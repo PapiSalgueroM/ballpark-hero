@@ -1,0 +1,20 @@
+[title] 246 rollovers, 184 stays: on CM_BOARD_BASE 108 of 118 A or B seasons opened under Safe (64 of 69 titles); on the head 0
+  by fate, none n 180: base mean 47.78 (p10 39 to p90 55.5), head mean 58.63 (p10 37 to p90 69)
+  by fate, up n 4: base mean 78.63 (p10 77.5 to p90 82), head mean 69 (p10 69 to p90 69)
+  by grade, A n 80: base mean 52.75 (p10 49 to p90 57), head mean 69 (p10 69 to p90 69)
+  by grade, B n 38: base mean 49.78 (p10 41 to p90 77.5), head mean 69 (p10 69 to p90 69)
+  by grade, C n 50: base mean 43.59 (p10 38 to p90 47.5), head mean 41.61 (p10 36 to p90 45.5)
+  by grade, D n 16: base mean 38.97 (p10 35 to p90 49), head mean 37.94 (p10 35 to p90 47)
+ok   [title] every A or B season opens the next at Safe or more (0 of 118 under)
+ok   [title] every D or F season opens the next under Safe (0 of 16 at Safe or more)
+ok   [title] every move at the summer opens at BOARD_FRESH (0 of 62 do not)
+ok   [title] startNextSeason draws the same number of times on head and base wherever the kitty band did not bind
+ok   [title] and writes the same save but for the opening (4 rollovers where the band bound left to section kitty)
+[kitty] tier 1: the band bound 0 of 149 staying rollovers (0 with a trophy); next budget over the club's: base median 2.14 p90 2.46, head median 2.14 p90 2.46
+[kitty] tier 2: the band bound 0 of 11 staying rollovers (0 with a trophy); next budget over the club's: base median 1.87 p90 2, head median 1.87 p90 2
+[kitty] tier 3: the band bound 4 of 17 staying rollovers (0 with a trophy); next budget over the club's: base median 2 p90 3.46, head median 2 p90 3.29
+[kitty] tier 4: the band bound 134 of 179 staying rollovers (8 with a trophy); next budget over the club's: base median 4.97 p90 8, head median 3.25 p90 3.25
+  134 rollovers of the tier 4 fleet where the band bound: their draws and the lines after the pot are counted, never held equal
+ok   [kitty] 356 staying rollovers: the cheque never passes max(10, 1.7 x the club's budget)
+ok   [kitty] and equals the old cheque wherever the old one was inside the band (0 differ)
+simCmBoardVerdict GREEN: 7 of 7 checks green (parts title, kitty, 358 s)

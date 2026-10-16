@@ -1,0 +1,9 @@
+[grade] 340 season ends: up 79, down 39, escape 17, A by a title or two trophies 66, A by overshoot alone 30, B to F with no fate 109
+  on the base ladder these same seasons: 14 promotions graded C or worse; the relegation cap changes 20 grades
+ok   [grade] every promotion grades A or B with an 'up' line naming the top flight (79 cases)
+ok   [grade] every relegation grades C or worse (B or worse with a trophy) with a 'down' line naming the league below (39 cases)
+ok   [grade] every escape keeps its grade with an 'escape' line (17 cases)
+ok   [grade] an A by a title or two trophies reads the old A lines, an A by overshoot alone the over line (96 cases)
+FAIL [grade] the statues and the murals only on a title or two trophies (17; first OB now seed 1 season 2: 7 of 12, A 'The board is thrilled. Statues have been commissioned.')
+ok   [grade] every B to F season with no fate grades as the base ladder with a line of the old VERDICTS (109 cases)
+control statues FIRED: 1 of 6 checks red

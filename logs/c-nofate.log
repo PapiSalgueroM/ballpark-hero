@@ -1,0 +1,9 @@
+[grade] 256 season ends: up 61, down 29, escape 12, A by a title or two trophies 50, A by overshoot alone 22, B to F with no fate 82
+  on the base ladder these same seasons: 9 promotions graded C or worse; the relegation cap changes 16 grades
+FAIL [grade] every promotion grades A or B with an 'up' line naming the top flight (61; first West Ham now seed 0 season 1: 1 of 24, A 'The board is thrilled. Statues have been commissioned.')
+FAIL [grade] every relegation grades C or worse (B or worse with a trophy) with a 'down' line naming the league below (29; first Pisa now seed 0 season 2: 19 of 20, C 'A middling year: you survive, but the leash is shorter.')
+FAIL [grade] every escape keeps its grade with an 'escape' line (12; first Alavés now seed 0 season 1: 13 of 20, A 'Miles past what anyone asked of this squad. The fans are dreaming now.')
+ok   [grade] an A by a title or two trophies reads the old A lines, an A by overshoot alone the over line (72 cases)
+ok   [grade] the statues and the murals only on a title or two trophies (22 seasons could carry them)
+ok   [grade] every B to F season with no fate grades as the base ladder with a line of the old VERDICTS (82 cases)
+control nofate FIRED: 3 of 6 checks red

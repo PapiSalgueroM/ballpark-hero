@@ -1,0 +1,5 @@
+[fresh] fleet B seed base 500000: 0 of 739 lost openers leave the board Safe (0 percent)
+  lowest 0, spread 0 points; floor 100 percent
+ok   [fresh] 2400 fresh careers open at BOARD_FRESH (60) (0 do not)
+FAIL [fresh] a lost opener leaves the board Safe at least 100 percent of the time on every seed base (0)
+control start60 FIRED: 1 of 2 checks red

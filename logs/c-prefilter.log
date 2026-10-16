@@ -1,0 +1,5 @@
+[stream] 174 season ends handed to both trees; 12 had a base offer outside the step
+FAIL [stream] finishSeason draws the same number of times on head and base from the same state (47; first Celtic season 1: head 70, base 78)
+FAIL [stream] and writes the same save but for the grade, the line, the fate and an offer outside the step (33; first Celtic season 1: .state.pendingSummary.offers.0.club: head "Crystal Palace" base "Aston Villa")
+FAIL [stream] the offers are equal wherever every base offer was within the step (33; first Celtic season 1)
+control prefilter FIRED: 3 of 3 checks red
