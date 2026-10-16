@@ -1,3 +1,15 @@
+## 2026-10-16: BH lazy-recovery diagnostic preparation, no app changes
+
+Codex proof-only branch codex/bh-lazy-recovery starts at exact joined e7f111b7. The
+completed BFb lane's old lazy-editor method reported one unexpected React error in
+its deliberate failed-download recovery, despite three healthy flows. New workflow
+will retain an uninstrumented invocation and a separate explicitly perturbed trace
+of the same unchanged method, complete reports/captures/build/source/tool receipts,
+all15 readers and unchanged weights. No new error allowance or application change.
+Runtime and diagnosis remain pending; I owns integration/publication. Details:
+docs/audits/bh-lazy-recovery.md. The report-fix queue can proceed once the actual
+release failures are reconciled; none is called live by this preparation.
+
 ## 2026-10-16 05:30 EDT: session I starts; player reports split between the lanes; the Lovable editor push reverted
 
 Claude lane (session I). Live: Release BG (main c9b80fce, deployment bc4815da). The Lovable editor's push of 08:36 to
