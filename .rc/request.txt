@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+careerHub: ENGINES=chromium node scripts/playCareerHub.mjs
+pressMarket: ENGINES=chromium node scripts/playCareerPressMarket.mjs
+marketTalk: ENGINES=chromium node scripts/playUsMarketTalk.mjs
+career993: SIM_NETWORK=offline ENGINES=chromium CAREER993_ARTIFACTS="$RC_OUT/c993" node scripts/qa/career993.mjs
+career993-reveal: SIM_NETWORK=offline ENGINES=chromium CAREER993_CONTROL=reveal CAREER993_ARTIFACTS="$RC_OUT/c993-reveal" node scripts/qa/career993.mjs
+career993-choice: SIM_NETWORK=offline ENGINES=chromium CAREER993_CONTROL=choice CAREER993_ARTIFACTS="$RC_OUT/c993-choice" node scripts/qa/career993.mjs
