@@ -13,6 +13,7 @@ import { spawn, execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { withoutClubDetailFixtures } from './lib/clubDetailFixturesSourceJoin.mjs';
 
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Current-roster browser execution requires remote offline CI.');
 assert(process.env.CM_OWN_ROSTER_PHASE === 'fixed', 'The browser proof runs only after fixed real-engine screen outcomes.');
@@ -28,6 +29,7 @@ const SOURCE_FILES = ['src/components/club-manager/ClubDetailScreen.tsx', 'src/l
   'src/lib/clubManagerWorldRoster.ts', 'src/lib/clubManagerEras.ts', 'src/test/clubDetailOwnClub.test.tsx',
   'src/test/clubDetailCurrentRoster.test.tsx', 'scripts/simClubDetailCurrentRoster.mjs',
   '.github/workflows/club-detail-current-roster.yml', 'scripts/playClubDetailCurrentRoster.mjs',
+  'src/lib/clubDetailFixtures.ts', 'scripts/lib/clubDetailFixturesSourceJoin.mjs',
   'src/pages/ClubManager.tsx', 'src/hooks/useClubManager.ts', 'src/lib/clubManagerSlots.ts',
   'src/lib/saveFence.ts', 'src/components/club-manager/ManagerSlotsScreen.tsx',
   'src/components/club-manager/WorldTablesCard.tsx', 'src/components/club-manager/LeagueTableCard.tsx',
@@ -295,8 +297,12 @@ try {
     && model.actualRenderedStates === 8 && model.passed === 8 && model.failed === 0 && model.child.status === 0 && !model.child.signal && !model.child.error,
     'Eight complete real fixed screen outcomes without child or setup failures are required.');
   setup(receipts.length === 8 && JSON.stringify(receipts.map(row => row.name)) === JSON.stringify(NAMES), 'Eight source-bound original rendered-state identities are required.');
-  setup(JSON.stringify(model.sourceReceipts.map(row => row.file)) === JSON.stringify(SOURCE_FILES.slice(0, 9))
-    && JSON.stringify(model.bindings.map(row => row.file)) === JSON.stringify(SOURCE_FILES.slice(0, 5)), 'All nine exact screen inputs and five parent bindings are required.');
+  setup(JSON.stringify(model.sourceReceipts.map(row => row.file)) === JSON.stringify(SOURCE_FILES.slice(0, 11))
+    && JSON.stringify(model.bindings.map(row => row.file)) === JSON.stringify(SOURCE_FILES.slice(0, 5)), 'All eleven exact screen inputs and five parent bindings are required.');
+  setup(JSON.stringify(model.fixtureBindings.map(row => row.file)) === JSON.stringify(SOURCE_FILES.slice(9, 11)), 'Both current fixture inputs require separate HEAD bindings.');
+  for (const binding of model.fixtureBindings) setup(binding.candidateSha256 === fileHash(path.join(ROOT, binding.file))
+    && binding.headSha256 === binding.candidateSha256
+    && binding.headSha256 === sha(execFileSync('git', ['show', report.sourceHead + ':' + binding.file], { cwd: ROOT })), 'Current fixture HEAD binding differs: ' + binding.file);
   for (const row of model.sourceReceipts) {
     setup(fileHash(path.join(ROOT, row.file)) === row.beforeSha256 && row.beforeSha256 === row.afterSha256, 'Real screen source binding differs: ' + row.file);
     retained('fixed/' + path.basename(row.file) + '.before', row.beforeSha256);
@@ -306,7 +312,9 @@ try {
   for (const binding of [model.componentBinding, model.oldTestBinding]) {
     retained('fixed/' + path.basename(binding.file) + '.fixed-plan', binding.plannedSha256);
     const inverse = retained('fixed/' + path.basename(binding.file) + '.inverse', binding.inverseSha256);
-    setup(binding.plannedSha256 === fileHash(path.join(ROOT, binding.file)) && binding.inverseSha256 === binding.parentSha256
+    const current = fs.readFileSync(path.join(ROOT, binding.file), 'utf8');
+    const comparable = binding.file === SOURCE_FILES[0] ? withoutClubDetailFixtures(current) : current;
+    setup(binding.plannedSha256 === sha(comparable) && binding.inverseSha256 === binding.parentSha256
       && fs.readFileSync(inverse).equals(execFileSync('git', ['show', PARENT + ':' + binding.file], { cwd: ROOT })), 'Exact whole phase inverse differs: ' + binding.file);
   }
   setup(model.compiled.some(row => row.file === 'engine.mjs') && model.compiled.some(row => row.file === 'component.mjs')

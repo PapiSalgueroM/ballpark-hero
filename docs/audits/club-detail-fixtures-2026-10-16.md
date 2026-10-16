@@ -2,9 +2,11 @@
 
 Base: `a758fcec4392c57c639aa54cda840810c8e44663`. Branch: `codex/manager-club-fixtures`.
 
-Status: tests and remote workflow prepared. Product remains the base component. No runtime has run locally. A qualifying remote baseline is required before implementation.
+Status: corrected remote baseline qualified; bounded product and source joins authored for review. Fixed verification is pending. No runtime has run locally and no release or live-site claim is made.
 
 First remote run `38880595650` at `2fbdcbf6` was blocked by four test-only type errors: Testing Library role options do not accept `exact: true`. No test ran and no baseline credit is claimed. Removing only those four unsupported options keeps exact string-name matching, all ten case identities and every outcome expectation. The type step now prints its retained diagnostics and preserves the compiler exit status. Retained artifact `12038135044` has ZIP SHA256 `5c7c409fe347880896ca75fdafa37eb53687374de72843de34d15ff818e8cf17`.
+
+Corrected baseline `ce8b644b`, run `38881328433`, job `116908498375`, passed the real application type gate. Root reviewed the complete report: exactly seven named missing-action Boolean faults and three preservation passes, plus all eleven old roster outcomes. No setup fault received credit. The product was unchanged through this baseline.
 
 The requested view is a plain Fixtures action inside the existing club header, opening a separate league fixture view with Back. The initial squad structure, values, player rows and outer navigation stay intact. No extra default `.bg-card` wrapper or sibling between club header and squad is permitted, because retained roster unit and browser consumers use those seams.
 
@@ -18,4 +20,6 @@ The remote workflow retains source archive, installed package versions, real app
 
 ## Existing roster source fences
 
-`scripts/simClubDetailCurrentRoster.mjs` reconstructs the complete component from `082fc277` and its four roster substitutions. Its core-ref environment option does not admit additive UI. `scripts/playClubDetailCurrentRoster.mjs` checks the same exact source and inverse. Implementation therefore needs a deliberate reversible fixtures join on those two source bindings while retaining every original roster span, eight named cases, three original-control failures and five preservation passes. The old workflow is frozen to its original packet, so it will not be rewritten or credited as this branch's workflow. The current branch runs the actual current roster test files directly, and any old source-fence join must be reviewed separately before fixed verification.
+`scripts/simClubDetailCurrentRoster.mjs` reconstructs the complete component from `082fc277` and its four roster substitutions. Its core-ref environment option does not admit additive UI. The shared `scripts/lib/clubDetailFixturesSourceJoin.mjs` inverts exactly four additive import/state/view/button spans, requires each exact anchor once and restores current source forwards. Partial or duplicate joins fail. Both old consumers compare that explicit inverse to the unchanged historical full plan. The historical `plannedSha256`, `.fixed-plan`, `.inverse`, original parent, roster spans, eight named cases and three-fault/five-preserve original control are retained. The full current component stays bound by existing source receipts; reader/helper have separate committed-HEAD bindings and before/after receipts. The new workflow runs the old sim normally and with its original control using `CM_OWN_ROSTER_CORE_REF=HEAD`.
+
+The old workflow is frozen and unchanged. Its browser consumer is adapted at source only and receives a remote syntax check; this packet claims no executed Club Manager browser journey or pixel review. Actual outcome coverage is the new ten, the original seven-fault control, restored twenty-one, and the two old source-proof methods. The default squad DOM is unchanged after the explicit inverse, including both `.bg-card` wrappers and direct player rows.

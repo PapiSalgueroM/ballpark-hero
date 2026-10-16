@@ -15,7 +15,7 @@ jobs:
       run:
         shell: bash
     env:
-      CLUB_FIXTURES_PHASE: baseline
+      CLUB_FIXTURES_PHASE: fixed
       SIM_NETWORK: offline
       ENGINES: chromium
     steps:
@@ -59,6 +59,15 @@ jobs:
           set -euo pipefail
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/clubDetailCurrentRoster.test.tsx src/test/clubDetailOwnClub.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile.json=club-fixtures-artifacts/roster.json > club-fixtures-artifacts/roster.log 2>&1
           cat club-fixtures-artifacts/roster.log
+      - name: Existing exact roster source proof and original control
+        if: env.CLUB_FIXTURES_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          node --check scripts/playClubDetailCurrentRoster.mjs
+          CM_OWN_ROSTER_PHASE=fixed CM_OWN_ROSTER_CORE_REF=HEAD CM_OWN_ROSTER_OUT="$PWD/club-fixtures-artifacts/old-roster" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs > club-fixtures-artifacts/old-roster-normal.log 2>&1
+          tail -n 6 club-fixtures-artifacts/old-roster-normal.log
+          CM_OWN_ROSTER_PHASE=fixed CM_OWN_ROSTER_CONTROL=original CM_OWN_ROSTER_CORE_REF=HEAD CM_OWN_ROSTER_OUT="$PWD/club-fixtures-artifacts/old-roster" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs > club-fixtures-artifacts/old-roster-original.log 2>&1
+          tail -n 6 club-fixtures-artifacts/old-roster-original.log
       - name: Production build
         if: env.CLUB_FIXTURES_PHASE == 'fixed'
         run: |

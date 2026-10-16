@@ -1,3 +1,7 @@
+## 2026-10-16: club detail league fixtures candidate, remote fixed verification pending
+
+Codex branch `codex/manager-club-fixtures`, base `a758fcec`. Corrected baseline `ce8b644b`, run `38881328433`, passed actual app types, exactly seven missing Fixtures-action failures plus three preservation passes, and all eleven existing roster cases. The earlier run `38880595650` stopped on four unsupported test role options; no regression credit from that run. Bounded reader and separate club fixture view are authored for root review: saved own/world membership, calendar-prefix versus world-round progress, recorded directed scores only, explicit missing results and Back to the original squad. No core, schema, calendar, real data or roster change. Fixed proof and release remain pending. Details: `docs/audits/club-detail-fixtures-2026-10-16.md`.
+
 ## 2026-10-16 05:30 EDT: session I starts; player reports split between the lanes; the Lovable editor push reverted
 
 Claude lane (session I). Live: Release BG (main c9b80fce, deployment bc4815da). The Lovable editor's push of 08:36 to
