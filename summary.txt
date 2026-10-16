@@ -1,0 +1,5 @@
+simNoRivalNames exit=0 26s | No rival product names found. 0 findings.
+s0 exit=0 0s | simCmWorldMoves: green, sections 0 held
+probe-check exit=0 0s | cmAiRecordProbe1344: all 9 anchors stand once in src/lib/clubManager.ts
+simHarnessAnchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 79s | 

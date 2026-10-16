@@ -1,0 +1,12 @@
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   probe "generateHeadlines returns its deals": 1
+   probe "the seeded skip": 1
+   probe "the deal is collected": 1
+   probe "generateHeadlines hands them back": 1
+   probe "the helpers": 1
+   probe "startCareer keeps the opening deals": 1
+   probe "the flush after the seed block": 1
+   probe "January records": 1
+   probe "the summer records": 1
+   control seedless: 1
+simCmWorldMoves: green, sections 0 held
