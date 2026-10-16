@@ -1,6 +1,6 @@
-## 2026-10-16: Round 1375 appointment desk regression method pending remote baseline
+## 2026-10-16: Round 1375 appointment desk candidate, causal baseline qualified
 
-Codex lane, `codex/manager-handover-desk`, based on main d4f2c6f6. Test and workflow only. The two public appointment paths replace the previous manager's inbox but retain his decisions desk. Ten focused cases prepare existing pending cards at actual match whistles: four expected inherited-card faults and six preservation cases, with complete paired career states and global random draw traces. The appeal case checks pending-card clearing only; it makes no natural straight-red or accepted-appeal exploit claim. No application code changed and no local runtime checks ran. The remote baseline must qualify before the two clearing fields are added. Claude I owns all competition work.
+Codex lane, `codex/manager-handover-desk`, based on main d4f2c6f6. Root read closed baseline run 38890178174 on method 862de03d: actual types, exactly four inherited-card failures and six preservation passes, all 41 old desk tests, 521 package manifests and source/offline holds passed. The candidate now clears only the predecessor's decisions beside each existing inbox assignment in startMidSeason and joinClubNow. The ten tests stay frozen; fixed verification is pending for five source arms, full state/draw/size comparisons, related simulations, build and all 15 readers. No local runtime checks ran. Details: docs/audits/manager-handover-desk-2026-10-16.md. Claude I owns all competition work.
 
 ## 2026-10-16 05:30 EDT: session I starts; player reports split between the lanes; the Lovable editor push reverted
 

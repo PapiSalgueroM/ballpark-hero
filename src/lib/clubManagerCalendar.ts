@@ -817,6 +817,7 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
     managerXp: career.managerXp,
     /* The inbox is the old manager's post. */
     inbox: career.inbox,
+    decisions: undefined,
     /* Round 978: and so was the assistant's note on the last international
        break, so the break and any rest stay behind with it. */
     ...(s.intl ? { intl: { season: s.season, fired: [...s.intl.fired] } } : {}),
@@ -973,6 +974,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
     leagueOverrides: career.leagueOverrides,
     managers,
     inbox: [reaction],
+    decisions: undefined,
     aiHeadlines: [
       `🧳 You have left ${from} for ${club} with the season still running. ${interim} takes charge at ${from} until the summer.`,
       ...s.aiHeadlines,

@@ -1,7 +1,12 @@
-name: Manager handover desk baseline
+name: Manager handover desk fixed proof
 
 on:
   workflow_dispatch:
+    inputs:
+      base:
+        description: Exact incoming application base before the two clearing fields
+        required: false
+        default: d4f2c6f688d656205722ba52bbdb33f03490966a
   push:
     branches: [codex/manager-handover-desk]
 
@@ -12,16 +17,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  baseline:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 60
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
       TZ: UTC
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
       HANDOVER_OUT: manager-handover-artifacts
+      CM_HANDOVER_OUT: manager-handover-artifacts/proof
+      CM_HANDOVER_BASE: ${{ inputs.base || 'd4f2c6f688d656205722ba52bbdb33f03490966a' }}
       SIM_OFFLINE_RECEIPT: manager-handover-artifacts/transport.log
     steps:
       - uses: actions/checkout@v4
@@ -33,18 +42,24 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Bind complete unchanged application and source archive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind incoming application, frozen method and full source archive
         run: |
           mkdir -p "$HANDOVER_OUT"
           test "$(git rev-parse HEAD)" = "${{ github.sha }}"
           git rev-parse HEAD > "$HANDOVER_OUT/source-head.txt"
           git rev-parse 'HEAD^{tree}' > "$HANDOVER_OUT/source-tree.txt"
+          git rev-parse --verify "${CM_HANDOVER_BASE}^{commit}" > "$HANDOVER_OUT/base-head.txt"
           git status --porcelain --untracked-files=no > "$HANDOVER_OUT/source-before.txt"
           test ! -s "$HANDOVER_OUT/source-before.txt"
-          git diff --exit-code d4f2c6f688d656205722ba52bbdb33f03490966a -- src ':!src/test/clubManagerHandoverDesk.test.ts' scripts .github/workflows ':!.github/workflows/manager-handover-desk.yml' index.html package.json package-lock.json bun.lock vitest.config.ts tsconfig.app.json
+          git diff --exit-code "$CM_HANDOVER_BASE" -- src ':!src/lib/clubManagerCalendar.ts' ':!src/test/clubManagerHandoverDesk.test.ts' scripts ':!scripts/simCmHandoverDesk.mjs' .github/workflows ':!.github/workflows/manager-handover-desk.yml' index.html package.json package-lock.json bun.lock vitest.config.ts vite.config.ts tsconfig.json tsconfig.app.json tsconfig.node.json
+          test "$(git rev-parse HEAD:src/test/clubManagerHandoverDesk.test.ts)" = "$(git rev-parse 862de03d5e912ecccade0f64d3840f23fa7f6992:src/test/clubManagerHandoverDesk.test.ts)"
+          git diff "$CM_HANDOVER_BASE" -- src/lib/clubManagerCalendar.ts > "$HANDOVER_OUT/application.diff"
           git archive HEAD | gzip > "$HANDOVER_OUT/source.tar.gz"
           sha256sum "$HANDOVER_OUT/source.tar.gz" > "$HANDOVER_OUT/archive-sha256.txt"
-          git ls-files -z src scripts .github/workflows index.html package.json package-lock.json bun.lock vitest.config.ts tsconfig.app.json | xargs -0 sha256sum > "$HANDOVER_OUT/held-sources.sha256"
+          git ls-files -z src scripts .github/workflows index.html package.json package-lock.json bun.lock vitest.config.ts vite.config.ts tsconfig.json tsconfig.app.json tsconfig.node.json | xargs -0 sha256sum > "$HANDOVER_OUT/held-sources.sha256"
           npm ci
           node --input-type=module <<'JS'
           import fs from 'node:fs';
@@ -61,96 +76,75 @@ jobs:
           assert.equal(rows.length, 521, 'Complete locked npm ci installation');
           fs.writeFileSync(process.env.HANDOVER_OUT + '/installed.json', JSON.stringify(rows, null, 2));
           JS
+      - name: Remote build reader tools
+        run: |
+          npm install --no-save playwright
+          node_modules/.bin/playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const rows = ['node_modules/playwright/package.json', 'node_modules/playwright-core/package.json'].map(file => {
+            const bytes = fs.readFileSync(file); return { file, version: JSON.parse(bytes).version, sha256: createHash('sha256').update(bytes).digest('hex') };
+          });
+          fs.writeFileSync(process.env.HANDOVER_OUT + '/reader-tools.json', JSON.stringify(rows, null, 2));
+          JS
       - name: Actual application type gate
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$HANDOVER_OUT/types.log"
-      - name: Actual public handovers with retained full states and draw traces
+      - name: Five exact public handover arms and complete state, RNG and size comparisons
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmHandoverDesk.mjs 2>&1 | tee "$HANDOVER_OUT/proof.log"
+      - name: Original 41 desk, depth and deadline regressions
         run: |
-          set +e
-          CM_HANDOVER_RECEIPT="$PWD/$HANDOVER_OUT/raw-states.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/clubManagerHandoverDesk.test.ts --maxWorkers=1 --minWorkers=1 --reporter=verbose --reporter=json --outputFile="$HANDOVER_OUT/unit.json" > "$HANDOVER_OUT/unit.log" 2>&1
-          result=$?
-          set -e
-          echo "$result" > "$HANDOVER_OUT/unit-exit.txt"
-          cat "$HANDOVER_OUT/unit.log"
-      - name: Require only four exact inherited-desk faults and six preserved cases
-        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/clubManagerDecisions.test.tsx src/test/clubManagerDecisionDepth.test.ts src/test/clubManagerDecisionDeadline.test.ts --maxWorkers=1 --minWorkers=1 --reporter=verbose --reporter=json --outputFile="$HANDOVER_OUT/original-tests.json" 2>&1 | tee "$HANDOVER_OUT/original-tests.log"
           node --input-type=module <<'JS'
           import fs from 'node:fs';
           import assert from 'node:assert/strict';
-          const out = process.env.HANDOVER_OUT;
-          const report = JSON.parse(fs.readFileSync(out + '/unit.json', 'utf8'));
-          const log = fs.readFileSync(out + '/unit.log', 'utf8').replace(/\u001b\[[0-9;]*m/g, '');
-          assert(!/TypeError:|ReferenceError:|SyntaxError:|ERR_MODULE_NOT_FOUND|Unhandled (?:Errors?|Rejection|Exception)|Uncaught Exception|Failed Suites|Failed to load|Failed to resolve import|SIM_OFFLINE_BLOCK/i.test(log), 'No setup, runtime or transport error credit');
-          assert.equal(Number(fs.readFileSync(out + '/unit-exit.txt', 'utf8')), 1);
-          assert.equal(report.success, false);
-          assert.equal(report.numTotalTests, 10); assert.equal(report.numPassedTests, 6); assert.equal(report.numFailedTests, 4);
-          assert.equal(report.numPendingTests, 0); assert.equal(report.numTodoTests, 0);
-          assert.equal(report.testResults.length, 1);
-          const file = report.testResults[0];
-          assert(file.name.endsWith('/src/test/clubManagerHandoverDesk.test.ts') && !file.message);
-          const expected = new Map();
-          for (const path of ['picker', 'job']) {
-            expected.set(`handover desk missing: ${path} cannot claim predecessor funds`, { status: 'failed', marker: `CM_HANDOVER_${path.toUpperCase()}_FUNDS: inherited funds remain claimable`, truth: 'expected false to be true' });
-            expected.set(`handover desk missing: ${path} clears pending predecessor appeal`, { status: 'failed', marker: `CM_HANDOVER_${path.toUpperCase()}_APPEAL: predecessor pending appeal remains on the new desk`, truth: 'expected true to be false' });
-            expected.set(`handover desk preservation: ${path} keeps every other state field and draw`, { status: 'passed' });
-          }
-          for (const title of [
-            'saved predecessor cards remain valid before appointment',
-            'existing funded reply applies once',
-            'new manager matches still offer the original deck',
-            'refused join and empty calendar retain original guards',
-          ]) expected.set('handover desk preservation: ' + title, { status: 'passed' });
-          const cases = file.assertionResults;
-          assert.deepEqual(cases.map(row => row.title).sort(), [...expected.keys()].sort());
-          for (const row of cases) {
-            const want = expected.get(row.title); assert.equal(row.status, want.status, row.title);
-            assert.equal(row.failureMessages.length, want.status === 'failed' ? 1 : 0, row.title);
-            if (want.status === 'failed') {
-              const failure = row.failureMessages[0];
-              assert(failure.startsWith('AssertionError: ' + want.marker), row.title);
-              assert(failure.includes(want.truth), row.title);
-            }
-          }
-          const raw = JSON.parse(fs.readFileSync(out + '/raw-states.json', 'utf8'));
-          const withoutDesk = state => { const copy = structuredClone(state); delete copy.decisions; return copy; };
-          for (const path of ['picker', 'job']) {
-            const original = raw[path + '-reference'], prepared = raw[path + '-prepared'];
-            assert(original && prepared && original.whistles > 0 && prepared.whistles === original.whistles);
-            assert(original.draws.length > 0); assert.deepEqual(prepared.draws, original.draws);
-            assert.deepEqual(prepared.input, original.input);
-            assert.deepEqual(withoutDesk(prepared.state), withoutDesk(original.state));
-            assert.deepEqual(prepared.predecessor.decisions.map(card => card.kind), ['situation', 'appeal']);
-            assert(prepared.predecessor.decisions.every(card => !card.resolved && card.options.length > 0));
-          }
-          assert(raw.savedPredecessor && raw.newManagerDesk && raw.newManagerDesk.matches > 0);
-          fs.writeFileSync(out + '/qualified-baseline.json', JSON.stringify({ status: 'pass', phase: 'baseline',
-            observedFailures: cases.filter(row => row.status === 'failed').map(row => row.title),
-            preservedCases: cases.filter(row => row.status === 'passed').map(row => row.title),
-            scope: 'Prepared pending-card clearing at actual predecessor whistles. No natural straight-red or accepted-appeal exploit claim.',
-          }, null, 2));
-          console.log('Qualified baseline: four exact inherited-desk failures, six preserved cases, complete paired states and random traces.');
+          const report = JSON.parse(fs.readFileSync(process.env.HANDOVER_OUT + '/original-tests.json', 'utf8'));
+          const output = fs.readFileSync(process.env.HANDOVER_OUT + '/original-tests.log', 'utf8');
+          assert.equal(report.success, true); assert.equal(report.numTotalTests, 41); assert.equal(report.numPassedTests, 41);
+          assert.equal(report.numFailedTests, 0); assert.equal(report.numPendingTests, 0); assert.equal(report.numTodoTests, 0);
+          assert.equal(report.testResults.length, 3);
+          assert(report.testResults.every(file => !file.message && file.assertionResults.every(row => row.status === 'passed' && row.failureMessages.length === 0)));
+          assert(!/Unhandled (?:Errors?|Rejection|Exception)|Uncaught Exception|SIM_OFFLINE_BLOCK/i.test(output));
           JS
-      - name: Require original desk and deadline regressions
+      - name: Existing actual takeover, calendar and application simulations
         run: |
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/clubManagerDecisions.test.tsx src/test/clubManagerDecisionDepth.test.ts src/test/clubManagerDecisionDeadline.test.ts --maxWorkers=1 --minWorkers=1 --reporter=verbose --reporter=json --outputFile="$HANDOVER_OUT/original-tests.json" 2>&1 | tee "$HANDOVER_OUT/original-tests.log"
-      - name: Hold complete tracked source, installed packages and offline transport
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/simMidSeasonStart.mjs 2>&1 | tee "$HANDOVER_OUT/midseason.log"
+          MIDSEASON_CONTROL=dirty node scripts/simMidSeasonStart.mjs 2>&1 | tee "$HANDOVER_OUT/midseason-dirty.log"
+          grep -F 'CONTROL FIRED: the untidied handover was caught' "$HANDOVER_OUT/midseason-dirty.log"
+          node scripts/simClubManagerCalendar.mjs 2>&1 | tee "$HANDOVER_OUT/calendar.log"
+          node scripts/simCmApplications.mjs 2>&1 | tee "$HANDOVER_OUT/applications.log"
+      - name: Actual production build
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build 2>&1 | tee "$HANDOVER_OUT/build.log"
+      - name: All fifteen build and snapshot readers
+        run: |
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          failed=0
+          for reader in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            node "scripts/$reader.mjs" 2>&1 | tee "$HANDOVER_OUT/$reader.log" || failed=1
+          done
+          exit "$failed"
+      - name: Hold tracked source, installed packages, reader tools and offline transport
         if: always()
         run: |
           sha256sum --check "$HANDOVER_OUT/held-sources.sha256" > "$HANDOVER_OUT/source-holds.log"
-          git diff --exit-code HEAD -- src scripts .github/workflows index.html package.json package-lock.json bun.lock vitest.config.ts tsconfig.app.json
+          git diff --exit-code HEAD -- src scripts .github/workflows index.html package.json package-lock.json bun.lock vitest.config.ts vite.config.ts tsconfig.json tsconfig.app.json tsconfig.node.json
           node --input-type=module <<'JS'
           import fs from 'node:fs';
           import assert from 'node:assert/strict';
           import { createHash } from 'node:crypto';
-          const rows = JSON.parse(fs.readFileSync(process.env.HANDOVER_OUT + '/installed.json', 'utf8'));
+          const out = process.env.HANDOVER_OUT, rows = JSON.parse(fs.readFileSync(out + '/installed.json', 'utf8'));
           assert.equal(rows.length, 521, 'Complete installed manifest hold');
-          for (const row of rows) {
+          const tools = JSON.parse(fs.readFileSync(out + '/reader-tools.json', 'utf8'));
+          for (const row of [...rows, ...tools]) {
             const bytes = fs.readFileSync(row.file);
             assert.equal(JSON.parse(bytes).version, row.version, row.file);
             assert.equal(createHash('sha256').update(bytes).digest('hex'), row.sha256, row.file);
           }
           const blocked = process.env.SIM_OFFLINE_RECEIPT;
           assert(!fs.existsSync(blocked) || fs.statSync(blocked).size === 0, 'No denied transport was attempted');
-          console.log(`Held ${rows.length} installed package manifests and all tracked sources.`);
+          console.log(`Held ${rows.length} locked manifests, reader tools and all tracked sources. No save cap or historical assertion changed.`);
           JS
       - uses: actions/upload-artifact@v4
         if: always()
