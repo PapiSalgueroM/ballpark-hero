@@ -1,0 +1,3 @@
+headsha: git log --oneline -1
+rodri-proof: CI=1 SIM_NETWORK=offline PLAYER_BINGO_RODRI_PHASE=fixed PLAYER_BINGO_RODRI_OUT="$PWD/bingo-rodri-artifacts" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoRodriHonour.mjs
+simPlayerBingoWorldCupAlias: CI=1 SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoWorldCupAlias.mjs
