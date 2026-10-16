@@ -1,0 +1,9 @@
+headsha: git log --oneline -3
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > /tmp/va.log 2>&1; s=$?; grep -E "Test Files|Tests |FAIL" /tmp/va.log | head -30; tail -4 /tmp/va.log; exit $s
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simPlayerBingoHonours: node scripts/simPlayerBingoHonours.mjs
+simBuildYourXiFit: node scripts/simBuildYourXiFit.mjs
