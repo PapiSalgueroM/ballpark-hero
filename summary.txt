@@ -1,0 +1,8 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playUsSeasonCentre exit=0 226s | playUsSeasonCentre: 217 checks, 0 failed
+playSeasonCentreMotion exit=0 125s | playSeasonCentreMotion: 80 checks, 0 failed
+playSoundGate exit=1 46s | Node.js v24.21.0
+depth1 exit=0 10s | playSoccerCareerDepth: 80 checks, 0 failed
+depth2 exit=0 10s | playSoccerCareerDepth: 80 checks, 0 failed
+depth3 exit=0 10s | playSoccerCareerDepth: 80 checks, 0 failed
+homeSearch exit=1 8s | Scope: actual built signed-out Home with explicit locally fulfilled public reads and real cached fonts/flags; no gameplay or production forwarding.

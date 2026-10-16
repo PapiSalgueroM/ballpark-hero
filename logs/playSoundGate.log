@@ -1,0 +1,188 @@
+
+0) The built chunks
+   ok   the kit is one chunk, soundKit-CDg89olE.js: 5318 bytes, 2425 gzipped (named soundKit-, at most 3,000 gzipped)
+   ok   the switch lives in index-DL87ba82.js
+   ok   dist/index.html does not name the kit chunk
+   ok   no chunk imports the kit statically
+   ok   the one dynamic import of the kit is in the switch's chunk (index-DL87ba82.js)
+   ok   no audio file anywhere in dist
+cues by length: whistle 18522, net 13230, crowd 61740, tick 2205, sting 39690, thud 9702
+saves after 1 seeded careers: out (a list of 10, 2012, placed 22); podium (a list of 10, 2019, placed 3); win (a list of 10, 2024, placed 1)
+this Chromium, a context made after a tap: running at first, resume resolved in 0 ms, then running, its clock at 0.31 s after 0.3 s
+switches mounted: footer yes, header yes
+
+1) Off by default
+   ok   / at 390: contexts 0, starts 0, buzzes 0, the kit chunk requested 0 times (tapped: true)
+   ok   /club-manager at 390: contexts 0, starts 0, buzzes 0, the kit chunk requested 0 times (tapped: true)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('.cm-rise-gated button').first()
+    - locator resolved to <button class="inline-flex items-center gap-2 rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 px-4 w-full h-auto py-2 text-xs font-bold text-black bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">🎤 Thank your rival by name: he made me this good</button>
+  - attempting click action
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div data-wheel-disk="true" class="h-full w-full rounded-full border-4 border-foreground/50 motion-reduce:transition-none"></div> from <div role="dialog" tabindex="-1" id="radix-:ri:" data-state="open" aria-labelledby="radix-:rj:" aria-describedby="radix-:rk:" data-career-chance-wheel="true" class="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events
+  - retrying click action
+    - waiting 20ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div data-wheel-disk="true" class="h-full w-full rounded-full border-4 border-foreground/50 motion-reduce:transition-none"></div> from <div role="dialog" tabindex="-1" id="radix-:ri:" data-state="open" aria-labelledby="radix-:rj:" aria-describedby="radix-:rk:" data-career-chance-wheel="true" class="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events
+  2 × retrying click action
+      - waiting 100ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events
+  13 × retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div data-wheel-disk="true" class="h-full w-full rounded-full border-4 border-foreground/50 motion-reduce:transition-none"></div> from <div role="dialog" tabindex="-1" id="radix-:ri:" data-state="open" aria-labelledby="radix-:rj:" aria-describedby="radix-:rk:" data-career-chance-wheel="true" class="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div data-wheel-disk="true" class="h-full w-full rounded-full border-4 border-foreground/50 motion-reduce:transition-none"></div> from <div role="dialog" tabindex="-1" id="radix-:ri:" data-state="open" aria-labelledby="radix-:rj:" aria-describedby="radix-:rk:" data-career-chance-wheel="true" class="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoundGate.mjs:372:29 {
+  log: [
+    "  - waiting for locator('.cm-rise-gated button').first()",
+    '    - locator resolved to <button class="inline-flex items-center gap-2 rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 px-4 w-full h-auto py-2 text-xs font-bold text-black bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">🎤 Thank your rival by name: he made me this good</button>',
+    '  - attempting click action',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is visible, enabled and stable',
+    '    - scrolling into view if needed',
+    '    - done scrolling',
+    '    - <div data-wheel-disk="true" class="h-full w-full rounded-full border-4 border-foreground/50 motion-reduce:transition-none"></div> from <div role="dialog" tabindex="-1" id="radix-:ri:" data-state="open" aria-labelledby="radix-:rj:" aria-describedby="radix-:rk:" data-career-chance-wheel="true" class="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events',
+    '  - retrying click action',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is visible, enabled and stable',
+    '    - scrolling into view if needed',
+    '    - done scrolling',
+    '    - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events',
+    '  - retrying click action',
+    '    - waiting 20ms',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is visible, enabled and stable',
+    '    - scrolling into view if needed',
+    '    - done scrolling',
+    '    - <div data-wheel-disk="true" class="h-full w-full rounded-full border-4 border-foreground/50 motion-reduce:transition-none"></div> from <div role="dialog" tabindex="-1" id="radix-:ri:" data-state="open" aria-labelledby="radix-:rj:" aria-describedby="radix-:rk:" data-career-chance-wheel="true" class="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events',
+    '  2 × retrying click action',
+    '      - waiting 100ms',
+    '      - waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events',
+    '  13 × retrying click action',
+    '       - waiting 500ms',
+    '       - waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms',
+    '       - waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <div data-wheel-disk="true" class="h-full w-full rounded-full border-4 border-foreground/50 motion-reduce:transition-none"></div> from <div role="dialog" tabindex="-1" id="radix-:ri:" data-state="open" aria-labelledby="radix-:rj:" aria-describedby="radix-:rk:" data-career-chance-wheel="true" class="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms',
+    '       - waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms',
+    '       - waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events',
+    '  - retrying click action',
+    '    - waiting 500ms',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is visible, enabled and stable',
+    '    - scrolling into view if needed',
+    '    - done scrolling',
+    '    - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events',
+    '  - retrying click action',
+    '    - waiting 500ms',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is visible, enabled and stable',
+    '    - scrolling into view if needed',
+    '    - done scrolling',
+    '    - <div data-wheel-disk="true" class="h-full w-full rounded-full border-4 border-foreground/50 motion-reduce:transition-none"></div> from <div role="dialog" tabindex="-1" id="radix-:ri:" data-state="open" aria-labelledby="radix-:rj:" aria-describedby="radix-:rk:" data-career-chance-wheel="true" class="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 d…>…</div> subtree intercepts pointer events',
+    '  - retrying click action',
+    '    - waiting 500ms',
+    '    - waiting for element to be visible, enabled and stable',
+    '    - element is visible, enabled and stable',
+    '    - scrolling into view if needed',
+    '    - done scrolling',
+    '    - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events',
+    '  - retrying click action',
+    '    - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
