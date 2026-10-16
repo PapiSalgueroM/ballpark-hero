@@ -34,6 +34,13 @@
  *      the same owner and status unless a deal line of the run in moved him) plus only men of the run in's deal
  *      lines, every deal line of the run in between two other clubs is placed at its buyer, and every name gone
  *      before the move stays gone after it.
+ *   4. the market, played inside section 1's careers: at every window each man of its deal lines is on the screen's
+ *      market (marketForScreen) at his buyer, marked joinedThisSeason, and every door (buy, clause, loan, talk)
+ *      answers what it answers today with that deal line taken out, or else the new sentence ("only joined ... this
+ *      season"; the critic's corrections 9 and 15); a man hidden behind a namesake is counted, not failed
+ *      (correction 23). At the next summer he is on sale at his club like anyone else, and when the buy door opens
+ *      buyPlayer takes him (on its own stream). marketForScreen is timed against buildMarket on the same states:
+ *      at most 3 times plus 5 ms a call.
  *   6. legacy: careers with no world seed (startCareer with PR269's legacy world, and fresh careers with the seed,
  *      the ledger and the squad's ledger keys stripped the way simClubManagerSaveSize strips them, and the legacy
  *      career with three deals of mine at its start: a release, a buy and a sale through acceptBid), the same nine
@@ -61,7 +68,7 @@
  *   section 9: the table is in the round's notes, docs/audits/ROUND-1344-NOTES.md; the January entry took 37.8 ms on
  *     the base and about 255 ms with the probe (recorded deal by deal), which is why ruling 4 packs once a window.
  *
- * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,2,3,6,12), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per
+ * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,2,3,4,6,12), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per
  * section), CM_WORLD_MOVES_ERAS (default now,era2015,era2005), CM_WORLD_MOVES_BASE (default the commit the branch
  * started from), CM_WORLD_MOVES_SHAPE_ARMS (default base,head), CM_WORLD_MOVES_SEASONS (section 9, default 15),
  * CM_WORLD_MOVES_OUT (section 9's JSON folder, default $RC_OUT or the temp folder).
@@ -75,7 +82,9 @@
  *   CM_WORLD_MOVES_CONTROL=nojanuary  January's window keeps the ledger it had: section 1 red, first in January
  *   CM_WORLD_MOVES_CONTROL=nosummer   the summer's window keeps the ledger it had: section 1 red, first in the summer
  *   CM_WORLD_MOVES_CONTROL=joinledger joinClubNow takes the departed career's ledger again: section 3 red
- *   CM_WORLD_MOVES_CONTROL=nohijack  makeOffer's hijack records nothing: section 2 red on the hijack arm only
+ *   CM_WORLD_MOVES_CONTROL=nolock     the refusal's sentence out (a joined man is for sale): section 4 red
+ *   CM_WORLD_MOVES_CONTROL=nolist     marketForScreen hands back buildMarket's list: section 4 red
+ *   CM_WORLD_MOVES_CONTROL=nohijack makeOffer's hijack records nothing: section 2 red on the hijack arm only
  *   CM_WORLD_MOVES_CONTROL=nowalk     walkAway's rival close records nothing: section 2 red on the walk arm only
  *   CM_WORLD_MOVES_CONTROL=slow       the window packs the ledger after every deal again (the step 1 probe's way):
  *                                     section 12 red
@@ -115,7 +124,7 @@ const COMBINE = process.argv[2] === '--combine';   // handled at the end of the 
 
 /* The commit this branch started from (origin/main at the claim, Release BG live; src equal to bd3b6244). */
 const BASE = process.env.CM_WORLD_MOVES_BASE || 'd4f2c6f688d656205722ba52bbdb33f03490966a';
-const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 2, 3, 6, 12]));
+const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 2, 3, 4, 6, 12]));
 const ERAS = (process.env.CM_WORLD_MOVES_ERAS || 'now,era2015,era2005').split(',');
 if (process.env.CM_WORLD_MOVES_HEAD) cannot('CM_WORLD_MOVES_HEAD is gone: the step 1 probe was removed at step 2 (the head records the deals itself)');
 const CONTROL = process.env.CM_WORLD_MOVES_CONTROL || '';
@@ -135,6 +144,8 @@ const CONTROLS = {
   nosummer: { section: 1, first: 'summer', edits: [[SUMMER_CALL, `  state.intl = freshIntl(state);\n${keepLedger('  ')}`]] },
   joinledger: { section: 3, file: 'src/lib/clubManagerCalendar.ts', edits: [['    ...(s.worldRoster !== undefined ? { worldRoster: plainCopy(s.worldRoster) }\n      : departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),\n',
     '    ...(departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),\n']] },
+  nolock: { section: 4, edits: [["  return `${mp.name} only joined ${mp.club} this season. They will not sell him on until ${career.transferWindow === 'summer' ? 'next summer' : 'the summer'}.`;\n", '  return null;\n']] },
+  nolist: { section: 4, edits: [['  if (!gone.size || !worldRosterView(career)) return market;\n', '  return market;\n']] },
   nohijack: { section: 2, arm: 'hijack', edits: [['      return recordAiDeals(state, [{ mp: next.player, to: next.rivalBidder, fee: next.rivalOffer }]);\n', '      return state;\n']] },
   nowalk: { section: 2, arm: 'walk', edits: [['    return recordAiDeals(state, [{ mp: neg.player, to: neg.rivalBidder, fee: neg.rivalOffer }]);\n', '    return state;\n']] },
   slow: { section: 12, edits: [[RECORD_LINE, '    if (working && seen) { const moved = recordAiDeal(working, { mp, to: buyer, fee }, working); if (moved === working) continue; working = packedLedger(moved); }\n    else unrecorded.push({ mp, to: buyer, fee });\n']] },
@@ -297,6 +308,60 @@ function oneClubRule(M, s, label) {
   return at.size + mine;
 }
 
+/* ---------- section 4, the market (run inside section 1's careers) ---------- */
+const s4 = { listed: 0, namesake: 0, doors: 0, buyLocked: 0, nextSummer: 0, bought: 0, gone: 0, screenMs: 0, baseMs: 0, calls: 0 };
+const joinedLine = (name, club, s) => `${name} only joined ${club} this season. They will not sell him on until ${s.transferWindow === 'summer' ? 'next summer' : 'the summer'}.`;
+/** At a window: every man of its deal lines is listed at his buyer, marked, and every door refuses him in today's order. */
+function marketAt(M, s, lines, label, pending) {
+  M.cm.buildMarket(s);   // warm the shared world list, so the two timings below compare the filters
+  let t0 = performance.now(); const screen = M.cm.marketForScreen(s); s4.screenMs += performance.now() - t0;
+  t0 = performance.now(); M.cm.buildMarket(s); s4.baseMs += performance.now() - t0; s4.calls += 1;
+  for (const line of lines) {
+    const row = screen.find(p => p.name === line.name && p.club === line.to);
+    if (!row) {
+      /* worldMarket lists one man per name (the Paulinho and Allan rule): a namesake elsewhere can hide him. */
+      if (screen.some(p => p.name === line.name) || s.squad.some(p => p.name === line.name)) { s4.namesake += 1; continue; }
+      fail(4, `${label}: ${line.name}, bought by ${line.to}, is not on the screen's market there`); continue;
+    }
+    s4.listed += 1;
+    if (row.joinedThisSeason !== true) fail(4, `${label}: ${line.name} is listed at ${line.to} without joinedThisSeason`);
+    const without = { ...s, transferLog: (s.transferLog ?? []).filter(t => !(t.name === line.name && t.to === line.to && t.season === s.season)) };
+    for (const door of ['buy', 'clause', 'loan', 'talk']) {
+      s4.doors += 1;
+      const want = M.cm.doorRefusal(without, row, door) ?? joinedLine(line.name, line.to, s);
+      const got = M.cm.doorRefusal(s, row, door);
+      if (got !== want) fail(4, `${label}: the ${door} door on ${line.name} answers "${got}", wanted "${want}"`);
+      if (door === 'buy' && got === joinedLine(line.name, line.to, s)) s4.buyLocked += 1;
+    }
+    pending.set(line.name, { to: line.to, label });
+  }
+}
+/** At the next summer: a man bought last season is on sale at his club like anyone else. */
+function nextSummerAt(M, s, pending, resold, label) {
+  const market = M.cm.buildMarket(s);
+  const records = M.ledger.readWorldRoster(s)?.records ?? [];
+  for (const [name, man] of pending) {
+    if (resold.has(name) || s.goneNames.includes(name)) { s4.gone += 1; continue; }
+    const owned = records.find(r => r.status === 'owned' && r.owner === man.to && r.player.name === name);
+    if (!owned) { s4.gone += 1; continue; }   // retired, or released: the ledger says where he is, section 1 checks it
+    const row = market.find(p => p.name === name && p.club === man.to);
+    if (!row) {
+      if (market.some(p => p.name === name) || s.squad.some(p => p.name === name)) { s4.namesake += 1; continue; }
+      fail(4, `${label}: ${name}, bought by ${man.to} at ${man.label}, is not on sale there a season later`); continue;
+    }
+    s4.nextSummer += 1;
+    const why = M.cm.doorRefusal(s, row, 'buy');
+    if (why === joinedLine(name, man.to, s)) fail(4, `${label}: ${name} is still refused as a new signing a season later`);
+    if (why === null) {
+      /* buyPlayer on its own stream, so section 1's careers play the same whether or not section 4 runs. */
+      const keep = Math.random; Math.random = stream(mix('buy4', label, name));
+      try { if (M.cm.buyPlayer(s, row)) s4.bought += 1; else fail(4, `${label}: the buy door is open on ${name} and buyPlayer refused him`); }
+      finally { Math.random = keep; }
+    }
+  }
+  pending.clear();
+}
+
 /* ---------- section 1, ownership ---------- */
 const S1_SEASONS = 6;
 const tally = {};   // per window type: deals, refused, records, stored, windows
@@ -306,6 +371,7 @@ async function ownershipCareer(E, era, club, seed) {
   Math.random = stream(mix('own', era, club, seed));
   const tag = `${club} (${era}, seed ${seed})`;
   const moved = new Map();   // name -> { to, since }
+  const pending4 = new Map();   // section 4: name -> { to, label }, checked at the next summer
   const reload = (st, label) => {
     M.store.clear();
     if (!M.cm.saveCareer(st)) { fail(1, `${tag} ${label}: the save was refused`); return st; }
@@ -326,11 +392,13 @@ async function ownershipCareer(E, era, club, seed) {
       moved.set(line.name, { to: line.to, since: label });
     }
     s1Checked += oneClubRule(M, s, `${tag} ${label}`);
+    if (SECTIONS.has(4)) marketAt(M, s, lines, `${tag} ${label}`, pending4);
   };
   const atRollover = (s, label, before) => {
     phase1 = 'rollover';
     const resold = new Set(addedLines(before, s.transferLog).filter(aiLine(s.clubName)).map(line => line.name));
     s1Rollovers += 1;
+    if (SECTIONS.has(4)) nextSummerAt(M, s, pending4, resold, `${tag} ${label}`);
     const records = M.ledger.readWorldRoster(s)?.records ?? [];
     for (const [name, man] of moved) {
       if (resold.has(name)) continue;   // moved again in this summer's window: section (i) places him there
@@ -774,7 +842,7 @@ const H = await engine('head', { edit: headEdits.length ? text => headEdits.redu
 const B = needBase ? await engine('base', { base: true }) : null;
 if (made.size) for (const [what, n] of made) console.log(`   control edit made ${n} time(s): ${what}`);
 
-if (SECTIONS.has(1)) {
+if (SECTIONS.has(1) || SECTIONS.has(4)) {
   const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [1, 2, 3, 4, 5]);
   console.log(`1) ownership: seeded careers, ${S1_SEASONS} seasons, seeds ${seeds.join(',')}, the ${H.label} engine`);
   for (const era of ERAS) for (const club of CLUBS[era]) for (const seed of seeds) await ownershipCareer(H, era, club, seed);
@@ -784,7 +852,14 @@ if (SECTIONS.has(1)) {
   console.log(`   ${s1Careers} careers (${s1Sacked} sacked early), ${s1Checked} listings checked by the one club rule, ${s1Tracked} moved men followed over ${s1Rollovers} rollovers`);
   console.log(`   failures by check: (i) ${checks.i ?? 0}, (ii) ${checks.ii ?? 0}, (iii) ${checks.iii ?? 0}; the first at ${firstRed1 ?? 'none'}`);
   console.log(`   the opening window's refusals (deal lines it closed before the seed that the flush could not place): ${tally.opening?.refused ?? 0} of ${tally.opening?.deals ?? 0} (expected 0)`);
-  if (!s1Careers || !Object.values(tally).some(r => r.deals)) fail(1,'no AI deal line was seen, so nothing was measured');
+  if (!s1Careers || !Object.values(tally).some(r => r.deals)) cannot('no AI deal line was seen, so nothing was measured');
+  if (SECTIONS.has(4)) {
+    console.log(`4) the market: ${s4.listed} moved men on the screen's market at their buyer (${s4.namesake} hidden behind a namesake, counted), ${s4.doors} door presses checked, the buy door locked on ${s4.buyLocked}; a season later ${s4.nextSummer} on sale there, ${s4.bought} bought, ${s4.gone} moved on or retired`);
+    const screen = s4.screenMs / (s4.calls || 1), base = s4.baseMs / (s4.calls || 1);
+    console.log(`   marketForScreen ${screen.toFixed(2)} ms a call against buildMarket's ${base.toFixed(2)} ms on the same states (limit 3 x + 5 ms)`);
+    if (screen > 3 * base + 5) fail(4, `marketForScreen took ${screen.toFixed(2)} ms a call against buildMarket's ${base.toFixed(2)} ms, over 3 x + 5 ms`);
+    if (!s4.listed || !s4.nextSummer) cannot(`section 4: ${s4.listed} men listed and ${s4.nextSummer} checked a season later, so the market measured nothing`);
+  }
 }
 if (SECTIONS.has(2)) {
   const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [1, 2, 3, 4, 5]);

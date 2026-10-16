@@ -55,7 +55,7 @@ import {
 } from '@/lib/clubManagerLeagueBook';
 /* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */
 import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardInput, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
-import { compactWorldRoster, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterView } from '@/lib/clubManagerWorldRoster';
+import { compactWorldRoster, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterOwner, worldRosterView } from '@/lib/clubManagerWorldRoster';
 import type { WorldRosterState } from '@/lib/clubManagerWorldRoster';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
@@ -1500,6 +1500,8 @@ export interface MarketPlayer {
   value?: number;
   /** Round 132: this game made him up, and the transfer screen says so. */
   generated?: boolean;
+  /** Round 1344: another club bought him this season (marketForScreen); listed there, not for sale until the summer. */
+  joinedThisSeason?: true;
 }
 
 export interface TransferRecord {
@@ -9361,6 +9363,38 @@ export function buildMarket(career: CareerState): MarketPlayer[] {
     .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.has(sameManKey(p)));
 }
 
+/* Round 1344 (the player report: a man another club bought was "deleted from the database"). The market the transfer
+   screen shows: buildMarket, plus, in a career with a readable ledger, every man another club bought this season (his
+   name is on goneNames and the ledger owns him at the club the market lists him at), marked joinedThisSeason, in the
+   market's own order. He can be found at his new club; every door refuses him with the reason until the summer
+   (joinedThisSeasonRefusal). buildMarket itself is unchanged: the window news and the board's asks read it. A man I
+   sold this season is the same case. With no ledger the answer is buildMarket's own list. scripts/simCmWorldMoves.mjs
+   section 4 holds it. */
+export function marketForScreen(career: CareerState): MarketPlayer[] {
+  const market = buildMarket(career);
+  const gone = new Set(career.goneNames);
+  if (!gone.size || !worldRosterView(career)) return market;
+  const squadNames = new Set(career.squad.map(p => p.name));
+  const retired = new Set(career.retiredNames ?? []);
+  const released = releasedByYouNames(career);
+  const onLoanOut = new Set((career.loanedOut ?? []).map(l => sameManKey(l.player)));
+  const joined = new Set(worldMarket(career).filter(p => gone.has(p.name) && p.worldRosterKey !== undefined
+    && !squadNames.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.has(sameManKey(p))
+    && worldRosterOwner(career, p.worldRosterKey) === p.club));
+  if (!joined.size) return market;
+  const listed = new Set(market);
+  return worldMarket(career).filter(p => listed.has(p) || joined.has(p)).map(p => joined.has(p) ? { ...p, joinedThisSeason: true as const } : p);
+}
+
+/* Round 1344: a man another club bought this season is not for sale until the summer, by any door. Read off this
+   season's deal line to his club (a namesake on goneNames cannot trip it) and the ledger owning him there, so a career
+   with no ledger never meets it. After every older reason, so today's refusals keep their order. */
+function joinedThisSeasonRefusal(career: CareerState, mp: MarketPlayer): string | null {
+  if (!mp.worldRosterKey || !(career.transferLog ?? []).some(t => t.name === mp.name && t.to === mp.club && t.season === career.season && !t.loan)) return null;
+  if (worldRosterOwner(career, mp.worldRosterKey) !== mp.club) return null;
+  return `${mp.name} only joined ${mp.club} this season. They will not sell him on until ${career.transferWindow === 'summer' ? 'next summer' : 'the summer'}.`;
+}
+
 /** Round 71: append a line to the Latest Transfers feed (capped at 80). */
 function pushNews(state: CareerState, news: Omit<TransferNews, 'season' | 'week'>): void {
   const log = state.transferLog ?? [];
@@ -9407,7 +9441,7 @@ export function signingRefusal(career: CareerState, mp: MarketPlayer, fee: numbe
      be pressed, and the summer return would make two of him. */
   const away = (career.loanedOut ?? []).find(l => sameManKey(l.player) === sameManKey(mp));
   if (away) return `${mp.name} is already yours, out on loan at ${away.club}. Bring him back from the loan desk instead.`;
-  return null;
+  return joinedThisSeasonRefusal(career, mp);
 }
 
 /** Round 634 review: the four ways a market card can be pressed. */
@@ -9443,7 +9477,7 @@ export function doorRefusal(career: CareerState, mp: MarketPlayer, door: MarketD
   if (releasedByYouNames(career).has(mp.name)) return `You released ${mp.name}. He will not sign for you again.`;
   const away = (career.loanedOut ?? []).find(l => sameManKey(l.player) === sameManKey(mp));
   if (away) return `${mp.name} is already yours, out on loan at ${away.club}. Bring him back from the loan desk instead.`;
-  return null;
+  return joinedThisSeasonRefusal(career, mp);
 }
 
 function completeSigning(

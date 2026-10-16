@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { CareerState, MarketPlayer } from '@/lib/clubManager';
-import { acceptBid, aiDealPlayer, buildMarket, recordAiDeals, startCareer, worldRosterFor, worldYear } from '@/lib/clubManager';
+import { acceptBid, aiDealPlayer, buildMarket, doorRefusal, marketForScreen, recordAiDeals, startCareer, worldRosterFor, worldYear } from '@/lib/clubManager';
 import { readWorldRoster } from '@/lib/clubManagerWorldRoster';
 
 /* Round 1344 (the player report of 2026-10-16: a man another club bought vanished from the market and turned up at
@@ -66,6 +66,24 @@ describe('Round 1344: deals between two other clubs reach the world ledger', () 
     const record = (readWorldRoster(sold!)?.records ?? []).find(r => r.owner === buyer && r.player.name === man.name)!;
     expect(record.player.wage).toBeDefined();
     expect(aiDealPlayer(sold!, cardAt(sold!, buyer, man.name))).toBeNull();
+  });
+
+  it('the screen\'s market lists a man another club bought this season at his new club, and every door says why not yet', () => {
+    const s = withRoll(0.6, () => startCareer('Everton'));
+    expect(s.transferWindow).toBe('summer');
+    const line = aiLines(s)[0];
+    const row = marketForScreen(s).find(p => p.name === line.name && p.club === line.to);
+    expect(row?.joinedThisSeason).toBe(true);
+    expect(buildMarket(s).some(p => p.name === line.name)).toBe(false);
+    const sentence = `${line.name} only joined ${line.to} this season. They will not sell him on until next summer.`;
+    expect(doorRefusal(s, row!, 'talk')).toBe(sentence);
+    expect(doorRefusal({ ...s, budget: 9999 }, row!, 'buy')).toBe(sentence);
+    expect(doorRefusal({ ...s, transferWindow: null }, row!, 'talk')).toBe('The transfer window is shut.');
+    expect(doorRefusal({ ...s, transferWindow: 'january' }, row!, 'talk')).toBe(sentence.replace('next summer', 'the summer'));
+    const none: CareerState = { ...s };
+    delete none.worldRoster;
+    expect(marketForScreen(none)).toEqual(buildMarket(none));
+    expect(marketForScreen(none).some(p => p.joinedThisSeason)).toBe(false);
   });
 
   it('recordAiDeals takes no draw, and hands an unseeded career back as the same object', () => {
