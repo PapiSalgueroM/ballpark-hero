@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/test/clubManager src/test/cm src/test/manager src/test/dailyMenuResume src/lib/clubManager src/test/numberFormatting.test.tsx --testTimeout=300000 --hookTimeout=120000
+retire: node scripts/simCmRetire.mjs
+retire-base: git worktree add -f .rb1 e814c2de >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb1 node scripts/simCmRetire.mjs --part=fleet,hotseat,loads,oldsave
+c-basewrites: RETIRE_CONTROL=basewrites node scripts/simCmRetire.mjs
+c-hotseatwrites: git worktree add -f .rb2 e814c2de >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb2 RETIRE_CONTROL=hotseatwrites node scripts/simCmRetire.mjs
+appealIsolation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+decisionRegression1081: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerDecisionRegression1081.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+c-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simClubManager: node scripts/simClubManager.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs

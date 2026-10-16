@@ -1,0 +1,17 @@
+retire exit=0 39s | simCmRetire: all 18 checks passed (record, oldsave, pens, base, retire, dashes)
+tsc exit=0 98s | 
+c-basewrites exit=1 1s | control basewrites FIRED: 1 of 1 checks red
+c-hotseatwrites exit=1 16s | control hotseatwrites FIRED: 1 of 4 checks red
+vitest-cm exit=0 133s |    Duration  132.50s (transform 9.43s, setup 2.98s, collect 34.04s, tests 233.03s, environment 23.42s, prepare 5.22s)
+appealIsolation exit=0 36s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+retire-base exit=0 160s | simCmRetire: all 15 checks passed (fleet, hotseat, loads, oldsave)
+simCmLeagueRules exit=0 50s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simClubManagerSaveSize exit=0 47s | simClubManagerSaveSize: all sections green
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+c-uncapped exit=1 49s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+decisionRegression1081 exit=1 139s | Node.js v24.21.0
+simClubManager exit=0 34s | ALL CLUB MANAGER SIMS PASSED
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simManagerHotSeat exit=0 54s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simHarnessAnchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

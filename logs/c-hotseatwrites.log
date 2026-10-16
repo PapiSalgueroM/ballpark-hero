@@ -1,0 +1,7 @@
+NEGATIVE CONTROL ON: RETIRE_CONTROL=hotseatwrites, src/lib/clubManager.ts is a rewritten copy
+== hotseat
+FAIL [hotseat] every daily before the cutover (30, 2026-09-24 to 2026-10-23) replays exactly as on RETIRE_BASE, nothing taken off (30 differ, first 2026-09-24 Pumas UNAM)
+ok   [hotseat] every daily from the cutover (10, 2026-10-24 on) replays as on RETIRE_BASE once the record is taken off
+ok   [hotseat] handoverState never carries retired (40 runs)
+ok   [hotseat] a carried run's first Club Manager match seeds the record exactly from the book (31 runs carried on) (31 seeded)
+control hotseatwrites FIRED: 1 of 4 checks red

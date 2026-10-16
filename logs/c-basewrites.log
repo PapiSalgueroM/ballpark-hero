@@ -1,0 +1,5 @@
+NEGATIVE CONTROL ON: RETIRE_CONTROL=basewrites, src/lib/clubManager.ts is a rewritten copy
+== base
+   a 'base' Liverpool season: 40 matches
+FAIL [base] a career on the base rules plays a season and never writes the record (40 of 40 matches wrote it)
+control basewrites FIRED: 1 of 1 checks red
