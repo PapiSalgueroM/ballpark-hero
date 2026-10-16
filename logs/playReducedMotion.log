@@ -1,0 +1,8 @@
+   Release AU    chance wheel at 390 by 844: result line 587 to 631 before (whole), 587 to 631 after (whole), dialog 140 to 704 of 844, disk 192px whole, 2 button(s) before, reveal 66ms
+   Release AU    chance wheel pictures: /tmp/rm
+   our own keyframe CSS was present and guarded on 4 of 20 routes; the rest had not reached a reveal yet
+   no preference /front-office    elements that move for more than 10ms: 72 of 430
+   no preference /fight-career    elements that move for more than 10ms: 59 of 398
+   no preference /stadium-tycoon  elements that move for more than 10ms: 84 of 495
+
+playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone else keeps the celebration. The chance wheel was answered 1 time(s) on the way to a scene and its result line is whole on 4 screen size(s).

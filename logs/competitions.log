@@ -1,0 +1,12 @@
+ok   1280x900: returning to league keeps the exact watched match and selected-tab focus
+ok   1280x900: completed league review survives competition changes without restarting
+ok   1280x900: switching competitions and squads preserves save bytes and page scroll
+ok   1280x900: hidden live league clock and save stay frozen
+ok   1280x900: returning resumes the same live clock without resetting its minute
+ok   1280x900: a paused league retains its minute and paused state across tabs
+ok   1280x900: old trophy season is accessible without fabricating its unavailable league
+ok   1280x900: old replay marks missing games and never borrows the latest European opponents
+ok   1280x900: historical replay labels the actual current squad club and upcoming season
+ok   1280x900: reload preserves all save bytes and recorded totals
+ok   1280x900: no page errors or sideways scroll
+playSoccerCareerCompetitions: 52 checks, 0 failed
