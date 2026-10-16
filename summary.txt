@@ -1,0 +1,6 @@
+m-hold exit=0 9s | MUTANT hold vitest=1 sim5=1
+m-stamp exit=0 31s | MUTANT stamp vitest=0 sim37=1
+m-contract exit=0 16s | MUTANT contract vitest=1 sim16=0
+m-capgate exit=0 19s | MUTANT capgate vitest=0 sim16=0 kit=1
+m-moralesay exit=0 8s | MUTANT moralesay vitest=1 sim5=1
+m-injgate exit=1 19s | MUTANT injgate vitest=0 sim16=0 kit=0

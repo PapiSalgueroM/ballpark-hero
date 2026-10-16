@@ -1,0 +1,36 @@
+MUT capgate: applied to src/data/soccerDeck/starter.ts
+ [32m✓[39m src/lib/soccerDeck.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+[2m      Tests [22m [1m[32m26 passed[39m[22m[90m (26)[39m
+   LB: 13 cards reached, 495 deck cards in 527 summers (0.94 a summer), the top card 724 at 23.0%
+   RB: 13 cards reached, 500 deck cards in 534 summers (0.94 a summer), the top card 724 at 25.4%
+   CDM: 13 cards reached, 492 deck cards in 533 summers (0.92 a summer), the top card 724 at 27.0%
+   CM: 12 cards reached, 518 deck cards in 537 summers (0.96 a summer), the top card 724 at 21.0%
+   CAM: 13 cards reached, 519 deck cards in 538 summers (0.96 a summer), the top card 724 at 18.9%
+   LW: 13 cards reached, 496 deck cards in 529 summers (0.94 a summer), the top card 724 at 23.2%
+   RW: 13 cards reached, 519 deck cards in 543 summers (0.96 a summer), the top card 724 at 23.1%
+   ST: 13 cards reached, 523 deck cards in 547 summers (0.96 a summer), the top card 724 at 21.0%
+   keepers: a deck card in 94.9% of summers (516 of 544)
+   defenders: a deck card in 93.7% of summers (1991 of 2126)
+   midfielders: a deck card in 96.5% of summers (1037 of 1075)
+   forwards: a deck card in 95.0% of summers (1538 of 1619)
+   ok all 28 cards reached: every position card its own group and no other, every situation card at least one, and no group printed another's training words
+7) Keyed: the slot and the deck's answers draw no Math.random, the same save deals the same card in a fresh bundle, and the season moves the pick
+8) Economy: four answer arms against the deck off, over five seeds of whole careers
+9) Old saves: the base's saves load and play here as they do there; a save with a deck card pending loads on the base (skipped, its stamp handed back) and answers here
+10) Lazy: the page and the engine reach the gate and nothing of the deck, and nothing but the gate and tests loads it
+
+runtime 14.3 s
+simSoccerDeck: green. Sections 1, 6 only.
+   ok soccer: all 28 cards reached in 1000 deals, the top card 724 at 11.7% (ceiling 13.7%)
+   reach by position: no pack the kit knows names a reachBy fact yet
+11) Registry: every option prints exactly the keys it moves, by exactly the amounts, and bind refuses each breakage
+12) Legal: every pack narrated in roles, slots only in words, and a tagged card never lands on a real man
+   ok 10483 real names harvested from thirteen roster files
+   ok 710 strings over 12 packs: no quote, no first person, every voice a role, no real name, slots only where declared, no person slot by a speech verb, no wording prints an effect, every conduct or private card tagged (baseline: afl/afl_go_home, nba/nba_trade_demand)
+   ok FX_CONDUCT on 100 ten season desks answering late: 17035 cards dealt, 6985 of them tagged, 16574 answered, 59656 tagged cards held for a real man, 112 answers refused and 280 open cards settled after a role passed to a real man (or nobody); every tagged card dealt and every answer taken landed on generated men only, every refused answer moved nothing, no tagged card sat open about a real man, no dealt text kept a brace
+14) Frozen words: no recorded card of a compact pack changes its words, options, story or slots
+   ok 39 recorded cards of 2 compact pack(s): every wording, option, story and slot as recorded
+
+runtime 2.6 s
+simEventDeck: 1 failure, red sections 10
+MUTANT capgate vitest=0 sim16=0 kit=1

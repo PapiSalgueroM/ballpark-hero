@@ -1,0 +1,34 @@
+MUT contract: applied to src/lib/soccerDeck.ts
+   [32m✓[39m the gate[2m > [22manswers [] until the deck is loaded, then deals from it[32m 1[2mms[22m[39m
+   [32m✓[39m the gate[2m > [22mloads the real chunk and deals one card of the shipped pack[32m 1[2mms[22m[39m
+   [32m✓[39m the gate[2m > [22mfails closed on a load that resolves with nothing in it[32m 1[2mms[22m[39m
+   [32m✓[39m the gate[2m > [22mclears a rejected load so the next try can land it[32m 0[2mms[22m[39m
+   [32m✓[39m the starter pack[2m > [22mholds 28 cards: five a position group and eight about where a career stands[32m 1[2mms[22m[39m
+   [32m✓[39m the starter pack[2m > [22mdeals each code only its own group's position cards[32m 11[2mms[22m[39m
+[31m   [31m×[31m the starter pack[2m > [22mgates the cards whose words state a fact on that fact[39m[32m 4[2mms[22m[39m
+   [32m✓[39m the starter pack[2m > [22mnever deals a training card at room 0, and every option moves exactly what it prints[32m 9[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22msoccerDeckFacts[2m > [22mreads only the save: caps, the armband at his club, one year left, the room, the senior rows, the same club
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mgates the cards whose words state a fact on that fact
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m24 passed[39m[22m[90m (26)[39m
+   LB: 13 cards reached, 485 deck cards in 534 summers (0.91 a summer), the top card 706 at 18.4%
+   RB: 13 cards reached, 494 deck cards in 536 summers (0.92 a summer), the top card 706 at 16.4%
+   CDM: 13 cards reached, 489 deck cards in 534 summers (0.92 a summer), the top card 706 at 16.6%
+   CM: 12 cards reached, 508 deck cards in 531 summers (0.96 a summer), the top card 713 at 15.4%
+   CAM: 13 cards reached, 517 deck cards in 543 summers (0.95 a summer), the top card 711 at 16.4%
+   LW: 13 cards reached, 494 deck cards in 541 summers (0.91 a summer), the top card 720 at 15.2%
+   RW: 13 cards reached, 518 deck cards in 540 summers (0.96 a summer), the top card 717 at 15.8%
+   ST: 13 cards reached, 512 deck cards in 549 summers (0.93 a summer), the top card 717 at 14.8%
+   keepers: a deck card in 90.3% of summers (495 of 548)
+   defenders: a deck card in 91.4% of summers (1946 of 2128)
+   midfielders: a deck card in 95.4% of summers (1025 of 1074)
+   forwards: a deck card in 93.5% of summers (1524 of 1630)
+   ok all 28 cards reached: every position card its own group and no other, every situation card at least one, and no group printed another's training words
+7) Keyed: the slot and the deck's answers draw no Math.random, the same save deals the same card in a fresh bundle, and the season moves the pick
+8) Economy: four answer arms against the deck off, over five seeds of whole careers
+9) Old saves: the base's saves load and play here as they do there; a save with a deck card pending loads on the base (skipped, its stamp handed back) and answers here
+10) Lazy: the page and the engine reach the gate and nothing of the deck, and nothing but the gate and tests loads it
+
+runtime 14.1 s
+simSoccerDeck: green. Sections 1, 6 only.
+MUTANT contract vitest=1 sim16=0
