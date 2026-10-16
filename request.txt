@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+edge: cp .rc/x/managerTransferEdgeCases.test.ts src/test/managerTransferEdgeCases.test.ts && node_modules/.bin/vitest run src/test/managerTransferEdgeCases.test.ts --reporter=verbose --testTimeout=900000 --hookTimeout=900000; s=$?; rm -f src/test/managerTransferEdgeCases.test.ts; exit $s
+edge-carried: cp .rc/x/managerTransferEdgeCasesCarried.test.ts src/test/managerTransferEdgeCasesCarried.test.ts && node_modules/.bin/vitest run src/test/managerTransferEdgeCasesCarried.test.ts --reporter=verbose --testTimeout=900000 --hookTimeout=900000; s=$?; rm -f src/test/managerTransferEdgeCasesCarried.test.ts; exit $s
+s2: CM_WORLD_MOVES_SECTIONS=2 node scripts/simCmWorldMoves.mjs
+s3: CM_WORLD_MOVES_SECTIONS=3 node scripts/simCmWorldMoves.mjs
+s10: CM_WORLD_MOVES_SECTIONS=10 node scripts/simCmWorldMoves.mjs
+s11: CM_WORLD_MOVES_SECTIONS=11 node scripts/simCmWorldMoves.mjs
+s7: CM_WORLD_MOVES_SECTIONS=7 node scripts/simCmWorldMoves.mjs
+vitest-moves: node_modules/.bin/vitest run src/lib/clubManagerWorldMoves.test.ts src/lib/clubManagerWorldMovesNamesakes.test.ts src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerCustomPromotion.test.ts --reporter=verbose --testTimeout=300000 --hookTimeout=120000
+bridge-check: node scripts/lib/cmNoAiMoves1344.mjs --check

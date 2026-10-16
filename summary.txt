@@ -1,0 +1,10 @@
+edge-carried exit=0 7s |    Duration  6.53s (transform 2.30s, setup 67ms, collect 92ms, tests 5.07s, environment 423ms, prepare 312ms)
+edge exit=1 11s |    Duration  10.37s (transform 2.34s, setup 62ms, collect 118ms, tests 8.94s, environment 451ms, prepare 129ms)
+s2 exit=0 33s | simCmWorldMoves: green, sections 2 held
+s3 exit=0 36s | simCmWorldMoves: green, sections 3 held
+s11 exit=0 23s | simCmWorldMoves: green, sections 11 held
+s10 exit=0 35s | simCmWorldMoves: green, sections 10 held
+vitest-moves exit=0 11s |    Duration  10.54s (transform 2.66s, setup 482ms, collect 9.02s, tests 12.67s, environment 3.44s, prepare 911ms)
+bridge-check exit=0 0s | cmNoAiMoves1344: all 5 anchors stand once and can be taken out
+tsc exit=0 92s | 
+s7 exit=0 54s | simCmWorldMoves: green, sections 7 held
