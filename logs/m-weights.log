@@ -1,0 +1,28 @@
+MUT weights: patched src/lib/clubManager.ts (occurrence 1 of 1)
+[title] 242 rollovers, 242 stays: on CM_BOARD_BASE 131 of 186 A or B seasons opened under Safe (62 of 79 titles); on the head 0
+  by fate, none n 232: base mean 52.19 (p10 40 to p90 65.5), head mean 62.91 (p10 42 to p90 69)
+  by fate, up n 8: base mean 80.31 (p10 77.5 to p90 82), head mean 69 (p10 69 to p90 69)
+  by fate, escape n 2: base mean 56.5 (p10 55 to p90 58), head mean 69 (p10 69 to p90 69)
+  by grade, A n 128: base mean 59.02 (p10 49 to p90 72.5), head mean 69.54 (p10 69 to p90 71)
+  by grade, B n 58: base mean 50.51 (p10 42 to p90 58), head mean 69 (p10 69 to p90 69)
+  by grade, C n 43: base mean 43.55 (p10 38 to p90 48), head mean 43.51 (p10 38 to p90 48)
+  by grade, D n 13: base mean 39.04 (p10 35 to p90 49), head mean 39.27 (p10 35 to p90 49)
+ok   [title] every A or B season opens the next at Safe or more (0 of 186 under)
+ok   [title] every D or F season opens the next under Safe (0 of 13 at Safe or more)
+ok   [title] every move at the summer opens at BOARD_FRESH (0 of 0 do not)
+ok   [title] startNextSeason draws the same number of times on head and base wherever the kitty band did not bind
+ok   [title] and writes the same save but for the opening (53 rollovers where the band bound left to section kitty)
+simCmBoardVerdict GREEN: 5 of 5 checks green (parts title, 179 s)
+3c) the era names the filler could build are listed exactly
+   6911 era players, 22 buildable names, 22 listed
+3d) no league or nation id is branched on outside the rules table
+   105 sources read, 61 ids, 0 finding(s)
+
+simCmLeagueRules: 19 failure(s)
+   Inter Miami: 4/8 met, 0 unresolved at final whistle
+
+ALL BOARD CHECKS PASSED
+   3087 labels checked
+
+simBoardObjectives: green. Every board talks like a board.
+MUT weights: title=0 rules=1 simBoard=0 simBoardObjectives=0

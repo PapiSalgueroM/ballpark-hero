@@ -1,0 +1,3 @@
+m-played exit=1 298s | MUT played: title=0 rules=1 simBoard=0 simClubManagerScore=0
+m-weights exit=1 212s | MUT weights: title=0 rules=1 simBoard=0 simBoardObjectives=0
+m-joins exit=1 107s | MUT joins: legacy=1 takeover=0

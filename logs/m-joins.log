@@ -1,0 +1,14 @@
+MUT joins: patched src/lib/clubManagerCalendar.ts (occurrence 2 of 2)
+MUT joins: patched src/lib/clubManagerCalendar.ts (occurrence 2 of 2)
+FAIL [legacy] 68 takeovers on the old rules (startMidSeason at new year and the run in, joinClubNow): every byte equal to CM_BOARD_BASE (8 differ; first Liverpool now join seed 1: .boardConfidence: head 69 base 62)
+ok   [legacy] 11 careers on the old rules (matchRules 'base' on both trees): every save byte and every draw equal to CM_BOARD_BASE
+simCmBoardVerdict RED: 1 of 2 checks green (parts legacy, 57 s)
+[takeover] 80 handovers (8 by joinClubNow, 0 joins skipped: approached before applying); on CM_BOARD_BASE 44 carried a failed objective, on the head 0
+ok   [takeover] 80 takeovers open at BOARD_FRESH (69) (0 do not; 8 joins of 8 join cases)
+  the card: 44 takeovers dropped a failed objective; the season score compared on 42 of them (the rest were sacked first) at the handover and at the final whistle
+ok   [takeover] on the day of the handover no objective on the card reads failed (0 do)
+ok   [takeover] the card is the base card less exactly its failed objectives, in order
+ok   [takeover] the season score is the same with and without the dropped objectives, at the handover and the final whistle (42 cases)
+ok   [takeover] every takeover equal to CM_BOARD_BASE but for the opening (and the card), its handover stamp included
+simCmBoardVerdict GREEN: 5 of 5 checks green (parts takeover, 49 s)
+MUT joins: legacy=1 takeover=0

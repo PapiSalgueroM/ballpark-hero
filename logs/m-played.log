@@ -1,0 +1,29 @@
+MUT played: patched src/lib/clubManager.ts (occurrence 1 of 1)
+[title] 243 rollovers, 243 stays: on CM_BOARD_BASE 131 of 186 A or B seasons opened under Safe (62 of 79 titles); on the head 0
+  by fate, none n 232: base mean 52.19 (p10 40 to p90 65.5), head mean 63.08 (p10 39 to p90 71.5)
+  by fate, up n 8: base mean 80.31 (p10 77.5 to p90 82), head mean 79.56 (p10 75.5 to p90 82)
+  by fate, down n 1: base mean 35 (p10 35 to p90 35), head mean 35 (p10 35 to p90 35)
+  by fate, escape n 2: base mean 56.5 (p10 55 to p90 58), head mean 69 (p10 69 to p90 69)
+  by grade, A n 128: base mean 59.02 (p10 49 to p90 72.5), head mean 71.12 (p10 69 to p90 78.5)
+  by grade, B n 58: base mean 50.51 (p10 42 to p90 58), head mean 69.34 (p10 69 to p90 69)
+  by grade, C n 44: base mean 43.35 (p10 36.5 to p90 48), head mean 41.52 (p10 35 to p90 46)
+  by grade, D n 13: base mean 39.04 (p10 35 to p90 49), head mean 37.88 (p10 35 to p90 47)
+ok   [title] every A or B season opens the next at Safe or more (0 of 186 under)
+ok   [title] every D or F season opens the next under Safe (0 of 13 at Safe or more)
+ok   [title] every move at the summer opens at BOARD_FRESH (0 of 0 do not)
+ok   [title] startNextSeason draws the same number of times on head and base wherever the kitty band did not bind
+ok   [title] and writes the same save but for the opening (53 rollovers where the band bound left to section kitty)
+simCmBoardVerdict GREEN: 5 of 5 checks green (parts title, 180 s)
+3c) the era names the filler could build are listed exactly
+   6911 era players, 22 buildable names, 22 listed
+3d) no league or nation id is branched on outside the rules table
+   105 sources read, 61 ids, 0 finding(s)
+
+simCmLeagueRules: 6 failure(s)
+   Inter Miami: 3/8 met, 0 unresolved at final whistle
+
+ALL BOARD CHECKS PASSED
+   the 60 entry cap: 54 of 54 logs missing his first league match fell back to the constant; 54 of 54 missing a cup or European entry still replayed exactly
+
+ALL SEASON SCORE CHECKS PASSED
+MUT played: title=0 rules=1 simBoard=0 simClubManagerScore=0
