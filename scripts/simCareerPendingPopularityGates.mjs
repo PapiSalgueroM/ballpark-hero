@@ -52,7 +52,11 @@ const appBindings = [ENGINE, SAVE, files[3], files[4]].map(file => {
 });
 if (PHASE === 'baseline') assert.equal(sources.get(LIFE), original, 'Baseline Life must be unchanged');
 if (CONTROL) assert.notEqual(sources.get(LIFE), original, 'Original control must actually replace changed product source');
-const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'pending-popularity-compiled-'));
+const tmpRoot = path.join(ROOT, '.sim-control');
+fs.mkdirSync(tmpRoot, { recursive: true });
+const tmp = fs.mkdtempSync(path.join(tmpRoot, 'pending-popularity-compiled-'));
+assert.equal(path.dirname(tmpRoot), ROOT, 'Compiled parent must stay inside the actual project');
+assert.equal(path.dirname(tmp), tmpRoot, 'Compiled cleanup target must stay inside its project parent');
 let outcome = {};
 function receipt(extra = {}) {
   outcome = { ...outcome, ...extra };
