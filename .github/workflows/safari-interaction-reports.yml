@@ -17,7 +17,8 @@ jobs:
     env:
       CI: '1'
       SIM_NETWORK: offline
-      SAFARI_REPORT_PHASE: baseline
+      SAFARI_REPORT_PHASE: fixed
+      SC_CREATION_BASELINE_RAW_SHA256: a26072a4a0666a129cd28125e3b81e165f702baca3d554be37a25be74c398d84
       SOCCER_CREATION_BASE: http://127.0.0.1:4173
       XI_SELECTION_BASE: http://127.0.0.1:4173
     steps:
@@ -27,6 +28,7 @@ jobs:
           echo "SAFARI_REPORT_FONT_CACHE=$RUNNER_TEMP/safari-report-fonts" >> "$GITHUB_ENV"
           echo "SOCCER_CREATION_OUT=$RUNNER_TEMP/safari-reports/creation" >> "$GITHUB_ENV"
           echo "XI_SELECTION_OUT=$RUNNER_TEMP/safari-reports/xi" >> "$GITHUB_ENV"
+          echo "WEBKIT_OFFLINE_OUT=$RUNNER_TEMP/safari-reports/webkit-transport" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -44,7 +46,12 @@ jobs:
           mkdir -p "$SAFARI_REPORT_OUT"
           git rev-parse HEAD > "$SAFARI_REPORT_OUT/head.txt"
           git archive --format=zip HEAD > "$SAFARI_REPORT_OUT/source.zip"
-          git diff --exit-code e814c2def671e07bd6163462dff8ab1230be2000 HEAD -- src ':!src/test/soccerCareerCreationRoll.test.tsx'
+          git diff --exit-code e814c2def671e07bd6163462dff8ab1230be2000 HEAD -- src public package.json package-lock.json bun.lock ':!src/test/soccerCareerCreationRoll.test.tsx' ':!src/pages/SoccerCareer.tsx'
+          if test "$SAFARI_REPORT_PHASE" = baseline; then
+            git diff --exit-code e814c2def671e07bd6163462dff8ab1230be2000 HEAD -- src/pages/SoccerCareer.tsx
+          else
+            test "$SAFARI_REPORT_PHASE" = fixed
+          fi
           git status --porcelain --untracked-files=no > "$SAFARI_REPORT_OUT/source-before.txt"
           test ! -s "$SAFARI_REPORT_OUT/source-before.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$SAFARI_REPORT_OUT/source-files.sha256"
@@ -65,8 +72,16 @@ jobs:
           set -euo pipefail
           node --check scripts/qa/playSoccerCreation1388.mjs
           node --check scripts/qa/playBuildYourXiSelection1388.mjs
+          node --check scripts/qa/proveSoccerCreation1388.mjs
+          node --check scripts/qa/proveWebkitOffline1388.mjs
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SAFARI_REPORT_OUT/types.log"
+      - name: Offline transport controls and actual WebKit compatibility
+        run: |
+          set -euo pipefail
+          RUNNER_TRANSPORT_CONTROL=all node scripts/simRunnerTransport.mjs 2>&1 | tee "$SAFARI_REPORT_OUT/transport-controls.log"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/proveWebkitOffline1388.mjs 2>&1 | tee "$SAFARI_REPORT_OUT/webkit-transport.log"
       - name: Exact current creation faults and preserved outcomes
+        if: env.SAFARI_REPORT_PHASE == 'baseline'
         run: |
           set -euo pipefail
           set +e
@@ -99,6 +114,11 @@ jobs:
           const raw=JSON.parse(fs.readFileSync(out+'/creation-units-raw.json')); assert.equal(Object.keys(raw).length,4);
           console.log('Published-source baseline:2 precise stale-position faults and2 full saved-player preserves. No product fix claim.');
           NODE
+      - name: Fixed creation original-source control and restoration
+        if: env.SAFARI_REPORT_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/proveSoccerCreation1388.mjs 2>&1 | tee "$SAFARI_REPORT_OUT/creation-proof.log"
       - name: Actual production build
         run: |
           set -euo pipefail
@@ -144,7 +164,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: safari-report-baseline-${{ github.sha }}
+          name: safari-report-${{ env.SAFARI_REPORT_PHASE }}-${{ github.sha }}
           path: ${{ env.SAFARI_REPORT_OUT }}
           if-no-files-found: error
           retention-days: 14

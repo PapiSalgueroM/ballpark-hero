@@ -1,3 +1,6 @@
+## Root1388 urgent interaction reports, 2026-10-16
+
+The original published application reproduces two position-change creation faults on actual WebKit and Chromium. Corrected-guard original baseline18234788/run38971694933 isSUCCESS:9native Soccer Career journeys,5XI cases,4mounted-page units with2exact faults+2preserves, actualtypes/build/all15readers/fullunchangedweights and source/dependency/dist holds. Artifact12077292112 is physically retained outside,48,630,179B/SHAb8f7b04b2288f8d3be78009157bd5be8c12edd7a37de8cd55f37c5169c71eff1; rawunitSHAa26072a4a0666a129cd28125e3b81e165f702baca3d554be37a25be74c398d84. Root's focused CreationScreen fix and original-source restoration proof are prepared, not yet runtime qualified or live. XI selections pass with declared prepared rows, so the public iPad report remains open. ActualClaudeI keeps joined release/main/publication. Details: docs/audits/safari-interaction-reports.md.
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
