@@ -1,0 +1,9 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCmRetire-strip exit=1 26s | control strip FIRED: 6 of 18 checks red
+playCmRetire-norecord exit=1 97s | control norecord FIRED: 6 of 52 checks red
+playCmRetire exit=0 102s | playCmRetire: all 60 checks passed. Pictures in /home/runner/work/_temp/rc-out/files/head
+playClubManagerSlots exit=0 10s | playClubManagerSlots: green
+playCmHubLanding exit=0 98s | playCmHubLanding: green (A 8 pass 0 fail, B 65 pass 0 fail, C 110 pass 0 fail, E 63 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its first frame
+playClubManager exit=0 291s | Played Club Manager through its own screens. 0 findings.
+playCmNoSack exit=0 261s |   PASS  no page errors
+playTwoTabs exit=0 474s | playTwoTabs: green at 320x640, 390x844, 1280x900

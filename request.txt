@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+playCmRetire: node scripts/playCmRetire.mjs
+playCmRetire-strip: PLAY_RETIRE_CONTROL=strip node scripts/playCmRetire.mjs
+playCmRetire-norecord: PLAY_RETIRE_CONTROL=norecord node scripts/playCmRetire.mjs
+playTwoTabs: ENGINES=chromium node scripts/playTwoTabs.mjs
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+playClubManagerSlots: ENGINES=chromium node scripts/playClubManagerSlots.mjs
+playCmHubLanding: ENGINES=chromium node scripts/playCmHubLanding.mjs
+playCmNoSack: node scripts/playCmNoSack.mjs
