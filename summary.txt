@@ -1,0 +1,2 @@
+seeds exit=1 36s | seeds done, any red: 1
+inj-kit13to16 exit=1 128s | MUTANT injgate kit13to16=0

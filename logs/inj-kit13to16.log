@@ -1,0 +1,4 @@
+MUT injgate: applied to src/data/soccerDeck/starter.ts
+simEventDeck: 8 packs (nfl, nba, mlb, nhl, college, gym, afl)
+simEventDeck: green. Sections 13, 14, 15, 16 only.
+MUTANT injgate kit13to16=0

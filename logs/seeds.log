@@ -1,0 +1,13 @@
+SEED=1 exit=0    ok soccer: all 28 cards reached in 1000 deals, the top card 726 at 10.2% (ceiling 13.7%) 
+SEED=2 exit=0    ok soccer: all 28 cards reached in 1000 deals, the top card 726 at 10.4% (ceiling 13.7%) 
+SEED=3 exit=0    ok soccer: all 28 cards reached in 1000 deals, the top card 726 at 9.0% (ceiling 13.7%) 
+SEED=4 exit=1    FAIL soccer: 1 cards never dealt over 1,000 seasons (719)    ok soccer: all 28 cards reached in 1000 deals, the top card 726 at 10.8% (ceiling 13.7%) 
+SEED=5 exit=0    ok soccer: all 28 cards reached in 1000 deals, the top card 726 at 10.7% (ceiling 13.7%) 
+SEED=6 exit=0    ok soccer: all 28 cards reached in 999 deals, the top card 726 at 10.9% (ceiling 13.7%) 
+SEED=7 exit=0    ok soccer: all 28 cards reached in 1000 deals, the top card 726 at 9.1% (ceiling 13.7%) 
+SEED=8 exit=0    ok soccer: all 28 cards reached in 1000 deals, the top card 726 at 11.7% (ceiling 13.7%) 
+SEED=9 exit=0    ok soccer: all 28 cards reached in 999 deals, the top card 726 at 10.6% (ceiling 13.7%) 
+SEED=10 exit=0    ok soccer: all 28 cards reached in 1000 deals, the top card 726 at 10.1% (ceiling 13.7%) 
+SEED=11 exit=0    ok soccer: all 28 cards reached in 1000 deals, the top card 726 at 9.2% (ceiling 13.7%) 
+SEED=12 exit=0    ok soccer: all 28 cards reached in 1000 deals, the top card 726 at 9.3% (ceiling 13.7%) 
+seeds done, any red: 1
