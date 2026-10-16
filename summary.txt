@@ -1,0 +1,9 @@
+edge-carried exit=1 11s |    Duration  10.18s (transform 2.83s, setup 102ms, collect 137ms, tests 7.95s, environment 954ms, prepare 301ms)
+s0 exit=0 0s | simCmWorldMoves: green, sections 0 held
+vitest-units exit=0 13s |    Duration  12.21s (transform 3.67s, setup 476ms, collect 9.97s, tests 13.70s, environment 2.98s, prepare 1.21s)
+s2 exit=2 40s | simCmWorldMoves: cannot run: section 2: only 13 wars on a man I sold and 0 on a man I left behind could be set up, under 3 each
+s3 exit=0 42s | simCmWorldMoves: green, sections 3 held
+s10 exit=0 49s | simCmWorldMoves: green, sections 10 held
+tsc exit=0 108s | 
+s7 exit=0 78s | simCmWorldMoves: green, sections 7 held
+s11 exit=1 39s | simCmWorldMoves: RED, sections 11 (9)

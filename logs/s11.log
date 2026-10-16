@@ -1,0 +1,12 @@
+11) my own results: Aberdeen, Motherwell, St Mirren (2026-27), 3 seasons, BASE against the head on one stream, seeds 1,2,3
+  FAIL section 11: Aberdeen (now, seed 1): by step 42 (match) the head drew 62812 times and BASE 62877, with no AI deal touching my league or my opponents
+  FAIL section 11: Aberdeen (now, seed 2): by step 37 (match) the head drew 56320 times and BASE 56356, with no AI deal touching my league or my opponents
+  FAIL section 11: Aberdeen (now, seed 3): by step 72 (match) the head drew 109061 times and BASE 109087, with no AI deal touching my league or my opponents
+  FAIL section 11: Motherwell (now, seed 1): by step 60 (match) the head drew 86127 times and BASE 86120, with no AI deal touching my league or my opponents
+  FAIL section 11: Motherwell (now, seed 2): by step 32 (match) the head drew 48798 times and BASE 48799, with no AI deal touching my league or my opponents
+  FAIL section 11: Motherwell (now, seed 3): by step 58 (match) the head drew 89247 times and BASE 89191, with no AI deal touching my league or my opponents
+  FAIL section 11: St Mirren (now, seed 1): by step 29 (match) the head drew 45045 times and BASE 45118, with no AI deal touching my league or my opponents
+  FAIL section 11: St Mirren (now, seed 2): by step 43 (match) the head drew 67415 times and BASE 67392, with no AI deal touching my league or my opponents
+   9 careers: 360 results of mine compared; 0 compared to the end, 0 cut where a deal touched my league, 0 where it touched a club I played
+  section 11: 1 more failures not shown
+simCmWorldMoves: RED, sections 11 (9)
