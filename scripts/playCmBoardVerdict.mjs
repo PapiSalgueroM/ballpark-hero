@@ -189,6 +189,7 @@ for (const profile of PROFILES) {
         check('a', `${w}: 150 ms after Back every card is already showing, focus on the tapped one`, back.faint === 0 && back.focus === offerClub, `${back.faint} not showing, focus on ${back.focus}`);
         check('a', `${w}: the note under the offers is 12 px or more`, back.hasNote && back.note >= 12, `${back.note} px`);
         await page.waitForTimeout(250);
+        await shot(page, `back-${w}`);
         check('a', `${w}: Back shows the list and leaves the save as it was`, (await page.locator('[data-cm-offer]').count()) >= 2 && JSON.stringify(await saved(page)) === saveBefore);
         await page.locator(`[data-cm-offer="${offerClub}"]`).first().click();
         await page.waitForTimeout(400);
