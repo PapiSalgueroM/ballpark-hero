@@ -1,0 +1,6 @@
+vitest exit=0 98s |    Duration  96.23s (transform 12.27s, setup 3.36s, collect 40.89s, tests 181.40s, environment 22.10s, prepare 5.76s)
+sd-a exit=0 112s | simSoccerDeck: green. Sections 1, 2, 3, 4, 5 only.
+tsc exit=0 132s | 
+sd-b exit=0 69s | simSoccerDeck: green. Sections 6, 7, 9, 10 only.
+sd-8 exit=0 98s | simSoccerDeck: green. Sections 8 only.
+sd-whole exit=0 188s | simSoccerDeck: green. Every section.

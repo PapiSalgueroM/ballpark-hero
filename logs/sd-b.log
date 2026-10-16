@@ -1,0 +1,41 @@
+simSoccerDeck: head and base e814c2de bundled (1.9 s); the shipped pack holds 28 cards
+1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing
+2) Inert: the deck not loaded, 200 careers of 12 seasons, every save byte equal to the base's after every step and the Math.random count equal
+3) Adds, never replaces: at each deal, from one identical state, the old batch is the base's and a deck card is first
+4) Neutral: every deck card answered on the option that moves nothing, every season end save is the base's but for the deck's own stamps
+5) Promises: every option moves what its button prints, to the bound and no further, says what landed, and never moves money or fame
+6) Reach by position: every position card reaches its own group and never another, every situation card someone, no keeper word for an outfielder
+   GK: 13 cards reached, 496 deck cards in 549 summers (0.90 a summer), the top card 702 at 17.7%
+   CB: 13 cards reached, 483 deck cards in 533 summers (0.91 a summer), the top card 706 at 19.5%
+   LB: 13 cards reached, 481 deck cards in 531 summers (0.91 a summer), the top card 706 at 18.9%
+   RB: 13 cards reached, 491 deck cards in 534 summers (0.92 a summer), the top card 706 at 16.9%
+   CDM: 13 cards reached, 478 deck cards in 534 summers (0.90 a summer), the top card 706 at 17.4%
+   CM: 12 cards reached, 501 deck cards in 533 summers (0.94 a summer), the top card 712 at 15.8%
+   CAM: 13 cards reached, 516 deck cards in 545 summers (0.95 a summer), the top card 711 at 17.1%
+   LW: 13 cards reached, 493 deck cards in 542 summers (0.91 a summer), the top card 720 at 15.0%
+   RW: 13 cards reached, 512 deck cards in 537 summers (0.95 a summer), the top card 717 at 15.8%
+   ST: 13 cards reached, 504 deck cards in 546 summers (0.92 a summer), the top card 717 at 15.9%
+   keepers: a deck card in 90.3% of summers (496 of 549)
+   defenders: a deck card in 90.7% of summers (1933 of 2132)
+   midfielders: a deck card in 94.3% of summers (1017 of 1078)
+   forwards: a deck card in 92.9% of summers (1509 of 1625)
+   ok all 28 cards reached: every position card its own group and no other, every situation card at least one, and no group printed another's training words
+7) Keyed: the slot and the deck's answers draw no Math.random, the same save deals the same card in a fresh bundle, and the season moves the pick
+   the loaded fleet: 1943 slot calls and 1796 deck answers drew Math.random 0 times; the whole fleet drew it 1171439 times (printed, never asserted)
+   ok the slot and the deck's answers drew Math.random 0 times
+   ok 389 saves dealt in two fresh bundles (and two different Math.random streams): the same card every time (378 dealt one)
+   the same save eight summers, the year moved: careers dealt at least two different cards, by sample: 100.0, 100.0, 100.0, 100.0, 100.0 percent (floor 80); sample 0 had 0 saves dealt one card eight times
+   ok the pick moves with the season
+8) Economy: four answer arms against the deck off, over five seeds of whole careers
+9) Old saves: the base's saves load and play here as they do there; a save with a deck card pending loads on the base (skipped, its stamp handed back) and answers here
+   445 saves the base wrote, loaded and played a season on both
+   ok every base save loads to the same JSON here and plays the same season
+   60 saves with a deck card pending: 60 pass the save validator, 60 skipped on the base with the stamp handed back, 60 answered here
+   ok a saved deck card loads on the base and is skipped with its stamp handed back, and here it is answered
+10) Lazy: the page and the engine reach the gate and nothing of the deck, and nothing but the gate and tests loads it
+   ok src/pages/SoccerCareer.tsx: 180 files load with it, the gate among them, and none of the deck
+   ok src/lib/soccerCareerEngine.ts: 65 files load with it, the gate among them, and none of the deck
+   ok 1538 src files read as code: nothing but the gate and tests calls loadSoccerDeck
+
+runtime 69.2 s
+simSoccerDeck: green. Sections 6, 7, 9, 10 only.
