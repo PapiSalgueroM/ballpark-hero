@@ -58,6 +58,10 @@ const ManagerSlotsScreen = lazy(() => import('@/components/club-manager/ManagerS
 const SaveMovedNotice = lazy(() => import('@/components/SaveMovedNotice').catch(() => { reloadToRetryChunk(); return new Promise<never>(() => undefined); }));
 const ClubManagerSeasonSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary'));
 const SackedCareerSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary').then(m => ({ default: m.SackedCareerSummary })));
+/* Round 1343: the farewell loads only for a career that retires; the door starts loading it when its confirm opens. */
+const ClubManagerFarewell = lazy(() => import('@/components/club-manager/ClubManagerFarewell'));
+const CmRetireDoor = lazy(() => import('@/components/club-manager/CmRetireDoor'));
+const preloadFarewell = () => { void import('@/components/club-manager/ClubManagerFarewell'); };
 const WorldEditorScreen = lazy(() => import('@/components/club-manager/WorldEditorScreen'));
 const CustomClubForm = lazy(() => import('@/components/club-manager/CustomClubForm').then(m => ({ default: m.CustomClubForm })));
 const CrestBadge = lazy(() => import('@/components/club-manager/CustomClubForm').then(m => ({ default: m.CrestBadge })));
@@ -165,6 +169,9 @@ const ClubManager = () => {
      opens the club's home screen at its top before the first paint, instead of
      at the scroll offset the screen before it left behind. */
   const hubTopRef = useArrivalTop<HTMLDivElement>(g.phase === 'hub' && g.career ? 'hub' : null);
+  /* Round 1343: the farewell opens at its top too. On the RETIRED heading, which has height before the lazy
+     farewell lands. */
+  const retiredTopRef = useArrivalTop<HTMLDivElement>(g.phase === 'retired' && g.career ? 'retired' : null);
   // Round 70: the nation -> league -> team picker. Each step change pulls the
   // new step into view (skipFirst so landing on the page stays put).
   // Round 72: nations can hold more than one league (England, the USA).
@@ -388,7 +395,7 @@ const ClubManager = () => {
       <ScreenLoading>
         <ManagerSlotsScreen
           slots={g.slots}
-          activeDetail={c ? `Week ${Math.min(c.week + 1, c.calendar.length)} of ${c.calendar.length} · Board ${Math.round(c.boardConfidence)}/100` : null}
+          activeDetail={c && !c.retired ? `Week ${Math.min(c.week + 1, c.calendar.length)} of ${c.calendar.length} · Board ${Math.round(c.boardConfidence)}/100` : null}
           note={g.slotNote}
           onContinue={g.openSlot}
           onNew={g.newInSlot}
@@ -891,6 +898,8 @@ const ClubManager = () => {
         <h1 className="text-3xl md:text-5xl font-bold text-primary font-display mb-1">SEASON {sm.season} COMPLETE</h1>
         <p className="text-muted-foreground text-sm mb-5">{sm.club} · finished <span className="text-foreground font-bold">#{sm.position}</span> with {sm.points} pts</p>
         <ScreenLoading><ClubManagerSeasonSummary sm={sm} c={c} g={g} /></ScreenLoading>
+        {/* Round 1343: retire here, before the summer. */}
+        <div className="mt-4 mx-auto max-w-sm"><Suspense fallback={<div className="min-h-11" />}><CmRetireDoor c={c} retire={g.retire} onOpen={preloadFarewell} /></Suspense></div>
         {/* Round 928 review: the managers are a tap away here too, not only on the hub. */}
         <button onClick={g.showSlots} data-testid="cm-show-slots-end" className="mt-4 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors">
           Your managers
@@ -909,9 +918,25 @@ const ClubManager = () => {
             are document wide once mounted, so the class is live up here. */}
         <h1 className="cm-loss-shake text-3xl md:text-5xl font-bold text-destructive font-display mb-5">SACKED!</h1>
         <ScreenLoading><SackedCareerSummary c={c} g={g} /></ScreenLoading>
+        {/* Round 1343: or stop waiting for the phone. */}
+        <div className="mt-4 mx-auto max-w-sm"><Suspense fallback={<div className="min-h-11" />}><CmRetireDoor c={c} retire={g.retire} onOpen={preloadFarewell} /></Suspense></div>
         <button onClick={g.showSlots} data-testid="cm-show-slots-sacked" className="mt-4 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors">
           Your managers
         </button>
+      </div>
+    );
+  }
+
+  /* ================= RETIRED ================= */
+  /* Round 1343: a retired career's only screen. Its own career binding (Round 541, simEarlyReturnScope). */
+  if (g.phase === 'retired' && g.career) {
+    const c = g.career;
+    return shell(
+      <div className="text-center">
+        <div ref={retiredTopRef}>
+          <h1 data-cm-retired className="text-3xl md:text-5xl font-bold text-primary font-display mb-5">RETIRED</h1>
+        </div>
+        <ScreenLoading><ClubManagerFarewell c={c} g={g} /></ScreenLoading>
       </div>
     );
   }
@@ -1540,7 +1565,7 @@ const ClubManager = () => {
               )}
 
               {hubPanel === 'manager' && (
-                <ScreenLoading><ClubManagerCareerPanel c={c} g={g} nationOffer={nationOffer} /></ScreenLoading>
+                <ScreenLoading><ClubManagerCareerPanel c={c} g={g} nationOffer={nationOffer} onRetireOpen={preloadFarewell} /></ScreenLoading>
               )}
             </div>
           )}

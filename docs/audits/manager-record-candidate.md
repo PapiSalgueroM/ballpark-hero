@@ -1,0 +1,13 @@
+# Manager record trim candidate proof
+
+This is a test-only packet against I1343 head 7f71523406172cdf4374bfa718607d5ccfccd4f6. Claude owns the product fix and release. No product source is committed here. The earlier qualified PR292 and its original baseline remain intact.
+
+The remote workflow runs the unchanged six direct boundary tests on that original application, requiring precisely two legacy record failures and four preservation cases. It then applies the reviewed patch temporarily, requires six passes, and compares all seven actual public-match observations across arms. Initial states, public outputs, whole non-record match and reloaded states, and consumed random streams must match. Both raw-state files are retained. The original core is restored in a finally block and full source/dependency holds run afterward. Existing record/retirement tests also run on the temporary candidate.
+
+The patch only moves the existing 300-row trim until after highest-record initialization. Exact original and candidate whole-file hashes are asserted. Tests use prepared fictional archive rows on a real public initializer and play the real next match. They do not invent a real result or mock the match.
+
+Actual remote run38924986800/job117054120953 passed on7882e5bf5a0b4fcb561e5dc48d4af64c66bf6292. The original arm has precisely two record faults and four preserves; the transient candidate passes all six tests. All seven observation pairs use seed1 and1350draws, holding initializers, inputs, complete public outputs, full non-record match/reloaded states and consumed random streams. The real type gate passes. Existing record/retirement cases pass58/58 across three files. All3740source-file and24466installed-file holds pass, with521locked versions bound.
+
+Artifact12056437035 is41124146bytes, SHA2566e6eb992b46c39350408820900d67b02a94d35b965b5053ccf8b2b13dce149a6. It retains both full raw-state arms, unit reports, before/candidate core sources and the complete tested source archive. Native readback independently recomputed both raw hashes, all seven paired public outcomes, whole non-record states/reloads and random streams. All4772source-archive entries match the exact tested Git blobs. Input immutability remains an in-process assertion because separate post-input objects are not retained.
+
+This qualifies the transient candidate in these exact methods. No committed product fix, build, browser, full-suite, joined release or live claim. Do not merge this packet wholesale: its original source deliberately retains the fault and its workflow is a comparison aid for the owning lane. Take only the reviewed patch and direct unit file into the owning product branch, then qualify the joined tree there.

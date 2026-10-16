@@ -48,7 +48,13 @@ import { validWorldEdit } from '@/lib/clubManagerWorldEdit';
 import type { CurrencyCode } from '@/lib/clubManagerStart';
 import type { SkillTree } from '@/lib/clubManagerXp';
 
-export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked';
+export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked' | 'retired';
+
+/** Round 1343: where a saved career opens: a retired career on its farewell (the only phase it can reach), then a
+ *  sacked one out of work, then a finished season's summary, then the hub. */
+export function phaseFor(c: CareerState): CMPhase {
+  return c.retired ? 'retired' : c.sacked ? 'sacked' : c.pendingSummary ? 'seasonEnd' : 'hub';
+}
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
 
 /**
@@ -199,7 +205,7 @@ export function useClubManager() {
         if (saved.pendingSummary) setSummary(saved.pendingSummary);
         if (goStraightIn.current) {
           goStraightIn.current = false;
-          setPhase(saved.sacked ? 'sacked' : saved.pendingSummary ? 'seasonEnd' : 'hub');
+          setPhase(phaseFor(saved));
           setActiveTab('overview');
         } else {
           setPhase('resume');
@@ -382,11 +388,28 @@ export function useClubManager() {
   /* ---------- lifecycle actions ---------- */
   const resume = useCallback(() => {
     if (!career) { setPhase('clubSelect'); return; }
-    if (career.sacked) setPhase('sacked');
-    else if (career.pendingSummary) { setSummary(career.pendingSummary); setPhase('seasonEnd'); }
-    else setPhase('hub');
+    const next = phaseFor(career);
+    if (next === 'seasonEnd') setSummary(career.pendingSummary);
+    setPhase(next);
     setActiveTab('overview');
   }, [career]);
+
+  /** Round 1343: retire. The write comes first: only a retired career the disk holds moves the page to the
+   *  farewell. Refused (another tab moved the career on, or no room) the page stays where it was, the notice or the
+   *  banner already up. True when it retired. The rule comes in from the door (retireCareer in
+   *  clubManagerRetire.ts), so the hook's first load does not carry that module. */
+  const retire = useCallback((make: (c: CareerState) => CareerState | null): boolean => {
+    const now = careerRef.current;
+    if (!now || !holdsActiveSlot()) return false;
+    const next = make(now);
+    if (next && !next.retired) return false;
+    if (!next || !persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    setPhase('retired');
+    setActiveTab('overview');
+    return true;
+  }, [holdsActiveSlot, persist]);
 
   /* ---------- Round 928: the manager slots ---------- */
 
@@ -540,12 +563,14 @@ export function useClubManager() {
     setPhase('resume');
   }, [holdsActiveSlot, letGoIfStale, movedOn]);
 
-  /* Retire at the season's end, or Start New Career once sacked. Before
-     Round 928 both wiped the career in one tap; the review found they still
-     did after the slots came in, which is exactly what the round promised
-     would stop. Now the career stays in its slot (Delete on the managers
-     screen is the only way to end one for good) and the new one starts in an
-     empty slot. With all three taken, the managers screen says so. */
+  /* Start a new manager: from the season's end, from Start New Career once
+     sacked, and from the farewell. Before Round 928 the first two wiped the
+     career in one tap; the review found they still did after the slots came
+     in, which is exactly what the round promised would stop. Now the career
+     stays in its slot (Delete on the managers screen is the only way to remove
+     one, and since Round 1343 retire above is the way to end one) and the new
+     one starts in an empty slot. With all three taken, the managers screen
+     says so. */
   const startNew = useCallback(() => {
     const empty = readSlots().find(v => !v.summary && !v.damaged);
     if (empty) { newInSlot(empty.slot); return; }
@@ -1254,7 +1279,7 @@ export function useClubManager() {
     slots, slotNote, openSlot, newInSlot, removeSlot, showSlots,
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
-    resume, startNew, chooseClub, confirmClub, confirmCustomClub,
+    resume, startNew, retire, chooseClub, confirmClub, confirmCustomClub,
     setFormationIndex, setMentality, setXiSlot, swapXiSlots, autoPick,
     saveMatchPlan, applyMatchPlan, deleteMatchPlan,
     setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,

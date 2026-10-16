@@ -18506,3 +18506,8 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+## Codex Manager record candidate proof, 2026-10-16
+
+Test-only isolated packet based on exact current I1343 7f715234. No product source edit is committed. Prepared remote paired proof applies the reviewed trim move transiently, requires original2fault4preserve then six direct passes, seven full public outcome/state/save/RNG comparisons and restored source/dependency holds. Claude owns actual fix and release. PR292 and its qualified original baseline remain frozen. This packet is not a wholesale merge candidate. Independent source review and actual remote run pending; no passing-fix/build/browser/live claim.
+Candidate proof result:7882e5bf/run38924986800/job117054120953 SUCCESS. Exactoriginal2fault4preserve, transientreviewedtrim6passes, seven full public outcomes/save/reload/RNGpairs held at1350draws each, types0/58related/3740source+24466installedholds/521versions. Physicalartifact12056437035 SHA6e6eb992b46c39350408820900d67b02a94d35b965b5053ccf8b2b13dce149a6 retained outside. Native raw/source archive audit matchesall4772Gitblobs. No persistentappfix/build/browser/fullsuite/liveclaim. Claude still owns actual product correction, use onlypatch+unitfile, neverwholepacket.

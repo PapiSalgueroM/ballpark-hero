@@ -37,6 +37,8 @@ export interface SlotSummary {
   eraLabel: string;
   historic: boolean;
   sacked: boolean;
+  /** Round 1343: present, and true, only on a career that has retired. */
+  retired?: true;
 }
 
 export interface SlotView {
@@ -104,6 +106,7 @@ export function summarize(raw: string | null): SlotSummary | null {
       eraLabel: era.label,
       historic: isHistoricEra(eraId ?? undefined),
       sacked: c.sacked === true,
+      ...(c.retired && typeof c.retired === 'object' ? { retired: true as const } : {}),
     };
   } catch {
     return null;
