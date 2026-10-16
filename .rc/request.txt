@@ -1,0 +1,4 @@
+createclub-bridged: D=/tmp/ccb-$$ && mkdir -p $D && git archive HEAD | tar -x -C $D && node .rc/x/applyCtl.mjs $D bridge && ln -s $PWD/node_modules $D/node_modules && cd $D && node scripts/simCreateClub.mjs
+createclub-onbase: D=/tmp/cco-$$ && git worktree add -q --detach $D d4f2c6f688d656205722ba52bbdb33f03490966a && ln -s $PWD/node_modules $D/node_modules && cd $D && node scripts/simCreateClub.mjs
+leaguerules-bridged: D=/tmp/lrb-$$ && mkdir -p $D && git archive HEAD | tar -x -C $D && node .rc/x/applyCtl.mjs $D bridge && ln -s $PWD/node_modules $D/node_modules && cd $D && node scripts/simCmLeagueRules.mjs
+leaguerules-onbase: D=/tmp/lro-$$ && git worktree add -q --detach $D d4f2c6f688d656205722ba52bbdb33f03490966a && ln -s $PWD/node_modules $D/node_modules && cd $D && node scripts/simCmLeagueRules.mjs
