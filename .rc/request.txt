@@ -1,0 +1,18 @@
+#!playwright
+livescores: node scripts/simLiveScores.mjs
+invnames: node scripts/simInventedNames.mjs
+invquotes: node scripts/simNoInventedQuotes.mjs
+invconduct: node scripts/simNoInventedConduct.mjs
+legal: node scripts/simLegalPages.mjs
+footer: node scripts/simSingleFooter.mjs
+slugs: node scripts/simCompletionSlugs.mjs
+once: node scripts/simCompletionOnce.mjs
+double: node scripts/simNoDoubleRecord.mjs
+puzzle: node scripts/simDailyPuzzleContract.mjs
+hardening: node scripts/simDailySaveHardening.mjs
+retry: node scripts/simFetchRetry.mjs
+google: node scripts/simGoogleOnlyReturn.mjs
+relay: node scripts/simReportRelay.mjs
+navbar: node scripts/simNavbarStatsReads.mjs
+scoring: node scripts/simScoringCoverage.mjs
+moment: node scripts/simResultMoment.mjs
