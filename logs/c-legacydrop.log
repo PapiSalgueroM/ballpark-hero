@@ -1,0 +1,9 @@
+NEGATIVE CONTROL ON: RETIRE_CONTROL=legacydrop, src/lib/clubManagerRetire.ts is a rewritten copy
+== retire
+   18 careers at three moments, 12 trophies between them
+ok   [retire] retiring changes only `retired` (and writes the record down when absent), never its input, at the right moment (moments seasonEnd, midSeason, outOfWork)
+ok   [retire] retiring draws nothing (0 draws)
+ok   [retire] a match in progress and a retired career are refused (18 of 18)
+ok   [retire] a season played to its last match and not yet reviewed is refused, so the review writes its title and its row first (5 of 5)
+FAIL [retire] the farewell's clubs, cabinet and record are the save's (18 wrong; first Everton seed 0 season end)
+control legacydrop FIRED: 1 of 5 checks red

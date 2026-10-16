@@ -1,0 +1,5 @@
+NEGATIVE CONTROL ON: RETIRE_CONTROL=loadtouch, src/lib/clubManager.ts is a rewritten copy
+== loads
+   16 old saves (4 from realSaves), 16 loaded
+FAIL [loads] every old save loads to the same JSON on head and base (16 differ, first realSaves)
+control loadtouch FIRED: 1 of 1 checks red

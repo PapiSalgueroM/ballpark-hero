@@ -1,0 +1,5 @@
+NEGATIVE CONTROL ON: RETIRE_CONTROL=pensdrawn, src/lib/clubManager.ts is a rewritten copy
+== pens
+   the record fleet held 18 shootouts, 18 of them single leg ties
+FAIL [pens] every single leg shootout (18) keeps the level score with W or L, reads as penalties, counts no kick (18 wrong; first Fulham 2-2 D: stored 2-2 vs Fulham, S2, the report 2-2 (4 goals, 0 kicks))
+control pensdrawn FIRED: 1 of 1 checks red
