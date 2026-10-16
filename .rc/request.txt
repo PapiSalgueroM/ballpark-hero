@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playUsCareerReports.mjs
+walk-noretire: RC_OUT=$RC_OUT/noretire PLAY_US_REPORTS_CONTROL=noretire ENGINES=chromium node scripts/playUsCareerReports.mjs
+walk-noundo: RC_OUT=$RC_OUT/noundo PLAY_US_REPORTS_CONTROL=noundo ENGINES=chromium node scripts/playUsCareerReports.mjs
+walk-noreplay: RC_OUT=$RC_OUT/noreplay PLAY_US_REPORTS_CONTROL=noreplay ENGINES=chromium node scripts/playUsCareerReports.mjs
+walk-nosettle: RC_OUT=$RC_OUT/nosettle PLAY_US_REPORTS_CONTROL=nosettle ENGINES=chromium node scripts/playUsCareerReports.mjs
+night: RC_OUT=$RC_OUT/night ENGINES=chromium node scripts/playDraftNight.mjs
+career993: node scripts/qa/career993.mjs
+homefold: ENGINES=chromium node scripts/playHomeFold.mjs
