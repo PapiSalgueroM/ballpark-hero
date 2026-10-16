@@ -1,0 +1,6 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+opponentLabels exit=0 44s | 0 failing checks in the report
+potential exit=0 73s | PASS Soccer potential progress browser
+weight exit=0 30s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+flagship exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+truths exit=0 121s | playSoccerScreenTruths: green, W4 W4r W5 W6 W7 W8 pass on the head and every control section is red on the base

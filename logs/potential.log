@@ -1,0 +1,12 @@
+PASS 430-reveal: actual reveal, saved Attributes values and complete raw reload held
+PASS 430-wall99: actual Attributes, full save/reload and wall99 boundary
+PASS 430-retired: actual Attributes, full save/reload and retired boundary
+PASS 1440-visible: actual Attributes, full save/reload and visible boundary
+PASS 1440-pending: actual Attributes waiting mask, no premature disclosure and complete raw save held
+PASS 1440-reveal: actual reveal, saved Attributes values and complete raw reload held
+PASS 1440-wall99: actual Attributes, full save/reload and wall99 boundary
+PASS 1440-retired: actual Attributes, full save/reload and retired boundary
+Potential progress browser: 20/20 declared journeys, 20 passed.
+Potential progress controls: 4/4 effective copied observation controls.
+Potential progress evidence: complete saves, draw callers, served bodies, geometry and original PNGs at /tmp/pot
+PASS Soccer potential progress browser
