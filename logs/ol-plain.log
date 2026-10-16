@@ -1,0 +1,4 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 0 node harnesses
+
+No dist/ to serve. Run npm run build first.
