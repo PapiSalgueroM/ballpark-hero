@@ -1,0 +1,2 @@
+#!playwright
+glue: bash .rc/x/glue.sh
