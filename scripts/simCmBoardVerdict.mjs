@@ -708,7 +708,11 @@ async function dailiesSection(head, base) {
 /* ---------------- sections fresh, title and takeover (step 4 on) ---------------- */
 /* The floor of section fresh: the share of fleet B's lost openers that leave the meter Safe, set from three
    seed bases of fleet B measured on the head (the lowest share minus its measured spread). */
-const FRESH_FLOOR = 0.9;
+/* Measured on d64314de (remote check r1335-s4, fresh): 739 of 739, 734 of 734 and 700 of 700 lost openers
+   stayed Safe on the three bases, lowest 100 percent, spread 0, so the floor is 1. It is structural, not
+   luck: a fresh career is under its wage cap, so a lost opener costs at most (4.5 + 2) x 1.3, 8.5 after the
+   rounding, and 69 less 8.5 is 60.5. */
+const FRESH_FLOOR = 1;
 function freshSection(arm) {
   const P = 'fresh';
   const { cm, bv } = arm;
@@ -750,6 +754,9 @@ function rollStreamHook(head, base, acc) {
     const h = withSeed(rollSeed, () => head.cm.startNextSeason(clone(S), take));
     const hn = DRAWS.n;
     const hAlloc = globalThis.__cmAlloc.pop();
+    /* startNextSeason reads the club it was played for BEFORE it registers anything, so the base is handed
+       the finished season's memberships first, the way loading the save would. */
+    base.cm.registerLeagueOverrides(S.leagueOverrides ?? null);
     base.cm.registerCustomClub(null);
     DRAWS.n = 0;
     globalThis.__cmAlloc = [];
@@ -757,6 +764,8 @@ function rollStreamHook(head, base, acc) {
     const bn = DRAWS.n;
     const bAlloc = globalThis.__cmAlloc.pop();
     globalThis.__cmAlloc = undefined;
+    /* The head goes on to play this rollover for real: its registry back to the season just finished. */
+    head.cm.registerLeagueOverrides(S.leagueOverrides ?? null);
     const moving = h.clubName !== S.clubName;
     acc.rows.push({ grade: S.pendingSummary?.verdictGrade ?? null, fate: S.pendingSummary?.fate ?? null, title: S.pendingSummary?.position === 1,
       moving, head: h.boardConfidence, base: b.boardConfidence, bound: h.budget !== b.budget, hAlloc, bAlloc, hBudget: h.budget, bBudget: b.budget, tier: head.cm.clubDefFor(h.clubName)?.tier ?? 0 });
