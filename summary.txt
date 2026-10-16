@@ -1,0 +1,16 @@
+s12 exit=0 81s | simCmWorldMoves: green, sections 12 held
+c-slow exit=1 89s | simCmWorldMoves: control slow FIRED: section 12 red (9)
+mA-s14 exit=0 91s | simCmWorldMoves: green, sections 1, 4 held
+mA-unit exit=0 3s |    Duration  1.87s (transform 977ms, setup 34ms, collect 1.20s, tests 157ms, environment 208ms, prepare 79ms)
+mA-bound exit=0 197s | simCmLedgerBound: green, all four sections held
+mB-bound exit=1 202s | simCmLedgerBound: RED, sections 4 (5)
+mB-unit exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerWorldMoves.test.ts,title=src/lib/clubManagerWorldMoves.test.ts > Round 1344%3A deals between
+mB-s7 exit=0 99s | simCmWorldMoves: green, sections 1, 7 held
+mC-s14 exit=1 89s | simCmWorldMoves: RED, sections 4 (689)
+mD-s5 exit=0 10s | simCmWorldMoves: green, sections 5 held
+mD-unit exit=0 2s |    Duration  1.85s (transform 937ms, setup 42ms, collect 1.14s, tests 155ms, environment 224ms, prepare 90ms)
+mE-unit exit=0 2s |    Duration  1.68s (transform 876ms, setup 36ms, collect 1.06s, tests 144ms, environment 171ms, prepare 44ms)
+mE-s14 exit=0 85s | simCmWorldMoves: green, sections 1, 4 held
+mF-s3 exit=1 9s | simCmWorldMoves: RED, sections 3 (112)
+mF-unit exit=0 3s |    Duration  2.55s (transform 995ms, setup 62ms, collect 2.18s, tests 1.13s, environment 388ms, prepare 93ms)
+clean exit=0 0s | tree clean

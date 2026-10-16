@@ -1,0 +1,13 @@
+mut F: applied to src/lib/clubManagerCalendar.ts
+3) join: seeded 2026-27 careers take a job mid season through joinClubNow, before and after January, seeds 1,2,3
+  FAIL section 3: Real Madrid (now, seed 1, before January): Gianluigi Donnarumma, bought by another club this season before the move, is buyable again after it
+  FAIL section 3: Real Madrid (now, seed 1, before January): Moisés Caicedo, bought by another club this season before the move, is buyable again after it
+  FAIL section 3: Real Madrid (now, seed 1, before January): Dani Olmo, bought by another club this season before the move, is buyable again after it
+  FAIL section 3: Real Madrid (now, seed 1, before January): Aleksandar Pavlovic, bought by another club this season before the move, is buyable again after it
+  FAIL section 3: Real Madrid (now, seed 1, before January): Micky van de Ven, bought by another club this season before the move, is buyable again after it
+  FAIL section 3: Real Madrid (now, seed 1, after January): Federico Dimarco, bought by another club this season before the move, is buyable again after it
+  FAIL section 3: Real Madrid (now, seed 1, after January): Nico Schlotterbeck, bought by another club this season before the move, is buyable again after it
+  FAIL section 3: Real Madrid (now, seed 1, after January): Gabriel Martinelli, bought by another club this season before the move, is buyable again after it
+   18 moves (0 could not be set up), 120 departed records kept, 111 deal lines of the run in placed, 120 gone names carried over
+  section 3: 104 more failures not shown
+simCmWorldMoves: RED, sections 3 (112)

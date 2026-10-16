@@ -1,0 +1,63 @@
+mut B: applied to src/lib/clubManager.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerWorldMoves.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 160[2mms[22m[39m
+   [32m✓[39m Round 1344: deals between two other clubs reach the world ledger[2m > [22ma new career records its opening window: every man is at his buyer and gone from his seller[32m 34[2mms[22m[39m
+   [32m✓[39m Round 1344: deals between two other clubs reach the world ledger[2m > [22maiDealPlayer hands back the ledger payload of a man the ledger holds, and the projection's man otherwise[32m 35[2mms[22m[39m
+[31m   [31m×[31m Round 1344: deals between two other clubs reach the world ledger[2m > [22ma man I sold is never taken by an AI club while my buyer holds him (the lead's ruling 3)[39m[32m 27[2mms[22m[39m
+[31m     → expected { id: 'p-james-garner', …(19) } to be null[39m
+   [32m✓[39m Round 1344: deals between two other clubs reach the world ledger[2m > [22mthe screen's market lists a man another club bought this season at his new club, and every door says why not yet[32m 32[2mms[22m[39m
+   [32m✓[39m Round 1344: deals between two other clubs reach the world ledger[2m > [22ma seeded save missing this season's moves is mended when it opens, once, and a damaged line never costs the save[32m 16[2mms[22m[39m
+   [32m✓[39m Round 1344: deals between two other clubs reach the world ledger[2m > [22mrecordAiDeals takes no draw, and hands an unseeded career back as the same object[32m 16[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerWorldMoves.test.ts[2m > [22mRound 1344: deals between two other clubs reach the world ledger[2m > [22ma man I sold is never taken by an AI club while my buyer holds him (the lead's ruling 3)
+[31m[1mAssertionError[22m: expected { id: 'p-james-garner', …(19) } to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+{
+  "age": 24,
+  "contractYears": 4,
+  "fitness": 100,
+  "generated": undefined,
+  "id": "p-james-garner",
+  "injuryWeeks": 0,
+  "isYouth": false,
+  "lastTen": [],
+  "morale": 70,
+  "name": "James Garner",
+  "position": "CDM",
+  "potential": 89,
+  "rating": 86,
+  "role": "star",
+  "seasonAssists": 0,
+  "seasonGoals": 0,
+  "suspendedMatches": 0,
+  "value": 36.5,
+  "wage": 48,
+  "worldRosterKey": "[\"now\",\"Everton\",\"James Garner\",\"CDM\",2002,0]",
+}
+
+[36m [2m❯[22m src/lib/clubManagerWorldMoves.test.ts:[2m70:65[22m[39m
+    [90m 68| [39m    const record = (readWorldRoster(sold!)?.records ?? []).find(r => r…
+    [90m 69| [39m    [34mexpect[39m(record[33m.[39mplayer[33m.[39mwage)[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m 70| [39m    expect(aiDealPlayer(sold!, cardAt(sold!, buyer, man.name))).toBeNu…
+    [90m   | [39m                                                                [31m^[39m
+    [90m 71| [39m  })[33m;[39m
+    [90m 72| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 17:16:01
+[2m   Duration [22m 1.82s[2m (transform 963ms, setup 32ms, collect 1.19s, tests 160ms, environment 176ms, prepare 72ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerWorldMoves.test.ts,title=src/lib/clubManagerWorldMoves.test.ts > Round 1344%3A deals between two other clubs reach the world ledger > a man I sold is never taken by an AI club while my buyer holds him (the lead's ruling 3),line=70,column=65::AssertionError: expected { id: 'p-james-garner', …(19) } to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A{%0A  "age": 24,%0A  "contractYears": 4,%0A  "fitness": 100,%0A  "generated": undefined,%0A  "id": "p-james-garner",%0A  "injuryWeeks": 0,%0A  "isYouth": false,%0A  "lastTen": [],%0A  "morale": 70,%0A  "name": "James Garner",%0A  "position": "CDM",%0A  "potential": 89,%0A  "rating": 86,%0A  "role": "star",%0A  "seasonAssists": 0,%0A  "seasonGoals": 0,%0A  "suspendedMatches": 0,%0A  "value": 36.5,%0A  "wage": 48,%0A  "worldRosterKey": "[\"now\",\"Everton\",\"James Garner\",\"CDM\",2002,0]",%0A}%0A%0A ❯ src/lib/clubManagerWorldMoves.test.ts:70:65%0A%0A
