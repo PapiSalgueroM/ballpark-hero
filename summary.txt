@@ -1,0 +1,11 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight exit=0 26s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+playHomeFold exit=0 30s | playHomeFold: green. The first thing on the page is something to play.
+playSoftFourOhFour exit=0 7s | playSoftFourOhFour: green. A dead address says it is dead before a line of app code runs, and no real page is touched.
+lazy1 exit=0 33s | lazyCheck FIXED: three healthy creator flows load the editor on Customize, with actual failed-chunk recovery and omission control.
+lazy1log exit=0 0s | reading default lines: 0
+lazy2 exit=0 32s | lazyCheck FIXED: three healthy creator flows load the editor on Customize, with actual failed-chunk recovery and omission control.
+lazy2log exit=0 0s | reading default lines: 0
+lazy3 exit=0 32s | lazyCheck FIXED: three healthy creator flows load the editor on Customize, with actual failed-chunk recovery and omission control.
+lazy3log exit=0 1s | reading default lines: 0
+snapshot exit=0 35s | clock samples at 0, 5, 11 days: 0 route(s) carried date dependent blocks, 0 removed by the second sample, 0 more by the third
