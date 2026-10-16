@@ -1,0 +1,635 @@
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
++ actual - expected
+... Skipped lines
+
+  {
+    loaded: {
+      academy: {
+        candidates: [
+          {
+...
+          {
++           deckId: 'injurySupport',
++           from: 'The medical team',
++           id: 'desk-1-0-injurySupport',
+-           deckId: 'finesKitty',
+-           from: 'The head coach',
+-           id: 'desk-1-0-finesKitty',
+            kind: 'situation',
+            options: [
+              {
+                effect: {
++                 delta: 6,
+-                 delta: 2,
+                  kind: 'move',
++                 meter: 'morale'
+-                 meter: 'press'
+                },
++               label: 'Check in with him (his morale +6)'
+-               label: "Give it to the club's community partner (press mood +2)"
+              },
+              {
+                effect: {
++                 delta: 2,
+-                 delta: 0.1,
+                  kind: 'move',
++                 meter: 'board'
+-                 meter: 'budget'
+                },
++               label: 'Update the board (board patience +2)'
+-               label: 'Put it in the transfer pot (£100k into the transfer budget)'
+              },
+              {
+                effect: {
+                  kind: 'none'
+                },
++               label: 'Leave it with medical staff (nothing changes)'
+-               label: 'Leave it in the kitty (nothing changes)'
+              }
+            ],
++           playerId: 'p-thierno-barry',
++           playerName: 'Thierno Barry',
+            season: 1,
++           text: 'Thierno Barry had 2 injury weeks left when this note was written. Staff suggest a check in or a board update. Neither changes the recovery time.',
+-           text: "The squad's fines kitty has £100k in it from late arrivals and phones in meetings. The head coach asks where it should go. The local paper always runs it when it goes to charity.",
+            week: 0
+          }
+        ],
+        eraId: 'now',
+        facilities: {
+
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 4,
+...
+    },
++   worldRoster: {
++     eraId: 'now',
++     records: [
++       {
++         key: '["now","Inter Milan","Federico Dimarco","LB",1998,0]',
++         origin: {
++           birthYear: 1998,
++           club: 'Inter Milan',
++           name: 'Federico Dimarco',
++           position: 'LB',
++           since: 0
++         },
++         owner: 'Arsenal',
++         player: {
++           age: 28,
++           fitness: 100,
++           generated: undefined,
++           id: 'p-federico-dimarco',
++           injuryWeeks: 0,
++           isYouth: false,
++           morale: 70,
++           name: 'Federico Dimarco',
++           position: 'LB',
++           rating: 86,
++           seasonAssists: 0,
++           seasonGoals: 0,
++           suspendedMatches: 0,
++           value: 40.5,
++           worldRosterKey: '["now","Inter Milan","Federico Dimarco","LB",1998,0]'
++         },
++         status: 'owned',
++         year: 2026
++       },
++       {
++         key: '["now","Brighton","Luka Vuskovic","CB",2008,0]',
++         origin: {
++           birthYear: 2008,
++           club: 'Brighton',
++           name: 'Luka Vuskovic',
++           position: 'CB',
++           since: 0
++         },
++         owner: 'RB Leipzig',
++         player: {
++           age: 18,
++           fitness: 100,
++           generated: undefined,
++           id: 'p-luka-vuskovic',
++           injuryWeeks: 0,
++           isYouth: false,
++           morale: 70,
++           name: 'Luka Vuskovic',
++           position: 'CB',
++           rating: 87,
++           seasonAssists: 0,
++           seasonGoals: 0,
++           suspendedMatches: 0,
++           value: 48.8,
++           worldRosterKey: '["now","Brighton","Luka Vuskovic","CB",2008,0]'
++         },
++         status: 'owned',
++         year: 2026
++       },
++       {
++         key: '["now","Real Madrid","Ibrahima Konaté","CB",2000,0]',
++         origin: {
++           birthYear: 2000,
++           club: 'Real Madrid',
++           name: 'Ibrahima Konaté',
++           position: 'CB',
++           since: 0
++         },
++         owner: 'Arsenal',
++         player: {
++           age: 26,
++           fitness: 100,
++           generated: undefined,
++           id: 'p-ibrahima-konate',
++           injuryWeeks: 0,
++           isYouth: false,
++           morale: 70,
++           name: 'Ibrahima Konaté',
++           position: 'CB',
++           rating: 86,
++           seasonAssists: 0,
++           seasonGoals: 0,
++           suspendedMatches: 0,
++           value: 40.5,
++           worldRosterKey: '["now","Real Madrid","Ibrahima Konaté","CB",2000,0]'
++         },
++         status: 'owned',
++         year: 2026
++       },
++       {
++         key: '["now","Borussia Dortmund","Nico Schlotterbeck","CB",2000,0]',
++         origin: {
++           birthYear: 2000,
++           club: 'Borussia Dortmund',
++           name: 'Nico Schlotterbeck',
++           position: 'CB',
++           since: 0
++         },
++         owner: 'Manchester City',
++         player: {
++           age: 26,
++           fitness: 100,
++           generated: undefined,
++           id: 'p-nico-schlotterbeck',
++           injuryWeeks: 0,
++           isYouth: false,
++           morale: 70,
++           name: 'Nico Schlotterbeck',
++           position: 'CB',
++           rating: 87,
++           seasonAssists: 0,
++           seasonGoals: 0,
++           suspendedMatches: 0,
++           value: 44.3,
++           worldRosterKey: '["now","Borussia Dortmund","Nico Schlotterbeck","CB",2000,0]'
++         },
++         status: 'owned',
++         year: 2026
++       },
++       {
++         key: '["now","Chelsea","João Pedro","ST",2002,0]',
++         origin: {
++           birthYear: 2002,
++           club: 'Chelsea',
++           name: 'João Pedro',
++           position: 'ST',
++           since: 0
++         },
++         owner: 'Manchester City',
++         player: {
++           age: 24,
++           fitness: 100,
++           generated: undefined,
++           id: 'p-joao-pedro',
++           injuryWeeks: 0,
++           isYouth: false,
++           morale: 70,
++           name: 'João Pedro',
++           position: 'ST',
++           rating: 89,
++           seasonAssists: 0,
++           seasonGoals: 0,
++           suspendedMatches: 0,
++           value: 60.8,
++           worldRosterKey: '["now","Chelsea","João Pedro","ST",2002,0]'
++         },
++         status: 'owned',
++         year: 2026
++       }
++     ],
++     version: 1
++   },
+    worldSeed: 734015355,
+    xiIds: [
+      'p-jordan-pickford',
+      'p-jarrad-branthwaite',
+      'p-james-tarkowski',
+
+PASS [healthy] identity
+FAIL [healthy] buy-job: Actual buy preserves every original field except the declared ownership metadata
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 5,
+...
+        {
++         key: '["now","Arsenal","Declan Rice","CM",2000,0]',
++         origin: {
++           birthYear: 2000,
++           club: 'Arsenal',
++           name: 'Declan Rice',
++           position: 'CM',
++           since: 0
++         },
++         owner: 'Chelsea',
++         player: {
++           age: 26,
++           fitness: 100,
++           generated: undefined,
++           id: 'p-declan-rice',
++           injuryWeeks: 0,
++           isYouth: false,
++           morale: 70,
++           name: 'Declan Rice',
++           position: 'CM',
++           rating: 91,
++           seasonAssists: 0,
++           seasonGoals: 0,
++           suspendedMatches: 0,
++           value: 97.5,
++           worldRosterKey: '["now","Arsenal","Declan Rice","CM",2000,0]'
++         },
++         status: 'owned',
++         year: 2026
++       },
++       {
++         key: '["now","Arsenal","Jurriën Timber","RB",2002,0]',
++         origin: {
++           birthYear: 2002,
++           club: 'Arsenal',
++           name: 'Jurriën Timber',
++           position: 'RB',
++           since: 0
++         },
++         owner: 'Manchester United',
++         player: {
++           age: 24,
++           fitness: 100,
++           generated: undefined,
++           id: 'p-jurrien-timber',
++           injuryWeeks: 0,
++           isYouth: false,
++           morale: 70,
++           name: 'Jurriën Timber',
++           position: 'RB',
++           rating: 88,
++           seasonAssists: 0,
++           seasonGoals: 0,
++           suspendedMatches: 0,
++           value: 57,
++           worldRosterKey: '["now","Arsenal","Jurriën Timber","RB",2002,0]'
++         },
++         status: 'owned',
++         year: 2026
++       },
++       {
++         key: '["now","Arsenal","Bukayo Saka","RW",2002,0]',
++         origin: {
++           birthYear: 2002,
++           club: 'Arsenal',
++           name: 'Bukayo Saka',
++           position: 'RW',
++           since: 0
++         },
++         owner: 'Bayern Munich',
++         player: {
++           age: 24,
++           fitness: 100,
++           generated: undefined,
++           id: 'p-bukayo-saka',
++           injuryWeeks: 0,
++           isYouth: false,
++           morale: 70,
++           name: 'Bukayo Saka',
++           position: 'RW',
++           rating: 91,
++           seasonAssists: 0,
++           seasonGoals: 0,
++           suspendedMatches: 0,
++           value: 97.5,
++           worldRosterKey: '["now","Arsenal","Bukayo Saka","RW",2002,0]'
++         },
++         status: 'owned',
++         year: 2026
++       },
++       {
++         key: '["now","Barcelona","Raphinha","LW",1997,0]',
++         origin: {
++           birthYear: 1997,
++           club: 'Barcelona',
++           name: 'Raphinha',
++           position: 'LW',
++           since: 0
++         },
++         owner: 'Real Madrid',
++         player: {
++           age: 29,
++           fitness: 100,
++           generated: undefined,
++           id: 'p-raphinha',
++           injuryWeeks: 0,
++           isYouth: false,
++           morale: 70,
++           name: 'Raphinha',
++           position: 'LW',
++           rating: 89,
++           seasonAssists: 0,
++           seasonGoals: 0,
++           suspendedMatches: 0,
++           value: 64.5,
++           worldRosterKey: '["now","Barcelona","Raphinha","LW",1997,0]'
++         },
++         status: 'owned',
++         year: 2026
++       },
++       {
++         key: '["now","Tottenham","Micky van de Ven","CB",2002,0]',
++         origin: {
++           birthYear: 2002,
++           club: 'Tottenham',
++           name: 'Micky van de Ven',
++           position: 'CB',
++           since: 0
++         },
++         owner: 'Brentford',
++         player: {
++           age: 24,
++           fitness: 100,
++           generated: undefined,
++           id: 'p-micky-van-de-ven',
++           injuryWeeks: 0,
++           isYouth: false,
++           morale: 70,
++           name: 'Micky van de Ven',
++           position: 'CB',
++           rating: 88,
++           seasonAssists: 0,
++           seasonGoals: 0,
++           suspendedMatches: 0,
++           value: 52.5,
++           worldRosterKey: '["now","Tottenham","Micky van de Ven","CB",2002,0]'
++         },
++         status: 'owned',
++         year: 2026
++       },
++       {
++         key: '["now","Manchester United","Amad Diallo","RW",2003,0]',
++         origin: {
++           birthYear: 2003,
++           club: 'Manchester United',
++           name: 'Amad Diallo',
++           position: 'RW',
++           since: 0
++         },
++         owner: 'Arsenal',
++         player: {
++           age: 23,
++           fitness: 100,
++           generated: undefined,
++           id: 'p-amad-diallo',
++           injuryWeeks: 0,
++           isYouth: false,
++           morale: 70,
++           name: 'Amad Diallo',
++           position: 'RW',
++           rating: 86,
++           seasonAssists: 0,
++           seasonGoals: 0,
++           suspendedMatches: 0,
++           value: 40.5,
++           worldRosterKey: '["now","Manchester United","Amad Diallo","RW",2003,0]'
++         },
++         status: 'owned',
++         year: 2026
++       },
++       {
+          key: '["now","Arsenal","William Saliba","CB",2002,0]',
+          origin: {
+            birthYear: 2002,
+            club: 'Arsenal',
+            name: 'William Saliba',
+
+PASS [healthy] year-away
+PASS [healthy] sale
+FAIL [healthy] option: Temporary loan does not claim permanent ownership
++ actual - expected
+
++ {
++   eraId: 'now',
++   records: [
++     {
++       key: '["now","Arsenal","Declan Rice","CM",2000,0]',
++       origin: {
++         birthYear: 2000,
++         club: 'Arsenal',
++         name: 'Declan Rice',
++         position: 'CM',
++         since: 0
++       },
++       owner: 'Chelsea',
++       player: {
++         age: 26,
++         fitness: 100,
++         generated: undefined,
++         id: 'p-declan-rice',
++         injuryWeeks: 0,
++         isYouth: false,
++         morale: 70,
++         name: 'Declan Rice',
++         position: 'CM',
++         rating: 91,
++         seasonAssists: 0,
++         seasonGoals: 0,
++         suspendedMatches: 0,
++         value: 97.5,
++         worldRosterKey: '["now","Arsenal","Declan Rice","CM",2000,0]'
++       },
++       status: 'owned',
++       year: 2026
++     },
++     {
++       key: '["now","Arsenal","Jurriën Timber","RB",2002,0]',
++       origin: {
++         birthYear: 2002,
++         club: 'Arsenal',
++         name: 'Jurriën Timber',
++         position: 'RB',
++         since: 0
++       },
++       owner: 'Manchester United',
++       player: {
++         age: 24,
++         fitness: 100,
++         generated: undefined,
++         id: 'p-jurrien-timber',
++         injuryWeeks: 0,
++         isYouth: false,
++         morale: 70,
++         name: 'Jurriën Timber',
++         position: 'RB',
++         rating: 88,
++         seasonAssists: 0,
++         seasonGoals: 0,
++         suspendedMatches: 0,
++         value: 57,
++         worldRosterKey: '["now","Arsenal","Jurriën Timber","RB",2002,0]'
++       },
++       status: 'owned',
++       year: 2026
++     },
++     {
++       key: '["now","Arsenal","Bukayo Saka","RW",2002,0]',
++       origin: {
++         birthYear: 2002,
++         club: 'Arsenal',
++         name: 'Bukayo Saka',
++         position: 'RW',
++         since: 0
++       },
++       owner: 'Bayern Munich',
++       player: {
++         age: 24,
++         fitness: 100,
++         generated: undefined,
++         id: 'p-bukayo-saka',
++         injuryWeeks: 0,
++         isYouth: false,
++         morale: 70,
++         name: 'Bukayo Saka',
++         position: 'RW',
++         rating: 91,
++         seasonAssists: 0,
++         seasonGoals: 0,
++         suspendedMatches: 0,
++         value: 97.5,
++         worldRosterKey: '["now","Arsenal","Bukayo Saka","RW",2002,0]'
++       },
++       status: 'owned',
++       year: 2026
++     },
++     {
++       key: '["now","Barcelona","Raphinha","LW",1997,0]',
++       origin: {
++         birthYear: 1997,
++         club: 'Barcelona',
++         name: 'Raphinha',
++         position: 'LW',
++         since: 0
++       },
++       owner: 'Real Madrid',
++       player: {
++         age: 29,
++         fitness: 100,
++         generated: undefined,
++         id: 'p-raphinha',
++         injuryWeeks: 0,
++         isYouth: false,
++         morale: 70,
++         name: 'Raphinha',
++         position: 'LW',
++         rating: 89,
++         seasonAssists: 0,
++         seasonGoals: 0,
++         suspendedMatches: 0,
++         value: 64.5,
++         worldRosterKey: '["now","Barcelona","Raphinha","LW",1997,0]'
++       },
++       status: 'owned',
++       year: 2026
++     },
++     {
++       key: '["now","Tottenham","Micky van de Ven","CB",2002,0]',
++       origin: {
++         birthYear: 2002,
++         club: 'Tottenham',
++         name: 'Micky van de Ven',
++         position: 'CB',
++         since: 0
++       },
++       owner: 'Brentford',
++       player: {
++         age: 24,
++         fitness: 100,
++         generated: undefined,
++         id: 'p-micky-van-de-ven',
++         injuryWeeks: 0,
++         isYouth: false,
++         morale: 70,
++         name: 'Micky van de Ven',
++         position: 'CB',
++         rating: 88,
++         seasonAssists: 0,
++         seasonGoals: 0,
++         suspendedMatches: 0,
++         value: 52.5,
++         worldRosterKey: '["now","Tottenham","Micky van de Ven","CB",2002,0]'
++       },
++       status: 'owned',
++       year: 2026
++     },
++     {
++       key: '["now","Manchester United","Amad Diallo","RW",2003,0]',
++       origin: {
++         birthYear: 2003,
++         club: 'Manchester United',
++         name: 'Amad Diallo',
++         position: 'RW',
++         since: 0
++       },
++       owner: 'Arsenal',
++       player: {
++         age: 23,
++         fitness: 100,
++         generated: undefined,
++         id: 'p-amad-diallo',
++         injuryWeeks: 0,
++         isYouth: false,
++         morale: 70,
++         name: 'Amad Diallo',
++         position: 'RW',
++         rating: 86,
++         seasonAssists: 0,
++         seasonGoals: 0,
++         suspendedMatches: 0,
++         value: 40.5,
++         worldRosterKey: '["now","Manchester United","Amad Diallo","RW",2003,0]'
++       },
++       status: 'owned',
++       year: 2026
++     }
++   ],
++   version: 1
++ }
+- undefined
+
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+4 !== 0
+
+    at arm (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:481:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:489:24

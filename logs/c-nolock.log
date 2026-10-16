@@ -1,0 +1,33 @@
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   control seedless: 1
+   control norecord: 1
+   control norecord: 1
+   control noflush: 1
+   control nojanuary: 1
+   control nosummer: 1
+   control joinledger: 1
+   control nolock: 1
+   control nolist: 1
+   control nohijack: 1
+   control nowalk: 1
+   control slow: 1
+   control edit made 1 time(s): nolock: return `${mp.name} only joined ${mp.club} this season. They 
+1) ownership: seeded careers, 6 seasons, seeds 1,2, the head engine
+  FAIL section 4: Real Madrid (now, seed 1) the opening window: the buy door on Mohammed Kudus answers "null", wanted "Mohammed Kudus only joined Atlético Madrid this season. They will not sell him on until next summer."
+  FAIL section 4: Real Madrid (now, seed 1) the opening window: the clause door on Mohammed Kudus answers "null", wanted "Mohammed Kudus only joined Atlético Madrid this season. They will not sell him on until next summer."
+  FAIL section 4: Real Madrid (now, seed 1) the opening window: the talk door on Mohammed Kudus answers "null", wanted "Mohammed Kudus only joined Atlético Madrid this season. They will not sell him on until next summer."
+  FAIL section 4: Real Madrid (now, seed 1) the opening window: the buy door on Morgan Rogers answers "null", wanted "Morgan Rogers only joined Barcelona this season. They will not sell him on until next summer."
+  FAIL section 4: Real Madrid (now, seed 1) the opening window: the talk door on Morgan Rogers answers "null", wanted "Morgan Rogers only joined Barcelona this season. They will not sell him on until next summer."
+  FAIL section 4: Real Madrid (now, seed 1) the opening window: the buy door on Eberechi Eze answers "null", wanted "Eberechi Eze only joined Atalanta this season. They will not sell him on until next summer."
+  FAIL section 4: Real Madrid (now, seed 1) the opening window: the clause door on Eberechi Eze answers "null", wanted "Eberechi Eze only joined Atalanta this season. They will not sell him on until next summer."
+  FAIL section 4: Real Madrid (now, seed 1) the opening window: the talk door on Eberechi Eze answers "null", wanted "Eberechi Eze only joined Atalanta this season. They will not sell him on until next summer."
+   opening  6 windows, 28 AI deal lines, 0 not placed at the buyer, ledger 4.7 records and 2457 units a window on average
+   january  36 windows, 157 AI deal lines, 0 not placed at the buyer, ledger 36.5 records and 5139 units a window on average
+   summer   30 windows, 131 AI deal lines, 0 not placed at the buyer, ledger 38.3 records and 4685 units a window on average
+   6 careers (0 sacked early), 306417 listings checked by the one club rule, 735 moved men followed over 30 rollovers
+   failures by check: (i) 0, (ii) 0, (iii) 0; the first at none
+   the opening window's refusals (deal lines it closed before the seed that the flush could not place): 0 of 28 (expected 0)
+4) the market: 316 moved men on the screen's market at their buyer (1 hidden behind a namesake, counted), 1264 door presses checked, the buy door locked on 0; a season later 258 on sale there, 137 bought, 6 moved on or retired
+   marketForScreen 5.06 ms a call against buildMarket's 2.16 ms on the same states (limit 3 x + 5 ms)
+  section 4: 539 more failures not shown
+simCmWorldMoves: control nolock FIRED: section 4 red (547)

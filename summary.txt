@@ -1,0 +1,18 @@
+vitest-cm exit=1 12s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubDetailCurrentRoster.test.tsx,title=src/test/clubDetailCurrentRoster.test.tsx > Club details use th
+s0 exit=0 1s | simCmWorldMoves: green, sections 0 held
+vitest-hook exit=0 21s |    Duration  20.67s (transform 4.28s, setup 838ms, collect 13.96s, tests 33.16s, environment 5.80s, prepare 1.27s)
+s3 exit=0 18s | simCmWorldMoves: green, sections 3 held
+c-joinledger exit=2 17s | simCmWorldMoves: cannot run: section 3: no deal line of a run in was seen, so the join measured nothing
+tsc exit=0 83s | 
+s14-2015 exit=0 104s | simCmWorldMoves: green, sections 1, 4 held
+s14-now exit=0 159s | simCmWorldMoves: green, sections 1, 4 held
+s14-2005 exit=0 106s | simCmWorldMoves: green, sections 1, 4 held
+c-nolock exit=1 78s | simCmWorldMoves: control nolock FIRED: section 4 red (547)
+c-nolist exit=2 63s | simCmWorldMoves: cannot run: section 4: 0 men listed and 0 checked a season later, so the market measured nothing
+unseeded exit=0 156s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to 11959fcf (state, draws and saved bytes at every step), and 15 new careers w
+unseeded-onbase exit=0 160s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to 69f85c23 (state, draws and saved bytes at every step), and 15 new careers w
+unseeded-guard exit=1 148s | simCmUnseededWorld: CONTROL guard FIRED: with the guard out the deal fleet went red (49 saves) and the quiet fleet stayed green
+simManagerWorldContinuity exit=1 28s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:489:24
+simBooks exit=0 13s | simBooks: green. Every number these games show agrees with every other number they show.
+simCmLedgerJourney exit=0 114s | simCmLedgerJourney: green. 45 seeded journeys, 9678 ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carri
+simFreeAgents exit=1 72s | simFreeAgents: 1 failure(s)
