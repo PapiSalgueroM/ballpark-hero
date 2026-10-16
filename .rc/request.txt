@@ -1,0 +1,12 @@
+simEras: node scripts/simEras.mjs
+simEra2005: node scripts/simEra2005.mjs
+simEra2010: node scripts/simEra2010.mjs
+simEra2015: node scripts/simEra2015.mjs
+simEra2020: node scripts/simEra2020.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run clubManager cmTables cmWorld cmValue cmMinute cmLeague clubDetail staffScreen --testTimeout=300000 --hookTimeout=120000
+ownclub: node scripts/simCmOwnClubMarket.mjs
+freeagents: node scripts/simFreeAgents.mjs
+savesize: node scripts/simClubManagerSaveSize.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
