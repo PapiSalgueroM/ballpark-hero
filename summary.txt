@@ -1,0 +1,6 @@
+build-m1 exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+m1walk-1 exit=0 94s | playChunkReloadWait: green on 16 rows. A page that loses a file waits for its one reload, no broken page, no error, nothing moved.
+m1walk-2 exit=0 94s | playChunkReloadWait: green on 16 rows. A page that loses a file waits for its one reload, no broken page, no error, nothing moved.
+m1walk-3 exit=0 95s | playChunkReloadWait: green on 16 rows. A page that loses a file waits for its one reload, no broken page, no error, nothing moved.
+m1walk-4 exit=0 94s | playChunkReloadWait: green on 16 rows. A page that loses a file waits for its one reload, no broken page, no error, nothing moved.
+m1walk-5 exit=0 95s | playChunkReloadWait: green on 16 rows. A page that loses a file waits for its one reload, no broken page, no error, nothing moved.

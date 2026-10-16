@@ -1,0 +1,8 @@
+#!playwright
+#!serial
+build-m1: git worktree add -q /tmp/m1 a7094670 && ln -s "$PWD/node_modules" /tmp/m1/node_modules && cd /tmp/m1 && node_modules/.bin/vite build > /tmp/bm1.log 2>&1; s=$?; tail -1 /tmp/bm1.log; exit $s
+m1walk-1: cd /tmp/m1 && node scripts/playChunkReloadWait.mjs
+m1walk-2: cd /tmp/m1 && node scripts/playChunkReloadWait.mjs
+m1walk-3: cd /tmp/m1 && node scripts/playChunkReloadWait.mjs
+m1walk-4: cd /tmp/m1 && node scripts/playChunkReloadWait.mjs
+m1walk-5: cd /tmp/m1 && node scripts/playChunkReloadWait.mjs
