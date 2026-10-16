@@ -1,0 +1,42 @@
+  FAIL W3:nba-390: Undo skip moved the page from scrollY 507 to 500
+  FAIL W5:nba-390-150ms: a double tap on Undo skip 150 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nba-390-150ms: locator.tap: Timeout 15000ms exceeded.
+  FAIL W5:nba-390-700ms: a double tap on Undo skip 700 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nba-390-700ms: locator.tap: Timeout 15000ms exceeded.
+  FAIL W3:nba-1280: Undo skip moved the page from scrollY 496 to 493
+  FAIL W5:nba-1280-150ms: a double tap on Undo skip 150 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nba-1280-150ms: locator.click: Timeout 15000ms exceeded.
+  FAIL W5:nba-1280-700ms: a double tap on Undo skip 700 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nba-1280-700ms: locator.click: Timeout 15000ms exceeded.
+  FAIL W3:nfl-390: Undo skip moved the page from scrollY 507 to 500
+  FAIL W5:nfl-390-150ms: a double tap on Undo skip 150 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nfl-390-150ms: locator.tap: Timeout 15000ms exceeded.
+  FAIL W5:nfl-390-700ms: a double tap on Undo skip 700 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nfl-390-700ms: locator.tap: Timeout 15000ms exceeded.
+  FAIL W3:nfl-1280: Undo skip moved the page from scrollY 496 to 493
+  FAIL W5:nfl-1280-150ms: a double tap on Undo skip 150 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nfl-1280-150ms: locator.click: Timeout 15000ms exceeded.
+  FAIL W5:nfl-1280-700ms: a double tap on Undo skip 700 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nfl-1280-700ms: locator.click: Timeout 15000ms exceeded.
+  W2:nba-390: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W3:nba-390: scrollY 507 before Undo skip, 500 after
+  W3:nba-390: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  W5:nba-390-150ms: a double tap on Undo skip 150 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 507 before, 507 after
+  W5:nba-390-700ms: a double tap on Undo skip 700 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 507 before, 507 after
+  W2:nba-1280: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W3:nba-1280: scrollY 496 before Undo skip, 493 after
+  W3:nba-1280: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  W5:nba-1280-150ms: a double tap on Undo skip 150 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 496 before, 496 after
+  W5:nba-1280-700ms: a double tap on Undo skip 700 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 496 before, 496 after
+  W2:nfl-390: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W3:nfl-390: scrollY 507 before Undo skip, 500 after
+  W3:nfl-390: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  W5:nfl-390-150ms: a double tap on Undo skip 150 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 507 before, 507 after
+  W5:nfl-390-700ms: a double tap on Undo skip 700 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 507 before, 507 after
+  W2:nfl-1280: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W3:nfl-1280: scrollY 496 before Undo skip, 493 after
+  W3:nfl-1280: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  W5:nfl-1280-150ms: a double tap on Undo skip 150 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 496 before, 496 after
+  W5:nfl-1280-700ms: a double tap on Undo skip 700 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 496 before, 496 after
+  screenshots: 82 in /home/runner/work/_temp/rc-out/files
+CONTROL nosettle FIRED: W5 red
