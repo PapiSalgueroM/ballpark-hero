@@ -16,9 +16,11 @@ origin/rc-results/<name>.
    Season Centre, owed to S15.
 
 2. The Ballon d'Or night. While `career.phase === "ballon_dor" && ballonDorAwaitingReveal(career) !== null`, the Full
-   attributes button is disabled and its second line (the same element, so nothing moves) reads "Opens once the
-   Ballon d'Or night is over". No remount, so the countdown never starts again and no sound replays; no save write;
-   no file of S18's touched. Every other phase is as before, season_summary with the night pending among them.
+   attributes button is disabled, drops its chevron (so the dimmed row does not look like a door), and its second
+   line (the same element, so nothing moves) reads "Opens once the Ballon d'Or result is in" (the button opens at the
+   reveal, while the card with Continue is still up, so "the night is over" was a shade early; changed after the
+   reviews). No remount during the countdown, so the countdown never starts again; no save write; no file of S18's
+   touched. Every other phase is as before, season_summary with the night pending among them.
 3. The Squad sheet. The first open lands on home with "New here? Tap ? for how your rank, the eleven and the
    manager's trust work." (data-squad-first-hint), above the tiles. The flag keeps the key soccerSquad:help but now
    means "the pointer was shown": read before the first paint (a pure read in a useState initialiser), written in an
@@ -42,7 +44,9 @@ origin/rc-results/<name>.
   flag: a browser that refuses storage sees the one line pointer again" (markHintShown answers false when storage
   refuses; the old helpSeen's keeps: key went with the function that kept its answer).
 - scripts/simSoccerOpponentLabels.mjs: two REVERSE pairs put the help's old intro words back before the legacy page is
-  hashed against ORIGINAL_COMPONENT_SHA (b553b627), the way Release BH reversed PR278's hunks.
+  hashed against ORIGINAL_COMPONENT_SHA (b553b627), the way Release BH reversed PR278's hunks. After the reviews, a
+  pair whose current side is no longer found exactly once fails with "FAIL component reverse anchor: REVERSE pair N
+  of M ..." and the first words of the stale side, instead of a bare esbuild "Build failed with 1 error".
 
 ## Proof (GitHub runners; result names are origin/rc-results/<name>)
 - Type gate 0 on every step (r1337-s1, r1337-s2, r1337-s3; 178 to 203 s). `git diff --name-only e814c2de...HEAD --
@@ -101,5 +105,21 @@ origin/rc-results/<name>.
 - No guide sentence moves: soccer2.ts:1788 ("The 📺 Week by week button plays the same season match by match ...")
   stays true.
 - To S15: the shared Season Centre help still opens by itself before the season (POLISH 24 is PART for that screen).
+- To the other lane: this round also edited scripts/simSoccerOpponentLabels.mjs (theirs, b5868c81, kept by this
+  lane's releases since): two REVERSE pairs and an intro1337 map limited to the two new help strings, and after the
+  reviews a stale pair names itself when it fails. Not in the brief's owned list; name it beside the line 120 edit.
 - To S18: the night card replays its taps and sting on any remount (AwardsNightCard.tsx 74 to 80, useSoundPlan's per
-  mount memory); after this round Full attributes no longer causes one, the two controls above still do.
+  mount memory). During the countdown Full attributes no longer causes one. After the reveal it still does: the
+  phase is still ballon_dor and the card is still up (Continue, and the speech for a winner), the button is enabled
+  (ballonDorAwaitingReveal answers null once revealed), opening it unmounts the card (the attrsOpen early return) and
+  Back mounts it again complete, replaying the ten taps and the sting over a finished card. That is base behaviour,
+  not a regression of this round, and stays S18's. "Go back" and "Cookie choices" (above) still cause one during the
+  countdown.
+- Residual of the shared shape (ruling 2e, not a defect of this round): Training's ? keeps aria-expanded true on the
+  menu whether one paragraph or three show (as TrainingGround does), so a screen reader hears no change when ? is
+  pressed there. Whoever next touches the shared TrainingGround shape should give the expanded state its own meaning.
+- For whoever lifts soccer onto TrainingGround: src/test/fixtures/TrainingGroundSoccerBinding.tsx line 30 still binds
+  the menu rule this round removed ("One session per season. Score 50+ for a +1, 80+ ..."), and
+  src/test/careerTrainingGround.fixture.json records it in 8 menu rows. Nothing is red (that test renders the fixture,
+  not TrainingPanel), but a lift through that binding would bring the removed line back: bind "One bank per season
+  ..." instead and re-record the fixture then.
