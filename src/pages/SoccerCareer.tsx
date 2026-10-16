@@ -3666,6 +3666,10 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   if (attrsOpen) {
     return <AttributesScreen career={career} onBack={() => setAttrsOpen(false)} />;
   }
+  /* Round 1337: while the Ballon d'Or night counts down, Full attributes waits. Opening it
+     unmounted the night's card, and the countdown started again from 10th on the way back.
+     Held, nothing remounts and nothing is written. */
+  const nightHeld = career.phase === "ballon_dor" && ballonDorAwaitingReveal(career) !== null;
 
   return (
     <div ref={screenRef} className="space-y-3 pb-20">
@@ -4174,12 +4178,13 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <button
               type="button"
               onClick={() => setAttrsOpen(true)}
-              className="w-full mt-1 flex items-center justify-between rounded-lg border border-border bg-muted/20 px-3 py-2 text-left active:scale-[0.99] transition-transform"
+              disabled={nightHeld}
+              className="w-full mt-1 flex items-center justify-between rounded-lg border border-border bg-muted/20 px-3 py-2 text-left active:scale-[0.99] transition-transform disabled:opacity-60"
             >
               <span className="min-w-0">
                 <span className="block text-xs font-bold">Full attributes</span>
                 <span className="block text-[10px] text-muted-foreground truncate">
-                  {career.physique?.heightCm ?? 180} cm · {career.physique?.weightKg ?? 76} kg · every number under the six
+                  {nightHeld ? "Opens once the Ballon d'Or night is over" : <>{career.physique?.heightCm ?? 180} cm · {career.physique?.weightKg ?? 76} kg · every number under the six</>}
                 </span>
               </span>
               <ChevronRight className="w-4 h-4 shrink-0 opacity-60" />

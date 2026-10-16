@@ -105,6 +105,54 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
+/* A Ballon d'Or night on the save: ten fictional names, the player third, the list not yet shown. */
+function nightSave(phase: E.CareerState['phase'], revealed: boolean): E.CareerState {
+  const career = player();
+  const row = career.seasons[career.seasons.length - 1];
+  const nominees = Array.from({ length: 10 }, (_, i) => ({
+    name: i === 2 ? career.playerName : `Fixture Candidate ${i + 1}`, points: 300 - i * 20, isPlayer: i === 2,
+    nationality: 'England', club: 'Arsenal', position: 'CM', goals: 12, trophies: [] as string[],
+  }));
+  return { ...career, phase, pendingSummary: row,
+    pendingBallonDor: { year: row.year, nominees, playerRank: 3, playerPoints: 260, playerNominated: true, moved: '', ...(revealed ? { revealed: true } : {}) } } as E.CareerState;
+}
+const attributesButton = () => screen.getByRole('button', { name: /^Full attributes/ });
+const attributesOpen = (view: ReturnType<typeof render>) => [...view.container.querySelectorAll('h1')].some(h => /full attributes$/.test(h.textContent ?? ''));
+
+describe('S1 the Ballon d\'Or night holds Full attributes while it counts down', () => {
+  it('disables the button with the night line, and a press leaves the night up and the save unchanged', () => {
+    const view = mount(nightSave('ballon_dor', false));
+    const card = view.container.querySelector('[data-award-night="ballon_dor"]');
+    expect(card).not.toBeNull();
+    expect(card!.getAttribute('data-award-result')).toBe('waiting');
+    const button = attributesButton();
+    expect(button).toBeDisabled();
+    expect(button.textContent).toContain("Opens once the Ballon d'Or night is over");
+    const before = localStorage.getItem(KEY);
+    fireEvent.click(button);
+    expect(attributesOpen(view)).toBe(false);
+    expect(view.container.querySelector('[data-award-night="ballon_dor"]')).toBe(card);
+    expect(localStorage.getItem(KEY)).toBe(before);
+  });
+
+  it('opens Full attributes once the night has been shown', () => {
+    const view = mount(nightSave('ballon_dor', true));
+    const button = attributesButton();
+    expect(button).toBeEnabled();
+    expect(button.textContent).not.toContain('Opens once');
+    fireEvent.click(button);
+    expect(attributesOpen(view)).toBe(true);
+  });
+
+  it('keeps Full attributes open on the season summary with the night still to come', () => {
+    const view = mount(nightSave('season_summary', false));
+    const button = attributesButton();
+    expect(button).toBeEnabled();
+    fireEvent.click(button);
+    expect(attributesOpen(view)).toBe(true);
+  });
+});
+
 describe('S2 Week by week says it is a watch', () => {
   it('labels the 📺 button as a watch, never live', () => {
     const view = mount(player());
