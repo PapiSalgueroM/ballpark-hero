@@ -1,0 +1,2 @@
+simCmOldCareersWorld: BASE 3a147a7c, sections 1, control never
+simCmOldCareersWorld: cannot run: control never: its anchor is in src/lib/clubManager.ts 0 times, it must be exactly once: career = adoptLivingWorld(career);

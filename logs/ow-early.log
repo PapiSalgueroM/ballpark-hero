@@ -1,0 +1,6 @@
+simCmOldCareersWorld: BASE 3a147a7c, sections 1, control early
+  fixture pre: 1 tape(s) passed over (tape 0: the next season ended (or the manager was sacked) before its January window (season 2 week 14 of 54, match, sacked true, wilderness false, board 0))
+  FAIL section 1: fixture pre: this tree threw: the save did not open
+  FAIL section 1: fixture mid: this tree threw: the save did not open
+section 1: 0 old saves, 0 steps equal to BASE before the summer, 0 steps after it at 0 checkpoints; deals between two other clubs placed at their buyers: 0 in the summer, 0 in January (0 placements checked); 0 joined rows on the screen; red by check {}
+simCmOldCareersWorld: control early DID NOT FIRE: the comparison before the summer stayed green

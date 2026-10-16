@@ -1,0 +1,10 @@
+wm-seedless exit=2 0s | simCmWorldMoves: cannot run: seedless: its anchor is in src/lib/clubManager.ts 0 times, it must be exactly once: if (!livingWorldOf(state)) return state;
+wm-noguard exit=2 0s | simCmWorldMoves: cannot run: noguard: its anchor is in src/lib/clubManager.ts 0 times, it must be exactly once: return livingWorldOf(career) && recordAiDeal(career, deal,
+oldworld exit=1 5s | Node.js v24.21.0
+ow-never exit=2 1s | simCmOldCareersWorld: cannot run: control never: its anchor is in src/lib/clubManager.ts 0 times, it must be exactly once: career = adoptLivingWorld(career);
+appeal-oldengine exit=1 10s | Node.js v24.21.0
+ow-early exit=3 4s | simCmOldCareersWorld: control early DID NOT FIRE: the comparison before the summer stayed green
+appeal-head exit=1 51s | Node.js v24.21.0
+continuity-base exit=1 41s |     at async file:///tmp/base1/scripts/simManagerWorldContinuity.mjs:496:24
+ow-bridge exit=1 60s | simCmOldCareersWorld: control bridge FIRED: section 2 red on 18 of 18 seeded careers (60s)
+decisions-base exit=1 20s | simClubManagerDecisions: 3 findings

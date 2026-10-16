@@ -1,0 +1,20 @@
+simCmOldCareersWorld: BASE 3a147a7c, sections 1, 2
+  fixture pre: 1 tape(s) passed over (tape 0: the next season ended (or the manager was sacked) before its January window (season 2 week 14 of 54, match, sacked true, wilderness false, board 0))
+  FAIL section 1: [adopted] pre (Arsenal, now) at rollover: it holds no readable ledger
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Alessandro Bastoni (Inter Milan to Newcastle): 0 owned records at the buyer
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Malick Thiaw (Newcastle to Tottenham): 0 owned records at the buyer
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Yan Diomande (Real Madrid to Manchester City): 0 owned records at the buyer
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Ange-Yoan Bonny (Inter Milan to Crystal Palace): 0 owned records at the buyer
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Alejandro Garnacho (Aston Villa to Liverpool): 0 owned records at the buyer
+  FAIL section 1: [market] pre (Arsenal, now) at rollover: 14 market rows list a man at my own club Arsenal
+  FAIL section 1: [adopted] pre (Arsenal, now) at save-and-reload after the summer: it holds no readable ledger
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmOldCareersWorld.mjs:278
+    const adoptBytes = JSON.stringify(HM.cm.adoptLivingWorld(JSON.parse(b[0].json))).length - b[0].json.length;
+                                            ^
+
+TypeError: HM.cm.adoptLivingWorld is not a function
+    at fixtureSection (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmOldCareersWorld.mjs:278:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmOldCareersWorld.mjs:353:3
+
+Node.js v24.21.0
