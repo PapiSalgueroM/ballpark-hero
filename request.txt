@@ -1,0 +1,3 @@
+#!build
+#!playwright
+playCmRetire: node scripts/playCmRetire.mjs
