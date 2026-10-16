@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+wm-a: CM_WORLD_MOVES_SECTIONS=0,2,3,5,7,8 node scripts/simCmWorldMoves.mjs
+wm-b: CM_WORLD_MOVES_SECTIONS=1,4 node scripts/simCmWorldMoves.mjs
+wm-c: CM_WORLD_MOVES_SECTIONS=6,10,11 node scripts/simCmWorldMoves.mjs
+bridges: node scripts/lib/cmNoAiMoves1344.mjs --check && node scripts/lib/cmWorldSeed1250.mjs --check
+shootout: node scripts/simCmShootoutOrder.mjs
+var: node scripts/simCmVar.mjs
+leaguerules: node scripts/simCmLeagueRules.mjs
+savesize: node scripts/simClubManagerSaveSize.mjs
+slots: node scripts/simClubManagerSlots.mjs
+journey: node scripts/simCmLedgerJourney.mjs
+freeagents: node scripts/simFreeAgents.mjs
+detail: CM_OWN_ROSTER_CORE_REF=HEAD node scripts/simClubDetailCurrentRoster.mjs
