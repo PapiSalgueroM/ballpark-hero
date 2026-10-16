@@ -23,7 +23,9 @@ const heldTest = readFileSync(testFile);
 const source = heldLib.toString('utf8').replaceAll('\r\n', '\n');
 /* Release BE join (Round BEG): taken again once because Round 1352 (PR251, the World Cup Andy Robertson alias)
    changed fetchWorldCupSets in playerBingo.ts; main's file held 9195E989... before that merge. */
-assert.equal(hash(Buffer.from(source)), 'AD1D776406BF0151C6BE4B1EB53EA544E6FEC40363BD1D5B491D491342FEAEEF');
+/* Rodri sparse-history correction: the whole-library pin is retaken for the new personal honour.
+   Existing title predicates, Vitinha rows and all four executable controls remain held. */
+assert.equal(hash(Buffer.from(source)), 'B446D6FEBC197D9210A01624BD41F71A31CD65EFAD5FF566FDF64DB0EBF792AC');
 assert.equal(hash(heldTest), '0AE18AE01A012509200926DB6F66BA115C81AF718FD07B308299DFE21EB4EB72');
 writeFileSync(path.join(out, 'source.raw.ts'), heldLib);
 writeFileSync(path.join(out, 'source.LF.ts'), source);

@@ -633,6 +633,22 @@ const UCL_WINNER_KEYS: Set<string> = new Set(
   UCL_WINNER_PAIRS.flatMap(p => p.keys.flatMap(k => p.years.map(y => `${k}|${y}`))),
 );
 
+// Rodri won in 2023. Title and identity sources: docs/audits/player-bingo-rodri-ucl-2026-10-16.md.
+// A separately verified honour does not depend on complete market season rows.
+const VERIFIED_UCL_WINNERS = [
+  { name: 'rodri', nationality: 'spain', position: 'defensive midfield', birthYear: 1996 },
+] as const;
+
+function hasVerifiedUclHonour(p: BingoPlayer): boolean {
+  return VERIFIED_UCL_WINNERS.some(fact =>
+    normalizeName(p.name) === fact.name &&
+    primaryNationality(p.nationality) === fact.nationality &&
+    normalizeName(p.position) === fact.position &&
+    Number.isInteger(p.age) && p.age > 0 && Number.isInteger(p.year) && p.year > 0 &&
+    p.year - p.age >= fact.birthYear && p.year - p.age <= fact.birthYear + 1,
+  );
+}
+
 /**
  * Release BA: the year 2026 rows are an autumn 2025 snapshot with the summer
  * 2026 window written over them (scripts/transferOverlay2026.mjs, Round 450's
@@ -882,8 +898,8 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
       test: (p, d) => d.wcWinners.has(normalizeName(p.name)),
     }),
   );
-  // Champions League winner via (club, season-end year) rows against the
-  // verified 2011-2026 winner pairs. See UCL_WINNER_PAIRS for method.
+  // Champions League winner via verified personal honours or (club, season-end year)
+  // rows against the verified 2011-2026 winner pairs. See UCL_WINNER_PAIRS for method.
   out.push(
     withSupport(data, {
       id: 'ucl-winner',
@@ -893,7 +909,7 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
       test: (p, d) => {
         const rows = d.clubYears.get(p.name);
         const windowArrival = UCL_2026_WINDOW_ARRIVALS.has(normalizeName(p.name));
-        return !!rows && rows.some(r => !(windowArrival && r.year === 2026) && UCL_WINNER_KEYS.has(`${r.key}|${r.year}`));
+        return hasVerifiedUclHonour(p) || (!!rows && rows.some(r => !(windowArrival && r.year === 2026) && UCL_WINNER_KEYS.has(`${r.key}|${r.year}`)));
       },
     }),
   );
