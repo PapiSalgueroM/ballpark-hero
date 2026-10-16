@@ -8,13 +8,15 @@
  * proof that whatever moved moved for the recording and nothing else (the brief's decision 7, the critic's
  * correction 6). The pattern is scripts/lib/cmWorldSeed1250.mjs's.
  *
- * FOUR EDITS, each failing closed (its anchor must stand exactly once, line endings read as LF, or nothing is changed
+ * FIVE EDITS, each failing closed (its anchor must stand exactly once, line endings read as LF, or nothing is changed
  * and the caller is told: exit 2 from the command line, a thrown error from the function), and counted:
  *   1. generateHeadlines records nothing and skips nothing: every deal goes back on the list it hands back;
  *   2. recordAiDeals' loop is taken out, so the opening flush, the hijack, the walk away and the repair on load write
  *      nothing (and the lead's ruling 3, inside the recording, goes with them);
  *   3. joinClubNow takes the departed career's ledger again (src/lib/clubManagerCalendar.ts);
- *   4. and the departed career's gone names are not carried over.
+ *   4. and the departed career's gone names are not carried over;
+ *   5. and a rival in a bidding war closes whatever the ledger says (rivalCloseRefused answers false, the review's
+ *      fix of 2026-10-16), as it did before the round.
  * What stays: the screen's market (marketForScreen, read by the transfer screen only) and the refusal, which only a
  * ledger record of an AI deal or of a sale of mine this season can trip; the dailies' strip of a ledger that is then
  * never written; the optional pack parameter of the two writers.
@@ -38,6 +40,8 @@ export const BRIDGE_EDITS = [
     '    ...(departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),\n'],
   [CALENDAR, 'the join keeps the run in\'s gone names',
     '    ...(worldSeedOf(departed) === undefined ? {} : { goneNames: [...new Set([...s.goneNames, ...career.goneNames.filter(name => movedElsewhere.has(name))])] }),\n', ''],
+  [ENGINE, 'a rival closes whatever the ledger says',
+    '  return worldSeedOf(career) !== undefined && recordAiDeal(career, deal, career) === career;\n', '  return false;\n'],
 ];
 
 /** How many times each anchor stands in its file's source (LF). */

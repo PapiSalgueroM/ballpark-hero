@@ -509,6 +509,17 @@ export function recordAiDeals(state: CareerState, deals: readonly AiDeal[]): Car
   for (const deal of deals) next = recordAiDeal(next, deal, state);
   return next === state ? state : packedLedger(next);
 }
+
+/* Round 1344 review (both reviews' first major; the other lane's PR295 found it too): a rival in a bidding war closes
+   only a deal a seeded career's ledger records. When the ledger refuses the man (the lead's ruling 3: one I sold, or
+   one I signed and left behind at a job move; or a man his club does not hold exactly once) the rival does not get
+   him: the draw that brought the close is spent as before, but no news line, no gone name and no "closed the deal"
+   note say he moved while the ledger keeps him where he was. An unseeded career never refuses (today's rule). Pure,
+   no draw. Its body is one line so scripts/lib/cmNoAiMoves1344.mjs can take it out; scripts/simCmWorldMoves.mjs
+   section 2 (the protected arms) holds it. */
+function rivalCloseRefused(career: CareerState, deal: AiDeal): boolean {
+  return worldSeedOf(career) !== undefined && recordAiDeal(career, deal, career) === career;
+}
 /** A rival club's projected roster minus every man who is in my squad. */
 export function oppRosterFor(state: CareerState, club: string, mine: ReadonlySet<string> = mySquadNames(state)): ProjectedPlayer[] {
   return projectedRosterWithout(club, yearsOn(state), state.eraId ?? 'now', mine, state);
@@ -9365,7 +9376,8 @@ export function buildMarket(career: CareerState): MarketPlayer[] {
 
 /* Round 1344 (the player report: a man another club bought was "deleted from the database"). The market the transfer
    screen shows: buildMarket, plus, in a career with a readable ledger, every man another club bought this season (his
-   name is on goneNames and the ledger owns him at the club the market lists him at), marked joinedThisSeason, in the
+   name is on goneNames, this season's deal line takes him to the club the market lists him at, and the ledger owns
+   him there), marked joinedThisSeason, in the
    market's own order. He can be found at his new club; every door refuses him with the reason until the summer
    (joinedThisSeasonRefusal). buildMarket itself is unchanged: the window news and the board's asks read it. A man I
    sold this season is the same case. With no ledger the answer is buildMarket's own list. scripts/simCmWorldMoves.mjs
@@ -9378,20 +9390,32 @@ export function marketForScreen(career: CareerState): MarketPlayer[] {
   const retired = new Set(career.retiredNames ?? []);
   const released = releasedByYouNames(career);
   const onLoanOut = new Set((career.loanedOut ?? []).map(l => sameManKey(l.player)));
-  const joined = new Set(worldMarket(career).filter(p => gone.has(p.name) && p.worldRosterKey !== undefined
+  /* Round 1344 review: rows are matched by name and club, not by object, so the answer never rests on worldMarket's
+     memo handing the same objects back to three calls; and a man is marked joined by the one test the refusal reads
+     (joinedHisClubThisSeason), so nothing is listed as joined that a door then sells. A gone name with no deal line
+     to his club this season stays off the screen, as buildMarket has it. */
+  const at = (p: MarketPlayer) => `${p.name}|${p.club}`;
+  const world = worldMarket(career);
+  const joined = new Set(world.filter(p => gone.has(p.name)
     && !squadNames.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.has(sameManKey(p))
-    && worldRosterOwner(career, p.worldRosterKey) === p.club));
+    && joinedHisClubThisSeason(career, p)).map(at));
   if (!joined.size) return market;
-  const listed = new Set(market);
-  return worldMarket(career).filter(p => listed.has(p) || joined.has(p)).map(p => joined.has(p) ? { ...p, joinedThisSeason: true as const } : p);
+  const listed = new Set(market.map(at));
+  return world.filter(p => listed.has(at(p)) || joined.has(at(p))).map(p => joined.has(at(p)) ? { ...p, joinedThisSeason: true as const } : p);
 }
 
-/* Round 1344: a man another club bought this season is not for sale until the summer, by any door. Read off this
-   season's deal line to his club (a namesake on goneNames cannot trip it) and the ledger owning him there, so a career
-   with no ledger never meets it. After every older reason, so today's refusals keep their order. */
+/* Round 1344: whether a man joined the club the market lists him at this season: this season's deal line to that
+   club (a namesake on goneNames cannot trip it) and the ledger owning him there, so a career with no ledger never
+   meets it. The screen's listing (marketForScreen) and every door (joinedThisSeasonRefusal) read this one test. */
+function joinedHisClubThisSeason(career: CareerState, mp: MarketPlayer): boolean {
+  return !!mp.worldRosterKey && (career.transferLog ?? []).some(t => t.name === mp.name && t.to === mp.club && t.season === career.season && !t.loan)
+    && worldRosterOwner(career, mp.worldRosterKey) === mp.club;
+}
+
+/* Round 1344: a man another club bought this season is not for sale until the summer, by any door. After every older
+   reason, so today's refusals keep their order. */
 function joinedThisSeasonRefusal(career: CareerState, mp: MarketPlayer): string | null {
-  if (!mp.worldRosterKey || !(career.transferLog ?? []).some(t => t.name === mp.name && t.to === mp.club && t.season === career.season && !t.loan)) return null;
-  if (worldRosterOwner(career, mp.worldRosterKey) !== mp.club) return null;
+  if (!joinedHisClubThisSeason(career, mp)) return null;
   return `${mp.name} only joined ${mp.club} this season. They will not sell him on until ${career.transferWindow === 'summer' ? 'next summer' : 'the summer'}.`;
 }
 
@@ -10448,7 +10472,8 @@ export function makeOffer(career: CareerState, amount: number, extras?: DealExtr
   if (next.rivalBidder && next.rivalOffer !== null && packageValue <= next.rivalOffer) {
     next.note = `${next.rivalBidder} are still ahead at ${money(next.rivalOffer)}. Beat it or lose him.`;
     // Dithering lets the rival close: 30% they win the race right now.
-    if (Math.random() < 0.3) {
+    // Round 1344 review: only a deal the ledger records (the draw comes first, so no draw moves).
+    if (Math.random() < 0.3 && !rivalCloseRefused(career, { mp: next.player, to: next.rivalBidder, fee: next.rivalOffer })) {
       const state: CareerState = {
         ...career,
         negotiation: { ...next, status: 'hijacked', note: `${next.rivalBidder} closed the deal at ${money(next.rivalOffer)} while you hesitated.` },
@@ -10737,7 +10762,9 @@ function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: Personal
 export function walkAway(career: CareerState): CareerState {
   const neg = career.negotiation;
   if (!neg) return career;
-  if (neg.status === 'open' && neg.rivalBidder && neg.rivalOffer !== null && Math.random() < 0.6) {
+  /* Round 1344 review: the rival takes him only when the ledger records it (the draw comes first, so no draw moves). */
+  if (neg.status === 'open' && neg.rivalBidder && neg.rivalOffer !== null && Math.random() < 0.6
+    && !rivalCloseRefused(career, { mp: neg.player, to: neg.rivalBidder, fee: neg.rivalOffer })) {
     const state: CareerState = {
       ...career,
       negotiation: null,
