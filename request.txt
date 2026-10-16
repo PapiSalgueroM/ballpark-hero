@@ -1,0 +1,4 @@
+#!serial
+#!playwright
+weight-base: git checkout 1027b08c -- src && npm run build > /dev/null 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4181 > /dev/null 2>&1 &) && sleep 5 && BASE=http://localhost:4181 SWEEP_BASE=http://localhost:4181 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs; s=$?; git checkout HEAD -- src; exit $s
+weight-head: npm run build > /dev/null 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4182 > /dev/null 2>&1 &) && sleep 5 && BASE=http://localhost:4182 SWEEP_BASE=http://localhost:4182 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
