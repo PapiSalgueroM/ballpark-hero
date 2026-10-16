@@ -1,0 +1,3 @@
+seed4-head exit=1 19s | simClubManagerDecisions: 1 findings
+tsc exit=0 59s | 
+dr-head exit=1 118s | Node.js v24.21.0
