@@ -1,0 +1,30 @@
+  /                    broke in 0 of 4 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0, 0, 0; stale text at most 0
+  /club-manager        broke in 0 of 4 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0, 0, 0; stale text at most 0
+  /nba-my-career       broke in 0 of 4 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0, 0, 0; stale text at most 0
+  /nba-my-career#bank  broke in 0 of 4 walk(s); the guard printed its line in 0; moved nodes per walk 7, 7, 7, 7; stale text at most 0
+  /nfl-my-career       broke in 0 of 4 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0, 0, 0; stale text at most 0
+  /stadium-tycoon      broke in 0 of 4 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0, 0, 0; stale text at most 0
+  /college-grid        broke in 0 of 4 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0, 0, 0; stale text at most 0
+  /build-your-xi       broke in 0 of 4 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0, 0, 0; stale text at most 0
+  /front-office        broke in 0 of 4 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0, 0, 0; stale text at most 0
+
+WHAT THE THREE BOXES READ after the picks
+  phone    keep   nationality "Brazil" (readable) | position "Striker (ST)" (readable) | era "Current era (2025 start)" (readable)
+  desktop  keep   nationality "Brazil" (readable) | position "Striker (ST)" (readable) | era "Current era (2025 start)" (readable)
+  phone    alter  nationality "«Brazil»" (readable) | position "«Striker (ST)»" (readable) | era "«Current era (2025 start)»" (readable)
+  desktop  alter  nationality "«Brazil»" (readable) | position "«Striker (ST)»" (readable) | era "«Current era (2025 start)»" (readable)
+
+THE CALLS THAT NAMED A MOVED NODE (4 different, each one a crash without the guard)
+  4x /soccer-career: removeChild under <span> of "s"
+  16x /nba-my-career#bank: insertBefore under <span> of "-$100k"
+  8x /nba-my-career#bank: removeChild under <span> of "+"
+  4x /nba-my-career#bank: insertBefore under <span> of "-$200k"
+
+LAYER TWO on 40 page load(s): 27975 text node(s) seen taken, 12 removal(s) and 20 insert(s) put through, 1608 string(s) handed back fresh, 1312 node(s) taken up again after the translator gave them back. Text the translator will not take again, back on the page: 0.
+
+THE UNDO on 4 create walk(s): the translator gave back 328, 328, 328, 328 node(s); then 11, 11, 11, 11 press(es) and 12, 12, 12, 12 look(s); stale text at most 0, 0, 0, 0; the age line wrong at 0 of 12, 0 of 12, 0 of 12, 0 of 12 look(s), 3, 3, 3, 3 of them after a birthday that came after the undo.
+
+nothing left this machine: 68 request(s) to the database host aborted, other hosts aborted [fonts.googleapis.com], 20 screenshot(s) in /home/runner/work/_temp/rc-out/files/translated-plain
+32 call(s) in all named a node its parent no longer owned, each one a crash without the guard. Layer one had to fall back, and printed its line, on 0 of 40 page load(s).
+
+playTranslatedPage: 447 checks, 0 failed

@@ -1,0 +1,30 @@
+   fence before absent, after a week 2; Brighton week 0, 0 results, last none to Brighton week 1, 1 results, last Aston Villa 1-0; a second tab stales it: true
+9) BACK: a stale tab leaves by the browser's Back, mid Play Live and on the hub (1280x900)
+  note  tab A's live match is in minute 3
+   mid Play Live: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 1-1" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 1-1" (live none)
+  ok    A left by Back mid Play Live: the save is still B's
+   on the hub: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 1-0" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 1-0" (live none)
+  ok    A left by Back on the hub: the save is still B's
+   then in the same document a Hot Seat carry on: the save holds "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the same document carried a Hot Seat job on afterwards
+10) SOCCER REPLACE, and 11) REVERSE (1280x900)
+   A opened on "Next Season"; B played "Next Season": Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2; A saw the notice at once: true; A's press went through: false; forced "Next Season"; A's writes 1 to 1
+  ok    B's season is on disk byte for byte after A's press and A's forced press: Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2
+  ok    A reloaded onto B's season with no notice: Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2
+   REVERSE: B saw the notice: true; A stepped "Continue to Season Summary →": Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2; B forced "Continue to Season Summary →"; B's writes 2 to 2
+  ok    B's forced press changed nothing: the save is A's
+12) NEW CAREER IN A STALE TAB (1280x900)
+   A saw the notice: true; forced New Career true, forced confirm true; A's writes 1 to 1; on disk Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2
+  ok    a stale New Career cleared nothing
+   creation: B began Fresh Creator age 16, youth, 1 seasons, last 2025 Fulham Youth: 0 apps, 0 goals, 0; A saw the notice: true; A's forced Begin Career true; A's writes 0 to 0; on disk Fresh Creator age 16, youth, 1 seasons, last 2025 Fulham Youth: 0 apps, 0 goals, 0
+  ok    a stale Begin Career wrote nothing
+13) WEEK BY WEEK IN A STALE TAB (1280x900)
+   A's Season Centre open: true (Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7); B played on: Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; A saw the notice: true; forced in the Centre ["?","Back to the papers","Bundesliga","DFB-Pokal"], then "Continue to Season Summary →"; A's writes of soccerCareerSave 2 to 2
+  note  RECORDED, NOT JUDGED (owed): the stale tab wrote seasonCentre:v1:soccer 0 time(s) after the other tab played on
+  ok    the stale Season Centre changed nothing in the save
+14) SOCCER OLD SAVE AND THE NOTICE (1280x900)
+   fence before absent, after "Next Season" 2; Two Tab Tester age 18, playing, 3 seasons, last 2022 West Ham: 32 apps, 5 goals, 6.9 to Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; a second tab stales it: true
+  ok    no jump: scrollY 120 and height 9396 before and after
+  ok    the notice: Reload 44 px, smallest text 16 px, no animation, no toast, Tab stayed inside true
+cases red: none; pictures in /home/runner/work/_temp/rc-out/files/tt
+playTwoTabs: green at 320x640, 390x844, 1280x900

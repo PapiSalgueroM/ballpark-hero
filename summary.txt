@@ -1,0 +1,10 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sims3 exit=1 280s | 2 harnesses not green.
+competitions exit=0 19s | playSoccerCareerCompetitions: 52 checks, 0 failed
+contracts exit=0 68s | playSoccerCareerContracts: 201 checks, 0 failed
+translated exit=0 157s | playTranslatedPage: 447 checks, 0 failed
+twoTabs exit=0 482s | playTwoTabs: green at 320x640, 390x844, 1280x900
+sims1 exit=0 1059s | All 16 harnesses green.
+career992 exit=0 54s | Native career practice evidence: /home/runner/work/ballpark-hero/ballpark-hero/career-practice-artifacts/native
+vitest-more exit=0 16s |    Duration  14.54s (transform 5.90s, setup 243ms, collect 9.19s, tests 10.94s, environment 2.54s, prepare 631ms)
+sims2 exit=1 1542s | 1 harness not green.

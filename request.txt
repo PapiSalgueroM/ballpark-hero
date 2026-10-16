@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+sims1: ONLY=simActivityNotCompletion,simCareerAcademy,simCareerDerbies,simCareerDilemmaReach,simCareerEras,simCareerFacts,simCareerKeepPlaying,simCareerLeagueSeasons,simCareerPositionRatings,simCareerRecordedStats,simCareerTransferBrief,simCareerTrophyRuns,simClubSquads,simCmDataOnDemand,simCareerLeagueWorld,simTraining node scripts/runAllSims.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+sims2: ONLY=simCreation,simHomeFront,simLoanSpell,simManagerCareer,simNationalityFlags,simSaveFence,simScoreShown,simSessionMarks,simSoccerAgentReview,simSoccerAgentReviewPageControl,simSoccerAwardGenerations,simSoccerCareerDocumentaryReview,simSoccerCareerSaveRecovery node scripts/runAllSims.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+sims3: ONLY=simSoccerCareerSaveRetry,simSoccerCareerSavedLoan,simSoccerCurrency,simSoccerFarewell,simSoccerFarewellPageControl,simSoccerInternationalReturn,simSoccerInternationalReturnPageControl,simSoccerVeteranTalks,simTransferBriefPageControl,simVictoryMoment node scripts/runAllSims.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+competitions: PORT=4608 ENGINES=chromium node scripts/playSoccerCareerCompetitions.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+contracts: PORT=4609 ENGINES=chromium node scripts/playSoccerCareerContracts.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+translated: ENGINES=chromium node scripts/playTranslatedPage.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+twoTabs: PORT=4610 RC_OUT=$RC_OUT/tt ENGINES=chromium node scripts/playTwoTabs.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+career992: ENGINES=chromium node scripts/qa/career992.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+vitest-more: node_modules/.bin/vitest run src/test/careerPracticeLifecycle.test.tsx src/test/soccerClubStartingElevenUi.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -20; exit ${PIPESTATUS[0]}

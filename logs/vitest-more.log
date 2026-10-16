@@ -1,0 +1,20 @@
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/careerPracticeLifecycle.test.tsx [2m([22m[2m23 tests[22m[2m)[22m[33m 2212[2mms[22m[39m
+   [33m[2m✓[22m[39m shared practice lifecycle[2m > [22msupersedes the abandoned fifth penalty with the new drill result [33m 499[2mms[22m[39m
+   [33m[2m✓[22m[39m shared practice lifecycle[2m > [22mgates preserve both the open window and between-gate delay [33m 424[2mms[22m[39m
+   [33m[2m✓[22m[39m shared practice lifecycle[2m > [22mcone time and mistakes exclude the entire paused interval [33m 312[2mms[22m[39m
+ [32m✓[39m src/test/soccerClubStartingElevenUi.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 562[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m64 tests[22m[2m)[22m[33m 8168[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1754[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 354[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1335[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 375[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1845[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 469[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m96 passed[39m[22m[90m (96)[39m
+[2m   Start at [22m 18:13:23
+[2m   Duration [22m 14.54s[2m (transform 5.90s, setup 243ms, collect 9.19s, tests 10.94s, environment 2.54s, prepare 631ms)[22m
+
