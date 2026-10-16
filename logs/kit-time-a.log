@@ -1,0 +1,4 @@
+KIT side=base line=a exit=0 seconds=57 | runtime 57.7 s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+KIT side=head line=a exit=0 seconds=59 | runtime 58.4 s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+KIT side=head line=a exit=0 seconds=59 | runtime 58.7 s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+KIT side=base line=a exit=0 seconds=57 | runtime 57.7 s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.

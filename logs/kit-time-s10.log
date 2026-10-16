@@ -1,0 +1,2 @@
+KIT side=base section=10 exit=0 seconds=3 | runtime 2.9 s
+KIT side=head section=10 exit=0 seconds=4 | runtime 3.2 s
