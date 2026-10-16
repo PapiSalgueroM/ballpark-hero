@@ -1,0 +1,4 @@
+appeal-fixhead exit=1 4s | Node.js v24.21.0
+appeal-revert exit=0 22s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+boundary-fixhead exit=0 3s |    Duration  2.71s (transform 840ms, setup 31ms, collect 22ms, tests 2.23s, environment 174ms, prepare 73ms)
+boundary-oldsource exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRecordBoundary.test.ts,title=src/test/clubManagerRecordBoundary.test.ts > Manager record re
