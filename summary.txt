@@ -1,0 +1,3 @@
+headsha exit=0 0s | 74aa918b1 rc request rBHh-m3c for 1404ca2d1024667c78b3c8280c37d43c2847c12a
+life-original-ctl exit=0 2s | lifeOriginal: CONTROL FIRED-OK on base bd3b6244: exactly the 8 preview cases failed, 10 preserved, both files restored
+life-held exit=0 0s | src and scripts held after the control
