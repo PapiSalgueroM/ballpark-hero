@@ -43,7 +43,7 @@ import type { ConcessionTier } from '@/lib/clubManagerFinances';
 import { hireStaff, matchStaffOffer, releaseToPoacher, sackStaff } from '@/lib/clubManagerStaff';
 import type { StaffPostId } from '@/lib/clubManagerStaff';
 import { spendSkillPoint } from '@/lib/clubManagerXp';
-import { setStartOption } from '@/lib/clubManagerStart';
+import { postsScore, setStartOption } from '@/lib/clubManagerStart';
 import { validWorldEdit } from '@/lib/clubManagerWorldEdit';
 import type { CurrencyCode } from '@/lib/clubManagerStart';
 import type { SkillTree } from '@/lib/clubManagerXp';
@@ -803,13 +803,16 @@ export function useClubManager() {
          player's points fifty times over. Measured 2026-09-01: the top of
          the points table held 80,246 of its 87,800 from 1,586 Club Manager
          rows. The finished season below is the completion. */
-      recordActivity('/club-manager', currentSeasonScore(res.state));
+      /* Round 1342: a No sacking career pings with no score, so it never ranks. */
+      if (postsScore(res.state)) recordActivity('/club-manager', currentSeasonScore(res.state));
+      else recordActivity('/club-manager');
       recordStreakDay('/club-manager');
       setReport(res.report);
       setPhase('matchResult');
     } else if (res.kind === 'seasonOver') {
       const { state, summary: sm } = finishSeason(res.state);
-      recordCompletion('/club-manager', sm.seasonScore);
+      if (postsScore(state)) recordCompletion('/club-manager', sm.seasonScore);
+      else recordCompletion('/club-manager');
       setCareer(state);
       setSummary(sm);
       setPhase('seasonEnd');
@@ -841,7 +844,8 @@ export function useClubManager() {
     }
     if (run.halt === 'seasonOver') {
       const { state: done, summary: sm } = finishSeason(run.state);
-      recordCompletion('/club-manager', sm.seasonScore);
+      if (postsScore(done)) recordCompletion('/club-manager', sm.seasonScore);
+      else recordCompletion('/club-manager');
       setCareer(done);
       setSummary(sm);
       setPhase('seasonEnd');
@@ -850,7 +854,8 @@ export function useClubManager() {
     setCareer(run.state);
     if (run.lastReport) {
       // Round 157: a fast-forwarded run still counts as playing today.
-      recordActivity('/club-manager', currentSeasonScore(run.state));
+      if (postsScore(run.state)) recordActivity('/club-manager', currentSeasonScore(run.state));
+      else recordActivity('/club-manager');
       recordStreakDay('/club-manager');
       setReport(run.lastReport);
       setPhase('matchResult');
@@ -860,7 +865,8 @@ export function useClubManager() {
   const continueFromReport = useCallback(() => {
     if (!career) return;
     if (career.sacked) {
-      recordCompletion('/club-manager', currentSeasonScore(career));
+      if (postsScore(career)) recordCompletion('/club-manager', currentSeasonScore(career));
+      else recordCompletion('/club-manager');
       /* Round 201: the sack opens the wilderness rather than closing the
          save. The screen is the same route ('sacked'), what changed is that
          it now has a way onward. */
@@ -870,7 +876,8 @@ export function useClubManager() {
     }
     if (career.week >= career.calendar.length) {
       const { state, summary: sm } = finishSeason(career);
-      recordCompletion('/club-manager', sm.seasonScore);
+      if (postsScore(state)) recordCompletion('/club-manager', sm.seasonScore);
+      else recordCompletion('/club-manager');
       setCareer(state);
       setSummary(sm);
       setPhase('seasonEnd');
@@ -1144,7 +1151,8 @@ export function useClubManager() {
     setCareer(res.state);
     if (res.report) {
       // Round 157: a finished match counts toward today, mid-season included.
-      recordActivity('/club-manager', currentSeasonScore(res.state));
+      if (postsScore(res.state)) recordActivity('/club-manager', currentSeasonScore(res.state));
+      else recordActivity('/club-manager');
       recordStreakDay('/club-manager');
       setReport(res.report);
       setPhase('matchResult');
