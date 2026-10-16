@@ -1,0 +1,5 @@
+introBack: wrote the old intro back, sha f65e0f08aa8aa638
+fixErrs: status pass, arms current:pass original-table-binding:pass whole-undo:pass, comparisons table-first:pass table-return:pass severe-first:pass severe-return:pass wrong-year:pass wrong-league:pass ambiguous-first:pass ambiguous-return:pass
+Luton component arms: 3/3.
+Luton copied observation controls: 2/2.
+PASS Luton display component proof

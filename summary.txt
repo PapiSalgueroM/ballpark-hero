@@ -1,0 +1,4 @@
+ib-head1 exit=0 18s | PASS Luton display component proof
+ib-a10a exit=0 18s | PASS Luton display component proof
+ib-head2 exit=0 18s | PASS Luton display component proof
+base2 exit=0 17s | PASS Luton display component proof
