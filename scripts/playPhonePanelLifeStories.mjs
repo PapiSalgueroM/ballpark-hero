@@ -112,6 +112,20 @@ try {
         await body.evaluate(element => { element.scrollTop = element.scrollHeight; });
         row.innerScroll = await body.evaluate(element => ({ top: element.scrollTop, height: element.clientHeight, content: element.scrollHeight }));
         check(row.innerScroll.content <= row.innerScroll.height + 1 || row.innerScroll.top > 0, 'overflow remains reachable inside phone');
+        const reachability = () => body.evaluate(element => {
+          const last = element.querySelector('li:last-child').getBoundingClientRect();
+          let top = 0, bottom = innerHeight; const clips = [];
+          for (let node = element; node; node = node.parentElement) {
+            if (!['auto', 'scroll', 'hidden', 'clip'].includes(getComputedStyle(node).overflowY)) continue;
+            const box = node.getBoundingClientRect();
+            const edge = { top: box.top + node.clientTop, bottom: box.top + node.clientTop + node.clientHeight };
+            clips.push(edge); top = Math.max(top, edge.top); bottom = Math.min(bottom, edge.bottom);
+          }
+          return { last: { top: last.top, bottom: last.bottom, height: last.height }, top, bottom, clips,
+            reachable: last.height > 0 && last.top >= top - 0.5 && last.bottom <= bottom + 0.5 };
+        });
+        row.reachability = await reachability();
+        check(row.reachability.reachable, 'last story fits within every clipping ancestor after inner scroll');
         await page.screenshot({ path: path.join(OUT, name + '-' + profile.width + '-bottom.png') });
         if (profile.width === 320) {
           const previous = await region.getAttribute('style');
@@ -125,6 +139,12 @@ try {
           report.controls.push({ kind: 'horizontal-overflow', fired: true });
           await first.evaluate((element, style) => { if (style === null) element.removeAttribute('style'); else element.setAttribute('style', style); }, oldStyle);
           check((await inspect()).bodyScroll <= (await inspect()).bodyWidth + 1, 'layout restored after DOM controls');
+          const oldBody = await body.getAttribute('style');
+          await body.evaluate(element => { element.style.minHeight = '2000px'; element.scrollTop = element.scrollHeight; });
+          const clipped = await reachability(); check(!clipped.reachable, 'expanded-body control actually clips the last story');
+          report.controls.push({ kind: 'vertical-clipping', fired: true, measured: clipped });
+          await body.evaluate((element, style) => { if (style === null) element.removeAttribute('style'); else element.setAttribute('style', style); element.scrollTop = element.scrollHeight; }, oldBody);
+          check((await reachability()).reachable, 'last story reachable after clipping control restoration');
         }
       } else {
         check(await region.count() === 0, 'no story section for ' + name + ' flags');
@@ -153,9 +173,9 @@ try {
     } finally { await context.close(); }
   }
   assert.equal(report.cases.length, 15); assert(report.cases.every(row => row.status === 'complete'));
-  assert.equal(report.controls.length, 2); assert(report.controls.every(row => row.fired));
+  assert.equal(report.controls.length, 3); assert(report.controls.every(row => row.fired));
   assert.equal(sha(fs.readFileSync(fixturePath)), fixtureHash); assert.deepEqual(distInventory(path.join(ROOT, 'dist')), distBefore);
   report.status = 'complete'; report.distHeld = true; report.fixtureHeld = true; write();
-  console.log('PASS Life stories browser: fifteen actual served-phone cases, five widths, two changed DOM controls, unchanged saved bytes.');
+  console.log('PASS Life stories browser: fifteen actual served-phone cases, five widths, three changed DOM controls, unchanged saved bytes.');
 } catch (error) { report.error = error.stack || String(error); write(); throw error; }
 finally { await browser.close(); }

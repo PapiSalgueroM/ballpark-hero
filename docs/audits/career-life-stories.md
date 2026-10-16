@@ -94,7 +94,8 @@ generated diffs and the exact dist inventory, and requires the separately author
 `scripts/playPhonePanelLifeStories.mjs` on the served build. Root owns that browser leaf:
 actual phone Life at 320x568, 390x844, 430x932, 1280x800 and 1440x900: fifteen saved-state
 cases, internal fit, parent scroll, Back and close focus, literal saved continuation and
-captures. Two changed DOM controls check visibility and sideways overflow; the original
+captures. Three changed DOM controls check visibility, sideways overflow and vertical clipping;
+the last story must be fully reachable inside every clipping ancestor. The original
 component remains the separate unit causal control. External fonts are blocked, so captures
 qualify the declared fallback-font presentation. The original full `SWEEP_OFFLINE=1`
 `sweepWeight.mjs` runs against the same build with every existing budget unchanged. No scoped

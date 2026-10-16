@@ -1,13 +1,15 @@
-## 2026-10-16: Round 1377 phone Life stories method prepared, product held
+## 2026-10-16: Round 1377 phone Life stories candidate, fixed gates pending
 
 Codex lane, branch `codex/career-life-stories`, parent `d4f2c6f6`. Root reserved 1377 in the
-primary workboard. The actual PhonePanel test and branch Actions baseline are authored for a
-small read-only list of the five existing unfinished Life flags. No product has changed.
-Expected first-run outcomes are eight exact missing-section failures and four preservation
-passes, with types, original phone focus controls and 51 related unit outcomes required.
-Nothing has run locally. Product waits for remote causal baseline qualification. Fixed phase
-also owes the actual served phone proof, full unchanged weight budgets and fifteen build
-readers. Method and precise limits: `docs/audits/career-life-stories.md`.
+primary workboard. Baseline `fce36ab1`, run `38889971492`, job `116936806033` qualified:
+eight exact missing-section failures, four preservation passes, types, the original twelve
+phone focus cases and four controls, and 51 related passes. Full artifact `12041775730` is
+retained and reopened in `dukb-handoff/2026-10-16/life-stories-baseline`.
+The nineteen-line PhonePanel addition now shows five existing unfinished stories, with no
+new saved state, choices or draws. Fixed current/original/restored checks, five-width served
+phone checks, unchanged full download budgets and fifteen build readers are pending.
+Nothing has run locally. Claude I owns integration and publication; this is not live.
+Method and precise limits: `docs/audits/career-life-stories.md`.
 
 ## 2026-10-16 05:30 EDT: session I starts; player reports split between the lanes; the Lovable editor push reverted
 
