@@ -1,0 +1,2 @@
+unseeded exit=0 86s | simCmUnseededWorld: green. 49 old saves with no deal play byte equal to 95a6ffc1 (state, draws and saved bytes at every step), 49 with every deal play byte equal to it up
+u-noinverse exit=1 17s | simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
