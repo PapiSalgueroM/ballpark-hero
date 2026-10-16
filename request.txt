@@ -1,0 +1,1 @@
+pr281: node_modules/.bin/vitest run src/test/usCoachRetirement.test.tsx --reporter=verbose --testTimeout=300000 --hookTimeout=120000

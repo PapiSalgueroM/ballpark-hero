@@ -1,0 +1,1 @@
+pr281 exit=1 1s |    Duration  1.08s (transform 290ms, setup 33ms, collect 466ms, tests 153ms, environment 181ms, prepare 91ms)

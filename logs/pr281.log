@@ -1,0 +1,206 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m×[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot play another season[32m 7[2mms[22m[39m
+[31m   → expected false to be true // Object.is equality[39m
+ [31m×[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot sit out another season[32m 1[2mms[22m[39m
+[31m   → expected false to be true // Object.is equality[39m
+ [31m×[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot accept an old offer[32m 1[2mms[22m[39m
+[31m   → expected false to be true // Object.is equality[39m
+ [31m×[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot refresh the market[32m 1[2mms[22m[39m
+[31m   → expected false to be true // Object.is equality[39m
+ [31m×[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mretiring changes only done and is pure and idempotent[32m 0[2mms[22m[39m
+[31m   → expected false to be true // Object.is equality[39m
+ [31m×[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mretirement requires confirmation and accepts once after cancel and escape[32m 68[2mms[22m[39m
+[31m   → expected false to be true // Object.is equality[39m
+ [31m×[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted employed coach keeps the record and log without season actions[32m 30[2mms[22m[39m
+[31m   → expected false to be true // Object.is equality[39m
+ [31m×[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted unemployed coach cannot take offers or advance the calendar[32m 31[2mms[22m[39m
+[31m   → expected false to be true // Object.is equality[39m
+ [31m×[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted start card opens a review instead of offering a coaching return[32m 3[2mms[22m[39m
+[31m   → expected false to be true // Object.is equality[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mactive coaching still plays one season and leaves its input unchanged[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mactive coach still accepts a genuine offer without changing year or history[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mlegacy coaching saves without done keep their active career[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coaching saves preserve their full record on JSON reload[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mactive start card still resumes the sideline without starting over[32m 6[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 9 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot play another season
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/usCoachRetirement.test.tsx:[2m47:46[22m[39m
+    [90m 45| [39m    const state = { ...fixture(), done: true }, held = json(state), ra…
+    [90m 46| [39m    [35mconst[39m result [33m=[39m [33mCoach[39m[33m.[39m[34mplayCoachSeason[39m(state[33m,[39m random)[33m;[39m
+    [90m 47| [39m    [34mexpect[39m(result[33m.[39mstate[33m.[39myear [33m===[39m state[33m.[39myear)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                             [31m^[39m
+    [90m 48| [39m    [34mexpect[39m(result)[33m.[39m[34mtoEqual[39m({ state[33m:[39m held[33m,[39m notes[33m:[39m [] })[33m;[39m
+    [90m 49| [39m    [34mexpect[39m(state)[33m.[39m[34mtoEqual[39m(held)[33m;[39m [34mexpect[39m(random)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot sit out another season
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/usCoachRetirement.test.tsx:[2m55:46[22m[39m
+    [90m 53| [39m    const state = { ...fixture(false), done: true }, held = json(state…
+    [90m 54| [39m    [35mconst[39m result [33m=[39m [33mCoach[39m[33m.[39m[34msitOutCoachSeason[39m(state[33m,[39m random)[33m;[39m
+    [90m 55| [39m    [34mexpect[39m(result[33m.[39mstate[33m.[39myear [33m===[39m state[33m.[39myear)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                             [31m^[39m
+    [90m 56| [39m    [34mexpect[39m(result)[33m.[39m[34mtoEqual[39m({ state[33m:[39m held[33m,[39m notes[33m:[39m [] })[33m;[39m
+    [90m 57| [39m    [34mexpect[39m(state)[33m.[39m[34mtoEqual[39m(held)[33m;[39m [34mexpect[39m(random)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot accept an old offer
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/usCoachRetirement.test.tsx:[2m63:33[22m[39m
+    [90m 61| [39m    const state = { ...fixture(false), done: true }, held = json(state…
+    [90m 62| [39m    [35mconst[39m result [33m=[39m [33mCoach[39m[33m.[39m[34macceptCoachOffer[39m(state[33m,[39m [34m0[39m)[33m;[39m
+    [90m 63| [39m    [34mexpect[39m(result[33m.[39mjob [33m===[39m [35mnull[39m)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                [31m^[39m
+    [90m 64| [39m    [34mexpect[39m(result)[33m.[39m[34mtoEqual[39m(held)[33m;[39m [34mexpect[39m(state)[33m.[39m[34mtoEqual[39m(held)[33m;[39m
+    [90m 65| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot refresh the market
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/usCoachRetirement.test.tsx:[2m70:44[22m[39m
+    [90m 68| [39m    const state = { ...fixture(false), done: true }, held = json(state…
+    [90m 69| [39m    [33mCoach[39m[33m.[39m[34mrefreshCoachOffers[39m(state[33m,[39m random)[33m;[39m
+    [90m 70| [39m    [34mexpect[39m(random[33m.[39mmock[33m.[39mcalls[33m.[39mlength [33m===[39m [34m0[39m)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                           [31m^[39m
+    [90m 71| [39m    [34mexpect[39m(state)[33m.[39m[34mtoEqual[39m(held)[33m;[39m
+    [90m 72| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mretiring changes only done and is pure and idempotent
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/usCoachRetirement.test.tsx:[2m76:42[22m[39m
+    [90m 74| [39m  [34mit[39m([32m'retiring changes only done and is pure and idempotent'[39m[33m,[39m () [33m=>[39m {
+    [90m 75| [39m    const retire = (Coach as unknown as { retireCoachCareer?: (state: …
+    [90m 76| [39m    [34mexpect[39m([35mtypeof[39m retire [33m===[39m [32m'function'[39m)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                         [31m^[39m
+    [90m 77| [39m    [35mconst[39m state [33m=[39m [34mfixture[39m()[33m,[39m held [33m=[39m [34mjson[39m(state)[33m;[39m
+    [90m 78| [39m    const random = vi.spyOn(Math, 'random').mockImplementation(() => {…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mretirement requires confirmation and accepts once after cancel and escape
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/usCoachRetirement.test.tsx:[2m87:29[22m[39m
+    [90m 85| [39m    [35mconst[39m state [33m=[39m [34mfixture[39m()[33m,[39m held [33m=[39m [34mjson[39m(state)[33m,[39m view [33m=[39m [34mpanel[39m(state)[33m;[39m
+    [90m 86| [39m    const opener = view.queryByRole('button', { name: 'Retire from coa…
+    [90m 87| [39m    [34mexpect[39m(opener [33m!==[39m [35mnull[39m)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                            [31m^[39m
+    [90m 88| [39m    fireEvent[33m.[39m[34mclick[39m(opener[33m![39m)[33m;[39m
+    [90m 89| [39m    let dialog = within(document.body).getByRole('alertdialog', { name…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted employed coach keeps the record and log without season actions
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/usCoachRetirement.test.tsx:[2m109:85[22m[39m
+    [90m107| [39m  it('completed employed coach keeps the record and log without season…
+    [90m108| [39m    const state = { ...fixture(), done: true }, view = panel(state), l…
+    [90m109| [39m    expect(view.queryByRole('button', { name: /^Coach the \d+ season$/…
+    [90m   | [39m                                                                                    [31m^[39m
+    [90m110| [39m    expect(view.getByRole('heading', { name: 'Coaching career complete…
+    [90m111| [39m    expect(view.queryByRole('button', { name: 'Retire from coaching' }…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted unemployed coach cannot take offers or advance the calendar
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/usCoachRetirement.test.tsx:[2m120:87[22m[39m
+    [90m118| [39m  it('completed unemployed coach cannot take offers or advance the cal…
+    [90m119| [39m    const state = { ...fixture(false), done: true }, view = panel(stat…
+    [90m120| [39m    expect(view.queryByRole('button', { name: /^Sit out the \d+ season…
+    [90m   | [39m                                                                                      [31m^[39m
+    [90m121| [39m    expect(view.getByRole('heading', { name: 'Coaching career complete…
+    [90m122| [39m    expect(view.queryByRole('button', { name: new RegExp(state.offers[…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted start card opens a review instead of offering a coaching return
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/usCoachRetirement.test.tsx:[2m132:29[22m[39m
+    [90m130| [39m    const view = render(<CoachStartCard sport="nba" existing={{ ...fix…
+    [90m131| [39m    const review = view.queryByRole('button', { name: 'Review coaching…
+    [90m132| [39m    expect(review !== null).toBe(true); expect(view.queryByRole('butto…
+    [90m   | [39m                            [31m^[39m
+    [90m133| [39m    fireEvent.click(review!); expect(resume).toHaveBeenCalledTimes(1);…
+    [90m134| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/9]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m9 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 11:32:35
+[2m   Duration [22m 1.08s[2m (transform 290ms, setup 33ms, collect 466ms, tests 153ms, environment 181ms, prepare 91ms)[22m
+
