@@ -24,7 +24,13 @@ const EXPORT = '\nexport { buildModel as __opponentModel };\n';
 const ENV = '{"PROD":true,"DEV":false,"MODE":"production","SSR":false}';
 const MEMBERS = ['Anderlecht','Antwerp','Cercle Brugge','Charleroi','Club Brugge','Dender','Genk','Gent','La Louviere','Mechelen','OH Leuven','Sint-Truiden','Standard Liege','Union Saint-Gilloise','Westerlo','Zulte Waregem'];
 const NOTE = "2025/26 club membership is verified. Match order and results are simulated; extra opponents and their phase aren't recorded.";
+/* Release BH: PR278's four hunks (the verified 2023 Premier League opponent) are reversed first, so the legacy page
+   below is still the component this proof was qualified against. */
 const REVERSE = [
+  ["import { historicalOpponentLabels } from '@/lib/season/historicalOpponentLabels';\n",''],
+  ['  const historical = historicalOpponentLabels(row, ctx, s);\n  const display = historical ?? belgian2025OpponentLabels(row, s);\n','  const display = belgian2025OpponentLabels(row, s);\n'],
+  ["  if (historical && s.mode === 'table') notes.push(historical.note);\n",''],
+  ['    season: historical ? { ...s, labels: historical.labels } : s,','    season: s,'],
   ["import { belgian2025OpponentLabels } from '@/lib/season/belgianOpponentLabels';\n",''],
   ['  const display = belgian2025OpponentLabels(row, s);\n',''],
   ['    names: display?.names ?? s.labels.map(l => (l.named ? l.name : SOCCER.words.unnamed)),','    names: s.labels.map(l => (l.named ? l.name : SOCCER.words.unnamed)),'],
