@@ -197,7 +197,7 @@ export function ManagerRecordLines({ c, ended = false }: { c: CareerState; /** O
                       <p data-cm-worst-defeat>💀 Worst defeat: <span className="text-foreground font-semibold">{lowFirst(c.careerStats.biggestDefeat.score)}</span> vs {c.careerStats.biggestDefeat.opp}</p>
                     )}
                     {high && (
-                      <p data-cm-highest-scoring>⚽ Highest scoring game: <span className="text-foreground font-semibold">{high.score}</span>{SCORING_WORD[scoringOutcome(high)]} vs {high.opp}{SCORING_AFTER[scoringOutcome(high)]}, Season {formatNumber(high.season)}</p>
+                      <p data-cm-highest-scoring>⚽ Highest scoring game: <span className="text-foreground font-semibold">{high.score}</span>{SCORING_WORD[scoringOutcome(high)]} vs {high.opp}{SCORING_AFTER[scoringOutcome(high)]}, <span className="whitespace-nowrap">Season {formatNumber(high.season)}</span></p>
                     )}
                     {high && (high.missed ?? 0) >= 1 && (
                       <p data-cm-highest-scoring-missed>Counted from {formatNumber(counted)} of your {formatNumber(c.careerStats.played)} matches. Your save no longer keeps {high.missed === 1 ? 'the score of the other one' : `the scores of the other ${formatNumber(high.missed!)}`}.</p>

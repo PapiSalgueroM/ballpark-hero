@@ -563,12 +563,14 @@ export function useClubManager() {
     setPhase('resume');
   }, [holdsActiveSlot, letGoIfStale, movedOn]);
 
-  /* Retire at the season's end, or Start New Career once sacked. Before
-     Round 928 both wiped the career in one tap; the review found they still
-     did after the slots came in, which is exactly what the round promised
-     would stop. Now the career stays in its slot (Delete on the managers
-     screen is the only way to end one for good) and the new one starts in an
-     empty slot. With all three taken, the managers screen says so. */
+  /* Start a new manager: from the season's end, from Start New Career once
+     sacked, and from the farewell. Before Round 928 the first two wiped the
+     career in one tap; the review found they still did after the slots came
+     in, which is exactly what the round promised would stop. Now the career
+     stays in its slot (Delete on the managers screen is the only way to remove
+     one, and since Round 1343 retire above is the way to end one) and the new
+     one starts in an empty slot. With all three taken, the managers screen
+     says so. */
   const startNew = useCallback(() => {
     const empty = readSlots().find(v => !v.summary && !v.damaged);
     if (empty) { newInSlot(empty.slot); return; }

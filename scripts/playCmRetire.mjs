@@ -314,6 +314,8 @@ async function walkF(profile) {
     await openManagerPanel(page);
     const waits = (await page.locator('[data-cm-retire-waits]').first().textContent({ timeout: 6000 }).catch(() => '')) ?? '';
     check(P, 'the Manager panel draws no door and points at See Season Review', (await page.locator('[data-cm-retire-door]').count()) === 0 && waits.includes('See Season Review'), waits);
+    const fit = await measure(page, 'played out panel');
+    check(P, 'the pointer is at least 12 px, not cut and not past the page', fit.length === 0, fit.slice(0, 3).join('; '));
     await shot(page, `F-panel-${profile.width}`);
     await page.reload({ waitUntil: 'domcontentloaded' });
     await page.locator('[data-testid="cm-slots"]').waitFor({ timeout: 15000 }).catch(() => {});
@@ -337,7 +339,10 @@ async function walkF(profile) {
 
 /* ---- E: the page ---- */
 const NEW = ['[data-cm-retire-door]', '[data-cm-retire-keep]', '[data-cm-retire-yes]', '[data-cm-farewell-tile]', '[data-cm-farewell-back]', '[data-testid="cm-show-slots-retired"]', '[data-cm-slot-open]'];
-const TEXT = ['[data-cm-retire-confirm] p', '[data-cm-farewell] p', '[data-cm-farewell] button', '[data-cm-farewell-moment]', '[data-cm-highest-scoring]', '[data-cm-retired]'];
+/* TEXT is this round's own text. The farewell's stat row labels (Seasons, Win %, Trophies) are drawn by the shared
+   ResultScreen at text-[10px], the site's standard for every result card, so they are outside TEXT on purpose and
+   E's "no new text under 12 px" says nothing about them (review note). */
+const TEXT = ['[data-cm-retire-confirm] p', '[data-cm-retire-waits]', '[data-cm-farewell] p', '[data-cm-farewell] button', '[data-cm-farewell-moment]', '[data-cm-highest-scoring]', '[data-cm-retired]'];
 async function measure(page, label) {
   const bad = await page.evaluate(({ NEW, TEXT }) => {
     const out = [];
