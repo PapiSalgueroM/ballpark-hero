@@ -29,7 +29,10 @@ journey and the draft night, so each fix lands once for all four sports.
    and never offers a Take button; no season, sit out, offer or retire button); CoachStartCard shows "Review
    coaching career" on a done career. `state.done` joined the reveal key, and the reveal now also runs on the
    first mount (skipFirst false) because the board opens the panel from the bottom of the long retirement
-   screen: the walk measured the card 370 to 970 px above the screen before that fix (97ce2acb).
+   screen: the walk measured the card 370 to 970 px above the screen before that fix (97ce2acb). A career
+   retired before a first season reads "No seasons coached" on the done card, on the Coaching Log tile and on
+   the log itself, never a 0-0 record at 0.0 percent (closing check); a live career's lines are as they were,
+   which the US board fixture holds.
 4. Showcase undo (careerPreDraft.ts, two new functions only): `preDraftCanUndoSkip` and `preDraftUndoSkip`.
    The skip draws nothing, so the undo is the pre skip state to the byte. Never offered after "Go all out" or
    "Play it safe" (they share one keyed grade; an undo would be a free re roll). DraftShowcaseCard takes an

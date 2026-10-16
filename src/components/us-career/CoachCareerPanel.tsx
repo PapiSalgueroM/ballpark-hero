@@ -258,16 +258,26 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
         {panel === 'log' && (
           <div className="space-y-2">
             <div className="rounded-2xl border border-border bg-card p-3 text-center">
-              <p className="text-sm font-black text-foreground">
-                {totals.wins}-{totals.losses}{totals.otl ? `-${totals.otl}` : ''} as a coach
-              </p>
-              <p className="text-[11px] text-muted-foreground">
-                {totals.seasons} season{totals.seasons === 1 ? '' : 's'} · {totals.rings} title{totals.rings === 1 ? '' : 's'} · {(totals.winPct * 100).toFixed(1)} percent
-              </p>
+              {/* Round 1346: a career retired before a first season has no record to print, the same as the done
+                  card. A live career keeps its lines as they were (the US board fixture holds them). */}
+              {state.done && totals.seasons === 0 ? (
+                <p className="text-sm font-black text-foreground">No seasons coached</p>
+              ) : (
+                <>
+                  <p className="text-sm font-black text-foreground">
+                    {totals.wins}-{totals.losses}{totals.otl ? `-${totals.otl}` : ''} as a coach
+                  </p>
+                  <p className="text-[11px] text-muted-foreground">
+                    {totals.seasons} season{totals.seasons === 1 ? '' : 's'} · {totals.rings} title{totals.rings === 1 ? '' : 's'} · {(totals.winPct * 100).toFixed(1)} percent
+                  </p>
+                </>
+              )}
             </div>
             <div className="rounded-2xl border border-border bg-card p-3">
               {state.results.length === 0 ? (
-                <p className="py-6 text-center text-xs text-muted-foreground">Nothing on the books yet. Go coach a season.</p>
+                <p className="py-6 text-center text-xs text-muted-foreground">
+                  {state.done ? 'Nothing on the books. You walked away before coaching a season.' : 'Nothing on the books yet. Go coach a season.'}
+                </p>
               ) : (
                 <div className="max-h-96 space-y-0.5 overflow-y-auto">
                   {[...state.results].reverse().map((r, i) => (
@@ -456,7 +466,7 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
         <button onClick={() => open('log')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
           <span className="text-xl">📜</span>
           <span className="mt-0.5 block text-sm font-black text-foreground">Coaching Log</span>
-          <span className="block truncate text-[10px] text-muted-foreground">{totals.seasons} season{totals.seasons === 1 ? '' : 's'} · {totals.wins}-{totals.losses}{totals.otl ? `-${totals.otl}` : ''}</span>
+          <span className="block truncate text-[10px] text-muted-foreground">{state.done && totals.seasons === 0 ? 'No seasons coached' : <>{totals.seasons} season{totals.seasons === 1 ? '' : 's'} · {totals.wins}-{totals.losses}{totals.otl ? `-${totals.otl}` : ''}</>}</span>
         </button>
       </div>
 

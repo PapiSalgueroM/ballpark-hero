@@ -3,7 +3,8 @@
  * (2) A coach retires from coaching behind the shared confirm: Keep coaching and Escape save nothing, Retire saves
  *     the same save with only coach.done set, the done screen shows, a remount lands on it without a write, and the
  *     retirement screen's card reviews the finished career instead of offering the sideline back; a second click
- *     right after the retirement opens no tile.
+ *     right after the retirement opens no tile; and a career retired before a first season reads No seasons coached
+ *     on its Coaching Log, never a 0-0 record.
  * (3) An old coach save written before `done` existed mounts as an active career and is not rewritten on load.
  * (Undo) The showcase Skip can be undone until Draft day, back to the byte, on the real board; never after a graded
  *     approach; and a second tap right after the undo is never taken as a graded approach. (The cases (1), (4) and (5) of the brief were the age rule and the dirty money desk, both cut.)
@@ -135,6 +136,29 @@ describe('Round 1346: retire from coaching on the real board', () => {
     clock.pass();
     fireEvent.click(view.getByRole('button', { name: /Coaching Log/ })); await flush();
     expect(done()).toBeNull();
+  });
+
+  /* The closing check saw the Coaching Log of a career retired before a first season print a 0-0 record at 0.0
+     percent while the done card above it said No seasons coached. A coach who walks away at once has an empty log. */
+  it.each(SPORTS)('%s: a career retired before a first season reads No seasons coached in the log, not a 0-0 record', async (slug, key, Board) => {
+    const clock = settleClock();
+    const save = JSON.parse(coachSave(slug)) as Saved;
+    (save.coach as { results: unknown[] }).results = [];
+    localStorage.setItem(key, JSON.stringify(save));
+    const view = render(<Board />); await flush();
+    fireEvent.click(view.getByRole('button', { name: 'Retire from coaching' }));
+    const dialog = within(document.body).getByRole('alertdialog', { name: 'Retire from coaching?' });
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Retire from coaching' })); await flush(); await noDialog();
+    expect(view.getByRole('heading', { name: 'Coaching career complete' })).toBeInTheDocument();
+    expect(view.getByRole('button', { name: /Coaching Log/ })).toHaveTextContent(/Coaching LogNo seasons coached$/);
+    clock.pass();
+    fireEvent.click(view.getByRole('button', { name: /Coaching Log/ })); await flush();
+    expect(view.queryByRole('heading', { name: 'Coaching career complete' })).toBeNull();
+    expect(view.getByText('No seasons coached')).toBeInTheDocument();
+    expect(view.getByText('Nothing on the books. You walked away before coaching a season.')).toBeInTheDocument();
+    expect(view.queryByText(/as a coach/)).toBeNull();
+    expect(view.queryByText(/0\.0 percent/)).toBeNull();
+    expect(view.queryByText(/Go coach a season/)).toBeNull();
   });
 
   it.each(SPORTS)('%s: an old coach save with no done mounts as an active career and is not rewritten', async (slug, key, Board) => {

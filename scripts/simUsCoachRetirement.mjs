@@ -226,6 +226,7 @@ const NORETIRE_FAILS = [
   'retirement requires confirmation and accepts once after cancel and escape',
   ...SPORTS.map(s => `${s}: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired`),
   ...SPORTS.map(s => `${s}: a second click right after the retirement opens nothing on the done hub`),
+  ...SPORTS.map(s => `${s}: a career retired before a first season reads No seasons coached in the log, not a 0-0 record`),
 ];
 /* The review's double click on the confirm (finding F3): with the panel's settle always settled, exactly these fail. */
 const SETTLE_FAILS = SPORTS.map(s => `${s}: a second click right after the retirement opens nothing on the done hub`);
@@ -233,9 +234,9 @@ const PANEL = 'src/components/us-career/CoachCareerPanel.tsx';
 const panelSource = (await readFile(path.join(ROOT, PANEL), 'utf8')).replaceAll('\r\n', '\n');
 const settleLine = '  const retireSettle = useTapSettle();\n';
 assert.equal(panelSource.split(settleLine).length - 1, 1, 'The panel settle anchor is held once');
-/* PR281's 14, and the board file's ten cases per sport (three for the coach, three for the showcase undo, four for
+/* PR281's 14, and the board file's eleven cases per sport (four for the coach, three for the showcase undo, four for
    the draft night replay). */
-const CASES = 14 + 10 * SPORTS.length;
+const CASES = 14 + 11 * SPORTS.length;
 async function vitest(swap) {
   await mkdir(path.join(ROOT, '.sim-control'), { recursive: true });
   const dir = await mkdtemp(path.join(ROOT, '.sim-control/us-coach1346-vitest-'));
