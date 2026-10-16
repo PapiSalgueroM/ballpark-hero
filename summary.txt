@@ -1,0 +1,2 @@
+shape-head-6-10 exit=0 555s | simCmWorldMoves: green, sections 9 held
+shape-head-1-5 exit=0 555s | simCmWorldMoves: green, sections 9 held

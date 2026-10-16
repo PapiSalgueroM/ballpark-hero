@@ -1,0 +1,2 @@
+shape-head-1-5: CM_WORLD_MOVES_SECTIONS=9 CM_WORLD_MOVES_SHAPE_ARMS=head CM_WORLD_MOVES_SEEDS=1-5 node scripts/simCmWorldMoves.mjs
+shape-head-6-10: CM_WORLD_MOVES_SECTIONS=9 CM_WORLD_MOVES_SHAPE_ARMS=head CM_WORLD_MOVES_SEEDS=6-10 node scripts/simCmWorldMoves.mjs
