@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-world: node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000
+simWorldUcl: node scripts/simWorldUcl.mjs
+golden-check-head: node scripts/recordWorldTieGolden1347.mjs --ref HEAD --check
+golden-base: node scripts/recordWorldTieGolden1347.mjs --out /tmp/gbase.json && cmp /tmp/gbase.json scripts/data/worldTieGolden1347.json && echo GOLDEN-BASE-SAME
