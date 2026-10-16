@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+playCmRetire: node scripts/playCmRetire.mjs
+playCmRetire-strip: PLAY_RETIRE_CONTROL=strip node scripts/playCmRetire.mjs
+playCmRetire-norecord: PLAY_RETIRE_CONTROL=norecord node scripts/playCmRetire.mjs
+twoTabs15: ENGINES=chromium CASES=15 node scripts/playTwoTabs.mjs
+twoTabs15-nofence: ENGINES=chromium CASES=15 TWO_TABS_CONTROL=nofence node scripts/playTwoTabs.mjs
+sweepWeight-head: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs 2>&1 | grep -E "club-manager|manager-hot-seat|deadline-day|sweepWeight" | head -12
+sweepWeight-base: git worktree add -f /tmp/wb d4f2c6f6 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/wb/node_modules; cd /tmp/wb && node_modules/.bin/vite build > /tmp/wb-build.log 2>&1; echo "build exit $? assets $(ls dist/assets | wc -l)"; (node scripts/lib/hostLikeServer.mjs dist 4174 > /tmp/wb-serve.log 2>&1 &); for i in $(seq 40); do curl -s -o /dev/null http://localhost:4174/ && break; sleep 1; done; SWEEP_BASE=http://localhost:4174 BASE=http://localhost:4174 SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs 2>&1 | grep -E "club-manager|manager-hot-seat|deadline-day|sweepWeight" | head -12

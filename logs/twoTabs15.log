@@ -1,0 +1,21 @@
+fixtures: Brighton 55840 chars, Everton 54114 chars, Hot Seat survivor Arsenal (survived, 9 actions)
+== 320x640
+15) RETIRE (320x640)
+   B played on to Everton week 1, 1 results, last Wrexham 3-1 | A saw the notice: true, its door press went through: false | after A's forced Yes: Everton week 1, 1 results, last Wrexham 3-1, retired false
+  ok    A's forced Yes wrote nothing: the disk is B's and not retired
+   C retired: true at Everton week 1, 1 results, last Wrexham 3-1 | after B's forced Quick Sim: Everton week 1, 1 results, last Wrexham 3-1, retired true
+  ok    B's forced Quick Sim wrote nothing: the disk stays retired
+== 390x844
+15) RETIRE (390x844)
+   B played on to Everton week 1, 1 results, last Millwall 0-0 | A saw the notice: true, its door press went through: false | after A's forced Yes: Everton week 1, 1 results, last Millwall 0-0, retired false
+  ok    A's forced Yes wrote nothing: the disk is B's and not retired
+   C retired: true at Everton week 1, 1 results, last Millwall 0-0 | after B's forced Quick Sim: Everton week 1, 1 results, last Millwall 0-0, retired true
+  ok    B's forced Quick Sim wrote nothing: the disk stays retired
+== 1280x900
+15) RETIRE (1280x900)
+   B played on to Everton week 1, 1 results, last Birmingham City 1-0 | A saw the notice: true, its door press went through: false | after A's forced Yes: Everton week 1, 1 results, last Birmingham City 1-0, retired false
+  ok    A's forced Yes wrote nothing: the disk is B's and not retired
+   C retired: true at Everton week 1, 1 results, last Birmingham City 1-0 | after B's forced Quick Sim: Everton week 1, 1 results, last Birmingham City 1-0, retired true
+  ok    B's forced Quick Sim wrote nothing: the disk stays retired
+cases red: none; pictures in /home/runner/work/_temp/rc-out/files
+playTwoTabs: green at 320x640, 390x844, 1280x900

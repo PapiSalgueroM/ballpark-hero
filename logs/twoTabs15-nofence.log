@@ -1,0 +1,27 @@
+fixtures: Brighton 55840 chars, Everton 54114 chars, Hot Seat survivor Arsenal (survived, 9 actions)
+== 320x640
+15) RETIRE (320x640)
+   B played on to Everton week 1, 1 results, last Coventry City 0-1 | A saw the notice: false, its door press went through: true | after A's forced Yes: Everton week 54, 39 results, last Ipswich Town 0-1, retired true
+  FAIL [case 15]: tab A never showed the notice after tab B played on
+  FAIL [case 15]: tab A pressed the door through the notice
+  FAIL [case 15]: A's forced Yes wrote: the disk went from "Everton week 1, 1 results, last Coventry City 0-1" to "Everton week 54, 39 results, last Ipswich Town 0-1", retired true
+   C retired: true at Everton week 54, 39 results, last Ipswich Town 0-1 | after B's forced Quick Sim: Everton week 2, 2 results, last Leeds United 3-1, retired false
+  FAIL [case 15]: B's forced Quick Sim wrote over the retired career ("Everton week 54, 39 results, last Ipswich Town 0-1" to "Everton week 2, 2 results, last Leeds United 3-1", retired false)
+== 390x844
+15) RETIRE (390x844)
+   B played on to Everton week 1, 1 results, last Cardiff City 3-0 | A saw the notice: false, its door press went through: true | after A's forced Yes: Everton week 54, 39 results, last Ipswich Town 0-1, retired true
+  FAIL [case 15]: tab A never showed the notice after tab B played on
+  FAIL [case 15]: tab A pressed the door through the notice
+  FAIL [case 15]: A's forced Yes wrote: the disk went from "Everton week 1, 1 results, last Cardiff City 3-0" to "Everton week 54, 39 results, last Ipswich Town 0-1", retired true
+   C retired: true at Everton week 54, 39 results, last Ipswich Town 0-1 | after B's forced Quick Sim: Everton week 2, 2 results, last Leeds United 0-1, retired false
+  FAIL [case 15]: B's forced Quick Sim wrote over the retired career ("Everton week 54, 39 results, last Ipswich Town 0-1" to "Everton week 2, 2 results, last Leeds United 0-1", retired false)
+== 1280x900
+15) RETIRE (1280x900)
+   B played on to Everton week 1, 1 results, last Preston North End 2-0 | A saw the notice: false, its door press went through: true | after A's forced Yes: Everton week 54, 39 results, last Ipswich Town 0-1, retired true
+  FAIL [case 15]: tab A never showed the notice after tab B played on
+  FAIL [case 15]: tab A pressed the door through the notice
+  FAIL [case 15]: A's forced Yes wrote: the disk went from "Everton week 1, 1 results, last Preston North End 2-0" to "Everton week 54, 39 results, last Ipswich Town 0-1", retired true
+   C retired: true at Everton week 54, 39 results, last Ipswich Town 0-1 | after B's forced Quick Sim: Everton week 2, 2 results, last Stoke City 1-3, retired false
+  FAIL [case 15]: B's forced Quick Sim wrote over the retired career ("Everton week 54, 39 results, last Ipswich Town 0-1" to "Everton week 2, 2 results, last Stoke City 1-3", retired false)
+cases red: 15; pictures in /home/runner/work/_temp/rc-out/files
+CONTROL DID NOT TURN ITS CASES RED: TWO_TABS_CONTROL=nofence dropped 24 writes, red 15 of 1, 2, 3, 6, 9, 10, 11, 12, 14, 15

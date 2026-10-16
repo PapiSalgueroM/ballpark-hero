@@ -1,0 +1,8 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCmRetire-strip exit=1 24s | control strip FIRED: 6 of 18 checks red
+twoTabs15 exit=0 40s | playTwoTabs: green at 320x640, 390x844, 1280x900
+playCmRetire-norecord exit=1 81s | control norecord FIRED: 6 of 40 checks red
+playCmRetire exit=1 89s | playCmRetire: 2 of 48 checks FAILED
+sweepWeight-head exit=0 28s | sweepWeight: 1 failure
+sweepWeight-base exit=0 61s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+twoTabs15-nofence exit=2 308s | CONTROL DID NOT TURN ITS CASES RED: TWO_TABS_CONTROL=nofence dropped 24 writes, red 15 of 1, 2, 3, 6, 9, 10, 11, 12, 14, 15
