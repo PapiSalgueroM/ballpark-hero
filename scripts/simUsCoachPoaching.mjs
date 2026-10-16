@@ -45,7 +45,22 @@ for (const anchor of [departure, credit]) {
   assert.equal(source.split(anchor).length - 1, 1, 'One actual executable binding');
   assert.equal(holdSource(Buffer.from(source.replaceAll('\n', '\r\n'))).source.split(anchor).length - 1, 1, 'CRLF binding held');
 }
-const original = source.replace(departure, oldDeparture).replace(credit + '\n', '');
+/* Round 1346 bridge: the coaching retirement added five hunks to the engine (retireCoachCareer and one done guard
+   at the top of four functions). Each is an exact anchor held once, LF and CRLF, and stripped before the hash, so
+   the pinned pre-888 hash is unchanged and still proves no other line of the engine moved. */
+const retireHunks = [
+  ["  excludeTeam = '',\n): void {\n  if (s.done) return;\n", "  excludeTeam = '',\n): void {\n"],
+  ['CoachCareerState {\n  if (prev.done) return prev;\n  const offer = prev.offers[index];', 'CoachCareerState {\n  const offer = prev.offers[index];'],
+  ['  if (prev.done) return { state: prev, notes: [] };\n  const s: CoachCareerState = { ...prev, results: [...prev.results], profile:', '  const s: CoachCareerState = { ...prev, results: [...prev.results], profile:'],
+  ['  if (prev.done) return { state: prev, notes: [] };\n  const s: CoachCareerState = { ...prev, results: [...prev.results] };', '  const s: CoachCareerState = { ...prev, results: [...prev.results] };'],
+  ["\n/** Round 1346: the player closes the book himself. Only `done` changes, and once\n *  it is set every season, offer and market call above hands its input back. */\nexport function retireCoachCareer(prev: CoachCareerState): CoachCareerState {\n  return prev.done ? prev : { ...prev, done: true };\n}\n", ''],
+];
+for (const [hunk] of retireHunks) {
+  assert.equal(source.split(hunk).length - 1, 1, 'Round 1346 retirement hunk held once');
+  assert.equal(holdSource(Buffer.from(source.replaceAll('\n', '\r\n'))).source.split(hunk).length - 1, 1, 'Round 1346 CRLF hunk held');
+}
+const preRetire = retireHunks.reduce((text, [hunk, without]) => text.replace(hunk, without), source);
+const original = preRetire.replace(departure, oldDeparture).replace(credit + '\n', '');
 assert.equal(createHash('sha256').update(original).digest('hex'), originalHash, 'Reconstructed original matches the captured pre-repair engine exactly');
 let subject = source;
 if (control) { const [anchor, replacement] = controls[control]; subject = source.replace(anchor, replacement); assert.notEqual(subject, source); }

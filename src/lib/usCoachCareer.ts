@@ -210,6 +210,7 @@ export function refreshCoachOffers(
   first = false,
   excludeTeam = '',
 ): void {
+  if (s.done) return;
   const skip = excludeTeam || s.job?.team || '';
   const openings = coachingVacancies(s.sport, rng).filter(o => o.team !== skip);
   const ceiling = bestCoachTierAvailable(s.profile);
@@ -258,6 +259,7 @@ function coachOfferNote(s: CoachCareerState, first: boolean): string {
 
 /** Take one of the jobs on the table. */
 export function acceptCoachOffer(prev: CoachCareerState, index: number): CoachCareerState {
+  if (prev.done) return prev;
   const offer = prev.offers[index];
   if (!offer) return prev;
   return {
@@ -445,6 +447,7 @@ export function playCoachSeason(
   prev: CoachCareerState,
   rng: () => number = Math.random,
 ): { state: CoachCareerState; notes: string[] } {
+  if (prev.done) return { state: prev, notes: [] };
   const s: CoachCareerState = { ...prev, results: [...prev.results], profile: { ...prev.profile } };
   const job = s.job;
   if (!job || s.unemployed) return { state: s, notes: [] };
@@ -553,6 +556,7 @@ export function sitOutCoachSeason(
   prev: CoachCareerState,
   rng: () => number = Math.random,
 ): { state: CoachCareerState; notes: string[] } {
+  if (prev.done) return { state: prev, notes: [] };
   const s: CoachCareerState = { ...prev, results: [...prev.results] };
   s.profile = recordSeasonOut(s.profile);
   s.results.push({
@@ -574,6 +578,12 @@ export function sitOutCoachSeason(
       ? `A year out of the game. ${s.offers.length} team${s.offers.length === 1 ? '' : 's'} interested now.`
       : 'Another year out of the game. The phone stayed quiet.'],
   };
+}
+
+/** Round 1346: the player closes the book himself. Only `done` changes, and once
+ *  it is set every season, offer and market call above hands its input back. */
+export function retireCoachCareer(prev: CoachCareerState): CoachCareerState {
+  return prev.done ? prev : { ...prev, done: true };
 }
 
 /* ---------------- what the UI needs to say ---------------- */
