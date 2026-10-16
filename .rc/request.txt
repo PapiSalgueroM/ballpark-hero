@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usCoachRetirement.test.tsx src/test/usCareerReports1346.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerProgrammeUi.test.tsx src/lib/usCoachPoaching.test.ts --reporter=verbose --testTimeout=300000 --hookTimeout=120000
+parity: node scripts/simUsBoardParity.mjs
+confirm: node scripts/simUsCareerActionConfirm.mjs
+confirm-direct: US_CAREER_ACTION_CONTROL=direct node scripts/simUsCareerActionConfirm.mjs
+confirm-cancel: US_CAREER_ACTION_CONTROL=cancel node scripts/simUsCareerActionConfirm.mjs
+confirm-escape: US_CAREER_ACTION_CONTROL=escape node scripts/simUsCareerActionConfirm.mjs
+confirm-duplicate: US_CAREER_ACTION_CONTROL=duplicate node scripts/simUsCareerActionConfirm.mjs
+confirm-rearm: US_CAREER_ACTION_CONTROL=rearm node scripts/simUsCareerActionConfirm.mjs
+confirm-initial: US_CAREER_ACTION_CONTROL=initial node scripts/simUsCareerActionConfirm.mjs
+confirm-focus: US_CAREER_ACTION_CONTROL=focus node scripts/simUsCareerActionConfirm.mjs
+confirm-unmount: US_CAREER_ACTION_CONTROL=unmount node scripts/simUsCareerActionConfirm.mjs
+confirm-retireWiring: US_CAREER_ACTION_CONTROL=retireWiring node scripts/simUsCareerActionConfirm.mjs
+confirm-restartWiring: US_CAREER_ACTION_CONTROL=restartWiring node scripts/simUsCareerActionConfirm.mjs
+confirm-ownKey: US_CAREER_ACTION_CONTROL=ownKey node scripts/simUsCareerActionConfirm.mjs
+confirm-legacy: US_CAREER_ACTION_CONTROL=legacy node scripts/simUsCareerActionConfirm.mjs
+coachCareer: node scripts/simUsCoachCareer.mjs
+poaching: node scripts/simUsCoachPoaching.mjs
