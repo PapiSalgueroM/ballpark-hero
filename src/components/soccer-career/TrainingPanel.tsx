@@ -306,9 +306,11 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
           <button onClick={close} className="min-h-11 rounded-lg bg-muted/30 px-3 text-xs font-bold">Close</button>
         </div>
 
+        {/* Round 1337: the shared TrainingGround's shape. The menu shows one paragraph, the bank rule with its
+            example, above the drills; the drill list and the pause rule join it behind the ?. */}
         {(showRules || screen === "menu") && <div data-practice-rules className="border-b border-border bg-primary/5 p-4 text-xs leading-relaxed space-y-2">
-          <p>Tap cones in order with as few slips as possible. Sprint Burst gives you five seconds to tap the track. Pick five penalty spots, or watch the tell and dive for five keeper shots. Hit eight passing gates before they close.</p>
-          <p>Pause or opening these rules freezes the drill, including a shot reveal. Leaving the tab pauses it too. Close the rules, then choose Resume practice to carry on. Drills and Close discard the unfinished run.</p>
+          {showRules && <p>Tap cones in order with as few slips as possible. Sprint Burst gives you five seconds to tap the track. Pick five penalty spots, or watch the tell and dive for five keeper shots. Hit eight passing gates before they close.</p>}
+          {showRules && <p>Pause or opening these rules freezes the drill, including a shot reveal. Leaving the tab pauses it too. Close the rules, then choose Resume practice to carry on. Drills and Close discard the unfinished run.</p>}
           <p>One bank per season: 50 earns +1 to the shown stat next season, 80 earns +2. Example: three goals from five penalties score 60 and earn +1. A score below 50 uses the session without a gain.</p>
         </div>}
         {legacyPlaying && <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-2 text-xs">
@@ -349,7 +351,6 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
               </div>
             ) : (
               <>
-                <p className="text-[11px] text-muted-foreground text-center">One session per season. Score 50+ for a +1, 80+ for a +2 to that stat with next season's growth.</p>
                 {isGK && (
                   <p className="text-[11px] text-muted-foreground text-center" data-training-keeper-rule>
                     You are in goal, so these train keeper skills: the slalom and First Touch are footwork for your Positioning, the sprint is your Sweeping Speed, the gates are your Distribution, and shot stopping is your Reflexes.

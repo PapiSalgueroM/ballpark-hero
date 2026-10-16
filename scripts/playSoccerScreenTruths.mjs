@@ -340,6 +340,41 @@ async function w6(width, height) {
   } finally { await ctx.close(); }
 }
 
+/* ---------- W7: Training's menu shows one rules paragraph above the drills ---------- */
+async function w7(width, height) {
+  section = 'W7';
+  const { ctx, page, errors } = await open(recordedSave('ere'), { width, height });
+  try {
+    const opener = page.locator('[data-career-utility="training"]');
+    await opener.waitFor({ timeout: 45000 });
+    const before = await saveBytes(page);
+    await opener.click();
+    const dialog = page.getByRole('dialog', { name: 'Training ground' });
+    await dialog.waitFor({ timeout: 15000 });
+    await dialog.locator('[data-practice-rules]').waitFor({ timeout: 8000 });
+    await page.waitForTimeout(400);
+    const menu = await dialog.locator('[data-practice-rules] p').allInnerTexts();
+    check(menu.length === 1 && menu[0].includes('Example'), `${width}: the menu's rules block is one paragraph with its worked example (${menu.length} paragraphs)`);
+    check(!(await dialog.innerText()).includes('One session per season'), `${width}: the bank rule is said once on the menu`);
+    const view = await page.evaluate(() => {
+      const d = document.querySelector('[role="dialog"][aria-label="Training ground"]');
+      const b = d && [...d.querySelectorAll('button')].find(x => /drill\. Trains/.test(x.textContent || ''));
+      if (!b) return null;
+      const r = b.getBoundingClientRect(), dr = d.getBoundingClientRect();
+      return { scrollTop: d.scrollTop, bottom: Math.round(r.bottom), panelBottom: Math.round(dr.bottom), vh: innerHeight };
+    });
+    check(!!view && view.scrollTop === 0 && view.bottom <= Math.min(view.panelBottom, view.vh),
+      `${width}: the first drill tile is in view without scrolling the panel (${JSON.stringify(view)})`);
+    await shot(page, `W7-menu-${width}`);
+    await dialog.getByRole('button', { name: 'Practice rules', exact: true }).click();
+    const all = await dialog.locator('[data-practice-rules] p').allInnerTexts();
+    check(all.length === 3 && all[2] === menu[0], `${width}: ? shows all three paragraphs, the bank rule last (${all.length})`);
+    await shot(page, `W7-rules-${width}`);
+    check(await saveBytes(page) === before, `${width}: the save is byte for byte the same`);
+    check(errors.length === 0, `${width}: no page error (${errors[0] || 'none'})`);
+  } finally { await ctx.close(); }
+}
+
 /* ---------- the run ---------- */
 async function runArm(which) {
   arm = which;

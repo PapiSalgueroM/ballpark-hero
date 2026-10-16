@@ -258,3 +258,43 @@ describe('S3 the Squad sheet opens on the squad, the rules one tap away', () => 
     expect(view.container.querySelector('[data-squad-first-hint]')).not.toBeNull();
   });
 });
+
+/* ---------- S4 Training ---------- */
+const BANK = 'One bank per season: 50 earns +1 to the shown stat next season, 80 earns +2. Example: three goals from five penalties score 60 and earn +1. A score below 50 uses the session without a gain.';
+function training() {
+  const career = { position: 'ST', phase: 'pro', retired: false, seasons: [{ year: 2031 }], trainingSeasonYear: 2030, statBoostNextSeason: {}, morale: 50, events: [] } as unknown as E.CareerState;
+  return render(<TrainingPanel career={career} available onComplete={vi.fn()} onDrill={vi.fn()} onClose={vi.fn()} />);
+}
+const paragraphs = (root: HTMLElement) => [...(root.querySelector('[data-practice-rules]')?.querySelectorAll('p') ?? [])].map(p => p.textContent ?? '');
+
+describe('S4 Training shows one rules paragraph on its menu, the rest behind its ?', () => {
+  it('holds only the bank rule with its example on the menu, and ? shows all three', () => {
+    const v = training();
+    expect(paragraphs(v.container)).toEqual([BANK]);
+    expect(v.container.textContent).not.toContain('One session per season');
+    const rulesButton = v.getByRole('button', { name: 'Practice rules' });
+    expect(rulesButton).toHaveAttribute('aria-expanded', 'true');
+    fireEvent.click(rulesButton);
+    const all = paragraphs(v.container);
+    expect(all).toHaveLength(3);
+    expect(all[0]).toContain('Tap cones in order');
+    expect(all[1]).toContain('Pause or opening these rules');
+    expect(all[2]).toBe(BANK);
+    expect(rulesButton).toHaveAttribute('aria-expanded', 'true');
+    fireEvent.click(rulesButton);
+    expect(paragraphs(v.container)).toEqual([BANK]);
+  });
+
+  it('keeps the ? during a drill as it was: three paragraphs, the drill paused (passes on the base too)', () => {
+    const v = training();
+    fireEvent.click(v.getByRole('button', { name: /Penalty Placement/ }));
+    fireEvent.click(v.getByRole('button', { name: 'Shoot bottom middle' }));
+    act(() => { vi.advanceTimersByTime(400); });
+    expect(v.container.querySelector('[data-practice-rules]')).toBeNull();
+    fireEvent.click(v.getByRole('button', { name: 'Practice rules' }));
+    expect(paragraphs(v.container)).toHaveLength(3);
+    expect(v.container.querySelector('[data-soccer-practice-paused]')?.getAttribute('data-soccer-practice-paused')).toBe('true');
+    fireEvent.click(v.getByRole('button', { name: 'Practice rules' }));
+    expect(v.container.querySelector('[data-practice-rules]')).toBeNull();
+  });
+});
