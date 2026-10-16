@@ -1,0 +1,15 @@
+runEach: 13 harnesses
+simGmDealTableFixture exit=1 1s | simGmDealTableFixture: FAIL, 2 section(s) differ from the recording || FAIL: section B no longer replays (720 lines recorded, 720 now) / FAIL: section C no longer replays (101 lines recorded, 126 now)
+simLineupVerifiedPositions exit=1 0s | Node.js v24.21.0
+simAdminAccess exit=1 2s | Node.js v24.21.0
+simNascarDriver exit=1 2s | Node.js v24.21.0
+simNflGridData exit=1 5s | SUPABASE unreachable (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co) for nfl_team_codes?select=team_code,team_name,franchise&limit=100 after 3 attempts. NOTHING WAS 
+simPlayerBingoWorldCupAlias exit=1 0s | Node.js v24.21.0
+simAnswerFromRecords exit=1 24s | 1 passed, 13 failed. 22 call(s) retried for an empty response, 11 still silent after three tries. || FAIL  482  Haaland at Man City settled from records  -> THE FUNCTION DID NOT ANSWER after 3 tries, s / FAIL  482  Messi for Argentina settled from records  -> THE FUNCTION DID NOT ANSWER after 3 tries, s
+simSoccerGridTiers exit=1 3s | simSoccerGridTiers: the pool did not load, which is itself worth investigating
+simWindow2026PremierLeague exit=1 5s | SUPABASE unreachable (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co) for player_market_values?select=club&year=eq.2026&club=eq.Crystal%20Palace&limit=1 after 3 attem
+simWorldXiDefensiveMids exit=1 0s | SUPABASE UNREACHABLE OR POOL TOO SMALL. NOTHING WAS CHECKED.
+simStockLive exit=1 2s | simStockLive: the fetch returned null, which is itself worth investigating
+simPerfectSeasonWheel exit=1 113s | simPerfectSeasonWheel: 8 failure(s) in 1:mlb, 1:nba, 1:nfl, 1:nhl, 3:mlb, 3:nba, 3:nfl, 3:nhl || FAIL [nhl]: the wheel read returned nothing (database unreachable or a page failed every retry) / FAIL [mlb]: the wheel read returned nothing (database unreachable or a page failed every retry)
+simMoney exit=1 149s | 1 FAILURES || FAIL: biggest save is 88.3 KB / 1 FAILURES
+runEach: done, 13 of 13 exited non zero

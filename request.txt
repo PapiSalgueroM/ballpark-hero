@@ -1,0 +1,3 @@
+#!build
+#!playwright
+cmp1: FENCE_BASE=e814c2def671e07bd6163462dff8ab1230be2000 bash .rc/x/cmp.sh simAdminAccess simAnswerFromRecords simGmDealTableFixture simLineupVerifiedPositions simNascarDriver simNflGridData simPerfectSeasonWheel simPlayerBingoWorldCupAlias simMoney simSoccerGridTiers simWindow2026PremierLeague simWorldXiDefensiveMids  simStockLive
