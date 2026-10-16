@@ -1,0 +1,15 @@
+simApproaches exit=0 3s | ALL APPROACH CHECKS PASSED
+simBooks exit=0 13s | simBooks: green. Every number these games show agrees with every other number they show.
+simClubManagerALeague exit=0 8s | simClubManagerALeague: all checks passed
+simBoardAsks exit=0 34s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+simClubManager exit=0 36s | ALL CLUB MANAGER SIMS PASSED
+simClubManagerDeals exit=0 14s | simClubManagerDeals: green. The desk reads, the table binds, and nobody signs on a handshake.
+simClubManagerSave exit=0 9s | simClubManagerSave: all sections green
+simClubManagerStaff exit=0 21s | simClubManagerStaff: PASS. Four made up men who cost what the desk says, lift only their own half of the pitch, tax nobody who ignores them, and can be taken off you.
+simClubManagerStart exit=0 2s | simClubManagerStart: green. The defaults are the shipped game, the currency never reaches the engine, and no setting can switch off the haggle.
+simCmCopy exit=0 38s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simClubManagerNewLeagues exit=0 145s | simClubManagerNewLeagues: all checks passed
+simClubManagerBudget exit=0 169s | simClubManagerBudget: PASS
+simCreateClub exit=1 10s | simCreateClub: 1 failure
+simCmLedgerJourney exit=0 78s | simCmLedgerJourney: green. 45 seeded journeys, 9472 ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carri
+simCmLedgerBound exit=0 200s | simCmLedgerBound: green, all four sections held
