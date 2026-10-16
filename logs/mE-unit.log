@@ -1,0 +1,47 @@
+mut E: applied to src/lib/clubManager.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerWorldMoves.test.ts[2m > [22mRound 1344: deals between two other clubs reach the world ledger[2m > [22ma new career records its opening window: every man is at his buyer and gone from his seller[32m 59[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldMoves.test.ts[2m > [22mRound 1344: deals between two other clubs reach the world ledger[2m > [22maiDealPlayer hands back the ledger payload of a man the ledger holds, and the projection's man otherwise[32m 58[2mms[22m[39m
+ [31m×[39m src/lib/clubManagerWorldMovesNamesakes.test.ts[2m > [22mRound 1344 review: a namesake the ledger refuses is never moved, by a window or a rival[2m > [22mrule 1: two men of one name and age at the seller; the lookup finds one by position, the write refuses him[32m 67[2mms[22m[39m
+[31m   → expected null to match object { Object (name, position, ...) }[39m
+ [32m✓[39m src/lib/clubManagerWorldMovesNamesakes.test.ts[2m > [22mRound 1344 review: a namesake the ledger refuses is never moved, by a window or a rival[2m > [22mrule 2: a keyless man sharing his name and birth year with a ledger record of another club; the write refuses him[32m 26[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldMovesNamesakes.test.ts[2m > [22mRound 1344 review: the repair on load (the critic's correction 8, the run review's minor m1)[2m > [22ma save whose ledger holds a damaged record still opens, its log as it was[32m 26[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldMovesNamesakes.test.ts[2m > [22mRound 1344 review: the repair on load (the critic's correction 8, the run review's minor m1)[2m > [22ma deal line of an earlier season is never mended, even with its name on goneNames[32m 16[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldMoves.test.ts[2m > [22mRound 1344: deals between two other clubs reach the world ledger[2m > [22ma man I sold is never taken by an AI club while my buyer holds him (the lead's ruling 3)[32m 44[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldMoves.test.ts[2m > [22mRound 1344: deals between two other clubs reach the world ledger[2m > [22mthe screen's market lists a man another club bought this season at his new club, and every door says why not yet[32m 56[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldMoves.test.ts[2m > [22mRound 1344: deals between two other clubs reach the world ledger[2m > [22ma seeded save missing this season's moves is mended when it opens, once, and a damaged line never costs the save[32m 26[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldMoves.test.ts[2m > [22mRound 1344: deals between two other clubs reach the world ledger[2m > [22mrecordAiDeals takes no draw, and hands an unseeded career back as the same object[32m 30[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerWorldMovesNamesakes.test.ts[2m > [22mRound 1344 review: a namesake the ledger refuses is never moved, by a window or a rival[2m > [22mrule 1: two men of one name and age at the seller; the lookup finds one by position, the write refuses him
+[31m[1mAssertionError[22m: expected null to match object { Object (name, position, ...) }[39m
+
+[32m- Expected:[39m 
+{
+  "age": 24,
+  "name": "Namesake Twin Testcase",
+  "position": "ST",
+}
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/lib/clubManagerWorldMovesNamesakes.test.ts:[2m66:35[22m[39m
+    [90m 64| [39m    expect(twins.every(p => p.worldRosterKey === undefined)).toBe(true…
+    [90m 65| [39m    [35mconst[39m card [33m=[39m [34mcardOf[39m([32m'Kilmarnock'[39m[33m,[39m twins[33m.[39m[34mfind[39m(p [33m=>[39m p[33m.[39mp [33m===[39m [32m'ST'[39m)[33m![39m)[33m;[39m
+    [90m 66| [39m    expect(aiDealPlayer(s, card)).toMatchObject({ name: TWIN, position…
+    [90m   | [39m                                  [31m^[39m
+    [90m 67| [39m    expect(recordAiDeals(s, [{ mp: card, to: 'Arsenal', fee: 6 }])).to…
+    [90m 68| [39m    [34mrivalCannotClose[39m(s[33m,[39m card)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m9 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 19:48:04
+[2m   Duration [22m 2.69s[2m (transform 1.82s, setup 118ms, collect 3.15s, tests 413ms, environment 694ms, prepare 319ms)[22m
+

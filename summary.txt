@@ -1,0 +1,3 @@
+mA-s10 exit=1 30s | simCmWorldMoves: RED, sections 10 (10)
+mE-unit exit=1 3s |    Duration  2.69s (transform 1.82s, setup 118ms, collect 3.15s, tests 413ms, environment 694ms, prepare 319ms)
+clean exit=0 0s | tree clean

@@ -1,0 +1,13 @@
+mut A: applied to src/lib/clubManager.ts
+10) the window's skip: Real Madrid sells its eight best outfield men at the start and plays 3 seasons, seeds 1,2,3,4,5,6,7,8
+  FAIL section 10: Real Madrid (now, seed 1, eight men sold) the summer before season 3: the news says Barcelona signed Yan Diomande from Bologna, but the ledger holds no record of him at Barcelona
+  FAIL section 10: Real Madrid (now, seed 1, eight men sold) the summer before season 3: Barcelona took Yan Diomande, a man I sold (ruling 3)
+  FAIL section 10: Real Madrid (now, seed 1, eight men sold) the summer before season 3: the news says Brentford signed Dean Huijsen from Southampton, but the ledger holds no record of him at Brentford
+  FAIL section 10: Real Madrid (now, seed 1, eight men sold) the summer before season 3: Brentford took Dean Huijsen, a man I sold (ruling 3)
+  FAIL section 10: Real Madrid (now, seed 2, eight men sold) January of season 2: the news says Liverpool signed Dean Huijsen from Birmingham City, but the ledger holds no record of him at Liverpool
+  FAIL section 10: Real Madrid (now, seed 2, eight men sold) January of season 2: Liverpool took Dean Huijsen, a man I sold (ruling 3)
+  FAIL section 10: Real Madrid (now, seed 7, eight men sold) January of season 2: the news says Tottenham signed Arda Güler from Coventry City, but the ledger holds no record of him at Tottenham
+  FAIL section 10: Real Madrid (now, seed 7, eight men sold) January of season 2: Tottenham took Arda Güler, a man I sold (ruling 3)
+   8 careers, 64 men sold, 40 windows, 165 deal lines checked; a man I sold stood in the top 120 a window draws from 254 times
+  section 10: 2 more failures not shown
+simCmWorldMoves: RED, sections 10 (10)
