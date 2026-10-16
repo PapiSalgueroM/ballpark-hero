@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run clubManager cmTables cmWorld cmValue cmMinute cmLeague clubDetail staffScreen --testTimeout=300000 --hookTimeout=120000
+ownclub: node scripts/simCmOwnClubMarket.mjs
+ctl-own: r=""; for k in legacy slice shallow; do OWNCLUB_MARKET_CONTROL=$k node scripts/simCmOwnClubMarket.mjs > /tmp/o-$k.log 2>&1; r="$r $k=$?"; tail -1 /tmp/o-$k.log | cut -c1-200; done; echo "controls:$r"; [ "$r" = " legacy=1 slice=1 shallow=1" ] && [ $(grep -l "FIRED" /tmp/o-legacy.log /tmp/o-slice.log /tmp/o-shallow.log | wc -l) = 3 ]
+freeagents: node scripts/simFreeAgents.mjs; a=$?; FA_CONTROL=ownclub node scripts/simFreeAgents.mjs > /tmp/fa.log 2>&1; b=$?; tail -1 /tmp/fa.log; echo "head=$a ownclub=$b"; [ $a = 0 ] && [ $b = 1 ]
+savesize: node scripts/simClubManagerSaveSize.mjs
+appeal-bare: node scripts/simManagerAppealIsolation.mjs
+appeal-retake: node .rc/x/pinAll.mjs e814c2de --write && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout -- scripts/fixtures; exit $s
+leaguerules: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+sizediag: node scripts/qa/managerWorldSizeDiagnostic.mjs
+dailydeals: node scripts/simDailyDeals.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+ctl-unseeded-noinverse: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && CM_UNSEEDED_CONTROL=noinverse node scripts/simCmUnseededWorld.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base' "$TMPDIR/ctl.log"
+unseeded-minusAZ: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && echo "base $CM_UNSEEDED_BASE (Release BC as published without Release AZ)" && node scripts/simCmUnseededWorld.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qF 'simCmUnseededWorld: green. ' "$TMPDIR/ctl.log"
+continuity-minusAZ: MANAGER_WORLD_CONTINUITY_BASE=$(bash .rc/x/baseDeck.sh) && export MANAGER_WORLD_CONTINUITY_BASE && echo "base $MANAGER_WORLD_CONTINUITY_BASE (Release BC as published without Release AZ)" && MANAGER_WORLD_CONTINUITY_ARTIFACTS="$TMPDIR/mwc" node scripts/simManagerWorldContinuity.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qF 'Manager world continuity: 1 arms, eleven complete groups per arm' "$TMPDIR/ctl.log" && grep -qF 'Private world variation is measured, no historical fixture was re-recorded' "$TMPDIR/ctl.log"
+ctl-continuity-all: MANAGER_WORLD_CONTINUITY_BASE=$(bash .rc/x/baseDeck.sh) && export MANAGER_WORLD_CONTINUITY_BASE && echo "base $MANAGER_WORLD_CONTINUITY_BASE (Release BC as published without Release AZ)" && MANAGER_WORLD_CONTINUITY_ARTIFACTS="$TMPDIR/mwc" MANAGER_WORLD_CONTINUITY_CONTROL=all node scripts/simManagerWorldContinuity.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qE 'Manager world continuity: ([2-9]|[1-9][0-9]+) arms, eleven complete groups per arm' "$TMPDIR/ctl.log" && grep -qF 'Private world variation is measured, no historical fixture was re-recorded' "$TMPDIR/ctl.log"

@@ -1,0 +1,16 @@
+tsc exit=0 108s | 
+vitest exit=0 143s |    Duration  141.87s (transform 6.95s, setup 3.01s, collect 27.23s, tests 246.37s, environment 21.66s, prepare 4.85s)
+freeagents exit=0 175s | head=0 ownclub=1
+ownclub exit=0 334s | simCmOwnClubMarket: green (mode rule, sections 1, 2, 3, 4, 5): the market lists nobody at my own club in every old save and moves nothing else
+appeal-bare exit=1 7s | Node.js v24.21.0
+savesize exit=0 56s | simClubManagerSaveSize: all sections green
+appeal-retake exit=0 39s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+leaguerules exit=0 32s | simCmLeagueRules: all checks passed (modern, eras, pure)
+dailydeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+anchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-unseeded-noinverse exit=0 31s | simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
+unseeded-minusAZ exit=0 145s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to 1cb05d11 (state, draws and saved bytes at every step), and 15 new careers w
+continuity-minusAZ exit=0 45s | Private world variation is measured, no historical fixture was re-recorded
+sizediag exit=0 490s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained
+ctl-own exit=0 867s | controls: legacy=1 slice=1 shallow=1
+ctl-continuity-all exit=0 486s | Private world variation is measured, no historical fixture was re-recorded

@@ -1,0 +1,17 @@
+treeWithoutMerge: b646c71ca147be2ef5721b4cdb41d068dc4cae0f, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+base 2d2ffd90cfe4b0d2cbbb4d16adca4894e52e4040 (Release BC as published without Release AZ)
+PASS [healthy] inactive
+PASS [healthy] constructors
+PASS [healthy] identity
+PASS [healthy] buy-job
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+Manager world continuity: 1 arms, eleven complete groups per arm
+Independent original engine (b6eb78e7) inactive saves and full draw vectors held in every arm
+Completed transactions, original source identity and actual callback receipts retained
+Private world variation is measured, no historical fixture was re-recorded
