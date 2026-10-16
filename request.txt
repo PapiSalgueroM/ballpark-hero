@@ -1,0 +1,11 @@
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simCmRealFixtures: node scripts/simCmRealFixtures.mjs
+simManagerSpec: node scripts/simManagerSpec.mjs
+simCalendar: node scripts/simCalendar.mjs
+simCalendarCurrentDate: node scripts/simCalendarCurrentDate.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simCmVar: node scripts/simCmVar.mjs
+simCmQuickSubs: node scripts/simCmQuickSubs.mjs
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs

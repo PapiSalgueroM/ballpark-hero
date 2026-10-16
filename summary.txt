@@ -1,0 +1,11 @@
+simCmRealFixtures exit=0 6s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+simCalendar exit=0 1s | simCalendar: all green
+simCalendarCurrentDate exit=0 9s | Calendar Current date: normalized copied controls, original bytes held, owned temporary files cleaned. Native geometry/keyboard acceptance remains pending.
+simCmInternationals exit=0 37s | simCmInternationals: all green
+simCmLedgerJourney exit=0 136s | simCmLedgerJourney: green. 45 seeded journeys, 9498 ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carri
+simCmQuickSubs exit=0 1s | simCmQuickSubs normal: real coaching outcomes and independent unmanaged baseline passed.
+simManagerMatchPlans exit=0 6s | simManagerMatchPlans: 13 actual outcomes passed.
+simManagerSpec exit=0 146s | simManagerSpec: all green
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simClubManagerDecisions exit=0 18s | simClubManagerDecisions: 0 findings
+simCmVar exit=0 165s | simCmVar normal: actual review outcomes and full prior baseline passed.
