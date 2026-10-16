@@ -26,6 +26,9 @@
  *                                                       checkout only; it refuses a file with uncommitted changes.
  *                                                       The way back: git checkout -- src/lib/clubManager.ts
  *   node scripts/lib/cmAiRecordProbe1344.mjs --check     says whether every edit can be made (exit 0)
+ *   node scripts/lib/cmAiRecordProbe1344.mjs --into D    the edits in D/src/lib/clubManager.ts, D an exported copy
+ *                                                       (mkdir D && git archive HEAD | tar -x -C D); a harness then
+ *                                                       runs as node D/scripts/simX.mjs and measures the copy
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
@@ -89,6 +92,16 @@ if (process.argv[1] && path.resolve(process.argv[1]) === here) {
   try {
     const out = withAiRecording(readFileSync(file, 'utf8'));
     if (mode === '--check') { console.log(`cmAiRecordProbe1344: all ${PROBE_EDITS.length} anchors stand once in ${FILE}`); process.exit(0); }
+    if (mode === '--into') {
+      /* An exported copy of the tree (git archive HEAD | tar -x -C <dir>), so parallel runner lines never share a
+         file or a git lock. The copy is the committed source, so there is nothing of anybody's to overwrite. */
+      const dir = path.resolve(process.argv[3] ?? '');
+      const target = path.join(dir, FILE);
+      if (!process.argv[3] || target === file) { console.error('cmAiRecordProbe1344: --into needs the folder of an exported copy, not this tree'); process.exit(2); }
+      writeFileSync(target, withAiRecording(readFileSync(target, 'utf8')));
+      console.log(`cmAiRecordProbe1344: the AI deals are recorded in ${target}`);
+      process.exit(0);
+    }
     if (mode !== '--apply') { console.error('cmAiRecordProbe1344: say --check or --apply'); process.exit(2); }
     const dirty = spawnSync('git', ['status', '--porcelain', '--', FILE], { cwd: root, encoding: 'utf8' });
     if (dirty.status !== 0 || dirty.stdout.trim()) { console.error(`cmAiRecordProbe1344: ${FILE} has uncommitted changes (or git could not say). Nothing was changed.`); process.exit(2); }
