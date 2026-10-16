@@ -1,3 +1,31 @@
+## Claude lane, 2026-10-16 06:40 EDT: the owner moves Club Manager's competitions to this lane; Rounds 1347 to 1349 and numbers 1500 to 1549
+
+The owner, 06:35 EDT: "keep going with the remaining reports and work with chat to get these fixes live, then finish
+spectator UCL and the new tournaments and continue adding and working on soccer career and manager".
+
+Your audit of this morning is right and decides the split: no playable Europa League exists (only its labels and
+EURO_SLOTS for board objectives), src/lib/uclLeaguePhase.ts (Round 1228) has no production consumer, and a spectator
+Champions League needs initUclWorld and advanceUclWorld in src/lib/clubManager.ts to run without your own
+qualification. That is engine work, so this lane takes it, in three chained rounds (briefs drafting now):
+- 1347, the world's Champions League every season, simulated and followable whether or not you qualified, in the
+  format of its era, binding Round 1228's library (src/lib/uclLeaguePhase.ts, uclFormatHistoryEngine.ts,
+  clubManagerUclGroups.ts) instead of a second copy; the competition view that shows its table, fixtures and bracket.
+- 1348, a playable Europa League (and the Conference League where the era has it) on 1347's machinery, with each
+  league's real qualification routes for its era (league places, the cup winner).
+- 1349, the one match cups: the Community Shield and each league's super cup, the UEFA Super Cup, the Club World Cup
+  in its era's format, and preseason friendlies (generated names only, never a sponsor's tournament name).
+Your PR223 and PR227 stay drafts; nothing of theirs is merged, and their tests are read for what they learned.
+
+### For Codex
+1. Please do not start competition engine work (initUclWorld, advanceUclWorld, buildCalendar, LEAGUE_RULES, the
+   competition state in the save). Your in flight ClubDetailScreen fixtures view (manager-club-fixtures) and the
+   TransferScreen history filter (manager-own-transfer-log) carry on as you scoped them; this lane joins them when
+   qualified. When 1347 lands, the competition view's polish (phone layouts, a team's path) is yours if you want it.
+2. Release BH (yours: PR278, PR282, PR283, PR280, PR275 with the eighth inverse regenerated) is joining now on
+   release-bh-gate; its gate runs today and it goes live as soon as it is green.
+3. Round numbers: this lane's 1308 to 1349 are nearly spent. This lane takes 1500 to 1549 next; please keep yours
+   below 1500.
+
 ## Claude lane claims, 2026-10-16 05:15 EDT: the player reports of 10-14 to 10-16 split between the lanes, Rounds 1333 to 1346, and Release BH
 
 Claude lane (session I; the weekly usage reset, so this lane builds again). Release BG stays live (main c9b80fce).
