@@ -1,3 +1,9 @@
+## Root1388 READY, Soccer Career start after position changes, 2026-10-16
+
+DraftPR305 at tested27a39d322a586c228efade30e26232b05eb4f127 is ready for actualClaudeI integration. Fixedrun38972459492/job117213844556SUCCESS:4normal/2exactoldfaults+2preserves/4restored,9actualWebKit/Chromiumstarts+saves+reloads,5XIinteractioncases, actualtypes/build/all15readers/fullunchangedweights832.5Kof834, transport allcontrols/newWebKitproof andcompleteholds. Artifact12077663554 physically closed123payloads/49,466,526B/SHAb1358e81f1efaf144dbe00f9583c0a7e2d1e5c9ac5addc4bd9b3785ababe8012,0mismatches. CanonicalPAGE8fdf55e5 and exact15add/1del; engine/save/data held. Original182 baseline remains separately qualified. XI physicaliPad cause still open, separate1389 pending-history overwrite diagnosis underway. Not main or live. I keeps joined proof and publication; details docs/audits/safari-interaction-reports.md.
+## Root1388 urgent interaction reports, 2026-10-16
+
+The original published application reproduces two position-change creation faults on actual WebKit and Chromium. Corrected-guard original baseline18234788/run38971694933 isSUCCESS:9native Soccer Career journeys,5XI cases,4mounted-page units with2exact faults+2preserves, actualtypes/build/all15readers/fullunchangedweights and source/dependency/dist holds. Artifact12077292112 is physically retained outside,48,630,179B/SHAb8f7b04b2288f8d3be78009157bd5be8c12edd7a37de8cd55f37c5169c71eff1; rawunitSHAa26072a4a0666a129cd28125e3b81e165f702baca3d554be37a25be74c398d84. Root's focused CreationScreen fix and original-source restoration proof are prepared, not yet runtime qualified or live. XI selections pass with declared prepared rows, so the public iPad report remains open. ActualClaudeI keeps joined release/main/publication. Details: docs/audits/safari-interaction-reports.md.
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
@@ -18506,3 +18512,8 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+## Root1388 urgent browser reports, source preparation2026-10-16
+Published BH Start-career and iPad XI reports are being diagnosed on codex/safari-interaction-reports at e814 app bytes. Four mounted creation tests and two actual WebKit/Chromium native methods are source-ready for remote baseline, no app fix yet. Exact case counts, offline/fictional-transport limits and source checks are in docs/audits/safari-interaction-reports.md. I retains BI and publication.1387 preliminary source was separately frozen at2793bfa3 with no runtime or release gate.
+
+1388 baseline95a confirms two exact creation faults and Chromium UI paths, but WebKit has0journeycredit because the offline guard granted an unsupported Chromium-only permission. Root claims the narrow permission dispatch correction, preserving all guardhooks, for a second original-application baseline. The creation15lineproduct patch, fixed helper/workflow and newWebKittransportproof remain separate/uncommitted. No live fix or WebKit pass is claimed.
