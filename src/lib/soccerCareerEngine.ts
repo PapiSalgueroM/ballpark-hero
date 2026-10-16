@@ -2380,9 +2380,9 @@ export function dismissMoralDilemma(prev: CareerState, clubs: ClubData[]): Caree
   s.pendingMoralDilemma = null;
   /* Round 819 review: you said yes to your rival's club, so you sign there
      now, the way any accepted offer signs: a four year deal at their going
-     rate or your current wage if that is higher, their fee, your agent's
-     cut, and the armband stays behind. This summer's window is spent on
-     that move. */
+     rate or your current wage if higher, then the existing age/form policy.
+     Their fee and your agent's cut apply; the armband stays behind.
+     This summer's window is spent on that move. */
   if (s.pendingRivalMove) {
     const name = s.pendingRivalMove;
     s.pendingRivalMove = null;
@@ -2391,7 +2391,7 @@ export function dismissMoralDilemma(prev: CareerState, clubs: ClubData[]): Caree
     if (club && club.name !== s.currentClub) {
       const moved = acceptOffer(s, {
         club, contractYears: 4,
-        wage: Math.max(s.weeklyWage, wageForTier(club.tier, s.overall)),
+        wage: soccerTransferTerms(s, Math.max(s.weeklyWage, wageForTier(club.tier, s.overall)), 4).wage,
         transferFee: realisticTransferFee(s.overall, s.age),
       });
       moved.events = [...s.events, ...moved.events];
