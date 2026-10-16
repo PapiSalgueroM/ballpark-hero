@@ -1,0 +1,40 @@
+     "Shooting +2, Dribbling +2, Morale +10" first frame at 462,-21 356x54 (scrollY 251, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" settled at 462,32 356x54 (scrollY 251, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" first frame at 462,-41 356x73 (scrollY 251, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" settled at 462,32 356x73 (scrollY 251, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Popularity +3, Followers +0.5M" first frame at 462,-21 356x54 (scrollY 251, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Popularity +3, Followers +0.5M" settled at 462,32 356x54 (scrollY 251, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Staying at QPR" first frame at 462,-21 356x54 (scrollY 251, step 13 (transfer_window: Stay and fight for place 💪)): nothing under it
+     "Staying at QPR" settled at 462,32 356x54 (scrollY 251, step 13 (transfer_window: Stay and fight for place 💪)): nothing under it
+     coverage contract signing: 1 sampled
+     coverage random event choice: 7 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== head 360x780 (bar only)
+   bar youth (floating): ["Next Year"], AGE 323 to 343
+   bar playing (floating): ["Next Season","Week by week: live the season match by match"], AGE 323 to 343
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 323 to 343
+   bar pundit (floating): ["Next Season"], AGE 323 to 343
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 323 to 343
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 323 to 343
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 323 to 343
+== head 375x667 (bar only)
+   bar youth (floating): ["Next Year"], AGE 338 to 358
+   bar playing (floating): ["Next Season","Week by week: live the season match by match"], AGE 338 to 358
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 338 to 358
+   bar pundit (floating): ["Next Season"], AGE 338 to 358
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 338 to 358
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 338 to 358
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 338 to 358
+== head 480x800 (name only)
+   name "Danny Okafor-Whitfield": 3 line(s), scrollWidth 106 of 106
+   name "Supercalifragilisticexpialidociouswinger": 4 line(s), scrollWidth 106 of 106
+== head 768x1024 (name only)
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 271 of 271
+   name "Supercalifragilisticexpialidociouswinger": 2 line(s), scrollWidth 379 of 379
+playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire, toasts, bytes), HEAD ONLY

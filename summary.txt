@@ -1,0 +1,9 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+offerReview1082 exit=1 0s | Node.js v24.21.0
+playCareerLeagueWorld exit=0 17s | playCareerLeagueWorld: 39 checks, 0 failed
+playSeasonMoments exit=0 50s | playSeasonMoments: 117 checks, 0 failed
+playCareerMoments exit=0 66s | playCareerMoments: 34 checks, 0 failed
+playSoccerLanding exit=0 284s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire, toasts, bytes), HEAD ONLY
+playCareerProgramme exit=1 88s | Node.js v24.21.0
+playSoccerCareer exit=1 480s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
+playStartingXi exit=1 1831s | playStartingXi: 2 failures
