@@ -1,0 +1,175 @@
+name: Manager own transfer log
+
+on:
+  push:
+    branches: [codex/manager-own-transfer-log]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      TRANSFER_LOG_PHASE: baseline
+      SIM_NETWORK: offline
+      ENGINES: chromium
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preserve source and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir transfer-log-artifacts
+          git archive --format=zip HEAD > transfer-log-artifacts/source.zip
+          git rev-parse HEAD > transfer-log-artifacts/head.txt
+          cp package.json transfer-log-artifacts/package.before.json
+          cp package-lock.json transfer-log-artifacts/package-lock.before.json
+          npm ci > transfer-log-artifacts/install.log 2>&1
+      - name: Actual application types
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > transfer-log-artifacts/types.log 2>&1
+      - name: Actual own transfer history regressions
+        run: |
+          set -euo pipefail
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/managerOwnTransferLog.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=transfer-log-artifacts/current.json > transfer-log-artifacts/current.log 2>&1
+          status=$?
+          set -e
+          printf '%s\n' "$status" > transfer-log-artifacts/current.exit
+          cat transfer-log-artifacts/current.log
+          node --input-type=module <<'JS'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const report=JSON.parse(fs.readFileSync('transfer-log-artifacts/current.json','utf8'));
+          const rows=report.testResults.flatMap(file=>file.assertionResults), failed=rows.filter(row=>row.status==='failed');
+          const expected=['own history shows saved buys sales loans and exact counterparties','own history filters before the fifty-row limit','own history keeps both sorts and returns to all clubs','own history follows the current club when the same log is rerendered','own history explains an empty recorded list without claiming a complete history','history explains that older moves may no longer be recorded'];
+          assert.equal(report.testResults.length,1); assert.equal(rows.length,10);
+          assert.equal(report.numPendingTests,0); assert.equal(report.numTodoTests,0);
+          assert(rows.every(row=>['passed','failed'].includes(row.status)));
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|\[SIM_OFFLINE_BLOCK\]/.test(fs.readFileSync('transfer-log-artifacts/current.log','utf8')));
+          if(process.env.TRANSFER_LOG_PHASE==='baseline') {
+            assert.equal(report.success,false); assert.equal(report.numFailedTests,6); assert.equal(report.numPassedTests,4);
+            assert.deepEqual(failed.map(row=>row.title).sort(),expected.sort());
+            assert(failed.every(row=>row.failureMessages.length===1 && row.failureMessages[0].includes('AssertionError')));
+            assert.equal(fs.readFileSync('transfer-log-artifacts/current.exit','utf8').trim(),'1');
+          } else {
+            assert.equal(report.success,true); assert.equal(report.numFailedTests,0); assert.equal(report.numPassedTests,10);
+            assert.equal(fs.readFileSync('transfer-log-artifacts/current.exit','utf8').trim(),'0');
+          }
+          console.log('PASS transfer log contract: '+report.numPassedTests+' passed, '+report.numFailedTests+' declared failures');
+          JS
+      - name: Original product control and restoration
+        if: env.TRANSFER_LOG_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          file=src/components/club-manager/TransferScreen.tsx
+          cp "$file" transfer-log-artifacts/TransferScreen.fixed.tsx
+          trap 'cp transfer-log-artifacts/TransferScreen.fixed.tsx "$file"' EXIT
+          git show "a758fcec4392c57c639aa54cda840810c8e44663:$file" > transfer-log-artifacts/TransferScreen.original.tsx
+          if cmp -s transfer-log-artifacts/TransferScreen.fixed.tsx transfer-log-artifacts/TransferScreen.original.tsx; then echo 'Control did not change product'; exit 1; fi
+          cp transfer-log-artifacts/TransferScreen.original.tsx "$file"
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/managerOwnTransferLog.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=transfer-log-artifacts/original.json > transfer-log-artifacts/original.log 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 1
+          node --input-type=module <<'JS'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const report=JSON.parse(fs.readFileSync('transfer-log-artifacts/original.json','utf8'));
+          const rows=report.testResults.flatMap(file=>file.assertionResults), failed=rows.filter(row=>row.status==='failed');
+          const expected=['own history shows saved buys sales loans and exact counterparties','own history filters before the fifty-row limit','own history keeps both sorts and returns to all clubs','own history follows the current club when the same log is rerendered','own history explains an empty recorded list without claiming a complete history','history explains that older moves may no longer be recorded'];
+          assert.equal(report.testResults.length,1); assert.equal(rows.length,10); assert.equal(report.success,false);
+          assert.equal(report.numFailedTests,6); assert.equal(report.numPassedTests,4); assert.equal(report.numPendingTests,0); assert.equal(report.numTodoTests,0);
+          assert(rows.every(row=>['passed','failed'].includes(row.status)));
+          assert.deepEqual(failed.map(row=>row.title).sort(),expected.sort());
+          assert(failed.every(row=>row.failureMessages.length===1 && row.failureMessages[0].includes('AssertionError')));
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|\[SIM_OFFLINE_BLOCK\]/.test(fs.readFileSync('transfer-log-artifacts/original.log','utf8')));
+          console.log('PASS original product: exactly six own-history failures and four preservation passes');
+          JS
+          cp transfer-log-artifacts/TransferScreen.fixed.tsx "$file"
+          trap - EXIT
+          git diff --exit-code -- "$file"
+      - name: Restored own history and existing transfer deal outcomes
+        if: env.TRANSFER_LOG_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/managerOwnTransferLog.test.tsx src/test/clubManagerDealMoment.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=transfer-log-artifacts/related.json > transfer-log-artifacts/related.log 2>&1
+          cat transfer-log-artifacts/related.log
+          node --input-type=module <<'JS'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const report=JSON.parse(fs.readFileSync('transfer-log-artifacts/related.json','utf8'));
+          assert.equal(report.success,true); assert.equal(report.numFailedTests,0); assert(report.numPassedTests>0);
+          assert.equal(report.numPendingTests,0); assert.equal(report.numTodoTests,0);
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|\[SIM_OFFLINE_BLOCK\]/.test(fs.readFileSync('transfer-log-artifacts/related.log','utf8')));
+          console.log('PASS original transfer outcomes: '+report.numPassedTests);
+          JS
+      - name: Production build
+        if: env.TRANSFER_LOG_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build > transfer-log-artifacts/build.log 2>&1
+          tail -n 6 transfer-log-artifacts/build.log
+      - name: Install isolated reader tools
+        if: env.TRANSFER_LOG_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          tools="$RUNNER_TEMP/transfer-log-reader-tools"
+          mkdir "$tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$tools/package.json"
+          npm install --prefix "$tools" --ignore-scripts --no-audit --no-fund > transfer-log-artifacts/browser-install.log 2>&1
+          test ! -e node_modules/playwright
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$tools/node_modules/playwright/cli.js" install --with-deps chromium > transfer-log-artifacts/chromium-install.log 2>&1
+          python -m pip install fonttools pillow > transfer-log-artifacts/python-install.log 2>&1
+      - name: Every rebuilt-site reader
+        if: env.TRANSFER_LOG_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > transfer-log-artifacts/server.log 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 60); do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done
+          test "$ready" -eq 1
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            set +e
+            SIM_OFFLINE_RECEIPT="$PWD/transfer-log-artifacts/$harness.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$harness.mjs" > "transfer-log-artifacts/$harness.log" 2>&1
+            status=$?
+            set -e
+            cat "transfer-log-artifacts/$harness.log"
+            printf '%s\t%s\n' "$harness" "$status" >> transfer-log-artifacts/readers.tsv
+            if test "$status" -ne 0 || test -s "transfer-log-artifacts/$harness.transport"; then failed=1; fi
+            if grep -E '(^|[[:space:]])(FAIL|SKIP|EMPTY)([[:space:]]|$)' "transfer-log-artifacts/$harness.log"; then failed=1; fi
+          done
+          test "$(wc -l < transfer-log-artifacts/readers.tsv)" -eq 15
+          exit "$failed"
+      - name: Source and package preservation
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- src public scripts package.json package-lock.json
+          cmp package.json transfer-log-artifacts/package.before.json
+          cmp package-lock.json transfer-log-artifacts/package-lock.before.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manager-own-transfer-log-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: error
+          path: transfer-log-artifacts/
