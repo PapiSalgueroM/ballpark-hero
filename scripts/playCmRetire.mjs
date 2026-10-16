@@ -294,7 +294,8 @@ async function walkD(profile) {
       if (name === 'whole') check(P, 'a whole book prints no second line', missed === null, `${missed}`);
       else {
         const played = oldLean.careerStats.played, kept = oldLean.h2h.length;
-        check(P, 'a leaned book says how many it could not see', !!expect?.missed && missed === `Counted from ${kept} of your ${played} matches. Your save no longer keeps the scores of the other ${played - kept}.`, `${missed}`);
+        const lost = played - kept === 1 ? 'the score of the other one' : `the scores of the other ${played - kept}`;
+        check(P, 'a leaned book says how many it could not see', !!expect?.missed && missed === `Counted from ${kept} of your ${played} matches. Your save no longer keeps ${lost}.`, `${missed}`);
       }
       check(P, 'opening the panel writes nothing new', before === after && !JSON.parse(after ?? '{}')?.careerStats?.highestScoring);
       await shot(page, `D-${name}-${profile.width}`);

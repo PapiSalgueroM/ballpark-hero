@@ -200,7 +200,7 @@ export function ManagerRecordLines({ c }: { c: CareerState }) {
                       <p data-cm-highest-scoring>⚽ Highest scoring game: <span className="text-foreground font-semibold">{high.score}</span>{SCORING_WORD[scoringOutcome(high)]} vs {high.opp}{SCORING_AFTER[scoringOutcome(high)]}, Season {formatNumber(high.season)}</p>
                     )}
                     {high && (high.missed ?? 0) >= 1 && (
-                      <p data-cm-highest-scoring-missed>Counted from {formatNumber(counted)} of your {formatNumber(c.careerStats.played)} matches. Your save no longer keeps the scores of the other {formatNumber(high.missed!)}.</p>
+                      <p data-cm-highest-scoring-missed>Counted from {formatNumber(counted)} of your {formatNumber(c.careerStats.played)} matches. Your save no longer keeps {high.missed === 1 ? 'the score of the other one' : `the scores of the other ${formatNumber(high.missed!)}`}.</p>
                     )}
                     {c.careerStats.mostExpensiveBuy && (
                       <p>💸 Priciest buy: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveBuy.name}</span> ({money(c.careerStats.mostExpensiveBuy.fee, c)})</p>

@@ -58,6 +58,9 @@ describe('the record line', () => {
       .toBe('Counted from 2 of your 5 matches. Your save no longer keeps the scores of the other 3.');
     expect(lines(career(1380, [], { opp: 'B', score: '6-2', res: 'W', season: 9, missed: 1166 })).missed)
       .toBe('Counted from 214 of your 1,380 matches. Your save no longer keeps the scores of the other 1,166.');
+    /* Review fix: exactly one score lost still says so (a save missing one match is not a whole count). */
+    expect(lines(career(5, [row('A', '1-0', 'W'), row('B', '2-1', 'W'), row('C', '0-0', 'D'), row('D', '1-1', 'D')])).missed)
+      .toBe('Counted from 4 of your 5 matches. Your save no longer keeps the score of the other one.');
   });
   it('prints nothing with no game: a new career, an empty book, a stored null', () => {
     expect(lines(career(0, [])).high).toBeNull();
