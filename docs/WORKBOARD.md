@@ -15786,3 +15786,7 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Round1392 pending: retired Manager continuation metadata
+
+Codex prepares the narrow home-card handback from finish-1343 item5 on I d8. Actual retirement is a saved object, while Continue only reads sacked true and still prints season; the front CTA describes an active dugout. Product scope is metadata reader/CMentry and state-neutral CM continue CTA, no engine/save/slot/world changes. Original-source remote baseline comes before edits. Other games and legacy descriptions held. No READY or live claim, no new gate on urgent1391 or I's BI sequence. See docs/audits/retired-manager-continue.md.
