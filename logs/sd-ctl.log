@@ -1,0 +1,17 @@
+bindopen exit=1 | simSoccerDeck: CONTROL=bindopen FIRED: section 1 failed (21 failures, red sections 1) | first:    FAIL cash: the bind check passes it
+leak exit=1 | simSoccerDeck: CONTROL=leak FIRED: section 2 failed (2 failures, red sections 2) | first:    FAIL 200 careers part from the base: career 0 (GK, 1990-94) from step 7; career 1 (CB, 1995-99) from step 7
+last exit=1 | simSoccerDeck: CONTROL=last FIRED: section 3 failed (3 failures, red sections 3) | first:    FAIL 1903 deals hold a deck card that is not first
+pool exit=1 | simSoccerDeck: CONTROL=pool FIRED: section 3 failed (5 failures, red sections 3) | first:    FAIL 888 deals hold more than one deck card
+silent exit=1 | simSoccerDeck: CONTROL=silent FIRED: section 5 failed (2 failures, red sections 5) | first:    FAIL 900 answers move something other than what they print, or say it wrong
+drop exit=1 | simSoccerDeck: CONTROL=drop FIRED: section 5 failed (2 failures, red sections 5) | first:    FAIL 600 answers move something other than what they print, or say it wrong
+ceiling exit=1 | simSoccerDeck: CONTROL=ceiling FIRED: section 5 failed (2 failures, red sections 5) | first:    FAIL 400 answers move something other than what they print, or say it wrong
+posleak exit=1 | simSoccerDeck: CONTROL=posleak FIRED: section 6 failed (1 failures, red sections 6) | first:    FAIL 142 position cards dealt to another group: a midfielder (CM) was dealt 706, a defender card
+neutralmoves exit=1 | simSoccerDeck: CONTROL=neutralmoves FIRED: section 4 failed (1 failures, red sections 4) | first:    FAIL 200 careers part from the base at a season end
+noreseed exit=1 | simSoccerDeck: CONTROL=noreseed FIRED: section 4 failed (1 failures, red sections 4) | first:    FAIL 200 careers part from the base at a season end
+mathrandom exit=1 | simSoccerDeck: CONTROL=mathrandom FIRED: section 7 failed (2 failures, red sections 7) | first:    FAIL the slot and the deck's answers drew Math.random 1799 times
+keyseason exit=1 | simSoccerDeck: CONTROL=keyseason FIRED: section 7 failed (1 failures, red sections 7) | first:    FAIL a sample fell to 0.0 percent of careers dealt two different cards, under the floor 80
+pressure exit=1 | simSoccerDeck: CONTROL=pressure FIRED: section 8 failed (5 failures, red sections 8) | first:    FAIL best moves morale25 by 9.33 against the deck off, band 5.5
+noresolve exit=1 | simSoccerDeck: CONTROL=noresolve FIRED: section 9 failed (1 failures, red sections 9) | first:    FAIL 60 pending deck cards were not answered here after the reload
+eager exit=1 | simSoccerDeck: CONTROL=eager FIRED: section 10 failed (2 failures, red sections 10) | first:    FAIL src/pages/SoccerCareer.tsx's static closure holds src/lib/soccerDeck.ts, src/lib/gmInbox.ts, src/data/
+caller exit=1 | simSoccerDeck: CONTROL=caller FIRED: section 10 failed (1 failures, red sections 10) | first:    FAIL 1 src files call loadSoccerDeck: src/pages/SoccerCareer.tsx
+simSoccerDeck: 16 of 16 controls fired
