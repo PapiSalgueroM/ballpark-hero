@@ -52,3 +52,21 @@ against BASE against BASE.
 2. Shape: may part A ship without a shedding rule (buyers carry +0.67 men a club, flat; sellers recover).
 3. A man you sold: may an AI club buy him while his deal with you lasts (simCmLedgerBound section 4 says no today).
 4. The January entry time: record a window's deals with one compaction (the critic's correction 20) as part of 2a.
+
+## Steps 2 to 6, after the lead's rulings (2026-10-16)
+The rulings (dukb-handoff/2026-10-10/briefs/lead-rulings-1344.md): SIZE_BUDGET 214,000 by the header's recipe; part A
+ships without a shedding rule (section 9 asserts the tiers and the buyers' surplus); an AI club never takes a man the
+ledger holds from a deal of mine; one compaction a window; careers started before 13 October in a round of their own.
+
+What changed in product code: generateHeadlines records every deal of a seeded career as it closes (a working copy of
+the ledger, packed once a window) and skips a deal the ledger would refuse after its three draws; startCareer records
+a fresh career's opening window once its seed is drawn; the hijack and the walk away record the rival's deal;
+joinClubNow keeps the run in's ledger and this season's names of deals between other clubs; the screen's market
+(marketForScreen) lists a man another club bought this season at his new club and every door refuses him until the
+summer; loadCareer mends this season's missing moves of a seeded save inside its own fail safe; the dailies strip the
+ledger with the seed. The two ledger writers gained an optional `pack` parameter (ruling 4).
+
+Proof: scripts/simCmWorldMoves.mjs sections 0 to 8 and 12 (section 9 by --combine), every control firing;
+scripts/lib/cmNoAiMoves1344.mjs, the bridge (four anchors); scripts/playCmWorldMoves.mjs, the walk;
+src/lib/clubManagerWorldMoves.test.ts. The remote checks and every number are in the round's finish report
+(dukb-handoff/2026-10-10/results-g/finish-1344.md). The step 1 probe was removed at step 2 (history: ee949025).
