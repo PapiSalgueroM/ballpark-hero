@@ -1,0 +1,4 @@
+tsc exit=0 48s | 
+vitest exit=0 2s |    Duration  1.83s (transform 1.06s, setup 83ms, collect 1.57s, tests 164ms, environment 505ms, prepare 160ms)
+m-injgate exit=0 2s | MUTANT injgate vitest=1
+m-capgate exit=0 2s | MUTANT capgate vitest=1
