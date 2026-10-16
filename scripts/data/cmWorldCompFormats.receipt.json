@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "ledgerKey": "cm-world-comp-formats-v1",
+  "dataFile": "scripts/data/cmWorldCompFormats.json",
+  "readOn": "2026-10-16",
+  "readBy": "the builder of Round 1347, desktop Claude lane",
+  "method": "Each page was opened on the read day through a page reader that answers with lines quoted from the page. Every literal in the ledger is a line that reader quoted, with two kinds of exception written down here: a dash of the two kinds this repo bans is written as a hyphen (the 2026-27 dates) or the line is cut at it (Sky Sports' final line of 2026-27, cut before the stadium), and where the reader would only quote part of a long sentence, the part is quoted as its own literal and never joined to another part. Pages were found by web search; no wiki was read for a row, and the two wiki mirrors the search offered (grokipedia, wikiwand) are refused by the checker like any wiki.",
+  "limits": [
+    "No copy of a page was kept, so there is no snapshot hash.",
+    "The adversarial critic of this round named uefa.com newsid=2493305 as the 2015-16 pots page. It is the 2017-18 draw (dated 24 August 2017), and newsid=2398032, which a search offered next, is the 2016-17 draw. Neither is a source here. The 2015-16 rows read UEFA's own 2015-16 draw page (0253-0d043866fe5a) instead.",
+    "G1 (the group stage shape) stands on three publishers that describe the format the league phase replaced (ESPN, Al Jazeera and goal.com, all 2024) plus UEFA's 2015-16 draw page. ESPN dates that format to the previous 21 seasons and Al Jazeera to 2003, so the row speaks for every era season; no page of 2005-06 or 2010-11 itself prints all five figures.",
+    "G3-2005 and G3-2010 (no club drawn with a club of its own association) stand on UEFA's page of that season plus ESPN's line that in past seasons country protection held until the quarter-finals. ESPN's line is read as speaking for the group stage era it describes in the same article; no second page of 2005-06 or 2010-11 itself was found.",
+    "G2-2005 and G2-2010 (all four pots by coefficient) stand on UEFA alone and are not built: the game seeds its pots by its own strength in every era (standIns).",
+    "G4-early (the round of 16 draw of 2005-06 and 2010-11) was not read. The engine's own comment at drawUclRoundOf16 names a 2010-11 uefa.com page (Last 16 set for 17 December draw) that this round did not open. Nothing stands on G4 here: the round of 16 of a watched era season is the participant's own draw, bound in Round 1502.",
+    "G5-2015-ko (Russia and Ukraine kept apart in the 2015-16 round of 16) stands on UEFA alone, and G5-2020-ko was not read (no Russian or Ukrainian club reached that round of 16). The participant's round of 16 draw does not apply the ban either; fixing that moves the participant and is owed, not built.",
+    "G5-2020-groups stands on UEFA and on FC Shakhtar Donetsk's own page of 30 September 2020, which names the three Russian clubs among those Shakhtar could not face; it does not say why, and UEFA's page does.",
+    "G7 (two legged knockout ties) is FOX Sports of 2015-16 and Bleacher Report of 2018-19; G8 (the final as one match) is Bleacher Report alone. Neither stands under a constant here: the watched era ties take their legs from uclLegsFor, which the engine already sources.",
+    "N1 (the 2026-27 nights) is recorded for the order of its months only. The game's nights sit on its own calendar and the screen prints the game's dates, never these."
+  ],
+  "checkedBy": "scripts/simWorldUcl.mjs",
+  "sha256": "2d8f8a70f4110c4e177ad999db139d13710de20b7aafbb2c05f921c334372e72"
+}
