@@ -13,6 +13,10 @@ import type { useClubManager } from '@/hooks/useClubManager';
    it is read from the save; nobody speaks. */
 
 const count = (n: number, one: string, many: string) => `${formatNumber(n)} ${n === 1 ? one : many}`;
+/* Keeps an emoji with its count on the emoji line, which otherwise wraps between them on a phone. */
+const NBSP = String.fromCharCode(0xa0);
+/* A career that finished no season says the one it was in, the way farewellShareText does. */
+const seasonsDone = (l: CareerLegacy) => (l.finishedSeasons > 0 ? count(l.finishedSeasons, 'season', 'seasons') : `Season ${formatNumber(l.lastSeason)}`);
 
 function momentLine(c: CareerState, l: CareerLegacy): string {
   const r = l.retired;
@@ -64,16 +68,16 @@ export default function ClubManagerFarewell({ c, g }: {
       scoreLabel={l.trophies === 1 ? 'trophy' : 'trophies'}
       outcomeEmoji="👋"
       headline={name ? `Farewell, ${name}` : "You've retired"}
-      statLine={`${count(l.finishedSeasons, 'season', 'seasons')} · ${count(l.clubs.length, 'club', 'clubs')} · ${formatNumber(l.wins)}W ${formatNumber(l.draws)}D ${formatNumber(l.losses)}L`}
+      statLine={`${seasonsDone(l)} · ${count(l.clubs.length, 'club', 'clubs')} · ${formatNumber(l.wins)}W ${formatNumber(l.draws)}D ${formatNumber(l.losses)}L`}
       funFact={<span data-cm-farewell-moment>{momentLine(c, l)}</span>}
       statRow={[
         { label: 'Seasons', value: formatNumber(l.finishedSeasons) },
         { label: 'Win %', value: `${l.winRate}%` },
         { label: 'Trophies', value: formatNumber(l.trophies) },
       ]}
-      emojiGrid={`👋 Retired in S${l.lastSeason} · 🏆×${l.trophies} · ${l.wins}W ${l.draws}D ${l.losses}L`}
+      emojiGrid={`👋 Retired in S${formatNumber(l.lastSeason)} · 🏆${NBSP}×${formatNumber(l.trophies)} · ${formatNumber(l.wins)}W ${formatNumber(l.draws)}D ${formatNumber(l.losses)}L`}
       share={{
-        score: `Retired after ${count(l.finishedSeasons, 'season', 'seasons')} (${count(l.trophies, 'trophy', 'trophies')})`,
+        score: `Retired ${l.finishedSeasons > 0 ? 'after ' : 'in '}${seasonsDone(l)} (${count(l.trophies, 'trophy', 'trophies')})`,
         gameName: 'Club Manager',
         gamePath: '/club-manager',
         customText: farewellShareText(l),

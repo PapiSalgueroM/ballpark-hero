@@ -311,6 +311,21 @@ describe('the farewell', { timeout: 120000 }, () => {
     expect(e.container.querySelector('[data-cm-farewell-moment]')?.textContent).toBe('Left Everton in week 1 of Season 1');
   });
 
+  it('counts no unfinished season, formats every number, and keeps the trophy with its count (review fix)', () => {
+    const g = { startNew: vi.fn(), showSlots: vi.fn() };
+    const big = {
+      ...retiredCareer(), season: 1, history: [], trophies: [],
+      careerStats: { played: 2400, wins: 1203, draws: 600, losses: 597, clubsManaged: ['Everton'] },
+      retired: { season: 1, worldSeason: '2026-27', when: 'outOfWork', club: 'Everton' },
+    } as unknown as CareerState;
+    const { container } = render(<ClubManagerFarewell c={big} g={g as any} />);
+    const text = container.textContent ?? '';
+    expect(text).toContain('Season 1 · 1 club · 1,203W 600D 597L');
+    expect(text).not.toContain('0 seasons');
+    expect(text).toContain(`Retired in S1 · 🏆${String.fromCharCode(0xa0)}×0 · 1,203W 600D 597L`);
+    expect(text).not.toContain('1203W');
+  });
+
   it('the managers screen says retired and offers the farewell on that tile only', () => {
     const summary = (club: string, retired: boolean) => ({
       managerName: null, clubName: club, season: 7, worldSeason: '2032-33', trophies: 2, eraId: null, eraLabel: '2026-27', historic: false, sacked: false,
