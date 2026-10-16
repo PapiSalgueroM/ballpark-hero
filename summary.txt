@@ -1,0 +1,10 @@
+headsha exit=0 0s | 87056ed9b Round BHH: bind the cold context, documentary and saved loan proofs' Life hold to SC_*_LIFE_REF
+simSoccerCareerColdContext-ctl-original exit=0 5s | FIRED-OK
+simSoccerCareerColdContext exit=0 5s | simSoccerCareerColdContext normal: green.
+simSoccerCareerDocumentaryReview exit=0 9s | simSoccerCareerDocumentaryReview normal: green.
+simSoccerCareerDocumentaryReview-ctl-registration exit=0 5s | FIRED-OK
+simSoccerCareerDocumentaryReview-ctl-priority exit=0 5s | FIRED-OK
+simSoccerCareerDocumentaryReview-ctl-effect exit=0 5s | FIRED-OK
+simSoccerCareerSavedLoan-ctl-gate exit=0 5s | FIRED-OK
+documentaryBinding exit=0 2s | Three actual old-Cold source guard refusals: known631 corruption, unrelated whole-parent drift and malformed236 binding. No app mutation or child compiler/unit credit.
+simSoccerCareerSavedLoan exit=0 12s | simSoccerCareerSavedLoan normal: green.
