@@ -1,0 +1,10 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | a758fcec4 Claim Rounds 1333 to 1346 and Release BH; the player reports of 10-14 to 10-16 split between the lanes
+luton-proof exit=0 18s | PASS Luton display component proof
+saveFixtures exit=0 10s | Prepared 9 declared font dependencies for local fulfillment.
+playSaveReaders exit=0 5s | playSoccerSaveReaders: green, 18 checks at 390 and 1280 on career 713-CB-playing (119700 characters raw, 45562 stored), 0 failures.
+playSaveReaders-ctl-envelope exit=0 4s | FIRED-OK
+luton-walk exit=1 34s | Node.js v24.21.0
+playOpponents exit=0 10s | playSoccerCareerOpponents: 164 checks, 0 failed
+basesrv exit=0 28s | base a758fcec served on 4174: 200
+luton-walk-ctl-main exit=1 34s | Node.js v24.21.0

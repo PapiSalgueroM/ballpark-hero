@@ -1,0 +1,7 @@
+fixture: table mode table, unnamed slot 8, first meeting md 12; severe mode results
+FAIL [luton] 390x844 table: kickoff table names Luton Town once and no placeholder
+FAIL [luton] 390x844 table: Luton Town twice in the fixture list, no placeholder (another club)
+FAIL [luton] 390x844 table: review carries the membership note
+FAIL [luton] 390x844 table: final table names Luton Town once and no placeholder
+
+Node.js v24.21.0

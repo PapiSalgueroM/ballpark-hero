@@ -1,0 +1,29 @@
+fixture: table mode table, unnamed slot 8, first meeting md 12; severe mode results
+ok   [base] 390x844 table: Season Centre opens on Arsenal (Arsenal · 2023/24)
+FAIL [luton] 390x844 table: kickoff table names Luton Town once and no placeholder
+ok   [base] 390x844 table: kickoff table is shown with Arsenal in it
+ok   [base] 390x844 table: 38 fixtures, 19 opponents twice each, own club never an opponent
+ok   [luton] 390x844 table: Luton Town twice in the fixture list, no placeholder (Luton Town)
+ok   [luton] 390x844 table: review carries the membership note
+FAIL [luton] 390x844 table: final table names Luton Town once and no placeholder
+ok   [base] 390x844 table: save bytes unchanged
+ok   [base] 390x844 table: no horizontal overflow
+ok   [base] 390x844 table: no page errors
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-centre-bar]').getByRole('button', { name: '▶ League game 2', exact: true })
+
+    at watchThrough (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/lutonWalk.mjs:104:132)
+    at async tableSeason (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/lutonWalk.mjs:141:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/lutonWalk.mjs:168:53 {
+  log: [
+    "  - waiting for locator('[data-centre-bar]').getByRole('button', { name: '▶ League game 2', exact: true })"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
