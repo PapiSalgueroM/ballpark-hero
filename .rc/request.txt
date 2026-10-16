@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/lib/clubManagerWorldMoves.test.ts src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/test/clubDetailCurrentRoster.test.tsx src/test/clubManagerDealMoment.test.tsx src/lib/clubManagerCustomPromotion.test.ts --testTimeout=300000 --hookTimeout=120000
+s0: CM_WORLD_MOVES_SECTIONS=0 node scripts/simCmWorldMoves.mjs
+s3: CM_WORLD_MOVES_SECTIONS=3 node scripts/simCmWorldMoves.mjs
+c-joinledger: CM_WORLD_MOVES_CONTROL=joinledger node scripts/simCmWorldMoves.mjs
+c-nolist: CM_WORLD_MOVES_CONTROL=nolist CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+s5: CM_WORLD_MOVES_SECTIONS=5 node scripts/simCmWorldMoves.mjs
+c-norepair: CM_WORLD_MOVES_CONTROL=norepair CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
+c-repairthrows: CM_WORLD_MOVES_CONTROL=repairthrows CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
+s7: CM_WORLD_MOVES_SECTIONS=7 node scripts/simCmWorldMoves.mjs
+s8-now: CM_WORLD_MOVES_SECTIONS=8 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
+s8-2015: CM_WORLD_MOVES_SECTIONS=8 CM_WORLD_MOVES_ERAS=era2015 node scripts/simCmWorldMoves.mjs
+s8-2005: CM_WORLD_MOVES_SECTIONS=8 CM_WORLD_MOVES_ERAS=era2005 node scripts/simCmWorldMoves.mjs
+bridge-check: node scripts/lib/cmNoAiMoves1344.mjs --check
+simFreeAgents: node scripts/simFreeAgents.mjs
+continuity: B=$(bash .rc/x/baseDeck.sh) && MANAGER_WORLD_CONTINUITY_BASE=$B node scripts/simManagerWorldContinuity.mjs
+continuity-all: B=$(bash .rc/x/baseDeck.sh) && MANAGER_WORLD_CONTINUITY_BASE=$B MANAGER_WORLD_CONTINUITY_CONTROL=all node scripts/simManagerWorldContinuity.mjs
+continuity-onbase: B=$(bash .rc/x/baseDeck.sh) && git worktree add -q --detach /tmp/r1344cb d4f2c6f688d656205722ba52bbdb33f03490966a && ln -s $PWD/node_modules /tmp/r1344cb/node_modules && cd /tmp/r1344cb && MANAGER_WORLD_CONTINUITY_BASE=$B node scripts/simManagerWorldContinuity.mjs
