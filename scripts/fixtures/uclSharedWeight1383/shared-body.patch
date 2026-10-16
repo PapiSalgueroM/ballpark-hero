@@ -1,0 +1,99 @@
+diff --git a/src/lib/clubManager.ts b/src/lib/clubManager.ts
+index c36d3ac8..135cd15f 100644
+--- a/src/lib/clubManager.ts
++++ b/src/lib/clubManager.ts
+@@ -140,6 +140,7 @@ import type { UclGroupRule } from '@/lib/clubManagerUclGroups';
+ /* Round 670 review: how a Champions League tie is read, shared with Soccer
+    Career. The module imports nothing. */
+ import { uclTieOutcome } from '@/lib/uclTieRule';
++import { groupFixtures, settleTie } from '@/lib/worldCompetition';
+ /* Round 781: the match clock with the board in it. The module imports nothing. */
+ import { clockOrder, playedBy } from '@/lib/clubManagerClock';
+ 
+@@ -12479,57 +12480,12 @@ function advanceUclBracket(state: CareerState, round: UclKoRound): void {
+   for (const t of bracket) {
+     if (t.round !== round || t.winner) continue;
+     if (t.mine) continue;                     // my tie is settled by my match
+-    const legs = uclLegsFor(state.eraId, t.round);
+-    if (legs === 2) {
+-      /* Round 507: two matches, the second at the other ground, and the tie
+-         read by the competition's own rule for this season. simAiMatch returns
+-         the goals in the order it was handed the clubs, so leg two comes back
+-         reversed and is turned back into this tie's orientation here rather
+-         than at the four places that read it. */
+-      const [h1, a1] = simAiMatch(state, t.home, t.away);
+-      /* Round 670: leg two settles the tie, so it can go to extra time and
+-         draws at the deflator the manager's own deciders draw at. */
+-      const [a2, h2] = simAiMatch(state, t.away, t.home, ET_DEFLATOR);
+-      t.legs = 2;
+-      t.leg1 = { homeGoals: h1, awayGoals: a1 };
+-      t.leg2 = { homeGoals: h2, awayGoals: a2 };
+-      let out = uclTieOutcome(t, uclAwayGoalsApply(state.eraId));
+-      if (out.winner === null) {
+-        /* Round 670: level after ninety, so thirty more minutes at the same
+-           ground, added to leg two and read again by the era's rule. */
+-        const [ea, eh] = simAiMatch(state, t.away, t.home, ET_DEFLATOR * ET_MINUTES / 90);
+-        t.leg2 = { homeGoals: h2 + eh, awayGoals: a2 + ea };
+-        t.aet = true;
+-        out = uclTieOutcome(t, uclAwayGoalsApply(state.eraId));
+-      }
+-      t.homeGoals = out.homeAgg;
+-      t.awayGoals = out.awayAgg;
+-      t.byAwayGoals = out.byAwayGoals || undefined;
+-      if (out.winner === null) {
+-        t.pens = true;
+-        t.winner = Math.random() < 0.5 ? t.home : t.away;
+-      } else {
+-        t.winner = out.winner === 'home' ? t.home : t.away;
+-      }
+-      continue;
+-    }
+-    let [hg, ag] = simAiMatch(state, t.home, t.away, ET_DEFLATOR);
+-    if (hg === ag) {
+-      /* Round 670: level after ninety, so extra time first. */
+-      const [eh, ea] = simAiMatch(state, t.home, t.away, ET_DEFLATOR * ET_MINUTES / 90);
+-      hg += eh;
+-      ag += ea;
+-      t.aet = true;
+-    }
+-    t.homeGoals = hg;
+-    t.awayGoals = ag;
+-    if (hg === ag) {
+-      // Knockout football always produces a winner, and level after extra time means penalties.
+-      t.pens = true;
+-      t.winner = Math.random() < 0.5 ? t.home : t.away;
+-    } else {
+-      t.winner = hg > ag ? t.home : t.away;
+-    }
++    settleTie(t, {
++      legs: uclLegsFor(state.eraId, t.round),
++      awayGoals: uclAwayGoalsApply(state.eraId),
++      deciderScale: ET_DEFLATOR,
++      etScale: ET_DEFLATOR * ET_MINUTES / 90,
++    }, (home, away, scale) => simAiMatch(state, home, away, scale), () => Math.random());
+   }
+   const next: UclKoRound | null = round === 'R16' ? 'QF' : round === 'QF' ? 'SF' : round === 'SF' ? 'F' : null;
+   if (!next) return;
+@@ -12869,22 +12825,6 @@ export function initUclWorld(state: CareerState): UclAiGroup[] | undefined {
+   return groups;
+ }
+ 
+-/** The two fixtures of one matchday in a four club double round robin.
+- *  Every club plays every matchday, and every pairing happens exactly twice
+- *  with the venue swapped. */
+-function groupFixtures(clubs: string[], md: number): [string, string][] {
+-  const [a, b, c, d] = clubs;
+-  const rounds: [string, string][][] = [
+-    [[a, b], [c, d]],
+-    [[c, a], [b, d]],
+-    [[a, d], [b, c]],
+-    [[b, a], [d, c]],
+-    [[a, c], [d, b]],
+-    [[d, a], [c, b]],
+-  ];
+-  return rounds[clamp(md, 0, 5)];
+-}
+-
+ /**
+  * Bring every AI group up to my own group's matchday. Lockstep on a normal
+  * week, catch-up when an old save arrives without a uclWorld mid campaign.
