@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+pm-fonts: mkdir -p career-press-market-artifacts && FREE_KICK_FONT_CACHE=career-press-market-artifacts/font-cache node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -3
+pm-outcomes: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE=career-press-market-artifacts/font-cache; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPressMarket.mjs 2>&1 | tee career-press-market-artifacts/outcomes.log | tail -25 && node scripts/qa/checkCareerPressMarket.mjs outcomes
+pm-native: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE=career-press-market-artifacts/font-cache; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerPressMarket.mjs 2>&1 | tee career-press-market-artifacts/native.log | tail -25 && node scripts/qa/checkCareerPressMarket.mjs native
