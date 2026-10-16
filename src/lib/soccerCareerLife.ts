@@ -498,7 +498,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.overall >= 84 && state.age >= 27) {
+  if ((state.pendingEvents.some(event => event.id === 232) || state.overall >= 84) && state.age >= 27) {
     push({ id: 232, story: STORY.statueVote, cooldown: COOLDOWN.once, emoji: "🗿", title: "The Statue Vote",
       description: "Your hometown council is voting on a statue of you outside the stadium where you played as a kid.",
       category: "life", choices: [
@@ -672,7 +672,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.overall >= 86 && state.age >= 29) {
+  if ((state.pendingEvents.some(event => event.id === 249) || state.overall >= 86) && state.age >= 29) {
     push({ id: 249, cooldown: COOLDOWN.once, emoji: "🎞️", title: "The Biopic Offer",
       description: "A major studio wants the film rights to your life story. They mention an A-list actor for the lead. He is 5 foot 6. You are not.",
       category: "life", choices: [

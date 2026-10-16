@@ -16,7 +16,7 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
-      SC_PENDING_OVERALL_PHASE: baseline
+      SC_PENDING_OVERALL_PHASE: fixed
       SC_PENDING_OVERALL_BASE: 63573c16abf61b31bbdb9c0117631e99e4538c01
       SC_PENDING_OVERALL_OUT: ${{ github.workspace }}/pending-overall-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/pending-overall-artifacts/font-cache
