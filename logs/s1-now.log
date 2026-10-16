@@ -1,0 +1,15 @@
+1) ownership: seeded careers, 6 seasons, seeds 1,2,3,4,5, the head engine
+  FAIL section 1: Real Madrid (now, seed 1) the opening window: Atlético Madrid signed Mohammed Kudus from Tottenham, but the ledger holds no record of him at Atlético Madrid
+  FAIL section 1: Real Madrid (now, seed 1) the opening window: Barcelona signed Morgan Rogers from Chelsea, but the ledger holds no record of him at Barcelona
+  FAIL section 1: Real Madrid (now, seed 1) the opening window: Atalanta signed Eberechi Eze from Arsenal, but the ledger holds no record of him at Atalanta
+  FAIL section 1: Real Madrid (now, seed 1) the opening window: Atlético Madrid signed Cody Gakpo from Liverpool, but the ledger holds no record of him at Atlético Madrid
+  FAIL section 1: Real Madrid (now, seed 1) the opening window: Barcelona signed Tijjani Reijnders from Al-Qadsiah, but the ledger holds no record of him at Barcelona
+  FAIL section 1: Real Madrid (now, seed 1) January of season 1: Manchester City signed João Neves from PSG, but the ledger holds no record of him at Manchester City
+  FAIL section 1: Real Madrid (now, seed 1) January of season 1: Atlético Madrid signed Martín Zubimendi from Arsenal, but the ledger holds no record of him at Atlético Madrid
+  FAIL section 1: Real Madrid (now, seed 1) January of season 1: Barcelona signed Ousmane Dembélé from PSG, but the ledger holds no record of him at Barcelona
+   opening  15 windows, 75 AI deal lines, 75 not placed at the buyer, ledger 0.0 records and 0 units a window on average
+   january  90 windows, 402 AI deal lines, 402 not placed at the buyer, ledger 7.9 records and 915 units a window on average
+   summer   75 windows, 335 AI deal lines, 335 not placed at the buyer, ledger 9.5 records and 1098 units a window on average
+   15 careers (0 sacked early), 765484 listings checked by the one club rule, 649 moved men followed over 75 rollovers
+  section 1: 1453 more failures not shown
+simCmWorldMoves: RED, sections 1 (1461)

@@ -1,0 +1,15 @@
+1) ownership: seeded careers, 6 seasons, seeds 1,2,3,4,5, the head engine
+  FAIL section 1: Chelsea (era2005, seed 1) the opening window: Inter Milan signed Gianluca Zambrotta from Juventus, but the ledger holds no record of him at Inter Milan
+  FAIL section 1: Chelsea (era2005, seed 1) the opening window: Real Madrid signed Aleksandr Hleb from Arsenal, but the ledger holds no record of him at Real Madrid
+  FAIL section 1: Chelsea (era2005, seed 1) the opening window: Tottenham signed Alex Frei from Rennes, but the ledger holds no record of him at Tottenham
+  FAIL section 1: Chelsea (era2005, seed 1) January of season 1: Inter Milan signed Vincenzo Montella from Roma, but the ledger holds no record of him at Inter Milan
+  FAIL section 1: Chelsea (era2005, seed 1) January of season 1: Newcastle signed Ewerthon from Zaragoza, but the ledger holds no record of him at Newcastle
+  FAIL section 1: Chelsea (era2005, seed 1) January of season 1: Middlesbrough signed Robert Pirès from Arsenal, but the ledger holds no record of him at Middlesbrough
+  FAIL section 1: Chelsea (era2005, seed 1) January of season 1: Tottenham signed Lukas Podolski from Köln, but the ledger holds no record of him at Tottenham
+  FAIL section 1: Chelsea (era2005, seed 1) the rollover to season 2: Gianluca Zambrotta, moved to Inter Milan at the opening window, has no owned record there
+   opening  15 windows, 63 AI deal lines, 63 not placed at the buyer, ledger 0.0 records and 0 units a window on average
+   january  90 windows, 385 AI deal lines, 385 not placed at the buyer, ledger 5.4 records and 669 units a window on average
+   summer   75 windows, 327 AI deal lines, 327 not placed at the buyer, ledger 6.5 records and 803 units a window on average
+   15 careers (0 sacked early), 257766 listings checked by the one club rule, 630 moved men followed over 75 rollovers
+  section 1: 1397 more failures not shown
+simCmWorldMoves: RED, sections 1 (1405)

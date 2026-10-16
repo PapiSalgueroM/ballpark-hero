@@ -1,0 +1,78 @@
+cmAiRecordProbe1344: the AI deals are recorded in /home/runner/work/ballpark-hero/ballpark-hero/.p-pr/src/lib/clubManager.ts
+pr269bundle: 21 files from /home/runner/work/ballpark-hero/ballpark-hero/.p-pr in /home/runner/work/ballpark-hero/ballpark-hero/.p-prb
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/managerAiOwnership.test.ts[2m > [22m[2mManager AI completed-deal ownership[2m > [22m[2mmissing actual makeOffer hijack records its buyer
+
+[90mstdout[2m | src/test/managerAiOwnership.test.ts[2m > [22m[2mManager AI completed-deal ownership[2m > [22m[2mmissing actual walkAway records its rival buyer
+
+ [31m×[39m src/test/managerAiOwnership.test.ts[2m > [22mManager AI completed-deal ownership[2m > [22mmissing actual makeOffer hijack records its buyer[33m 1512[2mms[22m[39m
+[31m   → actual makeOffer AI buyer ownership is missing: expected false to be true // Object.is equality[39m
+[90mstdout[2m | src/test/managerAiOwnership.test.ts[2m > [22m[2mManager AI completed-deal ownership[2m > [22m[2mmissing actual January window records its completed buyers
+
+ [31m×[39m src/test/managerAiOwnership.test.ts[2m > [22mManager AI completed-deal ownership[2m > [22mmissing actual walkAway records its rival buyer[32m 180[2mms[22m[39m
+[31m   → actual walkAway AI buyer ownership is missing: expected false to be true // Object.is equality[39m
+[90mstdout[2m | src/test/managerAiOwnership.test.ts[2m > [22m[2mManager AI completed-deal ownership[2m > [22m[2mmissing actual fresh constructor records its completed buyers after seed
+
+ [32m✓[39m src/test/managerAiOwnership.test.ts[2m > [22mManager AI completed-deal ownership[2m > [22mmissing actual January window records its completed buyers[33m 6003[2mms[22m[39m
+[90mstdout[2m | src/test/managerAiOwnership.test.ts[2m > [22m[2mManager AI completed-deal ownership[2m > [22m[2mpreservation unclosed rival offer keeps ownership and original news
+
+ [32m✓[39m src/test/managerAiOwnership.test.ts[2m > [22mManager AI completed-deal ownership[2m > [22mmissing actual fresh constructor records its completed buyers after seed[33m 678[2mms[22m[39m
+[90mstdout[2m | src/test/managerAiOwnership.test.ts[2m > [22m[2mManager AI completed-deal ownership[2m > [22m[2mpreservation no-rival walkAway keeps ownership without draws
+
+ [32m✓[39m src/test/managerAiOwnership.test.ts[2m > [22mManager AI completed-deal ownership[2m > [22mpreservation unclosed rival offer keeps ownership and original news[32m 140[2mms[22m[39m
+[90mstdout[2m | src/test/managerAiOwnership.test.ts[2m > [22m[2mManager AI completed-deal ownership[2m > [22m[2mpreservation actual manual purchase keeps complete recorded identity
+
+ [32m✓[39m src/test/managerAiOwnership.test.ts[2m > [22mManager AI completed-deal ownership[2m > [22mpreservation no-rival walkAway keeps ownership without draws[32m 136[2mms[22m[39m
+[90mstdout[2m | src/test/managerAiOwnership.test.ts[2m > [22m[2mManager AI completed-deal ownership[2m > [22m[2mpreservation actual unseeded world keeps legacy ownership behavior
+
+ [32m✓[39m src/test/managerAiOwnership.test.ts[2m > [22mManager AI completed-deal ownership[2m > [22mpreservation actual manual purchase keeps complete recorded identity[32m 196[2mms[22m[39m
+ [32m✓[39m src/test/managerAiOwnership.test.ts[2m > [22mManager AI completed-deal ownership[2m > [22mpreservation actual unseeded world keeps legacy ownership behavior[33m 345[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/managerAiOwnership.test.ts[2m > [22mManager AI completed-deal ownership[2m > [22mmissing actual makeOffer hijack records its buyer
+[31m[1mAssertionError[22m: actual makeOffer AI buyer ownership is missing: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/managerAiOwnership.test.ts:[2m115:165[22m[39m
+    [90m113| [39m    const next = frame('makeOffer-hijack', prepared.state, [.01], () =…
+    [90m114| [39m    prerequisite(next?.negotiation?.status === 'hijacked', 'actual riv…
+    [90m115| [39m    expect(dealOwned(next, prepared.card.name, prepared.card.club, pre…
+    [90m   | [39m                                                                                                                                                                    [31m^[39m
+    [90m116| [39m    expect(next.budget).toBe(prepared.state.budget); expect(next.squad…
+    [90m117| [39m    expect(next.transferLog!.slice(-1)[0]).toEqual({ name: prepared.ca…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/managerAiOwnership.test.ts[2m > [22mManager AI completed-deal ownership[2m > [22mmissing actual walkAway records its rival buyer
+[31m[1mAssertionError[22m: actual walkAway AI buyer ownership is missing: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/managerAiOwnership.test.ts:[2m125:164[22m[39m
+    [90m123| [39m    const next = frame('walkAway-rival-close', prepared.state, [.01], …
+    [90m124| [39m    prerequisite(next.negotiation === null && next.goneNames.includes(…
+    [90m125| [39m    expect(dealOwned(next, prepared.card.name, prepared.card.club, pre…
+    [90m   | [39m                                                                                                                                                                   [31m^[39m
+    [90m126| [39m    expect(next.budget).toBe(prepared.state.budget); expect(next.squad…
+    [90m127| [39m    expect(next.transferLog!.slice(-1)[0]).toEqual({ name: prepared.ca…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m6 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 12:17:16
+[2m   Duration [22m 12.20s[2m (transform 934ms, setup 80ms, collect 67ms, tests 9.19s, environment 445ms, prepare 236ms)[22m
+

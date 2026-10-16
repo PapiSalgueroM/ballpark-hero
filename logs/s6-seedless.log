@@ -1,0 +1,29 @@
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   probe "generateHeadlines returns its deals": 1
+   probe "the seeded skip": 1
+   probe "the deal is collected": 1
+   probe "generateHeadlines hands them back": 1
+   probe "the helpers": 1
+   probe "startCareer keeps the opening deals": 1
+   probe "the flush after the seed block": 1
+   probe "January records": 1
+   probe "the summer records": 1
+   control seedless: 1
+   control edit made 1 time(s): seedless: if (worldSeedOf(state) === undefined) return state;
+1) ownership: seeded careers, 6 seasons, seeds 0,1, the head engine
+  FAIL section 1: Real Madrid (now, seed 0) the opening window: Napoli signed Cody Gakpo from Liverpool, but the ledger holds no record of him at Napoli
+  FAIL section 1: Real Madrid (now, seed 0) the opening window: Atlético Madrid signed Jérémy Jacquet from Liverpool, but the ledger holds no record of him at Atlético Madrid
+  FAIL section 1: Real Madrid (now, seed 0) the opening window: Atlético Madrid signed Rayan Cherki from Manchester City, but the ledger holds no record of him at Atlético Madrid
+  FAIL section 1: Real Madrid (now, seed 0) the opening window: Chelsea signed Maghnes Akliouche from PSG, but the ledger holds no record of him at Chelsea
+  FAIL section 1: Real Madrid (now, seed 0) January of season 1: Roma signed Anthony Gordon from Barcelona, but the ledger holds no record of him at Roma
+  FAIL section 1: Real Madrid (now, seed 0) January of season 1: Atlético Madrid signed Nico O'Reilly from Manchester City, but the ledger holds no record of him at Atlético Madrid
+  FAIL section 1: Real Madrid (now, seed 0) January of season 1: Atlético Madrid signed Viktor Gyökeres from Arsenal, but the ledger holds no record of him at Atlético Madrid
+  FAIL section 1: Real Madrid (now, seed 0) January of season 1: PSG signed Adam Wharton from Crystal Palace, but the ledger holds no record of him at PSG
+   opening  6 windows, 24 AI deal lines, 24 not placed at the buyer, ledger 0.0 records and 0 units a window on average
+   january  36 windows, 159 AI deal lines, 159 not placed at the buyer, ledger 7.6 records and 863 units a window on average
+   summer   30 windows, 138 AI deal lines, 138 not placed at the buyer, ledger 9.1 records and 1035 units a window on average
+   6 careers (0 sacked early), 306218 listings checked by the one club rule, 254 moved men followed over 30 rollovers
+6) legacy: unseeded careers, BASE against the head, every saved string and Math.random draw
+   12 careers, 48 saves, 1125420 draws on the head
+  section 1: 567 more failures not shown
+simCmWorldMoves: control seedless DID NOT FIRE: section 6 stayed green

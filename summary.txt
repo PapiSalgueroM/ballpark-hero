@@ -1,0 +1,10 @@
+s0 exit=0 1s | simCmWorldMoves: green, sections 0 held
+s1-2015 exit=1 88s | simCmWorldMoves: RED, sections 1 (1398)
+s1-2005 exit=1 88s | simCmWorldMoves: RED, sections 1 (1405)
+s1-now exit=1 147s | simCmWorldMoves: RED, sections 1 (1461)
+s6-now exit=0 105s | simCmWorldMoves: green, sections 6 held
+s6-2015 exit=0 80s | simCmWorldMoves: green, sections 6 held
+s6-2005 exit=0 80s | simCmWorldMoves: green, sections 6 held
+pr269-probe exit=1 14s |    Duration  12.20s (transform 934ms, setup 80ms, collect 67ms, tests 9.19s, environment 445ms, prepare 236ms)
+s1-probe-now exit=0 204s | simCmWorldMoves: green, sections 1 held
+s6-seedless exit=3 88s | simCmWorldMoves: control seedless DID NOT FIRE: section 6 stayed green

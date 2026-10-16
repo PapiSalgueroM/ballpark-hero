@@ -1,0 +1,15 @@
+1) ownership: seeded careers, 6 seasons, seeds 1,2,3,4,5, the head engine
+  FAIL section 1: Bayern Munich (era2015, seed 1) the opening window: Borussia Dortmund signed Daniel Carvajal from Real Madrid, but the ledger holds no record of him at Borussia Dortmund
+  FAIL section 1: Bayern Munich (era2015, seed 1) the opening window: Real Madrid signed Alex Sandro from Juventus, but the ledger holds no record of him at Real Madrid
+  FAIL section 1: Bayern Munich (era2015, seed 1) the opening window: Manchester United signed Raheem Sterling from Manchester City, but the ledger holds no record of him at Manchester United
+  FAIL section 1: Bayern Munich (era2015, seed 1) the opening window: Inter Milan signed Blaise Matuidi from PSG, but the ledger holds no record of him at Inter Milan
+  FAIL section 1: Bayern Munich (era2015, seed 1) the opening window: Bayer Leverkusen signed John Stones from Everton, but the ledger holds no record of him at Bayer Leverkusen
+  FAIL section 1: Bayern Munich (era2015, seed 1) January of season 1: Roma signed André Schürrle from Wolfsburg, but the ledger holds no record of him at Roma
+  FAIL section 1: Bayern Munich (era2015, seed 1) January of season 1: Manchester United signed Theo Walcott from Arsenal, but the ledger holds no record of him at Manchester United
+  FAIL section 1: Bayern Munich (era2015, seed 1) January of season 1: PSG signed Leonardo Bonucci from Juventus, but the ledger holds no record of him at PSG
+   opening  15 windows, 60 AI deal lines, 60 not placed at the buyer, ledger 0.0 records and 0 units a window on average
+   january  90 windows, 381 AI deal lines, 381 not placed at the buyer, ledger 7.1 records and 773 units a window on average
+   summer   75 windows, 334 AI deal lines, 334 not placed at the buyer, ledger 8.5 records and 928 units a window on average
+   15 careers (0 sacked early), 247462 listings checked by the one club rule, 623 moved men followed over 75 rollovers
+  section 1: 1390 more failures not shown
+simCmWorldMoves: RED, sections 1 (1398)
