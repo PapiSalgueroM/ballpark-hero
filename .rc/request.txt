@@ -1,0 +1,3 @@
+probeq: OWNCLUB_MARKET_FLEET=quick OWNCLUB_MARKET_PROBE=1 node scripts/simCmOwnClubMarket.mjs
+asisq: OWNCLUB_MARKET_FLEET=quick node scripts/simCmOwnClubMarket.mjs
+probe: OWNCLUB_MARKET_PROBE=1 node scripts/simCmOwnClubMarket.mjs
