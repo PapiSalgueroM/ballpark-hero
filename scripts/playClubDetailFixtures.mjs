@@ -33,6 +33,7 @@ const report = { status: 'running', head: execFileSync('git', ['rev-parse', 'HEA
   cases: [], controls: [], captures: [], issues: [], preflights: [], sources: [], compiled: [], sourceHeld: false, distHeld: false,
   limits: ['This is a retained simulated Arsenal career, not real match results or a browser-played season.',
     'The missing-ledger scenario removes only pairResults.premier from a declared copy of the same retained state.',
+    'The first actual load adds only the existing default managerXp block; browser inputs are its actual persisted output after two stable reloads.',
     'Expected fixtures use the source-bound real schedule and saved calendar prefix, independently of clubLeagueFixtures.',
     'Table, club, Fixtures, both Back actions and one literal reload per journey are covered. No competition engine is changed.',
     'All 38 DOM rows are compared; the first and last visible rows receive separate original captures in each journey.',
@@ -379,6 +380,7 @@ try {
   setup(equal({ ...inverse, pairResults: undefined }, { ...fixture.state, pairResults: undefined })
     && equal({ ...inverse.pairResults, premier: undefined }, { ...fixture.state.pairResults, premier: undefined })
     && equal(inverse.pairResults.premier, fixture.state.pairResults.premier), 'The missing-ledger scenario must change only the declared Premier ledger.');
+  dist = inventory(path.join(ROOT, 'dist')); setup(dist.length > 0, 'Built served assets must be physically present.'); report.dist = dist;
   const prepared = [];
   for (const [name, state] of [['recorded', copy(fixture.state)], ['missing-ledger', missing]]) {
     const original = JSON.stringify(state); memory.clear(); memory.set(KEY, original);
@@ -386,16 +388,21 @@ try {
     const receipt = { name, original: state, originalRaw: original, originalSha256: sha(original), loaded: run.value.loaded,
       actualRaw: run.value.raw, actualRawSha256: sha(run.value.raw ?? ''), saved: run.value.saved, draws: run.draws };
     report.preflights.push(receipt); retain('preflight/' + name + '.json', JSON.stringify(receipt, null, 2) + '\n'); write();
-    setup(!!run.value.loaded && run.value.saved && run.draws.length === 0 && run.value.raw === original && equal(run.value.loaded, state), name + ': actual load/save must preserve all original state, including week, calendar, membership, results and squad, with zero RNG.');
-    memory.clear(); memory.set(KEY, run.value.raw);
-    const second = zeroDraws(() => { const loaded = E.loadCareer(); return { loaded, saved: loaded ? E.saveCareer(loaded) : false, raw: memory.get(KEY) }; });
-    receipt.second = second;
-    retain('preflight/' + name + '-second.json', JSON.stringify(second, null, 2) + '\n');
-    setup(second.draws.length === 0 && second.value.saved && second.value.raw === original && equal(second.value.loaded, state), name + ': repeated actual loader must preserve complete saved bytes and zero RNG.');
-    prepared.push({ name, state, raw: original, expected: fixtureOracle(state, name), squad: rosterOracle(state) });
+    const expectedCanonical = { ...state, managerXp: { v: 1, xp: 0, points: { tactics: 0, recruitment: 0, negotiation: 0, youth: 0, manManagement: 0, finance: 0, media: 0 } } };
+    setup(!Object.hasOwn(state, 'managerXp') && !!run.value.loaded && run.value.saved && run.draws.length === 0
+      && run.value.raw === JSON.stringify(expectedCanonical) && equal(run.value.loaded, expectedCanonical), name + ': first actual load may add only the existing literal default managerXp block, preserving every other original field and zero RNG.');
+    const canonical = run.value.loaded, raw = run.value.raw;
+    receipt.stableReloads = [];
+    for (let ordinal = 1; ordinal <= 2; ordinal++) {
+      memory.clear(); memory.set(KEY, raw);
+      const next = zeroDraws(() => { const loaded = E.loadCareer(); return { loaded, saved: loaded ? E.saveCareer(loaded) : false, raw: memory.get(KEY) }; });
+      receipt.stableReloads.push(next);
+      retain('preflight/' + name + '-stable-' + ordinal + '.json', JSON.stringify(next, null, 2) + '\n');
+      setup(next.draws.length === 0 && next.value.saved && next.value.raw === raw && equal(next.value.loaded, canonical), name + ': both actual canonical reloads must preserve complete persisted bytes and zero RNG.');
+    }
+    prepared.push({ name, state: canonical, raw, expected: fixtureOracle(canonical, name), squad: rosterOracle(canonical) });
   }
   report.prepared = prepared;
-  dist = inventory(path.join(ROOT, 'dist')); setup(dist.length > 0, 'Built served assets must be physically present.'); report.dist = dist;
   browser = await pw.chromium.launch({ headless: true }); report.browserVersion = await browser.version();
   for (const profile of PROFILES) for (const fixture of prepared) await journey(profile, fixture);
   check(report.cases.length === 8 && report.cases.every(row => row.stages.length === 2 && row.reload && row.shots.length === (row.id === '320-recorded' ? 6 : 2)), 'Exactly eight complete journeys, sixteen full fixture reads and eight literal reloads are required.');

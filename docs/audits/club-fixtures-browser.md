@@ -31,3 +31,25 @@ The workflow also reruns unchanged component/current/original/restored outcomes 
 roster controls, actual application types, production build:seo, all fifteen rebuilt-site
 readers, unchanged full download budgets and source/dependency/dist holds. No browser,
 pixel, full-suite, natural play or live-site qualification exists yet.
+
+First remote run `38900124066` at `858ae1b4` failed the new setup method before any
+browser journey. Actual types, unchanged ten current cases, seven-fault/three-preserve
+original control, twenty-one restored/related cases, old roster controls, build:seo and
+all fifteen readers passed. The full weight sweep did not run after the setup failure.
+Artifact `12045916145`, 42,138,009 bytes, SHA256
+`b5d4c21240ac16b440d41850afd9f6de19a212ce951e8b33b7e47142ee4cedb3`
+is retained at `dukb-handoff/2026-10-16/club-fixtures-browser-first`.
+
+The retained engine state has no managerXp block. Its actual first load calls the existing
+ensureXp initializer and adds exactly the default zero-points block, 132 serialized bytes.
+Native full-state comparison found no other changed field and no RNG draw. The new method
+had incorrectly required that first load to be byte-identical. Its late dist inventory had
+also not been captured when setup threw; all 782 workflow dist hashes actually held.
+There were zero browser journeys, rows, reloads, controls or captures. No UI bug was shown.
+
+Method-only correction: keep the original fixture byte-for-byte, require the first actual
+load/save to add only that literal existing default block, then require two further actual
+loads/saves of its persisted output to hold every byte and zero RNG. Browser inputs use
+that actual output. Capture the dist inventory before setup can fail. App, old proofs,
+packages, fixture, eight journeys, all row/layout detectors and four controls stay held.
+Fresh remote browser/build/reader/weight acceptance remains required.

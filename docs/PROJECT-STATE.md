@@ -1,10 +1,15 @@
-## 2026-10-16: optional club fixtures served-browser proof in preparation
+## 2026-10-16: optional club fixtures browser setup correction, runtime pending
 
 Codex branch `codex/manager-fixtures-browser` starts at frozen PR285 docs0fd9cbba, application
 equal to tested71b4e158. No app or old-proof change. The exact retained Round1375 reference
 state supplies actual simulated league results; eight saved-page journeys and effective
 DOM controls will check Fixtures navigation, scores, legacy absence, scrolling and saved
-state at four widths. All runtime is remote/offline, no qualification yet. This add-on
+state at four widths. First remote run38900124066 at858ae1b4 passed types, all existing
+component/roster controls, build and15readers, then failed before any browser journey:
+the existing loader adds only a missing default managerXp block. New method now binds
+that exact first-load canonicalization and requires two stable actual reloads of its
+persisted output. Fixture/app/oldproofs/packages held, no UI bug or pixel acceptance.
+All runtime is remote/offline, fresh browser/build/readers/weight pending. This add-on
 does not block ready PR285 or Claude I's current release. Details: docs/audits/club-fixtures-browser.md.
 
 ## 2026-10-16: club detail league fixtures ready for integration
