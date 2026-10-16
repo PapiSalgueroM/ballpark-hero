@@ -1,0 +1,6 @@
+mut m7: applied to src/lib/clubManagerStart.ts
+---- ns:4 exit=1
+  FAIL (section 4): ensureStartOptions dropped No sacking when it repaired a broken block
+simCmNoSack: FAIL in section(s) 4
+simCmNoSack: FAIL in section(s) 4
+MUT m7 CAUGHT: ns:4=1

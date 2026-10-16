@@ -1,0 +1,9 @@
+#!serial
+m1: bash .rc/x/mutline.sh m1 tsc vt:src/test/clubManagerNoSack.test.tsx,src/hooks/useClubManager.test.ts ns
+m10: bash .rc/x/mutline.sh m10 tsc vt:src/test/clubManagerNoSack.test.tsx ns:4
+m2: bash .rc/x/mutline.sh m2 ns:2,3,4,5
+m3: bash .rc/x/mutline.sh m3 ns vt:src/test/clubManagerNoSack.test.tsx
+m6: bash .rc/x/mutline.sh m6 ns:4 vt:src/test/clubManagerNoSack.test.tsx,src/lib/clubManagerSlots.test.ts sim:simClubManagerSlots
+m7: bash .rc/x/mutline.sh m7 ns:4
+m11: bash .rc/x/mutline.sh m11 vt:src/test/clubManagerNoSack.test.tsx
+m5: bash .rc/x/mutline.sh m5 tsc vt:src/test/clubManagerNoSack.test.tsx

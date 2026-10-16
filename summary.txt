@@ -1,0 +1,8 @@
+m1 exit=0 167s | MUT m1 NOT CAUGHT (all green): tsc=0 vt:src/test/clubManagerNoSack.test.tsx,src/hooks/useClubManager.test.ts=0 ns=0
+m10 exit=0 71s | MUT m10 NOT CAUGHT (all green): tsc=0 vt:src/test/clubManagerNoSack.test.tsx=0 ns:4=0
+m2 exit=1 25s | MUT m2 CAUGHT: ns:2,3,4,5=1
+m3 exit=0 100s | MUT m3 NOT CAUGHT (all green): ns=0 vt:src/test/clubManagerNoSack.test.tsx=0
+m6 exit=0 60s | MUT m6 NOT CAUGHT (all green): ns:4=0 vt:src/test/clubManagerNoSack.test.tsx,src/lib/clubManagerSlots.test.ts=0 sim:simClubManagerSlots=0
+m7 exit=1 0s | MUT m7 CAUGHT: ns:4=1
+m11 exit=1 4s | MUT m11 CAUGHT: vt:src/test/clubManagerNoSack.test.tsx=1
+m5 exit=0 69s | MUT m5 NOT CAUGHT (all green): tsc=0 vt:src/test/clubManagerNoSack.test.tsx=0

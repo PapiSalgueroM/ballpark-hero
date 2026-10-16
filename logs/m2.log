@@ -1,0 +1,12 @@
+mut m2: applied to src/lib/clubManagerStart.ts
+---- ns:2,3,4,5 exit=1
+  FAIL (section 2): Arsenal: sacked at match 61 with No sacking on
+  FAIL (section 2): Arsenal: the twin was sacked at match 61 and the No sacking career shows no No sacking line there
+  FAIL (section 2): Brentford: sacked at match 93 with No sacking on
+  FAIL (section 2): Brentford: the twin was sacked at match 93 and the No sacking career shows no No sacking line there
+  FAIL (section 2): Hull City: sacked at match 25 with No sacking on
+  FAIL (section 2): Hull City: the twin was sacked at match 25 and the No sacking career shows no No sacking line there
+  FAIL (section 2): Espanyol: sacked at match 93 with No sacking on
+  FAIL (section 2): Espanyol: the twin was sacked at match 93 and the No sacking career shows no No sacking line there
+simCmNoSack: FAIL in section(s) 2, 3, 4
+MUT m2 CAUGHT: ns:2,3,4,5=1

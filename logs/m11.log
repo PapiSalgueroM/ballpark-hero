@@ -1,0 +1,9 @@
+mut m11: applied to src/components/club-manager/ManagerForm.tsx
+---- vt:src/test/clubManagerNoSack.test.tsx exit=1
+[31m   [31m×[31m the Dugout step[2m > [22mthe switch rides on both buttons[39m[33m 342[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerNoSack.test.tsx[2m > [22mthe Dugout step[2m > [22mthe switch rides on both buttons
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m6 passed[39m[22m[90m (7)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerNoSack.test.tsx,title=src/test/clubManagerNoSack.test.tsx > the Dugout step > the switch rides on both buttons,line=58,column=23::AssertionError: expected last "spy" call to have been called with [ Array(3) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    ObjectContaining {%0A      "name": "Sam Calloway",%0A    },%0A    undefined,%0A-   {%0A-     "noSack": true,%0A-   },%0A  ]%0A%0A ❯ src/test/clubManagerNoSack.test.tsx:58:23%0A%0A
+MUT m11 CAUGHT: vt:src/test/clubManagerNoSack.test.tsx=1

@@ -1,0 +1,9 @@
+mut m1: applied to src/pages/ClubManager.tsx
+---- tsc exit=0
+---- vt:src/test/clubManagerNoSack.test.tsx,src/hooks/useClubManager.test.ts exit=0
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+
+---- ns exit=0
+simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6)
+MUT m1 NOT CAUGHT (all green): tsc=0 vt:src/test/clubManagerNoSack.test.tsx,src/hooks/useClubManager.test.ts=0 ns=0

@@ -1,0 +1,10 @@
+mut m6: applied to src/lib/clubManagerSlots.ts
+---- ns:4 exit=0
+simCmNoSack: PASS (sections 4)
+---- vt:src/test/clubManagerNoSack.test.tsx,src/lib/clubManagerSlots.test.ts exit=0
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m21 passed[39m[22m[90m (21)[39m
+
+---- sim:simClubManagerSlots exit=0
+simClubManagerSlots: all sections green
+MUT m6 NOT CAUGHT (all green): ns:4=0 vt:src/test/clubManagerNoSack.test.tsx,src/lib/clubManagerSlots.test.ts=0 sim:simClubManagerSlots=0

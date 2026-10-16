@@ -1,0 +1,7 @@
+mut m5: applied to src/components/club-manager/MetersStrip.tsx
+---- tsc exit=0
+---- vt:src/test/clubManagerNoSack.test.tsx exit=0
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+
+MUT m5 NOT CAUGHT (all green): tsc=0 vt:src/test/clubManagerNoSack.test.tsx=0
