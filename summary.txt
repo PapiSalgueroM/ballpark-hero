@@ -1,0 +1,6 @@
+retire exit=0 26s | simCmRetire: all 18 checks passed (record, oldsave, pens, base, retire, dashes)
+simClubManagerSaveSize exit=0 50s | simClubManagerSaveSize: all sections green
+tsc exit=0 72s | 
+c-uncapped exit=1 68s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+vitest-cm exit=0 105s |    Duration  104.04s (transform 8.25s, setup 2.61s, collect 29.66s, tests 194.06s, environment 19.11s, prepare 4.34s)
+decisionRegression1081 exit=1 122s | Node.js v24.21.0
