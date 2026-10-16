@@ -1,0 +1,4 @@
+[fate] 172 season ends: up 42, down 22, escape 4, none 104; 16 finishes at exactly the count plus one (the cases fatecount needs)
+FAIL [fate] the summary fate is the move the rollover really made, on every season end (64; first West Ham now seed 0 season 1: 1 of 24 in championship, summary down, the rollover up)
+ok   [fate] the season record carries the same fate as the summary
+control fateflip FIRED: 1 of 2 checks red

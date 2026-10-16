@@ -1,0 +1,4 @@
+[fate] 332 season ends: up 79, down 37, escape 17, none 199; 26 finishes at exactly the count plus one (the cases fatecount needs)
+FAIL [fate] the summary fate is the move the rollover really made, on every season end (26; first Wolves now seed 0 season 2: 4 of 24 in championship, summary up, the rollover null)
+ok   [fate] the season record carries the same fate as the summary
+control fatecount FIRED: 1 of 2 checks red

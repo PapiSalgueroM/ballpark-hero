@@ -1,0 +1,2 @@
+FAIL [legacy] 44 careers on the old rules (matchRules 'base' on both trees): every save byte and every draw equal to CM_BOARD_BASE (5 differ; first West Ham now seed 0 stay: head e91c9d2d18b1b657 116420 draws, base 850732a685e3f6b1 116420 draws (season 3 week 14 sacked))
+control legacyleak FIRED: 1 of 1 checks red

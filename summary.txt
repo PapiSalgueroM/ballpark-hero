@@ -1,0 +1,11 @@
+c-fateflip exit=1 127s | control fateflip FIRED: 1 of 2 checks red
+c-nofate exit=1 197s | control nofate FIRED: 3 of 6 checks red
+c-statues exit=1 261s | control statues FIRED: 1 of 6 checks red
+simBoard exit=0 4s | ALL BOARD CHECKS PASSED
+simBoardObjectives exit=0 0s | simBoardObjectives: green. Every board talks like a board.
+simPromotion exit=0 2s | simPromotion: all green
+simManagerCustomPromotion exit=0 5s | PASS all five actual save/load summers: identical outcomes and RNG draws; source bytes held
+c-legacyleak exit=1 104s | control legacyleak FIRED: 1 of 1 checks red
+c-fatecount exit=1 252s | control fatecount FIRED: 1 of 2 checks red
+simClubManagerScore exit=0 89s | ALL SEASON SCORE CHECKS PASSED
+simPress exit=0 1649s | ALL PRESS AND TEAM TALK CHECKS PASSED
