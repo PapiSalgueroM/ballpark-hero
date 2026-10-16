@@ -1,0 +1,20 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-world: node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000
+simWorldUcl: node scripts/simWorldUcl.mjs
+ctl-onesource: WORLD_UCL_CONTROL=onesource node scripts/simWorldUcl.mjs
+ctl-wiki: WORLD_UCL_CONTROL=wiki node scripts/simWorldUcl.mjs
+ctl-thinused: WORLD_UCL_CONTROL=thinused node scripts/simWorldUcl.mjs
+ctl-figure: WORLD_UCL_CONTROL=figure node scripts/simWorldUcl.mjs
+ctl-receipt: WORLD_UCL_CONTROL=receipt node scripts/simWorldUcl.mjs
+ctl-cover: WORLD_UCL_CONTROL=cover node scripts/simWorldUcl.mjs
+ctl-const: WORLD_UCL_CONTROL=const node scripts/simWorldUcl.mjs
+ctl-partial: WORLD_UCL_CONTROL=partial node scripts/simWorldUcl.mjs
+ctl-ban: WORLD_UCL_CONTROL=ban node scripts/simWorldUcl.mjs
+ctl-order: WORLD_UCL_CONTROL=order node scripts/simWorldUcl.mjs
+golden-base: node scripts/recordWorldTieGolden1347.mjs --out /tmp/gbase.json && cmp /tmp/gbase.json scripts/data/worldTieGolden1347.json && echo GOLDEN-BASE-SAME
+golden-check-base: node scripts/recordWorldTieGolden1347.mjs --ref d4f2c6f6 --check
+golden-check-head: node scripts/recordWorldTieGolden1347.mjs --ref HEAD --check
+golden-check-ctl: node -e "const f=require('fs');const g=JSON.parse(f.readFileSync('scripts/data/worldTieGolden1347.json','utf8'));g.cases[0].coins.push(0.5);f.writeFileSync('/tmp/gbad.json',JSON.stringify(g))" && node scripts/recordWorldTieGolden1347.mjs --ref d4f2c6f6 --check --against /tmp/gbad.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
