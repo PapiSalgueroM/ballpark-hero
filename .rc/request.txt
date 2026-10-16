@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+basebuild: git worktree add -f .base origin/main > /dev/null 2>&1; cd .base && git log --oneline -1 && ../node_modules/.bin/vite build --outDir ../dist-base > /tmp/bb.log 2>&1; echo "base build=$?"; ls ../dist-base/assets | wc -l
+walk: node .rc/x/review-run-walk.mjs
