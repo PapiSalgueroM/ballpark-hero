@@ -52,6 +52,15 @@
  *      career with three deals of mine at its start: a release, a buy and a sale through acceptBid), the same nine
  *      clubs, seeds 0 to 4, two seasons with their January windows, a save and a reload after every window,
  *      deal and rollover, against BASE: every state, saved byte and Math.random draw equal.
+ *   7. my deals with the recording on (the critic's correction 10): seeded careers of the three worlds (seeds 1 to 3)
+ *      release, buy and sell (acceptBid) at the start and again a season later, on BASE and on the head; each deal must
+ *      leave exactly one ledger record with the right owner and status, and the head may not leave more deals without
+ *      one than BASE (an AI record sharing a name and birth year with a keyless man of mine would be such a refusal).
+ *   8. the bridge (the brief's decision 7, the critic's correction 6): seeded careers of the three worlds (seeds 0 to 2),
+ *      two seasons with their January windows, saved and reloaded after every window and rollover: the head with
+ *      scripts/lib/cmNoAiMoves1344.mjs (four anchors: the window's record line, recordAiDeals' loop, the join's
+ *      ledger and its gone names) equals BASE in every saved string, draw and the last state; the head without it
+ *      differs on at least one career (asserted, and printed: how many and from which save).
  *   9. shape (only when asked): the world's shape over fifteen seasons at the 2026-27 trio, BASE against the head,
  *      per tier (each league's top five and bottom five by the bake's year 0 XI, the clubs that sold and the clubs
  *      that bought in an AI deal line): the XI average, the roster length minus the projection's slot count and the
@@ -74,7 +83,7 @@
  *   section 9: the table is in the round's notes, docs/audits/ROUND-1344-NOTES.md; the January entry took 37.8 ms on
  *     the base and about 255 ms with the probe (recorded deal by deal), which is why ruling 4 packs once a window.
  *
- * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,2,3,4,5,6,12), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per
+ * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,2,3,4,5,6,7,8,12), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per
  * section), CM_WORLD_MOVES_ERAS (default now,era2015,era2005), CM_WORLD_MOVES_BASE (default the commit the branch
  * started from), CM_WORLD_MOVES_SHAPE_ARMS (default base,head), CM_WORLD_MOVES_SEASONS (section 9, default 15),
  * CM_WORLD_MOVES_OUT (section 9's JSON folder, default $RC_OUT or the temp folder).
@@ -112,6 +121,7 @@ import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { withoutAiMoves, BRIDGE_FILES, bridgeAnchorCounts } from './lib/cmNoAiMoves1344.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENGINE = 'src/lib/clubManager.ts';
@@ -133,7 +143,7 @@ const COMBINE = process.argv[2] === '--combine';   // handled at the end of the 
 
 /* The commit this branch started from (origin/main at the claim, Release BG live; src equal to bd3b6244). */
 const BASE = process.env.CM_WORLD_MOVES_BASE || 'd4f2c6f688d656205722ba52bbdb33f03490966a';
-const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 2, 3, 4, 5, 6, 12]));
+const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 2, 3, 4, 5, 6, 7, 8, 12]));
 const ERAS = (process.env.CM_WORLD_MOVES_ERAS || 'now,era2015,era2005').split(',');
 if (process.env.CM_WORLD_MOVES_HEAD) cannot('CM_WORLD_MOVES_HEAD is gone: the step 1 probe was removed at step 2 (the head records the deals itself)');
 const CONTROL = process.env.CM_WORLD_MOVES_CONTROL || '';
@@ -195,8 +205,9 @@ function editOf(edits, name) {
 }
 /** One engine bundled once; each career runs in a fresh context, so module state never leaks between careers.
     `base` reads every source file from BASE; `edit` rewrites the engine file. */
-async function engine(label, { base = false, edit = null, editFile = ENGINE } = {}) {
+async function engine(label, { base = false, edit = null, editFile = ENGINE, bridge = false } = {}) {
   let edited = false;
+  const bridged = new Set();
   const plugin = {
     name: `world-moves-${label}`,
     setup(b) {
@@ -207,6 +218,7 @@ async function engine(label, { base = false, edit = null, editFile = ENGINE } = 
           ? lf(execFileSync('git', ['show', `${BASE}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 26 }))
           : lf(fs.readFileSync(args.path, 'utf8'));
         if (edit && rel === editFile) { text = edit(text); edited = true; }
+        if (bridge) { const out = withoutAiMoves(text, rel); if (out !== text) { text = out; bridged.add(rel); } }
         return { contents: text, loader: path.extname(args.path).slice(1), resolveDir: path.dirname(args.path) };
       });
     },
@@ -215,6 +227,7 @@ async function engine(label, { base = false, edit = null, editFile = ENGINE } = 
   const out = await esbuild.build({ stdin: { contents: entry, resolveDir: ROOT, sourcefile: `world-moves-${label}.ts`, loader: 'ts' },
     bundle: true, write: false, format: 'cjs', platform: 'node', target: 'node20', plugins: [plugin], logLevel: 'silent' });
   if (edit && !edited) cannot(`the ${label} engine was to be edited and ${editFile} was never loaded`);
+  if (bridge && bridged.size !== BRIDGE_FILES.length) cannot(`the ${label} engine was to carry the bridge and only ${[...bridged].join(', ') || 'no file'} took it`);
   const script = new vm.Script(out.outputFiles[0].text, { filename: `world-moves-${label}.cjs` });
   return {
     label,
@@ -595,13 +608,13 @@ async function legacyCareer(E, era, club, seed, kind) {
       saved.push(sha(M.store.get(M.cm.SAVE_KEY) ?? ''));
       return M.cm.loadCareer() ?? s;
     };
-    let s = kind !== 'stripped' ? M.cm.startCareer(club, era, undefined, undefined, LEGACY_WORLD) : M.cm.startCareer(club, era);
+    let s = kind === 'seeded' || kind === 'stripped' ? M.cm.startCareer(club, era) : M.cm.startCareer(club, era, undefined, undefined, LEGACY_WORLD);
     if (kind === 'stripped') {
       s = JSON.parse(JSON.stringify(s));
       delete s.worldSeed; delete s.worldRoster;
       for (const p of s.squad) { delete p.worldRosterKey; delete p.worldRosterSince; }
     }
-    if (M.cm.worldSeedOf(s) !== undefined || s.worldRoster !== undefined) return { error: 'the career still carries a seed or a ledger' };
+    if (kind !== 'seeded' && (M.cm.worldSeedOf(s) !== undefined || s.worldRoster !== undefined)) return { error: 'the career still carries a seed or a ledger' };
     s = keepSaved(s);
     let dealt = 0;
     if (kind === 'deals') {
@@ -656,6 +669,66 @@ async function legacySection(B, H) {
     if (first >= 0) fail(6, `${tag}: saved string ${first + 1} of ${b.saved.length} differs from BASE's`);
     if (b.draws !== h.draws || b.drawHash !== h.drawHash) fail(6, `${tag}: Math.random draws ${h.draws} against BASE's ${b.draws} (values ${h.drawHash === b.drawHash ? 'equal' : 'differ'})`);
     if (b.state !== h.state) fail(6, `${tag}: the last state differs from BASE's`);
+  }
+}
+
+/* ---------- section 7, my deals with the recording on ---------- */
+const s7 = { base: { deals: 0, refused: 0 }, head: { deals: 0, refused: 0 } };
+/** A seeded career's deals of mine (a release, a buy, a sale through acceptBid) at its start and again a season later,
+    each held to exactly one ledger record with the right owner and status. */
+async function mineCareer(E, arm, era, club, seed) {
+  const M = await E.fresh(), keep = Math.random, row = s7[arm];
+  Math.random = stream(mix('mine', era, club, seed));
+  const holds = (st, name, owner, status) => {
+    row.deals += 1;
+    const recs = (M.ledger.readWorldRoster(st)?.records ?? []).filter(r => r.player.name === name && r.status === status && r.owner === owner);
+    if (recs.length !== 1) row.refused += 1;
+  };
+  const dealsOf = s => {
+    s = { ...s, budget: 9999, wageCap: 9999, transferWindow: 'summer' };
+    const outfield = cur => cur.squad.filter(p => !p.onLoan && p.position !== 'GK');
+    const low = [...outfield(s)].sort((a, b) => a.rating - b.rating || a.id.localeCompare(b.id)).find(p => M.cm.releaseBlock(s, p) === null);
+    const released = low && M.cm.releasePlayer(s, low.id);
+    if (released) { s = released; holds(s, low.name, null, 'released'); }
+    const mine = new Set(s.squad.map(p => p.name));
+    const mp = M.cm.buildMarket(s).find(p => p.position !== 'GK' && p.age < 29 && p.rating < 80 && !mine.has(p.name));
+    const bought = mp && M.cm.buyPlayer(s, mp);
+    if (bought) { s = bought; holds(s, mp.name, s.clubName, 'owned'); }
+    const man = [...outfield(s)].sort((a, b) => b.rating - a.rating || a.id.localeCompare(b.id))[1];
+    const buyer = M.cm.buildMarket(s).find(p => p.club !== s.clubName)?.club;
+    const bid = man && buyer ? { playerId: man.id, playerName: man.name, club: buyer, offer: 30, status: 'open' } : null;
+    const sold = bid && M.cm.acceptBid({ ...s, incomingBids: [...(s.incomingBids ?? []), bid] }, man.id);
+    if (sold) { s = sold; holds(s, man.name, buyer, 'owned'); }
+    return s;
+  };
+  try {
+    let s = dealsOf(M.cm.startCareer(club, era));
+    for (let guard = 0; guard < 400; guard += 1) {
+      if (s.boardConfidence < 35) s = { ...s, boardConfidence: 55 };
+      const r = M.cm.playNextEntry(s, OPT);
+      s = r.state;
+      if (r.kind === 'seasonOver' || s.sacked) break;
+    }
+    if (!s.sacked) dealsOf(M.cm.startNextSeason(M.cm.finishSeason(s).state));
+  } finally { Math.random = keep; }
+}
+
+/* ---------- section 8, the bridge ---------- */
+const s8 = { careers: 0, equal: 0, differ: 0, first: {} };
+async function bridgeSection(B, HB, H) {
+  const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [0, 1, 2]);
+  for (const era of ERAS) for (const club of CLUBS[era]) for (const seed of seeds) {
+    const tag = `${club} (${era}, seed ${seed}, seeded)`;
+    const [b, hb, h] = [await legacyCareer(B, era, club, seed, 'seeded'), await legacyCareer(HB, era, club, seed, 'seeded'), await legacyCareer(H, era, club, seed, 'seeded')];
+    if (b.error || hb.error || h.error) cannot(`section 8, ${tag}: ${b.error ?? hb.error ?? h.error}`);
+    s8.careers += 1;
+    const firstB = b.saved.findIndex((x, i) => x !== hb.saved[i]);
+    if (b.saved.length !== hb.saved.length || firstB >= 0) fail(8, `${tag}: with the bridge, saved string ${firstB + 1} of ${b.saved.length} differs from BASE's`);
+    if (b.draws !== hb.draws || b.drawHash !== hb.drawHash) fail(8, `${tag}: with the bridge, ${hb.draws} draws against BASE's ${b.draws}`);
+    if (b.state !== hb.state) fail(8, `${tag}: with the bridge, the last state differs from BASE's`);
+    const firstH = b.saved.findIndex((x, i) => x !== h.saved[i]);
+    if (firstH >= 0 || b.state !== h.state) { s8.differ += 1; const at = firstH >= 0 ? `save ${firstH + 1}` : 'the last state'; s8.first[at] = (s8.first[at] ?? 0) + 1; }
+    else s8.equal += 1;
   }
 }
 
@@ -892,6 +965,10 @@ if (COMBINE) process.exit(combine(process.argv.slice(3)));
 const treeSource = lf(fs.readFileSync(path.join(ROOT, ENGINE), 'utf8'));
 if (SECTIONS.has(0)) {
   console.log('0) anchors: every edit this harness can make stands exactly once in the source it is made to');
+  for (const [label, n] of bridgeAnchorCounts(file => fs.readFileSync(path.join(ROOT, file), 'utf8'))) {
+    console.log(`   bridge "${label}": ${n}`);
+    if (n !== 1) fail(0, `the bridge's anchor "${label}" stands ${n} times`);
+  }
   for (const [name, c] of Object.entries(CONTROLS)) for (const [from] of c.edits) {
     const n = (c.file ? lf(fs.readFileSync(path.join(ROOT, c.file), 'utf8')) : treeSource).split(from).length - 1;
     console.log(`   control ${name}: ${n}`);
@@ -899,10 +976,11 @@ if (SECTIONS.has(0)) {
   }
 }
 const headEdits = [CONTROL ? editOf(CONTROLS[CONTROL].edits, CONTROL) : null].filter(Boolean);
-const needBase = SECTIONS.has(5) || SECTIONS.has(6) || SECTIONS.has(12) || SECTIONS.has(9) && (process.env.CM_WORLD_MOVES_SHAPE_ARMS || 'base,head').split(',').includes('base');
+const needBase = SECTIONS.has(5) || SECTIONS.has(7) || SECTIONS.has(8) || SECTIONS.has(6) || SECTIONS.has(12) || SECTIONS.has(9) && (process.env.CM_WORLD_MOVES_SHAPE_ARMS || 'base,head').split(',').includes('base');
 const H = await engine('head', { edit: headEdits.length ? text => headEdits.reduce((t, f) => f(t), text) : null,
   editFile: CONTROL ? CONTROLS[CONTROL].file ?? ENGINE : ENGINE });
 const B = needBase ? await engine('base', { base: true }) : null;
+const HB = SECTIONS.has(8) ? await engine('bridge', { bridge: true }) : null;
 if (made.size) for (const [what, n] of made) console.log(`   control edit made ${n} time(s): ${what}`);
 
 if (SECTIONS.has(1) || SECTIONS.has(4)) {
@@ -957,6 +1035,21 @@ if (SECTIONS.has(12)) {
   console.log(`12) the window entry: ${CLUBS.now.join(', ')} to the January of season ${WINDOW_SEASON}, ${WINDOW_TRIALS} trials an engine, the head's median at most 3 x BASE's + 5 ms`);
   await timeSection(B, H);
   if (!s12Careers) cannot('section 12: no career was timed');
+}
+if (SECTIONS.has(7)) {
+  const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [1, 2, 3]);
+  console.log(`7) my deals with the recording on: a release, a buy and a sale at the start and a season later, on BASE and on the head, seeds ${seeds.join(',')}`);
+  for (const era of ERAS) for (const club of CLUBS[era]) for (const seed of seeds) { await mineCareer(B, 'base', era, club, seed); await mineCareer(H, 'head', era, club, seed); }
+  console.log(`   BASE: ${s7.base.deals} deals of mine, ${s7.base.refused} without exactly one record; the head: ${s7.head.deals} deals, ${s7.head.refused} without exactly one record`);
+  if (s7.head.refused > s7.base.refused) fail(7, `the head left ${s7.head.refused} deals of mine without exactly one ledger record, BASE ${s7.base.refused}`);
+  if (!s7.head.deals) cannot('section 7: no deal of mine was made');
+}
+if (SECTIONS.has(8)) {
+  console.log('8) the bridge: seeded careers, BASE against the head with scripts/lib/cmNoAiMoves1344.mjs, every saved string and draw; and without it');
+  await bridgeSection(B, HB, H);
+  console.log(`   ${s8.careers} careers: with the bridge every one checked against BASE; without it ${s8.differ} differ (first at ${Object.entries(s8.first).map(([k, v]) => `${k} x${v}`).join(', ') || 'none'}) and ${s8.equal} do not`);
+  if (!s8.careers) cannot('section 8: no career was played');
+  if (!s8.differ) fail(8, 'without the bridge no seeded career differs from BASE, so the fleet does not measure the recording');
 }
 if (SECTIONS.has(9)) {
   console.log(`9) shape: ${SHAPE_SEASONS} seasons at ${CLUBS.now.join(', ')} (the JSON goes to --combine)`);
