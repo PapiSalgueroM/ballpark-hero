@@ -1,0 +1,14 @@
+adoptHarness: sections 2 (protected) and 3 (join) now start adopted careers
+mut joinCarry: applied to src/lib/clubManagerCalendar.ts
+3) join: seeded 2026-27 careers take a job mid season through joinClubNow, before and after January and in season two, seeds 1,2,3
+  FAIL section 3: Real Madrid (now, seed 1, before January): the joined log does not open with the departed career's 5 deal lines of this season between two other clubs
+  FAIL section 3: Real Madrid (now, seed 1, before January): the joined ledger holds Franco Mastantuono, in no deal line of the run in nor the departed ledger
+  FAIL section 3: Real Madrid (now, seed 1, before January): the joined ledger holds Alejandro Balde, in no deal line of the run in nor the departed ledger
+  FAIL section 3: Real Madrid (now, seed 1, before January): the joined ledger holds Rúben Dias, in no deal line of the run in nor the departed ledger
+  FAIL section 3: Real Madrid (now, seed 1, before January): the joined ledger holds Khvicha Kvaratskhelia, in no deal line of the run in nor the departed ledger
+  FAIL section 3: Real Madrid (now, seed 1, before January): the joined ledger holds Josko Gvardiol, in no deal line of the run in nor the departed ledger
+  FAIL section 3: Real Madrid (now, seed 1, before January): Gianluigi Donnarumma, bought by another club this season before the move, is buyable again after it
+  FAIL section 3: Real Madrid (now, seed 1, before January): Moisés Caicedo, bought by another club this season before the move, is buyable again after it
+   27 moves (0 could not be set up), 152 departed records kept, 14 deal lines of the run in placed, 163 gone names carried over with 163 deal lines, 148 payloads compared, 200 door presses after the move (71 men the ledger no longer holds at one club, 0 behind a namesake, counted)
+  section 3: 557 more failures not shown
+simCmWorldMoves: RED, sections 3 (565)

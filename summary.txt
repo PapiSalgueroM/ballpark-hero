@@ -1,0 +1,4 @@
+p-healthy exit=0 27s | simCmWorldMoves: green, sections 2, 3 held
+p-rival exit=1 13s | simCmWorldMoves: RED, sections 2 (168)
+p-join exit=1 14s | simCmWorldMoves: RED, sections 3 (565)
+p-seeded exit=0 29s | simCmWorldMoves: green, sections 2, 3 held

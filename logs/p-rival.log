@@ -1,0 +1,15 @@
+adoptHarness: sections 2 (protected) and 3 (join) now start adopted careers
+mut rivalClose: applied to src/lib/clubManager.ts
+2) negotiation: a hijack and a walk away on PR269's vectors at each seeded career's opening window, seeds 1,2,3,4,5
+   hijack: 45 of 45 at the rival; walk away: 45 of 45; 0 careers where no bidding war could be set up on the vectors
+  FAIL section 2: Real Madrid (now, seed 1, a man I left behind) protected-hijack: the talks went hijacked (the rival closed on Abdoul Koné)
+  FAIL section 2: Real Madrid (now, seed 1, a man I left behind) protected-hijack: a news line says Nürnberg took Abdoul Koné from Real Madrid
+  FAIL section 2: Real Madrid (now, seed 1, a man I left behind) protected-hijack: Abdoul Koné went on goneNames
+  FAIL section 2: Real Madrid (now, seed 1, a man I left behind) protected-walk: a news line says Nürnberg took Abdoul Koné from Real Madrid
+  FAIL section 2: Real Madrid (now, seed 1, a man I left behind) protected-walk: Abdoul Koné went on goneNames
+  FAIL section 2: Real Madrid (now, seed 1, a man I left behind) protected-walk: a headline says Nürnberg signed Abdoul Koné
+  FAIL section 2: Real Madrid (now, seed 2, a man I sold) protected-hijack: the talks went hijacked (the rival closed on Jude Bellingham)
+  FAIL section 2: Real Madrid (now, seed 2, a man I sold) protected-hijack: a news line says Heidenheim took Jude Bellingham from Manchester City
+   protected by ruling 3: a man I sold, 0 of 13 wars held (15 careers tried, 0 not protected); a man I left behind, 0 of 15 (15 tried, 0 not protected)
+  section 2: 160 more failures not shown
+simCmWorldMoves: RED, sections 2 (168)
