@@ -25,7 +25,7 @@ const preservation = ['life stories preservation: legacy missing flags keep the 
   'life stories preservation: five actual acquisition and followup meanings supply held browser fixtures'];
 const sourceFiles = [PANEL, TEST, 'src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerLife.ts', 'src/lib/soccerCareerRealismA.ts',
   'src/lib/soccerCareerSave.ts', 'src/lib/soccerPhone.ts', 'src/lib/soccerMoney.ts', 'src/pages/SoccerCareer.tsx',
-  'scripts/simPhonePanelLifeStories.mjs', '.github/workflows/career-life-stories.yml',
+  'scripts/simPhonePanelLifeStories.mjs', 'scripts/playPhonePanelLifeStories.mjs', '.github/workflows/career-life-stories.yml',
   'package.json', 'package-lock.json', 'bun.lock'];
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const git = args => { const run = spawnSync('git', args, { cwd: ROOT, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 }); assert.equal(run.status, 0); return run.stdout; };

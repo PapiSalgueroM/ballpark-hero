@@ -68,6 +68,7 @@ jobs:
       - name: Actual application type gate
         run: |
           set -euo pipefail
+          node --check scripts/playPhonePanelLifeStories.mjs
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$LIFE_STORIES_OUT/types.log"
       - name: Exact real-component causal baseline or fixed original and restored arms
         run: |
