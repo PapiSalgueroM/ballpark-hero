@@ -1,0 +1,7 @@
+owngoals: node scripts/simCmOwnGoals.mjs
+subs: node scripts/simCmSubs.mjs
+era2005: node scripts/simEra2005.mjs
+era2020: node scripts/simEra2020.mjs
+custompromo: node scripts/simManagerCustomPromotion.mjs
+newleagues: node scripts/simClubManagerNewLeagues.mjs
+realfixtures: node scripts/simCmRealFixtures.mjs

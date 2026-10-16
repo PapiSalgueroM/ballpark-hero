@@ -1,0 +1,7 @@
+era2005 exit=0 21s | simEra2005: green. 2005 is real, sealed, and plays like 2005.
+era2020 exit=0 43s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+subs exit=0 72s | simCmSubs GREEN: 59 of 59 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press)
+custompromo exit=0 8s | PASS all five actual save/load summers: identical outcomes and RNG draws; source bytes held
+realfixtures exit=0 6s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+owngoals exit=0 97s | simCmOwnGoals: PASS, 8 sections green
+newleagues exit=0 141s | simClubManagerNewLeagues: all checks passed
