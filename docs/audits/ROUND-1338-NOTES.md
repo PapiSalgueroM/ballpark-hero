@@ -59,3 +59,15 @@ characters `;return new Promise(()=>{})`.
   the tab's second failure, blocked storage): owed to the other lane, give the open mount a CentreMountBoundary.
 - .github/workflows/soccer-career-save-writer.yml line 46 pins the OLD CareerStory line byte for byte; it fires only on
   a push to codex/soccer-career-save-size, so it goes red the next time that branch is pushed with main merged.
+
+## Measured on the final source (56b049cf, merged with main ae14cf97)
+
+- Runner results: r1338-s5a, r1338-s5b, r1338-s5c, r1338-s5d (head), r1338-s5base (base ae14cf97). All green but the
+  three live database fences (red on base too, the runner blocks the database).
+- Entry chunk: 49 characters over base before gzip (22 the page flag, 27 the wait); the SoccerCareer chunk 7 shorter.
+- Weight rows at the tenth, base then head: four move by 0.1K (/stadium-tycoon 302.0 to 302.1, /wonderkid-factory
+  275.8 to 275.9, /nfl-my-career 486.3 to 486.4, /transfer-path 377.7 to 377.8); /, /club-manager and /soccer-career
+  (832.4K of 834K) unchanged; none over budget.
+- Saved pages /soccer-career, /club-manager and /footle: identical on base and head.
+- playChunkReloadWait: 8 of 8 rows green, waits of 2502 to 2554 ms against a 2500 ms hold; the stock control fired on
+  8 of 8. playSoccerCareerBuildLazy: 3 of 3 green on head and on base, "reading 'default'" in none of the six logs.
