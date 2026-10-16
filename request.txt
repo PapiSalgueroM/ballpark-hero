@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+srclib: test -z "$(git diff --name-only e814c2de...HEAD -- src/lib)" && echo "src/lib untouched" || { git diff --name-only e814c2de...HEAD -- src/lib; exit 1; }
+vitest: node_modules/.bin/vitest run src/test/soccerScreenTruths.test.tsx src/test/seasonCentreWords.test.tsx src/test/soccerSeasonCompetitions.test.tsx src/test/seasonCentreSlots.test.tsx src/test/seasonReplays.test.tsx src/test/seasonCentreOwnGoals.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+sims: ONLY=simSeasonCentreNeutral,simSeasonCentreMotion,simSoccerCompetitionNavigation,simSoccerOpponentLabels,simAccessibility,simHarnessAnchors,simNoRivalNames node scripts/runAllSims.mjs --browser 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+playSeasonCentre: PORT=4602 ENGINES=chromium node scripts/playSeasonCentre.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+playSeasonMoments: PORT=4604 ENGINES=chromium node scripts/playSeasonMoments.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+playCareerLeagueWorld: PORT=4605 ENGINES=chromium node scripts/playCareerLeagueWorld.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}

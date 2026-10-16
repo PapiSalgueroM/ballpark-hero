@@ -1,0 +1,17 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 6 node harnesses
+  PASS  simAccessibility.mjs            0.7s
+  PASS  simHarnessAnchors.mjs         229.5s
+  PASS  simNoRivalNames.mjs            37.2s
+  PASS  simSeasonCentreMotion.mjs      38.2s
+  PASS  simSeasonCentreNeutral.mjs     58.9s
+  PASS  simSoccerCompetitionNavigation.mjs   70.7s
+
+Serving dist on 4173 for 1 browser harnesses
+  FAIL  simSoccerOpponentLabels.mjs     0.8s
+
+----- simSoccerOpponentLabels.mjs (FAIL) -----
+Error: Build failed with 1 error:
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+
+1 harness not green.

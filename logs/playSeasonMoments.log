@@ -1,0 +1,30 @@
+ok   7. D phone reduced gloves: after a reload the taken moment is not offered again ("")
+ok   7. D phone reduced gloves: the reloaded season shows the decided 0-1 and banks nothing twice
+ok   1. E phone reduced gloves: the page loads no training ground and no drill board (48 scripts)
+ok   2. E phone reduced gloves: the kick off card lists the moments ("🎯 3 moments are yours to play this season: matchdays 2, 8 and 31.")
+ok   8. E phone reduced gloves: both buttons on the offer are full touch targets (44 and 44 pixels tall, 44 wanted)
+ok   2. E phone reduced gloves: the offer says how the board is played before the go is used, and holds the focus ("How it plays: Glove Save, one shot. Hold and drag ", on DIV)
+ok   2. E phone reduced gloves: matchday 2 stops for a call (YOUR CALL on matchday 2)
+ok   2. E phone reduced gloves: the clock holds a beat before minute 56 (55) and the bar steps aside
+ok   2. E phone reduced gloves: reading the offer wrote nothing
+ok   3. E phone reduced gloves: the attempt is used before any input ([[2,0,-1]])
+ok   1. E phone reduced gloves: the board's code arrived after the press
+ok   8. E phone reduced gloves: the board fits (12 to 378 of 390, page 390 wide) and the page did not move (545 then 545)
+ok   10. E phone reduced gloves: with the board open the focus is inside the Season Centre (on DIV)
+ok   10. E phone reduced gloves: no Fixtures button while a moment is on the stage (offer false, board false)
+ok   4. E phone reduced gloves: the save holds the moment's entry once the board has reported ([2,0,2,1.2,1.1348,1.9296])
+ok   10. E phone reduced gloves: on the verdict card there is still no Fixtures button and the focus is inside (false, on BUTTON)
+ok   4. E phone reduced gloves: the verdict card shows the saved result (made, 2 stars, entry [2,0,2,1.2,1.1348,1.9296])
+ok   4. E phone reduced gloves: the saved entry replays in node to the same result (2 stars, "Got down to it. Saved.")
+ok   8. E phone reduced gloves: reduced motion, nothing animating on the verdict (0)
+ok   5. E phone reduced gloves: the card says what it means for the season ("It counts, and the match changes from here. The return game ")
+ok   5. E phone reduced gloves: full time reads 0-1, the decided match is 0-1
+ok   10. E phone reduced gloves: the Fixtures button is back once the moment is done
+ok   11. E phone reduced gloves: stepping out early banks nothing and the way back in is still there (phase season_summary, banked undefined, button true)
+ok   11. E phone reduced gloves: Continue on the summary banks the season's stars as the pure function does (phase ballon_dor, ledger {"v":1,"key":"Moment 3|Arsenal|2013|33|0|0|7|centre","m":[[2,0,2,1.2,1.1348,1.9296]],"bank)
+ok   11. E phone reduced gloves: the bank's line is in his events, against the 3 moments on offer ("🎯 Season Centre moments: 2 of 9 stars. No gains this time")
+ok   9. no label on the offer, the board or the verdict starts with a walker action ([])
+ok   no page error on any walk ()
+outcomes: A desktop wallshot: missed with 0 stars (call, the record had a make); B desktop reduced tackle: left on the board; C phone throughball: made with 1 stars (call, the record had a miss); D phone reduced gloves: made with 2 stars (call, the record had a miss); E phone reduced gloves: made with 2 stars (call, the record had a miss); E phone reduced gloves: left early, banked at Continue
+cup nights pressed through on the way to a moment, over all walks: 7
+playSeasonMoments: 117 checks, 0 failed

@@ -1,0 +1,8 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+srclib exit=0 0s | src/lib untouched
+vitest exit=0 20s |    Duration  18.85s (transform 8.58s, setup 817ms, collect 23.64s, tests 12.47s, environment 4.60s, prepare 1.08s)
+playSeasonCentre exit=0 134s | playSeasonCentre: 41 checks, 0 failed
+tsc exit=0 178s | 
+playCareerLeagueWorld exit=0 21s | playCareerLeagueWorld: 39 checks, 0 failed
+playSeasonMoments exit=0 58s | playSeasonMoments: 117 checks, 0 failed
+sims exit=1 231s | 1 harness not green.
