@@ -134,7 +134,7 @@ The groups are the drills' (careerDrills.ts drillForPosition): GK keeper; CB, LB
 midfielder; LW, RW, ST forward. The doubtful pairs, one line each:
 - 706 for LB, RB, CDM: worded "wants every defender to know it inside out" (not "at the heart of it"), true for all four.
 - 707 for CDM: a holding midfielder on the ball under a press is the card; true.
-- 708 for CDM: "a quick winger cannot get away from you once he is goal side", a holding midfielder tracks runners too; true enough, no position named.
+- 708 for CDM: "more pace in your recovery runs, so a quick winger who gets in behind you does not stay there", a holding midfielder tracks runners too; true enough, no position named.
 - 710 for LB, RB, CDM: "the defensive walkthroughs", not "the back line"; true for all four.
 - 712 for CAM and CM: set piece delivery; true.
 - 715 for CAM: defensive shape work for an attacking midfielder is the point of the card; true.
@@ -190,14 +190,16 @@ momentsRoom allowed just before it. The pressure control (every deck move times 
 
 ### Section 6, the share of summers a deck card was dealt (correction 15, for Round 1504's words)
 
-Keepers 89.2, defenders 93.0, midfielders 94.7, forwards 92.6 percent (rc r1334-s3b, 400 careers of 18 seasons). Over
-half for every group, so "most summers" is true; "every summer" is not.
+Keepers 90.3, defenders 90.7, midfielders 94.3, forwards 92.9 percent (rc r1334-f1 on 82088d35, the pack as it ships,
+400 careers of 18 seasons; the first reading, 89.2, 93.0, 94.7 and 92.6 on rc r1334-s3b, was the pack before ruling
+2(j)). Over half for every group, so "most summers" is true; "every summer" is not. Round 1504 quotes these.
 
 ### The drill rule owed (correction 6(c))
 
-Over the loaded fleet (section 5): 1,163 deck training answers, 0 landed less than they printed (the card is answered
-first), and with a full drill banked after each, 172 (14.8 percent) would pass the ceiling only because of the deck's
-boost: careerDrills.ts applyDrillResult counts its room as drillHeadroom minus momentsPaid and never counts queued
+Over the loaded fleet (section 5, rc r1334-f1 on 82088d35, the pack as it ships): 1,196 deck training answers, 0
+landed less than they printed (the card is answered first), and with a full drill banked after each, 190 (15.9 percent)
+would pass the ceiling only because of the deck's boost (the first reading, 1,163 and 172 or 14.8 percent on rc
+r1334-s3b, was the pack before ruling 2(j)): careerDrills.ts applyDrillResult counts its room as drillHeadroom minus momentsPaid and never counts queued
 boosts. Owed to the drills, not this round's (careerDrills.ts is read only here).
 
 ## Step 5: the final proof (code 82088d35, then ca88eaef for two retargeted controls)
@@ -215,6 +217,89 @@ boosts. Owed to the drills, not this round's (careerDrills.ts is read only here)
 - The weight (r1334-w): no route of sweepWeight's table moves over 0.1K; /soccer-career +61 B at 832.4K. No built chunk
   holds the deck: nothing calls loadSoccerDeck, so Rollup drops the loader and its import; Round 1504 measures the chunk.
 - `git diff --quiet e814c2de -- src/pages src/components src/hooks` exits 0; `git diff --name-only e814c2de` is exactly
-  the files this round owns; the dailies grep lists only Soccer Career's own files.
+  the files this round owns; the dailies grep lists only Soccer Career's own files (both pasted under "Review fixes").
 - Colours (`git grep -c`, summed): bg-blue-600 131 to 133, bg-emerald-600 265 to 267, bg-gray-800 8 to 10, bg-slate-600 0;
   the built CSS 56,553 B gzipped on both sides.
+
+## Review fixes (2026-10-16, after the run and read reviews; the fixer's report is results-g/fix-1334.md)
+
+### The two pastes decision 5 orders (on the fixed head)
+
+`git diff --name-only e814c2de` (30 files, exactly "Files this round owns"):
+
+```
+docs/audits/ROUND-1334-NOTES.md
+scripts/data/eventDeckWords.json
+scripts/lib/careerSoccerDeck1334.mjs
+scripts/qa/careerPressMarketKit.mjs
+scripts/qa/careerTransferBriefKit.mjs
+scripts/qa/derbyHistory1195.mjs
+scripts/qa/seasonHistory1193.mjs
+scripts/qa/soccerAgentReviewKit.mjs
+scripts/qa/soccerFarewellKit.mjs
+scripts/qa/soccerInternationalReturnKit.mjs
+scripts/simCareerAwardsNight.mjs
+scripts/simCareerLeagueFinish.mjs
+scripts/simCareerLeagueSeasons.mjs
+scripts/simCareerProgramme.mjs
+scripts/simCareerSocialBrands.mjs
+scripts/simCareerStoryRole.mjs
+scripts/simCareerTrophyRuns.mjs
+scripts/simEventDeck.mjs
+scripts/simSoccerCareerDevelopment.mjs
+scripts/simSoccerDeck.mjs
+scripts/simSoccerDeckFairness.mjs
+scripts/simSoccerWorldTruth.mjs
+src/data/soccerDeck/index.ts
+src/data/soccerDeck/starter.ts
+src/data/soccerDeck/words.ts
+src/lib/gmInbox.ts
+src/lib/soccerCareerEngine.ts
+src/lib/soccerDeck.test.ts
+src/lib/soccerDeck.ts
+src/lib/soccerDeckGate.ts
+```
+
+`git grep -l soccerCareerEngine -- src/pages src/components src/hooks` (35 files: the page plus 34 under
+src/components/soccer-career, Soccer Career's own files only; the finish's "35 files under src/components/soccer-career"
+miscounted by one):
+
+```
+src/pages/SoccerCareer.tsx
+src/components/soccer-career/ AgentBrief.tsx AgentReviewCard.tsx CareerMentorTile.tsx CareerRecordsSheet.tsx
+  CareerRecordsTile.tsx CareerStory.tsx DrillBoard.tsx FarewellSeasonCard.tsx FirstTouchBoard.tsx InternationalPanel.tsx
+  InternationalReturnCard.tsx MoneyScreens.tsx PhonePanel.tsx PreseasonPlanTile.tsx PressRoom.tsx PressRoomTile.tsx
+  ReducedRoleNote.tsx SeasonAmbitionTile.tsx SeasonCompetitionPanel.tsx SeasonRatings.tsx SeasonResumeChip.tsx
+  SignedSlip.tsx SoccerCareerProgramme.tsx SoccerMomentBoard.tsx SoccerSeasonCentre.tsx SoccerSeasonHistory.tsx
+  SquadSheet.tsx SquadTile.tsx ThroughBallBoard.tsx TrainingPanel.tsx TrophyCabinet.tsx careerMilestones.ts
+  careerMoments.ts useSoccerMoments.tsx
+```
+
+### What the reviews changed (each its own commit)
+
+- The unit test now deals every gated card on its side of each bound and never one step past it: 709 (yellows 7 and
+  6), 710 (age 26 and 25), 714 (goals 4 and 3), 719 (goals 3 and 4 at apps 15, apps 14 at goals 3), 722 (age 31 and
+  30), 724 (intApps 1 and 0), 726 (injuryWeeks 8 and 7), 727 (tier 1 and 2 at age 22, age 23 at tier 1). Eleven
+  mutations, each moving one of those bounds one step or dropping 724's gate, each turn it red (rc r1334-fx1a, line
+  muts: 11 of 11 caught, "1 failed | 27 passed" each). Before it, a data edit making 726's words false shipped green.
+- Card 718 now reads "wants you quicker off the mark when the trigger comes" (Pace, what its option pays) instead of
+  "able to keep it up for ninety minutes" (Stamina, a Physical line). Its frozen words row was recorded again on top of
+  SC_BASE's file by the append mode (rc r1334-fx1b, line words); only soccer/718's text hash moved, so the file is still
+  SC_BASE's plus appended rows.
+- The gate's test seam bumps a load generation, so a load in flight when the seam resets can never write the deck or
+  clear a newer load (unit tested both ways). The game never calls the seam.
+- simSoccerDeck section 3 counts a deal, and a head fleet batch, holding a deck card wherever it sits, so the `last`
+  control no longer prints "dealt no card" lines that are untrue under it; the header and section 8's pastCeiling comment
+  now say what the code does.
+
+### Not changed, for the lead
+
+- The kit's reach check over the soccer pack (section 10) is a coin toss: at the shipped specs it is red at SEED 4 and 28
+  of seeds 1 to 30 (719 never dealt), green at the gate's default SEED 1. The pack has four rare cards (705, 719, 721,
+  727, each about 2 to 8 deals over the kit's 1,000 seasons). Narrowing the goals spec does not cure it (goals 0 to 12:
+  still red at SEED 16; 0 to 15 and 0 to 20 green at 30 seeds but with a least dealt card at 1 or 2 deals), and the specs
+  are the brief's list, so none moved. The cure is a section 10 change (more seasons for a pack with rare cards), which
+  decision 1(f) does not allow here and which Round 1333, rewriting section 10 and the drives, is the place for.
+- The two one line kit edits that are not appends (sections 8 and 10, above) stay: the soccer index line of 1(f) cannot
+  pass the kit without them.
+- Ruling 2(j)'s residue: training still moves legacy +1.66 (BEST) and +1.56 (WORST) against an OFF spread of 1.21.
