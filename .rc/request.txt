@@ -1,0 +1,5 @@
+#!serial
+wm-12: CM_WORLD_MOVES_SECTIONS=12 node scripts/simCmWorldMoves.mjs
+ledgerbound: node scripts/simCmLedgerBound.mjs
+appeal-head: node scripts/simManagerAppealIsolation.mjs
+appeal-oldengine: git show 3a147a7cb4a13e5a931f32eac8b8a7bd65ed10cb:src/lib/clubManager.ts > src/lib/clubManager.ts && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout -- src; exit $s
