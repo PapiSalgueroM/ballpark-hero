@@ -1,0 +1,9 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+flagship exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+playCareerProgramme exit=1 1s | Node.js v24.21.0
+weight exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+awardReveal exit=0 14s | playSoccerCareerAwardReveal: 26 checks, 0 failed
+playSeasonCentre exit=0 124s | playSeasonCentre: 41 checks, 0 failed
+practice1076 exit=0 104s | PASS career practice native: 9 actual panel journeys, 27 effective DOM controls, trusted focus/input, earned banking and unchanged sources.
+potential exit=0 59s | PASS Soccer potential progress browser
+playCareerSquad exit=0 188s | playCareerSquad: 181 checks, 0 failed

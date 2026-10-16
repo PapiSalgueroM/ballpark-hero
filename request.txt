@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wh.log 2>&1; s=$?; grep -E "soccer-career|sweepWeight:" /tmp/wh.log | head -8; tail -2 /tmp/wh.log; exit $s
+flagship: node scripts/simFlagshipWeight.mjs 2>&1 | tail -20; exit ${PIPESTATUS[0]}
+playCareerSquad: PORT=4601 ENGINES=chromium node scripts/playCareerSquad.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+playCareerProgramme: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ENGINES=chromium node scripts/playCareerProgramme.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+playSeasonCentre: PORT=4602 ENGINES=chromium node scripts/playSeasonCentre.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+awardReveal: PORT=4603 ENGINES=chromium node scripts/playSoccerCareerAwardReveal.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+practice1076: node scripts/qa/careerPractice1076.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/careerPractice1076.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+potential: SOCCER_POTENTIAL_BROWSER_OUT=$RC_OUT/pot node scripts/qa/soccerPotentialProgressBrowser.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
