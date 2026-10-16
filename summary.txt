@@ -1,0 +1,11 @@
+c-start60 exit=1 28s | control start60 FIRED: 1 of 2 checks red
+c-hotstart exit=1 30s | control hotstart FIRED: 1 of 2 checks red
+simMidSeasonStart exit=0 4s | simMidSeasonStart: all green
+simManagerHotSeat exit=0 65s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simDeadlineDay exit=0 6s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+c-noband exit=1 113s | control noband FIRED: 2 of 5 checks red
+simDailyClubPool exit=0 5s | simDailyClubPool: all sections green
+vitest exit=0 19s |    Duration  17.61s (transform 2.86s, setup 455ms, collect 9.99s, tests 24.92s, environment 3.30s, prepare 1.19s)
+simCmApplications exit=0 113s | simCmApplications: green. The answer is earned, the limits hold, a summer move fires once, joining now moves the manager that week, and old saves load.
+simClubManagerCalendar exit=0 47s | simClubManagerCalendar: all green

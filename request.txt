@@ -1,0 +1,11 @@
+c-start60: SIM_CM_BOARD_CONTROL=start60 FRESH_BASES=1 node scripts/simCmBoardVerdict.mjs --part=fresh
+c-noband: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c1) TITLE_SEEDS=2 SIM_CM_BOARD_CONTROL=noband node scripts/simCmBoardVerdict.mjs --part=title
+c-hotstart: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c2) DAILY_BACK=0 DAILY_DD=1 SIM_CM_BOARD_CONTROL=hotstart node scripts/simCmBoardVerdict.mjs --part=dailies
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs
+vitest: node_modules/.bin/vitest run src/test/managerHotSeatCarryOnCard.test.tsx src/test/dailyMenuResume.test.tsx src/test/calendarCurrentDate.test.tsx src/test/clubManagerVarLive.test.tsx src/lib/clubManagerBoardVerdict.test.ts --testTimeout=300000 --hookTimeout=120000

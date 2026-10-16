@@ -1,0 +1,13 @@
+[title] 98 rollovers, 85 stays: on CM_BOARD_BASE 52 of 64 A or B seasons opened under Safe (28 of 35 titles); on the head 41
+  by fate, none n 84: base mean 50.79 (p10 42.5 to p90 61), head mean 52.75 (p10 40.5 to p90 67)
+  by fate, up n 1: base mean 82 (p10 82 to p90 82), head mean 65 (p10 65 to p90 65)
+  by grade, A n 44: base mean 55.43 (p10 49 to p90 66.5), head mean 60.18 (p10 55 to p90 70.5)
+  by grade, B n 20: base mean 47.83 (p10 40.5 to p90 55), head mean 47.03 (p10 38.5 to p90 60)
+  by grade, C n 19: base mean 44.97 (p10 38 to p90 52), head mean 42.82 (p10 36 to p90 48.5)
+  by grade, D n 2: base mean 49 (p10 49 to p90 49), head mean 47 (p10 47 to p90 47)
+FAIL [title] every A or B season opens the next at Safe or more (41 of 64 under)
+ok   [title] every D or F season opens the next under Safe (0 of 2 at Safe or more)
+ok   [title] every move at the summer opens at BOARD_FRESH (0 of 13 do not)
+ok   [title] startNextSeason draws the same number of times on head and base wherever the kitty band did not bind
+FAIL [title] and writes the same save but for the opening (4; first Brighton season 1: .managerXp.xp: head 459 base 434)
+control noband FIRED: 2 of 5 checks red

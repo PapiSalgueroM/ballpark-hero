@@ -1,0 +1,5 @@
+[dailies] Hot Seat: 60 dates (60 from 2026-09-24 and every seventh day back); 56 identical, 3 differ only in a suitor's name, 1 moved; 5 raised an approach
+FAIL [dailies] 60 Hot Seat days: every run equal to CM_BOARD_BASE but for a suitor's name (1; first 2026-10-25: .state.press.pending.id: head "pq-1-16-6" base "pq-1-16-7")
+ok   [dailies] 1 Deadline Day days: the deal, the grade and the state's keys equal to CM_BOARD_BASE
+control hotstart: 1 dates moved without the line
+control hotstart FIRED: 1 of 2 checks red
