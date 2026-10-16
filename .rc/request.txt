@@ -1,0 +1,13 @@
+#!serial
+m1-unit: node .rc/x/mut1339.mjs m1 && node_modules/.bin/vitest run src/lib/clubManagerOwnClubLevel.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m1-fa: node .rc/x/mut1339.mjs m1 && node scripts/simFreeAgents.mjs; s=$?; git checkout -- src scripts; exit $s
+m1-own: node .rc/x/mut1339.mjs m1 && node scripts/simCmOwnClubMarket.mjs; s=$?; git checkout -- src scripts; exit $s
+m2-unit: node .rc/x/mut1339.mjs m2 && node_modules/.bin/vitest run src/lib/clubManagerOwnClubLevel.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m2-fa: node .rc/x/mut1339.mjs m2 && node scripts/simFreeAgents.mjs; s=$?; git checkout -- src scripts; exit $s
+m2-own: node .rc/x/mut1339.mjs m2 && node scripts/simCmOwnClubMarket.mjs; s=$?; git checkout -- src scripts; exit $s
+m3-own: node .rc/x/mut1339.mjs m3 && OWNCLUB_MARKET_SECTIONS=1,2 node scripts/simCmOwnClubMarket.mjs; s=$?; git checkout -- src scripts; exit $s
+m3-unit: node .rc/x/mut1339.mjs m3 && node_modules/.bin/vitest run src/lib/clubManagerOwnClubLevel.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m4-unit: node .rc/x/mut1339.mjs m4 && node_modules/.bin/vitest run src/lib/clubManagerOwnClubLevel.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m4-fa: node .rc/x/mut1339.mjs m4 && node scripts/simFreeAgents.mjs; s=$?; git checkout -- src scripts; exit $s
+m4-own: node .rc/x/mut1339.mjs m4 && OWNCLUB_MARKET_SECTIONS=1,2 node scripts/simCmOwnClubMarket.mjs; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short src scripts | head; git diff --quiet -- src scripts
