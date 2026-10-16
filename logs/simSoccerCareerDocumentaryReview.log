@@ -1,0 +1,77 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Only fixed Life may differ from the whole held parent app
++ actual - expected
+... Skipped lines
+
+  'export const SOCCER_LIFE_CONSEQUENCES: Readonly<Record<number, Readonly<Record<number, string>>>> = {\n' +
+    '  205: {\n' +
+    "    0: 'Followers +400k, Morale -3, dressing room teases you forever',\n" +
+    "    1: 'Represent yourself from now on, Morale -5, awkward family dinners',\n" +
+    '  },\n' +
+...
+    "  223: { 1: 'Diplomacy: Morale +3, Integrity +1, whales on Wednesdays' },\n" +
++   "  227: { 0: '40%: they won it all (Net worth +€2M, Followers +500k). 60%: they folded (Net worth -€300k)' },\n" +
++   '  230: {\n' +
++   "    0: 'Morale -3, the curse saga continues next season',\n" +
++   "    1: 'Morale +5, Followers +400k, sponsor mildly concerned',\n" +
++   '  },\n' +
++   "  232: { 0: '60%: Integrity +8, Morale +8. 40%: Morale -5' },\n" +
+    "  233: { 0: 'Followers +800k, Popularity +4, self-awareness is elite' },\n" +
+    '};\n'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerDocumentaryReview.mjs:75:36
+    at Array.map (<anonymous>)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerDocumentaryReview.mjs:73:28
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'export const SOCCER_LIFE_CONSEQUENCES: Readonly<Record<number, Readonly<Record<number, string>>>> = {\n' +
+    '  205: {\n' +
+    "    0: 'Followers +400k, Morale -3, dressing room teases you forever',\n" +
+    "    1: 'Represent yourself from now on, Morale -5, awkward family dinners',\n" +
+    '  },\n' +
+    "  211: { 1: 'Integrity +4, Popularity +4, playgrounds everywhere copy you' },\n" +
+    "  213: { 0: 'Followers +500k, Popularity -2, journalists hate it' },\n" +
+    "  214: { 1: 'Integrity +2, Followers +300k, the stare goes viral anyway' },\n" +
+    "  215: { 1: 'Integrity +3, Morale +3, dressing room respect' },\n" +
+    "  217: { 0: 'Popularity +4 and Morale -3 now, the manager reads your column' },\n" +
+    "  218: { 0: '60%: all 7 skills +1 queued for next season (normal growth and the 99 cap still apply). 40%: Pace -1 now, you mostly learned soup' },\n" +
+    "  219: { 0: 'Followers +800k, 50%: Popularity +6, 50%: Popularity -3' },\n" +
+    "  221: { 0: 'Followers +1M, Popularity +4, the people love a bad singer' },\n" +
+    "  222: { 1: 'Morale -5, Followers +300k, the story becomes a documentary punchline' },\n" +
+    "  223: { 1: 'Diplomacy: Morale +3, Integrity +1, whales on Wednesdays' },\n" +
+    "  227: { 0: '40%: they won it all (Net worth +€2M, Followers +500k). 60%: they folded (Net worth -€300k)' },\n" +
+    '  230: {\n' +
+    "    0: 'Morale -3, the curse saga continues next season',\n" +
+    "    1: 'Morale +5, Followers +400k, sponsor mildly concerned',\n" +
+    '  },\n' +
+    "  232: { 0: '60%: Integrity +8, Morale +8. 40%: Morale -5' },\n" +
+    "  233: { 0: 'Followers +800k, Popularity +4, self-awareness is elite' },\n" +
+    '};\n',
+  expected: 'export const SOCCER_LIFE_CONSEQUENCES: Readonly<Record<number, Readonly<Record<number, string>>>> = {\n' +
+    '  205: {\n' +
+    "    0: 'Followers +400k, Morale -3, dressing room teases you forever',\n" +
+    "    1: 'Represent yourself from now on, Morale -5, awkward family dinners',\n" +
+    '  },\n' +
+    "  211: { 1: 'Integrity +4, Popularity +4, playgrounds everywhere copy you' },\n" +
+    "  213: { 0: 'Followers +500k, Popularity -2, journalists hate it' },\n" +
+    "  214: { 1: 'Integrity +2, Followers +300k, the stare goes viral anyway' },\n" +
+    "  215: { 1: 'Integrity +3, Morale +3, dressing room respect' },\n" +
+    "  217: { 0: 'Popularity +4 and Morale -3 now, the manager reads your column' },\n" +
+    "  218: { 0: '60%: all 7 skills +1 queued for next season (normal growth and the 99 cap still apply). 40%: Pace -1 now, you mostly learned soup' },\n" +
+    "  219: { 0: 'Followers +800k, 50%: Popularity +6, 50%: Popularity -3' },\n" +
+    "  221: { 0: 'Followers +1M, Popularity +4, the people love a bad singer' },\n" +
+    "  222: { 1: 'Morale -5, Followers +300k, the story becomes a documentary punchline' },\n" +
+    "  223: { 1: 'Diplomacy: Morale +3, Integrity +1, whales on Wednesdays' },\n" +
+    "  233: { 0: 'Followers +800k, Popularity +4, self-awareness is elite' },\n" +
+    '};\n',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
