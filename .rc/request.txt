@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usCoachRetirement.test.tsx src/test/usCareerReports1346.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerProgrammeUi.test.tsx src/test/usCareerHelpRules1104.test.tsx --testTimeout=300000 --hookTimeout=120000
+parity: node scripts/simUsBoardParity.mjs
+coachCareer: node scripts/simUsCoachCareer.mjs
+retire: node scripts/simUsCoachRetirement.mjs
+confirm: node scripts/simUsCareerActionConfirm.mjs
+walk: ENGINES=chromium node scripts/playUsCareerReports.mjs
+walk-noretire: PLAY_US_REPORTS_CONTROL=noretire ENGINES=chromium node scripts/playUsCareerReports.mjs
+walk-noundo: PLAY_US_REPORTS_CONTROL=noundo ENGINES=chromium node scripts/playUsCareerReports.mjs
+walk-noreplay: PLAY_US_REPORTS_CONTROL=noreplay ENGINES=chromium node scripts/playUsCareerReports.mjs
