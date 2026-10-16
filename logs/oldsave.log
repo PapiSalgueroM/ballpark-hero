@@ -1,0 +1,3 @@
+oldsave: 9 clubs x 4 seeds x 4 variants, base /tmp/base-o
+   144 base saves compared in 377 s; branch saves whose key survives a base load: 9 of 9
+oldsave: PASS (every base save opens and plays on the branch as on the base)

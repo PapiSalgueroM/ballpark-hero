@@ -1,0 +1,14 @@
+simCmNoSack: sections 2
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+2) The hoard keeper for three seasons at the nine clubs, with No sacking and without (fleet seed 7)
+   Arsenal                No sacking: 3 seasons, board low 0.5, 17 lines; twin sacked at match 110
+   Brentford              No sacking: 3 seasons, board low 1.0, 26 lines; twin sacked at match 14
+   Hull City              No sacking: 3 seasons, board low 0.2, 16 lines; twin sacked at match 93
+   Real Madrid            No sacking: 3 seasons, board low 31.5, 0 lines; twin kept the job for 3 seasons
+   Espanyol               No sacking: 3 seasons, board low 0.1, 9 lines; twin sacked at match 67
+   Málaga                 No sacking: 3 seasons, board low 0.2, 6 lines; twin sacked at match 29
+   Inter Milan            No sacking: 3 seasons, board low 1.0, 13 lines; twin sacked at match 93
+   Torino                 No sacking: 3 seasons, board low 1.0, 24 lines; twin sacked at match 54
+   Frosinone              No sacking: 3 seasons, board low 1.0, 16 lines; twin sacked at match 35
+   twins sacked 8 of 9 (floor 5), each survived at that very match by its No sacking career: 8; No sacking lines 127; 52 s
+simCmNoSack: PASS (sections 2)
