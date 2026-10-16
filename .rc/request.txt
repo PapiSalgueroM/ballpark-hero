@@ -1,0 +1,3 @@
+#!serial
+unseeded: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) node scripts/simCmUnseededWorld.mjs
+c-never: CM_UNSEEDED_CONTROL=never CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) node scripts/simCmUnseededWorld.mjs
