@@ -1,0 +1,9 @@
+== simWritesAreSent exit 1
+
+simWritesAreSent: 2 failures
+== simSchemaNames exit 1
+SUPABASE UNREACHABLE (TypeError: fetch failed).
+SUPABASE UNREACHABLE. NOTHING WAS CHECKED.
+== simLeaderboardCaps exit 1
+the database refused game_score_caps?select=game,max_score&limit=2000: TypeError: fetch failed
+fences: simLiveScores=0 simNoRivalNames=0 simInventedNames=0 simHarnessAnchors=0 simNoInventedQuotes=0 simNoInventedConduct=0 simLegalPages=0 simSingleFooter=0 simCompletionSlugs=0 simCompletionOnce=0 simNoDoubleRecord=0 simDailyPuzzleContract=0 simDailySaveHardening=0 simWritesAreSent=1 simSchemaNames=1 simFetchRetry=0 simGoogleOnlyReturn=0 simReportRelay=0 simNavbarStatsReads=0 simLeaderboardCaps=1 simScoringCoverage=0 simSiteSearch=0 simResultMoment=0 simGuideHeadings=0 simStorageWrites=0
