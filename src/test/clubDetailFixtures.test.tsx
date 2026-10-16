@@ -29,7 +29,7 @@ function screen(state: CareerState, club = state.clubName) {
   return { ...render(<ClubDetailScreen clubName={club} career={state} onBack={onBack} />), onBack };
 }
 async function fixtures(view: ReturnType<typeof screen>): Promise<Reader> {
-  const button = view.queryByRole('button', { name: 'Fixtures', exact: true });
+  const button = view.queryByRole('button', { name: 'Fixtures' });
   expect(button !== null, 'club detail must offer its saved league fixtures').toBe(true);
   fireEvent.click(button!);
   expect(view.getByRole('region', { name: 'Club league fixtures' })).toBeInTheDocument();
@@ -108,9 +108,9 @@ describe('Club detail saved league fixtures', () => {
 
   it('fixtures Back returns to the same squad before the outer Back leaves the club', async () => {
     const state = twoClubs(), view = screen(state), originalNames = names(view);
-    await fixtures(view); fireEvent.click(within(view.getByRole('region', { name: 'Club league fixtures' })).getByRole('button', { name: 'Back', exact: true }));
+    await fixtures(view); fireEvent.click(within(view.getByRole('region', { name: 'Club league fixtures' })).getByRole('button', { name: 'Back' }));
     expect(view.queryByRole('region', { name: 'Club league fixtures' })).toBeNull(); expect(names(view)).toEqual(originalNames);
-    expect(view.onBack).not.toHaveBeenCalled(); fireEvent.click(view.getByRole('button', { name: 'Back', exact: true })); expect(view.onBack).toHaveBeenCalledOnce();
+    expect(view.onBack).not.toHaveBeenCalled(); fireEvent.click(view.getByRole('button', { name: 'Back' })); expect(view.onBack).toHaveBeenCalledOnce();
   });
 
   it('preservation keeps the initial owned squad value and best eleven', () => {
@@ -128,7 +128,7 @@ describe('Club detail saved league fixtures', () => {
 
   it('preservation keeps outer navigation and does not write or draw randomness', () => {
     const state = initial(), before = JSON.stringify(state), random = vi.spyOn(Math, 'random'), write = vi.spyOn(Storage.prototype, 'setItem');
-    const view = screen(state); fireEvent.click(view.getByRole('button', { name: 'Back', exact: true }));
+    const view = screen(state); fireEvent.click(view.getByRole('button', { name: 'Back' }));
     expect(view.onBack).toHaveBeenCalledOnce(); expect(JSON.stringify(state)).toBe(before); expect(random).not.toHaveBeenCalled(); expect(write).not.toHaveBeenCalled();
   });
 });

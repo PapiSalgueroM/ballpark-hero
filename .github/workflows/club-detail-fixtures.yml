@@ -43,7 +43,12 @@ jobs:
       - name: Actual application types
         run: |
           set -euo pipefail
+          set +e
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > club-fixtures-artifacts/types.log 2>&1
+          status=$?
+          set -e
+          cat club-fixtures-artifacts/types.log
+          exit "$status"
       - name: Actual fixture outcomes and original control
         run: |
           set -euo pipefail

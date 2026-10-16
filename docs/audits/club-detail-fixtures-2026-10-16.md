@@ -4,6 +4,8 @@ Base: `a758fcec4392c57c639aa54cda840810c8e44663`. Branch: `codex/manager-club-fi
 
 Status: tests and remote workflow prepared. Product remains the base component. No runtime has run locally. A qualifying remote baseline is required before implementation.
 
+First remote run `38880595650` at `2fbdcbf6` was blocked by four test-only type errors: Testing Library role options do not accept `exact: true`. No test ran and no baseline credit is claimed. Removing only those four unsupported options keeps exact string-name matching, all ten case identities and every outcome expectation. The type step now prints its retained diagnostics and preserves the compiler exit status. Retained artifact `12038135044` has ZIP SHA256 `5c7c409fe347880896ca75fdafa37eb53687374de72843de34d15ff818e8cf17`.
+
 The requested view is a plain Fixtures action inside the existing club header, opening a separate league fixture view with Back. The initial squad structure, values, player rows and outer navigation stay intact. No extra default `.bg-card` wrapper or sibling between club header and squad is permitted, because retained roster unit and browser consumers use those seams.
 
 The reader will use the save's own `leagueClubs` for the managed league, or another league's saved `world[id].table` membership, following WorldTablesCard. It calls the existing `careerRoundPairs` with that membership and league id. Own progress counts league entries in `calendar.slice(0, week)`; world progress uses that league's `world[id].round`. A calendar index is not a league round. Odd-league byes are omitted. Clubs without saved league membership get an unavailable message, never an invented cup or Champions League schedule.
