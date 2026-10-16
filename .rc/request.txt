@@ -1,0 +1,9 @@
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+pure: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh p0) node scripts/simCmBoardVerdict.mjs --part=pure
+norival: node scripts/simNoRivalNames.mjs
+vitest: node_modules/.bin/vitest run src/test/clubManagerOfferConfirm.test.tsx src/lib/clubManagerBoardVerdict.test.ts --testTimeout=300000
