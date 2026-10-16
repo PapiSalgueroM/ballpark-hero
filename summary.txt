@@ -1,0 +1,7 @@
+simWorldUcl exit=0 0s | simWorldUcl: green, 369 checks, 0 failures
+golden-check-head exit=0 1s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+golden-base exit=0 1s | GOLDEN-BASE-SAME
+vitest-world exit=0 6s |    Duration  5.25s (transform 2.22s, setup 126ms, collect 2.68s, tests 1.20s, environment 570ms, prepare 248ms)
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+dailydeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+tsc exit=0 68s | 
