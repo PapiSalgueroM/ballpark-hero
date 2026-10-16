@@ -1,0 +1,4 @@
+rules-base: CM_RULES_ROOT=$(bash .rc/x/mkbase.sh rb) node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+rules-forced: git worktree add -q .claude/worktrees/forced HEAD && node .rc/x/forceLegacy.mjs .claude/worktrees/forced && CM_RULES_ROOT=$PWD/.claude/worktrees/forced node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+rules-head: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+rules-write: sleep 2 && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/" && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
