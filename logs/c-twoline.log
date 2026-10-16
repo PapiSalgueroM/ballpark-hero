@@ -1,0 +1,68 @@
+simCmNoSack: sections 7, control twoline
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+7) A promise to win before every match, the board planted on 2, 3.5, 5, 6.5 in turn, at Hull City, Málaga, Frosinone: 2 seeds, 36 matches each, the Normal twin played beside it (fleet seed 0)
+  FAIL (section 7): Hull City seed 0 entry 1: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 5: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 6: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 7: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 8: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 13: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 17: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 18: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 22: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 23: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 27: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 28: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 30: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 31: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 32: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 34: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 35: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 1 entry 5: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 1 entry 8: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 1 entry 13: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 1 entry 17: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 1 entry 22: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 1 entry 23: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 1 entry 26: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 1 entry 27: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 1 entry 30: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 1 entry 31: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 1 entry 35: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 0 entry 1: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 0 entry 5: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 0 entry 17: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 0 entry 21: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 0 entry 30: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 1 entry 5: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 1 entry 6: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 1 entry 9: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 1 entry 14: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 1 entry 17: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 1 entry 23: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 1 entry 26: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 1 entry 27: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 1 entry 30: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 1 entry 35: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 0 entry 9: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 0 entry 10: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 0 entry 13: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 0 entry 14: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 0 entry 17: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 0 entry 18: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 0 entry 23: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 0 entry 26: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 0 entry 27: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 0 entry 30: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 0 entry 34: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 0 entry 35: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 1 entry 9: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 1 entry 18: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 1 entry 21: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 1 entry 23: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 1 entry 26: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 1 entry 27: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 1 entry 30: 2 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 1 entry 35: 2 No sacking lines in one report, one a match
+   twins kept the job and matched to the byte: 70; twins sacked at the recheck after a broken promise: 83 (floor 36); both floors in one match: 63 (floor 28); at the first check with no promise broken: 0; 8 s
+simCmNoSack: CONTROL twoline FIRED: section 7 red (63 failures)
