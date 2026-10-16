@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+cdr-sim: export CI=1 SIM_NETWORK=offline CM_OWN_ROSTER_PHASE=fixed CM_OWN_ROSTER_OUT=$TMPDIR/cdr && mkdir -p $CM_OWN_ROSTER_OUT && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs
+cdr-walk: export CI=1 SIM_NETWORK=offline CM_OWN_ROSTER_PHASE=fixed CM_OWN_ROSTER_OUT=$TMPDIR/cdr2 && mkdir -p $CM_OWN_ROSTER_OUT && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs > /dev/null 2>&1; node scripts/playClubDetailCurrentRoster.mjs

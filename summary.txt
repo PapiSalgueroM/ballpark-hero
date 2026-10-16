@@ -1,0 +1,3 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+cdr-sim exit=1 1s | Node.js v24.21.0
+cdr-walk exit=1 1s | Current-roster browser: failed; 7 checks, 0 saved page journeys, 0 effective controls, 0 originals, 5 failures, 0 setup failures.
