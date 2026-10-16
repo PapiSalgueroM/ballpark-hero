@@ -121,8 +121,12 @@ describe('Round 1344: deals between two other clubs reach the world ledger', () 
       const next = recordAiDeals(s, [{ mp, to, fee: 1 }]);
       expect(next).not.toBe(s);
       expect((readWorldRoster(next)?.records ?? []).some(r => r.owner === to && r.player.name === mp.name)).toBe(true);
-      const unseeded = { ...s, worldSeed: undefined };
+      /* Round 1508: a career with no seed that holds a readable ledger plays the living world (adopted at its first
+         summer), so an unseeded career here is one with neither: the seed and the flushed ledger both taken off. */
+      const unseeded = { ...s, worldSeed: undefined, worldRoster: undefined };
       expect(recordAiDeals(unseeded, [{ mp, to, fee: 1 }])).toBe(unseeded);
+      const adopted = { ...s, worldSeed: undefined };
+      expect((readWorldRoster(recordAiDeals(adopted, [{ mp, to, fee: 1 }]))?.records ?? []).some(r => r.owner === to && r.player.name === mp.name)).toBe(true);
       expect(recordAiDeals(s, [])).toBe(s);
     } finally { random.mockRestore(); }
   });

@@ -22,10 +22,31 @@
  *   (c) fresh, the inverse: new careers started by both engines with scripts/lib/cmWorldSeed1250.mjs composed
  *       into this tree's engine (the seed block of startCareer out), through plan (b), byte equal to BASE.
  *
+ *
+ * ROUND 1508 (the lead's decision 3 of brief 1508, from Round 1344's ruling 5): a career with no seed now joins the
+ * living world at its first summer on this engine (adoptLivingWorld, first thing in startNextSeason: an empty ledger
+ * and still no seed). So an old save stays byte equal to BASE up to that summer, and only up to it: from the
+ * rollover on, this tree's journey is held to the ledger branch's invariants instead of to BASE:
+ *   adopted  a readable ledger and no seed, at every step from the rollover on (a save and a reload included);
+ *   moved    every deal of this season between two other clubs is placed: exactly one owned record at the buyer,
+ *            his key listed at the buyer and at no other club, and no other club still listing a man of his origin;
+ *   market   the market (buildMarket and the screen's marketForScreen) lists nobody at my own club, and the screen
+ *            never lists a moved man at the club that sold him;
+ *   mine     the deal plan goes on after the rollover with deals of mine (a release, a buy, a sale through
+ *            acceptBid, each saved and reloaded): each leaves exactly one ledger record with its owner and status, a
+ *            man I bought is listed at no club of the world, and a man I sold is one no AI club can take (aiDealPlayer
+ *            answers null, Round 1344's ruling 3).
+ * The fresh section's inverse (scripts/lib/cmWorldSeed1250.mjs) cuts the adoption line too, so there a new career
+ * made unseeded still plays byte equal to BASE all the way, the new deals of mine included.
+ *
  * CONTROLS, each must go red where it says and nowhere else (exit 1, last line says FIRED):
  *   CM_UNSEEDED_CONTROL=guard      takes the guard out: the deal fleet (b) goes red, the quiet fleet (a) stays
  *                                  green (the fresh section is not run)
  *   CM_UNSEEDED_CONTROL=noinverse  runs only the fresh section, without the inverse: it goes red
+ *   CM_UNSEEDED_CONTROL=early      (Round 1508) adopts one summer early, as the save opens: the comparison with BASE
+ *                                  before the summer goes red (quiet and deals; the fresh section is not run)
+ *   CM_UNSEEDED_CONTROL=never      (Round 1508) never adopts (startNextSeason's line out): the moved check goes red
+ *                                  after the rollover while the comparison before it stays green (deals only)
  * CM_UNSEEDED_FLEET=quick plays one seed a club and no fixtures (for trying it out; never a gate line).
  * Exit 0 green, 1 red or a control that fired, 2 could not run, 3 a control that did not fire.
  *
@@ -52,10 +73,19 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.CM_UNSEEDED_BASE || 'b6eb78e799b12c851e4e8e583e9e926aed117f1c';
 const ENGINE = 'src/lib/clubManager.ts';
 const GUARD = '  if (!livingWorldOf(state)) return state;\n';
+/* Round 1508: the adoption, and where the early control puts a second one (the load, before the first summer). */
+const ADOPT = '  career = adoptLivingWorld(career);\n';
+const LOAD_REPAIR = '    repairAiMoves(parsed);\n';
 const CONTROL = process.env.CM_UNSEEDED_CONTROL || '';
 const QUICK = process.env.CM_UNSEEDED_FLEET === 'quick';
 const cannot = why => { console.log(`simCmUnseededWorld: cannot run: ${why}`); process.exit(2); };
-if (CONTROL && !['guard', 'noinverse'].includes(CONTROL)) cannot(`unknown control ${CONTROL}`);
+if (CONTROL && !['guard', 'noinverse', 'early', 'never'].includes(CONTROL)) cannot(`unknown control ${CONTROL}`);
+/** One anchor that must stand exactly once in the engine, replaced (a control's edit fails closed). */
+const once = (name, from, to) => text => {
+  const n = text.split(from).length - 1;
+  if (n !== 1) cannot(`control ${name}: its anchor is in ${ENGINE} ${n} times, it must be exactly once: ${from.trim()}`);
+  return text.replace(from, () => to);
+};
 try { execFileSync('git', ['cat-file', '-e', `${BASE}^{commit}`], { cwd: ROOT, stdio: 'ignore' }); } catch { cannot(`the base commit ${BASE.slice(0, 8)} is not in this clone (fetch its history)`); }
 
 const sha = v => createHash('sha256').update(typeof v === 'string' ? v : JSON.stringify(v)).digest('hex').slice(0, 16);
@@ -80,7 +110,10 @@ async function engine(label, { base = false, edit = null } = {}) {
       });
     },
   };
-  const entry = "export * as cm from './src/lib/clubManager';\nexport * as eras from './src/lib/clubManagerEras';\nexport * as hs from './src/lib/managerHotSeat';\n";
+  /* Round 1508: this tree's arms also hand back the ledger's reader, for the checks after the adoption (BASE, from
+     before Release AZ, has no such file). */
+  const entry = "export * as cm from './src/lib/clubManager';\nexport * as eras from './src/lib/clubManagerEras';\nexport * as hs from './src/lib/managerHotSeat';\n"
+    + (base ? '' : "export * as ledger from './src/lib/clubManagerWorldRoster';\n");
   const out = await build({ stdin: { contents: entry, resolveDir: ROOT, sourcefile: `unseeded-${label}.ts`, loader: 'ts' },
     bundle: true, write: false, format: 'cjs', platform: 'node', target: 'node20', plugins: [plugin], logLevel: 'silent' });
   if (edit && !edited) cannot(`the ${label} engine was to be edited and ${ENGINE} was never loaded`);
@@ -131,23 +164,101 @@ function firstDifference(a, b) {
   return 'the key order differs';
 }
 
+/* ---------- Round 1508: the ledger branch's invariants, held on this tree's journey from the rollover on ---------- */
+/** A deal between two other clubs (PR269's rule, as scripts/simCmWorldMoves.mjs reads it). */
+const aiLine = mine => line => !!line && typeof line.name === 'string' && !line.loan && line.from !== mine && line.to !== mine
+  && line.from !== 'a free transfer' && line.to !== 'a free transfer';
+/** Every club of the career's world but mine, and every club the ledger names as an owner. */
+function worldClubs(M, s) {
+  const era = s.eraId ?? 'now';
+  const names = M.eras.isHistoricEra(era)
+    ? M.cm.eraLeaguesFor(era).flatMap(l => l.clubs)
+    : M.cm.REAL_LEAGUES.flatMap(l => M.cm.playableClubs(l.id).map(c => c.name));
+  const out = new Set(names);
+  for (const record of M.ledger.readWorldRoster(s)?.records ?? []) if (record.owner) out.add(record.owner);
+  out.delete(s.clubName);
+  return [...out];
+}
+const newLiving = () => ({ states: 0, lines: 0, records: 0, joined: 0, mine: { release: 0, buy: 0, sale: 0 }, counts: {}, fails: [] });
+/** One state of an adopted career, held to the invariants above. `deal` is the deal of mine the step made, if any. */
+function livingCheck(M, s, label, note, deal, lv) {
+  const bad = (check, line) => { lv.counts[check] = (lv.counts[check] ?? 0) + 1; lv.fails.push(`[${check}] at ${label}: ${line}`); };
+  lv.states += 1;
+  if (note === 'the save was refused' || note === 'the reload was refused') bad('adopted', note);
+  const held = M.ledger.readWorldRoster(s);
+  if (M.cm.worldSeedOf(s) !== undefined) bad('adopted', 'the career carries a world seed');
+  if (!held) bad('adopted', 'the career holds no readable ledger');
+  const records = held?.records ?? [], year = M.cm.worldYear(s), mine = s.clubName;
+  const at = new Map(), origin = new Map();
+  const add = (map, key, club) => { const list = map.get(key); if (list) list.push(club); else map.set(key, [club]); };
+  for (const club of worldClubs(M, s)) {
+    for (const p of M.cm.worldRosterFor(s, club)) {
+      if (p.worldRosterKey) add(at, p.worldRosterKey, club);
+      add(origin, `${p.n}|${year - p.a}|${p.p}`, club);
+    }
+  }
+  /* moved: every deal of this season between two other clubs has its man owned at the buyer */
+  const lines = (s.transferLog ?? []).filter(l => l && l.season === s.season).filter(aiLine(mine));
+  for (const line of lines) {
+    lv.lines += 1;
+    const recs = records.filter(r => r.status === 'owned' && r.owner === line.to && r.player.name === line.name);
+    if (recs.length !== 1) bad('moved', `${line.name} (${line.from} to ${line.to}): ${recs.length ? `${recs.length} owned records at the buyer` : `the ledger holds no record of him at ${line.to}`}`);
+  }
+  /* every owned record at its owner and nowhere else (mine: at no club of the world) */
+  for (const r of records) {
+    if (r.status !== 'owned') continue;
+    lv.records += 1;
+    const check = r.owner === mine ? 'mine' : 'moved';
+    const where = at.get(r.key) ?? [];
+    const want = r.owner === mine ? [] : [r.owner];
+    if (where.length !== want.length || where.some(c => !want.includes(c))) bad(check, `${r.player.name}, owned by ${r.owner}, is listed at ${where.join(' and ') || 'no club'}`);
+    const twins = (origin.get(`${r.origin.name}|${r.origin.birthYear}|${r.origin.position}`) ?? []).filter(c => c !== r.owner);
+    if (twins.length) bad(check, `a man of ${r.player.name}'s origin (${r.origin.club}, born ${r.origin.birthYear}) is still listed at ${twins.join(' and ')}`);
+  }
+  /* market: nobody at my own club; a moved man never on the screen at the club that sold him */
+  const market = M.cm.buildMarket(s), screen = M.cm.marketForScreen(s);
+  const ownRows = market.filter(p => p.club === mine).length + screen.filter(p => p.club === mine).length;
+  if (ownRows) bad('market', `${ownRows} rows of the market list a man at my own club ${mine}`);
+  const atSeller = new Set(lines.map(l => `${l.name}|${l.from}`));
+  for (const p of screen) {
+    if (atSeller.has(`${p.name}|${p.club}`)) bad('market', `the screen lists ${p.name} at ${p.club}, the club that sold him this season`);
+    if (p.joinedThisSeason) lv.joined += 1;
+  }
+  /* mine: the deal this step made left exactly one record, and a man I sold is one no AI club can take */
+  if (deal) {
+    lv.mine[deal.kind] += 1;
+    const recs = records.filter(r => r.player.name === deal.name && r.status === deal.status && r.owner === deal.owner);
+    if (recs.length !== 1) bad('mine', `my ${deal.kind} of ${deal.name} left ${recs.length} ledger records (${deal.status}, owner ${deal.owner})`);
+    if (deal.kind === 'sale' && recs.length === 1) {
+      const listed = M.cm.worldRosterFor(s, deal.owner).find(p => p.worldRosterKey === recs[0].key);
+      if (!listed) bad('mine', `${deal.name}, sold to ${deal.owner}, is not listed there`);
+      else if (M.cm.aiDealPlayer(s, { name: listed.n, club: deal.owner, position: listed.p, age: listed.a, rating: listed.r, price: 1, value: listed.v,
+        worldRosterKey: listed.worldRosterKey, worldRosterSince: listed.since, potential: listed.potential }) !== null) bad('mine', `an AI club could take ${deal.name}, a man I sold to ${deal.owner}`);
+    }
+  }
+}
+
 /* One journey of one save through one plan on one engine. Every step draws from its own stretch of the stream.
    Round 1331, the bridge for a kit pinned to an old engine: since that round a match plays its league and season's
    substitution rule and the press at the whistle reads the next fixture, which the pinned base does not know. This
    tree's journeys (bridge) hand every step but a save the career with matchRules 'base', which is the old engine
    for subs and press by construction (scripts/simCmSubs.mjs section legacy proves it byte for byte), and take the
    key off every state before it is compared or saved. */
-async function journey(E, input, plan, seed, bridge = false) {
+async function journey(E, input, plan, seed, bridge = false, living = null) {
   const M = await E.fresh();
   const steps = [];
   let s = null; let k = 0;
+  /* Round 1508: from the rollover on (the first summer on this engine) a step is `after` the adoption. */
+  let after = false;
   const step = (label, fn) => {
     k += 1;
     const r = tape((seed + k * 7919) >>> 0, () => fn(bridge && s && label !== 'save-and-reload' ? { ...s, matchRules: 'base' } : s));
     const got = r.value ?? {};
     if (bridge && got.state && 'matchRules' in got.state) { got.state = { ...got.state }; delete got.state.matchRules; }
     if (got.state) s = got.state;
-    steps.push({ label, note: got.note ?? '', json: JSON.stringify(s), draws: r.draws.length, drawSha: sha(r.draws), saved: got.saved ?? null });
+    if (label === 'rollover') after = true;
+    steps.push({ label, note: got.note ?? '', json: JSON.stringify(s), draws: r.draws.length, drawSha: sha(r.draws), saved: got.saved ?? null, after });
+    if (living && after) livingCheck(M, s, label, got.note ?? '', got.deal ?? null, living);
   };
   const reload = () => step('save-and-reload', cur => {
     M.store.clear();
@@ -224,23 +335,60 @@ async function journey(E, input, plan, seed, bridge = false) {
   play(6, 'with-deals'); toEnd('rest');
   step('finish', cur => ({ state: M.cm.finishSeason(cur).state }));
   step('rollover', cur => ({ state: M.cm.startNextSeason(cur) }));
-  reload(); play(4, 'next-season'); reload();
+  reload();
+  /* Round 1508: deals of mine after the first summer, each saved and reloaded: on this tree the adopted career's
+     ledger takes them (the mine check); in the fresh section (the inverse) they are compared with BASE like the rest. */
+  step('open-window-2', cur => ({ state: { ...cur, budget: 9999, wageCap: 9999, transferWindow: 'summer' } }));
+  step('release-2', cur => {
+    const man = [...outfield(cur)].sort((a, b) => a.rating - b.rating || a.id.localeCompare(b.id))[0];
+    const next = man && M.cm.releasePlayer(cur, man.id);
+    return next ? { state: next, note: 'done', deal: { kind: 'release', name: man.name, owner: null, status: 'released' } } : { note: 'refused' };
+  });
+  reload();
+  step('buy-2', cur => {
+    const mine = names(cur);
+    const mp = M.cm.buildMarket(cur).find(p => p.position !== 'GK' && p.age < 29 && p.rating < 80 && !mine.has(p.name));
+    const next = mp && M.cm.buyPlayer(cur, mp);
+    return next ? { state: next, note: 'done', deal: { kind: 'buy', name: mp.name, owner: cur.clubName, status: 'owned' } } : { note: 'refused' };
+  });
+  reload();
+  step('sale-2', cur => {
+    const man = [...outfield(cur)].sort((a, b) => b.rating - a.rating || a.id.localeCompare(b.id))[1];
+    const buyer = M.cm.buildMarket(cur).find(p => p.club !== cur.clubName)?.club;
+    if (!man || !buyer) return { note: 'refused' };
+    const bid = { playerId: man.id, playerName: man.name, club: buyer, offer: 30, status: 'open' };
+    const next = M.cm.acceptBid({ ...cur, incomingBids: [...(cur.incomingBids ?? []), bid] }, man.id);
+    return next ? { state: next, note: 'done', deal: { kind: 'sale', name: man.name, owner: buyer, status: 'owned' } } : { note: 'refused' };
+  });
+  reload();
+  play(4, 'next-season'); reload();
   return steps;
 }
 
-/* Two journeys of one save, base and this tree, compared step by step. */
-async function pair(sectionName, A, B, input, plan, seed, acc) {
+/* Two journeys of one save, base and this tree, compared step by step. Round 1508: with `adopts`, only the steps
+   before the rollover are compared (the first summer on this engine adopts the career), and this tree's steps from
+   the rollover on are held to the invariants instead (acc.living). */
+async function pair(sectionName, A, B, input, plan, seed, acc, adopts = false) {
   let a, b;
+  const tag = `${sectionName} ${input.name} (${plan}, seed ${seed})`;
+  const lv = adopts ? newLiving() : null;
   try { a = await journey(A, input, plan, seed); } catch (e) { cannot(`${input.name} (${plan}) on the base engine: ${e.message}`); }
-  try { b = await journey(B, input, plan, seed, true); } catch (e) { b = null; acc.fails.push(`${sectionName} ${input.name} (${plan}, seed ${seed}): this tree threw: ${e.message}`); }
+  try { b = await journey(B, input, plan, seed, true, lv); } catch (e) { b = null; acc.fails.push(`${tag}: this tree threw: ${e.message}`); }
   acc.journeys += 1;
   for (const x of a) if (x.note) acc.notes[`${x.label} ${x.note}`] = (acc.notes[`${x.label} ${x.note}`] ?? 0) + 1;
   if (!b) return;
-  acc.steps += a.length;
-  const n = Math.max(a.length, b.length);
-  for (let i = 0; i < n; i += 1) {
+  if (lv) {
+    const L = acc.living;
+    L.journeys += 1; L.states += lv.states; L.lines += lv.lines; L.records += lv.records; L.joined += lv.joined;
+    for (const kind of Object.keys(lv.mine)) L.mine[kind] += lv.mine[kind];
+    for (const [check, n] of Object.entries(lv.counts)) L.counts[check] = (L.counts[check] ?? 0) + n;
+    if (lv.fails.length) L.fails.push(`${tag}: ${lv.fails.length} red after the rollover, first ${lv.fails[0]}`.slice(0, 600));
+  }
+  const compared = adopts ? b.filter(y => !y.after).length : Math.max(a.length, b.length);
+  acc.steps += compared;
+  for (let i = 0; i < compared; i += 1) {
     const x = a[i], y = b[i];
-    if (!x || !y || x.label !== y.label) { acc.fails.push(`${sectionName} ${input.name} (${plan}, seed ${seed}): the steps part at ${i} (${x?.label} against ${y?.label})`); return; }
+    if (!x || !y || x.label !== y.label || x.after !== y.after) { acc.fails.push(`${tag}: the steps part at ${i} (${x?.label} against ${y?.label})`); return; }
     const why = [];
     if (x.json !== y.json) why.push(`the state differs, ${firstDifference(x.json, y.json)}`);
     if (x.draws !== y.draws || x.drawSha !== y.drawSha) why.push(`the draws differ (${x.draws} against ${y.draws})`);
@@ -248,18 +396,23 @@ async function pair(sectionName, A, B, input, plan, seed, acc) {
     if (x.note !== y.note) why.push(`the step went otherwise (${x.note} against ${y.note})`);
     if (why.length) { acc.fails.push(`${sectionName} ${input.name} (${plan}, seed ${seed}) at step ${i} ${x.label}: ${why.join('; ')}`.slice(0, 600)); return; }
   }
-  for (const y of b) if (/"worldRoster":|"worldSeed":/.test(y.json)) { acc.fails.push(`${sectionName} ${input.name} (${plan}): this tree's save carries a ledger or a seed at ${y.label}`); return; }
+  /* Before the adoption (or all the way, where nothing adopts) the save carries no ledger and no seed. */
+  for (const y of b) if ((!adopts || !y.after) && /"worldRoster":|"worldSeed":/.test(y.json)) { acc.fails.push(`${sectionName} ${input.name} (${plan}): this tree's save carries a ledger or a seed at ${y.label}`); return; }
 }
-const newAcc = () => ({ journeys: 0, steps: 0, fails: [], notes: {} });
+const newAcc = () => ({ journeys: 0, steps: 0, fails: [], notes: {},
+  living: { journeys: 0, states: 0, lines: 0, records: 0, joined: 0, mine: { release: 0, buy: 0, sale: 0 }, counts: {}, fails: [] } });
 
 const ERAS = ['now', 'era2020', 'era2015', 'era2010', 'era2005'];
 const SEEDS = QUICK ? [0x5eed01] : [0x5eed01, 0x5eed02, 0x5eed03];
 const HOT_DATES = QUICK ? [] : ['2026-10-10', '2026-10-27', '2027-01-19'];
 
 const baseEngine = await engine('base', { base: true });
-const sections = CONTROL === 'noinverse' ? ['fresh'] : CONTROL === 'guard' ? ['quiet', 'deals'] : ['quiet', 'deals', 'fresh'];
+const sections = CONTROL === 'noinverse' ? ['fresh'] : CONTROL === 'guard' || CONTROL === 'early' ? ['quiet', 'deals']
+  : CONTROL === 'never' ? ['deals'] : ['quiet', 'deals', 'fresh'];
 const thisTree = CONTROL === 'guard'
   ? await engine('noguard', { edit: text => { const n = text.split(GUARD).length - 1; if (n !== 1) cannot(`control guard: the guard is in ${ENGINE} ${n} times, it must be exactly once`); return text.replace(GUARD, ''); } })
+  : CONTROL === 'early' ? await engine('early', { edit: once('early', LOAD_REPAIR, `${LOAD_REPAIR}    Object.assign(parsed, adoptLivingWorld(parsed));\n`) })
+  : CONTROL === 'never' ? await engine('never', { edit: once('never', ADOPT, '') })
   : await engine('tree');
 const inverse = CONTROL === 'noinverse' ? await engine('tree') : await engine('inverse', { edit: withoutWorldSeed });
 
@@ -305,12 +458,18 @@ for (const section of sections) {
   if (section === 'fresh') {
     for (const f of fleet.filter(x => x.seed === SEEDS[0])) await pair(section, baseEngine, inverse, { name: `${f.club} (${f.era}) started fresh`, start: [f.club, f.era] }, 'deals', f.seed, acc);
   } else {
-    for (const save of oldSaves) await pair(section, baseEngine, thisTree, save, section, save.seed, acc);
+    for (const save of oldSaves) await pair(section, baseEngine, thisTree, save, section, save.seed, acc, section === 'deals');
   }
-  console.log(`${section}: ${acc.journeys} saves, ${acc.steps} steps compared, ${acc.fails.length} red, ${Math.round((Date.now() - t0) / 1000)}s`);
+  console.log(`${section}: ${acc.journeys} saves, ${acc.steps} steps compared${section === 'deals' ? ' (up to the rollover)' : ''}, ${acc.fails.length} red, ${Math.round((Date.now() - t0) / 1000)}s`);
   if (Object.keys(acc.notes).length) console.log(`  deals on the base engine: ${Object.entries(acc.notes).sort().map(([k, v]) => `${k} ${v}`).join(', ')}`);
   for (const f of acc.fails.slice(0, 8)) console.log(`  FAIL ${f}`);
   if (acc.fails.length > 8) console.log(`  ... and ${acc.fails.length - 8} more`);
+  const L = acc.living;
+  if (L.journeys) {
+    console.log(`  after the rollover (Round 1508, this tree only): ${L.journeys} adopted careers, ${L.states} states checked, ${L.lines} deal lines between two other clubs placed, ${L.records} owned records held at one club, ${L.joined} joined rows on the screen; deals of mine: ${L.mine.release} releases, ${L.mine.buy} buys, ${L.mine.sale} sales; red by check: ${JSON.stringify(L.counts)}`);
+    for (const f of L.fails.slice(0, 8)) console.log(`  FAIL after the rollover: ${f}`);
+    if (L.fails.length > 8) console.log(`  ... and ${L.fails.length - 8} more`);
+  }
 }
 
 /* The deal fleet must have made every deal the recorder sees at least once, or it proves nothing about them. */
@@ -335,8 +494,26 @@ if (CONTROL === 'noinverse') {
     : 'simCmUnseededWorld: CONTROL noinverse DID NOT FIRE: new careers on this tree equal the base without the inverse');
   process.exit(red('fresh') ? 1 : 3);
 }
-const total = sections.reduce((n, s) => n + results[s].fails.length, 0);
+if (CONTROL === 'early') {
+  const fired = red('quiet') && red('deals');
+  console.log(fired
+    ? `simCmUnseededWorld: CONTROL early FIRED: adopted as the save opens, the comparison with BASE before the first summer went red (quiet ${results.quiet.fails.length}, deals ${results.deals.fails.length} saves)`
+    : `simCmUnseededWorld: CONTROL early DID NOT FIRE as it must: quiet red ${red('quiet')}, deals red ${red('deals')}`);
+  process.exit(fired ? 1 : 3);
+}
+if (CONTROL === 'never') {
+  const moved = results.deals.living.counts.moved ?? 0;
+  const fired = moved > 0 && !red('deals');
+  console.log(fired
+    ? `simCmUnseededWorld: CONTROL never FIRED: never adopted, the moved check went red ${moved} times after the rollover while the comparison before it stayed green`
+    : `simCmUnseededWorld: CONTROL never DID NOT FIRE as it must: moved red ${moved}, the comparison before the rollover red ${red('deals')}`);
+  process.exit(fired ? 1 : 3);
+}
+/* Round 1508: the checks after the rollover must have had something to hold. */
+const L = results.deals.living;
+if (!L.journeys || !L.lines || !L.mine.release || !L.mine.buy || !L.mine.sale) cannot(`after the rollover the deal fleet checked ${L.journeys} careers, ${L.lines} deal lines, ${L.mine.release} releases, ${L.mine.buy} buys and ${L.mine.sale} sales of mine: none of them may be 0`);
+const total = sections.reduce((n, s) => n + results[s].fails.length + results[s].living.fails.length, 0);
 console.log(total === 0
-  ? `simCmUnseededWorld: green. ${results.quiet.journeys} old saves with no deal and ${results.deals.journeys} with every deal play byte equal to ${BASE.slice(0, 8)} (state, draws and saved bytes at every step), and ${results.fresh.journeys} new careers with the seed block out do too`
+  ? `simCmUnseededWorld: green. ${results.quiet.journeys} old saves with no deal play byte equal to ${BASE.slice(0, 8)} (state, draws and saved bytes at every step), ${results.deals.journeys} with every deal play byte equal to it up to their first summer and hold the living world's invariants after it, and ${results.fresh.journeys} new careers with the seed block out play byte equal all the way`
   : `simCmUnseededWorld: ${total} FAILURE(S)`);
 process.exit(total === 0 ? 0 : 1);

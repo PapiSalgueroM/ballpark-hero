@@ -412,8 +412,11 @@ describe('actual world roster continuity through manager callbacks', () => {
     const current = withRoll(0.6, () => startNextSeason(high));
     expect(current.squad.find(p => p.id === id)?.rating).toBe(99);
     const old = { ...high }; delete old.worldSeed;
+    /* Round 1508: a career with no seed joins the living world first thing at its summer (adoptLivingWorld), so the
+       ceiling it ages under from that summer is the living world's too: the 99 stays. Before the round it was 95. */
     const legacy = withRoll(0.6, () => startNextSeason(old));
-    expect(legacy.squad.find(p => p.id === id)?.rating).toBe(95);
+    expect(legacy.worldSeed).toBeUndefined(); expect(readWorldRoster(legacy)).not.toBeNull();
+    expect(legacy.squad.find(p => p.id === id)?.rating).toBe(99);
     const below = { ...real, squad: real.squad.map(p => p.id === id ? { ...p, rating: 95, potential: 99, contractYears: 4, apps: 38 } : p) };
     expect(withRoll(0.6, () => startNextSeason(below)).squad.find(p => p.id === id)?.rating).toBe(95);
   });
@@ -511,8 +514,9 @@ describe('actual world roster continuity through manager callbacks', () => {
   });
 
   /* Release AZ, the lead's ruling Y1: a save from before the release has no world seed, and it never writes a
-     ledger, through any deal the recorder sees, so it keeps playing the world it always had. */
-  it('never writes a ledger for a career with no world seed, through every deal the recorder sees', () => {
+     ledger, through any deal the recorder sees, so it keeps playing the world it always had. Round 1508: until its
+     next summer, where it joins the living world. */
+  it('writes no ledger for a career with no world seed before its next summer, through every deal the recorder sees', () => {
     const c = realCareer(); delete c.worldSeed;
     const market = buildMarket(c);
     const offer = market.find(p => p.club === 'Arsenal' && p.age < 29 && p.position !== 'GK')!;
@@ -530,10 +534,14 @@ describe('actual world roster continuity through manager callbacks', () => {
     const loaned = loanIn(released, loanOffer)!; expect(loaned).not.toBeNull();
     const exercised = exerciseLoanOption(loaned, loaned.squad.find(x => x.name === loanOffer.name)!.id)!;
     expect(exercised).not.toBeNull(); expect(exercised.worldRoster).toBeUndefined();
-    const stayed = withRoll(0.6, () => startNextSeason(exercised));
-    expect(stayed.worldRoster).toBeUndefined(); expect(stayed.worldSeed).toBeUndefined();
-    const moved = withRoll(0.6, () => startNextSeason(exercised, 'Liverpool'));
-    expect(moved.worldRoster).toBeUndefined(); expect(moved.worldSeed).toBeUndefined();
+    /* Round 1508: at its next summer such a career joins the living world (a readable ledger, still no seed). Nothing
+       from before that summer is rebuilt: none of the deals above left a record of mine. */
+    const before = [offer.name, second.name, loanOffer.name];
+    for (const next of [withRoll(0.6, () => startNextSeason(exercised)), withRoll(0.6, () => startNextSeason(exercised, 'Liverpool'))]) {
+      expect(next.worldSeed).toBeUndefined();
+      const held = readWorldRoster(next); expect(held).not.toBeNull();
+      expect(held!.records.some(r => before.includes(r.player.name) && (r.owner === c.clubName || r.status === 'released'))).toBe(false);
+    }
   });
 
   /* Release AZ, the lead's ruling Y2: a ledger the reader cannot verify reads as absent (the save plays its seeded
