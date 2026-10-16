@@ -1,0 +1,41 @@
+runEach: done, 11 of 64 exited non zero
+simRetiredRoutes exit=0 1s | simRetiredRoutes: all green
+simRugbyLeagueChallenge exit=0 9s | simRugbyLeagueChallenge: eight source/fixture inputs held byte for byte; reports and changed copies retained.
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simSearchDiscard exit=0 2s | simSearchDiscard: green. Every search plays, and the draft is what decides the season.
+simRarityAgreement exit=1 41s | SUPABASE UNREACHABLE. NOTHING WAS CHECKED. || FAIL: position-left-winger: the pool came back empty
+simSeasonLaw exit=0 1s | simSeasonLaw: 14 checks, 0 failed
+simSilverwareSort exit=0 1s | [SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+simSeoTitles exit=0 2s | simSeoTitles: green. 133 games carry a keyword title and description, PageSeo renders them lazily, every saved page matches, and the entry chunk is clean, and every saved guide heading is its search t
+simSoccerCareerColdContext exit=1 1s | Node.js v24.21.0
+simSoccerCareerPendingLife exit=1 1s | Node.js v24.21.0
+simNbaAwardsSense exit=0 172s | simNbaAwardsSense: 164 checks, 0 failed (full size), 170s
+simSoccerCareerSaveRetry exit=0 20s | simSoccerCareerSaveRetry: 8 actual outcomes passed.
+simSoccerConquest exit=1 12s | 1 FAILURES || FAIL: the database refused game_score_caps?select=game,max_score&game=eq.conquest-soccer-imperialism: Error: Offline harness blocked fetch to https://flawuiqbvj / 1 FAILURES
+simSoccerHigherLowerReveal exit=0 4s | simSoccerHigherLowerReveal: source bytes held, owned copies and report cleaned.
+simSoccerAgentReviewPageControl exit=0 37s | PASS actual page/component source held and exact evidence retained.
+simSoccerSeasonCompetitions exit=0 2s | simSoccerSeasonCompetitions: saved names, exact outcomes, no historical leakage and independent engine snapshots passed
+simSoccerDiscipline exit=0 70s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m || [41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSoccer discipline consequences[2m > [22mkeeps all appearances suspended at zero goals a
+simSquadDealTopic exit=0 1s | simSquadDealTopic: green. The league you pick is the league you get, in both eras, jokes included.
+simStatDetectiveMotion exit=0 20s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+simStorageWrites exit=0 6s | simStorageWrites: all green (owed: 12)
+simTennisSlams exit=0 1s | simTennisSlams: 11 checks, 0 failed; end state 1015 rows (record 1015), 1004 verified, 5 corrected, 6 filled, 10 dropped
+simTournamentWinners exit=0 2s | simTournamentWinners: every squad is under its own nation, and the file is still read by nothing.
+simSoccerLoanMinutes exit=0 87s | PASS simSoccerLoanMinutes: projected forced loans, complete moves and parent returns
+simTransferPathModes exit=0 10s | simTransferPathModes: green. Under every rule the stored minimum is the search's, every hint describes a path the rule accepts, and no chain leaves the rule.
+simTrustCopy exit=0 2s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simTycoonGoalFlight exit=1 1s | Scope: finite component proof; headed browser requires xvfb and prefetched actual font cache. Evidence: /home/runner/work/ballpark-hero/ballpark-hero/tycoon-goal-flight-artifacts || simTycoonGoalFlight: FAIL, 0/4 effective copied controls; historical expected failure=false.
+simSoccerWorldTruth exit=0 99s | simSoccerWorldTruth: OK, every section green
+simTransferBriefPageControl exit=0 21s | CONTROL FIRED captured-rapid-request:2 actual equality failures,4 unrelated page cases pass,6 healthy baseline cases.
+simUclPlaces exit=0 1s | simUclPlaces: all green
+simTycoonSetPiecePage exit=0 10s | Tycoon set-piece page: 6/6 actual page cases passed
+simUsCareerAnnualBenefits exit=0 8s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+simUsCareerRecovery exit=0 9s | Career recovery: fictional offline engine fixtures, no native UI, full-career completion, medical effect or real sports-stat claim.
+simUsCoaching exit=0 8s | PASS: ALL US COACHING CHECKS PASSED
+simWc2026Results exit=0 2s | simWc2026Results: all green
+simWilderness exit=0 2s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+simWindow2026SerieA exit=1 5s | SUPABASE unreachable (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co) for player_market_values?select=club&year=eq.2026&club=eq.Atl%C3%A9tico%20de%20Madrid&limit=1 af
+simWorldXiPositions exit=1 1s | SUPABASE UNREACHABLE OR POOL TOO SMALL. NOTHING WAS CHECKED.
+simValidatePlayerRecords exit=1 105s | simValidatePlayerRecords: 83 finding(s). || FAIL: no nation pool could be measured, so this section proved nothing / FAIL: the pool for Argentina is EMPTY, so that slot cannot be filled
+simTycoonPitch exit=0 684s |    All 8 controls fired exactly where they should.
+runEach: done, 11 of 64 exited non zero
