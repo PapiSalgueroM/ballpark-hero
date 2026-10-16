@@ -1,0 +1,32 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+appeal-retake: node .rc/x/pinAll.mjs e814c2de --write && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout -- scripts/fixtures; exit $s
+rules-bare: node scripts/simCmLeagueRules.mjs
+rules-retake: sleep 9 && git worktree add -q .claude/worktrees/rt HEAD && ln -s "$PWD/node_modules" .claude/worktrees/rt/node_modules && node .claude/worktrees/rt/scripts/simCmLeagueRules.mjs --write | tail -2 && node .claude/worktrees/rt/scripts/simCmLeagueRules.mjs
+retire: node scripts/simCmRetire.mjs
+retire-fleet: export RB=$(node scripts/lib/treeWithoutMerge.mjs 819d9d16 dd44adff) && echo "base $RB" && git worktree add -f .rb1 $RB >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb1 node scripts/simCmRetire.mjs --part=fleet
+retire-hotseat-loads: sleep 5; export RB=$(node scripts/lib/treeWithoutMerge.mjs 819d9d16 dd44adff) && echo "base $RB" && git worktree add -f .rb2 $RB >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb2 node scripts/simCmRetire.mjs --part=hotseat,loads,oldsave
+retire-ctl: r=""; for k in tielast skipgame nomissed basewrites pensdrawn retiretouch legacydrop liveok seasonover drawone dash; do RETIRE_CONTROL=$k node scripts/simCmRetire.mjs > /tmp/r-$k.log 2>&1; e=$?; f=$(grep -c "FIRED" /tmp/r-$k.log); r="$r $k=$e/$f"; done; echo "controls:$r"; [ -z "$(echo "$r" | tr ' ' '\n' | grep -v '^$' | grep -v '=1/[1-9]')" ]
+retire-ctl-base: sleep 10; export RB=$(node scripts/lib/treeWithoutMerge.mjs 819d9d16 dd44adff) && echo "base $RB" && git worktree add -f .rb3 $RB >/dev/null 2>&1; r=""; for k in stripnone drawleak hotseatwrites loadtouch; do RETIRE_BASE=$PWD/.rb3 RETIRE_CONTROL=$k node scripts/simCmRetire.mjs > /tmp/rb-$k.log 2>&1; e=$?; f=$(grep -c "FIRED" /tmp/rb-$k.log); r="$r $k=$e/$f"; tail -1 /tmp/rb-$k.log; done; echo "controls:$r"; [ -z "$(echo "$r" | tr ' ' '\n' | grep -v '^$' | grep -v '=1/[1-9]')" ]
+vitest-cm: node_modules/.bin/vitest run src/test/clubManager src/test/cm src/test/manager src/test/dailyMenuResume src/lib/clubManager src/test/numberFormatting.test.tsx src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+ns: node scripts/simCmNoSack.mjs
+ownclub: node scripts/simCmOwnClubMarket.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simEarlyReturnScope: node scripts/simEarlyReturnScope.mjs
+simClubManager: node scripts/simClubManager.mjs
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs
+simWilderness: node scripts/simWilderness.mjs
+simNationJob: node scripts/simNationJob.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+decisions-default: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs
+decisions-seed4: SIM_SEED=4 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
