@@ -1,0 +1,4 @@
+NEGATIVE CONTROL ON: RETIRE_CONTROL=dash
+== dashes
+FAIL [dashes] no dash of any kind in the 5 new files (527 lines), comments included (src/lib/clubManagerRetire.ts:190)
+control dash FIRED: 1 of 1 checks red

@@ -1,0 +1,7 @@
+rules-base exit=0 47s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+rules-nogate exit=0 47s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+rules-head-EXPECT-RED exit=1 46s | simCmLeagueRules: 47 failure(s)
+write-digest exit=0 73s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+probe38 exit=0 2s | probe38 done
+retire exit=0 25s | simCmRetire: all 17 checks passed (record, oldsave, pens, base, retire, dashes)
+retire-dash exit=1 0s | control dash FIRED: 1 of 1 checks red
