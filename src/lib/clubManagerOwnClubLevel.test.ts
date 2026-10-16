@@ -119,8 +119,12 @@ describe("the manager's own club is read from his club, never the world roster",
        roster put at his club were men who are not his. Real Madrid's bake holds more men than the 26 a squad starts with. */
     const s: CareerState = withRoll(0.6, () => ({ ...startCareer('Real Madrid'), budget: 9999, wageCap: 9999, transferWindow: 'summer' as const }));
     expect(s.worldSeed).toBeDefined();
-    expect(s.worldRoster).toBeUndefined();
-    const old: CareerState = { ...s };
+    /* Round 1344: a new career now carries its opening window's deals between other clubs in its ledger (the post
+       seed flush), so the case with no ledger, and the career from before the release, take it off first. */
+    const none: CareerState = { ...s };
+    delete none.worldRoster;
+    expect(buildMarket(none).some(m => m.club === 'Real Madrid')).toBe(false);
+    const old: CareerState = { ...none };
     delete old.worldSeed;
     /* A career from before the release lists them, on sale from his own club, exactly as it always did (ruling Y1). */
     const oldMine = buildMarket(old).filter(m => m.club === 'Real Madrid');

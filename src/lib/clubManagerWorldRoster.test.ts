@@ -44,6 +44,10 @@ function realCareer(): CareerState {
   const rng = vi.spyOn(Math, 'random').mockReturnValue(0.6);
   try {
     const c = startCareer('Everton');
+    /* Round 1344: a new career now carries its opening window's deals between other clubs in its ledger (the post
+       seed flush). These cases are about the manager's own deals from a career's first day, so the fixture starts
+       from the ledger a new career had before: none. src/lib/clubManagerWorldMoves.test.ts holds the flush. */
+    delete c.worldRoster;
     return { ...c, budget: 9999, wageCap: 9999, transferWindow: 'summer' };
   } finally { rng.mockRestore(); }
 }

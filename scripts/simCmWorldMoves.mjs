@@ -24,6 +24,11 @@
  *      every later rollover, or the ledger says he retired; (iv) printed per window type: deals, refusals,
  *      records, the ledger's stored length, and the opening window's refusals on a line of their own (the critic's
  *      correction 4: that window cannot skip, so its refusals are measured, expected 0).
+ *   2. negotiation: at each seeded career's opening window (seeds 1 to 5), PR269's own scripts open a bidding war
+ *      (startNegotiation on [.6, .99, .6], an offer at 0.8 of the ask on [.6, .01, .5, .5]); then the hijack
+ *      (makeOffer again on [.01]) and, from the same state, the walk away (walkAway on [.01]): the rival owns the
+ *      man (the ledger places him at the rival, who lists him, and the seller does not), and exactly one draw is
+ *      taken. A career where the vectors raise no rival is counted, not failed; under 5 of either arm cannot run.
  *   6. legacy: careers with no world seed (startCareer with PR269's legacy world, and fresh careers with the seed,
  *      the ledger and the squad's ledger keys stripped the way simClubManagerSaveSize strips them, and the legacy
  *      career with three deals of mine at its start: a release, a buy and a sale through acceptBid), the same nine
@@ -51,7 +56,7 @@
  *   section 9: the table is in the round's notes, docs/audits/ROUND-1344-NOTES.md; the January entry took 37.8 ms on
  *     the base and about 255 ms with the probe (recorded deal by deal), which is why ruling 4 packs once a window.
  *
- * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,6,12), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per
+ * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,2,6,12), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per
  * section), CM_WORLD_MOVES_ERAS (default now,era2015,era2005), CM_WORLD_MOVES_BASE (default the commit the branch
  * started from), CM_WORLD_MOVES_SHAPE_ARMS (default base,head), CM_WORLD_MOVES_SEASONS (section 9, default 15),
  * CM_WORLD_MOVES_OUT (section 9's JSON folder, default $RC_OUT or the temp folder).
@@ -64,6 +69,8 @@
  *                                     opening window
  *   CM_WORLD_MOVES_CONTROL=nojanuary  January's window keeps the ledger it had: section 1 red, first in January
  *   CM_WORLD_MOVES_CONTROL=nosummer   the summer's window keeps the ledger it had: section 1 red, first in the summer
+ *   CM_WORLD_MOVES_CONTROL=nohijack   makeOffer's hijack records nothing: section 2 red on the hijack arm only
+ *   CM_WORLD_MOVES_CONTROL=nowalk     walkAway's rival close records nothing: section 2 red on the walk arm only
  *   CM_WORLD_MOVES_CONTROL=slow       the window packs the ledger after every deal again (the step 1 probe's way):
  *                                     section 12 red
  *   CM_WORLD_MOVES_COMBINE_CONTROL=shift  --combine adds 0.2 to the head's top five XI at season 10: red
@@ -102,7 +109,7 @@ const COMBINE = process.argv[2] === '--combine';   // handled at the end of the 
 
 /* The commit this branch started from (origin/main at the claim, Release BG live; src equal to bd3b6244). */
 const BASE = process.env.CM_WORLD_MOVES_BASE || 'd4f2c6f688d656205722ba52bbdb33f03490966a';
-const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 6, 12]));
+const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 2, 6, 12]));
 const ERAS = (process.env.CM_WORLD_MOVES_ERAS || 'now,era2015,era2005').split(',');
 if (process.env.CM_WORLD_MOVES_HEAD) cannot('CM_WORLD_MOVES_HEAD is gone: the step 1 probe was removed at step 2 (the head records the deals itself)');
 const CONTROL = process.env.CM_WORLD_MOVES_CONTROL || '';
@@ -120,6 +127,8 @@ const CONTROLS = {
   noflush: { section: 1, first: 'opening', edits: [['  return recordAiDeals(state, unrecorded);\n}\n', '  return state;\n}\n']] },
   nojanuary: { section: 1, first: 'january', edits: [[JANUARY_CALL, `${keepLedger('      ')}      // Round 135:`]] },
   nosummer: { section: 1, first: 'summer', edits: [[SUMMER_CALL, `  state.intl = freshIntl(state);\n${keepLedger('  ')}`]] },
+  nohijack: { section: 2, arm: 'hijack', edits: [['      return recordAiDeals(state, [{ mp: next.player, to: next.rivalBidder, fee: next.rivalOffer }]);\n', '      return state;\n']] },
+  nowalk: { section: 2, arm: 'walk', edits: [['    return recordAiDeals(state, [{ mp: neg.player, to: neg.rivalBidder, fee: neg.rivalOffer }]);\n', '    return state;\n']] },
   slow: { section: 12, edits: [[RECORD_LINE, '    if (working && seen) { const moved = recordAiDeal(working, { mp, to: buyer, fee }, working); if (moved === working) continue; working = packedLedger(moved); }\n    else unrecorded.push({ mp, to: buyer, fee });\n']] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`);
@@ -347,6 +356,45 @@ async function ownershipCareer(E, era, club, seed) {
       atWindow('summer', `the summer before season ${season + 1}`, s, before);
     }
   } finally { Math.random = keep; }
+}
+
+/* ---------- section 2, negotiation ---------- */
+/** fn under Math.random fed a fixed vector; one draw past its end throws. Returns the value and the draws taken. */
+function onVector(values, fn) {
+  const keep = Math.random; let taken = 0;
+  Math.random = () => { if (taken >= values.length) throw new Error('a draw past the vector'); return values[taken++]; };
+  try { return { value: fn(), taken }; } finally { Math.random = keep; }
+}
+const s2 = { hijack: { set: 0, owned: 0 }, walk: { set: 0, owned: 0 }, unset: 0 };
+/* PR269's own scripts (src/test/managerAiOwnership.test.ts at 1923d291): a card a career can afford, under 27,
+   with one source at its club; startNegotiation on [.6, .99, .6]; an offer at 0.8 of the ask on [.6, .01, .5, .5]
+   brings the rival in; then the hijack (makeOffer again on [.01]) or the walk away (walkAway on [.01]). */
+async function negotiationCareer(E, era, club, seed) {
+  const M = await E.fresh(), keep = Math.random;
+  Math.random = stream(mix('negotiate', era, club, seed));
+  let s;
+  try { s = M.cm.startCareer(club, era); } finally { Math.random = keep; }
+  const tag = `${club} (${era}, seed ${seed})`;
+  const card = M.cm.buildMarket(s).find(p => p.position !== 'GK' && p.age < 27 && p.price >= 3 && p.price * 1.2 <= s.budget
+    && M.cm.oppRosterFor(s, p.club).filter(x => x.n === p.name && x.a === p.age).length === 1);
+  const started = card && onVector([0.6, 0.99, 0.6], () => M.cm.startNegotiation(s, card)).value;
+  const amount = started?.negotiation ? Math.round(started.negotiation.theirAsk * 0.8 * 10) / 10 : 0;
+  const war = started?.negotiation?.status === 'open' ? onVector([0.6, 0.01, 0.5, 0.5], () => M.cm.makeOffer(started, amount)).value : null;
+  const neg = war?.negotiation;
+  if (!neg || neg.status !== 'open' || !neg.rivalBidder || neg.rivalOffer === null) { s2.unset += 1; return; }
+  for (const arm of ['hijack', 'walk']) {
+    let run;
+    try { run = onVector([0.01], () => arm === 'hijack' ? M.cm.makeOffer(war, amount) : M.cm.walkAway(war)); }
+    catch (e) { fail(2, `${tag} ${arm}: ${e.message}`); continue; }
+    s2[arm].set += 1;
+    const after = run.value;
+    if (run.taken !== 1) fail(2, `${tag} ${arm}: took ${run.taken} draws, the vector holds 1`);
+    if (arm === 'hijack' && after?.negotiation?.status !== 'hijacked') { fail(2, `${tag} hijack: the rival did not close`); continue; }
+    const line = { name: neg.player.name, from: neg.player.club, to: neg.rivalBidder };
+    const why = placement(M, after, line);
+    if (why) fail(2, `${tag} ${arm}: ${line.to} took ${line.name} from ${line.from}, but ${why}`);
+    else s2[arm].owned += 1;
+  }
 }
 
 /* ---------- section 6, legacy ---------- */
@@ -683,6 +731,13 @@ if (SECTIONS.has(1)) {
   console.log(`   the opening window's refusals (deal lines it closed before the seed that the flush could not place): ${tally.opening?.refused ?? 0} of ${tally.opening?.deals ?? 0} (expected 0)`);
   if (!s1Careers || !Object.values(tally).some(r => r.deals)) fail(1,'no AI deal line was seen, so nothing was measured');
 }
+if (SECTIONS.has(2)) {
+  const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [1, 2, 3, 4, 5]);
+  console.log(`2) negotiation: a hijack and a walk away on PR269's vectors at each seeded career's opening window, seeds ${seeds.join(',')}`);
+  for (const era of ERAS) for (const club of CLUBS[era]) for (const seed of seeds) await negotiationCareer(H, era, club, seed);
+  console.log(`   hijack: ${s2.hijack.owned} of ${s2.hijack.set} at the rival; walk away: ${s2.walk.owned} of ${s2.walk.set}; ${s2.unset} careers where no bidding war could be set up on the vectors`);
+  if (s2.hijack.set < 5 || s2.walk.set < 5) cannot(`section 2: only ${s2.hijack.set} hijacks and ${s2.walk.set} walk aways could be set up, under 5 each`);
+}
 if (SECTIONS.has(6)) {
   console.log('6) legacy: unseeded careers, BASE against the head, every saved string and Math.random draw');
   await legacySection(B, H);
@@ -704,7 +759,12 @@ const red = Object.keys(failures).map(Number).sort((a, b) => a - b);
 for (const section of red) if (failures[section].length > 8) console.log(`  section ${section}: ${failures[section].length - 8} more failures not shown`);
 if (CONTROL) {
   const target = CONTROLS[CONTROL].section;
-  const first = CONTROLS[CONTROL].first;
+  const first = CONTROLS[CONTROL].first, arm = CONTROLS[CONTROL].arm;
+  /* An arm control (section 2) must turn its own arm red and leave the other arm green. */
+  if (arm && failures[target]?.length && !failures[target].every(line => line.includes(` ${arm}:`))) {
+    console.log(`simCmWorldMoves: control ${CONTROL} DID NOT FIRE as it must: section ${target} red beyond its own arm (${arm})`);
+    process.exit(3);
+  }
   if (failures[target]?.length && (!first || firstRed1 === first)) { console.log(`simCmWorldMoves: control ${CONTROL} FIRED: section ${target} red (${failures[target].length})${first ? `, first at ${first}` : ''}`); process.exit(1); }
   if (failures[target]?.length) { console.log(`simCmWorldMoves: control ${CONTROL} DID NOT FIRE as it must: section ${target} red, but first at ${firstRed1}, not ${first}`); process.exit(3); }
   console.log(`simCmWorldMoves: control ${CONTROL} DID NOT FIRE: section ${target} stayed green`);

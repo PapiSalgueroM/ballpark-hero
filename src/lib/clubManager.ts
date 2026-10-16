@@ -10422,7 +10422,8 @@ export function makeOffer(career: CareerState, amount: number, extras?: DealExtr
         transferLog: [...(career.transferLog ?? [])],
       };
       pushNews(state, { name: next.player.name, from: next.player.club, to: next.rivalBidder, fee: next.rivalOffer });
-      return state;
+      /* Round 1344: the rival's deal is a deal between two other clubs, so a seeded career records it (no draw). */
+      return recordAiDeals(state, [{ mp: next.player, to: next.rivalBidder, fee: next.rivalOffer }]);
     }
     return { ...career, negotiation: next };
   }
@@ -10714,7 +10715,8 @@ export function walkAway(career: CareerState): CareerState {
       `${neg.rivalBidder} sign ${neg.player.name} after ${career.clubName} walk away from the table.`,
       ...state.aiHeadlines,
     ].slice(0, 8);
-    return state;
+    /* Round 1344: and so is this one (no draw). */
+    return recordAiDeals(state, [{ mp: neg.player, to: neg.rivalBidder, fee: neg.rivalOffer }]);
   }
   return { ...career, negotiation: null };
 }
