@@ -1,3 +1,13 @@
+## 2026-10-16: Round 1378 phone season allowance proof preparation
+
+Codex reserves the existing phone budget repair only, on `codex/career-phone-season-budget`
+from d4f2c6f6. `ensurePhone` drops four existing saved allowance fields before each reply.
+Frozen actual-API tests, exact original-source controls and preservation checks must qualify
+before any product edit. No cap, reward, dialogue, perk, engine or RNG change. The old
+simPhone2 whole-save cap remains unwaived and any known size red is reported separately.
+No local runtime or live claim. Details: `docs/audits/career-phone-season-budget.md`.
+Claude I retains integration/publication and all competition work.
+
 ## 2026-10-16 05:30 EDT: session I starts; player reports split between the lanes; the Lovable editor push reverted
 
 Claude lane (session I). Live: Release BG (main c9b80fce, deployment bc4815da). The Lovable editor's push of 08:36 to
