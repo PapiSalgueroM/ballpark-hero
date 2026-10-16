@@ -1,0 +1,12 @@
+vitest: node_modules/.bin/vitest run src/lib/clubManager src/test/clubManager src/test/cm src/test/managerHotSeat src/test/calendarCurrentDate src/test/dailyMenuResume --testTimeout=300000 --hookTimeout=120000
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simEra2005: node scripts/simEra2005.mjs
+simEra2010: node scripts/simEra2010.mjs
+simEra2015: node scripts/simEra2015.mjs
+simEra2020: node scripts/simEra2020.mjs
+simAwardRaces: node scripts/simAwardRaces.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simSaveFence: node scripts/simSaveFence.mjs

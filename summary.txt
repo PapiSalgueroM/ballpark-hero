@@ -1,0 +1,12 @@
+simClubManagerSave exit=0 15s | simClubManagerSave: all sections green
+simClubManager exit=0 53s | ALL CLUB MANAGER SIMS PASSED
+simClubManagerSaveSize exit=0 80s | simClubManagerSaveSize: all sections green
+simEra2005 exit=0 16s | simEra2005: green. 2005 is real, sealed, and plays like 2005.
+simClubManagerSlots exit=0 72s | simClubManagerSlots: all sections green
+simEra2010 exit=0 15s | simEra2010: green. 2010 is real, sealed, and plays like 2010.
+vitest exit=0 137s |    Duration  135.67s (transform 7.46s, setup 3.27s, collect 28.72s, tests 242.64s, environment 22.26s, prepare 4.86s)
+simEra2015 exit=0 13s | simEra2015: green. 2015 is real, sealed, and plays like 2015.
+simEra2020 exit=0 28s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+simAwardRaces exit=0 19s | ALL AWARD RACE CHECKS PASSED
+simSaveFence exit=0 37s | simSaveFence: all green (tabs, source, fleet)
+simCmLeagueBook exit=0 59s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (58s)
