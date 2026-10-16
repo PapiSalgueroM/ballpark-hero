@@ -1,0 +1,39 @@
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   bridge "the window records nothing": 1
+   bridge "recordAiDeals records nothing": 1
+   bridge "the join keeps the departed ledger": 1
+   bridge "the join keeps the run in's gone names and log": 1
+   bridge "a rival closes whatever the ledger says": 1
+   control seedless: 1
+   control norecord: 1
+   control norecord: 1
+   control noflush: 1
+   control nojanuary: 1
+   control nosummer: 1
+   control joinledger: 1
+   control nolock: 1
+   control nolist: 1
+   control norepair: 1
+   control repairthrows: 1
+   control nohijack: 1
+   control nowalk: 1
+   control noguard: 1
+   control nocarry: 1
+   control nostamp: 1
+   control dropbase: 1
+   control noskip: 1
+   control drawshift: 1
+   control slow: 1
+   control edit made 1 time(s): noskip: ; if (moved === working) continue; working = moved; }
+10) the window's skip: Real Madrid sells its eight best outfield men at the start and plays 3 seasons, seeds 1,2,3,4,5,6,7,8
+  FAIL section 10: Real Madrid (now, seed 1, eight men sold) the summer before season 3: the news says Barcelona signed Yan Diomande from Bologna, but the ledger holds no record of him at Barcelona
+  FAIL section 10: Real Madrid (now, seed 1, eight men sold) the summer before season 3: Barcelona took Yan Diomande, a man I sold (ruling 3)
+  FAIL section 10: Real Madrid (now, seed 1, eight men sold) the summer before season 3: the news says Brentford signed Dean Huijsen from Southampton, but the ledger holds no record of him at Brentford
+  FAIL section 10: Real Madrid (now, seed 1, eight men sold) the summer before season 3: Brentford took Dean Huijsen, a man I sold (ruling 3)
+  FAIL section 10: Real Madrid (now, seed 2, eight men sold) January of season 2: the news says Liverpool signed Dean Huijsen from Birmingham City, but the ledger holds no record of him at Liverpool
+  FAIL section 10: Real Madrid (now, seed 2, eight men sold) January of season 2: Liverpool took Dean Huijsen, a man I sold (ruling 3)
+  FAIL section 10: Real Madrid (now, seed 7, eight men sold) January of season 2: the news says Tottenham signed Arda Güler from Coventry City, but the ledger holds no record of him at Tottenham
+  FAIL section 10: Real Madrid (now, seed 7, eight men sold) January of season 2: Tottenham took Arda Güler, a man I sold (ruling 3)
+   8 careers, 64 men sold, 40 windows, 165 deal lines checked; a man I sold stood in the top 120 a window draws from 254 times
+  section 10: 2 more failures not shown
+simCmWorldMoves: control noskip FIRED: section 10 red (10)

@@ -1,0 +1,39 @@
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   bridge "the window records nothing": 1
+   bridge "recordAiDeals records nothing": 1
+   bridge "the join keeps the departed ledger": 1
+   bridge "the join keeps the run in's gone names and log": 1
+   bridge "a rival closes whatever the ledger says": 1
+   control seedless: 1
+   control norecord: 1
+   control norecord: 1
+   control noflush: 1
+   control nojanuary: 1
+   control nosummer: 1
+   control joinledger: 1
+   control nolock: 1
+   control nolist: 1
+   control norepair: 1
+   control repairthrows: 1
+   control nohijack: 1
+   control nowalk: 1
+   control noguard: 1
+   control nocarry: 1
+   control nostamp: 1
+   control dropbase: 1
+   control noskip: 1
+   control drawshift: 1
+   control slow: 1
+   control edit made 1 time(s): nocarry: transferLog: [...lines, ...(s.transferLog ?? []).map(t => ({
+3) join: seeded 2026-27 careers take a job mid season through joinClubNow, before and after January, seeds 1,2,3
+  FAIL section 3: Real Madrid (now, seed 1, before January): the joined log does not open with the departed career's 5 deal lines of this season between two other clubs
+  FAIL section 3: Real Madrid (now, seed 1, before January): the joined ledger holds Franco Mastantuono, in no deal line of the run in nor the departed ledger
+  FAIL section 3: Real Madrid (now, seed 1, before January): the joined ledger holds Alejandro Balde, in no deal line of the run in nor the departed ledger
+  FAIL section 3: Real Madrid (now, seed 1, before January): the joined ledger holds Rúben Dias, in no deal line of the run in nor the departed ledger
+  FAIL section 3: Real Madrid (now, seed 1, before January): the joined ledger holds Khvicha Kvaratskhelia, in no deal line of the run in nor the departed ledger
+  FAIL section 3: Real Madrid (now, seed 1, before January): the joined ledger holds Josko Gvardiol, in no deal line of the run in nor the departed ledger
+  FAIL section 3: Real Madrid (now, seed 1, before January): Gianluigi Donnarumma, bought by Roma this season, is not on the screen's market there after the move
+  FAIL section 3: Real Madrid (now, seed 1, before January): Moisés Caicedo, bought by PSG this season, is not on the screen's market there after the move
+   27 moves (0 could not be set up), 273 departed records kept, 13 deal lines of the run in placed, 163 gone names carried over with 163 deal lines, 263 payloads compared, 42 door presses after the move (0 men the ledger no longer holds at one club, 0 behind a namesake, counted)
+  section 3: 310 more failures not shown
+simCmWorldMoves: control nocarry FIRED: section 3 red (318)

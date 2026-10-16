@@ -1,0 +1,7 @@
+c-noguard exit=2 39s | simCmWorldMoves: cannot run: section 2: only 13 wars on a man I sold and 0 on a man I left behind could be set up, under 3 each
+c-nocarry exit=1 44s | simCmWorldMoves: control nocarry FIRED: section 3 red (318)
+c-nostamp exit=3 41s | simCmWorldMoves: control nostamp DID NOT FIRE: section 3 stayed green
+c-noflush exit=1 85s | simCmWorldMoves: control noflush FIRED: section 1 red (28), first at opening
+c-noskip exit=1 44s | simCmWorldMoves: control noskip FIRED: section 10 red (10)
+c-dropbase exit=1 87s | simCmWorldMoves: control dropbase FIRED: section 4 red (360531)
+c-drawshift exit=2 49s | simCmWorldMoves: cannot run: section 11: only 0 results compared, under 100
