@@ -76,7 +76,11 @@ describe('Club details use the current owned squad', () => {
     own(state, 'legacy-empty', true);
   });
   it('current roster preservation: seeded save without a ledger shows its owned squad', () => {
-    const state = saved(initial()); expect(state.worldSeed).toBeDefined(); expect(state.worldRoster).toBeUndefined(); own(state, 'seeded');
+    /* Round 1344: a new career now carries its opening window's deals between other clubs in a ledger, and a seeded
+       save written without one has this season's moves mended into one when it opens (repairAiMoves, which mends only
+       names on goneNames). So the save this case opens has no ledger and no gone names: seeded, nothing to mend. */
+    const fresh = initial(); delete fresh.worldRoster; fresh.goneNames = [];
+    const state = saved(fresh); expect(state.worldSeed).toBeDefined(); expect(state.worldRoster).toBeUndefined(); own(state, 'seeded');
   });
   it('current roster preservation: seeded actual deals show the owned roster', () => {
     const result = changed(true); expect(result.state.worldSeed).toBeDefined(); expect(result.state.worldRoster).toBeDefined(); own(result.state, 'seeded-deal');

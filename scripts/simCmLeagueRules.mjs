@@ -524,6 +524,23 @@
       s2_whole as well, 104 hashes, each a hash of a whole state; every
       other view held, and pure held. Written with --part=modern,eras,pure
       --write on the tree itself (104 lines changed), then run green whole.
+      Round 1344 (2026-10-16) took it ONCE, by the brief's decision 7: a
+      seeded career now records every deal between two other clubs in its
+      world ledger, from the opening window on, so `start`, `whole` and
+      `wholeNext` move in all 47 saves (27 modern, 20 era), `summary` in 25,
+      and the tables, results, cups and Europe of the few saves whose
+      matches met a moved man (s2_world and s2_whole in 10, s2_table in 8,
+      s2_results 7, s2_cup 6, world 3, objectivesNext 3, table, results,
+      europe, cup and cupDrawNext 2 each, trophies, s2_trophies, s2_europe,
+      promotions and europeNext 1 each); pure held 48/0. Attribution on a
+      GitHub runner at b7da3075 (remote check r1344-y), in throwaway
+      checkouts: with scripts/lib/cmNoAiMoves1344.mjs applied (the
+      recording taken out) the committed file is green whole
+      (leaguerules-bridged), and the round's base d4f2c6f6 is green whole
+      (leaguerules-onbase), so the recording is the only cause. Written with
+      --part=modern,eras,pure --write on the tree itself (remote check
+      r1344-dg, line write-digest, 234 lines changed), then run green whole
+      on the same runner.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,

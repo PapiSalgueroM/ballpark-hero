@@ -109,6 +109,13 @@ export default function ClubManagerHelp() {
                 <p><span className="font-semibold text-foreground">Example:</span> a 4-4 draw in Season 2 and a 5-3 win in Season 4 both have eight goals, so your record keeps the 4-4. A 3-3 cup tie you won on penalties counts six.</p>
                 <p><span className="font-semibold text-foreground">Example:</span> a career saved before this line was added works it out from the scores the save still keeps. If it no longer keeps all of them, the line says how many of your matches it could not see.</p>
               </div>
+              {/* Round 1344: a deal between two other clubs reaches the world ledger (generateHeadlines in
+                  src/lib/clubManager.ts). Appended on its own; it points back to the world memory paragraph. */}
+              <div data-cm-help="world-moves" className="space-y-2">
+                <p>🔄 <span className="font-semibold text-foreground">Deals between other clubs stick too.</span> The world remembers your deals (see above), and in a career started after the 13 October update it remembers the other clubs' deals as well. When the news says a club signed a player, he is in their squad straight away: on their club page, in their line ups against you, and on the transfer market at his new club. They will not sell him on until the summer, and the market tells you so if you try. A player you sell works the same way.</p>
+                <p><span className="font-semibold text-foreground">Example:</span> Napoli sell a winger to Arsenal in the summer news. He is in Arsenal's squad on their club page straight away, he can play against you for Arsenal, and the market lists him at Arsenal, not for sale until next summer. A season later he is still there, a year older.</p>
+                <p>Club strengths and the golden boot race are worked out once a season, so a window's moves count there from the next season. If your career is newer than that update and a move this season went missing, opening it puts him where he went; moves from earlier seasons stay where they were. A career started before the update keeps the world it had.</p>
+              </div>
             </div>
   );
 }

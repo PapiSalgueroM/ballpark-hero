@@ -29,7 +29,7 @@ import {
   playNextEntry, fixtureFor, entryInvolvesMe, careerLeagueOf, leagueRulesOf, CUP_LABELS, UCL_LABELS,
   cupProgressRank, uclProgressRank, objectiveStatuses, openObjectives,
   /* Round 783: the mid season takeover an accepted application walks into. */
-  startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, customExitUclField,
+  startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, customExitUclField, SAVE_CAPS,
   /* Round 1335: the old season rules' switch, read by both handovers. */
   legacySeason,
 } from '@/lib/clubManager';
@@ -865,6 +865,25 @@ function playRunIn(career: CareerState, target: number): CareerState {
   return s;
 }
 
+/* Round 1344 review (both reviews' second major; the other lane's PR295 found it too): what a seeded career carries
+   across a mid season job move so a man another club bought this season is still not for sale after it (the brief's
+   decision 3). The gone names alone hid him from buildMarket, but the screen lists him at his buyer and every door
+   reads this season's deal line to that club (joinedHisClubThisSeason), and that line lived only in the departed
+   career's log, so the doors opened. Carried: the departed career's gone names of this season's deals between two
+   other clubs and those deal lines, first, then the run in's own lines (a seeded run in already plays this season's
+   number: startCareer takes it from the departed career). The log keeps its cap. scripts/simCmWorldMoves.mjs
+   section 3 holds it (control nocarry). */
+function seededJoinCarry(career: CareerState, s: CareerState, moved: ReadonlySet<string>): Pick<CareerState, 'goneNames' | 'transferLog'> {
+  const gone = career.goneNames.filter(name => moved.has(name));
+  const carried = new Set(gone);
+  const lines = (career.transferLog ?? []).filter(t => t.season === career.season && !t.loan && carried.has(t.name)
+    && t.from !== career.clubName && t.to !== career.clubName);
+  return {
+    goneNames: [...new Set([...s.goneNames, ...gone])],
+    transferLog: [...lines, ...(s.transferLog ?? [])].slice(-SAVE_CAPS.transferLog),
+  };
+}
+
 /* ---------- Round 783: walking into the job you applied for, today ---------- */
 
 /**
@@ -948,6 +967,9 @@ export function joinClubNow(career: CareerState): CareerState | null {
   if (s.leagueClubs.includes(from)) managers[from] = { name: interim, since: career.season };
   const managed = new Set(career.careerStats.clubsManaged ?? [from]);
   managed.add(club);
+  /* Round 1344: this season's deals between two other clubs in the departed career (the gone names below). */
+  const movedElsewhere = new Set((career.transferLog ?? []).filter(t => t.season === career.season && !t.loan
+    && t.from !== from && t.to !== from).map(t => t.name));
   const joined: CareerState = {
     ...s,
     sacked: false,
@@ -978,8 +1000,17 @@ export function joinClubNow(career: CareerState): CareerState | null {
     startOptions: career.startOptions,
     h2h: career.h2h,
     retiredNames: career.retiredNames,
-    ...(departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),
+    /* Round 1344, the lead's ruling (brief decision 3): the run in started from the departed career's ledger and
+       wrote every deal it played (the new club's opening window and any January between other clubs, a sale through
+       a release clause), so the joined career takes the run in's ledger whole. A career with no seed writes none,
+       and keeps the departed one exactly as before. scripts/simCmWorldMoves.mjs section 3 holds it. */
+    ...(s.worldRoster !== undefined ? { worldRoster: plainCopy(s.worldRoster) }
+      : departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),
     ...(departed.worldSeed === undefined ? {} : { worldSeed: departed.worldSeed }),
+    /* And in a seeded career a man another club bought earlier this season is not for sale after the move: the
+       run in's gone names plus the departed career's names of this season's deals between two other clubs (the men
+       I bought, sold or let go keep today's rule after a move), with the deal lines the refusal reads. */
+    ...(worldSeedOf(departed) === undefined ? {} : seededJoinCarry(career, s, movedElsewhere)),
     retiredLastSummer: career.retiredLastSummer,
     leagueOverrides: career.leagueOverrides,
     managers,

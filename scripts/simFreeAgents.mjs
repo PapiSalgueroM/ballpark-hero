@@ -1505,6 +1505,10 @@ console.log('17) a man you release never signs for you again, by any door');
      the save as it looks once the record and goneNames are gone, and each must
      open when the permanent list is taken away, or its refusal proves nothing. */
   const st = seeded(7700, () => cm.startCareer('Everton'));
+  /* Round 1344: a new career now carries its opening window's deals between other clubs in its ledger (the post
+     seed flush). This section reads the save with the one ledger record of the release below taken away, so it
+     starts from the ledger a new career had before the round: none. */
+  delete st.worldRoster;
   cm.ensureFreeAgents(st);
   /* Release AZ fix pass 4, the lead's ruling (the manager's own club is read from his squad, never the world
      roster): in a new, seeded career the market lists nobody at my own club, so a man I release there can only

@@ -4,7 +4,7 @@ import { saveMatchPlan as savePlan, applyMatchPlan as applyPlan, deleteMatchPlan
 import {
   CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality,
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
-  buildMarket, buyPlayer, autoPickXI, nextFixture, sortedLeagueTable,
+  marketForScreen, buyPlayer, autoPickXI, nextFixture, sortedLeagueTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer, savedCareerEraId, savedCareerFixtureKey, leagueOf,
   startNegotiation, makeOffer, offerTerms, exerciseLoanOption, breakLoan, recallLoanedPlayer, walkAway, respondApproach, expandGround,
   enterWilderness, wildernessWeek, acceptWildernessJob, takeNationJob, leaveNationJob, payClause, loanIn, acceptBid, rejectBid,
@@ -363,7 +363,9 @@ export function useClubManager() {
 
   /* ---------- derived ---------- */
   const market: MarketPlayer[] = useMemo(
-    () => (career ? buildMarket(career) : []),
+    /* Round 1344: the screen's market also lists a man another club bought this season at his new club (refused
+       until the summer), so the search finds him where he went. */
+    () => (career ? marketForScreen(career) : []),
     [career],
   );
   const nextFx: NextFixtureInfo | null = useMemo(

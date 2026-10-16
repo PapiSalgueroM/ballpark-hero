@@ -81,6 +81,10 @@ try {
   const testSpans = [[oldTestComment, '/* Club details use the saved owned squad for every career, including legacy\n   saves. Rival clubs still use their current world roster. */'],
     ['a career from before the release reads its own club off the projected world exactly as it did', 'a career from before the release reads its own club from its current saved squad'],
     ['expect(screenText(old, \'Real Madrid\')).toContain(`Squad (${projected.length} on the books)`);', 'expect(screenText(old, \'Real Madrid\')).toContain(`Squad (${old.squad.length} on the books)`);']];
+  /* Round 1344: a new career now carries its opening window's deals between other clubs in a ledger (the post seed
+     flush), so the old test's career from before the release takes the ledger off with the seed: one more span. */
+  testSpans.push(['    delete old.worldSeed;\n    expect(old.worldRoster).toBeUndefined();',
+    "    delete old.worldSeed;\n    /* Round 1344: a new career now carries its opening window's deals between other clubs in a ledger (the post\n       seed flush); a career from before the release had none, so it comes off with the seed. */\n    delete old.worldRoster;\n    expect(old.worldRoster).toBeUndefined();"]);
   function planned(file, before, spans) {
     let after = before; const rows = [];
     for (const [anchor, replacement] of spans) {

@@ -533,6 +533,10 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
      writes it a ledger (recordActualRosterTransfer). scripts/simDailyDeals.mjs holds this: its seed control
      puts this line back out. */
   delete s.worldSeed;
+  /* Round 1344: and no ledger. startCareer records its opening window's deals into one once the seed is drawn
+     (the post seed flush); a hot seat day holds none (Y3), so it comes off with the seed, before the first week.
+     scripts/simDailyDeals.mjs holds this: its ledger control puts this line back out. */
+  delete s.worldRoster;
   /* Round 1331: and the match rules the day plays, set before the first week (rulesOf). A day on the base
      rules carries matchRules 'base', read for the substitution rule, the press fixture and (Round 1335)
      the season rules (legacySeason); handoverState takes it off again. scripts/simDailyDeals.mjs (rulesall) and

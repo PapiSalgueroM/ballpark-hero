@@ -56,7 +56,7 @@ import {
 } from '@/lib/clubManagerLeagueBook';
 /* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */
 import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardInput, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
-import { compactWorldRoster, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterView } from '@/lib/clubManagerWorldRoster';
+import { compactWorldRoster, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterOwner, worldRosterView } from '@/lib/clubManagerWorldRoster';
 import type { WorldRosterState } from '@/lib/clubManagerWorldRoster';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
@@ -448,7 +448,7 @@ function worldMarket(career: CareerState): MarketPlayer[] {
 }
 
 /** Only a projected source or an already certified ownership record supplies deal provenance. */
-function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: string, to: string | null, kind: 'permanent' | 'release' | 'retire'): CareerState {
+function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: string, to: string | null, kind: 'permanent' | 'release' | 'retire', pack = true): CareerState {
   /* Release AZ, the lead's ruling Y1: a career with no world seed (every save from before this release, and a
      Hot Seat day handed over) never writes a ledger, so it plays on exactly as it did. A readable ledger alone
      turns on the same branches the seed does, so this is the one place both are kept off together.
@@ -463,7 +463,67 @@ function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: 
   return recordWorldRosterTransfer(state, { player, from, to, kind,
     since: carried?.origin.since ?? source?.since ?? player.worldRosterSince,
     originPosition: carried?.origin.position ?? source?.p,
-    ...(carried ? { key: carried.key } : {}) });
+    ...(carried ? { key: carried.key } : {}) }, pack);
+}
+
+/** Round 1344: one deal closed between two clubs that are not mine. `mp.club` is the seller. */
+export interface AiDeal { mp: MarketPlayer; to: string; fee: number }
+
+/* Round 1344 (the player report of 2026-10-16: a man another club bought vanished from the market and turned up at
+   his old club the next season; PR269, the other lane's Round 1367, proved the four writers that never told the
+   ledger). The man an AI deal moves, as the ledger records him: his own record's payload when the ledger already
+   holds him at the seller, else the seller's projected man (by his key, else by name, age and position) through
+   bakedToCMPlayer, never a payload made up from the market card. Null when the seller does not hold exactly one such
+   man, and (the lead's ruling 3, Release AZ's promise) when the ledger holds him there from a deal of MINE: a man I
+   sold, or one I signed and left behind when I changed jobs. His payload is then the one my squad gave him, the only
+   kind that carries a wage (agePlayer never adds one), and the club that holds him signs him again whenever his
+   deal runs down (refreshWorldRosterOnce), so no AI club takes him while he is there. Pure, no draw.
+   scripts/simCmWorldMoves.mjs and scripts/simCmLedgerBound.mjs (section 4) hold it. */
+export function aiDealPlayer(state: CareerState, mp: MarketPlayer): CMPlayer | null {
+  const current = refreshWorldRoster(state);
+  const found = worldRosterFor(current, mp.club).filter(p => mp.worldRosterKey ? p.worldRosterKey === mp.worldRosterKey
+    : p.n === mp.name && p.a === mp.age && p.p === mp.position);
+  if (found.length !== 1) return null;
+  const key = found[0].worldRosterKey;
+  const record = key ? worldRosterView(current)?.records.find(r => r.key === key && r.owner === mp.club && r.status === 'owned') : undefined;
+  if (!record) return bakedToCMPlayer(found[0]);
+  return record.player.wage === undefined ? plainCopy(record.player) : null;
+}
+
+/* Round 1344: one AI deal written to the ledger, through recordActualRosterTransfer's rules, with the ledger left
+   unpacked (`seen` is the state the window read its market from, so every lookup of a window shares one refreshed
+   read). The same state comes back when the deal is refused. */
+function recordAiDeal(state: CareerState, deal: AiDeal, seen: CareerState): CareerState {
+  const player = aiDealPlayer(seen, deal.mp);
+  return player ? recordActualRosterTransfer(state, player, deal.mp.club, deal.to, 'permanent', false) : state;
+}
+
+/** Round 1344: an unpacked ledger is packed once, at the end of the window that wrote it (the lead's ruling 4). */
+function packedLedger(state: CareerState): CareerState {
+  return state.worldRoster === undefined ? state : { ...state, worldRoster: compactWorldRoster(state.worldRoster) };
+}
+
+/* Round 1344: deals closed while the career had no seed yet (the opening window of a fresh career, whose seed is drawn
+   after its news) or outside a window (the hijack, the walk away), recorded in order and packed once. A career with
+   no seed comes back as the same object (the guard of recordActualRosterTransfer, ruling Y1), so it gains no key.
+   Pure, no draw. Its loop is one line, so scripts/lib/cmNoAiMoves1344.mjs can take it out. Exported for
+   src/lib/clubManagerWorldMoves.test.ts. */
+export function recordAiDeals(state: CareerState, deals: readonly AiDeal[]): CareerState {
+  if (worldSeedOf(state) === undefined || !deals.length) return state;
+  let next = state;
+  for (const deal of deals) next = recordAiDeal(next, deal, state);
+  return next === state ? state : packedLedger(next);
+}
+
+/* Round 1344 review (both reviews' first major; the other lane's PR295 found it too): a rival in a bidding war closes
+   only a deal a seeded career's ledger records. When the ledger refuses the man (the lead's ruling 3: one I sold, or
+   one I signed and left behind at a job move; or a man his club does not hold exactly once) the rival does not get
+   him: the draw that brought the close is spent as before, but no news line, no gone name and no "closed the deal"
+   note say he moved while the ledger keeps him where he was. An unseeded career never refuses (today's rule). Pure,
+   no draw. Its body is one line so scripts/lib/cmNoAiMoves1344.mjs can take it out; scripts/simCmWorldMoves.mjs
+   section 2 (the protected arms) holds it. */
+function rivalCloseRefused(career: CareerState, deal: AiDeal): boolean {
+  return worldSeedOf(career) !== undefined && recordAiDeal(career, deal, career) === career;
 }
 /** A rival club's projected roster minus every man who is in my squad. */
 export function oppRosterFor(state: CareerState, club: string, mine: ReadonlySet<string> = mySquadNames(state)): ProjectedPlayer[] {
@@ -1456,6 +1516,8 @@ export interface MarketPlayer {
   value?: number;
   /** Round 132: this game made him up, and the transfer screen says so. */
   generated?: boolean;
+  /** Round 1344: another club bought him this season (marketForScreen); listed there, not for sale until the summer. */
+  joinedThisSeason?: true;
 }
 
 export interface TransferRecord {
@@ -9330,6 +9392,51 @@ export function buildMarket(career: CareerState): MarketPlayer[] {
     .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.has(sameManKey(p)));
 }
 
+/* Round 1344 (the player report: a man another club bought was "deleted from the database"). The market the transfer
+   screen shows: buildMarket, plus, in a career with a readable ledger, every man another club bought this season (his
+   name is on goneNames, this season's deal line takes him to the club the market lists him at, and the ledger owns
+   him there), marked joinedThisSeason, in the
+   market's own order. He can be found at his new club; every door refuses him with the reason until the summer
+   (joinedThisSeasonRefusal). buildMarket itself is unchanged: the window news and the board's asks read it. A man I
+   sold this season is the same case. With no ledger the answer is buildMarket's own list. scripts/simCmWorldMoves.mjs
+   section 4 holds it. */
+export function marketForScreen(career: CareerState): MarketPlayer[] {
+  const market = buildMarket(career);
+  const gone = new Set(career.goneNames);
+  if (!gone.size || !worldRosterView(career)) return market;
+  const squadNames = new Set(career.squad.map(p => p.name));
+  const retired = new Set(career.retiredNames ?? []);
+  const released = releasedByYouNames(career);
+  const onLoanOut = new Set((career.loanedOut ?? []).map(l => sameManKey(l.player)));
+  /* Round 1344 review: rows are matched by name and club, not by object, so the answer never rests on worldMarket's
+     memo handing the same objects back to three calls; and a man is marked joined by the one test the refusal reads
+     (joinedHisClubThisSeason), so nothing is listed as joined that a door then sells. A gone name with no deal line
+     to his club this season stays off the screen, as buildMarket has it. */
+  const at = (p: MarketPlayer) => `${p.name}|${p.club}`;
+  const world = worldMarket(career);
+  const joined = new Set(world.filter(p => gone.has(p.name)
+    && !squadNames.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.has(sameManKey(p))
+    && joinedHisClubThisSeason(career, p)).map(at));
+  if (!joined.size) return market;
+  const listed = new Set(market.map(at));
+  return world.filter(p => listed.has(at(p)) || joined.has(at(p))).map(p => joined.has(at(p)) ? { ...p, joinedThisSeason: true as const } : p);
+}
+
+/* Round 1344: whether a man joined the club the market lists him at this season: this season's deal line to that
+   club (a namesake on goneNames cannot trip it) and the ledger owning him there, so a career with no ledger never
+   meets it. The screen's listing (marketForScreen) and every door (joinedThisSeasonRefusal) read this one test. */
+function joinedHisClubThisSeason(career: CareerState, mp: MarketPlayer): boolean {
+  return !!mp.worldRosterKey && (career.transferLog ?? []).some(t => t.name === mp.name && t.to === mp.club && t.season === career.season && !t.loan)
+    && worldRosterOwner(career, mp.worldRosterKey) === mp.club;
+}
+
+/* Round 1344: a man another club bought this season is not for sale until the summer, by any door. After every older
+   reason, so today's refusals keep their order. */
+function joinedThisSeasonRefusal(career: CareerState, mp: MarketPlayer): string | null {
+  if (!joinedHisClubThisSeason(career, mp)) return null;
+  return `${mp.name} only joined ${mp.club} this season. They will not sell him on until ${career.transferWindow === 'summer' ? 'next summer' : 'the summer'}.`;
+}
+
 /** Round 71: append a line to the Latest Transfers feed (capped at 80). */
 function pushNews(state: CareerState, news: Omit<TransferNews, 'season' | 'week'>): void {
   const log = state.transferLog ?? [];
@@ -9376,7 +9483,7 @@ export function signingRefusal(career: CareerState, mp: MarketPlayer, fee: numbe
      be pressed, and the summer return would make two of him. */
   const away = (career.loanedOut ?? []).find(l => sameManKey(l.player) === sameManKey(mp));
   if (away) return `${mp.name} is already yours, out on loan at ${away.club}. Bring him back from the loan desk instead.`;
-  return null;
+  return joinedThisSeasonRefusal(career, mp);
 }
 
 /** Round 634 review: the four ways a market card can be pressed. */
@@ -9412,7 +9519,7 @@ export function doorRefusal(career: CareerState, mp: MarketPlayer, door: MarketD
   if (releasedByYouNames(career).has(mp.name)) return `You released ${mp.name}. He will not sign for you again.`;
   const away = (career.loanedOut ?? []).find(l => sameManKey(l.player) === sameManKey(mp));
   if (away) return `${mp.name} is already yours, out on loan at ${away.club}. Bring him back from the loan desk instead.`;
-  return null;
+  return joinedThisSeasonRefusal(career, mp);
 }
 
 function completeSigning(
@@ -10383,7 +10490,8 @@ export function makeOffer(career: CareerState, amount: number, extras?: DealExtr
   if (next.rivalBidder && next.rivalOffer !== null && packageValue <= next.rivalOffer) {
     next.note = `${next.rivalBidder} are still ahead at ${money(next.rivalOffer)}. Beat it or lose him.`;
     // Dithering lets the rival close: 30% they win the race right now.
-    if (Math.random() < 0.3) {
+    // Round 1344 review: only a deal the ledger records (the draw comes first, so no draw moves).
+    if (Math.random() < 0.3 && !rivalCloseRefused(career, { mp: next.player, to: next.rivalBidder, fee: next.rivalOffer })) {
       const state: CareerState = {
         ...career,
         negotiation: { ...next, status: 'hijacked', note: `${next.rivalBidder} closed the deal at ${money(next.rivalOffer)} while you hesitated.` },
@@ -10391,7 +10499,8 @@ export function makeOffer(career: CareerState, amount: number, extras?: DealExtr
         transferLog: [...(career.transferLog ?? [])],
       };
       pushNews(state, { name: next.player.name, from: next.player.club, to: next.rivalBidder, fee: next.rivalOffer });
-      return state;
+      /* Round 1344: the rival's deal is a deal between two other clubs, so a seeded career records it (no draw). */
+      return recordAiDeals(state, [{ mp: next.player, to: next.rivalBidder, fee: next.rivalOffer }]);
     }
     return { ...career, negotiation: next };
   }
@@ -10671,7 +10780,9 @@ function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: Personal
 export function walkAway(career: CareerState): CareerState {
   const neg = career.negotiation;
   if (!neg) return career;
-  if (neg.status === 'open' && neg.rivalBidder && neg.rivalOffer !== null && Math.random() < 0.6) {
+  /* Round 1344 review: the rival takes him only when the ledger records it (the draw comes first, so no draw moves). */
+  if (neg.status === 'open' && neg.rivalBidder && neg.rivalOffer !== null && Math.random() < 0.6
+    && !rivalCloseRefused(career, { mp: neg.player, to: neg.rivalBidder, fee: neg.rivalOffer })) {
     const state: CareerState = {
       ...career,
       negotiation: null,
@@ -10683,7 +10794,8 @@ export function walkAway(career: CareerState): CareerState {
       `${neg.rivalBidder} sign ${neg.player.name} after ${career.clubName} walk away from the table.`,
       ...state.aiHeadlines,
     ].slice(0, 8);
-    return state;
+    /* Round 1344: and so is this one (no draw). */
+    return recordAiDeals(state, [{ mp: neg.player, to: neg.rivalBidder, fee: neg.rivalOffer }]);
   }
   return { ...career, negotiation: null };
 }
@@ -11302,7 +11414,15 @@ export function generateWeeklyNews(state: CareerState): void {
   }
 }
 
-function generateHeadlines(state: CareerState): void {
+/* Round 1344: in a seeded career every deal of the window is written to the ledger as it closes (onto a working copy,
+   packed once at the end, the lead's ruling 4), so the man is at his buyer at once: his squad, the line ups, the club
+   page, the market. A deal the ledger would refuse is not made at all (no news, no goneNames): the skip comes after
+   the candidate's three draws, so no draw moves. A career with no seed records nothing here and hands its deals back,
+   so startCareer can record a fresh career's opening window once its seed is drawn. scripts/simCmWorldMoves.mjs. */
+function generateHeadlines(state: CareerState): AiDeal[] {
+  const unrecorded: AiDeal[] = [];
+  const seen = worldSeedOf(state) === undefined ? null : state;
+  let working = seen;
   const market = buildMarket(state);
   const count = Math.min(ri(3, 6), market.length);
   const candidates = shuffle(market.slice(0, 120)).slice(0, count);
@@ -11334,11 +11454,14 @@ function generateHeadlines(state: CareerState): void {
     const pool = (local.length && Math.random() < 0.5) ? local : affordable;
     if (pool.length === 0) continue;   // nobody in the world can afford him
     const buyer = pick(pool).name;
+    if (working && seen) { const moved = recordAiDeal(working, { mp, to: buyer, fee }, seen); if (moved === working) continue; working = moved; }
+    else unrecorded.push({ mp, to: buyer, fee });
     heads.push(`${buyer} sign ${mp.name} from ${mp.club} for ${money(fee)}.`);
     state.goneNames.push(mp.name);
     // Round 71: every AI deal lands in the Latest Transfers feed too.
     pushNews(state, { name: mp.name, from: mp.club, to: buyer, fee });
   }
+  if (working && working !== seen) state.worldRoster = packedLedger(working).worldRoster;
   /* Round 141: the window's own record deal gets a line, read off the same
      transferLog the Latest Transfers card shows, so the two never disagree. */
   const seasonDeals = (state.transferLog ?? []).filter(t => t.season === state.season && !t.loan);
@@ -11351,6 +11474,7 @@ function generateHeadlines(state: CareerState): void {
   state.aiHeadlines = heads;
   // Round 71: a fresh window also means AI clubs come sniffing at my squad.
   generateIncomingBids(state);
+  return unrecorded;
 }
 
 /* ================================================================== */
@@ -18284,7 +18408,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     state.windowWeeksLeft = lateWeeks;
     state.summerWindow = { season: state.season, matchWeeks: lateWeeks };
   }
-  generateHeadlines(state);
+  /* Round 1344: a fresh career has no seed yet, so its opening window's deals come back and are recorded by the
+     last line, once the seed block below has drawn one (the post seed flush; the year 0 projection ignores the
+     seed, so the keys are the ones the seeded world gives these men). A job move is seeded already: nothing comes back. */
+  const unrecorded = generateHeadlines(state);
   /* Round 1021 review: a late season can meet its first international window
      before a ball is kicked (2020-21's September window opened five days
      before the Premier League did). Its note goes out with the save, so it
@@ -18303,7 +18430,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   } else if (world.worldSeed !== undefined && state.worldSeed === undefined) {
     state.worldSeed = world.worldSeed;
   }
-  return state;
+  return recordAiDeals(state, unrecorded);
 }
 
 /**
@@ -21397,6 +21524,10 @@ export function loadCareer(): CareerState | null {
       if (parsed.customClub) delete parsed.customClub;
       registerCustomClub(null);
     }
+    /* Round 1344: a seeded save written before this round may hold this season's deals between other clubs that
+       never reached the ledger; they are mended here, inside their own fail safe. Before the asks, which read
+       buildMarket: it drops every name on goneNames, and every man mended is on it, so no ask can move. */
+    repairAiMoves(parsed);
     /* Round 474: the specific asks, LAST, because the country an ask counts
        and the market it is measured against both read the league, and the
        league is not settled until the two registrations above have run. */
@@ -21404,6 +21535,44 @@ export function loadCareer(): CareerState | null {
     return parsed;
   } catch {
     return null;
+  }
+}
+
+/* Round 1344: mending a seeded save that is missing this season's moves between other clubs (written by an engine
+   from before the round: the news said a club bought him, the ledger never heard, so he was off the market and still
+   at his old club). Each deal line of THIS season (not a loan, neither club mine, not a free transfer) whose man is on
+   goneNames and of whose name the ledger holds no record at all: the seller's man found by name alone (a line
+   carries no age or position), exactly one or the line is skipped, then recorded through recordAiDeals, the same rules
+   as every other deal. Earlier seasons are left as they are: by then he has played a season or more at his old club
+   in that save, and the 80 line log cannot rebuild the rest honestly (PR269's audit says so too). Nothing happens
+   with no seed, with an unreadable ledger, or while the era's squads are not loaded. It can never cost a save: any
+   error leaves the parsed state exactly as it was (loadCareer reads a thrown error as no save at all). It is idempotent
+   and a no-op on every save this engine writes. scripts/simCmWorldMoves.mjs section 5 holds it. */
+function repairAiMoves(state: CareerState): void {
+  try {
+    if (worldSeedOf(state) === undefined || !eraRostersLoaded(state.eraId) || !Array.isArray(state.transferLog) || !Array.isArray(state.goneNames)) return;
+    if (state.worldRoster !== undefined && !worldRosterView(state)) return;
+    const gone = new Set(state.goneNames);
+    const records = worldRosterView(state)?.records ?? [];
+    /* In the log's order, each on the state the lines before it left, so a man sold on within the season is found
+       at the club that bought him first. */
+    let mended = state;
+    for (const line of state.transferLog) {
+      if (!line || typeof line.name !== 'string' || typeof line.from !== 'string' || typeof line.to !== 'string' || line.loan
+        || line.season !== state.season || !gone.has(line.name) || line.from === state.clubName || line.to === state.clubName
+        || line.from === 'a free transfer' || line.to === 'a free transfer') continue;
+      /* Any record of the name means the ledger already placed him (here, or wherever he went next): never a second. */
+      if (records.some(r => r.player.name === line.name || r.origin.name === line.name)) continue;
+      const found = worldRosterFor(mended, line.from).filter(p => p.n === line.name);
+      if (found.length !== 1) continue;
+      const p = found[0];
+      mended = recordAiDeals(mended, [{ mp: { name: p.n, club: line.from, position: p.p, age: p.a, rating: p.r, price: askingPrice(p.v, p.a), value: p.v,
+        generated: p.g || undefined, ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey, worldRosterSince: p.since, potential: p.potential } : {}) },
+        to: line.to, fee: typeof line.fee === 'number' ? line.fee : 0 }]);
+    }
+    if (mended !== state && mended.worldRoster !== undefined) state.worldRoster = mended.worldRoster;
+  } catch {
+    /* The save opens as it was saved. */
   }
 }
 
