@@ -26,6 +26,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ADOPT } from './cmNoAdoption1508.mjs';
 
 export const FILE = 'src/lib/clubManager.ts';
 export const ANCHOR = '  if (!world) {\n    const entropy = JSON.stringify([state.eraId, state.startYear, state.clubName,\n';
@@ -35,8 +36,8 @@ const CLOSE = '    state.worldSeed = world.worldSeed;\n  }\n';
    makes every new save a save from before Release AZ. Either last line is accepted, so the legs that apply this
    in throwaway checkouts of older commits still run. */
 const AFTERS = ['  return state;\n}\n', '  return recordAiDeals(state, unrecorded);\n}\n'];
-/* Round 1508: the line of startNextSeason that adopts a career with no seed into the living world. */
-export const ADOPT = '  career = adoptLivingWorld(career);\n';
+/* Round 1508: the line of startNextSeason that adopts a career with no seed into the living world (one source). */
+export { ADOPT };
 
 /** The source of clubManager.ts with the seed block of startCareer taken out. Line endings are read as LF. */
 export function withoutWorldSeed(source) {

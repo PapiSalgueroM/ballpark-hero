@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { BASE, BASE_TREE, HEAD, TREE, ROOT, clone, sha, sourceHashes, writeEvidence, uniquePatch, tape, loadEngine } from './qa/managerWorldContinuityKit.mjs';
 import { withoutAiMoves } from './lib/cmNoAiMoves1344.mjs';
+import { withoutAdoption } from './lib/cmNoAdoption1508.mjs';
 
 const OUT = path.resolve(process.env.MANAGER_WORLD_CONTINUITY_ARTIFACTS || '.tmp-fx/manager-world-continuity');
 const CONTROL = process.env.MANAGER_WORLD_CONTINUITY_CONTROL || '';
@@ -124,7 +125,9 @@ async function arm(control) {
      scripts/lib/cmNoAiMoves1344.mjs (fail closed: it throws unless its five anchors stand once), so what this kit
      compares is everything else; simCmWorldMoves section 8 proves the bridge leaves the head equal to the round's base. */
   const B = await loadEngine({ label: control || 'healthy', patch: (file, source, receipts) => {
-    const bridged = withoutAiMoves(source, file);
+    /* Round 1508: and the adoption of a career with no seed at its next summer (scripts/lib/cmNoAdoption1508.mjs,
+       fail closed), which the pinned engine never did: the inactive group rolls such careers into a summer. */
+    const bridged = withoutAdoption(withoutAiMoves(source, file), file);
     return defect && file === defect.file ? uniquePatch(bridged, defect.from, defect.to, file, receipts) : bridged;
   } });
   const originalEngine = A; const currentEngine = B;
