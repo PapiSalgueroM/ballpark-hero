@@ -15753,3 +15753,7 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Codex Round1381: press coverage measurement, 2026-10-16 17:54:53 UTC
+
+DIAGNOSTIC ONLY, on I1344 sourcee2063dbe. The owned runtime review asks the other lane to resolve1351presscohort coverage: the first3public-policy careers stop after164entries/51answers without a below35witness, while base/bridge reachmood34 and36pairs. Existing game assertions and core must not change. Root claims only a new remote measurement/proof, not the original harness or its future widening yet. Preserve the3-career979prefix, append the same3clubs for documented seed bases1/2/3/4, measure all15declared careers with unchanged policy/180limit/sack stop on current/base/bridge, retain rawstates/answers/seeded draws. No assigned mood, lowered threshold, favorable-seed selection, Engine/Calendar/1081pin change, local runtime, main or publication. A later method correction requires the actual measurement and effective existing omission controls. CurrentI1344product faults remain I-owned and open. This diagnostic does not add a release gate.

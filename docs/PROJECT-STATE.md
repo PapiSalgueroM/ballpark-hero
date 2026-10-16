@@ -18506,3 +18506,7 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+## Codex Round1381: press coverage measurement, 2026-10-16 17:54:53 UTC
+
+DIAGNOSTIC ONLY, on I1344 sourcee2063dbe. The owned runtime review asks the other lane to resolve1351presscohort coverage: the first3public-policy careers stop after164entries/51answers without a below35witness, while base/bridge reachmood34 and36pairs. Existing game assertions and core must not change. Root claims only a new remote measurement/proof, not the original harness or its future widening yet. Preserve the3-career979prefix, append the same3clubs for documented seed bases1/2/3/4, measure all15declared careers with unchanged policy/180limit/sack stop on current/base/bridge, retain rawstates/answers/seeded draws. No assigned mood, lowered threshold, favorable-seed selection, Engine/Calendar/1081pin change, local runtime, main or publication. A later method correction requires the actual measurement and effective existing omission controls. CurrentI1344product faults remain I-owned and open. This diagnostic does not add a release gate.
