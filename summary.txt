@@ -1,0 +1,5 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 8s | playCmOwnClubMarket: green. Saves A and B from before Release AZ list nobody at their own club on the market, the club's page names its squad and none of those men, and t
+hubE exit=0 17s | playCmHubLanding: green (E 15 pass 0 fail); the hub lands on the club on its first frame
+playClubManager exit=0 289s | Played Club Manager through its own screens. 0 findings.
+playTwoTabs exit=0 429s | playTwoTabs: green at 320x640, 390x844, 1280x900

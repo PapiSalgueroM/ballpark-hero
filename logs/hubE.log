@@ -1,0 +1,17 @@
+E. Old saves resume to a whole hub
+  PASS  E  cmOldSave1052Fixture.json: the hub header is on screen on the first frame after Resume (top 113 px)
+  PASS  E  cmOldSave1052Fixture.json: the hub draws 1185 characters and none of undefined, NaN, [object Object], Infinity
+  PASS  E  cmSecondTierOldSaveFixture.json: the hub header is on screen on the first frame after Resume (top 113 px)
+  PASS  E  cmSecondTierOldSaveFixture.json: the hub draws 1174 characters and none of undefined, NaN, [object Object], Infinity
+  PASS  E  cmOldSave1052Fixture.json edge-320: the meters' chunk was still loading on the first hub frame
+  PASS  E  cmOldSave1052Fixture.json edge-320: the board meter reads "Board One bad week from the sack"
+  PASS  E  cmOldSave1052Fixture.json edge-320: nothing on the hub shifts when the meters land late (layout shift 0.0000, strip 60px in a 60px slot)
+  PASS  E  cmOldSave1052Fixture.json edge-390: the meters' chunk was still loading on the first hub frame
+  PASS  E  cmOldSave1052Fixture.json edge-390: the board meter reads "Board One bad week from the sack"
+  PASS  E  cmOldSave1052Fixture.json edge-390: nothing on the hub shifts when the meters land late (layout shift 0.0000, strip 60px in a 60px slot)
+  PASS  E  cmOldSave1052Fixture.json edge-1280: the meters' chunk was still loading on the first hub frame
+  PASS  E  cmOldSave1052Fixture.json edge-1280: the board meter reads "Board One bad week from the sack"
+  PASS  E  cmOldSave1052Fixture.json edge-1280: nothing on the hub shifts when the meters land late (layout shift 0.0000, strip 60px in a 60px slot)
+  PASS  E  cmOldSave1052Fixture.json plain-390: the meters' chunk was still loading on the first hub frame
+  PASS  E  cmOldSave1052Fixture.json plain-390: nothing on the hub shifts when the meters land late (layout shift 0.0000, strip 52px in a 52px slot)
+playCmHubLanding: green (E 15 pass 0 fail); the hub lands on the club on its first frame
