@@ -1,0 +1,156 @@
+name: Soccer Career queued overall choices
+
+on:
+  push:
+    branches: [codex/career-pending-overall-gates]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      SC_PENDING_OVERALL_PHASE: baseline
+      SC_PENDING_OVERALL_BASE: 63573c16abf61b31bbdb9c0117631e99e4538c01
+      SC_PENDING_OVERALL_OUT: ${{ github.workspace }}/pending-overall-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/pending-overall-artifacts/font-cache
+      PRERENDER_ONLY: /soccer-career
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind source and locked dependencies
+        run: |
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          mkdir -p "$SC_PENDING_OVERALL_OUT"
+          git rev-parse HEAD > "$SC_PENDING_OVERALL_OUT/source-head.txt"
+          git archive --format=zip HEAD > "$SC_PENDING_OVERALL_OUT/source.zip"
+          git status --porcelain --untracked-files=no > "$SC_PENDING_OVERALL_OUT/source-before.txt"
+          test ! -s "$SC_PENDING_OVERALL_OUT/source-before.txt"
+          git diff --exit-code "$SC_PENDING_OVERALL_BASE" -- . ':!docs/PROJECT-STATE.md' ':!docs/WORKBOARD.md' ':!docs/audits/career-pending-overall-gates.md' ':!src/lib/soccerCareerLife.ts' ':!src/test/careerPendingOverallGates.test.ts' ':!scripts/simCareerPendingOverallGates.mjs' ':!.github/workflows/career-pending-overall-gates.yml'
+          git diff --exit-code "$SC_PENDING_OVERALL_BASE" -- src scripts package.json package-lock.json bun.lock ':!src/lib/soccerCareerLife.ts' ':!src/test/careerPendingOverallGates.test.ts' ':!scripts/simCareerPendingOverallGates.mjs'
+          if test "$SC_PENDING_OVERALL_PHASE" = baseline; then
+            git diff --exit-code "$SC_PENDING_OVERALL_BASE" -- src/lib/soccerCareerLife.ts
+          fi
+          find src scripts .github/workflows public -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$SC_PENDING_OVERALL_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$SC_PENDING_OVERALL_OUT/package-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, entry]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, entry.version, p); return { path: p, version };
+          });
+          assert.equal(installed.length, 521);
+          fs.writeFileSync(process.env.SC_PENDING_OVERALL_OUT + '/installed.json', JSON.stringify(installed, null, 2));
+          console.log(`Bound ${installed.length} installed locked versions.`);
+          NODE
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$SC_PENDING_OVERALL_OUT/installed-files.sha256"
+      - name: Actual application type gate
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_PENDING_OVERALL_OUT/types.log"
+      - name: New method syntax
+        run: node --check scripts/simCareerPendingOverallGates.mjs
+      - name: Exact queued-choice baseline or fixed outcomes
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPendingOverallGates.mjs 2>&1 | tee "$SC_PENDING_OVERALL_OUT/$SC_PENDING_OVERALL_PHASE.log"
+      - name: Original source control and full restoration
+        if: env.SC_PENDING_OVERALL_PHASE == 'fixed'
+        run: |
+          SC_PENDING_OVERALL_CONTROL=original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPendingOverallGates.mjs 2>&1 | tee "$SC_PENDING_OVERALL_OUT/original.log"
+          SC_PENDING_OVERALL_RESTORED=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPendingOverallGates.mjs 2>&1 | tee "$SC_PENDING_OVERALL_OUT/restored.log"
+      - name: Existing saved-choice and followup outcomes
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerPendingLife.test.ts src/test/soccerCareerLifeReviews.test.ts src/test/soccerLifeChainPackedSave.test.ts --maxWorkers=1 --reporter=verbose --reporter=json --outputFile.json="$SC_PENDING_OVERALL_OUT/prior-units.json" 2>&1 | tee "$SC_PENDING_OVERALL_OUT/prior-units.log"
+      - name: Frozen PR286 current original and restored outcomes
+        env:
+          SC_PENDING_POPULARITY_PHASE: fixed
+          SC_PENDING_POPULARITY_BASE: d4f2c6f688d656205722ba52bbdb33f03490966a
+          SC_PENDING_POPULARITY_OUT: ${{ github.workspace }}/pending-overall-artifacts/prior-popularity
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPendingPopularityGates.mjs 2>&1 | tee "$SC_PENDING_OVERALL_OUT/prior-popularity-normal.log"
+          SC_PENDING_POPULARITY_CONTROL=original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPendingPopularityGates.mjs 2>&1 | tee "$SC_PENDING_OVERALL_OUT/prior-popularity-original.log"
+          SC_PENDING_POPULARITY_RESTORED=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPendingPopularityGates.mjs 2>&1 | tee "$SC_PENDING_OVERALL_OUT/prior-popularity-restored.log"
+      - name: Frozen PR302 current original and restored outcomes
+        env:
+          SC_PENDING_MONEY_PHASE: fixed
+          SC_PENDING_MONEY_BASE: 75abee825b73c34b4a7a6d6852de1417a20cc8aa
+          SC_PENDING_MONEY_OUT: ${{ github.workspace }}/pending-overall-artifacts/prior-money
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPendingMoneyGates.mjs 2>&1 | tee "$SC_PENDING_OVERALL_OUT/prior-money-normal.log"
+          SC_PENDING_MONEY_CONTROL=original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPendingMoneyGates.mjs 2>&1 | tee "$SC_PENDING_OVERALL_OUT/prior-money-original.log"
+          SC_PENDING_MONEY_RESTORED=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPendingMoneyGates.mjs 2>&1 | tee "$SC_PENDING_OVERALL_OUT/prior-money-restored.log"
+      - name: Build tools
+        if: env.SC_PENDING_OVERALL_PHASE == 'fixed'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/overall-build" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$RUNNER_TEMP/overall-build/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/overall-build/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/overall-build/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$SC_PENDING_OVERALL_OUT/fonts.log"
+      - name: Complete build and all rebuilt-site readers
+        if: env.SC_PENDING_OVERALL_PHASE == 'fixed'
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$SC_PENDING_OVERALL_OUT/build.log"
+          cp scripts/data/lastmod.json "$SC_PENDING_OVERALL_OUT/build-lastmod.json"
+          git diff -- scripts/data/lastmod.json > "$SC_PENDING_OVERALL_OUT/build-lastmod.diff"
+          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$SC_PENDING_OVERALL_OUT/readers.log"
+          test "$(grep -c '^All 15 harnesses green\.$' "$SC_PENDING_OVERALL_OUT/readers.log")" = 1
+      - name: Unchanged full route weights
+        if: env.SC_PENDING_OVERALL_PHASE == 'fixed'
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$SC_PENDING_OVERALL_OUT/weight-server.log" 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          sleep 2
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$SC_PENDING_OVERALL_OUT/weights.log"
+      - name: Full current and restored observations match
+        if: env.SC_PENDING_OVERALL_PHASE == 'fixed'
+        run: cmp "$SC_PENDING_OVERALL_OUT/units/normal/raw.json" "$SC_PENDING_OVERALL_OUT/units/restored/raw.json"
+      - name: Retain generated sitemap and restore its source
+        if: always() && env.SC_PENDING_OVERALL_PHASE == 'fixed'
+        run: |
+          git show HEAD:public/sitemap.xml > "$SC_PENDING_OVERALL_OUT/source-sitemap.xml"
+          cp public/sitemap.xml "$SC_PENDING_OVERALL_OUT/build-sitemap.xml"
+          git diff -- public/sitemap.xml > "$SC_PENDING_OVERALL_OUT/build-sitemap.diff"
+          sha256sum "$SC_PENDING_OVERALL_OUT/source-sitemap.xml" "$SC_PENDING_OVERALL_OUT/build-sitemap.xml" > "$SC_PENDING_OVERALL_OUT/sitemap-receipts.sha256"
+          test "$(grep -c '  public/sitemap.xml$' "$SC_PENDING_OVERALL_OUT/source-hashes.txt")" = 1
+          grep -v '  public/sitemap.xml$' "$SC_PENDING_OVERALL_OUT/source-hashes.txt" | sha256sum --check > "$SC_PENDING_OVERALL_OUT/source-before-sitemap-restore-holds.log"
+          git restore --source=HEAD --worktree -- public/sitemap.xml
+      - name: Final source and dependency holds
+        if: always()
+        run: |
+          sha256sum --check "$SC_PENDING_OVERALL_OUT/source-hashes.txt" > "$SC_PENDING_OVERALL_OUT/source-holds.log"
+          sha256sum --check "$SC_PENDING_OVERALL_OUT/package-hashes.txt"
+          sha256sum --check "$SC_PENDING_OVERALL_OUT/installed-files.sha256" > "$SC_PENDING_OVERALL_OUT/installed-holds.log"
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' public package.json package-lock.json bun.lock .github/workflows
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const installed = JSON.parse(fs.readFileSync(process.env.SC_PENDING_OVERALL_OUT + '/installed.json'));
+          for (const row of installed) assert.equal(JSON.parse(fs.readFileSync(row.path + '/package.json')).version, row.version, row.path);
+          console.log(`Held ${installed.length} installed locked versions.`);
+          NODE
+      - name: Retain complete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pending-overall-${{ github.run_id }}
+          path: pending-overall-artifacts/
+          retention-days: 14
+          if-no-files-found: error
