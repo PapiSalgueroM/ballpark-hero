@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ownclub: node scripts/simCmOwnClubMarket.mjs
+ctl-legacy: OWNCLUB_MARKET_CONTROL=legacy node scripts/simCmOwnClubMarket.mjs
+ctl-slice: OWNCLUB_MARKET_CONTROL=slice node scripts/simCmOwnClubMarket.mjs
+ctl-shallow: OWNCLUB_MARKET_CONTROL=shallow node scripts/simCmOwnClubMarket.mjs
+commit-main: OWNCLUB_MARKET_PARENT=1027b08cac8ef5cfc52c6b2e738e5c0a8d703402 node scripts/simCmOwnClubMarket.mjs
+probe-on-rule: OWNCLUB_MARKET_PROBE=1 node scripts/simCmOwnClubMarket.mjs
+unit: node_modules/.bin/vitest run src/lib/clubManagerOwnClubLevel.test.ts --testTimeout=300000 --hookTimeout=120000
+freeagents: node scripts/simFreeAgents.mjs
+fa-ownclub: FA_CONTROL=ownclub node scripts/simFreeAgents.mjs
+savesize: node scripts/simClubManagerSaveSize.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+dailydeals: node scripts/simDailyDeals.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+invnames: node scripts/simInventedNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+search: node scripts/simSiteSearch.mjs
