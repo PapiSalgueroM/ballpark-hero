@@ -1,0 +1,4 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild exit=0 30s | base served: 200
+weight exit=1 50s |   CSS, every file gzipped: base 56553 B, head 56553 B
+colours exit=0 1s | bg-slate-600 head 0 files 0, base 0

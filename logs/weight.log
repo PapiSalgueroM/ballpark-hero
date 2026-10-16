@@ -1,0 +1,24 @@
+sweepWeight's table, 14 routes, base against head (gzipped JS, K to one decimal and bytes):
+  /                    base 243.2K (249054 B)  head 243.2K (249041 B)  -13 B  budget 244K
+  /club-manager        base 604.4K (618919 B)  head 604.4K (618916 B)  -3 B  budget 606K
+  /soccer-career       base 832.4K (852352 B)  head 832.4K (852413 B)  +61 B  budget 834K
+  /stadium-tycoon      base 302.0K (309298 B)  head 302.0K (309298 B)  +0 B  budget 303K
+  /wonderkid-factory   base 275.8K (282459 B)  head 275.8K (282456 B)  -3 B  budget 277K
+  /minefield           base 293.8K (300803 B)  head 293.7K (300796 B)  -7 B  budget 295K
+  /footle              base 352.2K (360614 B)  head 352.2K (360621 B)  +7 B  budget 354K
+  /nfl-my-career       base 486.3K (498022 B)  head 486.3K (497998 B)  -24 B  budget 488K
+  /front-office        base 372.5K (381393 B)  head 372.4K (381385 B)  -8 B  budget 374K
+  /soccer-grid         base 317.3K (324873 B)  head 317.3K (324882 B)  +9 B  budget 319K
+  /leaderboard         base 251.3K (257303 B)  head 251.3K (257292 B)  -11 B  budget 266K
+  /manager-hot-seat    base 622.8K (637703 B)  head 622.8K (637698 B)  -5 B  budget 624K
+  /deadline-day        base 632.7K (647862 B)  head 632.7K (647861 B)  -1 B  budget 634K
+  /transfer-path       base 377.7K (386793 B)  head 377.7K (386804 B)  +11 B  budget 379K
+routes moving over 0.1K: none
+  src/lib/soccerDeck.ts: in no chunk
+  src/data/soccerDeck/starter.ts: in no chunk
+  src/data/soccerDeck/words.ts: in no chunk
+  src/lib/gmInbox.ts: in no chunk
+  src/lib/soccerDeckGate.ts: in no chunk
+  src/lib/season/soccerMoments.ts: soccerMoments-BnpF2oIk.js
+  in all, the deck's first load on /soccer-career fetches 0 chunks, 0.0K gzipped, none of them in the route's first download: yes
+  CSS, every file gzipped: base 56553 B, head 56553 B
