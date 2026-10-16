@@ -1,0 +1,7 @@
+#!build
+#!serial
+opponentLabels-head: ONLY=simSoccerOpponentLabels node scripts/runAllSims.mjs --browser 2>&1 | tail -10; exit ${PIPESTATUS[0]}
+opponentLabels-base: git worktree add -q /tmp/bo e814c2de && ln -s "$PWD/node_modules" /tmp/bo/node_modules && cd /tmp/bo && node_modules/.bin/vite build > /tmp/bo-build.log 2>&1 && ONLY=simSoccerOpponentLabels node scripts/runAllSims.mjs --browser 2>&1 | tail -10; exit ${PIPESTATUS[0]}
+hist-head: SOCCER_LUTON_DISPLAY_OUT=$RC_OUT/hist SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerHistoricalOpponentDisplayProof.mjs 2>&1 | tail -15; exit ${PIPESTATUS[0]}
+hist-introback: git worktree add -q /tmp/ib HEAD && ln -s "$PWD/node_modules" /tmp/ib/node_modules && node .rc/x/introBack.mjs /tmp/ib && cd /tmp/ib && git diff --stat e814c2de -- src/components/soccer-career/SoccerSeasonCentre.tsx && echo "(no diff above means the component is the base's byte for byte)" && SOCCER_LUTON_DISPLAY_OUT=/tmp/ib-out SIM_NETWORK=offline NODE_OPTIONS="--require=/tmp/ib/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerHistoricalOpponentDisplayProof.mjs 2>&1 | tail -15; exit ${PIPESTATUS[0]}
+hist-base: git worktree add -q /tmp/hb e814c2de && ln -s "$PWD/node_modules" /tmp/hb/node_modules && cd /tmp/hb && SOCCER_LUTON_DISPLAY_OUT=/tmp/hb-out SIM_NETWORK=offline NODE_OPTIONS="--require=/tmp/hb/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerHistoricalOpponentDisplayProof.mjs 2>&1 | tail -15; exit ${PIPESTATUS[0]}

@@ -1,0 +1,6 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+opponentLabels-head exit=1 26s | 1 harness not green.
+opponentLabels-base exit=0 59s | All 1 harnesses green.
+hist-head exit=1 1s | FAIL Luton display component proof
+hist-introback exit=0 18s | PASS Luton display component proof
+hist-base exit=0 17s | PASS Luton display component proof
