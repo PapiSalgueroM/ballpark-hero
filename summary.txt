@@ -1,0 +1,5 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+c993-head exit=1 30s | AssertionError [ERR_ASSERTION]: All six native journeys must pass
+c993-reverted exit=1 26s | AssertionError [ERR_ASSERTION]: All six native journeys must pass
+c993-reveal exit=0 3s | Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-reveal
+c993-choice exit=0 4s | Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-choice

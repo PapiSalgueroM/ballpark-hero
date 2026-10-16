@@ -1,0 +1,9 @@
+ scripts/qa/career993.mjs | 4 ----
+ 1 file changed, 4 deletions(-)
+nfl-390-touch: AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
+nba-390-touch: AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
+mlb-390-touch: AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
+nhl-390-touch: AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
+nba-320-touch-reduced: AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
+nba-1440-keyboard: AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
+AssertionError [ERR_ASSERTION]: All six native journeys must pass
