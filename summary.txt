@@ -1,0 +1,9 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simFlagshipWeight exit=0 2s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+stale exit=0 4s | head=0 controls: catchreload=1 nowait=1 flagfirst=1 nolistener=1 noguard=1 noprerender=1 nooffline=1 nosave=1 norelease=1 barenudge=1
+simCareerStory exit=0 37s | simCareerStory: GREEN, 96 careers keep every season's lines in order, draw nothing and stay inside the size bands
+vitest exit=0 7s |    Duration  6.83s (transform 2.67s, setup 157ms, collect 7.34s, tests 3.53s, environment 1.01s, prepare 437ms)
+simCareerStoryRole exit=0 53s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+packedFence exit=0 38s | PASS packed fence seam: 4 healthy cases, 3 exact effective copied controls, 4 complete undo cases, source held.
+tsc exit=0 99s | 
+storyRole exit=0 57s | Career Story native: 554 checks, 0 failed, 9/9 journeys; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-story-role/native

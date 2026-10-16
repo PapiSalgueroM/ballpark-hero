@@ -1,0 +1,10 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+stale: node scripts/simStaleChunk.mjs; a=$?; r=""; for k in catchreload nowait flagfirst nolistener noguard noprerender nooffline nosave norelease barenudge; do SIM_STALE_CHUNK_CONTROL=$k node scripts/simStaleChunk.mjs > /tmp/s-$k.log 2>&1; r="$r $k=$?"; tail -1 /tmp/s-$k.log; done; echo "head=$a controls:$r"; [ $a = 0 ] && [ "$r" = " catchreload=1 nowait=1 flagfirst=1 nolistener=1 noguard=1 noprerender=1 nooffline=1 nosave=1 norelease=1 barenudge=1" ]
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+simCareerStoryRole: node scripts/simCareerStoryRole.mjs
+vitest: node_modules/.bin/vitest run src/test/soccerCareerSaveFence.test.tsx src/test/soccerCareerPackedFence.test.tsx --testTimeout=300000 --hookTimeout=120000
+packedFence: SC_PACKED_FENCE_OUT="$PWD/.tmp-fx/packed-fence" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCareerPackedFence.mjs
+storyRole: export FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/fc"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerStoryRole.mjs
