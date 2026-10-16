@@ -70,3 +70,14 @@ Proof: scripts/simCmWorldMoves.mjs sections 0 to 8 and 12 (section 9 by --combin
 scripts/lib/cmNoAiMoves1344.mjs, the bridge (four anchors); scripts/playCmWorldMoves.mjs, the walk;
 src/lib/clubManagerWorldMoves.test.ts. The remote checks and every number are in the round's finish report
 (dukb-handoff/2026-10-10/results-g/finish-1344.md). The step 1 probe was removed at step 2 (history: ee949025).
+
+Where it stands (2026-10-16, end of the run): steps 2 to 6 done and proven on GitHub runners; origin/main 1027b08c
+(Release BH) merged; the final proof on the merged head green (remote check r1344-fin3), the walk green (r1344-w4).
+The lead's ruling 5 (careers started before 13 October brought into the living world at their next summer) is NOT in
+this round: it needs the writer guard to accept a ledger with no seed and a ruling on what simCmUnseededWorld asserts
+after an old save's rollover, so it is its own round. Retaken by decision 7: scripts/data/cmLeagueRulesDigest.json
+(bridge leg green whole) and the 1081 pin (last). Fixture edits, each one line with a comment, where a new seeded
+career's flushed ledger broke a "no ledger yet" precondition: clubManagerWorldRoster.test.ts, clubManagerOwnClubLevel
+.test.ts, clubDetailCurrentRoster.test.tsx, clubDetailOwnClub.test.tsx (with its span in simClubDetailCurrentRoster),
+simFreeAgents and simClubManagerSaveSize section 6. simClubManagerDecisions (the other lane's) loses three press cards'
+coverage on the head (green on the base and with the bridge): owed to that lane.
