@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node scripts/playUsCareerReports.mjs
+walk-noretire: PLAY_US_REPORTS_CONTROL=noretire ENGINES=chromium node scripts/playUsCareerReports.mjs
+walk-noundo: PLAY_US_REPORTS_CONTROL=noundo ENGINES=chromium node scripts/playUsCareerReports.mjs
+walk-noreplay: PLAY_US_REPORTS_CONTROL=noreplay ENGINES=chromium node scripts/playUsCareerReports.mjs
+playDraftNight: ENGINES=chromium node scripts/playDraftNight.mjs
+playHomeFold: ENGINES=chromium node scripts/playHomeFold.mjs
+playNflTruth: ENGINES=chromium node scripts/playNflTruth.mjs
