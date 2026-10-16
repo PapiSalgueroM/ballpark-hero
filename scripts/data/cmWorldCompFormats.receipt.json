@@ -3,7 +3,7 @@
   "ledgerKey": "cm-world-comp-formats-v1",
   "dataFile": "scripts/data/cmWorldCompFormats.json",
   "readOn": "2026-10-16",
-  "readBy": "the builder of Round 1347, desktop Claude lane",
+  "readBy": "the builder of Round 1347, desktop Claude lane; corrected the same day by its fixer after two adversarial reviews (see the last limit)",
   "method": "Each page was opened on the read day through a page reader that answers with lines quoted from the page. Every literal in the ledger is a line that reader quoted, with two kinds of exception written down here: a dash of the two kinds this repo bans is written as a hyphen (the 2026-27 dates) or the line is cut at it (Sky Sports' final line of 2026-27, cut before the stadium), and where the reader would only quote part of a long sentence, the part is quoted as its own literal and never joined to another part. Pages were found by web search; no wiki was read for a row, and the two wiki mirrors the search offered (grokipedia, wikiwand) are refused by the checker like any wiki.",
   "limits": [
     "No copy of a page was kept, so there is no snapshot hash.",
@@ -12,11 +12,12 @@
     "G3-2005 and G3-2010 (no club drawn with a club of its own association) stand on UEFA's page of that season plus ESPN's line that in past seasons country protection held until the quarter-finals. ESPN's line is read as speaking for the group stage era it describes in the same article; no second page of 2005-06 or 2010-11 itself was found.",
     "G2-2005 and G2-2010 (all four pots by coefficient) stand on UEFA alone and are not built: the game seeds its pots by its own strength in every era (standIns).",
     "G4-early (the round of 16 draw of 2005-06 and 2010-11) was not read. The engine's own comment at drawUclRoundOf16 names a 2010-11 uefa.com page (Last 16 set for 17 December draw) that this round did not open. Nothing stands on G4 here: the round of 16 of a watched era season is the participant's own draw, bound in Round 1502.",
-    "G5-2015-ko (Russia and Ukraine kept apart in the 2015-16 round of 16) stands on UEFA alone, and G5-2020-ko was not read (no Russian or Ukrainian club reached that round of 16). The participant's round of 16 draw does not apply the ban either; fixing that moves the participant and is owed, not built.",
+    "G5-2015-ko (Russia and Ukraine kept apart in the 2015-16 round of 16) stands on UEFA alone, and G5-2020-ko was not read at all (neither the rule in that draw nor which clubs reached it). The participant's round of 16 draw does not apply the ban either; fixing that moves the participant and is owed, not built.",
     "G5-2020-groups stands on UEFA and on FC Shakhtar Donetsk's own page of 30 September 2020, which names the three Russian clubs among those Shakhtar could not face; it does not say why, and UEFA's page does.",
-    "G7 (two legged knockout ties) is FOX Sports of 2015-16 and Bleacher Report of 2018-19; G8 (the final as one match) is Bleacher Report alone. Neither stands under a constant here: the watched era ties take their legs from uclLegsFor, which the engine already sources.",
-    "N1 (the 2026-27 nights) is recorded for the order of its months only. The game's nights sit on its own calendar and the screen prints the game's dates, never these."
+    "G7 (two legged knockout ties) is FOX Sports of 2015-16 and Bleacher Report of 2018-19; G8 (the final as one match) is Bleacher Report alone. Neither stands under a constant here: worldCompetition.ts states no round's legs (nightsOf and evaluateWorldComp take every round's, the final's included, from the binding, which passes uclLegsFor), and a unit test proves a binding with a two legged final gets one. Until the fix round the module forced the final to one match itself, which this line then wrongly denied.",
+    "N1 (the 2026-27 nights) is recorded for the order of its months only. The game's nights sit on its own calendar and the screen prints the game's dates, never these.",
+    "Fix round, 2026-10-16, after two adversarial reviews: G3-2005's fact no longer says holders Liverpool entered through qualifying without country protection (no recorded source said they qualified, and the exception rests on UEFA alone; it is now a periodNote, and the standIns line says the game does not model it); G6's fact no longer says away goals counted in extra time too (Bleacher Report alone; now a periodNote); G5-2020-ko no longer states a result it never read; G4-late's UEFA 2020-21 page is dated 2020-08-01, the date the page prints, not the 14 December 2020 draw it reports. No figure, status, usedBy or constant changed."
   ],
   "checkedBy": "scripts/simWorldUcl.mjs",
-  "sha256": "2d8f8a70f4110c4e177ad999db139d13710de20b7aafbb2c05f921c334372e72"
+  "sha256": "6c2d3bfcbad0ccd1245eb30a14d89cb61c07cc13107bc2c984d6c915bc6a4e15"
 }

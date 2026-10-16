@@ -13,7 +13,7 @@
   "g8": { "clubs": 32, "groups": 8, "groupSize": 4, "games": 6, "advance": 2, "pots": 4 },
   "standIns": [
     "Pots: the game seeds all four pots by its own strength, the holder first when the save knows one. No club coefficient is kept, so the real pot rule of each season (G2) is recorded and not played.",
-    "2005-06: holders Liverpool entered through qualifying and had no country protection that season (G3-2005). The game applies the association rule to every club.",
+    "2005-06: the game applies the association rule to every club. UEFA's draw page of that season says holders Liverpool were without country protection; that exception rests on one recorded publisher (see G3-2005's periodNote), so it is no row's fact and the game does not model it.",
     "The quarter-finals and semi-finals follow the bracket order the participant's engine already uses, not the open draw the real ones had.",
     "The nights sit on the game's own calendar. The real 2026-27 months (N1) are recorded for their order, and the screen prints the game's dates, never these."
   ],
@@ -78,8 +78,8 @@
           "Club coefficient rankings determine Pots 2 to 4"
         ] }
       ] },
-    { "id": "G3-2005", "seasons": [2005], "fact": "The 2005-06 group draw: no club drawn with a club of its own association, except holders Liverpool, who entered through qualifying without country protection.", "status": "verified", "usedBy": ["G8_ASSOC_APART.2005"],
-      "periodNote": "ESPN's line speaks of the group stage era as a whole (the same article dates it to the previous 21 seasons); UEFA's page is the 2005-06 draw.",
+    { "id": "G3-2005", "seasons": [2005], "fact": "The 2005-06 group draw: no club drawn with a club of its own association.", "status": "verified", "usedBy": ["G8_ASSOC_APART.2005"],
+      "periodNote": "ESPN's line speaks of the group stage era as a whole (the same article dates it to the previous 21 seasons); UEFA's page is the 2005-06 draw. UEFA's page also says holders Liverpool were without country protection that season. Among the recorded sources only UEFA says so (ESPN states the general rule), so the exception is not part of this row's fact. LFChistory.net's 'Liverpool in Europe: Super Cup win and Athens' (Chris Wood, read 2026-10-16) says Liverpool went through the qualifying rounds and were drawn in a group with Chelsea, but the page shows no date, so it is not recorded as a source.",
       "sources": [
         { "publisher": "UEFA, Old and new meet in Monaco", "url": "https://www.uefa.com/uefachampionsleague/news/01ac-0ea80475ea9e-604a23d0ab93-1000--old-and-new-meet-in-monaco", "published": "2005-08-25", "literal": [
           "No side can draw opponents from their own nation",
@@ -120,14 +120,14 @@
         ] }
       ] },
     { "id": "G4-late", "seasons": [2015, 2020], "fact": "The round of 16 draw: a group winner against a runner-up, never of the same group or the same association; the group winner plays the first leg away and the second at home.", "status": "verified", "usedBy": [],
-      "periodNote": "Bleacher Report's explainer is of 2018-19, inside the same format; UEFA's two pages are the 2015-16 and 2020-21 draws.",
+      "periodNote": "Bleacher Report's explainer is of 2018-19, inside the same format; UEFA's two pages are the 2015-16 and 2020-21 draws. UEFA's 2020-21 page is dated Saturday 1 August 2020 and reports the draw made on Monday 14 December 2020 (read again 2026-10-16).",
       "sources": [
         { "publisher": "UEFA, 2015/16 round of 16 draw", "url": "https://www.uefa.com/uefachampionsleague/news/0253-0d04520b39d2-1933f7d2ac6e-1000--champions-league-round-of-16-draw", "published": "2015-12-10", "literal": [
           "Two seeding pots have been formed: one consisting of group winners and the other of runners-up.",
           "No team can play a club from their group or any side from their own association.",
           "Seeded group winners will be away in the round of 16 first legs on 16/17 and 23/24 February"
         ] },
-        { "publisher": "UEFA, 2020/21 round of 16 draw", "url": "https://www.uefa.com/uefachampionsleague/news/0261-1044d9f198f9-3298a49c06d7-1000--uefa-champions-league-round-of-16-draw/", "published": "2020-12-14", "literal": [
+        { "publisher": "UEFA, 2020/21 round of 16 draw", "url": "https://www.uefa.com/uefachampionsleague/news/0261-1044d9f198f9-3298a49c06d7-1000--uefa-champions-league-round-of-16-draw/", "published": "2020-08-01", "literal": [
           "Two seeding pots were formed: one consisting of the eight group winners and the other of the eight runners-up.",
           "No team could play a club from their own association or a club from the same group they were in.",
           "Seeded group winners are away in the round of 16 first legs and at home in the return matches."
@@ -171,9 +171,9 @@
           "In the group stage, the Miners will not face Dynamo Kyiv, as well as Zenit, Krasnodar and Lokomotiv."
         ] }
       ] },
-    { "id": "G5-2020-ko", "seasons": [2020], "fact": "The 2020-21 round of 16 draw: no page read states the Russia and Ukraine rule for it, and no Russian or Ukrainian club reached it that season.", "status": "toVerify", "usedBy": [], "sources": [] },
-    { "id": "G6", "seasons": [2005, 2010, 2015, 2020], "fact": "Away goals: a tie level on aggregate went to the side with more away goals, in extra time too, until the rule was abolished in every UEFA club competition from 2021-22; since then extra time and penalties.", "figures": { "abolishedFrom": 2021 }, "status": "verified", "usedBy": [],
-      "periodNote": "The engine already reads this through uclAwayGoalsApply (UCL_AWAY_GOALS_LAST_YEAR 2020); the row records it for the watched ties, whose rules the binding passes from that function.",
+    { "id": "G5-2020-ko", "seasons": [2020], "fact": "The 2020-21 round of 16 draw: not read. No page was read for the Russia and Ukraine rule in that draw, nor for which clubs reached it.", "status": "toVerify", "usedBy": [], "sources": [] },
+    { "id": "G6", "seasons": [2005, 2010, 2015, 2020], "fact": "Away goals: a tie level on aggregate went to the side with more away goals, until the rule was abolished in every UEFA club competition from 2021-22; since then extra time and penalties.", "figures": { "abolishedFrom": 2021 }, "status": "verified", "usedBy": [],
+      "periodNote": "The engine already reads this through uclAwayGoalsApply (UCL_AWAY_GOALS_LAST_YEAR 2020); the row records it for the watched ties, whose rules the binding passes from that function. Bleacher Report also says the rule applied again after extra time; it is the only recorded source that says so (UEFA's page does not state it), so that clause is not part of this row's fact.",
       "sources": [
         { "publisher": "UEFA, Do away goals count double", "url": "https://www.uefa.com/uefachampionsleague/news/027d-17172d2190e2-03070c1a3001-1000--do-away-goals-count-double-in-the-champions-league-europa/", "published": "2024-01-14", "literal": [
           "Since the start of the 2021/22 campaign, there has been no away goals rule in UEFA's club competitions.",
