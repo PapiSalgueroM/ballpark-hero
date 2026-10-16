@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+grade0: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh g0) SHARD=0/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream
+grade1: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh g1) SHARD=1/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream
+grade2: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh g2) SHARD=2/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream
+legacy0: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh l0) SHARD=0/2 node scripts/simCmBoardVerdict.mjs --part=legacy
+legacy1: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh l1) SHARD=1/2 node scripts/simCmBoardVerdict.mjs --part=legacy
+rules: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+rulesforced: git worktree add -q .claude/worktrees/forced HEAD && node .rc/x/forceLegacy.mjs .claude/worktrees/forced && CM_RULES_ROOT=$PWD/.claude/worktrees/forced node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+appeal: node scripts/simManagerAppealIsolation.mjs
+vitest: node_modules/.bin/vitest run src/lib/clubManager src/test/clubManager src/test/cm src/test/managerHotSeat --testTimeout=300000 --hookTimeout=120000
