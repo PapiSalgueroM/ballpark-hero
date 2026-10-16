@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+golden: node scripts/recordWorldTieGolden1347.mjs --out "$RC_OUT/worldTieGolden1347.json"
+simWorldUcl: node scripts/simWorldUcl.mjs
+simClubManagerEraUcl: node scripts/simClubManagerEraUcl.mjs
+simEraWorldTables: node scripts/simEraWorldTables.mjs
+simCareerContinental: node scripts/simCareerContinental.mjs
+vitest-continental: node_modules/.bin/vitest run src/lib/soccerCareerContinental.test.ts --testTimeout=300000 --hookTimeout=120000
