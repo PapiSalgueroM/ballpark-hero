@@ -216,9 +216,10 @@ try {
        today's (Round 634: every refused door shows the engine's sentence in it), so (e) holds the new refusal to the
        note's behaviour on a refusal that already exists, the same row with the squad full: the card under the finger
        moves no more than it does there, and the note's text is at least 12 px and inside the screen's width. */
-    /* The squad padded to 30 with copies of its last man (new ids): the talk door's own "squad is full" refusal, which
-       comes before the new one, on the same row. Copies, not new men: nothing in the save is invented beyond the count. */
-    const full = (() => { const c = JSON.parse(pick.save1); const last = c.squad[c.squad.length - 1]; for (let i = 0; c.squad.length < 30; i += 1) c.squad.push({ ...last, id: `${last.id}-wm${i}` }); return JSON.stringify(c); })();
+    /* The squad padded to 30 with copies of its last man under new ids and plain filler names (a walk's doctored save,
+       never shipped; the load keeps one of each man, so a copy needs its own name): the talk door's own "squad is
+       full" refusal, which comes before the new one, on the same row. */
+    const full = (() => { const c = JSON.parse(pick.save1); const last = c.squad[c.squad.length - 1]; for (let i = 0; c.squad.length < 30; i += 1) c.squad.push({ ...last, id: `${last.id}-wm${i}`, name: `Walk Filler ${i + 1}` }); return JSON.stringify(c); })();
     for (const profile of PROFILES) {
       const w = profile.width, presses = {};
       for (const [kind, save] of [['joined', pick.save1], ['full', full]]) {
