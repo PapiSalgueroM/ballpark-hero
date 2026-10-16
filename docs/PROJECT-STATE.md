@@ -1,3 +1,6 @@
+## Root1389 actual baseline measured, fixed source prepared, 2026-10-16
+
+Unchangedb1520a9e/run38974096729SUCCESS establishes one precise pending-history overwrite fault with7preserves/28public-state snapshots,101oldcases/types/holds. Physical artifact12078686046(36,806,036B/SHAf60e451b6d3d36e68368e9ee49ad2bcf8398fb0b0b7e28376081c8d23a1c4db9); actualrawfd84e36c. Exact2linebusyflag fix, original/restored8case proof and6nativebusy/refusalretry journeys are independently source reviewed, not yet runtime qualified. Root305careerfix remainsREADY93730ed2. ActualClaudeI owns joined release/main/publication. Details docs/audits/xi-selection-race.md.
 ## Root1389 diagnosis prepared, XI pending-position selection, 2026-10-16
 
 Eight actual-hook cases and remote baseline proof are source reviewed against unchanged published application18234788. Expected one precise late-history overwrite fault plus seven preserves,28fullpublic-state/draw/storage snapshots and101old regressions. No product patch or runtime claim. Separate1388 career fix is READY asPR305final93730ed2, tested27a39d32; actualClaudeI owns integration/publication. Details docs/audits/xi-selection-race.md.
