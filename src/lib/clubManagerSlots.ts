@@ -19,7 +19,7 @@
  */
 import { SAVE_KEY, leanCareer, worldSeasonLabel, type CareerState } from './clubManager';
 import { eraById, isHistoricEra } from './clubManagerEras';
-import { noSackFrom } from './clubManagerStart';
+import { noSackFrom } from '@/lib/clubManagerStart';
 import { saveFence } from '@/lib/saveFence';
 
 export const SLOT_COUNT = 3;
