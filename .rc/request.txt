@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+wsent-head: SIM_NETWORK=offline node scripts/simWritesAreSent.mjs > /tmp/wh.log 2>&1; s=$?; tail -14 /tmp/wh.log | cut -c1-220; exit $s
+wsent-main: git worktree add /tmp/base e814c2de >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && (node_modules/.bin/vite build > /tmp/bb.log 2>&1 || (tail -20 /tmp/bb.log; exit 1)) && SIM_NETWORK=offline node scripts/simWritesAreSent.mjs > /tmp/wb.log 2>&1; s=$?; tail -14 /tmp/wb.log | cut -c1-220; exit $s
