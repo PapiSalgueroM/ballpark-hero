@@ -1,0 +1,7 @@
+c-noflush: CM_WORLD_MOVES_CONTROL=noflush CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+c-noguard: CM_WORLD_MOVES_CONTROL=noguard node scripts/simCmWorldMoves.mjs
+c-nocarry: CM_WORLD_MOVES_CONTROL=nocarry node scripts/simCmWorldMoves.mjs
+c-nostamp: CM_WORLD_MOVES_CONTROL=nostamp node scripts/simCmWorldMoves.mjs
+c-dropbase: CM_WORLD_MOVES_CONTROL=dropbase CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+c-noskip: CM_WORLD_MOVES_CONTROL=noskip node scripts/simCmWorldMoves.mjs
+c-drawshift: CM_WORLD_MOVES_CONTROL=drawshift node scripts/simCmWorldMoves.mjs
