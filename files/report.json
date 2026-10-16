@@ -1,0 +1,16 @@
+{
+  "checks": 17,
+  "failures": 0,
+  "issues": [],
+  "notes": [
+    "variant built in 31 s",
+    "summary saves: summary-GK-0 age 19 at Aston Villa; summary-ST-9 age 19 at Aston Villa",
+    "pending saves: pending-GK-702 \"Playing it out from the back\" (5 cards, 2 options); pending-ST-718 \"Pressing from the front\" (4 cards, 2 options); pending-CB-707 \"Playing out under a press\" (6 cards, 2 options); pending-CM-715 \"Covering the space\" (6 cards, 2 options)",
+    "S summary-GK-0 seed 42: head random_events:201,406,229,411 | random_events:201,406,229,411 | random_events:201,406,229,411; var random_events:704,201,406,229,411 | random_events:704,201,406,229,411 | random_events:704,201,406,229,411",
+    "S summary-GK-0 seed 7: head random_events:201,406,229,411 | random_events:201,406,229,411 | random_events:201,406,229,411; var random_events:704,201,406,229,411 | random_events:704,201,406,229,411 | random_events:704,201,406,229,411",
+    "S summary-GK-0 seed 1234: head random_events:201,405,228,406 | random_events:201,405,228,406 | random_events:201,405,228,406; var random_events:704,201,405,228,406 | random_events:704,201,405,228,406 | random_events:704,201,405,228,406",
+    "S summary-ST-9 seed 42: head random_events:201,420,423,1 | random_events:201,420,423,1 | random_events:201,420,423,1; var random_events:720,201,420,423,1 | random_events:720,201,420,423,1 | random_events:720,201,420,423,1",
+    "S summary-ST-9 seed 7: head random_events:201,420,423,1 | random_events:201,420,423,1 | random_events:201,420,423,1; var random_events:720,201,420,423,1 | random_events:720,201,420,423,1 | random_events:720,201,420,423,1",
+    "S summary-ST-9 seed 1234: head random_events:201,420,423,1 | random_events:201,420,423,1 | random_events:201,420,423,1; var random_events:720,201,420,423,1 | random_events:720,201,420,423,1 | random_events:720,201,420,423,1"
+  ]
+}
