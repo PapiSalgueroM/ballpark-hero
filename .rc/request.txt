@@ -1,0 +1,10 @@
+#!serial
+unseeded: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) node scripts/simCmUnseededWorld.mjs
+u-norecord: CM_UNSEEDED_CONTROL=norecord CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) node scripts/simCmUnseededWorld.mjs
+oldworld: node scripts/simCmOldCareersWorld.mjs
+appeal-head: node scripts/simManagerAppealIsolation.mjs
+appeal-oldengine: git checkout 1b96efbe -- src/lib/clubManager.ts && git diff HEAD --stat | tail -2 && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+mut-adoptLoans: node .rc/x/mut2.mjs adoptLoans && node_modules/.bin/vitest run src/lib/clubManagerAdoption.test.ts --testTimeout=300000; s=$?; git checkout HEAD -- src scripts; exit $s
+mut-adoptTwoClubs: node .rc/x/mut2.mjs adoptTwoClubs && node_modules/.bin/vitest run src/lib/clubManagerAdoption.test.ts --testTimeout=300000; s=$?; git checkout HEAD -- src scripts; exit $s
+mut-freeAgent: node .rc/x/mut2.mjs freeAgent && node_modules/.bin/vitest run src/lib/clubManagerAdoption.test.ts --testTimeout=300000; s=$?; git checkout HEAD -- src scripts; exit $s
+mut-eraWait: node .rc/x/mut2.mjs eraWait && node_modules/.bin/vitest run src/lib/clubManagerAdoption.test.ts --testTimeout=300000; s=$?; git checkout HEAD -- src scripts; exit $s
