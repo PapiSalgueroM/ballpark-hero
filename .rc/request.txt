@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/soccerDeck.test.ts src/lib/gmInbox.test.ts --testTimeout=300000 --hookTimeout=120000
+deck-a: SIM_SOCCER_DECK_SECTIONS=1,2,3,4,5 node scripts/simSoccerDeck.mjs
+deck-b: SIM_SOCCER_DECK_SECTIONS=6,7,9,10 node scripts/simSoccerDeck.mjs
+deck-c: SIM_SOCCER_DECK_SECTIONS=8 node scripts/simSoccerDeck.mjs
+kit-c: SIM_EVENT_DECK_SECTIONS=14,15,16 node scripts/simEventDeck.mjs
+norival: node scripts/simNoRivalNames.mjs
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+fairness: node scripts/simSoccerDeckFairness.mjs
+static: git diff --quiet e814c2de HEAD -- src/pages src/components src/hooks && echo pages-untouched && n=$(git diff e814c2de HEAD | grep '^+' | grep -cP '[\x{2013}\x{2014}]'); echo "added lines with an en or em dash: $n"; git diff --name-only e814c2de HEAD | wc -l; test "$n" -eq 0
