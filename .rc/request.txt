@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+playCmRetire: node scripts/playCmRetire.mjs
+mut-seasonover: node .rc/x/mut1343.mjs seasonover && node_modules/.bin/vitest run src/test/clubManagerRetire.test.tsx src/lib/clubManagerRetire.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+mutp-seasonover: node .rc/x/mut1343.mjs seasonover && node_modules/.bin/vite build --outDir dist-mut-so > /dev/null 2>&1 && DIST=dist-mut-so node scripts/playCmRetire.mjs; s=$?; git checkout -- src scripts; exit $s
