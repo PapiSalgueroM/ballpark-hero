@@ -1,0 +1,39 @@
+S1-head-390-rm: docs=/ /soccer-career reloaded=true holdBroke=false samples=30 pageErrors=0 wait=3021 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=13|loading=false|broke=false|y=6639
+S1-head-390-mo: docs=/ /soccer-career reloaded=true holdBroke=false samples=30 pageErrors=0 wait=3019 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=13|loading=false|broke=false|y=6265
+S1-head-1280-rm: docs=/ /soccer-career reloaded=true holdBroke=false samples=31 pageErrors=0 wait=3019 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=13|loading=false|broke=false|y=2849
+S1-head-1280-mo: docs=/ /soccer-career reloaded=true holdBroke=false samples=31 pageErrors=0 wait=3025 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=13|loading=false|broke=false|y=3238
+S2-head-390-rm: docs=/soccer-career /soccer-career reloaded=true holdBroke=false samples=31 pageErrors=0 wait=3019 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=0|loading=true|broke=false|y=0
+S2-head-390-mo: docs=/soccer-career /soccer-career reloaded=true holdBroke=false samples=30 pageErrors=0 wait=3013 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=0|loading=true|broke=false|y=0
+S2-head-1280-rm: docs=/soccer-career /soccer-career reloaded=true holdBroke=false samples=30 pageErrors=0 wait=3013 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=0|loading=true|broke=false|y=0
+S2-head-1280-mo: docs=/soccer-career /soccer-career reloaded=true holdBroke=false samples=30 pageErrors=0 wait=3015 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=0|loading=true|broke=false|y=0
+S3-head-390-rm: docs=/ /soccer-career reloaded=true holdBroke=false samples=30 pageErrors=0 wait=3011 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=13|loading=false|broke=false|y=6639 ; /world-cup-bracket|tiles=0|loading=false|broke=false|y=0
+   notes: tapped /world-cup-bracket at 805 ms into the hold
+S3-head-1280-rm: docs=/ /soccer-career reloaded=true holdBroke=false samples=30 pageErrors=0 wait=3012 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=13|loading=false|broke=false|y=2849 ; /football-connect-4|tiles=0|loading=false|broke=false|y=0
+   notes: tapped /football-connect-4 at 805 ms into the hold
+S1-base-390-rm: docs=/ /soccer-career reloaded=true holdBroke=true samples=30 pageErrors=0 wait=3019 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=0|loading=false|broke=true|y=0
+S1-base-390-mo: docs=/ /soccer-career reloaded=true holdBroke=true samples=30 pageErrors=0 wait=3015 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=0|loading=false|broke=true|y=0
+S1-base-1280-rm: docs=/ /soccer-career reloaded=true holdBroke=true samples=30 pageErrors=0 wait=3028 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=0|loading=false|broke=true|y=0
+S1-base-1280-mo: docs=/ /soccer-career reloaded=true holdBroke=true samples=30 pageErrors=0 wait=3018 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=0|loading=false|broke=true|y=0
+S2-base-390-rm: docs=/soccer-career /soccer-career reloaded=true holdBroke=true samples=31 pageErrors=0 wait=3015 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=0|loading=false|broke=true|y=0
+S2-base-390-mo: docs=/soccer-career /soccer-career reloaded=true holdBroke=true samples=30 pageErrors=0 wait=3017 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=0|loading=false|broke=true|y=0
+S2-base-1280-rm: docs=/soccer-career /soccer-career reloaded=true holdBroke=true samples=31 pageErrors=0 wait=3012 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=0|loading=false|broke=true|y=0
+S2-base-1280-mo: docs=/soccer-career /soccer-career reloaded=true holdBroke=true samples=30 pageErrors=0 wait=3016 final=/soccer-career|tiles=0|broke=false|h1=⚽ Soccer Career
+   hold: /soccer-career|tiles=0|loading=false|broke=true|y=0
+review walk: 18 runs recorded

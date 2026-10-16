@@ -1,0 +1,1320 @@
+[
+ {
+  "tag": "S1-head-390-rm",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/",
+    "at": 13
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 854,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 833,
+    "action": "html200"
+   },
+   {
+    "at": 3926,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 52,
+  "notes": [],
+  "before": {
+   "path": "/",
+   "doc": "sabp03",
+   "broke": false,
+   "loading": false,
+   "tiles": 13,
+   "h1": "DoUKnowBall",
+   "mainText": 21518,
+   "flag": null,
+   "scrollY": 6639
+  },
+  "tapDocs": 0,
+  "hold": "S1-head-390-rm-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "xddm7j",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S1-head-390-rm-after.jpg",
+  "holdBroke": false,
+  "holdSamples": 30,
+  "holdStates": [
+   "/soccer-career|tiles=13|loading=false|broke=false|y=6639"
+  ],
+  "docIds": [
+   "sabp03",
+   "xddm7j"
+  ],
+  "reloaded": true,
+  "waitMs": 3021
+ },
+ {
+  "tag": "S1-head-390-mo",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/",
+    "at": 9
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 1668,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 1650,
+    "action": "html200"
+   },
+   {
+    "at": 4756,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 61,
+  "notes": [],
+  "before": {
+   "path": "/",
+   "doc": "45cufg",
+   "broke": false,
+   "loading": false,
+   "tiles": 13,
+   "h1": "DoUKnowBall",
+   "mainText": 21518,
+   "flag": null,
+   "scrollY": 6639
+  },
+  "tapDocs": 0,
+  "hold": "S1-head-390-mo-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "e7jghi",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S1-head-390-mo-after.jpg",
+  "holdBroke": false,
+  "holdSamples": 30,
+  "holdStates": [
+   "/soccer-career|tiles=13|loading=false|broke=false|y=6265"
+  ],
+  "docIds": [
+   "45cufg",
+   "e7jghi"
+  ],
+  "reloaded": true,
+  "waitMs": 3019
+ },
+ {
+  "tag": "S1-head-1280-rm",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/",
+    "at": 9
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 820,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 801,
+    "action": "html200"
+   },
+   {
+    "at": 3937,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 52,
+  "notes": [],
+  "before": {
+   "path": "/",
+   "doc": "lgptjs",
+   "broke": false,
+   "loading": false,
+   "tiles": 13,
+   "h1": "DoUKnowBall",
+   "mainText": 21774,
+   "flag": null,
+   "scrollY": 2849
+  },
+  "tapDocs": 0,
+  "hold": "S1-head-1280-rm-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "dlu05l",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S1-head-1280-rm-after.jpg",
+  "holdBroke": false,
+  "holdSamples": 31,
+  "holdStates": [
+   "/soccer-career|tiles=13|loading=false|broke=false|y=2849"
+  ],
+  "docIds": [
+   "lgptjs",
+   "dlu05l"
+  ],
+  "reloaded": true,
+  "waitMs": 3019
+ },
+ {
+  "tag": "S1-head-1280-mo",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/",
+    "at": 9
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 1043,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 1018,
+    "action": "html200"
+   },
+   {
+    "at": 4146,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 54,
+  "notes": [],
+  "before": {
+   "path": "/",
+   "doc": "9ogc8l",
+   "broke": false,
+   "loading": false,
+   "tiles": 13,
+   "h1": "DoUKnowBall",
+   "mainText": 21774,
+   "flag": null,
+   "scrollY": 2849
+  },
+  "tapDocs": 0,
+  "hold": "S1-head-1280-mo-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "c1bjgt",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S1-head-1280-mo-after.jpg",
+  "holdBroke": false,
+  "holdSamples": 31,
+  "holdStates": [
+   "/soccer-career|tiles=13|loading=false|broke=false|y=3238"
+  ],
+  "docIds": [
+   "9ogc8l",
+   "c1bjgt"
+  ],
+  "reloaded": true,
+  "waitMs": 3025
+ },
+ {
+  "tag": "S2-head-390-rm",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/soccer-career",
+    "at": 9
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 124,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 105,
+    "action": "html200"
+   },
+   {
+    "at": 3188,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 46,
+  "notes": [],
+  "hold": "S2-head-390-rm-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "craozx",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S2-head-390-rm-after.jpg",
+  "holdBroke": false,
+  "holdSamples": 31,
+  "holdStates": [
+   "/soccer-career|tiles=0|loading=true|broke=false|y=0"
+  ],
+  "docIds": [
+   "suy1d7",
+   "craozx"
+  ],
+  "reloaded": true,
+  "waitMs": 3019
+ },
+ {
+  "tag": "S2-head-390-mo",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/soccer-career",
+    "at": 9
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 105,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 93,
+    "action": "html200"
+   },
+   {
+    "at": 3152,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 45,
+  "notes": [],
+  "hold": "S2-head-390-mo-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "lfj12m",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S2-head-390-mo-after.jpg",
+  "holdBroke": false,
+  "holdSamples": 30,
+  "holdStates": [
+   "/soccer-career|tiles=0|loading=true|broke=false|y=0"
+  ],
+  "docIds": [
+   "f0ufba",
+   "lfj12m"
+  ],
+  "reloaded": true,
+  "waitMs": 3013
+ },
+ {
+  "tag": "S2-head-1280-rm",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/soccer-career",
+    "at": 8
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 111,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 99,
+    "action": "html200"
+   },
+   {
+    "at": 3185,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 46,
+  "notes": [],
+  "hold": "S2-head-1280-rm-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "cxc50u",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S2-head-1280-rm-after.jpg",
+  "holdBroke": false,
+  "holdSamples": 30,
+  "holdStates": [
+   "/soccer-career|tiles=0|loading=true|broke=false|y=0"
+  ],
+  "docIds": [
+   "p1ii0e",
+   "cxc50u"
+  ],
+  "reloaded": true,
+  "waitMs": 3013
+ },
+ {
+  "tag": "S2-head-1280-mo",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/soccer-career",
+    "at": 8
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 105,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 90,
+    "action": "html200"
+   },
+   {
+    "at": 3154,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 45,
+  "notes": [],
+  "hold": "S2-head-1280-mo-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "7x5u20",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S2-head-1280-mo-after.jpg",
+  "holdBroke": false,
+  "holdSamples": 30,
+  "holdStates": [
+   "/soccer-career|tiles=0|loading=true|broke=false|y=0"
+  ],
+  "docIds": [
+   "5m5830",
+   "7x5u20"
+  ],
+  "reloaded": true,
+  "waitMs": 3015
+ },
+ {
+  "tag": "S3-head-390-rm",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/",
+    "at": 12
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 771,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 760,
+    "action": "html200"
+   },
+   {
+    "at": 3848,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 91,
+  "notes": [
+   "tapped /world-cup-bracket at 805 ms into the hold"
+  ],
+  "before": {
+   "path": "/",
+   "doc": "c3gdru",
+   "broke": false,
+   "loading": false,
+   "tiles": 13,
+   "h1": "DoUKnowBall",
+   "mainText": 21518,
+   "flag": null,
+   "scrollY": 6639
+  },
+  "other": {
+   "href": "/world-cup-bracket",
+   "x": 195,
+   "y": 313,
+   "d": 109
+  },
+  "tapDocs": 0,
+  "hold": "S3-head-390-rm-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "wivwx6",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S3-head-390-rm-after.jpg",
+  "holdBroke": false,
+  "holdSamples": 30,
+  "holdStates": [
+   "/soccer-career|tiles=13|loading=false|broke=false|y=6639",
+   "/world-cup-bracket|tiles=0|loading=false|broke=false|y=0"
+  ],
+  "docIds": [
+   "c3gdru",
+   "wivwx6"
+  ],
+  "reloaded": true,
+  "waitMs": 3011
+ },
+ {
+  "tag": "S3-head-1280-rm",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/",
+    "at": 9
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 817,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 805,
+    "action": "html200"
+   },
+   {
+    "at": 3890,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 92,
+  "notes": [
+   "tapped /football-connect-4 at 805 ms into the hold"
+  ],
+  "before": {
+   "path": "/",
+   "doc": "x6e9wf",
+   "broke": false,
+   "loading": false,
+   "tiles": 13,
+   "h1": "DoUKnowBall",
+   "mainText": 21774,
+   "flag": null,
+   "scrollY": 2849
+  },
+  "other": {
+   "href": "/football-connect-4",
+   "x": 499,
+   "y": 317,
+   "d": 133
+  },
+  "tapDocs": 0,
+  "hold": "S3-head-1280-rm-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "kejo3q",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S3-head-1280-rm-after.jpg",
+  "holdBroke": false,
+  "holdSamples": 30,
+  "holdStates": [
+   "/soccer-career|tiles=13|loading=false|broke=false|y=2849",
+   "/football-connect-4|tiles=0|loading=false|broke=false|y=0"
+  ],
+  "docIds": [
+   "x6e9wf",
+   "kejo3q"
+  ],
+  "reloaded": true,
+  "waitMs": 3012
+ },
+ {
+  "tag": "S1-base-390-rm",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/",
+    "at": 10
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 785,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 766,
+    "action": "html200"
+   },
+   {
+    "at": 3856,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at Gg (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:39:643",
+   "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at Gg (http://127.0.0.1:43809/assets",
+   "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:41:444",
+   "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 51,
+  "notes": [],
+  "before": {
+   "path": "/",
+   "doc": "u3yqe4",
+   "broke": false,
+   "loading": false,
+   "tiles": 13,
+   "h1": "DoUKnowBall",
+   "mainText": 21518,
+   "flag": null,
+   "scrollY": 6639
+  },
+  "tapDocs": 0,
+  "hold": "S1-base-390-rm-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "q87jr4",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S1-base-390-rm-after.jpg",
+  "holdBroke": true,
+  "holdSamples": 30,
+  "holdStates": [
+   "/soccer-career|tiles=0|loading=false|broke=true|y=0"
+  ],
+  "docIds": [
+   "u3yqe4",
+   "q87jr4"
+  ],
+  "reloaded": true,
+  "waitMs": 3019
+ },
+ {
+  "tag": "S1-base-390-mo",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/",
+    "at": 9
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 1663,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 1648,
+    "action": "html200"
+   },
+   {
+    "at": 4720,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at Gg (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:39:643",
+   "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at Gg (http://127.0.0.1:43809/assets",
+   "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:41:444",
+   "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 61,
+  "notes": [],
+  "before": {
+   "path": "/",
+   "doc": "j478nj",
+   "broke": false,
+   "loading": false,
+   "tiles": 13,
+   "h1": "DoUKnowBall",
+   "mainText": 21518,
+   "flag": null,
+   "scrollY": 6639
+  },
+  "tapDocs": 0,
+  "hold": "S1-base-390-mo-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "0zt2d6",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S1-base-390-mo-after.jpg",
+  "holdBroke": true,
+  "holdSamples": 30,
+  "holdStates": [
+   "/soccer-career|tiles=0|loading=false|broke=true|y=0"
+  ],
+  "docIds": [
+   "j478nj",
+   "0zt2d6"
+  ],
+  "reloaded": true,
+  "waitMs": 3015
+ },
+ {
+  "tag": "S1-base-1280-rm",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/",
+    "at": 8
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 810,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 783,
+    "action": "html200"
+   },
+   {
+    "at": 3885,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at Gg (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:39:643",
+   "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at Gg (http://127.0.0.1:43809/assets",
+   "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:41:444",
+   "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 51,
+  "notes": [],
+  "before": {
+   "path": "/",
+   "doc": "tucu5j",
+   "broke": false,
+   "loading": false,
+   "tiles": 13,
+   "h1": "DoUKnowBall",
+   "mainText": 21774,
+   "flag": null,
+   "scrollY": 2849
+  },
+  "tapDocs": 0,
+  "hold": "S1-base-1280-rm-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "9bmq89",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S1-base-1280-rm-after.jpg",
+  "holdBroke": true,
+  "holdSamples": 30,
+  "holdStates": [
+   "/soccer-career|tiles=0|loading=false|broke=true|y=0"
+  ],
+  "docIds": [
+   "tucu5j",
+   "9bmq89"
+  ],
+  "reloaded": true,
+  "waitMs": 3028
+ },
+ {
+  "tag": "S1-base-1280-mo",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/",
+    "at": 9
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 1042,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 1024,
+    "action": "html200"
+   },
+   {
+    "at": 4100,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at Gg (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:39:643",
+   "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at Gg (http://127.0.0.1:43809/assets",
+   "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:41:444",
+   "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 54,
+  "notes": [],
+  "before": {
+   "path": "/",
+   "doc": "im09xa",
+   "broke": false,
+   "loading": false,
+   "tiles": 13,
+   "h1": "DoUKnowBall",
+   "mainText": 21774,
+   "flag": null,
+   "scrollY": 2849
+  },
+  "tapDocs": 0,
+  "hold": "S1-base-1280-mo-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "x8so4e",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S1-base-1280-mo-after.jpg",
+  "holdBroke": true,
+  "holdSamples": 30,
+  "holdStates": [
+   "/soccer-career|tiles=0|loading=false|broke=true|y=0"
+  ],
+  "docIds": [
+   "im09xa",
+   "x8so4e"
+  ],
+  "reloaded": true,
+  "waitMs": 3018
+ },
+ {
+  "tag": "S2-base-390-rm",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/soccer-career",
+    "at": 9
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 123,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 108,
+    "action": "html200"
+   },
+   {
+    "at": 3196,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:41:444",
+   "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 46,
+  "notes": [],
+  "hold": "S2-base-390-rm-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "eh90ik",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S2-base-390-rm-after.jpg",
+  "holdBroke": true,
+  "holdSamples": 31,
+  "holdStates": [
+   "/soccer-career|tiles=0|loading=false|broke=true|y=0"
+  ],
+  "docIds": [
+   "493d3h",
+   "eh90ik"
+  ],
+  "reloaded": true,
+  "waitMs": 3015
+ },
+ {
+  "tag": "S2-base-390-mo",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/soccer-career",
+    "at": 8
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 107,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 90,
+    "action": "html200"
+   },
+   {
+    "at": 3158,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:41:444",
+   "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 45,
+  "notes": [],
+  "hold": "S2-base-390-mo-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "rqp64d",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S2-base-390-mo-after.jpg",
+  "holdBroke": true,
+  "holdSamples": 30,
+  "holdStates": [
+   "/soccer-career|tiles=0|loading=false|broke=true|y=0"
+  ],
+  "docIds": [
+   "5o0dgh",
+   "rqp64d"
+  ],
+  "reloaded": true,
+  "waitMs": 3017
+ },
+ {
+  "tag": "S2-base-1280-rm",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/soccer-career",
+    "at": 8
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 120,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 107,
+    "action": "html200"
+   },
+   {
+    "at": 3170,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:41:444",
+   "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 46,
+  "notes": [],
+  "hold": "S2-base-1280-rm-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "usa143",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S2-base-1280-rm-after.jpg",
+  "holdBroke": true,
+  "holdSamples": 31,
+  "holdStates": [
+   "/soccer-career|tiles=0|loading=false|broke=true|y=0"
+  ],
+  "docIds": [
+   "ndospp",
+   "usa143"
+  ],
+  "reloaded": true,
+  "waitMs": 3012
+ },
+ {
+  "tag": "S2-base-1280-mo",
+  "docs": [
+   {
+    "n": 1,
+    "path": "/soccer-career",
+    "at": 9
+   },
+   {
+    "n": 2,
+    "path": "/soccer-career",
+    "at": 113,
+    "continued": true
+   }
+  ],
+  "files": [
+   {
+    "at": 97,
+    "action": "html200"
+   },
+   {
+    "at": 3171,
+    "action": "served"
+   }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of \"text/html\". Strict MIME type checking is enforced for module scripts per HTML sp",
+   "TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:41:444",
+   "A page failed to render: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43809/assets/index-Bsy_bROY.js:10:3572)\n    at tx (http://127.0.0.1:43809/assets",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector",
+   "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+  ],
+  "live": 45,
+  "notes": [],
+  "hold": "S2-base-1280-mo-hold.jpg",
+  "final": {
+   "path": "/soccer-career",
+   "doc": "4j7ddk",
+   "broke": false,
+   "loading": false,
+   "tiles": 0,
+   "h1": "⚽ Soccer Career",
+   "mainText": 490,
+   "flag": "1",
+   "scrollY": 0
+  },
+  "after": "S2-base-1280-mo-after.jpg",
+  "holdBroke": true,
+  "holdSamples": 30,
+  "holdStates": [
+   "/soccer-career|tiles=0|loading=false|broke=true|y=0"
+  ],
+  "docIds": [
+   "0e8whu",
+   "4j7ddk"
+  ],
+  "reloaded": true,
+  "waitMs": 3016
+ }
+]
