@@ -1,9 +1,14 @@
-## 2026-10-16: Round 1378 phone season allowance proof preparation
+## 2026-10-16: Round 1378 phone season allowance candidate, baseline qualified
 
 Codex reserves the existing phone budget repair only, on `codex/career-phone-season-budget`
 from d4f2c6f6. `ensurePhone` drops four existing saved allowance fields before each reply.
-Frozen actual-API tests, exact original-source controls and preservation checks must qualify
-before any product edit. No cap, reward, dialogue, perk, engine or RNG change. The old
+The baseline 0804cff9/run38895059368/job116953434091 qualified actual types, seven exact
+budget faults/five preserves, 84 raw observations, old focus12, simPhone green and source/
+installed bytes/521 manifests. simPhone2 retains only its known whole-save size red98.8KB.
+Artifact12043921328 SHA256055851dc0f95051930481014d329db09acd2b9104690d12bbe233d9582e06518
+is retained and reopened. The candidate now adds exactly four optional budget assignments;
+frozen current/original/restored and old simulation/build/reader/weight checks are pending.
+No cap, reward, dialogue, perk, engine or RNG change. The old
 simPhone2 whole-save cap remains unwaived and any known size red is reported separately.
 No local runtime or live claim. Details: `docs/audits/career-phone-season-budget.md`.
 Claude I retains integration/publication and all competition work.

@@ -16,7 +16,7 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
-      PHONE_BUDGET_PHASE: baseline
+      PHONE_BUDGET_PHASE: fixed
       PHONE_BUDGET_BASE: d4f2c6f688d656205722ba52bbdb33f03490966a
       PHONE_BUDGET_OUT: ${{ github.workspace }}/phone-budget-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/phone-budget-artifacts/font-cache
