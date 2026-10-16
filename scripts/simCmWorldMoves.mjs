@@ -23,24 +23,36 @@
  *      origin, and no man of my squad is listed at any club; (iii) every man moved in the run is at his buyer at
  *      every later rollover, or the ledger says he retired; (iv) printed per window type: deals, refusals,
  *      records, the ledger's stored length, and the opening window's refusals on a line of their own (the critic's
- *      correction 4: that window cannot skip, so its refusals are measured, expected 0).
+ *      correction 4: that window cannot skip, so its refusals are measured, expected 0). The opening window's (i) is
+ *      also checked on the state startCareer hands back, before its first save (the review of 2026-10-16: the
+ *      repair on load mended a missing flush and hid it from the noflush control).
  *   2. negotiation: at each seeded career's opening window (seeds 1 to 5), PR269's own scripts open a bidding war
  *      (startNegotiation on [.6, .99, .6], an offer at 0.8 of the ask on [.6, .01, .5, .5]); then the hijack
  *      (makeOffer again on [.01]) and, from the same state, the walk away (walkAway on [.01]): the rival owns the
  *      man (the ledger places him at the rival, who lists him, and the seller does not), and exactly one draw is
  *      taken. A career where the vectors raise no rival is counted, not failed; under 5 of either arm cannot run.
+ *      The protected arms (the review of 2026-10-16, both reviews' first major): the 2026-27 trio, the same seeds, a
+ *      man I sold (a season later, on sale at my buyer) and a man I left behind at a job move (on sale at my old
+ *      club), each protected by the lead's ruling 3; the same war on a copy with the window open and the budget
+ *      high; the hijack and the walk away each take one draw and nothing says he moved (no news line, gone name or
+ *      headline, the talks not hijacked, his record unchanged). Under 3 wars of either kind cannot run.
  *   3. join: seeded 2026-27 careers (the trio, seeds 1 to 3) take a job mid season through joinClubNow, once before
  *      January and once after it (the brief's decision 3): the joined ledger holds every departed record (same key;
  *      the same owner and status unless a deal line of the run in moved him) plus only men of the run in's deal
  *      lines, every deal line of the run in between two other clubs is placed at its buyer, and every name gone
- *      before the move stays gone after it.
+ *      before the move stays gone after it. Since the review of 2026-10-16 (both reviews' second major), also a join
+ *      in season two, and: the joined log opens with the departed career's lines of this season's deals between two
+ *      other clubs whose men stay gone, then the run in's lines, each with this season's number; a departed record
+ *      the run in did not move keeps its payload (or a later year); and every man of those lines is on the screen at
+ *      the club that owns him, marked, with Talk and buy refusing him (pressed with the window open).
  *   4. the market, played inside section 1's careers: at every window each man of its deal lines is on the screen's
  *      market (marketForScreen) at his buyer, marked joinedThisSeason, and every door (buy, clause, loan, talk)
  *      answers what it answers today with that deal line taken out, or else the new sentence ("only joined ... this
  *      season"; the critic's corrections 9 and 15); a man hidden behind a namesake is counted, not failed
  *      (correction 23). At the next summer he is on sale at his club like anyone else, and when the buy door opens
  *      buyPlayer takes him (on its own stream). marketForScreen is timed against buildMarket on the same states:
- *      at most 3 times plus 5 ms a call.
+ *      at most 3 times plus 5 ms a call. Since the review of 2026-10-16: the screen keeps every row buildMarket
+ *      lists, and Talk and buy refuse every row it marks joinedThisSeason.
  *   5. the repair on load: saves BASE's engine wrote for the three worlds' careers (seeds 1 to 3) after the opening
  *      window and after the first January, loaded by the head: every deal line of this season between two other
  *      clubs whose man is on goneNames is mended (placed at his buyer), or left for a counted reason (a deal of mine
@@ -53,13 +65,16 @@
  *      clubs, seeds 0 to 4, two seasons with their January windows, a save and a reload after every window,
  *      deal and rollover, against BASE: every state, saved byte and Math.random draw equal.
  *   7. my deals with the recording on (the critic's correction 10): seeded careers of the three worlds (seeds 1 to 3)
- *      release, buy and sell (acceptBid) at the start and again a season later, on BASE and on the head; each deal must
+ *      release, buy and sell (acceptBid), and since the review of 2026-10-16 also make a swap (an offer with a man of
+ *      mine in it, his terms met) and take a loan with its option exercised, at the start and again a season later,
+ *      on BASE and on the head (a deal the stream cannot reach is counted; no swap or no option at all on the head
+ *      cannot run); each deal must
  *      leave exactly one ledger record with the right owner and status, and the head may not leave more deals without
  *      one than BASE (an AI record sharing a name and birth year with a keyless man of mine would be such a refusal).
  *   8. the bridge (the brief's decision 7, the critic's correction 6): seeded careers of the three worlds (seeds 0 to 2),
  *      two seasons with their January windows, saved and reloaded after every window and rollover: the head with
- *      scripts/lib/cmNoAiMoves1344.mjs (four anchors: the window's record line, recordAiDeals' loop, the join's
- *      ledger and its gone names) equals BASE in every saved string, draw and the last state; the head without it
+ *      scripts/lib/cmNoAiMoves1344.mjs (five anchors: the window's record line, recordAiDeals' loop, the join's
+ *      ledger, its gone names and log, and the rival's guard) equals BASE in every saved string, draw and the last state; the head without it
  *      differs on at least one career (asserted, and printed: how many and from which save).
  *   9. shape (only when asked): the world's shape over fifteen seasons at the 2026-27 trio, BASE against the head,
  *      per tier (each league's top five and bottom five by the bake's year 0 XI, the clubs that sold and the clubs
@@ -70,6 +85,17 @@
  *      seed differences and its standard error, beside BASE against BASE on a second seed set) and ASSERTS the
  *      lead's ruling 2: the top and bottom tiers' XI and age at seasons 5, 10 and 15 move by no more than SHAPE_MARGIN
  *      once BASE against BASE is taken off, and the buyers' surplus stays at the level step 1 measured and flat.
+ *  10. the window's skip (the review of 2026-10-16, the run review's M4): Real Madrid (2026-27) sells its eight best
+ *      outfield men to other clubs at the start through acceptBid, so ruling 3 protects eight of the best rated men
+ *      in the world, and plays three seasons, seeds 1 to 8; at every window each new deal line between two other
+ *      clubs is placed at its buyer and none is a man I sold. Printed: how often a man I sold stood in the top 120 a
+ *      window draws from (none at all cannot run).
+ *  11. my own results (the brief's decision 5, the read review's major D): Aberdeen, Motherwell and St Mirren
+ *      (2026-27), seeds 1 to 3, three seasons without a reload, BASE and the head on one stream, walked step by step.
+ *      A step counts while no AI deal line seen so far on either arm names a club of my league or a club I have
+ *      played; the first step that breaks that ends the comparison (a touched club changes the draws from there on,
+ *      by design). Within it every result of my own matches and the draw count equal BASE's. Under 100 results
+ *      compared cannot run.
  *  12. the window entry's time (the lead's ruling 4, the critic's correction 20): the 2026-27 trio, seeds 1 to 3,
  *      played on BASE and on the head to the January of season 6; the playNextEntry call that opens it is timed
  *      WINDOW_TRIALS times on each engine, alternating, each from a fresh load of the same save, and the head's median
@@ -83,7 +109,7 @@
  *   section 9: the table is in the round's notes, docs/audits/ROUND-1344-NOTES.md; the January entry took 37.8 ms on
  *     the base and about 255 ms with the probe (recorded deal by deal), which is why ruling 4 packs once a window.
  *
- * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,2,3,4,5,6,7,8,12), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per
+ * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,2,3,4,5,6,7,8,10,11,12), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per
  * section), CM_WORLD_MOVES_ERAS (default now,era2015,era2005), CM_WORLD_MOVES_BASE (default the commit the branch
  * started from), CM_WORLD_MOVES_SHAPE_ARMS (default base,head), CM_WORLD_MOVES_SEASONS (section 9, default 15),
  * CM_WORLD_MOVES_OUT (section 9's JSON folder, default $RC_OUT or the temp folder).
@@ -93,7 +119,8 @@
  *   CM_WORLD_MOVES_CONTROL=norecord   no AI deal is recorded anywhere (the window's record line and recordAiDeals'
  *                                     loop out): section 1 red, first at the opening window
  *   CM_WORLD_MOVES_CONTROL=noflush    startCareer's last line back to `return state;`: section 1 red, first at the
- *                                     opening window
+ *                                     opening window (read before its first save; after the save the repair on
+ *                                     load mends it, which is why it is read there since the review)
  *   CM_WORLD_MOVES_CONTROL=nojanuary  January's window keeps the ledger it had: section 1 red, first in January
  *   CM_WORLD_MOVES_CONTROL=nosummer   the summer's window keeps the ledger it had: section 1 red, first in the summer
  *   CM_WORLD_MOVES_CONTROL=joinledger joinClubNow takes the departed career's ledger again: section 3 red
@@ -104,6 +131,12 @@
  *                                     every save still loads, byte equal to BASE's load (else it did not fire)
  *   CM_WORLD_MOVES_CONTROL=nohijackmakeOffer's hijack records nothing: section 2 red on the hijack arm only
  *   CM_WORLD_MOVES_CONTROL=nowalk     walkAway's rival close records nothing: section 2 red on the walk arm only
+ *   CM_WORLD_MOVES_CONTROL=noguard    a rival closes whatever the ledger says: section 2 red on the protected arms
+ *   CM_WORLD_MOVES_CONTROL=nocarry    a job move carries the gone names but not their deal lines: section 3 red
+ *   CM_WORLD_MOVES_CONTROL=nostamp    the run in's lines keep their season one number: section 3 red (season two)
+ *   CM_WORLD_MOVES_CONTROL=dropbase   the screen lists only the joined men: section 4 red
+ *   CM_WORLD_MOVES_CONTROL=noskip     the window publishes a deal the ledger refuses: section 10 red
+ *   CM_WORLD_MOVES_CONTROL=drawshift  every recorded AI deal takes one draw: section 11 red
  *   CM_WORLD_MOVES_CONTROL=slow       the window packs the ledger after every deal again (the step 1 probe's way):
  *                                     section 12 red
  *   CM_WORLD_MOVES_COMBINE_CONTROL=shift  --combine adds 0.2 to the head's top five XI at season 10: red
@@ -143,7 +176,7 @@ const COMBINE = process.argv[2] === '--combine';   // handled at the end of the 
 
 /* The commit this branch started from (origin/main at the claim, Release BG live; src equal to bd3b6244). */
 const BASE = process.env.CM_WORLD_MOVES_BASE || 'd4f2c6f688d656205722ba52bbdb33f03490966a';
-const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 2, 3, 4, 5, 6, 7, 8, 12]));
+const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12]));
 const ERAS = (process.env.CM_WORLD_MOVES_ERAS || 'now,era2015,era2005').split(',');
 if (process.env.CM_WORLD_MOVES_HEAD) cannot('CM_WORLD_MOVES_HEAD is gone: the step 1 probe was removed at step 2 (the head records the deals itself)');
 const CONTROL = process.env.CM_WORLD_MOVES_CONTROL || '';
@@ -151,6 +184,8 @@ const CONTROL = process.env.CM_WORLD_MOVES_CONTROL || '';
 const RECORD_LINE = '    if (working && seen) { const moved = recordAiDeal(working, { mp, to: buyer, fee }, seen); if (moved === working) continue; working = moved; }\n    else unrecorded.push({ mp, to: buyer, fee });\n';
 const JANUARY_CALL = '      generateHeadlines(state);\n      // Round 135:';
 const SUMMER_CALL = '  state.intl = freshIntl(state);\n  generateHeadlines(state);\n';
+/* joinClubNow's carried log (seededJoinCarry, src/lib/clubManagerCalendar.ts), the review of 2026-10-16. */
+const CARRY_LINE = '    transferLog: [...lines, ...(s.transferLog ?? []).map(t => ({ ...t, season: career.season }))].slice(-SAVE_CAPS.transferLog),\n';
 const keepLedger = indent => `${indent}{ const held1344 = state.worldRoster; generateHeadlines(state); if (held1344 === undefined) delete state.worldRoster; else state.worldRoster = held1344; }\n`;
 /* Each control: the section it must turn red, the window its first red must be at (section 1), and its edits of
    this tree's engine, [anchor, replacement]. */
@@ -169,6 +204,12 @@ const CONTROLS = {
   repairthrows: { section: 5, loads: true, edits: [["  try {\n    if (worldSeedOf(state) === undefined || !eraRostersLoaded(state.eraId)", "  try {\n    if (Math.abs(1) === 1) throw new Error('the repairthrows control');\n    if (worldSeedOf(state) === undefined || !eraRostersLoaded(state.eraId)"]] },
   nohijack: { section: 2, arm: 'hijack', edits: [['      return recordAiDeals(state, [{ mp: next.player, to: next.rivalBidder, fee: next.rivalOffer }]);\n', '      return state;\n']] },
   nowalk: { section: 2, arm: 'walk', edits: [['    return recordAiDeals(state, [{ mp: neg.player, to: neg.rivalBidder, fee: neg.rivalOffer }]);\n', '    return state;\n']] },
+  noguard: { section: 2, edits: [['  return worldSeedOf(career) !== undefined && recordAiDeal(career, deal, career) === career;\n', '  return false;\n']] },
+  nocarry: { section: 3, file: 'src/lib/clubManagerCalendar.ts', edits: [[CARRY_LINE, '    transferLog: s.transferLog,\n']] },
+  nostamp: { section: 3, file: 'src/lib/clubManagerCalendar.ts', edits: [[CARRY_LINE, '    transferLog: [...lines, ...(s.transferLog ?? [])].slice(-SAVE_CAPS.transferLog),\n']] },
+  dropbase: { section: 4, edits: [['  return world.filter(p => listed.has(at(p)) || joined.has(at(p))).map(', '  return world.filter(p => joined.has(at(p))).map(']] },
+  noskip: { section: 10, edits: [['; if (moved === working) continue; working = moved; }\n', '; working = moved; }\n']] },
+  drawshift: { section: 11, edits: [['  const player = aiDealPlayer(seen, deal.mp);\n', '  Math.random();\n  const player = aiDealPlayer(seen, deal.mp);\n']] },
   slow: { section: 12, edits: [[RECORD_LINE, '    if (working && seen) { const moved = recordAiDeal(working, { mp, to: buyer, fee }, working); if (moved === working) continue; working = packedLedger(moved); }\n    else unrecorded.push({ mp, to: buyer, fee });\n']] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`);
@@ -333,7 +374,7 @@ function oneClubRule(M, s, label) {
 }
 
 /* ---------- section 4, the market (run inside section 1's careers) ---------- */
-const s4 = { lines: 0, listed: 0, namesake: 0, doors: 0, buyLocked: 0, nextSummer: 0, bought: 0, gone: 0, screenMs: 0, baseMs: 0, calls: 0 };
+const s4 = { lines: 0, listed: 0, namesake: 0, doors: 0, buyLocked: 0, nextSummer: 0, bought: 0, gone: 0, screenMs: 0, baseMs: 0, calls: 0, kept: 0, marked: 0 };
 const joinedLine = (name, club, s) => `${name} only joined ${club} this season. They will not sell him on until ${s.transferWindow === 'summer' ? 'next summer' : 'the summer'}.`;
 /** At a window: every man of its deal lines is listed at his buyer, marked, and every door refuses him in today's order. */
 function marketAt(M, s, lines, label, pending) {
@@ -341,6 +382,16 @@ function marketAt(M, s, lines, label, pending) {
   let t0 = performance.now(); const screen = M.cm.marketForScreen(s); s4.screenMs += performance.now() - t0;
   t0 = performance.now(); M.cm.buildMarket(s); s4.baseMs += performance.now() - t0; s4.calls += 1;
   s4.lines += lines.length;
+  /* The review of 2026-10-16 (the read review's minor 5, and the root of both product majors): the screen keeps every
+     row buildMarket lists, and every row it marks joinedThisSeason is refused by Talk and buy, pressed on a copy
+     with the window open, the budget high and no talks running. */
+  const onScreen = new Set(screen.map(p => `${p.name}|${p.club}`));
+  for (const p of M.cm.buildMarket(s)) { s4.kept += 1; if (!onScreen.has(`${p.name}|${p.club}`)) fail(4, `${label}: buildMarket lists ${p.name} at ${p.club} and the screen does not`); }
+  const doorsAt = { ...s, transferWindow: s.transferWindow ?? 'january', budget: 9999, negotiation: null };
+  for (const p of screen.filter(x => x.joinedThisSeason)) for (const door of ['talk', 'buy']) {
+    s4.marked += 1;
+    if (M.cm.doorRefusal(doorsAt, p, door) === null) fail(4, `${label}: ${p.name} is marked joinedThisSeason at ${p.club} and the ${door} door opens`);
+  }
   for (const line of lines) {
     const row = screen.find(p => p.name === line.name && p.club === line.to);
     if (!row) {
@@ -438,6 +489,14 @@ async function ownershipCareer(E, era, club, seed) {
     let s = M.cm.startCareer(club, era);
     if (M.cm.worldSeedOf(s) === undefined) cannot(`${tag}: a new career carries no worldSeed`);
     s1Careers += 1;
+    /* The review of 2026-10-16 (the run review's M3): the opening window is checked first on the state startCareer
+       hands back, BEFORE its first save and load, because the repair on load mends a missing flush and hid it from
+       the noflush control (a player who plays on without reloading never meets the repair). */
+    phase1 = 'opening';
+    for (const line of addedLines([], s.transferLog).filter(aiLine(s.clubName))) {
+      const why = placement(M, s, line);
+      if (why) fail1('i', `${tag} the opening window, before any save: ${line.to} signed ${line.name} from ${line.from}, but ${why}`);
+    }
     s = reload(s, 'the opening window');
     atWindow('opening', 'the opening window', s, []);
     for (let season = 1; season <= S1_SEASONS; season += 1) {
@@ -498,19 +557,116 @@ async function negotiationCareer(E, era, club, seed) {
   }
 }
 
+/* The review of 2026-10-16 (both reviews' first major, the other lane's PR295): a rival never closes a deal the ledger
+   refuses. Two men the lead's ruling 3 protects: one I SOLD (a 2026-27 career sells its second best outfield man at
+   the start through acceptBid, the section 7 way, and plays the season out; at the next summer he is on sale at his
+   buyer) and one I LEFT BEHIND (the career takes a job at week 6 through joinClubNow, and a man of my old squad is
+   on sale at my old club). On a copy with the window open and the budget high, so the war and not the purse decides,
+   PR269's vectors open a bidding war on him; then the hijack (makeOffer on [.01]) and, from the same state, the walk
+   away (walkAway on [.01]) take exactly one draw and say nowhere that he moved: no news line, no gone name, no new
+   headline, the talks not hijacked, his ledger record as it was. */
+const s2p = { sold: { tried: 0, set: 0, held: 0, unprotected: 0 }, behind: { tried: 0, set: 0, held: 0, unprotected: 0 } };
+const ledgerRecordOf = (M, st, name) => JSON.stringify((M.ledger.readWorldRoster(st)?.records ?? []).filter(r => r.player.name === name));
+async function protectedCareer(E, club, seed, kind) {
+  const M = await E.fresh(), keep = Math.random, row = s2p[kind];
+  Math.random = stream(mix('protected', club, seed, kind));
+  const tag = `${club} (now, seed ${seed}, a man I ${kind === 'sold' ? 'sold' : 'left behind'})`;
+  row.tried += 1;
+  let s, name, holder;
+  try {
+    s = M.cm.startCareer(club, 'now');
+    if (kind === 'sold') {
+      const man = [...s.squad].filter(p => !p.onLoan && p.position !== 'GK' && !p.isYouth).sort((a, b) => b.rating - a.rating || a.id.localeCompare(b.id))[1];
+      const buyer = M.cm.buildMarket(s).find(p => p.club !== s.clubName)?.club;
+      const bid = man && buyer ? { playerId: man.id, playerName: man.name, club: buyer, offer: 30, status: 'open' } : null;
+      const sold = bid && M.cm.acceptBid({ ...s, incomingBids: [...(s.incomingBids ?? []), bid] }, man.id);
+      if (!sold) return;
+      s = sold; name = man.name; holder = buyer;
+      for (let guard = 0; guard < 400; guard += 1) {
+        if (s.boardConfidence < 35) s = { ...s, boardConfidence: 55 };
+        const r = M.cm.playNextEntry(s, OPT);
+        s = r.state;
+        if (r.kind === 'seasonOver' || s.sacked) break;
+      }
+      if (s.sacked) return;
+      s = M.cm.startNextSeason(M.cm.finishSeason(s).state);
+    } else {
+      for (let guard = 0; guard < 400 && s.week < 6; guard += 1) {
+        if (s.boardConfidence < 35) s = { ...s, boardConfidence: 55 };
+        const r = M.cm.playNextEntry(s, OPT);
+        s = r.state;
+        if (r.kind === 'seasonOver' || s.sacked) return;
+      }
+      const to = JOIN_TO[club];
+      const league = M.cm.REAL_LEAGUES.find(l => M.cm.playableClubs(l.id).some(c => c.name === to))?.id;
+      const open = { club: to, league, tier: 1, season: s.season, week: s.week, matchesLeft: 0, roll: 0, status: 'accepted' };
+      const old = new Set(s.squad.filter(p => !p.onLoan && !p.isYouth).map(p => p.name));
+      holder = s.clubName;
+      const j = M.cal.joinClubNow({ ...s, jobHunt: { open, cooldowns: [], sentSeason: s.season, sent: 1, summerMove: null } });
+      if (!j || j.clubName !== to) return;
+      s = j;
+      name = M.cm.marketForScreen(s).find(p => p.club === holder && old.has(p.name) && p.position !== 'GK')?.name;
+    }
+  } finally { Math.random = keep; }
+  const card = name && M.cm.buildMarket(s).find(p => p.name === name && p.club === holder);
+  if (!card) return;
+  const st = { ...s, budget: 9999, wageCap: 9999, transferWindow: s.transferWindow ?? 'january', negotiation: null };
+  if (M.cm.aiDealPlayer(st, card) !== null) { row.unprotected += 1; fail(2, `${tag} protected: the ledger does not protect ${name} at ${holder} (ruling 3)`); return; }
+  let war, amount;
+  try {
+    const started = onVector([0.6, 0.99, 0.6], () => M.cm.startNegotiation(st, card)).value;
+    amount = started?.negotiation ? Math.round(started.negotiation.theirAsk * 0.8 * 10) / 10 : 0;
+    war = started?.negotiation?.status === 'open' ? onVector([0.6, 0.01, 0.5, 0.5], () => M.cm.makeOffer(started, amount)).value : null;
+  } catch { return; }
+  const neg = war?.negotiation;
+  if (!neg || neg.status !== 'open' || !neg.rivalBidder || neg.rivalOffer === null) return;
+  row.set += 1;
+  const before = ledgerRecordOf(M, war, name);
+  let held = true;
+  for (const arm of ['hijack', 'walk']) {
+    const label = `${tag} protected-${arm}:`;
+    const bad = why => { held = false; fail(2, `${label} ${why}`); };
+    let run;
+    try { run = onVector([0.01], () => arm === 'hijack' ? M.cm.makeOffer(war, amount) : M.cm.walkAway(war)); }
+    catch (e) { bad(e.message); continue; }
+    const after = run.value;
+    if (run.taken !== 1) bad(`took ${run.taken} draws, the vector holds 1`);
+    if (!after) { bad('came back null'); continue; }
+    if (arm === 'hijack' && after.negotiation?.status !== 'open') bad(`the talks went ${after.negotiation?.status ?? 'away'} (the rival closed on ${name})`);
+    if (arm === 'walk' && after.negotiation !== null) bad('the talks did not end');
+    if (JSON.stringify(after.transferLog) !== JSON.stringify(war.transferLog)) bad(`a news line says ${neg.rivalBidder} took ${name} from ${holder}`);
+    if (JSON.stringify(after.goneNames) !== JSON.stringify(war.goneNames)) bad(`${name} went on goneNames`);
+    if (JSON.stringify(after.aiHeadlines) !== JSON.stringify(war.aiHeadlines)) bad(`a headline says ${neg.rivalBidder} signed ${name}`);
+    if (ledgerRecordOf(M, after, name) !== before) bad(`${name}'s ledger record changed`);
+  }
+  if (held) row.held += 1;
+}
+
 /* ---------- section 3, join ---------- */
-const JOIN_TO = { 'Real Madrid': 'Arsenal', Everton: 'Napoli', Aberdeen: 'Fulham' };
-const s3 = { joins: 0, refused: 0, departed: 0, lines: 0, runIn: 0, gone: 0 };
+const JOIN_TO ={ 'Real Madrid': 'Arsenal', Everton: 'Napoli', Aberdeen: 'Fulham' };
+const s3 = { joins: 0, refused: 0, departed: 0, lines: 0, runIn: 0, gone: 0, carried: 0, payloads: 0, doors: 0, notOwned: 0, namesake: 0 };
 /** A seeded 2026-27 career that takes a job mid season, before or after its January window, through joinClubNow. */
 async function joinCareer(E, club, seed, when) {
   const M = await E.fresh(), keep = Math.random;
   Math.random = stream(mix('join', club, seed, when));
-  const tag = `${club} (now, seed ${seed}, ${when} January)`;
+  const tag = `${club} (now, seed ${seed}, ${when === 'second' ? 'in season two' : `${when} January`})`;
   try {
     let s = M.cm.startCareer(club, 'now'), january = false, after = 0;
+    /* The review of 2026-10-16: a join in season two, where the run in's own lines (its fresh save's season one)
+       must take this season's number for the refusal to read them. */
+    if (when === 'second') {
+      for (let guard = 0; guard < 400; guard += 1) {
+        if (s.boardConfidence < 35) s = { ...s, boardConfidence: 55 };
+        const r = M.cm.playNextEntry(s, OPT);
+        s = r.state;
+        if (r.kind === 'seasonOver' || s.sacked) break;
+      }
+      if (s.sacked) { s3.refused += 1; return; }
+      s = M.cm.startNextSeason(M.cm.finishSeason(s).state);
+    }
     for (let guard = 0; guard < 400; guard += 1) {
       if (s.boardConfidence < 35) s = { ...s, boardConfidence: 55 };
-      if (when === 'before' && s.week >= 6) break;
+      if (when !== 'after' && s.week >= 6) break;
       if (when === 'after' && january && (after += 1) > 3) break;
       const r = M.cm.playNextEntry(s, OPT);
       s = r.state;
@@ -526,7 +682,18 @@ async function joinCareer(E, club, seed, when) {
     const departed = M.ledger.readWorldRoster(M.cm.refreshWorldRoster(s))?.records ?? [];
     const joined = M.ledger.readWorldRoster(j)?.records ?? [];
     const byKey = new Map(joined.map(r => [r.key, r]));
-    const runLines = (j.transferLog ?? []).filter(line => !line.loan);
+    /* The review of 2026-10-16 (both reviews' second major): the joined log is the departed career's lines of this
+       season's deals between two other clubs whose men stay gone, first, then the run in's own lines, every one with
+       this season's number. The rest of this section reads the run in's lines only. */
+    const movedBefore = new Set((s.transferLog ?? []).filter(aiLine(s.clubName)).filter(l => l.season === s.season).map(l => l.name));
+    const keptGone = new Set(s.goneNames.filter(n => movedBefore.has(n)));
+    const carried = (s.transferLog ?? []).filter(t => t.season === s.season && !t.loan && keptGone.has(t.name) && t.from !== s.clubName && t.to !== s.clubName);
+    const log = j.transferLog ?? [];
+    s3.carried += carried.length;
+    if (JSON.stringify(log.slice(0, carried.length)) !== JSON.stringify(carried)) fail(3, `${tag}: the joined log does not open with the departed career's ${carried.length} deal lines of this season between two other clubs`);
+    const stale = log.slice(carried.length).filter(t => t.season !== s.season);
+    if (stale.length) fail(3, `${tag}: ${stale.length} of the run in's lines keep another season's number (${stale[0].season}, this season is ${s.season})`);
+    const runLines = log.slice(carried.length).filter(line => !line.loan);
     const runNames = new Set(runLines.map(line => line.name));
     for (const r of departed) {
       s3.departed += 1;
@@ -541,10 +708,46 @@ async function joinCareer(E, club, seed, when) {
       if (why) fail(3, `${tag}: in the run in ${line.to} signed ${line.name} from ${line.from}, but ${why}`);
       else s3.runIn += 1;
     }
+    /* The read review's minor 4 (the brief's decision 3, "payload equal or refreshed"): a departed record the run in
+       did not move keeps its payload, read against the departed ledger exactly as joinClubNow builds it (my old
+       squad's snapshot taken first), or carries a later year (refreshed). */
+    const snapped = M.ledger.readWorldRoster(M.cm.refreshWorldRoster(M.ledger.snapshotWorldRosterClub(s, s.clubName)))?.records ?? [];
+    for (const r of snapped) {
+      const k = byKey.get(r.key);
+      if (!k || k.owner !== r.owner || k.status !== r.status || runNames.has(r.player.name)) continue;
+      s3.payloads += 1;
+      if (k.year === r.year && JSON.stringify(k.player) !== JSON.stringify(r.player)) fail(3, `${tag}: ${r.player.name}'s payload changed across the move with no deal line of the run in`);
+    }
     /* The men other clubs bought this season before the move stay gone after it (the men I bought, sold or let go
        keep today's rule). */
-    const movedBefore = new Set((s.transferLog ?? []).filter(aiLine(s.clubName)).filter(l => l.season === s.season).map(l => l.name));
-    for (const name of s.goneNames.filter(n => movedBefore.has(n))) { s3.gone += 1; if (!j.goneNames.includes(name)) fail(3, `${tag}: ${name}, bought by another club this season before the move, is buyable again after it`); }
+    for (const name of keptGone) { s3.gone += 1; if (!j.goneNames.includes(name)) fail(3, `${tag}: ${name}, bought by another club this season before the move, is buyable again after it`); }
+    /* And no door sells them (the run review's M1 and m4: the gone name alone held, while the screen listed him and
+       Talk opened): every man of this season's deals between two other clubs, carried or the run in's, is on the
+       screen at the club the ledger says owns him, marked joinedThisSeason, and Talk and buy answer what they answer
+       with his deal line taken out, or else the new sentence. The doors are pressed on a copy with the window open,
+       the budget high and no talks running, since a shut window answers first. */
+    const doorsAt = { ...j, transferWindow: j.transferWindow ?? 'january', budget: 9999, negotiation: null };
+    const screen = M.cm.marketForScreen(doorsAt);
+    const names = new Set([...carried, ...runLines.filter(aiLine(to))].map(t => t.name));
+    for (const name of names) {
+      if (j.squad.some(p => p.name === name)) continue;
+      const owned = joined.filter(r => r.status === 'owned' && r.player.name === name);
+      if (owned.length !== 1 || !owned[0].owner || owned[0].owner === to) { s3.notOwned += 1; continue; }
+      const club = owned[0].owner;
+      const row = screen.find(p => p.name === name && p.club === club);
+      if (!row) {
+        if (screen.some(p => p.name === name)) { s3.namesake += 1; continue; }
+        fail(3, `${tag}: ${name}, bought by ${club} this season, is not on the screen's market there after the move`); continue;
+      }
+      if (row.joinedThisSeason !== true) fail(3, `${tag}: ${name} is listed at ${club} after the move without joinedThisSeason`);
+      const without = { ...doorsAt, transferLog: (doorsAt.transferLog ?? []).filter(t => !(t.name === name && t.to === club && t.season === doorsAt.season)) };
+      for (const door of ['talk', 'buy']) {
+        s3.doors += 1;
+        const want = M.cm.doorRefusal(without, row, door) ?? joinedLine(name, club, doorsAt);
+        const got = M.cm.doorRefusal(doorsAt, row, door);
+        if (got !== want) fail(3, `${tag}: after the move the ${door} door on ${name} at ${club} answers "${got}", wanted "${want}"`);
+      }
+    }
   } finally { Math.random = keep; }
 }
 
@@ -678,7 +881,7 @@ async function legacySection(B, H) {
 }
 
 /* ---------- section 7, my deals with the recording on ---------- */
-const s7 = { base: { deals: 0, refused: 0 }, head: { deals: 0, refused: 0 } };
+const s7 = { base: { deals: 0, refused: 0, swaps: 0, options: 0, unreached: 0 }, head: { deals: 0, refused: 0, swaps: 0, options: 0, unreached: 0 } };
 /** A seeded career's deals of mine (a release, a buy, a sale through acceptBid) at its start and again a season later,
     each held to exactly one ledger record with the right owner and status. */
 async function mineCareer(E, arm, era, club, seed) {
@@ -704,6 +907,29 @@ async function mineCareer(E, arm, era, club, seed) {
     const bid = man && buyer ? { playerId: man.id, playerName: man.name, club: buyer, offer: 30, status: 'open' } : null;
     const sold = bid && M.cm.acceptBid({ ...s, incomingBids: [...(s.incomingBids ?? []), bid] }, man.id);
     if (sold) { s = sold; holds(s, man.name, buyer, 'owned'); }
+    /* The read review's major C (the critic's correction 10): a swap and an exercised loan option too. The swap: talks
+       for a man of another club, an offer over the ask with my lowest rated spare outfield man in the deal, and his
+       asked terms met; the man who arrives is mine and the man who goes is the seller's. The option: a man of
+       another club in on loan, his option to buy taken at once. Each deal that cannot be reached on this stream is
+       counted, not failed. */
+    const have = new Set(s.squad.map(p => p.name));
+    const target = M.cm.buildMarket(s).find(p => p.position !== 'GK' && p.age < 29 && p.rating < 80 && !have.has(p.name) && M.cm.doorRefusal(s, p, 'talk') === null);
+    const spare = [...outfield(s)].sort((a, b) => a.rating - b.rating || a.id.localeCompare(b.id)).find(p => M.cm.canLeaveSquad(s, p));
+    let talk = target && spare ? M.cm.startNegotiation(s, target) : null;
+    if (talk?.negotiation?.status === 'open') talk = M.cm.makeOffer(talk, Math.round(talk.negotiation.theirAsk * 1.1 * 10) / 10, { swapId: spare.id });
+    const want = talk?.negotiation?.phase === 'terms' ? talk.negotiation.terms?.want : undefined;
+    const swapped = want ? M.cm.offerTerms(talk, want) : null;
+    if (swapped?.negotiation?.status === 'agreed') {
+      s = { ...swapped, negotiation: null }; row.swaps += 1;
+      holds(s, target.name, s.clubName, 'owned'); holds(s, spare.name, target.club, 'owned');
+    } else row.unreached += 1;
+    const have2 = new Set(s.squad.map(p => p.name));
+    const lent = M.cm.buildMarket(s).find(p => p.position !== 'GK' && !have2.has(p.name) && M.cm.doorRefusal(s, p, 'loan') === null);
+    const loaned = lent ? M.cm.loanIn(s, lent) : null;
+    const loanee = loaned?.squad.find(p => p.name === lent.name && p.onLoan);
+    const optioned = loanee && loanee.loanOptionFee !== undefined ? M.cm.exerciseLoanOption(loaned, loanee.id) : null;
+    if (optioned) { s = optioned; row.options += 1; holds(s, lent.name, s.clubName, 'owned'); }
+    else row.unreached += 1;
     return s;
   };
   try {
@@ -735,6 +961,119 @@ async function bridgeSection(B, HB, H) {
     if (firstH >= 0 || b.state !== h.state) { s8.differ += 1; const at = firstH >= 0 ? `save ${firstH + 1}` : 'the last state'; s8.first[at] = (s8.first[at] ?? 0) + 1; }
     else s8.equal += 1;
   }
+}
+
+/* ---------- section 10, the window's skip ---------- */
+/* The review of 2026-10-16 (the run review's M4): a window never publishes a deal the ledger refuses. Real Madrid
+   (2026-27) sells its eight best outfield men to other clubs at the start through acceptBid (the section 7 way, the
+   review's skip probe), so the lead's ruling 3 protects eight of the best rated men in the world, then plays three
+   seasons. At every window each new deal line between two other clubs is placed at its buyer (placement, as section
+   1), and none of them is a man the ledger holds from my sale. Exposure is printed: how often a protected man stood
+   in the top 120 of the market a window draws from. Control noskip takes the skip out. */
+const S10_SEASONS = 3;
+const s10 = { careers: 0, sold: 0, windows: 0, lines: 0, exposed: 0 };
+async function skipCareer(E, seed) {
+  const M = await E.fresh(), keep = Math.random;
+  Math.random = stream(mix('skip', seed));
+  const tag = `Real Madrid (now, seed ${seed}, eight men sold)`;
+  const sold = new Set();
+  const audit = (s, before, label) => {
+    s10.windows += 1;
+    const records = M.ledger.readWorldRoster(s)?.records ?? [];
+    for (const line of addedLines(before, s.transferLog).filter(aiLine(s.clubName))) {
+      s10.lines += 1;
+      const why = placement(M, s, line);
+      if (why) fail(10, `${tag} ${label}: the news says ${line.to} signed ${line.name} from ${line.from}, but ${why}`);
+      if (sold.has(line.name) && records.some(r => r.status === 'owned' && r.player.name === line.name && r.player.wage !== undefined)) fail(10, `${tag} ${label}: ${line.to} took ${line.name}, a man I sold (ruling 3)`);
+    }
+  };
+  const exposure = s => { const top = new Set(M.cm.buildMarket(s).slice(0, 120).map(p => p.name)); for (const name of sold) if (top.has(name)) s10.exposed += 1; };
+  try {
+    let s = M.cm.startCareer('Real Madrid', 'now');
+    const clubs = [...new Set(M.cm.buildMarket(s).map(p => p.club).filter(c => c !== s.clubName))];
+    const best = [...s.squad].filter(p => !p.onLoan && !p.isYouth && p.position !== 'GK').sort((a, b) => b.rating - a.rating || a.id.localeCompare(b.id)).slice(0, 8);
+    for (const [i, man] of best.entries()) {
+      const bid = { playerId: man.id, playerName: man.name, club: clubs[(seed * 7 + i * 13) % clubs.length], offer: Math.max(30, man.value ?? 30), status: 'open' };
+      const next = M.cm.acceptBid({ ...s, incomingBids: [...(s.incomingBids ?? []), bid] }, man.id);
+      if (next) { s = next; sold.add(man.name); s10.sold += 1; }
+    }
+    s10.careers += 1;
+    for (let season = 1; season <= S10_SEASONS; season += 1) {
+      for (let guard = 0; guard < 400; guard += 1) {
+        if (s.boardConfidence < 35) s = { ...s, boardConfidence: 55 };
+        const before = [...(s.transferLog ?? [])], prev = s;
+        const r = M.cm.playNextEntry(s, OPT);
+        s = r.state;
+        if (r.kind === 'window') { exposure(prev); audit(s, before, `January of season ${season}`); }
+        if (r.kind === 'seasonOver' || s.sacked) break;
+      }
+      if (s.sacked || season === S10_SEASONS) break;
+      s = M.cm.finishSeason(s).state;
+      const before = [...(s.transferLog ?? [])];
+      exposure({ ...s, goneNames: [] });
+      s = M.cm.startNextSeason(s);
+      audit(s, before, `the summer before season ${season + 1}`);
+    }
+  } finally { Math.random = keep; }
+}
+
+/* ---------- section 11, my own results where no AI deal touches my opponents ---------- */
+/* The brief's decision 5 (the read review's major D): the recording reaches my own results only through the clubs
+   its deals touch. The fleet: Scottish Premiership careers (2026-27), whose league the 120 best rated men a window
+   draws from barely reach, played on BASE and on the head from one stream for three seasons, each without a reload.
+   Both arms are walked step by step; a step is comparable while no AI deal line seen so far on either arm names a
+   club of my league or a club I have played, and the first step that breaks that ends the career's comparison (a
+   touched club changes the draws from there on, by design). Within the comparable steps every result of my own
+   matches and the draw count must equal BASE's. Control drawshift adds one draw to every recorded AI deal. */
+const S11_SEASONS = 3;
+const S11_CLUBS = ['Aberdeen', 'Motherwell', 'St Mirren'];
+const s11 = { careers: 0, compared: 0, cutLeague: 0, cutOpponent: 0, whole: 0 };
+async function ownResultsRun(E, club, seed) {
+  const M = await E.fresh(), keep = Math.random, next = stream(mix('own11', club, seed));
+  let draws = 0;
+  Math.random = () => { draws += 1; return next(); };
+  const steps = [];
+  try {
+    let s = M.cm.startCareer(club, 'now');
+    const step = (kind, before, beforeResults) => steps.push({ kind, draws, lines: addedLines(before, s.transferLog).filter(aiLine(s.clubName)),
+      results: addedLines(beforeResults, s.resultLog), league: [...s.leagueClubs] });
+    step('start', [], []);
+    for (let season = 1; season <= S11_SEASONS; season += 1) {
+      for (let guard = 0; guard < 400; guard += 1) {
+        if (s.boardConfidence < 35) s = { ...s, boardConfidence: 55 };
+        const before = [...(s.transferLog ?? [])], beforeResults = [...(s.resultLog ?? [])];
+        const r = M.cm.playNextEntry(s, OPT);
+        s = r.state;
+        step(r.kind, before, beforeResults);
+        if (r.kind === 'seasonOver' || s.sacked) break;
+      }
+      if (s.sacked || season === S11_SEASONS) break;
+      s = M.cm.finishSeason(s).state;
+      const before = [...(s.transferLog ?? [])];
+      s = M.cm.startNextSeason(s);
+      step('summer', before, [...(s.resultLog ?? [])]);
+    }
+  } finally { Math.random = keep; }
+  return steps;
+}
+async function ownResultsCareer(B, H, club, seed) {
+  const tag = `${club} (now, seed ${seed})`;
+  const [b, h] = [await ownResultsRun(B, club, seed), await ownResultsRun(H, club, seed)];
+  s11.careers += 1;
+  const touched = new Set(), played = new Set();
+  for (let i = 0; i < Math.min(b.length, h.length); i += 1) {
+    for (const line of [...b[i].lines, ...h[i].lines]) { touched.add(line.from); touched.add(line.to); }
+    if (h[i].league.some(c => touched.has(c))) { s11.cutLeague += 1; return; }
+    const opponents = [...b[i].results, ...h[i].results].map(r => r.opp);
+    if (opponents.some(o => touched.has(o)) || [...played].some(o => touched.has(o))) { s11.cutOpponent += 1; return; }
+    if (b[i].kind !== h[i].kind) { fail(11, `${tag}: step ${i + 1} is ${h[i].kind} on the head and ${b[i].kind} on BASE`); return; }
+    if (b[i].draws !== h[i].draws) { fail(11, `${tag}: by step ${i + 1} (${h[i].kind}) the head drew ${h[i].draws} times and BASE ${b[i].draws}, with no AI deal touching my league or my opponents`); return; }
+    if (JSON.stringify(b[i].results) !== JSON.stringify(h[i].results)) { fail(11, `${tag}: at step ${i + 1} my results differ from BASE's: ${JSON.stringify(h[i].results)} against ${JSON.stringify(b[i].results)}`); return; }
+    s11.compared += h[i].results.length;
+    for (const o of opponents) played.add(o);
+  }
+  if (b.length !== h.length) fail(11, `${tag}: the head played ${h.length} steps and BASE ${b.length}`);
+  else s11.whole += 1;
 }
 
 /* ---------- section 9, shape ---------- */
@@ -981,7 +1320,7 @@ if (SECTIONS.has(0)) {
   }
 }
 const headEdits = [CONTROL ? editOf(CONTROLS[CONTROL].edits, CONTROL) : null].filter(Boolean);
-const needBase = SECTIONS.has(5) || SECTIONS.has(7) || SECTIONS.has(8) || SECTIONS.has(6) || SECTIONS.has(12) || SECTIONS.has(9) && (process.env.CM_WORLD_MOVES_SHAPE_ARMS || 'base,head').split(',').includes('base');
+const needBase = SECTIONS.has(11) || SECTIONS.has(5) || SECTIONS.has(7) || SECTIONS.has(8) || SECTIONS.has(6) || SECTIONS.has(12) || SECTIONS.has(9) && (process.env.CM_WORLD_MOVES_SHAPE_ARMS || 'base,head').split(',').includes('base');
 const H = await engine('head', { edit: headEdits.length ? text => headEdits.reduce((t, f) => f(t), text) : null,
   editFile: CONTROL ? CONTROLS[CONTROL].file ?? ENGINE : ENGINE });
 const B = needBase ? await engine('base', { base: true }) : null;
@@ -1001,6 +1340,7 @@ if (SECTIONS.has(1) || SECTIONS.has(4)) {
   if (!s1Careers || !Object.values(tally).some(r => r.deals)) cannot('no AI deal line was seen, so nothing was measured');
   if (SECTIONS.has(4)) {
     console.log(`4) the market: ${s4.listed} moved men on the screen's market at their buyer (${s4.namesake} hidden behind a namesake, counted), ${s4.doors} door presses checked, the buy door locked on ${s4.buyLocked}; a season later ${s4.nextSummer} on sale there, ${s4.bought} bought, ${s4.gone} moved on or retired`);
+    console.log(`   the screen kept all of ${s4.kept} buildMarket rows it was checked against; ${s4.marked} Talk and buy presses on rows it marks joinedThisSeason`);
     const screen = s4.screenMs / (s4.calls || 1), base = s4.baseMs / (s4.calls || 1);
     console.log(`   marketForScreen ${screen.toFixed(2)} ms a call against buildMarket's ${base.toFixed(2)} ms on the same states (limit 3 x + 5 ms)`);
     if (screen > 3 * base + 5) fail(4, `marketForScreen took ${screen.toFixed(2)} ms a call against buildMarket's ${base.toFixed(2)} ms, over 3 x + 5 ms`);
@@ -1014,12 +1354,16 @@ if (SECTIONS.has(2)) {
   for (const era of ERAS) for (const club of CLUBS[era]) for (const seed of seeds) await negotiationCareer(H, era, club, seed);
   console.log(`   hijack: ${s2.hijack.owned} of ${s2.hijack.set} at the rival; walk away: ${s2.walk.owned} of ${s2.walk.set}; ${s2.unset} careers where no bidding war could be set up on the vectors`);
   if (s2.hijack.set < 5 || s2.walk.set < 5) cannot(`section 2: only ${s2.hijack.set} hijacks and ${s2.walk.set} walk aways could be set up, under 5 each`);
+  for (const club of CLUBS.now) for (const seed of seeds) for (const kind of ['sold', 'behind']) await protectedCareer(H, club, seed, kind);
+  console.log(`   protected by ruling 3: a man I sold, ${s2p.sold.held} of ${s2p.sold.set} wars held (${s2p.sold.tried} careers tried, ${s2p.sold.unprotected} not protected); a man I left behind, ${s2p.behind.held} of ${s2p.behind.set} (${s2p.behind.tried} tried, ${s2p.behind.unprotected} not protected)`);
+  if (s2p.sold.set < 3 || s2p.behind.set < 3) cannot(`section 2: only ${s2p.sold.set} wars on a man I sold and ${s2p.behind.set} on a man I left behind could be set up, under 3 each`);
 }
 if (SECTIONS.has(3)) {
   const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [1, 2, 3]);
   console.log(`3) join: seeded 2026-27 careers take a job mid season through joinClubNow, before and after January, seeds ${seeds.join(',')}`);
-  for (const club of CLUBS.now) for (const seed of seeds) for (const when of ['before', 'after']) await joinCareer(H, club, seed, when);
-  console.log(`   ${s3.joins} moves (${s3.refused} could not be set up), ${s3.departed} departed records kept, ${s3.runIn} deal lines of the run in placed, ${s3.gone} gone names carried over`);
+  for (const club of CLUBS.now) for (const seed of seeds) for (const when of ['before', 'after', 'second']) await joinCareer(H, club, seed, when);
+  console.log(`   ${s3.joins} moves (${s3.refused} could not be set up), ${s3.departed} departed records kept, ${s3.runIn} deal lines of the run in placed, ${s3.gone} gone names carried over with ${s3.carried} deal lines, ${s3.payloads} payloads compared, ${s3.doors} door presses after the move (${s3.notOwned} men the ledger no longer holds at one club, ${s3.namesake} behind a namesake, counted)`);
+  if (!s3.doors) cannot('section 3: no door was pressed after a move, so the carry measured nothing');
   if (s3.joins < 6) cannot(`section 3: only ${s3.joins} moves could be made, under 6`);
   if (!s3.lines) cannot('section 3: no deal line of a run in was seen, so the join measured nothing');
 }
@@ -1048,7 +1392,9 @@ if (SECTIONS.has(7)) {
   for (const era of ERAS) for (const club of CLUBS[era]) for (const seed of seeds) { await mineCareer(B, 'base', era, club, seed); await mineCareer(H, 'head', era, club, seed); }
   console.log(`   BASE: ${s7.base.deals} deals of mine, ${s7.base.refused} without exactly one record; the head: ${s7.head.deals} deals, ${s7.head.refused} without exactly one record`);
   if (s7.head.refused > s7.base.refused) fail(7, `the head left ${s7.head.refused} deals of mine without exactly one ledger record, BASE ${s7.base.refused}`);
+  console.log(`   swaps: BASE ${s7.base.swaps}, the head ${s7.head.swaps}; exercised loan options: BASE ${s7.base.options}, the head ${s7.head.options}; deals not reached on the stream: BASE ${s7.base.unreached}, the head ${s7.head.unreached}`);
   if (!s7.head.deals) cannot('section 7: no deal of mine was made');
+  if (!s7.head.swaps || !s7.head.options) cannot(`section 7: ${s7.head.swaps} swaps and ${s7.head.options} exercised options on the head, so a kind of deal went unmeasured`);
 }
 if (SECTIONS.has(8)) {
   console.log('8) the bridge: seeded careers, BASE against the head with scripts/lib/cmNoAiMoves1344.mjs, every saved string and draw; and without it');
@@ -1056,6 +1402,21 @@ if (SECTIONS.has(8)) {
   console.log(`   ${s8.careers} careers: with the bridge every one checked against BASE; without it ${s8.differ} differ (first at ${Object.entries(s8.first).map(([k, v]) => `${k} x${v}`).join(', ') || 'none'}) and ${s8.equal} do not`);
   if (!s8.careers) cannot('section 8: no career was played');
   if (!s8.differ) fail(8, 'without the bridge no seeded career differs from BASE, so the fleet does not measure the recording');
+}
+if (SECTIONS.has(10)) {
+  const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [1, 2, 3, 4, 5, 6, 7, 8]);
+  console.log(`10) the window's skip: Real Madrid sells its eight best outfield men at the start and plays ${S10_SEASONS} seasons, seeds ${seeds.join(',')}`);
+  for (const seed of seeds) await skipCareer(H, seed);
+  console.log(`   ${s10.careers} careers, ${s10.sold} men sold, ${s10.windows} windows, ${s10.lines} deal lines checked; a man I sold stood in the top 120 a window draws from ${s10.exposed} times`);
+  if (!s10.careers || !s10.lines) cannot('section 10: no window was audited');
+  if (!s10.exposed) cannot('section 10: no man I sold ever stood where a window draws from, so the skip was never in play');
+}
+if (SECTIONS.has(11)) {
+  const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [1, 2, 3]);
+  console.log(`11) my own results: ${S11_CLUBS.join(', ')} (2026-27), ${S11_SEASONS} seasons, BASE against the head on one stream, seeds ${seeds.join(',')}`);
+  for (const club of S11_CLUBS) for (const seed of seeds) await ownResultsCareer(B, H, club, seed);
+  console.log(`   ${s11.careers} careers: ${s11.compared} results of mine compared; ${s11.whole} compared to the end, ${s11.cutLeague} cut where a deal touched my league, ${s11.cutOpponent} where it touched a club I played`);
+  if (s11.compared < 100) cannot(`section 11: only ${s11.compared} results compared, under 100`);
 }
 if (SECTIONS.has(9)) {
   console.log(`9) shape: ${SHAPE_SEASONS} seasons at ${CLUBS.now.join(', ')} (the JSON goes to --combine)`);

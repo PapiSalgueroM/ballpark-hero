@@ -121,7 +121,7 @@ async function arm(control) {
   const defect = CONTROLS[control];
   /* Round 1344, the bridge for this kit pinned to an old engine: since that round a seeded career records every deal
      between two other clubs, from its opening window on, which the pinned engine never did. The current arm carries
-     scripts/lib/cmNoAiMoves1344.mjs (fail closed: it throws unless its four anchors stand once), so what this kit
+     scripts/lib/cmNoAiMoves1344.mjs (fail closed: it throws unless its five anchors stand once), so what this kit
      compares is everything else; simCmWorldMoves section 8 proves the bridge leaves the head equal to the round's base. */
   const B = await loadEngine({ label: control || 'healthy', patch: (file, source, receipts) => {
     const bridged = withoutAiMoves(source, file);
