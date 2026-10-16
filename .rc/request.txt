@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+basebuild: git worktree add -f .base e814c2def671e07bd6163462dff8ab1230be2000 > /dev/null 2>&1 && cd .base && ../node_modules/.bin/vite build --outDir ../dist-base --emptyOutDir > /tmp/basebuild.log 2>&1; s=$?; tail -2 /tmp/basebuild.log; cd .. && (nohup node scripts/lib/hostLikeServer.mjs dist-base 4174 > /tmp/base-server.log 2>&1 &) ; sleep 3; echo "base served: $(curl -s -o /dev/null -w '%{http_code}' http://localhost:4174/soccer-career)"; exit $s
+weight: cp .rc/x/weight1334.mjs scripts/weight1334.tmp.mjs && node scripts/weight1334.tmp.mjs; s=$?; rm -f scripts/weight1334.tmp.mjs; exit $s
+colours: for c in bg-blue-600 bg-emerald-600 bg-gray-800 bg-slate-600; do echo "$c head $(git grep -c "$c" -- src | awk -F: '{n+=$2} END {print n+0}') files $(git grep -l "$c" -- src | wc -l), base $(git grep -c "$c" e814c2de -- src | awk -F: '{n+=$NF} END {print n+0}')"; done
