@@ -170,6 +170,10 @@ async function walkW1(browser, sport, size) {
     await review.waitFor();
     if (await page.getByRole('button', { name: 'Back to the sideline', exact: true }).count()) fail(id, 'the retirement screen offers the sideline back');
     await check('retirement-screen', null);
+    /* Review F8: this round's button, so it answers to the 44 px rule like every other new one. */
+    const reviewBox = await review.boundingBox();
+    if (!reviewBox || reviewBox.height < 44) fail(id, `Review coaching career is ${reviewBox ? `${Math.round(reviewBox.height)} px` : 'missing'} tall`);
+    notes.push(`${id}: Review coaching career is ${reviewBox ? Math.round(reviewBox.height) : 'no'} px tall`);
     await tap(review);
     await page.getByRole('heading', { name: 'Coaching career complete' }).waitFor();
     await check('reviewed', '[data-coach-done]');

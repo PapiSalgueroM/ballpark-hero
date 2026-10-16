@@ -104,6 +104,7 @@ describe('Round 1346: retire from coaching on the real board', () => {
     expect(view.getByRole('heading', { name: 'Coaching career complete' })).toBeInTheDocument();
     expect(view.queryByRole('button', { name: 'Retire from coaching' })).toBeNull();
     expect(view.queryByRole('button', { name: /^(Coach|Sit out) the \d+ season$/ })).toBeNull();
+    expect(view.getByRole('button', { name: /The Market/ })).toHaveTextContent(/The MarketYou are not looking now$/);
     const retiredBytes = localStorage.getItem(key);
     view.unmount();
     const again = render(<Board />); await flush();
