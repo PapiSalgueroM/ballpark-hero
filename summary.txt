@@ -1,0 +1,1 @@
+size exit=0 3s |       Tests  1 passed (1)
