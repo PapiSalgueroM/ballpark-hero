@@ -13,7 +13,7 @@ import RetireDoor, { ARM_MS } from '@/components/club-manager/RetireDoor';
 import CmRetireDoor from '@/components/club-manager/CmRetireDoor';
 import ManagerSlotsScreen from '@/components/club-manager/ManagerSlotsScreen';
 import ClubManagerFarewell from '@/components/club-manager/ClubManagerFarewell';
-import { useClubManager } from '@/hooks/useClubManager';
+import { phaseFor, useClubManager } from '@/hooks/useClubManager';
 import { retireCareer } from '@/lib/clubManagerRetire';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), recordStreakDay: vi.fn(), getCurrentPlayerName: vi.fn(() => null) }));
@@ -114,6 +114,36 @@ describe('retiring through the hook', { timeout: 120000 }, () => {
     act(() => api.showSlots());
     act(() => api.resume());
     expect(api.phase).toBe('retired');
+  });
+
+  /* Review fix: the cases above retire a mid season career, so "never seasonEnd or sacked" was never asked of a save
+     that is also sacked or at a season end. These are, through every way a career is opened. */
+  it('a retired save that is also sacked, or holds a season summary, opens on the farewell and nowhere else', async () => {
+    const summary = { season: 1 } as unknown as NonNullable<CareerState['pendingSummary']>;
+    for (const extra of [{ sacked: true }, { pendingSummary: summary }, { sacked: true, pendingSummary: summary }]) {
+      expect(phaseFor({ ...retireCareer(startCareer('Everton'))!, ...extra })).toBe('retired');
+      localStorage.clear(); sessionStorage.clear(); api = null;
+      const first = render(<Harness />);
+      await start('Everton');
+      const c = { ...retireCareer(api.career)!, ...extra };
+      first.unmount();
+      api = null;
+      localStorage.setItem(SAVE_KEY, JSON.stringify(c));
+      const second = render(<Harness />);
+      await waitFor(() => expect(api.phase).toBe('resume'));
+      act(() => api.openSlot(1));
+      expect(api.phase).toBe('retired');
+      act(() => api.showSlots());
+      act(() => api.resume());
+      expect(api.phase).toBe('retired');
+      second.unmount();
+      api = null;
+      markLandOnHub();
+      const third = render(<Harness />);
+      await waitFor(() => expect(api.career?.clubName).toBe('Everton'));
+      await waitFor(() => expect(api.phase).toBe('retired'));
+      third.unmount();
+    }
   });
 
   it('opens a retired career parked in another slot on its farewell, through the boot', async () => {

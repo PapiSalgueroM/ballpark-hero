@@ -9,7 +9,8 @@
         Start a new manager opens the picker with the retired career parked in slot 1.
      B  mid season: Liverpool, season 2, twelve entries in. The Manager panel shows the line; retiring there
         names the week and the position on the farewell.
-     C  out of work: a sacked career retires from the sacked screen; the farewell says out of work.
+     C  out of work: a sacked career retires from the sacked screen; the farewell says out of work, and after a
+        reload See the farewell opens it again, never the sacked screen (the save stays sacked under `retired`).
      D  old save: a save without the field on a whole book shows the line with no second line, and opening the
         panel writes nothing new; the same save leaned shows the second line with the right numbers.
      E  the page, at 320 by 640, 390 by 844 and 1280 by 900 (and with reduced motion): scrollY and the door's
@@ -261,6 +262,15 @@ async function walkC(profile) {
     const moment = (await page.locator('[data-cm-farewell-moment]').textContent().catch(() => '')) ?? '';
     check(P, 'the sacked screen retires a manager out of work', title.includes('phone') && moment.includes('out of work') && (await diskRetired(page))?.when === 'outOfWork', `${title} | ${moment}`);
     await shot(page, `C-farewell-${profile.width}`);
+    /* Review fix: the save is still sacked under its retirement, so the reload must open the farewell, never the
+       sacked screen with its job market. */
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.locator('[data-testid="cm-slots"]').waitFor({ timeout: 15000 }).catch(() => {});
+    const open = (await page.locator('[data-cm-slot-open]').first().textContent().catch(() => '')) ?? '';
+    await openSlotButton(page);
+    await page.locator('[data-cm-farewell]').waitFor({ timeout: 10000 }).catch(() => {});
+    const again = (await page.locator('[data-cm-farewell-moment]').textContent().catch(() => '')) ?? '';
+    check(P, 'a reload and See the farewell open the farewell again, not the sacked screen', open.includes('See the farewell') && again.includes('out of work') && (await page.locator('[data-cm-retire-door]').count()) === 0, `${open} | ${again}`);
     check(P, 'no page error', page.errors.length === 0, page.errors[0] ?? '');
   } finally { await context.close(); }
 }
