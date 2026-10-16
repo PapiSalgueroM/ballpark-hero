@@ -964,6 +964,7 @@ async function legacySection(head, base, runs) {
 /* ---------------- section pure (step 1) ---------------- */
 const MODULE = 'src/lib/clubManagerBoardVerdict.ts';
 const METERS = 'src/lib/clubManagerMeters.ts';
+const HELP = 'src/components/club-manager/ClubManagerHelp.tsx';
 const LADDER_FROM = "  let verdictGrade: 'A' | 'B' | 'C' | 'D' | 'F';\n";
 const LADDER_TO = "    verdictGrade = 'F';\n  }\n";
 /** The base's finishSeason ladder, cut from its own source and evaluated: the oracle is never retyped. */
@@ -1047,8 +1048,17 @@ function pureSection(bv, ctx) {
   check(P, `BOARD_SAFE_LINE (${bv.BOARD_SAFE_LINE}) equals clubManagerMeters' BOARD_SAFE (${safe})`, bv.BOARD_SAFE_LINE === safe);
   check(P, 'the statues and the murals live only under a title or two trophies (none in VERDICT_LINES)', !/statue|mural/i.test(JSON.stringify(bv.VERDICT_LINES)));
   check(P, 'LEGACY_BOARD_START 60 and LEGACY_NEW_JOB_BOARD 62', bv.LEGACY_BOARD_START === 60 && bv.LEGACY_NEW_JOB_BOARD === 62);
+  /* The help's worked example, computed by the module and printed by the help (control example). */
+  const example = [{ id: 'league', hit: true }, { id: 'cup', hit: true }, { id: 'goals', hit: false }, { id: 'natQuota', hit: false }, { id: 'veterans', hit: false }];
+  const raw = bv.openingConfidence({ grade: 'C', playedExpectation: 1, finish: 1, objectives: example, promiseNet: 0 });
+  const opens = bv.openingConfidence({ grade: 'A', playedExpectation: 1, finish: 1, objectives: example, promiseNet: 0 });
+  const old = 55 + 2 * example.reduce((n, o) => n + (o.hit ? 1 : -1), 0);
+  const help = ctx.helpText ?? '';
+  check(P, `the help's example prints the module's sums: ${raw} raw, ${old} on the old rule, and an A opens at ${opens} (BOARD_FRESH)`,
+    help.includes(`2 x (3 + 1 - 1 - 0.5 - 0.5) = ${raw}`) && help.includes(`2 x (1 + 1 - 1 - 1 - 1) = ${old}`) && opens === bv.BOARD_FRESH && help.includes('opens at {BOARD_FRESH}, Safe'));
 }
 const MODULE_CONTROLS = {
+  example: null,
   safeline: ['export const BOARD_SAFE_LINE = 60;', 'export const BOARD_SAFE_LINE = 61;'],
   upgrade: ["  if (i.fate === 'up') return { grade: atLeast(grade, 'B'), kind: 'up' };", "  if (i.fate === 'up') return { grade, kind: 'up' };"],
   band: ["  if (i.grade === 'A' || i.grade === 'B') v = Math.max(v, BOARD_FRESH);", '  if (false) v = Math.max(v, BOARD_FRESH);'],
@@ -1128,8 +1138,11 @@ async function main() {
       if (!BASE) { console.log('section pure needs CM_BOARD_BASE (its ladder oracle is the base engine); could not run'); process.exit(2); }
       let text = await readSource(root, MODULE);
       if (MODULE_CONTROLS[CONTROL]) text = patchOnce(text, ...MODULE_CONTROLS[CONTROL], `control ${CONTROL}`);
+      else if (CONTROL && !(CONTROL in MODULE_CONTROLS)) { console.log(`control ${CONTROL} is not a section pure control`); process.exit(2); }
       const bv = await bundleModule(text, folder, CONTROL || 'head');
-      pureSection(bv, { baseText: await readSource(BASE, ENGINE), metersText: await readSource(root, METERS) });
+      let helpText = await readSource(root, HELP);
+      if (CONTROL === 'example') helpText = patchOnce(helpText, '0.5 - 0.5) = 59', '0.5 - 0.5) = 58', 'control example');
+      pureSection(bv, { baseText: await readSource(BASE, ENGINE), metersText: await readSource(root, METERS), helpText });
     } else if (['grade', 'fate', 'stream', 'offers'].includes(part)) {
       /* One fleet serves the four sections. */
       if (fleetDone) continue;
