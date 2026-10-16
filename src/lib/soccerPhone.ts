@@ -1033,10 +1033,12 @@ export function ensurePhone(s: CareerState): PhoneState {
   const p = (s as CareerState & { phone?: PhoneState }).phone;
   if (!p || typeof p !== "object") return blankPhone();
   const out: PhoneState = {
-    threads: Array.isArray(p.threads) ? p.threads.filter(t => t && Array.isArray(t.lines)) : [],
+    threads: Array.isArray(p.threads) ? p.threads.filter(t => t && Array.isArray(t.lines)).map(t => ({
+      ...t, lines: [...t.lines], seen: Array.isArray(t.seen) ? [...t.seen] : [],
+    })) : [],
     feed: Array.isArray(p.feed) ? p.feed.filter(f => typeof f === "string") : [],
     world: p.world && typeof p.world === "object" ? p.world : null,
-    clubs: p.clubs && typeof p.clubs === "object" ? p.clubs : {},
+    clubs: p.clubs && typeof p.clubs === "object" ? { ...p.clubs } : {},
     rivalClub: typeof p.rivalClub === "string" ? p.rivalClub : null,
     seed: typeof p.seed === "number" && p.seed > 0 ? p.seed : 1,
     offers: typeof p.offers === "number" ? p.offers : 0,

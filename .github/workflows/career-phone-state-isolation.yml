@@ -16,7 +16,7 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
-      PHONE_ISOLATION_PHASE: baseline
+      PHONE_ISOLATION_PHASE: fixed
       PHONE_ISOLATION_BASE: c40ea5d85734915f7f0d9a5a155615267640eb80
       PHONE_ISOLATION_OUT: ${{ github.workspace }}/phone-isolation-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/phone-isolation-artifacts/font-cache
