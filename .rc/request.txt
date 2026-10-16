@@ -1,0 +1,8 @@
+#!serial
+mut-tieleg1: node .rc/x/mut1347fix.mjs tieleg1 && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-tieagg: node .rc/x/mut1347fix.mjs tieagg && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-r16same: node .rc/x/mut1347fix.mjs r16same && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-finalone: node .rc/x/mut1347fix.mjs finalone && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-finalnights: node .rc/x/mut1347fix.mjs finalnights && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-fxorder: node .rc/x/mut1347fix.mjs fxorder && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+clean-after: git status --short src scripts | head -5; node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000
