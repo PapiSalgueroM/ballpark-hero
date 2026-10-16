@@ -1,0 +1,15 @@
+s0 exit=0 0s | simCmWorldMoves: green, sections 0 held
+appealIsolation exit=0 41s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+tsc exit=0 76s | 
+s8-now exit=0 47s | simCmWorldMoves: green, sections 8 held
+vitest-cm exit=0 24s |    Duration  23.10s (transform 3.70s, setup 1.18s, collect 8.94s, tests 45.12s, environment 7.41s, prepare 1.62s)
+pr269-head exit=0 12s |    Duration  9.68s (transform 1.68s, setup 45ms, collect 60ms, tests 7.67s, environment 286ms, prepare 130ms)
+s1-now exit=0 171s | simCmWorldMoves: green, sections 1, 4 held
+s6-now exit=0 140s | simCmWorldMoves: green, sections 6 held
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simDailyDeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+bridge-check exit=0 0s | cmNoAiMoves1344: all 4 anchors stand once and can be taken out
+simHarnessAnchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+leagueRules exit=0 46s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
