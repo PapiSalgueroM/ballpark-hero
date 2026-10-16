@@ -15,7 +15,7 @@ jobs:
       run:
         shell: bash
     env:
-      WORLD_XI_PHASE: baseline
+      WORLD_XI_PHASE: fixed
       SIM_NETWORK: offline
       ENGINES: chromium
     steps:
