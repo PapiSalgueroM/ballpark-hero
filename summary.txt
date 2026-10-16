@@ -1,0 +1,14 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simUsCareerPractice exit=0 27s | All 1 harnesses green.
+simUsSeasonCentre exit=0 124s | All 1 harnesses green.
+simUsCareerSaveRetry exit=0 155s | All 1 harnesses green.
+simCareerDecisionOutcome exit=0 9s | All 1 harnesses green.
+simCareerEntryGuide exit=0 8s | All 1 harnesses green.
+simCareerPressMarket exit=0 9s | All 1 harnesses green.
+simCareerSeasonReview exit=0 12s | All 1 harnesses green.
+simRevealMoments exit=0 12s | All 1 harnesses green.
+simHelpDialogFocus exit=0 3s | All 1 harnesses green.
+simTrustCopy exit=0 1s | All 1 harnesses green.
+simAccessibility exit=0 0s | All 1 harnesses green.
+simNbaAwardsSense exit=0 145s | All 1 harnesses green.
+simUsCareerSummer exit=124 4200s | Running 1 node harness
