@@ -1,0 +1,10 @@
+decisions exit=1 23s | simClubManagerDecisions: 3 findings
+decisions-base exit=0 25s | simClubManagerDecisions: 0 findings
+clubDetail exit=0 5s | simClubDetailCurrentRoster normal: green.
+headlines exit=0 5s | simHeadlines: green. The feed is alive and it does not lie.
+transfers exit=0 103s | ALL TRANSFER CHECKS PASSED
+freeAgents exit=0 134s | simFreeAgents: all sections passed
+vitest-lib exit=0 36s |    Duration  36.06s (transform 5.23s, setup 1.09s, collect 11.47s, tests 61.33s, environment 7.96s, prepare 2.04s)
+ledgerJourney exit=0 183s | simCmLedgerJourney: green. 45 seeded journeys, 9654 ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carri
+slots exit=0 91s | simClubManagerSlots: all sections green
+vitest-test exit=0 134s |    Duration  133.65s (transform 8.55s, setup 2.41s, collect 34.96s, tests 185.55s, environment 19.18s, prepare 4.39s)
