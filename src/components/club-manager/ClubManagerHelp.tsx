@@ -86,6 +86,13 @@ export default function ClubManagerHelp() {
                 <p><span className="font-semibold text-foreground">Example:</span> a 2026-27 Premier League match. Two changes at half time cost no stoppage. Then one at 60, one at 70 and one at 80, and that is all five changes and all three stoppages gone. A 2005-06 match gives you three, whenever you like.</p>
                 <p>The other dugout and the Quick Sim coach play the same rule, and under five the coach keeps a stoppage back for an injury as well as a change. Cups and European ties play your league's rule. The 2019-20 restart did allow five, but a season here goes by the year it starts, so 2019-20 plays three. Every other league in the game (the Eredivisie, MLS, the Saudi Pro League and the rest) keeps three for now, because we could not confirm its rule on two sources yet.</p>
               </div>
+              {/* Round 1344: a deal between two other clubs reaches the world ledger (generateHeadlines in
+                  src/lib/clubManager.ts). Appended on its own; it points back to the world memory paragraph. */}
+              <div data-cm-help="world-moves" className="space-y-2">
+                <p>🔄 <span className="font-semibold text-foreground">Deals between other clubs stick too.</span> The world remembers your deals (see above), and in a career started after the 13 October update it remembers the other clubs' deals as well. When the news says a club signed a player, he is in their squad straight away: on their club page, in their line ups against you, and on the transfer market at his new club. They will not sell him on until the summer, and the market tells you so if you try. A player you sell works the same way, and players you sold, or signed and then left behind when you changed jobs, stay where they are: no other club buys them.</p>
+                <p><span className="font-semibold text-foreground">Example:</span> Napoli sell a winger to Arsenal in the summer news. He is in Arsenal's squad on their club page straight away, he can play against you for Arsenal, and the market lists him at Arsenal, not for sale until next summer. A season later he is still there, a year older.</p>
+                <p>Club strengths and the golden boot race are worked out once a season, so a window's moves count there from the next season. If your career is newer than that update and a move this season went missing, opening it puts him where he went; moves from earlier seasons stay where they were. A career started before the update keeps the world it had.</p>
+              </div>
             </div>
   );
 }
