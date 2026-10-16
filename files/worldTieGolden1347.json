@@ -1,0 +1,2312 @@
+{
+ "what": "Round 1347: knockout ties as the participant engine settles them, recorded by scripts/recordWorldTieGolden1347.mjs",
+ "ref": "d4f2c6f6",
+ "cases": [
+  {
+   "name": "modern QF 70-70 plain",
+   "eraId": null,
+   "round": "QF",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 1,
+   "kind": "plain",
+   "rules": {
+    "legs": 2,
+    "awayGoals": false,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     1,
+     3
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     2,
+     2
+    ]
+   ],
+   "coins": [],
+   "draws": 12,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":3,\"awayGoals\":5,\"winner\":\"Beta FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":1,\"awayGoals\":3},\"leg2\":{\"homeGoals\":2,\"awayGoals\":2}}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "modern QF 70-70 et",
+   "eraId": null,
+   "round": "QF",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 2,
+   "kind": "et",
+   "rules": {
+    "legs": 2,
+    "awayGoals": false,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     2,
+     2
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     1,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     1,
+     0
+    ]
+   ],
+   "coins": [],
+   "draws": 13,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":3,\"awayGoals\":4,\"winner\":\"Beta FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":2,\"awayGoals\":2},\"leg2\":{\"homeGoals\":1,\"awayGoals\":2},\"aet\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "modern QF 70-70 pens",
+   "eraId": null,
+   "round": "QF",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 29,
+   "kind": "pens",
+   "rules": {
+    "legs": 2,
+    "awayGoals": false,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     0,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     1,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     0,
+     0
+    ]
+   ],
+   "coins": [
+    0.24725181562826037
+   ],
+   "draws": 9,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":1,\"awayGoals\":1,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":0,\"awayGoals\":0},\"leg2\":{\"homeGoals\":1,\"awayGoals\":1},\"aet\":true,\"pens\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals",
+    "pens"
+   ]
+  },
+  {
+   "name": "modern QF 82-64 plain",
+   "eraId": null,
+   "round": "QF",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 1,
+   "kind": "plain",
+   "rules": {
+    "legs": 2,
+    "awayGoals": false,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     1,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     2,
+     4
+    ]
+   ],
+   "coins": [],
+   "draws": 11,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":5,\"awayGoals\":2,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":1,\"awayGoals\":0},\"leg2\":{\"homeGoals\":4,\"awayGoals\":2}}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "modern QF 82-64 et",
+   "eraId": null,
+   "round": "QF",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 7,
+   "kind": "et",
+   "rules": {
+    "legs": 2,
+    "awayGoals": false,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     0,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     2,
+     2
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     0,
+     1
+    ]
+   ],
+   "coins": [],
+   "draws": 11,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":3,\"awayGoals\":2,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":0,\"awayGoals\":0},\"leg2\":{\"homeGoals\":3,\"awayGoals\":2},\"aet\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "modern QF 82-64 pens",
+   "eraId": null,
+   "round": "QF",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 172,
+   "kind": "pens",
+   "rules": {
+    "legs": 2,
+    "awayGoals": false,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     0,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     1,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     0,
+     0
+    ]
+   ],
+   "coins": [
+    0.2856300447601825
+   ],
+   "draws": 9,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":1,\"awayGoals\":1,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":0,\"awayGoals\":0},\"leg2\":{\"homeGoals\":1,\"awayGoals\":1},\"aet\":true,\"pens\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals",
+    "pens"
+   ]
+  },
+  {
+   "name": "modern F 70-70 plain",
+   "eraId": null,
+   "round": "F",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 1,
+   "kind": "plain",
+   "rules": {
+    "legs": 1,
+    "awayGoals": false,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     1,
+     3
+    ]
+   ],
+   "coins": [],
+   "draws": 6,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":1,\"awayGoals\":3,\"winner\":\"Beta FC\",\"mine\":false}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine"
+   ]
+  },
+  {
+   "name": "modern F 70-70 et",
+   "eraId": null,
+   "round": "F",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 3,
+   "kind": "et",
+   "rules": {
+    "legs": 1,
+    "awayGoals": false,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     1,
+     1
+    ],
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.32166666666666666,
+     1,
+     0
+    ]
+   ],
+   "coins": [],
+   "draws": 7,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":1,\"winner\":\"Alpha FC\",\"mine\":false,\"aet\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "aet"
+   ]
+  },
+  {
+   "name": "modern F 70-70 pens",
+   "eraId": null,
+   "round": "F",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 6,
+   "kind": "pens",
+   "rules": {
+    "legs": 1,
+    "awayGoals": false,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     1,
+     1
+    ],
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.32166666666666666,
+     0,
+     0
+    ]
+   ],
+   "coins": [
+    0.004537841537967324
+   ],
+   "draws": 7,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":1,\"awayGoals\":1,\"winner\":\"Alpha FC\",\"mine\":false,\"aet\":true,\"pens\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "aet",
+    "pens"
+   ]
+  },
+  {
+   "name": "modern F 82-64 plain",
+   "eraId": null,
+   "round": "F",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 1,
+   "kind": "plain",
+   "rules": {
+    "legs": 1,
+    "awayGoals": false,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     1,
+     0
+    ]
+   ],
+   "coins": [],
+   "draws": 3,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":1,\"awayGoals\":0,\"winner\":\"Alpha FC\",\"mine\":false}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine"
+   ]
+  },
+  {
+   "name": "modern F 82-64 et",
+   "eraId": null,
+   "round": "F",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 7,
+   "kind": "et",
+   "rules": {
+    "legs": 1,
+    "awayGoals": false,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     0,
+     0
+    ],
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.32166666666666666,
+     2,
+     0
+    ]
+   ],
+   "coins": [],
+   "draws": 6,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":0,\"winner\":\"Alpha FC\",\"mine\":false,\"aet\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "aet"
+   ]
+  },
+  {
+   "name": "modern F 82-64 pens",
+   "eraId": null,
+   "round": "F",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 19,
+   "kind": "pens",
+   "rules": {
+    "legs": 1,
+    "awayGoals": false,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     0,
+     0
+    ],
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.32166666666666666,
+     0,
+     0
+    ]
+   ],
+   "coins": [
+    0.9865809082984924
+   ],
+   "draws": 5,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":0,\"awayGoals\":0,\"winner\":\"Beta FC\",\"mine\":false,\"aet\":true,\"pens\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "aet",
+    "pens"
+   ]
+  },
+  {
+   "name": "era2005 QF 70-70 plain",
+   "eraId": "era2005",
+   "round": "QF",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 1,
+   "kind": "plain",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     1,
+     3
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     2,
+     2
+    ]
+   ],
+   "coins": [],
+   "draws": 12,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":3,\"awayGoals\":5,\"winner\":\"Beta FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":1,\"awayGoals\":3},\"leg2\":{\"homeGoals\":2,\"awayGoals\":2}}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2005 QF 70-70 away",
+   "eraId": "era2005",
+   "round": "QF",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 2,
+   "kind": "away",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     2,
+     2
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     1,
+     1
+    ]
+   ],
+   "coins": [],
+   "draws": 10,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":3,\"awayGoals\":3,\"winner\":\"Beta FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":2,\"awayGoals\":2},\"leg2\":{\"homeGoals\":1,\"awayGoals\":1},\"byAwayGoals\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2005 QF 70-70 et",
+   "eraId": "era2005",
+   "round": "QF",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 5,
+   "kind": "et",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     2,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     2,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     1,
+     0
+    ]
+   ],
+   "coins": [],
+   "draws": 13,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":3,\"awayGoals\":4,\"winner\":\"Beta FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":2,\"awayGoals\":1},\"leg2\":{\"homeGoals\":1,\"awayGoals\":3},\"aet\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2005 QF 70-70 etAway",
+   "eraId": "era2005",
+   "round": "QF",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 211,
+   "kind": "etAway",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     0,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     0,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     1,
+     1
+    ]
+   ],
+   "coins": [],
+   "draws": 10,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":2,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":0,\"awayGoals\":1},\"leg2\":{\"homeGoals\":2,\"awayGoals\":1},\"aet\":true,\"byAwayGoals\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2005 QF 70-70 pens",
+   "eraId": "era2005",
+   "round": "QF",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 273,
+   "kind": "pens",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     1,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     1,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     0,
+     0
+    ]
+   ],
+   "coins": [
+    0.07630155072547495
+   ],
+   "draws": 11,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":2,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":1,\"awayGoals\":1},\"leg2\":{\"homeGoals\":1,\"awayGoals\":1},\"aet\":true,\"pens\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals",
+    "pens"
+   ]
+  },
+  {
+   "name": "era2005 QF 82-64 plain",
+   "eraId": "era2005",
+   "round": "QF",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 1,
+   "kind": "plain",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     1,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     2,
+     4
+    ]
+   ],
+   "coins": [],
+   "draws": 11,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":5,\"awayGoals\":2,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":1,\"awayGoals\":0},\"leg2\":{\"homeGoals\":4,\"awayGoals\":2}}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2005 QF 82-64 away",
+   "eraId": "era2005",
+   "round": "QF",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 7,
+   "kind": "away",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     0,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     2,
+     2
+    ]
+   ],
+   "coins": [],
+   "draws": 8,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":2,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":0,\"awayGoals\":0},\"leg2\":{\"homeGoals\":2,\"awayGoals\":2},\"byAwayGoals\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2005 QF 82-64 et",
+   "eraId": "era2005",
+   "round": "QF",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 12,
+   "kind": "et",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     1,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     1,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     0,
+     1
+    ]
+   ],
+   "coins": [],
+   "draws": 9,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":1,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":1,\"awayGoals\":0},\"leg2\":{\"homeGoals\":1,\"awayGoals\":1},\"aet\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2005 QF 82-64 pens",
+   "eraId": "era2005",
+   "round": "QF",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 197,
+   "kind": "pens",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     1,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     1,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     0,
+     0
+    ]
+   ],
+   "coins": [
+    0.25000687944702804
+   ],
+   "draws": 11,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":2,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":1,\"awayGoals\":1},\"leg2\":{\"homeGoals\":1,\"awayGoals\":1},\"aet\":true,\"pens\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals",
+    "pens"
+   ]
+  },
+  {
+   "name": "era2005 QF 82-64 etAway",
+   "eraId": "era2005",
+   "round": "QF",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 585,
+   "kind": "etAway",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     0,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     0,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     1,
+     1
+    ]
+   ],
+   "coins": [],
+   "draws": 8,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":1,\"awayGoals\":1,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":0,\"awayGoals\":0},\"leg2\":{\"homeGoals\":1,\"awayGoals\":1},\"aet\":true,\"byAwayGoals\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2005 F 70-70 plain",
+   "eraId": "era2005",
+   "round": "F",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 1,
+   "kind": "plain",
+   "rules": {
+    "legs": 1,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     1,
+     3
+    ]
+   ],
+   "coins": [],
+   "draws": 6,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":1,\"awayGoals\":3,\"winner\":\"Beta FC\",\"mine\":false}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine"
+   ]
+  },
+  {
+   "name": "era2005 F 70-70 et",
+   "eraId": "era2005",
+   "round": "F",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 3,
+   "kind": "et",
+   "rules": {
+    "legs": 1,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     1,
+     1
+    ],
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.32166666666666666,
+     1,
+     0
+    ]
+   ],
+   "coins": [],
+   "draws": 7,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":1,\"winner\":\"Alpha FC\",\"mine\":false,\"aet\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "aet"
+   ]
+  },
+  {
+   "name": "era2005 F 70-70 pens",
+   "eraId": "era2005",
+   "round": "F",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 6,
+   "kind": "pens",
+   "rules": {
+    "legs": 1,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     1,
+     1
+    ],
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.32166666666666666,
+     0,
+     0
+    ]
+   ],
+   "coins": [
+    0.004537841537967324
+   ],
+   "draws": 7,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":1,\"awayGoals\":1,\"winner\":\"Alpha FC\",\"mine\":false,\"aet\":true,\"pens\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "aet",
+    "pens"
+   ]
+  },
+  {
+   "name": "era2005 F 82-64 plain",
+   "eraId": "era2005",
+   "round": "F",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 1,
+   "kind": "plain",
+   "rules": {
+    "legs": 1,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     1,
+     0
+    ]
+   ],
+   "coins": [],
+   "draws": 3,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":1,\"awayGoals\":0,\"winner\":\"Alpha FC\",\"mine\":false}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine"
+   ]
+  },
+  {
+   "name": "era2005 F 82-64 et",
+   "eraId": "era2005",
+   "round": "F",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 7,
+   "kind": "et",
+   "rules": {
+    "legs": 1,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     0,
+     0
+    ],
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.32166666666666666,
+     2,
+     0
+    ]
+   ],
+   "coins": [],
+   "draws": 6,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":0,\"winner\":\"Alpha FC\",\"mine\":false,\"aet\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "aet"
+   ]
+  },
+  {
+   "name": "era2005 F 82-64 pens",
+   "eraId": "era2005",
+   "round": "F",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 19,
+   "kind": "pens",
+   "rules": {
+    "legs": 1,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     0,
+     0
+    ],
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.32166666666666666,
+     0,
+     0
+    ]
+   ],
+   "coins": [
+    0.9865809082984924
+   ],
+   "draws": 5,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":0,\"awayGoals\":0,\"winner\":\"Beta FC\",\"mine\":false,\"aet\":true,\"pens\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "aet",
+    "pens"
+   ]
+  },
+  {
+   "name": "era2020 QF 70-70 plain",
+   "eraId": "era2020",
+   "round": "QF",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 1,
+   "kind": "plain",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     1,
+     3
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     2,
+     2
+    ]
+   ],
+   "coins": [],
+   "draws": 12,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":3,\"awayGoals\":5,\"winner\":\"Beta FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":1,\"awayGoals\":3},\"leg2\":{\"homeGoals\":2,\"awayGoals\":2}}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2020 QF 70-70 away",
+   "eraId": "era2020",
+   "round": "QF",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 2,
+   "kind": "away",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     2,
+     2
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     1,
+     1
+    ]
+   ],
+   "coins": [],
+   "draws": 10,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":3,\"awayGoals\":3,\"winner\":\"Beta FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":2,\"awayGoals\":2},\"leg2\":{\"homeGoals\":1,\"awayGoals\":1},\"byAwayGoals\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2020 QF 70-70 et",
+   "eraId": "era2020",
+   "round": "QF",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 5,
+   "kind": "et",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     2,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     2,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     1,
+     0
+    ]
+   ],
+   "coins": [],
+   "draws": 13,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":3,\"awayGoals\":4,\"winner\":\"Beta FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":2,\"awayGoals\":1},\"leg2\":{\"homeGoals\":1,\"awayGoals\":3},\"aet\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2020 QF 70-70 etAway",
+   "eraId": "era2020",
+   "round": "QF",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 211,
+   "kind": "etAway",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     0,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     0,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     1,
+     1
+    ]
+   ],
+   "coins": [],
+   "draws": 10,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":2,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":0,\"awayGoals\":1},\"leg2\":{\"homeGoals\":2,\"awayGoals\":1},\"aet\":true,\"byAwayGoals\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2020 QF 70-70 pens",
+   "eraId": "era2020",
+   "round": "QF",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 273,
+   "kind": "pens",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     1,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     1,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     0,
+     0
+    ]
+   ],
+   "coins": [
+    0.07630155072547495
+   ],
+   "draws": 11,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":2,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":1,\"awayGoals\":1},\"leg2\":{\"homeGoals\":1,\"awayGoals\":1},\"aet\":true,\"pens\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals",
+    "pens"
+   ]
+  },
+  {
+   "name": "era2020 QF 82-64 plain",
+   "eraId": "era2020",
+   "round": "QF",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 1,
+   "kind": "plain",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     1,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     2,
+     4
+    ]
+   ],
+   "coins": [],
+   "draws": 11,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":5,\"awayGoals\":2,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":1,\"awayGoals\":0},\"leg2\":{\"homeGoals\":4,\"awayGoals\":2}}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2020 QF 82-64 away",
+   "eraId": "era2020",
+   "round": "QF",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 7,
+   "kind": "away",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     0,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     2,
+     2
+    ]
+   ],
+   "coins": [],
+   "draws": 8,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":2,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":0,\"awayGoals\":0},\"leg2\":{\"homeGoals\":2,\"awayGoals\":2},\"byAwayGoals\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2020 QF 82-64 et",
+   "eraId": "era2020",
+   "round": "QF",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 12,
+   "kind": "et",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     1,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     1,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     0,
+     1
+    ]
+   ],
+   "coins": [],
+   "draws": 9,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":1,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":1,\"awayGoals\":0},\"leg2\":{\"homeGoals\":1,\"awayGoals\":1},\"aet\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2020 QF 82-64 pens",
+   "eraId": "era2020",
+   "round": "QF",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 197,
+   "kind": "pens",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     1,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     1,
+     1
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     0,
+     0
+    ]
+   ],
+   "coins": [
+    0.25000687944702804
+   ],
+   "draws": 11,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":2,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":1,\"awayGoals\":1},\"leg2\":{\"homeGoals\":1,\"awayGoals\":1},\"aet\":true,\"pens\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals",
+    "pens"
+   ]
+  },
+  {
+   "name": "era2020 QF 82-64 etAway",
+   "eraId": "era2020",
+   "round": "QF",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 585,
+   "kind": "etAway",
+   "rules": {
+    "legs": 2,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     1,
+     0,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.965,
+     0,
+     0
+    ],
+    [
+     "Beta FC",
+     "Alpha FC",
+     0.32166666666666666,
+     1,
+     1
+    ]
+   ],
+   "coins": [],
+   "draws": 8,
+   "tieOut": "{\"round\":\"QF\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":1,\"awayGoals\":1,\"winner\":\"Alpha FC\",\"mine\":false,\"legs\":2,\"leg1\":{\"homeGoals\":0,\"awayGoals\":0},\"leg2\":{\"homeGoals\":1,\"awayGoals\":1},\"aet\":true,\"byAwayGoals\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "legs",
+    "leg1",
+    "leg2",
+    "aet",
+    "byAwayGoals"
+   ]
+  },
+  {
+   "name": "era2020 F 70-70 plain",
+   "eraId": "era2020",
+   "round": "F",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 1,
+   "kind": "plain",
+   "rules": {
+    "legs": 1,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     1,
+     3
+    ]
+   ],
+   "coins": [],
+   "draws": 6,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":1,\"awayGoals\":3,\"winner\":\"Beta FC\",\"mine\":false}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine"
+   ]
+  },
+  {
+   "name": "era2020 F 70-70 et",
+   "eraId": "era2020",
+   "round": "F",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 3,
+   "kind": "et",
+   "rules": {
+    "legs": 1,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     1,
+     1
+    ],
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.32166666666666666,
+     1,
+     0
+    ]
+   ],
+   "coins": [],
+   "draws": 7,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":1,\"winner\":\"Alpha FC\",\"mine\":false,\"aet\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "aet"
+   ]
+  },
+  {
+   "name": "era2020 F 70-70 pens",
+   "eraId": "era2020",
+   "round": "F",
+   "strengths": [
+    70,
+    70
+   ],
+   "seed": 6,
+   "kind": "pens",
+   "rules": {
+    "legs": 1,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     1,
+     1
+    ],
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.32166666666666666,
+     0,
+     0
+    ]
+   ],
+   "coins": [
+    0.004537841537967324
+   ],
+   "draws": 7,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":1,\"awayGoals\":1,\"winner\":\"Alpha FC\",\"mine\":false,\"aet\":true,\"pens\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "aet",
+    "pens"
+   ]
+  },
+  {
+   "name": "era2020 F 82-64 plain",
+   "eraId": "era2020",
+   "round": "F",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 1,
+   "kind": "plain",
+   "rules": {
+    "legs": 1,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     1,
+     0
+    ]
+   ],
+   "coins": [],
+   "draws": 3,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":1,\"awayGoals\":0,\"winner\":\"Alpha FC\",\"mine\":false}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine"
+   ]
+  },
+  {
+   "name": "era2020 F 82-64 et",
+   "eraId": "era2020",
+   "round": "F",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 7,
+   "kind": "et",
+   "rules": {
+    "legs": 1,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     0,
+     0
+    ],
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.32166666666666666,
+     2,
+     0
+    ]
+   ],
+   "coins": [],
+   "draws": 6,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":2,\"awayGoals\":0,\"winner\":\"Alpha FC\",\"mine\":false,\"aet\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "aet"
+   ]
+  },
+  {
+   "name": "era2020 F 82-64 pens",
+   "eraId": "era2020",
+   "round": "F",
+   "strengths": [
+    82,
+    64
+   ],
+   "seed": 19,
+   "kind": "pens",
+   "rules": {
+    "legs": 1,
+    "awayGoals": true,
+    "deciderScale": 0.965,
+    "etScale": 0.32166666666666666
+   },
+   "tieIn": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}",
+   "calls": [
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.965,
+     0,
+     0
+    ],
+    [
+     "Alpha FC",
+     "Beta FC",
+     0.32166666666666666,
+     0,
+     0
+    ]
+   ],
+   "coins": [
+    0.9865809082984924
+   ],
+   "draws": 5,
+   "tieOut": "{\"round\":\"F\",\"slot\":0,\"home\":\"Alpha FC\",\"away\":\"Beta FC\",\"homeGoals\":0,\"awayGoals\":0,\"winner\":\"Beta FC\",\"mine\":false,\"aet\":true,\"pens\":true}",
+   "keys": [
+    "round",
+    "slot",
+    "home",
+    "away",
+    "homeGoals",
+    "awayGoals",
+    "winner",
+    "mine",
+    "aet",
+    "pens"
+   ]
+  }
+ ]
+}

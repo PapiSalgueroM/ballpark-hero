@@ -1,0 +1,7 @@
+simWorldUcl exit=0 0s | simWorldUcl: green, 369 checks, 0 failures
+golden exit=0 1s | recordWorldTieGolden1347: 44 cases from d4f2c6f6 written to ../../_temp/rc-out/files/worldTieGolden1347.json
+simEraWorldTables exit=0 3s | simEraWorldTables: green. Era worlds play, the picker lists the truth, and the knockout takes the top twos.
+simCareerContinental exit=0 17s | simCareerContinental: all green
+vitest-continental exit=0 3s |    Duration  1.93s (transform 448ms, setup 83ms, collect 533ms, tests 192ms, environment 498ms, prepare 308ms)
+simClubManagerEraUcl exit=0 37s | simClubManagerEraUcl: PASS. The era Champions League plays its round of 16, the group tables stay up, Spain and Italy split level points on head to head, and an era night
+tsc exit=0 74s | 
