@@ -18,6 +18,9 @@ const TEST = 'src/test/soccerCareerSavedLoan.test.ts', PARENT = '1b383132351440d
    files this packet fixes are still compared with PARENT. Here soccerCareerEngine.ts, soccerCareerSave.ts and
    SoccerCareer.tsx (moved by Releases BB to BE) go to CORE_REF; Life and the rest of the chain stay with PARENT. */
 const CORE_REF = process.env.SC_SAVED_LOAN_CORE_REF || PARENT;
+/* Release BH join (Round BHH): SC_SAVED_LOAN_LIFE_REF (default PARENT) is the ref Life and its captions are held to.
+   PR280 rewrote four Life captions after this packet; the join names PARENT with exactly that change. */
+const LIFE_REF = process.env.SC_SAVED_LOAN_LIFE_REF || PARENT;
 const ENGINE = path.join(ROOT, 'src/lib/soccerCareerEngine.ts'), LIFE = path.join(ROOT, 'src/lib/soccerCareerLife.ts');
 const REALISM = path.join(ROOT, 'src/lib/soccerCareerRealismA.ts'), SAVE = path.join(ROOT, 'src/lib/soccerCareerSave.ts');
 const CONTRACTS = path.join(ROOT, 'src/lib/soccerCareerContracts.ts'), ROUTINE = path.join(ROOT, 'src/lib/soccerCareerRoutineEvents.ts');
@@ -57,10 +60,10 @@ function git(args) {
   const result = spawnSync('git', args, { cwd: ROOT, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
   assert.equal(result.status, 0, 'Actual Git source receipt must finish'); return result.stdout;
 }
-const sourceHead = git(['rev-parse', 'HEAD']).trim(), parentLife = git(['show', `${PARENT}:src/lib/soccerCareerLife.ts`]);
+const sourceHead = git(['rev-parse', 'HEAD']).trim(), parentLife = git(['show', `${LIFE_REF}:src/lib/soccerCareerLife.ts`]);
 fs.writeFileSync(path.join(retained, 'soccerCareerLife.parent.ts'), parentLife);
 const parentBindings = app.map(file => {
-  const name = path.relative(ROOT, file).replaceAll('\\', '/'), before = git(['show', `${[ENGINE, SAVE, PAGE].includes(file) ? CORE_REF : PARENT}:${name}`]);
+  const name = path.relative(ROOT, file).replaceAll('\\', '/'), before = git(['show', `${[ENGINE, SAVE, PAGE].includes(file) ? CORE_REF : [LIFE, CAPTIONS].includes(file) ? LIFE_REF : PARENT}:${name}`]);
   return { file: name, parentSha256: sha(before), candidateSha256: sha(sources.get(file)) };
 });
 function receipt(extra = {}) {
