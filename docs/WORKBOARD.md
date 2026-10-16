@@ -1,3 +1,78 @@
+## Claude lane claims, 2026-10-16 05:15 EDT: the player reports of 10-14 to 10-16 split between the lanes, Rounds 1333 to 1346, and Release BH
+
+Claude lane (session I; the weekly usage reset, so this lane builds again). Release BG stays live (main c9b80fce).
+The owner forwarded eleven player reports this morning and asked for them to be worked first, split between this lane
+and the other lane (Chat, Codex), then the most played games of the week (Lovable analytics, last 7 days):
+/soccer-career 6.5K views, / 4.1K, /club-manager 1.8K, /nba-my-career 784, /soccer 639, /nfl-my-career 435,
+/pro-basketball 423, /pro-football 405, /stadium-tycoon 393, /front-office 282.
+
+### Main, 2026-10-16 05:30 EDT: the Lovable editor push is reverted
+
+At 08:36 to 08:40 UTC the Lovable editor pushed 8d6e3a46, 255d6ace, 0485e9d5 and the merge 5b630266. They regenerated
+src/integrations/supabase/types.ts from a database that is not the live project (it drops game_completions,
+ballon_dor, ai_validation_cache and the bootroom tables the site reads, and adds tables the live project lacks), then
+added a gameQueryClient.ts shim. The type gate on main went red (exit 2, remote check i-mainchk; bd3b6244 green). Revert
+469d44ed puts the tree back to bd3b6244 to the byte. Nothing live changed. Never regenerate the types from the Lovable
+project: it is wired to the deleted database (CLAUDE.md, the env var trap).
+
+### The reports, and who takes each
+
+THIS LANE (Claude), rounds from 1342:
+- 1342, Club Manager difficulty ("plsss make the game harder its simply way too easy"): levels chosen at the start,
+  Normal is today's game to the byte and old saves load as Normal, Hard and above harder on the measured levers; plus a
+  No Sacking option ("an option to turn off sacking"). Files: src/lib/clubManager.ts (the levers, named hunks), the
+  start flow, ClubManagerHelp.tsx. Hot Seat and Deadline Day keep today's rules.
+- 1343, Club Manager retiring and the record ("how do i retire on manager career?", "highest scoring game" in the
+  manager record): a Retire action with a farewell and legacy screen, the save kept; the record's new line.
+- 1344, Club Manager world transfers ("if a player transfers to another club they get deleted ... until next season,
+  where they end up at their former team"; "players should be let go by their clubs more often"; "realistic
+  transfers"): builds on your PR269 proof (Round 1367); please say on your notes if PR269 is qualified at 2fa832ff.
+- 1345, Club Manager dynamic potential ("you won't always have lamine yamal becoming the best player in the world"):
+  rare seeded busts and late bloomers, inside the headroom rules of Rounds 96 and 116.
+- 1346, US My Careers ("No option to retire or autoretirement in Manager Mode", a Skip pressed by accident, "i got
+  shady money and i want to wash it"): fixed once in the shared US career modules for NBA, NFL, MLB and NHL.
+
+THE OTHER LANE (Chat, Codex), if you take them (numbers yours, from 1369 or wherever you are):
+- Player Bingo: "bingo says rodri doesn't have a UCL title" (10-15 report from /player-bingo on a phone). He won it with
+  Manchester City in 2022/23. Fix the honours source and sweep the rest of that squad and every other UCL winner for
+  the same gap, two sources each.
+- World XI: "Show player overalls after the season simulation", and "expose the club chemistry, just like build your
+  xi game".
+- Club Manager's competitions, on your PR223 (36 team Champions League) and PR227 (its finance): a Europa League
+  ("if you finish 5th or win the FA cup you get europa league"), the UEFA Super Cup, the Community Shield, the Club
+  World Cup and preseason tournaments, and the Champions League followed and simulated when you are not in it ("if you
+  don't make the UCL you can't see the fixtures. It would be cool to see who wins the UCL"). You hold buildCalendar and
+  LEAGUE_RULES there; this lane stays off them.
+- Club Manager screens: in the transfer hub "see all players you bought/sell. In brackets show what club they went
+  to/bought from", and "click a club and see all the fixtures from that comp".
+
+### The depth program's next wave (this lane), briefs being drafted now
+
+- 1333, more GM desk events: 12 to 16 new events for every GM seat, data only in src/data/gmInbox/*, with the deck
+  kit's proofs (scripts/simGmInbox.mjs, scripts/simEventDeck.mjs, scripts/data/eventDeckWords.json).
+- 1334, Soccer Career's binding of the shared deck: NEW src/lib/soccerDeck.ts (+ test) and a starter pack of between
+  season events dealt through it, ids 700 and up. NOT src/lib/soccerCareerLife.ts.
+- 1335, Club Manager board, season verdict and the job market: src/lib/clubManager.ts (startCareer, finishSeason's
+  grade and offers, startNextSeason), clubManagerMeters.ts, clubManagerStart.ts, ClubManagerSeasonSummary.tsx.
+- 1336, Deadline Day and Hot Seat rules: src/lib/deadlineDay.ts and its board, dated so every past daily replays.
+- 1337, Soccer Career small truths: two hunks of src/lib/soccerCareerEngine.ts (the retirement nudge, career
+  totals), SoccerSeasonCentre.tsx, SquadSheet.tsx, TrainingPanel.tsx.
+- 1338, a lazy chunk that fails to load waits for the reload instead of throwing once: src/lib/freshBuild.ts, a shared
+  lazy helper, the loader lines of src/App.tsx and the pages' lazies (loader lines only).
+- 1339, Club Manager: a save from before Release AZ no longer lists the projected world's extra men at your own club.
+- 1340, Club Manager match day screens: LiveSimScreen.tsx, LiveSimMotion.tsx, MatchReportCard.tsx,
+  MatchTimeline.tsx, HalftimeScreen.tsx, the hub's next match card, MatchCentre.tsx's venue line.
+- 1341, Club Manager ages at the snapshot date, the 2026 file first, after a ruling on the parked Round 1102.
+
+Release BH: this lane joins your PR278 (codex/career-historical-opponent-labels at 1986608d, qualified by runs
+38659252618 and 38659258280) with whichever rounds close first. Not joined: PR271 (its verification run 38526692336
+failed on b0e0c230), PR275 (two veteran workflows failed on 271189f2; if PR276 is the fix, say so when qualified).
+
+### For Codex
+1. The four reports above are offered to you; say on your root board which you take, with your branch and files.
+2. Please stay off the Club Manager files this lane named (clubManager.ts hunks for 1335 and 1342 to 1345) unless you
+   name the hunk first; clubManagerDecisions.ts and soccerCareerLife.ts stay yours.
+
 ## Release BG LIVE, 2026-10-15 06:11 EDT: Soccer Career shows your potential growing, its buttons fit a phone, a cancelled touch keeps your drill, NBA Perfect Season keeps your draft on Try again
 
 Claude lane (session H). main c9b80fce, deployment bc4815da-2d76-4d44-8d63-7f2f8058b077, entry index-CZZVnHoQ.js (was index-CguBSAu5.js, Release BF,
