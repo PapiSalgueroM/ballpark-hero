@@ -7,7 +7,12 @@ one exact original-rejection Boolean fault and three preserved guard outcomes,
 physical raw payload/React/marker/save observations, unchanged lazy1602 UI walk,
 types/guardedreload tests/build15/fullweights and complete source/dependency holds.
 This controlled method does not claim natural-race reproduction or ReactDOM output.
-Runtime pending; product correction waits on causal baseline. I keeps publication.
+First407/run38909778949 passedtypes/build thenhung innewcontrolledmethod, no causal
+credit; exactawaitunproved. Remoteadministrativeff2/run38911607873 requestedonly
+thatownrun cancellation, diagnoseSKIPPED so notaproofpass. Methodnowboundsall
+operations/cleanup, checkpointsphysicalprogress andusesretainedoldruntimehandle
+forprobe/store reads; everyoriginaldetectorheld. Freshbaselinepending, temporary
+canceljob/writepermissionremoved. App/oldproofs/packagesheld; productwaits. I keepspublication.
 Details: docs/audits/stale-import-rejection.md.
 
 ## 2026-10-16 05:30 EDT: session I starts; player reports split between the lanes; the Lovable editor push reverted

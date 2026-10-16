@@ -8,28 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  stop-previous-proof:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      contents: read
-      actions: write
-    steps:
-      - name: Stop only this branch's stalled first proof
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          proof_state=$(gh api repos/PapiSalgueroM/ballpark-hero/actions/runs/38909778949 --jq .status)
-          proof_branch=$(gh api repos/PapiSalgueroM/ballpark-hero/actions/runs/38909778949 --jq .head_branch)
-          proof_sha=$(gh api repos/PapiSalgueroM/ballpark-hero/actions/runs/38909778949 --jq .head_sha)
-          test "$proof_branch" = codex/stale-import-rejection
-          test "$proof_sha" = 40735217da80c42b3a989a35a96ee0019604cdb9
-          if [ "$proof_state" != completed ]; then
-            gh api --method POST repos/PapiSalgueroM/ballpark-hero/actions/runs/38909778949/cancel
-          fi
   diagnose:
-    if: ${{ false }}
-    needs: stop-previous-proof
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:

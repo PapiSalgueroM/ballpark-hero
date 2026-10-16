@@ -106,11 +106,11 @@ function emittedOwner() {
 }
 let browser, server;
 async function serve() {
-  const port = await new Promise((resolve, reject) => {
+  const port = await within(new Promise((resolve, reject) => {
     const probe = createServer(); probe.once('error', reject); probe.listen(0, '127.0.0.1', () => {
       const port = probe.address().port; probe.close(error => error ? reject(error) : resolve(port));
     });
-  });
+  }), 5000, 'Owned port probe did not finish');
   server = spawn(process.execPath, ['scripts/lib/hostLikeServer.mjs', 'dist', String(port)], { cwd: ROOT, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
   await within(new Promise((resolve, reject) => {
     let log = ''; server.once('error', reject); server.once('exit', code => reject(new Error('Owned host exited ' + code + ': ' + log)));
@@ -121,7 +121,8 @@ async function serve() {
 }
 async function runCase(base, owner, id) {
   const row = { id, stage: 'boot', transport: [], requests: [], responses: [], documents: [], console: [], pageErrors: [], lifecycle: [],
-    setupFault: null, outcome: null, provenance: { sourceHead: report.sourceHead, entryPath: owner.entryPath, entrySha256: owner.sha256,
+    progress: [], budget: { workMs: 90000, cleanupMs: 15000 }, setupFault: null, outcome: null,
+    provenance: { sourceHead: report.sourceHead, entryPath: owner.entryPath, entrySha256: owner.sha256,
       preloadExportAlias: owner.alias, preloadOwnerSha256: owner.ownerSha256, reactPackageSha256: owner.reactPackage.sha256,
       sourceReceipts: report.sources, mode: 'Actual emitted helper, native import and React private initializer; controlled document hold only' } };
   report.cases.push(row); let context, page, runtime;
@@ -129,66 +130,87 @@ async function runCase(base, owner, id) {
   const heldDocument = new Promise(resolve => { heldResolve = resolve; });
   const rawPath = path.join(OUT, id + '.raw.json');
   const retain = () => { fs.writeFileSync(rawPath, JSON.stringify(row, null, 2) + '\n'); write(); };
+  const started = Date.now(), deadline = started + row.budget.workMs;
+  const checkpoint = (label, state = 'complete') => {
+    row.progress.push({ label, state, elapsedMs: Date.now() - started }); retain();
+    console.log(`Stale import ${id}: ${label} ${state}`);
+  };
+  const step = async (label, action, milliseconds = 20000) => {
+    checkpoint(label, 'started');
+    const remaining = deadline - Date.now();
+    if (remaining <= 0) throw new Error(id + ': case work deadline exhausted before ' + label);
+    try {
+      const result = await within(Promise.resolve().then(action), Math.min(milliseconds, remaining), id + ': ' + label + ' timed out');
+      checkpoint(label); return result;
+    } catch (error) { checkpoint(label, 'failed'); throw error; }
+  };
   try {
-    context = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block',
+    context = await step('create-context', () => browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block',
       storageState: { cookies: [], origins: [{ origin: base, localStorage: [
-        { name: 'cookie-consent', value: 'essential' }, { name: 'dukb-theme', value: 'dark' }, { name: 'dukb-guest-handle', value: 'SteadyVolley-18' }] }] } });
-    page = await context.newPage(); page.setDefaultTimeout(20000);
-    if (id === 'marker-already-spent') await page.addInitScript(key => sessionStorage.setItem(key, '1'), STALE_KEY);
+        { name: 'cookie-consent', value: 'essential' }, { name: 'dukb-theme', value: 'dark' }, { name: 'dukb-guest-handle', value: 'SteadyVolley-18' }] }] } }));
+    page = await step('create-page', () => context.newPage()); page.setDefaultTimeout(20000);
+    if (id === 'marker-already-spent') await step('seed-spent-marker', () => page.addInitScript(key => sessionStorage.setItem(key, '1'), STALE_KEY));
     const missing = id === 'optional-sound-kit' ? '/assets/soundKit-CausalProof.js' : '/assets/causal-missing.js';
     assert(!fs.existsSync(path.join(DIST, missing.slice(1))), 'Declared native-import fault asset must actually be absent');
     row.missingUrl = base + missing;
-    await context.route('**/*', route => {
+    await step('install-owned-routes', () => context.route('**/*', route => {
       const request = route.request(), url = new URL(request.url());
       if (url.origin !== base || url.pathname === missing) {
         row.transport.push({ stage: row.stage, url: request.url(), method: request.method(),
           action: url.origin === base ? 'owned-native-import-abort' : 'external-abort' });
-        return route.abort('blockedbyclient');
+        return within(route.abort('blockedbyclient'), 5000, id + ': declared abort timed out');
       }
       if (armed && request.isNavigationRequest() && request.frame() === page.mainFrame()) {
         const lifecycle = { url: request.url(), method: request.method(), stage: row.stage, operation: 'held-before-response', released: false };
         row.lifecycle.push(lifecycle); row.transport.push({ url: request.url(), method: request.method(), action: 'held-reload-document' });
+        checkpoint('reload-document-held');
         return new Promise(resolve => { held.push({ route, resolve, lifecycle }); heldResolve(); });
       }
-      return route.continue();
-    });
-    await context.routeWebSocket('**/*', socket => { row.transport.push({ url: socket.url(), action: 'websocket-close' }); socket.close(); });
+      return within(route.continue(), 5000, id + ': owned route continuation timed out');
+    }));
+    await step('block-websockets', () => context.routeWebSocket('**/*', socket => { row.transport.push({ url: socket.url(), action: 'websocket-close' }); socket.close(); }));
     page.on('request', request => row.requests.push({ stage: row.stage, url: request.url(), method: request.method(), type: request.resourceType(),
       mainDocument: request.isNavigationRequest() && request.frame() === page.mainFrame() }));
     page.on('response', response => {
       const request = response.request(), item = { stage: row.stage, url: response.url(), status: response.status(),
         mainDocument: request.isNavigationRequest() && request.frame() === page.mainFrame() };
       row.responses.push(item);
-      if (response.url() === base + owner.entryPath) pendingBodies.push(response.body().then(bytes => { item.bytes = bytes.length; item.sha256 = hash(bytes); }));
+      if (response.url() === base + owner.entryPath) pendingBodies.push(within(response.body(), 15000, id + ': served entry body timed out')
+        .then(bytes => { item.bytes = bytes.length; item.sha256 = hash(bytes); }).catch(error => { item.bodyError = String(error); }));
     });
     page.on('requestfailed', request => row.transport.push({ stage: row.stage, action: 'request-failed', url: request.url(),
       error: request.failure()?.errorText || null, type: request.resourceType() }));
     page.on('framenavigated', frame => { if (frame === page.mainFrame()) row.documents.push({ stage: row.stage, url: frame.url() }); });
     page.on('pageerror', error => row.pageErrors.push({ stage: row.stage, name: error.name, message: error.message, stack: error.stack }));
     page.on('console', message => { if (message.type() === 'error') row.console.push({ stage: row.stage, text: message.text(), location: message.location() }); });
-    await page.goto(base + '/soccer-career', { waitUntil: 'domcontentloaded', timeout: 45000 });
-    await page.getByRole('heading', { name: 'Create Your Player', exact: true }).waitFor({ timeout: 45000 });
-    await page.waitForLoadState('networkidle', { timeout: 20000 });
-    runtime = await page.evaluateHandle(async ({ entryUrl, alias }) => {
+    await step('load-document', () => page.goto(base + '/soccer-career', { waitUntil: 'domcontentloaded', timeout: 45000 }), 45000);
+    await step('creator-ready', () => page.getByRole('heading', { name: 'Create Your Player', exact: true }).waitFor({ timeout: 45000 }), 45000);
+    await step('boot-network-settled', () => page.waitForLoadState('networkidle', { timeout: 20000 }));
+    checkpoint('booted');
+    runtime = await step('import-actual-namespace', () => page.evaluateHandle(async ({ entryUrl, alias }) => {
       const entry = await import(entryUrl), preload = entry[alias];
       if (typeof preload !== 'function') throw new Error('Actual emitted preload export is not a function');
       const identities = [...new Set(Object.values(entry).filter(value => value && typeof value === 'object'
         && typeof value.lazy === 'function' && typeof value.createElement === 'function' && value.version === '18.3.1'))];
       if (identities.length !== 1) throw new Error('Actual entry must export exactly one React 18.3.1 lazy/createElement object identity');
       const React = identities[0], aliases = Object.entries(entry).filter(([, value]) => value === React).map(([name]) => name);
-      return { preload, React, aliases, version: React.version };
-    }, { entryUrl: base + owner.entryPath, alias: owner.alias });
-    row.actualNamespace = await runtime.evaluate(value => ({ reactAliases: value.aliases, reactVersion: value.version, preloadType: typeof value.preload }));
-    const stores = () => page.evaluate(() => {
-      const read = store => Object.fromEntries(Object.keys(store).sort().map(key => [key, store.getItem(key)]));
-      return { local: read(localStorage), session: read(sessionStorage), timeOrigin: performance.timeOrigin, href: location.href,
-        online: navigator.onLine, career: localStorage.getItem('soccerCareerSave') };
-    });
-    row.before = await stores(); assert.equal(row.before.career, null, 'No saved career at actual boot');
+      const readStores = () => {
+        const read = store => Object.fromEntries(Object.keys(store).sort().map(key => [key, store.getItem(key)]));
+        return { local: read(localStorage), session: read(sessionStorage), timeOrigin: performance.timeOrigin, href: location.href,
+          online: navigator.onLine, career: localStorage.getItem('soccerCareerSave') };
+      };
+      return { preload, React, aliases, version: React.version, readStores };
+    }, { entryUrl: base + owner.entryPath, alias: owner.alias }));
+    row.actualNamespace = await step('read-actual-namespace', () => runtime.evaluate(value => ({ reactAliases: value.aliases, reactVersion: value.version, preloadType: typeof value.preload })));
+    checkpoint('namespace-imported');
+    await step('read-served-entry-bodies', () => Promise.all(pendingBodies));
+    const stores = label => step(label, () => runtime.evaluate(value => value.readStores()));
+    row.before = await stores('read-before-store'); checkpoint('before-store-retained');
+    assert.equal(row.before.career, null, 'No saved career at actual boot');
     assert.equal(row.before.online, true, 'Actual creator must boot online before the declared offline case');
-    if (id === 'offline-after-boot') await context.setOffline(true);
+    if (id === 'offline-after-boot') await step('set-offline-after-boot', () => context.setOffline(true));
     row.stage = 'probe'; armed = id === 'automatic-held-document';
-    row.observation = await within(page.evaluate(async ({ runtime, missingUrl }) => {
+    row.observation = await step('settle-actual-helper-and-react', () => runtime.evaluate(async (runtime, missingUrl) => {
       let nativeError, nativeFulfilled = false, callbackCalls = 0, helperPromise, firstThrown, firstReturned = false;
       const events = [], describeError = error => error && ({ name: error.name, message: error.message, stack: error.stack });
       const observe = event => events.push({ event, payload: event.payload, atListener: event.defaultPrevented, cancelable: event.cancelable });
@@ -220,10 +242,11 @@ async function runCase(base, owner, id) {
             defaultPreventedAfterSettlement: item.event.defaultPrevented, payload: describeError(item.payload),
             payloadIsError: item.payload instanceof Error, sameNativeError: item.payload === nativeError })) };
       } finally { window.removeEventListener('vite:preloadError', observe); }
-    }, { runtime, missingUrl: row.missingUrl }), 20000, id + ': actual helper/React settlement timed out');
-    if (id === 'automatic-held-document') await within(heldDocument, 5000, 'Automatic marker did not schedule an actual main-document request');
-    await new Promise(resolve => setTimeout(resolve, 500));
-    row.after = await stores(); await Promise.all(pendingBodies);
+    }, row.missingUrl));
+    checkpoint('probe-settlement-retained');
+    if (id === 'automatic-held-document') await step('observe-held-document', () => heldDocument, 5000);
+    await step('post-settlement-window', () => new Promise(resolve => setTimeout(resolve, 500)), 1000);
+    row.after = await stores('read-after-store'); checkpoint('after-store-retained');
     row.heldAtObservation = held.map(item => ({ ...item.lifecycle }));
     row.outcome = { passed: row.observation.settlement.kind === 'rejected' && row.observation.settlement.sameNativeError === true
       && row.observation.second.sameNativeError === true && row.observation.second.sameEventPayload === true,
@@ -233,13 +256,23 @@ async function runCase(base, owner, id) {
   } catch (error) { row.setupFault = error?.stack || String(error); retain(); }
   finally {
     row.stage = 'cleanup';
+    const cleanupDeadline = Date.now() + row.budget.cleanupMs;
+    const cleanup = async (label, action) => {
+      checkpoint(label, 'started');
+      try {
+        await within(Promise.resolve().then(action), Math.max(1, Math.min(5000, cleanupDeadline - Date.now())), id + ': ' + label + ' timed out');
+        checkpoint(label); return true;
+      } catch (error) { row.setupFault ||= label + ': ' + String(error); checkpoint(label, 'failed'); return false; }
+    };
     for (const item of held) {
-      try { await item.route.abort('aborted'); item.lifecycle.released = true; item.lifecycle.releaseOperation = 'abort-after-raw'; }
-      catch (error) { row.setupFault ||= 'Held route cleanup failed: ' + String(error); item.lifecycle.releaseError = String(error); }
+      try {
+        const released = await cleanup('abort-held-document', () => item.route.abort('aborted'));
+        item.lifecycle.released = released; item.lifecycle.releaseOperation = 'abort-after-raw';
+      }
       finally { item.resolve(); }
     }
-    if (runtime) await runtime.dispose().catch(error => { row.setupFault ||= 'Runtime handle cleanup failed: ' + String(error); });
-    if (context) await context.close().catch(error => { row.setupFault ||= 'Context cleanup failed: ' + String(error); });
+    if (runtime) await cleanup('dispose-old-runtime', () => runtime.dispose());
+    if (context) await cleanup('close-context', () => context.close());
     retain();
   }
   return row;
@@ -273,6 +306,7 @@ function qualify(row, owner, base) {
   assert(row.lifecycle.every(item => item.released === true && item.releaseOperation === 'abort-after-raw'), 'Every held route released after physical raw retention');
   const entryLoads = row.responses.filter(response => response.url === base + owner.entryPath);
   assert.equal(entryLoads.length, 1, 'Reimport uses the already loaded real entry module');
+  assert.equal(entryLoads[0].bodyError, undefined, 'Actual emitted entry body read must finish');
   assert.equal(entryLoads[0].sha256, owner.sha256); assert.equal(entryLoads[0].bytes, owner.bytes);
   assert(row.responses.every(response => new URL(response.url).origin === base && response.status < 400), 'No external response or failed owned response');
   assert.equal(row.pageErrors.length, 0, 'No uncaught app/React error allowance');
@@ -293,7 +327,7 @@ function qualify(row, owner, base) {
 try {
   const owner = emittedOwner(); report.emitted = owner; write();
   const base = await serve(); report.ownedOrigin = base;
-  browser = await pw.chromium.launch({ headless: true }); report.browserVersion = browser.version();
+  browser = await within(pw.chromium.launch({ headless: true }), 30000, 'Actual browser launch timed out'); report.browserVersion = browser.version();
   for (const id of IDS) await runCase(base, owner, id);
   // All four raw files exist before any phase-dependent outcome classification.
   for (const id of IDS) assert(fs.existsSync(path.join(OUT, id + '.raw.json')));
@@ -306,10 +340,22 @@ try {
   report.completed = 4; report.passed = report.cases.filter(row => row.outcome.passed).length; report.failed = 4 - report.passed;
   assert.equal(report.failed, report.expectedBooleanFaults); assert.equal(report.passed, PHASE === 'baseline' ? 3 : 4);
   report.status = 'qualified-' + PHASE; write();
-  console.log(`Stale import ${PHASE}: 4 actual exported-helper/React cases completed; ${report.passed} passed; ${report.failed} exact original-rejection Boolean faults; setup faults 0.`);
-  console.log('Controlled held-document evidence only. No natural-race, ReactDOM, visual or database completion claim.');
 } catch (error) { report.status = 'failed'; report.qualificationError = error?.stack || String(error); write(); throw error; }
 finally {
-  if (browser) await browser.close();
-  if (server) { server.kill(); await within(new Promise(resolve => { if (server.exitCode !== null) resolve(); else server.once('exit', resolve); }), 5000, 'Owned host did not stop'); }
+  const cleanupErrors = [];
+  if (browser) {
+    try { await within(browser.close(), 10000, 'Final browser shutdown timed out'); }
+    catch (error) { cleanupErrors.push(String(error)); }
+  }
+  if (server) {
+    server.kill();
+    try { await within(new Promise(resolve => { if (server.exitCode !== null) resolve(); else server.once('exit', resolve); }), 5000, 'Owned host did not stop'); }
+    catch (error) { cleanupErrors.push(String(error)); }
+  }
+  if (cleanupErrors.length) {
+    report.status = 'failed'; report.finalCleanupErrors = cleanupErrors; write();
+    console.error(cleanupErrors.join('\n')); process.exit(1);
+  }
 }
+console.log(`Stale import ${PHASE}: 4 actual exported-helper/React cases completed; ${report.passed} passed; ${report.failed} exact original-rejection Boolean faults; setup faults 0.`);
+console.log('Controlled held-document evidence only. No natural-race, ReactDOM, visual or database completion claim.');

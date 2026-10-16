@@ -37,3 +37,21 @@ existing guarded-reload cases, simStaleChunk, production build:seo scoped only t
 /soccer-career, all fifteen rebuilt-site readers, unchanged full download budgets,
 source/compiled/dependency/font/browser/distribution holds and retained evidence
 remain required. No runtime, application correction or live claim yet.
+
+First attempt40735217/run38909778949 passed types, syntax, dependency bindings and
+the scoped production build, then stalled in the new controlled method. Its precise
+await is unproved because this first method lacked per-operation checkpoints.
+Post-navigation frame-scoped evaluation was a source-level suspect. The attempt
+has no causal baseline credit. Temporary workflow-onlyff2be34d/run38911607873
+successfully requested cancellation of only that exact run after checking its
+branch and head; its diagnostic job was explicitly skipped. That administrative
+success is not a passing proof. The old attempt retains its always-run evidence.
+
+Method-only correction keeps a read-only store closure on the actual old-document
+runtime handle and uses that handle for probe and before/after reads. Setup,
+protocol, body and cleanup operations have explicit bounds, per-case work/cleanup
+budgets and physical progress checkpoints before later awaits. The four cases,
+phase outcomes, payload/React/store/timeOrigin/URL/held-header checks stay intact.
+The workflow caps the causal step at five minutes. The temporary cancellation job
+and its write permission are removed before the fresh baseline. App, packages and
+old proofs remain identical to e7f111b7. No product correction before qualification.
