@@ -1,0 +1,16 @@
+sd-bindopen exit=1 3s | simSoccerDeck: CONTROL=bindopen FIRED: section 1 failed (21 failures, red sections 1)
+sd-last exit=1 27s | simSoccerDeck: CONTROL=last FIRED: section 3 failed (5 failures, red sections 3)
+sd-pool exit=1 27s | simSoccerDeck: CONTROL=pool FIRED: section 3 failed (5 failures, red sections 3)
+sd-leak exit=1 36s | simSoccerDeck: CONTROL=leak FIRED: section 2 failed (2 failures, red sections 2)
+sd-neutralmoves exit=1 18s | simSoccerDeck: CONTROL=neutralmoves FIRED: section 4 failed (1 failures, red sections 4)
+sd-silent exit=3 11s | simSoccerDeck: CONTROL=silent did NOT fire: section 5 stayed green, which is itself a failure of the control
+sd-noreseed exit=1 19s | simSoccerDeck: CONTROL=noreseed FIRED: section 4 failed (1 failures, red sections 4)
+sd-drop exit=3 12s | simSoccerDeck: CONTROL=drop did NOT fire: section 5 stayed green, which is itself a failure of the control
+sd-ceiling exit=1 12s | simSoccerDeck: CONTROL=ceiling FIRED: section 5 failed (2 failures, red sections 5)
+sd-posleak exit=1 26s | simSoccerDeck: CONTROL=posleak FIRED: section 6 failed (1 failures, red sections 6)
+sd-mathrandom exit=1 34s | simSoccerDeck: CONTROL=mathrandom FIRED: section 7 failed (2 failures, red sections 7)
+sd-keyseason exit=1 36s | simSoccerDeck: CONTROL=keyseason FIRED: section 7 failed (1 failures, red sections 7)
+sd-eager exit=1 3s | simSoccerDeck: CONTROL=eager FIRED: section 10 failed (2 failures, red sections 10)
+sd-noresolve exit=1 7s | simSoccerDeck: CONTROL=noresolve FIRED: section 9 failed (1 failures, red sections 9)
+sd-caller exit=1 2s | simSoccerDeck: CONTROL=caller FIRED: section 10 failed (1 failures, red sections 10)
+sd-pressure exit=1 82s | simSoccerDeck: CONTROL=pressure FIRED: section 8 failed (5 failures, red sections 8)
