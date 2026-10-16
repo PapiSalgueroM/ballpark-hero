@@ -1,0 +1,14 @@
+  FAIL W1:nba-390: reviewed: [data-coach-done] sits at -898 to -768, off the 844 px screen
+  FAIL W3:nba-390: locator.tap: Timeout 4000ms exceeded.
+  FAIL W1:nba-1280: reviewed: [data-coach-done] sits at -687 to -574, off the 800 px screen
+  FAIL W3:nba-1280: locator.click: Timeout 4000ms exceeded.
+  FAIL W1:nfl-390: reviewed: [data-coach-done] sits at -965 to -835, off the 844 px screen
+  FAIL W3:nfl-390: locator.tap: Timeout 4000ms exceeded.
+  FAIL W1:nfl-1280: reviewed: [data-coach-done] sits at -787 to -674, off the 800 px screen
+  FAIL W3:nfl-1280: locator.click: Timeout 4000ms exceeded.
+  W2:nba-390: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W2:nba-1280: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W2:nfl-390: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W2:nfl-1280: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  screenshots: 57 in /home/runner/work/_temp/rc-out/files
+CONTROL noundo FIRED: W3 red

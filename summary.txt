@@ -1,0 +1,8 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-noundo exit=1 49s | CONTROL noundo FIRED: W3 red
+walk exit=1 61s | playUsCareerReports: 4 FAILURES
+walk-noretire exit=1 66s | CONTROL noretire FIRED: W2 red
+playHomeFold exit=0 30s | playHomeFold: green. The first thing on the page is something to play.
+walk-noreplay exit=1 55s | CONTROL noreplay FIRED: W3 red
+playNflTruth exit=0 103s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+playDraftNight exit=0 213s | playDraftNight: ALL GREEN, 49 nights walked
