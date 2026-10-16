@@ -1,0 +1,7 @@
+#!serial
+oldsave: git worktree add /tmp/base 1027b08cac8ef5cfc52c6b2e738e5c0a8d703402 >/dev/null 2>&1 && BASE_TREE=/tmp/base node .rc/x/oldsave.mjs
+m1: node .rc/x/mut.mjs M1 && node_modules/.bin/vitest run src/test/usCareerReports1346.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | grep -E "FAIL|✓|×|Test Files|Tests " | tail -20; s=${PIPESTATUS[0]}; git checkout -- src scripts; exit $s
+m2: node .rc/x/mut.mjs M2 && node_modules/.bin/vitest run src/test/careerDraftNight.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | grep -E "FAIL|×|Test Files|Tests " | tail -20; s=${PIPESTATUS[0]}; git checkout -- src scripts; exit $s
+m3: node .rc/x/mut.mjs M3 M3b && node_modules/.bin/vitest run src/test/usCareerReports1346.test.tsx src/test/careerDraftNight.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | grep -E "FAIL|×|Test Files|Tests " | tail -20; a=${PIPESTATUS[0]}; node scripts/simUsCareerSkips.mjs 2>&1 | tail -6; b=${PIPESTATUS[0]}; git checkout -- src scripts; echo "M3 vitest=$a skips=$b"; exit $((a+b))
+m4: node .rc/x/mut.mjs M4 && node_modules/.bin/vitest run src/test/usCoachRetirement.test.tsx src/test/usCareerReports1346.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | grep -E "FAIL|×|Test Files|Tests " | tail -20; s=${PIPESTATUS[0]}; git checkout -- src scripts; exit $s
+m4sim: node .rc/x/mut.mjs M4 && node scripts/simUsCoachRetirement.mjs 2>&1 | tail -8; s=${PIPESTATUS[0]}; git checkout -- src scripts; exit $s

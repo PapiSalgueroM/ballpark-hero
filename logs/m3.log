@@ -1,0 +1,11 @@
+MUTATION M3 applied to src/components/us-career/ProspectJourney.tsx
+MUTATION M3b applied to src/components/us-career/ProspectJourney.tsx
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m78 passed[39m[22m[90m (78)[39m
+   16040 showcase states, 1099 of them clamped skips: every skip undone to the byte, nothing offered elsewhere
+   src/test/usCareerReports1346.test.tsx: 24/24 pass as it is
+2) with the undo handing back its input: 4 fail, exactly the 4 named
+3) with no Watch it again on the night: 4 fail, exactly the 4 named
+3) with Watch it again offered under reduced motion: 4 fail, exactly the 4 named
+PASS: ALL US CAREER SKIP CHECKS PASSED
+M3 vitest=0 skips=0

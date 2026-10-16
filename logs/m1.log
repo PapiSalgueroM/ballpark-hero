@@ -1,0 +1,21 @@
+MUTATION M1 applied to src/components/career/DraftShowcaseCard.tsx
+   [32m✓[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnhl: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day[32m 106[2mms[22m[39m
+[31m   [31m×[31m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnfl: a graded showcase is never offered an undo[39m[32m 40[2mms[22m[39m
+[31m   [31m×[31m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnba: a graded showcase is never offered an undo[39m[32m 34[2mms[22m[39m
+[31m   [31m×[31m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mmlb: a graded showcase is never offered an undo[39m[32m 41[2mms[22m[39m
+[31m   [31m×[31m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnhl: a graded showcase is never offered an undo[39m[32m 34[2mms[22m[39m
+   [32m✓[39m Round 1346: draft night can be watched again[2m > [22mnfl: Skip to the end, then Watch it again plays the night again and saves nothing[32m 53[2mms[22m[39m
+   [32m✓[39m Round 1346: draft night can be watched again[2m > [22mnba: Skip to the end, then Watch it again plays the night again and saves nothing[32m 66[2mms[22m[39m
+   [32m✓[39m Round 1346: draft night can be watched again[2m > [22mmlb: Skip to the end, then Watch it again plays the night again and saves nothing[32m 47[2mms[22m[39m
+   [32m✓[39m Round 1346: draft night can be watched again[2m > [22mnhl: Skip to the end, then Watch it again plays the night again and saves nothing[32m 53[2mms[22m[39m
+   [32m✓[39m Round 1346: draft night can be watched again[2m > [22mnfl: under reduced motion the night ends on its last frame with nothing to watch again[32m 16[2mms[22m[39m
+   [32m✓[39m Round 1346: draft night can be watched again[2m > [22mnba: under reduced motion the night ends on its last frame with nothing to watch again[32m 17[2mms[22m[39m
+   [32m✓[39m Round 1346: draft night can be watched again[2m > [22mmlb: under reduced motion the night ends on its last frame with nothing to watch again[32m 17[2mms[22m[39m
+   [32m✓[39m Round 1346: draft night can be watched again[2m > [22mnhl: under reduced motion the night ends on its last frame with nothing to watch again[32m 16[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: the showcase Skip can be undone until Draft day[2m > [22mnfl: a graded showcase is never offered an undo
+[41m[1m FAIL [22m[49m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: the showcase Skip can be undone until Draft day[2m > [22mnba: a graded showcase is never offered an undo
+[41m[1m FAIL [22m[49m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: the showcase Skip can be undone until Draft day[2m > [22mmlb: a graded showcase is never offered an undo
+[41m[1m FAIL [22m[49m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: the showcase Skip can be undone until Draft day[2m > [22mnhl: a graded showcase is never offered an undo
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m20 passed[39m[22m[90m (24)[39m

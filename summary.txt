@@ -1,0 +1,6 @@
+oldsave exit=0 2s | OLD SAVE PROBE: PASS
+m1 exit=1 5s |       Tests  4 failed | 20 passed (24)
+m2 exit=1 3s |       Tests  1 failed | 53 passed (54)
+m3 exit=0 26s | M3 vitest=0 skips=0
+m4 exit=1 5s |       Tests  1 failed | 37 passed (38)
+m4sim exit=1 13s | 2 FAILURES

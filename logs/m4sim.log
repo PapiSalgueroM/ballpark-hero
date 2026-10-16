@@ -1,0 +1,9 @@
+MUTATION M4 applied to src/components/us-career/CoachCareerPanel.tsx
+  nhl: 300 careers, 6056 coaching steps before the retirement
+  retired: 902 while employed, 298 out of work (146 holding offers), 54 before a first season
+2) Byte identity with BASE: held
+3) Retired careers hand their input back: held
+  FAIL [section 4] plain: 37 of 38 passed (want 38 of 38), exit 1
+  FAIL [section 4] noretire: failed ["completed unemployed coach cannot take offers or advance the calendar","mlb: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired","nba: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired","nfl: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired","nhl: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired","retirement requires confirmation and accepts once after cancel and escape","retiring changes only done and is pure and idempotent"], want ["mlb: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired","nba: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired","nfl: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired","nhl: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired","retirement requires confirmation and accepts once after cancel and escape","retiring changes only done and is pure and idempotent"]
+4) src/test/usCoachRetirement.test.tsx and src/test/usCareerReports1346.test.tsx: 37/38 pass as they are; with retireCoachCareer returning its input 7 fail, exactly the 6 named
+2 FAILURES

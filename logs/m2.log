@@ -1,0 +1,6 @@
+MUTATION M2 applied to src/components/career/DraftNightSequence.tsx
+[31m   [31m×[31m watch it again[2m > [22monce the night is over Watch it again takes the skip's place, and without the prop the row is the one it was[39m[32m 8[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mwatch it again[2m > [22monce the night is over Watch it again takes the skip's place, and without the prop the row is the one it was
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m53 passed[39m[22m[90m (54)[39m
