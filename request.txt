@@ -1,0 +1,21 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unitset: node_modules/.bin/vitest run src/lib/clubManagerBoardVerdict.test.ts src/test/clubManagerOfferConfirm.test.tsx src/test/cmLeagueLeadersCard.test.tsx src/test/managerHotSeatCarryOnCard.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
+walk: node scripts/playCmBoardVerdict.mjs
+walk-noconfirm: git worktree add -q .claude/worktrees/ctl1 HEAD && node .rc/x/ctlPatch2.mjs .claude/worktrees/ctl1 noconfirm && (cd .claude/worktrees/ctl1 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-noconfirm" --emptyOutDir --logLevel error) && DIST=dist-noconfirm PLAY_BOARD_CONTROL=noconfirm node scripts/playCmBoardVerdict.mjs
+walk-nofate: sleep 4 && git worktree add -q .claude/worktrees/ctl2 HEAD && node .rc/x/ctlPatch2.mjs .claude/worktrees/ctl2 nofate && (cd .claude/worktrees/ctl2 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-nofate" --emptyOutDir --logLevel error) && DIST=dist-nofate PLAY_BOARD_CONTROL=nofate node scripts/playCmBoardVerdict.mjs
+walk-rise: sleep 8 && git worktree add -q .claude/worktrees/ctl3 HEAD && node .rc/x/ctlPatch2.mjs .claude/worktrees/ctl3 rise && (cd .claude/worktrees/ctl3 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-rise" --emptyOutDir --logLevel error) && DIST=dist-rise PLAY_BOARD_CONTROL=rise node scripts/playCmBoardVerdict.mjs
+weight-head: (node scripts/lib/hostLikeServer.mjs dist 4182 > /dev/null 2>&1 &) && sleep 5 && BASE=http://localhost:4182 SWEEP_BASE=http://localhost:4182 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+weight-prev: sleep 12 && git worktree add -q .claude/worktrees/prev 0fa88d41 && (cd .claude/worktrees/prev && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-prev" --emptyOutDir --logLevel error) && (node scripts/lib/hostLikeServer.mjs dist-prev 4183 > /dev/null 2>&1 &) && sleep 5 && BASE=http://localhost:4183 SWEEP_BASE=http://localhost:4183 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+worldbrowser-head: MANAGER_WORLD_BROWSER_CONTROL=all node scripts/simManagerWorldBrowser.mjs
+worldbrowser-base: sleep 16 && git worktree add -q .claude/worktrees/wbb 1027b08c && ln -s "$PWD/node_modules" .claude/worktrees/wbb/node_modules && cd .claude/worktrees/wbb && MANAGER_WORLD_BROWSER_CONTROL=all node scripts/simManagerWorldBrowser.mjs
