@@ -1,4 +1,4 @@
-## 2026-10-16: BH lazy-recovery diagnostic preparation, no app changes
+## 2026-10-16: BH lazy recovery diagnostic qualified, race still open
 
 Codex proof-only branch codex/bh-lazy-recovery starts at exact joined e7f111b7. The
 completed BFb lane's old lazy-editor method reported one unexpected React error in
@@ -6,7 +6,13 @@ its deliberate failed-download recovery, despite three healthy flows. New workfl
 will retain an uninstrumented invocation and a separate explicitly perturbed trace
 of the same unchanged method, complete reports/captures/build/source/tool receipts,
 all15 readers and unchanged weights. No new error allowance or application change.
-Runtime and diagnosis remain pending; I owns integration/publication. Details:
+Run38902127364 on7a684596 passed both unchanged1602check/12original invocations,
+full build15readers/weights and physical evidence holds. Trace2873events shows the
+first import cancelled before actualreload and second rejected without cancellation;
+no undefined.default in either repeat. Root and independent review closed artifact
+12048633739, retained locally. This does not clear the earlier intermittent failure.
+Separate controlled actual-Vite/React proof is being prepared before a product fix.
+No app/full-suite/live claim; I owns integration/publication. Details:
 docs/audits/bh-lazy-recovery.md. The report-fix queue can proceed once the actual
 release failures are reconciled; none is called live by this preparation.
 
