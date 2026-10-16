@@ -1,6 +1,6 @@
 # Queued Soccer Career popularity choices
 
-Round 1376, 2026-10-16. Qualified baseline, fixed source candidate awaiting remote verification.
+Round 1376, 2026-10-16. Fixed source qualified for integration, publication pending.
 
 Base: `d4f2c6f688d656205722ba52bbdb33f03490966a`. Branch: `codex/career-pending-popularity-gates`.
 
@@ -17,3 +17,5 @@ Remote Actions also runs the existing saved Life, review and packed-save unit fi
 Baseline history: run `38889564418` at `8fb48955` passed types but ran zero cases because Vite could not load a bundle outside its project root. Artifact `12041660084`, SHA256 `88cbb7f1a41c3f4f277f90b50468b85753907acb1d9c9fcd3fd94bcd5937628f`, remains a method failure with no test credit. Method correction `44fb1611` moved compilation inside the project with containment assertions. Corrected run `38890201198`, job `116937554747`, passed: real application types, all fifteen completed cases with exactly eleven named callback faults and four preservation passes, 62 prior unit passes, and 521 installed dependency/source holds. Root retained artifact `12042135318`, SHA256 `76e8a8a0ccff1215f92c8b3f645b8036151fa949f4c98c4202889ada2a3f5c8d`.
 
 Integration seam: `SC_PENDING_POPULARITY_BASE` defaults to the original base above. On a later integrated tree it must name the incoming tree immediately before this feature is merged, so the original complete Life control and unchanged app bindings both use that exact parent. The workflow records its explicit base. This does not waive any app/source hold or expected outcome; the same fifteen cases and eleven callback causes remain required.
+
+Fixed qualification: `320cd84554207b840c85543a190eaeaa8c10c2eb`, run `38890884039`, job `116939831913`, success. Actual types, normal fifteen passes, original complete-Life eleven exact missing callbacks with four preserves, restored fifteen passes, 62 prior unit passes, the complete one-route SEO build and all fifteen rebuilt-site readers passed. Seven physical source receipts in each arm have equal before/after hashes, and all 521 installed locked versions remained held. No setup, empty or skipped-case credit was used. Complete artifact `12042032250` is 38,260,685 bytes, SHA256 `4e4c915f9916fb5128234fe902cec1c54b9785af615ea8f0d37fb24c3d60bfad`, retained and reopened at `C:/Users/antho/dukb-handoff/2026-10-16/popularity-fixed`. This final evidence note changes only documentation, with application, test, method and workflow bytes held to the tested source. No full-suite, browser or live claim.
