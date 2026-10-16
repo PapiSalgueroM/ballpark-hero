@@ -4471,7 +4471,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 match by match. Last in DOM order, so every test and walker that
                 presses the bar's first button still presses Next Season. */}
             {career.phase === "playing" && (
-              <Button onClick={onWeekByWeek} variant="outline" aria-label="Week by week: live the season match by match" className="h-12 w-11 shrink-0 px-0 text-base font-bold sm:w-auto sm:px-3 sm:text-sm gap-1.5" data-week-by-week>
+              <Button onClick={onWeekByWeek} variant="outline" aria-label="Week by week: watch your season match by match" className="h-12 w-11 shrink-0 px-0 text-base font-bold sm:w-auto sm:px-3 sm:text-sm gap-1.5" data-week-by-week>
                 <span aria-hidden="true">📺</span>
                 <span className="hidden sm:inline">Week by week</span>
                 <span className="hidden sm:inline rounded bg-emerald-500/20 px-1 text-[9px] font-black text-emerald-400">NEW</span>
