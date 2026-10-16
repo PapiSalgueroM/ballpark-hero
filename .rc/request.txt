@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+fonts: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -3
+pressMarket: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPressMarket.mjs > /tmp/pm-sim.log 2>&1; echo "sim exit $?"; tail -2 /tmp/pm-sim.log | cut -c1-200; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ENGINES=chromium node scripts/playCareerPressMarket.mjs
+career993-head: SIM_NETWORK=offline ENGINES=chromium CAREER993_ARTIFACTS="$RC_OUT/c993-head" node scripts/qa/career993.mjs > /tmp/c993h.log 2>&1; s=$?; grep -v -E "^\s+at " /tmp/c993h.log | grep -E "AssertionError|journeys|^\+ |^- " | head -16 | cut -c1-200; exit $s
+career993-base: git worktree add /tmp/base d4f2c6f6 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && (node_modules/.bin/vite build > /tmp/bb.log 2>&1 || (tail -20 /tmp/bb.log; exit 1)) && SIM_NETWORK=offline ENGINES=chromium CAREER993_ARTIFACTS="$RC_OUT/c993-base" node scripts/qa/career993.mjs > /tmp/c993b.log 2>&1; s=$?; grep -v -E "^\s+at " /tmp/c993b.log | grep -E "AssertionError|journeys|^\+ |^- " | head -16 | cut -c1-200; exit $s
