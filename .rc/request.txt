@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walkA: WALK_ONLY=A node .rc/x/walk1334.mjs
