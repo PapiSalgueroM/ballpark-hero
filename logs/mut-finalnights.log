@@ -1,0 +1,125 @@
+mut1347fix: finalnights applied to src/lib/worldCompetition.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/lib/worldCompetition.test.ts[2m > [22m[2mthe nights[2m > [22m[2mevery league size the game has, read off REAL_LEAGUES and ERA_LEAGUES, places its nights on their own rounds
+[22m[39mworldCompetition: league sizes the game has: 10, 12, 14, 15, 16, 18, 20, 24 (27 real leagues, 4 eras)
+
+ [31m❯[39m src/lib/worldCompetition.test.ts [2m([22m[2m65 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 608[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mthe golden table comes from the base commit and holds every kind of ending[32m 2[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 70-70 plain[32m 1[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 70-70 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 82-64 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 70-70 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 70-70 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 82-64 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 away[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 etAway[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 away[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 etAway[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 70-70 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 70-70 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 82-64 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 away[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 etAway[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 away[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 etAway[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 70-70 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 70-70 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 82-64 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mcontrol: the same tie with its fields in another order is not the golden bytes[32m 1[2mms[22m[39m
+   [32m✓[39m drawG8, the eras group draw[2m > [22mdraws 32 clubs into eight groups, one from each pot, inside both rules, the same every time[32m 62[2mms[22m[39m
+   [32m✓[39m drawG8, the eras group draw[2m > [22ma season before the 2014 ruling may put Russia and Ukraine together, and a plain draw keeps neither rule[32m 1[2mms[22m[39m
+   [32m✓[39m drawG8, the eras group draw[2m > [22ma field with nine clubs of one association is drawn with exactly one clash, and quickly[32m 2[2mms[22m[39m
+   [32m✓[39m drawG8, the eras group draw[2m > [22msixteen of one association: eight clashes, the fewest any draw can make, and it never hangs[32m 1[2mms[22m[39m
+   [32m✓[39m drawG8, the eras group draw[2m > [22mrefuses a field that is not 32 different clubs[32m 0[2mms[22m[39m
+   [32m✓[39m the nights[2m > [22m13 nights in the eras and 17 in the league phase, in order[32m 0[2mms[22m[39m
+[31m   [31m×[31m the nights[2m > [22mthe final has the legs the binding gives it, like every other round[39m[32m 10[2mms[22m[39m
+[31m     → expected [ 'SF2', 'F' ] to deeply equal [ 'F1', 'F2' ][39m
+   [32m✓[39m the nights[2m > [22mevery league phase night after matchday 6 is its own league round, at every league size[32m 2[2mms[22m[39m
+   [32m✓[39m the nights[2m > [22mevery league size the game has, read off REAL_LEAGUES and ERA_LEAGUES, places its nights on their own rounds[32m 1[2mms[22m[39m
+   [32m✓[39m the nights[2m > [22mcontrol: a mark table with two equal entries, placed by the fraction alone, puts two nights on one round[32m 0[2mms[22m[39m
+   [32m✓[39m evaluateWorldComp[2m > [22man era season played to the end is complete and legal[32m 127[2mms[22m[39m
+   [32m✓[39m evaluateWorldComp[2m > [22ma league phase season played to the end is complete and legal[32m 96[2mms[22m[39m
+   [32m✓[39m evaluateWorldComp[2m > [22mis deterministic and a prefix at every night, and shows no score before its night[32m 66[2mms[22m[39m
+   [32m✓[39m evaluateWorldComp[2m > [22mcrowns exactly one winner every finished season, over a few hundred seeds[32m 205[2mms[22m[39m
+[31m   [31m×[31m evaluateWorldComp[2m > [22ma binding that makes the final two legs gets a two legged final (the module never forces one match)[39m[32m 3[2mms[22m[39m
+[31m     → Cannot read properties of undefined (reading 'fixtures')[39m
+   [32m✓[39m evaluateWorldComp[2m > [22mgroupFixtures is a double round robin[32m 0[2mms[22m[39m
+   [32m✓[39m evaluateWorldComp[2m > [22mthe module groupFixtures plays the engine matchday table, line for line, until E2 deletes the copy[32m 3[2mms[22m[39m
+   [32m✓[39m the same tables on every device (correction 1)[2m > [22ma reversed device order does not move the watched groups[32m 2[2mms[22m[39m
+   [32m✓[39m the same tables on every device (correction 1)[2m > [22mcontrol: the participant default order does move under it, so the reversal bites[32m 8[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/worldCompetition.test.ts[2m > [22mthe nights[2m > [22mthe final has the legs the binding gives it, like every other round
+[31m[1mAssertionError[22m: expected [ 'SF2', 'F' ] to deeply equal [ 'F1', 'F2' ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[32m-   "F1",[39m
+[32m-   "F2",[39m
+[31m+   "SF2",[39m
+[31m+   "F",[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/lib/worldCompetition.test.ts:[2m145:62[22m[39m
+    [90m143| [39m  })[33m;[39m
+    [90m144| [39m  it('the final has the legs the binding gives it, like every other ro…
+    [90m145| [39m    expect(nightsOf('g8', () => 2).map(n => n.id).slice(-2)).toEqual([…
+    [90m   | [39m                                                             [31m^[39m
+    [90m146| [39m    [34mexpect[39m([34mnightsOf[39m([32m'l36'[39m[33m,[39m () [33m=>[39m [34m2[39m)[33m.[39mlength)[33m.[39m[34mtoBe[39m([34m18[39m)[33m;[39m
+    [90m147| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/worldCompetition.test.ts[2m > [22mevaluateWorldComp[2m > [22ma binding that makes the final two legs gets a two legged final (the module never forces one match)
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'fixtures')[39m
+[36m [2m❯[22m forEach src/lib/worldCompetition.ts:[2m441:21[22m[39m
+    [90m439| [39m      [35mif[39m (rules[33m.[39mlegs [33m===[39m [34m2[39m [33m&&[39m t[33m.[39mleg1 [33m&&[39m t[33m.[39mleg2) {
+    [90m440| [39m        nights[first].fixtures.push(k > first ? { home: t.home, away: …
+    [90m441| [39m        nights[end].fixtures.push(k > end ? { home: t.away, away: t.ho…
+    [90m   | [39m                    [31m^[39m
+    [90m442| [39m        if (k > first) view.leg1 = [t.leg1.homeGoals, t.leg1.awayGoals…
+    [90m443| [39m        [35mif[39m (k [33m>[39m end) view[33m.[39mleg2 [33m=[39m [t[33m.[39mleg2[33m.[39mhomeGoals[33m,[39m t[33m.[39mleg2[33m.[39mawayGoals][33m;[39m
+[90m [2m❯[22m Module.evaluateWorldComp src/lib/worldCompetition.ts:[2m434:11[22m[39m
+[90m [2m❯[22m src/lib/worldCompetition.test.ts:[2m361:17[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m63 passed[39m[22m[90m (65)[39m
+[2m   Start at [22m 20:00:54
+[2m   Duration [22m 2.84s[2m (transform 1.23s, setup 53ms, collect 1.49s, tests 608ms, environment 298ms, prepare 121ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > the nights > the final has the legs the binding gives it%2C like every other round,line=145,column=62::AssertionError: expected [ 'SF2', 'F' ] to deeply equal [ 'F1', 'F2' ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A-   "F1",%0A-   "F2",%0A+   "SF2",%0A+   "F",%0A  ]%0A%0A ❯ src/lib/worldCompetition.test.ts:145:62%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > a binding that makes the final two legs gets a two legged final (the module never forces one match),line=441,column=21::TypeError: Cannot read properties of undefined (reading 'fixtures')%0A ❯ forEach src/lib/worldCompetition.ts:441:21%0A ❯ Module.evaluateWorldComp src/lib/worldCompetition.ts:434:11%0A ❯ src/lib/worldCompetition.test.ts:361:17%0A%0A
