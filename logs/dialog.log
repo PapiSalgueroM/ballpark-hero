@@ -1,0 +1,7 @@
+PASS 320: actual New Career dialog and Cancel
+PASS 390: actual New Career dialog and Cancel
+PASS 430: actual New Career dialog and Cancel
+PASS 1440: actual New Career dialog and Cancel
+New Career dialogs: 4/4 actual Cancel flows.
+New Career controls: 2/2 effective full inverses.
+PASS Soccer New Career dialog browser
