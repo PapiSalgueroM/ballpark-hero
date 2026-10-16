@@ -133,3 +133,32 @@ pin's sha at simManagerAppealIsolation.mjs:142 (80ee99e7 against 7a89018d on ste
   anywhere from 35 to 82 after a season you stayed for, depending on how that season went (a season the board grades
   A or B opens at 69 or more, a D or an F under 60)". Then genSearchKeywords is theirs.
 - Round 1341 rebases its comment edit at managerHotSeat.ts 526 to 531 on this round's 527 and 528.
+
+## Review fixes (fix-1335, 2026-10-16)
+
+Two adversarial reviews (run and read) of 0fa88d41; their findings and every proof are in the lane's
+results-g/fix-1335.md. One commit each, all pushed:
+- dcfd1644, the run review's MAJOR: section takeover hands startMidSeason the state startCareer built (BOARD_FRESH
+  on the head), so it holds playRunIn's pin to LEGACY_BOARD_START; control nopin (the pin taken out) fires on 25
+  takeovers (r1335-fx1). The legacy leg and the join cases keep the old 60.
+- ca1301f7, the read review's MAJOR (advice 17, ruled IN by section 1 decision 2): Manager Hot Seat's own takeover
+  takes openObjectives on the current rules and the whole card on the old ones (legacySeason), as Club Manager's
+  takeovers do, so a run carried on to Club Manager starts clean. Nothing a hot seat day plays reads a failed line:
+  simDailyDeals green unedited, and section dailies (r1335-fx2) shows every date's whole run equal but for a
+  suitor's name, with 42 of 110 current rules takeovers dropping a failed line on the base's card; control hscard.
+  Residual: a career carried on from a day dated before HOT_SEAT_RULES_FROM (2026-10-24) keeps its whole card.
+- 402b0e95: section title recomputes every stay's opening from the season it had (controls played and weights,
+  18 and 64 cases); SHARD on the title, grade and legacy fleets splits by career, so each shard holds moves.
+- 64eea0ea: Back from the offer question shows the list at once (no second rise), and the note under the offers is
+  12 px; playCmBoardVerdict checks both 150 ms after Back (control rise).
+- 8ddd9a79: the help and What's New say "usually" about one bad night (a run in takeover whose first night is a lost
+  cup tie can end at 59.9), scope the escape line to leagues where the game moves clubs, and say two steps after a
+  top flight title (advice 11).
+- 62e9df6d merges origin/main e814c2de (docs/WORKBOARD.md only); 19079e44 adds the walk's after Back picture.
+- Weight on the head: /club-manager 605.9K, /manager-hot-seat 624.3K, /deadline-day 634.2K (the fix adds 0.1K to
+  the last two). The recordings are unmoved: no fix edits src/lib/clubManager.ts (the 1081 pin recomputed equal)
+  and the digest written from the head is byte equal to the committed one.
+
+Owed from the reviews: the offer blurb's "(abroad)" (pre-existing, behind the switch with both retakes); the title
+kind before the escape kind for a drop zone favourite that wins the league (polish); simManagerWorldContinuity's
+bridges and its constructor mask, unreachable behind the kit's pre-existing inactive red; the weight joins (lead).
