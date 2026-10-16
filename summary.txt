@@ -1,0 +1,4 @@
+wc-head exit=1 20s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:496:24
+wc-e2063dbe exit=1 21s |     at async file:///tmp/wce-2370/scripts/simManagerWorldContinuity.mjs:496:24
+wc-main exit=1 20s |     at async file:///tmp/wcm-2519/scripts/simManagerWorldContinuity.mjs:489:24
+ledgerBound-alone exit=0 246s | simCmLedgerBound: green, all four sections held

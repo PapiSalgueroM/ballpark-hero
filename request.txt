@@ -1,0 +1,5 @@
+#!serial
+wc-head: node scripts/simManagerWorldContinuity.mjs
+wc-e2063dbe: D=/tmp/wce-$$ && git worktree add -q --detach $D e2063dbea06e037fa2e14f8434101ffd7817f728 && ln -s $PWD/node_modules $D/node_modules && cd $D && node scripts/simManagerWorldContinuity.mjs
+wc-main: D=/tmp/wcm-$$ && git worktree add -q --detach $D origin/main && ln -s $PWD/node_modules $D/node_modules && cd $D && node scripts/simManagerWorldContinuity.mjs
+ledgerBound-alone: node scripts/simCmLedgerBound.mjs
