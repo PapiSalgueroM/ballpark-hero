@@ -26,6 +26,10 @@
       did not run (runAllSims on a clean clone) and does not fail.
    4. HEAD AGAINST STOCK (PRELOAD_WAIT_STOCK_DIST set): hashed names
       normalised, exactly one chunk differs, by exactly the minified wait.
+   5. STOCK AGAINST BASE (PRELOAD_WAIT_BASE_DIST and _DIST2, the base commit
+      built twice): a null arm first, the two base builds must not differ at
+      all; then the stock control differs from the base only in the entry
+      (freshBuild.ts) and the Soccer Career page chunk (its loader line).
    6. SOURCE FENCE, comments stripped. vite.config.ts imports preloadWait from
       ./scripts/lib/vitePreloadWait.mjs and lists preloadWait() as a plugins
       entry of its own, never behind a mode test (the fix rests on that one
@@ -41,7 +45,8 @@
    Negative controls (PRELOAD_WAIT_CONTROL): stock runs the stock text in the
    patched arm (section 1 red); stockdist points section 3 at the stock
    control dist (section 3 red); extra changes one byte of one other chunk on
-   the stock side in memory (section 4 red); noplugin takes preloadWait() out
+   the stock side in memory (section 4 red); extrabase does the same to the
+   base side (section 5 red); noplugin takes preloadWait() out
    of the plugins array in memory (section 6 red); gated puts it behind a
    mode test in memory (section 6 red); dynamicspec adds an
    import(name) to src in memory (section 6 red). Each asserts its anchor
@@ -55,7 +60,7 @@ import { preloadWait, patchPreloadHelper, wrapperState, PRELOAD_HELPER_ID, WAIT_
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PRELOAD_WAIT_CONTROL || '';
-const EXPECT = { stock: [1], stockdist: [3], extra: [4], noplugin: [6], gated: [6], dynamicspec: [6] };
+const EXPECT = { stock: [1], stockdist: [3], extra: [4], extrabase: [5], noplugin: [6], gated: [6], dynamicspec: [6] };
 if (CONTROL && !(CONTROL in EXPECT)) { console.error('unknown control ' + CONTROL); process.exit(2); }
 const code = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
 function rewrite(src, anchor, replacement, why) {
@@ -217,6 +222,33 @@ console.log('3) the built dist: the one wrapper waits after its rethrow');
   }
 }
 
+/* sections 4 and 5: two dists as multisets of chunks, hashed names normalised in names and in contents */
+const HASHED = /([\w.$]+)-[A-Za-z0-9_-]{8}\.(js|css)/g;
+const norm = s => s.replace(HASHED, '$1-#.$2');
+function side(dir) {
+  const m = new Map();
+  for (const f of fs.readdirSync(path.join(dir, 'assets')).filter(f => /\.(js|css)$/.test(f))) {
+    const k = norm(f); if (!m.has(k)) m.set(k, []);
+    m.get(k).push(norm(fs.readFileSync(path.join(dir, 'assets', f), 'utf8')));
+  }
+  return m;
+}
+function diffSides(a, b) {
+  const diffs = [];
+  for (const k of new Set([...a.keys(), ...b.keys()])) {
+    const x = [...(a.get(k) ?? [])].sort(); const y = [...(b.get(k) ?? [])].sort();
+    const left = x.filter(t => !y.includes(t)); const right = y.filter(t => !x.includes(t));
+    if (left.length || right.length) diffs.push({ k, left, right });
+  }
+  return diffs;
+}
+/* the extra control: one byte of one chunk that has nothing to do with this round, changed in memory */
+function touchOne(m) {
+  const key = [...m.keys()].find(k => k.endsWith('.js') && !/^(index|SoccerCareer)-#/.test(k) && !m.get(k).some(t => t.includes('vite:preloadError')));
+  const t = m.get(key)[0];
+  m.get(key)[0] = t.slice(0, 10) + (t[10] === 'x' ? 'y' : 'x') + t.slice(11);
+}
+
 section = 4;
 console.log('4) head against the stock control: one chunk differs, by exactly the wait');
 {
@@ -224,28 +256,9 @@ console.log('4) head against the stock control: one chunk differs, by exactly th
   if (!STOCK_DIST) console.log('   skip PRELOAD_WAIT_STOCK_DIST is not set, so this section did not run');
   else if (!fs.existsSync(path.join(HEAD, 'assets')) || !fs.existsSync(path.join(STOCK_DIST, 'assets'))) { console.error('section 4: both dists must be built'); process.exit(2); }
   else {
-    const HASHED = /([\w.$]+)-[A-Za-z0-9_-]{8}\.(js|css)/g;
-    const norm = s => s.replace(HASHED, '$1-#.$2');
-    const side = dir => {
-      const m = new Map();
-      for (const f of fs.readdirSync(path.join(dir, 'assets')).filter(f => /\.(js|css)$/.test(f))) {
-        const k = norm(f); if (!m.has(k)) m.set(k, []);
-        m.get(k).push(norm(fs.readFileSync(path.join(dir, 'assets', f), 'utf8')));
-      }
-      return m;
-    };
     const head = side(HEAD); const stock = side(STOCK_DIST);
-    if (CONTROL === 'extra') {
-      const key = [...stock.keys()].find(k => k.endsWith('.js') && !stock.get(k).some(t => t.includes('vite:preloadError')));
-      const t = stock.get(key)[0];
-      stock.get(key)[0] = t.slice(0, 10) + (t[10] === 'x' ? 'y' : 'x') + t.slice(11);
-    }
-    const diffs = [];
-    for (const k of new Set([...head.keys(), ...stock.keys()])) {
-      const h = [...(head.get(k) ?? [])].sort(); const s = [...(stock.get(k) ?? [])].sort();
-      const left = h.filter(t => !s.includes(t)); const right = s.filter(t => !h.includes(t));
-      if (left.length || right.length) diffs.push({ k, left, right });
-    }
+    if (CONTROL === 'extra') touchOne(stock);
+    const diffs = diffSides(head, stock);
     console.log(`   info ${head.size} names on head, ${stock.size} on the stock control`);
     if (diffs.length !== 1 || diffs[0].left.length !== 1 || diffs[0].right.length !== 1) fail(`${diffs.length} name(s) differ (${diffs.map(d => d.k).slice(0, 8).join(', ')}), expected exactly one chunk`);
     else {
@@ -257,6 +270,36 @@ console.log('4) head against the stock control: one chunk differs, by exactly th
       if (removed !== '' || !/^;?\s*return\s*new\s+Promise\(\s*\(\s*\)\s*=>\s*\{\s*\}\s*\)\s*;?$/.test(added)) fail(`${diffs[0].k} differs by more than the wait`);
       else ok(`${diffs[0].k} is the only chunk that differs, by ${added.length} characters: the wait`);
     }
+  }
+}
+
+section = 5;
+console.log('5) the stock control against a build of the base: only the entry and the Soccer Career page chunk differ');
+{
+  const BASE = process.env.PRELOAD_WAIT_BASE_DIST ? path.resolve(ROOT, process.env.PRELOAD_WAIT_BASE_DIST) : '';
+  const BASE2 = process.env.PRELOAD_WAIT_BASE_DIST2 ? path.resolve(ROOT, process.env.PRELOAD_WAIT_BASE_DIST2) : '';
+  if (!BASE || !STOCK_DIST) {
+    if (CONTROL === 'extrabase') { console.error('extrabase: set PRELOAD_WAIT_BASE_DIST and PRELOAD_WAIT_STOCK_DIST'); process.exit(2); }
+    console.log('   skip PRELOAD_WAIT_BASE_DIST is not set, so this section did not run');
+  } else if (![BASE, STOCK_DIST, ...(BASE2 ? [BASE2] : [])].every(d => fs.existsSync(path.join(d, 'assets')))) { console.error('section 5: every named dist must be built'); process.exit(2); }
+  else {
+    /* the null arm first: the base built twice in the same place must not differ at all, or nothing below can be believed */
+    if (!BASE2) fail('PRELOAD_WAIT_BASE_DIST2 (the base built a second time) is not set: no null arm, so the comparison cannot be believed');
+    else {
+      const nul = diffSides(side(BASE), side(BASE2));
+      if (nul.length) fail(`the base built twice differs in ${nul.length} name(s) (${nul.map(d => d.k).slice(0, 6).join(', ')}): chunks are not byte stable here`);
+      else ok('null arm: the base built twice gives the same chunks, byte for byte once hashes are normalised');
+    }
+    const stock = side(STOCK_DIST); const base = side(BASE);
+    if (CONTROL === 'extrabase') touchOne(base);
+    const diffs = diffSides(stock, base);
+    const want = ['SoccerCareer-#.js', 'index-#.js'];
+    for (const d of diffs) console.log(`   info ${d.k}: ${d.left.map(t => t.length).join('+')} characters on the stock control, ${d.right.map(t => t.length).join('+')} on base`);
+    const got = diffs.map(d => d.k).sort();
+    const entry = diffs.find(d => d.k === 'index-#.js');
+    if (got.join() !== want.join()) fail(`the chunks that differ are [${got.join(', ')}], expected exactly [${want.join(', ')}] (the entry with freshBuild.ts, and the Soccer Career page with its one loader line)`);
+    else if (!entry.left.some(t => t.includes('dukb-reloaded-stale-chunk'))) fail('the entry chunk that differs does not hold freshBuild.ts');
+    else ok('only the entry (freshBuild.ts) and the Soccer Career page chunk (its CareerStory loader) differ from the base build');
   }
 }
 
