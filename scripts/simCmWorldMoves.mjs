@@ -29,6 +29,11 @@
  *      (makeOffer again on [.01]) and, from the same state, the walk away (walkAway on [.01]): the rival owns the
  *      man (the ledger places him at the rival, who lists him, and the seller does not), and exactly one draw is
  *      taken. A career where the vectors raise no rival is counted, not failed; under 5 of either arm cannot run.
+ *   3. join: seeded 2026-27 careers (the trio, seeds 1 to 3) take a job mid season through joinClubNow, once before
+ *      January and once after it (the brief's decision 3): the joined ledger holds every departed record (same key;
+ *      the same owner and status unless a deal line of the run in moved him) plus only men of the run in's deal
+ *      lines, every deal line of the run in between two other clubs is placed at its buyer, and every name gone
+ *      before the move stays gone after it.
  *   6. legacy: careers with no world seed (startCareer with PR269's legacy world, and fresh careers with the seed,
  *      the ledger and the squad's ledger keys stripped the way simClubManagerSaveSize strips them, and the legacy
  *      career with three deals of mine at its start: a release, a buy and a sale through acceptBid), the same nine
@@ -56,7 +61,7 @@
  *   section 9: the table is in the round's notes, docs/audits/ROUND-1344-NOTES.md; the January entry took 37.8 ms on
  *     the base and about 255 ms with the probe (recorded deal by deal), which is why ruling 4 packs once a window.
  *
- * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,2,6,12), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per
+ * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,2,3,6,12), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per
  * section), CM_WORLD_MOVES_ERAS (default now,era2015,era2005), CM_WORLD_MOVES_BASE (default the commit the branch
  * started from), CM_WORLD_MOVES_SHAPE_ARMS (default base,head), CM_WORLD_MOVES_SEASONS (section 9, default 15),
  * CM_WORLD_MOVES_OUT (section 9's JSON folder, default $RC_OUT or the temp folder).
@@ -69,7 +74,8 @@
  *                                     opening window
  *   CM_WORLD_MOVES_CONTROL=nojanuary  January's window keeps the ledger it had: section 1 red, first in January
  *   CM_WORLD_MOVES_CONTROL=nosummer   the summer's window keeps the ledger it had: section 1 red, first in the summer
- *   CM_WORLD_MOVES_CONTROL=nohijack   makeOffer's hijack records nothing: section 2 red on the hijack arm only
+ *   CM_WORLD_MOVES_CONTROL=joinledger joinClubNow takes the departed career's ledger again: section 3 red
+ *   CM_WORLD_MOVES_CONTROL=nohijack  makeOffer's hijack records nothing: section 2 red on the hijack arm only
  *   CM_WORLD_MOVES_CONTROL=nowalk     walkAway's rival close records nothing: section 2 red on the walk arm only
  *   CM_WORLD_MOVES_CONTROL=slow       the window packs the ledger after every deal again (the step 1 probe's way):
  *                                     section 12 red
@@ -109,7 +115,7 @@ const COMBINE = process.argv[2] === '--combine';   // handled at the end of the 
 
 /* The commit this branch started from (origin/main at the claim, Release BG live; src equal to bd3b6244). */
 const BASE = process.env.CM_WORLD_MOVES_BASE || 'd4f2c6f688d656205722ba52bbdb33f03490966a';
-const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 2, 6, 12]));
+const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 2, 3, 6, 12]));
 const ERAS = (process.env.CM_WORLD_MOVES_ERAS || 'now,era2015,era2005').split(',');
 if (process.env.CM_WORLD_MOVES_HEAD) cannot('CM_WORLD_MOVES_HEAD is gone: the step 1 probe was removed at step 2 (the head records the deals itself)');
 const CONTROL = process.env.CM_WORLD_MOVES_CONTROL || '';
@@ -127,6 +133,8 @@ const CONTROLS = {
   noflush: { section: 1, first: 'opening', edits: [['  return recordAiDeals(state, unrecorded);\n}\n', '  return state;\n}\n']] },
   nojanuary: { section: 1, first: 'january', edits: [[JANUARY_CALL, `${keepLedger('      ')}      // Round 135:`]] },
   nosummer: { section: 1, first: 'summer', edits: [[SUMMER_CALL, `  state.intl = freshIntl(state);\n${keepLedger('  ')}`]] },
+  joinledger: { section: 3, file: 'src/lib/clubManagerCalendar.ts', edits: [['    ...(s.worldRoster !== undefined ? { worldRoster: plainCopy(s.worldRoster) }\n      : departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),\n',
+    '    ...(departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),\n']] },
   nohijack: { section: 2, arm: 'hijack', edits: [['      return recordAiDeals(state, [{ mp: next.player, to: next.rivalBidder, fee: next.rivalOffer }]);\n', '      return state;\n']] },
   nowalk: { section: 2, arm: 'walk', edits: [['    return recordAiDeals(state, [{ mp: neg.player, to: neg.rivalBidder, fee: neg.rivalOffer }]);\n', '    return state;\n']] },
   slow: { section: 12, edits: [[RECORD_LINE, '    if (working && seen) { const moved = recordAiDeal(working, { mp, to: buyer, fee }, working); if (moved === working) continue; working = packedLedger(moved); }\n    else unrecorded.push({ mp, to: buyer, fee });\n']] },
@@ -165,7 +173,7 @@ function editOf(edits, name) {
 }
 /** One engine bundled once; each career runs in a fresh context, so module state never leaks between careers.
     `base` reads every source file from BASE; `edit` rewrites the engine file. */
-async function engine(label, { base = false, edit = null } = {}) {
+async function engine(label, { base = false, edit = null, editFile = ENGINE } = {}) {
   let edited = false;
   const plugin = {
     name: `world-moves-${label}`,
@@ -176,15 +184,15 @@ async function engine(label, { base = false, edit = null } = {}) {
         let text = base
           ? lf(execFileSync('git', ['show', `${BASE}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 26 }))
           : lf(fs.readFileSync(args.path, 'utf8'));
-        if (edit && rel === ENGINE) { text = edit(text); edited = true; }
+        if (edit && rel === editFile) { text = edit(text); edited = true; }
         return { contents: text, loader: path.extname(args.path).slice(1), resolveDir: path.dirname(args.path) };
       });
     },
   };
-  const entry = "export * as cm from './src/lib/clubManager';\nexport * as eras from './src/lib/clubManagerEras';\nexport * as ledger from './src/lib/clubManagerWorldRoster';\n";
+  const entry = "export * as cm from './src/lib/clubManager';\nexport * as eras from './src/lib/clubManagerEras';\nexport * as ledger from './src/lib/clubManagerWorldRoster';\nexport * as cal from './src/lib/clubManagerCalendar';\n";
   const out = await esbuild.build({ stdin: { contents: entry, resolveDir: ROOT, sourcefile: `world-moves-${label}.ts`, loader: 'ts' },
     bundle: true, write: false, format: 'cjs', platform: 'node', target: 'node20', plugins: [plugin], logLevel: 'silent' });
-  if (edit && !edited) cannot(`the ${label} engine was to be edited and ${ENGINE} was never loaded`);
+  if (edit && !edited) cannot(`the ${label} engine was to be edited and ${editFile} was never loaded`);
   const script = new vm.Script(out.outputFiles[0].text, { filename: `world-moves-${label}.cjs` });
   return {
     label,
@@ -395,6 +403,52 @@ async function negotiationCareer(E, era, club, seed) {
     if (why) fail(2, `${tag} ${arm}: ${line.to} took ${line.name} from ${line.from}, but ${why}`);
     else s2[arm].owned += 1;
   }
+}
+
+/* ---------- section 3, join ---------- */
+const JOIN_TO = { 'Real Madrid': 'Arsenal', Everton: 'Napoli', Aberdeen: 'Fulham' };
+const s3 = { joins: 0, refused: 0, departed: 0, runIn: 0, gone: 0 };
+/** A seeded 2026-27 career that takes a job mid season, before or after its January window, through joinClubNow. */
+async function joinCareer(E, club, seed, when) {
+  const M = await E.fresh(), keep = Math.random;
+  Math.random = stream(mix('join', club, seed, when));
+  const tag = `${club} (now, seed ${seed}, ${when} January)`;
+  try {
+    let s = M.cm.startCareer(club, 'now'), january = false, after = 0;
+    for (let guard = 0; guard < 400; guard += 1) {
+      if (s.boardConfidence < 35) s = { ...s, boardConfidence: 55 };
+      if (when === 'before' && s.week >= 6) break;
+      if (when === 'after' && january && (after += 1) > 3) break;
+      const r = M.cm.playNextEntry(s, OPT);
+      s = r.state;
+      if (r.kind === 'window') january = true;
+      if (r.kind === 'seasonOver' || s.sacked) { s3.refused += 1; return; }
+    }
+    const to = JOIN_TO[club];
+    const league = M.cm.REAL_LEAGUES.find(l => M.cm.playableClubs(l.id).some(c => c.name === to))?.id;
+    const open = { club: to, league, tier: 1, season: s.season, week: s.week, matchesLeft: 0, roll: 0, status: 'accepted' };
+    const j = M.cal.joinClubNow({ ...s, jobHunt: { open, cooldowns: [], sentSeason: s.season, sent: 1, summerMove: null } });
+    if (!j || j.clubName !== to) { s3.refused += 1; return; }
+    s3.joins += 1;
+    const departed = M.ledger.readWorldRoster(M.cm.refreshWorldRoster(s))?.records ?? [];
+    const joined = M.ledger.readWorldRoster(j)?.records ?? [];
+    const byKey = new Map(joined.map(r => [r.key, r]));
+    const runLines = (j.transferLog ?? []).filter(line => !line.loan);
+    const runNames = new Set(runLines.map(line => line.name));
+    for (const r of departed) {
+      s3.departed += 1;
+      const k = byKey.get(r.key);
+      if (!k) { fail(3, `${tag}: the departed ledger's ${r.player.name} (${r.owner ?? r.status}) is not in the joined ledger`); continue; }
+      if ((k.owner !== r.owner || k.status !== r.status) && !runNames.has(r.player.name)) fail(3, `${tag}: ${r.player.name} moved from ${r.owner ?? r.status} to ${k.owner ?? k.status} with no deal line of the run in`);
+    }
+    for (const r of joined) if (!departed.some(d => d.key === r.key) && !runNames.has(r.player.name)) fail(3, `${tag}: the joined ledger holds ${r.player.name}, in no deal line of the run in nor the departed ledger`);
+    for (const line of runLines.filter(aiLine(to))) {
+      const why = placement(M, j, line);
+      if (why) fail(3, `${tag}: in the run in ${line.to} signed ${line.name} from ${line.from}, but ${why}`);
+      else s3.runIn += 1;
+    }
+    for (const name of s.goneNames) { s3.gone += 1; if (!j.goneNames.includes(name)) fail(3, `${tag}: ${name}, gone this season before the move, is buyable again after it`); }
+  } finally { Math.random = keep; }
 }
 
 /* ---------- section 6, legacy ---------- */
@@ -708,14 +762,15 @@ const treeSource = lf(fs.readFileSync(path.join(ROOT, ENGINE), 'utf8'));
 if (SECTIONS.has(0)) {
   console.log('0) anchors: every edit this harness can make stands exactly once in the source it is made to');
   for (const [name, c] of Object.entries(CONTROLS)) for (const [from] of c.edits) {
-    const n = treeSource.split(from).length - 1;
+    const n = (c.file ? lf(fs.readFileSync(path.join(ROOT, c.file), 'utf8')) : treeSource).split(from).length - 1;
     console.log(`   control ${name}: ${n}`);
     if (n !== 1) fail(0, `the anchor of the control ${name} stands ${n} times in ${ENGINE}`);
   }
 }
 const headEdits = [CONTROL ? editOf(CONTROLS[CONTROL].edits, CONTROL) : null].filter(Boolean);
 const needBase = SECTIONS.has(6) || SECTIONS.has(12) || SECTIONS.has(9) && (process.env.CM_WORLD_MOVES_SHAPE_ARMS || 'base,head').split(',').includes('base');
-const H = await engine('head', { edit: headEdits.length ? text => headEdits.reduce((t, f) => f(t), text) : null });
+const H = await engine('head', { edit: headEdits.length ? text => headEdits.reduce((t, f) => f(t), text) : null,
+  editFile: CONTROL ? CONTROLS[CONTROL].file ?? ENGINE : ENGINE });
 const B = needBase ? await engine('base', { base: true }) : null;
 if (made.size) for (const [what, n] of made) console.log(`   control edit made ${n} time(s): ${what}`);
 
@@ -737,6 +792,14 @@ if (SECTIONS.has(2)) {
   for (const era of ERAS) for (const club of CLUBS[era]) for (const seed of seeds) await negotiationCareer(H, era, club, seed);
   console.log(`   hijack: ${s2.hijack.owned} of ${s2.hijack.set} at the rival; walk away: ${s2.walk.owned} of ${s2.walk.set}; ${s2.unset} careers where no bidding war could be set up on the vectors`);
   if (s2.hijack.set < 5 || s2.walk.set < 5) cannot(`section 2: only ${s2.hijack.set} hijacks and ${s2.walk.set} walk aways could be set up, under 5 each`);
+}
+if (SECTIONS.has(3)) {
+  const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [1, 2, 3]);
+  console.log(`3) join: seeded 2026-27 careers take a job mid season through joinClubNow, before and after January, seeds ${seeds.join(',')}`);
+  for (const club of CLUBS.now) for (const seed of seeds) for (const when of ['before', 'after']) await joinCareer(H, club, seed, when);
+  console.log(`   ${s3.joins} moves (${s3.refused} could not be set up), ${s3.departed} departed records kept, ${s3.runIn} deal lines of the run in placed, ${s3.gone} gone names carried over`);
+  if (s3.joins < 6) cannot(`section 3: only ${s3.joins} moves could be made, under 6`);
+  if (!s3.runIn) cannot('section 3: no deal line of a run in was seen, so the join measured nothing');
 }
 if (SECTIONS.has(6)) {
   console.log('6) legacy: unseeded careers, BASE against the head, every saved string and Math.random draw');

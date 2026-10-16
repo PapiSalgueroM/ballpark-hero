@@ -967,8 +967,16 @@ export function joinClubNow(career: CareerState): CareerState | null {
     startOptions: career.startOptions,
     h2h: career.h2h,
     retiredNames: career.retiredNames,
-    ...(departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),
+    /* Round 1344, the lead's ruling (brief decision 3): the run in started from the departed career's ledger and
+       wrote every deal it played (the new club's opening window and any January between other clubs, a sale through
+       a release clause), so the joined career takes the run in's ledger whole. A career with no seed writes none,
+       and keeps the departed one exactly as before. scripts/simCmWorldMoves.mjs section 3 holds it. */
+    ...(s.worldRoster !== undefined ? { worldRoster: plainCopy(s.worldRoster) }
+      : departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),
     ...(departed.worldSeed === undefined ? {} : { worldSeed: departed.worldSeed }),
+    /* And in a seeded career a man another club bought earlier this season stays off the market after the move:
+       the names of both seasons' windows, the departed one's first. */
+    ...(worldSeedOf(departed) === undefined ? {} : { goneNames: [...new Set([...career.goneNames, ...s.goneNames])] }),
     retiredLastSummer: career.retiredLastSummer,
     leagueOverrides: career.leagueOverrides,
     managers,
