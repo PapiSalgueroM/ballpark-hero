@@ -1,0 +1,39 @@
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   bridge "the window records nothing": 1
+   bridge "recordAiDeals records nothing": 1
+   bridge "the join keeps the departed ledger": 1
+   bridge "the join keeps the run in's gone names and log": 1
+   bridge "a rival closes whatever the ledger says": 1
+   control seedless: 1
+   control norecord: 1
+   control norecord: 1
+   control noflush: 1
+   control nojanuary: 1
+   control nosummer: 1
+   control joinledger: 1
+   control nolock: 1
+   control nolist: 1
+   control norepair: 1
+   control repairthrows: 1
+   control nohijack: 1
+   control nowalk: 1
+   control noguard: 1
+   control nocarry: 1
+   control seasonone: 1
+   control dropbase: 1
+   control noskip: 1
+   control drawshift: 1
+   control slow: 1
+   control edit made 1 time(s): joinledger: ...(s.worldRoster !== undefined ? { worldRoster: plainCopy(s
+3) join: seeded 2026-27 careers take a job mid season through joinClubNow, before and after January and in season two, seeds 1,2,3
+  FAIL section 3: Real Madrid (now, seed 1, before January): in the run in Liverpool signed Franco Mastantuono from Fiorentina, but the ledger holds no record of him at Liverpool
+  FAIL section 3: Real Madrid (now, seed 1, before January): in the run in Bayern Munich signed Alejandro Balde from Barcelona, but the ledger holds no record of him at Bayern Munich
+  FAIL section 3: Real Madrid (now, seed 1, before January): in the run in Fulham signed Rúben Dias from Manchester City, but the ledger holds no record of him at Fulham
+  FAIL section 3: Real Madrid (now, seed 1, before January): in the run in Bayern Munich signed Khvicha Kvaratskhelia from PSG, but the ledger holds no record of him at Bayern Munich
+  FAIL section 3: Real Madrid (now, seed 1, before January): in the run in Bournemouth signed Josko Gvardiol from Manchester City, but the ledger holds no record of him at Bournemouth
+  FAIL section 3: Real Madrid (now, seed 1, after January): in the run in Liverpool signed Alejandro Balde from Barcelona, but the ledger holds no record of him at Liverpool
+  FAIL section 3: Real Madrid (now, seed 1, after January): in the run in Manchester United signed Dean Huijsen from Real Madrid, but the ledger holds no record of him at Manchester United
+  FAIL section 3: Real Madrid (now, seed 1, after January): in the run in Chelsea signed Dayot Upamecano from Barcelona, but the ledger holds no record of him at Chelsea
+   27 moves (0 could not be set up), 273 departed records kept, 0 deal lines of the run in placed, 163 gone names carried over with 163 deal lines, 263 payloads compared, 320 door presses after the move (143 men the ledger no longer holds at one club, 0 behind a namesake, counted)
+  section 3: 146 more failures not shown
+simCmWorldMoves: control joinledger FIRED: section 3 red (154)
