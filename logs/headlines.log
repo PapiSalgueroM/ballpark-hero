@@ -1,0 +1,14 @@
+mut headlines: applied to src/lib/clubManager.ts
+ src/lib/clubManager.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+treeWithoutMerge: eb5c95e70d8ff7f9e810cf3c18319efbbd95c821, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+  ... and 29 more
+fresh: 15 saves, 1034 steps compared, 0 red, 19s
+  deals on the base engine: buy done 15, buy-2 done 15, loan-option done 15, release done 9, release refused 6, release-2 done 9, release-2 refused 6, sale done 15, sale-2 done 15, swap done 15
+simCmUnseededWorld: 49 FAILURE(S)
+  mid: 839 bytes of ledger after January (7 records)
+  mid: the adoption adds 59 bytes to the state (an empty ledger)
+section 2: 18 seeded careers, 108 saves, 876355 draws, 28 January windows and 48 deals of mine on the head, 0 red
+simCmOldCareersWorld: RED, 60 failure(s) (section 1 60, section 2 0) (48s)
+[2m      Tests [22m [1m[32m102 passed[39m[22m[90m (102)[39m
+MUT headlines: CAUGHT (unseeded=1 oldworld=1 vitest=0)

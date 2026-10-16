@@ -1,0 +1,5 @@
+#!serial
+rivalClose: bash .rc/x/mutrun.sh rivalClose
+freeAgent: bash .rc/x/mutrun.sh freeAgent
+joinCarry: bash .rc/x/mutrun.sh joinCarry
+headlines: bash .rc/x/mutrun.sh headlines

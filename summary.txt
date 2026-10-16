@@ -1,0 +1,4 @@
+rivalClose exit=0 202s | MUT rivalClose: SURVIVED, every harness green (unseeded=0 oldworld=0 vitest=0)
+freeAgent exit=0 198s | MUT freeAgent: SURVIVED, every harness green (unseeded=0 oldworld=0 vitest=0)
+joinCarry exit=0 198s | MUT joinCarry: SURVIVED, every harness green (unseeded=0 oldworld=0 vitest=0)
+headlines exit=1 197s | MUT headlines: CAUGHT (unseeded=1 oldworld=1 vitest=0)
