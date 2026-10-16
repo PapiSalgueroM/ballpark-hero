@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/test/clubManager src/test/manager src/lib/clubManager src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+noSack: node scripts/simCmNoSack.mjs
+slots: node scripts/simClubManagerSlots.mjs
+appeal1081: node scripts/simManagerAppealIsolation.mjs
+saveFence: node scripts/simSaveFence.mjs
+storageWrites: node scripts/simStorageWrites.mjs
+midSeason: node scripts/simMidSeasonStart.mjs
+leagueFixtures: node scripts/simCmLeagueFixtures.mjs
+meters: node scripts/simClubManagerMeters.mjs
+noRival: node scripts/simNoRivalNames.mjs

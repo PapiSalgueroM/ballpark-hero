@@ -1,0 +1,11 @@
+tsc exit=0 91s | 
+vitest-cm exit=0 127s |    Duration  126.35s (transform 5.53s, setup 3.10s, collect 25.51s, tests 206.90s, environment 20.64s, prepare 4.55s)
+noSack exit=0 130s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6)
+slots exit=0 59s | simClubManagerSlots: all sections green
+storageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+midSeason exit=0 3s | simMidSeasonStart: all green
+appeal1081 exit=0 32s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+leagueFixtures exit=0 8s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+saveFence exit=0 45s | simSaveFence: all green (tabs, source, fleet)
+noRival exit=0 11s | No rival product names found. 0 findings.
+meters exit=0 21s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
