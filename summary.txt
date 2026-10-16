@@ -1,0 +1,6 @@
+dailies-hscard exit=1 90s | control hscard FIRED: 2 of 3 checks red
+dailies exit=0 91s | simCmBoardVerdict GREEN: 3 of 3 checks green (parts dailies, 89 s)
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+hsunit exit=0 7s |    Duration  5.86s (transform 3.17s, setup 157ms, collect 6.15s, tests 2.94s, environment 937ms, prepare 411ms)
+tsc exit=0 104s | 
+simManagerHotSeat exit=0 58s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
