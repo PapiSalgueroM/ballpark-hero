@@ -1,3 +1,12 @@
+## 2026-10-16: Club Manager own transfer log candidate
+
+Codex branch `codex/manager-own-transfer-log`: the Latest transfer tab can filter saved purchases, sales and loans
+to the current club before its 50-row display limit. Saved counterparties and gross fees stay as recorded; the
+separate net season ledger, market, engine, data and save format are unchanged. The view explains that only recent
+recorded deals remain available. Remote baseline `3cd95071`, run `38878573962`, qualified with six intended display
+failures and four preservation passes. Fixed implementation is authored; fresh remote controls, related tests,
+build and all fifteen rebuilt-site readers remain pending. No merged or live claim.
+
 ## 2026-10-16 05:30 EDT: session I starts; player reports split between the lanes; the Lovable editor push reverted
 
 Claude lane (session I). Live: Release BG (main c9b80fce, deployment bc4815da). The Lovable editor's push of 08:36 to

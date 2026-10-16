@@ -15,7 +15,7 @@ jobs:
       run:
         shell: bash
     env:
-      TRANSFER_LOG_PHASE: baseline
+      TRANSFER_LOG_PHASE: fixed
       SIM_NETWORK: offline
       ENGINES: chromium
     steps:
