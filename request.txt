@@ -1,0 +1,18 @@
+saveSize-d: node scripts/simClubManagerSaveSize.mjs
+saveSize-1: SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+saveSize-2: SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+saveSize-3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+saveSize-4: SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+saveSize-5: SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+saveSize-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+slots-d: node scripts/simClubManagerSlots.mjs
+slots-1: SIM_SEED=1 node scripts/simClubManagerSlots.mjs
+slots-2: SIM_SEED=2 node scripts/simClubManagerSlots.mjs
+ledgerBound: node scripts/simCmLedgerBound.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simManagerCustomPromotion: node scripts/simManagerCustomPromotion.mjs
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs
+simReleaseClause: node scripts/simReleaseClause.mjs
+simContracts: node scripts/simContracts.mjs

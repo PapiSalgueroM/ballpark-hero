@@ -1,0 +1,18 @@
+saveSize-d exit=1 71s | simClubManagerSaveSize: 1 failure in section 6
+saveSize-1 exit=1 72s | simClubManagerSaveSize: 1 failure in section 6
+saveSize-2 exit=1 73s | simClubManagerSaveSize: 1 failure in section 6
+saveSize-3 exit=1 70s | simClubManagerSaveSize: 1 failure in section 6
+saveSize-5 exit=1 70s | simClubManagerSaveSize: 1 failure in section 6
+saveSize-4 exit=1 78s | simClubManagerSaveSize: 1 failure in section 6
+saveSize-uncapped exit=1 78s | simClubManagerSaveSize: SAVE_SIZE_CONTROL=uncapped turned sections 1, 6 red, but it should have hit only section 1
+slots-d exit=0 82s | simClubManagerSlots: all sections green
+slots-1 exit=0 80s | simClubManagerSlots: all sections green
+simManagerHotSeat exit=0 54s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simDeadlineDay exit=0 4s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simManagerCustomPromotion exit=0 5s | PASS all five actual save/load summers: identical outcomes and RNG draws; source bytes held
+slots-2 exit=0 84s | simClubManagerSlots: all sections green
+simMidSeasonStart exit=0 2s | simMidSeasonStart: all green
+simReleaseClause exit=0 2s | simReleaseClause: green. The exit door is real, priced, hunted, and honestly escapable only at full wage.
+simContracts exit=0 17s | ALL CONTRACT CHECKS PASSED
+ledgerBound exit=0 277s | simCmLedgerBound: green, all four sections held
