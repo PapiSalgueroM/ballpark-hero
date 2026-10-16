@@ -53,6 +53,32 @@ and retains both streams separately. App, tests and helper stayed held. The fail
 is retained separately as `phone-budget-baseline-method-failure`, with no whole-run pass.
 
 After baseline closure, the product adds exactly four optional-field assignments to
-`ensurePhone`. The twelve tests, helper and every old simulation stay frozen. Fixed checks
-are pending. Compare the resulting full-simulation printed sizes with the retained
-baseline and report any movement; an unchanged cap is not an unchanged measured size.
+`ensurePhone`. Removing exactly those four lines reconstructs the entire original phone
+Git blob `a9703d98bbc9c6b681d76095bd4ad8d816b897a6`. The twelve tests, helper and every old
+simulation stay frozen.
+
+Fixed qualification passed on tested `09604883d13b59bb718d0c6a5a8cb8cae85b6894`, run
+`38895730098`, job `116955617409`. Actual current twelve pass, complete original seven
+exact budget faults/five preserves, restored twelve pass, all with zero skipped or pending
+cases and 84 full observations per arm. Root independently compared every non-budget and
+non-direct-meter field and draw in the physical current/original data. Complete restored
+data equals current; complete original data also equals the qualified baseline. The
+three-reply fixture now ends at karma 54/morale 56 rather than 58/61, and the actual two-reply
+popularity fixture ends at 51 rather than 52. No reward or conversation changed.
+
+Actual types, the existing twelve focus cases, simPhone, production build:seo, all fifteen
+rebuilt-site readers and the unchanged full weight sweep passed. Soccer Career is 832.4K
+against 834K. All 3,713 source, 24,466 existing installed-file and 782 dist hold rows are OK;
+521 installed package manifests are held. Artifact `12043354639`, SHA256
+`15174485c46b20bf396063cc9db96e3784fdb5244667f877d6d948132fcba91e`, is retained and reopened
+under `C:/Users/antho/dukb-handoff/2026-10-16/phone-budget-fixed`.
+
+Full simPhone2 still fails solely its original 52KB whole-save ceiling: the printed maximum
+moved from 98.8KB to 98.9KB, and phone maximum from 7.9KB to 8.0KB; printed medians/means
+remain 72.3KB/7.3KB. Its measured peak-overall reply gap remains 1.50 (standard error 0.36).
+These rounded figures do not prove byte equality, and no ceiling was raised or waived.
+That sim is explicitly red, not a full-suite pass. Scope is actual API/serialization and
+existing simulation coverage, not a new browser interaction or packed-long-save proof.
+No natural frequency, live or publication claim. Claude I owns integration/publication.
+On an integrated rerun use the exact incoming pre-feature `PHONE_BUDGET_BASE` for engine,
+save and original phone bindings. Final qualification edits are documentation only.

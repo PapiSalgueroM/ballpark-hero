@@ -1,13 +1,20 @@
-## 2026-10-16: Round 1378 phone season allowance candidate, baseline qualified
+## 2026-10-16: Round 1378 phone season allowance qualified for integration
 
 Codex reserves the existing phone budget repair only, on `codex/career-phone-season-budget`
 from d4f2c6f6. `ensurePhone` drops four existing saved allowance fields before each reply.
-The baseline 0804cff9/run38895059368/job116953434091 qualified actual types, seven exact
-budget faults/five preserves, 84 raw observations, old focus12, simPhone green and source/
-installed bytes/521 manifests. simPhone2 retains only its known whole-save size red98.8KB.
-Artifact12043921328 SHA256055851dc0f95051930481014d329db09acd2b9104690d12bbe233d9582e06518
-is retained and reopened. The candidate now adds exactly four optional budget assignments;
-frozen current/original/restored and old simulation/build/reader/weight checks are pending.
+The baseline 0804cff9/run 38895059368/job 116953434091 qualified actual types, seven exact
+budget faults/five preserves, 84 raw observations, old focus 12, simPhone green and source/
+installed bytes/521 manifests. simPhone2 retains only its known whole-save size red, 98.8KB.
+Artifact 12043921328 SHA256 055851dc0f95051930481014d329db09acd2b9104690d12bbe233d9582e06518
+is retained and reopened. Tested 09604883d13b59bb718d0c6a5a8cb8cae85b6894 passed fixed
+run 38895730098/job 116955617409: twelve current passes, original seven precise faults/five
+preserves, twelve restored passes, 84 full observations per arm, all remaining state/RNG
+held. Exactly four optional budget assignments; whole original inverse and frozen methods
+held. Actual types/focus 12/simPhone/build/all 15 readers/full unchanged weight 832.4K of 834K
+passed, with 3713 source/24466 installed/782 dist holds and 521 package manifests. Retained
+artifact 12043354639 SHA256 15174485c46b20bf396063cc9db96e3784fdb5244667f877d6d948132fcba91e.
+The original simPhone2 size red remains, printed whole max 98.8 to 98.9KB/phone 7.9 to 8.0KB;
+no unchanged-size or full-suite claim. Final qualification edits are documentation only.
 No cap, reward, dialogue, perk, engine or RNG change. The old
 simPhone2 whole-save cap remains unwaived and any known size red is reported separately.
 No local runtime or live claim. Details: `docs/audits/career-phone-season-budget.md`.
