@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+intl exit=0 117s | Soccer international return native 854 checks,12 journeys,3 copied observation controls,0 failures.
+unit-base exit=1 6s | vitest on the base's copies exit 1 (1 wanted)
+unit-head exit=0 5s |       Tests  11 passed (11)

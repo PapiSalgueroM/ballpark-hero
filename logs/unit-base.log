@@ -1,0 +1,21 @@
+ × src/test/soccerScreenTruths.test.tsx > S1 the Ballon d'Or night holds Full attributes while it counts down > disables the button with the night line, and a press leaves the night up and the save unchanged 181ms
+ ✓ src/test/soccerScreenTruths.test.tsx > S1 the Ballon d'Or night holds Full attributes while it counts down > opens Full attributes once the night has been shown 118ms
+ ✓ src/test/soccerScreenTruths.test.tsx > S1 the Ballon d'Or night holds Full attributes while it counts down > keeps Full attributes open on the season summary with the night still to come 82ms
+ × src/test/soccerScreenTruths.test.tsx > S2 Week by week says it is a watch > labels the 📺 button as a watch, never live 72ms
+ × src/test/soccerScreenTruths.test.tsx > S2 Week by week says it is a watch > opens its help on what the sheet is, with no Spanish pool note and no "nothing here can change" 68ms
+ ✓ src/test/soccerScreenTruths.test.tsx > S2 Week by week says it is a watch > still names the Spanish club pool in a partial league world season's own note 68ms
+ × src/test/soccerScreenTruths.test.tsx > S3 the Squad sheet opens on the squad, the rules one tap away > lands on home with the pointer, writes the flag after mount only, and ? opens the help with the new first rule 16ms
+ × src/test/soccerScreenTruths.test.tsx > S3 the Squad sheet opens on the squad, the rules one tap away > shows the pointer on the first open only 7ms
+ × src/test/soccerScreenTruths.test.tsx > S3 the Squad sheet opens on the squad, the rules one tap away > shows the pointer and does not crash when storage throws 7ms
+ × src/test/soccerScreenTruths.test.tsx > S4 Training shows one rules paragraph on its menu, the rest behind its ? > holds only the bank rule with its example on the menu, and ? shows all three 9ms
+ ✓ src/test/soccerScreenTruths.test.tsx > S4 Training shows one rules paragraph on its menu, the rest behind its ? > keeps the ? during a drill as it was: three paragraphs, the drill paused (passes on the base too) 121ms
+ FAIL  src/test/soccerScreenTruths.test.tsx > S1 the Ballon d'Or night holds Full attributes while it counts down > disables the button with the night line, and a press leaves the night up and the save unchanged
+ FAIL  src/test/soccerScreenTruths.test.tsx > S2 Week by week says it is a watch > labels the 📺 button as a watch, never live
+ FAIL  src/test/soccerScreenTruths.test.tsx > S2 Week by week says it is a watch > opens its help on what the sheet is, with no Spanish pool note and no "nothing here can change"
+ FAIL  src/test/soccerScreenTruths.test.tsx > S3 the Squad sheet opens on the squad, the rules one tap away > lands on home with the pointer, writes the flag after mount only, and ? opens the help with the new first rule
+ FAIL  src/test/soccerScreenTruths.test.tsx > S3 the Squad sheet opens on the squad, the rules one tap away > shows the pointer on the first open only
+ FAIL  src/test/soccerScreenTruths.test.tsx > S3 the Squad sheet opens on the squad, the rules one tap away > shows the pointer and does not crash when storage throws
+ FAIL  src/test/soccerScreenTruths.test.tsx > S4 Training shows one rules paragraph on its menu, the rest behind its ? > holds only the bank rule with its example on the menu, and ? shows all three
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  7 failed | 4 passed (11)
+vitest on the base's copies exit 1 (1 wanted)

@@ -1,0 +1,16 @@
+simSoccerInternationalReturn exit 0
+PASS 320-selected 73 checks
+PASS 320-not-selected 67 checks
+PASS 320-ban 75 checks
+PASS 320-tournament 73 checks
+PASS 390-selected 68 checks
+PASS 390-not-selected 67 checks
+PASS 390-ban 75 checks
+PASS 390-tournament 73 checks
+PASS 1280-selected 68 checks
+PASS 1280-not-selected 67 checks
+PASS 1280-ban 75 checks
+PASS 1280-tournament 73 checks
+PASS 1280-ban 75 checks
+PASS 1280-tournament 73 checks
+Soccer international return native 854 checks,12 journeys,3 copied observation controls,0 failures.
