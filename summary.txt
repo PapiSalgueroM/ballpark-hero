@@ -1,0 +1,7 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+c993-head exit=0 26s | nba-1440-keyboard: full road, all phase reloads, earned draft handoff and first pro season passed
+c993-reverted exit=1 22s | AssertionError [ERR_ASSERTION]: All six native journeys must pass
+c993-reveal exit=0 4s | Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-reveal
+c993-choice exit=0 5s | Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-choice
+wsent-head exit=1 13s | simWritesAreSent: 2 failures
+f3-mut exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1346.test.tsx,title=src/test/usCareerReports1346.test.tsx > Round 1346%3A retire from c

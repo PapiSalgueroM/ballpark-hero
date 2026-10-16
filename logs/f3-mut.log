@@ -1,0 +1,114 @@
+ src/components/us-career/CoachCareerPanel.tsx | 26 ++++++++------------------
+ 1 file changed, 8 insertions(+), 18 deletions(-)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/usCareerReports1346.test.tsx [2m([22m[2m44 tests[22m[2m | [22m[31m4 failed[39m[2m | [22m[33m40 skipped[39m[2m)[22m[33m 408[2mms[22m[39m
+   [2m[90m↓[39m[22m Round 1346: retire from coaching on the real board[2m > [22mnfl: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired
+   [2m[90m↓[39m[22m Round 1346: retire from coaching on the real board[2m > [22mnba: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired
+   [2m[90m↓[39m[22m Round 1346: retire from coaching on the real board[2m > [22mmlb: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired
+   [2m[90m↓[39m[22m Round 1346: retire from coaching on the real board[2m > [22mnhl: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired
+   [2m[90m↓[39m[22m Round 1346: retire from coaching on the real board[2m > [22mnfl: a second click right after the retirement opens nothing on the done hub
+   [2m[90m↓[39m[22m Round 1346: retire from coaching on the real board[2m > [22mnba: a second click right after the retirement opens nothing on the done hub
+   [2m[90m↓[39m[22m Round 1346: retire from coaching on the real board[2m > [22mmlb: a second click right after the retirement opens nothing on the done hub
+   [2m[90m↓[39m[22m Round 1346: retire from coaching on the real board[2m > [22mnhl: a second click right after the retirement opens nothing on the done hub
+[31m   [31m×[31m Round 1346: retire from coaching on the real board[2m > [22mnfl: a career retired before a first season reads No seasons coached in the log, not a 0-0 record[39m[32m 176[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveTextContent()[22m
+
+Expected element to have text content:
+[32m  /Coaching LogNo seasons coached$/[31m
+Received:
+[31m  📜Coaching Log0 seasons · 0-0[31m[39m
+[31m   [31m×[31m Round 1346: retire from coaching on the real board[2m > [22mnba: a career retired before a first season reads No seasons coached in the log, not a 0-0 record[39m[32m 80[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveTextContent()[22m
+
+Expected element to have text content:
+[32m  /Coaching LogNo seasons coached$/[31m
+Received:
+[31m  📜Coaching Log0 seasons · 0-0[31m[39m
+[31m   [31m×[31m Round 1346: retire from coaching on the real board[2m > [22mmlb: a career retired before a first season reads No seasons coached in the log, not a 0-0 record[39m[32m 82[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveTextContent()[22m
+
+Expected element to have text content:
+[32m  /Coaching LogNo seasons coached$/[31m
+Received:
+[31m  📜Coaching Log0 seasons · 0-0[31m[39m
+[31m   [31m×[31m Round 1346: retire from coaching on the real board[2m > [22mnhl: a career retired before a first season reads No seasons coached in the log, not a 0-0 record[39m[32m 70[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveTextContent()[22m
+
+Expected element to have text content:
+[32m  /Coaching LogNo seasons coached$/[31m
+Received:
+[31m  📜Coaching Log0 seasons · 0-0[31m[39m
+   [2m[90m↓[39m[22m Round 1346: retire from coaching on the real board[2m > [22mnfl: an old coach save with no done mounts as an active career and is not rewritten
+   [2m[90m↓[39m[22m Round 1346: retire from coaching on the real board[2m > [22mnba: an old coach save with no done mounts as an active career and is not rewritten
+   [2m[90m↓[39m[22m Round 1346: retire from coaching on the real board[2m > [22mmlb: an old coach save with no done mounts as an active career and is not rewritten
+   [2m[90m↓[39m[22m Round 1346: retire from coaching on the real board[2m > [22mnhl: an old coach save with no done mounts as an active career and is not rewritten
+   [2m[90m↓[39m[22m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnfl: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day
+   [2m[90m↓[39m[22m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnba: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day
+   [2m[90m↓[39m[22m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mmlb: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day
+   [2m[90m↓[39m[22m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnhl: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day
+   [2m[90m↓[39m[22m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnfl: a graded showcase is never offered an undo
+   [2m[90m↓[39m[22m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnba: a graded showcase is never offered an undo
+   [2m[90m↓[39m[22m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mmlb: a graded showcase is never offered an undo
+   [2m[90m↓[39m[22m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnhl: a graded showcase is never offered an undo
+   [2m[90m↓[39m[22m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnfl: a second tap right after Undo skip is never taken as a graded showcase
+   [2m[90m↓[39m[22m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnba: a second tap right after Undo skip is never taken as a graded showcase
+   [2m[90m↓[39m[22m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mmlb: a second tap right after Undo skip is never taken as a graded showcase
+   [2m[90m↓[39m[22m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnhl: a second tap right after Undo skip is never taken as a graded showcase
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mnfl: Skip to the end, then Watch it again plays the night again and saves nothing
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mnba: Skip to the end, then Watch it again plays the night again and saves nothing
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mmlb: Skip to the end, then Watch it again plays the night again and saves nothing
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mnhl: Skip to the end, then Watch it again plays the night again and saves nothing
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mnfl: a second tap on the night's shared button does nothing for a second
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mnba: a second tap on the night's shared button does nothing for a second
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mmlb: a second tap on the night's shared button does nothing for a second
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mnhl: a second tap on the night's shared button does nothing for a second
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mnfl: Watch it again after a night that landed remounts the result and the stage
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mnba: Watch it again after a night that landed remounts the result and the stage
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mmlb: Watch it again after a night that landed remounts the result and the stage
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mnhl: Watch it again after a night that landed remounts the result and the stage
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mnfl: under reduced motion the night ends on its last frame with nothing to watch again
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mnba: under reduced motion the night ends on its last frame with nothing to watch again
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mmlb: under reduced motion the night ends on its last frame with nothing to watch again
+   [2m[90m↓[39m[22m Round 1346: draft night can be watched again[2m > [22mnhl: under reduced motion the night ends on its last frame with nothing to watch again
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: retire from coaching on the real board[2m > [22mnfl: a career retired before a first season reads No seasons coached in the log, not a 0-0 record
+[41m[1m FAIL [22m[49m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: retire from coaching on the real board[2m > [22mnba: a career retired before a first season reads No seasons coached in the log, not a 0-0 record
+[41m[1m FAIL [22m[49m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: retire from coaching on the real board[2m > [22mmlb: a career retired before a first season reads No seasons coached in the log, not a 0-0 record
+[41m[1m FAIL [22m[49m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: retire from coaching on the real board[2m > [22mnhl: a career retired before a first season reads No seasons coached in the log, not a 0-0 record
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveTextContent()[22m
+
+Expected element to have text content:
+[32m  /Coaching LogNo seasons coached$/[31m
+Received:
+[31m  📜Coaching Log0 seasons · 0-0[31m[39m
+[36m [2m❯[22m src/test/usCareerReports1346.test.tsx:[2m153:64[22m[39m
+    [90m151| [39m    fireEvent.click(within(dialog).getByRole('button', { name: 'Retire…
+    [90m152| [39m    expect(view.getByRole('heading', { name: 'Coaching career complete…
+    [90m153| [39m    expect(view.getByRole('button', { name: /Coaching Log/ })).toHaveT…
+    [90m   | [39m                                                               [31m^[39m
+    [90m154| [39m    clock[33m.[39m[34mpass[39m()[33m;[39m
+    [90m155| [39m    fireEvent.click(view.getByRole('button', { name: /Coaching Log/ })…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[33m40 skipped[39m[90m (44)[39m
+[2m   Start at [22m 20:54:17
+[2m   Duration [22m 2.82s[2m (transform 1.24s, setup 40ms, collect 1.83s, tests 408ms, environment 233ms, prepare 95ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1346.test.tsx,title=src/test/usCareerReports1346.test.tsx > Round 1346%3A retire from coaching on the real board > nfl%3A a career retired before a first season reads No seasons coached in the log%2C not a 0-0 record,line=153,column=64::Error: expect(element).toHaveTextContent()%0A%0AExpected element to have text content:%0A  /Coaching LogNo seasons coached$/%0AReceived:%0A  📜Coaching Log0 seasons · 0-0%0A ❯ src/test/usCareerReports1346.test.tsx:153:64%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1346.test.tsx,title=src/test/usCareerReports1346.test.tsx > Round 1346%3A retire from coaching on the real board > nba%3A a career retired before a first season reads No seasons coached in the log%2C not a 0-0 record,line=153,column=64::Error: expect(element).toHaveTextContent()%0A%0AExpected element to have text content:%0A  /Coaching LogNo seasons coached$/%0AReceived:%0A  📜Coaching Log0 seasons · 0-0%0A ❯ src/test/usCareerReports1346.test.tsx:153:64%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1346.test.tsx,title=src/test/usCareerReports1346.test.tsx > Round 1346%3A retire from coaching on the real board > mlb%3A a career retired before a first season reads No seasons coached in the log%2C not a 0-0 record,line=153,column=64::Error: expect(element).toHaveTextContent()%0A%0AExpected element to have text content:%0A  /Coaching LogNo seasons coached$/%0AReceived:%0A  📜Coaching Log0 seasons · 0-0%0A ❯ src/test/usCareerReports1346.test.tsx:153:64%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1346.test.tsx,title=src/test/usCareerReports1346.test.tsx > Round 1346%3A retire from coaching on the real board > nhl%3A a career retired before a first season reads No seasons coached in the log%2C not a 0-0 record,line=153,column=64::Error: expect(element).toHaveTextContent()%0A%0AExpected element to have text content:%0A  /Coaching LogNo seasons coached$/%0AReceived:%0A  📜Coaching Log0 seasons · 0-0%0A ❯ src/test/usCareerReports1346.test.tsx:153:64%0A%0A
