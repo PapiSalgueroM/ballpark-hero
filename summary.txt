@@ -1,0 +1,12 @@
+tsc exit=0 102s | 
+legacy0 exit=0 216s | simCmBoardVerdict GREEN: 2 of 2 checks green (parts legacy, 215 s)
+legacy1 exit=0 239s | simCmBoardVerdict GREEN: 2 of 2 checks green (parts legacy, 238 s)
+fleet0 exit=0 382s | simCmBoardVerdict GREEN: 14 of 14 checks green (parts grade, fate, stream, offers, 381 s)
+fleet1 exit=0 341s | simCmBoardVerdict GREEN: 14 of 14 checks green (parts grade, fate, stream, offers, 341 s)
+fleet2 exit=0 363s | simCmBoardVerdict GREEN: 14 of 14 checks green (parts grade, fate, stream, offers, 362 s)
+takeover0 exit=0 90s | simCmBoardVerdict GREEN: 5 of 5 checks green (parts takeover, 89 s)
+takeover1 exit=0 86s | simCmBoardVerdict GREEN: 5 of 5 checks green (parts takeover, 85 s)
+titlekitty0 exit=0 400s | simCmBoardVerdict GREEN: 7 of 7 checks green (parts title, kitty, 399 s)
+small exit=0 119s | simCmBoardVerdict GREEN: 22 of 22 checks green (parts pure, fresh, saves, dailies, 118 s)
+rulesforced exit=0 34s | simCmLeagueRules: all checks passed (modern, eras, pure)
+titlekitty1 exit=0 394s | simCmBoardVerdict GREEN: 7 of 7 checks green (parts title, kitty, 392 s)

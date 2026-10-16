@@ -1,0 +1,3 @@
+ok   [legacy] 72 takeovers on the old rules (startMidSeason at new year and the run in, joinClubNow): every byte equal to CM_BOARD_BASE
+ok   [legacy] 55 careers on the old rules (matchRules 'base' on both trees): every save byte and every draw equal to CM_BOARD_BASE
+simCmBoardVerdict GREEN: 2 of 2 checks green (parts legacy, 238 s)
