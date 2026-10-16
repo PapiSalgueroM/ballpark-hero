@@ -1,0 +1,9 @@
+mutation m6 applied to scripts/lib/vitePreloadWait.mjs
+build=0
+simPreloadWait=2
+   FAIL the tiny build did not print the plugin line, so the plugin did not run
+   FAIL the patched text does not hold the wait exactly once, or the stock text already holds it
+   FAIL patchPreloadHelper(stock) differs from what the plugin emitted
+   FAIL a build fed a mutated helper passed: the plugin does not fail closed
+strip-wait: anchor appears 0 times, refusing to run a dead control
+restored

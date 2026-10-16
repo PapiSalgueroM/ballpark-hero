@@ -1,0 +1,12 @@
+mutation m5 applied to src/lib/freshBuild.ts
+simStaleChunk=1
+   FAIL reloadAsked is set true 0 time(s) and written 1 time(s), expected one set and the declaration
+   FAIL reloadAsked is never set inside reloadOnceForStaleChunk, so a second failure in the page breaks it
+vitest=1
+[31m   [31m×[31m Round 1338: a page that asked for its reload waits with it[2m > [22m2. a second and a third error in the same page: cancelled, still one reload[39m[32m 10[2mms[22m[39m
+[31m   [31m×[31m Round 1132: the stale chunk listener and the optional chunk[2m > [22many other chunk still reloads once per tab, and a kit error after it changes nothing[39m[32m 12[2mms[22m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/freshBuildOptionalChunk.test.ts[2m > [22mRound 1132: the stale chunk listener and the optional chunk[2m > [22many other chunk still reloads once per tab, and a k
+[41m[1m FAIL [22m[49m src/test/freshBuildReloadWait.test.ts[2m > [22mRound 1338: a page that asked for its reload waits with it[2m > [22m2. a second and a third error in the same page: cancell
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m23 passed[39m[22m[90m (25)[39m
+restored

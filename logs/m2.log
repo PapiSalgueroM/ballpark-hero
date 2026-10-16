@@ -1,0 +1,6 @@
+mutation m2 applied to src/lib/freshBuild.ts
+simStaleChunk=1
+   FAIL reloadAsked is set before the once flag is written or before window.location.reload() returns, so a page whose reload never came would wait for ever
+vitest=0
+[2m      Tests [22m [1m[32m25 passed[39m[22m[90m (25)[39m
+restored

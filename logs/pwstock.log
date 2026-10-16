@@ -1,0 +1,24 @@
+1) Vite's real wrapper (vite 5.4.21), stock and patched
+   FAIL (a) the patched wrapper resolved to undefined on a cancelled failure; it must wait for the reload
+   FAIL (d) two cancelled failures in the patched wrapper: resolved, resolved, expected both pending
+   ok   (b) a failure nobody cancels: both reject with the same error object
+   ok   (c) a healthy import: both give the same module object
+2) the patch is exact, and the plugin fails the build closed
+   ok   the patch is the stock text plus the wait at one place, and refuses 0 or 2 copies of the branch (vite 5.4.21 named)
+   ok   a build fed a mutated helper fails with the plugin message
+   ok   a build whose emitted wrapper lost the wait fails at the bundle check
+   ok   a build with minify off passes the bundle check (the scripts/qa side builds)
+   ok   a build with no dynamic import passes and says it has no preload wrapper
+3) the built dist: the one wrapper waits after its rethrow
+   info 522 js files; the literal vite:preloadError is in index-D2mTH4BV.js
+   ok   index-D2mTH4BV.js: ...i.payload=a,window.dispatchEvent(i),!i.defaultPrevented)throw a;return new Promise(()=>{})
+4) head against the stock control: one chunk differs, by exactly the wait
+   skip PRELOAD_WAIT_STOCK_DIST is not set, so this section did not run
+5) the stock control against a build of the base: only the entry and the Soccer Career page chunk differ
+   skip PRELOAD_WAIT_BASE_DIST is not set, so this section did not run
+6) the vite.config.ts entry, and every runtime import( has a plain string specifier
+   ok   vite.config.ts imports preloadWait and lists preloadWait() ungated (6 entries in the array)
+   info 333 runtime import( calls in 38 files, 237 lazy( calls, across 1534 source files (tests left out)
+   ok   every runtime import( in src has a plain string specifier, so the build wraps every one
+
+simPreloadWait: control stock turned section(s) 1 red and nothing else. The check works.

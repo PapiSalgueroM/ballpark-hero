@@ -1,0 +1,28 @@
+#!build
+#!serial
+dists: node scripts/simPreloadWait.mjs --build-stock dist-stock 2>&1 | tail -2; git worktree add -f .base origin/main > /dev/null 2>&1; (cd .base && git log --oneline -1 && ../node_modules/.bin/vite build --outDir ../dist-base > /tmp/b1.log 2>&1); echo "base build=$?"; ls dist/assets | wc -l; ls dist-stock/assets | wc -l; ls dist-base/assets | wc -l
+pwhead: PRELOAD_WAIT_STOCK_DIST=dist-stock PRELOAD_WAIT_BASE_DIST=dist-base PRELOAD_WAIT_BASE_DIST2=dist-base node scripts/simPreloadWait.mjs
+pwstock: PRELOAD_WAIT_CONTROL=stock node scripts/simPreloadWait.mjs
+pwstockdist: PRELOAD_WAIT_CONTROL=stockdist PRELOAD_WAIT_STOCK_DIST=dist-stock node scripts/simPreloadWait.mjs
+pwextra: PRELOAD_WAIT_CONTROL=extra PRELOAD_WAIT_STOCK_DIST=dist-stock node scripts/simPreloadWait.mjs
+pwextrabase: PRELOAD_WAIT_CONTROL=extrabase PRELOAD_WAIT_STOCK_DIST=dist-stock PRELOAD_WAIT_BASE_DIST=dist-base PRELOAD_WAIT_BASE_DIST2=dist-base node scripts/simPreloadWait.mjs
+pwnoplugin: PRELOAD_WAIT_CONTROL=noplugin node scripts/simPreloadWait.mjs
+pwgated: PRELOAD_WAIT_CONTROL=gated node scripts/simPreloadWait.mjs
+pwdynamicspec: PRELOAD_WAIT_CONTROL=dynamicspec node scripts/simPreloadWait.mjs
+schead: node scripts/simStaleChunk.mjs
+scnolistener: SIM_STALE_CHUNK_CONTROL=nolistener node scripts/simStaleChunk.mjs
+scnoguard: SIM_STALE_CHUNK_CONTROL=noguard node scripts/simStaleChunk.mjs
+scnoprerender: SIM_STALE_CHUNK_CONTROL=noprerender node scripts/simStaleChunk.mjs
+scnooffline: SIM_STALE_CHUNK_CONTROL=nooffline node scripts/simStaleChunk.mjs
+scnosave: SIM_STALE_CHUNK_CONTROL=nosave node scripts/simStaleChunk.mjs
+scnorelease: SIM_STALE_CHUNK_CONTROL=norelease node scripts/simStaleChunk.mjs
+scbarenudge: SIM_STALE_CHUNK_CONTROL=barenudge node scripts/simStaleChunk.mjs
+scnowait: SIM_STALE_CHUNK_CONTROL=nowait node scripts/simStaleChunk.mjs
+scflagfirst: SIM_STALE_CHUNK_CONTROL=flagfirst node scripts/simStaleChunk.mjs
+sccatchreload: SIM_STALE_CHUNK_CONTROL=catchreload node scripts/simStaleChunk.mjs
+m1: node .rc/x/review-run-mut.mjs m1 || exit 9; node_modules/.bin/vite build --outDir /tmp/m1 > /tmp/m1b.log 2>&1; echo "build=$?"; grep -a "dukb\] preload" /tmp/m1b.log | cut -c1-260 | head -3; PRELOAD_WAIT_DIST=/tmp/m1 node scripts/simPreloadWait.mjs > /tmp/m1p.log 2>&1; echo "simPreloadWait=$?"; grep -a "FAIL" /tmp/m1p.log | cut -c1-220 | head -5; tail -1 /tmp/m1p.log; git checkout -- src scripts; echo restored
+m2: node .rc/x/review-run-mut.mjs m2 || exit 9; node scripts/simStaleChunk.mjs > /tmp/m2s.log 2>&1; echo "simStaleChunk=$?"; grep -a FAIL /tmp/m2s.log | cut -c1-220 | head -4; node_modules/.bin/vitest run src/test/freshBuildReloadWait.test.ts src/test/freshBuildOptionalChunk.test.ts src/test/freshBuildBlockedStorage.test.ts > /tmp/m2v.log 2>&1; echo "vitest=$?"; grep -a -E "Tests |FAIL|✗|×" /tmp/m2v.log | cut -c1-200 | head -6; git checkout -- src scripts; echo restored
+m3: node .rc/x/review-run-mut.mjs m3 || exit 9; node scripts/simStaleChunk.mjs > /tmp/m3s.log 2>&1; echo "simStaleChunk=$?"; grep -a FAIL /tmp/m3s.log | cut -c1-220 | head -4; node_modules/.bin/vitest run src/test/freshBuildReloadWait.test.ts src/test/freshBuildOptionalChunk.test.ts src/test/freshBuildBlockedStorage.test.ts > /tmp/m3v.log 2>&1; echo "vitest=$?"; grep -a -E "Tests |FAIL|✗|×" /tmp/m3v.log | cut -c1-200 | head -6; git checkout -- src scripts; echo restored
+m4: node .rc/x/review-run-mut.mjs m4 || exit 9; node scripts/simStaleChunk.mjs > /tmp/m4s.log 2>&1; echo "simStaleChunk=$?"; grep -a FAIL /tmp/m4s.log | cut -c1-220 | head -4; node_modules/.bin/vitest run src/test/freshBuildReloadWait.test.ts src/test/freshBuildOptionalChunk.test.ts src/test/freshBuildBlockedStorage.test.ts > /tmp/m4v.log 2>&1; echo "vitest=$?"; grep -a -E "Tests |FAIL|✗|×" /tmp/m4v.log | cut -c1-200 | head -6; git checkout -- src scripts; echo restored
+m5: node .rc/x/review-run-mut.mjs m5 || exit 9; node scripts/simStaleChunk.mjs > /tmp/m5s.log 2>&1; echo "simStaleChunk=$?"; grep -a FAIL /tmp/m5s.log | cut -c1-220 | head -4; node_modules/.bin/vitest run src/test/freshBuildReloadWait.test.ts src/test/freshBuildOptionalChunk.test.ts src/test/freshBuildBlockedStorage.test.ts > /tmp/m5v.log 2>&1; echo "vitest=$?"; grep -a -E "Tests |FAIL|✗|×" /tmp/m5v.log | cut -c1-200 | head -6; git checkout -- src scripts; echo restored
+m6: node .rc/x/review-run-mut.mjs m6 || exit 9; node_modules/.bin/vite build --outDir /tmp/m6 > /tmp/m6b.log 2>&1; echo "build=$?"; grep -a "dukb\] preload" /tmp/m6b.log | cut -c1-260 | head -3; PRELOAD_WAIT_DIST=/tmp/m6 node scripts/simPreloadWait.mjs > /tmp/m6p.log 2>&1; echo "simPreloadWait=$?"; grep -a "FAIL" /tmp/m6p.log | cut -c1-220 | head -5; tail -1 /tmp/m6p.log; git checkout -- src scripts; echo restored

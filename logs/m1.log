@@ -1,0 +1,9 @@
+mutation m1 applied to scripts/lib/vitePreloadWait.mjs
+build=1
+[31m[dukb-preload-wait] [plugin dukb-preload-wait] [dukb] preload wrapper: assets/index-q0Fv1sJv.js dispatch vite:preloadError without the wait (vite 5.4.21), so a cancelled chunk error would answer empty again. Read scripts/lib/vitePreloadWait.mjs.[31m
+simPreloadWait=1
+   FAIL the tiny build failed: [31m[dukb-preload-wait] [plugin dukb-preload-wait] [dukb] preload wrapper: assets/index-Dwz2yMHb.js dispatch vite:preloadError without the wait (vite 5.4.21), so a cancelled chunk error wo
+   FAIL (b) a failure nobody cancels: rejected, pending, expected both to reject with the same error
+   FAIL a build with minify off failed at the plugin: [31m[dukb-preload-wait] [plugin dukb-preload-wait] [dukb] preload wrapper: assets/index-OBt5WrQ0.js dispatch vite:preloadError without the wait (vite 5.4.21), so a c
+simPreloadWait: 3 failure(s) in section(s) 1, 2
+restored

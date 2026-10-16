@@ -1,0 +1,12 @@
+mutation m3 applied to src/lib/freshBuild.ts
+simStaleChunk=1
+   FAIL reloadAsked is declared false 0 time(s), expected once
+   FAIL reloadAsked is set true 2 time(s) and written 2 time(s), expected one set and the declaration
+vitest=1
+[31m   [31m×[31m Round 1132: the stale chunk listener and the optional chunk[2m > [22many other chunk still reloads once per tab, and a kit error after it changes nothing[39m[32m 10[2mms[22m
+[31m   [31m×[31m Round 1132: the stale chunk listener and the optional chunk[2m > [22ma kit error first does not use up the one reload a real stale chunk gets[39m[32m 4[2mms[22m[39m
+[31m   [31m×[31m Round 1338: a page that asked for its reload waits with it[2m > [22m1. the first chunk error in a page: cancelled, one reload, the once flag set[39m[32m 14[2mms[22m[39m
+[31m   [31m×[31m Round 1338: a page that asked for its reload waits with it[2m > [22m2. a second and a third error in the same page: cancelled, still one reload[39m[32m 4[2mms[22m[39m
+[31m   [31m×[31m Round 1338: a page that asked for its reload waits with it[2m > [22m3. the sound kit after it: still never cancelled (Round 1132)[39m[32m 3[2mms[22m[39m
+[31m   [31m×[31m Round 1338: a page that asked for its reload waits with it[2m > [22m4. the next page, its one reload spent: nothing cancelled, no reload, twice[39m[32m 6[2mms[22m[39m
+restored
