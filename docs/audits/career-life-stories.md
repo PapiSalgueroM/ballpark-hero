@@ -86,8 +86,11 @@ Only fixed phase installs pinned Playwright 1.64.0 in a temporary prefix, Chromi
 fonttools/pillow, then retains declared font dependencies. It runs offline `build:seo`, retains
 generated diffs and the exact dist inventory, and requires the separately authored
 `scripts/playPhonePanelLifeStories.mjs` on the served build. Root owns that browser leaf:
-actual phone Life at 320x568, 390x844 and 1280x800, internal fit, parent scroll, Back and close
-focus, literal saved continuation and captures. The original full `SWEEP_OFFLINE=1`
+actual phone Life at 320x568, 390x844, 430x932, 1280x800 and 1440x900: fifteen saved-state
+cases, internal fit, parent scroll, Back and close focus, literal saved continuation and
+captures. Two changed DOM controls check visibility and sideways overflow; the original
+component remains the separate unit causal control. External fonts are blocked, so captures
+qualify the declared fallback-font presentation. The original full `SWEEP_OFFLINE=1`
 `sweepWeight.mjs` runs against the same build with every existing budget unchanged. No scoped
 weight claim is made. Browser and pixel acceptance are not credited by this baseline.
 
