@@ -1,0 +1,55 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usCoachRetirement.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 2411[2mms[22m[39m
+   [33m[2m✓[22m[39m US coaching retirement[2m > [22mretirement requires confirmation and accepts once after cancel and escape [33m 1444[2mms[22m[39m
+   [33m[2m✓[22m[39m US coaching retirement[2m > [22mcompleted employed coach keeps the record and log without season actions [33m 438[2mms[22m[39m
+   [33m[2m✓[22m[39m US coaching retirement[2m > [22mcompleted unemployed coach cannot take offers or advance the calendar [33m 410[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1654[2mms[22m[39m
+   [33m[2m✓[22m[39m draft day on the four US career hubs[2m > [22mNFL mounts the draft day card with the engine pick and the confetti rule [33m 736[2mms[22m[39m
+   [33m[2m✓[22m[39m draft day on the four US career hubs[2m > [22mNBA mounts the draft day card with the engine pick and the confetti rule [33m 351[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 4643[2mms[22m[39m
+   [33m[2m✓[22m[39m US programme choices and restoration[2m > [22mshows the actual rules and worked example before the choice tiles [33m 810[2mms[22m[39m
+   [33m[2m✓[22m[39m US programme choices and restoration[2m > [22mshows the distinct tactical tradeoff on each actual option for 'mlb' 'CF' [33m 349[2mms[22m[39m
+   [33m[2m✓[22m[39m US programme choices and restoration[2m > [22mkeeps a selected choice and restores detail scroll and Help focus [33m 342[2mms[22m[39m
+   [33m[2m✓[22m[39m US programme choices and restoration[2m > [22mclears optional selections without changing base career fields [33m 355[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReports1346.test.tsx [2m([22m[2m44 tests[22m[2m)[22m[33m 23273[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnfl: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired [33m 2649[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnba: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired [33m 2008[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mmlb: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired [33m 1590[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnhl: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired [33m 1310[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnfl: a second click right after the retirement opens nothing on the done hub [33m 709[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnba: a second click right after the retirement opens nothing on the done hub [33m 675[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mmlb: a second click right after the retirement opens nothing on the done hub [33m 616[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnhl: a second click right after the retirement opens nothing on the done hub [33m 622[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnfl: a career retired before a first season reads No seasons coached in the log, not a 0-0 record [33m 355[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnba: a career retired before a first season reads No seasons coached in the log, not a 0-0 record [33m 384[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mmlb: a career retired before a first season reads No seasons coached in the log, not a 0-0 record [33m 330[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnhl: a career retired before a first season reads No seasons coached in the log, not a 0-0 record [33m 500[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnba: an old coach save with no done mounts as an active career and is not rewritten [33m 308[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnfl: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day [33m 628[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnba: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day [33m 526[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mmlb: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day [33m 723[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnhl: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day [33m 696[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnfl: a graded showcase is never offered an undo [33m 406[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnba: a graded showcase is never offered an undo [33m 458[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mmlb: a graded showcase is never offered an undo [33m 371[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnhl: a graded showcase is never offered an undo [33m 395[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnfl: a second tap right after Undo skip is never taken as a graded showcase [33m 670[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnba: a second tap right after Undo skip is never taken as a graded showcase [33m 638[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mmlb: a second tap right after Undo skip is never taken as a graded showcase [33m 607[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnhl: a second tap right after Undo skip is never taken as a graded showcase [33m 514[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: draft night can be watched again[2m > [22mnfl: Skip to the end, then Watch it again plays the night again and saves nothing [33m 323[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: draft night can be watched again[2m > [22mnba: Skip to the end, then Watch it again plays the night again and saves nothing [33m 465[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: draft night can be watched again[2m > [22mmlb: Skip to the end, then Watch it again plays the night again and saves nothing [33m 450[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: draft night can be watched again[2m > [22mnba: a second tap on the night's shared button does nothing for a second [33m 343[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: draft night can be watched again[2m > [22mnhl: a second tap on the night's shared button does nothing for a second [33m 326[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m85 passed[39m[22m[90m (85)[39m
+[2m   Start at [22m 19:50:27
+[2m   Duration [22m 36.64s[2m (transform 9.92s, setup 1.14s, collect 27.21s, tests 31.98s, environment 6.38s, prepare 1.59s)[22m
+

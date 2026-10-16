@@ -1,0 +1,5 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 38s |    Duration  36.64s (transform 9.92s, setup 1.14s, collect 27.21s, tests 31.98s, environment 6.38s, prepare 1.59s)
+tsc exit=0 162s | 
+parity exit=0 125s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+mine exit=0 175s | All 7 harnesses green.
