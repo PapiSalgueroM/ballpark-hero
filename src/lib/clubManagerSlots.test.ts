@@ -193,3 +193,15 @@ describe('Round 1323: the swap and the delete go through the save fence', () => 
     expect(gen()).toBe(g0 + 2);
   });
 });
+
+describe('Round 1343: a retired career on its tile', () => {
+  it('says retired only when the save holds a retirement, and a damaged save is still unreadable', () => {
+    const good = startCareer('Everton');
+    expect(summarize(JSON.stringify(good))).not.toHaveProperty('retired');
+    const retired = { ...good, retired: { season: 1, worldSeason: '2026-27', when: 'midSeason', club: 'Everton', week: 0, position: 1, played: 0, points: 0 } };
+    expect(summarize(JSON.stringify(retired))?.retired).toBe(true);
+    expect(summarize(JSON.stringify({ ...good, retired: true }))).not.toHaveProperty('retired');
+    expect(summarize(JSON.stringify({ ...retired, saveVersion: 2 }))).toBeNull();
+    expect(summarize('{not json')).toBeNull();
+  });
+});

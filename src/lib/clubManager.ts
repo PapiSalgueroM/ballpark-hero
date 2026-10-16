@@ -2954,6 +2954,9 @@ export interface CareerState {
    *  that moves the dailies joins this same field (a dated value naming the newest rule a run plays)
    *  rather than adding a second one. Round 1343 joined it: 'base' also keeps no highest scoring game. */
   matchRules?: 'base';
+  /** Round 1343: set once, by retireCareer (clubManagerRetire.ts), when the manager retires. A retired career
+   *  keeps its slot as a finished career and opens on its farewell. Absent on every other save. */
+  retired?: import('@/lib/clubManagerRetire').Retirement;
 }
 
 /* ---------- Round 505: the armband and the set piece takers ---------- */
@@ -19204,7 +19207,7 @@ export function matchFacts(career: CareerState): MatchFacts | null {
 /* Round 633: the league title trophy's name, shared by the rollover that
    pushes it and the season score that reads it, rather than two literals that
    can drift apart. */
-const LEAGUE_TITLE_NAME = 'League Title';
+export const LEAGUE_TITLE_NAME = 'League Title';
 
 /**
  * Round 633: a record shape guard for the stamped handover, on the

@@ -11,7 +11,11 @@
               with a prev of fewer goals: the level score with res W or L, onPenalties true, goals equal to the
               report's goals with no kick. Exit 2 only when the fleet held no shootout at all.
      base     a career with matchRules 'base' plays a season and never writes the field.
-     fleet    (needs RETIRE_BASE) Everton 2005-06, Barcelona 2015-16, Liverpool now, seeds 0 to 4, three
+     retire   retireCareer at the three moments (the season's end, the middle of one, out of work) on real careers,
+              against a deep copy taken before: only `retired` (and the record when absent) differ, the input never
+              moves, zero draws; null with a match in progress and when already retired; careerLegacy's clubs cover
+              every name in clubsManaged, its cabinet sums to the trophies, its record equals the save's.
+     fleet   (needs RETIRE_BASE) Everton 2005-06, Barcelona 2015-16, Liverpool now, seeds 0 to 4, three
               seasons, quick sims with the coach and with noCoach: every save byte equal to RETIRE_BASE's once
               careerStats.highestScoring is taken off, and every draw. A 'base' career: equal, nothing taken off.
      hotseat  (needs RETIRE_BASE) 30 Hot Seat dates before HOT_SEAT_RULES_FROM and 10 from it on, played by a
@@ -28,6 +32,8 @@
      skipgame    the update ignores the match just played: record red
      nomissed    missed is never stored: oldsave red
      basewrites  the 'base' gate off: base red (and hotseat red before the cutover)
+     liveok      canRetire forgets the match in progress: retire red
+     drawone     a Math.random call inside retireCareer: retire red on the draw count
      stripnone   the fleet compares with the new key left on: fleet red (proves the key is written)
      drawleak    an extra Math.random in the update: fleet red on the draw count
 
@@ -46,6 +52,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENGINE = 'src/lib/clubManager.ts';
 const RECORDS = 'src/lib/clubManagerRecords.ts';
+const RETIRE = 'src/lib/clubManagerRetire.ts';
 const RETIRE_BASE = process.env.RETIRE_BASE ?? '';
 const CONTROL = process.env.RETIRE_CONTROL ?? '';
 const SEEDS = Number(process.env.RETIRE_SEEDS ?? 5);
@@ -54,7 +61,7 @@ const ALL_CLUBS = { everton: ['Everton', 'era2005'], barcelona: ['Barcelona', 'e
 const CLUBS = (process.env.RETIRE_CLUBS ? process.env.RETIRE_CLUBS.split(',') : Object.keys(ALL_CLUBS)).map(k => ALL_CLUBS[k]);
 const partArg = process.argv.find(a => a.startsWith('--part='));
 const BASE_PARTS = ['fleet', 'hotseat', 'loads'];
-const OWN_PARTS = ['record', 'oldsave', 'pens', 'base'];
+const OWN_PARTS = ['record', 'oldsave', 'pens', 'base', 'retire'];
 const ALL_PARTS = [...OWN_PARTS, ...(RETIRE_BASE ? BASE_PARTS : [])];
 
 const CONTROLS = {
@@ -63,6 +70,8 @@ const CONTROLS = {
   nomissed: { part: 'oldsave', file: RECORDS, from: '  return missed > 0 ? { ...rest, missed } : rest;', to: '  return rest;' },
   basewrites: { part: 'base', file: ENGINE, from: "  if (state.matchRules !== 'base') {", to: '  if (true) {' },
   stripnone: { part: 'fleet' },
+  liveok: { part: 'retire', file: RETIRE, from: '  return !!c && !c.retired && !c.live;', to: '  return !!c && !c.retired;' },
+  drawone: { part: 'retire', file: RETIRE, from: '  const next = JSON.parse(JSON.stringify(c)) as CareerState;', to: '  const next = JSON.parse(JSON.stringify(c)) as CareerState; Math.random();' },
   drawleak: { part: 'fleet', file: RECORDS, from: '  const stats = state.careerStats;', to: '  const stats = state.careerStats; Math.random();' },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.log(`unknown control ${CONTROL}`); process.exit(2); }
@@ -102,7 +111,7 @@ const HS = new WeakMap();
 const OUT = new WeakMap();
 /** The engine bundled with Manager Hot Seat and the record module beside it. `srcRoot` is the src tree
  *  everything else comes from (RETIRE_BASE's for the base arm); `recordsText` a patched record module. */
-async function bundleEngine(text, name, folder, { srcRoot = path.join(root, 'src'), recordsText = null } = {}) {
+async function bundleEngine(text, name, folder, { srcRoot = path.join(root, 'src'), recordsText = null, retireText = null } = {}) {
   const target = path.join(folder, `${name}.ts`);
   const output = path.join(folder, `${name}.cjs`);
   const entry = path.join(folder, `${name}-entry.ts`);
@@ -113,17 +122,24 @@ async function bundleEngine(text, name, folder, { srcRoot = path.join(root, 'src
     await writeFile(recFile, recordsText);
     alias['@/lib/clubManagerRecords'] = recFile;
   }
+  if (retireText !== null) {
+    const retFile = path.join(folder, name + '-retire.ts');
+    await writeFile(retFile, retireText);
+    alias['@/lib/clubManagerRetire'] = retFile;
+  }
   const hasRecords = srcRoot === path.join(root, 'src');
   await writeFile(entry, "export * as cm from '@/lib/clubManager';\nexport * as hs from '@/lib/managerHotSeat';\n"
-    + (hasRecords ? "export * as rec from '@/lib/clubManagerRecords';\n" : ''));
+    + (hasRecords ? "export * as rec from '@/lib/clubManagerRecords';\nexport * as ret from '@/lib/clubManagerRetire';\n" : ''));
   await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias, nodePaths: [path.join(root, 'node_modules')] });
   const mod = require(output);
   HS.set(mod.cm, mod.hs);
   OUT.set(mod.cm, output);
   if (mod.rec) REC.set(mod.cm, mod.rec);
+  if (mod.ret) RET.set(mod.cm, mod.ret);
   await mod.cm.ensureAllEraRosters();
   return mod.cm;
 }
+const RET = new WeakMap();
 const REC = new WeakMap();
 /** A fresh copy of an engine bundle, the way a page load gets one: module level counters start again. */
 async function freshEngine(cm) {
@@ -133,6 +149,7 @@ async function freshEngine(cm) {
   HS.set(mod.cm, mod.hs);
   OUT.set(mod.cm, output);
   if (mod.rec) REC.set(mod.cm, mod.rec);
+  if (mod.ret) RET.set(mod.cm, mod.ret);
   await mod.cm.ensureAllEraRosters();
   return mod.cm;
 }
@@ -298,6 +315,56 @@ async function baseSection(cm) {
   check(P, 'a career on the base rules plays a season and never writes the record', matches > 20 && wrote === 0 && !('highestScoring' in run.state.careerStats), `${wrote} of ${matches} matches wrote it`);
 }
 
+/* ---------------- section retire ---------------- */
+async function retireSection(cm) {
+  const P = 'retire';
+  const ret = RET.get(cm);
+  /* Real careers at their three moments: a season played and finished (the summary pending), the next season 20
+     entries in, and the same out of work. */
+  const careers = [];
+  for (const [club, era] of CLUBS) {
+    for (let seed = 0; seed < 2; seed++) {
+      const played = playCareer(cm, { club, era, seed, seasons: 2 }).state;
+      const ended = withSeed(seed + 40, () => cm.finishSeason(played).state);
+      let mid = withSeed(seed + 41, () => cm.startNextSeason(clone(ended)));
+      for (let i = 0; i < 20; i++) mid = withSeed(seed * 100 + i + 42, () => cm.playNextEntry(mid, QUICK.coach)).state;
+      careers.push([`${club} seed ${seed} season end`, ended, 'seasonEnd'], [`${club} seed ${seed} mid season`, mid, 'midSeason'],
+        [`${club} seed ${seed} out of work`, { ...clone(mid), sacked: true }, 'outOfWork']);
+    }
+  }
+  let bad = 0, first = '', draws = 0, refused = 0, legacyBad = 0, legacyFirst = '', trophies = 0;
+  const moments = new Set();
+  for (const [label, c, planned] of careers) {
+    /* A career the board sacked on the way is out of work whatever moment it was meant to be. */
+    const when = c.sacked ? 'outOfWork' : planned;
+    moments.add(when);
+    const before = JSON.stringify(c);
+    DRAWS.n = 0;
+    const r = withSeed(1, () => ret.retireCareer(c));
+    draws += DRAWS.n;
+    const rest = r ? clone(r) : null;
+    if (rest) { delete rest.retired; if (!('highestScoring' in c.careerStats)) delete rest.careerStats.highestScoring; }
+    const ok = !!r && JSON.stringify(c) === before && JSON.stringify(rest) === before && r.retired?.when === when
+      && r.retired.club === c.clubName && r.retired.season === c.season;
+    if (!ok) { bad += 1; first ||= `${label}: ${r ? `retired ${JSON.stringify(r.retired)}` : 'refused'}`; }
+    if (!r) continue;
+    if (ret.retireCareer({ ...clone(c), live: {} }) === null && ret.retireCareer(r) === null) refused += 1;
+    const l = ret.careerLegacy(r);
+    const names = new Set(l.clubs.map(x => x.club));
+    const cabinet = l.cabinet.reduce((n, t) => n + t.seasons.length, 0);
+    trophies += r.trophies.length;
+    const legacyOk = (r.careerStats.clubsManaged ?? [r.clubName]).every(n => names.has(n)) && cabinet === r.trophies.length
+      && l.played === r.careerStats.played && l.wins === r.careerStats.wins && l.draws === r.careerStats.draws && l.losses === r.careerStats.losses
+      && l.finishedSeasons === r.history.length;
+    if (!legacyOk) { legacyBad += 1; legacyFirst ||= label; }
+  }
+  console.log(`   ${careers.length} careers at three moments, ${trophies} trophies between them`);
+  check(P, 'retiring changes only `retired` (and writes the record down when absent), never its input, at the right moment', bad === 0 && moments.size === 3, bad ? `${bad} wrong; first ${first}` : `moments ${[...moments].join(', ')}`);
+  check(P, 'retiring draws nothing', draws === 0, `${draws} draws`);
+  check(P, 'a match in progress and a retired career are refused', refused === careers.length, `${refused} of ${careers.length}`);
+  check(P, 'the farewell\'s clubs, cabinet and record are the save\'s', legacyBad === 0 && trophies > 0, legacyBad ? `${legacyBad} wrong; first ${legacyFirst}` : `${trophies} trophies`);
+}
+
 /* ---------------- section fleet (RETIRE_BASE) ---------------- */
 async function fleetSection(cm, ctx) {
   const P = 'fleet';
@@ -414,23 +481,30 @@ async function loadsSection(cm, ctx) {
 }
 
 /* ---------------- main ---------------- */
-const SECTIONS = { record: recordSection, oldsave: oldsaveSection, pens: pensSection, base: baseSection, fleet: fleetSection, hotseat: hotseatSection, loads: loadsSection };
+const SECTIONS = { record: recordSection, oldsave: oldsaveSection, pens: pensSection, base: baseSection, retire: retireSection, fleet: fleetSection, hotseat: hotseatSection, loads: loadsSection };
 async function main() {
   const folder = await mkdtemp(path.join(os.tmpdir(), 'simCmRetire-'));
   const lf = s => s.replace(/\r\n/g, '\n');
   let text = lf(await readFile(path.join(root, ENGINE), 'utf8'));
   const recordsSource = lf(await readFile(path.join(root, RECORDS), 'utf8'));
   let recordsText = recordsSource;
+  const retireSource = lf(await readFile(path.join(root, RETIRE), 'utf8'));
+  let retireText = retireSource;
   const spec = CONTROLS[CONTROL];
   if (spec?.from !== undefined) {
-    const inRec = spec.file === RECORDS;
-    const n = (inRec ? recordsText : text).split(spec.from).length - 1;
+    const which = spec.file === RECORDS ? recordsText : spec.file === RETIRE ? retireText : text;
+    const n = which.split(spec.from).length - 1;
     if (n !== 1) { console.log(`control ${CONTROL}: its anchor is in ${spec.file} ${n} times, not once; could not run`); process.exit(2); }
-    if (inRec) recordsText = recordsText.replace(spec.from, spec.to); else text = text.replace(spec.from, spec.to);
+    if (spec.file === RECORDS) recordsText = recordsText.replace(spec.from, spec.to);
+    else if (spec.file === RETIRE) retireText = retireText.replace(spec.from, spec.to);
+    else text = text.replace(spec.from, spec.to);
     console.log(`NEGATIVE CONTROL ON: RETIRE_CONTROL=${CONTROL}, ${spec.file} is a rewritten copy`);
   } else if (CONTROL) console.log(`NEGATIVE CONTROL ON: RETIRE_CONTROL=${CONTROL}`);
   globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {}, clear: () => {} };
-  const cm = await bundleEngine(text, CONTROL || 'head', folder, { recordsText: recordsText === recordsSource ? null : recordsText });
+  const cm = await bundleEngine(text, CONTROL || 'head', folder, {
+    recordsText: recordsText === recordsSource ? null : recordsText,
+    retireText: retireText === retireSource ? null : retireText,
+  });
   const ctx = { folder, base: null, pens: null };
   const needsBase = PARTS.some(p => BASE_PARTS.includes(p));
   if (needsBase && !RETIRE_BASE) { console.log(`sections ${PARTS.filter(p => BASE_PARTS.includes(p)).join(', ')} need RETIRE_BASE, a checkout of the branch point; could not run`); process.exit(2); }
