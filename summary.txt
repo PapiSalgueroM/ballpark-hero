@@ -1,0 +1,2 @@
+mutb-sackedfirst exit=0 106s | MUTB sackedfirst playCmRetire=0
+mutb-summaryfirst exit=0 104s | MUTB summaryfirst playCmRetire=1
