@@ -1,0 +1,11 @@
+#!serial
+unseeded: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) node scripts/simCmUnseededWorld.mjs
+u-early: CM_UNSEEDED_CONTROL=early CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) node scripts/simCmUnseededWorld.mjs
+u-never: CM_UNSEEDED_CONTROL=never CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) node scripts/simCmUnseededWorld.mjs
+u-guard: CM_UNSEEDED_CONTROL=guard CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) node scripts/simCmUnseededWorld.mjs
+u-noinverse: CM_UNSEEDED_CONTROL=noinverse CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) node scripts/simCmUnseededWorld.mjs
+oldworld: node scripts/simCmOldCareersWorld.mjs
+ow-never: CM_OLD_WORLD_CONTROL=never node scripts/simCmOldCareersWorld.mjs
+ow-early: CM_OLD_WORLD_CONTROL=early node scripts/simCmOldCareersWorld.mjs
+ow-bridge: CM_OLD_WORLD_CONTROL=bridge node scripts/simCmOldCareersWorld.mjs
+bridges: node scripts/lib/cmNoAdoption1508.mjs --check && node scripts/lib/cmWorldSeed1250.mjs --check && node scripts/lib/cmNoAiMoves1344.mjs --check
