@@ -1,0 +1,75 @@
+name: Manager press cohort measurement
+
+on:
+  push:
+    branches: [codex/manager-press-cohort-proof]
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      PRESS_COHORT_SOURCE: e2063dbea06e037fa2e14f8434101ffd7817f728
+      PRESS_COHORT_BASE: 1027b08c
+      CM_PRESS_COHORT_OUT: ${{ github.workspace }}/press-cohort-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind unchanged application and original harness
+        run: |
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          mkdir -p "$CM_PRESS_COHORT_OUT"
+          git rev-parse HEAD > "$CM_PRESS_COHORT_OUT/head.txt"
+          git archive --format=zip HEAD > "$CM_PRESS_COHORT_OUT/source.zip"
+          git diff --exit-code "$PRESS_COHORT_SOURCE" -- src scripts package.json package-lock.json bun.lock ':!scripts/qa/measureManagerPressCohort.mjs'
+          find src scripts .github/workflows -type f -print0 | sort -z | xargs -0 sha256sum > "$CM_PRESS_COHORT_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$CM_PRESS_COHORT_OUT/package-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, row]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, row.version, p); return { path: p, version };
+          });
+          assert.equal(installed.length, 521);
+          fs.writeFileSync(process.env.CM_PRESS_COHORT_OUT + '/installed.json', JSON.stringify(installed, null, 2));
+          NODE
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$CM_PRESS_COHORT_OUT/installed-files.sha256"
+      - name: Actual types and measurement syntax
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CM_PRESS_COHORT_OUT/types.log"
+          node --check scripts/qa/measureManagerPressCohort.mjs
+      - name: Declared current base and bridge careers
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/measureManagerPressCohort.mjs 2>&1 | tee "$CM_PRESS_COHORT_OUT/measurement.log"
+      - name: Exact source and dependency holds
+        if: always()
+        run: |
+          sha256sum --check "$CM_PRESS_COHORT_OUT/source-hashes.txt" > "$CM_PRESS_COHORT_OUT/source-holds.log"
+          sha256sum --check "$CM_PRESS_COHORT_OUT/package-hashes.txt" > "$CM_PRESS_COHORT_OUT/package-holds.log"
+          sha256sum --check "$CM_PRESS_COHORT_OUT/installed-files.sha256" > "$CM_PRESS_COHORT_OUT/installed-holds.log"
+          git diff --exit-code -- src scripts package.json package-lock.json bun.lock .github/workflows
+      - name: Retain complete diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-press-cohort-${{ github.run_id }}
+          path: press-cohort-artifacts/
+          retention-days: 14
+          if-no-files-found: error
