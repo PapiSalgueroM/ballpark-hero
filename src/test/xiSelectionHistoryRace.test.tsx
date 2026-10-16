@@ -71,7 +71,9 @@ async function release(request: Pending, body: unknown, done: Promise<void>) {
   await act(async () => { request.release(body); await done; });
 }
 const validHistory = [{ primary_position: 'Centre-Back', secondary_positions: ['ST'] }];
-beforeEach(() => {
+beforeEach(async () => {
+  // Warm React's async-act scheduler before measuring actual hook draws.
+  await act(async () => {});
   fixture.nation = false; draws = []; trace = []; pending = []; active = [];
   localStorage.clear(); sessionStorage.clear(); localStorage.setItem('xi-race-sentinel', 'local-held'); sessionStorage.setItem('xi-race-sentinel', 'session-held');
   vi.spyOn(Math, 'random').mockImplementation(() => { draws.push(0.5); return 0.5; });

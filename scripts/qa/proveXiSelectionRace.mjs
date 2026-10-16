@@ -13,14 +13,14 @@ assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Remote offline 
 assert(process.env.XI_SELECTION_RACE_PHASE === 'baseline', 'Only the unchanged-app baseline is currently implemented');
 assert(process.env.XI_RACE_OUT && path.isAbsolute(process.env.XI_RACE_OUT), 'Absolute XI_RACE_OUT required');
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..'), OUT=process.env.XI_RACE_OUT;
-const BASE='1823478805186fcd037d5f6b3145513a273aa4fb', TEST='src/test/xiSelectionHistoryRace.test.tsx', SELF='scripts/qa/proveXiSelectionRace.mjs';
+const BASE='8220144a8c7c31a3bc5f9afe84c925faccf905c0', ORIGINAL='b1520a9e9d21148b74487079a5847cd907dbedf0', HOOK='src/hooks/useLineupBuilder.ts', TEST='src/test/xiSelectionHistoryRace.test.tsx', SELF='scripts/qa/proveXiSelectionRace.mjs';
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const git=args=>{const p=spawnSync('git',args,{cwd:ROOT,encoding:'utf8',timeout:30000,maxBuffer:64*1024*1024});assert(!p.error&&!p.signal&&p.status===0,'Actual Git read '+args.join(' '));return p.stdout;};
 assert(!fs.existsSync(path.join(OUT,'report.json')),'Never overwrite evidence');fs.mkdirSync(OUT,{recursive:true});
 const json=(name,value)=>fs.writeFileSync(path.join(OUT,name),JSON.stringify(value,null,2)+'\n');
 const tracked=()=>Object.fromEntries(git(['ls-files','-z']).split('\0').filter(Boolean).sort().map(file=>[file,sha(fs.readFileSync(path.join(ROOT,file)))]));
 const before=tracked(), HEAD=git(['rev-parse','HEAD']).trim();
-const report={head:HEAD,base:BASE,phase:'baseline',scope:'actual-hook deferred-history reproduction only',sourceHeld:false,qualified:false};
+const report={head:HEAD,base:BASE,originalHookRef:ORIGINAL,phase:'baseline',scope:'actual-hook deferred-history reproduction only',sourceHeld:false,qualified:false};
 const checkpoint=()=>json('report.json',report);
 json('tracked.before.json',before);checkpoint();
 const OWNED='history race missing: a late history cannot replace the latest enabled-picker selection';
@@ -37,10 +37,19 @@ const KEYS=['overlap','primary','valid-history','refused-retry','unverified-retr
 const CAUSE='XI_SELECTION_RACE_OWNERSHIP: late history replaced the most recent pick accepted by the enabled picker';
 try {
  assert.equal(git(['status','--porcelain','--untracked-files=no']),'','Committed clean source required');
- assert.equal(sha(fs.readFileSync(path.join(ROOT,TEST))),'f4695edf40dbd2017015219cab791156c133bb679f7e330de40aabf970a9549d','Frozen eight-case test bytes');
+ assert.equal(sha(fs.readFileSync(path.join(ROOT,TEST))),'8e72ee3379cf3bda0c966520f1b02aa7d9ec2567cd9f40470a9988b0a843158b','Frozen corrected eight-case test bytes');
  for(const file of [TEST,SELF]) assert.equal(fs.readFileSync(path.join(ROOT,file),'utf8'),git(['show',HEAD+':'+file]),'Actual method belongs to this HEAD');
  git(['merge-base','--is-ancestor',BASE,HEAD]);
- git(['diff','--exit-code',BASE,HEAD,'--','src','scripts','public','package.json','package-lock.json','bun.lock','bun.lockb',':!'+TEST,':!'+SELF]);
+ const originalTest=git(['show',ORIGINAL+':'+TEST]),currentTest=fs.readFileSync(path.join(ROOT,TEST),'utf8');
+ assert.equal(sha(originalTest),'f4695edf40dbd2017015219cab791156c133bb679f7e330de40aabf970a9549d','Original eight-case source remains exact reachable Git');
+ const warmSpan="beforeEach(async () => {\n  // Warm React's async-act scheduler before measuring actual hook draws.\n  await act(async () => {});";
+ const oldSpan='beforeEach(() => {';
+ assert.equal(currentTest.split(warmSpan).length,2,'One explicit framework-only warmup');
+ assert.equal(currentTest.replace(warmSpan,oldSpan),originalTest,'Only scheduler warmup differs from the entire frozen original test');
+ assert.equal(fs.readFileSync(path.join(ROOT,HOOK),'utf8'),git(['show',ORIGINAL+':'+HOOK]),'Actual application hook is the complete original baseline');
+ report.warmSetupDerivation={originalTestRef:ORIGINAL,originalTestSha256:sha(originalTest),currentTestSha256:sha(currentTest),warmSpan,oldSpan,wholeInverseEqual:true,
+  reason:'React18.3.1 development enqueueTask first async act reads Math.random once before scheduler reuse. Warm before fixture accounting, no draws are removed or subtracted.'};checkpoint();
+ git(['diff','--exit-code',BASE,HEAD,'--','src','scripts','public','package.json','package-lock.json','bun.lock','bun.lockb',':!'+TEST,':!'+SELF,':!'+HOOK]);
  const bound=['src/hooks/useLineupBuilder.ts','src/pages/LineupBuilder.tsx','src/lib/positionFit.ts','src/lib/validatorClient.ts',TEST,SELF];
  report.sources=bound.map(file=>{const bytes=fs.readFileSync(path.join(ROOT,file)),target=path.join(OUT,'source',file);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes);return{file,bytes:bytes.length,sha256:sha(bytes)};});
  report.frozenTestSha256=sha(fs.readFileSync(path.join(ROOT,TEST)));checkpoint();

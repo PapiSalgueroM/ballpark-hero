@@ -1,3 +1,6 @@
+## Root1389 fixture correction and fresh original-app baseline, 2026-10-16
+
+First fixed822/run38974894448 failed on one framework scheduler RNG draw, with no later-arm/build/browser credit. Exact React source matches the CI installed-body receipt and measured draw timing. One async-act warmup before measurement preserves all eight test bodies and assertions, with a whole-test inverse proof. Application hook is restored to original b152 for a fresh baseline. Fixed helper/native remain held. No product or live qualification is claimed. See docs/audits/xi-selection-race.md.
 ## Root1389 actual baseline measured, fixed source prepared, 2026-10-16
 
 Unchangedb1520a9e/run38974096729SUCCESS establishes one precise pending-history overwrite fault with7preserves/28public-state snapshots,101oldcases/types/holds. Physical artifact12078686046(36,806,036B/SHAf60e451b6d3d36e68368e9ee49ad2bcf8398fb0b0b7e28376081c8d23a1c4db9); actualrawfd84e36c. Exact2linebusyflag fix, original/restored8case proof and6nativebusy/refusalretry journeys are independently source reviewed, not yet runtime qualified. Root305careerfix remainsREADY93730ed2. ActualClaudeI owns joined release/main/publication. Details docs/audits/xi-selection-race.md.
