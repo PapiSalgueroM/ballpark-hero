@@ -1,0 +1,4 @@
+vitest exit=0 9s |    Duration  8.96s (transform 2.42s, setup 111ms, collect 4.38s, tests 5.71s, environment 789ms, prepare 338ms)
+coachret exit=0 33s | PASS: ALL US COACHING RETIREMENT CHECKS PASSED
+parity exit=0 43s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+tsc exit=0 55s | 

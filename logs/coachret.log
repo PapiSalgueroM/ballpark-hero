@@ -1,0 +1,5 @@
+2) Byte identity with BASE: held
+3) Retired careers hand their input back: held
+4) src/test/usCoachRetirement.test.tsx and src/test/usCareerReports1346.test.tsx: 58/58 pass as they are; with retireCoachCareer returning its input 14 fail, exactly the 14 named
+4) with the panel's settle always settled 4 fail, exactly the 4 named
+PASS: ALL US COACHING RETIREMENT CHECKS PASSED
