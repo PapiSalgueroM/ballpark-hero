@@ -1,0 +1,27 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 13 node harnesses
+  PASS  simAccessibility.mjs            0.2s
+  PASS  simCareerAwardsNight.mjs      161.6s
+  EMPTY simCareerPracticeLifecycle.mjs    6.4s
+        printed 1 line, so its checks did not run
+  PASS  simCareerSquad.mjs            348.3s
+  PASS  simCareerStoryRole.mjs         68.6s
+  PASS  simHarnessAnchors.mjs         105.9s
+  PASS  simSeasonCentreMotion.mjs      18.0s
+  PASS  simSeasonCentreNeutral.mjs     22.8s
+  PASS  simSoccerCompetitionNavigation.mjs   23.6s
+  FAIL  simSoccerOfferReview.mjs        9.2s
+  PASS  simSoccerPracticeLifecycle.mjs    9.1s
+  PASS  simStorageWrites.mjs            3.0s
+  PASS  simTrainingFeedbackMotion.mjs    4.7s
+
+Skipping 1 browser harness (simSoccerOpponentLabels). Pass --browser to include them.
+
+----- simCareerPracticeLifecycle.mjs (EMPTY) -----
+simCareerPracticeLifecycle: 22 mounted outcomes and the independent bank baseline passed; 0 copied faults rejected; source hold passed.
+
+
+----- simSoccerOfferReview.mjs (FAIL) -----
+Soccer offer review: FAILED.
+
+2 harnesses not green.

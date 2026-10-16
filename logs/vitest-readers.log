@@ -1,0 +1,30 @@
+[22m[39mCB: 5 pro seasons, 172 apps, 58 clean sheets (16, 12, 8, 8, 8)
+
+ [32m✓[39m src/test/careerRecordedStats.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 224[2mms[22m[39m
+[90mstdout[2m | src/test/defenderCleanSheets.test.tsx[2m > [22m[2ma defender keeps clean sheets in his career totals and on the Career Stats tile[2m > [22m[2mLB: 5 seeded pro seasons add up to clean sheets, and the tile prints the same number
+[22m[39mLB: 5 pro seasons, 152 apps, 57 clean sheets (6, 16, 7, 16, 5)
+
+[90mstdout[2m | src/test/defenderCleanSheets.test.tsx[2m > [22m[2ma defender keeps clean sheets in his career totals and on the Career Stats tile[2m > [22m[2mRB: 5 seeded pro seasons add up to clean sheets, and the tile prints the same number
+[22m[39mRB: 5 pro seasons, 148 apps, 47 clean sheets (6, 9, 9, 6, 10)
+
+ [32m✓[39m src/test/defenderCleanSheets.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1691[2mms[22m[39m
+   [33m[2m✓[22m[39m a defender keeps clean sheets in his career totals and on the Career Stats tile[2m > [22mCB: 5 seeded pro seasons add up to clean sheets, and the tile prints the same number [33m 905[2mms[22m[39m
+   [33m[2m✓[22m[39m a defender keeps clean sheets in his career totals and on the Career Stats tile[2m > [22mLB: 5 seeded pro seasons add up to clean sheets, and the tile prints the same number [33m 407[2mms[22m[39m
+   [33m[2m✓[22m[39m a defender keeps clean sheets in his career totals and on the Career Stats tile[2m > [22mRB: 5 seeded pro seasons add up to clean sheets, and the tile prints the same number [33m 371[2mms[22m[39m
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 30
+[22m[39mREACH start=30 careers=6 seasons=24 adultSeasons=24 offers=4 shows=4 adultShows=4
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: a player from 20 up sees dilemmas on screen
+[22m[39mREACH total adultOffers=29 adultShows=29
+
+ [32m✓[39m src/test/careerDilemmaReach.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 71029[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 17 [33m 16930[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 19 [33m 13724[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 24 [33m 16560[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 30 [33m 22308[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m24 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m [1m[32m280 passed[39m[22m[90m (280)[39m
+[2m   Start at [22m 16:40:14
+[2m   Duration [22m 111.57s[2m (transform 13.95s, setup 2.94s, collect 60.56s, tests 203.97s, environment 21.90s, prepare 5.09s)[22m
+
