@@ -1,0 +1,5 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sweepWeight-head exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+vitest-s6 exit=0 24s |    Duration  22.55s (transform 5.04s, setup 385ms, collect 12.24s, tests 25.78s, environment 2.67s, prepare 816ms)
+tsc exit=0 82s | 
+playCmRetire exit=0 91s | playCmRetire: all 48 checks passed. Pictures in /home/runner/work/_temp/rc-out/files/head
