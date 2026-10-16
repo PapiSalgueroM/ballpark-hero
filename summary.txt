@@ -1,0 +1,7 @@
+checks exit=0 0s | cmWorldSeed1250: the seed block stands once in src/lib/clubManager.ts and can be taken out
+vitest exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerWorldRoster.test.ts,title=src/lib/clubManagerWorldRoster.test.ts > actual world roster conti
+tsc exit=0 63s | 
+dailydeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+unseeded-now exit=1 143s | simCmUnseededWorld: 49 FAILURE(S)
+s06 exit=0 279s | simCmWorldMoves: green, sections 0, 6 held
+c-seedless exit=1 284s | simCmWorldMoves: control seedless FIRED: section 6 red (135)
