@@ -15753,3 +15753,7 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Codex Round1382 CLAIM: finite decision coverage diagnostic, 2026-10-16 18:28:12 UTC
+
+Ownerroot, branchcodex/manager-decision-coverage, explicit corrected1344base6f6b81b0afdb51e5d6f67f845f2312b9e536e469. Only newQA/workflow/audit initially. Measure original3-club2-season prefix then finite9career same3clubs repeated3times across all5seeds/current and immutable frozen desk. Keep seedformulaBASE+7+31*i,2seasons,sackstop,floor6,allassertions,S5first2clubs. Measuredpress15candidate only in copied harness, no source overwrite. Calibrate untouched3 vs observer3 stdout/exit/rawprefix; retain all31child runs including actualfreeloss, even assertionreds. Future adoption needs measuredheadroom/effectivecontrols, no lowerfloors or inventedhealthy classification. Existing1081frozenfixture/acceptedreceipt held; only futureattributedmutableharnesspin retake permitted. This diagnostic does not qualify or block closed1343/reportpublication. No app/main/deploy/competition edits or localruntime.
