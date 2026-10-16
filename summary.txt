@@ -1,0 +1,4 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSaveKeeper exit=0 825s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new beyond the 2 key(s) named in KEYS_ADDED_ON_PURPOS
+ctl-keeper-extrafence exit=0 73s | playSaveKeeper control extrafence: FIRED. Journey K failed on the key the branch arm added (dukb-fence:dukb-control-extra-key).
+ctl-keeper-extrakey exit=0 73s | playSaveKeeper control extrakey: FIRED. Journey K failed on the key the branch arm added (dukb-control-extra-key).
