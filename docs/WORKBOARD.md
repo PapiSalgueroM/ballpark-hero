@@ -15717,3 +15717,13 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Codex Round1386 claim: queued Life overall gates, 2026-10-16
+
+Owned isolated codex/career-pending-overall-gates from qualified PR302 final63573c16abf61b31bbdb9c0117631e99e4538c01. Scope only Life232/249 overall catalog availability, retaining original age27/29 and fresh84/86 thresholds. Actual260 head-knock failure lowers Passing1, and the public reply recomputes overall below a previously offered target threshold. JSON reload loses callbacks and skips even free integrity choices. Six frozen cases must first qualify exactly2 callback faults4 preserves remotely; full states/draws, actual predecessor, both statue chance branches, original/restored, old62/286/302 controls, types/build15readers/unchangedweights/source/package/installed holds. No product before causal baseline and root approval, no Engine/Save/UI/I1334/I1337 edits, local runtime, natural-frequency or release claim.
+
+Round1386 ready for review: draftPR303, tested719aace3/run38963406618/job117183828379 SUCCESS after root-qualified301796 causal baseline. Product exactly two pending-ID/overall conditions, original ageguards/callbacks/prior286+302 fixes held. Sixcurrent/original2exactfaults4preserve/sixrestored and24raw each, old62/286+302prior controls/types/build15readers/unchangedweights/allsource-public-package-installedholds pass. Fixed artifact12074525576 retained career-pending-overall-fixed, SHA3427320c892c64e55255634e0f5fe3bc3c959ca6f72cb1e27b8c0328f4a83067. Independent closing and integrated binding belong to root/I, no publication or broader game claim. Final docs hold testednon-docbytes.
+
+1386 root physical review closed all72raw/102inputholds/42literalwholeoutcomes/25healthyfullpairs/5originalskips plus actual15reader closings/fullweights/outer175files. Remaining independent receipts tracked separately. Draft remains stacked302; incoming integration and publication belong to root/I. No broader auto-CI, browser or natural-frequency qualification.
+
+1386 independent full receipt audit also CLOSED zero mismatches (175payloads/4748Gitblobs/whole raw relations/held source-package-installed/output checks). Broader auto38964078413 and38964078449 still type/build in progress at final metadata read; no all-CI claim. All non-document bytes remain exactly tested719aace3.
