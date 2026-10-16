@@ -13,7 +13,7 @@
      (d) at 390: the same career's save written by the round's BASE engine (d4f2c6f6, which never told the ledger):
          after Resume Career, B's club page lists X (the repair on load);
      (e) at every width, around the refused press: the desk note that shows the refusal is today's (Round 634), so
-         the press is held to a refusal that already exists, the same row with the window shut: the card under the
+         the press is held to a refusal that already exists, the same row with the squad full: the card under the
          finger moves no more than it does there (within 2 px), and the note's text is at least 12 px and inside the
          screen's width. scrollY, the document height and where the note lands are printed for both. The Talk
          button's height is printed too (it is today's button, not this round's).
@@ -214,12 +214,14 @@ try {
   if (CONTROL !== 'norepair') {
     /* (a) and (e): the market finds him at his new club and the door says why, at every width. The desk note is
        today's (Round 634: every refused door shows the engine's sentence in it), so (e) holds the new refusal to the
-       note's behaviour on a refusal that already exists, the same row with the window shut: the card under the finger
+       note's behaviour on a refusal that already exists, the same row with the squad full: the card under the finger
        moves no more than it does there, and the note's text is at least 12 px and inside the screen's width. */
-    const shut = (() => { const c = JSON.parse(pick.save1); c.transferWindow = null; c.windowWeeksLeft = 0; return JSON.stringify(c); })();
+    /* The squad padded to 30 with copies of its last man (new ids): the talk door's own "squad is full" refusal, which
+       comes before the new one, on the same row. Copies, not new men: nothing in the save is invented beyond the count. */
+    const full = (() => { const c = JSON.parse(pick.save1); const last = c.squad[c.squad.length - 1]; for (let i = 0; c.squad.length < 30; i += 1) c.squad.push({ ...last, id: `${last.id}-wm${i}` }); return JSON.stringify(c); })();
     for (const profile of PROFILES) {
       const w = profile.width, presses = {};
-      for (const [kind, save] of [['joined', pick.save1], ['shut', shut]]) {
+      for (const [kind, save] of [['joined', pick.save1], ['full', full]]) {
         const { context, page } = await pageWith(profile, save);
         if (!(await resume(page))) { check('a', `${w} ${kind}: the planted career resumes to the hub`, false); await context.close(); continue; }
         const row = await marketRow(page, X, BUYER);
@@ -233,13 +235,13 @@ try {
         errors.push(...page.errors);
         await context.close();
       }
-      const j = presses.joined, s = presses.shut;
+      const j = presses.joined, s = presses.full;
       if (!j) continue;
       check('a', `${w}: Talk says he only joined ${BUYER} this season`, j.note?.text.includes(joined(BUYER)), j.note?.text ?? 'no note');
-      check('a', `${w}: with the window shut the same Talk says so first`, s?.note?.text.includes('The transfer window is shut.'), s?.note?.text ?? 'no note');
+      check('a', `${w}: with the squad full the same Talk says so first`, s?.note?.text.includes('Your squad is full at 30.'), s?.note?.text ?? 'no note');
       const moved = p => (p.after.top ?? 0) - (p.before.top ?? 0);
       const line = p => `card ${Math.round(moved(p))} px, scrollY ${p.before.y} to ${p.after.y}, height ${p.before.h} to ${p.after.h}, note ${p.note ? `${Math.round(p.note.top)} to ${Math.round(p.note.bottom)} of ${p.note.height}` : 'none'}`;
-      check('e', `${w}: the refused press moves the card no more than today's refusal does (joined: ${line(j)}; shut: ${s ? line(s) : 'not measured'})`,
+      check('e', `${w}: the refused press moves the card no more than today's refusal does (joined: ${line(j)}; squad full: ${s ? line(s) : 'not measured'})`,
         !!s && Math.abs(moved(j) - moved(s)) <= 2);
       check('e', `${w}: the desk note is at least 12 px and inside the screen's width`, j.note && j.note.size >= 12 && j.note.left >= 0 && j.note.right <= j.note.width,
         j.note ? `${j.note.size} px, ${Math.round(j.note.left)} to ${Math.round(j.note.right)} of ${j.note.width}` : 'no note');
