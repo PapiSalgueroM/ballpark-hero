@@ -1,0 +1,8 @@
+vitest exit=0 21s |    Duration  19.97s (transform 3.94s, setup 550ms, collect 11.83s, tests 38.96s, environment 3.10s, prepare 1.04s)
+skips-clamp exit=1 1s | CONTROL clamp FIRED: section 1 red on 1099 states
+skips exit=0 42s | PASS: ALL US CAREER SKIP CHECKS PASSED
+draftNight exit=0 0s | simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.
+retire exit=0 22s | PASS: ALL US COACHING RETIREMENT CHECKS PASSED
+prospect exit=0 13s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+predraft exit=0 18s | simCareerPreDraft [seed set a]: ALL GREEN
+tsc exit=0 76s | 

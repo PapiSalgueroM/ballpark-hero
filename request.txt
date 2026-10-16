@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usCareerReports1346.test.tsx src/test/careerDraftNight.test.tsx src/test/usCareerDraftNightBoard.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usCoachRetirement.test.tsx --reporter=verbose --testTimeout=300000 --hookTimeout=120000
+skips: node scripts/simUsCareerSkips.mjs
+skips-clamp: US_CAREER_SKIPS_CONTROL=clamp node scripts/simUsCareerSkips.mjs
+retire: node scripts/simUsCoachRetirement.mjs
+draftNight: node scripts/simDraftNight.mjs
+prospect: node scripts/simUsCareerProspect.mjs
+predraft: node scripts/simCareerPreDraft.mjs
