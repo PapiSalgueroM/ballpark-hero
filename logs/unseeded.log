@@ -1,0 +1,21 @@
+treeWithoutMerge: 6b8032fcdad157f636bdb88a3f07e1fabf8b09c4, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+  now: Brentford, Cardiff City, and the thinnest roster of the era AC Horsens (0 projected men)
+  era2020: Chelsea, Real Betis, and the thinnest roster of the era Crotone (3 projected men)
+  era2015: Chelsea, Eibar, and the thinnest roster of the era GFC Ajaccio (2 projected men)
+  era2010: Blackburn Rovers, Espanyol, and the thinnest roster of the era Cesena (3 projected men)
+  era2005: Blackburn Rovers, Celta Vigo, and the thinnest roster of the era Cádiz (1 projected men)
+quiet: 49 saves, 2221 steps compared, 0 red, 46s
+deals: 49 saves, 2655 steps compared (up to the rollover), 0 red, 77s
+  deals on the base engine: buy done 49, buy-2 done 49, loan-option done 49, release done 31, release refused 18, release-2 done 31, release-2 refused 18, sale done 49, sale-2 done 49, swap done 49
+  after the rollover (Round 1508, this tree only): 49 adopted careers, 686 states checked, 3178 deal lines between two other clubs placed, 5341 owned records held at one club, 3521 joined rows on the screen; deals of mine: 31 releases, 49 buys, 49 sales; red by check: {"mine":8}
+  FAIL after the rollover: deals Cardiff City (now) (deals, seed 6221057): 1 red after the rollover, first [mine] at sale-2: my sale of António Silva (key yes, age 23, CB) left 0 ledger records (owned, owner Barcelona); records naming him: owned Hibernian from Bournemouth
+  FAIL after the rollover: deals Cardiff City (now) (deals, seed 6221059): 1 red after the rollover, first [mine] at sale-2: my sale of António Silva (key yes, age 23, CB) left 0 ledger records (owned, owner Barcelona); records naming him: owned Hearts from Bournemouth
+  FAIL after the rollover: deals AC Horsens (now) (deals, seed 6221057): 1 red after the rollover, first [mine] at sale-2: my sale of António Silva (key yes, age 23, CB) left 0 ledger records (owned, owner Barcelona); records naming him: owned Real Oviedo from Bournemouth
+  FAIL after the rollover: deals Chelsea (era2020) (deals, seed 6221058): 1 red after the rollover, first [mine] at sale-2: my sale of N'Golo Kanté (key no, age 29, CDM) left 0 ledger records (owned, owner Barcelona); records naming him: owned Leicester City from Chelsea
+  FAIL after the rollover: deals Crotone (era2020) (deals, seed 6221057): 1 red after the rollover, first [mine] at sale-2: my sale of Abdou Diallo (key yes, age 24, CB) left 0 ledger records (owned, owner Barcelona); records naming him: owned Atalanta from PSG
+  FAIL after the rollover: deals Crotone (era2020) (deals, seed 6221059): 1 red after the rollover, first [mine] at sale-2: my sale of Abdou Diallo (key yes, age 24, CB) left 0 ledger records (owned, owner Barcelona); records naming him: owned RB Leipzig from PSG
+  FAIL after the rollover: deals Blackburn Rovers (era2010) (deals, seed 6221058): 1 red after the rollover, first [mine] at sale-2: my sale of Ángel Di María (key yes, age 22, RW) left 0 ledger records (owned, owner Barcelona); records naming him: owned Manchester United from Real Madrid
+  FAIL after the rollover: deals Cádiz (era2005) (deals, seed 6221057): 1 red after the rollover, first [mine] at sale-2: my sale of Djibril Cissé (key yes, age 24, ST) left 0 ledger records (owned, owner Arsenal); records naming him: owned Udinese from Liverpool
+fresh: 15 saves, 1034 steps compared, 0 red, 19s
+  deals on the base engine: buy done 15, buy-2 done 15, loan-option done 15, release done 9, release refused 6, release-2 done 9, release-2 refused 6, sale done 15, sale-2 done 15, swap done 15
+simCmUnseededWorld: 8 FAILURE(S)
