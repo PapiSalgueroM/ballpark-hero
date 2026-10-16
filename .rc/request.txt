@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+pure: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh p0) node scripts/simCmBoardVerdict.mjs --part=pure
+c-example: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh p1) SIM_CM_BOARD_CONTROL=example node scripts/simCmBoardVerdict.mjs --part=pure
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simAcademy: node scripts/simAcademy.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simEras: node scripts/simEras.mjs
+simRoles: node scripts/simRoles.mjs
+simWilderness: node scripts/simWilderness.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+norival: node scripts/simNoRivalNames.mjs
