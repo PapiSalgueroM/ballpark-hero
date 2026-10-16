@@ -1,0 +1,3 @@
+asisq exit=1 19s | simCmOwnClubMarket: 31 FAILURE(S) (mode as-is, sections 1, 2 red): as the head stands, the defect is seen
+probeq exit=0 58s | simCmOwnClubMarket: green (mode probe, sections 1, 2, 3, 4, 5): the market lists nobody at my own club in every old save and moves nothing else
+probe exit=0 288s | simCmOwnClubMarket: green (mode probe, sections 1, 2, 3, 4, 5): the market lists nobody at my own club in every old save and moves nothing else

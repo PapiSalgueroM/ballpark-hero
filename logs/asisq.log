@@ -1,0 +1,35 @@
+simCmOwnClubMarket: mode as-is, head arm this tree, parent arm this tree, sections 1, 2, QUICK fleet
+  fleet now: Orenburg (33 bake men)
+  fleet era2020: Bayern Munich (28 bake men)
+  fleet era2015: Arsenal (30 bake men)
+  fleet era2010: Arsenal (35 bake men)
+  fleet era2005: Manchester United (29 bake men)
+  17 old saves (3 fixture, 4 committed, 10 written by the pre AZ engine), 10s
+  fixture A (Real Madrid, season 1): removed 4 (0 in the parent's first 120; the old engine listed 4), 0 namesakes
+  fixture B (Real Madrid, season 3): removed 17 (6 in the parent's first 120; the old engine listed 17), 0 namesakes
+  feed fixture B: the parent's first 120 held 6 men at my club; its January named 0 (none), the head's 0
+  fixture C (Real Madrid, season 1): removed 4 (0 in the parent's first 120; the old engine listed 4), 0 namesakes
+  fixture C (open question 3, MEASURED): the talk for Ferland Mendy is shown (phase fee); a fee at the ask left it at terms; terms met: status agreed, Ferland Mendy in my squad 1 time(s)
+  cmOldSave1052Fixture: removed 0 (a season 1 save of a club no deeper than 26: the no op)
+  cmSecondTierOldSaveFixture: removed 0 (a season 1 save of a club no deeper than 26: the no op)
+  cmBookSaveEvertonFixture: removed 0 (a season 1 save of a club no deeper than 26: the no op)
+  cmBookSaveHerthaFixture: removed 0 (a season 1 save of a club no deeper than 26: the no op)
+  feed Bayern Munich (era2020, season 3, seed 1339f1): the parent's first 120 held 3 men at my club; its January named 0 (none), the head's 0
+  feed Arsenal (era2015, season 3, seed 1339f1): the parent's first 120 held 4 men at my club; its January named 0 (none), the head's 0
+  feed Arsenal (era2010, season 3, seed 1339f1): the parent's first 120 held 2 men at my club; its January named 0 (none), the head's 0
+  feed Manchester United (era2005, season 3, seed 1339f1): the parent's first 120 held 5 men at my club; its January named 0 (none), the head's 0
+section 1 old: 17 saves, the fleet removed 133 men at their own club (14 in the parent's first 120), 1 namesakes, 26 red, 8s
+section 2 feed: 5 season 3 saves played to January, the parent's window named 0 men from my club who were not mine (MEASURED), 5 red
+  FAIL 1 fixture A: (1a) the head's market lists 4 men at Real Madrid, first Ferland Mendy
+  FAIL 1 fixture A: (1b) the head's market is not the parent's without Real Madrid's rows, at character 198868: parent ...":74,"price":5.6,"value":4.5},{"name":"Filip Ugrinic","club":"Valencia","positio... head ...":74,"price":5.6,"value":4.5},{"name":"Ferland Mendy","club":"Real Madrid","posi...
+  FAIL 1 fixture B: (1a) the head's market lists 17 men at Real Madrid, first Jude Bellingham
+  FAIL 1 fixture B: (1b) the head's market is not the parent's without Real Madrid's rows, at character 223: parent ...5,"price":116.3,"value":105.7},{"name":"Erling Haaland","club":"Manchester City"... head ...5,"price":116.3,"value":105.7},{"name":"Jude Bellingham","club":"Real Madrid","p...
+  FAIL 1 fixture C: (1a) the head's market lists 4 men at Real Madrid, first Ferland Mendy
+  FAIL 1 fixture C: (1b) the head's market is not the parent's without Real Madrid's rows, at character 198779: parent ...":74,"price":5.6,"value":4.5},{"name":"Filip Ugrinic","club":"Valencia","positio... head ...":74,"price":5.6,"value":4.5},{"name":"Ferland Mendy","club":"Real Madrid","posi...
+  ... and 20 more in section 1
+  FAIL 2 fixture B: (2a) the head's first 120 hold 6 men at Real Madrid, first Jude Bellingham
+  FAIL 2 Bayern Munich (era2020, season 3, seed 1339f1): (2a) the head's first 120 hold 3 men at Bayern Munich, first Serge Gnabry
+  FAIL 2 Arsenal (era2015, season 3, seed 1339f1): (2a) the head's first 120 hold 4 men at Arsenal, first Mesut Özil
+  FAIL 2 Arsenal (era2010, season 3, seed 1339f1): (2a) the head's first 120 hold 2 men at Arsenal, first Cesc Fàbregas
+  FAIL 2 Manchester United (era2005, season 3, seed 1339f1): (2a) the head's first 120 hold 5 men at Manchester United, first Ruud van Nistelrooy
+simCmOwnClubMarket: 31 FAILURE(S) (mode as-is, sections 1, 2 red): as the head stands, the defect is seen
