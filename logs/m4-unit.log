@@ -1,0 +1,43 @@
+mut1339 m4: applied once to src/lib/clubManager.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerOwnClubLevel.test.ts [2m([22m[2m7 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 754[2mms[22m[39m
+   [32m✓[39m the manager's own club is read from his club, never the world roster[2m > [22mhis club screen average is the base read in season one, however many men he released[32m 55[2mms[22m[39m
+   [32m✓[39m the manager's own club is read from his club, never the world roster[2m > [22mhis club strength at the summer rollover is the base read, so the free agent level rule reads the base[32m 132[2mms[22m[39m
+   [32m✓[39m the manager's own club is read from his club, never the world roster[2m > [22mthe club he leaves in the summer is another club at once, read off the world roster[32m 51[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mthe one club read is the world read, club for club, in today and in a past era, cold and cached [33m 356[2mms[22m[39m
+   [32m✓[39m the manager's own club is read from his club, never the world roster[2m > [22ma job taken mid season (the door joinClubNow opens) reads the club he left off the world roster[32m 41[2mms[22m[39m
+   [32m✓[39m the manager's own club is read from his club, never the world roster[2m > [22mthe club he joins mid season is his from that day, read as the base, though the career handed over names the old one[32m 76[2mms[22m[39m
+[31m   [31m×[31m the manager's own club is read from his club, never the world roster[2m > [22min every career the market lists nobody at his own club, ledger or none, and the club he leaves is listed at once[39m[32m 42[2mms[22m[39m
+[31m     → expected true to be false // Object.is equality[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerOwnClubLevel.test.ts[2m > [22mthe manager's own club is read from his club, never the world roster[2m > [22min every career the market lists nobody at his own club, ledger or none, and the club he leaves is listed at once
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/lib/clubManagerOwnClubLevel.test.ts:[2m139:66[22m[39m
+    [90m137| [39m    [35mconst[39m rel [33m=[39m [34mreleasePlayer[39m(s[33m,[39m man[33m.[39mid)[33m![39m[33m;[39m
+    [90m138| [39m    [34mexpect[39m(rel[33m.[39mworldRoster)[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m139| [39m    expect(buildMarket(rel).some(m => m.club === 'Real Madrid')).toBe(…
+    [90m   | [39m                                                                 [31m^[39m
+    [90m140| [39m    [35mconst[39m next [33m=[39m [34mwithRoll[39m([34m0.6[39m[33m,[39m () [33m=>[39m [34mstartNextSeason[39m(rel))[33m;[39m
+    [90m141| [39m    [34mexpect[39m(next[33m.[39mclubName)[33m.[39m[34mtoBe[39m([32m'Real Madrid'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m6 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 15:51:17
+[2m   Duration [22m 3.15s[2m (transform 1.50s, setup 52ms, collect 1.66s, tests 754ms, environment 287ms, prepare 142ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerOwnClubLevel.test.ts,title=src/lib/clubManagerOwnClubLevel.test.ts > the manager's own club is read from his club%2C never the world roster > in every career the market lists nobody at his own club%2C ledger or none%2C and the club he leaves is listed at once,line=139,column=66::AssertionError: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/lib/clubManagerOwnClubLevel.test.ts:139:66%0A%0A

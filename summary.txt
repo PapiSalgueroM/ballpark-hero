@@ -1,0 +1,12 @@
+m1-unit exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerOwnClubLevel.test.ts,title=src/lib/clubManagerOwnClubLevel.test.ts > the manager's own club 
+m1-fa exit=1 72s | simFreeAgents: 1 failure(s)
+m1-own exit=2 0s | simCmOwnClubMarket: cannot run: src/lib/clubManager.ts carries neither main's line nor the rule exactly once
+m2-unit exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerOwnClubLevel.test.ts,title=src/lib/clubManagerOwnClubLevel.test.ts > the manager's own club 
+m2-fa exit=1 73s | simFreeAgents: 1 failure(s)
+m2-own exit=2 0s | simCmOwnClubMarket: cannot run: src/lib/clubManager.ts carries neither main's line nor the rule exactly once
+m3-own exit=1 81s | simCmOwnClubMarket: 3 FAILURE(S) (mode rule, sections 2 red)
+m3-unit exit=0 3s |    Duration  3.13s (transform 1.44s, setup 54ms, collect 1.56s, tests 842ms, environment 287ms, prepare 139ms)
+m4-unit exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerOwnClubLevel.test.ts,title=src/lib/clubManagerOwnClubLevel.test.ts > the manager's own club 
+m4-fa exit=0 72s | simFreeAgents: all sections passed
+m4-own exit=0 81s | simCmOwnClubMarket: green (mode rule, sections 1, 2): the market lists nobody at my own club in every old save and moves nothing else
+clean exit=0 0s | 

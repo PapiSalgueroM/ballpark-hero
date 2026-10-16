@@ -1,0 +1,2 @@
+mut1339 m1: applied once to src/lib/clubManager.ts
+simCmOwnClubMarket: cannot run: src/lib/clubManager.ts carries neither main's line nor the rule exactly once
