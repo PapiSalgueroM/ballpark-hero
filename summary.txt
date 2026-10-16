@@ -1,0 +1,4 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-norepair exit=3 5s | playCmWorldMoves: control norepair DID NOT FIRE: (d) stayed green
+walk-norecord exit=3 17s | playCmWorldMoves: control norecord DID NOT FIRE: (b) stayed green
+walk exit=0 25s | playCmWorldMoves: green, 22 checks held; pictures in /home/runner/work/_temp/rc-out/files/head

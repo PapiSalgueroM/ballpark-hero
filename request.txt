@@ -1,0 +1,5 @@
+#!build
+#!playwright
+walk: node scripts/playCmWorldMoves.mjs
+walk-norecord: PLAY_WORLD_MOVES_CONTROL=norecord node scripts/playCmWorldMoves.mjs
+walk-norepair: PLAY_WORLD_MOVES_CONTROL=norepair node scripts/playCmWorldMoves.mjs
