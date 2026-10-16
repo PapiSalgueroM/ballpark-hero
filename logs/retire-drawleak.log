@@ -1,0 +1,6 @@
+NEGATIVE CONTROL ON: RETIRE_CONTROL=drawleak, src/lib/clubManagerRecords.ts is a rewritten copy
+== fleet
+FAIL [fleet] 2 careers of 1 seasons: every save byte (the record taken off) and every draw equal to RETIRE_BASE (2 differ; first Liverpool now seed 0 coach: head c84c98d0f1587e11 54541 draws, base 559b84e09aaab63e 53544 draws (season 1 week 54))
+ok   [fleet] every head career wrote the record (2 of 2)
+ok   [fleet] 1 careers on matchRules 'base': equal to RETIRE_BASE with nothing taken off
+control drawleak FIRED: 1 of 3 checks red

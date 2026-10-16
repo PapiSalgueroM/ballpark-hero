@@ -1,0 +1,5 @@
+retire-hotseat exit=0 24s | simCmRetire: all 4 checks passed (hotseat)
+retire-stripnone exit=1 7s | control stripnone FIRED: 1 of 3 checks red
+retire-drawleak exit=1 7s | control drawleak FIRED: 1 of 3 checks red
+retire-loads exit=0 51s | simCmRetire: all 8 checks passed (loads, oldsave)
+retire-fleet exit=0 102s | simCmRetire: all 3 checks passed (fleet)
