@@ -1,0 +1,54 @@
+control nofate: patched .claude/worktrees/ctl2/src/components/club-manager/ClubManagerSeasonSummary.tsx
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ok   (a) 320: the review shows the offers
+ok   (a) 320: a tap opens the question in the same panel and moves nothing
+ok   (a) 320: scrollY and the panel's top stay put [y 1728 to 1728, top 230.5 to 230.5]
+ok   (a) 320: both buttons at least 44 px tall [44, 44]
+ok   (a) 320: no new text under 12 px, none cut or outside the panel [0 small, 0 out]
+ok   (a) 320: the question names the club
+ok   (a) 320: Back shows the list and leaves the save as it was
+ok   (a) 320: Take the job starts season 2 at Everton [Everton season 2]
+ok   (a) 320: no page error
+FAIL (b) 320: the fate line reads You went up. [none]
+ok   (b) 320: the verdict names the Premier League [Promoted to the Premier League. That is the season the board asked for.]
+ok   (c) 320: a fresh career reads Safe [Board
+Safe]
+ok   (c) 320: after a lost opener (63.3) reads Safe [Board
+Safe]
+ok   (d) 320: the Board panel lists no failed objective
+ok   (a) 390: the review shows the offers
+ok   (a) 390: a tap opens the question in the same panel and moves nothing
+ok   (a) 390: scrollY and the panel's top stay put [y 1351 to 1351, top 342 to 342]
+ok   (a) 390: both buttons at least 44 px tall [44, 44]
+ok   (a) 390: no new text under 12 px, none cut or outside the panel [0 small, 0 out]
+ok   (a) 390: the question names the club
+ok   (a) 390: Back shows the list and leaves the save as it was
+ok   (a) 390: Take the job starts season 2 at Everton [Everton season 2]
+ok   (a) 390: no page error
+FAIL (b) 390: the fate line reads You went up. [none]
+ok   (b) 390: the verdict names the Premier League [Promoted to the Premier League. That is the season the board asked for.]
+ok   (c) 390: a fresh career reads Safe [Board
+Safe]
+ok   (c) 390: after a lost opener (63.3) reads Safe [Board
+Safe]
+ok   (d) 390: the Board panel lists no failed objective
+ok   (a) 1280: the review shows the offers
+ok   (a) 1280: a tap opens the question in the same panel and moves nothing
+ok   (a) 1280: scrollY and the panel's top stay put [y 1210 to 1210, top 377.75 to 377.75]
+ok   (a) 1280: both buttons at least 44 px tall [44, 44]
+ok   (a) 1280: no new text under 12 px, none cut or outside the panel [0 small, 0 out]
+ok   (a) 1280: the question names the club
+ok   (a) 1280: Back shows the list and leaves the save as it was
+ok   (a) 1280: Take the job starts season 2 at Everton [Everton season 2]
+ok   (a) 1280: no page error
+FAIL (b) 1280: the fate line reads You went up. [none]
+ok   (b) 1280: the verdict names the Premier League [Promoted to the Premier League. That is the season the board asked for.]
+ok   (c) 1280: a fresh career reads Safe [Board
+Safe]
+ok   (c) 1280: after a lost opener (63.3) reads Safe [Board
+Safe]
+ok   (d) 1280: the Board panel lists no failed objective
+control nofate FIRED: 3 checks red, 3 cases

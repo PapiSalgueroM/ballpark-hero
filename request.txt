@@ -1,0 +1,10 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/clubManagerOfferConfirm.test.tsx src/test/cmLeagueLeadersCard.test.tsx src/lib/clubManagerBoardVerdict.test.ts --testTimeout=300000 --hookTimeout=120000
+walk: node scripts/playCmBoardVerdict.mjs
+walk-noconfirm: git worktree add -q .claude/worktrees/ctl1 HEAD && node .rc/x/ctlPatch.mjs .claude/worktrees/ctl1 noconfirm && (cd .claude/worktrees/ctl1 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-noconfirm" --emptyOutDir --logLevel error) && DIST=dist-noconfirm PLAY_BOARD_CONTROL=noconfirm node scripts/playCmBoardVerdict.mjs
+walk-nofate: sleep 4 && git worktree add -q .claude/worktrees/ctl2 HEAD && node .rc/x/ctlPatch.mjs .claude/worktrees/ctl2 nofate && (cd .claude/worktrees/ctl2 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-nofate" --emptyOutDir --logLevel error) && DIST=dist-nofate PLAY_BOARD_CONTROL=nofate node scripts/playCmBoardVerdict.mjs
+title0: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh t0) SHARD=0/2 node scripts/simCmBoardVerdict.mjs --part=title,kitty
+title1: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh t1) SHARD=1/2 node scripts/simCmBoardVerdict.mjs --part=title,kitty
+fresh: node scripts/simCmBoardVerdict.mjs --part=fresh

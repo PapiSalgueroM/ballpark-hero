@@ -1,0 +1,9 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 8s |    Duration  8.12s (transform 2.75s, setup 378ms, collect 6.73s, tests 4.08s, environment 2.03s, prepare 695ms)
+tsc exit=0 81s | 
+walk exit=0 89s | playCmBoardVerdict GREEN: 42 of 42 checks green
+walk-noconfirm exit=1 109s | control noconfirm FIRED: 3 checks red, 3 cases
+walk-nofate exit=1 175s | control nofate FIRED: 3 checks red, 3 cases
+fresh exit=0 76s | simCmBoardVerdict GREEN: 2 of 2 checks green (parts fresh, 76 s)
+title0 exit=0 337s | simCmBoardVerdict GREEN: 7 of 7 checks green (parts title, kitty, 335 s)
+title1 exit=0 323s | simCmBoardVerdict GREEN: 7 of 7 checks green (parts title, kitty, 320 s)
