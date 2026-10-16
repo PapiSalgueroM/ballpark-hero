@@ -1,0 +1,3 @@
+build exit=0 56s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tscbase exit=0 92s | 
+tsc exit=2 101s |                   Type '{ error: true; } & String' is missing the following properties from type 'PoolRow': player_name, nationality, position, club, and 3 more.

@@ -1,0 +1,40 @@
+  Property 'market_value_usd' does not exist on type 'SelectQueryError<"column 'player_name' does not exist on 'career_players'.">'.
+src/lib/triviaQuestionBank.ts(167,11): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(relation: "career_players" | "cbb_programs" | "guess_nation_countries" | "nascar_drivers" | "baseball_career_players" | "baseball_connections_puzzles" | "boxing_career_records" | ... 194 more ... | "world_series_v2"): PostgrestQueryBuilder<...>', gave the following error.
+    Argument of type '"ballon_dor"' is not assignable to parameter of type '"career_players" | "cbb_programs" | "guess_nation_countries" | "nascar_drivers" | "baseball_career_players" | "baseball_connections_puzzles" | "boxing_career_records" | ... 194 more ... | "world_series_v2"'.
+  Overload 2 of 2, '(relation: never): PostgrestQueryBuilder<{ PostgrestVersion: "14.17"; }, { Tables: { baseball_career_players: { Row: { created_at: string; data: Json; id: string; sort_order: number; }; Insert: { created_at?: string; data: Json; id: string; sort_order: number; }; Update: { ...; }; Relationships: []; }; ... 200 more ...; world_series_v2: { ...; }; }; Views: {}; Functions: { ...; }; Enums: { ...; }; CompositeTypes: {}; }, never, never, never>', gave the following error.
+    Argument of type '"ballon_dor"' is not assignable to parameter of type 'never'.
+src/lib/triviaQuestionBank.ts(175,10): error TS2352: Conversion of type '(SelectQueryError<"column 'year' does not exist on 'career_players'."> | SelectQueryError<"column 'year' does not exist on 'cbb_programs'."> | ... 199 more ... | SelectQueryError<...>)[]' to type 'BallonRow[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'SelectQueryError<"column 'year' does not exist on 'career_players'."> | SelectQueryError<"column 'year' does not exist on 'cbb_programs'."> | ... 199 more ... | SelectQueryError<...>' is not comparable to type 'BallonRow'.
+    Type '{ error: true; } & String' is missing the following properties from type 'BallonRow': year, rank, player_name, nationality, and 2 more.
+src/lib/whoAmI.ts(517,35): error TS2589: Type instantiation is excessively deep and possibly infinite.
+src/lib/whoAmI.ts(526,17): error TS2352: Conversion of type 'SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">' to type 'PoolRow' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type '{ error: true; } & String' is missing the following properties from type 'PoolRow': player_name, nationality, position, club, and 3 more.
+src/lib/whoAmI.ts(621,33): error TS2339: Property 'c' does not exist on type 'SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">'.
+src/lib/whoAmI.ts(623,56): error TS2339: Property 'n' does not exist on type 'SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">'.
+src/lib/whoAmI.ts(623,61): error TS2339: Property 'k' does not exist on type 'SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">'.
+src/lib/whoAmI.ts(625,18): error TS2339: Property 'k' does not exist on type 'SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">'.
+src/lib/whoAmI.ts(625,50): error TS2339: Property 'a' does not exist on type 'SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">'.
+src/lib/whoAmI.ts(625,61): error TS2339: Property 'y' does not exist on type 'SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">'.
+src/lib/whoAmI.ts(693,62): error TS2339: Property 'player_name' does not exist on type 'SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">'.
+src/lib/whoAmI.ts(693,77): error TS2339: Property 'person_key' does not exist on type 'SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">'.
+src/lib/whoAmI.ts(742,9): error TS2322: Type 'PostgrestFilterBuilder<{ PostgrestVersion: "14.17"; }, { Tables: { baseball_career_players: { Row: { created_at: string; data: Json; id: string; sort_order: number; }; Insert: { created_at?: string; data: Json; id: string; sort_order: number; }; Update: { ...; }; Relationships: []; }; ... 200 more ...; world_series_...' is not assignable to type 'PromiseLike<{ data: PoolRow[]; error: unknown; }>'.
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = PostgrestSingleResponse<SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">[]>, TResult2 = never>(onfulfilled?: (value: PostgrestSingleResponse<SelectQueryError<...>[]>) => TResult1 | PromiseLike<...>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => PromiseLike...' is not assignable to type '<TResult1 = { data: PoolRow[]; error: unknown; }, TResult2 = never>(onfulfilled?: (value: { data: PoolRow[]; error: unknown; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => PromiseLike<...>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'PostgrestSingleResponse<SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">[]>' is not assignable to type '{ data: PoolRow[]; error: unknown; }'.
+            Type 'PostgrestResponseSuccess<SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">[]>' is not assignable to type '{ data: PoolRow[]; error: unknown; }'.
+              Types of property 'data' are incompatible.
+                Type 'SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">[]' is not assignable to type 'PoolRow[]'.
+                  Type '{ error: true; } & String' is missing the following properties from type 'PoolRow': player_name, nationality, position, club, and 3 more.
+src/lib/whoAmI.ts(767,9): error TS2322: Type 'PostgrestFilterBuilder<{ PostgrestVersion: "14.17"; }, { Tables: { baseball_career_players: { Row: { created_at: string; data: Json; id: string; sort_order: number; }; Insert: { created_at?: string; data: Json; id: string; sort_order: number; }; Update: { ...; }; Relationships: []; }; ... 200 more ...; world_series_...' is not assignable to type 'PromiseLike<{ data: PoolRow[]; error: unknown; }>'.
+  Types of property 'then' are incompatible.
+    Type '<TResult1 = PostgrestSingleResponse<SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">[]>, TResult2 = never>(onfulfilled?: (value: PostgrestSingleResponse<SelectQueryError<...>[]>) => TResult1 | PromiseLike<...>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => PromiseLike...' is not assignable to type '<TResult1 = { data: PoolRow[]; error: unknown; }, TResult2 = never>(onfulfilled?: (value: { data: PoolRow[]; error: unknown; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<...>) => PromiseLike<...>'.
+      Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'PostgrestSingleResponse<SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">[]>' is not assignable to type '{ data: PoolRow[]; error: unknown; }'.
+            Type 'PostgrestResponseSuccess<SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">[]>' is not assignable to type '{ data: PoolRow[]; error: unknown; }'.
+              Types of property 'data' are incompatible.
+                Type 'SelectQueryError<"column 'person_key' does not exist on 'player_market_values'.">[]' is not assignable to type 'PoolRow[]'.
+                  Type '{ error: true; } & String' is missing the following properties from type 'PoolRow': player_name, nationality, position, club, and 3 more.
