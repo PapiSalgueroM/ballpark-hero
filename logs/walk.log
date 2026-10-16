@@ -1,0 +1,65 @@
+save B (Real Madrid, season 3) 390x844 reduce
+  PASS  B-390-rm: the unsearched list shows 50 rows, 0 at Real Madrid
+  PASS  B-390-rm: searching Real Madrid lists 0 rows at Real Madrid (1 rows in all)
+  PASS  B-390-rm: typing the search moved the page 0px
+  PASS  B-390-rm: searching Barcelona lists 24 rows at Barcelona (the row counter works)
+  MEASURED B-390-rm: searching "Mbappe" lists 1 rows:  | 
+  MEASURED B-390-rm: searching "Vinicius" lists 1 rows: Vinicius Lira | Santos · 20y · worth £5.5m to £7.2m
+  MEASURED B-390-rm: searching "Mendy" lists 3 rows: Antoine Mendy | Nice · 23y · worth £7.2m to £10.5m ; Nobel Mendy | Hull City · 23y · worth £7.1m to £9.5m ; Batista Mendy | Trabzonspor · 27y · worth £5.7m to £6.8m
+  MEASURED B-390-rm: 0 lines on the Market tab name a man "from Real Madrid" who is not in the save's squad
+  PASS  B-390-rm: the Market tab scrolls sideways by 0px
+  PASS  B-390-rm: the club page names 0 of the old market's men at Real Madrid
+  PASS  B-390-rm: 0 page errors
+save B (Real Madrid, season 3) 390x844 no-preference
+  PASS  B-390-motion: the unsearched list shows 50 rows, 0 at Real Madrid
+  PASS  B-390-motion: searching Real Madrid lists 0 rows at Real Madrid (1 rows in all)
+  PASS  B-390-motion: typing the search moved the page 0px
+  PASS  B-390-motion: searching Barcelona lists 24 rows at Barcelona (the row counter works)
+  MEASURED B-390-motion: searching "Mbappe" lists 1 rows:  | 
+  MEASURED B-390-motion: searching "Vinicius" lists 1 rows: Vinicius Lira | Santos · 20y · worth £5.5m to £7.2m
+  MEASURED B-390-motion: searching "Mendy" lists 3 rows: Antoine Mendy | Nice · 23y · worth £7.2m to £10.5m ; Nobel Mendy | Hull City · 23y · worth £7.1m to £9.5m ; Batista Mendy | Trabzonspor · 27y · worth £5.7m to £6.8m
+  MEASURED B-390-motion: 0 lines on the Market tab name a man "from Real Madrid" who is not in the save's squad
+  PASS  B-390-motion: the Market tab scrolls sideways by 0px
+  PASS  B-390-motion: the club page names 0 of the old market's men at Real Madrid
+  PASS  B-390-motion: 0 page errors
+save B (Real Madrid, season 3) 1280x900 reduce
+  PASS  B-1280-rm: the unsearched list shows 50 rows, 0 at Real Madrid
+  PASS  B-1280-rm: searching Real Madrid lists 0 rows at Real Madrid (1 rows in all)
+  PASS  B-1280-rm: typing the search moved the page 0px
+  PASS  B-1280-rm: searching Barcelona lists 24 rows at Barcelona (the row counter works)
+  MEASURED B-1280-rm: searching "Mbappe" lists 1 rows:  | 
+  MEASURED B-1280-rm: searching "Vinicius" lists 1 rows: Vinicius Lira | Santos · 20y · worth £5.5m to £7.2m
+  MEASURED B-1280-rm: searching "Mendy" lists 3 rows: Antoine Mendy | Nice · 23y · worth £7.2m to £10.5m ; Nobel Mendy | Hull City · 23y · worth £7.1m to £9.5m ; Batista Mendy | Trabzonspor · 27y · worth £5.7m to £6.8m
+  MEASURED B-1280-rm: 0 lines on the Market tab name a man "from Real Madrid" who is not in the save's squad
+  PASS  B-1280-rm: the Market tab scrolls sideways by 0px
+  PASS  B-1280-rm: the club page names 0 of the old market's men at Real Madrid
+  PASS  B-1280-rm: 0 page errors
+save B (Real Madrid, season 3) 1280x900 no-preference
+  PASS  B-1280-motion: the unsearched list shows 50 rows, 0 at Real Madrid
+  PASS  B-1280-motion: searching Real Madrid lists 0 rows at Real Madrid (1 rows in all)
+  PASS  B-1280-motion: typing the search moved the page 0px
+  PASS  B-1280-motion: searching Barcelona lists 24 rows at Barcelona (the row counter works)
+  MEASURED B-1280-motion: searching "Mbappe" lists 1 rows:  | 
+  MEASURED B-1280-motion: searching "Vinicius" lists 1 rows: Vinicius Lira | Santos · 20y · worth £5.5m to £7.2m
+  MEASURED B-1280-motion: searching "Mendy" lists 3 rows: Antoine Mendy | Nice · 23y · worth £7.2m to £10.5m ; Nobel Mendy | Hull City · 23y · worth £7.1m to £9.5m ; Batista Mendy | Trabzonspor · 27y · worth £5.7m to £6.8m
+  MEASURED B-1280-motion: 0 lines on the Market tab name a man "from Real Madrid" who is not in the save's squad
+  PASS  B-1280-motion: the Market tab scrolls sideways by 0px
+  PASS  B-1280-motion: the club page names 0 of the old market's men at Real Madrid
+  PASS  B-1280-motion: 0 page errors
+save A (Real Madrid, season 1) 390x844 reduce
+  PASS  A-390-rm: the unsearched list shows 50 rows, 0 at Real Madrid
+  PASS  A-390-rm: searching Real Madrid lists 0 rows at Real Madrid (1 rows in all)
+  PASS  A-390-rm: typing the search moved the page 0px
+  PASS  A-390-rm: searching Barcelona lists 23 rows at Barcelona (the row counter works)
+  MEASURED A-390-rm: searching "Mbappe" lists 1 rows:  | 
+  MEASURED A-390-rm: searching "Vinicius" lists 1 rows: Vinicius Lira | Santos · 18y · worth £3m to £3.1m
+  MEASURED A-390-rm: searching "Mendy" lists 4 rows: Batista Mendy | Trabzonspor · 25y · worth £6.1m to £6.4m ; Antoine Mendy | Nice · 21y · worth £4.5m to £4.5m ; Nobel Mendy | Hull City · 21y · worth £4.4m to £4.6m ; Edouard Mendy | Al-Ahli · 33y · worth £3.8m to £3.9m
+  MEASURED A-390-rm: 0 lines on the Market tab name a man "from Real Madrid" who is not in the save's squad
+  PASS  A-390-rm: the Market tab scrolls sideways by 0px
+  PASS  A-390-rm: the club page names 0 of the old market's men at Real Madrid
+  PASS  A-390-rm: 0 page errors
+  MEASURED whats-new 390: Club Manager: your club is your squad on the market too. In a Club Manager career you started before 13 October, or a Manager Hot Seat job you carried on, the transfer market still listed players at your own club who were not in your squad: the extra names on your club's real roster beyond the 26 you start with, and from your second season the men who had left you. Search your own club and you cou
+  PASS  whats-new 390: scrolls sideways by 0px
+  MEASURED whats-new 1280: Club Manager: your club is your squad on the market too. In a Club Manager career you started before 13 October, or a Manager Hot Seat job you carried on, the transfer market still listed players at your own club who were not in your squad: the extra names on your club's real roster beyond the 26 you start with, and from your second season the men who had left you. Search your own club and you cou
+  PASS  whats-new 1280: scrolls sideways by 0px
+walk1339: green (pictures in /home/runner/work/_temp/rc-out/files/rv)
