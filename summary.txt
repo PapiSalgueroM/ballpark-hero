@@ -1,0 +1,32 @@
+appeal-retake exit=0 54s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+rules-bare exit=1 71s | simCmLeagueRules: 47 failure(s)
+tsc exit=0 92s | 
+retire exit=0 42s | simCmRetire: all 18 checks passed (record, oldsave, pens, base, retire, dashes)
+retire-hotseat-loads exit=0 85s | simCmRetire: all 12 checks passed (hotseat, loads, oldsave)
+rules-retake exit=0 158s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+retire-fleet exit=0 128s | simCmRetire: all 3 checks passed (fleet)
+retire-ctl exit=0 190s | controls: tielast=1/1 skipgame=1/1 nomissed=1/1 basewrites=1/1 pensdrawn=1/1 retiretouch=1/1 legacydrop=1/1 liveok=1/1 seasonover=1/1 drawone=1/1 dash=1/1
+vitest-cm exit=0 219s |    Duration  218.14s (transform 11.91s, setup 4.91s, collect 49.25s, tests 391.38s, environment 36.45s, prepare 8.28s)
+ns exit=0 168s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
+retire-ctl-base exit=0 407s | controls: stripnone=1/1 drawleak=1/1 hotseatwrites=1/1 loadtouch=1/1
+simClubManagerSlots exit=0 88s | simClubManagerSlots: all sections green
+simClubManagerSaveSize exit=0 74s | simClubManagerSaveSize: all sections green
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simSaveFence exit=0 68s | simSaveFence: all green (tabs, source, fleet)
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simCmTablesTruth exit=0 25s | simCmTablesTruth: every case green
+simDeadlineDay exit=0 6s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simEarlyReturnScope exit=0 13s | simEarlyReturnScope: all green
+simClubManager exit=0 45s | ALL CLUB MANAGER SIMS PASSED
+simMidSeasonStart exit=0 4s | simMidSeasonStart: all green
+simWilderness exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+simNationJob exit=0 2s | simNationJob: green. You can manage a country now, and it is a job you have to earn and can lose.
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simManagerHotSeat exit=0 83s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+decisions-default exit=0 24s | simClubManagerDecisions: 0 findings
+decisions-seed4 exit=1 26s | simClubManagerDecisions: 1 findings
+ownclub exit=0 417s | simCmOwnClubMarket: green (mode rule, sections 1, 2, 3, 4, 5): the market lists nobody at my own club in every old save and moves nothing else
+rivals exit=0 22s | No rival product names found. 0 findings.
+simGuideHeadings exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+anchors exit=0 55s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simClubManagerScore exit=0 121s | ALL SEASON SCORE CHECKS PASSED

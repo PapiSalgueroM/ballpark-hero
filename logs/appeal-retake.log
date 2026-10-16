@@ -1,0 +1,13 @@
+src/lib/clubManager.ts: committed 7a89018d base 7a89018d REPRODUCES tree 7c6d2dc7 (moved)
+src/lib/clubManagerSlots.ts: committed 5c900a37 base 5c900a37 REPRODUCES tree 6db7d75e (moved)
+scripts/simClubManagerSlots.mjs: committed c7bd9818 base c7bd9818 REPRODUCES tree c7bd9818 (unchanged)
+scripts/simClubManagerDecisions.mjs: committed 5b3ee496 base 5b3ee496 REPRODUCES tree 5b3ee496 (unchanged)
+written (2 moved)
+Appeal characterization integrity passed: 24 complete actual pairs.
+Existing-card compatibility: 6 save/load and empty-slot round trips, every appeal option.
+Effective copied controls: mislink, effect, story, verdict; independent baseline passed in each.
+Historical baseline: 6 preserved differing pairs, separate from current product parity.
+Compatibility: 13 outcome groups, 16 effective mapped controls.
+Whole-source holds: 3666 exact files; 24 executed bundles retained.
+Product correctness: true; differing pairs: 0.
+Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
