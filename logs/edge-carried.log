@@ -1,0 +1,17 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 prior human sale journey[2m > [22mprior human sale hijack cannot announce an ownership-refused transfer[32m 12[2mms[22m[39m
+ [32m✓[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 prior human sale journey[2m > [22mprior human sale walk-away cannot announce an ownership-refused transfer[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 prior human sale journey[2m > [22mhuman-sale rule 3 keeps the full owned payload and takes no RNG[32m 12[2mms[22m[39m
+ [32m✓[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 ordinary AI transfers[2m > [22mordinary AI rival closes still record both actual purchases[32m 16[2mms[22m[39m
+ [32m✓[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 actual job handover journey[2m > [22mcarried current-season AI signing keeps its Talk lock after job move and reload[32m 21[2mms[22m[39m
+ [32m✓[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 actual job handover journey[2m > [22mcarried current-season AI signing keeps its buy lock after job move and reload[32m 19[2mms[22m[39m
+ [32m✓[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 actual job handover journey[2m > [22moriginal current-season AI signing refuses actual Talk and buy before the job move[32m 10[2mms[22m[39m
+ [32m✓[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 actual job handover journey[2m > [22mjob move and actual January save retain the departed full player identity[32m 60[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 18:53:09
+[2m   Duration [22m 6.98s[2m (transform 2.15s, setup 83ms, collect 88ms, tests 5.10s, environment 681ms, prepare 313ms)[22m
+

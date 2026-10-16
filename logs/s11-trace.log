@@ -1,0 +1,33 @@
+11) my own results: Aberdeen, Motherwell, St Mirren (2026-27), 3 seasons, BASE against the head on one stream, seeds 2
+  FAIL section 11: Aberdeen (now, seed 2): by step 37 (match) the head drew 56320 times and BASE 56356, with no AI deal touching my league or my opponents
+    the arms first part at draw 0:
+    BASE
+      0: pick < uniqueYouthName < makeYouth < world-moves-base.cjs:40126:16 < Array.forEach
+      1: pick < uniqueYouthName < makeYouth < world-moves-base.cjs:40126:16 < Array.forEach
+      2: ri < makeYouth < world-moves-base.cjs:40126:16 < Array.forEach < ensureSquadCoverage
+    head
+      0: pick < uniqueYouthName < makeYouth < world-moves-head.cjs:40173:16 < Array.forEach
+      1: pick < uniqueYouthName < makeYouth < world-moves-head.cjs:40173:16 < Array.forEach
+      2: ri < makeYouth < world-moves-head.cjs:40173:16 < Array.forEach < ensureSquadCoverage
+  FAIL section 11: Motherwell (now, seed 2): by step 32 (match) the head drew 48798 times and BASE 48799, with no AI deal touching my league or my opponents
+    the arms first part at draw 0:
+    BASE
+      0: pick < uniqueYouthName < makeYouth < world-moves-base.cjs:40126:16 < Array.forEach
+      1: pick < uniqueYouthName < makeYouth < world-moves-base.cjs:40126:16 < Array.forEach
+      2: ri < makeYouth < world-moves-base.cjs:40126:16 < Array.forEach < ensureSquadCoverage
+    head
+      0: pick < uniqueYouthName < makeYouth < world-moves-head.cjs:40173:16 < Array.forEach
+      1: pick < uniqueYouthName < makeYouth < world-moves-head.cjs:40173:16 < Array.forEach
+      2: ri < makeYouth < world-moves-head.cjs:40173:16 < Array.forEach < ensureSquadCoverage
+  FAIL section 11: St Mirren (now, seed 2): by step 43 (match) the head drew 67415 times and BASE 67392, with no AI deal touching my league or my opponents
+    the arms first part at draw 0:
+    BASE
+      0: pick < uniqueYouthName < makeYouth < world-moves-base.cjs:40126:16 < Array.forEach
+      1: pick < uniqueYouthName < makeYouth < world-moves-base.cjs:40126:16 < Array.forEach
+      2: ri < makeYouth < world-moves-base.cjs:40126:16 < Array.forEach < ensureSquadCoverage
+    head
+      0: pick < uniqueYouthName < makeYouth < world-moves-head.cjs:40173:16 < Array.forEach
+      1: pick < uniqueYouthName < makeYouth < world-moves-head.cjs:40173:16 < Array.forEach
+      2: ri < makeYouth < world-moves-head.cjs:40173:16 < Array.forEach < ensureSquadCoverage
+   3 careers: 96 results of mine compared; 0 compared to the end, 0 cut where a deal touched my league, 0 where it touched a club I played
+simCmWorldMoves: RED, sections 11 (3)

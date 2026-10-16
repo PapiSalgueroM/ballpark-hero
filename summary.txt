@@ -1,0 +1,9 @@
+vitest-new exit=0 7s |    Duration  6.73s (transform 3.80s, setup 265ms, collect 7.93s, tests 3.16s, environment 2.18s, prepare 1.32s)
+edge-carried exit=0 7s |    Duration  6.98s (transform 2.15s, setup 83ms, collect 88ms, tests 5.10s, environment 681ms, prepare 313ms)
+s0 exit=0 0s | simCmWorldMoves: green, sections 0 held
+s2 exit=0 38s | simCmWorldMoves: green, sections 2 held
+s3 exit=0 39s | simCmWorldMoves: green, sections 3 held
+s11-trace exit=1 57s | simCmWorldMoves: RED, sections 11 (3)
+c-noguard exit=1 39s | simCmWorldMoves: control noguard FIRED: section 2 red (168)
+c-seasonone exit=1 39s | simCmWorldMoves: control seasonone FIRED: section 3 red (198)
+c-nocarry exit=1 36s | simCmWorldMoves: control nocarry FIRED: section 3 red (318)
