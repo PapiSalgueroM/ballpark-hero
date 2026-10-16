@@ -89,3 +89,13 @@ journey and the draft night, so each fix lands once for all four sports.
 - Round 1500: the dirty money desk, cut from this round by the lead.
 - PR281 (codex/us-coach-retirement): its test file is on this branch byte for byte and all 14 cases pass, so
   it can be closed once this round is on main.
+
+## Main's reds met on the way
+
+- scripts/qa/career993.mjs (the prospect-journey workflow's native walk) was red on main: all six journeys
+  differed from the expected save by the `summerSalt` Round 1038 (b0eb7afc) draws at the board's joinCareer, and
+  one step later by the summer it deals after the first pro season. The walk now mirrors both (3fbab771,
+  072ff96a); no product line changed. Put back to its main bytes it fails with main's exact six lines.
+- simWritesAreSent section 2 drives /guess-the-nation, which loads its countries from the live database, so it
+  is red on any runner on main and here alike; section 1 (every write in src is sent) is green. It has no US
+  career part.
