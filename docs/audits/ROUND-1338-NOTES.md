@@ -62,6 +62,17 @@ characters `;return new Promise(()=>{})`.
   the tab's second failure, blocked storage): owed to the other lane, give the open mount a CentreMountBoundary.
 - .github/workflows/soccer-career-save-writer.yml line 46 pins the OLD CareerStory line byte for byte; it fires only on
   a push to codex/soccer-career-save-size, so it goes red the next time that branch is pushed with main merged.
+- A tap away during the wait (the run review's minor 1, r1338-run-w rows S3). On the tapped link path the home page
+  stays live for the whole wait, so a player whose first tap seems to do nothing can tap another game: that game draws
+  and is playable (the World Cup bracket at 390, Soccer Connect 4 at 1280), and the reload asked for at the first tap
+  then lands on /soccer-career and takes it away. Nothing saved is lost; the reload does what the first tap asked, and
+  on base the same window shows "This page broke". The decision 4 text "the page you were on stays until the fresh
+  page arrives" holds, but it does not say the page stays live; left as it is this round.
+- The build fails closed only while the plugin runs (the run review's minor 2, mutation m6). If the plugin stops
+  applying (its `apply` changed, or a later config wrapper filters it out), `vite build` goes green and ships Vite's
+  stock wrapper. simPreloadWait sections 1 and 2 and the section 6 config fence catch that on a runner, but the host
+  runs neither, so the lead's publish proof (the live entry chunk grepped with WAIT_RE after deploy_project, critic
+  item 3) is the only net on the host and must not be skipped.
 
 ## Measured on the final source (56b049cf, merged with main ae14cf97)
 
