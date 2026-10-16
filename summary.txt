@@ -1,0 +1,2 @@
+size-base exit=0 39s | simClubManagerSaveSize: all sections green
+slots-base exit=0 43s | simClubManagerSlots: all sections green

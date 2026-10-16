@@ -1,0 +1,3 @@
+#!serial
+size-base: git checkout 1027b08c -- src && node scripts/simClubManagerSaveSize.mjs; s=$?; git checkout HEAD -- src; exit $s
+slots-base: git checkout 1027b08c -- src && node scripts/simClubManagerSlots.mjs; s=$?; git checkout HEAD -- src; exit $s
