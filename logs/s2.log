@@ -1,0 +1,5 @@
+simCmNoSack: sections 2
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+2) The hoard keeper for three seasons at the nine clubs, with No sacking and without (fleet seed 0)
+  FAIL (section 2): the engine has no turnOnNoSack or postsScore, so No sacking cannot be switched on
+simCmNoSack: FAIL in section(s) 2

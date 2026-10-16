@@ -1,0 +1,5 @@
+simCmNoSack: sections 1, compared with the base tree /home/runner/work/ballpark-hero/ballpark-hero/.tmp-base1
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+1) A career without the key plays as the base tree: 9 clubs, 2 seeds, 2 seasons, coach and noCoach
+   36 careers compared, 2606416 draws here, in 60 s
+simCmNoSack: PASS (sections 1)

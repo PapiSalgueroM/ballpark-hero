@@ -1,0 +1,3 @@
+s2 exit=1 0s | simCmNoSack: FAIL in section(s) 2
+s3456 exit=1 3s | simCmNoSack: FAIL in section(s) 3, 4, 5
+s1 exit=0 61s | simCmNoSack: PASS (sections 1)
