@@ -19,7 +19,7 @@ import {
 import { drawUclLeaguePhase } from './uclLeaguePhase';
 import { sortedUclGroupTable } from './clubManagerUclGroups';
 import { keyedRng } from './keyedRng';
-import type { TableRow } from './clubManager';
+import { ERA_LEAGUES, REAL_LEAGUES, type TableRow } from './clubManager';
 
 interface GoldenCase {
   name: string; rules: TieRules; tieIn: string; calls: [string, string, number, number, number][];
@@ -160,6 +160,20 @@ describe('the nights', () => {
       sizes.push(clubs);
     }
     expect(sizes.length).toBe(27);
+  });
+  /* The read review's m5: the sizes above are a superset only if every league the game has fits in them, so read
+     them off REAL_LEAGUES and every era's ERA_LEAGUES, print them, and place the nights at each. */
+  it('every league size the game has, read off REAL_LEAGUES and ERA_LEAGUES, places its nights on their own rounds', () => {
+    const sizes = new Set<number>([...REAL_LEAGUES, ...Object.values(ERA_LEAGUES).flat()].map(l => l.clubs.length));
+    const list = [...sizes].sort((x, y) => x - y);
+    console.log(`worldCompetition: league sizes the game has: ${list.join(', ')} (${REAL_LEAGUES.length} real leagues, ${Object.keys(ERA_LEAGUES).length} eras)`);
+    expect(list.length).toBeGreaterThan(2);
+    for (const clubs of list) {
+      expect(clubs >= 4 && clubs <= 30, `a league of ${clubs} clubs is outside the 4 to 30 checked above`).toBe(true);
+      const rounds = 2 * ((clubs % 2 === 0 ? clubs : clubs + 1) - 1);
+      const placed = leaguePhaseNightRounds(rounds, at(rounds, 0.39));
+      expect(rising(placed) && placed[0] > at(rounds, 0.39), `${clubs} clubs: ${placed.join(',')}`).toBe(true);
+    }
   });
   it('control: a mark table with two equal entries, placed by the fraction alone, puts two nights on one round', () => {
     const marks = [0.5, 0.6, 0.6, 0.7];
