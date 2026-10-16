@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { build } from 'esbuild';
+import { stripRetireHunks } from './lib/usCoachRetireHunks.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const engine = 'src/lib/usCoachCareer.ts', test = 'src/lib/usCoachPoaching.test.ts';
@@ -47,19 +48,9 @@ for (const anchor of [departure, credit]) {
 }
 /* Round 1346 bridge: the coaching retirement added five hunks to the engine (retireCoachCareer and one done guard
    at the top of four functions). Each is an exact anchor held once, LF and CRLF, and stripped before the hash, so
-   the pinned pre-888 hash is unchanged and still proves no other line of the engine moved. */
-const retireHunks = [
-  ["  excludeTeam = '',\n): void {\n  if (s.done) return;\n", "  excludeTeam = '',\n): void {\n"],
-  ['CoachCareerState {\n  if (prev.done) return prev;\n  const offer = prev.offers[index];', 'CoachCareerState {\n  const offer = prev.offers[index];'],
-  ['  if (prev.done) return { state: prev, notes: [] };\n  const s: CoachCareerState = { ...prev, results: [...prev.results], profile:', '  const s: CoachCareerState = { ...prev, results: [...prev.results], profile:'],
-  ['  if (prev.done) return { state: prev, notes: [] };\n  const s: CoachCareerState = { ...prev, results: [...prev.results] };', '  const s: CoachCareerState = { ...prev, results: [...prev.results] };'],
-  ["\n/** Round 1346: the player closes the book himself. Only `done` changes, and once\n *  it is set every season, offer and market call above hands its input back. */\nexport function retireCoachCareer(prev: CoachCareerState): CoachCareerState {\n  return prev.done ? prev : { ...prev, done: true };\n}\n", ''],
-];
-for (const [hunk] of retireHunks) {
-  assert.equal(source.split(hunk).length - 1, 1, 'Round 1346 retirement hunk held once');
-  assert.equal(holdSource(Buffer.from(source.replaceAll('\n', '\r\n'))).source.split(hunk).length - 1, 1, 'Round 1346 CRLF hunk held');
-}
-const preRetire = retireHunks.reduce((text, [hunk, without]) => text.replace(hunk, without), source);
+   the pinned pre-888 hash is unchanged and still proves no other line of the engine moved. The anchors live in
+   scripts/lib/usCoachRetireHunks.mjs, shared with simUsCoachRetirement. */
+const preRetire = stripRetireHunks(source);
 const original = preRetire.replace(departure, oldDeparture).replace(credit + '\n', '');
 assert.equal(createHash('sha256').update(original).digest('hex'), originalHash, 'Reconstructed original matches the captured pre-repair engine exactly');
 let subject = source;

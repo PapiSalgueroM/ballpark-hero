@@ -92,7 +92,10 @@ try {
     const expected = controls[control][3], failed = rows.filter(row => row.status === 'failed');
     assert.equal(run.status, 1); assert.equal(report.numFailedTests, expected.length); assert.equal(report.numPassedTests, CASE_COUNT - expected.length);
     assert.deepEqual(failed.map(row => row.title).sort(), [...expected].sort());
-    for (const row of failed) assert.match(row.failureMessages.join('\n'), /AssertionError:|expect\(element\)|TestingLibraryElementError: Unable to find (?:an accessible element with the role|an element with the text:)/);
+    /* Round 1346: the env above sets FORCE_COLOR, and its mere presence turns Vitest's colours on, so a jest-dom
+       message reads expect(<ESC>[22m<ESC>[31melement...; the colour codes are taken out before the match. */
+    const plainText = text => text.replace(new RegExp(String.fromCharCode(27) + '[[][0-9;]*m', 'g'), '');
+    for (const row of failed) assert.match(plainText(row.failureMessages.join('\n')), /AssertionError:|expect\(element\)|TestingLibraryElementError: Unable to find (?:an accessible element with the role|an element with the text:)/);
     console.log(`Career confirmation ${control}: one actual executable binding changed in an isolated source copy.`);
     console.log(`Career confirmation ${control}: ${expected.length} intended failures, ${CASE_COUNT - expected.length} independent passes, no skipped cases.`);
     console.log(`US_ACTION_CONTROL: ${JSON.stringify({ control, failed: failed.map(row => ({ title: row.title, messages: row.failureMessages })) })}`);
