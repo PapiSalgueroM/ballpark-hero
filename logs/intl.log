@@ -1,0 +1,16 @@
+simSoccerInternationalReturn exit 0: ve saves and vectors: 90 pairs.
+PASS actual return source groups: 8.
+PASS actual selected, not-selected, ban and tournament fixtures: 4.
+PASS international return copied production source bytes held.
+    '    - accept-encoding: gzip,deflate,br',
+    '    - origin: http://127.0.0.1:36391',
+    '    - referer: http://127.0.0.1:36391/soccer-career',
+    '    - sec-ch-ua: "Not:A-Brand";v="8", "Chromium";v="156", "HeadlessChrome";v="156"',
+    '    - sec-ch-ua-mobile: ?0',
+    '    - sec-ch-ua-platform: "Linux"'
+  ],
+  name: 'Error',
+  code: 'ECONNRESET'
+}
+
+Node.js v24.21.0

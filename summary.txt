@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+intl exit=1 21s | Node.js v24.21.0
+farewell exit=0 260s | Soccer farewell native 1343 checks,18 journeys,3 copied observation controls,0 failures.
+agent exit=0 427s | Soccer agent review native 1904 checks,12 journeys,3 copied observation controls,0 failures.
