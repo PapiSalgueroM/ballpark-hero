@@ -1,0 +1,15 @@
+headsha exit=0 0s | 4b742e2ae Round BHH: record the base of Round 1329's inverse after PR275 (3225f123) in this branch's history, tree unchanged
+simSoccerSeasonHistory exit=0 3s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+simSoccerFarewell exit=0 10s | Soccer farewell:9 healthy groups,168 full original state/RNG pairs,6 effective source controls,6 prepared native branches.
+simSoccerInternationalReturn exit=0 9s | PASS international return copied production source bytes held.
+simSoccerAgentReview exit=0 15s | PASS agent review product and proof source bytes held.
+simCareerProgramme exit=0 89s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
+anchors exit=0 52s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+rival exit=0 14s | No rival product names found. 0 findings.
+trust exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+rival-proof exit=0 12s | soccerRivalWagesProof PASS arms3 tests69 originalWageFailures10 traceRows39
+simSoccerContractMoves exit=0 2s | simSoccerContractMoves: all full-save contract and club-move checks passed
+simPhone2 exit=1 189s | 1 FAILURES
+simCareerDilemmaTruth exit=0 8s | simCareerDilemmaTruth: all green
+simMoney exit=1 261s | 1 FAILURES
+simSoccerVeteranOffers exit=0 772s | PASS Soccer veteran offers: 7 groups, 11 retained bundle arms
