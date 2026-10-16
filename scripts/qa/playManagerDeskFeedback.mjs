@@ -181,7 +181,12 @@ try {
       /* Calibrate the geometry oracle on the SAME real status, then restore its exact style. This is diagnostic
        * calibration, not the product control: the original-placement arm must use an actual rebuilt source inverse. */
       const style = await noteLocator(run.page).getAttribute('style');
-      await noteLocator(run.page).evaluate(element => element.setAttribute('style', 'position:fixed!important;left:8px!important;bottom:8px!important;top:auto!important;width:calc(100vw - 16px)!important;z-index:2147483647!important;display:flex!important;visibility:visible!important'));
+      await noteLocator(run.page).evaluate(element => {
+        const banner = document.querySelector('[role="region"][aria-label="Cookie choices"]');
+        const covered = banner && getComputedStyle(banner).position === 'fixed'
+          ? Math.max(0, innerHeight - banner.getBoundingClientRect().top) : 0;
+        element.setAttribute('style', `position:fixed!important;left:8px!important;bottom:${covered + 8}px!important;top:auto!important;width:calc(100vw - 16px)!important;z-index:2147483647!important;display:flex!important;visibility:visible!important`);
+      });
       row.observations.calibrationVisible = await snapshot(run.page); assert.equal(row.observations.calibrationVisible.notes[0].visible, true);
       await capture(run.page, `${id}-calibration-visible.png`);
       await noteLocator(run.page).evaluate(element => element.style.setProperty('visibility', 'hidden', 'important'));
