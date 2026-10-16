@@ -1,0 +1,6 @@
+s6-now: CM_WORLD_MOVES_SECTIONS=6 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
+s6-2015: CM_WORLD_MOVES_SECTIONS=6 CM_WORLD_MOVES_ERAS=era2015 node scripts/simCmWorldMoves.mjs
+s6-2005: CM_WORLD_MOVES_SECTIONS=6 CM_WORLD_MOVES_ERAS=era2005 node scripts/simCmWorldMoves.mjs
+s6-seedless: CM_WORLD_MOVES_CONTROL=seedless CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=0-1 node scripts/simCmWorldMoves.mjs
+s1-now: CM_WORLD_MOVES_SECTIONS=1 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
+s1-probe-2005: CM_WORLD_MOVES_SECTIONS=1 CM_WORLD_MOVES_HEAD=probe CM_WORLD_MOVES_ERAS=era2005,era2015 node scripts/simCmWorldMoves.mjs
