@@ -1,0 +1,9 @@
+headsha exit=0 0s | 87056ed9b Round BHH: bind the cold context, documentary and saved loan proofs' Life hold to SC_*_LIFE_REF
+simHarnessAnchors exit=0 65s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simAccessibility exit=0 0s | simAccessibility: all green
+simPlayerBingoHonours exit=0 14s | simPlayerBingoHonours PASS
+simBuildYourXiFit exit=0 3s | simBuildYourXiFit: all checks green
+tsc exit=0 115s | 
+vitest-all exit=0 565s |    Duration  564.49s (transform 35.64s, setup 23.79s, collect 161.68s, tests 1207.05s, environment 177.76s, prepare 35.58s)
