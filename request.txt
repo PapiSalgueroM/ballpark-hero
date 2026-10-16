@@ -1,0 +1,10 @@
+# Release BH reruns (session I): the opponent labels binding (PR278 hunks reversed before the legacy page) and the two walks red on timing or flake, each with its setup lines.
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simSoccerOpponentLabels: SIM_NETWORK=offline SOCCER_OPPONENT_LABELS_OUT="$RUNNER_TEMP/ba-labels" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerOpponentLabels.mjs
+simSoccerOpponentLabels-forwalk: SIM_NETWORK=offline SOCCER_OPPONENT_LABELS_OUT="$RUNNER_TEMP/ba-labels" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerOpponentLabels.mjs
+simSoccerOpponentLabels-browser: SOCCER_OPPONENT_LABELS_BROWSER=1 SOCCER_OPPONENT_LABELS_INPUT="$RUNNER_TEMP/ba-labels" SOCCER_OPPONENT_LABELS_OUT="$RUNNER_TEMP/ba-labels-b" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerOpponentLabels.mjs
+labels-pure: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SOCCER_OPPONENT_LABELS_OUT=/tmp/labels-proof node scripts/simSoccerOpponentLabels.mjs 2>&1 | tail -20
+labels-browser: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SOCCER_OPPONENT_LABELS_BROWSER=1 SOCCER_OPPONENT_LABELS_INPUT=/tmp/labels-proof SOCCER_OPPONENT_LABELS_OUT=/tmp/labels-browser node scripts/simSoccerOpponentLabels.mjs 2>&1 | tail -20

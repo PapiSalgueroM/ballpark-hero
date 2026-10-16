@@ -1,0 +1,7 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simSoccerOpponentLabels exit=0 26s | PASS simSoccerOpponentLabels: complete original/current careers, display controls and whole undo
+simSoccerOpponentLabels-forwalk exit=0 26s | PASS simSoccerOpponentLabels: complete original/current careers, display controls and whole undo
+simSoccerOpponentLabels-browser exit=0 10s | PASS simSoccerOpponentLabels browser: 3 actual saved-row journeys, complete saves and read vectors
+labels-pure exit=0 26s | PASS simSoccerOpponentLabels: complete original/current careers, display controls and whole undo
+labels-browser exit=0 10s | PASS simSoccerOpponentLabels browser: 3 actual saved-row journeys, complete saves and read vectors
