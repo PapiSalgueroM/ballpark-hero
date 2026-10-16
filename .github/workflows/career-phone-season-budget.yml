@@ -86,12 +86,14 @@ jobs:
           });
           const log = result.stdout + result.stderr;
           fs.writeFileSync(process.env.PHONE_BUDGET_OUT + '/simPhone2.log', log);
+          fs.writeFileSync(process.env.PHONE_BUDGET_OUT + '/simPhone2.stdout.log', result.stdout);
+          fs.writeFileSync(process.env.PHONE_BUDGET_OUT + '/simPhone2.stderr.log', result.stderr);
           process.stdout.write(log);
           const failures = log.split(/\r?\n/).filter(line => /^  FAIL:/.test(line));
           const knownSizeOnly = result.status === 1 && !result.error && !result.signal && failures.length === 1
-            && /^  FAIL: biggest save is \d+(?:\.\d+)? KB$/.test(failures[0]) && /\n1 FAILURES\s*$/.test(log);
+            && /^  FAIL: biggest save is \d+(?:\.\d+)? KB$/.test(failures[0]) && /\n1 FAILURES\s*$/.test(result.stdout);
           const green = result.status === 0 && !result.error && !result.signal && failures.length === 0
-            && /ALL PHONE ROUND 130 CHECKS PASSED\s*$/.test(log);
+            && /ALL PHONE ROUND 130 CHECKS PASSED\s*$/.test(result.stdout);
           fs.writeFileSync(process.env.PHONE_BUDGET_OUT + '/simPhone2.process.json', JSON.stringify({
             status: result.status, signal: result.signal, error: result.error?.message ?? null,
             failures, green, knownSizeOnly, limits: 'Original 52KB whole-save cap is unchanged. A retained known size failure is not a green sim or full-suite claim.',
