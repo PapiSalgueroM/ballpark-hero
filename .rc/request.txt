@@ -1,0 +1,9 @@
+#!build
+#!playwright
+#!serial
+c993-head: SIM_NETWORK=offline ENGINES=chromium CAREER993_ARTIFACTS="$RC_OUT/c993-head" node scripts/qa/career993.mjs > /tmp/c993h.log 2>&1; s=$?; grep -v -E "^\s+at " /tmp/c993h.log | grep -E "passed|AssertionError|journeys|^\s+[+-] " | head -16 | cut -c1-200; exit $s
+c993-reverted: git show 40c678a9:scripts/qa/career993.mjs > scripts/qa/career993.mjs && git diff --stat && SIM_NETWORK=offline ENGINES=chromium CAREER993_ARTIFACTS="$RC_OUT/c993-rev" node scripts/qa/career993.mjs > /tmp/c993r.log 2>&1; s=$?; git checkout -- scripts; grep -v -E "^\s+at " /tmp/c993r.log | grep -E "passed|AssertionError|journeys|^\s+[+-] " | head -16 | cut -c1-200; exit $s
+c993-reveal: CAREER993_CONTROL=reveal SIM_NETWORK=offline ENGINES=chromium CAREER993_ARTIFACTS="$RC_OUT/c993-reveal" node scripts/qa/career993.mjs > /tmp/c993v.log 2>&1; s=$?; grep -v -E "^\s+at " /tmp/c993v.log | tail -3 | cut -c1-200; exit $s
+c993-choice: CAREER993_CONTROL=choice SIM_NETWORK=offline ENGINES=chromium CAREER993_ARTIFACTS="$RC_OUT/c993-choice" node scripts/qa/career993.mjs > /tmp/c993c.log 2>&1; s=$?; grep -v -E "^\s+at " /tmp/c993c.log | tail -3 | cut -c1-200; exit $s
+wsent-head: SIM_NETWORK=offline node scripts/simWritesAreSent.mjs > /tmp/wh.log 2>&1; s=$?; tail -14 /tmp/wh.log | cut -c1-220; exit $s
+f3-mut: git show 6923e9ec:src/components/us-career/CoachCareerPanel.tsx > src/components/us-career/CoachCareerPanel.tsx && git diff --stat && node_modules/.bin/vitest run src/test/usCareerReports1346.test.tsx -t "No seasons coached" --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
