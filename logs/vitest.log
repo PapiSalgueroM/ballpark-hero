@@ -1,0 +1,92 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot play another season[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot sit out another season[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot accept an old offer[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot refresh the market[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mretiring changes only done and is pure and idempotent[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mretirement requires confirmation and accepts once after cancel and escape[33m 540[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted employed coach keeps the record and log without season actions[32m 260[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted unemployed coach cannot take offers or advance the calendar[32m 139[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted start card opens a review instead of offering a coaching return[32m 20[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mactive coaching still plays one season and leaves its input unchanged[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mactive coach still accepts a genuine offer without changing year or history[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mlegacy coaching saves without done keep their active career[32m 5[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coaching saves preserve their full record on JSON reload[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mactive start card still resumes the sideline without starting over[32m 21[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mdraft day on the four US career hubs[2m > [22mNFL mounts the draft day card with the engine pick and the confetti rule[33m 371[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mdraft day on the four US career hubs[2m > [22mNBA mounts the draft day card with the engine pick and the confetti rule[32m 122[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mdraft day on the four US career hubs[2m > [22mMLB mounts the draft day card with the engine pick and the confetti rule[32m 92[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the actual rules and worked example before the choice tiles[33m 373[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mdraft day on the four US career hubs[2m > [22mNHL mounts the draft day card with the engine pick and the confetti rule[32m 99[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mthe pick either side of round one[2m > [22mNFL draws pick 31 the way the line under it reads[32m 27[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mthe pick either side of round one[2m > [22mNBA draws pick 31 the way the line under it reads[32m 22[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mthe pick either side of round one[2m > [22mMLB draws pick 31 the way the line under it reads[32m 14[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mthe pick either side of round one[2m > [22mNHL draws pick 31 the way the line under it reads[32m 25[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mcoach season reveal[2m > [22mcoaching a season replaces the grey line with a reveal carrying the record and the notes[32m 29[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the distinct tactical tradeoff on each actual option for 'nfl' 'QB'[32m 220[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the distinct tactical tradeoff on each actual option for 'mlb' 'CF'[32m 190[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the distinct tactical tradeoff on each actual option for 'mlb' 'SP'[32m 104[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the distinct tactical tradeoff on each actual option for 'nhl' 'G'[32m 127[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the distinct tactical tradeoff on each actual option for 'nba' 'PG'[32m 116[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'NFL' preserves live restore and engine state as an independent baseline[33m 834[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the distinct tactical tradeoff on each actual option for 'nba' 'PF'[32m 118[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the distinct tactical tradeoff on each actual option for 'nhl' 'C'[32m 146[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'NBA' preserves live restore and engine state as an independent baseline[33m 589[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22msaves a selected choice immediately with the real upcoming team and year[32m 175[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mrestores the original tile focus and list scroll after Back[32m 177[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'MLB' preserves live restore and engine state as an independent baseline[33m 429[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mkeeps a selected choice and restores detail scroll and Help focus[32m 249[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mclears optional selections without changing base career fields[32m 166[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mkeeps all displayed choices disabled for an unavailable career {"retired":true}[32m 72[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mkeeps all displayed choices disabled for an unavailable career {"suspendedSeasons":1}[32m 76[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mkeeps seed4 year2063 departure and standing unchanged when no larger vacancy exists[32m 20[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mretains genuine seed1 year2055 transfer fromWashington Wizards toMiami Heat[32m 19[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mretains genuine seed1 year2061 transfer fromMiami Heat toNew Orleans Pelicans[32m 3[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mretains genuine seed2 year2045 transfer fromDenver Nuggets toHouston Rockets[32m 11[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mretains genuine seed2 year2054 transfer fromAtlanta Hawks toUtah Jazz[32m 3[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mretains genuine seed4 year2049 transfer fromLA Clippers toBoston Celtics[32m 2[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mretains genuine seed4 year2059 transfer fromBoston Celtics toDallas Mavericks[32m 3[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mholds the original ordinary staying season and its three draws[32m 1[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mholds original firing, new market and unemployment without an instant rehire[32m 3[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mkeeps previously earned poaching credit during an ordinary same-chair season[32m 2[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mround-trips current coaching saves and null old coaching data through the existing repair API[32m 2[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mdoes not play or draw randomness when the original fired coach has no job[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mhandles a malformed optional result without crashing or rewarding[32m 107[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mdoes not offer veteran adaptation before age 30[32m 88[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'NHL' preserves live restore and engine state as an independent baseline[33m 409[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mcloses with Escape and returns focus to the exact opener[32m 72[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mrenders the earned outcome using saved target and bonus values[32m 9[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'NFL' keeps retirement pending until explicit acceptance and records its real legacy once[33m 617[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'NBA' keeps retirement pending until explicit acceptance and records its real legacy once[33m 414[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'MLB' keeps retirement pending until explicit acceptance and records its real legacy once[33m 352[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'NHL' keeps retirement pending until explicit acceptance and records its real legacy once[33m 388[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'NFL' keeps restart pending then deletes only its own career without another completion[33m 479[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'NBA' keeps restart pending then deletes only its own career without another completion[33m 424[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'MLB' keeps restart pending then deletes only its own career without another completion[33m 439[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'NHL' keeps restart pending then deletes only its own career without another completion[33m 401[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22mkeeps closed mounts callback quiet and unrelated payloads exact as an independent baseline[32m 14[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22mretire starts on Cancel and returns both dismissal paths to its exact opener without scrolling[32m 107[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: retire from coaching on the real board[2m > [22mnfl: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired[33m 1064[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22mrestart starts on Cancel and returns both dismissal paths to its exact opener without scrolling[32m 101[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22maccepts two same-frame Confirm clicks once and rearms only after a new opening[32m 85[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22munmounts an open prompt without accepting or erasing its caller save[32m 30[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22mcontains the explicit keyboard boundary events while Cancel spends nothing[32m 71[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22mretireCoach keeps every guard of the shared prompt from Cancel first to a quiet unmount[32m 175[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: retire from coaching on the real board[2m > [22mnba: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired[33m 583[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: retire from coaching on the real board[2m > [22mmlb: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired[33m 409[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: retire from coaching on the real board[2m > [22mnhl: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired[33m 415[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: retire from coaching on the real board[2m > [22mnfl: an old coach save with no done mounts as an active career and is not rewritten[32m 142[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: retire from coaching on the real board[2m > [22mnba: an old coach save with no done mounts as an active career and is not rewritten[32m 94[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: retire from coaching on the real board[2m > [22mmlb: an old coach save with no done mounts as an active career and is not rewritten[32m 95[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReports1346.test.tsx[2m > [22mRound 1346: retire from coaching on the real board[2m > [22mnhl: an old coach save with no done mounts as an active career and is not rewritten[32m 90[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m80 passed[39m[22m[90m (80)[39m
+[2m   Start at [22m 11:49:02
+[2m   Duration [22m 14.28s[2m (transform 4.20s, setup 689ms, collect 13.28s, tests 13.73s, environment 4.14s, prepare 1.71s)[22m
+

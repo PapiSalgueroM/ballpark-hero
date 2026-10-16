@@ -1,0 +1,72 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /AssertionError:|expect\(element\)|TestingLibraryElementError: Unable to find (?:an accessible element with the role|an element with the text:)/. Input:
+
+'Error: \x1B[2mexpect(\x1B[22m\x1B[31melement\x1B[39m\x1B[2m).toHaveFocus()\x1B[22m\n' +
+  '\n' +
+  'Expected element with focus:\n' +
+  '  \x1B[32m<button\n' +
+  '  class="min-h-11 min-w-11"\n' +
+  '>\n' +
+  '  Keep playing\n' +
+  '</button>\x1B[39m\n' +
+  'Received element with focus:\n' +
+  '  \x1B[31m<button\n' +
+  '  aria-controls="radix-:r3l:"\n' +
+  '  aria-expanded="true"\n' +
+  '  aria-haspopup="dialog"\n' +
+  '  data-state="open"\n' +
+  '  type="button"\n' +
+  '>\n' +
+  '  Original fixture action\n' +
+  '</button>\x1B[39m\n' +
+  '    at Proxy.expectWrapper (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/expect/dist/index.js:1745:12)\n' +
+  '    at Proxy.<anonymous> (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/expect/dist/index.js:1029:14)\n' +
+  '    at Proxy.toHaveFocus (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/chai/index.js:1686:25)\n' +
+  '    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerActionConfirm.test.tsx:140:117\n' +
+  '    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:863:59\n' +
+  '    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:155:11\n' +
+  '    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:26\n' +
+  '    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1897:20\n' +
+  '    at new Promise (<anonymous>)\n' +
+  '    at runWithTimeout (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1863:10)'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simUsCareerActionConfirm.mjs:95:38 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'Error: \x1B[2mexpect(\x1B[22m\x1B[31melement\x1B[39m\x1B[2m).toHaveFocus()\x1B[22m\n' +
+    '\n' +
+    'Expected element with focus:\n' +
+    '  \x1B[32m<button\n' +
+    '  class="min-h-11 min-w-11"\n' +
+    '>\n' +
+    '  Keep playing\n' +
+    '</button>\x1B[39m\n' +
+    'Received element with focus:\n' +
+    '  \x1B[31m<button\n' +
+    '  aria-controls="radix-:r3l:"\n' +
+    '  aria-expanded="true"\n' +
+    '  aria-haspopup="dialog"\n' +
+    '  data-state="open"\n' +
+    '  type="button"\n' +
+    '>\n' +
+    '  Original fixture action\n' +
+    '</button>\x1B[39m\n' +
+    '    at Proxy.expectWrapper (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/expect/dist/index.js:1745:12)\n' +
+    '    at Proxy.<anonymous> (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/expect/dist/index.js:1029:14)\n' +
+    '    at Proxy.toHaveFocus (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/chai/index.js:1686:25)\n' +
+    '    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerActionConfirm.test.tsx:140:117\n' +
+    '    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:863:59\n' +
+    '    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:155:11\n' +
+    '    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:26\n' +
+    '    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1897:20\n' +
+    '    at new Promise (<anonymous>)\n' +
+    '    at runWithTimeout (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1863:10)',
+  expected: /AssertionError:|expect\(element\)|TestingLibraryElementError: Unable to find (?:an accessible element with the role|an element with the text:)/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
