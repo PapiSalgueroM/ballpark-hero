@@ -293,7 +293,7 @@ const squadNow = page => page.evaluate(() => {
   const top = el => { let t = 0; for (let e = el; e && e !== sheet; e = e.offsetParent) t += e.offsetTop; return t; };
   const hint = sheet.querySelector('[data-squad-first-hint]'), tile = sheet.querySelector('[data-squad-open]');
   return { screen: sheet.querySelector('[data-squad-screen]')?.getAttribute('data-squad-screen') ?? null,
-    hintY: hint ? top(hint) : null, tileY: tile ? top(tile) : null };
+    hintY: hint ? top(hint) : null, tileY: tile ? top(tile) : null, panelY: top(sheet.querySelector("[role=dialog]")), panelH: sheet.querySelector("[role=dialog]")?.offsetHeight ?? null };
 });
 async function w6(width, height) {
   section = 'W6';
@@ -311,7 +311,7 @@ async function w6(width, height) {
         const top = el => { let t = 0; for (let e = el; e && e !== sheet; e = e.offsetParent) t += e.offsetTop; return t; };
         const hint = sheet.querySelector('[data-squad-first-hint]'), first = sheet.querySelector('[data-squad-open]');
         window.__squadFirst = { screen: sheet.querySelector('[data-squad-screen]').getAttribute('data-squad-screen'),
-          hintY: hint ? top(hint) : null, tileY: first ? top(first) : null };
+          hintY: hint ? top(hint) : null, tileY: first ? top(first) : null, panelY: top(sheet.querySelector("[role=dialog]")), panelH: sheet.querySelector("[role=dialog]")?.offsetHeight ?? null };
       }).observe(document.body, { childList: true, subtree: true });
     });
     await tile.click();
@@ -321,7 +321,7 @@ async function w6(width, height) {
     const later = await squadNow(page);
     check(first?.screen === 'home' && first.hintY !== null, `${width}: the first frame of the first open is home with the pointer (${JSON.stringify(first)})`);
     check(later?.screen === 'home' && later.hintY !== null, `${width}: one second later it is still home with the pointer (${JSON.stringify(later)})`);
-    check(!!first && !!later && first.hintY === later.hintY && first.tileY === later.tileY, `${width}: the pointer and the first tile have not moved`);
+    check(!!first && !!later && first.hintY === later.hintY && first.tileY === later.tileY, `${width}: the pointer and the first tile have not moved (first ${JSON.stringify(first)}, a second later ${JSON.stringify(later)})`);
     await shot(page, `W6-first-open-${width}`);
     await page.getByRole('button', { name: 'How the squad works', exact: true }).click();
     const help = await page.locator('[data-squad-sheet] [data-squad-screen="help"]').waitFor({ timeout: 8000 }).then(() => true, () => false);
@@ -398,10 +398,10 @@ async function w8(width, height) {
       const title = [...document.querySelectorAll('h1')].find(h => /full attributes$/.test(h.textContent || ''));
       const labels = [...document.querySelectorAll('span')].filter(s => (s.className || '').includes('w-[6.5rem]'));
       return { title: title ? { text: title.textContent, cut: cut(title) } : null,
-        labels: labels.length, cutLabels: labels.filter(cut).map(s => s.textContent) };
+        labels: labels.length, cutLabels: labels.filter(cut).map(s => s.textContent), overflowing: labels.filter(s => s.scrollWidth > s.clientWidth).map(s => s.textContent) };
     });
     check(!!seen.title && seen.title.text.includes(LONG_NAME) && !seen.title.cut, `${width}: the title holds the whole name (${JSON.stringify(seen.title)})`);
-    check(seen.labels >= 6 && seen.cutLabels.length === 0, `${width}: every keeper label holds its whole text (${seen.labels} labels, cut: ${seen.cutLabels.join(', ') || 'none'})`);
+    check(seen.labels >= 6 && seen.cutLabels.length === 0, `${width}: every keeper label holds its whole text (${seen.labels} labels; text wider than its box: ${seen.overflowing.join(', ') || 'none'}; set to cut with an ellipsis: ${seen.cutLabels.length})`);
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(200);
     await shot(page, `W8-attributes-${width}`);
