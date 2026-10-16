@@ -1,0 +1,10 @@
+id-base: mkdir -p /tmp/base-b && git archive d4f2c6f6 src | tar -x -C /tmp/base-b && BASE_ROOT=/tmp/base-b SECTION=1,6 SEEDS=8 SEASONS=4 node scripts/simCmNoSack.mjs
+oldsave: mkdir -p /tmp/base-o && git archive d4f2c6f6 src | tar -x -C /tmp/base-o && BASE_ROOT=/tmp/base-o node .rc/x/oldsave.mjs
+fleet4: SECTION=2 FLEET_SEED=4 node scripts/simCmNoSack.mjs
+fleet5: SECTION=2 FLEET_SEED=5 node scripts/simCmNoSack.mjs
+fleet6: SECTION=2 FLEET_SEED=6 node scripts/simCmNoSack.mjs
+fleet7: SECTION=2 FLEET_SEED=7 node scripts/simCmNoSack.mjs
+fleet8: SECTION=2 FLEET_SEED=8 node scripts/simCmNoSack.mjs
+fleet9: SECTION=2 FLEET_SEED=9 node scripts/simCmNoSack.mjs
+fleet10: SECTION=2 FLEET_SEED=10 node scripts/simCmNoSack.mjs
+fleet11: SECTION=2 FLEET_SEED=11 node scripts/simCmNoSack.mjs
