@@ -77,7 +77,7 @@ import { createRequire } from 'node:module';
 import { build } from 'esbuild';
 import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENGINE = 'src/lib/clubManager.ts';
@@ -919,6 +919,35 @@ function cardCheck(head, base, c, h, b, card) {
 /* Set true at step 6, when the takeover card drops what is already failed. */
 const TAKEOVER_OBJECTIVES = true;
 
+/* ---------------- section saves (step 9) ---------------- */
+/** Every Club Manager save scripts/lib/realSaves.mjs builds with the BASE engine, plus one paused on the season
+ *  review (its offers dealt, no fate), loads to the same JSON on both trees, and the paused one keeps its offers. */
+async function savesSection(head, base, folder) {
+  const P = 'saves';
+  const { buildRealSaves } = await import(pathToFileURL(path.join(root, 'scripts/lib/realSaves.mjs')).href);
+  const built = await buildRealSaves({ root: BASE, tmpDir: path.join(folder, 'realsaves'), seeds: [0, 1, 2, 3] });
+  const raws = [...(built.fleet['/club-manager'] ?? [])];
+  const store = new Map();
+  globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
+  /* The paused review: a season the base engine finished, saved by the base engine's own writer. */
+  const played = playSeason(base.cm, startOf(base.cm, 'OB', null, 5), 5 * 7919);
+  const fin = withSeed(8, () => base.cm.finishSeason(played.s));
+  store.clear();
+  base.cm.saveCareer(fin.state);
+  const paused = store.get(base.cm.SAVE_KEY);
+  if (paused) raws.push(paused);
+  let bad = 0, first = '';
+  const load = (arm, raw) => { store.clear(); store.set(arm.cm.SAVE_KEY, raw); const s = arm.cm.loadCareer(); store.clear(); return s; };
+  for (const raw of raws) {
+    const h = load(head, raw), b = load(base, raw);
+    if (JSON.stringify(h) !== JSON.stringify(b)) { bad += 1; first ||= firstDiff(h, b); }
+  }
+  check(P, `${raws.length} Club Manager saves (realSaves on CM_BOARD_BASE, and a paused review) load to the same JSON on both trees`, raws.length > 1 && bad === 0, bad ? `${bad}; first ${first}` : '');
+  const h = paused ? load(head, paused) : null;
+  check(P, 'the paused review keeps the offers it was dealt and carries no fate', !!h && JSON.stringify(h.pendingSummary?.offers) === JSON.stringify(fin.summary.offers) && !('fate' in (h.pendingSummary ?? {})),
+    `${fin.summary.offers.length} offers`);
+}
+
 /* ---------------- section legacy (step 2 on) ---------------- */
 const LEGACY_WORLDS = [['era2005', ['Everton']], ['era2015', ['Barcelona']], [null, ['Liverpool', 'West Ham', 'OB']]];
 function legacyRuns(cm) {
@@ -1190,6 +1219,8 @@ async function main() {
         for (const c of shard(fleet4)) playCareer(head.cm, { club: c.name, era: null, seed: 700 + seed, seasons: 2, policy: 'stay' }, null, { beforeRoll: rollStreamHook(head, base, acc) });
       }
       kittyChecks(head, [...(ARMS.titleRows ?? []), ...acc.rows], acc);
+    } else if (part === 'saves') {
+      await savesSection(await headArm(folder), await baseArm(folder), folder);
     } else if (part === 'takeover') {
       await takeoverSection(await headArm(folder), await baseArm(folder));
     } else if (part === 'dailies') {
