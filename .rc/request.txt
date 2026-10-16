@@ -1,0 +1,10 @@
+appeal-head: node scripts/simManagerAppealIsolation.mjs
+appeal-oldengine: git show 3a147a7cb4a13e5a931f32eac8b8a7bd65ed10cb:src/lib/clubManager.ts > src/lib/clubManager.ts && git show 3a147a7cb4a13e5a931f32eac8b8a7bd65ed10cb:src/lib/clubManagerCalendar.ts > src/lib/clubManagerCalendar.ts && git show 3a147a7cb4a13e5a931f32eac8b8a7bd65ed10cb:scripts/fixtures/managerAppealIsolation1081/manifest.json > scripts/fixtures/managerAppealIsolation1081/manifest.json && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout -- src scripts; exit $s
+wm-seedless: CM_WORLD_MOVES_CONTROL=seedless node scripts/simCmWorldMoves.mjs
+wm-noguard: CM_WORLD_MOVES_CONTROL=noguard node scripts/simCmWorldMoves.mjs
+oldworld: node scripts/simCmOldCareersWorld.mjs
+ow-never: CM_OLD_WORLD_CONTROL=never node scripts/simCmOldCareersWorld.mjs
+ow-early: CM_OLD_WORLD_CONTROL=early node scripts/simCmOldCareersWorld.mjs
+ow-bridge: CM_OLD_WORLD_CONTROL=bridge node scripts/simCmOldCareersWorld.mjs
+continuity-base: git worktree add -q /tmp/base1 3a147a7cb4a13e5a931f32eac8b8a7bd65ed10cb && ln -s $PWD/node_modules /tmp/base1/node_modules && cd /tmp/base1 && node scripts/simManagerWorldContinuity.mjs
+decisions-base: git worktree add -q /tmp/base2 3a147a7cb4a13e5a931f32eac8b8a7bd65ed10cb && ln -s $PWD/node_modules /tmp/base2/node_modules && cd /tmp/base2 && node scripts/simClubManagerDecisions.mjs
