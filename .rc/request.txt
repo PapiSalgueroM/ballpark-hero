@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+simResultMoment: node scripts/simResultMoment.mjs
+simResultMoment2: node scripts/simResultMoment.mjs
