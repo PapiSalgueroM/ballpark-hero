@@ -1,0 +1,14 @@
+NEGATIVE CONTROL ON: leak (section 2 must fail)
+simSoccerDeck: head and base e814c2de bundled (1.8 s); the shipped pack holds 28 cards, CONTROL=leak
+1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing
+2) Inert: the deck not loaded, 200 careers of 12 seasons, every save byte equal to the base's after every step and the Math.random count equal
+   200 careers, 20846 saves compared, 1155960 Math.random calls on the base
+   FAIL 200 careers part from the base: career 0 (GK, 1990-94) from step 7; career 1 (CB, 1995-99) from step 7; career 2 (LB, 2000-04) from step 7
+   FAIL 200 careers draw Math.random a different number of times
+3) Adds, never replaces: at each deal, from one identical state, the old batch is the base's and a deck card is first
+5) Promises: every option moves what its button prints, to the bound and no further, says what landed, and never moves money or fame
+6) Reach by position: every position card reaches its own group and never another, every situation card someone, no keeper word for an outfielder
+10) Lazy: the page and the engine reach the gate and nothing of the deck, and nothing but the gate and tests loads it
+
+runtime 36.2 s
+simSoccerDeck: CONTROL=leak FIRED: section 2 failed (2 failures, red sections 2)

@@ -1,0 +1,16 @@
+vitest exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerDeck.test.ts,title=src/lib/soccerDeck.test.ts > the starter pack > never deals a training card at
+sd-silent exit=1 14s | simSoccerDeck: CONTROL=silent FIRED: section 5 failed (1 failures, red sections 5)
+sd-drop exit=1 14s | simSoccerDeck: CONTROL=drop FIRED: section 5 failed (1 failures, red sections 5)
+sd-ceiling exit=1 12s | simSoccerDeck: CONTROL=ceiling FIRED: section 5 failed (2 failures, red sections 5)
+sd-posleak exit=1 25s | simSoccerDeck: CONTROL=posleak FIRED: section 6 failed (2 failures, red sections 6)
+sd-bindopen exit=1 2s | simSoccerDeck: CONTROL=bindopen FIRED: section 1 failed (21 failures, red sections 1)
+sd exit=1 95s | simSoccerDeck: 1 failure, red sections 6
+tsc exit=0 102s | 
+sd-leak exit=1 36s | simSoccerDeck: CONTROL=leak FIRED: section 2 failed (2 failures, red sections 2)
+sd-last exit=1 28s | simSoccerDeck: CONTROL=last FIRED: section 3 failed (5 failures, red sections 3)
+norival exit=0 16s | No rival product names found. 0 findings.
+conduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+sd-pool exit=1 29s | simSoccerDeck: CONTROL=pool FIRED: section 3 failed (5 failures, red sections 3)
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+names exit=0 10s | simInventedNames: green. Every invented man on this site is invented all the way down.
+quotes exit=0 25s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.

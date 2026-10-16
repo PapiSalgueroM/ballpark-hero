@@ -1,0 +1,117 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/soccerDeck.test.ts [2m([22m[2m26 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 159[2mms[22m[39m
+   [32m✓[39m the words[2m > [22mprints every training key as the attribute screen names its stat, for that position group[32m 5[2mms[22m[39m
+   [32m✓[39m soccerDeckFacts[2m > [22mreads each of the ten codes as the drills group them[32m 15[2mms[22m[39m
+   [32m✓[39m soccerDeckFacts[2m > [22mreads only the save: caps, the armband at his club, one year left, the room, the senior rows, the same club[32m 6[2mms[22m[39m
+   [32m✓[39m soccerDeckFacts[2m > [22mcounts only the derby meetings he played last season[32m 1[2mms[22m[39m
+   [32m✓[39m soccerDeckFacts[2m > [22mis null unless a live career at a club has just played a season[32m 1[2mms[22m[39m
+   [32m✓[39m soccerDeckProblems[2m > [22mpasses the shipped pack and the fixture[32m 3[2mms[22m[39m
+   [32m✓[39m soccerDeckProblems[2m > [22mrefuses each soccer rule with its own message[32m 6[2mms[22m[39m
+   [32m✓[39m deckToRandomEvents[2m > [22mgives the save validator a number id, words, and each option its effect words[32m 4[2mms[22m[39m
+   [32m✓[39m the slot[2m > [22mdeals the same card from the same key, at most one, never from Math.random[32m 6[2mms[22m[39m
+   [32m✓[39m the slot[2m > [22mholds a training card at room 0, and deals nothing when the facts are null[32m 4[2mms[22m[39m
+   [32m✓[39m the slot[2m > [22mnever deals a card the old batch holds, the last card answered, or one cooling down[32m 6[2mms[22m[39m
+   [32m✓[39m the slot[2m > [22mdeals nothing from a pack with a problem[32m 4[2mms[22m[39m
+   [32m✓[39m the answer[2m > [22mmoves exactly what the button prints and writes one line saying what landed[32m 2[2mms[22m[39m
+   [32m✓[39m the answer[2m > [22mlands a training key no further than the room at the answer, and says so[32m 0[2mms[22m[39m
+   [32m✓[39m the answer[2m > [22mstops morale at 0 and 100 and says where it stopped[32m 2[2mms[22m[39m
+   [32m✓[39m the answer[2m > [22mleaves the state untouched and the log alone on the option that moves nothing[32m 0[2mms[22m[39m
+   [32m✓[39m the pending reader[2m > [22mrebuilds a saved deck card in random_events only, whatever the facts say now[32m 1[2mms[22m[39m
+   [32m✓[39m the gate[2m > [22mknows the deck ids[32m 1[2mms[22m[39m
+   [32m✓[39m the gate[2m > [22manswers [] until the deck is loaded, then deals from it[32m 2[2mms[22m[39m
+[31m   [31m×[31m the gate[2m > [22mloads the real chunk, whose shipped pack deals nothing yet[39m[32m 17[2mms[22m[39m
+[31m     → expected [ { id: 716, emoji: '⚽', …(5) } ] to deeply equal [][39m
+   [32m✓[39m the gate[2m > [22mfails closed on a load that resolves with nothing in it[32m 6[2mms[22m[39m
+   [32m✓[39m the gate[2m > [22mclears a rejected load so the next try can land it[32m 2[2mms[22m[39m
+   [32m✓[39m the starter pack[2m > [22mholds 28 cards: five a position group and eight about where a career stands[32m 2[2mms[22m[39m
+   [32m✓[39m the starter pack[2m > [22mdeals each code only its own group's position cards[32m 27[2mms[22m[39m
+   [32m✓[39m the starter pack[2m > [22mgates the cards whose words state a fact on that fact[32m 18[2mms[22m[39m
+[31m   [31m×[31m the starter pack[2m > [22mnever deals a training card at room 0, and every option moves exactly what it prints[39m[32m 16[2mms[22m[39m
+[31m     → expected { playerName: 'Deck Fixture', …(114) } to be { playerName: 'Deck Fixture', …(114) } // Object.is equality
+
+If it should pass with deep equality, replace "toBe" with "toStrictEqual"
+
+Expected: { playerName: 'Deck Fixture', …(114) }
+Received: serializes to the same string
+[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe gate[2m > [22mloads the real chunk, whose shipped pack deals nothing yet
+[31m[1mAssertionError[22m: expected [ { id: 716, emoji: '⚽', …(5) } ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   {[39m
+[31m+     "category": "positive",[39m
+[31m+     "choices": [[39m
+[31m+       {[39m
+[31m+         "apply": [Function anonymous],[39m
+[31m+         "color": "bg-blue-600",[39m
+[31m+         "consequence": "Shooting next season +1",[39m
+[31m+         "emoji": "📋",[39m
+[31m+         "label": "Put your name down",[39m
+[31m+       },[39m
+[31m+       {[39m
+[31m+         "apply": [Function anonymous],[39m
+[31m+         "color": "bg-gray-800",[39m
+[31m+         "consequence": "Nothing changes",[39m
+[31m+         "emoji": "✋",[39m
+[31m+         "label": "Let someone else take them",[39m
+[31m+       },[39m
+[31m+     ],[39m
+[31m+     "cooldown": 4,[39m
+[31m+     "description": "The coaching staff are drawing up next season's penalty order. Put your name down and preseason starts with a hundred spot kicks a day.",[39m
+[31m+     "emoji": "⚽",[39m
+[31m+     "id": 716,[39m
+[31m+     "title": "Penalty duty",[39m
+[31m+   },[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/lib/soccerDeck.test.ts:[2m289:48[22m[39m
+    [90m287| [39m    [35mawait[39m [34mloadSoccerDeck[39m()[33m;[39m
+    [90m288| [39m    [34mexpect[39m([34msoccerDeckReady[39m())[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m289| [39m    [34mexpect[39m([34msoccerDeckSlot[39m([34ms[39m()[33m,[39m [34m2024[39m[33m,[39m [32m'k'[39m[33m,[39m []))[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                                               [31m^[39m
+    [90m290| [39m  })[33m;[39m
+    [90m291| [39m  it('fails closed on a load that resolves with nothing in it', async …
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mnever deals a training card at room 0, and every option moves exactly what it prints
+[31m[1mAssertionError[22m: expected { playerName: 'Deck Fixture', …(114) } to be { playerName: 'Deck Fixture', …(114) } // Object.is equality
+
+If it should pass with deep equality, replace "toBe" with "toStrictEqual"
+
+Expected: { playerName: 'Deck Fixture', …(114) }
+Received: serializes to the same string
+[39m
+
+[2mCompared values have no visual difference.[22m
+
+[36m [2m❯[22m forEach src/lib/soccerDeck.test.ts:[2m366:66[22m[39m
+    [90m364| [39m        [35mconst[39m s [33m=[39m [34mcareer[39m({ morale[33m:[39m [34m50[39m })[33m;[39m
+    [90m365| [39m        [35mconst[39m after [33m=[39m c[33m.[39m[34mapply[39m({ [33m...[39ms })[33m;[39m
+    [90m366| [39m        if (c.consequence === 'Nothing changes') { expect(after).toBe(…
+    [90m   | [39m                                                                 [31m^[39m
+    [90m367| [39m        [35mconst[39m moved[33m:[39m string[] [33m=[39m [][33m;[39m
+    [90m368| [39m        if (after.morale !== s.morale) moved.push(`Morale ${after.mora…
+[90m [2m❯[22m src/lib/soccerDeck.test.ts:[2m363:20[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m24 passed[39m[22m[90m (26)[39m
+[2m   Start at [22m 17:33:20
+[2m   Duration [22m 4.00s[2m (transform 2.03s, setup 134ms, collect 2.49s, tests 159ms, environment 561ms, prepare 203ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerDeck.test.ts,title=src/lib/soccerDeck.test.ts > the gate > loads the real chunk%2C whose shipped pack deals nothing yet,line=289,column=48::AssertionError: expected [ { id: 716, emoji: '⚽', …(5) } ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   {%0A+     "category": "positive",%0A+     "choices": [%0A+       {%0A+         "apply": [Function anonymous],%0A+         "color": "bg-blue-600",%0A+         "consequence": "Shooting next season +1",%0A+         "emoji": "📋",%0A+         "label": "Put your name down",%0A+       },%0A+       {%0A+         "apply": [Function anonymous],%0A+         "color": "bg-gray-800",%0A+         "consequence": "Nothing changes",%0A+         "emoji": "✋",%0A+         "label": "Let someone else take them",%0A+       },%0A+     ],%0A+     "cooldown": 4,%0A+     "description": "The coaching staff are drawing up next season's penalty order. Put your name down and preseason starts with a hundred spot kicks a day.",%0A+     "emoji": "⚽",%0A+     "id": 716,%0A+     "title": "Penalty duty",%0A+   },%0A+ ]%0A%0A ❯ src/lib/soccerDeck.test.ts:289:48%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerDeck.test.ts,title=src/lib/soccerDeck.test.ts > the starter pack > never deals a training card at room 0%2C and every option moves exactly what it prints,line=366,column=66::AssertionError: expected { playerName: 'Deck Fixture', …(114) } to be { playerName: 'Deck Fixture', …(114) } // Object.is equality%0A%0AIf it should pass with deep equality, replace "toBe" with "toStrictEqual"%0A%0AExpected: { playerName: 'Deck Fixture', …(114) }%0AReceived: serializes to the same string%0A%0A%0ACompared values have no visual difference.%0A%0A ❯ forEach src/lib/soccerDeck.test.ts:366:66%0A ❯ src/lib/soccerDeck.test.ts:363:20%0A%0A

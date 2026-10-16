@@ -1,0 +1,34 @@
+NEGATIVE CONTROL ON: bindopen (section 1 must fail)
+simSoccerDeck: head and base e814c2de bundled (1.8 s); the shipped pack holds 28 cards, CONTROL=bindopen
+1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing
+   ok the shipped pack (28 cards) has no problem
+   ok 28 titles: no quote mark, dash, first person, conduct or private word, or any of 10483 real names
+   FAIL cash: the bind check passes it
+   FAIL popularity: the bind check passes it
+   FAIL karma: the bind check passes it
+   FAIL desk: the bind check passes it
+   FAIL a keeper word on an outfield card: the bind check passes it
+   FAIL an outfield word on a keeper card: the bind check passes it
+   FAIL a training key on a situation card: the bind check passes it
+   FAIL a training value of 0.5: the bind check passes it
+   FAIL id 650: the bind check passes it
+   FAIL a duplicate id: the bind check passes it
+   FAIL a missing title: the bind check passes it
+   FAIL a missing kind: the bind check passes it
+   FAIL no neutral option: the bind check passes it
+   FAIL wordings: the bind check passes it
+   FAIL tag: the bind check passes it
+   FAIL a one shot: the bind check passes it
+   FAIL story: the bind check passes it
+   FAIL a card's own chance: the bind check passes it
+   FAIL a pack chance of 0.5: the bind check passes it
+   FAIL an undeclared fact: the bind check passes it
+   FAIL a pack with a problem dealt 20 cards
+2) Inert: the deck not loaded, 200 careers of 12 seasons, every save byte equal to the base's after every step and the Math.random count equal
+3) Adds, never replaces: at each deal, from one identical state, the old batch is the base's and a deck card is first
+5) Promises: every option moves what its button prints, to the bound and no further, says what landed, and never moves money or fame
+6) Reach by position: every position card reaches its own group and never another, every situation card someone, no keeper word for an outfielder
+10) Lazy: the page and the engine reach the gate and nothing of the deck, and nothing but the gate and tests loads it
+
+runtime 1.9 s
+simSoccerDeck: CONTROL=bindopen FIRED: section 1 failed (21 failures, red sections 1)
