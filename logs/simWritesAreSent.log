@@ -1,0 +1,6 @@
+1) no database write in src is built and then dropped on the floor
+   22 write calls in src, 0 never sent
+2) a finished round really does put a request on the wire
+  FAIL: there is no dist to serve, so the runtime half could not run
+
+simWritesAreSent: 1 failure
