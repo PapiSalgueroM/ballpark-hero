@@ -1,0 +1,4 @@
+#!serial
+base-continuity: git checkout 1027b08c -- src scripts && node scripts/simManagerWorldContinuity.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+pre-continuity: git checkout 52e346d4 -- scripts/simManagerWorldContinuity.mjs && node scripts/simManagerWorldContinuity.mjs; s=$?; git checkout HEAD -- scripts; exit $s
+base-size: git checkout 1027b08c -- src scripts && node scripts/qa/managerWorldSizeDiagnostic.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
