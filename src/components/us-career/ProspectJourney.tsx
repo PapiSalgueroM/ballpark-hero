@@ -38,7 +38,10 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
   const [help, setHelp] = useState(!state);
   /* Round 1346: draft night can be watched again in the mount that played it (never saved, like the night itself).
      Each run remounts the card and the stage, whose keys carry it, so the rows and the held result arrive again on
-     the night's clock; focus goes to the play area's own title, as it does at every new step. */
+     the night's clock. The keys matter after a night that landed on its own: its hold (the result's cm-rise and the
+     stage's data-night-hold) is already on, so without a remount nothing would start again and the pick would stay
+     in sight while the rows replay (after a skipped night the hold is added fresh either way). Focus goes to the
+     play area's own title, as it does at every new step. */
   const [nightRun, setNightRun] = useState(0);
   useEffect(() => { if (nightRun) actionTitleRef.current?.focus({ preventScroll: true }); }, [nightRun]);
   /* "Skip to the end" and "Watch it again" share one cell, so a press of either ignores a tap for a second after the

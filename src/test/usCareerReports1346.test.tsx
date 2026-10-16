@@ -281,6 +281,25 @@ describe('Round 1346: draft night can be watched again', () => {
     expect(nightIn(view)).toHaveAttribute('data-night-stage', 'skipped');
   });
 
+  /* After a night that landed on its own the result's hold and the stage's are already on, so only a remount starts
+     them again: without the card's and the stage's nightRun keys the pick would stay in sight during the replay. */
+  it.each(PROSPECTS)('%s: Watch it again after a night that landed remounts the result and the stage', async (_, Board, sport) => {
+    localStorage.setItem(sport.saveKey, JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: atDraftDay(sport) }));
+    const view = mountProspect(Board), j = () => within(journeyOf(view));
+    await nightLoaded();
+    fireEvent.click(j().getByRole('button', { name: 'Draft day' })); await flush();
+    const rows = nightIn(view)!.querySelectorAll<HTMLElement>('[data-night-row]');
+    fireEvent.animationEnd(rows[rows.length - 1]); await flush();
+    expect(nightIn(view)).toHaveAttribute('data-night-stage', 'landed');
+    const result = j().getByTestId('draft-result'), stage = journeyOf(view).querySelector('[data-night-hold]');
+    expect(stage).not.toBeNull();
+    fireEvent.click(j().getByRole('button', { name: 'Watch it again' })); await flush();
+    expect(nightIn(view)).toHaveAttribute('data-night-stage', 'live');
+    expect(j().getByTestId('draft-result')).not.toBe(result);
+    expect(j().getByTestId('draft-result')).toHaveAttribute('aria-hidden', 'true');
+    expect(journeyOf(view).querySelector('[data-night-hold]')).not.toBe(stage);
+  });
+
   it.each(PROSPECTS)('%s: under reduced motion the night ends on its last frame with nothing to watch again', async (_, Board, sport) => {
     const real = window.matchMedia;
     window.matchMedia = ((q: string) => ({ ...real(q), matches: /reduce/.test(q) })) as typeof window.matchMedia;
