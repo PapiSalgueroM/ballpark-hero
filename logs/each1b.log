@@ -1,0 +1,41 @@
+runEach: done, 9 of 64 exited non zero
+simResultPillComparison exit=0 43s | simResultPillComparison: green. 34 finished states on a 390 wide phone: every pill reads the hook's score, on one line inside its fixed pill, nothing scrolls sideways, nothing moves while the reveal p
+simRosterAdjudication exit=0 1s | simRosterAdjudication: all green
+simMoney exit=1 546s | 1 FAILURES || FAIL: biggest save is 88.3 KB / 1 FAILURES
+simSearchAndDiscardFeedback exit=0 20s | simSearchAndDiscardFeedback: copied controls never edit live game files; pixel fit and reduced motion require the independent native matrix.
+simSeasonFamilySummary exit=0 17s | simSeasonFamilySummary: saved family progression green, both effective negative controls caught || [41m[1m FAIL [22m[49m src/test/seasonFamilySummary.test.ts[2m > [22mSoccer Career yearly family summary[2m > [22mgives a newborn dedication only in the  / [41m[1m FAIL [22m[49m src/test/seasonFamilySummary.test.ts[2m > [22mSoccer Career yearly family summary[2m > [22mkeeps the most recent recorded birth as
+simSaveFence exit=0 133s | simSaveFence: all green (tabs, source, fleet)
+simSilverwareReveal exit=0 12s | Silverware reveal cleanup: owned temporary folder removed; production bytes preserved.
+simSoccerAgentReview exit=0 31s | PASS agent review product and proof source bytes held.
+simSoccerCareerAmbitions exit=0 8s | simSoccerCareerAmbitions: all 16 paired careers, exact target results, future rewards once and seven actual interruption paths passed
+simSoccerCareerOpponents exit=0 29s | simSoccerCareerOpponents: current behavior green, 2 effective negative controls caught || [41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22mnames real opponents in a conf / [41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22muses the known split-league cl
+simSoccerCareerSaveRecovery exit=0 25s | Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.
+simSeoMetaSplit exit=0 187s | simSeoMetaSplit: green. 171 pages drawn from the split build carry the saved head in every field a crawler reads, every game page fetched only its own part, and all 133 routes in origin/main's table a
+simSoccerDerbyHistory exit=0 8s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby-history/outcomes
+simSoccerGridTiers exit=1 4s | SOCCER GRID POOL UNREACHABLE OR TOO SMALL. NOTHING WAS CHECKED.
+simSoccerCompetitionNavigation exit=0 75s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m || [41m[1m FAIL [22m[49m src/test/soccerSeasonCompetitions.test.tsx[2m > [22mSoccer Career competition navigation keeps the actual league view[2m > [22mlab
+simSoccerSeasonAvailability exit=0 21s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m || [41m[1m FAIL [22m[49m src/test/soccerSeasonAvailability.test.ts[2m > [22msaved soccer availability fits the actual calendar[2m > [22mkeeps a recorded mi
+simSoccerVeteranTalks exit=0 161s | ok   five production browser fixtures including USD, all raw amounts remain EUR
+simSportsFacts exit=0 2s | simSportsFacts: every fact in the record is sourced on two organisations with a real check date and no admitted gap, every date it verifies is a real day, every noOfficial reason names the official ho
+simStartingXi exit=0 1s | simStartingXi: green. He can see the eleven, and not one man on it is somebody real.
+simStockScoring exit=0 11s | simStockScoring: green. The wallet is there to be spent, hoarding scores near the floor, and every number on the card is worth reading.
+simTennisPlayerFeedback exit=0 14s | simTennisPlayerFeedback: original bytes held and only owned disposable files cleaned.
+simTopDailies exit=0 62s | simTopDailies: green. The surviving top ten daily deals winnable boards in every era.
+simTrainingFeedbackMotion exit=0 16s | simTrainingFeedbackMotion: twelve actual-panel menu, penalty, keeper timing, marker, exact-score/tier, stable-node/focus and one-bank outcomes passed.
+simTransferPathHints exit=0 37s | simTransferPathHints: green. Every minimum is the search's minimum and every hint describes a path the game accepts.
+simTrophyCabinet exit=0 22s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯[22m[39m || [41m[1m FAIL [22m[49m src/test/trophyCabinet.test.tsx[2m > [22mSoccer Career trophy cabinet records[2m > [22mdoes not grant a win just because a losing  / [41m[1m FAIL [22m[49m src/test/trophyCabinet.test.tsx[2m > [22mSoccer Career trophy cabinet records[2m > [22mkeeps old flags without fabricating names o
+simTycoonGearPage exit=0 9s | Artifacts: /home/runner/work/_temp/t-each1b/each-simTycoonGearPage-t0Z4wg/tycoon-gear-page-r7km19
+simTycoonPacks exit=0 445s |    All 23 controls fired exactly where they should.
+simTycoonSetPiece exit=0 20s |   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simUclLegs exit=0 9s | simUclLegs: green. Two legs, the right ground each week, and each season judged by its own rule for a level tie.
+simOpposition exit=SIGKILL 1500s | Everton, 2400 seasons an arm, every break seen and nothing changed by the player.
+simUsCareerActionConfirm exit=0 19s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, viewport and keyboard defaults.
+simUsCoachPoaching exit=0 7s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+simUsSeasonLedger exit=0 12s | simUsSeasonLedger: green. 4381 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+simUsCareerProspect exit=0 33s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+simWhodTheyBeatReveal exit=0 7s | simWhodTheyBeatReveal: CRLF bindings proved, raw source bytes held, owned copies cleaned; fictional transport only, no browser or live calls.
+simWindow2026PremierLeague exit=1 5s | SUPABASE unreachable (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co) for player_market_values?select=club&year=eq.2026&club=eq.Crystal%20Palace&limit=1 after 3 attem
+simWorldXiDefensiveMids exit=1 2s | SUPABASE UNREACHABLE OR POOL TOO SMALL. NOTHING WAS CHECKED.
+simVictoryMoment exit=0 35s | PASS reduce: motion, final facts, first-frame Continue and 320px layout
+simSoccerLoanBite exit=0 1038s | simSoccerLoanBite PASS
+runEach: done, 9 of 64 exited non zero

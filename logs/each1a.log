@@ -1,0 +1,41 @@
+runEach: done, 5 of 64 exited non zero
+simCareerPositionRatings exit=0 228s | all sections green: defenders and holding midfielders are rated on their defending
+simCmRealFixtures exit=0 12s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+simClubManagerSlots exit=0 150s | simClubManagerSlots: all sections green
+simCollegeGridShipped exit=0 51s | simCollegeGridShipped: green. None of the thirteen ships, the two files are the key row for row and verdict for verdict, every board keeps its answers and its floor, the files are inside their budget,
+simCompletionSlugs exit=0 3s | simCompletionSlugs: green. Every recorded slug names a game the site can find.
+simConquestDaily exit=0 4s | ALL CONQUEST DAILY CHECKS PASSED
+simConquestScenes exit=0 20s | ALL CONQUEST SCENE CHECKS PASSED
+simCmVar exit=0 370s | simCmVar normal: actual review outcomes and full prior baseline passed.
+simDailyLegend exit=0 5s | simDailyLegend: green. The rule and the words a winner reads come from one place.
+simDailyStanding exit=0 1s | simDailyStanding: green. Ten daily results carry today's standing, each on its own scale, counted in the database, hidden under 20 players.
+simDepthChart exit=0 5s | ALL DEPTH CHART CHECKS PASSED
+simCmLedgerBound exit=0 685s | simCmLedgerBound: green, all four sections held
+simEra2005 exit=0 34s | simEra2005: green. 2005 is real, sealed, and plays like 2005.
+simDrawOrder exit=0 504s | simDrawOrder: green
+simF1Champions exit=0 1s | simF1Champions: green (the record holds together and matches the table as read, the migration is the record's, every constructor note is backed, and both games agree)
+simFaceOffDeadline exit=0 8s | Face Off deadline cleanup: owned copies/reports removed; production hook bytes held.
+simFightCareer exit=0 27s | simFightCareer: all sections passed
+simFixtureBalance exit=0 10s | simFixtureBalance: PASS. Generated schedules keep the run-of-two contract at every league size, old saves keep their generated list, rollovers converge the flag, the AI world shares that list, and all
+simFootleCurrency exit=0 10s | simFootleCurrency: owned copies cleaned, actual page held, no production data changed.
+simFootleUnlimited exit=0 12s | simFootleUnlimited normal: 10 passed, 0 intended failures, 0 intentional skips; 10 source inputs held.
+simFreeKickPractice exit=0 16s | simFreeKickPractice: eleven actual Board/engine checks passed for explicit inputs, exact geometry, native key routing, pause/help, ten-shot practice, fresh daily roundtrips and private storage refusal
+simGauntletDraft exit=0 4s | simGauntletDraft: green. Every pick is a choice, and the cup is won in the draft.
+simGmDealTableFixture exit=1 4s |     now:      Aston Villa|0.62|1|ask=47|pat=3|meter=17|open|fee|stage=1|rival=-|The fax machine allegedly "broke". The ask just went up. || simGmDealTableFixture: FAIL, 2 section(s) differ from the recording / FAIL: section B no longer replays (720 lines recorded, 720 now)
+simCreation exit=0 991s | ALL CREATION CHECKS PASSED
+simGmGameDay exit=0 205s | simGmGameDay: 462 checks, 0 failed
+simGmSeat exit=0 201s | simGmSeat: all checks passed
+simGridPuzzlePool exit=0 1s | simGridPuzzlePool: green. Deep pools, distinct boards, criteria the game understands.
+simGoogleOnlyReturn exit=0 142s |    8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.
+simHeisman exit=0 1s | simHeisman: green. 91 verified Heisman rows, the migration's end state equal to them, 23 corrections guarded, and the Record Books page showing the same rows.
+simHigherLowerReveal exit=0 6s | simHigherLowerReveal: 23 source inputs held, owned copies and report cleaned.
+simHubExperience exit=0 7s | Hub experience: 1 modes completed, all exact outcome targets verified.
+simIndexNow exit=0 1s | simIndexNow: green. The key file, the script and the sitemap agree.
+simInventedNames exit=0 15s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simLegalPages exit=0 1s | simLegalPages: all green
+simLineupVerifiedPositions exit=1 1s | Node.js v24.21.0
+simLiveMatch exit=0 9s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven named men who come and go on 
+simLoanSpell exit=0 10s | simLoanSpell: green. The bench has a door now, and the door does not lie.
+simHalftime exit=0 769s | ALL HALFTIME CHECKS PASSED
+simEras exit=SIGKILL 1500s | 5) Balance did not move: ticking clock against a frozen one
+runEach: done, 5 of 64 exited non zero
