@@ -1,0 +1,36 @@
+oldsave1339: head clubManager.ts 1109676 chars, base 1109676 chars, differ false
+  T1 seeded: 48 base made saves (16 buys, 8 accepted bids), market and 30 entries compared, 39s
+  FAIL fixture A: the head lists 4 men at Real Madrid
+  FAIL fixture A: the head's market is not the base's minus Real Madrid's rows
+  FAIL fixture A: 30 entries on, the head lists 4 men at Real Madrid
+  fixture A (Real Madrid, season 1, seed none): base lists 4 at own club (0 in first 120, best index 1871), head 0; 30 entries on: equal
+  FAIL fixture B: the head lists 17 men at Real Madrid
+  FAIL fixture B: the head's market is not the base's minus Real Madrid's rows
+  FAIL fixture B: 30 entries on, the head lists 16 men at Real Madrid
+  FAIL fixture B: the head's feed signed 1 men from Real Madrid who were never in the squad (Dean Huijsen)
+  fixture B (Real Madrid, season 3, seed none): base lists 17 at own club (6 in first 120, best index 2), head 0; 30 entries on: equal
+  FAIL fixture C: the head lists 4 men at Real Madrid
+  FAIL fixture C: the head's market is not the base's minus Real Madrid's rows
+  FAIL fixture C: 30 entries on, the head lists 4 men at Real Madrid
+  fixture C (Real Madrid, season 1, seed none): base lists 4 at own club (0 in first 120, best index 1870), head 0; 30 entries on: equal
+  cmOldSave1052Fixture (Sevilla, season 1, seed none): base lists 0 at own club (0 in first 120), head 0; 30 entries on: equal
+  cmSecondTierOldSaveFixture (Valencia, season 1, seed none): base lists 0 at own club (0 in first 120), head 0; 30 entries on: equal
+  cmBookSaveEvertonFixture (Everton, season 1, seed none): base lists 0 at own club (0 in first 120), head 0; 30 entries on: equal
+  cmBookSaveHerthaFixture (Hertha BSC, season 1, seed none): base lists 0 at own club (0 in first 120), head 0; 30 entries on: equal
+  hot seat 2026-10-10 (Athletic Club) (Athletic Club, season 1, seed none): base lists 0 at own club (0 in first 120), head 0; 30 entries on: equal
+  hot seat 2026-10-21 (Anderlecht) (Anderlecht, season 1, seed none): base lists 0 at own club (0 in first 120), head 0; 30 entries on: equal
+  FAIL hot seat 2026-11-03 (Real Betis): the head lists 3 men at Real Betis
+  FAIL hot seat 2026-11-03 (Real Betis): the head's market is not the base's minus Real Betis's rows
+  FAIL hot seat 2026-11-03 (Real Betis): 30 entries on, the head lists 3 men at Real Betis
+  hot seat 2026-11-03 (Real Betis) (Real Betis, season 1, seed none): base lists 3 at own club (0 in first 120, best index 3822), head 0; 30 entries on: equal
+  hot seat 2026-12-01 (Getafe) (Getafe, season 1, seed none): base lists 0 at own club (0 in first 120), head 0; 30 entries on: equal
+  hot seat 2027-01-15 (Seattle Sounders) (Seattle Sounders, season 1, seed none): base lists 0 at own club (0 in first 120), head 0; 30 entries on: equal
+  hot seat 2027-02-02 (Spartak Moscow) (Spartak Moscow, season 1, seed none): base lists 0 at own club (0 in first 120), head 0; 30 entries on: equal
+  T2 unseeded: 13 saves, 28 own club rows removed, 0 played differently in 30 entries, 8s
+  job move A Real Madrid to Barcelona: seed none; rows at the new club head 0 base 0 (best base index -1); rows at Real Madrid head 29 base 29; feed lines from Barcelona for a non squad man head 0 base 0; asks equal true
+  job move A Real Madrid to Manchester City: seed none; rows at the new club head 0 base 0 (best base index -1); rows at Real Madrid head 30 base 30; feed lines from Manchester City for a non squad man head 0 base 0; asks equal true
+  job move A Real Madrid to Bayern Munich: seed none; rows at the new club head 0 base 0 (best base index -1); rows at Real Madrid head 29 base 29; feed lines from Bayern Munich for a non squad man head 0 base 0; asks equal true
+  job move B Real Madrid to Barcelona: seed none; rows at the new club head 0 base 0 (best base index -1); rows at Real Madrid head 30 base 30; feed lines from Barcelona for a non squad man head 0 base 0; asks equal true
+  job move B Real Madrid to Manchester City: seed none; rows at the new club head 0 base 0 (best base index -1); rows at Real Madrid head 30 base 30; feed lines from Manchester City for a non squad man head 0 base 0; asks equal true
+  job move B Real Madrid to Bayern Munich: seed none; rows at the new club head 0 base 0 (best base index -1); rows at Real Madrid head 29 base 29; feed lines from Bayern Munich for a non squad man head 0 base 0; asks equal true
+oldsave1339: 13 FAILURE(S)

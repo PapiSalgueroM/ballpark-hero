@@ -1,0 +1,2 @@
+oldsave exit=0 50s | oldsave1339: green
+oldsave-ctl exit=1 48s | oldsave1339: 13 FAILURE(S)

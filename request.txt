@@ -1,0 +1,3 @@
+#!serial
+oldsave: git worktree add /tmp/base 1027b08cac8ef5cfc52c6b2e738e5c0a8d703402 >/dev/null 2>&1; node .rc/x/oldsave1339.mjs /tmp/base
+oldsave-ctl: PROBE_HEAD_ROOT=/tmp/base node .rc/x/oldsave1339.mjs /tmp/base
