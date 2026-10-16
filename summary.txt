@@ -1,0 +1,7 @@
+clubDetail-head exit=0 8s | simClubDetailCurrentRoster normal: green.
+clubDetail-onbase exit=0 9s | simClubDetailCurrentRoster normal: green.
+decisions-onbase exit=0 20s | simClubManagerDecisions: 0 findings
+decisions-bridged exit=0 21s | simClubManagerDecisions: 0 findings
+playCmRealFixtures exit=1 3s | Node.js v24.21.0
+simHarnessAnchors exit=0 43s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+decisions-head exit=1 14s | simClubManagerDecisions: 3 findings

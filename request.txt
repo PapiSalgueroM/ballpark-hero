@@ -1,0 +1,8 @@
+#!playwright
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+clubDetail-head: CM_OWN_ROSTER_CORE_REF=HEAD NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs
+clubDetail-onbase: D=/tmp/cdb-$$ && git worktree add -q --detach $D d4f2c6f688d656205722ba52bbdb33f03490966a && ln -s $PWD/node_modules $D/node_modules && cd $D && CM_OWN_ROSTER_CORE_REF=HEAD NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs
+decisions-onbase: D=/tmp/dob-$$ && git worktree add -q --detach $D d4f2c6f688d656205722ba52bbdb33f03490966a && ln -s $PWD/node_modules $D/node_modules && cd $D && node scripts/simClubManagerDecisions.mjs
+decisions-bridged: D=/tmp/dbr-$$ && mkdir -p $D && git archive HEAD | tar -x -C $D && node .rc/x/applyCtl.mjs $D bridge && ln -s $PWD/node_modules $D/node_modules && cd $D && node scripts/simClubManagerDecisions.mjs
+decisions-head: node scripts/simClubManagerDecisions.mjs
+playCmRealFixtures: mkdir -p cm-real-fixture-artifacts/font-cache && FREE_KICK_FONT_CACHE="$PWD/cm-real-fixture-artifacts/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && FREE_KICK_FONT_CACHE="$PWD/cm-real-fixture-artifacts/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs
