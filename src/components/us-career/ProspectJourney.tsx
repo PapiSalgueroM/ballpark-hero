@@ -7,6 +7,7 @@ import { preDraftChoose, preDraftPlaySeason, preDraftProjection, preDraftProject
 import type { UsCareerProspect } from '@/lib/usCareerProspect';
 import type { UsCareerSport } from '@/lib/usCareerSport';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { useTapSettle } from '@/hooks/useTapSettle';
 import styles from './ProspectJourney.module.css';
 
 const ACTS = ['Pick your path', 'Earn your place', 'Draft day'];
@@ -40,6 +41,9 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
      the night's clock; focus goes to the play area's own title, as it does at every new step. */
   const [nightRun, setNightRun] = useState(0);
   useEffect(() => { if (nightRun) actionTitleRef.current?.focus({ preventScroll: true }); }, [nightRun]);
+  /* "Skip to the end" and "Watch it again" share one cell, so a press of either ignores a tap for a second after the
+     other (useTapSettle): a double tap on the skip no longer starts the night over, nor one on the replay end it. */
+  const nightSettle = useTapSettle();
   useEffect(() => { (state ? actionTitleRef : titleRef).current?.focus({ preventScroll: true }); }, [eventKey]);
   /* Round 1220: the night plays once, in the mount that pressed "Draft day".
      The flag is never saved, so a reload at the result shows the result. */
@@ -126,8 +130,8 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
               onRunDraft={() => { setNightStage(!nightKit ? 'off' : lessMotion() ? 'skipped' : 'live'); onChange(preDraftRunDraft(desc, state)); }} onContinue={onJoin}
               showRange nightHold={nightHold} nightHeld={held} onUndoSkip={() => onChange(preDraftUndoSkip(state))}
               night={night && nightKit && out ? <nightKit.DraftNightSequence night={night} desc={desc} draftYear={out.draftYear} stage={nightStage === 'live' ? 'live' : nightStage === 'landed' ? 'landed' : 'skipped'}
-                onLanded={() => setNightStage(s => (s === 'live' ? 'landed' : s))} onSkip={() => setNightStage('skipped')} onContinue={onJoin}
-                onReplay={lessMotion() ? undefined : () => { setNightRun(n => n + 1); setNightStage('live'); }} /> : undefined} />}
+                onLanded={() => setNightStage(s => (s === 'live' ? 'landed' : s))} onSkip={() => { if (!nightSettle.settled()) return; nightSettle.mark(); setNightStage('skipped'); }} onContinue={onJoin}
+                onReplay={lessMotion() ? undefined : () => { if (!nightSettle.settled()) return; nightSettle.mark(); setNightRun(n => n + 1); setNightStage('live'); }} /> : undefined} />}
       </div>
       {state && state.lines.length > 0 && <details className={styles.history}>
         <summary>Your scout file <span>{state.lines.length} {state.lines.length === 1 ? 'season' : 'seasons'}</span></summary>

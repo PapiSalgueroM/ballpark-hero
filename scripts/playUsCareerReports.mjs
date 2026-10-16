@@ -10,7 +10,8 @@
  *   W4 the same night under reduced motion: it starts on its last frame and there is nothing to watch again.
  *   W5 the double taps of the review (r1346-run-d), at 150 and 700 ms between taps: a double tap on Undo skip ends on
  *      the road from before the skip (the second tap lands on a graded approach, which waits out the settle second of
- *      useTapSettle), and Go all out works once that second has passed.
+ *      useTapSettle), and Go all out works once that second has passed; then on draft night a double tap on Skip to
+ *      the end leaves the night skipped (not started over) and one on Watch it again leaves it playing.
  * After every press: no sideways scroll, every new button at least 44 px tall, the card the press was about inside
  * the viewport, no page error, and a screenshot in $RC_OUT (or .tmp-fx/play-us-reports) to LOOK at.
  * (The brief's W1 was a coach ending at an age; the lead cut the age rule, so W1 is the done screen's reload.)
@@ -255,6 +256,7 @@ async function walkW3(browser, sport, size) {
     await check('night-skipped', '[data-night-actions]', '[data-night-replay]');
     const saved = await bytes();
     await knock('W3', '[data-night-replay]');
+    await page.waitForTimeout(1000);
     await tap(page.getByRole('button', { name: 'Watch it again', exact: true }));
     await page.locator('[data-night-stage="live"]').waitFor();
     const again = await rowHeight();
@@ -315,6 +317,27 @@ async function walkW5(browser, sport, size, gap) {
     await tap(page.getByRole('button', { name: /^Go all out/ }));
     await page.locator('[data-prospect-phase="draft"]').waitFor();
     if (JSON.parse(await bytes()).prospect.state.showcase?.approach !== 'allout') fail(id, 'Go all out did not work once the second had passed');
+    /* Draft night's one cell: Skip to the end, then Watch it again in its place, and back. */
+    await nightChunk(page);
+    await page.waitForTimeout(250);
+    await tap(page.getByRole('button', { name: 'Draft day', exact: true }));
+    await page.locator('[data-night-stage="live"]').waitFor();
+    const skipEnd = page.getByRole('button', { name: 'Skip to the end', exact: true });
+    await skipEnd.scrollIntoViewIfNeeded();
+    const [sx, sy] = await centreOf(skipEnd);
+    if (CONTROL === 'nosettle') await defeatSettle(page);
+    await tapTwice(page, size, sx, sy, gap);
+    await page.waitForTimeout(300);
+    const afterSkip = await page.locator('[data-career-night]').getAttribute('data-night-stage');
+    if (afterSkip !== 'skipped') fail(id, `a double tap on Skip to the end ${gap} ms apart left the night ${afterSkip}, not skipped`);
+    await page.waitForTimeout(1100);
+    const [rx, ry] = await centreOf(page.getByRole('button', { name: 'Watch it again', exact: true }));
+    await tapTwice(page, size, rx, ry, gap);
+    await page.waitForTimeout(300);
+    const afterReplay = await page.locator('[data-career-night]').getAttribute('data-night-stage');
+    if (afterReplay !== 'live') fail(id, `a double tap on Watch it again ${gap} ms apart left the night ${afterReplay}, not playing`);
+    notes.push(`${id}: a double tap on Skip to the end leaves the night ${afterSkip}; one on Watch it again leaves it ${afterReplay}`);
+    await check('night-double-taps', '[data-night-actions]');
   } catch (error) { fail(id, String(error.message || error).split('\n')[0]); } finally { await context.close(); }
 }
 

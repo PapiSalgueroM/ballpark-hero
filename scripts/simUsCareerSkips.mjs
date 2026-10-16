@@ -20,8 +20,9 @@
  *      graded approaches take a tap right after the undo, the double tap the review found) exactly those four second
  *      tap cases fail.
  *   3. The night, the same file: with DraftNightSequence swapped for one without "Watch it again" exactly the four
- *      replay cases fail; with ProspectJourney swapped for one that offers it under reduced motion exactly the four
- *      reduced motion cases fail.
+ *      replay cases and the four "second tap on the night's shared button" cases fail; with ProspectJourney swapped
+ *      for one that offers it under reduced motion exactly the four reduced motion cases fail; with ProspectJourney's
+ *      night settle swapped for one that is always settled exactly the four second tap cases fail.
  *
  * Controls (US_CAREER_SKIPS_CONTROL), one anchor edit of src/lib/careerPreDraft.ts in the bundle only, asserted
  * present once first. A control that fires exits 1 with its last line "CONTROL <name> FIRED"; one that does not
@@ -54,6 +55,7 @@ const control = process.env.US_CAREER_SKIPS_CONTROL || '';
 const NIGHT = 'src/components/career/DraftNightSequence.tsx', JOURNEY = 'src/components/us-career/ProspectJourney.tsx';
 const CARD = 'src/components/career/DraftShowcaseCard.tsx';
 const settleGuard = 'if (a.id !== "skip" && !undoSettle.settled()) return; ';
+const nightSettle = '  const nightSettle = useTapSettle();\n';
 const replayButton = '        {over && onReplay && <Button variant="outline" className="min-h-11 w-full whitespace-normal" onClick={onReplay} data-night-replay>Watch it again</Button>}\n';
 const motionGuard = 'onReplay={lessMotion() ? undefined : () => {';
 const CONTROLS = {
@@ -171,6 +173,7 @@ const SPORT_IDS = ['nfl', 'nba', 'mlb', 'nhl'];
 const UNDO_FAILS = SPORT_IDS.map(s => `${s}: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day`);
 const SETTLE_FAILS = SPORT_IDS.map(s => `${s}: a second tap right after Undo skip is never taken as a graded showcase`);
 const REPLAY_FAILS = SPORT_IDS.map(s => `${s}: Skip to the end, then Watch it again plays the night again and saves nothing`);
+const NIGHT_TAP_FAILS = SPORT_IDS.map(s => `${s}: a second tap on the night's shared button does nothing for a second`);
 const MOTION_FAILS = SPORT_IDS.map(s => `${s}: under reduced motion the night ends on its last frame with nothing to watch again`);
 const sourceOf = file => fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
 /* Each swap is [module specifier, file, anchor, replacement]; the anchor must be held once. */
@@ -179,6 +182,7 @@ const SWAPS = {
   noreplay: ['@/components/career/DraftNightSequence', NIGHT, replayButton, ''],
   motion: ['@/components/us-career/ProspectJourney', JOURNEY, motionGuard, 'onReplay={false ? undefined : () => {'],
   settle: ['@/components/career/DraftShowcaseCard', CARD, settleGuard, ''],
+  nightsettle: ['@/components/us-career/ProspectJourney', JOURNEY, nightSettle, '  const nightSettle = { mark: () => undefined, settled: () => true };\n'],
 };
 for (const [, file, anchor] of Object.values(SWAPS)) assert.equal(sourceOf(file).split(anchor).length - 1, 1, `Swap anchor held once in ${file}`);
 function boardRun(swapName) {
@@ -218,7 +222,8 @@ if (control) {
   for (const [name, section, want, what] of [
     ['noundo', 2, [...UNDO_FAILS, ...SETTLE_FAILS], 'the undo handing back its input'],
     ['settle', 2, SETTLE_FAILS, 'the graded approaches taking a tap right after the undo'],
-    ['noreplay', 3, REPLAY_FAILS, 'no Watch it again on the night'],
+    ['noreplay', 3, [...REPLAY_FAILS, ...NIGHT_TAP_FAILS], 'no Watch it again on the night'],
+    ['nightsettle', 3, NIGHT_TAP_FAILS, 'the night\'s shared button taking a tap right after the other half'],
     ['motion', 3, MOTION_FAILS, 'Watch it again offered under reduced motion'],
   ]) {
     const run = boardRun(name);

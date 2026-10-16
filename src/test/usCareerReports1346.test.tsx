@@ -237,6 +237,7 @@ const nightIn = (view: ReturnType<typeof render>) => journeyOf(view).querySelect
 
 describe('Round 1346: draft night can be watched again', () => {
   it.each(PROSPECTS)('%s: Skip to the end, then Watch it again plays the night again and saves nothing', async (_, Board, sport) => {
+    const clock = settleClock();
     localStorage.setItem(sport.saveKey, JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: atDraftDay(sport) }));
     const view = mountProspect(Board), j = () => within(journeyOf(view));
     await nightLoaded();
@@ -246,6 +247,7 @@ describe('Round 1346: draft night can be watched again', () => {
     fireEvent.click(j().getByRole('button', { name: 'Skip to the end' }));
     expect(nightIn(view)).toHaveAttribute('data-night-stage', 'skipped');
     const bytes = localStorage.getItem(sport.saveKey);
+    clock.pass();
     fireEvent.click(j().getByRole('button', { name: 'Watch it again' })); await flush();
     expect(nightIn(view)).toHaveAttribute('data-night-stage', 'live');
     for (const row of nightIn(view)!.querySelectorAll<HTMLElement>('[data-night-row]')) expect(row.className).toMatch(/cm-(tick-in|slam|rise)/);
@@ -253,9 +255,30 @@ describe('Round 1346: draft night can be watched again', () => {
     expect(j().getByTestId('draft-result')).toHaveAttribute('aria-hidden', 'true');
     expect(journeyOf(view).querySelector('h3.sr-only')).toHaveFocus();
     expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+    clock.pass();
     fireEvent.click(j().getByRole('button', { name: 'Skip to the end' }));
     expect(j().getByRole('button', { name: 'Watch it again' })).toBeEnabled();
     expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+  });
+
+  /* The review found the two halves of one cell taking a double tap: Skip to the end then Watch it again started the
+     night over, and the reverse ended the replay at once. Each now ignores a tap for a second after the other. */
+  it.each(PROSPECTS)('%s: a second tap on the night\'s shared button does nothing for a second', async (_, Board, sport) => {
+    const clock = settleClock();
+    localStorage.setItem(sport.saveKey, JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: atDraftDay(sport) }));
+    const view = mountProspect(Board), j = () => within(journeyOf(view));
+    await nightLoaded();
+    fireEvent.click(j().getByRole('button', { name: 'Draft day' })); await flush();
+    fireEvent.click(j().getByRole('button', { name: 'Skip to the end' })); await flush();
+    fireEvent.click(j().getByRole('button', { name: 'Watch it again' })); await flush();
+    expect(nightIn(view)).toHaveAttribute('data-night-stage', 'skipped');
+    clock.pass();
+    fireEvent.click(j().getByRole('button', { name: 'Watch it again' })); await flush();
+    fireEvent.click(j().getByRole('button', { name: 'Skip to the end' })); await flush();
+    expect(nightIn(view)).toHaveAttribute('data-night-stage', 'live');
+    clock.pass();
+    fireEvent.click(j().getByRole('button', { name: 'Skip to the end' })); await flush();
+    expect(nightIn(view)).toHaveAttribute('data-night-stage', 'skipped');
   });
 
   it.each(PROSPECTS)('%s: under reduced motion the night ends on its last frame with nothing to watch again', async (_, Board, sport) => {
