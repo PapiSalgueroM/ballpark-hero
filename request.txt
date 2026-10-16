@@ -1,0 +1,3 @@
+#!build
+#!playwright
+playDraftNight: ENGINES=chromium node scripts/playDraftNight.mjs
