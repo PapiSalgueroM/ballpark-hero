@@ -1,0 +1,10 @@
+  FAIL W3:nba-390: locator.tap: Timeout 4000ms exceeded.
+  FAIL W3:nba-1280: locator.click: Timeout 4000ms exceeded.
+  FAIL W3:nfl-390: locator.tap: Timeout 4000ms exceeded.
+  FAIL W3:nfl-1280: locator.click: Timeout 4000ms exceeded.
+  W2:nba-390: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W2:nba-1280: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W2:nfl-390: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W2:nfl-1280: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  screenshots: 180 in /home/runner/work/_temp/rc-out/files
+CONTROL noundo FIRED: W3 red

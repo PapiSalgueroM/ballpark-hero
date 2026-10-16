@@ -1,0 +1,6 @@
+MUTATION M3 applied to src/components/us-career/ProspectJourney.tsx
+MUTATION M3b applied to src/components/us-career/ProspectJourney.tsx
+  N1:nba-1280: Watch it again {"x":337,"y":842,"w":299,"h":46}; result on the first live night {"opacity":0,"visibility":"visible","ariaHidden":"true","top":934,"h":80,"text":"2026 draftRound 1, pick 21 (21 overall)LA Clippers hold the "}; 150 ms into the replay {"opacity":0,"visibility":"visible","ariaHidden":"true","top":900,"h":80,"text":"2026 draftRound 1, pick 21 (21 overall)LA Clippers hold the "}; landed {"opacity":1,"visibility":"visible","ariaHidden":null,"top":900,"h":80,"text":"2026 draftRound 1, pick 21 (21 overall)LA Clippers hold the "}; scrollY 292
+  N1:nfl-1280: Watch it again {"x":337,"y":842,"w":299,"h":46}; result on the first live night {"opacity":0,"visibility":"visible","ariaHidden":"true","top":903,"h":80,"text":"2026 draftRound 1, pick 26 (26 overall)Buffalo Bills hold th"}; 150 ms into the replay {"opacity":0,"visibility":"visible","ariaHidden":"true","top":900,"h":80,"text":"2026 draftRound 1, pick 26 (26 overall)Buffalo Bills hold th"}; landed {"opacity":1,"visibility":"visible","ariaHidden":null,"top":900,"h":80,"text":"2026 draftRound 1, pick 26 (26 overall)Buffalo Bills hold th"}; scrollY 154
+  screenshots: 114 in /home/runner/work/_temp/rc-out/files
+REVIEW WALK (m3): ALL GREEN

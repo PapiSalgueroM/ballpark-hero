@@ -1,0 +1,62 @@
+  C1:nba-390: scrollY on load 0 then 0 after 1.5 s; opener {"x":137.75,"y":456,"w":114.484375,"h":44,"top":456,"bottom":500,"ih":844}
+  C1:nba-390: done card {"x":33,"y":290,"w":324,"h":129.5,"top":290,"bottom":419.5,"ih":844}; focus on BODY Skip to main contentLiveLive s
+  C1:nba-390: after reload: phase retired, review button 1
+  C2:nba-390: offers in the save 1; done card text: "🧢 Coaching career complete 0-0 as a coach 0 seasons · 0 titles · 0.0 percent You walked away before coaching a season. Nothing on the books, and nothing against you either."
+  P1:nba-390: Skip it {"x":33,"y":875,"w":324,"h":94}; after the skip, under that point: nothing; Undo skip {"x":33,"y":159,"w":324,"h":46}; Draft day {"x":33,"y":269,"w":324,"h":44}; scrollY 507
+  P1:nba-390: after Undo, under the Undo point: button "Go all outPush every drill to the limit."; scrollY 0
+  P1:nba-390-rm: Skip it {"x":33,"y":875,"w":324,"h":94}; after the skip, under that point: nothing; Undo skip {"x":33,"y":159,"w":324,"h":46}; Draft day {"x":33,"y":269,"w":324,"h":44}; scrollY 507
+  P1:nba-390-rm: after Undo, under the Undo point: button "Go all outPush every drill to the limit."; scrollY 0
+  P2-skip:nba-390: double tap on Skip it at 195,922: phase showcase, showcase none, drafted no
+  P2-undo:nba-390: double tap on Undo skip at 195,182: phase draft, showcase allout, drafted no
+  FAIL P2-undo:nba-390: a double tap on Undo skip picked a graded approach, which has no undo: phase draft, showcase allout, drafted no
+  N1:nba-390: Watch it again {"x":33,"y":692,"w":158,"h":46}; result on the first live night {"opacity":0,"visibility":"visible","ariaHidden":"true","top":750,"h":107,"text":"2026 draftRound 1, pick 21 (21 overall)LA Clippers hold the "}; 150 ms into the replay {"opacity":0,"visibility":"visible","ariaHidden":"true","top":750,"h":107,"text":"2026 draftRound 1, pick 21 (21 overall)LA Clippers hold the "}; landed {"opacity":1,"visibility":"visible","ariaHidden":null,"top":750,"h":107,"text":"2026 draftRound 1, pick 21 (21 overall)LA Clippers hold the "}; scrollY 500
+  N1:nba-390-rm: reduced motion: Watch it again 0, two columns false, result {"opacity":1,"visibility":"visible","ariaHidden":null,"top":750,"h":107,"text":"2026 draftRound 1, pick 21 (21 overall)LA Clippers hold the "}
+  H:nba-390: help line shown 1 time(s)
+  C1:nba-1280: scrollY on load 0 then 0 after 1.5 s; opener {"x":582.75,"y":385.5,"w":114.484375,"h":44,"top":385.5,"bottom":429.5,"ih":900}
+  FAIL C1:nba-1280: locator.waitFor: Timeout 15000ms exceeded.
+  C2:nba-1280: offers in the save 1; done card text: "🧢 Coaching career complete 0-0 as a coach 0 seasons · 0 titles · 0.0 percent You walked away before coaching a season. Nothing on the books, and nothing against you either."
+  P1:nba-1280: Skip it {"x":337,"y":846,"w":606,"h":94}; after the skip, under that point: SECTION; Undo skip {"x":337,"y":593,"w":606,"h":46}; Draft day {"x":337,"y":683,"w":606,"h":44}; scrollY 40
+  P1:nba-1280: after Undo, under the Undo point: button "Go all outPush every drill to the limit."; scrollY 0
+  P1:nba-1280-rm: Skip it {"x":337,"y":846,"w":606,"h":94}; after the skip, under that point: SECTION; Undo skip {"x":337,"y":593,"w":606,"h":46}; Draft day {"x":337,"y":683,"w":606,"h":44}; scrollY 40
+  P1:nba-1280-rm: after Undo, under the Undo point: button "Go all outPush every drill to the limit."; scrollY 0
+  P2-skip:nba-1280: double tap on Skip it at 640,893: phase draft, showcase skip, drafted no
+  P2-undo:nba-1280: double tap on Undo skip at 640,616: phase draft, showcase allout, drafted no
+  FAIL P2-undo:nba-1280: a double tap on Undo skip picked a graded approach, which has no undo: phase draft, showcase allout, drafted no
+  N1:nba-1280: Watch it again {"x":337,"y":842,"w":299,"h":46}; result on the first live night {"opacity":0,"visibility":"visible","ariaHidden":"true","top":934,"h":80,"text":"2026 draftRound 1, pick 21 (21 overall)LA Clippers hold the "}; 150 ms into the replay {"opacity":0,"visibility":"visible","ariaHidden":"true","top":900,"h":80,"text":"2026 draftRound 1, pick 21 (21 overall)LA Clippers hold the "}; landed {"opacity":1,"visibility":"visible","ariaHidden":null,"top":900,"h":80,"text":"2026 draftRound 1, pick 21 (21 overall)LA Clippers hold the "}; scrollY 292
+  N1:nba-1280-rm: reduced motion: Watch it again 0, two columns false, result {"opacity":1,"visibility":"visible","ariaHidden":null,"top":900,"h":80,"text":"2026 draftRound 1, pick 21 (21 overall)LA Clippers hold the "}
+  H:nba-1280: help line shown 1 time(s)
+  C1:nba-390-rm: scrollY on load 0 then 0 after 1.5 s; opener {"x":137.75,"y":456,"w":114.484375,"h":44,"top":456,"bottom":500,"ih":844}
+  C1:nba-390-rm: done card {"x":33,"y":290,"w":324,"h":129.5,"top":290,"bottom":419.5,"ih":844}; focus on BODY Skip to main contentLiveLive s
+  C1:nba-390-rm: after reload: phase retired, review button 1
+  C1:nfl-390: scrollY on load 0 then 0 after 1.5 s; opener {"x":137.75,"y":456,"w":114.484375,"h":44,"top":456,"bottom":500,"ih":844}
+  C1:nfl-390: done card {"x":33,"y":290,"w":324,"h":129.5,"top":290,"bottom":419.5,"ih":844}; focus on BODY Skip to main contentLiveLive s
+  C1:nfl-390: after reload: phase retired, review button 1
+  C2:nfl-390: offers in the save 1; done card text: "🧢 Coaching career complete 0-0 as a coach 0 seasons · 0 titles · 0.0 percent You walked away before coaching a season. Nothing on the books, and nothing against you either."
+  P1:nfl-390: Skip it {"x":33,"y":875,"w":324,"h":94}; after the skip, under that point: nothing; Undo skip {"x":33,"y":159,"w":324,"h":46}; Draft day {"x":33,"y":269,"w":324,"h":44}; scrollY 507
+  P1:nfl-390: after Undo, under the Undo point: button "Go all outPush every drill to the limit."; scrollY 0
+  P1:nfl-390-rm: Skip it {"x":33,"y":875,"w":324,"h":94}; after the skip, under that point: nothing; Undo skip {"x":33,"y":159,"w":324,"h":46}; Draft day {"x":33,"y":269,"w":324,"h":44}; scrollY 507
+  P1:nfl-390-rm: after Undo, under the Undo point: button "Go all outPush every drill to the limit."; scrollY 0
+  P2-skip:nfl-390: double tap on Skip it at 195,922: phase showcase, showcase none, drafted no
+  P2-undo:nfl-390: double tap on Undo skip at 195,182: phase draft, showcase allout, drafted no
+  FAIL P2-undo:nfl-390: a double tap on Undo skip picked a graded approach, which has no undo: phase draft, showcase allout, drafted no
+  N1:nfl-390: Watch it again {"x":33,"y":538,"w":158,"h":46}; result on the first live night {"opacity":0,"visibility":"visible","ariaHidden":"true","top":596,"h":107,"text":"2026 draftRound 1, pick 26 (26 overall)Buffalo Bills hold th"}; 150 ms into the replay {"opacity":0,"visibility":"visible","ariaHidden":"true","top":596,"h":107,"text":"2026 draftRound 1, pick 26 (26 overall)Buffalo Bills hold th"}; landed {"opacity":1,"visibility":"visible","ariaHidden":null,"top":596,"h":107,"text":"2026 draftRound 1, pick 26 (26 overall)Buffalo Bills hold th"}; scrollY 500
+  N1:nfl-390-rm: reduced motion: Watch it again 0, two columns false, result {"opacity":1,"visibility":"visible","ariaHidden":null,"top":596,"h":107,"text":"2026 draftRound 1, pick 26 (26 overall)Buffalo Bills hold th"}
+  H:nfl-390: help line shown 1 time(s)
+  C1:nfl-1280: scrollY on load 0 then 0 after 1.5 s; opener {"x":582.75,"y":385.5,"w":114.484375,"h":44,"top":385.5,"bottom":429.5,"ih":900}
+  FAIL C1:nfl-1280: locator.waitFor: Timeout 15000ms exceeded.
+  C2:nfl-1280: offers in the save 1; done card text: "🧢 Coaching career complete 0-0 as a coach 0 seasons · 0 titles · 0.0 percent You walked away before coaching a season. Nothing on the books, and nothing against you either."
+  P1:nfl-1280: Skip it {"x":337,"y":846,"w":606,"h":94}; after the skip, under that point: SECTION; Undo skip {"x":337,"y":593,"w":606,"h":46}; Draft day {"x":337,"y":683,"w":606,"h":44}; scrollY 40
+  P1:nfl-1280: after Undo, under the Undo point: button "Go all outPush every drill to the limit."; scrollY 0
+  P1:nfl-1280-rm: Skip it {"x":337,"y":846,"w":606,"h":94}; after the skip, under that point: SECTION; Undo skip {"x":337,"y":593,"w":606,"h":46}; Draft day {"x":337,"y":683,"w":606,"h":44}; scrollY 40
+  P1:nfl-1280-rm: after Undo, under the Undo point: button "Go all outPush every drill to the limit."; scrollY 0
+  P2-skip:nfl-1280: double tap on Skip it at 640,893: phase draft, showcase skip, drafted no
+  P2-undo:nfl-1280: double tap on Undo skip at 640,616: phase draft, showcase allout, drafted no
+  FAIL P2-undo:nfl-1280: a double tap on Undo skip picked a graded approach, which has no undo: phase draft, showcase allout, drafted no
+  N1:nfl-1280: Watch it again {"x":337,"y":842,"w":299,"h":46}; result on the first live night {"opacity":0,"visibility":"visible","ariaHidden":"true","top":903,"h":80,"text":"2026 draftRound 1, pick 26 (26 overall)Buffalo Bills hold th"}; 150 ms into the replay {"opacity":0,"visibility":"visible","ariaHidden":"true","top":900,"h":80,"text":"2026 draftRound 1, pick 26 (26 overall)Buffalo Bills hold th"}; landed {"opacity":1,"visibility":"visible","ariaHidden":null,"top":900,"h":80,"text":"2026 draftRound 1, pick 26 (26 overall)Buffalo Bills hold th"}; scrollY 154
+  N1:nfl-1280-rm: reduced motion: Watch it again 0, two columns false, result {"opacity":1,"visibility":"visible","ariaHidden":null,"top":900,"h":80,"text":"2026 draftRound 1, pick 26 (26 overall)Buffalo Bills hold th"}
+  H:nfl-1280: help line shown 1 time(s)
+  C1:nfl-390-rm: scrollY on load 0 then 0 after 1.5 s; opener {"x":137.75,"y":456,"w":114.484375,"h":44,"top":456,"bottom":500,"ih":844}
+  C1:nfl-390-rm: done card {"x":33,"y":290,"w":324,"h":129.5,"top":290,"bottom":419.5,"ih":844}; focus on BODY Skip to main contentLiveLive s
+  C1:nfl-390-rm: after reload: phase retired, review button 1
+  screenshots: 106 in /home/runner/work/_temp/rc-out/files
+REVIEW WALK (head): 6 FAILURES

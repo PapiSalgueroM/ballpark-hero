@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=1 147s | REVIEW WALK (head): 6 FAILURES
+m3walk exit=0 48s | REVIEW WALK (m3): ALL GREEN
+builder-walk exit=0 62s | playUsCareerReports: ALL GREEN, 14 walks
+ctl-noretire exit=1 66s | CONTROL noretire FIRED: W2 red
+ctl-noundo exit=1 50s | CONTROL noundo FIRED: W3 red
+ctl-noreplay exit=1 57s | CONTROL noreplay FIRED: W3 red

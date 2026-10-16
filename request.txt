@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+walk: node .rc/x/walk.mjs
+m3walk: node .rc/x/mut.mjs M3 M3b && node_modules/.bin/vite build --outDir /tmp/distm3 >/dev/null 2>&1 && DIST=/tmp/distm3 WALK_ONLY=replay WALK_TAG=m3 node .rc/x/walk.mjs; s=$?; git checkout -- src scripts; exit $s
+builder-walk: ENGINES=chromium node scripts/playUsCareerReports.mjs
+ctl-noretire: ENGINES=chromium PLAY_US_REPORTS_CONTROL=noretire node scripts/playUsCareerReports.mjs
+ctl-noundo: ENGINES=chromium PLAY_US_REPORTS_CONTROL=noundo node scripts/playUsCareerReports.mjs
+ctl-noreplay: ENGINES=chromium PLAY_US_REPORTS_CONTROL=noreplay node scripts/playUsCareerReports.mjs
