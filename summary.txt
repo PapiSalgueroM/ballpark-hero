@@ -1,0 +1,7 @@
+ctl-unseeded-noinverse exit=0 33s | simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
+continuity-minusAZ exit=0 48s | Private world variation is measured, no historical fixture was re-recorded
+ctl-unseeded-guard exit=0 145s | simCmUnseededWorld: CONTROL guard FIRED: with the guard out the deal fleet went red (49 saves) and the quiet fleet stayed green
+unseeded-minusAZ exit=0 150s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to c280fdc7 (state, draws and saved bytes at every step), and 15 new careers w
+continuity-default-head exit=1 30s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:497:24
+unseeded-default-head exit=1 119s | simCmUnseededWorld: 112 FAILURE(S)
+ctl-continuity-all exit=0 446s | Private world variation is measured, no historical fixture was re-recorded
