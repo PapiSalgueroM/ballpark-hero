@@ -1,0 +1,3 @@
+fences3 exit=0 90s | All 3 harnesses green.
+tsc exit=0 122s | 
+skips exit=0 124s | PASS: ALL US CAREER SKIP CHECKS PASSED
