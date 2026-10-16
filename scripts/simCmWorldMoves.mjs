@@ -970,7 +970,7 @@ if (COMBINE) process.exit(combine(process.argv.slice(3)));
 const treeSource = lf(fs.readFileSync(path.join(ROOT, ENGINE), 'utf8'));
 if (SECTIONS.has(0)) {
   console.log('0) anchors: every edit this harness can make stands exactly once in the source it is made to');
-  for (const [label, n] of bridgeAnchorCounts(file => fs.readFileSync(path.join(ROOT, file), 'utf8'))) {
+  for (const [label, n] of bridgeAnchorCounts(file => lf(fs.readFileSync(path.join(ROOT, file), 'utf8')))) {
     console.log(`   bridge "${label}": ${n}`);
     if (n !== 1) fail(0, `the bridge's anchor "${label}" stands ${n} times`);
   }
