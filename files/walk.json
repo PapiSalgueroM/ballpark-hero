@@ -1,0 +1,247 @@
+{
+ "cases": [
+  {
+   "label": "joined-390-rm",
+   "row": {
+    "text": "RB 🇳🇱 Jurriën Timber Manchester United · 24y · worth £52.7m to £64.2m 88 Talk · £62.7m",
+    "label": "Talk · £62.7m",
+    "h": 23
+   },
+   "after": {
+    "note": null,
+    "refused": false,
+    "dialog": false,
+    "around": "deadline · offers can arrive any week · loans used 0/2 BUDGET £70m Negotiating: Jurriën Timber 88 Manchester United · RB · 24y · worth £52.7m to £64.2m Their ask: £66m ●●●●● \"Their sporting director picks up on the second ring. Everyone is for sale.\" ADD-ONS None £2m £5m £10m SELL-ON None 10% 20% 30",
+    "w": 390,
+    "vw": 390
+   }
+  },
+  {
+   "label": "before-390-rm",
+   "row": {
+    "text": "RB 🇳🇱 Jurriën Timber Manchester United · 24y · worth £55m to £60.3m 88 Talk · £62.7m",
+    "label": "Talk · £62.7m",
+    "h": 23
+   },
+   "after": {
+    "note": "Jurriën Timber only joined Manchester United this season. They will not sell him on until the summer.x",
+    "refused": true,
+    "dialog": false,
+    "around": "eague £70.7m Managers Board Safe Fans Grumbling Home Squad Tactics Table Market Jurriën Timber only joined Manchester United this season. They will not sell him on until the summer. x ❄️ January window OPEN 3 match weeks until the deadline · offers can arrive any week · loans used 0/2 BUDGET £70.7m ",
+    "w": 390,
+    "vw": 390
+   }
+  },
+  {
+   "label": "joined-1280-motion",
+   "row": {
+    "text": "RB 🇳🇱 Jurriën Timber Manchester United · 24y · worth £52.7m to £64.2m 88 Talk · £62.7m",
+    "label": "Talk · £62.7m",
+    "h": 23
+   },
+   "after": {
+    "note": null,
+    "refused": false,
+    "dialog": false,
+    "around": "deadline · offers can arrive any week · loans used 0/2 BUDGET £70m Negotiating: Jurriën Timber 88 Manchester United · RB · 24y · worth £52.7m to £64.2m Their ask: £64.1m ●●●●○ \"They know you are interested. The price just went up.\" ADD-ONS None £2m £5m £10m SELL-ON None 10% 20% 30% SWAP No part exch",
+    "w": 1280,
+    "vw": 1280
+   }
+  },
+  {
+   "label": "before-1280-motion",
+   "row": {
+    "text": "RB 🇳🇱 Jurriën Timber Manchester United · 24y · worth £55m to £60.3m 88 Talk · £62.7m",
+    "label": "Talk · £62.7m",
+    "h": 23
+   },
+   "after": {
+    "note": "Jurriën Timber only joined Manchester United this season. They will not sell him on until the summer.x",
+    "refused": true,
+    "dialog": false,
+    "around": "eague £70.7m Managers Board Safe Fans Grumbling Home Squad Tactics Table Market Jurriën Timber only joined Manchester United this season. They will not sell him on until the summer. x ❄️ January window OPEN 3 match weeks until the deadline · offers can arrive any week · loans used 0/2 BUDGET £70.7m ",
+    "w": 1280,
+    "vw": 1280
+   }
+  },
+  {
+   "label": "joined-390-motion",
+   "row": {
+    "text": "RB 🇳🇱 Jurriën Timber Manchester United · 24y · worth £52.7m to £64.2m 88 Talk · £62.7m",
+    "label": "Talk · £62.7m",
+    "h": 23
+   },
+   "after": {
+    "note": null,
+    "refused": false,
+    "dialog": false,
+    "around": "deadline · offers can arrive any week · loans used 0/2 BUDGET £70m Negotiating: Jurriën Timber 88 Manchester United · RB · 24y · worth £52.7m to £64.2m Their ask: £67.2m ●●●●○ \"Their sporting director picks up on the second ring. Everyone is for sale.\" ADD-ONS None £2m £5m £10m SELL-ON None 10% 20% ",
+    "w": 390,
+    "vw": 390
+   }
+  },
+  {
+   "label": "before-390-motion",
+   "row": {
+    "text": "RB 🇳🇱 Jurriën Timber Manchester United · 24y · worth £55m to £60.3m 88 Talk · £62.7m",
+    "label": "Talk · £62.7m",
+    "h": 23
+   },
+   "after": {
+    "note": "Jurriën Timber only joined Manchester United this season. They will not sell him on until the summer.x",
+    "refused": true,
+    "dialog": false,
+    "around": "eague £70.7m Managers Board Safe Fans Grumbling Home Squad Tactics Table Market Jurriën Timber only joined Manchester United this season. They will not sell him on until the summer. x ❄️ January window OPEN 3 match weeks until the deadline · offers can arrive any week · loans used 0/2 BUDGET £70.7m ",
+    "w": 390,
+    "vw": 390
+   }
+  },
+  {
+   "label": "joined-1280-rm",
+   "row": {
+    "text": "RB 🇳🇱 Jurriën Timber Manchester United · 24y · worth £52.7m to £64.2m 88 Talk · £62.7m",
+    "label": "Talk · £62.7m",
+    "h": 23
+   },
+   "after": {
+    "note": null,
+    "refused": false,
+    "dialog": false,
+    "around": "deadline · offers can arrive any week · loans used 0/2 BUDGET £70m Negotiating: Jurriën Timber 88 Manchester United · RB · 24y · worth £52.7m to £64.2m Their ask: £68.1m ●●●●○ \"They want top money for him.\" ADD-ONS None £2m £5m £10m SELL-ON None 10% 20% 30% SWAP No part exchange Alessandro Buongiorn",
+    "w": 1280,
+    "vw": 1280
+   }
+  },
+  {
+   "label": "before-1280-rm",
+   "row": {
+    "text": "RB 🇳🇱 Jurriën Timber Manchester United · 24y · worth £55m to £60.3m 88 Talk · £62.7m",
+    "label": "Talk · £62.7m",
+    "h": 23
+   },
+   "after": {
+    "note": "Jurriën Timber only joined Manchester United this season. They will not sell him on until the summer.x",
+    "refused": true,
+    "dialog": false,
+    "around": "eague £70.7m Managers Board Safe Fans Grumbling Home Squad Tactics Table Market Jurriën Timber only joined Manchester United this season. They will not sell him on until the summer. x ❄️ January window OPEN 3 match weeks until the deadline · offers can arrive any week · loans used 0/2 BUDGET £70.7m ",
+    "w": 1280,
+    "vw": 1280
+   }
+  }
+ ],
+ "engine": {
+  "seed": 1,
+  "rows": [
+   {
+    "name": "Jurriën Timber",
+    "from": "Arsenal",
+    "to": "Manchester United",
+    "week": 0,
+    "goneJ": true,
+    "markedJ": true,
+    "linesInJ": 0,
+    "talkS": "Jurriën Timber only joined Manchester United this season. They will not sell him on until the summer.",
+    "talkJ": null,
+    "buyJ": null
+   },
+   {
+    "name": "Jude Bellingham",
+    "from": "Real Madrid",
+    "to": "Barcelona",
+    "week": 0,
+    "goneJ": true,
+    "markedJ": true,
+    "linesInJ": 0,
+    "talkS": "Jude Bellingham only joined Barcelona this season. They will not sell him on until the summer.",
+    "talkJ": null,
+    "buyJ": "That costs £141.6m and you have £70m."
+   },
+   {
+    "name": "Josko Gvardiol",
+    "from": "Manchester City",
+    "to": "Liverpool",
+    "week": 0,
+    "goneJ": true,
+    "markedJ": true,
+    "linesInJ": 0,
+    "talkS": "Josko Gvardiol only joined Liverpool this season. They will not sell him on until the summer.",
+    "talkJ": null,
+    "buyJ": "That costs £71.3m and you have £70m."
+   },
+   {
+    "name": "Alejandro Balde",
+    "from": "Barcelona",
+    "to": "Manchester United",
+    "week": 0,
+    "goneJ": true,
+    "markedJ": true,
+    "linesInJ": 0,
+    "talkS": "Alejandro Balde only joined Manchester United this season. They will not sell him on until the summer.",
+    "talkJ": null,
+    "buyJ": null
+   },
+   {
+    "name": "Willian Pacho",
+    "from": "PSG",
+    "to": "Newcastle",
+    "week": 0,
+    "goneJ": true,
+    "markedJ": true,
+    "linesInJ": 0,
+    "talkS": "Willian Pacho only joined Newcastle this season. They will not sell him on until the summer.",
+    "talkJ": null,
+    "buyJ": null
+   },
+   {
+    "name": "Ilya Zabarnyi",
+    "from": "PSG",
+    "to": "Crystal Palace",
+    "week": 0,
+    "goneJ": true,
+    "markedJ": true,
+    "linesInJ": 0,
+    "talkS": "Ilya Zabarnyi only joined Crystal Palace this season. They will not sell him on until the summer.",
+    "talkJ": null,
+    "buyJ": null
+   },
+   {
+    "name": "Carlos Baleba",
+    "from": "Manchester United",
+    "to": "Tottenham",
+    "week": 28,
+    "goneJ": true,
+    "markedJ": true,
+    "linesInJ": 0,
+    "talkS": "Carlos Baleba only joined Tottenham this season. They will not sell him on until the summer.",
+    "talkJ": null,
+    "buyJ": null
+   },
+   {
+    "name": "Tijjani Reijnders",
+    "from": "Al-Qadsiah",
+    "to": "Borussia Dortmund",
+    "week": 28,
+    "goneJ": true,
+    "markedJ": true,
+    "linesInJ": 0,
+    "talkS": "Tijjani Reijnders only joined Borussia Dortmund this season. They will not sell him on until the summer.",
+    "talkJ": null,
+    "buyJ": null
+   },
+   {
+    "name": "Federico Dimarco",
+    "from": "Inter Milan",
+    "to": "Arsenal",
+    "week": 28,
+    "goneJ": true,
+    "markedJ": true,
+    "linesInJ": 0,
+    "talkS": "Federico Dimarco only joined Arsenal this season. They will not sell him on until the summer.",
+    "talkJ": null,
+    "buyJ": null
+   }
+  ]
+ },
+ "whatsNew": "Club Manager: players other clubs buy stay bought. You told us a player who moved between two other clubs vanished from the game and turned up back at his old club the next season. In a Club Manager career started after the 13 October update, that deal now sticks: he is in his new club's squad straight away, plays for them against you, shows up on the market at his new club (not for sale until the summer), and is still there next season. If your career is that new and already lost someone this season, opening it puts him back where he went. Careers started before that update keep the world they had.",
+ "errors": []
+}
