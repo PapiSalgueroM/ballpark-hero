@@ -1,0 +1,9 @@
+unseeded exit=0 89s | simCmUnseededWorld: green. 49 old saves with no deal play byte equal to 76a88d4d (state, draws and saved bytes at every step), 49 with every deal play byte equal to it up
+u-norecord exit=1 45s | simCmUnseededWorld: CONTROL norecord FIRED: adopted without recording my men, the mine check went red 1232 times after the rollover while the comparison before it stayed 
+oldworld exit=0 27s | simCmOldCareersWorld: green, sections 1, 2 held (27s)
+appeal-head exit=1 3s | Node.js v24.21.0
+appeal-oldengine exit=0 19s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+mut-adoptLoans exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerAdoption.test.ts,title=src/lib/clubManagerAdoption.test.ts > Round 1508%3A an old career ado
+mut-adoptTwoClubs exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerAdoption.test.ts,title=src/lib/clubManagerAdoption.test.ts > Round 1508%3A an old career ado
+mut-freeAgent exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerAdoption.test.ts,title=src/lib/clubManagerAdoption.test.ts > Round 1508%3A an old career ado
+mut-eraWait exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerEras.ts,title=src/lib/clubManagerAdoption.test.ts > Round 1508%3A an old career adopted into

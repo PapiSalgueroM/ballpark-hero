@@ -1,0 +1,40 @@
+mut2 freeAgent: applied to src/lib/clubManager.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerAdoption.test.ts [2m([22m[2m4 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 176[2mms[22m[39m
+   [32m✓[39m Round 1508: an old career adopted into the living world[2m > [22mwaits for an era whose squads have not arrived, and adopts at the first summer that has them[32m 140[2mms[22m[39m
+   [32m✓[39m Round 1508: an old career adopted into the living world[2m > [22mrecords a man I signed before the summer and loaned out across it as signed by me from his old club[32m 12[2mms[22m[39m
+   [32m✓[39m Round 1508: an old career adopted into the living world[2m > [22mleaves a man of mine alone when the projection lists his name and age at two clubs[32m 9[2mms[22m[39m
+[31m   [31m×[31m Round 1508: an old career adopted into the living world[2m > [22msigns a free agent the ledger holds as released back onto my books in the ledger[39m[32m 14[2mms[22m[39m
+[31m     → expected null to be 'Everton' // Object.is equality[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerAdoption.test.ts[2m > [22mRound 1508: an old career adopted into the living world[2m > [22msigns a free agent the ledger holds as released back onto my books in the ledger
+[31m[1mAssertionError[22m: expected null to be 'Everton' // Object.is equality[39m
+
+[32m- Expected:[39m 
+"Everton"
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/lib/clubManagerAdoption.test.ts:[2m97:28[22m[39m
+    [90m 95| [39m    const after = readWorldRoster(signed)!.records.filter(r => r.key =…
+    [90m 96| [39m    [34mexpect[39m(after)[33m.[39m[34mtoHaveLength[39m([34m1[39m)[33m;[39m
+    [90m 97| [39m    expect(after[0].owner).toBe(held.clubName); expect(after[0].status…
+    [90m   | [39m                           [31m^[39m
+    [90m 98| [39m  })[33m;[39m
+    [90m 99| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 23:55:57
+[2m   Duration [22m 1.63s[2m (transform 912ms, setup 29ms, collect 1.04s, tests 176ms, environment 155ms, prepare 50ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerAdoption.test.ts,title=src/lib/clubManagerAdoption.test.ts > Round 1508%3A an old career adopted into the living world > signs a free agent the ledger holds as released back onto my books in the ledger,line=97,column=28::AssertionError: expected null to be 'Everton' // Object.is equality%0A%0A- Expected: %0A"Everton"%0A%0A+ Received: %0Anull%0A%0A ❯ src/lib/clubManagerAdoption.test.ts:97:28%0A%0A
