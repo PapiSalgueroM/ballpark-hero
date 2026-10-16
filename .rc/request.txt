@@ -1,0 +1,6 @@
+oldsaves: node .rc/x/oldsaves.mjs
+unseeded: B=$(bash .rc/x/baseDeck.sh) && echo "base $B" && CM_UNSEEDED_BASE=$B node scripts/simCmUnseededWorld.mjs
+s6-2015: CM_WORLD_MOVES_SECTIONS=6 CM_WORLD_MOVES_ERAS=era2015 node scripts/simCmWorldMoves.mjs
+s6-2005: CM_WORLD_MOVES_SECTIONS=6 CM_WORLD_MOVES_ERAS=era2005 node scripts/simCmWorldMoves.mjs
+s8-2015: CM_WORLD_MOVES_SECTIONS=8 CM_WORLD_MOVES_ERAS=era2015 node scripts/simCmWorldMoves.mjs
+s1-2005: CM_WORLD_MOVES_SECTIONS=1,4 CM_WORLD_MOVES_ERAS=era2005 node scripts/simCmWorldMoves.mjs
