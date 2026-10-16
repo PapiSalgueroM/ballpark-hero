@@ -303,3 +303,24 @@ src/components/soccer-career/ AgentBrief.tsx AgentReviewCard.tsx CareerMentorTil
 - The two one line kit edits that are not appends (sections 8 and 10, above) stay: the soccer index line of 1(f) cannot
   pass the kit without them.
 - Ruling 2(j)'s residue: training still moves legacy +1.66 (BEST) and +1.56 (WORST) against an OFF spread of 1.21.
+
+### The kit's two gate lines, seconds before and after (ruling 2(h))
+
+Measured on one runner in one #!serial request (rc r1334-fx2a, line kit-time-1 base first, kit-time-2 head first), SC_BASE
+e814c2de checked out beside the head at .rcbase, the head 8cbca428 (the pack as it ships plus the review fixes):
+
+| line | SC_BASE | head |
+|---|---|---|
+| `SIM_EVENT_DECK_SECTIONS=1,2,3,4,5,6,7,8,9,10,11,12 node scripts/simEventDeck.mjs` | 48 s, 48 s | 48 s, 49 s |
+| `SIM_EVENT_DECK_SECTIONS=13,14,15,16 node scripts/simEventDeck.mjs` | 103 s, 102 s | 104 s, 103 s |
+
+Every run exit 0 and green. The soccer pack adds about a second to the kit; both lines stay under 150 s, so no third
+line is owed by time (the finish's three way split, 13 alone and 14,15,16, also stands: 75 s and 25 s on rc r1334-fx2b).
+
+### The reach check, measured for the lead (not changed here)
+
+rc r1334-fx1b and r1334-fx2a, a runner-only patch printing the least dealt cards of section 10, SEED 1 to 30 each:
+the shipped kit red at SEED 4 and 28 (719 at 0); with the soccer pack driven over five times the seasons (5,000) green at
+all 30 seeds, the least dealt card 719 at 5 to 19 deals, the top card 726 at 9.82 to 11.04 percent over seeds 1 to 10
+(under the 13.7 ceiling). The patch is one line of section 10's drive:
+`for (let d = 0; d < DRIVES.FLEET.desks * (tag === 'soccer' ? 5 : 1); d++) runDesk(...)`.
