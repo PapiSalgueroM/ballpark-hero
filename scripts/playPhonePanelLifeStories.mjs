@@ -129,10 +129,11 @@ try {
         await page.screenshot({ path: path.join(OUT, name + '-' + profile.width + '-bottom.png') });
         if (profile.width === 320) {
           const previous = await region.getAttribute('style');
-          await region.evaluate(element => { element.style.display = 'none'; });
+          const heldRegion = await region.elementHandle();
+          await heldRegion.evaluate(element => { element.style.display = 'none'; });
           check((await inspect()).visible === false, 'hidden-region control actually removes visible stories');
           report.controls.push({ kind: 'hidden-region', fired: true });
-          await region.evaluate((element, style) => { if (style === null) element.removeAttribute('style'); else element.setAttribute('style', style); }, previous);
+          await heldRegion.evaluate((element, style) => { if (style === null) element.removeAttribute('style'); else element.setAttribute('style', style); }, previous);
           const first = region.getByRole('listitem').first(), oldStyle = await first.getAttribute('style');
           await first.evaluate(element => { element.style.minWidth = '2000px'; });
           const control = await inspect(); check(control.bodyScroll > control.bodyWidth + 100, 'overflow control changes measured layout');
