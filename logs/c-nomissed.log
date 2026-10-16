@@ -1,0 +1,11 @@
+NEGATIVE CONTROL ON: RETIRE_CONTROL=nomissed, src/lib/clubManagerRecords.ts is a rewritten copy
+== oldsave
+   an Everton career 4 seasons in, built on head with the field taken off (no RETIRE_BASE): 167 played, 167 in the book
+ok   [oldsave] the old save carries no record
+ok   [oldsave] the old save's book holds every match (167 of 167)
+ok   [oldsave] on the whole book the derived record is the reports' first of the most goals, with no missed (6-2 vs Sunderland, S1; reports 6-2 vs Sunderland, S1)
+FAIL [oldsave] leaned, the derived record says the book lost 5 matches (6-2 vs Sunderland, S1)
+ok   [oldsave] reading the record writes nothing
+ok   [oldsave] one match on head stores the seed or that match, whichever has more goals (stored 6-2 vs Sunderland, S1; seed 6-2 vs Sunderland, S1; tonight 1-4 vs Burnley)
+FAIL [oldsave] and carries missed forward (undefined of 5)
+control nomissed FIRED: 2 of 7 checks red

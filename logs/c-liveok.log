@@ -1,0 +1,8 @@
+NEGATIVE CONTROL ON: RETIRE_CONTROL=liveok, src/lib/clubManagerRetire.ts is a rewritten copy
+== retire
+   18 careers at three moments, 12 trophies between them
+ok   [retire] retiring changes only `retired` (and writes the record down when absent), never its input, at the right moment (moments seasonEnd, midSeason, outOfWork)
+ok   [retire] retiring draws nothing (0 draws)
+FAIL [retire] a match in progress and a retired career are refused (0 of 18)
+ok   [retire] the farewell's clubs, cabinet and record are the save's (12 trophies)
+control liveok FIRED: 1 of 4 checks red

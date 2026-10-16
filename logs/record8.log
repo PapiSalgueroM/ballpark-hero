@@ -1,0 +1,15 @@
+== record
+   3 clubs x 8 seeds x 2 seasons: 2109 matches, 86 ties with the record, 26 shootouts (26 single leg)
+ok   [record] the fleet played matches and read every report (2109 matches, 0 reports not read)
+ok   [record] after every match the stored record is the first of the most goals the reports show
+ok   [record] after every match the stored record equals highestFromBook over the whole book
+== pens
+   the record fleet held 26 shootouts, 26 of them single leg ties
+ok   [pens] every single leg shootout (26) keeps the level score with W or L, reads as penalties, counts no kick
+== retire
+   18 careers at three moments, 12 trophies between them
+ok   [retire] retiring changes only `retired` (and writes the record down when absent), never its input, at the right moment (moments seasonEnd, midSeason, outOfWork)
+ok   [retire] retiring draws nothing (0 draws)
+ok   [retire] a match in progress and a retired career are refused (18 of 18)
+ok   [retire] the farewell's clubs, cabinet and record are the save's (12 trophies)
+simCmRetire: all 8 checks passed (record, pens, retire)

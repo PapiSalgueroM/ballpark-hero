@@ -1,0 +1,25 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+retire: node scripts/simCmRetire.mjs
+c-tielast: RETIRE_CONTROL=tielast node scripts/simCmRetire.mjs
+c-skipgame: RETIRE_CONTROL=skipgame node scripts/simCmRetire.mjs
+c-nomissed: RETIRE_CONTROL=nomissed node scripts/simCmRetire.mjs
+c-basewrites: RETIRE_CONTROL=basewrites node scripts/simCmRetire.mjs
+c-liveok: RETIRE_CONTROL=liveok node scripts/simCmRetire.mjs
+c-drawone: RETIRE_CONTROL=drawone node scripts/simCmRetire.mjs
+c-dash: RETIRE_CONTROL=dash node scripts/simCmRetire.mjs
+c-stripnone: git worktree add -f .rb1 d4f2c6f6 >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb1 RETIRE_CONTROL=stripnone node scripts/simCmRetire.mjs
+c-drawleak: git worktree add -f .rb2 d4f2c6f6 >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb2 RETIRE_CONTROL=drawleak node scripts/simCmRetire.mjs
+fleet8: git worktree add -f .rb3 d4f2c6f6 >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb3 RETIRE_SEEDS=8 RETIRE_SEASONS=4 node scripts/simCmRetire.mjs --part=fleet
+hotseat-loads: git worktree add -f .rb4 d4f2c6f6 >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb4 node scripts/simCmRetire.mjs --part=hotseat,loads,oldsave
+record8: RETIRE_SEEDS=8 node scripts/simCmRetire.mjs --part=record,pens,retire
+vitest-new: node_modules/.bin/vitest run src/lib/clubManagerRecords.test.ts src/lib/clubManagerRetire.test.ts src/lib/clubManagerSlots.test.ts src/test/clubManagerRetire.test.tsx src/test/clubManagerManagerFace.test.tsx src/test/cmTablesTruth.test.tsx src/test/numberFormatting.test.tsx --testTimeout=300000 --hookTimeout=120000
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simEarlyReturnScope: node scripts/simEarlyReturnScope.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simStaleChunk: node scripts/simStaleChunk.mjs
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+appealIsolation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs

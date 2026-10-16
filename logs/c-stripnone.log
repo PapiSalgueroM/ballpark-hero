@@ -1,0 +1,6 @@
+NEGATIVE CONTROL ON: RETIRE_CONTROL=stripnone
+== fleet
+FAIL [fleet] 30 careers of 3 seasons: every save byte (the record taken off) and every draw equal to RETIRE_BASE (30 differ; first Everton era2005 seed 0 coach: head 0abbabbaadba7d08 69484 draws, base bc4507642291a91d 69484 draws (season 3 week 56))
+ok   [fleet] every head career wrote the record (30 of 30)
+ok   [fleet] 3 careers on matchRules 'base': equal to RETIRE_BASE with nothing taken off
+control stripnone FIRED: 1 of 3 checks red
