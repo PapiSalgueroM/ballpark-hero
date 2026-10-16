@@ -18492,3 +18492,9 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+## Codex Round1380: phone state isolation, 2026-10-16 17:35:40 UTC
+
+A source audit found that ensurePhone retains shared thread records, line/seen arrays and clubs map, so real reply/open/world actions can mutate an earlier CareerState. This isolated additive packet starts from qualified PR289 c40ea5d8 and preserves its four budget fields. It owns only the phone copy boundary and regression proof, no Engine/Page/PhonePanel/I1334/I1337 change. Round1379 alias design remains outside and unclaimed.
+
+Plan: reproduce exact input mutations through actual public helpers remotely; make the smallest copy correction; retain identical complete action results and RNG while prior inputs hold; run old phone/budget/focus checks, real types/build and all15readers plus unchanged full route weights. Any delayed-season visible leak claim requires a served reproduction. Source reasoning alone does not establish it. No local app execution, production DB, competing release or live claim. This does not gate I's report release/UCL/cups.

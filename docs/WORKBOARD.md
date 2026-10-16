@@ -15717,3 +15717,9 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Codex Round1380: phone state isolation, 2026-10-16 17:35:40 UTC
+
+A source audit found that ensurePhone retains shared thread records, line/seen arrays and clubs map, so real reply/open/world actions can mutate an earlier CareerState. This isolated additive packet starts from qualified PR289 c40ea5d8 and preserves its four budget fields. It owns only the phone copy boundary and regression proof, no Engine/Page/PhonePanel/I1334/I1337 change. Round1379 alias design remains outside and unclaimed.
+
+Plan: reproduce exact input mutations through actual public helpers remotely; make the smallest copy correction; retain identical complete action results and RNG while prior inputs hold; run old phone/budget/focus checks, real types/build and all15readers plus unchanged full route weights. Any delayed-season visible leak claim requires a served reproduction. Source reasoning alone does not establish it. No local app execution, production DB, competing release or live claim. This does not gate I's report release/UCL/cups.
