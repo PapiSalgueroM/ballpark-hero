@@ -56,7 +56,12 @@ const CONTROL = process.env.NO_SACK_CONTROL || '';
 const SEEDS = Number(process.env.SEEDS || 2);
 const SEASONS = Number(process.env.SEASONS || 2);
 const FLEET_SEED = Number(process.env.FLEET_SEED || 0);
-/* Measured: see the header table (filled in from the first runner passes). */
+/* Measured on 2c893d06 (remote check r1342-s2, lines ns2 and ns2-f1 to ns2-f3): the hoard keeper's twin was
+   sacked at 8, 7, 7 and 8 of the nine clubs on FLEET_SEED 0 to 3 (Real Madrid's never, in any), and every one of
+   those matches was survived by its No sacking career with the line (8, 7, 7, 8 pairs; 159, 100, 119 and 129 lines
+   in all). The floor sits two under the lowest. A No sacking board went as low as 0.0x after a match (a cost
+   between the floor and the end of the week) and never to zero. Section 1 against d4f2c6f6 with SEEDS=5 SEASONS=3:
+   90 careers equal in 178 s; the default 2 and 2 is 36 careers in about 60 s, and the whole run about 130 s. */
 const SACK_FLOOR = Number(process.env.SACK_FLOOR || 5);
 
 const cannot = why => { console.log(`simCmNoSack: CANNOT RUN: ${why}`); process.exit(2); };

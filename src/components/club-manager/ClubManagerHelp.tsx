@@ -86,6 +86,13 @@ export default function ClubManagerHelp() {
                 <p><span className="font-semibold text-foreground">Example:</span> a 2026-27 Premier League match. Two changes at half time cost no stoppage. Then one at 60, one at 70 and one at 80, and that is all five changes and all three stoppages gone. A 2005-06 match gives you three, whenever you like.</p>
                 <p>The other dugout and the Quick Sim coach play the same rule, and under five the coach keeps a stoppage back for an injury as well as a change. Cups and European ties play your league's rule. The 2019-20 restart did allow five, but a season here goes by the year it starts, so 2019-20 plays three. Every other league in the game (the Eredivisie, MLS, the Saudi Pro League and the rest) keeps three for now, because we could not confirm its rule on two sources yet.</p>
               </div>
+              {/* Round 1342: No sacking (src/lib/clubManagerStart.ts). Appended on its own; the board sentences above
+                  stay true for every career without it, and the first line here says which one they leave out. */}
+              <div data-cm-help="no-sacking" className="space-y-2">
+                <p>🛡️ <span className="font-semibold text-foreground">No sacking.</span> Everything above about the sack is for a normal career. Switch on No sacking and zero is no longer the sack for you: the board still moves after every match and still tells you what it thinks, but where it would fire you it keeps you on its last point instead. Pick it on the Dugout step when you start, or turn it on later from Options (it asks twice). It cannot be turned off, it cannot be turned on while you are out of work, and from then on the career posts no score to the leaderboards, though your days played still count. Manager Hot Seat and Deadline Day never use it.</p>
+                <p>It also takes the bite out of the wage ceiling. Going over it only ever cost board confidence, and with No sacking on that can no longer cost you the job.</p>
+                <p><span className="font-semibold text-foreground">Example:</span> the board is on 2 and you lose 3-0. On a normal career that is the sack. With No sacking the board stays on 1, the match report says they would have sacked you, and you play the next match.</p>
+              </div>
             </div>
   );
 }
