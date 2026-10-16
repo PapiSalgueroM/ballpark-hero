@@ -1,0 +1,4 @@
+#!build
+#!serial
+saveRetry: ONLY=simUsCareerSaveRetry node scripts/runAllSims.mjs
+saveRetry-direct: node scripts/simUsCareerSaveRetry.mjs 2>&1 | tail -15
