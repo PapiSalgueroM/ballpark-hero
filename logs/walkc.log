@@ -1,0 +1,35 @@
+save C (Real Madrid, season 1, a talk open for Ferland Mendy) 390x844 reduce
+  MEASURED C-390-rm: the Squad tab names Ferland Mendy 0 times before the deal
+  MEASURED C-390-rm: the deal card is shown: Negotiating: Ferland Mendy / 74 / Real Madrid · LB · 30y · worth £4.4m to £4.6m / Their ask: £4.5m
+  PASS  C-390-rm: searching Mendy lists 0 rows at Real Madrid (Batista Mendy, Antoine Mendy, Nobel Mendy, Edouard Mendy)
+  MEASURED C-390-rm: after Meet ask and his terms the card reads: DEAL DONE: Ferland Mendy / 74 / Real Madrid · LB · 30y · worth £4.4m to £4.6m / Ferland Mendy signs from Real Madrid for £4.5m. / 
+  PASS  C-390-rm: the Market tab scrolls sideways by 0px with the deal card
+  MEASURED C-390-rm: the Squad tab names Ferland Mendy 2 times after the deal
+  FAIL  C-390-rm: Ferland Mendy is in my squad at most once (2)
+  PASS  C-390-rm: 0 page errors
+save C (Real Madrid, season 1, a talk open for Ferland Mendy) 390x844 no-preference
+  MEASURED C-390-motion: the Squad tab names Ferland Mendy 0 times before the deal
+  MEASURED C-390-motion: the deal card is shown: Negotiating: Ferland Mendy / 74 / Real Madrid · LB · 30y · worth £4.4m to £4.6m / Their ask: £4.5m
+  PASS  C-390-motion: searching Mendy lists 0 rows at Real Madrid (Batista Mendy, Antoine Mendy, Nobel Mendy, Edouard Mendy)
+  MEASURED C-390-motion: after Meet ask and his terms the card reads: DEAL DONE: Ferland Mendy / 74 / Real Madrid · LB · 30y · worth £4.4m to £4.6m / Ferland Mendy signs from Real Madrid for £4.5m. / 
+  PASS  C-390-motion: the Market tab scrolls sideways by 0px with the deal card
+  MEASURED C-390-motion: the Squad tab names Ferland Mendy 2 times after the deal
+  FAIL  C-390-motion: Ferland Mendy is in my squad at most once (2)
+  PASS  C-390-motion: 0 page errors
+save C (Real Madrid, season 1, a talk open for Ferland Mendy) 1280x900 reduce
+  MEASURED C-1280-rm: the Squad tab names Ferland Mendy 0 times before the deal
+  MEASURED C-1280-rm: the deal card is shown: Negotiating: Ferland Mendy / 74 / Real Madrid · LB · 30y · worth £4.4m to £4.6m / Their ask: £4.5m
+  PASS  C-1280-rm: searching Mendy lists 0 rows at Real Madrid (Batista Mendy, Antoine Mendy, Nobel Mendy, Edouard Mendy)
+  MEASURED C-1280-rm: after Meet ask and his terms the card reads: DEAL DONE: Ferland Mendy / 74 / Real Madrid · LB · 30y · worth £4.4m to £4.6m / Ferland Mendy signs from Real Madrid for £4.5m. / 
+  PASS  C-1280-rm: the Market tab scrolls sideways by 0px with the deal card
+  MEASURED C-1280-rm: the Squad tab names Ferland Mendy 2 times after the deal
+  FAIL  C-1280-rm: Ferland Mendy is in my squad at most once (2)
+  PASS  C-1280-rm: 0 page errors
+  MEASURED B-390: searching "Mbapp" lists 1 rows: Ethan Mbappé | Lille · 21y · worth £14.4m to £20.5m
+  MEASURED B-390: searching "Vinícius" lists 2 rows: Carlos Vinícius | Grêmio · 32y · worth £1.8m to £2m ; Igor Vinícius | Santos · 30y · worth £1.7m to £1.8m
+  MEASURED B-390: searching "Bellingham" lists 1 rows: Jobe Bellingham | Borussia Dortmund · 22y · worth £25m to £40.1m
+  MEASURED B-390: searching "Valverde" lists 0 rows: 
+  MEASURED B-390: searching "Huijsen" lists 0 rows: 
+  MEASURED B: free agents in the save from my club: Federico Valverde (expired), Aurélien Tchouaméni (expired), Dean Huijsen (expired), Trent Alexander-Arnold (expired), Bernardo Silva (expired), Jude Bellingham (expired), Eduardo Camavinga (expired), Thiago Pitarch (expired), Andriy Lunin (expired), Antonio Rüdiger (expired)
+  PASS  B-390: 0 page errors
+walk1339c: 3 FAILURE(S)

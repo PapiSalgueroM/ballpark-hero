@@ -1,0 +1,6 @@
+legacy1339: the old line is back in src/lib/clubManager.ts
+control save A (Real Madrid, season 1) at 390 by 844
+  the old line's market lists 4 rows at Real Madrid (the fixture recorded 4)
+control save B (Real Madrid, season 3) at 390 by 844
+  the old line's market lists 17 rows at Real Madrid (the fixture recorded 17)
+playCmOwnClubMarket: CONTROL base FIRED: with the old line the market lists 4 and 17 men at the club for saves A and B
