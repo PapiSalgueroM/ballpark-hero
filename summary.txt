@@ -1,0 +1,9 @@
+vitest exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerDeck.test.ts,title=src/lib/soccerDeck.test.ts > the gate > answers [] until the deck is loaded%2C
+tsc exit=0 100s | 
+sd-8 exit=0 120s | simSoccerDeck: green. Sections 8 only.
+sd-rest exit=0 144s | simSoccerDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 9, 10 only.
+sd-pressure exit=1 103s | simSoccerDeck: CONTROL=pressure FIRED: section 8 failed (4 failures, red sections 8)
+kit-a exit=0 107s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+kit-c exit=0 49s | simEventDeck: green. Sections 14, 15, 16 only.
+kit-b exit=0 116s | simEventDeck: green. Sections 13 only.
+measure-10 exit=0 41s | simEventDeck: green. Sections 10 only.

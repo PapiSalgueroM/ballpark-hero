@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/soccerDeck.test.ts --testTimeout=300000 --hookTimeout=120000
+sd-8: SIM_SOCCER_DECK_SECTIONS=8 node scripts/simSoccerDeck.mjs
+sd-rest: SIM_SOCCER_DECK_SECTIONS=1,2,3,4,5,6,7,9,10 node scripts/simSoccerDeck.mjs
+sd-pressure: SIM_SOCCER_DECK_CONTROL=pressure node scripts/simSoccerDeck.mjs
+kit-a: SIM_EVENT_DECK_SECTIONS=1,2,3,4,5,6,7,8,9,10,11,12 node scripts/simEventDeck.mjs
+kit-b: SIM_EVENT_DECK_SECTIONS=13 node scripts/simEventDeck.mjs
+kit-c: SIM_EVENT_DECK_SECTIONS=14,15,16 node scripts/simEventDeck.mjs
+measure-10: SIM_EVENT_DECK_MEASURE=1 SIM_EVENT_DECK_SECTIONS=10 node scripts/simEventDeck.mjs

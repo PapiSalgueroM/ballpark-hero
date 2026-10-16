@@ -1,0 +1,33 @@
+simEventDeck: 8 packs (nfl, nba, mlb, nhl, college, gym, afl)
+1) Replay: 7 GM packs, seeds 1, 2, 3, drives FLEET, SILENT, STUBBORN, FALLEN, 10 seasons a desk
+2) Same seed, same deck; a JSON round trip and repairGmInbox between every two weeks change nothing
+3) Weights: equal weights deal the recording, and a weight is a share of the draw, never a rank
+4) Story: never two of one story inside its cooldown or in one week, a one shot story once
+5) Subject rest: no subject inside its rest or twice in a week, the rest book born pruned
+6) Texts: wordings move no deal and no draw, every wording comes up at its share, a key reads the same words
+7) Expiry: an open card is settled at exactly w plus expires on its neutral option, nothing moves, the deck never freezes
+8) Neutral: every card of every pack off the baseline has an option that moves nothing, and every pack check holds
+9) Season clock: a card is held out exactly as careerEventDeck holds it; the week clock is back after exactly N
+10) Share and reach: every card of every pack reached over 1,000 seasons, no card above its pack's measured ceiling
+   ok nfl: all 10 cards reached in 2793 deals, the top card nfl_fan_night at 20.2% (ceiling 22.4%)
+   measure: nfl top card share at seeds 1 to 10: nfl_fan_night 20.23, nfl_fan_night 19.86, nfl_fan_night 19.55, nfl_fan_night 20.39, nfl_fan_night 20.05, nfl_fan_night 20.31, nfl_fan_night 19.38, nfl_fan_night 19.90, nfl_fan_night 20.10, nfl_fan_night 20.33
+   ok nba: all 8 cards reached in 2308 deals, the top card nba_jersey_night at 27.2% (ceiling 29.8%)
+   measure: nba top card share at seeds 1 to 10: nba_jersey_night 27.17, nba_jersey_night 26.82, nba_jersey_night 26.77, nba_jersey_night 26.77, nba_jersey_night 27.23, nba_jersey_night 27.09, nba_jersey_night 27.09, nba_jersey_night 26.84, nba_jersey_night 26.58, nba_jersey_night 27.79
+   ok mlb: all 8 cards reached in 2535 deals, the top card mlb_giveaway at 26.2% (ceiling 28.8%)
+   measure: mlb top card share at seeds 1 to 10: mlb_giveaway 26.19, mlb_giveaway 26.30, mlb_giveaway 26.34, mlb_giveaway 26.26, mlb_giveaway 25.56, mlb_giveaway 25.94, mlb_giveaway 26.56, mlb_giveaway 26.74, mlb_giveaway 26.82, mlb_giveaway 26.54
+   ok nhl: all 8 cards reached in 2780 deals, the top card nhl_line_juggle at 25.3% (ceiling 27.8%)
+   measure: nhl top card share at seeds 1 to 10: nhl_line_juggle 25.25, nhl_line_juggle 24.66, nhl_line_juggle 25.41, nhl_line_juggle 25.36, nhl_line_juggle 25.03, nhl_line_juggle 24.99, nhl_line_juggle 25.81, nhl_line_juggle 24.93, nhl_line_juggle 25.18, nhl_line_juggle 25.48
+   ok college: all 8 cards reached in 3321 deals, the top card col_game_day_visit at 28.0% (ceiling 30.5%)
+   measure: college top card share at seeds 1 to 10: col_game_day_visit 27.97, col_game_day_visit 28.01, col_game_day_visit 27.57, col_game_day_visit 28.03, col_game_day_visit 28.48, col_game_day_visit 27.92, col_game_day_visit 28.10, col_game_day_visit 28.26, col_game_day_visit 27.54, col_game_day_visit 28.39
+   ok gym: all 6 cards reached in 2833 deals, the top card gym_six_am_kid at 33.9% (ceiling 36.7%)
+   measure: gym top card share at seeds 1 to 10: gym_six_am_kid 33.85, gym_six_am_kid 34.02, gym_six_am_kid 34.50, gym_six_am_kid 34.13, gym_six_am_kid 34.37, gym_six_am_kid 34.28, gym_six_am_kid 34.71, gym_six_am_kid 34.25, gym_six_am_kid 33.98, gym_six_am_kid 33.60
+   ok afl: all 6 cards reached in 2193 deals, the top card afl_sore_midfielder at 35.0% (ceiling 37.4%)
+   measure: afl top card share at seeds 1 to 10: afl_sore_midfielder 35.02, afl_sore_midfielder 34.46, afl_sore_midfielder 34.09, afl_sore_midfielder 35.36, afl_sore_midfielder 35.16, afl_sore_midfielder 34.87, afl_sore_midfielder 34.38, afl_sore_midfielder 34.34, afl_sore_midfielder 33.98, afl_sore_midfielder 35.09
+   ok soccer: all 28 cards reached in 1000 deals, the top card 726 at 10.2% (ceiling 13.7%)
+   measure: soccer top card share at seeds 1 to 10: 726 10.20, 726 10.40, 726 9.00, 726 10.80, 726 10.70, 726 10.91, 726 9.10, 726 11.70, 726 10.61, 726 10.10
+   reach by position: no pack the kit knows names a reachBy fact yet
+11) Registry: every option prints exactly the keys it moves, by exactly the amounts, and bind refuses each breakage
+12) Legal: every pack narrated in roles, slots only in words, and a tagged card never lands on a real man
+
+runtime 41.6 s
+simEventDeck: green. Sections 10 only.

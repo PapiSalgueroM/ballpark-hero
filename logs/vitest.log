@@ -1,0 +1,179 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/soccerDeck.test.ts [2m([22m[2m26 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[32m 192[2mms[22m[39m
+   [32m✓[39m the words[2m > [22mprints every training key as the attribute screen names its stat, for that position group[32m 6[2mms[22m[39m
+   [32m✓[39m soccerDeckFacts[2m > [22mreads each of the ten codes as the drills group them[32m 12[2mms[22m[39m
+   [32m✓[39m soccerDeckFacts[2m > [22mreads only the save: caps, the armband at his club, one year left, the room, the senior rows, the same club[32m 10[2mms[22m[39m
+   [32m✓[39m soccerDeckFacts[2m > [22mcounts only the derby meetings he played last season[32m 1[2mms[22m[39m
+   [32m✓[39m soccerDeckFacts[2m > [22mis null unless a live career at a club has just played a season[32m 1[2mms[22m[39m
+[31m   [31m×[31m soccerDeckProblems[2m > [22mpasses the shipped pack and the fixture[39m[32m 29[2mms[22m[39m
+[31m     → expected [ …(10) ] to deeply equal [][39m
+   [32m✓[39m soccerDeckProblems[2m > [22mrefuses each soccer rule with its own message[32m 7[2mms[22m[39m
+   [32m✓[39m deckToRandomEvents[2m > [22mgives the save validator a number id, words, and each option its effect words[32m 4[2mms[22m[39m
+[31m   [31m×[31m the slot[2m > [22mdeals the same card from the same key, at most one, never from Math.random[39m[32m 4[2mms[22m[39m
+[31m     → expected [] to have a length of 1 but got +0[39m
+[31m   [31m×[31m the slot[2m > [22mholds a training card at room 0, and deals nothing when the facts are null[39m[32m 2[2mms[22m[39m
+[31m     → expected [] to deeply equal [ 724 ][39m
+[31m   [31m×[31m the slot[2m > [22mnever deals a card the old batch holds, the last card answered, or one cooling down[39m[32m 2[2mms[22m[39m
+[31m     → expected [] to deeply equal [ 716 ][39m
+   [32m✓[39m the slot[2m > [22mdeals nothing from a pack with a problem[32m 4[2mms[22m[39m
+   [32m✓[39m the answer[2m > [22mmoves exactly what the button prints and writes one line saying what landed[32m 2[2mms[22m[39m
+   [32m✓[39m the answer[2m > [22mlands a training key no further than the room at the answer, and says so[32m 1[2mms[22m[39m
+   [32m✓[39m the answer[2m > [22mstops morale at 0 and 100 and says where it stopped[32m 2[2mms[22m[39m
+   [32m✓[39m the answer[2m > [22mleaves the state untouched and the log alone on the option that moves nothing[32m 0[2mms[22m[39m
+[31m   [31m×[31m the pending reader[2m > [22mrebuilds a saved deck card in random_events only, whatever the facts say now[39m[32m 1[2mms[22m[39m
+[31m     → Cannot read properties of undefined (reading 'id')[39m
+   [32m✓[39m the gate[2m > [22mknows the deck ids[32m 1[2mms[22m[39m
+[31m   [31m×[31m the gate[2m > [22manswers [] until the deck is loaded, then deals from it[39m[32m 2[2mms[22m[39m
+[31m     → expected [] to have a length of 1 but got +0[39m
+   [32m✓[39m the gate[2m > [22mloads the real chunk and deals one card of the shipped pack[32m 2[2mms[22m[39m
+   [32m✓[39m the gate[2m > [22mfails closed on a load that resolves with nothing in it[32m 2[2mms[22m[39m
+   [32m✓[39m the gate[2m > [22mclears a rejected load so the next try can land it[32m 1[2mms[22m[39m
+   [32m✓[39m the starter pack[2m > [22mholds 28 cards: five a position group and eight about where a career stands[32m 1[2mms[22m[39m
+   [32m✓[39m the starter pack[2m > [22mdeals each code only its own group's position cards[32m 32[2mms[22m[39m
+   [32m✓[39m the starter pack[2m > [22mgates the cards whose words state a fact on that fact[32m 28[2mms[22m[39m
+   [32m✓[39m the starter pack[2m > [22mnever deals a training card at room 0, and every option moves exactly what it prints[32m 33[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22msoccerDeckProblems[2m > [22mpasses the shipped pack and the fixture
+[31m[1mAssertionError[22m: expected [ …(10) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "pressure names t_pace, a meter the pack never moves",[39m
+[31m+   "pressure names t_passing, a meter the pack never moves",[39m
+[31m+   "pressure names t_dribbling, a meter the pack never moves",[39m
+[31m+   "pressure names t_defending, a meter the pack never moves",[39m
+[31m+   "pressure names t_physical, a meter the pack never moves",[39m
+[31m+   "pressure names gk_shot_stopping, a meter the pack never moves",[39m
+[31m+   "pressure names gk_aerial_command, a meter the pack never moves",[39m
+[31m+   "pressure names gk_distribution, a meter the pack never moves",[39m
+[31m+   "pressure names gk_penalty_saving, a meter the pack never moves",[39m
+[31m+   "pressure names gk_sweeping_speed, a meter the pack never moves",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/lib/soccerDeck.test.ts:[2m124:41[22m[39m
+    [90m122| [39m  [34mit[39m([32m'passes the shipped pack and the fixture'[39m[33m,[39m () [33m=>[39m {
+    [90m123| [39m    [34mexpect[39m([34msoccerDeckProblems[39m([33mSOCCER_DECK_PACKS[39m[33m.[39msoccer))[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m124| [39m    [34mexpect[39m([34msoccerDeckProblems[39m([33mFIXTURE[39m))[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                                        [31m^[39m
+    [90m125| [39m  })[33m;[39m
+    [90m126| [39m  [34mit[39m([32m'refuses each soccer rule with its own message'[39m[33m,[39m () [33m=>[39m {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe slot[2m > [22mdeals the same card from the same key, at most one, never from Math.random
+[31m[1mAssertionError[22m: expected [] to have a length of 1 but got +0[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m src/lib/soccerDeck.test.ts:[2m184:17[22m[39m
+    [90m182| [39m      [35mconst[39m a [33m=[39m [34mdeal[39m({ [33m...[39mbase }[33m,[39m [32m'Deck Fixture|2024|deckslot'[39m)[33m;[39m
+    [90m183| [39m      [35mconst[39m b [33m=[39m [34mdeal[39m({ [33m...[39mbase }[33m,[39m [32m'Deck Fixture|2024|deckslot'[39m)[33m;[39m
+    [90m184| [39m      [34mexpect[39m(a)[33m.[39m[34mtoHaveLength[39m([34m1[39m)[33m;[39m
+    [90m   | [39m                [31m^[39m
+    [90m185| [39m      [34mexpect[39m(b[33m.[39m[34mmap[39m(e [33m=>[39m e[33m.[39mid))[33m.[39m[34mtoEqual[39m(a[33m.[39m[34mmap[39m(e [33m=>[39m e[33m.[39mid))[33m;[39m
+    [90m186| [39m      [35mconst[39m seen [33m=[39m [35mnew[39m [33mSet[39m[33m<[39mnumber[33m>[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe slot[2m > [22mholds a training card at room 0, and deals nothing when the facts are null
+[31m[1mAssertionError[22m: expected [] to deeply equal [ 724 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [[39m
+[32m-   724,[39m
+[32m- ][39m
+[31m+ [][39m
+
+[36m [2m❯[22m src/lib/soccerDeck.test.ts:[2m195:79[22m[39m
+    [90m193| [39m    [35mconst[39m full [33m=[39m [34mst[39m()[33m;[39m
+    [90m194| [39m    full[33m.[39moverall [33m=[39m [34m85[39m[33m;[39m
+    [90m195| [39m    for (let i = 0; i < 20; i++) expect(deal(full, `key${i}`).map(e =>…
+    [90m   | [39m                                                                              [31m^[39m
+    [90m196| [39m    [34mexpect[39m([34mdeal[39m([34mcareer[39m({}[33m,[39m { type[33m:[39m [32m'youth'[39m })))[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m197| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe slot[2m > [22mnever deals a card the old batch holds, the last card answered, or one cooling down
+[31m[1mAssertionError[22m: expected [] to deeply equal [ 716 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [[39m
+[32m-   716,[39m
+[32m- ][39m
+[31m+ [][39m
+
+[36m [2m❯[22m src/lib/soccerDeck.test.ts:[2m201:83[22m[39m
+    [90m199| [39m    [35mconst[39m s [33m=[39m [34mst[39m()[33m;[39m
+    [90m200| [39m    const taken = [{ id: 724, emoji: '', title: '', description: '', c…
+    [90m201| [39m    for (let i = 0; i < 20; i++) expect(deal(s, `key${i}`, taken).map(…
+    [90m   | [39m                                                                                  [31m^[39m
+    [90m202| [39m    for (let i = 0; i < 20; i++) expect(deal({ ...s, lastEventId: 724 …
+    [90m203| [39m    [35mconst[39m cooling [33m=[39m { [33m...[39ms[33m,[39m eventLastFired[33m:[39m { [34m716[39m[33m:[39m [34mseason[39m(s) [33m-[39m [34m4[39m } }[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe pending reader[2m > [22mrebuilds a saved deck card in random_events only, whatever the facts say now
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'id')[39m
+[36m [2m❯[22m src/lib/soccerDeck.test.ts:[2m254:16[22m[39m
+    [90m252| [39m  it('rebuilds a saved deck card in random_events only, whatever the f…
+    [90m253| [39m    const [fwd] = deal(career({}, { intApps: 0 }), 'Deck Fixture|2024|…
+    [90m254| [39m    [34mexpect[39m(fwd[33m.[39mid)[33m.[39m[34mtoBe[39m([34m716[39m)[33m;[39m
+    [90m   | [39m               [31m^[39m
+    [90m255| [39m    /* reloaded as a goalkeeper (a fact that would never deal it): it …
+    [90m256| [39m    const saved = copy({ ...career({ position: 'GK' }), phase: 'random…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe gate[2m > [22manswers [] until the deck is loaded, then deals from it
+[31m[1mAssertionError[22m: expected [] to have a length of 1 but got +0[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m src/lib/soccerDeck.test.ts:[2m283:48[22m[39m
+    [90m281| [39m    [35mawait[39m [34mloadSoccerDeck[39m()[33m;[39m
+    [90m282| [39m    [34mexpect[39m([34msoccerDeckReady[39m())[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m283| [39m    [34mexpect[39m([34msoccerDeckSlot[39m([34ms[39m()[33m,[39m [34m2024[39m[33m,[39m [32m'k'[39m[33m,[39m []))[33m.[39m[34mtoHaveLength[39m([34m1[39m)[33m;[39m
+    [90m   | [39m                                               [31m^[39m
+    [90m284| [39m    [34mexpect[39m([34msoccerDeckPending[39m(saved)[33m.[39m[34mmap[39m(e [33m=>[39m e[33m.[39mid))[33m.[39m[34mtoEqual[39m([[34m716[39m])[33m;[39m
+    [90m285| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m20 passed[39m[22m[90m (26)[39m
+[2m   Start at [22m 17:55:22
+[2m   Duration [22m 4.34s[2m (transform 2.16s, setup 79ms, collect 2.65s, tests 192ms, environment 618ms, prepare 309ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerDeck.test.ts,title=src/lib/soccerDeck.test.ts > soccerDeckProblems > passes the shipped pack and the fixture,line=124,column=41::AssertionError: expected [ …(10) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "pressure names t_pace, a meter the pack never moves",%0A+   "pressure names t_passing, a meter the pack never moves",%0A+   "pressure names t_dribbling, a meter the pack never moves",%0A+   "pressure names t_defending, a meter the pack never moves",%0A+   "pressure names t_physical, a meter the pack never moves",%0A+   "pressure names gk_shot_stopping, a meter the pack never moves",%0A+   "pressure names gk_aerial_command, a meter the pack never moves",%0A+   "pressure names gk_distribution, a meter the pack never moves",%0A+   "pressure names gk_penalty_saving, a meter the pack never moves",%0A+   "pressure names gk_sweeping_speed, a meter the pack never moves",%0A+ ]%0A%0A ❯ src/lib/soccerDeck.test.ts:124:41%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerDeck.test.ts,title=src/lib/soccerDeck.test.ts > the slot > deals the same card from the same key%2C at most one%2C never from Math.random,line=184,column=17::AssertionError: expected [] to have a length of 1 but got +0%0A%0A- Expected%0A+ Received%0A%0A- 1%0A+ 0%0A%0A ❯ src/lib/soccerDeck.test.ts:184:17%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerDeck.test.ts,title=src/lib/soccerDeck.test.ts > the slot > holds a training card at room 0%2C and deals nothing when the facts are null,line=195,column=79::AssertionError: expected [] to deeply equal [ 724 ]%0A%0A- Expected%0A+ Received%0A%0A- [%0A-   724,%0A- ]%0A+ []%0A%0A ❯ src/lib/soccerDeck.test.ts:195:79%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerDeck.test.ts,title=src/lib/soccerDeck.test.ts > the slot > never deals a card the old batch holds%2C the last card answered%2C or one cooling down,line=201,column=83::AssertionError: expected [] to deeply equal [ 716 ]%0A%0A- Expected%0A+ Received%0A%0A- [%0A-   716,%0A- ]%0A+ []%0A%0A ❯ src/lib/soccerDeck.test.ts:201:83%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerDeck.test.ts,title=src/lib/soccerDeck.test.ts > the pending reader > rebuilds a saved deck card in random_events only%2C whatever the facts say now,line=254,column=16::TypeError: Cannot read properties of undefined (reading 'id')%0A ❯ src/lib/soccerDeck.test.ts:254:16%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerDeck.test.ts,title=src/lib/soccerDeck.test.ts > the gate > answers [] until the deck is loaded%2C then deals from it,line=283,column=48::AssertionError: expected [] to have a length of 1 but got +0%0A%0A- Expected%0A+ Received%0A%0A- 1%0A+ 0%0A%0A ❯ src/lib/soccerDeck.test.ts:283:48%0A%0A
