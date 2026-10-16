@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import {
-  acceptOffer, advanceProSeason, completeClubVerdictMove, dismissAppealResult,
-  FALLBACK_CLUBS, initCareer, repairCareer, signExtension, stayAtClub,
+  acceptOffer, advanceProSeason, applyMoralDilemmaChoice, completeClubVerdictMove, dismissAppealResult,
+  dismissMoralDilemma, FALLBACK_CLUBS, initCareer, MORAL_DILEMMAS, repairCareer, signExtension, stayAtClub,
   type CareerState, type ContractOffer,
 } from '@/lib/soccerCareerEngine';
 import { soccerExtensionQuote } from '@/lib/soccerCareerContracts';
@@ -141,5 +143,74 @@ describe('Soccer Career club decisions', () => {
     const before = JSON.stringify(old);
     expect(JSON.stringify(repairCareer(old))).toBe(before);
     expect(old.transferSituation?.type).toBe('frozen_out');
+  });
+});
+
+describe('Soccer Career rival-club wage terms', () => {
+  it.each([
+    { id: 'young29', age: 29, overall: 76, rating: 6.4, apps: 32, form: 'playing', agent: 'self', wage: 100000, want: 100000, fees: 2 },
+    { id: 'weak32', age: 32, overall: 76, rating: 6.4, apps: 32, form: 'playing', agent: 'self', wage: 100000, want: 90000, fees: 2 },
+    { id: 'weak35', age: 35, overall: 76, rating: 6.4, apps: 32, form: 'playing', agent: 'self', wage: 100000, want: 80000, fees: 2 },
+    { id: 'holding35', age: 35, overall: 85, rating: 7.5, apps: 32, form: 'playing', agent: 'self', wage: 100000, want: 100000, fees: 2 },
+    { id: 'elite32', age: 32, overall: 90, rating: 8.2, apps: 32, form: 'playing', agent: 'self', wage: 100000, want: 110000, fees: 2 },
+    { id: 'elite35', age: 35, overall: 90, rating: 8.2, apps: 32, form: 'playing', agent: 'self', wage: 100000, want: 105000, fees: 2 },
+    { id: 'cameo35', age: 35, overall: 90, rating: 8.2, apps: 2, form: 'playing', agent: 'self', wage: 100000, want: 100000, fees: 2 },
+    { id: 'latest-youth35', age: 35, overall: 76, rating: 6.4, apps: 32, form: 'latest-youth', agent: 'self', wage: 100000, want: 80000, fees: 2 },
+    { id: 'youth-only35', age: 35, overall: 90, rating: 9.9, apps: 32, form: 'youth-only', agent: 'self', wage: 100000, want: 85000, fees: 2 },
+    { id: 'super35', age: 35, overall: 76, rating: 6.4, apps: 32, form: 'playing', agent: 'super', wage: 100000, want: 100000, fees: 2.6 },
+    { id: 'shark35', age: 35, overall: 76, rating: 6.4, apps: 32, form: 'playing', agent: 'shark', wage: 100000, want: 88000, fees: 2.4 },
+    { id: 'cousin35', age: 35, overall: 76, rating: 6.4, apps: 32, form: 'playing', agent: 'cousin', wage: 100000, want: 76000, fees: 2.15 },
+    { id: 'market35', age: 35, overall: 76, rating: 6.4, apps: 32, form: 'playing', agent: 'self', wage: 100, want: 400, fees: 2 },
+  ] as const)('prices the actual rival choice and Continue at $id without another draw', spec => {
+    const fixtureDraws: { value: number; caller: string | null }[] = [], draws: { value: number; caller: string | null }[] = [];
+    let fixtureSetup = true;
+    vi.spyOn(Math, 'random').mockImplementation(() => {
+      const value = fixtureSetup ? 0.7 : 0; (fixtureSetup ? fixtureDraws : draws).push({ value, caller: new Error().stack ?? null }); return value;
+    });
+    const state = career(spec.age, spec.overall, spec.rating);
+    state.weeklyWage = spec.wage; state.agentId = spec.agent;
+    state.seasons[0] = { ...state.seasons[0], apps: spec.apps, leagueApps: Math.min(spec.apps, 30) };
+    if (spec.form === 'latest-youth') state.seasons.push({ ...state.seasons[0], type: 'youth', rating: 9.9 });
+    if (spec.form === 'youth-only') state.seasons = state.seasons.map(row => ({ ...row, type: 'youth' as const, rating: 9.9 }));
+    state.rival = { name: 'Contract Rival', nationality: 'Brazil', position: 'ST', club: destination.name, clubTier: destination.tier,
+      overall: 76, careerGoals: 0, careerAssists: 0, careerApps: 0, leagueTitles: 0, championsLeagues: 0,
+      worldCups: 0, ballonDors: 0, intCaps: 0, intGoals: 0, marketValue: 1, age: spec.age, retired: false };
+    state.phase = 'moral_dilemma'; state.pendingMoralDilemma = MORAL_DILEMMAS.find(row => row.id === 'rival_club_offer')!;
+    state.isClubCaptain = true; state.captainClub = parent.name; state.captainSeasons = 1;
+    const input = JSON.stringify(state), history = JSON.stringify(state.seasons); fixtureSetup = false;
+    let chosen: CareerState | undefined, continued: CareerState | undefined, chosenBefore: string | null = null, completed = false;
+    let failure: { classification: string; name: string; message: string; stack: string | null } | null = null;
+    try {
+      chosen = applyMoralDilemmaChoice(state, 0); chosenBefore = JSON.stringify(chosen);
+      continued = dismissMoralDilemma(chosen, FALLBACK_CLUBS);
+      expect(continued.weeklyWage, `SOCCER_RIVAL_WAGE_${spec.id}`).toBe(spec.want);
+      expect(chosen.pendingRivalMove).toBe(destination.name);
+      expect(chosen.netWorth - state.netWorth).toBeCloseTo(10, 6); expect(continued.netWorth).toBe(chosen.netWorth);
+      expect(continued.currentClub).toBe(destination.name); expect(continued.contractYearsLeft).toBe(4);
+      expect(continued.phase).toBe('playing'); expect(continued.pendingRivalMove).toBeNull();
+      expect(continued.agentFeesPaid).toBe(spec.fees); expect(continued.isClubCaptain).toBe(false); expect(continued.captainClub).toBeNull();
+      expect(JSON.stringify(state)).toBe(input); expect(JSON.stringify(chosen)).toBe(chosenBefore);
+      expect(JSON.stringify(continued.seasons)).toBe(history);
+      expect(draws.map(row => row.value)).toEqual([0, 0]);
+      expect(draws[0].caller).toContain('wageForTier'); expect(draws[1].caller).toContain('realisticTransferFee');
+      completed = true;
+    } catch (error) {
+      failure = { classification: error instanceof Error && error.name === 'AssertionError' ? 'assertion' : 'action-exception',
+        name: error instanceof Error ? error.name : typeof error, message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack ?? null : null };
+      throw error;
+    } finally {
+      const out = process.env.SOCCER_RIVAL_WAGES_OUT;
+      if (out !== undefined) {
+        if (!out.trim()) throw new Error('SOCCER_RIVAL_WAGES_OUT must name an evidence directory');
+        mkdirSync(out, { recursive: true }); writeFileSync(join(out, `${spec.id}.json`), JSON.stringify({
+          id: spec.id, title: `prices the actual rival choice and Continue at ${spec.id} without another draw`,
+          scope: 'Complete saved JSON snapshots of the declared fixture and actual choice/Continue. Functions and undefined fields are outside this saved JSON claim. Fixed0.7 fixture setup draws are separate from the zero action tape.',
+          spec, inputBefore: input, inputAfter: JSON.stringify(state), choiceBefore: chosenBefore,
+          choiceAfter: chosen ? JSON.stringify(chosen) : null, result: continued ? JSON.stringify(continued) : null,
+          fixtureDraws, draws, completed, failure,
+        }, null, 2));
+      }
+    }
   });
 });
