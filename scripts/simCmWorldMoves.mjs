@@ -179,6 +179,9 @@ const fail = (section, line) => {
   shown[section] = (shown[section] ?? 0) + 1;
   if (shown[section] <= 8) console.log(`  FAIL section ${section}: ${line}`);
 };
+/** Section 1's failures counted by check: (i) placed at the buyer, (ii) the one club rule, (iii) still there later. */
+const checks = {};
+const fail1 = (check, line) => { checks[check] = (checks[check] ?? 0) + 1; fail(1, line); };
 /** The lines one step added to the transfer log. The log keeps its last 80, so the oldest may have gone. */
 function addedLines(before, after) {
   const b = (before ?? []).map(x => JSON.stringify(x)), a = (after ?? []).map(x => JSON.stringify(x));
@@ -225,20 +228,20 @@ function oneClubRule(M, s, label) {
       add(origin, `${p.n}|${year - p.a}|${p.p}`, club);
     }
   }
-  for (const [key, clubs] of at) if (clubs.length > 1) fail(1, `${label}: the key ${key} is listed at ${clubs.join(' and ')}`);
+  for (const [key, clubs] of at) if (clubs.length > 1) fail1('ii', `${label}:the key ${key} is listed at ${clubs.join(' and ')}`);
   for (const r of M.ledger.readWorldRoster(s)?.records ?? []) {
     if (r.status !== 'owned' || r.owner === s.clubName) continue;
     const where = at.get(r.key) ?? [];
-    if (where.length !== 1 || where[0] !== r.owner) fail(1, `${label}: ${r.player.name}, owned by ${r.owner}, is listed at ${where.join(' and ') || 'no club'}`);
+    if (where.length !== 1 || where[0] !== r.owner) fail1('ii', `${label}:${r.player.name}, owned by ${r.owner}, is listed at ${where.join(' and ') || 'no club'}`);
     const twins = (origin.get(`${r.origin.name}|${r.origin.birthYear}|${r.origin.position}`) ?? []).filter(c => c !== r.owner);
-    if (twins.length) fail(1, `${label}: a man matching ${r.origin.name}'s origin (${r.origin.club}, born ${r.origin.birthYear}) is still listed at ${twins.join(' and ')}`);
+    if (twins.length) fail1('ii', `${label}:a man matching ${r.origin.name}'s origin (${r.origin.club}, born ${r.origin.birthYear}) is still listed at ${twins.join(' and ')}`);
   }
   let mine = 0;
   for (const p of s.squad) {
     if (madeUp(p) || p.onLoan) continue;
     mine += 1;
     const clubs = origin.get(`${p.name}|${year - p.age}|${p.position}`) ?? [];
-    if (clubs.length) fail(1, `${label}: ${p.name} of my squad is also listed at ${clubs.join(' and ')}`);
+    if (clubs.length) fail1('ii', `${label}:${p.name} of my squad is also listed at ${clubs.join(' and ')}`);
   }
   return at.size + mine;
 }
@@ -267,7 +270,7 @@ async function ownershipCareer(E, era, club, seed) {
     row.stored += s.worldRoster === undefined ? 0 : JSON.stringify(s.worldRoster).length;
     for (const line of lines) {
       const why = placement(M, s, line);
-      if (why) { row.refused += 1; fail(1, `${tag} ${label}: ${line.to} signed ${line.name} from ${line.from}, but ${why}`); }
+      if (why) { row.refused += 1; fail1('i',`${tag} ${label}: ${line.to} signed ${line.name} from ${line.from}, but ${why}`); }
       moved.set(line.name, { to: line.to, since: label });
     }
     s1Checked += oneClubRule(M, s, `${tag} ${label}`);
@@ -281,8 +284,8 @@ async function ownershipCareer(E, era, club, seed) {
       s1Tracked += 1;
       if (records.some(r => r.status === 'retired' && r.origin.name === name)) { moved.delete(name); continue; }
       const record = records.find(r => r.status === 'owned' && r.owner === man.to && r.player.name === name);
-      if (!record) { fail(1, `${tag} ${label}: ${name}, moved to ${man.to} at ${man.since}, has no owned record there`); moved.delete(name); continue; }
-      if (!M.cm.worldRosterFor(s, man.to).some(p => p.worldRosterKey === record.key)) { fail(1, `${tag} ${label}: ${name}, moved to ${man.to} at ${man.since}, is not listed there`); moved.delete(name); }
+      if (!record) { fail1('iii', `${tag} ${label}: ${name}, moved to ${man.to} at ${man.since},has no owned record there`); moved.delete(name); continue; }
+      if (!M.cm.worldRosterFor(s, man.to).some(p => p.worldRosterKey === record.key)) { fail1('iii', `${tag} ${label}: ${name}, moved to ${man.to} at ${man.since},is not listed there`); moved.delete(name); }
     }
   };
   try {
@@ -549,7 +552,8 @@ if (SECTIONS.has(1)) {
     console.log(`   ${kind.padEnd(8)} ${row.windows} windows, ${row.deals} AI deal lines, ${row.refused} not placed at the buyer, ledger ${(row.records / row.windows).toFixed(1)} records and ${Math.round(row.stored / row.windows)} units a window on average`);
   }
   console.log(`   ${s1Careers} careers (${s1Sacked} sacked early), ${s1Checked} listings checked by the one club rule, ${s1Tracked} moved men followed over ${s1Rollovers} rollovers`);
-  if (!s1Careers || !Object.values(tally).some(r => r.deals)) fail(1, 'no AI deal line was seen, so nothing was measured');
+  console.log(`   failures by check: (i) ${checks.i ?? 0}, (ii) ${checks.ii ?? 0}, (iii) ${checks.iii ?? 0}`);
+  if (!s1Careers || !Object.values(tally).some(r => r.deals)) fail(1,'no AI deal line was seen, so nothing was measured');
 }
 if (SECTIONS.has(6)) {
   console.log('6) legacy: unseeded careers, BASE against the head, every saved string and Math.random draw');
