@@ -1,0 +1,3 @@
+unit-on-parent exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerOwnClubLevel.test.ts,title=src/lib/clubManagerOwnClubLevel.test.ts > the manager's own club 
+ownclub-vs-parent exit=0 273s | simCmOwnClubMarket: green (mode commit, sections 1, 2, 3, 4, 5): the market lists nobody at my own club in every old save and moves nothing else
+baseanchor exit=0 1s | 1

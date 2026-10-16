@@ -1,0 +1,4 @@
+#!serial
+unit-on-parent: git show d4f2c6f6:src/lib/clubManager.ts > src/lib/clubManager.ts && node_modules/.bin/vitest run src/lib/clubManagerOwnClubLevel.test.ts --testTimeout=300000; s=$?; git checkout -- src; exit $s
+ownclub-vs-parent: OWNCLUB_MARKET_PARENT=d4f2c6f688d656205722ba52bbdb33f03490966a node scripts/simCmOwnClubMarket.mjs
+baseanchor: B=$(bash .rc/x/baseDeck.sh) && echo "base $B" && git show $B:src/lib/clubManager.ts | grep -c "  return marketBase(yearsOn(career), career.eraId)$"

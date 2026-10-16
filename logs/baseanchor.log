@@ -1,0 +1,3 @@
+treeWithoutMerge: 9ccb6a981b3e6275403f642e4577ed0d37280d32, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+base c124ee4b22faa33f51123ad5a57347b4ed3845d4
+1
