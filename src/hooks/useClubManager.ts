@@ -34,6 +34,7 @@ import { eraById, eraRostersLoaded, ensureEraRosters, isHistoricEra } from '@/li
 import { ensureRealLeagueFixtures, realLeagueFixturesLoaded, realLeagueFixtureKeyFor } from '@/lib/clubManagerFixtures';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { readSlots, switchSlot, deleteSlot, activeSlot, type SlotView } from '@/lib/clubManagerSlots';
+import { retireCareer } from '@/lib/clubManagerRetire';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
@@ -48,7 +49,13 @@ import { validWorldEdit } from '@/lib/clubManagerWorldEdit';
 import type { CurrencyCode } from '@/lib/clubManagerStart';
 import type { SkillTree } from '@/lib/clubManagerXp';
 
-export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked';
+export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked' | 'retired';
+
+/** Round 1343: where a saved career opens: a retired career on its farewell (the only phase it can reach), then a
+ *  sacked one out of work, then a finished season's summary, then the hub. */
+export function phaseFor(c: CareerState): CMPhase {
+  return c.retired ? 'retired' : c.sacked ? 'sacked' : c.pendingSummary ? 'seasonEnd' : 'hub';
+}
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
 
 /**
@@ -199,7 +206,7 @@ export function useClubManager() {
         if (saved.pendingSummary) setSummary(saved.pendingSummary);
         if (goStraightIn.current) {
           goStraightIn.current = false;
-          setPhase(saved.sacked ? 'sacked' : saved.pendingSummary ? 'seasonEnd' : 'hub');
+          setPhase(phaseFor(saved));
           setActiveTab('overview');
         } else {
           setPhase('resume');
@@ -382,11 +389,26 @@ export function useClubManager() {
   /* ---------- lifecycle actions ---------- */
   const resume = useCallback(() => {
     if (!career) { setPhase('clubSelect'); return; }
-    if (career.sacked) setPhase('sacked');
-    else if (career.pendingSummary) { setSummary(career.pendingSummary); setPhase('seasonEnd'); }
-    else setPhase('hub');
+    const next = phaseFor(career);
+    if (next === 'seasonEnd') setSummary(career.pendingSummary);
+    setPhase(next);
     setActiveTab('overview');
   }, [career]);
+
+  /** Round 1343: retire. The write comes first: only a retired career the disk holds moves the page to the
+   *  farewell. Refused (another tab moved the career on, or no room) the page stays where it was, the notice or the
+   *  banner already up. True when it retired. */
+  const retire = useCallback((): boolean => {
+    const now = careerRef.current;
+    if (!now || !holdsActiveSlot()) return false;
+    const next = retireCareer(now);
+    if (!next || !persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    setPhase('retired');
+    setActiveTab('overview');
+    return true;
+  }, [holdsActiveSlot, persist]);
 
   /* ---------- Round 928: the manager slots ---------- */
 
@@ -1254,7 +1276,7 @@ export function useClubManager() {
     slots, slotNote, openSlot, newInSlot, removeSlot, showSlots,
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
-    resume, startNew, chooseClub, confirmClub, confirmCustomClub,
+    resume, startNew, retire, chooseClub, confirmClub, confirmCustomClub,
     setFormationIndex, setMentality, setXiSlot, swapXiSlots, autoPick,
     saveMatchPlan, applyMatchPlan, deleteMatchPlan,
     setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,

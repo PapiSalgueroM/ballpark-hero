@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { formatNumber } from '@/lib/formatNumber';
 import { Pencil, UserPlus } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
@@ -11,6 +11,8 @@ import EditManagerSheet from '@/components/club-manager/EditManagerSheet';
 import { huntBusy } from '@/lib/clubManagerJobHunt';
 import { BACKGROUND_TREE, TREE_INFO } from '@/lib/clubManagerXp';
 import { highestScoringOf, scoringOutcome } from '@/lib/clubManagerRecords';
+import { canRetire, retireDoorCopy } from '@/lib/clubManagerRetire';
+import RetireDoor from '@/components/club-manager/RetireDoor';
 
 /* Round 1325: a score printed low number first. The save has kept the worst
    defeat as the other side's goals first since Round 71, so "3-0 vs Manchester
@@ -25,11 +27,15 @@ export function lowFirst(score: string): string {
   return `${Math.min(a, b)}-${Math.max(a, b)}`;
 }
 
-export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
+export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen }: {
   c: CareerState;
-  g: Pick<ReturnType<typeof useClubManager>, 'resignNation' | 'acceptNation' | 'answerApproach' | 'applyJob' | 'joinNow' | 'joinSummer' | 'updateManager'>;
+  /* Round 1343: retire is optional, and the door is drawn only when it is passed. */
+  g: Pick<ReturnType<typeof useClubManager>, 'resignNation' | 'acceptNation' | 'answerApproach' | 'applyJob' | 'joinNow' | 'joinSummer' | 'updateManager'>
+    & Partial<Pick<ReturnType<typeof useClubManager>, 'retire'>>;
   nationOffer: ReturnType<typeof nationOfferFor>;
+  onRetireOpen?: () => void;
 }) {
+  const doorCopy = useMemo(() => (g.retire && canRetire(c) ? retireDoorCopy(c) : null), [c, g.retire]);
   /* Round 965: the Edit manager sheet, and for a Skip career the way to name
      the man in the dugout after all. */
   const [editing, setEditing] = useState(false);
@@ -171,6 +177,9 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                     </div>
                   </div>
                   <ManagerRecordLines c={c} />
+                  {doorCopy && g.retire && (
+                    <div className="mt-3"><RetireDoor {...doorCopy} onRetire={g.retire} onOpen={onRetireOpen} /></div>
+                  )}
                 </div>
                 </>
   );

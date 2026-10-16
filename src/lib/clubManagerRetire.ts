@@ -155,3 +155,34 @@ export function farewellShareText(legacy: CareerLegacy): string {
   if (legacy.played > 0) parts.push(`${legacy.winRate}% of ${plural(legacy.played, 'match', 'matches')} won`);
   return `I retired from Club Manager ${when}: ${parts.join(', ')}. Can you beat me? douknowball.com/club-manager`;
 }
+
+export const ordinal = (n: number): string => {
+  const t = n % 100;
+  const s = t >= 11 && t <= 13 ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' } as Record<number, string>)[n % 10] ?? 'th';
+  return `${formatNumber(n)}${s}`;
+};
+
+export interface RetireDoorCopy { door: string; title: string; lines: string[]; keep: string; confirm: string }
+
+/** Club Manager's words for the retire door and its confirm, at the moment the career is in. */
+export function retireDoorCopy(c: CareerState): RetireDoorCopy {
+  const when = retirementMoment(c);
+  const lines: string[] = [];
+  let title: string;
+  if (when === 'midSeason') {
+    title = 'Retire now?';
+    const pos = leaguePosition(c);
+    lines.push(`Your season at ${c.clubName} stops here, in week ${formatNumber(printedWeek(c, c.week))}${pos > 0 ? `, with the club ${ordinal(pos)} in the league` : ''}. Nothing more gets played.`);
+  } else if (when === 'seasonEnd') {
+    title = `Retire after Season ${formatNumber(c.season)}?`;
+    lines.push(`You walk away from ${c.clubName} before the summer.`);
+  } else {
+    title = 'Stop waiting for the phone?';
+    lines.push(`You retire from management. Your last job was ${c.clubName}.`);
+  }
+  const move = c.pendingMove?.club ?? c.jobHunt?.summerMove?.club;
+  if (move) lines.push(`The move to ${move} you agreed is off.`);
+  if (c.nationJob) lines.push(`You step down as ${c.nationJob.nation} manager too.`);
+  lines.push('Your record and your trophies stay saved in this slot as a finished career, with a farewell you can open any time. A new manager starts in an empty slot.');
+  return { door: '👋 Retire from management', title, lines, keep: 'Keep managing', confirm: 'Yes, retire' };
+}
