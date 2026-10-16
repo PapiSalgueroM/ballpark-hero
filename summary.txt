@@ -1,0 +1,16 @@
+guideHeadings exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+tsc exit=0 93s | 
+aLeague exit=0 11s | simClubManagerALeague: all checks passed
+varLedger exit=0 1s | simCmVarLedger: all 691 checks passed.
+noSack exit=0 145s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6)
+academy exit=0 511s | ALL ACADEMY CHECKS PASSED
+eras exit=0 1570s | ALL ERA AND AGEING CHECKS PASSED
+wilderness exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+trustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+missingEleven exit=0 0s | simMissingElevenSources: green. 40 sheets, 39 of them row for row against the record.
+anchors exit=0 59s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+noRival exit=0 19s | No rival product names found. 0 findings.
+budget exit=0 228s | simClubManagerBudget: PASS
+score exit=0 112s | ALL SEASON SCORE CHECKS PASSED
+roles exit=0 1774s | ALL ROLE CHECKS PASSED
+press exit=0 2521s | ALL PRESS AND TEAM TALK CHECKS PASSED
