@@ -1,0 +1,14 @@
+MUT escapeoff: patched src/lib/clubManager.ts (occurrence 1 of 1)
+[grade] 296 season ends: up 70, down 36, escape 15, A by a title or two trophies 45, A by overshoot alone 30, B to F with no fate 100
+  on the base ladder these same seasons: 9 promotions graded C or worse; the relegation cap changes 17 grades
+ok   [grade] every promotion grades A or B with an 'up' line naming the top flight (70 cases)
+ok   [grade] every relegation grades C or worse (B or worse with a trophy) with a 'down' line naming the league below (36 cases)
+ok   [grade] every escape keeps its grade with an 'escape' line (15 cases)
+FAIL [grade] an A by a title or two trophies reads the old A lines, an A by overshoot alone the over line (1; first Lecce now seed 2 season 1: 13 of 20, A 'Everyone had you going down and you stayed up. The board will not forget it.')
+ok   [grade] the statues and the murals only on a title or two trophies (30 seasons could carry them)
+FAIL [grade] every B to F season with no fate grades as the base ladder with a line of the old VERDICTS (7; first Osasuna now seed 0 season 1: 17 of 20, B 'Survival nobody predicted. The fans sang your name all the way home.')
+[fate] 296 season ends: up 70, down 36, escape 15, none 175; 26 finishes at exactly the count plus one (the cases fatecount needs)
+FAIL [fate] the summary fate is the move the rollover really made, on every season end (8; first Osasuna now seed 0 season 1: 17 of 20 in laliga, summary escape, the rollover null)
+ok   [fate] the season record carries the same fate as the summary
+simCmBoardVerdict RED: 5 of 8 checks green (parts grade, fate, 115 s)
+MUT escapeoff: gradefate=1

@@ -1,0 +1,16 @@
+MUT runinpin: patched src/lib/clubManagerCalendar.ts (occurrence 1 of 1)
+[takeover] 200 handovers (20 by joinClubNow, 0 joins skipped: approached before applying); on CM_BOARD_BASE 109 carried a failed objective, on the head 0
+ok   [takeover] 200 takeovers open at BOARD_FRESH (69) (0 do not; 20 joins of 20 join cases)
+  the card: 109 takeovers dropped a failed objective; the season score compared on 99 of them (the rest were sacked first) at the handover and at the final whistle
+ok   [takeover] on the day of the handover no objective on the card reads failed (0 do)
+ok   [takeover] the card is the base card less exactly its failed objectives, in order
+ok   [takeover] the season score is the same with and without the dropped objectives, at the handover and the final whistle (99 cases)
+ok   [takeover] every takeover equal to CM_BOARD_BASE but for the opening (and the card), its handover stamp included
+simCmBoardVerdict GREEN: 5 of 5 checks green (parts takeover, 74 s)
+   the save records it, the dugout says simulated, the hub keeps saying it
+
+simMidSeasonStart: all green
+   ok  an application goes out with 5 league games left and is answered in time, not with fewer; a waiting yes leads the summary; after the sack the job taken is the job you get
+
+simCmApplications: green. The answer is earned, the limits hold, a summer move fires once, joining now moves the manager that week, and old saves load.
+MUT runinpin: takeover=0 simMidSeasonStart=0 simCmApplications=0

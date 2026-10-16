@@ -1,0 +1,4 @@
+m-runinpin exit=0 119s | MUT runinpin: takeover=0 simMidSeasonStart=0 simCmApplications=0
+m-approachswap exit=1 125s | MUT approachswap: offers=1
+m-bigsecond exit=1 124s | MUT bigsecond: offers=1
+m-escapeoff exit=1 115s | MUT escapeoff: gradefate=1

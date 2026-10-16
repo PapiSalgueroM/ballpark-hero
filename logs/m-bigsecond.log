@@ -1,0 +1,7 @@
+MUT bigsecond: patched src/lib/clubManager.ts (occurrence 1 of 1)
+FAIL [offers] 179 summer offers of the fleets: every one within the step (one tier up, two after a top flight title or the Champions League) (11; first Verona (tier 4, 1 of 20) offered Brentford (tier 2))
+ok   [offers] 166 mid season approaches: every one from at most one tier above
+ok   [offers] 794 tier 2 to 4 clubs of every world: each has a club exactly one tier up to be approached by
+[offers] the tier 4 fleet: 32 season ends; on CM_BOARD_BASE the same season ends were dealt 8 offers two or more tiers up in 6 seasons (the cases nostep needs)
+simCmBoardVerdict RED: 2 of 3 checks green (parts offers, 124 s)
+MUT bigsecond: offers=1
