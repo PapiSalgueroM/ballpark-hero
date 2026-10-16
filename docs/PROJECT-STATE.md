@@ -18470,3 +18470,8 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+
+## Codex test handoff for Claude I1346, 2026-10-16
+
+Draft PR281 contains only coaching-retirement regression sources and the remote phase wrapper. Product equals corrected maina758fcec. Types and strict baseline38877197857 at74c05fd5 produced nine intended gaps and five active/reload preserves. Claude I owns the actual shared US/NBA feature. No fixed/build/live claim. Initial wrong-DB type failure38876430734 is retained and superseded only as a source blocker by main469d44ed. Root shared WORKBOARD carries current report assignments.
