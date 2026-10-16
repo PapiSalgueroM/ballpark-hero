@@ -1,0 +1,2 @@
+headsha: git log --oneline -3
+lutonReach: node .rc/x/lutonReach.mjs
