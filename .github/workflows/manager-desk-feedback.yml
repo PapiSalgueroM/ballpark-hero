@@ -17,7 +17,7 @@ jobs:
       ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
       CM_DESK_FEEDBACK_BASE: 7c4838670253f2ca95af2adf14c2397d66b4f7c9
-      MDF_PHASE: baseline
+      MDF_PHASE: fixed
       MDF_OUT: ${{ github.workspace }}/manager-desk-feedback-artifacts/browser
       MDF_EVIDENCE: ${{ github.workspace }}/manager-desk-feedback-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/manager-desk-feedback-artifacts/font-cache
@@ -67,6 +67,9 @@ jobs:
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$MDF_EVIDENCE/types.log"
           node --check scripts/qa/playManagerDeskFeedback.mjs
+          if test "$MDF_PHASE" = fixed; then
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/managerOwnTransferLog.test.tsx src/test/clubManagerDealMoment.test.tsx --testTimeout=120000 2>&1 | tee "$MDF_EVIDENCE/related-tests.log"
+          fi
       - name: Isolated pinned browser and declared fonts
         run: |
           npm install --prefix "$RUNNER_TEMP/manager-desk-browser" --no-save --package-lock=false playwright@1.64.0
