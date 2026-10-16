@@ -1,0 +1,7 @@
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+preload: grep -E "dukb\] preload wrapper" "$RC_OUT/../logs/build.log" 2>/dev/null; node scripts/simPreloadWait.mjs --build-stock dist-stock 2>&1 | grep -E "dukb\]|stock control|error" ; s=${PIPESTATUS[0]}; PRELOAD_WAIT_STOCK_DIST=dist-stock node scripts/simPreloadWait.mjs; a=$?; PRELOAD_WAIT_STOCK_DIST=dist-stock PRELOAD_WAIT_CONTROL=stockdist node scripts/simPreloadWait.mjs; b=$?; PRELOAD_WAIT_STOCK_DIST=dist-stock PRELOAD_WAIT_CONTROL=extra node scripts/simPreloadWait.mjs; c=$?; echo "stockbuild=$s head=$a stockdist=$b extra=$c"; [ $s = 0 ] && [ $a = 0 ] && [ $b = 1 ] && [ $c = 1 ]
+controls: r=""; for k in stock noplugin gated dynamicspec; do PRELOAD_WAIT_CONTROL=$k node scripts/simPreloadWait.mjs > /tmp/c-$k.log 2>&1; e=$?; tail -1 /tmp/c-$k.log; r="$r $k=$e"; done; echo "controls:$r"; [ "$r" = " stock=1 noplugin=1 gated=1 dynamicspec=1" ]
+simSnapshotAssets: node scripts/simSnapshotAssets.mjs
+simSeoTitles: node scripts/simSeoTitles.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
