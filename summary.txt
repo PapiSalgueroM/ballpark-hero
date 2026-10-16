@@ -1,0 +1,14 @@
+headsha exit=0 0s | 9ff14fc70 Record qualified Rodri Bingo correction [skip ci]
+rodri-proof exit=1 0s | Node.js v24.21.0
+simPlayerBingoHonours exit=0 16s | simPlayerBingoHonours PASS
+simPlayerBingoWorldCupAlias exit=1 0s | Node.js v24.21.0
+simPlayerBingoLoad exit=0 4s | simPlayerBingoLoad: CRLF bindings proved, raw source bytes held, owned copies cleaned; fictional transport only, no browser or live calls.
+vitest-bingo exit=0 26s |    Duration  25.91s (transform 9.69s, setup 1.24s, collect 13.86s, tests 26.33s, environment 5.20s, prepare 1.70s)
+simSportsBingo exit=0 0s | simSportsBingo: green. Every card can be finished, and the packs play fair.
+simBingoSeats exit=0 1s | simBingoSeats: all checks passed
+simMarketYearScope exit=0 0s | simMarketYearScope: all green
+simPlayerBingoLineFeedback exit=0 6s | simPlayerBingoLineFeedback: CRLF bindings proved, original bytes held and owned copies cleaned; fictional fixtures, no browser or backend calls.
+simRevealMoments exit=0 12s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+simScoreShown exit=0 31s | simScoreShown: all sections green
+tsc exit=0 86s | 
