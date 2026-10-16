@@ -1,0 +1,8 @@
+vitest-s4 exit=0 33s |    Duration  32.85s (transform 7.22s, setup 815ms, collect 18.96s, tests 36.73s, environment 5.74s, prepare 1.42s)
+retire exit=0 46s | simCmRetire: all 16 checks passed (record, oldsave, pens, base, retire)
+simEarlyReturnScope exit=0 13s | simEarlyReturnScope: all green
+simNoRivalNames exit=0 24s | No rival product names found. 0 findings.
+simCmTablesTruth exit=0 25s | simCmTablesTruth: every case green
+simHarnessAnchors exit=0 61s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 112s | 
+simClubManagerSlots exit=0 64s | simClubManagerSlots: all sections green

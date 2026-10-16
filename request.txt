@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-s4: node_modules/.bin/vitest run src/test/clubManagerRetire.test.tsx src/test/clubManagerSlots.test.tsx src/lib/clubManagerSlots.test.ts src/lib/clubManagerRetire.test.ts src/lib/clubManagerRecords.test.ts src/test/clubManagerManagerFace.test.tsx src/test/cmTablesTruth.test.tsx src/test/numberFormatting.test.tsx --testTimeout=300000 --hookTimeout=120000
+retire: node scripts/simCmRetire.mjs
+simEarlyReturnScope: node scripts/simEarlyReturnScope.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
