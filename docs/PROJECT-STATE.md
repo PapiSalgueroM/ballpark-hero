@@ -1,3 +1,18 @@
+## READY Root1389 / PR306, XI selection history, 2026-10-16
+
+Tested439a23dd/run38976601107/job117227435949 SUCCESS. Exactly2product additions keep the picker busy during wrong-position history and release it after refusal.8normal/1precise original fault+7preserves/8restored,84snapshots,101old/types/build/all15readers/6actualWebKit-Chromium journeys/unchangedweights/full holds pass. Artifact12079630852 physically retained and independently closed with0mismatches,122payloads/4768Gitentries/782dist/15PNG; closure5af81f3d. Root reviewed actual states and3fresh screenshots. PR306 follows READY30593730ed2. Claude I owns final integration/live publication, neither is claimed live. Full evidence and limits:docs/audits/xi-selection-race.md. Closing delta is documentation only.
+## Root1389 warm baseline measured and fixed qualification rebound, 2026-10-16
+
+Original-app cb750990/run38976074878 SUCCESS:1precise overwrite fault+7preserves/28snapshots,101old/types/521/full holds. Artifact12079411345 physically retained, actual warm raw7c65d7f1. The identical two-line busy fix is restored with only fixed-method baseline/test/raw ref rebinding. All assertions and native method remain held; fresh fixed qualification still required. First fixed822 failure remains unqualified. Root305 Career start fix staysREADY; Claude I owns main and live publication. Details docs/audits/xi-selection-race.md.
+## Root1389 fixture correction and fresh original-app baseline, 2026-10-16
+
+First fixed822/run38974894448 failed on one framework scheduler RNG draw, with no later-arm/build/browser credit. Exact React source matches the CI installed-body receipt and measured draw timing. One async-act warmup before measurement preserves all eight test bodies and assertions, with a whole-test inverse proof. Application hook is restored to original b152 for a fresh baseline. Fixed helper/native remain held. No product or live qualification is claimed. See docs/audits/xi-selection-race.md.
+## Root1389 actual baseline measured, fixed source prepared, 2026-10-16
+
+Unchangedb1520a9e/run38974096729SUCCESS establishes one precise pending-history overwrite fault with7preserves/28public-state snapshots,101oldcases/types/holds. Physical artifact12078686046(36,806,036B/SHAf60e451b6d3d36e68368e9ee49ad2bcf8398fb0b0b7e28376081c8d23a1c4db9); actualrawfd84e36c. Exact2linebusyflag fix, original/restored8case proof and6nativebusy/refusalretry journeys are independently source reviewed, not yet runtime qualified. Root305careerfix remainsREADY93730ed2. ActualClaudeI owns joined release/main/publication. Details docs/audits/xi-selection-race.md.
+## Root1389 diagnosis prepared, XI pending-position selection, 2026-10-16
+
+Eight actual-hook cases and remote baseline proof are source reviewed against unchanged published application18234788. Expected one precise late-history overwrite fault plus seven preserves,28fullpublic-state/draw/storage snapshots and101old regressions. No product patch or runtime claim. Separate1388 career fix is READY asPR305final93730ed2, tested27a39d32; actualClaudeI owns integration/publication. Details docs/audits/xi-selection-race.md.
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
@@ -18506,3 +18521,8 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+## Root1388 urgent browser reports, source preparation2026-10-16
+Published BH Start-career and iPad XI reports are being diagnosed on codex/safari-interaction-reports at e814 app bytes. Four mounted creation tests and two actual WebKit/Chromium native methods are source-ready for remote baseline, no app fix yet. Exact case counts, offline/fictional-transport limits and source checks are in docs/audits/safari-interaction-reports.md. I retains BI and publication.1387 preliminary source was separately frozen at2793bfa3 with no runtime or release gate.
+
+1388 baseline95a confirms two exact creation faults and Chromium UI paths, but WebKit has0journeycredit because the offline guard granted an unsupported Chromium-only permission. Root claims the narrow permission dispatch correction, preserving all guardhooks, for a second original-application baseline. The creation15lineproduct patch, fixed helper/workflow and newWebKittransportproof remain separate/uncommitted. No live fix or WebKit pass is claimed.

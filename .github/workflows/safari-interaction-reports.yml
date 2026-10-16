@@ -1,0 +1,150 @@
+name: Safari career and XI interaction reports
+
+on:
+  push:
+    branches: [codex/safari-interaction-reports]
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      SAFARI_REPORT_PHASE: baseline
+      SOCCER_CREATION_BASE: http://127.0.0.1:4173
+      XI_SELECTION_BASE: http://127.0.0.1:4173
+    steps:
+      - name: Initialize evidence paths on the allocated runner
+        run: |
+          echo "SAFARI_REPORT_OUT=$RUNNER_TEMP/safari-reports" >> "$GITHUB_ENV"
+          echo "SAFARI_REPORT_FONT_CACHE=$RUNNER_TEMP/safari-report-fonts" >> "$GITHUB_ENV"
+          echo "SOCCER_CREATION_OUT=$RUNNER_TEMP/safari-reports/creation" >> "$GITHUB_ENV"
+          echo "XI_SELECTION_OUT=$RUNNER_TEMP/safari-reports/xi" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact source and remote tools
+        run: |
+          set -euo pipefail
+          mkdir -p "$SAFARI_REPORT_OUT"
+          git rev-parse HEAD > "$SAFARI_REPORT_OUT/head.txt"
+          git archive --format=zip HEAD > "$SAFARI_REPORT_OUT/source.zip"
+          git diff --exit-code e814c2def671e07bd6163462dff8ab1230be2000 HEAD -- src ':!src/test/soccerCareerCreationRoll.test.tsx'
+          git status --porcelain --untracked-files=no > "$SAFARI_REPORT_OUT/source-before.txt"
+          test ! -s "$SAFARI_REPORT_OUT/source-before.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$SAFARI_REPORT_OUT/source-files.sha256"
+          npm ci > "$SAFARI_REPORT_OUT/install.log" 2>&1
+          cat "$SAFARI_REPORT_OUT/install.log"
+          npm install --prefix "$RUNNER_TEMP/safari-report-tools" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$RUNNER_TEMP/safari-report-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/safari-report-tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/safari-report-tools/node_modules/playwright/cli.js" install --with-deps chromium webkit
+          python -m pip install fonttools pillow
+          python -m pip freeze > "$SAFARI_REPORT_OUT/python-packages.txt"
+          node -p "require('playwright/package.json').version" > "$SAFARI_REPORT_OUT/playwright-version.txt"
+          SOCCER_CAREER_SAVE_RETRY_FONT_CACHE="$SAFARI_REPORT_FONT_CACHE" node scripts/qa/soccerCareerSaveRetry1078.mjs --prefetch-fonts-only > "$SAFARI_REPORT_OUT/fonts.log" 2>&1
+          cp -R "$SAFARI_REPORT_FONT_CACHE" "$SAFARI_REPORT_OUT/fonts"
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$SAFARI_REPORT_OUT/installed-files.sha256"
+      - name: Parse new remote methods and actual app types
+        run: |
+          set -euo pipefail
+          node --check scripts/qa/playSoccerCreation1388.mjs
+          node --check scripts/qa/playBuildYourXiSelection1388.mjs
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SAFARI_REPORT_OUT/types.log"
+      - name: Exact current creation faults and preserved outcomes
+        run: |
+          set -euo pipefail
+          set +e
+          SC_CREATION_ROLL_RAW="$SAFARI_REPORT_OUT/creation-units-raw.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerCreationRoll.test.tsx --maxWorkers=1 --reporter=verbose --reporter=json --outputFile.json="$SAFARI_REPORT_OUT/creation-units.json" > "$SAFARI_REPORT_OUT/creation-units.log" 2>&1
+          unit_exit=$?
+          set -e
+          cat "$SAFARI_REPORT_OUT/creation-units.log"
+          UNIT_EXIT="$unit_exit" node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const out=process.env.SAFARI_REPORT_OUT, r=JSON.parse(fs.readFileSync(out+'/creation-units.json'));
+          const log=fs.readFileSync(out+'/creation-units.log','utf8');
+          assert(!/Unhandled Errors?|Unhandled Rejection|Uncaught Exception|TypeError:|ReferenceError:|SyntaxError:|Failed to (?:load|resolve import)|Cannot find module|ERR_MODULE_NOT_FOUND|SIM_OFFLINE_BLOCK/i.test(log),'Setup/unhandled faults cannot qualify as the expected product faults');
+          const expected=[
+            'creation roll stale settled: changing position requires a new roll before Begin Career',
+            'creation roll stale in-flight: a previous position roll cannot publish after the switch',
+          ];
+          const preserved=[
+            'creation roll preservation: a fresh settled roll starts and saves the displayed player',
+            'creation roll preservation: a new position reroll starts with its displayed stats',
+          ];
+          assert.equal(r.testResults.length,1); const f=r.testResults[0]; assert(!f.message);
+          assert(f.name.replaceAll('\\','/').endsWith('/src/test/soccerCareerCreationRoll.test.tsx'));
+          assert.deepEqual(f.assertionResults.map(x=>x.title).sort(),[...expected,...preserved].sort());
+          assert(f.assertionResults.every(x=>['passed','failed'].includes(x.status)));
+          assert.equal(r.numTotalTests,4); assert.equal(r.numPendingTests,0); assert.equal(r.numTodoTests,0);
+          const failed=f.assertionResults.filter(x=>x.status==='failed');
+          assert.deepEqual(failed.map(x=>x.title).sort(),expected.sort());
+          for(const x of failed) assert(x.failureMessages.length===1 && /^AssertionError: creation roll (settled position leaves Begin Career enabled without a usable preview|in-flight position publishes an abandoned preview).*expected false to be true/s.test(x.failureMessages[0]));
+          assert.equal(r.numPassedTests,2); assert.equal(r.numFailedTests,2); assert.equal(Number(process.env.UNIT_EXIT),1);
+          const raw=JSON.parse(fs.readFileSync(out+'/creation-units-raw.json')); assert.equal(Object.keys(raw).length,4);
+          console.log('Published-source baseline:2 precise stale-position faults and2 full saved-player preserves. No product fix claim.');
+          NODE
+      - name: Actual production build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build 2>&1 | tee "$SAFARI_REPORT_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$SAFARI_REPORT_OUT/dist-files.sha256"
+          git archive --format=zip HEAD src/pages/SoccerCareer.tsx src/pages/LineupBuilder.tsx src/components/game/PlayerAutocomplete.tsx src/hooks/useLineupBuilder.ts > "$SAFARI_REPORT_OUT/built-source.zip"
+          python -c "import os,zipfile; z=zipfile.ZipFile(os.environ['SAFARI_REPORT_OUT']+'/dist.zip','w',zipfile.ZIP_DEFLATED); [(z.write(os.path.join(r,f),os.path.join(r,f))) for r,ds,fs in os.walk('dist') for f in fs]; z.close()"
+      - name: Every built-site reader
+        run: |
+          set -euo pipefail
+          failed=0
+          for sim in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$sim.mjs" > "$SAFARI_REPORT_OUT/$sim.log" 2>&1 || failed=1
+            tail -n 3 "$SAFARI_REPORT_OUT/$sim.log"
+          done
+          exit "$failed"
+      - name: Actual WebKit and Chromium native paths
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$SAFARI_REPORT_OUT/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do curl --fail --silent http://127.0.0.1:4173/ > /dev/null && break || sleep 1; done
+          failed=0
+          SIM_OFFLINE_RECEIPT="$SAFARI_REPORT_OUT/creation.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSoccerCreation1388.mjs > "$SAFARI_REPORT_OUT/creation-browser.log" 2>&1 || failed=1
+          cat "$SAFARI_REPORT_OUT/creation-browser.log"
+          SIM_OFFLINE_RECEIPT="$SAFARI_REPORT_OUT/xi.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playBuildYourXiSelection1388.mjs > "$SAFARI_REPORT_OUT/xi-browser.log" 2>&1 || failed=1
+          cat "$SAFARI_REPORT_OUT/xi-browser.log"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$SAFARI_REPORT_OUT/weights.log" 2>&1 || failed=1
+          cat "$SAFARI_REPORT_OUT/weights.log"
+          exit "$failed"
+      - name: Complete source dependencies and built output held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$SAFARI_REPORT_OUT/source-files.sha256" > "$SAFARI_REPORT_OUT/source-holds.log"
+          sha256sum --check "$SAFARI_REPORT_OUT/installed-files.sha256" > "$SAFARI_REPORT_OUT/installed-holds.log"
+          if test -f "$SAFARI_REPORT_OUT/dist-files.sha256"; then sha256sum --check "$SAFARI_REPORT_OUT/dist-files.sha256" > "$SAFARI_REPORT_OUT/dist-holds.log"; fi
+          test ! -s "$SAFARI_REPORT_OUT/creation.transport"
+          test ! -s "$SAFARI_REPORT_OUT/xi.transport"
+          git status --porcelain --untracked-files=no > "$SAFARI_REPORT_OUT/source-after.txt"
+          test ! -s "$SAFARI_REPORT_OUT/source-after.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: safari-report-baseline-${{ github.sha }}
+          path: ${{ env.SAFARI_REPORT_OUT }}
+          if-no-files-found: error
+          retention-days: 14
