@@ -1,0 +1,23 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+appealIsolation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+retire: node scripts/simCmRetire.mjs
+retire-fleet: git worktree add -f .rb1 d4f2c6f6 >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb1 node scripts/simCmRetire.mjs --part=fleet
+retire-hotseat-loads: git worktree add -f .rb2 d4f2c6f6 >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb2 node scripts/simCmRetire.mjs --part=hotseat,loads,oldsave
+vitest-cm: node_modules/.bin/vitest run src/test/clubManager src/test/cm src/test/manager src/test/dailyMenuResume src/lib/clubManager src/test/numberFormatting.test.tsx --testTimeout=300000 --hookTimeout=120000
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simEarlyReturnScope: node scripts/simEarlyReturnScope.mjs
+simClubManager: node scripts/simClubManager.mjs
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs
+simWilderness: node scripts/simWilderness.mjs
+simNationJob: node scripts/simNationJob.mjs
+simHomeFront: node scripts/simHomeFront.mjs
