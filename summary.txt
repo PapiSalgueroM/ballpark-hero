@@ -1,0 +1,17 @@
+simHeadlines exit=0 4s | simHeadlines: green. The feed is alive and it does not lie.
+simManagers exit=0 4s | simManagers: all green
+simDealDepth exit=0 32s | simDealDepth: all green
+simPromotion exit=0 3s | simPromotion: all green
+simReleaseClause exit=0 2s | simReleaseClause: green. The exit door is real, priced, hunted, and honestly escapable only at full wage.
+simManagerXp exit=0 66s | simManagerXp: green. Nothing spent is the game that shipped, every point moves something, and nothing can be conjured.
+simCustomClubValues exit=0 76s | simCustomClubValues: 25 checks, 0 failures
+simGmStaff exit=1 2s | GM STAFF: 40 failure(s)
+simGmDealTableFixture exit=1 0s | simGmDealTableFixture: FAIL, 2 section(s) differ from the recording
+simWorldEditor exit=0 6s | simWorldEditor: 2478 checks, 0 failures
+simDailyDeals exit=0 2s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simDeadlineDay exit=0 4s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simTacticsEngine exit=0 72s | simTacticsEngine: PASS. A man is read in his slot, a second position is earned over counted weeks, the armband and the takers reach the stream, a duty moves the football 
+simClubManagerDecisions exit=0 15s | simClubManagerDecisions: 0 findings
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simManagerHotSeat exit=0 45s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simClubManagerSlots exit=0 48s | simClubManagerSlots: all sections green

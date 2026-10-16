@@ -1,0 +1,17 @@
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+simDealDepth: node scripts/simDealDepth.mjs
+simHeadlines: node scripts/simHeadlines.mjs
+simManagers: node scripts/simManagers.mjs
+simManagerXp: node scripts/simManagerXp.mjs
+simPromotion: node scripts/simPromotion.mjs
+simReleaseClause: node scripts/simReleaseClause.mjs
+simTacticsEngine: node scripts/simTacticsEngine.mjs
+simWorldEditor: node scripts/simWorldEditor.mjs
+simGmStaff: node scripts/simGmStaff.mjs
+simGmDealTableFixture: node scripts/simGmDealTableFixture.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
