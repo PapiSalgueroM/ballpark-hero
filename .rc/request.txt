@@ -1,0 +1,5 @@
+retire-fleet: git worktree add -f .rb1 d4f2c6f6 >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb1 node scripts/simCmRetire.mjs --part=fleet
+retire-hotseat: git worktree add -f .rb2 d4f2c6f6 >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb2 node scripts/simCmRetire.mjs --part=hotseat
+retire-loads: git worktree add -f .rb3 d4f2c6f6 >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb3 node scripts/simCmRetire.mjs --part=loads,oldsave
+retire-stripnone: git worktree add -f .rb4 d4f2c6f6 >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb4 RETIRE_SEEDS=1 RETIRE_SEASONS=1 RETIRE_CLUBS=liverpool RETIRE_CONTROL=stripnone node scripts/simCmRetire.mjs
+retire-drawleak: git worktree add -f .rb5 d4f2c6f6 >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb5 RETIRE_SEEDS=1 RETIRE_SEASONS=1 RETIRE_CLUBS=liverpool RETIRE_CONTROL=drawleak node scripts/simCmRetire.mjs
