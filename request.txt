@@ -1,0 +1,14 @@
+retire: node scripts/simUsCoachRetirement.mjs
+retire-drift: US_COACH_RETIRE_CONTROL=drift node scripts/simUsCoachRetirement.mjs
+retire-early: US_COACH_RETIRE_CONTROL=early node scripts/simUsCoachRetirement.mjs
+retire-noretire: US_COACH_RETIRE_CONTROL=noretire node scripts/simUsCoachRetirement.mjs
+retire-noguard: US_COACH_RETIRE_CONTROL=noguard node scripts/simUsCoachRetirement.mjs
+retire-nosit: US_COACH_RETIRE_CONTROL=nosit node scripts/simUsCoachRetirement.mjs
+retire-noaccept: US_COACH_RETIRE_CONTROL=noaccept node scripts/simUsCoachRetirement.mjs
+retire-norefresh: US_COACH_RETIRE_CONTROL=norefresh node scripts/simUsCoachRetirement.mjs
+poaching: node scripts/simUsCoachPoaching.mjs
+poaching-rng: US_COACH_POACHING_CONTROL=rng node scripts/simUsCoachPoaching.mjs
+confirm-initial: US_CAREER_ACTION_CONTROL=initial node scripts/simUsCareerActionConfirm.mjs
+confirm-focus: US_CAREER_ACTION_CONTROL=focus node scripts/simUsCareerActionConfirm.mjs
+confirm: node scripts/simUsCareerActionConfirm.mjs
+base-initial: git worktree add -q /tmp/base d4f2c6f6 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && US_CAREER_ACTION_CONTROL=initial node scripts/simUsCareerActionConfirm.mjs 2>&1 | grep -E "AssertionError|intended failures|split|did not match" | head -5; exit ${PIPESTATUS[0]}

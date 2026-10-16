@@ -1,0 +1,16 @@
+Fleet: 300 careers per sport, head engine with control noretire against BASE (hunks stripped)
+  FAIL [section 2] nfl #0: the retired state is not BASE with done set
+  FAIL [section 2] nfl #1: the retired state is not BASE with done set
+  FAIL [section 2] nfl #2: the retired state is not BASE with done set
+  FAIL [section 2] nfl #3: the retired state is not BASE with done set
+  FAIL [section 2] nfl #4: the retired state is not BASE with done set
+  nfl: 300 careers, 5989 coaching steps before the retirement
+  nba: 300 careers, 5940 coaching steps before the retirement
+  mlb: 300 careers, 5784 coaching steps before the retirement
+  nhl: 300 careers, 6056 coaching steps before the retirement
+  retired: 0 while employed, 0 out of work (0 holding offers), 54 before a first season
+  FAIL [section 3] fleet: no career retired while employed, so the play guard was never tried
+2) Byte identity with BASE: 1200 careers red
+3) Retired careers hand their input back: 1 careers red
+4) skipped under a control (the controls aim at sections 2 and 3)
+CONTROL noretire FIRED: section 2 red on 1200 careers

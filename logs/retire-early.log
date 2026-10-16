@@ -1,0 +1,15 @@
+Fleet: 300 careers per sport, head engine with control early against BASE (hunks stripped)
+  FAIL [section 2] nfl #0: step 5: the head state differs from BASE before any retirement
+  FAIL [section 2] nfl #1: step 5: the head state differs from BASE before any retirement
+  FAIL [section 2] nfl #2: step 5: the head state differs from BASE before any retirement
+  FAIL [section 2] nfl #3: step 6: the head state differs from BASE before any retirement
+  FAIL [section 2] nfl #4: step 5: the head state differs from BASE before any retirement
+  nfl: 300 careers, 1811 coaching steps before the retirement
+  nba: 300 careers, 1980 coaching steps before the retirement
+  mlb: 300 careers, 2142 coaching steps before the retirement
+  nhl: 300 careers, 1824 coaching steps before the retirement
+  retired: 138 while employed, 122 out of work (44 holding offers), 54 before a first season
+2) Byte identity with BASE: 940 careers red
+3) Retired careers hand their input back: held
+4) skipped under a control (the controls aim at sections 2 and 3)
+CONTROL early FIRED: section 2 red on 940 careers

@@ -1,0 +1,14 @@
+retire-early exit=1 2s | CONTROL early FIRED: section 2 red on 940 careers
+retire-drift exit=1 2s | CONTROL drift FIRED: section 2 red on 1200 careers
+retire-noretire exit=1 2s | CONTROL noretire FIRED: section 2 red on 1200 careers
+retire-noguard exit=1 2s | CONTROL noguard FIRED: section 3 red on 1200 careers
+retire-nosit exit=1 2s | CONTROL nosit FIRED: section 3 red on 1200 careers
+retire-noaccept exit=1 2s | CONTROL noaccept FIRED: section 3 red on 146 careers
+retire-norefresh exit=1 2s | CONTROL norefresh FIRED: section 3 red on 1200 careers
+poaching exit=0 2s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+poaching-rng exit=0 2s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+retire exit=0 12s | PASS: ALL US COACHING RETIREMENT CHECKS PASSED
+confirm-focus exit=0 6s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+confirm-initial exit=0 6s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+confirm exit=0 6s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+base-initial exit=1 4s |   expected: /AssertionError:|expect\(element\)|TestingLibraryElementError: Unable to find (?:an accessible element with the role|an element with the text:)/,
