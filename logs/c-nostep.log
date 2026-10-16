@@ -1,0 +1,5 @@
+FAIL [offers] 201 summer offers of the fleets: every one within the step (one tier up, two after a top flight title or the Champions League) (68; first Celtic (tier 4, 2 of 12) offered Crystal Palace (tier 2))
+FAIL [offers] 172 mid season approaches: every one from at most one tier above (68; first West Ham (tier 3) approached by Arsenal (tier 1))
+ok   [offers] 794 tier 2 to 4 clubs of every world: each has a club exactly one tier up to be approached by
+[offers] the tier 4 fleet: 121 season ends; on CM_BOARD_BASE the same season ends were dealt 59 offers two or more tiers up in 48 seasons (the cases nostep needs)
+control nostep FIRED: 2 of 3 checks red
