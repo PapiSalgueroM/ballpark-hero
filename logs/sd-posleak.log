@@ -1,0 +1,31 @@
+NEGATIVE CONTROL ON: posleak (section 6 must fail)
+simSoccerDeck: head and base e814c2de bundled (2.2 s); the shipped pack holds 28 cards, CONTROL=posleak
+1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing
+2) Inert: the deck not loaded, 200 careers of 12 seasons, every save byte equal to the base's after every step and the Math.random count equal
+3) Adds, never replaces: at each deal, from one identical state, the old batch is the base's and a deck card is first
+5) Promises: every option moves what its button prints, to the bound and no further, says what landed, and never moves money or fame
+6) Reach by position: every position card reaches its own group and never another, every situation card someone, no keeper word for an outfielder
+   posleak: 706 widened to pos < 3, and the widened pack passes the bind check
+   GK: 13 cards reached, 488 deck cards in 547 summers (0.89 a summer), the top card 702 at 18.0%
+   CB: 13 cards reached, 495 deck cards in 535 summers (0.93 a summer), the top card 706 at 18.8%
+   LB: 13 cards reached, 492 deck cards in 526 summers (0.94 a summer), the top card 706 at 19.1%
+   RB: 13 cards reached, 502 deck cards in 535 summers (0.94 a summer), the top card 706 at 17.1%
+   CDM: 13 cards reached, 491 deck cards in 533 summers (0.92 a summer), the top card 706 at 16.9%
+   CM: 13 cards reached, 506 deck cards in 532 summers (0.95 a summer), the top card 712 at 15.2%
+   CAM: 14 cards reached, 526 deck cards in 552 summers (0.95 a summer), the top card 706 at 13.9%
+   LW: 13 cards reached, 494 deck cards in 543 summers (0.91 a summer), the top card 720 at 14.8%
+   RW: 13 cards reached, 510 deck cards in 535 summers (0.95 a summer), the top card 717 at 15.7%
+   ST: 13 cards reached, 500 deck cards in 546 summers (0.92 a summer), the top card 717 at 16.0%
+   keepers: a deck card in 89.2% of summers (488 of 547)
+   defenders: a deck card in 93.0% of summers (1980 of 2129)
+   midfielders: a deck card in 95.2% of summers (1032 of 1084)
+   forwards: a deck card in 92.6% of summers (1504 of 1624)
+     a midfielder (CM) was dealt 706, a defender card
+     a midfielder (CAM) was dealt 706, a defender card
+     a midfielder (CM) was dealt 706, a defender card
+     a midfielder (CM) was dealt 706, a defender card
+   FAIL 141 position cards dealt to another group: a midfielder (CM) was dealt 706, a defender card
+10) Lazy: the page and the engine reach the gate and nothing of the deck, and nothing but the gate and tests loads it
+
+runtime 21.9 s
+simSoccerDeck: CONTROL=posleak FIRED: section 6 failed (1 failures, red sections 6)

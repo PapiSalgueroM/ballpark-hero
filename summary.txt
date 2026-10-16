@@ -1,0 +1,3 @@
+vitest exit=0 5s |    Duration  3.79s (transform 1.91s, setup 134ms, collect 2.38s, tests 136ms, environment 521ms, prepare 240ms)
+sd-posleak exit=1 22s | simSoccerDeck: CONTROL=posleak FIRED: section 6 failed (1 failures, red sections 6)
+sd exit=0 65s | simSoccerDeck: green. Every section.
