@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk-s3: WALK_ONLY=s3 node .rc/x/review-run-walk.mjs
