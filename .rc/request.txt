@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+srclib: test -z "$(git diff --name-only e814c2de...HEAD -- src/lib)" && echo "src/lib untouched" || { git diff --name-only e814c2de...HEAD -- src/lib; exit 1; }
+vitest: node_modules/.bin/vitest run src/test/soccerScreenTruths.test.tsx src/test/soccerPotentialProgress.test.tsx src/test/careerAwardsNightCard.test.tsx src/test/soccerAwardReveal.test.tsx src/test/soccerFarewellPage.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+sims: ONLY=simCareerAwardsNight,simSoccerOpponentLabels,simHarnessAnchors node scripts/runAllSims.mjs --browser 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+truths: git worktree add -q /tmp/bd e814c2de && ln -s "$PWD/node_modules" /tmp/bd/node_modules && (cd /tmp/bd && node_modules/.bin/vite build > /tmp/bd-build.log 2>&1) && SECTIONS=W4,W4r,W5 SHOTS=$RC_OUT/shots SCREEN_TRUTHS_BASE_DIST=/tmp/bd/dist ENGINES=chromium node scripts/playSoccerScreenTruths.mjs 2>&1 | tail -70; exit ${PIPESTATUS[0]}
+awardReveal: PORT=4603 ENGINES=chromium node scripts/playSoccerCareerAwardReveal.mjs 2>&1 | tail -20; exit ${PIPESTATUS[0]}
+potential: SOCCER_POTENTIAL_BROWSER_OUT=$RC_OUT/pot node scripts/qa/soccerPotentialProgressBrowser.mjs 2>&1 | tail -20; exit ${PIPESTATUS[0]}
+playCareerMoments: PORT=4606 ENGINES=chromium node scripts/playCareerMoments.mjs 2>&1 | tail -20; exit ${PIPESTATUS[0]}
+playSoccerCareer: PORT=4607 ENGINES=chromium node scripts/playSoccerCareer.mjs 2>&1 | tail -20; exit ${PIPESTATUS[0]}
+playStartingXi: ENGINES=chromium node scripts/playStartingXi.mjs 2>&1 | tail -20; exit ${PIPESTATUS[0]}
+playSoccerLanding: SOCCER_LANDING_HEAD_ONLY=1 RC_OUT=$RC_OUT/land ENGINES=chromium node scripts/playSoccerLanding.mjs 2>&1 | tail -20; exit ${PIPESTATUS[0]}
