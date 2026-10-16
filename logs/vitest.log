@@ -1,0 +1,148 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the distinct tactical tradeoff on each actual option for 'nfl' 'QB'[32m 165[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the actual rules and worked example before the choice tiles[33m 387[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the distinct tactical tradeoff on each actual option for 'mlb' 'CF'[32m 145[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the distinct tactical tradeoff on each actual option for 'mlb' 'SP'[32m 101[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the distinct tactical tradeoff on each actual option for 'nhl' 'G'[32m 93[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the distinct tactical tradeoff on each actual option for 'nba' 'PG'[32m 97[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the distinct tactical tradeoff on each actual option for 'nba' 'PF'[32m 63[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mshows the distinct tactical tradeoff on each actual option for 'nhl' 'C'[32m 88[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22msaves a selected choice immediately with the real upcoming team and year[32m 93[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mrestores the original tile focus and list scroll after Back[32m 111[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mkeeps a selected choice and restores detail scroll and Help focus[32m 196[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mclears optional selections without changing base career fields[32m 128[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mkeeps all displayed choices disabled for an unavailable career {"retired":true}[32m 69[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mkeeps all displayed choices disabled for an unavailable career {"suspendedSeasons":1}[32m 72[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mhandles a malformed optional result without crashing or rewarding[32m 139[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot play another season[32m 16[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot sit out another season[32m 7[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot accept an old offer[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coach cannot refresh the market[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mretiring changes only done and is pure and idempotent[32m 6[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mdoes not offer veteran adaptation before age 30[32m 98[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mcloses with Escape and returns focus to the exact opener[32m 73[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx[2m > [22mUS programme choices and restoration[2m > [22mrenders the earned outcome using saved target and bonus values[32m 11[2mms[22m[39m
+ [31m×[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mretirement requires confirmation and accepts once after cancel and escape[33m 322[2mms[22m[39m
+[31m   → expected false to be true // Object.is equality[39m
+ [31m×[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted employed coach keeps the record and log without season actions[32m 152[2mms[22m[39m
+[31m   → expected false to be true // Object.is equality[39m
+ [31m×[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted unemployed coach cannot take offers or advance the calendar[32m 135[2mms[22m[39m
+[31m   → expected false to be true // Object.is equality[39m
+ [31m×[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted start card opens a review instead of offering a coaching return[32m 23[2mms[22m[39m
+[31m   → expected false to be true // Object.is equality[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mactive coaching still plays one season and leaves its input unchanged[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mactive coach still accepts a genuine offer without changing year or history[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mlegacy coaching saves without done keep their active career[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted coaching saves preserve their full record on JSON reload[32m 5[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mactive start card still resumes the sideline without starting over[32m 26[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mkeeps seed4 year2063 departure and standing unchanged when no larger vacancy exists[32m 21[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mretains genuine seed1 year2055 transfer fromWashington Wizards toMiami Heat[32m 5[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mretains genuine seed1 year2061 transfer fromMiami Heat toNew Orleans Pelicans[32m 2[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mretains genuine seed2 year2045 transfer fromDenver Nuggets toHouston Rockets[32m 4[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mretains genuine seed2 year2054 transfer fromAtlanta Hawks toUtah Jazz[32m 1[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mretains genuine seed4 year2049 transfer fromLA Clippers toBoston Celtics[32m 1[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mretains genuine seed4 year2059 transfer fromBoston Celtics toDallas Mavericks[32m 1[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mholds the original ordinary staying season and its three draws[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mholds original firing, new market and unemployment without an instant rehire[32m 2[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mkeeps previously earned poaching credit during an ordinary same-chair season[32m 1[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mround-trips current coaching saves and null old coaching data through the existing repair API[32m 2[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts[2m > [22mUS coach poaching follows a real new chair[2m > [22mdoes not play or draw randomness when the original fired coach has no job[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mdraft day on the four US career hubs[2m > [22mNFL mounts the draft day card with the engine pick and the confetti rule[32m 173[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mdraft day on the four US career hubs[2m > [22mNBA mounts the draft day card with the engine pick and the confetti rule[32m 59[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mdraft day on the four US career hubs[2m > [22mMLB mounts the draft day card with the engine pick and the confetti rule[32m 61[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mdraft day on the four US career hubs[2m > [22mNHL mounts the draft day card with the engine pick and the confetti rule[32m 44[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mthe pick either side of round one[2m > [22mNFL draws pick 31 the way the line under it reads[32m 15[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mthe pick either side of round one[2m > [22mNBA draws pick 31 the way the line under it reads[32m 10[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mthe pick either side of round one[2m > [22mMLB draws pick 31 the way the line under it reads[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mthe pick either side of round one[2m > [22mNHL draws pick 31 the way the line under it reads[32m 12[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx[2m > [22mcoach season reveal[2m > [22mcoaching a season replaces the grey line with a reveal carrying the record and the notes[32m 15[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mretirement requires confirmation and accepts once after cancel and escape
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/usCoachRetirement.test.tsx:[2m87:29[22m[39m
+    [90m 85| [39m    [35mconst[39m state [33m=[39m [34mfixture[39m()[33m,[39m held [33m=[39m [34mjson[39m(state)[33m,[39m view [33m=[39m [34mpanel[39m(state)[33m;[39m
+    [90m 86| [39m    const opener = view.queryByRole('button', { name: 'Retire from coa…
+    [90m 87| [39m    [34mexpect[39m(opener [33m!==[39m [35mnull[39m)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                            [31m^[39m
+    [90m 88| [39m    fireEvent[33m.[39m[34mclick[39m(opener[33m![39m)[33m;[39m
+    [90m 89| [39m    let dialog = within(document.body).getByRole('alertdialog', { name…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted employed coach keeps the record and log without season actions
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/usCoachRetirement.test.tsx:[2m109:85[22m[39m
+    [90m107| [39m  it('completed employed coach keeps the record and log without season…
+    [90m108| [39m    const state = { ...fixture(), done: true }, view = panel(state), l…
+    [90m109| [39m    expect(view.queryByRole('button', { name: /^Coach the \d+ season$/…
+    [90m   | [39m                                                                                    [31m^[39m
+    [90m110| [39m    expect(view.getByRole('heading', { name: 'Coaching career complete…
+    [90m111| [39m    expect(view.queryByRole('button', { name: 'Retire from coaching' }…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted unemployed coach cannot take offers or advance the calendar
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/usCoachRetirement.test.tsx:[2m120:87[22m[39m
+    [90m118| [39m  it('completed unemployed coach cannot take offers or advance the cal…
+    [90m119| [39m    const state = { ...fixture(false), done: true }, view = panel(stat…
+    [90m120| [39m    expect(view.queryByRole('button', { name: /^Sit out the \d+ season…
+    [90m   | [39m                                                                                      [31m^[39m
+    [90m121| [39m    expect(view.getByRole('heading', { name: 'Coaching career complete…
+    [90m122| [39m    expect(view.queryByRole('button', { name: new RegExp(state.offers[…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCoachRetirement.test.tsx[2m > [22mUS coaching retirement[2m > [22mcompleted start card opens a review instead of offering a coaching return
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/usCoachRetirement.test.tsx:[2m132:29[22m[39m
+    [90m130| [39m    const view = render(<CoachStartCard sport="nba" existing={{ ...fix…
+    [90m131| [39m    const review = view.queryByRole('button', { name: 'Review coaching…
+    [90m132| [39m    expect(review !== null).toBe(true); expect(view.queryByRole('butto…
+    [90m   | [39m                            [31m^[39m
+    [90m133| [39m    fireEvent.click(review!); expect(resume).toHaveBeenCalledTimes(1);…
+    [90m134| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m49 passed[39m[22m[90m (53)[39m
+[2m   Start at [22m 11:42:39
+[2m   Duration [22m 6.48s[2m (transform 3.95s, setup 379ms, collect 7.96s, tests 3.28s, environment 2.66s, prepare 960ms)[22m
+

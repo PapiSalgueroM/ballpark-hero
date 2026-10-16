@@ -1,0 +1,8 @@
+poaching exit=0 3s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+poaching-phantom exit=0 3s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+poaching-credit exit=0 3s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+poaching-rng exit=0 3s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+coachCareer exit=0 4s | PASS: ALL US COACHING CAREER CHECKS PASSED
+coaching exit=0 10s | PASS: ALL US COACHING CHECKS PASSED
+vitest exit=1 7s |    Duration  6.48s (transform 3.95s, setup 379ms, collect 7.96s, tests 3.28s, environment 2.66s, prepare 960ms)
+tsc exit=0 72s | 
