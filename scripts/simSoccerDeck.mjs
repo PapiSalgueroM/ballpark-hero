@@ -91,8 +91,9 @@
      10) LAZY, the static half. The static closure (scripts/lib/
         staticClosure.mjs) of src/pages/SoccerCareer.tsx and of the engine
         holds soccerDeckGate.ts and none of soccerDeck.ts, src/data/
-        soccerDeck/* or gmInbox.ts; and no src file but the gate and tests
-        calls loadSoccerDeck, read as code with its comments gone.
+        soccerDeck/* or gmInbox.ts; and, since Round 1504, the page calls
+        loadSoccerDeck and no other src file but the gate and tests does,
+        read as code with its comments gone.
 
    Every section deals the shipped pack (28 cards). The one card fixture pack
    made in memory (FIXTURE below) is what the leak control hands the gate, and
@@ -133,16 +134,18 @@
                save deals one card every summer; section 7 fails.
      pressure  every deck move times ten (the pack, in memory); section 8
                fails on a band.
-     freetraining every training option's time cost stripped (the pack, in
-               memory, Round 1504): the deck trains for free as in Round
-               1334; section 8 fails on the ruling's legacy band.
+     freetraining every training option's time cost stripped and its
+               training doubled (the pack, in memory, Round 1504); section 8
+               fails on the ruling's legacy band.
      noresolve the engine's catalog spread of the pending deck card is gone
                (in memory): a saved deck card is skipped here too; section 9
                fails.
      eager     the gate gains a static import of './soccerDeck' (in memory);
                section 10 fails.
-     caller    the page gains a call of loadSoccerDeck (in memory); section 10
-               fails.
+     caller    the engine gains a call of loadSoccerDeck (in memory, Round
+               1504: the page is the one caller now); section 10 fails.
+     pagesilent the page's calls of loadSoccerDeck are gone (in memory, Round
+               1504): no card would ever be dealt; section 10 fails.
    Exit 0 green, 1 red (or a control that fired), 2 could not run, 3 a control
    that did not fire.
 
@@ -211,7 +214,8 @@ const CONTROLS = {
   freetraining: { breaks: '8', file: null, edits: null },
   noresolve: { breaks: '9', file: ENGINE, edits: [['    ...soccerDeckPending(state),\n', '    /* noresolve control */\n']] },
   eager: { breaks: '10', file: GATE, edits: null },
-  caller: { breaks: '10', file: PAGE, edits: null },
+  caller: { breaks: '10', file: ENGINE, edits: null },
+  pagesilent: { breaks: '10', file: PAGE, edits: null },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`SIM_SOCCER_DECK_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 const swapped = new Map();
@@ -993,7 +997,13 @@ const ECON_N = Number(process.env.SIM_SOCCER_DECK_ECONOMY_N || 100);
 /* Round 1504, the lead's ruling 3 on Round 1334: before the cards go live, the mean legacy move of EVERY answer policy
    sits within the measured seed to seed spread (absolute value at most 1.2; 1334 read OFF's spread 1.21), NEUTRAL about
    0. So the legacy band is the ruling's 1.2, not a reading plus a margin, and the training options pay a time cost
-   (src/data/soccerDeck/starter.ts). The freetraining control strips the costs and must go red on it. */
+   (src/data/soccerDeck/starter.ts). The freetraining control strips the costs and doubles the training and must go red
+   on it. Read 2026-10-17 on a runner (rc r1504-s1, the paired fleet, 100 careers a seed, seeds 0 to 4), each arm
+   against the deck off as BEST / WORST / NEUTRAL: legacy -0.38 / -0.42 / 0.00 (OFF's seed to seed sd 1.33; per seed
+   BEST -1.66 to +0.44), morale25 +0.14 / -1.27 / 0, morale30 +1.31 / -0.85 / 0, integrity30 +0.17 / +0.23 / 0,
+   overall30 +0.11 / +0.11 / 0, peak -0.02 / -0.00 / 0, clean40 +0.02 / +0.02 / 0, pastCeiling 0; every other band as
+   Round 1334 set it holds these with room. Round 1334's pack (the costs stripped, nothing doubled) on the same fleet:
+   legacy +1.13 / +1.17 / 0, peak +0.46 / +0.48. */
 const BANDS = { morale25: 5.5, morale30: 4, integrity25: 3.5, integrity30: 8.5, overall30: 1, peak: 0.75, legacy: 1.2, clean40: 0.15, pastCeiling: 0.01 };
 if (runs(8)) {
   let P8 = PACK;
@@ -1002,13 +1012,16 @@ if (runs(8)) {
       ...(c.fx ? { fx: Object.fromEntries(Object.entries(c.fx).map(([k, v]) => [k, v * 10])) } : {}) })) })) };
     if (H.deck.soccerDeckProblems(P8).length) { console.error(`pressure control: the scaled pack has problems (${H.deck.soccerDeckProblems(P8)[0]}), refusing to run`); process.exit(2); }
   }
-  /* Round 1504: freetraining strips every training cost (the pack, in memory), so the deck trains for free again as it
-     did in Round 1334; the legacy band must go red. */
+  /* Round 1504: freetraining strips every training cost and doubles what each option trains (the pack, in memory), so
+     the deck raises the legacy score for free; the legacy band must go red. Doubled because the costs stripped alone,
+     which is Round 1334's pack, read BEST +1.13 and WORST +1.17 on this paired fleet (rc r1504-s1), inside the band by
+     a hair: a control at that size would be a coin toss, not a proof that the band bites. */
   if (CONTROL === 'freetraining') {
     const costs = PACK.events.flatMap(e => e.choices).filter(c => Object.values(c.fx ?? {}).some(v => v < 0)).length;
     if (costs === 0) { console.error('freetraining control: no option of the pack carries a training cost, refusing to run'); process.exit(2); }
-    P8 = { ...PACK, events: PACK.events.map(e => ({ ...e, choices: e.choices.map(c => (c.fx ? { ...c, fx: Object.fromEntries(Object.entries(c.fx).filter(([, v]) => v >= 0)) } : c)) })) };
-    console.log(`   freetraining control: ${costs} options lose their training cost`);
+    P8 = { ...PACK, events: PACK.events.map(e => ({ ...e, choices: e.choices.map(c => (c.fx ? { ...c, fx: Object.fromEntries(Object.entries(c.fx).filter(([, v]) => v >= 0).map(([k, v]) => [k, k in H.words.SOCCER_TRAINING_KEYS ? v * 2 : v])) } : c)) })) };
+    if (H.deck.soccerDeckProblems(P8).length) { console.error(`freetraining control: the free pack has problems (${H.deck.soccerDeckProblems(P8)[0]}), refusing to run`); process.exit(2); }
+    console.log(`   freetraining control: ${costs} options lose their training cost and train double`);
   }
   const defs = Object.fromEntries(P8.events.map(e => [Number(e.id), e]));
   const TRAIN = H.words.SOCCER_TRAINING_KEYS;
@@ -1182,7 +1195,7 @@ if (runs(9)) {
 /* ─── 10. lazy, the static half ────────────────────────────────────────── */
 
 SECTION = '10';
-console.log('10) Lazy: the page and the engine reach the gate and nothing of the deck, and nothing but the gate and tests loads it');
+console.log('10) Lazy: the page and the engine reach the gate and nothing of the deck, and the page is the one caller that loads it');
 if (runs(10)) {
   const gateAbs = path.join(ROOT, GATE);
   const override = {};
@@ -1202,20 +1215,30 @@ if (runs(10)) {
     : /\.(ts|tsx)$/.test(d.name) ? [`${dir}/${d.name}`] : []));
   const files = walk('src');
   const isTest = f => /\.test\.tsx?$/.test(f) || f.startsWith('src/test/');
-  if (CONTROL === 'caller' && !files.includes(PAGE)) { console.error('caller control: the page is gone, refusing to run'); process.exit(2); }
+  /* Round 1504: the page loads the deck now, and it is the one caller. `caller` adds a call to the engine (which must
+     never fetch the deck: the deal would then wait on the network) and `pagesilent` takes the page's calls away
+     (the cards would never be dealt), each in memory. */
+  if (CONTROL === 'caller' && !files.includes(ENGINE)) { console.error('caller control: the engine is gone, refusing to run'); process.exit(2); }
   const callers = [];
   let read = 0;
   for (const f of files) {
     if (f === GATE || isTest(f)) continue;
     read += 1;
     let text = readSrc(f);
-    if (CONTROL === 'caller' && f === PAGE) text = `${text}\nvoid loadSoccerDeck();\n`;
+    if (CONTROL === 'caller' && f === ENGINE) text = `${text}\nvoid loadSoccerDeck();\n`;
+    if (CONTROL === 'pagesilent' && f === PAGE) {
+      const n = (text.match(/loadSoccerDeck\(\)/g) ?? []).length;
+      if (n === 0) { console.error('pagesilent control: the page calls loadSoccerDeck nowhere, refusing to run'); process.exit(2); }
+      text = text.split('loadSoccerDeck()').join('Promise.resolve()');
+    }
     if (!text.includes('loadSoccerDeck')) continue;
     if (/\bloadSoccerDeck\s*\(/.test(codeOf(path.join(ROOT, f), text))) callers.push(f);
   }
   if (read < 500) fail(`only ${read} src files read: the caller check saw nothing`);
-  if (callers.length) fail(`${callers.length} src files call loadSoccerDeck: ${callers.join(', ')}`);
-  else ok(`${read} src files read as code: nothing but the gate and tests calls loadSoccerDeck`);
+  const others = callers.filter(f => f !== PAGE);
+  if (others.length) fail(`${others.length} src files besides the page call loadSoccerDeck: ${others.join(', ')}`);
+  if (!callers.includes(PAGE)) fail(`${PAGE} never calls loadSoccerDeck, so no summer card is ever dealt`);
+  if (!others.length && callers.includes(PAGE)) ok(`${read} src files read as code: the page loads the deck, and nothing else but the gate and tests calls loadSoccerDeck`);
 }
 
 /* ─── the verdict ──────────────────────────────────────────────────────── */

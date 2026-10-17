@@ -9,8 +9,9 @@
    Until loadSoccerDeck() has landed the module, both questions answer []:
    soccerDeckSlot deals no card and soccerDeckPending adds nothing to the
    catalog, so the engine plays exactly the game it played before this round.
-   Nothing calls loadSoccerDeck in this round but the deck's own tests and
-   harnesses (Round 1504 makes the page fetch it).
+   Since Round 1504 the page (src/pages/SoccerCareer.tsx) fetches it as soon
+   as a live career is on screen and is the only caller outside the deck's
+   own tests and harnesses (simSoccerDeck section 10 holds that).
 
    The loader is the engine's manager market pattern (loadManagerMarket: one
    promise for every caller, a failed load clears itself so a retry works),
@@ -22,6 +23,14 @@
 import type { CareerState, RandomEvent } from './soccerCareerEngine';
 
 type SoccerDeckModule = typeof import('./soccerDeck');
+
+/** Round 1504: the help line for the summer cards (GameHelp's extraRules on
+ *  /soccer-career). "Most summers" is what simSoccerDeck section 6 measured
+ *  (a deck card in 90 to 94 percent of each position group's summers), never
+ *  "every summer"; the ceiling rule is the card's own (soccerDeck.ts). */
+export const SOCCER_DECK_HELP_RULES: readonly string[] = [
+  'Summer cards: most summers start with one card, never more, about your position or where your career stands, before the rest of the between seasons news. Training on one adds a point to a skill next season and takes a point from another, because the hours come out of your normal work, and it never lands past your ceiling. Example: a striker who takes penalty duty gets Shooting +1 and Dribbling -1 next season; at your ceiling no training card comes up.',
+];
 
 /** The deck's ids, 700 to 999 (600 to 699 are the other lane's routines). */
 export function isSoccerDeckId(id: unknown): boolean {

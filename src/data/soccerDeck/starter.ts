@@ -255,7 +255,7 @@ export const STARTER: SoccerDeckPack = {
   pressure: {
     morale: 2,
     t_pace: 1, t_shooting: 1, t_passing: 1, t_dribbling: 1, t_defending: 1, t_physical: 1,
-    gk_shot_stopping: 1, gk_aerial_command: 1, gk_distribution: 1, gk_penalty_saving: 1, gk_sweeping_speed: 1,
+    gk_shot_stopping: 1, gk_aerial_command: 1, gk_distribution: 1, gk_penalty_saving: 1, gk_sweeping_speed: 1, gk_positioning: 1,
   },
   events: CARDS.map(([e]) => e),
   titles: Object.fromEntries(CARDS.map(([e, title]) => [e.id, title])),
