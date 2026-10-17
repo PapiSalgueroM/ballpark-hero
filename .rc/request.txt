@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/rvwalk1500.mjs
+ban: node .rc/x/rvban1500.mjs
