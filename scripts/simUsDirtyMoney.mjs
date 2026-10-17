@@ -432,10 +432,14 @@ for (const [slug, [fn, file]] of Object.entries(LIFE_DECK)) {
           const r = DM.dealWithDirtyMoney(c, way);
           const net = r2((r.state.heat ?? 0) - (before.heat ?? 0));
           const back = handBack(c, r.state);
-          const bound = cost > 0 ? cost : DM.canDealWithDirtyMoney(before) ? handBack(before, DM.dealWithDirtyMoney(before, way).state) : 0;
+          /* Free of heat, the option is held to the desk on the career just before it: the money held before came
+             with its own heat (a save holding 1.5M comes clean for heat -1 with or without the brewery's 0.05M). */
+          const without = cost > 0 ? null : DM.canDealWithDirtyMoney(before) ? DM.dealWithDirtyMoney(before, way).state : before;
+          const bound = without ? handBack(before, without) : cost;
+          const floor = without ? r2((without.heat ?? 0) - (before.heat ?? 0)) : 0;
           row.worstNet[way] = Math.min(row.worstNet[way] ?? Infinity, net);
           row.mostBack[way] = Math.max(row.mostBack[way] ?? -Infinity, back);
-          if (net < 0) fail(7, key, `${way} leaves heat ${net} below where it was before the card (heat ${before.heat ?? 0}, ${before.dirtyMoney ?? 0}M held)`);
+          if (net < floor) fail(7, key, `${way} leaves heat ${net} below where it was before the card (heat ${before.heat ?? 0}, ${before.dirtyMoney ?? 0}M held, floor ${floor})`);
           if (back > bound) fail(7, key, `${way} hands back ${back} of heat and karma for a life card that cost heat +${cost} (bound ${bound})`);
         }
         table.set(key, row);
