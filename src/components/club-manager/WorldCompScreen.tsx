@@ -87,7 +87,8 @@ const ZONE_BAR: Record<'through' | 'playoff' | 'out', string> = {
 };
 
 function TableRows({ rows, format, myClub, onClub, played }: { rows: TableRow[]; format: 'g8' | 'l36'; myClub: string; onClub: (c: string) => void; played: boolean }) {
-  const cols = 'grid grid-cols-[1.5rem_1fr_1.4rem_1.4rem_1.4rem_2rem_2rem] gap-x-1 items-center';
+  /* The number columns are as narrow as their figures, so at 320 a one word name (Panathinaikos) fits whole. */
+  const cols = 'grid grid-cols-[1.25rem_1fr_1.1rem_1.1rem_1.1rem_1.75rem_1.75rem] gap-x-1 items-center';
   return (
     <div className="bg-card border border-border rounded-2xl p-3" data-cm-world-table={rows.length}>
       <div className={cn(cols, 'text-xs text-muted-foreground pb-1 border-b border-border/60')}>

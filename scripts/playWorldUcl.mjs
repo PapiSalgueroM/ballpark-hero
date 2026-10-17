@@ -14,14 +14,17 @@
  *   (d) a Real Madrid participant: Table is the old groups card, Matchdays read from the adapter
  *   (e) on every view of (a), (c) and the new views of (d): scrollY and the document height the same before a
  *       tile and after its back button, every new control at least 44 px tall, no new text under 12 px, no
- *       sideways scroll, nothing cut by its box or off the screen, no two controls on top of each other; under
+ *       sideways scroll, nothing cut by its box or off the screen, no one word name broken in the middle of the word,
+ *       no two controls on top of each other, and the season review's line fully drawn; under
  *       reduced motion nothing in the panel animates
  * Exit 0 green, 1 red (or a control that fired), 2 could not run, 3 a control that did not fire.
  *
  * Negative controls (PLAY_WORLD_CONTROL; each patches one line of the tree, asserted present exactly once, builds a
- * second dist into its own temp folder, puts the file back, serves that dist and walks (a) at 390 only):
+ * second dist into its own temp folder, puts the file back, serves that dist and walks one case at one size):
  *   notile  the Champions League tile is drawn only for a club in it      (a) red: no tile for a watcher
  *   ahead   the adapter evaluates one night past the week                  (a) red: matchday 5 shows scores
+ *   oldcols the table's number columns as wide as the first draft          (c) at 320 red: a one word name breaks
+ * (notile and ahead walk (a) at 390; oldcols walks (c) at 320.)
  * Runs only on a runner (CI set): it builds and serves. Request lines, with #!serve and #!playwright:
  *   walk: node scripts/playWorldUcl.mjs
  *   walk-notile: PLAY_WORLD_CONTROL=notile node scripts/playWorldUcl.mjs
@@ -57,6 +60,10 @@ const CONTROLS = {
     from: '    result = evalWorldUcl(career);',
     to: '    result = evalWorldUcl(career, worldUclNightsDone(career) + 1);',
     finding: 'matchday 5 shows' },
+  oldcols: { file: 'src/components/club-manager/WorldCompScreen.tsx',
+    from: "const cols = 'grid grid-cols-[1.25rem_1fr_1.1rem_1.1rem_1.1rem_1.75rem_1.75rem] gap-x-1 items-center';",
+    to: "const cols = 'grid grid-cols-[1.5rem_1fr_1.4rem_1.4rem_1.4rem_2rem_2rem] gap-x-1 items-center';",
+    finding: 'breaks in the middle of the word', run: 'c', size: [320, 640] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`);
 
@@ -207,6 +214,16 @@ async function measure(page, where) {
       if (parseFloat(st.fontSize) < 11.95) out.small.push(`"${words(el)}" ${st.fontSize}`);
       if (r.right > vw + 1 || r.left < -1) out.cut.push(`"${words(el)}" runs off the screen`);
       if ((st.overflowX === 'hidden' || st.overflowX === 'clip' || st.textOverflow === 'ellipsis') && el.scrollWidth > el.clientWidth + 1) out.cut.push(`"${words(el)}" is cut by its box`);
+      /* A one word name drawn over two lines is broken in the middle of the word (the first final walk showed
+         "Panathinaiko s" at 320): its text range has more than one line box. */
+      for (const n of el.childNodes) {
+        const word = n.nodeType === 3 ? n.textContent.trim() : '';
+        if (word.length < 4 || /\s/.test(word)) continue;
+        const range = document.createRange();
+        range.selectNodeContents(n);
+        const lines = new Set([...range.getClientRects()].filter(q => q.width > 0).map(q => Math.round(q.top)));
+        if (lines.size > 1) out.cut.push(`"${word}" breaks in the middle of the word`);
+      }
     }
     return out;
   });
@@ -307,6 +324,12 @@ async function caseB(browser, size, tag) {
     if (!got || !text.includes(saves.b.winner) || !text.includes(saves.b.runnerUp)) finding(where, `the season review does not name the final (${text || 'no line'}); the engine's: ${saves.b.winner} beat ${saves.b.runnerUp}`);
     else {
       await line.first().scrollIntoViewIfNeeded().catch(() => {});
+      /* The review's lines tick in one after another, so the line is looked at once it is fully drawn. */
+      const drawn = await page.waitForFunction(() => {
+        const el = document.querySelector('[data-cm-world-final-line]');
+        return !!el && parseFloat(getComputedStyle(el).opacity) > 0.99;
+      }, null, { timeout: 15000 }).then(() => true, () => false);
+      if (!drawn) finding(where, 'the final\'s line is never fully drawn (its opacity stays below 1)');
       const fs12 = await line.first().evaluate(el => parseFloat(getComputedStyle(el).fontSize));
       if (fs12 < 11.95) finding(where, `the final's line is ${fs12} px`);
       const wide = await page.evaluate(() => document.scrollingElement.scrollWidth > window.innerWidth + 1);
@@ -396,7 +419,11 @@ async function caseMotion(browser) {
 const browser = await chromium.launch();
 try {
   if (CONTROL) {
-    await caseA(browser, [390, 844], `390-${CONTROL}`);
+    const c = CONTROLS[CONTROL];
+    const size = c.size ?? [390, 844];
+    const tag = `${size[0]}-${CONTROL}`;
+    if ((c.run ?? 'a') === 'c') await caseC(browser, size, tag);
+    else await caseA(browser, size, tag);
   } else {
     for (const size of SIZES) {
       const tag = String(size[0]);
