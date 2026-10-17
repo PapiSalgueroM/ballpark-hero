@@ -1,0 +1,10 @@
+save A: Liverpool against Newcastle (Premier League · Round 1), away, 55704 bytes
+save B: Liverpool against Nottingham Forest (Premier League · Round 2), home, 71342 bytes
+save C: Real Madrid against Villarreal (Copa del Rey · Final), neutral, 160429 bytes
+save E: Real Madrid against Roma (Champions League · Quarter-final · second leg), away, 141299 bytes
+save D: Eintracht Frankfurt with Ayoube Amaimouni-Echghouyab on 12 goals (planted), the tile should read "Amaimouni-Echghouyab leads with 12", 53979 bytes
+D-320: the Stats tile reads "Ayoube Amaimouni-Echghouyab leads with 12" on 4 line(s), the tile 149 px tall
+  FAIL: D-320: the Stats tile's line wraps to 4 lines ("Ayoube Amaimouni-Echghouyab leads with 12")
+0 walks, 2 checks, 1s; pictures in /home/runner/work/_temp/rc-out/files/matchday
+control fullname: fired 1 time(s)
+playCmMatchDay: CONTROL fullname FIRED

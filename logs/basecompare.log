@@ -1,0 +1,29 @@
+base save: 70304 bytes, club Liverpool, live minute 45 home false 0-0 vs Newcastle
+head after Resume: h1 "Liverpool", stages , hub card Newcastle vs Liverpool
+head report from the base's mid match save: "Newcastle 0 - 1 Liverpool", first numbers theirs
+head save after the report: 72073 bytes, parses
+rvrun-oldsave: 0 findings
+oldsave exit=0
+A-320 hub: text under 12 px head 38 base 38; height head 28334 base 28334
+A-320 centre: text under 12 px head 49 base 49; height head 27406 base 27406
+A-320 live: text under 12 px head 50 base 72; height head 26575 base 26575
+A-320 interval: text under 12 px head 131 base 131; height head 27975 base 27975
+A-320 report: text under 12 px head 256 base 256; height head 28761 base 28526
+A-390 hub: text under 12 px head 38 base 38; height head 22752 base 22752
+A-390 centre: text under 12 px head 49 base 49; height head 21887 base 21887
+A-390 live: text under 12 px head 50 base 72; height head 21112 base 21112
+A-390 interval: text under 12 px head 131 base 131; height head 22446 base 22446
+A-390 report: text under 12 px head 256 base 256; height head 23151 base 23016
+A-1280 hub: text under 12 px head 35 base 35; height head 13574 base 13574
+A-1280 centre: text under 12 px head 46 base 46; height head 13120 base 13120
+A-1280 live: text under 12 px head 74 base 96; height head 12388 base 12388
+A-1280 interval: text under 12 px head 133 base 133; height head 13680 base 13680
+A-1280 report: text under 12 px head 258 base 258; height head 14267 base 14206
+B-320 hub: text under 12 px head 38 base 38; height head 28330 base 28346
+B-320 centre: text under 12 px head 52 base 52; height head 27400 base 27400
+B-320 live: text under 12 px head 50 base 72; height head 26575 base 26575
+B-320 interval: text under 12 px head 131 base 131; height head 27975 base 27975
+B-320 report: text under 12 px head 283 base 283; height head 29029 base 28702
+C-1280: the save after the walk is the base's to the byte (160896 bytes)
+playCmMatchDay compare: green. Against /tmp/wbase/dist: no screen has more text under 12 px, and every save after the same seeded taps is the base's
+compare exit=0 oldsave exit=0

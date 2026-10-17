@@ -1,0 +1,10 @@
+save A: Liverpool against Newcastle (Premier League · Round 1), away, 55704 bytes
+save B: Liverpool against Nottingham Forest (Premier League · Round 2), home, 71342 bytes
+save C: Real Madrid against Villarreal (Copa del Rey · Final), neutral, 160429 bytes
+save E: Real Madrid against Roma (Champions League · Quarter-final · second leg), away, 141299 bytes
+save D: Eintracht Frankfurt with Ayoube Amaimouni-Echghouyab on 12 goals (planted), the tile should read "Amaimouni-Echghouyab leads with 12", 53979 bytes
+  FAIL: A-390: 20 of 20 timeline names are cut: ⚽ Goal: Lewis Miley; ⚽ Goal: Florian Wirtz 🅰️ Alexander Isak; 🟨 Booked: Aladji Bamba
+A-390: heights hub 22752, centre 21887, live 21112, interval 22446, report 23358
+1 walks, 19 checks, 11s; pictures in /home/runner/work/_temp/rc-out/files/matchday
+control cut: fired 1 time(s)
+playCmMatchDay: CONTROL cut FIRED

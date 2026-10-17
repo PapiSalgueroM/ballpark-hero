@@ -1,0 +1,11 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=1 130s |   - 320: the live strip reads "Newcastle0 - 0Liverpool"
+pmd-swap exit=1 4s | playCmMatchDay: CONTROL swap FIRED
+pmd-cut exit=1 14s | playCmMatchDay: CONTROL cut FIRED
+pmd-jump exit=1 14s | playCmMatchDay: CONTROL jump FIRED
+pmd-fullname exit=1 4s | playCmMatchDay: CONTROL fullname FIRED
+playCmMatchDay exit=1 185s | playCmMatchDay: RED, 1 failures
+lf-widelabels exit=1 1s | Node.js v24.21.0
+lf-digits exit=1 1s | Node.js v24.21.0
+basecompare exit=0 300s | compare exit=0 oldsave exit=0
+playLiveMatchFit exit=0 143s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.

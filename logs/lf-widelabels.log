@@ -1,0 +1,11 @@
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_CONTROL=widelabels node scripts/playLiveMatchFit.mjs
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playLiveMatchFit.mjs:264
+  if (occupied) throw new Error(`port ${PORT} already answers, refusing to test an unknown server`);
+                      ^
+
+Error: port 4191 already answers, refusing to test an unknown server
+    at startServer (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playLiveMatchFit.mjs:264:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playLiveMatchFit.mjs:1099:1
+
+Node.js v24.21.0
