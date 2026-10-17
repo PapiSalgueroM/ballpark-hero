@@ -1,0 +1,147 @@
+name: NFL Perfect Season retry baseline
+on:
+  push:
+    branches: [codex/nfl-perfect-season-retry]
+    paths:
+      - .github/workflows/nfl-perfect-season-retry.yml
+      - scripts/qa/nflPerfectSeasonRetryProof.mjs
+      - src/test/perfectSeasonNflRetry.test.tsx
+      - scripts/qa/nflPerfectSeasonRetryBrowser.mjs
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retain exact original product and locked installation
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/nfl-perfect-season-retry-baseline"; test ! -e "$out"; mkdir -p "$out"
+          export NFL_RETRY_OUT="$out"; echo "NFL_RETRY_OUT=$out" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
+          sha256sum "$out/source.zip" "$out/request-source-files.sha256" > "$out/initial-source-packet.sha256"
+          git merge-base --is-ancestor 8293c758f4284d21baaa2320383cfd5cb5bd4944 HEAD
+          git diff --exit-code 8293c758f4284d21baaa2320383cfd5cb5bd4944 HEAD -- . ':!docs' ':!src/test/perfectSeasonNflRetry.test.tsx' ':!scripts/qa/nflPerfectSeasonRetryProof.mjs' ':!scripts/qa/nflPerfectSeasonRetryBrowser.mjs' ':!.github/workflows/nfl-perfect-season-retry.yml' > "$out/base-source-hold.log"
+          git diff --exit-code HEAD -- . > "$out/admission-working-source-hold.log"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          printf '%s\0' "$(command -v node)" "$(readlink -f "$(command -v npm)")" "$(readlink -f "$(command -v python)")" | sort -z | xargs -0 sha256sum > "$out/runtime-tools-files.sha256"
+          npm --version > "$out/npm-version.txt"
+          npm ci > "$out/install.log" 2>&1
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$out/dependencies.transport" node scripts/qa/soccerAgentReviewDependencies.mjs before > "$out/dependencies-before.log" 2>&1
+          cp soccer-agent-review-artifacts/dependencies-before.json "$out/"
+          SIM_OFFLINE_RECEIPT="$out/dependency-check.transport" node --input-type=module > "$out/dependency-check.log" 2>&1 <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const out=process.env.NFL_RETRY_OUT,inventory=JSON.parse(fs.readFileSync(out+'/dependencies-before.json'));
+          assert.equal(inventory.packages.length,521);fs.writeFileSync(out+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n',{flag:'wx'});console.log('PASS 521 actual locked installed package versions.');
+          NODE
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-files.sha256"
+      - name: Actual application types and effective offline preload
+        id: types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$NFL_RETRY_OUT"
+          preload_check='const assert=require("node:assert/strict");assert.ok((process.env.NODE_OPTIONS||"").includes("offlineTransport.cjs"),"Children retain offline preload");assert.ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")],"Actual offline preload is in require.cache");'
+          status=0; NODE_OPTIONS='' node -e "$preload_check" > "$out/preload-control.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/preload-control.exit"; test "$status" -eq 1; grep -F 'AssertionError' "$out/preload-control.log"; grep -F 'Children retain offline preload' "$out/preload-control.log"
+          node -e "$preload_check" > "$out/preload-normal.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
+      - name: Exact three original recovery faults and two healthy NFL cases
+        id: proof
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          NFL_RETRY_PROOF_OUT="$NFL_RETRY_OUT/proof" SIM_OFFLINE_RECEIPT="$NFL_RETRY_OUT/proof.transport" node scripts/qa/nflPerfectSeasonRetryProof.mjs baseline > "$NFL_RETRY_OUT/proof.stdout.log" 2> "$NFL_RETRY_OUT/proof.stderr.log"
+          tail -n 4 "$NFL_RETRY_OUT/proof.stdout.log"
+      - name: Unchanged NBA original and removal proof against its exact merged parent
+        id: nba
+        if: ${{ !cancelled() && steps.types.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$NFL_RETRY_OUT"
+          status=0; NBA_RETRY_PARENT_REF=fb709452066d6452333211abcb2759d0b87d1e18 NBA_RETRY_PROOF_OUT="$out/nba-proof" SIM_OFFLINE_RECEIPT="$out/nba-proof.transport" node scripts/qa/nbaPerfectSeasonRetryProof.mjs > "$out/nba-proof.stdout.log" 2> "$out/nba-proof.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/nba-proof.exit.txt"
+          SIM_OFFLINE_RECEIPT="$out/nba-classifier.transport" node --input-type=module > "$out/nba-classification.log" 2>&1 <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import path from 'node:path';import{createHash}from'node:crypto';
+          const out=process.env.NFL_RETRY_OUT,root=out+'/nba-proof',r=JSON.parse(fs.readFileSync(root+'/report.json')),sha=b=>createHash('sha256').update(b).digest('hex');
+          assert.equal(fs.readFileSync(out+'/nba-proof.exit.txt','utf8').trim(),'0');assert.equal(r.status,'pass');assert.deepEqual(r.errors,[]);assert.equal(r.parentRef,'fb709452066d6452333211abcb2759d0b87d1e18');assert.equal(r.joinBinding.mergeStatus,0);
+          assert.deepEqual(r.arms.map(a=>a.id),['original','eager-debit','forgotten-reroll','stale-wheel','current','whole-undo']);assert.deepEqual(r.controls.map(a=>a.id),['original','eager-debit','forgotten-reroll','stale-wheel']);assert(r.controls.every(c=>c.status==='pass'&&c.changed));
+          const refs=v=>{if(!v||typeof v!=='object')return;if(typeof v.path==='string'&&Number.isInteger(v.bytes)&&typeof v.sha256==='string'){assert(!path.isAbsolute(v.path)&&!v.path.split('/').includes('..'));const b=fs.readFileSync(path.join(root,v.path));assert.equal(b.length,v.bytes);assert.equal(sha(b),v.sha256);}for(const c of Object.values(v))refs(c);};refs(r);
+          const failed=[3,1,1,1,0,0];for(const[a,i]of r.arms.map((a,i)=>[a,i])){assert.equal(a.status,'pass');const v=JSON.parse(fs.readFileSync(path.join(root,a.vitest.path))),rows=v.testResults.flatMap(s=>s.assertionResults);assert.equal(v.numTotalTests,5);assert.equal(v.numFailedTests,failed[i]);assert.equal(v.numPassedTests,5-failed[i]);assert.equal(v.numPendingTests,0);assert.equal(rows.length,5);assert.equal(a.observations.length,5);assert.equal(a.process.status,failed[i]?1:0);}
+          assert(fs.readFileSync(out+'/nba-proof.stdout.log','utf8').trimEnd().endsWith('PASS NBA Perfect Season retry proof'));console.log('PASS unchanged NBA method: all six source arms and four exact controls with full actual retained bodies.');
+          NODE
+          tail -n 4 "$out/nba-proof.stdout.log"
+      - name: Unchanged five NBA page and thirty-three four-sport result cases
+        id: units
+        if: ${{ !cancelled() && steps.types.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$NFL_RETRY_OUT"
+          status=0; NBA_RETRY_COMPONENT_OUT="$out/nba-direct-observations" SIM_OFFLINE_RECEIPT="$out/units.transport" node_modules/.bin/vitest run src/test/perfectSeasonNbaRetry.test.tsx src/test/perfectSeasonResult.test.tsx src/test/perfectSeasonVerdict.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$out/units.vitest.json" > "$out/units.stdout.log" 2> "$out/units.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/units.exit.txt"
+          SIM_OFFLINE_RECEIPT="$out/units-classifier.transport" node --input-type=module > "$out/units-classification.log" 2>&1 <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.NFL_RETRY_OUT,u=JSON.parse(fs.readFileSync(out+'/units.vitest.json')),rows=u.testResults.flatMap(s=>s.assertionResults),log=fs.readFileSync(out+'/units.stdout.log','utf8')+fs.readFileSync(out+'/units.stderr.log','utf8');
+          assert.equal(fs.readFileSync(out+'/units.exit.txt','utf8').trim(),'0');assert.equal(u.success,true);assert.equal(u.testResults.length,3);assert.deepEqual(u.testResults.map(s=>[s.name.replaceAll('\\','/').split('/').at(-1),s.assertionResults.length]).sort(),[['perfectSeasonNbaRetry.test.tsx',5],['perfectSeasonResult.test.tsx',16],['perfectSeasonVerdict.test.tsx',17]].sort());assert.equal(u.numTotalTests,38);assert.equal(u.numPassedTests,38);assert.equal(u.numFailedTests,0);assert.equal(u.numPendingTests,0);assert.equal(u.numTodoTests,0);assert.equal(rows.length,38);assert(rows.every(r=>r.status==='passed'));assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to load|Cannot find module|No test files found|SIM_OFFLINE_BLOCK/i.test(log));console.log('PASS all thirty-eight unchanged NBA and four-sport result cases.');
+          NODE
+          tail -n 4 "$out/units.stdout.log"
+      - name: Retain actual source and every partial proof without weakening failures
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="${NFL_RETRY_OUT:-$RUNNER_TEMP/nfl-perfect-season-retry-baseline}"; mkdir -p "$out"; result=0
+          git diff --exit-code HEAD -- . > "$out/source-diff.log" 2>&1 || result=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/validated-source-files.sha256"
+          NFL_RETRY_ARCHIVE_OUT="$out" python - <<'PY'
+          import os,subprocess,zipfile
+          out=os.environ['NFL_RETRY_ARCHIVE_OUT']; files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile(out+'/validated-source.zip','x',zipfile.ZIP_DEFLATED) as archive:
+              for file in sorted(filter(None,files)): archive.write(file,file)
+          PY
+          if test -f "$out/dependencies-before.json"; then
+            SIM_OFFLINE_RECEIPT="$out/dependencies-final.transport" node --input-type=module > "$out/dependencies-after.log" 2>&1 <<'NODE' || result=1
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out=process.env.NFL_RETRY_OUT,before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),sha=x=>createHash('sha256').update(x).digest('hex');
+          const packageFiles=before.packageFiles.map(r=>({file:r.file,sha256:sha(fs.readFileSync(r.file))})),packages=before.packages.map(r=>{const p=JSON.parse(fs.readFileSync(r.directory+'/package.json'));return{directory:r.directory,name:p.name,version:p.version};});
+          fs.writeFileSync(out+'/dependencies-after.json',JSON.stringify({packageFiles,packages},null,2)+'\n',{flag:'wx'});assert.equal(packages.length,521);assert.deepEqual(packageFiles,before.packageFiles);assert.deepEqual(packages,before.packages);console.log('PASS all 521 actual locked versions and both package bodies held.');
+          NODE
+          fi
+          for kind in request-source installed runtime-tools validated-source; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
+          if test -f "$out/initial-source-packet.sha256"; then sha256sum --check "$out/initial-source-packet.sha256" > "$out/initial-source-packet-holds.log" 2>&1 || result=1; fi
+          if test -f "$out/installed-files.sha256"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-after-files.sha256"; cmp "$out/installed-files.sha256" "$out/installed-after-files.sha256" > "$out/installed-inventory-hold.log" 2>&1 || result=1; fi
+          while IFS= read -r -d '' file; do test ! -s "$file" || result=1; done < <(find "$out" -type f -name '*.transport' -print0)
+          printf 'types=%s\nproof=%s\nnba=%s\nunits=%s\nbuild=skipped\nreaders=skipped\nweights=skipped\n' '${{ steps.types.outcome }}' '${{ steps.proof.outcome }}' '${{ steps.nba.outcome }}' '${{ steps.units.outcome }}' > "$out/stage-outcomes.txt"
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nfl-perfect-season-retry-baseline-${{ github.sha }}
+          path: ${{ env.NFL_RETRY_OUT }}
+          if-no-files-found: error
+          retention-days: 14
