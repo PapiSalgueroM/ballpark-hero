@@ -1,0 +1,3 @@
+failures: inactive [Entire inactive AR result and saved bytes match] | constructors [Fresh constructor changes only the declared held seed]
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:508:24

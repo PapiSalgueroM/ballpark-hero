@@ -1,0 +1,3 @@
+cont-r1344 exit=1 36s |     at async file:///tmp/w44/scripts/simManagerWorldContinuity.mjs:496:24
+cont-head exit=1 39s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:508:24
+cont-main exit=1 41s |     at async file:///tmp/wm/scripts/simManagerWorldContinuity.mjs:489:24
