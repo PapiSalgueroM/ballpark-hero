@@ -15,8 +15,9 @@
  */
 import type { CMEra } from '@/lib/clubManagerEras';
 import { CM_ERAS } from '@/lib/clubManagerEras';
-import { uclFirstKoRound, uclLegsFor, uclAwayGoalsApply } from '@/lib/clubManager';
+import { uclFirstKoRound, uclLegsFor, uclAwayGoalsApply, worldUclFormatOf } from '@/lib/clubManager';
 import { periodFor, seasonOf, UCL_AWAY_GOALS, type UclFormatPeriod } from '@/lib/uclFormatHistory';
+import type { WorldCompFormat } from '@/lib/worldCompetition';
 
 export interface ClubManagerUclShape {
   era: Pick<CMEra, 'id' | 'label' | 'startYear' | 'emoji'>;
@@ -28,6 +29,10 @@ export interface ClubManagerUclShape {
   realId: string;
   /** Whether the engine's shape is the real one or a stand in. */
   matchesReal: boolean;
+  /** Round 1503: the format of the Champions League a save of this era
+   *  follows from outside it, in a season its club is not in it
+   *  (worldUclFormatOf): 'g8' the eras' groups, 'l36' the league phase. */
+  watched: WorldCompFormat;
   /** The one line the page prints under the era. */
   line: string;
 }
@@ -35,7 +40,7 @@ export interface ClubManagerUclShape {
 /** The one line the page prints under each era. Pure, so the harness can
  *  assert on it without rendering anything. */
 export function clubManagerUclLine(
-  s: Pick<ClubManagerUclShape, 'era' | 'firstKo' | 'legs' | 'awayGoals' | 'matchesReal'>,
+  s: Pick<ClubManagerUclShape, 'era' | 'firstKo' | 'legs' | 'awayGoals' | 'matchesReal' | 'watched'>,
   real: UclFormatPeriod,
 ): string {
   const ko = s.firstKo === 'R16' ? 'round of 16' : 'quarter-finals';
@@ -44,7 +49,10 @@ export function clubManagerUclLine(
   const shape = `Eight groups of four into the ${ko}, ${legs}, ${ag}.`;
   if (s.matchesReal) return `${shape} That is the real ${seasonOf(s.era.startYear)} format.`;
   const verb = real.to === null ? 'runs' : 'ran';
-  return `${shape} A stand in: the real ${seasonOf(s.era.startYear)} competition ${verb} ${real.title.toLowerCase()}, which the engine does not play yet.`;
+  /* Round 1503: the competition a save follows from outside it plays the
+     league phase, so the stand in is the club's own path, not the engine's. */
+  const followed = s.watched === 'l36' && real.stage === 'leaguePhase';
+  return `${shape} A stand in: the real ${seasonOf(s.era.startYear)} competition ${verb} ${real.title.toLowerCase()}, which ${followed ? 'your own club does not play yet' : 'the engine does not play yet'}.${followed ? ' The Champions League you follow from outside it plays the real format.' : ''}`;
 }
 
 /**
@@ -73,6 +81,7 @@ export function clubManagerUclShape(era: CMEra): ClubManagerUclShape {
     awayGoals,
     realId: real.id,
     matchesReal,
+    watched: worldUclFormatOf({ eraId: era.id }),
   };
   return { ...shape, line: clubManagerUclLine(shape, real) };
 }

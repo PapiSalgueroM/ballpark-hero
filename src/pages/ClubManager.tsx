@@ -75,6 +75,7 @@ const MetersStrip = lazy(() => import('@/components/club-manager/MetersStrip').t
 const UclBracketCard = lazy(() => import('@/components/club-manager/UclBracketCard').then(m => ({ default: m.UclBracketCard })));
 const UclGroupsCard = lazy(() => import('@/components/club-manager/UclGroupsCard').then(m => ({ default: m.UclGroupsCard })));
 const CupBracketCard = lazy(() => import('@/components/club-manager/CupBracketCard').then(m => ({ default: m.CupBracketCard })));
+const CupsPanel = lazy(() => import('@/components/club-manager/WorldCompScreen').then(m => ({ default: m.CupsPanel })));
 const StatsScreen = lazy(() => import('@/components/club-manager/StatsScreen').then(m => ({ default: m.StatsScreen })));
 const CalendarScreen = lazy(() => import('@/components/club-manager/CalendarScreen').then(m => ({ default: m.CalendarScreen })));
 const InboxCard = lazy(() => import('@/components/club-manager/InboxCard').then(m => ({ default: m.InboxCard })));
@@ -1462,15 +1463,20 @@ const ClubManager = () => {
                 <ScreenLoading><ClubManagerTreatmentPanel unavailable={unavailable} /></ScreenLoading>
               )}
 
+              {/* Round 1503: two tiles, the domestic cup and the Champions League, each opening a view of its own
+                  (WorldCompScreen.tsx, lazy). The cards this panel has always mounted are handed in, in its old
+                  order: the cup line, the cup bracket, the Champions League heading, the groups and the bracket
+                  (scripts/simClubManagerEraMidSeason.mjs section 6 reads that order). Round 312: two clearly
+                  separated competitions. Round 832: a league with no domestic cup says so, once, and shows no
+                  bracket. */}
               {hubPanel === 'cups' && (
-                <div className="space-y-2">
-                  {/* Round 312: two clearly separated competitions. The old
-                      panel put the UCL groups straight under the domestic cup
-                      line, which read as the cup showing the wrong table, and
-                      the domestic bracket card had never been mounted at all. */}
-                  {/* Round 832: a league with no domestic cup says so, once, and
-                      shows no bracket. */}
-                  {cupName === null ? (
+                <ScreenLoading><CupsPanel
+                  career={c}
+                  onClubClick={setClubView}
+                  cupTitle={cupName ?? 'Domestic cup'}
+                  cupValue={cupName === null ? (cupSatOut ? 'Not entered' : 'No domestic cup') : cupAlive ? 'Still alive' : c.cupRound === 'won' ? 'CUP WINNERS' : 'Knocked out'}
+                  cupSub={cupAlive ? `Next up: ${c.cupDraw[c.cupRound as CupRound] ?? 'to be drawn'}` : undefined}
+                  cupLine={cupName === null ? (
                     <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">
                       🏅 {cupSatOut
                         ? <>{c.clubName} do not enter the {cupSatOut}, so the season is the league{careerLeagueOf(c).euro ? ' and Europe' : ''}.</>
@@ -1489,29 +1495,15 @@ const ClubManager = () => {
                       <>🏅 <span className="font-bold">{careerLeagueOf(c).cupName}</span>: out{c.cupExit ? ` at the ${c.cupExit === 'F' ? 'final' : c.cupExit === 'SF' ? 'semi-final' : c.cupExit === 'QF' ? 'quarter-final' : 'Round of 16'}` : ''}. Next year.</>
                     )}
                   </div>
-                  {/* Round 102 built this bracket; Round 312 finally mounts it. */}
-                  <ScreenLoading><CupBracketCard career={c} onClubClick={setClubView} /></ScreenLoading>
                   </>)}
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider px-1 pt-1">
-                    ⭐ Champions League
-                  </div>
-                  {/* Round 163: every group in the draw, not just mine, plus
-                      the projected bracket that locks in after matchday 6. */}
-                  <ScreenLoading><UclGroupsCard career={c} onClubClick={setClubView} /></ScreenLoading>
-                  {c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won' && (
-                    <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
-                      ⭐ Alive in the Champions League. Next knockout round: <span className="font-bold">{c.uclKoRound === 'F' ? 'Final' : c.uclKoRound === 'SF' ? 'Semi-final' : c.uclKoRound === 'QF' ? 'Quarter-final' : 'Round of 16'}</span>
-                    </div>
-                  )}
-                  {c.uclKoRound === 'won' && (
-                    <div className="bg-card border border-gold/40 rounded-xl p-3 text-xs text-gold font-bold">⭐ CHAMPIONS OF EUROPE.</div>
-                  )}
-                  {/* Round 95: the knockout stage as a real bracket. */}
-                  <ScreenLoading><UclBracketCard career={c} onClubClick={setClubView} /></ScreenLoading>
-                  {!uclAlive && c.uclKoRound !== 'won' && c.uclGroup === null && (
-                    <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">No European football this season{careerLeagueOf(c).euro ? '. Reach the Champions League places to change that' : ' in this league'}.</div>
-                  )}
-                </div>
+                  /* Round 102 built this bracket; Round 312 mounted it. */
+                  cupBracket={cupName === null ? undefined : <CupBracketCard career={c} onClubClick={setClubView} />}
+                  uclHeading={<div className="text-xs text-muted-foreground uppercase tracking-wider">⭐ Champions League</div>}
+                  /* Round 163: every group in the draw; Round 95: the knockouts as a real bracket. In the
+                     Champions League view for the club in it (the club watching reads clubManagerWorldView.ts). */
+                  groupsCard={<UclGroupsCard career={c} onClubClick={setClubView} />}
+                  bracketCard={<UclBracketCard career={c} onClubClick={setClubView} />}
+                /></ScreenLoading>
               )}
 
               {/* Round 171: the finance desk, his CM-8. Round 200: the sponsor.
