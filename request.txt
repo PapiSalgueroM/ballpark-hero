@@ -1,0 +1,5 @@
+oldsave: git worktree add -q /tmp/base d8aaa4cb && NODE_OPTIONS=--max-old-space-size=7000 node .rc/x/oldsave.mjs
+sec2-big: git worktree add -q /tmp/b1 d8aaa4cb && NODE_OPTIONS=--max-old-space-size=7000 SECTION=2 SEEDS=5 SEASONS=3 BASE_ROOT=/tmp/b1 node scripts/simCmDifficulty.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs

@@ -1,0 +1,52 @@
+oldsave probe: 12 clubs (Manchester City, Brentford, Coventry City, Barcelona, Espanyol, Alavés, Juventus, Torino, Venezia, Borussia Dortmund, Hamburg, Paderborn), 2 seeds, head /home/runner/work/ballpark-hero/ballpark-hero, base /tmp/base
+A) 96 of 96 base saves open identically, 96 play on identically (a season end, the summer, ten entries); 12 saved with a match live
+  ok: A: every old save opens and plays on as on the base
+B) 16 of 16 Normal new jobs (joinClubNow and wilderness) equal the base's, then ten entries on
+  ok: B: Normal joinClubNow and wilderness jobs are the base, to the byte
+   C joinClubNow Manchester City to Aston Villa hard: budget 79.52 -> 63.6 (dial 63.6), wage cap 814 -> 765 (dial 765), board 69 -> 69
+   C joinClubNow Manchester City to Aston Villa legend: budget 79.52 -> 51.7 (dial 51.7), wage cap 814 -> 733 (dial 733), board 69 -> 69
+   C wilderness Manchester City to Blackburn Rovers hard: budget 9 -> 7.2 (dial 7.2), wage cap 128 -> 120 (dial 120), board 69 -> 69
+   C wilderness Manchester City to Blackburn Rovers legend: budget 9 -> 5.9 (dial 5.9), wage cap 128 -> 115 (dial 115), board 69 -> 69
+   C joinClubNow Brentford to Aston Villa hard: budget 79.56 -> 63.6 (dial 63.6), wage cap 814 -> 765 (dial 765), board 69 -> 69
+   C joinClubNow Brentford to Aston Villa legend: budget 79.56 -> 51.7 (dial 51.7), wage cap 814 -> 733 (dial 733), board 69 -> 69
+   C wilderness Brentford to Rodina Moscow hard: budget 9 -> 7.2 (dial 7.2), wage cap 86 -> 81 (dial 81), board 69 -> 69
+   C wilderness Brentford to Rodina Moscow legend: budget 9 -> 5.9 (dial 5.9), wage cap 86 -> 77 (dial 77), board 69 -> 69
+   C joinClubNow Coventry City to Aston Villa hard: budget 79.49 -> 63.6 (dial 63.6), wage cap 814 -> 765 (dial 765), board 69 -> 69
+   C joinClubNow Coventry City to Aston Villa legend: budget 79.49 -> 51.7 (dial 51.7), wage cap 814 -> 733 (dial 733), board 69 -> 69
+   C wilderness Coventry City to Gaziantep FK hard: budget 9 -> 7.2 (dial 7.2), wage cap 186 -> 175 (dial 175), board 69 -> 69
+   C wilderness Coventry City to Gaziantep FK legend: budget 9 -> 5.9 (dial 5.9), wage cap 186 -> 167 (dial 167), board 69 -> 69
+   C joinClubNow Barcelona to Aston Villa hard: budget 78.24 -> 62.6 (dial 62.6), wage cap 814 -> 765 (dial 765), board 69 -> 69
+   C joinClubNow Barcelona to Aston Villa legend: budget 78.24 -> 50.9 (dial 50.9), wage cap 814 -> 733 (dial 733), board 69 -> 69
+   C wilderness Barcelona to Altach hard: budget 9 -> 7.2 (dial 7.2), wage cap 170 -> 160 (dial 160), board 69 -> 69
+   C wilderness Barcelona to Altach legend: budget 9 -> 5.9 (dial 5.9), wage cap 170 -> 153 (dial 153), board 69 -> 69
+   C joinClubNow Espanyol to Aston Villa hard: budget 79.62 -> 63.7 (dial 63.7), wage cap 814 -> 765 (dial 765), board 69 -> 69
+   C joinClubNow Espanyol to Aston Villa legend: budget 79.62 -> 51.8 (dial 51.8), wage cap 814 -> 733 (dial 733), board 69 -> 69
+   C wilderness Espanyol to Southampton hard: budget 22 -> 17.6 (dial 17.6), wage cap 312 -> 293 (dial 293), board 69 -> 69
+   C wilderness Espanyol to Southampton legend: budget 22 -> 14.3 (dial 14.3), wage cap 312 -> 281 (dial 281), board 69 -> 69
+   C joinClubNow Alavés to Aston Villa hard: budget 79.42 -> 63.5 (dial 63.5), wage cap 814 -> 765 (dial 765), board 69 -> 69
+   C joinClubNow Alavés to Aston Villa legend: budget 79.42 -> 51.6 (dial 51.6), wage cap 814 -> 733 (dial 733), board 69 -> 69
+   C wilderness Alavés to Stoke City hard: budget 11 -> 8.8 (dial 8.8), wage cap 190 -> 179 (dial 179), board 69 -> 69
+   C wilderness Alavés to Stoke City legend: budget 11 -> 7.2 (dial 7.2), wage cap 190 -> 171 (dial 171), board 69 -> 69
+   C joinClubNow Juventus to Aston Villa hard: budget 79.77 -> 63.8 (dial 63.8), wage cap 814 -> 765 (dial 765), board 69 -> 69
+   C joinClubNow Juventus to Aston Villa legend: budget 79.77 -> 51.9 (dial 51.9), wage cap 814 -> 733 (dial 733), board 69 -> 69
+   C wilderness Juventus to Southampton hard: budget 22 -> 17.6 (dial 17.6), wage cap 302 -> 284 (dial 284), board 69 -> 69
+   C wilderness Juventus to Southampton legend: budget 22 -> 14.3 (dial 14.3), wage cap 302 -> 272 (dial 272), board 69 -> 69
+   C joinClubNow Torino to Aston Villa hard: budget 78.39 -> 62.7 (dial 62.7), wage cap 814 -> 765 (dial 765), board 69 -> 69
+   C joinClubNow Torino to Aston Villa legend: budget 78.39 -> 51 (dial 51), wage cap 814 -> 733 (dial 733), board 69 -> 69
+   C wilderness Torino to Austria Wien hard: budget 9 -> 7.2 (dial 7.2), wage cap 154 -> 145 (dial 145), board 69 -> 69
+   C wilderness Torino to Austria Wien legend: budget 9 -> 5.9 (dial 5.9), wage cap 154 -> 139 (dial 139), board 69 -> 69
+   C2 takeover Manchester City autumn legend: budget 190.03 -> 123.5 (dial 123.5), cap 1366 -> 1229 (dial 1229), board 69 -> 69, asks same true
+   C2 takeover Manchester City newYear legend: budget 206.45 -> 134.2 (dial 134.2), cap 1366 -> 1229 (dial 1229), board 69 -> 69, asks same true
+   C2 takeover Manchester City runIn legend: budget 222.13 -> 144.4 (dial 144.4), cap 1366 -> 1229 (dial 1229), board 69 -> 69, asks same true
+   C2 takeover Brentford autumn legend: budget 81.15 -> 52.7 (dial 52.7), cap 768 -> 691 (dial 691), board 69 -> 69, asks same true
+   C2 takeover Brentford newYear legend: budget 88.52 -> 57.5 (dial 57.5), cap 768 -> 691 (dial 691), board 69 -> 69, asks same true
+   C2 takeover Brentford runIn legend: budget 93.08 -> 60.5 (dial 60.5), cap 768 -> 691 (dial 691), board 69 -> 69, asks same true
+   C2 takeover Coventry City autumn legend: budget 38.41 -> 25 (dial 25), cap 459 -> 413 (dial 413), board 69 -> 69, asks same true
+   C2 takeover Coventry City newYear legend: budget 41.57 -> 27 (dial 27), cap 459 -> 413 (dial 413), board 69 -> 69, asks same true
+   C2 takeover Coventry City runIn legend: budget 44.86 -> 29.2 (dial 29.2), cap 459 -> 413 (dial 413), board 69 -> 69, asks same true
+   C2 takeover Barcelona autumn legend: budget 187.54 -> 121.9 (dial 121.9), cap 1319 -> 1187 (dial 1187), board 69 -> 69, asks same true
+   C2 takeover Barcelona newYear legend: budget 203.93 -> 132.6 (dial 132.6), cap 1319 -> 1187 (dial 1187), board 69 -> 69, asks same true
+   C2 takeover Barcelona runIn legend: budget 224.32 -> 145.8 (dial 145.8), cap 1319 -> 1187 (dial 1187), board 69 -> 69, asks same true
+  ok: D: a Hard save with a broken block opens as Hard (block {"v":1,"currency":"GBP","nationJobs":true,"strictness":3,"difficulty":"hard"})
+   D: the base opens a Hard save with startOptions {"v":1,"currency":"GBP","nationJobs":true,"strictness":3,"difficulty":"hard"}
+oldsave probe: all green

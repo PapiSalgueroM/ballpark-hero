@@ -1,0 +1,5 @@
+simSaveFence exit=0 56s | simSaveFence: all green (tabs, source, fleet)
+simSaveKeeper exit=0 5s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simClubManagerSaveSize exit=0 63s | simClubManagerSaveSize: all sections green
+oldsave exit=0 203s | oldsave probe: all green
+sec2-big exit=0 305s | simCmDifficulty: all green (sections 2)
