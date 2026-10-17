@@ -15,6 +15,9 @@ ROUND-1334-NOTES.md); this round deals it. What changed against that dark round,
   from a free one on the paired fleet (the free pack reads BEST +1.13, WORST +1.17); the bind rule is what holds the
   cost. So ROUND-1334-NOTES.md's "training still moves legacy +1.66" describes Round 1334's free pack; the costed
   pack reads BEST -0.38, WORST -0.42, NEUTRAL 0.00 (rc r1504-s1).
+- A stat already at 99 takes no training (since the closing fix of 2026-10-17): the season start clamps a stat at 99,
+  so the training lands +0 there and its cost is not paid; section 5 runs its fixtures with all seven stats at 99 too,
+  and the statmax control proves the bound bites.
 - A deck card's toast prints the season log line of what landed, never the button's promise; with no line (the
   option that moves nothing, or a card the engine skipped) it says "Nothing changes".
 
@@ -37,7 +40,7 @@ ROUND-1334-NOTES.md); this round deals it. What changed against that dark round,
 
 ## Where the proof lives
 
-- scripts/simSoccerDeck.mjs (sections 1 to 10 and 19 controls), scripts/simEventDeck.mjs (the kit; reach as a fleet
+- scripts/simSoccerDeck.mjs (sections 1 to 10 and 20 controls), scripts/simEventDeck.mjs (the kit; reach as a fleet
   statistic), src/lib/soccerDeck.test.ts, and the browser walk scripts/playSoccerDeck.mjs at 390 and 1280 (cases deal,
   fasttap, answer, delayed, late, noreload, reload, ceiling, help). The walk's delayed case presses the other option
   second, so it goes red if the page's second press guard is removed.
