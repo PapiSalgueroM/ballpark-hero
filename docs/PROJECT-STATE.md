@@ -1,3 +1,8 @@
+## Round1411 scoped READY, 17 October 2026: Soccer Career survives a failed Press Room download
+
+The tile now contains optional download errors, with a clear failure screen and Back/Escape that return focus to the career. Career state, pending-save registry and normal answers are held. Actual tested commit21bda16b3926b824d8c8249d5cd67efbff86f174 passed run39047691376/job117439624915. Normal/original/boundary-removal/restored proof,180 unchanged related cases and four production390/1280 browser journeys pass; complete saves and original/restored byte bridges hold.
+
+Types0, serial build then15 readers and14 fatal caps pass: SC833.1/834, CM608.5/609, NFL487.8/488K. Native physical157344/0, core1203/0, common2264/0, browser18694/0. Failed original method and exact repair remain retained. See docs/ROUND1411-PRESS-ROOM-FAILURE.md for artifact/body bindings and limits. Real-merge tested21bda, carry these closing docs separately, regenerate and qualify I's actual join. I retains active Soccer Career, Manager/UCL/tournaments, release/main/publish; PR308 is independent. No new live claim.
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
