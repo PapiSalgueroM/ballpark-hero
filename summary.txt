@@ -1,0 +1,9 @@
+simClubManagerCalendar exit=0 54s | simClubManagerCalendar: all green
+simCmApplications exit=0 112s | simCmApplications: green. The answer is earned, the limits hold, a summer move fires once, joining now moves the manager that week, and old saves load.
+simCmRealFixtures exit=0 5s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+simCmLedgerJourney exit=0 148s | simCmLedgerJourney: green. 45 seeded journeys, 9498 ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carri
+simCmSubs exit=0 70s | simCmSubs GREEN: 59 of 59 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press)
+simCmVar exit=0 189s | simCmVar normal: actual review outcomes and full prior baseline passed.
+simCmLeagueBook exit=0 96s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (95s)
+simManagerHotSeat exit=0 75s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simCmBoardVerdict exit=0 692s | simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 692 s)
