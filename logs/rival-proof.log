@@ -1,0 +1,4 @@
+soccerRivalWagesProof arm=current assertions=23 traceRows=13 intendedFailures=0
+soccerRivalWagesProof arm=original assertions=23 traceRows=13 intendedFailures=10
+soccerRivalWagesProof arm=whole-undo assertions=23 traceRows=13 intendedFailures=0
+soccerRivalWagesProof PASS arms3 tests69 originalWageFailures10 traceRows39

@@ -1,0 +1,14 @@
+headsha exit=0 0s | a6b762955 Round BII: record the base of Round 1329's inverse after PR289 and PR297 (9e93b382) in this branch's history, tree unchanged
+vitest-bh exit=0 8s |    Duration  8.12s (transform 2.45s, setup 1.16s, collect 5.87s, tests 5.96s, environment 4.70s, prepare 1.17s)
+rodri-proof exit=0 10s | simPlayerBingoRodriHonour: fixed proof passed; complete raw reports and changed-copy receipts retained. Offline only.
+simSportsBingo exit=0 0s | simSportsBingo: green. Every card can be finished, and the packs play fair.
+simBingoSeats exit=0 1s | simBingoSeats: all checks passed
+simMarketYearScope exit=0 0s | simMarketYearScope: all green
+wx-original-ctl exit=0 4s | wxOriginal: CONTROL FIRED-OK on base 5b630266: 3 display tests failed on their markers, the season test passed, both files restored
+simWorldXiSeasonReport exit=0 2s | simWorldXiSeasonReport: green. The report says a great deal more, every number adds up and comes off who played, and nobody real says a word.
+simWorldXiReport exit=0 1s | simWorldXiReport: green. The report says more and the season it describes did not move.
+life-original-ctl exit=0 2s | lifeOriginal: CONTROL FIRED-OK on base fe78be0c: exactly the 8 preview cases failed, 10 preserved, both files restored
+simCareerLife exit=0 22s | simCareerLife: green. Every peak is reachable, the critic has an opinion and it is about the football, and nothing about either of them is on the save.
+rival-proof exit=0 7s | soccerRivalWagesProof PASS arms3 tests69 originalWageFailures10 traceRows39
+simCareerDilemmaTruth exit=0 5s | simCareerDilemmaTruth: all green
+held-after exit=0 0s | src and scripts held after every line
