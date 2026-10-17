@@ -1,0 +1,6 @@
+c-field32 exit=1 162s | simWorldUcl: control field32 FIRED (67 failures, all its own)
+c-nocustomexit exit=1 167s | simWorldUcl: control nocustomexit FIRED (1 failures, all its own)
+wu-1 exit=0 175s | simWorldUcl: green, 75364 checks, 0 failures
+norival exit=0 16s | No rival product names found. 0 findings.
+pin1081 exit=1 9s | Node.js v24.21.0
+anchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
