@@ -1,3 +1,9 @@
+## Codex1398 current-release account loading, source prepared
+
+Recorded2026-10-17UTC. Optional isolated candidate starts at exact actual I67ec99568cb67c0d1bf287bef2629b6d35def549. Product204613e866cecdb76a76a69ea394294c744da2e7 reapplies the already qualified270 five-file account-loading patch12b7af2a081790bbeac7a7e2ad7ce178f8ab9a2035e6a87e41fbd01661d44181. Four existing bodies at67ec are whole equal to that patch's original baseline. New wrapper, AuthModal props export and Header/Index/GameNavbar imports only; no ClubManager or SoccerCareer page, engine, world or competition edit.
+
+The unchanged six-case account testf01fc742 and1397 native exact-opener browser method7afd8c7a are reused. A new remote proof/workflow will bind fresh paired original67ec and candidate tests, serial builds, actual three-route served downloads, nine candidate account journeys and all14 unchanged caps. Current I's prior three cap failures are observations, not qualification of this candidate. No local app/test/build/browser runtime. Source review and remote qualification remain pending; no READY, saving, main or live claim. Actual I owns integration and publishing. Prior PR314 remains independently READY/pushed.
+
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
