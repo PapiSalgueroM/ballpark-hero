@@ -872,7 +872,7 @@ const ClubManager = () => {
         <header className="text-center mb-4">
           <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">FULL TIME</h1>
         </header>
-        <ScreenLoading><MatchReportCard report={g.report} clubName={g.career.clubName} onContinue={g.continueFromReport} /></ScreenLoading>
+        <ScreenLoading><MatchReportCard report={g.report} clubName={g.career.clubName} onContinue={g.continueFromReport} noSack={noSackFrom(g.career) !== null} /></ScreenLoading>
       </div>
     );
   }

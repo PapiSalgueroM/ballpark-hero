@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronRight, ChevronDown } from 'lucide-react';
-import { confidenceLabel, minuteLabel } from '@/lib/clubManager';
+import { minuteLabel } from '@/lib/clubManager';
 import { scorerLine } from '@/lib/clubManagerScorerLine';
 import type { MatchWeekReport, MatchStats } from '@/lib/clubManager';
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
@@ -11,24 +11,38 @@ import { cardsAndSubsAt, reportLines } from '@/lib/clubManagerMatchCentre';
 import type { CardsAndSubs } from '@/lib/clubManagerMatchCentre';
 import { MatchTimeline } from '@/components/club-manager/MatchTimeline';
 import { ShootoutKicks } from '@/components/club-manager/ShootoutKicks';
+import { inFixtureOrder, mineFirstOfReport } from '@/lib/cmMatchDisplay';
+import { BOARD_EDGE, boardMeter } from '@/lib/clubManagerMeters';
+import type { MeterTone } from '@/lib/clubManagerMeters';
 
-/** Round 157: one stat as two bars meeting in the middle, matchday-app style. */
-function StatBar({ label, mine, theirs, decimals = 0, suffix = '' }: {
-  label: string; mine: number; theirs: number; decimals?: number; suffix?: string;
+/* Round 1340: the board word under the number is the header meter's word, in the meter's colour (the same tone
+   map as MetersStrip.tsx). src/test/cmReportBoardWord.test.tsx holds the two copies together. */
+const BOARD_TONE: Record<MeterTone, string> = { good: 'text-emerald-400', mid: 'text-yellow-400', bad: 'text-red-400' };
+
+/** Round 157: one stat as two bars meeting in the middle, matchday-app style.
+ *  Round 1340: in the order of the fixture, home side first, my number and my bar keeping their tone. */
+function StatBar({ label, mine, theirs, mineFirst, decimals = 0, suffix = '' }: {
+  label: string; mine: number; theirs: number; mineFirst: boolean; decimals?: number; suffix?: string;
 }) {
   const total = mine + theirs;
   const myShare = total > 0 ? (mine / total) * 100 : 50;
   const fmt = (n: number) => (decimals ? n.toFixed(decimals) : String(n)) + suffix;
+  const [nFirst, nSecond] = inFixtureOrder(mineFirst,
+    <span className="font-bold text-foreground tabular-nums" data-cm-stat-n="mine">{fmt(mine)}</span>,
+    <span className="font-bold text-muted-foreground tabular-nums" data-cm-stat-n="theirs">{fmt(theirs)}</span>);
+  const [barFirst, barSecond] = inFixtureOrder(mineFirst,
+    <div className={cn('bg-primary', mineFirst ? 'rounded-l-full' : 'rounded-r-full')} style={{ width: `${myShare}%` }} />,
+    <div className={cn('bg-muted-foreground/40', mineFirst ? 'rounded-r-full' : 'rounded-l-full')} style={{ width: `${100 - myShare}%` }} />);
   return (
     <div data-cm-stat={label}>
       <div className="flex items-center justify-between text-[10px] mb-0.5">
-        <span className="font-bold text-foreground tabular-nums" data-cm-stat-n="mine">{fmt(mine)}</span>
+        {nFirst}
         <span className="text-muted-foreground uppercase tracking-wider text-[9px]">{label}</span>
-        <span className="font-bold text-muted-foreground tabular-nums" data-cm-stat-n="theirs">{fmt(theirs)}</span>
+        {nSecond}
       </div>
       <div className="flex h-1.5 rounded-full overflow-hidden bg-secondary gap-px">
-        <div className="bg-primary rounded-l-full" style={{ width: `${myShare}%` }} />
-        <div className="bg-muted-foreground/40 rounded-r-full" style={{ width: `${100 - myShare}%` }} />
+        {barFirst}
+        {barSecond}
       </div>
     </div>
   );
@@ -38,26 +52,26 @@ function StatBar({ label, mine, theirs, decimals = 0, suffix = '' }: {
  *  Round 714: keeper saves (counted off the same play), and both dugouts'
  *  bookings and changes (counted off their committed lines), each only when
  *  the report recorded them, so an older report never prints a made up zero. */
-function StatsBlock({ stats, counts }: { stats: MatchStats; counts: CardsAndSubs | null }) {
+function StatsBlock({ stats, counts, mineFirst }: { stats: MatchStats; counts: CardsAndSubs | null; mineFirst: boolean }) {
   return (
     <div className="space-y-2">
       {/* Round 472: possession wears its percent sign on both sides, because
           the two numbers are a split of one hundred and a bare "58" against a
           bare "42" reads as a count of something. */}
-      <StatBar label="Possession" mine={stats.possession} theirs={100 - stats.possession} suffix="%" />
-      <StatBar label="Shots" mine={stats.shots} theirs={stats.oppShots} />
-      <StatBar label="On target" mine={stats.onTarget} theirs={stats.oppOnTarget} />
-      <StatBar label="Expected goals" mine={stats.xg} theirs={stats.oppXg} decimals={2} />
-      <StatBar label="Corners" mine={stats.corners} theirs={stats.oppCorners} />
-      <StatBar label="Fouls" mine={stats.fouls} theirs={stats.oppFouls} />
+      <StatBar label="Possession" mine={stats.possession} theirs={100 - stats.possession} mineFirst={mineFirst} suffix="%" />
+      <StatBar label="Shots" mine={stats.shots} theirs={stats.oppShots} mineFirst={mineFirst} />
+      <StatBar label="On target" mine={stats.onTarget} theirs={stats.oppOnTarget} mineFirst={mineFirst} />
+      <StatBar label="Expected goals" mine={stats.xg} theirs={stats.oppXg} mineFirst={mineFirst} decimals={2} />
+      <StatBar label="Corners" mine={stats.corners} theirs={stats.oppCorners} mineFirst={mineFirst} />
+      <StatBar label="Fouls" mine={stats.fouls} theirs={stats.oppFouls} mineFirst={mineFirst} />
       {stats.saves !== undefined && stats.oppSaves !== undefined && (
-        <StatBar label="Keeper saves" mine={stats.saves} theirs={stats.oppSaves} />
+        <StatBar label="Keeper saves" mine={stats.saves} theirs={stats.oppSaves} mineFirst={mineFirst} />
       )}
       {counts && (
         <>
-          <StatBar label="Yellow cards" mine={counts.yellows} theirs={counts.oppYellows} />
-          <StatBar label="Red cards" mine={counts.reds} theirs={counts.oppReds} />
-          <StatBar label="Substitutions" mine={counts.subs} theirs={counts.oppSubs} />
+          <StatBar label="Yellow cards" mine={counts.yellows} theirs={counts.oppYellows} mineFirst={mineFirst} />
+          <StatBar label="Red cards" mine={counts.reds} theirs={counts.oppReds} mineFirst={mineFirst} />
+          <StatBar label="Substitutions" mine={counts.subs} theirs={counts.oppSubs} mineFirst={mineFirst} />
         </>
       )}
     </div>
@@ -114,6 +128,8 @@ interface MatchReportCardProps {
   report: MatchWeekReport;
   clubName: string;
   onContinue: () => void;
+  /** Round 1340: the career plays under No sacking, so the board word says what the header's meter says there. */
+  noSack?: boolean;
 }
 
 /**
@@ -129,12 +145,23 @@ interface MatchReportCardProps {
  * the scoreboard itself is the true final score from the first frame, a
  * line playClubManager enforces (see the comment inside).
  */
-export function MatchReportCard({ report, clubName, onContinue }: MatchReportCardProps) {
+export function MatchReportCard({ report, clubName, onContinue, noSack = false }: MatchReportCardProps) {
   const r = report;
   /* Round 472. His words: real team names, never "them". The other club is on
      the report twice already, as home or away, so every heading that used to
      say Them says who it means. */
   const opponent = r.home === clubName ? r.away : r.home;
+  /* Round 1340: the report reads like a scoreboard. The engine writes it home
+     side first (the scoreline has always printed that way), so every column
+     with a club on each side follows the scoreline: mine first at home and on
+     a neutral ground, theirs first away. Each side keeps its own tone and its
+     data attributes wherever it sits. */
+  const mineFirst = mineFirstOfReport(r, clubName);
+  /* Round 1340: the board word is the header meter's (boardMeter, and under No
+     sacking the header's own words below the edge), never a second scale. */
+  const board = boardMeter({ boardConfidence: r.confidence });
+  const boardWord = noSack && board.value < BOARD_EDGE ? 'Lost the board · No sacking' : board.band;
+  const boardTone = BOARD_TONE[board.tone];
   const resultTone = r.won ? 'text-correct' : r.drawn ? 'text-yellow-400' : 'text-destructive';
   const resultWord = r.won ? 'VICTORY' : r.drawn ? 'DRAW' : 'DEFEAT';
   /* Round 507: on a two legged tie the night and the shootout are different
@@ -220,6 +247,65 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
     return () => clearTimeout(t);
   }, [r.home, r.away, r.homeGoals, r.awayGoals]);
 
+  /* Round 1340: each two sided block is built once per side and drawn in the
+     fixture's order (mineFirst above). My scorers keep their beat and theirs
+     theirs, wherever the column sits. */
+  const [scorersFirst, scorersSecond] = inFixtureOrder(mineFirst,
+    <div data-cm-scorer-col="mine">
+      <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1 truncate">{clubName}</div>
+      {r.myScorers.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
+      {r.myScorers.map((sc, i) => (
+        <p key={i} className="text-[11px] text-foreground cm-rise" style={{ animationDelay: revealDelay(i, 0.35, 0.14) }}>
+          ⚽ {scorerLine(sc)}
+          {/* Round 1146: an own goal names one of theirs, and a man the game made up wears his tag here as on every other screen. */}
+          {sc.gen && <MadeUpTag className="ml-1" />}
+          {sc.assist && <span className="text-[9px] text-muted-foreground"> · 🅰️ {sc.assist}</span>}
+        </p>
+      ))}
+    </div>,
+    <div data-cm-scorer-col="theirs">
+      <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1 truncate">{opponent}</div>
+      {r.oppScorers.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
+      {r.oppScorers.map((sc, i) => (
+        <p key={i} className="text-[11px] text-muted-foreground cm-rise" style={{ animationDelay: revealDelay(i, 0.45, 0.14) }}>⚽ {scorerLine(sc)}</p>
+      ))}
+    </div>);
+  const [statsHeadFirst, statsHeadSecond] = inFixtureOrder(mineFirst,
+    <span className="text-primary font-bold normal-case truncate">{clubName}</span>,
+    <span className="font-bold normal-case truncate">{opponent}</span>);
+  const [possFirst, possSecond] = detail ? inFixtureOrder(mineFirst,
+    <span className="text-[10px] font-bold text-primary tabular-nums" data-cm-poss="mine">{detail.stats.possession}%</span>,
+    <span className="text-[10px] font-bold text-muted-foreground tabular-nums" data-cm-poss="theirs">{100 - detail.stats.possession}%</span>) : [null, null];
+  /* The momentum legend sits between two rows in the fixture's order, so it
+     takes the same order; each name keeps its arrow, and the arrow, not the
+     side, says above or below the line. */
+  const [legendFirst, legendSecond] = inFixtureOrder(mineFirst,
+    <span className="truncate" data-cm-legend="mine">▲ {clubName}</span>,
+    <span className="truncate" data-cm-legend="theirs">▼ {opponent}</span>);
+  const [shotsFirst, shotsSecond] = detail ? inFixtureOrder(mineFirst,
+    <span className="text-foreground tabular-nums font-bold" data-cm-shots="mine">{detail.stats.shots} <span className="font-normal text-muted-foreground">({detail.stats.onTarget})</span></span>,
+    <span className="text-muted-foreground tabular-nums font-bold" data-cm-shots="theirs">{detail.stats.oppShots} <span className="font-normal">({detail.stats.oppOnTarget})</span></span>) : [null, null];
+  const [bestFirst, bestSecond] = detail ? inFixtureOrder(mineFirst,
+    <div data-cm-best="mine">
+      <div className="text-[8px] text-muted-foreground uppercase tracking-wider mb-0.5 truncate">{clubName} best</div>
+      {detail.myRatings.slice(0, 3).map((p, i) => (
+        <div key={i} className="flex items-center gap-1 text-[10px]">
+          <span className="text-foreground truncate">{p.name}</span>
+          <span className="ml-auto shrink-0 font-bold tabular-nums text-emerald-400">{p.rating.toFixed(1)}</span>
+        </div>
+      ))}
+    </div>,
+    <div data-cm-best="theirs">
+      <div className="text-[8px] text-muted-foreground uppercase tracking-wider mb-0.5 truncate">{opponent} best</div>
+      {(detail.oppRatings ?? []).slice(0, 3).map((p, i) => (
+        <div key={i} className="flex items-center gap-1 text-[10px]">
+          <span className="text-muted-foreground truncate">{p.name}</span>
+          {p.gen && <MadeUpTag />}
+          <span className="ml-auto shrink-0 font-bold tabular-nums text-muted-foreground">{p.rating.toFixed(1)}</span>
+        </div>
+      ))}
+    </div>) : [null, null];
+
   return (
     <div className="max-w-md mx-auto space-y-4">
       <CelebrationStyles />
@@ -302,25 +388,8 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
 
         {(r.myScorers.length > 0 || r.oppScorers.length > 0) && (
           <div className="grid grid-cols-2 gap-3 mt-4">
-            <div>
-              <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1 truncate">{clubName}</div>
-              {r.myScorers.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
-              {r.myScorers.map((sc, i) => (
-                <p key={i} className="text-[11px] text-foreground cm-rise" style={{ animationDelay: revealDelay(i, 0.35, 0.14) }}>
-                  ⚽ {scorerLine(sc)}
-                  {/* Round 1146: an own goal names one of theirs, and a man the game made up wears his tag here as on every other screen. */}
-                  {sc.gen && <MadeUpTag className="ml-1" />}
-                  {sc.assist && <span className="text-[9px] text-muted-foreground"> · 🅰️ {sc.assist}</span>}
-                </p>
-              ))}
-            </div>
-            <div>
-              <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1 truncate">{opponent}</div>
-              {r.oppScorers.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
-              {r.oppScorers.map((sc, i) => (
-                <p key={i} className="text-[11px] text-muted-foreground cm-rise" style={{ animationDelay: revealDelay(i, 0.45, 0.14) }}>⚽ {scorerLine(sc)}</p>
-              ))}
-            </div>
+            {scorersFirst}
+            {scorersSecond}
           </div>
         )}
 
@@ -385,11 +454,11 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
         {detail && (
           <div className="mt-4 bg-surface-2 border border-border/60 rounded-xl p-3">
             <div className="flex items-center justify-between gap-2 text-[9px] text-muted-foreground uppercase tracking-wider mb-2">
-              <span className="text-primary font-bold normal-case truncate">{clubName}</span>
+              {statsHeadFirst}
               <span className="shrink-0">Match stats</span>
-              <span className="font-bold normal-case truncate">{opponent}</span>
+              {statsHeadSecond}
             </div>
-            <StatsBlock stats={detail.stats} counts={detailCounts} />
+            <StatsBlock stats={detail.stats} counts={detailCounts} mineFirst={mineFirst} />
             {/* Round 169: momentum as one continuous flow, us above the
                 line, them below, like his match app models draw it.
                 Round 178: possession and shots ride ON the chart now, the
@@ -399,17 +468,17 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
                   sign and both under the name of the club that had it, so
                   they read as one hundred split two ways. */}
               <div className="flex items-center justify-between gap-2 mb-1">
-                <span className="text-[10px] font-bold text-primary tabular-nums" data-cm-poss="mine">{detail.stats.possession}%</span>
+                {possFirst}
                 <span className="text-[9px] text-muted-foreground uppercase tracking-wider shrink-0">Balance of play</span>
-                <span className="text-[10px] font-bold text-muted-foreground tabular-nums" data-cm-poss="theirs">{100 - detail.stats.possession}%</span>
+                {possSecond}
               </div>
               <MomentumArea momentum={detail.momentum} />
               {/* Which half of the chart belongs to whom. The arrows do the
                   work: left and right would read as time, and time is the row
                   underneath. */}
               <div className="flex items-center justify-between gap-2 text-[8px] text-muted-foreground/80 uppercase tracking-wider">
-                <span className="truncate">▲ {clubName}</span>
-                <span className="truncate">▼ {opponent}</span>
+                {legendFirst}
+                {legendSecond}
               </div>
               {/* Round 670: a match with extra time draws twelve ten minute
                   buckets, so its axis runs to 120. */}
@@ -419,9 +488,9 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
                   : <><span>0'</span><span>45'</span><span>90'</span></>}
               </div>
               <div className="flex items-center justify-between text-[9px] mt-0.5">
-                <span className="text-foreground tabular-nums font-bold">{detail.stats.shots} <span className="font-normal text-muted-foreground">({detail.stats.onTarget})</span></span>
+                {shotsFirst}
                 <span className="text-muted-foreground uppercase tracking-wider text-[8px]">Shots (on target)</span>
-                <span className="text-muted-foreground tabular-nums font-bold">{detail.stats.oppShots} <span className="font-normal">({detail.stats.oppOnTarget})</span></span>
+                {shotsSecond}
               </div>
             </div>
           </div>
@@ -429,7 +498,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
 
         {/* Round 714: the event timeline, both clubs either side of the clock. */}
         {detail && detail.timeline.length > 0 && (
-          <MatchTimeline detail={detail} clubName={clubName} opponent={opponent} />
+          <MatchTimeline detail={detail} clubName={clubName} opponent={opponent} mineFirst={mineFirst} />
         )}
 
         {/* Round 157: the man of the match, and everyone's number behind him. */}
@@ -447,25 +516,8 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
                 real eleven; thin worlds keep the old one-liner. */}
             {detail.oppRatings && detail.oppRatings.length > 0 ? (
               <div className="mt-2 grid grid-cols-2 gap-2">
-                <div>
-                  <div className="text-[8px] text-muted-foreground uppercase tracking-wider mb-0.5 truncate">{clubName} best</div>
-                  {detail.myRatings.slice(0, 3).map((p, i) => (
-                    <div key={i} className="flex items-center gap-1 text-[10px]">
-                      <span className="text-foreground truncate">{p.name}</span>
-                      <span className="ml-auto shrink-0 font-bold tabular-nums text-emerald-400">{p.rating.toFixed(1)}</span>
-                    </div>
-                  ))}
-                </div>
-                <div>
-                  <div className="text-[8px] text-muted-foreground uppercase tracking-wider mb-0.5 truncate">{opponent} best</div>
-                  {detail.oppRatings.slice(0, 3).map((p, i) => (
-                    <div key={i} className="flex items-center gap-1 text-[10px]">
-                      <span className="text-muted-foreground truncate">{p.name}</span>
-                      {p.gen && <MadeUpTag />}
-                      <span className="ml-auto shrink-0 font-bold tabular-nums text-muted-foreground">{p.rating.toFixed(1)}</span>
-                    </div>
-                  ))}
-                </div>
+                {bestFirst}
+                {bestSecond}
               </div>
             ) : detail.oppBest ? (
               <div className="text-[10px] text-muted-foreground mt-1">{opponent}’s danger man on the day: {detail.oppBest}</div>
@@ -533,16 +585,13 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
           </div>
           <div className="text-center">
             <div className="text-[9px] text-muted-foreground uppercase tracking-wider">Board</div>
-            <div className={cn(
-              'text-lg font-bold font-display',
-              r.confidence >= 60 ? 'text-emerald-400' : r.confidence >= 30 ? 'text-yellow-400' : 'text-red-400',
-            )}>
+            <div className={cn('text-lg font-bold font-display', boardTone)}>
               {Math.round(r.confidence)}
               <span className={cn('text-[10px] font-normal ml-1', verdict ? 'cm-slam' : 'opacity-0', r.confidenceDelta >= 0 ? 'text-emerald-400' : 'text-red-400')}>
                 ({r.confidenceDelta >= 0 ? '+' : ''}{r.confidenceDelta})
               </span>
             </div>
-            <div className="text-[9px] text-muted-foreground">{confidenceLabel(r.confidence)}</div>
+            <div className={cn('text-[9px]', boardTone)} data-cm-board-word={board.tone}>{boardWord}</div>
           </div>
         </div>
 
