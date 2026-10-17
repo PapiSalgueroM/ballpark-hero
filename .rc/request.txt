@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+diff-base: git worktree add -q /tmp/b1 d8aaa4cb && BASE_ROOT=/tmp/b1 node scripts/simCmDifficulty.mjs
+c-nojoin: CM_DIFF_CONTROL=nojoin node scripts/simCmDifficulty.mjs
+c-helpdrift: CM_DIFF_CONTROL=helpdrift node scripts/simCmDifficulty.mjs
+unit: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts src/test/clubManagerDifficultyPick.test.tsx --testTimeout=300000 --hookTimeout=120000
