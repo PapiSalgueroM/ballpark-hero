@@ -160,7 +160,12 @@ function findWhistleMaterial() {
 const stageOf = (container: HTMLElement) => container.querySelector('[data-cm-live-stage]')!.getAttribute('data-cm-live-stage');
 const scoreAt = (career: CareerState, minute: number) => ['me', 'opp'].map(side => liveFeed(career.live!)
   .filter(e => e.kind === 'goal' && e.side === side && e.minute <= minute).length).join(' - ');
-const readScore = (container: HTMLElement) => container.querySelector('[data-cm-live-score]')!.textContent!.trim();
+/* Round 1340: the score is drawn home side first, so it is read by side ("me - opp") off its two marked digits,
+   which the strip and the interval card both carry, and every assertion keeps its meaning at any venue. */
+const readScore = (container: HTMLElement) => {
+  const score = container.querySelector('[data-cm-live-score]')!;
+  return `${score.querySelector('[data-cm-score-of="me"]')!.textContent!.trim()} - ${score.querySelector('[data-cm-score-of="opp"]')!.textContent!.trim()}`;
+};
 /* Round 781: a line's place on the clock (45+3 sits at 48 here, inside the
    first half's board), the board a period's clock runs on past its last
    minute, and the score off every goal at or before a clock place. */
@@ -1789,14 +1794,41 @@ describe('Match mode', () => {
     await step(4000);
     const line = mounted.container.querySelector('[data-cm-live-statline]')!.textContent!;
     const full = mounted.container.querySelector('[data-cm-live-stats]')!;
+    /* Round 1340: both read home side first, so the line and the full stats are compared in the order drawn. */
     const cell = (label: string) => [...full.querySelectorAll(`[data-cm-live-stat="${label}"] span`)].map(s => s.textContent);
-    const [shotsMine, , shotsTheirs] = cell('Shots (on target)');
-    const [xgMine, , xgTheirs] = cell('xG');
-    expect(line).toContain(`Poss ${full.querySelector('[data-cm-live-poss="mine"]')!.textContent} ${full.querySelector('[data-cm-live-poss="theirs"]')!.textContent}`);
-    expect(line).toContain(`Shots ${shotsMine} ${shotsTheirs}`);
-    expect(line).toContain(`xG ${xgMine} ${xgTheirs}`);
+    const [shotsFirst, , shotsSecond] = cell('Shots (on target)');
+    const [xgFirst, , xgSecond] = cell('xG');
+    const possPair = [...full.querySelectorAll('[data-cm-live-poss]')].map(s => s.textContent).join(' ');
+    expect(line).toContain(`Poss ${possPair}`);
+    expect(line).toContain(`Shots ${shotsFirst} ${shotsSecond}`);
+    expect(line).toContain(`xG ${xgFirst} ${xgSecond}`);
     /* And the full stats are in the markup the whole time, panel or no panel. */
     expect(mounted.container.querySelectorAll('[data-cm-live-stats]').length).toBe(1);
+  }, 60000);
+
+  it('away from home the score, the names either side of it and the stats read home side first (Round 1340)', async () => {
+    const career = quiet();
+    career.live!.home = false;
+    const mounted = mount(career);
+    await step(400);
+    const score = mounted.container.querySelector('[data-cm-live-score]')!;
+    const digits = [...score.querySelectorAll('[data-cm-score-of]')].map(d => d.getAttribute('data-cm-score-of'));
+    expect(digits).toEqual(['opp', 'me']);
+    expect(score.textContent!.trim()).toBe(`${score.querySelector('[data-cm-score-of="opp"]')!.textContent} - ${score.querySelector('[data-cm-score-of="me"]')!.textContent}`);
+    const strip = score.parentElement!;
+    const names = [...strip.children].filter(el => el !== score).map(el => el.textContent);
+    expect(names).toEqual([career.live!.opponent, career.clubName]);
+    expect(strip.children[strip.children.length - 1].className).toContain('text-primary');
+    const full = mounted.container.querySelector('[data-cm-live-stats]')!;
+    expect([...full.querySelectorAll('[data-cm-live-poss]')].map(s => s.getAttribute('data-cm-live-poss'))).toEqual(['theirs', 'mine']);
+    for (const cell of full.querySelectorAll('[data-cm-live-stat]')) {
+      expect([...cell.querySelectorAll('[data-cm-live-stat-n]')].map(s => s.getAttribute('data-cm-live-stat-n'))).toEqual(['theirs', 'mine']);
+    }
+    /* The line under the pitch: their number first, mine the bold one. */
+    const line = mounted.container.querySelector('[data-cm-live-statline]')!;
+    const possBold = line.querySelector('b')!.textContent;
+    expect(possBold).toBe(full.querySelector('[data-cm-live-poss="mine"]')!.textContent);
+    expect(line.textContent).toContain(`Poss ${full.querySelector('[data-cm-live-poss="theirs"]')!.textContent} ${possBold}`);
   }, 60000);
 
   it('level neighbours take a row each, and a wall shows numbers', () => {

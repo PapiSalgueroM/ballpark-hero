@@ -493,7 +493,10 @@ for (let step = 0; step < MAX_STEPS; step++) {
   if (where === 'HALF TIME' || (where === 'MATCH LIVE' && /Second half/i.test(t))) {
     halftimes++;
     const score = (t.match(/(\d+)-(\d+)/) || []);
-    lastHt = { my: Number(score[1]), opp: Number(score[2]) };
+    /* Round 1340: the half time card reads home side first, like a scoreboard, so away from home its first
+       number is theirs. The card's own venue word ("Half time · <competition> · away") says which. */
+    const htAway = /Half time\s*·[^\n]*·\s*away\b/i.test(t);
+    lastHt = htAway ? { my: Number(score[2]), opp: Number(score[1]) } : { my: Number(score[1]), opp: Number(score[2]) };
     if (!Number.isFinite(lastHt.my) || !Number.isFinite(lastHt.opp)) {
       note('BROKEN ', 'the half time screen showed no readable score');
     }
@@ -553,10 +556,10 @@ for (let step = 0; step < MAX_STEPS; step++) {
 
   if (where === 'FULL TIME') {
     fullTimes++;
-    /* The two screens are oriented differently and comparing them naively is
-       wrong. The half time screen always puts YOUR club on the left, because
-       it is your dressing room. The full time report is a scoreboard, so it
-       prints home team first. Away at Old Trafford that reads "Brighton 0-1
+    /* Before Round 1340 the two screens were oriented differently. The half
+       time screen put YOUR club on the left, as your dressing room. The full
+       time report is a scoreboard, so it prints home team first (since Round
+       1340 the half time card does too, and is read by its venue word above). Away at Old Trafford that reads "Brighton 0-1
        Manchester United" at the break and "Manchester United 2 - 0 Brighton"
        at the end, which is 0-1 becoming 0-2 and not a score going backwards.
        The first version of this check reported exactly that, twice, and it was

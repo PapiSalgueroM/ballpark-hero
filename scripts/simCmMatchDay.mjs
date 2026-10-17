@@ -20,19 +20,26 @@
         first number is the home side's share.
      3) The timeline: its header and every row's first cell are the home side's; no name span is cut (truncate);
         every (P) and (O.G) mark sits outside the name span and right after it (Round 1146's promise).
+     4) Live and half time: every fifth league match of the fleet is also kicked off live and rendered in the first
+        half, at the interval, in the second half and at the whistle. The strip's names, the score's digits (by
+        data-cm-score-of), the interval card, the stats (header, possession, every cell by data-cm-live-stat-n) and
+        the line under the pitch are home side first, and HalftimeScreen rendered alone prints its names and score
+        in the same order.
      7) A home match reads as before: on every home and neutral match the card's visible text, in document order,
         equals the card at MATCHDAY_BASE (the round's files as they were at the base, everything else this tree's),
-        with only the board word masked (it now says what the header's meter says).
+        with only the board word masked (it now says what the header's meter says); and every live frame of a home
+        match, and the dressing room alone, reads exactly as at the base.
 
    Negative controls (MATCHDAY_CONTROL=...), each asserting its anchor first, printing how often it fired:
      neutralaway  myClubFirst answers false for a neutral ground. Section 1 must go red on every neutral match.
-     oldorder     myClubFirst and mineFirstOfReport answer true always, the screens before this round. Sections 2
-                  and 3 must go red on every away match and stay green on home and neutral ones.
+     oldorder     myClubFirst and mineFirstOfReport answer true always, the screens before this round. Sections 2,
+                  3 and 4 must go red on away matches and stay green on home and neutral ones.
      truncate     the timeline's name span is cut again. Section 3 must go red.
      homeflip     my club is drawn second at home. Section 7 must go red.
 
    Exit codes: 0 green, 1 red (or a control that fired), 2 could not run (a fleet under its floors: 100 away,
-   100 home and 5 neutral matches; widen the fleet, never lower a floor), 3 a control that did not fire.
+   100 home and 5 neutral matches, 40 live renders; widen the fleet, never lower a floor), 3 a control that did
+   not fire.
    Green is the closing summary line and the real exit code.
 
    Run: node scripts/simCmMatchDay.mjs     (MATCHDAY_BASE=<commit> overrides the base, default d8aaa4cb)
@@ -49,7 +56,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.MATCHDAY_CONTROL || '';
-const CONTROLS = { neutralaway: [1], oldorder: [2, 3], truncate: [3], homeflip: [7] };
+const CONTROLS = { neutralaway: [1], oldorder: [2, 3, 4], truncate: [3], homeflip: [7] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`MATCHDAY_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 const BASE = process.env.MATCHDAY_BASE || 'd8aaa4cb';
 const lf = s => s.replaceAll('\r\n', '\n');
@@ -149,6 +156,10 @@ export * as cm from '@/lib/clubManager';
 export * as order from '@/lib/cmMatchDisplay';
 export { MatchReportCard as HeadCard } from '@/components/club-manager/MatchReportCard';
 export { MatchReportCard as BaseCard } from '${baseCopies['components/club-manager/MatchReportCard']}';
+export { LiveSimScreen as HeadLive } from '@/components/club-manager/LiveSimScreen';
+export { LiveSimScreen as BaseLive } from '${baseCopies['components/club-manager/LiveSimScreen']}';
+export { HalftimeScreen as HeadHalf } from '@/components/club-manager/HalftimeScreen';
+export { HalftimeScreen as BaseHalf } from '${baseCopies['components/club-manager/HalftimeScreen']}';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 export const render = (Component, props) => renderToStaticMarkup(React.createElement(Component, props));
@@ -165,7 +176,10 @@ try {
 }
 const store = new Map();
 globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
-const { cm, order, HeadCard, BaseCard, render } = createRequire(import.meta.url)(BUNDLE);
+const { cm, order, HeadCard, BaseCard, HeadLive, BaseLive, HeadHalf, BaseHalf, render } = createRequire(import.meta.url)(BUNDLE);
+/* Round 832: a historic era's squads load with the era, so the fleet fetches them all first (simExtraTime does the
+   same); without it Everton 2005-06 cannot start. */
+await cm.ensureAllEraRosters();
 
 /* ---- a seeded stream per career and per match ---- */
 const HOUSE_RANDOM = Math.random;
@@ -189,9 +203,36 @@ const FLEET = [['Liverpool', undefined], ['Celta Vigo', undefined], ['OB', undef
 const NEUTRAL_WALK = [['Real Madrid', undefined], ['Man City', undefined], ['Bayern Munich', undefined], ['Barcelona', 'era2015'],
   ['Barcelona', 'era2005'], ['PSG', undefined], ['Inter', undefined], ['Arsenal', undefined]];
 const matches = [];
+const lives = [];
 let unpaired = 0;
 let careersStarted = 0;
-function playSeason(club, era, seed, keep) {
+/* Every fifth league match of the fleet is also kicked off live, from the same state on a seed of its own (the
+   fleet's own walk goes on from its quick sim): a frame in the first half, the interval, the second half and the
+   whistle, the way simCmMatchCentre builds its live screens. */
+function liveFrames(pre, club, fxHome, seed) {
+  return withSeed(seed, () => {
+    const res = cm.playNextEntry(pre);
+    if (res.kind !== 'halftime' || !res.state.live) return null;
+    const ht = res.state;
+    const atInterval = structuredClone(ht);
+    atInterval.live.minute = 45;
+    const s2 = cm.startSecondHalf(ht);
+    if (!s2) return null;
+    const fin = cm.resumeMatch(s2);
+    if (!fin.report) return null;
+    return {
+      club, fxHome, report: fin.report,
+      frames: [
+        { stage: 'first', career: cm.markLiveMinute(ht, 20) },
+        { stage: 'interval', career: atInterval },
+        { stage: 'second', career: cm.markLiveMinute(s2, 70) },
+        { stage: 'done', career: fin.state, report: fin.report },
+      ],
+    };
+  });
+}
+function playSeason(club, era, seed, keep, live = false) {
+  let leagueSeen = 0;
   const s0 = withSeed(seed * 7919 + 17, () => { try { return cm.startCareer(club, era); } catch { return null; } });
   if (!s0 || s0.clubName !== club) return false;
   careersStarted += 1;
@@ -205,7 +246,13 @@ function playSeason(club, era, seed, keep) {
       const r = res.report;
       const opp = r.home === club ? r.away : r.home;
       if (!fx || fx.kind !== 'match' || fx.opponent !== opp) unpaired += 1;
-      else if (keep(fx.home)) matches.push({ club, era: era ?? 'now', seed, fxHome: fx.home, report: r });
+      else if (keep(fx.home)) {
+        matches.push({ club, era: era ?? 'now', seed, fxHome: fx.home, report: r });
+        if (live && fx.competition === 'league' && leagueSeen++ % 5 === 0) {
+          const L = liveFrames(s, club, fx.home, seed * 7121 + guard * 13 + 3);
+          if (L) lives.push({ ...L, era: era ?? 'now', seed });
+        }
+      }
     }
     s = res.state;
     if (res.kind === 'seasonOver' || s.sacked) break;
@@ -215,7 +262,7 @@ function playSeason(club, era, seed, keep) {
 const started = Date.now();
 for (const [club, era] of FLEET) {
   for (let seed = 0; seed <= 4; seed++) {
-    if (!playSeason(club, era, seed, () => true)) cannotRun(`${club} (${era ?? 'now'}) did not start a career`);
+    if (!playSeason(club, era, seed, () => true, true)) cannotRun(`${club} (${era ?? 'now'}) did not start a career`);
   }
 }
 const neutralCount = () => matches.filter(m => m.fxHome === null).length;
@@ -231,7 +278,9 @@ const ctxOf = m => `${m.club} ${m.era} seed ${m.seed}: ${m.report.home} ${m.repo
 const counts = { home: 0, away: 0, neutral: 0 };
 for (const m of matches) counts[venueOf(m)] += 1;
 console.log(`fleet: ${careersStarted} careers, ${matches.length} matches (${counts.home} home, ${counts.away} away, ${counts.neutral} neutral), ${unpaired} reports with no fixture read before them, ${((Date.now() - started) / 1000).toFixed(0)}s`);
-if (counts.away < 100 || counts.home < 100 || counts.neutral < 5) cannotRun(`the fleet is under its floors (100 away, 100 home, 5 neutral): widen it, never lower a floor`);
+const liveRenders = lives.length * 4;
+console.log(`live: ${lives.length} league matches kicked off live (${lives.filter(L => L.fxHome === false).length} away), ${liveRenders} live renders`);
+if (counts.away < 100 || counts.home < 100 || counts.neutral < 5 || liveRenders < 40) cannotRun(`the fleet is under its floors (100 away, 100 home, 5 neutral, 40 live renders): widen it, never lower a floor`);
 /* A report whose opponent is not the one nextFixture named before it (a draw made that same week) cannot be tied
    to a venue, so it is left out and counted; a fleet where that is common cannot judge section 1. */
 if (unpaired > matches.length * 0.1) cannotRun(`${unpaired} reports could not be paired with the fixture read before them`);
@@ -380,6 +429,62 @@ for (const m of matches) {
 console.log(`   ${redBy[3]?.checked ?? 0} timelines, ${rowsRead} rows, ${namesRead} names, ${marksRead} marks; red: ${redBy[3]?.home ?? 0} home, ${redBy[3]?.away ?? 0} away, ${redBy[3]?.neutral ?? 0} neutral`);
 if ((redBy[3]?.checked ?? 0) < 100 || marksRead < 1) cannotRun(`only ${redBy[3]?.checked ?? 0} timelines and ${marksRead} marks to read`);
 
+/* ---------- 4. live and half time ---------- */
+console.log('4) Live and half time: the strip, the score\'s digits, the interval card, the stats and the line under the pitch home side first');
+const noop = () => {};
+const liveProps = (L, f) => ({
+  career: f.career, live: f.report ? null : f.career.live, report: f.report ?? null, clubColor: '#ffffff',
+  onSub: noop, onShape: noop, onTalk: noop, onSecondHalf: noop, onExit: noop,
+});
+const halfProps = career => ({ career, onSub: noop, onShape: noop, onTalk: noop, onSecondHalf: noop });
+const stagesSeen = { first: 0, interval: 0, second: 0, done: 0 };
+for (const L of lives) {
+  const me = L.fxHome !== false;
+  const opp = L.report.home === L.club ? L.report.away : L.report.home;
+  const want = me ? [L.club, opp] : [opp, L.club];
+  const firstSide = me ? 'me' : 'opp';
+  const m = { club: L.club, era: L.era, seed: L.seed, fxHome: L.fxHome, report: L.report };
+  const p = [];
+  if (L.frames[1].career.live.home !== L.fxHome) p.push(`the live match's home is ${L.frames[1].career.live.home}, the fixture said ${L.fxHome}`);
+  for (const f of L.frames) {
+    const html = render(HeadLive, liveProps(L, f));
+    f.html = html;
+    const stage = /data-cm-live-stage="([^"]*)"/.exec(html)?.[1];
+    if (stage !== f.stage) { p.push(`the ${f.stage} frame rendered as ${stage}`); continue; }
+    stagesSeen[stage] += 1;
+    const digits = attrs(html.slice(html.indexOf('data-cm-live-score')), 'data-cm-score-of').slice(0, 2);
+    if (!same(digits, [firstSide, me ? 'opp' : 'me'])) p.push(`at ${stage} the score's digits read ${digits.join(' then ')}`);
+    if (stage === 'interval') {
+      const names = /([^<>]*)<\/span> vs <span[^>]*>([^<]*)</.exec(html);
+      if (!names || !same([unescape(names[1]), unescape(names[2])], want)) p.push(`the interval card's names read ${names?.slice(1).join(' v ')}`);
+      const half = /<span class="[^"]*">([^<]*)<\/span><span class="[^"]*text-3xl[^"]*">(\d+)-(\d+)<\/span><span class="[^"]*">([^<]*)<\/span>/.exec(html);
+      const live = f.career.live;
+      const goals = me ? [live.myGoals, live.oppGoals] : [live.oppGoals, live.myGoals];
+      if (!half || !same([unescape(half[1]), unescape(half[4])], want) || !same([Number(half[2]), Number(half[3])], goals)) p.push(`the half time card reads ${half ? `${half[1]} ${half[2]}-${half[3]} ${half[4]}` : 'nothing'}`);
+    } else {
+      const strip = /<div class="cm-strip-score"><div[^>]*>([^<]*)<\/div>[\s\S]*?<\/div><div[^>]*>([^<]*)<\/div>/.exec(html);
+      if (!strip || !same([unescape(strip[1]), unescape(strip[2])], want)) p.push(`at ${stage} the strip reads ${strip ? `${strip[1]} v ${strip[2]}` : 'nothing'}`);
+      const line = html.slice(html.indexOf('data-cm-live-statline'));
+      if (html.includes('data-cm-live-statline') && /<span>Poss <b/.test(line) !== me) p.push(`at ${stage} the line under the pitch is not home side first`);
+    }
+    if (html.includes('data-cm-live-stats')) {
+      const head = headerPair(html, 'Balance of play');
+      if (!same(head, want)) p.push(`at ${stage} the stats header reads ${head?.join(' v ')}`);
+      const poss = attrs(html, 'data-cm-live-poss');
+      if (poss[0] !== sideWord(me)) p.push(`at ${stage} the possession pair is not home side first`);
+      for (const cell of html.split(/(?=data-cm-live-stat=")/).slice(1)) {
+        if (attrs(cell, 'data-cm-live-stat-n')[0] !== sideWord(me)) { p.push(`at ${stage} a stat cell is not home side first`); break; }
+      }
+    }
+  }
+  /* The dressing room rendered alone at the interval. */
+  const alone = render(HeadHalf, halfProps(L.frames[1].career));
+  const half = /<span class="[^"]*">([^<]*)<\/span><span class="[^"]*text-3xl[^"]*">(\d+)-(\d+)<\/span><span class="[^"]*">([^<]*)<\/span>/.exec(alone);
+  if (!half || !same([unescape(half[1]), unescape(half[4])], want)) p.push(`the half time screen alone reads ${half ? `${half[1]} v ${half[4]}` : 'nothing'}`);
+  judge(4, m, p);
+}
+console.log(`   ${redBy[4]?.checked ?? 0} live matches (${Object.entries(stagesSeen).map(([k, v]) => `${v} ${k}`).join(', ')}); red: ${redBy[4]?.home ?? 0} home, ${redBy[4]?.away ?? 0} away, ${redBy[4]?.neutral ?? 0} neutral`);
+
 /* ---------- 7. a home match reads as before ---------- */
 console.log('7) A home or neutral match: the card\'s visible text equals the base\'s, the board word masked');
 const maskBoard = html => html.replace(/(>Board<\/div><div[^>]*>[\s\S]*?<\/span><\/div><div[^>]*>)[^<]*(<\/div>)/, '$1#$2');
@@ -395,7 +500,26 @@ for (const m of matches) {
   }
   judge(7, m, p);
 }
-console.log(`   ${redBy[7].checked} home and neutral cards compared with ${BASE}; red: ${redBy[7].home} home, ${redBy[7].neutral} neutral`);
+/* And every frame of a home match kicked off live, the viewer and the dressing room alone. */
+let liveCompared = 0;
+for (const L of lives) {
+  if (L.fxHome === false) continue;
+  const m = { club: L.club, era: L.era, seed: L.seed, fxHome: L.fxHome, report: L.report };
+  const p = [];
+  const pairs = [...L.frames.map(f => [f.html, render(BaseLive, liveProps(L, f)), f.stage]),
+    [render(HeadHalf, halfProps(L.frames[1].career)), render(BaseHalf, halfProps(L.frames[1].career)), 'half time alone']];
+  for (const [headHtml, baseHtml, stage] of pairs) {
+    liveCompared += 1;
+    const head = visible(headHtml);
+    const base = visible(baseHtml);
+    if (head === base) continue;
+    let i = 0;
+    while (i < head.length && head[i] === base[i]) i += 1;
+    p.push(`at ${stage} the text differs from the base at "${head.slice(Math.max(0, i - 30), i + 40)}" against "${base.slice(Math.max(0, i - 30), i + 40)}"`);
+  }
+  judge(7, m, p);
+}
+console.log(`   ${redBy[7].checked} home and neutral matches compared with ${BASE} (${liveCompared} live screens among them); red: ${redBy[7].home} home, ${redBy[7].neutral} neutral`);
 
 /* ---------- the verdict ---------- */
 const redSections = [...failures.keys()].sort((a, b) => a - b);

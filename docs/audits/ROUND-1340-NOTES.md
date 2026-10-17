@@ -20,6 +20,17 @@ The brief is C:/Users/antho/dukb-handoff/2026-10-10/briefs/brief-1340.md. This f
   match as they were), simCmMatchCentre statBars (by attribute inside each bar), managerScorerMarks (finds the name by
   data-cm-tl-name). New scripts/simCmMatchDay.mjs sections 1, 2, 3 and 7 with controls neutralaway, oldorder,
   truncate and homeflip.
+- a3. Live and half time. LiveSimScreen: mineFirst beside opponent (liveNow.home while live, the report's own order at
+  the whistle); the score digits, the strip, the folded card, the interval card (whose two numbers now carry
+  data-cm-score-of like the strip's), LiveStats (header, possession, the bar, whose inline transition is now a class
+  with motion-reduce:transition-none) and every StatCell (each number marked data-cm-live-stat-n mine or theirs) and
+  the line under the pitch, all home side first, my club in green wherever it sits. LiveMatchHelp gains the order
+  bullet and an away worked example. HalftimeScreen's score card in the same order, my name in green. Repoints:
+  simCmMatchCentre liveCells (by data-cm-live-stat-n), clubManagerVarScreen snap and the readScore of
+  liveSimMotion and pitchOwnGoal (read "me - opp" off the two marked digits), liveSimMotion's statline test (in the
+  order drawn) plus a new away case, managerHalftimeLineups (the venue's order), playClubManager (reads the half time
+  card's venue word). simCmMatchDay section 4 and the live half of section 7; the fleet now loads the era squads
+  first (ensureAllEraRosters), which is why the a2 run could not start Everton 2005-06.
 - confidenceLabel (src/lib/clubManager.ts) has no caller in src after a2. It is dead code; the export stays, because
   clubManager.ts is not this round's file.
 

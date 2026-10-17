@@ -226,9 +226,15 @@ function statBars(html) {
 /** Every cell of the live strip: label to the two values it prints. */
 function liveCells(html) {
   const out = new Map();
-  const rx = /data-cm-live-stat="([^"]*)"[^>]*><span[^>]*>([^<]*)<\/span><span[^>]*>[^<]*<\/span><span[^>]*>([^<]*)<\/span>/g;
+  /* Round 1340: a cell draws its two numbers home side first, so each is read by its own attribute
+     (data-cm-live-stat-n), never by which comes first. */
+  const rx = /data-cm-live-stat="([^"]*)"[^>]*>(<span[^>]*>[^<]*<\/span><span[^>]*>[^<]*<\/span><span[^>]*>[^<]*<\/span>)/g;
   let m;
-  while ((m = rx.exec(html))) out.set(unescape(m[1]), { mine: m[2].trim(), theirs: m[3].trim() });
+  while ((m = rx.exec(html))) {
+    const mine = /data-cm-live-stat-n="mine"[^>]*>([^<]*)</.exec(m[2]);
+    const theirs = /data-cm-live-stat-n="theirs"[^>]*>([^<]*)</.exec(m[2]);
+    if (mine && theirs) out.set(unescape(m[1]), { mine: mine[1].trim(), theirs: theirs[1].trim() });
+  }
   return out;
 }
 /** The timeline rows on the card, in order. */

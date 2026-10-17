@@ -142,13 +142,16 @@ type Frame = {
   /** The small line under the pitch (chances, saves, corners, throw ins, fouls). */
   line: string;
 };
+const scoreOf = (el: Element) => `${el.querySelector('[data-cm-score-of="me"]')!.textContent!.trim()} - ${el.querySelector('[data-cm-score-of="opp"]')!.textContent!.trim()}`;
 function snap(c: HTMLElement, ms: number): Frame {
   const root = c.querySelector('[data-cm-live-stage]')!;
   const pitch = c.querySelector('[data-cm-live-pitch]');
   const card = c.querySelector('[data-cm-var]');
   return {
     ms, stage: root.getAttribute('data-cm-live-stage')!, minute: Number(root.getAttribute('data-cm-live-minute')), plus: Number(root.getAttribute('data-cm-live-plus') ?? 0),
-    score: c.querySelector('[data-cm-live-score]')!.textContent!.trim(),
+    /* Round 1340: the score is drawn home side first, so it is read by side ("me - opp") from its two marked digits,
+       which the strip and the interval card both carry, and every comparison keeps its meaning at any venue. */
+    score: scoreOf(c.querySelector('[data-cm-live-score]')!),
     motion: pitch?.getAttribute('data-cm-motion') ?? null, phase: pitch?.getAttribute('data-cm-motion-phase') ?? null,
     net: !!c.querySelector('[data-cm-net="goal"]'), ball: c.querySelector('[data-cm-ball]')?.getAttribute('style') ?? null,
     netAt: c.querySelector('.cm-live-net--top[data-cm-net="goal"]') ? 'top' : c.querySelector('.cm-live-net--bottom[data-cm-net="goal"]') ? 'bottom' : null,
