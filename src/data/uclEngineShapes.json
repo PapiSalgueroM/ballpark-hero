@@ -13,7 +13,8 @@
       "awayGoals": false,
       "realId": "league-phase",
       "matchesReal": false,
-      "line": "Eight groups of four into the quarter-finals, two legged ties, no away goals rule. A stand in: the real 2026-27 competition runs thirty six clubs in one league table, which the engine does not play yet."
+      "watched": "l36",
+      "line": "Eight groups of four into the quarter-finals, two legged ties, no away goals rule. A stand in: the real 2026-27 competition runs thirty six clubs in one league table, which your own club does not play yet. The Champions League you follow from outside it plays the real format."
     },
     {
       "era": {
@@ -27,6 +28,7 @@
       "awayGoals": true,
       "realId": "eight-groups-r16",
       "matchesReal": true,
+      "watched": "g8",
       "line": "Eight groups of four into the round of 16, two legged ties, away goals count double. That is the real 2020-21 format."
     },
     {
@@ -41,6 +43,7 @@
       "awayGoals": true,
       "realId": "eight-groups-r16",
       "matchesReal": true,
+      "watched": "g8",
       "line": "Eight groups of four into the round of 16, two legged ties, away goals count double. That is the real 2015-16 format."
     },
     {
@@ -55,6 +58,7 @@
       "awayGoals": true,
       "realId": "eight-groups-r16",
       "matchesReal": true,
+      "watched": "g8",
       "line": "Eight groups of four into the round of 16, two legged ties, away goals count double. That is the real 2010-11 format."
     },
     {
@@ -69,6 +73,7 @@
       "awayGoals": true,
       "realId": "eight-groups-r16",
       "matchesReal": true,
+      "watched": "g8",
       "line": "Eight groups of four into the round of 16, two legged ties, away goals count double. That is the real 2005-06 format."
     }
   ]
