@@ -21,7 +21,9 @@ const METHOD = '862de03d5e912ecccade0f64d3840f23fa7f6992';
 const sha = value => createHash('sha256').update(value).digest('hex');
 const lf = value => value.toString().replaceAll('\r\n', '\n');
 const git = args => execFileSync('git', args, { cwd: ROOT, maxBuffer: 128 * 1024 * 1024 });
-const read = relative => fs.readFileSync(path.join(ROOT, relative));
+/* Round BII (Release BI join): normalised on read, so simHarnessAnchors sees the calendar anchors below match on a
+   CRLF checkout too; every hash this file compares is of the same normalised text (the copies at the copied app check). */
+const read = relative => lf(fs.readFileSync(path.join(ROOT, relative)));
 const one = (source, before, after) => {
   assert.equal(source.split(before).length - 1, 1, 'Unique executable control anchor');
   const next = source.replace(before, after); assert.notEqual(next, source, 'Control changes executable source'); return next;
@@ -115,7 +117,7 @@ try {
     fs.writeFileSync(path.join(directory, 'calendar.ts'), variant.source);
     const copiedSource = {};
     for (const file of files.filter(file => file.startsWith('src/'))) {
-      const hash = sha(fs.readFileSync(path.join(project, file))); copiedSource[file] = hash;
+      const hash = sha(lf(fs.readFileSync(path.join(project, file)))); copiedSource[file] = hash;
       assert.equal(hash, file === CALENDAR ? sha(variant.source) : sourceBefore[file], 'Copied app differs only at declared calendar control: ' + file);
     }
     fs.writeFileSync(path.join(directory, 'source.json'), JSON.stringify({ calendarSha256: sha(variant.source), copiedSource }, null, 2));
