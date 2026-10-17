@@ -1,0 +1,3 @@
+
+runtime 1.2 s
+simSoccerDeck: CONTROL=bindopen FIRED: section 1 failed (21 failures, red sections 1)

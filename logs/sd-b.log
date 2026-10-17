@@ -1,0 +1,6 @@
+   ok src/pages/SoccerCareer.tsx: 180 files load with it, the gate among them, and none of the deck
+   ok src/lib/soccerCareerEngine.ts: 65 files load with it, the gate among them, and none of the deck
+   ok 1548 src files read as code: nothing but the gate and tests calls loadSoccerDeck
+
+runtime 38.8 s
+simSoccerDeck: green. Sections 6, 7, 9, 10 only.

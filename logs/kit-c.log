@@ -1,0 +1,4 @@
+   ok 2163 src files read as code: only the deck's own files, tests, type imports and dynamic imports reach the engine, a pack index or GmInboxPanel (3 on LAZY_IMPORTERS)
+
+runtime 25.8 s
+simEventDeck: green. Sections 14, 15, 16 only.
