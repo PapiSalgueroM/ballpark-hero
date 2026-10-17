@@ -1,0 +1,336 @@
+chainBase: src/lib/careerPreDraft.ts
+chainBase: src/lib/clubDetailFixtures.ts
+chainBase: src/lib/clubManager.ts
+chainBase: src/lib/clubManagerBoardVerdict.ts
+chainBase: src/lib/clubManagerCalendar.ts
+chainBase: src/lib/clubManagerRecords.ts
+chainBase: src/lib/clubManagerRetire.ts
+chainBase: src/lib/clubManagerSlots.ts
+chainBase: src/lib/clubManagerStart.ts
+chainBase: src/lib/clubManagerUclGroups.ts
+chainBase: src/lib/clubManagerWorldRoster.ts
+chainBase: src/lib/deadlineDay.ts
+chainBase: src/lib/freshBuild.ts
+chainBase: src/lib/gmInbox.ts
+chainBase: src/lib/managerHotSeat.ts
+chainBase: src/lib/playerBingo.ts
+chainBase: src/lib/season/historicalOpponentLabels.ts
+chainBase: src/lib/soccerCareerContracts.ts
+chainBase: src/lib/soccerCareerEngine.ts
+chainBase: src/lib/soccerCareerLife.ts
+chainBase: src/lib/soccerCareerLifeConsequences.ts
+chainBase: src/lib/soccerCareerRealismA.ts
+chainBase: src/lib/soccerCareerRoutineEvents.ts
+chainBase: src/lib/soccerClubSquadSheet.ts
+chainBase: src/lib/soccerDeck.ts
+chainBase: src/lib/soccerDeckGate.ts
+chainBase: src/lib/soccerPhone.ts
+chainBase: src/lib/usCoachCareer.ts
+chainBase: src/lib/usCoachRetirement.ts
+chainBase: src/lib/worldCompetition.ts
+chainBase: src/lib/worldXi.ts
+chainBase: 31 file(s) from HEAD into /tmp/lt
+chainBase: added data src/data/careerHistoricalOpponentDisplay.ts
+chainBase: added data src/data/soccerDeck/index.ts
+chainBase: added data src/data/soccerDeck/starter.ts
+chainBase: added data src/data/soccerDeck/words.ts
+chainBase: 4 added data file(s) from HEAD into /tmp/lt
+seed 1987332285; arms head, base; sections toasts, bytes; sizes 320x640, 390x844, 1280x900
+== head 320x640
+   26 toast sample(s) of 13 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, stopped with what it needed after 28 steps, 28 steps, 4 Next Year or Next Season presses (3 Next Season)
+     "Signed with QPR!" first frame at 16,-37 288x54 (scrollY 193, step 3 (contract_offer: Sign contract)): nothing under it
+     "Signed with QPR!" settled at 16,16 288x54 (scrollY 193, step 3 (contract_offer: Sign contract)): ["heading Danny Okafor-Whitfield"]
+     "🏢 Rent Apartment is yours" first frame at 16,-37 288x54 (scrollY 193, phone (bought Hire in 🏠Where you live17 left )): nothing under it
+     "🏢 Rent Apartment is yours" settled at 16,16 288x54 (scrollY 193, phone (bought Hire in 🏠Where you live17 left )): nothing under it
+     "🏋️ Post training video" first frame at 16,-37 288x54 (scrollY 193, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "🏋️ Post training video" settled at 16,16 288x54 (scrollY 193, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["heading Danny Okafor-Whitfield"]
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" first frame at 16,-76 288x93 (scrollY 193, step 10 (random_events: 🎭The ShowmanFame comes easy: followers )): nothing under it
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" settled at 16,16 288x93 (scrollY 193, step 10 (random_events: 🎭The ShowmanFame comes easy: followers )): ["heading Danny Okafor-Whitfield"]
+     "Physical +3 and Pace +1 next season, Morale -6" first frame at 16,-57 288x73 (scrollY 193, step 11 (random_events: 🥦Full compliance for a seasonPhysical +)): nothing under it
+     "Physical +3 and Pace +1 next season, Morale -6" settled at 16,16 288x73 (scrollY 193, step 11 (random_events: 🥦Full compliance for a seasonPhysical +)): ["heading Danny Okafor-Whitfield"]
+     "Morale +10, now in a relationship" first frame at 16,-37 288x54 (scrollY 193, step 12 (random_events: 💕Start datingMorale +10, now in a relat)): nothing under it
+     "Morale +10, now in a relationship" settled at 16,16 288x54 (scrollY 193, step 12 (random_events: 💕Start datingMorale +10, now in a relat)): ["heading Danny Okafor-Whitfield"]
+     "Staying at QPR" first frame at 16,-37 288x54 (scrollY 193, step 13 (transfer_window: Stay and fight for place 💪)): nothing under it
+     "Staying at QPR" settled at 16,16 288x54 (scrollY 193, step 13 (transfer_window: Stay and fight for place 💪)): ["heading Danny Okafor-Whitfield"]
+     "🏋️ Post training video" first frame at 16,-37 288x54 (scrollY 415, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "🏋️ Post training video" settled at 16,16 288x54 (scrollY 415, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" first frame at 16,-76 288x93 (scrollY 415, step 23 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" settled at 16,16 288x93 (scrollY 415, step 23 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" first frame at 16,-57 288x73 (scrollY 415, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" settled at 16,16 288x73 (scrollY 415, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" first frame at 16,-57 288x73 (scrollY 415, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" settled at 16,16 288x73 (scrollY 415, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Popularity +3, Followers +0.5M" first frame at 16,-37 288x54 (scrollY 415, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Popularity +3, Followers +0.5M" settled at 16,16 288x54 (scrollY 415, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Staying at QPR" first frame at 16,-37 288x54 (scrollY 415, step 13 (transfer_window: Stay and fight for place 💪)): nothing under it
+     "Staying at QPR" settled at 16,16 288x54 (scrollY 415, step 13 (transfer_window: Stay and fight for place 💪)): nothing under it
+     coverage contract signing: 1 sampled
+     coverage random event choice: 7 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== head 390x844
+   26 toast sample(s) of 13 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, stopped with what it needed after 28 steps, 28 steps, 4 Next Year or Next Season presses (3 Next Season)
+     "Signed with QPR!" first frame at 16,-37 358x54 (scrollY 193, step 3 (contract_offer: Sign contract)): nothing under it
+     "Signed with QPR!" settled at 16,16 358x54 (scrollY 193, step 3 (contract_offer: Sign contract)): ["heading Danny Okafor-Whitfield"]
+     "🏢 Rent Apartment is yours" first frame at 16,-37 358x54 (scrollY 193, phone (bought Hire in 🏠Where you live17 left )): nothing under it
+     "🏢 Rent Apartment is yours" settled at 16,16 358x54 (scrollY 193, phone (bought Hire in 🏠Where you live17 left )): nothing under it
+     "🏋️ Post training video" first frame at 16,-37 358x54 (scrollY 193, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "🏋️ Post training video" settled at 16,16 358x54 (scrollY 193, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["heading Danny Okafor-Whitfield"]
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" first frame at 16,-57 358x73 (scrollY 193, step 10 (random_events: 🎭The ShowmanFame comes easy: followers )): nothing under it
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" settled at 16,16 358x73 (scrollY 193, step 10 (random_events: 🎭The ShowmanFame comes easy: followers )): ["heading Danny Okafor-Whitfield"]
+     "Physical +3 and Pace +1 next season, Morale -6" first frame at 16,-37 358x54 (scrollY 193, step 11 (random_events: 🥦Full compliance for a seasonPhysical +)): nothing under it
+     "Physical +3 and Pace +1 next season, Morale -6" settled at 16,16 358x54 (scrollY 193, step 11 (random_events: 🥦Full compliance for a seasonPhysical +)): ["heading Danny Okafor-Whitfield"]
+     "Morale +10, now in a relationship" first frame at 16,-37 358x54 (scrollY 193, step 12 (random_events: 💕Start datingMorale +10, now in a relat)): nothing under it
+     "Morale +10, now in a relationship" settled at 16,16 358x54 (scrollY 193, step 12 (random_events: 💕Start datingMorale +10, now in a relat)): ["heading Danny Okafor-Whitfield"]
+     "Staying at QPR" first frame at 16,-37 358x54 (scrollY 193, step 13 (transfer_window: Stay and fight for place 💪)): nothing under it
+     "Staying at QPR" settled at 16,16 358x54 (scrollY 193, step 13 (transfer_window: Stay and fight for place 💪)): ["heading Danny Okafor-Whitfield"]
+     "🏋️ Post training video" first frame at 16,-37 358x54 (scrollY 397, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "🏋️ Post training video" settled at 16,16 358x54 (scrollY 397, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" first frame at 16,-57 358x73 (scrollY 397, step 23 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" settled at 16,16 358x73 (scrollY 397, step 23 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" first frame at 16,-37 358x54 (scrollY 397, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" settled at 16,16 358x54 (scrollY 397, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" first frame at 16,-57 358x73 (scrollY 397, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" settled at 16,16 358x73 (scrollY 397, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Popularity +3, Followers +0.5M" first frame at 16,-37 358x54 (scrollY 531, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Popularity +3, Followers +0.5M" settled at 16,16 358x54 (scrollY 397, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Staying at QPR" first frame at 16,-37 358x54 (scrollY 397, step 13 (transfer_window: Stay and fight for place 💪)): nothing under it
+     "Staying at QPR" settled at 16,16 358x54 (scrollY 397, step 13 (transfer_window: Stay and fight for place 💪)): nothing under it
+     coverage contract signing: 1 sampled
+     coverage random event choice: 7 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== head 1280x900
+   26 toast sample(s) of 13 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, stopped with what it needed after 28 steps, 28 steps, 4 Next Year or Next Season presses (3 Next Season)
+     "Signed with QPR!" first frame at 462,-21 356x54 (scrollY 101, step 3 (contract_offer: Sign contract)): ["heading Danny Okafor-Whitfield"]
+     "Signed with QPR!" settled at 462,32 356x54 (scrollY 101, step 3 (contract_offer: Sign contract)): ["heading Danny Okafor-Whitfield"]
+     "🏢 Rent Apartment is yours" first frame at 462,-21 356x54 (scrollY 101, phone (bought Hire in 🏠Where you live17 left )): nothing under it
+     "🏢 Rent Apartment is yours" settled at 462,32 356x54 (scrollY 101, phone (bought Hire in 🏠Where you live17 left )): nothing under it
+     "🏋️ Post training video" first frame at 462,-21 356x54 (scrollY 101, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["heading Danny Okafor-Whitfield"]
+     "🏋️ Post training video" settled at 462,32 356x54 (scrollY 101, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["heading Danny Okafor-Whitfield"]
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" first frame at 462,-41 356x73 (scrollY 101, step 10 (random_events: 🎭The ShowmanFame comes easy: followers )): nothing under it
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" settled at 462,32 356x73 (scrollY 101, step 10 (random_events: 🎭The ShowmanFame comes easy: followers )): ["heading Danny Okafor-Whitfield"]
+     "Physical +3 and Pace +1 next season, Morale -6" first frame at 462,-21 356x54 (scrollY 101, step 11 (random_events: 🥦Full compliance for a seasonPhysical +)): ["heading Danny Okafor-Whitfield"]
+     "Physical +3 and Pace +1 next season, Morale -6" settled at 462,32 356x54 (scrollY 101, step 11 (random_events: 🥦Full compliance for a seasonPhysical +)): ["heading Danny Okafor-Whitfield"]
+     "Morale +10, now in a relationship" first frame at 462,-21 356x54 (scrollY 101, step 12 (random_events: 💕Start datingMorale +10, now in a relat)): ["heading Danny Okafor-Whitfield"]
+     "Morale +10, now in a relationship" settled at 462,32 356x54 (scrollY 101, step 12 (random_events: 💕Start datingMorale +10, now in a relat)): ["heading Danny Okafor-Whitfield"]
+     "Staying at QPR" first frame at 462,-21 356x54 (scrollY 101, step 13 (transfer_window: Stay and fight for place 💪)): ["heading Danny Okafor-Whitfield"]
+     "Staying at QPR" settled at 462,32 356x54 (scrollY 101, step 13 (transfer_window: Stay and fight for place 💪)): ["heading Danny Okafor-Whitfield"]
+     "🏋️ Post training video" first frame at 462,-21 356x54 (scrollY 251, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "🏋️ Post training video" settled at 462,32 356x54 (scrollY 251, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" first frame at 462,-41 356x73 (scrollY 251, step 23 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" settled at 462,32 356x73 (scrollY 251, step 23 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" first frame at 462,-21 356x54 (scrollY 251, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" settled at 462,32 356x54 (scrollY 251, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" first frame at 462,-41 356x73 (scrollY 251, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" settled at 462,32 356x73 (scrollY 251, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Popularity +3, Followers +0.5M" first frame at 462,-21 356x54 (scrollY 251, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Popularity +3, Followers +0.5M" settled at 462,32 356x54 (scrollY 251, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Staying at QPR" first frame at 462,-21 356x54 (scrollY 251, step 13 (transfer_window: Stay and fight for place 💪)): nothing under it
+     "Staying at QPR" settled at 462,32 356x54 (scrollY 251, step 13 (transfer_window: Stay and fight for place 💪)): nothing under it
+     coverage contract signing: 1 sampled
+     coverage random event choice: 7 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== base 320x640
+   28 toast sample(s) of 14 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, stopped with what it needed after 28 steps, 28 steps, 4 Next Year or Next Season presses (3 Next Season)
+     "Joined QPR Youth!" first frame at 16,544 288x54 (scrollY 1876, step 1 (youth: Next Year)): ["control in the bar Next Year","control in the bar Retire"]
+  base [toasts 320x640]: "Joined QPR Youth!" (first frame, step 1 (youth: Next Year)) lies over ["control in the bar Next Year","control in the bar Retire"]
+     "Joined QPR Youth!" settled at 16,491 288x54 (scrollY 1876, step 1 (youth: Next Year)): nothing under it
+     "Signed with QPR!" first frame at 16,544 288x54 (scrollY 397, step 3 (contract_offer: Sign contract)): ["control in the card Your next seasonRoles, contracts, playing time and","control in the bar Next Season","control in the bar Retire","control in the bar Week by week: live the season match by match"]
+  base [toasts 320x640]: "Signed with QPR!" (first frame, step 3 (contract_offer: Sign contract)) lies over ["control in the card Your next seasonRoles, contracts, playing time and","control in the bar Next Season","control in the bar Retire","control in the bar Week by week: live the season match by match"]
+     "Signed with QPR!" settled at 16,491 288x54 (scrollY 397, step 3 (contract_offer: Sign contract)): ["control in the card 🏃 Preseason planBalanced, or choose your next-sea","control in the card Your next seasonRoles, contracts, playing time and"]
+  base [toasts 320x640]: "Signed with QPR!" (settled, step 3 (contract_offer: Sign contract)) lies over ["control in the card 🏃 Preseason planBalanced, or choose your next-sea","control in the card Your next seasonRoles, contracts, playing time and"]
+     "🏢 Rent Apartment is yours" first frame at 16,544 288x54 (scrollY 397, phone (bought Hire in 🏠Where you live17 left )): ["control in the dialog Put phone away"]
+  base [toasts 320x640]: "🏢 Rent Apartment is yours" (first frame, phone (bought Hire in 🏠Where you live17 left )) lies over ["control in the dialog Put phone away"]
+     "🏢 Rent Apartment is yours" settled at 16,491 288x54 (scrollY 397, phone (bought Hire in 🏠Where you live17 left )): ["control in the dialog Put phone away","control in the dialog €25M"]
+  base [toasts 320x640]: "🏢 Rent Apartment is yours" (settled, phone (bought Hire in 🏠Where you live17 left )) lies over ["control in the dialog Put phone away","control in the dialog €25M"]
+     "🏋️ Post training video" first frame at 16,544 288x54 (scrollY 397, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["control in the card Full attributes183 cm · 78 kg · every number under"]
+  base [toasts 320x640]: "🏋️ Post training video" (first frame, step 8 (social_media_action: 🏋️Post training videoShow off your skil)) lies over ["control in the card Full attributes183 cm · 78 kg · every number under"]
+     "🏋️ Post training video" settled at 16,491 288x54 (scrollY 397, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["control in the card Full attributes183 cm · 78 kg · every number under"]
+  base [toasts 320x640]: "🏋️ Post training video" (settled, step 8 (social_media_action: 🏋️Post training videoShow off your skil)) lies over ["control in the card Full attributes183 cm · 78 kg · every number under"]
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" first frame at 16,544 288x93 (scrollY 397, step 10 (random_events: 🎭The ShowmanFame comes easy: followers )): ["control in the card 👩‍🍳Get her and your mum in a kitchen togetherMor"]
+  base [toasts 320x640]: "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" (first frame, step 10 (random_events: 🎭The ShowmanFame comes easy: followers )) lies over ["control in the card 👩‍🍳Get her and your mum in a kitchen togetherMor"]
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" settled at 16,452 288x93 (scrollY 397, step 10 (random_events: 🎭The ShowmanFame comes easy: followers )): ["control in the card 🍕Negotiate one cheat day a weekPhysical +1 next s","control in the card 👩‍🍳Get her and your mum in a kitchen togetherMor"]
+  base [toasts 320x640]: "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" (settled, step 10 (random_events: 🎭The ShowmanFame comes easy: followers )) lies over ["control in the card 🍕Negotiate one cheat day a weekPhysical +1 next s","control in the card 👩‍🍳Get her and your mum in a kitchen togetherMor"]
+     "Physical +3 and Pace +1 next season, Morale -6" first frame at 16,544 288x73 (scrollY 397, step 11 (random_events: 🥦Full compliance for a seasonPhysical +)): nothing under it
+     "Physical +3 and Pace +1 next season, Morale -6" settled at 16,471 288x73 (scrollY 397, step 11 (random_events: 🥦Full compliance for a seasonPhysical +)): nothing under it
+     "Morale +10, now in a relationship" first frame at 16,544 288x54 (scrollY 549, step 12 (random_events: 💕Start datingMorale +10, now in a relat)): nothing under it
+     "Morale +10, now in a relationship" settled at 16,491 288x54 (scrollY 397, step 12 (random_events: 💕Start datingMorale +10, now in a relat)): ["control in the card Your next seasonRoles, contracts, playing time and"]
+  base [toasts 320x640]: "Morale +10, now in a relationship" (settled, step 12 (random_events: 💕Start datingMorale +10, now in a relat)) lies over ["control in the card Your next seasonRoles, contracts, playing time and"]
+     "Staying at QPR" first frame at 16,544 288x54 (scrollY 397, step 13 (transfer_window: Stay and fight for place 💪)): ["control in the bar Next Season","control in the bar Retire","control in the bar Week by week: live the season match by match"]
+  base [toasts 320x640]: "Staying at QPR" (first frame, step 13 (transfer_window: Stay and fight for place 💪)) lies over ["control in the bar Next Season","control in the bar Retire","control in the bar Week by week: live the season match by match"]
+     "Staying at QPR" settled at 16,491 288x54 (scrollY 397, step 13 (transfer_window: Stay and fight for place 💪)): ["control in the card 🎙️ Press roomAnswer for your season50/100"]
+  base [toasts 320x640]: "Staying at QPR" (settled, step 13 (transfer_window: Stay and fight for place 💪)) lies over ["control in the card 🎙️ Press roomAnswer for your season50/100"]
+     "🏋️ Post training video" first frame at 16,544 288x54 (scrollY 397, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["control in the card Full attributes183 cm · 78 kg · every number under"]
+  base [toasts 320x640]: "🏋️ Post training video" (first frame, step 8 (social_media_action: 🏋️Post training videoShow off your skil)) lies over ["control in the card Full attributes183 cm · 78 kg · every number under"]
+     "🏋️ Post training video" settled at 16,491 288x54 (scrollY 397, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["control in the card Full attributes183 cm · 78 kg · every number under"]
+  base [toasts 320x640]: "🏋️ Post training video" (settled, step 8 (social_media_action: 🏋️Post training videoShow off your skil)) lies over ["control in the card Full attributes183 cm · 78 kg · every number under"]
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" first frame at 16,544 288x93 (scrollY 397, step 23 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): ["control in the card Full attributes183 cm · 78 kg · every number under"]
+  base [toasts 320x640]: "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" (first frame, step 23 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)) lies over ["control in the card Full attributes183 cm · 78 kg · every number under"]
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" settled at 16,452 288x93 (scrollY 397, step 23 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" first frame at 16,544 288x73 (scrollY 397, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" settled at 16,471 288x73 (scrollY 397, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" first frame at 16,544 288x73 (scrollY 397, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" settled at 16,471 288x73 (scrollY 397, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Popularity +3, Followers +0.5M" first frame at 16,544 288x54 (scrollY 526, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Popularity +3, Followers +0.5M" settled at 16,491 288x54 (scrollY 397, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)): ["control in the card Your next seasonRoles, contracts, playing time and"]
+  base [toasts 320x640]: "Popularity +3, Followers +0.5M" (settled, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)) lies over ["control in the card Your next seasonRoles, contracts, playing time and"]
+     "Staying at QPR" first frame at 16,544 288x54 (scrollY 397, step 13 (transfer_window: Stay and fight for place 💪)): ["control in the bar Next Season","control in the bar Retire","control in the bar Week by week: live the season match by match"]
+  base [toasts 320x640]: "Staying at QPR" (first frame, step 13 (transfer_window: Stay and fight for place 💪)) lies over ["control in the bar Next Season","control in the bar Retire","control in the bar Week by week: live the season match by match"]
+     "Staying at QPR" settled at 16,491 288x54 (scrollY 397, step 13 (transfer_window: Stay and fight for place 💪)): ["control in the card 🎙️ Press roomAnswer for your season50/100"]
+  base [toasts 320x640]: "Staying at QPR" (settled, step 13 (transfer_window: Stay and fight for place 💪)) lies over ["control in the card 🎙️ Press roomAnswer for your season50/100"]
+     coverage contract signing: 1 sampled
+     coverage random event choice: 7 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== base 390x844
+   28 toast sample(s) of 14 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, stopped with what it needed after 28 steps, 28 steps, 4 Next Year or Next Season presses (3 Next Season)
+     "Joined QPR Youth!" first frame at 16,748 358x54 (scrollY 1632, step 1 (youth: Next Year)): ["control in the bar Next Year","control in the bar Retire"]
+  base [toasts 390x844]: "Joined QPR Youth!" (first frame, step 1 (youth: Next Year)) lies over ["control in the bar Next Year","control in the bar Retire"]
+     "Joined QPR Youth!" settled at 16,695 358x54 (scrollY 1632, step 1 (youth: Next Year)): nothing under it
+     "Signed with QPR!" first frame at 16,748 358x54 (scrollY 397, step 3 (contract_offer: Sign contract)): ["control in the bar Next Season","control in the card Display currency","control in the bar Retire"]
+  base [toasts 390x844]: "Signed with QPR!" (first frame, step 3 (contract_offer: Sign contract)) lies over ["control in the bar Next Season","control in the card Display currency","control in the bar Retire"]
+     "Signed with QPR!" settled at 16,695 358x54 (scrollY 397, step 3 (contract_offer: Sign contract)): nothing under it
+     "🏢 Rent Apartment is yours" first frame at 16,748 358x54 (scrollY 397, phone (bought Hire in 🏠Where you live17 left )): nothing under it
+     "🏢 Rent Apartment is yours" settled at 16,695 358x54 (scrollY 397, phone (bought Hire in 🏠Where you live17 left )): ["control in the dialog Put phone away"]
+  base [toasts 390x844]: "🏢 Rent Apartment is yours" (settled, phone (bought Hire in 🏠Where you live17 left )) lies over ["control in the dialog Put phone away"]
+     "🏋️ Post training video" first frame at 16,748 358x54 (scrollY 397, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["control in the card 🔥 Derby history"]
+  base [toasts 390x844]: "🏋️ Post training video" (first frame, step 8 (social_media_action: 🏋️Post training videoShow off your skil)) lies over ["control in the card 🔥 Derby history"]
+     "🏋️ Post training video" settled at 16,695 358x54 (scrollY 397, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" first frame at 16,748 358x73 (scrollY 397, step 10 (random_events: 🎭The ShowmanFame comes easy: followers )): nothing under it
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" settled at 16,675 358x73 (scrollY 397, step 10 (random_events: 🎭The ShowmanFame comes easy: followers )): nothing under it
+     "Physical +3 and Pace +1 next season, Morale -6" first frame at 16,748 358x54 (scrollY 397, step 11 (random_events: 🥦Full compliance for a seasonPhysical +)): nothing under it
+     "Physical +3 and Pace +1 next season, Morale -6" settled at 16,695 358x54 (scrollY 397, step 11 (random_events: 🥦Full compliance for a seasonPhysical +)): ["control in the card Full attributes183 cm · 78 kg · every number under"]
+  base [toasts 390x844]: "Physical +3 and Pace +1 next season, Morale -6" (settled, step 11 (random_events: 🥦Full compliance for a seasonPhysical +)) lies over ["control in the card Full attributes183 cm · 78 kg · every number under"]
+     "Morale +10, now in a relationship" first frame at 16,748 358x54 (scrollY 531, step 12 (random_events: 💕Start datingMorale +10, now in a relat)): nothing under it
+     "Morale +10, now in a relationship" settled at 16,695 358x54 (scrollY 397, step 12 (random_events: 💕Start datingMorale +10, now in a relat)): nothing under it
+     "Staying at QPR" first frame at 16,748 358x54 (scrollY 397, step 13 (transfer_window: Stay and fight for place 💪)): ["control in the bar Next Season","control in the bar Retire"]
+  base [toasts 390x844]: "Staying at QPR" (first frame, step 13 (transfer_window: Stay and fight for place 💪)) lies over ["control in the bar Next Season","control in the bar Retire"]
+     "Staying at QPR" settled at 16,695 358x54 (scrollY 397, step 13 (transfer_window: Stay and fight for place 💪)): ["control in the card Display currency"]
+  base [toasts 390x844]: "Staying at QPR" (settled, step 13 (transfer_window: Stay and fight for place 💪)) lies over ["control in the card Display currency"]
+     "🏋️ Post training video" first frame at 16,748 358x54 (scrollY 397, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["control in the card 🔥 Derby history"]
+  base [toasts 390x844]: "🏋️ Post training video" (first frame, step 8 (social_media_action: 🏋️Post training videoShow off your skil)) lies over ["control in the card 🔥 Derby history"]
+     "🏋️ Post training video" settled at 16,695 358x54 (scrollY 397, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): nothing under it
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" first frame at 16,748 358x73 (scrollY 397, step 23 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" settled at 16,675 358x73 (scrollY 397, step 23 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" first frame at 16,748 358x54 (scrollY 397, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)): nothing under it
+     "Shooting +2, Dribbling +2, Morale +10" settled at 16,695 358x54 (scrollY 397, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)): ["control in the card Full attributes183 cm · 78 kg · every number under"]
+  base [toasts 390x844]: "Shooting +2, Dribbling +2, Morale +10" (settled, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)) lies over ["control in the card Full attributes183 cm · 78 kg · every number under"]
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" first frame at 16,748 358x73 (scrollY 397, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" settled at 16,675 358x73 (scrollY 397, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): ["control in the card Full attributes183 cm · 78 kg · every number under"]
+  base [toasts 390x844]: "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" (settled, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)) lies over ["control in the card Full attributes183 cm · 78 kg · every number under"]
+     "Popularity +3, Followers +0.5M" first frame at 16,748 358x54 (scrollY 531, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Popularity +3, Followers +0.5M" settled at 16,695 358x54 (scrollY 397, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)): nothing under it
+     "Staying at QPR" first frame at 16,748 358x54 (scrollY 397, step 13 (transfer_window: Stay and fight for place 💪)): ["control in the bar Next Season","control in the bar Retire"]
+  base [toasts 390x844]: "Staying at QPR" (first frame, step 13 (transfer_window: Stay and fight for place 💪)) lies over ["control in the bar Next Season","control in the bar Retire"]
+     "Staying at QPR" settled at 16,695 358x54 (scrollY 397, step 13 (transfer_window: Stay and fight for place 💪)): ["control in the card Display currency"]
+  base [toasts 390x844]: "Staying at QPR" (settled, step 13 (transfer_window: Stay and fight for place 💪)) lies over ["control in the card Display currency"]
+     coverage contract signing: 1 sampled
+     coverage random event choice: 7 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== base 1280x900
+   28 toast sample(s) of 14 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, stopped with what it needed after 28 steps, 28 steps, 4 Next Year or Next Season presses (3 Next Season)
+     "Joined QPR Youth!" first frame at 892,868 356x54 (scrollY 1530, step 1 (youth: Next Year)): ["control in the bar Next Year","control in the page Open your phone"]
+  base [toasts 1280x900]: "Joined QPR Youth!" (first frame, step 1 (youth: Next Year)) lies over ["control in the bar Next Year","control in the page Open your phone"]
+     "Joined QPR Youth!" settled at 892,815 356x54 (scrollY 1530, step 1 (youth: Next Year)): ["control in the bar Next Year","control in the page Open your phone"]
+  base [toasts 1280x900]: "Joined QPR Youth!" (settled, step 1 (youth: Next Year)) lies over ["control in the bar Next Year","control in the page Open your phone"]
+     "Signed with QPR!" first frame at 892,868 356x54 (scrollY 251, step 3 (contract_offer: Sign contract)): ["control in the bar Week by week: live the season match by match","control in the page Open your phone"]
+  base [toasts 1280x900]: "Signed with QPR!" (first frame, step 3 (contract_offer: Sign contract)) lies over ["control in the bar Week by week: live the season match by match","control in the page Open your phone"]
+     "Signed with QPR!" settled at 892,815 356x54 (scrollY 251, step 3 (contract_offer: Sign contract)): ["control in the bar Week by week: live the season match by match","control in the page Open your phone"]
+  base [toasts 1280x900]: "Signed with QPR!" (settled, step 3 (contract_offer: Sign contract)) lies over ["control in the bar Week by week: live the season match by match","control in the page Open your phone"]
+     "🏢 Rent Apartment is yours" first frame at 892,868 356x54 (scrollY 251, phone (bought Hire in 🏠Where you live17 left )): nothing under it
+     "🏢 Rent Apartment is yours" settled at 892,815 356x54 (scrollY 251, phone (bought Hire in 🏠Where you live17 left )): nothing under it
+     "🏋️ Post training video" first frame at 892,868 356x54 (scrollY 251, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["control in the card Continental: 0. View winning seasons","control in the card Ballon d'Or: 0. View winning seasons","control in the page Open your phone"]
+  base [toasts 1280x900]: "🏋️ Post training video" (first frame, step 8 (social_media_action: 🏋️Post training videoShow off your skil)) lies over ["control in the card Continental: 0. View winning seasons","control in the card Ballon d'Or: 0. View winning seasons","control in the page Open your phone"]
+     "🏋️ Post training video" settled at 892,815 356x54 (scrollY 251, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["control in the card Continental: 0. View winning seasons","control in the card Ballon d'Or: 0. View winning seasons","control in the page Open your phone"]
+  base [toasts 1280x900]: "🏋️ Post training video" (settled, step 8 (social_media_action: 🏋️Post training videoShow off your skil)) lies over ["control in the card Continental: 0. View winning seasons","control in the card Ballon d'Or: 0. View winning seasons","control in the page Open your phone"]
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" first frame at 892,868 356x73 (scrollY 251, step 10 (random_events: 🎭The ShowmanFame comes easy: followers )): nothing under it
+     "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" settled at 892,795 356x73 (scrollY 251, step 10 (random_events: 🎭The ShowmanFame comes easy: followers )): ["control in the card Full attributes183 cm · 78 kg · every number under","control in the page Open the training ground","control in the page Open your phone"]
+  base [toasts 1280x900]: "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals stin" (settled, step 10 (random_events: 🎭The ShowmanFame comes easy: followers )) lies over ["control in the card Full attributes183 cm · 78 kg · every number under","control in the page Open the training ground","control in the page Open your phone"]
+     "Physical +3 and Pace +1 next season, Morale -6" first frame at 892,868 356x54 (scrollY 251, step 11 (random_events: 🥦Full compliance for a seasonPhysical +)): ["control in the page Open your phone"]
+  base [toasts 1280x900]: "Physical +3 and Pace +1 next season, Morale -6" (first frame, step 11 (random_events: 🥦Full compliance for a seasonPhysical +)) lies over ["control in the page Open your phone"]
+     "Physical +3 and Pace +1 next season, Morale -6" settled at 892,815 356x54 (scrollY 251, step 11 (random_events: 🥦Full compliance for a seasonPhysical +)): ["control in the page Open your phone"]
+  base [toasts 1280x900]: "Physical +3 and Pace +1 next season, Morale -6" (settled, step 11 (random_events: 🥦Full compliance for a seasonPhysical +)) lies over ["control in the page Open your phone"]
+     "Morale +10, now in a relationship" first frame at 892,868 356x54 (scrollY 251, step 12 (random_events: 💕Start datingMorale +10, now in a relat)): ["control in the page Open your phone"]
+  base [toasts 1280x900]: "Morale +10, now in a relationship" (first frame, step 12 (random_events: 💕Start datingMorale +10, now in a relat)) lies over ["control in the page Open your phone"]
+     "Morale +10, now in a relationship" settled at 892,815 356x54 (scrollY 251, step 12 (random_events: 💕Start datingMorale +10, now in a relat)): ["control in the page Open your phone"]
+  base [toasts 1280x900]: "Morale +10, now in a relationship" (settled, step 12 (random_events: 💕Start datingMorale +10, now in a relat)) lies over ["control in the page Open your phone"]
+     "Staying at QPR" first frame at 892,868 356x54 (scrollY 251, step 13 (transfer_window: Stay and fight for place 💪)): ["control in the bar Week by week: live the season match by match","control in the page Open your phone"]
+  base [toasts 1280x900]: "Staying at QPR" (first frame, step 13 (transfer_window: Stay and fight for place 💪)) lies over ["control in the bar Week by week: live the season match by match","control in the page Open your phone"]
+     "Staying at QPR" settled at 892,815 356x54 (scrollY 251, step 13 (transfer_window: Stay and fight for place 💪)): ["control in the bar Week by week: live the season match by match","control in the page Open your phone"]
+  base [toasts 1280x900]: "Staying at QPR" (settled, step 13 (transfer_window: Stay and fight for place 💪)) lies over ["control in the bar Week by week: live the season match by match","control in the page Open your phone"]
+     "🏋️ Post training video" first frame at 892,868 356x54 (scrollY 251, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["control in the card Continental: 0. View winning seasons","control in the card Ballon d'Or: 0. View winning seasons","control in the page Open your phone"]
+  base [toasts 1280x900]: "🏋️ Post training video" (first frame, step 8 (social_media_action: 🏋️Post training videoShow off your skil)) lies over ["control in the card Continental: 0. View winning seasons","control in the card Ballon d'Or: 0. View winning seasons","control in the page Open your phone"]
+     "🏋️ Post training video" settled at 892,815 356x54 (scrollY 251, step 8 (social_media_action: 🏋️Post training videoShow off your skil)): ["control in the card Continental: 0. View winning seasons","control in the card Ballon d'Or: 0. View winning seasons","control in the page Open your phone"]
+  base [toasts 1280x900]: "🏋️ Post training video" (settled, step 8 (social_media_action: 🏋️Post training videoShow off your skil)) lies over ["control in the card Continental: 0. View winning seasons","control in the card Ballon d'Or: 0. View winning seasons","control in the page Open your phone"]
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" first frame at 892,868 356x73 (scrollY 251, step 23 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): nothing under it
+     "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" settled at 892,795 356x73 (scrollY 251, step 23 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)): ["control in the page Open the training ground","control in the page Open your phone"]
+  base [toasts 1280x900]: "Family rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, ch" (settled, step 23 (random_events: 🧢Cousin RickyFamily rates: tiny 3% tran)) lies over ["control in the page Open the training ground","control in the page Open your phone"]
+     "Shooting +2, Dribbling +2, Morale +10" first frame at 892,868 356x54 (scrollY 251, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)): ["control in the page Open your phone"]
+  base [toasts 1280x900]: "Shooting +2, Dribbling +2, Morale +10" (first frame, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)) lies over ["control in the page Open your phone"]
+     "Shooting +2, Dribbling +2, Morale +10" settled at 892,815 356x54 (scrollY 251, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)): ["control in the page Open your phone"]
+  base [toasts 1280x900]: "Shooting +2, Dribbling +2, Morale +10" (settled, step 24 (random_events: 💪Wear it with prideShooting +2, Dribbli)) lies over ["control in the page Open your phone"]
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" first frame at 892,868 356x73 (scrollY 251, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): nothing under it
+     "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" settled at 892,795 356x73 (scrollY 251, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)): ["control in the page Open the training ground","control in the page Open your phone"]
+  base [toasts 1280x900]: "Could go 10x (+€2M), double (+€200k) or crash (-€200k)" (settled, step 25 (random_events: 🪙Invest €200kCould go 10x (+€2M), doubl)) lies over ["control in the page Open the training ground","control in the page Open your phone"]
+     "Popularity +3, Followers +0.5M" first frame at 892,868 356x54 (scrollY 251, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)): ["control in the page Open your phone"]
+  base [toasts 1280x900]: "Popularity +3, Followers +0.5M" (first frame, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)) lies over ["control in the page Open your phone"]
+     "Popularity +3, Followers +0.5M" settled at 892,815 356x54 (scrollY 251, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)): ["control in the page Open your phone"]
+  base [toasts 1280x900]: "Popularity +3, Followers +0.5M" (settled, step 26 (random_events: 😂Laugh and applaudPopularity +3, Follow)) lies over ["control in the page Open your phone"]
+     "Staying at QPR" first frame at 892,868 356x54 (scrollY 251, step 13 (transfer_window: Stay and fight for place 💪)): ["control in the bar Week by week: live the season match by match","control in the page Open your phone"]
+  base [toasts 1280x900]: "Staying at QPR" (first frame, step 13 (transfer_window: Stay and fight for place 💪)) lies over ["control in the bar Week by week: live the season match by match","control in the page Open your phone"]
+     "Staying at QPR" settled at 892,815 356x54 (scrollY 251, step 13 (transfer_window: Stay and fight for place 💪)): ["control in the bar Week by week: live the season match by match","control in the page Open your phone"]
+  base [toasts 1280x900]: "Staying at QPR" (settled, step 13 (transfer_window: Stay and fight for place 💪)) lies over ["control in the bar Week by week: live the season match by match","control in the page Open your phone"]
+     coverage contract signing: 1 sampled
+     coverage random event choice: 7 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== bytes (390x844)
+   base on seed 1987332285: 35 saves through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, stopped with what it needed after 33 steps, 33 steps, 4 Next Year or Next Season presses (3 Next Season)
+   head on seed 1987332285: 35 saves through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, stopped with what it needed after 33 steps, 33 steps, 4 Next Year or Next Season presses (3 Next Season)
+   bytes reached: three Next Seasons yes, a random event choice yes, a transfer window choice yes, a phone action yes
+  ok    bytes: 35 saves equal to the base byte for byte, through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, stopped with what it needed after 33 steps, 33 steps, 4 Next Year or Next Season presses (3 Next Season)
+== bytes: old saves (realSaves, seeds 0 to 7, 390x844)
+   save 0 (playing, pressed "Next Season"): equal after the mount and after a press, fence 2 to 3
+   save 1 (playing, pressed "Next Season"): equal after the mount and after a press, fence 1 to 2
+   save 2 (playing, pressed "Next Season"): equal after the mount and after a press, fence 2 to 3
+   save 3 (transfer_window, pressed "null"): equal after the mount and after a press, fence 2 to 2
+   save 4 (playing, pressed "Next Season"): equal after the mount and after a press, fence 2 to 3
+   save 5 (playing, pressed "Next Season"): equal after the mount and after a press, fence 2 to 3
+   save 6 (playing, pressed "Next Season"): equal after the mount and after a press, fence 2 to 3
+   save 7 (transfer_window, pressed "null"): equal after the mount and after a press, fence 2 to 2
+  ok    bytes: 8 of 8 old saves load to the same career on head and the base, and head fences each one
+  base toasts: the measurement sees the bug on the base (53 finding(s))
+playSoccerLanding: green at 320x640, 390x844, 1280x900 (also no extra sizes; toasts, bytes), every marked section red on the base
