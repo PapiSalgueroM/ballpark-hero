@@ -1,0 +1,5 @@
+md-greenfirst exit=1 24s | simCmMatchDay: CONTROL greenfirst FIRED (320 failures, section(s) 4)
+md-barorder exit=1 25s | simCmMatchDay: CONTROL barorder FIRED (4726 failures, section(s) 2, 4)
+simCmMatchDay exit=0 25s | simCmMatchDay: all sections green (916 matches: 461 home, 447 away, 8 neutral)
+md-oldorder exit=1 19s | simCmMatchDay: CONTROL oldorder FIRED (22776 failures, section(s) 2, 3, 4, 5)
+md-homeflip exit=1 18s | simCmMatchDay: CONTROL homeflip FIRED (34471 failures, section(s) 1, 2, 3, 4, 5, 7)
