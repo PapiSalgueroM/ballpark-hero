@@ -1,0 +1,35 @@
+# NFL Perfect Season retry, Round1408
+
+Archive failures now retry in place. Earlier picks and the chosen mode survive. Failed or unusable squad fetches spend no reroll; a usable recovery charges once. Starting another mode clears the previous wheel. Eight slots, seventeen games, six fetch attempts, the successful-spin timing floor, eligibility, ratings, simulation and completion policy remain unchanged.
+
+## Source and original
+
+Base:8293c758f4284d21baaa2320383cfd5cb5bd4944. Original checkpoint:37c7d7ed268102e275ecc80e4f7c0423e36b2e1d. Actual page tests1b64de94 were frozen before product. Exactly five page hunks reconstruct the entire originalbdf7e36d when removed. Candidate page39240B/SHAaa453141d93f5f53616393944ee623d58b1552886d2509ca6d371b66664158d5. No other application leaf changed. Test1b64, browser3aa4ca5f and workflow384f8534 remain frozen.
+
+Original Actions39036264060/job117406547566 qualified three precise named failure cases and two healthy cases. Actual original index/squad/simulation/completion counts were1/0/0/0,1/7/0/0,1/9/0/0,1/3/0/0,1/16/2/2. The healthy complete-run/restart case produced two actual17-game seasons with one completion per run. Original whole raw1053514B/SHA37d8be9fb7b0415fbe292e6b95b464155434b9216085970376f3ec6aa0452ba5. Artifact12102451030,76071664B/SHA9346288e74d9215358320fe91653dd4f3f80c168cfb87ee60857606b47a8fe08. Independent physical152683/0 and semantic1949/0 SHA7f3f076c close source, types,521versions, priorNBA six-arm proof and38direct tests.
+
+## Retained failed full attempt and repair
+
+Full4772821db0e09b29131f907d7ea105ae38f81cd8, Actions39037181955/job117409272958 FAILED. Artifact12101744833,77120262B/SHAa2650829056e1daf27317f59fb23e0fd37b0062dc2cebd0577769335c3189087. Original five cases and raw baseline equality passed; strict helper uniqueness then rejected2!==1 during eager-debit control construction. Its generic replacement destination setWheelText matched twice, including the existing interval update. No removal, candidate or restored child ran. Types, priorNBA and38direct tests passed. Build/readers/weights/browser were skipped, not green.
+
+The sole repair tightens both control operands through found.squad.year. New helper664887b1cfe6d5ebc363155094c64f209670174476b86893debf9d131b1a5494 reverses to the entire old5f9fa18b by one line. Independent native source receipt70a1dd43 proves unique from/to, exact same intended mutation body75402631 and whole inverse to candidateaa453. App, frozen tests, expected guards/counts, browser and workflow did not change. Failed packet physicalcaa3d6fb(154922/0) and correctedcausal f5bdba64(453/0) remain separate evidence, never qualified product.
+
+## Actual successful full run
+
+TESTED:c57c6a8e735768cf483dfe622a480e27307911f3. PR325. Actions39037958050/job117411486739 SUCCESS. All six actual source arms ran five cases: original3faults+2healthy, eager-debit1+4, forgotten-reroll1+4, stale-wheel1+4, current5pass, whole-undo5pass. Each control changed actual source and reconstructed the whole candidate on undo. Original raw equals the separately qualified baseline exactly. Both healthy complete IO rows remain equal across arms, and all five candidate/restored fixture/fetch/simulation/completion/daily outcomes match. Raw DOM, draw callers and process outputs stay retained.
+
+Actual candidate index/squad/simulation/completion counts:4/9/1/1,1/14/1/1,1/16/0/0,1/3/0/0,1/16/2/2. Complete seasons have17Boolean results and consistent records. After twelve failed fetches, one usable retry leaves one reroll. Three removal boundaries were1/15/0,1/16/0 and3/9/1 for index/squad/simulation counts. Unchanged priorNBA six source arms/four controls and all38direct result tests passed.
+
+The production NFL and unchanged NBA browsers each ran390px and1280px journeys. Every journey retained one actual document request, the original document nonce/time origin, six failed GETs, the earlier pick and a second recovered pick. Four copied recovery/layout controls were independently reconstructed, changed and wholly undone. All430body references,36unique served dist bodies and12PNG hashes/IHDR dimensions close. Root visually inspected only NFL390px error,390px recovered and1280px recovered screenshots, receiptf191f5c4. No visible overlap or unreadable retry control was found in that scoped check. This is Chromium evidence, not a Safari or high-streak/header audit.
+
+Actual app types:zero. Production build completed2026-10-17T13:51:49Z before all15readers and all14unchanged fatal page limits. SC833.1/834,CM608.6/609,NFL487.9/488. No cap or guard waiver. Full source/dependency/tool/font holds passed, including exact three denied font receipts and three changed-receipt rejection controls. Ordinary transport receipts stayed empty; fixtures fulfilled external IO locally.
+
+Artifact12102433481,89903148B/SHA7db22405ff04c7e40cbd72464a3544a9157af215351bc0fa763f57eff15da83e. Canonical tested ZIP2db4f6a861ba64b7bbc4471f53fcfe383e53d75f294e0d1fdcf0a1bc2ef810ab. Independent physical6f2893fc822c5f27ab6b0f785d9cb8f4ddff5791320326c020067fb1cd472215(157892/0), core/browser semantic56732ad162fcdbe1f9b225593592a6d78485c0125f5db913ea85b8d40bbb942f(2649/0), commonfull d5add5b45dfc6db5fcfd6955db7e50c396e7b4630d1006b49d61fd8be548fa77(2264/0). Complete4873source/784dist,521locked versions,24466installed members,176isolated browser-tool members,3runtime tools and9physical font bodies plus manifest close. Installed/runtime bodies rely on CI inventory/OK receipts unless physically retained, not local recreation.
+
+## Closure and limits
+
+CI changed exactly public/sitemap.xml,public/whats-new/index.html,scripts/data/lastmod.json. Those generated bodies remain outside. Closing source keeps tested originals and changes only PROJECT-STATE,WORKBOARD and this audit doc. Integrate actual TESTED code and closing docs separately under BIIrule2, then regenerate and qualify the joined release.
+
+First push finalexit was unretained; a subsequent old remote/no active push observation and one bounded successful retry are recorded, with no asserted timeout cause. First baseline artifact transfer timed out, then one fresh sibling download matched API bytes/digest. Native reviewers retained an invalid draft caused by unsupported AsSpan and a wrong path, a partial-causal assumption error, and one-element JSON array preparation correction. Their corrected receipts change only native methods. Metadata connector/API timeouts later recovered; no app or test rerun was attributed to them. No failed result or skipped gate was overwritten.
+
+Component snapshots do not independently measure elapsed timing-floor duration or hidden error-screen budget. Real timing/eligibility/math bytes are held, and actual browser document/pick recovery is separately observed. Fictional fetch fixtures establish behavior, not real sports data authority or production archive availability. Claude I owns active careers,Manager/UCL/tournaments, actual joined release,main and publication. This is scoped READY, not live.
