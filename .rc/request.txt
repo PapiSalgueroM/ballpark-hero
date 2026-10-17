@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+weight-base: git worktree add -q /tmp/bw d8aaa4cb && ln -s $PWD/node_modules /tmp/bw/node_modules && cd /tmp/bw && npm run build > /tmp/bw-build.log 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4183 > /tmp/bw-serve.log 2>&1 &) && sleep 5 && BASE=http://localhost:4183 SWEEP_BASE=http://localhost:4183 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+savesize-head: node scripts/simClubManagerSaveSize.mjs
+savesize-base: git worktree add -q /tmp/bs d8aaa4cb && ln -s $PWD/node_modules /tmp/bs/node_modules && cd /tmp/bs && node scripts/simClubManagerSaveSize.mjs
+slots-base: git worktree add -q /tmp/bl d8aaa4cb && ln -s $PWD/node_modules /tmp/bl/node_modules && cd /tmp/bl && node scripts/simClubManagerSlots.mjs
