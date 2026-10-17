@@ -12,7 +12,7 @@ const SELF = 'scripts/qa/proveNbaEvaluationResetBaseline.mjs';
 const TEST = 'src/test/nbaLineupEvaluationReset.test.tsx';
 const WORKFLOW = '.github/workflows/nba-evaluation-reset.yml';
 const HOOK = 'src/hooks/useNbaLineup.ts';
-const TEST_SHA = '48dcb9348257a902df2083addfeda5b2206065270f70d0032b2528a80ebaed67';
+const TEST_SHA = 'a429b483fb303f82d79219a08505e4785e33e73f6db3838f3c3c69046ff5b087';
 const HOOK_SHA = '23dd0e8ed4f0c2dc609e71dbfce2ec1536a42b4aabd7e82c77985f555aaae85b';
 const OUT = process.env.NBA_EVALUATION_OUT;
 assert(['1', 'true'].includes(process.env.CI) && process.env.SIM_NETWORK === 'offline', 'Remote CI and offline mode are mandatory');

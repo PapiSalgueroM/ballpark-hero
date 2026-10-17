@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, cleanup, renderHook } from '@testing-library/react';
+import { act, cleanup, renderHook, waitFor } from '@testing-library/react';
 import { writeFileSync } from 'node:fs';
 import { isAbsolute } from 'node:path';
 import type { NbaAIVerdict, StatChallenge } from '@/types/nba';
@@ -101,9 +101,11 @@ async function fill(view: Mounted, prefix = 'Old') {
   if (chosen.phase !== 'reviewing' || chosen.filledCount !== 5 || chosen.isValidating || chosen.totalStat !== 65) throw new Error('SETUP: actual five-pick actions and stat enrichments must finish before evaluation');
   return chosen;
 }
-function reset(view: Mounted) {
+async function reset(view: Mounted) {
   act(() => view.result.current.resetGame()); const resetImmediate = state(view);
-  act(() => vi.advanceTimersByTime(100));
+  await waitFor(() => {
+    if (view.result.current.challenge === null) throw new Error('SETUP: the actual reset challenge must become ready');
+  });
   return { resetImmediate, fresh: state(view) };
 }
 function retain(key: keyof typeof CASE_TITLES, moments: unknown) {
@@ -111,13 +113,12 @@ function retain(key: keyof typeof CASE_TITLES, moments: unknown) {
     localCalls: structuredClone(fixture.local.mock.calls), completionCalls: structuredClone(fixture.record.mock.calls),
     consoleErrors: consoleErrors.map(args => args.map(value => value instanceof Error ? { name: value.name, message: value.message } : value)),
     storesBefore: beforeStores, storesAfter: stores(), draws: [...draws], unexpected: [...unexpected],
-    deferred: deferreds.map(({ label, settled }) => ({ label, settled })), pendingTimers: vi.getTimerCount() };
+    deferred: deferreds.map(({ label, settled }) => ({ label, settled })) };
   cases[key] = evidence;
   return evidence;
 }
 function fixtureHeld(evidence: ReturnType<typeof retain>, chosen: State[]) {
   expect(evidence.deferred.every(gate => gate.settled), 'SETUP: every retained promise must settle before assertions').toBe(true);
-  expect(evidence.pendingTimers, 'SETUP: the actual reset timer must be drained').toBe(0);
   expect(evidence.unexpected, 'SETUP: no undeclared transport or local judge call').toEqual([]);
   expect(evidence.requests.filter(row => row.kind === 'evaluation')).toEqual(chosen.map(s => ({ kind: 'evaluation', url: REVIEW_URL, method: 'POST', contentType: 'application/json', body: postFor(s), signalAtCall: null })));
   expect(evidence.requests.filter(row => row.kind === 'enrichment')).toEqual(chosen.flatMap(s => s.filledSlots.map(({ slot }) => ({ kind: 'enrichment', url: STAT_URL, method: 'POST', contentType: 'application/json',
@@ -137,7 +138,6 @@ beforeEach(async () => {
   vi.useRealTimers();
   // Warm React's first async act scheduler before measuring any game draw.
   await act(async () => {});
-  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
   let challengeIndex = 0;
   fixture.challenge.mockReset().mockImplementation(() => ({ stat: 'Fixture Challenge ' + (++challengeIndex), direction: challengeIndex % 2 ? 'highest' : 'lowest', unit: 'fixture units', emoji: '🏀' }));
   fixture.local.mockReset(); fixture.record.mockReset(); fixture.badges.mockReset().mockResolvedValue([]); fixture.refresh.mockReset(); fixture.toast.mockReset();
@@ -163,7 +163,7 @@ beforeEach(async () => {
   vi.spyOn(Math, 'random').mockImplementation(() => { draws.push(0.6); return 0.6; });
   vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => { consoleErrors.push(args); });
 });
-afterEach(() => { cleanup(); vi.clearAllTimers(); vi.useRealTimers(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
+afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 afterAll(() => {
   const out = process.env.NBA_EVALUATION_RAW;
   if (out) { if (!isAbsolute(out)) throw new Error('NBA_EVALUATION_RAW must be absolute'); writeFileSync(out, JSON.stringify({ version: 1, caseTitles: Object.values(CASE_TITLES), cases }, null, 2) + '\n', { flag: 'wx' }); }
@@ -172,7 +172,7 @@ afterAll(() => {
 describe('NBA evaluation belongs to the current five', () => {
   it(CASE_TITLES.resetSuccess, async () => {
     const view = mount(), chosen = await fill(view), response = request('reset success response');
-    const done = begin(view), during = state(view), { resetImmediate, fresh } = reset(view);
+    const done = begin(view), during = state(view), { resetImmediate, fresh } = await reset(view);
     await act(async () => { response.resolve(reply(true, REMOTE)); await done; }); const settled = state(view);
     const evidence = retain('resetSuccess', { chosen, during, resetImmediate, fresh, settled }); fixtureHeld(evidence, [chosen]);
     expect(abandoned(settled), 'Starting over must keep the abandoned NBA five from becoming a result').toBe(true);
@@ -182,7 +182,7 @@ describe('NBA evaluation belongs to the current five', () => {
     const view = mount(), chosen = await fill(view), response = request('held JSON response'), body = deferred<NbaAIVerdict>('held JSON body'), entered = deferred<void>('JSON entered', false);
     const done = begin(view);
     await act(async () => { response.resolve({ ok: true, status: 200, json: () => { jsonCalls.push('held'); entered.resolve(); return body.promise; } } as Response); await entered.promise; });
-    const readingJson = state(view), { resetImmediate, fresh } = reset(view);
+    const readingJson = state(view), { resetImmediate, fresh } = await reset(view);
     await act(async () => { body.resolve(REMOTE); await done; }); const settled = state(view);
     const evidence = retain('resetJson', { chosen, readingJson, resetImmediate, fresh, settled }); fixtureHeld(evidence, [chosen]);
     expect(abandoned(settled), 'A reset NBA game must ignore the previous held JSON verdict').toBe(true);
@@ -191,7 +191,7 @@ describe('NBA evaluation belongs to the current five', () => {
   it(CASE_TITLES.nonOkFallback, async () => {
     const view = mount(), chosen = await fill(view), response = request('non-ok response'), local = deferred<NbaAIVerdict>('non-ok local'), entered = deferred<void>('non-ok entered', false);
     localPlans.push(() => { entered.resolve(); return local.promise; }); const done = begin(view);
-    await act(async () => { response.resolve(reply(false, {})); await entered.promise; }); const judging = state(view), { resetImmediate, fresh } = reset(view);
+    await act(async () => { response.resolve(reply(false, {})); await entered.promise; }); const judging = state(view), { resetImmediate, fresh } = await reset(view);
     await act(async () => { local.resolve(LOCAL); await done; }); const settled = state(view);
     const evidence = retain('nonOkFallback', { chosen, judging, resetImmediate, fresh, settled }); fixtureHeld(evidence, [chosen]);
     expect(abandoned(settled), 'A reset NBA game must ignore its abandoned non-ok fallback').toBe(true);
@@ -200,7 +200,7 @@ describe('NBA evaluation belongs to the current five', () => {
   it(CASE_TITLES.thrownFallback, async () => {
     const view = mount(), chosen = await fill(view), response = request('thrown response'), local = deferred<NbaAIVerdict>('thrown local'), entered = deferred<void>('thrown entered', false);
     localPlans.push(() => { entered.resolve(); return local.promise; }); const done = begin(view);
-    await act(async () => { response.reject(new Error('Fixture request failure')); await entered.promise; }); const judging = state(view), { resetImmediate, fresh } = reset(view);
+    await act(async () => { response.reject(new Error('Fixture request failure')); await entered.promise; }); const judging = state(view), { resetImmediate, fresh } = await reset(view);
     await act(async () => { local.resolve(LOCAL); await done; }); const settled = state(view);
     const evidence = retain('thrownFallback', { chosen, judging, resetImmediate, fresh, settled }); fixtureHeld(evidence, [chosen]);
     expect(abandoned(settled), 'A reset NBA game must ignore its abandoned network fallback').toBe(true);
@@ -209,7 +209,7 @@ describe('NBA evaluation belongs to the current five', () => {
   it(CASE_TITLES.rejectedFallback, async () => {
     const view = mount(), chosen = await fill(view), response = request('rejected fallback response'), local = deferred<NbaAIVerdict>('rejected local'), entered = deferred<void>('rejected entered', false);
     localPlans.push(() => { entered.resolve(); return local.promise; }); const done = begin(view);
-    await act(async () => { response.resolve(reply(false, {})); await entered.promise; }); const judging = state(view), { resetImmediate, fresh } = reset(view);
+    await act(async () => { response.resolve(reply(false, {})); await entered.promise; }); const judging = state(view), { resetImmediate, fresh } = await reset(view);
     await act(async () => { local.reject(new Error('Fixture local failure')); await done; }); const settled = state(view);
     const evidence = retain('rejectedFallback', { chosen, judging, resetImmediate, fresh, settled }); fixtureHeld(evidence, [chosen]);
     expect(abandoned(settled), 'An abandoned NBA judge rejection must not set the new game error').toBe(true);
@@ -218,7 +218,7 @@ describe('NBA evaluation belongs to the current five', () => {
   it(CASE_TITLES.replacement, async () => {
     async function pair(oldFirst: boolean) {
       const view = mount(), completedBefore = fixture.record.mock.calls.length, chosen = await fill(view, 'Old'), old = request(oldFirst ? 'old first response' : 'old last response');
-      const oldDone = begin(view), { resetImmediate } = reset(view), fresh = await fill(view, 'New'), next = request(oldFirst ? 'new last response' : 'new first response');
+      const oldDone = begin(view), { resetImmediate } = await reset(view), fresh = await fill(view, 'New'), next = request(oldFirst ? 'new last response' : 'new first response');
       const nextDone = begin(view), waiting = state(view); let middle: State;
       if (oldFirst) {
         await act(async () => { old.resolve(reply(true, REMOTE)); await oldDone; }); middle = state(view);
