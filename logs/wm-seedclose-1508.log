@@ -1,0 +1,47 @@
+treeWithoutMerge: 457c5b2035c1e35594b8ce48967817cfa2e8c904, 13850625 without f1e54e17; conflicts kept from 13850625: none
+treeWithoutMerge: 3c6305026b4c9dac551e7aca61da68ac5d2515a3, 457c5b20 without 54100f6e; conflicts kept from 457c5b20: src/pages/WhatsNew.tsx
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   bridge "the window records nothing": 1
+   bridge "recordAiDeals records nothing": 1
+   bridge "the join keeps the departed ledger": 1
+   bridge "the join keeps the run in's gone names and log": 1
+   bridge "a rival closes whatever the ledger says": 1
+   control seedless: 1
+   control norecord: 1
+   control norecord: 1
+   control noflush: 1
+   control nojanuary: 1
+   control nosummer: 1
+   control joinledger: 1
+   control nolock: 1
+   control nolist: 1
+   control norepair: 1
+   control repairthrows: 1
+   control nohijack: 1
+   control nowalk: 1
+   control noguard: 1
+   control nocarry: 1
+   control seasonone: 1
+   control dropbase: 1
+   control noskip: 1
+   control drawshift: 1
+   control slow: 1
+   control seedclose: 1
+   control seedcarry: 1
+   control goneshown: 1
+   control edit made 1 time(s): seedclose: return livingWorldOf(career) && recordAiDeal(career, deal, c
+2) negotiation: a hijack and a walk away on PR269's vectors at each seeded career's opening window, seeds 1,2,3,4,5
+   hijack: 45 of 45 at the rival; walk away: 45 of 45; 0 careers where no bidding war could be set up on the vectors
+   protected by ruling 3: a man I sold, 13 of 13 wars held (15 careers tried, 0 not protected); a man I left behind, 15 of 15 (15 tried, 0 not protected)
+13) section 2's protected arms in ADOPTED careers (Round 1508: no seed, the ledger adoptLivingWorld gives), seeds 1,2,3,4,5
+  FAIL section 13: Real Madrid (now, seed 1, a man I left behind, adopted) protected-hijack: the talks went hijacked (the rival closed on Abdoul Koné)
+  FAIL section 13: Real Madrid (now, seed 1, a man I left behind, adopted) protected-hijack: a news line says Nürnberg took Abdoul Koné from Real Madrid
+  FAIL section 13: Real Madrid (now, seed 1, a man I left behind, adopted) protected-hijack: Abdoul Koné went on goneNames
+  FAIL section 13: Real Madrid (now, seed 1, a man I left behind, adopted) protected-walk: a news line says Nürnberg took Abdoul Koné from Real Madrid
+  FAIL section 13: Real Madrid (now, seed 1, a man I left behind, adopted) protected-walk: Abdoul Koné went on goneNames
+  FAIL section 13: Real Madrid (now, seed 1, a man I left behind, adopted) protected-walk: a headline says Nürnberg signed Abdoul Koné
+  FAIL section 13: Real Madrid (now, seed 2, a man I sold, adopted) protected-hijack: the talks went hijacked (the rival closed on Jude Bellingham)
+  FAIL section 13: Real Madrid (now, seed 2, a man I sold, adopted) protected-hijack: a news line says Heidenheim took Jude Bellingham from Manchester City
+   a man I sold, 0 of 13 wars held (15 careers tried, 0 not protected); a man I left behind, 0 of 15 (15 tried, 0 not protected)
+  section 13: 160 more failures not shown
+simCmWorldMoves: control seedclose FIRED: section 13 red (168)

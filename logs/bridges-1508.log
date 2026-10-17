@@ -1,0 +1,3 @@
+cmNoAdoption1508: the adoption line stands once in src/lib/clubManager.ts and can be taken out
+cmWorldSeed1250: the seed block stands once in src/lib/clubManager.ts and can be taken out
+cmNoAiMoves1344: all 5 anchors stand once and can be taken out

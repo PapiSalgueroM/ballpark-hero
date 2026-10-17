@@ -1,0 +1,13 @@
+treeWithoutMerge: 5ec26a710303740362d4bae46cf0c0ed815c74a8, 13850625 without f1e54e17; conflicts kept from 13850625: none
+simCmOldCareersWorld: BASE 5ec26a71 (CM_OLD_WORLD_BASE), sections 1, control early
+  fixture pre: 1 tape(s) passed over (tape 0: the next season ended (or the manager was sacked) before its January window (season 2 week 27 of 54, match, sacked true, wilderness false, board 0))
+  FAIL section 1: [equal] pre (Arsenal, now) before the summer, at step 0 load: the state differs
+  pre (Arsenal, now): 20 steps equal to BASE before the summer, 31 after it
+  FAIL section 1: [equal] mid (Bayern Munich, era2015) before the summer, at step 0 load: the state differs
+  mid (Bayern Munich, era2015): 18 steps equal to BASE before the summer, 29 after it
+section 1: 2 old saves, 2 steps equal to BASE before the summer, 60 steps after it at 8 checkpoints; deals between two other clubs placed at their buyers: 9 in the summer, 12 in January (60 placements checked); 60 joined rows on the screen; red by check {"equal":2}
+  pre: 1427 bytes of ledger after January (16 records)
+  pre: the adoption adds 0 bytes to the state (an empty ledger)
+  mid: 1534 bytes of ledger after January (17 records)
+  mid: the adoption adds 0 bytes to the state (an empty ledger)
+simCmOldCareersWorld: control early FIRED: section 1's comparison before the summer red 2 times (8s)
