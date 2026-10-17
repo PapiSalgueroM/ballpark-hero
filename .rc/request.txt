@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walk: echo "head $(git log -1 --format=%H HEAD^ 2>/dev/null) / $(git log -1 --format=%s | cut -c1-60)"; node scripts/playSoccerDeck.mjs > /tmp/w.log 2>&1; s=$?; echo "ok lines $(grep -c '^ok' /tmp/w.log) FAIL lines $(grep -c '^FAIL' /tmp/w.log)"; grep '^FAIL' /tmp/w.log | head -20; grep 'delayed' /tmp/w.log | head -40; tail -2 /tmp/w.log; exit $s
+m-guard: node .rc/x/mutfix1504.mjs guard && grep -c 'press.at === career' src/pages/SoccerCareer.tsx; npm run build > /tmp/b.log 2>&1 && { RC_OUT=/tmp/guard-out node scripts/playSoccerDeck.mjs > /tmp/g.log 2>&1; s=$?; echo "ok lines $(grep -c '^ok' /tmp/g.log) FAIL lines $(grep -c '^FAIL' /tmp/g.log) FAIL outside delayed $(grep '^FAIL' /tmp/g.log | grep -vc 'delayed')"; grep '^FAIL' /tmp/g.log | cut -c1-260 | head -24; tail -1 /tmp/g.log; git checkout -- src scripts; npm run build > /tmp/b2.log 2>&1; echo "guard mutation: walk exit=$s"; exit $s; }
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json; s=$?; echo "tsc exit=$s"; exit $s
