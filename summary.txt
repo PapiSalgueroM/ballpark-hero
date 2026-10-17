@@ -1,0 +1,4 @@
+vitest exit=0 11s |    Duration  10.80s (transform 3.90s, setup 243ms, collect 9.82s, tests 10.91s, environment 2.02s, prepare 485ms)
+simUsDirtyMoney exit=0 57s | simUsDirtyMoney: all sections green
+ctl-words exit=1 56s | CONTROL words FIRED (red sections 1, 4)
+tsc exit=0 80s | 

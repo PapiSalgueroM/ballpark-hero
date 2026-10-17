@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/careerDirtyMoney.test.ts src/test/usCareerDirtyMoney.test.tsx src/test/usCareerHelpRules1104.test.tsx --testTimeout=300000 --hookTimeout=120000
+simUsDirtyMoney: node scripts/simUsDirtyMoney.mjs
+ctl-words: US_DIRTY_MONEY_CONTROL=words node scripts/simUsDirtyMoney.mjs
