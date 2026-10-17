@@ -1,0 +1,466 @@
+{
+  "version": 1,
+  "caseTitles": [
+    "Header leaves the account dialog unevaluated until Log In",
+    "Home leaves the account dialog unevaluated until Make a free one",
+    "Game navbar leaves the account dialog unevaluated until Track stats",
+    "Header preserves requested tabs fields and the latest opener across reopening",
+    "Home opens the real signup form and keeps validation and Close usable",
+    "Game navbar keeps signup Escape navigation and saved bytes unchanged"
+  ],
+  "cases": {
+    "headerDeferred": {
+      "title": "Header leaves the account dialog unevaluated until Log In",
+      "consumer": "header",
+      "before": {
+        "local": {
+          "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+        },
+        "session": {
+          "account-fixture": "held session bytes"
+        }
+      },
+      "initial": {
+        "factoryEvaluations": 0,
+        "realImports": 0,
+        "renders": 0,
+        "mounts": 0,
+        "unmounts": 0,
+        "dialogPresent": false,
+        "address": "/",
+        "stores": {
+          "local": {
+            "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+          },
+          "session": {
+            "account-fixture": "held session bytes"
+          }
+        }
+      },
+      "opened": {
+        "factoryEvaluations": 1,
+        "realImports": 1,
+        "renders": 1,
+        "mounts": 1,
+        "unmounts": 0,
+        "form": {
+          "heading": "Welcome Back!",
+          "email": "",
+          "password": "",
+          "ageConfirmed": null,
+          "focusInside": true,
+          "address": "/",
+          "stores": {
+            "local": {
+              "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+            },
+            "session": {
+              "account-fixture": "held session bytes"
+            }
+          }
+        }
+      },
+      "closed": {
+        "factoryEvaluations": 1,
+        "realImports": 1,
+        "renders": 2,
+        "mounts": 1,
+        "unmounts": 0,
+        "dialogPresent": false,
+        "openerFocused": true,
+        "stores": {
+          "local": {
+            "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+          },
+          "session": {
+            "account-fixture": "held session bytes"
+          }
+        }
+      },
+      "backend": {
+        "signIn": 0,
+        "signUp": 0,
+        "signOut": 0,
+        "resetPasswordForEmail": 0,
+        "from": 0,
+        "rpc": 0
+      }
+    },
+    "homeDeferred": {
+      "title": "Home leaves the account dialog unevaluated until Make a free one",
+      "consumer": "home",
+      "before": {
+        "local": {
+          "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+        },
+        "session": {
+          "account-fixture": "held session bytes"
+        }
+      },
+      "initial": {
+        "factoryEvaluations": 0,
+        "realImports": 0,
+        "renders": 0,
+        "mounts": 0,
+        "unmounts": 0,
+        "dialogPresent": false,
+        "address": "/",
+        "stores": {
+          "local": {
+            "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+          },
+          "session": {
+            "account-fixture": "held session bytes"
+          }
+        }
+      },
+      "opened": {
+        "factoryEvaluations": 1,
+        "realImports": 1,
+        "renders": 1,
+        "mounts": 1,
+        "unmounts": 0,
+        "form": {
+          "heading": "Join DoUKnowBall",
+          "email": "",
+          "password": "",
+          "ageConfirmed": false,
+          "focusInside": true,
+          "address": "/",
+          "stores": {
+            "local": {
+              "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+            },
+            "session": {
+              "account-fixture": "held session bytes"
+            }
+          }
+        }
+      },
+      "closed": {
+        "factoryEvaluations": 1,
+        "realImports": 1,
+        "renders": 2,
+        "mounts": 1,
+        "unmounts": 0,
+        "dialogPresent": false,
+        "openerFocused": true,
+        "stores": {
+          "local": {
+            "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+          },
+          "session": {
+            "account-fixture": "held session bytes"
+          }
+        }
+      },
+      "backend": {
+        "signIn": 0,
+        "signUp": 0,
+        "signOut": 0,
+        "resetPasswordForEmail": 0,
+        "from": 0,
+        "rpc": 0
+      }
+    },
+    "navbarDeferred": {
+      "title": "Game navbar leaves the account dialog unevaluated until Track stats",
+      "consumer": "navbar",
+      "before": {
+        "local": {
+          "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+        },
+        "session": {
+          "account-fixture": "held session bytes"
+        }
+      },
+      "initial": {
+        "factoryEvaluations": 0,
+        "realImports": 0,
+        "renders": 0,
+        "mounts": 0,
+        "unmounts": 0,
+        "dialogPresent": false,
+        "address": "/club-manager?fixture=kept#round",
+        "stores": {
+          "local": {
+            "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+          },
+          "session": {
+            "account-fixture": "held session bytes"
+          }
+        }
+      },
+      "opened": {
+        "factoryEvaluations": 1,
+        "realImports": 1,
+        "renders": 1,
+        "mounts": 1,
+        "unmounts": 0,
+        "form": {
+          "heading": "Join DoUKnowBall",
+          "email": "",
+          "password": "",
+          "ageConfirmed": false,
+          "focusInside": true,
+          "address": "/club-manager?fixture=kept#round",
+          "stores": {
+            "local": {
+              "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+            },
+            "session": {
+              "account-fixture": "held session bytes"
+            }
+          }
+        }
+      },
+      "closed": {
+        "factoryEvaluations": 1,
+        "realImports": 1,
+        "renders": 2,
+        "mounts": 1,
+        "unmounts": 0,
+        "dialogPresent": false,
+        "openerFocused": true,
+        "stores": {
+          "local": {
+            "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+          },
+          "session": {
+            "account-fixture": "held session bytes"
+          }
+        }
+      },
+      "backend": {
+        "signIn": 0,
+        "signUp": 0,
+        "signOut": 0,
+        "resetPasswordForEmail": 0,
+        "from": 0,
+        "rpc": 0
+      }
+    },
+    "headerLifetime": {
+      "title": "Header preserves requested tabs fields and the latest opener across reopening",
+      "first": {
+        "heading": "Welcome Back!",
+        "email": "fixture@example.invalid",
+        "password": "held-password",
+        "ageConfirmed": null,
+        "focusInside": true,
+        "address": "/",
+        "stores": {
+          "local": {
+            "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+          },
+          "session": {
+            "account-fixture": "held session bytes"
+          }
+        }
+      },
+      "second": {
+        "heading": "Join DoUKnowBall",
+        "email": "fixture@example.invalid",
+        "password": "held-password",
+        "ageConfirmed": true,
+        "focusInside": true,
+        "address": "/",
+        "stores": {
+          "local": {
+            "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+          },
+          "session": {
+            "account-fixture": "held session bytes"
+          }
+        }
+      },
+      "third": {
+        "heading": "Welcome Back!",
+        "email": "fixture@example.invalid",
+        "password": "held-password",
+        "ageConfirmed": null,
+        "focusInside": true,
+        "address": "/",
+        "stores": {
+          "local": {
+            "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+          },
+          "session": {
+            "account-fixture": "held session bytes"
+          }
+        }
+      },
+      "fourth": {
+        "heading": "Join DoUKnowBall",
+        "email": "fixture@example.invalid",
+        "password": "held-password",
+        "ageConfirmed": true,
+        "focusInside": true,
+        "address": "/",
+        "stores": {
+          "local": {
+            "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+          },
+          "session": {
+            "account-fixture": "held session bytes"
+          }
+        }
+      },
+      "beforeFinalClose": {
+        "mounts": 1,
+        "unmounts": 0,
+        "realImports": 1
+      },
+      "latestOpenerFocused": true,
+      "loginConnected": true,
+      "signupConnected": true,
+      "before": {
+        "local": {
+          "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+        },
+        "session": {
+          "account-fixture": "held session bytes"
+        }
+      },
+      "after": {
+        "local": {
+          "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+        },
+        "session": {
+          "account-fixture": "held session bytes"
+        }
+      },
+      "backend": {
+        "signIn": 0,
+        "signUp": 0,
+        "signOut": 0,
+        "resetPasswordForEmail": 0,
+        "from": 0,
+        "rpc": 0
+      }
+    },
+    "homeForm": {
+      "title": "Home opens the real signup form and keeps validation and Close usable",
+      "opened": {
+        "heading": "Join DoUKnowBall",
+        "email": "",
+        "password": "",
+        "ageConfirmed": false,
+        "focusInside": true,
+        "address": "/",
+        "stores": {
+          "local": {
+            "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+          },
+          "session": {
+            "account-fixture": "held session bytes"
+          }
+        }
+      },
+      "validation": {
+        "emailInvalid": "true",
+        "passwordInvalid": "true",
+        "emailMessage": "Email is required",
+        "passwordMessage": "Password is required"
+      },
+      "login": {
+        "heading": "Welcome Back!",
+        "email": "",
+        "password": "",
+        "ageConfirmed": null,
+        "focusInside": true,
+        "address": "/",
+        "stores": {
+          "local": {
+            "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+          },
+          "session": {
+            "account-fixture": "held session bytes"
+          }
+        }
+      },
+      "openerFocused": true,
+      "before": {
+        "local": {
+          "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+        },
+        "session": {
+          "account-fixture": "held session bytes"
+        }
+      },
+      "after": {
+        "local": {
+          "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+        },
+        "session": {
+          "account-fixture": "held session bytes"
+        }
+      },
+      "backend": {
+        "signIn": 0,
+        "signUp": 0,
+        "signOut": 0,
+        "resetPasswordForEmail": 0,
+        "from": 0,
+        "rpc": 0
+      }
+    },
+    "navbarNavigation": {
+      "title": "Game navbar keeps signup Escape navigation and saved bytes unchanged",
+      "initialAddress": "/club-manager?fixture=kept#round",
+      "opened": {
+        "heading": "Join DoUKnowBall",
+        "email": "",
+        "password": "",
+        "ageConfirmed": false,
+        "focusInside": true,
+        "address": "/club-manager?fixture=kept#round",
+        "stores": {
+          "local": {
+            "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+          },
+          "session": {
+            "account-fixture": "held session bytes"
+          }
+        }
+      },
+      "afterEscape": {
+        "openerFocused": true,
+        "address": "/club-manager?fixture=kept#round",
+        "stores": {
+          "local": {
+            "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+          },
+          "session": {
+            "account-fixture": "held session bytes"
+          }
+        }
+      },
+      "afterBack": "/soccer",
+      "before": {
+        "local": {
+          "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+        },
+        "session": {
+          "account-fixture": "held session bytes"
+        }
+      },
+      "after": {
+        "local": {
+          "soccerCareerSave": "{\"fixture\":\"opaque career bytes\"}"
+        },
+        "session": {
+          "account-fixture": "held session bytes"
+        }
+      },
+      "backend": {
+        "signIn": 0,
+        "signUp": 0,
+        "signOut": 0,
+        "resetPasswordForEmail": 0,
+        "from": 0,
+        "rpc": 0
+      }
+    }
+  }
+}
