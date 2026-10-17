@@ -1,0 +1,4 @@
+simCmOwnClubMarket: CONTROL legacy FIRED: with main's line on the head, section 1 went red (126) and section 2 (41), and the rest stayed green
+simCmOwnClubMarket: CONTROL slice FIRED: one row fewer in the feed's pool moved every start (1700 of 1700) and every daily (180); sections 1 and 2 stayed green
+simCmOwnClubMarket: CONTROL shallow DID NOT FIRE as it must: the lowest index was none
+controls: legacy=1 slice=1 shallow=3
