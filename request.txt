@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+playSoccerResultsLayout: node scripts/playSoccerResultsLayout.mjs
+access: node scripts/simAccessibility.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+rival: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

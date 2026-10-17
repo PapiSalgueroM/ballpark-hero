@@ -1,0 +1,7 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+access exit=0 0s | simAccessibility: all green
+playSoccerResultsLayout exit=1 0s | Node.js v24.21.0
+simInventedNames exit=0 12s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simCareerParity exit=0 15s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+rival exit=0 21s | No rival product names found. 0 findings.
+simHarnessAnchors exit=1 43s | simHarnessAnchors: 1 failure(s)

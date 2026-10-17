@@ -1,0 +1,8 @@
+1) every harness parses
+   ok   938 harnesses pass node --check
+2) no harness carries an anchor it can never match
+   938 harnesses, 249 carry a multi line anchor into src, 304 normalised reads guard one
+   ok   249 harnesses are in scope, so the check is looking at something
+   FAIL simCmHandoverDesk.mjs reads src/lib/clubManagerCalendar.ts raw at line 24 and searches it with a multi line anchor (line 29), so on a CRLF checkout it matches nothing
+
+simHarnessAnchors: 1 failure(s)
