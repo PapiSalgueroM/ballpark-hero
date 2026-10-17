@@ -1,0 +1,34 @@
+[SIM_OFFLINE_BLOCK] external fetch https://fonts.googleapis.com
+/home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/offlineTransport.cjs:30
+  const error = new Error(`Offline harness blocked ${via} to ${origin}`);
+                ^
+
+Error: Offline harness blocked fetch to https://fonts.googleapis.com
+    at blocked (/home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/offlineTransport.cjs:30:17)
+    at requireLoopback (/home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/offlineTransport.cjs:36:39)
+    at globalThis.fetch (/home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/offlineTransport.cjs:49:3)
+    at download (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/freeKickLab1070.mjs:21:28)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/freeKickLab1070.mjs:28:21
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  code: 'SIM_OFFLINE_BLOCK'
+}
+
+Node.js v24.21.0
+simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+node:fs:621
+  return binding.open(
+                 ^
+
+Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/fcrf/manifest.json'
+    at Object.openSync (node:fs:621:18)
+    at Object.readFileSync (node:fs:487:35)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:43:41 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/fcrf/manifest.json'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+weights: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; cp /tmp/sw.log $RC_OUT/sw.log; grep -E "soccer-career|club-manager|manager-hot-seat|deadline-day|nba-my-career|nfl-my-career|mlb-my-career|nhl-my-career|OVER|over" /tmp/sw.log | head -30; tail -3 /tmp/sw.log; exit $s
+playTwoTabs: ENGINES=chromium node scripts/playTwoTabs.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+playHomeFold: node scripts/playHomeFold.mjs
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+playClubManagerSlots: ENGINES=chromium node scripts/playClubManagerSlots.mjs
+playCmHubLanding: ENGINES=chromium node scripts/playCmHubLanding.mjs
+playCmRealFixtures: mkdir -p .tmp-fx/fcrf && export FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/fcrf" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && node scripts/simCmRealFixtures.mjs | tail -1 && node scripts/playCmRealFixtures.mjs
