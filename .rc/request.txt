@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+basebuild-33d1: git worktree add -f .base 33d1b7b6a783a7a5b3c6f9d0c3ff76a15c17f6df > /dev/null 2>&1 && cd .base && ../node_modules/.bin/vite build --outDir ../dist-base --emptyOutDir > /tmp/basebuild.log 2>&1; s=$?; tail -2 /tmp/basebuild.log; cd .. && (nohup node scripts/lib/hostLikeServer.mjs dist-base 4174 > /tmp/base-server.log 2>&1 &) ; sleep 3; echo "base served: $(curl -s -o /dev/null -w '%{http_code}' http://localhost:4174/soccer-career)"; exit $s
+weight-vs-33d1: cp .rc/x/weight1334.mjs scripts/weight1334.tmp.mjs && node scripts/weight1334.tmp.mjs > /tmp/w2.log 2>&1; s=$?; rm -f scripts/weight1334.tmp.mjs; cp /tmp/w2.log $RC_OUT/weight-vs-33d1.log; grep -E "soccer-career|club-manager|manager-hot-seat|deadline-day|nfl-my-career|^ *\/ " /tmp/w2.log | head -20; tail -3 /tmp/w2.log; exit $s
+helper-1335: R=$(bash .rc/x/minus1335.sh); s=$?; echo "minus1335 exit $s ref $R"; [ $s -eq 0 ] && git diff --stat $R HEAD -- src/lib/clubManagerCalendar.ts src/components/club-manager/ClubManagerHelp.tsx | tail -2; exit $s
