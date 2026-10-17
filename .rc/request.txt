@@ -1,0 +1,5 @@
+#!serial
+sd1: SIM_SOCCER_DECK_SECTIONS=1 node scripts/simSoccerDeck.mjs
+ctl-onefree: SIM_SOCCER_DECK_CONTROL=onefree node scripts/simSoccerDeck.mjs > /tmp/c.log 2>&1; s=$?; grep -E 'onefree control|FAIL' /tmp/c.log | cut -c1-240; tail -1 /tmp/c.log; exit $s
+m-rule-onefree: node .rc/x/mutfix1504.mjs rule && { SIM_SOCCER_DECK_CONTROL=onefree node scripts/simSoccerDeck.mjs > /tmp/r.log 2>&1; s=$?; grep -E 'onefree control|FAIL' /tmp/r.log | cut -c1-240; tail -1 /tmp/r.log; git checkout -- src scripts; echo "rule deleted, onefree control exit=$s (3 means it did not fire, as it must not)"; [ $s -eq 3 ] && exit 0; exit 1; }
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
