@@ -14,7 +14,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const BASE = '6465d9aeac1bc10f37d08fcb1a41b7521a886a1a';
 const TEST = 'src/test/managerSavedDealsPaging.test.tsx', OLD = 'src/test/managerOwnTransferLog.test.tsx';
 const SELF = 'scripts/qa/proveManagerSavedDealsPaging.mjs', COMPONENT = 'src/components/club-manager/TransferScreen.tsx';
-const TEST_SHA = '88260fb103c2ea09111fcead25096d76fca76db82acbafa3be6e42c7185741f7';
+const TEST_SHA = 'f8f4538bf3220a9189c13455fa54c6dd06bc32db028aa010a8463725b50f44b4';
 const FAULTS = {
   'all retained own deals are reachable in newest-first pages': 'The next page must expose retained own deals beyond fifty',
   'fee pages sort the complete retained list and reset safely': 'The next fee page must expose the remaining retained deals',
@@ -88,7 +88,7 @@ try {
     assert.equal(evidence.careerAfter, evidence.careerBefore); assert.deepEqual(evidence.actionCalls, []); assert.deepEqual(evidence.draws, []);
   }
   assert.equal(raw.cases.readOnly.careerAfter, raw.cases.readOnly.careerBefore, 'Complete captured career bytes held during preserved browsing');
-  assert.deepEqual(raw.cases.readOnly.actionCalls, []); assert.deepEqual(raw.cases.readOnly.clearCalls, [[]]); assert.deepEqual(raw.cases.readOnly.draws, []);
+  assert.deepEqual(raw.cases.readOnly.actionCalls, []); assert.equal(raw.cases.readOnly.clearCalls, 1); assert.deepEqual(raw.cases.readOnly.draws, []);
   paging.row.rawCases = RAW_KEYS;
   assert.deepEqual(paging.suite.assertionResults.map(item => item.title).sort(), [...Object.keys(FAULTS), ...PRESERVES].sort());
   for (const item of paging.suite.assertionResults) {

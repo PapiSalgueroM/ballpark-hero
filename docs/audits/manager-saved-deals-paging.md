@@ -11,3 +11,9 @@ First freeze six additive mounted cases and run them against the unchanged compo
 All application runtime is remote in GitHub Actions. Final qualification adds actual app types, the production build, all fifteen rebuilt-site readers, unchanged route weights and prepared saved-log phone/desktop journeys. The browser fixture is synthetic and explicitly persisted through the actual constructor/save/load. It does not prove naturally accumulated transfer history or physical Apple behavior. No local application runtime, production database query, main merge or live publication is claimed.
 
 Baseline source and execution are pending. No product change has been applied.
+
+## First baseline method repair
+
+Actual7dc4dcfc/run38988478046/job117265318593 completed FAILURE. The original component completed all6cases, with the2precise missing-Next faults and4preservation cases passing. Actual app types,521installed versions and full source/installed holds passed. The old10cases were not reached. The proof then rejected its own raw Dismiss receipt: React passes a click event, but the helper expected an empty argument list. The raw event also contains a volatile timestamp, so it is unsuitable for exact pairing.
+
+Only the new raw receipt changes to the numeric callback count1, already enforced by the unchanged toHaveBeenCalledTimes(1) test assertion. Both helper expectations and test pins follow that representation. All six test assertions, titles, fixtures, actions, component and old10test remain unchanged. The failed artifact12083563723,36771859bytes,SHA4d7830bfdd228c486827415c8399fb125e4c9931b7f63826d650350fde7869d4 is retained outside in manager-saved-deals-paging-first-baseline-1393. It is not qualified or relabeled. Repaired baseline execution is pending; the production pager is still unapplied.

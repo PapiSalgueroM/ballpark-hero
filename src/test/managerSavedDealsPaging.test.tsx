@@ -223,7 +223,7 @@ describe('saved Club Manager deal pages', () => {
     fireEvent.click(view.getByRole('button', { name: 'Dismiss' }));
     cases.readOnly = { careerBefore: before, careerAfter: JSON.stringify(career), history, business: business.textContent,
       feedback: { role: feedback.getAttribute('role'), text: feedback.textContent }, actionCalls: view.action.mock.calls,
-      clearCalls: view.clearNote.mock.calls, draws: random.mock.results.map(result => result.value) };
+      clearCalls: view.clearNote.mock.calls.length, draws: random.mock.results.map(result => result.value) };
     expect(JSON.stringify(career)).toBe(before);
     expect(business).toHaveTextContent(career.seasonSignings[0].name); expect(business).toHaveTextContent(moneyIn(career)(7));
     expect(feedback).toHaveAttribute('role', 'status'); expect(feedback).toHaveTextContent('Fixture refusal. The saved deal remains unchanged.');
