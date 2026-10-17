@@ -830,7 +830,9 @@ const SAVE_KEY = "soccerCareerSave";
 /* Round 1330: the page's own toasts sit at the top centre, clear of the bar,
    the Training and Phone buttons and the choices a card reveals under them. */
 const PAGE_TOAST = { position: "top-center" } as const;
-/* Round 1504: the longest a deck card's answer waits for the deck chunk before it says so (handleEventChoice). */
+/* Round 1504: the longest a deck card's answer waits for the deck chunk before it says so (handleEventChoice).
+   scripts/playSoccerDeck.mjs read the deck's first load (7 chunks, 30.1K gzipped) at 334 ms on a phone line of
+   150 ms latency and 1.6 Mbps (rc r1504-s7); about 2.6 s on a 2G line of 250 Kbps and 800 ms by the same bytes. */
 const DECK_WAIT_MS = 8000;
 const SaveMovedNotice = lazy(() => import('@/components/SaveMovedNotice').catch(() => { reloadToRetryChunk(); return new Promise<never>(() => undefined); }));
 
