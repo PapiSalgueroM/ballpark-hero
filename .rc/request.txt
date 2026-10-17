@@ -1,0 +1,15 @@
+# Release BI triage, f579a005: simLiveMatch section 3 and simClubManagerEraUcl section 7 read the save's world ledger. Plain runs on the file's seed and SIM_SEED 1 and 2; the new noledger controls and the old controls of those sections (a control line here exits 0 when it fired: simLiveMatch "control <c>: PASS", simClubManagerEraUcl "control: green"); simHarnessAnchors for the new anchor.
+headsha: git log --oneline -2
+simLiveMatch: node scripts/simLiveMatch.mjs
+simLiveMatch-seed1: SIM_SEED=1 node scripts/simLiveMatch.mjs
+simLiveMatch-seed2: SIM_SEED=2 node scripts/simLiveMatch.mjs
+lm-ctl-noledger: LIVE_MATCH_CONTROL=noledger node scripts/simLiveMatch.mjs
+lm-ctl-nooppsubs: LIVE_MATCH_CONTROL=nooppsubs node scripts/simLiveMatch.mjs
+lm-ctl-doubleman: LIVE_MATCH_CONTROL=doubleman node scripts/simLiveMatch.mjs
+simClubManagerEraUcl: node scripts/simClubManagerEraUcl.mjs
+simClubManagerEraUcl-seed1: SIM_SEED=1 node scripts/simClubManagerEraUcl.mjs
+simClubManagerEraUcl-seed2: SIM_SEED=2 node scripts/simClubManagerEraUcl.mjs
+ucl-ctl-noledger: CM_UCL_CONTROL=noledger node scripts/simClubManagerEraUcl.mjs
+ucl-ctl-poolnames: CM_UCL_CONTROL=poolnames node scripts/simClubManagerEraUcl.mjs
+ucl-ctl-oldname: CM_UCL_CONTROL=oldname node scripts/simClubManagerEraUcl.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
