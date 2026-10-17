@@ -1,0 +1,5 @@
+Actual Cold binding body: child exit1; one exact guard refusal; effective source-map fault 0bfc8ef2161d3f76c8b51f24e3fc5141669cd1fdfa2f882e83beee10bdf8d7b3.
+Actual Cold binding unrelated: child exit1; one exact guard refusal; effective source-map fault 57e24e264b392acdf81f2e54fe47b037b927f995145fa96615e481674b5d43a1.
+Actual Cold binding loan-gate: child exit1; one exact guard refusal; effective source-map fault ffcd768661effa7ca27eaeb50a47cf9e04e1c065100e2bf461de8e667b6749d9.
+Actual source held: 13 files; all three full helper inverses and physical Life fault copies retained.
+Three actual old-Cold source guard refusals: known631 corruption, unrelated whole-parent drift and malformed236 binding. No app mutation or child compiler/unit credit.
