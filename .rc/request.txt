@@ -1,0 +1,4 @@
+fleet-pc: node scripts/proofWorldUclFleet.mjs --base 20fa77a6 --fleet participants --coach coach --strip worldComps --eval --holder-off --old-saves
+fleet-pn: node scripts/proofWorldUclFleet.mjs --base 20fa77a6 --fleet participants --coach nocoach --strip worldComps --eval --holder-off --old-saves
+fleet-wc: node scripts/proofWorldUclFleet.mjs --base 20fa77a6 --fleet watchers --coach coach --strip worldComps --eval --holder-off --old-saves
+fleet-wn: node scripts/proofWorldUclFleet.mjs --base 20fa77a6 --fleet watchers --coach nocoach --strip worldComps --eval --holder-off --old-saves
