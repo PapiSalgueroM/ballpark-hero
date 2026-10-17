@@ -19,8 +19,8 @@
  *     head sha256 e37b73f25a17e4c63718430365de87cd1d5a001960ba8257ac674834e691dd90
  *     base sha256 d21d2f552bf72ab5e24e0fbca03f330b51f1888f529129140824115c3cebc938
  *   src/lib/soccerPhone.ts
- *     head sha256 d7f3dd3784f08699af763eee7ac1cf5c960408fa7231940615901d3dbd36390b
- *     base sha256 43c30266828c0d6ed77fd061b29a0a14e70c44d73f157b859ef6f1c15a875000
+ *     head sha256 b0a1872e54219160ce574c0cfaccc9ace5972af0ffe492de0cbd14419e11d603
+ *     base sha256 828dd23dc838b0d2163a6371be9db64077fb87b717d61980b035b980769c8cd1
  *   src/lib/soccerArcade.ts
  *     head sha256 456ec78d275469f520b1ecd7df8fde60a91fed06f5d3b17d8b6332b87c0ef791
  *     base sha256 bc8301f8b1405f6e4c037d6a04f13551fa8751031bdf4aa351fab378d02fd3d8
@@ -31,6 +31,11 @@
  * soccerCareerEngine.ts change and nothing else, recorded in history by Release BH's join; b9df63b4's four files are
  * 082fc277's, origin/main with Release BC, and c5fc5470's, origin/release-bc-gate when the round started, byte for byte), so the recordings
  * and the base pins stay as they were taken: this is an attribution, not a new recording.
+ * Release BI's join (Round BII): PR289 and PR297 change soccerPhone.ts (ensurePhone keeps the season budget fields
+ * and copies its saved threads and clubs, outside this round's regions), so the base is now 9e93b382, which is
+ * 3225f123 with exactly those two phone patches, recorded in this branch's history by an ours merge. Its four files
+ * differ from this tree by Round 1329 alone (the same patch id as 3225f123 against the tree before PR289); the rows
+ * are unchanged (they still give the base's phone, 828dd23d), the phone's two pins moved.
  * scripts/simSoccerWorldTruth.mjs section 6 proves every value on every run.
  *
  * Every row is required exactly once at its turn, so this cannot go quietly idle when the source moves under it.
@@ -39,15 +44,15 @@
  */
 import assert from 'node:assert/strict';
 
-export const WORLD_TRUTH_BASE = '3225f1235112bdcb031f059259f74cea48bcb346';
+export const WORLD_TRUTH_BASE = '9e93b3826daa012e0a4f8f6b1865269f252bc09a';
 export const WORLD_TRUTH_SHA256 = {
   "src/lib/soccerCareerEngine.ts": {
     "head": "e37b73f25a17e4c63718430365de87cd1d5a001960ba8257ac674834e691dd90",
     "base": "d21d2f552bf72ab5e24e0fbca03f330b51f1888f529129140824115c3cebc938"
   },
   "src/lib/soccerPhone.ts": {
-    "head": "d7f3dd3784f08699af763eee7ac1cf5c960408fa7231940615901d3dbd36390b",
-    "base": "43c30266828c0d6ed77fd061b29a0a14e70c44d73f157b859ef6f1c15a875000"
+    "head": "b0a1872e54219160ce574c0cfaccc9ace5972af0ffe492de0cbd14419e11d603",
+    "base": "828dd23dc838b0d2163a6371be9db64077fb87b717d61980b035b980769c8cd1"
   },
   "src/lib/soccerArcade.ts": {
     "head": "456ec78d275469f520b1ecd7df8fde60a91fed06f5d3b17d8b6332b87c0ef791",

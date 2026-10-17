@@ -123,8 +123,14 @@ const esbuild = require('esbuild');
    Release BH's join (Round BHH): PR275 changes soccerCareerEngine.ts (the rival veteran wage, outside this round's
    regions), so the base is now 3225f123, which is b9df63b4 with exactly PR275's engine change, recorded in this
    branch's history by an ours merge. Its four files differ from this tree by Round 1329 alone (the same patch id as
-   b9df63b4 against the tree before PR275); the rows regenerated from it are unchanged, the engine's two pins moved. */
-const BASE = '3225f1235112bdcb031f059259f74cea48bcb346';
+   b9df63b4 against the tree before PR275); the rows regenerated from it are unchanged, the engine's two pins moved.
+   Release BI's join (Round BII): PR289 and PR297 change soccerPhone.ts (ensurePhone, outside this round's regions),
+   so the base is now 9e93b382, which is 3225f123 with exactly those two phone patches, recorded in this branch's
+   history by an ours merge. Its four files differ from this tree by Round 1329 alone (the same patch id as 3225f123
+   against the tree before PR289); the rows are unchanged, the phone's two pins moved. Without it section 6 failed
+   on the pins and section 4 counted every old save as growing a phone field (the base built its phones without
+   PR289's four budget keys). */
+const BASE = '9e93b3826daa012e0a4f8f6b1865269f252bc09a';
 /* Release BF join: the base bundle reads the files named here from this tree instead of BASE, so a later round's
    engine input that this round never touched is the same on both sides of the lockstep. By default these are the
    Soccer Career life chain's five engine inputs, Life, its routine events and captions, Contracts and RealismA
