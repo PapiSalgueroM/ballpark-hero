@@ -1,0 +1,9 @@
+mutrun M5 (back no longer restores the scroll position): vitest exit 0: [2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m | [2m Tests [22m [1m[32m40 passed[39m[22m[90m (40)[39m
+   walk: FAIL (a) Chelsea 390 screen: back did not put the page where it was: scrollY 0 then 494, height 21738 then 21738
+   walk: FAIL (c) Villarreal 2005 390 screen: back did not put the page where it was: scrollY 0 then 520, height 21738 then 21738
+   walk: FAIL (d) Real Madrid 390 screen: back did not put the page where it was: scrollY 0 then 488, height 21706 then 21706
+   walk: FAIL (a) Chelsea 1280 screen: back did not put the page where it was: scrollY 0 then 524, height 12982 then 12982
+   walk: FAIL (c) Villarreal 2005 1280 screen: back did not put the page where it was: scrollY 0 then 540, height 12982 then 12982
+   walk: FAIL (d) Real Madrid 1280 screen: back did not put the page where it was: scrollY 0 then 21, height 12932 then 12932
+mutrun M5: walk exit 1: playWorldUcl: FAIL, 6 findings over 39 measured views; pictures in /home/runner/work/_temp/rc-out/files/shots
+mutrun M5: CAUGHT (back no longer restores the scroll position; vitest exit 0, build exit 0, walk exit 1)

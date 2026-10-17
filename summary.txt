@@ -1,0 +1,4 @@
+mutM4 exit=1 149s | mutrun M4: CAUGHT (participant: my group venue rule inverted; vitest exit 1, build exit 0, walk exit 0)
+mutM5 exit=1 150s | mutrun M5: CAUGHT (back no longer restores the scroll position; vitest exit 0, build exit 0, walk exit 1)
+mutM6 exit=0 148s | mutrun M6: SURVIVED (watched ties: two legged ties read as one match; vitest exit 0, build exit 0, walk exit 0)
+mutM7 exit=0 151s | mutrun M7: SURVIVED (participant: second leg night scores not flipped to the leg home side; vitest exit 0, build exit 0, walk exit 0)
