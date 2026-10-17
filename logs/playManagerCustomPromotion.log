@@ -1,0 +1,14 @@
+node:fs:483
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/manager-report-artifacts/natural/manifest.json'
+    at Object.readFileSync (node:fs:483:20)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playManagerCustomPromotion.mjs:18:32 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/manager-report-artifacts/natural/manifest.json'
+}
+
+Node.js v24.21.0
