@@ -1,0 +1,9 @@
+1) the record adds up
+2) the unbeaten run is a real run
+3) the gap and the margin agree with the table
+4) the player of the season is one of the XI, at the top rating
+5) three new lines print, and the season is unchanged
+   400 seasons, 1 title winning, 1200 new lines printed
+   400 of 400 seasons byte identical in points, position, trophies and top scorer to the engine before this round
+
+simWorldXiReport: green. The report says more and the season it describes did not move.

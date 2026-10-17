@@ -1,0 +1,14 @@
+headsha exit=0 0s | a5b0e7675 Round BIK: retake the Round 1081 manifest once more, on the final tree of Release BI (Round 1508 in)
+vitest-bh exit=0 5s |    Duration  5.00s (transform 1.63s, setup 462ms, collect 4.06s, tests 3.73s, environment 2.69s, prepare 936ms)
+rodri-proof exit=0 6s | simPlayerBingoRodriHonour: fixed proof passed; complete raw reports and changed-copy receipts retained. Offline only.
+simSportsBingo exit=0 0s | simSportsBingo: green. Every card can be finished, and the packs play fair.
+simBingoSeats exit=0 0s | simBingoSeats: all checks passed
+simMarketYearScope exit=0 0s | simMarketYearScope: all green
+wx-original-ctl exit=0 2s | wxOriginal: CONTROL FIRED-OK on base 5b630266: 3 display tests failed on their markers, the season test passed, both files restored
+simWorldXiSeasonReport exit=0 1s | simWorldXiSeasonReport: green. The report says a great deal more, every number adds up and comes off who played, and nobody real says a word.
+simWorldXiReport exit=0 0s | simWorldXiReport: green. The report says more and the season it describes did not move.
+life-original-ctl exit=0 1s | lifeOriginal: CONTROL FIRED-OK on base fe78be0c: exactly the 8 preview cases failed, 10 preserved, both files restored
+simCareerLife exit=0 13s | simCareerLife: green. Every peak is reachable, the critic has an opinion and it is about the football, and nothing about either of them is on the save.
+rival-proof exit=1 0s | soccerRivalWagesProof FAIL errors=1
+simCareerDilemmaTruth exit=0 3s | simCareerDilemmaTruth: all green
+held-after exit=0 0s | src and scripts held after every line
