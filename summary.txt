@@ -1,0 +1,7 @@
+ctl-cap exit=1 76s | CONTROL cap FIRED (red sections 7)
+simUsDirtyMoney exit=0 84s | simUsDirtyMoney: all sections green
+ctl-farm exit=1 96s | CONTROL farm FIRED (red sections 7)
+ctl-flat exit=1 87s | CONTROL flat FIRED (red sections 7)
+simUsDirtyMoney-base exit=0 75s | simUsDirtyMoney: all sections green
+simUsDirtyMoney-big exit=0 215s | simUsDirtyMoney: all sections green
+simUsDirtyMoney-600 exit=0 269s | simUsDirtyMoney: all sections green
