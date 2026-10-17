@@ -587,6 +587,11 @@ async function watcherPass() {
   for (const f of fleet) for (const seed of SEEDS) {
     const name = `${f.club} (${f.era}) seed ${seed}`;
     let movedTo = null;
+    /* Seasons a mid season move left without a watched competition by the rule: the new club is an entrant of
+       the one it watched, or nothing could be carried and the field is not fixed data (a move in season two or
+       later of today's world from a club that was in the competition: the critic's advice 26). Counted, never
+       called a missing competition. */
+    const movedWithout = new Set();
     const move = f.club === 'Everton' ? (M, cur) => {
       const places = M.cm.uclPlacesIn(M.cm.careerLeagueOf(cur));
       const table = M.cm.sortedLeagueTable(cur).map(row => row.club);
@@ -601,6 +606,7 @@ async function watcherPass() {
       seasons: 3, join: seed === SEEDS[0] ? 1 : seed === SEEDS[1] ? 2 : false, move,
       onStep: (M, s, label, got) => {
         if (runs(3) || runs(4)) track(M, s, label, got);
+        if (got?.joined && s && !s.uclGroup && !s.worldComps?.ucl) movedWithout.add(s.season);
         if (got?.prev && s?.season === 2 && movedTo) {
           const tables = M.cm.uclFinalTables(got.prev);
           const direct = tables ? M.cm.uclDirectQualifiersFromTables(tables, got.prev.uclBracket?.find(t => t.round === 'F')?.winner ?? null) : [];
@@ -609,6 +615,7 @@ async function watcherPass() {
       },
       onSeasonEnd: (M, st, n) => {
         if (st.uclGroup) { bump('1 seasons in the Champions League (not watched)'); return; }
+        if (!st.worldComps?.ucl && movedWithout.has(n)) { bump('1 seasons a mid season move left with no competition, by the rule'); return; }
         const tag = `${f.club} (${f.era}) season ${n} seed ${seed}${st.clubName !== f.club ? ` now at ${st.clubName}` : ''}${n === 2 && movedTo ? ` moved to ${movedTo}` : ''}`;
         if (runs(1) || runs(7)) checkSeason(M, st, tag, measured);
         if (st.worldComps?.ucl?.f === 'g8' && measured.g8.length < 40) measured.g8.push({ slice: st.worldComps.ucl, rule: M.cm.uclGroupRule(st), tag });
