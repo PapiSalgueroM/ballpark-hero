@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+simVictoryMoment: node scripts/simVictoryMoment.mjs
+playManagerHalftimeLineups: node scripts/playManagerHalftimeLineups.mjs
+playPitchRestartContinuity: node scripts/playPitchRestartContinuity.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+playCmVar: node scripts/playCmVar.mjs
+playClubManager: node scripts/playClubManager.mjs
