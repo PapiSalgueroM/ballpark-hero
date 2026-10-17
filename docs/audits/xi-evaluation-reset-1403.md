@@ -1,0 +1,9 @@
+# Round1403: Build Your XI evaluation abandonment
+
+Status: claim only. Frozen actualI8293c758f4284d21baaa2320383cfd5cb5bd4944, own hook/test/workflow only. Source recommendation NEXT-ROOT-SOURCE-CANDIDATE-XI-EVALUATION.md SHA69b0ad35c99a7f741be8abf213509fbc1e25670d5a70c5805a34e9a2528949e9 traces actual page Start Over, hook asynchronous success/fallback writes, reset and real completion callback. No runtime reproduction yet.
+
+The new game must stay empty after abandoned remote/fallback responses. Reset must immediately release its old evaluation busy state, and an old finally must not clear the next game's busy flag. New formation and unmount abandon the same work. Keep existing remote/sparse/local/error content and scoring unchanged. No new backend,timeout,save,data or validation policy. Use actual hook and 11fictional primary-position selections with every transport stubbed and every held promise drained before assertions.
+
+Test-first: only adopt the exact two qualified308 history-busy lines (wholehook369487db) over I's hook9130c9e6. This preserves the ready player-selection fix and makes it the original baseline for the distinct evaluation bug. No308 Soccer Career page or start files are adopted. Author focused new12-case proof and own baseline-only remote job, retain actual7plannedfault/5healthy counts after observation, realtypes. Do not author production cancellation guards until that baseline qualifies.
+
+Later fixed qualification must retain original/fixed/restored outcomes, existing validator/history/fit/picker coverage, serial build with stale WN refreshed, all15readers/all14fatalweights and complete source/dependency/tool/font/dist/offline holds. No local Node/Python/app/test/build/browser runtime. I retains all active simulation/competition and joined-release work. READY308 and319 stay independent, no new release gate or main/live claim.
