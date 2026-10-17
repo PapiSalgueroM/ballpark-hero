@@ -2,7 +2,7 @@
  * scripts/proofWorldUclFleet.mjs (the round time proof) both drive, written once.
  *
  *   engineOf(root, label, { base, edits })  bundles src/lib/clubManager.ts with the modules the sections read
- *       (cm, eras, cal, hs, dd, w), either from the files on disk or, with `base`, every src file read through
+ *       (cm, eras, cal, hs, dd, w, lp), either from the files on disk or, with `base`, every src file read through
  *       `git show <base>:<path>`. `edits` are [{ file, from, to }] applied to the source in the bundle only; each
  *       `from` must stand in its file exactly once or nothing runs (the caller's cannot()). Every journey gets a
  *       fresh vm context (fresh()), so module state such as registered memberships never leaks between saves,
@@ -27,6 +27,7 @@ const ENTRY = [
   "export * as hs from './src/lib/managerHotSeat';",
   "export * as dd from './src/lib/deadlineDay';",
   "export * as w from './src/lib/worldCompetition';",
+  "export * as lp from './src/lib/uclLeaguePhase';",
 ].join('\n');
 
 export async function engineOf(root, label, { base = null, edits = [] } = {}, cannot = why => { throw new Error(why); }) {
