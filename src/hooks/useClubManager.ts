@@ -26,7 +26,7 @@ import type { MarketDoor } from '@/lib/clubManager';
 import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation, FormationSlot } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
-import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec, ManagerEdit } from '@/lib/clubManager';
+import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec, ManagerEdit, BoardObjective } from '@/lib/clubManager';
 import { simToWeek as runSimToWeek, startMidSeason, joinClubNow } from '@/lib/clubManagerCalendar';
 import { CM_VAR_LIVE } from '@/lib/clubManagerVarLive';
 import { cmVarGameAsk } from '@/lib/clubManagerVar';
@@ -43,7 +43,10 @@ import type { ConcessionTier } from '@/lib/clubManagerFinances';
 import { hireStaff, matchStaffOffer, releaseToPoacher, sackStaff } from '@/lib/clubManagerStaff';
 import type { StaffPostId } from '@/lib/clubManagerStaff';
 import { spendSkillPoint } from '@/lib/clubManagerXp';
-import { applyCareerSetup, postsScore, setStartOption, turnOnNoSack as turnOnNoSackFor } from '@/lib/clubManagerStart';
+import { postsScore, setStartOption, turnOnNoSack as turnOnNoSackFor } from '@/lib/clubManagerStart';
+/* Round 1501: the level, applied with No sacking on the Dugout step's choice, and the market listed to you. */
+import { marketForMe, setUpCareer } from '@/lib/clubManagerDifficulty';
+import { buildBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
 import { validWorldEdit } from '@/lib/clubManagerWorldEdit';
 import type { CareerSetup, CurrencyCode } from '@/lib/clubManagerStart';
 import type { SkillTree } from '@/lib/clubManagerXp';
@@ -133,6 +136,13 @@ import { SAVE_KEY } from '@/lib/clubManager';
 import { setAsideSave, browserStorage } from '@/lib/brokenSaveRecovery';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
 import { takeLandOnHub } from '@/lib/clubManagerLanding';
+
+/* Round 1501: the board's card for a career set up on Hard or Legend before a ball is kicked. Everything
+   that is not one of the board's asks stays; the asks are built again for the smaller cheque and the
+   market as it is listed to you. Draws nothing (buildBoardAsks picks by a hash). */
+function rebuildBoardAsks(s: CareerState): BoardObjective[] {
+  return [...(s.boardObjectives ?? []).filter(o => !isBoardAsk(o.id)), ...buildBoardAsks(s)];
+}
 
 export function useClubManager() {
   const [phase, setPhase] = useState<CMPhase>('boot');
@@ -365,7 +375,8 @@ export function useClubManager() {
   const market: MarketPlayer[] = useMemo(
     /* Round 1344: the screen's market also lists a man another club bought this season at his new club (refused
        until the summer), so the search finds him where he went. */
-    () => (career ? marketForScreen(career) : []),
+    /* Round 1501: the market as it is listed to you, marked by the level (the same array on Normal). */
+    () => (career ? marketForMe(career, marketForScreen(career)) : []),
     [career],
   );
   const nextFx: NextFixtureInfo | null = useMemo(
@@ -629,7 +640,7 @@ export function useClubManager() {
       const fresh = startCareer(club, era, undefined, manager, undefined, edit);
       /* Round 549: a mid season takeover plays the run-in first, under the
          manager before you, and hands the club over where it stands. */
-      const s = applyCareerSetup(entry ? startMidSeason(fresh, entry) : fresh, setup);
+      const s = setUpCareer(entry ? startMidSeason(fresh, entry) : fresh, setup, rebuildBoardAsks);
       setCareer(s);
       setActiveTab('overview');
       setPhase('hub');
@@ -699,7 +710,7 @@ export function useClubManager() {
      the create form is its own confirmation. */
   const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec, manager?: ManagerSpec, entry?: MidSeasonEntry, setup?: CareerSetup) => {
     const fresh = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec, manager);
-    const s = applyCareerSetup(entry ? startMidSeason(fresh, entry) : fresh, setup);
+    const s = setUpCareer(entry ? startMidSeason(fresh, entry) : fresh, setup, rebuildBoardAsks);
     setCareer(s);
     setPendingClub(null);
     setActiveTab('overview');

@@ -8,6 +8,7 @@
  */
 import { useState } from 'react';
 import type { SlotView } from '@/lib/clubManagerSlots';
+import { DIFFICULTY_INFO } from '@/lib/managerDifficulty';
 
 interface Props {
   slots: SlotView[];
@@ -54,7 +55,7 @@ export default function ManagerSlotsScreen({ slots, activeDetail, note, onContin
                   </div>
                   {v.active && activeDetail && <div className="text-xs text-muted-foreground mt-0.5">{activeDetail}</div>}
                   <div className="text-xs text-muted-foreground mt-0.5">
-                    🏆 {s.trophies} {s.trophies === 1 ? 'trophy' : 'trophies'}{s.noSack ? ' · No sacking' : ''}{s.retired ? ' · 👋 retired' : s.sacked ? ' · sacked, looking for work' : ''}
+                    🏆 {s.trophies} {s.trophies === 1 ? 'trophy' : 'trophies'}{s.level ? ` · ${DIFFICULTY_INFO[s.level].label}` : ''}{s.noSack ? ' · No sacking' : ''}{s.retired ? ' · 👋 retired' : s.sacked ? ' · sacked, looking for work' : ''}
                   </div>
                   <div className="mt-auto pt-3">
                     {confirming === v.slot ? (

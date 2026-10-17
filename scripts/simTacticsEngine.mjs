@@ -282,8 +282,8 @@ const CONTROLS = {
     must: [1], also: [],
     what: 'the first line of secondHalfLambdas',
     edits: [[
-      '): { lamMine: number; lamOpp: number; mine: number; oppS: number } {\n  const oppS = strengthOf(state, fx.opponent);\n',
-      '): { lamMine: number; lamOpp: number; mine: number; oppS: number } {\n  xi = xi.map(x => ({ ...x, slot: null }));\n  const oppS = strengthOf(state, fx.opponent);\n',
+      '): { lamMine: number; lamOpp: number; mine: number; oppS: number } {\n  const oppS = oppStrengthVsMe(state, fx.opponent);\n',
+      '): { lamMine: number; lamOpp: number; mine: number; oppS: number } {\n  xi = xi.map(x => ({ ...x, slot: null }));\n  const oppS = oppStrengthVsMe(state, fx.opponent);\n',
     ]],
     note: 'the second half reads every man as natural (a null slot pays nothing); section 1 must go red on the second half lambda',
   },

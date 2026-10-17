@@ -119,6 +119,9 @@ import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
    reason the deals and the staff are in theirs. */
 import { addXp, askEdge, dutyEdge, ensureXp, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthIntakeEdge, youthReportEdge } from '@/lib/clubManagerXp';
 import { NO_SACK_LINE, PATIENCE_FLOOR, askPremiumScale, boardMaySack, currencySymbol, ensureStartOptions, nationJobsOn, patienceDelta, startOptionsOf } from '@/lib/clubManagerStart';
+/* Round 1501: the difficulty dials. Every function there is the identity on Normal, and the file imports
+   this one as a type only, so there is no cycle. */
+import { boardCheque, boardOpening, boardSwing, oppEdge, wageRoomFor } from '@/lib/clubManagerDifficulty';
 /* Round 1331: the substitution rule by league and season, a pure table. */
 import { subsLeagueBase, subsRuleFor, type SubsRule } from '@/lib/clubManagerSubsRule';
 export { subsRuleFor, CM_SUBS_PARTIAL } from '@/lib/clubManagerSubsRule';
@@ -8956,7 +8959,7 @@ export function talkTargetNow(career: CareerState): number | null {
   if (live) {
     const second = livePairs(career, live);
     const venue = live.home === true ? 3 : live.home === false ? -1.5 : 0;
-    const edge = myMatchStrength(career, second) + venue - strengthOf(career, live.opponent);
+    const edge = myMatchStrength(career, second) + venue - oppStrengthVsMe(career, live.opponent);
     return halftimeTarget(live.myGoals, live.oppGoals, edge, xiMood(career, men(second)));
   }
   const edge = matchEdge(career);
@@ -9649,7 +9652,10 @@ export function releaseClauseOf(mp: MarketPlayer, season: number): number | null
   if (h % 100 >= 35) return null;
   const mult = 1.5 + ((h >>> 8) % 100) / 100;
   const base = mp.value ?? mp.price;
-  return Math.max(1, Math.round(base * mult * 10) / 10);
+  /* Round 1501: never under the card's own price. On Normal a clause is always above it (1.5 times the value
+     or more, against a price of at most 1.25 times), so this changes nothing there; on Hard and Legend the
+     card carries the marked price, and a clause must not become the cheaper door round the mark. */
+  return Math.max(1, Math.round(base * mult * 10) / 10, mp.price);
 }
 
 /** Pay the release clause: instant signing at the clause price. */
@@ -11585,6 +11591,15 @@ function strengthOf(state: CareerState, club: string): number {
      the finish derived era prior, never a 2026 preview rating. */
   const eraPrior = state.eraId && isHistoricEra(state.eraId) ? eraEuroPrior(state.eraId, club) : null;
   return state.clubStrengths[club] ?? eraPrior ?? STRENGTH_PRIORS[club] ?? Math.max(clubPreviewRating(club), 64);
+}
+
+/* Round 1501: the other side in one of YOUR matches, with the level's edge on top. Zero on Normal, where
+   this is strengthOf's very number. Every read of an opponent in your match goes through here (the two
+   halves' goal rates, the match itself, the team talks, the next match card and the match facts); every
+   match between two other clubs keeps strengthOf, so the rest of the world plays as it always did. */
+export function oppStrengthVsMe(state: CareerState, club: string): number {
+  const edge = oppEdge(state);
+  return edge === 0 ? strengthOf(state, club) : strengthOf(state, club) + edge;
 }
 /* Round 899: simEra2015 reads the rating every match uses, and the
    association the round of 16 draw uses, for a save from before the round. */
@@ -15327,7 +15342,7 @@ function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], menta
   const talk = talkEdgeFor(state, xi, fx, state.teamTalk ?? null);
   const press = state.press;
   const mine = myMatchStrength(state, xi) + talk + (press?.nextSharpen ?? 0);
-  const oppS = strengthOf(state, fx.opponent) + (press?.nextFire ?? 0);
+  const oppS = oppStrengthVsMe(state, fx.opponent) + (press?.nextFire ?? 0);
   const ment = MENT_MOD[mentality] ?? MENT_MOD.balanced;
   const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
   const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
@@ -15350,7 +15365,7 @@ function etScale(fx: MyFixture): number { return fx.extraTime ? ET_DEFLATOR : 1;
 function secondHalfLambdas(
   state: CareerState, fx: MyFixture, live: LiveMatch, xi: XiSlot[], scoreMine: number, scoreOpp: number,
 ): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
-  const oppS = strengthOf(state, fx.opponent);
+  const oppS = oppStrengthVsMe(state, fx.opponent);
   const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
   const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
   const press = state.press;
@@ -16748,7 +16763,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const fitAtKickoff = new Set(
     state.squad.filter(p => isAvailable(p) && !p.onLoan).map(p => p.id),
   );
-  const oppS = strengthOf(state, fx.opponent);
+  const oppS = oppStrengthVsMe(state, fx.opponent);
 
   /* Round 119: with a first half already played, the second is simulated off
      whatever the manager left on the pitch and whichever mentality he sent
@@ -17467,6 +17482,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      save starts on, so a manager who never opens the press room plays the game
      the previous twelve rounds calibrated. */
   if (confDelta < 0 && state.press) confDelta *= pressPatience(state.press.mood);
+  /* Round 1501: the level. A win counts for less and a defeat for more, after patience and the press,
+     so a giant's board still feels a defeat most. The identity on Normal (boardSwing returns its input). */
+  confDelta = boardSwing(state, confDelta);
   confDelta = Math.round(confDelta * 10) / 10;
   state.boardConfidence = clamp(state.boardConfidence + confDelta, 0, 100);
   /* Round 1342: No sacking holds the board on its last point in front of the
@@ -18729,7 +18747,7 @@ function talkEdgeFor(
 ): number {
   if (!tone) return 0;
   const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
-  const edge = myMatchStrength(state, xi) + venue - strengthOf(state, fx.opponent);
+  const edge = myMatchStrength(state, xi) + venue - oppStrengthVsMe(state, fx.opponent);
   const target = preMatchTarget(edge, xiMood(state, men(xi)), state.form);
   return talkWeight(state, tone, target) * TALK_EDGE;
 }
@@ -19272,7 +19290,7 @@ export function nextFixtureFrom(career: CareerState, fromWeek: number): NextFixt
         compLabel: fx.compLabel,
         opponent: fx.opponent,
         home: fx.home,
-        oppStrength: Math.round(strengthOf(career, fx.opponent)),
+        oppStrength: Math.round(oppStrengthVsMe(career, fx.opponent)),
       };
     }
   }
@@ -19330,7 +19348,7 @@ export function matchFacts(career: CareerState): MatchFacts | null {
 
     const xi = effectiveXIWithSlots(career);
     const mine = myMatchStrength(career, xi);
-    const oppS = strengthOf(career, fx.opponent);
+    const oppS = oppStrengthVsMe(career, fx.opponent);
     const ment = MENT_MOD[career.mentality] ?? MENT_MOD.balanced;
     const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
     const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
@@ -19553,6 +19571,19 @@ const VERDICTS: Record<'A' | 'B' | 'C' | 'D' | 'F', string[]> = {
     'Catastrophic. Only the compensation clause saved your job this long.',
   ],
 };
+
+/* Round 1501, the lead's ruling from Round 1342's closing check: under No sacking the board cannot carry out a
+   threat to sack you, so its verdict never makes one. The same pick is taken on every path (the season's draws
+   are what they were), and only these two lines are reworded: the board's disappointment, without the threat.
+   Neither says No sacking kept you in the job: the line is picked by the grade alone, and a D or F season with the
+   board nowhere near zero was never going to cost the job (the only sacks are the zero checks after a match). */
+const NO_SACK_VERDICTS: Record<string, string> = {
+  'A poor season. One more like that and you are gone.': 'A poor season. The board is fuming and wants a lot more next year.',
+  'Catastrophic. Only the compensation clause saved your job this long.': 'Catastrophic. The board is furious, and it will not forget this one.',
+};
+export function boardVerdictLine(state: CareerState, line: string): string {
+  return boardMaySack(state) ? line : NO_SACK_VERDICTS[line] ?? line;
+}
 
 /* ---------- Round 168: mid-season approaches ---------- */
 
@@ -19952,7 +19983,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   /* One pick on every path, so the season's draws are what they were. A title or two trophies read the A
      lines, an ordinary season its grade's, and only the kinds with their own lines read the module's. */
   const ownLines = graded && graded.kind in VERDICT_LINES ? VERDICT_LINES[graded.kind as keyof typeof VERDICT_LINES] : null;
-  const verdict = ownLines ? fillLeague(pick([...ownLines]), fated?.league ?? '') : pick(VERDICTS[verdictGrade]);
+  const verdict = boardVerdictLine(state, ownLines ? fillLeague(pick([...ownLines]), fated?.league ?? '') : pick(VERDICTS[verdictGrade]));
 
   const byGoals = [...state.squad].sort((a, b) => b.seasonGoals - a.seasonGoals);
   const byAssists = [...state.squad].sort((a, b) => b.seasonAssists - a.seasonAssists);
@@ -20792,10 +20823,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 1335: a stay's cheque is that same flat formula, never past KITTY_TOP_SHARE of the club's usual
      budget or 10m (kittyAllocation), so a small club's good year pays a bonus its size can carry; the
      carry below is unchanged, and it is capped by the cheque, so it shrinks with it. */
+  /* Round 1501: the level's cheque on every arm (the identity on Normal); the carry rule below is untouched. */
   const allocation = moving
-    ? Math.round(club.budget * 1.1)
-    : legacy ? Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12))
-    : kittyAllocation({ budget: club.budget, expectation: club.expectation, finish: prevPos, trophies: seasonTrophyCount });
+    ? boardCheque(career, Math.round(club.budget * 1.1))
+    : legacy ? boardCheque(career, Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12)))
+    : boardCheque(career, kittyAllocation({ budget: club.budget, expectation: club.expectation, finish: prevPos, trophies: seasonTrophyCount }));
   /* A corrupt or pre-Round 436 save can hand us anything here, so a balance
      that is not a real number carries nothing rather than poisoning the new
      season with NaN. */
@@ -20861,7 +20893,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     season,
     week: 0,
     budget,
-    boardConfidence: opening,
+    boardConfidence: boardOpening(career, opening),
     sacked: false,
     squad,
     xiIds: [],
@@ -21042,7 +21074,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      whenever in the season they went. Zero at every other club. */
   const roomNow = moving ? 0 : foundersWageRoom(state);
   state.wageCap = moving
-    ? wageCapFrom(wageBill(state))
+    ? wageRoomFor(career, wageCapFrom(wageBill(state)))
     : nextWageCap(Math.max(60, (career.wageCap ?? wageCapFrom(wageBill(career))) - (career.founderWageRoom ?? 0)), club.expectation, prevPos, seasonTrophyCount) + roomNow;
   state.founderWageRoom = roomNow || undefined;
   for (const name of freeAgentNews) {

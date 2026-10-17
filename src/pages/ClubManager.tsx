@@ -36,7 +36,8 @@ import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { ClubManagerClubList } from '@/components/club-manager/ClubManagerClubList';
-import { CURRENCIES, STRICTNESS_INFO, noSackFrom, startOptionsOf } from '@/lib/clubManagerStart';
+import { CURRENCIES, STRICTNESS_DEFAULT, STRICTNESS_INFO, levelFrom, noSackFrom, startOptionsOf } from '@/lib/clubManagerStart';
+import { DIFFICULTY_INFO } from '@/lib/managerDifficulty';
 import type { CareerSetup } from '@/lib/clubManagerStart';
 import { withWorldEdit, worldEditMoves, realLeagueIdOf } from '@/lib/clubManagerWorldEdit';
 import type { WorldEdit } from '@/lib/clubManagerWorldEdit';
@@ -998,6 +999,12 @@ const ClubManager = () => {
           <span className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
             {worldSeasonLabel(c)} · Season {c.season}
           </span>
+          {/* Round 1501: a Hard or Legend career wears its level for its whole life. No pill on Normal. */}
+          {levelFrom(c) !== 'normal' && (
+            <span data-cm-level-pill={levelFrom(c)} className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
+              {DIFFICULTY_INFO[levelFrom(c)].label}
+            </span>
+          )}
           {/* Round 1342: a No sacking career wears it for its whole life. No pill otherwise. */}
           {noSackFrom(c) !== null && (
             <span data-cm-nosack-pill className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
@@ -1309,7 +1316,12 @@ const ClubManager = () => {
                 icon="⚙️" title="Options"
                 value={(() => {
                   const o = startOptionsOf(c);
-                  return `${CURRENCIES[o.currency].symbol} · ${STRICTNESS_INFO[o.strictness]?.label ?? 'Normal'}`;
+                  /* Round 1501: a Hard or Legend career shows its level here, never the haggle's Normal, and
+                     after it the haggle's word whenever that is not the default, so no setting hides. */
+                  const lv = levelFrom(c);
+                  const haggle = STRICTNESS_INFO[o.strictness]?.label ?? 'Normal';
+                  if (lv === 'normal') return `${CURRENCIES[o.currency].symbol} · ${haggle}`;
+                  return `${CURRENCIES[o.currency].symbol} · ${DIFFICULTY_INFO[lv].label}${o.strictness !== STRICTNESS_DEFAULT ? ` · ${haggle}` : ''}`;
                 })()}
                 sub={(() => {
                   const o = startOptionsOf(c);
