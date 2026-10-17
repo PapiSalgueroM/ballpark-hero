@@ -1,0 +1,19 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simUsDirtyMoney: BASE=8293c758f4284d21baaa2320383cfd5cb5bd4944 node scripts/simUsDirtyMoney.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+vitest: node_modules/.bin/vitest run src/test/usCareerDirtyMoney.test.tsx src/lib/careerDirtyMoney.test.ts src/test/usCareerHelpRules1104.test.tsx src/test/careerDecisionOutcome.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usCareerMarketBoard.test.tsx src/test/usCareerMarketSecondTab.test.tsx src/test/usCareerSummer.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/careerEntryGuide.test.tsx src/test/myCareerRestore.test.tsx careerHallV1Replay nbaOldSaveLines --testTimeout=300000 --hookTimeout=120000
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simUsCareerProspect: node scripts/simUsCareerProspect.mjs
+simUsCareerPractice: node scripts/simUsCareerPractice.mjs
+simUsCareerSaveRetry: node scripts/simUsCareerSaveRetry.mjs
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simCareerDecisionOutcome: node scripts/simCareerDecisionOutcome.mjs
+simCareerEntryGuide: node scripts/simCareerEntryGuide.mjs
+simCareerPressMarket: node scripts/simCareerPressMarket.mjs
+simCareerSeasonReview: node scripts/simCareerSeasonReview.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+numberFormatting1085Parity: node scripts/qa/numberFormatting1085Parity.mjs
+usCareerSaveRecovery1084: node scripts/qa/usCareerSaveRecovery1084.mjs
