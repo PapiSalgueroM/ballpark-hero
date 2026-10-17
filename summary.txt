@@ -1,0 +1,8 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 8293c758f Release BI: the lead sets the three Club Manager engine weight rows from the join's runner measurement
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+htLineups exit=0 5s | simManagerHalftimeLineups normal: green.
+htLineups-ctl-original exit=0 5s | FIRED-OK
+liveLineups exit=0 39s | Three byte-identical actual engines retain complete final-state/id/input equality; pure reader graph imports no game engine.
+playHtLineups exit=0 23s | Halftime lineups browser: passed; 869 checks, 3 played profiles, 1 effective controls, 7 originals.
+playDepth exit=1 62s | ]

@@ -1,0 +1,6 @@
+treeWithoutMerge: 0f097d21aaa60f56ea80ed0f0428efd07a991887, a5ed09be without 6a86f2a2; conflicts kept from a5ed09be: scripts/playManagerHalftimeLineups.mjs, scripts/simManagerHalftimeLineups.mjs, scripts/simManagerLiveLineups.mjs
+CM_HT_PARENT_REF 0f097d21aaa60f56ea80ed0f0428efd07a991887 (this head without Round 1365s merge 6a86f2a2; first parent 491c10d3)
+Prepared 9 declared font dependencies for local fulfillment.
+prepInstalled: 521 installed locked versions written to /home/runner/work/ballpark-hero/ballpark-hero/htw
+simManagerHalftimeLineups normal: green.
+Halftime lineups browser: passed; 869 checks, 3 played profiles, 1 effective controls, 7 originals.

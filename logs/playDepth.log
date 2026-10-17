@@ -1,0 +1,6 @@
+Club Manager decision depth fixed: failed; 567 checks, 18 natural/catalog cases, 2 controls, 38 originals, 3 failures, 0 setup failures.
+[
+ "320-injurySupport-natural: boot changed context outside the desk.",
+ "390-injurySupport-natural: boot changed context outside the desk.",
+ "1280-injurySupport-natural: boot changed context outside the desk."
+]
