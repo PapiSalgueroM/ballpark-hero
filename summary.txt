@@ -1,0 +1,17 @@
+sim exit=0 71s | simUsDirtyMoney: all sections green
+tsc exit=0 96s | 
+ctl-words exit=1 77s | CONTROL words FIRED (red sections 1, 4)
+ctl-mathrandom exit=1 74s | CONTROL mathrandom FIRED (red sections 2, 4)
+sim-big exit=0 207s | simUsDirtyMoney: all sections green
+ctl-flat exit=1 85s | CONTROL flat FIRED (red sections 7)
+ctl-farm exit=1 69s | CONTROL farm FIRED (red sections 7)
+ctl-deck exit=1 64s | CONTROL deck FIRED (red sections 5)
+ctl-noop-nfl exit=1 74s | CONTROL noop FIRED (red sections 4)
+ctl-noop-nba exit=1 83s | CONTROL noop FIRED (red sections 4)
+ctl-nodesk exit=1 6s | CONTROL nodesk FIRED (red sections 6)
+ctl-sentence exit=1 6s | CONTROL sentence FIRED (red sections 6)
+vitest exit=0 11s |    Duration  10.27s (transform 4.82s, setup 372ms, collect 10.81s, tests 11.20s, environment 1.84s, prepare 462ms)
+ctl-noop-mlb exit=1 76s | CONTROL noop FIRED (red sections 4)
+ctl-noop-nhl exit=1 85s | CONTROL noop FIRED (red sections 4)
+parity exit=0 77s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+fences exit=0 95s | simStorageWrites: all green (owed: 12)
