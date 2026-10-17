@@ -1,0 +1,30 @@
+mut1502: markearly APPLIED to /tmp/mut-markearly/src/lib/clubManager.ts
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020), Villarreal (era2005), Werder Bremen (era2010), Sevilla (era2015), Marseille (era2020); seeds 1,2,3,4,5
+  1 and 3: 65 journeys in 233 s
+  7 goals a watched match 2.624 (19968 matches); a domestic league match 2.625
+  7 ties 3152: to extra time 12.4 percent, to penalties 5.6 percent
+  4 slice bytes g8: 112 seasons, mean 627, smallest 594, largest 670
+  4 slice bytes l36: 65 seasons, mean 1434, smallest 1411, largest 1481
+  1 device order: 40 group seasons evaluated level both ways
+  3 league sizes: now 10, now 12, now 14, now 15, now 16, now 18, now 20, now 24, era2005 18, era2005 20, era2010 18, era2010 20, era2015 18, era2015 20, era2020 18, era2020 20
+  3 move probe: 112 moves that carried the slice, 9 of them onto a calendar behind the old one
+  1 era seasons with a stand in for my club: 38
+  1 seasons a mid season move left with no competition, by the rule: 2
+  1 seasons in the Champions League (not watched): 17
+  1 seasons where exclude took out a direct entrant (a summer move): 4
+  1 watched seasons g8: 112
+  1 watched seasons l36: 64
+  3 date checks g8: 129
+  3 date checks l36: 78
+  3 joins that carried the slice: 14
+  3 joins that dropped the slice: 1
+  3 joins with nothing to carry or open: 2
+  3 states checked: 7804
+  7 g8 draws: 112
+  7 l36 slates over the cap: 1
+  7 l36 slates with an association break: 3
+  7 l36 slates: 64
+  7 titles by strength quartile 1: 144
+  7 titles by strength quartile 2: 28
+  7 titles by strength quartile 3: 4
+simWorldUcl: green, 248927 checks, 0 failures
