@@ -130,10 +130,12 @@ async function runCase(collection, id, route, width, work) {
     const start = Date.now(); while (pendingJs.size || Date.now() - lastJs < 1000) { assert(Date.now() - start < 20000, 'Owned JavaScript reaches a bounded quiet period'); await page.waitForTimeout(100); }
     await bounded(Promise.all(bodyTasks), 'All physical response bodies'); assert.deepEqual(row.evidenceErrors, []);
   };
+  const pointedElements = new WeakMap();
   const pointer = async locator => {
     const box = await locator.boundingBox(); assert(box && box.width > 0 && box.height > 0, 'A real control is painted');
     const point = [box.x + box.width / 2, box.y + box.height / 2]; assert(point[0] >= 0 && point[0] < width && point[1] >= 0 && point[1] < row.height);
     assert.equal(await locator.evaluate((element, p) => element.contains(document.elementFromPoint(p[0], p[1])), point), true, 'Actual pointer reaches the control without forced click or click-time scrolling');
+    const element = await locator.elementHandle(); assert(element, 'The actual pointer target exists'); pointedElements.set(locator, element);
     if (width === 320) await page.touchscreen.tap(point[0], point[1]); else await page.mouse.click(point[0], point[1]);
   };
   const openers = { header: () => page.getByRole('button', { name: 'Log In', exact: true }), home: () => page.getByRole('button', { name: 'Make a free one', exact: true }), navbar: () => page.getByRole('button', { name: /Sign up to track your stats|Track stats/i }) };
@@ -143,7 +145,7 @@ async function runCase(collection, id, route, width, work) {
   };
   const held = (actual, expected, allowNewDocument = false) => { assert.deepEqual(actual.stores, expected.stores, 'All local and session bytes held'); assert.deepEqual(actual.window, expected.window, 'Outer page does not jump'); if (!allowNewDocument) { assert.equal(actual.timeOrigin, expected.timeOrigin); assert.equal(actual.href, expected.href); } assert(actual.pageWidth <= actual.clientWidth + 1); };
   const close = async (opener, escape = false) => {
-    const openerElement = await opener.elementHandle(); assert(openerElement, 'The actual opener exists before closing');
+    const openerElement = pointedElements.get(opener); assert(openerElement, 'The actual clicked opener was captured before opening');
     if (escape) await page.keyboard.press('Escape'); else { const button = page.getByRole('button', { name: 'Close', exact: true }); await button.scrollIntoViewIfNeeded(); await pointer(button); }
     await page.getByRole('dialog').waitFor({ state: 'hidden' });
     const started = Date.now(), focusReturn = { immediate: await openerElement.evaluate(element => element.isConnected && document.activeElement === element), settled: false, elapsedMs: null };
