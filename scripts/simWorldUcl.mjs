@@ -85,7 +85,12 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { engineOf, pickFleet, tape, ERAS as ERAS_OF_FLEET } from './lib/worldUclFleet.mjs';
-import { HOLDER_EDIT, HOLDER_LINE } from './lib/worldUclHolder1502.mjs';
+/* Step E5 (the watched winner as next season's holder) is its own commit so the lead can hold it out (the critic's
+   advice 21): without it the holder library is gone and the holder is my own final's winner alone, so the
+   library is read only when it is there and section 5 and the noholder control say E5 is not built. */
+const HOLDER_LIB = path.join(path.dirname(fileURLToPath(import.meta.url)), 'lib', 'worldUclHolder1502.mjs');
+const { HOLDER_EDIT = null, HOLDER_LINE = null } = fs.existsSync(HOLDER_LIB) ? await import(pathToFileURL(HOLDER_LIB).href) : {};
+const hasE5 = () => !!HOLDER_LINE && text(CM).includes(HOLDER_LINE);
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const text = file => fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
@@ -165,7 +170,7 @@ const CAREER_EDITS = {
     { file: MODULE_FILE, from: '    const r = Math.max(prev + 1, at(f));', to: '    const r = at(f);' },
     { file: MODULE_FILE, from: '0.79, 0.82, 0.87, 0.90, 1.0];', to: '0.79, 0.82, 0.87, 0.87, 1.0];' },
   ],
-  noholder: [HOLDER_EDIT],
+  noholder: HOLDER_EDIT ? [HOLDER_EDIT] : [],
   keep: [{ file: CM, from: '    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);', to: '    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);\n    (state as unknown as Record<string, unknown>).worldCompsKept = career.worldComps;' }],
 };
 /* The review of 2026-10-17 (results-g/review-run-1502.md and review-read-1502.md): each mutation it showed every
@@ -551,7 +556,8 @@ function standInOf(M, s) {
 function openChecks(M, s, name, label, got, measured) {
   const slice = s?.worldComps?.ucl;
   if (!slice || !(label === 'start' || got?.prev)) return;
-  const holder = got?.prev ? M.cm.uclHolderOf(got.prev) : slice.f === 'l36' ? M.cm.CM_FINAL_TABLES_2025_26.holders : null;
+  const holderOf = c => (M.cm.uclHolderOf ? M.cm.uclHolderOf(c) : c.uclBracket?.find(t => t.round === 'F')?.winner ?? null);
+  const holder = got?.prev ? holderOf(got.prev) : slice.f === 'l36' ? M.cm.CM_FINAL_TABLES_2025_26.holders : null;
   const want = holder && slice.clubs.includes(holder) ? holder : undefined;
   ok(slice.holder === want, `1 holder: ${name} at ${label}: the draw's holder is ${slice.holder ?? 'nobody'}, the save's holder ${holder ?? 'nobody'} ${want ? 'is' : 'is not'} in the field`);
   if (want) bump('1 opened seasons drawn with the holder first');
@@ -864,7 +870,7 @@ async function watcherPass() {
 async function selfRelative() {
   /* From step E5 the holder line is reverted in BOTH arms, so this section compares the binding alone; what the
      holder moves is section 5's, by attribution. */
-  const holder = text(CM).includes(HOLDER_LINE) ? [HOLDER_EDIT] : [];
+  const holder = hasE5() ? [HOLDER_EDIT] : [];
   const head = await engineOf(ROOT, 'head2', { edits: [...careerEdits(), ...holder] }, cannot);
   const off = await engineOf(ROOT, 'off', { edits: [...BINDING_OFF, ...holder] }, cannot);
   if (careerEdits().length) changed = true;
@@ -976,7 +982,7 @@ async function localeCheck(slices) {
  * rollover after a watched final, on the field (the attribution: the line is the whole of the change).
  */
 async function holderSection() {
-  if (!text(CM).includes(HOLDER_LINE)) { console.log('  5 the holder: not in this tree (step E5 not built)'); return; }
+  if (!hasE5()) { console.log('  5 the holder: not in this tree (step E5 not built)'); return; }
   const head = await engineOf(ROOT, 'holder', { edits: careerEdits() }, cannot);
   const ref = await engineOf(ROOT, 'holder-off', { edits: [HOLDER_EDIT] }, cannot);
   if (careerEdits().length) changed = true;
