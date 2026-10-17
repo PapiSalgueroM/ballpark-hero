@@ -1,0 +1,11 @@
+depthProbe: wrote scripts/playDepthProbe.mjs
+PROBE 320-injurySupport-natural keys differ: squad
+PROBE   squad lengths boot=25 prepared=25
+PROBE     squad[24] Oscar Miclea fields: role boot="key" prepared=undefined | lastTen boot=[] prepared=undefined
+PROBE 390-injurySupport-natural keys differ: squad
+PROBE   squad lengths boot=25 prepared=25
+PROBE     squad[24] Oscar Miclea fields: role boot="key" prepared=undefined | lastTen boot=[] prepared=undefined
+PROBE 1280-injurySupport-natural keys differ: squad
+PROBE   squad lengths boot=25 prepared=25
+PROBE     squad[24] Oscar Miclea fields: role boot="key" prepared=undefined | lastTen boot=[] prepared=undefined
+Club Manager decision depth fixed: failed; 567 checks, 18 natural/catalog cases, 2 controls, 38 originals, 3 failures, 0 setup failures.
