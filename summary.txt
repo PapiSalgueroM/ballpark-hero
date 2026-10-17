@@ -1,0 +1,11 @@
+words exit=0 0s | simEventDeck: green. Sections 14 only.
+tsc exit=0 74s | 
+vitest exit=0 4s |    Duration  3.11s (transform 1.67s, setup 46ms, collect 2.24s, tests 115ms, environment 271ms, prepare 109ms)
+sd8 exit=0 83s | simSoccerDeck: green. Sections 8 only.
+sd15 exit=0 8s | simSoccerDeck: green. Sections 1, 5 only.
+sd8-free exit=3 91s | simSoccerDeck: CONTROL=freetraining did NOT fire: section 8 stayed green, which is itself a failure of the control
+kit10-thin exit=1 4s | simEventDeck: 1 failure, red sections 10 (CONTROL=reachthin fired)
+kit10 exit=0 11s | simEventDeck: green. Sections 10 only.
+kit10-unreach exit=1 11s | simEventDeck: 1 failure, red sections 10 (CONTROL=unreach fired)
+sd-ctl5 exit=0 22s | ceiling exit=1 simSoccerDeck: CONTROL=ceiling FIRED: section 5 failed (2 failures, red sections 5)
+kit-rest exit=1 102s | simEventDeck: 1 failure, red sections 15

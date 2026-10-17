@@ -1,0 +1,3 @@
+drop exit=1 simSoccerDeck: CONTROL=drop FIRED: section 5 failed (2 failures, red sections 5)
+silent exit=1 simSoccerDeck: CONTROL=silent FIRED: section 5 failed (2 failures, red sections 5)
+ceiling exit=1 simSoccerDeck: CONTROL=ceiling FIRED: section 5 failed (2 failures, red sections 5)
