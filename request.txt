@@ -1,0 +1,6 @@
+#!serial
+pin-red: node scripts/simManagerAppealIsolation.mjs
+pin-revert: git show e24aa5e1:src/lib/clubManager.ts > src/lib/clubManager.ts && git diff --stat && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout -- src; exit $s
+sec7: SECTION=7 node scripts/simCmDifficulty.mjs
+sec7-helpdrift: SECTION=7 CM_DIFF_CONTROL=helpdrift node scripts/simCmDifficulty.mjs
+unit: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts --testTimeout=300000 --hookTimeout=120000
