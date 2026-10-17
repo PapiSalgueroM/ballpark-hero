@@ -1,0 +1,341 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: src/lib/clubManager.ts: whole parent must stay held.
++ actual - expected
+... Skipped lines
+
+  "import { foldSpecialLatin } from '@/lib/nameFold';\n" +
+    "import { nameModerationError } from '@/lib/nameModeration';\n" +
+    "import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';\n" +
++   "import { noteHighestScoring } from '@/lib/clubManagerRecords';\n" +
+    "import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGoalLift, type CmVarDecision, type CmVarKind, type CmVarAsk } from '@/lib/clubManagerVar';\n" +
+    '/* Round 201: the wilderness reuses the manager job market the retired\n' +
+    '   player path already had, so a sacked manager gets real clubs with real\n' +
+    '   briefs instead of a bespoke second offer engine. */\n' +
+    '/* Round 310: the offer pool import gained the cache invalidator. The two\n' +
+...
+    "import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardInput, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';\n" +
++   "import { compactWorldRoster, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterOwner, worldRosterView } from '@/lib/clubManagerWorldRoster';\n" +
+-   "import { compactWorldRoster, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterView } from '@/lib/clubManagerWorldRoster';\n" +
+    "import type { WorldRosterState } from '@/lib/clubManagerWorldRoster';\n" +
+    "import { players as RAW_POOL } from '@/data/players';\n" +
+    '// Round 70: real 2026 rosters for every club in the big five leagues, baked\n' +
+    '// from the Transfermarkt style market value data in Supabase. The bake file\n' +
+    '// imports nothing but types, so reading it at module scope is safe.\n' +
+...
+    "import { addXp, askEdge, dutyEdge, ensureXp, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthIntakeEdge, youthReportEdge } from '@/lib/clubManagerXp';\n" +
++   "import { NO_SACK_LINE, PATIENCE_FLOOR, askPremiumScale, boardMaySack, currencySymbol, ensureStartOptions, nationJobsOn, patienceDelta, startOptionsOf } from '@/lib/clubManagerStart';\n" +
+-   "import { PATIENCE_FLOOR, askPremiumScale, currencySymbol, ensureStartOptions, nationJobsOn, patienceDelta, startOptionsOf } from '@/lib/clubManagerStart';\n" +
+    '/* Round 1331: the substitution rule by league and season, a pure table. */\n' +
+    "import { subsLeagueBase, subsRuleFor, type SubsRule } from '@/lib/clubManagerSubsRule';\n" +
+    "export { subsRuleFor, CM_SUBS_PARTIAL } from '@/lib/clubManagerSubsRule';\n" +
+    '/* Round 474: the five specific board asks, built and graded there for the\n' +
+    '   same reason the facilities and the books live in their own files. */\n' +
+    "import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';\n" +
++   "/* Round 1335: the board's verdict, its openings, the kitty band and the offer step, a pure module. */\n" +
++   "import { BOARD_FRESH, VERDICT_LINES, fillLeague, kittyAllocation, offerStepOk, openingConfidence, seasonGrade, type SeasonFate } from '@/lib/clubManagerBoardVerdict';\n" +
++   "export { BOARD_FRESH } from '@/lib/clubManagerBoardVerdict';\n" +
+    '/* Round 978: international duty. Called only inside functions, never at module\n' +
+    '   scope, so the cycle back into this file stays evaluation safe. */\n' +
+    "import { answerBreak, backFromDuty, endRest, ensureIntl, fireDueBreaks, freshIntl, restingIds } from '@/lib/clubManagerInternationals';\n" +
+    "import type { IntlDuty } from '@/lib/clubManagerInternationals';\n" +
+    "/* Round 1021: the late 2020-21 start's summer window. Called inside\n" +
+    '   startCareer only, never at module scope: the calendar module imports this\n' +
++   '   one, the same loop the internationals mo'... 1128049 more characters
+-   '   one, the same loop the internationals module already closes. */\n' +
+-   "import { lateSummerWindowWeeks } from '@/lib/clubManagerCalendar';\n" +
+-   '/* Round 478: the Champions League orders a level group table by its own\n' +
+-   '   rule, not a league one. That module imports nothing but types from here,\n' +
+-   '   so there is no cycle at all. */\n' +
+-   "import { UCL_GROUP_LEDGER, countWaitingLevelRuns, noteUclGroupResult, sortedUclGroupTable, uclGroupFootnote } from '@/lib/clubManagerUclGroups';\n" +
+-   'import type { UclGro'... 1099676 more characters
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerLiveLineups.mjs:79:68
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: "import { foldSpecialLatin } from '@/lib/nameFold';\n" +
+    "import { nameModerationError } from '@/lib/nameModeration';\n" +
+    "import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';\n" +
+    "import { noteHighestScoring } from '@/lib/clubManagerRecords';\n" +
+    "import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGoalLift, type CmVarDecision, type CmVarKind, type CmVarAsk } from '@/lib/clubManagerVar';\n" +
+    '/* Round 201: the wilderness reuses the manager job market the retired\n' +
+    '   player path already had, so a sacked manager gets real clubs with real\n' +
+    '   briefs instead of a bespoke second offer engine. */\n' +
+    '/* Round 310: the offer pool import gained the cache invalidator. The two\n' +
+    '   files already import each other (this module reaches the market at\n' +
+    '   runtime only, and the market reads leagues at runtime only), so the\n' +
+    '   cycle stays evaluation-order safe. */\n' +
+    "import { realJobOffers, allOfferClubs, invalidateOfferClubCache } from '@/lib/managerJobMarket';\n" +
+    '/* Round 202: the national team job runs on the international engine Soccer\n' +
+    '   Career has used since Round 124, rather than a second thinner one. */\n' +
+    "import { runManagerSummer, NATION_CONFED } from '@/lib/soccerInternational';\n" +
+    "/* Round 965: the manager's face reads Soccer Career's look tables, never a\n" +
+    '   copy of them. That module imports nothing from here. */\n' +
+    "import { SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR } from '@/lib/soccerCareerAppearance';\n" +
+    "import type { JobOffer as MarketJobOffer, ManagerProfile, ClubTier, OfferClub } from '@/lib/managerOffers';\n" +
+    "/* Round 783: the job hunt's pure half. It imports nothing from here but\n" +
+    '   types, so there is no cycle; see its header. */\n' +
+    'import {\n' +
+    '  acceptLine, acceptanceOdds, applyRefusal, bookSummerMove, consumeSummerMove, countDown,\n' +
+    '  decideApplication, declineLine, employedStanding, jobHuntOf, leavingLine, openApplication, recordDecision,\n' +
+    '  dropOnSack, huntBusy, rollOverHunt, waitingYes,\n' +
+    '  LEAVING_BOARD_HIT,\n' +
+    "} from '@/lib/clubManagerJobHunt';\n" +
+    "import type { ApplicationInput, JobHunt } from '@/lib/clubManagerJobHunt';\n" +
+    '/* Round 633: the season score lives in its own pure module so a harness can\n' +
+    '   drive it with synthetic inputs and no engine bundle. clubManagerScore\n' +
+    '   imports nothing from here, so there is no cycle. */\n' +
+    'import {\n' +
+    '  seasonLedger, seasonLedgerScore,\n' +
+    '  type LegacyLogEntry, type SeasonHandover, type SeasonLedger, type SeasonLedgerInput,\n' +
+    "} from '@/lib/clubManagerScore';\n" +
+    "import type { Player, Position } from '@/types/game';\n" +
+    "import { FORMATIONS as SHARED_FORMATIONS, SLOT_ALLOWED, playerRating } from '@/lib/squadShape';\n" +
+    "import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';\n" +
+    "import type { Formation, FormationSlot } from '@/lib/squadShape';\n" +
+    '/* Round 505: the one position rule the lineup games share, so an out of\n' +
+    '   position man here is graded by the same family table World XI uses.\n' +
+    '   positionFit imports nothing but types, so there is no cycle. */\n' +
+    "import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade } from '@/lib/positionFit';\n" +
+    '/* Round 1146: the own goal rule the Soccer Career Season Centre reads too.\n' +
+    '   It imports only the keyed generator, so there is no cycle. */\n' +
+    "import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';\n" +
+    "/* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */\n" +
+    "import { keyedRng } from '@/lib/keyedRng';\n" +
+    '/* Round 1229: the one scorer weight table. It imports a type and nothing else, so there is no cycle. */\n' +
+    "import { goalWeight, assistWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWeight';\n" +
+    '/* Round 1229: the league book, pure. It imports the keyed generator, the own goal rule and the weight table. */\n' +
+    'import {\n' +
+    '  bookFits, bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal, creditMine, creditOwnGoal, dealAssist, dealGoals,\n' +
+    '  liveBook, openBook, openLateBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,\n' +
+    "} from '@/lib/clubManagerLeagueBook';\n" +
+    "/* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */\n" +
+    "import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardInput, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';\n" +
+    "import { compactWorldRoster, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterOwner, worldRosterView } from '@/lib/clubManagerWorldRoster';\n" +
+    "import type { WorldRosterState } from '@/lib/clubManagerWorldRoster';\n" +
+    "import { players as RAW_POOL } from '@/data/players';\n" +
+    '// Round 70: real 2026 rosters for every club in the big five leagues, baked\n' +
+    '// from the Transfermarkt style market value data in Supabase. The bake file\n' +
+    '// imports nothing but types, so reading it at module scope is safe.\n' +
+    "import { CM_ROSTER_META } from '@/data/clubManagerRosters';\n" +
+    "import { CM_REAL_FREE_AGENTS } from '@/data/clubManagerFreeAgents2026';\n" +
+    "import type { BakedPlayer } from '@/data/clubManagerRosters';\n" +
+    '// Round 1035: the modern squads are the baked file joined with the A-League\n' +
+    "// Men's generated one, in one place both engine files read.\n" +
+    "import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL } from '@/data/clubManagerWorldRosters';\n" +
+    "// Round 612: how the real 2025-26 season finished, read by season one's\n" +
+    '// Champions League field. The data file imports nothing, so there is no cycle.\n' +
+    "import { CM_FINAL_TABLES_2025_26, CM_FINAL_TABLES_PARTIAL } from '@/data/clubManagerFinalTables2025_26';\n" +
+    '/* Round 1012: the real rivals table moved to a shared leaf module so Soccer\n' +
+    '   Career reads the same data. Imported back under its old name, unchanged. */\n' +
+    "import { PRIMARY_RIVAL as RIVALS } from '@/data/clubRivalries';\n" +
+    '// Round 132: the world clock. Everything about ageing, retirement, eras and\n' +
+    '// the projected future world lives in clubManagerEras, which imports nothing\n' +
+    '// from this file, so there is no cycle.\n' +
+    'import {\n' +
+    '  CM_BASE_YEAR, CM_ERAS, DEFAULT_ERA_ID, eraById, seasonLabel,\n' +
+    '  projectedRoster, projectedWorld, projectedXIAvg, projectedWorldFor, projectedClubXIAvg,\n' +
+    '  ageDriftBand, declineScale, retireChance,\n' +
+    '  isHistoricEra, eraRosters, eraRostersRaw, eraUpliftRating, HISTORIC_PARTIAL,\n' +
+    '  makeGeneratedName, eraBakeRating, bakedValueForRating,\n' +
+    '  eraRostersLoaded,\n' +
+    "} from '@/lib/clubManagerEras';\n" +
+    "import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';\n" +
+    '/* Round 467: the facilities and the books. Both modules import from this\n' +
+    '   file and this file calls into them; nothing on either side runs at module\n' +
+    '   scope, which is the house rule for a cycle. */\n' +
+    'import {\n' +
+    '  ensureFacilities, injurySpell, rolloverFacilities, tickFacilities, trainingGroundGrowthMult,\n' +
+    "} from '@/lib/clubManagerFacilities';\n" +
+    "import type { ClubFacilities } from '@/lib/clubManagerFacilities';\n" +
+    'import {\n' +
+    '  concessionPerFan, ensureBooks, fanCrowdMult, noteAwayTrip, noteHomeGate, noteSponsorIncome,\n' +
+    '  rolloverBooks, setTicketPolicy, tickBooks,\n' +
+    "} from '@/lib/clubManagerFinances';\n" +
+    "import type { ClubBooks } from '@/lib/clubManagerFinances';\n" +
+    '/* Round 979: the decisions desk, same cycle, same rule: pure exports, nothing\n' +
+    '   read at module scope on either side. */\n' +
+    "import { answerDecision, settleDecisionDesk } from '@/lib/clubManagerDecisions';\n" +
+    '/* Round 471: the four staff posts, same cycle, same rule. */\n' +
+    'import {\n' +
+    '  coachGrowthMult, ensureStaff, rolloverStaff, scoutQualityBonus, tickStaff,\n' +
+    "} from '@/lib/clubManagerStaff';\n" +
+    "import type { ClubStaff } from '@/lib/clubManagerStaff';\n" +
+    '/* Round 506: the deal desk, in its own file for the same reason the staff and\n' +
+    '   the board asks are in theirs. Every export is pure and nothing here is read\n' +
+    '   at module scope, which is what keeps the cycle between the two files safe. */\n' +
+    'import {\n' +
+    '  ASK_CONVERGENCE, MAX_TERMS_YEARS, MIN_TERMS_YEARS, OPENING_PATIENCE_MIN,\n' +
+    '  OPENING_PATIENCE_SPREAD, askingTerms, counterTerms, dealCloseness, loanTermsFor,\n' +
+    '  loanOutTermsFor, offerVerdict, patienceCost, termsNote, termsVerdict,\n' +
+    "} from '@/lib/clubManagerDeals';\n" +
+    "import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';\n" +
+    '/* Round 513: manager XP and the seven trees, in their own file for the same\n' +
+    '   reason the deals and the staff are in theirs. */\n' +
+    "import { addXp, askEdge, dutyEdge, ensureXp, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthIntakeEdge, youthReportEdge } from '@/lib/clubManagerXp';\n" +
+    "import { NO_SACK_LINE, PATIENCE_FLOOR, askPremiumScale, boardMaySack, currencySymbol, ensureStartOptions, nationJobsOn, patienceDelta, startOptionsOf } from '@/lib/clubManagerStart';\n" +
+    '/* Round 1331: the substitution rule by league and season, a pure table. */\n' +
+    "import { subsLeagueBase, subsRuleFor, type SubsRule } from '@/lib/clubManagerSubsRule';\n" +
+    "export { subsRuleFor, CM_SUBS_PARTIAL } from '@/lib/clubManagerSubsRule';\n" +
+    '/* Round 474: the five specific board asks, built and graded there for the\n' +
+    '   same reason the facilities and the books live in their own files. */\n' +
+    "import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';\n" +
+    "/* Round 1335: the board's verdict, its openings, the kitty band and the offer step, a pure module. */\n" +
+    "import { BOARD_FRESH, VERDICT_LINES, fillLeague, kittyAllocation, offerStepOk, openingConfidence, seasonGrade, type SeasonFate } from '@/lib/clubManagerBoardVerdict';\n" +
+    "export { BOARD_FRESH } from '@/lib/clubManagerBoardVerdict';\n" +
+    '/* Round 978: international duty. Called only inside functions, never at module\n' +
+    '   scope, so the cycle back into this file stays evaluation safe. */\n' +
+    "import { answerBreak, backFromDuty, endRest, ensureIntl, fireDueBreaks, freshIntl, restingIds } from '@/lib/clubManagerInternationals';\n" +
+    "import type { IntlDuty } from '@/lib/clubManagerInternationals';\n" +
+    "/* Round 1021: the late 2020-21 start's summer window. Called inside\n" +
+    '   startCareer only, never at module scope: the calendar module imports this\n' +
+    '   one, the same loop the internationals mo'... 1128049 more characters,
+  expected: "import { foldSpecialLatin } from '@/lib/nameFold';\n" +
+    "import { nameModerationError } from '@/lib/nameModeration';\n" +
+    "import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';\n" +
+    "import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGoalLift, type CmVarDecision, type CmVarKind, type CmVarAsk } from '@/lib/clubManagerVar';\n" +
+    '/* Round 201: the wilderness reuses the manager job market the retired\n' +
+    '   player path already had, so a sacked manager gets real clubs with real\n' +
+    '   briefs instead of a bespoke second offer engine. */\n' +
+    '/* Round 310: the offer pool import gained the cache invalidator. The two\n' +
+    '   files already import each other (this module reaches the market at\n' +
+    '   runtime only, and the market reads leagues at runtime only), so the\n' +
+    '   cycle stays evaluation-order safe. */\n' +
+    "import { realJobOffers, allOfferClubs, invalidateOfferClubCache } from '@/lib/managerJobMarket';\n" +
+    '/* Round 202: the national team job runs on the international engine Soccer\n' +
+    '   Career has used since Round 124, rather than a second thinner one. */\n' +
+    "import { runManagerSummer, NATION_CONFED } from '@/lib/soccerInternational';\n" +
+    "/* Round 965: the manager's face reads Soccer Career's look tables, never a\n" +
+    '   copy of them. That module imports nothing from here. */\n' +
+    "import { SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR } from '@/lib/soccerCareerAppearance';\n" +
+    "import type { JobOffer as MarketJobOffer, ManagerProfile, ClubTier, OfferClub } from '@/lib/managerOffers';\n" +
+    "/* Round 783: the job hunt's pure half. It imports nothing from here but\n" +
+    '   types, so there is no cycle; see its header. */\n' +
+    'import {\n' +
+    '  acceptLine, acceptanceOdds, applyRefusal, bookSummerMove, consumeSummerMove, countDown,\n' +
+    '  decideApplication, declineLine, employedStanding, jobHuntOf, leavingLine, openApplication, recordDecision,\n' +
+    '  dropOnSack, huntBusy, rollOverHunt, waitingYes,\n' +
+    '  LEAVING_BOARD_HIT,\n' +
+    "} from '@/lib/clubManagerJobHunt';\n" +
+    "import type { ApplicationInput, JobHunt } from '@/lib/clubManagerJobHunt';\n" +
+    '/* Round 633: the season score lives in its own pure module so a harness can\n' +
+    '   drive it with synthetic inputs and no engine bundle. clubManagerScore\n' +
+    '   imports nothing from here, so there is no cycle. */\n' +
+    'import {\n' +
+    '  seasonLedger, seasonLedgerScore,\n' +
+    '  type LegacyLogEntry, type SeasonHandover, type SeasonLedger, type SeasonLedgerInput,\n' +
+    "} from '@/lib/clubManagerScore';\n" +
+    "import type { Player, Position } from '@/types/game';\n" +
+    "import { FORMATIONS as SHARED_FORMATIONS, SLOT_ALLOWED, playerRating } from '@/lib/squadShape';\n" +
+    "import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';\n" +
+    "import type { Formation, FormationSlot } from '@/lib/squadShape';\n" +
+    '/* Round 505: the one position rule the lineup games share, so an out of\n' +
+    '   position man here is graded by the same family table World XI uses.\n' +
+    '   positionFit imports nothing but types, so there is no cycle. */\n' +
+    "import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade } from '@/lib/positionFit';\n" +
+    '/* Round 1146: the own goal rule the Soccer Career Season Centre reads too.\n' +
+    '   It imports only the keyed generator, so there is no cycle. */\n' +
+    "import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';\n" +
+    "/* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */\n" +
+    "import { keyedRng } from '@/lib/keyedRng';\n" +
+    '/* Round 1229: the one scorer weight table. It imports a type and nothing else, so there is no cycle. */\n' +
+    "import { goalWeight, assistWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWeight';\n" +
+    '/* Round 1229: the league book, pure. It imports the keyed generator, the own goal rule and the weight table. */\n' +
+    'import {\n' +
+    '  bookFits, bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal, creditMine, creditOwnGoal, dealAssist, dealGoals,\n' +
+    '  liveBook, openBook, openLateBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,\n' +
+    "} from '@/lib/clubManagerLeagueBook';\n" +
+    "/* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */\n" +
+    "import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardInput, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';\n" +
+    "import { compactWorldRoster, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterView } from '@/lib/clubManagerWorldRoster';\n" +
+    "import type { WorldRosterState } from '@/lib/clubManagerWorldRoster';\n" +
+    "import { players as RAW_POOL } from '@/data/players';\n" +
+    '// Round 70: real 2026 rosters for every club in the big five leagues, baked\n' +
+    '// from the Transfermarkt style market value data in Supabase. The bake file\n' +
+    '// imports nothing but types, so reading it at module scope is safe.\n' +
+    "import { CM_ROSTER_META } from '@/data/clubManagerRosters';\n" +
+    "import { CM_REAL_FREE_AGENTS } from '@/data/clubManagerFreeAgents2026';\n" +
+    "import type { BakedPlayer } from '@/data/clubManagerRosters';\n" +
+    '// Round 1035: the modern squads are the baked file joined with the A-League\n' +
+    "// Men's generated one, in one place both engine files read.\n" +
+    "import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL } from '@/data/clubManagerWorldRosters';\n" +
+    "// Round 612: how the real 2025-26 season finished, read by season one's\n" +
+    '// Champions League field. The data file imports nothing, so there is no cycle.\n' +
+    "import { CM_FINAL_TABLES_2025_26, CM_FINAL_TABLES_PARTIAL } from '@/data/clubManagerFinalTables2025_26';\n" +
+    '/* Round 1012: the real rivals table moved to a shared leaf module so Soccer\n' +
+    '   Career reads the same data. Imported back under its old name, unchanged. */\n' +
+    "import { PRIMARY_RIVAL as RIVALS } from '@/data/clubRivalries';\n" +
+    '// Round 132: the world clock. Everything about ageing, retirement, eras and\n' +
+    '// the projected future world lives in clubManagerEras, which imports nothing\n' +
+    '// from this file, so there is no cycle.\n' +
+    'import {\n' +
+    '  CM_BASE_YEAR, CM_ERAS, DEFAULT_ERA_ID, eraById, seasonLabel,\n' +
+    '  projectedRoster, projectedWorld, projectedXIAvg, projectedWorldFor, projectedClubXIAvg,\n' +
+    '  ageDriftBand, declineScale, retireChance,\n' +
+    '  isHistoricEra, eraRosters, eraRostersRaw, eraUpliftRating, HISTORIC_PARTIAL,\n' +
+    '  makeGeneratedName, eraBakeRating, bakedValueForRating,\n' +
+    '  eraRostersLoaded,\n' +
+    "} from '@/lib/clubManagerEras';\n" +
+    "import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';\n" +
+    '/* Round 467: the facilities and the books. Both modules import from this\n' +
+    '   file and this file calls into them; nothing on either side runs at module\n' +
+    '   scope, which is the house rule for a cycle. */\n' +
+    'import {\n' +
+    '  ensureFacilities, injurySpell, rolloverFacilities, tickFacilities, trainingGroundGrowthMult,\n' +
+    "} from '@/lib/clubManagerFacilities';\n" +
+    "import type { ClubFacilities } from '@/lib/clubManagerFacilities';\n" +
+    'import {\n' +
+    '  concessionPerFan, ensureBooks, fanCrowdMult, noteAwayTrip, noteHomeGate, noteSponsorIncome,\n' +
+    '  rolloverBooks, setTicketPolicy, tickBooks,\n' +
+    "} from '@/lib/clubManagerFinances';\n" +
+    "import type { ClubBooks } from '@/lib/clubManagerFinances';\n" +
+    '/* Round 979: the decisions desk, same cycle, same rule: pure exports, nothing\n' +
+    '   read at module scope on either side. */\n' +
+    "import { answerDecision, settleDecisionDesk } from '@/lib/clubManagerDecisions';\n" +
+    '/* Round 471: the four staff posts, same cycle, same rule. */\n' +
+    'import {\n' +
+    '  coachGrowthMult, ensureStaff, rolloverStaff, scoutQualityBonus, tickStaff,\n' +
+    "} from '@/lib/clubManagerStaff';\n" +
+    "import type { ClubStaff } from '@/lib/clubManagerStaff';\n" +
+    '/* Round 506: the deal desk, in its own file for the same reason the staff and\n' +
+    '   the board asks are in theirs. Every export is pure and nothing here is read\n' +
+    '   at module scope, which is what keeps the cycle between the two files safe. */\n' +
+    'import {\n' +
+    '  ASK_CONVERGENCE, MAX_TERMS_YEARS, MIN_TERMS_YEARS, OPENING_PATIENCE_MIN,\n' +
+    '  OPENING_PATIENCE_SPREAD, askingTerms, counterTerms, dealCloseness, loanTermsFor,\n' +
+    '  loanOutTermsFor, offerVerdict, patienceCost, termsNote, termsVerdict,\n' +
+    "} from '@/lib/clubManagerDeals';\n" +
+    "import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';\n" +
+    '/* Round 513: manager XP and the seven trees, in their own file for the same\n' +
+    '   reason the deals and the staff are in theirs. */\n' +
+    "import { addXp, askEdge, dutyEdge, ensureXp, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthIntakeEdge, youthReportEdge } from '@/lib/clubManagerXp';\n" +
+    "import { PATIENCE_FLOOR, askPremiumScale, currencySymbol, ensureStartOptions, nationJobsOn, patienceDelta, startOptionsOf } from '@/lib/clubManagerStart';\n" +
+    '/* Round 1331: the substitution rule by league and season, a pure table. */\n' +
+    "import { subsLeagueBase, subsRuleFor, type SubsRule } from '@/lib/clubManagerSubsRule';\n" +
+    "export { subsRuleFor, CM_SUBS_PARTIAL } from '@/lib/clubManagerSubsRule';\n" +
+    '/* Round 474: the five specific board asks, built and graded there for the\n' +
+    '   same reason the facilities and the books live in their own files. */\n' +
+    "import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';\n" +
+    '/* Round 978: international duty. Called only inside functions, never at module\n' +
+    '   scope, so the cycle back into this file stays evaluation safe. */\n' +
+    "import { answerBreak, backFromDuty, endRest, ensureIntl, fireDueBreaks, freshIntl, restingIds } from '@/lib/clubManagerInternationals';\n" +
+    "import type { IntlDuty } from '@/lib/clubManagerInternationals';\n" +
+    "/* Round 1021: the late 2020-21 start's summer window. Called inside\n" +
+    '   startCareer only, never at module scope: the calendar module imports this\n' +
+    '   one, the same loop the internationals module already closes. */\n' +
+    "import { lateSummerWindowWeeks } from '@/lib/clubManagerCalendar';\n" +
+    '/* Round 478: the Champions League orders a level group table by its own\n' +
+    '   rule, not a league one. That module imports nothing but types from here,\n' +
+    '   so there is no cycle at all. */\n' +
+    "import { UCL_GROUP_LEDGER, countWaitingLevelRuns, noteUclGroupResult, sortedUclGroupTable, uclGroupFootnote } from '@/lib/clubManagerUclGroups';\n" +
+    'import type { UclGro'... 1099676 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

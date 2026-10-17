@@ -1,0 +1,4 @@
+Actual application mutation: none; effective copied source faults1; no file, setup or pending credit.
+Effective pointerdown control: 7c11c31109912ccb50b23817b53c6c1e0c2ac809d6d7f9ce525fed2c36ffbe82 -> 5bac9b698f7f341c9952cafb817fb313f1a583ad8feed258b4396ad727437093; whole fixed-source inverse held.
+simPlayerAutocompleteTouchScroll pointerdown: green.
+FIRED-OK

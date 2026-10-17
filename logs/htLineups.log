@@ -1,0 +1,23 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: src/lib/clubManager.ts: held parent differs.
++ actual - expected
+
++ '45c6d487db4dfe8e16d59da02eb9a4040bfb7681a55f8321749d028138bd1ab7'
+- '7a89018d61b149a7cccb24b9392a92b5fbce610b942611c592722cde5e4b11b7'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerHalftimeLineups.mjs:60:73
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '45c6d487db4dfe8e16d59da02eb9a4040bfb7681a55f8321749d028138bd1ab7',
+  expected: '7a89018d61b149a7cccb24b9392a92b5fbce610b942611c592722cde5e4b11b7',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
