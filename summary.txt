@@ -1,0 +1,4 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=1 192s | playWorldUcl: FAIL, 3 findings over 30 measured views; pictures in /home/runner/work/_temp/rc-out/files/shots
+walk-notile exit=1 29s | playWorldUcl control notile: FIRED, "no Champions League tile" reported 1 time(s) (1 findings in all)
+walk-ahead exit=1 42s | playWorldUcl control ahead: FIRED, "matchday 5 shows" reported 1 time(s) (3 findings in all)
