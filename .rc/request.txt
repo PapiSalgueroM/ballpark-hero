@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+#!serial
+walk: node scripts/playWorldUcl.mjs
+walk-instandin: PLAY_WORLD_CONTROL=instandin node scripts/playWorldUcl.mjs
+walk-inswap: PLAY_WORLD_CONTROL=inswap node scripts/playWorldUcl.mjs
+walk-legturn: PLAY_WORLD_CONTROL=legturn node scripts/playWorldUcl.mjs
+mutM7: node .rc/x/mutrun-1503.mjs M7; s=$?; git checkout -- src scripts; exit $s
+walk-notile: PLAY_WORLD_CONTROL=notile node scripts/playWorldUcl.mjs
+walk-ahead: PLAY_WORLD_CONTROL=ahead node scripts/playWorldUcl.mjs
+walk-oldcols: PLAY_WORLD_CONTROL=oldcols node scripts/playWorldUcl.mjs
+walk-legflip: PLAY_WORLD_CONTROL=legflip node scripts/playWorldUcl.mjs
+walk-swapfinal: PLAY_WORLD_CONTROL=swapfinal node scripts/playWorldUcl.mjs
+walk-r16help: PLAY_WORLD_CONTROL=r16help node scripts/playWorldUcl.mjs
