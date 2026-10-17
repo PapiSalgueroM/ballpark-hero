@@ -1,0 +1,13 @@
+#!serial
+headsha: git log --oneline -3
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simManagerAppealIsolation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+decisions-default: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs
+decisions-seed4: SIM_SEED=4 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs
+decisionRegression1081: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerDecisionRegression1081.mjs
+vitest-dailySaveShapes: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simCareerTransferBrief: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs
+simSoccerAgentReview: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
+held-after: git status --porcelain --untracked-files=no | head -5; git diff --exit-code HEAD -- src scripts && echo "src and scripts held after every line"

@@ -1,0 +1,12 @@
+headsha exit=0 0s | be3791703 Round BII: record the base of Round 1329's inverse after 285f8f81 (c2d21574) in this branch's history, tree unchanged
+tsc exit=0 64s | 
+simManagerAppealIsolation exit=0 34s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simCmLeagueRules exit=0 55s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+decisions-default exit=0 35s | simClubManagerDecisions: 0 findings
+decisions-seed4 exit=0 31s | simClubManagerDecisions: 0 findings
+decisionRegression1081 exit=0 325s | Original loss control fired in section 3 beside a healthy seed-1 baseline.
+vitest-dailySaveShapes exit=0 20s |    Duration  19.57s (transform 2.45s, setup 56ms, collect 292ms, tests 18.50s, environment 304ms, prepare 116ms)
+vitest-all exit=0 730s |    Duration  730.00s (transform 36.53s, setup 34.02s, collect 202.68s, tests 1535.44s, environment 248.62s, prepare 51.47s)
+simCareerTransferBrief exit=0 7s | Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.
+simSoccerAgentReview exit=0 10s | PASS agent review product and proof source bytes held.
+held-after exit=0 0s | src and scripts held after every line
