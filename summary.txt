@@ -1,0 +1,3 @@
+td-m3 exit=1 3s |    Duration  1.52s (transform 37ms, setup 0ms, collect 0ms, tests 0ms, environment 758ms, prepare 404ms)
+td-m4 exit=1 4s |    Duration  1.24s (transform 23ms, setup 0ms, collect 0ms, tests 0ms, environment 449ms, prepare 164ms)
+td-main exit=1 4s |    Duration  1.30s (transform 16ms, setup 0ms, collect 0ms, tests 0ms, environment 497ms, prepare 352ms)
