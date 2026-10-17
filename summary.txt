@@ -1,0 +1,2 @@
+unseeded-base exit=1 137s | simCmUnseededWorld: 112 FAILURE(S)
+money-base exit=1 201s | 1 FAILURES
