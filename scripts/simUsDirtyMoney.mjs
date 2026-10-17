@@ -20,7 +20,8 @@
  *      400 careers a sport (US_DIRTY_MONEY_AB), each on its own seeded stream on both: every career that never took
  *      the launder option is byte equal after every season and every card; the takers are counted and none fails.
  *   6. Controls only: the board test (src/test/usCareerDirtyMoney.test.tsx) run against a copy of the shared board
- *      with the desk (nodesk) or the honest sentence (sentence) taken out; exactly the named cases must fail.
+ *      with the desk (nodesk), the honest sentence (sentence) or the season guard (anyphase) taken out; exactly the
+ *      named cases must fail.
  *   7. Never a heat eraser, never a karma farm (the critic's correction 2, binding). Fleet saves of every sport
  *      (real careers through the bindings on the seeded stream, each also at heat 91, at heat 100, holding 20M
  *      more, broke at 1M and just back from a ban), every option of the four corruption decks that adds dirty money, then at once each way:
@@ -43,8 +44,9 @@
  *   deck        launderEffectText draws one Math.random                       -> section 5
  *   noop        one sport's launder apply put back to the flag and heat +10   -> section 4, naming that sport only
  *               (US_DIRTY_MONEY_SPORT=nba|nfl|mlb|nhl, default nba; run once per sport)
- *   nodesk      the board's Deal with it button never drawn                   -> section 6, all 12 board cases
+ *   nodesk      the board's Deal with it button never drawn                   -> section 6, the 12 cases that need a desk (of 16)
  *   sentence    the board always keeps the old Shady aisle sentence           -> section 6, the 4 desk cases
+ *   anyphase    the Deal with it button drawn in every phase                  -> section 6, the 4 phase cases only
  *
  * Nothing here reaches the network. Run: node scripts/simUsDirtyMoney.mjs
  */
@@ -73,10 +75,10 @@ const CONTROLS = {
 };
 /* Controls that edit another file: noop edits one deck (US_DIRTY_MONEY_SPORT, default nba) in the head bundle,
    nodesk and sentence edit the shared board for the vitest run of section 6. */
-const OTHER_CONTROLS = { noop: [4], nodesk: [6], sentence: [6] };
+const OTHER_CONTROLS = { noop: [4], nodesk: [6], sentence: [6], anyphase: [6] };
 assert.ok(!control || control in CONTROLS || control in OTHER_CONTROLS, `Known control (${[...Object.keys(CONTROLS), ...Object.keys(OTHER_CONTROLS)].join(', ')})`);
-/* The two board controls only need section 6: the rest is skipped so a control run stays short. */
-const boardOnly = control === 'nodesk' || control === 'sentence';
+/* The three board controls only need section 6: the rest is skipped so a control run stays short. */
+const boardOnly = control === 'nodesk' || control === 'sentence' || control === 'anyphase';
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replaceAll('\r\n', '\n');
 const source = read(MODULE);
 for (const [anchor, replacement] of Object.values(CONTROLS)) {
@@ -105,11 +107,16 @@ const CASE = {
   desk: s => `${s}: every washer owned, the desk previews, holds a second tap, and Come clean saves exactly the rule`,
   sentence: s => `${s}: with one washer unowned the old sentence stands byte for byte, beside the desk`,
   none: s => `${s}: no dirty money, no desk; the recorded dirty save mounts without a write and offers it`,
+  phase: s => `${s}: outside a playing season the desk is not offered, over a contract talk or free agency`,
 };
+/* The phase case passes under nodesk (no desk anywhere) and is the only one anyphase (advice 17's guard dropped,
+   the Round 1500 review's run minor 1) turns red. */
 const BOARD_CONTROLS = {
   nodesk: ["{phase === 'season' && canDealWithDirtyMoney(career) && (", '{false && (', SPORTS.flatMap(s => [CASE.desk(s), CASE.sentence(s), CASE.none(s)])],
   sentence: ['(washersLeft(sport.shopItems, career.purchased) > 0 ? (', '(true ? (', SPORTS.map(CASE.desk)],
+  anyphase: ["{phase === 'season' && canDealWithDirtyMoney(career) && (", '{canDealWithDirtyMoney(career) && (', SPORTS.map(CASE.phase)],
 };
+const BOARD_CASES = 16;
 const boardText = read(BOARD);
 for (const [anchor, replacement] of Object.values(BOARD_CONTROLS)) {
   assert.equal(boardText.split(anchor).length - 1, 1, `Board control anchor held once: ${anchor}`);
@@ -118,7 +125,7 @@ for (const [anchor, replacement] of Object.values(BOARD_CONTROLS)) {
 }
 const testText = read(BOARD_TEST);
 for (const make of Object.values(CASE)) assert.ok(testText.includes(`'%s: ${make('').slice(2)}'`), `the board test still names: ${make('%s')}`);
-console.log(`6) the board test under the board controls: ${boardOnly ? control : 'run only as a control (nodesk, sentence)'}`);
+console.log(`6) the board test under the board controls: ${boardOnly ? control : 'run only as a control (nodesk, sentence, anyphase)'}`);
 if (boardOnly) {
   const { spawnSync } = await import('node:child_process');
   let up = ROOT, vitestBin = '';
@@ -141,7 +148,7 @@ if (boardOnly) {
   const failedTitles = rows.filter(r => r.status === 'failed').map(r => r.title).sort();
   const passed = rows.filter(r => r.status === 'passed').length;
   console.log(`   control ${control}: ${rows.length} cases, ${failedTitles.length} failed (${expected.length} named), ${passed} passed, vitest exit ${run.status}`);
-  const exact = rows.length === 12 && passed + failedTitles.length === 12 && JSON.stringify(failedTitles) === JSON.stringify([...expected].sort());
+  const exact = rows.length === BOARD_CASES && passed + failedTitles.length === BOARD_CASES && JSON.stringify(failedTitles) === JSON.stringify([...expected].sort());
   if (!exact) console.log(`   failed: ${failedTitles.join(' | ') || 'none'}`);
   console.log(exact ? `CONTROL ${control} FIRED (red sections 6)` : `CONTROL ${control} DID NOT FIRE (red sections none)`);
   process.exit(exact ? 1 : 2);

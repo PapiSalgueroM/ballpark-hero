@@ -6,6 +6,8 @@
  *     rule's change (dirty money 0, the 1.0M fine, heat 55 to 50, karma +3) with its line on screen and in the feed.
  *     With one washer unowned the old sentence is there byte for byte, and the desk still is.
  * (5) The desk is never shown on a save with no dirty money, and a save with dirty money mounts without a write.
+ * (6) The desk is offered in a playing season only: a contract talk or free agency save holding dirty money shows the
+ *     heat meter and no "Deal with it" (simUsDirtyMoney's control anyphase drops the guard and needs this red).
  *
  * The saves are the board's own bytes from scripts/data/usBoardFixture.json (its `dirty` save per sport, 2.5M at
  * heat 55, recorded before this round), with only the dirty money, the heat and the washers set, mounted the way that
@@ -156,5 +158,23 @@ describe('Round 1500: deal with dirty money on the real board', () => {
     expect(localStorage.getItem(key)).toBe(recorded);
     expect(deskButton(view.container)?.textContent).toBe('Deal with it');
     await waitFor(() => expect(view.container.textContent).toContain(OLD_SENTENCE));
+  });
+
+  /* Advice 17's guard (the Round 1500 review's run minor 1): the heat meter is drawn in every phase, the desk only
+     in a playing season. The fixture's contract talk and free agency saves come back in those phases on load. */
+  it.each(SPORTS)('%s: outside a playing season the desk is not offered, over a contract talk or free agency', async (slug, key, sport, Board) => {
+    for (const [name, marker] of [['extTalk', '[data-extension-talk]'], ['faTalk', '[data-fa-window]']] as const) {
+      const save = JSON.parse(fixture.sports[slug].saves[name]) as Saved;
+      expect(save.c.retired, `${name}: a playing career`).toBe(false);
+      save.c.dirtyMoney = 9.5;
+      save.c.heat = 55;
+      localStorage.setItem(key, JSON.stringify(save));
+      const view = render(<Board />); await flush();
+      await waitFor(() => expect(view.container.querySelector(marker), `${name}: the screen it was saved on is up`).not.toBeNull());
+      expect(view.container.textContent, `${name}: the heat meter is there`).toContain('$9.5M unexplained');
+      expect(deskButton(view.container), `${name}: no Deal with it outside a season`).toBeNull();
+      view.unmount();
+      localStorage.clear();
+    }
   });
 });
