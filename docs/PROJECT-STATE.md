@@ -18508,7 +18508,7 @@ Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
 
 
-## Codex1399 source candidate
+## Codex1399 scoped READY
 
-See docs/audits/manager-completion-timeout-1399.md. Frozen actual I a5b0e767, full-season-only test timeout; remote proof and build gates pending. No product/main/live change. I owns integration and publish.
+See docs/audits/manager-completion-timeout-1399.md and draft PR316. Frozen actual I a5b0e767, actual tested7d6d54cb/run39014012019/job117342244379 SUCCESS. Only the full-season test gets300_000ms; all assertions, the single-match default and old harness remain held. Same20worker original/fixed/restored proof, six old controls, direct assertion control, real types, serial build and all15rebuilt-site readers pass. Both earlier failures are preserved. Artifact12094277066/31795a52 is independently physically and semantically closed. Three generated paths are retained outside the branch; final is exactly three closing docs beyond the request, not docs-only from actual validated output. BII rule2 uses actual tested7d for a real merge, closing docs separately and I regenerates output. No product/full-suite/weight/main/live claim; I owns integration, spectator UCL, tournaments and publish. Urgent308 and314 stay independent,315 stays NOT READY. The source-only current-a5 urgent308 apply check passes without joining or qualifying its runtime.
 
