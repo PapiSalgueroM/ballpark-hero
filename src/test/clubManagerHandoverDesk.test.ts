@@ -10,6 +10,9 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { writeFileSync } from 'node:fs';
 import type { CareerState } from '@/lib/clubManager';
 import type { DeskItem } from '@/lib/clubManagerDecisions';
+/* Release BI join (Round BII): Round 1335 (merged first) opens a new job's board at BOARD_FRESH (69) on a modern
+   career, where this file was written against the old flat 62. The appointment premise is the same. */
+import { BOARD_FRESH } from '@/lib/clubManagerBoardVerdict';
 
 const fixture = vi.hoisted(() => ({ install: false, whistles: 0, predecessor: null as unknown }));
 vi.mock('@/lib/clubManagerDecisions', async importOriginal => {
@@ -134,7 +137,7 @@ describe('Club Manager appointment desk ownership', () => {
       const { reference, prepared } = await pair(path);
       expect(withoutDesk(prepared.state)).toEqual(withoutDesk(reference.state));
       expect(prepared.draws).toEqual(reference.draws); expect(prepared.whistles).toBe(reference.whistles);
-      expect(prepared.state.boardConfidence).toBe(62); expect(prepared.state.week).toBeGreaterThan(0);
+      expect(prepared.state.boardConfidence).toBe(BOARD_FRESH); expect(prepared.state.week).toBeGreaterThan(0);
       expect(JSON.stringify(prepared.input)).toBe(prepared.inputBytes);
       expect(JSON.stringify(reference.input)).toBe(reference.inputBytes);
     }, 120000);
