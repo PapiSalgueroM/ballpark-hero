@@ -55,7 +55,7 @@ jobs:
           git status --porcelain --untracked-files=no > "$HANDOVER_OUT/source-before.txt"
           test ! -s "$HANDOVER_OUT/source-before.txt"
           git diff --exit-code "$CM_HANDOVER_BASE" -- src ':!src/lib/clubManagerCalendar.ts' ':!src/test/clubManagerHandoverDesk.test.ts' scripts ':!scripts/simCmHandoverDesk.mjs' .github/workflows ':!.github/workflows/manager-handover-desk.yml' index.html package.json package-lock.json bun.lock vitest.config.ts vite.config.ts tsconfig.json tsconfig.app.json tsconfig.node.json
-          test "$(git rev-parse HEAD:src/test/clubManagerHandoverDesk.test.ts)" = "$(git rev-parse 862de03d5e912ecccade0f64d3840f23fa7f6992:src/test/clubManagerHandoverDesk.test.ts)"
+          test "$(git rev-parse HEAD:src/test/clubManagerHandoverDesk.test.ts)" = "$(git rev-parse ff42f7e19541a3ee3a78b7c8f43f1cebf00ca0a6:src/test/clubManagerHandoverDesk.test.ts)"
           git diff "$CM_HANDOVER_BASE" -- src/lib/clubManagerCalendar.ts > "$HANDOVER_OUT/application.diff"
           git archive HEAD | gzip > "$HANDOVER_OUT/source.tar.gz"
           sha256sum "$HANDOVER_OUT/source.tar.gz" > "$HANDOVER_OUT/archive-sha256.txt"

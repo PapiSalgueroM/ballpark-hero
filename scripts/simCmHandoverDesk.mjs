@@ -17,7 +17,9 @@ const OUT = path.resolve(process.env.CM_HANDOVER_OUT || path.join(ROOT, 'manager
 const BASE = process.env.CM_HANDOVER_BASE || 'd4f2c6f688d656205722ba52bbdb33f03490966a';
 const CALENDAR = 'src/lib/clubManagerCalendar.ts';
 const TEST = 'src/test/clubManagerHandoverDesk.test.ts';
-const METHOD = '862de03d5e912ecccade0f64d3840f23fa7f6992';
+/* Release BI join (Round BII): the frozen test moved from 862de03d to ff42f7e1, whose only change is the expected
+   board of a fresh appointment (Round 1335's BOARD_FRESH instead of the old flat 62). */
+const METHOD = 'ff42f7e19541a3ee3a78b7c8f43f1cebf00ca0a6';
 const sha = value => createHash('sha256').update(value).digest('hex');
 const lf = value => value.toString().replaceAll('\r\n', '\n');
 const git = args => execFileSync('git', args, { cwd: ROOT, maxBuffer: 128 * 1024 * 1024 });
