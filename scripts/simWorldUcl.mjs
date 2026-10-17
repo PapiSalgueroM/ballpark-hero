@@ -68,7 +68,8 @@
  *              locale (the groups ordered by the device's order again) swaphome and edgeswap (the watched
  *              match with its two strengths or its two edges swapped) standweak (the eras' stand in is the
  *              weakest club outside the 32) noholdertop (the holder never first in the draw) nocustomexit (a
- *              summer move away from a created club leaves the created club's name in the watched field)
+ *              summer move away from a created club hands its watched place to the created club's name, so the
+ *              open throws and the season watches nothing)
  *   section 2: stream (the watched match draws from Math.random) participant (a club in the Champions League
  *              opens a watched one too) form (the evaluation writes the clubs' form)
  *   section 3: ahead (a night counts one week early) live (the evaluation reads today's strengths, not the
@@ -198,7 +199,8 @@ Object.assign(CONTROLS, {
   standweak: [1, /^1 stand in: /, /^1 /],
   noholdertop: [1, /^1 holder: /, /^1 /],
   memokey: [3, /^3 memo: /, /^3 /],
-  /* Advice 24: a summer move away from a created club hands its watched place to the created club's name. */
+  /* Advice 24: a summer move away from a created club hands its watched place to the created club's name (the
+     open then throws on a club the new world does not know, and the season watches nothing). */
   nocustomexit: [1, /^1 created exit: /],
 });
 Object.assign(CAREER_EDITS, {
@@ -1013,7 +1015,9 @@ async function customExitProbe() {
   const next = tape(0x4800, () => M.cm.startNextSeason(s, to.club)).value;
   ok(next.clubName === to.club && !next.uclGroup, `1 created exit setup: the summer move to ${to.club} did not leave a watcher (at ${next.clubName}, uclGroup ${next.uclGroup === null ? 'null' : 'set'})`);
   const watched = next.worldComps?.ucl?.clubs ?? [];
-  ok(watched.length > 0, `1 created exit setup: the move to ${to.club} opened no watched competition`);
+  /* Not a setup line: with the exit taken out the created club's name, which the new season's world no longer
+     knows, makes the open throw, and the season is left with no watched competition at all (fix-c, 2faa2f61). */
+  ok(watched.length > 0, `1 created exit: the summer move to ${to.club} opened no watched competition`);
   ok(!watched.includes(CREATED.name), `1 created exit: after leaving ${CREATED.name} for ${to.club}, the watched field still lists the created club`);
   ok(watched.includes(replaced), `1 created exit: after leaving ${CREATED.name} for ${to.club}, its place did not go back to ${replaced}, the club it replaced`);
   console.log(`  1 created club left in the summer: ${CREATED.name} (top of ${top}, in place of ${replaced}) to ${to.club}; the watched field holds ${watched.includes(replaced) ? replaced : 'not ' + replaced}`);
