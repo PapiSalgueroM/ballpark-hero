@@ -1,3 +1,8 @@
+## Codex Round1394: US retirement guide candidate, NOT READY on weights
+
+Recorded 2026-10-17 UTC. DraftPR311 is the explicit1346/BiH handback on actualI1346mergeb31, four two-sentence guide items only. Tested2ab027be/run38990091016/job117270330064 completed FAILURE only3unchanged limits: Manager607.2/606K, Hot Seat625.0/624, Deadline635.0/634. No cap waiver or paired cost attribution. Actualtypes0B, four exact source hashes/inverses, generators, five-page production build, all17existing individual site/guide/search readers,521versions and all byte holds pass. No new unit/browser framework or engine/UI/save/data change.
+
+Artifact12085290902/aaa79515 is physically closed. Root4808source/4808validated/784dist body closure7ad56a3c and independent semanticf3e430ed pass;18recorded build-font denial lines are preserved, without zero-external credit. Exactly9actual generated bodies were adopted: keywords/frozen headings/four US pages/existing-source What's New/sitemap/lastmod. Final source must differ from actual validated output only in3closingdocs, then push. Under BII rule2, use tested2ab for a real merge if selected and carry closing docs separately. This is a nonblocking copy candidate, not READY or live. Claude I owns integration, weight disposition and publication; urgent308 remains first and no extra BI gate is added. Evidence: docs/audits/us-career-retirement-guide.md.
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
