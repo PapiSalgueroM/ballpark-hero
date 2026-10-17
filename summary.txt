@@ -1,0 +1,6 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 0640c995e Round BII: What's New for the other lane's packets, one Club Manager entry (your own transfers, a club's fixtures, the refusal note, a clean desk on a takeover)
+simHarnessAnchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+handover exit=1 6s | Node.js v24.21.0
+playSoccerCareerPendingMorale exit=1 53s | Node.js v24.21.0
+layout-attr-bc6 exit=0 1s | AssertionError [ERR_ASSERTION]: Engine is exactly the unchanged original base
