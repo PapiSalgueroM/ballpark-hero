@@ -1,0 +1,7 @@
+base 5f08963080e2b710d3cdd57e5049a33adae4a08e
+normal: 10 passed, 0 exact expected faults; full state and draw holds.
+original-calendar: 6 passed, 4 exact expected faults; full state and draw holds.
+missing-picker: 8 passed, 2 exact expected faults; full state and draw holds.
+missing-job: 8 passed, 2 exact expected faults; full state and draw holds.
+restored: 10 passed, 0 exact expected faults; full state and draw holds.
+simCmHandoverDesk: five qualified arms, frozen ten-case method, both isolated missing-field controls, complete original calendar and full restoration.
