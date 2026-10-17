@@ -119,6 +119,9 @@ import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
    reason the deals and the staff are in theirs. */
 import { addXp, askEdge, dutyEdge, ensureXp, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthIntakeEdge, youthReportEdge } from '@/lib/clubManagerXp';
 import { NO_SACK_LINE, PATIENCE_FLOOR, askPremiumScale, boardMaySack, currencySymbol, ensureStartOptions, nationJobsOn, patienceDelta, startOptionsOf } from '@/lib/clubManagerStart';
+/* Round 1501: the difficulty dials. Every function there is the identity on Normal, and the file imports
+   this one as a type only, so there is no cycle. */
+import { boardCheque, boardOpening, boardSwing, oppEdge, wageRoomFor } from '@/lib/clubManagerDifficulty';
 /* Round 1331: the substitution rule by league and season, a pure table. */
 import { subsLeagueBase, subsRuleFor, type SubsRule } from '@/lib/clubManagerSubsRule';
 export { subsRuleFor, CM_SUBS_PARTIAL } from '@/lib/clubManagerSubsRule';
@@ -8848,7 +8851,7 @@ export function talkTargetNow(career: CareerState): number | null {
   if (live) {
     const second = livePairs(career, live);
     const venue = live.home === true ? 3 : live.home === false ? -1.5 : 0;
-    const edge = myMatchStrength(career, second) + venue - strengthOf(career, live.opponent);
+    const edge = myMatchStrength(career, second) + venue - oppStrengthVsMe(career, live.opponent);
     return halftimeTarget(live.myGoals, live.oppGoals, edge, xiMood(career, men(second)));
   }
   const edge = matchEdge(career);
@@ -11414,6 +11417,15 @@ function strengthOf(state: CareerState, club: string): number {
      the finish derived era prior, never a 2026 preview rating. */
   const eraPrior = state.eraId && isHistoricEra(state.eraId) ? eraEuroPrior(state.eraId, club) : null;
   return state.clubStrengths[club] ?? eraPrior ?? STRENGTH_PRIORS[club] ?? Math.max(clubPreviewRating(club), 64);
+}
+
+/* Round 1501: the other side in one of YOUR matches, with the level's edge on top. Zero on Normal, where
+   this is strengthOf's very number. Every read of an opponent in your match goes through here (the two
+   halves' goal rates, the match itself, the team talks, the next match card and the match facts); every
+   match between two other clubs keeps strengthOf, so the rest of the world plays as it always did. */
+export function oppStrengthVsMe(state: CareerState, club: string): number {
+  const edge = oppEdge(state);
+  return edge === 0 ? strengthOf(state, club) : strengthOf(state, club) + edge;
 }
 /* Round 899: simEra2015 reads the rating every match uses, and the
    association the round of 16 draw uses, for a save from before the round. */
@@ -15156,7 +15168,7 @@ function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], menta
   const talk = talkEdgeFor(state, xi, fx, state.teamTalk ?? null);
   const press = state.press;
   const mine = myMatchStrength(state, xi) + talk + (press?.nextSharpen ?? 0);
-  const oppS = strengthOf(state, fx.opponent) + (press?.nextFire ?? 0);
+  const oppS = oppStrengthVsMe(state, fx.opponent) + (press?.nextFire ?? 0);
   const ment = MENT_MOD[mentality] ?? MENT_MOD.balanced;
   const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
   const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
@@ -15179,7 +15191,7 @@ function etScale(fx: MyFixture): number { return fx.extraTime ? ET_DEFLATOR : 1;
 function secondHalfLambdas(
   state: CareerState, fx: MyFixture, live: LiveMatch, xi: XiSlot[], scoreMine: number, scoreOpp: number,
 ): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
-  const oppS = strengthOf(state, fx.opponent);
+  const oppS = oppStrengthVsMe(state, fx.opponent);
   const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
   const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
   const press = state.press;
@@ -16577,7 +16589,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const fitAtKickoff = new Set(
     state.squad.filter(p => isAvailable(p) && !p.onLoan).map(p => p.id),
   );
-  const oppS = strengthOf(state, fx.opponent);
+  const oppS = oppStrengthVsMe(state, fx.opponent);
 
   /* Round 119: with a first half already played, the second is simulated off
      whatever the manager left on the pitch and whichever mentality he sent
@@ -17296,6 +17308,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      save starts on, so a manager who never opens the press room plays the game
      the previous twelve rounds calibrated. */
   if (confDelta < 0 && state.press) confDelta *= pressPatience(state.press.mood);
+  /* Round 1501: the level. A win counts for less and a defeat for more, after patience and the press,
+     so a giant's board still feels a defeat most. The identity on Normal (boardSwing returns its input). */
+  confDelta = boardSwing(state, confDelta);
   confDelta = Math.round(confDelta * 10) / 10;
   state.boardConfidence = clamp(state.boardConfidence + confDelta, 0, 100);
   /* Round 1342: No sacking holds the board on its last point in front of the
@@ -18555,7 +18570,7 @@ function talkEdgeFor(
 ): number {
   if (!tone) return 0;
   const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
-  const edge = myMatchStrength(state, xi) + venue - strengthOf(state, fx.opponent);
+  const edge = myMatchStrength(state, xi) + venue - oppStrengthVsMe(state, fx.opponent);
   const target = preMatchTarget(edge, xiMood(state, men(xi)), state.form);
   return talkWeight(state, tone, target) * TALK_EDGE;
 }
@@ -19098,7 +19113,7 @@ export function nextFixtureFrom(career: CareerState, fromWeek: number): NextFixt
         compLabel: fx.compLabel,
         opponent: fx.opponent,
         home: fx.home,
-        oppStrength: Math.round(strengthOf(career, fx.opponent)),
+        oppStrength: Math.round(oppStrengthVsMe(career, fx.opponent)),
       };
     }
   }
@@ -19156,7 +19171,7 @@ export function matchFacts(career: CareerState): MatchFacts | null {
 
     const xi = effectiveXIWithSlots(career);
     const mine = myMatchStrength(career, xi);
-    const oppS = strengthOf(career, fx.opponent);
+    const oppS = oppStrengthVsMe(career, fx.opponent);
     const ment = MENT_MOD[career.mentality] ?? MENT_MOD.balanced;
     const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
     const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;

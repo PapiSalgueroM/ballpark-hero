@@ -28,6 +28,7 @@ describe('readLevel and the stored key', () => {
   it('a fresh career is Normal and carries no key at all', () => {
     const s = startCareer('Everton');
     expect(difficultyOf(s)).toBe('normal');
+    ensureStartOptions(s);
     expect('difficulty' in (s.startOptions as object)).toBe(false);
   });
 
@@ -41,6 +42,7 @@ describe('readLevel and the stored key', () => {
     ensureStartOptions(s);
     expect(JSON.stringify(s.startOptions)).toBe(once);
     const valid = startCareer('Everton');
+    ensureStartOptions(valid);
     const before = JSON.stringify(valid.startOptions);
     ensureStartOptions(valid);
     expect(JSON.stringify(valid.startOptions)).toBe(before);
