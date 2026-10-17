@@ -1,0 +1,6 @@
+  FAIL W4:nba-390: locator.tap: Timeout 4000ms exceeded.
+  FAIL W4:nba-1280: locator.click: Timeout 4000ms exceeded.
+  FAIL W4:nfl-390: locator.tap: Timeout 4000ms exceeded.
+  FAIL W4:nfl-1280: locator.click: Timeout 4000ms exceeded.
+  screenshots: 32 in /home/runner/work/_temp/rc-out/files
+CONTROL nodesk FIRED: W4 red

@@ -1,0 +1,7 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ucl-walk exit=0 184s | playWorldUcl: green. Seven saves at three sizes, 63 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
+ucl-ctl exit=0 118s | controls (each must be 1): notile=1 instandin=1 legturn=1 oldcols=1
+dirty-walk exit=0 32s | playUsDirtyMoney: ALL GREEN, 4 walks
+dirty-nodesk exit=1 20s | CONTROL nodesk FIRED: W4 red
+deck-walk exit=0 124s | playSoccerDeck: green, every case at 390 and 1280.
+transport exit=0 8s | Transport cleanup: owned browsers, contexts, server and copies closed/removed; runner/helper/stimulus source bytes held.

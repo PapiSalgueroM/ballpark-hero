@@ -1,0 +1,18 @@
+Transport normal/node: 24 held outcomes; 0 intended failures.
+Transport normal/browser: 27 held outcomes; 0 intended failures.
+Transport normal: actual denied-target TCP connections 0; all targets were owned local servers.
+Transport host/node: 13 held outcomes; 11 intended failures.
+Transport host/node rejected: literal loopback host rules; fetch external blocked; fetch Request external blocked; fetch remote redirect blocked; http external blocked; named ESM http external blocked; https external blocked; http options effective remote hostname blocked; http proxy absolute request path blocked; Node WebSocket external blocked; nested child inherited guard.
+Transport host/browser: 11 held outcomes; 16 intended failures.
+Transport host/browser rejected: browser remote fetch blocked; late page continue cannot bypass guard; late context continue cannot bypass guard; continue rewritten target cannot bypass guard; route fetch external blocked; route fetch rewritten target blocked; context API external blocked; context API remote redirect blocked; standalone API external blocked; standalone API remote redirect blocked; later WebSocket routes cannot bypass guard; unrouteAll reinstalls transport guard; unroute reinstalls transport guard; browser document remote redirect blocked; browser.newPage receives guard; persistent context receives guard.
+Transport host: actual denied-target TCP connections 11; all targets were owned local servers.
+Transport agent/node: 22 held outcomes; 2 intended failures.
+Transport agent/node rejected: custom Agent cannot redirect socket to sentinel; stock Agent options cannot override loopback destination.
+Transport agent: actual denied-target TCP connections 2; all targets were owned local servers.
+Runner normal: 12/12 actual child-process outcomes passed; no offline probe/retry and honest PASS/SKIP/FAIL/EMPTY, including discarded nested diagnostics.
+Runner receipt control: removing one executable append rejected the discarded-nested-block failure assertion.
+Runner receipt control: transport remained blocked; the wrong PASS occurred only when the independent receipt was removed.
+Runner probe control: scoped no-probe assertion rejected one actual local request; useful pure child stayed green.
+Runner probe control: copied child transport guard stayed intact and the pure child supplied all four substantive evidence lines.
+Transport receipt: no production, site or public DNS target was contacted; controls used a private127.0.0.2 sentinel only.
+Transport cleanup: owned browsers, contexts, server and copies closed/removed; runner/helper/stimulus source bytes held.

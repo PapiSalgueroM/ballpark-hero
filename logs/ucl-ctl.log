@@ -1,0 +1,5 @@
+notile: last: playWorldUcl control notile: FIRED, "no Champions League tile" reported 1 time(s) (1 findings in all)
+instandin: last: playWorldUcl control instandin: FIRED, "the club in it from outside the real 32" reported 2 time(s) (2 findings in all)
+legturn: last: playWorldUcl control legturn: FIRED, "knockout night not as the bracket holds it" reported 3 time(s) (3 findings in all)
+oldcols: last: playWorldUcl control oldcols: FIRED, "breaks in the middle of the word" reported 1 time(s) (1 findings in all)
+controls (each must be 1): notile=1 instandin=1 legturn=1 oldcols=1
