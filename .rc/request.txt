@@ -1,0 +1,2 @@
+oracle-head-early: OR_EARLY_ONLY=1 node .rc/x/nightOracle1502.mjs
+oracle-mdearly-early: R=$PWD; W=/tmp/o2-mdearly && git worktree add -q --detach $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mut1502.mjs mdearly $W && cd $W && OR_EARLY_ONLY=1 node $R/.rc/x/nightOracle1502.mjs
