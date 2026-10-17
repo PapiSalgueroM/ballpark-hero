@@ -1,0 +1,4 @@
+headsha exit=0 0s | 8293c758f Release BI: the lead sets the three Club Manager engine weight rows from the join's runner measurement
+simMatchDetail exit=0 5s | simMatchDetail: all green
+simMatchDetail-again exit=0 5s | simMatchDetail: all green
+simCmLedgerBound exit=0 258s | simCmLedgerBound: green, all four sections held
