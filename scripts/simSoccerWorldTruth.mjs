@@ -112,6 +112,8 @@ import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { inverseWorldTruth, worldTruthReceiptProblem, WORLD_TRUTH_SHA256, WORLD_TRUTH_FILES, WORLD_TRUTH_ADDITIONS } from './lib/careerWorldTruth1329.mjs';
+/* Round 1334 adds three engine lines after this round: section 6 takes the ninth inverse off the tree's engine first. */
+import { inverseSoccerDeck, soccerDeckReceiptProblem, SOCCER_DECK_ADDITIONS } from './lib/careerSoccerDeck1334.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(path.join(ROOT, 'package.json'));
@@ -1025,9 +1027,12 @@ SECTION = '6';
 console.log('6) The eighth inverse gives the base\'s four files back, and every change sits in this round\'s hunks');
 if (runs('6')) {
   const receipt = [];
+  const deckReceipt = [];
   for (const file of WORLD_TRUTH_FILES) {
     /* a control's copy is LF already; the tree's file is normalised on read */
-    const head = controlSources.get(file) ?? fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n');
+    const raw = controlSources.get(file) ?? fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n');
+    let head = raw;
+    try { head = inverseSoccerDeck(file, raw, deckReceipt); } catch (e) { fail(`${file}: Round 1334's inverse does not apply (${e.message.split('\n')[0]})`); }
     const base = execFileSync('git', ['show', `${BASE}:${file}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).split('\r\n').join('\n');
     let back = null;
     try { back = inverseWorldTruth(file, head, receipt); } catch (e) { fail(`${file}: the inverse does not apply (${e.message.split('\n')[0]})`); }
@@ -1056,6 +1061,9 @@ if (runs('6')) {
   }
   const problem = worldTruthReceiptProblem(receipt, WORLD_TRUTH_FILES);
   if (problem) fail(problem);
+  const deckProblem = soccerDeckReceiptProblem(deckReceipt);
+  if (deckProblem) fail(deckProblem);
+  console.log(`   Round 1334's rows taken off first: ${deckReceipt.length} of ${SOCCER_DECK_ADDITIONS.length}`);
   console.log(`   rows applied: ${receipt.length} of ${WORLD_TRUTH_ADDITIONS.length}`);
 }
 

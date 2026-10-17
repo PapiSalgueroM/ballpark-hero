@@ -13,6 +13,8 @@ import { veteranPayPatches } from './lib/careerVeteranPay1262.mjs';
 import { awardGenerationsPatches } from './lib/careerAwardGenerations1318.mjs';
 import { deckFairPatches } from './lib/careerDeckFair1327.mjs';
 import { worldTruthPatches } from './lib/careerWorldTruth1329.mjs';
+/* Round 1334: the soccer deck's three engine lines come out first, in front of Round 1329 (scripts/lib/careerSoccerDeck1334.mjs), every row once, in order. */
+import { soccerDeckPatches } from './lib/careerSoccerDeck1334.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* Release AT: the base is the tree just before Rounds 1185 to 1187 were merged on the release line (5d31eaa6, PR208
@@ -187,7 +189,7 @@ if (!IMPORT_ONLY) {
      its keyed draws move every seeded career's Math.random from the first deck or paper on. */
   /* Round 1329: and the world truth round before that, the newest change first (scripts/lib/careerWorldTruth1329.mjs): the
      engine's and the phone's rows, the two files of it this bundle loads. */
-  const nextTen = [...worldTruthPatches().filter(patch => patch.file === 'src/lib/soccerCareerEngine.ts' || patch.file === 'src/lib/soccerPhone.ts'), ...deckFairPatches(), ...nextTenPatches(), ...veteranPayPatches(), ...awardGenerationsPatches()].map(patch => ({ ...patch, name: patch.id }));
+  const nextTen = [...soccerDeckPatches(), ...worldTruthPatches().filter(patch => patch.file === 'src/lib/soccerCareerEngine.ts' || patch.file === 'src/lib/soccerPhone.ts'), ...deckFairPatches(), ...nextTenPatches(), ...veteranPayPatches(), ...awardGenerationsPatches()].map(patch => ({ ...patch, name: patch.id }));
   /* Round 1329 fix pass: a control's edit can sit inside an attribution row (mentorRemember's label is inside Round
      1327's cards-1-to-10 row, once on each side), and that row then misses its anchor and the copied bundle refuses, so
      the =all run died on main 082fc277 too. The control is carried through such a row on both sides: the row still finds

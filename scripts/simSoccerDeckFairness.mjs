@@ -120,6 +120,9 @@ import { inverseDeckFair, DECK_FAIR_ADDITIONS, DECK_FAIR_BASE_SHA256, DECK_FAIR_
 /* Round 1329 edits the engine after this round (the month award, the tournament lines): section 8 takes that off
    first with the eighth inverse, then proves the seventh against its own pinned head and base. */
 import { inverseWorldTruth, worldTruthReceiptProblem, WORLD_TRUTH_ADDITIONS } from './lib/careerWorldTruth1329.mjs';
+/* Round 1334 adds three engine lines after both (the soccer deck's gate import, its catalog spread, its slot): section 8
+   takes the ninth inverse off first, then the eighth, then proves the seventh. */
+import { inverseSoccerDeck, soccerDeckReceiptProblem, SOCCER_DECK_ADDITIONS } from './lib/careerSoccerDeck1334.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* The tree this round was cut from. Section 7 bundles it from git.
@@ -915,8 +918,13 @@ console.log('8) The seventh inverse gives the base\'s engine back byte for byte,
   const sha = t => createHash('sha256').update(t).digest('hex');
   const baseText = execFileSync('git', ['show', `${BASE}:${ENGINE}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).replace(/\r\n/g, '\n');
   const truthReceipt = [];
-  let headText = ENGINE_SOURCE;
-  try { headText = inverseWorldTruth(ENGINE, ENGINE_SOURCE, truthReceipt); } catch (err) { fail(`Round 1329's inverse does not apply: ${err.message}`); }
+  const deckReceipt = [];
+  let deckOff = ENGINE_SOURCE;
+  try { deckOff = inverseSoccerDeck(ENGINE, ENGINE_SOURCE, deckReceipt); } catch (err) { fail(`Round 1334's inverse does not apply: ${err.message}`); }
+  console.log(`   Round 1334's rows taken off first: ${deckReceipt.length} of ${SOCCER_DECK_ADDITIONS.length}`);
+  if (soccerDeckReceiptProblem(deckReceipt)) fail(soccerDeckReceiptProblem(deckReceipt));
+  let headText = deckOff;
+  try { headText = inverseWorldTruth(ENGINE, deckOff, truthReceipt); } catch (err) { fail(`Round 1329's inverse does not apply: ${err.message}`); }
   const truthRows = WORLD_TRUTH_ADDITIONS.filter(name => name.startsWith('engine-'));
   console.log(`   Round 1329's rows taken off first: ${truthReceipt.length} of ${truthRows.length}; the seventh's head is then ${sha(headText)} (pinned ${DECK_FAIR_HEAD_SHA256})`);
   if (truthReceipt.map(row => row.addition).join() !== truthRows.join()) fail('Round 1329\'s inverse did not take every engine row off once, in order');

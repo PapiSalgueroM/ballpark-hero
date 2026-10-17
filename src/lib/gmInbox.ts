@@ -634,7 +634,7 @@ const wt = (e: GmEventDef): number => e.weight ?? 1;
 /** One card out of those that came up, one draw either way. Equal weights
  *  take the uniform line the deck has always used, to the draw; otherwise
  *  the draw lands on the running sum of the weights. */
-function gmTake(came: GmEventDef[], rng: () => number): GmEventDef {
+export function gmTake(came: GmEventDef[], rng: () => number): GmEventDef {
   if (came.every(x => wt(x) === wt(came[0]))) {
     const e = came.splice(Math.floor(rng() * came.length), 1)[0];
     return e;

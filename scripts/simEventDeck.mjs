@@ -249,6 +249,10 @@
                    section 14 fails.
      effectedit    k_plain's second option moves trust by one more (in
                    memory); section 14 fails.
+     Round 1334 (W2):
+     unreach       soccer's card 719 is gated on goals below 0, a value no
+                   desk draws (in memory); section 10 fails, and prints no
+                   "all cards reached" line for the soccer pack after it.
 
    Runtime about 85 to 100 s on a runner, three requests at a time (section 2
    reloads all 84 rows since the review's fix pass; it was 40 s with seed 1
@@ -288,6 +292,7 @@ const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failope
   'fxsilent', 'fxdrop', 'fxunbound', 'fxneutral', 'conductreal', 'slotopen', 'quoteslot', 'untagged', 'rosterword',
   'pruneearly', 'codecword', 'codecslot', 'wordedit', 'wordorder', 'storymove', 'pressure', 'eager',
   'conductlate', 'conductstale', 'conducttarget', 'nullpass', 'newpack', 'speechpast', 'voiceedit', 'effectedit'];
+CONTROLS.push('unreach'); /* Round 1334: section 10's reach check over the soccer pack */
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -305,6 +310,8 @@ const count = (hay, needle) => hay.split(needle).length - 1;
    PACK_BINDS entry when their cards move fx keys). */
 const PACK_INDEXES = [
   ['src/data/gmInbox/index.ts', 'GM_INBOX_PACKS', 'src/components/front-office-shared/GmInboxPanel.tsx'],
+  /* Round 1334 (W2): Soccer Career's starter pack. */
+  ['src/data/soccerDeck/index.ts', 'SOCCER_DECK_PACKS', 'src/pages/SoccerCareer.tsx'],
 ];
 /* The third field is the component that shows that index's cards: section 7
    refuses an expiring card in an index whose component never calls
@@ -365,6 +372,9 @@ fs.writeFileSync(ENTRY, [
   `export { keyedRng } from '${R}/src/lib/keyedRng.ts';`,
   `export { onCooldown } from '${R}/src/lib/careerEventDeck.ts';`,
   ...PACK_INDEXES.map(([rel, name], i) => `export { ${name} as packs${i} } from '${R}/${rel}';`),
+  /* Round 1334: the soccer words come from their data module, never from src/lib/soccerDeck.ts, which reaches the
+     whole Soccer Career engine at runtime and would bundle it into this kit. */
+  `export { SOCCER_FX_WORDS as soccerFxWords } from '${R}/src/data/soccerDeck/words.ts';`,
 ].join('\n'));
 /* A control swaps the engine's source in memory, never on disk. */
 const redirect = {
@@ -583,6 +593,10 @@ if (CONTROL === 'newpack') {
    and 15, which could not bind it; a pack with a tag or a person slot and
    no entry is bound with a resolver that makes everyone generated. */
 const PACK_BINDS = {};
+/* Round 1334 (W2): Soccer Career's keys (integrity and the training keys) over the kit's desk, each a number in a bag
+   made on the desk at its first write, with the soccer words. */
+PACK_BINDS.soccer = { fx: Object.fromEntries(Object.entries(B.soccerFxWords).map(([k, w]) => [k, { ...w,
+  apply: (s, v) => { s.soccer = { ...(s.soccer ?? {}), [k]: ((s.soccer ?? {})[k] ?? 0) + v }; }, read: s => (s.soccer ?? {})[k] ?? 0 }])) };
 const needsFx = p => p.events.some(e => e.choices.some(c => Object.keys(c.fx ?? {}).length > 0));
 const aboutPeople = p => p.events.some(e => e.tag !== undefined) || Object.values(p.slots ?? {}).some(sl => sl.person);
 const everyoneGenerated = (s, ref) => ('role' in ref ? { name: `Your ${ref.role}`, real: false } : { name: `Player ${Math.round(Number(ref.id))}`, real: false });
@@ -1102,7 +1116,7 @@ if (runs(8)) {
     const lacking = p.events.filter(e => E.gmNeutralIndex(e.choices) < 0).map(e => e.id);
     if (NEUTRAL_BASELINE.includes(k)) { if (lacking.length === 0) bad.push(`${k} has a neutral option on every card now: take it off NEUTRAL_BASELINE`); }
     else if (lacking.length) bad.push(`${k}: ${lacking[0]} has no option that moves nothing`);
-    for (const pr of E.gmPackProblems(p)) bad.push(`${k}: ${pr}`);
+    for (const pr of E.gmPackProblems(p, PACK_BINDS[k]?.fx)) bad.push(`${k}: ${pr}`); /* Round 1334: an index pack's own registry */
   }
   const missing = NEUTRAL_BASELINE.filter(k => !known[k]);
   if (missing.length) bad.push(`NEUTRAL_BASELINE names packs the kit does not know: ${missing.join(', ')}`);
@@ -1166,7 +1180,7 @@ if (runs(9)) {
 
 /* ═══ 10. SHARE AND REACH over the FLEET drive ═══ */
 
-console.log('10) Share and reach: every card of every pack reached over 1,000 seasons, no card above its pack\'s measured ceiling');
+console.log('10) Share and reach: every card of every pack reached over at least 1,000 seasons, no card above its pack\'s measured ceiling');
 if (runs(10)) {
   const packs = { ...ALL_PACKS };
   /* The brief's form of this control (one NFL card at weight 50) changed
@@ -1180,6 +1194,18 @@ if (runs(10)) {
     if (hits.length !== 1 || hits[0].cooldown !== undefined) { console.error('heavy control: nfl_fan_night is not there once with the pack cooldown, refusing to run'); process.exit(2); }
     packs.nfl = { ...packs.nfl, events: packs.nfl.events.map(x => (x === hits[0] ? { ...x, cooldown: 0, weight: 50 } : x)) };
   }
+  /* Round 1334: a pack whose situational cards are rare is driven longer here, so the reach check reads the cards and
+     not the seed. Soccer's four (705, 719, 721, 727) were dealt 1 to 12 times in 1,000 seasons and 719 not once at
+     SEED 4 and SEED 28 of seeds 1 to 30 (rc r1334-fx1b); over 5,000 seasons 719 was dealt 5 to 19 times at every one
+     of the 30 (rc r1334-fx2a). A pack off this table keeps the FLEET drive's 100 desks, so the GM packs read as before. */
+  const REACH_DESKS = { soccer: 500 };
+  /* Round 1334: CONTROL=unreach gates soccer's 719 on a fact no desk draws (goals below 0), so the reach check must
+     fail for that pack and print no "all cards reached" line after the FAIL. */
+  if (CONTROL === 'unreach') {
+    const hits = packs.soccer?.events.filter(x => x.id === '719') ?? [];
+    if (hits.length !== 1) { console.error('unreach control: soccer card 719 is not there once, refusing to run'); process.exit(2); }
+    packs.soccer = { ...packs.soccer, events: packs.soccer.events.map(x => (x === hits[0] ? { ...x, when: [{ fact: 'goals', op: '<', value: 0 }] } : x)) };
+  }
   const shares = (pack, tag, seed) => {
     const n = {};
     const byValue = {};
@@ -1191,7 +1217,7 @@ if (runs(10)) {
         if (pack.reachBy) (byValue[String(w.facts[pack.reachBy])] ??= new Set()).add(m.defId);
       }
     };
-    for (let d = 0; d < DRIVES.FLEET.desks; d++) runDesk(pack, tag, seed, 'FLEET', d, { observe });
+    for (let d = 0; d < (REACH_DESKS[tag] ?? DRIVES.FLEET.desks); d++) runDesk(pack, tag, seed, 'FLEET', d, { observe, bind: PACK_BINDS[tag] }); /* Round 1334: an index pack's own registry and drive */
     const ranked = pack.events.map(e => ({ id: e.id, share: (n[e.id] ?? 0) / Math.max(1, total) })).sort((a, b) => b.share - a.share);
     return { n, total, ranked, byValue };
   };
@@ -1205,15 +1231,19 @@ if (runs(10)) {
      standard deviations (about 0.4 points). A pack the kit knows with no
      ceiling here fails until a pack round measures and writes one. */
   const CEILING = { nfl: 0.224, nba: 0.298, mlb: 0.288, nhl: 0.278, college: 0.305, gym: 0.367, afl: 0.374 };
+  /* Round 1334 (W2): Soccer Career's starter pack over its REACH_DESKS drive (5,000 seasons), measured 2026-10-16 on a
+     runner (rc r1334-fx2a, reach5x) at seeds 1 to 10: the top card is 726 every time, 9.82 to 11.04 percent; the
+     highest plus 2 points. (Over 1,000 seasons it read 9.00 to 11.70, rc r1334-s4a, and the ceiling was 0.137.) */
+  CEILING.soccer = 0.131;
   const reach = [];
   for (const [k, p] of Object.entries(packs)) {
     const r = shares(p, k, SEED);
     const unreached = p.events.filter(e => !r.n[e.id]).map(e => e.id);
     const top = r.ranked[0];
-    if (unreached.length) fail(10, `${k}: ${unreached.length} cards never dealt over 1,000 seasons (${unreached.slice(0, 3).join(', ')})`);
+    if (unreached.length) fail(10, `${k}: ${unreached.length} cards never dealt over ${((REACH_DESKS[k] ?? DRIVES.FLEET.desks) * SEASONS).toLocaleString('en-US')} seasons (${unreached.slice(0, 3).join(', ')})`);
     if (CEILING[k] === undefined) fail(10, `${k} has no measured share ceiling: run SIM_EVENT_DECK_MEASURE=1 and write one in`);
     else if (top.share > CEILING[k]) fail(10, `${k}: ${top.id} took ${(top.share * 100).toFixed(1)}% of ${r.total} deals, ceiling ${(CEILING[k] * 100).toFixed(1)}%`);
-    else ok(`${k}: all ${p.events.length} cards reached in ${r.total} deals, the top card ${top.id} at ${(top.share * 100).toFixed(1)}% (ceiling ${(CEILING[k] * 100).toFixed(1)}%)`);
+    else if (!unreached.length) ok(`${k}: all ${p.events.length} cards reached in ${r.total} deals, the top card ${top.id} at ${(top.share * 100).toFixed(1)}% (ceiling ${(CEILING[k] * 100).toFixed(1)}%)`); /* Round 1334: never after the reach FAIL */
     if (p.reachBy) reach.push(`${k} by ${p.reachBy}: ${Object.entries(r.byValue).slice(0, 8).map(([v, s]) => `${v} ${s.size}`).join(', ')}`);
     if (MEASURE) {
       const tops = TEN.map(sd => shares(p, k, sd).ranked[0]);
@@ -2009,6 +2039,9 @@ if (runs(15)) {
    review fix pass (rc r1332-fx-c, ba06f054): 57,375 B LF, 17,087 B
    minified, 6,350 B gzipped; bundled 17,742 B and 6,627 B. */
 const LAZY_IMPORTERS = [];
+/* Round 1334 (W2): Soccer Career's binding, the lazy soccer chunk's own entry
+   (src/lib/soccerDeckGate.ts loads it with a dynamic import). */
+LAZY_IMPORTERS.push('src/lib/soccerDeck.ts');
 if (runs(16)) {
   console.log('16) Bytes and lazy: bytes per event, and nothing that is not the deck imports it eagerly');
   const zlib = await import('node:zlib');
