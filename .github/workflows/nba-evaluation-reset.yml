@@ -1,0 +1,90 @@
+name: NBA evaluation reset verification
+on:
+  push:
+    branches: [codex/nba-evaluation-reset]
+    paths:
+      - .github/workflows/nba-evaluation-reset.yml
+      - scripts/qa/proveNbaEvaluationResetBaseline.mjs
+      - src/hooks/useNbaLineup.ts
+      - src/test/nbaLineupEvaluationReset.test.tsx
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Freeze the original production source and locked install
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/nba-evaluation-reset"; test ! -e "$out"; mkdir -p "$out/raw"
+          echo "NBA_EVALUATION_OUT=$out" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
+          sha256sum "$out/source.zip" "$out/request-source-files.sha256" > "$out/initial-source-packet.sha256"
+          git merge-base --is-ancestor 8293c758f4284d21baaa2320383cfd5cb5bd4944 HEAD
+          git diff --exit-code 8293c758f4284d21baaa2320383cfd5cb5bd4944 HEAD -- . ':!docs' ':!src/test/nbaLineupEvaluationReset.test.tsx' ':!scripts/qa/proveNbaEvaluationResetBaseline.mjs' ':!.github/workflows/nba-evaluation-reset.yml' > "$out/base-source-hold.log"
+          printf '%s\0' "$(command -v node)" "$(readlink -f "$(command -v npm)")" | sort -z | xargs -0 sha256sum > "$out/runtime-tools-files.sha256"
+          npm ci > "$out/install.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/dependencies.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerAgentReviewDependencies.mjs before > "$out/dependencies.log" 2>&1
+          cp soccer-agent-review-artifacts/dependencies-before.json "$out/"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-files.sha256"
+      - name: Actual application types
+        id: types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$NBA_EVALUATION_OUT/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$NBA_EVALUATION_OUT/types.log" 2>&1
+      - name: Exact original ownership reproduction and related offline checks
+        id: proof
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$NBA_EVALUATION_OUT/proof.transport" node scripts/qa/proveNbaEvaluationResetBaseline.mjs > "$NBA_EVALUATION_OUT/proof.log" 2>&1
+          tail -n 3 "$NBA_EVALUATION_OUT/proof.log"
+      - name: Retain every actual source installed tool and partial result
+        if: always()
+        run: |
+          set -euo pipefail
+          out="${NBA_EVALUATION_OUT:-$RUNNER_TEMP/nba-evaluation-reset}"; mkdir -p "$out"; result=0
+          git diff --exit-code HEAD -- . > "$out/source-diff.log" 2>&1 || result=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/validated-source-files.sha256"
+          NBA_EVALUATION_ARCHIVE_OUT="$out" python - <<'PY'
+          import os,subprocess,zipfile
+          out=os.environ['NBA_EVALUATION_ARCHIVE_OUT']; files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile(out+'/validated-source.zip','w',zipfile.ZIP_DEFLATED) as archive:
+              for file in sorted(filter(None,files)): archive.write(file,file)
+          PY
+          for kind in request-source installed runtime-tools validated-source; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
+          if test -f "$out/initial-source-packet.sha256"; then sha256sum --check "$out/initial-source-packet.sha256" > "$out/initial-source-packet-holds.log" 2>&1 || result=1; fi
+          if test -f "$out/installed-files.sha256"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-after-files.sha256"; cmp "$out/installed-files.sha256" "$out/installed-after-files.sha256" || result=1; fi
+          for method in dependencies types proof related baseline; do test ! -s "$out/$method.transport" || result=1; done
+          printf 'types=%s\nproof=%s\nbuild=skipped\nreaders=skipped\nweights=skipped\n' '${{ steps.types.outcome }}' '${{ steps.proof.outcome }}' > "$out/stage-outcomes.txt"
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nba-evaluation-reset-baseline-${{ github.sha }}
+          path: ${{ env.NBA_EVALUATION_OUT }}
+          if-no-files-found: error
+          retention-days: 14

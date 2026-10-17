@@ -1,3 +1,6 @@
+## Codex1405 claimed, 2026-10-17 UTC
+
+NBA Starting5 review reset: root is preparing a frozen real-hook regression method on actualI8293 before editing product. Late remote/local reviews currently survive Start Over. Scope is only the NBA evaluator lifecycle, own test/workflow and closing docs. Runtime, fix and READY status pending. Active I career/competition source and joined release remain I owned. See docs/audits/nba-evaluation-reset-1405.md.
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
