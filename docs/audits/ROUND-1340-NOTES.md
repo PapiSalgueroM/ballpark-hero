@@ -113,3 +113,17 @@ the league table's goals pair, not a match screen.
   room; the rule now leaves the last half pixel to the browser's rounding (a fault needs clear room), and probe v3
   prints how far over each near miss was and uses a <br> control instead of display:block (whose box is the whole
   column wide, so it never read as room).
+- b3's measure (r1340-b3w on 9f300e45, playLiveMatchFit at 320 by 568, the same three seeds twice each): 2.125 and
+  2.083, 2.333 and 2.458, 1.750 and 1.750 overlapping pairs a frame, mean 2.083 against LABELS_BEFORE_320's 2.590: a
+  fall of 0.507, more than the 0.417 spread, so p7's overlap half is closed and the two letter fallback was not
+  needed. Labels cut a frame: 5.0 on every run (13.9 to 15.0 before). No label begins with a digit at any size.
+  Controls widelabels and digits fired on their own lines with the rest green.
+- simCmMatchDay section 6 (r1340-b3, b3c): 15166 dot labels over 692 pitches, 7555 of mine (13 in initials), 4685
+  named and 2926 nameless opponents (1903 staged); control numbers fired on section 6 alone.
+- The two packet harnesses that pin a whole file to "the parent plus the packet" (simManagerHalftimeLineups with
+  playManagerHalftimeLineups, simPitchRestartContinuity with playPitchRestartContinuity) were run against a
+  SYNTHETIC parent built on the runner: this head with only the packet's own spans taken back out, read from the
+  harness itself (.tmp-fx/synthParents.mjs, never committed). Both green on r1340-b3x.
+- The Stats tile (r1340-m2 on c109dd75): 2 of the 200 longest pitch names of the 2026-27 world pass two lines at
+  320 in the shipped wording (Amaimouni-Echghouyab, Oxlade-Chamberlain); "<name>: 12" would keep all 200 in two.
+  Owed to the lead as a decision; save D's check stays red until then.
