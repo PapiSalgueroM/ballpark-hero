@@ -165,7 +165,7 @@ export function getCorruptionEvents(state: CareerState): RandomEvent[] {
       category: "negative", choices: [
         { label: "Pay him €2M to forget", emoji: "🤐", color: "bg-red-600", consequence: "Heat +15 and now two people can ruin you",
           apply: s => { s.netWorth = Math.round((s.netWorth - 2) * 100) / 100; heat(s, 15); setFlag(s, "snitchArc", 1); s.events = [...s.events, "🤐 Paid a teammate €2M for silence. He bought a boat. The boat is called 'Nice Try'"]; return s; } },
-        { label: "Bring him in on the whole thing", emoji: "🤝", color: "bg-red-700", consequence: "Heat +25, but income doubles while it lasts",
+        { label: "Bring him in on the whole thing", emoji: "🤝", color: "bg-red-700", consequence: "€2M dirty now, Heat +25",
           apply: s => { dirty(s, 2); heat(s, 25); setFlag(s, "snitchArc", 2); s.events = [...s.events, "🤝 Brought him in. Two players, one scheme, zero exit plan"]; return s; } },
         { label: "Stop everything, right now", emoji: "🛑", color: "bg-emerald-600", consequence: "Heat -30, all dirty income ends, Integrity +14",
           apply: s => { heat(s, -30); setFlag(s, "syndicate", 7); s.integrityBonus += 14; s.morale = clamp(s.morale + 10, 0, 100); setFlag(s, "snitchArc", 3); s.events = [...s.events, "🛑 A teammate looked you in the eye and you quit the whole thing that night"]; return s; } },
@@ -175,9 +175,9 @@ export function getCorruptionEvents(state: CareerState): RandomEvent[] {
   /* ══ ARC 6: The tax amnesty window. A real out, at a real price. ══ */
   if (h >= 55 && flag(state, "amnesty") === 0) {
     push({ id: 325, emoji: "🪟", title: "The Amnesty Window",
-      description: "The government opens a 90-day amnesty: declare everything, pay a flat 40%, walk away with no charges. Your lawyer calls it the best deal you will ever be offered. Your accountant calls it a robbery. Both are right.",
+      description: "The government opens a 90-day amnesty: declare everything, pay 40% of hidden money plus 5% of net worth, walk away with no charges. Your lawyer calls it the best deal you will ever be offered. Your accountant calls it a robbery. Both are right.",
       category: "life", choices: [
-        { label: "Take the amnesty", emoji: "🕊️", color: "bg-emerald-600", consequence: "Pay 40% of everything hidden, Heat drops to almost nothing",
+        { label: "Take the amnesty", emoji: "🕊️", color: "bg-emerald-600", consequence: "Pay 40% of hidden money plus 5% of net worth, Heat drops to almost nothing",
           apply: s => { const hidden = (s.dirtyMoney ?? 0); const fee = Math.round((hidden * 0.4 + s.netWorth * 0.05) * 100) / 100; s.netWorth = Math.round((s.netWorth + hidden * 0.6 - s.netWorth * 0.05) * 100) / 100; s.dirtyMoney = 0; s.corruptionHeat = 5; s.integrityBonus += 8; setFlag(s, "amnesty", 1); s.events = [...s.events, `🕊️ Took the amnesty. €${fee.toFixed(1)}M gone, the folder closed, the phone silent for the first time in years`]; return s; } },
         { label: "Ignore it. They have nothing", emoji: "😎", color: "bg-red-600", consequence: "Heat +10, and prosecutors take the refusal personally",
           apply: s => { heat(s, 10); setFlag(s, "amnesty", 2); s.events = [...s.events, "😎 Skipped the amnesty. The lead investigator pinned your photo to a board. An actual board"]; return s; } },
