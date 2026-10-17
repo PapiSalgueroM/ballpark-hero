@@ -1,0 +1,4 @@
+# Release BI triage, 71444b77: the two source fences that read scripts/, after the two harness commits.
+headsha: git log --oneline -3
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
