@@ -28,7 +28,7 @@ const pins = [
   ['scripts/genCareerLeagueSeasons.mjs',10719,'0e66daf8402796a3e73710138e106a9e564d2f29f2b8e8fc6fa02908cd589ce7'],
   ['src/data/careerHistoricalOpponentDisplay.ts',499,'a3f4b8563daa776d921a1374430a5b2c3efcc0a5a389c97151ed56f34087999b'],
   ['src/lib/season/historicalOpponentLabels.ts',2490,'8c67960342059cbaa1d7860d821afdef8122a92fb33d3bee60d5400bbd7e26dc'],
-  [COMPONENT,31506,'f65e0f08aa8aa638839f5438923b62d7d69f3197ec0375179eb5a9386cc86635'],
+  [COMPONENT,31496,'94c3c55e9d5c46a84c9c17a5d17713114bc14c0e94e26e03391b363ce7895ce2'],
   [UNIT,6038,'412887e712a58ca91ed56a8ea82ebbecd975a599380abc2726857e53b57d195a'],
 ];
 const held = [...pins.map(row => row[0]), 'src/data/careerLeagueSeasons.ts', 'scripts/data/leagueSeasons/premier-league.json', FIXTURE, 'src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerSave.ts', 'src/lib/soccerCareerLeague.ts', 'src/lib/season/core.ts', 'src/lib/season/soccer.ts', 'src/lib/season/soccerEvents.ts', 'src/lib/season/resume.ts', 'src/components/season-centre/resumeStore.ts', 'src/components/season-centre/SeasonCentre.tsx', 'src/components/season-centre/SeasonCentreHelp.tsx', 'src/components/season-centre/MatchClock.tsx', 'src/components/season-centre/MiniPitch.tsx', 'src/components/motion/RankShiftTable.tsx', 'src/components/club-manager/LeagueTableCard.tsx', 'src/test/setup.ts', 'vitest.config.ts', 'package.json', 'package-lock.json', 'scripts/lib/offlineTransport.cjs', OBSERVER, 'scripts/qa/soccerHistoricalOpponentDisplayProof.mjs'];

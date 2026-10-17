@@ -1645,7 +1645,7 @@ function AttributesScreen({ career, onBack }: { career: CareerState; onBack: () 
     <div ref={revealRef} className="max-w-xl mx-auto space-y-3 animate-fade-in pb-20">
       <div className="flex items-center gap-2">
         <Button variant="ghost" size="sm" onClick={onBack} className="h-8 px-2 text-muted-foreground">← Back</Button>
-        <h1 className="text-base font-black truncate">{career.playerName}, full attributes</h1>
+        <h1 className="min-w-0 text-base font-black [overflow-wrap:anywhere]">{career.playerName}, full attributes</h1>
       </div>
 
       <div className="bg-card border border-border rounded-xl p-3 grid grid-cols-3 gap-2 text-center">
@@ -1686,7 +1686,7 @@ function AttributesScreen({ career, onBack }: { career: CareerState; onBack: () 
             const rc = v >= 80 ? "text-green-400" : v >= 65 ? "text-emerald-400" : v >= 50 ? "text-yellow-400" : "text-red-400";
             return (
               <div key={c.id} className="flex items-center gap-2">
-                <span className="w-[6.5rem] shrink-0 text-[11px] text-muted-foreground truncate">{c.label}</span>
+                <span className="w-[6.5rem] shrink-0 text-[11px] leading-tight text-muted-foreground [overflow-wrap:anywhere]">{c.label}</span>
                 <div className="flex-1 h-2 rounded-full bg-muted/40 overflow-hidden">
                   <div className={`h-full rounded-full ${FAMILY_COLORS[fam.key] || "bg-emerald-500"}`} style={{ width: `${v}%` }} />
                 </div>
@@ -3666,6 +3666,10 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   if (attrsOpen) {
     return <AttributesScreen career={career} onBack={() => setAttrsOpen(false)} />;
   }
+  /* Round 1337: while the Ballon d'Or night counts down, Full attributes waits. Opening it
+     unmounted the night's card, and the countdown started again from 10th on the way back.
+     Held, nothing remounts and nothing is written. */
+  const nightHeld = career.phase === "ballon_dor" && ballonDorAwaitingReveal(career) !== null;
 
   return (
     <div ref={screenRef} className="space-y-3 pb-20">
@@ -4174,15 +4178,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <button
               type="button"
               onClick={() => setAttrsOpen(true)}
-              className="w-full mt-1 flex items-center justify-between rounded-lg border border-border bg-muted/20 px-3 py-2 text-left active:scale-[0.99] transition-transform"
+              disabled={nightHeld}
+              className="w-full mt-1 flex items-center justify-between rounded-lg border border-border bg-muted/20 px-3 py-2 text-left active:scale-[0.99] transition-transform disabled:opacity-60"
             >
               <span className="min-w-0">
                 <span className="block text-xs font-bold">Full attributes</span>
                 <span className="block text-[10px] text-muted-foreground truncate">
-                  {career.physique?.heightCm ?? 180} cm · {career.physique?.weightKg ?? 76} kg · every number under the six
+                  {nightHeld ? "Opens once the Ballon d'Or result is in" : <>{career.physique?.heightCm ?? 180} cm · {career.physique?.weightKg ?? 76} kg · every number under the six</>}
                 </span>
               </span>
-              <ChevronRight className="w-4 h-4 shrink-0 opacity-60" />
+              {!nightHeld && <ChevronRight className="w-4 h-4 shrink-0 opacity-60" />}
             </button>
           </div>
 
@@ -4471,7 +4476,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 match by match. Last in DOM order, so every test and walker that
                 presses the bar's first button still presses Next Season. */}
             {career.phase === "playing" && (
-              <Button onClick={onWeekByWeek} variant="outline" aria-label="Week by week: live the season match by match" className="h-12 w-11 shrink-0 px-0 text-base font-bold sm:w-auto sm:px-3 sm:text-sm gap-1.5" data-week-by-week>
+              <Button onClick={onWeekByWeek} variant="outline" aria-label="Week by week: watch your season match by match" className="h-12 w-11 shrink-0 px-0 text-base font-bold sm:w-auto sm:px-3 sm:text-sm gap-1.5" data-week-by-week>
                 <span aria-hidden="true">📺</span>
                 <span className="hidden sm:inline">Week by week</span>
                 <span className="hidden sm:inline rounded bg-emerald-500/20 px-1 text-[9px] font-black text-emerald-400">NEW</span>

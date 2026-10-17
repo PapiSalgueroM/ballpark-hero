@@ -5,7 +5,8 @@
  * bench, his place in his own line, last season's reasons and the help. It
  * shows what the game already decided and changes none of it: this file
  * reads the save and never writes it. The one thing it stores is a per
- * viewer flag saying the help has been seen.
+ * viewer flag saying the one line pointer to the help has been shown
+ * (Round 1337: the first open lands on the squad, the help is one tap away).
  *
  * It loads as its own chunk (SquadTile.tsx imports it lazily), the page
  * behind it never moves, and every hook sits above every return.
@@ -35,18 +36,28 @@ interface Props {
   career: CareerState;
   view: SquadView;
   onClose: () => void;
-  /** Opens on this screen and skips the first open help. For tests and checks. */
+  /** Opens on this screen and skips the first open pointer (no read, no write). For tests and checks. */
   initialScreen?: SquadScreen;
 }
 
 const HELP_KEY = 'soccerSquad:help';
 
-/* Has this viewer seen the help? A browser that refuses storage sees it again. */
-function helpSeen(): boolean {
+/* Has this viewer been shown the pointer to the help? A pure read, so it may
+   run before the first paint. A browser that refuses storage sees the pointer again. */
+function hintShown(): boolean {
   try {
-    if (window.localStorage.getItem(HELP_KEY)) return true;
-    window.localStorage.setItem(HELP_KEY, '1');
+    return !!window.localStorage.getItem(HELP_KEY);
+  } catch {
     return false;
+  }
+}
+/* Written after mount and never during a render: a render React throws away
+   must not set the flag and so hide the pointer from the render it keeps.
+   Answers whether the flag was stored; refused, the pointer shows again next time. */
+function markHintShown(): boolean {
+  try {
+    window.localStorage.setItem(HELP_KEY, '1');
+    return true;
   } catch {
     return false;
   }
@@ -118,6 +129,10 @@ function ManRow({ m, view, captain }: { m: SquadMan; view: SquadView; captain: b
 
 export default function SquadSheet({ career, view, onClose, initialScreen }: Props) {
   const [screen, setScreen] = useState<SquadScreen>(initialScreen ?? 'home');
+  /* Round 1337: the first open lands on the squad with a one line pointer to
+     the ?. Read before the first paint, so the line is there in the first
+     frame and nothing under it moves. */
+  const [firstHint] = useState(() => !initialScreen && !hintShown());
   const [shown, setShown] = useState(0);
   const panel = useRef<HTMLDivElement | null>(null);
   const last = useMemo(() => lastSeason(career), [career]);
@@ -127,10 +142,9 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
   }, [career, view]);
   const help = useMemo(() => squadHelp(), []);
 
-  /* The first time a viewer opens the sheet, the help comes first. */
   useEffect(() => {
-    if (!initialScreen && !helpSeen()) setScreen('help');
-  }, [initialScreen]);
+    if (firstHint) markHintShown();
+  }, [firstHint]);
   /* The trust bar fills from nothing to its figure, once. */
   useEffect(() => { setShown(view.trust.pct); }, [view.trust.pct]);
   /* Keep the keyboard inside the dialog when a screen's buttons go away. */
@@ -193,6 +207,7 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
           </div>
         </div>
         <p className="text-xs leading-snug text-muted-foreground" data-squad-source-line>{sourceLine(view)}</p>
+        {firstHint && <p className="text-xs leading-snug text-foreground" data-squad-first-hint>New here? Tap ? for how your rank, the eleven and the manager&apos;s trust work.</p>}
         <div className="grid grid-cols-2 gap-2">
           {tiles.map(t => (
             <button
