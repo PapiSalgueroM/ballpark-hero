@@ -1,0 +1,22 @@
+save A: Liverpool against Newcastle (Premier League · Round 1), away, 55704 bytes
+save B: Liverpool against Nottingham Forest (Premier League · Round 2), home, 71342 bytes
+save C: Real Madrid against Villarreal (Copa del Rey · Final), neutral, 160429 bytes
+save E: Real Madrid against Roma (Champions League · Quarter-final · second leg), away, 141299 bytes
+  FAIL: A-320: 1 of 2 marks are off their name's last line: ⚽ Goal: Giorgi Mamardashvili
+A-320: heights hub 28334, centre 27406, live 26575, interval 27975, report 28948; 20 timeline names, 2 marks
+A-390: heights hub 22752, centre 21887, live 21112, interval 22447, report 23457; 21 timeline names, 1 marks
+A-1280: heights hub 13574, centre 13120, live 12388, interval 13680, report 14256; 15 timeline names, 0 marks
+B-320: heights hub 28346, centre 27400, live 26575, interval 27975, report 28811; 15 timeline names, 0 marks
+B-390: heights hub 22752, centre 21899, live 21112, interval 22446, report 23170; 14 timeline names, 0 marks
+B-1280: heights hub 13574, centre 13132, live 12388, interval 13680, report 14318; 18 timeline names, 0 marks
+C-320: heights hub 28293, centre 27494, live 26575, interval 27960, report 28873; 21 timeline names, 0 marks
+C-390: heights hub 22703, centre 21993, live 21112, interval 22416, report 23174; 17 timeline names, 0 marks
+C-1280: heights hub 13544, centre 13226, live 12388, interval 13680, report 14321; 18 timeline names, 0 marks
+E-320: heights hub 28308, centre 27525, live 26575, interval 28009, report 28676; 17 timeline names, 0 marks
+E-390: heights hub 22723, centre 21994, live 21112, interval 22495, report 22941; 13 timeline names, 0 marks
+E-1280: heights hub 13544, centre 13226, live 12388, interval 13699, report 14172; 15 timeline names, 0 marks
+A-390-rm: heights hub 22752, centre 21887, live 21112, interval 22446, report 23247; 19 timeline names, 0 marks
+B-390-rm: heights hub 22752, centre 21899, live 21112, interval 22446, report 23488; 24 timeline names, 0 marks
+C-390-rm: heights hub 22703, centre 21993, live 21112, interval 22447, report 23418; 24 timeline names, 2 marks
+15 walks, 264 checks, 180s; pictures in /home/runner/work/_temp/rc-out/files/matchday
+playCmMatchDay: RED, 1 failures

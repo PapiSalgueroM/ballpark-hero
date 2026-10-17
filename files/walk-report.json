@@ -1,0 +1,1865 @@
+{
+ "fixtures": {
+  "ruledOut": {
+   "seed": 2460,
+   "minute": 9,
+   "side": "me",
+   "who": "Kiernan Dewsbury-Hall",
+   "decision": "disallowed"
+  },
+  "goalBefore": {
+   "seed": 1724,
+   "minute": 8,
+   "side": "opp",
+   "who": "João Gomes",
+   "decision": "disallowed"
+  },
+  "two": {
+   "seed": 4926,
+   "minute": 6,
+   "side": "opp",
+   "who": "Jérémy Jacquet",
+   "decision": "disallowed"
+  },
+  "lateWhistle": {
+   "seed": 1984,
+   "minute": 45,
+   "side": "opp",
+   "who": "Alejandro Garnacho",
+   "decision": "disallowed"
+  },
+  "lateBefore": {
+   "seed": 2591,
+   "minute": 45,
+   "side": "opp",
+   "who": "Nicolas Jackson",
+   "decision": "disallowed"
+  },
+  "ownGoal": {
+   "seed": 1940,
+   "minute": 10,
+   "side": "me",
+   "who": "Brennan Johnson",
+   "decision": "disallowed"
+  },
+  "injury": {
+   "seed": 3861,
+   "minute": 15,
+   "side": "opp",
+   "who": "Hugo Ekitiké",
+   "decision": "disallowed"
+  },
+  "red": {
+   "seed": 6513,
+   "minute": 34,
+   "side": "opp",
+   "who": "Nicolas Jackson",
+   "decision": "disallowed"
+  },
+  "crowdedGoal": {
+   "seed": 42322,
+   "minute": 45,
+   "side": "opp",
+   "who": "Alejandro Garnacho",
+   "decision": "disallowed"
+  },
+  "crowdedShot": {
+   "seed": 6203,
+   "minute": 45,
+   "side": "opp",
+   "who": "Nicolas Jackson",
+   "decision": "disallowed"
+  }
+ },
+ "cases": [
+  {
+   "id": "390-motion-ruledOut-plain",
+   "kind": "ruledOut",
+   "variant": "plain",
+   "seed": 2460,
+   "shots": [
+    "390-motion-ruledOut-plain-1-checking.jpg",
+    "390-motion-ruledOut-plain-2-decided.jpg",
+    "390-motion-ruledOut-plain-3-after.jpg",
+    "390-motion-ruledOut-plain-4-help.jpg",
+    "390-motion-ruledOut-plain-8-full-time.jpg",
+    "390-motion-ruledOut-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "opp": 0,
+    "me": 0
+   },
+   "minuteChecking": 9,
+   "plusChecking": 0,
+   "decided": "VAR: goal ruled out |  | Kiernan Dewsbury-Hall, Everton, 9' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "opp": 0,
+    "me": 0
+   },
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 10
+  },
+  {
+   "id": "390-motion-goalBefore-plain",
+   "kind": "goalBefore",
+   "variant": "plain",
+   "seed": 1724,
+   "shots": [
+    "390-motion-goalBefore-plain-1-checking.jpg",
+    "390-motion-goalBefore-plain-2-decided.jpg",
+    "390-motion-goalBefore-plain-3-after.jpg",
+    "390-motion-goalBefore-plain-8-full-time.jpg",
+    "390-motion-goalBefore-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "8'",
+    "side": "opp",
+    "who": "João Gomes",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | João Gomes, Aston Villa, 8' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "minuteChecking": 9,
+   "plusChecking": 0,
+   "decided": "VAR: goal ruled out |  | João Gomes, Aston Villa, 8' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "result": "3-1",
+   "timeline": [
+    {
+     "clock": "8'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: João Gomes",
+     "shown": "📺 VAR: goal ruled out: João Gomes",
+     "cut": false
+    }
+   ],
+   "seconds": 11
+  },
+  {
+   "id": "1280-motion-ruledOut-plain",
+   "kind": "ruledOut",
+   "variant": "plain",
+   "seed": 2460,
+   "shots": [
+    "1280-motion-ruledOut-plain-1-checking.jpg",
+    "1280-motion-ruledOut-plain-2-decided.jpg",
+    "1280-motion-ruledOut-plain-3-after.jpg",
+    "1280-motion-ruledOut-plain-4-help.jpg",
+    "1280-motion-ruledOut-plain-8-full-time.jpg",
+    "1280-motion-ruledOut-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "opp": 0,
+    "me": 0
+   },
+   "minuteChecking": 9,
+   "plusChecking": 0,
+   "decided": "VAR: goal ruled out |  | Kiernan Dewsbury-Hall, Everton, 9' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "opp": 0,
+    "me": 0
+   },
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 10
+  },
+  {
+   "id": "1280-motion-goalBefore-plain",
+   "kind": "goalBefore",
+   "variant": "plain",
+   "seed": 1724,
+   "shots": [
+    "1280-motion-goalBefore-plain-1-checking.jpg",
+    "1280-motion-goalBefore-plain-2-decided.jpg",
+    "1280-motion-goalBefore-plain-3-after.jpg",
+    "1280-motion-goalBefore-plain-8-full-time.jpg",
+    "1280-motion-goalBefore-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "8'",
+    "side": "opp",
+    "who": "João Gomes",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | João Gomes, Aston Villa, 8' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "minuteChecking": 9,
+   "plusChecking": 0,
+   "decided": "VAR: goal ruled out |  | João Gomes, Aston Villa, 8' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "result": "3-1",
+   "timeline": [
+    {
+     "clock": "8'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: João Gomes",
+     "shown": "📺 VAR: goal ruled out: João Gomes",
+     "cut": false
+    }
+   ],
+   "seconds": 11
+  },
+  {
+   "id": "390-reduced-ruledOut-plain",
+   "kind": "ruledOut",
+   "variant": "plain",
+   "seed": 2460,
+   "shots": [
+    "390-reduced-ruledOut-plain-1-checking.jpg",
+    "390-reduced-ruledOut-plain-2-decided.jpg",
+    "390-reduced-ruledOut-plain-3-after.jpg",
+    "390-reduced-ruledOut-plain-8-full-time.jpg",
+    "390-reduced-ruledOut-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "opp": 0,
+    "me": 0
+   },
+   "minuteChecking": 9,
+   "plusChecking": 0,
+   "decided": "VAR: goal ruled out |  | Kiernan Dewsbury-Hall, Everton, 9' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "opp": 0,
+    "me": 0
+   },
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 8
+  },
+  {
+   "id": "1280-reduced-ruledOut-plain",
+   "kind": "ruledOut",
+   "variant": "plain",
+   "seed": 2460,
+   "shots": [
+    "1280-reduced-ruledOut-plain-1-checking.jpg",
+    "1280-reduced-ruledOut-plain-2-decided.jpg",
+    "1280-reduced-ruledOut-plain-3-after.jpg",
+    "1280-reduced-ruledOut-plain-8-full-time.jpg",
+    "1280-reduced-ruledOut-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "opp": 0,
+    "me": 0
+   },
+   "minuteChecking": 9,
+   "plusChecking": 0,
+   "decided": "VAR: goal ruled out |  | Kiernan Dewsbury-Hall, Everton, 9' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "opp": 0,
+    "me": 0
+   },
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 8
+  },
+  {
+   "id": "390-motion-two-plain",
+   "kind": "two",
+   "variant": "plain",
+   "seed": 4926,
+   "shots": [
+    "390-motion-two-plain-1-checking.jpg",
+    "390-motion-two-plain-2-decided.jpg",
+    "390-motion-two-plain-3-after.jpg",
+    "390-motion-two-plain-5-second-review.jpg",
+    "390-motion-two-plain-8-full-time.jpg",
+    "390-motion-two-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "6'",
+    "side": "opp",
+    "who": "Jérémy Jacquet",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Jérémy Jacquet, Liverpool, 6' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "opp": 0,
+    "me": 0
+   },
+   "minuteChecking": 6,
+   "plusChecking": 0,
+   "decided": "VAR: goal ruled out |  | Jérémy Jacquet, Liverpool, 6' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "opp": 0,
+    "me": 0
+   },
+   "result": "1-0",
+   "timeline": [
+    {
+     "clock": "6'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Jérémy Jacquet",
+     "shown": "📺 VAR: goal ruled out: Jérémy Jacquet",
+     "cut": false
+    },
+    {
+     "clock": "15'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Hugo Ekitiké",
+     "shown": "📺 VAR: goal ruled out: Hugo Ekitiké",
+     "cut": false
+    }
+   ],
+   "seconds": 16
+  },
+  {
+   "id": "390-motion-lateWhistle-plain",
+   "kind": "lateWhistle",
+   "variant": "plain",
+   "seed": 1984,
+   "shots": [
+    "390-motion-lateWhistle-plain-1-checking.jpg",
+    "390-motion-lateWhistle-plain-2-decided.jpg",
+    "390-motion-lateWhistle-plain-3-after.jpg",
+    "390-motion-lateWhistle-plain-8-full-time.jpg",
+    "390-motion-lateWhistle-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+3'",
+    "side": "opp",
+    "who": "Alejandro Garnacho",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 45,
+   "plusChecking": 3,
+   "decided": "VAR: goal ruled out |  | Alejandro Garnacho, Aston Villa, 45+3' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "result": "1-0",
+   "timeline": [
+    {
+     "clock": "45+3'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "shown": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "cut": false
+    }
+   ],
+   "seconds": 29
+  },
+  {
+   "id": "390-motion-lateBefore-plain",
+   "kind": "lateBefore",
+   "variant": "plain",
+   "seed": 2591,
+   "shots": [
+    "390-motion-lateBefore-plain-1-checking.jpg",
+    "390-motion-lateBefore-plain-2-decided.jpg",
+    "390-motion-lateBefore-plain-3-after.jpg",
+    "390-motion-lateBefore-plain-8-full-time.jpg",
+    "390-motion-lateBefore-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+4'",
+    "side": "opp",
+    "who": "Nicolas Jackson",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 1
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 1
+   },
+   "minuteChecking": 45,
+   "plusChecking": 4,
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 45+4' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "result": "2-1",
+   "timeline": [
+    {
+     "clock": "45+4'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "shown": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "cut": false
+    }
+   ],
+   "seconds": 32
+  },
+  {
+   "id": "390-motion-ownGoal-plain",
+   "kind": "ownGoal",
+   "variant": "plain",
+   "seed": 1940,
+   "shots": [
+    "390-motion-ownGoal-plain-1-checking.jpg",
+    "390-motion-ownGoal-plain-2-decided.jpg",
+    "390-motion-ownGoal-plain-3-after.jpg",
+    "390-motion-ownGoal-plain-6-own-goal.jpg",
+    "390-motion-ownGoal-plain-8-full-time.jpg",
+    "390-motion-ownGoal-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "10'",
+    "side": "me",
+    "who": "Brennan Johnson",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Brennan Johnson, Everton, 10' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 11,
+   "plusChecking": 0,
+   "decided": "VAR: goal ruled out |  | Brennan Johnson, Everton, 10' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "me": 0,
+    "opp": 0
+   },
+   "result": "2-0",
+   "timeline": [
+    {
+     "clock": "10'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Brennan Johnson",
+     "shown": "📺 VAR: goal ruled out: Brennan Johnson",
+     "cut": false
+    }
+   ],
+   "seconds": 11
+  },
+  {
+   "id": "390-motion-injury-plain",
+   "kind": "injury",
+   "variant": "plain",
+   "seed": 3861,
+   "shots": [
+    "390-motion-injury-plain-1-checking.jpg",
+    "390-motion-injury-plain-2-decided.jpg",
+    "390-motion-injury-plain-3-after.jpg",
+    "390-motion-injury-plain-8-full-time.jpg",
+    "390-motion-injury-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "15'",
+    "side": "opp",
+    "who": "Hugo Ekitiké",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Hugo Ekitiké, Liverpool, 15' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "opp": 0,
+    "me": 0
+   },
+   "minuteChecking": 15,
+   "plusChecking": 0,
+   "decided": "VAR: goal ruled out |  | Hugo Ekitiké, Liverpool, 15' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "opp": 0,
+    "me": 0
+   },
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "15'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Hugo Ekitiké",
+     "shown": "📺 VAR: goal ruled out: Hugo Ekitiké",
+     "cut": false
+    }
+   ],
+   "seconds": 13
+  },
+  {
+   "id": "390-motion-red-plain",
+   "kind": "red",
+   "variant": "plain",
+   "seed": 6513,
+   "shots": [
+    "390-motion-red-plain-1-checking.jpg",
+    "390-motion-red-plain-2-decided.jpg",
+    "390-motion-red-plain-3-after.jpg",
+    "390-motion-red-plain-8-full-time.jpg",
+    "390-motion-red-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "34'",
+    "side": "opp",
+    "who": "Nicolas Jackson",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 34' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "minuteChecking": 34,
+   "plusChecking": 0,
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 34' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "result": "2-1",
+   "timeline": [
+    {
+     "clock": "34'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "shown": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "cut": false
+    }
+   ],
+   "seconds": 24
+  },
+  {
+   "id": "1280-motion-lateWhistle-plain",
+   "kind": "lateWhistle",
+   "variant": "plain",
+   "seed": 1984,
+   "shots": [
+    "1280-motion-lateWhistle-plain-1-checking.jpg",
+    "1280-motion-lateWhistle-plain-2-decided.jpg",
+    "1280-motion-lateWhistle-plain-3-after.jpg",
+    "1280-motion-lateWhistle-plain-8-full-time.jpg",
+    "1280-motion-lateWhistle-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+3'",
+    "side": "opp",
+    "who": "Alejandro Garnacho",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 45,
+   "plusChecking": 3,
+   "decided": "VAR: goal ruled out |  | Alejandro Garnacho, Aston Villa, 45+3' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "result": "1-0",
+   "timeline": [
+    {
+     "clock": "45+3'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "shown": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "cut": false
+    }
+   ],
+   "seconds": 29
+  },
+  {
+   "id": "1280-motion-lateBefore-plain",
+   "kind": "lateBefore",
+   "variant": "plain",
+   "seed": 2591,
+   "shots": [
+    "1280-motion-lateBefore-plain-1-checking.jpg",
+    "1280-motion-lateBefore-plain-2-decided.jpg",
+    "1280-motion-lateBefore-plain-3-after.jpg",
+    "1280-motion-lateBefore-plain-8-full-time.jpg",
+    "1280-motion-lateBefore-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+4'",
+    "side": "opp",
+    "who": "Nicolas Jackson",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 1
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 1
+   },
+   "minuteChecking": 45,
+   "plusChecking": 4,
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 45+4' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "result": "2-1",
+   "timeline": [
+    {
+     "clock": "45+4'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "shown": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "cut": false
+    }
+   ],
+   "seconds": 32
+  },
+  {
+   "id": "1280-motion-ownGoal-plain",
+   "kind": "ownGoal",
+   "variant": "plain",
+   "seed": 1940,
+   "shots": [
+    "1280-motion-ownGoal-plain-1-checking.jpg",
+    "1280-motion-ownGoal-plain-2-decided.jpg",
+    "1280-motion-ownGoal-plain-3-after.jpg",
+    "1280-motion-ownGoal-plain-6-own-goal.jpg",
+    "1280-motion-ownGoal-plain-8-full-time.jpg",
+    "1280-motion-ownGoal-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "10'",
+    "side": "me",
+    "who": "Brennan Johnson",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Brennan Johnson, Everton, 10' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 11,
+   "plusChecking": 0,
+   "decided": "VAR: goal ruled out |  | Brennan Johnson, Everton, 10' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "me": 0,
+    "opp": 0
+   },
+   "result": "2-0",
+   "timeline": [
+    {
+     "clock": "10'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Brennan Johnson",
+     "shown": "📺 VAR: goal ruled out: Brennan Johnson",
+     "cut": false
+    }
+   ],
+   "seconds": 11
+  },
+  {
+   "id": "1280-motion-injury-plain",
+   "kind": "injury",
+   "variant": "plain",
+   "seed": 3861,
+   "shots": [
+    "1280-motion-injury-plain-1-checking.jpg",
+    "1280-motion-injury-plain-2-decided.jpg",
+    "1280-motion-injury-plain-3-after.jpg",
+    "1280-motion-injury-plain-8-full-time.jpg",
+    "1280-motion-injury-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "15'",
+    "side": "opp",
+    "who": "Hugo Ekitiké",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Hugo Ekitiké, Liverpool, 15' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "opp": 0,
+    "me": 0
+   },
+   "minuteChecking": 15,
+   "plusChecking": 0,
+   "decided": "VAR: goal ruled out |  | Hugo Ekitiké, Liverpool, 15' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "opp": 0,
+    "me": 0
+   },
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "15'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Hugo Ekitiké",
+     "shown": "📺 VAR: goal ruled out: Hugo Ekitiké",
+     "cut": false
+    }
+   ],
+   "seconds": 13
+  },
+  {
+   "id": "1280-motion-red-plain",
+   "kind": "red",
+   "variant": "plain",
+   "seed": 6513,
+   "shots": [
+    "1280-motion-red-plain-1-checking.jpg",
+    "1280-motion-red-plain-2-decided.jpg",
+    "1280-motion-red-plain-3-after.jpg",
+    "1280-motion-red-plain-8-full-time.jpg",
+    "1280-motion-red-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "34'",
+    "side": "opp",
+    "who": "Nicolas Jackson",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 34' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "minuteChecking": 34,
+   "plusChecking": 0,
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 34' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "result": "2-1",
+   "timeline": [
+    {
+     "clock": "34'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "shown": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "cut": false
+    }
+   ],
+   "seconds": 23
+  },
+  {
+   "id": "390-motion-crowdedGoal-plain",
+   "kind": "crowdedGoal",
+   "variant": "plain",
+   "seed": 42322,
+   "shots": [
+    "390-motion-crowdedGoal-plain-1-checking.jpg",
+    "390-motion-crowdedGoal-plain-2-decided.jpg",
+    "390-motion-crowdedGoal-plain-3-after.jpg",
+    "390-motion-crowdedGoal-plain-0-last-kick-card.jpg",
+    "390-motion-crowdedGoal-plain-8-full-time.jpg",
+    "390-motion-crowdedGoal-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+3'",
+    "side": "opp",
+    "who": "Alejandro Garnacho",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 2,
+    "opp": 0
+   },
+   "minuteChecking": 45,
+   "plusChecking": 4,
+   "decided": "VAR: goal ruled out |  | Alejandro Garnacho, Aston Villa, 45+3' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "lastKick": {
+    "text": "GOAL! Free kick,  | Brennan Johnson |  45+4' | Everton · 1 this season | Tap to carry on",
+    "minute": 45,
+    "plus": 4,
+    "stage": "first",
+    "reviewCardUp": 0,
+    "solid": true,
+    "shot": "390-motion-crowdedGoal-plain-0-last-kick-card.jpg",
+    "goal": "me 45+4' Brennan Johnson",
+    "goalPlace": 49,
+    "whistlePlace": 49,
+    "cardAt": 51,
+    "intervalAt": 57,
+    "samples": 58
+   },
+   "result": "3-0",
+   "timeline": [
+    {
+     "clock": "45+3'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "shown": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "cut": false
+    }
+   ],
+   "seconds": 32
+  },
+  {
+   "id": "390-motion-crowdedShot-plain",
+   "kind": "crowdedShot",
+   "variant": "plain",
+   "seed": 6203,
+   "shots": [
+    "390-motion-crowdedShot-plain-1-checking.jpg",
+    "390-motion-crowdedShot-plain-2-decided.jpg",
+    "390-motion-crowdedShot-plain-3-after.jpg",
+    "390-motion-crowdedShot-plain-8-full-time.jpg",
+    "390-motion-crowdedShot-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+4'",
+    "side": "opp",
+    "who": "Nicolas Jackson",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 1
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 1
+   },
+   "minuteChecking": 45,
+   "plusChecking": 4,
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 45+4' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "result": "2-1",
+   "timeline": [
+    {
+     "clock": "45+4'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "shown": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "cut": false
+    }
+   ],
+   "seconds": 32
+  },
+  {
+   "id": "1280-motion-crowdedGoal-plain",
+   "kind": "crowdedGoal",
+   "variant": "plain",
+   "seed": 42322,
+   "shots": [
+    "1280-motion-crowdedGoal-plain-1-checking.jpg",
+    "1280-motion-crowdedGoal-plain-2-decided.jpg",
+    "1280-motion-crowdedGoal-plain-3-after.jpg",
+    "1280-motion-crowdedGoal-plain-0-last-kick-card.jpg",
+    "1280-motion-crowdedGoal-plain-8-full-time.jpg",
+    "1280-motion-crowdedGoal-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+3'",
+    "side": "opp",
+    "who": "Alejandro Garnacho",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 2,
+    "opp": 0
+   },
+   "minuteChecking": 45,
+   "plusChecking": 4,
+   "decided": "VAR: goal ruled out |  | Alejandro Garnacho, Aston Villa, 45+3' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "lastKick": {
+    "text": "GOAL! Free kick,  | Brennan Johnson |  45+4' | Everton · 1 this season | Tap to carry on",
+    "minute": 45,
+    "plus": 4,
+    "stage": "first",
+    "reviewCardUp": 0,
+    "solid": true,
+    "shot": "1280-motion-crowdedGoal-plain-0-last-kick-card.jpg",
+    "goal": "me 45+4' Brennan Johnson",
+    "goalPlace": 49,
+    "whistlePlace": 49,
+    "cardAt": 51,
+    "intervalAt": 57,
+    "samples": 58
+   },
+   "result": "3-0",
+   "timeline": [
+    {
+     "clock": "45+3'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "shown": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "cut": false
+    }
+   ],
+   "seconds": 32
+  },
+  {
+   "id": "1280-motion-crowdedShot-plain",
+   "kind": "crowdedShot",
+   "variant": "plain",
+   "seed": 6203,
+   "shots": [
+    "1280-motion-crowdedShot-plain-1-checking.jpg",
+    "1280-motion-crowdedShot-plain-2-decided.jpg",
+    "1280-motion-crowdedShot-plain-3-after.jpg",
+    "1280-motion-crowdedShot-plain-8-full-time.jpg",
+    "1280-motion-crowdedShot-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+4'",
+    "side": "opp",
+    "who": "Nicolas Jackson",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 1
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 1
+   },
+   "minuteChecking": 45,
+   "plusChecking": 4,
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 45+4' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "result": "2-1",
+   "timeline": [
+    {
+     "clock": "45+4'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "shown": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "cut": false
+    }
+   ],
+   "seconds": 32
+  },
+  {
+   "id": "390-reduced-lateWhistle-plain",
+   "kind": "lateWhistle",
+   "variant": "plain",
+   "seed": 1984,
+   "shots": [
+    "390-reduced-lateWhistle-plain-1-checking.jpg",
+    "390-reduced-lateWhistle-plain-2-decided.jpg",
+    "390-reduced-lateWhistle-plain-3-after.jpg",
+    "390-reduced-lateWhistle-plain-8-full-time.jpg",
+    "390-reduced-lateWhistle-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+3'",
+    "side": "opp",
+    "who": "Alejandro Garnacho",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 45,
+   "plusChecking": 3,
+   "decided": "VAR: goal ruled out |  | Alejandro Garnacho, Aston Villa, 45+3' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "result": "1-0",
+   "timeline": [
+    {
+     "clock": "45+3'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "shown": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "cut": false
+    }
+   ],
+   "seconds": 28
+  },
+  {
+   "id": "390-reduced-lateBefore-plain",
+   "kind": "lateBefore",
+   "variant": "plain",
+   "seed": 2591,
+   "shots": [
+    "390-reduced-lateBefore-plain-1-checking.jpg",
+    "390-reduced-lateBefore-plain-2-decided.jpg",
+    "390-reduced-lateBefore-plain-3-after.jpg",
+    "390-reduced-lateBefore-plain-8-full-time.jpg",
+    "390-reduced-lateBefore-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+4'",
+    "side": "opp",
+    "who": "Nicolas Jackson",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 1
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 1
+   },
+   "minuteChecking": 45,
+   "plusChecking": 4,
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 45+4' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "result": "2-1",
+   "timeline": [
+    {
+     "clock": "45+4'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "shown": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "cut": false
+    }
+   ],
+   "seconds": 30
+  },
+  {
+   "id": "1280-reduced-lateWhistle-plain",
+   "kind": "lateWhistle",
+   "variant": "plain",
+   "seed": 1984,
+   "shots": [
+    "1280-reduced-lateWhistle-plain-1-checking.jpg",
+    "1280-reduced-lateWhistle-plain-2-decided.jpg",
+    "1280-reduced-lateWhistle-plain-3-after.jpg",
+    "1280-reduced-lateWhistle-plain-8-full-time.jpg",
+    "1280-reduced-lateWhistle-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+3'",
+    "side": "opp",
+    "who": "Alejandro Garnacho",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 45,
+   "plusChecking": 3,
+   "decided": "VAR: goal ruled out |  | Alejandro Garnacho, Aston Villa, 45+3' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "result": "1-0",
+   "timeline": [
+    {
+     "clock": "45+3'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "shown": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "cut": false
+    }
+   ],
+   "seconds": 27
+  },
+  {
+   "id": "1280-reduced-lateBefore-plain",
+   "kind": "lateBefore",
+   "variant": "plain",
+   "seed": 2591,
+   "shots": [
+    "1280-reduced-lateBefore-plain-1-checking.jpg",
+    "1280-reduced-lateBefore-plain-2-decided.jpg",
+    "1280-reduced-lateBefore-plain-3-after.jpg",
+    "1280-reduced-lateBefore-plain-8-full-time.jpg",
+    "1280-reduced-lateBefore-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+4'",
+    "side": "opp",
+    "who": "Nicolas Jackson",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 1
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 1
+   },
+   "minuteChecking": 45,
+   "plusChecking": 4,
+   "decided": "VAR: goal ruled out |  | Nicolas Jackson, Aston Villa, 45+4' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "result": "2-1",
+   "timeline": [
+    {
+     "clock": "45+4'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "shown": "📺 VAR: goal ruled out: Nicolas Jackson",
+     "cut": false
+    }
+   ],
+   "seconds": 30
+  },
+  {
+   "id": "390-reduced-crowdedGoal-plain",
+   "kind": "crowdedGoal",
+   "variant": "plain",
+   "seed": 42322,
+   "shots": [
+    "390-reduced-crowdedGoal-plain-1-checking.jpg",
+    "390-reduced-crowdedGoal-plain-2-decided.jpg",
+    "390-reduced-crowdedGoal-plain-3-after.jpg",
+    "390-reduced-crowdedGoal-plain-0-last-kick-card.jpg",
+    "390-reduced-crowdedGoal-plain-8-full-time.jpg",
+    "390-reduced-crowdedGoal-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "45+3'",
+    "side": "opp",
+    "who": "Alejandro Garnacho",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 2,
+    "opp": 0
+   },
+   "minuteChecking": 45,
+   "plusChecking": 4,
+   "decided": "VAR: goal ruled out |  | Alejandro Garnacho, Aston Villa, 45+3' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "lastKick": {
+    "text": "GOAL! Free kick,  | Brennan Johnson |  45+4' | Everton · 1 this season | Tap to carry on",
+    "minute": 45,
+    "plus": 4,
+    "stage": "first",
+    "reviewCardUp": 0,
+    "solid": true,
+    "shot": "390-reduced-crowdedGoal-plain-0-last-kick-card.jpg",
+    "goal": "me 45+4' Brennan Johnson",
+    "goalPlace": 49,
+    "whistlePlace": 49,
+    "cardAt": 25,
+    "intervalAt": 30,
+    "samples": 31
+   },
+   "result": "3-0",
+   "timeline": [
+    {
+     "clock": "45+3'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "shown": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "cut": false
+    }
+   ],
+   "seconds": 30
+  },
+  {
+   "id": "390-motion-ruledOut-leave",
+   "kind": "ruledOut",
+   "variant": "leave",
+   "seed": 2460,
+   "shots": [
+    "390-motion-ruledOut-leave-1-checking.jpg",
+    "390-motion-ruledOut-leave-3-returned.jpg",
+    "390-motion-ruledOut-leave-8-full-time.jpg",
+    "390-motion-ruledOut-leave-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "opp": 0,
+    "me": 0
+   },
+   "minuteChecking": 9,
+   "plusChecking": 0,
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 11
+  },
+  {
+   "id": "1280-motion-ruledOut-leave",
+   "kind": "ruledOut",
+   "variant": "leave",
+   "seed": 2460,
+   "shots": [
+    "1280-motion-ruledOut-leave-1-checking.jpg",
+    "1280-motion-ruledOut-leave-3-returned.jpg",
+    "1280-motion-ruledOut-leave-8-full-time.jpg",
+    "1280-motion-ruledOut-leave-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "opp": 0,
+    "me": 0
+   },
+   "minuteChecking": 9,
+   "plusChecking": 0,
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 11
+  },
+  {
+   "id": "390-motion-ruledOut-skip",
+   "kind": "ruledOut",
+   "variant": "skip",
+   "seed": 2460,
+   "shots": [
+    "390-motion-ruledOut-skip-1-checking.jpg",
+    "390-motion-ruledOut-skip-2-after-skip.jpg",
+    "390-motion-ruledOut-skip-8-full-time.jpg",
+    "390-motion-ruledOut-skip-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "opp": 0,
+    "me": 0
+   },
+   "minuteChecking": 9,
+   "plusChecking": 0,
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 7
+  },
+  {
+   "id": "1280-motion-ruledOut-skip",
+   "kind": "ruledOut",
+   "variant": "skip",
+   "seed": 2460,
+   "shots": [
+    "1280-motion-ruledOut-skip-1-checking.jpg",
+    "1280-motion-ruledOut-skip-2-after-skip.jpg",
+    "1280-motion-ruledOut-skip-8-full-time.jpg",
+    "1280-motion-ruledOut-skip-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "opp": 0,
+    "me": 0
+   },
+   "minuteChecking": 9,
+   "plusChecking": 0,
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 7
+  }
+ ],
+ "help": [
+  {
+   "id": "390-hub-help",
+   "shots": [
+    "390-hub-help-1-var-paragraph.jpg"
+   ],
+   "fail": [],
+   "text": "📺 VAR in today's game. In a save that starts in 2026/27, a match can go to a video review from its next kickoff, but only in the competitions we have checked really use VAR this season.\n\nRight now that is: Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig, Belgian Pro League, Swiss Super League, Austrian Bundesliga, SuperSport HNL, Saudi Pro League, 2. Bundesliga, Danish Superliga, Super League Greece, Segunda División, Serie B, MLS Eastern Conference, MLS Western Conference, Brasileirão Série A, A-League Men, Russian Premier League, Champions League, KNVB Cup, Copa do Brasil, Australia Cup (the final only), DFB-Pokal. A cup on that list has it from the round of 16 on unless the list says otherwise.\n\nEverything else plays without it, either because the real competition does not use it this season or because we could not confirm on two sources that it does, and the older eras (the 2005, 2010, 2015 and 2020 starts) never get it, even when they run on past 2026.\n\nWhat gets reviewed. In real football a review can look at goals, penalty calls, red cards (since July 2026 that includes one that came from a clearly wrong second yellow) and a card shown to the wrong player, and the referee's call stands unless it was a clear and obvious error. This game reviews goals only: a review can rule a goal out, and it looks at nothing else.\n\nIn Play Live a goal that gets ruled out goes in first and the check comes after. Then it counts for nothing: no score, no scorer, no shot on the stats. You only see a review that changed the call, and it is rare.\n\nHow often. Rarely, and on purpose. We read the published season counts we could find, kept only what more than one publisher counts, and set the game at the cautious end of them, so a review changes fewer results, not more. In this game that is a goal ruled out about once in 13 matches. It works both ways, for you and against you, and it does change results.\n\nExample: it is 0-0, the ball goes in, a check opens and the goal is ruled out. It stays 0-0, with no scorer and no shot on the stats. Each decision is made once and saved with the match, so the live match and the full time report always agree. Open the match's ? button to read this again.",
+   "box": {
+    "x": 25,
+    "right": 365,
+    "height": 1088,
+    "vw": 390,
+    "vh": 844,
+    "docWidth": 390,
+    "paragraphs": [
+     100,
+     260,
+     120,
+     160,
+     100,
+     160,
+     140
+    ]
+   }
+  },
+  {
+   "id": "1280-hub-help",
+   "shots": [
+    "1280-hub-help-1-var-paragraph.jpg"
+   ],
+   "fail": [],
+   "text": "📺 VAR in today's game. In a save that starts in 2026/27, a match can go to a video review from its next kickoff, but only in the competitions we have checked really use VAR this season.\n\nRight now that is: Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig, Belgian Pro League, Swiss Super League, Austrian Bundesliga, SuperSport HNL, Saudi Pro League, 2. Bundesliga, Danish Superliga, Super League Greece, Segunda División, Serie B, MLS Eastern Conference, MLS Western Conference, Brasileirão Série A, A-League Men, Russian Premier League, Champions League, KNVB Cup, Copa do Brasil, Australia Cup (the final only), DFB-Pokal. A cup on that list has it from the round of 16 on unless the list says otherwise.\n\nEverything else plays without it, either because the real competition does not use it this season or because we could not confirm on two sources that it does, and the older eras (the 2005, 2010, 2015 and 2020 starts) never get it, even when they run on past 2026.\n\nWhat gets reviewed. In real football a review can look at goals, penalty calls, red cards (since July 2026 that includes one that came from a clearly wrong second yellow) and a card shown to the wrong player, and the referee's call stands unless it was a clear and obvious error. This game reviews goals only: a review can rule a goal out, and it looks at nothing else.\n\nIn Play Live a goal that gets ruled out goes in first and the check comes after. Then it counts for nothing: no score, no scorer, no shot on the stats. You only see a review that changed the call, and it is rare.\n\nHow often. Rarely, and on purpose. We read the published season counts we could find, kept only what more than one publisher counts, and set the game at the cautious end of them, so a review changes fewer results, not more. In this game that is a goal ruled out about once in 13 matches. It works both ways, for you and against you, and it does change results.\n\nExample: it is 0-0, the ball goes in, a check opens and the goal is ruled out. It stays 0-0, with no scorer and no shot on the stats. Each decision is made once and saved with the match, so the live match and the full time report always agree. Open the match's ? button to read this again.",
+   "box": {
+    "x": 441,
+    "right": 839,
+    "height": 928,
+    "vw": 1280,
+    "vh": 900,
+    "docWidth": 1280,
+    "paragraphs": [
+     80,
+     220,
+     100,
+     140,
+     80,
+     140,
+     120
+    ]
+   }
+  }
+ ]
+}

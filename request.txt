@@ -1,0 +1,18 @@
+#!serve
+#!playwright
+playCmMatchDay: node scripts/playCmMatchDay.mjs
+pmd-swap: PLAY_MATCHDAY_CONTROL=swap node scripts/playCmMatchDay.mjs
+pmd-cut: PLAY_MATCHDAY_CONTROL=cut node scripts/playCmMatchDay.mjs
+pmd-jump: PLAY_MATCHDAY_CONTROL=jump node scripts/playCmMatchDay.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+playCmHubLanding: node scripts/playCmHubLanding.mjs
+playCmLeagueFixtures: node scripts/playCmLeagueFixtures.mjs
+playCmQuickSubs: set -o pipefail; export CI=1 FREE_KICK_FONT_CACHE="$PWD/cm-quick-subs-artifacts/font-cache"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs
+playClubManager: node scripts/playClubManager.mjs
+playHomeFold: node scripts/playHomeFold.mjs
+playCmRealFixtures: node scripts/playCmRealFixtures.mjs
+playCmTablesFit: node scripts/playCmTablesFit.mjs
+playCmVar: node scripts/playCmVar.mjs
+simVictoryMoment: node scripts/simVictoryMoment.mjs
+playHtLineups: set -o pipefail; export CI=1 SIM_NETWORK=offline CM_HT_PARENT_REF=HEAD CM_HT_LINEUPS_OUT="$PWD/htw" CM_HT_LINEUPS_PHASE=fixed FREE_KICK_FONT_CACHE="$PWD/fch"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && node .rc/x/prepInstalled.mjs "$PWD/htw" && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerHalftimeLineups.mjs | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerLiveLineups.mjs | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playManagerHalftimeLineups.mjs
+playPitch: set -o pipefail; export CI=1 SIM_NETWORK=offline PITCH_RESTART_PARENT_REF=HEAD PITCH_RESTART_OUT="$PWD/prw" PITCH_RESTART_PHASE=fixed; node .rc/x/prepInstalled.mjs "$PWD/prw" && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPitchRestartContinuity.mjs | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPitchRestartContinuity.mjs

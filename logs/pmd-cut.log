@@ -1,0 +1,9 @@
+save A: Liverpool against Newcastle (Premier League · Round 1), away, 55704 bytes
+save B: Liverpool against Nottingham Forest (Premier League · Round 2), home, 71342 bytes
+save C: Real Madrid against Villarreal (Copa del Rey · Final), neutral, 160429 bytes
+save E: Real Madrid against Roma (Champions League · Quarter-final · second leg), away, 141299 bytes
+  FAIL: A-390: 19 of 19 timeline names are cut: 🧤 Shot saved: Alexander Isak; ⚽ Goal: Bazoumana Touré; 🧤 Shot saved: Anthony Elanga
+A-390: heights hub 22752, centre 21887, live 21112, interval 22446, report 23230
+1 walks, 19 checks, 11s; pictures in /home/runner/work/_temp/rc-out/files/matchday
+control cut: fired 1 time(s)
+playCmMatchDay: CONTROL cut FIRED

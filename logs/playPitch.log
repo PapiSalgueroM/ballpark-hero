@@ -1,0 +1,309 @@
+prepInstalled: 521 installed locked versions written to /home/runner/work/ballpark-hero/ballpark-hero/prw
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The complete motion inverse must equal the parent
++ actual - expected
+... Skipped lines
+
+  "import type { PitchEvent } from '@/components/pitch-motion/contract';\n" +
+    "import './pitchMotion.css';\n" +
+    "import { useEffect, useRef, useState } from 'react';\n" +
+    "import { ACTION_SPAN, NET_AT } from '@/components/pitch-motion/contract';\n" +
+    '\n' +
+...
+    '  const players = (before: T[], after: T[]) => passing(before, after, after.map(player => ({ ...player, ...point(before.find(p => p.key === player.key && p.name === player.name) ?? player, player, t) })), t);\n' +
++   '  // Round 1101: a scene that carries an arc is reached along a quadratic curve (a corne'... 12121 more characters
+-   '  // Round 1101: a scene that carries an arc is reached along a quadratic curve (a corne'... 12250 more characters
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simPitchRestartContinuity.mjs:60:16 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: "import type { PitchEvent } from '@/components/pitch-motion/contract';\n" +
+    "import './pitchMotion.css';\n" +
+    "import { useEffect, useRef, useState } from 'react';\n" +
+    "import { ACTION_SPAN, NET_AT } from '@/components/pitch-motion/contract';\n" +
+    '\n' +
+    'interface Point { x: number; y: number; }\n' +
+    'export interface MotionPlayer extends Point { key: string; name?: string; keeper: boolean; }\n' +
+    '/** `arc` is optional: a control point, and the ball arrives at this scene along a curve through it. */\n' +
+    'export interface MotionScene<T extends MotionPlayer> { mine: T[]; theirs: T[]; ball: Point; holderKey: string | null; arc?: Point; }\n' +
+    'export interface MotionEvent { event: PitchEvent; key: string; at: number; }\n' +
+    'export interface Pose { kick?: number; dive?: number; catching?: number; celebrate?: number; hop?: number; rue?: number; }\n' +
+    'export interface MotionFrame<T extends MotionPlayer> extends MotionScene<T> {\n' +
+    '  poses: Record<string, Pose>;\n' +
+    '  action: string;\n' +
+    "  net: 'me' | 'opp' | null;\n" +
+    '  netPulse: number;\n' +
+    '  phase: string;\n' +
+    '  /** Round 1216: on the frames of an own goal only, the key of the figure it goes in off (null when he is not on the grass). */\n' +
+    '  ownGoalBy?: string | null;\n' +
+    '}\n' +
+    'const bounded = (v: number) => Math.max(0, Math.min(1, v));\n' +
+    'const mix = (a: number, b: number, t: number) => a + (b - a) * t;\n' +
+    'const point = (a: Point, b: Point, t: number): Point => ({ x: mix(a.x, b.x, t), y: mix(a.y, b.y, t) });\n' +
+    'const smooth = (t: number) => { const p = bounded(t); return p * p * (3 - 2 * p); };\n' +
+    "/** How long the shooter's plant lasts on the clock: the first .24 of an action. */\n" +
+    'const PLANT_SPAN = .24 * ACTION_SPAN;\n' +
+    '\n' +
+    '/** Coordinates and poses only. All outcomes arrive in the committed feed. */\n' +
+    'export function actionFrame<T extends MotionPlayer>(scene: MotionScene<T>, action: MotionEvent, elapsed: number): MotionFrame<T> {\n' +
+    "  if (action.event.og && action.event.kind === 'goal' && !action.event.penalty && !action.event.freeKick) return ownGoalFrame(scene, action, elapsed);\n" +
+    '  const event = action.event;\n' +
+    "  const mine = event.side === 'me';\n" +
+    '  const attackers = mine ? scene.mine : scene.theirs;\n' +
+    '  const defenders = mine ? scene.theirs : scene.mine;\n' +
+    '  // Round 1101: a shooter the feed does not name is the man the scene has on the ball, before the first outfield man.\n' +
+    '  const striker = attackers.find(p => p.name === event.text) ?? attackers.find(p => p.key === scene.holderKey && !p.keeper) ?? attackers.find(p => !p.keeper);\n' +
+    '  const keeper = defenders.find(p => p.keeper);\n' +
+    '  const p = bounded(elapsed / 1.05);\n' +
+    '  const plant = smooth(p / .24);\n' +
+    '  const flight = bounded((p - .24) / .48);\n' +
+    '  const resolve = bounded((p - .72) / .28);\n' +
+    "  const wing = event.flank === 'left' ? -1 : event.flank === 'right' ? 1 : event.minute % 2 < 1 ? -1 : 1;\n" +
+    '  const source = striker ?? scene.ball;\n' +
+    '  const spot = { x: event.penalty ? 50 : Math.max(25, Math.min(75, source.x)), y: mine ? (event.penalty ? 12 : event.freeKick ? 30 : 26) : (event.penalty ? 88 : event.freeKick ? 70 : 74) };\n' +
+    '  const planted = point(source, spot, plant);\n' +
+    "  const end = { x: event.kind === 'shot' ? 50 + wing * 24 : 50 + wing * 7, y: mine ? (event.kind === 'save' ? 8 : 1) : (event.kind === 'save' ? 92 : 99) };\n" +
+    '  const foot = { x: planted.x + 1.3, y: planted.y + (mine ? -1 : 1) };\n' +
+    '  const ball = flight > 0 ? point({ x: spot.x + 1.3, y: spot.y + (mine ? -1 : 1) }, end, flight) : foot;\n' +
+    '  if (flight > 0 && flight < 1) ball.x += Math.sin(flight * Math.PI) * wing * (event.freeKick ? 4 : 1.4);\n' +
+    '  const dive = smooth((flight - .1) / .9);\n' +
+    "  const keeperEnd = event.kind === 'save' ? end : { x: 50 - wing * 5, y: mine ? 10 : 90 };\n" +
+    '  // Round 1101: for a penalty the keeper is on his line before he goes.\n' +
+    '  const keeperFrom = keeper && event.penalty ? point(keeper, { x: 50, y: mine ? 3 : 97 }, plant) : keeper;\n' +
+    '  const keeperPosition = keeperFrom ? point(keeperFrom, keeperEnd, dive) : null;\n' +
+    "  // Only the committed scorer's side celebrates, after the ball reaches the net.\n" +
+    "  const celebration = event.kind === 'goal' && flight === 1 ? smooth(resolve / .55) : 0;\n" +
+    '  const teammates = celebration && striker ? attackers.filter(player => !player.keeper && player.key !== striker.key)\n' +
+    '    .sort((a, b) => Math.hypot(a.x - planted.x, a.y - planted.y) - Math.hypot(b.x - planted.x, b.y - planted.y)).slice(0, 2) : [];\n' +
+    "  // Round 1101: nobody of the shooter's side stands where he plants. Such a man steps six to the side, away from the spot.\n" +
+    '  const aside = (player: T): T => striker && attackers.includes(player) && !player.keeper && player.key !== striker.key\n' +
+    '    && Math.abs(player.x - spot.x) < 5 && Math.abs(player.y - spot.y) < 4\n' +
+    '    ? { ...player, x: player.x + (player.x > spot.x || (player.x === spot.x && wing < 0) ? 6 : -6) * plant } : player;\n' +
+    '  // Round 1101, dead balls inside an action. A penalty: everybody but the taker and the keepers is outside the area,\n' +
+    '  // 18 from that goal line, on its edge. A direct free kick: the three defenders nearest the ball stand as a wall, 9 goal side of it.\n' +
+    '  const goalLine = mine ? 0 : 100;\n' +
+    '  const wall = event.freeKick ? defenders.filter(player => !player.keeper)\n' +
+    '    .sort((a, b) => Math.hypot(a.x - spot.x, a.y - spot.y) - Math.hypot(b.x - spot.x, b.y - spot.y)).slice(0, 3).sort((a, b) => a.x - b.x) : [];\n' +
+    '  const lineUp = new Map<T, Point>();\n' +
+    '  if (event.penalty) for (const side of [scene.mine, scene.theirs]) {\n' +
+    '    const inside = (player: T) => !player.keeper && player !== striker && Math.abs(player.y - goalLine) < 18;\n' +
+    '    const edge = goalLine + (mine ? 18 : -18);\n' +
+    '    const taken: Point[] = side.filter(player => !inside(player)).map(player => ({ x: player.x, y: player.y }));\n' +
+    '    // Nearest the goal line first, so nobody has to walk through a team mate to get out.\n' +
+    '    for (const player of side.filter(inside).sort((a, b) => Math.abs(a.y - goalLine) - Math.abs(b.y - goalLine))) {\n' +
+    '      let x = player.x;\n' +
+    '      for (let k = 1; k < 24 && taken.some(other => Math.abs(other.x - x) < 4 && Math.abs(other.y - edge) < 3); k++) {\n' +
+    '        x = Math.max(4, Math.min(96, player.x + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * 4));\n' +
+    '      }\n' +
+    '      taken.push({ x, y: edge });\n' +
+    '      lineUp.set(player, { x, y: edge });\n' +
+    '    }\n' +
+    '  }\n' +
+    '  const stand = (player: T): T => {\n' +
+    '    const inWall = wall.indexOf(player);\n' +
+    '    if (inWall >= 0) return { ...player, ...point(player, { x: spot.x + 1.3 + (inWall - (wall.length - 1) / 2) * 3.5, y: spot.y + (mine ? -9 : 9) }, plant) };\n' +
+    '    const out = lineUp.get(player);\n' +
+    '    if (out) return { ...player, ...point(player, out, plant) };\n' +
+    '    return aside(player);\n' +
+    '  };\n' +
+    '  const patch = (players: T[]) => players.map(player => player.key === striker?.key ? { ...player, ...planted }\n' +
+    '    : player.key === keeper?.key && keeperPosition ? { ...player, ...keeperPosition }\n' +
+    '    : teammates.some(teammate => teammate.key === player.key) ? { ...stand(player), ...point(stand(player), planted, celebration * .18) } : stand(player));\n' +
+    '  const poses: Record<string, Pose> = {};\n' +
+    '  if (striker) poses[striker.key] = { kick: Math.sin(bounded((p - .12) / .24) * Math.PI) };\n' +
+    "  if (keeper) poses[keeper.key] = { dive: (event.kind === 'save' ? wing : -wing) * dive * 68, catching: event.kind === 'save' ? dive : 0 };\n" +
+    '  if (celebration && striker) {\n' +
+    '    poses[striker.key] = { ...poses[striker.key], celebrate: celebration, hop: Math.sin(resolve * Math.PI) * 4 };\n' +
+    '    for (const teammate of teammates) poses[teammate.key] = { celebrate: celebration };\n' +
+    '  }\n' +
+    '  return {\n' +
+    '    ...scene, mine: patch(scene.mine), theirs: patch(scene.theirs), ball, holderKey: flight === 0 ? striker?.key ?? null : null,\n' +
+    "    poses, action: event.kind, net: event.kind === 'goal' && flight === 1 ? (mine ? 'opp' : 'me') : null,\n" +
+    "    netPulse: event.kind === 'goal' ? Math.sin(resolve * Math.PI) : 0,\n" +
+    "    phase: flight === 0 ? 'plant' : flight < 1 ? 'flight' : event.kind === 'save' ? 'caught' : event.kind === 'goal' ? 'net' : 'wide',\n" +
+    '  };\n' +
+    '}\n' +
+    '\n' +
+    '/** Round 1101: two men of one side are never drawn on top of each other mid stride. When their straight\n' +
+    ' *  paths pass through each other during a tween, each steps aside along the line of their closest approach.\n' +
+    ' *  That line does not turn during a tween, so nobody jumps, and the step is zero at both ends of it. */\n' +
+    'function passing<T extends MotionPlayer>(before: T[], after: T[], now: T[], t: number): T[] {\n' +
+    '  const ease = Math.min(1, 5 * t, 5 * (1 - t));\n' +
+    '  if (ease <= 0) return now;\n' +
+    '  const start = after.map(player => before.find(p => p.key === player.key && p.name === player.name) ?? player);\n' +
+    '  const raw = now.map(player => ({ x: player.x, y: player.y }));\n' +
+    '  for (let i = 0; i < after.length; i++) for (let j = i + 1; j < after.length; j++) {\n' +
+    '    const r0 = { x: start[j].x - start[i].x, y: start[j].y - start[i].y };\n' +
+    '    const v = { x: after[j].x - after[i].x - r0.x, y: after[j].y - after[i].y - r0.y };\n' +
+    '    const speed = Math.hypot(v.x, v.y);\n' +
+    '    if (speed < 1e-6) continue;\n' +
+    '    const u = { x: v.x / speed, y: v.y / speed };\n' +
+    '    const from0 = r0.x * u.x + r0.y * u.y;\n' +
+    '    // Only a pair that really passes: the closest approach lies inside this tween.\n' +
+    '    if (from0 > 0 || from0 + speed < 0) continue;\n' +
+    '    const r = { x: raw[j].x - raw[i].x, y: raw[j].y - raw[i].y };\n' +
+    '    const along = r.x * u.x + r.y * u.y;\n' +
+    '    if (Math.abs(along) >= 6) continue;\n' +
+    '    let n = { x: r.x - along * u.x, y: r.y - along * u.y };\n' +
+    '    const gap = Math.hypot(n.x, n.y);\n' +
+    '    if (gap >= 3.6) continue;\n' +
+    '    n = gap < 1e-6 ? { x: -u.y, y: u.x } : { x: n.x / gap, y: n.y / gap };\n' +
+    '    const step = (3.6 - gap) * (Math.abs(along) <= 3.6 ? 1 : (6 - Math.abs(along)) / 2.4) * ease / 2;\n' +
+    '    now[i].x -= n.x * step; now[i].y -= n.y * step;\n' +
+    '    now[j].x += n.x * step; now[j].y += n.y * step;\n' +
+    '  }\n' +
+    '  return now;\n' +
+    '}\n' +
+    '\n' +
+    'export function between<T extends MotionPlayer>(from: MotionScene<T>, to: MotionScene<T>, t: number): MotionScene<T> {\n' +
+    '  const players = (before: T[], after: T[]) => passing(before, after, after.map(player => ({ ...player, ...point(before.find(p => p.key === player.key && p.name === player.name) ?? player, player, t) })), t);\n' +
+    '  // Round 1101: a scene that carries an arc is reached along a quadratic curve (a corne'... 12121 more characters,
+  expected: "import type { PitchEvent } from '@/components/pitch-motion/contract';\n" +
+    "import './pitchMotion.css';\n" +
+    "import { useEffect, useRef, useState } from 'react';\n" +
+    "import { ACTION_SPAN, NET_AT } from '@/components/pitch-motion/contract';\n" +
+    '\n' +
+    'interface Point { x: number; y: number; }\n' +
+    'export interface MotionPlayer extends Point { key: string; name?: string; keeper: boolean; }\n' +
+    '/** `arc` is optional: a control point, and the ball arrives at this scene along a curve through it. */\n' +
+    'export interface MotionScene<T extends MotionPlayer> { mine: T[]; theirs: T[]; ball: Point; holderKey: string | null; arc?: Point; }\n' +
+    'export interface MotionEvent { event: PitchEvent; key: string; at: number; }\n' +
+    'export interface Pose { kick?: number; dive?: number; catching?: number; celebrate?: number; hop?: number; rue?: number; }\n' +
+    'export interface MotionFrame<T extends MotionPlayer> extends MotionScene<T> {\n' +
+    '  poses: Record<string, Pose>;\n' +
+    '  action: string;\n' +
+    "  net: 'me' | 'opp' | null;\n" +
+    '  netPulse: number;\n' +
+    '  phase: string;\n' +
+    '  /** Round 1216: on the frames of an own goal only, the key of the figure it goes in off (null when he is not on the grass). */\n' +
+    '  ownGoalBy?: string | null;\n' +
+    '}\n' +
+    'const bounded = (v: number) => Math.max(0, Math.min(1, v));\n' +
+    'const mix = (a: number, b: number, t: number) => a + (b - a) * t;\n' +
+    'const point = (a: Point, b: Point, t: number): Point => ({ x: mix(a.x, b.x, t), y: mix(a.y, b.y, t) });\n' +
+    'const smooth = (t: number) => { const p = bounded(t); return p * p * (3 - 2 * p); };\n' +
+    "/** How long the shooter's plant lasts on the clock: the first .24 of an action. */\n" +
+    'const PLANT_SPAN = .24 * ACTION_SPAN;\n' +
+    '\n' +
+    '/** Coordinates and poses only. All outcomes arrive in the committed feed. */\n' +
+    'export function actionFrame<T extends MotionPlayer>(scene: MotionScene<T>, action: MotionEvent, elapsed: number): MotionFrame<T> {\n' +
+    "  if (action.event.og && action.event.kind === 'goal' && !action.event.penalty && !action.event.freeKick) return ownGoalFrame(scene, action, elapsed);\n" +
+    '  const event = action.event;\n' +
+    "  const mine = event.side === 'me';\n" +
+    '  const attackers = mine ? scene.mine : scene.theirs;\n' +
+    '  const defenders = mine ? scene.theirs : scene.mine;\n' +
+    '  // Round 1101: a shooter the feed does not name is the man the scene has on the ball, before the first outfield man.\n' +
+    '  const striker = attackers.find(p => p.name === event.text) ?? attackers.find(p => p.key === scene.holderKey && !p.keeper) ?? attackers.find(p => !p.keeper);\n' +
+    '  const keeper = defenders.find(p => p.keeper);\n' +
+    '  const p = bounded(elapsed / 1.05);\n' +
+    '  const plant = smooth(p / .24);\n' +
+    '  const flight = bounded((p - .24) / .48);\n' +
+    '  const resolve = bounded((p - .72) / .28);\n' +
+    "  const wing = event.flank === 'left' ? -1 : event.flank === 'right' ? 1 : event.minute % 2 < 1 ? -1 : 1;\n" +
+    '  const source = striker ?? scene.ball;\n' +
+    '  const spot = { x: event.penalty ? 50 : Math.max(25, Math.min(75, source.x)), y: mine ? (event.penalty ? 12 : event.freeKick ? 30 : 26) : (event.penalty ? 88 : event.freeKick ? 70 : 74) };\n' +
+    '  const planted = point(source, spot, plant);\n' +
+    "  const end = { x: event.kind === 'shot' ? 50 + wing * 24 : 50 + wing * 7, y: mine ? (event.kind === 'save' ? 8 : 1) : (event.kind === 'save' ? 92 : 99) };\n" +
+    '  const foot = { x: planted.x + 1.3, y: planted.y + (mine ? -1 : 1) };\n' +
+    '  const ball = flight > 0 ? point({ x: spot.x + 1.3, y: spot.y + (mine ? -1 : 1) }, end, flight) : foot;\n' +
+    '  if (flight > 0 && flight < 1) ball.x += Math.sin(flight * Math.PI) * wing * (event.freeKick ? 4 : 1.4);\n' +
+    '  const dive = smooth((flight - .1) / .9);\n' +
+    "  const keeperEnd = event.kind === 'save' ? end : { x: 50 - wing * 5, y: mine ? 10 : 90 };\n" +
+    '  // Round 1101: for a penalty the keeper is on his line before he goes.\n' +
+    '  const keeperFrom = keeper && event.penalty ? point(keeper, { x: 50, y: mine ? 3 : 97 }, plant) : keeper;\n' +
+    '  const keeperPosition = keeperFrom ? point(keeperFrom, keeperEnd, dive) : null;\n' +
+    "  // Only the committed scorer's side celebrates, after the ball reaches the net.\n" +
+    "  const celebration = event.kind === 'goal' && flight === 1 ? smooth(resolve / .55) : 0;\n" +
+    '  const teammates = celebration && striker ? attackers.filter(player => !player.keeper && player.key !== striker.key)\n' +
+    '    .sort((a, b) => Math.hypot(a.x - planted.x, a.y - planted.y) - Math.hypot(b.x - planted.x, b.y - planted.y)).slice(0, 2) : [];\n' +
+    "  // Round 1101: nobody of the shooter's side stands where he plants. Such a man steps six to the side, away from the spot.\n" +
+    '  const aside = (player: T): T => striker && attackers.includes(player) && !player.keeper && player.key !== striker.key\n' +
+    '    && Math.abs(player.x - spot.x) < 5 && Math.abs(player.y - spot.y) < 4\n' +
+    '    ? { ...player, x: player.x + (player.x > spot.x || (player.x === spot.x && wing < 0) ? 6 : -6) * plant } : player;\n' +
+    '  // Round 1101, dead balls inside an action. A penalty: everybody but the taker and the keepers is outside the area,\n' +
+    '  // 18 from that goal line, on its edge. A direct free kick: the three defenders nearest the ball stand as a wall, 9 goal side of it.\n' +
+    '  const goalLine = mine ? 0 : 100;\n' +
+    '  const wall = event.freeKick ? defenders.filter(player => !player.keeper)\n' +
+    '    .sort((a, b) => Math.hypot(a.x - spot.x, a.y - spot.y) - Math.hypot(b.x - spot.x, b.y - spot.y)).slice(0, 3).sort((a, b) => a.x - b.x) : [];\n' +
+    '  const lineUp = new Map<T, Point>();\n' +
+    '  if (event.penalty) for (const side of [scene.mine, scene.theirs]) {\n' +
+    '    const inside = (player: T) => !player.keeper && player !== striker && Math.abs(player.y - goalLine) < 18;\n' +
+    '    const edge = goalLine + (mine ? 18 : -18);\n' +
+    '    const taken: Point[] = side.filter(player => !inside(player)).map(player => ({ x: player.x, y: player.y }));\n' +
+    '    // Nearest the goal line first, so nobody has to walk through a team mate to get out.\n' +
+    '    for (const player of side.filter(inside).sort((a, b) => Math.abs(a.y - goalLine) - Math.abs(b.y - goalLine))) {\n' +
+    '      let x = player.x;\n' +
+    '      for (let k = 1; k < 24 && taken.some(other => Math.abs(other.x - x) < 4 && Math.abs(other.y - edge) < 3); k++) {\n' +
+    '        x = Math.max(4, Math.min(96, player.x + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * 4));\n' +
+    '      }\n' +
+    '      taken.push({ x, y: edge });\n' +
+    '      lineUp.set(player, { x, y: edge });\n' +
+    '    }\n' +
+    '  }\n' +
+    '  const stand = (player: T): T => {\n' +
+    '    const inWall = wall.indexOf(player);\n' +
+    '    if (inWall >= 0) return { ...player, ...point(player, { x: spot.x + 1.3 + (inWall - (wall.length - 1) / 2) * 3.5, y: spot.y + (mine ? -9 : 9) }, plant) };\n' +
+    '    const out = lineUp.get(player);\n' +
+    '    if (out) return { ...player, ...point(player, out, plant) };\n' +
+    '    return aside(player);\n' +
+    '  };\n' +
+    '  const patch = (players: T[]) => players.map(player => player.key === striker?.key ? { ...player, ...planted }\n' +
+    '    : player.key === keeper?.key && keeperPosition ? { ...player, ...keeperPosition }\n' +
+    '    : teammates.some(teammate => teammate.key === player.key) ? { ...stand(player), ...point(stand(player), planted, celebration * .18) } : stand(player));\n' +
+    '  const poses: Record<string, Pose> = {};\n' +
+    '  if (striker) poses[striker.key] = { kick: Math.sin(bounded((p - .12) / .24) * Math.PI) };\n' +
+    "  if (keeper) poses[keeper.key] = { dive: (event.kind === 'save' ? wing : -wing) * dive * 68, catching: event.kind === 'save' ? dive : 0 };\n" +
+    '  if (celebration && striker) {\n' +
+    '    poses[striker.key] = { ...poses[striker.key], celebrate: celebration, hop: Math.sin(resolve * Math.PI) * 4 };\n' +
+    '    for (const teammate of teammates) poses[teammate.key] = { celebrate: celebration };\n' +
+    '  }\n' +
+    '  return {\n' +
+    '    ...scene, mine: patch(scene.mine), theirs: patch(scene.theirs), ball, holderKey: flight === 0 ? striker?.key ?? null : null,\n' +
+    "    poses, action: event.kind, net: event.kind === 'goal' && flight === 1 ? (mine ? 'opp' : 'me') : null,\n" +
+    "    netPulse: event.kind === 'goal' ? Math.sin(resolve * Math.PI) : 0,\n" +
+    "    phase: flight === 0 ? 'plant' : flight < 1 ? 'flight' : event.kind === 'save' ? 'caught' : event.kind === 'goal' ? 'net' : 'wide',\n" +
+    '  };\n' +
+    '}\n' +
+    '\n' +
+    '/** Round 1101: two men of one side are never drawn on top of each other mid stride. When their straight\n' +
+    ' *  paths pass through each other during a tween, each steps aside along the line of their closest approach.\n' +
+    ' *  That line does not turn during a tween, so nobody jumps, and the step is zero at both ends of it. */\n' +
+    'function passing<T extends MotionPlayer>(before: T[], after: T[], now: T[], t: number): T[] {\n' +
+    '  const ease = Math.min(1, 5 * t, 5 * (1 - t));\n' +
+    '  if (ease <= 0) return now;\n' +
+    '  const start = after.map(player => before.find(p => p.key === player.key && p.name === player.name) ?? player);\n' +
+    '  const raw = now.map(player => ({ x: player.x, y: player.y }));\n' +
+    '  for (let i = 0; i < after.length; i++) for (let j = i + 1; j < after.length; j++) {\n' +
+    '    const r0 = { x: start[j].x - start[i].x, y: start[j].y - start[i].y };\n' +
+    '    const v = { x: after[j].x - after[i].x - r0.x, y: after[j].y - after[i].y - r0.y };\n' +
+    '    const speed = Math.hypot(v.x, v.y);\n' +
+    '    if (speed < 1e-6) continue;\n' +
+    '    const u = { x: v.x / speed, y: v.y / speed };\n' +
+    '    const from0 = r0.x * u.x + r0.y * u.y;\n' +
+    '    // Only a pair that really passes: the closest approach lies inside this tween.\n' +
+    '    if (from0 > 0 || from0 + speed < 0) continue;\n' +
+    '    const r = { x: raw[j].x - raw[i].x, y: raw[j].y - raw[i].y };\n' +
+    '    const along = r.x * u.x + r.y * u.y;\n' +
+    '    if (Math.abs(along) >= 6) continue;\n' +
+    '    let n = { x: r.x - along * u.x, y: r.y - along * u.y };\n' +
+    '    const gap = Math.hypot(n.x, n.y);\n' +
+    '    if (gap >= 3.6) continue;\n' +
+    '    n = gap < 1e-6 ? { x: -u.y, y: u.x } : { x: n.x / gap, y: n.y / gap };\n' +
+    '    const step = (3.6 - gap) * (Math.abs(along) <= 3.6 ? 1 : (6 - Math.abs(along)) / 2.4) * ease / 2;\n' +
+    '    now[i].x -= n.x * step; now[i].y -= n.y * step;\n' +
+    '    now[j].x += n.x * step; now[j].y += n.y * step;\n' +
+    '  }\n' +
+    '  return now;\n' +
+    '}\n' +
+    '\n' +
+    'export function between<T extends MotionPlayer>(from: MotionScene<T>, to: MotionScene<T>, t: number): MotionScene<T> {\n' +
+    '  const players = (before: T[], after: T[]) => passing(before, after, after.map(player => ({ ...player, ...point(before.find(p => p.key === player.key && p.name === player.name) ?? player, player, t) })), t);\n' +
+    '  // Round 1101: a scene that carries an arc is reached along a quadratic curve (a corne'... 12250 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
