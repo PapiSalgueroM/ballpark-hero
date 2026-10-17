@@ -18508,6 +18508,6 @@ Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
 
 
-## Codex1400 guide candidate
+## Codex1400 guide scoped READY
 
-ActualI8293 frozen. Own only qualified314 Manager guide wording plus new1508 old-career adoption item and remote-generated guide/keyword/snapshot outputs, own workflow and closing docs. No engine/account/SC/cap edits. Types/build17readers/strictweights pending. ActualI owns release and publication. See docs/audits/manager-guide-world-adoption-1400.md.
+PR317, actualI8293 frozen, tested325cd88a/run39016221773/job117348766950 SUCCESS. Qualified314 Manager guide wording plus one1508adoption item; no other314guide/account/UI or engine/SC/cap edits. Exact guide inverse, CM13items/all130otherrecords held, deterministic keywords, realtypes/serialbuild/all17readers/all14unchangedweights pass. Manager609.0rounds609/609 and NFL at roundedcap, little headroom. Artifact12095201963/891118fa, physical8b8087e2 and semanticafd5bd72 (102/0) fully close source/output evidence. Actual6generated bodies adopted inf77c059e; closing3docs separately, final not docs-only from request. BIIrule2 uses actualTESTED325 realmerge, closingdocsseparate and actualIguide/keyword/SEOregeneration plusjoinedchecks. Root1399/urgent308/314independent,315NOTREADY. I owns activeSC/core/spectator/tournaments/main/publish. No full-suite/newengine/productbrowser/physicalApple/provider/currentfutureI/main/livecredit. See docs/audits/manager-guide-world-adoption-1400.md.
