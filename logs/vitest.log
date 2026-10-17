@@ -1,0 +1,64 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerDifficulty.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 319[2mms[22m[39m
+   [32m✓[39m readLevel and the stored key[2m > [22mreads only the two exact words, everything else is Normal[32m 1[2mms[22m[39m
+[31m   [31m×[31m readLevel and the stored key[2m > [22ma fresh career is Normal and carries no key at all[39m[32m 28[2mms[22m[39m
+[31m     → Cannot use 'in' operator to search for 'difficulty' in undefined[39m
+[31m   [31m×[31m readLevel and the stored key[2m > [22mensureStartOptions keeps the level and No sacking off a broken block, and is idempotent[39m[32m 32[2mms[22m[39m
+[31m     → expected '{"v":1,"currency":"GBP","nationJobs":…' to be undefined // Object.is equality[39m
+   [32m✓[39m the table[2m > [22mNormal is the identity row and each level is strictly harder than the one before on every dial[32m 6[2mms[22m[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22mon a Normal career[32m 17[2mms[22m[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22msetUpCareer on Normal with No sacking off returns the very career it was given[32m 0[2mms[22m[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22ma level writes its key, cuts the cheque and the room by the dial, and rebuilds the asks on day one only[32m 0[2mms[22m[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22mNo sacking alone writes only its own key[32m 0[2mms[22m[39m
+   [32m✓[39m the dials on Hard and Legend[2m > [22mthe board: a win gives less, a defeat takes more, and only a bad season opens lower[32m 0[2mms[22m[39m
+   [32m✓[39m the dials on Hard and Legend[2m > [22mthe market: the same men in the same order, every price marked, every value untouched[32m 232[2mms[22m[39m
+   [32m✓[39m the dials on Hard and Legend[2m > [22mthe opponent: an edge only off Normal[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerNoSack.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1109[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mstarts with No sacking off and Skip hands nothing on [33m 340[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mthe switch rides on both buttons [33m 526[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerDifficulty.test.ts[2m > [22mreadLevel and the stored key[2m > [22ma fresh career is Normal and carries no key at all
+[31m[1mTypeError[22m: Cannot use 'in' operator to search for 'difficulty' in undefined[39m
+[36m [2m❯[22m src/lib/clubManagerDifficulty.test.ts:[2m31:12[22m[39m
+    [90m 29| [39m    [35mconst[39m s [33m=[39m [34mstartCareer[39m([32m'Everton'[39m)[33m;[39m
+    [90m 30| [39m    [34mexpect[39m([34mdifficultyOf[39m(s))[33m.[39m[34mtoBe[39m([32m'normal'[39m)[33m;[39m
+    [90m 31| [39m    [34mexpect[39m([32m'difficulty'[39m [35min[39m (s[33m.[39mstartOptions [35mas[39m object))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m   | [39m           [31m^[39m
+    [90m 32| [39m  })[33m;[39m
+    [90m 33| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerDifficulty.test.ts[2m > [22mreadLevel and the stored key[2m > [22mensureStartOptions keeps the level and No sacking off a broken block, and is idempotent
+[31m[1mAssertionError[22m: expected '{"v":1,"currency":"GBP","nationJobs":…' to be undefined // Object.is equality[39m
+
+[32m- Expected:[39m 
+undefined
+
+[31m+ Received:[39m 
+"{\"v\":1,\"currency\":\"GBP\",\"nationJobs\":true,\"strictness\":3}"
+
+[36m [2m❯[22m src/lib/clubManagerDifficulty.test.ts:[2m46:48[22m[39m
+    [90m 44| [39m    [35mconst[39m before [33m=[39m [33mJSON[39m[33m.[39m[34mstringify[39m(valid[33m.[39mstartOptions)[33m;[39m
+    [90m 45| [39m    [34mensureStartOptions[39m(valid)[33m;[39m
+    [90m 46| [39m    [34mexpect[39m([33mJSON[39m[33m.[39m[34mstringify[39m(valid[33m.[39mstartOptions))[33m.[39m[34mtoBe[39m(before)[33m;[39m
+    [90m   | [39m                                               [31m^[39m
+    [90m 47| [39m  })[33m;[39m
+    [90m 48| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m17 passed[39m[22m[90m (19)[39m
+[2m   Start at [22m 00:26:44
+[2m   Duration [22m 4.48s[2m (transform 2.16s, setup 120ms, collect 4.52s, tests 1.43s, environment 775ms, prepare 408ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerDifficulty.test.ts,title=src/lib/clubManagerDifficulty.test.ts > readLevel and the stored key > a fresh career is Normal and carries no key at all,line=31,column=12::TypeError: Cannot use 'in' operator to search for 'difficulty' in undefined%0A ❯ src/lib/clubManagerDifficulty.test.ts:31:12%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerDifficulty.test.ts,title=src/lib/clubManagerDifficulty.test.ts > readLevel and the stored key > ensureStartOptions keeps the level and No sacking off a broken block%2C and is idempotent,line=46,column=48::AssertionError: expected '{"v":1,"currency":"GBP","nationJobs":…' to be undefined // Object.is equality%0A%0A- Expected: %0Aundefined%0A%0A+ Received: %0A"{\"v\":1,\"currency\":\"GBP\",\"nationJobs\":true,\"strictness\":3}"%0A%0A ❯ src/lib/clubManagerDifficulty.test.ts:46:48%0A%0A

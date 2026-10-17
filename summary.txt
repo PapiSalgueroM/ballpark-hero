@@ -1,0 +1,7 @@
+sec1 exit=0 1s | simCmDifficulty: all green (sections 1)
+sec1-flat exit=1 1s | simCmDifficulty: 1 FAILURES (sections 1)
+vitest exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerDifficulty.test.ts,title=src/lib/clubManagerDifficulty.test.ts > readLevel and the stored ke
+time0 exit=0 27s | simCmDifficulty: all green (sections 0)
+simClubManagerStart exit=0 2s | simClubManagerStart: green. The defaults are the shipped game, the currency never reaches the engine, and no setting can switch off the haggle.
+tsc exit=0 59s | 
+simCmNoSack exit=0 86s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)

@@ -1,0 +1,9 @@
+1) the table
+  ok: Normal is the identity row
+  ok: 12 of 12 caps hold
+  ok: src/lib/managerDifficulty.ts: no growth, potential, rating, draw or clock in its code
+  ok: src/lib/clubManagerDifficulty.ts: no growth, potential, rating, draw or clock in its code
+  ok: clubManagerDifficulty.ts runtime imports: @/lib/clubManagerStart, @/lib/clubManagerBoardVerdict
+  ok: src/lib/clubManagerStart.ts does not import the engine or this module at runtime
+  ok: src/lib/clubManagerBoardVerdict.ts does not import the engine or this module at runtime
+simCmDifficulty: all green (sections 1)

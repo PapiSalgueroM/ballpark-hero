@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts src/test/clubManagerNoSack.test.tsx --testTimeout=300000 --hookTimeout=120000
+sec1: SECTION=1 node scripts/simCmDifficulty.mjs
+sec1-flat: SECTION=1 CM_DIFF_CONTROL=flat node scripts/simCmDifficulty.mjs
+time0: SECTION=0 SEEDS=1 SEASONS=2 node scripts/simCmDifficulty.mjs
+simCmNoSack: node scripts/simCmNoSack.mjs
+simClubManagerStart: node scripts/simClubManagerStart.mjs
