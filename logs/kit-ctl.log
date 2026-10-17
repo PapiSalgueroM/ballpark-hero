@@ -1,0 +1,3 @@
+unreach exit=1 simEventDeck: 1 failure, red sections 10 (CONTROL=unreach fired)
+reachthin exit=1 simEventDeck: 1 failure, red sections 10 (CONTROL=reachthin fired)
+ok lines for soccer under unreach: 0 (0 expected)

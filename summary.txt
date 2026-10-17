@@ -1,0 +1,10 @@
+sd-a exit=0 87s | simSoccerDeck: green. Sections 1, 2, 3, 4, 5 only.
+tsc exit=0 99s | 
+sd-c exit=0 116s | simSoccerDeck: green. Sections 8 only.
+sd-base exit=0 59s | simSoccerDeck: green. Sections 2, 4 only.
+sd-b exit=0 78s | simSoccerDeck: green. Sections 6, 7, 9, 10 only.
+vitest exit=0 86s |    Duration  85.07s (transform 10.37s, setup 3.32s, collect 34.03s, tests 166.97s, environment 20.92s, prepare 4.55s)
+kit-a exit=0 107s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+kit-ctl exit=0 24s | ok lines for soccer under unreach: 0 (0 expected)
+kit-b exit=0 163s | simEventDeck: green. Sections 13, 14, 15, 16 only.
+sd-ctl exit=0 388s | controls that did not fire: none
