@@ -1,0 +1,3 @@
+simWorldUcl-pass: WORLD_UCL_ONLY=0,1,3,4,7 node scripts/simWorldUcl.mjs
+simWorldUcl-self: WORLD_UCL_ONLY=2 node scripts/simWorldUcl.mjs
+simWorldUcl-daily: WORLD_UCL_ONLY=6 node scripts/simWorldUcl.mjs

@@ -1,0 +1,3 @@
+simWorldUcl-pass exit=2 4s | simWorldUcl: cannot run: TypeError: Cannot read properties of undefined (reading '0') |     at checkTies (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/sim
+simWorldUcl-daily exit=0 5s | simWorldUcl: green, 20 checks, 0 failures
+simWorldUcl-self exit=0 762s | simWorldUcl: green, 1 checks, 0 failures

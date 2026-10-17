@@ -1,0 +1,4 @@
+  0 ledger: verified G1 G2-2015 G2-2020 G3-2005 G3-2010 G3-2015 G3-2020 G4-late G5-ruling G5-2015-groups G5-2020-groups G6 G7 N1 | one publisher G2-2005 G2-2010 G5-2015-ko G8 | to verify G4-early G5-2020-ko
+  0 engine: G8_SHAPE {"clubs":32,"groups":8,"groupSize":4,"games":6,"advance":2}; association rule 2005 true, 2010 true, 2015 true, 2020 true; bans 2005 0, 2010 0, 2015 1, 2020 1; partial G2-2005 G2-2010 G4-early G5-2015-ko G5-2020-ko G8
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020); seeds 1,2,3,4,5
+simWorldUcl: cannot run: TypeError: Cannot read properties of undefined (reading '0') |     at checkTies (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simWorldUcl.mjs:496:41) |     at checkSeason (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simWorldUcl.mjs:412:3)
