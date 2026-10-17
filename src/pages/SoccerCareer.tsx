@@ -1174,13 +1174,17 @@ export default function SoccerCareer() {
      in memory. Without it the engine's Round 667 skip would drop the card
      while the toast still promised its effect (the lead's ruling 2 on Round
      1334). So that press waits for the chunk, at most DECK_WAIT_MS, then
-     answers on the career it was pressed on; if the chunk cannot be had the
-     card stays and a toast says so. After a load that failed the next press
-     reloads the page (a dynamic import that failed stays failed for the life
-     of the page, src/lib/freshBuild.ts) and the save brings the card back. A
-     second press while it waits does nothing. A deck card's toast prints what
-     its season log line says landed (training at the ceiling, morale at 0 or
-     100, a cost for training that did not land), never the button's promise.
+     answers on the career on screen while that card is still first there (a
+     session banked while it waited is the player's own move, review of
+     2026-10-17); if the chunk cannot be had the card stays and a toast says
+     so. After a load that failed the next press reloads the page when it can
+     (a dynamic import that failed stays failed for the life of the page,
+     src/lib/freshBuild.ts) and the save brings the card back; offline, or
+     over a save the browser refused, it tries the import again, so the toast
+     says retry, not reload. A second press while it waits does nothing. A
+     deck card's toast prints what its season log line says landed (training
+     at the ceiling, morale at 0 or 100, a cost for training that did not
+     land), never the button's promise; no line means nothing landed.
      Every other card takes the path it always took. */
   const deckPress = useRef<{ at: CareerState | null; failed: boolean }>({ at: null, failed: false });
   const careerNow = useRef(career);
@@ -1193,7 +1197,7 @@ export default function SoccerCareer() {
     if (isSoccerDeckId(event.id)) {
       const head = `${event.emoji} ${event.title}: `;
       const line = result.events.slice(pressed.events.length).find(l => l.startsWith(head));
-      toast(line ? line.slice(head.length) : event.choices[choiceIndex].consequence, PAGE_TOAST);
+      toast(line ? line.slice(head.length) : 'Nothing changes', PAGE_TOAST);
       return;
     }
     const consequence = soccerEventChoiceConsequence(pressed, event.id, choiceIndex, event.choices[choiceIndex].consequence);
@@ -1215,8 +1219,8 @@ export default function SoccerCareer() {
       toast.dismiss(waiting);
       if (press.at === pressed) press.at = null;
       press.failed = outcome === 'failed';
-      if (outcome === 'ready') { if (careerNow.current === pressed) answerEvent(pressed, choiceIndex); return; }
-      toast.error(press.failed ? 'This card could not load. Tap again to reload.' : 'Still loading. Tap again in a moment.', PAGE_TOAST);
+      if (outcome === 'ready') { const now = careerNow.current; if (now?.pendingEvents[0]?.id === event.id) answerEvent(now, choiceIndex); return; }
+      toast.error(press.failed ? 'This card could not load. Tap again to retry.' : 'Still loading. Tap again in a moment.', PAGE_TOAST);
     });
   };
 

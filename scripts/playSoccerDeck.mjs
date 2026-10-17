@@ -19,6 +19,8 @@
                 does nothing (no second wait, no second toast), and the first press's answer lands once (correction 3).
      noreload   the tab has used its one stale chunk reload (sessionStorage dukb-reloaded-stale-chunk) and the deck
                 chunk is aborted: the press says the card could not load and the card stays (correction 4(c)).
+                Then (review of 2026-10-17) a tap while offline cannot reload, tries again and says so again, and
+                a tap back online reloads the page once and the save brings the card back.
      reload     the deck chunk aborted on a fresh tab: freshBuild's stale chunk rule reloads it once and the career
                 comes back on its phase with its card and its save (correction 4(c)).
      ceiling    the card dealt with room to train, then a session banked before the answer (the training ground
@@ -159,6 +161,12 @@ const waitToast = async (page, test, ms) => {
   return null;
 };
 const savedOf = page => page.evaluate(k => JSON.parse(localStorage.getItem(k) || 'null'), KEY);
+/** True once no toast passes `test` (a toast lasts about 4 s), so the next one seen is a new one. */
+const waitGone = async (page, test, ms) => {
+  const end = Date.now() + ms;
+  while (Date.now() < end) { if (!(await toasts(page)).some(test)) return true; await page.waitForTimeout(100); }
+  return false;
+};
 
 async function open(profile, save, { deck = 'allow', staleUsed = false, throttle = false } = {}) {
   const ctx = await browser.newContext({ viewport: { width: profile.w, height: profile.h }, isMobile: profile.mobile, hasTouch: profile.mobile,
@@ -320,6 +328,23 @@ try {
         await shot(page, `${id}-noreload`);
         const unexpected = errors.filter(e => !/soccerDeck|dynamically imported module|Failed to fetch/i.test(e));
         check(unexpected.length === 0, `${id} noreload: no page error but the failed chunk${unexpected.length ? ` (${unexpected[0]})` : ''}`);
+        /* the toast says retry, not reload: offline the next tap cannot reload, so it tries the import again and says
+           so again; back online the next tap reloads, and the save brings the card back */
+        const failedToast = x => x.includes('This card could not load');
+        const cleared = await waitGone(page, failedToast, 10000);
+        await ctx.setOffline(true);
+        await optionOf(page, f.card.labels[0]).click();
+        const again = await waitToast(page, failedToast, 8000);
+        check(cleared && !!again && loads() === 1 && await cardTitle(page, f.card.title).isVisible(),
+          `${id} noreload: offline, the next tap tries again without a reload, says so again and the card stays (${loads()} loads)`);
+        await ctx.setOffline(false);
+        await optionOf(page, f.card.labels[0]).click();
+        const back = Date.now() + 20000;
+        while (Date.now() < back && loads() < 2) await page.waitForTimeout(200);
+        await cardTitle(page, f.card.title).waitFor({ timeout: 60000 }).catch(() => undefined);
+        const kept = await savedOf(page);
+        check(loads() === 2 && await cardTitle(page, f.card.title).isVisible() && kept?.pendingEvents?.[0]?.id === f.card.id,
+          `${id} noreload: online, the next tap reloads the page once and the card comes back with its save (${loads()} loads)`);
         await ctx.close();
       }
       /* reload: a fresh tab whose deck chunk fails reloads once and comes back on its card with its save */
