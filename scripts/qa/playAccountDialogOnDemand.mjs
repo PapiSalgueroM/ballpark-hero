@@ -145,6 +145,14 @@ async function runCase(collection, id, route, width, work) {
     page.on('pageerror', error => row.errors.push(String(error.stack || error)));
     page.on('console', message => { if (message.type() === 'error') row.console.push({ type: message.type(), text: message.text() }); });
     await page.goto(BASE + route, { waitUntil: 'domcontentloaded' });
+    const rulesTitle = { 'boot-hot-seat': 'How to Play Manager Hot Seat', 'boot-deadline-day': 'How to Play Deadline Day' }[id];
+    if (rulesTitle) {
+      const rules = page.getByRole('dialog', { name: rulesTitle, exact: true }); await rules.waitFor();
+      await observe('entry-rules');
+      const play = rules.getByRole('button', { name: "Let's Play!", exact: true }); await play.scrollIntoViewIfNeeded(); await pointer(play);
+      await rules.waitFor({ state: 'hidden' });
+      row.rulesEntry = { title: rulesTitle, action: "Let's Play!", method: 'actual native pointer', dismissed: true };
+    }
     if (route === '/') await openers.header().waitFor(); else await openers.navbar().waitFor();
     await quiet(); row.jsRequestedBeforeOpen = [...new Set(row.requests.filter(item => item.owned && isJs(item.url)).map(item => item.url))].sort();
     row.authFetchedBeforeOpen = row.jsRequestedBeforeOpen.includes(authUrl);
