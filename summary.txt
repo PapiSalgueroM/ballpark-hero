@@ -1,0 +1,5 @@
+c-nojoin exit=1 38s | simCmDifficulty: 8 FAILURES (sections 3)
+c-helpdrift exit=1 0s | simCmDifficulty: 1 FAILURES (sections 7)
+unit exit=0 7s |    Duration  6.28s (transform 3.42s, setup 168ms, collect 6.04s, tests 2.76s, environment 1.17s, prepare 323ms)
+tsc exit=0 93s | 
+diff-base exit=0 185s | simCmDifficulty: all green (sections 1,2,3,6,7)
