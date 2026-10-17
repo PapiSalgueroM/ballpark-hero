@@ -1,4 +1,6 @@
-## Codex Round1393: saved transfer deals paging, baseline pending
+Actual original-source baseline5eb5e035/run38988894683 passed6completed/2precise faults+4preserves andold10/types/521/holds. Product1768216a applied after that baseline, actual fixed/original/restored plus served/build/reader/weight qualification pending. First7dc method failure remains preserved. DraftPR310 is based on qualified296; no main/live claim.
+
+## Codex Round1393: saved transfer deals paging, qualification pending
 
 Recorded 2026-10-17 UTC. Claimed on codex/manager-saved-deals-pagination from qualified PR296 head6465d9ae. The reader currently hides saved rows beyond50. Scope is only paging retained filtered deals, preserving284/296 UI behavior and all state. New six-case baseline, old10tests and remote proof are being prepared before any product edit. Claude I retains main, publication, core and competitions. This adds no gate to urgentPR308 and makes no live claim. See docs/audits/manager-saved-deals-paging.md.
 
