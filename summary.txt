@@ -1,0 +1,7 @@
+md-oldorder exit=2 7s | simCmMatchDay could not run: Everton (era2005) did not start a career
+md-neutralaway exit=2 7s | simCmMatchDay could not run: Everton (era2005) did not start a career
+md-truncate exit=2 8s | simCmMatchDay could not run: Everton (era2005) did not start a career
+md-homeflip exit=2 7s | simCmMatchDay could not run: Everton (era2005) did not start a career
+ms-them exit=0 8s | simMatchScreen: PASS. Effective them fault failed only section 3; untouched baseline passed and source bytes held.
+ms-bareposs exit=0 8s | simMatchScreen: PASS. Effective bareposs fault failed only section 2; untouched baseline passed and source bytes held.
+ms-ragged exit=0 6s | simMatchScreen: PASS. Effective ragged fault failed only section 4; untouched baseline passed and source bytes held.

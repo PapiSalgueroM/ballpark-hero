@@ -1,0 +1,7 @@
+md-neutralaway: MATCHDAY_CONTROL=neutralaway node scripts/simCmMatchDay.mjs
+md-oldorder: MATCHDAY_CONTROL=oldorder node scripts/simCmMatchDay.mjs
+md-truncate: MATCHDAY_CONTROL=truncate node scripts/simCmMatchDay.mjs
+md-homeflip: MATCHDAY_CONTROL=homeflip node scripts/simCmMatchDay.mjs
+ms-bareposs: MATCH_SCREEN_CONTROL=bareposs node scripts/simMatchScreen.mjs
+ms-them: MATCH_SCREEN_CONTROL=them node scripts/simMatchScreen.mjs
+ms-ragged: MATCH_SCREEN_CONTROL=ragged node scripts/simMatchScreen.mjs
