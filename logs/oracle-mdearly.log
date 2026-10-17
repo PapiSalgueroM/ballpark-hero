@@ -1,0 +1,32 @@
+mut1502: mdearly APPLIED to /tmp/o-mdearly/src/lib/clubManager.ts
+nightOracle1502: 13 watchers (Chelsea now, Hoffenheim now, Everton now, América now, Proof Town Athletic now, Wigan Athletic era2005, Wolves era2010, West Ham era2015, Sheffield United era2020, Villarreal era2005, Werder Bremen era2010, Sevilla era2015, Marseille era2020), seeds 1,2
+  FAIL Chelsea (now) seed 1: MD1 is the uclGroup entry at 3 (2026-8-26) but is dated 2026-8-22
+  FAIL Chelsea (now) seed 1: MD2 is the uclGroup entry at 7 (2026-9-16) but is dated 2026-9-12
+  FAIL Chelsea (now) seed 1: MD3 is the uclGroup entry at 12 (2026-10-7) but is dated 2026-10-3
+  FAIL Chelsea (now) seed 1: MD4 is the uclGroup entry at 15 (2026-10-21) but is dated 2026-10-17
+  FAIL Chelsea (now) seed 1: MD5 is the uclGroup entry at 18 (2026-11-4) but is dated 2026-10-31
+  FAIL Chelsea (now) seed 1: MD6 is the uclGroup entry at 23 (2026-11-25) but is dated 2026-11-21
+  FAIL Chelsea (now) seed 1: MD1 is the uclGroup entry at 3 (2026-8-26) but is dated 2026-8-22
+  FAIL Chelsea (now) seed 1: MD2 is the uclGroup entry at 7 (2026-9-16) but is dated 2026-9-12
+  FAIL Chelsea (now) seed 1: MD3 is the uclGroup entry at 12 (2026-10-7) but is dated 2026-10-3
+  FAIL Chelsea (now) seed 1: MD4 is the uclGroup entry at 15 (2026-10-21) but is dated 2026-10-17
+  FAIL Chelsea (now) seed 1: MD5 is the uclGroup entry at 18 (2026-11-4) but is dated 2026-10-31
+  FAIL Chelsea (now) seed 1: MD6 is the uclGroup entry at 23 (2026-11-25) but is dated 2026-11-21
+  FAIL Chelsea (now) seed 1: MD1 is the uclGroup entry at 3 (2026-8-26) but is dated 2026-8-22
+  FAIL Chelsea (now) seed 1: MD2 is the uclGroup entry at 7 (2026-9-16) but is dated 2026-9-12
+  FAIL Chelsea (now) seed 1: MD3 is the uclGroup entry at 12 (2026-10-7) but is dated 2026-10-3
+  FAIL Chelsea (now) seed 1: MD4 is the uclGroup entry at 15 (2026-10-21) but is dated 2026-10-17
+  FAIL Chelsea (now) seed 1: MD5 is the uclGroup entry at 18 (2026-11-4) but is dated 2026-10-31
+  FAIL Chelsea (now) seed 1: MD6 is the uclGroup entry at 23 (2026-11-25) but is dated 2026-11-21
+  FAIL Chelsea (now) seed 1: MD1 is the uclGroup entry at 3 (2026-8-26) but is dated 2026-8-22
+  FAIL Chelsea (now) seed 1 week 3: MD1 (uclGroup, its entry 3) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 1: MD2 is the uclGroup entry at 7 (2026-9-16) but is dated 2026-9-12
+  FAIL Chelsea (now) seed 1: MD3 is the uclGroup entry at 12 (2026-10-7) but is dated 2026-10-3
+  FAIL Chelsea (now) seed 1: MD4 is the uclGroup entry at 15 (2026-10-21) but is dated 2026-10-17
+  FAIL Chelsea (now) seed 1: MD5 is the uclGroup entry at 18 (2026-11-4) but is dated 2026-10-31
+  FAIL Chelsea (now) seed 1: MD6 is the uclGroup entry at 23 (2026-11-25) but is dated 2026-11-21
+  checked l36 uclGroup: 2562
+  checked l36 date: 4697
+  checked g8 uclGroup: 4038
+  checked g8 uclKo: 4711
+nightOracle1502: RED, 6756 failures of 27319 checks

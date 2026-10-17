@@ -1,0 +1,32 @@
+mut1502: markearly APPLIED to /tmp/o-markearly/src/lib/clubManager.ts
+nightOracle1502: 13 watchers (Chelsea now, Hoffenheim now, Everton now, América now, Proof Town Athletic now, Wigan Athletic era2005, Wolves era2010, West Ham era2015, Sheffield United era2020, Villarreal era2005, Werder Bremen era2010, Sevilla era2015, Marseille era2020), seeds 1,2
+  FAIL Chelsea (now) seed 1 week 34: PO1 (date, its entry 34) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 1 week 38: R16_1 (date, its entry 38) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 1 week 44: QF1 (date, its entry 44) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 1 week 48: SF1 (date, its entry 48) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 2 week 34: PO1 (date, its entry 34) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 2 week 38: R16_1 (date, its entry 38) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 2 week 44: QF1 (date, its entry 44) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 2 week 48: SF1 (date, its entry 48) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 1 week 30: PO1 (date, its entry 30) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 1 week 32: PO2 (date, its entry 32) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 1 week 35: R16_1 (date, its entry 35) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 1 week 41: QF1 (date, its entry 41) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 1 week 45: SF1 (date, its entry 45) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 1 week 47: SF2 (date, its entry 47) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 2 week 30: PO1 (date, its entry 30) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 2 week 32: PO2 (date, its entry 32) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 2 week 35: R16_1 (date, its entry 35) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 2 week 41: QF1 (date, its entry 41) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 2 week 45: SF1 (date, its entry 45) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 2 week 47: SF2 (date, its entry 47) counts as played EARLY, the calendar has not played it
+  FAIL Everton (now) seed 1 week 34: PO1 (date, its entry 34) counts as played EARLY, the calendar has not played it
+  FAIL Everton (now) seed 1 week 38: R16_1 (date, its entry 38) counts as played EARLY, the calendar has not played it
+  FAIL Everton (now) seed 1 week 44: QF1 (date, its entry 44) counts as played EARLY, the calendar has not played it
+  FAIL Everton (now) seed 1 week 48: SF1 (date, its entry 48) counts as played EARLY, the calendar has not played it
+  FAIL Everton (now) seed 2 week 34: PO1 (date, its entry 34) counts as played EARLY, the calendar has not played it
+  checked l36 uclGroup: 2562
+  checked l36 date: 4697
+  checked g8 uclGroup: 4038
+  checked g8 uclKo: 4711
+nightOracle1502: RED, 42 failures of 27319 checks

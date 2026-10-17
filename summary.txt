@@ -1,0 +1,5 @@
+oracle-head exit=0 23s | nightOracle1502: GREEN, 27319 checks, 0 failures
+oracle-markearly exit=1 25s | nightOracle1502: RED, 42 failures of 27319 checks
+oracle-mdearly exit=1 25s | nightOracle1502: RED, 6756 failures of 27319 checks
+entrant-head exit=0 63s | entrantJoin1502: GREEN, 33 reachable moves to an entrant with no uclGroup, every one dropped the slice
+entrant-carry exit=1 63s | entrantJoin1502: RED, 33 mid season moves to an entrant carry a watched competition that lists the manager's own club
