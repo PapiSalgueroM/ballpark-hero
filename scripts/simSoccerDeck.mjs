@@ -1020,6 +1020,9 @@ if (runs(8)) {
     const costs = PACK.events.flatMap(e => e.choices).filter(c => Object.values(c.fx ?? {}).some(v => v < 0)).length;
     if (costs === 0) { console.error('freetraining control: no option of the pack carries a training cost, refusing to run'); process.exit(2); }
     P8 = { ...PACK, events: PACK.events.map(e => ({ ...e, choices: e.choices.map(c => (c.fx ? { ...c, fx: Object.fromEntries(Object.entries(c.fx).filter(([, v]) => v >= 0).map(([k, v]) => [k, k in H.words.SOCCER_TRAINING_KEYS ? v * 2 : v])) } : c)) })) };
+    /* a key only a cost moved (gk_positioning) leaves the pressure book with the cost, or the bind check refuses the pack */
+    const moved = new Set(P8.events.flatMap(e => e.choices).flatMap(c => [...Object.keys(c.fx ?? {}), ...(c.morale ? ['morale'] : [])]));
+    P8.pressure = Object.fromEntries(Object.entries(PACK.pressure ?? {}).filter(([k]) => moved.has(k)).map(([k, v]) => [k, k in H.words.SOCCER_TRAINING_KEYS ? v * 2 : v]));
     if (H.deck.soccerDeckProblems(P8).length) { console.error(`freetraining control: the free pack has problems (${H.deck.soccerDeckProblems(P8)[0]}), refusing to run`); process.exit(2); }
     console.log(`   freetraining control: ${costs} options lose their training cost and train double`);
   }
