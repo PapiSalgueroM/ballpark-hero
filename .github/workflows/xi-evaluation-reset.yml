@@ -1,4 +1,4 @@
-name: XI evaluation reset verification
+name: XI evaluation reset full verification
 on:
   push:
     branches: [codex/xi-evaluation-reset]
@@ -10,16 +10,18 @@ on:
 permissions:
   contents: read
 jobs:
-  baseline:
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 75
     defaults:
       run:
         shell: bash
     env:
       CI: '1'
       SIM_NETWORK: offline
+      ENGINES: chromium
       TZ: UTC
+      PRERENDER_ONLY: /whats-new
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,81 +34,200 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Freeze original evaluation on the exact qualified selection hook
+      - name: Bind the candidate and unchanged qualified original method
         run: |
           set -euo pipefail
+          set -o noclobber
           out="$RUNNER_TEMP/xi-evaluation-reset"; test ! -e "$out"; mkdir -p "$out/raw"
           echo "XI_RESET_OUT=$out" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          test -z "$(git status --porcelain --untracked-files=no)"
           git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
+          git ls-files -z -- . ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
           git merge-base --is-ancestor 8293c758f4284d21baaa2320383cfd5cb5bd4944 HEAD
           git diff --exit-code 8293c758f4284d21baaa2320383cfd5cb5bd4944 HEAD -- . ':!docs' ':!src/hooks/useLineupBuilder.ts' ':!src/test/lineupBuilderEvaluationReset.test.tsx' ':!.github/workflows/xi-evaluation-reset.yml' > "$out/base-source-hold.log"
-          git show 12133c4006199d60f2c40ff5725494fe603659c0:src/hooks/useLineupBuilder.ts > "$out/qualified308-hook.ts"
-          cmp "$out/qualified308-hook.ts" src/hooks/useLineupBuilder.ts
-          test "$(git hash-object src/hooks/useLineupBuilder.ts)" = 369487db56b37c031257b97e89e4303b0228c640
-          test "$(sha256sum src/hooks/useLineupBuilder.ts | cut -d' ' -f1)" = db4b0caca0aca7a915eefdfc38b5e8bfa4034f16972a1a7a041cb279f7f59664
+          XI_RESET_OUT="$out" SIM_OFFLINE_RECEIPT="$out/sourceguard.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module > "$out/source-admission.log" 2>&1 <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';
+          const out=process.env.XI_RESET_OUT,hook='src/hooks/useLineupBuilder.ts',test='src/test/lineupBuilderEvaluationReset.test.tsx',sha=b=>createHash('sha256').update(b).digest('hex'),original=execFileSync('git',['show','12133c4006199d60f2c40ff5725494fe603659c0:'+hook]),candidate=fs.readFileSync(hook);
+          assert.equal(process.env.CI,'1');assert.equal(process.env.SIM_NETWORK,'offline');assert.equal(sha(original),'db4b0caca0aca7a915eefdfc38b5e8bfa4034f16972a1a7a041cb279f7f59664');assert.equal(execFileSync('git',['hash-object','--stdin'],{input:original,encoding:'utf8'}).trim(),'369487db56b37c031257b97e89e4303b0228c640');
+          assert.equal(candidate.length,20919);assert.equal(sha(candidate),'06902436629a77260aaa79fa3fee18b95e065dbade34f8e8a56d15d2072bb5ac');assert.equal(execFileSync('git',['hash-object','--stdin'],{input:candidate,encoding:'utf8'}).trim(),'78e6c2552437e1fe04b21892a82bca48b7d71534');assert(!candidate.equals(original));assert.equal(sha(fs.readFileSync(test)),'fda9341fd16647968e69ef2ba59c75ba70aa5f5934017b78ffe65ae3b6721b6d');
+          const files=execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean),map=Object.fromEntries(files.map(f=>[f,sha(fs.readFileSync(f))]));for(const f of [hook,test,'.github/workflows/xi-evaluation-reset.yml'])assert(fs.readFileSync(f).equals(execFileSync('git',['show','HEAD:'+f])),'Actual working source equals committed source: '+f);
+          const write=(f,b)=>fs.writeFileSync(out+'/'+f,b,{flag:'wx'});write('qualified308-hook.ts',original);write('candidate-hook.ts',candidate);write('source-map.json',JSON.stringify(map,null,2)+'\n');write('source-bindings.json',JSON.stringify({originalSha256:sha(original),candidateSha256:sha(candidate),testSha256:map[test],qualifiedOriginal:'12133c4006199d60f2c40ff5725494fe603659c0',base:'8293c758f4284d21baaa2320383cfd5cb5bd4944',limits:'Hook ownership only; no provider, Apple device, full-suite, changed I join or live qualification.'},null,2)+'\n');console.log('PASS exact candidate, frozen fda9341f test and db4/3694 qualified308 original.');
+          NODE
+          sha256sum "$out/source.zip" "$out/request-source-files.sha256" "$out/source-files.sha256" "$out/source-map.json" "$out/qualified308-hook.ts" "$out/candidate-hook.ts" > "$out/initial-source-packet.sha256"
           printf '%s\0' "$(command -v node)" "$(readlink -f "$(command -v npm)")" | sort -z | xargs -0 sha256sum > "$out/runtime-tools-files.sha256"
+          npm --version > "$out/npm-version.txt"
           npm ci > "$out/install.log" 2>&1
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerAgentReviewDependencies.mjs before > "$out/dependencies.log" 2>&1
-          cp soccer-agent-review-artifacts/dependencies-before.json "$out/"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerAgentReviewDependencies.mjs before > "$out/dependencies-before.log" 2>&1
+          browser_tools="$RUNNER_TEMP/xi-evaluation-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright; ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerAgentReviewDependencies.mjs after > "$out/dependencies-after.log" 2>&1
+          cp soccer-agent-review-artifacts/dependencies-*.json "$out/"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const out=process.env.XI_RESET_OUT || process.env.RUNNER_TEMP+'/xi-evaluation-reset';
+          const before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),after=JSON.parse(fs.readFileSync(out+'/dependencies-after.json'));
+          assert.equal(before.packages.length,521); assert.equal(after.packages.length,521); assert.deepEqual(after.packages,before.packages); assert.deepEqual(after.packageFiles,before.packageFiles); assert.equal(after.addedBrowserPackage,'1.64.0'); fs.writeFileSync(out+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n');
+          NODE
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/fonts-install.log" 2>&1; python -m pip freeze > "$out/python-packages.txt"
+          FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-files.sha256"
+          test "$(find "$out/font-cache" -type f | wc -l)" -eq 9
           find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-files.sha256"
-      - name: Actual types and unchanged validator and history checks
-        id: existing
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tool-files.sha256"
+      - name: Actual types and current original restored hook observations
+        id: checks
+        timeout-minutes: 30
+        run: |
+          set -euo pipefail
+          set -o noclobber
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$XI_RESET_OUT"
+          preload_check='const assert=require("node:assert/strict");assert.ok((process.env.NODE_OPTIONS||"").includes("offlineTransport.cjs"),"Children retain offline preload");assert.ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")],"Actual offline preload is in require.cache");'
+          status=0; NODE_OPTIONS='' node -e "$preload_check" > "$out/preload-control.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/preload-control.exit"; test "$status" -eq 1; grep -F 'Children retain offline preload' "$out/preload-control.log"
+          node -e "$preload_check" > "$out/preload-normal.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/arms.transport" node --input-type=module > "$out/arms.log" 2>&1 <<'NODE'
+          import fs from 'node:fs';import os from 'node:os';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {spawnSync} from 'node:child_process';
+          const out=process.env.XI_RESET_OUT,hook='src/hooks/useLineupBuilder.ts',target='src/test/lineupBuilderEvaluationReset.test.tsx',oldTests=['src/test/lineupValidatorClient.test.tsx','src/test/lineupBuilderHistoryRead.test.tsx'],pickerTests=['src/test/lineupPickerFocus.test.tsx','src/test/lineupPickerFilters.test.tsx'],sha=b=>createHash('sha256').update(b).digest('hex'),candidate=fs.readFileSync(out+'/candidate-hook.ts'),original=fs.readFileSync(out+'/qualified308-hook.ts'),sourceMap=JSON.parse(fs.readFileSync(out+'/source-map.json')),write=(f,b)=>fs.writeFileSync(out+'/'+f,b,{flag:'wx'});
+          assert.equal(sha(candidate),'06902436629a77260aaa79fa3fee18b95e065dbade34f8e8a56d15d2072bb5ac');assert.equal(sha(original),'db4b0caca0aca7a915eefdfc38b5e8bfa4034f16972a1a7a041cb279f7f59664');
+          const faults=['reset keeps a late success out and releases evaluation busy','a new formation keeps a late JSON verdict out','reset drops a non-ok fallback already being judged','reset drops a thrown-request fallback already being judged','a rejected abandoned fallback cannot start another judge','an old evaluation cannot clear or overwrite the next game','unmount ignores a late request error without judging it'],preserves=['ordinary remote success posts the whole chosen XI and records once','sparse successful replies keep the existing default verdict','ordinary non-ok replies still finish with the offline judge','ordinary thrown requests still finish with the offline judge','ordinary nested local failures keep the current error verdict'],keys=['resetSuccess','formationJson','nonOkFallback','thrownFallback','rejectedFallback','replacement','unmount','remote','sparse','nonOk','thrown','nestedError'];
+          const causes=['Starting over must keep the abandoned XI from becoming a result','A new formation must not inherit the previous XI verdict','A reset XI must ignore its abandoned non-ok fallback','A reset XI must ignore its abandoned network fallback','An abandoned fallback rejection must not start another judge or publish an error',"An abandoned evaluation must leave the new game's busy state and result alone",'An unmounted XI must not start the offline judge after its request fails'];
+          const errors=[],observations={},controls=[];let currentOldTitles;
+          function inventory(label,expectedHook){const actual={};for(const file of Object.keys(sourceMap))actual[file]=sha(fs.readFileSync(file));write(label+'.source.json',JSON.stringify(actual,null,2)+'\n');for(const [file,expected] of Object.entries(sourceMap))assert.equal(actual[file],file===hook?sha(expectedHook):expected,'Independent source hold: '+label+' '+file);}
+          function run(label,files,expectedHook,rawTarget=false){inventory(label+'-before',expectedHook);const stage=fs.mkdtempSync(path.join(os.tmpdir(),'xi-reset-reporter-')),reporter=path.join(stage,'vitest.json'),raw=out+'/raw/'+label+'.observations.json';assert(!fs.existsSync(reporter));assert(!fs.existsSync(raw));const run=spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run',...files,'--maxWorkers=1','--minWorkers=1','--reporter=default','--reporter=json','--outputFile='+reporter],{encoding:'utf8',timeout:600000,maxBuffer:16*1024*1024,env:{...process.env,XI_EVALUATION_RAW:rawTarget?raw:'',SIM_OFFLINE_RECEIPT:out+'/'+label+'.transport'}});write(label+'.stdout.log',run.stdout||'');write(label+'.stderr.log',run.stderr||'');write(label+'.exit.json',JSON.stringify({status:run.status,signal:run.signal,error:run.error?.message,reporterPath:reporter},null,2)+'\n');const bytes=fs.existsSync(reporter)?fs.readFileSync(reporter):null;if(bytes)write(label+'.vitest.json',bytes);else write(label+'.reporter-missing.txt','Actual Vitest JSON report was not created.\n');inventory(label+'-after',expectedHook);assert(!run.error,String(run.error));assert.equal(run.signal,null);assert(bytes,'Actual Vitest JSON report exists');const result=JSON.parse(bytes),rows=result.testResults.flatMap(s=>s.assertionResults),log=(run.stdout||'')+'\n'+(run.stderr||'');assert.equal(result.testResults.length,files.length);assert.deepEqual(result.testResults.map(s=>s.name.replaceAll('\\','/').split('/src/')[1]).sort(),files.map(f=>f.slice(4)).sort());assert.equal(result.numPendingTests,0);assert.equal(result.numTodoTests,0);assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to load|Cannot find module|No test files found|SIM_OFFLINE_BLOCK/i.test(log));const rawResult=rawTarget?JSON.parse(fs.readFileSync(raw)):null;observations[label]={exit:run.status,result,raw:rawResult};return {exit:run.status,result,rows,raw:rawResult};}
+          function checkRaw(r){assert.equal(r.version,1);assert.deepEqual(r.caseTitles,[...faults,...preserves]);assert.deepEqual(Object.keys(r.cases),keys);for(let i=0;i<keys.length;i++){const row=r.cases[keys[i]];assert.equal(row.title,[...faults,...preserves][i]);assert(Array.isArray(row.deferred)&&row.deferred.length>0&&row.deferred.every(g=>typeof g.label==='string'&&g.settled===true),'Every retained promise drained: '+keys[i]);assert.deepEqual(row.unexpected,[],'No undeclared fixture work: '+keys[i]);assert(Array.isArray(row.requests)&&row.requests.length>0);}}
+          function checkFaults(r){const actual=r.testResults.flatMap(s=>s.assertionResults),failed=actual.filter(t=>t.status==='failed');assert.deepEqual(failed.map(t=>t.title),faults);assert.deepEqual(actual.filter(t=>t.status==='passed').map(t=>t.title),preserves);for(let i=0;i<faults.length;i++){assert(failed[i].failureMessages.length>0);for(const value of failed[i].failureMessages){const text=value.replace(/\x1b\[[0-9;]*m/g,'');assert(text.includes('AssertionError')&&text.includes(causes[i])&&text.includes('expected false to be true'),'Exact named Boolean ownership cause: '+faults[i]);}}}
+          function green(o,count){assert.equal(o.exit,0);assert.equal(o.result.success,true);assert.equal(o.result.numTotalTests,count);assert.equal(o.result.numPassedTests,count);assert.equal(o.result.numFailedTests,0);assert.equal(o.rows.length,count);assert(o.rows.every(r=>r.status==='passed'));}
+          function attempt(label,fn){try{fn();}catch(error){errors.push({label,error:error.stack});console.error(label,error.stack);}}
+          try{attempt('candidate',()=>{const o=run('candidate',[target],candidate,true);green(o,12);assert.deepEqual(o.rows.map(r=>r.title),[...faults,...preserves]);checkRaw(o.raw);});attempt('existing-current',()=>{const o=run('existing-current',oldTests,candidate);green(o,58);currentOldTitles=o.rows.map(r=>r.fullName).sort();});inventory('before-original-write',candidate);fs.writeFileSync(hook,original);attempt('original',()=>{const o=run('original',[target],original,true);assert.equal(o.exit,1);assert.equal(o.result.success,false);assert.equal(o.result.numTotalTests,12);assert.equal(o.result.numFailedTests,7);assert.equal(o.result.numPassedTests,5);assert.equal(o.rows.length,12);checkFaults(o.result);checkRaw(o.raw);});attempt('existing-original',()=>{const o=run('existing-original',oldTests,original);green(o,58);assert.deepEqual(o.rows.map(r=>r.fullName).sort(),currentOldTitles);});}catch(error){errors.push({label:'source-transition',error:error.stack});}
+          finally{fs.writeFileSync(hook,candidate);attempt('restored',()=>{const o=run('restored',[target],candidate,true);green(o,12);assert.deepEqual(o.rows.map(r=>r.title),[...faults,...preserves]);checkRaw(o.raw);});attempt('picker-preservation',()=>green(run('picker-preservation',pickerTests,candidate),15));attempt('final-source',()=>inventory('final-candidate',candidate));}
+          attempt('receipt-controls',()=>{const originalRun=observations.original;assert(originalRun,'Actual original observation exists');const base={result:originalRun.result,raw:originalRun.raw},digest=v=>sha(JSON.stringify(v));for(const name of ['wrong-cause','unsettled-gate','unexpected-work','wrong-title']){const changedResult=structuredClone(base.result),changedRaw=structuredClone(base.raw);if(name==='wrong-cause')changedResult.testResults[0].assertionResults.find(r=>r.status==='failed').failureMessages=['AssertionError: unrelated fixture assertion: expected false to be true'];if(name==='unsettled-gate')changedRaw.cases.resetSuccess.deferred[0].settled=false;if(name==='unexpected-work')changedRaw.cases.resetSuccess.unexpected.push('fixture-only rejection control');if(name==='wrong-title')changedRaw.cases.resetSuccess.title='fixture-only wrong title';assert.notEqual(digest({result:changedResult,raw:changedRaw}),digest(base));assert.throws(()=>{checkFaults(changedResult);checkRaw(changedRaw);},assert.AssertionError);controls.push({name,changedSha256:digest({result:changedResult,raw:changedRaw}),rejected:true});}assert.throws(()=>green({exit:originalRun.exit,result:originalRun.result,rows:originalRun.result.testResults.flatMap(s=>s.assertionResults)},12),assert.AssertionError);});
+          write('qualification.json',JSON.stringify({status:errors.length?'failed':'passed',errors,receiptControls:controls,arms:Object.fromEntries(Object.entries(observations).map(([name,o])=>[name,{exit:o.exit,total:o.result.numTotalTests,passed:o.result.numPassedTests,failed:o.result.numFailedTests}])),limits:'Frozen twelve-case method, qualified original308, existing58 and picker15. No provider or physical-device claim.'},null,2)+'\n');if(errors.length)throw new Error(JSON.stringify(errors));console.log('PASS candidate12, exact original7faults+5healthy, restored12, both existing58 arms, picker15, four effective receipt controls and complete source holds.');
+          NODE
+          sha256sum --check "$out/request-source-files.sha256" > "$out/checks-source-holds.log"
+          SIM_OFFLINE_RECEIPT="$out/validator.transport" node scripts/simLineupValidatorClient.mjs > "$out/validator.log" 2>&1
+          grep -F 'simLineupValidatorClient: 55 checks passed.' "$out/validator.log"
+          SIM_OFFLINE_RECEIPT="$out/fit.transport" node scripts/simBuildYourXiFit.mjs > "$out/fit.log" 2>&1
+          grep -F 'simBuildYourXiFit: all checks green' "$out/fit.log"
+          sha256sum --check "$out/request-source-files.sha256" > "$out/harnesses-source-holds.log"
+      - name: Serial production build with only the stale news snapshot refreshed
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$XI_RESET_OUT/build.transport" npm run build:seo > "$XI_RESET_OUT/build.log" 2>&1
+          tail -n 6 "$XI_RESET_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$XI_RESET_OUT/dist-files.sha256"
+      - name: All fifteen rebuilt-site readers
+        id: readers
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           out="$XI_RESET_OUT"
-          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
-          SIM_OFFLINE_RECEIPT="$out/existing.transport" node_modules/.bin/vitest run src/test/lineupValidatorClient.test.tsx src/test/lineupBuilderHistoryRead.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$out/existing.vitest.json" > "$out/existing.log" 2>&1
-          tail -n 8 "$out/existing.log"
-      - name: Reproduce the exact original ownership faults before a production fix
-        id: reproduce
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            status=0; SIM_OFFLINE_RECEIPT="$out/$method.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv"; tail -n 3 "$out/$method.log"
+            test "$status" -eq 0 || failed=1; test ! -s "$out/$method.transport" || failed=1
+          done
+          test "$(wc -l < "$out/readers.tsv")" -eq 15; exit "$failed"
+      - name: Actual offline validator page and existing accept-on-error control
+        id: browser
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          set -o noclobber
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$XI_RESET_OUT"
+          SIM_OFFLINE_RECEIPT="$out/browser.transport" node scripts/playLineupValidator.mjs > "$out/browser.log" 2>&1
+          grep -F 'playLineupValidator: green at 2 widths (390 and 1280).' "$out/browser.log"
+          SIM_OFFLINE_RECEIPT="$out/browser-control.transport" PLAY_LINEUP_CONTROL=accept-on-error node scripts/playLineupValidator.mjs > "$out/browser-control.log" 2>&1
+          grep -F 'playLineupValidator control: green. Accept on error was planted, the slot filled, and the nothing filled assertion caught it.' "$out/browser-control.log"
+      - name: Unchanged full fourteen page weights with every failure fatal
+        id: weights
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
-          out="$XI_RESET_OUT"; status=0
-          XI_EVALUATION_RAW="$out/raw/observations.json" SIM_OFFLINE_RECEIPT="$out/baseline.transport" node_modules/.bin/vitest run src/test/lineupBuilderEvaluationReset.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$out/baseline.vitest.json" > "$out/baseline.log" 2>&1 || status=$?
-          printf '%s\n' "$status" > "$out/baseline.exit"; test "$status" -eq 1
-          SIM_OFFLINE_RECEIPT="$out/classifier.transport" node --input-type=module > "$out/baseline-classification.log" 2>&1 <<'NODE'
-          import fs from 'node:fs'; import assert from 'node:assert/strict'; import {createHash} from 'node:crypto';
-          const out=process.env.XI_RESET_OUT, faults=['reset keeps a late success out and releases evaluation busy','a new formation keeps a late JSON verdict out','reset drops a non-ok fallback already being judged','reset drops a thrown-request fallback already being judged','a rejected abandoned fallback cannot start another judge','an old evaluation cannot clear or overwrite the next game','unmount ignores a late request error without judging it'], preserves=['ordinary remote success posts the whole chosen XI and records once','sparse successful replies keep the existing default verdict','ordinary non-ok replies still finish with the offline judge','ordinary thrown requests still finish with the offline judge','ordinary nested local failures keep the current error verdict'];
-          const result=JSON.parse(fs.readFileSync(out+'/baseline.vitest.json')), rows=result.testResults.flatMap(s=>s.assertionResults), log=fs.readFileSync(out+'/baseline.log','utf8');
-          assert.equal(result.testResults.length,1); assert(result.testResults[0].name.replaceAll('\\','/').endsWith('/src/test/lineupBuilderEvaluationReset.test.tsx')); assert.equal(result.numTotalTests,12); assert.equal(result.numFailedTests,7); assert.equal(result.numPassedTests,5); assert.equal(result.numPendingTests,0); assert.equal(result.numTodoTests,0); assert.equal(rows.length,12);
-          const causes=['Starting over must keep the abandoned XI from becoming a result','A new formation must not inherit the previous XI verdict','A reset XI must ignore its abandoned non-ok fallback','A reset XI must ignore its abandoned network fallback','An abandoned fallback rejection must not start another judge or publish an error',"An abandoned evaluation must leave the new game's busy state and result alone",'An unmounted XI must not start the offline judge after its request fails'];
-          const checkFaults=r=>{const actual=r.testResults.flatMap(s=>s.assertionResults),failed=actual.filter(t=>t.status==='failed');assert.deepEqual(failed.map(t=>t.title),faults);assert.deepEqual(actual.filter(t=>t.status==='passed').map(t=>t.title),preserves);for(let i=0;i<faults.length;i++){assert(failed[i].failureMessages.length>0);for(const value of failed[i].failureMessages){const text=value.replace(/\x1b\[[0-9;]*m/g,'');assert(text.includes('AssertionError')&&text.includes(causes[i])&&text.includes('expected false to be true'),'Exact named Boolean ownership cause: '+faults[i]);}}};
-          checkFaults(result);assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to load|Cannot find module|No test files found|SIM_OFFLINE_BLOCK/i.test(log));
-          const existing=JSON.parse(fs.readFileSync(out+'/existing.vitest.json'));assert.equal(existing.success,true);assert.equal(existing.testResults.length,2);assert.equal(existing.numTotalTests,58);assert.equal(existing.numPassedTests,58);assert.equal(existing.numFailedTests,0);assert.equal(existing.numPendingTests,0);assert.equal(existing.numTodoTests,0);
-          const raw=JSON.parse(fs.readFileSync(out+'/raw/observations.json')),keys=['resetSuccess','formationJson','nonOkFallback','thrownFallback','rejectedFallback','replacement','unmount','remote','sparse','nonOk','thrown','nestedError'];
-          const checkRaw=r=>{assert.equal(r.version,1);assert.deepEqual(r.caseTitles,[...faults,...preserves]);assert.deepEqual(Object.keys(r.cases),keys);for(let i=0;i<keys.length;i++){const row=r.cases[keys[i]];assert.equal(row.title,[...faults,...preserves][i]);assert(Array.isArray(row.deferred)&&row.deferred.length>0&&row.deferred.every(g=>typeof g.label==='string'&&g.settled===true),'Every retained promise drained: '+keys[i]);assert.deepEqual(row.unexpected,[],'No undeclared fixture work: '+keys[i]);assert(Array.isArray(row.requests)&&row.requests.length>0);}};
-          checkRaw(raw);
-          const sha=v=>createHash('sha256').update(JSON.stringify(v)).digest('hex'),controls=[];
-          for(const name of ['wrong-cause','unsettled-gate','unexpected-work','wrong-title']){const changedResult=structuredClone(result),changedRaw=structuredClone(raw);if(name==='wrong-cause'){changedResult.testResults[0].assertionResults.find(r=>r.status==='failed').failureMessages=['AssertionError: unrelated fixture assertion: expected false to be true'];}if(name==='unsettled-gate')changedRaw.cases.resetSuccess.deferred[0].settled=false;if(name==='unexpected-work')changedRaw.cases.resetSuccess.unexpected.push('fixture-only rejection control');if(name==='wrong-title')changedRaw.cases.resetSuccess.title='fixture-only wrong title';assert(sha({result:changedResult,raw:changedRaw})!==sha({result,raw}),'Receipt control must change actual evidence');assert.throws(()=>{checkFaults(changedResult);checkRaw(changedRaw);},assert.AssertionError);controls.push({name,changedSha256:sha({result:changedResult,raw:changedRaw}),rejected:true});}
-          const report={status:'qualified-original-counterexamples',faults,causes,preserves,existingPassed:58,rawCases:Object.keys(raw.cases),receiptControls:controls,limits:'Original qualified308 hook only. No new production guard, build, browser, full suite, physical Apple, provider, joined I or live qualification.'};fs.writeFileSync(out+'/baseline-classification.json',JSON.stringify(report,null,2)+'\n'); console.log('PASS exact seven named Boolean ownership faults, five healthy preserves, twelve drained observations, fifty-eight existing cases and four changed receipt rejection controls.');
-          NODE
-          tail -n 12 "$out/baseline.log"
-      - name: Retain actual source installed tools and every partial outcome
+          out="$XI_RESET_OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-weights.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          status=0; SIM_OFFLINE_RECEIPT="$out/weights.transport" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
+          cat "$out/weights.log"; printf '%s\n' "$status" > "$out/weights-exit.txt"; exit "$status"
+      - name: Complete actual source and dist with bounded generated changes
         if: always()
         run: |
           set -euo pipefail
           out="${XI_RESET_OUT:-$RUNNER_TEMP/xi-evaluation-reset}"; mkdir -p "$out"; result=0
-          git diff --exit-code HEAD -- . > "$out/source-diff.log" 2>&1 || result=1
+          git diff --exit-code HEAD -- . ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' > "$out/non-generated-diff.log" 2>&1 || result=1
+          git diff --binary HEAD -- public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json > "$out/generated.patch"
+          git diff --name-only HEAD > "$out/generated-paths.txt"
+          if test '${{ steps.build.outcome }}' = success; then printf 'public/sitemap.xml\npublic/whats-new/index.html\nscripts/data/lastmod.json\n' | sort > "$out/expected-generated-paths.txt"; sort "$out/generated-paths.txt" | cmp - "$out/expected-generated-paths.txt" || result=1; fi
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/validated-source-files.sha256"
           XI_RESET_ARCHIVE_OUT="$out" python - <<'PY'
           import os,subprocess,zipfile
-          out=os.environ['XI_RESET_ARCHIVE_OUT'];files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          out=os.environ['XI_RESET_ARCHIVE_OUT']; files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
           with zipfile.ZipFile(out+'/validated-source.zip','w',zipfile.ZIP_DEFLATED) as archive:
               for file in sorted(filter(None,files)): archive.write(file,file)
+          if os.path.isdir('dist'):
+              with zipfile.ZipFile(out+'/dist.zip','w',zipfile.ZIP_DEFLATED) as archive:
+                  for folder,dirs,names in os.walk('dist'):
+                      for name in sorted(names): archive.write(os.path.join(folder,name),os.path.join(folder,name))
           PY
-          for kind in request-source installed runtime-tools validated-source; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
+          if test -d dist; then find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist-after-files.sha256"; fi
+          if test -f "$out/dist-files.sha256"; then cmp "$out/dist-files.sha256" "$out/dist-after-files.sha256" > "$out/dist-inventory-hold.log" 2>&1 || result=1; fi
+          printf 'checks=%s\nbuild=%s\nreaders=%s\nweights=%s\nbrowser=${{ steps.browser.outcome }}\n' '${{ steps.checks.outcome }}' '${{ steps.build.outcome }}' '${{ steps.readers.outcome }}' '${{ steps.weights.outcome }}' > "$out/stage-outcomes.txt"
+          exit "$result"
+      - name: Source installed tool font and transport holds
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="${XI_RESET_OUT:-$RUNNER_TEMP/xi-evaluation-reset}"; result=0
+          for kind in source installed browser-tool runtime-tools font validated-source dist; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
+          if test -f "$out/initial-source-packet.sha256"; then sha256sum --check "$out/initial-source-packet.sha256" > "$out/initial-source-packet-holds.log" 2>&1 || result=1; fi
           if test -f "$out/installed-files.sha256"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-after-files.sha256"; cmp "$out/installed-files.sha256" "$out/installed-after-files.sha256" || result=1; fi
-          for method in types existing baseline classifier; do test ! -s "$out/$method.transport" || result=1; done
-          printf 'existing=%s\nreproduce=%s\n' '${{ steps.existing.outcome }}' '${{ steps.reproduce.outcome }}' > "$out/stage-outcomes.txt"
+          build_classified=0
+          if node --input-type=module > "$out/build-transport-classification.log" 2>&1 <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import {createHash} from 'node:crypto'; import {createRequire} from 'node:module';
+          import {SAMPLE_DAYS} from './scripts/lib/prerenderClock.mjs';
+          const out=process.env.XI_RESET_OUT || process.env.RUNNER_TEMP+'/xi-evaluation-reset', sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const report={status:'running',observations:[],sources:{},method:'Classify retained denials only; no network permission or routing change'};
+          try {
+            assert((process.env.NODE_OPTIONS||'').includes('offlineTransport.cjs')); const require=createRequire(import.meta.url); assert(require.cache[require.resolve('./scripts/lib/offlineTransport.cjs')]);
+            assert.equal(process.env.PRERENDER_ONLY,'/whats-new'); assert.deepEqual(SAMPLE_DAYS,[0,5,11]);
+            for(const file of ['scripts/lib/offlineTransport.cjs','scripts/lib/prerenderClock.mjs','scripts/prerender.mjs']) report.sources[file]=sha(fs.readFileSync(file));
+            const line='[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com\n', expected=Buffer.from(line.repeat(3));
+            assert.equal(sha(expected),'1175154605f5681b53732047b77c744fb9e814fe3c6340be82f786ea27138e57');
+            const classify=bytes=>{assert(bytes.equals(expected),'Build must record exactly the three known denied font requests'); return bytes.toString('utf8').split('\n').slice(0,-1);};
+            const actual=fs.readFileSync(out+'/build.transport'), rows=classify(actual);
+            report.observations.push({case:'actual-three-font-denials',accepted:true,sha256:sha(actual),bytes:actual.length,rows});
+            const controls=[['missing-line',Buffer.from(line.repeat(2))],['extra-line',Buffer.from(line.repeat(4))],['database-line',Buffer.from(line.repeat(2)+'[SIM_OFFLINE_BLOCK] database browser route continue https://fixture.invalid\n')]];
+            for(const [name,changed] of controls){assert(!changed.equals(actual),'Each control changes the actual receipt'); assert.throws(()=>classify(changed),assert.AssertionError); report.observations.push({case:name,accepted:false,sha256:sha(changed),bytes:changed.length});}
+            assert.equal(report.observations.length,4); report.status='passed'; console.log('PASS actual three denied font requests and three effective receipt-only rejection controls');
+          } catch(error){report.status='failed'; report.error=error.stack; throw error;}
+          finally{fs.writeFileSync(out+'/build-transport-classification.json',JSON.stringify(report,null,2)+'\n',{flag:'wx'});}
+          NODE
+          then build_classified=1; else result=1; fi
+          if test "$build_classified" -ne 1; then test ! -s "$out/build.transport" || result=1; fi
+          for method in sourceguard types arms candidate original restored existing-current existing-original picker-preservation validator fit browser browser-control simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do test ! -s "$out/$method.transport" || result=1; done
+          # Weight asset denials remain retained offline-method evidence, not ordinary zero-block credit.
           exit "$result"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: xi-evaluation-reset-baseline-${{ github.sha }}
+          name: xi-evaluation-reset-${{ github.sha }}
           path: ${{ env.XI_RESET_OUT }}
           if-no-files-found: error
           retention-days: 14

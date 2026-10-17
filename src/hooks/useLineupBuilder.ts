@@ -139,6 +139,13 @@ export function useLineupBuilder() {
   }, []);
   useEffect(() => cancelValidation, [cancelValidation]);
 
+  const evaluationRun = useRef(0);
+  const cancelEvaluation = useCallback(() => {
+    evaluationRun.current += 1;
+    setIsEvaluating(false);
+  }, []);
+  useEffect(() => () => { evaluationRun.current += 1; }, []);
+
   const positions = useMemo(() => (formation ? FORMATIONS[formation] : []), [formation]);
 
   const filledCount = filledSlots.size;
@@ -146,6 +153,7 @@ export function useLineupBuilder() {
 
   const selectFormation = useCallback((f: Formation) => {
     cancelValidation();
+    cancelEvaluation();
     setFormation(f);
     setTeamAssignments(getRandomTeamAssignments(11));
     setPhase('building');
@@ -153,7 +161,7 @@ export function useLineupBuilder() {
     setFilledSlots(new Map());
     setVerdict(null);
     setValidationError(null);
-  }, [cancelValidation]);
+  }, [cancelValidation, cancelEvaluation]);
 
   const selectPosition = useCallback((index: number) => {
     if (filledSlots.has(index)) return;
@@ -348,6 +356,7 @@ export function useLineupBuilder() {
 
   const evaluateTeam = useCallback(async () => {
     if (filledSlotsArray.length !== 11) return;
+    const run = ++evaluationRun.current;
     setIsEvaluating(true);
     try {
       const resp = await fetch(
@@ -361,11 +370,14 @@ export function useLineupBuilder() {
           body: JSON.stringify({ formation, players: filledSlotsArray }),
         }
       );
+      if (run !== evaluationRun.current) return;
       const data = await resp.json();
+      if (run !== evaluationRun.current) return;
       
       if (!resp.ok) {
         // AI referee down/out of quota -> offline judge, never a dead-end
         const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
+        if (run !== evaluationRun.current) return;
         setVerdict(local);
         setPhase('result');
         return;
@@ -382,21 +394,25 @@ export function useLineupBuilder() {
       }
       setPhase('result');
     } catch (err) {
+      if (run !== evaluationRun.current) return;
       console.error('Evaluation error:', err);
       try {
         const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
+        if (run !== evaluationRun.current) return;
         setVerdict(local);
       } catch {
+        if (run !== evaluationRun.current) return;
         setVerdict({ rating: 'Error', headline: 'Could not evaluate', analysis: 'Network error. Please check your connection and try again.' });
       }
       setPhase('result');
     } finally {
-      setIsEvaluating(false);
+      if (run === evaluationRun.current) setIsEvaluating(false);
     }
   }, [filledSlotsArray, formation]);
 
   const resetGame = useCallback(() => {
     cancelValidation();
+    cancelEvaluation();
     setFormation(null);
     setPhase('formation');
     setSelectedPositionIndex(null);
@@ -405,7 +421,7 @@ export function useLineupBuilder() {
     setVerdict(null);
     setValidationError(null);
     setIsSpinning(false);
-  }, [cancelValidation]);
+  }, [cancelValidation, cancelEvaluation]);
 
   useGameCompletion('build-your-xi', phase === 'result', verdict ? 500 : 0);
 
