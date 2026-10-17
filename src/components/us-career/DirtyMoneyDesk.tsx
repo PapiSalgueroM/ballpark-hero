@@ -84,7 +84,7 @@ export default function DirtyMoneyDesk({ career, onDeal, onClose }: DirtyMoneyDe
           if (!picked) {
             return (
               <button key={way} data-dirty-way={way} onClick={() => { tap.mark(); setPicked(way); }}
-                className="min-h-11 rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/40">
+                className="flex min-h-11 flex-col justify-start rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/40">
                 <span className="mb-1 block text-xs font-bold text-foreground">{`${copy.emoji} ${copy.title}`}</span>
                 {lines}
               </button>
