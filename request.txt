@@ -1,0 +1,6 @@
+#!build
+#!playwright
+compare: git worktree add -f /tmp/mdbase d8aaa4cb > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/mdbase/node_modules && (cd /tmp/mdbase && node_modules/.bin/vite build > /tmp/mdbase-build.log 2>&1; tail -1 /tmp/mdbase-build.log) && MATCHDAY_COMPARE_DIST=/tmp/mdbase/dist node scripts/playCmMatchDay.mjs
+simMatchDetail-head: node scripts/simMatchDetail.mjs
+simMatchDetail-head2: node scripts/simMatchDetail.mjs
+simMatchDetail-base: git worktree add -f /tmp/sdbase d8aaa4cb > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/sdbase/node_modules && cd /tmp/sdbase && node scripts/simMatchDetail.mjs

@@ -1,0 +1,5 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simMatchDetail-head2 exit=0 8s | simMatchDetail: all green
+simMatchDetail-head exit=0 9s | simMatchDetail: all green
+simMatchDetail-base exit=0 7s | simMatchDetail: all green
+compare exit=0 271s | playCmMatchDay compare: green. Against /tmp/mdbase/dist: no screen has more text under 12 px, and every save after the same seeded taps is the base's
