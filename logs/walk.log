@@ -1,0 +1,40 @@
+head 96277353e6fbb1a4bfa015b8621fdb6b20eba1a2 / rc request r1504-v1 for 96277353e6fbb1a4bfa015b8621fdb6b20eb
+ok lines 156 FAIL lines 0
+ok   390-ST delayed: the second option ("Keep it simple") answers differently from the first, so a second press that went through would show
+ok   390-ST delayed: the press says it is working while the chunk is held
+ok   390-ST delayed: the second press started no second wait (1 loading toasts)
+ok   390-ST delayed: the answer lands once the chunk does, and the toast says what landed
+ok   390-ST delayed: one result toast, the first press's, none for the second press (["You take on a defender in every session. Dribbling next season +1, Passing next season -1."])
+ok   390-ST delayed: the first press's season log line, once
+ok   390-ST delayed: the save holds the FIRST press's answer ({"dribbling":1,"passing":-1}), not the second's
+ok   390-ST delayed: the deck card left the batch
+ok   390-ST delayed: no page error
+ok   390-GK delayed: the second option ("Stick to the normal plan") answers differently from the first, so a second press that went through would show
+ok   390-GK delayed: the press says it is working while the chunk is held
+ok   390-GK delayed: the second press started no second wait (1 loading toasts)
+ok   390-GK delayed: the answer lands once the chunk does, and the toast says what landed
+ok   390-GK delayed: one result toast, the first press's, none for the second press (["You stay out for the extra hour every day. Morale -1, Aerial Command next season +1, Positioning next season -1."])
+ok   390-GK delayed: the first press's season log line, once
+ok   390-GK delayed: the save holds the FIRST press's answer ({"physical":1,"defending":-1}), not the second's
+ok   390-GK delayed: the deck card left the batch
+ok   390-GK delayed: no page error
+ok   1280-ST delayed: the second option ("Keep it simple") answers differently from the first, so a second press that went through would show
+ok   1280-ST delayed: the press says it is working while the chunk is held
+ok   1280-ST delayed: the second press started no second wait (1 loading toasts)
+ok   1280-ST delayed: the answer lands once the chunk does, and the toast says what landed
+ok   1280-ST delayed: one result toast, the first press's, none for the second press (["You take on a defender in every session. Dribbling next season +1, Passing next season -1."])
+ok   1280-ST delayed: the first press's season log line, once
+ok   1280-ST delayed: the save holds the FIRST press's answer ({"dribbling":1,"passing":-1}), not the second's
+ok   1280-ST delayed: the deck card left the batch
+ok   1280-ST delayed: no page error
+ok   1280-GK delayed: the second option ("Stick to the normal plan") answers differently from the first, so a second press that went through would show
+ok   1280-GK delayed: the press says it is working while the chunk is held
+ok   1280-GK delayed: the second press started no second wait (1 loading toasts)
+ok   1280-GK delayed: the answer lands once the chunk does, and the toast says what landed
+ok   1280-GK delayed: one result toast, the first press's, none for the second press (["You stay out for the extra hour every day. Morale -1, Aerial Command next season +1, Positioning next season -1."])
+ok   1280-GK delayed: the first press's season log line, once
+ok   1280-GK delayed: the save holds the FIRST press's answer ({"physical":1,"defending":-1}), not the second's
+ok   1280-GK delayed: the deck card left the batch
+ok   1280-GK delayed: no page error
+ok   1280 help: How to play carries the summer cards line
+playSoccerDeck: green, every case at 390 and 1280.
