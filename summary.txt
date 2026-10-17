@@ -1,0 +1,2 @@
+oracle-head-early exit=0 17s | nightOracle1502: GREEN, 27319 checks, 0 failures
+oracle-mdearly-early exit=1 17s | nightOracle1502: RED, 156 failures of 27319 checks

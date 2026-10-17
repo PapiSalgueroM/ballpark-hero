@@ -1,0 +1,32 @@
+mut1502: mdearly APPLIED to /tmp/o2-mdearly/src/lib/clubManager.ts
+nightOracle1502: 13 watchers (Chelsea now, Hoffenheim now, Everton now, América now, Proof Town Athletic now, Wigan Athletic era2005, Wolves era2010, West Ham era2015, Sheffield United era2020, Villarreal era2005, Werder Bremen era2010, Sevilla era2015, Marseille era2020), seeds 1,2
+  FAIL Chelsea (now) seed 1 week 3: MD1 (uclGroup, its entry 3) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 1 week 7: MD2 (uclGroup, its entry 7) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 1 week 12: MD3 (uclGroup, its entry 12) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 1 week 15: MD4 (uclGroup, its entry 15) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 1 week 18: MD5 (uclGroup, its entry 18) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 1 week 23: MD6 (uclGroup, its entry 23) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 2 week 3: MD1 (uclGroup, its entry 3) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 2 week 7: MD2 (uclGroup, its entry 7) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 2 week 12: MD3 (uclGroup, its entry 12) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 2 week 15: MD4 (uclGroup, its entry 15) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 2 week 18: MD5 (uclGroup, its entry 18) counts as played EARLY, the calendar has not played it
+  FAIL Chelsea (now) seed 2 week 23: MD6 (uclGroup, its entry 23) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 1 week 3: MD1 (uclGroup, its entry 3) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 1 week 6: MD2 (uclGroup, its entry 6) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 1 week 11: MD3 (uclGroup, its entry 11) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 1 week 14: MD4 (uclGroup, its entry 14) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 1 week 17: MD5 (uclGroup, its entry 17) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 1 week 20: MD6 (uclGroup, its entry 20) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 2 week 3: MD1 (uclGroup, its entry 3) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 2 week 6: MD2 (uclGroup, its entry 6) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 2 week 11: MD3 (uclGroup, its entry 11) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 2 week 14: MD4 (uclGroup, its entry 14) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 2 week 17: MD5 (uclGroup, its entry 17) counts as played EARLY, the calendar has not played it
+  FAIL Hoffenheim (now) seed 2 week 20: MD6 (uclGroup, its entry 20) counts as played EARLY, the calendar has not played it
+  FAIL Everton (now) seed 1 week 3: MD1 (uclGroup, its entry 3) counts as played EARLY, the calendar has not played it
+  checked l36 uclGroup: 2562
+  checked l36 date: 4697
+  checked g8 uclGroup: 4038
+  checked g8 uclKo: 4711
+nightOracle1502: RED, 156 failures of 27319 checks
