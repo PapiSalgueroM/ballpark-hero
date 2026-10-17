@@ -1,0 +1,45 @@
+fixtures: Brighton 57367 chars, Everton 56199 chars, Hot Seat survivor Arsenal (survived, 9 actions)
+== 320x640
+5) DAMAGED saves (320x640)
+   truncated: slots, then cleared (damaged line shown), 0 backup(s) holding the bytes; save unreadable; NaN on screen: false; errors 0
+  FAIL [case 5]: truncated: after Clear no backup holds the original bytes
+   budget-text: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   budget-junk: hub; save squad 27, budget 0; NaN on screen: false; errors 0
+   budget-negative: hub; save squad 27, budget -250; NaN on screen: false; errors 0
+   week-past-end: slots, no hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   squad-five: hub; save squad 16, budget 73; NaN on screen: false; errors 0
+   xi-missing: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   inbox-spam: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   unknown-club: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   board-zero: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   fitness-nan: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+== 390x844
+5) DAMAGED saves (390x844)
+   truncated: slots, then cleared (damaged line shown), 0 backup(s) holding the bytes; save unreadable; NaN on screen: false; errors 0
+  FAIL [case 5]: truncated: after Clear no backup holds the original bytes
+   budget-text: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   budget-junk: hub; save squad 27, budget 0; NaN on screen: false; errors 0
+   budget-negative: hub; save squad 27, budget -250; NaN on screen: false; errors 0
+   week-past-end: slots, no hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   squad-five: hub; save squad 16, budget 73; NaN on screen: false; errors 0
+   xi-missing: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   inbox-spam: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   unknown-club: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   board-zero: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   fitness-nan: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+== 1280x900
+5) DAMAGED saves (1280x900)
+   truncated: slots, then cleared (damaged line shown), 0 backup(s) holding the bytes; save unreadable; NaN on screen: false; errors 0
+  FAIL [case 5]: truncated: after Clear no backup holds the original bytes
+   budget-text: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   budget-junk: hub; save squad 27, budget 0; NaN on screen: false; errors 0
+   budget-negative: hub; save squad 27, budget -250; NaN on screen: false; errors 0
+   week-past-end: slots, no hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   squad-five: hub; save squad 16, budget 73; NaN on screen: false; errors 0
+   xi-missing: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   inbox-spam: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   unknown-club: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   board-zero: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   fitness-nan: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+cases red: 5; pictures in /home/runner/work/_temp/t-ctl-tt-nokeep/out
+CONTROL FIRED: TWO_TABS_CONTROL=nokeep dropped 6 writes and turned case(s) 5 red

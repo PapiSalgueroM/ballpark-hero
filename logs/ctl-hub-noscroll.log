@@ -1,0 +1,11 @@
+A. Landing: the first frame of the hub after a new job
+  FAIL  A  liverpool-take-390: hub header top -1796 px at scrollY 1909 on the first hub frame (screen 844 px)
+  FAIL  A  liverpool-skip-390: hub header top -1847 px at scrollY 1960 on the first hub frame (screen 844 px)
+  FAIL  A  celta-skip-320: hub header top -2187 px at scrollY 2300 on the first hub frame (screen 640 px)
+  FAIL  A  aberdeen-take-1280: hub header top -1309 px at scrollY 1434 on the first hub frame (screen 900 px)
+  FAIL  A  aberdeen-skip-1280: hub header top -1309 px at scrollY 1434 on the first hub frame (screen 900 px)
+  FAIL  A  everton2005-newyear-390: hub header top -1879 px at scrollY 1992 on the first hub frame (screen 844 px)
+  FAIL  A  liverpool-autumn-320: hub header top -2300 px at scrollY 2413 on the first hub frame (screen 640 px)
+A. Landing: a new season pressed from the bottom of the season review
+  FAIL  A  liverpool-season2-390: from scrollY 2613 at the review, hub header top -902 px on the first frame of season 2 (seed 21, 6 presses to the review)
+playCmHubLanding: CONTROL noscroll FIRED, 8 A check(s) went red, first: liverpool-take-390: hub header top -1796 px at scrollY 1909 on the first hub frame (screen 844 px) (A 0 pass 8 fail)
