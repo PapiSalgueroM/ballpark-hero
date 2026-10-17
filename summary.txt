@@ -1,0 +1,5 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 71444b779 Release BI triage: playClubManagerDecisionDepth boots its prepared save with the engine's own role repair applied
+playDepth exit=0 63s | []
+fx-head exit=0 0s | [{"card":"injurySupport","club":"Arsenal","run":0,"seed":979,"step":59,"season":2,"week":6}]
+fx-402fa456 exit=0 82s | [{"card":"injurySupport","club":"Arsenal","run":0,"seed":979,"step":76,"season":2,"week":24}]
