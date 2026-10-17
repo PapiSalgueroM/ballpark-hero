@@ -692,17 +692,18 @@ const rollOn = (m, s, seed, club) => withStream(seed, () => m.cm.startNextSeason
 /** A mid season move through joinClubNow (clubManagerCalendar.ts): an approach the manager has said yes to,
     on a stream of its own, so both modules take the same draws and only the new job's dials can differ. */
 const accepted = (s, to) => ({ ...s, jobHunt: { open: { club: to, league: 'Premier League', tier: 2, season: s.season, week: s.week, matchesLeft: 0, roll: 0, status: 'accepted', decidedWeek: s.week }, cooldowns: [], sentSeason: s.season, sent: 1, summerMove: null } });
-const joinOn = (m, s, seed, to) => withStream(seed, () => m.cal.joinClubNow(accepted(s, to)));
-/** Six entries into a season under the steady driver's quick sims, on the Normal module m. */
-function sixIn(m, club, seed) {
-  return withStream(seed, () => {
-    let s = m.cm.startCareer(club);
-    for (let g = 0; g < 6; g += 1) s = m.cm.playNextEntry(s, { skipHalftime: true }).state;
-    return s;
-  });
-}
 /** Where a mid season move goes: a Premier League club in the middle of the table, never the manager's own. */
 const moveTarget = (m, from) => m.cm.playableClubs('premier').find(c => c.name !== from && c.expectation > 8 && c.expectation < 14)?.name;
+/** A whole mid season move on module m and one stream: six entries in at club, then joinClubNow on the
+    level given (the key goes on just before the move, so the six entries are Normal's on every module). */
+const joinAfterSix = (m, club, seed, level) => withStream(seed, () => {
+  let s = m.cm.startCareer(club);
+  for (let g = 0; g < 6; g += 1) s = m.cm.playNextEntry(s, { skipHalftime: true }).state;
+  const to = moveTarget(m, club);
+  if (s.sacked || !to) return null;
+  const j = m.cal.joinClubNow(accepted(level === 'normal' ? s : keyed(s, level), to));
+  return j && j.clubName === to ? j : null;
+});
 function section3money() {
   const seeds = num('SEEDS3', 4);
   const clubs = fleetClubs().filter(c => c.tier !== 'big');
@@ -713,28 +714,28 @@ function section3money() {
     if (s) ends.push({ club: c.name, s, seed: 13000 + seed * 7 + clubs.indexOf(c) });
   }
   console.log(`  ${ends.length} season ends rolled (the steady driver at the mid and small clubs)`);
-  /* Mid season moves through joinClubNow: six entries in at every club of the fleet, then an accepted approach. */
-  const mids = [];
-  for (const [i, c] of fleetClubs().entries()) {
-    const s = sixIn(mn, c.name, 14000 + i);
-    const to = moveTarget(mn, c.name);
-    if (!s.sacked && to) mids.push({ club: c.name, s, to, seed: 15000 + i });
-  }
-  console.log(`  ${mids.length} mid season states ready for a joinClubNow move`);
-  /* M1 and M2 on joinClubNow: the new job's money is Normal's times the cheque and its ceiling Normal's times
-     the room (founders' room aside), from the same draws. lever is the dial under test, read is the number. */
+  /* M1 and M2 on joinClubNow: six entries in at every club of the fleet, then an accepted approach. The new
+     job's money is Normal's times the cheque and its ceiling Normal's times the room (founders' room aside).
+     Each move is played whole on a module of its own, Normal first and then Hard with that one lever on, from
+     the same stream: joinClubNow's run in reads the module's world, so a state carried from one module to
+     another moves the money by itself (measured: 78.18 against 78.06 with no dial at all). lever is the dial
+     under test, read is the number. */
   const joinCheck = (label, lever, wantOf, read) => {
-    const { m, dial } = leverModule([lever]);
-    let n = 0, bad = 0;
-    for (const e of mids) {
-      const a = joinOn(mn, e.s, e.seed, e.to), b = joinOn(m, keyed(e.s, 'hard'), e.seed, e.to);
-      if (!a || !b || a.clubName !== e.to || b.clubName !== e.to) { fail(`${label} joinClubNow ${e.club} to ${e.to}: the move did not happen`); continue; }
+    let n = 0, bad = 0, dialValue = null;
+    for (const [i, c] of fleetClubs().entries()) {
+      const seed = 14000 + i;
+      const a = joinAfterSix(fresh(HEAD), c.name, seed, 'normal');
+      const { m, dial } = leverModule([lever]);
+      dialValue = dial[lever];
+      const b = joinAfterSix(m, c.name, seed, 'hard');
+      if (!a || !b || a.clubName !== b.clubName) { fail(`${label} joinClubNow ${c.name}: Normal moved to ${a?.clubName ?? 'nowhere'}, Hard to ${b?.clubName ?? 'nowhere'}`); continue; }
       n += 1;
       const want = wantOf(a, dial);
-      if (!close(read(b), want, 1e-9)) { bad += 1; if (bad <= 3) fail(`${label} joinClubNow ${e.club} to ${e.to}: Normal ${read(a)}, Hard ${read(b)}, the dial says ${want}`); }
+      if (!close(read(b), want, 1e-9)) { bad += 1; if (bad <= 3) fail(`${label} joinClubNow ${c.name} to ${a.clubName}: Normal ${read(a)}, Hard ${read(b)}, the dial says ${want}`); }
     }
+    if (bad > 3) fail(`${label} joinClubNow: ${bad} moves in all off the dial`);
     if (n < 6) fail(`${label} joinClubNow: only ${n} mid season moves read, the floor is 6`);
-    else if (!bad) ok(`${label} joinClubNow: ${n} mid season moves start on Normal's ${label === 'M1' ? 'money' : 'ceiling'} times ${dial[lever]}`);
+    else if (!bad) ok(`${label} joinClubNow: ${n} mid season moves start on Normal's ${label === 'M1' ? 'money' : 'ceiling'} times ${dialValue}`);
   };
   /* B2: a stay's opening. At or above Safe it is Normal's; under Safe it is Normal's minus the cut. */
   {
