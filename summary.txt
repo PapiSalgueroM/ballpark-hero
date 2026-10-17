@@ -1,0 +1,13 @@
+headsha exit=0 0s | a6b762955 Round BII: record the base of Round 1329's inverse after PR289 and PR297 (9e93b382) in this branch's history, tree unchanged
+simSoccerDeckFairness exit=0 67s | simSoccerDeckFairness: all sections green
+simSoccerWorldTruth-offset1 exit=0 76s | simSoccerWorldTruth: OK, every section green
+simSoccerWorldTruth exit=0 77s | simSoccerWorldTruth: OK, every section green
+simCareerAwardsNight exit=0 78s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simCareerProgramme exit=1 3s | Node.js v24.21.0
+simCareerSocialBrands exit=0 36s | ALL SOCIAL AND BRAND CHECKS PASSED
+simCareerTrophyRuns exit=1 2s | Node.js v24.21.0
+simPhone exit=0 3s | ALL PHONE CHECKS PASSED
+simPhonePanelFocus exit=0 4s | simPhonePanelFocus: navigation changes no career bytes, funds or saved records; owned source copies are cleaned.
+simHarnessAnchors exit=0 51s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-fairness-16 exit=0 860s | simSoccerDeckFairness: 16 of 16 Round 1327 controls fired
+ctl-worldtruth-16 exit=0 936s | simSoccerWorldTruth: 16 of 16 Round 1329 controls fired on their own sections
