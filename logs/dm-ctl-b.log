@@ -1,0 +1,6 @@
+deck: last: CONTROL deck FIRED (red sections 5)
+noop: last: CONTROL noop FIRED (red sections 4)
+nodesk: last: CONTROL nodesk FIRED (red sections 6)
+sentence: last: CONTROL sentence FIRED (red sections 6)
+anyphase: last: CONTROL anyphase FIRED (red sections 6)
+controls (each must be 1): deck=1 noop=1 nodesk=1 sentence=1 anyphase=1

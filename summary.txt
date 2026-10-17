@@ -1,0 +1,6 @@
+vitest exit=0 20s |    Duration  19.41s (transform 5.16s, setup 561ms, collect 13.08s, tests 32.04s, environment 3.67s, prepare 1.08s)
+dirty exit=0 99s | simUsDirtyMoney: all sections green
+tsc exit=0 107s | 
+anchors exit=0 65s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+dm-ctl-b exit=0 161s | controls (each must be 1): deck=1 noop=1 nodesk=1 sentence=1 anyphase=1
+dm-ctl-a exit=0 407s | controls (each must be 1): words=1 mathrandom=1 flat=1 farm=1 cap=1 cool8=1

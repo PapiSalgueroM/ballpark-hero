@@ -1,0 +1,7 @@
+words: last: CONTROL words FIRED (red sections 1, 4)
+mathrandom: last: CONTROL mathrandom FIRED (red sections 2, 4)
+flat: last: CONTROL flat FIRED (red sections 7)
+farm: last: CONTROL farm FIRED (red sections 7)
+cap: last: CONTROL cap FIRED (red sections 7)
+cool8: last: CONTROL cool8 FIRED (red sections 9)
+controls (each must be 1): words=1 mathrandom=1 flat=1 farm=1 cap=1 cool8=1
