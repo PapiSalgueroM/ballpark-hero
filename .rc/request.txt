@@ -1,0 +1,3 @@
+#!serial
+headsha: git log --oneline -3
+wf284: node .rc/x/wfrun.mjs .github/workflows/manager-own-transfer-log.yml
