@@ -1,0 +1,4 @@
+fleet-pn exit=0 183s | proofWorldUclFleet: GREEN, 30 journeys and 3227 steps byte equal to 20fa77a6 (a watching state without worldComps), draws equal
+fleet-pc exit=0 253s | proofWorldUclFleet: GREEN, 30 journeys and 3252 steps byte equal to 20fa77a6 (a watching state without worldComps), draws equal
+fleet-wc exit=0 621s | proofWorldUclFleet: GREEN, 65 journeys and 8883 steps byte equal to 20fa77a6 (a watching state without worldComps), draws equal
+fleet-wn exit=0 457s | proofWorldUclFleet: GREEN, 65 journeys and 8916 steps byte equal to 20fa77a6 (a watching state without worldComps), draws equal
