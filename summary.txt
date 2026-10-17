@@ -1,0 +1,1 @@
+vitest-world exit=0 2s |    Duration  1.79s (transform 820ms, setup 29ms, collect 993ms, tests 346ms, environment 173ms, prepare 86ms)
