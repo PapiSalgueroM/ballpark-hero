@@ -1,0 +1,9 @@
+simCmShootoutOrder exit=0 37s | simCmShootoutOrder: all sections passed
+simManagerWorldContinuity exit=1 40s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:501:24
+simCmQuickSubs exit=0 2s | simCmQuickSubs normal: real coaching outcomes and independent unmanaged baseline passed.
+simCmSubs exit=0 69s | simCmSubs GREEN: 59 of 59 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press)
+simManagerEraWorldOracles exit=0 1s | PASS simManagerEraWorldOracles.mjs: actual joined-source baseline, 4 effective copied observation controls and complete undo/source holds
+simClubManagerEraUcl exit=0 37s | simClubManagerEraUcl: PASS. The era Champions League plays its round of 16, the group tables stay up, Spain and Italy split level points on head to head, and an era night
+simClubManagerEraMidSeason exit=0 8s | simClubManagerEraMidSeason: PASS. His 2005 save plays every league, the picker lists one La Liga, and the Cups tab shows the cup it names.
+simCmVar exit=0 176s | simCmVar normal: actual review outcomes and full prior baseline passed.
+simEras exit=0 1121s | ALL ERA AND AGEING CHECKS PASSED
