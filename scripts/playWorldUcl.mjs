@@ -24,7 +24,12 @@
  *       32 and starts in it, the engine's own answer): the screen names the club and the real club whose place it
  *       takes, word for word, and the field line says there is one change; the real club left over is read off the
  *       engine's groups and the era's verified 32, never off the screen's code (closing check, finding 1)
- *   (e) on every view of (a), (c), (k), (o) and the new views of (d): scrollY and the document height the same before a
+ *   (r) the (d) save played on until both semi-finals are settled: Matchdays paged back from the last night played
+ *       through the semi-final and quarter-final nights, each first leg night holding every tie home first with leg
+ *       one's score and each second leg night every tie at the other ground with leg two turned, as the bracket
+ *       holds them (both legs stored home first, UclTie in clubManager.ts), and one club's run holding its second
+ *       leg away (closing check, finding 2: the participant's second leg night was guarded by the unit file only)
+ *   (e) on every view of (a), (c), (k), (o), (r) and the new views of (d): scrollY and the document height the same before a
  *       tile and after its back button, every new control at least 44 px tall, no new text under 12 px, no
  *       sideways scroll, nothing cut by its box or off the screen, no one word name broken in the middle of the word,
  *       no two controls on top of each other, and the season review's line fully drawn; under
@@ -41,8 +46,10 @@
  *   r16help the ? for the club in it in today's world tells the eras' rule (d) red: a round of 16 the game never plays
  *   instandin the view forgets the stand in of the club in it              (o) red: the club from outside not named
  *   inswap  the screen's line for it names the two clubs the wrong way round (o) red: the line not word for word
+ *   legturn the club in it's second leg night keeps leg two unturned       (r) red: a night not as the bracket holds it
+ *           (the run reviewer's mutation M7, which the walk let through before case (r))
  * (notile and ahead walk (a) at 390; oldcols walks (c) at 320; legflip (k), swapfinal (b) and r16help (d) at 390;
- *  instandin and inswap (o) at 390.
+ *  instandin and inswap (o) and legturn (r) at 390.
  *  Controls patch the checkout one at a time, so a request runs them under #!serial.)
  * Runs only on a runner (CI set): it builds and serves. Request lines, with #!serve and #!playwright:
  *   walk: node scripts/playWorldUcl.mjs
@@ -61,7 +68,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PLAY_WORLD_CONTROL || '';
 /* PLAY_WORLD_CASES (for example "c") and PLAY_WORLD_SIZES (for example "390") narrow a run while a finding is chased;
    a narrowed run is never the round's proof, and says so on its last line. */
-const ALL_CASES = 'abcdko';
+const ALL_CASES = 'abcdkor';
 const CASES = process.env.PLAY_WORLD_CASES || ALL_CASES;
 const SIZES = [[320, 640], [390, 844], [1280, 900]].filter(([w]) => !process.env.PLAY_WORLD_SIZES || process.env.PLAY_WORLD_SIZES.split(',').includes(String(w)));
 const NARROW = CASES !== ALL_CASES || SIZES.length !== 3;
@@ -104,6 +111,10 @@ const CONTROLS = {
     from: '`${view.standIn.club} are in it in this save, in the place of ${view.standIn.for}, one of the real 32 of ${eraSeason}.`',
     to: '`${view.standIn.for} are in it in this save, in the place of ${view.standIn.club}, one of the real 32 of ${eraSeason}.`',
     finding: 'the club in it from outside the real 32', run: 'o' },
+  legturn: { file: 'src/lib/clubManagerWorldView.ts',
+    from: 'homeGoals: t.leg2 ? t.leg2.awayGoals : null, awayGoals: t.leg2 ? t.leg2.homeGoals : null',
+    to: 'homeGoals: t.leg2 ? t.leg2.homeGoals : null, awayGoals: t.leg2 ? t.leg2.awayGoals : null',
+    finding: 'knockout night not as the bracket holds it', run: 'r' },
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`);
 
@@ -215,6 +226,32 @@ const saves = {};
       'Every season of this save draws from the same 32 clubs, the real 2015-16 field, whatever the leagues do, with the one change named above.',
     ] };
     console.log(`(o) ${club} 2015, in it from outside the real 32, group matchday ${o.s.uclGroup.matchday}: in the place of ${left[0]}`);
+  }
+  /* (r) The (d) save played on until both semi-finals are settled. Each knockout night's rows are written here from
+     the bracket: leg one home first as stored, leg two at the other ground with its stored score turned (UclTie keeps
+     both legs in the tie's own orientation, home first). A second leg that reads the same either way cannot tell a
+     turned score from an unturned one, so at least one must differ or the case cannot run. */
+  {
+    const sfDone = s => { const sf = (s.uclBracket ?? []).filter(t => t.round === 'SF'); return sf.length === 2 && sf.every(t => t.winner); };
+    const r = await play('Real Madrid', undefined, 0x1503d, (M, s) => sfDone(s));
+    if (!r.s.uclGroup || !sfDone(r.s)) cannot('the Real Madrid save did not reach both semi-finals settled');
+    const NAME = { QF: 'Quarter-final', SF: 'Semi-final' };
+    const nights = {};
+    let differ = 0;
+    for (const round of ['QF', 'SF']) {
+      const ties = r.s.uclBracket.filter(t => t.round === round);
+      if (!ties.length || ties.some(t => t.legs !== 2 || !t.leg1 || !t.leg2)) cannot(`a ${round} tie of the Real Madrid save is not two legs played`);
+      nights[`${NAME[round]}, first leg`] = ties.map(t => `${t.home}|${t.leg1.homeGoals}-${t.leg1.awayGoals}|${t.away}`);
+      nights[`${NAME[round]}, second leg`] = ties.map(t => `${t.away}|${t.leg2.awayGoals}-${t.leg2.homeGoals}|${t.home}`);
+      differ += ties.filter(t => t.leg2.homeGoals !== t.leg2.awayGoals).length;
+    }
+    if (!differ) cannot('no second leg of the Real Madrid save reads differently turned, so the case could not tell');
+    const t0 = r.s.uclBracket.find(t => (t.round === 'QF' || t.round === 'SF') && t.leg2.homeGoals !== t.leg2.awayGoals);
+    saves.r = {
+      items: saved(r.M, r.s), nights, opensOn: 'Semi-final, second leg',
+      runClub: t0.home, runLabel: `${NAME[t0.round]}, second leg · away`, runRow: `${t0.away} ${t0.leg2.awayGoals}-${t0.leg2.homeGoals} ${t0.home}`,
+    };
+    console.log(`(r) Real Madrid, week ${r.s.week} of ${r.s.calendar.length} after ${r.entries} entries: both semi-finals settled, ${differ} of the six second legs read differently turned, run of ${t0.home}`);
   }
 }
 
@@ -574,6 +611,47 @@ async function caseO(browser, size, tag) {
   } finally { await ctx.close(); }
 }
 
+/** (r) The club in it, its knockout nights against the bracket, and one club's second leg in its run. */
+async function caseR(browser, size, tag) {
+  const where = `(r) Real Madrid knockouts ${tag}`;
+  const { ctx, page, errors } = await open(browser, saves.r.items, size);
+  const squash = s => (s || '').replace(/\s+/g, ' ').trim();
+  try {
+    if (!(await toCups(page, where))) return;
+    await roundTrip(page, `${where} screen`, page.locator('[data-cm-world-tile="ucl"]'), async () => {
+      if (!(await count(page, '[data-cm-world-mode="in"]'))) finding(where, 'the screen does not say the club is in it');
+      await roundTrip(page, `${where} matchdays`, page.locator('[data-cm-world-tile="matchdays"]'), async () => {
+        const want = Object.keys(saves.r.nights);
+        const seen = [];
+        for (let i = 0; i <= 8 && seen.length < want.length; i += 1) {
+          if (i && !(await press(page, page.getByRole('button', { name: 'Night before' })))) break;
+          const head = squash(await page.locator('[data-cm-world-night]').first().innerText().catch(() => ''));
+          if (i === 0 && !head.includes(saves.r.opensOn)) finding(where, `Matchdays opens on "${head.slice(0, 60)}", not the last night played (${saves.r.opensOn})`);
+          const label = want.find(l => head.includes(l));
+          if (!label || seen.includes(label)) continue;
+          seen.push(label);
+          const rows = await page.locator('[data-cm-world-fixtures] > div').evaluateAll(els => els.map(e => [...e.children].map(c => c.innerText.trim()).join('|')));
+          const exp = saves.r.nights[label];
+          const miss = exp.filter(x => !rows.includes(x));
+          if (rows.length !== exp.length || miss.length) finding(where, `knockout night not as the bracket holds it: ${label} reads "${rows.slice(0, 2).join(' / ')}", ${miss.length} of the bracket's ${exp.length} rows missing, first "${miss[0] ?? ''}"`);
+          await shot(page, `r-${label.replace(/[^a-z]+/gi, '-').toLowerCase()}-${tag}`);
+        }
+        if (seen.length !== want.length) finding(where, `paging back from the last night played reached ${seen.length} of the ${want.length} knockout nights (${seen.join(', ')})`);
+        console.log(`   ${where}: ${seen.length} of ${want.length} knockout nights read against the bracket`);
+        /* Paging ends on the quarter-final first legs, where every club of the last eight has a fixture. */
+        await roundTrip(page, `${where} run`, page.locator(`[data-cm-world-fixtures] [data-cm-world-club="${saves.r.runClub}"]`), async () => {
+          const rows = await page.locator(`[data-cm-world-run="${saves.r.runClub}"] [data-cm-world-run-row]`).evaluateAll(els => els.map(e => (e.innerText || '').replace(/\s+/g, ' ').trim()));
+          if (!rows.some(x => x.includes(saves.r.runLabel) && x.includes(saves.r.runRow))) {
+            finding(where, `knockout night not as the bracket holds it: ${saves.r.runClub}'s run has no row "${saves.r.runLabel}" reading "${saves.r.runRow}"`);
+          }
+          await shot(page, `r-run-${tag}`);
+        });
+      });
+    });
+    if (errors.length) finding(where, `page errors: ${errors.join(' | ')}`);
+  } finally { await ctx.close(); }
+}
+
 /** Reduced motion: with the screen and a view open, nothing inside the panel is animating. */
 async function caseMotion(browser) {
   const where = '(e) reduced motion 390';
@@ -594,7 +672,7 @@ async function caseMotion(browser) {
 }
 
 /* ---------- run ---------- */
-const RUN = { a: caseA, b: caseB, c: caseC, d: caseD, k: caseK, o: caseO };
+const RUN = { a: caseA, b: caseB, c: caseC, d: caseD, k: caseK, o: caseO, r: caseR };
 const browser = await chromium.launch();
 try {
   if (CONTROL) {
@@ -634,4 +712,4 @@ if (findings.length) {
   console.log(`playWorldUcl: FAIL, ${findings.length} findings over ${measured} measured views; pictures in ${SHOTS}`);
   process.exit(1);
 }
-console.log(`playWorldUcl: green. Six saves at three sizes, ${measured} views measured, every check held; pictures in ${SHOTS}`);
+console.log(`playWorldUcl: green. Seven saves at three sizes, ${measured} views measured, every check held; pictures in ${SHOTS}`);
