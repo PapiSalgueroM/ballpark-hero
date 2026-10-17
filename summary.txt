@@ -1,0 +1,5 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 110s | playSoccerDeck: green, every case at 390 and 1280.
+weight exit=0 85s | weight1504: done
+flagship exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+fences exit=0 347s | fences: red on the head: simWritesAreSent simSchemaNames simLeaderboardCaps; the same first failing line on the base: 3, different: 0
