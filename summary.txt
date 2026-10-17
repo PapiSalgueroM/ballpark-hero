@@ -1,0 +1,6 @@
+proof-watch-nocoach exit=0 314s | proofWorldUclFleet: GREEN, 45 journeys and 6169 steps byte equal to d8aaa4cb, draws equal
+simDailyDeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+proof-part exit=0 342s | proofWorldUclFleet: GREEN, 60 journeys and 6483 steps byte equal to d8aaa4cb, draws equal
+simCmShootoutOrder exit=0 38s | simCmShootoutOrder: all sections passed
+proof-watch-coach exit=0 418s | proofWorldUclFleet: GREEN, 45 journeys and 6141 steps byte equal to d8aaa4cb, draws equal
+simCmUnseededWorld exit=1 160s | simCmUnseededWorld: 112 FAILURE(S)

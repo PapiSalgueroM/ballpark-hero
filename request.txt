@@ -1,0 +1,6 @@
+proof-part: node scripts/proofWorldUclFleet.mjs --base d8aaa4cb --fleet participants --coach both
+proof-watch-nocoach: node scripts/proofWorldUclFleet.mjs --base d8aaa4cb --fleet watchers --coach nocoach
+proof-watch-coach: node scripts/proofWorldUclFleet.mjs --base d8aaa4cb --fleet watchers --coach coach
+simDailyDeals: node scripts/simDailyDeals.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs

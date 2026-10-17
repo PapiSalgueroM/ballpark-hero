@@ -1,0 +1,64 @@
+base d8aaa4cb; fleet (6): Real Madrid (now, participant); Arsenal (now, participant); Arsenal (era2005, participant); Arsenal (era2010, participant); Arsenal (era2015, participant); Manchester City (era2020, participant)
+seeds 1,2,3,4,5; modes both; strip nothing
+ok   Real Madrid (now, participant, nocoach, seed 1, 2 seasons): 111 steps, 5.4 s
+ok   Real Madrid (now, participant, nocoach, seed 2, 2 seasons): 112 steps, 5.8 s
+ok   Real Madrid (now, participant, nocoach, seed 3, 2 seasons): 113 steps, 5.2 s
+ok   Real Madrid (now, participant, nocoach, seed 4, 2 seasons): 109 steps, 5.6 s
+ok   Real Madrid (now, participant, nocoach, seed 5, 2 seasons): 111 steps, 5.8 s
+ok   Real Madrid (now, participant, coach, seed 1, 2 seasons): 116 steps, 8.9 s
+ok   Real Madrid (now, participant, coach, seed 2, 2 seasons): 111 steps, 9.1 s
+ok   Real Madrid (now, participant, coach, seed 3, 2 seasons): 112 steps, 9.1 s
+ok   Real Madrid (now, participant, coach, seed 4, 2 seasons): 111 steps, 8.8 s
+ok   Real Madrid (now, participant, coach, seed 5, 2 seasons): 110 steps, 9.2 s
+ok   Arsenal (now, participant, nocoach, seed 1, 2 seasons): 111 steps, 5.9 s
+ok   Arsenal (now, participant, nocoach, seed 2, 2 seasons): 111 steps, 6.2 s
+ok   Arsenal (now, participant, nocoach, seed 3, 2 seasons): 105 steps, 5.7 s
+ok   Arsenal (now, participant, nocoach, seed 4, 2 seasons): 109 steps, 5.0 s
+ok   Arsenal (now, participant, nocoach, seed 5, 2 seasons): 108 steps, 5.4 s
+ok   Arsenal (now, participant, coach, seed 1, 2 seasons): 110 steps, 8.9 s
+ok   Arsenal (now, participant, coach, seed 2, 2 seasons): 114 steps, 9.4 s
+ok   Arsenal (now, participant, coach, seed 3, 2 seasons): 105 steps, 8.9 s
+ok   Arsenal (now, participant, coach, seed 4, 2 seasons): 103 steps, 7.8 s
+ok   Arsenal (now, participant, coach, seed 5, 2 seasons): 110 steps, 9.4 s
+ok   Arsenal (era2005, participant, nocoach, seed 1, 2 seasons): 111 steps, 4.1 s
+ok   Arsenal (era2005, participant, nocoach, seed 2, 2 seasons): 106 steps, 3.7 s
+ok   Arsenal (era2005, participant, nocoach, seed 3, 2 seasons): 111 steps, 4.1 s
+ok   Arsenal (era2005, participant, nocoach, seed 4, 2 seasons): 107 steps, 3.4 s
+ok   Arsenal (era2005, participant, nocoach, seed 5, 2 seasons): 110 steps, 3.8 s
+ok   Arsenal (era2005, participant, coach, seed 1, 2 seasons): 109 steps, 5.3 s
+ok   Arsenal (era2005, participant, coach, seed 2, 2 seasons): 106 steps, 5.0 s
+ok   Arsenal (era2005, participant, coach, seed 3, 2 seasons): 113 steps, 5.4 s
+ok   Arsenal (era2005, participant, coach, seed 4, 2 seasons): 98 steps, 4.6 s
+ok   Arsenal (era2005, participant, coach, seed 5, 2 seasons): 110 steps, 4.7 s
+ok   Arsenal (era2010, participant, nocoach, seed 1, 2 seasons): 105 steps, 3.7 s
+ok   Arsenal (era2010, participant, nocoach, seed 2, 2 seasons): 109 steps, 4.5 s
+ok   Arsenal (era2010, participant, nocoach, seed 3, 2 seasons): 103 steps, 3.9 s
+ok   Arsenal (era2010, participant, nocoach, seed 4, 2 seasons): 98 steps, 3.4 s
+ok   Arsenal (era2010, participant, nocoach, seed 5, 2 seasons): 107 steps, 3.4 s
+ok   Arsenal (era2010, participant, coach, seed 1, 2 seasons): 106 steps, 5.1 s
+ok   Arsenal (era2010, participant, coach, seed 2, 2 seasons): 110 steps, 5.6 s
+ok   Arsenal (era2010, participant, coach, seed 3, 2 seasons): 108 steps, 5.5 s
+ok   Arsenal (era2010, participant, coach, seed 4, 2 seasons): 106 steps, 5.3 s
+ok   Arsenal (era2010, participant, coach, seed 5, 2 seasons): 106 steps, 5.3 s
+ok   Arsenal (era2015, participant, nocoach, seed 1, 2 seasons): 109 steps, 5.3 s
+ok   Arsenal (era2015, participant, nocoach, seed 2, 2 seasons): 95 steps, 4.6 s
+ok   Arsenal (era2015, participant, nocoach, seed 3, 2 seasons): 105 steps, 3.7 s
+ok   Arsenal (era2015, participant, nocoach, seed 4, 2 seasons): 99 steps, 4.1 s
+ok   Arsenal (era2015, participant, nocoach, seed 5, 2 seasons): 106 steps, 4.5 s
+ok   Arsenal (era2015, participant, coach, seed 1, 2 seasons): 109 steps, 6.0 s
+ok   Arsenal (era2015, participant, coach, seed 2, 2 seasons): 95 steps, 6.0 s
+ok   Arsenal (era2015, participant, coach, seed 3, 2 seasons): 104 steps, 5.6 s
+ok   Arsenal (era2015, participant, coach, seed 4, 2 seasons): 96 steps, 4.1 s
+ok   Arsenal (era2015, participant, coach, seed 5, 2 seasons): 106 steps, 5.9 s
+ok   Manchester City (era2020, participant, nocoach, seed 1, 2 seasons): 111 steps, 5.3 s
+ok   Manchester City (era2020, participant, nocoach, seed 2, 2 seasons): 118 steps, 5.1 s
+ok   Manchester City (era2020, participant, nocoach, seed 3, 2 seasons): 109 steps, 4.7 s
+ok   Manchester City (era2020, participant, nocoach, seed 4, 2 seasons): 110 steps, 5.0 s
+ok   Manchester City (era2020, participant, nocoach, seed 5, 2 seasons): 104 steps, 3.7 s
+ok   Manchester City (era2020, participant, coach, seed 1, 2 seasons): 109 steps, 6.2 s
+ok   Manchester City (era2020, participant, coach, seed 2, 2 seasons): 111 steps, 6.3 s
+ok   Manchester City (era2020, participant, coach, seed 3, 2 seasons): 113 steps, 6.0 s
+ok   Manchester City (era2020, participant, coach, seed 4, 2 seasons): 116 steps, 6.5 s
+ok   Manchester City (era2020, participant, coach, seed 5, 2 seasons): 117 steps, 6.3 s
+journeys 60, steps compared 6483, tree journeys whose save carried worldComps 0, 340 s
+proofWorldUclFleet: GREEN, 60 journeys and 6483 steps byte equal to d8aaa4cb, draws equal
