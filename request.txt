@@ -1,0 +1,3 @@
+#!serial
+headsha: git log --oneline -3
+wf289x: P=$(bash .rc/x/phoneMinus.sh 289) || exit 2; echo "289 base $P"; node .rc/x/wfrun.mjs .github/workflows/career-phone-season-budget.yml --set PHONE_BUDGET_BASE=$P --set PRERENDER_ONLY=/soccer-career,/whats-new
