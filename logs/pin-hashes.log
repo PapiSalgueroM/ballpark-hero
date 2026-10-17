@@ -1,0 +1,5 @@
+src/lib/clubManager.ts: pinned 650b2f188c7c tree b36c5ed4d4f4 c9d57690 650b2f188c7c base 7c6d2dc7df81 | tree=pin false c9d57690=pin true base=pin false
+src/lib/clubManagerSlots.ts: pinned 5c900a3701ea tree 876e27f40c3a c9d57690 876e27f40c3a base 876e27f40c3a | tree=pin false c9d57690=pin false base=pin false
+scripts/simClubManagerSlots.mjs: pinned c7bd98184dee tree c7bd98184dee c9d57690 c7bd98184dee base c7bd98184dee | tree=pin true c9d57690=pin true base=pin true
+scripts/simClubManagerDecisions.mjs: pinned 5b3ee496e6e6 tree 5b3ee496e6e6 c9d57690 5b3ee496e6e6 base 5b3ee496e6e6 | tree=pin true c9d57690=pin true base=pin true
+full tree hash of src/lib/clubManager.ts: b36c5ed4d4f46953166efb9295ccb0e782ea2617c63abf3d72ddc50d4c7ae3d8

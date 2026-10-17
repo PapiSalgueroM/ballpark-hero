@@ -1,0 +1,3 @@
+pin-hashes exit=0 0s | full tree hash of src/lib/clubManager.ts: b36c5ed4d4f46953166efb9295ccb0e782ea2617c63abf3d72ddc50d4c7ae3d8
+pin-head exit=1 7s | Node.js v24.21.0
+pin-revert exit=1 7s | Node.js v24.21.0
