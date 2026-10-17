@@ -1,0 +1,5 @@
+MUTATION m1 APPLIED in src/lib/cmMatchDisplay.ts
+6) The pitch: every dot label is the man's pitch name, his initials or his slot's role, never a number
+   15166 dot labels over 692 pitches: 7555 of mine named (13 in initials), 4685 named opponents, 2926 nameless opponents (1903 of them staged); red: 0 home, 0 away, 0 neutral
+7) A home or neutral match: the card's visible text equals the base's, the board word and the pitch labels masked
+simCmMatchDay: all sections green (916 matches: 461 home, 447 away, 8 neutral)

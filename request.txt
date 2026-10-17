@@ -1,0 +1,12 @@
+#!serial
+m1-unit: node .rc/x/rvrun-mut.mjs m1 && node_modules/.bin/vitest run src/lib/cmMatchDisplay.test.ts --testTimeout=300000 > /tmp/m1u.log 2>&1; s=$?; grep -E "Tests |FAIL|AssertionError|expected" /tmp/m1u.log | head -12; git checkout -- src scripts; exit $s
+m1-sim: node .rc/x/rvrun-mut.mjs m1 && node scripts/simCmMatchDay.mjs > /tmp/m1s.log 2>&1; s=$?; grep -E "FAIL|^ *6\)|labels" /tmp/m1s.log | head -12; tail -1 /tmp/m1s.log; git checkout -- src scripts; exit $s
+m2-sim: node .rc/x/rvrun-mut.mjs m2 && node scripts/simCmMatchDay.mjs > /tmp/m2s.log 2>&1; s=$?; grep -E "FAIL" /tmp/m2s.log | head -8; tail -1 /tmp/m2s.log; git checkout -- src scripts; exit $s
+m2-screen: node .rc/x/rvrun-mut.mjs m2 && node scripts/simMatchScreen.mjs > /tmp/m2m.log 2>&1; s=$?; grep -E "FAIL" /tmp/m2m.log | head -8; tail -1 /tmp/m2m.log; git checkout -- src scripts; exit $s
+m2-centre: node .rc/x/rvrun-mut.mjs m2 && node scripts/simCmMatchCentre.mjs > /tmp/m2c.log 2>&1; s=$?; grep -E "FAIL" /tmp/m2c.log | head -8; tail -1 /tmp/m2c.log; git checkout -- src scripts; exit $s
+m2-unit: node .rc/x/rvrun-mut.mjs m2 && node_modules/.bin/vitest run src/test/managerScorerMarks.test.tsx src/test/cmReportBoardWord.test.tsx --testTimeout=300000 > /tmp/m2u.log 2>&1; s=$?; grep -E "Tests |FAIL" /tmp/m2u.log | head -8; git checkout -- src scripts; exit $s
+m3-sim: node .rc/x/rvrun-mut.mjs m3 && node scripts/simCmMatchDay.mjs > /tmp/m3s.log 2>&1; s=$?; grep -E "FAIL|^live:|^ *4\)" /tmp/m3s.log | head -8; tail -1 /tmp/m3s.log; git checkout -- src scripts; exit $s
+m3-unit: node .rc/x/rvrun-mut.mjs m3 && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/clubManagerVarScreen.test.tsx src/test/pitchOwnGoal.test.tsx src/test/managerHalftimeLineups.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/m3u.log 2>&1; s=$?; grep -E "Tests |FAIL" /tmp/m3u.log | head -8; git checkout -- src scripts; exit $s
+m4-sim: node .rc/x/rvrun-mut.mjs m4 m4b && node scripts/simCmMatchDay.mjs > /tmp/m4s.log 2>&1; s=$?; grep -E "FAIL" /tmp/m4s.log | head -8; tail -1 /tmp/m4s.log; git checkout -- src scripts; exit $s
+m4-unit: node .rc/x/rvrun-mut.mjs m4 m4b && node_modules/.bin/vitest run src/test/managerHalftimeLineups.test.tsx --testTimeout=300000 > /tmp/m4u.log 2>&1; s=$?; grep -E "Tests |FAIL" /tmp/m4u.log | head -8; git checkout -- src scripts; exit $s
+clean: git status --short | head -5; echo "clean check done"

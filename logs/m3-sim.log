@@ -1,0 +1,4 @@
+MUTATION m3 APPLIED in src/components/club-manager/LiveSimScreen.tsx
+live: 173 league matches kicked off live (64 away), 692 live renders
+4) Live and half time: the strip, the score's digits, the interval card, the stats and the line under the pitch home side first
+simCmMatchDay: all sections green (916 matches: 461 home, 447 away, 8 neutral)
