@@ -1,0 +1,6 @@
+headsha exit=0 0s | be3791703 Round BII: record the base of Round 1329's inverse after 285f8f81 (c2d21574) in this branch's history, tree unchanged
+wf286x exit=1 192s | wfrun career-pending-popularity-gates.yml: 8 steps ran, 1 failed: Complete build and all rebuilt-site readers
+wf302x exit=1 228s | wfrun career-pending-money-gates.yml: 13 steps ran, 2 failed: Complete build and all rebuilt-site readers | Unchanged full route weights
+wf288 exit=1 245s | wfrun career-life-stories.yml: 10 steps ran, 2 failed: Fixed phase served phone Life and unchanged full download budgets | Fixed phase all fifteen rebuilt-site readers
+wf289x exit=1 279s | wfrun career-phone-season-budget.yml: 10 steps ran, 2 failed: Complete build and all rebuilt-site readers | Unchanged full download budgets
+wf297x exit=1 281s | wfrun career-phone-state-isolation.yml: 11 steps ran, 2 failed: Complete build and all rebuilt-site readers | Unchanged full download budgets
