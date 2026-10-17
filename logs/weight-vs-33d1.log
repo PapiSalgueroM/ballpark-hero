@@ -1,0 +1,10 @@
+  /                    base 243.2K (249052 B)  head 243.2K (249078 B)  +26 B  budget 244K
+  /club-manager        base 608.3K (622861 B)  head 608.3K (622922 B)  +61 B  budget 606K
+  /soccer-career       base 832.9K (852920 B)  head 833.0K (853018 B)  +98 B  budget 834K
+  /nfl-my-career       base 487.8K (499470 B)  head 487.8K (499549 B)  +79 B  budget 488K
+  /manager-hot-seat    base 626.1K (641164 B)  head 626.2K (641228 B)  +64 B  budget 624K
+  /deadline-day        base 636.1K (651324 B)  head 636.1K (651392 B)  +68 B  budget 634K
+  in all, the deck's first load on /soccer-career fetches 0 chunks, 0.0K gzipped, none of them in the route's first download: yes
+  src/lib/season/soccerMoments.ts: soccerMoments-Kz5CiWKd.js
+  in all, the deck's first load on /soccer-career fetches 0 chunks, 0.0K gzipped, none of them in the route's first download: yes
+  CSS, every file gzipped: base 56553 B, head 56553 B
