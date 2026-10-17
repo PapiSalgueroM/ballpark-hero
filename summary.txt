@@ -1,0 +1,13 @@
+guideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+vitest exit=0 10s |    Duration  9.43s (transform 3.52s, setup 343ms, collect 10.28s, tests 7.63s, environment 2.13s, prepare 811ms)
+tsc exit=0 101s | 
+simAcademy exit=0 506s | ALL ACADEMY CHECKS PASSED
+simEras exit=0 1487s | ALL ERA AND AGEING CHECKS PASSED
+simWilderness exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+simALeague exit=0 12s | simClubManagerALeague: all checks passed
+simBudget exit=0 205s | simClubManagerBudget: PASS
+simMeters exit=0 42s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simScore exit=0 125s | ALL SEASON SCORE CHECKS PASSED
+simRoles exit=0 1846s | ALL ROLE CHECKS PASSED
+simBoardVerdict exit=0 725s | simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 725 s)
+simPress exit=0 2550s | ALL PRESS AND TEAM TALK CHECKS PASSED

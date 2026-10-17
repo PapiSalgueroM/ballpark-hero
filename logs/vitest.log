@@ -1,0 +1,17 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubManagerOfferConfirm.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 1094[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1335: an offer asks first[2m > [22ma tap on an offer moves nothing and opens the question in the same panel [33m 434[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldView.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 2215[2mms[22m[39m
+ [32m✓[39m src/test/cmLeagueLeadersCard.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 4323[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mnames the league's most assists and most clean sheets from the book, and an older summary prints as it did [33m 1191[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mwithholds the new awards in a league whose data is too thin, and says why [33m 582[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22ma league between the floor and 95 is settled by the book and still carries the honest line, on the card and on the review [33m 944[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22ma season on a late book says the book covered only part of it, not that its data was thin [33m 739[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m31 passed[39m[22m[90m (31)[39m
+[2m   Start at [22m 10:10:48
+[2m   Duration [22m 9.43s[2m (transform 3.52s, setup 343ms, collect 10.28s, tests 7.63s, environment 2.13s, prepare 811ms)[22m
+
