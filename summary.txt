@@ -1,0 +1,12 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 185s | playWorldUcl: green. Seven saves at three sizes, 63 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
+walk-instandin exit=1 28s | playWorldUcl control instandin: FIRED, "the club in it from outside the real 32" reported 2 time(s) (2 findings in all)
+walk-inswap exit=1 29s | playWorldUcl control inswap: FIRED, "the club in it from outside the real 32" reported 1 time(s) (1 findings in all)
+walk-legturn exit=1 34s | playWorldUcl control legturn: FIRED, "knockout night not as the bracket holds it" reported 3 time(s) (3 findings in all)
+mutM7 exit=1 211s | mutrun M7: CAUGHT (participant: second leg night scores not flipped to the leg home side; vitest exit 1, build exit 0, walk exit 1)
+walk-notile exit=1 25s | playWorldUcl control notile: FIRED, "no Champions League tile" reported 1 time(s) (1 findings in all)
+walk-ahead exit=1 39s | playWorldUcl control ahead: FIRED, "matchday 5 shows" reported 1 time(s) (3 findings in all)
+walk-oldcols exit=1 32s | playWorldUcl control oldcols: FIRED, "breaks in the middle of the word" reported 1 time(s) (1 findings in all)
+walk-legflip exit=1 36s | playWorldUcl control legflip: FIRED, "card not as the engine played it" reported 11 time(s) (11 findings in all)
+walk-swapfinal exit=1 26s | playWorldUcl control swapfinal: FIRED, "the season review does not name the final" reported 1 time(s) (1 findings in all)
+walk-r16help exit=1 33s | playWorldUcl control r16help: FIRED, "the ? for the club in it" reported 1 time(s) (1 findings in all)

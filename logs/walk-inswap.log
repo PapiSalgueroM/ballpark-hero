@@ -1,0 +1,19 @@
+(a) Chelsea, week 17 of 54 after 13 entries: nights done 4, matchday 4 18 scores, matchday 5 18 fixtures, table 36
+(b) Chelsea season over after 41 entries: the engine's final, Manchester City beat PSG
+(k) Chelsea, week 40 after 31 entries: 12 nights done, 8 play-offs settled, 8 round of 16 ties, Matchdays opens on Round of 16, second leg
+(c) Villarreal 2005, week 55 of 56: 8 groups, the final won by Chelsea, stand in Valencia
+(d) Real Madrid, in it, group matchday 2
+(o) Everton 2015, in it from outside the real 32, group matchday 1: in the place of Galatasaray
+(r) Real Madrid, week 46 of 54 after 44 entries: both semi-finals settled, 5 of the six second legs read differently turned, run of Arsenal
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+control inswap: built src/components/club-manager/WorldCompScreen.tsx with its line patched into /home/runner/work/_temp/t-walk-inswap/dukb-world-ucl-walk-GU2FQ3/dist-inswap; the file is back as it was
+   FAIL (o) Everton 2015 390-inswap: the screen does not name the club in it from outside the real 32 as the engine drew it: no line "Everton are in it in this save, in the place of Galatasaray, one of the real 32 of 2015-16." (its lines: "You are in it: your group is Group A. / Galatasaray are in it in this save, in the place of Everton, one of the real 32 of 2015-16. / Every season of this save draws from the same 32 clubs, the real 2015-16 field, whatever the leagues do, with the one change named above.")
+   (o) Everton 2015 390-inswap screen: 7 controls and 20 lines measured
+playWorldUcl control inswap: FIRED, "the club in it from outside the real 32" reported 1 time(s) (1 findings in all)

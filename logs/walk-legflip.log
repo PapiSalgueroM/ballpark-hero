@@ -1,0 +1,34 @@
+(a) Chelsea, week 17 of 54 after 13 entries: nights done 4, matchday 4 18 scores, matchday 5 18 fixtures, table 36
+(b) Chelsea season over after 41 entries: the engine's final, Manchester City beat PSG
+(k) Chelsea, week 40 after 31 entries: 12 nights done, 8 play-offs settled, 8 round of 16 ties, Matchdays opens on Round of 16, second leg
+(c) Villarreal 2005, week 55 of 56: 8 groups, the final won by Chelsea, stand in Valencia
+(d) Real Madrid, in it, group matchday 2
+(o) Everton 2015, in it from outside the real 32, group matchday 1: in the place of Galatasaray
+(r) Real Madrid, week 46 of 54 after 44 entries: both semi-finals settled, 5 of the six second legs read differently turned, run of Arsenal
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+control legflip: built src/components/club-manager/WorldCompScreen.tsx with its line patched into /home/runner/work/_temp/t-walk-legflip/dukb-world-ucl-walk-nwHMDK/dist-legflip; the file is back as it was
+   FAIL (k) Chelsea knockouts 390-legflip: Play-offs card not as the engine played it: RB Leipzig v Real Betis, no "Second leg: Real Betis 1-2 RB Leipzig" (the card reads "RB Leipzig v Real Betis First leg: RB Leipzig 1-1 Real Betis Second leg: Real Betis 2-1 RB Leipzig 3-2 on aggregate, RB Leipzig win after extra time")
+   FAIL (k) Chelsea knockouts 390-legflip: Play-offs card not as the engine played it: Sporting CP v Celtic, no "Second leg: Celtic 1-2 Sporting CP" (the card reads "Sporting CP v Celtic First leg: Sporting CP 5-1 Celtic Second leg: Celtic 2-1 Sporting CP 7-2 on aggregate, Sporting CP through")
+   FAIL (k) Chelsea knockouts 390-legflip: Play-offs card not as the engine played it: Aston Villa v Barcelona, no "Second leg: Barcelona 3-0 Aston Villa" (the card reads "Aston Villa v Barcelona First leg: Aston Villa 1-1 Barcelona Second leg: Barcelona 0-3 Aston Villa 1-4 on aggregate, Barcelona through")
+   FAIL (k) Chelsea knockouts 390-legflip: Play-offs card not as the engine played it: Stuttgart v Feyenoord, no "Second leg: Feyenoord 3-4 Stuttgart" (the card reads "Stuttgart v Feyenoord First leg: Stuttgart 1-1 Feyenoord Second leg: Feyenoord 4-3 Stuttgart 5-4 on aggregate, Stuttgart through")
+   FAIL (k) Chelsea knockouts 390-legflip: Play-offs card not as the engine played it: Napoli v Arsenal, no "Second leg: Arsenal 1-2 Napoli" (the card reads "Napoli v Arsenal First leg: Napoli 2-1 Arsenal Second leg: Arsenal 2-1 Napoli 4-2 on aggregate, Napoli through")
+   FAIL (k) Chelsea knockouts 390-legflip: Play-offs card not as the engine played it: Inter Milan v Lyon, no "Second leg: Lyon 0-1 Inter Milan" (the card reads "Inter Milan v Lyon First leg: Inter Milan 1-1 Lyon Second leg: Lyon 1-0 Inter Milan 2-1 on aggregate, Inter Milan through")
+   (k) Chelsea knockouts 390-legflip: 2 of 8 Play-offs cards as the engine played them
+   FAIL (k) Chelsea knockouts 390-legflip: Last 16 card not as the engine played it: Sporting CP v Lille, no "Second leg: Lille 0-3 Sporting CP" (the card reads "Sporting CP v Lille First leg: Sporting CP 0-1 Lille Second leg: Lille 3-0 Sporting CP 3-1 on aggregate, Sporting CP through")
+   FAIL (k) Chelsea knockouts 390-legflip: Last 16 card not as the engine played it: Barcelona v Villarreal, no "Second leg: Villarreal 1-3 Barcelona" (the card reads "Barcelona v Villarreal First leg: Barcelona 1-0 Villarreal Second leg: Villarreal 3-1 Barcelona 4-1 on aggregate, Barcelona through")
+   FAIL (k) Chelsea knockouts 390-legflip: Last 16 card not as the engine played it: Roma v Como, no "Second leg: Como 0-4 Roma" (the card reads "Roma v Como First leg: Roma 2-3 Como Second leg: Como 4-0 Roma 6-3 on aggregate, Roma through")
+   FAIL (k) Chelsea knockouts 390-legflip: Last 16 card not as the engine played it: Napoli v Bayern Munich, no "Second leg: Bayern Munich 5-0 Napoli" (the card reads "Napoli v Bayern Munich First leg: Napoli 2-4 Bayern Munich Second leg: Bayern Munich 0-5 Napoli 2-9 on aggregate, Bayern Munich through")
+   FAIL (k) Chelsea knockouts 390-legflip: Last 16 card not as the engine played it: Galatasaray v PSG, no "Second leg: PSG 2-1 Galatasaray" (the card reads "Galatasaray v PSG First leg: Galatasaray 0-2 PSG Second leg: PSG 1-2 Galatasaray 1-4 on aggregate, PSG through")
+   (k) Chelsea knockouts 390-legflip: 3 of 8 Last 16 cards as the engine played them
+   (k) Chelsea knockouts 390-legflip knockouts: 22 controls and 55 lines measured
+   (k) Chelsea knockouts 390-legflip run: 2 controls and 53 lines measured
+   (k) Chelsea knockouts 390-legflip matchdays: 19 controls and 30 lines measured
+   (k) Chelsea knockouts 390-legflip screen: 7 controls and 20 lines measured
+playWorldUcl control legflip: FIRED, "card not as the engine played it" reported 11 time(s) (11 findings in all)
