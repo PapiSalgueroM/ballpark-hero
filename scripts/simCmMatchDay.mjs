@@ -600,21 +600,21 @@ function judgeDots(html, career, oppNames, p, where) {
     dotCounts.read += 1;
     if (d.text === null) { p.push(`${where}: a dot has no label`); continue; }
     const t = d.side === 'opp' ? d.text.replace(/\*$/, '') : d.text;
+    /* Counted before it is judged, so a control that turns every label red still shows what it read. */
+    const man = d.side === 'me' && d.key ? career.squad.find(q => q.id === d.key) : null;
+    if (man) dotCounts.mine += 1;
+    else if (d.side === 'opp') { if (oppNames.length) dotCounts.theirsNamed += 1; else dotCounts.theirsNameless += 1; }
     if (!t) { p.push(`${where}: a ${d.side} dot's label is empty`); continue; }
     if (/^\d/.test(t)) { p.push(`${where}: a ${d.side} dot's label "${d.text}" begins with a digit`); continue; }
     if (d.side === 'me') {
-      const man = d.key ? career.squad.find(q => q.id === d.key) : null;
       if (!man) { if (!SLOT_LABELS.has(t)) p.push(`${where}: my nameless dot reads "${t}", not a slot's role`); continue; }
-      dotCounts.mine += 1;
       if (t !== order.pitchName(man.name)) dotCounts.initials += 1;
       if (!asName(t, man.name)) p.push(`${where}: my ${man.name} reads "${t}", not his pitch name or initials`);
       if (!d.aria.includes(man.name) || /\bnumber\b/.test(d.aria)) p.push(`${where}: my ${man.name}'s label for a screen reader is "${d.aria}"`);
     } else if (!oppNames.length) {
-      dotCounts.theirsNameless += 1;
       if (!SLOT_LABELS.has(t)) p.push(`${where}: a nameless opponent reads "${t}", not a slot's role`);
-    } else {
-      dotCounts.theirsNamed += 1;
-      if (!oppNames.some(n => asName(t, n))) p.push(`${where}: an opponent reads "${t}", the pitch name or initials of nobody in their eleven or on their bench`);
+    } else if (!oppNames.some(n => asName(t, n))) {
+      p.push(`${where}: an opponent reads "${t}", the pitch name or initials of nobody in their eleven or on their bench`);
     }
   }
   return dots.length;
