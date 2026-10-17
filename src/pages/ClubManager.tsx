@@ -1245,7 +1245,7 @@ const ClubManager = () => {
                 value={`${c.squad.reduce((n, p) => n + p.seasonGoals, 0)} goals`}
                 sub={(() => {
                   const ts = [...c.squad].sort((a, b) => b.seasonGoals - a.seasonGoals)[0];
-                  return ts && ts.seasonGoals > 0 ? `${pitchName(ts.name)} leads with ${ts.seasonGoals}` : 'Goals, assists, ratings';
+                  return ts && ts.seasonGoals > 0 ? `${pitchName(ts.name)}: ${ts.seasonGoals}` : 'Goals, assists, ratings';
                 })()}
                 onClick={() => setHubPanel('stats')}
               />

@@ -10,7 +10,10 @@
      E  an away second leg (pictures only, no assertion: the reviewers judge the aggregate line by eye).
      D  (Round 1340b) the hub's Stats tile at 320: Eintracht Frankfurt with Ayoube Amaimouni-Echghouyab, whose
         pitch name is the longest in the pool, on 12 goals (a layout plant) so he leads it. The tile's line must
-        read his pitch name ("Amaimouni-Echghouyab leads with 12") and wrap to at most two lines.
+        read his pitch name ("Amaimouni-Echghouyab: 12") and wrap to at most two lines. The round first wrote
+        "<name> leads with 12", which r1340-G4 measured on three lines for the two longest pitch names of the pool
+        (Amaimouni-Echghouyab and Oxlade-Chamberlain), so the fix round after the review took the shorter wording
+        that keeps all 200 longest names within two (the printed measure below).
    At 320 by 640, 390 by 844 and 1280 by 900, and again at 390 with reduced motion, each of A, B and C is walked:
    the hub's next match card, the Match Centre, Play Live (the strip, the score's digits, the line under the
    pitch at 320 and 390 and the full stats at 1280), Skip to the interval (the interval card and the dressing
@@ -32,8 +35,10 @@
      swap  the hub card's two names are swapped in the DOM after both are found: the order check must go red.
      cut   nowrap, overflow hidden and an ellipsis on [data-cm-tl-name]: the whole name check must go red.
      jump  the window is scrolled 300 px inside the report's settle step: the jump check must go red.
-     fullname  (save D at 320 only) the Stats tile's line is set to his whole name in the DOM after the tile is
-           found: the two line check must go red.
+     fullname  (save D at 320 only) the Stats tile's line is set to the line the base drew for him, his whole name
+           ("Ayoube Amaimouni-Echghouyab leads with 12"), in the DOM after the tile is found: the two line check
+           must go red. The tile as shipped is measured first and must be within two lines, or the control
+           cannot run (exit 2): a check already red without it would make its FIRED prove nothing.
    With MATCHDAY_COMPARE_DIST=<a served build of the round's base> the walk instead compares builds (the brief's
    step a6): A, B and C at the three sizes walked by the same taps on the head and on the base, Math.random seeded
    at load and again on every tap and the clock fixed, so both builds draw the same matches. Text nodes under 12 px
@@ -150,7 +155,7 @@ const dState = start(TILE_CLUB, 300);
 const dMan = dState?.squad.find(p => p.name === TILE_MAN);
 if (!dMan) cannotRun(`${TILE_MAN} is not in ${TILE_CLUB}'s squad at the start of a career`);
 dMan.seasonGoals = TILE_GOALS;
-const saveD = { name: 'D', raw: JSON.stringify(cm.trimCareer(dState)), club: TILE_CLUB, man: TILE_MAN, line: `${display.pitchName(TILE_MAN)} leads with ${TILE_GOALS}` };
+const saveD = { name: 'D', raw: JSON.stringify(cm.trimCareer(dState)), club: TILE_CLUB, man: TILE_MAN, line: `${display.pitchName(TILE_MAN)}: ${TILE_GOALS}` };
 console.log(`save D: ${TILE_CLUB} with ${TILE_MAN} on ${TILE_GOALS} goals (planted), the tile should read "${saveD.line}", ${saveD.raw.length} bytes`);
 
 /* ---- the served build (and, for the comparison, the base's) ---- */
@@ -583,11 +588,12 @@ async function walkTile(width, height) {
         const i = divs.findIndex(d => d.classList.contains('uppercase'));
         if (i < 0 || divs[i].textContent.trim() !== 'Stats' || !divs[i + 2]) continue;
         const sub = divs[i + 2];
-        if (control) sub.textContent = whole;
         const cs = getComputedStyle(sub);
         const lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.2;
+        const shipped = { text: sub.innerText.trim(), lines: Math.round(sub.getBoundingClientRect().height / lh) };
+        if (control) sub.textContent = whole;
         b.scrollIntoView({ block: 'center' });
-        return { text: sub.innerText.trim(), lines: Math.round(sub.getBoundingClientRect().height / lh), h: Math.round(b.getBoundingClientRect().height) };
+        return { shipped, text: sub.innerText.trim(), lines: Math.round(sub.getBoundingClientRect().height / lh), h: Math.round(b.getBoundingClientRect().height) };
       }
       return null;
     }, { control: CONTROL === 'fullname', whole: `${TILE_MAN} leads with ${TILE_GOALS}` });
@@ -596,12 +602,16 @@ async function walkTile(width, height) {
     console.log(`${id}: the Stats tile reads "${tile.text}" on ${tile.lines} line(s), the tile ${tile.h} px tall`);
     if (CONTROL !== 'fullname') check(tile.text === saveD.line, `${id}: the Stats tile reads "${tile.text}", not "${saveD.line}"`);
     const fits = check(tile.lines <= 2, `${id}: the Stats tile's line wraps to ${tile.lines} lines ("${tile.text}")`);
-    if (!fits && CONTROL === 'fullname') fired.fullname += 1;
+    if (CONTROL === 'fullname') {
+      console.log(`${id}: as shipped the tile read "${tile.shipped.text}" on ${tile.shipped.lines} line(s)`);
+      if (tile.shipped.text !== saveD.line || tile.shipped.lines > 2) cannotRun(`control fullname: the tile as shipped reads "${tile.shipped.text}" on ${tile.shipped.lines} lines, so the two line check is not green without the control and its firing would prove nothing`);
+      if (!fits) fired.fullname += 1;
+    }
     if (!CONTROL) {
       /* Printed, not asserted: the 200 longest pitch names of the 2026-27 world in the same tile, in the shipped
          wording and two shorter ones, so the lead can see how many pass two lines and what a wording would buy. */
       const pool = [...new Set(Object.values(cm.CM_ROSTERS).flat().map(p => display.pitchName(p.n)))].sort((x, y) => y.length - x.length).slice(0, 200);
-      const wordings = { shipped: n => `${n} leads with ${TILE_GOALS}`, comma: n => `${n}, ${TILE_GOALS} goals`, colon: n => `${n}: ${TILE_GOALS}` };
+      const wordings = { shipped: n => `${n}: ${TILE_GOALS}`, first: n => `${n} leads with ${TILE_GOALS}`, comma: n => `${n}, ${TILE_GOALS} goals` };
       for (const [word, make] of Object.entries(wordings)) {
         const lines = await page.evaluate(texts => {
           const root = document.querySelector('[data-testid="cm-show-slots"]')?.closest('header')?.parentElement;
