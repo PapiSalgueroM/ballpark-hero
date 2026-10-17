@@ -1,0 +1,59 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 28 node harnesses
+  PASS  simDeadlineDay.mjs              7.1s
+  PASS  simDealDepth.mjs               47.8s
+  PASS  simEra2005.mjs                 18.7s
+  PASS  simEra2010.mjs                 20.2s
+  PASS  simEra2015.mjs                 16.9s
+  PASS  simEra2020.mjs                 35.0s
+  PASS  simEras.mjs                  1163.9s
+  PASS  simEraWorldTables.mjs           2.5s
+  PASS  simExtraTime.mjs              112.1s
+  PASS  simFinance.mjs                  9.9s
+  PASS  simFixtureBalance.mjs           4.8s
+  PASS  simFlagshipWeight.mjs           0.9s
+  PASS  simFootleLeagues.mjs            0.1s
+  PASS  simFreeAgents.mjs             114.7s
+  PASS  simGmBooks.mjs                  2.0s
+  FAIL  simGmCalendar.mjs               1.4s
+  FAIL  simGmDealTableFixture.mjs       1.3s
+  PASS  simGmFacilities.mjs             0.2s
+  FAIL  simGmStaff.mjs                  3.9s
+  PASS  simGmXp.mjs                     0.5s
+  PASS  simHalftime.mjs               733.0s
+  PASS  simHeadlines.mjs                3.8s
+  PASS  simHomeFront.mjs                1.0s
+  PASS  simIntlFormatHistory.mjs        2.4s
+  PASS  simInventedNames.mjs           12.7s
+  PASS  simJobMarket.mjs                1.2s
+  PASS  simLiveMatch.mjs                7.1s
+  PASS  simLiveSim.mjs                  0.5s
+
+----- simGmCalendar.mjs (FAIL) -----
+  FAIL: Everton seasonDays: hash 158dee139333cccc41abdbfc != recorded 4f6e77bb426d72edb25d0123; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\ recorded ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\
+  FAIL: Everton monthGrid: hash 998eed009784b43682c66dfd != recorded 191228a15047c811f0735e7a; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\" recorded ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\"
+  FAIL: Augsburg seasonDays: hash 29e2211231b009dd2c13593e != recorded d004198f9594eff7c0c3edf6; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\ recorded ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\
+  FAIL: Augsburg monthGrid: hash 486aafe84bae636d46f7d710 != recorded ecebc393e3df7ebcd664c12a; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\" recorded ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\"
+  FAIL: Norwich City seasonDays: hash 60f96d2fd871650b92af5ea0 != recorded 2e65e78a8e253e2db78b214a; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\ recorded ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\
+  FAIL: Norwich City monthGrid: hash 6921469a250cd670b7984977 != recorded 6ce8f2f8c3734c582c00f4b1; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\" recorded ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\"
+
+----- simGmDealTableFixture.mjs (FAIL) -----
+simGmDealTableFixture: FAIL, 2 section(s) differ from the recording
+  FAIL: section B no longer replays (720 lines recorded, 720 now)
+  FAIL: section C no longer replays (101 lines recorded, 126 now)
+
+----- simGmStaff.mjs (FAIL) -----
+  FAIL: Arsenal natural: line 5 of 81 differs
+  FAIL: Arsenal nines: line 14 of 70 differs
+  FAIL: Bayern Munich natural: line 15 of 69 differs
+  FAIL: Bayern Munich nines: line 5 of 63 differs
+  FAIL: Liverpool natural: line 25 of 67 differs
+  FAIL: Liverpool nines: line 24 of 63 differs
+  FAIL: PSG natural: line 15 of 69 differs
+  FAIL: PSG nines: line 5 of 74 differs
+  FAIL: Aston Villa natural: line 25 of 60 differs
+  FAIL: Aston Villa nines: line 10 of 72 differs
+  FAIL: Brentford natural: line 25 of 69 differs
+  FAIL: Brentford nines: line 14 of 69 differs
+
+3 harnesses not green.
