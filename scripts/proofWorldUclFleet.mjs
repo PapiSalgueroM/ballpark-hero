@@ -21,7 +21,10 @@
    --seeds 1,2,3 (1 to 5), --seasons <n> (participants 2, watchers 3), --only <substring of a club name>,
    --strip <key> (watchers only: that key of THIS TREE's state is left out of the comparison, never out of the
    save it plays on; from Round 1502's E3 the watchers are compared with --strip worldComps, and the participants
-   always on every key, with a check that none of their states carries worldComps).
+   always on every key, with a check that none of their states carries worldComps), --eval (THIS TREE calls
+   evalWorldUcl and worldUclNightsDone on the live state after every step, inside that step's stretch of the
+   stream, the way the screen will: the critic's correction 6b, so an evaluation that drew from Math.random or
+   wrote into the save shows as a difference; the base has no such function and is left alone).
    Exit 0 green, 1 a difference (the first one of each journey printed), 2 could not run. The last line says which.
    Run: node scripts/proofWorldUclFleet.mjs --base d8aaa4cb --fleet participants --coach nocoach */
 import { execFileSync } from 'node:child_process';
@@ -45,6 +48,7 @@ const SEEDS = arg('--seeds', '1,2,3,4,5').split(',').map(Number);
 const SEASONS = arg('--seasons', '');
 const ONLY = arg('--only', '');
 const STRIP = arg('--strip', '');
+const EVAL = process.argv.includes('--eval');
 const lf = s => s.split('\r\n').join('\n');
 const sha = v => createHash('sha256').update(typeof v === 'string' ? v : JSON.stringify(v)).digest('hex').slice(0, 16);
 
@@ -101,14 +105,18 @@ function tape(seed, action) {
 }
 
 /* One journey of one save on one engine: every step on its own stretch of the stream. */
-async function journey(E, f, seasons, mode, compareStrip) {
+async function journey(E, f, seasons, mode, compareStrip, evalEach = false) {
   const M = await E.fresh();
   const steps = [];
   let s = null; let k = 0;
   const opts = mode === 'coach' ? { skipHalftime: true } : { skipHalftime: true, noCoach: true };
   const step = (label, fn) => {
     k += 1;
-    const r = tape((f.seed * 0x9e3779b1 + k * 7919) >>> 0, () => fn(s));
+    const r = tape((f.seed * 0x9e3779b1 + k * 7919) >>> 0, () => {
+      const out = fn(s);
+      if (evalEach && out?.state) { M.cm.evalWorldUcl(out.state); M.cm.worldUclNightsDone(out.state); evals += 1; }
+      return out;
+    });
     const got = r.value ?? {};
     if (got.state) s = got.state;
     let shown = s;
@@ -189,7 +197,7 @@ const chosen = fleet.filter(f => !ONLY || f.club.includes(ONLY));
 console.log(`base ${BASE}; fleet (${chosen.length}): ${chosen.map(f => `${f.club} (${f.era}, ${f.kind})`).join('; ')}`);
 console.log(`seeds ${SEEDS.join(',')}; modes ${COACH}; strip ${STRIP || 'nothing'}`);
 
-let journeys = 0, steps = 0, carriers = 0;
+let journeys = 0, steps = 0, carriers = 0, evals = 0;
 const fails = [];
 const modes = COACH === 'both' ? ['nocoach', 'coach'] : [COACH];
 const t0 = Date.now();
@@ -201,7 +209,7 @@ for (const f of chosen) {
       const name = `${f.club} (${f.era}, ${f.kind}, ${mode}, seed ${seed}, ${seasons} seasons)`;
       let a, b;
       try { a = await journey(baseEngine, { ...f, seed }, seasons, mode, ''); } catch (e) { cannot(`${name} on the base engine: ${e.message}`); }
-      try { b = await journey(treeEngine, { ...f, seed }, seasons, mode, f.kind === 'watcher' ? STRIP : ''); } catch (e) { fails.push(`${name}: this tree threw: ${e.message}`); continue; }
+      try { b = await journey(treeEngine, { ...f, seed }, seasons, mode, f.kind === 'watcher' ? STRIP : '', EVAL); } catch (e) { fails.push(`${name}: this tree threw: ${e.message}`); continue; }
       journeys += 1;
       let bad = '';
       for (let i = 0; i < Math.max(a.length, b.length) && !bad; i += 1) {
@@ -222,7 +230,8 @@ for (const f of chosen) {
   }
 }
 for (const x of fails.slice(0, 12)) console.log(`  FAIL ${x}`);
-console.log(`journeys ${journeys}, steps compared ${steps}, tree journeys whose save carried worldComps ${carriers}, ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+console.log(`journeys ${journeys}, steps compared ${steps}, tree journeys whose save carried worldComps ${carriers}, evaluations on the live state ${evals}, ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+if (EVAL && !evals) cannot('--eval was asked for and no evaluation ran');
 if (!journeys) cannot('no journey ran');
 console.log(fails.length
   ? `proofWorldUclFleet: RED, ${fails.length} journeys differ from ${BASE} (of ${journeys})`

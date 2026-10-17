@@ -103,6 +103,9 @@ export interface WorldCompSlice {
   clashes?: number;
   /** The holder at the draw (top of pot one) when the save knew one. */
   holder?: string;
+  /** Nights already shown when the slice was carried across a mid season job move (Round 1502): the new club's
+   *  calendar can sit behind the old one, and a night once shown is never taken back. */
+  seen?: number;
 }
 
 /** One night of the season, in order. */

@@ -44,6 +44,19 @@
  *                                     Deadline Day date
  *   DAILY_DEALS_CONTROL=rulesstale    Round 1331: HOT_SEAT_RULES_FROM moved to 2026-10-01, before the round's
  *                                     base commit: the cutover check goes red
+ *   DAILY_DEALS_CONTROL=world         Round 1502: takes the Hot Seat's strip of the watched Champions League
+ *                                     (worldComps) back out: exactly the Hot Seat dates whose club WATCHES go red
+ *                                     on "the state carries a watched Champions League", and nothing else
+ *   DAILY_DEALS_CONTROL=worlddeadline Round 1502: the same for Deadline Day's strip: exactly its watching dates,
+ *                                     plain and scripted, go red, and nothing else
+ *
+ * Round 1502 (the world's Champions League, watched by a club that is not in it): startCareer opens a slice for
+ * such a club, and both dailies take it off with the seed. It draws nothing, so no deal can move under either
+ * control: they fire on the state's shape alone (the scripted days hold the state's keys, so they go red on the
+ * deal too, on their watching dates). A date WATCHES when the day's own startCareer state is not in the
+ * Champions League (uclGroup null, the engine's own answer, printed per date as "watches"): the critic's
+ * correction 12, so each control must turn exactly those dates red, and the window holds at least one watching
+ * date of each game (the run says how many).
  *
  * Round 1331 (the match rules: five changes in three stoppages where the league and season had them, and the
  * press asking about the next match). Manager Hot Seat plays them from HOT_SEAT_RULES_FROM on, so every date
@@ -71,7 +84,7 @@ const ROOT = path.resolve(arg('--root') || HERE);
 const PRINT = process.argv.includes('--print');
 const CONTROL = process.env.DAILY_DEALS_CONTROL || '';
 const cannot = why => { console.error(`simDailyDeals: cannot run: ${why}`); process.exit(2); };
-if (CONTROL && !['bind', 'binddeadline', 'seed', 'seeddeadline', 'rulesall', 'rulesstale'].includes(CONTROL)) cannot(`unknown control ${CONTROL}`);
+if (CONTROL && !['bind', 'binddeadline', 'seed', 'seeddeadline', 'rulesall', 'rulesstale', 'world', 'worlddeadline'].includes(CONTROL)) cannot(`unknown control ${CONTROL}`);
 /* Round 1331: the day the round's base commit (dec9075b, the Release BC record) was made. */
 const BASE_COMMIT_DATE = '2026-10-13';
 
@@ -135,11 +148,16 @@ const STRIPS = {
   binddeadline: { file: 'deadlineDay.ts', line: '    delete state0.realLeagueFixtures;' },
   seed: { file: 'managerHotSeat.ts', line: '  delete s.worldSeed;' },
   seeddeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldSeed;' },
+  world: { file: 'managerHotSeat.ts', line: '  delete s.worldComps;' },
+  worlddeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldComps;' },
   rulesall: { file: 'managerHotSeat.ts', line: "  if (setup.daily) return setup.daily < HOT_SEAT_RULES_FROM ? 'base' : undefined;", to: '  if (setup.daily) return undefined;' },
   rulesstale: { file: 'managerHotSeat.ts', line: "export const HOT_SEAT_RULES_FROM = '", to: "export const HOT_SEAT_RULES_FROM = '2026-10-01'; const HOT_SEAT_RULES_WAS = '" },
 };
 const SEEDED = 'the state carries a world seed or a ledger';
 const seeded = st => !!st && ('worldSeed' in st || 'worldRoster' in st);
+/* Round 1502: a daily state never carries the watched Champions League. */
+const WATCHED = 'the state carries a watched Champions League';
+const watched = st => !!st && 'worldComps' in st;
 const controlPlugin = {
   name: 'daily-deals-control',
   setup(b) {
@@ -172,6 +190,9 @@ function hotSeat(date) {
   const setup = hs.dailyHotSeat(date);
   let run = hs.startHotSeat({ club: setup.club, seed: setup.seed, daily: date });
   const keyed = 'realLeagueFixtures' in run.state;
+  /* Round 1502: whether the day's club watches the Champions League, and whether the day carries it. */
+  const watches = run.state.uclGroup === null;
+  const worldAtStart = watched(run.state);
   /* Round 1331: which match rules the day plays. */
   const based = run.state.matchRules === 'base';
   const opened = [setup.club, setup.seed, run.takeover, run.target, hs.upcoming(run), run.state.table];
@@ -181,20 +202,22 @@ function hotSeat(date) {
   const line = `${setup.club}: ${run.takeover.position} of ${run.takeover.clubs} after ${run.takeover.played}, ${run.takeover.points} pts, target ${run.target}; ${run.log.map(m => `${m.opponent} ${m.myGoals}-${m.oppGoals}`).join(', ')}; ${run.verdict?.kind ?? 'no verdict'}`;
   const seed = seeded(run.state) || (run.verdict ? seeded(hs.handoverState(run)) : false);
   const carriedRules = run.verdict ? 'matchRules' in hs.handoverState(run) : false;
-  return { club: setup.club, keyed: keyed || 'realLeagueFixtures' in run.state, seed, based, carriedRules, digest: sha([opened, played]), line };
+  const world = worldAtStart || watched(run.state) || (run.verdict ? watched(hs.handoverState(run)) : false);
+  return { club: setup.club, keyed: keyed || 'realLeagueFixtures' in run.state, seed, based, carriedRules, watches, world, digest: sha([opened, played]), line };
 }
 function deadline(date) {
   const { dd } = fresh();
   const setup = dd.dailyDeadlineDay(date);
   const run = dd.startDeadlineDay(setup);
   const grade = dd.gradeWindow(dd.endDay(run));
-  return { club: setup.club, keyed: 'realLeagueFixtures' in run.state, seed: seeded(run.state), digest: sha([setup.club, setup.seed, run.needs, run.targets, run.sales, run.startBudget, run.ticker, grade]), line: `${setup.club}: ${run.needs.length} needs, ${run.targets.length} targets, ${run.sales.length} sales, budget ${run.startBudget}` };
+  return { club: setup.club, keyed: 'realLeagueFixtures' in run.state, seed: seeded(run.state), watches: run.state.uclGroup === null, world: watched(run.state), digest: sha([setup.club, setup.seed, run.needs, run.targets, run.sales, run.startBudget, run.ticker, grade]), line: `${setup.club}: ${run.needs.length} needs, ${run.targets.length} targets, ${run.sales.length} sales, budget ${run.startBudget}` };
 }
 /* Release AZ, section 3: one scripted Deadline Day with a signing and a sale, then its actions replayed. */
 function scripted(date) {
   const { dd } = fresh();
   const setup = dd.dailyDeadlineDay(date);
   let run = dd.startDeadlineDay(setup);
+  const watches = run.state.uclGroup === null;
   let signed = null;
   for (let i = 0; i < run.targets.length && !signed; i += 1) {
     const opened = dd.openTalks(run, i);
@@ -221,11 +244,13 @@ function scripted(date) {
     if (next !== run) { run = next; sold = run.sales[k].name; }
   }
   const seedMid = seeded(run.state);
+  const worldMid = watched(run.state);
   run = dd.endDay(run);
   const recorded = BASELINE.scripted?.[date];
   const actions = PRINT || !recorded ? run.actions : recorded.actions;
   const replayed = fresh().dd.replayDeadlineDay(setup, actions);
   return { club: setup.club, signed, sold, seed: seedMid || seeded(run.state) || seeded(replayed.state),
+    watches, world: worldMid || watched(run.state) || watched(replayed.state),
     digest: sha([run.grade, dd.shareText(run), run.ticker, Object.keys(run.state).sort()]), actions: run.actions,
     grade: sha(run.grade), replayGrade: replayed.grade ? sha(replayed.grade) : null, replayApplied: replayed.actions.length, replayWanted: actions.length,
     line: `${setup.club}: signed ${signed ?? 'nobody'}, sold ${sold ?? 'nobody'}, grade ${run.grade?.letter ?? 'none'}, ${run.actions.length} actions` };
@@ -236,16 +261,19 @@ const RULES_FROM = fresh().hs.HOT_SEAT_RULES_FROM;
 const out = { hot: {}, deadline: {} };
 const fails = { hot: [], deadline: [] };
 const reasons = {};
+const watching = { hot: [], deadline: [], scripted: [] };
 for (const [kind, rows, deal] of [['hot', HOT, hotSeat], ['deadline', DEADLINE, deadline]]) {
   for (const [date, club] of rows) {
     const got = deal(date);
     if (club && got.club !== club) cannot(`${kind} ${date} deals ${got.club}, the window expects ${club}: the window no longer holds this Premier League day`);
     out[kind][date] = got.digest;
-    console.log(`  ${kind.padEnd(8)} ${date} ${club ? 'PL ' : '   '}${got.digest} ${got.line}`);
+    if (got.watches) watching[kind].push(date);
+    console.log(`  ${kind.padEnd(8)} ${date} ${club ? 'PL ' : '   '}${got.digest} ${got.line}${got.watches ? '; watches' : ''}`);
     if (PRINT) continue;
     const why = [];
     if (got.keyed) why.push('the state carries the real fixture key');
     if (got.seed) why.push(SEEDED);
+    if (got.world) why.push(WATCHED);
     if (kind === 'hot' && RULES_FROM !== undefined) {
       if (date < RULES_FROM && !got.based) why.push('the day does not play the base match rules');
       if (date >= RULES_FROM && got.based) why.push('the day plays the base match rules after the cutover');
@@ -261,9 +289,11 @@ const scriptedOut = {};
 for (const [date] of DEADLINE) {
   const got = scripted(date);
   scriptedOut[date] = { digest: got.digest, grade: got.grade, actions: got.actions };
-  console.log(`  scripted ${date}    ${got.digest} ${got.line}; replayed ${got.replayApplied} of ${got.replayWanted} actions`);
+  if (got.watches) watching.scripted.push(date);
+  console.log(`  scripted ${date}    ${got.digest} ${got.line}; replayed ${got.replayApplied} of ${got.replayWanted} actions${got.watches ? '; watches' : ''}`);
   if (PRINT) continue;
   const why = [];
+  if (got.world) why.push(WATCHED);
   const rec = BASELINE.scripted?.[date];
   if (!got.signed || !got.sold) why.push(`the script made no ${got.signed ? 'sale' : 'signing'} on this date (pick another target or sale)`);
   if (got.seed) why.push(SEEDED);
@@ -315,6 +345,22 @@ if (CONTROL === 'rulesall' || CONTROL === 'rulesstale') {
     : `simDailyDeals: CONTROL ${CONTROL} DID NOT FIRE as it must: Hot Seat red on [${fails.hot.join(', ')}], Deadline Day on [${fails.deadline.join(', ')}]`);
   process.exit(fired ? 1 : 3);
 }
+console.log(`  watching dates (Round 1502): Hot Seat ${watching.hot.length} of ${HOT.length}, Deadline Day ${watching.deadline.length} of ${DEADLINE.length}, scripted ${watching.scripted.length}`);
+if (CONTROL === 'world' || CONTROL === 'worlddeadline') {
+  /* Round 1502: red on exactly the watching dates of its own game (the scripted days too, for Deadline Day), each
+     on the watched sentence, and on no other date of either game. */
+  const hot = CONTROL === 'world';
+  const want = hot ? watching.hot.map(d => `hot ${d}`) : [...watching.deadline.map(d => `deadline ${d}`), ...watching.scripted.map(d => `scripted ${d}`)];
+  const onWatched = Object.keys(reasons).filter(k => reasons[k].includes(WATCHED)).sort();
+  const red = (hot ? fails.hot.map(d => `hot ${d}`) : fails.deadline.map(d => (d.startsWith('scripted ') ? d : `deadline ${d}`))).sort();
+  const other = hot ? fails.deadline : fails.hot;
+  const wanted = [...want].sort();
+  const fired = want.length > 0 && JSON.stringify(onWatched) === JSON.stringify(wanted) && JSON.stringify(red) === JSON.stringify(wanted) && other.length === 0;
+  console.log(fired
+    ? `simDailyDeals: CONTROL ${CONTROL} FIRED: exactly its ${want.length} watching dates went red on "${WATCHED}" and nothing else moved`
+    : `simDailyDeals: CONTROL ${CONTROL} DID NOT FIRE as it must: red on [${red.join(', ')}], on the watched sentence [${onWatched.join(', ')}], wanted exactly [${wanted.join(', ')}], the other game red on [${other.join(', ')}]`);
+  process.exit(fired ? 1 : 3);
+}
 if (CONTROL === 'seed' || CONTROL === 'seeddeadline') {
   /* Red on its own sentence: every date of its own game (the scripted days too, for Deadline Day) carries the
      seed, and no date of the other game is red at all. */
@@ -341,6 +387,6 @@ if (CONTROL) {
   process.exit(fired ? 1 : 3);
 }
 console.log(total === 0
-  ? `simDailyDeals: green. ${HOT.length} Hot Seat dates (${pl(HOT).length} Premier League) and ${DEADLINE.length} Deadline Day dates (${pl(DEADLINE).length} Premier League) deal what Release AS dealt, no daily carries the real fixture key, a world seed or a ledger, and the ${DEADLINE.length} scripted Deadline Days (a signing and a sale each) play and replay as on b6eb78e7.`
+  ? `simDailyDeals: green. ${HOT.length} Hot Seat dates (${pl(HOT).length} Premier League) and ${DEADLINE.length} Deadline Day dates (${pl(DEADLINE).length} Premier League) deal what Release AS dealt, no daily carries the real fixture key, a world seed, a ledger or a watched Champions League, and the ${DEADLINE.length} scripted Deadline Days (a signing and a sale each) play and replay as on b6eb78e7.`
   : `simDailyDeals: ${total} FAILURE(S): Hot Seat [${fails.hot.join(', ')}], Deadline Day [${fails.deadline.join(', ')}]`);
 process.exit(total === 0 ? 0 : 1);

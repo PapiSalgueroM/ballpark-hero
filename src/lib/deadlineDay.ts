@@ -355,6 +355,10 @@ export function startDeadlineDay(setup: DeadlineSetup): DeadlineRun {
        engine leave its state the shape it was, and every market and roster read of the day stays on the
        projected world. scripts/simDailyDeals.mjs holds it: its seeddeadline control puts this line back out. */
     delete state0.worldSeed;
+    /* Round 1502: nor a watched Champions League (startCareer opens one for a club that is not in it). It
+       draws nothing, so the deal cannot move; scripts/simDailyDeals.mjs holds the state's shape, and its
+       worlddeadline control puts this line back out. */
+    delete state0.worldComps;
     const rng = mulberry32(mixSeed(setup.seed, SEED_BRIEF));
     const count = rng() < 0.5 ? 3 : 4;
     const market = buildMarket(state0);
