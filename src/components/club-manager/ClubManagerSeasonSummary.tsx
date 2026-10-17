@@ -3,7 +3,7 @@ import { ChevronLeft, Trophy } from 'lucide-react';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
-import { bookAwardsState, money } from '@/lib/clubManager';
+import { bookAwardsState, evalWorldUcl, money } from '@/lib/clubManager';
 import { BOOK_FULL_SHARE, type AwardMan } from '@/lib/clubManagerLeagueBoards';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { TeamLines } from '@/components/club-manager/SeasonHonoursCard';
@@ -45,6 +45,16 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
   const summerMove = c.jobHunt?.summerMove ?? null;
   let tick = 0;
   const tickIn = () => ({ animationDelay: revealDelay(tick++) });
+  /* Round 1503: the Champions League a save follows from outside it plays its final after the last league game in
+     today's world, so the season ends before the Cups tile can show it: the winner lands here. Read only. */
+  const watchedFinal = (() => {
+    try {
+      const r = c.uclGroup ? null : evalWorldUcl(c);
+      return r?.done && r.winner && r.runnerUp ? { winner: r.winner, runnerUp: r.runnerUp } : null;
+    } catch {
+      return null;
+    }
+  })();
   /* Round 1311: the league's awards from the book. A summary written before them has no `awards`; it
      prints as it always did, plus, on a season the book could not settle, one line that says why. */
   const awards = sm.awards;
@@ -165,6 +175,12 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
               <Trophy className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
               Champions: <span className="font-bold">{sm.champion}</span>
             </p>
+            {watchedFinal && (
+              <p data-cm-world-final-line className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
+                <span className="shrink-0">⭐</span>
+                <span>Champions League: <span className="font-bold">{watchedFinal.winner}</span> beat {watchedFinal.runnerUp} in the final.</span>
+              </p>
+            )}
             {sm.fate && (
               <p data-cm-fate={sm.fate} className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
                 <span className="shrink-0">{sm.fate === 'up' ? '⬆️' : sm.fate === 'down' ? '⬇️' : '🛟'}</span>

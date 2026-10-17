@@ -301,6 +301,9 @@ function FinalView({ view, onClub }: ViewProps) {
         </div>
       ) : <p className="text-xs text-muted-foreground">The two finalists are not known yet.</p>}
       <p className="text-xs text-muted-foreground">{night?.date ? `To be played on ${shortDate(night.date)}.` : 'To be played after the semi-finals.'}</p>
+      {view.mode === 'watching' && view.format === 'l36' && (
+        <p className="text-xs text-muted-foreground">It comes after your last league game, so the winner shows on your season review.</p>
+      )}
     </div>
   );
 }
