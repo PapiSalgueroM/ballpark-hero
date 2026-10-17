@@ -1,0 +1,57 @@
+playCmDifficulty: seed 2543157748 (replay with DIFF_SEED=2543157748), widths 320, 390, 1280
+
+== 320 by 640
+  PASS  320: the Dugout step offers Normal, Hard and Legend with Normal pressed ([["Normal","true"],["Hard","false"],["Legend","false"]])
+  PASS  320: a Normal career carries no key and wears no level pill
+  PASS  320: Legend is pressed
+  PASS  320: pressing Hard, Legend, Normal, Hard, Legend and the switch moves nothing (start 2047/29143, hard 2047/29143, legend 2047/29143, normal 2047/29143, hard 2047/29143, legend 2047/29143, switch 2047/29143)
+  PASS  320: the card's shortest button is 44.0 px and its smallest text 12 px
+  PASS  320: the Dugout step is no wider than the screen
+  PASS  320: the Legend career is running
+  PASS  320: the save holds Legend and No sacking (legend, 1)
+  PASS  320: the hub wears the Legend pill ("Legend")
+  PASS  320: and the No sacking pill beside it
+  PASS  320: nothing in the header overlaps or runs off the page (0 overlaps)
+   320: header 92 px on Legend with No sacking, 62 px on Normal
+  PASS  320: the Options tile reads "⚙️ OPTIONS £ · Legend Currency, nation job, haggling"
+  PASS  320: Options shows "🎚️ How hard Legend Everything against you. Good luck. Picked when thi" with nothing to press
+  PASS  320: and No sacking on
+  PASS  320: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 1 of 54 · Board 69/100 🏆 0 tro"
+
+== 390 by 844
+  PASS  390: the Dugout step offers Normal, Hard and Legend with Normal pressed ([["Normal","true"],["Hard","false"],["Legend","false"]])
+  PASS  390: a Normal career carries no key and wears no level pill
+  PASS  390: Legend is pressed
+  PASS  390: pressing Hard, Legend, Normal, Hard, Legend and the switch moves nothing (start 1748/23450, hard 1748/23450, legend 1748/23450, normal 1748/23450, hard 1748/23450, legend 1748/23450, switch 1748/23450)
+  PASS  390: the card's shortest button is 44.0 px and its smallest text 12 px
+  PASS  390: the Dugout step is no wider than the screen
+  PASS  390: the Legend career is running
+  PASS  390: the save holds Legend and No sacking (legend, 1)
+  PASS  390: the hub wears the Legend pill ("Legend")
+  PASS  390: and the No sacking pill beside it
+  PASS  390: nothing in the header overlaps or runs off the page (0 overlaps)
+   390: header 92 px on Legend with No sacking, 62 px on Normal
+  PASS  390: the Options tile reads "⚙️ OPTIONS £ · Legend Currency, nation job, haggling"
+  PASS  390: Options shows "🎚️ How hard Legend Everything against you. Good luck. Picked when thi" with nothing to press
+  PASS  390: and No sacking on
+  PASS  390: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 1 of 54 · Board 69/100 🏆 0 tro"
+
+== 1280 by 900
+  PASS  1280: the Dugout step offers Normal, Hard and Legend with Normal pressed ([["Normal","true"],["Hard","false"],["Legend","false"]])
+  PASS  1280: a Normal career carries no key and wears no level pill
+  PASS  1280: Legend is pressed
+  PASS  1280: pressing Hard, Legend, Normal, Hard, Legend and the switch moves nothing (start 1314/14226, hard 1314/14226, legend 1314/14226, normal 1314/14226, hard 1314/14226, legend 1314/14226, switch 1314/14226)
+  PASS  1280: the card's shortest button is 44.0 px and its smallest text 12 px
+  PASS  1280: the Dugout step is no wider than the screen
+  PASS  1280: the Legend career is running
+  PASS  1280: the save holds Legend and No sacking (legend, 1)
+  PASS  1280: the hub wears the Legend pill ("Legend")
+  PASS  1280: and the No sacking pill beside it
+  PASS  1280: nothing in the header overlaps or runs off the page (0 overlaps)
+   1280: header 36 px on Legend with No sacking, 36 px on Normal
+  PASS  1280: the Options tile reads "⚙️ OPTIONS £ · Legend Currency, nation job, haggling"
+  PASS  1280: Options shows "🎚️ How hard Legend Everything against you. Good luck. Picked when thi" with nothing to press
+  PASS  1280: and No sacking on
+  PASS  1280: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 1 of 54 · Board 69/100 🏆 0 tro"
+  PASS  no page errors
+
