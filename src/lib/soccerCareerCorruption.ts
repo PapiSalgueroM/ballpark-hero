@@ -167,7 +167,7 @@ export function getCorruptionEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.netWorth = Math.round((s.netWorth - 2) * 100) / 100; heat(s, 15); setFlag(s, "snitchArc", 1); s.events = [...s.events, "🤐 Paid a teammate €2M for silence. He bought a boat. The boat is called 'Nice Try'"]; return s; } },
         { label: "Bring him in on the whole thing", emoji: "🤝", color: "bg-red-700", consequence: "€2M dirty now, Heat +25",
           apply: s => { dirty(s, 2); heat(s, 25); setFlag(s, "snitchArc", 2); s.events = [...s.events, "🤝 Brought him in. Two players, one scheme, zero exit plan"]; return s; } },
-        { label: "Stop everything, right now", emoji: "🛑", color: "bg-emerald-600", consequence: "Heat -30, all dirty income ends, Integrity +14",
+        { label: "Stop everything, right now", emoji: "🛑", color: "bg-emerald-600", consequence: "Heat -30, Integrity +14, Morale up to +10",
           apply: s => { heat(s, -30); setFlag(s, "syndicate", 7); s.integrityBonus += 14; s.morale = clamp(s.morale + 10, 0, 100); setFlag(s, "snitchArc", 3); s.events = [...s.events, "🛑 A teammate looked you in the eye and you quit the whole thing that night"]; return s; } },
       ] });
   }

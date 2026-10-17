@@ -1,7 +1,7 @@
-name: Soccer corruption cost copy verification
+name: Soccer syndicate choice copy verification
 on:
   push:
-    branches: [codex/soccer-corruption-cost-copy]
+    branches: [codex/soccer-syndicate-choice-copy]
     paths:
       - .github/workflows/soccer-cash-choice-copy.yml
       - src/lib/soccerCareerCorruption.ts
@@ -32,10 +32,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Bind the three copy changes and retain committed source
+      - name: Bind the one syndicate copy change and retain committed source
         run: |
           set -euo pipefail
-          out="$RUNNER_TEMP/soccer-corruption-cost-copy"; test ! -e "$out"; mkdir "$out"
+          out="$RUNNER_TEMP/soccer-syndicate-choice-copy"; test ! -e "$out"; mkdir "$out"
           echo "CASH_CHOICE_OUT=$out" >> "$GITHUB_ENV"
           echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
           git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
@@ -43,15 +43,15 @@ jobs:
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
           sha256sum "$out/source.zip" "$out/request-source-files.sha256" "$out/source-files.sha256" > "$out/initial-source-packet.sha256"
-          git merge-base --is-ancestor 225b53b74b61499115a4afefcb2e24f191ab2b62 HEAD
-          git diff --exit-code 225b53b74b61499115a4afefcb2e24f191ab2b62 HEAD -- . ':!docs' ':!src/lib/soccerCareerCorruption.ts' ':!.github/workflows/soccer-cash-choice-copy.yml' > "$out/base-source-hold.log"
+          git merge-base --is-ancestor 6e7119250374fe7f5b481948bc0cd3478f788351 HEAD
+          git diff --exit-code 6e7119250374fe7f5b481948bc0cd3478f788351 HEAD -- . ':!docs' ':!src/lib/soccerCareerCorruption.ts' ':!.github/workflows/soccer-cash-choice-copy.yml' > "$out/base-source-hold.log"
           CASH_CHOICE_OUT="$out" SIM_OFFLINE_RECEIPT="$out/sourceguard.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module > "$out/copy-source.log" 2>&1 <<'NODE'
           import fs from 'node:fs'; import assert from 'node:assert/strict'; import {createHash} from 'node:crypto'; import {execFileSync} from 'node:child_process';
-          const out=process.env.CASH_CHOICE_OUT,file='src/lib/soccerCareerCorruption.ts',base='225b53b74b61499115a4afefcb2e24f191ab2b62',sha=x=>createHash('sha256').update(x).digest('hex'),original=execFileSync('git',['show',base+':'+file]),candidate=fs.readFileSync(file);
-          assert.equal(original.length,31574); assert.equal(sha(original),'299485b3505ae1ca891a4ec1fd789a5b9177eeb913f2c78e9fe72d6f28d0afec'); assert.equal(candidate.length,31602); assert.equal(sha(candidate),'c7df3ef9f33f04e358103d76f63c57b765343f7f6ce9b9334c7b47a325d08aab');
-          const spans=[["pay a flat 40%","pay 40% of hidden money plus 5% of net worth"],["Pay 40% of everything hidden, Heat drops to almost nothing","Pay 40% of hidden money plus 5% of net worth, Heat drops to almost nothing"],["Heat +25, but income doubles while it lasts","€2M dirty now, Heat +25"]]; let inverse=candidate.toString('utf8');
-          for(const [before,after] of spans){assert.equal(original.toString('utf8').split(before).length,2,'Unique original copy span');assert.equal(inverse.split(after).length,2,'Unique reviewed copy span');inverse=inverse.replace(after,before);} assert.equal(inverse,original.toString('utf8'),'All code, saved fields, shop mechanics and RNG outside the three strings are held');
-          fs.writeFileSync(out+'/corruption.original225b.ts',original);fs.writeFileSync(out+'/corruption.candidate.ts',candidate);fs.writeFileSync(out+'/copy-source-bindings.json',JSON.stringify({base,file,originalBytes:original.length,originalSha256:sha(original),candidateBytes:candidate.length,candidateSha256:sha(candidate),spans,wholeInverseExact:true,limits:'New catalog copy only. Serialized pending labels and previews are not migrated; no NBA fix or direct event320/325 runtime coverage is claimed.'},null,2)+'\n');console.log('PASS exact three copy spans and whole original225b inverse; every other protected source body held.');
+          const out=process.env.CASH_CHOICE_OUT,file='src/lib/soccerCareerCorruption.ts',base='6e7119250374fe7f5b481948bc0cd3478f788351',sha=x=>createHash('sha256').update(x).digest('hex'),original=execFileSync('git',['show',base+':'+file]),candidate=fs.readFileSync(file);
+          assert.equal(original.length,31602); assert.equal(sha(original),'c7df3ef9f33f04e358103d76f63c57b765343f7f6ce9b9334c7b47a325d08aab'); assert.equal(candidate.length,31597); assert.equal(sha(candidate),'d8504b5bec9284cac0cc4ae7f7ec79b213550c39d3c84d9d15b8605170dc4a0c');
+          const spans=[["Heat -30, all dirty income ends, Integrity +14","Heat -30, Integrity +14, Morale up to +10"]]; let inverse=candidate.toString('utf8');
+          for(const [before,after] of spans){assert.equal(original.toString('utf8').split(before).length,2,'Unique original copy span');assert.equal(inverse.split(after).length,2,'Unique reviewed copy span');inverse=inverse.replace(after,before);} assert.equal(inverse,original.toString('utf8'),'All code, saved fields, shop mechanics and RNG outside the one string are held');
+          fs.writeFileSync(out+'/corruption.original6e71.ts',original);fs.writeFileSync(out+'/corruption.candidate.ts',candidate);fs.writeFileSync(out+'/copy-source-bindings.json',JSON.stringify({base,file,originalBytes:original.length,originalSha256:sha(original),candidateBytes:candidate.length,candidateSha256:sha(candidate),spans,wholeInverseExact:true,limits:'New catalog copy only. Serialized pending labels and previews are not migrated; no direct event320 callback runtime coverage is claimed.'},null,2)+'\n');console.log('PASS exact one copy span and whole original6e71 inverse; every other protected source body held.');
           NODE
           printf '%s\0' "$(command -v node)" "$(readlink -f "$(command -v npm)")" | sort -z | xargs -0 sha256sum > "$out/runtime-tools-files.sha256"
           npm --version > "$out/npm-version.txt"
@@ -65,7 +65,7 @@ jobs:
           cp soccer-agent-review-artifacts/dependencies-*.json "$out/"
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
           import fs from 'node:fs'; import assert from 'node:assert/strict';
-          const out=process.env.CASH_CHOICE_OUT || process.env.RUNNER_TEMP+'/soccer-corruption-cost-copy';
+          const out=process.env.CASH_CHOICE_OUT || process.env.RUNNER_TEMP+'/soccer-syndicate-choice-copy';
           const before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),after=JSON.parse(fs.readFileSync(out+'/dependencies-after.json'));
           assert.equal(before.packages.length,521); assert.equal(after.packages.length,521); assert.deepEqual(after.packages,before.packages); assert.deepEqual(after.packageFiles,before.packageFiles); assert.equal(after.addedBrowserPackage,'1.64.0'); fs.writeFileSync(out+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n');
           NODE
@@ -143,7 +143,7 @@ jobs:
         if: always()
         run: |
           set -euo pipefail
-          out="${CASH_CHOICE_OUT:-$RUNNER_TEMP/soccer-corruption-cost-copy}"; mkdir -p "$out"; result=0
+          out="${CASH_CHOICE_OUT:-$RUNNER_TEMP/soccer-syndicate-choice-copy}"; mkdir -p "$out"; result=0
           git diff --exit-code HEAD -- . > "$out/non-generated-diff.log" 2>&1 || result=1
           git diff --binary HEAD -- . > "$out/generated.patch"
           git diff --name-only HEAD > "$out/generated-paths.txt"
@@ -168,7 +168,7 @@ jobs:
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
-          out="${CASH_CHOICE_OUT:-$RUNNER_TEMP/soccer-corruption-cost-copy}"; result=0
+          out="${CASH_CHOICE_OUT:-$RUNNER_TEMP/soccer-syndicate-choice-copy}"; result=0
           for kind in source installed browser-tool runtime-tools font validated-source dist; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
           if test -f "$out/initial-source-packet.sha256"; then sha256sum --check "$out/initial-source-packet.sha256" > "$out/initial-source-packet-holds.log" 2>&1 || result=1; fi
           if test -f "$out/installed-files.sha256"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-after-files.sha256"; cmp "$out/installed-files.sha256" "$out/installed-after-files.sha256" || result=1; fi
@@ -178,7 +178,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: soccer-corruption-cost-copy-${{ github.sha }}
+          name: soccer-syndicate-choice-copy-${{ github.sha }}
           path: ${{ env.CASH_CHOICE_OUT }}
           if-no-files-found: error
           retention-days: 14

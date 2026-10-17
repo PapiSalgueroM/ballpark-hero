@@ -1,3 +1,7 @@
+## Codex1404 candidate prepared, 2026-10-17 UTC
+
+Soccer Career event320 now lists actual Heat -30, Integrity +14 and Morale up to +10 instead of promising all dirty income ends. One new catalog string only; all callbacks, flags, saved fields and RNG code held. Existing test/build/source gates queued remotely, no READY or live claim. See docs/audits/soccer-syndicate-choice-copy-1404.md.
+
 ## Codex1404 claimed, 2026-10-17 UTC
 
 One Soccer Career event320 consequence narrows its promise to leaving the syndicate. Existing callback does not end all dirty income. Copy-only on final1402, own workflow and docs; exact code/money/storage/RNG held. Runtime and ready status pending. No activeI or320XI dependency. See docs/audits/soccer-syndicate-choice-copy-1404.md.
