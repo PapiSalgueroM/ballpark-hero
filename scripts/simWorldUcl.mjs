@@ -25,22 +25,33 @@
  *      slate equal to drawUclLeaguePhase's own, its play-offs, round of 16 and later rounds, every tie's legs
  *      and aggregate, a shootout only when level, away goals only to 2020, the tables' identities, exactly one
  *      winner; and every group season evaluated level both ways round the device's order (correction 1).
- *   2  SELF RELATIVE: the engine against itself with the binding switched off (the open, the rollover and the
- *      join's carry), both fleets, both coach modes: every key but a watching state's worldComps equal, every
+ *      Since the review of 2026-10-17 also: every first stage score replayed on simAiMatch itself over the
+ *      snapshot with the fixture's keyed stream (the watched match is the participant's own AI match); where a
+ *      season is opened, the save's holder first in the draw when it is in the field, and an era's one club from
+ *      outside its 32 the stand in worked out here (the strongest era club outside them, printed); and a mid
+ *      season move left with no competition only by the rule (today's world from season two).
+ *   2  SELF RELATIVE: the engine against itself with the binding switched off (the open, the rollover, the
+ *      join's carry and the load repair), both fleets, both coach modes: every key but a watching state's worldComps equal, every
  *      draw equal, no state in the Champions League carrying a slice, the evaluation called on the live state
  *      after every step of this arm.
  *   3  in step: after every step the nights done never fall, a night counts only once the week is past it and
  *      shows no score before, a night shown never changes (across a move that carried the slice too), a reload
  *      evaluates the same; the nights' dates rise with the legs of a tie a week apart, in the fleet and at every
- *      league size of every world.
- *   4  the save: at most one slice, always the season in play's; its bytes per format printed.
+ *      league size of every world. Since the review of 2026-10-17 also: when a night counts as played, read off
+ *      the CALENDAR alone (a matchday is its uclGroup entry, an era's leg its uclKo entry, any other night follows
+ *      the last entry dated on or before it), never off worldUclNights; one state evaluated at two night counts;
+ *      on the third seed a move to an entrant of the watched competition that never carries it; a reload right
+ *      after every move that finds the same competition; and the carries held to a floor per format.
+ *   4  the save: at most one slice, always the season in play's, never listing my club; its bytes printed.
  *   5  the holder (step E5): today's world's watchers on the engine and on it with the holder line reverted
  *      (scripts/lib/worldUclHolder1502.mjs): a watched winner is in next season's field (and the watched one,
  *      unless it is my club now), a winner already in the field leaves its clubs alone, and the two engines part
  *      only at a rollover after a watched final, on the field. Prints the fields the holder changed.
  *   6  the dailies' state shape: no Hot Seat or Deadline Day state carries worldComps.
- *   7  measured and printed, asserting nothing: titles by strength quartile, goals a watched and a domestic match,
- *      extra time and shootouts, slates and draws that bent a rule.
+ *   7  measured and printed: titles by strength quartile (held to one band from measured headroom: the head
+ *      144, 28, 4, 0 of 176 in r1502-run-a; the strongest quarter must win more than half and over four times the
+ *      weakest's), goals a watched and a domestic match, extra time and shootouts, slates and draws that bent a
+ *      rule.
  *
  * Exit 0 green, 1 red or a control that fired, 2 could not run, 3 a control that did not fire.
  * A control is WORLD_UCL_CONTROL=<name>; it runs its own section only and must turn its own check red and nothing
@@ -52,14 +63,20 @@
  *              (today's world's field at 32) eraformat (an era plays the league phase) meinfill (season one's
  *              field keeps my club: Hoffenheim) meindirect (the rollover's field keeps my club: the summer move)
  *              nopens (a final level after extra time keeps no winner) agall (away goals in the league phase)
- *              locale (the groups ordered by the device's order again)
+ *              locale (the groups ordered by the device's order again) swaphome and edgeswap (the watched
+ *              match with its two strengths or its two edges swapped) standweak (the eras' stand in is the
+ *              weakest club outside the 32) noholdertop (the holder never first in the draw)
  *   section 2: stream (the watched match draws from Math.random) participant (a club in the Champions League
  *              opens a watched one too) form (the evaluation writes the clubs' form)
  *   section 3: ahead (a night counts one week early) live (the evaluation reads today's strengths, not the
  *              snapshot: red across a move) noseen (a carried slice forgets the nights it had shown) marks (two
- *              league phase nights on one league round)
+ *              league phase nights on one league round) mdearly (a matchday placed at the league entry before
+ *              its European midweek) markearly (a mark night placed at its league round) carryentrant (a move
+ *              to an entrant carries the competition) nofall (that move opens nothing, so a reload opens one)
+ *              memokey (the evaluation's memo forgets the night count)
  *   section 4: keep (the rollover keeps last season's slice under a second key)
  *   section 5: noholder (the holder line reverted: the watched winner stays out of next season's field)
+ *   section 7: titles (the strengths swapped: the band on the titles by quartile)
  */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -151,6 +168,41 @@ const CAREER_EDITS = {
   noholder: [HOLDER_EDIT],
   keep: [{ file: CM, from: '    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);', to: '    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);\n    (state as unknown as Record<string, unknown>).worldCompsKept = career.worldComps;' }],
 };
+/* The review of 2026-10-17 (results-g/review-run-1502.md and review-read-1502.md): each mutation it showed every
+   section green under, now a control of the check that answers it. */
+const BIND_LINE = 'const bind: WorldCompBind = { sim: (strH, strA, scale, rand) => simScore(strH, strA, 0.2, -0.08, scale, rand), tie };';
+const FALL_LINE = '    /* Nothing to carry, or my new club is an entrant of the one it watched (it cannot watch itself play): the\n';
+Object.assign(CONTROLS, {
+  /* Correction 8's defect put into worldUclNights' own places: a matchday counted at the league entry before its
+     European midweek, and a mark night at its league round before the entries of its own midweek. */
+  mdearly: [3, /^3 calendar: [^:]*\(now\) seed \d+ at [^:]*: MD1 \(uclGroup, entry \d+\) counts as played early/, /^3 /],
+  markearly: [3, /^3 calendar: [^:]*\(now\) seed \d+ at [^:]*: [A-Z0-9_]+ \(date, entry -?\d+\) counts as played early/, /^3 /],
+  /* The carry rule's entrant half: the entrant filter dropped (the slice carried onto an entrant), and the
+     fall through dropped (the move opens nothing, the load repair opens one: a reload changes the save). */
+  carryentrant: [3, /^3 entrant: /, /^(3|4) /],
+  nofall: [3, /^3 reload: .*\(right after the join\)/, /^3 /],
+  /* The watched match: the two strengths swapped, the two edges swapped. */
+  swaphome: [1, /^1 match: /, /^1 /],
+  edgeswap: [1, /^1 match: /, /^1 /],
+  titles: [7, /^7 titles: /, /^(7 titles|1 )/],
+  /* The eras' stand in reversed (the weakest), the holder never put first in pot one, the memo's key without the
+     night count. */
+  standweak: [1, /^1 stand in: /, /^1 /],
+  noholdertop: [1, /^1 holder: /, /^1 /],
+  memokey: [3, /^3 memo: /, /^3 /],
+});
+Object.assign(CAREER_EDITS, {
+  mdearly: [{ file: CM, from: '      put(night, i < 0 ? prev.at : i, i < 0 ? prev.round : roundOf(i), i >= 0);', to: '      put(night, i < 0 ? prev.at : i - 1, i < 0 ? prev.round : roundOf(i), i >= 0);' }],
+  markearly: [{ file: CM, from: '      put(night, r < rounds ? blockEnd(r) : cal.length - 1, r, false);\n      return;', to: '      put(night, r < rounds ? leagueAt[r] : cal.length - 1, r, false);\n      return;' }],
+  carryentrant: [{ file: CM, from: ' && slice.s === joined.season && !names.some(c => slice.clubs.includes(c))) {', to: ' && slice.s === joined.season) {' }],
+  nofall: [{ file: CM, from: FALL_LINE, to: `    if (slice && slice.s === career.season) return;\n${FALL_LINE}` }],
+  swaphome: [{ file: CM, from: BIND_LINE, to: BIND_LINE.replace('simScore(strH, strA, 0.2', 'simScore(strA, strH, 0.2') }],
+  edgeswap: [{ file: CM, from: BIND_LINE, to: BIND_LINE.replace('0.2, -0.08, scale', '-0.08, 0.2, scale') }],
+  titles: [{ file: CM, from: BIND_LINE, to: BIND_LINE.replace('simScore(strH, strA, 0.2', 'simScore(strA, strH, 0.2') }],
+  standweak: [{ file: CM, from: '    .sort((a, b) => b.xi - a.xi || plain(a.c, b.c))[0]?.c;', to: '    .sort((a, b) => a.xi - b.xi || plain(a.c, b.c))[0]?.c;' }],
+  noholdertop: [{ file: CM, from: '  const top = holder && field.includes(holder) ? holder : undefined;', to: '  const top: string | undefined = undefined;' }],
+  memokey: [{ file: CM, from: "  const key = `${state.eraId ?? ''}|${k}`;", to: "  const key = `${state.eraId ?? ''}`;" }],
+});
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control ${CONTROL}`);
 const runs = n => (CONTROL ? CONTROLS[CONTROL][0] === n : ONLY.length === 0 || ONLY.includes(n));
 
@@ -310,11 +362,15 @@ const byPlain = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
 const OPEN_LINE = '  /* Round 1502: a club not in the Champions League watches it, opened after the seed it is keyed on. */\n  openWorldUclOnStart(state, world);\n';
 const ROLL_LINE = '    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);\n';
 const CARRY_LINE = '  carryWorldUcl(career, joined);\n';
-/* The binding switched off (section 2's other arm): the three calls that open or carry a slice. */
+/* The binding switched off (section 2's other arm): the four calls that open, carry or repair a slice (the
+   load repair since the review of 2026-10-17: with it in both arms a repair that drew or wrote elsewhere moved
+   both alike). */
+const REPAIR_LINE = '    repairWorldUcl(parsed);\n';
 const BINDING_OFF = [
   { file: CM, from: OPEN_LINE, to: '' },
   { file: CM, from: ROLL_LINE, to: '    delete state.worldComps;\n' },
   { file: CAL, from: CARRY_LINE, to: '' },
+  { file: CM, from: REPAIR_LINE, to: '' },
 ];
 const yearOf = (M, st) => (M.eras.isHistoricEra(st.eraId) ? M.eras.eraById(st.eraId).startYear : 2026);
 const formatFor = (M, st) => (yearOf(M, st) <= 2023 ? 'g8' : 'l36');
@@ -331,6 +387,21 @@ function joinTarget(M, st) {
   const mine = leagues.find(l => l.clubs.includes(st.clubName));
   const other = leagues.find(l => l !== mine && mine && l.clubs.length !== mine.clubs.length) ?? leagues.find(l => l !== mine);
   return other ? { club: other.clubs[other.clubs.length - 1], leagueId: other.id } : null;
+}
+/** The review of 2026-10-17 (the carry rule's entrant half): a move to a club of its world's leagues that is an
+ *  entrant of the competition the journey watches and not in the participant's field, so the new club still
+ *  watches it (today's world: the watched 36's clubs beyond the participant's 32). The first by name, or null. */
+function entrantTarget(M, st) {
+  const slice = st.worldComps?.ucl;
+  if (!slice) return null;
+  const inIt = new Set(st.uclField ?? []);
+  const leagues = (M.eras.isHistoricEra(st.eraId) ? M.cm.ERA_LEAGUES[st.eraId] : M.cm.REAL_LEAGUES) ?? [];
+  for (const club of [...slice.clubs].sort(byPlain)) {
+    if (club === st.clubName || inIt.has(club)) continue;
+    const lg = leagues.find(l => l.clubs.includes(club));
+    if (lg) return { club, leagueId: lg.id };
+  }
+  return null;
 }
 
 /**
@@ -357,18 +428,26 @@ async function careerJourney(E, f, { seasons, mode = 'nocoach', join = false, mo
     onStep?.(M, s, label, got);
   };
   step('start', () => ({ state: f.custom ? M.cm.startCareer(f.club, f.era, f.custom) : M.cm.startCareer(f.club, f.era) }));
+  const reload = cur => {
+    M.store.clear();
+    if (!M.cm.saveCareer(cur)) return { saved: 'refused' };
+    return { state: M.cm.loadCareer(), saved: createHash('sha256').update(JSON.stringify([...M.store.entries()].sort())).digest('hex').slice(0, 16), reload: cur };
+  };
+  /* `join` is true (season one, the bottom club of another league), a season number, or { season, to: 'entrant' }. */
+  const joinSeason = join === true ? 1 : typeof join === 'number' ? join : join ? join.season : 0;
   for (let season = 1; season <= seasons; season += 1) {
     let over = false;
     for (let i = 0; i < 260 && !over; i += 1) {
       step(`s${season}-e${i + 1}`, cur => { const r = M.cm.playNextEntry(cur, opts); over = r.kind === 'seasonOver'; return { state: r.state }; });
-      if (i === 20) step(`s${season}-reload`, cur => {
-        M.store.clear();
-        if (!M.cm.saveCareer(cur)) return { saved: 'refused' };
-        return { state: M.cm.loadCareer(), saved: createHash('sha256').update(JSON.stringify([...M.store.entries()].sort())).digest('hex').slice(0, 16), reload: cur };
-      });
-      if (join && season === (join === true ? 1 : join) && i === 25) {
-        const to = joinTarget(M, s);
-        if (to) step(`s${season}-join`, cur => { const joined = joinTo(M, cur, to.club, to.leagueId); return joined ? { state: joined, joined: cur } : {}; });
+      if (i === 20) step(`s${season}-reload`, reload);
+      if (season === joinSeason && i === 25) {
+        const to = join.to === 'entrant' ? entrantTarget(M, s) : joinTarget(M, s);
+        if (to) {
+          step(`s${season}-join`, cur => { const joined = joinTo(M, cur, to.club, to.leagueId); return joined ? { state: joined, joined: cur } : {}; });
+          /* The review of 2026-10-17: a reload right after the move, so the move's answer and the load repair's
+             must be the same competition (they were not when the move was to an entrant). */
+          step(`s${season}-join-reload`, cur => ({ ...reload(cur), afterJoin: true }));
+        }
       }
     }
     if (!over) throw new Error(`season ${season} did not end in 260 entries`);
@@ -402,6 +481,16 @@ function checkSeason(M, st, tag, measured) {
     if (fx.hg !== undefined) measured.goals.push(fx.hg + fx.ag);
   }
   for (const [c, n] of games) ok(n === firstStage, `1 fixtures: ${tag}: ${c} played ${n} first stage matches, ${firstStage} expected`);
+  /* The watched match is the participant's own AI match over the snapshot (the review of 2026-10-17: the two
+     strengths or the two edges swapped in worldUclBind turned the titles over and every section stayed green):
+     every first stage score replayed on simAiMatch itself, the fixture's keyed stream standing in for its
+     Math.random. */
+  for (const n of r.nights.filter(x => x.stage === 'md')) for (const fx of n.fixtures) {
+    if (fx.hg === undefined) continue;
+    const want = replayMatch(M, measured.kr, slice, n.id, fx.home, fx.away);
+    ok(want[0] === fx.hg && want[1] === fx.ag, `1 match: ${tag} ${n.id} ${fx.home} v ${fx.away} is ${fx.hg}-${fx.ag}, simAiMatch over the snapshot says ${want[0]}-${want[1]}`);
+    bump('1 watched matches replayed on simAiMatch');
+  }
   const rows = slice.f === 'g8' ? (r.groups ?? []).flatMap(g => g.rows) : (r.table ?? []);
   ok(rows.length === size, `1 table: ${tag}: ${rows.length} rows`);
   let gf = 0, ga = 0;
@@ -426,6 +515,52 @@ function checkSeason(M, st, tag, measured) {
     const rank = [...slice.str].sort((a, b) => b - a).indexOf(slice.str[slice.clubs.indexOf(r.winner)]);
     bump(`7 titles by strength quartile ${Math.min(3, Math.floor(rank / (size / 4))) + 1}`);
   }
+}
+
+/** One watched first stage match played again on the participant's simAiMatch: a state whose strengths are the
+ *  snapshot's, and the fixture's keyed stream (worldCompetition.ts: seed, night, home, away) as Math.random. */
+function replayMatch(M, kr, slice, night, home, away) {
+  const strOf = c => slice.str[slice.clubs.indexOf(c)];
+  const original = Math.random;
+  Math.random = kr(`${slice.seed}|${night}|${home}|${away}`);
+  try { return M.cm.simAiMatch({ clubStrengths: { [home]: strOf(home), [away]: strOf(away) } }, home, away); }
+  finally { Math.random = original; }
+}
+
+/** An era's stand in for my club, worked out here rather than by worldUclEraField: when my club (by either name,
+ *  or the club a created club replaced) is one of the era's verified 32, the era league club outside the 32 with
+ *  the best XI (eraXIAvg), the name as plain text on a tie (the critic's answer 13); else none. */
+function standInOf(M, s) {
+  const era = s.eraId;
+  const pool = new Set((M.cm.ERA_UCL_FIELDS[era] ?? []).map(e => e.name));
+  const mine = new Set([s.clubName, s.customClub?.replacedClub].filter(Boolean).flatMap(c => [c, M.cm.eraEuroName(era, c)]));
+  if (![...mine].some(c => pool.has(c))) return null;
+  let best = null;
+  for (const c of (M.cm.ERA_LEAGUES[era] ?? []).flatMap(l => l.clubs)) {
+    if (pool.has(c) || pool.has(M.cm.eraEuroName(era, c)) || mine.has(c)) continue;
+    const xi = M.cm.eraXIAvg(era, c) ?? 0;
+    if (!best || xi > best.xi || (xi === best.xi && c < best.c)) best = { c, xi };
+  }
+  return best?.c ?? null;
+}
+
+/** Section 1, where a watched season is opened (the start and every rollover; the review of 2026-10-17 left the
+ *  holder out of pot one, and reversed the stand in, and both stayed green): the save's holder heads the draw
+ *  when it is in the field and nobody does otherwise, and an era's field holds, from outside its 32, exactly the
+ *  stand in standInOf names (printed per era). */
+function openChecks(M, s, name, label, got, measured) {
+  const slice = s?.worldComps?.ucl;
+  if (!slice || !(label === 'start' || got?.prev)) return;
+  const holder = got?.prev ? M.cm.uclHolderOf(got.prev) : slice.f === 'l36' ? M.cm.CM_FINAL_TABLES_2025_26.holders : null;
+  const want = holder && slice.clubs.includes(holder) ? holder : undefined;
+  ok(slice.holder === want, `1 holder: ${name} at ${label}: the draw's holder is ${slice.holder ?? 'nobody'}, the save's holder ${holder ?? 'nobody'} ${want ? 'is' : 'is not'} in the field`);
+  if (want) bump('1 opened seasons drawn with the holder first');
+  if (slice.f !== 'g8') return;
+  const stand = standInOf(M, s);
+  const pool = new Set((M.cm.ERA_UCL_FIELDS[s.eraId] ?? []).map(e => e.name));
+  const outside = slice.clubs.filter(c => !pool.has(c) && !pool.has(M.cm.eraEuroName(s.eraId, c)));
+  ok(same(outside, stand ? [stand] : []), `1 stand in: ${name} at ${label}: the field holds ${outside.join(', ') || 'nobody'} from outside the era's 32, the strongest era club outside them is ${stand ?? 'not needed'}`);
+  if (stand) measured.standIns.set(s.eraId, [...new Set([...(measured.standIns.get(s.eraId) ?? []), `${stand} for ${s.clubName}`])]);
 }
 
 /** Section 1, the eras' groups: one club of each pot a group, the season's draw rules, every pair twice, and a
@@ -537,22 +672,37 @@ function stepTracker(name) {
     const slice = s.worldComps?.ucl;
     if (slice) ok(slice.s === s.season, `4 stale: ${name} at ${label}: season ${s.season} carries the slice of season ${slice.s}`);
     if (s.uclGroup && slice) ok(false, `4 slices: ${name} at ${label}: a club in the Champions League carries a watched one`);
+    /* My club is never an entrant of the competition it watches, at any step (the brief's design, decision 4). */
+    if (slice) ok(!myNames(M, s).some(c => slice.clubs.includes(c)), `4 own: ${name} at ${label}: ${s.clubName} watches a competition that lists it among its entrants`);
     if (s.season !== season) {
       season = s.season; prevDone = 0; shown = new Map();
       if (slice) { counts[`4 slice bytes ${slice.f}`] = [...(counts[`4 slice bytes ${slice.f}`] ?? []), JSON.stringify(s.worldComps).length]; dates(M, s, label); }
     }
     if (got?.joined) {
       const before = got.joined.worldComps?.ucl;
+      const carried = !!slice && !!before && before.seed === slice.seed && same(before.clubs, slice.clubs);
+      /* The carry rule's entrant half (the critic's correction 10): a move to an entrant of the watched
+         competition that leaves the new club watching never carries that competition. */
+      if (before && !s.uclGroup && myNames(M, s).some(c => before.clubs.includes(c))) {
+        bump(`3 joins to an entrant that still watches${slice ? ', a fresh slice opened' : ', no slice'}`);
+        ok(!carried, `3 entrant: ${name} at ${label}: the move to ${s.clubName}, an entrant, carried the competition it is in`);
+      }
       if (!slice) bump(before ? '3 joins that dropped the slice' : '3 joins with nothing to carry or open');
-      else if (before && before.seed === slice.seed) {
+      else if (carried) {
         bump('3 joins that carried the slice');
+        bump(`3 joins that carried the slice ${slice.f}`);
         const places = M.cm.worldUclNights(s);
         const raw = places.filter(p => s.week > p.at).length;
         if (raw < (slice.seen ?? 0)) bump('3 joins whose new calendar sat behind the old');
       } else { bump('3 joins that opened a fresh slice'); shown = new Map(); prevDone = 0; }
       if (slice) dates(M, s, label);
     }
-    if (got?.reload) ok(JSON.stringify(M.cm.evalWorldUcl(got.reload)) === JSON.stringify(M.cm.evalWorldUcl(s)), `3 reload: ${name} at ${label}: the reloaded save evaluates otherwise`);
+    if (got?.reload) {
+      ok(JSON.stringify(M.cm.evalWorldUcl(got.reload)) === JSON.stringify(M.cm.evalWorldUcl(s)), `3 reload: ${name} at ${label}: the reloaded save evaluates otherwise`);
+      ok(JSON.stringify(got.reload.worldComps ?? null) === JSON.stringify(s.worldComps ?? null),
+        `3 reload: ${name} at ${label}: the reloaded save watches another competition${got.afterJoin ? ' (right after the join)' : ''} (${got.reload.worldComps ? 'one' : 'none'} before, ${s.worldComps ? 'one' : 'none'} after)`);
+      if (got.afterJoin) bump('3 reloads right after a join');
+    }
     if (!slice || slice.s !== s.season) return;
     const done = M.cm.worldUclNightsDone(s);
     const places = M.cm.worldUclNights(s);
@@ -571,8 +721,55 @@ function stepTracker(name) {
         else shown.set(key, now);
       }
     }
+    checkCalendar(M, s, name, label, done);
+    /* One state evaluated at two night counts (the review of 2026-10-17: the memo's key must hold the count,
+       which the screen of Round 1503 will lean on). */
+    const back = done > 0 ? M.cm.evalWorldUcl(s, done - 1)?.nightsDone : null;
+    if (done > 0) ok(back === done - 1, `3 memo: ${name} at ${label}: the evaluation at ${done - 1} nights answers ${back}`);
     bump('3 states checked');
   };
+}
+
+/** Both names my club goes by in its world (an era's field can know it by another). */
+const myNames = (M, s) => [s.clubName, s.eraId ? M.cm.eraEuroName(s.eraId, s.clubName) : s.clubName];
+
+/**
+ * Section 3, when a night counts as played, from the CALENDAR alone, never from worldUclNights (the critic's
+ * correction 8; the review of 2026-10-17 put correction 8's defect into worldUclNights' own places and the check
+ * above, which reads them, stayed green). A first stage matchday on one of the calendar's six European midweeks IS
+ * that uclGroup entry, and an era's knockout leg with a uclKo entry IS that entry: played once the week is past
+ * its index, and dated with it. Any other night is played once the week is past the last calendar entry dated on
+ * or before the night's own date. A night counted before that is early (red); an entry night not counted once
+ * its entry is played is late (red); a dated night shown after its day is counted and printed.
+ */
+function checkCalendar(M, s, name, label, done) {
+  const slice = s.worldComps.ucl;
+  const places = M.cm.worldUclNights(s);
+  const dates = M.cal.worldUclNightDates(s);
+  const entry = M.cal.entryDatesOf(s);
+  if (!places || !dates || !entry) { ok(false, `3 calendar: ${name} at ${label}: a watched season with no nights or no dates`); return; }
+  const over = s.week >= s.calendar.length;
+  const seen = slice.seen ?? 0;
+  const ymd = d => `${d.y}-${d.m}-${d.d}`;
+  places.forEach((p, i) => {
+    const n = p.night;
+    let idx = -1;
+    let how = 'date';
+    if (n.stage === 'md' && (n.md ?? 0) < 6) idx = s.calendar.findIndex(e => e.type === 'uclGroup' && e.round === n.md);
+    else if (slice.f === 'g8') idx = s.calendar.findIndex(e => e.type === 'uclKo' && e.uclRound === n.stage && (e.uclLeg ?? 1) === (n.leg ?? 1));
+    if (idx >= 0) {
+      how = n.stage === 'md' ? 'uclGroup' : 'uclKo';
+      ok(dayOf(dates[i]) === dayOf(entry[idx]), `3 calendar: ${name} at ${label}: ${n.id} is the ${how} entry ${idx} (${ymd(entry[idx])}) and is dated ${ymd(dates[i])}`);
+    } else for (let j = 0; j < entry.length; j += 1) if (dayOf(entry[j]) <= dayOf(dates[i])) idx = j;
+    const played = over || s.week > idx || i < seen;
+    if (i < done && !played) ok(false, `3 calendar: ${name} at ${label}: ${n.id} (${how}, entry ${idx}) counts as played early, at week ${s.week}`);
+    else if (i >= done && played && how !== 'date') ok(false, `3 calendar: ${name} at ${label}: ${n.id} (${how}, entry ${idx}) is not counted although its entry is played`);
+    else {
+      ok(true, '');
+      if (i >= done && played) bump(`3 late dated ${slice.f} nights (shown after their day)`);
+    }
+    bump(`3 calendar checks ${slice.f} ${how}`);
+  });
 }
 
 /** Sections 1, 3, 4 and 7: the watcher fleet through three seasons, a mid season move on two seeds, and a summer
@@ -582,15 +779,15 @@ async function watcherPass() {
   if (careerEdits().length) changed = true;
   const fleet = pickFleet(await E.fresh(), 'watchers', cannot);
   console.log(`  1 watchers: ${fleet.map(f => `${f.club} (${f.era})`).join(', ')}; seeds ${SEEDS.join(',')}`);
-  const measured = { goals: [], domestic: [0, 0], ties: 0, aet: 0, pens: 0, g8: [] };
+  const measured = { goals: [], domestic: [0, 0], ties: 0, aet: 0, pens: 0, g8: [], kr: (await bundle('kr', { kr: 'src/lib/keyedRng.ts' })).kr.keyedRng, standIns: new Map() };
   const t0 = Date.now();
   for (const f of fleet) for (const seed of SEEDS) {
     const name = `${f.club} (${f.era}) seed ${seed}`;
     let movedTo = null;
-    /* Seasons a mid season move left without a watched competition by the rule: the new club is an entrant of
-       the one it watched, or nothing could be carried and the field is not fixed data (a move in season two or
-       later of today's world from a club that was in the competition: the critic's advice 26). Counted, never
-       called a missing competition. */
+    /* Seasons a mid season move left without a watched competition by the rule, and only by it (the review of
+       2026-10-17: an excuse for any move hid a carry that went missing): today's world from season two on, where
+       no fixed data can open a field, after a move from a club that was in the competition (the critic's advice
+       26) or to an entrant of the one it watched. Any other move left without one is red. */
     const movedWithout = new Set();
     const move = f.club === 'Everton' ? (M, cur) => {
       const places = M.cm.uclPlacesIn(M.cm.careerLeagueOf(cur));
@@ -603,10 +800,19 @@ async function watcherPass() {
     await careerJourney(E, { ...f, seed }, {
       /* Mid season moves in season one on the first seed and in season two on the second (the critic's correction
          10: a move after the first rollover, in an era save and in today's world, keeps the season's own slice). */
-      seasons: 3, join: seed === SEEDS[0] ? 1 : seed === SEEDS[1] ? 2 : false, move,
+      /* And on the third seed today's world moves in season one to an entrant of the watched competition (the
+         review of 2026-10-17: Liverpool, Lyon and the like, in the watched 36 and not in the participant's 32). */
+      seasons: 3, move,
+      join: seed === SEEDS[0] ? 1 : seed === SEEDS[1] ? 2 : seed === SEEDS[2] && f.era === 'now' && !f.custom ? { season: 1, to: 'entrant' } : false,
       onStep: (M, s, label, got) => {
         if (runs(3) || runs(4)) track(M, s, label, got);
-        if (got?.joined && s && !s.uclGroup && !s.worldComps?.ucl) movedWithout.add(s.season);
+        if (runs(1)) openChecks(M, s, name, label, got, measured);
+        if (got?.joined && s && !s.uclGroup && !s.worldComps?.ucl) {
+          const before = got.joined.worldComps?.ucl;
+          const byRule = formatFor(M, s) === 'l36' && s.season >= 2 && (!before || before.s !== got.joined.season || myNames(M, s).some(c => before.clubs.includes(c)));
+          if (byRule) movedWithout.add(s.season);
+          else if (runs(1)) ok(false, `1 no competition: ${name}: the move to ${s.clubName} in season ${s.season} left no watched competition, and no rule says so`);
+        }
         if (got?.prev && s?.season === 2 && movedTo) {
           const tables = M.cm.uclFinalTables(got.prev);
           const direct = tables ? M.cm.uclDirectQualifiersFromTables(tables, got.prev.uclBracket?.find(t => t.round === 'F')?.winner ?? null) : [];
@@ -622,6 +828,24 @@ async function watcherPass() {
         for (const lg of Object.values(st.world ?? {})) for (const row of lg.table ?? []) { measured.domestic[0] += row.gf; measured.domestic[1] += (row.w + row.d + row.l) / 2; }
       },
     });
+  }
+  if (runs(1)) console.log(`  1 stand ins: ${[...measured.standIns].map(([era, xs]) => `${era} ${xs.join(', ')}`).join('; ') || 'none'}`);
+  if (runs(3)) {
+    /* The joins are held to a floor, not only printed (the review of 2026-10-17): a carry of each format, and
+       on three seeds or more a move to an entrant that still watches. */
+    for (const fmt of ['g8', 'l36']) ok((counts[`3 joins that carried the slice ${fmt}`] ?? 0) > 0, `3 joins: no mid season move carried a ${fmt} slice, so the carry went unchecked`);
+    const toEntrant = Object.entries(counts).filter(([k]) => k.startsWith('3 joins to an entrant')).reduce((a, [, v]) => a + v, 0);
+    if (SEEDS.length >= 3) ok(toEntrant > 0, '3 entrant: no mid season move went to an entrant of the watched competition, so the carry rule went unchecked');
+    ok((counts['3 reloads right after a join'] ?? 0) > 0, '3 reload: no save was reloaded right after a join');
+  }
+  if (runs(7)) {
+    /* The titles by strength quartile, held to a band set from measured headroom: the head gave 144, 28, 4 and 0
+       of 176 titles (r1502-run-a, five seeds), the two strengths swapped in the watched match 1, 22, 46 and 107
+       (r1502-run-s). The strongest quarter must win more than half and more than four times the weakest's. */
+    const q = [1, 2, 3, 4].map(i => counts[`7 titles by strength quartile ${i}`] ?? 0);
+    const titles = q.reduce((a, b) => a + b, 0);
+    if (titles >= 40) ok(2 * q[0] > titles && q[0] > 4 * q[3], `7 titles: the strongest quarter of the field won ${q[0]} of ${titles} titles and the weakest ${q[3]}`);
+    else console.log(`  7 titles: ${titles} titles, fewer than the 40 the band needs, so it is not held`);
   }
   const mean = xs => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : NaN);
   console.log(`  1 and 3: ${fleet.length * SEEDS.length} journeys in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
