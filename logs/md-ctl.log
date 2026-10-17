@@ -1,0 +1,10 @@
+treeWithoutMerge: 72e35f454eaf869d11677a9ece8ba8dd252cfe31, 8445f088 without 20fa77a6; conflicts kept from 8445f088: src/pages/WhatsNew.tsx
+neutralaway: last: simCmMatchDay: CONTROL neutralaway FIRED (232 failures, section(s) 1, 4, 5, 7)
+oldorder: last: simCmMatchDay: CONTROL oldorder FIRED (22834 failures, section(s) 2, 3, 4, 5)
+truncate: last: simCmMatchDay: CONTROL truncate FIRED (15799 failures, section(s) 3)
+numbers: last: simCmMatchDay: CONTROL numbers FIRED (15958 failures, section(s) 6)
+homeflip: last: simCmMatchDay: CONTROL homeflip FIRED (38090 failures, section(s) 1, 2, 3, 4, 5, 7)
+barorder: last: simCmMatchDay: CONTROL barorder FIRED (4736 failures, section(s) 2, 4)
+greenfirst: last: simCmMatchDay: CONTROL greenfirst FIRED (320 failures, section(s) 4)
+neutrallive: last: simCmMatchDay: CONTROL neutrallive FIRED (3824 failures, section(s) 4, 7)
+controls (each must be 1): neutralaway=1 oldorder=1 truncate=1 numbers=1 homeflip=1 barorder=1 greenfirst=1 neutrallive=1
