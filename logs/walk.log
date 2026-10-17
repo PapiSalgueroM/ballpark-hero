@@ -1,0 +1,31 @@
+ok   ST: the engine dealt a deck training card from the social media screen within 400 seeds
+   ST seed 1: 720 "Beating your man", "Do the one on one work" prints "Dribbling next season +1, Passing next season -1"
+ok   GK: the engine dealt a deck training card from the social media screen within 400 seeds
+   GK seed 1: 701 "Crosses into a crowded box", "Do the extra hour" prints "Morale -1, Aerial Command next season +1, Positioning next season -1"
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] database browser route continue https://flawuiqbvjobmkfkauhw.supabase.co
+ok   390-ST deal: the deck chunk was fetched with the career on screen (soccerDeck-C7W0uiEb.js)
+   timing at 390, throttled: the deck's first load fetched soccerDeck-C7W0uiEb.js (12 ms), soccerMoments-BqYBmtSO.js (18 ms), throughBallDrill-B9fNBoXH.js (19 ms), core-Dsglyqbx.js (20 ms), leagueCore--DUG-EXw.js (19 ms), keyedShuffle-CJAps3xO.js (20 ms), ownGoalRule-J3XQry1d.js (19 ms); 20 ms from its first request to its last byte; already in memory: AppearanceBuilder-hVI0PERJ.js, keyedRng-BKZQ2UGv.js, SoccerCareer-BtecBu8o.js, index-DbIu3gfh.js, PlayerAvatar-DjwoNVkv.js, soccerCareerAppearance-C4EKR5O3.js, soccerBoots-BK_dXNrV.js, soccerBootIds-BWkyFIXk.js, useCareerMoment-C2cnNzlh.js, clubRivalries-DuNC-DyB.js, formatNumber-CGuttX8h.js, dialogA11y-BCgxbiii.js, useGameCompletion-CbJWMmJt.js, badges-Evy4bhi2.js, GameSeoContent-BCRq5AVI.js, GameReportContext-DFJ0IBP2.js, flag-Ez-5e5U2.js, GameNavbar-B4crrDXq.js, arrow-left-BPucYCNv.js, star-BWUmDIoK.js, medal-B_yFb4t9.js, GameHelp-Bi77sCEn.js, HowToPlayPopover-SlBFjqz7.js, circle-help-zyrF43jj.js, VictoryMoment-DPDuF__X.js, select-CFYZwM9K.js, chevron-down-BFQ7E3C7.js, chevron-up-CyHGVDwD.js, confederationGroups-8jgsrX6T.js, soccerInternational-FiWGI8ks.js, lz-string-cemwgVSj.js, intlNames-DiJYNZJt.js, uclFormatHistory-DwuhruDw.js, careerRivalryChoices-B2c2ZYXB.js, managerOffers-EoQ6k_gA.js, careerAwardsNight-BDQnO6dK.js, arcade-CUT7KVjC.js, freeKick-BSoL5hQo.js, Confetti-DRgbdHFN.js, Celebration-D3oqUI4x.js, CelebrationStyles-E7Q8x0ri.js, FlagImg-Bsnqv617.js, ShareButtons-DlBIl3fh.js, copy-g9zeB5RB.js, useRevealScroll-CoyrnS77.js, useArrivalTop-Cki1Q0FH.js
+ok   390-ST deal: the first card is the deck card node dealt, "Beating your man"
+ok   390-ST deal: its training button prints the gain and the time cost ("Dribbling next season +1, Passing next season -1")
+ok   390-ST deal: no page error
+ok   390-ST fasttap: the deal went on without the deck card (phase random_events, first card 200)
+ok   390-ST fasttap: no page error
+ok   390-ST answer: the toast prints what landed, "You take on a defender in every session. Dribbling next season +1, Passing next season -1."
+ok   390-ST answer: the save queued what node queued ({"dribbling":1,"passing":-1})
+ok   390-ST answer: the deck card left the batch
+ok   390-ST answer: no page error
+ok   390-ST delayed: the press says it is working while the chunk is held
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+TargetClosedError2: "route.fetch: Target page, context or browser has been closed" while running route callback.
+Consider awaiting `await page.unrouteAll({ behavior: 'ignoreErrors' })`
+before the end of the test to ignore remaining routes in flight.
+    at route._innerContinue (/home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/offlineTransport.cjs:163:65)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerDeck.mjs:166:131 {
+  log: []
+}
+
+Node.js v24.21.0
