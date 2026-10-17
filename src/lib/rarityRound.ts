@@ -1,4 +1,4 @@
-import { supabase } from '@/integrations/supabase/client';
+import { gameQueryClient as supabase } from '@/lib/gameQueryClient';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 import { normalizeName, displayName, SOCCER_MARKET_VALUE_SOURCE, type PlayerSourceConfig } from '@/lib/playerSearch';
 import { dailyPrngSeed, dateSeed, getTodayET } from '@/lib/dateUtils';

@@ -4,7 +4,7 @@ import type { Database } from '@/integrations/supabase/types';
 
 // Local contracts for live relations missing from the generated schema.
 // Reuse the existing client so authentication and the live endpoint stay unchanged.
-type MarketRow = {
+type MarketRow = Omit<Database['public']['Tables']['player_market_values']['Row'], 'player_name' | 'year'> & {
   player_name: string;
   nationality: string | null;
   club: string | null;
@@ -58,6 +58,18 @@ type GameQueryDatabase = {
     };
     Views: {
       player_market_values_dedup: View<MarketRow>;
+      player_market_tracked: View<MarketRow & {
+        final_year: number;
+        final_value_usd: number | null;
+      }>;
+      ballon_dor: View<{
+        player_name: string;
+        year: number;
+        rank: number;
+        nationality: string | null;
+        club: string | null;
+        award_type: string | null;
+      }>;
       game_player_pool: View<PackRow>;
       rebuild_clubs: View<{
         club: string;
