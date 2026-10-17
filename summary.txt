@@ -1,0 +1,2 @@
+sec4-alloff exit=0 235s | alloff FIRED as it must
+sec4 exit=0 807s | simCmDifficulty: all green (sections 4)
