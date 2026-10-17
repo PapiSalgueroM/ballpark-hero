@@ -15,7 +15,8 @@
  *       a group), Final won by the engine's winner
  *   (d) a Real Madrid participant: Table is the old groups card, Matchdays read from the adapter, and the ? says the
  *       game's stand in for today's world (group winners into the quarter-finals), never a round of 16
- *   (k) the (a) save on the same stream at night 11 (play-offs settled, round of 16 first legs played): every
+ *   (k) the (a) save's stream stopped once 11 nights are done (on this stream the entry lands on 12: the play-offs
+ *       and both legs of the round of 16 played, measured on the runner 2026-10-17): every
  *       play-off and round of 16 card read against the engine's ties (first leg, second leg the right way round,
  *       the aggregate and how it was won), Matchdays paged back to the play-off second legs with every row as the
  *       engine played it, and one club's run holding its second leg (added by the review fix, run lens major 1)
@@ -124,8 +125,9 @@ const saves = {};
   const fin = tape(0x1503b, () => b.M.cm.finishSeason(b.s)).value.state;
   saves.b = { items: saved(b.M, fin), winner: end.winner, runnerUp: end.runnerUp };
   console.log(`(b) Chelsea season over after ${b.entries} entries: the engine's final, ${end.winner} beat ${end.runnerUp}`);
-  /* (k) the same stream stopped at night 11: the play-offs settled and the round of 16 first legs played. What each
-     card and each row must read is written here from the engine's own ties, never from the screen's code. */
+  /* (k) the same stream stopped once 11 nights are done (12 on this stream): the play-offs settled and the round of
+     16 played as far as the week reached. What each card and each row must read is written here from the engine's
+     own ties, never from the screen's code; a round of 16 tie with one leg played reads its first leg and no second. */
   const k = await play('Chelsea', undefined, 0x1503a, (M, s) => M.cm.worldUclNightsDone(s) >= 11);
   const kd = k.M.cm.worldUclNightsDone(k.s);
   const kr = k.M.cm.evalWorldUcl(k.s);
