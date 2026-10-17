@@ -37,6 +37,20 @@
         exactly the numbers the table gives, and the block opens by saying
         every other number on that screen is Normal's.
 
+   MEASURED (GitHub runner, remote checks r1501-m1 at 08a2a7b8; the dials are the starting table, untuned,
+   because they met every band on the first measurement). Section 4, the engaged driver, 9 clubs, 8 seeds,
+   6 seasons a level (432 seasons each), a sacked career handing its club to a fresh one:
+                         mid ppg   drop      sacked seasons      spend a season   big club titles in ten
+     Normal              1.41                 91 of 432 (0.21)   27.00m           3.89
+     Hard                1.24      12.6%     258 of 432 (2.84x)  22.53m (-16.5%)  2.64
+     Legend              1.09      23.0%     364 of 432 (4.00x)  14.58m (-46.0%)  1.39
+     bands (the lead)              8 to 20 / 18 to 35   1.4x / 2x   -10% on Hard     1 on Hard
+     Normal against Normal (even seeds against odd seeds): mid ppg 1.43 and 1.40, a 2.1% gap.
+   The second block of seeds (SEED_OFFSET=8, r1501-m2) is in the round's notes. Sacked share by tier, which
+   the bands do not hold: Hard 0.41 big, 0.54 mid, 0.84 small; Legend 0.69, 0.85, 0.99 (Normal 0.13, 0.15,
+   0.35). Section 0 on Normal, both drivers, 4 seeds, 10 seasons: the engaged buyer's mid ppg 1.40 against
+   the steady keeper's 1.39, big club titles 4.25 and 3.83 in ten. One season takes about 0.7 s on a runner.
+
    Negative controls (CM_DIFF_CONTROL), each patched in memory or into the
    bundle, never into src; each must turn its section red:
      flat        Hard's pain set to 1                                      1
@@ -820,7 +834,7 @@ function assertOutcomes(rows) {
   if (failures === before) ok('every level sits inside the bands the lead set');
 }
 function section4() {
-  const seeds = num('SEEDS', 4), seasons = num('SEASONS', 6);
+  const seeds = num('SEEDS', 8), seasons = num('SEASONS', 6);
   const levels = (process.env.LEVELS || LEVELS.join(',')).split(',');
   const drivers = (process.env.DRIVERS || 'engaged').split(',');
   console.log(`4) outcomes: ${levels.join(', ')}, ${seeds} seeds from ${num('SEED_OFFSET', 0)}, ${seasons} seasons, ${drivers.join(' and ')}, shard ${process.env.SHARD || '0/1'}`);
