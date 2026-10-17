@@ -1,0 +1,37 @@
+[measure] on this tree; fleets falls, rollover, offers, takeover
+[measure falls] 3200 fresh careers (4 clubs a tier a world, 40 seeds each, seed0 0), 0 with no match, openings seen 69
+  tier 1: n 129, median 8.5, p90 8.5, p95 8.5, p99 8.5
+  tier 2: n 194, median 6.5, p90 8.5, p95 8.5, p99 8.5
+  tier 3: n 319, median 5.5, p90 6.6, p95 7.2, p99 7.5
+  tier 4: n 348, median 4.9, p90 5.5, p95 5.5, p99 5.5
+  era era2005: n 204, median 5.5, p90 7.5, p95 7.5, p99 8.5
+  era era2010: n 203, median 5.5, p90 8.5, p95 8.5, p99 8.5
+  era era2015: n 180, median 5.5, p90 7.5, p95 8.5, p99 8.5
+  era era2020: n 230, median 5.5, p90 7.5, p95 8.5, p99 8.5
+  era now: n 173, median 5.5, p90 8.5, p95 8.5, p99 8.5
+  pooled lost openers: n 990, median 5.5, p90 7.5, p95 8.5, p99 8.5
+  by competition: league 990, cup 0, uclGroup 0, uclKo 0
+  BOARD_FRESH recipe: 60 + ceil(pooled p95 8.5) = 69
+[measure rollover] title fleet: 240 careers, 128 sacked before the end
+[measure title fleet] 488 season ends, 426 stays, 62 moves
+  A or B stays opening under Safe: 0 of 304; grade B: 0 of 96; title seasons: 0 of 148
+  promotions 12, graded C or worse 0; relegations 0
+  stay openings: n 426, median 69, p90 69, p95 73, p99 81
+[measure offers title fleet] 129 seasons with offers, 180 offers; 10 seasons and 12 offers two or more tiers up; e.g. Celtic (tier 4) offered Aston Villa (tier 2), Manchester United (tier 2); Celtic (tier 4) offered Nottingham Forest (tier 2); Celtic (tier 4) offered Aston Villa (tier 2), Manchester United (tier 2)
+[measure promotion fleet] 96 season ends, 96 stays, 0 moves
+  A or B stays opening under Safe: 0 of 76; grade B: 0 of 42; title seasons: 0 of 34
+  promotions 70, graded C or worse 0; relegations 0
+  stay openings: n 96, median 69, p90 70.5, p95 72, p99 73.5
+  kitty tier 1 flat over budget: n 286, median 1.07, p90 1.23, p95 1.42, p99 1.68
+  kitty tier 2 flat over budget: n 27, median 1.03, p90 1.25, p95 1.27, p99 1.66
+  kitty tier 3 flat over budget: n 55, median 1.2, p90 2.31, p95 2.6, p99 3.22
+  kitty tier 4 flat over budget: n 154, median 2.57, p90 6.5, p95 6.75, p99 7
+  KITTY_TOP_SHARE recipe: smallest multiple of 0.05 at or above the tier 1 and 2 p99 1.68 = 1.7
+  the band at 1.7 would bind 0 of 286 tier 1 rollovers (0 of them with a trophy)
+  the band at 1.7 would bind 0 of 27 tier 2 rollovers (0 of them with a trophy)
+  the band at 1.7 would bind 25 of 55 tier 3 rollovers (10 of them with a trophy)
+  the band at 1.7 would bind 102 of 154 tier 4 rollovers (50 of them with a trophy)
+[measure offers] tier 4 fleet: 344 season ends over 27 leagues
+[measure offers tier 4 fleet] 264 seasons with offers, 401 offers; 2 seasons and 2 offers two or more tiers up; e.g. OB (tier 4) offered Tottenham (tier 2); Rudeš (tier 4) offered Brighton (tier 2)
+[measure takeover] 180 handovers (startMidSeason), 0 carry a failed objective
+simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 750 s)

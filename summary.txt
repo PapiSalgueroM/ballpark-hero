@@ -1,0 +1,17 @@
+simBoardAsks exit=0 45s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+budget-selfcap-head exit=1 0s | control cannot run: clubManager.ts is not in the shape CM_BUDGET_CONTROL=selfcap rewrites
+budget-selfcap-base exit=1 1s | control cannot run: clubManager.ts is not in the shape CM_BUDGET_CONTROL=selfcap rewrites
+simClubManagerBudget exit=0 211s | simClubManagerBudget: PASS
+budget-static exit=1 215s | simClubManagerBudget: 22 FAILURE(S)
+simClubManagerFinances exit=0 76s | simClubManagerFinances: PASS. The books add up, the projection lands, prices move the fans and the board, and the sponsor desk pays what it says.
+simCustomClubValues exit=0 103s | simCustomClubValues: 25 checks, 0 failures
+simClubManagerSave exit=0 14s | simClubManagerSave: all sections green
+simCmUnseededWorld exit=1 194s | simCmUnseededWorld: 112 FAILURE(S)
+simMoney exit=1 285s | 1 FAILURES
+simClubManagerCalendar exit=0 48s | simClubManagerCalendar: all green
+simMidSeasonStart exit=0 3s | simMidSeasonStart: all green
+simCmApplications exit=0 111s | simCmApplications: green. The answer is earned, the limits hold, a summer move fires once, joining now moves the manager that week, and old saves load.
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simActivityNotCompletion exit=0 6s | simActivityNotCompletion: all green
+simClubManagerScore exit=0 91s | ALL SEASON SCORE CHECKS PASSED
+simCmBoardVerdict exit=0 751s | simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 750 s)

@@ -1,0 +1,39 @@
+NEGATIVE CONTROL ON: the summer rebuilds the kitty from the club definition again
+1) The carried balance is an input to the summer, and it is bounded
+  FAIL: Real Madrid s1: closed on 278.32m banked and still opened on 205, the same as a manager who banked nothing (205)
+  FAIL: Real Madrid s2: closed on 79.89m banked and still opened on 193, the same as a manager who banked nothing (193)
+  FAIL: Real Madrid s3: closed on 276.14m banked and still opened on 205, the same as a manager who banked nothing (205)
+  FAIL: Real Madrid s4: closed on 34.74m banked and still opened on 191, the same as a manager who banked nothing (191)
+  FAIL: Arsenal s1: closed on 246.02m banked and still opened on 165, the same as a manager who banked nothing (165)
+  FAIL: Arsenal s2: closed on 44.67m banked and still opened on 159, the same as a manager who banked nothing (159)
+  FAIL: Arsenal s3: closed on 223.03m banked and still opened on 163, the same as a manager who banked nothing (163)
+  FAIL: Napoli s1: closed on 77.26m banked and still opened on 52, the same as a manager who banked nothing (52)
+  FAIL: Wolves s1: closed on 47.32m banked and still opened on 45, the same as a manager who banked nothing (45)
+  FAIL: Ajax s1: closed on 46.34m banked and still opened on 29, the same as a manager who banked nothing (29)
+  FAIL: Ajax s2: closed on 7.03m banked and still opened on 43, the same as a manager who banked nothing (43)
+  FAIL: Ajax s3: closed on 62.52m banked and still opened on 27, the same as a manager who banked nothing (27)
+  FAIL: Ajax s4: closed on 8.22m banked and still opened on 29, the same as a manager who banked nothing (29)
+  FAIL: Roma s1: closed on 100.77m banked and still opened on 63, the same as a manager who banked nothing (63)
+  FAIL: Newcastle s1: closed on 103.38m banked and still opened on 73, the same as a manager who banked nothing (73)
+  FAIL: Inter Miami s1: closed on 15.24m banked and still opened on 17, the same as a manager who banked nothing (17)
+  FAIL: Inter Miami s2: closed on 3.15m banked and still opened on 17, the same as a manager who banked nothing (17)
+  FAIL: Inter Miami s3: closed on 22.05m banked and still opened on 10, the same as a manager who banked nothing (10)
+  FAIL: Inter Miami s4: closed on 3.11m banked and still opened on 10, the same as a manager who banked nothing (10)
+   19 summers cloned three ways, 19 with a real balance banked; banking raised the opening kitty in 0/19
+   a balance of four times the close plus 500m opens on 1.00x what an empty balance opens on (highest 1.00x)
+  FAIL: banking money raised next summer's kitty in only 0 of 19 summers
+  FAIL: the carry is not bounded at one extra allocation: an absurd balance opens on 1.00x (max 1.00x), expected 2.00x
+2) The rules screen states the bound the engine enforces
+   How to Play states the carry, its one-allocation cap, that it stays with the club, and what moves the ceiling
+3) A hoarder and a spender across consecutive summers
+   37 summers where the saver ended at least 5m up (median gap 46.2m): he opens on 1.00x the spender's kitty
+  FAIL: the saver opens on only 1.00x the spender's kitty (floor 1.20; see the header for the measured bands)
+4) The wage ceiling is no longer a mirror of your own bill
+   31 summers rolled: the new ceiling equalled 115 percent of that morning's bill in 0 of them (0 percent)
+5) The wage ceiling actually binds, and only on the manager loading it up
+   engaged manager breached in 32/36 seasons (89 percent, median peak bill 1.15x cap)
+   manager keeping the squad he was handed breached in 0/56 seasons (0 percent); 20 sacked keeper(s) handed the club to the next, 2.00 seasons a keeper
+6) A corrupt or pre-Round 436 balance carries nothing rather than NaN
+   7 corrupt balances all opened on 47m, the same as a balance of zero
+
+simClubManagerBudget: 22 FAILURE(S)

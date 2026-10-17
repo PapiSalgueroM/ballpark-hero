@@ -1,0 +1,17 @@
+simBoardAsks: node scripts/simBoardAsks.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+budget-static: CM_BUDGET_CONTROL=static node scripts/simClubManagerBudget.mjs
+budget-selfcap-head: CM_BUDGET_CONTROL=selfcap node scripts/simClubManagerBudget.mjs
+budget-selfcap-base: git worktree add -q /tmp/b3 d8aaa4cb && ln -s $PWD/node_modules /tmp/b3/node_modules && cd /tmp/b3 && CM_BUDGET_CONTROL=selfcap node scripts/simClubManagerBudget.mjs
+simCmBoardVerdict: node scripts/simCmBoardVerdict.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+simClubManagerFinances: node scripts/simClubManagerFinances.mjs
+simMoney: node scripts/simMoney.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs
