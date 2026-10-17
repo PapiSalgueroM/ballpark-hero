@@ -17,14 +17,17 @@
      2) The report card: the scoreline's names, the scorer columns, the stats header, the "best" columns, every stat
         bar's numbers, the possession pair, the momentum legend and the shots row are home side first; the first
         scorer column holds the home side's scorer lines; possession sums to 100 with a percent sign each and its
-        first number is the home side's share.
+        first number is the home side's share. Every bar's two segments follow its numbers: my green one
+        (bg-primary) first exactly when my number is first, and as wide as my share (the fix round after the
+        review, whose mutation m2 moved the segments back with every harness green).
      3) The timeline: its header and every row's first cell are the home side's; no name span is cut (truncate);
         every (P) and (O.G) mark sits outside the name span and right after it (Round 1146's promise).
      4) Live and half time: every fifth league match of the fleet is also kicked off live and rendered in the first
         half, at the interval, in the second half and at the whistle. The strip's names, the score's digits (by
         data-cm-score-of), the interval card, the stats (header, possession, every cell by data-cm-live-stat-n) and
         the line under the pitch are home side first, and HalftimeScreen rendered alone prints its names and score
-        in the same order.
+        in the same order. The possession bar's green segment is mine, first exactly when my number is, as wide
+        as my share (the review's mutation m6).
      5) The Match Centre: matchFacts read before every league match of seed 0's careers and before every neutral
         one, rendered. The tie's two name blocks, the two form rows and the two "Ones to watch" columns (each
         marked data-cm-mc-side) are home side first and each holds its own side's names and form; the odds still
@@ -49,6 +52,9 @@
      truncate     the timeline's name span is cut again. Section 3 must go red.
      numbers      the pitch labels as before Round 1340b, the position number in front. Section 6 must go red.
      homeflip     my club is drawn second at home. Section 7 must go red.
+     barorder     the report's stat bars and the live possession bar draw their segments mine first again while
+                  their numbers follow the fixture (the review's m2 and m6). Sections 2 and 4 must go red on away
+                  matches only, through the segment checks themselves (each must fire at least once).
 
    Exit codes: 0 green, 1 red (or a control that fired), 2 could not run (a fleet under its floors: 100 away,
    100 home and 5 neutral matches, 40 live renders; widen the fleet, never lower a floor), 3 a control that did
@@ -69,7 +75,11 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.MATCHDAY_CONTROL || '';
-const CONTROLS = { neutralaway: [1], oldorder: [2, 3, 4, 5], truncate: [3], numbers: [6], homeflip: [7] };
+const CONTROLS = { neutralaway: [1], oldorder: [2, 3, 4, 5], truncate: [3], numbers: [6], homeflip: [7], barorder: [2, 4] };
+/* A control that must fire through one particular check names it here: every pattern must match at least one
+   failure, so a red from some other check cannot pass for the control firing. */
+const CONTROL_KINDS = { barorder: [/: the [A-Z][a-z ]* bar's segments/, /: at \w+ the possession bar's segments/] };
+const kindHits = (CONTROL_KINDS[CONTROL] ?? []).map(() => 0);
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`MATCHDAY_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 const BASE = process.env.MATCHDAY_BASE || 'd8aaa4cb';
 const lf = s => s.replaceAll('\r\n', '\n');
@@ -78,6 +88,7 @@ const cannotRun = m => { console.error(`simCmMatchDay could not run: ${m}`); pro
 let section = 0;
 const failures = new Map();
 const fail = m => {
+  (CONTROL_KINDS[CONTROL] ?? []).forEach((rx, k) => { if (rx.test(m)) kindHits[k] += 1; });
   failures.set(section, (failures.get(section) ?? 0) + 1);
   if ((failures.get(section) ?? 0) <= 6) console.error(`  FAIL [${section}]: ${m}`);
 };
@@ -125,6 +136,12 @@ const PATCHES = {
   oldorder: [['lib/cmMatchDisplay', 'ts', [['  return home !== false;\n', '  return true;\n'], ['  return report.home === clubName;\n', '  return true;\n']]]],
   homeflip: [['lib/cmMatchDisplay', 'ts', [['  return home !== false;\n', '  return home !== false && home !== true;\n'], ['  return report.home === clubName;\n', '  return report.home !== clubName;\n']]]],
   truncate: [['components/club-manager/MatchTimeline', 'tsx', [['<span data-cm-tl-name="1" title=', '<span className="truncate" data-cm-tl-name="1" title=']]]],
+  /* The review's mutations m2 and m6: the report's stat bars and the live possession bar draw their two segments
+     in the old order (mine first) while the numbers above them follow the fixture. */
+  barorder: [
+    ['components/club-manager/MatchReportCard', 'tsx', [['const [barFirst, barSecond] = inFixtureOrder(mineFirst,', 'const [barFirst, barSecond] = inFixtureOrder(true,']]],
+    ['components/club-manager/LiveSimScreen', 'tsx', [['const [barFirst, barSecond] = inFixtureOrder(mineFirst,', 'const [barFirst, barSecond] = inFixtureOrder(true,']]],
+  ],
   /* The labels before Round 1340b: the position number in front of every name, the number alone in a crowd. */
   numbers: [['components/club-manager/LiveSimScreen', 'tsx', [
     ["{short.has(d.key) && m.name ? pitchInitials(m.name) || m.label : m.label}{m.gen ? '*' : ''}", "{m.number}{m.label && !short.has(d.key) ? ` ${m.label}` : ''}{m.gen ? '*' : ''}"],
@@ -371,6 +388,7 @@ console.log(`   ${redBy[1].checked} matches, ${neutralVenues} reports saying neu
 /* ---------- 2. the report card ---------- */
 console.log('2) The report card: every two sided block in the scoreline\'s order');
 let barsRead = 0;
+let segsRead = 0;
 for (const m of matches) {
   const r = m.report;
   const html = m.html;
@@ -399,6 +417,20 @@ for (const m of matches) {
       const ns = attrs(part, 'data-cm-stat-n').slice(0, 2);
       barsRead += 1;
       if (ns[0] !== first || ns[1] !== sideWord(!me)) p.push(`the ${label} bar draws ${ns.join(' then ')}`);
+      /* The bar under the numbers: its two segments follow the numbers, my green one (bg-primary) first exactly
+         when my number is first, and as wide as my share of the two (the StatBar's own sum). */
+      const segs = [...part.matchAll(/<div class="([^"]*)" style="width:([^";]*)"><\/div>/g)].slice(0, 2);
+      const greenAt = segs.findIndex(s => /(^| )bg-primary( |$)/.test(s[1]));
+      segsRead += segs.length;
+      if (segs.length !== 2 || greenAt !== (me ? 0 : 1)) p.push(`the ${label} bar's segments draw my green one ${greenAt === 0 ? 'first' : greenAt === 1 ? 'second' : 'nowhere'}`);
+      else {
+        const numBy = Object.fromEntries([...part.matchAll(/data-cm-stat-n="(mine|theirs)"[^>]*>([^<]*)</g)].slice(0, 2).map(x => [x[1], x[2].trim()]));
+        const valueOf = side => (label === 'Expected goals' ? (side === 'mine' ? d.stats.xg : d.stats.oppXg) : Number(String(numBy[side]).replace('%', '')));
+        const mine = valueOf('mine');
+        const total = mine + valueOf('theirs');
+        const share = total > 0 ? (mine / total) * 100 : 50;
+        if (segs[greenAt][2] !== `${share}%` || segs[1 - greenAt][2] !== `${100 - share}%`) p.push(`the ${label} bar's segments are ${segs[greenAt][2]} green and ${segs[1 - greenAt][2]} grey where my share is ${share}%`);
+      }
       if (label === 'Possession') {
         const nums = [...part.matchAll(/data-cm-stat-n="(?:mine|theirs)"[^>]*>([^<]*)</g)].map(x => x[1].trim());
         const homeShare = me ? d.stats.possession : 100 - d.stats.possession;
@@ -417,7 +449,7 @@ for (const m of matches) {
   }
   judge(2, m, p);
 }
-console.log(`   ${redBy[2].checked} reports, ${barsRead} stat bars read; red: ${redBy[2].home} home, ${redBy[2].away} away, ${redBy[2].neutral} neutral`);
+console.log(`   ${redBy[2].checked} reports, ${barsRead} stat bars read (${segsRead} bar segments); red: ${redBy[2].home} home, ${redBy[2].away} away, ${redBy[2].neutral} neutral`);
 
 /* ---------- 3. the timeline ---------- */
 console.log('3) The timeline: home side first, whole names, every mark right after its name');
@@ -464,6 +496,7 @@ const liveProps = (L, f) => ({
 });
 const halfProps = career => ({ career, onSub: noop, onShape: noop, onTalk: noop, onSecondHalf: noop });
 const stagesSeen = { first: 0, interval: 0, second: 0, done: 0 };
+let liveSegsRead = 0;
 for (const L of lives) {
   const me = L.fxHome !== false;
   const opp = L.report.home === L.club ? L.report.away : L.report.home;
@@ -498,6 +531,16 @@ for (const L of lives) {
       if (!same(head, want)) p.push(`at ${stage} the stats header reads ${head?.join(' v ')}`);
       const poss = attrs(html, 'data-cm-live-poss');
       if (poss[0] !== sideWord(me)) p.push(`at ${stage} the possession pair is not home side first`);
+      /* The possession bar between the two numbers: my green segment first exactly when my number is, as wide
+         as my share. */
+      const statsAt = html.indexOf('data-cm-live-stats');
+      const myPoss = /data-cm-live-poss="mine"[^>]*>([^<%]*)%/.exec(html.slice(statsAt))?.[1];
+      const barAt = html.indexOf('overflow-hidden bg-secondary">', statsAt);
+      const segs = barAt < 0 ? [] : [...html.slice(barAt).matchAll(/<div class="([^"]*)" style="width:([^";]*)"><\/div>/g)].slice(0, 2);
+      const greenAt = segs.findIndex(s => /(^| )bg-primary( |$)/.test(s[1]));
+      liveSegsRead += segs.length;
+      if (segs.length !== 2 || greenAt !== (me ? 0 : 1)) p.push(`at ${stage} the possession bar's segments draw my green one ${greenAt === 0 ? 'first' : greenAt === 1 ? 'second' : 'nowhere'}`);
+      else if (myPoss === undefined || segs[greenAt][2] !== `${myPoss}%` || segs[1 - greenAt][2] !== `${100 - Number(myPoss)}%`) p.push(`at ${stage} the possession bar's segments are ${segs[greenAt][2]} green and ${segs[1 - greenAt][2]} grey where my share is ${myPoss}%`);
       for (const cell of html.split(/(?=data-cm-live-stat=")/).slice(1)) {
         if (attrs(cell, 'data-cm-live-stat-n')[0] !== sideWord(me)) { p.push(`at ${stage} a stat cell is not home side first`); break; }
       }
@@ -509,7 +552,7 @@ for (const L of lives) {
   if (!half || !same([unescape(half[1]), unescape(half[4])], want)) p.push(`the half time screen alone reads ${half ? `${half[1]} v ${half[4]}` : 'nothing'}`);
   judge(4, m, p);
 }
-console.log(`   ${redBy[4]?.checked ?? 0} live matches (${Object.entries(stagesSeen).map(([k, v]) => `${v} ${k}`).join(', ')}); red: ${redBy[4]?.home ?? 0} home, ${redBy[4]?.away ?? 0} away, ${redBy[4]?.neutral ?? 0} neutral`);
+console.log(`   ${redBy[4]?.checked ?? 0} live matches (${Object.entries(stagesSeen).map(([k, v]) => `${v} ${k}`).join(', ')}; ${liveSegsRead} possession bar segments); red: ${redBy[4]?.home ?? 0} home, ${redBy[4]?.away ?? 0} away, ${redBy[4]?.neutral ?? 0} neutral`);
 
 /* ---------- 5. the Match Centre ---------- */
 console.log('5) The Match Centre: the tie, the form rows and the ones to watch home side first; the odds still Win, Draw, They win');
@@ -701,6 +744,12 @@ if (CONTROL) {
   /* oldorder is the screens before this round: red away, and green at home and on a neutral ground. */
   if (CONTROL === 'oldorder') ok = ok && want.every(s => redBy[s].away > 0 && redBy[s].home === 0 && redBy[s].neutral === 0);
   if (CONTROL === 'neutralaway') ok = ok && redBy[1].neutral > 0 && redBy[1].home === 0 && redBy[1].away === 0;
+  /* barorder only moves what an away match draws, like oldorder. */
+  if (CONTROL === 'barorder') ok = ok && want.every(s => redBy[s].away > 0 && redBy[s].home === 0 && redBy[s].neutral === 0);
+  if (kindHits.length) {
+    console.log(`control ${CONTROL}: the checks it must fire through fired ${kindHits.join(' and ')} times`);
+    ok = ok && kindHits.every(n => n > 0);
+  }
   if (ok) { console.log(`simCmMatchDay: CONTROL ${CONTROL} FIRED (${total} failures, section(s) ${redSections.join(', ')})`); process.exit(1); }
   console.log(`simCmMatchDay: CONTROL ${CONTROL} DID NOT FIRE as designed (red sections: ${redSections.join(', ') || 'none'})`);
   process.exit(3);
