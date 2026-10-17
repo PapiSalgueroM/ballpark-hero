@@ -241,6 +241,7 @@ export function useLineupBuilder() {
         played = await verifiedSecondaries(playerName.trim(), primary);
       }
       if (!positionCheck.ok) {
+        setIsValidating(true);
         played = await verifiedSecondaries(playerName.trim(), primary);
         if (played.length > 0) {
           positionCheck = checkLineupPick(
@@ -257,6 +258,7 @@ export function useLineupBuilder() {
          reroll, a new formation, a reset). Nothing is said, filled or asked. */
       if (run !== pickRun.current) return;
       if (!positionCheck.ok) {
+        setIsValidating(false);
         setValidationError(positionCheck.reason ?? 'That player does not fit this position.');
         return;
       }

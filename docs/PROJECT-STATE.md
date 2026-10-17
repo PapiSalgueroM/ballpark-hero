@@ -1,3 +1,7 @@
+## Codex1403 original baseline prepared, 2026-10-17 UTC
+
+Actualqualified308hook preserves2selectionbusy lines; evaluation logic remainsoriginal. New12caseactualhookmethod/ownremoteWF source-reviewed. Test-first baseline predicts7ownershipfaults and5preserves, actualtypes/old58 required. No productionguard or runtime/READYclaim yet. IactiveSC/core/competitions/releaseheld; existingREADY308/319independent. See docs/audits/xi-evaluation-reset-1403.md.
+
 ## Codex1403 claimed, 2026-10-17 UTC
 
 Build Your XI evaluation abandonment only, own hook/test/workflow. Frozen I8293, exactqualified308selectionhunks preserved, no activeSC/core/page change. Test-first remote baseline before productionguard, allruntimepending. See docs/audits/xi-evaluation-reset-1403.md. ExistingREADY308/319 and Ireleaseindependent.

@@ -1,0 +1,112 @@
+name: XI evaluation reset verification
+on:
+  push:
+    branches: [codex/xi-evaluation-reset]
+    paths:
+      - .github/workflows/xi-evaluation-reset.yml
+      - src/hooks/useLineupBuilder.ts
+      - src/test/lineupBuilderEvaluationReset.test.tsx
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Freeze original evaluation on the exact qualified selection hook
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/xi-evaluation-reset"; test ! -e "$out"; mkdir -p "$out/raw"
+          echo "XI_RESET_OUT=$out" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
+          git merge-base --is-ancestor 8293c758f4284d21baaa2320383cfd5cb5bd4944 HEAD
+          git diff --exit-code 8293c758f4284d21baaa2320383cfd5cb5bd4944 HEAD -- . ':!docs' ':!src/hooks/useLineupBuilder.ts' ':!src/test/lineupBuilderEvaluationReset.test.tsx' ':!.github/workflows/xi-evaluation-reset.yml' > "$out/base-source-hold.log"
+          git show 12133c4006199d60f2c40ff5725494fe603659c0:src/hooks/useLineupBuilder.ts > "$out/qualified308-hook.ts"
+          cmp "$out/qualified308-hook.ts" src/hooks/useLineupBuilder.ts
+          test "$(git hash-object src/hooks/useLineupBuilder.ts)" = 369487db56b37c031257b97e89e4303b0228c640
+          test "$(sha256sum src/hooks/useLineupBuilder.ts | cut -d' ' -f1)" = db4b0caca0aca7a915eefdfc38b5e8bfa4034f16972a1a7a041cb279f7f59664
+          printf '%s\0' "$(command -v node)" "$(readlink -f "$(command -v npm)")" | sort -z | xargs -0 sha256sum > "$out/runtime-tools-files.sha256"
+          npm ci > "$out/install.log" 2>&1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerAgentReviewDependencies.mjs before > "$out/dependencies.log" 2>&1
+          cp soccer-agent-review-artifacts/dependencies-before.json "$out/"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-files.sha256"
+      - name: Actual types and unchanged validator and history checks
+        id: existing
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$XI_RESET_OUT"
+          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/existing.transport" node_modules/.bin/vitest run src/test/lineupValidatorClient.test.tsx src/test/lineupBuilderHistoryRead.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$out/existing.vitest.json" > "$out/existing.log" 2>&1
+          tail -n 8 "$out/existing.log"
+      - name: Reproduce the exact original ownership faults before a production fix
+        id: reproduce
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$XI_RESET_OUT"; status=0
+          XI_EVALUATION_RAW="$out/raw/observations.json" SIM_OFFLINE_RECEIPT="$out/baseline.transport" node_modules/.bin/vitest run src/test/lineupBuilderEvaluationReset.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$out/baseline.vitest.json" > "$out/baseline.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/baseline.exit"; test "$status" -eq 1
+          SIM_OFFLINE_RECEIPT="$out/classifier.transport" node --input-type=module > "$out/baseline-classification.log" 2>&1 <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import {createHash} from 'node:crypto';
+          const out=process.env.XI_RESET_OUT, faults=['reset keeps a late success out and releases evaluation busy','a new formation keeps a late JSON verdict out','reset drops a non-ok fallback already being judged','reset drops a thrown-request fallback already being judged','a rejected abandoned fallback cannot start another judge','an old evaluation cannot clear or overwrite the next game','unmount ignores a late request error without judging it'], preserves=['ordinary remote success posts the whole chosen XI and records once','sparse successful replies keep the existing default verdict','ordinary non-ok replies still finish with the offline judge','ordinary thrown requests still finish with the offline judge','ordinary nested local failures keep the current error verdict'];
+          const result=JSON.parse(fs.readFileSync(out+'/baseline.vitest.json')), rows=result.testResults.flatMap(s=>s.assertionResults), log=fs.readFileSync(out+'/baseline.log','utf8');
+          assert.equal(result.testResults.length,1); assert(result.testResults[0].name.replaceAll('\\','/').endsWith('/src/test/lineupBuilderEvaluationReset.test.tsx')); assert.equal(result.numTotalTests,12); assert.equal(result.numFailedTests,7); assert.equal(result.numPassedTests,5); assert.equal(result.numPendingTests,0); assert.equal(result.numTodoTests,0); assert.equal(rows.length,12);
+          const causes=['Starting over must keep the abandoned XI from becoming a result','A new formation must not inherit the previous XI verdict','A reset XI must ignore its abandoned non-ok fallback','A reset XI must ignore its abandoned network fallback','An abandoned fallback rejection must not start another judge or publish an error',"An abandoned evaluation must leave the new game's busy state and result alone",'An unmounted XI must not start the offline judge after its request fails'];
+          const checkFaults=r=>{const actual=r.testResults.flatMap(s=>s.assertionResults),failed=actual.filter(t=>t.status==='failed');assert.deepEqual(failed.map(t=>t.title),faults);assert.deepEqual(actual.filter(t=>t.status==='passed').map(t=>t.title),preserves);for(let i=0;i<faults.length;i++){assert(failed[i].failureMessages.length>0);for(const value of failed[i].failureMessages){const text=value.replace(/\x1b\[[0-9;]*m/g,'');assert(text.includes('AssertionError')&&text.includes(causes[i])&&text.includes('expected false to be true'),'Exact named Boolean ownership cause: '+faults[i]);}}};
+          checkFaults(result);assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to load|Cannot find module|No test files found|SIM_OFFLINE_BLOCK/i.test(log));
+          const existing=JSON.parse(fs.readFileSync(out+'/existing.vitest.json'));assert.equal(existing.success,true);assert.equal(existing.testResults.length,2);assert.equal(existing.numTotalTests,58);assert.equal(existing.numPassedTests,58);assert.equal(existing.numFailedTests,0);assert.equal(existing.numPendingTests,0);assert.equal(existing.numTodoTests,0);
+          const raw=JSON.parse(fs.readFileSync(out+'/raw/observations.json')),keys=['resetSuccess','formationJson','nonOkFallback','thrownFallback','rejectedFallback','replacement','unmount','remote','sparse','nonOk','thrown','nestedError'];
+          const checkRaw=r=>{assert.equal(r.version,1);assert.deepEqual(r.caseTitles,[...faults,...preserves]);assert.deepEqual(Object.keys(r.cases),keys);for(let i=0;i<keys.length;i++){const row=r.cases[keys[i]];assert.equal(row.title,[...faults,...preserves][i]);assert(Array.isArray(row.deferred)&&row.deferred.length>0&&row.deferred.every(g=>typeof g.label==='string'&&g.settled===true),'Every retained promise drained: '+keys[i]);assert.deepEqual(row.unexpected,[],'No undeclared fixture work: '+keys[i]);assert(Array.isArray(row.requests)&&row.requests.length>0);}};
+          checkRaw(raw);
+          const sha=v=>createHash('sha256').update(JSON.stringify(v)).digest('hex'),controls=[];
+          for(const name of ['wrong-cause','unsettled-gate','unexpected-work','wrong-title']){const changedResult=structuredClone(result),changedRaw=structuredClone(raw);if(name==='wrong-cause'){changedResult.testResults[0].assertionResults.find(r=>r.status==='failed').failureMessages=['AssertionError: unrelated fixture assertion: expected false to be true'];}if(name==='unsettled-gate')changedRaw.cases.resetSuccess.deferred[0].settled=false;if(name==='unexpected-work')changedRaw.cases.resetSuccess.unexpected.push('fixture-only rejection control');if(name==='wrong-title')changedRaw.cases.resetSuccess.title='fixture-only wrong title';assert(sha({result:changedResult,raw:changedRaw})!==sha({result,raw}),'Receipt control must change actual evidence');assert.throws(()=>{checkFaults(changedResult);checkRaw(changedRaw);},assert.AssertionError);controls.push({name,changedSha256:sha({result:changedResult,raw:changedRaw}),rejected:true});}
+          const report={status:'qualified-original-counterexamples',faults,causes,preserves,existingPassed:58,rawCases:Object.keys(raw.cases),receiptControls:controls,limits:'Original qualified308 hook only. No new production guard, build, browser, full suite, physical Apple, provider, joined I or live qualification.'};fs.writeFileSync(out+'/baseline-classification.json',JSON.stringify(report,null,2)+'\n'); console.log('PASS exact seven named Boolean ownership faults, five healthy preserves, twelve drained observations, fifty-eight existing cases and four changed receipt rejection controls.');
+          NODE
+          tail -n 12 "$out/baseline.log"
+      - name: Retain actual source installed tools and every partial outcome
+        if: always()
+        run: |
+          set -euo pipefail
+          out="${XI_RESET_OUT:-$RUNNER_TEMP/xi-evaluation-reset}"; mkdir -p "$out"; result=0
+          git diff --exit-code HEAD -- . > "$out/source-diff.log" 2>&1 || result=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/validated-source-files.sha256"
+          XI_RESET_ARCHIVE_OUT="$out" python - <<'PY'
+          import os,subprocess,zipfile
+          out=os.environ['XI_RESET_ARCHIVE_OUT'];files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile(out+'/validated-source.zip','w',zipfile.ZIP_DEFLATED) as archive:
+              for file in sorted(filter(None,files)): archive.write(file,file)
+          PY
+          for kind in request-source installed runtime-tools validated-source; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
+          if test -f "$out/installed-files.sha256"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-after-files.sha256"; cmp "$out/installed-files.sha256" "$out/installed-after-files.sha256" || result=1; fi
+          for method in types existing baseline classifier; do test ! -s "$out/$method.transport" || result=1; done
+          printf 'existing=%s\nreproduce=%s\n' '${{ steps.existing.outcome }}' '${{ steps.reproduce.outcome }}' > "$out/stage-outcomes.txt"
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: xi-evaluation-reset-baseline-${{ github.sha }}
+          path: ${{ env.XI_RESET_OUT }}
+          if-no-files-found: error
+          retention-days: 14
