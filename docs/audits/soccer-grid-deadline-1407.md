@@ -1,0 +1,23 @@
+# Soccer Grid deadline, Round1407
+
+A verified main answer arriving after time expired could still change the board and saved rarity after completion recorded its score. The hook now checks the current main completion state before and after its asynchronous valid-result work, and before applying a wrong verdict. An admitted main request cannot become an Overtime answer. Genuine Overtime and the existing no-penalty unverified path are unchanged.
+
+## Source and original failure
+
+Base I829:8293c758f4284d21baaa2320383cfd5cb5bd4944. Original checkpoint:c733c4838082866d11630b22705c8390ef96b6b5. Test4e144630/helper1c16c6f3 were frozen before product. Original hook626a6ce4; candidate6940e46d contains exactly the two-line current-complete ref and four guards. Removing those restores the entire original hook. Shared Daily/Completion, page, validator, data and database calls are held.
+
+Original Actions39036195800/job117406333613 produced four exact Boolean main-preservation faults and eight healthy cases, plus eleven existing Daily/Completion passes. At39seconds a real pending answer remained validating; at40seconds main completion recorded100 exactly once. Late valid responses then raised main correctCount1to2, rarity20to13 and consumed a guess; a wrong response consumed a guess. Actual retained board/save/recorder state establishes the mismatch. Original raw358808B/SHA b7b4f989b7582a03def7a24633fb37b9532099b9011df9369fc5c6b099bc692e. Artifact12101969483,74772688B/SHA bcb29b8958bc12ce4218df770fcd4273c6521643e1611390035960aff623cede. Independent baseline physical356f2ef5 and semantic218c34c6 qualify those actual outputs.
+
+## Actual fixed qualification
+
+TESTED:ca21bbb10595ecc8d5f4dd06080d82ef8832affc. PR324. Actions39036988335/job117408715418 SUCCESS. Twelve fixed passes, four original faults plus eight healthy passes, twelve restored passes. Both eleven-case related runs pass. The whole original raw matches the independently qualified baseline. Normal/restored whole raw356710B/SHA8328678376d793612a33c362cdea2e1a10bab604ebce6cd4faffaf0eea7118a6 is byte identical; all eight complete healthy rows match the original. Late-unverified quota/toast behavior, timely valid/wrong/unverified answers, rejected checks, genuine Overtime scoring/storage and sixteen unscored Overtime wrong submissions are retained.
+
+Actual application types:zero. Production build completed2026-10-17T13:36:48Z before all fifteen readers and all fourteen unchanged fatal page caps. SC833.0/834,CM608.5/609,NFL487.8/488. No guard or cap waiver. Exact three denied font requests and three changed-receipt rejection controls passed, with no ordinary transport blocks. No production guesses were sent.
+
+Fixed artifact12103125630,84185733B/SHA a2715ce4617059fb45a0fabe630ece3b05929a4455bfe3c673957784465fefa6. Canonical source ZIP3f6b45fdf77bec57cc5193c924a86328504fccd8a9d887f4a1f161b1d5699a1d. Independent physical audit e6fcd1b64e22bdb08b1dc2ff59e17ee589c39f502953ea00a8b7692dbc0a57e7:157073checks/0issues. Core audit8cc40f830813af39a4d73df0a13c7859aa051dc58dc8bc7d97f7ee66dc71a1c6:1738/0. Common full audit13adc6cab9aa655b58434b34e78a6b20bc36ac1eddad17e3615ab7376e949c46:2264/0. Complete4872source/784dist,521locked versions,24466installed members,176isolated browser-tool members,3runtime tools and9physical cached fonts plus manifest close. Installed/runtime tool bodies rely on actual CI inventory/OK receipts, not local recreation.
+
+## Closure and limits
+
+Exactly three generated bodies changed in CI:public/sitemap.xml,public/whats-new/index.html,scripts/data/lastmod.json. They remain in the external artifact. Closing source keeps the tested originals. Only PROJECT-STATE,WORKBOARD and this audit document change after TESTED. The native baseline parser first unwrapped a one-element Overtime array; failed receiptc606 is retained, and NoEnumerate repaired representation only. The Windows patch initially usedCRLF; a native preflight refused it, canonicalLF normalization then proved the whole inverse. Neither correction changed app behavior or test expectations.
+
+This proves the actual hooks, Daily save and Completion recorder against labelled external IO fixtures. It does not prove a natural network-latency frequency, production validator result, full browser journey, joined release or publication. Claude I owns integration of actual TESTED source, separate closing docs, generated-output regeneration and qualification, main and publish under BIIrule2. The active career, Manager/UCL/tournament and US-career work is outside this lease.
