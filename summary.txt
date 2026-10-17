@@ -1,0 +1,6 @@
+headsha exit=0 0s | ff42f7e19 Round BII: PR287's desk test reads a fresh appointment's board at Round 1335's BOARD_FRESH, not the old flat 62
+wf284x exit=1 217s | wfrun wf284x.yml: 9 steps ran, 1 failed: Every rebuilt-site reader
+wf296x exit=1 257s | wfrun manager-desk-feedback.yml: 6 steps ran, 1 failed: Real served refusal and sibling-action journeys
+wf285 exit=1 168s | wfrun club-detail-fixtures.yml: 8 steps ran, 1 failed: Source and package preservation
+wf287x exit=1 299s | wfrun manager-handover-desk.yml: 9 steps ran, 2 failed: Bind incoming application, frozen method and full source archive | Hold tracked source, installed packages, reader
+wf301x exit=1 849s | wfrun manager-decision-method.yml: 5 steps ran, 2 failed: Bind application historical evidence and single pin retake | Retain regression observations and exact source hol
