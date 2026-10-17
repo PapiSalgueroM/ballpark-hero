@@ -1,0 +1,5 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+homeFold exit=0 30s | playHomeFold: green. The first thing on the page is something to play.
+weigh exit=0 42s | weigh1503: /club-manager head 615.8K, base 615.5K, growth 0.27K
+playCM exit=0 288s | Played Club Manager through its own screens. 0 findings.
+twoTabs exit=0 463s | playTwoTabs: green at 320x640, 390x844, 1280x900

@@ -1,0 +1,15 @@
+[33m
+[1m(!)[22m outDir [37m[2m/tmp/base-dist[22m[33m is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+head: /club-manager 615.8K over 43 files (row 606K); ClubManager chunk ClubManager-DYg-aHkD.js 25.9K; WorldCompScreen chunk WorldCompScreen-D5DIq7Wa.js 9.7K, loaded on the page's first draw: no
+base: /club-manager 615.5K over 43 files (row 606K); ClubManager chunk ClubManager-vvdSXBxT.js 25.9K; WorldCompScreen chunk none, loaded on the page's first draw: no
+weigh1503: /club-manager head 615.8K, base 615.5K, growth 0.27K
