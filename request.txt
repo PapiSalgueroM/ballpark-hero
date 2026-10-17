@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/careerDirtyMoney.test.ts --testTimeout=300000 --hookTimeout=120000
+simUsDirtyMoney: node scripts/simUsDirtyMoney.mjs
+ctl-words: US_DIRTY_MONEY_CONTROL=words node scripts/simUsDirtyMoney.mjs
+ctl-mathrandom: US_DIRTY_MONEY_CONTROL=mathrandom node scripts/simUsDirtyMoney.mjs
+ctl-flat: US_DIRTY_MONEY_CONTROL=flat node scripts/simUsDirtyMoney.mjs
+ctl-farm: US_DIRTY_MONEY_CONTROL=farm node scripts/simUsDirtyMoney.mjs

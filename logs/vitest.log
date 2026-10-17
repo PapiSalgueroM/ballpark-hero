@@ -1,0 +1,43 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/careerDirtyMoney.test.ts [2m([22m[2m8 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 50[2mms[22m[39m
+[31m   [31m×[31m Round 1500: every way does exactly what its button prints[2m > [22mthe preview numbers are the applied change, over a grid of money, heat, karma and cash[39m[32m 17[2mms[22m[39m
+[31m     → clean: money: expected +0 to be -0 // Object.is equality[39m
+   [32m✓[39m Round 1500: every way does exactly what its button prints[2m > [22ma career with no dirty money, or retired, comes back unchanged[32m 2[2mms[22m[39m
+   [32m✓[39m Round 1500: every way does exactly what its button prints[2m > [22mnever a heat eraser: Come clean cools at most 5 and nothing at the top of the meter; Give it away holds the heat[32m 23[2mms[22m[39m
+   [32m✓[39m Round 1500: every way does exactly what its button prints[2m > [22mthe wash is drawn against the whole percent it prints, rising with the heat from 15 to 55[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1500: every way does exactly what its button prints[2m > [22ma ban the season end brings is counted the way the engines count it[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1500: the card, the washers and the help line[2m > [22mthe card mutates its career and keeps its own sentence when the wash works[32m 2[2mms[22m[39m
+   [32m✓[39m Round 1500: the card, the washers and the help line[2m > [22mevery sport has three washers, read off its own shop, and none is the offshore account[32m 2[2mms[22m[39m
+   [32m✓[39m Round 1500: the card, the washers and the help line[2m > [22mthe help line carries the numbers the desk plays, and no long dash[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/careerDirtyMoney.test.ts[2m > [22mRound 1500: every way does exactly what its button prints[2m > [22mthe preview numbers are the applied change, over a grid of money, heat, karma and cash
+[31m[1mAssertionError[22m: clean: money: expected +0 to be -0 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- -0[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m src/lib/careerDirtyMoney.test.ts:[2m40:83[22m[39m
+    [90m 38| [39m        [35mconst[39m net0 [33m=[39m netWorth [33m??[39m [34m0[39m[33m;[39m
+    [90m 39| [39m        const netChange = way === 'clean' ? -p.fine : way === 'wash' &…
+    [90m 40| [39m        expect(Math.round(((s.netWorth ?? 0) - net0) * 10) / 10, `${wa…
+    [90m   | [39m                                                                                  [31m^[39m
+    [90m 41| [39m        expect(s.netWorth ?? 0, `${way}: never below zero`).toBeGreate…
+    [90m 42| [39m        expect(Math.round(((s.heat ?? 0) - heat) * 100) / 100, `${way}…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 09:34:07
+[2m   Duration [22m 3.43s[2m (transform 1.56s, setup 88ms, collect 2.00s, tests 50ms, environment 541ms, prepare 290ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/careerDirtyMoney.test.ts,title=src/lib/careerDirtyMoney.test.ts > Round 1500%3A every way does exactly what its button prints > the preview numbers are the applied change%2C over a grid of money%2C heat%2C karma and cash,line=40,column=83::AssertionError: clean: money: expected +0 to be -0 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- -0%0A+ 0%0A%0A ❯ src/lib/careerDirtyMoney.test.ts:40:83%0A%0A

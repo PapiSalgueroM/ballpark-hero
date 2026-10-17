@@ -1,0 +1,7 @@
+vitest exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/careerDirtyMoney.test.ts,title=src/lib/careerDirtyMoney.test.ts > Round 1500%3A every way does exactly 
+simUsDirtyMoney exit=1 55s | simUsDirtyMoney: 1 failures in sections 7
+ctl-words exit=1 57s | CONTROL words FIRED (red sections 1, 7)
+tsc exit=0 89s | 
+ctl-mathrandom exit=1 46s | CONTROL mathrandom FIRED (red sections 2)
+ctl-flat exit=1 49s | CONTROL flat FIRED (red sections 7)
+ctl-farm exit=1 36s | CONTROL farm FIRED (red sections 7)
