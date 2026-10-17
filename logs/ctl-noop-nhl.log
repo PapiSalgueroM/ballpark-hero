@@ -1,0 +1,74 @@
+6) the board test under the board controls: run only as a control (nodesk, sentence)
+   base decks rebuilt from the head by taking this round's hunks out (no BASE given to compare them with a commit)
+1-3) the grid: words, keys and the rule
+   36960 cases, 9240 washes: caught 41.5 percent of them, mean printed chance 41.2 percent; Math.random draws 0
+7) every corruption card that pays dirty money, followed at once by the desk
+   nba: 2330 fleet saves, 14 of 14 dirty options dealt
+   nfl: 1968 fleet saves, 9 of 9 dirty options dealt
+   mlb: 2340 fleet saves, 8 of 8 dirty options dealt
+   nhl: 2572 fleet saves, 12 of 12 dirty options dealt
+   598023 card then desk runs. Per option: dirty paid, heat it cost, saves, then per way the worst net heat and the most handed back:
+     mlb mcorr_memorabilia "Authenticate all of it, 1.2M": 1.2M, heat +12, 1350 saves; clean 0/8, give 0/6, wash 0/0
+     mlb mcorr_academy "Buy in, it prints money": 2M, heat +18, 1645 saves; clean 0/8, give 0/6, wash 0/0
+     mlb mcorr_tips "Send the texts, 1.5M a year": 1.5M, heat +20, 11232 saves; clean 0/8, give 0/6, wash 0/0
+     mlb mcorr_teammate "Bring him in": 1.8M, heat +20, 4708 saves; clean 0/8, give 0/6, wash 0/0
+     mlb mcorr_sportsbook "Sign it, 5M": 5M, heat +20, 4764 saves; clean 0/8, give 0/6, wash 0/0
+     mlb mcorr_broke "Take the money being offered": 5M, heat +26, 112 saves; clean 21/7, give 26/5, wash 36/0
+     mlb mcorr_reinstated "Call the guy back": 5M, heat +30, 2395 saves; clean 0/8, give 0/6, wash 0/0
+     mlb mcorr_tips_escalate "Do it, 4M": 4M, heat +34, 198 saves; clean 0/8, give 0/6, wash 0/0
+     nba ncorr_tickets "Sell them all, 600k a year": 0.6M, heat +9, 9882 saves; clean 0/8, give 0/6, wash 0/0
+     nba ncorr_memorabilia "Let the assistant sign": 1.1M, heat +10, 4346 saves; clean 0/8, give 0/6, wash 0/0
+     nba ncorr_ring_fakes "Take the cut, 800k": 0.8M, heat +12, 1558 saves; clean 0/8, give 0/6, wash 0/0
+     nba ncorr_shoe_kickback "Make the calls, 1.4M": 1.4M, heat +15, 7716 saves; clean 0/8, give 0/6, wash 0/0
+     nba ncorr_sneaks "Take the cut, 1.6M a year": 1.6M, heat +16, 7872 saves; clean 0/8, give 0/6, wash 0/0
+     nba ncorr_side_letter "Take the side deal": 2M, heat +16, 8010 saves; clean 0/8, give 0/6, wash 0/0
+     nba ncorr_pump_dump "Post it, 3M": 3M, heat +16, 2415 saves; clean 0/8, give 0/6, wash 0/0
+     nba ncorr_exhibition "Play the tour their way, 2.2M": 2.2M, heat +18, 1068 saves; clean 0/8, give 0/6, wash 0/0
+     nba ncorr_props "Take the under, 800k": 0.8M, heat +20, 12054 saves; clean 0/8, give 0/6, wash 0/0
+     nba ncorr_teammate_knows "Bring him in": 2M, heat +20, 5552 saves; clean 0/8, give 0/6, wash 0/0
+     nba ncorr_sportsbook "Sign it, 7M": 7M, heat +20, 7662 saves; clean 0/8, give 0/6, wash 0/0
+     nba ncorr_broke "Take the money being offered": 6M, heat +26, 481 saves; clean 7.2/8, give 7.2/6, wash 7.2/0
+     nba ncorr_reinstated "Call the guy back": 5M, heat +30, 2360 saves; clean 0/8, give 0/6, wash 0/0
+     nba ncorr_fake_injury "Fake the injury, 2.5M": 2.5M, heat +30, 210 saves; clean 0/8, give 0/6, wash 0/0
+     nfl corr_memorabilia "Let the assistant sign": 1.2M, heat +10, 1088 saves; clean 0/8, give 0/6, wash 0/0
+     nfl corr_ring_fakes "Take the cut, 900k": 0.9M, heat +12, 1310 saves; clean 0/8, give 0/6, wash 0/0
+     nfl corr_cap_circumvention "Take the side deal": 2M, heat +16, 9438 saves; clean 0/8, give 0/6, wash 0/0
+     nfl corr_teammate_asks "Bring him in": 1.8M, heat +20, 4348 saves; clean 0/8, give 0/6, wash 0/0
+     nfl corr_sportsbook_ad "Sign it, 6M": 6M, heat +20, 6420 saves; clean 0/8, give 0/6, wash 0/0
+     nfl corr_the_book "Text him the real inactives, 200k a month": 2.4M, heat +22, 10350 saves; clean 0/8, give 0/6, wash 0/0
+     nfl corr_broke "Take the money that is being offered": 5M, heat +26, 572 saves; clean 1.4/8, give 1.4/6, wash 1.4/0
+     nfl corr_reinstated "Call the guy with the app again": 5M, heat +30, 1997 saves; clean 0/8, give 0/6, wash 0/0
+     nfl corr_bet_yourself "Take the under, 3M": 3M, heat +32, 354 saves; clean 0/8, give 0/6, wash 0/0
+     nhl hcorr_tickets "Sell them all, 400k a year": 0.4M, heat +9, 11658 saves; clean 0/8, give 0/6, wash 0/0
+     nhl hcorr_memorabilia "Authenticate all of it, 900k": 0.9M, heat +12, 3382 saves; clean 0/8, give 0/6, wash 0/0
+     nhl hcorr_cup_ring "Take the cut, 700k": 0.7M, heat +12, 1451 saves; clean 0/8, give 0/6, wash 0/0
+     nhl hcorr_side_deal "Take the side deal": 1.5M, heat +16, 7428 saves; clean 0/8, give 0/6, wash 0/0
+     nhl hcorr_pump_dump "Post it, 2.5M": 2.5M, heat +16, 2307 saves; clean 0/8, give 0/6, wash 0/0
+     nhl hcorr_bounty "Take the money and take the number": 0.9M, heat +20, 10458 saves; clean 0/8, give 0/6, wash 0/0
+     nhl hcorr_tips "Send the texts, 1.2M a year": 1.2M, heat +20, 12546 saves; clean 0/8, give 0/6, wash 0/0
+     nhl hcorr_teammate "Bring him in": 1.6M, heat +20, 5792 saves; clean 0/8, give 0/6, wash 0/0
+     nhl hcorr_sportsbook "Sign it, 4M": 4M, heat +20, 7830 saves; clean 0/8, give 0/6, wash 0/0
+     nhl hcorr_broke "Take the money being offered": 5M, heat +26, 102 saves; clean 21/7, give 26/5, wash 36/0
+     nhl hcorr_reinstated "Call the guy back": 5M, heat +30, 2632 saves; clean 0/8, give 0/6, wash 0/0
+     nhl hcorr_tips_more "Do it, 3.5M": 3.5M, heat +34, 288 saves; clean 0/8, give 0/6, wash 0/0
+   clean gifts in the rivalry decks: nba 1M for karma +8 (8.0 a million); nba 1M for karma +3 (3.0 a million); nfl 1M for karma +8 (8.0 a million); nfl 1M for karma +3 (3.0 a million); mlb 1M for karma +8 (8.0 a million); mlb 1M for karma +3 (3.0 a million); nhl 1M for karma +8 (8.0 a million); nhl 1M for karma +3 (3.0 a million)
+   desk at 1M: give it away karma +1 (1.00 a million), come clean karma +0
+   desk at 2.5M: give it away karma +2 (0.80 a million), come clean karma +1
+   desk at 6M: give it away karma +6 (1.00 a million), come clean karma +3
+   desk at 10M: give it away karma +6 (0.60 a million), come clean karma +3
+   desk at 20M: give it away karma +6 (0.30 a million), come clean karma +3
+4) the four "nowhere to live" cards: the launder option is the desk's wash, and its words are the effect
+   nba: the card dealt to 583 fleet saves set to 5M, 448 washed clean (+3.5M), 135 caught
+   nfl: the card dealt to 492 fleet saves set to 5M, 393 washed clean (+3.5M), 99 caught
+   mlb: the card dealt to 585 fleet saves set to 5M, 465 washed clean (+3.5M), 120 caught
+  FAIL [section 4] nhl hcorr_wash: the launder option left 5M dirty
+   nhl: the card dealt to 643 fleet saves set to 5M, 518 washed clean (+3.5M), 125 caught
+5) A/B: careers that never take the launder option, head decks against the base decks, after every step
+   nba: 400 careers, 389 byte equal to the base after every step, 11 took the launder option (not compared), 14 were dealt the card and passed on it
+   nfl: 400 careers, 399 byte equal to the base after every step, 1 took the launder option (not compared), 2 were dealt the card and passed on it
+   mlb: 400 careers, 396 byte equal to the base after every step, 4 took the launder option (not compared), 4 were dealt the card and passed on it
+   nhl: 400 careers, 392 byte equal to the base after every step, 8 took the launder option (not compared), 4 were dealt the card and passed on it
+8) the help line: FLAGGED at 40 and three washers in every shop
+   control noop on nhl: section 4 names nhl
+   control noop: section 4 turned 1 red
+CONTROL noop FIRED (red sections 4)

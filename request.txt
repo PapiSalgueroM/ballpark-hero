@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usCareerDirtyMoney.test.tsx src/lib/careerDirtyMoney.test.ts --testTimeout=300000 --hookTimeout=120000
+simUsDirtyMoney: BASE=8293c758f4284d21baaa2320383cfd5cb5bd4944 node scripts/simUsDirtyMoney.mjs
+ctl-deck: US_DIRTY_MONEY_CONTROL=deck node scripts/simUsDirtyMoney.mjs
+ctl-noop-nba: US_DIRTY_MONEY_CONTROL=noop US_DIRTY_MONEY_SPORT=nba node scripts/simUsDirtyMoney.mjs
+ctl-noop-nfl: US_DIRTY_MONEY_CONTROL=noop US_DIRTY_MONEY_SPORT=nfl node scripts/simUsDirtyMoney.mjs
+ctl-noop-mlb: US_DIRTY_MONEY_CONTROL=noop US_DIRTY_MONEY_SPORT=mlb node scripts/simUsDirtyMoney.mjs
+ctl-noop-nhl: US_DIRTY_MONEY_CONTROL=noop US_DIRTY_MONEY_SPORT=nhl node scripts/simUsDirtyMoney.mjs
+ctl-nodesk: US_DIRTY_MONEY_CONTROL=nodesk node scripts/simUsDirtyMoney.mjs
+ctl-sentence: US_DIRTY_MONEY_CONTROL=sentence node scripts/simUsDirtyMoney.mjs

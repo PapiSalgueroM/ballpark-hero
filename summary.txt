@@ -1,0 +1,10 @@
+vitest exit=0 11s |    Duration  10.34s (transform 3.87s, setup 221ms, collect 6.99s, tests 8.56s, environment 1.26s, prepare 585ms)
+simUsDirtyMoney exit=0 78s | simUsDirtyMoney: all sections green
+ctl-deck exit=1 76s | CONTROL deck FIRED (red sections 5)
+tsc exit=0 102s | 
+ctl-noop-nba exit=1 68s | CONTROL noop FIRED (red sections 4)
+ctl-noop-nfl exit=1 75s | CONTROL noop FIRED (red sections 4)
+ctl-nodesk exit=1 6s | CONTROL nodesk FIRED (red sections 6)
+ctl-sentence exit=1 6s | CONTROL sentence FIRED (red sections 6)
+ctl-noop-mlb exit=1 79s | CONTROL noop FIRED (red sections 4)
+ctl-noop-nhl exit=1 61s | CONTROL noop FIRED (red sections 4)
