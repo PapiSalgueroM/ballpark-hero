@@ -25,8 +25,10 @@
                 opens with the card on screen, correction 6(b)): the answer lands nothing past the ceiling, pays no
                 cost, and the toast says so.
      help       the How to play sheet carries the summer cards line.
-   At 390 the first case also records how long the deck's chunks take on a throttled phone (Chromium's network
-   emulation: 150 ms latency, 1.6 Mbps down), the reading DECK_WAIT_MS in src/pages/SoccerCareer.tsx is set from.
+     late       the deck chunk held past DECK_WAIT_MS (read from the page's source): the press says it is still loading,
+                the card stays, and once the chunk has landed the next press answers it (correction 3's bound).
+   At 390 the first case also records how long the deck's chunks take on a throttled phone (each script held 150 ms
+   plus its bytes at 1.6 Mbps, see LATENCY_MS), the reading DECK_WAIT_MS in src/pages/SoccerCareer.tsx is set from.
 
    Exit 0 green, 1 a check failed. Screenshots and walk.json go to RC_OUT (or .tmp-fx/play-soccer-deck). */
 import './lib/offlineTransport.cjs';
@@ -42,6 +44,8 @@ const BASE = (process.env.BASE || 'http://localhost:4173').replace(/\/$/, '');
 const OUT = process.env.RC_OUT || path.join(ROOT, '.tmp-fx/play-soccer-deck');
 fs.mkdirSync(OUT, { recursive: true });
 const KEY = 'soccerCareerSave';
+const WAIT_MS = Number(/const DECK_WAIT_MS = (\d+);/.exec(fs.readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8'))?.[1]);
+if (!(WAIT_MS > 0)) { console.error('playSoccerDeck: DECK_WAIT_MS is not in src/pages/SoccerCareer.tsx, refusing to run'); process.exit(2); }
 const DECK_CHUNK = /\/assets\/soccerDeck-[\w-]+\.js$/;
 let failures = 0;
 const report = { cases: [], timing: null };
@@ -141,10 +145,12 @@ const ceilingOf = pending => {
 
 const { chromium } = pw;
 const browser = await chromium.launch({ headless: true });
-/* The throttled reading cannot use page.route: Chromium drops its network emulation for intercepted requests (the
-   first run read 22 to 32 ms a chunk at "1.6 Mbps"). So that one context runs in a browser whose resolver sends every
-   host but localhost to a closed port, supabase.co included, and routes nothing. */
-const slowBrowser = await chromium.launch({ headless: true, args: ['--host-resolver-rules=MAP * 127.0.0.1:9, EXCLUDE localhost'] });
+/* The throttled phone. Chromium's own network emulation does not apply to intercepted requests, and every request is
+   intercepted here (the walk's routes and scripts/lib/offlineTransport.cjs): two runs read 12 to 32 ms a chunk at
+   "1.6 Mbps". So the walk throttles each script itself: the response is held 150 ms of latency plus its own bytes at
+   1.6 Mbps, as on a slow phone line with no other request sharing it (an optimistic model, said so in the reading). */
+const LATENCY_MS = 150, BITS_PER_S = 1.6e6;
+const SLOW_SCRIPT = /\/assets\/[\w-]+\.js$/;
 const PROFILES = [{ w: 390, h: 844, mobile: true }, { w: 1280, h: 900, mobile: false }];
 const toasts = page => page.locator('[data-sonner-toast]').allInnerTexts().then(t => t.map(x => x.replace(/\s+/g, ' ').trim()));
 const waitToast = async (page, test, ms) => {
@@ -155,26 +161,29 @@ const waitToast = async (page, test, ms) => {
 const savedOf = page => page.evaluate(k => JSON.parse(localStorage.getItem(k) || 'null'), KEY);
 
 async function open(profile, save, { deck = 'allow', staleUsed = false, throttle = false } = {}) {
-  const ctx = await (throttle ? slowBrowser : browser).newContext({ viewport: { width: profile.w, height: profile.h }, isMobile: profile.mobile, hasTouch: profile.mobile,
+  const ctx = await browser.newContext({ viewport: { width: profile.w, height: profile.h }, isMobile: profile.mobile, hasTouch: profile.mobile,
     serviceWorkers: 'block', reducedMotion: 'reduce',
     storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [{ name: KEY, value: O.save.serializeSoccerCareerSave(save) }, { name: 'cookie-consent', value: 'essential' }] }] } });
-  if (!throttle) {
-    await ctx.route(/supabase\.co/, r => r.abort());
-    await ctx.route(url => !String(url).startsWith(BASE), r => r.abort());
-  }
+  await ctx.route(/supabase\.co/, r => r.abort());
+  await ctx.route(url => !String(url).startsWith(BASE), r => r.abort());
+  const hold = ms => new Promise(res => setTimeout(res, ms));
+  if (throttle) await ctx.route(SLOW_SCRIPT, async r => {
+    try {
+      await hold(LATENCY_MS);
+      const res = await r.fetch();
+      const body = await res.body();
+      await hold(Math.round(body.length * 8 / BITS_PER_S * 1000));
+      await r.fulfill({ response: res, body });
+    } catch { /* the context closed with this response still held */ }
+  });
   if (deck === 'abort') await ctx.route(DECK_CHUNK, r => r.abort());
-  if (deck === 'delay') await ctx.route(DECK_CHUNK, async r => { await new Promise(res => setTimeout(res, 4000)); await r.continue(); });
+  if (typeof deck === 'number') await ctx.route(DECK_CHUNK, async r => { await hold(deck); await r.continue().catch(() => undefined); });
   if (staleUsed) await ctx.addInitScript(() => { try { sessionStorage.setItem('dukb-reloaded-stale-chunk', '1'); } catch { /* the walk's own key */ } });
   const page = await ctx.newPage();
   const errors = [];
   let loads = 0;
   page.on('pageerror', e => errors.push(String(e)));
   page.on('load', () => { loads += 1; });
-  if (throttle) {
-    const cdp = await ctx.newCDPSession(page);
-    await cdp.send('Network.enable');
-    await cdp.send('Network.emulateNetworkConditions', { offline: false, latency: 150, downloadThroughput: 1.6e6 / 8, uploadThroughput: 750e3 / 8 });
-  }
   const deckResponse = deck === 'abort' ? null : page.waitForResponse(r => DECK_CHUNK.test(r.url()), { timeout: 90000 }).catch(() => null);
   await page.goto(`${BASE}/soccer-career`, { waitUntil: 'domcontentloaded', timeout: 90000 });
   return { ctx, page, errors, loads: () => loads, deckResponse };
@@ -221,7 +230,7 @@ try {
       /* fasttap: Continue pressed while the chunk is still held: that summer simply has no deck card (critic 16(b): a
          deal never waits, and the race can only leave the card out, never deal a different one) */
       {
-        const { ctx, page, errors } = await open(profile, f.summary, { deck: 'delay' });
+        const { ctx, page, errors } = await open(profile, f.summary, { deck: 4000 });
         const post = page.getByRole('button', { name: /Post about personal life/ }).first();
         await post.waitFor({ timeout: 60000 });
         await post.click();
@@ -251,7 +260,7 @@ try {
       }
       /* delayed: the press waits for the held chunk, a second press does nothing, the answer lands once */
       {
-        const { ctx, page, errors } = await open(profile, f.pending, { deck: 'delay' });
+        const { ctx, page, errors } = await open(profile, f.pending, { deck: 4000 });
         await cardTitle(page, f.card.title).waitFor({ timeout: 60000 });
         await optionOf(page, f.card.labels[0]).click();
         const busy = await waitToast(page, x => x.includes('Loading this card'), 1500);
@@ -264,6 +273,23 @@ try {
         check((saved?.events ?? []).filter(l => l.startsWith(head)).length === 1, `${id} delayed: the second press did nothing (one season log line)`);
         check(JSON.stringify(saved?.statBoostNextSeason) === JSON.stringify(want.boost), `${id} delayed: the save queued what node queued`);
         check(errors.length === 0, `${id} delayed: no page error${errors.length ? ` (${errors[0]})` : ''}`);
+        await ctx.close();
+      }
+      /* late: the chunk held past DECK_WAIT_MS: the press says so and the card stays; once it lands, a press answers */
+      {
+        const { ctx, page, errors, deckResponse } = await open(profile, f.pending, { deck: WAIT_MS + 2500 });
+        await cardTitle(page, f.card.title).waitFor({ timeout: 60000 });
+        await optionOf(page, f.card.labels[0]).click();
+        const late = await waitToast(page, x => x.includes('Still loading'), WAIT_MS + 2000);
+        check(!!late, `${id} late: past ${WAIT_MS} ms the press says the card is still loading`);
+        check(await cardTitle(page, f.card.title).isVisible(), `${id} late: the card stays`);
+        await deckResponse;
+        await page.waitForTimeout(600);
+        await optionOf(page, f.card.labels[0]).click();
+        check(!!(await waitToast(page, x => x.includes(want.toast), 5000)), `${id} late: once the chunk lands the next press answers it`);
+        const saved = await savedOf(page);
+        check(JSON.stringify(saved?.statBoostNextSeason) === JSON.stringify(want.boost), `${id} late: the save queued what node queued`);
+        check(errors.length === 0, `${id} late: no page error${errors.length ? ` (${errors[0]})` : ''}`);
         await ctx.close();
       }
       /* noreload: the one stale chunk reload is used, the chunk fails: the card stays and says so */
@@ -328,7 +354,6 @@ try {
   }
 } finally {
   await browser.close();
-  await slowBrowser.close();
   fs.writeFileSync(path.join(OUT, 'walk.json'), JSON.stringify({ ...report, failures }, null, 2));
   try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }
 }
