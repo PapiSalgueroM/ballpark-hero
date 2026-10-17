@@ -1,0 +1,25 @@
+(a) Chelsea, week 17 of 54 after 13 entries: nights done 4, matchday 4 18 scores, matchday 5 18 fixtures, table 36
+(b) Chelsea season over after 41 entries: the engine's final, Manchester City beat PSG
+(c) Villarreal 2005, week 55 of 56: 8 groups, the final won by Chelsea, stand in Valencia
+(d) Real Madrid, in it, group matchday 2
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+control ahead: built src/lib/clubManagerWorldView.ts with its line patched into /home/runner/work/_temp/t-walk-ahead/dukb-world-ucl-walk-ghMeyD/dist-ahead; the file is back as it was
+   (a) Chelsea 390-ahead tiles: 2 controls and 9 lines measured
+   (a) Chelsea 390-ahead table: 37 controls and 265 lines measured
+   FAIL (a) Chelsea 390-ahead: matchday 5 shows 18 scores before it is played
+   FAIL (a) Chelsea 390-ahead: matchday 5 lists 0 fixtures to play, the engine has 18
+   FAIL (a) Chelsea 390-ahead: Bayern Munich's run shows 5 played and 3 to come, not 4 and 4
+   (a) Chelsea 390-ahead run: 2 controls and 37 lines measured
+   (a) Chelsea 390-ahead matchdays: 39 controls and 60 lines measured
+   (a) Chelsea 390-ahead knockouts: 6 controls and 8 lines measured
+   (a) Chelsea 390-ahead final: 1 controls and 6 lines measured
+   (a) Chelsea 390-ahead help: 7 controls and 22 lines measured
+   (a) Chelsea 390-ahead screen: 7 controls and 20 lines measured
+playWorldUcl control ahead: FIRED, "matchday 5 shows" reported 1 time(s) (3 findings in all)

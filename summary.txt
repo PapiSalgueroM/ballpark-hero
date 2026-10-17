@@ -1,0 +1,21 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 65s | 
+vitest exit=0 6s |    Duration  5.36s (transform 2.25s, setup 323ms, collect 5.59s, tests 5.21s, environment 1.66s, prepare 530ms)
+walk exit=0 110s | playWorldUcl: green. Four saves at three sizes, 39 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
+walk-notile exit=1 37s | playWorldUcl control notile: FIRED, "no Champions League tile" reported 1 time(s) (1 findings in all)
+walk-ahead exit=1 51s | playWorldUcl control ahead: FIRED, "matchday 5 shows" reported 1 time(s) (3 findings in all)
+walk-oldcols exit=1 42s | playWorldUcl control oldcols: FIRED, "breaks in the middle of the word" reported 1 time(s) (1 findings in all)
+walk-bogus exit=2 0s | playWorldUcl: could not run. unknown control bogus (notile, ahead, oldcols)
+uclFormat exit=0 1s | simUclFormatHistory: green. The timeline is whole, twice sourced, the generated block is fresh, and the engine plays what it says.
+uclFormat-watched exit=0 0s | simUclFormatHistory control: green. UCL_FORMAT_CONTROL=watched was reported by section 3 with "watched competition is g8" (1 finding).
+eraMid exit=0 6s | simClubManagerEraMidSeason: PASS. His 2005 save plays every league, the picker lists one La Liga, and the Cups tab shows the cup it names.
+eraMid-cupspanel exit=0 6s | simClubManagerEraMidSeason control: green. The unmounted cup bracket was reported (1 finding).
+noRival exit=0 13s | No rival product names found. 0 findings.
+anchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+noQuotes exit=0 20s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+inventedNames exit=0 8s | simInventedNames: green. Every invented man on this site is invented all the way down.
+guideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+earlyReturn exit=0 8s | simEarlyReturnScope: all green
+a11y exit=0 0s | simAccessibility: all green
+storageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+siteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
