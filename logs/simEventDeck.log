@@ -1,0 +1,89 @@
+simEventDeck: 8 packs (nfl, nba, mlb, nhl, college, gym, afl)
+1) Replay: 7 GM packs, seeds 1, 2, 3, drives FLEET, SILENT, STUBBORN, FALLEN, 10 seasons a desk
+   84 rows, 72509 events dealt, 267577 deck draws, 296 repeat ids suffixed on FALLEN desks (18.5 s)
+   the recording: base 8fea14e2, gmInbox.ts blob 0055dbd1, drive baf7540a6deb, 84 rows
+   ok all 84 rows byte equal to the base engine's recording (desk states, ids, answer lines, deck draws, deals)
+2) Same seed, same deck; a JSON round trip and repairGmInbox between every two weeks change nothing
+   ok nfl seed 1 dealt the same 2793 events twice; seed 4 dealt another deck
+   ok all 638400 desk states of seeds 1, 2, 3 repaired to themselves
+   ok 84 rows (every row of section 1) dealt byte equal with a reload between every two weeks
+3) Weights: equal weights deal the recording, and a weight is a share of the draw, never a rank
+   ok every card at weight 1: 7 FLEET rows byte equal to the recording
+   ok every card at weight 2.5: 7 FLEET rows byte equal to the recording
+   ok FX_WEIGHT (weights 1 and 3): the light card took 0.2424 of 10000 deals (band 0.23 to 0.272)
+   ok FX_WEIGHT two a week (weights 1, 3 and 2) over 5000 weeks: 0 weeks dealt one card twice, 0 weeks dealt other than two; shares 0.207, 0.426, 0.367
+4) Story: never two of one story inside its cooldown or in one week, a one shot story once
+   ok 6083 story cards over 100 ten season desks, no story twice in a week or inside a cooldown, the one shot story once a desk
+   ok without the story field the same cards dealt 10692, 1.76 times as many (floor 1.5)
+5) Subject rest: no subject inside its rest or twice in a week, the rest book born pruned
+   ok 13343 subject cards over 50 desks of 400 weeks, none inside its rest or twice in a week, the book never above 5 entries
+   ok subjectRest 0 deals exactly as no subjects (765 deals, 2802 draws) and writes no book
+   ok at subjectRest 0 a card about a missing fact is still held (fail closed): dealt on no week without the fact, where the same pack without subjects dealt one on 82
+   ok no GM desk gained gmInboxRest over section 2's 638400 states
+   ok on a clock that falls every 20 weeks: 11312 subject cards over 50 desks, none inside its rest, the book never ahead of the clock or past a rest
+   ok one card about the captain on that clock: 31 deals over ten seasons, 31 expected (ticks 0, 6, 12, 18, 26, 32, 38 and on)
+6) Texts: wordings move no deal and no draw, every wording comes up at its share, a key reads the same words
+   ok with and without wordings: the same 15517 deals and 60001 deck draws
+   ok the same key reads the same words; another key reads other words on 6483 weeks with the same deal
+   ok every one of the 6 wordings came up, each at 0.971 to 1.015 of an even share (band 0.865 to 1.1)
+   packs the kit knows that use texts: none yet
+7) Expiry: an open card is settled at exactly w plus expires on its neutral option, nothing moves, the deck never freezes
+   ok 2634 cards settled on 20 silent desks, each at exactly w plus expires on its neutral option, no meter moved
+   ok the settled line: 📨 Your assistant dealt with it (Leave it).
+   ok silent desks were dealt 2686 cards, 44.8 times the 60 of the same pack without expiry, 270 in the tenth season
+   ok on a clock that falls every 20 weeks: 2340 cards settled on 20 silent desks, each in exactly its due week, 464 of them across a fall, no meter moved
+   ok the settled list named 1559 cards on 20 desks, 341 of them dropped by the kept cap in the call that settled them
+   ok a card whose def lost its expiry stays open for the manager
+   ok src/data/gmInbox/index.ts: 0 expiring cards, src/components/front-office-shared/GmInboxPanel.tsx calls gmExpiredLine (it must before any of its cards expires)
+   ok src/data/soccerDeck/index.ts: 0 expiring cards, src/pages/SoccerCareer.tsx does not call gmExpiredLine (it must before any of its cards expires)
+8) Neutral: every card of every pack off the baseline has an option that moves nothing, and every pack check holds
+   ok 10 packs: the 7 on the baseline each still lack a neutral option somewhere, every other card has one, no pack has a problem
+   ok bind refuses a zero weight, an expiring card with nothing neutral, an undeclared subject fact
+9) Season clock: a card is held out exactly as careerEventDeck holds it; the week clock is back after exactly N
+   ok 2,000 random ledgers and seasons: the season deck held out exactly what careerEventDeck holds out (3336 of 12000 cards)
+   ok a cooldown of N is back after exactly N weeks on the week clock and sits out exactly N seasons on the season clock
+10) Share and reach: every card of every pack reached over at least 1,000 seasons, no card above its pack's measured ceiling
+   ok nfl: all 10 cards reached in 2793 deals, the top card nfl_fan_night at 20.2% (ceiling 22.4%)
+   ok nba: all 8 cards reached in 2308 deals, the top card nba_jersey_night at 27.2% (ceiling 29.8%)
+   ok mlb: all 8 cards reached in 2535 deals, the top card mlb_giveaway at 26.2% (ceiling 28.8%)
+   ok nhl: all 8 cards reached in 2780 deals, the top card nhl_line_juggle at 25.3% (ceiling 27.8%)
+   ok college: all 8 cards reached in 3321 deals, the top card col_game_day_visit at 28.0% (ceiling 30.5%)
+   ok gym: all 6 cards reached in 2833 deals, the top card gym_six_am_kid at 33.9% (ceiling 36.7%)
+   ok afl: all 6 cards reached in 2193 deals, the top card afl_sore_midfielder at 35.0% (ceiling 37.4%)
+   ok soccer: all 28 cards reached in 4999 deals, the top card 726 at 9.8% (ceiling 13.1%)
+   reach by position: no pack the kit knows names a reachBy fact yet
+11) Registry: every option prints exactly the keys it moves, by exactly the amounts, and bind refuses each breakage
+   ok 13 options over 6 cards: each printed exactly the keys it moved, by exactly the amounts, the button and the answer line agree, a second answer moved nothing, every neutral index right (r5's fx only option is not neutral)
+   ok an answer whose key the seat never registered is refused and moves nothing
+   ok a label with unregistered keys prints them raw: Do it · mystery +2, Your keeper form -1
+   ok bind refuses an unregistered key, a built in name registered, a man on a plain key, a bare number on a key that names a man, a man off the targets, a value that is not a number, a key with no registry at all
+12) Legal: every pack narrated in roles, slots only in words, and a tagged card never lands on a real man
+   ok 10483 real names harvested from thirteen roster files
+   ok 710 strings over 12 packs: no quote, no first person, every voice a role, no real name, slots only where declared, no person slot by a speech verb, no wording prints an effect, every conduct or private card tagged (baseline: afl/afl_go_home, nba/nba_trade_demand)
+   ok FX_CONDUCT on 100 ten season desks answering late: 17035 cards dealt, 6985 of them tagged, 16574 answered, 59656 tagged cards held for a real man, 112 answers refused and 280 open cards settled after a role passed to a real man (or nobody); every tagged card dealt and every answer taken landed on generated men only, every refused answer moved nothing, no tagged card sat open about a real man, no dealt text kept a brace
+13) Compact: a pruned book and messages saved as numbers deal, answer and read exactly as a whole desk does
+   ok 10 packs at seeds 1, 2, 3, 3000 FLEET desks three ways (522000 compact weeks, 1806854 cooled book entries pruned in all): compact and whole dealt, answered and moved alike; a save, JSON and load between every two weeks changed nothing, text included; the book held exactly the entries still cooling, the one shots never past the pack's, never more than 8 kept
+   size report: FX_BIG (420 cards, 49.9 deals a season) on 20 desks: compact block season 1 642 B, season 5 1095 B, season 10 1348 B, season 15 1509 B, slope 32 B a season from 10 to 15; the same desk whole season 1 2772 B, season 5 4674 B, season 10 6127 B, season 15 6840 B, slope 143 B a season
+   ok the loader: a block of v: 2 reads as an empty desk; a bad book and a bad one shot list reset alone; a whole message from an older build is kept, a compact one whose card is gone is dropped and counted; the saved messages are compact (4 of 4)
+14) Frozen words: no recorded card of a compact pack changes its words, options, story or slots
+   ok 39 recorded cards of 2 compact pack(s): every wording, option, story and slot as recorded
+15) Economy: every meter a pack moves, BEST and WORST answered, its seasonal push under the pack's own ceiling
+   pressure a season (BEST / WORST): nfl cash +0.10 / -1.01, fans +5.35 / -2.08, morale +4.46 / -3.43, trust +4.35 / -3.68
+   pressure a season (BEST / WORST): nba cash +1.05 / -0.32, fans +2.50 / -1.43, morale +2.44 / -1.86, trust +2.19 / -1.58
+   pressure a season (BEST / WORST): mlb cash +0.00 / -0.69, fans +3.83 / -2.63, morale +1.93 / -1.93, trust +3.48 / -1.63
+   pressure a season (BEST / WORST): nhl cash +0.00 / -0.50, fans +3.30 / -1.87, morale +1.55 / -1.70, trust +2.49 / -1.59
+   pressure a season (BEST / WORST): college cash +1.50 / -3.79, fans +2.01 / -1.04, morale +2.46 / -2.08, recruit +8.61 / +0.51, trust +2.34 / -4.55
+   pressure a season (BEST / WORST): gym cash +0.07 / -0.06, trust +4.07 / -3.06
+   pressure a season (BEST / WORST): afl morale +3.08 / -0.86, trust +1.30 / -1.20
+   pressure a season (BEST / WORST): soccer gk_aerial_command +0.04 / +0.00, gk_distribution +0.03 / +0.00, gk_penalty_saving +0.03 / +0.00, gk_shot_stopping +0.01 / +0.00, gk_sweeping_speed +0.04 / +0.00, morale +0.64 / -0.26, t_defending +0.10 / +0.00, t_dribbling +0.06 / +0.00, t_pace +0.09 / +0.00, t_passing +0.08 / +0.00, t_physical +0.04 / +0.00, t_shooting +0.10 / +0.00
+   pressure a season (BEST / WORST): fx_registry ban +10.21 / +0.00, board +10.25 / -3.24, cash +0.00 / -6.53, fans +3.40 / +0.00, form +3.40 / -6.79, fund +1.63 / -4.90, morale +0.00 / -3.40, recruit +6.48 / +0.00, trust +6.83 / +0.00
+   pressure a season (BEST / WORST): fx_compact morale +19.35 / +0.00, trust +38.71 / +0.00
+   ok 10 packs: the 7 on the baseline printed, every other pack under its own ceiling on every meter it moves
+16) Bytes and lazy: bytes per event, and nothing that is not the deck imports it eagerly
+   packs: nfl 10 events 5368 B min 2004 B gz (200 B gz an event); nba 8 events 4438 B min 1738 B gz (217 B gz an event); mlb 8 events 4546 B min 1787 B gz (223 B gz an event); nhl 8 events 4213 B min 1723 B gz (215 B gz an event); college 8 events 4287 B min 1689 B gz (211 B gz an event); gym 6 events 3130 B min 1282 B gz (214 B gz an event); afl 6 events 3271 B min 1357 B gz (226 B gz an event); starter 28 events 15488 B min 4213 B gz (150 B gz an event)
+   82 events: 546 B minified, 193 B gzipped an event (each module alone); 420 events about 224 K min 79 K gz, 690 about 368 K min 130 K gz
+   the engine: 57382 B LF, 17100 B minified alone (6357 B gzipped), 17755 B minified with what it pulls in (6635 B gzipped)
+   ok 2164 src files read as code: only the deck's own files, tests, type imports and dynamic imports reach the engine, a pack index or GmInboxPanel (3 on LAZY_IMPORTERS)
+
+runtime 307.1 s
+simEventDeck: green.
