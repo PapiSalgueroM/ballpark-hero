@@ -1,0 +1,3 @@
+s4-off0: export TMPDIR=/tmp/o0 && mkdir -p $TMPDIR && SECTION=4 SEED_OFFSET=0 node scripts/simCmDifficulty.mjs; s=$?; TAG=off0 node .rc/x/firstsack.mjs $TMPDIR/cmdiff-fleet-*; tail -0 /dev/null; exit $s
+s4-off16: export TMPDIR=/tmp/o16 && mkdir -p $TMPDIR && SECTION=4 SEED_OFFSET=16 node scripts/simCmDifficulty.mjs; s=$?; TAG=off16 node .rc/x/firstsack.mjs $TMPDIR/cmdiff-fleet-*; exit $s
+s4-off32: export TMPDIR=/tmp/o32 && mkdir -p $TMPDIR && SECTION=4 SEED_OFFSET=32 node scripts/simCmDifficulty.mjs; s=$?; TAG=off32 node .rc/x/firstsack.mjs $TMPDIR/cmdiff-fleet-*; exit $s

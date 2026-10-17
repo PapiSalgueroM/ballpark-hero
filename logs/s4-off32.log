@@ -1,0 +1,30 @@
+simCmDifficulty: sections 4
+  table: normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":1.5}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3}
+4) outcomes: normal, hard, legend, 16 seeds from 32, 6 seasons, engaged, shard 0/1
+  12 shards (4 a level, 3 at a time), 2592 seasons
+  level  tier  driver   n   ppg  vsExp titles10 troph10   fees  sign  balance over  bMin bMean sacked matches xiS  xiE  clauseU loanU
+  normal big   engaged 288 2.05   0.98    4.83    9.20  65.89  1.24   150.72 0.69 45.84 74.34 0.13  48.56 89.75 90.14     0     0
+  normal mid   engaged 288 1.40  -2.45    0.42    0.97  15.96  1.90    23.49 0.64 38.73 67.56 0.24  38.83 80.60 80.95     0     0
+  normal small engaged 288 1.15  -8.42    0.90    1.01   6.56  2.55     7.45 0.82 25.01 58.93 0.35  38.40 75.01 75.67     0     0
+  hard   big   engaged 288 1.94   1.00    2.78    5.35  46.77  1.57   126.77 1.00 24.15 57.82 0.41  41.98 88.89 89.09     0     1
+  hard   mid   engaged 288 1.21  -1.87    0.14    0.49  13.10  2.06    17.12 0.91 14.85 50.33 0.60  30.00 79.63 79.79     0     0
+  hard   small engaged 288 0.70  -7.34    0.03    0.03   4.89  2.26     8.31 0.82  4.37 42.53 0.86  27.72 73.65 73.94     0     0
+  legend big   engaged 288 1.82   0.90    1.15    2.64  31.68  1.94   118.04 1.00  8.99 48.27 0.72  31.10 88.41 88.45     0     6
+  legend mid   engaged 288 1.05  -2.18    0.00    0.03  12.14  1.95     7.34 0.99  2.94 41.73 0.89  22.02 79.21 79.25     0    24
+  legend small engaged 288 0.56  -2.86    0.00    0.00   3.30  2.05     6.83 0.98  0.39 38.75 0.98  20.05 73.33 73.44     0     0
+  Normal: mid points per game 1.40, sacked 207 of 864 seasons (0.24), spend 29.47m a season, big club titles 4.83 in ten
+  Normal against Normal (even seeds against odd): mid points per game 1.42 and 1.37, a gap of 3.50 percent
+  hard: mid points per game 1.21 (down 13.42 percent), sacked 539 of 864 (0.62, 2.60 times Normal), spend 21.59m (down 26.75 percent), big club titles 2.78 in ten
+  legend: mid points per game 1.05 (down 24.47 percent), sacked 743 of 864 (0.86, 3.59 times Normal), spend 15.70m (down 46.71 percent), big club titles 1.15 in ten
+  ok: every level sits inside the bands the lead set
+simCmDifficulty: all green (sections 4)
+firstsack: 2592 rows from 1 folders
+  normal big   first season sacked 7 of 48 (0.15), matches in a first season 49.6, seasons sacked 38 of 288 (0.13), titles 139
+  normal mid   first season sacked 16 of 48 (0.33), matches in a first season 36.4, seasons sacked 68 of 288 (0.24), titles 12
+  normal small first season sacked 23 of 48 (0.48), matches in a first season 35.8, seasons sacked 101 of 288 (0.35), titles 26
+  hard   big   first season sacked 15 of 48 (0.31), matches in a first season 43.5, seasons sacked 118 of 288 (0.41), titles 80
+  hard   mid   first season sacked 29 of 48 (0.60), matches in a first season 30.0, seasons sacked 174 of 288 (0.60), titles 4
+  hard   small first season sacked 42 of 48 (0.88), matches in a first season 27.0, seasons sacked 247 of 288 (0.86), titles 1
+  legend big   first season sacked 30 of 48 (0.63), matches in a first season 33.0, seasons sacked 207 of 288 (0.72), titles 33
+  legend mid   first season sacked 43 of 48 (0.90), matches in a first season 22.7, seasons sacked 255 of 288 (0.89), titles 0
+  legend small first season sacked 46 of 48 (0.96), matches in a first season 21.5, seasons sacked 281 of 288 (0.98), titles 0
