@@ -51,7 +51,7 @@ const fonts = new Map(fontManifest.map(item => {
 }));
 assert.equal(fonts.size, fontManifest.length); write('font-manifest.json', fontManifest);
 const report = { variant: VARIANT, source: SOURCE, dist: DIST, base: BASE, status: 'running', qualified: false, ready: false, authHolder, sourceBindings: beforeSource,
-  boot: [], journeys: [], coldAccountAssets: null, errors: [], limits: ['Chromium at320 touch and1440 mouse, not physical Apple hardware.', 'Held chunk and browser offline mode are deliberate faults, not natural frequency evidence.', 'No auth submission, database request, provider popup or production account operation is performed.', 'External request intent is retained and aborted except verified cached fonts; zero external intent is not claimed.', 'Original arm qualifies three closed route boots only. No new original served UI inverse is claimed.', 'Full source/package/tool binding is owned by the paired workflow; this method holds its selected actual source leaves and every dist file.'] };
+  boot: [], journeys: [], coldAccountAssets: null, errors: [], limits: ['Chromium at320 touch and1440 mouse, not physical Apple hardware.', 'Held chunks, a declared one-shot cold chunk abort and browser offline state are deliberate faults, not natural offline networking evidence.', 'No auth submission, database request, provider popup or production account operation is performed.', 'External request intent is retained and aborted except verified cached fonts; zero external intent is not claimed.', 'Original arm qualifies three closed route boots only. No new original served UI inverse is claimed.', 'Full source/package/tool binding is owned by the paired workflow; this method holds its selected actual source leaves and every dist file.'] };
 const checkpoint = () => write('report.json', report);
 let browser;
 const bounded = (promise, label, ms = 15000) => {
@@ -66,13 +66,13 @@ function asset(url) {
 const isJs = url => new URL(url).origin === BASE && new URL(url).pathname.endsWith('.js');
 checkpoint();
 async function runCase(collection, id, route, width, work) {
-  const row = { id, route, width, height: width === 320 ? 640 : 900, status: 'running', requests: [], js: [], failures: [], documents: [], external: [], fontReceipts: [], errors: [], console: [], observations: [], screenshots: [], evidenceErrors: [], held: [] };
+  const row = { id, route, width, height: width === 320 ? 640 : 900, status: 'running', requests: [], js: [], failures: [], documents: [], external: [], fontReceipts: [], errors: [], console: [], observations: [], screenshots: [], evidenceErrors: [], held: [], controlledFailures: [] };
   if (id === 'offline-retry') { assert(report.coldAccountAssets); row.coldAccountAssets = report.coldAccountAssets; }
   collection.push(row); checkpoint();
   const context = await browser.newContext({ viewport: { width, height: row.height }, isMobile: width === 320, hasTouch: width === 320, reducedMotion: 'reduce', serviceWorkers: 'block',
     storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [{ name: 'cookie-consent', value: 'essential' }, { name: 'account-proof-save', value: '{"fixture":"opaque held game bytes"}' }] }] } });
   let page, holdAuth = false, releaseAuth = () => {}, lastJs = Date.now();
-  let holdPromise; const pendingJs = new Set(), bodyTasks = [], documentByRequest = new Map();
+  let holdPromise, abortFirstCold = false; const pendingJs = new Set(), bodyTasks = [], documentByRequest = new Map();
   context.on('request', request => {
     const url = request.url(), owned = new URL(url).origin === BASE;
     row.requests.push({ url, method: request.method(), type: request.resourceType(), owned });
@@ -103,6 +103,12 @@ async function runCase(collection, id, route, width, work) {
         row.external.push({ url, method: request.method(), type: request.resourceType(), action: 'aborted external intent' }); return await routed.abort();
       }
       assert(['GET', 'HEAD'].includes(request.method()), 'No owned auth submission or write');
+      if (abortFirstCold && isJs(url) && row.coldAccountAssets.urls.includes(url)) {
+        abortFirstCold = false;
+        const requestIndex = row.requests.findIndex(item => item.owned && item.url === url); assert(requestIndex >= 0);
+        row.controlledFailures.push({ url, requestIndex, action: 'deliberate cold-chunk abort', errorCode: 'internetdisconnected', healthyCaseId: row.coldAccountAssets.healthyCaseId, healthyRawReceipt: row.coldAccountAssets.healthyRawReceipt }); checkpoint();
+        return await routed.abort('internetdisconnected');
+      }
       if (url === authUrl && holdAuth) { row.held.push({ url, requestIndex: row.requests.length, action: 'hold actual AuthModal asset response' }); checkpoint(); await holdPromise; }
       return await routed.continue();
     } catch (error) { row.evidenceErrors.push(String(error.stack || error)); throw error; }
@@ -161,14 +167,18 @@ async function runCase(collection, id, route, width, work) {
     assert.equal(row.documents.length, 1); assert.equal(row.documents[0].method, 'GET'); assert.equal(row.documents[0].status, 200);
     await bounded(work({ page, context, row, first, observe, shot, quiet, pointer, openers, formReady, held, close,
       hold: () => { assert(!holdAuth); holdAuth = true; holdPromise = new Promise(resolve => { releaseAuth = resolve; }); },
-      release: () => { holdAuth = false; releaseAuth(); } }), 'Actual case ' + id, 90000);
+      release: () => { holdAuth = false; releaseAuth(); },
+      armColdFailure: browserOffline => { assert.equal(id, 'offline-retry'); assert.equal(browserOffline, true); assert.equal(row.controlledFailures.length, 0); assert(!abortFirstCold); row.browserOfflineBeforeInjection = browserOffline; abortFirstCold = true; }
+    }), 'Actual case ' + id, 90000);
     await quiet(); row.storesAfter = (await observe('final')).stores;
     assert.deepEqual(row.errors, [], 'No page errors, including failed-import recovery'); assert.deepEqual(row.evidenceErrors, []);
     const ownedFailures = row.failures.filter(item => item.owned);
     if (id === 'offline-retry') {
+      assert.equal(row.browserOfflineBeforeInjection, true); assert.equal(row.controlledFailures.length, 1, 'Exactly one declared cold request is aborted');
+      assert(ownedFailures.some(failure => failure.url === row.controlledFailures[0].url), 'The declared cold abort actually failed its request');
       assert(ownedFailures.length >= 1, 'Actual first account import path fails while offline');
       for (const failure of ownedFailures) { assert(row.coldAccountAssets.urls.includes(failure.url), 'Every owned failure is from the independently measured healthy cold account path'); assert(/ERR_INTERNET_DISCONNECTED|ERR_FAILED|NS_ERROR_OFFLINE/i.test(failure.error)); }
-    } else assert.equal(ownedFailures.length, 0);
+    } else { assert.equal(ownedFailures.length, 0); assert.equal(row.controlledFailures.length, 0); }
     for (const request of row.requests.filter(item => item.owned && isJs(item.url))) {
       const successful = row.js.some(item => item.url === request.url), declaredFailure = ownedFailures.some(item => item.url === request.url);
       assert(successful || declaredFailure, 'Every requested owned JS has a physical200 body or a declared offline failure in the independently measured cold account path');
@@ -192,7 +202,9 @@ try {
     for (const caller of ['header', 'home', 'navbar']) for (const width of [320, 1440]) {
       await runCase(report.journeys, caller + '-' + width, caller === 'navbar' ? '/club-manager' : '/', width, async api => {
         const { page, row, observe, shot, pointer, openers, formReady, held, close } = api;
-        const opener = openers[caller](); await opener.scrollIntoViewIfNeeded(); const before = await observe('before-open');
+        const opener = openers[caller](); await opener.scrollIntoViewIfNeeded();
+        if (caller === 'home') await page.waitForFunction(() => sessionStorage.getItem('home-scroll-y') === String(scrollY));
+        const before = await observe('before-open');
         await pointer(opener); await formReady(caller === 'header' ? 'Welcome Back!' : 'Join DoUKnowBall');
         const opened = await observe('opened'); held(opened, before); assert(opened.emailFocused); await shot('form');
         for (const [field, value] of [['Email', 'fixture@example.invalid'], ['Password', 'retained-field-only']]) {
@@ -232,7 +244,8 @@ try {
     await runCase(report.journeys, 'offline-retry', '/club-manager', 320, async api => {
       const { page, context, row, observe, shot, pointer, openers, formReady, held, close } = api;
       const opener = openers.navbar(); await opener.scrollIntoViewIfNeeded(); const before = await observe('before-offline');
-      await context.setOffline(true); assert.equal(await page.evaluate(() => navigator.onLine), false); await pointer(opener);
+      await context.setOffline(true); const browserOffline = await page.evaluate(() => navigator.onLine === false); assert.equal(browserOffline, true);
+      api.armColdFailure(browserOffline); await pointer(opener);
       await page.getByRole('heading', { name: 'Account could not open', exact: true }).waitFor();
       const failed = await observe('failed'); held(failed, before); assert.equal(failed.email, null); assert.equal(row.documents.length, 1); await shot('failed');
       const retry = page.getByRole('button', { name: 'Try again', exact: true }); await retry.scrollIntoViewIfNeeded(); await pointer(retry);

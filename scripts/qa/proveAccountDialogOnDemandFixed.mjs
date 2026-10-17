@@ -39,6 +39,7 @@ function compareBrowser() {
     assert.deepEqual(report.boot.map(row => [row.id, row.route]), [['boot-club-manager', '/club-manager'], ['boot-hot-seat', '/manager-hot-seat'], ['boot-deadline-day', '/deadline-day']]);
     const holderBody = physical(arm.folder, report.authHolder.bodyReceipt), holderGzip = physical(arm.folder, report.authHolder.gzipReceipt); assert.equal(sha(holderBody), report.authHolder.sha256); assert.equal(holderBody.length, report.authHolder.rawBytes); assert.equal(holderGzip.length, report.authHolder.gzipBytes); assert.deepEqual(gunzipSync(holderGzip), holderBody);
     for (const row of [...report.boot, ...report.journeys]) { const { rawReceipt, ...observed } = row; assert.deepEqual(JSON.parse(physical(arm.folder, rawReceipt)), observed, 'Actual complete physical case equals the report row');
+      assert.equal(row.controlledFailures.length, row.id === 'offline-retry' ? 1 : 0, 'Only the one declared offline case injects a cold request failure');
       for (const js of row.js) { assert.equal(js.status, 200); const body = physical(arm.folder, js.bodyReceipt), gzip = physical(arm.folder, js.gzipReceipt); assert.equal(body.length, js.rawBytes); assert.equal(gzip.length, js.gzipBytes); assert.equal(sha(body), js.bodySha256); assert.equal(js.bodySha256, js.diskSha256); assert.deepEqual(gunzipSync(gzip), body); }
     }
     for (const row of report.boot) { assert.equal(row.status, 'passed'); assert.equal(row.authFetchedBeforeOpen, variant === 'original'); assert.deepEqual(row.storesAfter, row.storesBefore); assert(row.js.length > 0);
@@ -57,6 +58,11 @@ function compareBrowser() {
   assert.deepEqual(cold, { healthyCaseId: healthy.id, healthyRawReceipt: healthy.rawReceipt, jsRequestedBeforeOpen: healthy.jsRequestedBeforeOpen, urls: coldUrls, files: coldFiles });
   const offline = fixedReport.journeys.find(row => row.id === 'offline-retry'); assert.deepEqual(offline.coldAccountAssets, cold);
   const failedCold = offline.failures.filter(item => item.owned); assert(failedCold.length >= 1);
+  assert.equal(offline.browserOfflineBeforeInjection, true); assert.equal(offline.controlledFailures.length, 1);
+  const injected = offline.controlledFailures[0]; assert.equal(injected.action, 'deliberate cold-chunk abort'); assert.equal(injected.errorCode, 'internetdisconnected');
+  assert.equal(injected.healthyCaseId, healthy.id); assert.deepEqual(injected.healthyRawReceipt, healthy.rawReceipt); assert(coldUrls.includes(injected.url));
+  assert(Number.isInteger(injected.requestIndex) && injected.requestIndex >= 0); assert.equal(offline.requests[injected.requestIndex].url, injected.url); assert.equal(offline.requests[injected.requestIndex].owned, true);
+  assert(failedCold.some(failure => failure.url === injected.url), 'The independently bound declared abort physically failed its actual request');
   for (const failure of failedCold) { assert(coldUrls.includes(failure.url), 'Every offline fault belongs to the separately observed healthy cold path'); assert.match(failure.error, /ERR_INTERNET_DISCONNECTED|ERR_FAILED|NS_ERROR_OFFLINE/i); }
   const weightsLog = fs.readFileSync(path.join(OUT, 'fixed', 'weights.log'), 'utf8'); assert.equal(fs.readFileSync(path.join(OUT, 'fixed', 'weights-exit.txt'), 'utf8').trim(), '0'); assert.equal((weightsLog.match(/^\s+(\/\S*)\s+\d+K gz over\s+\d+ files \(budget \d+K, \d+\.\d+K to the tenth\)$/gm) || []).length, 14); assert(!/^\s*FAIL:/m.test(weightsLog)); assert.match(weightsLog, /^sweepWeight: green\. Every page is inside its budget, and the budgets came down this round\.$/m);
   write(path.join(OUT, 'served-cost-comparison.json'), { status: 'complete', rows, scope: 'Same-installed-tools actual three-route boot requests. Original has no interactive-browser qualification; fixed has nine declared journeys. Full unchanged caps remain a separate mandatory verdict.' });
