@@ -31,7 +31,10 @@ type Vote = {
 type View<Row> = { Row: Row; Relationships: [] };
 type GameQueryDatabase = {
   public: {
-    Tables: Omit<Database['public']['Tables'], 'transfer_path_puzzles'> & {
+    Tables: Omit<Database['public']['Tables'], 'transfer_path_puzzles' | 'player_market_values'> & {
+      player_market_values: Omit<Database['public']['Tables']['player_market_values'], 'Row'> & {
+        Row: Database['public']['Tables']['player_market_values']['Row'] & { person_key: string | null };
+      };
       transfer_path_puzzles: {
         Row: {
           puzzle_id: string;
