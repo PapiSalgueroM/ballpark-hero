@@ -15798,3 +15798,6 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Round1408 claim: NFL Perfect Season retry preserves the draft
+Root reserves only src/pages/PerfectSeasonNfl.tsx plus new isolated unit/helper/browser/workflow and closing docs. Independent I829base, managed codex/nfl-perfect-season-retry. Source finding: failed squad lookup pre-debits rerolls and error Try again reloads the page, losing earlier picks. Reuse already-qualified and merged NBA PR273 policy: retain draft/retry intent, debit rerolls only after a usable squad loads, retry the held mode or re-enter index boot. Hold NFL eight slots,17games,1.5second success floor,six-attempt loop,eligibility,simulation,data/providers and all existingNBA proof/source. No MLB/NHL expansion. Freeze five real-page cases (3expected original faults,2healthy), inspect remote original before product. Full original/actual-control/fixed proof, unchanged priorNBA regression/method using explicit parentfb709452, actual built-page retry journeys, type/SEO build15readers14fatalcaps/fullholds. I1500USMyCareer/dirtymoney/coach and activeSoccer/Manager/UCL/tournaments/release/main/publish held. No local app runtime. No product or runtime credit at claim.
