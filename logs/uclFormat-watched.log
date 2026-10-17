@@ -1,0 +1,14 @@
+1) the timeline is contiguous from 1955 with exactly one open period
+   9 periods, 72 seasons each on exactly one row, 1955-56 to 1990-91 through 2024-25 onward
+2) every period rests on at least two publishers, and the provenance is well formed
+   40 sources across 4 publishers, 48 citations, verified 2026-09-10
+3) the generated block equals the engine, every era plays its real season, and the modern save admits it is a stand in
+  FAIL: uclEngineShapes.json is stale for 2026-27 (watched): run node scripts/genUclEngineShapes.mjs
+  FAIL: uclEngineShapes.json is stale for 2026-27 (line): run node scripts/genUclEngineShapes.mjs
+  FAIL: the modern save's watched competition is g8, not the real league phase its line promises: Eight groups of four into the quarter-finals, two legged ties, no away goals rule. A stand in: the real 2026-27 competition runs thirty six clubs in one league table, which the engine does not play yet.
+   4 of 4 historic eras match their real season, 1 modern save declared a stand in, generated file STALE
+4) snapshot check skipped: control run
+5) production guide rendering and saved summary claims
+   inspected production component at the affected table cell or answer
+
+simUclFormatHistory control: green. UCL_FORMAT_CONTROL=watched was reported by section 3 with "watched competition is g8" (1 finding).

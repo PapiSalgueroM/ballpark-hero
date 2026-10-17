@@ -1,0 +1,24 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 63s | 
+vitest exit=0 6s |    Duration  5.43s (transform 1.95s, setup 389ms, collect 5.69s, tests 5.23s, environment 1.86s, prepare 530ms)
+walk exit=0 149s | playWorldUcl: green. Five saves at three sizes, 51 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
+walk-legflip exit=1 51s | playWorldUcl control legflip: FIRED, "card not as the engine played it" reported 11 time(s) (11 findings in all)
+walk-swapfinal exit=1 40s | playWorldUcl control swapfinal: FIRED, "the season review does not name the final" reported 1 time(s) (1 findings in all)
+walk-r16help exit=1 47s | playWorldUcl control r16help: FIRED, "the ? for the club in it" reported 1 time(s) (1 findings in all)
+walk-notile exit=1 38s | playWorldUcl control notile: FIRED, "no Champions League tile" reported 1 time(s) (1 findings in all)
+walk-ahead exit=1 53s | playWorldUcl control ahead: FIRED, "matchday 5 shows" reported 1 time(s) (3 findings in all)
+walk-oldcols exit=1 45s | playWorldUcl control oldcols: FIRED, "breaks in the middle of the word" reported 1 time(s) (1 findings in all)
+mutM2 exit=1 189s | mutrun M2: CAUGHT (knockout tie card: second leg score printed the wrong way round; vitest exit 0, build exit 0, walk exit 1)
+mutM3 exit=1 184s | mutrun M3: CAUGHT (season review: winner and runner-up swapped; vitest exit 0, build exit 0, walk exit 1)
+mutM6 exit=1 188s | mutrun M6: CAUGHT (watched ties: two legged ties read as one match; vitest exit 1, build exit 0, walk exit 1)
+mutM7 exit=1 187s | mutrun M7: CAUGHT (participant: second leg night scores not flipped to the leg home side; vitest exit 1, build exit 0, walk exit 0)
+uclFormat exit=0 1s | simUclFormatHistory: green. The timeline is whole, twice sourced, the generated block is fresh, and the engine plays what it says.
+uclFormat-watched exit=0 1s | simUclFormatHistory control: green. UCL_FORMAT_CONTROL=watched was reported by section 3 with "watched competition is g8" (1 finding).
+eraMid exit=0 7s | simClubManagerEraMidSeason: PASS. His 2005 save plays every league, the picker lists one La Liga, and the Cups tab shows the cup it names.
+eraMid-cupspanel exit=0 7s | simClubManagerEraMidSeason control: green. The unmounted cup bracket was reported (1 finding).
+noRival exit=0 14s | No rival product names found. 0 findings.
+anchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+storageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+noQuotes exit=0 20s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+earlyReturn exit=0 8s | simEarlyReturnScope: all green
+a11y exit=0 0s | simAccessibility: all green

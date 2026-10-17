@@ -1,0 +1,26 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerWorldView.test.ts src/test/clubManagerBracketMoment.test.tsx src/test/cmLeagueLeadersCard.test.tsx src/test/clubManagerOfferConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
+walk: node scripts/playWorldUcl.mjs
+walk-legflip: PLAY_WORLD_CONTROL=legflip node scripts/playWorldUcl.mjs
+walk-swapfinal: PLAY_WORLD_CONTROL=swapfinal node scripts/playWorldUcl.mjs
+walk-r16help: PLAY_WORLD_CONTROL=r16help node scripts/playWorldUcl.mjs
+walk-notile: PLAY_WORLD_CONTROL=notile node scripts/playWorldUcl.mjs
+walk-ahead: PLAY_WORLD_CONTROL=ahead node scripts/playWorldUcl.mjs
+walk-oldcols: PLAY_WORLD_CONTROL=oldcols node scripts/playWorldUcl.mjs
+mutM2: node .rc/x/mutrun-1503.mjs M2; s=$?; git checkout -- src scripts; exit $s
+mutM3: node .rc/x/mutrun-1503.mjs M3; s=$?; git checkout -- src scripts; exit $s
+mutM6: node .rc/x/mutrun-1503.mjs M6; s=$?; git checkout -- src scripts; exit $s
+mutM7: node .rc/x/mutrun-1503.mjs M7; s=$?; git checkout -- src scripts; exit $s
+uclFormat: node scripts/simUclFormatHistory.mjs
+uclFormat-watched: UCL_FORMAT_CONTROL=watched node scripts/simUclFormatHistory.mjs
+eraMid: node scripts/simClubManagerEraMidSeason.mjs
+eraMid-cupspanel: CM_ERA_CONTROL=cupspanel node scripts/simClubManagerEraMidSeason.mjs
+noRival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storageWrites: node scripts/simStorageWrites.mjs
+noQuotes: node scripts/simNoInventedQuotes.mjs
+earlyReturn: node scripts/simEarlyReturnScope.mjs
+a11y: node scripts/simAccessibility.mjs

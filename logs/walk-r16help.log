@@ -1,0 +1,18 @@
+(a) Chelsea, week 17 of 54 after 13 entries: nights done 4, matchday 4 18 scores, matchday 5 18 fixtures, table 36
+(b) Chelsea season over after 41 entries: the engine's final, Manchester City beat PSG
+(k) Chelsea, week 40 after 31 entries: 12 nights done, 8 play-offs settled, 8 round of 16 ties, Matchdays opens on Round of 16, second leg
+(c) Villarreal 2005, week 55 of 56: 8 groups, the final won by Chelsea, stand in Valencia
+(d) Real Madrid, in it, group matchday 2
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+control r16help: built src/components/club-manager/WorldCompScreen.tsx with its line patched into /home/runner/work/_temp/t-walk-r16help/dukb-world-ucl-walk-PZklpo/dist-r16help; the file is back as it was
+   FAIL (d) Real Madrid 390-r16help: the ? for the club in it does not describe the game's stand in: "Eight groups of four, everyone playing the other three home and away. The top two of each group go through to a round of 16 drawn winner against runner-up, never from the same group or the same countr"
+   (d) Real Madrid 390-r16help matchdays: 35 controls and 54 lines measured
+   (d) Real Madrid 390-r16help screen: 7 controls and 19 lines measured
+playWorldUcl control r16help: FIRED, "the ? for the club in it" reported 1 time(s) (1 findings in all)

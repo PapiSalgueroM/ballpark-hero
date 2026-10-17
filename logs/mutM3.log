@@ -1,0 +1,7 @@
+mutrun M3 (season review: winner and runner-up swapped): vitest exit 0: [2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m | [2m Tests [22m [1m[32m44 passed[39m[22m[90m (44)[39m
+   walk: FAIL (b) Chelsea season over 320: the season review does not name the final as the engine played it ("⭐Champions League: PSG beat Manchester City in the final."; the engine's: "Champions League: Manchester City beat PSG 
+   walk: FAIL (b) Chelsea season over 390: the season review does not name the final as the engine played it ("⭐Champions League: PSG beat Manchester City in the final."; the engine's: "Champions League: Manchester City beat PSG 
+   walk: FAIL (b) Chelsea season over 1280: the season review does not name the final as the engine played it ("⭐Champions League: PSG beat Manchester City in the final."; the engine's: "Champions League: Manchester City beat PSG
+   walk: playWorldUcl: FAIL, 3 findings over 51 measured views; pictures in /home/runner/work/_temp/rc-out/files/shots
+mutrun M3: walk exit 1: playWorldUcl: FAIL, 3 findings over 51 measured views; pictures in /home/runner/work/_temp/rc-out/files/shots
+mutrun M3: CAUGHT (season review: winner and runner-up swapped; vitest exit 0, build exit 0, walk exit 1)
