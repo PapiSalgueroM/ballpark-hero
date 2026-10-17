@@ -1,0 +1,3 @@
+#!serial
+unit: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts src/test/clubManagerDifficultyPick.test.tsx --testTimeout=300000 --hookTimeout=120000
+m4: sed -i 's/    next.wageCap = wageRoomFor(state, state.wageCap - room) + room;/    next.wageCap = wageRoomFor(state, state.wageCap);/' src/lib/clubManagerDifficulty.ts && grep -q 'next.wageCap = wageRoomFor(state, state.wageCap);' src/lib/clubManagerDifficulty.ts && echo MUTATION_LANDED && node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts --testTimeout=300000; s=$?; git checkout -- src; exit $s
