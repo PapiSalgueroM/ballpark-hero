@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+wu-main: WORLD_UCL_ONLY=1,3,4,7 node scripts/simWorldUcl.mjs
+rev-mdearly: W=/tmp/mut-mdearly && git worktree add -q --detach $W HEAD && ln -s $PWD/node_modules $W/node_modules && node .rc/x/mut1502.mjs mdearly $W && mkdir -p $W-tmp && cd $W && TMPDIR=$W-tmp WORLD_UCL_ONLY=1,3,4 node scripts/simWorldUcl.mjs
+rev-markearly: W=/tmp/mut-markearly && git worktree add -q --detach $W HEAD && ln -s $PWD/node_modules $W/node_modules && node .rc/x/mut1502.mjs markearly $W && mkdir -p $W-tmp && cd $W && TMPDIR=$W-tmp WORLD_UCL_ONLY=1,3,4 node scripts/simWorldUcl.mjs
+oracle-head: node .rc/x/nightOracle1502.mjs
+entrant-head: node .rc/x/entrantJoin1502.mjs
