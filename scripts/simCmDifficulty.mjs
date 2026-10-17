@@ -51,7 +51,7 @@
    4.4 points on Hard, so one block of 8 seeds can sit 3 points from the band's edge: a coin toss. Section 4
    therefore runs seeds 0 to 15 by default, both blocks pooled (1.42, 1.21, 1.08: Hard 14.8%, Legend 24.1%,
    sacked 2.53x and 3.47x, spend -19.8%, big titles 2.36; Normal against Normal 4.6%, so the pooled drop's
-   error is about 2.3 points, over two of them from either edge). About 36 minutes on one runner line.
+   error is about 2.3 points, over two of them from either edge). About 36 minutes of play, run as twelve child processes three at a time (one process ran out of memory).
    Sacked share by tier, which the bands do not hold (block 1): Hard 0.41 big, 0.54 mid, 0.84 small; Legend
    0.69, 0.85, 0.99 (Normal 0.13, 0.15, 0.35). The steady keeper (renews, signs nobody, r1501-m3), 8 seeds:
    small clubs sacked 0.39, 0.85 and 0.99 of seasons on Normal, Hard and Legend while over its ceiling in
@@ -841,12 +841,45 @@ function assertOutcomes(rows) {
   }
   if (failures === before) ok('every level sits inside the bands the lead set');
 }
-function section4() {
+/* A whole fleet in one process loads a fresh engine for every career, and on 2026-10-16 the 432 careers of seeds
+   0 to 15 ran a runner out of memory three quarters of the way through (r1501-final, exit 134 after 1,346 s). A
+   run with no SHARD therefore plays each level in PARTS shards of its own, PAR at a time, each a child process
+   that writes its rows to a file, and folds them here: the same careers (each has its own module and stream, so a
+   shard plays it exactly as a whole run would) in processes small enough to finish. */
+async function fleetInChildren(levels, seeds, seasons, drivers) {
+  const { spawn } = await import('node:child_process');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cmdiff-fleet-'));
+  const parts = num('PARTS', 4), par = num('PAR', 3);
+  const jobs = levels.flatMap(lv => Array.from({ length: parts }, (_, k) => ({ lv, k })));
+  const run = ({ lv, k }) => new Promise(resolve => {
+    const out = path.join(dir, `${lv}-${k}.json`);
+    const env = { ...process.env, SECTION: '4', LEVELS: lv, SHARD: `${k}/${parts}`, OUT_JSON: out, SEEDS: String(seeds), SEASONS: String(seasons), DRIVERS: drivers.join(',') };
+    /* A child is a measurement, never a control run; the alloff control reaches it as a dial edit instead. */
+    delete env.CM_DIFF_CONTROL;
+    if (CONTROL === 'alloff') env.DIALS_JSON = JSON.stringify({ hard: { ...DIALS.normal }, legend: { ...DIALS.normal } });
+    const child = spawn(process.execPath, [fileURLToPath(import.meta.url)], { env, stdio: ['ignore', 'pipe', 'pipe'] });
+    let tail = '';
+    child.stdout.on('data', d => { tail = (tail + d).slice(-400); });
+    child.stderr.on('data', d => { tail = (tail + d).slice(-400); });
+    child.on('close', code => resolve({ lv, k, code, out, tail }));
+  });
+  const results = [];
+  for (let i = 0; i < jobs.length; i += par) results.push(...await Promise.all(jobs.slice(i, i + par).map(run)));
+  const rows = [];
+  for (const r of results) {
+    if (r.code !== 0 || !fs.existsSync(r.out)) { fail(`the ${r.lv} shard ${r.k} of ${parts} ended ${r.code}: ${r.tail.trim().split('\n').pop()}`); continue; }
+    rows.push(...JSON.parse(fs.readFileSync(r.out, 'utf8')));
+  }
+  console.log(`  ${results.length} shards (${parts} a level, ${par} at a time), ${rows.length} seasons`);
+  return rows;
+}
+async function section4() {
   const seeds = num('SEEDS', 16), seasons = num('SEASONS', 6);
   const levels = (process.env.LEVELS || LEVELS.join(',')).split(',');
   const drivers = (process.env.DRIVERS || 'engaged').split(',');
   console.log(`4) outcomes: ${levels.join(', ')}, ${seeds} seeds from ${num('SEED_OFFSET', 0)}, ${seasons} seasons, ${drivers.join(' and ')}, shard ${process.env.SHARD || '0/1'}`);
-  const rows = runFleet(levels, seeds, seasons, drivers);
+  const whole = !process.env.SHARD && num('PARTS', 4) > 1;
+  const rows = whole ? await fleetInChildren(levels, seeds, seasons, drivers) : runFleet(levels, seeds, seasons, drivers);
   printTable(rows, levels);
   if (process.env.SHARD && process.env.SHARD !== '0/1') { ok('a shard: the bands are the fold\'s (FOLD=<dir of OUT_JSON files>)'); return; }
   assertOutcomes(rows);
