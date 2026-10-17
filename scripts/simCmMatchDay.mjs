@@ -71,6 +71,10 @@
    Green is the closing summary line and the real exit code.
 
    Run: node scripts/simCmMatchDay.mjs     (MATCHDAY_BASE=<commit> overrides the base, default d8aaa4cb)
+   The base is pinned on purpose: section 7 proves this round left a home match as it was. A later round that
+   edits MatchReportCard, MatchTimeline, LiveSimScreen, HalftimeScreen or MatchCentre and changes what a home match
+   prints turns section 7 red until MATCHDAY_BASE is moved to that round's own starting commit (say so in its
+   gate); and if d8aaa4cb ever stops being reachable (a squash merge), the run exits 2 rather than judging.
 */
 import './lib/seedRandom.mjs';
 import { execFileSync } from 'node:child_process';
