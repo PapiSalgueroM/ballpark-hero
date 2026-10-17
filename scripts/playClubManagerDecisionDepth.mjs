@@ -313,6 +313,13 @@ async function runCase(base, profile, contract, fixture, variant = 'natural') {
   const definition = D.DECK.find(card => card.id === contract.id);
   const card = D.buildSituation(fixture.state, definition);
   const prepared = { ...clone(fixture.state), decisions: [card] };
+  /* Release BI: the engine gives every man his rung (role) and an empty lastTen on every load and at the top of every
+     kick off (ensureRoles, Round 127), and promoteProspect leaves both to that repair. The fixture search can stop on
+     the very step its policy promoted a prospect (Round 1344's deals between other clubs moved the search there for
+     injurySupport: Oscar Miclea, role and lastTen unset), and the boot check below then read Round 127's repair as a
+     change outside the desk. So the browser boots the state the engine itself would have saved: the same repair,
+     applied first to this copy only. The boot check is unchanged and still fails on any other change. */
+  E.ensureRoles(prepared);
   row.presentation = 'prepared-buildSituation-on-engine-context';
   row.context = contextOf(contract, prepared);
   setup(eligible(contract, prepared), `${row.id}: actual prepared context is not eligible.`);
