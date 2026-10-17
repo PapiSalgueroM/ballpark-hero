@@ -1,0 +1,7 @@
+#!build
+#!playwright
+#!serial
+headsha: git log --oneline -3
+small: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b1) node scripts/simCmBoardVerdict.mjs --part=pure,fresh,saves,dailies
+takeover: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b2) node scripts/simCmBoardVerdict.mjs --part=takeover
+take-nopin: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b3) SIM_CM_BOARD_CONTROL=nopin node scripts/simCmBoardVerdict.mjs --part=takeover

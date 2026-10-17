@@ -1,0 +1,5 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | be3791703 Round BII: record the base of Round 1329's inverse after 285f8f81 (c2d21574) in this branch's history, tree unchanged
+small exit=0 121s | simCmBoardVerdict GREEN: 23 of 23 checks green (parts pure, fresh, saves, dailies, 120 s)
+takeover exit=0 147s | simCmBoardVerdict GREEN: 5 of 5 checks green (parts takeover, 145 s)
+take-nopin exit=1 144s | control nopin FIRED: 1 of 5 checks red
