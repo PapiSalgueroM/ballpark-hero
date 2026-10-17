@@ -27,7 +27,7 @@ function sourceHashes(root) {
 }
 const report = { complete: false, sourceBefore: sourceHashes(ROOT), runs: [],
   originalVerificationBefore: Object.fromEntries([HARNESS, 'scripts/lib/seedRandom.mjs'].map(file => [file, digest(fs.readFileSync(path.join(ROOT, file)))])),
-  scope: 'Unmodified original assertions, explicit supplemental seeds, and separately retained default coverage status' };
+  scope: 'All original semantic assertions, declared nine-career prefix, and independently healthy current/frozen runs' };
 const save = () => fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2));
 save();
 function run(name, root, seed, control) {
@@ -48,26 +48,23 @@ function run(name, root, seed, control) {
   assert((child.stdout || '').includes(`simClubManagerDecisions${control ? ` (control ${control})` : ''}: ${row.failures.length} findings`), 'Complete original terminal verdict');
   return row;
 }
-function coverageStatus(row) {
-  if (row.exit === 0) { assert.deepEqual(row.failures, []); return 'passed'; }
-  assert.equal(row.exit, 1); assert(row.failures.length > 0);
-  for (const failure of row.failures) {
-    const reds = failure.match(/^FAIL \[1\] only ([0-5]) straight reds in the play seasons, under the floor of 6$/);
-    const answers = failure.match(/^FAIL \[4\] only (\d+) situation answers applied$/);
-    assert(reds || (answers && Number(answers[1]) < 200), 'Only exact original coverage floors may be characterized');
-  }
-  return 'coverage-floor-red';
+function healthyStatus(row) {
+  assert.equal(row.exit, 0, 'Every declared current and frozen run must satisfy all original assertions');
+  assert.deepEqual(row.failures, []); return 'passed';
 }
 function pairedStatus(current, historical) {
-  const status = coverageStatus(current), previous = coverageStatus(historical);
-  if (status !== 'passed') {
-    assert.equal(previous, status, 'Every current red must also occur with frozen decisions');
-    assert.equal(current.exit, historical.exit);
-    assert.equal(current.stdoutSha256, historical.stdoutSha256, 'Complete red stdout is byte-identical to frozen decisions');
-    assert.equal(current.stderrSha256, historical.stderrSha256, 'Complete red stderr is byte-identical to frozen decisions');
-    assert.deepEqual(current.failures, historical.failures);
-  }
-  return { current: status, historical: previous };
+  return { current: healthyStatus(current), historical: healthyStatus(historical) };
+}
+function retainedObservation(row) {
+  const stdout = fs.readFileSync(path.join(OUT, `${row.name}.stdout.log`), 'utf8');
+  const stderr = fs.readFileSync(path.join(OUT, `${row.name}.stderr.log`), 'utf8');
+  return { ...row, stdoutSha256: digest(stdout), stderrSha256: digest(stderr),
+    failures: stdout.split('\n').filter(line => line.startsWith('FAIL ')) };
+}
+function compareHeldObservation(actual, held) {
+  assert.deepEqual({ ...actual, stdoutSha256: held.stdoutSha256 }, held, 'Complete held observation metadata is unchanged');
+  assert.equal(actual.stdoutSha256, held.stdoutSha256, 'Complete held stdout is byte-identical to its healthy observation');
+  return 'passed';
 }
 const baseline = fs.mkdtempSync(path.join(ROOT, '.manager-decision-baseline-1081-'));
 try {
@@ -94,27 +91,39 @@ try {
   report.samples = samples.map(pair => ({ seed: pair.seed, ...pairedStatus(pair.current, pair.historical) }));
   assert.equal(samples[0].current.exit, 0, 'Seed 1 remains a genuinely healthy original assertion baseline');
   assert.equal(samples[0].historical.exit, 0, 'Frozen seed 1 is independently healthy');
-  const redPair = [{ current: currentDefault, historical: historicalDefault }, ...samples].find(pair => coverageStatus(pair.current) !== 'passed');
-  assert(redPair, 'An actual retained coverage red exercises its comparator');
-  const observed = fs.readFileSync(path.join(OUT, `${redPair.current.name}.stdout.log`), 'utf8');
+  assert.equal(report.runs.length, 10, 'All ten declared normal runs completed before the control');
+  const healthy = samples[0].current;
+  const observedFile = path.join(OUT, `${healthy.name}.stdout.log`);
+  const observed = fs.readFileSync(observedFile, 'utf8');
+  const heldRow = structuredClone(retainedObservation(healthy));
+  assert.deepEqual(heldRow, healthy, 'Physical healthy output matches its complete retained row');
+  assert.equal(compareHeldObservation(retainedObservation(healthy), heldRow), 'passed');
   const observation = '5. declining is main:';
   assert.equal(observed.split(observation).length - 1, 1, 'Unique observed output control anchor');
   const corrupted = observed.replace(observation, '5. declining is Main:');
   assert.notEqual(corrupted, observed); assert.notEqual(digest(corrupted), digest(observed));
-  const corruptedRow = { ...redPair.current, stdoutSha256: digest(corrupted) };
-  assert.deepEqual(corrupted.split('\n').filter(line => line.startsWith('FAIL ')), redPair.current.failures);
+  assert.deepEqual(corrupted.split('\n').filter(line => line.startsWith('FAIL ')), healthy.failures);
   fs.writeFileSync(path.join(OUT, 'comparator-control-before.stdout.log'), observed);
-  fs.writeFileSync(path.join(OUT, 'comparator-control-fault.stdout.log'), corrupted);
-  let mismatch;
-  try { pairedStatus(corruptedRow, redPair.historical); } catch (error) { mismatch = error; }
+  fs.writeFileSync(path.join(OUT, 'comparator-control-held.json'), JSON.stringify(heldRow, null, 2));
+  let mismatch, corruptedRow;
+  try {
+    fs.writeFileSync(observedFile, corrupted);
+    fs.writeFileSync(path.join(OUT, 'comparator-control-fault.stdout.log'), fs.readFileSync(observedFile));
+    corruptedRow = retainedObservation(healthy);
+    try { compareHeldObservation(corruptedRow, heldRow); } catch (error) { mismatch = error; }
+  } finally {
+    fs.writeFileSync(observedFile, observed);
+    fs.writeFileSync(path.join(OUT, 'comparator-control-restored.stdout.log'), fs.readFileSync(observedFile));
+  }
   assert.equal(mismatch?.name, 'AssertionError');
-  assert(mismatch.message.startsWith('Complete red stdout is byte-identical to frozen decisions'));
-  assert.equal(mismatch.actual, digest(corrupted)); assert.equal(mismatch.expected, redPair.historical.stdoutSha256);
-  assert.deepEqual(pairedStatus(redPair.current, redPair.historical), { current: 'coverage-floor-red', historical: 'coverage-floor-red' });
-  fs.writeFileSync(path.join(OUT, 'comparator-control-restored.stdout.log'), observed);
-  report.comparatorControl = { baseline: redPair.current.name, beforeSha256: digest(observed), faultSha256: digest(corrupted),
-    restoredSha256: digest(observed), corruptedRow, error: { name: mismatch.name, message: mismatch.message },
-    effective: true, restoredComparisonPassed: true, scope: 'Retained observation integrity, no gameplay or source mutation' };
+  assert(mismatch.message.startsWith('Complete held stdout is byte-identical to its healthy observation'));
+  assert.equal(mismatch.actual, digest(corrupted)); assert.equal(mismatch.expected, heldRow.stdoutSha256);
+  const restoredRow = retainedObservation(healthy);
+  assert.equal(compareHeldObservation(restoredRow, heldRow), 'passed');
+  report.comparatorControl = { baseline: healthy.name, beforeSha256: digest(observed), faultSha256: digest(corrupted),
+    restoredSha256: restoredRow.stdoutSha256, heldRow, corruptedRow,
+    error: { name: mismatch.name, message: mismatch.message }, effective: true, restoredComparisonPassed: true,
+    scope: 'Healthy retained observation integrity, no gameplay/source mutation or current/frozen output equality' };
   const from = '    const next = won ? 0 : p.suspendedMatches + APPEAL_LOSS_EXTRA;';
   const to = '    const next = won ? 0 : p.suspendedMatches;';
   const current = fs.readFileSync(path.join(ROOT, DESK), 'utf8').replaceAll('\r\n', '\n');
@@ -130,7 +139,7 @@ try {
     limit: 'Reconstructed exact original mutation retained; original harness removes its temporary emitted bundle' };
   report.complete = true; save();
   console.log(`Default current: ${report.currentDefault}; frozen historical: ${report.historicalDefault}.`);
-  console.log(`All declared paired seeds retained: ${report.samples.map(pair => `${pair.seed}=${pair.current}`).join(', ')}. Every red remains visible and matches frozen output exactly.`);
+  console.log(`All declared paired seeds retained: ${report.samples.map(pair => `${pair.seed}=${pair.current}`).join(', ')}. All ten normal runs passed; current and frozen outputs remain independently retained.`);
   console.log('Original loss control fired in section 3 beside a healthy seed-1 baseline.');
 } catch (error) {
   report.error = { name: error.name, message: error.message, stack: error.stack }; save(); throw error;

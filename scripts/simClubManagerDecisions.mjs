@@ -102,6 +102,20 @@
  *   reported only: the desk block on a save is a mean 1987 bytes, 90th
  *     percentile 2427, on the default seed (3276 and 3785 before closed
  *     cards dropped their buttons). simClubManagerSaveSize stayed green.
+ * REMOTE COVERAGE MEASUREMENT, 2026-10-16, Round 1382, source 6f6b81b0:
+ *   The declared nine-career prefix repeats Arsenal, Everton and Brighton
+ *   three times, with the original BASE_SEED + 7 + 31 * i formula, two
+ *   seasons, action policy and six-red floor. The first three full states,
+ *   RNG streams and counters matched the original, and section 5 stayed
+ *   exact. Across seeds 979, 1, 2, 3 and 4, the copied observer measured
+ *   current straight reds 35, 27, 28, 30, 29 and frozen 39, 30, 30, 30, 33.
+ *   All ten nine-career normal runs passed every unchanged assertion; the
+ *   actual seed-1 free-loss control found 24 failures, all in section 3.
+ *   The press cohort uses the separately measured fixed fifteen-career
+ *   prefix [979, 1, 2, 3, 4] x [Arsenal, Everton, Brighton], with its public
+ *   policy, mood-below-35 gate and 180-entry/sack stops unchanged. These are
+ *   copy measurements; the unobserved harness and 1081 recorder still need
+ *   their own remote qualification after adoption.
  */
 import './lib/seedRandom.mjs';
 import { execSync } from 'node:child_process';
@@ -240,10 +254,10 @@ function runPressCohort(E, copy) {
     };
     try { return action(); } finally { Math.random = previousRandom; globalThis.Date = PreviousDate; }
   };
-  const cohort = { careers: 0, entries: 0, promotions: 0, answers: [], boundCareers: 3, boundEntriesPerCareer: 180,
-    policy: 'browser policy: fixed 979 + clubIndex * 100; action seeds + step * 101 + 1/2/3', skipped: false, state: null };
-  for (const [index, club] of ['Arsenal', 'Everton', 'Brighton'].entries()) {
-    const careerSeed = 979 + index * 100;
+  const cohort = { careers: 0, entries: 0, promotions: 0, answers: [], boundCareers: 15, boundEntriesPerCareer: 180,
+    policy: 'browser policy: base seeds 979,1,2,3,4 + clubIndex * 100; action seeds + step * 101 + 1/2/3', skipped: false, state: null };
+  const starts = [979, 1, 2, 3, 4].flatMap(seed => ['Arsenal', 'Everton', 'Brighton'].map((club, index) => ({ club, seed: seed + index * 100 })));
+  for (const { club, seed: careerSeed } of starts) {
     cohort.careers++;
     let state = withSeed(careerSeed, () => E.startCareer(club));
     for (let step = 0; step < 180 && !state.sacked; step++) {
@@ -318,7 +332,7 @@ if (CONTROL === 'depthcohort') {
   const anchor = 'export const P = runPressCohort;';
   if (entrySource.split(anchor).length - 1 !== 1) throw new Error('presscohort requires one actual cohort binding');
   const before = entrySource;
-  entrySource = swap(before, anchor, 'export const P = () => ({ careers: 0, entries: 0, answers: [], boundCareers: 3, boundEntriesPerCareer: 180, skipped: true, state: null });', 'the actual press cohort binding');
+  entrySource = swap(before, anchor, 'export const P = () => ({ careers: 0, entries: 0, answers: [], boundCareers: 15, boundEntriesPerCareer: 180, skipped: true, state: null });', 'the actual press cohort binding');
   if (entrySource === before) throw new Error('presscohort did not change the actual compiled cohort');
   if (process.env.MANAGER_DECISION_DEPTH_OUT) {
     const out = path.resolve(process.env.MANAGER_DECISION_DEPTH_OUT);
@@ -362,7 +376,7 @@ const S5_CLUBS = 2;            // clubs replayed against main, per mode
 const S5_SEASONS = 1;          // seasons per replay
 const S5_MIN_CARDS = 40;       // desk cards that must be met while declining (measured 73 to 120)
 const PLAY_SEASONS = 2;        // seasons per club in sections 1, 3 and 4
-const MIN_STRAIGHT_REDS = 6;   // straight reds the play seasons must contain (measured 11 to 16)
+const MIN_STRAIGHT_REDS = 6;   // straight reds required (2026-10-16: current 27 to 35, frozen 30 to 39)
 const MIN_SITUATIONS = 200;    // answers applied, seasons plus kept states (measured 418 to 521)
 const ODDS_SAMPLE = 20000;     // synthetic verdicts per tier in section 2
 const ODDS_BAND = 1.5;         // points either side of the stated odds
@@ -621,7 +635,7 @@ function playEntry(club) {
     return s;
   };
 }
-for (let i = 0; i < CLUBS.length; i++) careerOf(A, CLUBS[i], BASE_SEED + 7 + 31 * i, PLAY_SEASONS, playEntry(CLUBS[i]));
+for (let i = 0; i < CLUBS.length * 3; i++) careerOf(A, CLUBS[i % CLUBS.length], BASE_SEED + 7 + 31 * i, PLAY_SEASONS, playEntry(CLUBS[i % CLUBS.length]));
 
 if (s1.straight < MIN_STRAIGHT_REDS) fail(1, `only ${s1.straight} straight reds in the play seasons, under the floor of ${MIN_STRAIGHT_REDS}`);
 console.log(`1. appeals: ${s1.matches} matches, ${s1.straight} straight reds, ${s1.secondYellow} second yellows, ${s1.appeals} appeals offered`);
@@ -653,7 +667,7 @@ try {
   Math.random = randomBeforePress;
   Date.now = clockBeforePress;
 }
-if (pressCohort && !pressCohort.state && CONTROL !== 'presscohort') fail(4, 'actual press cohort found no recorded mood below35 state within 3 careers of 180 entries');
+if (pressCohort && !pressCohort.state && CONTROL !== 'presscohort') fail(4, 'actual press cohort found no recorded mood below35 state within 15 careers of 180 entries');
 
 /* ---------- 4b. every answer of every card, from real mid season states ---------- */
 for (const [k, base] of kept.entries()) {
@@ -695,7 +709,7 @@ if (pressCohort?.state) {
 const addedPressPairs = [...s4.pairs].filter(pair => !pairsBeforePress.has(pair) && pair.startsWith('pressPressure#'));
 if (pressCohort && CONTROL !== 'presscohort' && addedPressPairs.length !== 3) fail(4, `actual press cohort added ${addedPressPairs.length} pressPressure answer pairs, expected 3`);
 if (pressCohort) {
-  console.log(`4b. actual press cohort: ${pressCohort.careers} careers, ${pressCohort.entries} entries, ${pressCohort.answers.length} press answers, ${pressCohort.state ? 1 : 0} kept state, mood ${pressCohort.mood ?? 'unavailable'}, ${addedPressPairs.length} added pressPressure pairs; bounds 3 careers x 180 entries; skipped=${pressCohort.skipped}.`);
+  console.log(`4b. actual press cohort: ${pressCohort.careers} careers, ${pressCohort.entries} entries, ${pressCohort.answers.length} press answers, ${pressCohort.state ? 1 : 0} kept state, mood ${pressCohort.mood ?? 'unavailable'}, ${addedPressPairs.length} added pressPressure pairs; bounds 15 careers x 180 entries; skipped=${pressCohort.skipped}.`);
   if (process.env.MANAGER_DECISION_DEPTH_OUT) fs.writeFileSync(path.join(path.resolve(process.env.MANAGER_DECISION_DEPTH_OUT), `press-cohort-${CONTROL || 'normal'}.json`), JSON.stringify({ ...pressCohort, addedPairs: addedPressPairs }, null, 2) + '\n');
 }
 /* ---------- 3b, planted: an unanswered appeal on every kept state ---------- */
