@@ -11,7 +11,9 @@
  * ONE EDIT, failing closed: the block of startCareer that writes state.worldSeed, from `  if (!world) {` with the
  * line under it (the entropy) to the `  }` that closes its else branch, right above `  return state;`. The pair
  * must stand exactly once in the source, and the block must end where it is expected to, or nothing is changed
- * and the caller is told (exit 2 from the command line, a thrown error from the function).
+ * and the caller is told (exit 2 from the command line, a thrown error from the function). Since Round 1508 a second,
+ * smaller cut goes with it: startNextSeason's line that adopts a career with no seed at its next summer, when the tree
+ * has it (once at most).
  *
  *   import { withoutWorldSeed } from './lib/cmWorldSeed1250.mjs';    source => source without the seed block
  *   node scripts/lib/cmWorldSeed1250.mjs --apply                      the same edit IN PLACE, for a runner or a
@@ -24,6 +26,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ADOPT } from './cmNoAdoption1508.mjs';
 
 export const FILE = 'src/lib/clubManager.ts';
 export const ANCHOR = '  if (!world) {\n    const entropy = JSON.stringify([state.eraId, state.startYear, state.clubName,\n';
@@ -33,6 +36,8 @@ const CLOSE = '    state.worldSeed = world.worldSeed;\n  }\n';
    makes every new save a save from before Release AZ. Either last line is accepted, so the legs that apply this
    in throwaway checkouts of older commits still run. */
 const AFTERS = ['  return state;\n}\n', '  return recordAiDeals(state, unrecorded);\n}\n'];
+/* Round 1508: the line of startNextSeason that adopts a career with no seed into the living world (one source). */
+export { ADOPT };
 
 /** The source of clubManager.ts with the seed block of startCareer taken out. Line endings are read as LF. */
 export function withoutWorldSeed(source) {
@@ -46,8 +51,13 @@ export function withoutWorldSeed(source) {
   if (!AFTERS.some(after => text.startsWith(after, end))) throw new Error(`cmWorldSeed1250: the seed block in ${FILE} is not the last thing startCareer does`);
   const block = text.slice(start, end);
   if (block.split('\n').length > 14 || !block.includes('state.worldSeed = Math.floor(')) throw new Error(`cmWorldSeed1250: the cut in ${FILE} is not the seed block`);
-  const out = text.slice(0, start) + text.slice(end);
+  let out = text.slice(0, start) + text.slice(end);
   if (out === text) throw new Error('cmWorldSeed1250: the edit changed nothing');
+  /* Round 1508: a save from before the release also never joins the living world at its next summer, so the line
+     that adopts it (startNextSeason's first) comes out too. A tree older than that round has no such line. */
+  const adopt = out.split(ADOPT).length - 1;
+  if (adopt > 1) throw new Error(`cmWorldSeed1250: the adoption line is in ${FILE} ${adopt} times, it must be once at most`);
+  if (adopt === 1) out = out.replace(ADOPT, () => '');
   return out;
 }
 

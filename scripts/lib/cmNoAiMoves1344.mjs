@@ -18,6 +18,8 @@
  *      2026-10-16);
  *   5. and a rival in a bidding war closes whatever the ledger says (rivalCloseRefused answers false, the review's
  *      fix of 2026-10-16), as it did before the round.
+ *   Round 1508: anchors 4 and 5 read livingWorldOf (a seed, or a readable ledger with no seed) where they read the
+ *   seed; on a seeded career the two are the same test, so what the bridge takes out is unchanged.
  * What stays: the screen's market (marketForScreen, read by the transfer screen only) and the refusal, which only a
  * ledger record of an AI deal or of a sale of mine this season can trip; the dailies' strip of a ledger that is then
  * never written; the optional pack parameter of the two writers.
@@ -40,9 +42,9 @@ export const BRIDGE_EDITS = [
     '    ...(s.worldRoster !== undefined ? { worldRoster: plainCopy(s.worldRoster) }\n      : departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),\n',
     '    ...(departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),\n'],
   [CALENDAR, 'the join keeps the run in\'s gone names and log',
-    '    ...(worldSeedOf(departed) === undefined ? {} : seededJoinCarry(career, s, movedElsewhere)),\n', ''],
+    '    ...(!livingWorldOf(departed) ? {} : seededJoinCarry(career, s, movedElsewhere)),\n', ''],
   [ENGINE, 'a rival closes whatever the ledger says',
-    '  return worldSeedOf(career) !== undefined && recordAiDeal(career, deal, career) === career;\n', '  return false;\n'],
+    '  return livingWorldOf(career) && recordAiDeal(career, deal, career) === career;\n', '  return false;\n'],
 ];
 
 /** How many times each anchor stands in its file's source (LF). */

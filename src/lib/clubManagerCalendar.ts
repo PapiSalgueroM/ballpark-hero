@@ -29,7 +29,7 @@ import {
   playNextEntry, fixtureFor, entryInvolvesMe, careerLeagueOf, leagueRulesOf, CUP_LABELS, UCL_LABELS,
   cupProgressRank, uclProgressRank, objectiveStatuses, openObjectives,
   /* Round 783: the mid season takeover an accepted application walks into. */
-  startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, customExitUclField, SAVE_CAPS,
+  startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, livingWorldOf, customExitUclField, SAVE_CAPS,
   /* Round 1335: the old season rules' switch, read by both handovers. */
   legacySeason,
 } from '@/lib/clubManager';
@@ -1010,8 +1010,9 @@ export function joinClubNow(career: CareerState): CareerState | null {
     ...(departed.worldSeed === undefined ? {} : { worldSeed: departed.worldSeed }),
     /* And in a seeded career a man another club bought earlier this season is not for sale after the move: the
        run in's gone names plus the departed career's names of this season's deals between two other clubs (the men
-       I bought, sold or let go keep today's rule after a move), with the deal lines the refusal reads. */
-    ...(worldSeedOf(departed) === undefined ? {} : seededJoinCarry(career, s, movedElsewhere)),
+       I bought, sold or let go keep today's rule after a move), with the deal lines the refusal reads. Round 1508:
+       and in a career with no seed adopted at an earlier summer (adoptLivingWorld), which plays the same world. */
+    ...(!livingWorldOf(departed) ? {} : seededJoinCarry(career, s, movedElsewhere)),
     retiredLastSummer: career.retiredLastSummer,
     leagueOverrides: career.leagueOverrides,
     managers,
