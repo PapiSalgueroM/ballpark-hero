@@ -1,0 +1,3 @@
+treeWithoutMerge: 0122e0651532ce44f100969fb96403c7a45aa880, 4597fc8c without 33d1b7b6; conflicts kept from 4597fc8c: src/pages/WhatsNew.tsx
+base 0122e0651532ce44f100969fb96403c7a45aa880 (this tree without Round 1337); src/lib changed: src/lib/soccerClubSquadSheet.ts 
+engine, save, shared files and guides byte equal to the tree without Round 1337
