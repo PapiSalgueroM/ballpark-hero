@@ -1,0 +1,5 @@
+treeWithoutMerge: abe36c765082b8965221e1191a51ec15860cc76f, 6cc515e3 without f1e54e17; conflicts kept from 6cc515e3: none
+contCmp1508: base abe36c765082b8965221e1191a51ec15860cc76f (the tree without 1508); head exit 1, base exit 1; 95 and 95 lines; 0 differ
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
+contCmp1508: green, the log equals the tree without 1508 line for line

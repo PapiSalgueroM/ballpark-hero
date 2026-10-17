@@ -1,0 +1,3 @@
+continuity-1508 exit=0 53s | contCmp1508: green, the log equals the tree without 1508 line for line
+cont-nobridge-1508 exit=1 53s | contCmp1508: RED, the log differs from the tree without 1508
+held-1508 exit=0 0s | src and scripts held after every line
