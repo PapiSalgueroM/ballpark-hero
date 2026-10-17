@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+playCmVar: node scripts/playCmVar.mjs
+mmp-base: git worktree add -f /tmp/mb d8aaa4cb > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/mb/node_modules && cd /tmp/mb && MANAGER_MATCH_PLANS_CONTROL=all ONLY=simManagerMatchPlans node scripts/runAllSims.mjs
