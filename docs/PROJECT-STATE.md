@@ -1,3 +1,7 @@
+## Codex1405 candidate prepared, 2026-10-17 UTC
+
+Actual corrected original5f75/run39029165594 reproduced7precise NBA Starting5 review-ownership faults with5healthy cases,41related tests, types and4receipt controls preserved. Candidate6fbb8a55 adds only review invalidation and stale-result guards; whole inverse holds the original hook. Full candidate build/test qualification pending. Earlier95f fake-timer setup failure remains retained as failed evidence. Claude I retains active career/competition source, joined release and publication. See docs/audits/nba-evaluation-reset-1405.md.
+
 ## Codex1405 claimed, 2026-10-17 UTC
 
 NBA Starting5 review reset: root is preparing a frozen real-hook regression method on actualI8293 before editing product. Late remote/local reviews currently survive Start Over. Scope is only the NBA evaluator lifecycle, own test/workflow and closing docs. Runtime, fix and READY status pending. Active I career/competition source and joined release remain I owned. See docs/audits/nba-evaluation-reset-1405.md.
