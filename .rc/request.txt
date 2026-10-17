@@ -1,0 +1,13 @@
+nba-head: node scripts/simNbaCareer.mjs
+nba-base: mkdir -p /tmp/b-nba && git archive 8293c758f4284d21baaa2320383cfd5cb5bd4944 | tar -x -C /tmp/b-nba && ln -s $PWD/node_modules /tmp/b-nba/node_modules && cd /tmp/b-nba && node scripts/simNbaCareer.mjs
+nfl-head: node scripts/simNflCareer.mjs
+nfl-base: mkdir -p /tmp/b-nfl && git archive 8293c758f4284d21baaa2320383cfd5cb5bd4944 | tar -x -C /tmp/b-nfl && ln -s $PWD/node_modules /tmp/b-nfl/node_modules && cd /tmp/b-nfl && node scripts/simNflCareer.mjs
+mlb-head: node scripts/simMlbCareer.mjs
+mlb-base: mkdir -p /tmp/b-mlb && git archive 8293c758f4284d21baaa2320383cfd5cb5bd4944 | tar -x -C /tmp/b-mlb && ln -s $PWD/node_modules /tmp/b-mlb/node_modules && cd /tmp/b-mlb && node scripts/simMlbCareer.mjs
+nhl-head: node scripts/simNhlCareer.mjs
+nhl-base: mkdir -p /tmp/b-nhl && git archive 8293c758f4284d21baaa2320383cfd5cb5bd4944 | tar -x -C /tmp/b-nhl && ln -s $PWD/node_modules /tmp/b-nhl/node_modules && cd /tmp/b-nhl && node scripts/simNhlCareer.mjs
+simCareerLife: node scripts/simCareerLife.mjs
+simUsCareerAnnualBenefits: node scripts/simUsCareerAnnualBenefits.mjs
+simUsCareerRecovery: node scripts/simUsCareerRecovery.mjs
+simSoccerCurrency: node scripts/simSoccerCurrency.mjs
+vitest-lib: node_modules/.bin/vitest run src/lib/usCareerAnnualBenefits.test.ts src/lib/usCareerRecovery.test.ts --testTimeout=300000
