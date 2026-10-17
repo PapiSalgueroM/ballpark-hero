@@ -196,7 +196,9 @@ function protectContext(context) {
     install(), context.routeWebSocket('**/*', route => route.connectToServer()),
     // Fulfilled documents lack Chromium's local IP address-space metadata.
     // Keep loopback WebSockets usable; their route guard still blocks outside.
-    context.grantPermissions(['local-network-access']),
+    context.browser()?.browserType().name() === 'chromium'
+      ? context.grantPermissions(['local-network-access'])
+      : Promise.resolve(),
   ]);
 }
 

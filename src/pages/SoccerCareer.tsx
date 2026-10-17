@@ -1777,6 +1777,18 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
   const [isRolling, setIsRolling] = useState(false);
   const [displayOvr, setDisplayOvr] = useState(0);
   const [academyClub, setAcademyClub] = useState<ClubData | null>(null);
+  const rollTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  // A roll belongs to the position it was made for. Keep the form itself mounted.
+  useEffect(() => {
+    setRolledOvr(null);
+    setRolledPot(null);
+    setIsRolling(false);
+    setAcademyClub(null);
+    return () => {
+      if (rollTimer.current !== null) clearInterval(rollTimer.current);
+      rollTimer.current = null;
+    };
+  }, [position]);
   // Round 79: the attribute point-spend build editor drill-in
   const [buildOpen, setBuildOpen] = useState(false);
   /* Coming back OUT of the build editor has the same problem in reverse, so
@@ -1807,6 +1819,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
       setDisplayOvr(rollStartingOverall(position));
       if (ticks >= totalTicks) {
         clearInterval(interval);
+        rollTimer.current = null;
         const finalOvr = rollStartingOverall(position);
         // Round 78: potential rolled alongside the overall. Weighted low,
         // tiny chance of a generational ceiling, exactly like he asked.
@@ -1827,6 +1840,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         setAcademyClub(club);
       }
     }, 60);
+    rollTimer.current = interval;
   }, [canGenerate, clubs, nationality, position, isRolling, era]);
 
   const tier = rolledOvr !== null ? getOverallTier(rolledOvr) : (isRolling ? getOverallTier(displayOvr) : null);
@@ -2035,7 +2049,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         </div>
       )}
 
-      <Button onClick={onBegin} disabled={!isFormValid || saving || rolledOvr === null}
+      <Button onClick={onBegin} disabled={!isFormValid || saving || rolledOvr === null || !previewStats}
         className="w-full h-12 text-lg font-bold bg-emerald-600 hover:bg-emerald-500 text-black disabled:opacity-40">
         {saving ? "Creating..." : "⚽ Begin Career"}
       </Button>
