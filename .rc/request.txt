@@ -1,0 +1,3 @@
+#!serial
+headsha: git log --oneline -3
+wf284x: R=$(bash .rc/x/minus284.sh) || exit 2; echo "inverse $R"; sed "s/a758fcec4392c57c639aa54cda840810c8e44663/$R/" .github/workflows/manager-own-transfer-log.yml > /tmp/wf284x.yml; test "$(grep -c "$R" /tmp/wf284x.yml)" = 1 || exit 2; node .rc/x/wfrun.mjs /tmp/wf284x.yml
