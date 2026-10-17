@@ -37,6 +37,7 @@ jobs:
           set -euo pipefail
           out="$RUNNER_TEMP/soccer-restored-choice-captions-baseline"; test ! -e "$out"; mkdir -p "$out"
           echo "CORRUPTION_PREVIEWS_OUT=$out" >> "$GITHUB_ENV"
+          export CORRUPTION_PREVIEWS_OUT="$out"
           git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
