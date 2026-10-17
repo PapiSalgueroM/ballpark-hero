@@ -1,0 +1,26 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/phonePanelFocus.test.tsx > actual Soccer Career phone focus > keeps thirteen original apps reachable without mutating career, funds or storage 250ms
+ ✓ src/test/phonePanelFocus.test.tsx > actual Soccer Career phone focus > contains both Tab boundaries and ShiftTab from the initially focused dialog 240ms
+ ✓ src/test/phonePanelFocus.test.tsx > actual Soccer Career phone focus > excludes disabled and hidden controls from the live Tab boundary 51ms
+ ✓ src/test/phonePanelFocus.test.tsx > actual Soccer Career phone focus > closes once on Escape and returns the exact connected opener without scrolling 66ms
+ ✓ src/test/phonePanelFocus.test.tsx > actual Soccer Career phone focus > returns the original opener after the native close action 73ms
+ ✓ src/test/phonePanelFocus.test.tsx > actual Soccer Career phone focus > returns the original opener after the backdrop action without closing on content taps 17ms
+ ✓ src/test/phonePanelFocus.test.tsx > actual Soccer Career phone focus > does not focus a disconnected opener on cleanup 7ms
+ ✓ src/test/phonePanelFocus.test.tsx > actual Soccer Career phone focus > keeps StrictMode initialization and cloned career rerenders quiet while a control remains focused 23ms
+ ✓ src/test/phonePanelFocus.test.tsx > actual Soccer Career phone focus > focuses stable Back controls and the original app tile across thread navigation 26ms
+ ✓ src/test/phonePanelFocus.test.tsx > actual Soccer Career phone focus > passes the exact original non-first thread index through the real answer helper 36ms
+ ✓ src/test/phonePanelFocus.test.tsx > actual Soccer Career phone focus > preserves available contacts, starter ordering and the original open-contact callback 50ms
+ ✓ src/test/phonePanelFocus.test.tsx > actual Soccer Career phone focus > retains the exact existing money callback and quiet focus after a refused action 13ms
+
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+   Start at  02:41:57
+   Duration  3.00s (transform 1.16s, setup 45ms, collect 1.48s, tests 855ms, environment 264ms, prepare 76ms)
+
+
+simPhonePanelFocus: twelve actual-panel checks passed with real career, thread, contact and money helpers.
+simPhonePanelFocus: thirteen apps, original thread/contact indices and money callback are preserved.
+simPhonePanelFocus: Tab endpoints, hidden/disabled controls, three close paths, StrictMode and quiet clones execute.
+simPhonePanelFocus: navigation changes no career bytes, funds or saved records; owned source copies are cleaned.

@@ -1,0 +1,24 @@
+headsha: git log --oneline -3
+simCareerProgramme: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+programme-ctl-overwrite: PROGRAMME_REWARD_CONTROL=overwrite CAREER_PROGRAMME_OUT="$PWD/pgo" node scripts/simCareerProgramme.mjs > /tmp/pg.log 2>&1; s=$?; grep -E "^AssertionError|Effective Programme" /tmp/pg.log | cut -c1-200; [ $s = 1 ] && [ "$(grep -c "^AssertionError \[ERR_ASSERTION\]: " /tmp/pg.log)" = 1 ] && grep -q "^AssertionError \[ERR_ASSERTION\]: Secondary wheel preserves complete approved choice outcome: soccerCareerLife.ts/218 choice 0 seed 15" /tmp/pg.log && grep -q "Effective Programme reward source control: overwrite" /tmp/pg.log && echo FIRED-OK
+simCareerTrophyRuns: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+simSoccerWorldTruth: node scripts/simSoccerWorldTruth.mjs
+simSoccerWorldTruth-offset1: SEED_OFFSET=1 node scripts/simSoccerWorldTruth.mjs
+ctl-worldtruth-16: n=0; bad=""; for p in goalsonly:1 seasonyear:1 nolegacy:2 realmoves:3 pastchampions:3 summer:3 quizyear:4 arcade:4 outside:6 log:5 boundary:0 panel:5 floor:0 legacy35:2 legacy30:2 extradraw:2; do c=${p%%:*}; k=${p#*:}; WORLD_TRUTH_CONTROL=$c node scripts/simSoccerWorldTruth.mjs > "$TMPDIR/wt-$c.log" 2>&1; s=$?; grep -h "WORLD_TRUTH_CONTROL=$c failed\|WORLD_TRUTH_CONTROL=$c left" "$TMPDIR/wt-$c.log"; if [ $s -eq 1 ] && grep -qF "FIRED: WORLD_TRUTH_CONTROL=$c failed section $k (" "$TMPDIR/wt-$c.log"; then n=$((n+1)); else bad="$bad $c(exit $s)"; tail -5 "$TMPDIR/wt-$c.log"; fi; done; echo "simSoccerWorldTruth: $n of 16 Round 1329 controls fired on their own sections${bad:+, NOT FIRED:$bad}"; [ $n -eq 16 ]
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simPhone: node scripts/simPhone.mjs
+simPhone2-KNOWN: node scripts/simPhone2.mjs
+simMoney-KNOWN: node scripts/simMoney.mjs
+simPhonePanelFocus: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPhonePanelFocus.mjs
+simBallonDorTruth: node scripts/simBallonDorTruth.mjs
+simCareerCleanSheets: node scripts/simCareerCleanSheets.mjs
+simCareerDomesticCup: node scripts/simCareerDomesticCup.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs
+simCareerStoryRole: node scripts/simCareerStoryRole.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSoccerCareerDevelopment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
