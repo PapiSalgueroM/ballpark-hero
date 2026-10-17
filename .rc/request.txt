@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+diff-outcomes: SECTION=4 node scripts/simCmDifficulty.mjs
+diff-alloff: SECTION=4 SEEDS=2 CM_DIFF_CONTROL=alloff node scripts/simCmDifficulty.mjs
+diff-suite: node scripts/simCmDifficulty.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
