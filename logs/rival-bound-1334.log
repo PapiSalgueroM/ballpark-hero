@@ -1,0 +1,8 @@
+treeWithoutMerge: 25ca27efb116ec31d1eff4b1fc61236e05a964ab, 4a160cd2 without b9964c33; conflicts kept from 4a160cd2: none
+RIVAL_REF 25ca27efb116ec31d1eff4b1fc61236e05a964ab (this head without Round 1334), its engine sha256 e37b73f25a17, the proof pins e37b73f25a17
+soccerRivalWagesProof arm=current assertions=23 traceRows=13 intendedFailures=0
+soccerRivalWagesProof arm=original assertions=23 traceRows=13 intendedFailures=10
+soccerRivalWagesProof arm=whole-undo assertions=23 traceRows=13 intendedFailures=0
+soccerRivalWagesProof arm=original assertions=23 traceRows=13 intendedFailures=10
+soccerRivalWagesProof arm=whole-undo assertions=23 traceRows=13 intendedFailures=0
+soccerRivalWagesProof PASS arms3 tests69 originalWageFailures10 traceRows39
