@@ -218,6 +218,7 @@ boosts. Owed to the drills, not this round's (careerDrills.ts is read only here)
   Every other one was rerun on the head and on SC_BASE on one runner (cmp.sh): the same exit and the same last line.
 - The weight (r1334-w): no route of sweepWeight's table moves over 0.1K; /soccer-career +61 B at 832.4K. No built chunk
   holds the deck: nothing calls loadSoccerDeck, so Rollup drops the loader and its import; Round 1504 measures the chunk.
+  (Round 1504: the page calls it now and the deck is a lazy chunk; see ROUND-1504-NOTES.md.)
 - `git diff --quiet e814c2de -- src/pages src/components src/hooks` exits 0; `git diff --name-only e814c2de` is exactly
   the files this round owns; the dailies grep lists only Soccer Career's own files (both pasted under "Review fixes").
 - Colours (`git grep -c`, summed): bg-blue-600 131 to 133, bg-emerald-600 265 to 267, bg-gray-800 8 to 10, bg-slate-600 0;
@@ -341,9 +342,11 @@ line (Round 1332's) counts every pack but names only the GM seats ("8 packs (nfl
 - The non append kit lines above: the lead accepts them (they are the minimum the soccer index line of 1(f) and an
   honest reach check need) or rejects them.
 - Ruling 2(j)'s residue: training still moves legacy +1.66 (BEST) and +1.56 (WORST) against an OFF spread of 1.21.
+  (Round 1504: every training option now pays a time cost, held by a bind rule; see ROUND-1504-NOTES.md.)
 - Round 1504 and the rollback plan: a save holding a pending deck card on a build where the deck is not loaded loses the
   card through Round 667's skip while the page's toast still promises its effect. The toast is the page's (Round
   1504's file); on this round's build no deck card can be dealt, since nothing calls loadSoccerDeck.
+  (Round 1504 fixed the toast in the commit that deals the cards; its rollback plan is in ROUND-1504-NOTES.md.)
 
 ### The kit's two gate lines, seconds before and after (ruling 2(h))
 
