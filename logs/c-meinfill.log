@@ -1,0 +1,33 @@
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020), Villarreal (era2005), Werder Bremen (era2010), Sevilla (era2015), Marseille (era2020); seeds 1,2,3,4,5
+  1 stand ins: era2005 Valencia for Villarreal; era2010 Manchester City for Werder Bremen; era2015 Liverpool for Sevilla; era2020 Tottenham for Marseille
+  1 and 3: 65 journeys in 215 s
+  7 goals a watched match 2.624 (18816 matches); a domestic league match 2.624
+  7 ties 2968: to extra time 11.6 percent, to penalties 5.1 percent
+  1 device order: 40 group seasons evaluated level both ways
+  1 created club left in the summer: Proof Town Athletic (top of premier, in place of Hull City) to Málaga; the watched field holds Hull City
+  1 era seasons with a stand in for my club: 38
+  1 opened seasons drawn with the holder first: 124
+  1 seasons a mid season move left with no competition, by the rule: 2
+  1 seasons in the Champions League (not watched): 18
+  1 seasons where exclude took out a direct entrant (a summer move): 2
+  1 seasons with no competition: 7
+  1 watched matches replayed on simAiMatch: 18816
+  1 watched seasons g8: 112
+  1 watched seasons l36: 56
+  7 g8 draws: 112
+  7 l36 slates with an association break: 3
+  7 l36 slates: 56
+  7 titles by strength quartile 1: 143
+  7 titles by strength quartile 2: 24
+  7 titles by strength quartile 3: 1
+FAIL 1 no competition: Chelsea (now) seed 3: the move to AC Milan in season 1 left no watched competition, and no rule says so
+FAIL 1 no competition: Chelsea (now) season 1 seed 3 now at AC Milan
+FAIL 1 no competition: Hoffenheim (now) season 1 seed 2
+FAIL 1 no competition: Hoffenheim (now) season 1 seed 3
+FAIL 1 no competition: Hoffenheim (now) season 1 seed 4
+FAIL 1 no competition: Hoffenheim (now) season 1 seed 5
+FAIL 1 no competition: Everton (now) seed 3: the move to AC Milan in season 1 left no watched competition, and no rule says so
+FAIL 1 no competition: Everton (now) season 1 seed 3 now at AC Milan
+FAIL 1 no competition: América (now) seed 3: the move to AC Milan in season 1 left no watched competition, and no rule says so
+FAIL 1 no competition: América (now) season 1 seed 3 now at AC Milan
+simWorldUcl: control meinfill FIRED (10 failures, all its own)

@@ -1,0 +1,30 @@
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020), Villarreal (era2005), Werder Bremen (era2010), Sevilla (era2015), Marseille (era2020); seeds 1,2,3,4,5
+  1 stand ins: era2005 Valencia for Villarreal; era2010 Manchester City for Werder Bremen; era2015 Liverpool for Sevilla; era2020 Tottenham for Marseille
+  1 and 3: 65 journeys in 219 s
+  7 goals a watched match 2.630 (18816 matches); a domestic league match 2.624
+  7 ties 2968: to extra time 11.8 percent, to penalties 5.4 percent
+  1 device order: 40 group seasons evaluated level both ways
+  1 created club left in the summer: Proof Town Athletic (top of premier, in place of Hull City) to Málaga; the watched field holds Hull City
+  1 era seasons with a stand in for my club: 38
+  1 opened seasons drawn with the holder first: 127
+  1 seasons a mid season move left with no competition, by the rule: 2
+  1 seasons in the Champions League (not watched): 19
+  1 seasons where exclude took out a direct entrant (a summer move): 2
+  1 seasons with no competition: 6
+  1 watched matches replayed on simAiMatch: 18816
+  1 watched seasons g8: 112
+  1 watched seasons l36: 56
+  7 g8 draws: 112
+  7 l36 slates over the cap: 1
+  7 l36 slates with an association break: 4
+  7 l36 slates: 56
+  7 titles by strength quartile 1: 140
+  7 titles by strength quartile 2: 26
+  7 titles by strength quartile 3: 2
+FAIL 1 no competition: Chelsea (now) season 3 seed 3 now at AC Milan
+FAIL 1 no competition: Everton (now) season 2 seed 1 now at Liverpool moved to Liverpool
+FAIL 1 no competition: Everton (now) season 2 seed 4 now at Manchester United moved to Manchester United
+FAIL 1 no competition: Everton (now) season 3 seed 4 now at Manchester United
+FAIL 1 no competition: Everton (now) season 2 seed 5 now at Arsenal moved to Arsenal
+FAIL 1 no competition: América (now) season 3 seed 2 now at Tottenham
+simWorldUcl: control meindirect FIRED (6 failures, all its own)

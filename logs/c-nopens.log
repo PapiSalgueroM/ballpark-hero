@@ -1,0 +1,62 @@
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020), Villarreal (era2005), Werder Bremen (era2010), Sevilla (era2015), Marseille (era2020); seeds 1,2,3,4,5
+  1 stand ins: era2005 Valencia for Villarreal; era2010 Manchester City for Werder Bremen; era2015 Liverpool for Sevilla; era2020 Tottenham for Marseille
+  1 and 3: 65 journeys in 220 s
+  7 goals a watched match 2.629 (19680 matches); a domestic league match 2.624
+  7 ties 3106: to extra time 12.1 percent, to penalties 5.7 percent
+  1 device order: 40 group seasons evaluated level both ways
+  1 created club left in the summer: Proof Town Athletic (top of premier, in place of Hull City) to Málaga; the watched field holds Hull City
+  1 era seasons with a stand in for my club: 38
+  1 opened seasons drawn with the holder first: 113
+  1 seasons a mid season move left with no competition, by the rule: 2
+  1 seasons in the Champions League (not watched): 19
+  1 seasons where exclude took out a direct entrant (a summer move): 2
+  1 watched matches replayed on simAiMatch: 19680
+  1 watched seasons g8: 112
+  1 watched seasons l36: 62
+  7 g8 draws: 112
+  7 l36 slates with an association break: 4
+  7 l36 slates: 62
+  7 titles by strength quartile 1: 132
+  7 titles by strength quartile 2: 23
+  7 titles by strength quartile 3: 1
+FAIL 1 winner: Chelsea (now) season 1 seed 1 now at Werder Bremen: F PSG v Stuttgart has no winner
+FAIL 1 winner: Chelsea (now) season 1 seed 1 now at Werder Bremen: done true, winner undefined
+FAIL 1 winner: Chelsea (now) season 1 seed 1 now at Werder Bremen: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Hoffenheim (now) season 3 seed 1 now at Tottenham: F Bayer Leverkusen v Barcelona has no winner
+FAIL 1 winner: Hoffenheim (now) season 3 seed 1 now at Tottenham: done true, winner undefined
+FAIL 1 winner: Hoffenheim (now) season 3 seed 1 now at Tottenham: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Hoffenheim (now) season 2 seed 4: F Newcastle v Atlético Madrid has no winner
+FAIL 1 winner: Hoffenheim (now) season 2 seed 4: done true, winner undefined
+FAIL 1 winner: Hoffenheim (now) season 2 seed 4: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Hoffenheim (now) season 2 seed 5: F Bayern Munich v Tottenham has no winner
+FAIL 1 winner: Hoffenheim (now) season 2 seed 5: done true, winner undefined
+FAIL 1 winner: Hoffenheim (now) season 2 seed 5: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Everton (now) season 1 seed 2: F Manchester City v Liverpool has no winner
+FAIL 1 winner: Everton (now) season 1 seed 2: done true, winner undefined
+FAIL 1 winner: Everton (now) season 1 seed 2: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Everton (now) season 1 seed 4: F Real Madrid v Aston Villa has no winner
+FAIL 1 winner: Everton (now) season 1 seed 4: done true, winner undefined
+FAIL 1 winner: Everton (now) season 1 seed 4: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: América (now) season 2 seed 2 now at Tottenham: F Manchester United v Chelsea has no winner
+FAIL 1 winner: América (now) season 2 seed 2 now at Tottenham: done true, winner undefined
+FAIL 1 winner: América (now) season 2 seed 2 now at Tottenham: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Proof Town Athletic (now) season 2 seed 3: F Bayern Munich v PSG has no winner
+FAIL 1 winner: Proof Town Athletic (now) season 2 seed 3: done true, winner undefined
+FAIL 1 winner: Proof Town Athletic (now) season 2 seed 3: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Proof Town Athletic (now) season 2 seed 4: F Bayern Munich v Real Madrid has no winner
+FAIL 1 winner: Proof Town Athletic (now) season 2 seed 4: done true, winner undefined
+FAIL 1 winner: Proof Town Athletic (now) season 2 seed 4: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Wigan Athletic (era2005) season 1 seed 2: F Benfica v Juventus has no winner
+FAIL 1 winner: Wigan Athletic (era2005) season 1 seed 2: done true, winner undefined
+FAIL 1 winner: Wigan Athletic (era2005) season 1 seed 2: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Sheffield United (era2020) season 2 seed 3: F Bayern Munich v Manchester United has no winner
+FAIL 1 winner: Sheffield United (era2020) season 2 seed 3: done true, winner undefined
+FAIL 1 winner: Sheffield United (era2020) season 2 seed 3: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Sheffield United (era2020) season 2 seed 4: F Real Madrid v PSG has no winner
+FAIL 1 winner: Sheffield United (era2020) season 2 seed 4: done true, winner undefined
+FAIL 1 winner: Sheffield United (era2020) season 2 seed 4: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Villarreal (era2005) season 2 seed 1 now at Wolfsburg: F Juventus v Barcelona has no winner
+FAIL 1 winner: Villarreal (era2005) season 2 seed 1 now at Wolfsburg: done true, winner undefined
+FAIL 1 winner: Villarreal (era2005) season 2 seed 1 now at Wolfsburg: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Villarreal (era2005) season 1 seed 3: F PSV v Juventus has no winner
+simWorldUcl: control nopens FIRED (54 failures, all its own)

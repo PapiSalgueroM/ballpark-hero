@@ -1,0 +1,63 @@
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020), Villarreal (era2005), Werder Bremen (era2010), Sevilla (era2015), Marseille (era2020); seeds 1,2,3,4,5
+  1 stand ins: era2005 Valencia for Villarreal; era2010 Manchester City for Werder Bremen; era2015 Liverpool for Sevilla; era2020 Tottenham for Marseille
+  1 and 3: 65 journeys in 209 s
+  7 goals a watched match 2.636 (19680 matches); a domestic league match 2.624
+  7 ties 3106: to extra time 12.6 percent, to penalties 5.8 percent
+  1 device order: 40 group seasons evaluated level both ways
+  1 created club left in the summer: Proof Town Athletic (top of premier, in place of Hull City) to Málaga; the watched field holds Hull City
+  1 era seasons with a stand in for my club: 38
+  1 opened seasons drawn with the holder first: 132
+  1 seasons a mid season move left with no competition, by the rule: 2
+  1 seasons in the Champions League (not watched): 19
+  1 seasons where exclude took out a direct entrant (a summer move): 2
+  1 watched matches replayed on simAiMatch: 19680
+  1 watched seasons g8: 112
+  1 watched seasons l36: 62
+  7 g8 draws: 112
+  7 l36 slates over the cap: 1
+  7 l36 slates with an association break: 4
+  7 l36 slates: 62
+  7 titles by strength quartile 1: 140
+  7 titles by strength quartile 2: 32
+  7 titles by strength quartile 3: 2
+FAIL 1 stand in: Villarreal (era2005) seed 1 at start: the field holds Cádiz from outside the era's 32, the strongest era club outside them is Valencia
+FAIL 1 stand in: Villarreal (era2005) seed 2 at start: the field holds Cádiz from outside the era's 32, the strongest era club outside them is Valencia
+FAIL 1 stand in: Villarreal (era2005) seed 2 at s1-rollover: the field holds Cádiz from outside the era's 32, the strongest era club outside them is Valencia
+FAIL 1 stand in: Villarreal (era2005) seed 2 at s2-rollover: the field holds Cádiz from outside the era's 32, the strongest era club outside them is Valencia
+FAIL 1 stand in: Villarreal (era2005) seed 3 at start: the field holds Cádiz from outside the era's 32, the strongest era club outside them is Valencia
+FAIL 1 stand in: Villarreal (era2005) seed 3 at s1-rollover: the field holds Cádiz from outside the era's 32, the strongest era club outside them is Valencia
+FAIL 1 stand in: Villarreal (era2005) seed 3 at s2-rollover: the field holds Cádiz from outside the era's 32, the strongest era club outside them is Valencia
+FAIL 1 stand in: Villarreal (era2005) seed 4 at start: the field holds Cádiz from outside the era's 32, the strongest era club outside them is Valencia
+FAIL 1 stand in: Villarreal (era2005) seed 4 at s1-rollover: the field holds Cádiz from outside the era's 32, the strongest era club outside them is Valencia
+FAIL 1 stand in: Villarreal (era2005) seed 4 at s2-rollover: the field holds Cádiz from outside the era's 32, the strongest era club outside them is Valencia
+FAIL 1 stand in: Villarreal (era2005) seed 5 at start: the field holds Cádiz from outside the era's 32, the strongest era club outside them is Valencia
+FAIL 1 stand in: Villarreal (era2005) seed 5 at s2-rollover: the field holds Cádiz from outside the era's 32, the strongest era club outside them is Valencia
+FAIL 1 stand in: Werder Bremen (era2010) seed 1 at start: the field holds Cesena from outside the era's 32, the strongest era club outside them is Manchester City
+FAIL 1 stand in: Werder Bremen (era2010) seed 2 at start: the field holds Cesena from outside the era's 32, the strongest era club outside them is Manchester City
+FAIL 1 stand in: Werder Bremen (era2010) seed 2 at s1-rollover: the field holds Cesena from outside the era's 32, the strongest era club outside them is Manchester City
+FAIL 1 stand in: Werder Bremen (era2010) seed 2 at s2-rollover: the field holds Cesena from outside the era's 32, the strongest era club outside them is Manchester City
+FAIL 1 stand in: Werder Bremen (era2010) seed 3 at start: the field holds Cesena from outside the era's 32, the strongest era club outside them is Manchester City
+FAIL 1 stand in: Werder Bremen (era2010) seed 3 at s2-rollover: the field holds Cesena from outside the era's 32, the strongest era club outside them is Manchester City
+FAIL 1 stand in: Werder Bremen (era2010) seed 4 at start: the field holds Cesena from outside the era's 32, the strongest era club outside them is Manchester City
+FAIL 1 stand in: Werder Bremen (era2010) seed 4 at s2-rollover: the field holds Cesena from outside the era's 32, the strongest era club outside them is Manchester City
+FAIL 1 stand in: Werder Bremen (era2010) seed 5 at start: the field holds Cesena from outside the era's 32, the strongest era club outside them is Manchester City
+FAIL 1 stand in: Werder Bremen (era2010) seed 5 at s2-rollover: the field holds Cesena from outside the era's 32, the strongest era club outside them is Manchester City
+FAIL 1 stand in: Sevilla (era2015) seed 1 at start: the field holds GFC Ajaccio from outside the era's 32, the strongest era club outside them is Liverpool
+FAIL 1 stand in: Sevilla (era2015) seed 2 at start: the field holds GFC Ajaccio from outside the era's 32, the strongest era club outside them is Liverpool
+FAIL 1 stand in: Sevilla (era2015) seed 2 at s1-rollover: the field holds GFC Ajaccio from outside the era's 32, the strongest era club outside them is Liverpool
+FAIL 1 stand in: Sevilla (era2015) seed 3 at start: the field holds GFC Ajaccio from outside the era's 32, the strongest era club outside them is Liverpool
+FAIL 1 stand in: Sevilla (era2015) seed 3 at s2-rollover: the field holds GFC Ajaccio from outside the era's 32, the strongest era club outside them is Liverpool
+FAIL 1 stand in: Sevilla (era2015) seed 4 at start: the field holds GFC Ajaccio from outside the era's 32, the strongest era club outside them is Liverpool
+FAIL 1 stand in: Sevilla (era2015) seed 5 at start: the field holds GFC Ajaccio from outside the era's 32, the strongest era club outside them is Liverpool
+FAIL 1 stand in: Sevilla (era2015) seed 5 at s1-rollover: the field holds GFC Ajaccio from outside the era's 32, the strongest era club outside them is Liverpool
+FAIL 1 stand in: Sevilla (era2015) seed 5 at s2-rollover: the field holds GFC Ajaccio from outside the era's 32, the strongest era club outside them is Liverpool
+FAIL 1 stand in: Marseille (era2020) seed 1 at start: the field holds Crotone from outside the era's 32, the strongest era club outside them is Tottenham
+FAIL 1 stand in: Marseille (era2020) seed 2 at start: the field holds Crotone from outside the era's 32, the strongest era club outside them is Tottenham
+FAIL 1 stand in: Marseille (era2020) seed 2 at s2-rollover: the field holds Crotone from outside the era's 32, the strongest era club outside them is Tottenham
+FAIL 1 stand in: Marseille (era2020) seed 3 at start: the field holds Crotone from outside the era's 32, the strongest era club outside them is Tottenham
+FAIL 1 stand in: Marseille (era2020) seed 3 at s1-rollover: the field holds Crotone from outside the era's 32, the strongest era club outside them is Tottenham
+FAIL 1 stand in: Marseille (era2020) seed 3 at s2-rollover: the field holds Crotone from outside the era's 32, the strongest era club outside them is Tottenham
+FAIL 1 stand in: Marseille (era2020) seed 4 at start: the field holds Crotone from outside the era's 32, the strongest era club outside them is Tottenham
+FAIL 1 stand in: Marseille (era2020) seed 4 at s1-rollover: the field holds Crotone from outside the era's 32, the strongest era club outside them is Tottenham
+FAIL 1 stand in: Marseille (era2020) seed 4 at s2-rollover: the field holds Crotone from outside the era's 32, the strongest era club outside them is Tottenham
+simWorldUcl: control standweak FIRED (43 failures, all its own)
