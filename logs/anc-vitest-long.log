@@ -1,0 +1,8 @@
+ [32m✓[39m src/hooks/useClubManager.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 1574[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager completion shape[2m > [22ma finished season records exactly one completion [33m 1407[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 05:24:05
+[2m   Duration [22m 4.01s[2m (transform 1.41s, setup 45ms, collect 1.77s, tests 1.57s, environment 258ms, prepare 57ms)[22m
+

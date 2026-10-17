@@ -1,0 +1,10 @@
+headsha exit=0 0s | b9964c331 Round BIJ: merge Round 1334 (r1334-soccer-deck at e6da1671), Soccer Career's binding of the shared deck, dark
+simManagerAppealIsolation exit=0 34s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simCmLeagueRules exit=0 56s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+anc exit=0 5s | simActivityNotCompletion: all green
+anc-vitest exit=0 5s |    Duration  4.05s (transform 1.37s, setup 44ms, collect 1.73s, tests 1.63s, environment 254ms, prepare 59ms)
+anc-vitest-long exit=0 5s |    Duration  4.01s (transform 1.41s, setup 45ms, collect 1.77s, tests 1.57s, environment 258ms, prepare 57ms)
+anc-c2f8 exit=0 5s | simActivityNotCompletion: all green
+anc-main exit=0 4s | simActivityNotCompletion: all green
+simClubManagerDecisions exit=0 35s | simClubManagerDecisions: 0 findings
+held-after exit=0 0s | src and scripts held after every line

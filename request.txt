@@ -1,0 +1,11 @@
+#!serial
+headsha: git log --oneline -3 | cut -c1-120
+simManagerAppealIsolation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+anc: node scripts/simActivityNotCompletion.mjs 2>&1 | tail -14; exit ${PIPESTATUS[0]}
+anc-vitest: node_modules/.bin/vitest run src/hooks/useClubManager.test.ts 2>&1 | grep -v "^ *$" | tail -45; exit ${PIPESTATUS[0]}
+anc-vitest-long: node_modules/.bin/vitest run src/hooks/useClubManager.test.ts --testTimeout=300000 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+anc-c2f8: git worktree add -q --detach /tmp/ancb c2f8d746e6164c45b7b6d9cf7a31124c951a7fd3 && ln -s "$PWD/node_modules" /tmp/ancb/node_modules && cd /tmp/ancb && node scripts/simActivityNotCompletion.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+anc-main: git worktree add -q --detach /tmp/ancm e814c2def671e07bd6163462dff8ab1230be2000 && ln -s "$PWD/node_modules" /tmp/ancm/node_modules && cd /tmp/ancm && node scripts/simActivityNotCompletion.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+held-after: git status --porcelain --untracked-files=no | head -5; git diff --exit-code HEAD -- src scripts && echo "src and scripts held after every line"
