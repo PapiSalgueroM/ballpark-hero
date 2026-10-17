@@ -396,6 +396,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         items: [
           "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
           "From 30, a falling rating brings the retirement talk: stop now, play one more year, or announce a farewell season. Then the legacy verdict, and the Hall of Fame wait one ballot at a time.",
+          "After your playing career, you can go after a coaching job, then choose Retire from coaching and confirm it to end that run with the record and log saved. Undo skip restores a skipped draft showcase before Draft day; on the same draft night screen, Watch it again replays the night once it ends, unless reduced motion is on.",
         ],
         subsections: [
           {

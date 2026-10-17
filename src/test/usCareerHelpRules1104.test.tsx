@@ -36,6 +36,7 @@ import { nflTruthHelpRules } from '@/lib/nflCareerHelpRules';
 import { NFL_KICKER_PICK_OFFSET, nflSeasonLength } from '@/lib/nflMyCareer';
 import { US_BANK_HELP_RULE } from '@/lib/usCareerBank';
 import { rookieDeal } from '@/lib/usCareerRookieDeal';
+import { US_COACH_RETIRE_HELP_RULE } from '@/lib/usCoachRetirement';
 
 const pages: Record<string, ComponentType> = { nba: NbaMyCareer, nfl: NflMyCareer, mlb: MlbMyCareer, nhl: NhlMyCareer };
 const tick = (ms: number) => act(async () => { await new Promise(resolve => setTimeout(resolve, ms)); });
@@ -77,6 +78,16 @@ describe('Round 1104: the changed rules are on the "?" screen', () => {
       localStorage.clear();
     }
   }, 240_000);
+
+  /* Round 1346: one coaching career, four pages, so one line on each, exactly once. */
+  it('all four pages show the coaching retirement line once', async () => {
+    for (const slug of ['nba', 'nfl', 'mlb', 'nhl']) {
+      const text = await helpText(slug);
+      expect(count(text, US_COACH_RETIRE_HELP_RULE), `${slug}: the coaching retirement line`).toBe(1);
+      cleanup();
+      localStorage.clear();
+    }
+  }, 300_000);
 
   it('the lines carry the numbers the engine plays', () => {
     const [pay, kicker, schedule, bank] = nflTruthHelpRules();

@@ -68,6 +68,7 @@
  *   continuefield  the Stadium Tycoon card reads a field the save does not have
  *   continueguard  a card prints a save's name at any length
  *   continuecold   the row renders its heading with no save in the browser
+ *   cmretired      an own Club Manager retirement object is ignored
  *   aussiemissing  the new manager's real save has no registered card
  *   aussiekey      the manager card reads a key its hook never writes
  *   aussiefield    the club ID (myClub) is mistaken for the display name
@@ -88,7 +89,7 @@ import { US_CAREER_BOARD, US_CAREER_SPORTS, allWrapperProblems } from './lib/usC
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROLS = {
   stage: 1, savekey: 2, nocolour: 3, noglyph: 3, rail: 4, shipped: 5, progress: 6,
-  continuekey: 7, continuefield: 7, continueguard: 7, continuecold: 7, favfirst: 8, favtrust: 8,
+  continuekey: 7, continuefield: 7, continueguard: 7, continuecold: 7, cmretired: 7, favfirst: 8, favtrust: 8,
   aussiemissing: 7, aussiekey: 7, aussiefield: 7, aussieround: 7,
 };
 const CONTROL = process.env.HOME_FRONT_CONTROL || '';
@@ -155,6 +156,11 @@ continueSrc = controlled('continuekey', continueSrc, "saveKey: 'fight-gym-save-v
 continueSrc = controlled('continuefield', continueSrc, "at: ['matchNo']", "at: ['matchNum']");
 continueSrc = controlled('continueguard', continueSrc,
   'return t.length > SAVE_NAME_MAX ? `${t.slice(0, SAVE_NAME_MAX - 3).trimEnd()}...` : t;', 'return t;');
+const cmRetiredLookup = "  const retired = entry.path === '/club-manager' && walk(save, ['retired']);";
+if (CONTROL === 'cmretired' && continueSrc.split(cmRetiredLookup).length !== 2) {
+  console.error('Club Manager retirement control needs one unique own-field lookup'); process.exit(1);
+}
+continueSrc = controlled('cmretired', continueSrc, cmRetiredLookup, '  const retired = null;');
 let rowSrc = read('src/components/home/ContinueRow.tsx');
 rowSrc = controlled('continuecold', rowSrc, 'if (saved.length === 0) return null;', 'if (saved.length < 0) return null;');
 homeFrontSrc = controlled('favfirst', homeFrontSrc, 'if (!fav) return all;', 'return all;');
@@ -578,7 +584,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     const files = WHERE[e.path];
     if (!files) continue;
     const src = files.map(code).join('\n');
-    const at = [e.name, e.count && e.count.at, e.ended && e.ended.at].filter(Boolean);
+    const at = [e.name, e.count && e.count.at, e.ended && e.ended.at, e.path === '/club-manager' && ['retired']].filter(Boolean);
     for (const fieldPath of at) {
       fieldPath.forEach((seg, i) => {
         if (/^\d+$/.test(seg)) return;
@@ -606,7 +612,13 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   /* and hand built saves in each game's shape, for the ones with no cheap engine start */
   const SAMPLES = {
     '/soccer-career': [[{ currentClub: 'Sample Town', age: 23, retired: false }, 'Sample Town, age 23'], [{ currentClub: 'Sample Town', age: 36, retired: true }, 'Sample Town, retired']],
-    '/club-manager': [[{ clubName: 'Sample FC', season: 3, sacked: false }, 'Sample FC, season 3'], [{ clubName: 'Sample FC', season: 3, sacked: true }, 'Sample FC, sacked']],
+    '/club-manager': [[{ clubName: 'Sample FC', season: 3, sacked: false }, 'Sample FC, season 3'], [{ clubName: 'Sample FC', season: 3, sacked: true }, 'Sample FC, sacked'],
+      [{ clubName: 'Sample FC', season: 3, sacked: false, retired: { when: 'midSeason' } }, 'Sample FC, retired'],
+      [{ clubName: 'Sample FC', season: 3, sacked: true, retired: { when: 'outOfWork' } }, 'Sample FC, retired'],
+      [{ clubName: 'Sample FC', season: 3, sacked: false, retired: null }, 'Sample FC, season 3'],
+      [{ clubName: 'Sample FC', season: 3, sacked: true, retired: [] }, 'Sample FC, sacked'],
+      [{ clubName: 'Sample FC', season: 3, sacked: false, retired: true }, 'Sample FC, season 3'],
+      [{ clubName: 'Sample FC', season: 3, sacked: true, retired: 'retired' }, 'Sample FC, sacked']],
     '/rebuild': [[{ v: 1, seats: [{ kind: 'human', club: 'Sample United' }] }, 'Sample United']],
     '/nfl-my-career': [[{ c: { team: 'ABC', year: 2029, retired: false }, phase: 'hub' }, 'ABC, 2029 season']],
     '/nba-my-career': [[{ c: { team: 'ABC', year: 2030, retired: true }, phase: 'retired' }, 'ABC, retired']],

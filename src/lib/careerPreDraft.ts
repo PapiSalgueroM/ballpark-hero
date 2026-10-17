@@ -507,6 +507,20 @@ export function preDraftShowcase(desc: PreDraftDescriptor, prev: PreDraftState, 
   return s;
 }
 
+/** Round 1346: a showcase Skip pressed by accident can be taken back until
+ *  "Draft day". The skip draws nothing and reveals nothing (no drill, no
+ *  grade), so putting the state back loses no information: the result is the
+ *  state before the skip, key for key. A graded approach is never undone,
+ *  because both read the same keyed grade and undoing one would be a free
+ *  second look at it. */
+export function preDraftCanUndoSkip(s: PreDraftState): boolean {
+  return s.phase === 'draft' && s.showcase?.approach === 'skip' && s.draft === null && !s.combine;
+}
+export function preDraftUndoSkip(prev: PreDraftState): PreDraftState {
+  if (!preDraftCanUndoSkip(prev) || !prev.showcase) return prev;
+  return { ...prev, stock: prev.stock - prev.showcase.stockDelta, showcase: null, phase: 'showcase' };
+}
+
 /** How many development seasons a drafted player spends before the debut:
  *  the better he already is, the fewer. Always inside the sport's range. */
 export function preDraftDevSeasonCount(pd: PreDraftPostDraft, rating: number, rng: () => number): number {

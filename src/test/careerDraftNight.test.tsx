@@ -431,3 +431,32 @@ describe('one lottery table, typed twice on main', () => {
     expect(gm.odds.map(pct => Math.round(pct * 10))).toEqual(NBA_LOTTERY_NOW.combos);
   });
 });
+
+/* Round 1346: a night skipped by accident can be watched again. The button takes the skip's place in the same
+   outlined box, so the row keeps the two columns it had while the night played; without the prop the row is the
+   one it was. */
+describe('watch it again', () => {
+  it('once the night is over Watch it again takes the skip\'s place, and without the prop the row is the one it was', () => {
+    for (const [, desc] of PAIRS) {
+      const night = buildCareerDraftNight(desc, endedAt(desc, 40))!;
+      const onReplay = vi.fn();
+      for (const stage of ['landed', 'skipped'] as const) {
+        const view = render(<DraftNightSequence night={night} desc={desc} draftYear={2026} stage={stage} onLanded={noop} onSkip={noop} onContinue={noop} onReplay={onReplay} />);
+        const actions = view.container.querySelector<HTMLElement>('[data-night-actions]')!;
+        expect(actions.className).toMatch(/grid-cols-2/);
+        expect(within(actions).queryByRole('button', { name: 'Skip to the end' })).toBeNull();
+        fireEvent.click(within(actions).getByRole('button', { name: 'Watch it again' }));
+        view.unmount();
+      }
+      expect(onReplay).toHaveBeenCalledTimes(2);
+      const live = render(<DraftNightSequence night={night} desc={desc} draftYear={2026} stage="live" onLanded={noop} onSkip={noop} onContinue={noop} onReplay={onReplay} />);
+      expect(within(live.container).queryByRole('button', { name: 'Watch it again' })).toBeNull();
+      expect(within(live.container).getByRole('button', { name: 'Skip to the end' })).toBeEnabled();
+      live.unmount();
+      const plain = render(<DraftNightSequence night={night} desc={desc} draftYear={2026} stage="skipped" onLanded={noop} onSkip={noop} onContinue={noop} />);
+      expect(within(plain.container).queryByRole('button', { name: 'Watch it again' })).toBeNull();
+      expect(plain.container.querySelector<HTMLElement>('[data-night-actions]')!.className).not.toMatch(/grid-cols-2/);
+      plain.unmount();
+    }
+  });
+});

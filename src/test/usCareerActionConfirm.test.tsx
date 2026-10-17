@@ -163,4 +163,32 @@ describe('US career destructive action confirmation', () => {
     expect(cancelButton).toHaveFocus(); expect(fireEvent.keyDown(cancelButton, { key: 'Tab', shiftKey: true })).toBe(false); expect(confirmButton).toHaveFocus();
     expect(fireEvent.keyDown(confirmButton, { key: 'Tab' })).toBe(false); expect(cancelButton).toHaveFocus(); expect(accept).not.toHaveBeenCalled();
   });
+
+  /* Round 1346: the coaching retirement reuses this prompt, so one case walks every guard the component controls
+     break: nothing on opening, Cancel first, Cancel and Escape spend nothing and hand focus back without scrolling,
+     two same-frame accepts count once, a new opening rearms, and unmounting an open prompt accepts nothing. */
+  it('retireCoach keeps every guard of the shared prompt from Cancel first to a quiet unmount', async () => {
+    const accept = vi.fn();
+    const view = render(<StrictMode><USCareerActionConfirm action="retireCoach" sport="NBA" onConfirm={accept}><button>Coach fixture action</button></USCareerActionConfirm></StrictMode>);
+    const opener = view.getByRole('button', { name: 'Coach fixture action' }), spy = vi.spyOn(opener, 'focus');
+    const openCoach = () => {
+      opener.focus(); fireEvent.click(opener);
+      const dialog = within(document.body).getByRole('alertdialog', { name: 'Retire from coaching?' });
+      expect(dialog).toHaveAccessibleDescription(); return dialog;
+    };
+    for (const escape of [false, true]) {
+      const dialog = openCoach(); expect(accept).not.toHaveBeenCalled();
+      expect(within(dialog).getByRole('button', { name: 'Keep coaching' })).toHaveFocus(); spy.mockClear();
+      if (escape) fireEvent.keyDown(dialog, { key: 'Escape' }); else fireEvent.click(within(dialog).getByRole('button', { name: 'Keep coaching' }));
+      await waitFor(() => expect(within(document.body).queryByRole('alertdialog')).toBeNull());
+      await waitFor(() => expect(opener).toHaveFocus()); expect(spy).toHaveBeenCalledWith({ preventScroll: true }); expect(accept).not.toHaveBeenCalled();
+    }
+    let dialog = openCoach(); const button = within(dialog).getByRole('button', { name: 'Retire from coaching' });
+    act(() => { button.click(); button.click(); }); await flush(); expect(accept).toHaveBeenCalledTimes(1);
+    dialog = openCoach(); fireEvent.click(within(dialog).getByRole('button', { name: 'Retire from coaching' })); await flush(); expect(accept).toHaveBeenCalledTimes(2);
+    await waitFor(() => expect(within(document.body).queryByRole('alertdialog')).toBeNull());
+    openCoach(); view.unmount(); await flush();
+    await act(async () => { await new Promise(resolve => setTimeout(resolve, 0)); });
+    expect(accept).toHaveBeenCalledTimes(2); expect(within(document.body).queryByRole('alertdialog')).toBeNull();
+  });
 });

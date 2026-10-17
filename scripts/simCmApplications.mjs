@@ -54,7 +54,7 @@
         calendar, the manager's record, trophies, history, season and world
         year come across byte for byte, the old club gets a generated interim
         (and holds it in the dugout record when it shares the league), the
-        board opens at the appointment's 62, the handover is stamped, and the
+        board opens at the appointment's BOARD_FRESH, the handover is stamped, and the
         joined career plays on. A same league target and a cross league
         target are both probed.
      5) an old save loads unchanged (hard). A save without the field opens,
@@ -753,7 +753,7 @@ section('4) A yes answered with now moves the manager that week');
     if (!interim || interim.split(' ').length < 2) fail(`${tag}: the interim reads '${interim}'`);
     if (joined.leagueClubs.includes(before.clubName) && joined.managers?.[before.clubName]?.name !== interim) fail(`${tag}: the old club's dugout reads ${joined.managers?.[before.clubName]?.name ?? 'nobody'}, not the interim`);
     if (joined.managers?.[target.club]) fail(`${tag}: the new club still has another manager on record`);
-    if (joined.boardConfidence !== 62) fail(`${tag}: the board opens at ${joined.boardConfidence}`);
+    if (joined.boardConfidence !== cm.BOARD_FRESH) fail(`${tag}: the board opens at ${joined.boardConfidence}`);
     if (!joined.handover || !isNum(joined.handover.pts) || !isNum(joined.handover.played)) fail(`${tag}: no handover stamped`);
     const letter = (joined.inbox ?? []).find(m => m.kind === 'jobApplication' && m.from === `The ${before.clubName} board`);
     if (!letter || !letter.text.includes(interim) || quoted(letter.text)) fail(`${tag}: the old board's letter is missing, nameless or quoted`);

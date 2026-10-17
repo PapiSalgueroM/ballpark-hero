@@ -19,7 +19,7 @@ import { useGamePicks } from '@/hooks/useGamePicks';
 import { FavouriteSport } from '@/components/home/FavouriteSport';
 import { SportGlyph, sportStyle } from '@/components/home/SportGlyph';
 import { useStreaks } from '@/hooks/useStreaks';
-import { AuthModal } from '@/components/auth/AuthModal';
+import { AccountDialogOnDemand as AuthModal } from '@/components/auth/AccountDialogOnDemand';
 
 import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, GAME_COUNT_LABEL, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
 import { CATEGORY_SPORT, sportOf, readFavouriteSport, favouriteFirst, FAVOURITE_SPORT_KEY, type SportKey } from '@/data/homeFront';

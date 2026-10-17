@@ -1,6 +1,7 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
+import { noteHighestScoring } from '@/lib/clubManagerRecords';
 import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGoalLift, type CmVarDecision, type CmVarKind, type CmVarAsk } from '@/lib/clubManagerVar';
 /* Round 201: the wilderness reuses the manager job market the retired
    player path already had, so a sacked manager gets real clubs with real
@@ -117,13 +118,16 @@ import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
 /* Round 513: manager XP and the seven trees, in their own file for the same
    reason the deals and the staff are in theirs. */
 import { addXp, askEdge, dutyEdge, ensureXp, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthIntakeEdge, youthReportEdge } from '@/lib/clubManagerXp';
-import { PATIENCE_FLOOR, askPremiumScale, currencySymbol, ensureStartOptions, nationJobsOn, patienceDelta, startOptionsOf } from '@/lib/clubManagerStart';
+import { NO_SACK_LINE, PATIENCE_FLOOR, askPremiumScale, boardMaySack, currencySymbol, ensureStartOptions, nationJobsOn, patienceDelta, startOptionsOf } from '@/lib/clubManagerStart';
 /* Round 1331: the substitution rule by league and season, a pure table. */
 import { subsLeagueBase, subsRuleFor, type SubsRule } from '@/lib/clubManagerSubsRule';
 export { subsRuleFor, CM_SUBS_PARTIAL } from '@/lib/clubManagerSubsRule';
 /* Round 474: the five specific board asks, built and graded there for the
    same reason the facilities and the books live in their own files. */
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
+/* Round 1335: the board's verdict, its openings, the kitty band and the offer step, a pure module. */
+import { BOARD_FRESH, VERDICT_LINES, fillLeague, kittyAllocation, offerStepOk, openingConfidence, seasonGrade, type SeasonFate } from '@/lib/clubManagerBoardVerdict';
+export { BOARD_FRESH } from '@/lib/clubManagerBoardVerdict';
 /* Round 978: international duty. Called only inside functions, never at module
    scope, so the cycle back into this file stays evaluation safe. */
 import { answerBreak, backFromDuty, endRest, ensureIntl, fireDueBreaks, freshIntl, restingIds } from '@/lib/clubManagerInternationals';
@@ -402,17 +406,18 @@ export function worldRosterXIAvg(career: CareerState, club: string): number | nu
 const WORLD_MARKET_MEMO = new WeakMap<object, { years: number; year: number; start: unknown; era: unknown; seed: number | undefined; club: string; out: MarketPlayer[] }>();
 
 /* Release AZ fix pass 4, the lead's ruling (the manager's own club is read from his squad, never the world
-   roster): in a career that plays the living world the market lists nobody at my own club. My club is my squad,
-   and buildMarket drops every man of my squad by name, so what the world roster still put at my club were men
-   who are not mine (the men a deep club's bake holds beyond the 26 a squad starts with, then the projection's
-   replacements): on sale from my own club, and named in the feed as signed from it. A career from before the
-   release keeps the projected world's market exactly as it was (ruling Y1). src/lib/clubManagerOwnClubLevel.test.ts
-   and scripts/simFreeAgents.mjs section 17 (FA_CONTROL=ownclub) hold it. */
+   roster), and since Round 1339 in every career, seeded or not: the market lists nobody at my own club. My club is
+   my squad, and buildMarket drops every man of my squad by name, so what the world roster still put at my club were
+   men who are not mine (a deep club's bake beyond the 26 a squad starts with, the projection's replacements, the men
+   I sold, the men whose deals ran out): on sale from my own club, and named in the feed as signed from it. A career
+   from before Release AZ keeps its projected world and never writes a ledger (ruling Y1), but its market agrees with
+   the club's page (ClubDetailScreen). src/lib/clubManagerOwnClubLevel.test.ts, scripts/simFreeAgents.mjs section 17
+   (FA_CONTROL=ownclub) and scripts/simCmOwnClubMarket.mjs (OWNCLUB_MARKET_CONTROL=legacy) hold it. */
 function worldMarket(career: CareerState): MarketPlayer[] {
   const fallback = marketBase(yearsOn(career), career.eraId, worldSeedOf(career));
   const current = refreshWorldRoster(career);
   const held = worldRosterView(current);
-  if (!held) return worldSeedOf(career) === undefined ? fallback : fallback.filter(p => p.club !== career.clubName);
+  if (!held) return fallback.filter(p => p.club !== career.clubName);
   const raw = current.worldRoster as object, years = yearsOn(current), year = worldYear(current), seed = worldSeedOf(current);
   const hit = WORLD_MARKET_MEMO.get(raw);
   if (hit && hit.years === years && hit.year === year && hit.start === current.startYear && hit.era === current.eraId && hit.seed === seed && hit.club === current.clubName) return hit.out;
@@ -1989,6 +1994,9 @@ export interface SeasonRecord {
    *  season the book decided. Kept on the record, so a manager who moves club takes his past winners
    *  with him (joinClubNow copies the history). An older record has none. */
   awards?: SeasonAwards;
+  /** Round 1335: the summer move the season earned, written only on a season the club really went up or
+   *  down or stayed up against the odds (seasonFate). An older record, and every other season, has none. */
+  fate?: SeasonFate;
 }
 
 export interface CareerStats {
@@ -2002,6 +2010,9 @@ export interface CareerStats {
   mostExpensiveBuy?: { name: string; fee: number } | null;
   mostExpensiveSale?: { name: string; fee: number } | null;
   clubsManaged?: string[];
+  /** Round 1343: the match with the most goals in it (clubManagerRecords.ts). Absent until the first match
+   *  played on Round 1343's engine, and then read from the book; null means counted with no game yet. */
+  highestScoring?: import('@/lib/clubManagerRecords').ScoringGame | null;
 }
 
 export interface JobOffer { club: string; blurb: string; }
@@ -2617,6 +2628,8 @@ export interface SeasonSummary {
   ballonDor?: { name: string; club: string } | null;
   /** Round 1311: the same awards the season's record keeps, on a season the league book decided. */
   awards?: SeasonAwards;
+  /** Round 1335: the same fate the season's record keeps, only on a season that has one. */
+  fate?: SeasonFate;
 }
 
 export interface CareerState {
@@ -2943,13 +2956,18 @@ export interface CareerState {
   /** Three club-bound tactics setups. Older saves have none; the match-plan reader validates entries. */
   matchPlans?: import('@/lib/clubManagerMatchPlans').SavedMatchPlan[];
   /** Round 1331: 'base' plays the match rules from before Round 1331 (three changes with no stoppage
-   *  limit everywhere, and the press asking about the fixture the old way). Set only by Manager Hot Seat
+   *  limit everywhere, and the press asking about the fixture the old way), and since Round 1335 the
+   *  season rules from before that round as well (legacySeason: the grade and its line, the offers, the
+   *  mid season approach, the openings, the kitty and the takeovers' card). Set only by Manager Hot Seat
    *  on a day dated before HOT_SEAT_RULES_FROM or a free run started before it, so a run in flight and
    *  every past daily replay exactly; taken off when the run is carried on to Club Manager and dropped by
    *  loadCareer, so no Club Manager save ever plays it. Absent means the current rules. A later rule
    *  that moves the dailies joins this same field (a dated value naming the newest rule a run plays)
-   *  rather than adding a second one. */
+   *  rather than adding a second one. Round 1343 joined it: 'base' also keeps no highest scoring game. */
   matchRules?: 'base';
+  /** Round 1343: set once, by retireCareer (clubManagerRetire.ts), when the manager retires. A retired career
+   *  keeps its slot as a finished career and opens on its farewell. Absent on every other save. */
+  retired?: import('@/lib/clubManagerRetire').Retirement;
 }
 
 /* ---------- Round 505: the armband and the set piece takers ---------- */
@@ -13706,6 +13724,13 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
   });
 }
 
+/** Round 1335: the card a new manager takes over in mid season: every objective but the ones already failed
+ *  before he arrived, in order. A done one stays (it can come back off, and the season score already leaves
+ *  an inherited tick out, Round 633's stamp). Pure, no draw. */
+export function openObjectives(s: CareerState): BoardObjective[] {
+  return objectiveStatuses(s).filter(x => x.status !== 'failed').map(x => x.objective);
+}
+
 /* ================================================================== */
 /* Match engine                                                       */
 /* ================================================================== */
@@ -17173,7 +17198,6 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     opp: fx.opponent, res, score: `${myGoals}-${oppGoals}`,
     season: state.season, comp: fx.competition, home: fx.home,
   });
-  state.h2h = h2hLog.slice(-300);
   /* And both sides' last-5 form, whatever the competition, because a cup
      hiding matters to the next opponent reading the form guide. */
   noteFormOne(state, state.clubName, res);
@@ -17205,6 +17229,12 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       state.careerStats.biggestDefeat = { opp: fx.opponent, score: `${oppGoals}-${myGoals}` };
     }
   }
+  /* Round 1343: and the highest scoring game (clubManagerRecords.ts). Not on Hot Seat's base rules: 'base' is
+     the engine before Round 1331, which kept no such line, so a day dated before the cutover replays as it did. */
+  if (state.matchRules !== 'base') {
+    noteHighestScoring(state, { opp: fx.opponent, score: `${myGoals}-${oppGoals}`, res, season: state.season, club: state.clubName, comp: fx.compLabel });
+  }
+  state.h2h = h2hLog.slice(-300);
 
   // Round 73: broken start promises get noticed, then the dressing room
   // finds something new to message you about.
@@ -17268,6 +17298,15 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   if (confDelta < 0 && state.press) confDelta *= pressPatience(state.press.mood);
   confDelta = Math.round(confDelta * 10) / 10;
   state.boardConfidence = clamp(state.boardConfidence + confDelta, 0, 100);
+  /* Round 1342: No sacking holds the board on its last point in front of the
+     check below, which is left exactly as it was, so zero stays the sack and
+     the warning under 22 still reads. Draws nothing. */
+  let noSackLine = false;
+  if (!boardMaySack(state) && state.boardConfidence <= 0) {
+    state.boardConfidence = 1;
+    noSackLine = true;
+    events.push(NO_SACK_LINE);
+  }
   if (state.boardConfidence <= 0) {
     state.sacked = true;
     events.push('📉 The board has seen enough. You are relieved of your duties.');
@@ -17313,6 +17352,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      check that sacks, so a manager could finish the week on zero and still
      be in a job. The header meter reads this number and says zero is the
      sack (src/lib/clubManagerMeters.ts), so the check runs once more here. */
+  /* Round 1342: and No sacking's floor runs once more in front of it, with one line a match. */
+  if (!boardMaySack(state) && state.boardConfidence <= 0) {
+    state.boardConfidence = 1;
+    if (!noSackLine) events.push(NO_SACK_LINE);
+  }
   if (!state.sacked && state.boardConfidence <= 0) {
     state.sacked = true;
     events.push('📉 The board has seen enough. You are relieved of your duties.');
@@ -18102,7 +18146,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     retiredNames: [],
     retiredLastSummer: [],
     budget: club.budget,
-    boardConfidence: 60,
+    boardConfidence: BOARD_FRESH,
     sacked: false,
     squad,
     xiIds: [],
@@ -18626,6 +18670,13 @@ export const MAX_SUBS = MAX_HALFTIME_SUBS;
 export function matchRuleOf(career: CareerState): SubsRule {
   if (career.matchRules === 'base') return { subs: MAX_SUBS, stops: null, partial: false };
   return subsRuleFor(subsLeagueBase(careerLeagueOf(career).id), worldYear(career));
+}
+
+/** Round 1335: true when this career plays the season rules from before Round 1335 (the CareerState doc of
+ *  matchRules: only a Hot Seat day dated before HOT_SEAT_RULES_FROM). Every read this round adds goes
+ *  through here, so one answer puts the whole round back (simCmBoardVerdict's forced leg). */
+export function legacySeason(c: Pick<CareerState, 'matchRules'>): boolean {
+  return c.matchRules === 'base';
 }
 
 /** Round 1331: is a change at this minute made at a break, which uses no stoppage? Half time is any
@@ -19195,7 +19246,7 @@ export function matchFacts(career: CareerState): MatchFacts | null {
 /* Round 633: the league title trophy's name, shared by the rollover that
    pushes it and the season score that reads it, rather than two literals that
    can drift apart. */
-const LEAGUE_TITLE_NAME = 'League Title';
+export const LEAGUE_TITLE_NAME = 'League Title';
 
 /**
  * Round 633: a record shape guard for the stamped handover, on the
@@ -19373,7 +19424,8 @@ function maybeApproach(state: CareerState): string | null {
   const hotForm = state.form.slice(-5).filter(r => r === 'W').length >= 4;
   if (overshoot < 3 && !hotForm) return null;
   if (Math.random() > 0.06) return null;
-  const suitor = pick(shuffle(approachSuitors(state)).slice(0, 6));
+  /* Round 1335: one tier above mine at most, filtered after the shuffle so the one pick draws as before. */
+  const suitor = pick(shuffle(approachSuitors(state)).filter(c => legacySeason(state) || offerStepOk(club.tier, c.tier, false)).slice(0, 6));
   if (!suitor) return null;
   const sLeague = (eraHist && eraLeagueOf(suitor.name, state.eraId)) || leagueOf(suitor.name);
   const ask = leagueDemand(suitor.expectation, suitor.tier, sLeague.clubs.length, sLeague, titleGapFor(suitor.name, sLeague, state.eraId), state.eraId, suitor.name);
@@ -19701,9 +19753,18 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   }
   const seasonTrophies = state.trophies.filter(t => t.season === state.season).map(t => t.name);
   const overshoot = club.expectation - position;
+  /* Round 1335: the grade knows the summer move the season earned (going up is at least a B, going down at
+     most a C, a B with a trophy) and names why; the old rules (legacySeason) keep the ladder below. */
+  const legacy = legacySeason(state);
+  const fated = legacy ? null : fateRead(state);
+  const fate = fated?.fate ?? null;
+  const graded = legacy ? null : seasonGrade({ position, expectation: club.expectation, trophies: seasonTrophies.length,
+    europeWon: seasonTrophies.includes('Champions League'), fate });
 
   let verdictGrade: 'A' | 'B' | 'C' | 'D' | 'F';
-  if (seasonTrophies.includes('Champions League') || position === 1 || overshoot >= 3 || seasonTrophies.length >= 2) {
+  if (graded) {
+    verdictGrade = graded.grade;
+  } else if (seasonTrophies.includes('Champions League') || position === 1 || overshoot >= 3 || seasonTrophies.length >= 2) {
     verdictGrade = 'A';
   } else if (overshoot >= 0 || seasonTrophies.length >= 1) {
     verdictGrade = 'B';
@@ -19714,7 +19775,10 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   } else {
     verdictGrade = 'F';
   }
-  const verdict = pick(VERDICTS[verdictGrade]);
+  /* One pick on every path, so the season's draws are what they were. A title or two trophies read the A
+     lines, an ordinary season its grade's, and only the kinds with their own lines read the module's. */
+  const ownLines = graded && graded.kind in VERDICT_LINES ? VERDICT_LINES[graded.kind as keyof typeof VERDICT_LINES] : null;
+  const verdict = ownLines ? fillLeague(pick([...ownLines]), fated?.league ?? '') : pick(VERDICTS[verdictGrade]);
 
   const byGoals = [...state.squad].sort((a, b) => b.seasonGoals - a.seasonGoals);
   const byAssists = [...state.squad].sort((a, b) => b.seasonAssists - a.seasonAssists);
@@ -19796,7 +19860,12 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
       && (c.tier < club.tier || (c.tier === club.tier && !myLeagueClubs.has(c.name)))
       && c.name !== state.clubName && c.name !== droppedClub && c.name !== offers[0]?.club));
     const classic = shuffle(everyClub.filter(c => !vacancyNames.has(c.name) && c.tier < club.tier && c.name !== state.clubName && c.name !== droppedClub && c.name !== offers[0]?.club));
-    const suitors = [...vacancySuitors, ...classic];
+    /* Round 1335: a club calls from at most one tier above yours, two after a top flight title or the
+       Champions League (a second tier title is not one: the promotion already pays it). Filtered after the
+       two shuffles, so the season's draws are what they were and the first callers keep their order. The
+       handshake and an application's yes above are never filtered; the old rules keep every caller. */
+    const big = (position === 1 && !PYRAMIDS.some(p => p.second === careerLeagueOf(state).id)) || seasonTrophies.includes('Champions League');
+    const suitors = [...vacancySuitors, ...classic].filter(c => legacy || offerStepOk(club.tier, c.tier, big));
     for (const s of suitors.slice(0, ri(1, 2))) {
       const myLeague = careerLeagueOf(state);
       const abroad = !myLeague.clubs.includes(s.name);
@@ -19894,11 +19963,12 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     playerOfSeason,
     ballonDor,
     ...(awards ? { awards } : {}),
+    ...(fate ? { fate } : {}),
   };
 
   state.history = [
     ...state.history.filter(h => h.season !== state.season),
-    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length, ...(awards ? { awards } : {}) },
+    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length, ...(awards ? { awards } : {}), ...(fate ? { fate } : {}) },
   ];
   state.history = keepTeams(state.history);
   state.pendingSummary = summary;
@@ -20191,6 +20261,60 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
   return { overrides: moved ? next : carried, lines: [...lines, ...elsewhere].slice(0, Math.max(5, lines.length)) };
 }
 
+/**
+ * Round 1335: the summer move runPromotionRelegation will make for MY slot, read without making it. Its own
+ * conditions, line for line: nothing in a historic era or an unpaired custom league, the same tables, the
+ * same custom slot mapping, the same skips (no readable table, a side that cannot move exactly `count`),
+ * and the pairs walked in the same order with the same memberships, stopping at the first pair that holds
+ * my league. 'up' when I finish inside the second tier's count, 'down' inside the top flight's bottom
+ * count, 'escape' when the top flight's drop zone is where my club was expected to finish and it finished
+ * outside it. No register call: it reads the registry finishSeason already reads. simCmBoardVerdict
+ * section fate holds it to what the rollover really does.
+ */
+function fateRead(prev: CareerState): { fate: SeasonFate; league: string } | null {
+  if (prev.eraId && isHistoricEra(prev.eraId)) return null;
+  if (prev.customClub && !customUsesPyramid(prev.customClub, prev.eraId)) return null;
+  const custom = prev.customClub;
+  const mySlot = custom?.replacedClub ?? prev.clubName;
+  const ownTable = sortedLeagueTable(prev).map(row => custom && row.club === prev.clubName
+    ? { ...row, club: custom.replacedClub } : row);
+  const myLeagueId = careerLeagueOf(prev).id;
+  const carried = prev.leagueOverrides ?? null;
+  const next: Record<string, string[]> = carried ? { ...carried } : {};
+  for (const pyr of PYRAMIDS) {
+    const mine = myLeagueId === pyr.top || myLeagueId === pyr.second;
+    const topDef = REAL_LEAGUES.find(l => l.id === pyr.top);
+    const secondDef = REAL_LEAGUES.find(l => l.id === pyr.second);
+    if (!topDef || !secondDef) { if (mine) return null; continue; }
+    const topClubs = next[pyr.top] ?? topDef.clubs;
+    const secondClubs = next[pyr.second] ?? secondDef.clubs;
+    const topTable = myLeagueId === pyr.top ? ownTable : sortedWorldTable(prev, pyr.top, prev.world?.[pyr.top]?.table ?? []);
+    const secondTable = myLeagueId === pyr.second ? ownTable : sortedWorldTable(prev, pyr.second, prev.world?.[pyr.second]?.table ?? []);
+    if (topTable.length < topClubs.length || secondTable.length < secondClubs.length) { if (mine) return null; continue; }
+    const topSet = new Set(topClubs);
+    const secondSet = new Set(secondClubs);
+    const topRows = topTable.filter(r => topSet.has(r.club));
+    const down = topRows.slice(-pyr.count).map(r => r.club);
+    const up = secondTable.filter(r => secondSet.has(r.club)).slice(0, pyr.count).map(r => r.club);
+    if (down.length !== pyr.count || up.length !== pyr.count) { if (mine) return null; continue; }
+    if (mine) {
+      if (myLeagueId === pyr.second) return up.includes(mySlot) ? { fate: 'up', league: toLeague(topDef.name) } : null;
+      if (down.includes(mySlot)) return { fate: 'down', league: toLeague(secondDef.name) };
+      const expected = clubDefFor(prev.clubName).expectation;
+      return expected > topRows.length - pyr.count ? { fate: 'escape', league: toLeague(topDef.name) } : null;
+    }
+    const downSet = new Set(down);
+    const upSet = new Set(up);
+    next[pyr.top] = [...topClubs.filter(c => !downSet.has(c)), ...up];
+    next[pyr.second] = [...secondClubs.filter(c => !upSet.has(c)), ...down];
+  }
+  return null;
+}
+/** Round 1335: the season's fate alone (fateRead). */
+export function seasonFate(state: CareerState): SeasonFate | null {
+  return fateRead(state)?.fate ?? null;
+}
+
 /* Round 1040 review: the summer lines name the league the way people say it.
    The Premier League, the Bundesliga, the Championship, the 2. Bundesliga and
    the Segunda División take the article; La Liga carries its own, and Serie A,
@@ -20295,6 +20419,17 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const promiseNet = objectiveStatuses(career)
     .filter(s => s.objective.promised)
     .reduce((n, s) => n + (s.status === 'done' ? 1 : -1), 0);
+  /* Round 1335: next season's opening reads the season you had. A move opens at BOARD_FRESH; a stay opens
+     from the club you PLAYED for (playedExpectation, read before the summer moved anybody), with the hits
+     the review printed weighed by their ids on the card they were graded from (the season's main demand
+     three, a board ask half, a summary whose list does not line up one each), then banded by the grade:
+     an A or B at least BOARD_FRESH, a D or F under Safe. The old rules (legacySeason) keep the old sum. */
+  const legacy = legacySeason(career);
+  const cardIds = (career.boardObjectives ?? []).map(o => o.id);
+  const opening = legacy
+    ? (moving ? 62 : clamp(55 + (club.expectation - prevPos) * 1.5 + objNet * 2 + promiseNet * 3, 35, 82))
+    : moving ? BOARD_FRESH : openingConfidence({ grade: summary?.verdictGrade ?? 'C', playedExpectation, finish: prevPos,
+      objectives: objs.map((o, i) => ({ id: cardIds.length === objs.length ? cardIds[i] : undefined, hit: o.hit })), promiseNet });
 
   /* Round 132: the world clock ticks here and only here. The new season is one
      year further from the baked roster year, which moves every AI squad, the
@@ -20477,9 +20612,13 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      chest nothing in the game can balance against. Walking to a new job
      carries nothing, the same rule the sponsor deal and the ground
      expansions already follow: the balance belonged to the club. */
+  /* Round 1335: a stay's cheque is that same flat formula, never past KITTY_TOP_SHARE of the club's usual
+     budget or 10m (kittyAllocation), so a small club's good year pays a bonus its size can carry; the
+     carry below is unchanged, and it is capped by the cheque, so it shrinks with it. */
   const allocation = moving
     ? Math.round(club.budget * 1.1)
-    : Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12));
+    : legacy ? Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12))
+    : kittyAllocation({ budget: club.budget, expectation: club.expectation, finish: prevPos, trophies: seasonTrophyCount });
   /* A corrupt or pre-Round 436 save can hand us anything here, so a balance
      that is not a real number carries nothing rather than poisoning the new
      season with NaN. */
@@ -20545,7 +20684,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     season,
     week: 0,
     budget,
-    boardConfidence: moving ? 62 : clamp(55 + (club.expectation - prevPos) * 1.5 + objNet * 2 + promiseNet * 3, 35, 82),
+    boardConfidence: opening,
     sacked: false,
     squad,
     xiIds: [],

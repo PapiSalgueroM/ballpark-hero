@@ -90,7 +90,7 @@ import PotentialProgress from '@/components/soccer-career/PotentialProgress';
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
-const CareerStory = lazy(() => import("@/components/soccer-career/CareerStory").catch(() => { reloadToRetryChunk(); return new Promise<never>(() => undefined); }));
+const CareerStory = lazy(() => import("@/components/soccer-career/CareerStory").catch(() => new Promise<never>(() => undefined)));
 import { BAND_CLASS } from "@/lib/careerRatingBand";
 import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";
 import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";

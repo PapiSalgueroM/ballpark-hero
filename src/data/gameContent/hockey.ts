@@ -945,6 +945,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "Retirement and the legacy score",
         items: [
           "Retirement hits at 40 for skaters, 41 for goalies, or earlier if your rating collapses. Before that, from 31, slipping 8 points off your best (or down to 69) brings the talk: retire now, one more year, or a farewell season. You can walk away after 6 seasons.",
+          "After your playing career, you can go after a coaching job, then choose Retire from coaching and confirm it to end that run with the record and log saved. Undo skip restores a skipped draft showcase before Draft day; on the same draft night screen, Watch it again replays the night once it ends, unless reduced motion is on.",
           "The legacy score weighs Cups, majors (Hart, Norris or Vezina), Conn Smythes, All-Star nods, seasons and production; 500 or more means the Hall of Fame.",
           "Hall of Fame voters weigh the hardware first (Cups, the major awards, All-Star years), then your seasons and your numbers, and a career total near the top of this game's books in a stat your position really piles up (goals, assists, points or a goalie's wins) earns a push of its own, up to 390 legacy points.",
           "Example: take a winger with ordinary numbers and one with the same hardware and more assists than 99 of 100 wingers this game has seen. The second scores at least 300 legacy points more, which can be the whole gap between a long wait and the Hall. A career you already retired keeps the ballot it was told.",

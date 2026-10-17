@@ -19,6 +19,7 @@
  */
 import { SAVE_KEY, leanCareer, worldSeasonLabel, type CareerState } from './clubManager';
 import { eraById, isHistoricEra } from './clubManagerEras';
+import { noSackFrom } from '@/lib/clubManagerStart';
 import { saveFence } from '@/lib/saveFence';
 
 export const SLOT_COUNT = 3;
@@ -37,6 +38,10 @@ export interface SlotSummary {
   eraLabel: string;
   historic: boolean;
   sacked: boolean;
+  /** Round 1342: present, and true, only on a No sacking career. */
+  noSack?: true;
+  /** Round 1343: present, and true, only on a career that has retired. */
+  retired?: true;
 }
 
 export interface SlotView {
@@ -104,6 +109,8 @@ export function summarize(raw: string | null): SlotSummary | null {
       eraLabel: era.label,
       historic: isHistoricEra(eraId ?? undefined),
       sacked: c.sacked === true,
+      ...(noSackFrom(c as CareerState) !== null ? { noSack: true as const } : {}),
+      ...(c.retired && typeof c.retired === 'object' ? { retired: true as const } : {}),
     };
   } catch {
     return null;

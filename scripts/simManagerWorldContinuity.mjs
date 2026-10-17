@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { BASE, BASE_TREE, HEAD, TREE, ROOT, clone, sha, sourceHashes, writeEvidence, uniquePatch, tape, loadEngine } from './qa/managerWorldContinuityKit.mjs';
+import { PRE_AZ_ANCHOR, PRE_AZ_RULE } from './lib/cmOwnClubMarket1339.mjs';
 
 const OUT = path.resolve(process.env.MANAGER_WORLD_CONTINUITY_ARTIFACTS || '.tmp-fx/manager-world-continuity');
 const CONTROL = process.env.MANAGER_WORLD_CONTINUITY_CONTROL || '';
@@ -110,13 +111,23 @@ function neutral(B, input, bridge = false) {
   const reads = { market: B.cm.buildMarket(c), opponent: B.cm.oppRosterFor(c, 'Arsenal'), year: B.cm.worldYear(c) };
   const match = B.cm.playNextEntry(bridge ? { ...clone(c), matchRules: 'base' } : clone(c), { skipHalftime: true, noCoach: true });
   if (bridge && match.state && 'matchRules' in match.state) delete match.state.matchRules;
-  const summer = B.cm.startNextSeason(clone(c));
+  /* Round 1335: and the summer too, since 'base' now also plays the season rules from before that round
+     (legacySeason: the opening, the kitty), which the pinned engine does not know either. */
+  const summer = B.cm.startNextSeason(bridge ? { ...clone(c), matchRules: 'base' } : clone(c));
+  if (bridge && 'matchRules' in summer) delete summer.matchRules;
   assert.equal(B.cm.saveCareer(c), true); const loaded = B.cm.loadCareer();
   return { reads, match, summer, loaded, storage: [...B.store.entries()] };
 }
 async function arm(control) {
   const directory = path.join(OUT, control || 'healthy'); fs.mkdirSync(directory, { recursive: true });
-  const A = await loadEngine({ original: true, label: `${control || 'healthy'}-original` });
+  /* Round 1339, the bridge: since that round no career's market lists a man at the club you manage, seeded or not,
+     and the original engine (before AZ) listed them in every career, so the inactive group's summer (the board's
+     asks and the feed read the market) parts without it. The original arm carries that one rule
+     (scripts/lib/cmOwnClubMarket1339.mjs, its receipt in originalPatches). Its prep engine is this arm too, so the
+     inactive input is a start the rule never moves (the start moment ranks every own club man past 1150, Round
+     1339's section 5), not a byte for byte old save. */
+  const A = await loadEngine({ original: true, label: `${control || 'healthy'}-original`, patch: (file, source, receipts) =>
+    file === CORE ? uniquePatch(source, PRE_AZ_ANCHOR, PRE_AZ_RULE, file, receipts) : source });
   const defect = CONTROLS[control];
   const B = await loadEngine({ label: control || 'healthy', patch: defect
     ? (file, source, receipts) => file === defect.file ? uniquePatch(source, defect.from, defect.to, file, receipts) : source : undefined });
@@ -124,7 +135,7 @@ async function arm(control) {
   const report = { head: HEAD, tree: TREE, base: BASE, baseTree: BASE_TREE, control, groups: [], failures: [],
     originalLoaded: A.loaded, currentLoaded: B.loaded, originalBundle: A.bundleSha256, currentBundle: B.bundleSha256,
     originalScopes: A.scopes, currentScopes: B.scopes,
-    patches: B.receipts, sourceBefore: before, evidence: {}, counts: {}, measurement: null };
+    patches: B.receipts, originalPatches: A.receipts, sourceBefore: before, evidence: {}, counts: {}, measurement: null };
   async function group(id, action) {
     const observations = []; let error = null;
     try { await action(observations); } catch (caught) { error = caught; }
@@ -176,7 +187,8 @@ async function arm(control) {
     for (const row of observations) {
       const { original, current, again, interleaved } = row;
       assert.ok(Number.isSafeInteger(current.value.worldSeed) && current.value.worldSeed >= 0 && current.value.worldSeed <= 0xffffffff);
-      equal(current.value, { ...original.value, worldSeed: current.value.worldSeed }, 'Fresh constructor changes only the declared held seed');
+      /* Round 1335: a new career opens at BOARD_FRESH, which the pinned engine does not know: compared at the old 60. */
+      equal({ ...current.value, boardConfidence: 60 }, { ...original.value, worldSeed: current.value.worldSeed }, 'Fresh constructor changes only the declared held seed');
       equal(current.draws, original.draws, 'Fresh seed uses no extra global draw'); equal(again, current, 'Fresh seed and whole constructor replay exactly');
       assert.equal(row.clock.restored, row.clock.before, 'Each VM clock is restored after the interleaved witness');
       assert.notDeepEqual(interleaved.value.academy.candidates.map(p => p.id), current.value.academy.candidates.map(p => p.id), 'Actual constructor candidate IDs changed across the held clock and other career');

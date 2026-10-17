@@ -11,18 +11,44 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
+type Sport = 'NFL' | 'NBA' | 'MLB' | 'NHL';
+type Action = 'retire' | 'restart' | 'retireCoach';
+
 interface Props {
-  action: 'retire' | 'restart';
-  sport: 'NFL' | 'NBA' | 'MLB' | 'NHL';
+  action: Action;
+  sport: Sport;
   onConfirm: () => void;
   children: ReactElement;
 }
+
+/* Round 1346: one copy table, so the coaching retirement reuses the prompt Round 886 proved
+   (one accept per opening, Cancel first, focus back without scrolling, nothing on unmount). */
+const COPY: Record<Action, (sport: Sport) => { title: string; description: string; cancel: string; confirm: string }> = {
+  retire: () => ({
+    title: 'Retire this player?',
+    description: 'Your seasons and stats stay saved, and you can start or resume coaching afterward. You cannot play another season with this player.',
+    cancel: 'Keep playing',
+    confirm: 'Retire this player',
+  }),
+  restart: sport => ({
+    title: 'Start a new career?',
+    description: `This deletes your saved ${sport} player and coaching career on this device. You cannot undo this.`,
+    cancel: 'Keep this career',
+    confirm: 'Start new career',
+  }),
+  retireCoach: () => ({
+    title: 'Retire from coaching?',
+    description: 'Your coaching record and log stay saved. You cannot coach another season with this career.',
+    cancel: 'Keep coaching',
+    confirm: 'Retire from coaching',
+  }),
+};
 
 export default function USCareerActionConfirm({ action, sport, onConfirm, children }: Props) {
   const [open, setOpen] = useState(false);
   const acceptedRef = useRef(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const retiring = action === 'retire';
+  const copy = COPY[action](sport);
 
   const changeOpen = (nextOpen: boolean) => {
     if (nextOpen) acceptedRef.current = false;
@@ -46,19 +72,15 @@ export default function USCareerActionConfirm({ action, sport, onConfirm, childr
         }}
       >
         <AlertDialogHeader>
-          <AlertDialogTitle>{retiring ? 'Retire this player?' : 'Start a new career?'}</AlertDialogTitle>
-          <AlertDialogDescription>
-            {retiring
-              ? 'Your seasons and stats stay saved, and you can start or resume coaching afterward. You cannot play another season with this player.'
-              : `This deletes your saved ${sport} player and coaching career on this device. You cannot undo this.`}
-          </AlertDialogDescription>
+          <AlertDialogTitle>{copy.title}</AlertDialogTitle>
+          <AlertDialogDescription>{copy.description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className="min-h-11 min-w-11">
-            {retiring ? 'Keep playing' : 'Keep this career'}
+            {copy.cancel}
           </AlertDialogCancel>
           <AlertDialogAction onClick={confirm} className="min-h-11 min-w-11">
-            {retiring ? 'Retire this player' : 'Start new career'}
+            {copy.confirm}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

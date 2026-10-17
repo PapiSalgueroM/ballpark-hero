@@ -21,6 +21,9 @@
  *   base engine, each through both plans;
  *   (c) fresh, the inverse: new careers started by both engines with scripts/lib/cmWorldSeed1250.mjs composed
  *       into this tree's engine (the seed block of startCareer out), through plan (b), byte equal to BASE.
+ * Since Round 1339 the base carries the one own club market rule (no career's market lists a man at the club you
+ * manage; scripts/lib/cmOwnClubMarket1339.mjs withRulePreAz), so the claim is "an unseeded save plays like the tree
+ * without AZ plus that one rule". Without it the deal fleet parts at the rollover's feed (the summer reads the market).
  *
  * CONTROLS, each must go red where it says and nowhere else (exit 1, last line says FIRED):
  *   CM_UNSEEDED_CONTROL=guard      takes the guard out: the deal fleet (b) goes red, the quiet fleet (a) stays
@@ -41,6 +44,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { withoutWorldSeed } from './lib/cmWorldSeed1250.mjs';
+import { withRulePreAz } from './lib/cmOwnClubMarket1339.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* The first parent of merge e of Release AZ: Release AX as published (origin/main b6eb78e7).
@@ -165,7 +169,10 @@ async function journey(E, input, plan, seed, bridge = false) {
     }
     throw new Error('a season did not end in 220 entries');
   };
-  if (input.start) step('start', () => ({ state: M.cm.startCareer(input.start[0], input.start[1]) }));
+  /* Round 1335, the same bridge one step earlier: 'base' now also plays the season rules from before that round
+     (legacySeason, through every finishSeason and startNextSeason step above), and a new career opens at
+     BOARD_FRESH, which startCareer cannot be told about, so the bridged start opens at the old 60. */
+  if (input.start) step('start', () => { const st = M.cm.startCareer(input.start[0], input.start[1]); if (bridge) st.boardConfidence = 60; return { state: st }; });
   else step('load', () => { M.store.clear(); M.store.set(M.cm.SAVE_KEY, input.raw); return { state: M.cm.loadCareer() }; });
   if (!s) throw new Error(`${input.name}: the save did not open`);
   if (plan === 'quiet') {
@@ -256,7 +263,7 @@ const ERAS = ['now', 'era2020', 'era2015', 'era2010', 'era2005'];
 const SEEDS = QUICK ? [0x5eed01] : [0x5eed01, 0x5eed02, 0x5eed03];
 const HOT_DATES = QUICK ? [] : ['2026-10-10', '2026-10-27', '2027-01-19'];
 
-const baseEngine = await engine('base', { base: true });
+const baseEngine = await engine('base', { base: true, edit: text => { try { return withRulePreAz(text); } catch (e) { cannot(e.message); } } });
 const sections = CONTROL === 'noinverse' ? ['fresh'] : CONTROL === 'guard' ? ['quiet', 'deals'] : ['quiet', 'deals', 'fresh'];
 const thisTree = CONTROL === 'guard'
   ? await engine('noguard', { edit: text => { const n = text.split(GUARD).length - 1; if (n !== 1) cannot(`control guard: the guard is in ${ENGINE} ${n} times, it must be exactly once`); return text.replace(GUARD, ''); } })

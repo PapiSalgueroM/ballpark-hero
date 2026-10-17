@@ -132,7 +132,10 @@ export function describeSave(entry: ContinueSave, raw: string | null): string | 
   const parts: string[] = [];
   const name = entry.name ? cleanName(walk(save, entry.name)) : null;
   if (name) parts.push(name);
-  if (entry.ended && walk(save, entry.ended.at) === true) {
+  const retired = entry.path === '/club-manager' && walk(save, ['retired']);
+  if (retired && typeof retired === 'object' && !Array.isArray(retired)) {
+    parts.push('retired');
+  } else if (entry.ended && walk(save, entry.ended.at) === true) {
     parts.push(entry.ended.say);
   } else if (entry.count) {
     const n = cleanCount(walk(save, entry.count.at));
