@@ -1,0 +1,4 @@
+#!build
+#!playwright
+#!serial
+main-both: export SIM_NETWORK=offline ENGINES=chromium VITEST_MAX_FORKS=1 VITEST_MIN_FORKS=1; R=$PWD; git worktree add /tmp/main 1ec77177 > /dev/null 2>&1 && ln -s "$R/node_modules" /tmp/main/node_modules && cd /tmp/main && node_modules/.bin/vite build > /tmp/bb.log 2>&1 || { tail -20 /tmp/bb.log; exit 9; }; mkdir -p career-decision-outcome-artifacts career-season-review-artifacts; node scripts/qa/careerDecisionOutcome1009.mjs > /tmp/d1009b.log 2>&1; a=$?; node scripts/qa/careerSeasonReview1008.mjs > /tmp/s1008b.log 2>&1; b=$?; echo "MAIN d1009 exit=$a"; tail -3 /tmp/d1009b.log; node "$R/.rc/x/printErr.mjs" career-decision-outcome-artifacts/native/report.json; echo "MAIN s1008 exit=$b"; tail -3 /tmp/s1008b.log; node "$R/.rc/x/printErr.mjs" career-season-review-artifacts/native/report.json; echo "MAIN d1009=$a s1008=$b"; exit $(( a + b ))
