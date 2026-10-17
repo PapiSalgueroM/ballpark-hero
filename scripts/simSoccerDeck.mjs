@@ -135,8 +135,13 @@
      pressure  every deck move times ten (the pack, in memory); section 8
                fails on a band.
      freetraining every training option's time cost stripped and its
-               training doubled (the pack, in memory, Round 1504); section 8
-               fails on the ruling's legacy band.
+               training doubled (the pack, in memory, Round 1504), with the
+               bind rule that refuses free training off (soccerDeck.ts, in
+               memory) so the free pack deals; section 8 fails on the
+               ruling's legacy band.
+     onefree   the first training option of the shipped pack loses its time
+               cost (the pack, in memory; review of 2026-10-17): the bind
+               check refuses the pack, so section 1 fails on the shipped pack.
      noresolve the engine's catalog spread of the pending deck card is gone
                (in memory): a saved deck card is skipped here too; section 9
                fails.
@@ -211,7 +216,8 @@ const CONTROLS = {
   mathrandom: { breaks: '7', file: DECK, edits: [['  return deckToRandomEvents(pack, [gmTake(eligible, keyedRng(key))]);', '  return deckToRandomEvents(pack, [gmTake(eligible, Math.random)]); /* mathrandom control */']] },
   keyseason: { breaks: '7', file: ENGINE, edits: [['  picked.unshift(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|${season}|deckslot`, picked));', '  picked.unshift(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|deckslot`, picked)); /* keyseason control */']] },
   pressure: { breaks: '8', file: null, edits: null },
-  freetraining: { breaks: '8', file: null, edits: null },
+  freetraining: { breaks: '8', file: DECK, edits: [['      else if (costs < gains) out.push(costs === 0 ? `${e.id}: "${c.label}" trains ${gains} and pays no cost` : `${e.id}: "${c.label}" trains ${gains} and pays only ${costs}`);\n', '      /* freetraining control: the bind rule on free training is off */\n']] },
+  onefree: { breaks: '1', file: null, edits: null },
   noresolve: { breaks: '9', file: ENGINE, edits: [['    ...soccerDeckPending(state),\n', '    /* noresolve control */\n']] },
   eager: { breaks: '10', file: GATE, edits: null },
   caller: { breaks: '10', file: ENGINE, edits: null },
@@ -413,7 +419,18 @@ SECTION = '1';
 console.log('1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing');
 if (runs(1)) {
   const D = H.deck;
-  const shipped = D.soccerDeckProblems(SHIPPED);
+  /* onefree: the first option that pays a training cost loses it, as a later pack edit could (review of 2026-10-17) */
+  let S1 = SHIPPED;
+  if (CONTROL === 'onefree') {
+    const at = SHIPPED.events.findIndex(e => e.choices.some(c => Object.values(c.fx ?? {}).some(v => v < 0)));
+    if (at < 0) { console.error('onefree control: no option of the shipped pack pays a training cost, refusing to run'); process.exit(2); }
+    const e = SHIPPED.events[at];
+    const ci = e.choices.findIndex(c => Object.values(c.fx ?? {}).some(v => v < 0));
+    const choices = e.choices.map((c, i) => (i === ci ? { ...c, fx: Object.fromEntries(Object.entries(c.fx).filter(([, v]) => v >= 0)) } : c));
+    S1 = { ...SHIPPED, events: SHIPPED.events.map((x, i) => (i === at ? { ...e, choices } : x)) };
+    console.log(`   onefree control: ${e.id} "${e.choices[ci].label}" loses its cost (${JSON.stringify(e.choices[ci].fx)} becomes ${JSON.stringify(choices[ci].fx)})`);
+  }
+  const shipped = D.soccerDeckProblems(S1);
   if (shipped.length) fail(`the shipped pack has ${shipped.length} problems: ${shipped.slice(0, 3).join('; ')}`);
   else ok(`the shipped pack (${SHIPPED.events.length} cards) has no problem`);
   /* The titles live outside the kit's frozen words and its legal scan, so they are scanned here with the kit's own
@@ -446,9 +463,9 @@ if (runs(1)) {
   else ok(`${Object.keys(SHIPPED.titles).length} titles: no quote mark, dash, first person, conduct or private word, or any of ${REAL.size} real names`);
   /* the breakages' base: the deal sections' pack plus a keeper and a forward training card made here */
   const KEEPER = { id: '798', beat: 'summer', from: 'Your keeper coach', emoji: '🧤', cooldown: 3, when: [{ fact: 'pos', op: '<', value: 1 }], text: 'Crosses.',
-    choices: [{ label: 'Work on it', reply: 'You work on it.', karma: 0, fx: { gk_aerial_command: 1 } }, { label: 'Leave it', reply: 'You leave it.', karma: 0 }] };
+    choices: [{ label: 'Work on it', reply: 'You work on it.', karma: 0, fx: { gk_aerial_command: 1, gk_positioning: -1 } }, { label: 'Leave it', reply: 'You leave it.', karma: 0 }] };
   const FORWARD = { id: '797', beat: 'summer', from: 'The coaching staff', emoji: '⚽', cooldown: 3, when: [{ fact: 'pos', op: '>=', value: 3 }], text: 'Penalties.',
-    choices: [{ label: 'Put your name down', reply: 'You put your name down.', karma: 0, fx: { t_shooting: 1 } }, { label: 'Leave it', reply: 'You leave it.', karma: 0 }] };
+    choices: [{ label: 'Put your name down', reply: 'You put your name down.', karma: 0, fx: { t_shooting: 1, t_pace: -1 } }, { label: 'Leave it', reply: 'You leave it.', karma: 0 }] };
   const BB = { ...PACK, events: [...PACK.events, KEEPER, FORWARD], titles: { ...PACK.titles, 797: 'Penalties', 798: 'Crosses' }, kinds: { ...PACK.kinds, 797: 'positive', 798: 'positive' } };
   delete BB.pressure;
   const situation = BB.events.find(e => !(e.when ?? []).some(c => c.fact === 'pos'));
@@ -462,6 +479,7 @@ if (runs(1)) {
     'a training key on a situation card': opt(situation.id, { fx: { t_pace: 1 } }),
     'a training value of 0.5': opt('797', { fx: { t_shooting: 0.5 } }),
     'a cost with no training': opt('797', { fx: { t_pace: -1 } }), 'a cost above the training': opt('797', { fx: { t_shooting: 1, t_pace: -2 } }),
+    'training with no cost': opt('797', { fx: { t_shooting: 1 } }), 'a cost below the training': opt('797', { fx: { t_shooting: 2, t_pace: -1 } }),
     'id 650': { ...BB, events: BB.events.map(e => (e.id === '797' ? { ...e, id: '650' } : e)), titles: { ...BB.titles, 650: 'x' }, kinds: { ...BB.kinds, 650: 'positive' } },
     'a duplicate id': { ...BB, events: [...BB.events, FORWARD] },
     'a missing title': { ...BB, titles: without(BB.titles, '797') },

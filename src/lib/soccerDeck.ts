@@ -40,7 +40,9 @@
    of his normal work, and the button prints both. Before this a card raised
    the recorded legacy score whatever the answer (simSoccerDeck section 8).
    A cost lands only as far as the training it pays for landed, so at the
-   ceiling neither moves.
+   ceiling neither moves. soccerDeckProblems refuses an option whose skill
+   costs differ from what it trains, so a pack with free training deals
+   nothing (simSoccerDeck section 1 and its onefree control).
 
    WHAT LANDED. Every option that moves something appends ONE line to the
    season log naming what landed, which can be less than the button printed
@@ -226,9 +228,11 @@ export function soccerDeckProblems(pack: SoccerDeckPack): string[] {
         if (SOCCER_TRAINING_KEYS[k].keeper && !keeper) out.push(`${e.id}: "${c.label}" trains a keeper skill (${k}) on a card an outfield player can be dealt`);
         if (!SOCCER_TRAINING_KEYS[k].keeper && !outfield) out.push(`${e.id}: "${c.label}" trains an outfield skill (${k}) on a card a keeper can be dealt`);
       }
-      /* Round 1504: a cost is the time a training option takes from another skill, so it never comes alone or bigger */
+      /* Round 1504: a cost is the time a training option takes from another skill, so it never comes alone or bigger,
+         and training never comes without it (the lead's ruling 3; the help line and What's New say so) */
       if (costs > 0 && gains === 0) out.push(`${e.id}: "${c.label}" takes a skill down and trains nothing`);
       else if (costs > gains) out.push(`${e.id}: "${c.label}" takes ${costs} from skills and trains only ${gains}`);
+      else if (costs < gains) out.push(costs === 0 ? `${e.id}: "${c.label}" trains ${gains} and pays no cost` : `${e.id}: "${c.label}" trains ${gains} and pays only ${costs}`);
     }
   }
   return out;
