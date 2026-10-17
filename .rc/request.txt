@@ -1,0 +1,3 @@
+wu-1: WORLD_UCL_ONLY=1 node scripts/simWorldUcl.mjs
+c-nocustomexit: WORLD_UCL_CONTROL=nocustomexit node scripts/simWorldUcl.mjs
+anchors: node scripts/simHarnessAnchors.mjs
