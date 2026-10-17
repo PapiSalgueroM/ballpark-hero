@@ -1,0 +1,95 @@
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
++ actual - expected
+... Skipped lines
+
+  {
+    loaded: {
+      academy: {
+        candidates: [
+          {
+...
+          {
++           deckId: 'injurySupport',
++           from: 'The medical team',
++           id: 'desk-1-0-injurySupport',
+-           deckId: 'finesKitty',
+-           from: 'The head coach',
+-           id: 'desk-1-0-finesKitty',
+            kind: 'situation',
+            options: [
+              {
+                effect: {
++                 delta: 6,
+-                 delta: 2,
+                  kind: 'move',
++                 meter: 'morale'
+-                 meter: 'press'
+                },
++               label: 'Check in with him (his morale +6)'
+-               label: "Give it to the club's community partner (press mood +2)"
+              },
+              {
+                effect: {
++                 delta: 2,
+-                 delta: 0.1,
+                  kind: 'move',
++                 meter: 'board'
+-                 meter: 'budget'
+                },
++               label: 'Update the board (board patience +2)'
+-               label: 'Put it in the transfer pot (£100k into the transfer budget)'
+              },
+              {
+                effect: {
+                  kind: 'none'
+                },
++               label: 'Leave it with medical staff (nothing changes)'
+-               label: 'Leave it in the kitty (nothing changes)'
+              }
+            ],
++           playerId: 'p-thierno-barry',
++           playerName: 'Thierno Barry',
+            season: 1,
++           text: 'Thierno Barry had 2 injury weeks left when this note was written. Staff suggest a check in or a board update. Neither changes the recovery time.',
+-           text: "The squad's fines kitty has £100k in it from late arrivals and phones in meetings. The head coach asks where it should go. The local paper always runs it when it goes to charity.",
+            week: 0
+          }
+        ],
+        eraId: 'now',
+        facilities: {
+
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 4,
+...
+        id: 'league',
++       label: 'Win La Liga',
+-       label: 'Win the La Liga',
+        target: 1
+      },
+      {
+        id: 'cup',
+        label: 'Win the Copa del Rey',
+
+PASS [healthy] identity
+PASS [healthy] buy-job
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+2 !== 0
+
+    at arm (file:///tmp/base/scripts/simManagerWorldContinuity.mjs:493:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///tmp/base/scripts/simManagerWorldContinuity.mjs:501:24

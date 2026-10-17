@@ -1,0 +1,9 @@
+simManagerWorldContinuity: node scripts/simManagerWorldContinuity.mjs
+continuity-base: git worktree add -q /tmp/base d8aaa4cb && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node scripts/simManagerWorldContinuity.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+unseeded-base: git worktree add -q /tmp/base2 d8aaa4cb && ln -s "$PWD/node_modules" /tmp/base2/node_modules && cd /tmp/base2 && node scripts/simCmUnseededWorld.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+savesize-base: git worktree add -q /tmp/base3 d8aaa4cb && ln -s "$PWD/node_modules" /tmp/base3/node_modules && cd /tmp/base3 && node scripts/simClubManagerSaveSize.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simUclSeasonOne: node scripts/simUclSeasonOne.mjs

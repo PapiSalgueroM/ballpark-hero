@@ -1,0 +1,9 @@
+simManagerWorldContinuity exit=1 32s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:507:24
+continuity-base exit=1 35s |     at async file:///tmp/base/scripts/simManagerWorldContinuity.mjs:501:24
+simCmShootoutOrder exit=0 30s | simCmShootoutOrder: all sections passed
+simClubManagerSaveSize exit=0 69s | simClubManagerSaveSize: all sections green
+simCmUnseededWorld exit=1 172s | simCmUnseededWorld: 112 FAILURE(S)
+unseeded-base exit=1 168s | simCmUnseededWorld: 112 FAILURE(S)
+savesize-base exit=0 70s | simClubManagerSaveSize: all sections green
+simUclSeasonOne exit=0 14s | simUclSeasonOne: all green
+simClubManagerSlots exit=0 64s | simClubManagerSlots: all sections green
