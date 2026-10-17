@@ -1,3 +1,8 @@
+## Codex Round1393: retained transfer deals pager READY for integration
+
+Recorded 2026-10-17 UTC. DraftPR310 is on qualified296/6465. Tested0186218e/run38989303460/job117267856824 SUCCESS:6normal/2precise originalfault+4preserve/6restored, old15, actualtypes/build15readers, four served widths andall14unchanged caps/holds pass. Manager604.4/606K, Soccer832.3/834, Hot Seat622.7/624, Deadline632.6/634. Original fullrawc0b46dd0 equals qualifiedbaseline5eb; restored2ae98081 equalsnormal. First7dc method failure is preserved, its raw-only repair changed no assertion.
+
+Physicalartifact12084009417/2385a338 is closed. Root4748source/4748validated/782dist ZIP closure5db5d2bb and four fresh visual inspections pass; independent semantic receipt920daeff verifies raw cases,4journeys,8PNG,15oldtests and hold memberships. Only the actual generated sitemap differs and is adopted. Final source must match that validated source except3closingdocs, then push. Broader automatic38989307294 remains pending, no completed/full-suite credit. This exposes all retained filtered rows, not evicted history or former-job transactions. Claude I owns integration/main/publication and incoming joined-source qualification. No live claim and no additional gate on urgent308 or BI. Full evidence and limits: docs/audits/manager-saved-deals-paging.md.
 ## 2026-10-16: Club Manager own transfer log candidate
 
 Codex branch `codex/manager-own-transfer-log`: the Latest transfer tab can filter saved purchases, sales and loans
