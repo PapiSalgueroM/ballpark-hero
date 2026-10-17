@@ -1,0 +1,9 @@
+simDailyDeals exit=0 7s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+dd-world exit=1 9s | simDailyDeals: CONTROL world FIRED: exactly its 12 watching dates went red on "the state carries a watched Champions League" and nothing else moved
+dd-worlddeadline exit=1 8s | simDailyDeals: CONTROL worlddeadline FIRED: exactly its 8 watching dates went red on "the state carries a watched Champions League" and nothing else moved
+dd-seed exit=1 9s | simDailyDeals: CONTROL seed FIRED: all 12 of its dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+tsc exit=0 137s | 
+vitest-cm exit=0 191s |    Duration  190.44s (transform 8.96s, setup 3.89s, collect 33.78s, tests 311.32s, environment 28.26s, prepare 6.28s)
+golden-head exit=0 1s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+proof-part-eval exit=0 303s | proofWorldUclFleet: GREEN, 60 journeys and 6483 steps byte equal to d8aaa4cb, draws equal
+proof-watch-eval exit=0 239s | proofWorldUclFleet: GREEN, 45 journeys and 6169 steps byte equal to d8aaa4cb (watchers without worldComps), draws equal

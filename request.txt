@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/lib/worldCompetition.test.ts src/lib/clubManager src/test/clubManager --testTimeout=300000 --hookTimeout=120000
+simDailyDeals: node scripts/simDailyDeals.mjs
+dd-world: DAILY_DEALS_CONTROL=world node scripts/simDailyDeals.mjs
+dd-worlddeadline: DAILY_DEALS_CONTROL=worlddeadline node scripts/simDailyDeals.mjs
+dd-seed: DAILY_DEALS_CONTROL=seed node scripts/simDailyDeals.mjs
+proof-part-eval: node scripts/proofWorldUclFleet.mjs --base d8aaa4cb --fleet participants --coach both --eval
+proof-watch-eval: node scripts/proofWorldUclFleet.mjs --base d8aaa4cb --fleet watchers --coach nocoach --strip worldComps --eval
+golden-head: node scripts/recordWorldTieGolden1347.mjs --ref HEAD --check
