@@ -3,9 +3,10 @@ import { cn } from '@/lib/utils';
 import type { CareerState } from '@/lib/clubManager';
 import {
   CURRENCIES, CURRENCY_CODES, STRICTNESS_INFO, STRICTNESS_MAX, STRICTNESS_MIN,
-  noSackFrom, startOptionsOf,
+  levelFrom, noSackFrom, startOptionsOf,
 } from '@/lib/clubManagerStart';
 import type { CurrencyCode } from '@/lib/clubManagerStart';
+import { DIFFICULTY_INFO } from '@/lib/managerDifficulty';
 
 interface StartOptionsScreenProps {
   career: CareerState;
@@ -34,10 +35,22 @@ export function StartOptionsScreen({ career, onCurrency, onNationJobs, onStrictn
   /* Round 1342: the first tap asks, the second switches it on. */
   const [arming, setArming] = useState(false);
   const noSackSince = noSackFrom(career);
+  const level = levelFrom(career);
   const outOfWork = career.sacked || !!career.wilderness;
 
   return (
     <div className="space-y-3" data-cm-start-options>
+      {/* Round 1501: how hard. Read only: picked on the Dugout step and fixed for the life of the career. */}
+      <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-2" data-cm-level-option={level}>
+        <div className="flex items-center justify-between gap-2">
+          <div className="text-xs font-bold text-foreground">🎚️ How hard</div>
+          <div className="text-xs text-gold font-bold">{DIFFICULTY_INFO[level].label}</div>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          {DIFFICULTY_INFO[level].blurb} Picked when this career began, and it stays that way. Negotiation strictness below is a separate setting.
+        </p>
+      </div>
+
       {/* Round 1342: No sacking. On for good once it is on; refused while out of work, so it can never undo a sack. */}
       <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-2" data-cm-nosack-option={noSackSince !== null ? 'on' : 'off'}>
         <div className="flex items-center justify-between gap-2">

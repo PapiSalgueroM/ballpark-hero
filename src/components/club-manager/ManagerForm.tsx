@@ -9,6 +9,8 @@ import HomelandSelect from '@/components/club-manager/HomelandSelect';
 import { MIDSEASON_ENTRY } from '@/lib/clubManagerCalendar';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import type { CareerSetup } from '@/lib/clubManagerStart';
+import { DIFFICULTY_INFO, DIFFICULTY_LEVELS } from '@/lib/managerDifficulty';
+import type { DifficultyLevel } from '@/lib/managerDifficulty';
 
 /**
  * Round 303, off the owner's tweaks list: "customizable created manager".
@@ -49,9 +51,13 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
   const [triedSubmit, setTriedSubmit] = useState(false);
   /* Round 1342: No sacking, off unless he switches it on. */
   const [noSack, setNoSack] = useState(false);
+  /* Round 1501: how hard, Normal unless he picks another. Fixed for the career once it starts. */
+  const [level, setLevel] = useState<DifficultyLevel>('normal');
 
   const nameError = useMemo(() => validateManagerName(name), [name]);
-  const setup: CareerSetup | undefined = noSack ? { noSack: true } : undefined;
+  const setup: CareerSetup | undefined = noSack || level !== 'normal'
+    ? { ...(noSack ? { noSack: true } : {}), ...(level !== 'normal' ? { level } : {}) }
+    : undefined;
 
   const create = () => {
     setTriedSubmit(true);
@@ -202,6 +208,30 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
             page does not move when it is pressed. */}
         <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-2" data-cm-career-options>
           <div className="text-xs font-bold text-foreground">⚙️ Career options</div>
+          {/* Round 1501: how hard. Three tiles in one row, Normal pressed; the line under them says what the
+              pressed one does and keeps two lines of room, so pressing a tile never moves the page. */}
+          <div className="text-xs text-muted-foreground">How hard do you want it?</div>
+          <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="How hard" data-cm-level-tiles={level}>
+            {DIFFICULTY_LEVELS.map(lv => (
+              <button
+                key={lv}
+                type="button"
+                role="radio"
+                aria-checked={level === lv}
+                onClick={() => setLevel(lv)}
+                data-cm-level-tile={lv}
+                className={cn(
+                  'min-h-[44px] rounded-xl border px-2 py-2 text-sm font-bold transition-colors',
+                  level === lv ? 'border-primary bg-primary/10 text-foreground' : 'border-border bg-background text-muted-foreground hover:border-primary/60',
+                )}
+              >
+                {DIFFICULTY_INFO[lv].label}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground min-h-[2rem]" data-cm-level-blurb>
+            {DIFFICULTY_INFO[level].blurb} Picked once, it stays for this career.
+          </p>
           <button
             type="button"
             role="switch"
