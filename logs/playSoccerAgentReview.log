@@ -1,0 +1,55 @@
+sim first: PASS agent review product and proof source bytes held.
+FAIL 320-cousin page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:481
+FAIL 320-shark page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:481
+FAIL 320-super page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:481
+FAIL 320-self page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:481
+FAIL 390-cousin page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:481
+FAIL 390-shark page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:481
+FAIL 390-super page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:481
+FAIL 390-self page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:481
+FAIL 1280-cousin page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:481
+FAIL 1280-shark page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:481
+FAIL 1280-super page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:481
+FAIL 1280-self page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:481
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 3
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:129:45 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 3,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
