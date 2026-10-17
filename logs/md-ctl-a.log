@@ -1,0 +1,5 @@
+neutralaway: 43 lines, last: simCmMatchDay: CONTROL neutralaway FIRED (232 failures, section(s) 1, 4, 5, 7)
+oldorder: 43 lines, last: simCmMatchDay: CONTROL oldorder FIRED (22834 failures, section(s) 2, 3, 4, 5)
+truncate: 25 lines, last: simCmMatchDay: CONTROL truncate FIRED (15799 failures, section(s) 3)
+numbers: 25 lines, last: simCmMatchDay: CONTROL numbers FIRED (15958 failures, section(s) 6)
+controls (each must be 1): neutralaway=1 oldorder=1 truncate=1 numbers=1

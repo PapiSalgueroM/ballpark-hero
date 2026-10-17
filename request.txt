@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/cmMatchDisplay.test.ts src/test/clubManagerVarScreen.test.tsx src/test/cmReportBoardWord.test.tsx src/test/liveSimMotion.test.tsx src/test/managerHalftimeLineups.test.tsx src/test/managerScorerMarks.test.tsx src/test/pitchOwnGoal.test.tsx src/test/clubManagerDifficultyPick.test.tsx --testTimeout=300000 --hookTimeout=120000
+matchday: MATCHDAY_BASE=c06f27b5 node scripts/simCmMatchDay.mjs
+md-ctl-a: ok=0; r=""; for k in neutralaway oldorder truncate numbers; do MATCHDAY_BASE=c06f27b5 MATCHDAY_CONTROL=$k node scripts/simCmMatchDay.mjs > /tmp/mda-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: $(grep -c . /tmp/mda-$k.log) lines, last: $(tail -1 /tmp/mda-$k.log | cut -c1-220)"; done; echo "controls (each must be 1):$r"; exit $ok
+md-ctl-b: ok=0; r=""; for k in homeflip barorder greenfirst neutrallive; do MATCHDAY_BASE=c06f27b5 MATCHDAY_CONTROL=$k node scripts/simCmMatchDay.mjs > /tmp/mdb-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: $(grep -c . /tmp/mdb-$k.log) lines, last: $(tail -1 /tmp/mdb-$k.log | cut -c1-220)"; done; echo "controls (each must be 1):$r"; exit $ok
+matchscreen: node scripts/simMatchScreen.mjs
+matchcentre: node scripts/simCmMatchCentre.mjs
+stoppage: node scripts/simCmStoppageTime.mjs
+motion: node scripts/simLiveSimMotion.mjs
+plans: node scripts/simManagerMatchPlans.mjs

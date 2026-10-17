@@ -1,0 +1,5 @@
+homeflip: 55 lines, last: simCmMatchDay: CONTROL homeflip FIRED (38090 failures, section(s) 1, 2, 3, 4, 5, 7)
+barorder: 32 lines, last: simCmMatchDay: CONTROL barorder FIRED (4736 failures, section(s) 2, 4)
+greenfirst: 26 lines, last: simCmMatchDay: CONTROL greenfirst FIRED (320 failures, section(s) 4)
+neutrallive: 31 lines, last: simCmMatchDay: CONTROL neutrallive FIRED (3824 failures, section(s) 4, 7)
+controls (each must be 1): homeflip=1 barorder=1 greenfirst=1 neutrallive=1
