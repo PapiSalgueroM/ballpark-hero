@@ -96,3 +96,10 @@ the league table's goals pair, not a match screen.
   9337): no first name alone is produced. The agnome names print as ruled ("Pedro Neto", "José Neto", "Martim
   Neto", "Carlos Júnior", "Luiz Júnior", "Mauro Júnior", "Roque Júnior", "Vinicius Junior", "Robinho Junior",
   "Amoako Junior"); the generational suffixes drop ("Cásseres", "Markanich", "Eremenko").
+- The mark (correction of the fix above): r1340-m1's probe found white-space nowrap wraps exactly the same entries as
+  pre (110 of 1610 over widths 60 to 220 px), because every one of them is a mark that has no room on the name's last
+  line: "Mamardashvili (O.G)" in bold is wider than a 320 phone's timeline column. No white-space rule keeps it up
+  without splitting the surname, so the class is back to the base's pre, and playCmMatchDay's mark check now passes
+  a mark that starts the very next line only when the last line plus the mark are wider than the column (printed as
+  "on the next line, no room on the last"); a mark off its line with room on it is still red. The probe (v2, sent
+  with the walk, never committed) proves the rule on the real Entry markup and catches a display:block control.

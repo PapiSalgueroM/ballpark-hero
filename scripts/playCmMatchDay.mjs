@@ -18,7 +18,10 @@
    bar, the momentum legend, the shots row, the best columns, the timeline's header and every row's columns).
    Every two sided block must read home side first, read by its data attributes, my club picked out in green.
    The timeline: every name whole (its box's scrollWidth at most its clientWidth plus 1, never an ellipsis), every
-   (P) or (O.G) mark on its name's last line, the toggle at least 44 px tall. The page never jumps: window.scrollY
+   (P) or (O.G) mark on its name's last line (or, only when his last word and the mark together are wider than the
+   column, at the start of the very next line: r1340-F4 met one at 320 and r1340-m1's probe showed no white-space
+   rule keeps it up without splitting the name; how many is printed), the toggle at least 44 px tall. The page
+   never jumps: window.scrollY
    is read before and after every step that is not a navigation (a settle on the report, the toggle) and must not
    move; the document height of each screen is printed. The reduced motion pass also reads
    document.getAnimations() on the report card and the timeline once the verdict is in, before the toggle is
@@ -245,7 +248,13 @@ const readNames = page => page.evaluate(() => {
     const lines = name ? [...name.getClientRects()] : [];
     const last = lines[lines.length - 1];
     const r = m.getBoundingClientRect();
-    return { name: name?.textContent.trim() ?? null, onLast: !!last && r.top < last.bottom && r.bottom > last.top, lines: lines.length };
+    const onLast = !!last && r.top < last.bottom && r.bottom > last.top;
+    /* The one way off the last line that is not a fault: his last word and the mark together are wider than the
+       column, so the mark starts the very next line (no white-space rule can avoid it without splitting the name). */
+    const cell = m.closest('[data-cm-tl-entry]')?.parentElement;
+    const room = cell ? cell.clientWidth : Infinity;
+    const forced = !onLast && !!last && r.top >= last.bottom - 1 && r.top < last.bottom + last.height && last.width + r.width > room + 0.5;
+    return { name: name?.textContent.trim() ?? null, onLast, forced, lines: lines.length };
   });
   const toggle = document.querySelector('[data-cm-tl-toggle]');
   return { names, marks, toggle: toggle ? toggle.getBoundingClientRect().height : null };
@@ -423,8 +432,9 @@ async function walk(save, width, height, reduced) {
     if (cut.length && CONTROL === 'cut') fired.cut += 1;
     assert(tl.names.length > 0 && cut.length === 0, `${cut.length} of ${tl.names.length} timeline names are cut: ${cut.slice(0, 3).map(n => n.text).join('; ')}`);
     if (CONTROL === 'cut') return row;
-    const offLine = tl.marks.filter(m => !m.onLast);
-    assert(offLine.length === 0, `${offLine.length} of ${tl.marks.length} marks are off their name's last line: ${offLine.slice(0, 3).map(m => m.name).join('; ')}`);
+    const offLine = tl.marks.filter(m => !m.onLast && !m.forced);
+    assert(offLine.length === 0, `${offLine.length} of ${tl.marks.length} marks are off their name's last line with room for them on it: ${offLine.slice(0, 3).map(m => m.name).join('; ')}`);
+    row.forced = tl.marks.filter(m => m.forced).length;
     if (tl.toggle !== null) {
       assert(tl.toggle >= 44, `the timeline toggle is ${tl.toggle.toFixed(1)} px tall`);
       y0 = await scrollYOf(page);
@@ -639,7 +649,7 @@ const t0 = Date.now();
 for (const [save, w, h, rm] of runs) {
   const row = await walk(save, w, h, rm);
   heights.push(row);
-  console.log(`${row.id}: heights ${Object.entries(row.screens).map(([k, v]) => `${k} ${v}`).join(', ')}${row.names !== undefined ? `; ${row.names} timeline names, ${row.marks} marks` : ''}`);
+  console.log(`${row.id}: heights ${Object.entries(row.screens).map(([k, v]) => `${k} ${v}`).join(', ')}${row.names !== undefined ? `; ${row.names} timeline names, ${row.marks} marks (${row.forced ?? 0} on the next line, no room on the last)` : ''}`);
 }
 if (!CONTROL || CONTROL === 'fullname') await walkTile(320, 640);
 await browser.close();

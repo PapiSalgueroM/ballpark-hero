@@ -27,9 +27,10 @@ function Entry({ row, mine, end }: { row: TimelineRow; mine: boolean; end: boole
       </span>
       {/* Round 1146: the mark is its own piece outside the name's span, never inside it. Round 1340: with nothing
           cut any more it rides at the end of the name's last line. A marked goal has no assist (a penalty and an
-          own goal never do), so nothing follows it. Its leading space sits inside this nowrap span, so the line
-          can not break before the mark: at 320 a pre span let "(O.G)" drop alone onto a line of its own. */}
-      {row.mark && <span className="shrink-0 whitespace-nowrap" data-cm-tl-mark="1">{row.mark}</span>}
+          own goal never do), so nothing follows it. Only when his last word and the mark are wider than the column
+          (a long surname in bold at 320) does the mark start the line under it, which no white-space rule can
+          avoid without splitting the name (r1340-m1's probe: pre and nowrap wrap the same entries). */}
+      {row.mark && <span className="shrink-0 whitespace-pre" data-cm-tl-mark="1">{row.mark}</span>}
       {(row.gen || row.secondGen) && <MadeUpTag className="ml-1" />}
     </span>
   );
