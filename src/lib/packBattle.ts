@@ -1,4 +1,4 @@
-import { gameQueryClient as supabase } from '@/lib/gameQueryClient';
+import { supabase } from '@/integrations/supabase/client';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 import { dailyPrngSeed, dateSeed, getTodayET } from '@/lib/dateUtils';
 

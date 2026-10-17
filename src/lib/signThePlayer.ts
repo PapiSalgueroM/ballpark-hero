@@ -1,4 +1,4 @@
-import { gameQueryClient as supabase } from '@/lib/gameQueryClient';
+import { supabase } from '@/integrations/supabase/client';
 import { dailyPrngSeed, dateSeed, getTodayET } from '@/lib/dateUtils';
 import { FORMATIONS, type Formation, type FormationSlot } from '@/lib/squadDeal';
 import type { Position } from '@/types/game';

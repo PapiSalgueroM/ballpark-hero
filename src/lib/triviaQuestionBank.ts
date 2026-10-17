@@ -1,4 +1,4 @@
-import { gameQueryClient as supabase } from '@/lib/gameQueryClient';
+import { supabase } from '@/integrations/supabase/client';
 import { dateSeed } from '@/lib/dateUtils';
 import { flagFor, fmtCompactUsd } from '@/lib/dealPlayers';
 
