@@ -1,0 +1,9 @@
+simUsDirtyMoney: node scripts/simUsDirtyMoney.mjs
+ctl-cap: US_DIRTY_MONEY_CONTROL=cap node scripts/simUsDirtyMoney.mjs
+ctl-farm: US_DIRTY_MONEY_CONTROL=farm node scripts/simUsDirtyMoney.mjs
+ctl-flat: US_DIRTY_MONEY_CONTROL=flat node scripts/simUsDirtyMoney.mjs
+ctl-cool8: US_DIRTY_MONEY_CONTROL=cool8 node scripts/simUsDirtyMoney.mjs
+ctl-words: US_DIRTY_MONEY_CONTROL=words node scripts/simUsDirtyMoney.mjs
+ctl-deck: US_DIRTY_MONEY_CONTROL=deck node scripts/simUsDirtyMoney.mjs
+simUsDirtyMoney-big: US_DIRTY_MONEY_CAREERS=360 US_DIRTY_MONEY_AB=800 node scripts/simUsDirtyMoney.mjs
+simUsDirtyMoney-base: BASE=8293c758f4284d21baaa2320383cfd5cb5bd4944 node scripts/simUsDirtyMoney.mjs
