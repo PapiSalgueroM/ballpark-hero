@@ -1,0 +1,5 @@
+vitest exit=0 8s |    Duration  7.73s (transform 3.47s, setup 550ms, collect 9.41s, tests 4.03s, environment 2.15s, prepare 684ms)
+wm-seedclose exit=1 68s | simCmWorldMoves: control seedclose FIRED: section 13 red (168)
+tsc exit=0 101s | 
+wm-13-14 exit=0 135s | simCmWorldMoves: green, sections 0, 2, 3, 13, 14 held
+wm-seedcarry exit=1 63s | simCmWorldMoves: control seedcarry FIRED: section 14 red (565)

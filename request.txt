@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerAdoption.test.ts src/lib/clubManagerWorldMoves.test.ts src/lib/clubManagerWorldRoster.test.ts --testTimeout=300000 --hookTimeout=120000
+wm-13-14: CM_WORLD_MOVES_SECTIONS=0,2,3,13,14 node scripts/simCmWorldMoves.mjs
+wm-seedclose: CM_WORLD_MOVES_CONTROL=seedclose CM_WORLD_MOVES_SECTIONS=0,2,13 node scripts/simCmWorldMoves.mjs
+wm-seedcarry: CM_WORLD_MOVES_CONTROL=seedcarry CM_WORLD_MOVES_SECTIONS=0,3,14 node scripts/simCmWorldMoves.mjs
