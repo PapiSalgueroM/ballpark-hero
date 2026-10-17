@@ -1,0 +1,13 @@
+c-meindirect exit=1 109s | simWorldUcl: control meindirect FIRED (2 failures, all its own)
+c-field32 exit=1 110s | simWorldUcl: control field32 FIRED (32 failures, all its own)
+c-dropnight exit=1 104s | simWorldUcl: control dropnight FIRED (8184 failures, all its own)
+simWorldUcl-pass exit=0 392s | simWorldUcl: green, 249188 checks, 0 failures
+c-locale exit=1 105s | simWorldUcl: control locale FIRED (40 failures, all its own)
+c-keep exit=1 114s | simWorldUcl: control keep FIRED (2477 failures, all its own)
+c-marks exit=1 152s | simWorldUcl: control marks FIRED (110 failures, all its own)
+c-nopens exit=1 107s | simWorldUcl: control nopens FIRED (42 failures, all its own)
+c-agall exit=1 106s | simWorldUcl: control agall FIRED (90 failures, all its own)
+c-stream exit=1 244s | simWorldUcl: control stream FIRED (27 failures, all its own)
+c-participant exit=1 242s | simWorldUcl: control participant FIRED (15 failures, all its own)
+c-form exit=1 195s | simWorldUcl: control form FIRED (27 failures, all its own)
+simWorldUcl-self exit=0 1068s | simWorldUcl: green, 23863 checks, 0 failures

@@ -1,0 +1,13 @@
+simWorldUcl-pass: WORLD_UCL_ONLY=0,1,3,4,5,6,7 node scripts/simWorldUcl.mjs
+simWorldUcl-self: WORLD_UCL_ONLY=2 node scripts/simWorldUcl.mjs
+c-meindirect: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=meindirect node scripts/simWorldUcl.mjs
+c-field32: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=field32 node scripts/simWorldUcl.mjs
+c-dropnight: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=dropnight node scripts/simWorldUcl.mjs
+c-locale: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=locale node scripts/simWorldUcl.mjs
+c-keep: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=keep node scripts/simWorldUcl.mjs
+c-marks: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=marks node scripts/simWorldUcl.mjs
+c-nopens: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=nopens node scripts/simWorldUcl.mjs
+c-agall: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=agall node scripts/simWorldUcl.mjs
+c-stream: WORLD_UCL_SEEDS=1 WORLD_UCL_CONTROL=stream node scripts/simWorldUcl.mjs
+c-participant: WORLD_UCL_SEEDS=1 WORLD_UCL_CONTROL=participant node scripts/simWorldUcl.mjs
+c-form: WORLD_UCL_SEEDS=1 WORLD_UCL_CONTROL=form node scripts/simWorldUcl.mjs
