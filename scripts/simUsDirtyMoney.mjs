@@ -25,8 +25,9 @@
  *   7. Never a heat eraser, never a karma farm (the critic's correction 2, binding). Fleet saves of every sport
  *      (real careers through the bindings on the seeded stream, each also at heat 91, at heat 100, holding 20M
  *      more, broke at 1M and just back from a ban), every option of the four corruption decks that adds dirty money,
- *      and the two life cards that do (NFL's cousin at the register, NHL's brewery stake: an option that costs no
- *      heat may not raise what the desk hands back at all), then at once each way:
+ *      and the two life cards that do (NFL's cousin at the register, NHL's brewery stake: an option that costs no heat
+ *      hands back nothing on its own money and no more than the cheapest paying card's heat with money held), then
+ *      at once each way:
  *      the heat after is never below the heat before the option (exact), and the heat plus karma the desk hands
  *      back never adds up to more than the heat the option cost (its printed "heat +N"). Every dirty option in the
  *      four deck sources must be dealt at least once, or the fleet is too small. The table prints per option the
@@ -46,7 +47,7 @@
  *   mathrandom  the wash draws Math.random                                    -> section 2
  *   flat        Come clean cools a flat 35 (the draft's number)               -> section 7, memorabilia among the red
  *   farm        Give it away pays up to 12 karma                              -> section 7
- *   cap         Come clean cools up to 6 (one point more)                     -> section 7, red only for NFL's cousin at the register (heat 8)
+ *   cap         Come clean cools up to 6 (one point more)                     -> section 7, red on the cousin (heat 8), no corruption card
  *   cool8       the desk's copy of the season end cools 8, the engines cool 9 -> section 9
  *   deck        launderEffectText draws one Math.random                       -> section 5
  *   noop        one sport's launder apply put back to the flag and heat +10   -> section 4, naming that sport only
@@ -401,12 +402,15 @@ for (const slug of SPORTS) {
 }
 /* The life cards that pay dirty money too (the Round 1500 review's run minor 7 and read minor 4): NFL's cousin at
    the register (0.6M for heat +8) and NHL's brewery stake (0.05M for no heat). The same exact check on the same fleet
-   and variants, with one difference for an option that costs no heat: it may not raise what the desk hands back at
-   all (the desk on the career after it against the desk on the career just before it). A hand back is paid by
-   whole millions and any money held before came with its own heat, so this is the honest bound there; an option
-   that costs heat is held to the absolute bound like every corruption card, which leaves the cousin no spare point
-   (the desk's most, 5 heat and 3 karma, is his 8). */
+   and variants. An option that costs heat is held to the absolute bound like every corruption card, which leaves
+   the cousin no spare point (the desk's most, 5 heat and 3 karma, is his 8). An option that costs no heat cannot be:
+   on a save already holding money its 0.05M can tip the held amount over a whole million and add a point of relief
+   (1.95M held, the brewery, Come clean cools 2 instead of 1: r1500-fx6 at 360 careers), and the heat for that money
+   was paid by the card that dealt it. So it is held to what is true of it: on its own money (nothing held before)
+   the desk hands back nothing and the heat never falls, and with money held the desk hands back no more than the
+   cheapest heat any paying card charges (every option in the table above with a cost, the cousin's 8 today). */
 const LIFE_DECK = { nfl: ['getNflLifeEventsB', 'src/lib/nflCareerLifeB.ts'], nhl: ['getNhlLifeEventsB', 'src/lib/nhlCareerLifeB.ts'] };
+const freeRuns = [];
 const handBack = (from, to) => r2(Math.max(0, (from.heat ?? 0) - (to.heat ?? 0)) + Math.max(0, (to.karma ?? 50) - (from.karma ?? 50)));
 for (const [slug, [fn, file]] of Object.entries(LIFE_DECK)) {
   for (const [vi, save] of fleets[slug].entries()) {
@@ -432,15 +436,11 @@ for (const [slug, [fn, file]] of Object.entries(LIFE_DECK)) {
           const r = DM.dealWithDirtyMoney(c, way);
           const net = r2((r.state.heat ?? 0) - (before.heat ?? 0));
           const back = handBack(c, r.state);
-          /* Free of heat, the option is held to the desk on the career just before it: the money held before came
-             with its own heat (a save holding 1.5M comes clean for heat -1 with or without the brewery's 0.05M). */
-          const without = cost > 0 ? null : DM.canDealWithDirtyMoney(before) ? DM.dealWithDirtyMoney(before, way).state : before;
-          const bound = without ? handBack(before, without) : cost;
-          const floor = without ? r2((without.heat ?? 0) - (before.heat ?? 0)) : 0;
           row.worstNet[way] = Math.min(row.worstNet[way] ?? Infinity, net);
           row.mostBack[way] = Math.max(row.mostBack[way] ?? -Infinity, back);
-          if (net < floor) fail(7, key, `${way} leaves heat ${net} below where it was before the card (heat ${before.heat ?? 0}, ${before.dirtyMoney ?? 0}M held, floor ${floor})`);
-          if (back > bound) fail(7, key, `${way} hands back ${back} of heat and karma for a life card that cost heat +${cost} (bound ${bound})`);
+          if (cost === 0) { freeRuns.push({ key, way, held: before.dirtyMoney ?? 0, net, back }); continue; }
+          if (net < 0) fail(7, key, `${way} leaves heat ${net} below where it was before the card (heat ${before.heat ?? 0}, ${before.dirtyMoney ?? 0}M held)`);
+          if (back > cost) fail(7, key, `${way} hands back ${back} of heat and karma for a life card that cost heat +${cost}`);
         }
         table.set(key, row);
       }
@@ -451,6 +451,16 @@ for (const [slug, [fn, file]] of Object.entries(LIFE_DECK)) {
   console.log(`   ${slug} life cards: ${dealt} of ${inSource} dirty options dealt (${file})`);
   if (!inSource || dealt < inSource) fail(7, `${slug} life coverage`, `${dealt} of the ${inSource} dirty options in ${file} were dealt`);
 }
+const paidFloor = Math.min(...[...table.values()].filter(r => r.cost > 0).map(r => r.cost));
+let freeAlone = 0;
+for (const z of freeRuns) {
+  if (z.held > 0) { if (z.back > paidFloor) fail(7, z.key, `${z.way} hands back ${z.back} with ${z.held}M held, more than the cheapest paying card's heat ${paidFloor}`); continue; }
+  freeAlone += 1;
+  if (z.net < 0 || z.back > 0) fail(7, z.key, `${z.way} on its own money hands back ${z.back} and moves the heat ${z.net}`);
+}
+console.log(`   life cards that cost no heat: ${freeRuns.length} card then desk runs, ${freeAlone} on their own money (nothing handed back), the rest held to the cheapest paying card's heat +${paidFloor}`);
+if (!freeAlone) fail(7, 'free coverage', 'no run of a no heat card on its own money: the check above was never asked');
+
 /* No other source pays dirty money: every US sport file that adds to it (an assignment of the held amount plus
    something) is one of the four corruption decks or the two life decks above, so a new one cannot slip past this
    section. The shop's washers subtract and the engines set it to 0, which this does not match. */
@@ -663,11 +673,12 @@ if (control) {
   }
   for (const s of want) console.log(`   control ${control}: section ${s} turned ${red.get(s)?.size ?? 0} red`);
   if (control === 'cap') {
-    /* One point more of Come clean breaks no corruption card (heat 9 or more) and only the cousin (heat 8). */
+    /* One point more of Come clean breaks no corruption card (heat 9 or more): it breaks the cousin (heat 8), and the
+       brewery with money held, which is held to the cousin's 8. */
     const reds = [...(red.get(7) ?? [])];
     console.log(`   control cap: section 7 red on ${reds.join('; ') || 'nothing'}`);
-    if (!reds.length || !reds.every(k => k.startsWith('nfl ') && k.includes('cousin'))) {
-      console.log('CONTROL cap DID NOT FIRE on the cousin alone');
+    if (!reds.some(k => k.startsWith('nfl ') && k.includes('cousin')) || !reds.every(k => table.get(k)?.life)) {
+      console.log('CONTROL cap DID NOT FIRE on the life cards alone');
       process.exit(2);
     }
   }
