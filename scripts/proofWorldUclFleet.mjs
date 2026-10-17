@@ -47,6 +47,12 @@ const SEASONS = arg('--seasons', '');
 const ONLY = arg('--only', '');
 const STRIP = arg('--strip', '');
 const EVAL = process.argv.includes('--eval');
+/* --old-saves (step E6): every save the BASE engine writes at a reload point is opened by a fresh context of each
+   engine: this tree's must load it to the base's JSON with worldComps aside, and carry the key exactly when the
+   load repair's rule says (not in the Champions League, a season not over, an era or season one of today's
+   world), each counted and printed. */
+const OLD_SAVES = process.argv.includes('--old-saves');
+const oldSaves = { loaded: 0, gained: 0, kept: 0, wrong: 0 };
 const sha = v => createHash('sha256').update(typeof v === 'string' ? v : JSON.stringify(v)).digest('hex').slice(0, 16);
 
 /* One journey of one save on one engine: every step on its own stretch of the stream. */
@@ -67,14 +73,15 @@ async function journey(E, f, seasons, mode, compareStrip, evalEach = false) {
     let shown = s;
     const watching = !!s && !s.uclGroup;
     if (compareStrip && watching && compareStrip in s) { shown = { ...s }; delete shown[compareStrip]; }
-    steps.push({ label, json: JSON.stringify(shown), draws: r.draws.length, drawSha: sha(r.draws), saved: got.saved ?? null,
+    steps.push({ label, json: JSON.stringify(shown), draws: r.draws.length, drawSha: sha(r.draws), saved: got.saved ?? null, raw: got.raw ?? null,
       carries: !!s && 'worldComps' in s, stripped: shown !== s, inIt: !!s && !!s.uclGroup });
   };
   const reload = label => step(label, cur => {
     M.store.clear();
     if (!M.cm.saveCareer(cur)) return { saved: 'refused' };
     const saved = sha([...M.store.entries()].sort());
-    return { state: M.cm.loadCareer(), saved };
+    const raw = OLD_SAVES ? M.store.get(M.cm.SAVE_KEY) : null;
+    return { state: M.cm.loadCareer(), saved, raw };
   });
   step('start', () => ({ state: f.custom ? M.cm.startCareer(f.club, f.era, f.custom) : M.cm.startCareer(f.club, f.era) }));
   for (let season = 1; season <= seasons; season += 1) {
@@ -134,6 +141,20 @@ for (const f of chosen) {
         if (!STRIP && y.carries) why.push('a state carries worldComps and no --strip was asked for');
         if (why.length) bad = `at step ${i} ${x.label}: ${why.join('; ')}`;
       }
+      if (OLD_SAVES) for (const x of a.filter(z => z.raw)) {
+        const T = await treeEngine.fresh(); const B = await baseEngine.fresh();
+        T.store.set(T.cm.SAVE_KEY, x.raw); B.store.set(B.cm.SAVE_KEY, x.raw);
+        const lt = T.cm.loadCareer(); const lb = B.cm.loadCareer();
+        oldSaves.loaded += 1;
+        if (!lt || !lb) { fails.push(`${name} at ${x.label}: an old save did not load (tree ${!!lt}, base ${!!lb})`); continue; }
+        const aside = st => JSON.stringify({ ...st, worldComps: undefined });
+        if (aside(lt) !== aside(lb)) fails.push(`${name} at ${x.label}: an old save loads otherwise, ${firstDifference(aside(lb), aside(lt))}`.slice(0, 700));
+        const historic = T.eras.isHistoricEra(lt.eraId);
+        const should = !lt.uclGroup && lt.week < lt.calendar.length && (historic || lt.season === 1);
+        const has = 'worldComps' in lt;
+        if (has) oldSaves.gained += 1; else oldSaves.kept += 1;
+        if (has !== should) { oldSaves.wrong += 1; fails.push(`${name} at ${x.label}: an old save ${has ? 'gained' : 'did not gain'} a watched Champions League (${historic ? 'an era' : `season ${lt.season}`}, uclGroup ${lt.uclGroup ? 'set' : 'null'})`); }
+      }
       steps += a.length;
       if (b.some(y => y.carries)) carriers += 1;
       if (bad) fails.push(`${name} ${bad}`.slice(0, 700));
@@ -144,6 +165,10 @@ for (const f of chosen) {
 for (const x of fails.slice(0, 12)) console.log(`  FAIL ${x}`);
 console.log(`journeys ${journeys}, steps compared ${steps}, tree journeys whose save carried worldComps ${carriers}, evaluations on the live state ${evals}, ${((Date.now() - t0) / 1000).toFixed(0)} s`);
 if (EVAL && !evals) cannot('--eval was asked for and no evaluation ran');
+if (OLD_SAVES) {
+  console.log(`old saves (written by ${BASE}): ${oldSaves.loaded} loaded by both engines, ${oldSaves.gained} gained a watched Champions League at load, ${oldSaves.kept} did not, ${oldSaves.wrong} against the rule`);
+  if (!oldSaves.loaded || !oldSaves.gained) cannot('--old-saves loaded no save, or none that the rule repairs');
+}
 if (!journeys) cannot('no journey ran');
 console.log(fails.length
   ? `proofWorldUclFleet: RED, ${fails.length} journeys differ from ${BASE} (of ${journeys})`

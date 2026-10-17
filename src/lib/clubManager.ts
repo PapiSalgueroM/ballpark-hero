@@ -13208,6 +13208,31 @@ export function carryWorldUcl(career: CareerState, joined: CareerState): void {
   }
 }
 
+/**
+ * The load repair (step E6, narrowly: the critic's answer 4 and correction
+ * 15). A save that is not in the Champions League and carries no watched one
+ * for its season (every save from before the round) gets one where the field
+ * is fixed data: season one of today's world (the real 2025-26 tables) and
+ * any season of an era (its verified 32). A later season of today's world no
+ * longer holds the tables its 36 came from, so it gets its first one at its
+ * next rollover. A slice of another season is taken off. In its own try and
+ * catch: a repair that fails leaves the save without a slice, never without
+ * the save (loadCareer's catch would hand back no career at all).
+ */
+export function repairWorldUcl(state: CareerState): void {
+  try {
+    const slice = state.worldComps?.ucl;
+    if (slice && slice.s === state.season && !state.uclGroup) return;
+    if (state.worldComps) delete state.worldComps;
+    if (state.uclGroup || !Array.isArray(state.calendar) || state.week >= state.calendar.length) return;
+    const fmt = worldUclFormatOf(state);
+    if (fmt === 'l36' && state.season !== 1) return;
+    openWorldUcl(state, worldUclField(state, null), fmt === 'l36' ? CM_FINAL_TABLES_2025_26.holders : null);
+  } catch {
+    delete state.worldComps;
+  }
+}
+
 /** The winner of the watched season, once the season is over (every night
  *  played and a final won), else null. Never throws. */
 export function worldUclWinner(career: CareerState): string | null {
@@ -21735,6 +21760,10 @@ export function loadCareer(): CareerState | null {
       if (parsed.customClub) delete parsed.customClub;
       registerCustomClub(null);
     }
+    /* Round 1502: a save with no watched Champions League for its season gets one here where the field is
+       fixed data (repairWorldUcl). After the registrations, because the strengths it snapshots read the
+       registered world; it never throws. */
+    repairWorldUcl(parsed);
     /* Round 474: the specific asks, LAST, because the country an ask counts
        and the market it is measured against both read the league, and the
        league is not settled until the two registrations above have run. */
