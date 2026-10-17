@@ -1,0 +1,17 @@
+#!build
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json; s=$?; echo "tsc exit=$s"; exit $s
+srclib: echo "src/lib changed vs the first parent c2f8d746: $(git diff --name-only c2f8d746 HEAD -- src/lib | tr '\n' ' ')"; git diff --quiet c2f8d746 HEAD -- src/lib/soccerCareerEngine.ts src/lib/soccerCareerSave.ts src/components/season-centre src/components/career/AwardsNightCard.tsx src/components/career/TrainingGround.tsx src/hooks/useSoundPlan.ts src/lib/soccerAwardReveal.ts src/data/gameContent && echo "engine, save, shared files and guides byte equal to the first parent c2f8d746"
+vitest: node_modules/.bin/vitest run src/test/soccerScreenTruths.test.tsx src/test/soccerPotentialProgress.test.tsx src/test/careerAwardsNightCard.test.tsx src/test/soccerAwardReveal.test.tsx src/test/soccerFarewellPage.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+vitest-readers: node_modules/.bin/vitest run src/test/careerAwardsNightCard.test.tsx src/test/careerDerbies.test.tsx src/test/careerDilemmaReach.test.tsx src/test/careerDilemmaSaves.test.tsx src/test/careerKeepPlaying.test.tsx src/test/careerRecordedStats.test.tsx src/test/careerSeasonRatings.test.tsx src/test/careerStory.test.tsx src/test/defenderCleanSheets.test.tsx src/test/scoreShown.test.tsx src/test/soccerAgentReviewPage.test.tsx src/test/soccerCareerAwardGenerations.test.tsx src/test/soccerCareerDebutLegacy.test.tsx src/test/soccerCareerDugoutTable.test.tsx src/test/soccerCareerPackedFence.test.tsx src/test/soccerCareerSaveFence.test.tsx src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerSaveRetry.test.tsx src/test/soccerDerbyHistoryUi.test.tsx src/test/soccerFarewellOneBanner.test.tsx src/test/soccerFarewellPage.test.tsx src/test/soccerInternationalReturnPage.test.tsx src/test/soccerPotentialProgress.test.tsx src/test/soccerTransferBriefPage.test.tsx src/test/seasonCentreWords.test.tsx src/test/soccerSeasonCompetitions.test.tsx src/test/seasonCentreSlots.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -20; exit ${PIPESTATUS[0]}
+storage: node scripts/simStorageWrites.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+storage-gone: SIM_STORAGE_WRITES_CONTROL=gone node scripts/simStorageWrites.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+hist-head: SOCCER_LUTON_DISPLAY_OUT=/tmp/hh-out SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerHistoricalOpponentDisplayProof.mjs > /tmp/hh.log 2>&1; s=$?; node .rc/x/fixErrs.mjs /tmp/hh-out/report.json; tail -4 /tmp/hh.log; exit $s
+ol-m12: node .rc/x/mut1337run.mjs m12 || exit 3; ONLY=simSoccerOpponentLabels node scripts/runAllSims.mjs --browser > /tmp/ol.log 2>&1; s=$?; git checkout -- src scripts; grep -E "FAIL|stale" /tmp/ol.log | cut -c1-400 | head -6; tail -2 /tmp/ol.log; exit $s
+pins: node .rc/x/pinsCheck.mjs; exit $?
+pins-ctl: git worktree add -q /tmp/pc b712a7ad && cd /tmp/pc && node $OLDPWD/.rc/x/pinsCheck.mjs; exit $?
+fences2: ONLY=simHarnessAnchors,simNoRivalNames node scripts/runAllSims.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+dash-m19: DASH_BASE=c2f8d746 node .rc/x/dashBase.mjs 2>&1 | tail -22; exit ${PIPESTATUS[0]}
+dash-rel: DASH_BASE=e814c2de node .rc/x/dashBase.mjs 2>&1 | tail -22; exit ${PIPESTATUS[0]}
+prerender: node scripts/simPrerender.mjs > /tmp/pr.log 2>&1; s=$?; grep -nE "FAIL|failure" /tmp/pr.log | head -14; tail -3 /tmp/pr.log; exit $s
