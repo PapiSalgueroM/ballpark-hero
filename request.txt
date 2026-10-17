@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+markProbe: node .rc/x/markProbe.mjs
+playCmMatchDay: node scripts/playCmMatchDay.mjs
+playCmMatchDay2: node scripts/playCmMatchDay.mjs
+marksUnit: node_modules/.bin/vitest run src/test/managerScorerMarks.test.tsx --testTimeout=300000 --hookTimeout=120000
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmMatchDay: node scripts/simCmMatchDay.mjs

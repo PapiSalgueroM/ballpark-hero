@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+markProbe exit=1 3s | markProbe: RED
+marksUnit exit=0 5s |    Duration  3.86s (transform 1.97s, setup 52ms, collect 2.54s, tests 132ms, environment 324ms, prepare 267ms)
+tsc exit=0 70s | 
+simCmMatchDay exit=0 21s | simCmMatchDay: all sections green (916 matches: 461 home, 447 away, 8 neutral)
+playCmMatchDay exit=0 183s | playCmMatchDay: green. 15 walks over 4 saves, every match day screen home side first, whole names on the timeline, a 44 px toggle, the page never moved
+playCmMatchDay2 exit=0 183s | playCmMatchDay: green. 15 walks over 4 saves, every match day screen home side first, whole names on the timeline, a 44 px toggle, the page never moved
