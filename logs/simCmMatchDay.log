@@ -1,0 +1,17 @@
+fleet: 25 careers, 916 matches (461 home, 447 away, 8 neutral), 0 reports with no fixture read before them, 28s
+live: 173 league matches kicked off live (64 away), 692 live renders
+1) One rule: the fixture's venue and the report's own order agree on every match
+   916 matches, 8 reports saying neutral; red: 0 home, 0 away, 0 neutral
+2) The report card: every two sided block in the scoreline's order
+   916 reports, 9160 stat bars read; red: 0 home, 0 away, 0 neutral
+3) The timeline: home side first, whole names, every mark right after its name
+   916 timelines, 15753 rows, 15753 names, 242 marks; red: 0 home, 0 away, 0 neutral
+4) Live and half time: the strip, the score's digits, the interval card, the stats and the line under the pitch home side first
+   173 live matches (173 first, 173 interval, 173 second, 173 done); red: 0 home, 0 away, 0 neutral
+5) The Match Centre: the tie, the form rows and the ones to watch home side first; the odds still Win, Draw, They win
+   163 Match Centres (76 home, 79 away, 8 neutral, 163 with ones to watch); red: 0 home, 0 away, 0 neutral
+6) The pitch: every dot label is the man's pitch name, his initials or his slot's role, never a number
+   15166 dot labels over 692 pitches: 7555 of mine named (13 in initials), 4685 named opponents, 2926 nameless opponents (1903 of them staged); red: 0 home, 0 away, 0 neutral
+7) A home or neutral match: the card's visible text equals the base's, the board word and the pitch labels masked
+   662 home and neutral screens compared with d8aaa4cb (545 live screens and 84 Match Centres among them); red: 0 home, 0 neutral
+simCmMatchDay: all sections green (916 matches: 461 home, 447 away, 8 neutral)

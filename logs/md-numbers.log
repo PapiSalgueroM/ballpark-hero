@@ -1,0 +1,22 @@
+NEGATIVE CONTROL ON: numbers; section(s) 6 must go red
+fleet: 25 careers, 916 matches (461 home, 447 away, 8 neutral), 0 reports with no fixture read before them, 28s
+live: 173 league matches kicked off live (64 away), 692 live renders
+1) One rule: the fixture's venue and the report's own order agree on every match
+   916 matches, 8 reports saying neutral; red: 0 home, 0 away, 0 neutral
+2) The report card: every two sided block in the scoreline's order
+   916 reports, 9160 stat bars read; red: 0 home, 0 away, 0 neutral
+3) The timeline: home side first, whole names, every mark right after its name
+   916 timelines, 15753 rows, 15753 names, 242 marks; red: 0 home, 0 away, 0 neutral
+4) Live and half time: the strip, the score's digits, the interval card, the stats and the line under the pitch home side first
+   173 live matches (173 first, 173 interval, 173 second, 173 done); red: 0 home, 0 away, 0 neutral
+5) The Match Centre: the tie, the form rows and the ones to watch home side first; the odds still Win, Draw, They win
+   163 Match Centres (76 home, 79 away, 8 neutral, 163 with ones to watch); red: 0 home, 0 away, 0 neutral
+6) The pitch: every dot label is the man's pitch name, his initials or his slot's role, never a number
+  FAIL [6]: Liverpool now seed 0: Newcastle 1-3 Liverpool (Premier League · Round 1, away): first: a opp dot's label "1 Hornicek" begins with a digit
+  FAIL [6]: Liverpool now seed 0: Newcastle 1-3 Liverpool (Premier League · Round 1, away): first: a opp dot's label "2 Thiaw" begins with a digit
+  FAIL [6]: Liverpool now seed 0: Newcastle 1-3 Liverpool (Premier League · Round 1, away): first: a opp dot's label "3 Livramento" begins with a digit
+  FAIL [6]: Liverpool now seed 0: Newcastle 1-3 Liverpool (Premier League · Round 1, away): first: a opp dot's label "4 Hall" begins with a digit
+  FAIL [6]: Liverpool now seed 0: Newcastle 1-3 Liverpool (Premier League · Round 1, away): first: a opp dot's label "5 Botman" begins with a digit
+  FAIL [6]: Liverpool now seed 0: Newcastle 1-3 Liverpool (Premier League · Round 1, away): first: a opp dot's label "6 Ramsey" begins with a digit
+   15166 dot labels over 692 pitches: 0 of mine named (0 in initials), 0 named opponents, 0 nameless opponents (0 of them staged); red: 109 home, 64 away, 0 neutral
+simCmMatchDay could not run: section 6 read 692 pitches, 0 of mine, 0 named and 0 staged nameless opponents: under its floors (40, 400, 200, 40)
