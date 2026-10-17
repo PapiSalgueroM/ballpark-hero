@@ -190,6 +190,8 @@ export function useSoccerGrid() {
   const timeUp = settings.timerMode !== 0 && timerExpired;
 
   const gameStatus: SoccerGridGameStatus = (rawDailyStatus !== 'playing' || timeUp) ? 'complete' : 'playing';
+  const mainRoundComplete = useRef(gameStatus === 'complete');
+  mainRoundComplete.current = gameStatus === 'complete';
 
   const rarityScore = useMemo(() => {
     if (correctActions.length === 0) return null;
@@ -291,15 +293,18 @@ export function useSoccerGrid() {
         const displayName = data?.fullName || playerName;
 
         if (isValid) {
+          if (!isOvertime && mainRoundComplete.current) return;
           /* Round 401: measure the crowd BEFORE this row joins it. The
              formula adds the player's own row itself; inserting first counted
              it twice (a first pick read 100 instead of the unicorn 101). */
           const rarity = await fetchRarity(puzzle.id, capturedCell, displayName);
+          if (!isOvertime && mainRoundComplete.current) return;
           await supabase.from('soccer_grid_selections').insert({
             puzzle_id: puzzle.id,
             cell_index: capturedCell,
             player_name: displayName.toLowerCase(),
           });
+          if (!isOvertime && mainRoundComplete.current) return;
 
           if (isOvertime) {
             // Overtime picks never touch dailyActions/correctCount/rarityScore -
@@ -324,6 +329,7 @@ export function useSoccerGrid() {
             toast.error("Couldn't verify that answer, please try again.");
           }
         } else {
+          if (!isOvertime && mainRoundComplete.current) return;
           setWrongFlash({ cellIndex: capturedCell, playerName });
           setTimeout(() => setWrongFlash(null), 1500);
           // Wrong guesses during Overtime don't cost anything, Overtime has
