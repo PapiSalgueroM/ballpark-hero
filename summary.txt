@@ -1,0 +1,11 @@
+tsc exit=0 88s | 
+vitest-cm exit=0 115s |    Duration  114.46s (transform 5.92s, setup 2.27s, collect 23.49s, tests 188.88s, environment 17.53s, prepare 4.12s)
+c-noholder exit=1 124s | simWorldUcl: control noholder FIRED (8 failures, all its own)
+proof-part exit=0 209s | proofWorldUclFleet: GREEN, 60 journeys and 6483 steps byte equal to d8aaa4cb (a watching state without worldComps), draws equal
+proof-watch-nocoach exit=0 213s | proofWorldUclFleet: GREEN, 45 journeys and 6169 steps byte equal to d8aaa4cb (a watching state without worldComps), draws equal
+golden-head exit=0 1s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 51s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simManagerAppealIsolation exit=1 7s | Node.js v24.21.0
+proof-watch-coach exit=0 245s | proofWorldUclFleet: GREEN, 45 journeys and 6141 steps byte equal to d8aaa4cb (a watching state without worldComps), draws equal
+simWorldUcl exit=0 846s | simWorldUcl: green, 197302 checks, 0 failures
