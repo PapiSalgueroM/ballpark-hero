@@ -1,0 +1,3 @@
+#!serial
+headsha: git log --oneline -3
+wf289: node .rc/x/wfrun.mjs .github/workflows/career-phone-season-budget.yml --set PHONE_BUDGET_BASE=d7b7fffc1ceac6f418ff3be15135f012731ecb30 --set PRERENDER_ONLY=/soccer-career,/whats-new
