@@ -1,0 +1,2 @@
+headsha exit=0 0s | ae02832c0 Round BII: merge PR289 (codex/career-phone-season-budget at c40ea5d8), the phone keeps its season budgets through a reload
+wf297 exit=1 315s | wfrun career-phone-state-isolation.yml: 11 steps ran, 1 failed: Unchanged full download budgets

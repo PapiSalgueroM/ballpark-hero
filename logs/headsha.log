@@ -1,0 +1,3 @@
+1bbaa83ad rc request rBIi-m17 for 57d82b0ad95428d14c6861fc7ca671c8a29c5f9f
+57d82b0ad Round BII: merge PR297 (codex/career-phone-state-isolation at 321bad0d), the phone copies its saved threads and clubs before changing them
+ae02832c0 Round BII: merge PR289 (codex/career-phone-season-budget at c40ea5d8), the phone keeps its season budgets through a reload

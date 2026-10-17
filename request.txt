@@ -1,0 +1,3 @@
+#!serial
+headsha: git log --oneline -3
+wf297: node .rc/x/wfrun.mjs .github/workflows/career-phone-state-isolation.yml --set PHONE_ISOLATION_BASE=ae02832c0883ad3ecaac5cf9a00c2ccd1dc97877 --set PRERENDER_ONLY=/soccer-career,/whats-new
