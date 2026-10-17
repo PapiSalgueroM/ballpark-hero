@@ -97,8 +97,10 @@ describe('Round 1500: every way does exactly what its button prints', () => {
     expect(top.bannedIfCaught).toBe(2);
     expect(top.lines.join(' ')).toContain('Not caught: 3.5M comes out as clean money, and at this heat you still sit out a season to a suspension');
     expect(top.lines.join(' ')).toContain('you sit out 2 seasons');
-    expect(launderEffectText(host({ heat: 89 }))).toContain('suspended either way');
-    expect(launderEffectText(host({ heat: 40 }))).toBe('Keep 70 percent, heat +10, 35 percent chance you are caught');
+    /* The card applies on one tap, so it prints the caught branch too, and at heat 89 the two seasons it costs. */
+    expect(launderEffectText(host({ heat: 89 }))).toBe('Keep 70 percent, heat +10, 55 percent chance you are caught, and at this heat you sit out a season either way. Caught: all of it seized, fanbase -30, morale -25, 2 seasons out');
+    expect(launderEffectText(host({ heat: 40 }))).toBe('Keep 70 percent, heat +10, 35 percent chance you are caught. Caught: all of it seized, fanbase -30, morale -25, a season out');
+    expect(launderEffectText(host({ heat: 40, fanbase: 12, morale: 7 }))).toContain('fanbase -12, morale -7, a season out');
   });
 });
 

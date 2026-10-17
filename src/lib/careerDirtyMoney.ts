@@ -294,11 +294,14 @@ export function launderDirtyMoney(c: DirtyMoneyHost, done: string): string {
   return caught ? resultLine(n, true) : `${done} ${resultLine(n, false)}`;
 }
 
-/** The card's effect line, built from the career it is dealt to, so the words are the effect. */
+/** The card's effect line, built from the career it is dealt to, so the words are the effect. The card applies on
+ *  one tap, so it prints both branches the desk prints: what a clean wash still costs at this heat, and what being
+ *  caught costs (all of it seized, the fanbase and morale, and every season served, two at the top of the meter). */
 export function launderEffectText(c: DirtyMoneyHost): string {
   const n = wayNumbers(c, 'wash');
-  const ban = n.bannedAfter > 0 ? ', and at this heat you are suspended either way' : '';
-  return `Keep ${Math.round(WASH_KEEP * 100)} percent, ${n.heat > 0 ? `heat +${n.heat}` : 'heat already at the top'}, ${n.caughtPct} percent chance you are caught${ban}`;
+  const ban = n.bannedAfter > 0 ? `, and at this heat you sit out ${sitOut(n.bannedAfter)} either way` : '';
+  const caught = `Caught: all of it seized, fanbase -${n.caughtFanbase}, morale -${n.caughtMorale}, ${sitOut(n.bannedIfCaught)} out`;
+  return `Keep ${Math.round(WASH_KEEP * 100)} percent, ${n.heat > 0 ? `heat +${n.heat}` : 'heat already at the top'}, ${n.caughtPct} percent chance you are caught${ban}. ${caught}`;
 }
 
 /** A shop item, as far as the washers go. */
