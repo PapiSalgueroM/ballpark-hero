@@ -13202,23 +13202,25 @@ export function evalWorldUcl(state: CareerState, nights?: number): WorldCompResu
  * state, once its season and year are the career's (the critic's correction
  * 10). It is carried when the new club watches and is not one of its
  * entrants, keeping the nights already shown (`seen`: the new club's calendar
- * can sit behind the old one, correction 11). When nothing is carried it is
- * opened fresh only where the field is fixed data (season one of today's
- * world, any season of an era), else the key comes off; a new club that is an
- * entrant of the competition it was watching drops it. Never throws.
+ * can sit behind the old one, correction 11). When nothing can be carried
+ * (there is none, or the new club is one of its entrants) it is opened fresh
+ * only where the field is fixed data (season one of today's world, any season
+ * of an era), else the key comes off: the load repair's own rule, so a reload
+ * never opens a competition the move left out. Never throws.
  */
 export function carryWorldUcl(career: CareerState, joined: CareerState): void {
   try {
     delete joined.worldComps;
     if (joined.uclGroup) return;
     const slice = career.worldComps?.ucl;
-    if (slice && slice.s === career.season) {
-      const names = [joined.clubName, joined.eraId ? eraEuroName(joined.eraId, joined.clubName) : joined.clubName];
-      if (slice.s !== joined.season || names.some(c => slice.clubs.includes(c))) return;
+    const names = [joined.clubName, joined.eraId ? eraEuroName(joined.eraId, joined.clubName) : joined.clubName];
+    if (slice && slice.s === career.season && slice.s === joined.season && !names.some(c => slice.clubs.includes(c))) {
       const seen = Math.max(slice.seen ?? 0, worldUclNightsDone(career));
       joined.worldComps = { ucl: { ...slice, ...(seen > 0 ? { seen } : {}) } };
       return;
     }
+    /* Nothing to carry, or my new club is an entrant of the one it watched (it cannot watch itself play): the
+       rule of a career with nothing to carry decides, the one repairWorldUcl applies at the next load. */
     openWorldUcl(joined, worldUclField(joined, null), worldUclFormatOf(joined) === 'l36' ? CM_FINAL_TABLES_2025_26.holders : null);
   } catch {
     delete joined.worldComps;
