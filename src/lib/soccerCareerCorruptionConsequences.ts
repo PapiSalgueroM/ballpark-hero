@@ -5,4 +5,5 @@ export const SOCCER_CORRUPTION_CONSEQUENCES: Readonly<Record<number, Readonly<Re
     2: 'Heat -30, Integrity +14, Morale up to +10',
   },
   325: { 0: 'Pay 40% of hidden money plus 5% of net worth, Heat drops to almost nothing' },
+  332: { 1: 'Current wage +8%, Integrity +10' },
 };

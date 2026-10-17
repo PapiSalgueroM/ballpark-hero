@@ -214,7 +214,7 @@ export function getCorruptionEvents(state: CareerState): RandomEvent[] {
       category: "negative", choices: [
         { label: "Take the kickback, €3M off the books", emoji: "💼", color: "bg-red-600", consequence: "€3M dirty, Heat +18",
           apply: s => { dirty(s, 3); heat(s, 18); s.integrityBonus -= 10; s.events = [...s.events, "💼 Took a €3M kickback through a company registered above a bakery"]; return s; } },
-        { label: "Everything on the official contract", emoji: "📃", color: "bg-emerald-600", consequence: "Wage +8% permanently, Integrity +10",
+        { label: "Everything on the official contract", emoji: "📃", color: "bg-emerald-600", consequence: SOCCER_CORRUPTION_CONSEQUENCES[332][1],
           apply: s => { s.weeklyWage = Math.round(s.weeklyWage * 1.08); s.integrityBonus += 10; s.events = [...s.events, "📃 Insisted every euro went on the official contract. Your accountant framed it"]; return s; } },
       ] });
   }
