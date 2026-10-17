@@ -1,0 +1,197 @@
+name: Current release account loading qualification
+on:
+  push:
+    branches: [codex/current-release-account]
+    paths:
+      - .github/workflows/release-account-dialog.yml
+      - scripts/qa/proveReleaseAccountDialog.mjs
+      - scripts/qa/playAccountDialogFocusReturn.mjs
+      - src/test/accountDialogOnDemand.test.tsx
+      - src/components/auth/AccountDialogOnDemand.tsx
+      - src/components/auth/AuthModal.tsx
+      - src/components/layout/Header.tsx
+      - src/components/game/GameNavbar.tsx
+      - src/pages/Index.tsx
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      PRERENDER_ONLY: /whats-new
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind exact current I and the qualified five-file patch
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$RUNNER_TEMP/release-account-dialog"; mkdir -p "$out/original" "$out/fixed"
+          export ACCOUNT_DIALOG_OUT="$out"
+          echo "ACCOUNT_DIALOG_OUT=$out" >> "$GITHUB_ENV"
+          echo "ACCOUNT_DIALOG_ORIGINAL_SOURCE=$RUNNER_TEMP/release-account-original" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$out/head.txt"; git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
+          git ls-files -z -- ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
+          cp "$out/source-files.sha256" "$out/fixed/source-files.sha256"
+          SIM_OFFLINE_RECEIPT="$out/admission.transport" node scripts/qa/proveReleaseAccountDialog.mjs admission > "$out/admission.log" 2>&1
+          cat "$out/admission.log"
+      - name: One locked install and isolated browser and font tools
+        run: |
+          set -euo pipefail
+          npm ci > "$ACCOUNT_DIALOG_OUT/install.log" 2>&1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerAgentReviewDependencies.mjs before > "$ACCOUNT_DIALOG_OUT/dependencies-before.log" 2>&1
+          browser_tools="$RUNNER_TEMP/release-account-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$ACCOUNT_DIALOG_OUT/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright; ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerAgentReviewDependencies.mjs after > "$ACCOUNT_DIALOG_OUT/dependencies-after.log" 2>&1
+          cp soccer-agent-review-artifacts/dependencies-*.json "$ACCOUNT_DIALOG_OUT/"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const out=process.env.ACCOUNT_DIALOG_OUT,before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),after=JSON.parse(fs.readFileSync(out+'/dependencies-after.json'));
+          assert.equal(before.packages.length,521); assert.equal(after.packages.length,521); assert.deepEqual(after.packages,before.packages); assert.deepEqual(after.packageFiles,before.packageFiles); assert.equal(after.addedBrowserPackage,'1.64.0'); fs.writeFileSync(out+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n');
+          NODE
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$ACCOUNT_DIALOG_OUT/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$ACCOUNT_DIALOG_OUT/fonts-install.log" 2>&1; python -m pip freeze > "$ACCOUNT_DIALOG_OUT/python-packages.txt"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$ACCOUNT_DIALOG_OUT/font-prefetch.log" 2>&1
+          find "$FREE_KICK_FONT_CACHE" -type f -print0 | sort -z | xargs -0 sha256sum > "$ACCOUNT_DIALOG_OUT/font-files.sha256"
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$ACCOUNT_DIALOG_OUT/installed-files.sha256"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$ACCOUNT_DIALOG_OUT/browser-tool-files.sha256"
+          test ! -e "$ACCOUNT_DIALOG_ORIGINAL_SOURCE"
+          git worktree add --detach "$ACCOUNT_DIALOG_ORIGINAL_SOURCE" 67ec99568cb67c0d1bf287bef2629b6d35def549 > "$ACCOUNT_DIALOG_OUT/original-worktree.log" 2>&1
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$ACCOUNT_DIALOG_ORIGINAL_SOURCE/node_modules"
+          git -C "$ACCOUNT_DIALOG_ORIGINAL_SOURCE" rev-parse HEAD > "$ACCOUNT_DIALOG_OUT/original/head.txt"
+          git -C "$ACCOUNT_DIALOG_ORIGINAL_SOURCE" -c core.autocrlf=false archive --format=zip HEAD > "$ACCOUNT_DIALOG_OUT/original/source.zip"
+          (cd "$ACCOUNT_DIALOG_ORIGINAL_SOURCE"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$ACCOUNT_DIALOG_OUT/original/request-source-files.sha256"
+          (cd "$ACCOUNT_DIALOG_ORIGINAL_SOURCE"; git ls-files -z -- ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' | sort -z | xargs -0 sha256sum) > "$ACCOUNT_DIALOG_OUT/original/source-files.sha256"
+      - name: Real types and three ordinary six-case source arms
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          preload_check='const assert=require("node:assert/strict"); assert.ok((process.env.NODE_OPTIONS||"").includes("offlineTransport.cjs"),"Children retain offline preload"); assert.ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")],"Actual offline preload is in require.cache");'
+          status=0; NODE_OPTIONS='' node -e "$preload_check" > "$ACCOUNT_DIALOG_OUT/preload-control.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$ACCOUNT_DIALOG_OUT/preload-control-exit.txt"; test "$status" -eq 1
+          grep -F 'AssertionError' "$ACCOUNT_DIALOG_OUT/preload-control.log"; grep -F 'Children retain offline preload' "$ACCOUNT_DIALOG_OUT/preload-control.log"
+          SIM_OFFLINE_RECEIPT="$ACCOUNT_DIALOG_OUT/preload-env.transport" node -e "$preload_check" > "$ACCOUNT_DIALOG_OUT/preload-normal.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$ACCOUNT_DIALOG_OUT/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$ACCOUNT_DIALOG_OUT/types.log" 2>&1
+          node --check scripts/qa/proveReleaseAccountDialog.mjs; node --check scripts/qa/playAccountDialogFocusReturn.mjs
+          SIM_OFFLINE_RECEIPT="$ACCOUNT_DIALOG_OUT/proof.transport" node scripts/qa/proveReleaseAccountDialog.mjs > "$ACCOUNT_DIALOG_OUT/proof.log" 2>&1
+          tail -n 4 "$ACCOUNT_DIALOG_OUT/proof.log"
+      - name: Unchanged auth controls with declared temporary readiness observer
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$ACCOUNT_DIALOG_OUT/auth-checks.transport" node scripts/qa/proveReleaseAccountDialog.mjs auth-checks > "$ACCOUNT_DIALOG_OUT/auth-checks.log" 2>&1
+          tail -n 4 "$ACCOUNT_DIALOG_OUT/auth-checks.log"
+          for method in simGoogleOnlyReturn simGoogleIdentity; do SIM_OFFLINE_RECEIPT="$ACCOUNT_DIALOG_OUT/$method.transport" node "scripts/$method.mjs" > "$ACCOUNT_DIALOG_OUT/$method.log" 2>&1; tail -n 3 "$ACCOUNT_DIALOG_OUT/$method.log"; done
+          SIM_OFFLINE_RECEIPT="$ACCOUNT_DIALOG_OUT/stale-normal.transport" node scripts/simStaleChunk.mjs > "$ACCOUNT_DIALOG_OUT/stale-normal.log" 2>&1
+          grep -F 'simStaleChunk: green.' "$ACCOUNT_DIALOG_OUT/stale-normal.log"
+          for control in nooffline nosave catchreload; do
+            sections=2; if test "$control" = nosave; then sections='2, 5'; elif test "$control" = catchreload; then sections=8; fi
+            status=0; SIM_OFFLINE_RECEIPT="$ACCOUNT_DIALOG_OUT/stale-$control.transport" SIM_STALE_CHUNK_CONTROL="$control" node scripts/simStaleChunk.mjs > "$ACCOUNT_DIALOG_OUT/stale-$control.log" 2>&1 || status=$?
+            test "$status" -eq 1; test "$(grep -Fxc "simStaleChunk: control $control turned section(s) $sections red and nothing else. The check works." "$ACCOUNT_DIALOG_OUT/stale-$control.log")" -eq 1
+          done
+          SIM_OFFLINE_RECEIPT="$ACCOUNT_DIALOG_OUT/preload.transport" node scripts/simPreloadWait.mjs > "$ACCOUNT_DIALOG_OUT/preload.log" 2>&1; grep -F 'simPreloadWait: green.' "$ACCOUNT_DIALOG_OUT/preload.log"
+      - name: Same-tools serial original and candidate production measurements
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          root_out="$ACCOUNT_DIALOG_OUT"; method_root="$GITHUB_WORKSPACE"; paired_failed=0
+          for variant in original fixed; do
+            source="$GITHUB_WORKSPACE"; if test "$variant" = original; then source="$ACCOUNT_DIALOG_ORIGINAL_SOURCE"; fi
+            arm="$root_out/$variant"; cd "$source"; export NODE_OPTIONS="--require=$source/scripts/lib/offlineTransport.cjs"
+            build_status=0; SIM_OFFLINE_RECEIPT="$arm/build.transport" npm run build:seo > "$arm/build.log" 2>&1 || build_status=$?
+            if test "$build_status" -ne 0; then paired_failed=1; continue; fi
+            tail -n 6 "$arm/build.log"; find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$arm/dist-files.sha256"
+            printf 'method\texit\n' > "$arm/readers.tsv"; failed=0
+            for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simGuideHeadings simSiteSearch; do
+              status=0; SIM_OFFLINE_RECEIPT="$arm/$method.transport" node "scripts/$method.mjs" > "$arm/$method.log" 2>&1 || status=$?
+              printf '%s\t%s\n' "$method" "$status" >> "$arm/readers.tsv"; tail -n 2 "$arm/$method.log"; test "$status" -eq 0 || failed=1; test ! -s "$arm/$method.transport" || failed=1
+            done
+            node scripts/lib/hostLikeServer.mjs dist 4173 > "$arm/server.log" 2>&1 &
+            task_server_pid=$!; trap 'kill "$task_server_pid" 2>/dev/null || true' EXIT
+            for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi; sleep 1; done
+            curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+            browser_status=0; SIM_OFFLINE_RECEIPT="$arm/browser.transport" NODE_OPTIONS="--require=$method_root/scripts/lib/offlineTransport.cjs" BASE=http://127.0.0.1:4173 ACCOUNT_DIALOG_OUT="$arm" ACCOUNT_DIALOG_SOURCE="$source" ACCOUNT_DIALOG_DIST="$source/dist" ACCOUNT_DIALOG_VARIANT="$variant" node "$method_root/scripts/qa/playAccountDialogFocusReturn.mjs" > "$arm/browser.log" 2>&1 || browser_status=$?
+            printf '%s\n' "$browser_status" > "$arm/browser-exit.txt"
+            weight_status=0; SIM_OFFLINE_RECEIPT="$arm/weights.transport" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$arm/weights.log" 2>&1 || weight_status=$?
+            printf '%s\n' "$weight_status" > "$arm/weights-exit.txt"; cat "$arm/weights.log"
+            class_status=0; ACCOUNT_DIALOG_OUT="$root_out" NODE_OPTIONS="--require=$method_root/scripts/lib/offlineTransport.cjs" node "$method_root/scripts/qa/proveReleaseAccountDialog.mjs" weights "$variant" > "$arm/weight-classification.log" 2>&1 || class_status=$?
+            cat "$arm/weight-classification.log"
+            kill "$task_server_pid"; wait "$task_server_pid" || true; trap - EXIT
+            test "$failed" -eq 0 || paired_failed=1; test "$browser_status" -eq 0 || paired_failed=1; test "$class_status" -eq 0 || paired_failed=1
+          done
+          cd "$method_root"
+          if test "$paired_failed" -eq 0; then ACCOUNT_DIALOG_OUT="$root_out" node scripts/qa/proveReleaseAccountDialog.mjs compare-browser > "$root_out/served-comparison.log" 2>&1; cat "$root_out/served-comparison.log"; fi
+          test "$paired_failed" -eq 0
+      - name: Retain complete actual original and candidate source and dist
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          root_out="${ACCOUNT_DIALOG_OUT:-$RUNNER_TEMP/release-account-dialog}"; result=0
+          for variant in original fixed; do
+            source="$GITHUB_WORKSPACE"; if test "$variant" = original; then source="${ACCOUNT_DIALOG_ORIGINAL_SOURCE:-$RUNNER_TEMP/release-account-original}"; fi
+            if test ! -d "$source"; then continue; fi
+            arm="$root_out/$variant"; mkdir -p "$arm"; cd "$source"; export NODE_OPTIONS="--require=$source/scripts/lib/offlineTransport.cjs"
+            git diff --exit-code HEAD -- . ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' > "$arm/non-generated-diff.log" 2>&1 || result=1
+            git diff --binary HEAD -- public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json > "$arm/generated.patch"
+            git ls-files -z | sort -z | xargs -0 sha256sum > "$arm/validated-source-files.sha256"
+            ACCOUNT_DIALOG_ARM_OUT="$arm" python - <<'PY'
+          import os,subprocess,zipfile
+          out=os.environ['ACCOUNT_DIALOG_ARM_OUT']; files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile(out+'/validated-source.zip','w',zipfile.ZIP_DEFLATED) as archive:
+              for file in sorted(filter(None,files)): archive.write(file,file)
+          if os.path.isdir('dist'):
+              with zipfile.ZipFile(out+'/dist.zip','w',zipfile.ZIP_DEFLATED) as archive:
+                  for folder,dirs,names in os.walk('dist'):
+                      for name in sorted(names): archive.write(os.path.join(folder,name),os.path.join(folder,name))
+          PY
+            if test -d dist; then find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$arm/dist-after-files.sha256"; fi
+          done
+          exit "$result"
+      - name: Whole source installed tool font and emitted-byte holds
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          root_out="${ACCOUNT_DIALOG_OUT:-$RUNNER_TEMP/release-account-dialog}"; result=0; cd "$GITHUB_WORKSPACE"
+          for kind in source installed browser-tool font; do file="$root_out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$root_out/$kind-holds.log" 2>&1 || result=1; fi; done
+          for variant in original fixed; do
+            source="$GITHUB_WORKSPACE"; if test "$variant" = original; then source="${ACCOUNT_DIALOG_ORIGINAL_SOURCE:-$RUNNER_TEMP/release-account-original}"; fi
+            if test ! -d "$source"; then continue; fi
+            arm="$root_out/$variant"; cd "$source"
+            for kind in source validated-source dist; do file="$arm/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$arm/$kind-holds.log" 2>&1 || result=1; fi; done
+            if test -f "$arm/dist-files.sha256"; then cmp "$arm/dist-files.sha256" "$arm/dist-after-files.sha256" > "$arm/dist-inventory-hold.log" 2>&1 || result=1; fi
+            for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simGuideHeadings simSiteSearch; do test ! -s "$arm/$method.transport" || result=1; done
+          done
+          for method in admission preload-env types proof auth-checks simGoogleOnlyReturn simGoogleIdentity stale-normal stale-nooffline stale-nosave stale-catchreload preload; do test ! -s "$root_out/$method.transport" || result=1; done
+          # Builds, served journeys and weights retain deliberate external denials and cached font fulfilments separately.
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: release-account-dialog-${{ github.sha }}
+          path: ${{ env.ACCOUNT_DIALOG_OUT }}
+          if-no-files-found: error
+          retention-days: 14
