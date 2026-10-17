@@ -1,0 +1,6 @@
+# Release BI triage: lane C reruns alone (simMatchDetail plays unseeded: the coin toss of review-cm-AT.md; simCmLedgerBound section 1 is a timing bound, green alone in rBIk-h2).
+#!serial
+headsha: git log --oneline -2
+simMatchDetail: node scripts/simMatchDetail.mjs
+simMatchDetail-again: node scripts/simMatchDetail.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
