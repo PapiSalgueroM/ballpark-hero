@@ -1,0 +1,20 @@
+mutfix1504: guard applied to src/pages/SoccerCareer.tsx
+ok lines 140
+FAIL 390-ST delayed: the second press started no second wait (2 loading toasts)
+FAIL 390-ST delayed: one result toast, the first press's, none for the second press (["Nothing changes","You take on a defender in every session. Dribbling next season +1, Passing next season -1."])
+FAIL 390-ST delayed: the first press's season log line, once
+FAIL 390-ST delayed: the save holds the FIRST press's answer ({"dribbling":1,"passing":-1}), not the second's
+FAIL 390-GK delayed: the second press started no second wait (2 loading toasts)
+FAIL 390-GK delayed: one result toast, the first press's, none for the second press (["Nothing changes","You stay out for the extra hour every day. Morale -1, Aerial Command next season +1, Positioning next season -1."])
+FAIL 390-GK delayed: the first press's season log line, once
+FAIL 390-GK delayed: the save holds the FIRST press's answer ({"physical":1,"defending":-1}), not the second's
+FAIL 1280-ST delayed: the second press started no second wait (2 loading toasts)
+FAIL 1280-ST delayed: one result toast, the first press's, none for the second press (["Nothing changes","You take on a defender in every session. Dribbling next season +1, Passing next season -1."])
+FAIL 1280-ST delayed: the first press's season log line, once
+FAIL 1280-ST delayed: the save holds the FIRST press's answer ({"dribbling":1,"passing":-1}), not the second's
+FAIL 1280-GK delayed: the second press started no second wait (2 loading toasts)
+FAIL 1280-GK delayed: one result toast, the first press's, none for the second press (["Nothing changes","You stay out for the extra hour every day. Morale -1, Aerial Command next season +1, Positioning next season -1."])
+FAIL 1280-GK delayed: the first press's season log line, once
+FAIL 1280-GK delayed: the save holds the FIRST press's answer ({"physical":1,"defending":-1}), not the second's
+playSoccerDeck: 16 failures
+guard mutation: walk exit=1

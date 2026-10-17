@@ -1,0 +1,12 @@
+mutfix1504: onefree applied to src/data/soccerDeck/starter.ts
+   FAIL the shipped pack has 1 problems: 716: "Put your name down" trains 1 and pays no cost
+   FAIL the breakages' base has problems of its own: 716: "Put your name down" trains 1 and pays no cost
+   FAIL the clean pack dealt nothing to the probe career, so the fail closed check proves nothing
+simSoccerDeck: 3 failures, red sections 1
+ [31m❯[39m src/lib/soccerDeck.test.ts [2m([22m[2m30 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[32m 53[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22msoccerDeckProblems[2m > [22mpasses the shipped pack and the fixture
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe gate[2m > [22mloads the real chunk and deals one card of the shipped pack
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mholds 28 cards: five a position group and eight about where a career stands
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mdeals each code only its own group's position cards
+onefree mutation: sd1 exit=1 vitest exit=1

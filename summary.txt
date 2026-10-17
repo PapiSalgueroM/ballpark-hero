@@ -1,0 +1,5 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 127s | playSoccerDeck: green, every case at 390 and 1280.
+weight exit=0 79s | weight1504: done
+m-guard exit=1 182s | guard mutation: walk exit=1
+m-onefree exit=1 3s | onefree mutation: sd1 exit=1 vitest exit=1
