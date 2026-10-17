@@ -1,0 +1,4 @@
+v-head exit=0 31s | head SoccerCareer chunk gzipped 403309 B
+v-nohelp exit=0 32s | no help line: 403182 B
+v-nopage exit=0 33s | base page over this gate: 402443 B
+v-base exit=0 32s | base: 402429 B
