@@ -1,0 +1,49 @@
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020); seeds 1,2,3
+  1 and 3: 27 journeys in 75 s
+  7 goals a watched match 2.607 (8544 matches); a domestic league match 2.627
+  7 ties 1353: to extra time 13.2 percent, to penalties 6.1 percent
+  1 device order: 35 group seasons evaluated level both ways
+  1 seasons in the Champions League (not watched): 10
+  1 seasons where exclude took out a direct entrant (a summer move): 3
+  1 watched seasons g8: 35
+  1 watched seasons l36: 36
+  7 g8 draws: 35
+  7 l36 slates with an association break: 2
+  7 l36 slates: 36
+  7 titles by strength quartile 1: 45
+  7 titles by strength quartile 2: 14
+  7 titles by strength quartile 3: 1
+FAIL 1 winner: Chelsea (now) season 1 seed 1 now at Werder Bremen: F PSG v Stuttgart has no winner
+FAIL 1 winner: Chelsea (now) season 1 seed 1 now at Werder Bremen: done true, winner undefined
+FAIL 1 winner: Chelsea (now) season 1 seed 1 now at Werder Bremen: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Chelsea (now) season 2 seed 2 now at Werder Bremen: F Liverpool v Barcelona has no winner
+FAIL 1 winner: Chelsea (now) season 2 seed 2 now at Werder Bremen: done true, winner undefined
+FAIL 1 winner: Chelsea (now) season 2 seed 2 now at Werder Bremen: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Hoffenheim (now) season 3 seed 1 now at Tottenham: F Strasbourg v Sporting CP has no winner
+FAIL 1 winner: Hoffenheim (now) season 3 seed 1 now at Tottenham: done true, winner undefined
+FAIL 1 winner: Hoffenheim (now) season 3 seed 1 now at Tottenham: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Hoffenheim (now) season 3 seed 3: F Liverpool v Stuttgart has no winner
+FAIL 1 winner: Hoffenheim (now) season 3 seed 3: done true, winner undefined
+FAIL 1 winner: Hoffenheim (now) season 3 seed 3: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Everton (now) season 1 seed 2 now at Werder Bremen: F Manchester City v Liverpool has no winner
+FAIL 1 winner: Everton (now) season 1 seed 2 now at Werder Bremen: done true, winner undefined
+FAIL 1 winner: Everton (now) season 1 seed 2 now at Werder Bremen: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: América (now) season 3 seed 1 now at Tottenham: F Arsenal v Real Madrid has no winner
+FAIL 1 winner: América (now) season 3 seed 1 now at Tottenham: done true, winner undefined
+FAIL 1 winner: América (now) season 3 seed 1 now at Tottenham: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: América (now) season 3 seed 3: F Monaco v Bayern Munich has no winner
+FAIL 1 winner: América (now) season 3 seed 3: done true, winner undefined
+FAIL 1 winner: América (now) season 3 seed 3: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Proof Town Athletic (now) season 2 seed 3: F Bayern Munich v PSG has no winner
+FAIL 1 winner: Proof Town Athletic (now) season 2 seed 3: done true, winner undefined
+FAIL 1 winner: Proof Town Athletic (now) season 2 seed 3: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Wigan Athletic (era2005) season 1 seed 2 now at Wolfsburg: F Benfica v Juventus has no winner
+FAIL 1 winner: Wigan Athletic (era2005) season 1 seed 2 now at Wolfsburg: done true, winner undefined
+FAIL 1 winner: Wigan Athletic (era2005) season 1 seed 2 now at Wolfsburg: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: Wigan Athletic (era2005) season 2 seed 3: F Real Madrid v Chelsea has no winner
+FAIL 1 winner: Wigan Athletic (era2005) season 2 seed 3: done true, winner undefined
+FAIL 1 winner: Wigan Athletic (era2005) season 2 seed 3: worldUclWinner says null, the evaluation undefined
+FAIL 1 winner: West Ham (era2015) season 2 seed 1 now at Hannover 96: F Manchester City v Bayern Munich has no winner
+FAIL 1 winner: West Ham (era2015) season 2 seed 1 now at Hannover 96: done true, winner undefined
+FAIL 1 winner: West Ham (era2015) season 2 seed 1 now at Hannover 96: worldUclWinner says null, the evaluation undefined
+simWorldUcl: control nopens FIRED (33 failures, all its own)

@@ -1,0 +1,50 @@
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020); seeds 1,2,3
+  1 and 3: 27 journeys in 76 s
+  7 goals a watched match 2.600 (5184 matches); a domestic league match 2.627
+  7 ties 828: to extra time 15.6 percent, to penalties 8.2 percent
+  1 device order: 0 group seasons evaluated level both ways
+  1 seasons in the Champions League (not watched): 10
+  1 seasons where exclude took out a direct entrant (a summer move): 3
+  1 seasons with no competition: 35
+  1 watched seasons l36: 36
+  7 l36 slates with an association break: 2
+  7 l36 slates: 36
+  7 titles by strength quartile 1: 25
+  7 titles by strength quartile 2: 10
+  7 titles by strength quartile 3: 1
+FAIL 1 no competition: Wigan Athletic (era2005) season 1 seed 1 now at Wolfsburg
+FAIL 1 no competition: Wigan Athletic (era2005) season 2 seed 1 now at Wolfsburg
+FAIL 1 no competition: Wigan Athletic (era2005) season 3 seed 1 now at Wolfsburg
+FAIL 1 no competition: Wigan Athletic (era2005) season 1 seed 2 now at Wolfsburg
+FAIL 1 no competition: Wigan Athletic (era2005) season 3 seed 2 now at Wolfsburg
+FAIL 1 no competition: Wigan Athletic (era2005) season 1 seed 3
+FAIL 1 no competition: Wigan Athletic (era2005) season 2 seed 3
+FAIL 1 no competition: Wigan Athletic (era2005) season 3 seed 3
+FAIL 1 no competition: Wolves (era2010) season 1 seed 1
+FAIL 1 no competition: Wolves (era2010) season 2 seed 1
+FAIL 1 no competition: Wolves (era2010) season 3 seed 1
+FAIL 1 no competition: Wolves (era2010) season 1 seed 2
+FAIL 1 no competition: Wolves (era2010) season 2 seed 2
+FAIL 1 no competition: Wolves (era2010) season 3 seed 2
+FAIL 1 no competition: Wolves (era2010) season 1 seed 3
+FAIL 1 no competition: Wolves (era2010) season 2 seed 3
+FAIL 1 no competition: Wolves (era2010) season 3 seed 3
+FAIL 1 no competition: West Ham (era2015) season 1 seed 1 now at Hannover 96
+FAIL 1 no competition: West Ham (era2015) season 2 seed 1 now at Hannover 96
+FAIL 1 no competition: West Ham (era2015) season 3 seed 1 now at Hannover 96
+FAIL 1 no competition: West Ham (era2015) season 1 seed 2 now at Hannover 96
+FAIL 1 no competition: West Ham (era2015) season 2 seed 2 now at Hannover 96
+FAIL 1 no competition: West Ham (era2015) season 3 seed 2 now at Hannover 96
+FAIL 1 no competition: West Ham (era2015) season 1 seed 3
+FAIL 1 no competition: West Ham (era2015) season 2 seed 3
+FAIL 1 no competition: West Ham (era2015) season 3 seed 3
+FAIL 1 no competition: Sheffield United (era2020) season 1 seed 1
+FAIL 1 no competition: Sheffield United (era2020) season 2 seed 1
+FAIL 1 no competition: Sheffield United (era2020) season 3 seed 1
+FAIL 1 no competition: Sheffield United (era2020) season 1 seed 2
+FAIL 1 no competition: Sheffield United (era2020) season 2 seed 2
+FAIL 1 no competition: Sheffield United (era2020) season 3 seed 2
+FAIL 1 no competition: Sheffield United (era2020) season 1 seed 3
+FAIL 1 no competition: Sheffield United (era2020) season 2 seed 3
+FAIL 1 no competition: Sheffield United (era2020) season 3 seed 3
+simWorldUcl: control eraformat FIRED (35 failures, all its own)

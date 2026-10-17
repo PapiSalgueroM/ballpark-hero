@@ -1,0 +1,49 @@
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020); seeds 1,2,3
+  1 and 3: 27 journeys in 78 s
+  7 goals a watched match 2.619 (3360 matches); a domestic league match 2.627
+  7 ties 525: to extra time 9.1 percent, to penalties 2.9 percent
+  1 device order: 35 group seasons evaluated level both ways
+  1 seasons in the Champions League (not watched): 10
+  1 seasons where exclude took out a direct entrant (a summer move): 3
+  1 seasons with no competition: 36
+  1 watched seasons g8: 35
+  7 g8 draws: 35
+  7 titles by strength quartile 1: 27
+  7 titles by strength quartile 2: 8
+FAIL 1 no competition: Chelsea (now) season 1 seed 1 now at Werder Bremen
+FAIL 1 no competition: Chelsea (now) season 2 seed 1 now at Werder Bremen
+FAIL 1 no competition: Chelsea (now) season 3 seed 1 now at Werder Bremen
+FAIL 1 no competition: Chelsea (now) season 1 seed 2 now at Werder Bremen
+FAIL 1 no competition: Chelsea (now) season 2 seed 2 now at Werder Bremen
+FAIL 1 no competition: Chelsea (now) season 3 seed 2 now at Werder Bremen
+FAIL 1 no competition: Chelsea (now) season 1 seed 3
+FAIL 1 no competition: Chelsea (now) season 3 seed 3
+FAIL 1 no competition: Hoffenheim (now) season 1 seed 1 now at Tottenham
+FAIL 1 no competition: Hoffenheim (now) season 3 seed 1 now at Tottenham
+FAIL 1 no competition: Hoffenheim (now) season 1 seed 2 now at Tottenham
+FAIL 1 no competition: Hoffenheim (now) season 3 seed 2 now at Tottenham
+FAIL 1 no competition: Hoffenheim (now) season 1 seed 3
+FAIL 1 no competition: Hoffenheim (now) season 2 seed 3
+FAIL 1 no competition: Hoffenheim (now) season 3 seed 3
+FAIL 1 no competition: Everton (now) season 1 seed 1
+FAIL 1 no competition: Everton (now) season 2 seed 1 now at Arsenal moved to Arsenal
+FAIL 1 no competition: Everton (now) season 1 seed 2 now at Werder Bremen
+FAIL 1 no competition: Everton (now) season 2 seed 2 now at Bayern Munich moved to Bayern Munich
+FAIL 1 no competition: Everton (now) season 1 seed 3
+FAIL 1 no competition: Everton (now) season 2 seed 3 now at Manchester United moved to Manchester United
+FAIL 1 no competition: Everton (now) season 3 seed 3 now at Manchester United
+FAIL 1 no competition: América (now) season 1 seed 1 now at Tottenham
+FAIL 1 no competition: América (now) season 3 seed 1 now at Tottenham
+FAIL 1 no competition: América (now) season 1 seed 2 now at Tottenham
+FAIL 1 no competition: América (now) season 2 seed 2 now at Tottenham
+FAIL 1 no competition: América (now) season 3 seed 2 now at Tottenham
+FAIL 1 no competition: América (now) season 1 seed 3
+FAIL 1 no competition: América (now) season 2 seed 3
+FAIL 1 no competition: América (now) season 3 seed 3
+FAIL 1 no competition: Proof Town Athletic (now) season 2 seed 1 now at Tottenham
+FAIL 1 no competition: Proof Town Athletic (now) season 3 seed 1 now at Tottenham
+FAIL 1 no competition: Proof Town Athletic (now) season 3 seed 2 now at Tottenham
+FAIL 1 no competition: Proof Town Athletic (now) season 1 seed 3
+FAIL 1 no competition: Proof Town Athletic (now) season 2 seed 3
+FAIL 1 no competition: Proof Town Athletic (now) season 3 seed 3
+simWorldUcl: control field32 FIRED (36 failures, all its own)

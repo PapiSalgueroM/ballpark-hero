@@ -1,0 +1,9 @@
+c-dropnight exit=1 78s | simWorldUcl: control dropnight FIRED (5392 failures, all its own)
+c-field32 exit=1 80s | simWorldUcl: control field32 FIRED (36 failures, all its own)
+c-eraformat exit=1 77s | simWorldUcl: control eraformat FIRED (35 failures, all its own)
+c-meinfill exit=1 77s | simWorldUcl: control meinfill FIRED (1 failures, all its own)
+pass3 exit=0 164s | simWorldUcl: green, 138406 checks, 0 failures
+c-meindirect exit=1 78s | simWorldUcl: control meindirect FIRED (3 failures, all its own)
+c-nopens exit=1 77s | simWorldUcl: control nopens FIRED (33 failures, all its own)
+c-agall exit=1 76s | simWorldUcl: control agall FIRED (75 failures, all its own)
+c-locale exit=1 53s | simWorldUcl: control locale FIRED (35 failures, all its own)
