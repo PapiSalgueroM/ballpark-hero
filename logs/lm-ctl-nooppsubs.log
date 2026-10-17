@@ -1,0 +1,1 @@
+control cannot run: the count line in drawOppSubs is not in the shape LIVE_MATCH_CONTROL=nooppsubs rewrites (  const count = Math.min(room, Math.round(ri(1, 3) * len));\n...)

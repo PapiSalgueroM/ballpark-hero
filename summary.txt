@@ -1,0 +1,14 @@
+headsha exit=0 0s | f579a0052 Release BI triage: simLiveMatch section 3 and simClubManagerEraUcl section 7 read a club's roster through the save's world ledger
+simLiveMatch-seed1 exit=0 7s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven
+simLiveMatch exit=0 7s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven
+lm-ctl-nooppsubs exit=1 0s | control cannot run: the count line in drawOppSubs is not in the shape LIVE_MATCH_CONTROL=nooppsubs rewrites (  const count = Math.min(room, Math.round(ri(1, 3) * len));\n
+simLiveMatch-seed2 exit=0 8s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven
+lm-ctl-noledger exit=0 7s | simLiveMatch control noledger: PASS (the named sections went red, the rest stayed green)
+lm-ctl-doubleman exit=0 8s | simLiveMatch control doubleman: PASS (the named sections went red, the rest stayed green)
+simClubManagerEraUcl exit=0 40s | simClubManagerEraUcl: PASS. The era Champions League plays its round of 16, the group tables stay up, Spain and Italy split level points on head to head, and an era night
+simClubManagerEraUcl-seed1 exit=0 41s | simClubManagerEraUcl: PASS. The era Champions League plays its round of 16, the group tables stay up, Spain and Italy split level points on head to head, and an era night
+simClubManagerEraUcl-seed2 exit=0 42s | simClubManagerEraUcl: PASS. The era Champions League plays its round of 16, the group tables stay up, Spain and Italy split level points on head to head, and an era night
+ucl-ctl-noledger exit=0 37s | simClubManagerEraUcl control: green. The unread ledger was reported (24 findings in section 7 name a man the ledger had moved away).
+ucl-ctl-poolnames exit=0 47s | simClubManagerEraUcl control: green. The poolnames regression was reported (43 findings in section 7).
+ucl-ctl-oldname exit=0 46s | simClubManagerEraUcl control: green. The oldname regression was reported (23 findings in section 7).
+simHarnessAnchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
