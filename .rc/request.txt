@@ -1,0 +1,13 @@
+# Release BH gate, the PR278 join's lines (Round BHG, finish-BHG.md): every proof the merge of 1986608d brought, on the gate head. The PR's proof pins only its own five files' bytes (unchanged by the join) and no parent, so it runs as is; its env is the workflow's (CI, SIM_NETWORK=offline, one vitest fork, a fresh out folder, an offline receipt that must stay empty). Plus the join's served walk (.rc/x/lutonWalk.mjs: the 2023 Premier League Season Centre at 390 and 1280) and its control against this head minus PR278 (.rc/x/basesrv.sh 55712283 a758fcec: the merge and its first parent). Each line is green only on exit 0 AND its PASS, green or FIRED-OK last line. Sends: bash rc.sh <name> rc-BHa.txt x/lutonWalk.mjs x/basesrv.sh. All green on 55712283 (rBHg-kit, 2026-10-16): unit 8/8, proof PASS (arms 3/3, controls 2/2), generator current, simCareerLeagueSeasons green, walk PASS 32, base b6eef10e served, control FIRED-OK (Luton 0/10, base 22/22), opponents 164/0.
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -2
+vitest-luton-unit: node_modules/.bin/vitest run src/test/historicalOpponentLabels.test.ts --testTimeout=300000 --hookTimeout=120000
+luton-proof: CI=1 SIM_NETWORK=offline VITEST_MAX_FORKS=1 VITEST_MIN_FORKS=1 SOCCER_LUTON_DISPLAY_OUT="$RUNNER_TEMP/luton-proof" SIM_OFFLINE_RECEIPT="$RUNNER_TEMP/luton-proof.transport.log" node scripts/qa/soccerHistoricalOpponentDisplayProof.mjs; s=$?; if [ -s "$RUNNER_TEMP/luton-proof.transport.log" ]; then echo "network attempted"; s=1; fi; git status --short src scripts | head -5; exit $s
+genCareerLeagueSeasons-check: node scripts/genCareerLeagueSeasons.mjs --check
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+luton-walk: SHOTS="$RC_OUT/luton-walk" node .rc/x/lutonWalk.mjs
+base-minus278: bash .rc/x/basesrv.sh 55712283 a758fcec 4174
+luton-walk-ctl-minus278: BASE=http://localhost:4174 LUTON_WALK_CONTROL=main SHOTS="$RC_OUT/luton-walk-minus278" node .rc/x/lutonWalk.mjs > /tmp/lw.log 2>&1; s=$?; grep -E "FAIL|fixture:" /tmp/lw.log | head -14 | cut -c1-160; tail -2 /tmp/lw.log | cut -c1-200; [ $s -eq 1 ] && grep -q "lutonWalk: CONTROL FIRED" /tmp/lw.log && echo FIRED-OK
+playSoccerCareerOpponents: BASE=http://localhost:4173 SHOTS="$RC_OUT/opp" node scripts/playSoccerCareerOpponents.mjs
