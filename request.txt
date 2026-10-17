@@ -1,0 +1,5 @@
+#!serial
+headsha: git log --oneline -3
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+transport: RUNNER_TRANSPORT_CONTROL=all node scripts/simRunnerTransport.mjs
+prove305: B=$(bash .rc/x/pktMinus.sh 305) || exit 2; echo "reference $B: $(git log -1 --format=%s $B)"; mkdir -p "$RC_OUT/c305"; CI=1 SIM_NETWORK=offline SAFARI_REPORT_PHASE=fixed SAFARI_REPORT_OUT="$RC_OUT/c305" SC_CREATION_BASELINE_RAW_SHA256=a26072a4a0666a129cd28125e3b81e165f702baca3d554be37a25be74c398d84 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node .rc/x/rebind.mjs scripts/qa/proveSoccerCreation1388.mjs $B; s=$?; echo "files:"; find "$RC_OUT/c305" -type f | sort | while read f; do echo "$(sha256sum "$f" | cut -c1-64) $(wc -c < "$f") ${f#$RC_OUT/}"; done | head -40; git status --porcelain --untracked-files=no | head -5; exit $s

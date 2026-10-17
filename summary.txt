@@ -1,0 +1,4 @@
+headsha exit=0 0s | f4dbf8bc6 Round BJG: Round 1501's hook test reads the market the screen lists on main (marketForScreen, Round 1344)
+tsc exit=0 66s | 
+transport exit=1 1s | Node.js v24.21.0
+prove305 exit=0 15s | d72dce0c48e366ee90c5ef9d86a55fa50a76cd1a7dfaa748f93a5289044783d6 535373 c305/creation-proof/tracked-before.json

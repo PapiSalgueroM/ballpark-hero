@@ -1,0 +1,14 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll preservation: a fresh settled roll starts and saves the displayed player 487ms
+ ✓ src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll stale settled: changing position requires a new roll before Begin Career 255ms
+ ✓ src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll stale in-flight: a previous position roll cannot publish after the switch 182ms
+ ✓ src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll preservation: a new position reroll starts with its displayed stats 246ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  18:20:06
+   Duration  3.98s (transform 1.54s, setup 70ms, collect 2.10s, tests 1.17s, environment 293ms, prepare 123ms)
+
+JSON report written to /home/runner/work/_temp/rc-out/files/c305/creation-proof/restored/units.json
