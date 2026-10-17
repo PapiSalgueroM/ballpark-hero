@@ -1,0 +1,15 @@
+simBallonDorTruth exit=0 5s | simBallonDorTruth: green. Every medal on the ceremony was won by the club that holds it, and the player's card is the record.
+simCareerCleanSheets exit=0 10s | simCareerCleanSheets: green. 24 careers a position, 8 seasons each. Defenders keep clean sheets at the keeper's rate, forwards keep none.
+simCareerDomesticCup exit=0 12s | simCareerDomesticCup: all sections green
+simCareerNoDeadEnd exit=0 1s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+simCareerLeagueFinish exit=0 15s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4819 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+simCareerLeagueSeasons exit=0 19s | simCareerLeagueSeasons: all sections green
+simInventedNames exit=0 10s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simCareerStoryRole exit=0 41s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+simPhone2 exit=1 139s | 1 FAILURES
+simSeasonCentreNeutral exit=0 22s | simSeasonCentreNeutral: 38 checks, 0 failed
+simSoccerCareerDevelopment exit=0 4s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+simMoney exit=1 193s | 1 FAILURES
+simPhone exit=0 4s | ALL PHONE CHECKS PASSED
+simSoccerWorldTruth exit=1 49s | simSoccerWorldTruth: 6 FAILURES (section 4: 1, section 6: 5)
+simCareerSquad exit=0 270s | simCareerSquad: 2214 checks, 0 failed
