@@ -1,0 +1,6 @@
+simExtraTime: node scripts/simExtraTime.mjs
+simExtraTime-noaiet: EXTRA_TIME_CONTROL=noaiet node scripts/simExtraTime.mjs
+simExtraTime-noaifinal: EXTRA_TIME_CONTROL=noaifinal node scripts/simExtraTime.mjs
+simCmLeaguePhase: node scripts/simCmLeaguePhase.mjs
+simUclField: node scripts/simUclField.mjs
+simWorldEditor: node scripts/simWorldEditor.mjs

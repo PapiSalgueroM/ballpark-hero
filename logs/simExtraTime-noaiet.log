@@ -1,0 +1,40 @@
+NEGATIVE CONTROL ON (noaiet): the AI plays its deciders the pre 670 way; section 5 must go red
+material: 37 careers walked, 1511 matches played, 60 deciders captured (modern 17, era2005 15, era2010 15, era2015 13; 52 second legs)
+1) Extra time is played exactly when it is due, in the manager's deciders
+   3000 decider replays over 60 fixtures x 50 seeds: 341 level at 90 (P = 0.114), 341 played extra time
+2) No league, group, domestic cup or first leg match ever gets extra time
+   1128 league (228 level), 173 group (38 level), 98 domestic cup (17 level, 17 straight to penalties), 52 first legs (13 level): none past 90
+3) Goals per decider do not move: A within tolerance of B, and C clears B
+   expected goals per decider (lambdas summed): A 2.724, B 2.721, C 2.821; A - B 0.003 (tolerance 0.04), C - B 0.100 (floor 0.06); n 3000, 3000, 3000
+   actual goals per decider: A 2.728, B 2.699, C 2.796; A - B 0.028 (tolerance 0.1)
+   AI second legs: A 2.595, B 2.607, C 2.672 goals; A - B -0.012 (tolerance 0.08), C - B 0.065 (floor 0.02); n 9800, 9800, 9800; extra time in 0.0 percent under A
+   solved deflator: mine 0.964, the AI's 0.969 (the constant is 0.965)
+4) The result after extra time is read the way the competition reads it
+   341 extra time matches read: 186 settled in extra time, 155 to penalties after it (coverage is section 1's); 5 folded outcomes driven directly
+5) Every AI tie settled by these replays plays extra time before penalties
+   10120 AI ties read (9800 over two legs): 0 settled in extra time, 816 to penalties after it
+   of them 320 AI finals, one legged (the walk's own, and 12 final weeks my club was not in, replayed 25 times each): 0 went to extra time, 76 of those to penalties
+  FAIL [5]: AC Milan v Rangers (era2005 F, the walk's career 10): went to penalties without extra time
+  FAIL [5]: Barcelona v Real Madrid (era2010 F, the walk's career 35): went to penalties without extra time
+  FAIL [5]: Manchester United v Manchester City (era2015 F, the walk's career 37): went to penalties without extra time
+  FAIL [5]: Aston Villa v Napoli (modern F, the walk's career 1 replay 1): went to penalties without extra time
+  FAIL [5]: Aston Villa v Napoli (modern F, the walk's career 1 replay 10): went to penalties without extra time
+  FAIL [5]: Aston Villa v Napoli (modern F, the walk's career 1 replay 12): went to penalties without extra time
+  FAIL [5]: Aston Villa v Napoli (modern F, the walk's career 1 replay 15): went to penalties without extra time
+  FAIL [5]: Aston Villa v Napoli (modern F, the walk's career 1 replay 21): went to penalties without extra time
+  FAIL [5]: (further failures in this section not printed)
+6) The report card, the viewer and the bracket say that extra time happened
+   report card: (AET), the AET 120+3' chip, the extra time line, the aggregate after it, the shootout after it, none of it on a regular match; viewer ET 97' and AET at the end; bracket aet line and the old line on an old tie
+7) The live path and the quick sim are one match, extra time included
+   40 extra time matches and 10 others equal both ways down to the report and the bracket; 12 changes at 100 kept the past and redrew 101..120
+8) Extra time is played by men with names, on the pitch at the minute
+   341 extra time matches, 5486 events of mine past 90 (4160 from the 99th minute on), each naming a man on my pitch
+9) Possession in extra time is read off rates, and a change that alters nothing leaves it
+   341 extra time matches: possession moved -0.009 points further from 50 on average when extra time was drawn (tolerance 0.5); the same shape at 100 left it exactly where it was in 248 of 248 (93 skipped, something of mine changed after 90)
+10) What announces extra time is true: level on the night, or level on aggregate on a second leg
+   117 one legged ties and 224 second legs to extra time (142 of those not level on the night, 131 in the away goals eras): the banner line and the timeline marker say what the tie says
+   a second leg shootout after extra time: the report card reads "Still level 1-1 on aggregate after extra time", the bracket "Level on aggregate after extra time. Real Madrid win on penalties."
+   a one legged shootout after extra time: the report card and the bracket say it was level after it
+
+simExtraTime control noaiet: sections red [5], required [5]
+simExtraTime control noaiet: FIRED on exactly its section(s), so the harness is red as it must be

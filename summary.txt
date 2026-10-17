@@ -1,0 +1,6 @@
+simExtraTime-noaiet exit=1 110s | simExtraTime control noaiet: FIRED on exactly its section(s), so the harness is red as it must be
+simExtraTime exit=0 111s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (
+simExtraTime-noaifinal exit=1 116s | simExtraTime control noaifinal: FIRED on exactly its section(s), so the harness is red as it must be
+simUclField exit=0 7s | simUclField: all green
+simWorldEditor exit=0 8s | simWorldEditor: 2478 checks, 0 failures
+simCmLeaguePhase exit=0 24s | simCmLeaguePhase: GREEN, 7021 checks, 0 failed, sections all.
