@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/soccerDeck.test.ts src/lib/gmInbox.test.ts --testTimeout=300000 --hookTimeout=120000
+sd1-5: SIM_SOCCER_DECK_SECTIONS=1,2,3,4,5 node scripts/simSoccerDeck.mjs
+sd8: SIM_SOCCER_DECK_SECTIONS=8 node scripts/simSoccerDeck.mjs
+sd6-10: SIM_SOCCER_DECK_SECTIONS=6,7,9,10 node scripts/simSoccerDeck.mjs
+sd-base: SIM_SOCCER_DECK_BASE=8293c758f4284d21baaa2320383cfd5cb5bd4944 SIM_SOCCER_DECK_SECTIONS=2,3,4 node scripts/simSoccerDeck.mjs
+ctl-onefree: SIM_SOCCER_DECK_CONTROL=onefree node scripts/simSoccerDeck.mjs
+ctl-freetraining: SIM_SOCCER_DECK_CONTROL=freetraining node scripts/simSoccerDeck.mjs
+ctl-bindopen: SIM_SOCCER_DECK_CONTROL=bindopen node scripts/simSoccerDeck.mjs
+kit1-12: SIM_EVENT_DECK_SECTIONS=1,2,3,4,5,6,7,8,9,10,11,12 node scripts/simEventDeck.mjs
+kit13-16: SIM_EVENT_DECK_SECTIONS=13,14,15,16 node scripts/simEventDeck.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simStaleChunk: node scripts/simStaleChunk.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
