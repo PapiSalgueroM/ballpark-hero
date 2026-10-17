@@ -1,0 +1,5 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sims3 exit=1 953s | 2 harnesses not green.
+fences exit=1 437s | 4 harnesses not green.
+sims1 exit=1 1553s | 1 harness not green.
+sims2 exit=1 2004s | 1 harness not green.

@@ -1,0 +1,25 @@
+  PASS  simCompletionOnce.mjs          14.9s
+  FAIL  simCompletionSlugs.mjs          3.0s
+  PASS  simDailyPuzzleContract.mjs      1.5s
+  FAIL  simDailySaveHardening.mjs     291.9s
+  PASS  simFetchRetry.mjs               5.7s
+  PASS  simGoogleOnlyReturn.mjs       208.2s
+  PASS  simGuideHeadings.mjs            3.0s
+  PASS  simHarnessAnchors.mjs         418.1s
+  PASS  simInventedNames.mjs           43.2s
+  FAIL  simLeaderboardCaps.mjs          4.2s
+  PASS  simLegalPages.mjs               2.5s
+  PASS  simLiveScores.mjs               2.4s
+  PASS  simNavbarStatsReads.mjs         9.9s
+  PASS  simNoDoubleRecord.mjs          75.4s
+  PASS  simNoInventedConduct.mjs        4.7s
+  PASS  simNoInventedQuotes.mjs        99.4s
+  PASS  simNoRivalNames.mjs            44.4s
+  FAIL  simReportRelay.mjs              1.0s
+  SKIP  simSchemaNames.mjs              2.3s
+  PASS  simScoringCoverage.mjs          1.5s
+  PASS  simSingleFooter.mjs             1.2s
+  PASS  simSiteSearch.mjs               3.9s
+   SKIPPED: the table could not be reached (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co), so the live column check did not run.
+
+4 harnesses not green.

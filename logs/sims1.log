@@ -1,0 +1,25 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 16 node harnesses
+  FAIL  simActivityNotCompletion.mjs   28.2s
+  PASS  simCareerAcademy.mjs           22.2s
+  PASS  simCareerDerbies.mjs          226.0s
+  PASS  simCareerDilemmaReach.mjs     219.6s
+  PASS  simCareerEras.mjs               2.1s
+  PASS  simCareerFacts.mjs             39.6s
+  PASS  simCareerKeepPlaying.mjs      388.8s
+  PASS  simCareerLeagueSeasons.mjs     89.3s
+  PASS  simCareerLeagueWorld.mjs     1309.7s
+  PASS  simCareerPositionRatings.mjs  352.1s
+  PASS  simCareerRecordedStats.mjs     21.6s
+  PASS  simCareerTransferBrief.mjs     29.6s
+  PASS  simCareerTrophyRuns.mjs        11.9s
+  PASS  simClubSquads.mjs              16.1s
+  PASS  simCmDataOnDemand.mjs          37.3s
+  PASS  simTraining.mjs                 9.5s
+
+----- simActivityNotCompletion.mjs (FAIL) -----
+  FAIL: the hook test is red:
+     FAIL  src/hooks/useClubManager.test.ts > Club Manager completion shape > a finished season records exactly one completion
+  FAIL: expected both tests to pass, vitest says: 1 failed | 1 passed (2)
+
+1 harness not green.

@@ -1,0 +1,29 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 17 node harnesses
+  PASS  simAccessibility.mjs            1.2s
+  PASS  simCareerAwardsNight.mjs      282.2s
+  PASS  simCareerSquad.mjs            951.4s
+  PASS  simCareerStoryRole.mjs        159.0s
+  PASS  simSoccerCareerDevelopment.mjs   17.1s
+  FAIL  simSoccerCareerSavedLoan.mjs    1.4s
+  PASS  simSoccerCareerSaveRetry.mjs   46.3s
+  PASS  simSoccerCurrency.mjs          28.0s
+  PASS  simSoccerFarewell.mjs          31.9s
+  PASS  simSoccerFarewellPageControl.mjs  123.1s
+  PASS  simSoccerInternationalReturn.mjs   27.5s
+  PASS  simSoccerInternationalReturnPageControl.mjs   84.7s
+  PASS  simSoccerPracticeLifecycle.mjs   35.5s
+  PASS  simSoccerVeteranTalks.mjs     242.7s
+  PASS  simStorageWrites.mjs           11.6s
+  PASS  simTrainingFeedbackMotion.mjs   25.4s
+  EMPTY simTransferBriefPageControl.mjs   43.5s
+        printed 1 line, so its checks did not run
+
+----- simSoccerCareerSavedLoan.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: Only the fixed236 gate may differ from the whole held parent app
+
+----- simTransferBriefPageControl.mjs (EMPTY) -----
+CONTROL FIRED captured-rapid-request:2 actual equality failures,4 unrelated page cases pass,6 healthy baseline cases.
+
+
+2 harnesses not green.
