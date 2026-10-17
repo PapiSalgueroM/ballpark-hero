@@ -1,3 +1,7 @@
+## Codex1409 scoped READY, 2026-10-17 UTC
+
+MLB Perfect Season keeps earlier picks and the chosen mode after archive errors. Failed rerolls spend nothing; one usable recovery charges once. ActualTESTED5250954e3beff764d09a2043eb473187fa330285, attached draftPR326, Actions39041853290/job117422777080 SUCCESS. Six source arms, original raw baseline equality,38 related cases, four MLB/NBA browser journeys, real types, serial SEO build,15 readers,14 unchanged fatal limits and full holds pass. Native physical157956/0, semantic3162/0, common2264/0. Three scoped screenshots reviewed. Three generated bodies stay outside; final closing docs and source closure are separate. BII real merge actualTESTED, I regenerates and qualifies the join. Claude I retains active Soccer Career/Manager/UCL/tournaments/main/publish. No live claim. See docs/audits/mlb-perfect-season-retry-1409.md.
+
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
