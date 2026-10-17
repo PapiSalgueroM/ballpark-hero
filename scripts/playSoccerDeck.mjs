@@ -6,7 +6,7 @@
    itself reached, and the walk knows which card the page must show.
 
    Cases, each at both sizes:
-     deal       a save at the season summary whose next step deals a deck card: the page fetches the deck as soon as
+     deal       a save at the between seasons social media screen whose Continue deals a deck card: the page fetches the deck as soon as
                 the career is on screen, the walk waits for the chunk's response (so nothing here hangs on timing),
                 presses Continue, and the first card is the deck card node dealt, its training button printing the
                 gain and the time cost (correction 16(b): nothing waited at the season end).
@@ -80,9 +80,10 @@ function step(M, s, clubs) {
     default: return null;
   }
 }
-/** A season summary at 19 or younger (no moral dilemma can come before 20, tryTriggerMoralDilemma) whose Continue
- *  path, through the social media screen only, deals a deck training card first; and that card pending. */
-const CONTINUE_PATH = new Set(['season_summary', 'social_media_action']);
+/** The between seasons social media screen at 19 or younger (no moral dilemma can come before 20,
+ *  tryTriggerMoralDilemma), whose Continue deals a deck training card first; and that card pending. (The season
+ *  summary is followed by the awards night before this screen, so the walk starts at the last screen before the deal.) */
+const CONTINUE_PATH = new Set(['social_media_action']);
 function findFixture(position) {
   const real = Math.random;
   try {
@@ -93,8 +94,7 @@ function findFixture(position) {
       let s = M.initCareer(`Deck Walk ${seed}`, 'England', position, '2010-14', st, 62, 2010, clubs, null);
       let summary = null;
       for (let guard = 0; guard < 400 && s && !s.retired && s.age <= 20; guard += 1) {
-        if (s.phase === 'season_summary') summary = copy(s);
-        else if (!CONTINUE_PATH.has(s.phase)) summary = null;
+        summary = CONTINUE_PATH.has(s.phase) ? (summary ?? copy(s)) : null;
         const next = step(M, s, clubs);
         if (!next) break;
         const first = next.phase === 'random_events' ? next.pendingEvents?.[0] : null;
@@ -110,7 +110,7 @@ function findFixture(position) {
 
 const FIX = { ST: findFixture('ST'), GK: findFixture('GK') };
 for (const [code, f] of Object.entries(FIX)) {
-  if (!check(!!f, `${code}: the engine dealt a deck training card from a season summary within 400 seeds`)) process.exit(1);
+  if (!check(!!f, `${code}: the engine dealt a deck training card from the social media screen within 400 seeds`)) process.exit(1);
   console.log(`   ${code} seed ${f.seed}: ${f.card.id} "${f.card.title}", "${f.card.labels[0]}" prints "${f.card.consequence}"`);
 }
 const clubs = O.engine.FALLBACK_CLUBS;
