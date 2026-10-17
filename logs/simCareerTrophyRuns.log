@@ -1,0 +1,52 @@
+FAIL engine baseline: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    draws: [
+      0.23147535882890224,
+      0.21313480869866908,
+      0.31649208161979914,
+...
+      phone: {
++       bK: undefined,
++       bM: undefined,
++       bP: undefined,
++       bYear: undefined,
+        clubs: {
+          'Bukayo Saka': 'Arsenal',
+          'Declan Rice': 'Arsenal',
+          'Désiré Doué': 'PSG',
+          'Erling Haaland': 'Leverkusen',
+
+PASS reader baseline
+PASS saved markup
+PASS missing markup
+PASS actual campaign baseline
+PASS actual campaign markup
+PASS snapshot precedence
+PASS read boundary
+PASS winning seasons
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: All nine healthy outcome groups pass
++ actual - expected
+
++ [
++   'engine baseline'
++ ]
+- []
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerTrophyRuns.mjs:172:50
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [ 'engine baseline' ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
