@@ -1,0 +1,4 @@
+#!serial
+n300: SIM_SOCCER_DECK_ECONOMY_N=300 SIM_SOCCER_DECK_SECTIONS=8 node scripts/simSoccerDeck.mjs
+n300-free: SIM_SOCCER_DECK_ECONOMY_N=300 SIM_SOCCER_DECK_CONTROL=freetraining node scripts/simSoccerDeck.mjs
+alt-fleet: sed -i 's/20000 + sd \* 1000 + n/50000 + sd * 1000 + n/' scripts/simSoccerDeck.mjs && test "$(grep -c '50000 + sd' scripts/simSoccerDeck.mjs)" = 1 && { SIM_SOCCER_DECK_SECTIONS=8 node scripts/simSoccerDeck.mjs > /tmp/a.log 2>&1; a=$?; SIM_SOCCER_DECK_CONTROL=freetraining node scripts/simSoccerDeck.mjs > /tmp/b.log 2>&1; b=$?; grep -E "legacy|FAIL" /tmp/a.log | cut -c1-260; tail -1 /tmp/a.log; grep -E "legacy|FAIL" /tmp/b.log | cut -c1-260; tail -1 /tmp/b.log; git checkout -- scripts; echo "alt fleet (careers 50000+): shipped exit=$a, freetraining exit=$b"; }

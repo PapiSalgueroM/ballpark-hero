@@ -1,0 +1,9 @@
+   legacy: off 51.48 (seed to seed sd 1.62), best 51.25 (-0.23), worst 51.13 (-0.35), neutral 51.48 (+0.00), band 1.2
+   legacy against the deck off: BEST -0.23 (seeds 0.35 -0.72 -0.58 0.91 -1.12), WORST -0.35 (seeds 0.02 -0.99 -0.63 1.15 -1.30), NEUTRAL 0.00 (seeds 0.00 0.00 0.00 0.00 0.00); the seed to seed spread 1.62, the ruling's band 1.2
+simSoccerDeck: green. Sections 8 only.
+   legacy: off 51.48 (seed to seed sd 1.62), best 53.96 (+2.48), worst 54.06 (+2.58), neutral 51.48 (+0.00), band 1.2
+   FAIL best moves legacy by 2.48 against the deck off, band 1.2
+   FAIL worst moves legacy by 2.58 against the deck off, band 1.2
+   legacy against the deck off: BEST 2.48 (seeds 3.36 1.70 2.40 3.36 1.59), WORST 2.58 (seeds 3.29 1.59 2.83 3.44 1.75), NEUTRAL 0.00 (seeds 0.00 0.00 0.00 0.00 0.00); the seed to seed spread 1.62, the ruling's band 1.2
+simSoccerDeck: CONTROL=freetraining FIRED: section 8 failed (2 failures, red sections 8)
+alt fleet (careers 50000+): shipped exit=0, freetraining exit=1

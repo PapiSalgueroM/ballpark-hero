@@ -1,0 +1,3 @@
+n300 exit=0 165s | simSoccerDeck: green. Sections 8 only.
+n300-free exit=1 168s | simSoccerDeck: CONTROL=freetraining FIRED: section 8 failed (2 failures, red sections 8)
+alt-fleet exit=0 116s | alt fleet (careers 50000+): shipped exit=0, freetraining exit=1
