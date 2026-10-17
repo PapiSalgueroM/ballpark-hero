@@ -1,0 +1,33 @@
+sd-12345 exit=0 63s | simSoccerDeck: green. Sections 1, 2, 3, 4, 5 only.
+tsc exit=0 73s | 
+sd-8 exit=0 91s | simSoccerDeck: green. Sections 8 only.
+vitest exit=0 3s |    Duration  2.89s (transform 1.65s, setup 176ms, collect 2.43s, tests 248ms, environment 807ms, prepare 382ms)
+sd-67910 exit=0 45s | simSoccerDeck: green. Sections 6, 7, 9, 10 only.
+sd-base exit=0 56s | simSoccerDeck: green. Sections 2, 3, 4 only.
+c-bindopen exit=1 1s | simSoccerDeck: CONTROL=bindopen FIRED: section 1 failed (23 failures, red sections 1)
+c-leak exit=1 26s | simSoccerDeck: CONTROL=leak FIRED: section 2 failed (2 failures, red sections 2)
+kit-1-12 exit=0 66s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+c-pool exit=1 20s | simSoccerDeck: CONTROL=pool FIRED: section 3 failed (5 failures, red sections 3)
+c-last exit=1 21s | simSoccerDeck: CONTROL=last FIRED: section 3 failed (3 failures, red sections 3)
+c-neutralmoves exit=1 15s | simSoccerDeck: CONTROL=neutralmoves FIRED: section 4 failed (1 failures, red sections 4)
+c-noreseed exit=1 15s | simSoccerDeck: CONTROL=noreseed FIRED: section 4 failed (1 failures, red sections 4)
+c-silent exit=1 9s | simSoccerDeck: CONTROL=silent FIRED: section 5 failed (2 failures, red sections 5)
+c-drop exit=1 9s | simSoccerDeck: CONTROL=drop FIRED: section 5 failed (2 failures, red sections 5)
+c-ceiling exit=1 10s | simSoccerDeck: CONTROL=ceiling FIRED: section 5 failed (2 failures, red sections 5)
+c-posleak exit=1 22s | simSoccerDeck: CONTROL=posleak FIRED: section 6 failed (1 failures, red sections 6)
+kit-13-16 exit=0 130s | simEventDeck: green. Sections 13, 14, 15, 16 only.
+c-mathrandom exit=1 26s | simSoccerDeck: CONTROL=mathrandom FIRED: section 7 failed (2 failures, red sections 7)
+c-keyseason exit=1 26s | simSoccerDeck: CONTROL=keyseason FIRED: section 7 failed (1 failures, red sections 7)
+c-noresolve exit=1 5s | simSoccerDeck: CONTROL=noresolve FIRED: section 9 failed (1 failures, red sections 9)
+c-eager exit=1 2s | simSoccerDeck: CONTROL=eager FIRED: section 10 failed (2 failures, red sections 10)
+c-caller exit=1 2s | simSoccerDeck: CONTROL=caller FIRED: section 10 failed (1 failures, red sections 10)
+c-pagesilent exit=1 2s | simSoccerDeck: CONTROL=pagesilent FIRED: section 10 failed (1 failures, red sections 10)
+k-reachthin exit=1 3s | simEventDeck: 1 failure, red sections 10 (CONTROL=reachthin fired)
+k-unreach exit=1 10s | simEventDeck: 1 failure, red sections 10 (CONTROL=unreach fired)
+f-stalechunk exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+f-storagewrites exit=0 2s | simStorageWrites: all green (owed: 12)
+f-trustcopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+f-norival exit=0 13s | No rival product names found. 0 findings.
+c-pressure exit=1 88s | simSoccerDeck: CONTROL=pressure FIRED: section 8 failed (3 failures, red sections 8)
+c-freetraining exit=1 92s | simSoccerDeck: CONTROL=freetraining FIRED: section 8 failed (2 failures, red sections 8)
+f-anchors exit=0 54s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

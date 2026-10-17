@@ -1,0 +1,20 @@
+NEGATIVE CONTROL ON: mathrandom (section 7 must fail)
+simSoccerDeck: head and base e814c2de bundled (1.3 s); the shipped pack holds 28 cards, CONTROL=mathrandom
+1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing
+2) Inert: the deck not loaded, 200 careers of 12 seasons, every save byte equal to the base's after every step and the Math.random count equal
+3) Adds, never replaces: at each deal, from one identical state, the old batch is the base's and a deck card is first
+4) Neutral: every deck card answered on the option that moves nothing, every season end save is the base's but for the deck's own stamps
+5) Promises: every option moves what its button prints, to the bound and no further, says what landed, and never moves money or fame
+6) Reach by position: every position card reaches its own group and never another, every situation card someone, no keeper word for an outfielder
+7) Keyed: the slot and the deck's answers draw no Math.random, the same save deals the same card in a fresh bundle, and the season moves the pick
+   the loaded fleet: 1942 slot calls and 1815 deck answers drew Math.random 1815 times; the whole fleet drew it 1159970 times (printed, never asserted)
+   FAIL the slot and the deck's answers drew Math.random 1815 times
+   FAIL 123 of 389 saves deal a different card in a fresh bundle
+   the same save eight summers, the year moved: careers dealt at least two different cards, by sample: 100.0, 100.0, 100.0, 100.0, 100.0 percent (floor 80); sample 0 had 0 saves dealt one card eight times
+   ok the pick moves with the season
+8) Economy: four answer arms against the deck off, over five seeds of whole careers
+9) Old saves: the base's saves load and play here as they do there; a save with a deck card pending loads on the base (skipped, its stamp handed back) and answers here
+10) Lazy: the page and the engine reach the gate and nothing of the deck, and the page is the one caller that loads it
+
+runtime 25.7 s
+simSoccerDeck: CONTROL=mathrandom FIRED: section 7 failed (2 failures, red sections 7)
