@@ -1,0 +1,12 @@
+mut1504: guard applied to src/pages/SoccerCareer.tsx
+playSoccerDeck: green, every case at 390 and 1280.
+FAIL 390-rm-secondpress: one season log line for the card
+FAIL 390-rm-secondpress: the save holds the FIRST press's answer
+FAIL 390-rm-secondpress: one result toast, none for the second press (["Nothing changes","You push through the sprint work. Morale -1, Pace next season +1, Shooting next season -1."])
+FAIL 390-anim-secondpress: one season log line for the card
+FAIL 390-anim-secondpress: the save holds the FIRST press's answer
+FAIL 390-anim-secondpress: one result toast, none for the second press (["Nothing changes","You push through the sprint work. Morale -1, Pace next season +1, Shooting next season -1."])
+FAIL 1280-rm-secondpress: one season log line for the card
+FAIL 1280-rm-secondpress: the save holds the FIRST press's answer
+walk1504: 12 failure(s)
+guard mutation: builder walk exit=0, reviewer walk exit=1
