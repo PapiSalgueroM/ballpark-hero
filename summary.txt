@@ -1,0 +1,8 @@
+headsha exit=0 0s | f1e54e171 Round BIK: merge Round 1508 (r1508-cm-old-careers-world at 51423bf5), Club Manager careers started before 13 O
+appeal exit=0 34s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+appeal-bare-EXPECT-PIN exit=1 7s |   code: 'ERR_ASSERTION',
+appeal-without1508 exit=0 34s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simCmLeagueRules exit=0 55s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simClubManagerDecisions exit=0 35s | simClubManagerDecisions: 0 findings
+anc exit=0 5s | simActivityNotCompletion: all green
+held-after exit=0 0s | src and scripts held after every line
