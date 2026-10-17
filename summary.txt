@@ -1,0 +1,5 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-nopill exit=0 58s | playCmDifficulty control nopill: all 1 guarded checks fired (mutations landed: {"pill":3})
+playClubManagerSlots exit=0 11s | playClubManagerSlots: green
+walk exit=0 81s |   PASS  no page errors
+playCmNoSack exit=0 257s |   PASS  no page errors
