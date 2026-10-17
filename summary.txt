@@ -1,0 +1,9 @@
+simUsDirtyMoney exit=0 42s | simUsDirtyMoney: all sections green
+ctl-farm exit=1 44s | CONTROL farm FIRED (red sections 7)
+ctl-cap exit=1 47s | CONTROL cap FIRED (red sections 7)
+ctl-words exit=1 37s | CONTROL words FIRED (red sections 1, 4)
+ctl-flat exit=1 44s | CONTROL flat FIRED (red sections 7)
+ctl-cool8 exit=1 49s | CONTROL cool8 FIRED (red sections 9)
+ctl-deck exit=1 40s | CONTROL deck FIRED (red sections 5)
+simUsDirtyMoney-base exit=0 44s | simUsDirtyMoney: all sections green
+simUsDirtyMoney-big exit=1 90s | simUsDirtyMoney: 11 failures in sections 7
