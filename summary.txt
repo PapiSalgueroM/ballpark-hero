@@ -1,0 +1,4 @@
+vitest exit=0 6s |    Duration  5.36s (transform 2.34s, setup 62ms, collect 2.57s, tests 1.60s, environment 461ms, prepare 276ms)
+noRival exit=0 13s | No rival product names found. 0 findings.
+anchors exit=0 33s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 48s | 
