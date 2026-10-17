@@ -535,7 +535,8 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
   delete s.worldSeed;
   /* Round 1502: and no watched Champions League. startCareer opens one for a club that is not in it; a hot
      seat day is the day it is, and the career handed to Club Manager (handoverState) is like any save from
-     before the round, which gets its slice at its next rollover. It draws nothing, so the deal cannot move:
+     before the round: a season one of today's world, so Club Manager's first load opens its slice
+     (repairWorldUcl). It draws nothing, so the deal cannot move:
      scripts/simDailyDeals.mjs holds the day's shape, and its world control puts this line back out. */
   delete s.worldComps;
   /* Round 1331: and the match rules the day plays, set before the first week (rulesOf). A day on the base
