@@ -1,0 +1,5 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-jump exit=0 31s | playCmDifficulty control jump: all 1 guarded checks fired (mutations landed: {"blurb":2})
+walk-nopill exit=0 60s | playCmDifficulty control nopill: all 1 guarded checks fired (mutations landed: {"pill":3})
+walk exit=0 86s |   PASS  no page errors
+playCmNoSack exit=0 261s |   PASS  no page errors

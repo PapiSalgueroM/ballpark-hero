@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: node scripts/playCmDifficulty.mjs
+walk-jump: WIDTHS=320 PLAY_DIFF_CONTROL=jump node scripts/playCmDifficulty.mjs
+walk-nopill: WIDTHS=390 PLAY_DIFF_CONTROL=nopill node scripts/playCmDifficulty.mjs
+playCmNoSack: node scripts/playCmNoSack.mjs
