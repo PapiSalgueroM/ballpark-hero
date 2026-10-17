@@ -1,0 +1,1 @@
+dailytime exit=0 17s | dailyTime1502: measured 18 dates on d8aaa4cb and this tree

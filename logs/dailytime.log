@@ -1,0 +1,21 @@
+hot      2026-10-10: base first 181 ms, then 113 ms; tree first 194 ms, then 123 ms; watches true
+hot      2026-10-11: base first 156 ms, then 116 ms; tree first 174 ms, then 124 ms; watches true
+hot      2026-10-12: base first 147 ms, then 99 ms; tree first 143 ms, then 98 ms; watches true
+hot      2026-10-13: base first 143 ms, then 103 ms; tree first 147 ms, then 104 ms; watches true
+hot      2026-10-14: base first 146 ms, then 103 ms; tree first 150 ms, then 99 ms; watches true
+hot      2026-10-15: base first 140 ms, then 104 ms; tree first 146 ms, then 98 ms; watches true
+hot      2026-10-16: base first 131 ms, then 93 ms; tree first 136 ms, then 91 ms; watches true
+hot      2026-10-27: base first 146 ms, then 105 ms; tree first 153 ms, then 106 ms; watches true
+hot      2026-11-14: base first 150 ms, then 108 ms; tree first 155 ms, then 107 ms; watches true
+hot      2027-01-19: base first 146 ms, then 104 ms; tree first 181 ms, then 131 ms; watches true
+hot      2027-01-30: base first 147 ms, then 102 ms; tree first 147 ms, then 102 ms; watches true
+hot      2027-02-06: base first 152 ms, then 111 ms; tree first 156 ms, then 104 ms; watches true
+deadline 2026-10-10: base first 32 ms, then 18 ms; tree first 38 ms, then 17 ms; watches true
+deadline 2026-10-11: base first 40 ms, then 17 ms; tree first 33 ms, then 18 ms; watches false
+deadline 2026-10-12: base first 36 ms, then 20 ms; tree first 77 ms, then 56 ms; watches true
+deadline 2026-10-18: base first 38 ms, then 19 ms; tree first 44 ms, then 19 ms; watches true
+deadline 2026-11-01: base first 39 ms, then 18 ms; tree first 35 ms, then 19 ms; watches false
+deadline 2026-11-09: base first 34 ms, then 21 ms; tree first 41 ms, then 22 ms; watches true
+hot: mean of the medians, base 105 ms, tree 107 ms; first call base 149 ms, tree 157 ms
+deadline: mean of the medians, base 19 ms, tree 25 ms; first call base 37 ms, tree 45 ms
+dailyTime1502: measured 18 dates on d8aaa4cb and this tree
