@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk-nopill: WIDTHS=390 PLAY_DIFF_CONTROL=nopill node scripts/playCmDifficulty.mjs
