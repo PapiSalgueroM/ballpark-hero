@@ -114,7 +114,9 @@ export function applyNewJobDials(state: CareerState): CareerState {
   const d = dialsOf(state);
   if (d.cheque === 1 && d.wageRoom === 1) return state;
   const next: CareerState = { ...state, budget: boardCheque(state, state.budget) };
-  if (state.wageCap !== undefined) {
+  /* Only when the room dial moves: taking the founders' room off and putting it back is not the identity on
+     every double, and a dial at its identity value must leave its number exactly as it was (correction 10). */
+  if (state.wageCap !== undefined && d.wageRoom !== 1) {
     const room = state.founderWageRoom ?? 0;
     next.wageCap = wageRoomFor(state, state.wageCap - room) + room;
   }
