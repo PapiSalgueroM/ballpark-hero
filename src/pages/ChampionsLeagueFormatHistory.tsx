@@ -75,7 +75,7 @@ function engineFaqAnswer(): string {
   const standInText = standIns.map(s => `The ${s.era.label} start is the stand in: ${s.line.replace(/ A stand in: the real/, ' The real').replace(/^Eight/, 'eight')}`).join(' ');
   /* Round 1503: a season the club is not in it, the save follows the real league phase (the shape's `watched`). */
   const followed = standIns.some(s => s.watched === 'l36');
-  return `Because the game does not put your own club through the league phase yet, and we would rather say so than pretend. ${standInText}${followed ? ' So in a season your club is not in it, you can follow the whole of the real one from the Cups tile: the 36 club table, the play-offs, the knockouts and the final.' : ''} The ${realLabels} starts play the real format of their own seasons.`;
+  return `Because the game does not put your own club through the league phase yet, and we would rather say so than pretend. ${standInText}${followed ? ' So in a season your club is not in it, you can follow a full season of it in the real format from the Cups tile, played by the game: the 36 club table, the play-offs, the knockouts and the final.' : ''} The ${realLabels} starts play the real format of their own seasons.`;
 }
 
 const FAQS = [
