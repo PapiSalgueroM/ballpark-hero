@@ -1,0 +1,20 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerNoSack.test.tsx src/lib/clubManagerSlots.test.ts src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+diff-base: git worktree add -q /tmp/b1 d8aaa4cb && BASE_ROOT=/tmp/b1 node scripts/simCmDifficulty.mjs
+diff-leak: git worktree add -q /tmp/b2 d8aaa4cb && BASE_ROOT=/tmp/b2 CM_DIFF_CONTROL=leak node scripts/simCmDifficulty.mjs
+diff-alloffleak: CM_DIFF_CONTROL=alloffleak node scripts/simCmDifficulty.mjs
+diff-helpdrift: CM_DIFF_CONTROL=helpdrift node scripts/simCmDifficulty.mjs
+diff-suite: node scripts/simCmDifficulty.mjs
+simCmNoSack: node scripts/simCmNoSack.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simAcademy: node scripts/simAcademy.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simEras: node scripts/simEras.mjs
+simRoles: node scripts/simRoles.mjs
+simWilderness: node scripts/simWilderness.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
