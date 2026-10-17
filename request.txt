@@ -1,0 +1,17 @@
+# Release BJ, Round 1501 (Club Manager difficulty: Normal, Hard and Legend), merged in Round BJG as m1 c06f27b5 (first
+# parent 60824a23, main with Release BI). Normal must equal the tree without 1501 to the byte (simCmDifficulty sections
+# 2 and 6, BASE_ROOT). On the final tree that base CANNOT be formed: scripts/lib/treeWithoutMerge.mjs c06f27b5 60824a23
+# exits 2 (taking 1501 out conflicts with Round 1503 in ClubManagerHelp.tsx and clubManagerCalendar.ts, and with the
+# seam f4dbf8bc), so the byte proof is bound to the merge itself: the lines below rerun it in a worktree of c06f27b5
+# against 60824a23, exactly as runner bjg-m1 did (diffbase 0, leak 1 FIRED 170). What the later merges add to a Normal
+# career is proven by their own lines (Round 1502's fleet proof, rc-BJc). Controls and the walk run on the final tree.
+# SECTION=4 (about 36 minutes) is rc-BJa2, its own request.
+diff-base: git worktree add -q .wt1501 c06f27b5 && git worktree add -q /tmp/b1501 60824a23 && cd .wt1501 && BASE_ROOT=/tmp/b1501 node scripts/simCmDifficulty.mjs
+diff-leak: git worktree add -q .wt1501l c06f27b5 && git worktree add -q /tmp/b1501l 60824a23 && cd .wt1501l && BASE_ROOT=/tmp/b1501l CM_DIFF_CONTROL=leak node scripts/simCmDifficulty.mjs; s=$?; [ $s = 1 ] && echo "leak FIRED as it must" && exit 0; echo "leak did not exit 1 ($s)"; exit 1
+sec2-fleet: git worktree add -q .wt1501f c06f27b5 && git worktree add -q /tmp/b1501f 60824a23 && cd .wt1501f && SECTION=2 SEEDS=5 SEASONS=3 BASE_ROOT=/tmp/b1501f node scripts/simCmDifficulty.mjs
+diff-ctl: ok=0; r=""; for k in nojoin helpdrift cheque wages alloffleak; do CM_DIFF_CONTROL=$k node scripts/simCmDifficulty.mjs > /tmp/cd-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/cd-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+nosack: git worktree add -q /tmp/b1501n 60824a23 && git worktree add -q .wt1501n c06f27b5 && cd .wt1501n && BASE_ROOT=/tmp/b1501n node scripts/simCmNoSack.mjs
+vitest-1501: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerNoSack.test.tsx src/lib/clubManagerSlots.test.ts src/test/clubManagerSlots.test.tsx src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+meters: node scripts/simClubManagerMeters.mjs
+wilderness: node scripts/simWilderness.mjs
+tactics: node scripts/simTacticsEngine.mjs

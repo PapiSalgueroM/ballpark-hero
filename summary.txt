@@ -1,0 +1,9 @@
+diff-leak exit=0 3s | leak FIRED as it must
+sec2-fleet exit=1 3s | Node.js v24.21.0
+diff-base exit=1 3s | Node.js v24.21.0
+nosack exit=1 3s | Node.js v24.21.0
+vitest-1501 exit=0 14s |    Duration  13.34s (transform 3.58s, setup 621ms, collect 11.82s, tests 14.48s, environment 3.88s, prepare 1.02s)
+wilderness exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+meters exit=0 41s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+tactics exit=0 103s | simTacticsEngine: PASS. A man is read in his slot, a second position is earned over counted weeks, the armband and the takers reach the stream, a duty moves the football 
+diff-ctl exit=0 245s | controls (each must be 1): nojoin=1 helpdrift=1 cheque=1 wages=1 alloffleak=1
