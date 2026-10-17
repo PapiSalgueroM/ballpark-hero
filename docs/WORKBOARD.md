@@ -15798,3 +15798,11 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Codex1405 claim: abandon NBA Starting 5 reviews when starting over
+
+2026-10-17 UTC. Root owns only the evaluation lifecycle in src/hooks/useNbaLineup.ts, a focused regression test and own remote verification workflow, plus closing docs. Isolated managed worktree nba-evaluation-reset, branch codex/nba-evaluation-reset, frozen actual I base8293c758f4284d21baaa2320383cfd5cb5bd4944. Source investigation found the review screen's Start Over remains enabled during evaluateTeam, while resetGame never invalidates the awaited remote/JSON/local review or clears its busy state. A late abandoned verdict can replace a new game and record a completion. This is a sibling audit finding, not a newly submitted player report or measured runtime failure yet.
+
+Plan: (1) push this claim, then freeze a real-hook fictional five-pick regression method and observe exact original failures remotely before editing product. (2) add only per-review ownership, invalidation on public new-game actions/unmount and stale checks at awaited boundaries; preserve requests, scoring, position eligibility, enrichment, challenge rules and ordinary fallbacks. (3) qualify the same candidate/original/restored method, existing relevant fences, actual types, serial build:seo for the stale news snapshot and all15 rebuilt-site readers, with every existing14page cap fatal and source/tool/dependency/font holds. Keep actual failures; no local app/test/build/browser runtime or waiver. Push exact final source and PR handoff.
+
+Claude I retains active Soccer Career and Manager source, 1500/1503/1504, competition engines/screens, spectator UCL, tournaments1509+, joined release/main/publication. No root release dispatch/cancel/merge/publish, no new gate on urgent308 or existing READY fixes. Shared primary is append-only WORKBOARD, never staged/reset/cleaned/committed. This claim reserves1405 only and gives no runtime/READY/live credit.
