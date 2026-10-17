@@ -1,0 +1,7 @@
+#!serial
+appeal-bare-EXPECT-PIN: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+appeal-retake: node .rc/x/pinAll.mjs e814c2de --write && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs; s=$?; git diff --stat -- scripts/fixtures; git checkout -- scripts/fixtures; exit $s
+rules-bare-EXPECT-DIGEST: node scripts/simCmLeagueRules.mjs
+rules-retake: git worktree add -q .claude/worktrees/rt HEAD && ln -s "$PWD/node_modules" .claude/worktrees/rt/node_modules && node .claude/worktrees/rt/scripts/simCmLeagueRules.mjs --write | tail -2 && git -C .claude/worktrees/rt diff --stat && node .claude/worktrees/rt/scripts/simCmLeagueRules.mjs
+decisions-seed4-CARRIED: SIM_SEED=4 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs
+decisionRegression1081-CARRIED: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerDecisionRegression1081.mjs

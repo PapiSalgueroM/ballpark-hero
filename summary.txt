@@ -1,0 +1,6 @@
+appeal-bare-EXPECT-PIN exit=1 5s | Node.js v24.21.0
+appeal-retake exit=0 27s |  1 file changed, 2 insertions(+), 2 deletions(-)
+rules-bare-EXPECT-DIGEST exit=1 43s | simCmLeagueRules: 47 failure(s)
+rules-retake exit=0 87s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+decisions-seed4-CARRIED exit=1 13s | simClubManagerDecisions: 3 findings
+decisionRegression1081-CARRIED exit=1 121s | Node.js v24.21.0

@@ -1,0 +1,17 @@
+5. declining is main: 4 of 4 seasons byte identical, 126 desk cards met and declined
+3b. left open: 42 unanswered cards closed at the next match, 9 of them appeals
+1. appeals: 195 matches, 7 straight reds, 3 second yellows, 7 appeals offered
+3. bans: 7 appeals lodged (2 won, 5 lost), 7 accepts walked; by tier {"40":7} lodged, {"40":2} won
+   odds read against his own red count on 7 appeals
+7. summers: 2 crossed with a desk on the save, 0 cards carried across
+4b. actual graduate cohort: 1 careers, 53 entries, 1 promotions, 1 kept state, apps 1, 3 added academyStepUp pairs; bounds 3 careers x 180 entries; skipped=false.
+4b. actual press cohort: 3 careers, 181 entries, 58 press answers, 0 kept state, mood unavailable, 0 added pressPressure pairs; bounds 3 careers x 180 entries; skipped=false.
+3b. planted: 21 of 21 planted appeals closed as expired at the next match
+4. answers: 524 applied, 33 of 36 card answers walked, 15 met a bound, from 21 kept states
+2. odds: 40% stated, 40.39% observed; 25% stated, 25.37% observed; 15% stated, 15.04% observed; end to end 28.6% of 7 lodged in the seasons
+6. words: 261 desk cards read
+   the desk block on the save: mean 2003 bytes, 90th percentile 2660, over 471 readings
+FAIL [4] actual press cohort found no recorded mood below35 state within 3 careers of 180 entries
+FAIL [4] actual press cohort added 0 pressPressure answer pairs, expected 3
+FAIL [4] only 33 of 36 card answers were walked; missing pressPressure#0, pressPressure#1, pressPressure#2
+simClubManagerDecisions: 3 findings
