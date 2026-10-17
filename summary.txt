@@ -1,0 +1,9 @@
+c-carryentrant exit=1 228s | simWorldUcl: control carryentrant FIRED (79 failures, all its own)
+rev-edgeswap exit=1 228s | simWorldUcl: RED, 475618 checks, 8426 failures
+rev-swaphome exit=1 234s | simWorldUcl: RED, 475186 checks, 11649 failures
+c-titles exit=1 166s | simWorldUcl: control titles FIRED (11649 failures, all its own)
+c-nofall exit=1 228s | simWorldUcl: control nofall FIRED (666 failures, all its own)
+rev-standweak exit=1 228s | simWorldUcl: RED, 475299 checks, 43 failures
+rev-memokey exit=1 222s | simWorldUcl: RED, 475299 checks, 7060 failures
+rev-noholdertop exit=1 317s | simWorldUcl: RED, 75495 checks, 133 failures
+rev-nocustomexit exit=1 331s | simWorldUcl: RED, 475449 checks, 1 failures

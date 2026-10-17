@@ -1,0 +1,83 @@
+mut1502b: swaphome APPLIED to /tmp/s-swaphome/src/lib/clubManager.ts
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020), Villarreal (era2005), Werder Bremen (era2010), Sevilla (era2015), Marseille (era2020); seeds 1,2,3,4,5
+  1 stand ins: era2005 Valencia for Villarreal; era2010 Manchester City for Werder Bremen; era2015 Liverpool for Sevilla; era2020 Tottenham for Marseille
+  1 and 3: 65 journeys in 200 s
+  7 goals a watched match 2.635 (19680 matches); a domestic league match 2.624
+  7 ties 3106: to extra time 10.5 percent, to penalties 5.2 percent
+  4 slice bytes g8: 112 seasons, mean 627, smallest 594, largest 669
+  4 slice bytes l36: 63 seasons, mean 1432, smallest 1411, largest 1469
+  1 device order: 40 group seasons evaluated level both ways
+  1 created club left in the summer: Proof Town Athletic (top of premier, in place of Hull City) to Málaga; the watched field holds Hull City
+  3 league sizes: now 10, now 12, now 14, now 15, now 16, now 18, now 20, now 24, era2005 18, era2005 20, era2010 18, era2010 20, era2015 18, era2015 20, era2020 18, era2020 20
+  3 move probe: 112 moves that carried the slice, 11 of them onto a calendar behind the old one
+  1 era seasons with a stand in for my club: 38
+  1 opened seasons drawn with the holder first: 133
+  1 seasons a mid season move left with no competition, by the rule: 2
+  1 seasons in the Champions League (not watched): 19
+  1 seasons where exclude took out a direct entrant (a summer move): 2
+  1 watched matches replayed on simAiMatch: 19680
+  1 watched seasons g8: 112
+  1 watched seasons l36: 62
+  3 calendar checks g8 uclGroup: 29700
+  3 calendar checks g8 uclKo: 34650
+  3 calendar checks l36 date: 30888
+  3 calendar checks l36 uclGroup: 16848
+  3 date checks g8: 129
+  3 date checks l36: 80
+  3 joins that carried the slice g8: 9
+  3 joins that carried the slice l36: 5
+  3 joins that carried the slice: 14
+  3 joins that dropped the slice: 1
+  3 joins that opened a fresh slice: 4
+  3 joins to an entrant that still watches, a fresh slice opened: 4
+  3 joins with nothing to carry or open: 2
+  3 reloads right after a join: 30
+  3 states checked: 7758
+  7 g8 draws: 112
+  7 l36 slates with an association break: 3
+  7 l36 slates: 62
+  7 titles by strength quartile 1: 2
+  7 titles by strength quartile 2: 22
+  7 titles by strength quartile 3: 42
+  7 titles by strength quartile 4: 108
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD1 PSG v Club Brugge is 0-1, simAiMatch over the snapshot says 2-0
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD1 Bayern Munich v Aston Villa is 0-0, simAiMatch over the snapshot says 1-1
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD1 Roma v Stuttgart is 2-2, simAiMatch over the snapshot says 2-1
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD1 Atlético Madrid v AGF is 0-4, simAiMatch over the snapshot says 2-0
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD1 Inter Milan v Celtic is 1-5, simAiMatch over the snapshot says 1-2
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD1 Borussia Dortmund v Liverpool is 0-2, simAiMatch over the snapshot says 0-3
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD1 Porto v Manchester United is 2-2, simAiMatch over the snapshot says 1-0
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD1 AC Milan v Barcelona is 2-0, simAiMatch over the snapshot says 1-0
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD1 Lille v Feyenoord is 2-1, simAiMatch over the snapshot says 3-0
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD1 Hoffenheim v Lens is 0-3, simAiMatch over the snapshot says 0-4
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD1 AEK Athens v Dinamo Zagreb is 1-3, simAiMatch over the snapshot says 1-2
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD1 LASK v Sporting CP is 1-0, simAiMatch over the snapshot says 1-2
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD1 Thun v Como is 0-0, simAiMatch over the snapshot says 0-3
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD2 PSG v Celtic is 4-0, simAiMatch over the snapshot says 5-0
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD2 Real Madrid v Liverpool is 2-0, simAiMatch over the snapshot says 2-1
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD2 Manchester City v AGF is 0-7, simAiMatch over the snapshot says 7-0
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD2 Aston Villa v Barcelona is 1-1, simAiMatch over the snapshot says 1-4
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD2 Villarreal v Bayern Munich is 2-0, simAiMatch over the snapshot says 2-1
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD2 Galatasaray v AEK Athens is 1-1, simAiMatch over the snapshot says 2-0
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD2 AC Milan v Sporting CP is 1-2, simAiMatch over the snapshot says 2-1
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD2 Club Brugge v Inter Milan is 2-3, simAiMatch over the snapshot says 1-0
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD2 Lille v Manchester United is 1-0, simAiMatch over the snapshot says 1-1
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD2 Feyenoord v Thun is 0-1, simAiMatch over the snapshot says 1-0
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD2 LASK v Borussia Dortmund is 2-0, simAiMatch over the snapshot says 0-1
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD2 Dinamo Zagreb v Lyon is 3-1, simAiMatch over the snapshot says 0-2
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD3 Liverpool v Inter Milan is 2-3, simAiMatch over the snapshot says 3-2
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD3 Bayern Munich v AEK Athens is 3-1, simAiMatch over the snapshot says 5-0
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD3 Aston Villa v Sporting CP is 0-0, simAiMatch over the snapshot says 1-1
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD3 Napoli v Stuttgart is 4-1, simAiMatch over the snapshot says 5-0
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD3 RB Leipzig v Club Brugge is 1-2, simAiMatch over the snapshot says 1-1
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD3 PSV v Galatasaray is 3-2, simAiMatch over the snapshot says 2-0
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD3 AC Milan v AGF is 0-3, simAiMatch over the snapshot says 3-0
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD3 Lille v Borussia Dortmund is 2-0, simAiMatch over the snapshot says 0-2
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD3 Feyenoord v Barcelona is 1-0, simAiMatch over the snapshot says 0-1
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD3 Hoffenheim v PSG is 1-1, simAiMatch over the snapshot says 0-1
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD3 LASK v Celtic is 4-2, simAiMatch over the snapshot says 3-1
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD3 Thun v Arsenal is 1-0, simAiMatch over the snapshot says 0-0
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD4 Real Madrid v Lille is 2-2, simAiMatch over the snapshot says 2-1
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD4 Borussia Dortmund v Como is 2-4, simAiMatch over the snapshot says 2-3
+FAIL 1 match: Chelsea (now) season 1 seed 1 now at Werder Bremen MD4 Napoli v LASK is 1-2, simAiMatch over the snapshot says 1-0
+simWorldUcl: RED, 475186 checks, 11649 failures
