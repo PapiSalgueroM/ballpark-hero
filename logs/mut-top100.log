@@ -1,0 +1,18 @@
+MUTATION top100 applied to src/lib/careerDirtyMoney.ts
+[31m   [31m×[31m Round 1500: every way does exactly what its button prints[2m > [22mnever a heat eraser: Come clean cools at most 5 and nothing at the top of the meter; Give it away holds the heat[39m[32m 11[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/careerDirtyMoney.test.ts[2m > [22mRound 1500: every way does exactly what its button prints[2m > [22mnever a heat eraser: Come clean cools at most 5 and nothing at the top of the meter; Give it away holds the heat
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m19 passed[39m[22m[90m (20)[39m
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+MUT top100 vitest=1 sim=1

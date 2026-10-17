@@ -1,0 +1,15 @@
+MUTATION noflag applied to src/lib/nbaCareerCorruption.ts
+[2m      Tests [22m [1m[32m20 passed[39m[22m[90m (20)[39m
+  FAIL [section 4] nba ncorr_wash: the card no longer closes itself (the wash flag)
+   nba: the card dealt to 583 fleet saves set to 5M, 448 washed clean (+3.5M), 135 caught
+   nfl: the card dealt to 492 fleet saves set to 5M, 393 washed clean (+3.5M), 99 caught
+   mlb: the card dealt to 585 fleet saves set to 5M, 465 washed clean (+3.5M), 120 caught
+   nhl: the card dealt to 643 fleet saves set to 5M, 518 washed clean (+3.5M), 125 caught
+5) A/B: careers that never take the launder option, head decks against the base decks, after every step
+   nba: 400 careers, 389 byte equal to the base after every step, 11 took the launder option (not compared), 14 were dealt the card and passed on it
+   nfl: 400 careers, 399 byte equal to the base after every step, 1 took the launder option (not compared), 2 were dealt the card and passed on it
+   mlb: 400 careers, 396 byte equal to the base after every step, 4 took the launder option (not compared), 4 were dealt the card and passed on it
+   nhl: 400 careers, 392 byte equal to the base after every step, 8 took the launder option (not compared), 4 were dealt the card and passed on it
+8) the help line: FLAGGED at 40 and three washers in every shop
+simUsDirtyMoney: 583 failures in sections 4
+MUT noflag vitest=0 sim=1

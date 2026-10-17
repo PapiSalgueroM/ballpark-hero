@@ -1,0 +1,9 @@
+MUTATION anyphase applied to src/components/us-career/UsCareerBoard.tsx
+[2m      Tests [22m [1m[32m20 passed[39m[22m[90m (20)[39m
+   mlb: 455 clicks, 24 seasons, 19 fixed saves, 886 screen steps; 6 wheel steps, 5 steps saved in an extension talk, 13 in free agency
+   nhl: 421 clicks, 24 seasons, 19 fixed saves, 900 screen steps; 6 wheel steps, 11 steps saved in an extension talk, 6 in free agency
+B) the replay: every click, every save, every screen
+   Vitest exit 0, passed [nfl, nba, mlb, nhl], failed []
+
+simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+MUT anyphase vitest=0 parity=0

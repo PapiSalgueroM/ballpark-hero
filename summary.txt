@@ -1,0 +1,6 @@
+mut-pctbefore exit=1 56s | MUT pctbefore vitest=1 sim=0
+mut-cool8 exit=1 55s | MUT cool8 vitest=1 sim=0
+mut-top100 exit=1 6s | MUT top100 vitest=1 sim=1
+mut-sliver exit=1 56s | MUT sliver vitest=1 sim=0
+mut-anyphase exit=0 54s | MUT anyphase vitest=0 parity=0
+mut-noflag exit=1 56s | MUT noflag vitest=0 sim=1
