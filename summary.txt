@@ -1,0 +1,2 @@
+headsha exit=0 0s | f85b1dd57 Round BII: merge PR284 (codex/manager-own-transfer-log at 7c483867), Latest transfers can show just your own club's recorded deals
+wf284x exit=1 210s | wfrun wf284x.yml: 9 steps ran, 1 failed: Every rebuilt-site reader
