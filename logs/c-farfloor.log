@@ -1,0 +1,5 @@
+simCmNoSack: sections 5, control farfloor
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+5) 2 sacked writes and 2 No sacking floors in clubManager.ts, read as code
+  FAIL (section 5): sacked write 1: its floor is not the statement right in front of its check (after the floor: "  state.boardConfidence -= 1;\n  if (state.boardConfidence <= 0) {\n    state.")
+simCmNoSack: CONTROL farfloor FIRED: section 5 red (1 failures)
