@@ -16,8 +16,11 @@
    NEVER A HEAT ERASER OR A KARMA FARM (the critic's correction 2, binding). The amounts are capped and scale with
    the money, so no corrupt choice followed by the desk ever leaves the heat lower than before that choice, and the
    heat and karma the desk hands back never add up to more than the choice cost in heat. The smallest heat any
-   corruption card charges for dirty money is 9 (scripts/simUsDirtyMoney.mjs reads every card and proves both on a
-   fleet); Come clean hands back at most 5 heat and 3 karma, Give it away at most 6 karma, and at heat 100 nothing
+   corruption card charges for dirty money is 9; two life cards pay some too, NFL's cousin at the register (0.6M for
+   heat 8, the floor that binds: 5 heat and 3 karma is exactly 8) and NHL's brewery stake (0.05M for no heat, under
+   the whole million any hand back needs). scripts/simUsDirtyMoney.mjs section 7 deals all of them, proves both on a
+   fleet and fails if any other file starts paying dirty money. Come clean hands back at most 5 heat and 3 karma,
+   Give it away at most 6 karma, and at heat 100 nothing
    cools (a card taken at the top of the meter added less than it printed). The one time card's own declare
    option stays the bigger, rarer deal.
 

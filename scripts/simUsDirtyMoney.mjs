@@ -24,7 +24,9 @@
  *      named cases must fail.
  *   7. Never a heat eraser, never a karma farm (the critic's correction 2, binding). Fleet saves of every sport
  *      (real careers through the bindings on the seeded stream, each also at heat 91, at heat 100, holding 20M
- *      more, broke at 1M and just back from a ban), every option of the four corruption decks that adds dirty money, then at once each way:
+ *      more, broke at 1M and just back from a ban), every option of the four corruption decks that adds dirty money,
+ *      and the two life cards that do (NFL's cousin at the register, NHL's brewery stake: an option that costs no
+ *      heat may not raise what the desk hands back at all), then at once each way:
  *      the heat after is never below the heat before the option (exact), and the heat plus karma the desk hands
  *      back never adds up to more than the heat the option cost (its printed "heat +N"). Every dirty option in the
  *      four deck sources must be dealt at least once, or the fleet is too small. The table prints per option the
@@ -41,6 +43,7 @@
  *   mathrandom  the wash draws Math.random                                    -> section 2
  *   flat        Come clean cools a flat 35 (the draft's number)               -> section 7, memorabilia among the red
  *   farm        Give it away pays up to 12 karma                              -> section 7
+ *   cap         Come clean cools up to 6 (one point more)                     -> section 7, red only for NFL's cousin at the register (heat 8)
  *   deck        launderEffectText draws one Math.random                       -> section 5
  *   noop        one sport's launder apply put back to the flag and heat +10   -> section 4, naming that sport only
  *               (US_DIRTY_MONEY_SPORT=nba|nfl|mlb|nhl, default nba; run once per sport)
@@ -71,6 +74,7 @@ const CONTROLS = {
   mathrandom: ['  return keyedRng(launderKey(c))() < caughtPct / 100;', '  return Math.random() < caughtPct / 100;', [2]],
   flat: ['  if (heat >= 100) return 0;\n  return Math.max(0, Math.min(CLEAN_HEAT_CAP, Math.floor(dirty), Math.floor(heat)));', '  return Math.max(0, Math.min(35, Math.floor(heat)));', [7]],
   farm: ['export const GIVE_KARMA_CAP = 6;', 'export const GIVE_KARMA_CAP = 12;', [7]],
+  cap: ['export const CLEAN_HEAT_CAP = 5;', 'export const CLEAN_HEAT_CAP = 6;', [7]],
   deck: ['export function launderEffectText(c: DirtyMoneyHost): string {\n  const n = wayNumbers(c, \'wash\');', 'export function launderEffectText(c: DirtyMoneyHost): string {\n  Math.random();\n  const n = wayNumbers(c, \'wash\');', [5]],
 };
 /* Controls that edit another file: noop edits one deck (US_DIRTY_MONEY_SPORT, default nba) in the head bundle,
@@ -205,6 +209,8 @@ fs.writeFileSync(path.join(tmp, 'entry.mjs'), [
   `export { getNflCorruptionEvents } from '${lib('nflCareerCorruption.ts')}';`,
   `export { getMlbCorruptionEvents } from '${lib('mlbCareerCorruption.ts')}';`,
   `export { getNhlCorruptionEvents } from '${lib('nhlCareerCorruption.ts')}';`,
+  `export { getNflLifeEventsB } from '${lib('nflCareerLifeB.ts')}';`,
+  `export { getNhlLifeEventsB } from '${lib('nhlCareerLifeB.ts')}';`,
 ].join('\n'));
 async function bundle(swaps, file) {
   const built = await build({
@@ -388,10 +394,68 @@ for (const slug of SPORTS) {
     }
   }
 }
+/* The life cards that pay dirty money too (the Round 1500 review's run minor 7 and read minor 4): NFL's cousin at
+   the register (0.6M for heat +8) and NHL's brewery stake (0.05M for no heat). The same exact check on the same fleet
+   and variants, with one difference for an option that costs no heat: it may not raise what the desk hands back at
+   all (the desk on the career after it against the desk on the career just before it). A hand back is paid by
+   whole millions and any money held before came with its own heat, so this is the honest bound there; an option
+   that costs heat is held to the absolute bound like every corruption card, which leaves the cousin no spare point
+   (the desk's most, 5 heat and 3 karma, is his 8). */
+const LIFE_DECK = { nfl: ['getNflLifeEventsB', 'src/lib/nflCareerLifeB.ts'], nhl: ['getNhlLifeEventsB', 'src/lib/nhlCareerLifeB.ts'] };
+const handBack = (from, to) => r2(Math.max(0, (from.heat ?? 0) - (to.heat ?? 0)) + Math.max(0, (to.karma ?? 50) - (from.karma ?? 50)));
+for (const [slug, [fn, file]] of Object.entries(LIFE_DECK)) {
+  for (const [vi, save] of fleets[slug].entries()) {
+    const variants = [save, { ...clone(save), heat: 91 }, { ...clone(save), heat: 100 }, { ...clone(save), dirtyMoney: r1((save.dirtyMoney ?? 0) + 20) }, { ...clone(save), netWorth: 1 }];
+    for (const [k, base] of variants.entries()) {
+      for (const card of E[fn](clone(base), E.keyedRng(`life|${slug}|${vi}|${k}`))) for (const opt of card.options) {
+        if (!/dirty/i.test(String(opt.apply))) continue;
+        const before = clone(base);
+        const c = clone(base);
+        opt.apply(c, E.keyedRng(`lifeopt|${slug}|${vi}|${k}|${card.id}`));
+        if ((c.dirtyMoney ?? 0) <= (before.dirtyMoney ?? 0)) continue;
+        const key = `${slug} ${card.id} / ${opt.label}`;
+        let cost = printedHeat(opt.effect);
+        if (cost == null) {
+          const z = { ...clone(base), heat: 0 };
+          opt.apply(z, E.keyedRng(`lifezero|${slug}|${vi}`));
+          cost = z.heat ?? 0;
+        }
+        const row = table.get(key) ?? { slug, card: card.id, label: opt.label, dirty: r2((c.dirtyMoney ?? 0) - (before.dirtyMoney ?? 0)), cost, saves: 0, worstNet: {}, mostBack: {}, life: true };
+        row.saves += 1;
+        for (const way of WAYS) {
+          optionRuns += 1;
+          const r = DM.dealWithDirtyMoney(c, way);
+          const net = r2((r.state.heat ?? 0) - (before.heat ?? 0));
+          const back = handBack(c, r.state);
+          const bound = cost > 0 ? cost : DM.canDealWithDirtyMoney(before) ? handBack(before, DM.dealWithDirtyMoney(before, way).state) : 0;
+          row.worstNet[way] = Math.min(row.worstNet[way] ?? Infinity, net);
+          row.mostBack[way] = Math.max(row.mostBack[way] ?? -Infinity, back);
+          if (net < 0) fail(7, key, `${way} leaves heat ${net} below where it was before the card (heat ${before.heat ?? 0}, ${before.dirtyMoney ?? 0}M held)`);
+          if (back > bound) fail(7, key, `${way} hands back ${back} of heat and karma for a life card that cost heat +${cost} (bound ${bound})`);
+        }
+        table.set(key, row);
+      }
+    }
+  }
+  const inSource = (read(file).match(/addDirty\(cc, /g) ?? []).length;
+  const dealt = [...table.values()].filter(r => r.slug === slug && r.life).length;
+  console.log(`   ${slug} life cards: ${dealt} of ${inSource} dirty options dealt (${file})`);
+  if (!inSource || dealt < inSource) fail(7, `${slug} life coverage`, `${dealt} of the ${inSource} dirty options in ${file} were dealt`);
+}
+/* No other source pays dirty money: every US sport file that adds to it (an assignment of the held amount plus
+   something) is one of the four corruption decks or the two life decks above, so a new one cannot slip past this
+   section. The shop's washers subtract and the engines set it to 0, which this does not match. */
+const ADDS = /dirtyMoney\s*=\s*[^;]*\?\?\s*0\)\s*\+/;
+const adders = fs.readdirSync(path.join(ROOT, 'src/lib')).filter(f => /^(nba|nfl|mlb|nhl|usCareer)\w*\.ts$/.test(f) && !f.endsWith('.test.ts'))
+  .filter(f => ADDS.test(read(`src/lib/${f}`))).map(f => `src/lib/${f}`).sort();
+const known = [...Object.values(DECK_FILE), ...Object.values(LIFE_DECK).map(([, f]) => f)].sort();
+console.log(`   files that add dirty money: ${adders.length} (${adders.map(f => path.basename(f, '.ts')).join(', ')})`);
+if (JSON.stringify(adders) !== JSON.stringify(known)) fail(7, 'sources', `the files that add dirty money are ${adders.join(', ')}, and this section deals ${known.join(', ')}`);
+
 /* Every dirty option in the four sources must have been dealt: the count of dirty(cc, ...) calls per deck file. */
 for (const slug of SPORTS) {
   const inSource = (read(DECK_FILE[slug]).match(/dirty\(cc, /g) ?? []).length;
-  const dealt = [...table.values()].filter(r => r.slug === slug).length;
+  const dealt = [...table.values()].filter(r => r.slug === slug && !r.life).length;
   console.log(`   ${slug}: ${fleetSize[slug]} fleet saves, ${dealt} of ${inSource} dirty options dealt`);
   if (dealt < inSource) fail(7, `${slug} coverage`, `only ${dealt} of the ${inSource} dirty options in ${DECK_FILE[slug]} were dealt: widen the fleet (US_DIRTY_MONEY_CAREERS)`);
 }
@@ -537,6 +601,15 @@ if (control) {
     fired = fired && named.length === 1 && named[0] === noopSport;
   }
   for (const s of want) console.log(`   control ${control}: section ${s} turned ${red.get(s)?.size ?? 0} red`);
+  if (control === 'cap') {
+    /* One point more of Come clean breaks no corruption card (heat 9 or more) and only the cousin (heat 8). */
+    const reds = [...(red.get(7) ?? [])];
+    console.log(`   control cap: section 7 red on ${reds.join('; ') || 'nothing'}`);
+    if (!reds.length || !reds.every(k => k.startsWith('nfl ') && k.includes('cousin'))) {
+      console.log('CONTROL cap DID NOT FIRE on the cousin alone');
+      process.exit(2);
+    }
+  }
   if (control === 'flat' && !(red.get(7)?.has([...table.keys()].find(k => k.includes('ncorr_memorabilia')) ?? 'none'))) {
     console.log('CONTROL flat DID NOT FIRE on the memorabilia card');
     process.exit(2);
