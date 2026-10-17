@@ -1,4 +1,4 @@
-name: Press room loading keyboard baseline
+name: Press room loading keyboard verification
 on:
   push:
     branches: [codex/press-room-loading-keyboard]
@@ -7,20 +7,24 @@ on:
       - scripts/qa/provePressRoomLoadingKeyboard.mjs
       - scripts/qa/playPressRoomLoadingKeyboard.mjs
       - src/test/pressRoomLoadingKeyboard.test.tsx
+      - src/components/soccer-career/PressRoomTile.tsx
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  baseline:
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     defaults:
       run:
         shell: bash
     env:
       CI: '1'
       SIM_NETWORK: offline
+      ENGINES: chromium
       TZ: UTC
+      PRERENDER_ONLY: /whats-new
+      PRESS_LOADING_KEYBOARD_BASELINE_RAW_SHA256: 7189d876eb4cb9c26267f766ec92912c9b315c79c83748e605778a33d4c4439e
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,21 +37,20 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Retain exact original product and locked installation
+      - name: Retain exact candidate request and bounded product source
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
-          out="$RUNNER_TEMP/press-room-loading-keyboard-baseline"; test ! -e "$out"; mkdir -p "$out"
+          out="$RUNNER_TEMP/press-room-loading-keyboard-fixed"; test ! -e "$out"; mkdir -p "$out"
           echo "PRESS_LOADING_KEYBOARD_OUT=$out" >> "$GITHUB_ENV"
           echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
-          export PRESS_LOADING_KEYBOARD_OUT="$out"
           git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
-          sha256sum "$out/source.zip" "$out/request-source-files.sha256" > "$out/initial-source-packet.sha256"
+          git ls-files -z -- . ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
+          sha256sum "$out/source.zip" "$out/request-source-files.sha256" "$out/source-files.sha256" > "$out/initial-source-packet.sha256"
           git merge-base --is-ancestor cc6605203b00b06ed994cf321fff5eea3060f708 HEAD
           git diff --exit-code cc6605203b00b06ed994cf321fff5eea3060f708 HEAD -- . ':!docs' ':!src/components/soccer-career/PressRoomTile.tsx' ':!src/test/pressRoomLoadingKeyboard.test.tsx' ':!scripts/qa/provePressRoomLoadingKeyboard.mjs' ':!scripts/qa/playPressRoomLoadingKeyboard.mjs' ':!.github/workflows/press-room-loading-keyboard.yml' > "$out/base-source-hold.log"
-          git diff --exit-code cc6605203b00b06ed994cf321fff5eea3060f708 HEAD -- src/components/soccer-career/PressRoomTile.tsx > "$out/original-product-hold.log"
           git diff --exit-code HEAD -- . > "$out/admission-working-source-hold.log"
           test -z "$(git status --porcelain --untracked-files=no)"
           printf '%s\0' "$(command -v node)" "$(readlink -f "$(command -v npm)")" "$(readlink -f "$(command -v python)")" | sort -z | xargs -0 sha256sum > "$out/runtime-tools-files.sha256"
@@ -81,8 +84,9 @@ jobs:
           test "$(wc -l < "$out/installed-files.sha256")" -eq 24466
           find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tool-files.sha256"
           test "$(wc -l < "$out/browser-tool-files.sha256")" -eq 176
-      - name: Actual application types and effective offline preload
-        id: types
+      - name: Actual types six pending keyboard arms and185 related cases
+        id: checks
+        timeout-minutes: 30
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
@@ -92,45 +96,122 @@ jobs:
           printf '%s\n' "$status" > "$out/preload-control.exit"; test "$status" -eq 1; grep -F 'AssertionError' "$out/preload-control.log"; grep -F 'Children retain offline preload' "$out/preload-control.log"
           node -e "$preload_check" > "$out/preload-normal.log" 2>&1
           SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
-      - name: Exact original pending keyboard faults and preserved cases
-        id: proof
+          SIM_OFFLINE_RECEIPT="$out/proof.transport" node scripts/qa/provePressRoomLoadingKeyboard.mjs fixed > "$out/proof.log" 2>&1
+          tail -n 4 "$out/proof.log"
+          sha256sum --check "$out/request-source-files.sha256" > "$out/checks-source-holds.log"
+      - name: Actual production build and one bounded snapshot refresh
+        id: build
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
-          SIM_OFFLINE_RECEIPT="$PRESS_LOADING_KEYBOARD_OUT/proof.transport" node scripts/qa/provePressRoomLoadingKeyboard.mjs baseline > "$PRESS_LOADING_KEYBOARD_OUT/proof.log" 2>&1
-          tail -n 4 "$PRESS_LOADING_KEYBOARD_OUT/proof.log"
-      - name: Retain actual source and every partial proof without weakening failures
+          SIM_OFFLINE_RECEIPT="$PRESS_LOADING_KEYBOARD_OUT/build.transport" npm run build:seo > "$PRESS_LOADING_KEYBOARD_OUT/build.log" 2>&1
+          tail -n 6 "$PRESS_LOADING_KEYBOARD_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$PRESS_LOADING_KEYBOARD_OUT/dist-files.sha256"
+      - name: All fifteen readers against the completed build
+        id: readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PRESS_LOADING_KEYBOARD_OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-readers.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            status=0; SIM_OFFLINE_RECEIPT="$out/$method.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv"; tail -n 3 "$out/$method.log"
+            test "$status" -eq 0 || failed=1; test ! -s "$out/$method.transport" || failed=1
+          done
+          test "$(wc -l < "$out/readers.tsv")" -eq 15; exit "$failed"
+      - name: Unchanged full fourteen page weights with every failure fatal
+        id: weights
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PRESS_LOADING_KEYBOARD_OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-weights.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          status=0; SIM_OFFLINE_RECEIPT="$out/weights.transport" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
+          cat "$out/weights.log"; printf '%s\n' "$status" > "$out/weights-exit.txt"; exit "$status"
+      - name: Actual served Press Room loading keyboard journeys
+        id: browser
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 20
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PRESS_LOADING_KEYBOARD_OUT"
+          export BASE=http://127.0.0.1:4173
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-browser.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          export PRESS_LOADING_KEYBOARD_SOURCE="$PWD" PRESS_LOADING_KEYBOARD_DIST="$PWD/dist"
+          SIM_OFFLINE_RECEIPT="$out/browser-runner.transport" node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+          const out=process.env.PRESS_LOADING_KEYBOARD_OUT,args=['scripts/qa/playPressRoomLoadingKeyboard.mjs'],env={...process.env,PRESS_LOADING_KEYBOARD_BROWSER_OUT:path.join(out,'browser'),SIM_OFFLINE_RECEIPT:path.join(out,'browser-child.transport')};
+          assert(!fs.existsSync(env.PRESS_LOADING_KEYBOARD_BROWSER_OUT),'Fresh browser directory');const result=spawnSync(process.execPath,args,{env,encoding:'utf8',timeout:1050000,maxBuffer:64*1024*1024});
+          fs.writeFileSync(out+'/browser.log',result.stdout||'',{flag:'wx'});fs.writeFileSync(out+'/browser-stderr.log',result.stderr||'',{flag:'wx'});fs.writeFileSync(out+'/browser-process.json',JSON.stringify({args,exit:result.status,signal:result.signal,error:result.error?{name:result.error.name,message:result.error.message}:null},null,2)+'\n',{flag:'wx'});
+          process.stdout.write(result.stdout||'');process.stderr.write(result.stderr||'');assert(!result.error&&!result.signal,'Actual browser child completed');assert.equal(result.status,0,'Actual browser child passed');assert.equal(JSON.parse(fs.readFileSync(env.PRESS_LOADING_KEYBOARD_BROWSER_OUT+'/report.json')).status,'passed','Actual retained browser report passed');
+          NODE
+      - name: Complete source and dist with bounded generated outputs retained outside
         if: always()
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
-          out="${PRESS_LOADING_KEYBOARD_OUT:-$RUNNER_TEMP/press-room-loading-keyboard-baseline}"; mkdir -p "$out"; result=0
-          git diff --exit-code HEAD -- . > "$out/source-diff.log" 2>&1 || result=1
+          out="${PRESS_LOADING_KEYBOARD_OUT:-$RUNNER_TEMP/press-room-loading-keyboard-fixed}"; mkdir -p "$out"; result=0
+          git diff --exit-code HEAD -- . ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' > "$out/non-generated-diff.log" 2>&1 || result=1
+          git diff --binary HEAD -- public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json > "$out/generated.patch"
+          git diff --name-only HEAD | sort > "$out/generated-paths.txt"
+          printf 'public/sitemap.xml\npublic/whats-new/index.html\nscripts/data/lastmod.json\n' | sort > "$out/allowed-generated-paths.txt"
+          comm -23 "$out/generated-paths.txt" "$out/allowed-generated-paths.txt" > "$out/unexpected-generated-paths.txt"; test ! -s "$out/unexpected-generated-paths.txt" || result=1
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/validated-source-files.sha256"
           PRESS_LOADING_KEYBOARD_ARCHIVE_OUT="$out" python - <<'PY'
           import os,subprocess,zipfile
-          out=os.environ['PRESS_LOADING_KEYBOARD_ARCHIVE_OUT']; files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          out=os.environ['PRESS_LOADING_KEYBOARD_ARCHIVE_OUT'];files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
           with zipfile.ZipFile(out+'/validated-source.zip','x',zipfile.ZIP_DEFLATED) as archive:
               for file in sorted(filter(None,files)): archive.write(file,file)
+          if os.path.isdir('dist'):
+              with zipfile.ZipFile(out+'/dist.zip','x',zipfile.ZIP_DEFLATED) as archive:
+                  for folder,dirs,names in os.walk('dist'):
+                      for name in sorted(names): archive.write(os.path.join(folder,name),os.path.join(folder,name))
           PY
-          if test -f "$out/dependencies-before.json"; then
-            SIM_OFFLINE_RECEIPT="$out/dependencies-final.transport" node --input-type=module > "$out/dependencies-final.log" 2>&1 <<'NODE' || result=1
-          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
-          const out=process.env.PRESS_LOADING_KEYBOARD_OUT,before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),sha=x=>createHash('sha256').update(x).digest('hex');
-          const packageFiles=before.packageFiles.map(r=>({file:r.file,sha256:sha(fs.readFileSync(r.file))})),packages=before.packages.map(r=>{const p=JSON.parse(fs.readFileSync(r.directory+'/package.json'));return{directory:r.directory,name:p.name,version:p.version};});
-          fs.writeFileSync(out+'/dependencies-final.json',JSON.stringify({packageFiles,packages},null,2)+'\n',{flag:'wx'});assert.equal(packages.length,521);assert.deepEqual(packageFiles,before.packageFiles);assert.deepEqual(packages,before.packages);console.log('PASS all 521 actual locked versions and both package bodies held.');
-          NODE
-          fi
-          for kind in request-source installed browser-tool runtime-tools font validated-source; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
+          if test -d dist; then find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist-after-files.sha256"; fi
+          if test -f "$out/dist-files.sha256"; then cmp "$out/dist-files.sha256" "$out/dist-after-files.sha256" > "$out/dist-inventory-hold.log" 2>&1 || result=1; fi
+          printf 'checks=%s\nbuild=%s\nreaders=%s\nweights=%s\n' '${{ steps.checks.outcome }}' '${{ steps.build.outcome }}' '${{ steps.readers.outcome }}' '${{ steps.weights.outcome }}' > "$out/stage-outcomes.txt"
+          printf 'browser=%s\n' '${{ steps.browser.outcome }}' > "$out/browser-stage-outcome.txt"
+          exit "$result"
+      - name: Full source installed browser tool runtime font and transport holds
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="${PRESS_LOADING_KEYBOARD_OUT:-$RUNNER_TEMP/press-room-loading-keyboard-fixed}"; result=0
+          for kind in source installed browser-tool runtime-tools font validated-source dist; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
           if test -f "$out/initial-source-packet.sha256"; then sha256sum --check "$out/initial-source-packet.sha256" > "$out/initial-source-packet-holds.log" 2>&1 || result=1; fi
           if test -f "$out/installed-files.sha256"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-after-files.sha256"; cmp "$out/installed-files.sha256" "$out/installed-after-files.sha256" > "$out/installed-inventory-hold.log" 2>&1 || result=1; fi
-          while IFS= read -r -d '' file; do test ! -s "$file" || result=1; done < <(find "$out" -type f -name '*.transport' -print0)
-          printf 'types=%s\nproof=%s\nbuild=skipped\nreaders=skipped\nweights=skipped\n' '${{ steps.types.outcome }}' '${{ steps.proof.outcome }}' > "$out/stage-outcomes.txt"
+          if test '${{ steps.build.outcome }}' = success; then
+            SIM_OFFLINE_RECEIPT="$out/build-classifier.transport" node --input-type=module > "$out/build-transport-classification.log" 2>&1 <<'NODE' || result=1
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';
+          const out=process.env.PRESS_LOADING_KEYBOARD_OUT,base='cc6605203b00b06ed994cf321fff5eea3060f708',sha=value=>createHash('sha256').update(value).digest('hex'),report={status:'running',method:'Retained guard-denial classification only, no outbound permission',sources:{},observations:[]};
+          try{assert.equal(process.env.PRERENDER_ONLY,'/whats-new');const {SAMPLE_DAYS}=await import('./scripts/lib/prerenderClock.mjs');assert.deepEqual(SAMPLE_DAYS,[0,5,11]);
+          for(const file of ['scripts/lib/offlineTransport.cjs','scripts/lib/prerenderClock.mjs','scripts/prerender.mjs']){const actual=fs.readFileSync(file);assert.deepEqual(actual,execFileSync('git',['show',base+':'+file]));report.sources[file]=sha(actual);}
+          const line='[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com\n',expected=Buffer.from(line.repeat(3));assert.equal(sha(expected),'1175154605f5681b53732047b77c744fb9e814fe3c6340be82f786ea27138e57');const check=bytes=>assert(bytes.equals(expected),'Build must retain exactly three known denied font requests');const actual=fs.readFileSync(out+'/build.transport');check(actual);report.observations.push({case:'actual-three-font-denials',accepted:true,bytes:actual.length,sha256:sha(actual)});
+          for(const [name,changed]of [['missing-line',Buffer.from(line.repeat(2))],['extra-line',Buffer.from(line.repeat(4))],['database-line',Buffer.from(line.repeat(2)+'[SIM_OFFLINE_BLOCK] database browser route continue https://fixture.invalid\n')]]){assert(!changed.equals(actual));assert.throws(()=>check(changed),assert.AssertionError);report.observations.push({case:name,accepted:false,bytes:changed.length,sha256:sha(changed)});}assert.equal(report.observations.length,4);report.status='passed';console.log('PASS three actual denied font requests and three changed receipt rejection controls.');}
+          catch(error){report.status='failed';report.error=error.stack;throw error;}finally{fs.writeFileSync(out+'/build-transport-classification.json',JSON.stringify(report,null,2)+'\n',{flag:'wx'});}
+          NODE
+          else
+            printf 'skipped: actual build outcome was %s\n' '${{ steps.build.outcome }}' > "$out/build-transport-classification-skipped.txt"
+          fi
+          while IFS= read -r -d '' file; do case "$file" in "$out/build.transport"|"$out/weights.transport") ;; *) test ! -s "$file" || result=1 ;; esac; done < <(find "$out" -type f -name '*.transport' -print0)
+          # Build is classified strictly above. Weight asset denials remain retained offline evidence.
           exit "$result"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: press-room-loading-keyboard-baseline-${{ github.sha }}
+          name: press-room-loading-keyboard-fixed-${{ github.sha }}
           path: ${{ env.PRESS_LOADING_KEYBOARD_OUT }}
           if-no-files-found: error
           retention-days: 14

@@ -42,7 +42,7 @@ export default function PressRoomTile({ career, onCareer }: {
       <span className="shrink-0 text-xs font-bold">{view.credibility}/100</span>
     </button>
     {open && <PressRoomBoundary onClose={close}><Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-      <div role="dialog" aria-label="Opening the press room" className="w-full max-w-md rounded-2xl border border-border bg-card p-4">
+      <div role="dialog" aria-modal="true" aria-label="Opening the press room" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(close)} className="w-full max-w-md rounded-2xl border border-border bg-card p-4">
         <p className="text-sm">Opening the press room...</p>
         <button type="button" onClick={close} className="mt-3 min-h-[44px] w-full rounded-xl border border-border px-4 text-sm">← Back to your career</button>
       </div>
