@@ -1,0 +1,9 @@
+     → keys that moved against the committed fixture: expected [ 'mlb|y2004|1B', 'mlb|y2004|RF' ] to deeply equal []
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/usCareerTruthDigest.test.ts > Round 1104: the US career truth digest > every key equals the committed fixture, or moved only where this step is allowed to move it
+AssertionError: keys that moved against the committed fixture: expected [ 'mlb|y2004|1B', 'mlb|y2004|RF' ] to deeply equal []
+
+- Expected
+      Tests  1 failed (1)
