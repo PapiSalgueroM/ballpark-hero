@@ -253,6 +253,11 @@
      unreach       soccer's card 719 is gated on goals below 0, a value no
                    desk draws (in memory); section 10 fails, and prints no
                    "all cards reached" line for the soccer pack after it.
+     Round 1504:
+     reachthin     the soccer pack's drive cut to 2 desks a seed (in memory),
+                   so its rare cards miss most seeds; section 10's fleet
+                   statistic (every card in at least 28 of seeds 1 to 30)
+                   fails.
 
    Runtime about 85 to 100 s on a runner, three requests at a time (section 2
    reloads all 84 rows since the review's fix pass; it was 40 s with seed 1
@@ -293,6 +298,7 @@ const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failope
   'pruneearly', 'codecword', 'codecslot', 'wordedit', 'wordorder', 'storymove', 'pressure', 'eager',
   'conductlate', 'conductstale', 'conducttarget', 'nullpass', 'newpack', 'speechpast', 'voiceedit', 'effectedit'];
 CONTROLS.push('unreach'); /* Round 1334: section 10's reach check over the soccer pack */
+CONTROLS.push('reachthin'); /* Round 1504: section 10's fleet reach statistic over the soccer pack */
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -1235,12 +1241,35 @@ if (runs(10)) {
      runner (rc r1334-fx2a, reach5x) at seeds 1 to 10: the top card is 726 every time, 9.82 to 11.04 percent; the
      highest plus 2 points. (Over 1,000 seasons it read 9.00 to 11.70, rc r1334-s4a, and the ceiling was 0.137.) */
   CEILING.soccer = 0.131;
+  /* Round 1504, the lead's ruling 4 on Round 1334: a pack on REACH_FLEET is held to a fleet statistic, never to one
+     seed: every card dealt in at least `atLeast` of SEED 1 to `seeds`, each seed the pack's own REACH_DESKS drive (a
+     wider bound on one seed is what the ruling forbids). The GM packs keep the single seed check. reachthin cuts the
+     soccer drive to 2 desks a seed, so the statistic must fail. */
+  const REACH_FLEET = { soccer: { seeds: 30, atLeast: 28 } };
+  if (CONTROL === 'reachthin') {
+    if (REACH_DESKS.soccer !== 500 || !packs.soccer) { console.error('reachthin control: the soccer pack or its 500 desk drive is gone, refusing to run'); process.exit(2); }
+    REACH_DESKS.soccer = 2;
+  }
   const reach = [];
   for (const [k, p] of Object.entries(packs)) {
     const r = shares(p, k, SEED);
-    const unreached = p.events.filter(e => !r.n[e.id]).map(e => e.id);
+    let unreached;
+    if (REACH_FLEET[k]) {
+      const { seeds, atLeast } = REACH_FLEET[k];
+      const hits = Object.fromEntries(p.events.map(e => [e.id, 0]));
+      for (let sd = 1; sd <= seeds; sd++) {
+        const rr = sd === SEED ? r : shares(p, k, sd);
+        for (const e of p.events) if (rr.n[e.id]) hits[e.id] += 1;
+      }
+      unreached = p.events.filter(e => hits[e.id] < atLeast).map(e => e.id);
+      const least = p.events.reduce((a, e) => (hits[e.id] < hits[a.id] ? e : a), p.events[0]);
+      console.log(`   ${k}: reach over seeds 1 to ${seeds} (${((REACH_DESKS[k] ?? DRIVES.FLEET.desks) * SEASONS).toLocaleString('en-US')} seasons each), the least reached card ${least.id} in ${hits[least.id]} of ${seeds}, at least ${atLeast} required`);
+      if (unreached.length) fail(10, `${k}: ${unreached.length} cards dealt in fewer than ${atLeast} of seeds 1 to ${seeds} (${unreached.slice(0, 3).map(id => `${id} in ${hits[id]}`).join(', ')})`);
+    } else {
+      unreached = p.events.filter(e => !r.n[e.id]).map(e => e.id);
+      if (unreached.length) fail(10, `${k}: ${unreached.length} cards never dealt over ${((REACH_DESKS[k] ?? DRIVES.FLEET.desks) * SEASONS).toLocaleString('en-US')} seasons (${unreached.slice(0, 3).join(', ')})`);
+    }
     const top = r.ranked[0];
-    if (unreached.length) fail(10, `${k}: ${unreached.length} cards never dealt over ${((REACH_DESKS[k] ?? DRIVES.FLEET.desks) * SEASONS).toLocaleString('en-US')} seasons (${unreached.slice(0, 3).join(', ')})`);
     if (CEILING[k] === undefined) fail(10, `${k} has no measured share ceiling: run SIM_EVENT_DECK_MEASURE=1 and write one in`);
     else if (top.share > CEILING[k]) fail(10, `${k}: ${top.id} took ${(top.share * 100).toFixed(1)}% of ${r.total} deals, ceiling ${(CEILING[k] * 100).toFixed(1)}%`);
     else if (!unreached.length) ok(`${k}: all ${p.events.length} cards reached in ${r.total} deals, the top card ${top.id} at ${(top.share * 100).toFixed(1)}% (ceiling ${(CEILING[k] * 100).toFixed(1)}%)`); /* Round 1334: never after the reach FAIL */

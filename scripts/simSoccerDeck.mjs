@@ -80,6 +80,9 @@
         share of season starts past the ceiling, each arm against the deck off
         inside a band set from the measured seed to seed spread; exact: no
         deck answer queues more than momentsRoom allowed just before it.
+        Since Round 1504 the arms are paired (Math.random reseeded before
+        every engine step, the deck answer on a stream of its own) and the
+        legacy band is the lead's ruling, 1.2 for every arm.
      9) OLD SAVES. Saves the base wrote load to the same JSON here and play
         the same season (the deck not loaded); a save written here with a
         deck card pending passes the save validator, loads on the base and is
@@ -130,6 +133,9 @@
                save deals one card every summer; section 7 fails.
      pressure  every deck move times ten (the pack, in memory); section 8
                fails on a band.
+     freetraining every training option's time cost stripped (the pack, in
+               memory, Round 1504): the deck trains for free as in Round
+               1334; section 8 fails on the ruling's legacy band.
      noresolve the engine's catalog spread of the pending deck card is gone
                (in memory): a saved deck card is skipped here too; section 9
                fails.
@@ -193,7 +199,7 @@ const CONTROLS = {
   pool: { breaks: '3', file: DECK, edits: [["  if (state.phase !== 'random_events' || problemsOf(pack).length > 0) return [];\n", '  return deckToRandomEvents(pack, pack.events); /* pool control */\n']] },
   silent: { breaks: '5', file: DECK, edits: [["        consequence: choiceEffects(c, pack, SOCCER_FX_WORDS).join(', ') || 'Nothing changes',",
     "        consequence: choiceEffects(c, pack, SOCCER_FX_WORDS).filter(w => !/^(Pace|Shooting|Passing|Dribbling|Defending|Physical) next season /.test(w)).join(', ') || 'Nothing changes', /* silent control */"]] },
-  drop: { breaks: '5', file: DECK, edits: [['    def.apply(s, raw);\n', "    if (!k.startsWith('t_')) def.apply(s, raw); /* drop control */\n"]] },
+  drop: { breaks: '5', file: DECK, edits: [['    def.apply(s, v);\n', "    if (!k.startsWith('t_')) def.apply(s, v); /* drop control */\n"]] },
   ceiling: { breaks: '5', file: DECK, edits: [['      const add = Math.max(0, Math.min(v, momentsRoom(s)));', '      const add = Math.max(0, v); /* ceiling control */']] },
   posleak: { breaks: '6', file: null, edits: null },
   neutralmoves: { breaks: '4', file: DECK, edits: [['        apply: still ? (s: CareerState) => s : (s: CareerState) => landChoice(s, def.emoji, title, c),',
@@ -202,6 +208,7 @@ const CONTROLS = {
   mathrandom: { breaks: '7', file: DECK, edits: [['  return deckToRandomEvents(pack, [gmTake(eligible, keyedRng(key))]);', '  return deckToRandomEvents(pack, [gmTake(eligible, Math.random)]); /* mathrandom control */']] },
   keyseason: { breaks: '7', file: ENGINE, edits: [['  picked.unshift(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|${season}|deckslot`, picked));', '  picked.unshift(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|deckslot`, picked)); /* keyseason control */']] },
   pressure: { breaks: '8', file: null, edits: null },
+  freetraining: { breaks: '8', file: null, edits: null },
   noresolve: { breaks: '9', file: ENGINE, edits: [['    ...soccerDeckPending(state),\n', '    /* noresolve control */\n']] },
   eager: { breaks: '10', file: GATE, edits: null },
   caller: { breaks: '10', file: PAGE, edits: null },
@@ -450,6 +457,7 @@ if (runs(1)) {
     'an outfield word on a keeper card': opt('798', { fx: { t_shooting: 1 } }),
     'a training key on a situation card': opt(situation.id, { fx: { t_pace: 1 } }),
     'a training value of 0.5': opt('797', { fx: { t_shooting: 0.5 } }),
+    'a cost with no training': opt('797', { fx: { t_pace: -1 } }), 'a cost above the training': opt('797', { fx: { t_shooting: 1, t_pace: -2 } }),
     'id 650': { ...BB, events: BB.events.map(e => (e.id === '797' ? { ...e, id: '650' } : e)), titles: { ...BB.titles, 650: 'x' }, kinds: { ...BB.kinds, 650: 'positive' } },
     'a duplicate id': { ...BB, events: [...BB.events, FORWARD] },
     'a missing title': { ...BB, titles: without(BB.titles, '797') },
@@ -692,27 +700,44 @@ if (runs(5)) {
           return;
         }
         const want = copy(before);
-        const said = [];
+        /* Morale first, then what it trains (to the room), then each cost (Round 1504), never more than the training
+           landed; the line keeps the printed order. */
+        const parts = [];
         for (const w of c.consequence.split(', ')) {
           const m = /^(.*) ([+-]\d+)$/.exec(w);
           if (!m) { wrong.push(`${card.id} "${c.label}" prints ${w}, which names no amount`); continue; }
-          const [label, v] = [m[1], Number(m[2])];
+          parts.push({ label: m[1], v: Number(m[2]) });
+        }
+        const text = new Map();
+        let trained = 0;
+        for (const p of [...parts.filter(q => q.label === 'Morale'), ...parts.filter(q => q.label !== 'Morale' && q.v > 0), ...parts.filter(q => q.label !== 'Morale' && q.v < 0)]) {
+          const { label, v } = p;
           if (label === 'Morale') {
             const to = Math.max(0, Math.min(100, want.morale + v)), d = to - want.morale;
             if (d !== v) atBound += 1;
             want.morale = to;
-            said.push(d === 0 ? `Morale stays at ${to}` : d === v ? `Morale ${sgn(d)}` : `Morale ${sgn(d)}, now at ${to}`);
+            text.set(p, d === 0 ? `Morale stays at ${to}` : d === v ? `Morale ${sgn(d)}` : `Morale ${sgn(d)}, now at ${to}`);
             continue;
           }
           const key = LABEL[label];
           if (!key) { wrong.push(`${card.id} "${c.label}" prints ${label}, which no registered key carries`); continue; }
-          if (key === 'integrity') { want.integrityBonus += v; said.push(`Integrity ${sgn(v)}`); continue; }
+          if (key === 'integrity') { want.integrityBonus += v; text.set(p, `Integrity ${sgn(v)}`); continue; }
           const stat = W.SOCCER_TRAINING_KEYS[key].stat;
+          if (v < 0) {
+            const pay = Math.min(-v, trained);
+            trained -= pay;
+            if (pay !== -v) atBound += 1;
+            if (pay > 0) want.statBoostNextSeason = { ...want.statBoostNextSeason, [stat]: (want.statBoostNextSeason[stat] ?? 0) - pay };
+            text.set(p, pay === -v ? `${label} ${sgn(-pay)}` : `${label} ${sgn(-pay)}, you only pay for training that landed`);
+            continue;
+          }
           const fit = Math.max(0, Math.min(v, H.momentsRoom(want)));
           if (fit !== v) atBound += 1;
+          trained += fit;
           if (fit > 0) want.statBoostNextSeason = { ...want.statBoostNextSeason, [stat]: (want.statBoostNextSeason[stat] ?? 0) + fit };
-          said.push(fit === v ? `${label} ${sgn(fit)}` : `${label} ${sgn(fit)}, you are at your ceiling`);
+          text.set(p, fit === v ? `${label} ${sgn(fit)}` : `${label} ${sgn(fit)}, you are at your ceiling`);
         }
+        const said = parts.map(p => text.get(p)).filter(t => t !== undefined);
         want.events = [...want.events, `${card.emoji} ${card.title}: ${defOf(card.id).choices[i].reply} ${said.join(', ')}.`];
         if (JSON.stringify(after) !== JSON.stringify(want)) {
           const keys = Object.keys({ ...after, ...want }).filter(k => JSON.stringify(after[k]) !== JSON.stringify(want[k]));
@@ -751,7 +776,7 @@ if (runs(5)) {
     const line = after.events[after.events.length - 1];
     const same = JSON.stringify(after.statBoostNextSeason) === JSON.stringify(drilled.statBoostNextSeason);
     console.log(`   the banked drill: room ${H.momentsRoom(st)} at the deal, ${H.momentsRoom(drilled)} after the drill; the answer logs "${line}"`);
-    if (!same || !/, you are at your ceiling\.$/.test(line)) fail('a drill banked before the answer: the answer still landed training, or its line does not say it is at the ceiling');
+    if (!same || !line.includes(', you are at your ceiling')) fail('a drill banked before the answer: the answer still landed training or its cost, or its line does not say it is at the ceiling');
     else ok('a drill banked between the deal and the answer: the answer lands nothing past the ceiling and its line says so');
   }
   /* the fleet: how often a deck answer clamps (answered first, so 0 is expected) and how often a deck boost and a
@@ -765,10 +790,13 @@ if (runs(5)) {
     drive(H.engine, 5000 + seed, { onStep: s => {
       const card = prev?.phase === 'random_events' ? prev.pendingEvents?.[0] : null;
       if (card && isDeck(card.id)) {
-        const printed = card.choices[0].consequence.split(', ').map(w => /^(.*) next season \+(\d+)$/.exec(w)).filter(Boolean).reduce((n, m) => n + Number(m[2]), 0);
+        /* what the first option trains, stat by stat (its cost sits on another stat, Round 1504) */
+        const gains = card.choices[0].consequence.split(', ').map(w => /^(.*) \+(\d+)$/.exec(w))
+          .filter(m => m && LABEL[m[1]] && LABEL[m[1]] !== 'integrity').map(m => [W.SOCCER_TRAINING_KEYS[LABEL[m[1]]].stat, Number(m[2])]);
+        const printed = gains.reduce((n, [, v]) => n + v, 0);
         if (printed > 0) {
           trainAnswers += 1;
-          if (queued(s) - queued(prev) < printed) clampedAnswers += 1;
+          if (gains.some(([stat, v]) => (s.statBoostNextSeason?.[stat] ?? 0) - (prev.statBoostNextSeason?.[stat] ?? 0) < v)) clampedAnswers += 1;
           const kind = H.drills.drillForPosition(s.position);
           const withDeck = H.drills.applyDrillResult(copy(s), kind, H.drills.ROUNDS_PER_RUN);
           const without = H.drills.applyDrillResult(copy(prev), kind, H.drills.ROUNDS_PER_RUN);
@@ -962,7 +990,11 @@ const ECON_N = Number(process.env.SIM_SOCCER_DECK_ECONOMY_N || 100);
    moved legacy +2.26 against a spread of 1.21 and clean40 +0.09: ruling 2(j), so the pack dropped them. What still
    moves legacy (+1.66 BEST, +1.56 WORST, -0.09 NEUTRAL) is the training the cards offer: it lands under the ceiling
    (pastCeiling stays 0) and lifts the peak overall by 0.4. */
-const BANDS = { morale25: 5.5, morale30: 4, integrity25: 3.5, integrity30: 8.5, overall30: 1, peak: 0.75, legacy: 4.5, clean40: 0.15, pastCeiling: 0.01 };
+/* Round 1504, the lead's ruling 3 on Round 1334: before the cards go live, the mean legacy move of EVERY answer policy
+   sits within the measured seed to seed spread (absolute value at most 1.2; 1334 read OFF's spread 1.21), NEUTRAL about
+   0. So the legacy band is the ruling's 1.2, not a reading plus a margin, and the training options pay a time cost
+   (src/data/soccerDeck/starter.ts). The freetraining control strips the costs and must go red on it. */
+const BANDS = { morale25: 5.5, morale30: 4, integrity25: 3.5, integrity30: 8.5, overall30: 1, peak: 0.75, legacy: 1.2, clean40: 0.15, pastCeiling: 0.01 };
 if (runs(8)) {
   let P8 = PACK;
   if (CONTROL === 'pressure') {
@@ -970,20 +1002,63 @@ if (runs(8)) {
       ...(c.fx ? { fx: Object.fromEntries(Object.entries(c.fx).map(([k, v]) => [k, v * 10])) } : {}) })) })) };
     if (H.deck.soccerDeckProblems(P8).length) { console.error(`pressure control: the scaled pack has problems (${H.deck.soccerDeckProblems(P8)[0]}), refusing to run`); process.exit(2); }
   }
+  /* Round 1504: freetraining strips every training cost (the pack, in memory), so the deck trains for free again as it
+     did in Round 1334; the legacy band must go red. */
+  if (CONTROL === 'freetraining') {
+    const costs = PACK.events.flatMap(e => e.choices).filter(c => Object.values(c.fx ?? {}).some(v => v < 0)).length;
+    if (costs === 0) { console.error('freetraining control: no option of the pack carries a training cost, refusing to run'); process.exit(2); }
+    P8 = { ...PACK, events: PACK.events.map(e => ({ ...e, choices: e.choices.map(c => (c.fx ? { ...c, fx: Object.fromEntries(Object.entries(c.fx).filter(([, v]) => v >= 0)) } : c)) })) };
+    console.log(`   freetraining control: ${costs} options lose their training cost`);
+  }
   const defs = Object.fromEntries(P8.events.map(e => [Number(e.id), e]));
   const TRAIN = H.words.SOCCER_TRAINING_KEYS;
   const sumOf = (c, pick) => Object.entries(c.fx ?? {}).reduce((n, [k, v]) => n + (pick(k) ? v : 0), 0);
+  /* BEST trains whenever it can: its training counts what an option adds, never the cost it pays (Round 1504) */
+  const gainOf = c => Object.entries(c.fx ?? {}).reduce((n, [k, v]) => n + (k in TRAIN && v > 0 ? v : 0), 0);
   const ARMS = {
-    best: card => { const cs = defs[card.id].choices; let at = 0; const v = c => 100 * sumOf(c, k => k === 'integrity') + 10 * sumOf(c, k => k in TRAIN) + (c.morale ?? 0); cs.forEach((c, i) => { if (v(c) > v(cs[at])) at = i; }); return at; },
+    best: card => { const cs = defs[card.id].choices; let at = 0; const v = c => 100 * sumOf(c, k => k === 'integrity') + 10 * gainOf(c) + (c.morale ?? 0); cs.forEach((c, i) => { if (v(c) > v(cs[at])) at = i; }); return at; },
     worst: card => { const cs = defs[card.id].choices; let at = 0; cs.forEach((c, i) => { if ((c.morale ?? 0) < (cs[at].morale ?? 0)) at = i; }); return at; },
     neutral: card => neutralOf(card),
   };
   const queuedOf = s => Object.values(s.statBoostNextSeason ?? {}).reduce((n, v) => n + (v > 0 ? v : 0), 0);
+  /* Round 1504: the arms are PAIRED. Math.random is reseeded before every engine step from the seed, the season count,
+     the phase and the step's count there (section 4's rule), and the deck answer draws from a stream of its own and
+     counts no step, so a deck answer cannot move the base's draws. Before this the fleet ran on one stream a career
+     and the first deck answer's catalog draws parted the arms (correction 1), so each arm's mean carried the noise of
+     500 careers simulated apart (NEUTRAL read -0.09 on a deck answer that moves nothing). Now an arm differs from the
+     deck off only by what its answers move. */
+  const driveEconomy = (M, seed, { onStep, deckChoice }) => {
+    const real = Math.random;
+    let stream = seeded(hashInt(`${seed}|economy|start`));
+    Math.random = () => stream();
+    const counts = {};
+    try {
+      const clubs = M.FALLBACK_CLUBS;
+      let s = startOf(M, seed);
+      onStep(s);
+      for (let guard = 0; guard < 1500 && !s.retired; guard += 1) {
+        if (s.phase === 'playing' && s.seasons.length >= 40) break;
+        const first = s.phase === 'random_events' ? s.pendingEvents?.[0] : null;
+        const deck = deckChoice && isDeck(first?.id);
+        if (deck) stream = seeded(hashInt(`${seed}|economy|the deck answer`));
+        else {
+          const k = `${seed}|${s.seasons.length}|${s.phase}`;
+          counts[k] = (counts[k] ?? 0) + 1;
+          stream = seeded(hashInt(`economy|${k}|${counts[k]}`));
+        }
+        const next = deck ? M.applyEventChoice(s, deckChoice(first), clubs) : step(M, s, seed, clubs);
+        if (!next) break;
+        s = next;
+        onStep(s);
+      }
+      return { s };
+    } finally { Math.random = real; }
+  };
   let answers = 0, overRoom = 0;
   const careerOf = (M, seed, arm) => {
     const out = { clean40: 0, queued: 0, starts: 0, past: 0 };
     let prev = null;
-    const r = drive(M, seed, { seasons: 40, onStep: s => {
+    const r = driveEconomy(M, seed, { onStep: s => {
       const card = prev?.phase === 'random_events' ? prev.pendingEvents?.[0] : null;
       if (arm && card && isDeck(card.id)) {
         answers += 1;
@@ -1030,9 +1105,10 @@ if (runs(8)) {
       if (Math.abs(d) > BANDS[m]) fail(`${a} moves ${m} by ${d.toFixed(2)} against the deck off, band ${BANDS[m]}`);
     }
   }
-  const legacyMove = avg(table.best.map((r, i) => r.legacy - table.off[i].legacy));
   const legacySpread = sd(table.off.map(r => r.legacy));
-  console.log(`   the BEST arm's legacy against the deck off: ${legacyMove.toFixed(2)} points, the seed to seed spread ${legacySpread.toFixed(2)} (ruling 2(j): beyond it, the pack drops its integrity effects)`);
+  const moveOf = a => avg(table[a].map((r, i) => r.legacy - table.off[i].legacy));
+  const perSeed = a => table[a].map((r, i) => (r.legacy - table.off[i].legacy).toFixed(2)).join(' ');
+  console.log(`   legacy against the deck off: BEST ${moveOf('best').toFixed(2)} (seeds ${perSeed('best')}), WORST ${moveOf('worst').toFixed(2)} (seeds ${perSeed('worst')}), NEUTRAL ${moveOf('neutral').toFixed(2)} (seeds ${perSeed('neutral')}); the seed to seed spread ${legacySpread.toFixed(2)}, the ruling's band ${BANDS.legacy}`);
   console.log(`   ${answers} deck answers, ${overRoom} queued more than the room just before them`);
   if (answers === 0) fail('no deck card was answered in any arm');
   if (overRoom) fail(`${overRoom} deck answers queued more than momentsRoom allowed`);

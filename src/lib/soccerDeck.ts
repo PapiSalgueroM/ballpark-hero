@@ -34,11 +34,20 @@
    and the answer (a training session banked in between), the key lands what
    fits, and the season log line says what landed.
 
+   THE COST (Round 1504, the lead's ruling 3 on Round 1334). Training is
+   never free: every option that trains a skill +1 also takes one from
+   another skill of the same group next season, because the hours come out
+   of his normal work, and the button prints both. Before this a card raised
+   the recorded legacy score whatever the answer (simSoccerDeck section 8).
+   A cost lands only as far as the training it pays for landed, so at the
+   ceiling neither moves.
+
    WHAT LANDED. Every option that moves something appends ONE line to the
    season log naming what landed, which can be less than the button printed
-   only at a bound (training at the ceiling, morale at 0 or 100), e.g.
-   "Shooting next season +0, you are at your ceiling". The option that moves
-   nothing returns the state untouched and logs nothing.
+   only at a bound (training at the ceiling, morale at 0 or 100, a cost for
+   training that did not land), e.g. "Shooting next season +0, you are at
+   your ceiling". The option that moves nothing returns the state untouched
+   and logs nothing.
 
    THE REGISTRY. Built in: morale (CareerState.morale, 0 to 100). Registered
    (SOCCER_FX): integrity (integrityBonus, signed, no bound) and thirteen
@@ -143,6 +152,8 @@ for (const [key, { stat }] of Object.entries(SOCCER_TRAINING_KEYS)) {
   SOCCER_FX[key] = {
     ...SOCCER_FX_WORDS[key],
     apply: (s, v) => {
+      /* a cost: queued as it is (landChoice never hands one more than the training it pays for landed) */
+      if (v < 0) { s.statBoostNextSeason = { ...(s.statBoostNextSeason ?? {}), [stat]: (s.statBoostNextSeason?.[stat] ?? 0) + v }; return; }
       const add = Math.max(0, Math.min(v, momentsRoom(s)));
       if (add > 0) s.statBoostNextSeason = { ...(s.statBoostNextSeason ?? {}), [stat]: (s.statBoostNextSeason?.[stat] ?? 0) + add };
     },
@@ -206,12 +217,18 @@ export function soccerDeckProblems(pack: SoccerDeckPack): string[] {
       if (c.popularity !== undefined) out.push(`${e.id}: "${c.label}" moves popularity`);
       if (c.cash !== undefined) out.push(`${e.id}: "${c.label}" moves cash`);
       if (c.out !== undefined || c.rating !== undefined || c.recruit !== undefined) out.push(`${e.id}: "${c.label}" moves a desk effect (out, rating or recruit)`);
+      let gains = 0, costs = 0;
       for (const [k, raw] of Object.entries(c.fx ?? {})) {
         if (!isTraining(k)) continue;
-        if (!(typeof raw === 'number' && Number.isInteger(raw) && raw > 0)) out.push(`${e.id}: "${c.label}" trains ${k} by ${JSON.stringify(raw)}, not a whole number above 0`);
+        if (!(typeof raw === 'number' && Number.isInteger(raw) && raw !== 0)) out.push(`${e.id}: "${c.label}" trains ${k} by ${JSON.stringify(raw)}, not a whole number other than 0`);
+        else if (raw > 0) gains += raw;
+        else costs -= raw;
         if (SOCCER_TRAINING_KEYS[k].keeper && !keeper) out.push(`${e.id}: "${c.label}" trains a keeper skill (${k}) on a card an outfield player can be dealt`);
         if (!SOCCER_TRAINING_KEYS[k].keeper && !outfield) out.push(`${e.id}: "${c.label}" trains an outfield skill (${k}) on a card a keeper can be dealt`);
       }
+      /* Round 1504: a cost is the time a training option takes from another skill, so it never comes alone or bigger */
+      if (costs > 0 && gains === 0) out.push(`${e.id}: "${c.label}" takes a skill down and trains nothing`);
+      else if (costs > gains) out.push(`${e.id}: "${c.label}" takes ${costs} from skills and trains only ${gains}`);
     }
   }
   return out;
@@ -243,14 +260,23 @@ function landChoice(prev: CareerState, emoji: string, title: string, c: GmChoice
     const moved = s.morale - before;
     said.push(moved === 0 ? `Morale stays at ${s.morale}` : moved === c.morale ? `Morale ${plus(moved)}` : `Morale ${plus(moved)}, now at ${s.morale}`);
   }
-  for (const [k, raw] of Object.entries(c.fx ?? {})) {
-    const def = Object.prototype.hasOwnProperty.call(SOCCER_FX, k) ? SOCCER_FX[k] : undefined;
-    if (!def || typeof raw !== 'number' || raw === 0) continue;
+  /* What it trains lands first, then each cost (Round 1504), and a cost takes no more than the training landed, so
+     training that could not land costs nothing. The line keeps the option's own order. */
+  const fx = Object.entries(c.fx ?? {}).filter(([k, raw]) => Object.prototype.hasOwnProperty.call(SOCCER_FX, k) && typeof raw === 'number' && raw !== 0) as [string, number][];
+  const landed: Record<string, string> = {};
+  let trained = 0;
+  for (const [k, raw] of [...fx.filter(([, r]) => r > 0), ...fx.filter(([, r]) => r < 0)]) {
+    const def = SOCCER_FX[k];
+    const cost = raw < 0 && isTraining(k);
+    const v = cost ? -Math.min(-raw, trained) : raw;
     const before = def.read(s);
-    def.apply(s, raw);
+    def.apply(s, v);
     const moved = def.read(s) - before;
-    said.push(moved === raw ? `${def.label} ${plus(moved)}` : `${def.label} ${plus(moved)}, you are at your ceiling`);
+    if (isTraining(k)) trained += moved;
+    landed[k] = moved === raw ? `${def.label} ${plus(moved)}`
+      : cost ? `${def.label} ${plus(moved)}, you only pay for training that landed` : `${def.label} ${plus(moved)}, you are at your ceiling`;
   }
+  for (const [k] of fx) said.push(landed[k]);
   s.events = [...s.events, `${emoji} ${title}: ${c.reply} ${said.join(', ')}.`];
   return s;
 }

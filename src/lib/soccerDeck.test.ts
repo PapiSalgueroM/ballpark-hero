@@ -136,6 +136,8 @@ describe('soccerDeckProblems', () => {
       outfieldWordKeeper: { ...FIXTURE, events: [keeperCard, CALLUP], titles: { ...FIXTURE.titles, 701: 'x' }, kinds: { ...FIXTURE.kinds, 701: 'positive' } },
       trainingOnSituation: opt({ fx: { t_pace: 1 } }, 1, 0),
       trainingNotWhole: opt({ fx: { t_shooting: 0.5 } }),
+      costAlone: opt({ fx: { t_pace: -1 } }),
+      costAboveGain: opt({ fx: { t_shooting: 1, t_pace: -2 } }),
       id650: { ...FIXTURE, events: [{ ...FORWARD, id: '650' }, CALLUP], titles: { ...FIXTURE.titles, 650: 'x' }, kinds: { ...FIXTURE.kinds, 650: 'positive' } },
       duplicate: { ...FIXTURE, events: [FORWARD, FORWARD, CALLUP] },
       noTitle: { ...FIXTURE, titles: { 724: FIXTURE.titles[724] } },
@@ -237,6 +239,20 @@ describe('the answer', () => {
     expect(after.statBoostNextSeason).toEqual({});
     expect(after.events.at(-1)).toBe('⚽ Penalty duty: You put your name down for penalties. Shooting next season +0, you are at your ceiling.');
     expect(SOCCER_FX.t_shooting.read(after)).toBe(0);
+  });
+  /* Round 1504: a training option's time cost, paid only for training that landed */
+  const [trade] = deckToRandomEvents({ ...FIXTURE, events: [{ ...FORWARD, choices: [{ ...FORWARD.choices[0], fx: { t_shooting: 1, t_pace: -1 } }, FORWARD.choices[1]] }] }, [{ ...FORWARD, choices: [{ ...FORWARD.choices[0], fx: { t_shooting: 1, t_pace: -1 } }, FORWARD.choices[1]] }]);
+  it('prints and pays the cost of a training option', () => {
+    expect(trade.choices[0].consequence).toBe('Shooting next season +1, Pace next season -1');
+    const s = career({ statBoostNextSeason: { pace: 1 } });
+    const after = trade.choices[0].apply({ ...s });
+    expect(after.statBoostNextSeason).toEqual({ shooting: 1, pace: 0 });
+    expect(after.events.at(-1)).toBe('⚽ Penalty duty: You put your name down for penalties. Shooting next season +1, Pace next season -1.');
+  });
+  it('charges nothing for training that could not land, and says so', () => {
+    const after = trade.choices[0].apply(career({ overall: 85 }));
+    expect(after.statBoostNextSeason).toEqual({});
+    expect(after.events.at(-1)).toBe('⚽ Penalty duty: You put your name down for penalties. Shooting next season +0, you are at your ceiling, Pace next season +0, you only pay for training that landed.');
   });
   it('stops morale at 0 and 100 and says where it stopped', () => {
     expect(call.choices[0].apply(career({ morale: 99 }))).toMatchObject({ morale: 100 });
@@ -432,7 +448,7 @@ describe('the starter pack', () => {
           const d = (after.statBoostNextSeason[stat] ?? 0) - (s.statBoostNextSeason[stat] ?? 0);
           if (!d) continue;
           const key = Object.keys(SOCCER_TRAINING_KEYS).find(k => SOCCER_TRAINING_KEYS[k].stat === stat && c.consequence.includes(SOCCER_FX_WORDS[k].label));
-          moved.push(key ? `${SOCCER_FX_WORDS[key].label} +${d}` : `${stat} +${d}, printed nowhere`);
+          moved.push(key ? `${SOCCER_FX_WORDS[key].label} ${d > 0 ? '+' : ''}${d}` : `${stat} ${d}, printed nowhere`);
         }
         expect(moved.sort(), `${card.id} ${c.label}`).toEqual(c.consequence.split(', ').sort());
         expect(after.events.length, `${card.id} ${c.label}`).toBe(s.events.length + 1);
