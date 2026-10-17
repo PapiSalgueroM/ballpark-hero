@@ -1,0 +1,6 @@
+#!playwright
+unit: node_modules/.bin/vitest run src/lib/cmMatchDisplay.test.ts --testTimeout=300000
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+mdHead: n=0; for i in 1 2 3 4 5 6 7 8; do node scripts/simMatchDetail.mjs > /tmp/mdh$i.log 2>&1 || { n=$((n+1)); grep FAIL /tmp/mdh$i.log | head -2; }; done; echo "head: $n of 8 runs red"
+mdBase: git worktree add -f /tmp/mdb d8aaa4cb > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/mdb/node_modules && cd /tmp/mdb && n=0; for i in 1 2 3 4 5 6 7 8; do node scripts/simMatchDetail.mjs > /tmp/mdb$i.log 2>&1 || { n=$((n+1)); grep FAIL /tmp/mdb$i.log | head -2; }; done; echo "base d8aaa4cb: $n of 8 runs red"
