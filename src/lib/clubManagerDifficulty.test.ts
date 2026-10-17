@@ -109,9 +109,11 @@ describe('every applier is the identity at its own identity dial', () => {
   it('a created club: the room dial moves only the base ceiling, and the founders\' room comes back whole', () => {
     /* Critic advice 27 and the review of 2026-10-17 (its mutation m4 applied the dial to the whole ceiling and
        nothing went red): the first summer takes the founders' room off in full, so the dial must not shrink it. */
+    /* A squad picked above what a small budget could buy (quality 85): only then do the founders carry a sale
+       ratio, and only then is there a founders' room to keep (a squad the money could buy has none). */
     const replacedClub = playableClubs('premier').at(-1)!.name;
     const made = startCareer('Level Ground FC', 'now', {
-      name: 'Level Ground FC', stadium: 'Level Ground', budgetTier: 'small', leagueId: 'premier', replacedClub,
+      name: 'Level Ground FC', stadium: 'Level Ground', budgetTier: 'small', leagueId: 'premier', replacedClub, quality: 85,
       crest: { shape: 0, pattern: 0, color1: '#112233', color2: '#ffffff', initials: 'LG' },
     } as CustomClubSpec);
     const room = made.founderWageRoom ?? 0;
