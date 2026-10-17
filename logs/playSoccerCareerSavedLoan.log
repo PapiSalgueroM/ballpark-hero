@@ -1,0 +1,432 @@
+Prepared 9 declared font dependencies for local fulfillment.
+prepInstalled: 521 installed locked versions written to /home/runner/work/ballpark-hero/ballpark-hero/w-playSoccerCareerSavedLoan
+prepInstalled: 521 installed locked versions written to /home/runner/work/ballpark-hero/ballpark-hero/w-playSoccerCareerSavedLoan/prior-popularity
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The unique fixed236 gate inverse must restore the whole held parent Life
++ actual - expected
+... Skipped lines
+
+  'import { rollCareerChance } from "./careerChanceWheel";\n' +
+    'import { getSoccerRoutineEvents } from "./soccerCareerRoutineEvents";\n' +
+    'import { SOCCER_LIFE_CONSEQUENCES } from "./soccerCareerLifeConsequences";\n' +
+    '/* ────────────────────────────────────────────────────────────────────────────\n' +
+    '   soccerCareerLife.ts, the life layer for Soccer Career (Round 49)\n' +
+...
+    '    push({ id: 200, cooldown: COOLDOWN.once, emoji: "🪞", title: "Who Are You, Really?",\n' +
++   '      description: "Teammates, journalists and fans keep asking the same question: what is your deal? '... 93916 more characters
+-   '      description: "Teammates, journalists and fans keep asking the same question: what is your deal? '... 93802 more characters
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerSavedLoan.mjs:282:12
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'import { rollCareerChance } from "./careerChanceWheel";\n' +
+    'import { getSoccerRoutineEvents } from "./soccerCareerRoutineEvents";\n' +
+    'import { SOCCER_LIFE_CONSEQUENCES } from "./soccerCareerLifeConsequences";\n' +
+    '/* ────────────────────────────────────────────────────────────────────────────\n' +
+    '   soccerCareerLife.ts, the life layer for Soccer Career (Round 49)\n' +
+    '   Personalities, agents, and the expanded off-pitch event catalog (ids 200+).\n' +
+    '   The goal: life-sim chaos on a scale you rarely see, with real mechanical\n' +
+    '   tradeoffs, so two careers never read the same.\n' +
+    '   NOTE: this file only imports TYPES from soccerCareerEngine, so the\n' +
+    '   engine -> soccerCareerLife runtime import has no cycle (same pattern\n' +
+    '   as careerEras.ts).\n' +
+    '   All new CareerState fields used here are OPTIONAL (personality, agentId,\n' +
+    '   lifeFlags) so pre-Round-49 saves keep loading untouched.\n' +
+    '   Round 725: every event carries a cooldown (see COOLDOWN below), the eight\n' +
+    '   one button events got a real second choice, and ids 253 to 272 are new:\n' +
+    '   family, media, money, injuries, the dressing room, agents, the national\n' +
+    '   team, the fans and the late career. Three stories this file shares with\n' +
+    '   other catalogs carry a STORY key so they happen once between them. Every\n' +
+    '   speaker is a role or a generated person, never a real one.\n' +
+    '   scripts/simCareerLifeCooldowns.mjs audits it.\n' +
+    '   ──────────────────────────────────────────────────────────────────────────── */\n' +
+    'import type { CareerState, RandomEvent } from "./soccerCareerEngine";\n' +
+    'import {\n' +
+    '  personalityOf, personalityMult, agentOf, agentWage, agentIncomeCut, agentTransferCut, identityBeatDue,\n' +
+    '} from "./careerIdentity";\n' +
+    'import type { IdentitySport, PersonalityDef, AgentDef } from "./careerIdentity";\n' +
+    '\n' +
+    '/* ─── tiny local helpers (duplicated on purpose: no runtime import cycle) ─── */\n' +
+    'const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));\n' +
+    'const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;\n' +
+    'const flag = (s: CareerState, key: string): number => (s.lifeFlags || {})[key] || 0;\n' +
+    'const setFlag = (s: CareerState, key: string, value: number) => {\n' +
+    '  s.lifeFlags = { ...(s.lifeFlags || {}), [key]: value };\n' +
+    '};\n' +
+    'type StatKey = "pace" | "shooting" | "passing" | "dribbling" | "defending" | "physical" | "reflexes";\n' +
+    'const bump = (s: CareerState, key: StatKey, n: number) => {\n' +
+    '  s.statBoostNextSeason = { ...s.statBoostNextSeason, [key]: (s.statBoostNextSeason[key] || 0) + n };\n' +
+    '};\n' +
+    'const money = (s: CareerState, delta: number) => {\n' +
+    '  s.netWorth = Math.round((s.netWorth + delta) * 100) / 100;\n' +
+    '};\n' +
+    'const followers = (s: CareerState, delta: number) => {\n' +
+    '  s.socialMediaFollowers = Math.round((s.socialMediaFollowers + delta) * 100) / 100;\n' +
+    '};\n' +
+    'const log = (s: CareerState, line: string) => { s.events = [...s.events, line]; };\n' +
+    '\n' +
+    'function pendingLifeChance(state: CareerState, id: number, chance: number): boolean {\n' +
+    '  const rolled = Math.random() < chance;\n' +
+    '  return rolled || (state.pendingEvents ?? []).some(event => event.id === id);\n' +
+    '}\n' +
+    '\n' +
+    '/* ─── Round 725: cooldowns ───\n' +
+    '   Seasons an event sits out after it fires, one number per kind of story so\n' +
+    '   the audit table in scripts/simCareerLifeCooldowns.mjs reads straight off\n' +
+    '   the catalog. The picker in soccerCareerEngine holds an event out while\n' +
+    '   (this season minus the season it last fired) is at most this number. ONCE\n' +
+    '   is longer than any career, so that story happens one time. Events with no\n' +
+    '   cooldown of their own fall back to the category default in the engine. */\n' +
+    'export const COOLDOWN = {\n' +
+    '  agent: 2,\n' +
+    '  personality: 2,\n' +
+    '  dressingRoom: 2,\n' +
+    '  media: 1,\n' +
+    '  money: 2,\n' +
+    '  family: 2,\n' +
+    '  injury: 3,\n' +
+    '  fans: 2,\n' +
+    '  national: 2,\n' +
+    '  late: 2,\n' +
+    '  once: 99,\n' +
+    '} as const;\n' +
+    '\n' +
+    '/* Stories told by more than one catalog. Every event carrying one of these\n' +
+    '   shares a single cooldown entry, so the set behaves as one story. */\n' +
+    'export const STORY = {\n' +
+    '  squadChatLeak: "squadChatLeak",\n' +
+    '  statueVote: "statueVote",\n' +
+    '  podcastLaunch: "podcastLaunch",\n' +
+    '} as const;\n' +
+    '\n' +
+    '/* ─── Personalities ───\n' +
+    '   Round 835: the rules (the bound on what a personality may move, the\n' +
+    '   fallbacks, the staggered beats) live in careerIdentity.ts and every career\n' +
+    '   shares them. What is soccer is below: who you can be, the two multipliers\n' +
+    '   each one carries, the agents and their cuts. The multipliers used to be two\n' +
+    '   switch statements; they are the same numbers, now on the row they belong\n' +
+    '   to, so the perk a card prints and the number behind it sit side by side. */\n' +
+    'export type { PersonalityDef, AgentDef } from "./careerIdentity";\n' +
+    '\n' +
+    'export const PERSONALITIES: PersonalityDef[] = [\n' +
+    '  { id: "showman", name: "The Showman", emoji: "🎭", blurb: "Cameras find you. You find them first.",\n' +
+    '    perk: "Followers grow 60% faster, sponsors pay 25% more, scandals hit harder",\n' +
+    '    followerMult: 1.6, sponsorMult: 1.25 },\n' +
+    '  { id: "iceman", name: "Ice Cold", emoji: "🧊", blurb: "No celebration. No panic. No comment.",\n' +
+    '    perk: "Sponsors trust you, drama slides off, slower follower growth",\n' +
+    '    followerMult: 0.9, sponsorMult: 1.05 },\n' +
+    '  { id: "hothead", name: "The Hothead", emoji: "🌋", blurb: "Plays angry. Lives angrier.",\n' +
+    '    perk: "Exclusive chaos events and fear-factor edges, riskier sponsor money",\n' +
+    '    followerMult: 1.15, sponsorMult: 0.9 },\n' +
+    '  { id: "professor", name: "The Professor", emoji: "📐", blurb: "Watches film on the team bus. For fun.",\n' +
+    '    perk: "Respected by managers and brands, fewer viral moments",\n' +
+    '    followerMult: 0.85, sponsorMult: 1.1 },\n' +
+    '  { id: "enigma", name: "The Enigma", emoji: "🃏", blurb: "Nobody, including you, knows what happens next.",\n' +
+    '    perk: "Wildcard bonuses, cult following, chaos both ways",\n' +
+    '    followerMult: 1.25, sponsorMult: 1 },\n' +
+    '];\n' +
+    '\n' +
+    'export const getPersonalityDef = (id?: string | null): PersonalityDef | undefined =>\n' +
+    '  personalityOf(id, SOCCER_IDENTITY);\n' +
+    '\n' +
+    'export function personalityFollowerMult(id?: string | null): number {\n' +
+    '  return personalityMult(id, "followers", SOCCER_IDENTITY);\n' +
+    '}\n' +
+    '\n' +
+    'export function personalitySponsorMult(id?: string | null): number {\n' +
+    '  return personalityMult(id, "sponsors", SOCCER_IDENTITY);\n' +
+    '}\n' +
+    '\n' +
+    '/* ─── Agents ─── */\n' +
+    'export const AGENTS: AgentDef[] = [\n' +
+    '  { id: "cousin", name: "Cousin Ricky", emoji: "🧢", blurb: "Family discount. Family-grade paperwork.",\n' +
+    '    wageMult: 0.95, incomeCut: 0, transferCut: 0.03 },\n' +
+    '  { id: "shark", name: "Marco De Luca", emoji: "🦈", blurb: "Mid-table clubs fear his ringtone.",\n' +
+    '    wageMult: 1.1, incomeCut: 0.05, transferCut: 0.08 },\n' +
+    '  { id: "super", name: "Zara Blackwood", emoji: "👑", blurb: "Has three club presidents on speed dial. Uses all three.",\n' +
+    '    wageMult: 1.25, incomeCut: 0.1, transferCut: 0.12 },\n' +
+    '  { id: "self", name: "No Agent", emoji: "🤝", blurb: "You negotiate for yourself.",\n' +
+    '    wageMult: 1, incomeCut: 0, transferCut: 0 },\n' +
+    '];\n' +
+    '\n' +
+    '/** What makes the identity rules the soccer ones. Data, not rules. Legacy\n' +
+    ' *  saves without an agent keep the old flat 10% transfer fee. */\n' +
+    'export const SOCCER_IDENTITY: IdentitySport = {\n' +
+    '  personalities: PERSONALITIES,\n' +
+    '  agents: AGENTS,\n' +
+    '  noAgentTransferCut: 0.1,\n' +
+    '  beats: { personalityAge: 18, agentAge: 19 },\n' +
+    '};\n' +
+    '\n' +
+    'export const getAgentDef = (id?: string | null): AgentDef | undefined =>\n' +
+    '  agentOf(id, SOCCER_IDENTITY);\n' +
+    '\n' +
+    'export function agentWageMult(id?: string | null): number {\n' +
+    '  return agentWage(id, SOCCER_IDENTITY);\n' +
+    '}\n' +
+    '\n' +
+    'export function agentIncomeCutRate(id?: string | null): number {\n' +
+    '  return agentIncomeCut(id, SOCCER_IDENTITY);\n' +
+    '}\n' +
+    '\n' +
+    'export function agentTransferCutRate(id?: string | null): number {\n' +
+    '  return agentTransferCut(id, SOCCER_IDENTITY);\n' +
+    '}\n' +
+    '\n' +
+    '/** The event that tells each identity beat in this catalog. */\n' +
+    'const IDENTITY_EVENT = { personality: 200, agent: 201 } as const;\n' +
+    '\n' +
+    '/** Events that must appear the season they become due (identity beats).\n' +
+    '    Staggered on purpose: personality first, agent the season after. */\n' +
+    'export function getPriorityLifeEventIds(state: CareerState): number[] {\n' +
+    '  const ids: number[] = [];\n' +
+    '  const beat = identityBeatDue(state, SOCCER_IDENTITY);\n' +
+    '  if (beat) ids.push(IDENTITY_EVENT[beat]);\n' +
+    '  /* Round 725: the comeback game (262) is a beat of the same kind. Left in\n' +
+    '     the general draw it showed up in about one comeback in three, and a\n' +
+    '     return from a long injury is not a story that should lose a raffle. */\n' +
+    '  if (comebackDue(state) && !state.retired) ids.push(262);\n' +
+    '  if (!state.retired) {\n' +
+    '    const year = state.seasons[state.seasons.length - 1]?.year ?? 0;\n' +
+    '    for (const [acquisition, followup, key] of [[226, 227, "esports"], [230, 231, "cursedBoots"], [236, 237, "teammateLoan"], [270, 630, "coachingBadges"], [408, 631, "rDocCrew"]] as const) {\n' +
+    '      const acquired = state.eventLastFired?.[String(acquisition)];\n' +
+    '      if (flag(state, key) === 1 && (typeof acquired !== "number" || !Number.isFinite(acquired) || acquired < year)) ids.push(followup);\n' +
+    '    }\n' +
+    '  }\n' +
+    '  return ids;\n' +
+    '}\n' +
+    '\n' +
+    '/* The comeback game is only news while the serious injury is recent: it\n' +
+    '   happened this season or the one before. Gated on any injury ever, a 33\n' +
+    '   year old could be told about his first start since a layoff at 22. The\n' +
+    '   injury cooldown keeps it to one comeback per injury. */\n' +
+    'function comebackDue(state: CareerState): boolean {\n' +
+    '  const lastSerious = state.seriousInjuries?.[state.seriousInjuries.length - 1];\n' +
+    '  if (!lastSerious) return false;\n' +
+    '  const seasonNow = state.seasons[state.seasons.length - 1]?.year ?? 0;\n' +
+    '  return lastSerious.year >= seasonNow - 1;\n' +
+    '}\n' +
+    '\n' +
+    '/* ─── The life event catalog (ids 200+) ───\n' +
+    '   Every event self-gates: it is only returned when its conditions hold, so\n' +
+    '   generateRandomEvents needs no extra eligibility rules for this pool. */\n' +
+    'export function getLifeEvents(state: CareerState): RandomEvent[] {\n' +
+    '  const events: RandomEvent[] = [];\n' +
+    '  const p = state.personality;\n' +
+    '  const push = (e: RandomEvent) => events.push(e);\n' +
+    '\n' +
+    '  /* ── 200: personality reveal ── */\n' +
+    '  if (!state.personality && state.age >= 18) {\n' +
+    '    push({ id: 200, cooldown: COOLDOWN.once, emoji: "🪞", title: "Who Are You, Really?",\n' +
+    '      description: "Teammates, journalists and fans keep asking the same question: what is your deal? '... 93916 more characters,
+  expected: 'import { rollCareerChance } from "./careerChanceWheel";\n' +
+    'import { getSoccerRoutineEvents } from "./soccerCareerRoutineEvents";\n' +
+    'import { SOCCER_LIFE_CONSEQUENCES } from "./soccerCareerLifeConsequences";\n' +
+    '/* ────────────────────────────────────────────────────────────────────────────\n' +
+    '   soccerCareerLife.ts, the life layer for Soccer Career (Round 49)\n' +
+    '   Personalities, agents, and the expanded off-pitch event catalog (ids 200+).\n' +
+    '   The goal: life-sim chaos on a scale you rarely see, with real mechanical\n' +
+    '   tradeoffs, so two careers never read the same.\n' +
+    '   NOTE: this file only imports TYPES from soccerCareerEngine, so the\n' +
+    '   engine -> soccerCareerLife runtime import has no cycle (same pattern\n' +
+    '   as careerEras.ts).\n' +
+    '   All new CareerState fields used here are OPTIONAL (personality, agentId,\n' +
+    '   lifeFlags) so pre-Round-49 saves keep loading untouched.\n' +
+    '   Round 725: every event carries a cooldown (see COOLDOWN below), the eight\n' +
+    '   one button events got a real second choice, and ids 253 to 272 are new:\n' +
+    '   family, media, money, injuries, the dressing room, agents, the national\n' +
+    '   team, the fans and the late career. Three stories this file shares with\n' +
+    '   other catalogs carry a STORY key so they happen once between them. Every\n' +
+    '   speaker is a role or a generated person, never a real one.\n' +
+    '   scripts/simCareerLifeCooldowns.mjs audits it.\n' +
+    '   ──────────────────────────────────────────────────────────────────────────── */\n' +
+    'import type { CareerState, RandomEvent } from "./soccerCareerEngine";\n' +
+    'import {\n' +
+    '  personalityOf, personalityMult, agentOf, agentWage, agentIncomeCut, agentTransferCut, identityBeatDue,\n' +
+    '} from "./careerIdentity";\n' +
+    'import type { IdentitySport, PersonalityDef, AgentDef } from "./careerIdentity";\n' +
+    '\n' +
+    '/* ─── tiny local helpers (duplicated on purpose: no runtime import cycle) ─── */\n' +
+    'const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));\n' +
+    'const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;\n' +
+    'const flag = (s: CareerState, key: string): number => (s.lifeFlags || {})[key] || 0;\n' +
+    'const setFlag = (s: CareerState, key: string, value: number) => {\n' +
+    '  s.lifeFlags = { ...(s.lifeFlags || {}), [key]: value };\n' +
+    '};\n' +
+    'type StatKey = "pace" | "shooting" | "passing" | "dribbling" | "defending" | "physical" | "reflexes";\n' +
+    'const bump = (s: CareerState, key: StatKey, n: number) => {\n' +
+    '  s.statBoostNextSeason = { ...s.statBoostNextSeason, [key]: (s.statBoostNextSeason[key] || 0) + n };\n' +
+    '};\n' +
+    'const money = (s: CareerState, delta: number) => {\n' +
+    '  s.netWorth = Math.round((s.netWorth + delta) * 100) / 100;\n' +
+    '};\n' +
+    'const followers = (s: CareerState, delta: number) => {\n' +
+    '  s.socialMediaFollowers = Math.round((s.socialMediaFollowers + delta) * 100) / 100;\n' +
+    '};\n' +
+    'const log = (s: CareerState, line: string) => { s.events = [...s.events, line]; };\n' +
+    '\n' +
+    'function pendingLifeChance(state: CareerState, id: number, chance: number): boolean {\n' +
+    '  const rolled = Math.random() < chance;\n' +
+    '  return rolled || (state.pendingEvents ?? []).some(event => event.id === id);\n' +
+    '}\n' +
+    '\n' +
+    '/* ─── Round 725: cooldowns ───\n' +
+    '   Seasons an event sits out after it fires, one number per kind of story so\n' +
+    '   the audit table in scripts/simCareerLifeCooldowns.mjs reads straight off\n' +
+    '   the catalog. The picker in soccerCareerEngine holds an event out while\n' +
+    '   (this season minus the season it last fired) is at most this number. ONCE\n' +
+    '   is longer than any career, so that story happens one time. Events with no\n' +
+    '   cooldown of their own fall back to the category default in the engine. */\n' +
+    'export const COOLDOWN = {\n' +
+    '  agent: 2,\n' +
+    '  personality: 2,\n' +
+    '  dressingRoom: 2,\n' +
+    '  media: 1,\n' +
+    '  money: 2,\n' +
+    '  family: 2,\n' +
+    '  injury: 3,\n' +
+    '  fans: 2,\n' +
+    '  national: 2,\n' +
+    '  late: 2,\n' +
+    '  once: 99,\n' +
+    '} as const;\n' +
+    '\n' +
+    '/* Stories told by more than one catalog. Every event carrying one of these\n' +
+    '   shares a single cooldown entry, so the set behaves as one story. */\n' +
+    'export const STORY = {\n' +
+    '  squadChatLeak: "squadChatLeak",\n' +
+    '  statueVote: "statueVote",\n' +
+    '  podcastLaunch: "podcastLaunch",\n' +
+    '} as const;\n' +
+    '\n' +
+    '/* ─── Personalities ───\n' +
+    '   Round 835: the rules (the bound on what a personality may move, the\n' +
+    '   fallbacks, the staggered beats) live in careerIdentity.ts and every career\n' +
+    '   shares them. What is soccer is below: who you can be, the two multipliers\n' +
+    '   each one carries, the agents and their cuts. The multipliers used to be two\n' +
+    '   switch statements; they are the same numbers, now on the row they belong\n' +
+    '   to, so the perk a card prints and the number behind it sit side by side. */\n' +
+    'export type { PersonalityDef, AgentDef } from "./careerIdentity";\n' +
+    '\n' +
+    'export const PERSONALITIES: PersonalityDef[] = [\n' +
+    '  { id: "showman", name: "The Showman", emoji: "🎭", blurb: "Cameras find you. You find them first.",\n' +
+    '    perk: "Followers grow 60% faster, sponsors pay 25% more, scandals hit harder",\n' +
+    '    followerMult: 1.6, sponsorMult: 1.25 },\n' +
+    '  { id: "iceman", name: "Ice Cold", emoji: "🧊", blurb: "No celebration. No panic. No comment.",\n' +
+    '    perk: "Sponsors trust you, drama slides off, slower follower growth",\n' +
+    '    followerMult: 0.9, sponsorMult: 1.05 },\n' +
+    '  { id: "hothead", name: "The Hothead", emoji: "🌋", blurb: "Plays angry. Lives angrier.",\n' +
+    '    perk: "Exclusive chaos events and fear-factor edges, riskier sponsor money",\n' +
+    '    followerMult: 1.15, sponsorMult: 0.9 },\n' +
+    '  { id: "professor", name: "The Professor", emoji: "📐", blurb: "Watches film on the team bus. For fun.",\n' +
+    '    perk: "Respected by managers and brands, fewer viral moments",\n' +
+    '    followerMult: 0.85, sponsorMult: 1.1 },\n' +
+    '  { id: "enigma", name: "The Enigma", emoji: "🃏", blurb: "Nobody, including you, knows what happens next.",\n' +
+    '    perk: "Wildcard bonuses, cult following, chaos both ways",\n' +
+    '    followerMult: 1.25, sponsorMult: 1 },\n' +
+    '];\n' +
+    '\n' +
+    'export const getPersonalityDef = (id?: string | null): PersonalityDef | undefined =>\n' +
+    '  personalityOf(id, SOCCER_IDENTITY);\n' +
+    '\n' +
+    'export function personalityFollowerMult(id?: string | null): number {\n' +
+    '  return personalityMult(id, "followers", SOCCER_IDENTITY);\n' +
+    '}\n' +
+    '\n' +
+    'export function personalitySponsorMult(id?: string | null): number {\n' +
+    '  return personalityMult(id, "sponsors", SOCCER_IDENTITY);\n' +
+    '}\n' +
+    '\n' +
+    '/* ─── Agents ─── */\n' +
+    'export const AGENTS: AgentDef[] = [\n' +
+    '  { id: "cousin", name: "Cousin Ricky", emoji: "🧢", blurb: "Family discount. Family-grade paperwork.",\n' +
+    '    wageMult: 0.95, incomeCut: 0, transferCut: 0.03 },\n' +
+    '  { id: "shark", name: "Marco De Luca", emoji: "🦈", blurb: "Mid-table clubs fear his ringtone.",\n' +
+    '    wageMult: 1.1, incomeCut: 0.05, transferCut: 0.08 },\n' +
+    '  { id: "super", name: "Zara Blackwood", emoji: "👑", blurb: "Has three club presidents on speed dial. Uses all three.",\n' +
+    '    wageMult: 1.25, incomeCut: 0.1, transferCut: 0.12 },\n' +
+    '  { id: "self", name: "No Agent", emoji: "🤝", blurb: "You negotiate for yourself.",\n' +
+    '    wageMult: 1, incomeCut: 0, transferCut: 0 },\n' +
+    '];\n' +
+    '\n' +
+    '/** What makes the identity rules the soccer ones. Data, not rules. Legacy\n' +
+    ' *  saves without an agent keep the old flat 10% transfer fee. */\n' +
+    'export const SOCCER_IDENTITY: IdentitySport = {\n' +
+    '  personalities: PERSONALITIES,\n' +
+    '  agents: AGENTS,\n' +
+    '  noAgentTransferCut: 0.1,\n' +
+    '  beats: { personalityAge: 18, agentAge: 19 },\n' +
+    '};\n' +
+    '\n' +
+    'export const getAgentDef = (id?: string | null): AgentDef | undefined =>\n' +
+    '  agentOf(id, SOCCER_IDENTITY);\n' +
+    '\n' +
+    'export function agentWageMult(id?: string | null): number {\n' +
+    '  return agentWage(id, SOCCER_IDENTITY);\n' +
+    '}\n' +
+    '\n' +
+    'export function agentIncomeCutRate(id?: string | null): number {\n' +
+    '  return agentIncomeCut(id, SOCCER_IDENTITY);\n' +
+    '}\n' +
+    '\n' +
+    'export function agentTransferCutRate(id?: string | null): number {\n' +
+    '  return agentTransferCut(id, SOCCER_IDENTITY);\n' +
+    '}\n' +
+    '\n' +
+    '/** The event that tells each identity beat in this catalog. */\n' +
+    'const IDENTITY_EVENT = { personality: 200, agent: 201 } as const;\n' +
+    '\n' +
+    '/** Events that must appear the season they become due (identity beats).\n' +
+    '    Staggered on purpose: personality first, agent the season after. */\n' +
+    'export function getPriorityLifeEventIds(state: CareerState): number[] {\n' +
+    '  const ids: number[] = [];\n' +
+    '  const beat = identityBeatDue(state, SOCCER_IDENTITY);\n' +
+    '  if (beat) ids.push(IDENTITY_EVENT[beat]);\n' +
+    '  /* Round 725: the comeback game (262) is a beat of the same kind. Left in\n' +
+    '     the general draw it showed up in about one comeback in three, and a\n' +
+    '     return from a long injury is not a story that should lose a raffle. */\n' +
+    '  if (comebackDue(state) && !state.retired) ids.push(262);\n' +
+    '  if (!state.retired) {\n' +
+    '    const year = state.seasons[state.seasons.length - 1]?.year ?? 0;\n' +
+    '    for (const [acquisition, followup, key] of [[226, 227, "esports"], [230, 231, "cursedBoots"], [236, 237, "teammateLoan"], [270, 630, "coachingBadges"], [408, 631, "rDocCrew"]] as const) {\n' +
+    '      const acquired = state.eventLastFired?.[String(acquisition)];\n' +
+    '      if (flag(state, key) === 1 && (typeof acquired !== "number" || !Number.isFinite(acquired) || acquired < year)) ids.push(followup);\n' +
+    '    }\n' +
+    '  }\n' +
+    '  return ids;\n' +
+    '}\n' +
+    '\n' +
+    '/* The comeback game is only news while the serious injury is recent: it\n' +
+    '   happened this season or the one before. Gated on any injury ever, a 33\n' +
+    '   year old could be told about his first start since a layoff at 22. The\n' +
+    '   injury cooldown keeps it to one comeback per injury. */\n' +
+    'function comebackDue(state: CareerState): boolean {\n' +
+    '  const lastSerious = state.seriousInjuries?.[state.seriousInjuries.length - 1];\n' +
+    '  if (!lastSerious) return false;\n' +
+    '  const seasonNow = state.seasons[state.seasons.length - 1]?.year ?? 0;\n' +
+    '  return lastSerious.year >= seasonNow - 1;\n' +
+    '}\n' +
+    '\n' +
+    '/* ─── The life event catalog (ids 200+) ───\n' +
+    '   Every event self-gates: it is only returned when its conditions hold, so\n' +
+    '   generateRandomEvents needs no extra eligibility rules for this pool. */\n' +
+    'export function getLifeEvents(state: CareerState): RandomEvent[] {\n' +
+    '  const events: RandomEvent[] = [];\n' +
+    '  const p = state.personality;\n' +
+    '  const push = (e: RandomEvent) => events.push(e);\n' +
+    '\n' +
+    '  /* ── 200: personality reveal ── */\n' +
+    '  if (!state.personality && state.age >= 18) {\n' +
+    '    push({ id: 200, cooldown: COOLDOWN.once, emoji: "🪞", title: "Who Are You, Really?",\n' +
+    '      description: "Teammates, journalists and fans keep asking the same question: what is your deal? '... 93802 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
