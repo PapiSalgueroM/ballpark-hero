@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+playCM: node scripts/playClubManager.mjs
+twoTabs: node scripts/playTwoTabs.mjs
+homeFold: node scripts/playHomeFold.mjs
+weigh: git worktree add -f .rc-base b5aed9d4 > /dev/null 2>&1 && (cd .rc-base && ../node_modules/.bin/vite build --outDir /tmp/base-dist > /dev/null) && { node scripts/lib/hostLikeServer.mjs /tmp/base-dist 4175 > /dev/null 2>&1 & P=$!; sleep 3; node .rc/x/weigh1503.mjs http://localhost:4173 dist http://localhost:4175 /tmp/base-dist; s=$?; kill $P; exit $s; }
