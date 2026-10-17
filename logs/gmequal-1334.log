@@ -1,0 +1,11 @@
+treeWithoutMerge: 02cb08553b19c9c0f5d88770b8fc4a03ab1b2d3c, 6cdbe065 without b9964c33; conflicts kept from 6cdbe065: none
+base 02cb08553b19c9c0f5d88770b8fc4a03ab1b2d3c (this tree without Round 1334)
+base exit=0 head exit=0, base lines 23, head lines 23
+1c1
+< simEventDeck: 7 packs (nfl, nba, mlb, nhl, college, gym, afl)
+---
+> simEventDeck: 8 packs (nfl, nba, mlb, nhl, college, gym, afl)
+10c10
+<    ok 9 packs: the 7 on the baseline each still lack a neutral option somewhere, every other card has one, no pack has a problem
+---
+>    ok 10 packs: the 7 on the baseline each still lack a neutral option somewhere, every other card has one, no pack has a problem
