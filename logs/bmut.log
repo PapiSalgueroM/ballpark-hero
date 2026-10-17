@@ -1,0 +1,52 @@
+MUTATION m2 APPLIED in src/components/club-manager/MatchReportCard.tsx
+MUTATION m3 APPLIED in src/components/club-manager/LiveSimScreen.tsx
+MUTATION m4 APPLIED in src/components/club-manager/HalftimeScreen.tsx
+MUTATION m4b APPLIED in src/components/club-manager/HalftimeScreen.tsx
+MUTATION m5 APPLIED in src/pages/ClubManager.tsx
+28
+  FAIL: C-320: the hub card reads Villarreal vs Real Madrid (opp me), my name green, not Real Madrid vs Villarreal
+  FAIL: C-320: the strip reads Villarreal v Real Madrid (green false true)
+  FAIL: C-320: the strip's digits read opp then me
+  FAIL: C-320: the full stats read theirs mine and cells theirs
+  FAIL: C-320: the full stats' header reads Villarreal | Balance of play | Real Madrid
+  FAIL: C-320: the line under the pitch has my number second
+  FAIL: C-320: the interval card reads Villarreal vs Real Madrid (opp then me)
+  FAIL: C-390: the hub card reads Villarreal vs Real Madrid (opp me), my name green, not Real Madrid vs Villarreal
+  FAIL: C-390: the strip reads Villarreal v Real Madrid (green false true)
+  FAIL: C-390: the strip's digits read opp then me
+  FAIL: C-390: the full stats read theirs mine and cells theirs
+  FAIL: C-390: the full stats' header reads Villarreal | Balance of play | Real Madrid
+  FAIL: C-390: the line under the pitch has my number second
+  FAIL: C-390: the interval card reads Villarreal vs Real Madrid (opp then me)
+  FAIL: C-1280: the hub card reads Villarreal vs Real Madrid (opp me), my name green, not Real Madrid vs Villarreal
+  FAIL: C-1280: the strip reads Villarreal v Real Madrid (green false true)
+  FAIL: C-1280: the strip's digits read opp then me
+  FAIL: C-1280: the full stats read theirs mine and cells theirs
+  FAIL: C-1280: the full stats' header reads Villarreal | Balance of play | Real Madrid
+  FAIL: C-1280: the interval card reads Villarreal vs Real Madrid (opp then me)
+  FAIL: C-390-rm: the hub card reads Villarreal vs Real Madrid (opp me), my name green, not Real Madrid vs Villarreal
+  FAIL: C-390-rm: the strip reads Villarreal v Real Madrid (green false true)
+  FAIL: C-390-rm: the strip's digits read opp then me
+  FAIL: C-390-rm: the full stats read theirs mine and cells theirs
+  FAIL: C-390-rm: the full stats' header reads Villarreal | Balance of play | Real Madrid
+  FAIL: C-390-rm: the line under the pitch has my number second
+  FAIL: C-390-rm: the interval card reads Villarreal vs Real Madrid (opp then me)
+  FAIL: D-320: the Stats tile's line wraps to 3 lines ("Amaimouni-Echghouyab leads with 12")
+playCmMatchDay: RED, 28 failures
+walk under mutation exit=1
+  FINDING 390: the live strip reads "Newcastle0 - 0Liverpool"
+  FINDING 390: the dressing room's card reads [{"t":"Newcastle","green":true},{"t":"2-2","green":false},{"t":"Liverpool","green":false}]
+  FINDING 390: a stat bar's green (my) segment is on the home side: true true true true true true true true true true
+  FINDING 390rm: the live strip reads "Newcastle0 - 0Liverpool"
+  FINDING 390rm: the dressing room's card reads [{"t":"Newcastle","green":true},{"t":"1-0","green":false},{"t":"Liverpool","green":false}]
+  FINDING 390rm: a stat bar's green (my) segment is on the home side: true true true true true true true true true true
+  FINDING 1280: the live strip reads "Newcastle1 - 0Liverpool"
+  FINDING 1280: the dressing room's card reads [{"t":"Newcastle","green":true},{"t":"1-1","green":false},{"t":"Liverpool","green":false}]
+  FINDING 1280: a stat bar's green (my) segment is on the home side: true true true true true true true true true true
+  FINDING 1280rm: the live strip reads "Newcastle1 - 0Liverpool"
+  FINDING 1280rm: the dressing room's card reads [{"t":"Newcastle","green":true},{"t":"1-0","green":false},{"t":"Liverpool","green":false}]
+  FINDING 1280rm: a stat bar's green (my) segment is on the home side: true true true true true true true true true true
+  FINDING 320: the live strip reads "Newcastle0 - 0Liverpool"
+  FINDING 320: the dressing room's card reads [{"t":"Newcastle","green":true},{"t":"2-0","green":false},{"t":"Liverpool","green":false}]
+  FINDING 320: a stat bar's green (my) segment is on the home side: true true true true true true true true true true
+  - 320: a stat bar's green (my) segment is on the home side: true true true true true true true true true true

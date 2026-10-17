@@ -1,0 +1,1 @@
+bmut exit=1 343s |   - 320: a stat bar's green (my) segment is on the home side: true true true true true true true true true true
