@@ -1,0 +1,6 @@
+simCmMatchDay exit=0 51s | simCmMatchDay: all sections green (916 matches: 461 home, 447 away, 8 neutral)
+simCmMatchCentre exit=0 9s | simCmMatchCentre: PASS. Every stat on the report and the live strip is counted off the committed play and lines, and every timeline row is an event the engine drew.
+simMatchScreen exit=0 10s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+simHarnessAnchors exit=0 90s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 174s | 
+unitcm exit=0 242s |    Duration  240.64s (transform 17.87s, setup 6.39s, collect 60.99s, tests 575.91s, environment 45.23s, prepare 9.59s)
