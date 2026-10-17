@@ -19,9 +19,10 @@
 
    Options: --base <commit> (required), --fleet participants|watchers|all (all), --coach coach|nocoach|both (both),
    --seeds 1,2,3 (1 to 5), --seasons <n> (participants 2, watchers 3), --only <substring of a club name>,
-   --strip <key> (watchers only: that key of THIS TREE's state is left out of the comparison, never out of the
-   save it plays on; from Round 1502's E3 the watchers are compared with --strip worldComps, and the participants
-   always on every key, with a check that none of their states carries worldComps), --eval (THIS TREE calls
+   --strip <key> (that key of THIS TREE's state is left out of the comparison, never out of the save it plays on,
+   at every step whose state is NOT in the Champions League (uclGroup null), in either fleet: a participant can
+   miss Europe in a later season and watch it; every step whose state IS in it is compared on every key and
+   fails if it carries worldComps; from Round 1502's E3 both fleets run with --strip worldComps), --eval (THIS TREE calls
    evalWorldUcl and worldUclNightsDone on the live state after every step, inside that step's stretch of the
    stream, the way the screen will: the critic's correction 6b, so an evaluation that drew from Math.random or
    wrote into the save shows as a difference; the base has no such function and is left alone).
@@ -64,9 +65,10 @@ async function journey(E, f, seasons, mode, compareStrip, evalEach = false) {
     const got = r.value ?? {};
     if (got.state) s = got.state;
     let shown = s;
-    if (compareStrip && s && compareStrip in s) { shown = { ...s }; delete shown[compareStrip]; }
+    const watching = !!s && !s.uclGroup;
+    if (compareStrip && watching && compareStrip in s) { shown = { ...s }; delete shown[compareStrip]; }
     steps.push({ label, json: JSON.stringify(shown), draws: r.draws.length, drawSha: sha(r.draws), saved: got.saved ?? null,
-      carries: !!s && 'worldComps' in s });
+      carries: !!s && 'worldComps' in s, stripped: shown !== s, inIt: !!s && !!s.uclGroup });
   };
   const reload = label => step(label, cur => {
     M.store.clear();
@@ -118,7 +120,7 @@ for (const f of chosen) {
       const name = `${f.club} (${f.era}, ${f.kind}, ${mode}, seed ${seed}, ${seasons} seasons)`;
       let a, b;
       try { a = await journey(baseEngine, { ...f, seed }, seasons, mode, ''); } catch (e) { cannot(`${name} on the base engine: ${e.message}`); }
-      try { b = await journey(treeEngine, { ...f, seed }, seasons, mode, f.kind === 'watcher' ? STRIP : '', EVAL); } catch (e) { fails.push(`${name}: this tree threw: ${e.message}`); continue; }
+      try { b = await journey(treeEngine, { ...f, seed }, seasons, mode, STRIP, EVAL); } catch (e) { fails.push(`${name}: this tree threw: ${e.message}`); continue; }
       journeys += 1;
       let bad = '';
       for (let i = 0; i < Math.max(a.length, b.length) && !bad; i += 1) {
@@ -127,8 +129,9 @@ for (const f of chosen) {
         const why = [];
         if (x.json !== y.json) why.push(`the state differs, ${firstDifference(x.json, y.json)}`);
         if (x.draws !== y.draws || x.drawSha !== y.drawSha) why.push(`the draws differ (${x.draws} against ${y.draws})`);
-        if (x.saved !== y.saved && !(STRIP && f.kind === 'watcher')) why.push('the saved bytes differ');
-        if (f.kind === 'participant' && y.carries) why.push('a participant state carries worldComps');
+        if (x.saved !== y.saved && !y.stripped) why.push('the saved bytes differ');
+        if (y.inIt && y.carries) why.push('a state in the Champions League carries worldComps');
+        if (!STRIP && y.carries) why.push('a state carries worldComps and no --strip was asked for');
         if (why.length) bad = `at step ${i} ${x.label}: ${why.join('; ')}`;
       }
       steps += a.length;
@@ -144,5 +147,5 @@ if (EVAL && !evals) cannot('--eval was asked for and no evaluation ran');
 if (!journeys) cannot('no journey ran');
 console.log(fails.length
   ? `proofWorldUclFleet: RED, ${fails.length} journeys differ from ${BASE} (of ${journeys})`
-  : `proofWorldUclFleet: GREEN, ${journeys} journeys and ${steps} steps byte equal to ${BASE}${STRIP ? ` (watchers without ${STRIP})` : ''}, draws equal`);
+  : `proofWorldUclFleet: GREEN, ${journeys} journeys and ${steps} steps byte equal to ${BASE}${STRIP ? ` (a watching state without ${STRIP})` : ''}, draws equal`);
 process.exit(fails.length ? 1 : 0);
