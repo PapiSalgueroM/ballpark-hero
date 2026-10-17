@@ -1,0 +1,5 @@
+     → careers that moved outside DIGEST_ALLOW=none: expected [ 'mlb|y2004|1B#0', 'mlb|y2004|RF#4' ] to deeply equal []
+AssertionError: careers that moved outside DIGEST_ALLOW=none: expected [ 'mlb|y2004|1B#0', 'mlb|y2004|RF#4' ] to deeply equal []
+      Tests  1 failed (1)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals the committed fixture%2C or moved only where this step is allowed to move it,line=136,column=86::AssertionError: careers that moved outside DIGEST_ALLOW=none: expected [ 'mlb|y2004|1B#0', 'mlb|y2004|RF#4' ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "mlb|y2004|1B#0",%0A+   "mlb|y2004|RF#4",%0A+ ]%0A%0A ❯ src/test/usCareerTruthDigest.test.ts:136:86%0A%0A
+DIGEST_ALLOW=none refuses the two keys as it must

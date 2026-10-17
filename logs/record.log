@@ -1,0 +1,7 @@
+stdout | src/test/usCareerTruthDigest.test.ts > Round 1104: the US career truth digest > every key equals the committed fixture, or moved only where this step is allowed to move it
+digest: 2 of 58 keys moved (2 of 464 careers; 0 careers were below zero on the committed code); allow=mlb|y2004|1B,mlb|y2004|RF; outside the allow list: 0
+digest moved: mlb|y2004|1B mlb|y2004|RF
+   ✓ Round 1104: the US career truth digest > every key equals the committed fixture, or moved only where this step is allowed to move it  33962ms
+      Tests  1 passed (1)
+ src/test/fixtures/usCareerTruthDigest.json | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)

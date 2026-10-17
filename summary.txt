@@ -1,0 +1,4 @@
+record exit=0 36s |  1 file changed, 4 insertions(+), 4 deletions(-)
+plain-after exit=0 36s |       Tests  1 passed (1)
+ctl-none exit=0 36s | DIGEST_ALLOW=none refuses the two keys as it must
+held exit=0 0s | src held
