@@ -35,6 +35,9 @@
  *      cheapest clean gift).
  *   8. The help line holds: every binding's meter turns FLAGGED at 40 (the help's example says so) and every shop
  *      has three washers the desk can read.
+ *   9. The printed bans are the engines': each sport's recorded dirty save over heat, a pending ban and dirty money, dealt
+ *      each way and played six season ends through the binding's own progress; the seasons served and the new
+ *      suspensions must be the numbers the way printed.
  *
  * Controls (US_DIRTY_MONEY_CONTROL), each a one anchor edit of an isolated copy of careerDirtyMoney.ts, asserted
  * present once first. A control that fires exits 1 with its last line "CONTROL <name> FIRED"; one that does not
@@ -44,6 +47,7 @@
  *   flat        Come clean cools a flat 35 (the draft's number)               -> section 7, memorabilia among the red
  *   farm        Give it away pays up to 12 karma                              -> section 7
  *   cap         Come clean cools up to 6 (one point more)                     -> section 7, red only for NFL's cousin at the register (heat 8)
+ *   cool8       the desk's copy of the season end cools 8, the engines cool 9 -> section 9
  *   deck        launderEffectText draws one Math.random                       -> section 5
  *   noop        one sport's launder apply put back to the flag and heat +10   -> section 4, naming that sport only
  *               (US_DIRTY_MONEY_SPORT=nba|nfl|mlb|nhl, default nba; run once per sport)
@@ -75,6 +79,7 @@ const CONTROLS = {
   flat: ['  if (heat >= 100) return 0;\n  return Math.max(0, Math.min(CLEAN_HEAT_CAP, Math.floor(dirty), Math.floor(heat)));', '  return Math.max(0, Math.min(35, Math.floor(heat)));', [7]],
   farm: ['export const GIVE_KARMA_CAP = 6;', 'export const GIVE_KARMA_CAP = 12;', [7]],
   cap: ['export const CLEAN_HEAT_CAP = 5;', 'export const CLEAN_HEAT_CAP = 6;', [7]],
+  cool8: ['const SEASON_COOL = 9;', 'const SEASON_COOL = 8;', [9]],
   deck: ['export function launderEffectText(c: DirtyMoneyHost): string {\n  const n = wayNumbers(c, \'wash\');', 'export function launderEffectText(c: DirtyMoneyHost): string {\n  Math.random();\n  const n = wayNumbers(c, \'wash\');', [5]],
 };
 /* Controls that edit another file: noop edits one deck (US_DIRTY_MONEY_SPORT, default nba) in the head bundle,
@@ -523,15 +528,15 @@ for (const slug of SPORTS) {
    every card. The careers that took it are counted, and a fleet where none did has not tested the change. */
 console.log('5) A/B: careers that never take the launder option, head decks against the base decks, after every step');
 const AB = Number(process.env.US_DIRTY_MONEY_AB || 400);
+/* A fleet that saw one taker is green by luck (the NFL's 400 careers held one, r1500-s5a, the Round 1500 review's read
+   minor 2), so each sport runs on past AB until at least AB_TAKERS careers took the launder option, up to ten times AB.
+   Every career is still its own fixed stream, so the run is the same every time. */
+const AB_TAKERS = 3;
 const BBIND = bindOf(B);
 const fnv = s => { let h = 0x811c9dc5 >>> 0; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return h >>> 0; };
 const mulberry = seed => { let a = seed >>> 0; return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
 function abCareer(X, sport, slug, i) {
   Math.random = mulberry(fnv(`ab|${slug}|${i}`));
-/* A fleet that saw one taker is green by luck (the NFL's 400 careers held one, r1500-s5a, the Round 1500 review's read
-   minor 2), so each sport runs on past AB until at least AB_TAKERS careers took the launder option, up to ten times AB.
-   Every career is still its own fixed stream, so the run is the same every time. */
-const AB_TAKERS = 3;
   const pos = sport.create.positions[i % sport.create.positions.length];
   const archs = sport.create.archetypes[pos];
   const c = sport.startCareer(`AB ${slug} ${i}`, pos, archs[i % archs.length], Math.random, X.defaultAppearance(), sport.create.eras[i % sport.create.eras.length].id);
@@ -584,6 +589,53 @@ try {
 } finally {
   Math.random = streamRandom;
 }
+
+/* ---------- section 9: the printed bans are what the four engines serve ----------
+   The desk copies the engines' season end (cool 9 with nothing held, a suspension at 90 once nothing is pending) to
+   print "you sit out N seasons" (correction 3). Nothing else ties that copy to the engines (the Round 1500 review's
+   read minor 3), so here each sport's recorded dirty save, over a grid of heat, a pending ban and dirty money, is
+   dealt each way and then played six season ends the board's way (a banned year takes one off first, then
+   sport.progress runs the meter): the seasons served, and how many suspensions started at a season end, must be
+   the numbers the way printed (Keep it quiet: whether the first season end suspends). The method is the run
+   reviewer's probe (2,304 of 2,304 matched, and 80 went red with the cooling off by one). */
+console.log('9) the printed bans against the four engines\' season end');
+const FIXTURE = JSON.parse(read('scripts/data/usBoardFixture.json'));
+const BAN_HEATS = [0, 40, 70, 75, 79, 80, 81, 84, 85, 88, 89, 89.5, 90, 91, 95, 98, 99, 100];
+let banCases = 0;
+const served = new Map();
+for (const slug of SPORTS) {
+  const sport = BIND[slug];
+  const recorded = JSON.parse(FIXTURE.sports[slug].saves.dirty).c;
+  for (const heat of BAN_HEATS) for (const pending of [0, 1]) for (const dirty of [0.4, 1.1, 6, 20]) for (const way of DM.DIRTY_WAYS) {
+    const c = { ...clone(recorded), heat, dirtyMoney: dirty, suspendedSeasons: pending, retired: false };
+    const n = DM.wayNumbers(c, way);
+    const r = way === 'quiet' ? { state: clone(c), caught: null } : DM.dealWithDirtyMoney(c, way);
+    const s = clone(r.state);
+    const rng = E.keyedRng(`ban|${slug}|${banCases}`);
+    let banned = 0, starts = 0, firstEndBan = null;
+    for (let i = 0; i < 6 && !s.retired; i++) {
+      if ((s.suspendedSeasons ?? 0) > 0) { s.suspendedSeasons -= 1; banned += 1; }
+      const was = s.suspendedSeasons ?? 0;
+      sport.progress(s, rng);
+      const began = was === 0 && (s.suspendedSeasons ?? 0) > 0;
+      if (began) starts += 1;
+      if (i === 0) firstEndBan = began;
+    }
+    banCases += 1;
+    const k = `${way}:${banned}`;
+    served.set(k, (served.get(k) ?? 0) + 1);
+    const who = `${slug} ${way}${way === 'wash' ? (r.caught ? ' caught' : ' clean') : ''} at heat ${heat}, ${pending} pending, ${dirty}M`;
+    if (way === 'quiet') {
+      if (n.burnsToBan !== firstEndBan) fail(9, who, `prints burnsToBan ${n.burnsToBan}, the engine's first season end ${firstEndBan ? 'suspends' : 'does not'}`);
+    } else if (way === 'wash' && r.caught) {
+      if (n.bannedIfCaught !== banned || n.startsIfCaught !== starts) fail(9, who, `prints ${n.bannedIfCaught} seasons and ${n.startsIfCaught} new suspensions, the engine served ${banned} and started ${starts}`);
+    } else if (n.bannedAfter !== banned || n.startsAfter !== starts) {
+      fail(9, who, `prints ${n.bannedAfter} seasons and ${n.startsAfter} new suspensions, the engine served ${banned} and started ${starts}`);
+    }
+  }
+}
+console.log(`   ${banCases} cases; seasons the engines served by way: ${[...served].sort().map(([k, v]) => `${k}=${v}`).join(' ')}`);
+for (const k of ['clean:1', 'give:1', 'quiet:2', 'wash:2']) if (!served.has(k)) fail(9, 'coverage', `no case served ${k}: the grid no longer reaches a ban`);
 
 /* ---------- section 8: the help line holds ---------- */
 console.log('8) the help line: FLAGGED at 40 and three washers in every shop');
