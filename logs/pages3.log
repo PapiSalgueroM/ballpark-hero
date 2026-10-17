@@ -1,0 +1,14 @@
+page test files: 25
+head run 1 exit=0
+base run 1 exit=0
+head run 2 exit=0
+base run 2 exit=0
+head run 3 exit=0
+base run 3 exit=0
+head 1: 291 passed, 0 failed of 291
+head 2: 291 passed, 0 failed of 291
+head 3: 291 passed, 0 failed of 291
+base 1: 291 passed, 0 failed of 291
+base 2: 291 passed, 0 failed of 291
+base 3: 291 passed, 0 failed of 291
+files whose result moved across the six runs: 0

@@ -1,0 +1,1 @@
+pages3: bash .rc/x/pages3.sh
