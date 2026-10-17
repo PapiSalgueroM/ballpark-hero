@@ -438,7 +438,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.netWorth >= 1.5 && !flag(state, "esports")) {
+  if ((state.pendingEvents.some(event => event.id === 226) || state.netWorth >= 1.5) && !flag(state, "esports")) {
     push({ id: 226, cooldown: COOLDOWN.once, emoji: "🎮", title: "Buy an Esports Team?",
       description: "A struggling esports org is for sale for €800k. Your gamer teammates swear it is about to blow up.",
       category: "life", choices: [
@@ -683,7 +683,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.netWorth >= 1) {
+  if (state.pendingEvents.some(event => event.id === 251) || state.netWorth >= 1) {
     push({ id: 251, cooldown: COOLDOWN.money, emoji: "🪙", title: "The Teammate Coin",
       description: "A teammate launches his own cryptocurrency and corners you at lunch about getting in early. His pitch deck is a napkin.",
       category: "life", choices: [
@@ -776,7 +776,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.netWorth >= 1) {
+  if (state.pendingEvents.some(event => event.id === 258) || state.netWorth >= 1) {
     push({ id: 258, cooldown: COOLDOWN.once, emoji: "🪴", title: "The Garden Centre Charge",
       description: "Your bank has frozen your card over €80k spent at a garden centre at three on a Tuesday afternoon. You were at training. Your dad has gone very quiet in the family chat.",
       category: "life", choices: [
@@ -789,7 +789,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.netWorth >= 1) {
+  if (state.pendingEvents.some(event => event.id === 259) || state.netWorth >= 1) {
     push({ id: 259, cooldown: COOLDOWN.money, emoji: "🧮", title: "The Accountant's Spreadsheet",
       description: "A teammate shows you his accountant's fees over lunch. Yours has been charging four times that for the same job, for three years, plus a 'strategy retainer' nobody can explain.",
       category: "negative", choices: [
