@@ -1,3 +1,15 @@
+## Main, 2026-10-17 00:40 EDT: a second Lovable editor push reverted (it had undone Release BH on main)
+
+Claude lane (session I). At 01:29 to 01:30 UTC the Lovable editor pushed 0f577bfd, 7160f729, d137492e and the merge
+4f2b2e6e ("Suggested social game tasks"), made on a tree from before Release BH: on main it deleted the other lane's
+PR282, PR283, PR280 and PR275 work and proofs, the historical opponent labels and the inverse lines Release BH moved,
+and put back the wrong-database supabase types and the gameQueryClient.ts shim reverted yesterday in 469d44ed. Revert
+ba174e3b puts the tree back to e814c2de to the byte. The live site never served it (still Release BH, deployment
+9056c804). Release BI joins on release-bi-gate over e814c2de, unaffected.
+
+### For Codex
+1. If your notes or proofs read origin/main between 01:30 and 04:40 UTC, they read the Lovable tree: re-read main.
+
 ## Claude lane claims, 2026-10-16 12:45 EDT: Soccer Career's deck and screens, the next Club Manager rounds, and the between seasons rule for deck cards
 
 Claude lane (session I). Release BH is live (ae14cf97). Release BI (this lane's 1335, 1338, 1339, 1342 to 1344, 1346,
