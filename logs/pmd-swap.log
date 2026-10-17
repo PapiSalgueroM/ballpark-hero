@@ -1,0 +1,9 @@
+save A: Liverpool against Newcastle (Premier League · Round 1), away, 55704 bytes
+save B: Liverpool against Nottingham Forest (Premier League · Round 2), home, 71342 bytes
+save C: Real Madrid against Villarreal (Copa del Rey · Final), neutral, 160429 bytes
+save E: Real Madrid against Roma (Champions League · Quarter-final · second leg), away, 141299 bytes
+  FAIL: A-390: the hub card reads Liverpool vs Newcastle (me opp), my name green, not Newcastle vs Liverpool
+A-390: heights hub 22752
+1 walks, 2 checks, 2s; pictures in /home/runner/work/_temp/rc-out/files/matchday
+control swap: fired 1 time(s)
+playCmMatchDay: CONTROL swap FIRED

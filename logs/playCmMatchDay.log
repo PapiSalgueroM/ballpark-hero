@@ -1,0 +1,21 @@
+save A: Liverpool against Newcastle (Premier League · Round 1), away, 55704 bytes
+save B: Liverpool against Nottingham Forest (Premier League · Round 2), home, 71342 bytes
+save C: Real Madrid against Villarreal (Copa del Rey · Final), neutral, 160429 bytes
+save E: Real Madrid against Roma (Champions League · Quarter-final · second leg), away, 141299 bytes
+A-320: heights hub 28334, centre 27417, live 26575, interval 27976, report 29072; 19 timeline names, 0 marks
+A-390: heights hub 22752, centre 21898, live 21112, interval 22447, report 23299; 18 timeline names, 0 marks
+A-1280: heights hub 13574, centre 13130, live 12388, interval 13680, report 14363; 16 timeline names, 0 marks
+B-320: heights hub 28346, centre 27408, live 26575, interval 27976, report 29139; 22 timeline names, 1 marks
+B-390: heights hub 22752, centre 21907, live 21112, interval 22446, report 23475; 23 timeline names, 0 marks
+B-1280: heights hub 13574, centre 13140, live 12388, interval 13680, report 14501; 22 timeline names, 1 marks
+C-320: heights hub 28293, centre 27502, live 26575, interval 27961, report 29116; 23 timeline names, 2 marks
+C-390: heights hub 22703, centre 22001, live 21112, interval 22416, report 23365; 24 timeline names, 1 marks
+C-1280: heights hub 13544, centre 13234, live 12388, interval 13680, report 14137; 16 timeline names, 0 marks
+E-320: heights hub 28308, centre 27533, live 26575, interval 28009, report 28806; 21 timeline names, 1 marks
+E-390: heights hub 22723, centre 22002, live 21112, interval 22465, report 22948; 12 timeline names, 0 marks
+E-1280: heights hub 13544, centre 13234, live 12388, interval 13699, report 14025; 11 timeline names, 0 marks
+A-390-rm: heights hub 22752, centre 21898, live 21112, interval 22446, report 23473; 20 timeline names, 0 marks
+B-390-rm: heights hub 22752, centre 21907, live 21112, interval 22446, report 23166; 15 timeline names, 0 marks
+C-390-rm: heights hub 22703, centre 22001, live 21112, interval 22416, report 23153; 20 timeline names, 0 marks
+15 walks, 264 checks, 175s; pictures in /home/runner/work/_temp/rc-out/files/matchday
+playCmMatchDay: green. 15 walks over 4 saves, every match day screen home side first, whole names on the timeline, a 44 px toggle, the page never moved

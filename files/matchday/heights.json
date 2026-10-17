@@ -1,0 +1,182 @@
+[
+  {
+    "id": "A-320",
+    "screens": {
+      "hub": 28334,
+      "centre": 27417,
+      "live": 26575,
+      "interval": 27976,
+      "report": 29072
+    },
+    "marks": 0,
+    "names": 19
+  },
+  {
+    "id": "A-390",
+    "screens": {
+      "hub": 22752,
+      "centre": 21898,
+      "live": 21112,
+      "interval": 22447,
+      "report": 23299
+    },
+    "marks": 0,
+    "names": 18
+  },
+  {
+    "id": "A-1280",
+    "screens": {
+      "hub": 13574,
+      "centre": 13130,
+      "live": 12388,
+      "interval": 13680,
+      "report": 14363
+    },
+    "marks": 0,
+    "names": 16
+  },
+  {
+    "id": "B-320",
+    "screens": {
+      "hub": 28346,
+      "centre": 27408,
+      "live": 26575,
+      "interval": 27976,
+      "report": 29139
+    },
+    "marks": 1,
+    "names": 22
+  },
+  {
+    "id": "B-390",
+    "screens": {
+      "hub": 22752,
+      "centre": 21907,
+      "live": 21112,
+      "interval": 22446,
+      "report": 23475
+    },
+    "marks": 0,
+    "names": 23
+  },
+  {
+    "id": "B-1280",
+    "screens": {
+      "hub": 13574,
+      "centre": 13140,
+      "live": 12388,
+      "interval": 13680,
+      "report": 14501
+    },
+    "marks": 1,
+    "names": 22
+  },
+  {
+    "id": "C-320",
+    "screens": {
+      "hub": 28293,
+      "centre": 27502,
+      "live": 26575,
+      "interval": 27961,
+      "report": 29116
+    },
+    "marks": 2,
+    "names": 23
+  },
+  {
+    "id": "C-390",
+    "screens": {
+      "hub": 22703,
+      "centre": 22001,
+      "live": 21112,
+      "interval": 22416,
+      "report": 23365
+    },
+    "marks": 1,
+    "names": 24
+  },
+  {
+    "id": "C-1280",
+    "screens": {
+      "hub": 13544,
+      "centre": 13234,
+      "live": 12388,
+      "interval": 13680,
+      "report": 14137
+    },
+    "marks": 0,
+    "names": 16
+  },
+  {
+    "id": "E-320",
+    "screens": {
+      "hub": 28308,
+      "centre": 27533,
+      "live": 26575,
+      "interval": 28009,
+      "report": 28806
+    },
+    "marks": 1,
+    "names": 21
+  },
+  {
+    "id": "E-390",
+    "screens": {
+      "hub": 22723,
+      "centre": 22002,
+      "live": 21112,
+      "interval": 22465,
+      "report": 22948
+    },
+    "marks": 0,
+    "names": 12
+  },
+  {
+    "id": "E-1280",
+    "screens": {
+      "hub": 13544,
+      "centre": 13234,
+      "live": 12388,
+      "interval": 13699,
+      "report": 14025
+    },
+    "marks": 0,
+    "names": 11
+  },
+  {
+    "id": "A-390-rm",
+    "screens": {
+      "hub": 22752,
+      "centre": 21898,
+      "live": 21112,
+      "interval": 22446,
+      "report": 23473
+    },
+    "marks": 0,
+    "names": 20
+  },
+  {
+    "id": "B-390-rm",
+    "screens": {
+      "hub": 22752,
+      "centre": 21907,
+      "live": 21112,
+      "interval": 22446,
+      "report": 23166
+    },
+    "marks": 0,
+    "names": 15
+  },
+  {
+    "id": "C-390-rm",
+    "screens": {
+      "hub": 22703,
+      "centre": 22001,
+      "live": 21112,
+      "interval": 22416,
+      "report": 23153
+    },
+    "marks": 0,
+    "names": 20
+  }
+]
