@@ -1,0 +1,6 @@
+baseline written for modern, eras, pure from /home/runner/work/ballpark-hero/ballpark-hero
+
+simCmLeagueRules: all checks passed (modern, eras, pure)
+ scripts/data/cmLeagueRulesDigest.json | 202 +++++++++++++++++-----------------
+ 1 file changed, 101 insertions(+), 101 deletions(-)
+rerun on the written digest: exit 0, simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)

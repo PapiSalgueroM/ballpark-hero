@@ -1,0 +1,40 @@
+37
+  FAIL: modern: now|championship differs in start, whole
+  FAIL: modern: now|laliga differs in start, whole, wholeNext, s2_whole
+  FAIL: modern: now|seriea differs in start, whole, wholeNext, s2_whole
+  FAIL: modern: now|bundesliga differs in start, whole, wholeNext, s2_whole
+  FAIL: modern: now|ligue1 differs in start, whole, wholeNext, s2_whole
+  FAIL: modern: now|eredivisie differs in start, whole
+  FAIL: modern: now|saudi differs in start, whole, wholeNext
+  FAIL: modern: now|mlsEast differs in start, whole, wholeNext
+  FAIL: modern: now|mlsWest differs in start, whole, wholeNext
+  FAIL: modern: now|scottish differs in wholeNext
+  FAIL: modern: now|superlig differs in wholeNext
+  FAIL: modern: now|bundesliga2 differs in start, whole, wholeNext, s2_whole
+  FAIL: modern: now|proleague differs in wholeNext
+  FAIL: modern: now|austria differs in start, whole
+  FAIL: modern: now|greece differs in start, whole, wholeNext
+  FAIL: modern: now|denmark differs in start, whole, europeNext, wholeNext
+  FAIL: modern: now|switzerland differs in start, whole, wholeNext
+  FAIL: modern: now|brasileirao differs in start, whole, wholeNext
+  FAIL: modern: now|ligamx differs in start, whole, wholeNext
+  FAIL: modern: now|aleague differs in start, whole, wholeNext
+  FAIL: modern: now|serieb differs in start, whole, wholeNext, s2_whole
+  FAIL: modern: now|ligue2 differs in start, whole, europeNext, wholeNext, s2_europe, s2_whole
+  FAIL: modern: now|segunda differs in start, whole, wholeNext, s2_whole
+  FAIL: modern: now|russia differs in start, whole, wholeNext
+  FAIL: eras: era2010|premier2010 differs in wholeNext
+  FAIL: eras: era2010|laliga2010 differs in start, whole, wholeNext
+  FAIL: eras: era2010|seriea2010 differs in wholeNext
+  FAIL: eras: era2010|bundesliga2010 differs in start, whole, wholeNext
+  FAIL: eras: era2010|ligue12010 differs in start, whole, wholeNext
+  FAIL: eras: era2015|premier2015 differs in wholeNext
+  FAIL: eras: era2015|laliga2015 differs in start, whole, wholeNext
+  FAIL: eras: era2015|seriea2015 differs in wholeNext
+  FAIL: eras: era2005|laliga2005 differs in start, whole, wholeNext
+  FAIL: eras: era2005|bundesliga2005 differs in start, whole, wholeNext
+  FAIL: eras: era2005|ligue12005 differs in start, whole, wholeNext
+  FAIL: eras: era2020|premier2020 differs in wholeNext
+  FAIL: eras: era2020|ligue12020 differs in wholeNext
+
+simCmLeagueRules: 37 failure(s)

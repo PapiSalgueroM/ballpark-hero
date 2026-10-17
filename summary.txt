@@ -1,0 +1,5 @@
+headsha exit=0 0s | 0d3f4d3b2 Round BJG: m7, merge PR306 (codex/xi-selection-race at ddffe5af), Build Your XI holds the picker while a player's history is checked
+check-final exit=1 56s | simCmLeagueRules: 37 failure(s)
+write-final exit=0 85s | rerun on the written digest: exit 0, simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+write-m2 exit=0 30s | simCmLeagueRules: all checks passed (modern, eras, pure)
+write-main exit=0 30s | simCmLeagueRules: all checks passed (modern, eras, pure)
