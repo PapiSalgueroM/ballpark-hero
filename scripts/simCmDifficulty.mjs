@@ -340,9 +340,9 @@ function fleetJobs(levels, seeds, drivers) {
 function runFleet(levels, seeds, seasons, drivers) {
   const { jobs } = fleetJobs(levels, seeds, drivers);
   const rows = [];
-  const t0 = Date.now();
+  const t0 = performance.now();
   for (const j of jobs) for (const level of levels) rows.push(...runCareer(j.club, j.driver, j.seed, level, seasons));
-  const secs = (Date.now() - t0) / 1000;
+  const secs = (performance.now() - t0) / 1000;
   console.log(`  played ${rows.length} seasons in ${secs.toFixed(0)} s (${(secs / Math.max(1, rows.length)).toFixed(2)} s a season)`);
   if (process.env.OUT_JSON) fs.writeFileSync(process.env.OUT_JSON, JSON.stringify(rows));
   return rows;
@@ -445,14 +445,17 @@ const firstDiff = (a, b) => {
   for (const k of new Set([...Object.keys(x), ...Object.keys(y)])) if (JSON.stringify(x[k]) !== JSON.stringify(y[k])) return k;
   return '(key order)';
 };
-const withoutLevel = j => { const o = JSON.parse(j); if (o.startOptions) delete o.startOptions.difficulty; return JSON.stringify(o); };
+/* 2b compares the two as data: the key goes in where setUpCareer puts it, so the order of the keys differs. */
+const canon = v => (Array.isArray(v) ? v.map(canon) : v && typeof v === 'object' ? Object.fromEntries(Object.keys(v).sort().map(k => [k, canon(v[k])])) : v);
+const withoutLevel = j => { const o = JSON.parse(j); if (o.startOptions) delete o.startOptions.difficulty; return JSON.stringify(canon(o)); };
+const canonJson = j => JSON.stringify(canon(JSON.parse(j)));
 async function section2() {
   const seeds = num('SEEDS', 2), seasons = num('SEASONS', 2);
   const BASE = BASE_ROOT ? await bundleOf(BASE_ROOT, 'base', []) : await bundleOf(ROOT, 'plain', PLAIN);
   console.log(`2) Normal plays as ${BASE_ROOT ? `the base tree ${BASE_ROOT}` : 'this tree with every dial read as Normal\'s'}: ${seeds} seeds, ${seasons} seasons, coach and noCoach`);
   const careers = identityCareers();
   let compared = 0, draws = 0, keyed = 0;
-  const t0 = Date.now();
+  const t0 = performance.now();
   for (const career of careers) for (let seed = 0; seed < seeds; seed += 1) for (const coach of [true, false]) {
     const sd = 5000 + seed * 97 + careers.indexOf(career);
     const a = await replay(HEAD, career, sd, coach, 'normal', seasons);
@@ -467,7 +470,7 @@ async function section2() {
     if (a.snaps.some(j => JSON.parse(j).startOptions?.difficulty !== undefined)) keyed += 1;
   }
   if (keyed) fail(`${keyed} Normal careers carry the difficulty key`);
-  ok(`${compared} Normal careers compared with the base, ${draws} draws, in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+  ok(`${compared} Normal careers compared with the base, ${draws} draws, in ${((performance.now() - t0) / 1000).toFixed(0)} s`);
   /* The picker path: Normal with No sacking off is the very object it was given. */
   const m = fresh(HEAD), s0 = m.cm.startCareer('Everton');
   if (m.dif.setUpCareer(s0, { level: 'normal', noSack: false }, () => { throw new Error('rebuilt'); }) === s0 && m.dif.setUpCareer(s0) === s0) ok('setUpCareer on Normal with No sacking off returns its argument');
@@ -485,8 +488,8 @@ async function section2() {
     n2 += 1;
     const tag = `2b ${career.tag} ${coach ? 'coach' : 'noCoach'}`;
     if (a.draws !== b.draws) { fail(`${tag}: Hard with Normal's dials took ${a.draws} draws, Normal ${b.draws}`); continue; }
-    const bad = a.snaps.findIndex((j, i) => withoutLevel(j) !== b.snaps[i]);
-    if (bad >= 0 || a.snaps.length !== b.snaps.length) fail(`${tag}: Hard with Normal's dials differs from Normal${bad >= 0 ? ` in season ${bad + 1}, first at key ${firstDiff(withoutLevel(a.snaps[bad]), b.snaps[bad])}` : ''}`);
+    const bad = a.snaps.findIndex((j, i) => withoutLevel(j) !== canonJson(b.snaps[i]));
+    if (bad >= 0 || a.snaps.length !== b.snaps.length) fail(`${tag}: Hard with Normal's dials differs from Normal${bad >= 0 ? ` in season ${bad + 1}, first at key ${firstDiff(withoutLevel(a.snaps[bad]), canonJson(b.snaps[bad]))}` : ''}`);
     else if (!a.snaps.every(j => JSON.parse(j).startOptions?.difficulty === 'hard')) fail(`${tag}: the Hard career lost its key`);
     else same += 1;
   }
