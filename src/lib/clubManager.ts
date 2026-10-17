@@ -13099,6 +13099,9 @@ function worldUclBind(state: CareerState, f: WorldCompFormat): WorldCompBind {
   }
   return bind;
 }
+/* Round 1502: scripts/simWorldUcl.mjs replays watched matches on simAiMatch itself over the snapshot, so the
+   watched match is held to the participant's own AI match, and checks the eras' stand in on eraXIAvg. */
+export { simAiMatch, eraXIAvg, eraEuroName };
 
 /** Where one night of the watched season sits on this save's calendar: it
  *  counts as played once `state.week` is past `at`. `entry` says the night
