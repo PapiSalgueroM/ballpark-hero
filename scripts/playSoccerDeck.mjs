@@ -15,8 +15,8 @@
                 nothing waits (critic 16(b): the race can only leave the card out, never deal a different one).
      answer     a save with that deck card pending: the training option lands the gain and the cost in the save, and
                 the toast prints the season log line of what landed, never the button's promise.
-     delayed    the deck chunk held 1.5 s: the press shows that it is working, a second press does nothing, and the
-                answer lands once (correction 3).
+     delayed    the deck chunk held 4 s: the press shows that it is working, a second press on the OTHER option
+                does nothing (no second wait, no second toast), and the first press's answer lands once (correction 3).
      noreload   the tab has used its one stale chunk reload (sessionStorage dukb-reloaded-stale-chunk) and the deck
                 chunk is aborted: the press says the card could not load and the card stays (correction 4(c)).
      reload     the deck chunk aborted on a fresh tab: freshBuild's stale chunk rule reloads it once and the career
@@ -258,20 +258,33 @@ try {
         check(errors.length === 0, `${id} answer: no page error${errors.length ? ` (${errors[0]})` : ''}`);
         await ctx.close();
       }
-      /* delayed: the press waits for the held chunk, a second press does nothing, the answer lands once */
+      /* delayed: the press waits for the held chunk; a second press, on the OTHER option, does nothing; the first
+         press's answer lands once, with one result toast. (Fix of 2026-10-17: the second press used to repeat the
+         first option, so with the page's guard deleted both answers were alike and the case stayed green.) */
       {
+        const other = oracle(f.pending, 1);
+        check(f.card.labels.length >= 2 && other.toast !== want.toast && JSON.stringify(other.boost) !== JSON.stringify(want.boost),
+          `${id} delayed: the second option ("${f.card.labels[1]}") answers differently from the first, so a second press that went through would show`);
         const { ctx, page, errors } = await open(profile, f.pending, { deck: 4000 });
         await cardTitle(page, f.card.title).waitFor({ timeout: 60000 });
         await optionOf(page, f.card.labels[0]).click();
         const busy = await waitToast(page, x => x.includes('Loading this card'), 1500);
         check(!!busy, `${id} delayed: the press says it is working while the chunk is held`);
-        await optionOf(page, f.card.labels[0]).click().catch(() => undefined);
+        await optionOf(page, f.card.labels[1]).click().catch(() => undefined);
+        await page.waitForTimeout(300);
+        const waits = (await toasts(page)).filter(x => x.includes('Loading this card')).length;
+        check(waits === 1, `${id} delayed: the second press started no second wait (${waits} loading toasts)`);
         const t = await waitToast(page, x => x.includes(want.toast), 12000);
         check(!!t, `${id} delayed: the answer lands once the chunk does, and the toast says what landed`);
+        await page.waitForTimeout(800);
+        const shown = await toasts(page);
+        check(shown.filter(x => x.includes(want.toast)).length === 1 && !shown.some(x => x.includes(other.toast)),
+          `${id} delayed: one result toast, the first press's, none for the second press (${JSON.stringify(shown)})`);
         const saved = await savedOf(page);
         const head = `${f.pending.pendingEvents[0].emoji} ${f.card.title}: `;
-        check((saved?.events ?? []).filter(l => l.startsWith(head)).length === 1, `${id} delayed: the second press did nothing (one season log line)`);
-        check(JSON.stringify(saved?.statBoostNextSeason) === JSON.stringify(want.boost), `${id} delayed: the save queued what node queued`);
+        check((saved?.events ?? []).filter(l => l.startsWith(head)).length === 1, `${id} delayed: the first press's season log line, once`);
+        check(JSON.stringify(saved?.statBoostNextSeason) === JSON.stringify(want.boost), `${id} delayed: the save holds the FIRST press's answer (${JSON.stringify(want.boost)}), not the second's`);
+        check(saved?.pendingEvents?.[0]?.id !== f.card.id, `${id} delayed: the deck card left the batch`);
         check(errors.length === 0, `${id} delayed: no page error${errors.length ? ` (${errors[0]})` : ''}`);
         await ctx.close();
       }
