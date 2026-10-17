@@ -1,0 +1,11 @@
+#!build
+#!playwright
+decision1009: export SIM_NETWORK=offline ENGINES=chromium VITEST_MAX_FORKS=1 VITEST_MIN_FORKS=1 && mkdir -p career-decision-outcome-artifacts && node scripts/qa/careerDecisionOutcome1009.mjs
+entryGuide1031: export SIM_NETWORK=offline ENGINES=chromium VITEST_MAX_FORKS=1 VITEST_MIN_FORKS=1 && pip3 install --quiet fonttools pillow && mkdir -p career-entry-guide-artifacts && node scripts/qa/careerEntryGuide1031.mjs
+look996: export SIM_NETWORK=offline ENGINES=chromium VITEST_MAX_FORKS=1 VITEST_MIN_FORKS=1 && pip3 install --quiet fonttools pillow && mkdir -p career-look-artifacts && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/appearanceSportCopy.test.tsx --maxWorkers=1 --no-file-parallelism && node scripts/qa/careerLook996.mjs
+practice1076: export SIM_NETWORK=offline ENGINES=chromium VITEST_MAX_FORKS=1 VITEST_MIN_FORKS=1 SEO_SPLIT_BASE_REF=HEAD && mkdir -p career-practice-lifecycle-artifacts && node scripts/qa/careerPractice1076.mjs --prefetch-fonts-only > /tmp/fonts1076.log 2>&1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/careerPractice1076.mjs
+career992: export SIM_NETWORK=offline ENGINES=chromium && mkdir -p career-practice-artifacts && node scripts/qa/career992.mjs
+seasonReview1008: export SIM_NETWORK=offline ENGINES=chromium VITEST_MAX_FORKS=1 VITEST_MIN_FORKS=1 && mkdir -p career-season-review-artifacts && node scripts/qa/careerSeasonReview1008.mjs
+numberFormatting1085: export SIM_NETWORK=offline ENGINES=chromium VITEST_MAX_FORKS=1 VITEST_MIN_FORKS=1 SEO_SPLIT_BASE_REF=HEAD TZ=UTC SIM_OFFLINE_RECEIPT=number-formatting-artifacts/transport.log && mkdir -p number-formatting-artifacts && node scripts/qa/numberFormatting1085.mjs --prefetch-fonts-only > /tmp/fonts1085.log 2>&1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/numberFormatting1085.mjs
+nf1085-vitest: export SIM_NETWORK=offline TZ=UTC && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/usCareerStatLines.test.tsx src/test/careerSeasonReview.test.tsx --maxWorkers=1 --no-file-parallelism
+career993: export SIM_NETWORK=offline ENGINES=chromium && mkdir -p prospect-journey-artifacts && node scripts/qa/career993.mjs

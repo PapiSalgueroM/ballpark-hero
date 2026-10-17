@@ -1,0 +1,10 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+look996 exit=0 31s | soccer-1440-keyboard-reduced: own sport copy, footwear and pose changes, tab retention, empty saves and layout passed; 852981 gzip bytes.
+decision1009 exit=1 41s | Node.js v24.21.0
+entryGuide1031 exit=0 81s | 
+career992 exit=0 46s | Native career practice evidence: /home/runner/work/ballpark-hero/ballpark-hero/career-practice-artifacts/native
+numberFormatting1085 exit=0 13s | Number formatting native: 6 actual route cases and 9 effective restored DOM controls passed.
+nf1085-vitest exit=0 12s |    Duration  10.33s (transform 2.05s, setup 97ms, collect 3.16s, tests 5.39s, environment 606ms, prepare 120ms)
+practice1076 exit=0 91s | PASS career practice native: 9 actual panel journeys, 27 effective DOM controls, trusted focus/input, earned banking and unchanged sources.
+career993 exit=0 27s | Native prospect evidence: /home/runner/work/ballpark-hero/ballpark-hero/prospect-journey-artifacts/native
+seasonReview1008 exit=1 121s | Node.js v24.21.0
