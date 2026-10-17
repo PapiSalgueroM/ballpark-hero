@@ -490,8 +490,10 @@ function checkTies(M, st, slice, r, tag, measured) {
   const awayEra = yearOf(M, st) <= 2020;
   for (const t of r.ties) {
     const legs = M.cm.uclLegsFor(st.eraId, t.round === 'PO' ? 'R16' : t.round);
-    ok(!!t.leg1 && (legs === 2) === !!t.leg2, `1 tie: ${tag}: ${t.round} ${t.home} v ${t.away} shows ${t.leg2 ? 2 : 1} legs, ${legs} expected`);
-    const agg = t.leg2 ? [t.leg1[0] + t.leg2[0], t.leg1[1] + t.leg2[1]] : t.leg1;
+    /* A two legged tie shows both legs and their sum; a one match tie shows its score as the aggregate alone. */
+    ok(legs === 2 ? !!t.leg1 && !!t.leg2 : !t.leg1 && !t.leg2, `1 tie: ${tag}: ${t.round} ${t.home} v ${t.away} shows legs ${!!t.leg1} ${!!t.leg2}, ${legs} expected`);
+    if (!t.agg || (legs === 2 && !(t.leg1 && t.leg2))) { ok(false, `1 tie: ${tag}: ${t.round} ${t.home} v ${t.away} has no aggregate`); continue; }
+    const agg = legs === 2 ? [t.leg1[0] + t.leg2[0], t.leg1[1] + t.leg2[1]] : t.agg;
     ok(same(t.agg, agg), `1 tie: ${tag}: ${t.round} ${t.home} v ${t.away} aggregate ${t.agg} is not its legs ${agg}`);
     if (t.pens) ok(t.aet === true && agg[0] === agg[1], `1 winner: ${tag}: ${t.round} ${t.home} v ${t.away} went to penalties at ${agg}, aet ${t.aet}`);
     ok(!!t.winner && (t.winner === t.home || t.winner === t.away), `1 winner: ${tag}: ${t.round} ${t.home} v ${t.away} has no winner`);
@@ -645,6 +647,7 @@ async function selfRelative() {
     }
   }
   ok(carried > 0, '2 no journey of this arm ever carried a watched Champions League, so the section compared nothing');
+  checks += steps;
   console.log(`  2 self relative: ${journeys} journeys, ${steps} steps each arm, ${carried} journeys carried a slice, ${((Date.now() - t0) / 1000).toFixed(0)} s`);
 }
 
