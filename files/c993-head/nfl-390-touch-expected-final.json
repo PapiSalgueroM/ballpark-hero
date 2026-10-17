@@ -1,0 +1,352 @@
+{
+  "c": {
+    "name": "Native Prospect",
+    "pos": "QB",
+    "archetype": {
+      "id": "cannon",
+      "label": "Cannon Arm",
+      "desc": "Big throws, big turnovers",
+      "ovrBoost": 2,
+      "potBoost": 4,
+      "durability": 0.9
+    },
+    "team": "NO",
+    "year": 2027,
+    "age": 22,
+    "ovr": 83,
+    "pot": 99,
+    "morale": 70,
+    "fanbase": 69,
+    "health": 90,
+    "salary": 4.2,
+    "contractYears": 3,
+    "seasons": [
+      {
+        "year": 2026,
+        "team": "NO",
+        "age": 21,
+        "ovr": 82,
+        "games": 17,
+        "awards": [],
+        "teamResult": "WON THE SUPER BOWL",
+        "salary": 4.2,
+        "passYds": 3535,
+        "passTd": 23,
+        "ints": 14,
+        "poGames": 4,
+        "poLine": "659 yds, 4 TD, 4 INT"
+      }
+    ],
+    "rings": 1,
+    "mvps": 0,
+    "allPros": 0,
+    "retired": false,
+    "draftPick": 32,
+    "earnings": 4.2,
+    "netWorth": 2.5,
+    "dirtyMoney": 0,
+    "heat": 0,
+    "suspendedSeasons": 0,
+    "purchased": [],
+    "lifeFlags": {},
+    "appearance": {
+      "skinTone": "olive",
+      "hairstyle": "fade",
+      "hairColor": "black",
+      "facialHair": "none",
+      "celebration": "knee_slide",
+      "boots": "vortex_strike",
+      "accessory": "none"
+    },
+    "yearlyCosts": 0,
+    "rival": {
+      "name": "Reese Rylander",
+      "pos": "QB",
+      "team": "NO",
+      "ovr": 82,
+      "pot": 95,
+      "age": 22,
+      "rings": 0,
+      "hisYears": 1,
+      "myYears": 0,
+      "retired": false,
+      "lastLine": "3,559 yds, 24 TD, 15 INT",
+      "lastScore": 116.74583333333334,
+      "lastYear": 2026,
+      "lastAllStar": false
+    },
+    "prospect": {
+      "v": 1,
+      "sport": "nfl",
+      "eraId": "now",
+      "seed": "nfl:seuf6u",
+      "routeId": "power",
+      "pos": "QB",
+      "rating": 82,
+      "pot": 99,
+      "stock": 72,
+      "health": 90,
+      "age": 21,
+      "seasonsDone": 3,
+      "lines": [
+        {
+          "age": 18,
+          "level": "College, big program",
+          "perf": 78,
+          "stockDelta": 6,
+          "stats": [
+            {
+              "label": "Games",
+              "value": "10"
+            },
+            {
+              "label": "Pass yds",
+              "value": "2597"
+            },
+            {
+              "label": "Pass TD",
+              "value": "26"
+            }
+          ]
+        },
+        {
+          "age": 19,
+          "level": "College, big program",
+          "perf": 62,
+          "stockDelta": 2,
+          "stats": [
+            {
+              "label": "Games",
+              "value": "12"
+            },
+            {
+              "label": "Pass yds",
+              "value": "2591"
+            },
+            {
+              "label": "Pass TD",
+              "value": "22"
+            }
+          ]
+        },
+        {
+          "age": 20,
+          "level": "College, big program",
+          "perf": 69,
+          "stockDelta": 4,
+          "stats": [
+            {
+              "label": "Games",
+              "value": "13"
+            },
+            {
+              "label": "Pass yds",
+              "value": "2793"
+            },
+            {
+              "label": "Pass TD",
+              "value": "25"
+            }
+          ]
+        }
+      ],
+      "pendingChoice": null,
+      "choicesSeen": [
+        "summer",
+        "film",
+        "nfl_bowl"
+      ],
+      "showcase": {
+        "approach": "steady",
+        "drill": "40 yard dash",
+        "grade": "C",
+        "stockDelta": -1
+      },
+      "draft": {
+        "pick": 32,
+        "round": 1,
+        "pickInRound": 32,
+        "team": "NO",
+        "ageAtDraft": 21,
+        "draftYear": 2026,
+        "slotValue": null,
+        "devSeasons": [],
+        "ratingAfter": 82,
+        "ageAfter": 21
+      },
+      "phase": "done"
+    },
+    "role": "starter",
+    "summerSalt": "11757m9",
+    "phoneInbox": [
+      {
+        "id": "draft_agent-2026",
+        "defId": "draft_agent",
+        "from": "Agent",
+        "emoji": "💼",
+        "text": "Congrats, you're a pro. Two shoe brands and a car dealership already called. Line up the rookie deals now, or wait until you've played a snap?",
+        "year": 2026,
+        "choices": [
+          {
+            "label": "Sign everything",
+            "reply": "Sign it all. Rookie money doesn't last",
+            "karma": -3,
+            "cash": 0.4,
+            "popularity": 2
+          },
+          {
+            "label": "Just the shoes",
+            "reply": "Shoes only for now. The rest can wait",
+            "karma": 1,
+            "cash": 0.2
+          },
+          {
+            "label": "Wait until I earn it",
+            "reply": "Nothing until I've done something on the field",
+            "karma": 6,
+            "morale": 2
+          }
+        ],
+        "beat": "draft"
+      },
+      {
+        "id": "camp_roommate-2026",
+        "defId": "camp_roommate",
+        "from": "Camp roommate",
+        "emoji": "😴",
+        "text": "You snore like a lawn mower. Either I'm buying earplugs or you're buying me a hotel room. Your call.",
+        "year": 2026,
+        "choices": [
+          {
+            "label": "Earplugs and breakfast on me",
+            "reply": "Earplugs are on me. Breakfast too. Sorry man",
+            "karma": 4,
+            "morale": 2
+          },
+          {
+            "label": "Tell him to deal with it",
+            "reply": "It's camp. Nobody sleeps. Deal with it",
+            "karma": -3
+          }
+        ],
+        "beat": "camp"
+      },
+      {
+        "id": "playoffs_staff-2026",
+        "defId": "playoffs_staff",
+        "from": "Agent",
+        "emoji": "💼",
+        "text": "Playoff checks just cleared. The equipment guys and trainers make a fraction of what you do. Want to do something for them?",
+        "year": 2026,
+        "choices": [
+          {
+            "label": "Split a bonus with the staff",
+            "reply": "Set it up. Every trainer and equipment guy gets something",
+            "karma": 10,
+            "morale": 3,
+            "cash": -0.15
+          },
+          {
+            "label": "Buy them dinner",
+            "reply": "Steakhouse, whole staff, my card",
+            "karma": 5,
+            "cash": -0.03
+          },
+          {
+            "label": "Keep it",
+            "reply": "They get paid. I get paid",
+            "karma": -4
+          }
+        ],
+        "beat": "playoffs"
+      }
+    ],
+    "phoneUsedIds": [
+      "draft_agent",
+      "camp_roommate",
+      "playoffs_staff"
+    ],
+    "pendingRivalryEvent": {
+      "id": 204,
+      "emoji": "🏈",
+      "title": "Head to Head Win",
+      "description": "Your team beat Reese Rylander's team this season, and you had the better box score.",
+      "consequence": "Fanbase +5, confidence boost"
+    },
+    "money": {
+      "seed": 2947111344,
+      "vault": 0,
+      "hold": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "cost": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "price": {
+        "ladder": 102.24,
+        "bricks": 94.25,
+        "cleats": 108.46,
+        "screens": 118.88,
+        "spark": 109.1
+      },
+      "hist": {
+        "ladder": [
+          100,
+          102.24
+        ],
+        "bricks": [
+          100,
+          94.25
+        ],
+        "cleats": [
+          100,
+          108.46
+        ],
+        "screens": [
+          100,
+          118.88
+        ],
+        "spark": [
+          100,
+          109.1
+        ]
+      },
+      "log": [],
+      "year": 2026,
+      "age": 1,
+      "won": 0,
+      "lost": 0,
+      "cPlays": 0,
+      "cNet": 0,
+      "cYear": 0,
+      "cShut": false,
+      "aYear": 0,
+      "aBest": 0,
+      "aPlays": 0
+    },
+    "karma": 50,
+    "headlines": [
+      "New Orleans Saints win the Super Bowl. Native Prospect has a ring",
+      "Native Prospect throws for 3,535 yards and 23 touchdowns"
+    ],
+    "eventLastFired": {},
+    "summer": {
+      "year": 2026,
+      "ids": [
+        "pressTitle"
+      ],
+      "at": 0
+    }
+  },
+  "phase": "event",
+  "teamQuality": 74,
+  "coach": null
+}

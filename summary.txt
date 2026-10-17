@@ -1,0 +1,21 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest1346 exit=0 20s |    Duration  19.69s (transform 5.10s, setup 714ms, collect 15.16s, tests 30.66s, environment 4.58s, prepare 1.43s)
+coachret-ctl exit=0 29s | controls (exit/FIRED): drift=1/1 early=1/1 noretire=1/1 noguard=1/1 nosit=1/1 noaccept=1/1 norefresh=1/1
+coachret exit=0 58s | PASS: ALL US COACHING RETIREMENT CHECKS PASSED
+skips-ctl exit=0 4s | controls (exit/FIRED): noundo=1/1 leak=1/1 graded=1/1 clamp=1/1
+tsc exit=0 110s | 
+confirm exit=0 9s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+poach exit=0 3s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+coachcareer exit=0 3s | PASS: ALL US COACHING CAREER CHECKS PASSED
+coaching exit=0 8s | PASS: ALL US COACHING CHECKS PASSED
+parity exit=0 80s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+draftnight exit=0 0s | simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.
+prospect exit=0 16s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+usweight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+skips exit=0 111s | PASS: ALL US CAREER SKIP CHECKS PASSED
+c993-reveal exit=0 4s | Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-rev
+predraft exit=0 29s | simCareerPreDraft [seed set a]: ALL GREEN
+c993 exit=0 33s | Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-head
+walk exit=0 128s | playUsCareerReports: ALL GREEN, 22 walks
+draftnight-walk exit=0 216s | playDraftNight: ALL GREEN, 49 nights walked
+walk-ctl exit=0 578s | controls (exit/FIRED): noretire=1/1 noundo=1/1 noreplay=1/1 nosettle=1/1
