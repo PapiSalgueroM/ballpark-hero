@@ -1,0 +1,24 @@
+mut m5: applied to src/lib/clubManagerDifficulty.ts
+simCmDifficulty: sections 2, 3
+  ok: 48 Normal careers compared with the base, 3353136 draws, in 45 s
+  ok: setUpCareer on Normal with No sacking off returns its argument
+  ok: 2c: 12 of 12 saves the base wrote open here as they open there, Normal with No sacking off
+  ok: 2b: 18 of 18 Hard careers on Normal's dials play as Normal, the key aside
+  ok: B1: 35 first matches (22 up, 13 down), Hard's change is Normal's times the dial every time
+  ok: P1: 9 next match cards and match facts read the opponent at strength plus 1.5, the odds worse in all 9
+  ok: P1: oppStrengthVsMe is read in exactly the seven readers of your match (talkTargetNow, firstHalfLambdas, secondHalfLambdas, playMyMatch, talkEdgeFor, nextFixtureFrom, matchFacts)
+  ok: P1: simAiMatch reads plain strengthOf, so no match between other clubs moves
+  ok: B2: 6 bad openings fell by exactly 8, 5 at or above Safe stayed
+  ok: M1: day one and 11 summer cheques are Normal's times 0.8
+  ok: M2: 10 new jobs (day one and summer moves) start on Normal's ceiling times 0.94
+  ok: T1: all 5080 cards are the same men in the same order at 1.15 times the list
+  ok: T1: Buy charges the marked price (204.9 for a man listed at 178.2)
+  ok: T1: none of 1799 release clauses undercuts the price at Legend's mark
+  ok: T1: the AI's own deals are Normal's (8 headlines after six entries)
+simCmDifficulty: all green (sections 2,3)
+[31m   [31m×[31m every applier is the identity at its own identity dial[2m > [22ma level writes its key, cuts the cheque and the room by the dial, and rebuilds the asks on day one only[39m[32m 5[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/clubManagerDifficulty.test.ts[2m > [22mevery applier is the identity at its own identity dial[2m > [22ma level writes its key, cuts the cheque and the room by the dial, and rebuilds the asks on day one only
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m17 passed[39m[22m[90m (18)[39m
+m5 SIM=0 VITEST=1

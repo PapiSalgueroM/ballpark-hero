@@ -1,0 +1,17 @@
+mut m7: applied to src/lib/clubManager.ts
+simCmDifficulty: sections 3
+  ok: B1: 35 first matches (22 up, 13 down), Hard's change is Normal's times the dial every time
+  ok: P1: 9 next match cards and match facts read the opponent at strength plus 1.5, the odds worse in all 9
+  FAIL: P1: oppStrengthVsMe is called 6 times (talkTargetNow, firstHalfLambdas, secondHalfLambdas, talkEdgeFor, nextFixtureFrom, matchFacts), seven are expected, all in talkTargetNow, firstHalfLambdas, secondHalfLambdas, playMyMatch, talkEdgeFor, nextFixtureFrom, matchFacts
+  ok: P1: simAiMatch reads plain strengthOf, so no match between other clubs moves
+  ok: B2: 6 bad openings fell by exactly 8, 5 at or above Safe stayed
+  ok: M1: day one and 11 summer cheques are Normal's times 0.8
+  ok: M2: 10 new jobs (day one and summer moves) start on Normal's ceiling times 0.94
+  ok: T1: all 5080 cards are the same men in the same order at 1.15 times the list
+  ok: T1: Buy charges the marked price (204.9 for a man listed at 178.2)
+  ok: T1: none of 1799 release clauses undercuts the price at Legend's mark
+  ok: T1: the AI's own deals are Normal's (8 headlines after six entries)
+simCmDifficulty: 1 FAILURES (sections 3)
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m18 passed[39m[22m[90m (18)[39m
+m7 SIM=1 VITEST=0

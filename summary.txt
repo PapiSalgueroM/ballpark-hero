@@ -1,0 +1,7 @@
+m1 exit=0 79s | m1 SIM=0 VITEST=0
+m2 exit=1 10s | m2 SIM=0 VITEST=1
+m3 exit=1 2s | m3 VITEST=1
+m4 exit=0 79s | m4 SIM=0 VITEST=0
+m5 exit=1 79s | m5 SIM=0 VITEST=1
+m6 exit=1 71s | m6 SIM=0 VITEST=1
+m7 exit=1 10s | m7 SIM=1 VITEST=0

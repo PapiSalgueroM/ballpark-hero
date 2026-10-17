@@ -1,0 +1,20 @@
+mut m6: applied to src/lib/clubManagerStart.ts
+simCmDifficulty: sections 1, 2
+  ok: Normal is the identity row
+  ok: 12 of 12 caps hold
+  ok: src/lib/managerDifficulty.ts: no growth, potential, rating, draw or clock in its code
+  ok: src/lib/clubManagerDifficulty.ts: no growth, potential, rating, draw or clock in its code
+  ok: clubManagerDifficulty.ts runtime imports: @/lib/clubManagerStart, @/lib/clubManagerBoardVerdict
+  ok: src/lib/clubManagerStart.ts does not import the engine or this module at runtime
+  ok: src/lib/clubManagerBoardVerdict.ts does not import the engine or this module at runtime
+  ok: 48 Normal careers compared with the base, 3353136 draws, in 45 s
+  ok: setUpCareer on Normal with No sacking off returns its argument
+  ok: 2c: 12 of 12 saves the base wrote open here as they open there, Normal with No sacking off
+  ok: 2b: 18 of 18 Hard careers on Normal's dials play as Normal, the key aside
+simCmDifficulty: all green (sections 1,2)
+[31m   [31m×[31m readLevel and the stored key[2m > [22mensureStartOptions keeps the level and No sacking off a broken block, and is idempotent[39m[32m 13[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/clubManagerDifficulty.test.ts[2m > [22mreadLevel and the stored key[2m > [22mensureStartOptions keeps the level and No sacking off a broken block, and is idempotent
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m17 passed[39m[22m[90m (18)[39m
+m6 SIM=0 VITEST=1

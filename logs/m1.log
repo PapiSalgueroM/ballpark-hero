@@ -1,0 +1,30 @@
+mut m1: applied to src/lib/clubManagerCalendar.ts
+simCmDifficulty: sections 1, 2, 3, 6, 7
+  ok: Normal is the identity row
+  ok: 12 of 12 caps hold
+  ok: src/lib/managerDifficulty.ts: no growth, potential, rating, draw or clock in its code
+  ok: src/lib/clubManagerDifficulty.ts: no growth, potential, rating, draw or clock in its code
+  ok: clubManagerDifficulty.ts runtime imports: @/lib/clubManagerStart, @/lib/clubManagerBoardVerdict
+  ok: src/lib/clubManagerStart.ts does not import the engine or this module at runtime
+  ok: src/lib/clubManagerBoardVerdict.ts does not import the engine or this module at runtime
+  ok: 48 Normal careers compared with the base, 3353136 draws, in 45 s
+  ok: setUpCareer on Normal with No sacking off returns its argument
+  ok: 2c: 12 of 12 saves the base wrote open here as they open there, Normal with No sacking off
+  ok: 2b: 18 of 18 Hard careers on Normal's dials play as Normal, the key aside
+  ok: B1: 35 first matches (22 up, 13 down), Hard's change is Normal's times the dial every time
+  ok: P1: 9 next match cards and match facts read the opponent at strength plus 1.5, the odds worse in all 9
+  ok: P1: oppStrengthVsMe is read in exactly the seven readers of your match (talkTargetNow, firstHalfLambdas, secondHalfLambdas, playMyMatch, talkEdgeFor, nextFixtureFrom, matchFacts)
+  ok: P1: simAiMatch reads plain strengthOf, so no match between other clubs moves
+  ok: B2: 6 bad openings fell by exactly 8, 5 at or above Safe stayed
+  ok: M1: day one and 11 summer cheques are Normal's times 0.8
+  ok: M2: 10 new jobs (day one and summer moves) start on Normal's ceiling times 0.94
+  ok: T1: all 5080 cards are the same men in the same order at 1.15 times the list
+  ok: T1: Buy charges the marked price (204.9 for a man listed at 178.2)
+  ok: T1: none of 1799 release clauses undercuts the price at Legend's mark
+  ok: T1: the AI's own deals are Normal's (8 headlines after six entries)
+  ok: the example's 18 numbers are the table's (4.5, 5.6, 6.7, 4, 3.2, 2.6, 40, 32, 26, 10, 11.5, 13, 80, 81.5, 83, 35, 27, 21)
+  ok: the block opens by saying every other number on the screen is Normal's, and names No sacking
+simCmDifficulty: all green (sections 1,2,3,6,7)
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m18 passed[39m[22m[90m (18)[39m
+m1 SIM=0 VITEST=0

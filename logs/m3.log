@@ -1,0 +1,7 @@
+mut m3: applied to src/hooks/useClubManager.ts
+[31m   [31m×[31m the hook[2m > [22ma career started on Legend carries the key and the level from day one[39m[32m 36[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerDifficultyPick.test.tsx[2m > [22mthe hook[2m > [22ma career started on Legend carries the key and the level from day one
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m17 passed[39m[22m[90m (18)[39m
+m3 VITEST=1
