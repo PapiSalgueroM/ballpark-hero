@@ -1,0 +1,18 @@
+vitest exit=1 11s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerDifficultyPick.test.tsx,title=src/test/clubManagerDifficultyPick.test.tsx > the hook > a ca
+tsc exit=0 96s | 
+wu-56 exit=0 216s | simWorldUcl: green, 173 checks, 0 failures
+dailydeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+dd-ctl exit=0 20s | controls (each must be 1): world=1 worlddeadline=1 ledger=1 ledgerdeadline=1
+wu-main exit=0 324s | simWorldUcl: green, 471960 checks, 0 failures
+unseeded exit=1 208s | simCmUnseededWorld: 112 FAILURE(S)
+uclfield exit=0 8s | simUclField: all green
+seasonlaw exit=0 0s | simSeasonLaw: 14 checks, 0 failed
+un-ctl exit=1 184s | controls (each must be 1): guard=3 early=1 never=3 norecord=3
+worldeditor exit=0 11s | simWorldEditor: 2478 checks, 0 failures
+formathistory exit=0 1s | simUclFormatHistory: green. The timeline is whole, twice sourced, the generated block is fresh, and the engine plays what it says.
+seasonone exit=0 18s | simUclSeasonOne: all green
+continuity exit=1 34s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:519:24
+extratime exit=0 126s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (
+norival exit=0 18s | No rival product names found. 0 findings.
+anchors exit=0 62s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+wu-ctl exit=0 958s | controls (each must be 1): swaphome=1 memokey=1 noholdertop=1 nocustomexit=1 field32=1 ahead=1 noholder=1

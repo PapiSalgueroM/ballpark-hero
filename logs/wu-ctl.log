@@ -1,0 +1,8 @@
+swaphome: last: simWorldUcl: control swaphome FIRED (6794 failures, all its own)
+memokey: last: simWorldUcl: control memokey FIRED (4175 failures, all its own)
+noholdertop: last: simWorldUcl: control noholdertop FIRED (77 failures, all its own)
+nocustomexit: last: simWorldUcl: control nocustomexit FIRED (1 failures, all its own)
+field32: last: simWorldUcl: control field32 FIRED (39 failures, all its own)
+ahead: last: simWorldUcl: control ahead FIRED (2842 failures, all its own)
+noholder: last: simWorldUcl: control noholder FIRED (6 failures, all its own)
+controls (each must be 1): swaphome=1 memokey=1 noholdertop=1 nocustomexit=1 field32=1 ahead=1 noholder=1

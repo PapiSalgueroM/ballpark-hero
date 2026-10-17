@@ -1,0 +1,209 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/lib/worldCompetition.test.ts[2m > [22m[2mthe nights[2m > [22m[2mevery league size the game has, read off REAL_LEAGUES and ERA_LEAGUES, places its nights on their own rounds
+[22m[39mworldCompetition: league sizes the game has: 10, 12, 14, 15, 16, 18, 20, 24 (27 real leagues, 4 eras)
+
+ [32m✓[39m src/test/clubManagerBracketMoment.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 703[2mms[22m[39m
+ [32m✓[39m src/lib/worldCompetition.test.ts [2m([22m[2m68 tests[22m[2m)[22m[33m 1596[2mms[22m[39m
+   [33m[2m✓[22m[39m evaluateWorldComp[2m > [22man era season played to the end is complete and legal [33m 386[2mms[22m[39m
+   [33m[2m✓[22m[39m evaluateWorldComp[2m > [22mcrowns exactly one winner every finished season, over a few hundred seeds [33m 520[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldView.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 2733[2mms[22m[39m
+ [31m❯[39m src/test/clubManagerDifficultyPick.test.tsx [2m([22m[2m5 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 2610[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22moffers three levels with Normal pressed, and Skip on Normal hands nothing on [33m 419[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mLegend and No sacking ride on both buttons [33m 733[2mms[22m[39m
+   [32m✓[39m the Options panel[2m > [22mshows the level read only, with no way to change it[32m 77[2mms[22m[39m
+[31m   [31m×[31m the hook[2m > [22ma career started on Legend carries the key and the level from day one[39m[32m 179[2mms[22m[39m
+[31m     → expected 5088 to be 5082 // Object.is equality[39m
+[31m   [31m×[31m the hook[2m > [22ma career started on Normal carries no key and lists the plain market[39m[33m 1200[2mms[22m[39m
+[31m     → expected [ …(5088) ] to deeply equal [ …(5082) ][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerDifficultyPick.test.tsx[2m > [22mthe hook[2m > [22ma career started on Legend carries the key and the level from day one
+[31m[1mAssertionError[22m: expected 5088 to be 5082 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 5082[39m
+[31m+ 5088[39m
+
+[36m [2m❯[22m src/test/clubManagerDifficultyPick.test.tsx:[2m91:26[22m[39m
+    [90m 89| [39m    [35mconst[39m list [33m=[39m [34mbuildMarket[39m(c)[33m;[39m
+    [90m 90| [39m    [35mconst[39m shown [33m=[39m r[33m.[39mresult[33m.[39mcurrent[33m.[39mmarket[33m;[39m
+    [90m 91| [39m    [34mexpect[39m(shown[33m.[39mlength)[33m.[39m[34mtoBe[39m(list[33m.[39mlength)[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m 92| [39m    expect(shown.every((mp, i) => mp.name === list[i].name && mp.price…
+    [90m 93| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerDifficultyPick.test.tsx[2m > [22mthe hook[2m > [22ma career started on Normal carries no key and lists the plain market
+[31m[1mAssertionError[22m: expected [ …(5088) ] to deeply equal [ …(5082) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -258,10 +258,38 @@[39m
+[2m      "price": 89.1,[22m
+[2m      "rating": 90,[22m
+[2m      "value": 81,[22m
+[2m    },[22m
+[2m    {[22m
+[31m+     "age": 28,[39m
+[31m+     "club": "Inter Milan",[39m
+[31m+     "generated": undefined,[39m
+[31m+     "joinedThisSeason": true,[39m
+[31m+     "name": "Ousmane Dembélé",[39m
+[31m+     "position": "ST",[39m
+[31m+     "potential": undefined,[39m
+[31m+     "price": 89.1,[39m
+[31m+     "rating": 90,[39m
+[31m+     "value": 81,[39m
+[31m+     "worldRosterKey": "[\"now\",\"PSG\",\"Ousmane Dembélé\",\"ST\",1998,0]",[39m
+[31m+     "worldRosterSince": 0,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "age": 24,[39m
+[31m+     "club": "Inter Milan",[39m
+[31m+     "generated": undefined,[39m
+[31m+     "joinedThisSeason": true,[39m
+[31m+     "name": "William Saliba",[39m
+[31m+     "position": "CB",[39m
+[31m+     "potential": undefined,[39m
+[31m+     "price": 80.1,[39m
+[31m+     "rating": 90,[39m
+[31m+     "value": 72.8,[39m
+[31m+     "worldRosterKey": "[\"now\",\"Arsenal\",\"William Saliba\",\"CB\",2002,0]",[39m
+[31m+     "worldRosterSince": 0,[39m
+[31m+   },[39m
+[31m+   {[39m
+[2m      "age": 27,[22m
+[2m      "club": "PSG",[22m
+[2m      "generated": undefined,[22m
+[2m      "name": "Achraf Hakimi",[22m
+[2m      "position": "RB",[22m
+[33m@@ -516,10 +544,24 @@[39m
+[2m      "name": "Bradley Barcola",[22m
+[2m      "position": "LW",[22m
+[2m      "price": 71.3,[22m
+[2m      "rating": 88,[22m
+[2m      "value": 57,[22m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "age": 26,[39m
+[31m+     "club": "Arsenal",[39m
+[31m+     "generated": undefined,[39m
+[31m+     "joinedThisSeason": true,[39m
+[31m+     "name": "Cody Gakpo",[39m
+[31m+     "position": "LW",[39m
+[31m+     "potential": undefined,[39m
+[31m+     "price": 57.8,[39m
+[31m+     "rating": 88,[39m
+[31m+     "value": 52.5,[39m
+[31m+     "worldRosterKey": "[\"now\",\"Liverpool\",\"Cody Gakpo\",\"LW\",2000,0]",[39m
+[31m+     "worldRosterSince": 0,[39m
+[2m    },[22m
+[2m    {[22m
+[2m      "age": 27,[22m
+[2m      "club": "Bayern Munich",[22m
+[2m      "generated": undefined,[22m
+[33m@@ -534,12 +576,26 @@[39m
+[2m      "club": "Real Madrid",[22m
+[2m      "generated": undefined,[22m
+[2m      "name": "Dean Huijsen",[22m
+[2m      "position": "CB",[22m
+[2m      "price": 65.6,[22m
+[31m+     "rating": 88,[39m
+[31m+     "value": 52.5,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "age": 32,[39m
+[31m+     "club": "Inter Milan",[39m
+[31m+     "generated": undefined,[39m
+[31m+     "joinedThisSeason": true,[39m
+[31m+     "name": "Harry Kane",[39m
+[31m+     "position": "ST",[39m
+[31m+     "potential": undefined,[39m
+[31m+     "price": 47.3,[39m
+[2m      "rating": 88,[22m
+[2m      "value": 52.5,[22m
+[31m+     "worldRosterKey": "[\"now\",\"Bayern Munich\",\"Harry Kane\",\"ST\",1994,0]",[39m
+[31m+     "worldRosterSince": 0,[39m
+[2m    },[22m
+[2m    {[22m
+[2m      "age": 23,[22m
+[2m      "club": "Manchester City",[22m
+[2m      "generated": undefined,[22m
+[33m@@ -1058,10 +1114,24 @@[39m
+[2m      "price": 46,[22m
+[2m      "rating": 86,[22m
+[2m      "value": 36.8,[22m
+[2m    },[22m
+[2m    {[22m
+[31m+     "age": 28,[39m
+[31m+     "club": "Fiorentina",[39m
+[31m+     "generated": undefined,[39m
+[31m+     "joinedThisSeason": true,[39m
+[31m+     "name": "Frenkie de Jong",[39m
+[31m+     "position": "CM",[39m
+[31m+     "potential": undefined,[39m
+[31m+     "price": 40.5,[39m
+[31m+     "rating": 86,[39m
+[31m+     "value": 36.8,[39m
+[31m+     "worldRosterKey": "[\"now\",\"Barcelona\",\"Frenkie de Jong\",\"CM\",1998,0]",[39m
+[31m+     "worldRosterSince": 0,[39m
+[31m+   },[39m
+[31m+   {[39m
+[2m      "age": 24,[22m
+[2m      "club": "Al-Hilal",[22m
+[2m      "generated": undefined,[22m
+[2m      "name": "Gabriel Martinelli",[22m
+[2m      "position": "LW",[22m
+[33m@@ -1116,10 +1186,24 @@[39m
+[2m      "name": "Ilya Zabarnyi",[22m
+[2m      "position": "CB",[22m
+[2m      "price": 46,[22m
+[2m      "rating": 86,[22m
+[2m      "value": 36.8,[22m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "age": 24,[39m
+[31m+     "club": "Stuttgart",[39m
+[31m+     "generated": undefined,[39m
+[31m+     "joinedThisSeason": true,[39m
+[31m+     "name": "James Garner",[39m
+[31m+     "position": "CDM",[39m
+[31m+     "potential": undefined,[39m
+[31m+     "price": 40.2,[39m
+[31m+     "rating": 86,[39m
+[31m+     "value": 36.5,[39m
+[31m+     "worldRosterKey": "[\"now\",\"Everton\",\"James Garner\",\"CDM\",2002,0]",[39m
+[31m+     "worldRosterSince": 0,[39m
+[2m    },[22m
+[2m    {[22m
+[2m      "age": 22,[22m
+[2m      "club": "Bayer Leverkusen",[22m
+[2m      "generated": undefined,[22m
+
+[36m [2m❯[22m src/test/clubManagerDifficultyPick.test.tsx:[2m103:37[22m[39m
+    [90m101| [39m    [34mexpect[39m([34mlevelFrom[39m(c))[33m.[39m[34mtoBe[39m([32m'normal'[39m)[33m;[39m
+    [90m102| [39m    expect(c.startOptions === undefined || !('difficulty' in (c.startO…
+    [90m103| [39m    [34mexpect[39m(r[33m.[39mresult[33m.[39mcurrent[33m.[39mmarket)[33m.[39m[34mtoEqual[39m([34mbuildMarket[39m(c))[33m;[39m
+    [90m   | [39m                                    [31m^[39m
+    [90m104| [39m  })[33m;[39m
+    [90m105| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m95 passed[39m[22m[90m (97)[39m
+[2m   Start at [22m 18:00:47
+[2m   Duration [22m 10.33s[2m (transform 3.39s, setup 367ms, collect 10.23s, tests 7.64s, environment 2.63s, prepare 872ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerDifficultyPick.test.tsx,title=src/test/clubManagerDifficultyPick.test.tsx > the hook > a career started on Legend carries the key and the level from day one,line=91,column=26::AssertionError: expected 5088 to be 5082 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 5082%0A+ 5088%0A%0A ❯ src/test/clubManagerDifficultyPick.test.tsx:91:26%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerDifficultyPick.test.tsx,title=src/test/clubManagerDifficultyPick.test.tsx > the hook > a career started on Normal carries no key and lists the plain market,line=103,column=37::AssertionError: expected [ …(5088) ] to deeply equal [ …(5082) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -258,10 +258,38 @@%0A      "price": 89.1,%0A      "rating": 90,%0A      "value": 81,%0A    },%0A    {%0A+     "age": 28,%0A+     "club": "Inter Milan",%0A+     "generated": undefined,%0A+     "joinedThisSeason": true,%0A+     "name": "Ousmane Dembélé",%0A+     "position": "ST",%0A+     "potential": undefined,%0A+     "price": 89.1,%0A+     "rating": 90,%0A+     "value": 81,%0A+     "worldRosterKey": "[\"now\",\"PSG\",\"Ousmane Dembélé\",\"ST\",1998,0]",%0A+     "worldRosterSince": 0,%0A+   },%0A+   {%0A+     "age": 24,%0A+     "club": "Inter Milan",%0A+     "generated": undefined,%0A+     "joinedThisSeason": true,%0A+     "name": "William Saliba",%0A+     "position": "CB",%0A+     "potential": undefined,%0A+     "price": 80.1,%0A+     "rating": 90,%0A+     "value": 72.8,%0A+     "worldRosterKey": "[\"now\",\"Arsenal\",\"William Saliba\",\"CB\",2002,0]",%0A+     "worldRosterSince": 0,%0A+   },%0A+   {%0A      "age": 27,%0A      "club": "PSG",%0A      "generated": undefined,%0A      "name": "Achraf Hakimi",%0A      "position": "RB",%0A@@ -516,10 +544,24 @@%0A      "name": "Bradley Barcola",%0A      "position": "LW",%0A      "price": 71.3,%0A      "rating": 88,%0A      "value": 57,%0A+   },%0A+   {%0A+     "age": 26,%0A+     "club": "Arsenal",%0A+     "generated": undefined,%0A+     "joinedThisSeason": true,%0A+     "name": "Cody Gakpo",%0A+     "position": "LW",%0A+     "potential": undefined,%0A+     "price": 57.8,%0A+     "rating": 88,%0A+     "value": 52.5,%0A+     "worldRosterKey": "[\"now\",\"Liverpool\",\"Cody Gakpo\",\"LW\",2000,0]",%0A+     "worldRosterSince": 0,%0A    },%0A    {%0A      "age": 27,%0A      "club": "Bayern Munich",%0A      "generated": undefined,%0A@@ -534,12 +576,26 @@%0A      "club": "Real Madrid",%0A      "generated": undefined,%0A      "name": "Dean Huijsen",%0A      "position": "CB",%0A      "price": 65.6,%0A+     "rating": 88,%0A+     "value": 52.5,%0A+   },%0A+   {%0A+     "age": 32,%0A+     "club": "Inter Milan",%0A+     "generated": undefined,%0A+     "joinedThisSeason": true,%0A+     "name": "Harry Kane",%0A+     "position": "ST",%0A+     "potential": undefined,%0A+     "price": 47.3,%0A      "rating": 88,%0A      "value": 52.5,%0A+     "worldRosterKey": "[\"now\",\"Bayern Munich\",\"Harry Kane\",\"ST\",1994,0]",%0A+     "worldRosterSince": 0,%0A    },%0A    {%0A      "age": 23,%0A      "club": "Manchester City",%0A      "generated": undefined,%0A@@ -1058,10 +1114,24 @@%0A      "price": 46,%0A      "rating": 86,%0A      "value": 36.8,%0A    },%0A    {%0A+     "age": 28,%0A+     "club": "Fiorentina",%0A+     "generated": undefined,%0A+     "joinedThisSeason": true,%0A+     "name": "Frenkie de Jong",%0A+     "position": "CM",%0A+     "potential": undefined,%0A+     "price": 40.5,%0A+     "rating": 86,%0A+     "value": 36.8,%0A+     "worldRosterKey": "[\"now\",\"Barcelona\",\"Frenkie de Jong\",\"CM\",1998,0]",%0A+     "worldRosterSince": 0,%0A+   },%0A+   {%0A      "age": 24,%0A      "club": "Al-Hilal",%0A      "generated": undefined,%0A      "name": "Gabriel Martinelli",%0A      "position": "LW",%0A@@ -1116,10 +1186,24 @@%0A      "name": "Ilya Zabarnyi",%0A      "position": "CB",%0A      "price": 46,%0A      "rating": 86,%0A      "value": 36.8,%0A+   },%0A+   {%0A+     "age": 24,%0A+     "club": "Stuttgart",%0A+     "generated": undefined,%0A+     "joinedThisSeason": true,%0A+     "name": "James Garner",%0A+     "position": "CDM",%0A+     "potential": undefined,%0A+     "price": 40.2,%0A+     "rating": 86,%0A+     "value": 36.5,%0A+     "worldRosterKey": "[\"now\",\"Everton\",\"James Garner\",\"CDM\",2002,0]",%0A+     "worldRosterSince": 0,%0A    },%0A    {%0A      "age": 22,%0A      "club": "Bayer Leverkusen",%0A      "generated": undefined,%0A%0A ❯ src/test/clubManagerDifficultyPick.test.tsx:103:37%0A%0A

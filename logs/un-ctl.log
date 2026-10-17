@@ -1,0 +1,5 @@
+guard: last: simCmUnseededWorld: CONTROL guard DID NOT FIRE as it must: deals red true, quiet red true
+early: last: simCmUnseededWorld: CONTROL early FIRED: adopted as the save opens, the comparison with BASE before the first summer went red (quiet 15, deals 15 saves)
+never: last: simCmUnseededWorld: CONTROL never DID NOT FIRE as it must: moved red 896, the comparison before the rollover red true
+norecord: last: simCmUnseededWorld: CONTROL norecord DID NOT FIRE as it must: mine red 357, the comparison before the rollover red true
+controls (each must be 1): guard=3 early=1 never=3 norecord=3

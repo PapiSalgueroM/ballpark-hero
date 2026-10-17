@@ -1,0 +1,5 @@
+world: last: simDailyDeals: CONTROL world FIRED: exactly its 12 watching dates went red on "the state carries a watched Champions League" and nothing else moved
+worlddeadline: last: simDailyDeals: CONTROL worlddeadline FIRED: exactly its 8 watching dates went red on "the state carries a watched Champions League" and nothing else moved
+ledger: last: simDailyDeals: CONTROL ledger FIRED: 12 of its 12 dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+ledgerdeadline: last: simDailyDeals: CONTROL ledgerdeadline FIRED: 12 of its 12 dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+controls (each must be 1): world=1 worlddeadline=1 ledger=1 ledgerdeadline=1
