@@ -2048,6 +2048,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
             heading: "Retiring and facing the legacy verdict",
             items: [
               "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait.",
+              "After your playing career, you can go after a coaching job, then choose Retire from coaching and confirm it to end that run with the record and log saved. Undo skip restores a skipped draft showcase before Draft day; on the same draft night screen, Watch it again replays the night once it ends, unless reduced motion is on.",
             ],
           },
         ],

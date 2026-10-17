@@ -1,3 +1,7 @@
+## Codex Round1394: US career retirement guide, qualification pending
+
+Recorded 2026-10-17 UTC. Actual I1346 handback on b31c9894, one two-sentence item added beside retirement in four My Career guides. Native independent inverse/source review passes, preserving all other Hall/retirement/data text. Remote types/build17readers/generated-source/unchanged-weight qualification is being prepared. No engine/UI/save changes, no local runtime and no live claim. This does not gate urgent308 or BI. See docs/audits/us-career-retirement-guide.md.
+
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
