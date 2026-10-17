@@ -1,0 +1,2 @@
+rev-rival exit=1 43s | simCmWorldMoves: RED, sections 0 (3), 13 (168)
+rev-join exit=1 48s | simCmWorldMoves: RED, sections 0 (2), 14 (565)
