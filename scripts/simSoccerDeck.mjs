@@ -48,8 +48,10 @@
         (GK, CB, CM, ST) at room 0, 1 and 5 under the ceiling and morale 0, 1,
         50, 99 and 100, fresh for each answer: the whole save after the answer
         equals the save before with exactly the printed effects applied, each
-        by the printed amount or to its bound (training at momentsRoom, morale
-        at 0 and 100), and one season log line saying what landed; netWorth,
+        by the printed amount or to its bound (training at momentsRoom and at
+        a stat of 99, where the season start clamps it: at morale 50 each
+        fixture also runs with all seven stats at 99; morale at 0 and 100),
+        and one season log line saying what landed; netWorth,
         totalEarnings, socialMediaFollowers, popularity and karma never move;
         the option that moves nothing moves nothing and logs nothing. At room
         0 and 1 no card is dealt whose training would not fit (the hold). A
@@ -80,6 +82,9 @@
         share of season starts past the ceiling, each arm against the deck off
         inside a band set from the measured seed to seed spread; exact: no
         deck answer queues more than momentsRoom allowed just before it.
+        Since Round 1504 the arms are paired (Math.random reseeded before
+        every engine step, the deck answer on a stream of its own) and the
+        legacy band is the lead's ruling, 1.2 for every arm.
      9) OLD SAVES. Saves the base wrote load to the same JSON here and play
         the same season (the deck not loaded); a save written here with a
         deck card pending passes the save validator, loads on the base and is
@@ -88,8 +93,9 @@
      10) LAZY, the static half. The static closure (scripts/lib/
         staticClosure.mjs) of src/pages/SoccerCareer.tsx and of the engine
         holds soccerDeckGate.ts and none of soccerDeck.ts, src/data/
-        soccerDeck/* or gmInbox.ts; and no src file but the gate and tests
-        calls loadSoccerDeck, read as code with its comments gone.
+        soccerDeck/* or gmInbox.ts; and, since Round 1504, the page calls
+        loadSoccerDeck and no other src file but the gate and tests does,
+        read as code with its comments gone.
 
    Every section deals the shipped pack (28 cards). The one card fixture pack
    made in memory (FIXTURE below) is what the leak control hands the gate, and
@@ -115,6 +121,10 @@
                integrity, which the pack stopped moving, and changed nothing).
      ceiling   a training key ignores momentsRoom (soccerDeck.ts, in memory):
                a boost lands at room 0; section 5 fails.
+     statmax   a training key ignores a stat at 99 (soccerDeck.ts, in memory):
+               the +1 the season start clamp drops is queued and its cost is
+               paid; section 5 fails on the maxed fixtures (review of
+               2026-10-17).
      posleak   card 706 (a defender's) is widened to pos < 3 in the pack the
                fleet deals from; the widened pack passes the bind check, so the
                red is a midfielder dealt 706, not a pack that deals nothing;
@@ -130,13 +140,25 @@
                save deals one card every summer; section 7 fails.
      pressure  every deck move times ten (the pack, in memory); section 8
                fails on a band.
+     freetraining every training option's time cost stripped and its
+               training doubled (the pack, in memory, Round 1504), with the
+               bind rule that refuses free training off (soccerDeck.ts, in
+               memory) so the free pack deals; section 8 fails on the
+               ruling's legacy band.
+     onefree   the first training option of the shipped pack loses its time
+               cost (the pack, in memory; review of 2026-10-17), and a key
+               only that cost moved leaves the pressure book, so the one
+               problem left is the free training: the bind check refuses the
+               pack, so section 1 fails on the shipped pack.
      noresolve the engine's catalog spread of the pending deck card is gone
                (in memory): a saved deck card is skipped here too; section 9
                fails.
      eager     the gate gains a static import of './soccerDeck' (in memory);
                section 10 fails.
-     caller    the page gains a call of loadSoccerDeck (in memory); section 10
-               fails.
+     caller    the engine gains a call of loadSoccerDeck (in memory, Round
+               1504: the page is the one caller now); section 10 fails.
+     pagesilent the page's calls of loadSoccerDeck are gone (in memory, Round
+               1504): no card would ever be dealt; section 10 fails.
    Exit 0 green, 1 red (or a control that fired), 2 could not run, 3 a control
    that did not fire.
 
@@ -193,8 +215,9 @@ const CONTROLS = {
   pool: { breaks: '3', file: DECK, edits: [["  if (state.phase !== 'random_events' || problemsOf(pack).length > 0) return [];\n", '  return deckToRandomEvents(pack, pack.events); /* pool control */\n']] },
   silent: { breaks: '5', file: DECK, edits: [["        consequence: choiceEffects(c, pack, SOCCER_FX_WORDS).join(', ') || 'Nothing changes',",
     "        consequence: choiceEffects(c, pack, SOCCER_FX_WORDS).filter(w => !/^(Pace|Shooting|Passing|Dribbling|Defending|Physical) next season /.test(w)).join(', ') || 'Nothing changes', /* silent control */"]] },
-  drop: { breaks: '5', file: DECK, edits: [['    def.apply(s, raw);\n', "    if (!k.startsWith('t_')) def.apply(s, raw); /* drop control */\n"]] },
-  ceiling: { breaks: '5', file: DECK, edits: [['      const add = Math.max(0, Math.min(v, momentsRoom(s)));', '      const add = Math.max(0, v); /* ceiling control */']] },
+  drop: { breaks: '5', file: DECK, edits: [['    def.apply(s, v);\n', "    if (!k.startsWith('t_')) def.apply(s, v); /* drop control */\n"]] },
+  ceiling: { breaks: '5', file: DECK, edits: [['      const add = Math.max(0, Math.min(v, momentsRoom(s), top));', '      const add = Math.max(0, v); /* ceiling control */']] },
+  statmax: { breaks: '5', file: DECK, edits: [['      const add = Math.max(0, Math.min(v, momentsRoom(s), top));', '      const add = Math.max(0, Math.min(v, momentsRoom(s))); /* statmax control */']] },
   posleak: { breaks: '6', file: null, edits: null },
   neutralmoves: { breaks: '4', file: DECK, edits: [['        apply: still ? (s: CareerState) => s : (s: CareerState) => landChoice(s, def.emoji, title, c),',
     '        apply: still ? (s: CareerState) => ({ ...s, morale: Math.min(100, s.morale + 1) }) : (s: CareerState) => landChoice(s, def.emoji, title, c), /* neutralmoves control */']] },
@@ -202,9 +225,12 @@ const CONTROLS = {
   mathrandom: { breaks: '7', file: DECK, edits: [['  return deckToRandomEvents(pack, [gmTake(eligible, keyedRng(key))]);', '  return deckToRandomEvents(pack, [gmTake(eligible, Math.random)]); /* mathrandom control */']] },
   keyseason: { breaks: '7', file: ENGINE, edits: [['  picked.unshift(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|${season}|deckslot`, picked));', '  picked.unshift(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|deckslot`, picked)); /* keyseason control */']] },
   pressure: { breaks: '8', file: null, edits: null },
+  freetraining: { breaks: '8', file: DECK, edits: [['      else if (costs < gains) out.push(costs === 0 ? `${e.id}: "${c.label}" trains ${gains} and pays no cost` : `${e.id}: "${c.label}" trains ${gains} and pays only ${costs}`);\n', '      /* freetraining control: the bind rule on free training is off */\n']] },
+  onefree: { breaks: '1', file: null, edits: null },
   noresolve: { breaks: '9', file: ENGINE, edits: [['    ...soccerDeckPending(state),\n', '    /* noresolve control */\n']] },
   eager: { breaks: '10', file: GATE, edits: null },
-  caller: { breaks: '10', file: PAGE, edits: null },
+  caller: { breaks: '10', file: ENGINE, edits: null },
+  pagesilent: { breaks: '10', file: PAGE, edits: null },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`SIM_SOCCER_DECK_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 const swapped = new Map();
@@ -402,7 +428,22 @@ SECTION = '1';
 console.log('1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing');
 if (runs(1)) {
   const D = H.deck;
-  const shipped = D.soccerDeckProblems(SHIPPED);
+  /* onefree: the first option that pays a training cost loses it, as a later pack edit could (review of 2026-10-17) */
+  let S1 = SHIPPED;
+  if (CONTROL === 'onefree') {
+    const at = SHIPPED.events.findIndex(e => e.choices.some(c => Object.values(c.fx ?? {}).some(v => v < 0)));
+    if (at < 0) { console.error('onefree control: no option of the shipped pack pays a training cost, refusing to run'); process.exit(2); }
+    const e = SHIPPED.events[at];
+    const ci = e.choices.findIndex(c => Object.values(c.fx ?? {}).some(v => v < 0));
+    const choices = e.choices.map((c, i) => (i === ci ? { ...c, fx: Object.fromEntries(Object.entries(c.fx).filter(([, v]) => v >= 0)) } : c));
+    S1 = { ...SHIPPED, events: SHIPPED.events.map((x, i) => (i === at ? { ...e, choices } : x)) };
+    /* a key only that cost moved leaves the pressure book too, so the one problem left is the free training itself
+       (without this the control fired on the pressure book alone, rc r1504-x1) */
+    const moved = new Set(S1.events.flatMap(x => x.choices).flatMap(c => [...Object.keys(c.fx ?? {}), ...(c.morale ? ['morale'] : [])]));
+    if (S1.pressure) S1.pressure = Object.fromEntries(Object.entries(S1.pressure).filter(([k]) => moved.has(k)));
+    console.log(`   onefree control: ${e.id} "${e.choices[ci].label}" loses its cost (${JSON.stringify(e.choices[ci].fx)} becomes ${JSON.stringify(choices[ci].fx)})`);
+  }
+  const shipped = D.soccerDeckProblems(S1);
   if (shipped.length) fail(`the shipped pack has ${shipped.length} problems: ${shipped.slice(0, 3).join('; ')}`);
   else ok(`the shipped pack (${SHIPPED.events.length} cards) has no problem`);
   /* The titles live outside the kit's frozen words and its legal scan, so they are scanned here with the kit's own
@@ -435,9 +476,9 @@ if (runs(1)) {
   else ok(`${Object.keys(SHIPPED.titles).length} titles: no quote mark, dash, first person, conduct or private word, or any of ${REAL.size} real names`);
   /* the breakages' base: the deal sections' pack plus a keeper and a forward training card made here */
   const KEEPER = { id: '798', beat: 'summer', from: 'Your keeper coach', emoji: '🧤', cooldown: 3, when: [{ fact: 'pos', op: '<', value: 1 }], text: 'Crosses.',
-    choices: [{ label: 'Work on it', reply: 'You work on it.', karma: 0, fx: { gk_aerial_command: 1 } }, { label: 'Leave it', reply: 'You leave it.', karma: 0 }] };
+    choices: [{ label: 'Work on it', reply: 'You work on it.', karma: 0, fx: { gk_aerial_command: 1, gk_positioning: -1 } }, { label: 'Leave it', reply: 'You leave it.', karma: 0 }] };
   const FORWARD = { id: '797', beat: 'summer', from: 'The coaching staff', emoji: '⚽', cooldown: 3, when: [{ fact: 'pos', op: '>=', value: 3 }], text: 'Penalties.',
-    choices: [{ label: 'Put your name down', reply: 'You put your name down.', karma: 0, fx: { t_shooting: 1 } }, { label: 'Leave it', reply: 'You leave it.', karma: 0 }] };
+    choices: [{ label: 'Put your name down', reply: 'You put your name down.', karma: 0, fx: { t_shooting: 1, t_pace: -1 } }, { label: 'Leave it', reply: 'You leave it.', karma: 0 }] };
   const BB = { ...PACK, events: [...PACK.events, KEEPER, FORWARD], titles: { ...PACK.titles, 797: 'Penalties', 798: 'Crosses' }, kinds: { ...PACK.kinds, 797: 'positive', 798: 'positive' } };
   delete BB.pressure;
   const situation = BB.events.find(e => !(e.when ?? []).some(c => c.fact === 'pos'));
@@ -450,6 +491,8 @@ if (runs(1)) {
     'an outfield word on a keeper card': opt('798', { fx: { t_shooting: 1 } }),
     'a training key on a situation card': opt(situation.id, { fx: { t_pace: 1 } }),
     'a training value of 0.5': opt('797', { fx: { t_shooting: 0.5 } }),
+    'a cost with no training': opt('797', { fx: { t_pace: -1 } }), 'a cost above the training': opt('797', { fx: { t_shooting: 1, t_pace: -2 } }),
+    'training with no cost': opt('797', { fx: { t_shooting: 1 } }), 'a cost below the training': opt('797', { fx: { t_shooting: 2, t_pace: -1 } }),
     'id 650': { ...BB, events: BB.events.map(e => (e.id === '797' ? { ...e, id: '650' } : e)), titles: { ...BB.titles, 650: 'x' }, kinds: { ...BB.kinds, 650: 'positive' } },
     'a duplicate id': { ...BB, events: [...BB.events, FORWARD] },
     'a missing title': { ...BB, titles: without(BB.titles, '797') },
@@ -590,11 +633,17 @@ console.log('4) Neutral: every deck card answered on the option that moves nothi
    every later draw of the career. So both bundles reseed Math.random before every engine step from the career, the
    season, the step's phase and its count in that season, and the deck card's answer has no key of its own (it draws
    from a throwaway stream): the base's draws are the base's whatever the deck does. The noreseed control turns the
-   reseeding off and the fleets part, which proves it is load bearing. */
+   reseeding off and the fleets part, which proves it is load bearing.
+   One driver serves this section and section 8 (review of 2026-10-17, minor 15). Its options: reseed (off only for
+   the noreseed control); onDeck, how a deck card is answered (a function of the card, null for the option that moves
+   nothing, false to leave the card to the step policy like any other card); tag, a prefix that gives section 8 streams
+   of its own; seasons and steps, where the walk stops; and onStep, handed every state from the first on. Without
+   onStep the driver keeps what this section reads: every season end save and the seasons whose deck answer emptied
+   the batch. */
 const neutralOf = card => Math.max(0, card.choices.findIndex(c => c.consequence === 'Nothing changes'));
-function driveKeyed(M, seed, { reseed = true, onDeck = null } = {}) {
+function driveKeyed(M, seed, { reseed = true, onDeck = null, tag = '', seasons = SEASONS, steps = 600, onStep = null } = {}) {
   const real = Math.random;
-  let stream = seeded(hashInt(`${seed}|start`));
+  let stream = seeded(hashInt(`${seed}|${tag}start`));
   Math.random = () => stream();
   const counts = {};
   const ends = [];
@@ -603,22 +652,26 @@ function driveKeyed(M, seed, { reseed = true, onDeck = null } = {}) {
     const clubs = M.FALLBACK_CLUBS;
     let s = startOf(M, seed);
     if (!reseed) stream = seeded(seed + 1);
-    for (let guard = 0; guard < 600 && !s.retired; guard += 1) {
-      if (s.phase === 'playing' && s.seasons.length >= SEASONS) break;
+    if (onStep) onStep(s);
+    for (let guard = 0; guard < steps && !s.retired; guard += 1) {
+      if (s.phase === 'playing' && s.seasons.length >= seasons) break;
       const first = s.phase === 'random_events' ? s.pendingEvents?.[0] : null;
-      const deck = isDeck(first?.id);
+      const deck = onDeck !== false && isDeck(first?.id);
       if (reseed) {
-        if (deck) stream = seeded(hashInt(`${seed}|the deck answer`));
+        if (deck) stream = seeded(hashInt(`${seed}|${tag}the deck answer`));
         else {
           const k = `${seed}|${s.seasons.length}|${s.phase}`;
           counts[k] = (counts[k] ?? 0) + 1;
-          stream = seeded(hashInt(`${k}|${counts[k]}`));
+          stream = seeded(hashInt(`${tag}${k}|${counts[k]}`));
         }
       }
       const next = deck ? M.applyEventChoice(s, onDeck ? onDeck(first) : neutralOf(first), clubs) : step(M, s, seed, clubs);
       if (!next) break;
-      if (deck && !(next.pendingEvents ?? []).length) empties.push(s.seasons.length);
-      if (next.phase === 'playing' && s.phase !== 'playing') ends.push(JSON.stringify(next));
+      if (onStep) onStep(next);
+      else {
+        if (deck && !(next.pendingEvents ?? []).length) empties.push(s.seasons.length);
+        if (next.phase === 'playing' && s.phase !== 'playing') ends.push(JSON.stringify(next));
+      }
       s = next;
     }
     return { ends, empties, s };
@@ -672,14 +725,18 @@ if (runs(5)) {
   const base5 = withStream(() => startOf(H.engine, 5), seeded(5)).value;
   const row5 = { ...(base5.seasons[0] ?? {}), year: 2012, age: 25, club: 'Deck Albion', clubCountry: 'England', clubTier: 2, type: 'playing', apps: 30, goals: 6,
     assists: 3, cleanSheets: 4, yellowCards: 8, redCards: 0, rating: 7, intApps: 2, injury: null, injuryWeeks: 9 };
-  const fixture = (code, room, morale) => ({ ...copy(base5), position: code, age: 25, morale, overall: 70, potential: 70 + room, potentialEarned: 0,
+  /* maxed (review of 2026-10-17): all seven stats at 99, where the season start clamps them, so no training lands
+     there and no cost is paid for it */
+  const SEVEN = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physical', 'reflexes'];
+  const fixture = (code, room, morale, maxed = false) => ({ ...copy(base5), position: code, age: 25, morale, overall: 70, potential: 70 + room, potentialEarned: 0,
     statBoostNextSeason: {}, currentClub: 'Deck Albion', currentClubTier: 1, seasons: [{ ...row5 }], retired: false, contractYearsLeft: 1,
-    isClubCaptain: true, captainClub: 'Deck Albion', eventLastFired: {}, lastEventId: null, pendingEvents: [] });
+    isClubCaptain: true, captainClub: 'Deck Albion', eventLastFired: {}, lastEventId: null, pendingEvents: [],
+    ...(maxed ? Object.fromEntries(SEVEN.map(k => [k, 99])) : {}) });
   const defOf = id => PACK.events.find(e => Number(e.id) === id);
-  let answers = 0, neutral = 0, atBound = 0;
+  let answers = 0, neutral = 0, atBound = 0, atMax = 0;
   const wrong = [];
-  for (const code of ['GK', 'CB', 'CM', 'ST']) for (const room of [0, 1, 5]) for (const morale of [0, 1, 50, 99, 100]) {
-    const s0 = fixture(code, room, morale);
+  for (const code of ['GK', 'CB', 'CM', 'ST']) for (const room of [0, 1, 5]) for (const morale of [0, 1, 50, 99, 100]) for (const maxed of morale === 50 ? [false, true] : [false]) {
+    const s0 = fixture(code, room, morale, maxed);
     for (const card of D.deckToRandomEvents(PACK, PACK.events)) {
       card.choices.forEach((c, i) => {
         const before = copy(s0);
@@ -692,27 +749,46 @@ if (runs(5)) {
           return;
         }
         const want = copy(before);
-        const said = [];
+        /* Morale first, then what it trains (to the room), then each cost (Round 1504), never more than the training
+           landed; the line keeps the printed order. */
+        const parts = [];
         for (const w of c.consequence.split(', ')) {
           const m = /^(.*) ([+-]\d+)$/.exec(w);
           if (!m) { wrong.push(`${card.id} "${c.label}" prints ${w}, which names no amount`); continue; }
-          const [label, v] = [m[1], Number(m[2])];
+          parts.push({ label: m[1], v: Number(m[2]) });
+        }
+        const text = new Map();
+        let trained = 0;
+        for (const p of [...parts.filter(q => q.label === 'Morale'), ...parts.filter(q => q.label !== 'Morale' && q.v > 0), ...parts.filter(q => q.label !== 'Morale' && q.v < 0)]) {
+          const { label, v } = p;
           if (label === 'Morale') {
             const to = Math.max(0, Math.min(100, want.morale + v)), d = to - want.morale;
             if (d !== v) atBound += 1;
             want.morale = to;
-            said.push(d === 0 ? `Morale stays at ${to}` : d === v ? `Morale ${sgn(d)}` : `Morale ${sgn(d)}, now at ${to}`);
+            text.set(p, d === 0 ? `Morale stays at ${to}` : d === v ? `Morale ${sgn(d)}` : `Morale ${sgn(d)}, now at ${to}`);
             continue;
           }
           const key = LABEL[label];
           if (!key) { wrong.push(`${card.id} "${c.label}" prints ${label}, which no registered key carries`); continue; }
-          if (key === 'integrity') { want.integrityBonus += v; said.push(`Integrity ${sgn(v)}`); continue; }
+          if (key === 'integrity') { want.integrityBonus += v; text.set(p, `Integrity ${sgn(v)}`); continue; }
           const stat = W.SOCCER_TRAINING_KEYS[key].stat;
-          const fit = Math.max(0, Math.min(v, H.momentsRoom(want)));
+          if (v < 0) {
+            const pay = Math.min(-v, trained);
+            trained -= pay;
+            if (pay !== -v) atBound += 1;
+            if (pay > 0) want.statBoostNextSeason = { ...want.statBoostNextSeason, [stat]: (want.statBoostNextSeason[stat] ?? 0) - pay };
+            text.set(p, pay === -v ? `${label} ${sgn(-pay)}` : `${label} ${sgn(-pay)}, you only pay for training that landed`);
+            continue;
+          }
+          const top = 99 - want[stat] - (want.statBoostNextSeason[stat] ?? 0);
+          const fit = Math.max(0, Math.min(v, H.momentsRoom(want), top));
           if (fit !== v) atBound += 1;
+          if (top < Math.min(v, H.momentsRoom(want))) atMax += 1;
+          trained += fit;
           if (fit > 0) want.statBoostNextSeason = { ...want.statBoostNextSeason, [stat]: (want.statBoostNextSeason[stat] ?? 0) + fit };
-          said.push(fit === v ? `${label} ${sgn(fit)}` : `${label} ${sgn(fit)}, you are at your ceiling`);
+          text.set(p, fit === v ? `${label} ${sgn(fit)}` : `${label} ${sgn(fit)}, you are at your ceiling`);
         }
+        const said = parts.map(p => text.get(p)).filter(t => t !== undefined);
         want.events = [...want.events, `${card.emoji} ${card.title}: ${defOf(card.id).choices[i].reply} ${said.join(', ')}.`];
         if (JSON.stringify(after) !== JSON.stringify(want)) {
           const keys = Object.keys({ ...after, ...want }).filter(k => JSON.stringify(after[k]) !== JSON.stringify(want[k]));
@@ -722,9 +798,10 @@ if (runs(5)) {
     }
   }
   for (const w of wrong.slice(0, 4)) console.error(`     ${w}`);
-  console.log(`   ${answers} answers (${neutral} on the option that moves nothing), ${atBound} effects at a bound`);
+  console.log(`   ${answers} answers (${neutral} on the option that moves nothing), ${atBound} effects at a bound, ${atMax} trainings held at 99`);
   if (answers < 1000) fail(`only ${answers} answers checked`);
   if (atBound === 0) fail('no effect met a bound, so the clamp was never checked');
+  if (atMax === 0) fail('no training met a stat at 99, so that bound was never checked');
   if (wrong.length) fail(`${wrong.length} answers move something other than what they print, or say it wrong`);
   else ok('every option moves exactly what it prints (to the bound and no further), the season log says what landed, nothing moves money, fame or karma, and the option that moves nothing moves nothing');
   /* the hold: at room 0 and 1 no card is dealt whose training would not fit */
@@ -751,7 +828,7 @@ if (runs(5)) {
     const line = after.events[after.events.length - 1];
     const same = JSON.stringify(after.statBoostNextSeason) === JSON.stringify(drilled.statBoostNextSeason);
     console.log(`   the banked drill: room ${H.momentsRoom(st)} at the deal, ${H.momentsRoom(drilled)} after the drill; the answer logs "${line}"`);
-    if (!same || !/, you are at your ceiling\.$/.test(line)) fail('a drill banked before the answer: the answer still landed training, or its line does not say it is at the ceiling');
+    if (!same || !line.includes(', you are at your ceiling')) fail('a drill banked before the answer: the answer still landed training or its cost, or its line does not say it is at the ceiling');
     else ok('a drill banked between the deal and the answer: the answer lands nothing past the ceiling and its line says so');
   }
   /* the fleet: how often a deck answer clamps (answered first, so 0 is expected) and how often a deck boost and a
@@ -765,10 +842,13 @@ if (runs(5)) {
     drive(H.engine, 5000 + seed, { onStep: s => {
       const card = prev?.phase === 'random_events' ? prev.pendingEvents?.[0] : null;
       if (card && isDeck(card.id)) {
-        const printed = card.choices[0].consequence.split(', ').map(w => /^(.*) next season \+(\d+)$/.exec(w)).filter(Boolean).reduce((n, m) => n + Number(m[2]), 0);
+        /* what the first option trains, stat by stat (its cost sits on another stat, Round 1504) */
+        const gains = card.choices[0].consequence.split(', ').map(w => /^(.*) \+(\d+)$/.exec(w))
+          .filter(m => m && LABEL[m[1]] && LABEL[m[1]] !== 'integrity').map(m => [W.SOCCER_TRAINING_KEYS[LABEL[m[1]]].stat, Number(m[2])]);
+        const printed = gains.reduce((n, [, v]) => n + v, 0);
         if (printed > 0) {
           trainAnswers += 1;
-          if (queued(s) - queued(prev) < printed) clampedAnswers += 1;
+          if (gains.some(([stat, v]) => (s.statBoostNextSeason?.[stat] ?? 0) - (prev.statBoostNextSeason?.[stat] ?? 0) < v)) clampedAnswers += 1;
           const kind = H.drills.drillForPosition(s.position);
           const withDeck = H.drills.applyDrillResult(copy(s), kind, H.drills.ROUNDS_PER_RUN);
           const without = H.drills.applyDrillResult(copy(prev), kind, H.drills.ROUNDS_PER_RUN);
@@ -962,7 +1042,17 @@ const ECON_N = Number(process.env.SIM_SOCCER_DECK_ECONOMY_N || 100);
    moved legacy +2.26 against a spread of 1.21 and clean40 +0.09: ruling 2(j), so the pack dropped them. What still
    moves legacy (+1.66 BEST, +1.56 WORST, -0.09 NEUTRAL) is the training the cards offer: it lands under the ceiling
    (pastCeiling stays 0) and lifts the peak overall by 0.4. */
-const BANDS = { morale25: 5.5, morale30: 4, integrity25: 3.5, integrity30: 8.5, overall30: 1, peak: 0.75, legacy: 4.5, clean40: 0.15, pastCeiling: 0.01 };
+/* Round 1504, the lead's ruling 3 on Round 1334: before the cards go live, the mean legacy move of EVERY answer policy
+   sits within the measured seed to seed spread (absolute value at most 1.2; 1334 read OFF's spread 1.21), NEUTRAL about
+   0. So the legacy band is the ruling's 1.2, not a reading plus a margin, and the training options pay a time cost
+   (src/data/soccerDeck/starter.ts). The freetraining control strips the costs and doubles the training and must go red
+   on it. Read 2026-10-17 on a runner (rc r1504-s1, the paired fleet, 100 careers a seed, seeds 0 to 4), each arm
+   against the deck off as BEST / WORST / NEUTRAL: legacy -0.38 / -0.42 / 0.00 (OFF's seed to seed sd 1.33; per seed
+   BEST -1.66 to +0.44), morale25 +0.14 / -1.27 / 0, morale30 +1.31 / -0.85 / 0, integrity30 +0.17 / +0.23 / 0,
+   overall30 +0.11 / +0.11 / 0, peak -0.02 / -0.00 / 0, clean40 +0.02 / +0.02 / 0, pastCeiling 0; every other band as
+   Round 1334 set it holds these with room. Round 1334's pack (the costs stripped, nothing doubled) on the same fleet:
+   legacy +1.13 / +1.17 / 0, peak +0.46 / +0.48. */
+const BANDS = { morale25: 5.5, morale30: 4, integrity25: 3.5, integrity30: 8.5, overall30: 1, peak: 0.75, legacy: 1.2, clean40: 0.15, pastCeiling: 0.01 };
 if (runs(8)) {
   let P8 = PACK;
   if (CONTROL === 'pressure') {
@@ -970,20 +1060,45 @@ if (runs(8)) {
       ...(c.fx ? { fx: Object.fromEntries(Object.entries(c.fx).map(([k, v]) => [k, v * 10])) } : {}) })) })) };
     if (H.deck.soccerDeckProblems(P8).length) { console.error(`pressure control: the scaled pack has problems (${H.deck.soccerDeckProblems(P8)[0]}), refusing to run`); process.exit(2); }
   }
+  /* Round 1504: freetraining strips every training cost and doubles what each option trains (the pack, in memory), so
+     the deck raises the legacy score for free; the legacy band must go red. Doubled because the costs stripped alone,
+     which is Round 1334's pack, read BEST +1.13 and WORST +1.17 on this paired fleet (rc r1504-s1), inside the band by
+     a hair: a control at that size would be a coin toss, not a proof that the band bites. Doubled it reads BEST +1.44
+     and WORST +1.66 (rc r1504-s3), both past the band (the hold deals a +2 card only at a room of 2 or more). */
+  if (CONTROL === 'freetraining') {
+    const costs = PACK.events.flatMap(e => e.choices).filter(c => Object.values(c.fx ?? {}).some(v => v < 0)).length;
+    if (costs === 0) { console.error('freetraining control: no option of the pack carries a training cost, refusing to run'); process.exit(2); }
+    P8 = { ...PACK, events: PACK.events.map(e => ({ ...e, choices: e.choices.map(c => (c.fx ? { ...c, fx: Object.fromEntries(Object.entries(c.fx).filter(([, v]) => v >= 0).map(([k, v]) => [k, k in H.words.SOCCER_TRAINING_KEYS ? v * 2 : v])) } : c)) })) };
+    /* a key only a cost moved (gk_positioning) leaves the pressure book with the cost, or the bind check refuses the pack */
+    const moved = new Set(P8.events.flatMap(e => e.choices).flatMap(c => [...Object.keys(c.fx ?? {}), ...(c.morale ? ['morale'] : [])]));
+    P8.pressure = Object.fromEntries(Object.entries(PACK.pressure ?? {}).filter(([k]) => moved.has(k)).map(([k, v]) => [k, k in H.words.SOCCER_TRAINING_KEYS ? v * 2 : v]));
+    if (H.deck.soccerDeckProblems(P8).length) { console.error(`freetraining control: the free pack has problems (${H.deck.soccerDeckProblems(P8)[0]}), refusing to run`); process.exit(2); }
+    console.log(`   freetraining control: ${costs} options lose their training cost and train double`);
+  }
   const defs = Object.fromEntries(P8.events.map(e => [Number(e.id), e]));
   const TRAIN = H.words.SOCCER_TRAINING_KEYS;
   const sumOf = (c, pick) => Object.entries(c.fx ?? {}).reduce((n, [k, v]) => n + (pick(k) ? v : 0), 0);
+  /* BEST trains whenever it can: its training counts what an option adds, never the cost it pays (Round 1504) */
+  const gainOf = c => Object.entries(c.fx ?? {}).reduce((n, [k, v]) => n + (k in TRAIN && v > 0 ? v : 0), 0);
   const ARMS = {
-    best: card => { const cs = defs[card.id].choices; let at = 0; const v = c => 100 * sumOf(c, k => k === 'integrity') + 10 * sumOf(c, k => k in TRAIN) + (c.morale ?? 0); cs.forEach((c, i) => { if (v(c) > v(cs[at])) at = i; }); return at; },
+    best: card => { const cs = defs[card.id].choices; let at = 0; const v = c => 100 * sumOf(c, k => k === 'integrity') + 10 * gainOf(c) + (c.morale ?? 0); cs.forEach((c, i) => { if (v(c) > v(cs[at])) at = i; }); return at; },
     worst: card => { const cs = defs[card.id].choices; let at = 0; cs.forEach((c, i) => { if ((c.morale ?? 0) < (cs[at].morale ?? 0)) at = i; }); return at; },
     neutral: card => neutralOf(card),
   };
   const queuedOf = s => Object.values(s.statBoostNextSeason ?? {}).reduce((n, v) => n + (v > 0 ? v : 0), 0);
+  /* Round 1504: the arms are PAIRED. Math.random is reseeded before every engine step from the seed, the season count,
+     the phase and the step's count there (section 4's rule), and the deck answer draws from a stream of its own and
+     counts no step, so a deck answer cannot move the base's draws. Before this the fleet ran on one stream a career
+     and the first deck answer's catalog draws parted the arms (correction 1), so each arm's mean carried the noise of
+     500 careers simulated apart (NEUTRAL read -0.09 on a deck answer that moves nothing). Now an arm differs from the
+     deck off only by what its answers move. Since the review of 2026-10-17 this is driveKeyed (section 4) with section
+     8's own streams (tag), forty seasons, its step limit and onStep; onDeck false lets the deck off arm's cards, if
+     any, go to the step policy as they did. */
   let answers = 0, overRoom = 0;
   const careerOf = (M, seed, arm) => {
     const out = { clean40: 0, queued: 0, starts: 0, past: 0 };
     let prev = null;
-    const r = drive(M, seed, { seasons: 40, onStep: s => {
+    const r = driveKeyed(M, seed, { tag: 'economy|', seasons: 40, steps: 1500, onDeck: arm ? ARMS[arm] : false, onStep: s => {
       const card = prev?.phase === 'random_events' ? prev.pendingEvents?.[0] : null;
       if (arm && card && isDeck(card.id)) {
         answers += 1;
@@ -999,7 +1114,7 @@ if (runs(8)) {
       }
       if ((s.integrityBonus ?? 0) >= 40) out.clean40 = 1;
       prev = s;
-    }, deckChoice: arm ? ARMS[arm] : null });
+    } });
     out.peak = r.s.peakOverall ?? r.s.overall;
     out.legacy = withStream(() => H.engine.calculateLegacy(r.s).score, seeded(seed)).value;
     out.pastCeiling = out.starts ? out.past / out.starts : 0;
@@ -1030,9 +1145,10 @@ if (runs(8)) {
       if (Math.abs(d) > BANDS[m]) fail(`${a} moves ${m} by ${d.toFixed(2)} against the deck off, band ${BANDS[m]}`);
     }
   }
-  const legacyMove = avg(table.best.map((r, i) => r.legacy - table.off[i].legacy));
   const legacySpread = sd(table.off.map(r => r.legacy));
-  console.log(`   the BEST arm's legacy against the deck off: ${legacyMove.toFixed(2)} points, the seed to seed spread ${legacySpread.toFixed(2)} (ruling 2(j): beyond it, the pack drops its integrity effects)`);
+  const moveOf = a => avg(table[a].map((r, i) => r.legacy - table.off[i].legacy));
+  const perSeed = a => table[a].map((r, i) => (r.legacy - table.off[i].legacy).toFixed(2)).join(' ');
+  console.log(`   legacy against the deck off: BEST ${moveOf('best').toFixed(2)} (seeds ${perSeed('best')}), WORST ${moveOf('worst').toFixed(2)} (seeds ${perSeed('worst')}), NEUTRAL ${moveOf('neutral').toFixed(2)} (seeds ${perSeed('neutral')}); the seed to seed spread ${legacySpread.toFixed(2)}, the ruling's band ${BANDS.legacy}`);
   console.log(`   ${answers} deck answers, ${overRoom} queued more than the room just before them`);
   if (answers === 0) fail('no deck card was answered in any arm');
   if (overRoom) fail(`${overRoom} deck answers queued more than momentsRoom allowed`);
@@ -1106,7 +1222,7 @@ if (runs(9)) {
 /* ─── 10. lazy, the static half ────────────────────────────────────────── */
 
 SECTION = '10';
-console.log('10) Lazy: the page and the engine reach the gate and nothing of the deck, and nothing but the gate and tests loads it');
+console.log('10) Lazy: the page and the engine reach the gate and nothing of the deck, and the page is the one caller that loads it');
 if (runs(10)) {
   const gateAbs = path.join(ROOT, GATE);
   const override = {};
@@ -1126,20 +1242,30 @@ if (runs(10)) {
     : /\.(ts|tsx)$/.test(d.name) ? [`${dir}/${d.name}`] : []));
   const files = walk('src');
   const isTest = f => /\.test\.tsx?$/.test(f) || f.startsWith('src/test/');
-  if (CONTROL === 'caller' && !files.includes(PAGE)) { console.error('caller control: the page is gone, refusing to run'); process.exit(2); }
+  /* Round 1504: the page loads the deck now, and it is the one caller. `caller` adds a call to the engine (which must
+     never fetch the deck: the deal would then wait on the network) and `pagesilent` takes the page's calls away
+     (the cards would never be dealt), each in memory. */
+  if (CONTROL === 'caller' && !files.includes(ENGINE)) { console.error('caller control: the engine is gone, refusing to run'); process.exit(2); }
   const callers = [];
   let read = 0;
   for (const f of files) {
     if (f === GATE || isTest(f)) continue;
     read += 1;
     let text = readSrc(f);
-    if (CONTROL === 'caller' && f === PAGE) text = `${text}\nvoid loadSoccerDeck();\n`;
+    if (CONTROL === 'caller' && f === ENGINE) text = `${text}\nvoid loadSoccerDeck();\n`;
+    if (CONTROL === 'pagesilent' && f === PAGE) {
+      const n = (text.match(/loadSoccerDeck\(\)/g) ?? []).length;
+      if (n === 0) { console.error('pagesilent control: the page calls loadSoccerDeck nowhere, refusing to run'); process.exit(2); }
+      text = text.split('loadSoccerDeck()').join('Promise.resolve()');
+    }
     if (!text.includes('loadSoccerDeck')) continue;
     if (/\bloadSoccerDeck\s*\(/.test(codeOf(path.join(ROOT, f), text))) callers.push(f);
   }
   if (read < 500) fail(`only ${read} src files read: the caller check saw nothing`);
-  if (callers.length) fail(`${callers.length} src files call loadSoccerDeck: ${callers.join(', ')}`);
-  else ok(`${read} src files read as code: nothing but the gate and tests calls loadSoccerDeck`);
+  const others = callers.filter(f => f !== PAGE);
+  if (others.length) fail(`${others.length} src files besides the page call loadSoccerDeck: ${others.join(', ')}`);
+  if (!callers.includes(PAGE)) fail(`${PAGE} never calls loadSoccerDeck, so no summer card is ever dealt`);
+  if (!others.length && callers.includes(PAGE)) ok(`${read} src files read as code: the page loads the deck, and nothing else but the gate and tests calls loadSoccerDeck`);
 }
 
 /* ─── the verdict ──────────────────────────────────────────────────────── */

@@ -94,6 +94,7 @@ const CareerStory = lazy(() => import("@/components/soccer-career/CareerStory").
 import { BAND_CLASS } from "@/lib/careerRatingBand";
 import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";
 import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
+import { isSoccerDeckId, loadSoccerDeck, soccerDeckReady, SOCCER_DECK_HELP_RULES } from "@/lib/soccerDeckGate";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
 import { dugoutTableWords, ordinal, leagueWithArticle, readLeagueFinish, finishLeague, leagueInYear, leagueSeasonLine, namedInLeague } from "@/lib/soccerCareerLeague";
 import { SeasonDerbyLines, DerbyChip, CareerDerbyTotals } from "@/components/soccer-career/DerbyLines";
@@ -829,6 +830,10 @@ const SAVE_KEY = "soccerCareerSave";
 /* Round 1330: the page's own toasts sit at the top centre, clear of the bar,
    the Training and Phone buttons and the choices a card reveals under them. */
 const PAGE_TOAST = { position: "top-center" } as const;
+/* Round 1504: the longest a deck card's answer waits for the deck chunk before it says so (handleEventChoice).
+   scripts/playSoccerDeck.mjs read the deck's first load (7 chunks, 30.1K gzipped) at 334 ms on a phone line of
+   150 ms latency and 1.6 Mbps (rc r1504-s7); about 2.6 s on a 2G line of 250 Kbps and 800 ms by the same bytes. */
+const DECK_WAIT_MS = 8000;
 const SaveMovedNotice = lazy(() => import('@/components/SaveMovedNotice').catch(() => { reloadToRetryChunk(); return new Promise<never>(() => undefined); }));
 
 export default function SoccerCareer() {
@@ -959,6 +964,17 @@ export default function SoccerCareer() {
       void loadManagerMarket().catch(() => { /* retried on demand, see the engine */ });
     }
   }, [career?.phase]);
+
+  /* Round 1504: the summer cards (src/lib/soccerDeckGate.ts) are a lazy chunk,
+     fetched as soon as a live career is on screen so it is usually in memory
+     long before a summer's deal. Nothing waits for it at a season end: a deal
+     made before it lands simply has no deck card (the card is keyed, so a
+     later deal is never a different one). Only answering a deck card already
+     on screen waits for it (handleEventChoice). */
+  const deckWanted = !!career && !career.retired;
+  useEffect(() => {
+    if (deckWanted && !soccerDeckReady()) void loadSoccerDeck().catch(() => { /* a pending deck card asks again, see handleEventChoice */ });
+  }, [deckWanted, career?.phase]);
 
   useEffect(() => {
     setClubs(FALLBACK_CLUBS);
@@ -1154,14 +1170,58 @@ export default function SoccerCareer() {
     setCareer(next);
   };
 
+  /* Round 1504: a deck card (ids 700 to 999) is answered only with the deck
+     in memory. Without it the engine's Round 667 skip would drop the card
+     while the toast still promised its effect (the lead's ruling 2 on Round
+     1334). So that press waits for the chunk, at most DECK_WAIT_MS, then
+     answers on the career on screen while that card is still first there (a
+     session banked while it waited is the player's own move, review of
+     2026-10-17); if the chunk cannot be had the card stays and a toast says
+     so. After a load that failed the next press reloads the page when it can
+     (a dynamic import that failed stays failed for the life of the page,
+     src/lib/freshBuild.ts) and the save brings the card back; offline, or
+     over a save the browser refused, it tries the import again, so the toast
+     says retry, not reload. A second press while it waits does nothing. A
+     deck card's toast prints what its season log line says landed (training
+     at the ceiling, morale at 0 or 100, a cost for training that did not
+     land), never the button's promise; no line means nothing landed.
+     Every other card takes the path it always took. */
+  const deckPress = useRef<{ at: CareerState | null; failed: boolean }>({ at: null, failed: false });
+  const careerNow = useRef(career);
+  careerNow.current = career;
+  const answerEvent = (pressed: CareerState, choiceIndex: number) => {
+    const event = pressed.pendingEvents[0];
+    if (!event) return;
+    const result = applyEventChoice(pressed, choiceIndex, clubs);
+    setCareer(result);
+    if (isSoccerDeckId(event.id)) {
+      const head = `${event.emoji} ${event.title}: `;
+      const line = result.events.slice(pressed.events.length).find(l => l.startsWith(head));
+      toast(line ? line.slice(head.length) : 'Nothing changes', PAGE_TOAST);
+      return;
+    }
+    const consequence = soccerEventChoiceConsequence(pressed, event.id, choiceIndex, event.choices[choiceIndex].consequence);
+    toast(event.id === 16 && choiceIndex === 1 ? moneyLine(consequence) : consequence, PAGE_TOAST);
+  };
   const handleEventChoice = (choiceIndex: number) => {
     if (!career) return;
     const event = career.pendingEvents[0];
     if (!event) return;
-    const result = applyEventChoice(career, choiceIndex, clubs);
-    setCareer(result);
-    const consequence = soccerEventChoiceConsequence(career, event.id, choiceIndex, event.choices[choiceIndex].consequence);
-    toast(event.id === 16 && choiceIndex === 1 ? moneyLine(consequence) : consequence, PAGE_TOAST);
+    if (!isSoccerDeckId(event.id) || soccerDeckReady()) { answerEvent(career, choiceIndex); return; }
+    const press = deckPress.current;
+    if (press.at === career) return;
+    if (press.failed && reloadToRetryChunk()) return;
+    const pressed = career;
+    press.at = pressed;
+    const waiting = toast.loading('Loading this card...', PAGE_TOAST);
+    const late = new Promise<'late'>(done => setTimeout(done, DECK_WAIT_MS, 'late'));
+    void Promise.race([loadSoccerDeck().then(() => 'ready' as const, () => 'failed' as const), late]).then(outcome => {
+      toast.dismiss(waiting);
+      if (press.at === pressed) press.at = null;
+      press.failed = outcome === 'failed';
+      if (outcome === 'ready') { const now = careerNow.current; if (now?.pendingEvents[0]?.id === event.id) answerEvent(now, choiceIndex); return; }
+      toast.error(press.failed ? 'This card could not load. Tap again to retry.' : 'Still loading. Tap again in a moment.', PAGE_TOAST);
+    });
   };
 
   const handleDismissDebut = () => {
@@ -1431,6 +1491,7 @@ export default function SoccerCareer() {
             'Preseason plan: choose development (+1 position skill after growth, 3 percentage points more injury risk), recovery (-1 skill, 4 points less risk), or balanced. Example: 20% injury risk becomes 23% or 16%, within existing limits. A serious injury or no appearances interrupts development; a move cancels the plan.',
             'Academy mentoring: the Youth Mentor event starts one generated player. Ten senior appearances at your shared club adds one mentoring year. Example: 12 appearances moves 0/3 to 1/3; six appearances pauses it. Three qualifying years complete it, a move ends it, and its history stays in the mentor tile.',
             ...STORY_ROLE_HELP_RULES,
+            ...SOCCER_DECK_HELP_RULES,
             'One tab at a time: the career plays in the newest tab you opened. An older tab asks you to reload. Example: open it in two tabs and play a season in the second; the first asks you to reload, and the reload shows that season.',
           ]} className={career ? "h-11 w-11 sm:h-auto sm:w-auto" : undefined} />
         </div>
