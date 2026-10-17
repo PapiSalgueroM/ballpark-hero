@@ -1,0 +1,34 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerRoutineEvents.test.ts [2m([22m[2m44 tests[22m[2m)[22m[33m 756[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerDocumentaryReview.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 1455[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career recorded documentary review[2m > [22mdocumentary review missing: another full-access deal enables one later review [33m 338[2mms[22m[39m
+[90mstdout[2m | src/test/soccerCareerStatRewards.test.ts[2m > [22m[2mSoccer Career stat rewards and truthful Life previews[2m > [22m[2mstat rewards missing: earned bonuses reach the actual next-season boundary once
+[22m[39mRetained actual stat-boundary unit sources: /home/runner/work/ballpark-hero/ballpark-hero/tmp/career-stat-boundary-unit-qAMUM4
+
+ [32m✓[39m src/test/soccerCareerStatRewards.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 2745[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards missing: earned bonuses reach the actual next-season boundary once [33m 2476[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerPendingLife.test.ts [2m([22m[2m40 tests[22m[2m)[22m[33m 703[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/soccerCareerLifeReviews.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 1097[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerPendingPopularity.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 277[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerContracts.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 325[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerPendingMorale.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 349[2mms[22m[39m
+ [32m✓[39m src/test/seasonCentreOwnGoals.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 3329[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mprints an own goal for side "us" with who did it and the club that got it, the same live, held and replayed [33m 1175[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mprints an own goal for side "them" with who did it and the club that got it, the same live, held and replayed [33m 566[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mleaves a return match alone in a replay exactly as it does live (the moments are planned, offered or not) [33m 643[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerColdContext.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 274[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSavedLoan.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 158[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerLifeFollowups.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 250[2mms[22m[39m
+ [32m✓[39m src/test/soccerLifeChainPackedSave.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 113[2mms[22m[39m
+ [32m✓[39m src/test/soccerSavePackedReaders.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 191[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+[2m      Tests [22m [1m[32m257 passed[39m[22m[90m (257)[39m
+[2m   Start at [22m 04:44:58
+[2m   Duration [22m 16.08s[2m (transform 4.98s, setup 1.75s, collect 14.46s, tests 12.02s, environment 9.43s, prepare 3.11s)[22m
+
