@@ -694,7 +694,12 @@ function measure(page) {
     const buttons = root ? [...root.querySelectorAll('button')].filter(visible).filter(b => !b.hasAttribute('data-cm-dot')) : [];
     const under44 = buttons.filter(b => { const r = b.getBoundingClientRect(); return r.width < 43.5 || r.height < 43.5; }).length;
     /* Name labels that overlap: the label span under (or over) each figure on the pitch. */
-    const labels = pitch ? [...pitch.querySelectorAll('[data-cm-dot] > span, [data-cm-dot-opp] > span')].map(el => el.getBoundingClientRect()).filter(r => r.width > 0) : [];
+    const labelEls = pitch ? [...pitch.querySelectorAll('[data-cm-dot] > span, [data-cm-dot-opp] > span')].filter(el => el.getBoundingClientRect().width > 0) : [];
+    const labels = labelEls.map(el => el.getBoundingClientRect());
+    /* Round 1340: what the labels say (no label may begin with a digit or be a number once the pitch wears names)
+       and how many are cut short by their cap. */
+    const labelTexts = labelEls.map(el => el.textContent.trim());
+    const labelsCut = labelEls.filter(el => el.scrollWidth > el.clientWidth + 0.5).length;
     let overlapping = 0;
     for (let i = 0; i < labels.length; i++) for (let j = i + 1; j < labels.length; j++) {
       const a = labels[i], b = labels[j];
@@ -709,7 +714,7 @@ function measure(page) {
       strip: rect(strip), pitch: rect(pitch), controls: rect(controlsEl), stage: rect(stage), statline: statline && visible(statline) ? rect(statline) : null,
       controlRects: controls.map(b => ({ name: (b.getAttribute('aria-label') || b.textContent || '').trim().slice(0, 24), width: b.getBoundingClientRect().width, height: b.getBoundingClientRect().height, hit: hit(b) })),
       backHit: hit(back), scoreHit: hit(score), hasBack: !!back,
-      small, smallest, under44, labels: labels.length, overlapping,
+      small, smallest, under44, labels: labels.length, overlapping, labelTexts, labelsCut,
       orient: document.querySelector('[data-pm-orient]') ? document.querySelector('[data-pm-orient]').getAttribute('data-pm-orient') : null,
     };
   });
@@ -717,13 +722,14 @@ function measure(page) {
 
 /** The mean number of overlapping name labels a frame, over a couple of seconds of open play. */
 async function labelMean(page, frames = 24) {
-  let sum = 0, n = 0, labels = 0;
+  let sum = 0, n = 0, labels = 0, cut = 0;
+  const texts = [];
   for (let i = 0; i < frames; i++) {
     const m = await measure(page);
-    if (m.labels) { sum += m.overlapping; labels = m.labels; n++; }
+    if (m.labels) { sum += m.overlapping; labels = m.labels; cut += m.labelsCut; n++; texts.push(...m.labelTexts); }
     await page.waitForTimeout(250);
   }
-  return { mean: n ? sum / n : NaN, frames: n, labels };
+  return { mean: n ? sum / n : NaN, frames: n, labels, cut: n ? cut / n : NaN, texts };
 }
 
 const VIEWPORTS = [
@@ -1134,9 +1140,13 @@ try {
     judgeFit(view, m);
     await shoot(page, `fit-${view.width}`);
     if (!REPORT && !CONTROL && view.width !== 390) {
-      /* Printed, not asserted: there is no reading of these sizes from before match mode to hold them to. */
-      const labels = await labelMean(page, 10);
-      console.log(`  [labels ${view.name}] mean overlapping name labels a frame ${labels.mean.toFixed(2)} over ${labels.frames} frames of ${labels.labels} labels`);
+      /* Printed, not asserted: there is no reading of these sizes from before match mode to hold them to.
+         Round 1340: 320 is read over 24 frames, the same as 390, with how many labels are cut and how many begin
+         with a digit, on one line a reader can collect (LABELS320). */
+      const labels = await labelMean(page, view.width === 320 ? 24 : 10);
+      const digits = labels.texts.filter(t => /^\d/.test(t)).length;
+      console.log(`  [labels ${view.name}] mean overlapping name labels a frame ${labels.mean.toFixed(2)} over ${labels.frames} frames of ${labels.labels} labels; ${labels.cut.toFixed(2)} cut a frame; ${digits} of ${labels.texts.length} label readings begin with a digit`);
+      if (view.width === 320) console.log(`  LABELS320 seed=${SEED} mean=${labels.mean.toFixed(3)} frames=${labels.frames} labels=${labels.labels} cut=${labels.cut.toFixed(3)} digits=${digits}`);
     }
     if (view.width === 390) {
       const labels = await labelMean(page);
