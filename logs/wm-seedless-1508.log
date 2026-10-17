@@ -1,0 +1,2 @@
+treeWithoutMerge: 633c5c883c599a3b5223fec2b8a90551630f5d3e, 8c39c9d8 without f1e54e17; conflicts kept from 8c39c9d8: scripts/lib/cmWorldSeed1250.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerHelp.tsx, src/hooks/useClubManager.ts, src/lib/clubManager.ts, src/lib/deadlineDay.ts, src/lib/managerHotSeat.ts: no honest base
