@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+simHelpDialogFocus: node scripts/simHelpDialogFocus.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+playNflTruth: ENGINES=chromium node scripts/playNflTruth.mjs
