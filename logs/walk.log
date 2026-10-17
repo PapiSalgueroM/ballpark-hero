@@ -1,0 +1,73 @@
+fatal: path 'src/lib/worldCompetition.ts' exists on disk, but not in '1ec77177'
+   K: Chelsea week 40 of 54, 8 play-offs settled, 8 round of 16 ties, follow Borussia Dortmund
+   K on the base engine b5aed9d4: save byte equal to the head's
+   era2015: 3 watched draws read, 0 groups with Russia and Ukraine together
+   era2020: 2 watched draws read, 0 groups with Russia and Ukraine together
+   EP: Everton 2015 in it at group matchday 3; Everton among the real 32 of 2015-16: false; the field has 32 clubs, outside the real 32: Everton; real clubs missing: PSG
+   E: Swansea era2015 cannot serve: week 56 of 56, done 13 of 13, winner Real Madrid
+   E: Crystal Palace era2015 cannot serve: sacked
+   E: Watford era2015 cannot serve: sacked
+   E: Leicester era2015 cannot serve: week 56 of 56, done 13 of 13, winner Zenit
+   E: West Brom era2015 cannot serve: sacked
+   E: Newcastle era2015, week 55 of 56, the final won by Juventus over Manchester City, 2 ties on away goals
+   P: Real Madrid week 33, QF legs at 32 and 34, uclKoRound QF, 4 quarter-finals unsettled, bracket 4
+   R: Champions League: Barcelona beat Galatasaray in the final.
+   OA: main's Chelsea save at week 20 loads on head with a slice true, 5 nights done
+   O2: main's season 2 save loads on head with a slice false; after its rollover on head: season 3 (watching)
+   K Chelsea 390: tile "⭐ CHAMPIONS LEAGUE Quarter-final, first leg next You are watching from outside"
+   K Chelsea 390: Knockouts opens on the pill "Quarters"
+   K Chelsea 390: 8 of 8 play-off cards read as the engine played them; first: Borussia Dortmund v Como First leg: Borussia Dortmund 2-1 Como Second leg: Como 2-0 Borussia Dortmund 2-3 on aggregate, Como through
+   K Chelsea 390: play-off second legs 8 rows, 8 as the engine played them
+   K Chelsea 390: run of Borussia Dortmund: Borussia Dortmund 17th in the league phase Out in the play-offs Open Borussia Dortmund's club page Matchday 1 · away Wed 26 Aug Roma 1-0 Borussia Dortmund Matchday 2 · home Wed 16 Sep Borussia Dortmund 4-4 Galatasaray Ma
+   K Chelsea 390-rm: tile "⭐ CHAMPIONS LEAGUE Quarter-final, first leg next You are watching from outside"
+   K Chelsea 390-rm: Knockouts opens on the pill "Quarters"
+   K Chelsea 390-rm: 8 of 8 play-off cards read as the engine played them; first: Borussia Dortmund v Como First leg: Borussia Dortmund 2-1 Como Second leg: Como 2-0 Borussia Dortmund 2-3 on aggregate, Como through
+   K Chelsea 390-rm: play-off second legs 8 rows, 8 as the engine played them
+   K Chelsea 390-rm: run of Borussia Dortmund: Borussia Dortmund 17th in the league phase Out in the play-offs Open Borussia Dortmund's club page Matchday 1 · away Wed 26 Aug Roma 1-0 Borussia Dortmund Matchday 2 · home Wed 16 Sep Borussia Dortmund 4-4 Galatasaray Ma
+   K Chelsea 1280: tile "⭐ CHAMPIONS LEAGUE Quarter-final, first leg next You are watching from outside"
+   K Chelsea 1280: Knockouts opens on the pill "Quarters"
+   K Chelsea 1280: 8 of 8 play-off cards read as the engine played them; first: Borussia Dortmund v Como First leg: Borussia Dortmund 2-1 Como Second leg: Como 2-0 Borussia Dortmund 2-3 on aggregate, Como through
+   K Chelsea 1280: play-off second legs 8 rows, 8 as the engine played them
+   K Chelsea 1280: run of Borussia Dortmund: Borussia Dortmund 17th in the league phase Out in the play-offs Open Borussia Dortmund's club page Matchday 1 · away Wed 26 Aug Roma 1-0 Borussia Dortmund Matchday 2 · home Wed 16 Sep Borussia Dortmund 4-4 Galatasaray Ma
+   K Chelsea 1280-rm: tile "⭐ CHAMPIONS LEAGUE Quarter-final, first leg next You are watching from outside"
+   K Chelsea 1280-rm: Knockouts opens on the pill "Quarters"
+   K Chelsea 1280-rm: 8 of 8 play-off cards read as the engine played them; first: Borussia Dortmund v Como First leg: Borussia Dortmund 2-1 Como Second leg: Como 2-0 Borussia Dortmund 2-3 on aggregate, Como through
+   K Chelsea 1280-rm: play-off second legs 8 rows, 8 as the engine played them
+   K Chelsea 1280-rm: run of Borussia Dortmund: Borussia Dortmund 17th in the league phase Out in the play-offs Open Borussia Dortmund's club page Matchday 1 · away Wed 26 Aug Roma 1-0 Borussia Dortmund Matchday 2 · home Wed 16 Sep Borussia Dortmund 4-4 Galatasaray Ma
+   E Newcastle era2015 390: tile "⭐ CHAMPIONS LEAGUE Won by Juventus You are watching from outside"
+   E Newcastle era2015 390: ? reads: Eight groups of four, everyone playing the other three home and away. The top two of each group go through to a round of 16 drawn winner against runner-up, never from the same group or the same country. Two legs to the semi-finals, then a one match final. A tie level on aggregate goes to the side with more away goals, then extra time and penalties. What the game plays in place of the real thing: t
+   E Newcastle era2015 390: round of 16 cards: Zenit v Juventus First leg: Zenit 2-2 Juventus Second leg: Juventus 6-0 Zenit 2-8 on aggregate, Juventus through || Arsenal v PSG First leg: Arsenal 3-2 PSG Second leg: PSG 1-0 Arsenal 3-3 on aggregate, PSG through on away goals || Roma v Maccabi Tel Aviv First leg: Roma 2-1 Maccabi Tel Aviv Second 
+   E Newcastle era2015 390: final reads: WINNERS 2015-16 🏆 Juventus 3-2, Juventus win after extra time. Runners-up: Manchester City Wed 4 May
+   E Newcastle era2015 1280-rm: tile "⭐ CHAMPIONS LEAGUE Won by Juventus You are watching from outside"
+   E Newcastle era2015 1280-rm: ? reads: Eight groups of four, everyone playing the other three home and away. The top two of each group go through to a round of 16 drawn winner against runner-up, never from the same group or the same country. Two legs to the semi-finals, then a one match final. A tie level on aggregate goes to the side with more away goals, then extra time and penalties. What the game plays in place of the real thing: t
+   E Newcastle era2015 1280-rm: round of 16 cards: Zenit v Juventus First leg: Zenit 2-2 Juventus Second leg: Juventus 6-0 Zenit 2-8 on aggregate, Juventus through || Arsenal v PSG First leg: Arsenal 3-2 PSG Second leg: PSG 1-0 Arsenal 3-3 on aggregate, PSG through on away goals || Roma v Maccabi Tel Aviv First leg: Roma 2-1 Maccabi Tel Aviv Second 
+   E Newcastle era2015 1280-rm: final reads: WINNERS 2015-16 🏆 Juventus 3-2, Juventus win after extra time. Runners-up: Manchester City Wed 4 May
+   P Real Madrid 390: tile "⭐ CHAMPIONS LEAGUE In the quarter-finals Next up: Manchester City"; status "In the quarter-finals"
+   P Real Madrid 390: Matchdays opens on: Before Quarter-final, first leg Wed 3 Feb · played After Real Madrid 1-0 Manchester City Lille with leg 2 Atlético Madrid Bayern Munich with leg 2 Aston Villa Barcelona with leg 2 PSG
+   FAIL P Real Madrid 390 knockouts (old bracket card, sizes not held): control under 44 px: "Real Madrid" 24.5px
+   FAIL P Real Madrid 390 knockouts (old bracket card, sizes not held): control under 44 px: "Manchester City" 24.5px
+   FAIL P Real Madrid 390 knockouts (old bracket card, sizes not held): control under 44 px: "Lille" 24.5px
+   FAIL P Real Madrid 390 knockouts (old bracket card, sizes not held): control under 44 px: "Atlético Madrid" 24.5px
+   FAIL P Real Madrid 390 knockouts (old bracket card, sizes not held): control under 44 px: "Bayern Munich" 24.5px
+   FAIL P Real Madrid 390 knockouts (old bracket card, sizes not held): control under 44 px: "Aston Villa" 24.5px
+   FAIL P Real Madrid 390 knockouts (old bracket card, sizes not held): control under 44 px: "Barcelona" 24.5px
+   FAIL P Real Madrid 390 knockouts (old bracket card, sizes not held): control under 44 px: "PSG" 24.5px
+   P Real Madrid 1280-rm: tile "⭐ CHAMPIONS LEAGUE In the quarter-finals Next up: Manchester City"; status "In the quarter-finals"
+   P Real Madrid 1280-rm: Matchdays opens on: Before Quarter-final, first leg Wed 3 Feb · played After Real Madrid 1-0 Manchester City Lille with leg 2 Atlético Madrid Bayern Munich with leg 2 Aston Villa Barcelona with leg 2 PSG
+   FAIL P Real Madrid 1280-rm knockouts (old bracket card, sizes not held): control under 44 px: "Real Madrid" 24.5px
+   FAIL P Real Madrid 1280-rm knockouts (old bracket card, sizes not held): control under 44 px: "Manchester City" 24.5px
+   FAIL P Real Madrid 1280-rm knockouts (old bracket card, sizes not held): control under 44 px: "Lille" 24.5px
+   FAIL P Real Madrid 1280-rm knockouts (old bracket card, sizes not held): control under 44 px: "Atlético Madrid" 24.5px
+   FAIL P Real Madrid 1280-rm knockouts (old bracket card, sizes not held): control under 44 px: "Bayern Munich" 24.5px
+   FAIL P Real Madrid 1280-rm knockouts (old bracket card, sizes not held): control under 44 px: "Aston Villa" 24.5px
+   FAIL P Real Madrid 1280-rm knockouts (old bracket card, sizes not held): control under 44 px: "Barcelona" 24.5px
+   FAIL P Real Madrid 1280-rm knockouts (old bracket card, sizes not held): control under 44 px: "PSG" 24.5px
+   EP 390: tile "⭐ CHAMPIONS LEAGUE Group stage, matchday 3 of 6 3rd in your group"; screen in g8: Cups ⭐ CHAMPIONS LEAGUE 2015-16 · eight groups of four, then knockouts Group stage, matchday 3 of 6 You are in it: your group is Group A. Every season of this save draws from the same 32 clubs, the real 2015-16 field, whatever the leagues do. 📋 GROUPS 8 group
+   KB 390: tile "⭐ CHAMPIONS LEAGUE Quarter-final, first leg next You are watching from outside"; screen watching l36: Cups ⭐ CHAMPIONS LEAGUE 2026-27 · 36 clubs in one table, then knockouts Quarter-final, first leg next Chelsea are not in it this season, so you are following it from outside. This is the real format. In a season your club qualifies, it plays the game's stand i
+   OA 390: tile "⭐ CHAMPIONS LEAGUE Matchday 6 of 8 next You are watching from outside"; screen watching l36: Cups ⭐ CHAMPIONS LEAGUE 2026-27 · 36 clubs in one table, then knockouts Matchday 6 of 8 next Chelsea are not in it this season, so you are following it from outside. This is the real format. In a season your club qualifies, it plays the game's stand in instead
+   OP 390: tile "⭐ CHAMPIONS LEAGUE Group stage, matchday 3 of 6 3rd in your group"; screen in g8: Cups ⭐ CHAMPIONS LEAGUE 2026-27 · eight groups of four, then knockouts Group stage, matchday 3 of 6 You are in it: your group is Group A. Your club plays the game's stand in: eight groups of four into the quarter-finals. In a season you are not in it, the one 
+   OE 390: tile "⭐ CHAMPIONS LEAGUE Round of 16, first leg next You are watching from outside"; screen watching g8: Cups ⭐ CHAMPIONS LEAGUE 2005-06 · eight groups of four, then knockouts Round of 16, first leg next Everton are not in it this season, so you are following it from outside. Every season of this save draws from the same 32 clubs, the real 2005-06 field, whatever
+   O2 390: tile "⭐ CHAMPIONS LEAGUE Nothing to follow It shows here from next season"; screen NONE: Cups ⭐ CHAMPIONS LEAGUE There is nothing to follow here this season. The Champions League shows here again from next season. The real competition's format, season by season
+   O2 1280-rm: tile "⭐ CHAMPIONS LEAGUE Nothing to follow It shows here from next season"; screen NONE: Cups ⭐ CHAMPIONS LEAGUE There is nothing to follow here this season. The Champions League shows here again from next season. The real competition's format, season by season
+walk-run-1503: 25 views measured, 17 network requests to blocked hosts aborted
+walk-run-1503: FINDINGS 16
