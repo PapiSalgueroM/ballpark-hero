@@ -1,0 +1,23 @@
+# Release BG gate, the join's lines (Round BGG, finish-BGG.md): every packet proof the five merges brought, on the gate head, each with its join env (the merge's first parent on release-bg-gate), plus the readers of the join's files that no lane carries (simDrillMotion and eight readers of SoccerCareer.tsx), plus the two weight rows. All green on 1d13b426 (rBGg-f2, rBGg-f3b, rBGg-f1). Each line is green only on exit 0 AND its PASS or green last line.
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -2
+vitest-packets: node_modules/.bin/vitest run src/test/soccerPotentialProgress.test.tsx src/test/soccerAwardReveal.test.tsx src/test/perfectSeasonNbaRetry.test.tsx src/test/drillBoardMatch.test.tsx src/test/drillBoardMarkup.test.tsx --testTimeout=300000 --hookTimeout=120000
+potential-browser: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_POTENTIAL_BROWSER_OUT="$RUNNER_TEMP/potential-browser" node scripts/qa/soccerPotentialProgressBrowser.mjs
+nba-proof: CI=1 SIM_NETWORK=offline NBA_RETRY_PARENT_REF=fb709452 NBA_RETRY_PROOF_OUT="$RUNNER_TEMP/nba-proof" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/nbaPerfectSeasonRetryProof.mjs
+nba-browser: CI=1 SIM_NETWORK=offline ENGINES=chromium NBA_RETRY_BROWSER_OUT="$RUNNER_TEMP/nba-browser" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/nbaPerfectSeasonRetryBrowser.mjs
+retire: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_RETIREMENT_PARENT_REF=97d706b2 SOCCER_RETIREMENT_BROWSER_OUT="$RUNNER_TEMP/retire" node scripts/qa/soccerRetirementActionsBrowser.mjs
+# Release BI triage (rBI-trBG): dialog binds SOCCER_NEW_CAREER_PARENT_REF to this head WITHOUT PR277 (treeWithoutMerge 48bb600a bc416f2a); Round 1337 moved bc416f2a's page.
+dialog: R=$(node scripts/lib/treeWithoutMerge.mjs 48bb600a bc416f2a) || exit 2; echo "SOCCER_NEW_CAREER_PARENT_REF $R (this head without PR277s merge 48bb600a)"; CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_NEW_CAREER_PARENT_REF=$R SOCCER_NEW_CAREER_BROWSER_OUT="$RUNNER_TEMP/dialog" node scripts/qa/soccerNewCareerDialogBrowser.mjs; s=$?; node -e "const r=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\")); console.log(JSON.stringify(r.errors,null,1).slice(0,2500))" "$RUNNER_TEMP/dialog/report.json"; exit $s
+drill-proof: CI=1 SIM_NETWORK=offline SOCCER_DRILL_CANCEL_OUT="$RUNNER_TEMP/drill-proof" node scripts/qa/soccerDrillPointerCancelProof.mjs
+simDrillMotion: node scripts/simDrillMotion.mjs
+simCareerAcademy: node scripts/simCareerAcademy.mjs
+simCareerDilemmaReach: node scripts/simCareerDilemmaReach.mjs
+simCareerEras: node scripts/simCareerEras.mjs
+simCareerFacts: node scripts/simCareerFacts.mjs
+simCareerPositionRatings: node scripts/simCareerPositionRatings.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simScoreShown: node scripts/simScoreShown.mjs
+simSoccerCurrency: node scripts/simSoccerCurrency.mjs
+budget-weights-bg: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/swbg.log 2>&1; s=$?; grep -E "soccer-career|perfect-season-nba|OVER|over" /tmp/swbg.log | head -20; tail -3 /tmp/swbg.log; exit $s
