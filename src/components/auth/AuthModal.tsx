@@ -13,10 +13,11 @@ import { sendPasswordLink } from '@/lib/googlePaused';
 import { toast } from 'sonner';
 import { Loader2, AlertCircle } from 'lucide-react';
 
-interface AuthModalProps {
+export interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   defaultTab?: 'login' | 'signup';
+  returnFocusTo?: HTMLElement | null;
 }
 
 /** Minimum password length. Matches the Input's existing minLength={6} and Supabase project's default minimum. */
@@ -84,7 +85,7 @@ function readableAuthError(message: string): string {
   return message;
 }
 
-export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalProps) {
+export function AuthModal({ isOpen, onClose, defaultTab = 'login', returnFocusTo }: AuthModalProps) {
   const [tab, setTab] = useState<'login' | 'signup'>(defaultTab);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -324,8 +325,9 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
       <DialogContent
         className="sm:max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto"
         onOpenAutoFocus={() => {
-          opener.current = document.activeElement instanceof HTMLElement && document.activeElement !== document.body
-            ? document.activeElement : null;
+          opener.current = returnFocusTo?.isConnected ? returnFocusTo
+            : document.activeElement instanceof HTMLElement && document.activeElement !== document.body
+              ? document.activeElement : null;
         }}
         onCloseAutoFocus={event => {
           if (!opener.current?.isConnected) return;
