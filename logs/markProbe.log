@@ -1,0 +1,4 @@
+pre: 1815 on the last line, 117 on the next line with no room on the last, 0 off it with room (a fault)
+nowrap: 1815 on the last line, 103 on the next line with no room on the last, 14 off it with room (a fault, last line plus mark minus the column: -0.97 -1.97 -0.64 -1.64 -2.64 -1.31 -2.31 -1.17)
+control: 0 on the last line, 480 on the next line with no room on the last, 1452 off it with room (a fault, last line plus mark minus the column: -18.31 -29.98 -12.75 -24.42 -11.67 -13.88 -25.55 -19.31)
+markProbe: green. With the shipped class a mark leaves its line only when there is no room for it, and the control is caught

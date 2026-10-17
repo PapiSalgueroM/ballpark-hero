@@ -1,0 +1,3 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+markProbe exit=0 2s | markProbe: green. With the shipped class a mark leaves its line only when there is no room for it, and the control is caught
+playCmMatchDay exit=1 182s | playCmMatchDay: RED, 1 failures
