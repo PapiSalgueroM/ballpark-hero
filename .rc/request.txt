@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerNoSack.test.tsx src/lib/clubManagerSlots.test.ts src/test/clubManagerSlots.test.tsx src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+diffbase: git worktree add -q /tmp/b1 60824a23 && BASE_ROOT=/tmp/b1 node scripts/simCmDifficulty.mjs
+c-nojoin: CM_DIFF_CONTROL=nojoin node scripts/simCmDifficulty.mjs
+c-leak: git worktree add -q /tmp/b2 60824a23 && BASE_ROOT=/tmp/b2 CM_DIFF_CONTROL=leak node scripts/simCmDifficulty.mjs
+c-helpdrift: CM_DIFF_CONTROL=helpdrift node scripts/simCmDifficulty.mjs
+c-cheque: CM_DIFF_CONTROL=cheque node scripts/simCmDifficulty.mjs
+nosack: git worktree add -q /tmp/b3 60824a23 && BASE_ROOT=/tmp/b3 node scripts/simCmNoSack.mjs
+meters: node scripts/simClubManagerMeters.mjs
+wild: node scripts/simWilderness.mjs
+tactics: node scripts/simTacticsEngine.mjs
