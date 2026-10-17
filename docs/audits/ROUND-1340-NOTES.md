@@ -38,6 +38,14 @@ The brief is C:/Users/antho/dukb-handoff/2026-10-10/briefs/brief-1340.md. This f
   marked data-cm-mc-side; the venue line, the first leg sentence, the odds and the meetings are unchanged.
   playCmLeagueFixtures reads the card as "<home> vs <away> <venue>". simCmMatchDay section 5 (the Match Centre, with
   oldorder firing there too) and the home and neutral Match Centres in section 7.
+- a5. NEW scripts/playCmMatchDay.mjs: the built site at 320 by 640, 390 by 844 and 1280 by 900 and again at 390
+  with reduced motion, saves A (Liverpool, away league match next), B (the same career, home), C (a final on a
+  neutral ground) and E (an away second leg, pictures only), planted from the real engine on a seeded stream.
+  Controls swap, cut and jump (DOM level, save A at 390).
+- a7 (help and What's New, sent ahead of a6 so the build says what it does): ClubManagerHelp.tsx's match paragraph
+  (line 48) gains one sentence on the order; one What's New entry, true of 1340a alone.
+- Owed to the other lane: src/data/gameContent/clubManagement.ts grepped on this head for dots, shirt, number, vs,
+  Match Centre, home side, scoreboard, on the left or right: no sentence this round makes false. None owed.
 - confidenceLabel (src/lib/clubManager.ts) has no caller in src after a2. It is dead code; the export stays, because
   clubManager.ts is not this round's file.
 
