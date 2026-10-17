@@ -1,0 +1,12 @@
+head-simManagerHalftimeLineups: node scripts/simManagerHalftimeLineups.mjs
+base-simManagerHalftimeLineups: git worktree add -q /tmp/b11 d8aaa4cb && ln -s "$PWD/node_modules" /tmp/b11/node_modules && cd /tmp/b11 && node scripts/simManagerHalftimeLineups.mjs
+head-simManagerLiveLineups: node scripts/simManagerLiveLineups.mjs
+base-simManagerLiveLineups: git worktree add -q /tmp/b12 d8aaa4cb && ln -s "$PWD/node_modules" /tmp/b12/node_modules && cd /tmp/b12 && node scripts/simManagerLiveLineups.mjs
+head-simGmCalendar: node scripts/simGmCalendar.mjs
+base-simGmCalendar: git worktree add -q /tmp/b13 d8aaa4cb && ln -s "$PWD/node_modules" /tmp/b13/node_modules && cd /tmp/b13 && node scripts/simGmCalendar.mjs
+head-simGmDealTableFixture: node scripts/simGmDealTableFixture.mjs
+base-simGmDealTableFixture: git worktree add -q /tmp/b14 d8aaa4cb && ln -s "$PWD/node_modules" /tmp/b14/node_modules && cd /tmp/b14 && node scripts/simGmDealTableFixture.mjs
+head-simGmStaff: node scripts/simGmStaff.mjs
+base-simGmStaff: git worktree add -q /tmp/b15 d8aaa4cb && ln -s "$PWD/node_modules" /tmp/b15/node_modules && cd /tmp/b15 && node scripts/simGmStaff.mjs
+head-simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+base-simManagerAppealIsolation: git worktree add -q /tmp/b16 d8aaa4cb && ln -s "$PWD/node_modules" /tmp/b16/node_modules && cd /tmp/b16 && node scripts/simManagerAppealIsolation.mjs
