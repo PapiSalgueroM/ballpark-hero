@@ -1,0 +1,12 @@
+simWorldUcl: node scripts/simWorldUcl.mjs
+unseeded: node scripts/simCmUnseededWorld.mjs
+continuity: node scripts/simManagerWorldContinuity.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+cmvar: node scripts/simCmVar.mjs
+cmsubs: node scripts/simCmSubs.mjs
+c-noholder: WORLD_UCL_CONTROL=noholder node scripts/simWorldUcl.mjs
+c-ahead: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=ahead node scripts/simWorldUcl.mjs
+c-meinfill: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=meinfill node scripts/simWorldUcl.mjs
+c-eraformat: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=eraformat node scripts/simWorldUcl.mjs
+c-noseen: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=noseen node scripts/simWorldUcl.mjs
+c-live: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=live node scripts/simWorldUcl.mjs

@@ -1,0 +1,12 @@
+continuity exit=1 31s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:509:24
+shootout exit=0 27s | simCmShootoutOrder: all sections passed
+unseeded exit=1 159s | simCmUnseededWorld: 112 FAILURE(S)
+cmvar exit=0 154s | simCmVar normal: actual review outcomes and full prior baseline passed.
+cmsubs exit=0 56s | simCmSubs GREEN: 59 of 59 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press)
+c-ahead exit=1 151s | simWorldUcl: control ahead FIRED (1471 failures, all its own)
+c-noholder exit=1 165s | simWorldUcl: control noholder FIRED (8 failures, all its own)
+c-meinfill exit=1 103s | simWorldUcl: control meinfill FIRED (4 failures, all its own)
+c-eraformat exit=1 107s | simWorldUcl: control eraformat FIRED (71 failures, all its own)
+c-noseen exit=1 146s | simWorldUcl: control noseen FIRED (11 failures, all its own)
+c-live exit=1 144s | simWorldUcl: control live FIRED (1873 failures, all its own)
+simWorldUcl exit=1 1219s | simWorldUcl: RED, 273053 checks, 2 failures
