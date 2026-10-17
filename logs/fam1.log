@@ -1,0 +1,23 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 19 node harnesses
+  PASS  simClubManagerEraMidSeason.mjs   10.0s
+  PASS  simClubManagerEraUcl.mjs       39.3s
+  PASS  simClubManagerFacilities.mjs   12.5s
+  PASS  simClubManagerFinances.mjs     77.6s
+  PASS  simClubManagerMeters.mjs       39.7s
+  PASS  simClubManagerSave.mjs         14.1s
+  PASS  simClubManagerSaveSize.mjs     70.4s
+  PASS  simClubManagerScore.mjs       125.7s
+  PASS  simClubManagerSlots.mjs        80.3s
+  PASS  simClubManagerStaff.mjs        26.6s
+  PASS  simClubManagerStart.mjs         3.7s
+  PASS  simCmApplications.mjs         106.7s
+  PASS  simCmBoardVerdict.mjs         681.4s
+  PASS  simCmCopy.mjs                  44.6s
+  PASS  simCmDataOnDemand.mjs          14.1s
+  PASS  simCmInternationals.mjs        36.7s
+  PASS  simCmLeagueBook.mjs            82.0s
+  PASS  simCmLeagueBookFacts.mjs        0.3s
+  PASS  simCmLeagueFixtures.mjs        14.2s
+
+All 19 harnesses green.
