@@ -1,0 +1,11 @@
+vitest exit=1 12s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerDifficultyPick.test.tsx,title=src/test/clubManagerDifficultyPick.test.tsx > the hook > a ca
+c-nojoin exit=1 31s | simCmDifficulty: 8 FAILURES (sections 3)
+tsc exit=0 86s | 
+c-helpdrift exit=1 1s | simCmDifficulty: 1 FAILURES (sections 7)
+c-cheque exit=1 34s | simCmDifficulty: 8 FAILURES (sections 3)
+c-leak exit=1 167s | simCmDifficulty: 170 FAILURES (sections 2,6)
+diffbase exit=0 228s | simCmDifficulty: all green (sections 1,2,3,6,7)
+wild exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+meters exit=0 32s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+nosack exit=0 145s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
+tactics exit=0 78s | simTacticsEngine: PASS. A man is read in his slot, a second position is earned over counted weeks, the armband and the takers reach the stream, a duty moves the football 

@@ -1,0 +1,203 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerSlots.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 598[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerDifficulty.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 1246[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22mthe market: the same men in the same order, every price marked, every value untouched [33m 527[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22ma release clause is never the cheaper door round the mark, and on Normal it is exactly what it was [33m 318[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerSlots.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 4040[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mtwo managers survive leaving the page, and either one opens [33m 497[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mthe screen asks before it deletes, and every tile says what it holds [33m 321[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22ma change in the old tab writes nothing over the other career and goes back to the managers [33m 338[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mthe old tab live clock writes nothing over the career switched in [33m 503[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mManagers tapped on the old tab hub writes nothing over the other career [33m 399[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22ma new manager from the old tab managers screen parks the other career where it belongs [33m 336[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: a parked era career[2m > [22mopens through the era boot, squads first [33m 376[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerNoSack.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1850[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mstarts with No sacking off and Skip hands nothing on [33m 493[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mthe switch rides on both buttons [33m 693[2mms[22m[39m
+   [33m[2m✓[22m[39m the hook[2m > [22ma career started with No sacking carries it and pings no score [33m 309[2mms[22m[39m
+ [31m❯[39m src/test/clubManagerDifficultyPick.test.tsx [2m([22m[2m5 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 3090[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22moffers three levels with Normal pressed, and Skip on Normal hands nothing on [33m 617[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mLegend and No sacking ride on both buttons [33m 864[2mms[22m[39m
+   [32m✓[39m the Options panel[2m > [22mshows the level read only, with no way to change it[32m 103[2mms[22m[39m
+[31m   [31m×[31m the hook[2m > [22ma career started on Legend carries the key and the level from day one[39m[32m 220[2mms[22m[39m
+[31m     → expected 5088 to be 5083 // Object.is equality[39m
+[31m   [31m×[31m the hook[2m > [22ma career started on Normal carries no key and lists the plain market[39m[33m 1284[2mms[22m[39m
+[31m     → expected [ …(5088) ] to deeply equal [ …(5083) ][39m
+ [32m✓[39m src/hooks/useClubManager.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 2524[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager completion shape[2m > [22ma finished season records exactly one completion [33m 2238[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerDifficultyPick.test.tsx[2m > [22mthe hook[2m > [22ma career started on Legend carries the key and the level from day one
+[31m[1mAssertionError[22m: expected 5088 to be 5083 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 5083[39m
+[31m+ 5088[39m
+
+[36m [2m❯[22m src/test/clubManagerDifficultyPick.test.tsx:[2m91:26[22m[39m
+    [90m 89| [39m    [35mconst[39m list [33m=[39m [34mbuildMarket[39m(c)[33m;[39m
+    [90m 90| [39m    [35mconst[39m shown [33m=[39m r[33m.[39mresult[33m.[39mcurrent[33m.[39mmarket[33m;[39m
+    [90m 91| [39m    [34mexpect[39m(shown[33m.[39mlength)[33m.[39m[34mtoBe[39m(list[33m.[39mlength)[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m 92| [39m    expect(shown.every((mp, i) => mp.name === list[i].name && mp.price…
+    [90m 93| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerDifficultyPick.test.tsx[2m > [22mthe hook[2m > [22ma career started on Normal carries no key and lists the plain market
+[31m[1mAssertionError[22m: expected [ …(5088) ] to deeply equal [ …(5083) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -268,10 +268,24 @@[39m
+[2m      "price": 89.1,[22m
+[2m      "rating": 90,[22m
+[2m      "value": 81,[22m
+[2m    },[22m
+[2m    {[22m
+[31m+     "age": 24,[39m
+[31m+     "club": "Inter Milan",[39m
+[31m+     "generated": undefined,[39m
+[31m+     "joinedThisSeason": true,[39m
+[31m+     "name": "William Saliba",[39m
+[31m+     "position": "CB",[39m
+[31m+     "potential": undefined,[39m
+[31m+     "price": 80.1,[39m
+[31m+     "rating": 90,[39m
+[31m+     "value": 72.8,[39m
+[31m+     "worldRosterKey": "[\"now\",\"Arsenal\",\"William Saliba\",\"CB\",2002,0]",[39m
+[31m+     "worldRosterSince": 0,[39m
+[31m+   },[39m
+[31m+   {[39m
+[2m      "age": 27,[22m
+[2m      "club": "PSG",[22m
+[2m      "generated": undefined,[22m
+[2m      "name": "Achraf Hakimi",[22m
+[2m      "position": "RB",[22m
+[33m@@ -628,10 +642,24 @@[39m
+[2m      "price": 57.8,[22m
+[2m      "rating": 88,[22m
+[2m      "value": 52.5,[22m
+[2m    },[22m
+[2m    {[22m
+[31m+     "age": 27,[39m
+[31m+     "club": "Real Madrid",[39m
+[31m+     "generated": undefined,[39m
+[31m+     "joinedThisSeason": true,[39m
+[31m+     "name": "Martin Ødegaard",[39m
+[31m+     "position": "CAM",[39m
+[31m+     "potential": undefined,[39m
+[31m+     "price": 57.8,[39m
+[31m+     "rating": 88,[39m
+[31m+     "value": 52.5,[39m
+[31m+     "worldRosterKey": "[\"now\",\"Arsenal\",\"Martin Ødegaard\",\"CAM\",1999,0]",[39m
+[31m+     "worldRosterSince": 0,[39m
+[31m+   },[39m
+[31m+   {[39m
+[2m      "age": 26,[22m
+[2m      "club": "Manchester United",[22m
+[2m      "generated": undefined,[22m
+[2m      "name": "Matheus Cunha",[22m
+[2m      "position": "ST",[22m
+[33m@@ -836,10 +864,24 @@[39m
+[2m      "name": "Mohammed Kudus",[22m
+[2m      "position": "RW",[22m
+[2m      "price": 48.7,[22m
+[2m      "rating": 87,[22m
+[2m      "value": 44.3,[22m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "age": 25,[39m
+[31m+     "club": "Juventus",[39m
+[31m+     "generated": undefined,[39m
+[31m+     "joinedThisSeason": true,[39m
+[31m+     "name": "Morgan Gibbs-White",[39m
+[31m+     "position": "CAM",[39m
+[31m+     "potential": undefined,[39m
+[31m+     "price": 53.7,[39m
+[31m+     "rating": 87,[39m
+[31m+     "value": 48.8,[39m
+[31m+     "worldRosterKey": "[\"now\",\"Nottingham Forest\",\"Morgan Gibbs-White\",\"CAM\",2001,0]",[39m
+[31m+     "worldRosterSince": 0,[39m
+[2m    },[22m
+[2m    {[22m
+[2m      "age": 26,[22m
+[2m      "club": "Borussia Dortmund",[22m
+[2m      "generated": undefined,[22m
+[33m@@ -936,10 +978,24 @@[39m
+[2m      "name": "Alphonso Davies",[22m
+[2m      "position": "LB",[22m
+[2m      "price": 40.5,[22m
+[2m      "rating": 86,[22m
+[2m      "value": 36.8,[22m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "age": 23,[39m
+[31m+     "club": "Roma",[39m
+[31m+     "generated": undefined,[39m
+[31m+     "joinedThisSeason": true,[39m
+[31m+     "name": "Amad Diallo",[39m
+[31m+     "position": "RW",[39m
+[31m+     "potential": undefined,[39m
+[31m+     "price": 50.6,[39m
+[31m+     "rating": 86,[39m
+[31m+     "value": 40.5,[39m
+[31m+     "worldRosterKey": "[\"now\",\"Manchester United\",\"Amad Diallo\",\"RW\",2003,0]",[39m
+[31m+     "worldRosterSince": 0,[39m
+[2m    },[22m
+[2m    {[22m
+[2m      "age": 25,[22m
+[2m      "club": "Aston Villa",[22m
+[2m      "generated": undefined,[22m
+[33m@@ -956,10 +1012,24 @@[39m
+[2m      "name": "Andrey Santos",[22m
+[2m      "position": "CM",[22m
+[2m      "price": 46,[22m
+[2m      "rating": 86,[22m
+[2m      "value": 36.8,[22m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "age": 24,[39m
+[31m+     "club": "Chelsea",[39m
+[31m+     "generated": undefined,[39m
+[31m+     "joinedThisSeason": true,[39m
+[31m+     "name": "Angelo Stiller",[39m
+[31m+     "position": "CDM",[39m
+[31m+     "potential": undefined,[39m
+[31m+     "price": 40.2,[39m
+[31m+     "rating": 86,[39m
+[31m+     "value": 36.5,[39m
+[31m+     "worldRosterKey": "[\"now\",\"Stuttgart\",\"Angelo Stiller\",\"CDM\",2002,0]",[39m
+[31m+     "worldRosterSince": 0,[39m
+[2m    },[22m
+[2m    {[22m
+[2m      "age": 18,[22m
+[2m      "club": "Manchester City",[22m
+[2m      "generated": undefined,[22m
+
+[36m [2m❯[22m src/test/clubManagerDifficultyPick.test.tsx:[2m103:37[22m[39m
+    [90m101| [39m    [34mexpect[39m([34mlevelFrom[39m(c))[33m.[39m[34mtoBe[39m([32m'normal'[39m)[33m;[39m
+    [90m102| [39m    expect(c.startOptions === undefined || !('difficulty' in (c.startO…
+    [90m103| [39m    [34mexpect[39m(r[33m.[39mresult[33m.[39mcurrent[33m.[39mmarket)[33m.[39m[34mtoEqual[39m([34mbuildMarket[39m(c))[33m;[39m
+    [90m   | [39m                                    [31m^[39m
+    [90m104| [39m  })[33m;[39m
+    [90m105| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m54 passed[39m[22m[90m (56)[39m
+[2m   Start at [22m 17:58:17
+[2m   Duration [22m 11.80s[2m (transform 3.08s, setup 504ms, collect 10.11s, tests 13.35s, environment 3.14s, prepare 934ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerDifficultyPick.test.tsx,title=src/test/clubManagerDifficultyPick.test.tsx > the hook > a career started on Legend carries the key and the level from day one,line=91,column=26::AssertionError: expected 5088 to be 5083 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 5083%0A+ 5088%0A%0A ❯ src/test/clubManagerDifficultyPick.test.tsx:91:26%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerDifficultyPick.test.tsx,title=src/test/clubManagerDifficultyPick.test.tsx > the hook > a career started on Normal carries no key and lists the plain market,line=103,column=37::AssertionError: expected [ …(5088) ] to deeply equal [ …(5083) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -268,10 +268,24 @@%0A      "price": 89.1,%0A      "rating": 90,%0A      "value": 81,%0A    },%0A    {%0A+     "age": 24,%0A+     "club": "Inter Milan",%0A+     "generated": undefined,%0A+     "joinedThisSeason": true,%0A+     "name": "William Saliba",%0A+     "position": "CB",%0A+     "potential": undefined,%0A+     "price": 80.1,%0A+     "rating": 90,%0A+     "value": 72.8,%0A+     "worldRosterKey": "[\"now\",\"Arsenal\",\"William Saliba\",\"CB\",2002,0]",%0A+     "worldRosterSince": 0,%0A+   },%0A+   {%0A      "age": 27,%0A      "club": "PSG",%0A      "generated": undefined,%0A      "name": "Achraf Hakimi",%0A      "position": "RB",%0A@@ -628,10 +642,24 @@%0A      "price": 57.8,%0A      "rating": 88,%0A      "value": 52.5,%0A    },%0A    {%0A+     "age": 27,%0A+     "club": "Real Madrid",%0A+     "generated": undefined,%0A+     "joinedThisSeason": true,%0A+     "name": "Martin Ødegaard",%0A+     "position": "CAM",%0A+     "potential": undefined,%0A+     "price": 57.8,%0A+     "rating": 88,%0A+     "value": 52.5,%0A+     "worldRosterKey": "[\"now\",\"Arsenal\",\"Martin Ødegaard\",\"CAM\",1999,0]",%0A+     "worldRosterSince": 0,%0A+   },%0A+   {%0A      "age": 26,%0A      "club": "Manchester United",%0A      "generated": undefined,%0A      "name": "Matheus Cunha",%0A      "position": "ST",%0A@@ -836,10 +864,24 @@%0A      "name": "Mohammed Kudus",%0A      "position": "RW",%0A      "price": 48.7,%0A      "rating": 87,%0A      "value": 44.3,%0A+   },%0A+   {%0A+     "age": 25,%0A+     "club": "Juventus",%0A+     "generated": undefined,%0A+     "joinedThisSeason": true,%0A+     "name": "Morgan Gibbs-White",%0A+     "position": "CAM",%0A+     "potential": undefined,%0A+     "price": 53.7,%0A+     "rating": 87,%0A+     "value": 48.8,%0A+     "worldRosterKey": "[\"now\",\"Nottingham Forest\",\"Morgan Gibbs-White\",\"CAM\",2001,0]",%0A+     "worldRosterSince": 0,%0A    },%0A    {%0A      "age": 26,%0A      "club": "Borussia Dortmund",%0A      "generated": undefined,%0A@@ -936,10 +978,24 @@%0A      "name": "Alphonso Davies",%0A      "position": "LB",%0A      "price": 40.5,%0A      "rating": 86,%0A      "value": 36.8,%0A+   },%0A+   {%0A+     "age": 23,%0A+     "club": "Roma",%0A+     "generated": undefined,%0A+     "joinedThisSeason": true,%0A+     "name": "Amad Diallo",%0A+     "position": "RW",%0A+     "potential": undefined,%0A+     "price": 50.6,%0A+     "rating": 86,%0A+     "value": 40.5,%0A+     "worldRosterKey": "[\"now\",\"Manchester United\",\"Amad Diallo\",\"RW\",2003,0]",%0A+     "worldRosterSince": 0,%0A    },%0A    {%0A      "age": 25,%0A      "club": "Aston Villa",%0A      "generated": undefined,%0A@@ -956,10 +1012,24 @@%0A      "name": "Andrey Santos",%0A      "position": "CM",%0A      "price": 46,%0A      "rating": 86,%0A      "value": 36.8,%0A+   },%0A+   {%0A+     "age": 24,%0A+     "club": "Chelsea",%0A+     "generated": undefined,%0A+     "joinedThisSeason": true,%0A+     "name": "Angelo Stiller",%0A+     "position": "CDM",%0A+     "potential": undefined,%0A+     "price": 40.2,%0A+     "rating": 86,%0A+     "value": 36.5,%0A+     "worldRosterKey": "[\"now\",\"Stuttgart\",\"Angelo Stiller\",\"CDM\",2002,0]",%0A+     "worldRosterSince": 0,%0A    },%0A    {%0A      "age": 18,%0A      "club": "Manchester City",%0A      "generated": undefined,%0A%0A ❯ src/test/clubManagerDifficultyPick.test.tsx:103:37%0A%0A

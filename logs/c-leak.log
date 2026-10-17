@@ -1,0 +1,186 @@
+simCmDifficulty: sections 2, 6, control leak
+  table: normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":1.5}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3}
+2) Normal plays as the base tree /tmp/b2: 2 seeds, 2 seasons, coach and noCoach
+  FAIL: Arsenal seed 0 coach: 107600 draws here, 115472 on the base
+  FAIL: Arsenal seed 0 coach: season 1 differs from the base, first at key budget
+  FAIL: Arsenal seed 0 noCoach: 34180 draws here, 98213 on the base
+  FAIL: Arsenal seed 0 noCoach: 1 season ends here, 2 on the base
+  FAIL: Arsenal seed 0 noCoach: season 1 differs from the base, first at key week
+  FAIL: Arsenal seed 1 coach: 100575 draws here, 81137 on the base
+  FAIL: Arsenal seed 1 coach: season 1 differs from the base, first at key budget
+  FAIL: Arsenal seed 1 noCoach: 32868 draws here, 101551 on the base
+  FAIL: Arsenal seed 1 noCoach: 1 season ends here, 2 on the base
+  FAIL: Arsenal seed 1 noCoach: season 1 differs from the base, first at key week
+  FAIL: Brentford seed 0 coach: 29165 draws here, 102033 on the base
+  FAIL: Brentford seed 0 coach: 1 season ends here, 2 on the base
+  FAIL: Brentford seed 0 coach: season 1 differs from the base, first at key week
+  FAIL: Brentford seed 0 noCoach: 95503 draws here, 32863 on the base
+  FAIL: Brentford seed 0 noCoach: 2 season ends here, 1 on the base
+  FAIL: Brentford seed 0 noCoach: season 1 differs from the base, first at key week
+  FAIL: Brentford seed 1 coach: 18369 draws here, 49770 on the base
+  FAIL: Brentford seed 1 coach: season 1 differs from the base, first at key week
+  FAIL: Brentford seed 1 noCoach: 68646 draws here, 84767 on the base
+  FAIL: Brentford seed 1 noCoach: season 1 differs from the base, first at key budget
+  FAIL: Hull City seed 0 coach: 35939 draws here, 22561 on the base
+  FAIL: Hull City seed 0 coach: season 1 differs from the base, first at key week
+  FAIL: Hull City seed 0 noCoach: 19289 draws here, 21707 on the base
+  FAIL: Hull City seed 0 noCoach: season 1 differs from the base, first at key week
+  FAIL: Hull City seed 1 coach: 103289 draws here, 103866 on the base
+  FAIL: Hull City seed 1 coach: season 1 differs from the base, first at key budget
+  FAIL: Hull City seed 1 noCoach: 35096 draws here, 36155 on the base
+  FAIL: Hull City seed 1 noCoach: season 1 differs from the base, first at key week
+  FAIL: Real Madrid seed 0 coach: 116734 draws here, 120640 on the base
+  FAIL: Real Madrid seed 0 coach: season 1 differs from the base, first at key budget
+  FAIL: Real Madrid seed 0 noCoach: 86960 draws here, 100641 on the base
+  FAIL: Real Madrid seed 0 noCoach: season 1 differs from the base, first at key budget
+  FAIL: Real Madrid seed 1 coach: 117942 draws here, 121389 on the base
+  FAIL: Real Madrid seed 1 coach: season 1 differs from the base, first at key budget
+  FAIL: Real Madrid seed 1 noCoach: 99731 draws here, 102871 on the base
+  FAIL: Real Madrid seed 1 noCoach: season 1 differs from the base, first at key budget
+  FAIL: Espanyol seed 0 coach: 100150 draws here, 101223 on the base
+  FAIL: Espanyol seed 0 coach: season 1 differs from the base, first at key budget
+  FAIL: Espanyol seed 0 noCoach: 21535 draws here, 44493 on the base
+  FAIL: Espanyol seed 0 noCoach: season 1 differs from the base, first at key week
+  FAIL: Espanyol seed 1 coach: 32761 draws here, 69184 on the base
+  FAIL: Espanyol seed 1 coach: 1 season ends here, 2 on the base
+  FAIL: Espanyol seed 1 coach: season 1 differs from the base, first at key week
+  FAIL: Espanyol seed 1 noCoach: 25395 draws here, 85398 on the base
+  FAIL: Espanyol seed 1 noCoach: 1 season ends here, 2 on the base
+  FAIL: Espanyol seed 1 noCoach: season 1 differs from the base, first at key week
+  FAIL: Málaga seed 0 coach: 24389 draws here, 33481 on the base
+  FAIL: Málaga seed 0 coach: season 1 differs from the base, first at key week
+  FAIL: Málaga seed 0 noCoach: 29094 draws here, 43058 on the base
+  FAIL: Málaga seed 0 noCoach: season 1 differs from the base, first at key week
+  FAIL: Málaga seed 1 coach: 29121 draws here, 36352 on the base
+  FAIL: Málaga seed 1 coach: season 1 differs from the base, first at key week
+  FAIL: Málaga seed 1 noCoach: 20229 draws here, 27672 on the base
+  FAIL: Málaga seed 1 noCoach: season 1 differs from the base, first at key week
+  FAIL: Inter Milan seed 0 coach: 51755 draws here, 111976 on the base
+  FAIL: Inter Milan seed 0 coach: 1 season ends here, 2 on the base
+  FAIL: Inter Milan seed 0 coach: season 1 differs from the base, first at key week
+  FAIL: Inter Milan seed 0 noCoach: 64459 draws here, 99937 on the base
+  FAIL: Inter Milan seed 0 noCoach: season 1 differs from the base, first at key budget
+  FAIL: Inter Milan seed 1 coach: 36059 draws here, 116765 on the base
+  FAIL: Inter Milan seed 1 coach: 1 season ends here, 2 on the base
+  FAIL: Inter Milan seed 1 coach: season 1 differs from the base, first at key week
+  FAIL: Inter Milan seed 1 noCoach: 31525 draws here, 86436 on the base
+  FAIL: Inter Milan seed 1 noCoach: 1 season ends here, 2 on the base
+  FAIL: Inter Milan seed 1 noCoach: season 1 differs from the base, first at key week
+  FAIL: Torino seed 0 coach: 22618 draws here, 104383 on the base
+  FAIL: Torino seed 0 coach: 1 season ends here, 2 on the base
+  FAIL: Torino seed 0 coach: season 1 differs from the base, first at key week
+  FAIL: Torino seed 0 noCoach: 67058 draws here, 66811 on the base
+  FAIL: Torino seed 0 noCoach: season 1 differs from the base, first at key budget
+  FAIL: Torino seed 1 coach: 94510 draws here, 86686 on the base
+  FAIL: Torino seed 1 coach: season 1 differs from the base, first at key budget
+  FAIL: Torino seed 1 noCoach: 43569 draws here, 58060 on the base
+  FAIL: Torino seed 1 noCoach: 1 season ends here, 2 on the base
+  FAIL: Torino seed 1 noCoach: season 1 differs from the base, first at key week
+  FAIL: Frosinone seed 0 coach: 34972 draws here, 99602 on the base
+  FAIL: Frosinone seed 0 coach: 1 season ends here, 2 on the base
+  FAIL: Frosinone seed 0 coach: season 1 differs from the base, first at key week
+  FAIL: Frosinone seed 0 noCoach: 24165 draws here, 92079 on the base
+  FAIL: Frosinone seed 0 noCoach: 1 season ends here, 2 on the base
+  FAIL: Frosinone seed 0 noCoach: season 1 differs from the base, first at key week
+  FAIL: Frosinone seed 1 coach: 20931 draws here, 30350 on the base
+  FAIL: Frosinone seed 1 coach: season 1 differs from the base, first at key week
+  FAIL: Frosinone seed 1 noCoach: 24039 draws here, 41381 on the base
+  FAIL: Frosinone seed 1 noCoach: season 1 differs from the base, first at key week
+  FAIL: Everton 2005-06 seed 0 coach: 12179 draws here, 45889 on the base
+  FAIL: Everton 2005-06 seed 0 coach: 1 season ends here, 2 on the base
+  FAIL: Everton 2005-06 seed 0 coach: season 1 differs from the base, first at key week
+  FAIL: Everton 2005-06 seed 0 noCoach: 29024 draws here, 41187 on the base
+  FAIL: Everton 2005-06 seed 0 noCoach: season 1 differs from the base, first at key budget
+  FAIL: Everton 2005-06 seed 1 coach: 47060 draws here, 35007 on the base
+  FAIL: Everton 2005-06 seed 1 coach: season 1 differs from the base, first at key budget
+  FAIL: Everton 2005-06 seed 1 noCoach: 33588 draws here, 14583 on the base
+  FAIL: Everton 2005-06 seed 1 noCoach: 2 season ends here, 1 on the base
+  FAIL: Everton 2005-06 seed 1 noCoach: season 1 differs from the base, first at key week
+  FAIL: a created club seed 0 coach: 20646 draws here, 30776 on the base
+  FAIL: a created club seed 0 coach: season 1 differs from the base, first at key week
+  FAIL: a created club seed 0 noCoach: 19346 draws here, 26871 on the base
+  FAIL: a created club seed 0 noCoach: season 1 differs from the base, first at key week
+  FAIL: a created club seed 1 coach: 21531 draws here, 30600 on the base
+  FAIL: a created club seed 1 coach: season 1 differs from the base, first at key week
+  FAIL: a created club seed 1 noCoach: 21488 draws here, 25419 on the base
+  FAIL: a created club seed 1 noCoach: season 1 differs from the base, first at key week
+  FAIL: Brentford, New year takeover seed 0 coach: 45838 draws here, 100089 on the base
+  FAIL: Brentford, New year takeover seed 0 coach: 1 season ends here, 2 on the base
+  FAIL: Brentford, New year takeover seed 0 coach: season 1 differs from the base, first at key week
+  FAIL: Brentford, New year takeover seed 0 noCoach: 96638 draws here, 58531 on the base
+  FAIL: Brentford, New year takeover seed 0 noCoach: season 1 differs from the base, first at key budget
+  FAIL: Brentford, New year takeover seed 1 coach: 50244 draws here, 101402 on the base
+  FAIL: Brentford, New year takeover seed 1 coach: 1 season ends here, 2 on the base
+  FAIL: Brentford, New year takeover seed 1 coach: season 1 differs from the base, first at key budget
+  FAIL: Brentford, New year takeover seed 1 noCoach: 40891 draws here, 99517 on the base
+  FAIL: Brentford, New year takeover seed 1 noCoach: 1 season ends here, 2 on the base
+  FAIL: Brentford, New year takeover seed 1 noCoach: season 1 differs from the base, first at key week
+  FAIL: Brentford, a joinClubNow move seed 0 coach: 116924 draws here, 43889 on the base
+  FAIL: Brentford, a joinClubNow move seed 0 coach: 2 season ends here, 1 on the base
+  FAIL: Brentford, a joinClubNow move seed 0 coach: season 1 differs from the base, first at key week
+  FAIL: Brentford, a joinClubNow move seed 0 noCoach: 82248 draws here, 44473 on the base
+  FAIL: Brentford, a joinClubNow move seed 0 noCoach: 2 season ends here, 1 on the base
+  FAIL: Brentford, a joinClubNow move seed 0 noCoach: season 1 differs from the base, first at key week
+  FAIL: Brentford, a joinClubNow move seed 1 coach: 35110 draws here, 48551 on the base
+  FAIL: Brentford, a joinClubNow move seed 1 coach: season 1 differs from the base, first at key week
+  FAIL: Brentford, a joinClubNow move seed 1 noCoach: 75115 draws here, 47115 on the base
+  FAIL: Brentford, a joinClubNow move seed 1 noCoach: 2 season ends here, 1 on the base
+  FAIL: Brentford, a joinClubNow move seed 1 noCoach: season 1 differs from the base, first at key week
+  FAIL: Hull City, a wilderness job seed 0 coach: 115325 draws here, 119398 on the base
+  FAIL: Hull City, a wilderness job seed 0 coach: season 1 differs from the base, first at key clubName
+  FAIL: Hull City, a wilderness job seed 0 noCoach: 43821 draws here, 108751 on the base
+  FAIL: Hull City, a wilderness job seed 0 noCoach: 1 season ends here, 2 on the base
+  FAIL: Hull City, a wilderness job seed 0 noCoach: season 1 differs from the base, first at key clubName
+  FAIL: Hull City, a wilderness job seed 1 coach: 91346 draws here, 95184 on the base
+  FAIL: Hull City, a wilderness job seed 1 coach: season 1 differs from the base, first at key clubName
+  FAIL: Hull City, a wilderness job seed 1 noCoach: 41608 draws here, 52555 on the base
+  FAIL: Hull City, a wilderness job seed 1 noCoach: season 1 differs from the base, first at key clubName
+  FAIL: 56 Normal careers carry the difficulty key
+  ok: 56 Normal careers compared with the base, 2940190 draws, in 114 s
+  ok: Brentford, a joinClubNow move: reached the new job all 8 times, on both trees
+  ok: Hull City, a wilderness job: reached the new job all 8 times, on both trees
+  ok: setUpCareer on Normal with No sacking off returns its argument
+  FAIL: 2c Arsenal: the base's save reads as hard, No sacking null
+  FAIL: 2c Brentford: the base's save reads as hard, No sacking null
+  FAIL: 2c Hull City: the base's save reads as hard, No sacking null
+  FAIL: 2c Real Madrid: the base's save reads as hard, No sacking null
+  FAIL: 2c Espanyol: the base's save reads as hard, No sacking null
+  FAIL: 2c Málaga: the base's save reads as hard, No sacking null
+  FAIL: 2c Inter Milan: the base's save reads as hard, No sacking null
+  FAIL: 2c Torino: the base's save reads as hard, No sacking null
+  FAIL: 2c Frosinone: the base's save reads as hard, No sacking null
+  FAIL: 2c Everton 2005-06: the base's save reads as hard, No sacking null
+  FAIL: 2c a created club: the base's save reads as hard, No sacking null
+  FAIL: 2c Brentford, New year takeover: the base's save reads as hard, No sacking null
+  FAIL: 2c Brentford, a joinClubNow move: the base's save reads as hard, No sacking null
+  FAIL: 2c Hull City, a wilderness job: the base's save reads as hard, No sacking null
+  ok: 2c: 0 of 14 saves the base wrote open here as they open there, Normal with No sacking off
+  FAIL: 2b Arsenal coach: Hard with Normal's dials took 122787 draws, Normal 25502
+  FAIL: 2b Arsenal noCoach: Hard with Normal's dials took 41530 draws, Normal 8526
+  FAIL: 2b Brentford coach: Hard with Normal's dials took 105736 draws, Normal 74037
+  FAIL: 2b Brentford noCoach: Hard with Normal's dials took 83458 draws, Normal 66581
+  FAIL: 2b Hull City coach: Hard with Normal's dials took 30204 draws, Normal 24185
+  FAIL: 2b Hull City noCoach: Hard with Normal's dials took 44495 draws, Normal 22753
+  FAIL: 2b Real Madrid coach: Hard with Normal's dials took 119878 draws, Normal 120798
+  FAIL: 2b Real Madrid noCoach: Hard with Normal's dials took 101208 draws, Normal 100412
+  FAIL: 2b Espanyol coach: Hard with Normal's dials took 76650 draws, Normal 14999
+  FAIL: 2b Espanyol noCoach: Hard with Normal's dials took 67808 draws, Normal 26938
+  FAIL: 2b Málaga coach: Hard with Normal's dials took 40098 draws, Normal 49929
+  FAIL: 2b Málaga noCoach: Hard with Normal's dials took 91432 draws, Normal 36367
+  FAIL: 2b Inter Milan coach: Hard with Normal's dials took 78821 draws, Normal 18584
+  FAIL: 2b Inter Milan noCoach: Hard with Normal's dials took 97672 draws, Normal 63677
+  FAIL: 2b Torino coach: Hard with Normal's dials took 85644 draws, Normal 18628
+  FAIL: 2b Torino noCoach: Hard with Normal's dials took 74531 draws, Normal 19445
+  FAIL: 2b Frosinone coach: Hard with Normal's dials took 27363 draws, Normal 38563
+  FAIL: 2b Frosinone noCoach: Hard with Normal's dials took 29245 draws, Normal 20329
+  ok: 2b: 0 of 18 Hard careers on Normal's dials play as Normal, the key aside
+6) Manager Hot Seat (2026-10-10, 2026-10-11, 2026-10-27) and Deadline Day (2026-10-10, 2026-10-11, 2026-10-18) play as on the base tree
+  FAIL: Hot Seat 2026-10-10 (Athletic Club): the day differs from the base; its state carries a level
+  FAIL: Hot Seat 2026-10-11 (Young Boys): the day differs from the base; its state carries a level
+  FAIL: Hot Seat 2026-10-27 (Nottingham Forest): the day differs from the base; its state carries a level
+   Deadline Day 2026-10-10 Rangers: identical, no level
+   Deadline Day 2026-10-11 Borussia Dortmund: identical, no level
+   Deadline Day 2026-10-18 Nottingham Forest: identical, no level
+   red per daily: Hot Seat 3 of 3, Deadline Day 0 of 3; deadlineDay.ts calls none of the match, summer, market or setup entry points
+CONTROL leak FIRED: 170 failures
+simCmDifficulty: 170 FAILURES (sections 2,6)
