@@ -1,0 +1,9 @@
+uclFormat-watched exit=0 1s | simUclFormatHistory control: green. UCL_FORMAT_CONTROL=watched was reported by section 3 with "watched competition is g8" (1 finding).
+uclFormat exit=0 1s | simUclFormatHistory: green. The timeline is whole, twice sourced, the generated block is fresh, and the engine plays what it says.
+trustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+uclFormat-legs exit=0 1s | simUclFormatHistory control: green. UCL_FORMAT_CONTROL=legs was reported by section 3 with "the real season ran" (4 findings).
+a11y exit=0 0s | simAccessibility: all green
+varLedger exit=0 0s | simCmVarLedger: all 691 checks passed.
+leagueFixtures exit=0 14s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+noRival exit=0 19s | No rival product names found. 0 findings.
+tsc exit=0 65s | 

@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+uclFormat: node scripts/simUclFormatHistory.mjs
+uclFormat-watched: UCL_FORMAT_CONTROL=watched node scripts/simUclFormatHistory.mjs
+uclFormat-legs: UCL_FORMAT_CONTROL=legs node scripts/simUclFormatHistory.mjs
+trustCopy: node scripts/simTrustCopy.mjs
+a11y: node scripts/simAccessibility.mjs
+noRival: node scripts/simNoRivalNames.mjs
+varLedger: node scripts/simCmVarLedger.mjs
+leagueFixtures: node scripts/simCmLeagueFixtures.mjs

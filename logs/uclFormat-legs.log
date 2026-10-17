@@ -1,0 +1,29 @@
+1) the timeline is contiguous from 1955 with exactly one open period
+   9 periods, 72 seasons each on exactly one row, 1955-56 to 1990-91 through 2024-25 onward
+2) every period rests on at least two publishers, and the provenance is well formed
+   40 sources across 4 publishers, 48 citations, verified 2026-09-10
+3) the generated block equals the engine, every era plays its real season, and the modern save admits it is a stand in
+  FAIL: uclEngineShapes.json is stale for 2026-27 (legs): run node scripts/genUclEngineShapes.mjs
+  FAIL: uclEngineShapes.json is stale for 2026-27 (line): run node scripts/genUclEngineShapes.mjs
+  FAIL: uclEngineShapes.json is stale for 2020-21 (legs): run node scripts/genUclEngineShapes.mjs
+  FAIL: uclEngineShapes.json is stale for 2020-21 (matchesReal): run node scripts/genUclEngineShapes.mjs
+  FAIL: uclEngineShapes.json is stale for 2020-21 (line): run node scripts/genUclEngineShapes.mjs
+  FAIL: uclEngineShapes.json is stale for 2015-16 (legs): run node scripts/genUclEngineShapes.mjs
+  FAIL: uclEngineShapes.json is stale for 2015-16 (matchesReal): run node scripts/genUclEngineShapes.mjs
+  FAIL: uclEngineShapes.json is stale for 2015-16 (line): run node scripts/genUclEngineShapes.mjs
+  FAIL: uclEngineShapes.json is stale for 2010-11 (legs): run node scripts/genUclEngineShapes.mjs
+  FAIL: uclEngineShapes.json is stale for 2010-11 (matchesReal): run node scripts/genUclEngineShapes.mjs
+  FAIL: uclEngineShapes.json is stale for 2010-11 (line): run node scripts/genUclEngineShapes.mjs
+  FAIL: uclEngineShapes.json is stale for 2005-06 (legs): run node scripts/genUclEngineShapes.mjs
+  FAIL: uclEngineShapes.json is stale for 2005-06 (matchesReal): run node scripts/genUclEngineShapes.mjs
+  FAIL: uclEngineShapes.json is stale for 2005-06 (line): run node scripts/genUclEngineShapes.mjs
+  FAIL: 2020-21: engine plays R16 first, 1 leg(s), away goals true; the real season ran "Thirty two clubs, eight groups, a round of 16" (r16 true, legs 2, away goals true)
+  FAIL: 2015-16: engine plays R16 first, 1 leg(s), away goals true; the real season ran "Thirty two clubs, eight groups, a round of 16" (r16 true, legs 2, away goals true)
+  FAIL: 2010-11: engine plays R16 first, 1 leg(s), away goals true; the real season ran "Thirty two clubs, eight groups, a round of 16" (r16 true, legs 2, away goals true)
+  FAIL: 2005-06: engine plays R16 first, 1 leg(s), away goals true; the real season ran "Thirty two clubs, eight groups, a round of 16" (r16 true, legs 2, away goals true)
+   0 of 4 historic eras match their real season, 1 modern save declared a stand in, generated file STALE
+4) snapshot check skipped: control run
+5) production guide rendering and saved summary claims
+   inspected production component at the affected table cell or answer
+
+simUclFormatHistory control: green. UCL_FORMAT_CONTROL=legs was reported by section 3 with "the real season ran" (4 findings).
