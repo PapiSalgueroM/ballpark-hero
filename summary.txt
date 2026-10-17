@@ -1,0 +1,9 @@
+sd8-free exit=2 2s | freetraining control: the free pack has problems (pressure names gk_positioning, a meter the pack never moves), refusing to run
+vitest-deck exit=0 5s |    Duration  4.02s (transform 2.20s, setup 261ms, collect 3.26s, tests 446ms, environment 1.10s, prepare 413ms)
+sd10 exit=0 66s | simSoccerDeck: green. Sections 6, 7, 9, 10 only.
+sd-ctl10 exit=0 9s | eager exit=1 simSoccerDeck: CONTROL=eager FIRED: section 10 failed (2 failures, red sections 10)
+tsc exit=0 101s | 
+pages-h1 exit=0 84s |    Duration  84.25s (transform 9.10s, setup 2.24s, collect 37.98s, tests 158.05s, environment 15.57s, prepare 3.22s)
+kit-b exit=0 220s | simEventDeck: green. Sections 13, 14, 15, 16 only.
+kit-a exit=0 137s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+fences exit=0 67s | rival=0 No rival product names found. 0 findings. | trust=0 simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own. | anchors
