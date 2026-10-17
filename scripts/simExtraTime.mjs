@@ -246,11 +246,17 @@ const ENGINE = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
 const CARD = path.join(ROOT, 'src', 'components', 'club-manager', 'MatchReportCard.tsx');
 const BRACKET = path.join(ROOT, 'src', 'components', 'club-manager', 'UclBracketCard.tsx');
 const DEFLATOR_LINE = /export const ET_DEFLATOR = [0-9.]+;\n/g;
+/* Round 1347 E2: the AI's tie is settled by settleTie (src/lib/worldCompetition.ts), called once from
+   advanceUclBracket with the round's rules. So the AI before Round 670 is that call's rules, edited in the
+   engine where every other anchor of this harness lives: the deciding ninety minutes at scale 1 and no extra
+   time (extraTime: false, settleTie's own switch), exactly what the three old edits of the inline body did
+   (leg two at scale 1 and no extra time; the one legged tie at scale 1 and no extra time). noaifinal turns
+   back only the one legged ties (the final), as its old edit did. */
+const AI_CALL = 'deciderScale: ET_DEFLATOR, etScale: ET_DEFLATOR * ET_MINUTES / 90 },\n';
 const AI_EDITS = [
-  ['      const [a2, h2] = simAiMatch(state, t.away, t.home, ET_DEFLATOR);\n', '      const [a2, h2] = simAiMatch(state, t.away, t.home);\n'],
-  ['      let out = uclTieOutcome(t, uclAwayGoalsApply(state.eraId));\n      if (out.winner === null) {\n', '      let out = uclTieOutcome(t, uclAwayGoalsApply(state.eraId));\n      if (false) {\n'],
-  ['    let [hg, ag] = simAiMatch(state, t.home, t.away, ET_DEFLATOR);\n    if (hg === ag) {\n', '    let [hg, ag] = simAiMatch(state, t.home, t.away);\n    if (false) {\n'],
+  [AI_CALL, 'deciderScale: 1, etScale: ET_DEFLATOR * ET_MINUTES / 90, extraTime: false },\n'],
 ];
+const AI_FINAL_EDIT = [AI_CALL, 'deciderScale: legs === 2 ? ET_DEFLATOR : 1, etScale: ET_DEFLATOR * ET_MINUTES / 90, extraTime: legs === 2 },\n'];
 const NO_ET_EDIT = ['function playsExtraTime(state: CareerState, entry: CalendarEntry): boolean {\n', 'function playsExtraTime(state: CareerState, entry: CalendarEntry): boolean {\n  if (entry) return false;\n'];
 const CONTROLS = {
   noet: { must: [1], also: [7, 8, 9, 10], file: 'engine', edits: [NO_ET_EDIT], note: 'playsExtraTime answers false; section 1 must go red' },
@@ -259,7 +265,7 @@ const CONTROLS = {
     edits: [["      advanced = (out.winner === 'home') === iAmHome;\n      if (etPlayed) decidedBy = 'aet';\n", "      advanced = (out.winner === 'home') === iAmHome;\n"]],
     note: "a second leg settled in extra time is reported as 'regular'; section 4 must go red",
   },
-  noaifinal: { must: [5], also: [], file: 'engine', edits: [AI_EDITS[2]], note: 'only the AI final goes back to the pre 670 way; section 5 must go red' },
+  noaifinal: { must: [5], also: [], file: 'engine', edits: [AI_FINAL_EDIT], note: 'only the AI final goes back to the pre 670 way; section 5 must go red' },
   noname: {
     must: [8], also: [], file: 'engine',
     edits: [['  const mineAt = (m: number): CMPlayer[] => xi.filter(p => (exits.get(p.id) ?? Infinity) > m);\n', '  const mineAt = (m: number): CMPlayer[] => xi.filter(p => (exits.get(p.id) ?? 99) > m);\n']],

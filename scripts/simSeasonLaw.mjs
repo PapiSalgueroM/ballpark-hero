@@ -78,7 +78,10 @@ const simScore = fnBody(cmSrc, 'simScore');
 const poissonCm = fnBody(cmSrc, 'poisson');
 const aiMatch = fnBody(cmSrc, 'simAiMatch');
 check(!!simScore && /clamp\(1\.25 \+ \(sA - sB\) \* 0\.055 \+ boostA, 0\.12, 4\.2\)/.test(simScore), 'clubManager simScore scores with clamp(1.25 + edge * 0.055 + boost, 0.12, 4.2)');
-check(!!poissonCm && /Math\.min\(k - 1, 7\)/.test(poissonCm) && /p \*= Math\.random\(\)/.test(poissonCm), 'clubManager poisson is the Knuth loop capped at 7');
+/* Round 1347 E2: poisson reads `p *= rand()` from an optional `rand = Math.random`, so the body is evaluated below
+   with that parameter, whose default is the counted generator handed in as Math; a body from before E2 that reads
+   Math.random directly still evaluates the same way. */
+check(!!poissonCm && /Math\.min\(k - 1, 7\)/.test(poissonCm) && /p \*= (?:Math\.random|rand)\(\)/.test(poissonCm), 'clubManager poisson is the Knuth loop capped at 7');
 check(!!aiMatch && /0\.2, -0\.08/.test(aiMatch), 'clubManager simAiMatch gives home 0.2 and away -0.08');
 const lawNums = {};
 for (const k of ['base', 'perPoint', 'min', 'max', 'cap', 'home', 'away']) {
@@ -102,7 +105,7 @@ for (let i = 0; i < N; i += 1) {
   const g1 = counted(i * 2654435761);
   const g2 = counted(i * 2654435761);
   const fakeMath = Object.assign(Object.create(Math), { random: g1 });
-  const cm = new Function('Math', `return function poisson(lambda) ${poissonCm}`)(fakeMath)(lambda);
+  const cm = new Function('Math', `return function poisson(lambda, rand = Math.random) ${poissonCm}`)(fakeMath)(lambda);
   const mine = poissonDraw(lambda, g2);
   if (cm === mine) same += 1;
   if (g1.count() === g2.count()) sameCalls += 1;

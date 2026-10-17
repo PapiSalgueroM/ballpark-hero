@@ -373,19 +373,20 @@ describe('evaluateWorldComp', () => {
     expect(seen.size).toBe(12);
     expect([...seen.values()].every(n => n === 1)).toBe(true);
   });
-  /* RECORDED DEBT until E2 (the read review's M3): the module's groupFixtures is a copy of the engine's, which is
-     not exported, so the two matchday tables are held to the same code text here. E2 deletes the engine's copy
-     and this check with it. */
-  it('the module groupFixtures plays the engine matchday table, line for line, until E2 deletes the copy', () => {
-    const table = (file: string): string => {
-      const src = readFileSync(path.join(process.cwd(), file), 'utf8');
-      const at = src.indexOf('function groupFixtures(');
-      const from = src.indexOf('const rounds', at);
-      const to = src.indexOf('];', from);
-      expect(at >= 0 && from > at && to > from, `${file}: no groupFixtures matchday table`).toBe(true);
-      return src.slice(from, to).replace(/\s+/g, ' ');
-    };
-    expect(table('src/lib/worldCompetition.ts')).toBe(table('src/lib/clubManager.ts'));
+  /* Round 1347 E2 (the read review's M3 closed): the engine's own copies are gone. clubManager.ts imports
+     groupFixtures and settleTie from this module, declares neither, and advanceUclBracket settles its AI tie with
+     one settleTie call. Read off the code with its comments stripped, so the prose saying so cannot pass it. */
+  it('the participant engine plays groupFixtures and settleTie from this module, one writing each', () => {
+    const raw = readFileSync(path.join(process.cwd(), 'src/lib/clubManager.ts'), 'utf8').replace(/\r\n/g, '\n');
+    const code = raw.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+    expect(code).toMatch(/import \{[^}]*\bgroupFixtures\b[^}]*\bsettleTie\b[^}]*\} from '@\/lib\/worldCompetition';/);
+    expect(code.includes('function groupFixtures(')).toBe(false);
+    expect(code.includes('function settleTie(')).toBe(false);
+    const at = code.indexOf('function advanceUclBracket(');
+    const body = code.slice(at, code.indexOf('\n}\n', at));
+    expect(at).toBeGreaterThan(0);
+    expect(body.split('settleTie(').length - 1).toBe(1);
+    expect(body.includes('simAiMatch(state, t.')).toBe(false);
   });
 });
 

@@ -144,6 +144,11 @@ import type { UclGroupRule } from '@/lib/clubManagerUclGroups';
 /* Round 670 review: how a Champions League tie is read, shared with Soccer
    Career. The module imports nothing. */
 import { uclTieOutcome } from '@/lib/uclTieRule';
+/* Round 1347 E2: one competition engine. The AI's knockout tie is settled by
+   settleTie and a group's matchday by groupFixtures, the same two functions
+   the watched Champions League plays. The module imports nothing but types
+   from here, so there is no cycle. */
+import { groupFixtures, settleTie } from '@/lib/worldCompetition';
 /* Round 781: the match clock with the board in it. The module imports nothing. */
 import { clockOrder, playedBy } from '@/lib/clubManagerClock';
 
@@ -12498,56 +12503,19 @@ function advanceUclBracket(state: CareerState, round: UclKoRound): void {
     if (t.round !== round || t.winner) continue;
     if (t.mine) continue;                     // my tie is settled by my match
     const legs = uclLegsFor(state.eraId, t.round);
-    if (legs === 2) {
-      /* Round 507: two matches, the second at the other ground, and the tie
-         read by the competition's own rule for this season. simAiMatch returns
-         the goals in the order it was handed the clubs, so leg two comes back
-         reversed and is turned back into this tie's orientation here rather
-         than at the four places that read it. */
-      const [h1, a1] = simAiMatch(state, t.home, t.away);
-      /* Round 670: leg two settles the tie, so it can go to extra time and
-         draws at the deflator the manager's own deciders draw at. */
-      const [a2, h2] = simAiMatch(state, t.away, t.home, ET_DEFLATOR);
-      t.legs = 2;
-      t.leg1 = { homeGoals: h1, awayGoals: a1 };
-      t.leg2 = { homeGoals: h2, awayGoals: a2 };
-      let out = uclTieOutcome(t, uclAwayGoalsApply(state.eraId));
-      if (out.winner === null) {
-        /* Round 670: level after ninety, so thirty more minutes at the same
-           ground, added to leg two and read again by the era's rule. */
-        const [ea, eh] = simAiMatch(state, t.away, t.home, ET_DEFLATOR * ET_MINUTES / 90);
-        t.leg2 = { homeGoals: h2 + eh, awayGoals: a2 + ea };
-        t.aet = true;
-        out = uclTieOutcome(t, uclAwayGoalsApply(state.eraId));
-      }
-      t.homeGoals = out.homeAgg;
-      t.awayGoals = out.awayAgg;
-      t.byAwayGoals = out.byAwayGoals || undefined;
-      if (out.winner === null) {
-        t.pens = true;
-        t.winner = Math.random() < 0.5 ? t.home : t.away;
-      } else {
-        t.winner = out.winner === 'home' ? t.home : t.away;
-      }
-      continue;
-    }
-    let [hg, ag] = simAiMatch(state, t.home, t.away, ET_DEFLATOR);
-    if (hg === ag) {
-      /* Round 670: level after ninety, so extra time first. */
-      const [eh, ea] = simAiMatch(state, t.home, t.away, ET_DEFLATOR * ET_MINUTES / 90);
-      hg += eh;
-      ag += ea;
-      t.aet = true;
-    }
-    t.homeGoals = hg;
-    t.awayGoals = ag;
-    if (hg === ag) {
-      // Knockout football always produces a winner, and level after extra time means penalties.
-      t.pens = true;
-      t.winner = Math.random() < 0.5 ? t.home : t.away;
-    } else {
-      t.winner = hg > ag ? t.home : t.away;
-    }
+    /* Round 1347 E2: the tie is settled by settleTie (src/lib/worldCompetition.ts),
+       the one writing the watched Champions League settles its ties with too.
+       Round 507: two legs, the second at the other ground, read by the
+       competition's own rule for this season (simAiMatch hands the goals back
+       in the order it was handed the clubs, and settleTie turns leg two back
+       into the tie's orientation). Round 670: the deciding ninety minutes draw
+       at ET_DEFLATOR, a level decider gets thirty more minutes at that times
+       30/90 (added to leg two in a two legged tie), then penalties on a coin.
+       The draws come in today's order (leg one, leg two, extra time, the coin)
+       and the fields are written in today's order, so a saved bracket is the
+       same bytes it always was (scripts/recordWorldTieGolden1347.mjs --check). */
+    settleTie(t, { legs, awayGoals: uclAwayGoalsApply(state.eraId), deciderScale: ET_DEFLATOR, etScale: ET_DEFLATOR * ET_MINUTES / 90 },
+      (home, away, scale) => simAiMatch(state, home, away, scale), () => Math.random());
   }
   const next: UclKoRound | null = round === 'R16' ? 'QF' : round === 'QF' ? 'SF' : round === 'SF' ? 'F' : null;
   if (!next) return;
@@ -12699,8 +12667,22 @@ function initUclGroup(qualified: boolean, myClub: string, eraId?: string, field?
  * function's job is only to read the save's final tables in world order.
  */
 export function uclQualifiersFrom(career: CareerState): string[] {
-  if (!!career.eraId && isHistoricEra(career.eraId)) return [];
-  if (!career.world || !Array.isArray(career.table) || !career.table.length) return [];
+  const tables = uclFinalTables(career);
+  if (!tables) return [];
+  return uclFieldFromTables(tables, career.uclBracket?.find(t => t.round === 'F')?.winner);
+}
+
+/**
+ * Round 1347 E2: the save's final tables of the season just played, the
+ * European leagues in world order, each in its own finishing order, or null
+ * when there is no finished season to read (a historic era, a save with no
+ * world or table, a season that did not finish). Lifted out of
+ * uclQualifiersFrom unchanged so the watched Champions League reads the very
+ * same tables (Round 1502), never a second reading of them.
+ */
+export function uclFinalTables(career: CareerState): { league: LeagueDef; clubs: string[] }[] | null {
+  if (!!career.eraId && isHistoricEra(career.eraId)) return null;
+  if (!career.world || !Array.isArray(career.table) || !career.table.length) return null;
   /* Only a season that actually FINISHED has a table worth reading. syncWorld
      drags the rest of the world to the same fraction of its season that I am
      through mine, so a half played save carries half played tables everywhere,
@@ -12709,16 +12691,15 @@ export function uclQualifiersFrom(career: CareerState): string[] {
      acceptWildernessJob also rolls a season over, and a manager sacked in
      November reaches it with his calendar unfinished. That case falls back to
      the pool, which is the honest answer when there is no final table. */
-  if (!Array.isArray(career.calendar) || career.week < career.calendar.length) return [];
+  if (!Array.isArray(career.calendar) || career.week < career.calendar.length) return null;
   const myLeague = careerLeagueOf(career);
   /* Each European league's own table with its own tiebreaks, in world order. */
-  const tables = worldLeagueDefs(career).filter(l => l.euro).map(league => {
+  return worldLeagueDefs(career).filter(l => l.euro).map(league => {
     const rows = league.id === myLeague.id
       ? sortedLeagueTable(career)
       : (career.world![league.id] ? sortedWorldTable(career, league.id, career.world![league.id].table) : null);
     return { league, clubs: (rows ?? []).map(r => r.club) };
   });
-  return uclFieldFromTables(tables, career.uclBracket?.find(t => t.round === 'F')?.winner);
 }
 
 /**
@@ -12728,15 +12709,25 @@ export function uclQualifiersFrom(career: CareerState): string[] {
  *
  * `tables` are the European leagues in world order, each with its clubs in
  * finishing order (champion first). A league with no clubs sends nobody.
+ *
+ * Round 1347 E2: `size` is the field's size (32, the participant's eight
+ * groups, unless the watched league phase asks for its 36) and `exclude` a
+ * club kept out of every route, its league place, the holders' route and the
+ * fill, with the fill topping the field back up: the manager's own club is
+ * never an entrant of the Champions League he watches (Round 1502). Every
+ * call that passes neither is the call it always was.
  */
 export function uclFieldFromTables(
   tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[],
   holder?: string | null,
+  size: number = UCL_FIELD_SIZE,
+  exclude?: string,
 ): string[] {
   /* The league places, then the holders (uclDirectQualifiersFromTables). */
-  const field = uclDirectQualifiersFromTables(tables, holder);
+  const field = uclDirectQualifiersFromTables(tables, holder, exclude);
   if (!field.length) return [];
   const seen = new Set<string>(field);
+  if (exclude) seen.add(exclude);
   const take = (club: string) => {
     if (!club || seen.has(club)) return;
     seen.add(club);
@@ -12750,14 +12741,14 @@ export function uclFieldFromTables(
   const byDepth = [...ranked].sort((a, b) =>
     (uclPlacesIn(b.league) - uclPlacesIn(a.league))
     || a.league.id.localeCompare(b.league.id));
-  for (let extra = 0; field.length < UCL_FIELD_SIZE && extra < 8; extra++) {
+  for (let extra = 0; field.length < size && extra < 8; extra++) {
     for (const t of byDepth) {
-      if (field.length >= UCL_FIELD_SIZE) break;
+      if (field.length >= size) break;
       const club = t.clubs[uclPlacesIn(t.league) + extra];
       if (club) take(club);
     }
   }
-  return field.slice(0, UCL_FIELD_SIZE);
+  return field.slice(0, size);
 }
 
 /**
@@ -12775,8 +12766,11 @@ export function uclFieldFromTables(
 export function uclDirectQualifiersFromTables(
   tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[],
   holder?: string | null,
+  exclude?: string,
 ): string[] {
-  const seen = new Set<string>();
+  /* Round 1347 E2: `exclude` (uclFieldFromTables says why) is never taken,
+     by its league place or as the holders. */
+  const seen = new Set<string>(exclude ? [exclude] : []);
   const field: string[] = [];
   const take = (club: string) => {
     if (!club || seen.has(club)) return;
@@ -12818,11 +12812,12 @@ export function uclDirectQualifiersFromTables(
  * CM_FINAL_TABLES_PARTIAL sends nobody from here, and its own clubs keep the
  * old tier rule in startCareer.
  */
-export function seasonOneUclField(eraId: string): string[] | null {
+export function seasonOneUclField(eraId: string, size: number = UCL_FIELD_SIZE, exclude?: string): string[] | null {
   const era = eraById(eraId);
   if (isHistoricEra(era.id) || era.startYear !== CM_FINAL_TABLES_2025_26.startYear + 1) return null;
   const tables = seasonOneTables();
-  const field = uclFieldFromTables(tables, CM_FINAL_TABLES_2025_26.holders);
+  /* Round 1347 E2: `size` and `exclude` as uclFieldFromTables reads them. */
+  const field = uclFieldFromTables(tables, CM_FINAL_TABLES_2025_26.holders, size, exclude);
   return field.length ? field : null;
 }
 
@@ -12887,21 +12882,10 @@ export function initUclWorld(state: CareerState): UclAiGroup[] | undefined {
   return groups;
 }
 
-/** The two fixtures of one matchday in a four club double round robin.
- *  Every club plays every matchday, and every pairing happens exactly twice
- *  with the venue swapped. */
-function groupFixtures(clubs: string[], md: number): [string, string][] {
-  const [a, b, c, d] = clubs;
-  const rounds: [string, string][][] = [
-    [[a, b], [c, d]],
-    [[c, a], [b, d]],
-    [[a, d], [b, c]],
-    [[b, a], [d, c]],
-    [[a, c], [d, b]],
-    [[d, a], [c, b]],
-  ];
-  return rounds[clamp(md, 0, 5)];
-}
+/* Round 1347 E2: groupFixtures (the two fixtures of one matchday in a four
+   club double round robin) lives in src/lib/worldCompetition.ts and is
+   imported above, so the participant's groups and the watched ones play one
+   schedule. */
 
 /**
  * Bring every AI group up to my own group's matchday. Lockstep on a normal
@@ -13741,24 +13725,29 @@ const MENT_MOD: Record<Mentality, { atk: number; def: number }> = {
   attacking: { atk: 0.42, def: 0.34 },
 };
 
-function poisson(lambda: number): number {
+/* Round 1347 E2: `rand` is the stream the draw reads. Every existing call
+   passes nothing and reads Math.random at call time (a default is evaluated
+   then, so withSeed's swap in the dailies still holds); the watched
+   Champions League passes a keyed stream per fixture so it never touches
+   the game's own. */
+function poisson(lambda: number, rand: () => number = Math.random): number {
   const L = Math.exp(-lambda);
   let k = 0;
   let p = 1;
   do {
     k += 1;
-    p *= Math.random();
+    p *= rand();
   } while (p > L);
   return Math.min(k - 1, 7);
 }
 
 /** Score for A vs B given strengths + extra xG boosts for each side. */
-function simScore(sA: number, sB: number, boostA: number, boostB: number, scale = 1): [number, number] {
+function simScore(sA: number, sB: number, boostA: number, boostB: number, scale = 1, rand: () => number = Math.random): [number, number] {
   const lA = clamp(1.25 + (sA - sB) * 0.055 + boostA, 0.12, 4.2);
   const lB = clamp(1.25 + (sB - sA) * 0.055 + boostB, 0.12, 4.2);
   /* Round 670: `scale` is 1 for every ninety minutes that cannot go to extra
      time, ET_DEFLATOR for a decider, and that times 30/90 for its extra time. */
-  return [poisson(lA * scale), poisson(lB * scale)];
+  return [poisson(lA * scale, rand), poisson(lB * scale, rand)];
 }
 
 /**

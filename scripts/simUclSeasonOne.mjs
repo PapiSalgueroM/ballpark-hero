@@ -138,8 +138,10 @@ const CONTROLS = {
   holders: {
     red: ['4'],
     what: 'season one hands the rule no holders',
-    re: /uclFieldFromTables\((\w+), CM_FINAL_TABLES_2025_26\.holders\)/g,
-    to: (_m, tables) => `uclFieldFromTables(${tables}, null)`,
+    /* Round 1347 E2: seasonOneUclField passes its optional size and exclude on after the holders, so the
+       call may close or carry on after them; the control replaces the holders alone either way. */
+    re: /uclFieldFromTables\((\w+), CM_FINAL_TABLES_2025_26\.holders([,)])/g,
+    to: (_m, tables, after) => `uclFieldFromTables(${tables}, null${after}`,
   },
   datafile: {
     red: ['2', '3', '5'],
