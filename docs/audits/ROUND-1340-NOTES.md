@@ -171,3 +171,11 @@ Each fix is its own commit, pushed; the full account is results-g/fix-1340.md.
 - Read finding 15: simCmMatchDay's header says when its pinned base must move.
 - Not fixed, owed or the lead's: read 9 (the Dutch prefix's case, pinned by the brief), 10 (two compound
   surnames), 14 (the Tactics tab and the live sub sheet still on the last word), 16 (as the brief owes).
+- The fix round's proof on d094fa1c (the fixes plus the merge of origin/main 1ec77177, which brings only the
+  board): r1340-fxP1 tsc 0, the Club Manager unit set 0 (1356 tests), simCmMatchDay 0 with its eight controls
+  fired and md-bogus 2, simMatchScreen and its three controls 0, the match screen sims, the dailies,
+  simHarnessAnchors, simNoRivalNames (0 findings), simStorageWrites 0, Round 1331's lines byte for byte, the engine
+  name only diff cmMatchDisplay.ts and its test; r1340-fxP2 playCmMatchDay 0 (save D two lines) with swap, cut,
+  jump and fullname fired, playCmHubLanding 0; r1340-fxP3 the weight 607.7K (+0.5K, as before), the seeded save
+  compare 0, and the 144 B of playCmTablesFit's case E traced to confidenceLabel's 135 B body plus one export
+  entry.
