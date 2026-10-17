@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+playCmMatchDay: node scripts/playCmMatchDay.mjs
+pmd-fullname: PLAY_MATCHDAY_CONTROL=fullname node scripts/playCmMatchDay.mjs
+playCmHubLanding: node scripts/playCmHubLanding.mjs
