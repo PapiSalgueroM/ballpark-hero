@@ -1,0 +1,5 @@
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+md-barorder: MATCHDAY_CONTROL=barorder node scripts/simCmMatchDay.mjs
+md-greenfirst: MATCHDAY_CONTROL=greenfirst node scripts/simCmMatchDay.mjs
+md-oldorder: MATCHDAY_CONTROL=oldorder node scripts/simCmMatchDay.mjs
+md-homeflip: MATCHDAY_CONTROL=homeflip node scripts/simCmMatchDay.mjs
