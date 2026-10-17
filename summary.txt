@@ -1,0 +1,2 @@
+headsha exit=0 0s | 5a8acc156 Round BII: merge PR302 (codex/career-pending-money-gates at 63573c16), offered Life choices stay open after you spend and reload
+wf287 exit=1 302s | wfrun manager-handover-desk.yml: 9 steps ran, 4 failed: Bind incoming application, frozen method and full source archive | Five exact public handover arms and complete st

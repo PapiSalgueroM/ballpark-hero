@@ -1,0 +1,3 @@
+#!serial
+headsha: git log --oneline -3
+wf287: node .rc/x/wfrun.mjs .github/workflows/manager-handover-desk.yml --set CM_HANDOVER_BASE=5a8acc1562351cb9cb4bddc5afbdc4debfc7b001
