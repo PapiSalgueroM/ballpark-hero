@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk.mjs
+playCmDifficulty: node scripts/playCmDifficulty.mjs
