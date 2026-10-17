@@ -1,0 +1,6 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 13s |    Duration  11.90s (transform 4.74s, setup 359ms, collect 10.34s, tests 12.94s, environment 2.54s, prepare 675ms)
+weights exit=0 70s |   /nhl-my-career: first load fetches the desk's words: no
+simUsDirtyMoney exit=0 92s | simUsDirtyMoney: all sections green
+tsc exit=0 100s | 
+sweepWeight exit=1 27s | sweepWeight: 1 failure
