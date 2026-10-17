@@ -1,0 +1,19 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+wu-main: WORLD_UCL_ONLY=1,3,4,7 node scripts/simWorldUcl.mjs
+wu-056: WORLD_UCL_ONLY=0,5,6 node scripts/simWorldUcl.mjs
+c-mdearly: WORLD_UCL_CONTROL=mdearly node scripts/simWorldUcl.mjs
+c-markearly: WORLD_UCL_CONTROL=markearly node scripts/simWorldUcl.mjs
+c-carryentrant: WORLD_UCL_CONTROL=carryentrant node scripts/simWorldUcl.mjs
+c-nofall: WORLD_UCL_CONTROL=nofall node scripts/simWorldUcl.mjs
+c-swaphome: WORLD_UCL_CONTROL=swaphome node scripts/simWorldUcl.mjs
+c-edgeswap: WORLD_UCL_CONTROL=edgeswap node scripts/simWorldUcl.mjs
+c-titles: WORLD_UCL_CONTROL=titles node scripts/simWorldUcl.mjs
+c-standweak: WORLD_UCL_CONTROL=standweak node scripts/simWorldUcl.mjs
+c-noholdertop: WORLD_UCL_CONTROL=noholdertop node scripts/simWorldUcl.mjs
+c-memokey: WORLD_UCL_CONTROL=memokey node scripts/simWorldUcl.mjs
+vitest: node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000
+dailydeals: node scripts/simDailyDeals.mjs
+dd-world: DAILY_DEALS_CONTROL=world node scripts/simDailyDeals.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
