@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+playTwoTabs: ENGINES=chromium node scripts/playTwoTabs.mjs
+playHomeFold: ENGINES=chromium node scripts/playHomeFold.mjs
