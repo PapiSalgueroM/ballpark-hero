@@ -673,6 +673,40 @@ async function leagueSizes() {
   console.log(`  3 league sizes: ${seen.join(', ')}`);
 }
 
+/** Section 3, the move probe (the critic's correction 11): a watcher's season one stopped just after each night it
+ *  has passed, and a move from there to the bottom club of every other league of its world. The nights done must
+ *  never fall across the move; how often the new club's calendar sat behind the old one is counted and printed
+ *  (the case `seen` exists for, and the one the noseen control needs). */
+async function joinProbe() {
+  const E = await engineOf(ROOT, 'probe', { edits: careerEdits() }, cannot);
+  if (careerEdits().length) changed = true;
+  let joins = 0, behind = 0;
+  for (const [club, era] of [['Chelsea', 'now'], ['Everton', 'now']]) {
+    const M = await E.fresh();
+    let s = tape(0x1502, () => M.cm.startCareer(club, era)).value;
+    const leagues = M.cm.REAL_LEAGUES.filter(l => !l.clubs.includes(club));
+    const sizes = new Map();
+    for (const lg of leagues) if (!sizes.has(lg.clubs.length)) sizes.set(lg.clubs.length, lg);
+    const places = M.cm.worldUclNights(s) ?? [];
+    for (let n = 0; n < places.length && n < 10; n += 1) {
+      while (s.week <= places[n].at && s.week < s.calendar.length) s = tape(0x2000 + s.week, () => M.cm.playNextEntry(s, { skipHalftime: true, noCoach: true })).value.state;
+      if (s.week >= s.calendar.length) break;
+      const before = M.cm.worldUclNightsDone(s);
+      for (const lg of sizes.values()) {
+        const joined = tape(0x3000 + n, () => joinTo(M, s, lg.clubs[lg.clubs.length - 1], lg.id)).value;
+        if (!joined?.worldComps?.ucl) continue;
+        joins += 1;
+        const after = M.cm.worldUclNightsDone(joined);
+        const raw = (M.cm.worldUclNights(joined) ?? []).filter(p => joined.week > p.at).length;
+        if (raw < before) behind += 1;
+        ok(after >= before, `3 falls: the probe, ${club} after ${places[n].night.id} to ${lg.id}: nights done fell from ${before} to ${after}`);
+      }
+    }
+  }
+  console.log(`  3 move probe: ${joins} moves that carried the slice, ${behind} of them onto a calendar behind the old one`);
+  ok(joins > 0, '3 falls: the move probe carried no slice, so it checked nothing');
+}
+
 /** Section 1, the device order (the critic's correction 1): every watched group season evaluated with every match
  *  level, so only the names order the tables, plainly and with the device's order turned round: the same. */
 async function localeCheck(slices) {
@@ -715,7 +749,7 @@ try {
   if ([1, 3, 4, 7].some(runs)) {
     const measured = await watcherPass();
     if (runs(1)) await localeCheck(measured.g8);
-    if (runs(3)) await leagueSizes();
+    if (runs(3)) { await leagueSizes(); await joinProbe(); }
   }
   if (runs(2)) await selfRelative();
   if (runs(6)) await dailies();
