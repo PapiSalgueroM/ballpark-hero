@@ -1,0 +1,28 @@
+# Release BI, Round 1335 (the board judges the season you had, and the job market), merged as ea937568 (first parent
+# 420902cd). Send with x/minus1335.sh, x/calImport1344.mjs, x/mkbase.sh and x/ctlPatch2.mjs (Round BIH: since Round 1344
+# put SAVE_CAPS beside 1335's calendar import, x/minus1335.sh also moves that one import onto its own line in the ref
+# it hands treeWithoutMerge, through x/calImport1344.mjs; see the helper's header). Every simCmBoardVerdict line binds its base:
+# BASE_SHA is this tree WITHOUT Round 1335 (x/minus1335.sh: treeWithoutMerge ea937568 420902cd, with the one help
+# file conflict handled as its header explains; it fails closed otherwise), which x/mkbase.sh checks out as
+# CM_BOARD_BASE (mkbase.sh's own default, 1027b08c, is the round's original base). Controls (take-nopin,
+# take-keepfailed, dailies-hscard, dailies-hotstart, title-played, title-weights) must exit 1 with FIRED; the walk's
+# controls (walk-noconfirm, walk-nofate, walk-rise) must exit 1 with FIRED. The digest and the Round 1081 pin are
+# retaken once on the release's final tree (part two); their plain lines live in rcg-C.
+# Round BII: in rBIi-m14c (three wide) small and take-nopin exited 2 "treeWithoutMerge: conflicts in clubManagerCalendar.ts" while other lines formed the same base: concurrency in the shared checkout. A line that exits 2 that way is rerun alone with #!serial (rBIi-c35 on c2f8d746: small 0, takeover 0, take-nopin FIRED).
+#!build
+#!playwright
+small: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b1) node scripts/simCmBoardVerdict.mjs --part=pure,fresh,saves,dailies
+takeover: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b2) node scripts/simCmBoardVerdict.mjs --part=takeover
+take-nopin: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b3) SIM_CM_BOARD_CONTROL=nopin node scripts/simCmBoardVerdict.mjs --part=takeover
+take-keepfailed: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b4) SIM_CM_BOARD_CONTROL=keepfailed node scripts/simCmBoardVerdict.mjs --part=takeover
+dailies-hscard: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b5) SIM_CM_BOARD_CONTROL=hscard node scripts/simCmBoardVerdict.mjs --part=dailies
+dailies-hotstart: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b6) SIM_CM_BOARD_CONTROL=hotstart node scripts/simCmBoardVerdict.mjs --part=dailies
+fleet0: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b7) SHARD=0/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream,offers
+fleet1: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b8) SHARD=1/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream,offers
+fleet2: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b9) SHARD=2/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream,offers
+title0: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c1) SHARD=0/2 node scripts/simCmBoardVerdict.mjs --part=title,kitty
+title1: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c2) SHARD=1/2 node scripts/simCmBoardVerdict.mjs --part=title,kitty
+title-played: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c3) SHARD=0/2 SIM_CM_BOARD_CONTROL=played node scripts/simCmBoardVerdict.mjs --part=title
+title-weights: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c4) SHARD=0/2 SIM_CM_BOARD_CONTROL=weights node scripts/simCmBoardVerdict.mjs --part=title
+legacy0: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c5) SHARD=0/2 node scripts/simCmBoardVerdict.mjs --part=legacy
+legacy1: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c6) SHARD=1/2 node scripts/simCmBoardVerdict.mjs --part=legacy
