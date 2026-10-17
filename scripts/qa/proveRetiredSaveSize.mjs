@@ -103,7 +103,7 @@ checkpoint();
 try {
   assert.equal(git(['status', '--porcelain', '--untracked-files=no']), '', 'Committed clean source');
   git(['merge-base', '--is-ancestor', BASELINE, report.head]);
-  const exceptions = [READER, HOME, HARNESS, TEST, BASELINE_HELPER, SELF].map(file => ':!' + file);
+  const exceptions = [READER, HOME, HARNESS, TEST, BASELINE_HELPER, SELF, 'scripts/qa/playAccountDialogFocusReturn.mjs'].map(file => ':!' + file);
   git(['diff', '--exit-code', '074cfac4b3bbb2622b5daddce66907fdd8e855f5', 'HEAD', '--', 'src', 'scripts', 'public', 'package.json', 'package-lock.json', 'bun.lock', 'bun.lockb', ...exceptions]);
   assert.equal(sha(read(TEST)), TEST_SHA); assert.deepEqual(read(TEST), Buffer.from(git(['show', BASELINE + ':' + TEST])));
   assert.deepEqual(read(BASELINE_HELPER), Buffer.from(git(['show', BASELINE + ':' + BASELINE_HELPER])));

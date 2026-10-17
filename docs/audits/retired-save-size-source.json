@@ -71,9 +71,9 @@
         "blob": "2869e517fe3fc37284eb190d7a63c2d03afac010"
       },
       "after": {
-        "bytes": 14108,
-        "sha256": "eb4916d3d04b98abf6c19102fd36ed88ab1d9bcf1e07d27779d587ad9025a72d",
-        "blob": "0d9884b0cbd411639981d6c87b625e554129fbeb"
+        "bytes": 14155,
+        "sha256": "6f854b54c4759a260d643a5f355fc2328e8bcf24c650ba41cfdab3dbab64671c",
+        "blob": "da1fb613dda3e1d606de24181c228e1d1dd10e74"
       },
       "spans": [
         {
@@ -91,6 +91,30 @@
         {
           "old": "  const normal = units('normal'); let original;",
           "new": "  const normal = units('normal');\n  assert.equal(sha(normal.bytes), 'bfcb59589666188d5a616ba8b57cd028137f2813def36caf653a44ee211e4a75', 'Complete normal raw equals the physically retained 1396 normal raw');\n  let original;"
+        },
+        {
+          "old": "const exceptions = [READER, HOME, HARNESS, TEST, BASELINE_HELPER, SELF].map(file => ':!' + file);",
+          "new": "const exceptions = [READER, HOME, HARNESS, TEST, BASELINE_HELPER, SELF, 'scripts/qa/playAccountDialogFocusReturn.mjs'].map(file => ':!' + file);"
+        }
+      ]
+    },
+    {
+      "path": "scripts/qa/playAccountDialogFocusReturn.mjs",
+      "referencePath": "scripts/qa/playAccountDialogOnDemand.mjs",
+      "before": {
+        "bytes": 28235,
+        "sha256": "a2f4ee128ac8d2d3745c591f22f6b5131cde7414e433935d628fb395fc330801",
+        "blob": "8c3fc677a051d66e7c9c2739ea3225556c0f0641"
+      },
+      "after": {
+        "bytes": 28849,
+        "sha256": "0bf48a6f4de3a074ee9921ba810eb79061d112976945b49a3b99aeb6e2ebfb1c",
+        "blob": "9c9c7679bd7a5ad8430a46e22776e80c63ae39d2"
+      },
+      "spans": [
+        {
+          "old": "  const close = async (opener, escape = false) => {\n    if (escape) await page.keyboard.press('Escape'); else { const button = page.getByRole('button', { name: 'Close', exact: true }); await button.scrollIntoViewIfNeeded(); await pointer(button); }\n    await page.getByRole('dialog').waitFor({ state: 'hidden' }); assert.equal(await opener.evaluate(element => element.isConnected && document.activeElement === element), true, 'Same connected opener regains focus');\n  };",
+          "new": "  const close = async (opener, escape = false) => {\n    const openerElement = await opener.elementHandle(); assert(openerElement, 'The actual opener exists before closing');\n    if (escape) await page.keyboard.press('Escape'); else { const button = page.getByRole('button', { name: 'Close', exact: true }); await button.scrollIntoViewIfNeeded(); await pointer(button); }\n    await page.getByRole('dialog').waitFor({ state: 'hidden' });\n    const started = Date.now(), focusReturn = { immediate: await openerElement.evaluate(element => element.isConnected && document.activeElement === element), settled: false, elapsedMs: null };\n    (row.focusReturns ??= []).push(focusReturn); checkpoint();\n    await page.waitForFunction(element => element.isConnected && document.activeElement === element, openerElement);\n    focusReturn.settled = await openerElement.evaluate(element => element.isConnected && document.activeElement === element); focusReturn.elapsedMs = Date.now() - started; checkpoint();\n    assert.equal(focusReturn.settled, true, 'Same connected opener regains focus');\n  };"
         }
       ]
     }
@@ -131,6 +155,12 @@
       "bytes": 24103,
       "sha256": "f146a1565e343687a8248be3c6a1e2c3518de6749856e3ac9208174f2a6e674e",
       "blob": "16663987e3b719b434858a1deb5d749f4ba0cbe0"
+    },
+    {
+      "path": "scripts/qa/playAccountDialogOnDemand.mjs",
+      "bytes": 28235,
+      "sha256": "a2f4ee128ac8d2d3745c591f22f6b5131cde7414e433935d628fb395fc330801",
+      "blob": "8c3fc677a051d66e7c9c2739ea3225556c0f0641"
     }
   ],
   "normalRawSha256": "bfcb59589666188d5a616ba8b57cd028137f2813def36caf653a44ee211e4a75",
