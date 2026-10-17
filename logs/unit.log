@@ -1,0 +1,42 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/cmReportBoardWord.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 2017[2mms[22m[39m
+   [33m[2m✓[22m[39m the report card and the header say the same thing about the board[2m > [22magrees at every whole value from 0 to 100, No sacking off [33m 1192[2mms[22m[39m
+   [33m[2m✓[22m[39m the report card and the header say the same thing about the board[2m > [22magrees at every whole value from 0 to 100, No sacking on [33m 796[2mms[22m[39m
+[90mstdout[2m | src/lib/cmMatchDisplay.test.ts[2m > [22m[2mthe pitch name and the initials (Round 1340b)[2m > [22m[2mholds over every name the game can put on a pitch
+[22m[39mpitch names: 9337 real names and 99678 generated ones checked; 190 real names print differently from the old last word
+  Koni De Winter -> De Winter; Mees de Wit -> de Wit; Marc-André ter Stegen -> ter Stegen; Carlos Júnior -> Carlos Júnior; Aschraf El Mahdioui -> El Mahdioui; Coba da Costa -> da Costa; Branco van den Boomen -> van den Boomen; Ignacio de Arruabarrena -> de Arruabarrena
+  Charles De Ketelaere -> De Ketelaere; Robin Le Normand -> Le Normand; Frenkie de Jong -> de Jong; Eliesse Ben Seghir -> Ben Seghir; Souffian El Karouani -> El Karouani; José Neto -> José Neto; Michele Di Gregorio -> Di Gregorio; Amine El Ouazzani -> El Ouazzani
+  Sepp van den Berg -> van den Berg; Maxim De Cuyper -> De Cuyper; Brian De Keersmaecker -> De Keersmaecker; Kevin Van Den Kerkhof -> Van Den Kerkhof; Luca de la Torre -> de la Torre; Pedro Neto -> Pedro Neto; Lucas Da Cunha -> Da Cunha; Milan van Ewijk -> van Ewijk
+  Martim Neto -> Martim Neto; Stefano Di Mario -> Di Mario; Omar El Hilali -> El Hilali; Urko González de Zárate -> de Zárate; Prince Amoako Junior -> Amoako Junior; Mathias de Amorim -> de Amorim; Tom van de Looi -> van de Looi; Finn van Breemen -> van Breemen
+  Jeremiah St. Juste -> St. Juste; David de Gea -> de Gea; Giorgian de Arrascaeta -> de Arrascaeta; Nicolás de la Cruz -> de la Cruz; Hendrik Van Crombrugge -> Van Crombrugge; Stephan El Shaarawy -> El Shaarawy; Donny van de Beek -> van de Beek; Jari De Busser -> De Busser
+  Filipe de Carvalho -> de Carvalho; Zakaria El Ouahdi -> El Ouahdi; Nathan De Cat -> De Cat; Rodrigo De Paul -> De Paul; Dayne St. Clair -> St. Clair; Louey Ben Farhat -> Ben Farhat; Dion De Neve -> De Neve; Said El Mala -> El Mala
+  Rav van den Berg -> van den Berg; Alexis Mac Allister -> Mac Allister; Virgil van Dijk -> van Dijk; Théo Le Bris -> Le Bris; Matteo Di Giusto -> Di Giusto; Matthijs de Ligt -> de Ligt; Jeffrey de Lange -> de Lange; Ortwin De Wolf -> De Wolf
+  Casper De Norre -> De Norre; Anthony Markanich Jr. -> Markanich; Giovanni Di Lorenzo -> Di Lorenzo; Kevin De Bruyne -> De Bruyne; Matthew Dos Santos -> Dos Santos; Anis Ben Slimane -> Ben Slimane; Justin von der Hitz -> von der Hitz; Ayoub El Kaabi -> El Kaabi
+  Romain Del Castillo -> Del Castillo; Mauro Júnior -> Mauro Júnior; Ruben van Bommel -> van Bommel; Stefan de Vrij -> de Vrij; Thibault De Smet -> De Smet; David Da Costa -> Da Costa; Neil El Aynaoui -> El Aynaoui; Jorge de Frutos -> de Frutos
+  Vinicius Junior -> Vinicius Junior; Marten de Roon -> de Roon; CJ dos Santos -> dos Santos; Robinho Junior -> Robinho Junior; Ignace Van der Brempt -> Van der Brempt; Mitchell van Bergen -> van Bergen; Samir El Mourabet -> El Mourabet; Mateo Del Blanco -> Del Blanco
+  Bilal El Khannouss -> El Khannouss; Enzo Le Fée -> Le Fée; Micky van de Ven -> van de Ven; Jan Paul van Hecke -> van Hecke; Cristian Cásseres Jr. -> Cásseres; Bart van Rooij -> van Rooij; Zeno Van Den Bosch -> Van Den Bosch; Kevin Mac Allister -> Mac Allister
+  Kamiel Van De Perre -> Van De Perre; Anouar Ait El Hadj -> El Hadj; Dani de Wit -> de Wit; Davy van den Berg -> van den Berg; Gabriele De Donno -> De Donno; Justin de Haas -> de Haas; Kayne van Oevelen -> van Oevelen; Andréa Le Borgne -> Le Borgne
+  Luiz Júnior -> Luiz Júnior; Anselmo de Moraes -> de Moraes; Francis de Vries -> de Vries; Arthur De Lima -> De Lima; Giovanni De Abreu -> De Abreu; Miguel Di Pizio -> Di Pizio; Hodaifa El Mhassani -> El Mhassani; Quique de Lucas -> de Lucas
+  Robin van Persie -> van Persie; Ulises de la Cruz -> de la Cruz; Mark van Bommel -> van Bommel; Giovanni van Bronckhorst -> van Bronckhorst; Roque Júnior -> Roque Júnior; Talal El Karkouri -> El Karkouri; Asier del Horno -> del Horno; Julian de Guzmán -> de Guzmán
+  Nasir El Kasmi -> El Kasmi; Iván de la Peña -> de la Peña; Andy van der Meyde -> van der Meyde; Hassan El Fakiri -> El Fakiri; Daniel Van Buyten -> Van Buyten; Rafael van der Vaart -> van der Vaart; Dick van Burik -> van Burik; Alessandro Del Piero -> Del Piero
+  Túlio de Melo -> de Melo; Aleksey Eremenko Jr. -> Eremenko; Hatem Ben Arfa -> Ben Arfa; Antônio da Silva -> da Silva; Ruud van Nistelrooy -> van Nistelrooy; Edwin van der Sar -> van der Sar; Arturo Di Napoli -> Di Napoli; Frédéric Da Rocha -> Da Rocha
+  Arjan de Zeeuw -> de Zeeuw; Daniele De Rossi -> De Rossi; Ulrich Le Pen -> Le Pen; Morgan De Sanctis -> De Sanctis; David Di Michele -> Di Michele; Antonio Di Natale -> Di Natale; Marco Di Vaio -> Di Vaio; Jelle Van Damme -> Van Damme
+  Peter Van der Heyden -> Van der Heyden; Óscar de Marcos -> de Marcos; Anthony Le Tallec -> Le Tallec; Jonathan dos Santos -> dos Santos; Franco Di Santo -> Di Santo; Fahid Ben Khalfallah -> Ben Khalfallah; Youssef El Arabi -> El Arabi; Rajiv van La Parra -> van La Parra
+  Patrick van Aanholt -> van Aanholt; Lorenzo De Silvestri -> De Silvestri; Manu del Moral -> del Moral; Igor de Camargo -> de Camargo; Joseba del Olmo -> del Olmo; Paolo De Ceglie -> De Ceglie; Simone Del Nero -> Del Nero; Nabil El Zhar -> El Zhar
+  Arnaud Le Lan -> Le Lan; Nigel de Jong -> de Jong; Abdelhamid El Kaoutari -> El Kaoutari; Chaouki Ben Saada -> Ben Saada; Ángel Di María -> Di María; Alberto de la Bella -> de la Bella; Angelo da Costa -> da Costa; Paulo da Silva -> da Silva
+  Manuel da Costa -> da Costa; Mattia De Sciglio -> De Sciglio; Munir El Haddadi -> El Haddadi; Damien Da Silva -> Da Silva; Jonathan de Guzmán -> de Guzmán; Antonio Di Gaudio -> Di Gaudio; Sebastien De Maio -> De Maio; Laurent Dos Santos -> Dos Santos
+  Johannes van den Bergh -> van den Bergh; Ritchie De Laet -> De Laet; Vincent Le Goff -> Le Goff; Pablo de Blasis -> de Blasis; Siem de Jong -> de Jong; Francesco Della Rocca -> Della Rocca; Gregory van der Wiel -> van der Wiel; Ricky van Wolfswinkel -> van Wolfswinkel
+  Nicolas de Préville -> de Préville; Marco van Ginkel -> van Ginkel; Omar El Kaddouri -> El Kaddouri; Wissam Ben Yedder -> Ben Yedder; Giovani dos Santos -> dos Santos; Farid El Melali -> El Melali; Anwar El Ghazi -> El Ghazi; Ahmed El Mohamady -> El Mohamady
+  Konrad de la Fuente -> de la Fuente; Bobby De Cordova-Reid -> De Cordova-Reid; Damien Le Tallec -> Le Tallec; Antonino La Gumina -> La Gumina; Luuk de Jong -> de Jong; Hidde ter Avest -> ter Avest
+the longest pitch name in the pool: Amaimouni-Echghouyab (20 characters)
+
+ [32m✓[39m src/lib/cmMatchDisplay.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 13756[2mms[22m[39m
+   [33m[2m✓[22m[39m the pitch name and the initials (Round 1340b)[2m > [22mholds over every name the game can put on a pitch [33m 13745[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 06:35:28
+[2m   Duration [22m 17.10s[2m (transform 3.41s, setup 170ms, collect 5.27s, tests 15.77s, environment 1.12s, prepare 375ms)[22m
+

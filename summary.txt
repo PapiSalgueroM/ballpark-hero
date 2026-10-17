@@ -1,0 +1,8 @@
+md-barorder exit=1 38s | simCmMatchDay: CONTROL barorder FIRED (4726 failures, section(s) 2, 4)
+simCmMatchDay exit=0 38s | simCmMatchDay: all sections green (916 matches: 461 home, 447 away, 8 neutral)
+md-greenfirst exit=1 34s | simCmMatchDay: CONTROL greenfirst FIRED (320 failures, section(s) 4)
+md-neutrallive exit=1 39s | simCmMatchDay: CONTROL neutrallive FIRED (3804 failures, section(s) 4, 7)
+unit exit=0 18s |    Duration  17.10s (transform 3.41s, setup 170ms, collect 5.27s, tests 15.77s, environment 1.12s, prepare 375ms)
+engineDiff exit=0 0s | end
+tsc exit=0 105s | 
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

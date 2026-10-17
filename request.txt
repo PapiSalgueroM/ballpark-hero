@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+md-barorder: MATCHDAY_CONTROL=barorder node scripts/simCmMatchDay.mjs
+md-greenfirst: MATCHDAY_CONTROL=greenfirst node scripts/simCmMatchDay.mjs
+md-neutrallive: MATCHDAY_CONTROL=neutrallive node scripts/simCmMatchDay.mjs
+unit: node_modules/.bin/vitest run src/lib/cmMatchDisplay.test.ts src/test/cmReportBoardWord.test.tsx --testTimeout=300000 --hookTimeout=120000
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+engineDiff: echo "names:"; git diff --name-only d8aaa4cb...HEAD -- src/lib src/hooks src/data; echo "end"
