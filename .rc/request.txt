@@ -1,0 +1,23 @@
+#!serve
+#!playwright
+simCalendar: node scripts/simCalendar.mjs
+simCalendarCurrentDate: node scripts/simCalendarCurrentDate.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simCmRealFixtures: node scripts/simCmRealFixtures.mjs
+simCmVar: node scripts/simCmVar.mjs
+simGmCalendar: node scripts/simGmCalendar.mjs
+simManagerSpec: node scripts/simManagerSpec.mjs
+playCmRealFixtures: node scripts/playCmRealFixtures.mjs
+playManagerCustomPromotion: node scripts/playManagerCustomPromotion.mjs
+reportControls: node scripts/qa/checkManagerReportControls.mjs
+sizediag: node scripts/qa/managerWorldSizeDiagnostic.mjs
+simCmNoSack: node scripts/simCmNoSack.mjs
+simCmRetire: node scripts/simCmRetire.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+decisions-CARRIED: node scripts/simClubManagerDecisions.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
