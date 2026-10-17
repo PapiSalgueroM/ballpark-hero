@@ -110,6 +110,30 @@ describe('the club watching it: today\'s world, the 36 club league phase', () =>
     expect(v.ties.filter(t => t.round === 'R16')).toHaveLength(8);
     for (const t of v.ties) expect(t.winner === t.home || t.winner === t.away).toBe(true);
   });
+
+  /* Review fix (run lens, major 1): the knockout content, leg by leg and the right way round, against the engine's
+     own evaluation. Mutation M6 (a two legged tie read as one match) turns this red. */
+  it('shows every tie as the engine played it: two legs to the semi-finals, each leg the right way round', () => {
+    const v = worldUclView(end)!;
+    const raw = evalWorldUcl(end)!;
+    expect(v.ties).toHaveLength(raw.ties.length);
+    let twoLegged = 0;
+    for (const r of raw.ties) {
+      const t = v.ties.find(x => x.round === r.round && x.slot === r.slot)!;
+      expect([t.home, t.away, t.winner, t.agg ?? null]).toEqual([r.home, r.away, r.winner, r.agg ?? null]);
+      expect(t.legs).toBe(r.round === 'F' ? 1 : 2);
+      if (r.round === 'F') continue;
+      twoLegged += 1;
+      expect([t.leg1, t.leg2]).toEqual([r.leg1, r.leg2]);
+      expect([t.agg![0], t.agg![1]]).toEqual([t.leg1![0] + t.leg2![0], t.leg1![1] + t.leg2![1]]);
+      /* The second leg is played at the away side's ground: its night lists it home first, with the score turned. */
+      const night2 = v.nights.find(n => n.stage === r.round && n.leg === 2)!;
+      expect(night2.fixtures).toContainEqual({ home: t.away, away: t.home, homeGoals: t.leg2![1], awayGoals: t.leg2![0] });
+      const night1 = v.nights.find(n => n.stage === r.round && n.leg === 1)!;
+      expect(night1.fixtures).toContainEqual({ home: t.home, away: t.away, homeGoals: t.leg1![0], awayGoals: t.leg1![1] });
+    }
+    expect(twoLegged).toBe(8 + 8 + 4 + 2);
+  });
 });
 
 describe('the club in it: the participant engine read, not simulated again', () => {
@@ -163,6 +187,64 @@ describe('the club in it: the participant engine read, not simulated again', () 
     const qf = v.nights.filter(n => n.stage === 'QF' && n.played);
     expect(qf.length).toBeGreaterThan(0);
     for (const n of qf) expect(n.fixtures.every(f => f.homeGoals !== null)).toBe(true);
+  });
+
+  /* Review fix (run lens, major 1): each leg's night the right way round. The bracket stores both legs home first
+     (the tie's home side); the second leg is at the other ground, so its night lists the away side at home with
+     the score turned. Mutation M7 (the second leg night not turned) turns this red. */
+  it('lists each knockout leg on its night at the right ground, with the score the bracket holds', () => {
+    const v = worldUclView(after)!;
+    const qfTies = (after.uclBracket ?? []).filter(t => t.round === 'QF' && t.leg1 && t.leg2);
+    expect(qfTies).toHaveLength(4);
+    const leg1 = v.nights.find(n => n.stage === 'QF' && n.leg === 1)!;
+    const leg2 = v.nights.find(n => n.stage === 'QF' && n.leg === 2)!;
+    for (const t of qfTies) {
+      expect(leg1.fixtures).toContainEqual({ home: t.home, away: t.away, homeGoals: t.leg1!.homeGoals, awayGoals: t.leg1!.awayGoals });
+      expect(leg2.fixtures).toContainEqual({ home: t.away, away: t.home, homeGoals: t.leg2!.awayGoals, awayGoals: t.leg2!.homeGoals });
+      const tv = v.ties.find(x => x.round === 'QF' && x.slot === t.slot)!;
+      expect([tv.legs, tv.leg1, tv.leg2]).toEqual([2, [t.leg1!.homeGoals, t.leg1!.awayGoals], [t.leg2!.homeGoals, t.leg2!.awayGoals]]);
+    }
+  });
+
+  /* Review fix (read lens, M2): in today's world the club in it plays the stand in, group winners into the
+     quarter-finals, so once the draw is made every club with no tie is out, second placed or not. */
+  it('calls every club the draw left out "Out in the group stage", and no club in the bracket', () => {
+    const v = worldUclView(after)!;
+    expect(v.firstKo).toBe('QF');
+    const inBracket = new Set(v.ties.flatMap(t => [t.home, t.away]));
+    const left = v.clubs.filter(c => !inBracket.has(c));
+    const seconds = v.groups!.map(g => g.rows[1].club).filter(c => !inBracket.has(c));
+    expect(left).toHaveLength(v.clubs.length - 8);
+    expect(seconds.length).toBeGreaterThanOrEqual(6);
+    for (const c of left) expect(clubRun(v, c)!.finish).toBe('Out in the group stage');
+    for (const c of inBracket) expect(clubRun(v, c)!.finish).not.toBe('Out in the group stage');
+  });
+});
+
+/* Review fix (run lens, major 3): an era save whose club is in it but is not one of the real 32 takes the place of
+   one of them, and the view names both. */
+describe('an era save in it from outside the real 32', () => {
+  let s: CareerState | null = null;
+  beforeAll(async () => {
+    await ensureEraRosters('era2015');
+    const real = new Set((ERA_UCL_FIELDS.era2015 ?? []).map(e => e.name));
+    for (const c of (ERA_LEAGUES.era2015 ?? []).flatMap(l => l.clubs).filter(x => !real.has(x))) {
+      const st = startCareer(c, 'era2015');
+      if (st.uclGroup) { s = st; break; }
+    }
+  }, 300_000);
+
+  it('names the club and the real club whose place it takes', () => {
+    expect(s).not.toBeNull();
+    const v = worldUclView(s!)!;
+    const real = (ERA_UCL_FIELDS.era2015 ?? []).map(e => e.name);
+    expect(v.mode).toBe('in');
+    expect(v.eraField).toBe(true);
+    expect(v.clubs).toHaveLength(32);
+    expect(v.standIn?.club).toBe(s!.clubName);
+    expect(real).toContain(v.standIn!.for);
+    expect(v.clubs).not.toContain(v.standIn!.for);
+    expect(v.clubs.filter(c => !real.includes(c))).toEqual([s!.clubName]);
   });
 });
 
