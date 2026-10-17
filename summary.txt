@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=1 12s | FAIL ST: the engine dealt a deck training card from a season summary within 400 seeds
+sd8-free exit=1 79s | simSoccerDeck: CONTROL=freetraining FIRED: section 8 failed (2 failures, red sections 8)
+weight exit=1 85s | STOP: /soccer-career is 834.1K, past 834K

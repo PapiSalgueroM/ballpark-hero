@@ -1,0 +1,33 @@
+sweepWeight's table, 14 routes, base against head (gzipped JS, K to one decimal and bytes):
+  /                    base 243.2K (249067 B)  head 243.2K (249082 B)  +15 B  budget 244K
+  /club-manager        base 608.5K (623119 B)  head 608.5K (623132 B)  +13 B  budget 609K
+  /soccer-career       base 833.0K (852999 B)  head 834.1K (854092 B)  +1093 B  budget 834K
+  /stadium-tycoon      base 302.1K (309306 B)  head 302.1K (309335 B)  +29 B  budget 303K
+  /wonderkid-factory   base 275.8K (282464 B)  head 275.9K (282494 B)  +30 B  budget 277K
+  /minefield           base 293.8K (300806 B)  head 293.8K (300832 B)  +26 B  budget 295K
+  /footle              base 352.2K (360619 B)  head 352.2K (360643 B)  +24 B  budget 354K
+  /nfl-my-career       base 487.8K (499541 B)  head 487.9K (499560 B)  +19 B  budget 488K
+  /front-office        base 372.5K (381397 B)  head 372.5K (381421 B)  +24 B  budget 374K
+  /soccer-grid         base 317.3K (324877 B)  head 317.3K (324904 B)  +27 B  budget 319K
+  /leaderboard         base 251.3K (257303 B)  head 251.3K (257323 B)  +20 B  budget 266K
+  /manager-hot-seat    base 626.4K (641425 B)  head 626.4K (641436 B)  +11 B  budget 627K
+  /deadline-day        base 636.3K (651587 B)  head 636.3K (651597 B)  +10 B  budget 637K
+  /transfer-path       base 377.7K (386798 B)  head 377.8K (386828 B)  +30 B  budget 379K
+routes moving over 0.1K: /soccer-career +1.1K
+  src/lib/soccerDeck.ts: soccerDeck-BMoPmR2-.js
+  src/data/soccerDeck/starter.ts: soccerDeck-BMoPmR2-.js
+  src/data/soccerDeck/words.ts: soccerDeck-BMoPmR2-.js
+  src/lib/gmInbox.ts: soccerDeck-BMoPmR2-.js
+  src/lib/soccerDeckGate.ts: SoccerCareer-DYPviC95.js
+  the gate help line: SoccerCareer-DYPviC95.js
+  src/lib/season/soccerMoments.ts: soccerMoments-ovhJYHWD.js
+  the deck's first load fetches soccerDeck-BMoPmR2-.js: 10.5K gzipped (soccerDeck.ts, starter.ts, words.ts, gmInbox.ts)
+  the deck's first load fetches ownGoalRule-J3XQry1d.js: 0.2K gzipped
+  the deck's first load fetches keyedShuffle-CJAps3xO.js: 0.1K gzipped
+  the deck's first load fetches leagueCore--DUG-EXw.js: 0.4K gzipped
+  the deck's first load fetches core-Dsglyqbx.js: 7.5K gzipped
+  the deck's first load fetches throughBallDrill-B9fNBoXH.js: 2.3K gzipped
+  the deck's first load fetches soccerMoments-ovhJYHWD.js: 9.1K gzipped (soccerMoments.ts)
+  in all, the deck's first load on /soccer-career fetches 7 chunks, 30.1K gzipped, none of them in the route's first download: yes
+  CSS, every file gzipped: base 56553 B, head 56553 B
+STOP: /soccer-career is 834.1K, past 834K

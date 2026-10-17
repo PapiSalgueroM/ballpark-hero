@@ -1,0 +1,30 @@
+NEGATIVE CONTROL ON: freetraining (section 8 must fail)
+simSoccerDeck: head and base e814c2de bundled (1.1 s); the shipped pack holds 28 cards, CONTROL=freetraining
+1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing
+2) Inert: the deck not loaded, 200 careers of 12 seasons, every save byte equal to the base's after every step and the Math.random count equal
+3) Adds, never replaces: at each deal, from one identical state, the old batch is the base's and a deck card is first
+4) Neutral: every deck card answered on the option that moves nothing, every season end save is the base's but for the deck's own stamps
+5) Promises: every option moves what its button prints, to the bound and no further, says what landed, and never moves money or fame
+6) Reach by position: every position card reaches its own group and never another, every situation card someone, no keeper word for an outfielder
+7) Keyed: the slot and the deck's answers draw no Math.random, the same save deals the same card in a fresh bundle, and the season moves the pick
+8) Economy: four answer arms against the deck off, over five seeds of whole careers
+   freetraining control: 20 options lose their training cost and train double
+   morale25: off 85.66 (seed to seed sd 1.82), best 86.90 (+1.24), worst 85.25 (-0.41), neutral 85.66 (+0.00), band 5.5
+   morale30: off 89.01 (seed to seed sd 2.64), best 91.16 (+2.14), worst 89.21 (+0.20), neutral 89.01 (+0.00), band 4
+   integrity25: off 20.83 (seed to seed sd 2.00), best 20.19 (-0.64), worst 20.31 (-0.53), neutral 20.83 (+0.00), band 3.5
+   integrity30: off 34.12 (seed to seed sd 4.14), best 32.51 (-1.61), worst 32.85 (-1.28), neutral 34.12 (+0.00), band 8.5
+   overall30: off 80.35 (seed to seed sd 0.56), best 80.57 (+0.21), worst 80.55 (+0.20), neutral 80.35 (+0.00), band 1
+   peak: off 78.07 (seed to seed sd 0.25), best 78.78 (+0.70), worst 78.77 (+0.69), neutral 78.07 (+0.00), band 0.75
+   legacy: off 52.07 (seed to seed sd 1.33), best 53.52 (+1.44), worst 53.73 (+1.66), neutral 52.07 (+0.00), band 1.2
+   FAIL best moves legacy by 1.44 against the deck off, band 1.2
+   FAIL worst moves legacy by 1.66 against the deck off, band 1.2
+   clean40: off 0.51 (seed to seed sd 0.06), best 0.52 (+0.01), worst 0.53 (+0.02), neutral 0.51 (+0.00), band 0.15
+   pastCeiling: off 0.00 (seed to seed sd 0.00), best 0.00 (+0.00), worst 0.00 (+0.00), neutral 0.00 (+0.00), band 0.01
+   queued: off 0.00 (seed to seed sd 0.00), best 13.79 (+13.79), worst 13.78 (+13.78), neutral 0.00 (+0.00)
+   legacy against the deck off: BEST 1.44 (seeds 2.21 2.26 0.19 0.23 2.32), WORST 1.66 (seeds 1.82 2.95 0.60 0.99 1.93), NEUTRAL 0.00 (seeds 0.00 0.00 0.00 0.00 0.00); the seed to seed spread 1.33, the ruling's band 1.2
+   18661 deck answers, 0 queued more than the room just before them
+9) Old saves: the base's saves load and play here as they do there; a save with a deck card pending loads on the base (skipped, its stamp handed back) and answers here
+10) Lazy: the page and the engine reach the gate and nothing of the deck, and the page is the one caller that loads it
+
+runtime 78.1 s
+simSoccerDeck: CONTROL=freetraining FIRED: section 8 failed (2 failures, red sections 8)
