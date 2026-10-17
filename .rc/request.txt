@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+markProbe: node .rc/x/markProbe.mjs
+playCmMatchDay: node scripts/playCmMatchDay.mjs
