@@ -1,0 +1,184 @@
+name: Soccer corruption cost copy verification
+on:
+  push:
+    branches: [codex/soccer-corruption-cost-copy]
+    paths:
+      - .github/workflows/soccer-cash-choice-copy.yml
+      - src/lib/soccerCareerCorruption.ts
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind the three copy changes and retain committed source
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/soccer-corruption-cost-copy"; test ! -e "$out"; mkdir "$out"
+          echo "CASH_CHOICE_OUT=$out" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
+          sha256sum "$out/source.zip" "$out/request-source-files.sha256" "$out/source-files.sha256" > "$out/initial-source-packet.sha256"
+          git merge-base --is-ancestor 225b53b74b61499115a4afefcb2e24f191ab2b62 HEAD
+          git diff --exit-code 225b53b74b61499115a4afefcb2e24f191ab2b62 HEAD -- . ':!docs' ':!src/lib/soccerCareerCorruption.ts' ':!.github/workflows/soccer-cash-choice-copy.yml' > "$out/base-source-hold.log"
+          CASH_CHOICE_OUT="$out" SIM_OFFLINE_RECEIPT="$out/sourceguard.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module > "$out/copy-source.log" 2>&1 <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import {createHash} from 'node:crypto'; import {execFileSync} from 'node:child_process';
+          const out=process.env.CASH_CHOICE_OUT,file='src/lib/soccerCareerCorruption.ts',base='225b53b74b61499115a4afefcb2e24f191ab2b62',sha=x=>createHash('sha256').update(x).digest('hex'),original=execFileSync('git',['show',base+':'+file]),candidate=fs.readFileSync(file);
+          assert.equal(original.length,31574); assert.equal(sha(original),'299485b3505ae1ca891a4ec1fd789a5b9177eeb913f2c78e9fe72d6f28d0afec'); assert.equal(candidate.length,31602); assert.equal(sha(candidate),'c7df3ef9f33f04e358103d76f63c57b765343f7f6ce9b9334c7b47a325d08aab');
+          const spans=[["pay a flat 40%","pay 40% of hidden money plus 5% of net worth"],["Pay 40% of everything hidden, Heat drops to almost nothing","Pay 40% of hidden money plus 5% of net worth, Heat drops to almost nothing"],["Heat +25, but income doubles while it lasts","€2M dirty now, Heat +25"]]; let inverse=candidate.toString('utf8');
+          for(const [before,after] of spans){assert.equal(original.toString('utf8').split(before).length,2,'Unique original copy span');assert.equal(inverse.split(after).length,2,'Unique reviewed copy span');inverse=inverse.replace(after,before);} assert.equal(inverse,original.toString('utf8'),'All code, saved fields, shop mechanics and RNG outside the three strings are held');
+          fs.writeFileSync(out+'/corruption.original225b.ts',original);fs.writeFileSync(out+'/corruption.candidate.ts',candidate);fs.writeFileSync(out+'/copy-source-bindings.json',JSON.stringify({base,file,originalBytes:original.length,originalSha256:sha(original),candidateBytes:candidate.length,candidateSha256:sha(candidate),spans,wholeInverseExact:true,limits:'New catalog copy only. Serialized pending labels and previews are not migrated; no NBA fix or direct event320/325 runtime coverage is claimed.'},null,2)+'\n');console.log('PASS exact three copy spans and whole original225b inverse; every other protected source body held.');
+          NODE
+          printf '%s\0' "$(command -v node)" "$(readlink -f "$(command -v npm)")" | sort -z | xargs -0 sha256sum > "$out/runtime-tools-files.sha256"
+          npm --version > "$out/npm-version.txt"
+          npm ci > "$out/install.log" 2>&1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerAgentReviewDependencies.mjs before > "$out/dependencies-before.log" 2>&1
+          browser_tools="$RUNNER_TEMP/manager-timeout-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright; ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerAgentReviewDependencies.mjs after > "$out/dependencies-after.log" 2>&1
+          cp soccer-agent-review-artifacts/dependencies-*.json "$out/"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const out=process.env.CASH_CHOICE_OUT || process.env.RUNNER_TEMP+'/soccer-corruption-cost-copy';
+          const before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),after=JSON.parse(fs.readFileSync(out+'/dependencies-after.json'));
+          assert.equal(before.packages.length,521); assert.equal(after.packages.length,521); assert.deepEqual(after.packages,before.packages); assert.deepEqual(after.packageFiles,before.packageFiles); assert.equal(after.addedBrowserPackage,'1.64.0'); fs.writeFileSync(out+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n');
+          NODE
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/fonts-install.log" 2>&1; python -m pip freeze > "$out/python-packages.txt"
+          FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-files.sha256"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-files.sha256"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tool-files.sha256"
+      - name: Actual types and unchanged preview currency and Life checks
+        id: checks
+        timeout-minutes: 30
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$CASH_CHOICE_OUT"
+          preload_check='const assert=require("node:assert/strict"); assert.ok((process.env.NODE_OPTIONS||"").includes("offlineTransport.cjs"),"Children retain offline preload"); assert.ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")],"Actual offline preload is in require.cache");'
+          status=0; NODE_OPTIONS='' node -e "$preload_check" > "$out/preload-control.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/preload-control.exit"; test "$status" -eq 1; grep -F 'AssertionError' "$out/preload-control.log"; grep -F 'Children retain offline preload' "$out/preload-control.log"
+          node -e "$preload_check" > "$out/preload-normal.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/previews.transport" node_modules/.bin/vitest run src/test/soccerCareerLifeChoicePreviews.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$out/previews.vitest.json" > "$out/previews.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/checks.transport" node --input-type=module > "$out/previews-check.log" 2>&1 <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.CASH_CHOICE_OUT,u=JSON.parse(fs.readFileSync(out+'/previews.vitest.json')),rows=u.testResults.flatMap(s=>s.assertionResults),log=fs.readFileSync(out+'/previews.log','utf8');assert.equal(u.success,true);assert.equal(u.testResults.length,1);assert(u.testResults[0].name.replaceAll('\\','/').endsWith('/src/test/soccerCareerLifeChoicePreviews.test.ts'));assert.equal(u.numTotalTests,18);assert.equal(u.numPassedTests,18);assert.equal(u.numFailedTests,0);assert.equal(u.numPendingTests,0);assert.equal(u.numTodoTests,0);assert.equal(rows.length,18);assert(rows.every(r=>r.status==='passed'));assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to load|Cannot find module|No test files found|SIM_OFFLINE_BLOCK/i.test(log));console.log('PASS all eighteen unchanged preview and callback cases.');
+          NODE
+          SIM_OFFLINE_RECEIPT="$out/currency.transport" node scripts/simSoccerCurrency.mjs > "$out/currency.log" 2>&1
+          grep -F '40 pairs compared on 9 fields each' "$out/currency.log"; grep -F 'simSoccerCurrency: green. The money reads in your currency and the game underneath it never noticed.' "$out/currency.log"
+          SIM_OFFLINE_RECEIPT="$out/cooldowns.transport" node scripts/simCareerLifeCooldowns.mjs > "$out/cooldowns.log" 2>&1
+          grep -F 'simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.' "$out/cooldowns.log"
+          SIM_OFFLINE_RECEIPT="$out/cooldowns-oneoption.transport" SIM_CAREER_LIFE_COOLDOWNS_CONTROL=oneoption node scripts/simCareerLifeCooldowns.mjs > "$out/cooldowns-oneoption.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/checks.transport" node --input-type=module > "$out/existing-checks.log" 2>&1 <<'NODE'
+          import fs from 'node:fs';import os from 'node:os';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out=process.env.CASH_CHOICE_OUT,text=fs.readFileSync(out+'/cooldowns-oneoption.log','utf8'),faults=[...text.matchAll(/^  FAIL \(section ([^)]+)\): (.+)$/gm)].map(m=>({section:m[1],message:m[2]}));assert(text.includes('NEGATIVE CONTROL ON: event 221 is back to one button (section 5 must fail)'));assert(text.includes('CONTROL FIRED: section 5 failed with the defect back in, as it should'));assert(faults.some(f=>f.section==='5'));assert(!/CONTROL DID NOT FIRE|control cannot run|SIM_OFFLINE_BLOCK/i.test(text));const control=fs.readFileSync(path.join(os.tmpdir(),'r725.oneoption.control.ts')),original=fs.readFileSync('src/lib/soccerCareerLife.ts');assert(!control.equals(original));fs.writeFileSync(out+'/cooldowns-oneoption.control.ts',control);const sha=x=>createHash('sha256').update(x).digest('hex');fs.writeFileSync(out+'/existing-checks.json',JSON.stringify({status:'passed',previews:18,currencyPairs:40,cooldownsArgument:'unchanged default200,500 careers',control:'oneoption',controlRequiredSection:'5',actualControlFaults:faults,otherControlFailedSections:[...new Set(faults.map(f=>f.section))].filter(s=>s!=='5'),lifeSourceSha256:sha(original),controlSourceSha256:sha(control),limits:'Existing harness permits and reports collateral control failures. No claim of section exclusivity or direct event320/325 runtime coverage.'},null,2)+'\n');console.log('PASS existing normal checks and effective oneoption control; actual fault sections retained.');
+          NODE
+          tail -n 3 "$out/previews.log"; tail -n 3 "$out/cooldowns.log"; tail -n 3 "$out/cooldowns-oneoption.log"
+          sha256sum --check "$out/request-source-files.sha256" > "$out/checks-source-holds.log"
+      - name: Normal production build with every tracked source body held
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$CASH_CHOICE_OUT/build.transport" npm run build > "$CASH_CHOICE_OUT/build.log" 2>&1
+          tail -n 6 "$CASH_CHOICE_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$CASH_CHOICE_OUT/dist-files.sha256"
+      - name: All fifteen rebuilt-site readers
+        id: readers
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$CASH_CHOICE_OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            status=0; SIM_OFFLINE_RECEIPT="$out/$method.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv"; tail -n 3 "$out/$method.log"
+            test "$status" -eq 0 || failed=1; test ! -s "$out/$method.transport" || failed=1
+          done
+          test "$(wc -l < "$out/readers.tsv")" -eq 15; exit "$failed"
+      - name: Unchanged full fourteen page weights with every failure fatal
+        id: weights
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$CASH_CHOICE_OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-weights.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          status=0; SIM_OFFLINE_RECEIPT="$out/weights.transport" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
+          cat "$out/weights.log"; printf '%s\n' "$status" > "$out/weights-exit.txt"; exit "$status"
+      - name: Complete actual source and dist with zero generated source changes
+        if: always()
+        run: |
+          set -euo pipefail
+          out="${CASH_CHOICE_OUT:-$RUNNER_TEMP/soccer-corruption-cost-copy}"; mkdir -p "$out"; result=0
+          git diff --exit-code HEAD -- . > "$out/non-generated-diff.log" 2>&1 || result=1
+          git diff --binary HEAD -- . > "$out/generated.patch"
+          git diff --name-only HEAD > "$out/generated-paths.txt"
+          test ! -s "$out/generated.patch" || result=1; test ! -s "$out/generated-paths.txt" || result=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/validated-source-files.sha256"
+          CASH_CHOICE_ARCHIVE_OUT="$out" python - <<'PY'
+          import os,subprocess,zipfile
+          out=os.environ['CASH_CHOICE_ARCHIVE_OUT']; files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile(out+'/validated-source.zip','w',zipfile.ZIP_DEFLATED) as archive:
+              for file in sorted(filter(None,files)): archive.write(file,file)
+          if os.path.isdir('dist'):
+              with zipfile.ZipFile(out+'/dist.zip','w',zipfile.ZIP_DEFLATED) as archive:
+                  for folder,dirs,names in os.walk('dist'):
+                      for name in sorted(names): archive.write(os.path.join(folder,name),os.path.join(folder,name))
+          PY
+          if test -d dist; then find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist-after-files.sha256"; fi
+          if test -f "$out/dist-files.sha256"; then cmp "$out/dist-files.sha256" "$out/dist-after-files.sha256" > "$out/dist-inventory-hold.log" 2>&1 || result=1; fi
+          printf 'checks=%s\nbuild=%s\nreaders=%s\nweights=%s\n' '${{ steps.checks.outcome }}' '${{ steps.build.outcome }}' '${{ steps.readers.outcome }}' '${{ steps.weights.outcome }}' > "$out/stage-outcomes.txt"
+          exit "$result"
+      - name: Source installed tool font and transport holds
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="${CASH_CHOICE_OUT:-$RUNNER_TEMP/soccer-corruption-cost-copy}"; result=0
+          for kind in source installed browser-tool runtime-tools font validated-source dist; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
+          if test -f "$out/initial-source-packet.sha256"; then sha256sum --check "$out/initial-source-packet.sha256" > "$out/initial-source-packet-holds.log" 2>&1 || result=1; fi
+          if test -f "$out/installed-files.sha256"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-after-files.sha256"; cmp "$out/installed-files.sha256" "$out/installed-after-files.sha256" || result=1; fi
+          for method in sourceguard types previews checks currency cooldowns cooldowns-oneoption build simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do test ! -s "$out/$method.transport" || result=1; done
+          # Weight asset denials remain retained offline-method evidence, not ordinary zero-block credit.
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-corruption-cost-copy-${{ github.sha }}
+          path: ${{ env.CASH_CHOICE_OUT }}
+          if-no-files-found: error
+          retention-days: 14
