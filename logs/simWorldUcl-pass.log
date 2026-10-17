@@ -1,0 +1,26 @@
+  0 ledger: verified G1 G2-2015 G2-2020 G3-2005 G3-2010 G3-2015 G3-2020 G4-late G5-ruling G5-2015-groups G5-2020-groups G6 G7 N1 | one publisher G2-2005 G2-2010 G5-2015-ko G8 | to verify G4-early G5-2020-ko
+  0 engine: G8_SHAPE {"clubs":32,"groups":8,"groupSize":4,"games":6,"advance":2}; association rule 2005 true, 2010 true, 2015 true, 2020 true; bans 2005 0, 2010 0, 2015 1, 2020 1; partial G2-2005 G2-2010 G4-early G5-2015-ko G5-2020-ko G8
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020); seeds 1,2,3,4,5
+  1 and 3: 45 journeys in 104 s
+  7 goals a watched match 2.616 (14736 matches); a domestic league match 2.624
+  7 ties 2334: to extra time 13.9 percent, to penalties 6.6 percent
+  4 slice bytes g8: 59 seasons, mean 613, smallest 590, largest 641
+  4 slice bytes l36: 65 seasons, mean 1423, smallest 1395, largest 1458
+  1 device order: 40 group seasons evaluated level both ways
+  3 league sizes: now 10, now 12, now 14, now 15, now 16, now 18, now 20, now 24, era2005 18, era2005 20, era2010 18, era2010 20, era2015 18, era2015 20, era2020 18, era2020 20
+  1 seasons in the Champions League (not watched): 13
+  1 seasons where exclude took out a direct entrant (a summer move): 5
+  1 watched seasons g8: 59
+  1 watched seasons l36: 63
+  3 date checks g8: 71
+  3 date checks l36: 80
+  3 joins that carried the slice: 11
+  3 joins that dropped the slice: 2
+  3 states checked: 5444
+  7 g8 draws: 59
+  7 l36 slates with an association break: 3
+  7 l36 slates: 63
+  7 titles by strength quartile 1: 99
+  7 titles by strength quartile 2: 21
+  7 titles by strength quartile 3: 2
+simWorldUcl: green, 178247 checks, 0 failures

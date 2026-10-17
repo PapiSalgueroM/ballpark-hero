@@ -1,0 +1,3 @@
+continuity exit=1 28s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:509:24
+simWorldUcl-pass exit=0 106s | simWorldUcl: green, 178247 checks, 0 failures
+proof-oldsaves exit=0 112s | proofWorldUclFleet: GREEN, 30 journeys and 3782 steps byte equal to d8aaa4cb (a watching state without worldComps), draws equal

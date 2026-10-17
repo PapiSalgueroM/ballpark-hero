@@ -1,0 +1,35 @@
+base d8aaa4cb; fleet (15): Real Madrid (now, participant); Arsenal (now, participant); Arsenal (era2005, participant); Arsenal (era2010, participant); Arsenal (era2015, participant); Manchester City (era2020, participant); Chelsea (now, watcher); Hoffenheim (now, watcher); Everton (now, watcher); América (now, watcher); Proof Town Athletic (now, watcher); Wigan Athletic (era2005, watcher); Wolves (era2010, watcher); West Ham (era2015, watcher); Sheffield United (era2020, watcher)
+seeds 1,2; modes nocoach; strip worldComps
+ok   Real Madrid (now, participant, nocoach, seed 1, 2 seasons): 111 steps, 4.5 s
+ok   Real Madrid (now, participant, nocoach, seed 2, 2 seasons): 112 steps, 4.0 s
+ok   Arsenal (now, participant, nocoach, seed 1, 2 seasons): 111 steps, 4.2 s
+ok   Arsenal (now, participant, nocoach, seed 2, 2 seasons): 111 steps, 4.6 s
+ok   Arsenal (era2005, participant, nocoach, seed 1, 2 seasons): 111 steps, 3.3 s
+ok   Arsenal (era2005, participant, nocoach, seed 2, 2 seasons): 106 steps, 2.6 s
+ok   Arsenal (era2010, participant, nocoach, seed 1, 2 seasons): 105 steps, 2.9 s
+ok   Arsenal (era2010, participant, nocoach, seed 2, 2 seasons): 109 steps, 2.5 s
+ok   Arsenal (era2015, participant, nocoach, seed 1, 2 seasons): 109 steps, 2.4 s
+ok   Arsenal (era2015, participant, nocoach, seed 2, 2 seasons): 95 steps, 2.2 s
+ok   Manchester City (era2020, participant, nocoach, seed 1, 2 seasons): 111 steps, 2.4 s
+ok   Manchester City (era2020, participant, nocoach, seed 2, 2 seasons): 118 steps, 2.6 s
+ok   Chelsea (now, watcher, nocoach, seed 1, 3 seasons): 147 steps, 5.2 s
+ok   Chelsea (now, watcher, nocoach, seed 2, 3 seasons): 144 steps, 5.0 s
+ok   Hoffenheim (now, watcher, nocoach, seed 1, 3 seasons): 133 steps, 4.6 s
+ok   Hoffenheim (now, watcher, nocoach, seed 2, 3 seasons): 124 steps, 4.4 s
+ok   Everton (now, watcher, nocoach, seed 1, 3 seasons): 144 steps, 5.1 s
+ok   Everton (now, watcher, nocoach, seed 2, 3 seasons): 145 steps, 5.0 s
+ok   América (now, watcher, nocoach, seed 1, 3 seasons): 119 steps, 4.0 s
+ok   América (now, watcher, nocoach, seed 2, 3 seasons): 119 steps, 4.1 s
+ok   Proof Town Athletic (now, watcher, nocoach, seed 1, 3 seasons): 152 steps, 5.0 s
+ok   Proof Town Athletic (now, watcher, nocoach, seed 2, 3 seasons): 152 steps, 4.8 s
+ok   Wigan Athletic (era2005, watcher, nocoach, seed 1, 3 seasons): 137 steps, 3.0 s
+ok   Wigan Athletic (era2005, watcher, nocoach, seed 2, 3 seasons): 136 steps, 3.1 s
+ok   Wolves (era2010, watcher, nocoach, seed 1, 3 seasons): 134 steps, 3.3 s
+ok   Wolves (era2010, watcher, nocoach, seed 2, 3 seasons): 137 steps, 3.4 s
+ok   West Ham (era2015, watcher, nocoach, seed 1, 3 seasons): 144 steps, 3.4 s
+ok   West Ham (era2015, watcher, nocoach, seed 2, 3 seasons): 137 steps, 3.3 s
+ok   Sheffield United (era2020, watcher, nocoach, seed 1, 3 seasons): 134 steps, 3.0 s
+ok   Sheffield United (era2020, watcher, nocoach, seed 2, 3 seasons): 135 steps, 2.8 s
+journeys 30, steps compared 3782, tree journeys whose save carried worldComps 20, evaluations on the live state 3782, 111 s
+old saves (written by d8aaa4cb): 126 loaded by both engines, 52 gained a watched Champions League at load, 74 did not, 0 against the rule
+proofWorldUclFleet: GREEN, 30 journeys and 3782 steps byte equal to d8aaa4cb (a watching state without worldComps), draws equal
