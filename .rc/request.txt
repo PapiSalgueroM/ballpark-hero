@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+walk: node .rc/x/rvrun-walk.mjs
+basecompare: git worktree add -f /tmp/wbase d8aaa4cb > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wbase/node_modules && (cd /tmp/wbase && npm run build > /tmp/wb.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/wbase/dist 4180 > /tmp/hs.log 2>&1 &) && sleep 4 && OLD_BASE=http://127.0.0.1:4180 node .rc/x/rvrun-oldsave.mjs; o=$?; echo "oldsave exit=$o"; MATCHDAY_COMPARE_DIST=/tmp/wbase/dist node scripts/playCmMatchDay.mjs > /tmp/cmp.log 2>&1; c=$?; grep -E "FAIL|differ|under 12" /tmp/cmp.log | head -20; tail -2 /tmp/cmp.log; echo "compare exit=$c oldsave exit=$o"; [ $o -eq 0 ] && [ $c -eq 0 ]
+playCmMatchDay: node scripts/playCmMatchDay.mjs
+pmd-swap: PLAY_MATCHDAY_CONTROL=swap node scripts/playCmMatchDay.mjs
+pmd-cut: PLAY_MATCHDAY_CONTROL=cut node scripts/playCmMatchDay.mjs
+pmd-jump: PLAY_MATCHDAY_CONTROL=jump node scripts/playCmMatchDay.mjs
+pmd-fullname: PLAY_MATCHDAY_CONTROL=fullname node scripts/playCmMatchDay.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+lf-widelabels: LIVE_FIT_CONTROL=widelabels node scripts/playLiveMatchFit.mjs
+lf-digits: LIVE_FIT_CONTROL=digits node scripts/playLiveMatchFit.mjs
