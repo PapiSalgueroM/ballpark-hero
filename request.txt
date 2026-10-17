@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simClubManagerDeals: node scripts/simClubManagerDeals.mjs
+simEra2020: node scripts/simEra2020.mjs
+simNationalityFlags: node scripts/simNationalityFlags.mjs
+simTransfers: node scripts/simTransfers.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+trust: node scripts/simTrustCopy.mjs
+access: node scripts/simAccessibility.mjs
