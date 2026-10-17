@@ -1,8 +1,9 @@
 /**
  * Round 1501 browser walk: Club Manager's difficulty levels on the screens, at 320 by 640, 390 by 844 and 1280 by 900.
  *
- *   (a) The Dugout step's Career options card offers Normal, Hard and Legend with Normal pressed; pressing Legend
- *       and then the No sacking switch moves nothing (scrollY and the document height the same); every tile is at
+ *   (a) The Dugout step's Career options card offers Normal, Hard and Legend with Normal pressed; pressing every
+ *       tile in turn (Hard, Legend, Normal, Hard, Legend) and then the No sacking switch moves nothing (scrollY and
+ *       the document height the same after every press; at 320 Hard's blurb is a line longer); every tile is at
  *       least 44 px tall and nothing in the card is under 12 px; the page is no wider than the screen. Skip starts
  *       the career: the save holds the level and No sacking, the hub wears the Legend pill beside the No sacking
  *       pill, nothing in the header overlaps, and the header's height is printed beside a Normal career's.
@@ -13,10 +14,15 @@
  * The database host is blocked; the page plays on a seeded stream (DIFF_SEED, scripts/lib/pageSeed.mjs).
  * Pictures of each step go to $RC_OUT when it is set; look at them.
  *
- * CONTROL (PLAY_DIFF_CONTROL=nopill) renames the level pill's marker in the SERVED chunk
- * (scripts/lib/servedCodeControl.mjs), never src, and exits 0 only when every pill check aimed at it went red.
+ * CONTROLS patch the SERVED chunk (scripts/lib/servedCodeControl.mjs), never src, and exit 0 only when every
+ * check aimed at them went red:
+ *   PLAY_DIFF_CONTROL=nopill renames the level pill's marker: the pill check goes red at every width.
+ *   PLAY_DIFF_CONTROL=jump drops the blurbs that are not pressed out of their shared grid cell, so the box is as
+ *     tall as the pressed one only: the tile press check goes red at 320 (at 390 and 1280 every blurb is two lines,
+ *     so the control is aimed at 320 alone and refuses to run without it).
  *
  *   #!serve then: node scripts/playCmDifficulty.mjs        WIDTHS=390 PLAY_DIFF_CONTROL=nopill node scripts/playCmDifficulty.mjs
+ *                 WIDTHS=320 PLAY_DIFF_CONTROL=jump node scripts/playCmDifficulty.mjs
  */
 import path from 'node:path';
 import pw from './lib/playwrightLoader.mjs';
@@ -27,7 +33,7 @@ const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 const OUT = process.env.RC_OUT || '';
 const CONTROL = process.env.PLAY_DIFF_CONTROL || '';
-if (CONTROL && CONTROL !== 'nopill') { console.error(`PLAY_DIFF_CONTROL=${CONTROL} is not a control this walk knows (nopill)`); process.exit(2); }
+if (CONTROL && CONTROL !== 'nopill' && CONTROL !== 'jump') { console.error(`PLAY_DIFF_CONTROL=${CONTROL} is not a control this walk knows (nopill, jump)`); process.exit(2); }
 let SEED = 0;
 try { SEED = pageSeedOf(import.meta.url, process.env.DIFF_SEED); } catch (e) { console.error(`DIFF_SEED: ${e.message}`); process.exit(2); }
 const HEIGHTS = { 320: 640, 390: 844, 1280: 900 };
@@ -77,6 +83,9 @@ async function newCtx(vp) {
   await ctx.route(/supabase\.co/, r => r.abort());
   await seedPages(ctx, SEED);
   if (CONTROL === 'nopill') await installServedCodeControl(ctx, [{ label: 'pill', find: /"data-cm-level-pill":/g, replace: '"data-cm-level-gone":' }], proof);
+  /* The blurbs that are not pressed leave the grid cell (display none instead of visibility hidden), so the box
+     is only as tall as the pressed one: the fixed box the review found jumping at 320. */
+  if (CONTROL === 'jump') await installServedCodeControl(ctx, [{ label: 'blurb', find: /("col-start-1 row-start-1",[\w$]+!==?[\w$]+&&")invisible"/g, replace: '$1hidden"' }], proof);
   return ctx;
 }
 /** A fresh start to the club picker: 2026-27, England, the Premier League, Brentford, to the Dugout step. */
@@ -122,20 +131,25 @@ for (const W of WIDTHS) {
   await pd.close();
   await ctxD.close();
 
-  /* (a) Legend and No sacking on the Dugout step, then Skip. */
+  /* (a) every tile in turn, ending on Legend, then No sacking on the Dugout step, then Skip. Every tile is
+     pressed because the blurbs differ in length: at 320 Hard's wraps to three lines (review of 2026-10-17). */
   const ctxA = await newCtx(vp);
   const pa = await toDugout(ctxA);
   const legend = pa.locator('[data-cm-level-tile="legend"]');
   await legend.scrollIntoViewIfNeeded().catch(() => {});
-  const before = await pa.evaluate(() => [window.scrollY, document.documentElement.scrollHeight]);
-  await legend.click({ timeout: 5000 }).catch(() => {});
-  await pause(pa, 250);
-  const mid = await pa.evaluate(() => [window.scrollY, document.documentElement.scrollHeight]);
+  const where = () => pa.evaluate(() => [window.scrollY, document.documentElement.scrollHeight]);
+  const steps = [['start', await where()]];
+  for (const lv of ['hard', 'legend', 'normal', 'hard', 'legend']) {
+    await pa.locator(`[data-cm-level-tile="${lv}"]`).click({ timeout: 5000 }).catch(() => {});
+    await pause(pa, 250);
+    steps.push([lv, await where()]);
+  }
   await pa.locator('[data-cm-nosack-switch]').click({ timeout: 5000 }).catch(() => {});
   await pause(pa, 250);
-  const after = await pa.evaluate(() => [window.scrollY, document.documentElement.scrollHeight]);
+  steps.push(['switch', await where()]);
   say((await legend.getAttribute('aria-checked').catch(() => null)) === 'true', `${W}: Legend is pressed`);
-  say(before.join() === mid.join() && mid.join() === after.join(), `${W}: pressing Legend and the switch moves nothing (scrollY ${before[0]}, ${mid[0]}, ${after[0]}; height ${before[1]}, ${mid[1]}, ${after[1]})`);
+  const moved = steps.filter(([, at]) => at.join() !== steps[0][1].join());
+  say(moved.length === 0, `${W}: pressing Hard, Legend, Normal, Hard, Legend and the switch moves nothing (${steps.map(([k, at]) => `${k} ${at[0]}/${at[1]}`).join(', ')})`, CONTROL === 'jump' && W === 320);
   const s = await sizes(pa, '[data-cm-career-options]');
   say(s.button >= 44 && s.font >= 12, `${W}: the card's shortest button is ${s.button.toFixed(1)} px and its smallest text ${s.font} px`);
   say(await fits(pa), `${W}: the Dugout step is no wider than the screen`);
@@ -145,7 +159,7 @@ for (const W of WIDTHS) {
   const sa = await readSave(pa);
   say(!!sa && sa.level === 'legend' && sa.noSack === 1, `${W}: the save holds Legend and No sacking (${sa && sa.level}, ${sa && sa.noSack})`);
   const pillText = ((await pa.locator('[data-cm-level-pill]').innerText().catch(() => '')) || '').trim();
-  say(pillText === 'Legend', `${W}: the hub wears the Legend pill ("${pillText}")`, true);
+  say(pillText === 'Legend', `${W}: the hub wears the Legend pill ("${pillText}")`, CONTROL === 'nopill');
   say((await pa.locator('[data-cm-nosack-pill]').count()) === 1, `${W}: and the No sacking pill beside it`);
   const hA = await header(pa);
   say(!!hA && hA.overlaps === 0 && hA.right <= W + 1, `${W}: nothing in the header overlaps or runs off the page (${hA && hA.overlaps} overlaps)`);
@@ -181,4 +195,4 @@ for (const W of WIDTHS) {
 }
 await browser.close();
 say(errors.length === 0, `no page errors${errors.length ? `: ${errors.slice(0, 3).join(' | ')}` : ''}`);
-process.exit(verdict('playCmDifficulty', proof, { minGuarded: WIDTHS.length }));
+process.exit(verdict('playCmDifficulty', proof, { minGuarded: CONTROL === 'jump' ? Math.max(1, WIDTHS.filter(w => w === 320).length) : WIDTHS.length }));

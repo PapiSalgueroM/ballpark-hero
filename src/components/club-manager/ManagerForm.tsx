@@ -209,7 +209,9 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
         <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-2" data-cm-career-options>
           <div className="text-xs font-bold text-foreground">⚙️ Career options</div>
           {/* Round 1501: how hard. Three tiles in one row, Normal pressed; the line under them says what the
-              pressed one does and keeps two lines of room, so pressing a tile never moves the page. */}
+              pressed one does. All three lines sit in the same grid cell and only the pressed one is visible,
+              so the box is always as tall as the longest of them at any width and pressing a tile never moves
+              the page (a fixed two line box let Hard's line wrap to three at 320 and push the page 16 px). */}
           <div className="text-xs text-muted-foreground">How hard do you want it?</div>
           <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="How hard" data-cm-level-tiles={level}>
             {DIFFICULTY_LEVELS.map(lv => (
@@ -229,9 +231,13 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
               </button>
             ))}
           </div>
-          <p className="text-xs text-muted-foreground min-h-[2rem]" data-cm-level-blurb>
-            {DIFFICULTY_INFO[level].blurb} Picked once, it stays for this career.
-          </p>
+          <div className="grid text-xs text-muted-foreground" data-cm-level-blurb={level}>
+            {DIFFICULTY_LEVELS.map(lv => (
+              <p key={lv} className={cn('col-start-1 row-start-1', lv !== level && 'invisible')} aria-hidden={lv !== level}>
+                {DIFFICULTY_INFO[lv].blurb} Picked once, it stays for this career.
+              </p>
+            ))}
+          </div>
           <button
             type="button"
             role="switch"
