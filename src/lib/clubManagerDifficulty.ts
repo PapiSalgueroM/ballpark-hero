@@ -1,0 +1,141 @@
+/**
+ * Round 1501: Club Manager's difficulty. A player's report, 2026-10-14: "plsss
+ * make the game harder its simply way too easy". The levels and their words are
+ * sport neutral (src/lib/managerDifficulty.ts); this file is Club Manager's
+ * table of dials and the small functions the engine calls where a dial bites.
+ *
+ * The dials, one row per level:
+ *   gain    the board's change after a match, when it is up, times this
+ *   pain    the same when it is down (after patience and the press)
+ *   cut     points off a stay's summer opening, only when that opening is
+ *           already under Safe: a season the board liked still opens Safe
+ *   cheque  the board's money (day one, every summer, a move) times this
+ *   wageRoom the wage ceiling a job starts with times this (never under 60)
+ *   mark    the price the market lists FOR YOU times this; the AI's own deals
+ *           and every man's value are untouched
+ *   edge    strength points the other side adds in your matches only
+ *
+ * NORMAL IS THE GAME AS IT WAS, TO THE BYTE. Every function below returns its
+ * input untouched when ITS dial holds the identity value (1, or 0 for cut and
+ * edge), by an early return, never by arithmetic with 1: rounding a budget to
+ * 0.1 is not the identity on every double. Nothing here draws from Math.random,
+ * and nothing is evaluated at module scope but the table.
+ *
+ * IMPORTS: types from clubManager.ts, and values only from files that do not
+ * import the engine back at runtime (clubManagerStart.ts imports it as a type
+ * only, clubManagerBoardVerdict.ts and managerDifficulty.ts import nothing), so
+ * the engine can import this file without a cycle. Anything that needs the
+ * engine (the board's asks) is handed in by the caller.
+ */
+import type { BoardObjective, CareerState, MarketPlayer } from '@/lib/clubManager';
+import { applyCareerSetup, levelFrom, startOptionsOf } from '@/lib/clubManagerStart';
+import type { CareerSetup } from '@/lib/clubManagerStart';
+import { BOARD_SAFE_LINE } from '@/lib/clubManagerBoardVerdict';
+import type { DifficultyLevel } from '@/lib/managerDifficulty';
+
+export interface CmDials {
+  gain: number;
+  pain: number;
+  cut: number;
+  cheque: number;
+  wageRoom: number;
+  mark: number;
+  edge: number;
+}
+
+/** The table. Set from measurement (scripts/simCmDifficulty.mjs section 4, its header has the numbers). */
+export const CM_DIFFICULTY_DIALS: Record<DifficultyLevel, CmDials> = {
+  normal: { gain: 1, pain: 1, cut: 0, cheque: 1, wageRoom: 1, mark: 1, edge: 0 },
+  hard: { gain: 0.8, pain: 1.25, cut: 8, cheque: 0.8, wageRoom: 0.94, mark: 1.15, edge: 1.5 },
+  legend: { gain: 0.65, pain: 1.5, cut: 14, cheque: 0.65, wageRoom: 0.9, mark: 1.3, edge: 3 },
+};
+
+/** The career's level. A save without the key is Normal. */
+export function difficultyOf(state: CareerState): DifficultyLevel {
+  return levelFrom(state);
+}
+
+function dialsOf(state: CareerState): CmDials {
+  return CM_DIFFICULTY_DIALS[levelFrom(state)];
+}
+
+/** B1: the board's change after one of your matches, before it is rounded. */
+export function boardSwing(state: CareerState, delta: number): number {
+  const { gain, pain } = dialsOf(state);
+  if (delta > 0) return gain === 1 ? delta : delta * gain;
+  if (delta < 0) return pain === 1 ? delta : delta * pain;
+  return delta;
+}
+
+/** B2: a stay's summer opening. At or above Safe it is untouched; under Safe it drops by the cut. */
+export function boardOpening(state: CareerState, value: number): number {
+  const { cut } = dialsOf(state);
+  if (cut === 0 || value >= BOARD_SAFE_LINE) return value;
+  return value - cut;
+}
+
+/** M1: the board's money, to the nearest 0.1m. */
+export function boardCheque(state: CareerState, amount: number): number {
+  const { cheque } = dialsOf(state);
+  return cheque === 1 ? amount : Math.round(amount * cheque * 10) / 10;
+}
+
+/** M2: the wage ceiling a job starts with. Never under 60, the floor wageCapFrom keeps. */
+export function wageRoomFor(state: CareerState, cap: number): number {
+  const { wageRoom } = dialsOf(state);
+  return wageRoom === 1 ? cap : Math.max(60, Math.round(cap * wageRoom));
+}
+
+/** T1: one price as the market lists it to you. */
+export function markedPrice(state: CareerState, price: number): number {
+  const { mark } = dialsOf(state);
+  return mark === 1 ? price : Math.max(0.5, Math.round(price * mark * 10) / 10);
+}
+
+/** T1: the market as you see it. The same array at Normal; otherwise the same men in
+ *  the same order, every field kept, only the price marked (never the value, which a
+ *  signing stores on the man and a sale reads back). */
+export function marketForMe(state: CareerState, market: MarketPlayer[]): MarketPlayer[] {
+  if (dialsOf(state).mark === 1) return market;
+  return market.map(mp => ({ ...mp, price: markedPrice(state, mp.price) }));
+}
+
+/** P1: what the other side adds to its strength in your match. */
+export function oppEdge(state: CareerState): number {
+  return dialsOf(state).edge;
+}
+
+/** M1 and M2 on a job you have just taken (day one, a takeover, a move in mid season):
+ *  the club's money times the cheque, its wage ceiling times the room. A created club's
+ *  founders' room (founderWageRoom) is added back whole, so only the base ceiling moves
+ *  by the dial and the first summer, which takes that room off, lands where it should.
+ *  The opening is NOT cut: a new appointment's mandate is the same at every level. */
+export function applyNewJobDials(state: CareerState): CareerState {
+  const d = dialsOf(state);
+  if (d.cheque === 1 && d.wageRoom === 1) return state;
+  const next: CareerState = { ...state, budget: boardCheque(state, state.budget) };
+  if (state.wageCap !== undefined) {
+    const room = state.founderWageRoom ?? 0;
+    next.wageCap = wageRoomFor(state, state.wageCap - room) + room;
+  }
+  return next;
+}
+
+/** The board's whole card, rebuilt for this state. The engine's asks need the engine,
+ *  so the caller hands the rebuild in (the hook passes clubManagerBoardAsks' builder). */
+export type AskRebuild = (state: CareerState) => BoardObjective[];
+
+/** The Dugout step's choice on a career startCareer (and startMidSeason) just made.
+ *  Normal with No sacking off is the very object it was given. Otherwise the level is
+ *  written on the block, the new job's dials are applied, and on day one (nothing played
+ *  yet) the board's asks are rebuilt for the smaller cheque and the marked market. A
+ *  takeover keeps the card the club set before you came. No sacking is Round 1342's. */
+export function setUpCareer(state: CareerState, setup?: CareerSetup, rebuildAsks?: AskRebuild): CareerState {
+  const level = setup?.level ?? 'normal';
+  let s = state;
+  if (level !== 'normal') {
+    s = applyNewJobDials({ ...state, startOptions: { ...startOptionsOf(state), difficulty: level } });
+    if (rebuildAsks && s.week === 0 && !s.midSeasonStart) s = { ...s, boardObjectives: rebuildAsks(s) };
+  }
+  return applyCareerSetup(s, setup);
+}

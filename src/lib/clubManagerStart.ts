@@ -37,6 +37,9 @@
  * clubManager.ts for its types.
  */
 import type { CareerState } from '@/lib/clubManager';
+/* Round 1501: the level's reader, from a file that imports nothing. */
+import { readLevel } from '@/lib/managerDifficulty';
+import type { DifficultyLevel } from '@/lib/managerDifficulty';
 
 /* ================================================================== */
 /* Currency                                                           */
@@ -109,6 +112,9 @@ export interface StartOptions {
   /** Round 1342: No sacking, stored as the season it was switched on. One way:
    *  absent is off and nothing deletes it. Only a positive whole number counts. */
   noSack?: number;
+  /** Round 1501: how hard the career plays, picked on the Dugout step and fixed for its life.
+   *  Absent is Normal, so every older save is Normal and a Normal career writes nothing. */
+  difficulty?: 'hard' | 'legend';
 }
 
 export function defaultStartOptions(): StartOptions {
@@ -148,15 +154,19 @@ export function ensureStartOptions(state: CareerState): StartOptions {
        survives, because dropping it would hand the board its sack back
        without the player asking. */
     const noSack = noSackFrom(state);
+    /* Round 1501: and so does the level, for the same reason. */
+    const level = levelFrom(state);
     state.startOptions = defaultStartOptions();
     if (noSack !== null) state.startOptions.noSack = noSack;
+    if (level !== 'normal') state.startOptions.difficulty = level;
   }
   return state.startOptions as StartOptions;
 }
 
 /** Set one option. Returns null when it cannot be done, the shape the hook takes.
-    No sacking is not one of them: it only ever goes on, through turnOnNoSack. */
-export function setStartOption<K extends keyof Omit<StartOptions, 'v' | 'noSack'>>(
+    No sacking is not one of them: it only ever goes on, through turnOnNoSack.
+    Round 1501: nor is the level, which is fixed when the career begins. */
+export function setStartOption<K extends keyof Omit<StartOptions, 'v' | 'noSack' | 'difficulty'>>(
   career: CareerState,
   key: K,
   value: StartOptions[K],
@@ -257,9 +267,17 @@ export function turnOnNoSack(state: CareerState): CareerState | null {
   return { ...state, startOptions: { ...startOptionsOf(state), noSack: season } };
 }
 
-/** What the Dugout step hands a new career. Absent or off is the career startCareer made. */
+/** What the Dugout step hands a new career. Absent or off is the career startCareer made.
+ *  Round 1501: the level rides here too; src/lib/clubManagerDifficulty.ts applies it. */
 export interface CareerSetup {
   noSack?: boolean;
+  level?: DifficultyLevel;
+}
+
+/** Round 1501: the career's level, read off the raw block the way noSackFrom reads No sacking. */
+export function levelFrom(state: CareerState): DifficultyLevel {
+  const o = state.startOptions as { difficulty?: unknown } | null | undefined;
+  return readLevel(o && typeof o === 'object' ? o.difficulty : undefined);
 }
 
 export function applyCareerSetup(state: CareerState, setup?: CareerSetup): CareerState {
