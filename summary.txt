@@ -1,0 +1,6 @@
+simCmMatchDay exit=2 16s | simCmMatchDay could not run: Everton (era2005) did not start a career
+simMatchScreen exit=0 11s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+simCmMatchCentre exit=0 9s | simCmMatchCentre: PASS. Every stat on the report and the live strip is counted off the committed play and lines, and every timeline row is an event the engine drew.
+simHarnessAnchors exit=0 85s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 154s | 
+unitcm exit=0 222s |    Duration  220.61s (transform 17.31s, setup 5.79s, collect 57.06s, tests 525.95s, environment 40.94s, prepare 9.23s)

@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unitcm: node_modules/.bin/vitest run $(grep -l "club-manager\|clubManager\|ClubManager\|cmMatchDisplay" src/test/*.test.ts* src/lib/*.test.ts) --testTimeout=300000 --hookTimeout=120000
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
