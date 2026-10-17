@@ -1,0 +1,13 @@
+headsha: git log --oneline -3
+simSoccerWorldTruth: node scripts/simSoccerWorldTruth.mjs
+simSoccerWorldTruth-offset1: SEED_OFFSET=1 node scripts/simSoccerWorldTruth.mjs
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+ctl-fairness-16: n=0; bad=""; for c in shuffle ranking globalpick keyseason newsyear nogate puskas loanclub unit poscode uncapped prefix olddebut injblow injlog outside; do SIM_SOCCER_DECK_FAIRNESS_CONTROL=$c node scripts/simSoccerDeckFairness.mjs > "$TMPDIR/fair-$c.log" 2>&1; s=$?; grep -h "CONTROL $c " "$TMPDIR/fair-$c.log"; if [ $s -eq 1 ] && grep -qE "CONTROL $c FIRED: section [0-9]+ failed \([0-9]+ failures in all\)" "$TMPDIR/fair-$c.log"; then n=$((n+1)); else bad="$bad $c(exit $s)"; tail -5 "$TMPDIR/fair-$c.log"; fi; done; echo "simSoccerDeckFairness: $n of 16 Round 1327 controls fired${bad:+, NOT FIRED:$bad}"; [ $n -eq 16 ]
+ctl-worldtruth-16: n=0; bad=""; for p in goalsonly:1 seasonyear:1 nolegacy:2 realmoves:3 pastchampions:3 summer:3 quizyear:4 arcade:4 outside:6 log:5 boundary:0 panel:5 floor:0 legacy35:2 legacy30:2 extradraw:2; do c=${p%%:*}; k=${p#*:}; WORLD_TRUTH_CONTROL=$c node scripts/simSoccerWorldTruth.mjs > "$TMPDIR/wt-$c.log" 2>&1; s=$?; grep -h "WORLD_TRUTH_CONTROL=$c failed\|WORLD_TRUTH_CONTROL=$c left" "$TMPDIR/wt-$c.log"; if [ $s -eq 1 ] && grep -qF "FIRED: WORLD_TRUTH_CONTROL=$c failed section $k (" "$TMPDIR/wt-$c.log"; then n=$((n+1)); else bad="$bad $c(exit $s)"; tail -5 "$TMPDIR/wt-$c.log"; fi; done; echo "simSoccerWorldTruth: $n of 16 Round 1329 controls fired on their own sections${bad:+, NOT FIRED:$bad}"; [ $n -eq 16 ]
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerProgramme: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerTrophyRuns: node scripts/simCareerTrophyRuns.mjs
+simPhone: node scripts/simPhone.mjs
+simPhonePanelFocus: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPhonePanelFocus.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
