@@ -1409,7 +1409,7 @@ if (SECTIONS.has(0)) {
   for (const [name, c] of Object.entries(CONTROLS)) for (const [from] of c.edits) {
     const n = (c.file ? lf(fs.readFileSync(path.join(ROOT, c.file), 'utf8')) : treeSource).split(from).length - 1;
     console.log(`   control ${name}: ${n}`);
-    if (n !== 1) fail(0, `the anchor of the control ${name} stands ${n} times in ${ENGINE}`);
+    if (n !== 1) fail(0, `the anchor of the control ${name} stands ${n} times in ${c.file ?? ENGINE}`);
   }
 }
 const headEdits = [CONTROL ? editOf(CONTROLS[CONTROL].edits, CONTROL) : null].filter(Boolean);
