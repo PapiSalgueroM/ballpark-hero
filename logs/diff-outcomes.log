@@ -1,0 +1,22 @@
+simCmDifficulty: sections 4
+  table: normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":1.5}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3}
+4) outcomes: normal, hard, legend, 16 seeds from 0, 6 seasons, engaged, shard 0/1
+
+<--- Last few GCs --->
+
+[3690:0x33b45000]  1313171 ms: Scavenge 4024.7 (4084.0) -> 4012.6 (4115.2) MB, pooled: 0 MB, 7.99 / 0.00 ms  (average mu = 0.339, current mu = 0.328) allocation failure; 
+[3690:0x33b45000]  1314843 ms: Mark-Compact (reduce) 4050.1 (4119.6) -> 3998.7 (4046.7) MB, pooled: 0 MB, 96.30 / 0.00 ms  (+ 1451.8 ms in 278 steps since start of marking, biggest step 7.6 ms, walltime since start of marking 1644 ms) (average mu = 0.358,
+FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
+----- Native stack trace -----
+
+ 1: 0x931db0  [node]
+ 2: 0x75968e node::OOMErrorHandler(char const*, v8::OOMDetails const&) [node]
+ 3: 0xc70d60  [node]
+ 4: 0xc70e4f  [node]
+ 5: 0xf14725  [node]
+ 6: 0xf14752  [node]
+ 7: 0xf14a4a  [node]
+ 8: 0xf2574a  [node]
+ 9: 0xf29af0  [node]
+10: 0x19c77d1  [node]
+timeout: the monitored command dumped core

@@ -1,0 +1,36 @@
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/hooks/useClubManager.test.ts src/lib/clubManagerBoardVerdict.test.ts src/lib/clubManagerCustomPromotion.test.ts src/lib/clubManagerDifficulty.test.ts src/lib/clubManagerGoalWeight.test.ts src/lib/clubManagerInternationals.test.ts src/lib/clubManagerLeagueBoards.test.ts src/lib/clubManagerLeagueBook.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerRecords.test.ts src/lib/clubManagerReportAge.test.ts src/lib/clubManagerReportedScorers.test.ts src/lib/clubManagerRetire.test.ts src/lib/clubManagerSlots.test.ts src/lib/clubManagerSubsRule.test.ts src/lib/clubManagerTrajectory.test.ts src/lib/clubManagerWorldRoster.test.ts src/test/clubManagerBracketMoment.test.tsx src/test/clubManagerDealMoment.test.tsx src/test/clubManagerDecisionDeadline.test.ts src/test/clubManagerDecisionDepth.test.ts src/test/clubManagerDecisions.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/clubManagerEraNationalities.test.ts src/test/clubManagerEraPicker.test.tsx src/test/clubManagerHubLines.test.ts src/test/clubManagerJobHunt.test.ts src/test/clubManagerManagerFace.test.tsx src/test/clubManagerNoSack.test.tsx src/test/clubManagerOfferConfirm.test.tsx src/test/clubManagerRecordBoundary.test.ts src/test/clubManagerRetire.test.tsx src/test/clubManagerRowButtons.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerSaveSize.test.tsx src/test/clubManagerShootoutOrder.test.ts src/test/clubManagerShootoutTile.test.tsx src/test/clubManagerSlots.test.tsx src/test/clubManagerStartWait.test.tsx src/test/clubManagerVarLive.test.tsx src/test/clubManagerVarScreen.test.tsx src/test/clubManagerWorldEditor.test.tsx src/test/clubManagerWorldEditorPage.test.tsx src/test/cmLeagueLeadersCard.test.tsx src/test/cmMinuteLabel.test.ts src/test/cmTablesTruth.test.tsx src/test/cmValueCurve.test.ts src/test/cmWorldIdentity1052.test.ts --testTimeout=300000 --hookTimeout=120000
+diff-base: git worktree add -q /tmp/b1 d8aaa4cb && BASE_ROOT=/tmp/b1 node scripts/simCmDifficulty.mjs
+diff-outcomes: SECTION=4 node scripts/simCmDifficulty.mjs
+diff-alloff: SECTION=4 SEEDS=2 CM_DIFF_CONTROL=alloff node scripts/simCmDifficulty.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simCmNoSack: git worktree add -q /tmp/b2 d8aaa4cb && BASE_ROOT=/tmp/b2 node scripts/simCmNoSack.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
