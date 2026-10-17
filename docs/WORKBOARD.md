@@ -15817,3 +15817,7 @@ TESTED0009 run39022764657/job117367697233success reproduces7exact ownership faul
 ## Codex1403 setup correction, 2026-10-17 UTC
 
 Firstfullrequesta82 failed before productchecks because9fontbodies+manifest werecounted as9total. Allfiveproduct/buildstagesunvisited. CorrectownWF to9bodies/10allfiles, sourceguard0690/testfda/capsheld. Failures/artifactretained, successorqualificationpending. NoREADY/live.
+
+## Codex1403 scoped READY, 2026-10-17 UTC
+
+Build Your XI reset/newformation/unmount invalidate pending reviews; old answers cannot publish, count completion or clear a replacement review's busy flag. Product0690, frozenmethodfda, WF0330. ActualTESTEDfbb8/run39024732419/job117373372408success:12/(7exact+5)/12,58+58+15,validator55/Fit/types,serialWNbuild15readers,realpage390/1280+effectivecontrol,14unchangedfatalcaps/allholds. Physical8583d995/semantic750e402c(1129/0) close136payloads/4872source/784dist. Firsta82font-countsetupfailure retainedNOTREADY, fixedWFonly9bodies+manifest10. Actual3genadopteda091, final3docsonlyclosureoutside. BIIactualTESTEDfbb8realmerge, closingdocsseparate,Iregenactualjoin. Preservequalified308twohooklinesonce,308SCstartfixindependent. Iownsactive1503/1504/1500/competition/main/publish. No rootgate/liveclaim.

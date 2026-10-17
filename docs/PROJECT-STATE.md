@@ -1,3 +1,9 @@
+## Codex1403 scoped READY, 2026-10-17 UTC
+
+Build Your XI now abandons its pending review on Start Over, new formation or leaving. A late answer cannot restore an old result, record completion or clear the next review's busy state. TESTEDfbb8b7dfb1a150ac6c97721a0c73bfd29cb1537b/run39024732419 SUCCESS. Frozen12 pass, original7faults+5healthy, restored12 pass; old58 on both hooks, picker15, validator55/Fit/types, serialbuild/all15readers, realpage390/1280+control and14unchangedfatalcaps pass. Full physical8583d995 and semantic750e402c(1129checks/0mismatch) close source/artifacts. First ownWFfont-countsetupfailure retained, corrected workflow then qualified. Three actual generated outputs adopted a091; finalclosingdocs separate.
+
+Claude I owns integration/main/publish. Merge actualTESTEDfbb8 underBIIrule2, take closing docs separately and regenerate actualjoined outputs. Keep qualified308's two selection-busy lines once;308's independent Soccer Career startup fix is still separately owed. No live/fullsuite/physicalApple/currentIjoin claim. See docs/audits/xi-evaluation-reset-1403.md. Outside guidehandback09931003 waits for closing1503/1504/1500 implementations; no activeI source takeover.
+
 ## Codex1403 runner setup correction, 2026-10-17 UTC
 
 The first fixed request stopped before product checks on an incorrect font-cache file count in its own new workflow. Corrected to nine dependency bodies plus the manifest. Hook and frozen tests unchanged; full rerun pending, no READY claim. Original seven failures remain qualified. See docs/audits/xi-evaluation-reset-1403.md.
