@@ -127,3 +127,21 @@ the league table's goals pair, not a match screen.
 - The Stats tile (r1340-m2 on c109dd75): 2 of the 200 longest pitch names of the 2026-27 world pass two lines at
   320 in the shipped wording (Amaimouni-Echghouyab, Oxlade-Chamberlain); "<name>: 12" would keep all 200 in two.
   Owed to the lead as a decision; save D's check stays red until then.
+
+## Final proof of the whole round (on c109dd75, GitHub runners)
+
+- r1340-G1 core: all as they must be (tsc 0, the Club Manager unit set 0, simCmMatchDay 0 and its five controls
+  fired, simMatchScreen and its three controls, the match screen and motion sims, the dailies, simHarnessAnchors,
+  simNoRivalNames 0 findings, Round 1331's lines byte for byte, the engine name only diff: cmMatchDisplay.ts and its
+  test alone).
+- r1340-G2 page and help readers: 21 green; simCmLeagueRules and simManagerWorldContinuity red with the same first
+  line on the base d8aaa4cb (r1340-G2b); simClubManagerDecisionDeadline green when run with CM_DEADLINE_CORE_REF=HEAD.
+- r1340-G3 the 24 rule fences: 21 green; two need the live database; simWritesAreSent red with the same first line on
+  the base.
+- r1340-G4 and G4b walks: all green or fired but save D's Stats tile (one failure, the decision owed to the lead) and
+  the match plans all control (its anchor is gone from useClubManager.ts on the base and on main); playCmVar's one
+  loaded case reran green alone.
+- r1340-G5: weight /club-manager 607.2K to 607.7K (+0.5K, the allotment), the dailies 0.1K lighter; every row over
+  budget on the base already; cmMatchDisplay.ts 1074 B minified, 586 B gzipped; the seeded save compare equal to
+  the byte; playCmTablesFit PART 1 green, PART 2's two findings are its base expectations.
+- origin/main holds no Release BI commit (its head is four Lovable editor commits): not merged.
