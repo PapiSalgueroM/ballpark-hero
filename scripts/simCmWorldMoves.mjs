@@ -116,7 +116,11 @@
  *      kind cannot run.
  *  14. (Round 1508, the same major) section 3's joins in ADOPTED careers, made the same way: the joined career
  *      carries the departed adopted career's deal lines of this season between two other clubs, its gone names and
- *      its ledger exactly as a seeded one does. Under 6 moves cannot run.
+ *      its ledger exactly as a seeded one does. Under 6 moves cannot run. The adoption comes right after startCareer,
+ *      so its opening window's deals between two other clubs were made before it and no record holds those men (a
+ *      real career adopts at its summer before the summer's first deal, so it has none of them). Their gone names are
+ *      carried like any, they have no door to press, and the screen must list them nowhere (control goneshown); they
+ *      are counted apart (r1508-f2p1, seeds 1 to 3: 71 men, all carried lines of week 0; section 3 skips none).
  *
  * MEASURED AT STEP 1 (GitHub runners, 2026-10-16; the head was the base plus scripts and a throwaway probe,
  * scripts/lib/cmAiRecordProbe1344.mjs, removed at step 2 and kept in the history at ee949025 and 21b3fa70):
@@ -161,6 +165,8 @@
  *                                     (r1508-run-p: sections 2 and 3 as they stand stayed green under it)
  *   CM_WORLD_MOVES_CONTROL=seedcarry  (Round 1508) joinClubNow's carry of this season's deal lines and gone names
  *                                     back to the seed only test: section 14 red (sections 2 and 3 stayed green)
+ *   CM_WORLD_MOVES_CONTROL=goneshown  (Round 1508's closing check) buildMarket lists gone names again: section 14
+ *                                     red on the men bought before the adoption, back on the screen at their old clubs
  *   CM_WORLD_MOVES_COMBINE_CONTROL=shift  --combine adds 0.2 to the head's top five XI at season 10: red
  * Exit 0 green, 1 red or a control that fired, 2 could not run, 3 a control that did not fire.
  *
@@ -237,6 +243,9 @@ const CONTROLS = {
      test. Only sections 13 and 14 can see them. */
   seedclose: { section: 13, edits: [['  return livingWorldOf(career) && recordAiDeal(career, deal, career) === career;\n', '  return worldSeedOf(career) !== undefined && recordAiDeal(career, deal, career) === career;\n']] },
   seedcarry: { section: 14, file: 'src/lib/clubManagerCalendar.ts', edits: [['    ...(!livingWorldOf(departed) ? {} : seededJoinCarry(career, s, movedElsewhere)),\n', '    ...(worldSeedOf(departed) === undefined ? {} : seededJoinCarry(career, s, movedElsewhere)),\n']] },
+  /* Round 1508's closing check (finding 2): buildMarket lists gone names again, so a man bought before the adoption,
+     whom no record holds, is back on the screen at the club the projection keeps him at. */
+  goneshown: { section: 14, edits: [['!squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name)', '!squadNames.has(p.name) && !retired.has(p.name)']] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`);
 /* A control runs its own section and the anchors only, unless the sections are named. */
@@ -351,6 +360,8 @@ function addedLines(before, after) {
 }
 /** PR269's rule for a deal between two other clubs: a new line, not a loan, neither club mine. */
 const aiLine = mine => line => !line.loan && line.from !== mine && line.to !== mine && line.from !== 'a free transfer' && line.to !== 'a free transfer';
+/** One deal line as a key (section 14 tells the lines made before the adoption from the rest by it). */
+const dealKey = t => `${t.name}|${t.from}|${t.to}|${t.season}|${t.week}`;
 /** Every club of the career's world but mine, and every club the ledger names as an owner. */
 function worldClubs(M, s) {
   const era = s.eraId ?? 'now';
@@ -695,7 +706,7 @@ async function protectedCareer(E, club, seed, kind, adopted = false) {
 const JOIN_TO ={ 'Real Madrid': 'Arsenal', Everton: 'Napoli', Aberdeen: 'Fulham' };
 const s3 = { joins: 0, refused: 0, departed: 0, lines: 0, runIn: 0, gone: 0, carried: 0, payloads: 0, doors: 0, notOwned: 0, namesake: 0 };
 /* Section 14: the same joins in adopted careers, tallied apart. */
-const s14 = { joins: 0, refused: 0, departed: 0, lines: 0, runIn: 0, gone: 0, carried: 0, payloads: 0, doors: 0, notOwned: 0, namesake: 0 };
+const s14 = { joins: 0, refused: 0, departed: 0, lines: 0, runIn: 0, gone: 0, carried: 0, payloads: 0, doors: 0, notOwned: 0, namesake: 0, beforeAdoption: 0 };
 /** A seeded 2026-27 career (or, for section 14, an adopted one) that takes a job mid season, before or after its
     January window, through joinClubNow. */
 async function joinCareer(E, club, seed, when, adopted = false) {
@@ -704,6 +715,9 @@ async function joinCareer(E, club, seed, when, adopted = false) {
   const tag = `${club} (now, seed ${seed}, ${when === 'second' ? 'in season two' : `${when} January`}${adopted ? ', adopted' : ''})`;
   try {
     let s = M.cm.startCareer(club, 'now'), january = false, after = 0;
+    /* Round 1508's closing check (finding 2): the deal lines already in the log when the career is adopted, its
+       opening window's, which startCareer made before adoptedStart takes the ledger off, so no record holds them. */
+    const beforeAdoption = new Set(adopted ? (s.transferLog ?? []).map(dealKey) : []);
     if (adopted) s = adoptedStart(M, s);
     /* The review of 2026-10-16: a join in season two, where the run in's own lines (its fresh save's season one)
        must take this season's number for the refusal to read them. */
@@ -785,7 +799,20 @@ async function joinCareer(E, club, seed, when, adopted = false) {
     for (const name of names) {
       if (j.squad.some(p => p.name === name)) continue;
       const owned = joined.filter(r => r.status === 'owned' && r.player.name === name);
-      if (owned.length !== 1 || !owned[0].owner || owned[0].owner === to) { t3.notOwned += 1; continue; }
+      if (owned.length !== 1 || !owned[0].owner || owned[0].owner === to) {
+        /* Round 1508's closing check (finding 2, measured on r1508-f2p1: all 71 men section 14 skipped at seeds 1 to
+           3 were this): a man of a carried line made before the adoption has no record in either ledger, by design
+           of this section, since a real career adopts at its summer before the summer's first deal (startNextSeason).
+           His gone name keeps him off every door only while the screen lists him nowhere, so that is asserted, and
+           he is counted apart. Every other man this skips is counted as before. */
+        if (adopted && carried.some(t => t.name === name && beforeAdoption.has(dealKey(t))) && !joined.some(r => r.player.name === name)) {
+          t3.beforeAdoption += 1;
+          const listed = screen.filter(p => p.name === name).map(p => p.club);
+          if (listed.length) fail(sec, `${tag}: ${name}, bought by another club before the adoption (no record by design), is on the screen's market at ${listed.join(', ')} after the move`);
+          continue;
+        }
+        t3.notOwned += 1; continue;
+      }
       const club = owned[0].owner;
       const row = screen.find(p => p.name === name && p.club === club);
       if (!row) {
@@ -1471,7 +1498,7 @@ if (SECTIONS.has(14)) {
   const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [1, 2, 3]);
   console.log(`14) section 3's joins in ADOPTED careers (Round 1508), before and after January and in season two, seeds ${seeds.join(',')}`);
   for (const club of CLUBS.now) for (const seed of seeds) for (const when of ['before', 'after', 'second']) await joinCareer(H, club, seed, when, true);
-  console.log(`   ${s14.joins} moves (${s14.refused} could not be set up), ${s14.departed} departed records kept, ${s14.runIn} deal lines of the run in placed, ${s14.gone} gone names carried over with ${s14.carried} deal lines, ${s14.payloads} payloads compared, ${s14.doors} door presses after the move (${s14.notOwned} men the ledger no longer holds at one club, ${s14.namesake} behind a namesake, counted)`);
+  console.log(`   ${s14.joins} moves (${s14.refused} could not be set up), ${s14.departed} departed records kept, ${s14.runIn} deal lines of the run in placed, ${s14.gone} gone names carried over with ${s14.carried} deal lines, ${s14.payloads} payloads compared, ${s14.doors} door presses after the move (${s14.beforeAdoption} men bought before the adoption, held by no record and listed nowhere, ${s14.notOwned} men the ledger no longer holds at one club, ${s14.namesake} behind a namesake, counted)`);
   if (!s14.doors) cannot('section 14: no door was pressed after a move, so the carry measured nothing');
   if (s14.joins < 6) cannot(`section 14: only ${s14.joins} moves could be made, under 6`);
   if (!s14.lines) cannot('section 14: no deal line of a run in was seen, so the join measured nothing');
