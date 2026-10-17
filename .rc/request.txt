@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sd-a: SIM_SOCCER_DECK_SECTIONS=1,2,3,4,5 node scripts/simSoccerDeck.mjs
+sd-c: SIM_SOCCER_DECK_SECTIONS=8 node scripts/simSoccerDeck.mjs
+sd-b: SIM_SOCCER_DECK_SECTIONS=6,7,9,10 node scripts/simSoccerDeck.mjs
+sd-base: SIM_SOCCER_DECK_BASE=8293c758f4284d21baaa2320383cfd5cb5bd4944 SIM_SOCCER_DECK_SECTIONS=2,4 node scripts/simSoccerDeck.mjs
+vitest: node_modules/.bin/vitest run src/lib/soccerDeck.test.ts src/lib/gmInbox.test.ts $(git grep -l "getAllEvents\|generateRandomEvents\|applyEventChoice" -- 'src/*.test.ts' 'src/*.test.tsx' | tr '\n' ' ') --testTimeout=300000 --hookTimeout=120000
+sd-ctl: for c in bindopen leak last pool neutralmoves noreseed silent drop ceiling posleak mathrandom keyseason pressure freetraining noresolve eager caller pagesilent; do SIM_SOCCER_DECK_CONTROL=$c node scripts/simSoccerDeck.mjs > /tmp/c-$c.log 2>&1; e=$?; l=$(tail -1 /tmp/c-$c.log); echo "$c exit=$e $l"; case "$l" in *"CONTROL=$c FIRED"*) [ $e -eq 1 ] || bad="$bad $c";; *) bad="$bad $c";; esac; done; echo "controls that did not fire:${bad:- none}"; [ -z "$bad" ]
+kit-a: SIM_EVENT_DECK_SECTIONS=1,2,3,4,5,6,7,8,9,10,11,12 node scripts/simEventDeck.mjs
+kit-b: SIM_EVENT_DECK_SECTIONS=13,14,15,16 node scripts/simEventDeck.mjs
+kit-ctl: for c in unreach reachthin; do EVENT_DECK_CONTROL=$c SIM_EVENT_DECK_SECTIONS=10 node scripts/simEventDeck.mjs > /tmp/k-$c.log 2>&1; e=$?; echo "$c exit=$e $(tail -1 /tmp/k-$c.log)"; done; echo "ok lines for soccer under unreach: $(grep -c 'ok soccer: all' /tmp/k-unreach.log) (0 expected)"
