@@ -33,6 +33,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { engineOf, pickFleet, tape } from './lib/worldUclFleet.mjs';
+import { HOLDER_EDIT } from './lib/worldUclHolder1502.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (name, dflt) => { const i = process.argv.indexOf(name); return i > 0 ? process.argv[i + 1] : dflt; };
@@ -52,6 +53,10 @@ const EVAL = process.argv.includes('--eval');
    load repair's rule says (not in the Champions League, a season not over, an era or season one of today's
    world), each counted and printed. */
 const OLD_SAVES = process.argv.includes('--old-saves');
+/* --holder-off (from step E5): THIS TREE plays with the holder line reverted (scripts/lib/worldUclHolder1502.mjs).
+   Green with it is the attribution of E5 against the base: the one line reverted, every key but a watching state's
+   worldComps is the base's. */
+const HOLDER_OFF = process.argv.includes('--holder-off');
 const oldSaves = { loaded: 0, gained: 0, kept: 0, wrong: 0 };
 const sha = v => createHash('sha256').update(typeof v === 'string' ? v : JSON.stringify(v)).digest('hex').slice(0, 16);
 
@@ -109,11 +114,11 @@ function firstDifference(a, b) {
 }
 
 const baseEngine = await engineOf(ROOT, 'base', { base: BASE }, cannot);
-const treeEngine = await engineOf(ROOT, 'tree', {}, cannot);
+const treeEngine = await engineOf(ROOT, 'tree', { edits: HOLDER_OFF ? [HOLDER_EDIT] : [] }, cannot);
 const fleet = pickFleet(await treeEngine.fresh(), FLEET, cannot);
 const chosen = fleet.filter(f => !ONLY || f.club.includes(ONLY));
 console.log(`base ${BASE}; fleet (${chosen.length}): ${chosen.map(f => `${f.club} (${f.era}, ${f.kind})`).join('; ')}`);
-console.log(`seeds ${SEEDS.join(',')}; modes ${COACH}; strip ${STRIP || 'nothing'}`);
+console.log(`seeds ${SEEDS.join(',')}; modes ${COACH}; strip ${STRIP || 'nothing'}${HOLDER_OFF ? '; this tree with the holder line reverted' : ''}`);
 
 let journeys = 0, steps = 0, carriers = 0, evals = 0;
 const fails = [];
