@@ -1,0 +1,27 @@
+headsha: git log --oneline -3 | cut -c1-120
+shootout: node scripts/simCmShootoutOrder.mjs
+var: node scripts/simCmVar.mjs
+savesize: node scripts/simClubManagerSaveSize.mjs
+slots: node scripts/simClubManagerSlots.mjs
+journey: node scripts/simCmLedgerJourney.mjs
+freeagents: node scripts/simFreeAgents.mjs
+detail: CM_OWN_ROSTER_CORE_REF=HEAD node scripts/simClubDetailCurrentRoster.mjs
+dailydeals: node scripts/simDailyDeals.mjs
+hotseat: node scripts/simManagerHotSeat.mjs
+deadline: node scripts/simDeadlineDay.mjs
+leaguebook: node scripts/simCmLeagueBook.mjs
+gathered: node scripts/simClubManagerGathered.mjs
+gmdesk: node scripts/simGmDeskHost.mjs
+savefence: node scripts/simSaveFence.mjs
+savekeeper: node scripts/simSaveKeeper.mjs
+calendar: node scripts/simClubManagerCalendar.mjs
+applications: node scripts/simCmApplications.mjs
+transfers: node scripts/simTransfers.mjs
+headlines: node scripts/simHeadlines.mjs
+books: node scripts/simBooks.mjs
+worldbrowser: node scripts/simManagerWorldBrowser.mjs
+clubmanager: node scripts/simClubManager.mjs
+fixturefleet: node scripts/simCmFixtureFleet.mjs
+cmsave: node scripts/simClubManagerSave.mjs
+nosack: node scripts/simCmNoSack.mjs
+ownclub: node scripts/simCmOwnClubMarket.mjs
