@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+gen: node scripts/genUclEngineShapes.mjs && cp src/data/uclEngineShapes.json "$RC_OUT/uclEngineShapes.json"
+probe: node .rc/x/probeExample1503.mjs
+eraMid: node scripts/simClubManagerEraMidSeason.mjs
+eraMid-cupspanel: CM_ERA_CONTROL=cupspanel node scripts/simClubManagerEraMidSeason.mjs
+vitest: node_modules/.bin/vitest run src/lib/clubManagerWorldView.test.ts src/test/clubManagerBracketMoment.test.tsx --testTimeout=300000 --hookTimeout=300000

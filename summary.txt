@@ -1,0 +1,6 @@
+gen exit=0 0s |   2005-06: Eight groups of four into the round of 16, two legged ties, away goals count double. That is the real 2005-06 format.
+probe exit=0 4s | probeExample1503: done
+eraMid exit=0 10s | simClubManagerEraMidSeason: PASS. His 2005 save plays every league, the picker lists one La Liga, and the Cups tab shows the cup it names.
+eraMid-cupspanel exit=0 11s | simClubManagerEraMidSeason control: green. The unmounted cup bracket was reported (1 finding).
+vitest exit=0 6s |    Duration  5.51s (transform 2.61s, setup 161ms, collect 5.75s, tests 1.94s, environment 1.22s, prepare 455ms)
+tsc exit=0 72s | 
