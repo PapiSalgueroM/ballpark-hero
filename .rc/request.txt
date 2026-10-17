@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/careerDirtyMoney.test.ts src/test/usCareerDirtyMoney.test.tsx src/test/usCareerHelpRules1104.test.tsx src/test/usCareerReports1346.test.tsx src/test/usCoachRetirement.test.tsx --testTimeout=300000 --hookTimeout=120000
+dirty: BASE=65126da08ff8300ab7a72f5c196f74ad9f9e7988 node scripts/simUsDirtyMoney.mjs
+dm-ctl-a: ok=0; r=""; for k in words mathrandom flat farm cap cool8; do US_DIRTY_MONEY_CONTROL=$k node scripts/simUsDirtyMoney.mjs > /tmp/dm-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/dm-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+dm-ctl-b: ok=0; r=""; for k in deck noop nodesk sentence anyphase; do US_DIRTY_MONEY_CONTROL=$k node scripts/simUsDirtyMoney.mjs > /tmp/dm-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/dm-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+anchors: node scripts/simHarnessAnchors.mjs
