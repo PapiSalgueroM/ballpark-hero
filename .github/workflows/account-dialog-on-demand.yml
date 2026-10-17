@@ -236,6 +236,7 @@ jobs:
           (cd "$ACCOUNT_DIALOG_ORIGINAL_SOURCE"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$ACCOUNT_DIALOG_OUT/original/request-source-files.sha256"
           (cd "$ACCOUNT_DIALOG_ORIGINAL_SOURCE"; git ls-files -z -- ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' | sort -z | xargs -0 sha256sum) > "$ACCOUNT_DIALOG_OUT/original/source-files.sha256"
       - name: Actual types and frozen normal original restored behavior
+        id: proof
         run: |
           set -euo pipefail
           SIM_OFFLINE_RECEIPT="$ACCOUNT_DIALOG_OUT/types.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$ACCOUNT_DIALOG_OUT/types.log" 2>&1
@@ -243,6 +244,13 @@ jobs:
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --check scripts/qa/playAccountDialogOnDemand.mjs
           SIM_OFFLINE_RECEIPT="$ACCOUNT_DIALOG_OUT/proof.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/proveAccountDialogOnDemandFixed.mjs > "$ACCOUNT_DIALOG_OUT/proof.log" 2>&1
           tail -n 4 "$ACCOUNT_DIALOG_OUT/proof.log"
+      - name: Retain two Home diagnostics after the unchanged proof fails
+        if: ${{ !cancelled() && steps.proof.outcome == 'failure' }}
+        timeout-minutes: 8
+        run: |
+          set -euo pipefail
+          SIM_OFFLINE_RECEIPT="$ACCOUNT_DIALOG_OUT/diagnose.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/proveAccountDialogOnDemandFixed.mjs diagnose > "$ACCOUNT_DIALOG_OUT/diagnose.log" 2>&1
+          tail -n 2 "$ACCOUNT_DIALOG_OUT/diagnose.log"
       - name: Existing focus normal both controls and Google regressions
         run: |
           set -euo pipefail
@@ -341,7 +349,7 @@ jobs:
             if test -f "$arm/dist-files.sha256"; then find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$arm/dist-after-files.sha256"; cmp "$arm/dist-files.sha256" "$arm/dist-after-files.sha256" > "$arm/dist-inventory-hold.log" 2>&1 || result=1; fi
             for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simGuideHeadings simSiteSearch; do test ! -s "$arm/$method.transport" || result=1; done
           done
-          for method in types proof auth-normal auth-nofocus auth-accountonly simGoogleOnlyReturn simGoogleIdentity stale-normal stale-nooffline stale-nosave stale-catchreload preload; do test ! -s "$root_out/$method.transport" || result=1; done
+          for method in types proof diagnose auth-normal auth-nofocus auth-accountonly simGoogleOnlyReturn simGoogleIdentity stale-normal stale-nooffline stale-nosave stale-catchreload preload; do test ! -s "$root_out/$method.transport" || result=1; done
           # Cached fonts and declared browser/weight denials retain their own evidence, never ordinary zero-block credit.
           exit "$result"
       - uses: actions/upload-artifact@v4
