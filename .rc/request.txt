@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walk: git worktree add /tmp/base 8293c758f4284d21baaa2320383cfd5cb5bd4944 > /dev/null 2>&1; BASE_TREE=/tmp/base node .rc/x/walk1504.mjs
+builder-walk: node scripts/playSoccerDeck.mjs > /tmp/w.log 2>&1; s=$?; grep -c "^ok" /tmp/w.log; grep "^FAIL" /tmp/w.log | head -10; tail -1 /tmp/w.log; exit $s
+m-guard: node .rc/x/mut1504.mjs guard && npm run build > /tmp/b.log 2>&1 && { RC_OUT=/tmp/guard-out node scripts/playSoccerDeck.mjs > /tmp/w.log 2>&1; s=$?; BASE_TREE=/tmp/base RC_OUT=/tmp/guard-out2 node .rc/x/walk1504.mjs > /tmp/v.log 2>&1; v=$?; grep "^FAIL" /tmp/w.log | head -8; tail -1 /tmp/w.log; grep "^FAIL" /tmp/v.log | head -8; tail -1 /tmp/v.log; git checkout -- src scripts; npm run build > /tmp/b2.log 2>&1; echo "guard mutation: builder walk exit=$s, reviewer walk exit=$v"; }
