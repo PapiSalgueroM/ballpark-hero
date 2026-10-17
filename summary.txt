@@ -1,0 +1,20 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+s0 exit=0 1s | simCmWorldMoves: green, sections 0 held
+s2 exit=0 41s | simCmWorldMoves: green, sections 2 held
+s3 exit=0 36s | simCmWorldMoves: green, sections 3 held
+tsc exit=0 102s | 
+s5 exit=0 25s | simCmWorldMoves: green, sections 5 held
+s7 exit=0 84s | simCmWorldMoves: green, sections 7 held
+s8 exit=0 156s | simCmWorldMoves: green, sections 8 held
+s10 exit=0 42s | simCmWorldMoves: green, sections 10 held
+s11 exit=0 29s | simCmWorldMoves: green, sections 11 held
+bridge-check exit=0 1s | cmNoAiMoves1344: all 5 anchors stand once and can be taken out
+vitest-moves exit=0 13s |    Duration  12.25s (transform 3.35s, setup 902ms, collect 10.59s, tests 16.10s, environment 4.49s, prepare 1.16s)
+s14 exit=0 506s | simCmWorldMoves: green, sections 1, 4 held
+s6 exit=0 453s | simCmWorldMoves: green, sections 6 held
+c-ctl2 exit=0 163s | controls (exit/FIRED): joinledger=1/1 nocarry=1/1 seasonone=1/1 norepair=1/1 repairthrows=1/1
+walk exit=0 27s | playCmWorldMoves: green, 22 checks held; pictures in /home/runner/work/_temp/rc-out/files/head
+c-ctl3 exit=0 189s | controls (exit/FIRED): nohijack=1/1 nowalk=1/1 noguard=1/1 noskip=1/1 drawshift=1/1
+w-norecord exit=1 64s | playCmWorldMoves: control norecord FIRED: (b) red
+w-norepair exit=1 46s | playCmWorldMoves: control norepair FIRED: (d) red
+c-ctl1 exit=0 528s | controls (exit/FIRED): seedless=1/1 norecord=1/1 noflush=1/1 nojanuary=1/1 nosummer=1/1 nolock=1/1 nolist=1/1 dropbase=1/1

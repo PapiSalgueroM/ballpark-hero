@@ -1,0 +1,12 @@
+treeWithoutMerge: 73cf4172aaf19705b377a297dc454ff007afdbe4, d6935157 without f1e54e17; conflicts kept from d6935157: none
+treeWithoutMerge: 3a15e7a08dd9bfd4d0e06bcdbbe34e74697c631f, 73cf4172 without 54100f6e; conflicts kept from 73cf4172: src/pages/WhatsNew.tsx
+base 3a15e7a08dd9bfd4d0e06bcdbbe34e74697c631f
+simCmWorldMoves: control seedless FIRED: section 6 red (18)
+simCmWorldMoves: control norecord FIRED: section 1 red (620), first at opening
+simCmWorldMoves: control noflush FIRED: section 1 red (28), first at opening
+simCmWorldMoves: control nojanuary FIRED: section 1 red (31), first at january
+simCmWorldMoves: control nosummer FIRED: section 1 red (23), first at summer
+simCmWorldMoves: control nolock FIRED: section 4 red (1497)
+simCmWorldMoves: control nolist FIRED: section 4 red (316)
+simCmWorldMoves: control dropbase FIRED: section 4 red (360531)
+controls (exit/FIRED): seedless=1/1 norecord=1/1 noflush=1/1 nojanuary=1/1 nosummer=1/1 nolock=1/1 nolist=1/1 dropbase=1/1

@@ -1,0 +1,34 @@
+# Release BI, Round 1344 (players other clubs buy stay bought: the world ledger records AI deals), merged in Round BIH
+# as 54100f6e (first parent b31c9894; the round's closed head 3a147a7c, verify-1344.md). Send with x/applyCtl1344.mjs.
+# BINDING: simCmWorldMoves compares the head with CM_WORLD_MOVES_BASE (its own default d4f2c6f6 is the round's branch
+# point); every line binds it to this tree WITHOUT Round 1344 (scripts/lib/treeWithoutMerge.mjs 54100f6e b31c9894),
+# fail closed (B=$(...) && export ...), so sections 5, 6, 7, 8 and 11 compare with the release minus 1344 and the
+# other rounds sit on both sides. The harness reads the base with git show, so lines can run side by side.
+# Controls (c-*): each must exit 1 with its last line "control <name> FIRED: section N red (...)". The walk's two
+# controls (w-norecord, w-norepair) build their own dist from a /tmp copy of the head (x/applyCtl1344.mjs puts the
+# bridge in, or the repair call out) and must exit 1 with FIRED. Lines that write into src/ (the observer unit files,
+# the timing section, the digest legs) are in rc-BIh2.txt, serial.
+# Round BIK (part five): Round 1508 (merge f1e54e17) stands on 1344 and edits its lines, so treeWithoutMerge
+# 54100f6e b31c9894 alone refuses on the joined tree. Every base line now calls x/minus1344.sh (send it too): the tree
+# without 1508 and then without 1344, whose tree equals the base part four used; it fails closed (exit 2).
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+s0: B=$(bash .rc/x/minus1344.sh) && export CM_WORLD_MOVES_BASE=$B && echo "base $B" && CM_WORLD_MOVES_SECTIONS=0 node scripts/simCmWorldMoves.mjs
+s14: B=$(bash .rc/x/minus1344.sh) && export CM_WORLD_MOVES_BASE=$B && echo "base $B" && CM_WORLD_MOVES_SECTIONS=1,4 node scripts/simCmWorldMoves.mjs
+s2: B=$(bash .rc/x/minus1344.sh) && export CM_WORLD_MOVES_BASE=$B && echo "base $B" && CM_WORLD_MOVES_SECTIONS=2 node scripts/simCmWorldMoves.mjs
+s3: B=$(bash .rc/x/minus1344.sh) && export CM_WORLD_MOVES_BASE=$B && echo "base $B" && CM_WORLD_MOVES_SECTIONS=3 node scripts/simCmWorldMoves.mjs
+s5: B=$(bash .rc/x/minus1344.sh) && export CM_WORLD_MOVES_BASE=$B && echo "base $B" && CM_WORLD_MOVES_SECTIONS=5 node scripts/simCmWorldMoves.mjs
+s6: B=$(bash .rc/x/minus1344.sh) && export CM_WORLD_MOVES_BASE=$B && echo "base $B" && CM_WORLD_MOVES_SECTIONS=6 node scripts/simCmWorldMoves.mjs
+s7: B=$(bash .rc/x/minus1344.sh) && export CM_WORLD_MOVES_BASE=$B && echo "base $B" && CM_WORLD_MOVES_SECTIONS=7 node scripts/simCmWorldMoves.mjs
+s8: B=$(bash .rc/x/minus1344.sh) && export CM_WORLD_MOVES_BASE=$B && echo "base $B" && CM_WORLD_MOVES_SECTIONS=8 node scripts/simCmWorldMoves.mjs
+s10: B=$(bash .rc/x/minus1344.sh) && export CM_WORLD_MOVES_BASE=$B && echo "base $B" && CM_WORLD_MOVES_SECTIONS=10 node scripts/simCmWorldMoves.mjs
+s11: B=$(bash .rc/x/minus1344.sh) && export CM_WORLD_MOVES_BASE=$B && echo "base $B" && CM_WORLD_MOVES_SECTIONS=11 node scripts/simCmWorldMoves.mjs
+bridge-check: node scripts/lib/cmNoAiMoves1344.mjs --check
+vitest-moves: node_modules/.bin/vitest run src/lib/clubManagerWorldMoves.test.ts src/lib/clubManagerWorldMovesNamesakes.test.ts src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerCustomPromotion.test.ts src/test/clubDetailCurrentRoster.test.tsx src/test/clubDetailOwnClub.test.tsx --testTimeout=300000 --hookTimeout=120000
+c-ctl1: B=$(bash .rc/x/minus1344.sh) || exit 2; export CM_WORLD_MOVES_BASE=$B; echo "base $B"; ok=0; r=""; for k in seedless norecord noflush nojanuary nosummer nolock nolist dropbase; do S=1-2; [ $k = seedless ] && S=0-1; CM_WORLD_MOVES_CONTROL=$k CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=$S node scripts/simCmWorldMoves.mjs > /tmp/wm-$k.log 2>&1; e=$?; f=$(tail -2 /tmp/wm-$k.log | grep -c FIRED); r="$r $k=$e/$f"; if [ $e != 1 ] || [ $f = 0 ]; then ok=1; tail -3 /tmp/wm-$k.log | cut -c1-300; else tail -1 /tmp/wm-$k.log | cut -c1-160; fi; done; echo "controls (exit/FIRED):$r"; exit $ok
+c-ctl2: B=$(bash .rc/x/minus1344.sh) || exit 2; export CM_WORLD_MOVES_BASE=$B; echo "base $B"; ok=0; r=""; for k in joinledger nocarry seasonone norepair repairthrows; do CM_WORLD_MOVES_CONTROL=$k node scripts/simCmWorldMoves.mjs > /tmp/wn-$k.log 2>&1; e=$?; f=$(tail -2 /tmp/wn-$k.log | grep -c FIRED); r="$r $k=$e/$f"; if [ $e != 1 ] || [ $f = 0 ]; then ok=1; tail -3 /tmp/wn-$k.log | cut -c1-300; else tail -1 /tmp/wn-$k.log | cut -c1-160; fi; done; echo "controls (exit/FIRED):$r"; exit $ok
+c-ctl3: B=$(bash .rc/x/minus1344.sh) || exit 2; export CM_WORLD_MOVES_BASE=$B; echo "base $B"; ok=0; r=""; for k in nohijack nowalk noguard noskip drawshift; do CM_WORLD_MOVES_CONTROL=$k node scripts/simCmWorldMoves.mjs > /tmp/wo-$k.log 2>&1; e=$?; f=$(tail -2 /tmp/wo-$k.log | grep -c FIRED); r="$r $k=$e/$f"; if [ $e != 1 ] || [ $f = 0 ]; then ok=1; tail -3 /tmp/wo-$k.log | cut -c1-300; else tail -1 /tmp/wo-$k.log | cut -c1-160; fi; done; echo "controls (exit/FIRED):$r"; exit $ok
+walk: ENGINES=chromium node scripts/playCmWorldMoves.mjs
+w-norecord: D=/tmp/wmr-$$ && mkdir -p $D && git archive HEAD | tar -x -C $D && node .rc/x/applyCtl1344.mjs $D bridge && ln -s $PWD/node_modules $D/node_modules && (cd $D && node_modules/.bin/vite build > /dev/null 2>&1) && DIST=$D/dist PLAY_WORLD_MOVES_CONTROL=norecord node scripts/playCmWorldMoves.mjs
+w-norepair: D=/tmp/wmn-$$ && mkdir -p $D && git archive HEAD | tar -x -C $D && node .rc/x/applyCtl1344.mjs $D norepair && ln -s $PWD/node_modules $D/node_modules && (cd $D && node_modules/.bin/vite build > /dev/null 2>&1) && DIST=$D/dist PLAY_WORLD_MOVES_CONTROL=norepair node scripts/playCmWorldMoves.mjs

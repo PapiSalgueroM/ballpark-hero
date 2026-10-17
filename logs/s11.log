@@ -1,0 +1,6 @@
+treeWithoutMerge: ea6ad0dfa28ad8c626ac001228b39fc60660005d, d6935157 without f1e54e17; conflicts kept from d6935157: none
+treeWithoutMerge: 0c1cdfb1c04a7841a762fb9ee40eb09655d8ee89, ea6ad0df without 54100f6e; conflicts kept from ea6ad0df: src/pages/WhatsNew.tsx
+base 0c1cdfb1c04a7841a762fb9ee40eb09655d8ee89
+11) my own results: Aberdeen, Motherwell, St Mirren (2026-27), 2 seasons, BASE against the head on one stream, seeds 1,2,3
+   9 careers: 343 results of mine compared; 217 of them in season one; 3 compared to the end, 0 cut where a deal touched my league, 0 where it touched a club I played; the stream parted after the first summer in season 2 x6 (measured, not asserted)
+simCmWorldMoves: green, sections 11 held

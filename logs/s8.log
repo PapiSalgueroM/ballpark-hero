@@ -1,0 +1,6 @@
+treeWithoutMerge: 6affc81711eec37a44c8258ec697a4a29f553098, d6935157 without f1e54e17; conflicts kept from d6935157: none
+treeWithoutMerge: 235182de353c3f8db924f986963418d92ee8c1a0, 6affc817 without 54100f6e; conflicts kept from 6affc817: src/pages/WhatsNew.tsx
+base 235182de353c3f8db924f986963418d92ee8c1a0
+8) the bridge: seeded careers, BASE against the head with scripts/lib/cmNoAiMoves1344.mjs, every saved string and draw; and without it
+   27 careers: with the bridge every one checked against BASE; without it 27 differ (first at save 1 x27) and 0 do not
+simCmWorldMoves: green, sections 8 held

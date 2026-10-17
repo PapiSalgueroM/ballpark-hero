@@ -1,0 +1,27 @@
+playCmWorldMoves: Everton seed 1, the opening window's Jurriën Timber from Arsenal to Manchester United (both in the league)
+ok   (a) 320: the market's search for Jurriën Timber finds him at Manchester United [RB 🇳🇱 Jurriën Timber Manchester United · 24y · worth £55m to £60.3m 88 Talk · £62.7m]
+ok   (a) 320: Talk says he only joined Manchester United this season [Jurriën Timber only joined Manchester United this season. They will not sell him on until next summer.x]
+ok   (a) 320: with the squad full the same Talk says so first [Your squad is full at 30. Somebody has to leave first.x]
+ok   (e) 320: the refused press moves the card no more than today's refusal does (joined: card 0 px, scrollY 751 to 751, height 29464 to 29464, note 270 to 352 of 640; squad full: card 0 px, scrollY 751 to 751, height 29487 to 29487, note 313 to 375 of 640)
+ok   (e) 320: the desk note is at least 12 px and inside the screen's width [12 px, 16 to 304 of 320]
+     the Talk button is 23 px tall at 320 (today's button, not this round's)
+ok   (a) 390: the market's search for Jurriën Timber finds him at Manchester United [RB 🇳🇱 Jurriën Timber Manchester United · 24y · worth £55m to £60.3m 88 Talk · £62.7m]
+ok   (a) 390: Talk says he only joined Manchester United this season [Jurriën Timber only joined Manchester United this season. They will not sell him on until next summer.x]
+ok   (a) 390: with the squad full the same Talk says so first [Your squad is full at 30. Somebody has to leave first.x]
+ok   (e) 390: the refused press moves the card no more than today's refusal does (joined: card 0 px, scrollY 601 to 601, height 23557 to 23557, note 388 to 454 of 844; squad full: card 0 px, scrollY 601 to 601, height 23580 to 23580, note 415 to 477 of 844)
+ok   (e) 390: the desk note is at least 12 px and inside the screen's width [12 px, 16 to 374 of 390]
+     the Talk button is 23 px tall at 390 (today's button, not this round's)
+ok   (a) 1280: the market's search for Jurriën Timber finds him at Manchester United [RB 🇳🇱 Jurriën Timber Manchester United · 24y · worth £55m to £60.3m 88 Talk · £62.7m]
+ok   (a) 1280: Talk says he only joined Manchester United this season [Jurriën Timber only joined Manchester United this season. They will not sell him on until next summer.x]
+ok   (a) 1280: with the squad full the same Talk says so first [Your squad is full at 30. Somebody has to leave first.x]
+ok   (e) 1280: the refused press moves the card no more than today's refusal does (joined: card 0 px, scrollY 0 to 0, height 13587 to 13587, note 785 to 847 of 900; squad full: card 0 px, scrollY 0 to 0, height 13610 to 13610, note 808 to 870 of 900)
+ok   (e) 1280: the desk note is at least 12 px and inside the screen's width [12 px, 208 to 1072 of 1280]
+     the Talk button is 23 px tall at 1280 (today's button, not this round's)
+ok   (b) Manchester United's club page lists Jurriën Timber
+ok   (b) Arsenal's club page does not list Jurriën Timber
+ok   (c) a season later Manchester United's club page still lists Jurriën Timber
+ok   (c) a season later the market lists Jurriën Timber at Manchester United
+ok   (c) and Talk no longer says he only joined [no note: the talks opened]
+ok   (d) a save BASE's engine wrote: after Resume Career Manchester United's club page lists Jurriën Timber
+ok   (errors) no page error on any page
+playCmWorldMoves: green, 22 checks held; pictures in /home/runner/work/_temp/rc-out/files/head

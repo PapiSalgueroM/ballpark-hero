@@ -1,0 +1,6 @@
+treeWithoutMerge: a84602804fc84104dde5d6a18cfdf118e4a52d87, d6935157 without f1e54e17; conflicts kept from d6935157: none
+treeWithoutMerge: c170ca1549edc02a36b11f91d9ef2840b0615d9c, a8460280 without 54100f6e; conflicts kept from a8460280: src/pages/WhatsNew.tsx
+base c170ca1549edc02a36b11f91d9ef2840b0615d9c
+5) the repair: saves BASE's engine wrote after the opening window and after January, loaded by the head, seeds 1,2,3
+   54 seeded saves (0 loaded byte equal to BASE's load, 0 did not load), 361 deal lines of this season: 361 mended, 0 left as a deal of mine holds him, 0 left for a namesake at the seller; 54 unseeded saves
+simCmWorldMoves: green, sections 5 held

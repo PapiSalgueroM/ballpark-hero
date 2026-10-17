@@ -1,0 +1,6 @@
+treeWithoutMerge: d68188ab31803bd420ee742b29b3057ee30bac18, d6935157 without f1e54e17; conflicts kept from d6935157: none
+treeWithoutMerge: 740a32d0dbe8ab1f4bb0688f4d16a5fe72f1dcb9, d68188ab without 54100f6e; conflicts kept from d68188ab: src/pages/WhatsNew.tsx
+base 740a32d0dbe8ab1f4bb0688f4d16a5fe72f1dcb9
+6) legacy: unseeded careers, BASE against the head, every saved string and Math.random draw
+   135 careers, 660 saves, 8051688 draws and 120 deals of mine on the head; 135 adopted at their first summer (Round 1508)
+simCmWorldMoves: green, sections 6 held
