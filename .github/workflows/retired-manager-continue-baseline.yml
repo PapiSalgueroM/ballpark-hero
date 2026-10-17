@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   baseline:
+    if: github.sha == '64b5a6cee99fd388f87c4269c3deea450acd99b6'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     defaults:
