@@ -1,0 +1,46 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 20 node harnesses
+  PASS  simLiveSimMotion.mjs           86.4s
+  FAIL  simManagerAppealIsolation.mjs   11.0s
+  PASS  simManagerCareer.mjs           14.6s
+  PASS  simManagerCustomPromotion.mjs    7.6s
+  EMPTY simManagerEraWorldOracles.mjs    1.8s
+        printed 1 line, so its checks did not run
+  FAIL  simManagerHalftimeLineups.mjs    0.2s
+  PASS  simManagerHotSeat.mjs          90.5s
+  FAIL  simManagerLiveLineups.mjs       0.1s
+  PASS  simManagerMatchPlans.mjs        7.2s
+  PASS  simManagers.mjs                 5.0s
+  PASS  simManagerSpec.mjs            150.0s
+  PASS  simManagerWorldBrowser.mjs      7.5s
+  FAIL  simManagerWorldContinuity.mjs   35.2s
+  PASS  simManagerXp.mjs               90.4s
+  PASS  simMatchDetail.mjs              7.2s
+  PASS  simMatchScreen.mjs              6.5s
+  PASS  simMidSeasonStart.mjs           4.4s
+  PASS  simNationJob.mjs                2.3s
+  PASS  simNoInventedQuotes.mjs        35.2s
+  PASS  simOpposition.mjs            1225.9s
+
+----- simManagerAppealIsolation.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: Historical engine and original assertion hold: src/lib/clubManagerSlots.ts
+
+----- simManagerEraWorldOracles.mjs (EMPTY) -----
+PASS simManagerEraWorldOracles.mjs: actual joined-source baseline, 4 effective copied observation controls and complete undo/source holds
+
+
+----- simManagerHalftimeLineups.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: src/lib/clubManager.ts: held parent differs.
+
+----- simManagerLiveLineups.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: src/lib/clubManager.ts: whole parent must stay held.
+    "import { nameModerationError } from '@/lib/nameModeration';\n" +
+    "import { nameModerationError } from '@/lib/nameModeration';\n" +
+    "import { nameModerationError } from '@/lib/nameModeration';\n" +
+
+----- simManagerWorldContinuity.mjs (FAIL) -----
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+5 harnesses not green.
