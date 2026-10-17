@@ -1,0 +1,37 @@
+NEGATIVE CONTROL ON: neutralaway; section(s) 1 must go red
+fleet: 25 careers, 916 matches (461 home, 447 away, 8 neutral), 0 reports with no fixture read before them, 17s
+live: 173 league matches kicked off live (64 away), 692 live renders
+1) One rule: the fixture's venue and the report's own order agree on every match
+  FAIL [1]: Celta Vigo now seed 3: Celta Vigo 2-5 Villarreal (Copa del Rey · Final, neutral): myClubFirst(null) is false but the report's order says true
+  FAIL [1]: OB now seed 4: OB 0-3 FC Copenhagen (Danish Cup · Final, neutral): myClubFirst(null) is false but the report's order says true
+  FAIL [1]: Barcelona era2015 seed 0: Barcelona 3-0 Juventus (Champions League · Final, neutral): myClubFirst(null) is false but the report's order says true
+  FAIL [1]: Barcelona era2015 seed 2: Barcelona 3-1 Sevilla (Copa del Rey · Final, neutral): myClubFirst(null) is false but the report's order says true
+  FAIL [1]: Barcelona era2015 seed 2: Barcelona 3-1 Arsenal (Champions League · Final, neutral): myClubFirst(null) is false but the report's order says true
+  FAIL [1]: Barcelona era2015 seed 3: Barcelona 4-0 Atlético Madrid (Copa del Rey · Final, neutral): myClubFirst(null) is false but the report's order says true
+   916 matches, 8 reports saying neutral; red: 0 home, 0 away, 8 neutral
+2) The report card: every two sided block in the scoreline's order
+   916 reports, 9160 stat bars read; red: 0 home, 0 away, 0 neutral
+3) The timeline: home side first, whole names, every mark right after its name
+   916 timelines, 15753 rows, 15753 names, 242 marks; red: 0 home, 0 away, 0 neutral
+4) Live and half time: the strip, the score's digits, the interval card, the stats and the line under the pitch home side first
+   173 live matches (173 first, 173 interval, 173 second, 173 done); red: 0 home, 0 away, 0 neutral
+5) The Match Centre: the tie, the form rows and the ones to watch home side first; the odds still Win, Draw, They win
+  FAIL [5]: Celta Vigo now seed 3: Celta Vigo 2-5 Villarreal (Copa del Rey · Final, neutral): the sides read opp me opp me opp me
+  FAIL [5]: OB now seed 4: OB 0-3 FC Copenhagen (Danish Cup · Final, neutral): the sides read opp me opp me opp me
+  FAIL [5]: Barcelona era2015 seed 0: Barcelona 3-0 Juventus (Champions League · Final, neutral): the sides read opp me opp me opp me
+  FAIL [5]: Barcelona era2015 seed 2: Barcelona 3-1 Sevilla (Copa del Rey · Final, neutral): the sides read opp me opp me opp me
+  FAIL [5]: Barcelona era2015 seed 2: Barcelona 3-1 Arsenal (Champions League · Final, neutral): the sides read opp me opp me opp me
+  FAIL [5]: Barcelona era2015 seed 3: Barcelona 4-0 Atlético Madrid (Copa del Rey · Final, neutral): the sides read opp me opp me opp me
+   163 Match Centres (76 home, 79 away, 8 neutral, 163 with ones to watch); red: 0 home, 0 away, 8 neutral
+6) The pitch: every dot label is the man's pitch name, his initials or his slot's role, never a number
+   15166 dot labels over 692 pitches: 7555 of mine named (13 in initials), 4685 named opponents, 2926 nameless opponents (1903 of them staged); red: 0 home, 0 away, 0 neutral
+7) A home or neutral match: the card's visible text equals the base's, the board word and the pitch labels masked
+  FAIL [7]: Celta Vigo now seed 3: Celta Vigo 2-5 Villarreal (Copa del Rey · Final, neutral): the Match Centre differs from the base at "lub home Copa del Rey · Final Villarreal #6 VS Celta Vigo #8 in league" against "lub home Copa del Rey · Final Celta Vigo #8 in league VS Villarreal #6"
+  FAIL [7]: OB now seed 4: OB 0-3 FC Copenhagen (Danish Cup · Final, neutral): the Match Centre differs from the base at "Club home Danish Cup · Final FC Copenhagen #4 VS OB #5 in league Neut" against "Club home Danish Cup · Final OB #5 in league VS FC Copenhagen #4 Neut"
+  FAIL [7]: Barcelona era2015 seed 0: Barcelona 3-0 Juventus (Champions League · Final, neutral): the Match Centre differs from the base at "home Champions League · Final Juventus #1 in Serie A VS Barcelona #1 i" against "home Champions League · Final Barcelona #1 in league VS Juventus #1 in"
+  FAIL [7]: Barcelona era2015 seed 2: Barcelona 3-1 Sevilla (Copa del Rey · Final, neutral): the Match Centre differs from the base at "lub home Copa del Rey · Final Sevilla #6 VS Barcelona #1 in league Neu" against "lub home Copa del Rey · Final Barcelona #1 in league VS Sevilla #6 Neu"
+  FAIL [7]: Barcelona era2015 seed 2: Barcelona 3-1 Arsenal (Champions League · Final, neutral): the Match Centre differs from the base at "home Champions League · Final Arsenal #1 in the Premier League VS Barc" against "home Champions League · Final Barcelona #1 in league VS Arsenal #1 in "
+  FAIL [7]: Barcelona era2015 seed 3: Barcelona 4-0 Atlético Madrid (Copa del Rey · Final, neutral): the Match Centre differs from the base at "lub home Copa del Rey · Final Atlético Madrid #1 VS Barcelona #3 in le" against "lub home Copa del Rey · Final Barcelona #3 in league VS Atlético Madri"
+   662 home and neutral screens compared with d8aaa4cb (545 live screens and 84 Match Centres among them); red: 0 home, 8 neutral
+control neutralaway: section 1 8 failures (0 home, 0 away, 8 neutral matches red)
+simCmMatchDay: CONTROL neutralaway FIRED (24 failures, section(s) 1, 5, 7)

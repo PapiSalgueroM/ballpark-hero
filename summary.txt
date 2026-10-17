@@ -1,0 +1,27 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simCmMatchDay exit=0 30s | simCmMatchDay: all sections green (916 matches: 461 home, 447 away, 8 neutral)
+md-neutralaway exit=1 29s | simCmMatchDay: CONTROL neutralaway FIRED (24 failures, section(s) 1, 5, 7)
+md-oldorder exit=1 30s | simCmMatchDay: CONTROL oldorder FIRED (18050 failures, section(s) 2, 3, 4, 5)
+tsc exit=0 98s | 
+md-truncate exit=1 28s | simCmMatchDay: CONTROL truncate FIRED (15753 failures, section(s) 3)
+md-homeflip exit=1 32s | simCmMatchDay: CONTROL homeflip FIRED (29281 failures, section(s) 1, 2, 3, 4, 5, 7)
+md-bogus exit=2 0s | MATCHDAY_CONTROL=bogus is not a control this harness knows
+simMatchScreen exit=0 6s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+md-numbers exit=1 29s | simCmMatchDay: CONTROL numbers FIRED (15166 failures, section(s) 6)
+ms-bareposs exit=0 13s | simMatchScreen: PASS. Effective bareposs fault failed only section 2; untouched baseline passed and source bytes held.
+ms-them exit=0 13s | simMatchScreen: PASS. Effective them fault failed only section 3; untouched baseline passed and source bytes held.
+unitcm exit=0 162s |    Duration  161.31s (transform 13.18s, setup 4.73s, collect 49.18s, tests 363.89s, environment 34.55s, prepare 7.62s)
+ms-ragged exit=0 12s | simMatchScreen: PASS. Effective ragged fault failed only section 4; untouched baseline passed and source bytes held.
+simCmMatchCentre exit=0 4s | simCmMatchCentre: PASS. Every stat on the report and the live strip is counted off the committed play and lines, and every timeline row is an event the engine drew.
+simCmStoppageTime exit=0 26s | simCmStoppageTime: PASS. Goals fall in the board at a measured share without adding any, every line in a board says 45+N or 90+N wherever a minute is printed, extra time 
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 39s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simInventedNames exit=0 7s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 1s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simLiveSimMotion exit=0 52s | simLiveSimMotion: green. 56 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+simResultMoment exit=1 0s | Node.js v24.21.0
+engineDiff exit=0 0s | src/test/pitchOwnGoal.test.tsx
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+dashScan exit=0 0s | dashScan: 2477 added lines since d8aaa4cb, 0 carry an en or em dash
+simNoInventedQuotes exit=0 15s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.

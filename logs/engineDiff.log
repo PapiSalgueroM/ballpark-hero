@@ -1,0 +1,33 @@
+engine names:
+src/lib/cmMatchDisplay.test.ts
+src/lib/cmMatchDisplay.ts
+all names:
+.github/workflows/lane-remote-check.yml
+.rc/request.txt
+.rc/run.sh
+.rc/x/rvrun-dashScan.mjs
+docs/audits/ROUND-1340-NOTES.md
+scripts/playClubManager.mjs
+scripts/playCmLeagueFixtures.mjs
+scripts/playCmMatchDay.mjs
+scripts/playLiveMatchFit.mjs
+scripts/simCmMatchCentre.mjs
+scripts/simCmMatchDay.mjs
+scripts/simMatchScreen.mjs
+src/components/club-manager/ClubManagerHelp.tsx
+src/components/club-manager/HalftimeScreen.tsx
+src/components/club-manager/LiveSimScreen.tsx
+src/components/club-manager/MatchCentre.tsx
+src/components/club-manager/MatchReportCard.tsx
+src/components/club-manager/MatchTimeline.tsx
+src/components/club-manager/TacticsScreen.tsx
+src/lib/cmMatchDisplay.test.ts
+src/lib/cmMatchDisplay.ts
+src/pages/ClubManager.tsx
+src/pages/WhatsNew.tsx
+src/test/clubManagerVarScreen.test.tsx
+src/test/cmReportBoardWord.test.tsx
+src/test/liveSimMotion.test.tsx
+src/test/managerHalftimeLineups.test.tsx
+src/test/managerScorerMarks.test.tsx
+src/test/pitchOwnGoal.test.tsx

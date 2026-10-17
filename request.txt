@@ -1,0 +1,27 @@
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unitcm: node_modules/.bin/vitest run $(grep -l "club-manager\|clubManager\|ClubManager\|cmMatchDisplay" src/test/*.test.ts* src/lib/*.test.ts) --testTimeout=300000 --hookTimeout=120000
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+md-neutralaway: MATCHDAY_CONTROL=neutralaway node scripts/simCmMatchDay.mjs
+md-oldorder: MATCHDAY_CONTROL=oldorder node scripts/simCmMatchDay.mjs
+md-truncate: MATCHDAY_CONTROL=truncate node scripts/simCmMatchDay.mjs
+md-homeflip: MATCHDAY_CONTROL=homeflip node scripts/simCmMatchDay.mjs
+md-numbers: MATCHDAY_CONTROL=numbers node scripts/simCmMatchDay.mjs
+md-bogus: MATCHDAY_CONTROL=bogus node scripts/simCmMatchDay.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+ms-bareposs: MATCH_SCREEN_CONTROL=bareposs node scripts/simMatchScreen.mjs
+ms-them: MATCH_SCREEN_CONTROL=them node scripts/simMatchScreen.mjs
+ms-ragged: MATCH_SCREEN_CONTROL=ragged node scripts/simMatchScreen.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+engineDiff: echo "engine names:"; git diff --name-only d8aaa4cb...HEAD -- src/lib src/hooks src/data; echo "all names:"; git diff --name-only d8aaa4cb...HEAD
+dashScan: node .rc/x/rvrun-dashScan.mjs d8aaa4cb
