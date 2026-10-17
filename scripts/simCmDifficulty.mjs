@@ -13,66 +13,146 @@
         the two modules (comments stripped) name no growth, potential or rating,
         and clubManagerDifficulty.ts imports at runtime only files that do not
         import the engine back.
-   Later sections are added by the steps that build the levers (see below).
+     2) Normal is the base, to the byte: the nine clubs, an Everton 2005-06
+        career, a created club and a New year takeover, set up as the Dugout
+        step sets them up with Normal chosen, SEEDS seeds, SEASONS seasons, the
+        coach on and off: the whole state at every season end and the count of
+        draws equal to BASE_ROOT's (a worktree of the commit the branch started
+        from; without it, this tree with every dial read as Normal's). Then the
+        picker path (setUpCareer returns its argument), and 2b: Hard with every
+        dial set to Normal's plays as Normal, the key aside.
+     3) each lever does exactly what its dial says, Hard with that one lever on
+        and the rest at Normal's, from the same draws: B1 the board's change
+        after the first match; P1 the next match card, the match facts and the
+        odds, and from the code that only the seven readers of your match read
+        the edge and simAiMatch keeps strengthOf; B2 a stay's opening; M1 day
+        one and the summer cheque; M2 day one and a summer move's ceiling; T1
+        the marked market, Buy's charge, the clause floor and the AI's deals.
+     4) outcomes over the fleet at the three levels (added with the tuning).
+     6) Manager Hot Seat and Deadline Day dates play as on the base, with no
+        level; Deadline Day's code reaches no lever.
 
    Negative controls (CM_DIFF_CONTROL), each patched in memory or into the
-   bundle, never into src:
-     flat   Hard's pain set to 1. Section 1 must go red.
+   bundle, never into src; each must turn its section red:
+     flat        Hard's pain set to 1                                      1
+     leak        a save with no key reads as Hard                          2 and 6 (every Hot Seat date)
+     alloffleak  2b's Hard keeps its edge                                  2
+     gain, pain, cut, cheque, wages, mark, edge
+                 that lever of Hard set back to Normal's                   3
+     clause      the clause floor at the card's price taken out            3
+     ddreach     deadlineDay.ts gains a call to oppStrengthVsMe            6
 
    Run: node scripts/simCmDifficulty.mjs     (SECTION=1, MEASURE=1 SEEDS=4 SEASONS=10)
-   Exit 0 green, 1 red (or a control fired), 2 could not run.
+        git worktree add /tmp/base <base sha> && BASE_ROOT=/tmp/base node scripts/simCmDifficulty.mjs
+   DIALS_JSON='{"hard":{"edge":2}}' merges into the table in memory (tuning on a runner).
+   Exit 0 green, 1 red (or a control fired), 2 could not run, 3 a control that did not fire.
 */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
-import { execSync } from 'node:child_process';
+import { build } from 'esbuild';
+import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ROOT_URL = ROOT.replaceAll('\\', '/');
-const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cmdiff-')).replaceAll('\\', '/');
+const BASE_ROOT = process.env.BASE_ROOT ? path.resolve(ROOT, process.env.BASE_ROOT) : null;
 const CONTROL = process.env.CM_DIFF_CONTROL || '';
-const CONTROLS = ['flat'];
-if (CONTROL && !CONTROLS.includes(CONTROL)) {
-  console.log(`CM_DIFF_CONTROL=${CONTROL} is not a control this harness knows; could not run`);
-  process.exit(2);
-}
+/* Each control and the sections it must turn red. */
+const CONTROLS = {
+  flat: ['1'], leak: ['2', '6'], alloffleak: ['2'], alloff: ['4'], clause: ['3'],
+  gain: ['3'], pain: ['3'], cut: ['3'], cheque: ['3'], wages: ['3'], mark: ['3'], edge: ['3'], ddreach: ['6'], helpdrift: ['7'],
+};
+const cannot = why => { console.log(`simCmDifficulty: CANNOT RUN: ${why}`); process.exit(2); };
+if (CONTROL && !CONTROLS[CONTROL]) cannot(`CM_DIFF_CONTROL=${CONTROL} is not a control this harness knows`);
 const num = (k, d) => (process.env[k] !== undefined && process.env[k] !== '' ? Number(process.env[k]) : d);
-const SECTIONS = (process.env.SECTION || 'all') === 'all'
-  ? [...(process.env.MEASURE === '1' ? ['0'] : []), '1']
-  : String(process.env.SECTION).split(',');
+const DEFAULT_SECTIONS = ['1', '2', '3', '6'];
+const SECTIONS = CONTROL ? CONTROLS[CONTROL]
+  : (process.env.SECTION || 'all') === 'all'
+    ? [...(process.env.MEASURE === '1' ? ['0'] : []), ...DEFAULT_SECTIONS]
+    : String(process.env.SECTION).split(',');
+if (BASE_ROOT && !fs.existsSync(path.join(BASE_ROOT, 'src/lib/clubManager.ts'))) cannot(`BASE_ROOT ${BASE_ROOT} holds no src/lib/clubManager.ts`);
 
 let failures = 0;
 const fail = m => { failures += 1; console.log('  FAIL: ' + m); };
 const ok = m => console.log('  ok: ' + m);
-const read = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8').replaceAll('\r\n', '\n');
-/** Source with comments and string contents' comment look alikes out, so a guard reads code, not prose. */
+const readAt = (root, rel) => fs.readFileSync(path.join(root, rel), 'utf8').replaceAll('\r\n', '\n');
+const read = rel => readAt(ROOT, rel);
+/** Source with comments out, so a guard reads code, not prose. */
 const code = src => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
 
-/* ---- bundle the engine and the difficulty module together (one copy of each) ---- */
-const ENTRY = `${TMP}/entry.mjs`;
-const BUNDLE = `${TMP}/bundle.mjs`;
-fs.writeFileSync(ENTRY, `
-globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export * as engine from '${ROOT_URL}/src/lib/clubManager.ts';
-export * as difficulty from '${ROOT_URL}/src/lib/clubManagerDifficulty.ts';
-export * as start from '${ROOT_URL}/src/lib/clubManagerStart.ts';
-export * as asks from '${ROOT_URL}/src/lib/clubManagerBoardAsks.ts';
-`);
-execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`, { stdio: 'inherit' });
-const bundle = await import(pathToFileURL(BUNDLE).href);
-const cm = bundle.engine, dif = bundle.difficulty, st = bundle.start, asks = bundle.asks;
-const DIALS = dif.CM_DIFFICULTY_DIALS;
+/* ---- bundles: this tree, the base tree (BASE_ROOT) and any control's edit, never src ---- */
+const PATCHES = {
+  leak: { file: 'clubManagerStart.ts', from: "  return readLevel(o && typeof o === 'object' ? o.difficulty : undefined);", to: "  return readLevel(o && typeof o === 'object' && o.difficulty !== undefined ? o.difficulty : 'hard');" },
+  clause: { file: 'clubManager.ts', from: '  return Math.max(1, Math.round(base * mult * 10) / 10, mp.price);', to: '  return Math.max(1, Math.round(base * mult * 10) / 10);' },
+};
+/* Without BASE_ROOT, section 2 compares with this tree with every dial read as Normal's: the same claim (a
+   career without the key never takes a lever's path), held for as long as the levers exist. */
+const PLAIN = [{ file: 'clubManagerDifficulty.ts', from: '  return CM_DIFFICULTY_DIALS[levelFrom(state)];', to: '  return CM_DIFFICULTY_DIALS.normal;' }];
+const patchPlugin = (edits, hits) => ({
+  name: 'cm-difficulty-edits',
+  setup(b) {
+    b.onLoad({ filter: /[.]ts$/ }, async args => {
+      const mine = edits.filter(e => path.basename(args.path) === e.file);
+      if (!mine.length) return undefined;
+      let source = (await fs.promises.readFile(args.path, 'utf8')).replaceAll('\r\n', '\n');
+      for (const e of mine) {
+        const count = source.split(e.from).length - 1;
+        if (count !== 1) cannot(`an edit's text is in ${e.file} ${count} times, it must be exactly once (${e.from.slice(0, 60)}...)`);
+        source = source.replace(e.from, e.to);
+        hits.n += 1;
+      }
+      return { contents: source, loader: 'ts' };
+    });
+  },
+});
+const MODS = { cm: 'clubManager', st: 'clubManagerStart', dif: 'clubManagerDifficulty', asks: 'clubManagerBoardAsks', cal: 'clubManagerCalendar', eras: 'clubManagerEras', hs: 'managerHotSeat', dd: 'deadlineDay' };
+async function bundleOf(root, name, edits) {
+  const work = fs.mkdtempSync(path.join(os.tmpdir(), `cmdiff-${name}-`));
+  const entry = path.join(work, 'entry.ts');
+  const lines = Object.entries(MODS)
+    .filter(([, f]) => fs.existsSync(path.join(root, `src/lib/${f}.ts`)))
+    .map(([k, f]) => `export * as ${k} from ${JSON.stringify(path.join(root, `src/lib/${f}.ts`).split(path.sep).join('/'))};`);
+  fs.writeFileSync(entry, lines.join('\n') + '\n');
+  const out = path.join(work, 'bundle.cjs');
+  const hits = { n: 0 };
+  await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: out, logLevel: 'silent',
+    alias: { '@': path.join(root, 'src') }, nodePaths: [path.join(ROOT, 'node_modules')], plugins: edits.length ? [patchPlugin(edits, hits)] : [] });
+  if (hits.n !== edits.length) cannot(`${name}: ${hits.n} of ${edits.length} edits reached the bundle`);
+  return out;
+}
+
+/* ---- the runtime: a fresh module per career (the way a page load deals one), a fixed clock ---- */
+const store = new Map();
+globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
+Date.now = () => 1791547200000;
+const req = createRequire(import.meta.url);
 const LEVELS = ['normal', 'hard', 'legend'];
 const KEYS = ['gain', 'pain', 'cut', 'cheque', 'wageRoom', 'mark', 'edge'];
 const HARDER = { gain: -1, pain: 1, cut: 1, cheque: -1, wageRoom: -1, mark: 1, edge: 1 };
-
-if (CONTROL === 'flat') {
-  DIALS.hard.pain = 1;
-  console.log('NEGATIVE CONTROL ON: Hard\'s pain is 1, the same as Normal\'s');
+/* DIALS_JSON (tuning on a runner without a commit): merged over the table of every module this run loads. */
+const TUNE = process.env.DIALS_JSON ? JSON.parse(process.env.DIALS_JSON) : null;
+/** Dial edits made in memory, after each load: TUNE first, then the run's control. */
+let memEdit = null;
+function fresh(b) {
+  delete req.cache[req.resolve(b)];
+  store.clear();
+  const m = req(b);
+  const D = m.dif?.CM_DIFFICULTY_DIALS;
+  if (D && TUNE) for (const lv of Object.keys(TUNE)) Object.assign(D[lv], TUNE[lv]);
+  if (D && memEdit) memEdit(D);
+  return m;
 }
+if (CONTROL === 'flat') { memEdit = D => { D.hard.pain = 1; }; console.log('NEGATIVE CONTROL ON: Hard\'s pain is 1, the same as Normal\'s'); }
+if (CONTROL === 'alloff') { memEdit = D => { Object.assign(D.hard, D.normal); Object.assign(D.legend, D.normal); }; console.log('NEGATIVE CONTROL ON: Hard and Legend carry Normal\'s dials'); }
+
+const HEAD = await bundleOf(ROOT, 'head', PATCHES[CONTROL] ? [PATCHES[CONTROL]] : []);
+const head = fresh(HEAD);
+const cm = head.cm, dif = head.dif, st = head.st, asks = head.asks;
+const DIALS = dif.CM_DIFFICULTY_DIALS;
+console.log(`simCmDifficulty: sections ${SECTIONS.join(', ')}${CONTROL ? `, control ${CONTROL}` : ''}${TUNE ? `, dials tuned by DIALS_JSON ${JSON.stringify(TUNE)}` : ''}`);
+console.log(`  table: ${LEVELS.map(lv => `${lv} ${JSON.stringify(DIALS[lv])}`).join('; ')}`);
 
 /* ---------- 1. the table ---------- */
 function section1() {
@@ -128,26 +208,33 @@ function section1() {
    scripts/lib/seedRandom.mjs (mulberry32). */
 function seeded(seed) {
   let a = seed >>> 0;
-  return () => {
+  const f = () => {
+    f.n += 1;
     a |= 0;
     a = (a + 0x6d2b79f5) | 0;
     let t = Math.imul(a ^ (a >>> 15), 1 | a);
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
+  f.n = 0;
+  return f;
 }
 function hash32(s) {
   let h = 0x811c9dc5 >>> 0;
   for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
   return h >>> 0;
 }
+/** Runs fn on its own stream; the draws it took are on withStream.draws afterwards. */
 function withStream(seed, fn) {
   const saved = Math.random;
-  Math.random = seeded(seed);
-  try { return fn(); } finally { Math.random = saved; }
+  const r = seeded(seed);
+  Math.random = r;
+  try { return fn(); } finally { Math.random = saved; withStream.draws = r.n; }
 }
-const rebuildAsks = s => [...(s.boardObjectives ?? []).filter(o => !asks.isBoardAsk(o.id)), ...asks.buildBoardAsks(s)];
-const asLevel = (s, level) => (level === 'normal' ? s : dif.setUpCareer(s, { level }, rebuildAsks));
+/** The hook's rebuild of the board's card (useClubManager.ts rebuildBoardAsks), for a module m. */
+const rebuildAsksOf = m => s => [...(s.boardObjectives ?? []).filter(o => !m.asks.isBoardAsk(o.id)), ...m.asks.buildBoardAsks(s)];
+/** A career on a level, the way the Dugout step sets it up (a base tree without the module plays Normal). */
+const asLevel = (m, s, level) => (level === 'normal' && !m.dif ? s : m.dif.setUpCareer(s, { level }, rebuildAsksOf(m)));
 const xiAvg = s => {
   const top = (s.squad ?? []).filter(p => !p.onLoan).map(p => p.rating).sort((a, b) => b - a).slice(0, 11);
   while (top.length < 11) top.push(60);
@@ -171,7 +258,8 @@ function fleetClubs() {
 /** One season under a driver. engaged renews every expiring deal and buys the best men the budget
     reaches in every window, from the market the page shows (marketForMe), while the squad is under 28;
     steady renews every deal and signs nobody. Both quick sim with the coach on. */
-function playSeason(s, driver, rec) {
+function playSeason(m, s, driver, rec) {
+  const { cm, dif } = m;
   for (let guard = 0; guard < 150; guard++) {
     for (const p of cm.expiringPlayers(s)) { const nx = cm.renewContract(s, p.id); if (nx) s = nx; }
     if (driver === 'engaged' && s.transferWindow) {
@@ -207,12 +295,14 @@ function playSeason(s, driver, rec) {
     draws of the same stream (the Round 505 keeper rule), so every level plays the same number of seasons
     and a level that sacks more is not averaged over its luckier survivors. */
 function runCareer(club, driver, seed, level, seasons) {
+  const m = fresh(HEAD);
+  const { cm } = m;
   return withStream(hash32(`${club.name}|${driver}|${seed}`), () => {
-    let s = asLevel(cm.startCareer(club.name), level);
+    let s = asLevel(m, cm.startCareer(club.name), level);
     const rows = [];
     for (let season = 1; season <= seasons; season++) {
       const rec = { club: club.name, tier: club.tier, driver, seed, level, season, fees: 0, signings: 0, clauseUnder: 0, loanUnder: 0, over: false, boardMin: 100, boardSum: 0, boardN: 0, xiStart: xiAvg(s), budgetStart: s.budget };
-      s = playSeason(s, driver, rec);
+      s = playSeason(m, s, driver, rec);
       const row = (s.table ?? []).find(r => r.club === s.clubName);
       rec.pts = row ? row.pts : 0;
       rec.games = row ? row.w + row.d + row.l : 0;
@@ -222,7 +312,7 @@ function runCareer(club, driver, seed, level, seasons) {
       if (s.sacked) {
         rec.position = null; rec.title = false; rec.trophies = 0; rec.balance = s.budget;
         rows.push(rec);
-        s = asLevel(cm.startCareer(club.name), level);
+        s = asLevel(m, cm.startCareer(club.name), level);
         continue;
       }
       const fin = cm.finishSeason(s);
@@ -311,11 +401,339 @@ function section0() {
   if (stuck) fail(`${stuck} seasons never reached their end inside 150 entries`);
 }
 
+/* ---------- 2. Normal is the base, to the byte ---------- */
+const SPEC = { name: 'Difficulty Town', stadium: 'Level Ground', crest: { shape: 0, pattern: 0, color1: '#112233', color2: '#ffffff', initials: 'DT' }, budgetTier: 'small', leagueId: 'premier', replacedClub: '' };
+/** The careers section 2 replays: the nine clubs, an Everton career in 2005-06, a created club, and a New
+    year takeover, each set up the way the Dugout step does it with Normal chosen. */
+function identityCareers() {
+  const out = fleetClubs().map(c => ({ tag: c.name, era: null, make: m => m.cm.startCareer(c.name) }));
+  out.push({ tag: 'Everton 2005-06', era: 'era2005', make: m => m.cm.startCareer('Everton', 'era2005') });
+  const spec = { ...SPEC, replacedClub: cm.playableClubs('premier').at(-1).name };
+  out.push({ tag: 'a created club', era: null, make: m => m.cm.startCareer(spec.name, 'now', spec) });
+  out.push({ tag: 'Brentford, New year takeover', era: null, make: m => m.cal.startMidSeason(m.cm.startCareer('Brentford'), 'newYear') });
+  return out;
+}
+const setUp = (m, s, setup) => (m.dif ? m.dif.setUpCareer(s, setup, rebuildAsksOf(m)) : s);
+/** One career, SEASONS seasons of quick sims; the whole state at every season end, and the draws taken. */
+async function replay(b, career, seed, coach, level, seasons, edit) {
+  const m = fresh(b);
+  if (edit) edit(m.dif.CM_DIFFICULTY_DIALS);
+  if (career.era && m.eras?.ensureEraRosters) await m.eras.ensureEraRosters(career.era);
+  const snaps = [];
+  withStream(seed, () => {
+    let s = setUp(m, career.make(m), { level });
+    for (let k = 1; k <= seasons; k += 1) {
+      let over = false;
+      for (let guard = 0; guard < 160; guard += 1) {
+        const res = m.cm.playNextEntry(s, { skipHalftime: true, noCoach: !coach });
+        s = res.state;
+        if (res.kind === 'seasonOver') { over = true; break; }
+        if (s.sacked) break;
+      }
+      if (!over) { snaps.push(JSON.stringify(s)); return; }
+      s = m.cm.finishSeason(s).state;
+      snaps.push(JSON.stringify(s));
+      if (k < seasons) s = m.cm.startNextSeason(s);
+    }
+  });
+  return { snaps, draws: withStream.draws };
+}
+const firstDiff = (a, b) => {
+  const x = JSON.parse(a), y = JSON.parse(b);
+  for (const k of new Set([...Object.keys(x), ...Object.keys(y)])) if (JSON.stringify(x[k]) !== JSON.stringify(y[k])) return k;
+  return '(key order)';
+};
+const withoutLevel = j => { const o = JSON.parse(j); if (o.startOptions) delete o.startOptions.difficulty; return JSON.stringify(o); };
+async function section2() {
+  const seeds = num('SEEDS', 2), seasons = num('SEASONS', 2);
+  const BASE = BASE_ROOT ? await bundleOf(BASE_ROOT, 'base', []) : await bundleOf(ROOT, 'plain', PLAIN);
+  console.log(`2) Normal plays as ${BASE_ROOT ? `the base tree ${BASE_ROOT}` : 'this tree with every dial read as Normal\'s'}: ${seeds} seeds, ${seasons} seasons, coach and noCoach`);
+  const careers = identityCareers();
+  let compared = 0, draws = 0, keyed = 0;
+  const t0 = Date.now();
+  for (const career of careers) for (let seed = 0; seed < seeds; seed += 1) for (const coach of [true, false]) {
+    const sd = 5000 + seed * 97 + careers.indexOf(career);
+    const a = await replay(HEAD, career, sd, coach, 'normal', seasons);
+    const b = await replay(BASE, career, sd, coach, 'normal', seasons);
+    const tag = `${career.tag} seed ${seed} ${coach ? 'coach' : 'noCoach'}`;
+    compared += 1; draws += a.draws;
+    if (a.draws !== b.draws) fail(`${tag}: ${a.draws} draws here, ${b.draws} on the base`);
+    if (a.snaps.length !== b.snaps.length) fail(`${tag}: ${a.snaps.length} season ends here, ${b.snaps.length} on the base`);
+    for (let i = 0; i < Math.min(a.snaps.length, b.snaps.length); i += 1) {
+      if (a.snaps[i] !== b.snaps[i]) { fail(`${tag}: season ${i + 1} differs from the base, first at key ${firstDiff(a.snaps[i], b.snaps[i])}`); break; }
+    }
+    if (a.snaps.some(j => JSON.parse(j).startOptions?.difficulty !== undefined)) keyed += 1;
+  }
+  if (keyed) fail(`${keyed} Normal careers carry the difficulty key`);
+  ok(`${compared} Normal careers compared with the base, ${draws} draws, in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+  /* The picker path: Normal with No sacking off is the very object it was given. */
+  const m = fresh(HEAD), s0 = m.cm.startCareer('Everton');
+  if (m.dif.setUpCareer(s0, { level: 'normal', noSack: false }, () => { throw new Error('rebuilt'); }) === s0 && m.dif.setUpCareer(s0) === s0) ok('setUpCareer on Normal with No sacking off returns its argument');
+  else fail('setUpCareer on Normal does not return its argument');
+
+  /* 2b. Every lever is its dial: Hard with every dial set to Normal's plays as Normal, the key aside. */
+  const leakEdge = CONTROL === 'alloffleak';
+  if (leakEdge) console.log('NEGATIVE CONTROL ON: 2b keeps Hard\'s edge on');
+  const allOff = D => { const edge = D.hard.edge; Object.assign(D.hard, D.normal); if (leakEdge) D.hard.edge = edge; };
+  let same = 0, n2 = 0;
+  for (const career of careers.slice(0, 9)) for (const coach of [true, false]) {
+    const sd = 7000 + careers.indexOf(career);
+    const a = await replay(HEAD, career, sd, coach, 'hard', seasons, allOff);
+    const b = await replay(HEAD, career, sd, coach, 'normal', seasons);
+    n2 += 1;
+    const tag = `2b ${career.tag} ${coach ? 'coach' : 'noCoach'}`;
+    if (a.draws !== b.draws) { fail(`${tag}: Hard with Normal's dials took ${a.draws} draws, Normal ${b.draws}`); continue; }
+    const bad = a.snaps.findIndex((j, i) => withoutLevel(j) !== b.snaps[i]);
+    if (bad >= 0 || a.snaps.length !== b.snaps.length) fail(`${tag}: Hard with Normal's dials differs from Normal${bad >= 0 ? ` in season ${bad + 1}, first at key ${firstDiff(withoutLevel(a.snaps[bad]), b.snaps[bad])}` : ''}`);
+    else if (!a.snaps.every(j => JSON.parse(j).startOptions?.difficulty === 'hard')) fail(`${tag}: the Hard career lost its key`);
+    else same += 1;
+  }
+  ok(`2b: ${same} of ${n2} Hard careers on Normal's dials play as Normal, the key aside`);
+}
+
+/* ---------- 3. each lever does exactly what its dial says ---------- */
+/* A module whose Hard row is Normal's but for ONE lever (Hard's own value), so a Hard career and a Normal
+   one take the same draws up to that lever. The lever's control sets that dial back to Normal's too, and
+   its check must then go red. */
+const LEVER_OF = { gain: ['gain'], pain: ['pain'], cut: ['cut'], cheque: ['cheque'], wages: ['wageRoom'], mark: ['mark'], edge: ['edge'] };
+function leverModule(keys) {
+  const m = fresh(HEAD);
+  const D = m.dif.CM_DIFFICULTY_DIALS, hard = { ...D.hard };
+  Object.assign(D.hard, D.normal);
+  for (const k of keys) D.hard[k] = hard[k];
+  if (LEVER_OF[CONTROL] && keys.some(k => LEVER_OF[CONTROL].includes(k))) for (const k of LEVER_OF[CONTROL]) D.hard[k] = D.normal[k];
+  return { m, dial: hard };
+}
+const close = (a, b, tol) => Math.abs(a - b) <= tol;
+/** The first match a career plays: its report and the state after it. */
+function firstMatch(m, s) {
+  for (let guard = 0; guard < 30; guard += 1) {
+    const res = m.cm.playNextEntry(s, { skipHalftime: true });
+    s = res.state;
+    if (res.report && typeof res.report.confidenceDelta === 'number') return { report: res.report, s };
+  }
+  return null;
+}
+/** A season's end under the steady driver (renews, signs nobody), on the Normal module m. */
+function seasonEnd(m, club, seed) {
+  return withStream(seed, () => {
+    let s = m.cm.startCareer(club);
+    const rec = { fees: 0, signings: 0, clauseUnder: 0, loanUnder: 0, over: false, boardMin: 100, boardSum: 0, boardN: 0 };
+    s = playSeason(m, s, 'steady', rec);
+    return s.sacked ? null : m.cm.finishSeason(s).state;
+  });
+}
+const keyed = (s, level) => ({ ...s, startOptions: { ...(s.startOptions ?? {}), difficulty: level } });
+function section3() {
+  const seeds = num('SEEDS3', 4);
+  if (LEVER_OF[CONTROL] || CONTROL === 'clause') console.log(`NEGATIVE CONTROL ON: ${CONTROL === 'clause' ? 'the clause floor at the card\'s price is gone' : `Hard's ${LEVER_OF[CONTROL].join(' and ')} set back to Normal's`}`);
+  console.log(`3) each lever does what its dial says (Hard with one lever on, the rest Normal's), ${seeds} seeds`);
+  const clubs = fleetClubs();
+  /* B1: the board's change after the first match. */
+  {
+    const { m: mh, dial } = leverModule(['gain', 'pain']);
+    let n = 0, bad = 0, up = 0, down = 0;
+    for (const c of clubs) for (let seed = 0; seed < seeds; seed += 1) {
+      const sd = 9000 + seed * 31 + clubs.indexOf(c);
+      const mn = fresh(HEAD);
+      const a = withStream(sd, () => firstMatch(mn, mn.cm.startCareer(c.name)));
+      const b = withStream(sd, () => firstMatch(mh, setUp(mh, mh.cm.startCareer(c.name), { level: 'hard' })));
+      if (!a || !b) { fail(`B1 ${c.name} seed ${seed}: no first match`); continue; }
+      const dn = a.report.confidenceDelta, dh = b.report.confidenceDelta;
+      if (Math.abs(dn) < 0.5) continue;
+      n += 1;
+      const want = dn > 0 ? dn * dial.gain : dn * dial.pain;
+      if (dn > 0) up += 1; else down += 1;
+      if (!close(dh, want, 0.13) || Math.sign(dh) !== Math.sign(dn)) { bad += 1; if (bad <= 3) fail(`B1 ${c.name} seed ${seed}: Normal ${dn}, Hard ${dh}, the dial says ${want.toFixed(2)}`); }
+    }
+    if (bad > 3) fail(`B1: ${bad} matches in all off the dial`);
+    if (n < 20 || up < 3 || down < 3) fail(`B1: only ${n} first matches (${up} up, ${down} down) moved the board by 0.5 or more, the floor is 20 with 3 each way`);
+    else if (!bad) ok(`B1: ${n} first matches (${up} up, ${down} down), Hard's change is Normal's times the dial every time`);
+  }
+  /* P1: the match facts and the next match card show the edge; the odds turn against you; no AI match reads it. */
+  {
+    const { m: mh, dial } = leverModule(['edge']);
+    const mn = fresh(HEAD);
+    let n = 0, worse = 0;
+    for (const c of clubs) {
+      const sn = withStream(11, () => mn.cm.startCareer(c.name));
+      const sh = withStream(11, () => setUp(mh, mh.cm.startCareer(c.name), { level: 'hard' }));
+      const opp = mn.cm.nextFixtureFrom(sn, sn.week);
+      const oh = mh.cm.nextFixtureFrom(sh, sh.week);
+      if (!opp?.opponent || !oh?.opponent || opp.opponent !== oh.opponent) continue;
+      n += 1;
+      const want = mn.cm.strengthOf(sn, opp.opponent) + dial.edge;
+      if (!close(mh.cm.oppStrengthVsMe(sh, oh.opponent), want, 1e-9)) fail(`P1 ${c.name}: the opponent reads ${mh.cm.oppStrengthVsMe(sh, oh.opponent)}, the dial says ${want}`);
+      if (oh.oppStrength !== Math.round(want)) fail(`P1 ${c.name}: the next match card shows ${oh.oppStrength}, the dial says ${Math.round(want)}`);
+      const fn = mn.cm.matchFacts(sn), fh = mh.cm.matchFacts(sh);
+      if (fn && fh && fh.odds.loss > fn.odds.loss && fh.odds.win < fn.odds.win) worse += 1;
+    }
+    if (n < 6) fail(`P1: only ${n} clubs had a next fixture to read`);
+    else if (worse < n) fail(`P1: the odds turned against you in ${worse} of ${n} match facts`);
+    else ok(`P1: ${n} next match cards and match facts read the opponent at strength plus ${dial.edge}, the odds worse in all ${n}`);
+    /* No AI against AI match reads it: in the engine (comments stripped) oppStrengthVsMe is called in the seven
+       readers of your match only, and simAiMatch keeps strengthOf. */
+    const src = code(read('src/lib/clubManager.ts'));
+    const readers = ['talkTargetNow', 'firstHalfLambdas', 'secondHalfLambdas', 'playMyMatch', 'talkEdgeFor', 'nextFixtureFrom', 'matchFacts'];
+    const calls = [...src.matchAll(/oppStrengthVsMe\(/g)].map(x => x.index);
+    const fnStarts = [...src.matchAll(/^(?:export )?function (\w+)/gm)].map(x => ({ name: x[1], at: x.index }));
+    const owner = at => fnStarts.filter(f => f.at < at).at(-1)?.name;
+    const owners = calls.map(owner).filter(o => o !== 'oppStrengthVsMe');
+    const stray = owners.filter(o => !readers.includes(o));
+    if (owners.length !== 7 || stray.length) fail(`P1: oppStrengthVsMe is called ${owners.length} times (${owners.join(', ')}), seven are expected, all in ${readers.join(', ')}`);
+    else ok(`P1: oppStrengthVsMe is read in exactly the seven readers of your match (${[...new Set(owners)].join(', ')})`);
+    const ai = src.slice(src.indexOf('function simAiMatch('), src.indexOf('\n}\n', src.indexOf('function simAiMatch(')));
+    if (!ai.includes('strengthOf(state, home)') || ai.includes('oppStrengthVsMe')) fail('P1: simAiMatch no longer reads plain strengthOf');
+    else ok('P1: simAiMatch reads plain strengthOf, so no match between other clubs moves');
+  }
+}
+
+/** The summer rolled from one season end state on a stream of its own (simClubManagerBudget's rollWith). */
+const rollOn = (m, s, seed, club) => withStream(seed, () => m.cm.startNextSeason(s, club));
+function section3money() {
+  const seeds = num('SEEDS3', 4);
+  const clubs = fleetClubs().filter(c => c.tier !== 'big');
+  const mn = fresh(HEAD);
+  const ends = [];
+  for (const c of clubs) for (let seed = 0; seed < Math.max(2, seeds - 1); seed += 1) {
+    const s = seasonEnd(mn, c.name, 12000 + seed * 53 + clubs.indexOf(c));
+    if (s) ends.push({ club: c.name, s, seed: 13000 + seed * 7 + clubs.indexOf(c) });
+  }
+  console.log(`  ${ends.length} season ends rolled (the steady driver at the mid and small clubs)`);
+  /* B2: a stay's opening. At or above Safe it is Normal's; under Safe it is Normal's minus the cut. */
+  {
+    const { m, dial } = leverModule(['cut']);
+    let below = 0, above = 0, bad = 0;
+    for (const e of ends) {
+      const a = rollOn(mn, e.s, e.seed), b = rollOn(m, keyed(e.s, 'hard'), e.seed);
+      const want = a.boardConfidence >= 60 ? a.boardConfidence : a.boardConfidence - dial.cut;
+      if (a.boardConfidence >= 60) above += 1; else below += 1;
+      if (b.boardConfidence !== want) { bad += 1; if (bad <= 3) fail(`B2 ${e.club}: Normal opens at ${a.boardConfidence}, Hard at ${b.boardConfidence}, the dial says ${want}`); }
+    }
+    if (below < 4 || above < 1) fail(`B2: ${below} openings under Safe and ${above} at or above it; the floors are 4 and 1`);
+    else if (!bad) ok(`B2: ${below} bad openings fell by exactly ${dial.cut}, ${above} at or above Safe stayed`);
+  }
+  /* M1: the summer cheque, read with nothing carried. */
+  {
+    const { m, dial } = leverModule(['cheque']);
+    let n = 0, bad = 0;
+    for (const e of ends) {
+      const empty = { ...e.s, budget: 0 };
+      const a = rollOn(mn, empty, e.seed), b = rollOn(m, keyed(empty, 'hard'), e.seed);
+      n += 1;
+      const want = Math.round(a.budget * dial.cheque * 10) / 10;
+      if (!close(b.budget, want, 0.11)) { bad += 1; if (bad <= 3) fail(`M1 ${e.club}: Normal's cheque ${a.budget}, Hard's ${b.budget}, the dial says ${want}`); }
+    }
+    const day = fresh(HEAD).cm.startCareer('Brentford');
+    const dh = setUp(m, m.cm.startCareer('Brentford'), { level: 'hard' });
+    if (dh.budget !== Math.round(day.budget * dial.cheque * 10) / 10) fail(`M1 day one: Normal ${day.budget}, Hard ${dh.budget}`);
+    if (n < 6) fail(`M1: only ${n} summers read`);
+    else if (!bad) ok(`M1: day one and ${n} summer cheques are Normal's times ${dial.cheque}`);
+  }
+  /* M2: the wage ceiling of a new job (day one, and a summer move); a stay grows the one it has. */
+  {
+    const { m, dial } = leverModule(['wageRoom']);
+    let n = 0, bad = 0;
+    const want = cap => Math.max(60, Math.round(cap * dial.wageRoom));
+    for (const c of clubs.slice(0, 4)) {
+      const a = withStream(3, () => mn.cm.startCareer(c.name)), b = withStream(3, () => setUp(m, m.cm.startCareer(c.name), { level: 'hard' }));
+      n += 1;
+      if (b.wageCap !== want(a.wageCap)) { bad += 1; fail(`M2 day one ${c.name}: Normal ${a.wageCap}, Hard ${b.wageCap}, the dial says ${want(a.wageCap)}`); }
+    }
+    const league = cm.playableClubs('premier');
+    for (const e of ends.slice(0, 6)) {
+      const to = league.find(c => c.name !== e.club && c.expectation > 8)?.name;
+      const a = rollOn(mn, e.s, e.seed, to), b = rollOn(m, keyed(e.s, 'hard'), e.seed, to);
+      if (a.clubName !== to || b.clubName !== to) { fail(`M2 move ${e.club} to ${to}: the move did not happen`); continue; }
+      n += 1;
+      if (b.wageCap !== want(a.wageCap)) { bad += 1; if (bad <= 3) fail(`M2 move to ${to}: Normal ${a.wageCap}, Hard ${b.wageCap}, the dial says ${want(a.wageCap)}`); }
+    }
+    if (n < 8) fail(`M2: only ${n} new jobs read`);
+    else if (!bad) ok(`M2: ${n} new jobs (day one and summer moves) start on Normal's ceiling times ${dial.wageRoom}`);
+  }
+  /* T1: the market listed to you. Same men, same order, marked prices; Buy charges the marked price; the
+     clause never undercuts it (at Legend's mark, where on the old rule it could); the AI's headlines are Normal's. */
+  {
+    const { m, dial } = leverModule(['mark']);
+    const s0 = withStream(5, () => m.cm.startCareer('Brentford'));
+    const sh = { ...setUp(m, s0, { level: 'hard' }), budget: 9999, transferWindow: s0.transferWindow ?? 'summer' };
+    const base = m.cm.buildMarket(sh), mine = m.dif.marketForMe(sh, base);
+    let marked = 0;
+    mine.forEach((mp, i) => { if (mp.name === base[i].name && mp.value === base[i].value && mp.price === Math.max(0.5, Math.round(base[i].price * dial.mark * 10) / 10)) marked += 1; });
+    if (marked !== base.length || (dial.mark !== 1 && mine.every((mp, i) => mp.price === base[i].price))) fail(`T1: ${marked} of ${base.length} cards are the same man at the marked price`);
+    else ok(`T1: all ${base.length} cards are the same men in the same order at ${dial.mark} times the list`);
+    const pick = mine.find(mp => m.cm.buyPlayer(sh, mp));
+    const after = pick && m.cm.buyPlayer(sh, pick);
+    if (!after || !close(sh.budget - after.budget, pick.price, 1e-9) || pick.price === base[mine.indexOf(pick)].price) fail(`T1: Buy did not charge the marked price${pick ? ` (${sh.budget - after?.budget} for a card of ${pick.price})` : ''}`);
+    else ok(`T1: Buy charges the marked price (${pick.price} for a man listed at ${base[mine.indexOf(pick)].price})`);
+    const legendMark = DIALS.legend.mark;
+    let under = 0, clauses = 0;
+    for (const mp of base) {
+      const card = { ...mp, price: Math.max(0.5, Math.round(mp.price * legendMark * 10) / 10) };
+      const c = m.cm.releaseClauseOf(card, sh.season);
+      if (c === null) continue;
+      clauses += 1;
+      if (c < card.price) under += 1;
+    }
+    if (under) fail(`T1: ${under} of ${clauses} release clauses undercut the price at Legend's mark`);
+    else ok(`T1: none of ${clauses} release clauses undercuts the price at Legend's mark`);
+    const runA = withStream(21, () => { let s = mn.cm.startCareer('Brentford'); for (let i = 0; i < 6; i += 1) s = mn.cm.playNextEntry(s, { skipHalftime: true }).state; return s.aiHeadlines; });
+    const runB = withStream(21, () => { let s = setUp(m, m.cm.startCareer('Brentford'), { level: 'hard' }); for (let i = 0; i < 6; i += 1) s = m.cm.playNextEntry(s, { skipHalftime: true }).state; return s.aiHeadlines; });
+    if (JSON.stringify(runA) !== JSON.stringify(runB)) fail('T1: the AI\'s headlines on a marked market differ from Normal\'s');
+    else ok(`T1: the AI's own deals are Normal's (${runA.length} headlines after six entries)`);
+  }
+}
+
+/* ---------- 6. the dailies never carry a level ---------- */
+const HOT = ['2026-10-10', '2026-10-11', '2026-10-27'];
+const DEAD = ['2026-10-10', '2026-10-11', '2026-10-18'];
+const carriesLevel = x => !!(x && x.startOptions && typeof x.startOptions === 'object' && 'difficulty' in x.startOptions);
+/* simDailyDeals' fixed script: balanced, no talk, the first press answer. */
+function hotSeatDay(b, date) {
+  const { hs } = fresh(b);
+  const setup = hs.dailyHotSeat(date);
+  let run = hs.startHotSeat({ club: setup.club, seed: setup.seed, daily: date });
+  let guard = 0;
+  while (!run.verdict && guard++ < 40) run = hs.pendingPress(run) ? hs.answerHotSeatPress(run, 0) : hs.playHotSeatMatch(run, 'balanced', null);
+  const hand = run.verdict ? hs.handoverState(run) : null;
+  return { club: setup.club, json: JSON.stringify([run.state, run.log, run.verdict ?? null, hand]), keyed: carriesLevel(run.state) || carriesLevel(hand) };
+}
+function deadlineDayRun(b, date) {
+  const { dd } = fresh(b);
+  const setup = dd.dailyDeadlineDay(date);
+  const run = dd.endDay(dd.startDeadlineDay(setup));
+  return { club: setup.club, json: JSON.stringify([run.state, run.grade ?? null, run.ticker]), keyed: carriesLevel(run.state) };
+}
+async function section6() {
+  const BASE = BASE_ROOT ? await bundleOf(BASE_ROOT, 'base6', []) : await bundleOf(ROOT, 'plain6', PLAIN);
+  console.log(`6) Manager Hot Seat (${HOT.join(', ')}) and Deadline Day (${DEAD.join(', ')}) play as on ${BASE_ROOT ? 'the base tree' : 'this tree with every dial read as Normal\'s'}`);
+  const red = { 'Hot Seat': 0, 'Deadline Day': 0 };
+  for (const [kind, dates, day] of [['Hot Seat', HOT, hotSeatDay], ['Deadline Day', DEAD, deadlineDayRun]]) {
+    for (const date of dates) {
+      const a = day(HEAD, date), b = day(BASE, date);
+      const why = [];
+      if (a.json !== b.json) why.push('the day differs from the base');
+      if (a.keyed) why.push('its state carries a level');
+      if (why.length) { red[kind] += 1; fail(`${kind} ${date} (${a.club}): ${why.join('; ')}`); }
+      else console.log(`   ${kind} ${date} ${a.club}: identical, no level`);
+    }
+  }
+  /* Deadline Day plays no match and never sets a career up, so no lever can reach it whatever its state
+     holds. Proved from its code (comments stripped), with a control that adds one call to a copy. */
+  let ddCode = code(read('src/lib/deadlineDay.ts'));
+  if (CONTROL === 'ddreach') ddCode += '\nexport function reach(state) { return oppStrengthVsMe(state, "x"); }\n';
+  const ENTRY_POINTS = ['playNextEntry', 'resumeMatch', 'playMyMatch', 'simToWeek', 'oppStrengthVsMe', 'boardSwing', 'boardOpening',
+    'boardCheque', 'wageRoomFor', 'marketForMe', 'setUpCareer', 'applyNewJobDials', 'joinClubNow', 'startNextSeason', 'useClubManager'];
+  const reached = ENTRY_POINTS.filter(n => new RegExp('(^|[^A-Za-z0-9_$])' + n + '[(]').test(ddCode));
+  if (reached.length) fail(`deadlineDay.ts calls ${reached.join(', ')}, so a lever can reach Deadline Day`);
+  console.log(`   red per daily: Hot Seat ${red['Hot Seat']} of ${HOT.length}, Deadline Day ${red['Deadline Day']} of ${DEAD.length}; deadlineDay.ts calls ${reached.length ? reached.join(', ') : 'none of the match, summer, market or setup entry points'}`);
+}
+
 /* ---------- run ---------- */
-const RUN = { 0: section0, 1: section1 };
+const RUN = { 0: section0, 1: section1, 2: section2, 3: () => { section3(); section3money(); }, 6: section6 };
 for (const s of SECTIONS) {
   if (!RUN[s]) { console.log(`SECTION=${s} is not a section of this harness; could not run`); process.exit(2); }
-  RUN[s]();
+  await RUN[s]();
 }
 if (CONTROL) console.log(failures ? `CONTROL ${CONTROL} FIRED: ${failures} failures` : `CONTROL ${CONTROL} DID NOT FIRE`);
 console.log(failures ? `simCmDifficulty: ${failures} FAILURES (sections ${SECTIONS.join(',')})` : `simCmDifficulty: all green (sections ${SECTIONS.join(',')})`);
