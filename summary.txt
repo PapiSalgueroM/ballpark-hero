@@ -1,0 +1,18 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+retire-fleet exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ManagerSlotsScreen.tsx, src/lib/clubManagerSlots.ts: no honest base
+retire-hotseat-loads exit=2 5s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ManagerSlotsScreen.tsx, src/lib/clubManagerSlots.ts: no honest base
+retire-ctl-base exit=2 10s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ManagerSlotsScreen.tsx, src/lib/clubManagerSlots.ts: no honest base
+retire exit=0 36s | simCmRetire: all 18 checks passed (record, oldsave, pens, base, retire, dashes)
+simCmTablesTruth exit=0 26s | simCmTablesTruth: every case green
+simNationJob exit=0 4s | simNationJob: green. You can manage a country now, and it is a job you have to earn and can lose.
+simHomeFront exit=0 2s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simEarlyReturnScope exit=0 14s | simEarlyReturnScope: all green
+simCmShootoutOrder exit=0 38s | simCmShootoutOrder: all sections passed
+decisions-seed4 exit=0 45s | simClubManagerDecisions: 0 findings
+retire-ctl exit=0 156s | controls: tielast=1/1 skipgame=1/1 nomissed=1/1 basewrites=1/1 pensdrawn=1/1 retiretouch=1/1 legacydrop=1/1 liveok=1/1 seasonover=1/1 drawone=1/1 dash=1/1
+simCmQuickLegs exit=0 91s | simCmQuickLegs: PASS, 10 sections green
+simCmVar exit=0 193s | simCmVar normal: actual review outcomes and full prior baseline passed.
+playCmRetire exit=0 108s | playCmRetire: all 60 checks passed. Pictures in /home/runner/work/_temp/rc-out/files/head
+playCmRetire-strip exit=1 27s | control strip FIRED: 6 of 18 checks red
+playCmRetire-norecord exit=1 97s | control norecord FIRED: 6 of 52 checks red
+decisionRegression1081 exit=0 381s | Original loss control fired in section 3 beside a healthy seed-1 baseline.
