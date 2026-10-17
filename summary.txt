@@ -1,0 +1,8 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+synth exit=0 0s | a7a1da88a5ccd7f879025631670f757df63ff662 b465966073dee0a0ebf11f10e31d6ba1111b99e6
+playPitch exit=0 20s | playPitchRestartContinuity: green in the prepared shared-pitch scope; no real Manager journey or painted-old-jump claim.
+playHtLineups exit=0 22s | Halftime lineups browser: passed; 869 checks, 3 played profiles, 1 effective controls, 7 originals.
+simWritesAreSent exit=1 13s | simWritesAreSent: 2 failures
+playCmRealFixtures exit=1 1s | Node.js v24.21.0
+playCmMatchDay exit=0 181s | playCmMatchDay: green. 15 walks over 4 saves, every match day screen home side first, whole names on the timeline, a 44 px toggle, the page never moved
+playCmVar exit=0 601s | playCmVar: green. Every review a player can meet was shown whole, at its minute, over nothing else, and every match settled as the engine settles it.

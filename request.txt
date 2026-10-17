@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+synth: node .rc/x/synthParents.mjs
+playHtLineups: set -o pipefail; read HTP PIP < <(node .rc/x/synthParents.mjs) && export CI=1 SIM_NETWORK=offline CM_HT_PARENT_REF=$HTP CM_HT_LINEUPS_OUT="$PWD/htw" CM_HT_LINEUPS_PHASE=fixed FREE_KICK_FONT_CACHE="$PWD/fch" && node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && node .rc/x/prepInstalled.mjs "$PWD/htw" && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerHalftimeLineups.mjs | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playManagerHalftimeLineups.mjs
+playPitch: set -o pipefail; read HTP PIP < <(node .rc/x/synthParents.mjs) && export CI=1 SIM_NETWORK=offline PITCH_RESTART_PARENT_REF=$PIP PITCH_RESTART_OUT="$PWD/prw" PITCH_RESTART_PHASE=fixed && node .rc/x/prepInstalled.mjs "$PWD/prw" && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPitchRestartContinuity.mjs | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPitchRestartContinuity.mjs
+playCmMatchDay: node scripts/playCmMatchDay.mjs
+playCmVar: node scripts/playCmVar.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+playCmRealFixtures: set -o pipefail; export FREE_KICK_FONT_CACHE="$PWD/fcr" && node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && node scripts/playCmRealFixtures.mjs
