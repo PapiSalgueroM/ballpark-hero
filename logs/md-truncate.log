@@ -1,0 +1,21 @@
+NEGATIVE CONTROL ON: truncate; section(s) 3 must go red
+fleet: 25 careers, 916 matches (461 home, 447 away, 8 neutral), 0 reports with no fixture read before them, 18s
+live: 173 league matches kicked off live (64 away), 692 live renders
+1) One rule: the fixture's venue and the report's own order agree on every match
+   916 matches, 8 reports saying neutral; red: 0 home, 0 away, 0 neutral
+2) The report card: every two sided block in the scoreline's order
+   916 reports, 9160 stat bars read; red: 0 home, 0 away, 0 neutral
+3) The timeline: home side first, whole names, every mark right after its name
+  FAIL [3]: Liverpool now seed 0: Newcastle 4-0 Liverpool (Premier League · Round 1, away): a name on the timeline is cut (truncate)
+  FAIL [3]: Liverpool now seed 0: Newcastle 4-0 Liverpool (Premier League · Round 1, away): a name on the timeline is cut (truncate)
+  FAIL [3]: Liverpool now seed 0: Newcastle 4-0 Liverpool (Premier League · Round 1, away): a name on the timeline is cut (truncate)
+  FAIL [3]: Liverpool now seed 0: Newcastle 4-0 Liverpool (Premier League · Round 1, away): a name on the timeline is cut (truncate)
+  FAIL [3]: Liverpool now seed 0: Newcastle 4-0 Liverpool (Premier League · Round 1, away): a name on the timeline is cut (truncate)
+  FAIL [3]: Liverpool now seed 0: Newcastle 4-0 Liverpool (Premier League · Round 1, away): a name on the timeline is cut (truncate)
+   916 timelines, 15753 rows, 15753 names, 242 marks; red: 461 home, 447 away, 8 neutral
+4) Live and half time: the strip, the score's digits, the interval card, the stats and the line under the pitch home side first
+   173 live matches (173 first, 173 interval, 173 second, 173 done); red: 0 home, 0 away, 0 neutral
+7) A home or neutral match: the card's visible text equals the base's, the board word masked
+   578 home and neutral matches compared with d8aaa4cb (545 live screens among them); red: 0 home, 0 neutral
+control truncate: section 3 15753 failures (461 home, 447 away, 8 neutral matches red)
+simCmMatchDay: CONTROL truncate FIRED (15753 failures, section(s) 3)

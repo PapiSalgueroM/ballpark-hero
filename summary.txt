@@ -1,0 +1,15 @@
+md-neutralaway exit=1 29s | simCmMatchDay: CONTROL neutralaway FIRED (8 failures, section(s) 1)
+md-oldorder exit=1 30s | simCmMatchDay: CONTROL oldorder FIRED (17971 failures, section(s) 2, 3, 4)
+md-truncate exit=1 31s | simCmMatchDay: CONTROL truncate FIRED (15753 failures, section(s) 3)
+md-homeflip exit=1 31s | simCmMatchDay: CONTROL homeflip FIRED (29129 failures, section(s) 1, 2, 3, 4, 7)
+simCmVarLedger exit=0 1s | simCmVarLedger: all 691 checks passed.
+simCmStoppageTime exit=0 33s | simCmStoppageTime: PASS. Goals fall in the board at a measured share without adding any, every line in a board says 45+N or 90+N wherever a minute is printed, extra time 
+simOwnGoalMotion exit=0 32s | simOwnGoalMotion: green. 16 tests passed: the dense fleet, OG1 to OG9 against their baseline arm, the scenes made by hand (OG6 to OG8 and OG10), the two recorded digests,
+simPitchRestartContinuity exit=1 0s | Node.js v24.21.0
+simRevealMoments exit=0 12s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+simLiveSimMotion exit=0 80s | simLiveSimMotion: green. 56 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+simManagerLiveLineups exit=1 0s | Node.js v24.21.0
+simManagerHalftimeLineups exit=1 0s | Node.js v24.21.0
+simMatchDetail exit=1 8s | simMatchDetail: 1 FAILURES
+simExtraTime exit=0 105s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (
+simPress exit=0 1961s | ALL PRESS AND TEAM TALK CHECKS PASSED
