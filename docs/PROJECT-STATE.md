@@ -1,3 +1,14 @@
+## Round1415 scoped READY, 17 October 2026: Keyboard exits while Soccer Career's Press Room loads
+
+The pending Press Room now takes focus and closes with Escape or Back. Late download completion stays closed; reopening and both actual loaded exits remain healthy. One product span adds89 source bytes. Actual tested25ae19bf518dd4c4441a088e6f022595e62abbc0 passed run39059855670/job117475392563, draft PR332. Original2 precise faults+2healthy qualify first; fixed6arms,185 unchanged related cases twice,4production390/1280 journeys and8viewed PNGs pass, with complete careers, storage, pending-save registry, RNG and source held.
+
+Types0, serial build then15readers and14fatal limits pass (SC833.1/834, CM608.5/609, NFL487.9/488K). Native physical157597/0, core5415/0, common2264/0, browser5852/0. The first native-only alias collision and reviewed saved-evidence correction remain retained. See docs/ROUND1415-PRESS-ROOM-LOADING-KEYBOARD.md. Real-merge tested25ae, carry the three closing docs separately and regenerate/qualify I's actual join. I retains active Soccer Career, Manager/UCL/tournaments, release/main/publish. Urgent PR308 tested12133c4006199d60f2c40ff5725494fe603659c0 stays first; the bounded main source gap remains handed back. No new live claim.
+
+## Round1411 scoped READY, 17 October 2026: Soccer Career survives a failed Press Room download
+
+The tile now contains optional download errors, with a clear failure screen and Back/Escape that return focus to the career. Career state, pending-save registry and normal answers are held. Actual tested commit21bda16b3926b824d8c8249d5cd67efbff86f174 passed run39047691376/job117439624915. Normal/original/boundary-removal/restored proof,180 unchanged related cases and four production390/1280 browser journeys pass; complete saves and original/restored byte bridges hold.
+
+Types0, serial build then15 readers and14 fatal caps pass: SC833.1/834, CM608.5/609, NFL487.8/488K. Native physical157344/0, core1203/0, common2264/0, browser18694/0. Failed original method and exact repair remain retained. See docs/ROUND1411-PRESS-ROOM-FAILURE.md for artifact/body bindings and limits. Real-merge tested21bda, carry these closing docs separately, regenerate and qualify I's actual join. I retains active Soccer Career, Manager/UCL/tournaments, release/main/publish; PR308 is independent. No new live claim.
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
