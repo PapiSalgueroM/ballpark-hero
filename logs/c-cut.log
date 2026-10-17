@@ -1,0 +1,20 @@
+simCmDifficulty: sections 3, control cut
+  table: normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":1.5}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3}
+NEGATIVE CONTROL ON: Hard's cut set back to Normal's
+3) each lever does what its dial says (Hard with one lever on, the rest Normal's), 4 seeds
+  ok: B1: 35 first matches (22 up, 13 down), Hard's change is Normal's times the dial every time
+  ok: P1: 9 next match cards and match facts read the opponent at strength plus 1.5, the odds worse in all 9
+  ok: P1: oppStrengthVsMe is read in exactly the seven readers of your match (talkTargetNow, firstHalfLambdas, secondHalfLambdas, playMyMatch, talkEdgeFor, nextFixtureFrom, matchFacts)
+  ok: P1: simAiMatch reads plain strengthOf, so no match between other clubs moves
+  11 season ends rolled (the steady driver at the mid and small clubs)
+  FAIL: B2 Espanyol: Normal opens at 37.5, Hard at 37.5, the dial says 29.5
+  FAIL: B2 Torino: Normal opens at 39, Hard at 39, the dial says 31
+  FAIL: B2 Torino: Normal opens at 47.5, Hard at 47.5, the dial says 39.5
+  ok: M1: day one and 11 summer cheques are Normal's times 0.8
+  ok: M2: 10 new jobs (day one and summer moves) start on Normal's ceiling times 0.94
+  ok: T1: all 5080 cards are the same men in the same order at 1.15 times the list
+  ok: T1: Buy charges the marked price (204.9 for a man listed at 178.2)
+  ok: T1: none of 1799 release clauses undercuts the price at Legend's mark
+  ok: T1: the AI's own deals are Normal's (8 headlines after six entries)
+CONTROL cut FIRED: 3 failures
+simCmDifficulty: 3 FAILURES (sections 3)
