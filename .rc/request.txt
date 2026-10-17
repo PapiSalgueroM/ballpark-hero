@@ -1,0 +1,2 @@
+#!build
+chunks: git worktree add -q /tmp/base 8293c758 && ln -s "$PWD/node_modules" /tmp/base/node_modules && ROOTD="$PWD" && (cd /tmp/base && node_modules/.bin/vite build --outDir "$ROOTD/dist-base" > /tmp/vb.log 2>&1) && mkdir -p "$RC_OUT" && cp dist/assets/SoccerCareer-*.js "$RC_OUT/head-SoccerCareer.js" && cp dist-base/assets/SoccerCareer-*.js "$RC_OUT/base-SoccerCareer.js" && ls dist/assets/SoccerCareer-*.js dist-base/assets/SoccerCareer-*.js && gzip -9 -c "$RC_OUT/head-SoccerCareer.js" | wc -c && gzip -9 -c "$RC_OUT/base-SoccerCareer.js" | wc -c
