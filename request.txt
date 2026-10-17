@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+playCmLeagueFixtures: node scripts/playCmLeagueFixtures.mjs
+playCmHubLanding: node scripts/playCmHubLanding.mjs
