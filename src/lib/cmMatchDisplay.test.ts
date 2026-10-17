@@ -94,8 +94,9 @@ describe('the pitch name and the initials (Round 1340b)', () => {
       expect(surname, name).not.toBe('');
       expect(/\d/.test(surname), name).toBe(false);
       expect(` ${words.join(' ')}`.endsWith(` ${surname}`), name).toBe(true);
-      /* Never a first name standing alone where the name has more words. */
-      if (words.length > 1) expect(surname === words[0], name).toBe(false);
+      /* Never a first name standing alone where the name has more words: a one word pitch name is the last word
+         (by place, not by spelling: "Jhon Jhon" is a generated name whose two words are the same). */
+      if (words.length > 1 && !surname.includes(' ')) expect(surname, name).toBe(words[words.length - 1]);
       expect(pitchInitials(name), name).toMatch(/^\p{L}{2,3}$/u);
       if (real.has(name) && surname !== lastName(name)) changed.push(`${name} -> ${surname}`);
       if (real.has(name) && surname.length > longest.length) longest = surname;
