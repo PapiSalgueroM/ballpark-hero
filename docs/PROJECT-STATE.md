@@ -1,3 +1,25 @@
+## Codex1403 scoped READY, 2026-10-17 UTC
+
+Build Your XI now abandons its pending review on Start Over, new formation or leaving. A late answer cannot restore an old result, record completion or clear the next review's busy state. TESTEDfbb8b7dfb1a150ac6c97721a0c73bfd29cb1537b/run39024732419 SUCCESS. Frozen12 pass, original7faults+5healthy, restored12 pass; old58 on both hooks, picker15, validator55/Fit/types, serialbuild/all15readers, realpage390/1280+control and14unchangedfatalcaps pass. Full physical8583d995 and semantic750e402c(1129checks/0mismatch) close source/artifacts. First ownWFfont-countsetupfailure retained, corrected workflow then qualified. Three actual generated outputs adopted a091; finalclosingdocs separate.
+
+Claude I owns integration/main/publish. Merge actualTESTEDfbb8 underBIIrule2, take closing docs separately and regenerate actualjoined outputs. Keep qualified308's two selection-busy lines once;308's independent Soccer Career startup fix is still separately owed. No live/fullsuite/physicalApple/currentIjoin claim. See docs/audits/xi-evaluation-reset-1403.md. Outside guidehandback09931003 waits for closing1503/1504/1500 implementations; no activeI source takeover.
+
+## Codex1403 runner setup correction, 2026-10-17 UTC
+
+The first fixed request stopped before product checks on an incorrect font-cache file count in its own new workflow. Corrected to nine dependency bodies plus the manifest. Hook and frozen tests unchanged; full rerun pending, no READY claim. Original seven failures remain qualified. See docs/audits/xi-evaluation-reset-1403.md.
+
+## Codex1403 baseline qualified, fix verification next, 2026-10-17 UTC
+
+Build Your XI: actual original seven late-evaluation faults reproduced before production changes, five normal paths and58existing checks pass. Minimum generation guard now authored in isolated branch, fixed12/old58/picker/build/readers/weights/browser checks pending. No READY/live claim. Claude I owns joined release and spectator/tournament work. See docs/audits/xi-evaluation-reset-1403.md.
+
+## Codex1403 original baseline prepared, 2026-10-17 UTC
+
+Actualqualified308hook preserves2selectionbusy lines; evaluation logic remainsoriginal. New12caseactualhookmethod/ownremoteWF source-reviewed. Test-first baseline predicts7ownershipfaults and5preserves, actualtypes/old58 required. No productionguard or runtime/READYclaim yet. IactiveSC/core/competitions/releaseheld; existingREADY308/319independent. See docs/audits/xi-evaluation-reset-1403.md.
+
+## Codex1403 claimed, 2026-10-17 UTC
+
+Build Your XI evaluation abandonment only, own hook/test/workflow. Frozen I8293, exactqualified308selectionhunks preserved, no activeSC/core/page change. Test-first remote baseline before productionguard, allruntimepending. See docs/audits/xi-evaluation-reset-1403.md. ExistingREADY308/319 and Ireleaseindependent.
+
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,

@@ -15798,3 +15798,26 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+
+## Codex1403 CLAIM: Build Your XI abandoned evaluation, 2026-10-17 UTC
+
+Root owns only src/hooks/useLineupBuilder.ts evaluation abandonment/reset lifecycle, the exact2qualified308selection-busy lines in that same hook, new focused actual-hook regression test, own remote workflow and closing docs. Frozen actualI8293c758f4284d21baaa2320383cfd5cb5bd4944. ManagedWTxi-evaluation-reset, branchcodex/xi-evaluation-reset. Historicalboard1886/1944leaveshooktootherlane; latestIledger/queue has no activeXIevaluationlease. IactiveSCpage/core/economics/calendar/competition/1503/1504/1500/main/publish held. No319SCcopyadoption, no308SCpage/startfiles. ClaimpushedbeforeQA/productediting. Primarysharedanddirty, appendclaimonly, neverstage/reset/commitprimary.
+
+Source-derived bug: actualpageStartOver staysenabledwhileSubmitTeam awaits; reset clears formation/slots/verdict but never invalidates evaluateTeam or clears its busy state. Old remote/local-fallback completion can force a new game to result and record completion. Minimal goal: abandoned evaluation never changes currentphase/verdict/busy or calls an unnecessary fallback; reset/newformation/unmount invalidate ownership. Preserve currentscoring/remote/local/errorcontent,validationpolicy,allpositionrules andexistingqualifiedselectionhunks.
+
+Plan: (1) adopt only completequalified308hook369487db (baseIhook9130c9e6 differs exactly2busy/refusal lines), author focuseddeferredactualhookmethod with12plannedcases(7counterexamples+5healthy), actual11fictionalprimary-position picks,realcompletionhookatmockedIO boundary, drainpromisesbeforeassertions. Remote BASELINE first, exactfaults/healthy outcomes fromfullJSON/default/rawreceipt; realtypes. No newproductionguard before observedcorrectfailures. (2) implementminimumownershipguard, remote green/red/restored proof with all old58validator/history cases and existing fit/picker checks held. (3) serialWNrefreshbuild asbase829snapshotisstale,all15readers/all14unchangedfatalweights and fullsource/installed/tool/font/dist/offlineholds, native fullsource closure/push/PRhandoff. Everyactualfailurestaysfailure; no cap/guardwaiver or localapp/runtime.
+
+No newbackend,timeoutpolicy,saveformat,realdata,fallbackscoring,playerfactsorproductfeature. Tests usefictionalfixtures andstuballtransport, noDBprobe/providerclaim. ExistingREADY308/319andIreleaseindependent,norootnewgate. Iowns missingBIdandoutput/basequalification; latest0933checkpoint source3cc6f8c8 hasA95/95 andhealthycompletion2/2(no currenttimeoutfault),28/33requestsreturned,BIdabsent. Rootdoesnotdispatch/cancel/mutateIkit/gate/main/publish.
+
+## Codex1403 original counterexamples qualified, 2026-10-17 UTC
+
+TESTED0009 run39022764657/job117367697233success reproduces7exact ownership faults+5healthy; unchanged58oldcases andrealtypespass. Actual12cases/19gates/15posts/9judges/12completioncalls/0RNG. Independentphysicalc57808fd andsemantic4d337297(full5f23ca1f,359checks/0mismatch) qualify original only. Artifact12096683737/SHA6c790f54 is fullyretained;4,872canonical/validatedbodiesclose. Firstnativeauditmetadata-schemaerrorsretainedandrepairedseparately, noapp/CIchange. Minimalgenerationguardnowauthored, testfdaheld, fixedqualificationpending. NotREADY/build/browser/live.
+
+## Codex1403 setup correction, 2026-10-17 UTC
+
+Firstfullrequesta82 failed before productchecks because9fontbodies+manifest werecounted as9total. Allfiveproduct/buildstagesunvisited. CorrectownWF to9bodies/10allfiles, sourceguard0690/testfda/capsheld. Failures/artifactretained, successorqualificationpending. NoREADY/live.
+
+## Codex1403 scoped READY, 2026-10-17 UTC
+
+Build Your XI reset/newformation/unmount invalidate pending reviews; old answers cannot publish, count completion or clear a replacement review's busy flag. Product0690, frozenmethodfda, WF0330. ActualTESTEDfbb8/run39024732419/job117373372408success:12/(7exact+5)/12,58+58+15,validator55/Fit/types,serialWNbuild15readers,realpage390/1280+effectivecontrol,14unchangedfatalcaps/allholds. Physical8583d995/semantic750e402c(1129/0) close136payloads/4872source/784dist. Firsta82font-countsetupfailure retainedNOTREADY, fixedWFonly9bodies+manifest10. Actual3genadopteda091, final3docsonlyclosureoutside. BIIactualTESTEDfbb8realmerge, closingdocsseparate,Iregenactualjoin. Preservequalified308twohooklinesonce,308SCstartfixindependent. Iownsactive1503/1504/1500/competition/main/publish. No rootgate/liveclaim.
