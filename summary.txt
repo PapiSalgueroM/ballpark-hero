@@ -1,0 +1,10 @@
+vitest exit=0 8s |    Duration  7.58s (transform 4.13s, setup 243ms, collect 8.87s, tests 4.65s, environment 1.94s, prepare 982ms)
+rivals exit=0 19s | No rival product names found. 0 findings.
+appeal exit=0 59s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+anchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 106s | 
+wm-seedclose exit=1 69s | simCmWorldMoves: control seedclose FIRED: section 13 red (168)
+bridges exit=0 0s | cmNoAiMoves1344: all 5 anchors stand once and can be taken out
+wm-seedcarry exit=1 68s | simCmWorldMoves: control seedcarry FIRED: section 14 red (565)
+wm-13-14 exit=0 126s | simCmWorldMoves: green, sections 0, 2, 3, 13, 14 held

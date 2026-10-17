@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerAdoption.test.ts src/lib/clubManagerWorldMoves.test.ts src/lib/clubManagerWorldRoster.test.ts --testTimeout=300000 --hookTimeout=120000
+appeal: node scripts/simManagerAppealIsolation.mjs
+rivals: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+wm-13-14: CM_WORLD_MOVES_SECTIONS=0,2,3,13,14 node scripts/simCmWorldMoves.mjs
+wm-seedclose: CM_WORLD_MOVES_CONTROL=seedclose CM_WORLD_MOVES_SECTIONS=0,2,13 node scripts/simCmWorldMoves.mjs
+wm-seedcarry: CM_WORLD_MOVES_CONTROL=seedcarry CM_WORLD_MOVES_SECTIONS=0,3,14 node scripts/simCmWorldMoves.mjs
+bridges: node scripts/lib/cmNoAdoption1508.mjs --check && node scripts/lib/cmWorldSeed1250.mjs --check && node scripts/lib/cmNoAiMoves1344.mjs --check
