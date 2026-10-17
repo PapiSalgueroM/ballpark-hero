@@ -86,9 +86,33 @@ const SAVESIZE_OWN_CLUB = [
     "  const awayCard = away ? buildMarket({ ...away, loanedOut: [], clubName: 'Barcelona' }).find(m => m.name === lent.name) : null;",
   ].join('\n') + '\n', '  const awayCard = away ? buildMarket({ ...away, loanedOut: [] }).find(m => m.name === lent.name) : null;\n'],
 ];
+/* Release BI's join (Round 1344 beside Release AZ and Round 1339): Round 1344 moved SaveSize's SIZE_BUDGET to 214,000
+   by the lead's ruling, rewrote the SLOPE_CAP comment's measured ranges, wrote why in one header paragraph, and made
+   section 6 take the flushed ledger off with the seed (one comment and one statement). A head that carries 1344 holds
+   those exact edits; each must stand exactly once, the paragraph is header comment lines only, and each is put back to
+   the text before 1344 ahead of the own club follows above and the byte for byte comparison. A head without 1344 (the
+   control-input arm's measured input) carries none of them. */
+const SAVESIZE_1344_FIRST = " * Round 1344 moved SIZE_BUDGET to 214,000, the lead's ruling 1 (2026-10-16),\n";
+const SAVESIZE_1344_LAST = ' * longer in the middle of the gap: measure again, never just raise it.\n';
+const SAVESIZE_1344_EDITS = [
+  [
+    "const SIZE_BUDGET = 214_000;   // Round 1344, every club's deals recorded: healthy 191,625 to 206,555; uncapped 227,507 to 239,176 (was 203,000: Round 1229, the league book, healthy 180,907 to 193,046, uncapped 215,793 to 226,422)\n",
+    "const SIZE_BUDGET = 203_000;   // Round 1229, the league book: healthy 180,907 to 193,046; head to head uncapped 215,793 to 226,422 (was 196,000: Round 1052, 27 leagues, healthy 179,120 to 187,581, uncapped 207,690 to 219,987)\n",
+  ],
+  [
+    "const SLOPE_CAP = 2_000;       // Round 1344, every club's deals recorded: healthy -181 to 1,517 bytes a season; uncapped 3,965 to 4,802 (was healthy 249 to 1,178, uncapped 3,052 to 4,408)\n",
+    "const SLOPE_CAP = 2_000;       // healthy 249 to 1,178 bytes a season; uncapped 3,052 to 4,408\n",
+  ],
+  [[
+    "  /* Round 1344: and from before its opening window's deals reached a ledger (the post seed flush writes one into",
+    '     every new seeded career, and a readable ledger alone turns on the seeded market), so the flushed ledger comes',
+    '     off with the seed. */',
+    "  const { worldSeed: _preReleaseSeed, worldRoster: _flushedLedger, ...base } = startCareer('Real Madrid');",
+  ].join('\n') + '\n', "  const { worldSeed: _preReleaseSeed, ...base } = startCareer('Real Madrid');\n"],
+];
 function historicalHarnessContract(name, source) {
   const historical = harnessSource(BASE, name);
-  let restored = source, representationAdapter = false, sectionFiveHandover = false, ownClubFollow = false, round1311Budget = false;
+  let restored = source, representationAdapter = false, sectionFiveHandover = false, ownClubFollow = false, round1311Budget = false, round1344Budget = false;
   if (source !== historical && name === 'simClubManagerSaveSize.mjs') {
     assert.equal(source.split(SAVESIZE_FIRST).length - 1, 1, 'One exact section 5 handover comment');
     assert.equal(source.split(SAVESIZE_LAST).length - 1, 1, 'One exact section 5 handover statement');
@@ -97,6 +121,19 @@ function historicalHarnessContract(name, source) {
     assert(start < end && comment.trimEnd().endsWith('*/') && comment.split('*/').length === 2 && block.split('\n').length <= 8, 'The section 5 addition is one comment and one statement');
     restored = source.slice(0, start) + source.slice(end);
     sectionFiveHandover = true;
+    if (restored.includes(SAVESIZE_1344_FIRST)) {
+      assert.equal(restored.split(SAVESIZE_1344_FIRST).length - 1, 1, 'One exact Round 1344 header paragraph start');
+      assert.equal(restored.split(SAVESIZE_1344_LAST).length - 1, 1, 'One exact Round 1344 header paragraph end');
+      const first = restored.indexOf(SAVESIZE_1344_FIRST), last = restored.indexOf(SAVESIZE_1344_LAST) + SAVESIZE_1344_LAST.length;
+      const paragraph = restored.slice(first, last).slice(0, -1).split('\n');
+      assert(first < last && paragraph.length <= 15 && paragraph.every(line => line.startsWith(' * ')), 'The Round 1344 paragraph is header comment lines only');
+      restored = restored.slice(0, first) + restored.slice(last);
+      for (const [now, then] of SAVESIZE_1344_EDITS) {
+        assert.equal(restored.split(now).length - 1, 1, 'One exact Round 1344 edit in SaveSize');
+        restored = restored.replace(now, () => then);
+      }
+      round1344Budget = true;
+    }
     for (const [now, then] of SAVESIZE_OWN_CLUB) {
       assert.equal(restored.split(now).length - 1, 1, 'One exact own club follow in SaveSize sections 6 and 8');
       restored = restored.replace(now, () => then);
@@ -123,7 +160,7 @@ function historicalHarnessContract(name, source) {
     }
   }
   assert.equal(restored, historical, 'Removing only the exact two additions restores the entire historical source');
-  return { representationAdapter, sectionFiveHandover, ownClubFollow, round1311Budget, measuredSha256: sha(source), restoredHistoricalSha256: sha(restored) };
+  return { representationAdapter, sectionFiveHandover, ownClubFollow, round1311Budget, round1344Budget, measuredSha256: sha(source), restoredHistoricalSha256: sha(restored) };
 }
 const harnessBlobs = Object.fromEntries(['simClubManagerSaveSize.mjs','simClubManagerSlots.mjs'].map(name => {
   const original = git(['rev-parse', `${BASE}:scripts/${name}`]), current = git(['rev-parse', `${HEAD}:scripts/${name}`]);

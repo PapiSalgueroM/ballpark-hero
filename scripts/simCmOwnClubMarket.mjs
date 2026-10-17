@@ -317,7 +317,11 @@ function startList(M) {
 const argsOf = item => item.args.map(a => a === undefined ? undefined : clone(a));
 const head5 = { ranks: 0, under: 0, none: 0, min: null, targets: 0, candidates: 0, gone: [Infinity, 0] };
 function headroom(item, started, ctx) {
-  const st = clone(started); st.goneNames = []; delete st.worldSeed;
+  /* Release BI's join (Round 1344 beside 1339): since Round 1344 the post seed flush writes a world ledger into every
+     new seeded career, and a readable ledger alone turns on the seeded market, which lists nobody at my own club. So
+     "no seed" takes the flushed ledger off with the seed, the way 1344's own SaveSize section 6 does; without it this
+     section listed nobody at any club (850 of 850 starts) and the shallow control could not fire. */
+  const st = clone(started); st.goneNames = []; delete st.worldSeed; delete st.worldRoster;
   head5.gone = [Math.min(head5.gone[0], started.goneNames?.length ?? 0), Math.max(head5.gone[1], started.goneNames?.length ?? 0)];
   const club = st.clubName;
   const market = ctx.p.cm.buildMarket(clone(st));
