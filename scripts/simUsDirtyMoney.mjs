@@ -13,7 +13,7 @@
  *      the caught share and the mean printed chance are printed side by side, never banded.
  *   7. Never a heat eraser, never a karma farm (the critic's correction 2, binding). Fleet saves of every sport
  *      (real careers through the bindings on the seeded stream, each also at heat 91, at heat 100, holding 20M
- *      more and broke at 1M), every option of the four corruption decks that adds dirty money, then at once each way:
+ *      more, broke at 1M and just back from a ban), every option of the four corruption decks that adds dirty money, then at once each way:
  *      the heat after is never below the heat before the option (exact), and the heat plus karma the desk hands
  *      back never adds up to more than the heat the option cost (its printed "heat +N"). Every dirty option in the
  *      four deck sources must be dealt at least once, or the fleet is too small. The table prints per option the
@@ -217,7 +217,13 @@ for (const slug of SPORTS) {
   const saves = playFleet(slug, PER_SPORT);
   fleetSize[slug] = saves.length;
   for (const [vi, save] of saves.entries()) {
-    const variants = [save, { ...clone(save), heat: 91 }, { ...clone(save), heat: 100 }, { ...clone(save), dirtyMoney: r1((save.dirtyMoney ?? 0) + 20) }, { ...clone(save), netWorth: 1 }];
+    /* The sixth variant has served a ban (its last season marked SUSPENDED, nothing pending): the only state the
+       four "Reinstated" cards are dealt in. On the runner's stream the NFL fleet of 120 never reached one on its
+       own (8 of 9 dirty options dealt, r1500-s1), so the variant deals it every time instead of by luck. */
+    const banned = clone(save);
+    if (banned.seasons.length) banned.seasons[banned.seasons.length - 1] = { ...banned.seasons[banned.seasons.length - 1], teamResult: 'SUSPENDED' };
+    banned.suspendedSeasons = 0;
+    const variants = [save, { ...clone(save), heat: 91 }, { ...clone(save), heat: 100 }, { ...clone(save), dirtyMoney: r1((save.dirtyMoney ?? 0) + 20) }, { ...clone(save), netWorth: 1 }, banned];
     for (const [k, base] of variants.entries()) {
       const deck = DECK[slug](clone(base), E.keyedRng(`deck|${slug}|${vi}|${k}`));
       for (const card of deck) for (const opt of card.options) {

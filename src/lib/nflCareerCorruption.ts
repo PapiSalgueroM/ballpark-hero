@@ -24,6 +24,7 @@
 import type { CareerState, CareerEvent } from './nflMyCareer';
 import { nflEraById, teamLabelOf, NFL_TEAM_NAMES, NFL_SPEND_ITEMS } from './nflMyCareer';
 import { liquidateUsCareerPurchases } from './usCareerAnnualBenefits';
+import { launderDirtyMoney, launderEffectText } from './careerDirtyMoney';
 
 /* CIRCULAR IMPORT GOTCHA (caught by scripts/simNflCareer.mjs, invisible to tsc):
    nflMyCareer imports this file for its event deck, and this file imports
@@ -277,8 +278,8 @@ export function getNflCorruptionEvents(c: CareerState, rng: () => number): Caree
       body: `You are sitting on ${dm.toFixed(1)}M that cannot be explained to anyone with a badge. Your accountant has started saying "hypothetically" a lot.`,
       options: [
         {
-          label: 'Buy car washes and a barbershop chain', effect: 'Launder it, heat +10 now',
-          apply: (cc) => { setFlag(cc, 'wash', 1); heatUp(cc, 10); return 'You bought into cash businesses. The car wash does remarkable numbers for a street with no traffic.'; },
+          label: 'Buy car washes and a barbershop chain', effect: launderEffectText(D(c)),
+          apply: (cc) => { setFlag(cc, 'wash', 1); return launderDirtyMoney(D(cc), 'You bought into cash businesses. The car wash does remarkable numbers for a street with no traffic.'); },
         },
         {
           label: 'Declare it and eat the tax', effect: 'Lose 55 percent, heat -35',

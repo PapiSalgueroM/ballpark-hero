@@ -79,6 +79,7 @@ import { answerTalk, endsAfterSeason, manualRetire, pendingTalk, repairHallOnLoa
 import { stampOnRetirement } from '@/lib/usCareerRetirementFlow';
 import { isFarewellSeason, type RetirementChoiceId } from '@/lib/careerRetirement';
 import { hallRecordFor, type HallSpeechId } from '@/lib/careerHallOfFame';
+import { DIRTY_SENTENCE_NO_WASHERS, canDealWithDirtyMoney, dealWithDirtyMoney, washersLeft } from '@/lib/careerDirtyMoney';
 
 const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));
 const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeasonReview'));
@@ -88,6 +89,8 @@ const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeaso
 const FarewellCard = lazy(() => import('@/components/career/FarewellCard').then(m => ({ default: m.FarewellCard })));
 const FarewellSeasonBanner = lazy(() => import('@/components/career/FarewellCard').then(m => ({ default: m.FarewellSeasonBanner })));
 const HallOfFameCard = lazy(() => import('@/components/career/HallOfFameCard').then(m => ({ default: m.HallOfFameCard })));
+/* Round 1500: the dirty money desk loads when "Deal with it" is pressed. */
+const DirtyMoneyDesk = lazy(() => import('@/components/us-career/DirtyMoneyDesk'));
 
 /* Round 126: 'coach' is new. Retirement used to be the last screen in the
    game. Now it hands you to a job board and the save keeps going.
@@ -151,7 +154,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   // Round 56: build your player's face before the draft
   const [appearance, setAppearance] = useState<PlayerAppearance>(() => defaultAppearance());
   // Round 85: the tile rule. The season hub is boxes; each opens its own screen.
-  const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'trophies' | 'news' | 'inbox'>('none');
+  const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'trophies' | 'news' | 'inbox' | 'dirty'>('none');
   const [retiredReview, setRetiredReview] = useState(false);
   const reviewReturn = useRef<'log' | 'retired' | null>(null);
   const reviewHubIndex = useRef(0);
@@ -1288,7 +1291,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     return withSaveStatus(
       <div ref={panelRef} className="space-y-3">
         <HubPanelHeader
-          title={panel === 'bank' ? '\u{1F4B0} The Bank' : panel === 'stats' ? '\u{1F4CA} My Player' : panel === 'log' ? '\u{1F4DC} Career Log' : panel === 'trophies' ? '\u{1F3C6} Trophy Case' : panel === 'inbox' ? '\u{1F4F1} Inbox' : '\u{1F4F0} News Feed'}
+          title={panel === 'bank' ? '\u{1F4B0} The Bank' : panel === 'stats' ? '\u{1F4CA} My Player' : panel === 'log' ? '\u{1F4DC} Career Log' : panel === 'trophies' ? '\u{1F3C6} Trophy Case' : panel === 'inbox' ? '\u{1F4F1} Inbox' : panel === 'dirty' ? '\u{1F4BC} Dirty money' : '\u{1F4F0} News Feed'}
           onBack={() => setPanel('none')}
         />
         {panel === 'bank' && (
@@ -1302,6 +1305,18 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
             onMoney={handleMoney}
             shop={<UsShopPanel stock={sport.shopItems} career={career} onBuy={id => { const res = sport.buyItem(career, id); if (!res) return; setCareer(res.state); setFeed(f => [res.log, ...f].slice(0, 8)); persist(res.state, 'season', teamQuality); }} />}
           />
+        )}
+        {/* Round 1500: the dirty money desk. Only in a playing season (the button under the heat meter is drawn
+            only then); the choice is applied by the shared rule, written to the feed and saved like a buy. */}
+        {panel === 'dirty' && phase === 'season' && (
+          <Suspense fallback={null}>
+            <DirtyMoneyDesk career={career} onClose={() => setPanel('none')} onDeal={way => {
+              const res = dealWithDirtyMoney(career, way);
+              if (!res.line) return null;
+              setCareer(res.state); setFeed(f => [res.line, ...f].slice(0, 8)); persist(res.state, 'season', teamQuality);
+              return res;
+            }} />
+          </Suspense>
         )}
         {panel === 'stats' && (
           <div className="space-y-3">
@@ -1481,10 +1496,25 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
               <div className={cn('h-full rounded-full transition-all duration-700', h >= 65 ? 'bg-destructive' : h >= 40 ? 'bg-orange-500' : 'bg-gold')} style={{ width: `${h}%` }} />
             </div>
             <p className="mt-1.5 text-[11px] leading-snug text-muted-foreground">{band.blurb}</p>
-            {(career.dirtyMoney ?? 0) > 0 && (
+            {(career.dirtyMoney ?? 0) > 0 && (washersLeft(sport.shopItems, career.purchased) > 0 ? (
               <p className="mt-1 text-[11px] font-bold text-destructive">
                 💼 ${(career.dirtyMoney ?? 0).toFixed(1)}M unexplained. Wash it in the Shady aisle or it keeps burning.
               </p>
+            ) : (
+              /* Round 1500: every washer in the Shady aisle is owned, so the sentence no longer points at it. */
+              <p className="mt-1 text-[11px] font-bold text-destructive">
+                {`💼 $${(career.dirtyMoney ?? 0).toFixed(1)}M unexplained. ${DIRTY_SENTENCE_NO_WASHERS}`}
+              </p>
+            ))}
+            {/* Round 1500: the way out, in a playing season only. The fixture walk leaves this element out of what
+                it compares and presses (src/test/usBoardFixture.test.tsx). */}
+            {phase === 'season' && canDealWithDirtyMoney(career) && (
+              <div data-dirty-money-desk="" className="mt-2">
+                <button onClick={() => setPanel('dirty')}
+                  className="min-h-11 w-full rounded-xl border border-destructive/40 bg-card px-3 text-xs font-bold text-destructive hover:bg-destructive/10">
+                  Deal with it
+                </button>
+              </div>
             )}
           </div>
         );

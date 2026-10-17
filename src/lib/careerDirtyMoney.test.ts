@@ -36,7 +36,8 @@ describe('Round 1500: every way does exactly what its button prints', () => {
         const s = r.state;
         expect(s.dirtyMoney, `${way}: dirty money ends at 0`).toBe(0);
         const net0 = netWorth ?? 0;
-        const netChange = way === 'clean' ? -p.fine : way === 'wash' && !r.caught ? p.keep : 0;
+        /* 0 - fine, never -fine: a fine of 0 must read as 0, not -0 (Object.is tells them apart). */
+        const netChange = way === 'clean' ? 0 - p.fine : way === 'wash' && !r.caught ? p.keep : 0;
         expect(Math.round(((s.netWorth ?? 0) - net0) * 10) / 10, `${way}: money`).toBe(netChange);
         expect(s.netWorth ?? 0, `${way}: never below zero`).toBeGreaterThanOrEqual(0);
         expect(Math.round(((s.heat ?? 0) - heat) * 100) / 100, `${way}: heat`).toBe(p.heat);
