@@ -1,0 +1,3 @@
+de4a1d443 rc request rBIi-ret for 0640c995ec96da20386993db15cd573fb64e0e43
+0640c995e Round BII: What's New for the other lane's packets, one Club Manager entry (your own transfers, a club's fixtures, the refusal note, a clean desk on a takeover) and one Soccer Career entry (offers that wait, ongoing stories, two phone fixes)
+56ce757bf Round BII: merge PR301 (codex/manager-decision-method at 4508500e), simClubManagerDecisions measures its real coverage and the regression premise is repaired

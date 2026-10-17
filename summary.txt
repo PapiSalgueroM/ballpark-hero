@@ -1,0 +1,10 @@
+headsha exit=0 0s | 56ce757bf Round BII: merge PR301 (codex/manager-decision-method at 4508500e), simClubManagerDecisions measures its real coverage and the regression premise is repaired
+rules-main-legs exit=0 48s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+rules-bare-EXPECT-DIGEST exit=1 55s | simCmLeagueRules: 47 failure(s)
+rules-retake exit=0 112s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+appeal-bare-EXPECT-PIN exit=1 6s | Node.js v24.21.0
+appeal-retake exit=0 34s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+decisions-default-retaken exit=0 35s | simClubManagerDecisions: 0 findings
+decisions-seed4-retaken exit=0 31s | simClubManagerDecisions: 0 findings
+decreg-retaken exit=0 330s | Original loss control fired in section 3 beside a healthy seed-1 baseline.
+decreg-bare exit=0 330s | Original loss control fired in section 3 beside a healthy seed-1 baseline.
