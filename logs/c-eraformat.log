@@ -1,0 +1,60 @@
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020), Villarreal (era2005), Werder Bremen (era2010), Sevilla (era2015), Marseille (era2020); seeds 1,2,3,4,5
+  1 stand ins: none
+  1 and 3: 65 journeys in 230 s
+  7 goals a watched match 2.638 (8928 matches); a domestic league match 2.624
+  7 ties 1426: to extra time 17.3 percent, to penalties 8.8 percent
+  1 device order: 0 group seasons evaluated level both ways
+  1 opened seasons drawn with the holder first: 60
+  1 seasons a mid season move left with no competition, by the rule: 2
+  1 seasons in the Champions League (not watched): 19
+  1 seasons where exclude took out a direct entrant (a summer move): 2
+  1 seasons with no competition: 112
+  1 watched matches replayed on simAiMatch: 8928
+  1 watched seasons l36: 62
+  7 l36 slates over the cap: 1
+  7 l36 slates with an association break: 4
+  7 l36 slates: 62
+  7 titles by strength quartile 1: 49
+  7 titles by strength quartile 2: 12
+  7 titles by strength quartile 3: 1
+FAIL 1 no competition: Wigan Athletic (era2005) seed 1: the move to Wolfsburg in season 1 left no watched competition, and no rule says so
+FAIL 1 no competition: Wigan Athletic (era2005) season 1 seed 1 now at Wolfsburg
+FAIL 1 no competition: Wigan Athletic (era2005) season 2 seed 1 now at Wolfsburg
+FAIL 1 no competition: Wigan Athletic (era2005) season 3 seed 1 now at Wolfsburg
+FAIL 1 no competition: Wigan Athletic (era2005) season 1 seed 2
+FAIL 1 no competition: Wigan Athletic (era2005) seed 2: the move to Wolfsburg in season 2 left no watched competition, and no rule says so
+FAIL 1 no competition: Wigan Athletic (era2005) season 2 seed 2 now at Wolfsburg
+FAIL 1 no competition: Wigan Athletic (era2005) season 3 seed 2 now at Wolfsburg
+FAIL 1 no competition: Wigan Athletic (era2005) season 1 seed 3
+FAIL 1 no competition: Wigan Athletic (era2005) season 2 seed 3
+FAIL 1 no competition: Wigan Athletic (era2005) season 3 seed 3
+FAIL 1 no competition: Wigan Athletic (era2005) season 1 seed 4
+FAIL 1 no competition: Wigan Athletic (era2005) season 2 seed 4
+FAIL 1 no competition: Wigan Athletic (era2005) season 3 seed 4
+FAIL 1 no competition: Wigan Athletic (era2005) season 1 seed 5
+FAIL 1 no competition: Wigan Athletic (era2005) season 2 seed 5
+FAIL 1 no competition: Wigan Athletic (era2005) season 3 seed 5
+FAIL 1 no competition: Wolves (era2010) season 1 seed 1
+FAIL 1 no competition: Wolves (era2010) season 2 seed 1
+FAIL 1 no competition: Wolves (era2010) season 3 seed 1
+FAIL 1 no competition: Wolves (era2010) season 1 seed 2
+FAIL 1 no competition: Wolves (era2010) season 2 seed 2
+FAIL 1 no competition: Wolves (era2010) season 3 seed 2
+FAIL 1 no competition: Wolves (era2010) season 1 seed 3
+FAIL 1 no competition: Wolves (era2010) season 2 seed 3
+FAIL 1 no competition: Wolves (era2010) season 3 seed 3
+FAIL 1 no competition: Wolves (era2010) season 1 seed 4
+FAIL 1 no competition: Wolves (era2010) season 2 seed 4
+FAIL 1 no competition: Wolves (era2010) season 3 seed 4
+FAIL 1 no competition: Wolves (era2010) season 1 seed 5
+FAIL 1 no competition: Wolves (era2010) season 2 seed 5
+FAIL 1 no competition: Wolves (era2010) season 3 seed 5
+FAIL 1 no competition: West Ham (era2015) seed 1: the move to Hannover 96 in season 1 left no watched competition, and no rule says so
+FAIL 1 no competition: West Ham (era2015) season 1 seed 1 now at Hannover 96
+FAIL 1 no competition: West Ham (era2015) season 2 seed 1 now at Hannover 96
+FAIL 1 no competition: West Ham (era2015) season 3 seed 1 now at Hannover 96
+FAIL 1 no competition: West Ham (era2015) season 1 seed 2
+FAIL 1 no competition: West Ham (era2015) seed 2: the move to Hannover 96 in season 2 left no watched competition, and no rule says so
+FAIL 1 no competition: West Ham (era2015) season 2 seed 2 now at Hannover 96
+FAIL 1 no competition: West Ham (era2015) season 3 seed 2 now at Hannover 96
+simWorldUcl: control eraformat FIRED (121 failures, all its own)

@@ -1,0 +1,68 @@
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020), Villarreal (era2005), Werder Bremen (era2010), Sevilla (era2015), Marseille (era2020); seeds 1,2,3,4,5
+  1 and 3: 65 journeys in 261 s
+  7 goals a watched match NaN (0 matches); a domestic league match 2.624
+  7 ties 0: to extra time NaN percent, to penalties NaN percent
+  4 slice bytes g8: 112 seasons, mean 627, smallest 594, largest 666
+  4 slice bytes l36: 63 seasons, mean 1434, smallest 1411, largest 1483
+  3 league sizes: now 10, now 12, now 14, now 15, now 16, now 18, now 20, now 24, era2005 18, era2005 20, era2010 18, era2010 20, era2015 18, era2015 20, era2020 18, era2020 20
+  3 move probe: 112 moves that carried the slice, 16 of them onto a calendar behind the old one
+  1 seasons a mid season move left with no competition, by the rule: 2
+  1 seasons in the Champions League (not watched): 19
+  1 seasons where exclude took out a direct entrant (a summer move): 2
+  3 calendar checks g8 uclGroup: 29700
+  3 calendar checks g8 uclKo: 34650
+  3 calendar checks l36 date: 30910
+  3 calendar checks l36 uclGroup: 16860
+  3 date checks g8: 129
+  3 date checks l36: 80
+  3 joins that carried the slice g8: 9
+  3 joins that carried the slice l36: 5
+  3 joins that carried the slice: 14
+  3 joins that dropped the slice: 1
+  3 joins that opened a fresh slice: 4
+  3 joins to an entrant that still watches, a fresh slice opened: 4
+  3 joins whose new calendar sat behind the old: 8
+  3 joins with nothing to carry or open: 2
+  3 reloads right after a join: 30
+  3 states checked: 7760
+FAIL 3 early: Chelsea (now) seed 1 at s1-e3: MD1 counts as played at week 3, its week is 3
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-e3: MD1 (uclGroup, entry 3) counts as played early, at week 3
+FAIL 3 early: Chelsea (now) seed 1 at s1-e6: MD2 counts as played at week 7, its week is 7
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-e6: MD2 (uclGroup, entry 7) counts as played early, at week 7
+FAIL 3 early: Chelsea (now) seed 1 at s1-e10: MD3 counts as played at week 12, its week is 12
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-e10: MD3 (uclGroup, entry 12) counts as played early, at week 12
+FAIL 3 early: Chelsea (now) seed 1 at s1-e12: MD4 counts as played at week 15, its week is 15
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-e12: MD4 (uclGroup, entry 15) counts as played early, at week 15
+FAIL 3 early: Chelsea (now) seed 1 at s1-e14: MD5 counts as played at week 18, its week is 18
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-e14: MD5 (uclGroup, entry 18) counts as played early, at week 18
+FAIL 3 early: Chelsea (now) seed 1 at s1-e18: MD6 counts as played at week 23, its week is 23
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-e18: MD6 (uclGroup, entry 23) counts as played early, at week 23
+FAIL 3 early: Chelsea (now) seed 1 at s1-e22: MD7 counts as played at week 28, its week is 28
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-e22: MD7 (date, entry 28) counts as played early, at week 28
+FAIL 3 early: Chelsea (now) seed 1 at s1-e23: MD8 counts as played at week 29, its week is 29
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-e23: MD8 (date, entry 29) counts as played early, at week 29
+FAIL 3 early: Chelsea (now) seed 1 at s1-join: PO1 counts as played at week 30, its week is 30
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-join: PO1 (date, entry 30) counts as played early, at week 30
+FAIL 3 early: Chelsea (now) seed 1 at s1-join-reload: PO1 counts as played at week 30, its week is 30
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-join-reload: PO1 (date, entry 30) counts as played early, at week 30
+FAIL 3 early: Chelsea (now) seed 1 at s1-e27: PO2 counts as played at week 32, its week is 32
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-e27: PO2 (date, entry 32) counts as played early, at week 32
+FAIL 3 early: Chelsea (now) seed 1 at s1-e29: R16_1 counts as played at week 35, its week is 35
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-e29: R16_1 (date, entry 35) counts as played early, at week 35
+FAIL 3 early: Chelsea (now) seed 1 at s1-e33: QF1 counts as played at week 41, its week is 41
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-e33: QF1 (date, entry 41) counts as played early, at week 41
+FAIL 3 early: Chelsea (now) seed 1 at s1-e36: SF1 counts as played at week 45, its week is 45
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-e36: SF1 (date, entry 45) counts as played early, at week 45
+FAIL 3 early: Chelsea (now) seed 1 at s1-e37: SF2 counts as played at week 47, its week is 47
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-e37: SF2 (date, entry 47) counts as played early, at week 47
+FAIL 3 early: Chelsea (now) seed 1 at s1-e38: F counts as played at week 49, its week is 49
+FAIL 3 calendar: Chelsea (now) seed 1 at s1-e38: F (date, entry 49) counts as played early, at week 49
+FAIL 3 early: Chelsea (now) seed 1 at s2-e3: MD1 counts as played at week 3, its week is 3
+FAIL 3 calendar: Chelsea (now) seed 1 at s2-e3: MD1 (uclGroup, entry 3) counts as played early, at week 3
+FAIL 3 early: Chelsea (now) seed 1 at s2-e5: MD2 counts as played at week 6, its week is 6
+FAIL 3 calendar: Chelsea (now) seed 1 at s2-e5: MD2 (uclGroup, entry 6) counts as played early, at week 6
+FAIL 3 early: Chelsea (now) seed 1 at s2-e9: MD3 counts as played at week 11, its week is 11
+FAIL 3 calendar: Chelsea (now) seed 1 at s2-e9: MD3 (uclGroup, entry 11) counts as played early, at week 11
+FAIL 3 early: Chelsea (now) seed 1 at s2-e11: MD4 counts as played at week 14, its week is 14
+FAIL 3 calendar: Chelsea (now) seed 1 at s2-e11: MD4 (uclGroup, entry 14) counts as played early, at week 14
+simWorldUcl: control ahead FIRED (4816 failures, all its own)

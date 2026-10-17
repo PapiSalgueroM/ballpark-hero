@@ -1,0 +1,42 @@
+  2 self relative: 190 journeys, 23896 steps each arm, 190 journeys carried a slice, 1415 s
+FAIL 2 participant Real Madrid (now) nocoach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Real Madrid (now) nocoach seed 2 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Real Madrid (now) nocoach seed 3 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Real Madrid (now) nocoach seed 4 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Real Madrid (now) nocoach seed 5 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Real Madrid (now) coach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Real Madrid (now) coach seed 2 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Real Madrid (now) coach seed 3 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Real Madrid (now) coach seed 4 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Real Madrid (now) coach seed 5 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 2 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 3 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 4 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 5 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (now) coach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (now) coach seed 2 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (now) coach seed 3 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (now) coach seed 4 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (now) coach seed 5 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2005) nocoach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2005) nocoach seed 2 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2005) nocoach seed 3 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2005) nocoach seed 4 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2005) nocoach seed 5 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2005) coach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2005) coach seed 2 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2005) coach seed 3 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2005) coach seed 4 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2005) coach seed 5 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2010) nocoach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2010) nocoach seed 2 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2010) nocoach seed 3 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2010) nocoach seed 4 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2010) nocoach seed 5 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2010) coach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2010) coach seed 2 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2010) coach seed 3 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2010) coach seed 4 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2010) coach seed 5 at start: a state in the Champions League carries worldComps; the state differs
+simWorldUcl: control participant FIRED (84 failures, all its own)
