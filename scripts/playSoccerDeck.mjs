@@ -1,7 +1,8 @@
 /* Round 1504: Soccer Career's summer cards in a real browser, at 390 (a throttled phone) and 1280.
 
    Runs against a served build (BASE, default http://localhost:4173: the remote check's #!serve), Chromium only,
-   with supabase.co aborted in every context. The saves are made in node from the real engine with the deck loaded
+   with supabase.co aborted in every context (by page.route; the one throttled context instead sends every host but
+   localhost to a closed port at the resolver, see slowBrowser). The saves are made in node from the real engine with the deck loaded
    (an esbuild bundle of the engine, the gate and the save module), so every case starts from a state the game
    itself reached, and the walk knows which card the page must show.
 
@@ -10,6 +11,8 @@
                 the career is on screen, the walk waits for the chunk's response (so nothing here hangs on timing),
                 presses Continue, and the first card is the deck card node dealt, its training button printing the
                 gain and the time cost (correction 16(b): nothing waited at the season end).
+     fasttap    the same save with the chunk held 4 s and Continue pressed at once: that summer has no deck card and
+                nothing waits (critic 16(b): the race can only leave the card out, never deal a different one).
      answer     a save with that deck card pending: the training option lands the gain and the cost in the save, and
                 the toast prints the season log line of what landed, never the button's promise.
      delayed    the deck chunk held 1.5 s: the press shows that it is working, a second press does nothing, and the
@@ -92,15 +95,19 @@ function findFixture(position) {
       const M = O.engine, clubs = M.FALLBACK_CLUBS;
       const st = { pace: 62, shooting: 62, passing: 62, dribbling: 62, defending: 62, physical: 62, reflexes: 62 };
       let s = M.initCareer(`Deck Walk ${seed}`, 'England', position, '2010-14', st, 62, 2010, clubs, null);
-      let summary = null;
       for (let guard = 0; guard < 400 && s && !s.retired && s.age <= 20; guard += 1) {
-        summary = CONTINUE_PATH.has(s.phase) ? (summary ?? copy(s)) : null;
+        /* the screen asks for one action before its Continue: the walk posts about his personal life (a fixed
+           follower gain, nothing that moves a stat or the room), then continues, as the page will */
+        if (CONTINUE_PATH.has(s.phase) && s.age <= 19 && !s.socialMediaActionUsedThisSeason) {
+          const acted = M.applySocialMediaAction(copy(s), 'personal_life');
+          const dealt = acted.phase === 'social_media_action' ? M.dismissSocialMediaPhase(acted, clubs) : null;
+          const first = dealt?.phase === 'random_events' ? dealt.pendingEvents?.[0] : null;
+          if (first && isDeck(first.id) && trains(first) && O.momentsRoom(dealt) >= 1) {
+            return { seed, summary: copy(s), pending: copy(dealt), card: { id: first.id, title: first.title, labels: first.choices.map(c => c.label), consequence: first.choices[0].consequence } };
+          }
+        }
         const next = step(M, s, clubs);
         if (!next) break;
-        const first = next.phase === 'random_events' ? next.pendingEvents?.[0] : null;
-        if (summary && summary.age <= 19 && CONTINUE_PATH.has(s.phase) && first && isDeck(first.id) && trains(first) && O.momentsRoom(next) >= 1) {
-          return { seed, summary, pending: copy(next), card: { id: first.id, title: first.title, labels: first.choices.map(c => c.label), consequence: first.choices[0].consequence } };
-        }
         s = next;
       }
     }
@@ -134,6 +141,10 @@ const ceilingOf = pending => {
 
 const { chromium } = pw;
 const browser = await chromium.launch({ headless: true });
+/* The throttled reading cannot use page.route: Chromium drops its network emulation for intercepted requests (the
+   first run read 22 to 32 ms a chunk at "1.6 Mbps"). So that one context runs in a browser whose resolver sends every
+   host but localhost to a closed port, supabase.co included, and routes nothing. */
+const slowBrowser = await chromium.launch({ headless: true, args: ['--host-resolver-rules=MAP * 127.0.0.1:9, EXCLUDE localhost'] });
 const PROFILES = [{ w: 390, h: 844, mobile: true }, { w: 1280, h: 900, mobile: false }];
 const toasts = page => page.locator('[data-sonner-toast]').allInnerTexts().then(t => t.map(x => x.replace(/\s+/g, ' ').trim()));
 const waitToast = async (page, test, ms) => {
@@ -144,11 +155,13 @@ const waitToast = async (page, test, ms) => {
 const savedOf = page => page.evaluate(k => JSON.parse(localStorage.getItem(k) || 'null'), KEY);
 
 async function open(profile, save, { deck = 'allow', staleUsed = false, throttle = false } = {}) {
-  const ctx = await browser.newContext({ viewport: { width: profile.w, height: profile.h }, isMobile: profile.mobile, hasTouch: profile.mobile,
+  const ctx = await (throttle ? slowBrowser : browser).newContext({ viewport: { width: profile.w, height: profile.h }, isMobile: profile.mobile, hasTouch: profile.mobile,
     serviceWorkers: 'block', reducedMotion: 'reduce',
     storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [{ name: KEY, value: O.save.serializeSoccerCareerSave(save) }, { name: 'cookie-consent', value: 'essential' }] }] } });
-  await ctx.route(/supabase\.co/, r => r.abort());
-  await ctx.route(url => !String(url).startsWith(BASE), r => r.abort());
+  if (!throttle) {
+    await ctx.route(/supabase\.co/, r => r.abort());
+    await ctx.route(url => !String(url).startsWith(BASE), r => r.abort());
+  }
   if (deck === 'abort') await ctx.route(DECK_CHUNK, r => r.abort());
   if (deck === 'delay') await ctx.route(DECK_CHUNK, async r => { await new Promise(res => setTimeout(res, 4000)); await r.continue(); });
   if (staleUsed) await ctx.addInitScript(() => { try { sessionStorage.setItem('dukb-reloaded-stale-chunk', '1'); } catch { /* the walk's own key */ } });
@@ -195,16 +208,29 @@ try {
           console.log(`   timing at 390, throttled: the deck's first load fetched ${mine.map(r => `${r.file} (${r.end - r.start} ms)`).join(', ')}; ${to - from} ms from its first request to its last byte; already in memory: ${deps.filter(d => !mine.some(r => r.file === d)).join(', ') || 'none'}`);
         }
         await page.waitForTimeout(400);
-        for (let i = 0; i < 6 && !(await cardTitle(page, f.card.title).isVisible()); i += 1) {
-          const next = page.getByRole('button', { name: /^Continue/ }).first();
-          if (await next.isVisible()) await next.click(); else await page.waitForTimeout(500);
-          await page.waitForTimeout(300);
-        }
+        await page.getByRole('button', { name: /Post about personal life/ }).first().click();
+        await page.getByRole('button', { name: /^Continue/ }).first().click();
+        await cardTitle(page, f.card.title).waitFor({ timeout: 10000 }).catch(() => undefined);
         check(await cardTitle(page, f.card.title).isVisible(), `${id} deal: the first card is the deck card node dealt, "${f.card.title}"`);
         const btn = await optionOf(page, f.card.labels[0]).innerText().catch(() => '');
         check(btn.replace(/\s+/g, ' ').includes(f.card.consequence), `${id} deal: its training button prints the gain and the time cost ("${f.card.consequence}")`);
         await shot(page, `${id}-deal`);
         check(errors.length === 0, `${id} deal: no page error${errors.length ? ` (${errors[0]})` : ''}`);
+        await ctx.close();
+      }
+      /* fasttap: Continue pressed while the chunk is still held: that summer simply has no deck card (critic 16(b): a
+         deal never waits, and the race can only leave the card out, never deal a different one) */
+      {
+        const { ctx, page, errors } = await open(profile, f.summary, { deck: 'delay' });
+        const post = page.getByRole('button', { name: /Post about personal life/ }).first();
+        await post.waitFor({ timeout: 60000 });
+        await post.click();
+        await page.getByRole('button', { name: /^Continue/ }).first().click();
+        await page.waitForTimeout(800);
+        const saved = await savedOf(page);
+        const first = saved?.phase === 'random_events' ? saved.pendingEvents?.[0] : null;
+        check(saved?.phase !== 'social_media_action' && !(first && first.id >= 700 && first.id <= 999), `${id} fasttap: the deal went on without the deck card (phase ${saved?.phase}, first card ${first?.id ?? 'none'})`);
+        check(errors.length === 0, `${id} fasttap: no page error${errors.length ? ` (${errors[0]})` : ''}`);
         await ctx.close();
       }
       /* answer: the training option lands the gain and the cost, the toast says what landed */
@@ -302,6 +328,7 @@ try {
   }
 } finally {
   await browser.close();
+  await slowBrowser.close();
   fs.writeFileSync(path.join(OUT, 'walk.json'), JSON.stringify({ ...report, failures }, null, 2));
   try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }
 }
