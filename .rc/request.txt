@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts src/test/clubManagerNoSack.test.tsx --testTimeout=300000 --hookTimeout=120000
+nosack-base: git worktree add -q /tmp/b1 d8aaa4cb && BASE_ROOT=/tmp/b1 SECTION=1,6 SEEDS=3 node scripts/simCmNoSack.mjs
+simTacticsEngine: node scripts/simTacticsEngine.mjs
+tactics-fit2nd: TACTICS_CONTROL=fit2nd node scripts/simTacticsEngine.mjs
+tactics-duty2nd-head: TACTICS_CONTROL=duty2nd node scripts/simTacticsEngine.mjs
+tactics-duty2nd-base: git worktree add -q /tmp/b2 d8aaa4cb && ln -s $PWD/node_modules /tmp/b2/node_modules && cd /tmp/b2 && TACTICS_CONTROL=duty2nd node scripts/simTacticsEngine.mjs
+simOpposition: node scripts/simOpposition.mjs
+simHalftime: node scripts/simHalftime.mjs
+simPress: node scripts/simPress.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+meters-promise: CM_METERS_CONTROL=promise node scripts/simClubManagerMeters.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
