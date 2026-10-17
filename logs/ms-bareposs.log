@@ -1,0 +1,194 @@
+NEGATIVE CONTROL ON: possession is two bare numbers that do not sum to 100; section 2 must go red
+1) The clock: stoppage time on the screen, for both halves, from the half it followed
+   348 halves: the board is the base, the half's stoppages and the roll in 348; 0 (0.00%) kept a board that a change at the half's last minute played out differently
+   174 reports rendered, every one showing 45+n' and 90+m' as the screen's own row
+   first half board 1 to 5 (mean 3.59), second half 2 to 8 (mean 6.10)
+2) Possession: two shares of one hundred, both wearing a percent sign
+  FAIL [2]: Everton v Crystal Palace: possession reads "59%" and "59", which is not two percentages
+  FAIL [2]: Everton v Bournemouth: possession reads "46%" and "46", which is not two percentages
+  FAIL [2]: Everton v Manchester United: possession reads "45%" and "45", which is not two percentages
+  FAIL [2]: Everton v Tottenham: possession reads "45%" and "45", which is not two percentages
+  FAIL [2]: Everton v Ipswich Town: possession reads "55%" and "55", which is not two percentages
+  FAIL [2]: Everton v Hull City: possession reads "50%" and "50", which is not two percentages
+  FAIL [2]: Everton v Chelsea: possession reads "46%" and "46", which is not two percentages
+  FAIL [2]: Everton v Leeds United: possession reads "51%" and "51", which is not two percentages
+  FAIL [2]: Everton v Arsenal: possession reads "37%" and "37", which is not two percentages
+  FAIL [2]: Everton v Newcastle: possession reads "43%" and "43", which is not two percentages
+  FAIL [2]: Everton v Coventry City: possession reads "63%" and "63", which is not two percentages
+  FAIL [2]: Everton v Brentford: possession reads "48%" and "48", which is not two percentages
+  FAIL [2]: Everton v Liverpool: possession reads "51%" and "51", which is not two percentages
+  FAIL [2]: Everton v Aston Villa: possession reads "47%" and "47", which is not two percentages
+  FAIL [2]: Everton v Fulham: possession reads "55%" and "55", which is not two percentages
+  FAIL [2]: Everton v Brighton: possession reads "46%" and "46", which is not two percentages
+  FAIL [2]: Everton v Derby County: possession reads "52%" and "52", which is not two percentages
+  FAIL [2]: Everton v Nottingham Forest: possession reads "43%" and "43", which is not two percentages
+  FAIL [2]: Everton v Sunderland: possession reads "55%" and "55", which is not two percentages
+  FAIL [2]: Everton v Manchester City: possession reads "47%" and "47", which is not two percentages
+  FAIL [2]: Everton v Leeds United: possession reads "46%" and "46", which is not two percentages
+  FAIL [2]: Everton v Aston Villa: possession reads "54%" and "54", which is not two percentages
+  FAIL [2]: Everton v Coventry City: possession reads "56%" and "56", which is not two percentages
+  FAIL [2]: Everton v Brentford: possession reads "54%" and "54", which is not two percentages
+  FAIL [2]: Everton v Liverpool: possession reads "46%" and "46", which is not two percentages
+  FAIL [2]: Everton v Newcastle: possession reads "59%" and "59", which is not two percentages
+  FAIL [2]: Everton v Leeds United: possession reads "57%" and "57", which is not two percentages
+  FAIL [2]: Everton v Sunderland: possession reads "52%" and "52", which is not two percentages
+  FAIL [2]: Everton v Nottingham Forest: possession reads "57%" and "57", which is not two percentages
+  FAIL [2]: Real Madrid v Deportivo La Coruña: possession reads "62%" and "62", which is not two percentages
+  FAIL [2]: Real Madrid v Atlético Madrid: possession reads "56%" and "56", which is not two percentages
+  FAIL [2]: Real Madrid v Celta Vigo: possession reads "56%" and "56", which is not two percentages
+  FAIL [2]: Real Madrid v Porto: possession reads "60%" and "60", which is not two percentages
+  FAIL [2]: Real Madrid v Alavés: possession reads "71%" and "71", which is not two percentages
+  FAIL [2]: Real Madrid v Real Sociedad: possession reads "56%" and "56", which is not two percentages
+  FAIL [2]: Real Madrid v Barcelona: possession reads "49%" and "49", which is not two percentages
+  FAIL [2]: Real Madrid v Thun: possession reads "72%" and "72", which is not two percentages
+  FAIL [2]: Real Madrid v Sevilla: possession reads "65%" and "65", which is not two percentages
+  FAIL [2]: Real Madrid v Sporting Gijón: possession reads "72%" and "72", which is not two percentages
+  FAIL [2]: Real Madrid v Valencia: possession reads "58%" and "58", which is not two percentages
+  FAIL [2]: Real Madrid v Osasuna: possession reads "71%" and "71", which is not two percentages
+  FAIL [2]: Real Madrid v RB Leipzig: possession reads "58%" and "58", which is not two percentages
+  FAIL [2]: Real Madrid v Málaga: possession reads "70%" and "70", which is not two percentages
+  FAIL [2]: Real Madrid v Villarreal: possession reads "62%" and "62", which is not two percentages
+  FAIL [2]: Real Madrid v Porto: possession reads "55%" and "55", which is not two percentages
+  FAIL [2]: Real Madrid v Real Betis: possession reads "55%" and "55", which is not two percentages
+  FAIL [2]: Real Madrid v Elche: possession reads "70%" and "70", which is not two percentages
+  FAIL [2]: Real Madrid v Thun: possession reads "72%" and "72", which is not two percentages
+  FAIL [2]: Real Madrid v Athletic Club: possession reads "60%" and "60", which is not two percentages
+  FAIL [2]: Real Madrid v Getafe: possession reads "64%" and "64", which is not two percentages
+  FAIL [2]: Real Madrid v Barcelona: possession reads "47%" and "47", which is not two percentages
+  FAIL [2]: Real Madrid v Espanyol: possession reads "65%" and "65", which is not two percentages
+  FAIL [2]: Real Madrid v RB Leipzig: possession reads "50%" and "50", which is not two percentages
+  FAIL [2]: Real Madrid v Levante: possession reads "61%" and "61", which is not two percentages
+  FAIL [2]: Real Madrid v Racing Santander: possession reads "70%" and "70", which is not two percentages
+  FAIL [2]: Real Madrid v Rayo Vallecano: possession reads "67%" and "67", which is not two percentages
+  FAIL [2]: Real Madrid v Deportivo La Coruña: possession reads "71%" and "71", which is not two percentages
+  FAIL [2]: Real Madrid v Atlético Madrid: possession reads "52%" and "52", which is not two percentages
+  FAIL [2]: Wolves v Millwall: possession reads "55%" and "55", which is not two percentages
+  FAIL [2]: Wolves v Derby County: possession reads "57%" and "57", which is not two percentages
+  FAIL [2]: Wolves v West Brom: possession reads "50%" and "50", which is not two percentages
+  FAIL [2]: Wolves v Norwich City: possession reads "65%" and "65", which is not two percentages
+  FAIL [2]: Wolves v Cardiff City: possession reads "66%" and "66", which is not two percentages
+  FAIL [2]: Wolves v Blackburn Rovers: possession reads "69%" and "69", which is not two percentages
+  FAIL [2]: Wolves v West Ham: possession reads "49%" and "49", which is not two percentages
+  FAIL [2]: Wolves v Birmingham City: possession reads "63%" and "63", which is not two percentages
+  FAIL [2]: Wolves v Nottingham Forest: possession reads "52%" and "52", which is not two percentages
+  FAIL [2]: Wolves v Lincoln City: possession reads "72%" and "72", which is not two percentages
+  FAIL [2]: Wolves v Portsmouth: possession reads "56%" and "56", which is not two percentages
+  FAIL [2]: Wolves v QPR: possession reads "58%" and "58", which is not two percentages
+  FAIL [2]: Wolves v Charlton Athletic: possession reads "63%" and "63", which is not two percentages
+  FAIL [2]: Wolves v Stoke City: possession reads "61%" and "61", which is not two percentages
+  FAIL [2]: Wolves v Watford: possession reads "56%" and "56", which is not two percentages
+  FAIL [2]: Wolves v Middlesbrough: possession reads "59%" and "59", which is not two percentages
+  FAIL [2]: Wolves v Sheffield United: possession reads "50%" and "50", which is not two percentages
+  FAIL [2]: Wolves v Bristol City: possession reads "64%" and "64", which is not two percentages
+  FAIL [2]: Wolves v Preston North End: possession reads "63%" and "63", which is not two percentages
+  FAIL [2]: Wolves v Bolton Wanderers: possession reads "72%" and "72", which is not two percentages
+  FAIL [2]: Wolves v Wrexham: possession reads "66%" and "66", which is not two percentages
+  FAIL [2]: Wolves v Burnley: possession reads "53%" and "53", which is not two percentages
+  FAIL [2]: Wolves v Swansea City: possession reads "60%" and "60", which is not two percentages
+  FAIL [2]: Wolves v Southampton: possession reads "49%" and "49", which is not two percentages
+  FAIL [2]: Wolves v Millwall: possession reads "61%" and "61", which is not two percentages
+  FAIL [2]: Wolves v Derby County: possession reads "52%" and "52", which is not two percentages
+  FAIL [2]: Wolves v West Brom: possession reads "57%" and "57", which is not two percentages
+  FAIL [2]: Wolves v Norwich City: possession reads "54%" and "54", which is not two percentages
+  FAIL [2]: Wolves v Cardiff City: possession reads "69%" and "69", which is not two percentages
+  FAIL [2]: Napoli v Udinese: possession reads "56%" and "56", which is not two percentages
+  FAIL [2]: Napoli v Genoa: possession reads "62%" and "62", which is not two percentages
+  FAIL [2]: Napoli v Lazio: possession reads "50%" and "50", which is not two percentages
+  FAIL [2]: Napoli v Dinamo Zagreb: possession reads "67%" and "67", which is not two percentages
+  FAIL [2]: Napoli v Torino: possession reads "61%" and "61", which is not two percentages
+  FAIL [2]: Napoli v Lecce: possession reads "57%" and "57", which is not two percentages
+  FAIL [2]: Napoli v Monza: possession reads "64%" and "64", which is not two percentages
+  FAIL [2]: Napoli v LASK: possession reads "64%" and "64", which is not two percentages
+  FAIL [2]: Napoli v AC Milan: possession reads "59%" and "59", which is not two percentages
+  FAIL [2]: Napoli v Venezia: possession reads "64%" and "64", which is not two percentages
+  FAIL [2]: Napoli v Venezia: possession reads "60%" and "60", which is not two percentages
+  FAIL [2]: Napoli v Como: possession reads "56%" and "56", which is not two percentages
+  FAIL [2]: Napoli v Club Brugge: possession reads "60%" and "60", which is not two percentages
+  FAIL [2]: Napoli v Juventus: possession reads "46%" and "46", which is not two percentages
+  FAIL [2]: Napoli v Cagliari: possession reads "62%" and "62", which is not two percentages
+  FAIL [2]: Napoli v Dinamo Zagreb: possession reads "62%" and "62", which is not two percentages
+  FAIL [2]: Napoli v Atalanta: possession reads "46%" and "46", which is not two percentages
+  FAIL [2]: Napoli v Sassuolo: possession reads "56%" and "56", which is not two percentages
+  FAIL [2]: Napoli v LASK: possession reads "72%" and "72", which is not two percentages
+  FAIL [2]: Napoli v Roma: possession reads "46%" and "46", which is not two percentages
+  FAIL [2]: Napoli v Bologna: possession reads "56%" and "56", which is not two percentages
+  FAIL [2]: Napoli v Atalanta: possession reads "43%" and "43", which is not two percentages
+  FAIL [2]: Napoli v Frosinone: possession reads "62%" and "62", which is not two percentages
+  FAIL [2]: Napoli v Club Brugge: possession reads "49%" and "49", which is not two percentages
+  FAIL [2]: Napoli v Inter Milan: possession reads "44%" and "44", which is not two percentages
+  FAIL [2]: Napoli v Parma: possession reads "60%" and "60", which is not two percentages
+  FAIL [2]: Napoli v Fiorentina: possession reads "48%" and "48", which is not two percentages
+  FAIL [2]: Napoli v Udinese: possession reads "66%" and "66", which is not two percentages
+  FAIL [2]: Napoli v Genoa: possession reads "55%" and "55", which is not two percentages
+  FAIL [2]: Ajax v NEC Nijmegen: possession reads "70%" and "70", which is not two percentages
+  FAIL [2]: Ajax v PSV: possession reads "48%" and "48", which is not two percentages
+  FAIL [2]: Ajax v Utrecht: possession reads "57%" and "57", which is not two percentages
+  FAIL [2]: Ajax v Willem II: possession reads "64%" and "64", which is not two percentages
+  FAIL [2]: Ajax v Feyenoord: possession reads "49%" and "49", which is not two percentages
+  FAIL [2]: Ajax v AZ Alkmaar: possession reads "51%" and "51", which is not two percentages
+  FAIL [2]: Ajax v Utrecht: possession reads "64%" and "64", which is not two percentages
+  FAIL [2]: Ajax v Twente: possession reads "57%" and "57", which is not two percentages
+  FAIL [2]: Ajax v PEC Zwolle: possession reads "63%" and "63", which is not two percentages
+  FAIL [2]: Ajax v Cambuur: possession reads "60%" and "60", which is not two percentages
+  FAIL [2]: Ajax v Go Ahead Eagles: possession reads "69%" and "69", which is not two percentages
+  FAIL [2]: Ajax v ADO Den Haag: possession reads "60%" and "60", which is not two percentages
+  FAIL [2]: Ajax v Telstar: possession reads "72%" and "72", which is not two percentages
+  FAIL [2]: Ajax v Sparta Rotterdam: possession reads "66%" and "66", which is not two percentages
+  FAIL [2]: Ajax v Groningen: possession reads "71%" and "71", which is not two percentages
+  FAIL [2]: Ajax v Excelsior: possession reads "72%" and "72", which is not two percentages
+  FAIL [2]: Ajax v Heerenveen: possession reads "67%" and "67", which is not two percentages
+  FAIL [2]: Ajax v Fortuna Sittard: possession reads "72%" and "72", which is not two percentages
+  FAIL [2]: Ajax v NEC Nijmegen: possession reads "66%" and "66", which is not two percentages
+  FAIL [2]: Ajax v PSV: possession reads "61%" and "61", which is not two percentages
+  FAIL [2]: Ajax v Utrecht: possession reads "58%" and "58", which is not two percentages
+  FAIL [2]: Ajax v Willem II: possession reads "71%" and "71", which is not two percentages
+  FAIL [2]: Ajax v Feyenoord: possession reads "50%" and "50", which is not two percentages
+  FAIL [2]: Ajax v AZ Alkmaar: possession reads "60%" and "60", which is not two percentages
+  FAIL [2]: Ajax v Twente: possession reads "57%" and "57", which is not two percentages
+  FAIL [2]: Ajax v PEC Zwolle: possession reads "64%" and "64", which is not two percentages
+  FAIL [2]: Ajax v Cambuur: possession reads "70%" and "70", which is not two percentages
+  FAIL [2]: Ajax v Go Ahead Eagles: possession reads "61%" and "61", which is not two percentages
+  FAIL [2]: Ajax v ADO Den Haag: possession reads "70%" and "70", which is not two percentages
+  FAIL [2]: Newcastle v Liverpool: possession reads "52%" and "52", which is not two percentages
+  FAIL [2]: Newcastle v Tottenham: possession reads "47%" and "47", which is not two percentages
+  FAIL [2]: Newcastle v Bournemouth: possession reads "51%" and "51", which is not two percentages
+  FAIL [2]: Newcastle v Leeds United: possession reads "49%" and "49", which is not two percentages
+  FAIL [2]: Newcastle v Hull City: possession reads "57%" and "57", which is not two percentages
+  FAIL [2]: Newcastle v Coventry City: possession reads "53%" and "53", which is not two percentages
+  FAIL [2]: Newcastle v Aston Villa: possession reads "57%" and "57", which is not two percentages
+  FAIL [2]: Newcastle v Brighton: possession reads "52%" and "52", which is not two percentages
+  FAIL [2]: Newcastle v Crystal Palace: possession reads "42%" and "42", which is not two percentages
+  FAIL [2]: Newcastle v Everton: possession reads "55%" and "55", which is not two percentages
+  FAIL [2]: Newcastle v Fulham: possession reads "51%" and "51", which is not two percentages
+  FAIL [2]: Newcastle v Arsenal: possession reads "48%" and "48", which is not two percentages
+  FAIL [2]: Newcastle v Brighton: possession reads "51%" and "51", which is not two percentages
+  FAIL [2]: Newcastle v Manchester United: possession reads "53%" and "53", which is not two percentages
+  FAIL [2]: Newcastle v Sunderland: possession reads "56%" and "56", which is not two percentages
+  FAIL [2]: Newcastle v Ipswich Town: possession reads "49%" and "49", which is not two percentages
+  FAIL [2]: Newcastle v Brentford: possession reads "52%" and "52", which is not two percentages
+  FAIL [2]: Newcastle v Manchester City: possession reads "54%" and "54", which is not two percentages
+  FAIL [2]: Newcastle v Nottingham Forest: possession reads "53%" and "53", which is not two percentages
+  FAIL [2]: Newcastle v Chelsea: possession reads "42%" and "42", which is not two percentages
+  FAIL [2]: Newcastle v Manchester United: possession reads "49%" and "49", which is not two percentages
+  FAIL [2]: Newcastle v Fulham: possession reads "55%" and "55", which is not two percentages
+  FAIL [2]: Newcastle v Arsenal: possession reads "40%" and "40", which is not two percentages
+  FAIL [2]: Newcastle v Brighton: possession reads "52%" and "52", which is not two percentages
+  FAIL [2]: Newcastle v Everton: possession reads "51%" and "51", which is not two percentages
+  FAIL [2]: Newcastle v Chelsea: possession reads "48%" and "48", which is not two percentages
+  FAIL [2]: Newcastle v Manchester City: possession reads "39%" and "39", which is not two percentages
+  FAIL [2]: Newcastle v Brentford: possession reads "53%" and "53", which is not two percentages
+  FAIL [2]: Newcastle v Nottingham Forest: possession reads "49%" and "49", which is not two percentages
+  FAIL [2]: only 0 possession pairs checked
+   0 pairs on screen, every one summing to 100 and every one the sim's own share
+3) Both clubs named, counted rather than string matched
+   174 reports name the other club 4 to 15 times (mean 7.9, floor 3.5), and 12 live viewers name both clubs
+4) Every text block centred inside the card
+   174 cards rendered, 0 left aligned blocks, every card centring its text
+5) Momentum reads as swings, not as one number
+   174 charts: 3.02 sign changes a match (floor 1.9), 88.5 percent reach both sides (floor 62)
+   every chart drew the report's own nine buckets
+6) Historical no-coach baseline: the same fixture and seed finish identically
+   24 fixtures replayed both ways, 13 distinct scorelines, every pair identical down to the momentum series
+   the engine plays a match in 1 places, both off one kick off, and each of the two screens offers exactly 2 ways in (7 buttons on the Match Centre)
+
+simMatchScreen: PASS. Effective bareposs fault failed only section 2; untouched baseline passed and source bytes held.

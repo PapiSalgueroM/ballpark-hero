@@ -1,0 +1,9 @@
+kept  LiveSimScreen.tsx 6-6: liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchF
+kept  LiveSimScreen.tsx 1180-1182: /* Round 1331: a change at the break before extra time is told on the 
+kept  LiveSimScreen.tsx 1456-1460: onChange(changeMinute, { kind: 'shape', mentality: m }, plus);
+kept  LiveSimScreen.tsx 1940-1950: {/* the change sheet: a sub or a shape, at this minute */}
+kept  LiveSimScreen.tsx 1985-1995: </div>
+kept  HalftimeScreen.tsx 4-4: import { benchFor, tiringAtHalftime, matchRuleOf, subsLeftOf, pressOf,
+kept  HalftimeScreen.tsx 55-56: /* Round 1331: the match's own rule; changes at the break use no stopp
+kept  HalftimeScreen.tsx 120-128: {/* ---- substitutions ---- */}
+lines1331: green, every Round 1331 span is in the head byte for byte
