@@ -1,7 +1,8 @@
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import type { CareerState } from '@/lib/clubManager';
-import { buildMarket, startCareer } from '@/lib/clubManager';
+import { buildMarket, releaseClauseOf, startCareer } from '@/lib/clubManager';
 import { DIFFICULTY_LEVELS, readLevel } from '@/lib/managerDifficulty';
+import { ensureEraRosters } from '@/lib/clubManagerEras';
 import { ensureStartOptions, levelFrom, noSackFrom } from '@/lib/clubManagerStart';
 import {
   CM_DIFFICULTY_DIALS, applyNewJobDials, boardCheque, boardOpening, boardSwing, difficultyOf, markedPrice,
@@ -114,6 +115,7 @@ describe('every applier is the identity at its own identity dial', () => {
 });
 
 describe('the dials on Hard and Legend', () => {
+  beforeAll(async () => { await ensureEraRosters('era2005'); });
   const s = startCareer('Everton');
   const hard = withLevel(s, 'hard'), legend = withLevel(s, 'legend');
   it('the board: a win gives less, a defeat takes more, and only a bad season opens lower', () => {
@@ -135,6 +137,30 @@ describe('the dials on Hard and Legend', () => {
       expect(mp.price).toBe(Math.max(0.5, Math.round(base[i].price * CM_DIFFICULTY_DIALS.legend.mark * 10) / 10));
       expect({ ...mp, price: base[i].price }).toEqual(base[i]);
     });
+  });
+
+  it('a release clause is never the cheaper door round the mark, and on Normal it is exactly what it was', () => {
+    /* The clause as it was before this round (releaseClauseOf before the floor at the card's price). */
+    const before = (mp: { name: string; value?: number; price: number }, season: number): number | null => {
+      const key = `${mp.name}:${season}`;
+      let h = 0;
+      for (let i = 0; i < key.length; i++) h = ((h * 31) + key.charCodeAt(i)) >>> 0;
+      if (h % 100 >= 35) return null;
+      return Math.max(1, Math.round((mp.value ?? mp.price) * (1.5 + ((h >>> 8) % 100) / 100) * 10) / 10);
+    };
+    let clauses = 0;
+    for (const era of ['now', 'era2005']) {
+      const c = startCareer('Everton', era);
+      for (const mp of buildMarket(c)) {
+        const was = before(mp, c.season);
+        expect(releaseClauseOf(mp, c.season)).toBe(was);
+        if (was === null) continue;
+        clauses += 1;
+        const marked = marketForMe(withLevel(c, 'legend'), [mp])[0];
+        expect(releaseClauseOf(marked, c.season) as number).toBeGreaterThanOrEqual(marked.price);
+      }
+    }
+    expect(clauses).toBeGreaterThan(50);
   });
 
   it('the opponent: an edge only off Normal', () => {

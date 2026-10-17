@@ -35,6 +35,7 @@ import {
 } from '@/lib/clubManager';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
 import { BOARD_FRESH, LEGACY_BOARD_START, LEGACY_NEW_JOB_BOARD } from '@/lib/clubManagerBoardVerdict';
+import { applyNewJobDials } from '@/lib/clubManagerDifficulty';
 import type { CmVarAsk } from '@/lib/clubManagerVar';
 import { CM_BASE_YEAR, DEFAULT_ERA_ID, eraById, isHistoricEra } from '@/lib/clubManagerEras';
 import { closeOnJoiningNow, jobHuntOf, leavingLine } from '@/lib/clubManagerJobHunt';
@@ -999,7 +1000,8 @@ export function joinClubNow(career: CareerState): CareerState | null {
   delete joined.customClub;
   delete joined.customValues;
   delete joined.founderWageRoom;
-  return joined;
+  /* Round 1501: the level's cheque and wage room on the new job (the identity on Normal). */
+  return applyNewJobDials(joined);
 }
 
 /**

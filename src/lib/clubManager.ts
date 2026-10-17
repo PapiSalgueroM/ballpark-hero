@@ -9499,7 +9499,10 @@ export function releaseClauseOf(mp: MarketPlayer, season: number): number | null
   if (h % 100 >= 35) return null;
   const mult = 1.5 + ((h >>> 8) % 100) / 100;
   const base = mp.value ?? mp.price;
-  return Math.max(1, Math.round(base * mult * 10) / 10);
+  /* Round 1501: never under the card's own price. On Normal a clause is always above it (1.5 times the value
+     or more, against a price of at most 1.25 times), so this changes nothing there; on Hard and Legend the
+     card carries the marked price, and a clause must not become the cheaper door round the mark. */
+  return Math.max(1, Math.round(base * mult * 10) / 10, mp.price);
 }
 
 /** Pay the release clause: instant signing at the clause price. */
@@ -20630,10 +20633,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 1335: a stay's cheque is that same flat formula, never past KITTY_TOP_SHARE of the club's usual
      budget or 10m (kittyAllocation), so a small club's good year pays a bonus its size can carry; the
      carry below is unchanged, and it is capped by the cheque, so it shrinks with it. */
+  /* Round 1501: the level's cheque on every arm (the identity on Normal); the carry rule below is untouched. */
   const allocation = moving
-    ? Math.round(club.budget * 1.1)
-    : legacy ? Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12))
-    : kittyAllocation({ budget: club.budget, expectation: club.expectation, finish: prevPos, trophies: seasonTrophyCount });
+    ? boardCheque(career, Math.round(club.budget * 1.1))
+    : legacy ? boardCheque(career, Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12)))
+    : boardCheque(career, kittyAllocation({ budget: club.budget, expectation: club.expectation, finish: prevPos, trophies: seasonTrophyCount }));
   /* A corrupt or pre-Round 436 save can hand us anything here, so a balance
      that is not a real number carries nothing rather than poisoning the new
      season with NaN. */
@@ -20699,7 +20703,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     season,
     week: 0,
     budget,
-    boardConfidence: opening,
+    boardConfidence: boardOpening(career, opening),
     sacked: false,
     squad,
     xiIds: [],
@@ -20880,7 +20884,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      whenever in the season they went. Zero at every other club. */
   const roomNow = moving ? 0 : foundersWageRoom(state);
   state.wageCap = moving
-    ? wageCapFrom(wageBill(state))
+    ? wageRoomFor(career, wageCapFrom(wageBill(state)))
     : nextWageCap(Math.max(60, (career.wageCap ?? wageCapFrom(wageBill(career))) - (career.founderWageRoom ?? 0)), club.expectation, prevPos, seasonTrophyCount) + roomNow;
   state.founderWageRoom = roomNow || undefined;
   for (const name of freeAgentNews) {
