@@ -1,0 +1,7 @@
+treeWithoutMerge: 5278d91ee94f585e68d9c5049b1cd154de281afb, 63b80985 without 819d9d16; conflicts kept from 63b80985: scripts/simCmLeagueRules.mjs, src/pages/WhatsNew.tsx
+base 5278d91ee94f585e68d9c5049b1cd154de281afb
+control stripnone FIRED: 1 of 3 checks red
+control drawleak FIRED: 1 of 3 checks red
+control hotseatwrites FIRED: 1 of 4 checks red
+control loadtouch FIRED: 1 of 1 checks red
+controls: stripnone=1/1 drawleak=1/1 hotseatwrites=1/1 loadtouch=1/1

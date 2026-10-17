@@ -1,0 +1,7 @@
+treeWithoutMerge: be6cc38461641dd596e0a7f41294ab9e27395736, 4191cdad without 819d9d16; conflicts kept from 4191cdad: scripts/simCmLeagueRules.mjs, src/pages/WhatsNew.tsx
+base be6cc38461641dd596e0a7f41294ab9e27395736
+== fleet
+ok   [fleet] 30 careers of 3 seasons: every save byte (the record taken off) and every draw equal to RETIRE_BASE
+ok   [fleet] every head career wrote the record (30 of 30)
+ok   [fleet] 3 careers on matchRules 'base': equal to RETIRE_BASE with nothing taken off
+simCmRetire: all 3 checks passed (fleet)
