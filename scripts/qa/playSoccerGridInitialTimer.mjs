@@ -61,7 +61,7 @@ let browser;
 checkpoint();
 async function journey(width, kind) {
   const id = kind + '-' + width, timed = kind === 'timed';
-  const row = { id, width, height: width === 390 ? 844 : 900, kind, status: 'running', requests: [], api: [], external: [], fonts: [], js: [], failures: [], errors: [], evidenceErrors: [], actions: [], observations: [], screenshots: [], clockSteps: [], hold: null };
+  const row = { id, width, height: width === 390 ? 844 : 900, kind, status: 'running', requests: [], api: [], external: [], fonts: [], js: [], failures: [], errors: [], evidenceErrors: [], actions: [], observations: [], screenshots: [], shotObservations: [], clockSteps: [], toastTransitions: [], hold: null };
   report.cases.push(row); checkpoint();
   const context = await browser.newContext({ viewport: { width, height: row.height }, isMobile: width === 390, hasTouch: width === 390, reducedMotion: 'reduce', timezoneId: 'UTC', serviceWorkers: 'block', storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [
     { name: 'cookie-consent', value: 'essential' }, { name: SETTINGS, value: JSON.stringify({ difficulty: 'easy', timerMode: timed ? 40 : 0 }) }, { name: 'grid-initial-timer-opaque-save', value: '{"fixture":"unchanged unrelated game"}' },
@@ -109,8 +109,8 @@ async function journey(width, kind) {
     } catch (error) { row.evidenceErrors.push(String(error.stack || error)); await route.abort(); }
   });
   await context.routeWebSocket('**/*', socket => { row.external.push({ url: socket.url(), type: 'websocket', action: 'closed websocket intent' }); socket.close(); });
-  await context.addInitScript(() => { if (location.origin === 'http://127.0.0.1:4173' && sessionStorage.getItem('grid-initial-timer-session') === null) sessionStorage.setItem('grid-initial-timer-session', 'held unrelated session bytes'); });
-  const observe = async label => {
+  await context.addInitScript(() => { Object.defineProperty(window, '__GRID_INITIAL_TIMER_DOCUMENT__', { value: crypto.randomUUID(), writable: false, configurable: false }); if (location.origin === 'http://127.0.0.1:4173' && sessionStorage.getItem('grid-initial-timer-session') === null) sessionStorage.setItem('grid-initial-timer-session', 'held unrelated session bytes'); });
+  const observe = async (label, destination = row.observations) => {
     const value = await page.evaluate(({ settings, daily, timer, expired }) => {
       const store = storage => Object.fromEntries(Object.keys(storage).sort().map(key => [key, storage.getItem(key)]));
       const rect = element => { if (!element) return null; const r = element.getBoundingClientRect(); return { x: r.x, y: r.y, documentTop: r.y + scrollY, width: r.width, height: r.height }; };
@@ -124,10 +124,10 @@ async function journey(width, kind) {
         cells: cells.map(cell => ({ text: cell.textContent, status: cell.dataset.gridCellStatus, disabled: cell.disabled })),
         buttons: buttons.map(button => ({ text: button.textContent.trim(), disabled: button.disabled, rect: rect(button) })), panel: rect(hard?.parentElement?.parentElement), board: rect(board),
         window: { x: scrollX, y: scrollY, width: innerWidth, height: innerHeight }, document: { width: document.documentElement.scrollWidth, height: document.documentElement.scrollHeight }, activeElement: document.activeElement?.outerHTML ?? null,
-        identity: { timeOrigin: performance.timeOrigin, navigation: performance.getEntriesByType('navigation').map(entry => entry.type) },
+        identity: { documentNonce: window.__GRID_INITIAL_TIMER_DOCUMENT__, timeOrigin: performance.timeOrigin, navigation: performance.getEntriesByType('navigation').map(entry => entry.type) },
       };
     }, { settings: SETTINGS, daily: DAILY, timer: TIMER, expired: EXPIRED });
-    row.observations.push({ label, ...value }); assert.equal(value.date, DATE); assert.equal(value.cells.length, 9); assert.equal(value.labels.rows.length, 3); assert.equal(value.labels.cols.length, 3); assert(value.document.width <= width, 'No horizontal overflow');
+    destination.push({ label, ...value }); assert.equal(value.date, DATE); assert.equal(value.cells.length, 9); assert.equal(value.labels.rows.length, 3); assert.equal(value.labels.cols.length, 3); assert(value.document.width <= width, 'No horizontal overflow');
     assert.equal(value.stores.local['grid-initial-timer-opaque-save'], '{"fixture":"unchanged unrelated game"}'); assert.equal(value.stores.session['grid-initial-timer-session'], 'held unrelated session bytes'); return value;
   };
   const pointer = async (locator, label) => {
@@ -139,11 +139,27 @@ async function journey(width, kind) {
     if (width === 390) await page.touchscreen.tap(x, y); else await page.mouse.click(x, y);
   };
   const named = name => page.getByRole('button', { name, exact: true });
-  const shot = async label => { const file = id + '-' + label + '.png'; await page.screenshot({ path: path.join(OUT, file) }); row.screenshots.push(receipt(file)); };
+  const shot = async label => {
+    if (timed) await page.locator('svg.lucide-clock').locator('..').scrollIntoViewIfNeeded(); else await named('Hard').scrollIntoViewIfNeeded();
+    const captured = await observe(label, row.shotObservations), prior = row.observations.at(-1); assert.deepEqual(captured.stores, prior.stores, 'Screenshot scroll preserves complete stores'); assert.equal(captured.at, prior.at); assert.deepEqual(captured.labels, prior.labels);
+    if (timed) { assert.equal(captured.timer.length, 1); assert.equal(captured.timer[0].text, label === 'first-submission' ? '40s' : '39s'); const rect = captured.timer[0].rect; assert(rect.x >= 0 && rect.y >= 0 && rect.x + rect.width <= width && rect.y + rect.height <= row.height, 'Actual expected timer is within the screenshot viewport'); }
+    const file = id + '-' + label + '.png'; await page.screenshot({ path: path.join(OUT, file) }); row.screenshots.push(receipt(file));
+  };
   const quiet = async () => { const started = Date.now(); while (pendingJs.size || Date.now() - lastJs < 500) { assert(Date.now() - started < 20000, 'Bounded owned JS quiet'); await page.waitForTimeout(50); } await bounded(Promise.all(bodyTasks), 'Complete physical JS evidence'); assert.deepEqual(row.evidenceErrors, []); };
   const setClock = async (label, value) => { const from = await page.evaluate(() => Date.now()); await page.clock.setFixedTime(value); const to = await page.evaluate(() => Date.now()); row.clockSteps.push({ label, from, to }); assert.equal(to, value); };
   const waitTimer = async expected => { await page.waitForFunction(text => { const clocks = [...document.querySelectorAll('svg.lucide-clock')]; return clocks.length === 1 && clocks[0].parentElement.textContent.trim() === text; }, expected); };
   const holdReached = async () => { const start = Date.now(); while (!row.hold) { assert(Date.now() - start < 15000, 'Declared first validator hold reached'); await page.waitForTimeout(20); } await page.waitForFunction(() => document.querySelector('input[aria-label="Search for a player"]')?.disabled === true); };
+  const rememberToasts = () => page.getByText(RETRY, { exact: true }).elementHandles();
+  const freshToast = async (previous, label) => {
+    const inspect = ({ text, prior }) => {
+      const titles = [...document.querySelectorAll('[data-sonner-toast] [data-title]')].filter(title => title.textContent === text);
+      const visible = title => { const toast = title.closest('[data-sonner-toast]'), rect = title.getBoundingClientRect(); return toast?.dataset.visible === 'true' && toast.dataset.removed !== 'true' && rect.width > 0 && rect.height > 0 && getComputedStyle(title).visibility !== 'hidden'; };
+      return { beforeCount: prior.length, priorConnected: prior.map(title => title.isConnected), afterCount: titles.length, titles: titles.map(title => ({ text: title.textContent, visible: visible(title), existedBefore: prior.includes(title), html: title.outerHTML })), newVisibleCount: titles.filter(title => !prior.includes(title) && visible(title)).length };
+    };
+    await page.waitForFunction(({ text, prior }) => [...document.querySelectorAll('[data-sonner-toast] [data-title]')].some(title => { const toast = title.closest('[data-sonner-toast]'), rect = title.getBoundingClientRect(); return title.textContent === text && !prior.includes(title) && toast?.dataset.visible === 'true' && toast.dataset.removed !== 'true' && rect.width > 0 && rect.height > 0 && getComputedStyle(title).visibility !== 'hidden'; }), { text: RETRY, prior: previous });
+    const proof = await page.evaluate(inspect, { text: RETRY, prior: previous }); row.toastTransitions.push({ label, ...proof }); assert(proof.newVisibleCount >= 1, 'Actual new visible unverified toast, independent of older identical messages');
+    for (const handle of previous) await handle.dispose();
+  };
   const submit = async label => {
     await pointer(page.locator('[data-grid-cell-status]').first(), label + ': select first cell'); const input = page.getByRole('textbox', { name: 'Search for a player', exact: true }); await input.waitFor(); await pointer(input, label + ': focus player input'); await page.keyboard.type(NAME); await pointer(named('Submit'), label + ': submit fictional answer'); return input;
   };
@@ -160,20 +176,20 @@ async function journey(width, kind) {
     await page.locator('[data-grid-cell-status]').first().waitFor(); await named('Hard').waitFor(); await quiet();
     const ready = await observe('ready'); assert.equal(ready.at, NOW); assert.deepEqual(JSON.parse(ready.settingsJSON), { difficulty: 'easy', timerMode: timed ? 40 : 0 }); unchangedBoard(ready, ready, null); assert.deepEqual(ready.timer, []);
     await setClock('idle 750ms before first guess', NOW + 750); const idle = await observe('idle-before-first-guess'); unchangedBoard(idle, ready, null); assert.deepEqual(idle.timer, []);
-    const input = await submit('first answer'); await holdReached(); const first = await observe('first-submission'); const epoch = timed ? String(NOW + 750) : null;
+    const firstToasts = await rememberToasts(); const input = await submit('first answer'); await holdReached(); const first = await observe('first-submission'); const epoch = timed ? String(NOW + 750) : null;
     unchangedBoard(first, ready, epoch); assert.deepEqual(first.timer.map(item => item.text), timed ? ['40s'] : []);
     assert.equal(first.buttons.filter(button => ['Easy', 'Normal', 'Hard', 'Unlimited', '90s', '60s', '40s'].includes(button.text) && button.disabled).length, 7, 'Both native settings groups are disabled during the actual held request');
     if (timed) await shot('first-submission');
-    release(); await input.waitFor({ state: 'hidden' }); await page.getByText(RETRY, { exact: true }).waitFor(); const released = await observe('unverified-released'); unchangedBoard(released, ready, epoch);
+    release(); await input.waitFor({ state: 'hidden' }); await freshToast(firstToasts, 'first-unverified'); const released = await observe('unverified-released'); unchangedBoard(released, ready, epoch);
     if (timed) {
       await setClock('999ms since the first submission', NOW + 750 + 999); await page.waitForTimeout(1100); const beforeTick = await observe('sampled-at-999ms'); unchangedBoard(beforeTick, ready, epoch); assert.deepEqual(beforeTick.timer.map(item => item.text), ['40s']);
       await setClock('1000ms since the first submission', NOW + 750 + 1000); await waitTimer('39s'); const tick = await observe('first-second-elapsed'); unchangedBoard(tick, ready, epoch); assert.deepEqual(tick.timer.map(item => item.text), ['39s']); await shot('first-second');
-      const oldOrigin = tick.identity.timeOrigin; await page.reload({ waitUntil: 'domcontentloaded' }); await page.locator('[data-grid-cell-status]').first().waitFor(); await named('Hard').waitFor(); await waitTimer('39s'); await quiet();
-      const refreshed = await observe('refreshed'); unchangedBoard(refreshed, ready, epoch); assert.deepEqual(refreshed.timer.map(item => item.text), ['39s']); assert.notEqual(refreshed.identity.timeOrigin, oldOrigin); assert.deepEqual(refreshed.identity.navigation, ['reload']);
+      const oldNonce = tick.identity.documentNonce; const actualReload = await page.reload({ waitUntil: 'domcontentloaded' }); assert(actualReload); row.reload = { url: actualReload.url(), status: actualReload.status(), requestIndex: requestIndex(actualReload.request()), navigationRequest: actualReload.request().isNavigationRequest(), resourceType: actualReload.request().resourceType() }; assert.deepEqual([row.reload.url, row.reload.status, row.reload.navigationRequest, row.reload.resourceType], [BASE + '/soccer-grid', 200, true, 'document']); await page.locator('[data-grid-cell-status]').first().waitFor(); await named('Hard').waitFor(); await waitTimer('39s'); await quiet();
+      const refreshed = await observe('refreshed'); unchangedBoard(refreshed, ready, epoch); assert.deepEqual(refreshed.timer.map(item => item.text), ['39s']); assert.match(oldNonce, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/); assert.match(refreshed.identity.documentNonce, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/); assert.notEqual(refreshed.identity.documentNonce, oldNonce, 'Actual reload replaces the per-document identity');
     } else {
       await setClock('Unlimited remains unstarted after two minutes', NOW + 120750); await page.waitForTimeout(1100); const later = await observe('unlimited-later'); unchangedBoard(later, ready, null); assert.deepEqual(later.timer, []);
     }
-    const retryInput = await submit('no-penalty retry'); await retryInput.waitFor({ state: 'hidden' }); await page.getByText(RETRY, { exact: true }).waitFor(); const retried = await observe('retry-released'); unchangedBoard(retried, ready, epoch); assert.deepEqual(retried.timer.map(item => item.text), timed ? ['39s'] : []); await shot(timed ? 'refreshed-retry' : 'unlimited-retry');
+    const retryToasts = await rememberToasts(); const retryInput = await submit('no-penalty retry'); await retryInput.waitFor({ state: 'hidden' }); await freshToast(retryToasts, 'retry-unverified'); const retried = await observe('retry-released'); unchangedBoard(retried, ready, epoch); assert.deepEqual(retried.timer.map(item => item.text), timed ? ['39s'] : []); await shot(timed ? 'refreshed-retry' : 'unlimited-retry');
     const validators = row.api.filter(item => item.kind === 'validator'); assert.equal(validators.length, 2); assert.notEqual(validators[0].requestIndex, validators[1].requestIndex);
     for (const item of validators) { assert.deepEqual(item.body, { playerName: NAME, rowAttribute: ready.labels.rows[0], colAttribute: ready.labels.cols[0] }); assert.equal(item.method, 'POST'); }
     assert(row.hold.released); await quiet(); assert.deepEqual(row.errors, []); assert.deepEqual(row.evidenceErrors, []); assert(!row.failures.some(failure => failure.owned), 'Every owned request succeeds');
