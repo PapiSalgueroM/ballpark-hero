@@ -1,0 +1,41 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+savesize: node scripts/simClubManagerSaveSize.mjs
+savesize-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+slots: node scripts/simClubManagerSlots.mjs
+slots-ctl: r=""; for k in nopark dupe norollback oldversion leanmore decisioncontent; do SLOTS_CONTROL=$k node scripts/simClubManagerSlots.mjs > /tmp/sl-$k.log 2>&1; e=$?; f=$(grep -c "CONTROL FIRED" /tmp/sl-$k.log); r="$r $k=$e/$f"; tail -1 /tmp/sl-$k.log | cut -c1-200; done; echo "controls:$r"; [ -z "$(echo "$r" | tr " " "\n" | grep -v "^$" | grep -v "=1/[1-9]")" ]
+shootout: node scripts/simCmShootoutOrder.mjs
+so-ctl: r=""; for k in ignoreorder noskip nocap unsetpath ownkeeper wrongkeeper nooppkeeper oppworst thinside nomakeup; do CM_SHOOTOUT_CONTROL=$k node scripts/simCmShootoutOrder.mjs > /tmp/c-$k.log 2>&1; e=$?; f=$(grep -cE 'simCmShootoutOrder: [1-9][0-9]* FAILURE' /tmp/c-$k.log); r="$r $k=$e/$f"; done; echo "controls:$r"; [ -z "$(echo "$r" | tr ' ' '\n' | grep -v '^$' | grep -v '=1/1')" ]
+dailydeals: node scripts/simDailyDeals.mjs
+dd-ctl: r=""; for k in bind binddeadline ledger ledgerdeadline rulesall rulesstale seed seeddeadline; do DAILY_DEALS_CONTROL=$k node scripts/simDailyDeals.mjs > /tmp/dd-$k.log 2>&1; e=$?; f=$(tail -3 /tmp/dd-$k.log | grep -c FIRED); r="$r $k=$e/$f"; tail -1 /tmp/dd-$k.log | cut -c1-160; done; echo "controls:$r"; [ -z "$(echo "$r" | tr ' ' '\n' | grep -v '^$' | grep -v '=1/[1-9]')" ]
+hotseat: node scripts/simManagerHotSeat.mjs
+deadline: node scripts/simDeadlineDay.mjs
+freeagents: node scripts/simFreeAgents.mjs; a=$?; FA_CONTROL=ownclub node scripts/simFreeAgents.mjs > /tmp/fa.log 2>&1; b=$?; tail -1 /tmp/fa.log | cut -c1-200; echo "head=$a ownclub=$b"; [ $a = 0 ] && [ $b = 1 ]
+nosack: node scripts/simCmNoSack.mjs
+decisions: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs
+clubdetail: CM_OWN_ROSTER_CORE_REF=HEAD node scripts/simClubDetailCurrentRoster.mjs
+calendar: node scripts/simClubManagerCalendar.mjs
+apps: node scripts/simCmApplications.mjs
+book: node scripts/simCmLeagueBook.mjs
+fixtures: node scripts/simCmLeagueFixtures.mjs
+transfers: node scripts/simTransfers.mjs
+headlines: node scripts/simHeadlines.mjs
+journey: node scripts/simCmLedgerJourney.mjs
+midseason: node scripts/simMidSeasonStart.mjs
+createclub-KNOWN: node scripts/simCreateClub.mjs
+clubmanager: node scripts/simClubManager.mjs
+tablestruth: node scripts/simCmTablesTruth.mjs
+custompromo: node scripts/simManagerCustomPromotion.mjs
+releaseclause: node scripts/simReleaseClause.mjs
+contracts: node scripts/simContracts.mjs
+continuity-plain-CARRIED: MANAGER_WORLD_CONTINUITY_ARTIFACTS="$TMPDIR/mwc0" node scripts/simManagerWorldContinuity.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+vitest-cm: node_modules/.bin/vitest run src/lib/clubManager src/test/clubManager src/test/clubDetail src/test/manager src/hooks/useClubManager --testTimeout=300000 --hookTimeout=120000
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
+guide: node scripts/simGuideHeadings.mjs
+access: node scripts/simAccessibility.mjs
+trust: node scripts/simTrustCopy.mjs
+ctl-unseeded-noinverse: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && CM_UNSEEDED_CONTROL=noinverse node scripts/simCmUnseededWorld.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base' "$TMPDIR/ctl.log"
+unseeded-minusAZ: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && echo "base $CM_UNSEEDED_BASE (Release BC as published without Release AZ)" && node scripts/simCmUnseededWorld.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qF 'simCmUnseededWorld: green. ' "$TMPDIR/ctl.log"
+continuity-minusAZ: MANAGER_WORLD_CONTINUITY_BASE=$(bash .rc/x/baseDeck.sh) && export MANAGER_WORLD_CONTINUITY_BASE && echo "base $MANAGER_WORLD_CONTINUITY_BASE (Release BC as published without Release AZ)" && MANAGER_WORLD_CONTINUITY_ARTIFACTS="$TMPDIR/mwc" node scripts/simManagerWorldContinuity.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qF 'Manager world continuity: 1 arms, eleven complete groups per arm' "$TMPDIR/ctl.log" && grep -qF 'Private world variation is measured, no historical fixture was re-recorded' "$TMPDIR/ctl.log"
+ctl-continuity-all: MANAGER_WORLD_CONTINUITY_BASE=$(bash .rc/x/baseDeck.sh) && export MANAGER_WORLD_CONTINUITY_BASE && echo "base $MANAGER_WORLD_CONTINUITY_BASE (Release BC as published without Release AZ)" && MANAGER_WORLD_CONTINUITY_ARTIFACTS="$TMPDIR/mwc" MANAGER_WORLD_CONTINUITY_CONTROL=all node scripts/simManagerWorldContinuity.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qE 'Manager world continuity: ([2-9]|[1-9][0-9]+) arms, eleven complete groups per arm' "$TMPDIR/ctl.log" && grep -qF 'Private world variation is measured, no historical fixture was re-recorded' "$TMPDIR/ctl.log"

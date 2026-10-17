@@ -1,0 +1,7 @@
+CONTROL FIRED: SLOTS_CONTROL=nopark turned section 1 red (red sections: 1, 2, 3, 4), as it must
+CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
+CONTROL FIRED: SLOTS_CONTROL=norollback turned section 3 red through its moved check (red sections: 3), as it must
+CONTROL FIRED: SLOTS_CONTROL=oldversion turned section 4 red through its slot1 check (red sections: 1, 2, 4), as it must
+CONTROL FIRED: SLOTS_CONTROL=leanmore turned section 4 red through its roundtrip check (red sections: 1, 4), as it must
+CONTROL FIRED: SLOTS_CONTROL=decisioncontent changed only decision roundtrip; fresh normal baseline green, executable receipt verified and source bytes held
+controls: nopark=1/1 dupe=1/1 norollback=1/1 oldversion=1/1 leanmore=1/1 decisioncontent=1/1
