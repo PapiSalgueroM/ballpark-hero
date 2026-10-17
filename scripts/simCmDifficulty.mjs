@@ -46,9 +46,17 @@
      Legend              1.09      23.0%     364 of 432 (4.00x)  14.58m (-46.0%)  1.39
      bands (the lead)              8 to 20 / 18 to 35   1.4x / 2x   -10% on Hard     1 on Hard
      Normal against Normal (even seeds against odd seeds): mid ppg 1.43 and 1.40, a 2.1% gap.
-   The second block of seeds (SEED_OFFSET=8, r1501-m2) is in the round's notes. Sacked share by tier, which
-   the bands do not hold: Hard 0.41 big, 0.54 mid, 0.84 small; Legend 0.69, 0.85, 0.99 (Normal 0.13, 0.15,
-   0.35). Section 0 on Normal, both drivers, 4 seeds, 10 seasons: the engaged buyer's mid ppg 1.40 against
+   A second block, seeds 8 to 15 (SEED_OFFSET=8, r1501-m2 at f8d1a7b7): Hard 17.0% (sacked 2.31x, spend
+   -22.9%, big titles 2.08), Legend 25.2% (3.07x), Normal against Normal a 7.2% gap. The two blocks differ by
+   4.4 points on Hard, so one block of 8 seeds can sit 3 points from the band's edge: a coin toss. Section 4
+   therefore runs seeds 0 to 15 by default, both blocks pooled (1.42, 1.21, 1.08: Hard 14.8%, Legend 24.1%,
+   sacked 2.53x and 3.47x, spend -19.8%, big titles 2.36; Normal against Normal 4.6%, so the pooled drop's
+   error is about 2.3 points, over two of them from either edge). About 36 minutes on one runner line.
+   Sacked share by tier, which the bands do not hold (block 1): Hard 0.41 big, 0.54 mid, 0.84 small; Legend
+   0.69, 0.85, 0.99 (Normal 0.13, 0.15, 0.35). The steady keeper (renews, signs nobody, r1501-m3), 8 seeds:
+   small clubs sacked 0.39, 0.85 and 0.99 of seasons on Normal, Hard and Legend while over its ceiling in
+   only 0.42, 0.11 and 0.79, so the small club sackings come from results and the board, not the wage drip.
+   Section 0 on Normal, both drivers, 4 seeds, 10 seasons: the engaged buyer's mid ppg 1.40 against
    the steady keeper's 1.39, big club titles 4.25 and 3.83 in ten. One season takes about 0.7 s on a runner.
 
    Negative controls (CM_DIFF_CONTROL), each patched in memory or into the
@@ -834,7 +842,7 @@ function assertOutcomes(rows) {
   if (failures === before) ok('every level sits inside the bands the lead set');
 }
 function section4() {
-  const seeds = num('SEEDS', 8), seasons = num('SEASONS', 6);
+  const seeds = num('SEEDS', 16), seasons = num('SEASONS', 6);
   const levels = (process.env.LEVELS || LEVELS.join(',')).split(',');
   const drivers = (process.env.DRIVERS || 'engaged').split(',');
   console.log(`4) outcomes: ${levels.join(', ')}, ${seeds} seeds from ${num('SEED_OFFSET', 0)}, ${seasons} seasons, ${drivers.join(' and ')}, shard ${process.env.SHARD || '0/1'}`);
