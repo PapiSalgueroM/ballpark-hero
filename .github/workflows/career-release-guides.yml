@@ -1,0 +1,202 @@
+name: Career release guides verification
+on:
+  push:
+    branches: [codex/career-release-guides]
+    paths:
+      - .github/workflows/career-release-guides.yml
+      - scripts/qa/proveCareerReleaseGuides.mjs
+      - src/data/gameContent/clubManagement.ts
+      - src/data/gameContent/soccer2.ts
+      - src/data/gameContent/basketball.ts
+      - src/data/gameContent/football.ts
+      - src/data/gameContent/baseball.ts
+      - src/data/gameContent/hockey.ts
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      PRERENDER_ONLY: /club-manager,/soccer-career,/nba-my-career,/nfl-my-career,/mlb-my-career,/nhl-my-career,/whats-new
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retain exact guide-only request and source context
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$RUNNER_TEMP/career-release-guides"; test ! -e "$out"; mkdir -p "$out"
+          export CAREER_RELEASE_GUIDES_OUT="$out"
+          echo "CAREER_RELEASE_GUIDES_OUT=$out" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
+          git ls-files -z -- . ':!src/data/searchKeywords.json' ':!scripts/data/guideHeadingsFrozen.json' ':!public/club-manager/index.html' ':!public/soccer-career/index.html' ':!public/nba-my-career/index.html' ':!public/nfl-my-career/index.html' ':!public/mlb-my-career/index.html' ':!public/nhl-my-career/index.html' ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
+          sha256sum "$out/source.zip" "$out/request-source-files.sha256" "$out/source-files.sha256" > "$out/initial-source-packet.sha256"
+          git merge-base --is-ancestor e32dd9facafcf43f4a4ddbafeae1a8baa6732aff HEAD
+          git diff --exit-code e32dd9facafcf43f4a4ddbafeae1a8baa6732aff HEAD -- . ':!docs' ':!src/data/gameContent/clubManagement.ts' ':!src/data/gameContent/soccer2.ts' ':!src/data/gameContent/basketball.ts' ':!src/data/gameContent/football.ts' ':!src/data/gameContent/baseball.ts' ':!src/data/gameContent/hockey.ts' ':!scripts/qa/proveCareerReleaseGuides.mjs' ':!.github/workflows/career-release-guides.yml' > "$out/base-source-hold.log"
+          git diff --exit-code HEAD -- . > "$out/admission-working-source-hold.log"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          printf '%s\0' "$(command -v node)" "$(readlink -f "$(command -v npm)")" "$(readlink -f "$(command -v python)")" | sort -z | xargs -0 sha256sum > "$out/runtime-tools-files.sha256"
+          test "$(wc -l < "$out/runtime-tools-files.sha256")" -eq 3
+          npm --version > "$out/npm-version.txt"
+      - name: Locked dependency browser and cached font setup
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$CAREER_RELEASE_GUIDES_OUT"
+          NODE_OPTIONS='' npm ci > "$out/install.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/dependencies.transport" node scripts/qa/soccerAgentReviewDependencies.mjs before > "$out/dependencies-before.log" 2>&1
+          browser_tools="$RUNNER_TEMP/career-release-guides-browser"; test ! -e "$browser_tools"
+          NODE_OPTIONS='' npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright; ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          SIM_OFFLINE_RECEIPT="$out/dependencies.transport" node scripts/qa/soccerAgentReviewDependencies.mjs after > "$out/dependencies-after.log" 2>&1
+          cp soccer-agent-review-artifacts/dependencies-*.json "$out/"
+          SIM_OFFLINE_RECEIPT="$out/dependency-check.transport" node --input-type=module > "$out/dependency-check.log" 2>&1 <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.CAREER_RELEASE_GUIDES_OUT,before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),after=JSON.parse(fs.readFileSync(out+'/dependencies-after.json'));
+          assert.equal(before.packages.length,521);assert.equal(after.packages.length,521);assert.deepEqual(after.packages,before.packages);assert.deepEqual(after.packageFiles,before.packageFiles);assert.equal(after.addedBrowserPackage,'1.64.0');fs.writeFileSync(out+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n',{flag:'wx'});console.log('PASS 521 held package versions and isolated Playwright 1.64.0.');
+          NODE
+          NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/fonts-install.log" 2>&1; python -m pip freeze > "$out/python-packages.txt"
+          NODE_OPTIONS='' FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-files.sha256"
+          test "$(find "$out/font-cache" -type f ! -name manifest.json | wc -l)" -eq 9
+          test "$(find "$out/font-cache" -type f | wc -l)" -eq 10
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-files.sha256"
+          test "$(wc -l < "$out/installed-files.sha256")" -eq 24466
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tool-files.sha256"
+          test "$(wc -l < "$out/browser-tool-files.sha256")" -eq 176
+      - name: Actual types six guide records and deterministic search index
+        id: checks
+        timeout-minutes: 30
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$CAREER_RELEASE_GUIDES_OUT"
+          preload_check='const assert=require("node:assert/strict");assert.ok((process.env.NODE_OPTIONS||"").includes("offlineTransport.cjs"),"Children retain offline preload");assert.ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")],"Actual offline preload is in require.cache");'
+          status=0; NODE_OPTIONS='' node -e "$preload_check" > "$out/preload-control.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/preload-control.exit"; test "$status" -eq 1; grep -F 'AssertionError' "$out/preload-control.log"; grep -F 'Children retain offline preload' "$out/preload-control.log"
+          node -e "$preload_check" > "$out/preload-normal.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/proof.transport" node scripts/qa/proveCareerReleaseGuides.mjs > "$out/proof.log" 2>&1
+          grep -F 'PASS six guide items, twelve effective source/fixture rejection controls, whole fixture preservation and deterministic search index.' "$out/proof.log"
+          grep -F 'simGuideHeadings: green.' "$out/proof/guide-headings.stdout.log"
+          grep -F 'simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.' "$out/proof/site-search.stdout.log"
+          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
+          sha256sum --check "$out/source-files.sha256" > "$out/checks-source-holds.log"
+      - name: Actual production build and seven bounded snapshot refreshes
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$CAREER_RELEASE_GUIDES_OUT/build.transport" npm run build:seo > "$CAREER_RELEASE_GUIDES_OUT/build.log" 2>&1
+          tail -n 6 "$CAREER_RELEASE_GUIDES_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$CAREER_RELEASE_GUIDES_OUT/dist-files.sha256"
+      - name: All fifteen readers against the completed build
+        id: readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$CAREER_RELEASE_GUIDES_OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-readers.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            status=0; SIM_OFFLINE_RECEIPT="$out/$method.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv"; tail -n 3 "$out/$method.log"
+            test "$status" -eq 0 || failed=1; test ! -s "$out/$method.transport" || failed=1
+          done
+          test "$(wc -l < "$out/readers.tsv")" -eq 15; exit "$failed"
+      - name: Unchanged full fourteen page weights with every failure fatal
+        id: weights
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$CAREER_RELEASE_GUIDES_OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-weights.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          status=0; SIM_OFFLINE_RECEIPT="$out/weights.transport" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
+          cat "$out/weights.log"; printf '%s\n' "$status" > "$out/weights-exit.txt"; exit "$status"
+      - name: Complete source and dist with eleven bounded generated paths retained outside
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="${CAREER_RELEASE_GUIDES_OUT:-$RUNNER_TEMP/career-release-guides}"; mkdir -p "$out"; result=0
+          git diff --exit-code HEAD -- . ':!src/data/searchKeywords.json' ':!scripts/data/guideHeadingsFrozen.json' ':!public/club-manager/index.html' ':!public/soccer-career/index.html' ':!public/nba-my-career/index.html' ':!public/nfl-my-career/index.html' ':!public/mlb-my-career/index.html' ':!public/nhl-my-career/index.html' ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' > "$out/non-generated-diff.log" 2>&1 || result=1
+          git diff --binary HEAD -- src/data/searchKeywords.json scripts/data/guideHeadingsFrozen.json public/club-manager/index.html public/soccer-career/index.html public/nba-my-career/index.html public/nfl-my-career/index.html public/mlb-my-career/index.html public/nhl-my-career/index.html public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json > "$out/generated.patch"
+          git diff --name-only HEAD | sort > "$out/generated-paths.txt"
+          printf 'src/data/searchKeywords.json\nscripts/data/guideHeadingsFrozen.json\npublic/club-manager/index.html\npublic/soccer-career/index.html\npublic/nba-my-career/index.html\npublic/nfl-my-career/index.html\npublic/mlb-my-career/index.html\npublic/nhl-my-career/index.html\npublic/whats-new/index.html\npublic/sitemap.xml\nscripts/data/lastmod.json\n' | sort > "$out/allowed-generated-paths.txt"
+          test "$(wc -l < "$out/allowed-generated-paths.txt")" -eq 11 || result=1
+          comm -23 "$out/generated-paths.txt" "$out/allowed-generated-paths.txt" > "$out/unexpected-generated-paths.txt"; test ! -s "$out/unexpected-generated-paths.txt" || result=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/validated-source-files.sha256"
+          CAREER_RELEASE_GUIDES_ARCHIVE_OUT="$out" python - <<'PY'
+          import os,subprocess,zipfile
+          out=os.environ['CAREER_RELEASE_GUIDES_ARCHIVE_OUT'];files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile(out+'/validated-source.zip','x',zipfile.ZIP_DEFLATED) as archive:
+              for file in sorted(filter(None,files)): archive.write(file,file)
+          if os.path.isdir('dist'):
+              with zipfile.ZipFile(out+'/dist.zip','x',zipfile.ZIP_DEFLATED) as archive:
+                  for folder,dirs,names in os.walk('dist'):
+                      for name in sorted(names): archive.write(os.path.join(folder,name),os.path.join(folder,name))
+          PY
+          if test -d dist; then find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist-after-files.sha256"; fi
+          if test -f "$out/dist-files.sha256"; then cmp "$out/dist-files.sha256" "$out/dist-after-files.sha256" > "$out/dist-inventory-hold.log" 2>&1 || result=1; fi
+          printf 'checks=%s\nbuild=%s\nreaders=%s\nweights=%s\n' '${{ steps.checks.outcome }}' '${{ steps.build.outcome }}' '${{ steps.readers.outcome }}' '${{ steps.weights.outcome }}' > "$out/stage-outcomes.txt"
+          exit "$result"
+      - name: Full source installed browser tool runtime font and transport holds
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="${CAREER_RELEASE_GUIDES_OUT:-$RUNNER_TEMP/career-release-guides}"; result=0
+          for kind in source installed browser-tool runtime-tools font validated-source dist; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
+          if test -f "$out/initial-source-packet.sha256"; then sha256sum --check "$out/initial-source-packet.sha256" > "$out/initial-source-packet-holds.log" 2>&1 || result=1; fi
+          if test -f "$out/installed-files.sha256"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-after-files.sha256"; cmp "$out/installed-files.sha256" "$out/installed-after-files.sha256" > "$out/installed-inventory-hold.log" 2>&1 || result=1; fi
+          if test '${{ steps.build.outcome }}' = success; then
+            SIM_OFFLINE_RECEIPT="$out/build-classifier.transport" node --input-type=module > "$out/build-transport-classification.log" 2>&1 <<'NODE' || result=1
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';
+          const out=process.env.CAREER_RELEASE_GUIDES_OUT,base='e32dd9facafcf43f4a4ddbafeae1a8baa6732aff',sha=value=>createHash('sha256').update(value).digest('hex'),report={status:'running',method:'Retained guard-denial classification only, no outbound permission',sources:{},observations:[]};
+          try{assert.equal(process.env.PRERENDER_ONLY,'/club-manager,/soccer-career,/nba-my-career,/nfl-my-career,/mlb-my-career,/nhl-my-career,/whats-new');const {SAMPLE_DAYS}=await import('./scripts/lib/prerenderClock.mjs');assert.deepEqual(SAMPLE_DAYS,[0,5,11]);assert.equal(process.env.PRERENDER_ONLY.split(',').length,7);
+          for(const file of ['scripts/lib/offlineTransport.cjs','scripts/lib/prerenderClock.mjs','scripts/prerender.mjs']){const actual=fs.readFileSync(file);assert.deepEqual(actual,execFileSync('git',['show',base+':'+file]));report.sources[file]=sha(actual);}
+          const line='[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com\n',expected=Buffer.from(line.repeat(21));assert.equal(sha(expected),'3ce12396e33039d32fbb223fe0cdf83343ae48abf5cfb15e3726f7df136815ad');const check=bytes=>assert(bytes.equals(expected),'Build must retain exactly twenty-one known denied font requests');const actual=fs.readFileSync(out+'/build.transport');check(actual);report.observations.push({case:'actual-twenty-one-font-denials',accepted:true,bytes:actual.length,sha256:sha(actual)});
+          for(const [name,changed]of [['missing-line',Buffer.from(line.repeat(20))],['extra-line',Buffer.from(line.repeat(22))],['database-line',Buffer.from(line.repeat(20)+'[SIM_OFFLINE_BLOCK] database browser route continue https://fixture.invalid\n')]]){assert(!changed.equals(actual));assert.throws(()=>check(changed),assert.AssertionError);report.observations.push({case:name,accepted:false,bytes:changed.length,sha256:sha(changed)});}assert.equal(report.observations.length,4);report.status='passed';console.log('PASS twenty-one actual denied font requests and three changed receipt rejection controls.');}
+          catch(error){report.status='failed';report.error=error.stack;throw error;}finally{fs.writeFileSync(out+'/build-transport-classification.json',JSON.stringify(report,null,2)+'\n',{flag:'wx'});}
+          NODE
+          else
+            printf 'skipped: actual build outcome was %s\n' '${{ steps.build.outcome }}' > "$out/build-transport-classification-skipped.txt"
+          fi
+          while IFS= read -r -d '' file; do case "$file" in "$out/build.transport"|"$out/weights.transport") ;; *) test ! -s "$file" || result=1 ;; esac; done < <(find "$out" -type f -name '*.transport' -print0)
+          # Build is classified strictly above. Weight asset denials remain retained offline evidence.
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-release-guides-${{ github.sha }}
+          path: ${{ env.CAREER_RELEASE_GUIDES_OUT }}
+          if-no-files-found: error
+          retention-days: 14
