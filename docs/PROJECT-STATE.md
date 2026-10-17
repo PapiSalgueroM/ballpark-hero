@@ -1,3 +1,10 @@
+## Codex1401 scoped READY, 2026-10-17 UTC
+
+PR318 corrects three Soccer Career cash-business captions; actual tested5066fe9239d6bfb848e79cade8b62ecacacc2ad9/run39018657286/job117355854956 SUCCESS on I8293. Code stays whole by exact inverse. Eighteen units,40currency pairs,500career normal/effective500career oneoption control,types/serialbuild/all15readers/all14fatalcaps and source/installed/font/dist holds pass. Physical19cf6cf4/semanticdc7b3676 (102/0) close artifact12095692466/a49f504e,4871source/784dist bodies. Actual3generated bodies adopted23d1e0e1; final is3closingdocs beyond that, not docs-only from tested request. Outside source closure and push receipt bind the final head. Existing saved captions are not migrated; no direct315 parity or NBA fix. BIIactualTESTED realmerge, closingdocsseparate, I regenerates joined output. Urgent308 remains independent. Main1ec/release829 and raw liveBQU remain at08:56UTC. BIdmissing alert handed to I, no root gate dispatch. See docs/audits/soccer-cash-choice-1401.md.
+## Codex1401 request prepared, 2026-10-17 UTC
+
+Three Soccer Career cash-business strings now describe an inquiry and direct players to the existing shop. Exact whole inverse holds all surrounding code. Existing checks and remote workflow prepared; runtime pending, no READY/live claim. Existing saved pending captions are not migrated. Actual I retains integration, active page/core, US1500 and release. See docs/audits/soccer-cash-choice-1401.md.
+
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
@@ -18506,3 +18513,8 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+
+## Codex1401 copy claim
+
+Root claims exactly3event315choice0 strings in SCcorruption, existingotherlaneleaf, ownWF/generatedWN/sitemap/lastmod/closingdocs. ActualI8293 frozen. Falsepurchase/unlock promises becomeinquiry+existingstore directions; oldsavedcaptionsnotmigrated. No core/page/engine/economics/NBA feature changes. Remoteonlygatespending. See docs/audits/soccer-cash-choice-1401.md.

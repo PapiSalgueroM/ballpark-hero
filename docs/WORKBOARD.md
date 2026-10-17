@@ -15798,3 +15798,15 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Codex1401 CLAIM: Soccer Career cash-business copy, 2026-10-17 UTC
+
+Root owns only3strings in src/lib/soccerCareerCorruption.ts event315choice0, own remote workflow, existing actualgenerated WN/sitemap/lastmod and closing docs. Frozen actualI8293c758f4284d21baaa2320383cfd5cb5bd4944. I1334brief636-638 explicitly leaves this leaf to the other lane; I1500excludes Soccer laundering. Currentwholeleaf matchesc2 canonicale936fade/31588B; no active exact-leaf collision. Branchcodex/soccer-cash-choice-copy, managedWTsoccer-cash-choice-copy. Claimdocs committed/pushed before product.
+
+Correct the false purchase/unlock promise to an inquiry, actual My Life > The other list directions, result No purchase made (prior ownership possible). Hold every guard/effect/flag/number/callback/shop/core/page/save/RNG code byte via whole3spaninverse. Alreadyserializedpendinglabels/previews are NOT migrated; no NBA1500/purchase/season functionality claim. No new copy-mirroring test. Existing relevant Life/catalog/currency checks, realtypes, serialWNbuild/all15readers/14strictcurrent829weights and fullsource/offline/tool/font holds remotely, no cap/guard waiver or source borrowing. IownsactiveSCpage/core/economics/competitions, spectator1503/tournaments1509+, joinedrelease/main/publish. No localNode/Python/app/test/build/browser runtime. Onlyappendthisclaim insharedprimary; no primary staging/reset/commit.
+
+## Codex1401 closing: scoped READY PR318
+
+## Codex1401 scoped READY, 2026-10-17 UTC
+
+PR318 corrects three Soccer Career cash-business captions; actual tested5066fe9239d6bfb848e79cade8b62ecacacc2ad9/run39018657286/job117355854956 SUCCESS on I8293. Code stays whole by exact inverse. Eighteen units,40currency pairs,500career normal/effective500career oneoption control,types/serialbuild/all15readers/all14fatalcaps and source/installed/font/dist holds pass. Physical19cf6cf4/semanticdc7b3676 (102/0) close artifact12095692466/a49f504e,4871source/784dist bodies. Actual3generated bodies adopted23d1e0e1; final is3closingdocs beyond that, not docs-only from tested request. Outside source closure and push receipt bind the final head. Existing saved captions are not migrated; no direct315 parity or NBA fix. BIIactualTESTED realmerge, closingdocsseparate, I regenerates joined output. Urgent308 remains independent. Main1ec/release829 and raw liveBQU remain at08:56UTC. BIdmissing alert handed to I, no root gate dispatch. See docs/audits/soccer-cash-choice-1401.md.
