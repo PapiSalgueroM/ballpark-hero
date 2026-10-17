@@ -1,0 +1,36 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 22 node harnesses
+  PASS  simAcademy.mjs                451.9s
+  PASS  simApproaches.mjs               2.7s
+  PASS  simAwardRaces.mjs              25.0s
+  PASS  simBoard.mjs                    6.8s
+  PASS  simBoardAsks.mjs               51.7s
+  PASS  simBoardObjectives.mjs          0.7s
+  PASS  simBooks.mjs                   15.1s
+  FAIL  simBracketMoment.mjs           26.4s
+  PASS  simCalendar.mjs                 0.6s
+  PASS  simCalendarCurrentDate.mjs      9.0s
+  PASS  simCareerClubPool.mjs          35.7s
+  PASS  simCareerDerbies.mjs           69.5s
+  PASS  simCareerDomesticCup.mjs       17.1s
+  PASS  simCareerLeagueSeasons.mjs     29.4s
+  FAIL  simClubDetailCurrentRoster.mjs    0.2s
+  PASS  simClubManager.mjs             46.2s
+  PASS  simClubManagerBudget.mjs      201.5s
+  PASS  simClubManagerCalendar.mjs     54.4s
+  PASS  simClubManagerClubList.mjs      1.1s
+  PASS  simClubManagerDeals.mjs        20.6s
+  FAIL  simClubManagerDecisionDeadline.mjs    0.1s
+  PASS  simClubManagerDecisions.mjs    25.1s
+
+----- simBracketMoment.mjs (FAIL) -----
+  FAIL: the browser did not load, so the page was never measured: Cannot find module '/home/claude/.npm-global/lib/node_modules/playwright/index.js' imported from /home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/playwrightLoader.mjs
+1 FAILURES (by section {"3":1})
+
+----- simClubDetailCurrentRoster.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+----- simClubManagerDecisionDeadline.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: Only fixed Decisions may differ from the held parent app
+
+3 harnesses not green.
