@@ -1,0 +1,6 @@
+simMatchDetail: node scripts/simMatchDetail.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simVictoryMoment: node scripts/simVictoryMoment.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
