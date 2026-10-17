@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+headsha: git log --oneline -3
+morale-alone-c2f8d746: set -o pipefail; export CI=1 SIM_NETWORK=offline SC_PENDING_LIFE_CORE_REF=$(bash .rc/x/coreBE.sh 50f49993) SC_LIFE_REWARDS_CORE_REF=$(bash .rc/x/coreBE.sh 80084c4b) SC_PENDING_MORALE_CORE_REF=$(bash .rc/x/coreBE.sh 26cad60f) SC_PENDING_POPULARITY_CORE_REF=$(bash .rc/x/coreBE.sh 25c6b0d2) SC_COLD_CONTEXT_CORE_REF=$(bash .rc/x/coreBE.sh f727cfbf) SC_COLD_REPLAY_CORE_REF=$(bash .rc/x/coreBE.sh f727cfbf) SC_DOCUMENTARY_CORE_REF=$(bash .rc/x/coreBE.sh 33b722fb) SC_SAVED_LOAN_CORE_REF=$(bash .rc/x/coreBE.sh ffc16131) CAREER_MORALE_OUT="$PWD/w-playSoccerCareerPendingMorale" CAREER_MORALE_PHASE=fixed FREE_KICK_FONT_CACHE="$PWD/w-playSoccerCareerPendingMorale/font-cache"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && node .rc/x/prepInstalled.mjs "$PWD/w-playSoccerCareerPendingMorale" && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerPendingMorale.mjs | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerPendingMorale.mjs
