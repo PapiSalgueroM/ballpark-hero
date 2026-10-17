@@ -1,0 +1,2 @@
+#!serial
+m6-sim: node .rc/x/rvrun-mut.mjs m6 && node scripts/simCmMatchDay.mjs > /tmp/m6s.log 2>&1; s=$?; grep -E "FAIL" /tmp/m6s.log | head -8; tail -1 /tmp/m6s.log; git checkout -- src scripts; exit $s
