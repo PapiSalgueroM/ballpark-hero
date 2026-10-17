@@ -1,0 +1,9 @@
+rev-swaphome: R=$PWD; W=/tmp/s-swaphome && git worktree add -q --detach $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mut1502b.mjs swaphome $W && mkdir -p $W-tmp && cd $W && TMPDIR=$W-tmp WORLD_UCL_ONLY=1,3,4,7 node scripts/simWorldUcl.mjs
+rev-edgeswap: R=$PWD; W=/tmp/s-edgeswap && git worktree add -q --detach $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mut1502b.mjs edgeswap $W && mkdir -p $W-tmp && cd $W && TMPDIR=$W-tmp WORLD_UCL_ONLY=1,3,4,7 node scripts/simWorldUcl.mjs
+c-carryentrant: WORLD_UCL_CONTROL=carryentrant node scripts/simWorldUcl.mjs
+c-nofall: WORLD_UCL_CONTROL=nofall node scripts/simWorldUcl.mjs
+c-titles: WORLD_UCL_CONTROL=titles node scripts/simWorldUcl.mjs
+rev-standweak: W=/tmp/mut-standweak && git worktree add -q --detach $W HEAD && ln -s $PWD/node_modules $W/node_modules && node .rc/x/mut1502.mjs standweak $W && mkdir -p $W-tmp && cd $W && TMPDIR=$W-tmp WORLD_UCL_ONLY=1,3,4 node scripts/simWorldUcl.mjs
+rev-noholdertop: W=/tmp/mut-noholdertop && git worktree add -q --detach $W HEAD && ln -s $PWD/node_modules $W/node_modules && node .rc/x/mut1502.mjs noholdertop $W && mkdir -p $W-tmp && cd $W && TMPDIR=$W-tmp WORLD_UCL_ONLY=1,5 node scripts/simWorldUcl.mjs
+rev-memokey: W=/tmp/mut-memokey && git worktree add -q --detach $W HEAD && ln -s $PWD/node_modules $W/node_modules && node .rc/x/mut1502.mjs memokey $W && mkdir -p $W-tmp && cd $W && TMPDIR=$W-tmp WORLD_UCL_ONLY=1,3,4 node scripts/simWorldUcl.mjs
+rev-nocustomexit: W=/tmp/mut-nocustomexit && git worktree add -q --detach $W HEAD && ln -s $PWD/node_modules $W/node_modules && node .rc/x/mut1502.mjs nocustomexit $W && mkdir -p $W-tmp && cd $W && TMPDIR=$W-tmp WORLD_UCL_ONLY=1,3,4,5 node scripts/simWorldUcl.mjs
