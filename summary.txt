@@ -1,0 +1,5 @@
+vitest exit=0 7s |    Duration  6.59s (transform 1.45s, setup 68ms, collect 1.91s, tests 3.55s, environment 382ms, prepare 176ms)
+simUsDirtyMoney exit=0 43s | simUsDirtyMoney: all sections green
+simUsCareerWeight exit=0 1s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simUsBoardParity exit=0 59s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+tsc exit=0 70s | 

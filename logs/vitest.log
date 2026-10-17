@@ -1,0 +1,11 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/careerDirtyMoney.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 3551[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1500: every way does exactly what its button prints[2m > [22mthe preview numbers are the applied change, over a grid of money, heat, karma and cash [33m 3532[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 10:10:18
+[2m   Duration [22m 6.59s[2m (transform 1.45s, setup 68ms, collect 1.91s, tests 3.55s, environment 382ms, prepare 176ms)[22m
+
