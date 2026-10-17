@@ -29,7 +29,9 @@
  *      snapshot with the fixture's keyed stream (the watched match is the participant's own AI match); where a
  *      season is opened, the save's holder first in the draw when it is in the field, and an era's one club from
  *      outside its 32 the stand in worked out here (the strongest era club outside them, printed); and a mid
- *      season move left with no competition only by the rule (today's world from season two).
+ *      season move left with no competition only by the rule (today's world from season two); and a created club
+ *      that finished top of its top flight, left in the summer, hands its watched place back to the club it
+ *      replaced (the critic's advice 24).
  *   2  SELF RELATIVE: the engine against itself with the binding switched off (the open, the rollover, the
  *      join's carry and the load repair), both fleets, both coach modes: every key but a watching state's worldComps equal, every
  *      draw equal, no state in the Champions League carrying a slice, the evaluation called on the live state
@@ -65,7 +67,8 @@
  *              nopens (a final level after extra time keeps no winner) agall (away goals in the league phase)
  *              locale (the groups ordered by the device's order again) swaphome and edgeswap (the watched
  *              match with its two strengths or its two edges swapped) standweak (the eras' stand in is the
- *              weakest club outside the 32) noholdertop (the holder never first in the draw)
+ *              weakest club outside the 32) noholdertop (the holder never first in the draw) nocustomexit (a
+ *              summer move away from a created club leaves the created club's name in the watched field)
  *   section 2: stream (the watched match draws from Math.random) participant (a club in the Champions League
  *              opens a watched one too) form (the evaluation writes the clubs' form)
  *   section 3: ahead (a night counts one week early) live (the evaluation reads today's strengths, not the
@@ -84,7 +87,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { engineOf, pickFleet, tape, ERAS as ERAS_OF_FLEET } from './lib/worldUclFleet.mjs';
+import { engineOf, pickFleet, tape, CREATED, ERAS as ERAS_OF_FLEET } from './lib/worldUclFleet.mjs';
 /* Step E5 (the watched winner as next season's holder) is its own commit so the lead can hold it out (the critic's
    advice 21): without it the holder library is gone and the holder is my own final's winner alone, so the
    library is read only when it is there and section 5 and the noholder control say E5 is not built. */
@@ -195,6 +198,8 @@ Object.assign(CONTROLS, {
   standweak: [1, /^1 stand in: /, /^1 /],
   noholdertop: [1, /^1 holder: /, /^1 /],
   memokey: [3, /^3 memo: /, /^3 /],
+  /* Advice 24: a summer move away from a created club hands its watched place to the created club's name. */
+  nocustomexit: [1, /^1 created exit: /],
 });
 Object.assign(CAREER_EDITS, {
   mdearly: [{ file: CM, from: '      put(night, i < 0 ? prev.at : i, i < 0 ? prev.round : roundOf(i), i >= 0);', to: '      put(night, i < 0 ? prev.at : i - 1, i < 0 ? prev.round : roundOf(i), i >= 0);' }],
@@ -207,6 +212,7 @@ Object.assign(CAREER_EDITS, {
   standweak: [{ file: CM, from: '    .sort((a, b) => b.xi - a.xi || plain(a.c, b.c))[0]?.c;', to: '    .sort((a, b) => a.xi - b.xi || plain(a.c, b.c))[0]?.c;' }],
   noholdertop: [{ file: CM, from: '  const top = holder && field.includes(holder) ? holder : undefined;', to: '  const top: string | undefined = undefined;' }],
   memokey: [{ file: CM, from: "  const key = `${state.eraId ?? ''}|${k}`;", to: "  const key = `${state.eraId ?? ''}`;" }],
+  nocustomexit: [{ file: CM, from: '    const tables = moving && watchTables ? watchTables.map(t => ({ ...t, clubs: customExitUclField(career, t.clubs) })) : watchTables;', to: '    const tables = watchTables;' }],
 });
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control ${CONTROL}`);
 const runs = n => (CONTROL ? CONTROLS[CONTROL][0] === n : ONLY.length === 0 || ONLY.includes(n));
@@ -974,6 +980,45 @@ async function localeCheck(slices) {
   console.log(`  1 device order: ${slices.length} group seasons evaluated level both ways`);
 }
 
+/** Section 1, the critic's advice 24 (the review of 2026-10-17, its minor 6): a created club in the first pyramid's
+ *  top flight finishes the season top of its table and the manager leaves it in the summer for the bottom club of
+ *  another league, which watches. The created club's place in the watched field goes back to the club it
+ *  replaced (customExitUclField, the participant's rule), never to the created club's own name. */
+async function customExitProbe() {
+  const E = await engineOf(ROOT, 'customexit', { edits: careerEdits() }, cannot);
+  if (careerEdits().length) changed = true;
+  const M = await E.fresh();
+  const top = M.cm.PYRAMIDS?.[0]?.top;
+  if (!top) cannot('no PYRAMIDS[0].top league for the created club');
+  let s = tape(0x1502, () => M.cm.startCareer(CREATED.name, 'now', { ...CREATED, leagueId: top })).value;
+  const replaced = s.customClub?.replacedClub;
+  if (!replaced) cannot('the created club in the top flight replaced nobody');
+  let over = false;
+  for (let i = 0; i < 260 && !over; i += 1) {
+    const r = tape(0x4000 + i, () => M.cm.playNextEntry(s, { skipHalftime: true, noCoach: true })).value;
+    s = r.state; over = r.kind === 'seasonOver';
+  }
+  if (!over) cannot('the created club\'s season did not end in 260 entries');
+  /* It finished top: its row's points put above everyone's, so its place is a direct one. */
+  const best = Math.max(...s.table.map(r => r.pts));
+  s = { ...s, table: s.table.map(r => (r.club === CREATED.name ? { ...r, pts: best + 30 } : r)) };
+  s = tape(0x4400, () => M.cm.finishSeason(s).state).value;
+  const tables = M.cm.uclFinalTables(s) ?? [];
+  ok(tables.find(t => t.league.id === top)?.clubs[0] === CREATED.name, `1 created exit setup: ${CREATED.name} is not top of the final ${top} table, so the probe checks nothing`);
+  /* The move: the last club of another European league's final table (it qualifies for nothing), not the club
+     the created one replaced. */
+  const other = tables.find(t => t.league.id !== top && t.clubs.length && !t.clubs.includes(replaced));
+  const to = other ? { club: other.clubs[other.clubs.length - 1] } : null;
+  if (!to) cannot('no club to move to from the created club');
+  const next = tape(0x4800, () => M.cm.startNextSeason(s, to.club)).value;
+  ok(next.clubName === to.club && !next.uclGroup, `1 created exit setup: the summer move to ${to.club} did not leave a watcher (at ${next.clubName}, uclGroup ${next.uclGroup === null ? 'null' : 'set'})`);
+  const watched = next.worldComps?.ucl?.clubs ?? [];
+  ok(watched.length > 0, `1 created exit setup: the move to ${to.club} opened no watched competition`);
+  ok(!watched.includes(CREATED.name), `1 created exit: after leaving ${CREATED.name} for ${to.club}, the watched field still lists the created club`);
+  ok(watched.includes(replaced), `1 created exit: after leaving ${CREATED.name} for ${to.club}, its place did not go back to ${replaced}, the club it replaced`);
+  console.log(`  1 created club left in the summer: ${CREATED.name} (top of ${top}, in place of ${replaced}) to ${to.club}; the watched field holds ${watched.includes(replaced) ? replaced : 'not ' + replaced}`);
+}
+
 /**
  * Section 5 (step E5): the holder. Today's world's watchers through three seasons on the engine as it is and on
  * the same engine with the holder line reverted (scripts/lib/worldUclHolder1502.mjs). Every season that ends with
@@ -1049,7 +1094,7 @@ try {
   if (runs(0)) { section0(); await section0Engine(); }
   if ([1, 3, 4, 7].some(runs)) {
     const measured = await watcherPass();
-    if (runs(1)) await localeCheck(measured.g8);
+    if (runs(1)) { await localeCheck(measured.g8); await customExitProbe(); }
     if (runs(3)) { await leagueSizes(); await joinProbe(); }
   }
   if (runs(2)) await selfRelative();
