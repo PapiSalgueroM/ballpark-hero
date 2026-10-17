@@ -1,0 +1,7 @@
+# Round1402: Soccer Career cost and one-time payment captions
+
+Status: claim only, no product edit or runtime result. Frozen final1401 base225b53b74b61499115a4afefcb2e24f191ab2b62. Actual1401TESTED5066/run39018657286 is closed/pushedREADY318; its source/public snapshots are held. This dependent round owns only the same free corruption catalog's three other strings and adapts its existing own workflow. Actual I retains engine/page/economics/save/shop/competitions and release.
+
+Event325 currently promises flat40% of hidden money but its callback also deducts5% of existing net worth. Disclose both in description and consequence. Event320choice1 promises income doubles but only adds2M dirty once; say that amount and the existing25heat. Every callback, flag, guard, amount, RNG and all315copy remain unchanged by whole3spaninverse. Existing saved pending captions are not migrated and no NBA or direct target runtime claim is made.
+
+Outside sourceplan1eecd9fc pins original31574B/299485b3 and candidate31602B/c7df3ef9, with the whole inverse. No new mirror-copy tests. Existing18units,40currency pairs,default500normal+500oneoption,actualtypes/normalbuild15readers14fatalweights and fullholds run remotely. The fresh1401snapshot is held, noSEOinputchanges and no generator needed; every tracked source body must remain unchanged by validation and generated delta must be empty. Plainbuild has no external font prerender requests, so its transport must be empty; existingofflineweightblocks are retained. No source guard, cap or runtime method waiver.

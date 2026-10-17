@@ -1,3 +1,7 @@
+## Codex1402 claimed, 2026-10-17 UTC
+
+Three more Soccer Career cost/payment captions only, on closed final1401 base225b. No product edit or runtime yet. Existing I-owned gameplay stays held; no saved-caption migration. See docs/audits/soccer-corruption-cost-copy-1402.md. Urgent308 and the active release remain independent.
+
 ## Codex1401 scoped READY, 2026-10-17 UTC
 
 PR318 corrects three Soccer Career cash-business captions; actual tested5066fe9239d6bfb848e79cade8b62ecacacc2ad9/run39018657286/job117355854956 SUCCESS on I8293. Code stays whole by exact inverse. Eighteen units,40currency pairs,500career normal/effective500career oneoption control,types/serialbuild/all15readers/all14fatalcaps and source/installed/font/dist holds pass. Physical19cf6cf4/semanticdc7b3676 (102/0) close artifact12095692466/a49f504e,4871source/784dist bodies. Actual3generated bodies adopted23d1e0e1; final is3closingdocs beyond that, not docs-only from tested request. Outside source closure and push receipt bind the final head. Existing saved captions are not migrated; no direct315 parity or NBA fix. BIIactualTESTED realmerge, closingdocsseparate, I regenerates joined output. Urgent308 remains independent. Main1ec/release829 and raw liveBQU remain at08:56UTC. BIdmissing alert handed to I, no root gate dispatch. See docs/audits/soccer-cash-choice-1401.md.
