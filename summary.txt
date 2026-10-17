@@ -1,0 +1,6 @@
+headsha exit=0 0s | ff42f7e19 Round BII: PR287's desk test reads a fresh appointment's board at Round 1335's BOARD_FRESH, not the old flat 62
+wf286x exit=1 223s | wfrun career-pending-popularity-gates.yml: 8 steps ran, 1 failed: Complete build and all rebuilt-site readers
+wf302x exit=1 231s | wfrun career-pending-money-gates.yml: 13 steps ran, 5 failed: Bind source and locked dependencies | Complete build and all rebuilt-site readers | Unchanged full route wei
+wf288 exit=1 278s | wfrun career-life-stories.yml: 10 steps ran, 5 failed: Retain exact source and install locked packages | Fixed phase browser and build dependencies | Fixed phase served p
+wf289x exit=1 338s | wfrun career-phone-season-budget.yml: 10 steps ran, 5 failed: Bind source and locked dependencies | Build tools | Complete build and all rebuilt-site readers | Unchanged 
+wf297x exit=1 340s | wfrun career-phone-state-isolation.yml: 11 steps ran, 5 failed: Bind source and locked dependencies | Build tools | Complete build and all rebuilt-site readers | Unchange

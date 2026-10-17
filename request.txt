@@ -1,0 +1,14 @@
+# Release BI, part three (Round BII, finish-BII.md), Soccer Career packets: PR286 (75abee82), PR302 (63573c16), PR288 (a32e8017), PR289 (c40ea5d8) and PR297 (321bad0d), merged as m12 6db4f3e0, m13 5a8acc15, m15 d7b7fffc, m16 ae02832c, m17 57d82b0a.
+# Each line runs that packet's OWN workflow step by step through .rc/x/wfrun.mjs, with every base bound to THIS tree minus exactly that packet:
+#   wf286x: SC_PENDING_POPULARITY_BASE = .rc/x/lifeMinus.sh 286 (keeps PR302's four money conditions and PR280's captions). wf302x: SC_PENDING_MONEY_BASE = lifeMinus.sh 302 (keeps PR286's eleven), and its frozen PR286 arms take lifeMinus.sh 286.
+#   wf289x: PHONE_BUDGET_BASE = .rc/x/phoneMinus.sh 289 (removes only the four budget lines, keeps PR297's copies, the packet's own recipe). wf297x: PHONE_ISOLATION_BASE = phoneMinus.sh 297.
+#   wf288: no base (its d4f2c6f6 PhonePanel still equals this tree's without PR288); GITHUB_REF_NAME is set to the packet's branch because its first step checks it.
+# Send with x/wfrun.mjs x/lifeMinus.sh x/phoneMinus.sh. Serial for the same reasons as rc-BIi. KNOWN: the weight steps fail on the three Club Manager engine routes (the lead's budgets); simPhone2's inherited 52KB cap is not in these workflows (it stays red in rcg, about 98.9KB).
+# The Life chain lanes rc-BFa, rc-BFb and rc-BHb read Life refs through x/lifeBH.sh, which since Round BII also applies PR286's and PR302's Life patches to each historical parent when this tree carries them (on a tree without them it prints the Release BH shas), and rc-BHb's life-original-ctl takes LIFE_ORIGINAL_BASE from it with LIFEBH_NO_CAPTIONS=1.
+#!serial
+headsha: git log --oneline -3
+wf286x: P=$(bash .rc/x/lifeMinus.sh 286) || exit 2; echo "base $P"; node .rc/x/wfrun.mjs .github/workflows/career-pending-popularity-gates.yml --set SC_PENDING_POPULARITY_BASE=$P
+wf302x: M=$(bash .rc/x/lifeMinus.sh 302) || exit 2; P=$(bash .rc/x/lifeMinus.sh 286) || exit 2; echo "302 base $M 286 base $P"; node .rc/x/wfrun.mjs .github/workflows/career-pending-money-gates.yml --set SC_PENDING_MONEY_BASE=$M --set SC_PENDING_POPULARITY_BASE=$P
+wf288: node .rc/x/wfrun.mjs .github/workflows/career-life-stories.yml --set GITHUB_REF_NAME=codex/career-life-stories
+wf289x: P=$(bash .rc/x/phoneMinus.sh 289) || exit 2; echo "base $P"; node .rc/x/wfrun.mjs .github/workflows/career-phone-season-budget.yml --set PHONE_BUDGET_BASE=$P
+wf297x: Q=$(bash .rc/x/phoneMinus.sh 297) || exit 2; echo "base $Q"; node .rc/x/wfrun.mjs .github/workflows/career-phone-state-isolation.yml --set PHONE_ISOLATION_BASE=$Q
