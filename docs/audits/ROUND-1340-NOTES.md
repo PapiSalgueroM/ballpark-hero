@@ -31,6 +31,13 @@ The brief is C:/Users/antho/dukb-handoff/2026-10-10/briefs/brief-1340.md. This f
   order drawn) plus a new away case, managerHalftimeLineups (the venue's order), playClubManager (reads the half time
   card's venue word). simCmMatchDay section 4 and the live half of section 7; the fleet now loads the era squads
   first (ensureAllEraRosters), which is why the a2 run could not start Everton 2005-06.
+- a4. The hub's next match card names the home side first (myClubFirst on the fixture's home), your club in green
+  wherever it sits, the stadium mark kept in front on a neutral ground and the venue line unchanged; the names carry
+  data-cm-next-side and the line data-cm-next-match. The Match Centre's tie (two name blocks, your colour dot kept
+  beside your name and toward VS), the form rows and the two Ones to watch columns are home side first, each side
+  marked data-cm-mc-side; the venue line, the first leg sentence, the odds and the meetings are unchanged.
+  playCmLeagueFixtures reads the card as "<home> vs <away> <venue>". simCmMatchDay section 5 (the Match Centre, with
+  oldorder firing there too) and the home and neutral Match Centres in section 7.
 - confidenceLabel (src/lib/clubManager.ts) has no caller in src after a2. It is dead code; the export stays, because
   clubManager.ts is not this round's file.
 

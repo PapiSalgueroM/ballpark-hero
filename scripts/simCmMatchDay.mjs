@@ -25,15 +25,20 @@
         data-cm-score-of), the interval card, the stats (header, possession, every cell by data-cm-live-stat-n) and
         the line under the pitch are home side first, and HalftimeScreen rendered alone prints its names and score
         in the same order.
+     5) The Match Centre: matchFacts read before every league match of seed 0's careers and before every neutral
+        one, rendered. The tie's two name blocks, the two form rows and the two "Ones to watch" columns (each
+        marked data-cm-mc-side) are home side first and each holds its own side's names and form; the odds still
+        read Win, Draw, They win, in that order. Floors: 40 home, 40 away, 3 neutral, 40 with ones to watch.
      7) A home match reads as before: on every home and neutral match the card's visible text, in document order,
         equals the card at MATCHDAY_BASE (the round's files as they were at the base, everything else this tree's),
-        with only the board word masked (it now says what the header's meter says); and every live frame of a home
-        match, and the dressing room alone, reads exactly as at the base.
+        with only the board word masked (it now says what the header's meter says); every live frame of a home
+        match, and the dressing room alone, reads exactly as at the base; and so does every home and neutral
+        Match Centre.
 
    Negative controls (MATCHDAY_CONTROL=...), each asserting its anchor first, printing how often it fired:
      neutralaway  myClubFirst answers false for a neutral ground. Section 1 must go red on every neutral match.
      oldorder     myClubFirst and mineFirstOfReport answer true always, the screens before this round. Sections 2,
-                  3 and 4 must go red on away matches and stay green on home and neutral ones.
+                  3, 4 and 5 must go red on away matches and stay green on home and neutral ones.
      truncate     the timeline's name span is cut again. Section 3 must go red.
      homeflip     my club is drawn second at home. Section 7 must go red.
 
@@ -56,7 +61,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.MATCHDAY_CONTROL || '';
-const CONTROLS = { neutralaway: [1], oldorder: [2, 3, 4], truncate: [3], homeflip: [7] };
+const CONTROLS = { neutralaway: [1], oldorder: [2, 3, 4, 5], truncate: [3], homeflip: [7] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`MATCHDAY_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 const BASE = process.env.MATCHDAY_BASE || 'd8aaa4cb';
 const lf = s => s.replaceAll('\r\n', '\n');
@@ -160,6 +165,8 @@ export { LiveSimScreen as HeadLive } from '@/components/club-manager/LiveSimScre
 export { LiveSimScreen as BaseLive } from '${baseCopies['components/club-manager/LiveSimScreen']}';
 export { HalftimeScreen as HeadHalf } from '@/components/club-manager/HalftimeScreen';
 export { HalftimeScreen as BaseHalf } from '${baseCopies['components/club-manager/HalftimeScreen']}';
+export { MatchCentre as HeadCentre } from '@/components/club-manager/MatchCentre';
+export { MatchCentre as BaseCentre } from '${baseCopies['components/club-manager/MatchCentre']}';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 export const render = (Component, props) => renderToStaticMarkup(React.createElement(Component, props));
@@ -176,7 +183,7 @@ try {
 }
 const store = new Map();
 globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
-const { cm, order, HeadCard, BaseCard, HeadLive, BaseLive, HeadHalf, BaseHalf, render } = createRequire(import.meta.url)(BUNDLE);
+const { cm, order, HeadCard, BaseCard, HeadLive, BaseLive, HeadHalf, BaseHalf, HeadCentre, BaseCentre, render } = createRequire(import.meta.url)(BUNDLE);
 /* Round 832: a historic era's squads load with the era, so the fleet fetches them all first (simExtraTime does the
    same); without it Everton 2005-06 cannot start. */
 await cm.ensureAllEraRosters();
@@ -204,6 +211,7 @@ const NEUTRAL_WALK = [['Real Madrid', undefined], ['Man City', undefined], ['Bay
   ['Barcelona', 'era2005'], ['PSG', undefined], ['Inter', undefined], ['Arsenal', undefined]];
 const matches = [];
 const lives = [];
+const centres = [];
 let unpaired = 0;
 let careersStarted = 0;
 /* Every fifth league match of the fleet is also kicked off live, from the same state on a seed of its own (the
@@ -240,6 +248,10 @@ function playSeason(club, era, seed, keep, live = false) {
   for (let guard = 1; guard < 200; guard++) {
     let fx = null;
     try { fx = cm.nextFixture(s); } catch { fx = null; }
+    /* Section 5's Match Centre: the facts before every league match of seed 0's careers and before every neutral
+       one, read off the same state the match is then played from. */
+    const wantFacts = fx && fx.kind === 'match' && ((live && seed === 0 && fx.competition === 'league') || fx.home === null);
+    const facts = wantFacts ? withSeed(seed * 6007 + guard, () => cm.matchFacts(s)) : null;
     const res = withSeed(seed * 104729 + guard * 31 + 5, () => cm.playNextEntry(s, { skipHalftime: true }));
     if (!res || !res.state) break;
     if (res.kind === 'match' && res.report) {
@@ -248,6 +260,7 @@ function playSeason(club, era, seed, keep, live = false) {
       if (!fx || fx.kind !== 'match' || fx.opponent !== opp) unpaired += 1;
       else if (keep(fx.home)) {
         matches.push({ club, era: era ?? 'now', seed, fxHome: fx.home, report: r });
+        if (facts) centres.push({ club, era: era ?? 'now', seed, fxHome: fx.home, report: r, facts });
         if (live && fx.competition === 'league' && leagueSeen++ % 5 === 0) {
           const L = liveFrames(s, club, fx.home, seed * 7121 + guard * 13 + 3);
           if (L) lives.push({ ...L, era: era ?? 'now', seed });
@@ -485,6 +498,70 @@ for (const L of lives) {
 }
 console.log(`   ${redBy[4]?.checked ?? 0} live matches (${Object.entries(stagesSeen).map(([k, v]) => `${v} ${k}`).join(', ')}); red: ${redBy[4]?.home ?? 0} home, ${redBy[4]?.away ?? 0} away, ${redBy[4]?.neutral ?? 0} neutral`);
 
+/* ---------- 5. the Match Centre ---------- */
+console.log('5) The Match Centre: the tie, the form rows and the ones to watch home side first; the odds still Win, Draw, They win');
+const centreProps = C => ({
+  career: C.career ?? null, facts: C.facts, clubColor: '#ffffff', tone: null, onTone: noop, talkRead: null,
+  talkStale: false, onQuickSim: noop, onLive: noop, onBack: noop,
+});
+/** The visible text of the element whose opening tag starts at idx (a div or a span), its own tags matched. */
+function elementText(html, idx) {
+  const tag = /^<(div|span)\b/.exec(html.slice(idx))?.[1];
+  if (!tag) return null;
+  const rx = new RegExp(`<${tag}\\b[^>]*>|</${tag}>`, 'g');
+  rx.lastIndex = idx;
+  let depth = 0;
+  let m;
+  while ((m = rx.exec(html))) {
+    if (m[0] === `</${tag}>`) { depth -= 1; if (depth === 0) return visible(html.slice(idx, rx.lastIndex)); } else depth += 1;
+  }
+  return null;
+}
+const centreCounts = { home: 0, away: 0, neutral: 0, watch: 0 };
+for (const C of centres) {
+  const me = C.fxHome !== false;
+  const f = C.facts;
+  const p = [];
+  if (!f) { p.push('matchFacts gave nothing before a match'); judge(5, C, p); continue; }
+  if (f.home !== C.fxHome || f.opponent !== (C.report.home === C.club ? C.report.away : C.report.home)) p.push(`the facts name ${f.opponent} (${f.home}), the fixture said ${C.fxHome}`);
+  C.career = { clubName: C.club };
+  const html = render(HeadCentre, centreProps(C));
+  C.html = html;
+  centreCounts[venueOf(C)] += 1;
+  const first = me ? 'me' : 'opp';
+  const second = me ? 'opp' : 'me';
+  const sides = [...html.matchAll(/<(div|span)\b[^>]*data-cm-mc-side="(me|opp)"/g)].map(x => ({ side: x[2], idx: x.index }));
+  const watch = f.myDanger.length > 0 || f.oppDanger.length > 0;
+  if (watch) centreCounts.watch += 1;
+  const wantSides = watch ? [first, second, first, second, first, second] : [first, second, first, second];
+  if (!same(sides.map(x => x.side), wantSides)) p.push(`the sides read ${sides.map(x => x.side).join(' ')}`);
+  else {
+    const textOf = side => ({ me: C.club, opp: f.opponent })[side];
+    const tie = sides.slice(0, 2).map(x => /<div[^>]*>([^<]*)<\/div>/.exec(html.slice(x.idx + 1))?.[1]).map(t => t && unescape(t));
+    if (!same(tie, [textOf(first), textOf(second)])) p.push(`the tie reads ${tie.join(' v ')}`);
+    const formOf = side => (side === 'me' ? f.myForm : f.oppForm);
+    for (const [i, x] of sides.slice(2, 4).entries()) {
+      const shown = elementText(html, x.idx);
+      const form = formOf(x.side);
+      /* The second row is drawn reversed (flex-row-reverse), so its text is the form in order either way. */
+      const want = form.length ? form.join(' ') : 'No matches yet';
+      if (shown !== want) p.push(`form row ${i + 1} (${x.side}) reads "${shown}", not "${want}"`);
+    }
+    if (watch) {
+      for (const x of sides.slice(4, 6)) {
+        const shown = elementText(html, x.idx);
+        const names = x.side === 'me' ? f.myDanger.map(n => `⚽ ${n}`) : f.oppDanger.map(n => `⚠️ ${n}`);
+        const want = names.length ? names.join(' ') : '-';
+        if (shown !== want) p.push(`the ${x.side} ones to watch read "${shown}", not "${want}"`);
+      }
+    }
+  }
+  if (!/Win \d+% Draw \d+% They win \d+%/.test(visible(html))) p.push('the odds no longer read Win, Draw, They win in that order');
+  judge(5, C, p);
+}
+console.log(`   ${redBy[5]?.checked ?? 0} Match Centres (${centreCounts.home} home, ${centreCounts.away} away, ${centreCounts.neutral} neutral, ${centreCounts.watch} with ones to watch); red: ${redBy[5]?.home ?? 0} home, ${redBy[5]?.away ?? 0} away, ${redBy[5]?.neutral ?? 0} neutral`);
+if (centreCounts.home < 40 || centreCounts.away < 40 || centreCounts.neutral < 3 || centreCounts.watch < 40) cannotRun('section 5 read under 40 home, 40 away, 3 neutral or 40 Match Centres with ones to watch: widen the sample, never lower a floor');
+
 /* ---------- 7. a home match reads as before ---------- */
 console.log('7) A home or neutral match: the card\'s visible text equals the base\'s, the board word masked');
 const maskBoard = html => html.replace(/(>Board<\/div><div[^>]*>[\s\S]*?<\/span><\/div><div[^>]*>)[^<]*(<\/div>)/, '$1#$2');
@@ -519,7 +596,19 @@ for (const L of lives) {
   }
   judge(7, m, p);
 }
-console.log(`   ${redBy[7].checked} home and neutral matches compared with ${BASE} (${liveCompared} live screens among them); red: ${redBy[7].home} home, ${redBy[7].neutral} neutral`);
+/* And every home and neutral Match Centre. */
+let centresCompared = 0;
+for (const C of centres) {
+  if (C.fxHome === false || !C.html) continue;
+  centresCompared += 1;
+  const head = visible(C.html);
+  const base = visible(render(BaseCentre, centreProps(C)));
+  if (head === base) { judge(7, C, []); continue; }
+  let i = 0;
+  while (i < head.length && head[i] === base[i]) i += 1;
+  judge(7, C, [`the Match Centre differs from the base at "${head.slice(Math.max(0, i - 30), i + 40)}" against "${base.slice(Math.max(0, i - 30), i + 40)}"`]);
+}
+console.log(`   ${redBy[7].checked} home and neutral screens compared with ${BASE} (${liveCompared} live screens and ${centresCompared} Match Centres among them); red: ${redBy[7].home} home, ${redBy[7].neutral} neutral`);
 
 /* ---------- the verdict ---------- */
 const redSections = [...failures.keys()].sort((a, b) => a - b);
