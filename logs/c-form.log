@@ -1,0 +1,21 @@
+  2 self relative: 30 journeys, 3702 steps each arm, 19 journeys carried a slice, 242 s
+FAIL 2 participant Arsenal (era2010) nocoach seed 1 at s2-e4: the state differs
+FAIL 2 watcher Chelsea (now) nocoach seed 1 at s1-e4: the state differs
+FAIL 2 watcher Chelsea (now) coach seed 1 at s1-e4: the state differs
+FAIL 2 watcher Hoffenheim (now) nocoach seed 1 at s1-e4: the state differs
+FAIL 2 watcher Hoffenheim (now) coach seed 1 at s1-e4: the state differs
+FAIL 2 watcher Everton (now) nocoach seed 1 at s1-e4: the state differs
+FAIL 2 watcher Everton (now) coach seed 1 at s1-e4: the state differs
+FAIL 2 watcher América (now) nocoach seed 1 at s1-e4: the state differs
+FAIL 2 watcher América (now) coach seed 1 at s1-e4: the state differs
+FAIL 2 watcher Proof Town Athletic (now) nocoach seed 1 at s1-e4: the state differs
+FAIL 2 watcher Proof Town Athletic (now) coach seed 1 at s1-e4: the state differs
+FAIL 2 watcher Wigan Athletic (era2005) nocoach seed 1 at s1-e4: the state differs
+FAIL 2 watcher Wigan Athletic (era2005) coach seed 1 at s1-e4: the state differs
+FAIL 2 watcher Wolves (era2010) nocoach seed 1 at s1-e4: the state differs
+FAIL 2 watcher Wolves (era2010) coach seed 1 at s1-e4: the state differs
+FAIL 2 watcher West Ham (era2015) nocoach seed 1 at s1-e4: the state differs
+FAIL 2 watcher West Ham (era2015) coach seed 1 at s1-e4: the state differs
+FAIL 2 watcher Sheffield United (era2020) nocoach seed 1 at s1-e4: the state differs
+FAIL 2 watcher Sheffield United (era2020) coach seed 1 at s1-e4: the state differs
+simWorldUcl: control form FIRED (19 failures, all its own)

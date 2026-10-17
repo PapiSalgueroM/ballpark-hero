@@ -1,0 +1,8 @@
+c-stream: WORLD_UCL_SEEDS=1 WORLD_UCL_CONTROL=stream node scripts/simWorldUcl.mjs
+c-participant: WORLD_UCL_SEEDS=1 WORLD_UCL_CONTROL=participant node scripts/simWorldUcl.mjs
+c-form: WORLD_UCL_SEEDS=1 WORLD_UCL_CONTROL=form node scripts/simWorldUcl.mjs
+c-ahead: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=ahead node scripts/simWorldUcl.mjs
+c-live: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=live node scripts/simWorldUcl.mjs
+c-noseen: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=noseen node scripts/simWorldUcl.mjs
+c-marks: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=marks node scripts/simWorldUcl.mjs
+c-keep: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=keep node scripts/simWorldUcl.mjs

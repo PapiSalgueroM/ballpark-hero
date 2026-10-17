@@ -1,0 +1,56 @@
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020); seeds 1,2,3
+  1 and 3: 27 journeys in 86 s
+  7 goals a watched match NaN (0 matches); a domestic league match 2.627
+  7 ties 0: to extra time NaN percent, to penalties NaN percent
+  4 slice bytes g8: 35 seasons, mean 613, smallest 590, largest 641
+  4 slice bytes l36: 38 seasons, mean 1424, smallest 1395, largest 1458
+  3 league sizes: now 10, now 12, now 14, now 15, now 16, now 18, now 20, now 24, era2005 18, era2005 20, era2010 18, era2010 20, era2015 18, era2015 20, era2020 18, era2020 20
+  3 move probe: 112 moves that carried the slice, 7 of them onto a calendar behind the old one
+  1 seasons in the Champions League (not watched): 10
+  1 seasons where exclude took out a direct entrant (a summer move): 3
+  3 date checks g8: 47
+  3 date checks l36: 53
+  3 joins that carried the slice: 11
+  3 joins that dropped the slice: 2
+  3 states checked: 3174
+FAIL 3 dates: Chelsea (now) seed 1 start: SF2 on 2027-4-21 is not after SF1
+FAIL 3 dates: Chelsea (now) seed 1 start: the two legs of SF are 0 days apart
+FAIL 3 dates: Chelsea (now) seed 1 s1-join: SF2 on 2027-4-14 is not after SF1
+FAIL 3 dates: Chelsea (now) seed 1 s1-join: the two legs of SF are 0 days apart
+FAIL 3 dates: Chelsea (now) seed 1 s1-rollover: SF2 on 2028-4-12 is not after SF1
+FAIL 3 dates: Chelsea (now) seed 1 s1-rollover: the two legs of SF are 0 days apart
+FAIL 3 dates: Chelsea (now) seed 1 s2-rollover: SF2 on 2029-4-18 is not after SF1
+FAIL 3 dates: Chelsea (now) seed 1 s2-rollover: the two legs of SF are 0 days apart
+FAIL 3 dates: Chelsea (now) seed 2 start: SF2 on 2027-4-21 is not after SF1
+FAIL 3 dates: Chelsea (now) seed 2 start: the two legs of SF are 0 days apart
+FAIL 3 dates: Chelsea (now) seed 2 s1-join: SF2 on 2027-4-14 is not after SF1
+FAIL 3 dates: Chelsea (now) seed 2 s1-join: the two legs of SF are 0 days apart
+FAIL 3 dates: Chelsea (now) seed 2 s1-rollover: SF2 on 2028-4-12 is not after SF1
+FAIL 3 dates: Chelsea (now) seed 2 s1-rollover: the two legs of SF are 0 days apart
+FAIL 3 dates: Chelsea (now) seed 2 s2-rollover: SF2 on 2029-4-18 is not after SF1
+FAIL 3 dates: Chelsea (now) seed 2 s2-rollover: the two legs of SF are 0 days apart
+FAIL 3 dates: Chelsea (now) seed 3 start: SF2 on 2027-4-21 is not after SF1
+FAIL 3 dates: Chelsea (now) seed 3 start: the two legs of SF are 0 days apart
+FAIL 3 dates: Chelsea (now) seed 3 s2-rollover: SF2 on 2029-4-25 is not after SF1
+FAIL 3 dates: Chelsea (now) seed 3 s2-rollover: the two legs of SF are 0 days apart
+FAIL 3 dates: Hoffenheim (now) seed 1 start: SF2 on 2027-4-14 is not after SF1
+FAIL 3 dates: Hoffenheim (now) seed 1 start: the two legs of SF are 0 days apart
+FAIL 3 dates: Hoffenheim (now) seed 1 s1-join: SF2 on 2027-4-21 is not after SF1
+FAIL 3 dates: Hoffenheim (now) seed 1 s1-join: the two legs of SF are 0 days apart
+FAIL 3 dates: Hoffenheim (now) seed 1 s2-rollover: SF2 on 2029-5-30 is not after SF1
+FAIL 3 dates: Hoffenheim (now) seed 1 s2-rollover: the two legs of SF are 0 days apart
+FAIL 3 dates: Hoffenheim (now) seed 2 start: SF2 on 2027-4-14 is not after SF1
+FAIL 3 dates: Hoffenheim (now) seed 2 start: the two legs of SF are 0 days apart
+FAIL 3 dates: Hoffenheim (now) seed 2 s1-join: SF2 on 2027-4-21 is not after SF1
+FAIL 3 dates: Hoffenheim (now) seed 2 s1-join: the two legs of SF are 0 days apart
+FAIL 3 dates: Hoffenheim (now) seed 2 s2-rollover: SF2 on 2029-4-25 is not after SF1
+FAIL 3 dates: Hoffenheim (now) seed 2 s2-rollover: the two legs of SF are 0 days apart
+FAIL 3 dates: Hoffenheim (now) seed 3 start: SF2 on 2027-4-14 is not after SF1
+FAIL 3 dates: Hoffenheim (now) seed 3 start: the two legs of SF are 0 days apart
+FAIL 3 dates: Hoffenheim (now) seed 3 s1-rollover: SF2 on 2028-4-12 is not after SF1
+FAIL 3 dates: Hoffenheim (now) seed 3 s1-rollover: the two legs of SF are 0 days apart
+FAIL 3 dates: Hoffenheim (now) seed 3 s2-rollover: SF2 on 2029-4-18 is not after SF1
+FAIL 3 dates: Hoffenheim (now) seed 3 s2-rollover: the two legs of SF are 0 days apart
+FAIL 3 dates: Everton (now) seed 1 start: SF2 on 2027-4-21 is not after SF1
+FAIL 3 dates: Everton (now) seed 1 start: the two legs of SF are 0 days apart
+simWorldUcl: control marks FIRED (114 failures, all its own)

@@ -1,0 +1,17 @@
+  2 self relative: 30 journeys, 3702 steps each arm, 30 journeys carried a slice, 244 s
+FAIL 2 participant Real Madrid (now) nocoach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Real Madrid (now) coach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (now) coach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2005) nocoach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2005) coach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2010) nocoach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2010) coach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2015) nocoach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Arsenal (era2015) coach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Manchester City (era2020) nocoach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 participant Manchester City (era2020) coach seed 1 at start: a state in the Champions League carries worldComps; the state differs
+FAIL 2 watcher Hoffenheim (now) nocoach seed 1 at s1-rollover: a state in the Champions League carries worldComps; the state differs
+FAIL 2 watcher Hoffenheim (now) coach seed 1 at s1-rollover: a state in the Champions League carries worldComps; the state differs
+FAIL 2 watcher América (now) nocoach seed 1 at s1-rollover: a state in the Champions League carries worldComps; the state differs
+simWorldUcl: control participant FIRED (15 failures, all its own)
