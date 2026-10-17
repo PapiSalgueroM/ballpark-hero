@@ -909,7 +909,7 @@ export function TacticsScreen({
             )}
           </div>
           <p className="text-[9px] text-muted-foreground mb-2">
-            Tap a man to add him next, tap him again to take him off. At the whistle your men step up in this order, anyone off the pitch is skipped, anyone you left out follows by shirt number with the keeper last, and after five each it is sudden death round the eleven. Leave it empty and it stays one draw that leans toward the stronger side; with a list only the takers and the keepers count, which suits an underdog more than a favourite.
+            Tap a man to add him next, tap him again to take him off. At the whistle your men step up in this order, anyone off the pitch is skipped, anyone you left out follows in the order of your eleven with the keeper last, and after five each it is sudden death round the eleven. Leave it empty and it stays one draw that leans toward the stronger side; with a list only the takers and the keepers count, which suits an underdog more than a favourite.
           </p>
           {shootoutOrder.length > 0 ? (
             <div className="flex flex-wrap gap-1 mb-2" data-cm-so-list="1">

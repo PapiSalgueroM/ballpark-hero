@@ -22,7 +22,7 @@ import { generatedLeagueCountClauses, generatedLeagueMonthClause } from '@/data/
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { inboxTile, kittyChange, leagueTileValue, recordLine } from '@/lib/clubManagerHubLines';
-import { myClubFirst } from '@/lib/cmMatchDisplay';
+import { myClubFirst, pitchName } from '@/lib/cmMatchDisplay';
 import { BOARD_EDGE, boardMeter } from '@/lib/clubManagerMeters';
 import { STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
 import { deskOf } from '@/lib/clubManagerDecisions';
@@ -1245,7 +1245,7 @@ const ClubManager = () => {
                 value={`${c.squad.reduce((n, p) => n + p.seasonGoals, 0)} goals`}
                 sub={(() => {
                   const ts = [...c.squad].sort((a, b) => b.seasonGoals - a.seasonGoals)[0];
-                  return ts && ts.seasonGoals > 0 ? `${ts.name} leads with ${ts.seasonGoals}` : 'Goals, assists, ratings';
+                  return ts && ts.seasonGoals > 0 ? `${pitchName(ts.name)} leads with ${ts.seasonGoals}` : 'Goals, assists, ratings';
                 })()}
                 onClick={() => setHubPanel('stats')}
               />

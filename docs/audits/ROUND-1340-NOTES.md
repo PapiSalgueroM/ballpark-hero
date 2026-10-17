@@ -85,3 +85,14 @@ the league table's goals pair, not a match screen.
   live help's surname bullet and the What's New entry extended in the same commit. simCmMatchDay section 6 with
   control numbers; section 7 masks the pitch labels. playLiveMatchFit holds 320 to LABELS_BEFORE_320's ceiling and
   every size to no label beginning with a digit, controls widelabels and digits.
+- b4: the hub's Stats tile prints the leader's pitch name (`${pitchName(ts.name)} leads with ...`); the help's
+  shootout sentence and the Tactics tab's (TacticsScreen.tsx, the shootout order note) both now say "anyone you
+  left out follows in the order of your eleven with the keeper last": the tab lists the eleven in xiIds order
+  (slot order) and shootoutTakerOrder takes the men not listed in onPitch order, which is slot order, keeper last.
+  playCmMatchDay save D: Eintracht Frankfurt with Ayoube Amaimouni-Echghouyab (pitch name Amaimouni-Echghouyab, the
+  longest in the pool at 20 characters, printed by cmMatchDisplay.test.ts) on 12 goals, a LAYOUT PLANT so he leads
+  the tile; at 320 the tile must read "Amaimouni-Echghouyab leads with 12" on at most two lines; control fullname.
+- Pitch name list (b1's unit file prints every real name whose pitch name differs from the old last word, 190 of
+  9337): no first name alone is produced. The agnome names print as ruled ("Pedro Neto", "José Neto", "Martim
+  Neto", "Carlos Júnior", "Luiz Júnior", "Mauro Júnior", "Roque Júnior", "Vinicius Junior", "Robinho Junior",
+  "Amoako Junior"); the generational suffixes drop ("Cásseres", "Markanich", "Eremenko").

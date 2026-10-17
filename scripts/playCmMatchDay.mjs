@@ -8,6 +8,9 @@
      B  the same career on to its next home league match.
      C  a final next, on a neutral ground (a strong club's season walked to its cup or European final).
      E  an away second leg (pictures only, no assertion: the reviewers judge the aggregate line by eye).
+     D  (Round 1340b) the hub's Stats tile at 320: Eintracht Frankfurt with Ayoube Amaimouni-Echghouyab, whose
+        pitch name is the longest in the pool, on 12 goals (a layout plant) so he leads it. The tile's line must
+        read his pitch name ("Amaimouni-Echghouyab leads with 12") and wrap to at most two lines.
    At 320 by 640, 390 by 844 and 1280 by 900, and again at 390 with reduced motion, each of A, B and C is walked:
    the hub's next match card, the Match Centre, Play Live (the strip, the score's digits, the line under the
    pitch at 320 and 390 and the full stats at 1280), Skip to the interval (the interval card and the dressing
@@ -26,6 +29,8 @@
      swap  the hub card's two names are swapped in the DOM after both are found: the order check must go red.
      cut   nowrap, overflow hidden and an ellipsis on [data-cm-tl-name]: the whole name check must go red.
      jump  the window is scrolled 300 px inside the report's settle step: the jump check must go red.
+     fullname  (save D at 320 only) the Stats tile's line is set to his whole name in the DOM after the tile is
+           found: the two line check must go red.
    With MATCHDAY_COMPARE_DIST=<a served build of the round's base> the walk instead compares builds (the brief's
    step a6): A, B and C at the three sizes walked by the same taps on the head and on the base, Math.random seeded
    at load and again on every tap and the clock fixed, so both builds draw the same matches. Text nodes under 12 px
@@ -52,7 +57,7 @@ const WORK = path.join(os.tmpdir(), `cmMatchDayEngine.${process.pid}`);
 const KEY = 'dukb-club-manager-save';
 const NOW = Date.parse('2026-10-16T16:00:00Z');
 const CONTROL = process.env.PLAY_MATCHDAY_CONTROL || '';
-const CONTROLS = ['swap', 'cut', 'jump'];
+const CONTROLS = ['swap', 'cut', 'jump', 'fullname'];
 const SIZES_ALL = [[320, 640], [390, 844], [1280, 900]];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`PLAY_MATCHDAY_CONTROL=${CONTROL} is not a control this walk knows`); process.exit(2); }
 const cannotRun = m => { console.error(`playCmMatchDay could not run: ${m}`); process.exit(2); };
@@ -61,7 +66,7 @@ fs.mkdirSync(OUT, { recursive: true });
 fs.mkdirSync(WORK, { recursive: true });
 
 const failures = [];
-const fired = { swap: 0, cut: 0, jump: 0 };
+const fired = { swap: 0, cut: 0, jump: 0, fullname: 0 };
 let checks = 0;
 const check = (ok, what) => { checks += 1; if (!ok) { failures.push(what); if (failures.length <= 40) console.error(`  FAIL: ${what}`); } return ok; };
 
@@ -130,6 +135,20 @@ for (const club of ['Real Madrid', 'Man City', 'Bayern Munich', 'Liverpool', 'Ba
 if (e) saves.push(plant('E', e, false));
 else console.log('no away second leg found: save E (pictures only) is left out');
 for (const s of saves) console.log(`save ${s.name}: ${s.club} against ${s.opponent} (${s.compLabel}), ${s.fxHome === null ? 'neutral' : s.fxHome ? 'home' : 'away'}, ${s.raw.length} bytes`);
+/* D (Round 1340b): the hub's Stats tile at 320 with the longest pitch name in the pool leading the scoring.
+   src/lib/cmMatchDisplay.test.ts prints that name over the whole pool (r1340-x1: Amaimouni-Echghouyab, 20
+   characters, Eintracht Frankfurt's Ayoube Amaimouni-Echghouyab). His 12 goals are a LAYOUT PLANT, set on the
+   save so he leads the tile; nothing else in the save moves. */
+const TILE_CLUB = 'Eintracht Frankfurt', TILE_MAN = 'Ayoube Amaimouni-Echghouyab', TILE_GOALS = 12;
+const displayBundle = path.join(WORK, 'display.mjs');
+await build({ entryPoints: [path.join(ROOT, 'src/lib/cmMatchDisplay.ts')], bundle: true, platform: 'node', format: 'esm', outfile: displayBundle, logLevel: 'error' });
+const display = await import(pathToFileURL(displayBundle).href);
+const dState = start(TILE_CLUB, 300);
+const dMan = dState?.squad.find(p => p.name === TILE_MAN);
+if (!dMan) cannotRun(`${TILE_MAN} is not in ${TILE_CLUB}'s squad at the start of a career`);
+dMan.seasonGoals = TILE_GOALS;
+const saveD = { name: 'D', raw: JSON.stringify(cm.trimCareer(dState)), club: TILE_CLUB, man: TILE_MAN, line: `${display.pitchName(TILE_MAN)} leads with ${TILE_GOALS}` };
+console.log(`save D: ${TILE_CLUB} with ${TILE_MAN} on ${TILE_GOALS} goals (planted), the tile should read "${saveD.line}", ${saveD.raw.length} bytes`);
 
 /* ---- the served build (and, for the comparison, the base's) ---- */
 const servers = [];
@@ -517,6 +536,62 @@ async function seededWalk(url, save, width, height) {
   }
 }
 const COMPARE = process.env.MATCHDAY_COMPARE_DIST || '';
+/* ---- save D: the Stats tile at 320 ---- */
+/** The hub's Stats tile on save D: its line holds the leader's pitch name and wraps to at most two lines. Under
+ *  PLAY_MATCHDAY_CONTROL=fullname the line is set to his whole name in the DOM, after the tile is found. */
+async function walkTile(width, height) {
+  const id = `D-${width}`;
+  const context = await browser.newContext({
+    viewport: { width, height }, isMobile: true, hasTouch: true, colorScheme: 'dark', serviceWorkers: 'block',
+    storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [{ name: KEY, value: saveD.raw }, { name: 'cookie-consent', value: 'essential' }, { name: 'dukb-theme', value: 'dark' }] }] },
+  });
+  await context.route('**/*', route => {
+    const url = new URL(route.request().url());
+    if (url.origin === BASE || ['fonts.googleapis.com', 'fonts.gstatic.com'].includes(url.hostname)) return route.continue();
+    return route.abort('blockedbyclient');
+  });
+  await context.routeWebSocket('**/*', socket => socket.close());
+  const page = await context.newPage();
+  page.setDefaultTimeout(20000);
+  await page.addInitScript(now => {
+    const Old = Date;
+    window.Date = class extends Old { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } };
+  }, NOW);
+  try {
+    await page.goto(`${BASE}/club-manager`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1000);
+    for (let i = 0; i < 3 && await page.locator('[role="dialog"][data-state="open"]').count(); i++) { await page.keyboard.press('Escape'); await page.waitForTimeout(250); }
+    await page.locator('[data-testid="cm-slot-1"]').getByRole('button', { name: 'Resume Career', exact: true }).tap();
+    await page.locator('[data-cm-next-match]').waitFor({ timeout: 45000 });
+    await page.evaluate(() => document.fonts.ready);
+    const tile = await page.evaluate(({ control, whole }) => {
+      const root = document.querySelector('[data-testid="cm-show-slots"]')?.closest('header')?.parentElement;
+      for (const b of root ? root.querySelectorAll('.grid > button') : []) {
+        const divs = [...b.querySelectorAll(':scope > div')];
+        const i = divs.findIndex(d => d.classList.contains('uppercase'));
+        if (i < 0 || divs[i].textContent.trim() !== 'Stats' || !divs[i + 2]) continue;
+        const sub = divs[i + 2];
+        if (control) sub.textContent = whole;
+        const cs = getComputedStyle(sub);
+        const lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.2;
+        b.scrollIntoView({ block: 'center' });
+        return { text: sub.innerText.trim(), lines: Math.round(sub.getBoundingClientRect().height / lh), h: Math.round(b.getBoundingClientRect().height) };
+      }
+      return null;
+    }, { control: CONTROL === 'fullname', whole: `${TILE_MAN} leads with ${TILE_GOALS}` });
+    await page.screenshot({ path: path.join(OUT, `${id}${CONTROL ? `-${CONTROL}` : ''}-stats.jpg`), type: 'jpeg', quality: 60 }).catch(() => {});
+    if (!check(!!tile, `${id}: the hub has no Stats tile`)) return;
+    console.log(`${id}: the Stats tile reads "${tile.text}" on ${tile.lines} line(s), the tile ${tile.h} px tall`);
+    if (CONTROL !== 'fullname') check(tile.text === saveD.line, `${id}: the Stats tile reads "${tile.text}", not "${saveD.line}"`);
+    const fits = check(tile.lines <= 2, `${id}: the Stats tile's line wraps to ${tile.lines} lines ("${tile.text}")`);
+    if (!fits && CONTROL === 'fullname') fired.fullname += 1;
+  } catch (e) {
+    check(false, `${id}: the Stats tile walk stopped (${String(e.message).split('\n')[0]})`);
+  } finally {
+    await context.close();
+  }
+}
+
 if (COMPARE) {
   if (!fs.existsSync(path.join(COMPARE, 'index.html'))) cannotRun(`MATCHDAY_COMPARE_DIST=${COMPARE} holds no index.html`);
   const BASE_URL = await serveDist(COMPARE);
@@ -555,7 +630,7 @@ if (COMPARE) {
 /* ---- the walks ---- */
 const SIZES = SIZES_ALL;
 const runs = [];
-if (CONTROL) runs.push([saves[0], 390, 844, false]);
+if (CONTROL === 'fullname') { /* save D alone, below */ } else if (CONTROL) runs.push([saves[0], 390, 844, false]);
 else {
   for (const save of saves) for (const [w, h] of SIZES) runs.push([save, w, h, false]);
   for (const save of saves.filter(s => s.assert)) runs.push([save, 390, 844, true]);
@@ -566,6 +641,7 @@ for (const [save, w, h, rm] of runs) {
   heights.push(row);
   console.log(`${row.id}: heights ${Object.entries(row.screens).map(([k, v]) => `${k} ${v}`).join(', ')}${row.names !== undefined ? `; ${row.names} timeline names, ${row.marks} marks` : ''}`);
 }
+if (!CONTROL || CONTROL === 'fullname') await walkTile(320, 640);
 await browser.close();
 fs.writeFileSync(path.join(OUT, 'heights.json'), JSON.stringify(heights, null, 2));
 console.log(`${runs.length} walks, ${checks} checks, ${((Date.now() - t0) / 1000).toFixed(0)}s; pictures in ${OUT}`);
