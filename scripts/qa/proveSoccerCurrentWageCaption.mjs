@@ -8,7 +8,7 @@ import { execFileSync, spawnSync } from 'node:child_process';
 
 const BASE = 'dbb24af7931ea927567d573c6287a45f08fb352a';
 const TEST = 'src/test/soccerCareerCurrentWageCaption.test.ts';
-const TEST_SHA = '52d3a990928421d6ca428c9e1c40729a0cbdbf698c15680067b4f5c9ab043731';
+const TEST_SHA = '0a8558b1d4aaf6452ad0f5e05b94d0507eb7b04b55c8fb135212de569c26b8fc';
 const SELF = 'scripts/qa/proveSoccerCurrentWageCaption.mjs';
 const WORKFLOW = '.github/workflows/soccer-current-wage-caption.yml';
 const CATALOG = 'src/lib/soccerCareerCorruption.ts', CONSTANTS = 'src/lib/soccerCareerCorruptionConsequences.ts';

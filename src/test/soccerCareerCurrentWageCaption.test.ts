@@ -116,7 +116,7 @@ describe('Soccer Career current wage choice captions', () => {
   });
   it(TITLES.newContract, () => {
     const raised = applyCurrentChoice(career());
-    const offer: ContractOffer = { club: { name: 'Wage Fixture United', country: 'England', tier: 2, color: '#123456', league: 'Fixture League' },
+    const offer: ContractOffer = { club: { id: 'wage-fixture-united', name: 'Wage Fixture United', country: 'England', tier: 2, color: '#123456', league: 'Fixture League' },
       contractYears: 3, wage: 70000, transferFee: 0 };
     const input = json({ ...raised.after, phase: 'transfer_window' as const, pendingOffers: [offer] });
     const before = json(input), offerBefore = json(offer);
