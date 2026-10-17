@@ -15798,3 +15798,13 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Codex1398 closing source and evidence
+
+Paired019/run39009004707 is fully closed and remains NOT READY only for SC835/834, with three Manager caps cleared. Physical149b85851581b6f74db4a28c2fb2dbf682bb62039cb812d6f4537c370e36390c and semantic closurea1f59aebb9debf44b29118e754ee93a2c186cf7f42aa4f679d722e21f77ee15a close504payloads,4869/4863canonicalsource,784/788dist,18 actual unit observations,34readers,6boots/9journeys/18PNGs/17settled focus, all controls and holds. Automated comparator skipped and uncredited; native body-bound2141/2154/1789B savings are separate observations. No root SC page edit or budget waiver.
+
+Actual readiness a61e26602bc10b19c36ece60cd7a967eb00e1ca9/run39010164358/job117330840682 SUCCESS is closed by physicalf79994b85c3e1979cf6ff502f7b66d67959f30ae8069fa4247d7e075664e6f1e and semantic050a3c48cb0a3e656bda18e9951ef71d1c882b0b07d7aeb34e49c4a086f95551. All35payloads/4871request+validatedsource bodies/521versions/types/24authcases with7intended control faults/source-installed-runtime holds pass. Permanent testd8dc equals270; unique await inverse equals019/67. Exact production patch12b7 remains held. This is an explicit QA successor, not docs-only from019 or new production-gate credit.
+
+Only three closing docs change from actual readiness-tested a61; every other source body stays exact. No generated public outputs adopted, both019 actual generated3deltas retained outside and I regenerates its release. Earlier precommitworking pins acc06/e2e4 each had exactly one CRLF; canonical whole Git019 helper85f8f2ff/workflow9319cf8d are proven LF-normalized equivalents by receiptd7505519b38701368bcb08f280877bb65e98a429ba64bb94d01e534552ce0f37. Source/readiness native auditor preparation errors are preserved separately, no app failures or rerun. Readinessd0cb/1309 are already canonical.
+
+Measured I handback: RELEASE-1398-MEASURED-SC-IMPORT-HANDBACK-FOR-CLAUDE-I.md. One-line current SC wrapper import remains source-only for I, with no page lease, promise of savings or implementation by root. Root sequentially viewed navbar-320-reopened.png; form, saved fields, consent and close fit, no broad visual claim. Current main1ec/release67ec were unchanged at last native check; public /whats-new200 still serves index-BQUxuJaU.js. No new main/live, full-suite, provider or physical-Apple credit. Closing push/final canonical closure follow. Shared primary stayed append-only WORKBOARD; no local application runtime.
