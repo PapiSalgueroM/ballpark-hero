@@ -1,0 +1,23 @@
+headsha: git log --oneline -2
+simSoccerSeasonHistory: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
+simSoccerDerbyHistory: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+simSoccerLoanMinutes: SOCCER_LOAN_MINUTES_OUT="$RUNNER_TEMP/ba-loan" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerLoanMinutes.mjs
+simSoccerCareerSaveRecovery: node scripts/simSoccerCareerSaveRecovery.mjs
+simSoccerLoanBite: node scripts/simSoccerLoanBite.mjs
+simSoccerAwardGenerations: SOCCER_AWARD_GENERATIONS_OUT=$RUNNER_TEMP/sag node scripts/simSoccerAwardGenerations.mjs
+simSoccerEventPromises: node scripts/simSoccerEventPromises.mjs
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+simSoccerWorldTruth: node scripts/simSoccerWorldTruth.mjs
+simCareerHall: node scripts/simCareerHall.mjs
+simCareerPress: node scripts/simCareerPress.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simSoccerOwnGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+simSoccerCompetitionNavigation: node scripts/simSoccerCompetitionNavigation.mjs
+simSoccerContractMoves: node scripts/simSoccerContractMoves.mjs
+simSoccerDiscipline: node scripts/simSoccerDiscipline.mjs
+simSoccerLeagueWorldLookup: node scripts/simSoccerLeagueWorldLookup.mjs
+simSoccerSeasonAvailability: node scripts/simSoccerSeasonAvailability.mjs
+simSoccerSeasonCompetitions: node scripts/simSoccerSeasonCompetitions.mjs
+simCareerPreDraft: node scripts/simCareerPreDraft.mjs
