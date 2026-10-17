@@ -1,0 +1,26 @@
+NEGATIVE CONTROL ON: Hard and Legend carry Normal's dials
+simCmDifficulty: sections 4, control alloff
+  table: normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; legend {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}
+4) outcomes: normal, hard, legend, 2 seeds from 0, 6 seasons, engaged, shard 0/1
+  12 shards (4 a level, 3 at a time), 324 seasons
+  level  tier  driver   n   ppg  vsExp titles10 troph10   fees  sign  balance over  bMin bMean sacked matches xiS  xiE  clauseU loanU
+  normal big   engaged  36 2.00   1.21    3.06    6.94  61.05  1.25   149.70 0.69 38.08 67.44 0.19  46.97 89.77 90.13     0     0
+  normal mid   engaged  36 1.38  -0.88    0.28    0.83  15.46  1.97    26.90 0.81 36.27 62.15 0.11  41.53 80.92 81.36     0     0
+  normal small engaged  36 1.18  -8.71    0.83    0.83   5.69  2.44     8.47 0.86 25.63 60.61 0.33  37.44 75.66 76.16     0     0
+  hard   big   engaged  36 2.00   1.21    3.06    6.94  61.05  1.25   149.70 0.69 38.08 67.44 0.19  46.97 89.77 90.13     0     0
+  hard   mid   engaged  36 1.38  -0.88    0.28    0.83  15.46  1.97    26.90 0.81 36.27 62.15 0.11  41.53 80.92 81.36     0     0
+  hard   small engaged  36 1.18  -8.71    0.83    0.83   5.69  2.44     8.47 0.86 25.63 60.61 0.33  37.44 75.66 76.16     0     0
+  legend big   engaged  36 2.00   1.21    3.06    6.94  61.05  1.25   149.70 0.69 38.08 67.44 0.19  46.97 89.77 90.13     0     0
+  legend mid   engaged  36 1.38  -0.88    0.28    0.83  15.46  1.97    26.90 0.81 36.27 62.15 0.11  41.53 80.92 81.36     0     0
+  legend small engaged  36 1.18  -8.71    0.83    0.83   5.69  2.44     8.47 0.86 25.63 60.61 0.33  37.44 75.66 76.16     0     0
+  Normal: mid points per game 1.38, sacked 23 of 108 seasons (0.21), spend 27.40m a season, big club titles 3.06 in ten
+  Normal against Normal (even seeds against odd): mid points per game 1.41 and 1.35, a gap of 4.15 percent
+  hard: mid points per game 1.38 (down 0.00 percent), sacked 23 of 108 (0.21, 1.00 times Normal), spend 27.40m (down 0.00 percent), big club titles 3.06 in ten
+  FAIL: hard: the mid clubs' points per game fell 0.00 percent, the band is 8 to 20
+  FAIL: hard: sacked 1.00 times as often as Normal, the floor is 1.4
+  FAIL: hard: spend per season fell 0.00 percent, the floor is 10
+  legend: mid points per game 1.38 (down 0.00 percent), sacked 23 of 108 (0.21, 1.00 times Normal), spend 27.40m (down 0.00 percent), big club titles 3.06 in ten
+  FAIL: legend: the mid clubs' points per game fell 0.00 percent, the band is 18 to 35
+  FAIL: legend: sacked 1.00 times as often as Normal, the floor is 2
+CONTROL alloff FIRED: 5 failures
+simCmDifficulty: 5 FAILURES (sections 4)

@@ -1,0 +1,6 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+diff-alloff exit=1 242s | simCmDifficulty: 5 FAILURES (sections 4)
+simWritesAreSent exit=1 14s | simWritesAreSent: 2 failures
+simResultMoment exit=0 9s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+diff-suite exit=0 305s | simCmDifficulty: all green (sections 1,2,3,6,7)
+diff-outcomes exit=0 780s | simCmDifficulty: all green (sections 4)
