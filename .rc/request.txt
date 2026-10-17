@@ -1,0 +1,37 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000
+golden: node scripts/recordWorldTieGolden1347.mjs --ref HEAD --check
+wu-all-but-2: WORLD_UCL_ONLY=0,1,3,4,5,6,7 node scripts/simWorldUcl.mjs
+wu-2: WORLD_UCL_ONLY=2 node scripts/simWorldUcl.mjs
+dailydeals: node scripts/simDailyDeals.mjs
+dd-world: DAILY_DEALS_CONTROL=world node scripts/simDailyDeals.mjs
+dd-worlddeadline: DAILY_DEALS_CONTROL=worlddeadline node scripts/simDailyDeals.mjs
+c0-onesource: WORLD_UCL_CONTROL=onesource node scripts/simWorldUcl.mjs
+c0-wiki: WORLD_UCL_CONTROL=wiki node scripts/simWorldUcl.mjs
+c0-thinused: WORLD_UCL_CONTROL=thinused node scripts/simWorldUcl.mjs
+c0-figure: WORLD_UCL_CONTROL=figure node scripts/simWorldUcl.mjs
+c0-receipt: WORLD_UCL_CONTROL=receipt node scripts/simWorldUcl.mjs
+c0-cover: WORLD_UCL_CONTROL=cover node scripts/simWorldUcl.mjs
+c0-const: WORLD_UCL_CONTROL=const node scripts/simWorldUcl.mjs
+c0-partial: WORLD_UCL_CONTROL=partial node scripts/simWorldUcl.mjs
+c0-ban: WORLD_UCL_CONTROL=ban node scripts/simWorldUcl.mjs
+c0-order: WORLD_UCL_CONTROL=order node scripts/simWorldUcl.mjs
+c-dropnight: WORLD_UCL_CONTROL=dropnight WORLD_UCL_SEEDS=1,2,3 node scripts/simWorldUcl.mjs
+c-field32: WORLD_UCL_CONTROL=field32 WORLD_UCL_SEEDS=1,2,3 node scripts/simWorldUcl.mjs
+c-eraformat: WORLD_UCL_CONTROL=eraformat WORLD_UCL_SEEDS=1,2,3 node scripts/simWorldUcl.mjs
+c-meinfill: WORLD_UCL_CONTROL=meinfill WORLD_UCL_SEEDS=1,2,3 node scripts/simWorldUcl.mjs
+c-meindirect: WORLD_UCL_CONTROL=meindirect WORLD_UCL_SEEDS=1,2,3 node scripts/simWorldUcl.mjs
+c-nopens: WORLD_UCL_CONTROL=nopens WORLD_UCL_SEEDS=1,2,3 node scripts/simWorldUcl.mjs
+c-agall: WORLD_UCL_CONTROL=agall WORLD_UCL_SEEDS=1,2,3 node scripts/simWorldUcl.mjs
+c-locale: WORLD_UCL_CONTROL=locale WORLD_UCL_SEEDS=1,2,3 node scripts/simWorldUcl.mjs
+c-ahead: WORLD_UCL_CONTROL=ahead WORLD_UCL_SEEDS=1,2,3 node scripts/simWorldUcl.mjs
+c-live: WORLD_UCL_CONTROL=live WORLD_UCL_SEEDS=1,2,3 node scripts/simWorldUcl.mjs
+c-noseen: WORLD_UCL_CONTROL=noseen WORLD_UCL_SEEDS=1,2,3 node scripts/simWorldUcl.mjs
+c-marks: WORLD_UCL_CONTROL=marks WORLD_UCL_SEEDS=1,2,3 node scripts/simWorldUcl.mjs
+c-keep: WORLD_UCL_CONTROL=keep WORLD_UCL_SEEDS=1,2,3 node scripts/simWorldUcl.mjs
+c-noholder: WORLD_UCL_CONTROL=noholder WORLD_UCL_SEEDS=1,2,3 node scripts/simWorldUcl.mjs
+c-stream: WORLD_UCL_CONTROL=stream WORLD_UCL_SEEDS=1 node scripts/simWorldUcl.mjs
+c-participant: WORLD_UCL_CONTROL=participant WORLD_UCL_SEEDS=1 node scripts/simWorldUcl.mjs
+c-form: WORLD_UCL_CONTROL=form WORLD_UCL_SEEDS=1 node scripts/simWorldUcl.mjs
+uclseasonone: node scripts/simUclSeasonOne.mjs
+savesize: node scripts/simClubManagerSaveSize.mjs
