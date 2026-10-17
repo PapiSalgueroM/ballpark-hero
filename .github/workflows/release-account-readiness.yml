@@ -1,0 +1,100 @@
+name: Persistent account test readiness
+on:
+  push:
+    branches: [codex/current-release-account]
+    paths:
+      - .github/workflows/release-account-readiness.yml
+      - scripts/qa/proveReleaseAccountReadiness.mjs
+      - src/test/authModalFocus.test.tsx
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify-readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind persistent readiness and unchanged019 production
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$RUNNER_TEMP/release-account-readiness"; mkdir -p "$out"
+          export ACCOUNT_READINESS_OUT="$out"; echo "ACCOUNT_READINESS_OUT=$out" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$out/head.txt"
+          git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
+          SIM_OFFLINE_RECEIPT="$out/admission.transport" node scripts/qa/proveReleaseAccountReadiness.mjs admission > "$out/admission.log" 2>&1
+          cat "$out/admission.log"
+      - name: One locked install with full package and runtime tool receipts
+        run: |
+          set -euo pipefail
+          npm ci > "$ACCOUNT_READINESS_OUT/install.log" 2>&1
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$ACCOUNT_READINESS_OUT/dependencies.transport" node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import {createHash} from 'node:crypto';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json')),packages=[];
+          for(const[directory,metadata]of Object.entries(lock.packages)){
+            if(!directory.startsWith('node_modules/')||typeof metadata.version!=='string')continue;
+            const file=directory+'/package.json'; if(!fs.existsSync(file))continue;
+            const actual=JSON.parse(fs.readFileSync(file)); assert.equal(actual.version,metadata.version);
+            packages.push({directory,name:actual.name,version:actual.version});
+          }
+          assert.equal(packages.length,521);
+          const sha=value=>createHash('sha256').update(value).digest('hex');
+          const packageFiles=['package.json','package-lock.json'].map(file=>({file,sha256:sha(fs.readFileSync(file))}));
+          fs.writeFileSync(process.env.ACCOUNT_READINESS_OUT+'/dependencies.json',JSON.stringify({packageFiles,packages},null,2)+'\n');
+          fs.writeFileSync(process.env.ACCOUNT_READINESS_OUT+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n');
+          NODE
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$ACCOUNT_READINESS_OUT/installed-files.sha256"
+          { readlink -f "$(command -v node)"; readlink -f "$(command -v npm)"; } | sort -u | xargs sha256sum > "$ACCOUNT_READINESS_OUT/runtime-tool-files.sha256"
+          npm --version > "$ACCOUNT_READINESS_OUT/npm-version.txt"
+      - name: Real app types and persistent eight-case auth controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$ACCOUNT_READINESS_OUT/preload.transport" node -e 'const assert=require("node:assert/strict");assert.ok((process.env.NODE_OPTIONS||"").includes("offlineTransport.cjs"));assert.ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")]);' > "$ACCOUNT_READINESS_OUT/preload.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$ACCOUNT_READINESS_OUT/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$ACCOUNT_READINESS_OUT/types.log" 2>&1
+          node --check scripts/qa/proveReleaseAccountReadiness.mjs
+          SIM_OFFLINE_RECEIPT="$ACCOUNT_READINESS_OUT/proof.transport" node scripts/qa/proveReleaseAccountReadiness.mjs > "$ACCOUNT_READINESS_OUT/proof.log" 2>&1
+          tail -n 4 "$ACCOUNT_READINESS_OUT/proof.log"
+      - name: Retain complete actual source and strict source installed tool holds
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="${ACCOUNT_READINESS_OUT:-$RUNNER_TEMP/release-account-readiness}"; mkdir -p "$out"; result=0
+          git diff --exit-code HEAD -- > "$out/source-diff.log" 2>&1 || result=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/validated-source-files.sha256"
+          command -v zip > "$out/archive-tool.txt"
+          git ls-files -z | xargs -0 zip -q "$out/validated-source.zip"
+          for kind in source installed runtime-tool; do
+            file="$out/$kind-files.sha256"
+            if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; else result=1; fi
+          done
+          cmp "$out/source-files.sha256" "$out/validated-source-files.sha256" > "$out/source-inventory-hold.log" 2>&1 || result=1
+          sha256sum --check "$out/validated-source-files.sha256" > "$out/validated-source-holds.log" 2>&1 || result=1
+          for name in admission dependencies preload types proof; do test ! -s "$out/$name.transport" || result=1; done
+          for name in normal nofocus accountonly; do test ! -s "$out/proof/$name.transport" || result=1; done
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: release-account-readiness-${{ github.sha }}
+          path: ${{ env.ACCOUNT_READINESS_OUT }}
+          if-no-files-found: error
+          retention-days: 14
