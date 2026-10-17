@@ -1,0 +1,3 @@
+mutM1 exit=1 150s | mutrun M1: CAUGHT (watched nights: played off by one (i <= done); vitest exit 1, build exit 0, walk exit 1)
+mutM2 exit=0 149s | mutrun M2: SURVIVED (knockout tie card: second leg score printed the wrong way round; vitest exit 0, build exit 0, walk exit 0)
+mutM3 exit=0 149s | mutrun M3: SURVIVED (season review: winner and runner-up swapped; vitest exit 0, build exit 0, walk exit 0)
