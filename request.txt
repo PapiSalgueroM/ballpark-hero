@@ -1,0 +1,1 @@
+probe14: node .rc/x/probe14.mjs && CM_WORLD_MOVES_SECTIONS=14 node scripts/simCmWorldMoves.mjs; s=$?; git checkout -- scripts; exit $s

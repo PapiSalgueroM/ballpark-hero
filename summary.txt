@@ -1,0 +1,1 @@
+probe14 exit=0 20s | DIAG14 TALLY gone=true 71; listed=no 71; pre=true 71; reason=none 71; reason=none|pre=true|src=carried 71; src=carried 71; when=after 32; when=before 39; wk=0 71
