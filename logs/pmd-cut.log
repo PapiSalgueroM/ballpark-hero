@@ -1,0 +1,9 @@
+save A: Liverpool against Newcastle (Premier League · Round 1), away, 55704 bytes
+save B: Liverpool against Nottingham Forest (Premier League · Round 2), home, 71342 bytes
+save C: Real Madrid against Villarreal (Copa del Rey · Final), neutral, 160429 bytes
+save E: Real Madrid against Roma (Champions League · Quarter-final · second leg), away, 141299 bytes
+  FAIL: A-390: the walk stopped: locator.waitFor: Timeout 45000ms exceeded.
+A-390: heights hub 22752, centre 21898
+1 walks, 4 checks, 47s; pictures in /home/runner/work/_temp/rc-out/files/matchday
+control cut: fired 0 time(s)
+playCmMatchDay: CONTROL cut DID NOT FIRE

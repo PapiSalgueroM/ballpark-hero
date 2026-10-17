@@ -1,0 +1,5 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+pmd-swap exit=1 5s | playCmMatchDay: CONTROL swap FIRED
+pmd-cut exit=3 51s | playCmMatchDay: CONTROL cut DID NOT FIRE
+pmd-jump exit=3 50s | playCmMatchDay: CONTROL jump DID NOT FIRE
+playCmMatchDay exit=1 707s | playCmMatchDay: RED, 12 failures

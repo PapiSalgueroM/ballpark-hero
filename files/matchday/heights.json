@@ -1,0 +1,107 @@
+[
+  {
+    "id": "A-320",
+    "screens": {
+      "hub": 28334,
+      "centre": 27417
+    }
+  },
+  {
+    "id": "A-390",
+    "screens": {
+      "hub": 22752,
+      "centre": 21898
+    }
+  },
+  {
+    "id": "A-1280",
+    "screens": {
+      "hub": 13574,
+      "centre": 13130
+    }
+  },
+  {
+    "id": "B-320",
+    "screens": {
+      "hub": 28346,
+      "centre": 27408
+    }
+  },
+  {
+    "id": "B-390",
+    "screens": {
+      "hub": 22752,
+      "centre": 21907
+    }
+  },
+  {
+    "id": "B-1280",
+    "screens": {
+      "hub": 13574,
+      "centre": 13140
+    }
+  },
+  {
+    "id": "C-320",
+    "screens": {
+      "hub": 28293,
+      "centre": 27502
+    }
+  },
+  {
+    "id": "C-390",
+    "screens": {
+      "hub": 22703,
+      "centre": 22001
+    }
+  },
+  {
+    "id": "C-1280",
+    "screens": {
+      "hub": 13544,
+      "centre": 13234
+    }
+  },
+  {
+    "id": "E-320",
+    "screens": {
+      "hub": 28308,
+      "centre": 27533
+    }
+  },
+  {
+    "id": "E-390",
+    "screens": {
+      "hub": 22723,
+      "centre": 22002
+    }
+  },
+  {
+    "id": "E-1280",
+    "screens": {
+      "hub": 13544,
+      "centre": 13234
+    }
+  },
+  {
+    "id": "A-390-rm",
+    "screens": {
+      "hub": 22752,
+      "centre": 21898
+    }
+  },
+  {
+    "id": "B-390-rm",
+    "screens": {
+      "hub": 22752,
+      "centre": 21907
+    }
+  },
+  {
+    "id": "C-390-rm",
+    "screens": {
+      "hub": 22703,
+      "centre": 22001
+    }
+  }
+]

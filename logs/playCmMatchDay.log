@@ -1,0 +1,33 @@
+save A: Liverpool against Newcastle (Premier League · Round 1), away, 55704 bytes
+save B: Liverpool against Nottingham Forest (Premier League · Round 2), home, 71342 bytes
+save C: Real Madrid against Villarreal (Copa del Rey · Final), neutral, 160429 bytes
+save E: Real Madrid against Roma (Champions League · Quarter-final · second leg), away, 141299 bytes
+  FAIL: A-320: the walk stopped: locator.waitFor: Timeout 45000ms exceeded.
+A-320: heights hub 28334, centre 27417
+  FAIL: A-390: the walk stopped: locator.waitFor: Timeout 45000ms exceeded.
+A-390: heights hub 22752, centre 21898
+  FAIL: A-1280: the walk stopped: locator.waitFor: Timeout 45000ms exceeded.
+A-1280: heights hub 13574, centre 13130
+  FAIL: B-320: the walk stopped: locator.waitFor: Timeout 45000ms exceeded.
+B-320: heights hub 28346, centre 27408
+  FAIL: B-390: the walk stopped: locator.waitFor: Timeout 45000ms exceeded.
+B-390: heights hub 22752, centre 21907
+  FAIL: B-1280: the walk stopped: locator.waitFor: Timeout 45000ms exceeded.
+B-1280: heights hub 13574, centre 13140
+  FAIL: C-320: the walk stopped: locator.waitFor: Timeout 45000ms exceeded.
+C-320: heights hub 28293, centre 27502
+  FAIL: C-390: the walk stopped: locator.waitFor: Timeout 45000ms exceeded.
+C-390: heights hub 22703, centre 22001
+  FAIL: C-1280: the walk stopped: locator.waitFor: Timeout 45000ms exceeded.
+C-1280: heights hub 13544, centre 13234
+E-320: heights hub 28308, centre 27533
+E-390: heights hub 22723, centre 22002
+E-1280: heights hub 13544, centre 13234
+  FAIL: A-390-rm: the walk stopped: locator.waitFor: Timeout 45000ms exceeded.
+A-390-rm: heights hub 22752, centre 21898
+  FAIL: B-390-rm: the walk stopped: locator.waitFor: Timeout 45000ms exceeded.
+B-390-rm: heights hub 22752, centre 21907
+  FAIL: C-390-rm: the walk stopped: locator.waitFor: Timeout 45000ms exceeded.
+C-390-rm: heights hub 22703, centre 22001
+15 walks, 48 checks, 703s; pictures in /home/runner/work/_temp/rc-out/files/matchday
+playCmMatchDay: RED, 12 failures
