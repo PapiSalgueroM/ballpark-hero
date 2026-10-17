@@ -1,0 +1,2 @@
+anchor-msg exit=1 1s | simCmWorldMoves: RED, sections 0 (2)
+wm-0 exit=0 1s | simCmWorldMoves: green, sections 0 held
