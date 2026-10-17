@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+usCareerSaveRecovery1084 exit=0 185s | US career recovery: 12 actual-route latest-write journeys, 4 deletion/replacement cases, 9 effective restored DOM controls, no forwarded writes.
+summer-rest exit=0 254s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
+summer6-nhl exit=0 918s | simUsCareerSummer: green. Sections 6 held.
+summer6-nba exit=0 3657s | simUsCareerSummer: green. Sections 6 held.
+summer6-mlb exit=0 3813s | simUsCareerSummer: green. Sections 6 held.
+summer6-nfl exit=0 3875s | simUsCareerSummer: green. Sections 6 held.
