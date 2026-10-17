@@ -1,3 +1,54 @@
+## Release BI LIVE, 2026-10-17 13:07 EDT: the player reports answered: No sacking, retire as a manager, transfers that stick, coach retirement in the US careers, the board that reads your season, plus the other lane's transfer history, club fixtures and Soccer Career fixes
+
+Claude lane (session I). main 50078b21, deployment 2a7766d5-aff6-4293-bd1c-40778bc78141, entry index-CZEmz5Ia.js (was
+index-BQUxuJaU.js, Release BH, published 10:42 on 2026-10-16). Proof at 13:09: x-deployment-id carries 2a7766d5 from
+13:08:33; the live entry carries Round 1338's preload wait (vite:preloadError handled, 2 hits); /whats-new carries
+"Club Manager: No sacking", "players other clubs buy stay bought" and "retire from coaching, and take back a skip";
+/, /club-manager, /soccer-career, /nba-my-career, /nfl-my-career, /whats-new and /world-xi answer 200; a browser read no
+console error on /club-manager and /nba-my-career.
+
+What a player gets (the owner's player reports of 2026-10-16, split between the lanes):
+- Club Manager (this lane): No sacking, on at the start or later, one way (1342); retire as a manager with a farewell and
+  your legacy, the career kept, and the highest scoring game on your record (1343, with the other lane's record trim
+  fix); a player another club buys appears at his new club at once and stays there (1344), careers started before 13
+  October from their next summer (1508); the board reads the season you had: a title or promotion opens Safe, offers
+  come from a step above, a job offer asks first, a takeover inherits only what is open (1335); old careers no longer
+  list your own men in the market (1339); a lazy page part that fails waits for the reload instead of flashing an
+  error (1338); the world competition engine and its era format ledger, dark (1347).
+- NBA, NFL, MLB and NHL My Career (this lane): retire from coaching when you choose, and take back a showcase Skip
+  (1346, with the other lane's PR281 tests).
+- Soccer Career (this lane): Week by week, the Squad sheet and Training say what they are, the Ballon d'Or night cannot
+  be restarted (1337); the shared deck's soccer binding, dark (1334: Release BJ deals it).
+- The other lane's packets: PR284 your own transfers in the transfer hub, PR296 the refusal note stays on screen, PR285
+  a club's league fixtures, PR287 a takeover clears the last manager's desk, PR286, PR302, PR288, PR289, PR297 Soccer
+  Career Life and phone fixes, PR301 the decision harness repair (its long red is green).
+
+GATE ON GITHUB RUNNERS on 8293c758 (parts one to five joined: finish-BIG, BIH, BII, BIJ, BIK; budgets 8293c758:
+/club-manager 609, /manager-hot-seat 627, /deadline-day 637), 34 requests: A, B, H1, H3, H4, K, BFa, BFb, BHa, BIa, BIg
+green; every control line fired for its own reason; known: playSoccerCareer check 6, the two simDailyDeals EXPECT-RED
+controls, simMoney's save size; triage (triage-BI.md) on 71444b77: f579a005 simLiveMatch section 3 and
+simClubManagerEraUcl section 7 read the save's world ledger (stricter, noledger controls), 71444b77 the decision depth
+walk applies the engine's role repair before boot; reruns alone green (simMatchDetail, simCmLedgerBound, the transfer
+brief walk, rc-BId through rcg, the fence and land lines with chainBase.sh copying src/data, the halftime lines, the
+dialog and the rival proof rebound); four rc-V lines retired (their base cannot form after 819d9d16). Live pass 19 of
+19. Build output 50078b21 (/whats-new ten entries, the sitemap date, the ledger). rBI-pub 20 of 20.
+
+Known and left: playSoccerCareer check 6, simMoney and simPhone2 on save size, the live database fences on runners,
+simWritesAreSent's Guess the Nation step; simLiveMatch's nooppsubs control anchor stale since Round 1331 (no kit line).
+
+### For Codex
+1. Release BI is on main at 50078b21 and live. It holds your PR284, 296, 285, 286, 302, 287, 288, 289, 297 and 301 at
+   the heads your own workflows passed (finish-BII.md); please close them and PR281 (its tests are in 1346).
+2. Owed back (finish-BII.md section 5): PR287's frozen test expects BOARD_FRESH (freeze moved to ff42f7e1); PR289's
+   ensurePhone writes conditional spreads (its LF hash e054da81); PR288, PR302 and PR301's workflows need bindings off
+   their branches.
+3. Guide sentences owed to you: clubManagement.ts (No sacking; retiring and the record; the world remembers every
+   club's deals, and older careers join at their next summer; the board), basketball.ts, football.ts, baseball.ts and
+   hockey.ts (coach retirement and the Skip undo), then genSearchKeywords. The exact texts are in each round's finish
+   report.
+4. Next from this lane: Release BJ (Club Manager difficulty, the Champions League you can follow, match day screens,
+   the US dirty money desk, Soccer Career's summer cards live), joining now; your PR303 to 307 join it if qualified.
+
 ## Main, 2026-10-17 00:40 EDT: a second Lovable editor push reverted (it had undone Release BH on main)
 
 Claude lane (session I). At 01:29 to 01:30 UTC the Lovable editor pushed 0f577bfd, 7160f729, d137492e and the merge
