@@ -28,9 +28,14 @@
         the edge and simAiMatch keeps strengthOf; B2 a stay's opening; M1 day
         one and the summer cheque; M2 day one and a summer move's ceiling; T1
         the marked market, Buy's charge, the clause floor and the AI's deals.
-     4) outcomes over the fleet at the three levels (added with the tuning).
+     4) outcomes over the fleet at the three levels for the engaged driver,
+        held to the lead's bands (see the table below). Long: run it as its
+        own line, or sharded (SHARD=k/n with OUT_JSON) and folded (FOLD=<dir>).
      6) Manager Hot Seat and Deadline Day dates play as on the base, with no
         level; Deadline Day's code reaches no lever.
+     7) the help's worked example (ClubManagerHelp.tsx, comments out) holds
+        exactly the numbers the table gives, and the block opens by saying
+        every other number on that screen is Normal's.
 
    Negative controls (CM_DIFF_CONTROL), each patched in memory or into the
    bundle, never into src; each must turn its section red:
@@ -41,6 +46,8 @@
                  that lever of Hard set back to Normal's                   3
      clause      the clause floor at the card's price taken out            3
      ddreach     deadlineDay.ts gains a call to oppStrengthVsMe            6
+     alloff      Hard and Legend carry Normal's dials                      4
+     helpdrift   Hard's cheque moved by 0.05 in memory                     7
 
    Run: node scripts/simCmDifficulty.mjs     (SECTION=1, MEASURE=1 SEEDS=4 SEASONS=10)
         git worktree add /tmp/base <base sha> && BASE_ROOT=/tmp/base node scripts/simCmDifficulty.mjs
@@ -475,6 +482,33 @@ async function section2() {
   const m = fresh(HEAD), s0 = m.cm.startCareer('Everton');
   if (m.dif.setUpCareer(s0, { level: 'normal', noSack: false }, () => { throw new Error('rebuilt'); }) === s0 && m.dif.setUpCareer(s0) === s0) ok('setUpCareer on Normal with No sacking off returns its argument');
   else fail('setUpCareer on Normal does not return its argument');
+
+  /* 2c. Old saves: a save the base wrote (its own saveCareer, after a season) opens on this tree to exactly what
+     the base opens it to, and reads as Normal with No sacking off. */
+  let loaded = 0;
+  for (const career of careers) {
+    const mb = fresh(BASE);
+    if (career.era && mb.eras?.ensureEraRosters) await mb.eras.ensureEraRosters(career.era);
+    const s = withStream(17000 + careers.indexOf(career), () => {
+      let x = career.make(mb);
+      for (let guard = 0; guard < 160; guard += 1) { const res = mb.cm.playNextEntry(x, { skipHalftime: true }); x = res.state; if (res.kind === 'seasonOver' || x.sacked) break; }
+      return x;
+    });
+    mb.cm.saveCareer(s);
+    let raw = store.get(mb.cm.SAVE_KEY);
+    if (!raw) { raw = JSON.stringify(s); console.log(`   2c ${career.tag}: the base's writer left nothing in the stub storage, the state's own JSON is opened instead`); }
+    const openOn = async b => {
+      const m = fresh(b);
+      if (career.era && m.eras?.ensureEraRosters) await m.eras.ensureEraRosters(career.era);
+      store.set(m.cm.SAVE_KEY, raw);
+      return { json: JSON.stringify(m.cm.loadCareer()), level: m.st.levelFrom ? m.st.levelFrom(m.cm.loadCareer()) : 'normal', noSack: m.st.noSackFrom(m.cm.loadCareer()) };
+    };
+    const a = await openOn(HEAD), b = await openOn(BASE);
+    if (a.json !== b.json) fail(`2c ${career.tag}: the base's save opens differently here, first at key ${firstDiff(a.json, b.json)}`);
+    else if (a.level !== 'normal' || a.noSack !== null) fail(`2c ${career.tag}: the base's save reads as ${a.level}, No sacking ${a.noSack}`);
+    else loaded += 1;
+  }
+  ok(`2c: ${loaded} of ${careers.length} saves the base wrote open here as they open there, Normal with No sacking off`);
 
   /* 2b. Every lever is its dial: Hard with every dial set to Normal's plays as Normal, the key aside. */
   const leakEdge = CONTROL === 'alloffleak';
