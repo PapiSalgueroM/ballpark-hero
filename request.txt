@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -3
+gmcal-e814c2de: R=$PWD; git worktree add -q /tmp/ge814c2de e814c2def671e07bd6163462dff8ab1230be2000 && ln -s $R/node_modules /tmp/ge814c2de/node_modules && cd /tmp/ge814c2de && node scripts/simGmCalendar.mjs | tail -3
+gmcal-bc6badb3: R=$PWD; git worktree add -q /tmp/gbc6badb3 bc6badb3992223ef7ceee229f1448f59af5abb38 && ln -s $R/node_modules /tmp/gbc6badb3/node_modules && cd /tmp/gbc6badb3 && node scripts/simGmCalendar.mjs | tail -3
+gmcal-5a8acc15: R=$PWD; git worktree add -q /tmp/g5a8acc15 5a8acc1562351cb9cb4bddc5afbdc4debfc7b001 && ln -s $R/node_modules /tmp/g5a8acc15/node_modules && cd /tmp/g5a8acc15 && node scripts/simGmCalendar.mjs | tail -3
+gmcal-head: node scripts/simGmCalendar.mjs | tail -3
+playCustomPromotion: export FREE_KICK_FONT_CACHE="$PWD/fcm" MANAGER_REPORT_ARTIFACTS="$PWD/mra/natural"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerCustomPromotion.mjs | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playManagerCustomPromotion.mjs
+playCmRealFixtures: export FREE_KICK_FONT_CACHE="$PWD/fcr2"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs

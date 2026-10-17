@@ -1,0 +1,8 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | a6b762955 Round BII: record the base of Round 1329's inverse after PR289 and PR297 (9e93b382) in this branch's history, tree unchanged
+gmcal-e814c2de exit=0 2s | simGmCalendar: 6 failure(s)
+gmcal-bc6badb3 exit=0 2s | simGmCalendar: 6 failure(s)
+gmcal-5a8acc15 exit=0 2s | simGmCalendar: 6 failure(s)
+gmcal-head exit=0 1s | simGmCalendar: 6 failure(s)
+playCustomPromotion exit=0 47s | playManagerCustomPromotion: 10 genuine promotion journeys, 520 checks, 0 failed, 0 external requests forwarded
+playCmRealFixtures exit=1 2s | Node.js v24.21.0
