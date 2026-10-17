@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unitcm: node_modules/.bin/vitest run $(grep -l "club-manager\|clubManager\|ClubManager\|cmMatchDisplay" src/test/*.test.ts* src/lib/*.test.ts) --testTimeout=300000 --hookTimeout=120000
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+md-numbers: MATCHDAY_CONTROL=numbers node scripts/simCmMatchDay.mjs
+md-homeflip: MATCHDAY_CONTROL=homeflip node scripts/simCmMatchDay.mjs
+md-oldorder: MATCHDAY_CONTROL=oldorder node scripts/simCmMatchDay.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simOwnGoalMotion: node scripts/simOwnGoalMotion.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
