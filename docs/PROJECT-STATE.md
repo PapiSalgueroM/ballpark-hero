@@ -18506,3 +18506,8 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+
+## Codex1400 guide candidate
+
+ActualI8293 frozen. Own only qualified314 Manager guide wording plus new1508 old-career adoption item and remote-generated guide/keyword/snapshot outputs, own workflow and closing docs. No engine/account/SC/cap edits. Types/build17readers/strictweights pending. ActualI owns release and publication. See docs/audits/manager-guide-world-adoption-1400.md.

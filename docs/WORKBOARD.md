@@ -15798,3 +15798,17 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+
+# Round1400 claim: Manager guide and older-career transfers
+
+2026-10-17 UTC. Root owns only src/data/gameContent/clubManagement.ts, its actual remote-generated searchKeywords.json, existing guide fixture refresh, the actual generated Club Manager snapshot/sitemap/lastmod, a new own remote qualification workflow and closing docs. Managed worktree C:/Users/antho/.codex/worktrees/manager-guide-world-adoption/ballpark-hero, branch codex/manager-guide-world-adoption. Frozen actual I8293c758f4284d21baaa2320383cfd5cb5bd4944, only3I-owned budget changes beyond actual1508join a5b0e767. No root cap changes.
+
+Explicit handback: finish-1508.md285/295-297 leaves this guide and genSearchKeywords to root. Preserve exact qualified PR314 Manager guide wording for the69opening board, No sacking, retirement and highest scoring record by carrying that one guide leaf from8158e4d0. Add exactly one source-reviewed item after buy/sell explaining new-career AI transfer persistence, old Manager and carried-on Hot Seat adoption next summer, old world retained, missing past AI deals not reconstructed and unavailable era squads postponing adoption. No other314product/guide/account leaf is adopted. Inverting only the new item must reproduce the whole314guide.
+
+Plan: (1) native independent whole-source copy review against829and qualified314; verify new item against actual1508adoption/carry/era guards. (2) Remote-only existing guide fixture refresh and keyword generation, whole other-route records held, deterministic keyword rerun. Real app types, serial build:seo only /club-manager, all15built-site readers plus guide/search fences and unchanged full14weight sweep. Retain exact source/validated/generated/dist bodies and existing offline/installed/tool/font holds. No mirror-copy test or engine test edits. (3) Native full evidence and final source closure, push and PR handoff. Any actual weight failure stays a failure, no waiver or old artifact credit.
+
+Primary is shared and dirty: append this claim only, never stage/reset/clean/commit primary. All product edits stay in this isolated worktree. Actual I retains engine/calendar/competition/SC,1502/1503spectatorUCL,1509+tournaments, joined release/main/publication. This optional guide correction adds no gate on urgent308, qualified314 or the active release prep. Root1399is already scopedREADY/pushed0947; no source/runtime from it is borrowed. No local Node/Python/TS/app/test/build/browser runtime, provider request, full-suite/current future I/main/live claim.
+
+
+1400 pre-dispatch scope correction: native source review proves current829 saved /whats-new misses10 existing required headings. Refresh /club-manager AND /whats-new without adding any entry or changing WhatsNew source. Exact6generated paths now include both snapshots, guide fixture, keywords, sitemap and lastmod. Strict expectedfontdenials6=2routes*3samples, unchanged guard and effective receiptcontrols. Wholecanonicalguide26680B/c1b3eac5, rawworking8c619isCRLFonly. Existing314guidewholeinverse and other829records/source held. All changes before first runtime.
