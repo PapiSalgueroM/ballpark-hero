@@ -1,0 +1,40 @@
+ok   7b. save A at 360 by 640: Back is on the screen and a tap on it works on every screen (7 taps; the body scrolls on first open (help), eleven, place; never stuck)
+ok   7b. save R at 360 by 640: Back is on the screen and a tap on it works on every screen (6 taps; the body scrolls on eleven; never stuck)
+ok   7b. save A at 844 by 390: the first open lands on home with the pointer to ?
+ok   7b. save A at 844 by 390: Back is on the screen and a tap on it works on every screen (7 taps; the body scrolls on first open (help), eleven, place, examples, home; never stuck)
+ok   7b. save R at 844 by 390: Back is on the screen and a tap on it works on every screen (6 taps; the body scrolls on eleven, place, examples, home; never stuck)
+ok   4b. Tab and Shift+Tab stay inside the sheet: 0 of 22 stops landed outside it, 6 different stops reached
+ok   4b. the page behind did not move while the keyboard went round the sheet (120 then 120)
+ok   4b. and it is where it was after closing (120 then 120)
+ok   13. save H is an injured season: 34 league games drawn, 32 games on the row
+ok   13. the Last season tile prints the 32 games played, not the league figure ("Last season 32 games")
+ok   13. the Last season screen never prints more league games than games ("Last season at FC Copenhagen 32 games in all competitions An injury took games off that total. Before it, your place was worth 34 league games. WHAT Y")
+ok   8. motion on: 20 ms after the eleven opens its last cell is not showing yet (opacity 0)
+ok   8. reduced motion: 100 ms after home arrives nothing is animating and the trust bar is at its figure (running 0, bar off by 0.0)
+ok   8. reduced motion: 100 ms after each screen arrives nothing in the sheet is still animating (0 running at worst)
+ok   8. reduced motion: all eleven cells show at once (11 of 11)
+ok   page: the sheet is one chunk of its own (SquadSheet-BnxGNt-y.js)
+ok   9. parsed the walker's ACTIONS (17 entries) and SKIP from its text
+ok   1. no sheet chunk on a fresh hub (49 scripts loaded)
+ok   2. page, save A: one tile on the hub, printing rank 1 and trust 66 ({"rank":"1","trust":"66","n":1})
+ok   10. page, save A at 390: the season list is inside the Career Timeline card, one row a season, and the card ends where the list ends (rows 5 of 5, grid children 2, card {"t":3080,"b":3403,"l":12,"r":378}, list {"t":3122,"b":3402,"l":13,"r":377}, hub column {"t":399,"b":3068,"l":12,"r":378})
+ok   10. page, save A at 390: the hub column is in the same grid as the card, above it on a phone (rows 5 of 5, grid children 2, card {"t":3080,"b":3403,"l":12,"r":378}, list {"t":3122,"b":3402,"l":13,"r":377}, hub column {"t":399,"b":3068,"l":12,"r":378})
+ok   1. one request for the sheet chunk after the press (1)
+ok   7. page, save A at 390: the sheet covers the screen and its panel sits inside it, with the page scrolled to 200 (sheet 0,0 390x844, panel 12,198 to 378,646, screen 390x844)
+ok   9. page, save A: the walker's pick never landed inside the tile or the sheet over 8 screens (on the hub it presses "Next Season")
+ok   9. page, save A: no label in the tile or the sheet starts with a walker ACTIONS entry (none)
+ok   7. page, save A: the career page did not move across open, every screen and close (200 then 200)
+ok   6. page, save A: the save string is byte identical after the sheet has been through every screen
+ok   2. page, save B: one tile on the hub, printing rank 8 and trust 55 ({"rank":"8","trust":"55","n":1})
+ok   10. page, save B at 390: the season list is inside the Career Timeline card, one row a season, and the card ends where the list ends (rows 3 of 3, grid children 2, card {"t":2281,"b":2509,"l":12,"r":378}, list {"t":2323,"b":2508,"l":13,"r":377}, hub column {"t":399,"b":2269,"l":12,"r":378})
+ok   10. page, save B at 390: the hub column is in the same grid as the card, above it on a phone (rows 3 of 3, grid children 2, card {"t":2281,"b":2509,"l":12,"r":378}, list {"t":2323,"b":2508,"l":13,"r":377}, hub column {"t":399,"b":2269,"l":12,"r":378})
+ok   7. page, save B at 390: the sheet covers the screen and its panel sits inside it, with the page scrolled to 200 (sheet 0,0 390x844, panel 12,179 to 378,665, screen 390x844)
+ok   9. page, save B: the walker's pick never landed inside the tile or the sheet over 8 screens (on the hub it presses "Next Season")
+ok   9. page, save B: no label in the tile or the sheet starts with a walker ACTIONS entry (none)
+ok   7. page, save B: the career page did not move across open, every screen and close (200 then 200)
+ok   6. page, save B: the save string is byte identical after the sheet has been through every screen
+ok   10. page, save A at 1280: the season list is inside the Career Timeline card, one row a season, and the card ends where the list ends (rows 5 of 5, grid children 2, card {"t":263,"b":593,"l":144,"r":404}, list {"t":305,"b":592,"l":145,"r":403}, hub column {"t":263,"b":2686,"l":416,"r":1136})
+ok   10. page, save A at 1280: the hub column is in the same grid as the card, to its right (rows 5 of 5, grid children 2, card {"t":263,"b":593,"l":144,"r":404}, list {"t":305,"b":592,"l":145,"r":403}, hub column {"t":263,"b":2686,"l":416,"r":1136})
+ok   7. page, save A at 1280: the sheet covers the screen and its panel sits inside it, and the page stayed at 0 (sheet 0,0 1280x800, panel 416,185 to 864,616, screen 1280x800; now 0)
+   screenshots in /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/shots, work folder /home/runner/work/_temp/t-playCareerSquad/careersquadplay-JAR4H2
+playCareerSquad: 190 checks, 0 failed

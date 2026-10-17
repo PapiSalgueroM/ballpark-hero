@@ -1,0 +1,12 @@
+                   ^
+
+Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/soccer-international-return-artifacts/native-fixtures.json'
+    at Object.readFileSync (node:fs:483:20)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:12:30 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/soccer-international-return-artifacts/native-fixtures.json'
+}
+
+Node.js v24.21.0

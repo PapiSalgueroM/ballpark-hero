@@ -1,0 +1,14 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 7 node harnesses
+  PASS  simCareerCleanSheets.mjs       16.1s
+  PASS  simCareerDerbies.mjs           80.2s
+  PASS  simCareerDrills.mjs             2.8s
+  PASS  simCareerSeasonRatings.mjs     38.6s
+  PASS  simFirstTouchDrill.mjs         11.7s
+  PASS  simNoDoubleRecord.mjs          40.2s
+  PASS  simThroughBallDrill.mjs        15.5s
+
+Serving dist on 4173 for 1 browser harnesses
+  PASS  simDrillMotion.mjs             23.0s
+
+All 8 harnesses green.

@@ -1,0 +1,23 @@
+#!serve
+#!playwright
+truths: git worktree add -q /tmp/bd c2f8d746 && ln -s "$PWD/node_modules" /tmp/bd/node_modules && (cd /tmp/bd && node_modules/.bin/vite build > /tmp/bd-build.log 2>&1) && SHOTS=$RC_OUT/shots SCREEN_TRUTHS_BASE_DIST=/tmp/bd/dist ENGINES=chromium node scripts/playSoccerScreenTruths.mjs > /tmp/tr.log 2>&1; s=$?; grep -E "^(FAIL|NOTE) \[head\]" /tmp/tr.log | head -10; grep -E "chevron|result is in" /tmp/tr.log | head -8; sed -n "/verdicts, section by section/,\$p" /tmp/tr.log; exit $s
+opponentLabels: ONLY=simSoccerOpponentLabels node scripts/runAllSims.mjs --browser > /tmp/ol.log 2>&1; s=$?; tail -3 /tmp/ol.log; node .rc/x/olReport.mjs | head -6; exit $s
+potential: SOCCER_POTENTIAL_BROWSER_OUT=/tmp/pot node scripts/qa/soccerPotentialProgressBrowser.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wh.log 2>&1; s=$?; grep -E "soccer-career|sweepWeight:" /tmp/wh.log | head -8; tail -2 /tmp/wh.log; exit $s
+flagship: node scripts/simFlagshipWeight.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+playCareerSquad: PORT=4601 ENGINES=chromium node scripts/playCareerSquad.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+playCareerProgramme: export FREE_KICK_FONT_CACHE=career-programme-artifacts/font-cache SIM_NETWORK=offline TZ=UTC; mkdir -p career-programme-artifacts && git rev-parse HEAD > career-programme-artifacts/source-head.txt && git rev-parse HEAD^{tree} > career-programme-artifacts/source-tree.txt && node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs > /tmp/simprog.log 2>&1; echo "simCareerProgramme exit $?: $(tail -c 300 /tmp/simprog.log)"; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerProgramme.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+practice1076: node scripts/qa/careerPractice1076.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/careerPractice1076.mjs 2>&1 | tail -20; exit ${PIPESTATUS[0]}
+competitions: PORT=4608 ENGINES=chromium node scripts/playSoccerCareerCompetitions.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+contracts: PORT=4609 ENGINES=chromium node scripts/playSoccerCareerContracts.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+translated: RC_OUT=/tmp/tp ENGINES=chromium node scripts/playTranslatedPage.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+twoTabs: RC_OUT=/tmp/tt PORT=4610 ENGINES=chromium node scripts/playTwoTabs.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+career992: ENGINES=chromium node scripts/qa/career992.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+offerReview1082: node scripts/qa/soccerOfferAssets1082.mjs > /tmp/assets.log 2>&1; echo "assets exit $?"; SOCCER_OFFER_REVIEW_ASSET_CACHE="$PWD/soccer-offer-review-artifacts/font-cache/manifest.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerOfferReview1082.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+playSoccerFarewell: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ENGINES=chromium node scripts/playSoccerFarewell.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+playSoccerAgentReview: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ENGINES=chromium node scripts/playSoccerAgentReview.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+playSoccerInternationalReturn: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ENGINES=chromium node scripts/playSoccerInternationalReturn.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+playSoccerEventCards: RC_OUT=/tmp/ec ENGINES=chromium node scripts/playSoccerEventCards.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+playReducedMotion: RC_OUT=/tmp/rm ENGINES=chromium node scripts/playReducedMotion.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+practice-sims: ONLY=simCareerDrills,simDrillMotion,simFirstTouchDrill,simThroughBallDrill,simNoDoubleRecord,simCareerCleanSheets,simCareerSeasonRatings,simCareerDerbies node scripts/runAllSims.mjs --browser 2>&1 | tail -16; exit ${PIPESTATUS[0]}
+usPractice: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsCareerPractice.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}

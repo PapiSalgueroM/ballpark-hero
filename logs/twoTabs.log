@@ -1,0 +1,12 @@
+   creation: B began Fresh Creator age 16, youth, 1 seasons, last 2025 Fulham Youth: 0 apps, 0 goals, 0; A saw the notice: true; A's forced Begin Career true; A's writes 0 to 0; on disk Fresh Creator age 16, youth, 1 seasons, last 2025 Fulham Youth: 0 apps, 0 goals, 0
+  ok    a stale Begin Career wrote nothing
+13) WEEK BY WEEK IN A STALE TAB (1280x900)
+   A's Season Centre open: true (Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7); B played on: Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; A saw the notice: true; forced in the Centre ["?","Back to the papers","Bundesliga","DFB-Pokal"], then "Continue to Season Summary →"; A's writes of soccerCareerSave 2 to 2
+  note  RECORDED, NOT JUDGED (owed): the stale tab wrote seasonCentre:v1:soccer 0 time(s) after the other tab played on
+  ok    the stale Season Centre changed nothing in the save
+14) SOCCER OLD SAVE AND THE NOTICE (1280x900)
+   fence before absent, after "Next Season" 2; Two Tab Tester age 18, playing, 3 seasons, last 2022 West Ham: 32 apps, 5 goals, 6.9 to Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; a second tab stales it: true
+  ok    no jump: scrollY 120 and height 9396 before and after
+  ok    the notice: Reload 44 px, smallest text 16 px, no animation, no toast, Tab stayed inside true
+cases red: none; pictures in /tmp/tt
+playTwoTabs: green at 320x640, 390x844, 1280x900
