@@ -128,6 +128,14 @@ export function pickFleet(M, which, cannot) {
     if (!second) cannot('no PYRAMIDS[0].second league for the created club');
     add('watcher', 'now', CREATED.name, { ...CREATED, leagueId: second });
     for (const era of ERAS) add('watcher', era, pickEra(era, false));
+    /* Round 1502, the critic's correction 19: a watcher that is one of its era's verified 32 (it was in that
+       season's real Champions League, the game does not put it in), so its place goes to the named stand in. The
+       first such club of each era, by the engine's own answer; an era without one adds nothing. */
+    for (const era of ERAS) {
+      const leagueClubs = new Set((M.cm.ERA_LEAGUES[era] ?? []).flatMap(l => l.clubs));
+      const club = (M.cm.ERA_UCL_FIELDS[era] ?? []).map(e => e.name).find(c => leagueClubs.has(c) && !startsIn(c, era));
+      if (club) add('watcher', era, club);
+    }
   }
   return fleet;
 }

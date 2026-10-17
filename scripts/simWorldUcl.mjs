@@ -116,7 +116,8 @@ Object.assign(CONTROLS, {
   stream: [2, /^2 watcher .*the draws differ/, /^2 /],
   participant: [2, /^2 .*carries worldComps/, /^2 /],
   form: [2, /^2 watcher .*the state differs/, /^2 /],
-  ahead: [3, /^3 early: /, /^3 /],
+  /* The critic's correction 8: among its reds a league phase MD1, the night the calendar's own European midweek is. */
+  ahead: [3, /^3 early: [^:]*\(now\) seed \d+ at [^:]*: MD1 counts as played/, /^3 /],
   live: [3, /^3 join moved: /, /^3 /],
   noseen: [3, /^3 falls: /, /^3 /],
   marks: [3, /^3 dates: /],
@@ -365,7 +366,7 @@ async function careerJourney(E, f, { seasons, mode = 'nocoach', join = false, mo
         if (!M.cm.saveCareer(cur)) return { saved: 'refused' };
         return { state: M.cm.loadCareer(), saved: createHash('sha256').update(JSON.stringify([...M.store.entries()].sort())).digest('hex').slice(0, 16), reload: cur };
       });
-      if (join && season === 1 && i === 25) {
+      if (join && season === (join === true ? 1 : join) && i === 25) {
         const to = joinTarget(M, s);
         if (to) step(`s${season}-join`, cur => { const joined = joinTo(M, cur, to.club, to.leagueId); return joined ? { state: joined, joined: cur } : {}; });
       }
@@ -595,7 +596,9 @@ async function watcherPass() {
     } : null;
     const track = stepTracker(name);
     await careerJourney(E, { ...f, seed }, {
-      seasons: 3, join: seed === SEEDS[0] || seed === SEEDS[1], move,
+      /* Mid season moves in season one on the first seed and in season two on the second (the critic's correction
+         10: a move after the first rollover, in an era save and in today's world, keeps the season's own slice). */
+      seasons: 3, join: seed === SEEDS[0] ? 1 : seed === SEEDS[1] ? 2 : false, move,
       onStep: (M, s, label, got) => {
         if (runs(3) || runs(4)) track(M, s, label, got);
         if (got?.prev && s?.season === 2 && movedTo) {
