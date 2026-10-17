@@ -1,0 +1,9 @@
+simUclSeasonOne exit=0 20s | simUclSeasonOne: all green
+simClubManagerSaveSize exit=0 71s | simClubManagerSaveSize: all sections green
+simSaveFence exit=0 62s | simSaveFence: all green (tabs, source, fleet)
+simClubManagerSlots exit=0 83s | simClubManagerSlots: all sections green
+simDeadlineDay exit=0 7s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simClubManagerSave exit=0 14s | simClubManagerSave: all sections green
+simManagerHotSeat exit=0 76s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simCmLeagueBook exit=0 86s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (86s)
+simCmQuickLegs exit=0 65s | simCmQuickLegs: PASS, 10 sections green
