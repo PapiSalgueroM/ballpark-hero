@@ -36,7 +36,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { ClubManagerClubList } from '@/components/club-manager/ClubManagerClubList';
-import { CURRENCIES, STRICTNESS_INFO, levelFrom, noSackFrom, startOptionsOf } from '@/lib/clubManagerStart';
+import { CURRENCIES, STRICTNESS_DEFAULT, STRICTNESS_INFO, levelFrom, noSackFrom, startOptionsOf } from '@/lib/clubManagerStart';
 import { DIFFICULTY_INFO } from '@/lib/managerDifficulty';
 import type { CareerSetup } from '@/lib/clubManagerStart';
 import { withWorldEdit, worldEditMoves, realLeagueIdOf } from '@/lib/clubManagerWorldEdit';
@@ -1316,9 +1316,12 @@ const ClubManager = () => {
                 icon="⚙️" title="Options"
                 value={(() => {
                   const o = startOptionsOf(c);
-                  /* Round 1501: a Hard or Legend career shows its level here, never the haggle's Normal. */
+                  /* Round 1501: a Hard or Legend career shows its level here, never the haggle's Normal, and
+                     after it the haggle's word whenever that is not the default, so no setting hides. */
                   const lv = levelFrom(c);
-                  return `${CURRENCIES[o.currency].symbol} · ${lv !== 'normal' ? DIFFICULTY_INFO[lv].label : STRICTNESS_INFO[o.strictness]?.label ?? 'Normal'}`;
+                  const haggle = STRICTNESS_INFO[o.strictness]?.label ?? 'Normal';
+                  if (lv === 'normal') return `${CURRENCIES[o.currency].symbol} · ${haggle}`;
+                  return `${CURRENCIES[o.currency].symbol} · ${DIFFICULTY_INFO[lv].label}${o.strictness !== STRICTNESS_DEFAULT ? ` · ${haggle}` : ''}`;
                 })()}
                 sub={(() => {
                   const o = startOptionsOf(c);
