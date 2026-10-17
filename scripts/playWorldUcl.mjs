@@ -93,11 +93,18 @@ const saves = {};
   const fin = tape(0x1503b, () => b.M.cm.finishSeason(b.s)).value.state;
   saves.b = { items: saved(b.M, fin), winner: end.winner, runnerUp: end.runnerUp };
   console.log(`(b) Chelsea season over after ${b.entries} entries: the engine's final, ${end.winner} beat ${end.runnerUp}`);
-  const c = await play('Sunderland', 'era2005', 0x1503c, (M, s) => { const p = M.cm.worldUclNights(s); return !!p && M.cm.worldUclNightsDone(s) >= p.length; });
-  const cr = c.M.cm.evalWorldUcl(c.s);
-  if (c.s.uclGroup || !cr?.winner || c.s.week >= c.s.calendar.length) cannot('the 2005 Sunderland save did not reach a played final before its season ended');
-  saves.c = { items: saved(c.M, c.s), winner: cr.winner, groups: cr.groups.length };
-  console.log(`(c) Sunderland 2005, week ${c.s.week} of ${c.s.calendar.length}: ${cr.groups.length} groups, the final won by ${cr.winner}`);
+  /* A 2005 watcher still in the job when the final is played: Villarreal first (one of the real 32 whose place a
+     stand in takes in the game), then two more. The first walk run picked Sunderland, who were sacked in March. */
+  for (const club of ['Villarreal', 'Tottenham', 'Everton']) {
+    const c = await play(club, 'era2005', 0x1503c, (M, s) => !!s.sacked || (() => { const p = M.cm.worldUclNights(s); return !!p && M.cm.worldUclNightsDone(s) >= p.length; })());
+    const cr = c.M.cm.evalWorldUcl(c.s);
+    if (c.s.uclGroup || c.s.sacked || !cr?.winner || c.s.week >= c.s.calendar.length) { console.log(`(c) ${club} 2005 cannot serve: ${c.s.uclGroup ? 'in it' : c.s.sacked ? 'sacked' : 'no played final before the season ended'}`); continue; }
+    const standIn = c.M.cm.worldUclEraField(c.s)?.standIn ?? null;
+    saves.c = { club, items: saved(c.M, c.s), winner: cr.winner, groups: cr.groups.length, standIn };
+    console.log(`(c) ${club} 2005, week ${c.s.week} of ${c.s.calendar.length}: ${cr.groups.length} groups, the final won by ${cr.winner}, stand in ${standIn ?? 'none'}`);
+    break;
+  }
+  if (!saves.c) cannot('no 2005 watcher reached a played final in the job');
   const d = await play('Real Madrid', undefined, 0x1503d, (M, s) => (s.uclGroup?.matchday ?? 0) >= 2);
   if (!d.s.uclGroup) cannot('Real Madrid are not in the Champions League in this build');
   saves.d = { items: saved(d.M, d.s), md: d.s.uclGroup.matchday };
@@ -305,18 +312,23 @@ async function caseB(browser, size, tag) {
       const wide = await page.evaluate(() => document.scrollingElement.scrollWidth > window.innerWidth + 1);
       if (wide) finding(where, 'the season review scrolls sideways');
     }
+    if (got) await line.first().screenshot({ path: path.join(SHOTS, `b-review-line-${tag}.png`) }).catch(() => {});
     await shot(page, `b-review-${tag}`);
     if (errors.length) finding(where, `page errors: ${errors.join(' | ')}`);
   } finally { await ctx.close(); }
 }
 
 async function caseC(browser, size, tag) {
-  const where = `(c) Sunderland 2005 ${tag}`;
+  const where = `(c) ${saves.c.club} 2005 ${tag}`;
   const { ctx, page, errors } = await open(browser, saves.c.items, size);
   try {
     if (!(await toCups(page, where))) return;
     await roundTrip(page, `${where} screen`, page.locator('[data-cm-world-tile="ucl"]'), async () => {
       if (!(await count(page, '[data-cm-world-mode="watching"][data-cm-world-format="g8"]'))) finding(where, 'the screen is not the watched eight groups');
+      if (saves.c.standIn) {
+        const head = (await page.locator('[data-cm-world-mode]').first().textContent().catch(() => '')) ?? '';
+        if (!head.includes(`${saves.c.standIn} stand in for `)) finding(where, `the screen does not name ${saves.c.standIn} as the stand in the engine picked`);
+      }
       await shot(page, `c-screen-${tag}`);
       await roundTrip(page, `${where} groups`, page.locator('[data-cm-world-tile="table"]'), async () => {
         const pills = await page.locator('[data-cm-world-view="table"] button').filter({ hasText: /^Group [A-H]$/ }).count();
