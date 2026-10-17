@@ -1,0 +1,12 @@
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+cases 16, failed 7, controls 4
+FAILED nba-PG-320-touch-dark-reduced: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: |  | 'event' !== 'season' | 
+FAILED nfl-QB-320-touch-dark-reduced: AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal: | + actual - expected | ... Skipped lines |  |   { |     'Interceptions thrown': [
+FAILED mlb-CF-320-touch-dark-reduced: AssertionError [ERR_ASSERTION]: compare-regular: comparison value clipped: {"label":"Doubles","top":782,"bottom":830,"left":25,"right":295,"width":270,"height":48,"text":"Doubles37370","cells":[{"top":806,"bottom":826,"left":33,"right":112.328125,"width":79.328125,"height":20,"text":"37"},{"top":806,"bottom":826,"left":120.328125,"right":199.65625,"width":79.328125,"height":20,"text":"37"},{"top":806,"bottom":826,"left":207.65625,"right":287,"width":79.34375,"height":20,"text":"0"}]}
+FAILED nba-PG-390-touch-light: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: |  | 'event' !== 'season' | 
+FAILED nba-PG-1280-mouse-dark: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: |  | 'event' !== 'season' | 
+FAILED nfl-QB-1280-mouse-dark: AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal: | + actual - expected | ... Skipped lines |  |   { |     'Interceptions thrown': [
+FAILED nba-PG-1280-keyboard-light-reduced: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: |  | 'event' !== 'season' | 

@@ -1,0 +1,4 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+d1009-head exit=1 37s | FAILED nfl-capped-390-touch-light: AssertionError [ERR_ASSERTION]: The real pre-choice season matches the reference engine exactly | + actual - expected |  | + `{"c":{"na
+s1008-head exit=1 116s | FAILED nba-PG-1280-keyboard-light-reduced: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: |  | 'event' !== 'season' | 
+base-both exit=2 187s | BASE d1009=1 s1008=1
