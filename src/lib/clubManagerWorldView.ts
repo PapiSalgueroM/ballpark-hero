@@ -81,7 +81,8 @@ export interface WorldCompView {
   runnerUp?: string;
   /** The holders, top of pot one at the draw (watching only, when the save knew them). */
   holder?: string;
-  /** An era's stand in: a club from outside the real 32 in the place of one of them (Round 1502, correction 19). */
+  /** An era's stand in: a club from outside the real 32 in the place of one of them. Watching, it is the club the
+   *  engine picked for my club's place (Round 1502, correction 19); in it, it is my own club. */
   standIn?: { club: string; for: string };
   /** An era save: every season's field is that era's real 32, whatever the leagues did. */
   eraField: boolean;
@@ -190,11 +191,15 @@ function participantView(career: CareerState): WorldCompView | null {
   const ties = [...bracket].sort((a, b) => KO_ORDER.indexOf(a.round) - KO_ORDER.indexOf(b.round) || a.slot - b.slot).map(tieView);
   const final = ties.find(t => t.round === 'F' && t.winner);
   const firstKo: WorldKoRound = ties[0]?.round ?? (nights.find(n => n.stage !== 'md')?.stage as WorldKoRound | undefined) ?? 'QF';
+  const clubs = groups.flatMap(g => g.rows.map(r => r.club));
+  /* An era save whose club is not one of the real 32: it takes the place of the one initUclWorld leaves over. */
+  const standIn = standInOf(career, clubs);
   return {
     mode: 'in', format: 'g8', season: seasonLabel(career), myClub: me,
-    clubs: groups.flatMap(g => g.rows.map(r => r.club)),
+    clubs,
     nights, nightsDone: nights.filter(n => n.played).length, groups, ties, firstKo,
     ...(final ? { winner: final.winner, runnerUp: final.winner === final.home ? final.away : final.home } : {}),
+    ...(standIn ? { standIn } : {}),
     eraField: isHistoricEra(career.eraId),
   };
 }
@@ -381,10 +386,19 @@ export function clubRun(view: WorldCompView, club: string): { rows: WorldRunRow[
     finish = `Still in: the ${roundPlural(last.round)}`;
   } else if (!stageOver || !place) {
     finish = 'Still in: the first stage';
-  } else if (view.format === 'g8' ? place.pos > 2 : place.pos > 24) {
-    finish = view.format === 'g8' ? 'Out in the group stage' : 'Out after the league phase';
   } else {
-    finish = 'Through, waiting on the draw';
+    /* Who goes on: the top two of a group, except for the club in it in today's world, whose stand in sends the
+       group winners to the quarter-finals and my club as runner-up in the last winner's place (uclSeededField).
+       Once the first knockout round is drawn, a club the league phase does not send straight to the round of 16
+       and with no tie in it is out, whatever the rule above says. */
+    const winnersOnly = view.mode === 'in' && view.firstKo === 'QF';
+    const through = view.format === 'l36' ? place.pos <= 24
+      : winnersOnly ? place.pos === 1 || (place.pos === 2 && club === view.myClub) : place.pos <= 2;
+    const direct = view.format === 'l36' && place.pos <= 8;
+    const drawn = view.ties.some(t => t.round === view.firstKo);
+    finish = !through || (drawn && !direct)
+      ? (view.format === 'g8' ? 'Out in the group stage' : 'Out after the league phase')
+      : 'Through, waiting on the draw';
   }
   return { rows, place: place ? `${place.text}${stageOver ? '' : ' so far'}` : null, finish };
 }
