@@ -99,8 +99,8 @@ function puzzleOnPage() {
   expect(found).toHaveLength(1); return found[0];
 }
 function buttons() {
-  return { difficulty: ['Easy', 'Normal', 'Hard'].map(name => screen.getByRole('button', { name, exact: true }) as HTMLButtonElement),
-    timer: ['Unlimited', '90s', '60s', '40s'].map(name => screen.getByRole('button', { name, exact: true }) as HTMLButtonElement) };
+  return { difficulty: ['Easy', 'Normal', 'Hard'].map(name => screen.getByRole('button', { name }) as HTMLButtonElement),
+    timer: ['Unlimited', '90s', '60s', '40s'].map(name => screen.getByRole('button', { name }) as HTMLButtonElement) };
 }
 function snapshot(label: string) {
   const puzzle = puzzleOnPage();
@@ -178,7 +178,7 @@ describe('Soccer Grid first-check settings ownership', () => {
   });
   it(TITLES.preplay, async () => {
     await ready(); const before = snapshot('ready');
-    fireEvent.click(buttons().difficulty[2]); await flush(); fireEvent.click(screen.getByRole('button', { name: '90s', exact: true })); await flush();
+    fireEvent.click(buttons().difficulty[2]); await flush(); fireEvent.click(screen.getByRole('button', { name: '90s' })); await flush();
     const settled = snapshot('settings-chosen'); retain('preplay', [before, settled]);
     expect(classifyPuzzleDifficulty(settled.puzzle)).toBe('hard'); expect(settled.puzzle.id).not.toBe(before.puzzle.id);
     expect(JSON.parse(settled.settingsJSON!)).toEqual({ difficulty: 'hard', timerMode: 90 });
@@ -189,7 +189,7 @@ describe('Soccer Grid first-check settings ownership', () => {
     await ready(); const before = snapshot('ready'); const stop = gate('held-unverified'); replies.validator.push(stop);
     await submit(); await act(async () => { stop.resolve({ data: { valid: false, unverified: true }, error: null }); }); await flush();
     const released = snapshot('unverified-released'); const available = buttons(); expect(available.difficulty.every(button => !button.disabled)).toBe(true); expect(available.timer.every(button => !button.disabled)).toBe(true);
-    fireEvent.click(available.difficulty[2]); await flush(); fireEvent.click(screen.getByRole('button', { name: '60s', exact: true })); await flush();
+    fireEvent.click(available.difficulty[2]); await flush(); fireEvent.click(screen.getByRole('button', { name: '60s' })); await flush();
     const settled = snapshot('settings-chosen'); retain('unverified', [before, released, settled]);
     expect(released.dailyJSON).toBeNull(); expect(released.cells.every(cell => cell.status === 'empty')).toBe(true); expect(released.toasts).toEqual([[RETRY]]);
     expect(JSON.parse(settled.settingsJSON!)).toEqual({ difficulty: 'hard', timerMode: 60 }); expect(classifyPuzzleDifficulty(settled.puzzle)).toBe('hard'); expect(settled.recordings).toEqual([]);
@@ -199,7 +199,7 @@ describe('Soccer Grid first-check settings ownership', () => {
     expect(settled.puzzle).toEqual(before.puzzle); expect(settled.settingsJSON).toBe(before.settingsJSON);
     expect(JSON.parse(settled.dailyJSON!)).toEqual({ v: 1, date: getTodayET(), puzzleIndex: 0, puzzleId: before.puzzle.id, guesses: [{ t: 'ok', cellIndex: 0, playerName: NAME, rarity: 20 }], gameStatus: 'playing' });
     expect(settled.cells[0]).toMatchObject({ status: 'correct', disabled: true }); expect(settled.cells.slice(1).every(cell => cell.status === 'empty')).toBe(true);
-    expect(screen.queryByRole('button', { name: 'Hard', exact: true })).toBeNull(); expect(settled.recordings).toEqual([]); expect(settled.toasts).toEqual([]);
+    expect(screen.queryByRole('button', { name: 'Hard' })).toBeNull(); expect(settled.recordings).toEqual([]); expect(settled.toasts).toEqual([]);
   });
   it(TITLES.wrong, async () => {
     await ready(); const before = snapshot('ready'); replies.validator.push({ data: { valid: false, unverified: false }, error: null }); await submit();
@@ -207,6 +207,6 @@ describe('Soccer Grid first-check settings ownership', () => {
     expect(settled.puzzle).toEqual(before.puzzle); expect(settled.settingsJSON).toBe(before.settingsJSON);
     expect(JSON.parse(settled.dailyJSON!)).toEqual({ v: 1, date: getTodayET(), puzzleIndex: 0, puzzleId: before.puzzle.id, guesses: [{ t: 'x' }], gameStatus: 'playing' });
     expect(settled.cells[0]).toMatchObject({ status: 'wrong', disabled: false }); expect(cleared.cells.every(cell => cell.status === 'empty')).toBe(true);
-    expect(screen.queryByRole('button', { name: 'Hard', exact: true })).toBeNull(); expect(settled.recordings).toEqual([]); expect(settled.toasts).toEqual([]);
+    expect(screen.queryByRole('button', { name: 'Hard' })).toBeNull(); expect(settled.recordings).toEqual([]); expect(settled.toasts).toEqual([]);
   });
 });

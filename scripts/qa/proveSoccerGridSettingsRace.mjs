@@ -12,7 +12,7 @@ const TEST = 'src/test/soccerGridSettingsRace.test.tsx';
 const SELF = 'scripts/qa/proveSoccerGridSettingsRace.mjs';
 const WORKFLOW = '.github/workflows/soccer-grid-settings-race.yml';
 const BROWSER = 'scripts/qa/playSoccerGridSettingsRace.mjs';
-const TEST_SHA = '5e666cf46cf8c337e0dc18081952786215a13602f307e35b1504a385581d0d72';
+const TEST_SHA = '294cfec5df8146dfd1175d7ae45b3ae5ceb6167376690b779cfb1488c5f8f14c';
 const ORIGINAL_SHA = 'fa2dcddca103b14b15ea7f884ddb8406403f0bf290e949f98897415587edf0b3';
 const PROTECTED = {
   'src/hooks/useSoccerGrid.ts': '6940e46da1b9b9984ec85309ed01c502a24e54c6c80d5c4a79aa23a03363a2ca',
