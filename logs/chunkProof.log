@@ -1,0 +1,7 @@
+head: clubManager-BPonx0jc.js 827135 B, "Dead man walking" 0 times, confidenceLabel absent
+head: index-C20A0QMs.js 797064 B, "Dead man walking" 0 times, confidenceLabel absent
+head: managerHotSeat-2umS4AOu.js 32094 B, "Dead man walking" 0 times, confidenceLabel absent
+base: clubManager-yuiXXicp.js 827279 B, "Dead man walking" 1 times, confidenceLabel 135 B: function X3(a){return a>=80?"Untouchable":a>=60?"Secure":a>=45?"Steady":a>=30?"Under pressure":a>=15?"On the brink":"Dead man walking"}
+base: index-BN9hujk7.js 797064 B, "Dead man walking" 0 times, confidenceLabel absent
+base: managerHotSeat-CVf-_JOB.js 32094 B, "Dead man walking" 0 times, confidenceLabel absent
+chunkProof: base 827279 B minus confidenceLabel 135 B = 827144 B against the head's 827135 B (difference 144 B, 9 B left unexplained)

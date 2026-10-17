@@ -1,0 +1,7 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+whead exit=1 26s | sweepWeight: 3 failures
+basebuild exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+wbase exit=1 30s | sweepWeight: 3 failures
+moduleBytes exit=0 0s | cmMatchDisplay.ts minified 1074 B, gzipped 586 B
+compare exit=0 233s | playCmMatchDay compare: green. Against /tmp/wbase/dist: no screen has more text under 12 px, and every save after the same seeded taps is the base's
+chunkProof exit=0 0s | chunkProof: base 827279 B minus confidenceLabel 135 B = 827144 B against the head's 827135 B (difference 144 B, 9 B left unexplained)

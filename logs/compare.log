@@ -1,0 +1,61 @@
+save A: Liverpool against Newcastle (Premier League · Round 1), away, 55704 bytes
+save B: Liverpool against Nottingham Forest (Premier League · Round 2), home, 71342 bytes
+save C: Real Madrid against Villarreal (Copa del Rey · Final), neutral, 160429 bytes
+save E: Real Madrid against Roma (Champions League · Quarter-final · second leg), away, 141299 bytes
+save D: Eintracht Frankfurt with Ayoube Amaimouni-Echghouyab on 12 goals (planted), the tile should read "Amaimouni-Echghouyab: 12", 53979 bytes
+one build twice, save A at 390: the same save to the byte
+A-320 hub: text under 12 px head 38 base 38; height head 28334 base 28334
+A-320 centre: text under 12 px head 49 base 49; height head 27406 base 27406
+A-320 live: text under 12 px head 50 base 72; height head 26575 base 26575
+A-320 interval: text under 12 px head 131 base 131; height head 27975 base 27975
+A-320 report: text under 12 px head 256 base 256; height head 28761 base 28526
+A-320: the save after the walk is the base's to the byte (71582 bytes)
+A-390 hub: text under 12 px head 38 base 38; height head 22752 base 22752
+A-390 centre: text under 12 px head 49 base 49; height head 21887 base 21887
+A-390 live: text under 12 px head 50 base 72; height head 21112 base 21112
+A-390 interval: text under 12 px head 131 base 131; height head 22446 base 22446
+A-390 report: text under 12 px head 256 base 256; height head 23151 base 23016
+A-390: the save after the walk is the base's to the byte (71582 bytes)
+A-1280 hub: text under 12 px head 35 base 35; height head 13574 base 13574
+A-1280 centre: text under 12 px head 46 base 46; height head 13120 base 13120
+A-1280 live: text under 12 px head 74 base 96; height head 12388 base 12388
+A-1280 interval: text under 12 px head 133 base 133; height head 13680 base 13680
+A-1280 report: text under 12 px head 258 base 258; height head 14267 base 14206
+A-1280: the save after the walk is the base's to the byte (71582 bytes)
+B-320 hub: text under 12 px head 38 base 38; height head 28330 base 28346
+B-320 centre: text under 12 px head 52 base 52; height head 27400 base 27400
+B-320 live: text under 12 px head 50 base 72; height head 26575 base 26575
+B-320 interval: text under 12 px head 131 base 131; height head 27975 base 27975
+B-320 report: text under 12 px head 283 base 283; height head 29029 base 28702
+B-320: the save after the walk is the base's to the byte (75889 bytes)
+B-390 hub: text under 12 px head 38 base 38; height head 22752 base 22752
+B-390 centre: text under 12 px head 52 base 52; height head 21899 base 21899
+B-390 live: text under 12 px head 50 base 72; height head 21112 base 21112
+B-390 interval: text under 12 px head 131 base 131; height head 22446 base 22446
+B-390 report: text under 12 px head 283 base 283; height head 23353 base 23163
+B-390: the save after the walk is the base's to the byte (75889 bytes)
+B-1280 hub: text under 12 px head 35 base 35; height head 13574 base 13574
+B-1280 centre: text under 12 px head 49 base 49; height head 13132 base 13132
+B-1280 live: text under 12 px head 74 base 96; height head 12388 base 12388
+B-1280 interval: text under 12 px head 133 base 133; height head 13680 base 13680
+B-1280 report: text under 12 px head 285 base 285; height head 14435 base 14353
+B-1280: the save after the walk is the base's to the byte (75889 bytes)
+C-320 hub: text under 12 px head 40 base 40; height head 28276 base 28293
+C-320 centre: text under 12 px head 71 base 71; height head 27494 base 27494
+C-320 live: text under 12 px head 52 base 74; height head 26575 base 26575
+C-320 interval: text under 12 px head 131 base 131; height head 27960 base 27960
+C-320 report: text under 12 px head 232 base 232; height head 28860 base 28591
+C-320: the save after the walk is the base's to the byte (160896 bytes)
+C-390 hub: text under 12 px head 40 base 40; height head 22687 base 22703
+C-390 centre: text under 12 px head 71 base 71; height head 21993 base 21993
+C-390 live: text under 12 px head 52 base 74; height head 21112 base 21112
+C-390 interval: text under 12 px head 131 base 131; height head 22446 base 22446
+C-390 report: text under 12 px head 232 base 232; height head 23200 base 23051
+C-390: the save after the walk is the base's to the byte (160896 bytes)
+C-1280 hub: text under 12 px head 37 base 37; height head 13544 base 13544
+C-1280 centre: text under 12 px head 68 base 68; height head 13226 base 13226
+C-1280 live: text under 12 px head 76 base 98; height head 12388 base 12388
+C-1280 interval: text under 12 px head 133 base 133; height head 13680 base 13680
+C-1280 report: text under 12 px head 234 base 234; height head 14353 base 14278
+C-1280: the save after the walk is the base's to the byte (160896 bytes)
+playCmMatchDay compare: green. Against /tmp/wbase/dist: no screen has more text under 12 px, and every save after the same seeded taps is the base's
