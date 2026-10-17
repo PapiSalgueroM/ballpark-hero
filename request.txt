@@ -1,0 +1,5 @@
+#!playwright
+#!serial
+buildA: git worktree add -q /tmp/base d8aaa4cb && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/dA --emptyOutDir > /tmp/bA.log 2>&1; s=$?; tail -2 /tmp/bA.log; exit $s
+buildB: node_modules/.bin/vite build --outDir /tmp/dB --emptyOutDir > /tmp/bB.log 2>&1; s=$?; tail -2 /tmp/bB.log; exit $s
+routes: node .rc/x/weighRoutes1502.mjs /tmp/dA /tmp/dB
