@@ -1,0 +1,4 @@
+sec3: SECTION=3 node scripts/simCmDifficulty.mjs
+sec3-nojoin: CM_DIFF_CONTROL=nojoin node scripts/simCmDifficulty.mjs
+sec2-base: git worktree add -q /tmp/b1 d8aaa4cb && SECTION=2 BASE_ROOT=/tmp/b1 node scripts/simCmDifficulty.mjs
+pin: node scripts/simManagerAppealIsolation.mjs

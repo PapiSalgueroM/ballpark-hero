@@ -1,0 +1,4 @@
+sec3-nojoin exit=1 28s | simCmDifficulty: 6 FAILURES (sections 3)
+sec3 exit=1 30s | simCmDifficulty: 3 FAILURES (sections 3)
+pin exit=0 37s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+sec2-base exit=0 155s | simCmDifficulty: all green (sections 2)
