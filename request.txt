@@ -1,0 +1,24 @@
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simAcademy: node scripts/simAcademy.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simEras: node scripts/simEras.mjs
+simRoles: node scripts/simRoles.mjs
+simWilderness: node scripts/simWilderness.mjs
+simEarlyReturnScope: node scripts/simEarlyReturnScope.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simClubManagerClubList: node scripts/simClubManagerClubList.mjs
+simClubManagerDecisionDeadline: node scripts/simClubManagerDecisionDeadline.mjs
+simClubManagerEraMidSeason: node scripts/simClubManagerEraMidSeason.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simCmQuickSubs: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmQuickSubs.mjs
+simManagerWorldContinuity: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
+worldSizeDiagnostic: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldSizeDiagnostic.mjs
+simPress: node scripts/simPress.mjs
