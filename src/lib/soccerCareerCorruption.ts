@@ -1,3 +1,4 @@
+import { SOCCER_CORRUPTION_CONSEQUENCES } from './soccerCareerCorruptionConsequences';
 import { rollCareerChance } from "./careerChanceWheel";
 /* ────────────────────────────────────────────────────────────────────────────
    soccerCareerCorruption.ts, the dirty side of Soccer Career (Round 54)
@@ -149,7 +150,7 @@ export function getCorruptionEvents(state: CareerState): RandomEvent[] {
     push({ id: 315, emoji: "🧺", title: "The Money Has Nowhere To Live",
       description: `You are sitting on €${dm.toFixed(1)}M that cannot be explained to anyone with a badge. Your accountant has started using the phrase "hypothetically speaking" a lot.`,
       category: "negative", choices: [
-        { label: "Ask about cash businesses", emoji: "🧼", color: "bg-red-600", consequence: "Heat +12. To clean dirty money each season, buy a laundering item in My Life > The other list.",
+        { label: "Ask about cash businesses", emoji: "🧼", color: "bg-red-600", consequence: SOCCER_CORRUPTION_CONSEQUENCES[315][0],
           apply: s => { setFlag(s, "washArc", 1); heat(s, 12); s.events = [...s.events, "🧼 You asked around about cash businesses. No purchase made."]; return s; } },
         { label: "Declare it all and pay the tax", emoji: "🧾", color: "bg-emerald-600", consequence: "Lose 55% to tax and penalties, Heat drops hard, Integrity +12",
           apply: s => { const keep = Math.round((s.dirtyMoney ?? 0) * 0.45 * 100) / 100; s.netWorth = Math.round((s.netWorth + keep) * 100) / 100; s.dirtyMoney = 0; heat(s, -35); s.integrityBonus += 12; setFlag(s, "washArc", 2); s.events = [...s.events, `🧾 Declared everything. The taxman took over half and gave back something better: sleep`]; return s; } },
@@ -165,9 +166,9 @@ export function getCorruptionEvents(state: CareerState): RandomEvent[] {
       category: "negative", choices: [
         { label: "Pay him €2M to forget", emoji: "🤐", color: "bg-red-600", consequence: "Heat +15 and now two people can ruin you",
           apply: s => { s.netWorth = Math.round((s.netWorth - 2) * 100) / 100; heat(s, 15); setFlag(s, "snitchArc", 1); s.events = [...s.events, "🤐 Paid a teammate €2M for silence. He bought a boat. The boat is called 'Nice Try'"]; return s; } },
-        { label: "Bring him in on the whole thing", emoji: "🤝", color: "bg-red-700", consequence: "€2M dirty now, Heat +25",
+        { label: "Bring him in on the whole thing", emoji: "🤝", color: "bg-red-700", consequence: SOCCER_CORRUPTION_CONSEQUENCES[320][1],
           apply: s => { dirty(s, 2); heat(s, 25); setFlag(s, "snitchArc", 2); s.events = [...s.events, "🤝 Brought him in. Two players, one scheme, zero exit plan"]; return s; } },
-        { label: "Stop everything, right now", emoji: "🛑", color: "bg-emerald-600", consequence: "Heat -30, Integrity +14, Morale up to +10",
+        { label: "Stop everything, right now", emoji: "🛑", color: "bg-emerald-600", consequence: SOCCER_CORRUPTION_CONSEQUENCES[320][2],
           apply: s => { heat(s, -30); setFlag(s, "syndicate", 7); s.integrityBonus += 14; s.morale = clamp(s.morale + 10, 0, 100); setFlag(s, "snitchArc", 3); s.events = [...s.events, "🛑 A teammate looked you in the eye and you quit the whole thing that night"]; return s; } },
       ] });
   }
@@ -177,7 +178,7 @@ export function getCorruptionEvents(state: CareerState): RandomEvent[] {
     push({ id: 325, emoji: "🪟", title: "The Amnesty Window",
       description: "The government opens a 90-day amnesty: declare everything, pay 40% of hidden money plus 5% of net worth, walk away with no charges. Your lawyer calls it the best deal you will ever be offered. Your accountant calls it a robbery. Both are right.",
       category: "life", choices: [
-        { label: "Take the amnesty", emoji: "🕊️", color: "bg-emerald-600", consequence: "Pay 40% of hidden money plus 5% of net worth, Heat drops to almost nothing",
+        { label: "Take the amnesty", emoji: "🕊️", color: "bg-emerald-600", consequence: SOCCER_CORRUPTION_CONSEQUENCES[325][0],
           apply: s => { const hidden = (s.dirtyMoney ?? 0); const fee = Math.round((hidden * 0.4 + s.netWorth * 0.05) * 100) / 100; s.netWorth = Math.round((s.netWorth + hidden * 0.6 - s.netWorth * 0.05) * 100) / 100; s.dirtyMoney = 0; s.corruptionHeat = 5; s.integrityBonus += 8; setFlag(s, "amnesty", 1); s.events = [...s.events, `🕊️ Took the amnesty. €${fee.toFixed(1)}M gone, the folder closed, the phone silent for the first time in years`]; return s; } },
         { label: "Ignore it. They have nothing", emoji: "😎", color: "bg-red-600", consequence: "Heat +10, and prosecutors take the refusal personally",
           apply: s => { heat(s, 10); setFlag(s, "amnesty", 2); s.events = [...s.events, "😎 Skipped the amnesty. The lead investigator pinned your photo to a board. An actual board"]; return s; } },
