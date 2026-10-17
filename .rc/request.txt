@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+ucl-walk: node scripts/playWorldUcl.mjs
+ucl-ctl: ok=0; r=""; for k in notile instandin legturn oldcols; do PLAY_WORLD_CONTROL=$k node scripts/playWorldUcl.mjs > /tmp/pw-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/pw-$k.log | cut -c1-200)"; done; git status --porcelain --untracked-files=no | head -3; echo "controls (each must be 1):$r"; exit $ok
+dirty-walk: ENGINES=chromium node scripts/playUsDirtyMoney.mjs
+dirty-nodesk: ENGINES=chromium PLAY_US_DIRTY_CONTROL=nodesk node scripts/playUsDirtyMoney.mjs
+deck-walk: node scripts/playSoccerDeck.mjs
+transport: CI=1 SIM_NETWORK=offline RUNNER_TRANSPORT_CONTROL=all node scripts/simRunnerTransport.mjs
