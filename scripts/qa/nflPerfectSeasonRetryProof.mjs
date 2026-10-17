@@ -102,7 +102,7 @@ try {
     const removals = [
       { id: 'eager-debit', failures: [titles[2]], guards: ['NFL_RETRY_GUARD_usable_recovery_request'], edits: [
         { from: '      if (rerolls <= 0) return;\n    }\n    retryReroll.current', to: '      if (rerolls <= 0) return;\n      setRerolls(r => r - 1);\n    }\n    retryReroll.current' },
-        { from: '    if (isReroll) setRerolls(r => r - 1);\n    setWheelText', to: '    setWheelText' },
+        { from: '    if (isReroll) setRerolls(r => r - 1);\n    setWheelText(`${found.squad.year}', to: '    setWheelText(`${found.squad.year}' },
       ] },
       { id: 'forgotten-reroll', failures: [titles[2]], guards: ['NFL_RETRY_GUARD_retry_reroll_debit'], edits: [{ from: 'void spin(retryReroll.current)', to: 'void spin(false)' }] },
       { id: 'stale-wheel', failures: [titles[0]], guards: ['NFL_RETRY_GUARD_stale_wheel_boot'], edits: [{ from: "    setIndex([]);\n    setPhase('boot');\n  };", to: "    setPhase('boot');\n  };" }] },
