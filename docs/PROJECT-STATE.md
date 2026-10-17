@@ -18532,3 +18532,7 @@ Next method-only repair has independent source PASS: browsera2f4ee12 (9unique sp
 ## Codex1396 optional report composition, 2026-10-17 UTC
 Joins actual tested account270, Manager guide81c8, retired Continuecb7 and US guides2ab in an isolated root branch. All application bodies remain exact to reviewed inputs, all other protected source stays on b31. Joint remote verification is pending, NOT READY. This does not qualify current I33d1/main4f2 or change Claude I publication ownership. See docs/audits/report-guide-integration-1396.md and source map. No local app runtime.
 
+
+## Codex1396 result, 2026-10-17 UTC
+Optional combined PR313 remains NOT READY: tested09f/run39002161663 passes types, all scoped behaviors/controls, build,17readers and3boots/9journeys; only Soccer Career rounds835K against834K. All13othercaps pass. Actual ten generated bodies are retained from validated source, so final is not docs-only from the tested request. Full audits/limits are in docs/audits/report-guide-integration-1396.md. SC account-entry proposal requires I's narrow page coordination; root made no page/core edit. Main1ec source matches e814 after the lead revert, no new publication verified. Use tested09f plus separate closing docs and actual release regeneration if selected after a real passing size fix. READY308/312 remain independent, I owns main and deploy_project.
+
