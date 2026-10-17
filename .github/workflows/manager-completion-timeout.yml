@@ -1,0 +1,151 @@
+name: Manager completion timeout qualification
+on:
+  push:
+    branches: [codex/manager-completion-timeout]
+    paths:
+      - .github/workflows/manager-completion-timeout.yml
+      - scripts/qa/proveManagerCompletionTimeout.mjs
+      - src/hooks/useClubManager.test.ts
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      PRERENDER_ONLY: /whats-new
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retain committed source and locked setup
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/manager-completion-timeout"; test ! -e "$out"; mkdir "$out"
+          echo "MANAGER_TIMEOUT_ARTIFACTS=$out" >> "$GITHUB_ENV"
+          echo "MANAGER_TIMEOUT_OUT=$out/causal" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
+          git ls-files -z -- ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
+          sha256sum "$out/source.zip" "$out/request-source-files.sha256" "$out/source-files.sha256" > "$out/initial-source-packet.sha256"
+          printf '%s\0' "$(command -v node)" "$(readlink -f "$(command -v npm)")" | sort -z | xargs -0 sha256sum > "$out/runtime-tools-files.sha256"
+          npm --version > "$out/npm-version.txt"
+          npm ci > "$out/install.log" 2>&1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerAgentReviewDependencies.mjs before > "$out/dependencies-before.log" 2>&1
+          browser_tools="$RUNNER_TEMP/manager-timeout-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright; ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerAgentReviewDependencies.mjs after > "$out/dependencies-after.log" 2>&1
+          cp soccer-agent-review-artifacts/dependencies-*.json "$out/"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const out=process.env.MANAGER_TIMEOUT_ARTIFACTS || process.env.RUNNER_TEMP+'/manager-completion-timeout';
+          const before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),after=JSON.parse(fs.readFileSync(out+'/dependencies-after.json'));
+          assert.equal(before.packages.length,521); assert.equal(after.packages.length,521); assert.deepEqual(after.packages,before.packages); assert.deepEqual(after.packageFiles,before.packageFiles); assert.equal(after.addedBrowserPackage,'1.64.0'); fs.writeFileSync(out+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n');
+          NODE
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/fonts-install.log" 2>&1; python -m pip freeze > "$out/python-packages.txt"
+          FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-files.sha256"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-files.sha256"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tool-files.sha256"
+      - name: Real types and exact causal stress with unchanged controls
+        id: proof
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$MANAGER_TIMEOUT_ARTIFACTS"
+          preload_check='const assert=require("node:assert/strict"); assert.ok((process.env.NODE_OPTIONS||"").includes("offlineTransport.cjs"),"Children retain offline preload"); assert.ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")],"Actual offline preload is in require.cache");'
+          status=0; NODE_OPTIONS='' node -e "$preload_check" > "$out/preload-control.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/preload-control.exit"; test "$status" -eq 1
+          grep -F 'AssertionError' "$out/preload-control.log"; grep -F 'Children retain offline preload' "$out/preload-control.log"
+          node -e "$preload_check" > "$out/preload-normal.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
+          node --check scripts/qa/proveManagerCompletionTimeout.mjs
+          SIM_OFFLINE_RECEIPT="$out/proof.transport" node scripts/qa/proveManagerCompletionTimeout.mjs > "$out/proof.log" 2>&1
+          tail -n 4 "$out/proof.log"
+          sha256sum --check "$out/request-source-files.sha256" > "$out/proof-source-holds.log"
+      - name: Serial production build with only the stale news snapshot refreshed
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$MANAGER_TIMEOUT_ARTIFACTS/build.transport" npm run build:seo > "$MANAGER_TIMEOUT_ARTIFACTS/build.log" 2>&1
+          tail -n 6 "$MANAGER_TIMEOUT_ARTIFACTS/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$MANAGER_TIMEOUT_ARTIFACTS/dist-files.sha256"
+      - name: All fifteen rebuilt-site readers
+        id: readers
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$MANAGER_TIMEOUT_ARTIFACTS"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            status=0; SIM_OFFLINE_RECEIPT="$out/$method.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv"; tail -n 3 "$out/$method.log"
+            test "$status" -eq 0 || failed=1; test ! -s "$out/$method.transport" || failed=1
+          done
+          test "$(wc -l < "$out/readers.tsv")" -eq 15; exit "$failed"
+      - name: Complete actual source and dist with bounded generated changes
+        if: always()
+        run: |
+          set -euo pipefail
+          out="${MANAGER_TIMEOUT_ARTIFACTS:-$RUNNER_TEMP/manager-completion-timeout}"; mkdir -p "$out"; result=0
+          git diff --exit-code HEAD -- . ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' > "$out/non-generated-diff.log" 2>&1 || result=1
+          git diff --binary HEAD -- public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json > "$out/generated.patch"
+          git diff --name-only HEAD > "$out/generated-paths.txt"
+          if test '${{ steps.build.outcome }}' = success; then printf 'public/sitemap.xml\npublic/whats-new/index.html\nscripts/data/lastmod.json\n' | sort > "$out/expected-generated-paths.txt"; sort "$out/generated-paths.txt" | cmp - "$out/expected-generated-paths.txt" || result=1; fi
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/validated-source-files.sha256"
+          MANAGER_TIMEOUT_ARCHIVE_OUT="$out" python - <<'PY'
+          import os,subprocess,zipfile
+          out=os.environ['MANAGER_TIMEOUT_ARCHIVE_OUT']; files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile(out+'/validated-source.zip','w',zipfile.ZIP_DEFLATED) as archive:
+              for file in sorted(filter(None,files)): archive.write(file,file)
+          if os.path.isdir('dist'):
+              with zipfile.ZipFile(out+'/dist.zip','w',zipfile.ZIP_DEFLATED) as archive:
+                  for folder,dirs,names in os.walk('dist'):
+                      for name in sorted(names): archive.write(os.path.join(folder,name),os.path.join(folder,name))
+          PY
+          if test -d dist; then find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist-after-files.sha256"; fi
+          if test -f "$out/dist-files.sha256"; then cmp "$out/dist-files.sha256" "$out/dist-after-files.sha256" > "$out/dist-inventory-hold.log" 2>&1 || result=1; fi
+          printf 'proof=%s\nbuild=%s\nreaders=%s\n' '${{ steps.proof.outcome }}' '${{ steps.build.outcome }}' '${{ steps.readers.outcome }}' > "$out/stage-outcomes.txt"
+          exit "$result"
+      - name: Source installed tool font and transport holds
+        if: always()
+        run: |
+          set -euo pipefail
+          out="${MANAGER_TIMEOUT_ARTIFACTS:-$RUNNER_TEMP/manager-completion-timeout}"; result=0
+          for kind in source installed browser-tool runtime-tools font validated-source dist; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
+          if test -f "$out/initial-source-packet.sha256"; then sha256sum --check "$out/initial-source-packet.sha256" > "$out/initial-source-packet-holds.log" 2>&1 || result=1; fi
+          if test -f "$out/installed-files.sha256"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-after-files.sha256"; cmp "$out/installed-files.sha256" "$out/installed-after-files.sha256" || result=1; fi
+          for method in types proof build simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do test ! -s "$out/$method.transport" || result=1; done
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manager-completion-timeout-${{ github.sha }}
+          path: ${{ env.MANAGER_TIMEOUT_ARTIFACTS }}
+          if-no-files-found: error
+          retention-days: 14
