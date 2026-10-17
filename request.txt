@@ -1,0 +1,3 @@
+bv-kitty: git worktree add -q /tmp/bv d8aaa4cb && CM_BOARD_BASE=/tmp/bv node scripts/simCmBoardVerdict.mjs --part=kitty
+bv-nokitty: git worktree add -q /tmp/bw d8aaa4cb && CM_BOARD_BASE=/tmp/bw SIM_CM_BOARD_CONTROL=nokitty node scripts/simCmBoardVerdict.mjs --part=kitty
+bv-pure: git worktree add -q /tmp/bx d8aaa4cb && CM_BOARD_BASE=/tmp/bx node scripts/simCmBoardVerdict.mjs --part=pure

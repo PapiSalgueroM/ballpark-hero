@@ -1,0 +1,3 @@
+bv-pure exit=2 1s |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+bv-kitty exit=0 138s | simCmBoardVerdict GREEN: 2 of 2 checks green (parts kitty, 137 s)
+bv-nokitty exit=1 139s | control nokitty FIRED: 2 of 2 checks red

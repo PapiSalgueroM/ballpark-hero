@@ -1,0 +1,8 @@
+[kitty] tier 1: the band bound 0 of 0 staying rollovers (0 with a trophy); next budget over the club's: base median n/a p90 n/a, head median n/a p90 n/a
+[kitty] tier 2: the band bound 0 of 0 staying rollovers (0 with a trophy); next budget over the club's: base median n/a p90 n/a, head median n/a p90 n/a
+[kitty] tier 3: the band bound 0 of 9 staying rollovers (0 with a trophy); next budget over the club's: base median 2.44 p90 3.27, head median 2.44 p90 3.86
+[kitty] tier 4: the band bound 0 of 335 staying rollovers (0 with a trophy); next budget over the club's: base median 3.25 p90 3.25, head median 4.5 p90 7.5
+  250 rollovers of the tier 4 fleet where the band bound: their draws and the lines after the pot are counted, never held equal
+FAIL [kitty] 344 staying rollovers: the cheque never passes max(10, 1.7 x the club's budget) (250; first 18 on a budget of 8)
+FAIL [kitty] and equals the old cheque wherever the old one was inside the band (250 differ)
+control nokitty FIRED: 2 of 2 checks red
