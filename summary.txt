@@ -1,0 +1,2 @@
+headsha exit=0 0s | 6db4f3e05 Round BII: merge PR286 (codex/career-pending-popularity-gates at 75abee82), a Life choice already queued in a save stays open when popularity dips
+wf302 exit=1 196s | wfrun career-pending-money-gates.yml: 13 steps ran, 4 failed: Bind source and locked dependencies | Unchanged full route weights | Retain generated sitemap and restore it
