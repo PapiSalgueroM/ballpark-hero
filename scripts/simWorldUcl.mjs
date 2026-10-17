@@ -201,7 +201,7 @@ Object.assign(CONTROLS, {
   memokey: [3, /^3 memo: /, /^3 /],
   /* Advice 24: a summer move away from a created club hands its watched place to the created club's name (the
      open then throws on a club the new world does not know, and the season watches nothing). */
-  nocustomexit: [1, /^1 created exit: /],
+  nocustomexit: [1, /^1 (no competition: the created club's summer exit|created exit: )/],
 });
 Object.assign(CAREER_EDITS, {
   mdearly: [{ file: CM, from: '      put(night, i < 0 ? prev.at : i, i < 0 ? prev.round : roundOf(i), i >= 0);', to: '      put(night, i < 0 ? prev.at : i - 1, i < 0 ? prev.round : roundOf(i), i >= 0);' }],
@@ -1016,10 +1016,14 @@ async function customExitProbe() {
   ok(next.clubName === to.club && !next.uclGroup, `1 created exit setup: the summer move to ${to.club} did not leave a watcher (at ${next.clubName}, uclGroup ${next.uclGroup === null ? 'null' : 'set'})`);
   const watched = next.worldComps?.ucl?.clubs ?? [];
   /* Not a setup line: with the exit taken out the created club's name, which the new season's world no longer
-     knows, makes the open throw, and the season is left with no watched competition at all (fix-c, 2faa2f61). */
-  ok(watched.length > 0, `1 created exit: the summer move to ${to.club} opened no watched competition`);
-  ok(!watched.includes(CREATED.name), `1 created exit: after leaving ${CREATED.name} for ${to.club}, the watched field still lists the created club`);
-  ok(watched.includes(replaced), `1 created exit: after leaving ${CREATED.name} for ${to.club}, its place did not go back to ${replaced}, the club it replaced`);
+     knows, makes the open throw, and the season watches nothing (r1502-fix-c). Worded in section 1's family for a
+     season with no watched competition, which a control that breaks every open of today's world (field32) turns
+     red too; the field itself is read only when one opened (r1502-fix-d). */
+  ok(watched.length > 0, `1 no competition: the created club's summer exit, ${CREATED.name} (now) to ${to.club}: no watched competition opened`);
+  if (watched.length) {
+    ok(!watched.includes(CREATED.name), `1 created exit: after leaving ${CREATED.name} for ${to.club}, the watched field still lists the created club`);
+    ok(watched.includes(replaced), `1 created exit: after leaving ${CREATED.name} for ${to.club}, its place did not go back to ${replaced}, the club it replaced`);
+  }
   console.log(`  1 created club left in the summer: ${CREATED.name} (top of ${top}, in place of ${replaced}) to ${to.club}; the watched field holds ${watched.includes(replaced) ? replaced : 'not ' + replaced}`);
 }
 
