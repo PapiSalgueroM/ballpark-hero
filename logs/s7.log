@@ -1,0 +1,6 @@
+treeWithoutMerge: 08de1ece5d8b5387b47a65ccc16042e1a77d2a66, c5618ac9 without 54100f6e; conflicts kept from c5618ac9: none
+base 08de1ece5d8b5387b47a65ccc16042e1a77d2a66
+7) my deals with the recording on: a release, a buy and a sale at the start and a season later, on BASE and on the head, seeds 1,2,3
+   BASE: 309 deals of mine, 6 without exactly one record; the head: 309 deals, 6 without exactly one record
+   swaps: BASE 54, the head 54; exercised loan options: BASE 54, the head 54; deals not reached on the stream: BASE 0, the head 0
+simCmWorldMoves: green, sections 7 held

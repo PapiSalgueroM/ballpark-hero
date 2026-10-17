@@ -1,0 +1,8 @@
+treeWithoutMerge: 09b467473dc1336836a3ee5a888723d0812736c3, c5618ac9 without 54100f6e; conflicts kept from c5618ac9: none
+base 09b467473dc1336836a3ee5a888723d0812736c3
+simCmWorldMoves: control nohijack FIRED: section 2 red (45)
+simCmWorldMoves: control nowalk FIRED: section 2 red (45)
+simCmWorldMoves: control noguard FIRED: section 2 red (168)
+simCmWorldMoves: control noskip FIRED: section 10 red (10)
+simCmWorldMoves: control drawshift FIRED: section 11 red (9)
+controls (exit/FIRED): nohijack=1/1 nowalk=1/1 noguard=1/1 noskip=1/1 drawshift=1/1

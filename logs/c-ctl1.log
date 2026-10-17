@@ -1,0 +1,11 @@
+treeWithoutMerge: cfb54b55d350ab49560fd5cf4195f75200c67071, c5618ac9 without 54100f6e; conflicts kept from c5618ac9: none
+base cfb54b55d350ab49560fd5cf4195f75200c67071
+simCmWorldMoves: control seedless FIRED: section 6 red (18)
+simCmWorldMoves: control norecord FIRED: section 1 red (620), first at opening
+simCmWorldMoves: control noflush FIRED: section 1 red (28), first at opening
+simCmWorldMoves: control nojanuary FIRED: section 1 red (31), first at january
+simCmWorldMoves: control nosummer FIRED: section 1 red (23), first at summer
+simCmWorldMoves: control nolock FIRED: section 4 red (1497)
+simCmWorldMoves: control nolist FIRED: section 4 red (316)
+simCmWorldMoves: control dropbase FIRED: section 4 red (360531)
+controls (exit/FIRED): seedless=1/1 norecord=1/1 noflush=1/1 nojanuary=1/1 nosummer=1/1 nolock=1/1 nolist=1/1 dropbase=1/1
