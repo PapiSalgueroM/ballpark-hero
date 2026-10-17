@@ -1,0 +1,2 @@
+headsha: git log --oneline -2
+td-plain: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=600000
