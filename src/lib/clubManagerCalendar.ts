@@ -32,6 +32,8 @@ import {
   startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, customExitUclField,
   /* Round 1335: the old season rules' switch, read by both handovers. */
   legacySeason,
+  /* Round 1502: the watched Champions League across a move, and where its nights sit. */
+  carryWorldUcl, worldUclNights,
 } from '@/lib/clubManager';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
 import { BOARD_FRESH, LEGACY_BOARD_START, LEGACY_NEW_JOB_BOARD } from '@/lib/clubManagerBoardVerdict';
@@ -157,6 +159,28 @@ export function seasonPlanOf(state: Pick<CareerState, 'startYear' | 'season' | '
 /** Every entry's date for the save's current season, late start included. */
 export function entryDatesOf(state: Pick<CareerState, 'startYear' | 'season' | 'eraId' | 'clubName' | 'customClub' | 'calendar'>): CalDate[] {
   return dateOfEntries(worldYearOf(state), state.calendar, seasonPlanOf(state));
+}
+
+/**
+ * Round 1502: the date of every night of the watched Champions League this
+ * season, on the save's own calendar (the game's dates, never the real ones).
+ * A night that is a calendar week of its own (a European midweek, an era's
+ * knockout leg) takes that week's date; a league phase night that follows a
+ * league round is the Wednesday after it (the round's date plus four, the
+ * midweek rule above), and one past the last league round goes a week at a
+ * time after the last round's Wednesday. Null when the save watches nothing.
+ */
+export function worldUclNightDates(state: CareerState): CalDate[] | null {
+  const places = worldUclNights(state);
+  if (!places) return null;
+  const dates = entryDatesOf(state);
+  const league = state.calendar.flatMap((e, i) => (e.type === 'league' ? [dates[i]] : []));
+  if (!league.length) return null;
+  return places.map(p => {
+    if (p.entry) return dates[p.at];
+    const last = league.length - 1;
+    return p.round <= last ? addDays(league[p.round], 4) : addDays(league[last], 4 + 7 * (p.round - last));
+  });
 }
 
 /** The opening Saturday of the save's current season. */
@@ -999,6 +1023,9 @@ export function joinClubNow(career: CareerState): CareerState | null {
   delete joined.customClub;
   delete joined.customValues;
   delete joined.founderWageRoom;
+  /* Round 1502: the watched Champions League, decided on the joined season and year (carried with the nights
+     already shown, opened where its field is fixed data, or taken off). */
+  carryWorldUcl(career, joined);
   return joined;
 }
 

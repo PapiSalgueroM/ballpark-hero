@@ -115,6 +115,9 @@ function neutral(B, input, bridge = false) {
      (legacySeason: the opening, the kitty), which the pinned engine does not know either. */
   const summer = B.cm.startNextSeason(bridge ? { ...clone(c), matchRules: 'base' } : clone(c));
   if (bridge && 'matchRules' in summer) delete summer.matchRules;
+  /* Round 1502: a summer outside the Champions League opens the one it watches (worldComps, drawing nothing),
+     which the pinned engine does not know: it comes off the current arm's summer too. */
+  if (bridge && 'worldComps' in summer) delete summer.worldComps;
   assert.equal(B.cm.saveCareer(c), true); const loaded = B.cm.loadCareer();
   return { reads, match, summer, loaded, storage: [...B.store.entries()] };
 }
@@ -187,8 +190,11 @@ async function arm(control) {
     for (const row of observations) {
       const { original, current, again, interleaved } = row;
       assert.ok(Number.isSafeInteger(current.value.worldSeed) && current.value.worldSeed >= 0 && current.value.worldSeed <= 0xffffffff);
-      /* Round 1335: a new career opens at BOARD_FRESH, which the pinned engine does not know: compared at the old 60. */
-      equal({ ...current.value, boardConfidence: 60 }, { ...original.value, worldSeed: current.value.worldSeed }, 'Fresh constructor changes only the declared held seed');
+      /* Round 1335: a new career opens at BOARD_FRESH, which the pinned engine does not know: compared at the old 60.
+         Round 1502: and a club outside the Champions League opens the one it watches (worldComps), which the pinned
+         engine does not know either and which draws nothing (the draws are compared below): the key comes off the
+         current arm before the comparison, never off the career it plays on. */
+      equal({ ...current.value, boardConfidence: 60, worldComps: undefined }, { ...original.value, worldSeed: current.value.worldSeed }, 'Fresh constructor changes only the declared held seed');
       equal(current.draws, original.draws, 'Fresh seed uses no extra global draw'); equal(again, current, 'Fresh seed and whole constructor replay exactly');
       assert.equal(row.clock.restored, row.clock.before, 'Each VM clock is restored after the interleaved witness');
       assert.notDeepEqual(interleaved.value.academy.candidates.map(p => p.id), current.value.academy.candidates.map(p => p.id), 'Actual constructor candidate IDs changed across the held clock and other career');

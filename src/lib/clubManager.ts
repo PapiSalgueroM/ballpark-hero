@@ -12981,7 +12981,8 @@ export function worldUclEraField(state: Pick<CareerState, 'eraId' | 'clubName' |
  * today's world the participant's rule at 36 with my club kept out, read off
  * `tables` (the season just finished, uclFinalTables) or, with none, off the
  * real 2025-26 tables in season one (seasonOneUclField). Null when there is
- * no honest field.
+ * no honest field: a later season of today's world with no finished tables to
+ * read (a rollover from a season cut short, a job move from season two on).
  */
 export function worldUclField(
   state: CareerState,
@@ -12991,7 +12992,7 @@ export function worldUclField(
   if (worldUclFormatOf(state) === 'g8') return worldUclEraField(state)?.field ?? null;
   const field = tables
     ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, worldUclExcluded(state))
-    : seasonOneUclField(state.eraId ?? DEFAULT_ERA_ID, UCL_LEAGUE.clubs, worldUclExcluded(state));
+    : state.season === 1 ? seasonOneUclField(state.eraId ?? DEFAULT_ERA_ID, UCL_LEAGUE.clubs, worldUclExcluded(state)) : null;
   return field && field.length ? field : null;
 }
 
@@ -13083,10 +13084,11 @@ function worldUclBind(state: CareerState, f: WorldCompFormat): WorldCompBind {
 }
 
 /** Where one night of the watched season sits on this save's calendar: it
- *  counts as played once `state.week` is past `at`. `round` is the league
- *  round it follows (a value past the last round is that many weeks after the
- *  season's last league round), for the dates the screen prints. */
-export interface WorldUclNightPlace { night: WorldNight; at: number; round: number }
+ *  counts as played once `state.week` is past `at`. `entry` says the night
+ *  IS the calendar entry at `at` (and is dated with it); otherwise it follows
+ *  league round `round` (a value past the last round is that many weeks after
+ *  the season's last league round). worldUclNightDates dates them. */
+export interface WorldUclNightPlace { night: WorldNight; at: number; round: number; entry: boolean }
 
 /**
  * The watched season's nights on this save's calendar (the critic's
@@ -13115,10 +13117,10 @@ export function worldUclNights(state: CareerState): WorldUclNightPlace[] | null 
   const roundOf = (i: number): number => Math.max(0, leagueAt.filter(x => x <= i).length - 1);
   const groupAt = (md: number): number => cal.findIndex(e => e.type === 'uclGroup' && e.round === md);
   const places: WorldUclNightPlace[] = [];
-  let prev = { at: -1, round: 0 };
-  const put = (night: WorldNight, at: number, round: number): void => {
-    prev = at < prev.at ? { at: prev.at, round: prev.round } : { at, round };
-    places.push({ night, at: prev.at, round: prev.round });
+  let prev = { at: -1, round: 0, entry: false };
+  const put = (night: WorldNight, at: number, round: number, entry: boolean): void => {
+    if (at >= prev.at) prev = { at, round, entry };
+    places.push({ night, ...prev });
   };
   /* Every calendar carries six European midweeks (buildCalendar's uclGroup weeks): the league phase plays its
      first six matchdays on them and its other eleven nights on the marks. */
@@ -13127,19 +13129,19 @@ export function worldUclNights(state: CareerState): WorldUclNightPlace[] | null 
   nights.forEach((night, n) => {
     if (slice.f === 'l36' && n >= weeks) {
       const r = marks[n - weeks];
-      put(night, r < rounds ? blockEnd(r) : cal.length - 1, r);
+      put(night, r < rounds ? blockEnd(r) : cal.length - 1, r, false);
       return;
     }
     if (night.stage === 'md') {
       const i = groupAt(night.md ?? 0);
-      put(night, i < 0 ? prev.at : i, i < 0 ? prev.round : roundOf(i));
+      put(night, i < 0 ? prev.at : i, i < 0 ? prev.round : roundOf(i), i >= 0);
       return;
     }
     const leg = night.leg ?? 1;
     const i = cal.findIndex(e => e.type === 'uclKo' && e.uclRound === night.stage && (e.uclLeg ?? 1) === leg);
-    if (i >= 0) { put(night, i, roundOf(i)); return; }
+    if (i >= 0) { put(night, i, roundOf(i), true); return; }
     const r = leg === 2 ? prev.round + 1 : Math.max(0, Math.min(rounds - 1, Math.round(rounds * UCL_R16_MARK)));
-    put(night, r < rounds ? blockEnd(r) : cal.length - 1, r);
+    put(night, r < rounds ? blockEnd(r) : cal.length - 1, r, false);
   });
   return places;
 }
@@ -13176,6 +13178,34 @@ export function evalWorldUcl(state: CareerState, nights?: number): WorldCompResu
   const out = evaluateWorldComp(slice, k, worldUclBind(state, slice.f));
   memo.set(key, out);
   return out;
+}
+
+/**
+ * A mid season job move (joinClubNow): the slice is decided on the joined
+ * state, once its season and year are the career's (the critic's correction
+ * 10). It is carried when the new club watches and is not one of its
+ * entrants, keeping the nights already shown (`seen`: the new club's calendar
+ * can sit behind the old one, correction 11). When nothing is carried it is
+ * opened fresh only where the field is fixed data (season one of today's
+ * world, any season of an era), else the key comes off; a new club that is an
+ * entrant of the competition it was watching drops it. Never throws.
+ */
+export function carryWorldUcl(career: CareerState, joined: CareerState): void {
+  try {
+    delete joined.worldComps;
+    if (joined.uclGroup) return;
+    const slice = career.worldComps?.ucl;
+    if (slice && slice.s === career.season) {
+      const names = [joined.clubName, joined.eraId ? eraEuroName(joined.eraId, joined.clubName) : joined.clubName];
+      if (slice.s !== joined.season || names.some(c => slice.clubs.includes(c))) return;
+      const seen = Math.max(slice.seen ?? 0, worldUclNightsDone(career));
+      joined.worldComps = { ucl: { ...slice, ...(seen > 0 ? { seen } : {}) } };
+      return;
+    }
+    openWorldUcl(joined, worldUclField(joined, null), worldUclFormatOf(joined) === 'l36' ? CM_FINAL_TABLES_2025_26.holders : null);
+  } catch {
+    delete joined.worldComps;
+  }
 }
 
 /** The winner of the watched season, once the season is over (every night
@@ -20673,6 +20703,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      Premier League's places, and one just relegated out of it left the
      Premier League sending nobody. */
   let nextUclField = uclQualifiersFrom(career);
+  /* Round 1502: the watched Champions League reads the very same final tables, here for the same reason, and
+     the season's winner as the holder the participant's field is handed. */
+  const watchTables = uclFinalTables(career);
+  const watchHolder = career.uclBracket?.find(t => t.round === 'F')?.winner ?? null;
   registerLeagueOverrides(pr.overrides);
   /* Round 146: inside a historic save, a "playable club" is an era club, so
      the move guard consults the era world before the modern one. */
@@ -21209,6 +21243,16 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length, eraId, nextCustom ? leagueClubs : undefined);
   // Round 163: a fresh Champions League draw for the new season.
   state.uclWorld = initUclWorld(state);
+  /* Round 1502: and the season's watched one when my club is not in it. The spread of the old career copied
+     last season's slice, so it is always replaced or taken off here, never kept. A summer move away from a
+     created club hands its place back to the club it replaced, the way the participant's field does
+     (customExitUclField). Never throws: a rollover always completes. */
+  try {
+    const tables = moving && watchTables ? watchTables.map(t => ({ ...t, clubs: customExitUclField(career, t.clubs) })) : watchTables;
+    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);
+  } catch {
+    delete state.worldComps;
+  }
   // Round 165: a fresh golden boot race too (the new table is all zeros).
   state.scorerRace = initScorerRace(state);
   openLeagueBook(state);

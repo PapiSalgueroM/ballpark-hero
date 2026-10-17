@@ -29,12 +29,9 @@
    Run: node scripts/proofWorldUclFleet.mjs --base d8aaa4cb --fleet participants --coach nocoach */
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import fs from 'node:fs';
 import path from 'node:path';
-import vm from 'node:vm';
-import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
-import { build } from 'esbuild';
+import { engineOf, pickFleet, tape } from './lib/worldUclFleet.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (name, dflt) => { const i = process.argv.indexOf(name); return i > 0 ? process.argv[i + 1] : dflt; };
@@ -49,60 +46,7 @@ const SEASONS = arg('--seasons', '');
 const ONLY = arg('--only', '');
 const STRIP = arg('--strip', '');
 const EVAL = process.argv.includes('--eval');
-const lf = s => s.split('\r\n').join('\n');
 const sha = v => createHash('sha256').update(typeof v === 'string' ? v : JSON.stringify(v)).digest('hex').slice(0, 16);
-
-async function engine(label, base) {
-  const plugin = {
-    name: 'fleet-source',
-    setup(b) {
-      b.onLoad({ filter: /\.(ts|tsx|json)$/ }, args => {
-        const rel = path.relative(ROOT, args.path).split(path.sep).join('/');
-        if (!rel.startsWith('src/')) return null;
-        let text;
-        if (base) {
-          try { text = lf(execFileSync('git', ['show', `${BASE}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 27 })); } catch { return null; }
-        } else text = lf(fs.readFileSync(args.path, 'utf8'));
-        return { contents: text, loader: path.extname(args.path).slice(1), resolveDir: path.dirname(args.path) };
-      });
-    },
-  };
-  const entry = "export * as cm from './src/lib/clubManager';\nexport * as eras from './src/lib/clubManagerEras';\n";
-  const out = await build({ stdin: { contents: entry, resolveDir: ROOT, sourcefile: `fleet-${label}.ts`, loader: 'ts' },
-    bundle: true, write: false, format: 'cjs', platform: 'node', target: 'node20', plugins: [plugin], logLevel: 'silent' });
-  const script = new vm.Script(out.outputFiles[0].text, { filename: `fleet-${label}.cjs` });
-  return {
-    label,
-    async fresh() {
-      const module = { exports: {} };
-      const store = new Map();
-      const NOW = 1791633600000;
-      class HeldDate extends Date {
-        constructor(...a) { super(...(a.length ? a : [NOW])); }
-        static now() { return NOW; }
-      }
-      const ctx = vm.createContext({ module, exports: module.exports, require: createRequire(path.join(ROOT, 'package.json')),
-        console, process, Buffer, Math, Date: HeldDate, URL, URLSearchParams, TextEncoder, TextDecoder, structuredClone,
-        setTimeout, clearTimeout, setInterval, clearInterval, fetch: () => Promise.reject(new Error('no network here')),
-        localStorage: { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() } });
-      script.runInContext(ctx);
-      await module.exports.eras.ensureAllEraRosters();
-      return { ...module.exports, store };
-    },
-  };
-}
-
-/* The random stream: a counter generator, the same on both engines, every draw kept. */
-function tape(seed, action) {
-  let state = seed >>> 0; const draws = [];
-  const original = Math.random;
-  Math.random = () => {
-    state = (state + 0x6d2b79f5) >>> 0; let v = state;
-    v = Math.imul(v ^ v >>> 15, v | 1); v ^= v + Math.imul(v ^ v >>> 7, v | 61);
-    const d = ((v ^ v >>> 14) >>> 0) / 4294967296; draws.push(d); return d;
-  };
-  try { return { value: action(), draws }; } finally { Math.random = original; }
-}
 
 /* One journey of one save on one engine: every step on its own stretch of the stream. */
 async function journey(E, f, seasons, mode, compareStrip, evalEach = false) {
@@ -155,44 +99,9 @@ function firstDifference(a, b) {
   return 'the key order differs';
 }
 
-const baseEngine = await engine('base', true);
-const treeEngine = await engine('tree', false);
-const M0 = await treeEngine.fresh();
-const startsIn = (club, era, custom) => {
-  const st = tape(0x1502, () => (custom ? M0.cm.startCareer(club, era, custom) : M0.cm.startCareer(club, era))).value;
-  M0.cm.registerCustomClub?.(null); M0.cm.registerLeagueOverrides?.(null);
-  return !!st.uclGroup;
-};
-const fleet = [];
-const add = (kind, era, club, custom) => {
-  const inIt = startsIn(club, era, custom);
-  if (inIt !== (kind === 'participant')) cannot(`${club} (${era}) was picked as a ${kind} but startCareer says uclGroup ${inIt ? 'set' : 'null'}`);
-  fleet.push({ kind, era, club, custom });
-};
-const pickEra = (era, wantIn) => {
-  const leagues = M0.cm.ERA_LEAGUES[era];
-  if (!leagues?.length) cannot(`the era ${era} has no leagues`);
-  const clubs = wantIn ? leagues[0].clubs : [...leagues[0].clubs].reverse();
-  const club = clubs.find(c => startsIn(c, era) === wantIn);
-  if (!club) cannot(`no ${wantIn ? 'participant' : 'watcher'} in ${era}'s first league`);
-  return club;
-};
-const ERAS = ['era2005', 'era2010', 'era2015', 'era2020'];
-if (FLEET !== 'watchers') {
-  for (const club of ['Real Madrid', 'Arsenal']) add('participant', 'now', club);
-  for (const era of ERAS) add('participant', era, pickEra(era, true));
-}
-if (FLEET !== 'participants') {
-  for (const club of ['Chelsea', 'Hoffenheim', 'Everton']) add('watcher', 'now', club);
-  const mx = M0.cm.REAL_LEAGUES.find(l => /liga mx/i.test(l.name ?? '') || /mx/i.test(l.id));
-  if (!mx) cannot('no Liga MX league in REAL_LEAGUES');
-  add('watcher', 'now', mx.clubs[0]);
-  const second = M0.cm.PYRAMIDS?.[0]?.second;
-  if (!second) cannot('no PYRAMIDS[0].second league for the created club');
-  add('watcher', 'now', 'Proof Town Athletic', { name: 'Proof Town Athletic', leagueId: second, stadium: 'Proof Park', budgetTier: 'big', quality: 72,
-    crest: { shape: 0, pattern: 0, color1: '#2563eb', color2: '#ffffff', initials: 'PT' }, replacedClub: '' });
-  for (const era of ERAS) add('watcher', era, pickEra(era, false));
-}
+const baseEngine = await engineOf(ROOT, 'base', { base: BASE }, cannot);
+const treeEngine = await engineOf(ROOT, 'tree', {}, cannot);
+const fleet = pickFleet(await treeEngine.fresh(), FLEET, cannot);
 const chosen = fleet.filter(f => !ONLY || f.club.includes(ONLY));
 console.log(`base ${BASE}; fleet (${chosen.length}): ${chosen.map(f => `${f.club} (${f.era}, ${f.kind})`).join('; ')}`);
 console.log(`seeds ${SEEDS.join(',')}; modes ${COACH}; strip ${STRIP || 'nothing'}`);

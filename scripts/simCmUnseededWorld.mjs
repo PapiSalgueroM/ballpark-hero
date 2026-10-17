@@ -122,6 +122,9 @@ function tape(seed, action) {
   try { return { value: action(), draws }; } finally { Math.random = original; }
 }
 
+/* Round 1502: a state with its watched Champions League left out, for comparison only. */
+const withoutWatched = st => (st && typeof st === 'object' && 'worldComps' in st ? { ...st, worldComps: undefined } : st);
+
 /* Where two states first part: the first top level key whose value differs, and forty characters either side of
    the first character that differs in it. */
 function firstDifference(a, b) {
@@ -151,12 +154,16 @@ async function journey(E, input, plan, seed, bridge = false) {
     const got = r.value ?? {};
     if (bridge && got.state && 'matchRules' in got.state) { got.state = { ...got.state }; delete got.state.matchRules; }
     if (got.state) s = got.state;
-    steps.push({ label, note: got.note ?? '', json: JSON.stringify(s), draws: r.draws.length, drawSha: sha(r.draws), saved: got.saved ?? null });
+    /* Round 1502 (the critic's correction 3): a club outside the Champions League carries the one it watches
+       (worldComps), keyed on the world seed, so the inverse arm (no seed) opens a different slice and the pinned
+       base none at all. It draws nothing (the draws are compared as before), so it comes out of the comparison on
+       every arm, never out of the career a step plays on. */
+    steps.push({ label, note: got.note ?? '', json: JSON.stringify(withoutWatched(s)), draws: r.draws.length, drawSha: sha(r.draws), saved: got.saved ?? null });
   };
   const reload = () => step('save-and-reload', cur => {
     M.store.clear();
     if (!M.cm.saveCareer(cur)) return { note: 'the save was refused' };
-    const saved = sha([...M.store.entries()].sort());
+    const saved = sha([...M.store.entries()].sort().map(([k, v]) => (k === M.cm.SAVE_KEY ? [k, JSON.stringify(withoutWatched(JSON.parse(v)))] : [k, v])));
     const loaded = M.cm.loadCareer();
     return { state: loaded, saved, note: loaded ? '' : 'the reload was refused' };
   });
