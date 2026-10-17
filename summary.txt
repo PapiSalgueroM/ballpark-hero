@@ -1,0 +1,4 @@
+md-truncate exit=1 19s | simCmMatchDay: CONTROL truncate FIRED (15753 failures, section(s) 3)
+md-numbers exit=1 20s | simCmMatchDay: CONTROL numbers FIRED (15166 failures, section(s) 6)
+simCmMatchDay exit=0 21s | simCmMatchDay: all sections green (916 matches: 461 home, 447 away, 8 neutral)
+md-neutralaway exit=1 13s | simCmMatchDay: CONTROL neutralaway FIRED (24 failures, section(s) 1, 5, 7)
