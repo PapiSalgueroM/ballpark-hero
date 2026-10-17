@@ -178,8 +178,10 @@ describe('the season verdict under No sacking', () => {
     const clause = 'Catastrophic. Only the compensation clause saved your job this long.';
     expect(boardVerdictLine(s, threat)).toBe(threat);
     expect(boardVerdictLine(s, clause)).toBe(clause);
-    expect(boardVerdictLine(on!, threat)).toBe('A poor season. The board is fuming, and only No sacking is keeping you in the job.');
-    expect(boardVerdictLine(on!, clause)).not.toMatch(/compensation|gone/);
+    expect(boardVerdictLine(on!, threat)).toBe('A poor season. The board is fuming and wants a lot more next year.');
+    expect(boardVerdictLine(on!, clause)).toBe('Catastrophic. The board is furious, and it will not forget this one.');
+    /* Picked by grade alone, so neither may claim No sacking saved a job the board was never going to take. */
+    for (const line of [threat, clause]) expect(boardVerdictLine(on!, line)).not.toMatch(/compensation|gone|No sacking|still have a job|in the job/);
     const plain = 'Solid work. The board is satisfied and the fans are onside.';
     expect(boardVerdictLine(on!, plain)).toBe(plain);
   });

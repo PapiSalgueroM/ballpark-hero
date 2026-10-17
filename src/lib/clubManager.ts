@@ -19400,10 +19400,12 @@ const VERDICTS: Record<'A' | 'B' | 'C' | 'D' | 'F', string[]> = {
 
 /* Round 1501, the lead's ruling from Round 1342's closing check: under No sacking the board cannot carry out a
    threat to sack you, so its verdict never makes one. The same pick is taken on every path (the season's draws
-   are what they were), and only these two lines are reworded: the board's disappointment, without the threat. */
+   are what they were), and only these two lines are reworded: the board's disappointment, without the threat.
+   Neither says No sacking kept you in the job: the line is picked by the grade alone, and a D or F season with the
+   board nowhere near zero was never going to cost the job (the only sacks are the zero checks after a match). */
 const NO_SACK_VERDICTS: Record<string, string> = {
-  'A poor season. One more like that and you are gone.': 'A poor season. The board is fuming, and only No sacking is keeping you in the job.',
-  'Catastrophic. Only the compensation clause saved your job this long.': 'Catastrophic. No sacking is the only reason you still have a job.',
+  'A poor season. One more like that and you are gone.': 'A poor season. The board is fuming and wants a lot more next year.',
+  'Catastrophic. Only the compensation clause saved your job this long.': 'Catastrophic. The board is furious, and it will not forget this one.',
 };
 export function boardVerdictLine(state: CareerState, line: string): string {
   return boardMaySack(state) ? line : NO_SACK_VERDICTS[line] ?? line;
