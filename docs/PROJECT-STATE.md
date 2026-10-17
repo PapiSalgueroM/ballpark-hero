@@ -1,3 +1,35 @@
+## Codex1404 scoped READY, 2026-10-17 UTC
+
+Soccer Career event320 now lists its actual heat, integrity and morale effects, removing the promise that all dirty income ends. One catalog string only, all callback code and saved fields held. TESTED2b498a98e4da394a16bc39c7388bc7c0bcfaab37/run39026289537 SUCCESS:18existing tests,40pairs,500normal+500controlled careers,realtypes/build/all15readers/14unchangedfatalcaps pass. Exactone-captioninverse/source4873/dist784/fullholds/ZEROgenerated delta. Physicalf2de6038 andsemantic38f38cdd(full a4f13970,97checks/0mismatch). Finalclosingdocs separately verified outside.
+
+Claude I owns actualjoined build/main/publish. BIIrealmergeactualTESTED2b4, closingdocs separate andIregenerates actualjoined outputs; selectingthisdescendantincludes318/319once. Urgent308 andXI320 stay independent. Newcatalogcaption only, existing savedpendingcaptionsnotmigrated; no direct320callbackruntime/newbrowser/NBA/fullsuite/physicaldevice/currentIjoin/liveclaim. See docs/audits/soccer-syndicate-choice-copy-1404.md. Guidecheckpointfef66a0a stillwaits for accepted1503/1504/1500closingheads.
+
+## Codex1404 candidate prepared, 2026-10-17 UTC
+
+Soccer Career event320 now lists actual Heat -30, Integrity +14 and Morale up to +10 instead of promising all dirty income ends. One new catalog string only; all callbacks, flags, saved fields and RNG code held. Existing test/build/source gates queued remotely, no READY or live claim. See docs/audits/soccer-syndicate-choice-copy-1404.md.
+
+## Codex1404 claimed, 2026-10-17 UTC
+
+One Soccer Career event320 consequence narrows its promise to leaving the syndicate. Existing callback does not end all dirty income. Copy-only on final1402, own workflow and docs; exact code/money/storage/RNG held. Runtime and ready status pending. No activeI or320XI dependency. See docs/audits/soccer-syndicate-choice-copy-1404.md.
+
+## Codex1402 scoped READY, 2026-10-17 UTC
+
+PR319 includes qualified1401/318 plus3cost/payment caption strings; actualTESTED932aaf0a2f18a7ab1b3bbe35582bf1c59962ebcb/run39019968910/job117359661025 SUCCESS on frozen225b. Wholeinverse holds callbacks/math/guards/all315copy. Actual18units/40pairs/500normal+500effectiveoneoption/types/ordinarybuild/all15readers/all14fatalweights/fullholds pass. Physical9d777772/semantic9a2e0d4e (91/0) close artifact12095788837/6b468edd,92payloads/4872source/784dist. ZEROgenerateddelta, request=validatedall4872. Finalonly3closingdocs,4304nondoc exact; outside source closure/push receipt bindfinalhead. BIIactualTESTED932realmerge, closingdocsseparate, Iregenerates actualjoin;318captionsonce. Existing savedcaptions/directtargetparity/NBA/fullsuite/live unclaimed. Urgent308independent; actualIownsactiveSC/core/competition/spectator1503/tournaments1509+/main/publish. Newselected-gatecheckpoint eb7168b1 andBIdmissingrecipe2ce2 handedtoI. See docs/audits/soccer-corruption-cost-copy-1402.md.
+## Codex1402 source prepared, 2026-10-17 UTC
+
+Exactly3additional Soccer Career cost/payment captions, wholeinverse and protectedsource held. Existing own workflow adapted to normalbuild with allsource unchanged and zero generateddelta. Runtime still pending, no READY/live claim. Final1401/318 remains scopedREADY and pushed225b. See docs/audits/soccer-corruption-cost-copy-1402.md.
+
+## Codex1402 claimed, 2026-10-17 UTC
+
+Three more Soccer Career cost/payment captions only, on closed final1401 base225b. No product edit or runtime yet. Existing I-owned gameplay stays held; no saved-caption migration. See docs/audits/soccer-corruption-cost-copy-1402.md. Urgent308 and the active release remain independent.
+
+## Codex1401 scoped READY, 2026-10-17 UTC
+
+PR318 corrects three Soccer Career cash-business captions; actual tested5066fe9239d6bfb848e79cade8b62ecacacc2ad9/run39018657286/job117355854956 SUCCESS on I8293. Code stays whole by exact inverse. Eighteen units,40currency pairs,500career normal/effective500career oneoption control,types/serialbuild/all15readers/all14fatalcaps and source/installed/font/dist holds pass. Physical19cf6cf4/semanticdc7b3676 (102/0) close artifact12095692466/a49f504e,4871source/784dist bodies. Actual3generated bodies adopted23d1e0e1; final is3closingdocs beyond that, not docs-only from tested request. Outside source closure and push receipt bind the final head. Existing saved captions are not migrated; no direct315 parity or NBA fix. BIIactualTESTED realmerge, closingdocsseparate, I regenerates joined output. Urgent308 remains independent. Main1ec/release829 and raw liveBQU remain at08:56UTC. BIdmissing alert handed to I, no root gate dispatch. See docs/audits/soccer-cash-choice-1401.md.
+## Codex1401 request prepared, 2026-10-17 UTC
+
+Three Soccer Career cash-business strings now describe an inquiry and direct players to the existing shop. Exact whole inverse holds all surrounding code. Existing checks and remote workflow prepared; runtime pending, no READY/live claim. Existing saved pending captions are not migrated. Actual I retains integration, active page/core, US1500 and release. See docs/audits/soccer-cash-choice-1401.md.
+
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
@@ -18506,3 +18538,8 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+
+## Codex1401 copy claim
+
+Root claims exactly3event315choice0 strings in SCcorruption, existingotherlaneleaf, ownWF/generatedWN/sitemap/lastmod/closingdocs. ActualI8293 frozen. Falsepurchase/unlock promises becomeinquiry+existingstore directions; oldsavedcaptionsnotmigrated. No core/page/engine/economics/NBA feature changes. Remoteonlygatespending. See docs/audits/soccer-cash-choice-1401.md.
