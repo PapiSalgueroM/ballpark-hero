@@ -1,0 +1,20 @@
+PASS cold standalone pack: no-preference, actual free draw and dismissal
+PASS cold standalone pack: reduce, actual free draw and dismissal
+PASS delayed academy: no-preference/dismiss/cold standalone, saved moves and notice lifetime intact
+PASS delayed academy: no-preference/expire/cold standalone, saved moves and notice lifetime intact
+PASS delayed academy: no-preference/resolve/cold standalone, saved moves and notice lifetime intact
+PASS delayed academy: no-preference/resolve/Stadium styles, saved moves and notice lifetime intact
+PASS delayed academy: reduce/dismiss/cold standalone, saved moves and notice lifetime intact
+PASS delayed academy: reduce/expire/cold standalone, saved moves and notice lifetime intact
+PASS delayed academy: reduce/resolve/cold standalone, saved moves and notice lifetime intact
+PASS delayed academy: reduce/resolve/Stadium styles, saved moves and notice lifetime intact
+PASS delayed trophy: 320px, stationary resolved card, built CSS
+PASS delayed trophy: 320px, dismissed before import, built CSS
+PASS delayed trophy: 390px, stationary resolved card, built CSS
+PASS delayed trophy: 390px, dismissed before import, built CSS
+PASS actual promotion: 320px/no-preference, Gravel Lane and both Summit outcomes
+PASS actual promotion: 320px/reduce, Gravel Lane and both Summit outcomes
+PASS actual promotion: 390px/no-preference, Gravel Lane and both Summit outcomes
+PASS actual promotion: 390px/reduce, Gravel Lane and both Summit outcomes
+PASS no-preference: motion, final facts, first-frame Continue and 320px layout
+PASS reduce: motion, final facts, first-frame Continue and 320px layout
