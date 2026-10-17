@@ -250,10 +250,12 @@ const readNames = page => page.evaluate(() => {
     const r = m.getBoundingClientRect();
     const onLast = !!last && r.top < last.bottom && r.bottom > last.top;
     /* The one way off the last line that is not a fault: his last word and the mark together are wider than the
-       column, so the mark starts the very next line (no white-space rule can avoid it without splitting the name). */
+       column, so the mark starts the very next line (no white-space rule can avoid it without splitting the name).
+       Within half a pixel of the column the browser's own rounding decides, so only a mark with clearly room to
+       spare on the last line counts as a fault (r1340-b4's probe met three such near misses). */
     const cell = m.closest('[data-cm-tl-entry]')?.parentElement;
     const room = cell ? cell.clientWidth : Infinity;
-    const forced = !onLast && !!last && r.top >= last.bottom - 1 && r.top < last.bottom + last.height && last.width + r.width > room + 0.5;
+    const forced = !onLast && !!last && r.top >= last.bottom - 1 && r.top < last.bottom + last.height && last.width + r.width > room - 0.5;
     return { name: name?.textContent.trim() ?? null, onLast, forced, lines: lines.length };
   });
   const toggle = document.querySelector('[data-cm-tl-toggle]');
@@ -595,6 +597,31 @@ async function walkTile(width, height) {
     if (CONTROL !== 'fullname') check(tile.text === saveD.line, `${id}: the Stats tile reads "${tile.text}", not "${saveD.line}"`);
     const fits = check(tile.lines <= 2, `${id}: the Stats tile's line wraps to ${tile.lines} lines ("${tile.text}")`);
     if (!fits && CONTROL === 'fullname') fired.fullname += 1;
+    if (!CONTROL) {
+      /* Printed, not asserted: the 200 longest pitch names of the 2026-27 world in the same tile, in the shipped
+         wording and two shorter ones, so the lead can see how many pass two lines and what a wording would buy. */
+      const pool = [...new Set(Object.values(cm.CM_ROSTERS).flat().map(p => display.pitchName(p.n)))].sort((x, y) => y.length - x.length).slice(0, 200);
+      const wordings = { shipped: n => `${n} leads with ${TILE_GOALS}`, comma: n => `${n}, ${TILE_GOALS} goals`, colon: n => `${n}: ${TILE_GOALS}` };
+      for (const [word, make] of Object.entries(wordings)) {
+        const lines = await page.evaluate(texts => {
+          const root = document.querySelector('[data-testid="cm-show-slots"]')?.closest('header')?.parentElement;
+          for (const b of root ? root.querySelectorAll('.grid > button') : []) {
+            const divs = [...b.querySelectorAll(':scope > div')];
+            const i = divs.findIndex(d => d.classList.contains('uppercase'));
+            if (i < 0 || divs[i].textContent.trim() !== 'Stats' || !divs[i + 2]) continue;
+            const sub = divs[i + 2], keep = sub.textContent;
+            const cs = getComputedStyle(sub);
+            const lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.2;
+            const out = texts.map(t => { sub.textContent = t; return Math.round(sub.getBoundingClientRect().height / lh); });
+            sub.textContent = keep;
+            return out;
+          }
+          return [];
+        }, pool.map(make));
+        const over = pool.filter((n, k) => lines[k] > 2);
+        console.log(`${id}: in the ${word} wording ("${make('Isak')}"), ${over.length} of the ${pool.length} longest pitch names of the 2026-27 world pass two lines${over.length ? `: ${over.slice(0, 10).join(', ')}${over.length > 10 ? ', ...' : ''}` : ''} (the shortest of these names is ${pool[pool.length - 1]?.length} letters)`);
+      }
+    }
   } catch (e) {
     check(false, `${id}: the Stats tile walk stopped (${String(e.message).split('\n')[0]})`);
   } finally {

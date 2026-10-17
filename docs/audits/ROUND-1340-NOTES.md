@@ -103,3 +103,13 @@ the league table's goals pair, not a match screen.
   a mark that starts the very next line only when the last line plus the mark are wider than the column (printed as
   "on the next line, no room on the last"); a mark off its line with room on it is still red. The probe (v2, sent
   with the walk, never committed) proves the rule on the real Entry markup and catches a display:block control.
+- r1340-b4 (1433eb97): save D measured. At 320 the Stats tile reads "Amaimouni-Echghouyab leads with 12" on 3 lines
+  (133 px tile); with his whole name it was 4 lines (149 px). So the design's sentence "the line fits two lines at 320
+  for the longest pitch name" is FALSE for the longest name; the walk's D check (at most two lines) stays an
+  assertion and is red, a finding for the lead (see the closing report). The walk now also prints, for the 200
+  longest pitch names of the 2026-27 world, how many pass two lines in the shipped wording and in two shorter ones.
+  The What's New sentence no longer claims the tile fits a small phone.
+- The mark rule's tolerance: r1340-b4's probe (v2) counted 3 entries with the shipped class as off their line with
+  room; the rule now leaves the last half pixel to the browser's rounding (a fault needs clear room), and probe v3
+  prints how far over each near miss was and uses a <br> control instead of display:block (whose box is the whole
+  column wide, so it never read as room).
