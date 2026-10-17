@@ -15798,3 +15798,11 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Codex1399 claim: full-season completion test headroom
+
+Root owns only the existing whole-season test's explicit timeout in src/hooks/useClubManager.test.ts, a new narrow scripts/qa proof and remote workflow, plus closing docs. Frozen actual I source a5b0e7675068525235883124a9947f656061a752. finish-BIJ.md section8 and section10 item9 measured this same test timing out at its default5seconds under20busyloops, and passing unchanged with300seconds. This is QA debt, not a new gameplay defect.
+
+Plan: (1) preserve all assertions, titles, hook/core/product files and the existing simActivityNotCompletion method; add300000ms only to the full-season test, leaving the single-match test's default untouched. (2) Remote-only exact-source original/fixed/restored comparison under the same20persistent CPU workers, requiring original precise season timeout and one preserved match, candidate full two-case success three times and the original effective match/source controls. Keep actual logs and failures, with no retries or cap changes. (3) Run actual types, serial production build and all15 rebuilt-site readers, then push a scoped handback with complete source evidence. No local app/test/build/browser runtime. No new runtime credit until actual results.
+
+Actual I retains core/world/calendar/competition and active SoccerCareer page, joined release/main/publication. This optional QA correction neither qualifies the full release nor adds a gate on urgentREADY308. Existing source-only SC account import and wash copy proposals remain unclaimed. No primary changes except this append-only board claim.
