@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/AuthContext';
-import { AuthModal } from '@/components/auth/AuthModal';
+import { AccountDialogOnDemand as AuthModal } from '@/components/auth/AccountDialogOnDemand';
 import { Flame, User, BarChart3, LogOut, Loader2, KeyRound } from 'lucide-react';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { SoundToggle } from '@/components/game/SoundToggle';
