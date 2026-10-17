@@ -1,0 +1,52 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerSlots.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 711[2mms[22m[39m
+ [31m❯[39m src/lib/clubManagerDifficulty.test.ts [2m([22m[2m14 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1271[2mms[22m[39m
+   [32m✓[39m readLevel and the stored key[2m > [22mreads only the two exact words, everything else is Normal[32m 3[2mms[22m[39m
+   [32m✓[39m readLevel and the stored key[2m > [22ma fresh career is Normal and carries no key at all[32m 39[2mms[22m[39m
+   [32m✓[39m readLevel and the stored key[2m > [22mensureStartOptions keeps the level and No sacking off a broken block, and is idempotent[32m 51[2mms[22m[39m
+   [32m✓[39m the table[2m > [22mNormal is the identity row and each level is strictly harder than the one before on every dial[32m 2[2mms[22m[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22mon a Normal career[32m 20[2mms[22m[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22msetUpCareer on Normal with No sacking off returns the very career it was given[32m 0[2mms[22m[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22ma level writes its key, cuts the cheque and the room by the dial, and rebuilds the asks on day one only[32m 1[2mms[22m[39m
+[31m   [31m×[31m every applier is the identity at its own identity dial[2m > [22ma created club: the room dial moves only the base ceiling, and the founders' room comes back whole[39m[32m 45[2mms[22m[39m
+[31m     → expected 0 to be greater than 0[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22mNo sacking alone writes only its own key[32m 1[2mms[22m[39m
+   [32m✓[39m the dials on Hard and Legend[2m > [22mthe board: a win gives less, a defeat takes more, and only a bad season opens lower[32m 1[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22mthe market: the same men in the same order, every price marked, every value untouched [33m 535[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22ma release clause is never the cheaper door round the mark, and on Normal it is exactly what it was [33m 301[2mms[22m[39m
+   [32m✓[39m the dials on Hard and Legend[2m > [22mthe opponent: an edge only off Normal[32m 0[2mms[22m[39m
+   [32m✓[39m the season verdict under No sacking[2m > [22mnever threatens a sack the board cannot carry out, and reads as it always did otherwise[32m 26[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerNoSack.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 2378[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mstarts with No sacking off and Skip hands nothing on [33m 795[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mthe switch rides on both buttons [33m 916[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDifficultyPick.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 2412[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22moffers three levels with Normal pressed, and Skip on Normal hands nothing on [33m 853[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mLegend and No sacking ride on both buttons [33m 1238[2mms[22m[39m
+ [32m✓[39m src/hooks/useClubManager.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 2546[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager completion shape[2m > [22ma played match records activity and not a completion [33m 346[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager completion shape[2m > [22ma finished season records exactly one completion [33m 2195[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerDifficulty.test.ts[2m > [22mevery applier is the identity at its own identity dial[2m > [22ma created club: the room dial moves only the base ceiling, and the founders' room comes back whole
+[31m[1mAssertionError[22m: expected 0 to be greater than 0[39m
+[36m [2m❯[22m src/lib/clubManagerDifficulty.test.ts:[2m118:18[22m[39m
+    [90m116| [39m    } [35mas[39m [33mCustomClubSpec[39m)[33m;[39m
+    [90m117| [39m    [35mconst[39m room [33m=[39m made[33m.[39mfounderWageRoom [33m??[39m [34m0[39m[33m;[39m
+    [90m118| [39m    [34mexpect[39m(room)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m119| [39m    [35mfor[39m ([35mconst[39m level [35mof[39m [[32m'hard'[39m[33m,[39m [32m'legend'[39m] [35mas[39m [35mconst[39m) {
+    [90m120| [39m      [35mconst[39m d [33m=[39m [33mCM_DIFFICULTY_DIALS[39m[level][33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m43 passed[39m[22m[90m (44)[39m
+[2m   Start at [22m 04:16:53
+[2m   Duration [22m 10.10s[2m (transform 3.27s, setup 558ms, collect 10.71s, tests 9.32s, environment 3.58s, prepare 1.06s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerDifficulty.test.ts,title=src/lib/clubManagerDifficulty.test.ts > every applier is the identity at its own identity dial > a created club%3A the room dial moves only the base ceiling%2C and the founders' room comes back whole,line=118,column=18::AssertionError: expected 0 to be greater than 0%0A ❯ src/lib/clubManagerDifficulty.test.ts:118:18%0A%0A

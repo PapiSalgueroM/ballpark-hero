@@ -1,0 +1,16 @@
+vitest exit=1 11s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerDifficulty.test.ts,title=src/lib/clubManagerDifficulty.test.ts > every applier is the identi
+c-nojoin exit=1 35s | simCmDifficulty: 8 FAILURES (sections 3)
+c-cheque exit=1 34s | simCmDifficulty: 8 FAILURES (sections 3)
+tsc exit=0 111s | 
+c-wages exit=1 35s | simCmDifficulty: 8 FAILURES (sections 3)
+diff-base exit=0 248s | simCmDifficulty: all green (sections 1,2,3,6,7)
+c-helpdrift exit=1 1s | simCmDifficulty: 1 FAILURES (sections 7)
+c-leak exit=1 177s | simCmDifficulty: 172 FAILURES (sections 2,6)
+simManagerAppealIsolation exit=0 52s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simNoRivalNames exit=0 23s | No rival product names found. 0 findings.
+simStorageWrites exit=0 5s | simStorageWrites: all green (owed: 12)
+c-alloffleak exit=1 205s | simCmDifficulty: 18 FAILURES (sections 2)
+simClubManagerMeters exit=0 39s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simHarnessAnchors exit=0 60s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simWilderness exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+simCmNoSack exit=0 117s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
