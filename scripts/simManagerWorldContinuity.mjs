@@ -194,7 +194,9 @@ async function arm(control) {
          Round 1502: and a club outside the Champions League opens the one it watches (worldComps), which the pinned
          engine does not know either and which draws nothing (the draws are compared below): the key comes off the
          current arm before the comparison, never off the career it plays on. */
-      equal({ ...current.value, boardConfidence: 60, worldComps: undefined }, { ...original.value, worldSeed: current.value.worldSeed }, 'Fresh constructor changes only the declared held seed');
+      const currentAsPinned = { ...current.value, boardConfidence: 60 };
+      delete currentAsPinned.worldComps;
+      equal(currentAsPinned, { ...original.value, worldSeed: current.value.worldSeed }, 'Fresh constructor changes only the declared held seed');
       equal(current.draws, original.draws, 'Fresh seed uses no extra global draw'); equal(again, current, 'Fresh seed and whole constructor replay exactly');
       assert.equal(row.clock.restored, row.clock.before, 'Each VM clock is restored after the interleaved witness');
       assert.notDeepEqual(interleaved.value.academy.candidates.map(p => p.id), current.value.academy.candidates.map(p => p.id), 'Actual constructor candidate IDs changed across the held clock and other career');
