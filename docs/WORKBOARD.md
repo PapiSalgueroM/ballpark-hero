@@ -15786,3 +15786,7 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Codex Round1394: US career retirement and skip guide handback
+
+Claimed 2026-10-17 UTC on codex/us-career-retirement-guide from actual I1346 merge b31c9894ac27283a9b650bf32b53e558b7148834. Explicit finish-1346 and finish-BIH handback to this lane: one two-sentence item beside retirement in basketball.ts, football.ts, baseball.ts and hockey.ts only, preserving all richer retirement/Hall text. Explain optional coaching job pursuit, confirmed coaching retirement with saved record/log, showcase Undo skip before Draft day and same-screen draft-night replay when reduced motion is off. No promised job, forced-age retirement or reload replay. Own source guide copy, actual generated keyword/headings/saved-page/sitemap outputs and scoped remote qualification/helper/workflow only. No engine/UI/action/save/core/competition edits and no local app runtime. Claude I retains integration/main/publication. This is separate from1393 and adds no gate to urgent308 or BI. Plan: native source-bound copy review, remote types/build+all15readers and guide/keyword checks, unchanged weights, exact-source handback/push.
