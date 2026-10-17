@@ -1,0 +1,10 @@
+Prepared 29 world browser font and flag dependencies.
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[dukb] preload wrapper: a cancelled chunk error waits for the reload (vite 5.4.21)
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 0 snapshots (0 left alone)
+PASS manager world native:3 profiles,9 effective DOM faults,actual modern/edited/historical worlds,unchanged saved tables and sources.
