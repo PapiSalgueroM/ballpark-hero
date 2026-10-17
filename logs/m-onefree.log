@@ -1,0 +1,9 @@
+mut1504: onefree applied to src/data/soccerDeck/starter.ts
+
+runtime 74.7 s
+simSoccerDeck: green. Sections 1, 5, 8 only.
+[2m      Tests [22m [1m[32m30 passed[39m[22m[90m (30)[39m
+   FAIL 1 frozen word breaks over 39 recorded cards
+runtime 101.7 s
+simEventDeck: 1 failure, red sections 14
+onefree: sd1,5,8 exit=0 vitest exit=0 kit13-16 exit=1

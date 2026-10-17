@@ -1,0 +1,24 @@
+mut1504: costgone applied to src/lib/soccerDeck.ts
+   ok the shipped pack (28 cards) has no problem
+   ok 28 titles: no quote mark, dash, first person, conduct or private word, or any of 10483 real names
+   ok 22 breakages, each refused with its own message
+   ok the clean pack dealt 20 of 20 keys, the same pack with a problem none
+   FAIL 800 answers move something other than what they print, or say it wrong
+   ok 320 deals at room 0 and 1, none with training that would not fit
+   ok a drill banked between the deal and the answer: the answer lands nothing past the ceiling and its line says so
+
+runtime 7.0 s
+simSoccerDeck: 1 failure, red sections 5
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe answer[2m > [22mprints and pays the cost of a training option
+[31m[1mAssertionError[22m: expected { pace: 1, shooting: 1 } to deeply equal { shooting: 1, pace: +0 }[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mnever deals a training card at room 0, and every option moves exactly what it prints
+[31m[1mAssertionError[22m: 701 Do the extra hour: expected [ …(2) ] to deeply equal [ …(3) ][39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m28 passed[39m[22m[90m (30)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerDeck.test.ts,title=src/lib/soccerDeck.test.ts > the answer > prints and pays the cost of a training option,line=249,column=39::AssertionError: expected { pace: 1, shooting: 1 } to deeply equal { shooting: 1, pace: +0 }%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "pace": 0,%0A+   "pace": 1,%0A    "shooting": 1,%0A  }%0A%0A ❯ src/lib/soccerDeck.test.ts:249:39%0A%0A
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerDeck.test.ts,title=src/lib/soccerDeck.test.ts > the starter pack > never deals a training card at room 0%2C and every option moves exactly what it prints,line=453,column=55::AssertionError: 701 Do the extra hour: expected [ …(2) ] to deeply equal [ …(3) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "Aerial Command next season +1",%0A    "Morale -1",%0A-   "Positioning next season -1",%0A  ]%0A%0A ❯ forEach src/lib/soccerDeck.test.ts:453:55%0A ❯ src/lib/soccerDeck.test.ts:439:20%0A%0A
+   legacy: off 52.07 (seed to seed sd 1.33), best 53.21 (+1.13), worst 53.25 (+1.17), neutral 52.07 (+0.00), band 1.2
+   legacy against the deck off: BEST 1.13 (seeds -0.15 1.36 0.96 1.98 1.51), WORST 1.17 (seeds -0.22 1.46 1.21 1.93 1.49), NEUTRAL 0.00 (seeds 0.00 0.00 0.00 0.00 0.00); the seed to seed spread 1.33, the ruling's band 1.2
+runtime 70.8 s
+simSoccerDeck: green. Sections 8 only.
+costgone: sd15 exit=1 vitest exit=1 sd8 exit=0

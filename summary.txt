@@ -1,0 +1,4 @@
+m-costcap exit=0 10s | costcap: sd15 exit=1 vitest exit=1
+m-costgone exit=0 80s | costgone: sd15 exit=1 vitest exit=1 sd8 exit=0
+m-onefree exit=0 179s | onefree: sd1,5,8 exit=0 vitest exit=0 kit13-16 exit=1
+p-99 exit=0 70s | probe99: sd8 exit=0 PROBE99 {"n":8212,"at99":0,"capped":0,"byStat":{}}

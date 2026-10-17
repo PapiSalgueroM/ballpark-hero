@@ -1,0 +1,17 @@
+mut1504: costcap applied to src/lib/soccerDeck.ts
+   ok the shipped pack (28 cards) has no problem
+   ok 28 titles: no quote mark, dash, first person, conduct or private word, or any of 10483 real names
+   ok 22 breakages, each refused with its own message
+   ok the clean pack dealt 20 of 20 keys, the same pack with a problem none
+   FAIL 400 answers move something other than what they print, or say it wrong
+   ok 320 deals at room 0 and 1, none with training that would not fit
+   FAIL a drill banked before the answer: the answer still landed training or its cost, or its line does not say it is at the ceiling
+
+runtime 7.1 s
+simSoccerDeck: 2 failures, red sections 5
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe answer[2m > [22mcharges nothing for training that could not land, and says so
+[31m[1mAssertionError[22m: expected { pace: -1 } to deeply equal {}[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m29 passed[39m[22m[90m (30)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerDeck.test.ts,title=src/lib/soccerDeck.test.ts > the answer > charges nothing for training that could not land%2C and says so,line=254,column=39::AssertionError: expected { pace: -1 } to deeply equal {}%0A%0A- Expected%0A+ Received%0A%0A- {}%0A+ {%0A+   "pace": -1,%0A+ }%0A%0A ❯ src/lib/soccerDeck.test.ts:254:39%0A%0A
+costcap: sd15 exit=1 vitest exit=1

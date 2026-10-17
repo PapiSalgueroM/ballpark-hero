@@ -1,0 +1,10 @@
+mut1504: probe99 applied to src/lib/soccerDeck.ts
+7) Keyed: the slot and the deck's answers draw no Math.random, the same save deals the same card in a fresh bundle, and the season moves the pick
+   legacy: off 52.07 (seed to seed sd 1.33), best 51.70 (-0.38), worst 51.66 (-0.42), neutral 52.07 (+0.00), band 1.2
+   legacy against the deck off: BEST -0.38 (seeds -1.66 -0.19 -0.88 0.44 0.40), WORST -0.42 (seeds -1.46 -0.68 -1.26 0.39 0.93), NEUTRAL 0.00 (seeds 0.00 0.00 0.00 0.00 0.00); the seed to seed spread 1.33, the ruling's band 1.2
+   19407 deck answers, 0 queued more than the room just before them
+9) Old saves: the base's saves load and play here as they do there; a save with a deck card pending loads on the base (skipped, its stamp handed back) and answers here
+PROBE99 {"n":8212,"at99":0,"capped":0,"byStat":{}}
+simSoccerDeck: green. Sections 8 only.
+PROBE99 {"n":8212,"at99":0,"capped":0,"byStat":{}}
+probe99: sd8 exit=0 PROBE99 {"n":8212,"at99":0,"capped":0,"byStat":{}}
