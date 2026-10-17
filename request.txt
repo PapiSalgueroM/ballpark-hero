@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/careerDirtyMoney.test.ts src/test/usCareerDirtyMoney.test.tsx src/test/usCareerHelpRules1104.test.tsx --testTimeout=300000 --hookTimeout=120000
+walk: ENGINES=chromium node scripts/playUsDirtyMoney.mjs
+walk-nodesk: mkdir -p $RC_OUT/ctl && RC_OUT=$RC_OUT/ctl PLAY_US_DIRTY_CONTROL=nodesk ENGINES=chromium node scripts/playUsDirtyMoney.mjs
+simUsDirtyMoney: node scripts/simUsDirtyMoney.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+weights: git worktree add -f .base 8293c758f4284d21baaa2320383cfd5cb5bd4944 > /dev/null 2>&1 && cd .base && ../node_modules/.bin/vite build --outDir ../dist-base --emptyOutDir > /tmp/basebuild.log 2>&1; tail -2 /tmp/basebuild.log; cd .. && (nohup node scripts/lib/hostLikeServer.mjs dist-base 4174 > /tmp/base-server.log 2>&1 &) ; sleep 3; cp .rc/x/weightfx.mjs scripts/weightfx.tmp.mjs && node scripts/weightfx.tmp.mjs; s=$?; rm -f scripts/weightfx.tmp.mjs; exit $s
+sweepWeight: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; cp /tmp/sw.log $RC_OUT/sw.log; grep -E "my-career|OVER|over" /tmp/sw.log | head -20; tail -3 /tmp/sw.log; exit $s

@@ -1,0 +1,10 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 11s |    Duration  10.34s (transform 3.70s, setup 339ms, collect 9.11s, tests 10.51s, environment 2.58s, prepare 493ms)
+walk-nodesk exit=1 22s | CONTROL nodesk FIRED: W4 red
+walk exit=0 36s | playUsDirtyMoney: ALL GREEN, 4 walks
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+tsc exit=0 92s | 
+simUsDirtyMoney exit=0 75s | simUsDirtyMoney: all sections green
+simUsBoardParity exit=0 79s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+sweepWeight exit=1 28s | sweepWeight: 1 failure
+weights exit=0 59s |   /nhl-my-career: first load fetches the desk's words: no
