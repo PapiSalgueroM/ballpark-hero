@@ -1,0 +1,7 @@
+ownclub exit=0 417s | simCmOwnClubMarket: green (mode rule, sections 1, 2, 3, 4, 5): the market lists nobody at my own club in every old save and moves nothing else
+sizediag-r1344 exit=1 1s | Node.js v24.21.0
+diag-ctl-budget exit=1 1s | Node.js v24.21.0
+anchors exit=0 60s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+rival exit=0 18s | No rival product names found. 0 findings.
+sizediag exit=0 639s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained
+ctl-own exit=0 1014s | controls: legacy=1 slice=1 shallow=1
