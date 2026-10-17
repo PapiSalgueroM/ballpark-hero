@@ -1,0 +1,5 @@
+#!serial
+headsha: git log --oneline -3
+handover-diag: B=$(bash .rc/x/minus287.sh) || exit 2; echo "base $B"; CI=true SIM_NETWORK=offline CM_HANDOVER_BASE=$B CM_HANDOVER_OUT="$PWD/hd2" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmHandoverDesk.mjs; s=$?; for f in hd2/*/stdout.log hd2/*/stderr.log; do echo "== $f"; tail -30 "$f" | cut -c1-300; done; exit $s
+wf287-m14-recorded: R=$PWD; git worktree add -q /tmp/w14 f0b86875572514421a83e29af306fab47c4163a6 || exit 2; cd /tmp/w14 && node $R/.rc/x/wfrun.mjs .github/workflows/manager-handover-desk.yml --set CM_HANDOVER_BASE=5a8acc1562351cb9cb4bddc5afbdc4debfc7b001
+wf287-head-synthetic: B=$(bash .rc/x/minus287.sh) || exit 2; echo "base $B"; node .rc/x/wfrun.mjs .github/workflows/manager-handover-desk.yml --set CM_HANDOVER_BASE=$B

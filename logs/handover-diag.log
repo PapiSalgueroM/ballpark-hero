@@ -1,0 +1,70 @@
+base 47f4aceedc9abc5f9b82b88e98c9fbdc829d7d31
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+1 !== 0
+
+    at verifyReport (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmHandoverDesk.mjs:69:10)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmHandoverDesk.mjs:135:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+== hd2/normal/stdout.log
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/_temp/t-handover-diag/cm-handover-desk-zBQGoF/normal[39m
+
+ [32m✓[39m src/test/clubManagerHandoverDesk.test.ts[2m > [22mClub Manager appointment desk ownership[2m > [22mhandover desk missing: picker cannot claim predecessor funds[33m 2337[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerHandoverDesk.test.ts[2m > [22mClub Manager appointment desk ownership[2m > [22mhandover desk missing: picker clears pending predecessor appeal[32m 0[2mms[22m[39m
+ [31m×[39m src/test/clubManagerHandoverDesk.test.ts[2m > [22mClub Manager appointment desk ownership[2m > [22mhandover desk preservation: picker keeps every other state field and draw[32m 43[2mms[22m[39m
+[31m   → expected 69 to be 62 // Object.is equality[39m
+ [32m✓[39m src/test/clubManagerHandoverDesk.test.ts[2m > [22mClub Manager appointment desk ownership[2m > [22mhandover desk missing: job cannot claim predecessor funds[33m 750[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerHandoverDesk.test.ts[2m > [22mClub Manager appointment desk ownership[2m > [22mhandover desk missing: job clears pending predecessor appeal[32m 0[2mms[22m[39m
+ [31m×[39m src/test/clubManagerHandoverDesk.test.ts[2m > [22mClub Manager appointment desk ownership[2m > [22mhandover desk preservation: job keeps every other state field and draw[32m 26[2mms[22m[39m
+[31m   → expected 69 to be 62 // Object.is equality[39m
+ [32m✓[39m src/test/clubManagerHandoverDesk.test.ts[2m > [22mClub Manager appointment desk ownership[2m > [22mhandover desk preservation: saved predecessor cards remain valid before appointment[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerHandoverDesk.test.ts[2m > [22mClub Manager appointment desk ownership[2m > [22mhandover desk preservation: existing funded reply applies once[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerHandoverDesk.test.ts[2m > [22mClub Manager appointment desk ownership[2m > [22mhandover desk preservation: new manager matches still offer the original deck[32m 48[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerHandoverDesk.test.ts[2m > [22mClub Manager appointment desk ownership[2m > [22mhandover desk preservation: refused join and empty calendar retain original guards[32m 1[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m8 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 01:57:10
+[2m   Duration [22m 3.92s[2m (transform 1.29s, setup 54ms, collect 55ms, tests 3.26s, environment 301ms, prepare 66ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/hd2/normal/unit.json
+== hd2/normal/stderr.log
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerHandoverDesk.test.ts[2m > [22mClub Manager appointment desk ownership[2m > [22mhandover desk preservation: picker keeps every other state field and draw
+[41m[1m FAIL [22m[49m src/test/clubManagerHandoverDesk.test.ts[2m > [22mClub Manager appointment desk ownership[2m > [22mhandover desk preservation: job keeps every other state field and draw
+[31m[1mAssertionError[22m: expected 69 to be 62 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 62[39m
+[31m+ 69[39m
+
+[36m [2m❯[22m src/test/clubManagerHandoverDesk.test.ts:[2m137:46[22m[39m
+    [90m135| [39m      expect(withoutDesk(prepared.state)).toEqual(withoutDesk(referenc…
+    [90m136| [39m      expect(prepared.draws).toEqual(reference.draws); expect(prepared…
+    [90m137| [39m      expect(prepared.state.boardConfidence).toBe(62); expect(prepared…
+    [90m   | [39m                                             [31m^[39m
+    [90m138| [39m      [34mexpect[39m([33mJSON[39m[33m.[39m[34mstringify[39m(prepared[33m.[39minput))[33m.[39m[34mtoBe[39m(prepared[33m.[39minputBytes)[33m;[39m
+    [90m139| [39m      expect(JSON.stringify(reference.input)).toBe(reference.inputByte…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+

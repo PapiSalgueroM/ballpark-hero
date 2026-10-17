@@ -1,0 +1,4 @@
+headsha exit=0 0s | 0640c995e Round BII: What's New for the other lane's packets, one Club Manager entry (your own transfers, a club's fixtures, the refusal note, a clean desk on a takeover)
+handover-diag exit=1 5s | ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+wf287-m14-recorded exit=1 349s | wfrun manager-handover-desk.yml: 9 steps ran, 2 failed: Five exact public handover arms and complete state, RNG and size comparisons | All fifteen build and snapshot read
+wf287-head-synthetic exit=1 273s | wfrun manager-handover-desk.yml: 9 steps ran, 4 failed: Bind incoming application, frozen method and full source archive | Five exact public handover arms and complete st
