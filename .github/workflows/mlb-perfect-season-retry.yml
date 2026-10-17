@@ -1,4 +1,4 @@
-name: MLB Perfect Season retry baseline
+name: MLB Perfect Season retry verification
 on:
   push:
     branches: [codex/mlb-perfect-season-retry]
@@ -7,20 +7,24 @@ on:
       - scripts/qa/mlbPerfectSeasonRetryProof.mjs
       - src/test/perfectSeasonMlbRetry.test.tsx
       - scripts/qa/mlbPerfectSeasonRetryBrowser.mjs
+      - src/pages/PerfectSeasonMlb.tsx
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  baseline:
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 90
     defaults:
       run:
         shell: bash
     env:
       CI: '1'
       SIM_NETWORK: offline
+      ENGINES: chromium
       TZ: UTC
+      PRERENDER_ONLY: /whats-new
+      MLB_RETRY_BASELINE_RAW_SHA: a6b1a1a84e0d00caf6081595f1835a15367689d433a50471e55cd42e90d6e1a3
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,33 +37,52 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Retain exact original product and locked installation
+      - name: Retain exact candidate request and bounded product source
         run: |
           set -euo pipefail
-          out="$RUNNER_TEMP/mlb-perfect-season-retry-baseline"; test ! -e "$out"; mkdir -p "$out"
+          out="$RUNNER_TEMP/mlb-perfect-season-retry-fixed"; test ! -e "$out"; mkdir -p "$out"
           export MLB_RETRY_OUT="$out"; echo "MLB_RETRY_OUT=$out" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
           git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
-          sha256sum "$out/source.zip" "$out/request-source-files.sha256" > "$out/initial-source-packet.sha256"
+          git ls-files -z -- . ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
+          sha256sum "$out/source.zip" "$out/request-source-files.sha256" "$out/source-files.sha256" > "$out/initial-source-packet.sha256"
           git merge-base --is-ancestor 8293c758f4284d21baaa2320383cfd5cb5bd4944 HEAD
-          git diff --exit-code 8293c758f4284d21baaa2320383cfd5cb5bd4944 HEAD -- . ':!docs' ':!src/test/perfectSeasonMlbRetry.test.tsx' ':!scripts/qa/mlbPerfectSeasonRetryProof.mjs' ':!scripts/qa/mlbPerfectSeasonRetryBrowser.mjs' ':!.github/workflows/mlb-perfect-season-retry.yml' > "$out/base-source-hold.log"
+          git diff --exit-code 8293c758f4284d21baaa2320383cfd5cb5bd4944 HEAD -- . ':!docs' ':!src/pages/PerfectSeasonMlb.tsx' ':!src/test/perfectSeasonMlbRetry.test.tsx' ':!scripts/qa/mlbPerfectSeasonRetryProof.mjs' ':!scripts/qa/mlbPerfectSeasonRetryBrowser.mjs' ':!.github/workflows/mlb-perfect-season-retry.yml' > "$out/base-source-hold.log"
           git diff --exit-code HEAD -- . > "$out/admission-working-source-hold.log"
           test -z "$(git status --porcelain --untracked-files=no)"
           printf '%s\0' "$(command -v node)" "$(readlink -f "$(command -v npm)")" "$(readlink -f "$(command -v python)")" | sort -z | xargs -0 sha256sum > "$out/runtime-tools-files.sha256"
           test "$(wc -l < "$out/runtime-tools-files.sha256")" -eq 3
           npm --version > "$out/npm-version.txt"
+      - name: Locked dependency browser and cached font setup
+        run: |
+          set -euo pipefail
+          out="$MLB_RETRY_OUT"
           npm ci > "$out/install.log" 2>&1
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           SIM_OFFLINE_RECEIPT="$out/dependencies.transport" node scripts/qa/soccerAgentReviewDependencies.mjs before > "$out/dependencies-before.log" 2>&1
-          cp soccer-agent-review-artifacts/dependencies-before.json "$out/"
+          browser_tools="$RUNNER_TEMP/mlb-perfect-season-browser"; test ! -e "$browser_tools"
+          NODE_OPTIONS='' npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright; ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          SIM_OFFLINE_RECEIPT="$out/dependencies.transport" node scripts/qa/soccerAgentReviewDependencies.mjs after > "$out/dependencies-after.log" 2>&1
+          cp soccer-agent-review-artifacts/dependencies-*.json "$out/"
           SIM_OFFLINE_RECEIPT="$out/dependency-check.transport" node --input-type=module > "$out/dependency-check.log" 2>&1 <<'NODE'
-          import fs from 'node:fs'; import assert from 'node:assert/strict';
-          const out=process.env.MLB_RETRY_OUT,inventory=JSON.parse(fs.readFileSync(out+'/dependencies-before.json'));
-          assert.equal(inventory.packages.length,521);fs.writeFileSync(out+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n',{flag:'wx'});console.log('PASS 521 actual locked installed package versions.');
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.MLB_RETRY_OUT,before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),after=JSON.parse(fs.readFileSync(out+'/dependencies-after.json'));
+          assert.equal(before.packages.length,521);assert.equal(after.packages.length,521);assert.deepEqual(after.packages,before.packages);assert.deepEqual(after.packageFiles,before.packageFiles);assert.equal(after.addedBrowserPackage,'1.64.0');fs.writeFileSync(out+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n',{flag:'wx'});console.log('PASS 521 held package versions and isolated Playwright 1.64.0.');
           NODE
+          NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/fonts-install.log" 2>&1; python -m pip freeze > "$out/python-packages.txt"
+          NODE_OPTIONS='' FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-files.sha256"
+          test "$(find "$out/font-cache" -type f ! -name manifest.json | wc -l)" -eq 9
+          test "$(find "$out/font-cache" -type f | wc -l)" -eq 10
           find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-files.sha256"
           test "$(wc -l < "$out/installed-files.sha256")" -eq 24466
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tool-files.sha256"
+          test "$(wc -l < "$out/browser-tool-files.sha256")" -eq 176
       - name: Actual application types and effective offline preload
         id: types
         run: |
@@ -71,12 +94,12 @@ jobs:
           printf '%s\n' "$status" > "$out/preload-control.exit"; test "$status" -eq 1; grep -F 'AssertionError' "$out/preload-control.log"; grep -F 'Children retain offline preload' "$out/preload-control.log"
           node -e "$preload_check" > "$out/preload-normal.log" 2>&1
           SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
-      - name: Exact three original recovery faults and two healthy MLB cases
+      - name: Candidate original removals and whole restored MLB page outcomes
         id: proof
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
-          MLB_RETRY_PROOF_OUT="$MLB_RETRY_OUT/proof" SIM_OFFLINE_RECEIPT="$MLB_RETRY_OUT/proof.transport" node scripts/qa/mlbPerfectSeasonRetryProof.mjs baseline > "$MLB_RETRY_OUT/proof.stdout.log" 2> "$MLB_RETRY_OUT/proof.stderr.log"
+          MLB_RETRY_PROOF_OUT="$MLB_RETRY_OUT/proof" SIM_OFFLINE_RECEIPT="$MLB_RETRY_OUT/proof.transport" node scripts/qa/mlbPerfectSeasonRetryProof.mjs fixed > "$MLB_RETRY_OUT/proof.stdout.log" 2> "$MLB_RETRY_OUT/proof.stderr.log"
           tail -n 4 "$MLB_RETRY_OUT/proof.stdout.log"
       - name: Unchanged NBA original and removal proof against its exact merged parent
         id: nba
@@ -112,38 +135,120 @@ jobs:
           assert.equal(fs.readFileSync(out+'/units.exit.txt','utf8').trim(),'0');assert.equal(u.success,true);assert.equal(u.testResults.length,3);assert.deepEqual(u.testResults.map(s=>[s.name.replaceAll('\\','/').split('/').at(-1),s.assertionResults.length]).sort(),[['perfectSeasonNbaRetry.test.tsx',5],['perfectSeasonResult.test.tsx',16],['perfectSeasonVerdict.test.tsx',17]].sort());assert.equal(u.numTotalTests,38);assert.equal(u.numPassedTests,38);assert.equal(u.numFailedTests,0);assert.equal(u.numPendingTests,0);assert.equal(u.numTodoTests,0);assert.equal(rows.length,38);assert(rows.every(r=>r.status==='passed'));assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to load|Cannot find module|No test files found|SIM_OFFLINE_BLOCK/i.test(log));console.log('PASS all thirty-eight unchanged NBA and four-sport result cases.');
           NODE
           tail -n 4 "$out/units.stdout.log"
-      - name: Retain actual source and every partial proof without weakening failures
+      - name: Actual production build and one bounded snapshot refresh
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$MLB_RETRY_OUT/build.transport" npm run build:seo > "$MLB_RETRY_OUT/build.log" 2>&1
+          tail -n 6 "$MLB_RETRY_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$MLB_RETRY_OUT/dist-files.sha256"
+      - name: All fifteen readers against the completed build
+        id: readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$MLB_RETRY_OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-readers.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            status=0; SIM_OFFLINE_RECEIPT="$out/$method.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv"; tail -n 3 "$out/$method.log"
+            test "$status" -eq 0 || failed=1; test ! -s "$out/$method.transport" || failed=1
+          done
+          test "$(wc -l < "$out/readers.tsv")" -eq 15; exit "$failed"
+      - name: Unchanged full fourteen page weights with every failure fatal
+        id: weights
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$MLB_RETRY_OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-weights.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          status=0; SIM_OFFLINE_RECEIPT="$out/weights.transport" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
+          cat "$out/weights.log"; printf '%s\n' "$status" > "$out/weights-exit.txt"; exit "$status"
+      - name: Actual built MLB and unchanged NBA retry journeys at both widths
+        id: browser
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$MLB_RETRY_OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-browser.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          status=0; MLB_RETRY_BROWSER_OUT="$out/browser" SIM_OFFLINE_RECEIPT="$out/browser.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/qa/mlbPerfectSeasonRetryBrowser.mjs > "$out/browser.stdout.log" 2> "$out/browser.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/browser.exit.txt"; test "$status" -eq 0 || failed=1
+          status=0; NBA_RETRY_BROWSER_OUT="$out/nba-browser" SIM_OFFLINE_RECEIPT="$out/nba-browser.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/qa/nbaPerfectSeasonRetryBrowser.mjs > "$out/nba-browser.stdout.log" 2> "$out/nba-browser.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/nba-browser.exit.txt"; test "$status" -eq 0 || failed=1
+          SIM_OFFLINE_RECEIPT="$out/browser-classifier.transport" node --input-type=module > "$out/browser-classification.log" 2>&1 <<'NODE' || failed=1
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const out=process.env.MLB_RETRY_OUT,sha=b=>createHash('sha256').update(b).digest('hex');
+          for(const[kind,label]of [['browser','MLB'],['nba-browser','NBA']]){const root=out+'/'+kind,r=JSON.parse(fs.readFileSync(root+'/report.json'));assert.equal(fs.readFileSync(out+'/'+kind+'.exit.txt','utf8').trim(),'0');assert.equal(r.status,'pass');assert.deepEqual(r.errors,[]);assert.deepEqual(r.cases.map(c=>c.width),[390,1280]);assert(r.cases.every(c=>c.status==='pass'));assert.deepEqual(r.controls.map(c=>c.id),['no-reload-picks','layout']);assert(r.controls.every(c=>c.status==='pass'&&c.changed===true&&c.wholeUndo===true));assert.deepEqual(r.sourceAfter,r.sourceBefore);
+          const refs=v=>{if(!v||typeof v!=='object')return;if(typeof v.path==='string'&&Number.isInteger(v.bytes)&&typeof v.sha256==='string'){assert(!path.isAbsolute(v.path)&&!v.path.split('/').includes('..'));const b=fs.readFileSync(path.join(root,v.path));assert.equal(b.length,v.bytes);assert.equal(sha(b),v.sha256);}for(const c of Object.values(v))refs(c);};refs(r);assert(fs.readFileSync(out+'/'+kind+'.stdout.log','utf8').trimEnd().endsWith('PASS '+label+' Perfect Season retry browser'));console.log('PASS '+label+' actual built retry journeys and effective copied controls, every retained body bound.');}
+          NODE
+          tail -n 4 "$out/browser.stdout.log"; tail -n 4 "$out/nba-browser.stdout.log"; exit "$failed"
+      - name: Complete source and dist with bounded generated outputs retained outside
         if: always()
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
-          out="${MLB_RETRY_OUT:-$RUNNER_TEMP/mlb-perfect-season-retry-baseline}"; mkdir -p "$out"; result=0
-          git diff --exit-code HEAD -- . > "$out/source-diff.log" 2>&1 || result=1
+          out="${MLB_RETRY_OUT:-$RUNNER_TEMP/mlb-perfect-season-retry-fixed}"; mkdir -p "$out"; result=0
+          git diff --exit-code HEAD -- . ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' > "$out/non-generated-diff.log" 2>&1 || result=1
+          git diff --binary HEAD -- public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json > "$out/generated.patch"
+          git diff --name-only HEAD | sort > "$out/generated-paths.txt"
+          printf 'public/sitemap.xml\npublic/whats-new/index.html\nscripts/data/lastmod.json\n' | sort > "$out/allowed-generated-paths.txt"
+          comm -23 "$out/generated-paths.txt" "$out/allowed-generated-paths.txt" > "$out/unexpected-generated-paths.txt"; test ! -s "$out/unexpected-generated-paths.txt" || result=1
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/validated-source-files.sha256"
           MLB_RETRY_ARCHIVE_OUT="$out" python - <<'PY'
           import os,subprocess,zipfile
-          out=os.environ['MLB_RETRY_ARCHIVE_OUT']; files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          out=os.environ['MLB_RETRY_ARCHIVE_OUT'];files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
           with zipfile.ZipFile(out+'/validated-source.zip','x',zipfile.ZIP_DEFLATED) as archive:
               for file in sorted(filter(None,files)): archive.write(file,file)
+          if os.path.isdir('dist'):
+              with zipfile.ZipFile(out+'/dist.zip','x',zipfile.ZIP_DEFLATED) as archive:
+                  for folder,dirs,names in os.walk('dist'):
+                      for name in sorted(names): archive.write(os.path.join(folder,name),os.path.join(folder,name))
           PY
-          if test -f "$out/dependencies-before.json"; then
-            SIM_OFFLINE_RECEIPT="$out/dependencies-final.transport" node --input-type=module > "$out/dependencies-after.log" 2>&1 <<'NODE' || result=1
-          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
-          const out=process.env.MLB_RETRY_OUT,before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),sha=x=>createHash('sha256').update(x).digest('hex');
-          const packageFiles=before.packageFiles.map(r=>({file:r.file,sha256:sha(fs.readFileSync(r.file))})),packages=before.packages.map(r=>{const p=JSON.parse(fs.readFileSync(r.directory+'/package.json'));return{directory:r.directory,name:p.name,version:p.version};});
-          fs.writeFileSync(out+'/dependencies-after.json',JSON.stringify({packageFiles,packages},null,2)+'\n',{flag:'wx'});assert.equal(packages.length,521);assert.deepEqual(packageFiles,before.packageFiles);assert.deepEqual(packages,before.packages);console.log('PASS all 521 actual locked versions and both package bodies held.');
-          NODE
-          fi
-          for kind in request-source installed runtime-tools validated-source; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
+          if test -d dist; then find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist-after-files.sha256"; fi
+          if test -f "$out/dist-files.sha256"; then cmp "$out/dist-files.sha256" "$out/dist-after-files.sha256" > "$out/dist-inventory-hold.log" 2>&1 || result=1; fi
+          printf 'types=%s\nproof=%s\nnba=%s\nunits=%s\nbuild=%s\nreaders=%s\nweights=%s\nbrowser=%s\n' '${{ steps.types.outcome }}' '${{ steps.proof.outcome }}' '${{ steps.nba.outcome }}' '${{ steps.units.outcome }}' '${{ steps.build.outcome }}' '${{ steps.readers.outcome }}' '${{ steps.weights.outcome }}' '${{ steps.browser.outcome }}' > "$out/stage-outcomes.txt"
+          exit "$result"
+      - name: Full source installed browser tool runtime font and transport holds
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="${MLB_RETRY_OUT:-$RUNNER_TEMP/mlb-perfect-season-retry-fixed}"; result=0
+          for kind in source installed browser-tool runtime-tools font validated-source dist; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
           if test -f "$out/initial-source-packet.sha256"; then sha256sum --check "$out/initial-source-packet.sha256" > "$out/initial-source-packet-holds.log" 2>&1 || result=1; fi
           if test -f "$out/installed-files.sha256"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-after-files.sha256"; cmp "$out/installed-files.sha256" "$out/installed-after-files.sha256" > "$out/installed-inventory-hold.log" 2>&1 || result=1; fi
-          while IFS= read -r -d '' file; do test ! -s "$file" || result=1; done < <(find "$out" -type f -name '*.transport' -print0)
-          printf 'types=%s\nproof=%s\nnba=%s\nunits=%s\nbuild=skipped\nreaders=skipped\nweights=skipped\n' '${{ steps.types.outcome }}' '${{ steps.proof.outcome }}' '${{ steps.nba.outcome }}' '${{ steps.units.outcome }}' > "$out/stage-outcomes.txt"
+          if test '${{ steps.build.outcome }}' = success; then
+            SIM_OFFLINE_RECEIPT="$out/build-classifier.transport" node --input-type=module > "$out/build-transport-classification.log" 2>&1 <<'NODE' || result=1
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';
+          const out=process.env.MLB_RETRY_OUT,base='8293c758f4284d21baaa2320383cfd5cb5bd4944',sha=value=>createHash('sha256').update(value).digest('hex'),report={status:'running',method:'Retained guard-denial classification only, no outbound permission',sources:{},observations:[]};
+          try{assert.equal(process.env.PRERENDER_ONLY,'/whats-new');const {SAMPLE_DAYS}=await import('./scripts/lib/prerenderClock.mjs');assert.deepEqual(SAMPLE_DAYS,[0,5,11]);
+          for(const file of ['scripts/lib/offlineTransport.cjs','scripts/lib/prerenderClock.mjs','scripts/prerender.mjs']){const actual=fs.readFileSync(file);assert.deepEqual(actual,execFileSync('git',['show',base+':'+file]));report.sources[file]=sha(actual);}
+          const line='[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com\n',expected=Buffer.from(line.repeat(3));assert.equal(sha(expected),'1175154605f5681b53732047b77c744fb9e814fe3c6340be82f786ea27138e57');const check=bytes=>assert(bytes.equals(expected),'Build must retain exactly three known denied font requests');const actual=fs.readFileSync(out+'/build.transport');check(actual);report.observations.push({case:'actual-three-font-denials',accepted:true,bytes:actual.length,sha256:sha(actual)});
+          for(const [name,changed]of [['missing-line',Buffer.from(line.repeat(2))],['extra-line',Buffer.from(line.repeat(4))],['database-line',Buffer.from(line.repeat(2)+'[SIM_OFFLINE_BLOCK] database browser route continue https://fixture.invalid\n')]]){assert(!changed.equals(actual));assert.throws(()=>check(changed),assert.AssertionError);report.observations.push({case:name,accepted:false,bytes:changed.length,sha256:sha(changed)});}assert.equal(report.observations.length,4);report.status='passed';console.log('PASS three actual denied font requests and three changed receipt rejection controls.');}
+          catch(error){report.status='failed';report.error=error.stack;throw error;}finally{fs.writeFileSync(out+'/build-transport-classification.json',JSON.stringify(report,null,2)+'\n',{flag:'wx'});}
+          NODE
+          else
+            printf 'skipped: actual build outcome was %s\n' '${{ steps.build.outcome }}' > "$out/build-transport-classification-skipped.txt"
+          fi
+          while IFS= read -r -d '' file; do case "$file" in "$out/build.transport"|"$out/weights.transport") ;; *) test ! -s "$file" || result=1 ;; esac; done < <(find "$out" -type f -name '*.transport' -print0)
+          # Build is classified strictly above. Weight asset denials remain retained offline evidence.
           exit "$result"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: mlb-perfect-season-retry-baseline-${{ github.sha }}
+          name: mlb-perfect-season-retry-fixed-${{ github.sha }}
           path: ${{ env.MLB_RETRY_OUT }}
           if-no-files-found: error
           retention-days: 14
