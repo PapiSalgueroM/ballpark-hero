@@ -1,0 +1,9 @@
+tsc exit=0 102s | 
+vitest-cm exit=0 138s |    Duration  137.48s (transform 6.23s, setup 2.99s, collect 25.21s, tests 223.74s, environment 19.78s, prepare 4.41s)
+proof-part exit=0 266s | proofWorldUclFleet: GREEN, 60 journeys and 6483 steps byte equal to d8aaa4cb (a watching state without worldComps), draws equal
+proof-watch-nocoach exit=0 257s | proofWorldUclFleet: GREEN, 45 journeys and 6169 steps byte equal to d8aaa4cb (a watching state without worldComps), draws equal
+golden-head exit=0 1s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 46s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+proof-watch-coach exit=0 264s | proofWorldUclFleet: GREEN, 45 journeys and 6141 steps byte equal to d8aaa4cb (a watching state without worldComps), draws equal
+simWorldUcl exit=0 867s | simWorldUcl: green, 196929 checks, 0 failures
