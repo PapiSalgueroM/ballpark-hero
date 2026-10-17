@@ -1,0 +1,64 @@
+1) every pair two sourced, off any wiki, between real clubs, and the ratchet only shrinks
+   15 pair clubs Soccer Career spells differently, 0 missing from the alias map
+   64 pairs, 0 bad; 42 aliases; 115 primary edges, 57 on the ratchet (frozen at 57), 0 unaccounted
+2) Club Manager reads exactly what it read before the lift
+   rivals 565e14623c2f (115 keys), board 8093c57e7481 (454 clubs)
+pool: 200 careers, 2000 playing seasons, 1305 with derbies (16 s)
+3) the right derbies, the verified number of meetings, and nothing else
+   pool: 2000 seasons, 1305 with a derby; meetings per rival {"2":1875}; 0 wrong counts, 0 wrong rival sets, 0 derbies keys where none was due
+   750 of them were played in the career's own 2026 on field (read off the row)
+   Arsenal 2020: 240 of 240 seasons right (Tottenham, Chelsea; the North London derby and a London derby)
+   Real Madrid 2020: 240 of 240 seasons right (Barcelona, Atletico Madrid; El Clasico and the Madrid derby)
+   Man City 2020: 240 of 240 seasons right (Man United; the alias map: Man City is Manchester City in the table)
+   Sao Paulo 2020: 240 of 240 seasons right (none; before 2026-27 the Brasileirao is not one of the six leagues the ledgers hold)
+   Sao Paulo 2026: 240 of 240 seasons right (Corinthians, Palmeiras, Santos; three Paulista rivals, through the alias map)
+   Corinthians 2002: 240 of 240 seasons right (none; the Brasileirao before 2003 claims nothing)
+   Corinthians 2003: 240 of 240 seasons right (none; before 2026-27 the Brasileirao is not one of the six leagues the ledgers hold)
+   Corinthians 2026: 240 of 240 seasons right (Palmeiras, Sao Paulo, Santos; the double round robin Brasileirao)
+   Newcastle 2020: 240 of 240 seasons right (none; Sunderland were in League One in 2020-21 (the league ledgers))
+   Newcastle 2026: 240 of 240 seasons right (Sunderland; the Tyne-Wear derby, woken by Round 1013 adding Sunderland)
+   Celta Vigo 2020: 240 of 240 seasons right (none; Deportivo were in the third tier in 2020-21 (the league ledgers))
+   Celta Vigo 2026: 240 of 240 seasons right (Deportivo; the Galician derby, Round 1013 Deportivo through the alias map)
+   West Ham 2020: 240 of 240 seasons right (Tottenham; Millwall plays in another league in the game, so the Dockers derby is dormant)
+   Roma 2020: 240 of 240 seasons right (Napoli; Lazio is not a Soccer Career club, so the Derby della Capitale is dormant)
+   PSG 2018: 240 of 240 seasons right (Marseille; the last full Ligue 1 season before the held one)
+   PSG 2019: 240 of 240 seasons right (none; Ligue 1 2019/20 was abandoned, held)
+   PSG 2020: 240 of 240 seasons right (Marseille; Ligue 1 after the held season)
+   Club America 1995: 240 of 240 seasons right (none; Liga MX before the short tournaments claims nothing)
+   Club America 1996: 240 of 240 seasons right (none; before 2026-27 Liga MX is not one of the six leagues the ledgers hold)
+   Club America 2019: 240 of 240 seasons right (none; the Clausura 2020 was cancelled, held)
+   Club America 2026: 240 of 240 seasons right (Chivas, Cruz Azul, Pumas; the Liga MX clasicos, through the alias map)
+   Boca Juniors 2020: 240 of 240 seasons right (none; Argentina has no verified cadence)
+   Brighton 1990: 240 of 240 seasons right (none; Brighton were in the Second Division in 1990-91 (the league ledgers))
+   Crystal Palace 1991: 240 of 240 seasons right (none; a First Division season, Brighton a division below (the league ledgers))
+   Brighton 2026: 240 of 240 seasons right (Crystal Palace; the M23 derby from 2026-27)
+   2026: 56 pairs active, 8 dormant (pinned 56 and 8)
+4) derby goals are a subset, keepers never score one, Derby Hero is derived and never stored
+   4425 derby seasons: 0 over the season's goals, 0 over its league apps, 0 keeper goals, 0 bad winner flags, 0 goals in a missed game, 0 hero mismatches, 0 careers storing a Derby Hero award
+   6915 two meeting rivalries, 0 played both at one ground; 4425 seasons replayed from their own inputs, 0 differ from what the engine stored
+5) resolving the derbies draws nothing from the main stream
+   16 of 16 digests equal; bundle B played 137 derby seasons, bundle A 0
+6) the swing is bounded, results follow strength, heroes follow position
+   6a: 4425 seasons swung, 0 outside the bands, 0 popularity and 0 morale off the clamp
+   6b: win share by strength gap 2: 0.566 (2286), 1: 0.480 (4022), 0: 0.371 (4904), -1: 0.266 (2516), -2: 0.159 (630)
+   6c: draw share 0.273 over 17670 meetings
+   6d: hero rate att 0.074 (2316), mid 0.046 (1514), def 0.014 (1522), gk 0.000 (753)
+   6d: 272 winners in 528 won meetings he scored in, 281.5 expected, ratio 0.966 (band 0.85 to 1.2)
+   6e: popularity at every season's end, on 70.472 (1325) off 70.048 (1328) difference 0.424 (band 6)
+   6e: 80 long careers each way, 0 and 0 divorced, 0 and 1 with a Hall of Fame line
+   6e: final popularity on 95.900 off 96.425 difference -0.525 (band 2)
+   6e: final morale on 75.912 off 76.513 difference -0.600 (band 14)
+   6e: sponsorship on 4.155 off 4.117 difference 0.038 (band 0.3)
+   6e: net worth on 55.103 off 55.626 difference -0.523 (band 4)
+   6e: hall of fame lines on 0.000 off 0.013 difference -0.013 (band 0.08)
+7) an old save plays on, garbage reads as nothing, the UI draws only what a season has
+   old save: 10 seasons, played on to 11
+   old season markup 0 chars; chip "🔥 1-1-0"; totals "🔥 Derbies: 2 played, 1 W 1 D 0 L, 1 goal"
+   CONTROL FIRED(page career-total-click): {"entries":1,"lines":12,"button":true}; original f733ad8f45aece0840c8396691840d112867765c6dc293fcda07afa4e65e9e4f; copied a6b2a5268230281d111e814e30a72cbffb58d0c31ada66009e8585ebc3a21f5c
+   CONTROL FIRED(page season-summary-click): {"entries":1,"lines":12,"button":true}; original f733ad8f45aece0840c8396691840d112867765c6dc293fcda07afa4e65e9e4f; copied 8df6b83835a74245244335dcff1988b9b5bd5ab2f0a3bf758a3fda5c44c097cc
+   CONTROL FIRED(page timeline-chip-click): {"entries":1,"lines":12,"button":true}; original f733ad8f45aece0840c8396691840d112867765c6dc293fcda07afa4e65e9e4f; copied e16eae2cddd27224f006f096ca555b9237c865b2b36651c99036d234ad3ad4b1
+   CONTROL FIRED(page duplicate-history-opener): {"entries":2,"lines":12,"button":false}; original f733ad8f45aece0840c8396691840d112867765c6dc293fcda07afa4e65e9e4f; copied 334f182f85d947b6b76066eca3eeabee5f8de346f21da53ff48a4383a85f6a0b
+   CONTROL FIRED(page wrong-history-handler): {"entries":0,"lines":14,"button":true}; original f733ad8f45aece0840c8396691840d112867765c6dc293fcda07afa4e65e9e4f; copied ae00fac94fafd42e99710252589e971d7d6cf755452fa9f2ad27b5f10cfc5239
+8) no text claims a derby the record may contradict, and no dash anywhere
+   14036 derby log and summary lines, 13350 fan comment sets, 0 with a dash
+simCareerDerbies: all 8 sections green
