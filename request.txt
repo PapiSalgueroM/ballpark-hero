@@ -1,0 +1,7 @@
+# Release BI triage: PR277's New Career dialog proof binds SOCCER_NEW_CAREER_PARENT_REF. The kit passed bc416f2a (the BG merge m4's first parent), whose src/pages/SoccerCareer.tsx Round 1337 has since moved (33d1b7b6), so its three edits no longer turn the parent's page into this one. dialog-old reruns the kit line with its report's errors printed; dialog binds this head WITHOUT PR277's merge (treeWithoutMerge 48bb600a bc416f2a), the BG join's own recipe on a newer tree.
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -2
+dialog-old: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_NEW_CAREER_PARENT_REF=bc416f2a SOCCER_NEW_CAREER_BROWSER_OUT="$RUNNER_TEMP/dialog-old" node scripts/qa/soccerNewCareerDialogBrowser.mjs; s=$?; node -e "const r=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\")); console.log(JSON.stringify(r.errors,null,1).slice(0,2500))" "$RUNNER_TEMP/dialog-old/report.json"; exit $s
+dialog: R=$(node scripts/lib/treeWithoutMerge.mjs 48bb600a bc416f2a) || exit 2; echo "SOCCER_NEW_CAREER_PARENT_REF $R (this head without PR277s merge 48bb600a)"; CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_NEW_CAREER_PARENT_REF=$R SOCCER_NEW_CAREER_BROWSER_OUT="$RUNNER_TEMP/dialog" node scripts/qa/soccerNewCareerDialogBrowser.mjs; s=$?; node -e "const r=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\")); console.log(JSON.stringify(r.errors,null,1).slice(0,2500))" "$RUNNER_TEMP/dialog/report.json"; exit $s
