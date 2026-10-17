@@ -8,11 +8,18 @@
  *       Champions League tile, Table (36 rows, eight through, sixteen to the play-offs, twelve out, the legend),
  *       Matchdays on matchday 4 (18 scores) paged to matchday 5 (18 fixtures, no score), a club tapped (its run:
  *       four recorded nights and four to come), back, Knockouts (drawn after matchday 8), Final (still to come)
- *   (b) the same save at the season's end: the season review names the watched final's winner and runner-up,
- *       the ones the engine's evaluation crowns (today's world plays its final after the last league game)
- *   (c) an era 2005 watcher (Sunderland): Groups (eight pills, four rows a group), Final won by the engine's winner
- *   (d) a Real Madrid participant: Table is the old groups card, Matchdays read from the adapter
- *   (e) on every view of (a), (c) and the new views of (d): scrollY and the document height the same before a
+ *   (b) the same save at the season's end: the season review's line is, word for word and in its order,
+ *       "Champions League: <winner> beat <runner-up> in the final.", the final the engine's evaluation played
+ *       (today's world plays its final after the last league game)
+ *   (c) an era 2005 watcher (Villarreal, or the next still in the job at the final): Groups (eight pills, four rows
+ *       a group), Final won by the engine's winner
+ *   (d) a Real Madrid participant: Table is the old groups card, Matchdays read from the adapter, and the ? says the
+ *       game's stand in for today's world (group winners into the quarter-finals), never a round of 16
+ *   (k) the (a) save on the same stream at night 11 (play-offs settled, round of 16 first legs played): every
+ *       play-off and round of 16 card read against the engine's ties (first leg, second leg the right way round,
+ *       the aggregate and how it was won), Matchdays paged back to the play-off second legs with every row as the
+ *       engine played it, and one club's run holding its second leg (added by the review fix, run lens major 1)
+ *   (e) on every view of (a), (c), (k) and the new views of (d): scrollY and the document height the same before a
  *       tile and after its back button, every new control at least 44 px tall, no new text under 12 px, no
  *       sideways scroll, nothing cut by its box or off the screen, no one word name broken in the middle of the word,
  *       no two controls on top of each other, and the season review's line fully drawn; under
@@ -24,7 +31,11 @@
  *   notile  the Champions League tile is drawn only for a club in it      (a) red: no tile for a watcher
  *   ahead   the adapter evaluates one night past the week                  (a) red: matchday 5 shows scores
  *   oldcols the table's number columns as wide as the first draft          (c) at 320 red: a one word name breaks
- * (notile and ahead walk (a) at 390; oldcols walks (c) at 320.)
+ *   legflip a tie card prints its second leg's score the wrong way round  (k) red: a card not as the engine played it
+ *   swapfinal the season review swaps the winner and the runner-up         (b) red: the line names the final wrongly
+ *   r16help the ? for the club in it in today's world tells the eras' rule (d) red: a round of 16 the game never plays
+ * (notile and ahead walk (a) at 390; oldcols walks (c) at 320; legflip (k), swapfinal (b) and r16help (d) at 390.
+ *  Controls patch the checkout one at a time, so a request runs them under #!serial.)
  * Runs only on a runner (CI set): it builds and serves. Request lines, with #!serve and #!playwright:
  *   walk: node scripts/playWorldUcl.mjs
  *   walk-notile: PLAY_WORLD_CONTROL=notile node scripts/playWorldUcl.mjs
@@ -42,9 +53,10 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PLAY_WORLD_CONTROL || '';
 /* PLAY_WORLD_CASES (for example "c") and PLAY_WORLD_SIZES (for example "390") narrow a run while a finding is chased;
    a narrowed run is never the round's proof, and says so on its last line. */
-const CASES = process.env.PLAY_WORLD_CASES || 'abcd';
+const ALL_CASES = 'abcdk';
+const CASES = process.env.PLAY_WORLD_CASES || ALL_CASES;
 const SIZES = [[320, 640], [390, 844], [1280, 900]].filter(([w]) => !process.env.PLAY_WORLD_SIZES || process.env.PLAY_WORLD_SIZES.split(',').includes(String(w)));
-const NARROW = CASES !== 'abcd' || SIZES.length !== 3;
+const NARROW = CASES !== ALL_CASES || SIZES.length !== 3;
 const TEMP = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-world-ucl-walk-'));
 const SHOTS = path.join(process.env.RC_OUT || TEMP, 'shots');
 fs.mkdirSync(SHOTS, { recursive: true });
@@ -64,6 +76,18 @@ const CONTROLS = {
     from: "const cols = 'grid grid-cols-[1.25rem_1fr_1.1rem_1.1rem_1.1rem_1.75rem_1.75rem] gap-x-1 items-center';",
     to: "const cols = 'grid grid-cols-[1.5rem_1fr_1.4rem_1.4rem_1.4rem_2rem_2rem] gap-x-1 items-center';",
     finding: 'breaks in the middle of the word', run: 'c', size: [320, 640] },
+  legflip: { file: 'src/components/club-manager/WorldCompScreen.tsx',
+    from: 'Second leg: {t.away} {t.leg2[1]}-{t.leg2[0]} {t.home}',
+    to: 'Second leg: {t.away} {t.leg2[0]}-{t.leg2[1]} {t.home}',
+    finding: 'card not as the engine played it', run: 'k' },
+  swapfinal: { file: 'src/components/club-manager/ClubManagerSeasonSummary.tsx',
+    from: '{ winner: r.winner, runnerUp: r.runnerUp }',
+    to: '{ winner: r.runnerUp, runnerUp: r.winner }',
+    finding: 'the season review does not name the final', run: 'b' },
+  r16help: { file: 'src/components/club-manager/WorldCompScreen.tsx',
+    from: ") : view.mode === 'in' && view.firstKo === 'QF' ? (",
+    to: ') : false ? (',
+    finding: 'the ? for the club in it', run: 'd' },
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`);
 
@@ -100,6 +124,38 @@ const saves = {};
   const fin = tape(0x1503b, () => b.M.cm.finishSeason(b.s)).value.state;
   saves.b = { items: saved(b.M, fin), winner: end.winner, runnerUp: end.runnerUp };
   console.log(`(b) Chelsea season over after ${b.entries} entries: the engine's final, ${end.winner} beat ${end.runnerUp}`);
+  /* (k) the same stream stopped at night 11: the play-offs settled and the round of 16 first legs played. What each
+     card and each row must read is written here from the engine's own ties, never from the screen's code. */
+  const k = await play('Chelsea', undefined, 0x1503a, (M, s) => M.cm.worldUclNightsDone(s) >= 11);
+  const kd = k.M.cm.worldUclNightsDone(k.s);
+  const kr = k.M.cm.evalWorldUcl(k.s);
+  if (k.s.uclGroup || kd < 11 || !kr) cannot(`Chelsea did not reach night 11 as a watcher (${kd} nights done)`);
+  const how = t => (t.pens ? `${t.aet ? 'level after extra time, ' : ''}${t.winner} win on penalties`
+    : t.byAwayGoals ? `${t.winner} through on away goals` : t.aet ? `${t.winner} win after extra time` : `${t.winner} through`);
+  const cardOf = t => ({
+    head: `${t.home} v ${t.away}`,
+    first: t.leg1 ? `First leg: ${t.home} ${t.leg1[0]}-${t.leg1[1]} ${t.away}` : null,
+    second: t.leg2 ? `Second leg: ${t.away} ${t.leg2[1]}-${t.leg2[0]} ${t.home}` : null,
+    words: t.winner && t.agg ? `${t.agg[0]}-${t.agg[1]} on aggregate, ${how(t)}` : 'To be played',
+  });
+  const po = kr.ties.filter(t => t.round === 'PO');
+  const r16 = kr.ties.filter(t => t.round === 'R16');
+  if (po.length !== 8 || po.some(t => !t.leg1 || !t.leg2 || !t.agg || !t.winner)) cannot('the play-offs are not all settled at night 11');
+  for (const t of po) {
+    if (t.agg[0] !== t.leg1[0] + t.leg2[0] || t.agg[1] !== t.leg1[1] + t.leg2[1]) cannot(`the engine's play-off ${t.home} v ${t.away} has an aggregate that is not its two legs`);
+  }
+  const po2 = kr.nights.findIndex(n => n.stage === 'PO' && n.leg === 2);
+  const LEG_NAME = { PO: 'Play-off', R16: 'Round of 16', QF: 'Quarter-final', SF: 'Semi-final' };
+  const lastNight = kr.nights[kd - 1];
+  const t0 = po[0];
+  saves.k = {
+    items: saved(k.M, k.s), done: kd, po: po.map(cardOf), r16: r16.map(cardOf),
+    opensOn: `${LEG_NAME[lastNight.stage]}, ${lastNight.leg === 2 ? 'second' : 'first'} leg`,
+    backToPo2: kd - 1 - po2,
+    po2rows: kr.nights[po2].fixtures.map(f => `${f.home}|${f.hg}-${f.ag}|${f.away}`),
+    runClub: t0.home, runRow: `${t0.away} ${t0.leg2[1]}-${t0.leg2[0]} ${t0.home}`,
+  };
+  console.log(`(k) Chelsea, week ${k.s.week} after ${k.entries} entries: ${kd} nights done, ${po.length} play-offs settled, ${r16.length} round of 16 ties, Matchdays opens on ${saves.k.opensOn}`);
   /* A 2005 watcher still in the job when the final is played: Villarreal first (one of the real 32 whose place a
      stand in takes in the game), then two more. The first walk run picked Sunderland, who were sacked in March. */
   for (const club of ['Villarreal', 'Tottenham', 'Everton']) {
@@ -320,8 +376,11 @@ async function caseB(browser, size, tag) {
   try {
     const line = page.locator('[data-cm-world-final-line]');
     const got = await line.first().waitFor({ timeout: 20000 }).then(() => true).catch(() => false);
-    const text = got ? ((await line.first().textContent()) ?? '') : '';
-    if (!got || !text.includes(saves.b.winner) || !text.includes(saves.b.runnerUp)) finding(where, `the season review does not name the final (${text || 'no line'}); the engine's: ${saves.b.winner} beat ${saves.b.runnerUp}`);
+    const text = got ? ((await line.first().textContent()) ?? '').replace(/\s+/g, ' ').trim() : '';
+    /* Word for word and in its order (review fix, run lens major 2): "includes the winner and includes the
+       runner-up" passed a line that had them the wrong way round. */
+    const want = `Champions League: ${saves.b.winner} beat ${saves.b.runnerUp} in the final.`;
+    if (!got || !text.endsWith(want)) finding(where, `the season review does not name the final as the engine played it ("${text || 'no line'}"; the engine's: "${want}")`);
     else {
       await line.first().scrollIntoViewIfNeeded().catch(() => {});
       /* The review's lines tick in one after another, so the line is looked at once it is fully drawn. */
@@ -376,6 +435,14 @@ async function caseD(browser, size, tag) {
     if (!(await toCups(page, where))) return;
     await roundTrip(page, `${where} screen`, page.locator('[data-cm-world-tile="ucl"]'), async () => {
       if (!(await count(page, '[data-cm-world-mode="in"]'))) finding(where, 'the screen does not say the club is in it');
+      /* The ? describes what this club plays (review fix, read lens M1): today's stand in sends the group winners to
+         the quarter-finals, and no round of 16 is ever played. */
+      await press(page, page.locator('[data-cm-world-help-toggle]'));
+      const help = ((await page.locator('[data-cm-world-help]').first().textContent().catch(() => '')) ?? '').replace(/\s+/g, ' ');
+      if (!help.includes('The eight group winners go through to the quarter-finals') || /round of 16/i.test(help)) {
+        finding(where, `the ? for the club in it does not describe the game's stand in: "${help.slice(0, 200)}"`);
+      }
+      await press(page, page.locator('[data-cm-world-help-toggle]'));
       /* The old groups card, mounted unedited: its own pills, not the adapter's table. Measured for overflow only. */
       await roundTrip(page, `${where} table`, page.locator('[data-cm-world-tile="table"]'), async () => {
         const adapter = await count(page, '[data-cm-world-table]');
@@ -390,6 +457,54 @@ async function caseD(browser, size, tag) {
         const played = await count(page, '[data-cm-world-fixture="played"]');
         if (!all || !played) finding(where, `Matchdays shows ${all} fixtures and ${played} scores on matchday ${saves.d.md}`);
         await shot(page, `d-matchdays-${tag}`);
+      });
+    });
+    if (errors.length) finding(where, `page errors: ${errors.join(' | ')}`);
+  } finally { await ctx.close(); }
+}
+
+/** (k) The knockouts against the engine: the cards of two rounds, the play-off second legs on Matchdays, a run. */
+async function caseK(browser, size, tag) {
+  const where = `(k) Chelsea knockouts ${tag}`;
+  const { ctx, page, errors } = await open(browser, saves.k.items, size);
+  const squash = s => (s || '').replace(/\s+/g, ' ').trim();
+  try {
+    if (!(await toCups(page, where))) return;
+    await roundTrip(page, `${where} screen`, page.locator('[data-cm-world-tile="ucl"]'), async () => {
+      await roundTrip(page, `${where} knockouts`, page.locator('[data-cm-world-tile="knockouts"]'), async () => {
+        for (const [pill, prefix, want] of [['Play-offs', 'PO', saves.k.po], ['Last 16', 'R16', saves.k.r16]]) {
+          await press(page, page.getByRole('button', { name: pill, exact: true }));
+          const cards = await page.locator(`[data-cm-world-tie^="${prefix}-"]`).evaluateAll(els => els.map(e => e.innerText.replace(/\s+/g, ' ').trim()));
+          if (cards.length !== want.length) finding(where, `${cards.length} ${pill} cards, the engine drew ${want.length}`);
+          let held = 0;
+          for (const w of want) {
+            const card = cards.find(c => c.startsWith(w.head));
+            const bad = !card ? 'no card'
+              : w.first && !card.includes(w.first) ? `no "${w.first}"`
+                : w.second && !card.includes(w.second) ? `no "${w.second}"`
+                  : !w.second && card.includes('Second leg:') ? 'a second leg not yet played'
+                    : !card.includes(w.words) ? `no "${w.words}"` : '';
+            if (bad) finding(where, `${pill} card not as the engine played it: ${w.head}, ${bad} (the card reads "${card ?? ''}")`);
+            else held += 1;
+          }
+          console.log(`   ${where}: ${held} of ${want.length} ${pill} cards as the engine played them`);
+          await shot(page, `k-${prefix.toLowerCase()}-${tag}`);
+        }
+      });
+      await roundTrip(page, `${where} matchdays`, page.locator('[data-cm-world-tile="matchdays"]'), async () => {
+        const head = squash(await page.locator('[data-cm-world-night]').first().innerText().catch(() => ''));
+        if (!head.includes(saves.k.opensOn)) finding(where, `Matchdays opens on "${head.slice(0, 60)}", not the last night played (${saves.k.opensOn})`);
+        for (let i = 0; i < saves.k.backToPo2; i += 1) await press(page, page.getByRole('button', { name: 'Night before' }));
+        const night = squash(await page.locator('[data-cm-world-night]').first().innerText().catch(() => ''));
+        if (!night.includes('Play-off, second leg')) finding(where, `paging back reached "${night.slice(0, 60)}", not the play-off second legs`);
+        const rows = await page.locator('[data-cm-world-fixtures] > div').evaluateAll(els => els.map(e => [...e.children].map(c => c.innerText.trim()).join('|')));
+        const miss = saves.k.po2rows.filter(r => !rows.includes(r));
+        if (rows.length !== saves.k.po2rows.length || miss.length) finding(where, `the play-off second legs read "${rows.slice(0, 2).join(' / ')}"; ${miss.length} of the engine's rows missing, first "${miss[0] ?? ''}"`);
+        await shot(page, `k-po2-${tag}`);
+        await roundTrip(page, `${where} run`, page.locator(`[data-cm-world-fixtures] [data-cm-world-club="${saves.k.runClub}"]`), async () => {
+          const run = squash(await page.locator(`[data-cm-world-run="${saves.k.runClub}"]`).first().innerText().catch(() => ''));
+          if (!run.includes(saves.k.runRow)) finding(where, `${saves.k.runClub}'s run does not hold its play-off second leg "${saves.k.runRow}"`);
+        });
       });
     });
     if (errors.length) finding(where, `page errors: ${errors.join(' | ')}`);
@@ -416,22 +531,19 @@ async function caseMotion(browser) {
 }
 
 /* ---------- run ---------- */
+const RUN = { a: caseA, b: caseB, c: caseC, d: caseD, k: caseK };
 const browser = await chromium.launch();
 try {
   if (CONTROL) {
     const c = CONTROLS[CONTROL];
     const size = c.size ?? [390, 844];
     const tag = `${size[0]}-${CONTROL}`;
-    if ((c.run ?? 'a') === 'c') await caseC(browser, size, tag);
-    else await caseA(browser, size, tag);
+    await RUN[c.run ?? 'a'](browser, size, tag);
   } else {
     for (const size of SIZES) {
       const tag = String(size[0]);
       console.log(`== ${size[0]} by ${size[1]}`);
-      if (CASES.includes('a')) await caseA(browser, size, tag);
-      if (CASES.includes('b')) await caseB(browser, size, tag);
-      if (CASES.includes('c')) await caseC(browser, size, tag);
-      if (CASES.includes('d')) await caseD(browser, size, tag);
+      for (const k of ALL_CASES) if (CASES.includes(k)) await RUN[k](browser, size, tag);
     }
     if (!NARROW) await caseMotion(browser);
   }
@@ -459,4 +571,4 @@ if (findings.length) {
   console.log(`playWorldUcl: FAIL, ${findings.length} findings over ${measured} measured views; pictures in ${SHOTS}`);
   process.exit(1);
 }
-console.log(`playWorldUcl: green. Four saves at three sizes, ${measured} views measured, every check held; pictures in ${SHOTS}`);
+console.log(`playWorldUcl: green. Five saves at three sizes, ${measured} views measured, every check held; pictures in ${SHOTS}`);
