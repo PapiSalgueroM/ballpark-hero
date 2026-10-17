@@ -1,0 +1,2 @@
+headsha exit=0 0s | a6b762955 Round BII: record the base of Round 1329's inverse after PR289 and PR297 (9e93b382) in this branch's history, tree unchanged
+wf301-m18-recorded exit=1 906s | wfrun manager-decision-method.yml: 5 steps ran, 1 failed: Actual types syntax and source fences

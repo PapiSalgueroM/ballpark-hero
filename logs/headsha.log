@@ -1,0 +1,3 @@
+8946e0f3b rc request rBIi-m18 for 4b38865921ec69d2908e72cf13060283ee400775
+4b3886592 Round BII: move Round 1329's inverse onto its base after PR289 and PR297 (9e93b382)
+a6b762955 Round BII: record the base of Round 1329's inverse after PR289 and PR297 (9e93b382) in this branch's history, tree unchanged
