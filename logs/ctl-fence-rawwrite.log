@@ -1,0 +1,7 @@
+source: every call in src that writes the Club Manager save or the Soccer Career save is fenced or allowed
+  FAIL [source]: a write of the Club Manager save outside the fence and off the allowed list: src/lib/clubManagerSlots.ts:219 deleteSlot setItem(SAVE_KEY)
+  Soccer Career: the restoredSave initialiser starts with saveFence.adopt(SAVE_KEY);; 1 read(s) after it; 1 adopt call(s) in the page
+  96 files write storage; 6 writes of the save inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+  Soccer Career: 3 writes of soccerCareerSave inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+  section source: 19 checks, 1 red
+CONTROL FIRED: SAVE_FENCE_CONTROL=rawwrite fired 1 times and section source went red with 1 findings

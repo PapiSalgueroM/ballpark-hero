@@ -1,0 +1,12 @@
+1) the fixture is whole: a named sha, both sports, every station of the scripted path
+   cfb: 104 steps, 78 stations, 0 missing, 0 steps short of a field, 9471 draws at the end
+   cbb: 100 steps, 78 stations, 0 missing, 0 steps short of a field, 9492 draws at the end
+2) the replay: both boards match every recorded step
+   NEGATIVE CONTROL ON: src/components/cfb-dynasty/CfbDynastyBoard.tsx says "signVerb: 'signed with'," for "signVerb: 'signs with',"
+   vitest exit 1, 1 failed | 3 passed (4)
+   cfb: red, the athletic director set aside honestly: green
+   cbb: green, the athletic director set aside honestly: green
+   first mismatch: step 37 (sign high school), in html, text
+  FAIL: the "cfbword" copy breaks the replay of cfb
+
+control "cfbword": 1 failure(s) fired as expected, the check works

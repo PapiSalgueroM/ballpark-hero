@@ -1,0 +1,76 @@
+chainBase: src/lib/careerPreDraft.ts
+chainBase: src/lib/clubDetailFixtures.ts
+chainBase: src/lib/clubManager.ts
+chainBase: src/lib/clubManagerBoardVerdict.ts
+chainBase: src/lib/clubManagerCalendar.ts
+chainBase: src/lib/clubManagerRecords.ts
+chainBase: src/lib/clubManagerRetire.ts
+chainBase: src/lib/clubManagerSlots.ts
+chainBase: src/lib/clubManagerStart.ts
+chainBase: src/lib/clubManagerUclGroups.ts
+chainBase: src/lib/clubManagerWorldRoster.ts
+chainBase: src/lib/deadlineDay.ts
+chainBase: src/lib/freshBuild.ts
+chainBase: src/lib/gmInbox.ts
+chainBase: src/lib/managerHotSeat.ts
+chainBase: src/lib/playerBingo.ts
+chainBase: src/lib/season/historicalOpponentLabels.ts
+chainBase: src/lib/soccerCareerContracts.ts
+chainBase: src/lib/soccerCareerEngine.ts
+chainBase: src/lib/soccerCareerLife.ts
+chainBase: src/lib/soccerCareerLifeConsequences.ts
+chainBase: src/lib/soccerCareerRealismA.ts
+chainBase: src/lib/soccerCareerRoutineEvents.ts
+chainBase: src/lib/soccerClubSquadSheet.ts
+chainBase: src/lib/soccerDeck.ts
+chainBase: src/lib/soccerDeckGate.ts
+chainBase: src/lib/soccerPhone.ts
+chainBase: src/lib/usCoachCareer.ts
+chainBase: src/lib/usCoachRetirement.ts
+chainBase: src/lib/worldCompetition.ts
+chainBase: src/lib/worldXi.ts
+chainBase: 31 file(s) from HEAD into /tmp/f2
+fleet: 4 careers x seeds 0,1,2,3,4 x 2 seasons, a save, a load and a save after every entry, against FENCE_BASE /tmp/f2
+NEGATIVE CONTROL ON: SAVE_FENCE_CONTROL=squadline rewrote clubManager.ts in the fleet-head bundle
+  1920 saves on head, 0 of them in a state a load repair fires on; 1454 faces equal to the base commit's (both saves' bytes and the draw count)
+  FAIL [fleet]: head and base part: Everton (today, squeezed to 12 at every window) seed 0: head "s0 w0 squeezed|524ba3c5e8909674|f88d01591ffc5d1c|742" base "s0 w0 squeezed|524ba3c5e8909674|6fc0122745831a2c|722"
+  squeezed career: 456 saves the engine wrote with fewer than 14 men (seed:saves 0:92 1:92 2:94 3:84 4:94)
+  negative budget: saved at -2.5, opened on head at -2.5 with 0 draws, the same JSON as the base's
+✘ [ERROR] Could not resolve "/tmp/f2/src/data/soccerDeck" (originally "@/data/soccerDeck")
+
+    ../../../../../tmp/f2/src/lib/soccerDeck.ts:77:34:
+      77 │ import { SOCCER_DECK_PACKS } from '@/data/soccerDeck';
+         ╵                                   ~~~~~~~~~~~~~~~~~~~
+
+  The path "@/data/soccerDeck" was remapped to "/tmp/f2/src/data/soccerDeck" using the alias feature, which then couldn't be resolved. Keep in mind that import path aliases are resolved in the current working directory.
+
+✘ [ERROR] Could not resolve "/tmp/f2/src/data/soccerDeck/words" (originally "@/data/soccerDeck/words")
+
+    ../../../../../tmp/f2/src/lib/soccerDeck.ts:78:54:
+      78 │ ...R_FX_WORDS, SOCCER_TRAINING_KEYS } from '@/data/soccerDeck/words';
+         ╵                                            ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  The path "@/data/soccerDeck/words" was remapped to "/tmp/f2/src/data/soccerDeck/words" using the alias feature, which then couldn't be resolved. Keep in mind that import path aliases are resolved in the current working directory.
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 2 errors:
+../../../../../tmp/f2/src/lib/soccerDeck.ts:77:34: ERROR: Could not resolve "/tmp/f2/src/data/soccerDeck" (originally "@/data/soccerDeck")
+../../../../../tmp/f2/src/lib/soccerDeck.ts:78:54: ERROR: Could not resolve "/tmp/f2/src/data/soccerDeck/words" (originally "@/data/soccerDeck/words")
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
