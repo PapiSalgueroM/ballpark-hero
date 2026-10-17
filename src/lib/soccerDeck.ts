@@ -40,7 +40,7 @@
    of his normal work, and the button prints both. Before this a card raised
    the recorded legacy score whatever the answer (simSoccerDeck section 8).
    A cost lands only as far as the training it pays for landed, so at the
-   ceiling neither moves. soccerDeckProblems refuses an option whose skill
+   ceiling neither moves, and neither does a stat already at 99. soccerDeckProblems refuses an option whose skill
    costs differ from what it trains, so a pack with free training deals
    nothing (simSoccerDeck section 1 and its onefree control).
 
@@ -156,7 +156,10 @@ for (const [key, { stat }] of Object.entries(SOCCER_TRAINING_KEYS)) {
     apply: (s, v) => {
       /* a cost: queued as it is (landChoice never hands one more than the training it pays for landed) */
       if (v < 0) { s.statBoostNextSeason = { ...(s.statBoostNextSeason ?? {}), [stat]: (s.statBoostNextSeason?.[stat] ?? 0) + v }; return; }
-      const add = Math.max(0, Math.min(v, momentsRoom(s)));
+      /* never past the ceiling, and never past 99: the season start clamps a stat there (soccerCareerEngine.ts), so a
+         +1 past it would land nothing and its cost would still be paid (review of 2026-10-17) */
+      const top = 99 - (s[stat] ?? 99) - (s.statBoostNextSeason?.[stat] ?? 0);
+      const add = Math.max(0, Math.min(v, momentsRoom(s), top));
       if (add > 0) s.statBoostNextSeason = { ...(s.statBoostNextSeason ?? {}), [stat]: (s.statBoostNextSeason?.[stat] ?? 0) + add };
     },
     read: s => s.statBoostNextSeason?.[stat] ?? 0,

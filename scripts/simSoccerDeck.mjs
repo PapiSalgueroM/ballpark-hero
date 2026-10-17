@@ -48,8 +48,10 @@
         (GK, CB, CM, ST) at room 0, 1 and 5 under the ceiling and morale 0, 1,
         50, 99 and 100, fresh for each answer: the whole save after the answer
         equals the save before with exactly the printed effects applied, each
-        by the printed amount or to its bound (training at momentsRoom, morale
-        at 0 and 100), and one season log line saying what landed; netWorth,
+        by the printed amount or to its bound (training at momentsRoom and at
+        a stat of 99, where the season start clamps it: at morale 50 each
+        fixture also runs with all seven stats at 99; morale at 0 and 100),
+        and one season log line saying what landed; netWorth,
         totalEarnings, socialMediaFollowers, popularity and karma never move;
         the option that moves nothing moves nothing and logs nothing. At room
         0 and 1 no card is dealt whose training would not fit (the hold). A
@@ -119,6 +121,10 @@
                integrity, which the pack stopped moving, and changed nothing).
      ceiling   a training key ignores momentsRoom (soccerDeck.ts, in memory):
                a boost lands at room 0; section 5 fails.
+     statmax   a training key ignores a stat at 99 (soccerDeck.ts, in memory):
+               the +1 the season start clamp drops is queued and its cost is
+               paid; section 5 fails on the maxed fixtures (review of
+               2026-10-17).
      posleak   card 706 (a defender's) is widened to pos < 3 in the pack the
                fleet deals from; the widened pack passes the bind check, so the
                red is a midfielder dealt 706, not a pack that deals nothing;
@@ -210,7 +216,8 @@ const CONTROLS = {
   silent: { breaks: '5', file: DECK, edits: [["        consequence: choiceEffects(c, pack, SOCCER_FX_WORDS).join(', ') || 'Nothing changes',",
     "        consequence: choiceEffects(c, pack, SOCCER_FX_WORDS).filter(w => !/^(Pace|Shooting|Passing|Dribbling|Defending|Physical) next season /.test(w)).join(', ') || 'Nothing changes', /* silent control */"]] },
   drop: { breaks: '5', file: DECK, edits: [['    def.apply(s, v);\n', "    if (!k.startsWith('t_')) def.apply(s, v); /* drop control */\n"]] },
-  ceiling: { breaks: '5', file: DECK, edits: [['      const add = Math.max(0, Math.min(v, momentsRoom(s)));', '      const add = Math.max(0, v); /* ceiling control */']] },
+  ceiling: { breaks: '5', file: DECK, edits: [['      const add = Math.max(0, Math.min(v, momentsRoom(s), top));', '      const add = Math.max(0, v); /* ceiling control */']] },
+  statmax: { breaks: '5', file: DECK, edits: [['      const add = Math.max(0, Math.min(v, momentsRoom(s), top));', '      const add = Math.max(0, Math.min(v, momentsRoom(s))); /* statmax control */']] },
   posleak: { breaks: '6', file: null, edits: null },
   neutralmoves: { breaks: '4', file: DECK, edits: [['        apply: still ? (s: CareerState) => s : (s: CareerState) => landChoice(s, def.emoji, title, c),',
     '        apply: still ? (s: CareerState) => ({ ...s, morale: Math.min(100, s.morale + 1) }) : (s: CareerState) => landChoice(s, def.emoji, title, c), /* neutralmoves control */']] },
@@ -708,14 +715,18 @@ if (runs(5)) {
   const base5 = withStream(() => startOf(H.engine, 5), seeded(5)).value;
   const row5 = { ...(base5.seasons[0] ?? {}), year: 2012, age: 25, club: 'Deck Albion', clubCountry: 'England', clubTier: 2, type: 'playing', apps: 30, goals: 6,
     assists: 3, cleanSheets: 4, yellowCards: 8, redCards: 0, rating: 7, intApps: 2, injury: null, injuryWeeks: 9 };
-  const fixture = (code, room, morale) => ({ ...copy(base5), position: code, age: 25, morale, overall: 70, potential: 70 + room, potentialEarned: 0,
+  /* maxed (review of 2026-10-17): all seven stats at 99, where the season start clamps them, so no training lands
+     there and no cost is paid for it */
+  const SEVEN = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physical', 'reflexes'];
+  const fixture = (code, room, morale, maxed = false) => ({ ...copy(base5), position: code, age: 25, morale, overall: 70, potential: 70 + room, potentialEarned: 0,
     statBoostNextSeason: {}, currentClub: 'Deck Albion', currentClubTier: 1, seasons: [{ ...row5 }], retired: false, contractYearsLeft: 1,
-    isClubCaptain: true, captainClub: 'Deck Albion', eventLastFired: {}, lastEventId: null, pendingEvents: [] });
+    isClubCaptain: true, captainClub: 'Deck Albion', eventLastFired: {}, lastEventId: null, pendingEvents: [],
+    ...(maxed ? Object.fromEntries(SEVEN.map(k => [k, 99])) : {}) });
   const defOf = id => PACK.events.find(e => Number(e.id) === id);
-  let answers = 0, neutral = 0, atBound = 0;
+  let answers = 0, neutral = 0, atBound = 0, atMax = 0;
   const wrong = [];
-  for (const code of ['GK', 'CB', 'CM', 'ST']) for (const room of [0, 1, 5]) for (const morale of [0, 1, 50, 99, 100]) {
-    const s0 = fixture(code, room, morale);
+  for (const code of ['GK', 'CB', 'CM', 'ST']) for (const room of [0, 1, 5]) for (const morale of [0, 1, 50, 99, 100]) for (const maxed of morale === 50 ? [false, true] : [false]) {
+    const s0 = fixture(code, room, morale, maxed);
     for (const card of D.deckToRandomEvents(PACK, PACK.events)) {
       card.choices.forEach((c, i) => {
         const before = copy(s0);
@@ -759,8 +770,10 @@ if (runs(5)) {
             text.set(p, pay === -v ? `${label} ${sgn(-pay)}` : `${label} ${sgn(-pay)}, you only pay for training that landed`);
             continue;
           }
-          const fit = Math.max(0, Math.min(v, H.momentsRoom(want)));
+          const top = 99 - want[stat] - (want.statBoostNextSeason[stat] ?? 0);
+          const fit = Math.max(0, Math.min(v, H.momentsRoom(want), top));
           if (fit !== v) atBound += 1;
+          if (top < Math.min(v, H.momentsRoom(want))) atMax += 1;
           trained += fit;
           if (fit > 0) want.statBoostNextSeason = { ...want.statBoostNextSeason, [stat]: (want.statBoostNextSeason[stat] ?? 0) + fit };
           text.set(p, fit === v ? `${label} ${sgn(fit)}` : `${label} ${sgn(fit)}, you are at your ceiling`);
@@ -775,9 +788,10 @@ if (runs(5)) {
     }
   }
   for (const w of wrong.slice(0, 4)) console.error(`     ${w}`);
-  console.log(`   ${answers} answers (${neutral} on the option that moves nothing), ${atBound} effects at a bound`);
+  console.log(`   ${answers} answers (${neutral} on the option that moves nothing), ${atBound} effects at a bound, ${atMax} trainings held at 99`);
   if (answers < 1000) fail(`only ${answers} answers checked`);
   if (atBound === 0) fail('no effect met a bound, so the clamp was never checked');
+  if (atMax === 0) fail('no training met a stat at 99, so that bound was never checked');
   if (wrong.length) fail(`${wrong.length} answers move something other than what they print, or say it wrong`);
   else ok('every option moves exactly what it prints (to the bound and no further), the season log says what landed, nothing moves money, fame or karma, and the option that moves nothing moves nothing');
   /* the hold: at room 0 and 1 no card is dealt whose training would not fit */
