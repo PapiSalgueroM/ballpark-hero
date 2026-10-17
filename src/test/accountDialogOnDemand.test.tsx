@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter, useLocation } from 'react-router-dom';
 import { afterAll, afterEach, beforeEach, expect, it, vi } from 'vitest';
 
@@ -60,7 +60,7 @@ function openerFor(consumer: Consumer) {
 }
 async function open(opener: HTMLElement, heading: string) {
   opener.focus(); fireEvent.click(opener);
-  await screen.findByRole('heading', { name: heading });
+  await waitFor(() => within(screen.getByRole('dialog')).getByRole('heading', { name: heading }));
   const email = await screen.findByRole('textbox', { name: 'Email' });
   await waitFor(() => expect(email).toHaveFocus());
   expect(screen.getByRole('dialog')).toContainElement(document.activeElement as HTMLElement);

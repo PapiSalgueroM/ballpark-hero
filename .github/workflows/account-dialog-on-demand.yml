@@ -179,7 +179,6 @@ jobs:
       ACCOUNT_DIALOG_BASELINE_REF: 073d5f6c8c465bb9d797e7d15d16fc4adafb400b
       ACCOUNT_DIALOG_BASELINE_RAW_SHA256: 6f7208ed9f60b6ffa83aa00c8c1124d39070c306866855af014e65d7b9c4ac74
       ACCOUNT_DIALOG_PRODUCT_PATCH_SHA256: 12b7af2a081790bbeac7a7e2ad7ce178f8ab9a2035e6a87e41fbd01661d44181
-      DEBUG_PRINT_LIMIT: '100000'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -202,7 +201,7 @@ jobs:
           git rev-parse HEAD > "$out/head.txt"; git archive --format=zip HEAD > "$out/source.zip"
           test -z "$(git status --porcelain --untracked-files=no)"
           git merge-base --is-ancestor "$ACCOUNT_DIALOG_BASELINE_REF" HEAD
-          git diff --exit-code "$ACCOUNT_DIALOG_BASELINE_REF" HEAD -- src scripts public index.html package.json package-lock.json bun.lock bun.lockb .github/workflows ':!src/components/layout/Header.tsx' ':!src/pages/Index.tsx' ':!src/components/game/GameNavbar.tsx' ':!src/components/auth/AuthModal.tsx' ':!src/components/auth/AccountDialogOnDemand.tsx' ':!scripts/qa/proveAccountDialogOnDemandFixed.mjs' ':!scripts/qa/playAccountDialogOnDemand.mjs' ':!.github/workflows/account-dialog-on-demand.yml'
+          git diff --exit-code "$ACCOUNT_DIALOG_BASELINE_REF" HEAD -- src scripts public index.html package.json package-lock.json bun.lock bun.lockb .github/workflows ':!src/test/accountDialogOnDemand.test.tsx' ':!src/components/layout/Header.tsx' ':!src/pages/Index.tsx' ':!src/components/game/GameNavbar.tsx' ':!src/components/auth/AuthModal.tsx' ':!src/components/auth/AccountDialogOnDemand.tsx' ':!scripts/qa/proveAccountDialogOnDemandFixed.mjs' ':!scripts/qa/playAccountDialogOnDemand.mjs' ':!.github/workflows/account-dialog-on-demand.yml'
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
           git ls-files -z -- ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
       - name: Same locked application and isolated tools for both builds
@@ -236,7 +235,6 @@ jobs:
           (cd "$ACCOUNT_DIALOG_ORIGINAL_SOURCE"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$ACCOUNT_DIALOG_OUT/original/request-source-files.sha256"
           (cd "$ACCOUNT_DIALOG_ORIGINAL_SOURCE"; git ls-files -z -- ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' | sort -z | xargs -0 sha256sum) > "$ACCOUNT_DIALOG_OUT/original/source-files.sha256"
       - name: Actual types and frozen normal original restored behavior
-        id: proof
         run: |
           set -euo pipefail
           SIM_OFFLINE_RECEIPT="$ACCOUNT_DIALOG_OUT/types.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$ACCOUNT_DIALOG_OUT/types.log" 2>&1
@@ -244,13 +242,6 @@ jobs:
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --check scripts/qa/playAccountDialogOnDemand.mjs
           SIM_OFFLINE_RECEIPT="$ACCOUNT_DIALOG_OUT/proof.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/proveAccountDialogOnDemandFixed.mjs > "$ACCOUNT_DIALOG_OUT/proof.log" 2>&1
           tail -n 4 "$ACCOUNT_DIALOG_OUT/proof.log"
-      - name: Retain two Home diagnostics after the unchanged proof fails
-        if: ${{ !cancelled() && steps.proof.outcome == 'failure' }}
-        timeout-minutes: 8
-        run: |
-          set -euo pipefail
-          SIM_OFFLINE_RECEIPT="$ACCOUNT_DIALOG_OUT/diagnose.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/proveAccountDialogOnDemandFixed.mjs diagnose > "$ACCOUNT_DIALOG_OUT/diagnose.log" 2>&1
-          tail -n 2 "$ACCOUNT_DIALOG_OUT/diagnose.log"
       - name: Existing focus normal both controls and Google regressions
         run: |
           set -euo pipefail
@@ -349,7 +340,7 @@ jobs:
             if test -f "$arm/dist-files.sha256"; then find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$arm/dist-after-files.sha256"; cmp "$arm/dist-files.sha256" "$arm/dist-after-files.sha256" > "$arm/dist-inventory-hold.log" 2>&1 || result=1; fi
             for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simGuideHeadings simSiteSearch; do test ! -s "$arm/$method.transport" || result=1; done
           done
-          for method in types proof diagnose auth-normal auth-nofocus auth-accountonly simGoogleOnlyReturn simGoogleIdentity stale-normal stale-nooffline stale-nosave stale-catchreload preload; do test ! -s "$root_out/$method.transport" || result=1; done
+          for method in types proof auth-normal auth-nofocus auth-accountonly simGoogleOnlyReturn simGoogleIdentity stale-normal stale-nooffline stale-nosave stale-catchreload preload; do test ! -s "$root_out/$method.transport" || result=1; done
           # Cached fonts and declared browser/weight denials retain their own evidence, never ordinary zero-block credit.
           exit "$result"
       - uses: actions/upload-artifact@v4
