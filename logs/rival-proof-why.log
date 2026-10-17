@@ -1,0 +1,8 @@
+soccerRivalWagesProof FAIL errors=1
+[
+ {
+  "stage": "proof",
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ '0b3d35bc584867da38ced517c5d2ed9c2507fbced8c200c916f5b830ed39d5a1'\n- 'e37b73f25a17e4c63718430365de87cd1d5a001960ba8257ac674834e691dd90'\n\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerRivalWagesProof.mjs:148:10\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+ }
+]
+src unchanged

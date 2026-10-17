@@ -1,0 +1,3 @@
+headsha exit=0 0s | 8293c758f Release BI: the lead sets the three Club Manager engine weight rows from the join's runner measurement
+rival-proof-why exit=1 1s | src unchanged
+rival-proof exit=0 7s | soccerRivalWagesProof PASS arms3 tests69 originalWageFailures10 traceRows39
