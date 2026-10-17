@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/worldCompetition.test.ts src/lib/clubManagerWorldView.test.ts src/test/clubManagerBracketMoment.test.tsx src/test/clubManagerDifficultyPick.test.tsx --testTimeout=300000 --hookTimeout=120000
+wu-main: WORLD_UCL_ONLY=0,1,3,4,7 node scripts/simWorldUcl.mjs
+wu-56: WORLD_UCL_ONLY=5,6 node scripts/simWorldUcl.mjs
+wu-ctl: ok=0; r=""; for k in swaphome memokey noholdertop nocustomexit field32 ahead noholder; do WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=$k node scripts/simWorldUcl.mjs > /tmp/wu-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/wu-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+dailydeals: node scripts/simDailyDeals.mjs
+dd-ctl: ok=0; r=""; for k in world worlddeadline ledger ledgerdeadline; do DAILY_DEALS_CONTROL=$k node scripts/simDailyDeals.mjs > /tmp/dd-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/dd-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+unseeded: node scripts/simCmUnseededWorld.mjs
+un-ctl: ok=0; r=""; for k in guard early never norecord; do CM_UNSEEDED_FLEET=quick CM_UNSEEDED_CONTROL=$k node scripts/simCmUnseededWorld.mjs > /tmp/un-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/un-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+uclfield: node scripts/simUclField.mjs
+seasonlaw: node scripts/simSeasonLaw.mjs
+extratime: node scripts/simExtraTime.mjs
+worldeditor: node scripts/simWorldEditor.mjs
+formathistory: node scripts/simUclFormatHistory.mjs
+seasonone: node scripts/simUclSeasonOne.mjs
+continuity: node scripts/simManagerWorldContinuity.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
