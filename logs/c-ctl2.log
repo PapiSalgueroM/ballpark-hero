@@ -1,0 +1,8 @@
+treeWithoutMerge: e33514bb64f43fa49e8b14da6fa468d0d608b123, ac631595 without 54100f6e; conflicts kept from ac631595: none
+base e33514bb64f43fa49e8b14da6fa468d0d608b123
+simCmWorldMoves: control joinledger FIRED: section 3 red (154)
+simCmWorldMoves: control nocarry FIRED: section 3 red (318)
+simCmWorldMoves: control seasonone FIRED: section 3 red (198)
+simCmWorldMoves: control norepair FIRED: section 5 red (361)
+simCmWorldMoves: control repairthrows FIRED: section 5 red (361)
+controls (exit/FIRED): joinledger=1/1 nocarry=1/1 seasonone=1/1 norepair=1/1 repairthrows=1/1
