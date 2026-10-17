@@ -1,0 +1,361 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: src/components/club-manager/LiveSimScreen.tsx whole-parent source hold
++ actual - expected
+... Skipped lines
+
+  "import { Fragment, useEffect, useMemo, useRef, useState } from 'react';\n" +
+    "import { cn } from '@/lib/utils';\n" +
+    "import { Pause, Play, FastForward, Users, ArrowLeft, ArrowLeftRight, Gauge, X } from 'lucide-react';\n" +
+    'import {\n' +
+    '  FORMATIONS, MENTALITIES, slotPosition, pitchLineOf, resolveXI, extraTimeCall,\n' +
+...
+    "import { ClubManagerVarReview } from '@/components/club-manager/ClubManagerVarReview';\n" +
++   "import { inFixtureOrder, mineFirstOfReport, myClubFirst, pitchInitials, pitchName } from '@/lib/cmMatchDisplay';\n" +
+    '\n' +
+    '/**\n' +
+    ' * Round 158: the Live Sim. His words, the ones he said to really pay\n' +
+    ' * attention to: "both sides with each of their formations start and then u\n' +
+    ' * see the little circles moving about... people can choose the speed of\n' +
+...
+    '   plays it as a goal (the ball goes in). Nothing else here reads it: not the score, not the stats, not a card. */\n' +
++   'type RuledOutChance = LiveFe'... 127006 more characters
+-   'type RuledOutChance = LiveFeedEvent & { ruledOut: string };\n' +
+-   '/** A review that takes a goal away. */\n' +
+-   'const isRuledOut = (e: LiveFeedEvent): bo'... 123203 more characters
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simPitchRestartContinuity.mjs:61:21 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: "import { Fragment, useEffect, useMemo, useRef, useState } from 'react';\n" +
+    "import { cn } from '@/lib/utils';\n" +
+    "import { Pause, Play, FastForward, Users, ArrowLeft, ArrowLeftRight, Gauge, X } from 'lucide-react';\n" +
+    'import {\n' +
+    '  FORMATIONS, MENTALITIES, slotPosition, pitchLineOf, resolveXI, extraTimeCall,\n' +
+    '  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, changeRoom, liveGoneIds,\n' +
+    "} from '@/lib/clubManager';\n" +
+    'import type {\n' +
+    '  CareerState, CMPlayer, LiveMatch, MatchWeekReport, MatchStats, Mentality, TalkTone,\n' +
+    '  LiveChange, LiveFeedEvent, FormationSlot,\n' +
+    "} from '@/lib/clubManager';\n" +
+    '/* Round 781: the clock label, the board aware "has it happened", and the tie on a second leg. */\n' +
+    "import { minuteLabel, playedBy, secondLegContext } from '@/lib/clubManager';\n" +
+    "import { HalftimeScreen } from '@/components/club-manager/HalftimeScreen';\n" +
+    "import { MadeUpTag } from '@/components/club-manager/SquadScreen';\n" +
+    "import { ShootoutKicks } from '@/components/club-manager/ShootoutKicks';\n" +
+    "import { useRevealScroll } from '@/hooks/useRevealScroll';\n" +
+    "import { cardsAndSubsAt, liveLines, reportLines } from '@/lib/clubManagerMatchCentre';\n" +
+    "import type { CardsAndSubs } from '@/lib/clubManagerMatchCentre';\n" +
+    "import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';\n" +
+    "import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';\n" +
+    '/* Round 1101: the pitch itself is the shared part now. New imports go on their own lines: the two\n' +
+    '   above are anchors a harness swaps by exact text. */\n' +
+    "import { ACTION_SPAN, BEAT_SPAN, NET_AT } from '@/components/pitch-motion/contract';\n" +
+    "import type { PitchFigure, PitchInput, PitchSide } from '@/components/pitch-motion/contract';\n" +
+    "import { goalWindow } from '@/components/pitch-motion/motion';\n" +
+    "import { PitchSurface, pitchSpot } from '@/components/pitch-motion/PitchSurface';\n" +
+    "import { CelebrationStyles } from '@/components/club-manager/CelebrationStyles';\n" +
+    "import { pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/scene';\n" +
+    "/* Round 1146: the mark after a goal, the report's own. */\n" +
+    "import { scorerMark } from '@/lib/clubManagerScorerLine';\n" +
+    "import type { GoalMarks } from '@/lib/clubManagerScorerLine';\n" +
+    "import { cmVarEventWaiting, cmVarPlayWaiting, cmVarCanAnnounce, cmVarPlayedReviewIds, cmVarLabel, cmVarKindsOf } from '@/lib/clubManagerVar';\n" +
+    "import { ClubManagerVarReview } from '@/components/club-manager/ClubManagerVarReview';\n" +
+    "import { inFixtureOrder, mineFirstOfReport, myClubFirst, pitchInitials, pitchName } from '@/lib/cmMatchDisplay';\n" +
+    '\n' +
+    '/**\n' +
+    ' * Round 158: the Live Sim. His words, the ones he said to really pay\n' +
+    ' * attention to: "both sides with each of their formations start and then u\n' +
+    ' * see the little circles moving about... people can choose the speed of\n' +
+    ' * that... there should be stats counter there with gx and also momentum\n' +
+    ' * graph... as manger u can see ur players and make subs and see their\n' +
+    ' * stamina".\n' +
+    ' *\n' +
+    ` * Round 504, his words again: "Ball at players' feet, both teams with names\n` +
+    ' * and numbers on their dots, players cover the whole pitch, throw ins,\n' +
+    ' * corners and fouls exist. Live stats visible during play, subs and tactics\n' +
+    ' * at any moment, the AI opponent also subs."\n' +
+    ' *\n' +
+    ' * What it is: a 2D walk through the match the engine has already committed,\n' +
+    ' * never a second simulation. The engine decides each half as a stream (goals,\n' +
+    " * chances, corners, throw ins, fouls, cards, an injury, the other dugout's\n" +
+    ' * subs, every one with a minute), the first at kick off and the second when\n' +
+    ' * the manager sends them back out, and this screen walks liveFeed(live) with\n' +
+    ' * a clock. The stats strip is liveStatsAt(live, minute), the same function\n' +
+    " * the report's stats block is counted with, so the counter at the final\n" +
+    ' * whistle and the number on the report are one number by construction.\n' +
+    ' *\n' +
+    ' * A change at any minute (tap one of your dots, bring somebody on or change\n' +
+    ' * the shape) goes to the engine through onChange, which keeps everything at\n' +
+    ' * or before that minute and redraws the rest of the half. The interval is\n' +
+    ' * still the real dressing room (HalftimeScreen, embedded). onStartSecondHalf\n' +
+    ' * draws the second half; onSecondHalf FINISHES the match at the final whistle\n' +
+    ' * and lands the report.\n' +
+    ' *\n' +
+    ' * Round 670: a level Champions League decider does not finish at 90. At 90 the\n' +
+    ' * viewer calls onStartExtraTime once, the engine draws the thirty minutes on\n' +
+    ' * the latest save when they are due (never decided here), and the viewer\n' +
+    ' * reads the answer off live.et: extra time runs the clock on to 120 before\n' +
+    ' * onSecondHalf, and no extra time finishes the match at 90.\n' +
+    ' *\n' +
+    " * Round 781: the board is football. Each period's clock runs on past its\n" +
+    ' * last minute by the board the engine drew for it (live.added), reading\n' +
+    " * 45+2' and 90+4', and a line in the board (minute 90, plus 3) fires when the\n" +
+    ' * clock reaches 90+3, not at 90. The whistle, the interval and the question\n' +
+    ' * at the end of the ninety all move to the end of the board. A change made in\n' +
+    " * the board is filed at the period's last minute with its plus, and the\n" +
+    ' * engine draws the rest of that board again off it (recutBoard).\n' +
+    ' *\n' +
+    ' * Round 1101: the choreography between events (who is carrying the ball, both\n' +
+    ' * sides holding their shape around it, the walk back for a kick off, the\n' +
+    ' * corner swung in) is theatre, and it is no longer drawn in this file. It is\n' +
+    ' * the shared pitch in src/components/pitch-motion: stagePitchInput hands it\n' +
+    " * this period's feed, pitchPlan and pitchScene say where everybody stands at\n" +
+    ' * the clock, off a generator keyed on the match, and this file draws no\n' +
+    ' * random number at all. The score, the scorers and every event minute are the\n' +
+    " * sim's own. The screen never lies about the sim; it is allowed to dance around it.\n" +
+    ' */\n' +
+    '\n' +
+    "type Stage = 'first' | 'interval' | 'second' | 'extra' | 'done';\n" +
+    "type Side = 'me' | 'opp';\n" +
+    '\n' +
+    '/** One man on the grass before he is placed: who he is and the slot his shape gives him. */\n' +
+    'interface Man {\n' +
+    '  key: string;\n' +
+    '  slot: FormationSlot;\n' +
+    "  /** Last name, or '' for an opposition with no named eleven. */\n" +
+    '  label: string;\n' +
+    '  name?: string;\n' +
+    '  number: number;\n' +
+    '  /** Mine only. */\n' +
+    '  id?: string;\n' +
+    '  side: Side;\n' +
+    '  /** Theirs only: a man the game made up, tagged the way the ratings sheet tags him. */\n' +
+    '  gen?: boolean;\n' +
+    '}\n' +
+    '/** A run of banner or event line text; `gen` hangs the MADE UP tag after it. */\n' +
+    'interface Seg { t: string; gen?: boolean; }\n' +
+    "interface Banner { segs: Seg[]; club: string; tone: Side | 'none'; }\n" +
+    '/** Round 1101: a goal that is playing out on the pitch. The card rises with it when the ball is in the net. */\n' +
+    'interface GoalMoment { key: string; at: number; side: Side; segs: Seg[]; club: string; nth: number; season: number | null; line: LogLine; }\n' +
+    '/** Round 1101: the one panel that can be open beside (or, on a phone, over the foot of) the pitch. */\n' +
+    "type Panel = 'stats' | 'squad' | 'help' | 'kicks';\n" +
+    '/** Round 1101: one line of the match as it was announced, for the list beside the pitch on a wide screen. */\n' +
+    'interface LogLine { key: string; at: string; segs: Seg[]; }\n' +
+    '\n' +
+    'interface LiveSimScreenProps {\n' +
+    '  career: CareerState;\n' +
+    '  live: LiveMatch | null;\n' +
+    '  report: MatchWeekReport | null;\n' +
+    '  clubColor: string;\n' +
+    '  onSub: (outId: string, inId: string) => void;\n' +
+    '  onShape: (m: Mentality) => void;\n' +
+    '  onTalk: (tone: TalkTone | null) => void;\n' +
+    '  /** Round 504: finishes the match (the page passes resumeMatch). Called once,\n' +
+    '   *  at the final whistle: at 90, or at the end of extra time (Round 670). */\n' +
+    '  onSecondHalf: () => void;\n' +
+    '  onExit: () => void;\n' +
+    '  /** Round 504: draws the second half when they go back out. */\n' +
+    '  onStartSecondHalf: () => void;\n' +
+    '  /** Round 670: called once when the clock reaches 90. The engine draws extra\n' +
+    '   *  time on the LATEST save when it is due and leaves the save alone when it\n' +
+    '   *  is not; the viewer then reads live.et to know which it was. */\n' +
+    '  onStartExtraTime: () => void;\n' +
+    '  /** Round 504: a sub or a shape change at a minute of the half being played.\n' +
+    '   *  Round 781: with how far into the board it was made, when it was. */\n' +
+    '  onChange: (minute: number, change: LiveChange, plus?: number) => void;\n' +
+    '  /** Round 504: tells the save where the clock stands (the interval, the\n' +
+    '   *  page going hidden), so a reload resumes from there rather than from\n' +
+    '   *  the last change. Never called on a tick. */\n' +
+    '  onMark: (minute: number) => void;\n' +
+    '}\n' +
+    '\n' +
+    'const SPEEDS = [0.5, 1, 2, 4] as const;\n' +
+    '/** Sim minutes per real second at 1x. 0.5 makes a match about three minutes. */\n' +
+    'const BASE_RATE = 0.5;\n' +
+    "/** Round 1101: the last stretch of a goal's action, from the ball in the net to the end of the action. */\n" +
+    'const GOAL_HOLD_SPAN = ACTION_SPAN - NET_AT;\n' +
+    '/** How long that stretch stays on screen, in real seconds, by speed: 2.5 at 1x to read the card, shorter\n' +
+    ' *  the faster the match is being watched. A tap on the card always ends it. */\n' +
+    'const GOAL_HOLD_SECONDS: Record<number, number> = { 0.5: 2.5, 1: 2.5, 2: 1.8, 4: 1.2 };\n' +
+    "/** A line's place on the clock: its minute plus how far into the board it sits. */\n" +
+    'const placeOf = (e: { minute: number; plus?: number }) => e.minute + (e.plus ?? 0);\n' +
+    '/** A line the pitch can play out: a goal, a shot or a save. */\n' +
+    "const isChance = (e: { kind: string }) => e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save';\n" +
+    "/** One line's key: what the banner effect remembers it by, and what the plan's start times are looked up by. */\n" +
+    "const lineKey = (e: { kind: string; side: string; minute: number; plus?: number; text: string }) => `${e.kind}:${e.side}:${e.minute}${e.plus ? `+${e.plus}` : ''}:${e.text}`;\n" +
+    '/* Round 1218 fix: a goal a review rules out is DRAWN before its review. The engine keeps no shot for it (it counts\n' +
+    "   for nothing), so the pitch is handed one line in its place, by the man the review names at the review's minute.\n" +
+    "   The plan stages it as a shot (what follows it is the defending side's restart, never a kick off) and the screen\n" +
+    '   plays it as a goal (the ball goes in). Nothing else here reads it: not the score, not the stats, not a card. */\n' +
+    'type RuledOutChance = LiveFe'... 127006 more characters,
+  expected: "import { Fragment, useEffect, useMemo, useRef, useState } from 'react';\n" +
+    "import { cn } from '@/lib/utils';\n" +
+    "import { Pause, Play, FastForward, Users, ArrowLeft, ArrowLeftRight, Gauge, X } from 'lucide-react';\n" +
+    'import {\n' +
+    '  FORMATIONS, MENTALITIES, slotPosition, pitchLineOf, resolveXI, extraTimeCall,\n' +
+    '  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, changeRoom, liveGoneIds,\n' +
+    "} from '@/lib/clubManager';\n" +
+    'import type {\n' +
+    '  CareerState, CMPlayer, LiveMatch, MatchWeekReport, MatchStats, Mentality, TalkTone,\n' +
+    '  LiveChange, LiveFeedEvent, FormationSlot,\n' +
+    "} from '@/lib/clubManager';\n" +
+    '/* Round 781: the clock label, the board aware "has it happened", and the tie on a second leg. */\n' +
+    "import { minuteLabel, playedBy, secondLegContext } from '@/lib/clubManager';\n" +
+    "import { HalftimeScreen } from '@/components/club-manager/HalftimeScreen';\n" +
+    "import { MadeUpTag } from '@/components/club-manager/SquadScreen';\n" +
+    "import { ShootoutKicks } from '@/components/club-manager/ShootoutKicks';\n" +
+    "import { useRevealScroll } from '@/hooks/useRevealScroll';\n" +
+    "import { cardsAndSubsAt, liveLines, reportLines } from '@/lib/clubManagerMatchCentre';\n" +
+    "import type { CardsAndSubs } from '@/lib/clubManagerMatchCentre';\n" +
+    "import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';\n" +
+    "import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';\n" +
+    '/* Round 1101: the pitch itself is the shared part now. New imports go on their own lines: the two\n' +
+    '   above are anchors a harness swaps by exact text. */\n' +
+    "import { ACTION_SPAN, BEAT_SPAN, NET_AT } from '@/components/pitch-motion/contract';\n" +
+    "import type { PitchFigure, PitchInput, PitchSide } from '@/components/pitch-motion/contract';\n" +
+    "import { goalWindow } from '@/components/pitch-motion/motion';\n" +
+    "import { PitchSurface, pitchSpot } from '@/components/pitch-motion/PitchSurface';\n" +
+    "import { CelebrationStyles } from '@/components/club-manager/CelebrationStyles';\n" +
+    "import { pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/scene';\n" +
+    "/* Round 1146: the mark after a goal, the report's own. */\n" +
+    "import { scorerMark } from '@/lib/clubManagerScorerLine';\n" +
+    "import type { GoalMarks } from '@/lib/clubManagerScorerLine';\n" +
+    "import { cmVarEventWaiting, cmVarPlayWaiting, cmVarCanAnnounce, cmVarPlayedReviewIds, cmVarLabel, cmVarKindsOf } from '@/lib/clubManagerVar';\n" +
+    "import { ClubManagerVarReview } from '@/components/club-manager/ClubManagerVarReview';\n" +
+    '\n' +
+    '/**\n' +
+    ' * Round 158: the Live Sim. His words, the ones he said to really pay\n' +
+    ' * attention to: "both sides with each of their formations start and then u\n' +
+    ' * see the little circles moving about... people can choose the speed of\n' +
+    ' * that... there should be stats counter there with gx and also momentum\n' +
+    ' * graph... as manger u can see ur players and make subs and see their\n' +
+    ' * stamina".\n' +
+    ' *\n' +
+    ` * Round 504, his words again: "Ball at players' feet, both teams with names\n` +
+    ' * and numbers on their dots, players cover the whole pitch, throw ins,\n' +
+    ' * corners and fouls exist. Live stats visible during play, subs and tactics\n' +
+    ' * at any moment, the AI opponent also subs."\n' +
+    ' *\n' +
+    ' * What it is: a 2D walk through the match the engine has already committed,\n' +
+    ' * never a second simulation. The engine decides each half as a stream (goals,\n' +
+    " * chances, corners, throw ins, fouls, cards, an injury, the other dugout's\n" +
+    ' * subs, every one with a minute), the first at kick off and the second when\n' +
+    ' * the manager sends them back out, and this screen walks liveFeed(live) with\n' +
+    ' * a clock. The stats strip is liveStatsAt(live, minute), the same function\n' +
+    " * the report's stats block is counted with, so the counter at the final\n" +
+    ' * whistle and the number on the report are one number by construction.\n' +
+    ' *\n' +
+    ' * A change at any minute (tap one of your dots, bring somebody on or change\n' +
+    ' * the shape) goes to the engine through onChange, which keeps everything at\n' +
+    ' * or before that minute and redraws the rest of the half. The interval is\n' +
+    ' * still the real dressing room (HalftimeScreen, embedded). onStartSecondHalf\n' +
+    ' * draws the second half; onSecondHalf FINISHES the match at the final whistle\n' +
+    ' * and lands the report.\n' +
+    ' *\n' +
+    ' * Round 670: a level Champions League decider does not finish at 90. At 90 the\n' +
+    ' * viewer calls onStartExtraTime once, the engine draws the thirty minutes on\n' +
+    ' * the latest save when they are due (never decided here), and the viewer\n' +
+    ' * reads the answer off live.et: extra time runs the clock on to 120 before\n' +
+    ' * onSecondHalf, and no extra time finishes the match at 90.\n' +
+    ' *\n' +
+    " * Round 781: the board is football. Each period's clock runs on past its\n" +
+    ' * last minute by the board the engine drew for it (live.added), reading\n' +
+    " * 45+2' and 90+4', and a line in the board (minute 90, plus 3) fires when the\n" +
+    ' * clock reaches 90+3, not at 90. The whistle, the interval and the question\n' +
+    ' * at the end of the ninety all move to the end of the board. A change made in\n' +
+    " * the board is filed at the period's last minute with its plus, and the\n" +
+    ' * engine draws the rest of that board again off it (recutBoard).\n' +
+    ' *\n' +
+    ' * Round 1101: the choreography between events (who is carrying the ball, both\n' +
+    ' * sides holding their shape around it, the walk back for a kick off, the\n' +
+    ' * corner swung in) is theatre, and it is no longer drawn in this file. It is\n' +
+    ' * the shared pitch in src/components/pitch-motion: stagePitchInput hands it\n' +
+    " * this period's feed, pitchPlan and pitchScene say where everybody stands at\n" +
+    ' * the clock, off a generator keyed on the match, and this file draws no\n' +
+    ' * random number at all. The score, the scorers and every event minute are the\n' +
+    " * sim's own. The screen never lies about the sim; it is allowed to dance around it.\n" +
+    ' */\n' +
+    '\n' +
+    "type Stage = 'first' | 'interval' | 'second' | 'extra' | 'done';\n" +
+    "type Side = 'me' | 'opp';\n" +
+    '\n' +
+    '/** One man on the grass before he is placed: who he is and the slot his shape gives him. */\n' +
+    'interface Man {\n' +
+    '  key: string;\n' +
+    '  slot: FormationSlot;\n' +
+    "  /** Last name, or '' for an opposition with no named eleven. */\n" +
+    '  label: string;\n' +
+    '  name?: string;\n' +
+    '  number: number;\n' +
+    '  /** Mine only. */\n' +
+    '  id?: string;\n' +
+    '  side: Side;\n' +
+    '  /** Theirs only: a man the game made up, tagged the way the ratings sheet tags him. */\n' +
+    '  gen?: boolean;\n' +
+    '}\n' +
+    '/** A run of banner or event line text; `gen` hangs the MADE UP tag after it. */\n' +
+    'interface Seg { t: string; gen?: boolean; }\n' +
+    "interface Banner { segs: Seg[]; club: string; tone: Side | 'none'; }\n" +
+    '/** Round 1101: a goal that is playing out on the pitch. The card rises with it when the ball is in the net. */\n' +
+    'interface GoalMoment { key: string; at: number; side: Side; segs: Seg[]; club: string; nth: number; season: number | null; line: LogLine; }\n' +
+    '/** Round 1101: the one panel that can be open beside (or, on a phone, over the foot of) the pitch. */\n' +
+    "type Panel = 'stats' | 'squad' | 'help' | 'kicks';\n" +
+    '/** Round 1101: one line of the match as it was announced, for the list beside the pitch on a wide screen. */\n' +
+    'interface LogLine { key: string; at: string; segs: Seg[]; }\n' +
+    '\n' +
+    'interface LiveSimScreenProps {\n' +
+    '  career: CareerState;\n' +
+    '  live: LiveMatch | null;\n' +
+    '  report: MatchWeekReport | null;\n' +
+    '  clubColor: string;\n' +
+    '  onSub: (outId: string, inId: string) => void;\n' +
+    '  onShape: (m: Mentality) => void;\n' +
+    '  onTalk: (tone: TalkTone | null) => void;\n' +
+    '  /** Round 504: finishes the match (the page passes resumeMatch). Called once,\n' +
+    '   *  at the final whistle: at 90, or at the end of extra time (Round 670). */\n' +
+    '  onSecondHalf: () => void;\n' +
+    '  onExit: () => void;\n' +
+    '  /** Round 504: draws the second half when they go back out. */\n' +
+    '  onStartSecondHalf: () => void;\n' +
+    '  /** Round 670: called once when the clock reaches 90. The engine draws extra\n' +
+    '   *  time on the LATEST save when it is due and leaves the save alone when it\n' +
+    '   *  is not; the viewer then reads live.et to know which it was. */\n' +
+    '  onStartExtraTime: () => void;\n' +
+    '  /** Round 504: a sub or a shape change at a minute of the half being played.\n' +
+    '   *  Round 781: with how far into the board it was made, when it was. */\n' +
+    '  onChange: (minute: number, change: LiveChange, plus?: number) => void;\n' +
+    '  /** Round 504: tells the save where the clock stands (the interval, the\n' +
+    '   *  page going hidden), so a reload resumes from there rather than from\n' +
+    '   *  the last change. Never called on a tick. */\n' +
+    '  onMark: (minute: number) => void;\n' +
+    '}\n' +
+    '\n' +
+    'const SPEEDS = [0.5, 1, 2, 4] as const;\n' +
+    '/** Sim minutes per real second at 1x. 0.5 makes a match about three minutes. */\n' +
+    'const BASE_RATE = 0.5;\n' +
+    "/** Round 1101: the last stretch of a goal's action, from the ball in the net to the end of the action. */\n" +
+    'const GOAL_HOLD_SPAN = ACTION_SPAN - NET_AT;\n' +
+    '/** How long that stretch stays on screen, in real seconds, by speed: 2.5 at 1x to read the card, shorter\n' +
+    ' *  the faster the match is being watched. A tap on the card always ends it. */\n' +
+    'const GOAL_HOLD_SECONDS: Record<number, number> = { 0.5: 2.5, 1: 2.5, 2: 1.8, 4: 1.2 };\n' +
+    "/** A line's place on the clock: its minute plus how far into the board it sits. */\n" +
+    'const placeOf = (e: { minute: number; plus?: number }) => e.minute + (e.plus ?? 0);\n' +
+    '/** A line the pitch can play out: a goal, a shot or a save. */\n' +
+    "const isChance = (e: { kind: string }) => e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save';\n" +
+    "/** One line's key: what the banner effect remembers it by, and what the plan's start times are looked up by. */\n" +
+    "const lineKey = (e: { kind: string; side: string; minute: number; plus?: number; text: string }) => `${e.kind}:${e.side}:${e.minute}${e.plus ? `+${e.plus}` : ''}:${e.text}`;\n" +
+    '/* Round 1218 fix: a goal a review rules out is DRAWN before its review. The engine keeps no shot for it (it counts\n' +
+    "   for nothing), so the pitch is handed one line in its place, by the man the review names at the review's minute.\n" +
+    "   The plan stages it as a shot (what follows it is the defending side's restart, never a kick off) and the screen\n" +
+    '   plays it as a goal (the ball goes in). Nothing else here reads it: not the score, not the stats, not a card. */\n' +
+    'type RuledOutChance = LiveFeedEvent & { ruledOut: string };\n' +
+    '/** A review that takes a goal away. */\n' +
+    'const isRuledOut = (e: LiveFeedEvent): bo'... 123203 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
