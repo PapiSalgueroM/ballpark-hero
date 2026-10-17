@@ -1,0 +1,10 @@
+simClubManagerDeals exit=0 26s | simClubManagerDeals: green. The desk reads, the table binds, and nobody signs on a handshake.
+simNationalityFlags exit=0 1s | simNationalityFlags: green. Every nationality the site prints wears its flag (owed: 1), no code stands in for a name, and the long lists sit under their confederation.
+simEra2020 exit=0 42s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+simHarnessAnchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+rival exit=0 17s | No rival product names found. 0 findings.
+trust exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+access exit=0 0s | simAccessibility: all green
+vitest-cmui exit=0 7s |    Duration  6.79s (transform 2.28s, setup 168ms, collect 5.88s, tests 4.79s, environment 998ms, prepare 463ms)
+simTransfers exit=0 111s | ALL TRANSFER CHECKS PASSED
+simEras exit=0 1364s | ALL ERA AND AGEING CHECKS PASSED

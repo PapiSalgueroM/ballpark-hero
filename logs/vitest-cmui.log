@@ -1,0 +1,16 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/managerOwnTransferLog.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 2152[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager own transfer history[2m > [22mown history shows saved buys sales loans and exact counterparties [33m 513[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager own transfer history[2m > [22mown history keeps both sorts and returns to all clubs [33m 360[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDealMoment.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 2640[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mslams DEAL DONE only after the flip, with the fee the save holds [33m 821[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mplays nothing when the screen opens onto a deal that was already done [33m 701[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mshakes once for a hijack and for a collapse, and never slams [33m 687[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m15 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 01:29:48
+[2m   Duration [22m 6.79s[2m (transform 2.28s, setup 168ms, collect 5.88s, tests 4.79s, environment 998ms, prepare 463ms)[22m
+
