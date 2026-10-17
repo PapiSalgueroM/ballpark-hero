@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { bannerClearance } from '@/components/club-manager/deskCue';
 /* Round 194: the nationality filter, CM-7's last open line. Per-world maps
    so a 2010 name never wears a 2026 flag. */
 import { nationalityOf } from '@/data/playerNationalities';
@@ -138,6 +139,10 @@ export function TransferScreen({
      produced 180 out of an intended 80. The bid box above never had this
      because it keeps its own string, which is the shape copied here. */
   const [wageText, setWageText] = useState('');
+  const noteAnchor = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    if (noteAnchor.current) noteAnchor.current.style.bottom = deskNote ? bannerClearance() : '';
+  }, [deskNote]);
 
   const windowOpen = career.transferWindow !== null;
   const neg = career.negotiation ?? null;
@@ -343,16 +348,6 @@ export function TransferScreen({
 
   return (
     <div className="space-y-4">
-      {/* Round 634 review: why the last press did nothing, in the engine's own
-          words. A refused door used to be a dead button. */}
-      {deskNote && (
-        <div role="status" data-testid="cm-desk-note" className="rounded-xl border border-yellow-500/50 bg-yellow-500/10 px-3 py-2 text-xs text-foreground flex items-start justify-between gap-2">
-          <span>{deskNote}</span>
-          {onClearNote && (
-            <button onClick={onClearNote} className="shrink-0 text-muted-foreground hover:text-foreground font-bold" aria-label="Dismiss">x</button>
-          )}
-        </div>
-      )}
       {/* Window status + budget */}
       <div className={cn(
         'rounded-xl border p-3 flex items-center justify-between',
@@ -1243,6 +1238,18 @@ export function TransferScreen({
           </div>
         </div>
       )}
+      {/* Round 634 review: why the last press did nothing, in the engine's own
+          words. A refused door used to be a dead button. */}
+      <div ref={noteAnchor} className="sticky bottom-3 z-20 h-0 !mt-0 pointer-events-none" data-cm-desk-note-anchor>
+        {deskNote && (
+          <div role="status" data-testid="cm-desk-note" className="absolute inset-x-0 bottom-0 pointer-events-auto rounded-xl border border-yellow-500/50 bg-card px-3 py-2 text-xs text-foreground flex items-start justify-between gap-2 shadow-lg">
+            <span>{deskNote}</span>
+            {onClearNote && (
+              <button onClick={onClearNote} className="min-h-[44px] min-w-[44px] shrink-0 text-muted-foreground hover:text-foreground font-bold" aria-label="Dismiss">x</button>
+            )}
+          </div>
+        )}
+      </div>
       {/* Round 927: last on purpose. The stack spaces every child after the
           first, so a style tag at the top would push the whole screen down. */}
       <CelebrationStyles />
