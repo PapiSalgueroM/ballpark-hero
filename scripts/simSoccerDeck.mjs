@@ -140,8 +140,10 @@
                memory) so the free pack deals; section 8 fails on the
                ruling's legacy band.
      onefree   the first training option of the shipped pack loses its time
-               cost (the pack, in memory; review of 2026-10-17): the bind
-               check refuses the pack, so section 1 fails on the shipped pack.
+               cost (the pack, in memory; review of 2026-10-17), and a key
+               only that cost moved leaves the pressure book, so the one
+               problem left is the free training: the bind check refuses the
+               pack, so section 1 fails on the shipped pack.
      noresolve the engine's catalog spread of the pending deck card is gone
                (in memory): a saved deck card is skipped here too; section 9
                fails.
@@ -428,6 +430,10 @@ if (runs(1)) {
     const ci = e.choices.findIndex(c => Object.values(c.fx ?? {}).some(v => v < 0));
     const choices = e.choices.map((c, i) => (i === ci ? { ...c, fx: Object.fromEntries(Object.entries(c.fx).filter(([, v]) => v >= 0)) } : c));
     S1 = { ...SHIPPED, events: SHIPPED.events.map((x, i) => (i === at ? { ...e, choices } : x)) };
+    /* a key only that cost moved leaves the pressure book too, so the one problem left is the free training itself
+       (without this the control fired on the pressure book alone, rc r1504-x1) */
+    const moved = new Set(S1.events.flatMap(x => x.choices).flatMap(c => [...Object.keys(c.fx ?? {}), ...(c.morale ? ['morale'] : [])]));
+    if (S1.pressure) S1.pressure = Object.fromEntries(Object.entries(S1.pressure).filter(([k]) => moved.has(k)));
     console.log(`   onefree control: ${e.id} "${e.choices[ci].label}" loses its cost (${JSON.stringify(e.choices[ci].fx)} becomes ${JSON.stringify(choices[ci].fx)})`);
   }
   const shipped = D.soccerDeckProblems(S1);
