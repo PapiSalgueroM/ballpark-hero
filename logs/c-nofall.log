@@ -1,0 +1,66 @@
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020), Villarreal (era2005), Werder Bremen (era2010), Sevilla (era2015), Marseille (era2020); seeds 1,2,3,4,5
+  1 and 3: 65 journeys in 256 s
+  7 goals a watched match NaN (0 matches); a domestic league match 2.624
+  7 ties 0: to extra time NaN percent, to penalties NaN percent
+  4 slice bytes g8: 112 seasons, mean 627, smallest 594, largest 666
+  4 slice bytes l36: 63 seasons, mean 1434, smallest 1411, largest 1483
+  3 league sizes: now 10, now 12, now 14, now 15, now 16, now 18, now 20, now 24, era2005 18, era2005 20, era2010 18, era2010 20, era2015 18, era2015 20, era2020 18, era2020 20
+  3 move probe: 112 moves that carried the slice, 11 of them onto a calendar behind the old one
+  1 seasons a mid season move left with no competition, by the rule: 2
+  1 seasons in the Champions League (not watched): 19
+  1 seasons where exclude took out a direct entrant (a summer move): 2
+  3 calendar checks g8 uclGroup: 29700
+  3 calendar checks g8 uclKo: 34650
+  3 calendar checks l36 date: 30866
+  3 calendar checks l36 uclGroup: 16836
+  3 date checks g8: 129
+  3 date checks l36: 76
+  3 joins that carried the slice g8: 9
+  3 joins that carried the slice l36: 5
+  3 joins that carried the slice: 14
+  3 joins that dropped the slice: 5
+  3 joins to an entrant that still watches, no slice: 4
+  3 joins with nothing to carry or open: 2
+  3 reloads right after a join: 30
+  3 states checked: 7756
+FAIL 3 reload: Chelsea (now) seed 3 at s1-join-reload: the reloaded save evaluates otherwise
+FAIL 3 reload: Chelsea (now) seed 3 at s1-join-reload: the reloaded save watches another competition (right after the join) (none before, one after)
+FAIL 3 moved: Chelsea (now) seed 3 at s1-join-reload: MD1 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-join-reload: MD2 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-join-reload: MD3 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-join-reload: MD4 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-join-reload: MD5 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-join-reload: MD6 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-join-reload: MD7 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-join-reload: MD8 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e27: MD1 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e27: MD2 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e27: MD3 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e27: MD4 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e27: MD5 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e27: MD6 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e27: MD7 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e27: MD8 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e28: MD1 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e28: MD2 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e28: MD3 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e28: MD4 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e28: MD5 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e28: MD6 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e28: MD7 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e28: MD8 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e29: MD1 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e29: MD2 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e29: MD3 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e29: MD4 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e29: MD5 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e29: MD6 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e29: MD7 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e29: MD8 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e30: MD1 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e30: MD2 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e30: MD3 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e30: MD4 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e30: MD5 changed after it was shown
+FAIL 3 moved: Chelsea (now) seed 3 at s1-e30: MD6 changed after it was shown
+simWorldUcl: control nofall FIRED (666 failures, all its own)

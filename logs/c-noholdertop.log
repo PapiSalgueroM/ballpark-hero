@@ -1,0 +1,62 @@
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020), Villarreal (era2005), Werder Bremen (era2010), Sevilla (era2015), Marseille (era2020); seeds 1,2,3,4,5
+  1 stand ins: era2005 Valencia for Villarreal; era2010 Manchester City for Werder Bremen; era2015 Liverpool for Sevilla; era2020 Tottenham for Marseille
+  1 and 3: 65 journeys in 221 s
+  7 goals a watched match 2.620 (19680 matches); a domestic league match 2.624
+  7 ties 3106: to extra time 12.6 percent, to penalties 6.1 percent
+  1 device order: 40 group seasons evaluated level both ways
+  1 era seasons with a stand in for my club: 38
+  1 opened seasons drawn with the holder first: 133
+  1 seasons a mid season move left with no competition, by the rule: 2
+  1 seasons in the Champions League (not watched): 19
+  1 seasons where exclude took out a direct entrant (a summer move): 2
+  1 watched matches replayed on simAiMatch: 19680
+  1 watched seasons g8: 112
+  1 watched seasons l36: 62
+  7 g8 draws: 112
+  7 l36 slates over the cap: 1
+  7 l36 slates with an association break: 4
+  7 l36 slates: 62
+  7 titles by strength quartile 1: 147
+  7 titles by strength quartile 2: 24
+  7 titles by strength quartile 3: 3
+FAIL 1 holder: Chelsea (now) seed 1 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Chelsea (now) seed 1 at s1-rollover: the draw's holder is nobody, the save's holder Borussia Dortmund is in the field
+FAIL 1 holder: Chelsea (now) seed 1 at s2-rollover: the draw's holder is nobody, the save's holder Barcelona is in the field
+FAIL 1 holder: Chelsea (now) seed 2 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Chelsea (now) seed 3 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Chelsea (now) seed 3 at s2-rollover: the draw's holder is nobody, the save's holder Juventus is in the field
+FAIL 1 holder: Chelsea (now) seed 4 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Chelsea (now) seed 4 at s2-rollover: the draw's holder is nobody, the save's holder Real Madrid is in the field
+FAIL 1 holder: Chelsea (now) seed 5 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Chelsea (now) seed 5 at s2-rollover: the draw's holder is nobody, the save's holder Bayern Munich is in the field
+FAIL 1 holder: Hoffenheim (now) seed 1 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Hoffenheim (now) seed 1 at s2-rollover: the draw's holder is nobody, the save's holder Benfica is in the field
+FAIL 1 holder: Hoffenheim (now) seed 2 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Hoffenheim (now) seed 2 at s1-rollover: the draw's holder is nobody, the save's holder Barcelona is in the field
+FAIL 1 holder: Hoffenheim (now) seed 2 at s2-rollover: the draw's holder is nobody, the save's holder Bayern Munich is in the field
+FAIL 1 holder: Hoffenheim (now) seed 3 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Hoffenheim (now) seed 3 at s2-rollover: the draw's holder is nobody, the save's holder Juventus is in the field
+FAIL 1 holder: Hoffenheim (now) seed 4 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Hoffenheim (now) seed 4 at s1-rollover: the draw's holder is nobody, the save's holder Lens is in the field
+FAIL 1 holder: Hoffenheim (now) seed 4 at s2-rollover: the draw's holder is nobody, the save's holder Borussia Dortmund is in the field
+FAIL 1 holder: Hoffenheim (now) seed 5 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Hoffenheim (now) seed 5 at s1-rollover: the draw's holder is nobody, the save's holder Arsenal is in the field
+FAIL 1 holder: Hoffenheim (now) seed 5 at s2-rollover: the draw's holder is nobody, the save's holder Bayern Munich is in the field
+FAIL 1 holder: Everton (now) seed 1 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Everton (now) seed 1 at s1-rollover: the draw's holder is nobody, the save's holder Manchester City is in the field
+FAIL 1 holder: Everton (now) seed 2 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Everton (now) seed 3 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Everton (now) seed 3 at s2-rollover: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Everton (now) seed 4 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Everton (now) seed 4 at s1-rollover: the draw's holder is nobody, the save's holder Como is in the field
+FAIL 1 holder: Everton (now) seed 4 at s2-rollover: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Everton (now) seed 5 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: Everton (now) seed 5 at s1-rollover: the draw's holder is nobody, the save's holder Club Brugge is in the field
+FAIL 1 holder: América (now) seed 1 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: América (now) seed 1 at s2-rollover: the draw's holder is nobody, the save's holder Arsenal is in the field
+FAIL 1 holder: América (now) seed 2 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: América (now) seed 2 at s1-rollover: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: América (now) seed 2 at s2-rollover: the draw's holder is nobody, the save's holder Manchester United is in the field
+FAIL 1 holder: América (now) seed 3 at start: the draw's holder is nobody, the save's holder PSG is in the field
+FAIL 1 holder: América (now) seed 3 at s2-rollover: the draw's holder is nobody, the save's holder Bayern Munich is in the field
+simWorldUcl: control noholdertop FIRED (133 failures, all its own)

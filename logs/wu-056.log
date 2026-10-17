@@ -1,0 +1,5 @@
+  0 ledger: verified G1 G2-2015 G2-2020 G3-2005 G3-2010 G3-2015 G3-2020 G4-late G5-ruling G5-2015-groups G5-2020-groups G6 G7 N1 | one publisher G2-2005 G2-2010 G5-2015-ko G8 | to verify G4-early G5-2020-ko
+  0 engine: G8_SHAPE {"clubs":32,"groups":8,"groupSize":4,"games":6,"advance":2}; association rule 2005 true, 2010 true, 2015 true, 2020 true; bans 2005 0, 2010 0, 2015 1, 2020 1; partial G2-2005 G2-2010 G4-early G5-2015-ko G5-2020-ko G8
+  5 the holder: 50 rollovers, 43 after a watched final, 36 winners already in the field (0 of those fields in another order), 7 fields the holder changed: Tottenham in for Werder Bremen; Liverpool in for Eintracht Frankfurt; Aston Villa in for RB Leipzig; Liverpool in for Augsburg; Lazio in for Eintracht Frankfurt; Manchester United in for RB Leipzig; Real Sociedad in for Eintracht Frankfurt
+  6 dailies: 20 days, 19 of them a club that watches
+simWorldUcl: green, 541 checks, 0 failures
