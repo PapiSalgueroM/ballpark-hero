@@ -88,10 +88,15 @@ jobs:
           find "$FREE_KICK_FONT_CACHE" -type f -print0 | sort -z | xargs -0 sha256sum > "$REPORT_GUIDE_OUT/font-files.sha256"
           find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$REPORT_GUIDE_OUT/installed-files.sha256"
           find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$REPORT_GUIDE_OUT/browser-tool-files.sha256"
-          echo "NODE_OPTIONS=--require=$PWD/scripts/lib/offlineTransport.cjs" >> "$GITHUB_ENV"
       - name: Actual types and six account cases in one ordinary process
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          preload_check='const assert=require("node:assert/strict"); assert.ok((process.env.NODE_OPTIONS||"").includes("offlineTransport.cjs"),"Children retain offline preload"); assert.ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")],"Actual offline preload is in require.cache");'
+          preload_status=0; NODE_OPTIONS='' node -e "$preload_check" > "$REPORT_GUIDE_OUT/preload-env-control.log" 2>&1 || preload_status=$?
+          printf '%s\n' "$preload_status" > "$REPORT_GUIDE_OUT/preload-env-control-exit.txt"; test "$preload_status" -eq 1
+          grep -F 'AssertionError' "$REPORT_GUIDE_OUT/preload-env-control.log"; grep -F 'Children retain offline preload' "$REPORT_GUIDE_OUT/preload-env-control.log"
+          SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/preload-env.transport" node -e "$preload_check" > "$REPORT_GUIDE_OUT/preload-env-normal.log" 2>&1
           status=0; SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$REPORT_GUIDE_OUT/types.log" 2>&1 || status=$?
           cat "$REPORT_GUIDE_OUT/types.log"; test "$status" -eq 0
           SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/account.transport" ACCOUNT_DIALOG_RAW="$REPORT_GUIDE_OUT/account-raw.json" node node_modules/vitest/vitest.mjs run src/test/accountDialogOnDemand.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=verbose --reporter=json --outputFile.json="$REPORT_GUIDE_OUT/account-units.json" > "$REPORT_GUIDE_OUT/account.log" 2>&1
@@ -106,6 +111,7 @@ jobs:
       - name: Joined retired Manager proof and the existing forty-seven Manager cases
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           node --check scripts/qa/proveRetiredManagerContinueJoined.mjs
           SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/retired.transport" RETIRED_MANAGER_CONTINUE_OUT="$REPORT_GUIDE_OUT/retired" node scripts/qa/proveRetiredManagerContinueJoined.mjs > "$REPORT_GUIDE_OUT/retired.log" 2>&1
           tail -n 3 "$REPORT_GUIDE_OUT/retired.log"
@@ -120,6 +126,7 @@ jobs:
       - name: Existing focus Google and chunk recovery controls
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           for control in normal nofocus accountonly; do
             value="$control"; if test "$control" = normal; then value=''; fi
             SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/auth-$control.transport" AUTH_MODAL_FOCUS_CONTROL="$value" node scripts/simAuthModalFocus.mjs > "$REPORT_GUIDE_OUT/auth-$control.log" 2>&1
@@ -136,6 +143,7 @@ jobs:
       - name: Refresh the five guides and search keywords
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           for route in /club-manager /nba-my-career /nfl-my-career /mlb-my-career /nhl-my-career; do SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/refresh.transport" node scripts/simGuideHeadings.mjs --refresh "$route" >> "$REPORT_GUIDE_OUT/refresh.log" 2>&1; done
           SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/keywords.transport" node scripts/genSearchKeywords.mjs > "$REPORT_GUIDE_OUT/keywords.log" 2>&1
           cat "$REPORT_GUIDE_OUT/refresh.log" "$REPORT_GUIDE_OUT/keywords.log"
@@ -143,6 +151,7 @@ jobs:
         id: build
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/build.transport" npm run build:seo > "$REPORT_GUIDE_OUT/build.log" 2>&1
           tail -n 6 "$REPORT_GUIDE_OUT/build.log"
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$REPORT_GUIDE_OUT/dist-files.sha256"
@@ -150,6 +159,7 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           failed=0; printf 'method\texit\n' > "$REPORT_GUIDE_OUT/readers.tsv"
           for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simGuideHeadings simSiteSearch; do
             status=0; SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/$method.transport" node "scripts/$method.mjs" > "$REPORT_GUIDE_OUT/$method.log" 2>&1 || status=$?
@@ -160,6 +170,7 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           for control in nokeyword lostline snapdrift; do
             status=0; SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/control-$control.transport" GUIDE_HEADINGS_CONTROL="$control" node scripts/simGuideHeadings.mjs > "$REPORT_GUIDE_OUT/control-$control.log" 2>&1 || status=$?
             cat "$REPORT_GUIDE_OUT/control-$control.log"; test "$status" -eq 1; grep -F "simGuideHeadings control $control: section " "$REPORT_GUIDE_OUT/control-$control.log"; grep -F 'red and every other section green' "$REPORT_GUIDE_OUT/control-$control.log"; test ! -s "$REPORT_GUIDE_OUT/control-$control.transport"
@@ -168,6 +179,7 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           node scripts/lib/hostLikeServer.mjs dist 4173 > "$REPORT_GUIDE_OUT/server.log" 2>&1 &
           task_server_pid=$!; trap 'kill "$task_server_pid" 2>/dev/null || true' EXIT
           for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi; sleep 1; done
@@ -182,6 +194,7 @@ jobs:
         if: always()
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           result=0; mapfile -t generated < "$REPORT_GUIDE_OUT/generated-paths.txt"; excluded=(); for file in "${generated[@]}"; do excluded+=(":!$file"); done
           git diff --exit-code HEAD -- . "${excluded[@]}" > "$REPORT_GUIDE_OUT/non-generated-diff.log" 2>&1 || result=1
           git diff --binary HEAD -- "${generated[@]}" > "$REPORT_GUIDE_OUT/generated.patch"
@@ -202,12 +215,13 @@ jobs:
         if: always()
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           result=0
           for kind in source installed browser-tool font validated-source dist; do
             file="$REPORT_GUIDE_OUT/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$REPORT_GUIDE_OUT/$kind-holds.log" 2>&1 || result=1; fi
           done
           if test -f "$REPORT_GUIDE_OUT/dist-files.sha256"; then cmp "$REPORT_GUIDE_OUT/dist-files.sha256" "$REPORT_GUIDE_OUT/dist-after-files.sha256" || result=1; fi
-          for method in types account retired manager auth-normal auth-nofocus auth-accountonly simGoogleOnlyReturn simGoogleIdentity stale-normal stale-nooffline stale-nosave stale-catchreload preload refresh keywords simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simGuideHeadings simSiteSearch control-nokeyword control-lostline control-snapdrift; do test ! -s "$REPORT_GUIDE_OUT/$method.transport" || result=1; done
+          for method in preload-env types account retired manager auth-normal auth-nofocus auth-accountonly simGoogleOnlyReturn simGoogleIdentity stale-normal stale-nooffline stale-nosave stale-catchreload preload refresh keywords simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simGuideHeadings simSiteSearch control-nokeyword control-lostline control-snapdrift; do test ! -s "$REPORT_GUIDE_OUT/$method.transport" || result=1; done
           # Build, served-browser and weight external request denials are retained separately, without zero-intent credit.
           exit "$result"
       - uses: actions/upload-artifact@v4
