@@ -1,0 +1,9 @@
+mutrun M2 (knockout tie card: second leg score printed the wrong way round): vitest exit 0: [2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m | [2m Tests [22m [1m[32m44 passed[39m[22m[90m (44)[39m
+   walk: FAIL (k) Chelsea knockouts 320: Play-offs card not as the engine played it: RB Leipzig v Real Betis, no "Second leg: Real Betis 1-2 RB Leipzig" (the card reads "RB Leipzig v Real Betis First leg: RB Leipzig 1-1 Real Beti
+   walk: FAIL (k) Chelsea knockouts 320: Play-offs card not as the engine played it: Sporting CP v Celtic, no "Second leg: Celtic 1-2 Sporting CP" (the card reads "Sporting CP v Celtic First leg: Sporting CP 5-1 Celtic Second leg
+   walk: FAIL (k) Chelsea knockouts 320: Play-offs card not as the engine played it: Aston Villa v Barcelona, no "Second leg: Barcelona 3-0 Aston Villa" (the card reads "Aston Villa v Barcelona First leg: Aston Villa 1-1 Barcelon
+   walk: FAIL (k) Chelsea knockouts 320: Play-offs card not as the engine played it: Stuttgart v Feyenoord, no "Second leg: Feyenoord 3-4 Stuttgart" (the card reads "Stuttgart v Feyenoord First leg: Stuttgart 1-1 Feyenoord Second
+   walk: FAIL (k) Chelsea knockouts 320: Play-offs card not as the engine played it: Napoli v Arsenal, no "Second leg: Arsenal 1-2 Napoli" (the card reads "Napoli v Arsenal First leg: Napoli 2-1 Arsenal Second leg: Arsenal 2-1 Na
+   walk: FAIL (k) Chelsea knockouts 320: Play-offs card not as the engine played it: Inter Milan v Lyon, no "Second leg: Lyon 0-1 Inter Milan" (the card reads "Inter Milan v Lyon First leg: Inter Milan 1-1 Lyon Second leg: Lyon 1
+mutrun M2: walk exit 1: playWorldUcl: FAIL, 33 findings over 51 measured views; pictures in /home/runner/work/_temp/rc-out/files/shots
+mutrun M2: CAUGHT (knockout tie card: second leg score printed the wrong way round; vitest exit 0, build exit 0, walk exit 1)

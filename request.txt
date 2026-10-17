@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerWorldView.test.ts src/test/clubManagerBracketMoment.test.tsx src/test/cmLeagueLeadersCard.test.tsx src/test/clubManagerOfferConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
+walk: node scripts/playWorldUcl.mjs
+walk-legflip: PLAY_WORLD_CONTROL=legflip node scripts/playWorldUcl.mjs
+walk-swapfinal: PLAY_WORLD_CONTROL=swapfinal node scripts/playWorldUcl.mjs
+walk-r16help: PLAY_WORLD_CONTROL=r16help node scripts/playWorldUcl.mjs
+mutM2: node .rc/x/mutrun-1503.mjs M2; s=$?; git checkout -- src scripts; exit $s
+mutM3: node .rc/x/mutrun-1503.mjs M3; s=$?; git checkout -- src scripts; exit $s
+mutM6: node .rc/x/mutrun-1503.mjs M6; s=$?; git checkout -- src scripts; exit $s
+mutM7: node .rc/x/mutrun-1503.mjs M7; s=$?; git checkout -- src scripts; exit $s

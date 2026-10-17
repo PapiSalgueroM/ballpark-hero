@@ -1,0 +1,11 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 66s | 
+vitest exit=0 6s |    Duration  5.54s (transform 2.03s, setup 261ms, collect 5.99s, tests 5.60s, environment 1.69s, prepare 498ms)
+walk exit=0 150s | playWorldUcl: green. Five saves at three sizes, 51 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
+walk-legflip exit=1 48s | playWorldUcl control legflip: FIRED, "card not as the engine played it" reported 11 time(s) (11 findings in all)
+walk-swapfinal exit=1 38s | playWorldUcl control swapfinal: FIRED, "the season review does not name the final" reported 1 time(s) (1 findings in all)
+walk-r16help exit=1 45s | playWorldUcl control r16help: FIRED, "the ? for the club in it" reported 1 time(s) (1 findings in all)
+mutM2 exit=1 188s | mutrun M2: CAUGHT (knockout tie card: second leg score printed the wrong way round; vitest exit 0, build exit 0, walk exit 1)
+mutM3 exit=1 184s | mutrun M3: CAUGHT (season review: winner and runner-up swapped; vitest exit 0, build exit 0, walk exit 1)
+mutM6 exit=1 187s | mutrun M6: CAUGHT (watched ties: two legged ties read as one match; vitest exit 1, build exit 0, walk exit 1)
+mutM7 exit=1 187s | mutrun M7: CAUGHT (participant: second leg night scores not flipped to the leg home side; vitest exit 1, build exit 0, walk exit 0)
