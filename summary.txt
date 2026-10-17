@@ -1,0 +1,2 @@
+headsha exit=0 0s | bc6badb39 Round BIH: compose Round 1344 with the world size diagnostic and simCmOwnClubMarket section 5
+wf284 exit=1 214s | wfrun manager-own-transfer-log.yml: 9 steps ran, 1 failed: Every rebuilt-site reader
