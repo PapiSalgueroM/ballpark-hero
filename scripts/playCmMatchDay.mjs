@@ -26,6 +26,12 @@
      swap  the hub card's two names are swapped in the DOM after both are found: the order check must go red.
      cut   nowrap, overflow hidden and an ellipsis on [data-cm-tl-name]: the whole name check must go red.
      jump  the window is scrolled 300 px inside the report's settle step: the jump check must go red.
+   With MATCHDAY_COMPARE_DIST=<a served build of the round's base> the walk instead compares builds (the brief's
+   step a6): A, B and C at the three sizes walked by the same taps on the head and on the base, Math.random seeded
+   at load and again on every tap and the clock fixed, so both builds draw the same matches. Text nodes under 12 px
+   on each screen are counted and the head may never have more; the save after the walk must be the base's to the
+   byte (the first differing key is printed on a red); the document heights are printed side by side, never
+   asserted. One build walked twice first proves the seeded save is stable; if it is not, the run cannot judge.
    Exit codes: 0 green, 1 red (or a control that fired), 2 could not run, 3 a control that did not fire.
    Green is the closing summary line and the real exit code.
 
@@ -47,6 +53,7 @@ const KEY = 'dukb-club-manager-save';
 const NOW = Date.parse('2026-10-16T16:00:00Z');
 const CONTROL = process.env.PLAY_MATCHDAY_CONTROL || '';
 const CONTROLS = ['swap', 'cut', 'jump'];
+const SIZES_ALL = [[320, 640], [390, 844], [1280, 900]];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`PLAY_MATCHDAY_CONTROL=${CONTROL} is not a control this walk knows`); process.exit(2); }
 const cannotRun = m => { console.error(`playCmMatchDay could not run: ${m}`); process.exit(2); };
 if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) cannotRun('no dist/index.html: build first');
@@ -124,22 +131,27 @@ if (e) saves.push(plant('E', e, false));
 else console.log('no away second leg found: save E (pictures only) is left out');
 for (const s of saves) console.log(`save ${s.name}: ${s.club} against ${s.opponent} (${s.compLabel}), ${s.fxHome === null ? 'neutral' : s.fxHome ? 'home' : 'away'}, ${s.raw.length} bytes`);
 
-/* ---- the served build ---- */
-const port = await new Promise((resolve, reject) => {
-  const probe = createServer(); probe.once('error', reject);
-  probe.listen(0, '127.0.0.1', () => { const p = probe.address().port; probe.close(err => (err ? reject(err) : resolve(p))); });
-});
-const BASE = `http://127.0.0.1:${port}`;
-const server = spawn(process.execPath, ['scripts/lib/hostLikeServer.mjs', 'dist', String(port)], { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });
-let serverLog = '';
-await new Promise((resolve, reject) => {
-  const timer = setTimeout(() => reject(new Error(`the host did not start: ${serverLog}`)), 15000);
-  server.once('exit', code => { clearTimeout(timer); reject(new Error(`the host exited ${code}: ${serverLog}`)); });
-  server.stdout.on('data', d => { serverLog += d; if (String(serverLog).includes('host-like server:')) { clearTimeout(timer); resolve(); } });
-  server.stderr.on('data', d => { serverLog += d; });
-}).catch(err => cannotRun(String(err.message)));
+/* ---- the served build (and, for the comparison, the base's) ---- */
+const servers = [];
+async function serveDist(dir) {
+  const port = await new Promise((resolve, reject) => {
+    const probe = createServer(); probe.once('error', reject);
+    probe.listen(0, '127.0.0.1', () => { const p = probe.address().port; probe.close(err => (err ? reject(err) : resolve(p))); });
+  });
+  const server = spawn(process.execPath, [path.join(ROOT, 'scripts/lib/hostLikeServer.mjs'), dir, String(port)], { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });
+  servers.push(server);
+  let log = '';
+  await new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(`the host did not start: ${log}`)), 15000);
+    server.once('exit', code => { clearTimeout(timer); reject(new Error(`the host exited ${code}: ${log}`)); });
+    server.stdout.on('data', d => { log += d; if (log.includes('host-like server:')) { clearTimeout(timer); resolve(); } });
+    server.stderr.on('data', d => { log += d; });
+  }).catch(err => cannotRun(String(err.message)));
+  return `http://127.0.0.1:${port}`;
+}
+const BASE = await serveDist('dist');
 const browser = await pw.chromium.launch({ headless: true });
-process.on('exit', () => { try { server.kill(); } catch { /* gone */ } try { fs.rmSync(WORK, { recursive: true, force: true }); } catch { /* gone */ } });
+process.on('exit', () => { for (const s of servers) { try { s.kill(); } catch { /* gone */ } } try { fs.rmSync(WORK, { recursive: true, force: true }); } catch { /* gone */ } });
 
 /* ---- reading the screens, in the page ---- */
 /** The hub card's two names, in document order: their side words, their texts and my name's class. */
@@ -226,6 +238,15 @@ const runningOnReport = page => page.evaluate(() => {
     .map(an => `${an.effect.target.tagName.toLowerCase()}.${String(an.effect.target.className).split(' ').slice(0, 3).join('.')} ${an.animationName ?? an.transitionProperty ?? ''}`);
 });
 const heightOf = page => page.evaluate(() => document.documentElement.scrollHeight);
+/** Waits for the live viewer to say it is at a stage, by its attribute alone (no visibility rule). */
+const stageIs = (page, value, timeout = 45000) => page.waitForFunction(v => [...document.querySelectorAll('[data-cm-live-stage]')]
+  .some(el => el.getAttribute('data-cm-live-stage') === v), value, { timeout });
+/** What the page shows when a step stops: the stages present and the first visible buttons. */
+const whereAmI = page => page.evaluate(() => {
+  const stages = [...document.querySelectorAll('[data-cm-live-stage]')].map(el => `${el.getAttribute('data-cm-live-stage')}@${el.getAttribute('data-cm-live-minute')}`);
+  const buttons = [...document.querySelectorAll('button')].filter(b => b.offsetParent !== null).map(b => b.textContent.trim().slice(0, 24)).filter(Boolean).slice(0, 14);
+  return `stages [${stages.join(', ')}], buttons [${buttons.join(' | ')}]`;
+}).catch(() => 'the page could not be read');
 const scrollYOf = page => page.evaluate(() => window.scrollY);
 const same = (x, y) => JSON.stringify(x) === JSON.stringify(y);
 
@@ -264,6 +285,7 @@ async function walk(save, width, height, reduced) {
   const act = async locator => { await locator.waitFor({ timeout: 45000 }); if (touch) await locator.tap(); else await locator.click(); };
   const visibleButton = name => page.locator('button:visible').filter({ hasText: new RegExp(`^\\s*${name}\\s*$`) }).first();
   const row = { id, screens: {} };
+  let step = 'the hub';
   try {
     /* The hub. */
     await page.goto(`${BASE}/club-manager`, { waitUntil: 'domcontentloaded' });
@@ -290,6 +312,7 @@ async function walk(save, width, height, reduced) {
     if (CONTROL === 'swap') return row;
 
     /* The Match Centre: the tie, the form rows and the ones to watch. */
+    step = 'the Match Centre';
     await act(page.locator('button:visible').filter({ hasText: 'Match Centre: form' }).first());
     await page.locator('[data-cm-mc-side]').first().waitFor({ timeout: 20000 });
     const centre = await readCentre(page);
@@ -300,7 +323,7 @@ async function walk(save, width, height, reduced) {
 
     /* Play Live: the strip, the digits, the line under the pitch at 320 and 390, the full stats at 1280. */
     await act(page.locator('button:visible[data-cm-way="live"]').first());
-    await page.locator('[data-cm-live-stage="first"]').waitFor({ timeout: 45000 });
+    step = 'kick off'; await stageIs(page, 'first');
     await page.waitForTimeout(1200);
     const live = await readLive(page);
     assert(same(live.names, names2) && same(live.mineGreen, me ? [true, false] : [false, true]), `the strip reads ${live.names.join(' v ')} (green ${live.mineGreen.join(' ')})`);
@@ -313,7 +336,7 @@ async function walk(save, width, height, reduced) {
 
     /* Skip to the interval: the live card and the dressing room's card. */
     await act(visibleButton('Skip'));
-    await page.locator('[data-cm-live-stage="interval"]').waitFor({ timeout: 45000 });
+    step = 'the interval'; await stageIs(page, 'interval');
     await page.waitForTimeout(600);
     const iv = await readInterval(page);
     assert(same(iv.digits, order2) && same(iv.names, names2), `the interval card reads ${iv.names.join(' vs ')} (${iv.digits.join(' then ')})`);
@@ -322,6 +345,7 @@ async function walk(save, width, height, reduced) {
     await shot('interval');
 
     /* Second half, then on to the report whatever the night brings (extra time, penalties). */
+    step = 'the second half';
     await act(visibleButton('Second half'));
     const deadline = Date.now() + 90000;
     while (Date.now() < deadline) {
@@ -332,9 +356,10 @@ async function walk(save, width, height, reduced) {
       if (await skip.count()) { await act(skip).catch(() => {}); await page.waitForTimeout(800); continue; }
       await page.waitForTimeout(700);
     }
-    if (!(await page.locator('[data-cm-timeline]').count())) { await shot('stuck', true); throw new Error('the report never came'); }
+    if (!(await page.locator('[data-cm-timeline]').count())) { await shot('stuck'); throw new Error('the report never came'); }
 
     /* The report, once its verdict is in. */
+    step = 'the report';
     await page.waitForTimeout(4000);
     const rep = await readReport(page);
     assert(same(rep.scoreline, names2), `the scoreline reads ${rep.scoreline.join(' v ')}`);
@@ -350,7 +375,7 @@ async function walk(save, width, height, reduced) {
       assert(running.length === 0, `with reduced motion ${running.length} animations still run on the report: ${running.slice(0, 3).join('; ')}`);
     }
     row.screens.report = await heightOf(page);
-    await shot('report', true);
+    await shot('report');
 
     /* The page never jumps: a settle on the report, then the toggle. */
     let y0 = await scrollYOf(page);
@@ -362,6 +387,7 @@ async function walk(save, width, height, reduced) {
     if (CONTROL === 'jump') return row;
 
     /* The timeline: whole names, marks on the last line, a 44 px toggle. */
+    step = 'the timeline';
     if (CONTROL === 'cut') {
       const n = await page.evaluate(() => {
         const names = document.querySelectorAll('[data-cm-tl-name]');
@@ -392,8 +418,8 @@ async function walk(save, width, height, reduced) {
     row.marks = tl.marks.length;
     row.names = tl.names.length;
   } catch (err) {
-    assert(false, `the walk stopped: ${String(err.message).split('\n')[0]}`);
-    await shot('error', true);
+    assert(false, `the walk stopped at ${step}: ${String(err.message).split('\n')[0]}; ${await whereAmI(page)}`);
+    await shot('error');
   } finally {
     assert(errors.length === 0, `page errors: ${errors.slice(0, 2).join(' | ')}`);
     await context.close();
@@ -401,8 +427,133 @@ async function walk(save, width, height, reduced) {
   return row;
 }
 
+/* ---- the base comparison (MATCHDAY_COMPARE_DIST=<the base build's dist>): text under 12 px never more on the head,
+   the save after the same seeded taps equal on both builds, the document heights printed side by side ---- */
+const smallText = page => page.evaluate(() => {
+  let n = 0;
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  for (let t = walker.nextNode(); t; t = walker.nextNode()) {
+    const el = t.parentElement;
+    if (!t.textContent.trim() || !el || el.closest('.sr-only, script, style')) continue;
+    const r = el.getBoundingClientRect();
+    const s = getComputedStyle(el);
+    if (!r.width || !r.height || s.visibility === 'hidden') continue;
+    if (parseFloat(s.fontSize) < 12) n += 1;
+  }
+  return n;
+});
+function firstDiff(x, y, at = '') {
+  if (JSON.stringify(x) === JSON.stringify(y)) return null;
+  if (x && y && typeof x === 'object' && typeof y === 'object') {
+    for (const k of new Set([...Object.keys(x), ...Object.keys(y)])) {
+      const d = firstDiff(x[k], y[k], `${at}.${k}`);
+      if (d) return d;
+    }
+  }
+  return `${at || '(root)'}: ${JSON.stringify(x)?.slice(0, 80)} against ${JSON.stringify(y)?.slice(0, 80)}`;
+}
+/** The same taps on any build, Math.random seeded at load and again on every tap, the clock fixed. */
+async function seededWalk(url, save, width, height) {
+  const touch = width < 1000;
+  const context = await browser.newContext({
+    viewport: { width, height }, isMobile: touch, hasTouch: touch, colorScheme: 'dark', serviceWorkers: 'block',
+    storageState: { cookies: [], origins: [{ origin: url, localStorage: [{ name: KEY, value: save.raw }, { name: 'cookie-consent', value: 'essential' }, { name: 'dukb-theme', value: 'dark' }] }] },
+  });
+  await context.route('**/*', route => {
+    const u = new URL(route.request().url());
+    if (u.origin === url || ['fonts.googleapis.com', 'fonts.gstatic.com'].includes(u.hostname)) return route.continue();
+    return route.abort('blockedbyclient');
+  });
+  await context.routeWebSocket('**/*', socket => socket.close());
+  const page = await context.newPage();
+  page.setDefaultTimeout(20000);
+  await page.addInitScript(now => {
+    const Old = Date;
+    window.Date = class extends Old { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } };
+    const seeded = seed => { let a = seed >>> 0; return () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
+    let taps = 0;
+    Math.random = seeded(1340);
+    document.addEventListener('click', () => { taps += 1; Math.random = seeded(1340 + taps * 7919); }, true);
+  }, NOW);
+  const act = async locator => { await locator.waitFor({ timeout: 45000 }); if (touch) await locator.tap(); else await locator.click(); };
+  const button = name => page.locator('button:visible').filter({ hasText: new RegExp(`^\\s*${name}\\s*$`) }).first();
+  const screens = {};
+  const measure = async key => { screens[key] = { small: await smallText(page), height: await heightOf(page) }; };
+  try {
+    await page.goto(`${url}/club-manager`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1000);
+    for (let i = 0; i < 3 && await page.locator('[role="dialog"][data-state="open"]').count(); i++) { await page.keyboard.press('Escape'); await page.waitForTimeout(250); }
+    await act(page.locator('[data-testid="cm-slot-1"]').getByRole('button', { name: 'Resume Career', exact: true }));
+    await page.locator('[data-cm-hub]').waitFor({ timeout: 45000 });
+    await page.waitForTimeout(1500);
+    await measure('hub');
+    await act(page.locator('button:visible').filter({ hasText: 'Match Centre: form' }).first());
+    await page.getByText('Engine odds', { exact: false }).first().waitFor({ timeout: 20000 });
+    await page.waitForTimeout(800);
+    await measure('centre');
+    await act(page.locator('button:visible[data-cm-way="live"]').first());
+    await stageIs(page, 'first');
+    await page.waitForTimeout(1200);
+    await measure('live');
+    await act(button('Skip'));
+    await stageIs(page, 'interval');
+    await page.waitForTimeout(600);
+    await measure('interval');
+    await act(button('Second half'));
+    const deadline = Date.now() + 90000;
+    while (Date.now() < deadline && !(await page.locator('[data-cm-timeline]').count())) {
+      if (await button('Full report').count()) await act(button('Full report'));
+      else if (await button('Skip').count()) await act(button('Skip')).catch(() => {});
+      await page.waitForTimeout(800);
+    }
+    await page.locator('[data-cm-timeline]').waitFor({ timeout: 5000 });
+    await page.waitForTimeout(4000);
+    await measure('report');
+    return { screens, save: await page.evaluate(k => localStorage.getItem(k), KEY) };
+  } catch (err) {
+    return { screens, save: null, error: String(err.message).split('\n')[0] };
+  } finally {
+    await context.close();
+  }
+}
+const COMPARE = process.env.MATCHDAY_COMPARE_DIST || '';
+if (COMPARE) {
+  if (!fs.existsSync(path.join(COMPARE, 'index.html'))) cannotRun(`MATCHDAY_COMPARE_DIST=${COMPARE} holds no index.html`);
+  const BASE_URL = await serveDist(COMPARE);
+  /* The stream is only comparable if one build gives the same save twice. */
+  const once = await seededWalk(BASE, saves[0], 390, 844);
+  const twice = await seededWalk(BASE, saves[0], 390, 844);
+  if (!once.save || !twice.save) cannotRun(`the seeded walk did not finish on the head (${once.error ?? twice.error})`);
+  const noise = firstDiff(JSON.parse(once.save), JSON.parse(twice.save));
+  console.log(`one build twice, save A at 390: ${noise ? `the saves differ at ${noise}` : 'the same save to the byte'}`);
+  if (noise) cannotRun('the seeded save is not stable on one build, so head against base cannot be judged');
+  for (const save of saves.filter(s => s.assert)) {
+    for (const [w, h] of SIZES_ALL) {
+      const head = await seededWalk(BASE, save, w, h);
+      const base = await seededWalk(BASE_URL, save, w, h);
+      const id = `${save.name}-${w}`;
+      check(!head.error && !base.error, `${id}: a seeded walk stopped (head: ${head.error ?? 'fine'}, base: ${base.error ?? 'fine'})`);
+      for (const key of Object.keys(base.screens)) {
+        const hs = head.screens[key];
+        const bs = base.screens[key];
+        console.log(`${id} ${key}: text under 12 px head ${hs?.small ?? '-'} base ${bs.small}; height head ${hs?.height ?? '-'} base ${bs.height}`);
+        check(!!hs && hs.small <= bs.small, `${id} ${key}: ${hs?.small} text nodes under 12 px on the head against ${bs.small} on the base`);
+      }
+      if (head.save && base.save) {
+        const d = firstDiff(JSON.parse(head.save), JSON.parse(base.save));
+        check(!d, `${id}: the save after the same seeded taps differs from the base's at ${d}`);
+        if (!d) console.log(`${id}: the save after the walk is the base's to the byte (${head.save.length} bytes)`);
+      }
+    }
+  }
+  await browser.close();
+  if (failures.length) { console.log(`playCmMatchDay compare: RED, ${failures.length} failures`); process.exit(1); }
+  console.log(`playCmMatchDay compare: green. Against ${COMPARE}: no screen has more text under 12 px, and every save after the same seeded taps is the base's`);
+  process.exit(0);
+}
+
 /* ---- the walks ---- */
-const SIZES = [[320, 640], [390, 844], [1280, 900]];
+const SIZES = SIZES_ALL;
 const runs = [];
 if (CONTROL) runs.push([saves[0], 390, 844, false]);
 else {
