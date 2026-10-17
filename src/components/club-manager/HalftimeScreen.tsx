@@ -6,6 +6,7 @@ import type { CareerState, CMPlayer, Mentality, TalkTone } from '@/lib/clubManag
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
 import { HalftimeLineups } from '@/components/club-manager/HalftimeLineups';
+import { inFixtureOrder, myClubFirst } from '@/lib/cmMatchDisplay';
 
 interface HalftimeScreenProps {
   career: CareerState;
@@ -68,6 +69,9 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }:
   const venue = live.home === true ? 'at home' : live.home === false ? 'away' : 'neutral';
   const leading = live.myGoals > live.oppGoals;
   const level = live.myGoals === live.oppGoals;
+  const mineFirst = myClubFirst(live.home);
+  const [nameFirst, nameSecond] = inFixtureOrder(live.home, career.clubName, live.opponent);
+  const [goalsFirst, goalsSecond] = inFixtureOrder(live.home, live.myGoals, live.oppGoals);
 
   return (
     <div className="space-y-3">
@@ -76,17 +80,19 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }:
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">
           Half time {'·'} {live.compLabel} {'·'} {venue}
         </div>
+        {/* Round 1340: home side first, like every scoreboard, my club picked out in green wherever it sits. The
+            score's colour is about me (leading, level, behind) and stays so. */}
         <div className="flex items-center justify-center gap-3">
-          <span className="text-sm text-foreground truncate max-w-[38%] text-right">{career.clubName}</span>
+          <span className={cn('text-sm truncate max-w-[38%] text-right', mineFirst ? 'text-primary' : 'text-muted-foreground')}>{nameFirst}</span>
           <span
             className={cn(
               'text-3xl font-black tabular-nums px-3',
               leading ? 'text-emerald-400' : level ? 'text-foreground' : 'text-destructive',
             )}
           >
-            {live.myGoals}-{live.oppGoals}
+            {goalsFirst}-{goalsSecond}
           </span>
-          <span className="text-sm text-muted-foreground truncate max-w-[38%] text-left">{live.opponent}</span>
+          <span className={cn('text-sm truncate max-w-[38%] text-left', mineFirst ? 'text-muted-foreground' : 'text-primary')}>{nameSecond}</span>
         </div>
         <p className="text-[11px] text-muted-foreground mt-2 italic">{live.read}</p>
       </div>

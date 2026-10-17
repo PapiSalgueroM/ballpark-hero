@@ -684,7 +684,11 @@ function mount(career: CareerState) {
   const callbacks = { onSub: vi.fn(), onShape: vi.fn(), onTalk: vi.fn(), onSecondHalf: vi.fn(), onExit: vi.fn(), onStartSecondHalf: vi.fn(), onStartExtraTime: vi.fn(), onChange: vi.fn(), onMark: vi.fn() };
   return { ...render(<LiveSimScreen career={career} live={career.live ?? null} report={null} clubColor="#86bced" {...callbacks} />), callbacks };
 }
-const readScore = (container: HTMLElement) => container.querySelector('[data-cm-live-score]')!.textContent!.trim();
+/* Round 1340: the score is drawn home side first, so it is read by side ("me - opp") off its two marked digits. */
+const readScore = (container: HTMLElement) => {
+  const score = container.querySelector('[data-cm-live-score]')!;
+  return `${score.querySelector('[data-cm-score-of="me"]')!.textContent!.trim()} - ${score.querySelector('[data-cm-score-of="opp"]')!.textContent!.trim()}`;
+};
 const scoreBy = (career: CareerState, pos: number) => ['me', 'opp'].map(side => liveFeed(career.live!)
   .filter(e => e.kind === 'goal' && e.side === side && clockPos(e) <= pos).length).join(' - ');
 const isChance = (e: LiveFeedEvent) => ['goal', 'save', 'shot'].includes(e.kind);

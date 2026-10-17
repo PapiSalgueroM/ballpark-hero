@@ -3,6 +3,7 @@ import { ChevronLeft, Play, Zap } from 'lucide-react';
 import type { CareerState, MatchFacts, FormResult, TalkTone } from '@/lib/clubManager';
 import { toLeague } from '@/lib/clubManager';
 import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
+import { inFixtureOrder, myClubFirst } from '@/lib/cmMatchDisplay';
 
 /**
  * Round 157: the pre-match facts screen, modelled on what a matchday app
@@ -61,6 +62,40 @@ export function MatchCentre({
   const oppPosLabel = f.oppPos
     ? `#${f.oppPos}${f.oppLeagueName ? ` in ${toLeague(f.oppLeagueName)}` : ''}`
     : f.oppLeagueName ? `Plays in ${toLeague(f.oppLeagueName)}` : null;
+  /* Round 1340: the tie, the form and the ones to watch read home side first, like a scoreboard, each side marked
+     data-cm-mc-side. Your club keeps its green name and its colour dot wherever it sits; the first side is aligned
+     toward VS from the left and the second from the right. The odds and the meetings stay yours. */
+  const mineFirst = myClubFirst(f.home);
+  const myBlock = (
+    <div className={cn('flex-1 min-w-0', mineFirst ? 'text-right' : 'text-left')} data-cm-mc-side="me">
+      <div className="text-sm font-bold text-primary truncate">{career.clubName}</div>
+      {myPosLabel && <div className="text-[9px] text-muted-foreground">{myPosLabel} in league</div>}
+    </div>
+  );
+  const oppBlock = (
+    <div className={cn('flex-1 min-w-0', mineFirst ? 'text-left' : 'text-right')} data-cm-mc-side="opp">
+      <div className="text-sm font-bold text-foreground truncate">{f.opponent}</div>
+      {oppPosLabel && <div className="text-[9px] text-muted-foreground truncate">{oppPosLabel}</div>}
+    </div>
+  );
+  const myDot = <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: clubColor }} />;
+  const [formFirst, formSecond] = inFixtureOrder(f.home, { side: 'me', form: f.myForm }, { side: 'opp', form: f.oppForm });
+  const myWatch = (
+    <div className={mineFirst ? undefined : 'text-right'} data-cm-mc-side="me">
+      {f.myDanger.map(n => (
+        <p key={n} className="text-[11px] text-foreground truncate">⚽ {n}</p>
+      ))}
+      {f.myDanger.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
+    </div>
+  );
+  const oppWatch = (
+    <div className={mineFirst ? 'text-right' : undefined} data-cm-mc-side="opp">
+      {f.oppDanger.map(n => (
+        <p key={n} className="text-[11px] text-muted-foreground truncate">⚠️ {n}</p>
+      ))}
+      {f.oppDanger.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
+    </div>
+  );
 
   return (
     <div className="max-w-md mx-auto space-y-3">
@@ -75,16 +110,9 @@ export function MatchCentre({
       <div className="bg-card border border-border rounded-2xl p-4 text-center">
         <div className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2">{f.compLabel}</div>
         <div className="flex items-center justify-center gap-3">
-          <div className="flex-1 text-right min-w-0">
-            <div className="text-sm font-bold text-primary truncate">{career.clubName}</div>
-            {myPosLabel && <div className="text-[9px] text-muted-foreground">{myPosLabel} in league</div>}
-          </div>
-          <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: clubColor }} />
+          {mineFirst ? <>{myBlock}{myDot}</> : oppBlock}
           <div className="px-2.5 py-1 rounded-lg bg-secondary text-xs font-bold text-muted-foreground shrink-0">VS</div>
-          <div className="flex-1 text-left min-w-0">
-            <div className="text-sm font-bold text-foreground truncate">{f.opponent}</div>
-            {oppPosLabel && <div className="text-[9px] text-muted-foreground truncate">{oppPosLabel}</div>}
-          </div>
+          {mineFirst ? oppBlock : <>{myDot}{myBlock}</>}
         </div>
         <div className="text-[10px] text-muted-foreground mt-1.5">
           {venue} · their strength ~{f.oppStrength} · your XI ~{f.myStrength}
@@ -99,9 +127,9 @@ export function MatchCentre({
 
         {/* Form, both dugouts */}
         <div className="flex items-center justify-between mt-3 px-1">
-          <FormRow form={f.myForm} align="left" />
+          <span className="inline-flex" data-cm-mc-side={formFirst.side}><FormRow form={formFirst.form} align="left" /></span>
           <span className="text-[9px] text-muted-foreground uppercase tracking-wider">Form</span>
-          <FormRow form={f.oppForm} align="right" />
+          <span className="inline-flex" data-cm-mc-side={formSecond.side}><FormRow form={formSecond.form} align="right" /></span>
         </div>
 
         {/* Engine odds. Ours, honestly labelled, never a fake fan vote. */}
@@ -125,18 +153,7 @@ export function MatchCentre({
         <div className="bg-card border border-border rounded-xl p-3">
           <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">🔥 Ones to watch</div>
           <div className="grid grid-cols-2 gap-3">
-            <div>
-              {f.myDanger.map(n => (
-                <p key={n} className="text-[11px] text-foreground truncate">⚽ {n}</p>
-              ))}
-              {f.myDanger.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
-            </div>
-            <div className="text-right">
-              {f.oppDanger.map(n => (
-                <p key={n} className="text-[11px] text-muted-foreground truncate">⚠️ {n}</p>
-              ))}
-              {f.oppDanger.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
-            </div>
+            {mineFirst ? <>{myWatch}{oppWatch}</> : <>{oppWatch}{myWatch}</>}
           </div>
         </div>
       )}

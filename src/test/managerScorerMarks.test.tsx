@@ -88,9 +88,11 @@ describe('an own goal, on every listing (Round 1146)', () => {
     const marks = [...container.querySelectorAll('[data-cm-tl="goal"] [data-cm-tl-mark]')];
     expect(marks.map(n => n.textContent)).toEqual([' (O.G)', ' (O.G)']);
     for (const mark of marks) {
-      expect(mark.closest('.truncate')).toBeNull();
+      /* Round 1340: nothing is cut any more; the name's span is found by its own attribute, and the mark is still
+         never inside it. */
+      expect(mark.closest('[data-cm-tl-name]')).toBeNull();
       expect(mark.className).toContain('shrink-0');
-      expect(mark.parentElement!.querySelector('.truncate')!.textContent).not.toContain('(O.G)');
+      expect(mark.parentElement!.querySelector('[data-cm-tl-name]')!.textContent).not.toContain('(O.G)');
     }
   });
 

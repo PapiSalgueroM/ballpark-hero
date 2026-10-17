@@ -22,6 +22,7 @@ import { generatedLeagueCountClauses, generatedLeagueMonthClause } from '@/data/
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { inboxTile, kittyChange, leagueTileValue, recordLine } from '@/lib/clubManagerHubLines';
+import { myClubFirst, pitchName } from '@/lib/cmMatchDisplay';
 import { BOARD_EDGE, boardMeter } from '@/lib/clubManagerMeters';
 import { STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
 import { deskOf } from '@/lib/clubManagerDecisions';
@@ -873,7 +874,7 @@ const ClubManager = () => {
         <header className="text-center mb-4">
           <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">FULL TIME</h1>
         </header>
-        <ScreenLoading><MatchReportCard report={g.report} clubName={g.career.clubName} onContinue={g.continueFromReport} /></ScreenLoading>
+        <ScreenLoading><MatchReportCard report={g.report} clubName={g.career.clubName} onContinue={g.continueFromReport} noSack={noSackFrom(g.career) !== null} /></ScreenLoading>
       </div>
     );
   }
@@ -1119,8 +1120,12 @@ const ClubManager = () => {
             {fx && fx.kind === 'match' && (
               <>
                 <div className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">{fx.compLabel}</div>
-                <div className="text-lg font-bold font-display text-foreground">
-                  {fx.home === null ? '🏟️ ' : ''}{c.clubName} <span className="text-muted-foreground text-sm">vs</span> {fx.opponent}
+                {/* Round 1340: the home side first, like a scoreboard, your club picked out in green wherever it sits. */}
+                <div className="text-lg font-bold font-display text-foreground" data-cm-next-match="1">
+                  {fx.home === null ? '🏟️ ' : ''}
+                  {myClubFirst(fx.home)
+                    ? <><span className="text-primary" data-cm-next-side="me">{c.clubName}</span> <span className="text-muted-foreground text-sm">vs</span> <span data-cm-next-side="opp">{fx.opponent}</span></>
+                    : <><span data-cm-next-side="opp">{fx.opponent}</span> <span className="text-muted-foreground text-sm">vs</span> <span className="text-primary" data-cm-next-side="me">{c.clubName}</span></>}
                 </div>
                 <div className="text-[10px] text-muted-foreground mt-0.5">
                   {fx.home === null ? 'Neutral venue' : fx.home ? 'Home' : 'Away'} · their strength ~{fx.oppStrength} · your XI avg {xiAverageRating(c)}
@@ -1244,10 +1249,13 @@ const ClubManager = () => {
               />
               <HubTile
                 icon="📊" title="Stats"
-                value={`${c.squad.reduce((n, p) => n + p.seasonGoals, 0)} goals`}
+                value={(() => {
+                  const goals = c.squad.reduce((n, p) => n + p.seasonGoals, 0);
+                  return `${goals} ${goals === 1 ? 'goal' : 'goals'}`;
+                })()}
                 sub={(() => {
                   const ts = [...c.squad].sort((a, b) => b.seasonGoals - a.seasonGoals)[0];
-                  return ts && ts.seasonGoals > 0 ? `${ts.name} leads with ${ts.seasonGoals}` : 'Goals, assists, ratings';
+                  return ts && ts.seasonGoals > 0 ? `${pitchName(ts.name)}: ${ts.seasonGoals}` : 'Goals, assists, ratings';
                 })()}
                 onClick={() => setHubPanel('stats')}
               />

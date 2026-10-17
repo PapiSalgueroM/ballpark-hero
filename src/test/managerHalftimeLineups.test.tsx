@@ -92,7 +92,9 @@ describe('Halftime starting XIs and provisional grades', () => {
     expect(view.container.textContent).toContain('Half time');
     expect(view.container.textContent).toContain(state.clubName);
     expect(view.container.textContent).toContain(state.live!.opponent);
-    expect(view.container.textContent).toContain(state.live!.myGoals + '-' + state.live!.oppGoals);
+    /* Round 1340: the score reads home side first, the venue's order. */
+    const [first, second] = state.live!.home === false ? [state.live!.oppGoals, state.live!.myGoals] : [state.live!.myGoals, state.live!.oppGoals];
+    expect(view.container.textContent).toContain(first + '-' + second);
     expect(JSON.stringify(state)).toBe(held); expect(random).not.toHaveBeenCalled();
     expect(Object.values(view.callbacks).every(callback => callback.mock.calls.length === 0)).toBe(true);
   });
