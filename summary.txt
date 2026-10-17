@@ -1,0 +1,6 @@
+tsc exit=0 136s | 
+vitest-cm exit=0 192s |    Duration  190.84s (transform 8.22s, setup 3.89s, collect 34.07s, tests 314.69s, environment 28.08s, prepare 6.24s)
+proof-part exit=0 373s | proofWorldUclFleet: GREEN, 60 journeys and 6483 steps byte equal to d8aaa4cb (a watching state without worldComps), draws equal
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+proof-watch-nocoach exit=0 302s | proofWorldUclFleet: GREEN, 45 journeys and 6169 steps byte equal to d8aaa4cb (a watching state without worldComps), draws equal
+proof-watch-coach exit=0 352s | proofWorldUclFleet: GREEN, 45 journeys and 6141 steps byte equal to d8aaa4cb (a watching state without worldComps), draws equal

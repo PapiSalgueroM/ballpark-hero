@@ -1,0 +1,49 @@
+base d8aaa4cb; fleet (9): Chelsea (now, watcher); Hoffenheim (now, watcher); Everton (now, watcher); América (now, watcher); Proof Town Athletic (now, watcher); Wigan Athletic (era2005, watcher); Wolves (era2010, watcher); West Ham (era2015, watcher); Sheffield United (era2020, watcher)
+seeds 1,2,3,4,5; modes nocoach; strip worldComps
+ok   Chelsea (now, watcher, nocoach, seed 1, 3 seasons): 147 steps, 8.3 s
+ok   Chelsea (now, watcher, nocoach, seed 2, 3 seasons): 144 steps, 9.2 s
+ok   Chelsea (now, watcher, nocoach, seed 3, 3 seasons): 145 steps, 9.6 s
+ok   Chelsea (now, watcher, nocoach, seed 4, 3 seasons): 150 steps, 10.3 s
+ok   Chelsea (now, watcher, nocoach, seed 5, 3 seasons): 147 steps, 9.8 s
+ok   Hoffenheim (now, watcher, nocoach, seed 1, 3 seasons): 133 steps, 8.0 s
+ok   Hoffenheim (now, watcher, nocoach, seed 2, 3 seasons): 124 steps, 8.3 s
+ok   Hoffenheim (now, watcher, nocoach, seed 3, 3 seasons): 124 steps, 7.7 s
+ok   Hoffenheim (now, watcher, nocoach, seed 4, 3 seasons): 125 steps, 8.3 s
+ok   Hoffenheim (now, watcher, nocoach, seed 5, 3 seasons): 123 steps, 8.1 s
+ok   Everton (now, watcher, nocoach, seed 1, 3 seasons): 144 steps, 8.8 s
+ok   Everton (now, watcher, nocoach, seed 2, 3 seasons): 145 steps, 9.2 s
+ok   Everton (now, watcher, nocoach, seed 3, 3 seasons): 147 steps, 9.4 s
+ok   Everton (now, watcher, nocoach, seed 4, 3 seasons): 143 steps, 9.2 s
+ok   Everton (now, watcher, nocoach, seed 5, 3 seasons): 137 steps, 7.6 s
+ok   América (now, watcher, nocoach, seed 1, 3 seasons): 119 steps, 6.7 s
+ok   América (now, watcher, nocoach, seed 2, 3 seasons): 119 steps, 6.7 s
+ok   América (now, watcher, nocoach, seed 3, 3 seasons): 119 steps, 7.7 s
+ok   América (now, watcher, nocoach, seed 4, 3 seasons): 119 steps, 7.7 s
+ok   América (now, watcher, nocoach, seed 5, 3 seasons): 119 steps, 7.0 s
+ok   Proof Town Athletic (now, watcher, nocoach, seed 1, 3 seasons): 152 steps, 9.1 s
+ok   Proof Town Athletic (now, watcher, nocoach, seed 2, 3 seasons): 152 steps, 8.4 s
+ok   Proof Town Athletic (now, watcher, nocoach, seed 3, 3 seasons): 152 steps, 8.7 s
+ok   Proof Town Athletic (now, watcher, nocoach, seed 4, 3 seasons): 159 steps, 9.8 s
+ok   Proof Town Athletic (now, watcher, nocoach, seed 5, 3 seasons): 159 steps, 9.2 s
+ok   Wigan Athletic (era2005, watcher, nocoach, seed 1, 3 seasons): 137 steps, 5.5 s
+ok   Wigan Athletic (era2005, watcher, nocoach, seed 2, 3 seasons): 136 steps, 5.3 s
+ok   Wigan Athletic (era2005, watcher, nocoach, seed 3, 3 seasons): 136 steps, 5.1 s
+ok   Wigan Athletic (era2005, watcher, nocoach, seed 4, 3 seasons): 134 steps, 5.7 s
+ok   Wigan Athletic (era2005, watcher, nocoach, seed 5, 3 seasons): 135 steps, 5.1 s
+ok   Wolves (era2010, watcher, nocoach, seed 1, 3 seasons): 134 steps, 4.4 s
+ok   Wolves (era2010, watcher, nocoach, seed 2, 3 seasons): 137 steps, 4.2 s
+ok   Wolves (era2010, watcher, nocoach, seed 3, 3 seasons): 137 steps, 4.1 s
+ok   Wolves (era2010, watcher, nocoach, seed 4, 3 seasons): 135 steps, 4.0 s
+ok   Wolves (era2010, watcher, nocoach, seed 5, 3 seasons): 136 steps, 4.2 s
+ok   West Ham (era2015, watcher, nocoach, seed 1, 3 seasons): 144 steps, 4.1 s
+ok   West Ham (era2015, watcher, nocoach, seed 2, 3 seasons): 137 steps, 3.9 s
+ok   West Ham (era2015, watcher, nocoach, seed 3, 3 seasons): 137 steps, 3.9 s
+ok   West Ham (era2015, watcher, nocoach, seed 4, 3 seasons): 137 steps, 4.0 s
+ok   West Ham (era2015, watcher, nocoach, seed 5, 3 seasons): 137 steps, 4.0 s
+ok   Sheffield United (era2020, watcher, nocoach, seed 1, 3 seasons): 134 steps, 3.9 s
+ok   Sheffield United (era2020, watcher, nocoach, seed 2, 3 seasons): 135 steps, 3.8 s
+ok   Sheffield United (era2020, watcher, nocoach, seed 3, 3 seasons): 135 steps, 4.2 s
+ok   Sheffield United (era2020, watcher, nocoach, seed 4, 3 seasons): 134 steps, 4.0 s
+ok   Sheffield United (era2020, watcher, nocoach, seed 5, 3 seasons): 135 steps, 4.1 s
+journeys 45, steps compared 6169, tree journeys whose save carried worldComps 45, evaluations on the live state 6169, 300 s
+proofWorldUclFleet: GREEN, 45 journeys and 6169 steps byte equal to d8aaa4cb (a watching state without worldComps), draws equal

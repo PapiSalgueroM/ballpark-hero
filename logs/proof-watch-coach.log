@@ -1,0 +1,49 @@
+base d8aaa4cb; fleet (9): Chelsea (now, watcher); Hoffenheim (now, watcher); Everton (now, watcher); América (now, watcher); Proof Town Athletic (now, watcher); Wigan Athletic (era2005, watcher); Wolves (era2010, watcher); West Ham (era2015, watcher); Sheffield United (era2020, watcher)
+seeds 1,2,3,4,5; modes coach; strip worldComps
+ok   Chelsea (now, watcher, coach, seed 1, 3 seasons): 148 steps, 13.5 s
+ok   Chelsea (now, watcher, coach, seed 2, 3 seasons): 146 steps, 11.4 s
+ok   Chelsea (now, watcher, coach, seed 3, 3 seasons): 143 steps, 11.3 s
+ok   Chelsea (now, watcher, coach, seed 4, 3 seasons): 154 steps, 12.6 s
+ok   Chelsea (now, watcher, coach, seed 5, 3 seasons): 141 steps, 12.1 s
+ok   Hoffenheim (now, watcher, coach, seed 1, 3 seasons): 124 steps, 10.4 s
+ok   Hoffenheim (now, watcher, coach, seed 2, 3 seasons): 128 steps, 11.8 s
+ok   Hoffenheim (now, watcher, coach, seed 3, 3 seasons): 122 steps, 11.4 s
+ok   Hoffenheim (now, watcher, coach, seed 4, 3 seasons): 125 steps, 10.6 s
+ok   Hoffenheim (now, watcher, coach, seed 5, 3 seasons): 124 steps, 10.8 s
+ok   Everton (now, watcher, coach, seed 1, 3 seasons): 144 steps, 12.4 s
+ok   Everton (now, watcher, coach, seed 2, 3 seasons): 142 steps, 12.3 s
+ok   Everton (now, watcher, coach, seed 3, 3 seasons): 138 steps, 11.7 s
+ok   Everton (now, watcher, coach, seed 4, 3 seasons): 143 steps, 11.6 s
+ok   Everton (now, watcher, coach, seed 5, 3 seasons): 136 steps, 12.0 s
+ok   América (now, watcher, coach, seed 1, 3 seasons): 119 steps, 8.8 s
+ok   América (now, watcher, coach, seed 2, 3 seasons): 119 steps, 6.8 s
+ok   América (now, watcher, coach, seed 3, 3 seasons): 119 steps, 6.7 s
+ok   América (now, watcher, coach, seed 4, 3 seasons): 119 steps, 6.9 s
+ok   América (now, watcher, coach, seed 5, 3 seasons): 119 steps, 6.7 s
+ok   Proof Town Athletic (now, watcher, coach, seed 1, 3 seasons): 152 steps, 8.9 s
+ok   Proof Town Athletic (now, watcher, coach, seed 2, 3 seasons): 151 steps, 9.1 s
+ok   Proof Town Athletic (now, watcher, coach, seed 3, 3 seasons): 160 steps, 9.2 s
+ok   Proof Town Athletic (now, watcher, coach, seed 4, 3 seasons): 159 steps, 8.8 s
+ok   Proof Town Athletic (now, watcher, coach, seed 5, 3 seasons): 151 steps, 8.0 s
+ok   Wigan Athletic (era2005, watcher, coach, seed 1, 3 seasons): 135 steps, 4.3 s
+ok   Wigan Athletic (era2005, watcher, coach, seed 2, 3 seasons): 135 steps, 4.3 s
+ok   Wigan Athletic (era2005, watcher, coach, seed 3, 3 seasons): 136 steps, 4.4 s
+ok   Wigan Athletic (era2005, watcher, coach, seed 4, 3 seasons): 134 steps, 4.3 s
+ok   Wigan Athletic (era2005, watcher, coach, seed 5, 3 seasons): 136 steps, 4.4 s
+ok   Wolves (era2010, watcher, coach, seed 1, 3 seasons): 134 steps, 4.8 s
+ok   Wolves (era2010, watcher, coach, seed 2, 3 seasons): 137 steps, 4.9 s
+ok   Wolves (era2010, watcher, coach, seed 3, 3 seasons): 137 steps, 4.8 s
+ok   Wolves (era2010, watcher, coach, seed 4, 3 seasons): 134 steps, 4.7 s
+ok   Wolves (era2010, watcher, coach, seed 5, 3 seasons): 136 steps, 4.9 s
+ok   West Ham (era2015, watcher, coach, seed 1, 3 seasons): 138 steps, 4.8 s
+ok   West Ham (era2015, watcher, coach, seed 2, 3 seasons): 136 steps, 4.7 s
+ok   West Ham (era2015, watcher, coach, seed 3, 3 seasons): 134 steps, 4.6 s
+ok   West Ham (era2015, watcher, coach, seed 4, 3 seasons): 145 steps, 5.2 s
+ok   West Ham (era2015, watcher, coach, seed 5, 3 seasons): 136 steps, 4.7 s
+ok   Sheffield United (era2020, watcher, coach, seed 1, 3 seasons): 134 steps, 4.8 s
+ok   Sheffield United (era2020, watcher, coach, seed 2, 3 seasons): 134 steps, 4.8 s
+ok   Sheffield United (era2020, watcher, coach, seed 3, 3 seasons): 134 steps, 4.9 s
+ok   Sheffield United (era2020, watcher, coach, seed 4, 3 seasons): 134 steps, 4.8 s
+ok   Sheffield United (era2020, watcher, coach, seed 5, 3 seasons): 136 steps, 5.1 s
+journeys 45, steps compared 6141, tree journeys whose save carried worldComps 45, evaluations on the live state 6141, 350 s
+proofWorldUclFleet: GREEN, 45 journeys and 6141 steps byte equal to d8aaa4cb (a watching state without worldComps), draws equal

@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/lib/worldCompetition.test.ts src/lib/clubManager src/test/clubManager --testTimeout=300000 --hookTimeout=120000
+proof-part: node scripts/proofWorldUclFleet.mjs --base d8aaa4cb --fleet participants --coach both --strip worldComps --eval
+proof-watch-nocoach: node scripts/proofWorldUclFleet.mjs --base d8aaa4cb --fleet watchers --coach nocoach --strip worldComps --eval
+proof-watch-coach: node scripts/proofWorldUclFleet.mjs --base d8aaa4cb --fleet watchers --coach coach --strip worldComps --eval
+simDailyDeals: node scripts/simDailyDeals.mjs
