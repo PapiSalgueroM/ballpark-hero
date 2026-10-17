@@ -15811,3 +15811,6 @@ Actual I retains core/world/calendar/competition and active SoccerCareer page, j
 
 
 1399 first60f/run39012499104 FAILEDat strictcausecapture. Actualoriginalnormal2pass; originalstress1matchpass+seasonfailedwithJSONSTACK_TRACE_ERRORonly, no actual5000message. No candidate/control/build/readergatesran. Exactartifact12094005179/76256570B/SHA9d1b1cd9 retained. Newhelper-only2spandualreportersuccessor3be7fd9c keepsstrictJSONandrequiresactualnameddefaulttimeout; test/WF/product/stress/control/timingheld. Nativefullinverse/sourceauditbeforeanyfreshrequest, noREADYorliveclaim.
+
+
+1399 second6a/run39013051408 actualjob117339454098 proof/build/all15readers PASS, overallFAILonlyemptybuildreceiptbar. FullphysicalCORRECTED4f4f786e and semanticreview closeactual167payloads/4872source/784dist/38maps/18processes, preserving243B3deniedfontrows. NewWF-onlyc4934010 classifiesEXACTknown3denials+3effectivepurecontrols, allothertransportzero. No guard/network/app/test/helper/timing/controlchange and no oldjobgreenclaim. Freshfullremotequalificationpendingaftersourcereview.

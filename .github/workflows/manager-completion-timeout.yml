@@ -136,11 +136,35 @@ jobs:
         if: always()
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           out="${MANAGER_TIMEOUT_ARTIFACTS:-$RUNNER_TEMP/manager-completion-timeout}"; result=0
           for kind in source installed browser-tool runtime-tools font validated-source dist; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
           if test -f "$out/initial-source-packet.sha256"; then sha256sum --check "$out/initial-source-packet.sha256" > "$out/initial-source-packet-holds.log" 2>&1 || result=1; fi
           if test -f "$out/installed-files.sha256"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-after-files.sha256"; cmp "$out/installed-files.sha256" "$out/installed-after-files.sha256" || result=1; fi
-          for method in types proof build simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do test ! -s "$out/$method.transport" || result=1; done
+          build_classified=0
+          if node --input-type=module > "$out/build-transport-classification.log" 2>&1 <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import {createHash} from 'node:crypto'; import {createRequire} from 'node:module';
+          import {SAMPLE_DAYS} from './scripts/lib/prerenderClock.mjs';
+          const out=process.env.MANAGER_TIMEOUT_ARTIFACTS || process.env.RUNNER_TEMP+'/manager-completion-timeout', sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const report={status:'running',observations:[],sources:{},method:'Classify retained denials only; no network permission or routing change'};
+          try {
+            assert((process.env.NODE_OPTIONS||'').includes('offlineTransport.cjs')); const require=createRequire(import.meta.url); assert(require.cache[require.resolve('./scripts/lib/offlineTransport.cjs')]);
+            assert.equal(process.env.PRERENDER_ONLY,'/whats-new'); assert.deepEqual(SAMPLE_DAYS,[0,5,11]);
+            for(const file of ['scripts/lib/offlineTransport.cjs','scripts/lib/prerenderClock.mjs','scripts/prerender.mjs']) report.sources[file]=sha(fs.readFileSync(file));
+            const line='[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com\n', expected=Buffer.from(line.repeat(3));
+            assert.equal(sha(expected),'1175154605f5681b53732047b77c744fb9e814fe3c6340be82f786ea27138e57');
+            const classify=bytes=>{assert(bytes.equals(expected),'Build must record exactly the three known denied font requests'); return bytes.toString('utf8').split('\n').slice(0,-1);};
+            const actual=fs.readFileSync(out+'/build.transport'), rows=classify(actual);
+            report.observations.push({case:'actual-three-font-denials',accepted:true,sha256:sha(actual),bytes:actual.length,rows});
+            const controls=[['missing-line',Buffer.from(line.repeat(2))],['extra-line',Buffer.from(line.repeat(4))],['database-line',Buffer.from(line.repeat(2)+'[SIM_OFFLINE_BLOCK] database browser route continue https://fixture.invalid\n')]];
+            for(const [name,changed] of controls){assert(!changed.equals(actual),'Each control changes the actual receipt'); assert.throws(()=>classify(changed),assert.AssertionError); report.observations.push({case:name,accepted:false,sha256:sha(changed),bytes:changed.length});}
+            assert.equal(report.observations.length,4); report.status='passed'; console.log('PASS actual three denied font requests and three effective receipt-only rejection controls');
+          } catch(error){report.status='failed'; report.error=error.stack; throw error;}
+          finally{fs.writeFileSync(out+'/build-transport-classification.json',JSON.stringify(report,null,2)+'\n');}
+          NODE
+          then build_classified=1; else result=1; fi
+          if test "$build_classified" -ne 1; then test ! -s "$out/build.transport" || result=1; fi
+          for method in types proof simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do test ! -s "$out/$method.transport" || result=1; done
           exit "$result"
       - uses: actions/upload-artifact@v4
         if: always()
