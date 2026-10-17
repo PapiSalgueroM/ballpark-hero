@@ -1,0 +1,6 @@
+headsha exit=0 0s | be3791703 Round BII: record the base of Round 1329's inverse after 285f8f81 (c2d21574) in this branch's history, tree unchanged
+wf284x exit=1 183s | wfrun wf284x.yml: 9 steps ran, 1 failed: Every rebuilt-site reader
+wf296x exit=1 217s | wfrun manager-desk-feedback.yml: 6 steps ran, 1 failed: Real served refusal and sibling-action journeys
+wf285 exit=1 135s | wfrun club-detail-fixtures.yml: 8 steps ran, 1 failed: Every rebuilt-site reader
+wf287x exit=1 268s | wfrun manager-handover-desk.yml: 9 steps ran, 3 failed: Actual production build | All fifteen build and snapshot readers | Hold tracked source, installed packages, reader
+wf301x exit=0 683s | wfrun manager-decision-method.yml: 5 steps ran, 0 failed

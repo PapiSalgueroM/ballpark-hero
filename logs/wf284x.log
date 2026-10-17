@@ -1,0 +1,319 @@
+inverse bdc62b9ca13fac9d215f34c68bd73f2b13ec2f69
+wfrun: HEAD moved from the request commit 6bf175d7e21a to the branch head it checks, c2f8d746e616
+wfrun: running in a fresh worktree of c2f8d746e616 at /home/runner/work/_temp/t-wf284x/wfrun-wt-FY4iTk
+wfrun /tmp/wf284x.yml job verify at c2f8d746e6164c45b7b6d9cf7a31124c951a7fd3; sets: none
+STEP 1/13 uses actions/checkout@v4: skipped (uses)
+STEP 2/13 uses actions/setup-node@v4: skipped (uses)
+STEP 3/13 uses actions/setup-python@v5: skipped (uses)
+::: STEP 4/13 Preserve source and install locked dependencies
+STEP 4/13 Preserve source and install locked dependencies: exit 0 (33s)
+::: STEP 5/13 Actual application types
+STEP 5/13 Actual application types: exit 0 (49s)
+::: STEP 6/13 Actual own transfer history regressions
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/_temp/t-wf284x/wfrun-wt-FY4iTk[39m
+
+ [32m✓[39m src/test/managerOwnTransferLog.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 663[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 02:53:13
+[2m   Duration [22m 2.59s[2m (transform 1.07s, setup 40ms, collect 1.39s, tests 663ms, environment 233ms, prepare 90ms)[22m
+
+JSON report written to /home/runner/work/_temp/t-wf284x/wfrun-wt-FY4iTk/transfer-log-artifacts/current.json
+PASS transfer log contract: 10 passed, 0 declared failures
+STEP 6/13 Actual own transfer history regressions: exit 0 (3s)
+::: STEP 7/13 Original product control and restoration
+PASS original product: exactly six own-history failures and four preservation passes
+STEP 7/13 Original product control and restoration: exit 0 (3s)
+::: STEP 8/13 Restored own history and existing transfer deal outcomes
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/_temp/t-wf284x/wfrun-wt-FY4iTk[39m
+
+ [32m✓[39m src/test/clubManagerDealMoment.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 881[2mms[22m[39m
+ [32m✓[39m src/test/managerOwnTransferLog.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 666[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m15 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 02:53:19
+[2m   Duration [22m 4.13s[2m (transform 1.09s, setup 66ms, collect 1.65s, tests 1.55s, environment 440ms, prepare 92ms)[22m
+
+JSON report written to /home/runner/work/_temp/t-wf284x/wfrun-wt-FY4iTk/transfer-log-artifacts/related.json
+PASS original transfer outcomes: 15
+STEP 8/13 Restored own history and existing transfer deal outcomes: exit 0 (5s)
+::: STEP 9/13 Production build
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 24.59s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+STEP 9/13 Production build: exit 0 (26s)
+::: STEP 10/13 Install isolated reader tools
+STEP 10/13 Install isolated reader tools: exit 0 (34s)
+::: STEP 11/13 Every rebuilt-site reader
+1) one publisher id, everywhere
+   publisher id pub-2929318086316376 in index.html, ads.txt, AdBanner and consentedScripts.ts
+2) site verification survives a visitor who never accepts cookies
+   meta tag in the template and on 170 of 170 shipped documents (21 redirect and noindex stubs excluded by design)
+3) ads.txt
+   1 record(s), all well formed
+4) the policy pages exist, are submitted, and have real content on them
+   4 required pages, all routed, all submitted, all with real prerendered text
+5) the advertising disclosures, as shipped
+   9 statements and 3 links, all present in the shipped document (14243 readable characters)
+5b) analytics loads only behind the same consent as the ads
+   measurement id G-KZQK2G68YC, analytics stays gated globally and ads load only beside a real slot
+6) the ad component never labels an empty box
+   collapses when ineligible or unfilled, labels only what filled
+6b) same-page consent reaches an already mounted ad
+   either choice notifies the current page, and an ad exists only after Accept
+6c) no global Auto Ads eligibility on non-content routes
+   the verification meta stays global, but the ad script is limited to pages with an AdBanner
+7) one production slot on every AdBanner caller
+   80 callers scanned against slot 7540487748, 0 mismatches
+
+simAdsense: green. Verification, ads.txt, the policy pages and the ad component are all review ready.
+1) every brand asset exists and is what it says it is
+   6 PNGs at their sizes, 4 SVGs made of outlines, the .ico with three sizes
+2) the template links the icons, the social image and the theme colour
+   3 icon links, og:image and twitter:image present, theme colour set
+3) no image the template points a crawler at lives off the domain
+   5 image references, 0 off the domain
+4) the Organization logo is the square mark, in both copies of the site block
+   both say /icon-512.png, a 512 by 512 square
+5) the header draws the mark from the generated geometry
+   LogoMark in the header, shape from logoMark.ts, hidden from screen readers
+6) the shipped geometry and SVGs are exactly what the generator produces
+   generator re-run, 5 files compared, 0 drifted
+7) the manifest makes the site installable with the same face
+   2 icons at their declared sizes, 3 shortcuts on live routes, theme colour agrees with the template
+
+simBrand: green. One mark, drawn from one source, everywhere the site shows its face.
+0) 153 shipped pages
+1) every head tag appears exactly once
+   11 tag kinds checked on 153 pages, 0 kinds wrong
+2) the tag that survives is the page's own, not the template's
+   0 template written tags left standing
+3) no two pages share a description
+   153 distinct descriptions across 153 pages
+4) no title is long enough to be truncated in a result
+   median 56, longest 60 (/alphabet-sprint), 0 over 60
+5) the trim never takes the brand off a title that had room for it
+   134 keep it, 14 could not have kept it under 60, 5 never used that suffix in their copy
+
+simHeadTags: green. Every page says its own thing, once.
+0) 10 live routes that are not submitted and ask not to be indexed
+1) every one of them has a document
+   10 of 10
+2) each one declares noindex in the HTML, before any JavaScript runs
+   10 documents, all declaring it
+3) none of them is a copy of the home page
+   10 documents, none of them the home page
+4) not in the sitemap, and no hashed paths in the committed copy
+   none submitted, 0 with a hashed path
+
+simHiddenPages: green. Every page we keep out of Google says so itself.
+1) registry: 13 categories, 133 games, 6 hubs
+   HUB_NAV carries the same 6 hubs as SPORT_HUBS
+2) the hub list, the router and the sitemap agree
+   6 hubs, all mounted, all in the sitemap, 0 pages gathering categories on their own
+   173 shipped documents read
+3) every hub links every game it gathers, and its count is true
+   /soccer: 36/36 games linked, printed count 36
+   /pro-basketball: 17/17 games linked, printed count 17
+   /hockey: 12/12 games linked, printed count 12
+   /pro-football: 11/11 games linked, printed count 11
+   /baseball: 11/11 games linked, printed count 11
+   /college: 7/7 games linked, printed count 7
+4) no shipped page tells the reader it has nothing
+   0 pages claiming zero, out of 173
+5) every game is reachable, and chrome is not allowed to do the work
+   20 chrome links, 133 games graded on body links: min 5, median 9, max 16
+6) every game on a hub ships as an h3 holding its link, and every section heading names the sport
+   /soccer: 36/36 games as h3 links, 6 section headings checked
+   /pro-basketball: 17/17 games as h3 links, 6 section headings checked
+   /hockey: 12/12 games as h3 links, 6 section headings checked
+   /pro-football: 11/11 games as h3 links, 6 section headings checked
+   /baseball: 11/11 games as h3 links, 6 section headings checked
+   /college: 7/7 games as h3 links, 6 section headings checked
+7) no hub prints a bare "/route" where a game's name and link should be
+   /soccer: 0 bare paths in the saved page
+   /pro-basketball: 0 bare paths in the saved page
+   /hockey: 0 bare paths in the saved page
+   /pro-football: 0 bare paths in the saved page
+   /baseball: 0 bare paths in the saved page
+   /college: 0 bare paths in the saved page
+
+simHubs: green. Every hub contains what it promises, and no page tells anyone it is empty.
+1) the key file
+   16211a5a50cff8f3434e5db883a21d8f.txt: content matches the name
+2) the submit script agrees
+   KEY constant matches the key file
+3) the sitemap the submission reads
+   171 URLs, all on the right host
+
+simIndexNow: green. The key file, the script and the sitemap agree.
+1) The pages that must never be indexed say so
+   7 routes noindexed, admin and 404 covered
+2) Every live page is either in the sitemap or deliberately out
+   171 URLs submitted, 181 live routes, 0 unexplained
+3) A sitemap entry with no inbound link is not a page
+   6 hubs, each submitted, kept by the generator and linked from the static home page
+4) Unique titles, unique descriptions, sane lengths
+   153 indexable pages, 0 duplicate titles, 0 duplicate descriptions (14 titles and 40 descriptions run past the display width, which only truncates)
+5) No indexable page ships without title, description and canonical
+6) One h1 per page: the SEO block fills in only where a page has none
+   145 pages carry the block, 137 have a headline of their own, 8 rely on it for their h1
+6b) Every submitted snapshot carries exactly one real h1
+   171 submitted documents checked at the bytes a crawler receives
+7) robots.txt reads the way a crawler parses it
+8) No em or en dash in the files this round touched
+
+simIndexing: green. Every page is either worth finding or honestly hidden.
+1) 171 crawlable documents against 171 sitemap routes
+2) every sitemap route is linked from somewhere
+   0 orphans, thinnest linked route has 4 inbound, median 8
+3) the pages that exist to gather other pages
+   13 hubs, every one linked from most of the site; sport hubs 170 to 170 inbound
+4) no page is a dead end
+   outbound links: min 13 (/privacy), median 21, max 91
+
+simInternalLinks: green. Every page can be reached, and every page leads somewhere.
+Checked 81 product names against 4071 files
+  scanned: src, public, supabase, scripts, index.html
+  skipped: node_modules, dist, dist-ssr, .git, .playwright-mcp, coverage, .cache, and docs/ on purpose (see the note above)
+  FIFA is allowlisted in 27 shapes, so the governing body, its
+    rankings and its World Cup all pass while the video game does not
+  6 live identifiers are left alone because renaming them is a
+    data migration, not a copy edit: routes, save keys and one Supabase table
+  lines ending in "rival-names-allow" are skipped, for the sims that carry
+    a banned-name list of their own because checking for them IS their job
+
+No rival product names found. 0 findings.
+1) coverage: 171 routes in the sitemap
+   171 of 171 routes have a document
+2) each document is a page, not the empty shell
+   thinnest page /contact at 2008 characters of text
+3) the documents are not all the same page
+   171 distinct documents across 171 routes
+4) each sampled page carries its OWN words
+   10 sampled pages each carry their own words
+5) nothing stale or broken was baked in
+   no error cards and no personal state in any of the 171 documents
+6) no snapshot pins itself to one build
+   170 snapshots, 0 carrying a hashed path
+7) no dated real world line was frozen into a snapshot
+   the calendar is retired and stays retired; drift is held by section 13 and playSnapshotDrift
+8) nothing a page renders is thrown away for being long
+  FAIL: /whats-new drops the entry "Club Manager: your own transfers, and any club's fixtures.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Soccer Career: offers that wait for you, and a better phone.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Club Manager: players other clubs buy stay bought.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "NBA, NFL, MLB and NHL My Career: retire from coaching, and take back a skip.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Club Manager: retire when you are ready, and see your highest scoring game.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Club Manager: No sacking.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops 8 entries in total
+   415 of 423 changelog entries reach the shipped page
+9) no link is written into a snapshot twice
+   the consumed-anchor guard is in place; 1 block-then-same-link adjacencies (reported, not asserted on: honest repeat linking looks identical)
+10) the snapshot styling does not outlive the snapshot
+   170 snapshots, 0 leaking padding onto the live app, 0 missing the wrapper
+11) exactly one canonical per shipped document
+   171 documents, 0 with more than one canonical, worst 1
+12) no shipped page has a running clock frozen into it
+   171 documents, 0 carrying a frozen clock
+13) everything the ticker computes declares itself volatile
+   no push list, 2 computed elements checked for data-no-prerender, LIVE chip present
+   171 documents, 0 carrying a frozen score card
+14) no page in the sitemap ships a noindex
+   171 sitemap documents, 0 carrying a noindex
+   the snapshot write holds: it replaces, it rides out a transient hold, it throws rather than
+   damage the old page, it does not retry a genuine error, and it leaves no litter
+16) no random pick seeds React state directly
+   2155 source files scanned, 23 raw random initialiser(s), 22 file(s) on the frozen baseline, 0 new
+17) no saved page opens on a frozen loading line
+   171 documents read, 0 waiting lines found
+
+simPrerender: 7 failures
+1) every snapshot in public/ is hash free
+   161 snapshots, 161 referencing the stable boot script, 0 hashed paths
+   11 retired signposts, none booting the app
+2) the app boots on a snapshot served against a build it never saw
+   /soccer-career   snapshot 17786 chars, booted yes, 389 nodes / 231 styled, 1 stylesheet(s), 0 failed requests
+   /records         snapshot 13225 chars, booted yes, 1091 nodes / 974 styled, 1 stylesheet(s), 0 failed requests
+   /whats-new       snapshot 317419 chars, booted yes, 1232 nodes / 735 styled, 1 stylesheet(s), 0 failed requests
+4) every retired address lands on its destination in a real browser
+   /deal-or-no-deal       -> /squad-deal          3 navigation(s), 227 styled nodes
+   /football-draft        -> /                    3 navigation(s), 2964 styled nodes
+   /grade-transfer        -> /                    3 navigation(s), 2964 styled nodes
+   /guess-soccer-club     -> /                    3 navigation(s), 2964 styled nodes
+   /guess-transfer-value  -> /                    3 navigation(s), 2964 styled nodes
+   /jeopardy              -> /quiz-board          3 navigation(s), 140 styled nodes
+   /overrated-underrated  -> /face-off            3 navigation(s), 219 styled nodes
+   /perfect-lineup        -> /                    3 navigation(s), 2964 styled nodes
+   /tier-list             -> /                    3 navigation(s), 2964 styled nodes
+   /world-cup             -> /                    3 navigation(s), 2964 styled nodes
+   /world-cup-predictor   -> /world-cup-bracket   3 navigation(s), 950 styled nodes
+
+simPrerenderBoot: green. The snapshots read like documents and still turn into the app.
+0) 11 retired routes in App.tsx, 181 live routes
+1) coverage
+   11 of 11 retired routes have their own document
+2) every stub names one destination, and it is a live page
+   refresh, canonical and visible link agree on all 11
+3) no retired route serves the home page document
+   11 documents: 0 identical to the shell, 0 sharing its title, 0 with no canonical, 0 with no declared redirect
+4) not in the sitemap, not linked from anywhere shipped
+   sitemap has 171 URLs and none of the 11 retired routes
+   0 internal links point at a retired route
+5) stubs are current with App.tsx
+   11 of 11 current
+
+simRetiredRoutes: all green
+1) every shipped page carries structured data, and it parses
+   171 submitted pages, 0 with none, 0 unparseable, 0 with no file
+2) no page claims to be something it is not
+   171 pages typed correctly, 0 wrong
+3) the markup a game page generates actually ships
+   133 game pages, 0 without FAQ markup, 0 without breadcrumbs, 0 with a broken trail
+3b) a game in a sport with a hub ships its trail through that hub
+   94 game pages trail through their hub, 39 have no hub and keep two steps, 0 wrong
+4) every shipped page says who this site is
+   171 pages, 0 without WebSite, 0 without Organization, 0 without WebApplication, 0 unlinked; home page ships 3 objects
+4b) the template block and the library have not drifted apart
+   template declares WebSite and Organization and WebApplication; the library references /#org, /#website, /#webapp
+5) the classification table has not fallen behind the route list
+   37 routes classified by hand, 133 by the registry, 0 unclassified, 0 stale
+
+simSchema: green. Every page says what it is, and everything it generates reaches the file a crawler reads.
+1) Sanity: the three sources parsed
+   171 sitemap URLs, 181 live routes, 11 redirect routes, 133 registry games
+2) No submitted URL is a redirect
+   clean, the Search Console failure cannot recur from here
+3) Every registry game is submitted
+   all 133 games present, including the newest
+4) Every submitted URL has a real route
+   no orphans submitted
+5) every lastmod is a claim the shipped files back up
+   171 rows, 171 ledger entries, 0 unbacked, 0 disagreeing, 0 pointing at a version that has been rewritten, 0 in the future
+
+simSitemap: green. Google only ever hears about real pages.
+1) the committed snapshots stay hash free
+   172 committed documents, 0 carrying a hashed path
+2) every shipped page carries THIS build's assets
+   180 of 180 shipped pages carry their own tags, 0 pointing at a file this build did not make
+3) the injected stylesheet does not block the paint
+   0 render blocking stylesheet injections
+4) the boot script survives as the fallback
+   180 of 180 still reference /prerender-boot.js
+5) the retired signposts are left alone
+   11 signposts, 0 touched
+6) the calm boot: the mark on a cover before React, the whole page without JS
+   180 of 180 shipped pages carry the cover, and the home template carries its own
+
+simSnapshotAssets: green. Every page knows where its own code is, and finding out costs nobody a round trip.
+STEP 11/13 Every rebuilt-site reader: exit 1 (29s)
+::: STEP 12/13 Source and package preservation (after an earlier failure)
+STEP 12/13 Source and package preservation: exit 0 (0s)
+STEP 13/13 uses actions/upload-artifact@v4: skipped (uses)
+wfrun wf284x.yml: 9 steps ran, 1 failed: Every rebuilt-site reader

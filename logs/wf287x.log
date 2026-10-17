@@ -1,0 +1,280 @@
+base 305693f5ddfff621f2ee74c5cd936cdb7573fd12
+wfrun: HEAD moved from the request commit 6bf175d7e21a to the branch head it checks, c2f8d746e616
+wfrun: running in a fresh worktree of c2f8d746e616 at /home/runner/work/_temp/t-wf287x/wfrun-wt-IbYRjM
+wfrun .github/workflows/manager-handover-desk.yml job verify at c2f8d746e6164c45b7b6d9cf7a31124c951a7fd3; sets: CM_HANDOVER_BASE=305693f5ddfff621f2ee74c5cd936cdb7573fd12
+STEP 1/13 uses actions/checkout@v4: skipped (uses)
+STEP 2/13 uses actions/setup-node@v4: skipped (uses)
+STEP 3/13 uses actions/setup-python@v5: skipped (uses)
+::: STEP 4/13 Bind incoming application, frozen method and full source archive
+npm warn deprecated abab@2.0.6: Use your platform's native atob() and btoa() methods instead
+npm warn deprecated whatwg-encoding@2.0.0: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+npm warn deprecated domexception@4.0.0: Use your platform's native DOMException instead
+npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+
+added 521 packages, and audited 522 packages in 6s
+
+101 packages are looking for funding
+  run `npm fund` for details
+
+23 vulnerabilities (5 moderate, 16 high, 2 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+npm warn install-scripts 3 packages have install scripts not yet covered by allowScripts:
+npm warn install-scripts   @swc/core@1.13.2 (postinstall: node postinstall.js)
+npm warn install-scripts   esbuild@0.21.5 (postinstall: node install.js)
+npm warn install-scripts   esbuild@0.25.0 (postinstall: node install.js)
+npm warn install-scripts
+npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+STEP 4/13 Bind incoming application, frozen method and full source archive: exit 0 (11s)
+::: STEP 5/13 Remote build reader tools
+
+added 2 packages in 495ms
+Installing dependencies...
+Switching to root user to install dependencies...
+Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+Hit:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease
+Hit:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease
+Hit:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+libcairo2 is already the newest version (1.18.0-3build1).
+libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+libgbm1 is already the newest version (25.2.8-0ubuntu0.24.04.4).
+libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.9).
+libnspr4 is already the newest version (2:4.35-1.1build1).
+libnss3 is already the newest version (2:3.98-1ubuntu0.2).
+libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+libx11-6 is already the newest version (2:1.8.7-1ubuntu0.1).
+libxcb1 is already the newest version (1.15-1ubuntu2).
+libxcomposite1 is already the newest version (1:0.4.5-1build3).
+libxdamage1 is already the newest version (1:1.1.6-1build1).
+libxext6 is already the newest version (2:1.3.4-1build2).
+libxfixes3 is already the newest version (1:6.0.0-2build1).
+libxkbcommon0 is already the newest version (1.6.0-1build1).
+libxrandr2 is already the newest version (2:1.5.2-2build1).
+xvfb is already the newest version (2:21.1.12-1ubuntu1.8).
+fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+fonts-unifont is already the newest version (1:15.1.01-1build1).
+libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+libfreetype6 is already the newest version (2.13.2+dfsg-1ubuntu0.2).
+xfonts-cyrillic is already the newest version (1:1.0.5+nmu1).
+xfonts-scalable is already the newest version (1:1.0.3-1.3).
+fonts-liberation is already the newest version (1:2.1.5-3).
+fonts-ipafont-gothic is already the newest version (00303-21ubuntu1).
+fonts-wqy-zenhei is already the newest version (0.9.45-8).
+fonts-tlwg-loma-otf is already the newest version (1:0.7.3-1).
+fonts-freefont-ttf is already the newest version (20211204+svn4273-2).
+0 upgraded, 0 newly installed, 0 to remove and 44 not upgraded.
+Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: fonttools in /home/runner/.local/lib/python3.12/site-packages (4.67.0)
+Requirement already satisfied: pillow in /home/runner/.local/lib/python3.12/site-packages (13.0.0)
+STEP 5/13 Remote build reader tools: exit 0 (3s)
+::: STEP 6/13 Actual application type gate
+STEP 6/13 Actual application type gate: exit 0 (51s)
+::: STEP 7/13 Five exact public handover arms and complete state, RNG and size comparisons
+normal: 10 passed, 0 exact expected faults; full state and draw holds.
+original-calendar: 6 passed, 4 exact expected faults; full state and draw holds.
+missing-picker: 8 passed, 2 exact expected faults; full state and draw holds.
+missing-job: 8 passed, 2 exact expected faults; full state and draw holds.
+restored: 10 passed, 0 exact expected faults; full state and draw holds.
+simCmHandoverDesk: five qualified arms, frozen ten-case method, both isolated missing-field controls, complete original calendar and full restoration.
+STEP 7/13 Five exact public handover arms and complete state, RNG and size comparisons: exit 0 (22s)
+::: STEP 8/13 Original 41 desk, depth and deadline regressions
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/_temp/t-wf287x/wfrun-wt-IbYRjM[39m
+
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline missing: saved board reply closes after actual kickoff[32m 97[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline missing: saved press reply closes after actual kickoff[32m 57[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline missing: saved morale reply closes after actual kickoff[32m 56[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline missing: saved budget reply closes after actual kickoff[32m 52[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline missing: saved decline reply closes after actual kickoff[32m 50[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: board reply keeps its exact before-kickoff effect[32m 36[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: press reply keeps its exact before-kickoff effect[32m 33[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: morale reply keeps its exact before-kickoff effect[32m 29[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: budget reply keeps its exact before-kickoff effect[32m 29[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: decline reply keeps its exact before-kickoff effect[32m 30[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: live appeal keeps its original expired outcome[32m 44[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: live acceptBan keeps its original accepted outcome[32m 44[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: before-kickoff appeal keeps its deterministic verdict[32m 27[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: before-kickoff acceptBan keeps its original accepted outcome[32m 29[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: missing card returns the same object[32m 26[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: resolved card returns the same object[32m 30[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: invalid before-kickoff choice returns the same object[32m 14[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: invalid live choice returns the same object[32m 26[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: real whistle expires the unanswered card without a desk benefit[32m 171[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: a previously answered card stays consumed across actual kickoff and reloads[32m 39[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDepth.test.ts[2m > [22mClub Manager recorded-context decision depth[2m > [22mpreserves the seven existing card identities and desk limits[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDepth.test.ts[2m > [22mClub Manager recorded-context decision depth[2m > [22mpoorRun: recorded eligibility, exact options, saved effects and one answer[32m 20[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDepth.test.ts[2m > [22mClub Manager recorded-context decision depth[2m > [22mboardPressure: recorded eligibility, exact options, saved effects and one answer[32m 19[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDepth.test.ts[2m > [22mClub Manager recorded-context decision depth[2m > [22mpressPressure: recorded eligibility, exact options, saved effects and one answer[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDepth.test.ts[2m > [22mClub Manager recorded-context decision depth[2m > [22minjurySupport: recorded eligibility, exact options, saved effects and one answer[32m 9[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDepth.test.ts[2m > [22mClub Manager recorded-context decision depth[2m > [22macademyStepUp: recorded eligibility, exact options, saved effects and one answer[32m 11[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDepth.test.ts[2m > [22mClub Manager recorded-context decision depth[2m > [22mminutesCheck: recorded eligibility, exact options, saved effects and one answer[32m 12[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 red card appeals[2m > [22mstates the odds by tier and walks every step of the ladder[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 red card appeals[2m > [22moffers nothing for a man with no ban[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 red card appeals[2m > [22mmoves suspendedMatches exactly as the card says, and nothing else[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 red card appeals[2m > [22mrefuses an appeal once the ban has started being served[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 red card appeals[2m > [22mcloses the appeal window once the next match has kicked off[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 red card appeals[2m > [22mcloses an unanswered appeal at the next match with the ban untouched[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 decisions deck[2m > [22mmoves only the number each answer names, by exactly its amount[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 decisions deck[2m > [22mnever draws from Math.random[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 decisions deck[2m > [22mreads a damaged block as empty and leaves the rest of the save alone[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 decisions deck[2m > [22mshares the inbox answer path[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 the desk on the inbox screen[2m > [22mshows an appeal with its odds and answers it through onAnswer[32m 56[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 the desk on the inbox screen[2m > [22mshows the answered line once the card is resolved[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 the desk on the inbox screen[2m > [22mkeeps closed cards behind a toggle while a card is open[32m 18[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 the desk on the inbox screen[2m > [22mrenders nothing with an empty inbox and an empty desk[32m 1[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m41 passed[39m[22m[90m (41)[39m
+[2m   Start at [22m 03:02:13
+[2m   Duration [22m 4.79s[2m (transform 1.19s, setup 100ms, collect 1.82s, tests 1.10s, environment 647ms, prepare 126ms)[22m
+
+JSON report written to /home/runner/work/_temp/t-wf287x/wfrun-wt-IbYRjM/manager-handover-artifacts/original-tests.json
+STEP 8/13 Original 41 desk, depth and deadline regressions: exit 0 (6s)
+::: STEP 9/13 Existing actual takeover, calendar and application simulations
+
+9 takeovers across 3 clubs and 3 entry points.
+1) The run-in really happened
+   every entry point deeper than the last, real matches and real points behind each
+2) The whole world moved, not just my club
+   every other league is as far through its own season as I am through mine
+3) The handover is clean: nothing of the last manager follows you in
+   9 handovers, all clean
+4) It terminates, and it reaches where it said it would
+   slowest 517ms (Real Madrid 2026-27 runIn), every run reached its target with a season left to play
+5) The save and the copy both say the run-in was simulated
+   the save records it, the dugout says simulated, the hub keeps saying it
+
+simMidSeasonStart: all green
+   NEGATIVE CONTROL ON: the handover tidy-up skipped, section 3 must go red
+
+9 takeovers across 3 clubs and 3 entry points.
+1) The run-in really happened
+   every entry point deeper than the last, real matches and real points behind each
+2) The whole world moved, not just my club
+   every other league is as far through its own season as I am through mine
+3) The handover is clean: nothing of the last manager follows you in
+  FAIL: Leicester 2015-16 runIn: the career arrives already sacked
+4) It terminates, and it reaches where it said it would
+   slowest 535ms (Real Madrid 2026-27 runIn), every run reached its target with a season left to play
+5) The save and the copy both say the run-in was simulated
+   the save records it, the dugout says simulated, the hub keeps saying it
+
+   CONTROL FIRED: the untidied handover was caught
+   CONTROL FIRED: the untidied handover was caught
+1) Sim to a day: the week pointer lands on the target, never past it, every league round on the way in the log
+   65 taps over 11 saves: 53 landed on the day, 12 halted (window 11, season over 0, sacked 1, approach 0)
+2) Fast forwards: each button equals the tap on its day, save for save, and Next match equals the engine's own single step
+   118 button/tap pairs, 182 save compares with id serials masked
+3) Windows: the grid's deadline day is the entry the engine shut the market on, January is drawn in January, and both sit near the real dates
+   Everton now summer strip: "The summer window is open. Deadline day is Sat 29 Aug, your 4th match of the season."
+   Everton now (20 clubs): summer deadline 2026-08-29 (real 2026-09-01), January opens 2027-01-02 (real 2027-01-01), deadline 2027-01-23 (real 2027-02-01)
+   Arsenal now (20 clubs): summer deadline 2026-08-26 (real 2026-09-01), January opens 2027-01-02 (real 2027-01-01), deadline 2027-01-23 (real 2027-02-01)
+   Augsburg now (18 clubs): summer deadline 2026-08-29 (real 2026-09-01), January opens 2027-01-02 (real 2027-01-01), deadline 2027-01-23 (real 2027-02-01)
+   Norwich City now (24 clubs): summer deadline 2026-08-29 (real 2026-09-01), January opens 2027-01-16 (real 2027-01-01), deadline 2027-02-06 (real 2027-02-01)
+   Barcelona era2015 (20 clubs): summer deadline 2015-08-26 (real 2015-09-01), January opens 2016-01-02 (real 2016-01-01), deadline 2016-01-16 (real 2016-02-01)
+   Juventus era2015 (20 clubs): summer deadline 2015-08-26 (real 2015-09-01), January opens 2016-01-02 (real 2016-01-01), deadline 2016-01-16 (real 2016-02-01)
+   Barcelona era2010 (20 clubs): summer deadline 2010-09-01 (real 2010-08-31), January opens 2011-01-01 (real 2011-01-01), deadline 2011-01-22 (real 2011-01-31)
+   Chelsea era2005 (20 clubs): summer deadline 2005-08-31 (real 2005-08-31), January opens 2006-01-07 (real 2006-01-01), deadline 2006-01-21 (real 2006-01-31)
+   Liverpool era2020 summer strip: "The summer window is open. Deadline day is Sat 3 Oct, your 7th match of the season."
+   Liverpool era2020 January strip: "The January window is open. Deadline day is Sat 23 Jan, your 3rd match after it opens."
+   Liverpool era2020 (20 clubs): summer deadline 2020-10-03 (real 2020-10-05), January opens 2021-01-02 (real 2021-01-01), deadline 2021-01-23 (real 2021-02-01)
+   Bayern Munich era2020 summer strip: "The summer window is open. Deadline day is Sat 3 Oct, your 5th match of the season."
+   Bayern Munich era2020 January strip: "The January window is open. Deadline day is Sat 23 Jan, your 3rd match after it opens."
+   Bayern Munich era2020 (18 clubs): summer deadline 2020-10-03 (real 2020-10-05), January opens 2021-01-09 (real 2021-01-01), deadline 2021-01-23 (real 2021-02-01)
+   Lille era2020 summer strip: "The summer window is open. Deadline day is Sat 3 Oct, your 9th match of the season."
+   Lille era2020 January strip: "The January window is open. Deadline day is Sat 16 Jan, your 3rd match after it opens."
+   Lille era2020 (20 clubs): summer deadline 2020-10-03 (real 2020-10-05), January opens 2021-01-02 (real 2021-01-01), deadline 2021-01-16 (real 2021-02-01)
+   22 of 22 deadline days matched the engine (6 of 11 August projections of January held); gaps to the real windows: summer up to 6 days, January open up to 8 (Championship 15), January deadline up to 16
+   22 window strips checked against the engine's deadline day and match count
+   1 long league save(s) checked for opening early enough in January: Norwich City now 2027-01-16
+4) Match days: the opponent and venue are the engine's own, rounds ahead are maybes, Europe is absent when I am not in it, played days carry the log
+   411 match days named, 0 draws to come, 87 rounds ahead drawn as maybes, 66 played days carry the log, 29 entries I am out of stay off the grid
+5) Grid: seven columns, at most six rows, every day of the season once, today once
+   10 months drawn, today once, no month over 42 cells
+6) Late season: 2020-21 opens on each league's real Saturday, crams rounds into midweek rather than drifting, ends by the real final weekend, and no other season moves a day
+   Liverpool (premier2020): opens 2020-09-12, 3 league rounds in midweek (2020-09-16, 2020-09-30, 2020-12-30), January window 2021-01-02, last league round 2021-05-15 (7 days before the real final weekend), summer window 7 matches to 2020-10-03 (four would shut it on 2020-09-23, 12 days early)
+   Barcelona (laliga2020): opens 2020-09-12, 3 league rounds in midweek (2020-09-16, 2020-09-30, 2020-12-30), January window 2021-01-02, last league round 2021-05-15 (7 days before the real final weekend), summer window 7 matches to 2020-10-03 (four would shut it on 2020-09-23, 12 days early)
+   Juventus (seriea2020): opens 2020-09-19, 3 league rounds in midweek (2020-09-23, 2020-10-07, 2021-01-06), January window 2021-01-09, last league round 2021-05-22 (0 days before the real final weekend), summer window 5 matches to 2020-10-03 (four would shut it on 2020-09-30, 5 days early)
+   Bayern Munich (bundesliga2020): opens 2020-09-19, 2 league rounds in midweek (2020-09-23, 2021-01-06), January window 2021-01-09, last league round 2021-05-08 (14 days before the real final weekend), summer window 5 matches to 2020-10-03 (four would shut it on 2020-09-30, 5 days early)
+   Lille (ligue12020): opens 2020-08-22, 0 league rounds in midweek (none), January window 2021-01-02, last league round 2021-05-15 (7 days before the real final weekend), summer window 9 matches to 2020-10-03 (four would shut it on 2020-09-09, 26 days early)
+   10 seasons outside 2020-21 checked: every one draws the plain rule's dates and a four match window
+   the plain rule over 4 calendar shapes and 28 world years: digest 61af451194fa4e13 (pinned 61af451194fa4e13, taken before this round)
+   joining Arsenal two entries in: in 2020-21 the summer window runs 7 matches (5 left), in 2021-22 4 (2 left, window summer)
+   a pre-round 2020-21 save migrated at week 9: 1 break(s) already played stay behind it, 4 of 4 played once each by the end, its four match window shut on entry 3 and the grid agrees
+simClubManagerCalendar: all green
+0) 24 base careers played to about week ten
+   24 bases, tiers 1, 2, 3, 4, weeks 10 to 10, 0 live approach(es) turned down first
+1) Acceptance against standing and tier gap over 480 applications
+   469 answered (11 sacked while waiting): 65.2 percent yes; r vs standing 0.406, r vs tiers up -0.195 (reported, the paired gap below is the gate); standing 34 to 100; off schedule 0, quoted 0, no message 0, wrong options 0
+   yes by tiers applied up: 0: 228 of 320, 1: 57 of 100, 2: 16 of 38, 3: 5 of 11
+   paired tier check: 213 pairs (7 lost to a sacking), yes at my tier 70.0 percent, yes above it 43.2 percent, gap 26.8 points; pairs where only the bigger club said yes 0
+   paired trouble check: 234 pairs from 24 bases (6 lost to a sacking), odds where their season is fine 67.6 percent, where it is going badly 73.2 percent, gap 5.6 points (trouble 0.0 vs 11.2 when sent); pairs where the settled club's odds were higher 12
+   ok  acceptance rises with standing and with the trouble the club is in, falls with the tiers applied up, every answer on its fixed match day, every answer in the inbox from the club's board
+2) One at a time, a season long cooldown, three a season
+   ok  one open application at a time, a decline shuts the door through next season and no further (by hand and through two real rollovers), three a season and the count resets
+3) A yes answered with the summer moves the manager at the rollover, once
+   ok  4 booked summer moves fired at the rollover, over a different tapped offer, once each, with the board hit, the old board's letter and the interim recorded
+4) A yes answered with now moves the manager that week
+   ok  4 managers joined the club that said yes that week, record and honours intact, interim named, and played on
+5) A save from before the round opens and plays with nothing in flight
+   ok  an old save opens with nothing in flight, can apply, plays on without the field, and an application in flight survives a save and load
+6) An approach and an application never overlap
+   approaches drawn over 209, 208 and 207 matches: free 15, application out 0, move booked 0
+   ok  no approach while an application is out or a move is booked (15 drawn in the free arm), no handshake beside one, and no application beside a live approach
+7) Late in the season, at its end, and after the sack
+   sacked at Brentford in week 17 with a move to Manchester United booked; the other job taken is Norwich City (a real call)
+   ok  an application goes out with 5 league games left and is answered in time, not with fewer; a waiting yes leads the summary; after the sack the job taken is the job you get
+
+simCmApplications: green. The answer is earned, the limits hold, a summer move fires once, joining now moves the manager that week, and old saves load.
+STEP 9/13 Existing actual takeover, calendar and application simulations: exit 0 (102s)
+::: STEP 10/13 Actual production build
+
+> vite_react_shadcn_ts@0.0.0 build
+> vite build
+
+[36mvite v5.4.21 [32mbuilding for production...[36m[39m
+transforming...
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✓[39m 2593 modules transformed.
+[dukb] no dist/index.html, snapshots stay on the boot script
+[31mx[39m Build failed in 11.72s
+[31merror during build:
+[31m[vite:load-fallback] Could not load /home/runner/work/_temp/t-wf287x/wfrun-wt-IbYRjM/src/lib/clubManagerJobHunt (imported by src/components/club-manager/ClubManagerCareerPanel.tsx): ENOENT: no such file or directory, open '/home/runner/work/_temp/t-wf287x/wfrun-wt-IbYRjM/src/lib/clubManagerJobHunt'[31m
+    at async open (node:internal/fs/promises:1345:25)
+    at async Object.readFile (node:internal/fs/promises:1996:14)
+    at async Object.load (file:///home/runner/work/_temp/t-wf287x/wfrun-wt-IbYRjM/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:65357:25)
+    at async PluginDriver.hookFirstAndGetPlugin (file:///home/runner/work/_temp/t-wf287x/wfrun-wt-IbYRjM/node_modules/rollup/dist/es/shared/node-entry.js:22798:28)
+    at async file:///home/runner/work/_temp/t-wf287x/wfrun-wt-IbYRjM/node_modules/rollup/dist/es/shared/node-entry.js:21784:33
+    at async Queue.work (file:///home/runner/work/_temp/t-wf287x/wfrun-wt-IbYRjM/node_modules/rollup/dist/es/shared/node-entry.js:23026:32)[39m
+STEP 10/13 Actual production build: exit 1 (13s)
+::: STEP 11/13 All fifteen build and snapshot readers (after an earlier failure)
+STEP 11/13 All fifteen build and snapshot readers: exit 1 (60s)
+::: STEP 12/13 Hold tracked source, installed packages, reader tools and offline transport (after an earlier failure)
+sha256sum: src/lib/clubManagerJobHunt.ts: No such file or directory
+sha256sum: WARNING: 1 listed file could not be read
+STEP 12/13 Hold tracked source, installed packages, reader tools and offline transport: exit 1 (0s)
+STEP 13/13 uses actions/upload-artifact@v4: skipped (uses)
+wfrun manager-handover-desk.yml: 9 steps ran, 3 failed: Actual production build | All fifteen build and snapshot readers | Hold tracked source, installed packages, reader tools and offline transport
