@@ -1,0 +1,44 @@
+treeWithoutMerge: 0e221ee55a07e37d04d394524cf93e6a5a21a3cc, 79a78f47 without f1e54e17; conflicts kept from 79a78f47: none
+treeWithoutMerge: a1d2c6429dac3f11a31041e455d9dceaa65ab8bf, 0e221ee5 without 54100f6e; conflicts kept from 0e221ee5: src/pages/WhatsNew.tsx
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   bridge "the window records nothing": 1
+   bridge "recordAiDeals records nothing": 1
+   bridge "the join keeps the departed ledger": 1
+   bridge "the join keeps the run in's gone names and log": 1
+   bridge "a rival closes whatever the ledger says": 1
+   control seedless: 1
+   control norecord: 1
+   control norecord: 1
+   control noflush: 1
+   control nojanuary: 1
+   control nosummer: 1
+   control joinledger: 1
+   control nolock: 1
+   control nolist: 1
+   control norepair: 1
+   control repairthrows: 1
+   control nohijack: 1
+   control nowalk: 1
+   control noguard: 1
+   control nocarry: 1
+   control seasonone: 1
+   control dropbase: 1
+   control noskip: 1
+   control drawshift: 1
+   control slow: 1
+   control seedclose: 1
+   control seedcarry: 1
+   control goneshown: 1
+   control edit made 1 time(s): seedless: if (!livingWorldOf(state)) return state;
+6) legacy: unseeded careers, BASE against the head, every saved string and Math.random draw
+  FAIL section 6: Real Madrid (now, seed 0, deals): the head's career wrote a world ledger with no seed before its first summer
+  FAIL section 6: Real Madrid (now, seed 0, deals): saved string 2 of 5 (before the first summer) differs from BASE's
+  FAIL section 6: Real Madrid (now, seed 0, deals): the state before the first summer differs from BASE's
+  FAIL section 6: Real Madrid (now, seed 1, deals): the head's career wrote a world ledger with no seed before its first summer
+  FAIL section 6: Real Madrid (now, seed 1, deals): saved string 2 of 5 (before the first summer) differs from BASE's
+  FAIL section 6: Real Madrid (now, seed 1, deals): the state before the first summer differs from BASE's
+  FAIL section 6: Real Madrid (now, seed 2, deals): the head's career wrote a world ledger with no seed before its first summer
+  FAIL section 6: Real Madrid (now, seed 2, deals): saved string 2 of 5 (before the first summer) differs from BASE's
+   135 careers, 660 saves, 8054758 draws and 120 deals of mine on the head; 135 adopted at their first summer (Round 1508)
+  section 6: 127 more failures not shown
+simCmWorldMoves: control seedless FIRED: section 6 red (135)

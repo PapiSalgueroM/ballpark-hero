@@ -1,0 +1,17 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerAdoption.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 688[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1508: an old career adopted into the living world[2m > [22mwaits for an era whose squads have not arrived, and adopts at the first summer that has them [33m 506[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldMoves.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 794[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldRoster.test.ts [2m([22m[2m96 tests[22m[2m)[22m[33m 4012[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mkeeps the fresh world seed and complete constructor draw vector stable across other careers and clocks [33m 603[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mpreserves an already higher seeded rating without raising the inherited growth ceiling [33m 352[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mbuys, joins another job, saves, reloads and rejoins the buyer without seller resurrection [33m 729[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mkeeps the permanent buyer and seller consistent after actual summer moves and aging [33m 418[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m106 passed[39m[22m[90m (106)[39m
+[2m   Start at [22m 08:34:46
+[2m   Duration [22m 8.79s[2m (transform 3.41s, setup 404ms, collect 9.64s, tests 5.49s, environment 1.99s, prepare 870ms)[22m
+

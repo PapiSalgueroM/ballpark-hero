@@ -1,0 +1,31 @@
+treeWithoutMerge: 8243835092856736ab23b6bad6ef02cb350b40bf, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+  now: Brentford, Cardiff City, and the thinnest roster of the era AC Horsens (0 projected men)
+  era2020: Chelsea, Real Betis, and the thinnest roster of the era Crotone (3 projected men)
+  era2015: Chelsea, Eibar, and the thinnest roster of the era GFC Ajaccio (2 projected men)
+  era2010: Blackburn Rovers, Espanyol, and the thinnest roster of the era Cesena (3 projected men)
+  era2005: Blackburn Rovers, Celta Vigo, and the thinnest roster of the era Cádiz (1 projected men)
+deals: 49 saves, 2655 steps compared (up to the rollover), 0 red, 76s
+  deals on the base engine: buy done 49, buy-2 done 49, loan-option done 49, release done 31, release refused 18, release-2 done 31, release-2 refused 18, sale done 49, sale-2 done 49, swap done 49
+  after the rollover (Round 1508, this tree only): 49 adopted careers, 686 states checked, 3178 deal lines between two other clubs placed, 0 owned records held at one club, 0 joined rows on the screen; deals of mine: 31 releases, 49 buys, 49 sales; red by check: {"adopted":686,"moved":3178,"mine":1858}
+  FAIL after the rollover: deals Brentford (now) (deals, seed 6221057): 138 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Brentford (now) (deals, seed 6221058): 138 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Brentford (now) (deals, seed 6221059): 138 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Cardiff City (now) (deals, seed 6221057): 116 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Cardiff City (now) (deals, seed 6221058): 130 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Cardiff City (now) (deals, seed 6221059): 130 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals AC Horsens (now) (deals, seed 6221057): 116 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals AC Horsens (now) (deals, seed 6221058): 102 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals AC Horsens (now) (deals, seed 6221059): 130 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Chelsea (era2020) (deals, seed 6221057): 138 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Chelsea (era2020) (deals, seed 6221058): 110 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Chelsea (era2020) (deals, seed 6221059): 96 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Real Betis (era2020) (deals, seed 6221057): 96 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Real Betis (era2020) (deals, seed 6221058): 96 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Real Betis (era2020) (deals, seed 6221059): 138 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Crotone (era2020) (deals, seed 6221057): 81 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Crotone (era2020) (deals, seed 6221058): 123 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Crotone (era2020) (deals, seed 6221059): 81 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Chelsea (era2015) (deals, seed 6221057): 145 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  FAIL after the rollover: deals Chelsea (era2015) (deals, seed 6221058): 152 red after the rollover, first [adopted] at rollover: the career holds no readable ledger
+  ... and 29 more
+simCmUnseededWorld: CONTROL never FIRED: never adopted, the moved check went red 3178 times after the rollover while the comparison before it stayed green

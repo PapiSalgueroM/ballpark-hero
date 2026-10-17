@@ -1,0 +1,31 @@
+treeWithoutMerge: 3b6df98b5f8e985b228734024b0e6aa1f414a87f, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+  now: Brentford, Cardiff City, and the thinnest roster of the era AC Horsens (0 projected men)
+  era2020: Chelsea, Real Betis, and the thinnest roster of the era Crotone (3 projected men)
+  era2015: Chelsea, Eibar, and the thinnest roster of the era GFC Ajaccio (2 projected men)
+  era2010: Blackburn Rovers, Espanyol, and the thinnest roster of the era Cesena (3 projected men)
+  era2005: Blackburn Rovers, Celta Vigo, and the thinnest roster of the era Cádiz (1 projected men)
+deals: 49 saves, 2655 steps compared (up to the rollover), 0 red, 92s
+  deals on the base engine: buy done 49, buy-2 done 49, loan-option done 49, release done 31, release refused 18, release-2 done 31, release-2 refused 18, sale done 49, sale-2 done 49, swap done 49
+  after the rollover (Round 1508, this tree only): 49 adopted careers, 686 states checked, 3178 deal lines between two other clubs placed, 4018 owned records held at one club, 3297 joined rows on the screen; deals of mine: 31 releases, 49 buys, 49 sales; red by check: {"mine":1232,"moved":224}
+  FAIL after the rollover: deals Brentford (now) (deals, seed 6221057): 42 red after the rollover, first [mine] at rollover: Abdoul Koné of my squad is also listed at RB Leipzig
+  FAIL after the rollover: deals Brentford (now) (deals, seed 6221058): 42 red after the rollover, first [mine] at rollover: Abdoul Koné of my squad is also listed at RB Leipzig
+  FAIL after the rollover: deals Brentford (now) (deals, seed 6221059): 42 red after the rollover, first [mine] at rollover: Abdoul Koné of my squad is also listed at RB Leipzig
+  FAIL after the rollover: deals Cardiff City (now) (deals, seed 6221057): 28 red after the rollover, first [mine] at rollover: Jude Bellingham of my squad is also listed at Real Madrid
+  FAIL after the rollover: deals Cardiff City (now) (deals, seed 6221058): 28 red after the rollover, first [mine] at rollover: Jude Bellingham of my squad is also listed at Real Madrid
+  FAIL after the rollover: deals Cardiff City (now) (deals, seed 6221059): 28 red after the rollover, first [mine] at rollover: Jude Bellingham of my squad is also listed at Real Madrid
+  FAIL after the rollover: deals AC Horsens (now) (deals, seed 6221057): 28 red after the rollover, first [mine] at rollover: Michael Olise of my squad is also listed at Bayern Munich
+  FAIL after the rollover: deals AC Horsens (now) (deals, seed 6221058): 28 red after the rollover, first [mine] at rollover: Jude Bellingham of my squad is also listed at Real Madrid
+  FAIL after the rollover: deals AC Horsens (now) (deals, seed 6221059): 28 red after the rollover, first [mine] at rollover: Jude Bellingham of my squad is also listed at Real Madrid
+  FAIL after the rollover: deals Chelsea (era2020) (deals, seed 6221057): 28 red after the rollover, first [mine] at rollover: Aarón Martín of my squad is also listed at Mainz
+  FAIL after the rollover: deals Chelsea (era2020) (deals, seed 6221058): 28 red after the rollover, first [mine] at rollover: Aarón Martín of my squad is also listed at Mainz
+  FAIL after the rollover: deals Chelsea (era2020) (deals, seed 6221059): 28 red after the rollover, first [mine] at rollover: Aarón Martín of my squad is also listed at Mainz
+  FAIL after the rollover: deals Real Betis (era2020) (deals, seed 6221057): 28 red after the rollover, first [mine] at rollover: Aarón Martín of my squad is also listed at Mainz
+  FAIL after the rollover: deals Real Betis (era2020) (deals, seed 6221058): 28 red after the rollover, first [mine] at rollover: Aarón Martín of my squad is also listed at Mainz
+  FAIL after the rollover: deals Real Betis (era2020) (deals, seed 6221059): 28 red after the rollover, first [mine] at rollover: Aarón Martín of my squad is also listed at Mainz
+  FAIL after the rollover: deals Crotone (era2020) (deals, seed 6221057): 14 red after the rollover, first [mine] at rollover: Kevin De Bruyne of my squad is also listed at Manchester City
+  FAIL after the rollover: deals Crotone (era2020) (deals, seed 6221058): 14 red after the rollover, first [mine] at rollover: Kevin De Bruyne of my squad is also listed at Manchester City
+  FAIL after the rollover: deals Crotone (era2020) (deals, seed 6221059): 14 red after the rollover, first [mine] at rollover: Kevin De Bruyne of my squad is also listed at Manchester City
+  FAIL after the rollover: deals Chelsea (era2015) (deals, seed 6221057): 42 red after the rollover, first [mine] at rollover: Adem Ljajic of my squad is also listed at Inter Milan
+  FAIL after the rollover: deals Chelsea (era2015) (deals, seed 6221058): 42 red after the rollover, first [mine] at rollover: Adem Ljajic of my squad is also listed at Inter Milan
+  ... and 29 more
+simCmUnseededWorld: CONTROL norecord FIRED: adopted without recording my men, the mine check went red 1232 times after the rollover while the comparison before it stayed green (red by check: {"mine":1232,"moved":224})
