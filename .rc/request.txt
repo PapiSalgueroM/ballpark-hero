@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/rvrun-walk.mjs
+oldsave: git worktree add -f /tmp/wbase d8aaa4cb > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wbase/node_modules && (cd /tmp/wbase && npm run build > /tmp/wb.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/wbase/dist 4180 > /tmp/hs.log 2>&1 &) && sleep 4 && OLD_BASE=http://127.0.0.1:4180 node .rc/x/rvrun-oldsave.mjs
