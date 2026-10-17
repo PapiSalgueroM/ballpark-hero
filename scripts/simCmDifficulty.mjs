@@ -896,7 +896,8 @@ function fold() {
 
 /* ---------- 7. the help's worked example is the dial table's ---------- */
 /* The example paragraph of the "How hard" block in ClubManagerHelp.tsx (read from the source, comments out)
-   names, in order: a league defeat at a mid table club on its place with the press neutral (4.5 times pain,
+   names, in order: a league defeat at a Challengers club (tier 3, the one tier whose patience is 1) on its place
+   with the press neutral (4.5 times pain,
    rounded the way the engine rounds), a win (4 times gain), a 40m cheque, a man listed at 10m, an opponent
    of 80, and a bad season that would open at 35. Every number in it must be the one the table gives. */
 function section7() {
@@ -920,9 +921,17 @@ function section7() {
   if (!block) fail('ClubManagerHelp.tsx has no "How hard" block');
   else if (JSON.stringify(got) !== JSON.stringify(want)) fail(`the help's example reads ${got.join(', ')}; the table gives ${want.join(', ')}`);
   else ok(`the example's ${got.length} numbers are the table's (${got.join(', ')})`);
+  /* 4.5 is a defeat only where patience is 1, which is tier 3, Challengers (a Contenders defeat is 5.2 on Normal). */
+  if (!/at a Challengers club/.test(text)) fail('the example does not place its defeat at a Challengers club, the one tier where a defeat costs exactly 4.5');
+  else ok('the example places its defeat at a Challengers club, where patience is 1');
   const first = (block.split('<p>')[1] ?? '').replace(/<[^>]+>/g, ' ');
-  if (!/Every number elsewhere on this screen is for a Normal career/.test(first) || !/No sacking/.test(first)) fail('the block does not open by saying the screen\'s other numbers are Normal\'s and that No sacking switches off the zero rule');
-  else ok('the block opens by saying every other number on the screen is Normal\'s, and names No sacking');
+  /* Everything, not only every number: Round 1335's "one bad night usually still leaves you Safe" has no number
+     in it and is false at a big club on Hard (review of 2026-10-17), so the block must cover words too and say
+     where that one stops holding. */
+  if (!/Everything elsewhere on this screen, every number and every promise, is for a Normal career/.test(first) || !/No sacking/.test(first)) fail('the block does not open by saying everything else on the screen is Normal\'s and that No sacking switches off the zero rule');
+  else ok('the block opens by saying everything else on the screen, numbers and promises, is Normal\'s, and names No sacking');
+  if (!/one bad night can already take you under Safe/.test(first)) fail('the block does not say that one bad night in a new job can take you under Safe on Hard and Legend');
+  else ok('the block says one bad night in a new job can take you under Safe');
 }
 
 /* ---------- run ---------- */
