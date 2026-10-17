@@ -1,0 +1,2 @@
+headsha exit=0 0s | f85b1dd57 Round BII: merge PR284 (codex/manager-own-transfer-log at 7c483867), Latest transfers can show just your own club's recorded deals
+wf296 exit=1 234s | wfrun manager-desk-feedback.yml: 6 steps ran, 1 failed: Real served refusal and sibling-action journeys
