@@ -1,0 +1,50 @@
+MUTATION_LANDED
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerDifficulty.test.ts [2m([22m[2m14 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 522[2mms[22m[39m
+   [32m✓[39m readLevel and the stored key[2m > [22mreads only the two exact words, everything else is Normal[32m 2[2mms[22m[39m
+   [32m✓[39m readLevel and the stored key[2m > [22ma fresh career is Normal and carries no key at all[32m 14[2mms[22m[39m
+   [32m✓[39m readLevel and the stored key[2m > [22mensureStartOptions keeps the level and No sacking off a broken block, and is idempotent[32m 22[2mms[22m[39m
+   [32m✓[39m the table[2m > [22mNormal is the identity row and each level is strictly harder than the one before on every dial[32m 1[2mms[22m[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22mon a Normal career[32m 8[2mms[22m[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22msetUpCareer on Normal with No sacking off returns the very career it was given[32m 0[2mms[22m[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22ma level writes its key, cuts the cheque and the room by the dial, and rebuilds the asks on day one only[32m 1[2mms[22m[39m
+[31m   [31m×[31m every applier is the identity at its own identity dial[2m > [22ma created club: the room dial moves only the base ceiling, and the founders' room comes back whole[39m[32m 24[2mms[22m[39m
+[31m     → expected 1234 to be 1298 // Object.is equality[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22mNo sacking alone writes only its own key[32m 1[2mms[22m[39m
+   [32m✓[39m the dials on Hard and Legend[2m > [22mthe board: a win gives less, a defeat takes more, and only a bad season opens lower[32m 1[2mms[22m[39m
+   [32m✓[39m the dials on Hard and Legend[2m > [22mthe market: the same men in the same order, every price marked, every value untouched[32m 225[2mms[22m[39m
+   [32m✓[39m the dials on Hard and Legend[2m > [22ma release clause is never the cheaper door round the mark, and on Normal it is exactly what it was[32m 114[2mms[22m[39m
+   [32m✓[39m the dials on Hard and Legend[2m > [22mthe opponent: an edge only off Normal[32m 0[2mms[22m[39m
+   [32m✓[39m the season verdict under No sacking[2m > [22mnever threatens a sack the board cannot carry out, and reads as it always did otherwise[32m 10[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerDifficulty.test.ts[2m > [22mevery applier is the identity at its own identity dial[2m > [22ma created club: the room dial moves only the base ceiling, and the founders' room comes back whole
+[31m[1mAssertionError[22m: expected 1234 to be 1298 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1298[39m
+[31m+ 1234[39m
+
+[36m [2m❯[22m src/lib/clubManagerDifficulty.test.ts:[2m125:27[22m[39m
+    [90m123| [39m      [35mconst[39m out [33m=[39m [34msetUpCareer[39m(made[33m,[39m { level })[33m;[39m
+    [90m124| [39m      [34mexpect[39m(out[33m.[39mfounderWageRoom)[33m.[39m[34mtoBe[39m(made[33m.[39mfounderWageRoom)[33m;[39m
+    [90m125| [39m      expect(out.wageCap).toBe(Math.max(60, Math.round(((made.wageCap …
+    [90m   | [39m                          [31m^[39m
+    [90m126| [39m      /* The case tells the two rules apart: the whole ceiling times t…
+    [90m127| [39m      expect(out.wageCap).not.toBe(Math.max(60, Math.round((made.wageC…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m13 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 04:30:33
+[2m   Duration [22m 2.81s[2m (transform 1.36s, setup 59ms, collect 1.55s, tests 522ms, environment 296ms, prepare 126ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerDifficulty.test.ts,title=src/lib/clubManagerDifficulty.test.ts > every applier is the identity at its own identity dial > a created club%3A the room dial moves only the base ceiling%2C and the founders' room comes back whole,line=125,column=27::AssertionError: expected 1234 to be 1298 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 1298%0A+ 1234%0A%0A ❯ src/lib/clubManagerDifficulty.test.ts:125:27%0A%0A

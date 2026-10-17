@@ -1,0 +1,14 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerDifficulty.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 683[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22mthe market: the same men in the same order, every price marked, every value untouched [33m 314[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDifficultyPick.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 968[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22moffers three levels with Normal pressed, and Skip on Normal hands nothing on [33m 361[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mLegend and No sacking ride on both buttons [33m 475[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m19 passed[39m[22m[90m (19)[39m
+[2m   Start at [22m 04:30:28
+[2m   Duration [22m 3.71s[2m (transform 2.04s, setup 113ms, collect 3.39s, tests 1.65s, environment 679ms, prepare 354ms)[22m
+

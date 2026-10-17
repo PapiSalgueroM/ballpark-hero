@@ -1,0 +1,2 @@
+unit exit=0 5s |    Duration  3.71s (transform 2.04s, setup 113ms, collect 3.39s, tests 1.65s, environment 679ms, prepare 354ms)
+m4 exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerDifficulty.test.ts,title=src/lib/clubManagerDifficulty.test.ts > every applier is the identi
