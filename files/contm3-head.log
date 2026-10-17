@@ -1,0 +1,335 @@
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
++ actual - expected
+... Skipped lines
+
+  {
+    loaded: {
+      academy: {
+        candidates: [
+          {
+...
+      },
++     worldComps: {
++       ucl: {
++         breaks: 0,
++         clubs: [
++           'PSG',
++           'Real Madrid',
++           'Manchester City',
++           'Barcelona',
++           'Arsenal',
++           'Bayern Munich',
++           'Inter Milan',
++           'Liverpool',
++           'Manchester United',
++           'Roma',
++           'Atlético Madrid',
++           'Borussia Dortmund',
++           'Galatasaray',
++           'Aston Villa',
++           'Como',
++           'Porto',
++           'RB Leipzig',
++           'AC Milan',
++           'Napoli',
++           'Real Betis',
++           'Stuttgart',
++           'Feyenoord',
++           'Lille',
++           'Sporting CP',
++           'Club Brugge',
++           'Villarreal',
++           'Hoffenheim',
++           'PSV',
++           'Lens',
++           'Lyon',
++           'Celtic',
++           'AEK Athens',
++           'LASK',
++           'Dinamo Zagreb',
++           'AGF',
++           'Thun'
++         ],
++         f: 'l36',
++         fx: [
++           75,
++           164,
++           181,
++           251,
++           350,
++           410,
++           442,
++           491,
++           584,
++           627,
++           716,
++           756,
++           891,
++           929,
++           1042,
++           1102,
++           1123,
++           1206,
++           1361,
++           1438,
++           1503,
++           1537,
++           1576,
++           1615,
++           1660,
++           1775,
++           1812,
++           1845,
++           1889,
++           1968,
++           2006,
++           2075,
++           2108,
++           2408,
++           2486,
++           2556,
++           2608,
++           2686,
++           2704,
++           2815,
++           2894,
++           2921,
++           3012,
++           3049,
++           3061,
++           3270,
++           3453,
++           3579,
++           3619,
++           3662,
++           3725,
++           3754,
++           3837,
++           3872,
++           3890,
++           4086,
++           4166,
++           4182,
++           4225,
++           4349,
++           4411,
++           4431,
++           4520,
++           4672,
++           4690,
++           4753,
++           4883,
++           4979,
++           5029,
++           5044,
++           5128,
++           5181,
++           5217,
++           5231,
++           5315,
++           5574,
++           5690,
++           5752,
++           5787,
++           5803,
++           5836,
++           5881,
++           5938,
++           5949,
++           5982,
++           6092,
++           6151,
++           6233,
++           6360,
++           6456,
++           6524,
++           6584,
++           6597,
++           6629,
++           6706,
++           6732,
++           6983,
++           7042,
++           7126,
++           7139,
++           7212,
++           7324,
++           7363,
++           7401,
++           7430,
++           7551,
++           7624,
++           7698,
++           7950,
++           8154,
++           8172,
++           8214,
++           8373,
++           8465,
++           8499,
++           8603,
++           8611,
++           8657,
++           8691,
++           8714,
++           8756,
++           8793,
++           8834,
++           8959,
++           8977,
++           9001,
++           9091,
++           9129,
++           9161,
++           9228,
++           9265,
++           9339,
++           9384,
++           9428,
++           9448,
++           9501,
++           9607,
++           9817,
++           9918,
++           10030,
++           10079,
++           10083,
++           10158,
++           10325
++         ],
++         holder: 'PSG',
++         overCap: 0,
++         s: 1,
++         seed: 3159772167,
++         str: [
++           88.9,
++           91.6,
++           90.5,
++           89.9,
++           89.7,
++           89.6,
++           87.5,
++           87.3,
++           84.5,
++           84.5,
++           84.4,
++           84.4,
++           84.4,
++           83.7,
++           83.4,
++           82.6,
++           82.2,
++           81.9,
++           81.5,
++           81,
++           80.6,
++           80.2,
++           80.1,
++           79.7,
++           79.5,
++           79.5,
++           78.3,
++           77.5,
++           77.4,
++           77.4,
++           73,
++           71.2,
++           67.5,
++           66.3,
++           64.5,
++           64
++         ],
++         v: 1
++       }
++     },
+      xiIds: [
+        'p-jordan-pickford',
+        'p-jarrad-branthwaite',
+        'p-james-tarkowski',
+        'p-michael-keane',
+...
+          {
++           deckId: 'injurySupport',
++           from: 'The medical team',
++           id: 'desk-1-0-injurySupport',
+-           deckId: 'finesKitty',
+-           from: 'The head coach',
+-           id: 'desk-1-0-finesKitty',
+            kind: 'situation',
+            options: [
+              {
+                effect: {
++                 delta: 6,
+-                 delta: 2,
+                  kind: 'move',
++                 meter: 'morale'
+-                 meter: 'press'
+                },
++               label: 'Check in with him (his morale +6)'
+-               label: "Give it to the club's community partner (press mood +2)"
+              },
+              {
+                effect: {
++                 delta: 2,
+-                 delta: 0.1,
+                  kind: 'move',
++                 meter: 'board'
+-                 meter: 'budget'
+                },
++               label: 'Update the board (board patience +2)'
+-               label: 'Put it in the transfer pot (£100k into the transfer budget)'
+              },
+              {
+                effect: {
+                  kind: 'none'
+                },
++               label: 'Leave it with medical staff (nothing changes)'
+-               label: 'Leave it in the kitty (nothing changes)'
+              }
+            ],
++           playerId: 'p-thierno-barry',
++           playerName: 'Thierno Barry',
+            season: 1,
++           text: 'Thierno Barry had 2 injury weeks left when this note was written. Staff suggest a check in or a board update. Neither changes the recovery time.',
+-           text: "The squad's fines kitty has £100k in it from late arrivals and phones in meetings. The head coach asks where it should go. The local paper always runs it when it goes to charity.",
+            week: 0
+          }
+        ],
+        eraId: 'now',
+        facilities: {
+
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 4,
+...
+        id: 'league',
++       label: 'Win La Liga',
+-       label: 'Win the La Liga',
+        target: 1
+      },
+      {
+        id: 'cup',
+        label: 'Win the Copa del Rey',
+
+PASS [healthy] identity
+PASS [healthy] buy-job
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+2 !== 0
+
+    at arm (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:511:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:519:24

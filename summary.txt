@@ -1,0 +1,2 @@
+cont-nobridge exit=0 31s | without the loaded bridge contCmp m3 is RED as it must
+held exit=0 0s | src and scripts held
