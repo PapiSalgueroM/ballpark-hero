@@ -55,6 +55,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
         heading: "Transfer windows and the staff room",
         items: [
           "Buy and sell in the summer and January windows: negotiate fees, pay release clauses, take loans, and field bids for your own stars before rival clubs close your targets.",
+          "New Manager careers remember other clubs' transfers too. Older careers, including Hot Seat jobs carried on here, join at their next summer and keep their existing world. Missing earlier deals between other clubs aren't rebuilt. If that era's squads aren't ready, joining waits for a later summer.",
           "Run the staff room: hire an attack, defence or goalkeeping coach and a lead scout, promote one of your own academy staff for nothing, pay somebody off, and decide whether to match a rival's offer when they come calling.",
         ],
       },
@@ -86,6 +87,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
         heading: "League lengths, past eras and created clubs",
         items: [
           "Every league plays its real length: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs.",
+          "Open the Cups panel to follow the whole Champions League, even when your club is not in it: table or groups, matchdays, knockouts and final. Tap a club to read its run. These are your game's simulated results.",
           "Serie B (20 clubs), Ligue 2 (18) and the Segunda División (20) sit under Serie A, Ligue 1 and La Liga, so the bottom three of Serie A and La Liga and the bottom two of Ligue 1 really go down and swap with the top of the division below every summer. The Segunda plays 20 of its real 22 clubs: Real Sociedad B and Celta Fortuna are reserve sides that don't play the Copa del Rey, so they're left out. The promotion playoffs, Serie B's playout and the French barrages aren't played, so it's a straight swap. Most second division squads are thin in the game's data (only Pisa and Verona in Serie B, Nantes, Saint-Étienne and Reims in Ligue 2, and Girona and Mallorca in the Segunda have eight or more real players), so the rest get topped up with made up youth players, marked as made up. These squads are last season's players that each club's 2026-27 squad list still names, so summer signings at these clubs aren't in yet.",
           "Brazil's Serie A is 20 clubs over 38 rounds with four going down and the Copa do Brasil as its cup. Three simplifications: it plays on the game's August to May calendar like MLS does rather than Brazil's own January to December one, the Copa Libertadores is not modelled, so a Brazilian club's season is the league and the cup, and clubs level on points are split by goal difference then goals scored, where the real table looks at wins first.",
           "Liga MX is 18 clubs and nobody goes down, because relegation is suspended for 2026-27. Three simplifications: the Apertura and the Clausura are played as one 34 round double round robin with one champion, the Liguilla is not played (the board still asks a playoff club to finish in the top eight, the places that reach it), and clubs level on points are split by goal difference then goals scored, the real table's first two steps, and the game stops there. There is no cup, because the Copa MX has not been played since 2020, and the Leagues Cup is not modelled.",
@@ -110,7 +112,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
       {
         heading: "The board meter, the fan meter and the sack race",
         items: [
-          "Two meters sit under the club name on every tab, words by default and the number out of 100 on tap. The board meter is the sack race itself: it opens at 60 in your first season, anywhere from 35 to 82 after that depending on how the last one went, and swings with results, cup runs, promises to the press and position against expectation. Safe is 60 and above, Under pressure is 10 to 59, under 10 reads One bad week from the sack, and at zero you are sacked. Only a result can sack you: a press answer or a handshake with another club can take the board to its last point, never to zero. The fan meter is read off this season's results (recent ones count most), your position against the club's expectation, the ticket policy and the trophies lifted this season: Singing at 65 and above, Grumbling from 40 to 64, Turning under 40, Hopeful before a ball is kicked.",
+          "Two meters sit under the club name on every tab, words by default and the number out of 100 on tap. The board meter is the sack race itself: new Club Manager careers open at 69 for each new job, then from 35 to 82 after a season you stay for (an A or B opens at 69 or more, a D or F below 60). It swings with results, cup runs, promises to the press and position against expectation. Safe is 60 and above, Under pressure is 10 to 59, under 10 reads One bad week from the sack, and at zero you are sacked. With No sacking on, a result that would fire you leaves the board on 1 instead, and under 10 the meter reads Lost the board. Only a result can sack you: a press answer or a handshake with another club can take the board to its last point, never to zero. The fan meter is read off this season's results (recent ones count most), your position against the club's expectation, the ticket policy and the trophies lifted this season: Singing at 65 and above, Grumbling from 40 to 64, Turning under 40, Hopeful before a ball is kicked.",
         ],
       },
       {
@@ -184,7 +186,11 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
     faqs: [
       {
         q: "How exactly do I get sacked?",
-        a: "The board meter in the header hits zero at a final whistle. Losses, sitting below the expected position, cup exits and promises to the press you broke drain it, while wins, trophies and cup runs refill it. Tap the meter for the number: under 10 it reads One bad week from the sack, and one bad week can genuinely take that much.",
+        a: "Unless No sacking is on, you are sacked when the board meter in the header hits zero at a final whistle. Losses, sitting below the expected position, cup exits and promises to the press you broke drain it, while wins, trophies and cup runs refill it. With No sacking off, tap the meter for the number: under 10 it reads One bad week from the sack, and one bad week can take that much. Pick No sacking on the Dugout step or turn it on later from Options while you are still employed. It cannot be turned off, and from then on this career posts no new leaderboard scores.",
+      },
+      {
+        q: "How do I retire?",
+        a: "Between matches, open the Manager panel, or use the button below the season summary or on the out of work screen. When the hub says Season complete, open See Season Review first so the season is counted. Confirm retirement to end the career with a farewell saved in its slot. Your record also shows the highest scoring game it has kept: add both teams' goals, including extra time but not shootout kicks. Older saves may not have kept every score.",
       },
       {
         q: "Does my career save?",
