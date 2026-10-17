@@ -1,0 +1,14 @@
+# Coaching retirement and skipped draft guide handback
+
+Round1394 implements the explicit other-lane guide handback in finish-1346 and finish-BIH. Baseb31c9894ac27283a9b650bf32b53e558b7148834 is the actual I1346 merge. Claude I retains engines, integration, main and publication.
+
+Only one two-sentence item is added beside retirement in each NBA, NFL, MLB and NHL My Career guide. It explains pursuing a coaching job, confirmed coaching retirement with the record/log saved, undoing a skipped showcase before Draft day and replaying the same draft night screen when reduced motion is off. It promises neither a job nor replay after reloading or entering the career. It adds no forced coaching age. Existing player retirement, legacy and Hall text stays intact.
+
+Independent native source review passed all four insertions. Removing each new full line reconstructs its entire base file exactly. This holds every other entry and real-data claim, including the richer incoming Hall paragraphs. Canonical LF hashes: basketball8b0935183e6298cd1035f4345661368b3335a42087bb6dcc30b5878651245549; football dca2b18bae39a3bcb5954cec3f5a0db69f2249ce9c3055c57aa4add5851125ac; baseball ca72eb728586c6538cd0bd51e6407f9856c388eef746e87288cc3313cce4630d; hockey9f47f1e54e88ce7071e5d2975eba6c306cfc554a4d5bda651a418285431a8ffd.
+
+No new unit suite is needed for these four copy insertions. Remote qualification will refresh each route's heading record, generate search keywords, run actual app types and the production build, then all fifteen rebuilt-site readers plus existing simGuideHeadings and simSiteSearch. The five redrawn routes include the four My Careers and /whats-new, whose base source already contains announcements missing from its old snapshot. No new announcement is authored. Nine generated leaves may change: keywords, frozen headings, five snapshots, sitemap and lastmod. Their actual bodies must come from the retained runner output.
+
+The unchanged full weight sweep remains binding. No existing cap failure is waived or attributed to this copy without paired evidence. Source, installed dependency and dist holds must pass. All application runtime stays on GitHub Actions. No local runtime, production database call, full-suite, main merge or live publication is claimed. Source and workflow qualification are pending.
+
+
+Independent workflow source review PASS at39f25bbdcc2eef1a3d9e50d92f03035beef7db212dba94edef6a799db9abc257. The158-line remote workflow binds four source hashes/inverses, permits exactly nine generated leaves, refreshes four routes, runs real types/build and17existing readers serially, then strict unchanged weight limits and complete byte holds. Build-time external asset denials remain recorded offline evidence, without ordinary zero-block credit. No local application execution, new unit suite or new browser journey was introduced. Actual qualification is pending.
