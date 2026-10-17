@@ -147,12 +147,13 @@ function fresh(b) {
 if (CONTROL === 'flat') { memEdit = D => { D.hard.pain = 1; }; console.log('NEGATIVE CONTROL ON: Hard\'s pain is 1, the same as Normal\'s'); }
 if (CONTROL === 'alloff') { memEdit = D => { Object.assign(D.hard, D.normal); Object.assign(D.legend, D.normal); }; console.log('NEGATIVE CONTROL ON: Hard and Legend carry Normal\'s dials'); }
 
-const HEAD = await bundleOf(ROOT, 'head', PATCHES[CONTROL] ? [PATCHES[CONTROL]] : []);
-const head = fresh(HEAD);
+const FOLD = process.env.FOLD || '';
+const HEAD = FOLD ? null : await bundleOf(ROOT, 'head', PATCHES[CONTROL] ? [PATCHES[CONTROL]] : []);
+const head = FOLD ? { cm: null, dif: null, st: null, asks: null } : fresh(HEAD);
 const cm = head.cm, dif = head.dif, st = head.st, asks = head.asks;
-const DIALS = dif.CM_DIFFICULTY_DIALS;
+const DIALS = dif ? dif.CM_DIFFICULTY_DIALS : null;
 console.log(`simCmDifficulty: sections ${SECTIONS.join(', ')}${CONTROL ? `, control ${CONTROL}` : ''}${TUNE ? `, dials tuned by DIALS_JSON ${JSON.stringify(TUNE)}` : ''}`);
-console.log(`  table: ${LEVELS.map(lv => `${lv} ${JSON.stringify(DIALS[lv])}`).join('; ')}`);
+if (DIALS) console.log(`  table: ${LEVELS.map(lv => `${lv} ${JSON.stringify(DIALS[lv])}`).join('; ')}`);
 
 /* ---------- 1. the table ---------- */
 function section1() {
@@ -331,7 +332,8 @@ function runCareer(club, driver, seed, level, seasons) {
 /** Every career of a fleet, sharded by SHARD=k/n (k from 0) so a runner can split it into jobs. */
 function fleetJobs(levels, seeds, drivers) {
   const jobs = [];
-  for (const club of fleetClubs()) for (const driver of drivers) for (let seed = 0; seed < seeds; seed++) jobs.push({ club, driver, seed });
+  const off = num('SEED_OFFSET', 0);
+  for (const club of fleetClubs()) for (const driver of drivers) for (let seed = off; seed < off + seeds; seed++) jobs.push({ club, driver, seed });
   const [k, n] = String(process.env.SHARD || '0/1').split('/').map(Number);
   return { jobs: jobs.filter((_, i) => i % n === k), levels };
 }
@@ -729,8 +731,80 @@ async function section6() {
   console.log(`   red per daily: Hot Seat ${red['Hot Seat']} of ${HOT.length}, Deadline Day ${red['Deadline Day']} of ${DEAD.length}; deadlineDay.ts calls ${reached.length ? reached.join(', ') : 'none of the match, summer, market or setup entry points'}`);
 }
 
+/* ---------- 4. outcomes: the lead's table for the engaged driver ---------- */
+/* Decision 2 of the round's brief, the bands the dials are tuned to, over the fleet (the nine clubs,
+   SEEDS seeds, SEASONS seasons, a sacked career handing its club to a fresh one so every level plays every
+   season): at the mid clubs the engaged driver's points per game falls 8 to 20 percent on Hard and 18 to 35
+   on Legend; his seasons ending in a sacking (all nine clubs) are at least 1.4 times Normal's on Hard and 2
+   times on Legend; his spend per season is at least 10 percent lower on Hard; and a big club on Hard still
+   wins its league in at least one season in ten. The bands are the lead's; the measured numbers and the
+   spread of Normal against Normal on other seeds are in the header table. */
+const BANDS = { hard: { drop: [0.08, 0.20], sack: 1.4 }, legend: { drop: [0.18, 0.35], sack: 2 } };
+function outcomesOf(rows) {
+  const eng = l => rows.filter(r => r.level === l && r.driver === 'engaged');
+  const out = {};
+  for (const l of LEVELS) {
+    const all = eng(l);
+    if (!all.length) continue;
+    out[l] = {
+      seasons: all.length,
+      midPpg: cell(all.filter(r => r.tier === 'mid')).ppg,
+      sack: all.filter(r => r.sacked).length / all.length,
+      sacks: all.filter(r => r.sacked).length,
+      spend: sum(all, r => r.fees) / all.length,
+      bigTitles10: cell(all.filter(r => r.tier === 'big')).titles10,
+    };
+  }
+  return out;
+}
+function assertOutcomes(rows) {
+  const before = failures;
+  const o = outcomesOf(rows);
+  if (!o.normal) { fail('section 4 has no Normal rows'); return; }
+  const n = o.normal;
+  /* Normal against Normal: the even seeds against the odd ones, the spread a level's drop has to clear. */
+  const nRows = rows.filter(r => r.level === 'normal' && r.driver === 'engaged' && r.tier === 'mid');
+  const even = cell(nRows.filter(r => r.seed % 2 === 0)).ppg, odd = cell(nRows.filter(r => r.seed % 2 === 1)).ppg;
+  console.log(`  Normal: mid points per game ${f2(n.midPpg)}, sacked ${n.sacks} of ${n.seasons} seasons (${f2(n.sack)}), spend ${f2(n.spend)}m a season, big club titles ${f2(n.bigTitles10)} in ten`);
+  console.log(`  Normal against Normal (even seeds against odd): mid points per game ${f2(even)} and ${f2(odd)}, a gap of ${f2(Math.abs(1 - odd / even) * 100)} percent`);
+  for (const l of ['hard', 'legend']) {
+    const x = o[l];
+    if (!x) continue;
+    const drop = 1 - x.midPpg / n.midPpg;
+    const sackRatio = n.sack > 0 ? x.sack / n.sack : (x.sack > 0 ? Infinity : NaN);
+    const spendDrop = 1 - x.spend / n.spend;
+    console.log(`  ${l}: mid points per game ${f2(x.midPpg)} (down ${f2(drop * 100)} percent), sacked ${x.sacks} of ${x.seasons} (${f2(x.sack)}, ${f2(sackRatio)} times Normal), spend ${f2(x.spend)}m (down ${f2(spendDrop * 100)} percent), big club titles ${f2(x.bigTitles10)} in ten`);
+    const [lo, hi] = BANDS[l].drop;
+    if (!(drop >= lo && drop <= hi)) fail(`${l}: the mid clubs' points per game fell ${f2(drop * 100)} percent, the band is ${lo * 100} to ${hi * 100}`);
+    if (!(sackRatio >= BANDS[l].sack)) fail(`${l}: sacked ${f2(sackRatio)} times as often as Normal, the floor is ${BANDS[l].sack}`);
+    if (l === 'hard' && !(spendDrop >= 0.10)) fail(`hard: spend per season fell ${f2(spendDrop * 100)} percent, the floor is 10`);
+    if (l === 'hard' && !(x.bigTitles10 >= 1)) fail(`hard: a big club won its league ${f2(x.bigTitles10)} seasons in ten, the floor is 1`);
+  }
+  if (failures === before) ok('every level sits inside the bands the lead set');
+}
+function section4() {
+  const seeds = num('SEEDS', 4), seasons = num('SEASONS', 6);
+  const levels = (process.env.LEVELS || LEVELS.join(',')).split(',');
+  const drivers = (process.env.DRIVERS || 'engaged').split(',');
+  console.log(`4) outcomes: ${levels.join(', ')}, ${seeds} seeds from ${num('SEED_OFFSET', 0)}, ${seasons} seasons, ${drivers.join(' and ')}, shard ${process.env.SHARD || '0/1'}`);
+  const rows = runFleet(levels, seeds, seasons, drivers);
+  printTable(rows, levels);
+  if (process.env.SHARD && process.env.SHARD !== '0/1') { ok('a shard: the bands are the fold\'s (FOLD=<dir of OUT_JSON files>)'); return; }
+  assertOutcomes(rows);
+}
+/** FOLD=<dir>: every OUT_JSON file in it, folded into one table and the bands. Bundles nothing. */
+function fold() {
+  const files = fs.readdirSync(FOLD).filter(f => f.endsWith('.json'));
+  const rows = files.flatMap(f => JSON.parse(fs.readFileSync(path.join(FOLD, f), 'utf8')));
+  console.log(`4) outcomes folded from ${files.length} files, ${rows.length} seasons`);
+  const levels = LEVELS.filter(l => rows.some(r => r.level === l));
+  printTable(rows, levels);
+  assertOutcomes(rows);
+}
+
 /* ---------- run ---------- */
-const RUN = { 0: section0, 1: section1, 2: section2, 3: () => { section3(); section3money(); }, 6: section6 };
+const RUN = { 0: section0, 1: section1, 2: section2, 3: () => { section3(); section3money(); }, 4: section4, 6: section6 };
+if (FOLD) { fold(); console.log(failures ? `simCmDifficulty: ${failures} FAILURES (fold)` : 'simCmDifficulty: all green (fold)'); process.exit(failures ? 1 : 0); }
 for (const s of SECTIONS) {
   if (!RUN[s]) { console.log(`SECTION=${s} is not a section of this harness; could not run`); process.exit(2); }
   await RUN[s]();
