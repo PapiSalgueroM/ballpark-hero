@@ -156,7 +156,7 @@ continueSrc = controlled('continuekey', continueSrc, "saveKey: 'fight-gym-save-v
 continueSrc = controlled('continuefield', continueSrc, "at: ['matchNo']", "at: ['matchNum']");
 continueSrc = controlled('continueguard', continueSrc,
   'return t.length > SAVE_NAME_MAX ? `${t.slice(0, SAVE_NAME_MAX - 3).trimEnd()}...` : t;', 'return t;');
-const cmRetiredLookup = "  const retired = entry.path === '/club-manager' ? walk(save, ['retired']) : null;";
+const cmRetiredLookup = "  const retired = entry.path === '/club-manager' && walk(save, ['retired']);";
 if (CONTROL === 'cmretired' && continueSrc.split(cmRetiredLookup).length !== 2) {
   console.error('Club Manager retirement control needs one unique own-field lookup'); process.exit(1);
 }

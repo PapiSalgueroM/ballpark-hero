@@ -1,0 +1,252 @@
+name: Retired save equivalent reader verification
+on:
+  push:
+    branches: [codex/retired-save-size]
+    paths:
+      - .github/workflows/retired-save-size.yml
+      - src/data/continueSaves.ts
+      - scripts/simHomeFront.mjs
+      - scripts/qa/proveRetiredSaveSize.mjs
+      - docs/audits/retired-save-size-source.json
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      PRERENDER_ONLY: /club-manager,/nba-my-career,/nfl-my-career,/mlb-my-career,/nhl-my-career,/whats-new
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind the declared reader inverses and every historical input
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/report-guide-integration"; mkdir -p "$out/fixed" "$out/retired"
+          echo "REPORT_GUIDE_OUT=$out" >> "$GITHUB_ENV"; echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$out/head.txt"; git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          REPORT_GUIDE_OUT="$out" node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import {createHash} from 'node:crypto'; import {execFileSync} from 'node:child_process';
+          const hash=b=>createHash('sha256').update(b).digest('hex'), git=(args,options={})=>execFileSync('git',args,{maxBuffer:128*1024*1024,...options}), text=args=>git(args).toString().trim();
+          const metrics=b=>({bytes:b.length,sha256:hash(b),blob:git(['hash-object','--stdin'],{input:b}).toString().trim()});
+          const contractPath='docs/audits/retired-save-size-source.json', contractBytes=fs.readFileSync(contractPath); assert.equal(hash(contractBytes),'4193bb3a0f79829b42de4f05c0883c622c554b292bf6e1c3c30bcb889fe3b4fd'); const contract=JSON.parse(contractBytes);
+          const roots=['src','scripts','public','index.html','package.json','package-lock.json','bun.lock','bun.lockb'], base='074cfac4b3bbb2622b5daddce66907fdd8e855f5';
+          const generated=['src/data/searchKeywords.json','scripts/data/guideHeadingsFrozen.json','public/club-manager/index.html','public/nba-my-career/index.html','public/nfl-my-career/index.html','public/mlb-my-career/index.html','public/nhl-my-career/index.html','public/whats-new/index.html','public/sitemap.xml','scripts/data/lastmod.json'];
+          assert.deepEqual(Object.keys(contract).sort(),['version','protectedAdmissionBase','historicalMap','protectedRoots','changes','historicalHeld','normalRawSha256','baselineRawSha256'].sort()); assert.equal(contract.version,1); assert.equal(contract.protectedAdmissionBase,base); assert.deepEqual(contract.protectedRoots,roots);
+          assert.equal(contract.normalRawSha256,'bfcb59589666188d5a616ba8b57cd028137f2813def36caf653a44ee211e4a75'); assert.equal(contract.baselineRawSha256,'f67f053db08221b4ec357a7ee63e16d34cf5458bfdd27d4d2d8a39e6689aa606'); git(['merge-base','--is-ancestor',base,'HEAD']);
+          assert.deepEqual(Object.keys(contract.historicalMap).sort(),['path','bytes','sha256','blob'].sort()); const {path:mapPath,...mapMetrics}=contract.historicalMap; assert.equal(mapPath,'docs/audits/report-guide-integration-source.json'); assert.equal(mapMetrics.sha256,'e272066bf703c0d5a7b0d180d34fe2a59fd386fc6b131d986eb1d1c7553e1544');
+          const mapBytes=fs.readFileSync(mapPath); assert.deepEqual(metrics(mapBytes),mapMetrics); assert.deepEqual(mapBytes,git(['show',base+':'+mapPath])); const map=JSON.parse(mapBytes);
+          const changedPaths=['src/data/continueSaves.ts','scripts/simHomeFront.mjs','scripts/qa/proveRetiredSaveSize.mjs']; assert.equal(contract.changes.length,3); assert.deepEqual(contract.changes.map(row=>row.path),changedPaths); assert.equal(new Set(contract.changes.map(row=>row.path)).size,3);
+          const actualChanged=text(['diff','--name-only',base,'HEAD','--',...roots]).split('\n').filter(Boolean).sort(); assert.deepEqual(actualChanged,[...changedPaths].sort());
+          const statuses=text(['diff','--name-status',base,'HEAD','--',...roots]).split('\n').filter(Boolean).sort(); assert.deepEqual(statuses,changedPaths.map(file=>(file.endsWith('proveRetiredSaveSize.mjs')?'A':'M')+'\t'+file).sort());
+          const inverseByPath=new Map(), changes=[];
+          for(const row of contract.changes){
+            assert.deepEqual(Object.keys(row).sort(),['path','referencePath','before','after','spans'].sort()); assert.equal(row.referencePath,row.path===changedPaths[2]?'scripts/qa/proveRetiredManagerContinueJoined.mjs':row.path);
+            for(const part of [row.before,row.after]){assert.deepEqual(Object.keys(part).sort(),['bytes','sha256','blob'].sort()); assert(Number.isSafeInteger(part.bytes)&&part.bytes>0); assert.match(part.sha256,/^[0-9a-f]{64}$/); assert.match(part.blob,/^[0-9a-f]{40}$/);}
+            const actual=fs.readFileSync(row.path), reference=git(['show',base+':'+row.referencePath]); assert.deepEqual(metrics(actual),row.after); assert.deepEqual(metrics(reference),row.before); assert.equal(text(['rev-parse','HEAD:'+row.path]),row.after.blob);
+            assert.equal(row.spans.length,row.path===changedPaths[0]?2:row.path===changedPaths[1]?1:4); let inverse=actual.toString('utf8');
+            for(const span of row.spans){assert.deepEqual(Object.keys(span).sort(),['old','new'].sort()); assert.equal(typeof span.old,'string'); assert.equal(typeof span.new,'string'); assert.notEqual(span.old,span.new); assert.equal(inverse.split(span.new).length,2,'Unique effective inverse: '+row.path); inverse=inverse.replace(span.new,span.old);}
+            const reconstructed=Buffer.from(inverse); assert.deepEqual(reconstructed,reference,'Whole inverse equals the actual074 reference: '+row.path); assert.deepEqual(metrics(reconstructed),row.before); inverseByPath.set(row.path,reconstructed); changes.push({...row,wholeInverseExact:true});
+          }
+          assert.equal(text(['ls-tree',base,'--',changedPaths[2]]),''); assert.equal(contract.changes[2].after.sha256,'eb4916d3d04b98abf6c19102fd36ed88ab1d9bcf1e07d27779d587ad9025a72d');
+          const heldPaths=['scripts/qa/proveRetiredManagerContinueJoined.mjs','scripts/qa/proveRetiredManagerContinue.mjs','scripts/qa/proveRetiredManagerContinueBaseline.mjs','src/test/retiredManagerContinue.test.tsx',mapPath,'.github/workflows/report-guide-integration.yml'];
+          assert.equal(contract.historicalHeld.length,6); assert.deepEqual(contract.historicalHeld.map(row=>row.path),heldPaths); const historicalHeld=[];
+          for(const row of contract.historicalHeld){assert.deepEqual(Object.keys(row).sort(),['path','bytes','sha256','blob'].sort()); const {path,...expected}=row, actual=fs.readFileSync(path); assert.deepEqual(metrics(actual),expected); assert.deepEqual(actual,git(['show',base+':'+path])); assert.equal(text(['rev-parse','HEAD:'+path]),expected.blob); historicalHeld.push({...row,wholeInputHeld:true});}
+          assert.deepEqual(Object.keys(map).sort(),['version','compositionSource','protectedBase','protectedRoots','admissionOnlyAddedPath','changedPaths','inputs','generatedPaths','scope'].sort()); assert.equal(map.version,1); assert.equal(map.compositionSource,'ae64ca746882bc55877d357423a7b4a711160a69'); assert.equal(map.protectedBase,'b31c9894ac27283a9b650bf32b53e558b7148834'); assert.deepEqual(map.protectedRoots,roots); assert.deepEqual(map.generatedPaths,generated);
+          assert.equal(map.admissionOnlyAddedPath,'scripts/qa/proveRetiredManagerContinueJoined.mjs'); git(['merge-base','--is-ancestor',map.compositionSource,'HEAD']); assert.equal(map.changedPaths.length,21); assert.equal(new Set(map.changedPaths).size,21); assert.equal(map.inputs.length,21); assert.equal(new Set(map.inputs.map(row=>row.path)).size,21); assert.deepEqual(map.inputs.map(row=>row.path).sort(),[...map.changedPaths].sort());
+          const historicalChanged=text(['diff','--name-only',map.protectedBase,map.compositionSource,'--',...roots]).split('\n').filter(Boolean).sort(); assert.deepEqual(historicalChanged,[...map.changedPaths].sort());
+          const rows=[]; for(const row of map.inputs){
+            assert.deepEqual(Object.keys(row).sort(),['path','sourceRef','blob','bytes','sha256'].sort()); git(['merge-base','--is-ancestor',row.sourceRef,'HEAD']); const original=git(['show',row.sourceRef+':'+row.path]), actual=fs.readFileSync(row.path), reconstructed=inverseByPath.has(row.path), checked=reconstructed?inverseByPath.get(row.path):actual;
+            assert.deepEqual(metrics(checked),{bytes:row.bytes,sha256:row.sha256,blob:row.blob}); assert.deepEqual(checked,original); assert.equal(text(['rev-parse',row.sourceRef+':'+row.path]),row.blob); assert.equal(text(['rev-parse',map.compositionSource+':'+row.path]),row.blob); if(!reconstructed) assert.equal(text(['rev-parse','HEAD:'+row.path]),row.blob);
+            rows.push({...row,actual:metrics(actual),wholeInputHeld:!reconstructed,referenceReconstructed:reconstructed});
+          }
+          assert.equal(rows.filter(row=>row.wholeInputHeld).length,19); assert.deepEqual(rows.filter(row=>row.referenceReconstructed).map(row=>row.path).sort(),[changedPaths[0],changedPaths[1]].sort());
+          const out=process.env.REPORT_GUIDE_OUT; fs.writeFileSync(out+'/generated-paths.txt',generated.join('\n')+'\n'); fs.writeFileSync(out+'/composition-receipt.json',JSON.stringify({head:text(['rev-parse','HEAD']),contractPath,contractSha256:hash(contractBytes),protectedAdmissionBase:base,historicalMap:contract.historicalMap,protectedRoots:roots,changedPaths:actualChanged,changes,historicalHeld,inputs:rows,actualExactInputs:19,reconstructedReferenceInputs:2,generatedPaths:generated},null,2)+'\n');
+          console.log('All19 unchanged historical inputs are exact;2 changed inputs reconstruct whole historical references;3 declared source changes and all6 frozen files are bound.');
+          NODE
+          mapfile -t generated < "$out/generated-paths.txt"; excluded=(); for file in "${generated[@]}"; do excluded+=(":!$file"); done
+          git ls-files -z -- "${excluded[@]}" | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
+      - name: Locked application and isolated Chromium and font tools
+        run: |
+          set -euo pipefail
+          npm ci > "$REPORT_GUIDE_OUT/install.log" 2>&1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerAgentReviewDependencies.mjs before > "$REPORT_GUIDE_OUT/dependencies-before.log" 2>&1
+          browser_tools="$RUNNER_TEMP/report-guide-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$REPORT_GUIDE_OUT/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright; ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerAgentReviewDependencies.mjs after > "$REPORT_GUIDE_OUT/dependencies-after.log" 2>&1
+          cp soccer-agent-review-artifacts/dependencies-*.json "$REPORT_GUIDE_OUT/"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const out=process.env.REPORT_GUIDE_OUT,before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),after=JSON.parse(fs.readFileSync(out+'/dependencies-after.json'));
+          assert.equal(before.packages.length,521); assert.equal(after.packages.length,521); assert.deepEqual(after.packages,before.packages); assert.deepEqual(after.packageFiles,before.packageFiles); assert.equal(after.addedBrowserPackage,'1.64.0'); fs.writeFileSync(out+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n');
+          NODE
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$REPORT_GUIDE_OUT/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$REPORT_GUIDE_OUT/fonts-install.log" 2>&1; python -m pip freeze > "$REPORT_GUIDE_OUT/python-packages.txt"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$REPORT_GUIDE_OUT/font-prefetch.log" 2>&1
+          find "$FREE_KICK_FONT_CACHE" -type f -print0 | sort -z | xargs -0 sha256sum > "$REPORT_GUIDE_OUT/font-files.sha256"
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$REPORT_GUIDE_OUT/installed-files.sha256"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$REPORT_GUIDE_OUT/browser-tool-files.sha256"
+      - name: Actual types and six account cases in one ordinary process
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          preload_check='const assert=require("node:assert/strict"); assert.ok((process.env.NODE_OPTIONS||"").includes("offlineTransport.cjs"),"Children retain offline preload"); assert.ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")],"Actual offline preload is in require.cache");'
+          preload_status=0; NODE_OPTIONS='' node -e "$preload_check" > "$REPORT_GUIDE_OUT/preload-env-control.log" 2>&1 || preload_status=$?
+          printf '%s\n' "$preload_status" > "$REPORT_GUIDE_OUT/preload-env-control-exit.txt"; test "$preload_status" -eq 1
+          grep -F 'AssertionError' "$REPORT_GUIDE_OUT/preload-env-control.log"; grep -F 'Children retain offline preload' "$REPORT_GUIDE_OUT/preload-env-control.log"
+          SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/preload-env.transport" node -e "$preload_check" > "$REPORT_GUIDE_OUT/preload-env-normal.log" 2>&1
+          status=0; SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$REPORT_GUIDE_OUT/types.log" 2>&1 || status=$?
+          cat "$REPORT_GUIDE_OUT/types.log"; test "$status" -eq 0
+          SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/account.transport" ACCOUNT_DIALOG_RAW="$REPORT_GUIDE_OUT/account-raw.json" node node_modules/vitest/vitest.mjs run src/test/accountDialogOnDemand.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=verbose --reporter=json --outputFile.json="$REPORT_GUIDE_OUT/account-units.json" > "$REPORT_GUIDE_OUT/account.log" 2>&1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import path from 'node:path'; import assert from 'node:assert/strict'; import {createHash} from 'node:crypto';
+          const out=process.env.REPORT_GUIDE_OUT,rawBytes=fs.readFileSync(out+'/account-raw.json'),raw=JSON.parse(rawBytes),units=JSON.parse(fs.readFileSync(out+'/account-units.json'));
+          assert.equal(createHash('sha256').update(rawBytes).digest('hex'),'2a8fcdfdbe12e9863939c7562baa3fb7d0a227746e5c38c5d069378a5f739642'); assert.equal(raw.version,1); assert.equal(raw.caseTitles.length,6); assert.equal(Object.keys(raw.cases).length,6);
+          assert.equal(units.success,true); assert.equal(units.numTotalTests,6); assert.equal(units.numPassedTests,6); assert.equal(units.numFailedTests,0); assert.equal(units.numPendingTests,0); assert.equal(units.numTodoTests,0); assert.equal(units.testResults.length,1);
+          const suite=units.testResults[0]; assert.equal(path.resolve(suite.name),path.resolve('src/test/accountDialogOnDemand.test.tsx')); assert.equal(suite.status,'passed'); assert(!suite.message); assert.equal(suite.assertionResults.length,6); assert.deepEqual(suite.assertionResults.map(row=>row.title).sort(),[...raw.caseTitles].sort()); assert(suite.assertionResults.every(row=>row.status==='passed'&&row.failureMessages.length===0));
+          assert(!/Unhandled Errors?|Unhandled Rejection|Uncaught Exception|TypeError:|ReferenceError:|SyntaxError:|Failed to (?:load|resolve import)|Cannot find module|ERR_MODULE_NOT_FOUND|SIM_OFFLINE_BLOCK/i.test(fs.readFileSync(out+'/account.log','utf8'))); console.log('All6 account cases passed in one process with the complete qualified raw bytes held.');
+          NODE
+      - name: Joined retired Manager proof and the existing forty-seven Manager cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node --check scripts/qa/proveRetiredSaveSize.mjs
+          SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/retired.transport" RETIRED_MANAGER_CONTINUE_OUT="$REPORT_GUIDE_OUT/retired" node scripts/qa/proveRetiredSaveSize.mjs > "$REPORT_GUIDE_OUT/retired.log" 2>&1
+          tail -n 3 "$REPORT_GUIDE_OUT/retired.log"
+          SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/manager.transport" node node_modules/vitest/vitest.mjs run src/lib/clubManagerSlots.test.ts src/test/clubManagerNoSack.test.tsx src/test/clubManagerRetire.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=verbose --reporter=json --outputFile.json="$REPORT_GUIDE_OUT/manager-units.json" > "$REPORT_GUIDE_OUT/manager.log" 2>&1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import path from 'node:path'; import assert from 'node:assert/strict';
+          const out=process.env.REPORT_GUIDE_OUT,proof=JSON.parse(fs.readFileSync(out+'/retired/fixed-proof/report.json')),units=JSON.parse(fs.readFileSync(out+'/manager-units.json'));
+          assert.equal(proof.status,'complete'); assert.equal(proof.qualified,true); assert.equal(proof.sourceHeld,true); assert.equal(proof.arms.length,3); assert(proof.arms.every(row=>row.qualified)); assert.equal(proof.homeFront.length,6); assert(proof.homeFront.every(row=>row.qualified));
+          assert.equal(units.success,true); assert.equal(units.numTotalTests,47); assert.equal(units.numPassedTests,47); for(const key of ['numFailedTests','numPendingTests','numTodoTests']) assert.equal(units[key],0); assert.equal(units.testResults.length,3);
+          const expected={'src/lib/clubManagerSlots.test.ts':15,'src/test/clubManagerNoSack.test.tsx':8,'src/test/clubManagerRetire.test.tsx':24}; for(const suite of units.testResults){const file=path.relative(process.cwd(),suite.name); assert.equal(suite.assertionResults.length,expected[file]); assert.equal(suite.status,'passed'); assert(!suite.message); assert(suite.assertionResults.every(row=>row.status==='passed'&&row.failureMessages.length===0)); delete expected[file];} assert.deepEqual(expected,{}); console.log('Joined6/original2+4/restored6 proof and all47 existing Manager cases passed.');
+          NODE
+      - name: Existing focus Google and chunk recovery controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          for control in normal nofocus accountonly; do
+            value="$control"; if test "$control" = normal; then value=''; fi
+            SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/auth-$control.transport" AUTH_MODAL_FOCUS_CONTROL="$value" node scripts/simAuthModalFocus.mjs > "$REPORT_GUIDE_OUT/auth-$control.log" 2>&1
+            tail -n 2 "$REPORT_GUIDE_OUT/auth-$control.log"
+          done
+          for method in simGoogleOnlyReturn simGoogleIdentity; do SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/$method.transport" node "scripts/$method.mjs" > "$REPORT_GUIDE_OUT/$method.log" 2>&1; tail -n 3 "$REPORT_GUIDE_OUT/$method.log"; done
+          SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/stale-normal.transport" node scripts/simStaleChunk.mjs > "$REPORT_GUIDE_OUT/stale-normal.log" 2>&1; grep -F 'simStaleChunk: green.' "$REPORT_GUIDE_OUT/stale-normal.log"
+          for control in nooffline nosave catchreload; do
+            sections=2; if test "$control" = nosave; then sections='2, 5'; elif test "$control" = catchreload; then sections=8; fi
+            status=0; SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/stale-$control.transport" SIM_STALE_CHUNK_CONTROL="$control" node scripts/simStaleChunk.mjs > "$REPORT_GUIDE_OUT/stale-$control.log" 2>&1 || status=$?
+            test "$status" -eq 1; test "$(grep -Fxc "simStaleChunk: control $control turned section(s) $sections red and nothing else. The check works." "$REPORT_GUIDE_OUT/stale-$control.log")" -eq 1
+          done
+          SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/preload.transport" node scripts/simPreloadWait.mjs > "$REPORT_GUIDE_OUT/preload.log" 2>&1; grep -F 'simPreloadWait: green.' "$REPORT_GUIDE_OUT/preload.log"
+      - name: Refresh the five guides and search keywords
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          for route in /club-manager /nba-my-career /nfl-my-career /mlb-my-career /nhl-my-career; do SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/refresh.transport" node scripts/simGuideHeadings.mjs --refresh "$route" >> "$REPORT_GUIDE_OUT/refresh.log" 2>&1; done
+          SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/keywords.transport" node scripts/genSearchKeywords.mjs > "$REPORT_GUIDE_OUT/keywords.log" 2>&1
+          cat "$REPORT_GUIDE_OUT/refresh.log" "$REPORT_GUIDE_OUT/keywords.log"
+      - name: One actual production build and six saved pages
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/build.transport" npm run build:seo > "$REPORT_GUIDE_OUT/build.log" 2>&1
+          tail -n 6 "$REPORT_GUIDE_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$REPORT_GUIDE_OUT/dist-files.sha256"
+      - name: All seventeen existing built-site readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          failed=0; printf 'method\texit\n' > "$REPORT_GUIDE_OUT/readers.tsv"
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simGuideHeadings simSiteSearch; do
+            status=0; SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/$method.transport" node "scripts/$method.mjs" > "$REPORT_GUIDE_OUT/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$REPORT_GUIDE_OUT/readers.tsv"; tail -n 2 "$REPORT_GUIDE_OUT/$method.log"; test "$status" -eq 0 || failed=1; test ! -s "$REPORT_GUIDE_OUT/$method.transport" || failed=1
+          done
+          exit "$failed"
+      - name: The three existing guide controls remain effective
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          for control in nokeyword lostline snapdrift; do
+            status=0; SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/control-$control.transport" GUIDE_HEADINGS_CONTROL="$control" node scripts/simGuideHeadings.mjs > "$REPORT_GUIDE_OUT/control-$control.log" 2>&1 || status=$?
+            cat "$REPORT_GUIDE_OUT/control-$control.log"; test "$status" -eq 1; grep -F "simGuideHeadings control $control: section " "$REPORT_GUIDE_OUT/control-$control.log"; grep -F 'red and every other section green' "$REPORT_GUIDE_OUT/control-$control.log"; test ! -s "$REPORT_GUIDE_OUT/control-$control.transport"
+          done
+      - name: Actual fixed served account flows and every unchanged download budget
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$REPORT_GUIDE_OUT/server.log" 2>&1 &
+          task_server_pid=$!; trap 'kill "$task_server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi; sleep 1; done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          browser_status=0; SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/fixed/browser.transport" BASE=http://127.0.0.1:4173 ACCOUNT_DIALOG_SOURCE="$PWD" ACCOUNT_DIALOG_DIST="$PWD/dist" ACCOUNT_DIALOG_OUT="$REPORT_GUIDE_OUT/fixed" ACCOUNT_DIALOG_VARIANT=fixed node scripts/qa/playAccountDialogOnDemand.mjs > "$REPORT_GUIDE_OUT/fixed/browser.log" 2>&1 || browser_status=$?
+          printf '%s\n' "$browser_status" > "$REPORT_GUIDE_OUT/fixed/browser-exit.txt"; tail -n 4 "$REPORT_GUIDE_OUT/fixed/browser.log"
+          weight_status=0; SIM_OFFLINE_RECEIPT="$REPORT_GUIDE_OUT/weights.transport" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$REPORT_GUIDE_OUT/weights.log" 2>&1 || weight_status=$?
+          printf '%s\n' "$weight_status" > "$REPORT_GUIDE_OUT/weights-exit.txt"; cat "$REPORT_GUIDE_OUT/weights.log"
+          test "$browser_status" -eq 0; test "$weight_status" -eq 0
+          test "$(grep -Fxc 'sweepWeight: green. Every page is inside its budget, and the budgets came down this round.' "$REPORT_GUIDE_OUT/weights.log")" -eq 1
+      - name: Retain actual validated source generated changes and emitted bodies even after failure
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          result=0; mapfile -t generated < "$REPORT_GUIDE_OUT/generated-paths.txt"; excluded=(); for file in "${generated[@]}"; do excluded+=(":!$file"); done
+          git diff --exit-code HEAD -- . "${excluded[@]}" > "$REPORT_GUIDE_OUT/non-generated-diff.log" 2>&1 || result=1
+          git diff --binary HEAD -- "${generated[@]}" > "$REPORT_GUIDE_OUT/generated.patch"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$REPORT_GUIDE_OUT/validated-source-files.sha256"
+          python - <<'PY'
+          import os,subprocess,zipfile
+          out=os.environ['REPORT_GUIDE_OUT']; files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile(out+'/validated-source.zip','w',zipfile.ZIP_DEFLATED) as archive:
+              for file in sorted(filter(None,files)): archive.write(file,file)
+          if os.path.isdir('dist'):
+              with zipfile.ZipFile(out+'/dist.zip','w',zipfile.ZIP_DEFLATED) as archive:
+                  for folder,dirs,names in os.walk('dist'):
+                      for name in sorted(names): archive.write(os.path.join(folder,name),os.path.join(folder,name))
+          PY
+          if test -d dist; then find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$REPORT_GUIDE_OUT/dist-after-files.sha256"; fi
+          exit "$result"
+      - name: Complete source dependency font tool and dist holds
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          result=0
+          for kind in source installed browser-tool font validated-source dist; do
+            file="$REPORT_GUIDE_OUT/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$REPORT_GUIDE_OUT/$kind-holds.log" 2>&1 || result=1; fi
+          done
+          if test -f "$REPORT_GUIDE_OUT/dist-files.sha256"; then cmp "$REPORT_GUIDE_OUT/dist-files.sha256" "$REPORT_GUIDE_OUT/dist-after-files.sha256" || result=1; fi
+          for method in preload-env types account retired manager auth-normal auth-nofocus auth-accountonly simGoogleOnlyReturn simGoogleIdentity stale-normal stale-nooffline stale-nosave stale-catchreload preload refresh keywords simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simGuideHeadings simSiteSearch control-nokeyword control-lostline control-snapdrift; do test ! -s "$REPORT_GUIDE_OUT/$method.transport" || result=1; done
+          # Build, served-browser and weight external request denials are retained separately, without zero-intent credit.
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: retired-save-size-${{ github.sha }}
+          path: ${{ env.REPORT_GUIDE_OUT }}
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,138 @@
+{
+  "version": 1,
+  "protectedAdmissionBase": "074cfac4b3bbb2622b5daddce66907fdd8e855f5",
+  "historicalMap": {
+    "path": "docs/audits/report-guide-integration-source.json",
+    "bytes": 8042,
+    "sha256": "e272066bf703c0d5a7b0d180d34fe2a59fd386fc6b131d986eb1d1c7553e1544",
+    "blob": "d689cf89dbaa6d74b7a7042c29ce2a344da127b4"
+  },
+  "protectedRoots": [
+    "src",
+    "scripts",
+    "public",
+    "index.html",
+    "package.json",
+    "package-lock.json",
+    "bun.lock",
+    "bun.lockb"
+  ],
+  "changes": [
+    {
+      "path": "src/data/continueSaves.ts",
+      "referencePath": "src/data/continueSaves.ts",
+      "before": {
+        "bytes": 8748,
+        "sha256": "1bb1765bf9a53eb16d3dcd67e96bf482d0e7666618b501d1caf92e2895e13333",
+        "blob": "b6802aa4ea39540913e891236c5d9d729aed6db6"
+      },
+      "after": {
+        "bytes": 8733,
+        "sha256": "ceb3a55a7f747b9b8be5248eeab4c58360ec586bec3b92e14ecc85f4cebc42b3",
+        "blob": "f9da9910cd164e577e7bc702240931d08909f954"
+      },
+      "spans": [
+        {
+          "old": "  const retired = entry.path === '/club-manager' ? walk(save, ['retired']) : null;",
+          "new": "  const retired = entry.path === '/club-manager' && walk(save, ['retired']);"
+        },
+        {
+          "old": "  if (retired !== null && typeof retired === 'object' && !Array.isArray(retired)) {",
+          "new": "  if (retired && typeof retired === 'object' && !Array.isArray(retired)) {"
+        }
+      ]
+    },
+    {
+      "path": "scripts/simHomeFront.mjs",
+      "referencePath": "scripts/simHomeFront.mjs",
+      "before": {
+        "bytes": 50938,
+        "sha256": "0c25361439fa488d250efc30403c0a031e6b4d5aa8adb880702006f2fbd3ac78",
+        "blob": "1a62eb1e64a7415a2e3e91bbcc7a9676e189485f"
+      },
+      "after": {
+        "bytes": 50932,
+        "sha256": "cb14b57b973f786585b8ab1a76e2abc09d8cb242b8e46b5e587156f4ed064741",
+        "blob": "6fea35a767c067e975326c13e1aa34925035bf29"
+      },
+      "spans": [
+        {
+          "old": "const cmRetiredLookup = \"  const retired = entry.path === '/club-manager' ? walk(save, ['retired']) : null;\";",
+          "new": "const cmRetiredLookup = \"  const retired = entry.path === '/club-manager' && walk(save, ['retired']);\";"
+        }
+      ]
+    },
+    {
+      "path": "scripts/qa/proveRetiredSaveSize.mjs",
+      "referencePath": "scripts/qa/proveRetiredManagerContinueJoined.mjs",
+      "before": {
+        "bytes": 13961,
+        "sha256": "e2d59fc543aa37531ed3e975978717d3c9bca49e68f9fb87695406bf6952b34c",
+        "blob": "2869e517fe3fc37284eb190d7a63c2d03afac010"
+      },
+      "after": {
+        "bytes": 14108,
+        "sha256": "eb4916d3d04b98abf6c19102fd36ed88ab1d9bcf1e07d27779d587ad9025a72d",
+        "blob": "0d9884b0cbd411639981d6c87b625e554129fbeb"
+      },
+      "spans": [
+        {
+          "old": "const SELF = 'scripts/qa/proveRetiredManagerContinueJoined.mjs';",
+          "new": "const SELF = 'scripts/qa/proveRetiredSaveSize.mjs';"
+        },
+        {
+          "old": "git(['diff', '--exit-code', 'ae64ca746882bc55877d357423a7b4a711160a69', 'HEAD'",
+          "new": "git(['diff', '--exit-code', '074cfac4b3bbb2622b5daddce66907fdd8e855f5', 'HEAD'"
+        },
+        {
+          "old": "const newBranch = \"  const retired = entry.path === '/club-manager' ? walk(save, ['retired']) : null;\\n  if (retired !== null && typeof retired === 'object' && !Array.isArray(retired)) {\\n    parts.push('retired');\\n  } else if (entry.ended && walk(save, entry.ended.at) === true) {\";",
+          "new": "const newBranch = \"  const retired = entry.path === '/club-manager' && walk(save, ['retired']);\\n  if (retired && typeof retired === 'object' && !Array.isArray(retired)) {\\n    parts.push('retired');\\n  } else if (entry.ended && walk(save, entry.ended.at) === true) {\";"
+        },
+        {
+          "old": "  const normal = units('normal'); let original;",
+          "new": "  const normal = units('normal');\n  assert.equal(sha(normal.bytes), 'bfcb59589666188d5a616ba8b57cd028137f2813def36caf653a44ee211e4a75', 'Complete normal raw equals the physically retained 1396 normal raw');\n  let original;"
+        }
+      ]
+    }
+  ],
+  "historicalHeld": [
+    {
+      "path": "scripts/qa/proveRetiredManagerContinueJoined.mjs",
+      "bytes": 13961,
+      "sha256": "e2d59fc543aa37531ed3e975978717d3c9bca49e68f9fb87695406bf6952b34c",
+      "blob": "2869e517fe3fc37284eb190d7a63c2d03afac010"
+    },
+    {
+      "path": "scripts/qa/proveRetiredManagerContinue.mjs",
+      "bytes": 13917,
+      "sha256": "0c1bc154d59722a9575bfba719281d832ea3cac1fb0e3bb469f72afe096d3e50",
+      "blob": "27c1165b4311271d50a0f063210bae5e1d164226"
+    },
+    {
+      "path": "scripts/qa/proveRetiredManagerContinueBaseline.mjs",
+      "bytes": 15691,
+      "sha256": "3d4f1c862c29d18e3302a1acb73c693cb5d07b55d8f58c9d7f3b19f8aec4abf9",
+      "blob": "44bcb3cb6adf1c813f93c5475465e3ac0cae3cc4"
+    },
+    {
+      "path": "src/test/retiredManagerContinue.test.tsx",
+      "bytes": 11086,
+      "sha256": "e3e005eacd784b3601575109f0e4ffff9b1dd8bec56faf57490966142047b2bf",
+      "blob": "cb8da2778a4a97b598d5f7ec48b5403448f521f2"
+    },
+    {
+      "path": "docs/audits/report-guide-integration-source.json",
+      "bytes": 8042,
+      "sha256": "e272066bf703c0d5a7b0d180d34fe2a59fd386fc6b131d986eb1d1c7553e1544",
+      "blob": "d689cf89dbaa6d74b7a7042c29ce2a344da127b4"
+    },
+    {
+      "path": ".github/workflows/report-guide-integration.yml",
+      "bytes": 24103,
+      "sha256": "f146a1565e343687a8248be3c6a1e2c3518de6749856e3ac9208174f2a6e674e",
+      "blob": "16663987e3b719b434858a1deb5d749f4ba0cbe0"
+    }
+  ],
+  "normalRawSha256": "bfcb59589666188d5a616ba8b57cd028137f2813def36caf653a44ee211e4a75",
+  "baselineRawSha256": "f67f053db08221b4ec357a7ee63e16d34cf5458bfdd27d4d2d8a39e6689aa606"
+}

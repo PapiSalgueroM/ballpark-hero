@@ -1,3 +1,7 @@
+## Codex1397 pending verification, 2026-10-17 UTC
+
+A separate root-owned attempt over exact final074cfac4 shortens two equivalent expressions in the retired Club Manager Continue-card reader. The existing HomeFront control gets its matching lookup literal. No Soccer Career page, core, saves, competitions or caps change. A new proof clone requires the complete normal raw bfcb5958 from1396, keeps the original full f67f053d baseline and all historical controls, and a new remote workflow verifies the three declared whole-file inverses before running the unchanged scoped gates. Historical helpers, tests, source map and workflow stay byte exact. This is not qualified yet, does not gate the READY urgent308 or account312 options, and grants no current I or live credit. Actual I retains integration and publication.
+
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,

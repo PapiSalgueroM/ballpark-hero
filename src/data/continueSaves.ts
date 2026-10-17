@@ -132,8 +132,8 @@ export function describeSave(entry: ContinueSave, raw: string | null): string | 
   const parts: string[] = [];
   const name = entry.name ? cleanName(walk(save, entry.name)) : null;
   if (name) parts.push(name);
-  const retired = entry.path === '/club-manager' ? walk(save, ['retired']) : null;
-  if (retired !== null && typeof retired === 'object' && !Array.isArray(retired)) {
+  const retired = entry.path === '/club-manager' && walk(save, ['retired']);
+  if (retired && typeof retired === 'object' && !Array.isArray(retired)) {
     parts.push('retired');
   } else if (entry.ended && walk(save, entry.ended.at) === true) {
     parts.push(entry.ended.say);
