@@ -1,0 +1,6 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight-head exit=1 28s | sweepWeight: 3 failures
+savesize-head exit=0 51s | simClubManagerSaveSize: all sections green
+weight-base exit=1 66s | sweepWeight: 3 failures
+savesize-base exit=0 48s | simClubManagerSaveSize: all sections green
+slots-base exit=0 47s | simClubManagerSlots: all sections green
