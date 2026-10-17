@@ -1,0 +1,2 @@
+headsha exit=0 0s | 84fcd4915 Round BII: merge PR296 (codex/manager-desk-feedback at 6465d9ae), the refusal note sits visible and still at the bottom of the transfer screen
+wf285 exit=1 188s | wfrun club-detail-fixtures.yml: 8 steps ran, 1 failed: Every rebuilt-site reader

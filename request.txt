@@ -1,0 +1,3 @@
+#!serial
+headsha: git log --oneline -3
+wf285: node .rc/x/wfrun.mjs .github/workflows/club-detail-fixtures.yml
