@@ -65,22 +65,74 @@ assert.equal(process.argv.length, 2, 'Only unit proof or compare-browser is supp
 for (const key of ['ACCOUNT_DIALOG_BASELINE_RAW_SHA256', 'ACCOUNT_DIALOG_PRODUCT_PATCH_SHA256']) assert.match(process.env[key] || '', /^[0-9a-f]{64}$/, 'Actual reviewed physical pin required: ' + key);
 const folder = path.join(OUT, 'fixed-proof'); assert(!fs.existsSync(folder), 'Never overwrite prior evidence'); fs.mkdirSync(folder, { recursive: true });
 const checkpoint = () => write(path.join(folder, 'report.json'), report), tracked = () => Object.fromEntries(git(['ls-files', '-z']).toString().split('\0').filter(Boolean).sort().map(file => [file, sha(read(file))]));
-const before = tracked(), report = { status: 'running', qualified: false, head: git(['rev-parse', 'HEAD']).toString().trim(), baseline: BASELINE, runs: [], sourceHeld: false, scope: 'Three-arm actual mounted-consumer proof only. Served costs/browser/full budgets are separate actual workflow measurements.' }; write(path.join(folder, 'tracked.before.json'), before); checkpoint();
+const before = tracked(), report = { status: 'running', qualified: false, head: git(['rev-parse', 'HEAD']).toString().trim(), baseline: BASELINE, runs: [], sourceHeld: false, scope: 'Three arms with six isolated single-case Vitest children each. Each child filters five declarations; aggregates retain actual selected observations and physical provenance. Served costs/browser/full budgets are separate actual workflow measurements.' }; write(path.join(folder, 'tracked.before.json'), before); checkpoint();
 const receipt = file => { const bytes = fs.readFileSync(file); return { file: path.relative(folder, file).replaceAll('\\', '/'), bytes: bytes.length, sha256: sha(bytes) }; };
 function runArm(name, original) {
-  const arm = path.join(folder, name); fs.mkdirSync(arm); const unitFile = path.join(arm, 'units.json'), rawFile = path.join(arm, 'raw.json'), transport = path.join(arm, 'units.transport');
-  const child = spawnSync(process.execPath, ['node_modules/vitest/vitest.mjs', 'run', TEST, '--maxWorkers=1', '--minWorkers=1', '--reporter=verbose', '--reporter=json', '--outputFile.json=' + unitFile], { cwd: ROOT, env: { ...process.env, ACCOUNT_DIALOG_RAW: rawFile, SIM_OFFLINE_RECEIPT: transport, FORCE_COLOR: '0', NO_COLOR: '1' }, encoding: 'utf8', timeout: 600000, maxBuffer: 64 * 1024 * 1024 });
-  for (const [file, body] of [['stdout.log', child.stdout], ['stderr.log', child.stderr]]) fs.writeFileSync(path.join(arm, file), body || '');
-  const row = { name, exit: child.status, error: child.error?.message || null, signal: child.signal, qualified: false, stdout: receipt(path.join(arm, 'stdout.log')), stderr: receipt(path.join(arm, 'stderr.log')) }; report.runs.push(row); if (fs.existsSync(unitFile)) row.units = receipt(unitFile); if (fs.existsSync(rawFile)) row.raw = receipt(rawFile); checkpoint(); process.stdout.write(child.stdout || ''); process.stderr.write(child.stderr || '');
-  assert(!child.error && !child.signal && child.status === (original ? 1 : 0), 'Actual completed unit arm: ' + name); assert(!SETUP.test((child.stdout || '') + (child.stderr || '')), 'Setup and transport errors never qualify'); assert(!fs.existsSync(transport) || fs.readFileSync(transport).length === 0);
-  const units = JSON.parse(fs.readFileSync(unitFile)); assert.equal(units.success, !original); assert.equal(units.numTotalTests, 6); assert.equal(units.numFailedTests, original ? 3 : 0); assert.equal(units.numPassedTests, original ? 3 : 6); assert.equal(units.numPendingTests, 0); assert.equal(units.numTodoTests, 0); assert.equal(units.testResults.length, 1);
-  const suite = units.testResults[0]; assert.equal(path.resolve(suite.name), path.join(ROOT, TEST)); assert.equal(suite.status, original ? 'failed' : 'passed'); assert(!suite.message); assert.equal(suite.assertionResults.length, 6); assert.deepEqual(suite.assertionResults.map(item => item.title).sort(), [...TITLES].sort());
-  for (const item of suite.assertionResults) { const cause = original && FAULTS[item.title]; assert.equal(item.status, cause ? 'failed' : 'passed'); if (!cause) { assert.deepEqual(item.failureMessages, []); continue; } assert.equal(item.failureMessages.length, 1); assert(item.failureMessages[0].includes(cause)); assert.match(item.failureMessages[0], /AssertionError/); assert.match(item.failureMessages[0], /expected false to be true/); assert(!SETUP.test(item.failureMessages[0])); }
+  const arm = path.join(folder, name); fs.mkdirSync(arm);
+  const row = { name, execution: 'six isolated Vitest processes, one selected case each', qualified: false, children: [] };
+  report.runs.push(row); checkpoint();
+  const aggregate = { version: 1, caseTitles: TITLES, cases: {} };
+  const armSource = () => Object.fromEntries(Object.keys(before).map(file => [file, fs.existsSync(path.join(ROOT, file)) ? sha(read(file)) : null]));
+  const expectedSource = { ...before };
+  if (original) { for (const file of PRODUCTS.slice(0, -1)) expectedSource[file] = sha(git(['show', BASELINE + ':' + file])); expectedSource[PRODUCTS.at(-1)] = null; }
+  assert.deepEqual(armSource(), expectedSource, 'Exact candidate or original whole source before isolated children');
+  const sourceFile = path.join(arm, 'source.before.json'); write(sourceFile, expectedSource); row.source = receipt(sourceFile);
+  const tool = { node: process.execPath, nodeVersion: process.version, vitestEntry: 'node_modules/vitest/vitest.mjs', vitestSha256: sha(read('node_modules/vitest/vitest.mjs')) };
+  row.tools = tool; checkpoint();
+  for (const [index, title] of TITLES.entries()) {
+    assert.deepEqual(armSource(), expectedSource, 'Same complete candidate or original source throughout the arm: ' + name);
+    assert.equal(sha(read(tool.vitestEntry)), tool.vitestSha256, 'Same actual Vitest entry throughout the arm');
+    const key = KEYS[index], selected = path.join(arm, String(index + 1).padStart(2, '0') + '-' + key);
+    fs.mkdirSync(selected);
+    const unitFile = path.join(selected, 'units.json'), rawFile = path.join(selected, 'raw.json'), transport = path.join(selected, 'units.transport');
+    const pattern = '^' + title.replace(/[.*+?^$()|[\]{}\\]/g, '\\$&') + '$';
+    const cause = original ? FAULTS[title] : undefined;
+    const args = ['node_modules/vitest/vitest.mjs', 'run', TEST, '--testNamePattern=' + pattern, '--maxWorkers=1', '--minWorkers=1', '--reporter=verbose', '--reporter=json', '--outputFile.json=' + unitFile];
+    const child = spawnSync(process.execPath, args, { cwd: ROOT, env: { ...process.env, ACCOUNT_DIALOG_RAW: rawFile, SIM_OFFLINE_RECEIPT: transport, FORCE_COLOR: '0', NO_COLOR: '1' }, encoding: 'utf8', timeout: 120000, maxBuffer: 64 * 1024 * 1024 });
+    for (const [file, body] of [['stdout.log', child.stdout], ['stderr.log', child.stderr]]) fs.writeFileSync(path.join(selected, file), body || '');
+    const observed = { key, title, pattern, args, node: process.execPath, exit: child.status, error: child.error?.message || null, signal: child.signal, qualified: false,
+      stdout: receipt(path.join(selected, 'stdout.log')), stderr: receipt(path.join(selected, 'stderr.log')) };
+    row.children.push(observed);
+    if (fs.existsSync(unitFile)) observed.units = receipt(unitFile); if (fs.existsSync(rawFile)) observed.raw = receipt(rawFile); checkpoint();
+    process.stdout.write(child.stdout || ''); process.stderr.write(child.stderr || '');
+    try {
+    assert(!child.error && !child.signal && child.status === (cause ? 1 : 0), 'Actual isolated completed case: ' + name + '/' + title);
+    assert(!SETUP.test((child.stdout || '') + (child.stderr || '')), 'Setup and transport errors never qualify');
+    assert(!fs.existsSync(transport) || fs.readFileSync(transport).length === 0);
+    const units = JSON.parse(fs.readFileSync(unitFile));
+    assert.equal(units.success, !cause); assert.equal(units.numTotalTests, 6); assert.equal(units.numFailedTests, cause ? 1 : 0);
+    assert.equal(units.numPassedTests, cause ? 0 : 1); assert.equal(units.numPendingTests, 5); assert.equal(units.numTodoTests, 0); assert.equal(units.testResults.length, 1);
+    const suite = units.testResults[0]; assert.equal(path.resolve(suite.name), path.join(ROOT, TEST)); assert.equal(suite.status, cause ? 'failed' : 'passed');
+    assert(!suite.message); assert.equal(suite.assertionResults.length, 6); assert.deepEqual(suite.assertionResults.map(item => item.title).sort(), [...TITLES].sort());
+    for (const item of suite.assertionResults) {
+      if (item.title !== title) { assert.equal(item.status, 'pending', 'Exactly the other five frozen declarations are filtered'); assert.deepEqual(item.failureMessages, []); continue; }
+      assert.equal(item.status, cause ? 'failed' : 'passed');
+      if (!cause) { assert.deepEqual(item.failureMessages, []); continue; }
+      assert.equal(item.failureMessages.length, 1); assert(item.failureMessages[0].includes(cause)); assert.match(item.failureMessages[0], /AssertionError/);
+      assert.match(item.failureMessages[0], /expected false to be true/); assert(!SETUP.test(item.failureMessages[0]));
+    }
+    const raw = JSON.parse(fs.readFileSync(rawFile)); assert.equal(raw.version, 1); assert.deepEqual(raw.caseTitles, TITLES); assert.deepEqual(Object.keys(raw.cases), [key], 'Only the actually executed selected case emits an observation');
+    const value = raw.cases[key]; assert.equal(value.title, title); assert.deepEqual(Object.keys(value.backend).sort(), ['from', 'resetPasswordForEmail', 'rpc', 'signIn', 'signOut', 'signUp']);
+    assert(Object.values(value.backend).every(count => count === 0)); assert.deepEqual(index < 3 ? value.closed.stores : value.after, value.before);
+    aggregate.cases[key] = value; observed.completion = { selected: 1, pending: 5, passed: cause ? 0 : 1, preciseBooleanFaults: cause ? 1 : 0, cause: cause || null };
+    observed.qualified = true;
+    } catch (error) { observed.validationError = error?.stack || String(error); }
+    assert.equal(sha(read(tool.vitestEntry)), tool.vitestSha256); assert.deepEqual(armSource(), expectedSource, 'No source mixing across physical child observations');
+    checkpoint();
+  }
+  assert.equal(row.children.length, 6); row.validatedChildren = row.children.filter(child => child.qualified).length; checkpoint();
+  assert(row.children.every(child => child.qualified), 'All six actual isolated cases must qualify before any aggregate or next source arm');
+  assert.deepEqual(Object.keys(aggregate.cases), KEYS);
+  const rawFile = path.join(arm, 'raw.json'); write(rawFile, aggregate); row.raw = receipt(rawFile);
+  row.aggregate = { origin: 'Selected case objects from the six retained single-case raw files, in frozen KEY order; not one six-case Vitest process',
+    children: row.children.map(child => ({ key: child.key, title: child.title, raw: child.raw })), completed: 6, passed: original ? 3 : 6, preciseBooleanFaults: original ? 3 : 0 };
+  checkpoint();
   const bytes = fs.readFileSync(rawFile), raw = JSON.parse(bytes); assert.equal(raw.version, 1); assert.deepEqual(raw.caseTitles, TITLES); assert.deepEqual(Object.keys(raw.cases).sort(), [...KEYS].sort());
   for (const [index, key] of KEYS.entries()) { const value = raw.cases[key]; assert.equal(value.title, TITLES[index]); assert.deepEqual(Object.keys(value.backend).sort(), ['from', 'resetPasswordForEmail', 'rpc', 'signIn', 'signOut', 'signUp']); assert(Object.values(value.backend).every(count => count === 0)); assert.deepEqual(index < 3 ? value.closed.stores : value.after, value.before); }
   for (const [index, key] of KEYS.slice(0, 3).entries()) { const value = raw.cases[key]; assert.equal(value.initial.dialogPresent, false); for (const count of ['factoryEvaluations', 'realImports', 'mounts']) { assert.equal(value.initial[count], original ? 1 : 0); assert.equal(value.opened[count], 1); assert.equal(value.closed[count], 1); } assert.equal(value.initial.unmounts, 0); assert.equal(value.closed.unmounts, 0); assert.equal(value.closed.dialogPresent, false); assert.equal(value.closed.openerFocused, true); assert.equal(value.opened.form.focusInside, true); assert.equal(value.opened.form.heading, index === 0 ? 'Welcome Back!' : 'Join DoUKnowBall'); for (const stores of [value.initial.stores, value.opened.form.stores]) assert.deepEqual(stores, value.before); }
-  row.qualified = true; row.cases = suite.assertionResults.map(item => ({ title: item.title, status: item.status })); checkpoint(); return { bytes, raw };
+  row.qualified = true; checkpoint(); return { bytes, raw };
 }
+
 const candidate = Object.fromEntries(PRODUCTS.map(file => [file, read(file)])); let normal, original, restored;
 try {
   assert.equal(git(['status', '--porcelain', '--untracked-files=no']).toString(), ''); git(['merge-base', '--is-ancestor', BASELINE, report.head]);
@@ -98,4 +150,4 @@ try {
   for (const key of KEYS.slice(3)) assert.deepEqual(normal.raw.cases[key], original.raw.cases[key], 'Every complete original preservation outcome is held: ' + key);
   assert.deepEqual(tracked(), before, 'Every source body held after restored execution'); report.status = 'complete'; report.qualified = true; checkpoint(); write(path.join(folder, 'summary.json'), report);
 } catch (error) { report.error = error?.stack || String(error); checkpoint(); throw error; }
-console.log('Account dialog fixed proof:6 normal,3 exact original faults+3 whole preserves,6 restored;full original baseline and normal/restored raw bytes held.');
+console.log('Account dialog fixed proof:18 isolated Vitest children (6 normal,3 exact original faults+3 whole preserves,6 restored), each with5 filtered declarations;full original aggregate baseline and normal/restored aggregate raw bytes held.');
