@@ -31,6 +31,11 @@
    stream is left exactly where it was. Pure apart from launderDirtyMoney, which mutates because the deck cards'
    contract is to mutate and return the feed line (nbaCareerCorruption.ts 20 to 21).
 
+   TWO FILES, ONE RULE. This file is what the four corruption decks, the board and the pages' help need at first
+   load: the numbers, the apply, the draw and the card. The desk's button words and its apply on a copy
+   (wayLines, previewDirty, dealWithDirtyMoney) are in careerDirtyMoneyDesk.ts, which only the lazy desk imports,
+   so they stay out of the four pages' first load; they run this file's numbers and add no rule.
+
    The fields are the US careers' (src/lib/usCareerSport.ts UsCareerCore); a career that names them differently
    binds through an adapter, so Soccer Career's own laundering can join later without a rename. No sport is
    imported here: the board and the four corruption decks import this, never the reverse. */
@@ -214,55 +219,9 @@ export function wayNumbers(c: DirtyMoneyHost, way: DirtyWay): DirtyNumbers {
   return n;
 }
 
-const sitOut = (n: number) => (n === 1 ? 'a season' : `${n} seasons`);
-/* What every suspension the engines start at a season end takes (nbaMyCareer.ts 926 to 927 and its three copies),
-   the same numbers a caught wash takes at once. */
-const startCost = (starts: number) => (starts <= 0 ? '' : `, fanbase -${CAUGHT_FANBASE} and morale -${CAUGHT_MORALE} ${starts === 1 ? 'when it starts' : 'each time one starts'}`);
-
-/** The lines a way's button prints, built only from its numbers. */
-export function wayLines(n: DirtyNumbers, heatNow: number): string[] {
-  const banLine = n.bannedAfter > 0 ? [`At this heat you still sit out ${sitOut(n.bannedAfter)} to a suspension${startCost(n.startsAfter)}`] : [];
-  if (n.way === 'clean') {
-    return [
-      n.fine > 0
-        ? `Pay back all ${m(n.amount)} plus a ${m(n.fine)} fine${n.fineIsAll ? ', all the clean money you have' : ''}`
-        : `Pay back all ${m(n.amount)}. You have no clean money for the fine`,
-      n.heat < 0 ? `Heat ${n.heat}` : heatNow >= 100 ? 'At the top of the meter nothing cools the heat' : 'Too little to cool the heat',
-      n.karma > 0 ? `Karma +${n.karma}` : 'Karma stays where it is',
-      ...banLine,
-    ];
-  }
-  if (n.way === 'give') {
-    return [
-      `All ${m(n.amount)} goes to charity. You keep none of it`,
-      n.karma > 0 ? `Karma +${n.karma}` : 'Karma stays where it is',
-      'Heat stays where it is',
-      ...banLine,
-    ];
-  }
-  if (n.way === 'wash') {
-    const washed = n.keep > 0 ? `${m(n.keep)} comes out as clean money` : 'too little of it to come out as clean money';
-    return [
-      n.heat >= WASH_HEAT ? `Heat +${n.heat} now` : n.heat > 0 ? 'Heat goes to the top of the meter now' : 'Heat is already at the top of the meter',
-      `${n.caughtPct} percent chance you are caught`,
-      `Not caught: ${washed}${n.bannedAfter > 0 ? `, and at this heat you still sit out ${sitOut(n.bannedAfter)} to a suspension${startCost(n.startsAfter)}` : ''}`,
-      `Caught: all ${m(n.amount)} is seized, fanbase -${n.caughtFanbase}, morale -${n.caughtMorale}, and you sit out ${sitOut(n.bannedIfCaught)}${n.startsIfCaught > 0 ? `, the next suspension costing fanbase -${CAUGHT_FANBASE} and morale -${CAUGHT_MORALE} again` : ''}`,
-    ];
-  }
-  return [
-    'Nothing changes now',
-    heatNow > 0 ? 'It keeps burning: heat climbs every season you hold it' : 'Nobody is looking yet, but once the heat starts it climbs every season you hold it',
-    ...(n.burnsToBan ? [`At this heat the next season end suspends you, takes all of it, and costs fanbase -${CAUGHT_FANBASE} and morale -${CAUGHT_MORALE}`] : []),
-  ];
-}
-
-export interface DirtyPreview extends DirtyNumbers { lines: string[] }
-
-/** What a way's button prints before you choose: every number it will apply, rounded as printed. */
-export function previewDirty(c: DirtyMoneyHost, way: DirtyWay): DirtyPreview {
-  const n = wayNumbers(c, way);
-  return { ...n, lines: wayLines(n, c.heat ?? 0) };
-}
+/** Seasons served, as the desk and the card print them. */
+export const seasonsOut = (n: number): string => (n === 1 ? 'a season' : `${n} seasons`);
+const sitOut = seasonsOut;
 
 /** The key a wash is decided on. Changes with the season and with the money, so it is one decision a state. */
 export function launderKey(c: DirtyMoneyHost): string {
@@ -274,8 +233,9 @@ export function washIsCaught(c: DirtyMoneyHost, caughtPct: number): boolean {
   return keyedRng(launderKey(c))() < caughtPct / 100;
 }
 
-/** Applies a way's numbers to the career, mutating it. Writes only the fields that change. */
-function applyNumbers(c: DirtyMoneyHost, n: DirtyNumbers, caught: boolean): void {
+/** Applies a way's numbers to the career, mutating it. Writes only the fields that change. The desk's copy
+ *  (careerDirtyMoneyDesk.ts) and the card's wash both apply through this. */
+export function applyDirtyNumbers(c: DirtyMoneyHost, n: DirtyNumbers, caught: boolean): void {
   c.dirtyMoney = 0;
   if (n.way === 'clean' && n.fine > 0) c.netWorth = round2((c.netWorth ?? 0) - n.fine);
   if (n.way === 'wash' && !caught) c.netWorth = round2((c.netWorth ?? 0) + n.keep);
@@ -288,7 +248,8 @@ function applyNumbers(c: DirtyMoneyHost, n: DirtyNumbers, caught: boolean): void
   }
 }
 
-function resultLine(n: DirtyNumbers, caught: boolean): string {
+/** The feed line a way leaves, once applied. */
+export function dirtyResultLine(n: DirtyNumbers, caught: boolean): string {
   const extras = [n.heat < 0 ? `heat ${n.heat}` : '', n.karma > 0 ? `karma +${n.karma}` : ''].filter(Boolean).join(', ');
   const tail = extras ? ` ${extras.charAt(0).toUpperCase()}${extras.slice(1)}.` : '';
   if (n.way === 'clean') return `You came clean and paid back ${m(n.amount)}${n.fine > 0 ? ` plus a ${m(n.fine)} fine` : ''}.${tail}`;
@@ -298,26 +259,14 @@ function resultLine(n: DirtyNumbers, caught: boolean): string {
     : n.keep > 0 ? `${m(n.keep)} came out clean.` : 'Too little of it came out to count.';
 }
 
-/** The desk: deals with all the dirty money one way, on a copy. Keep it quiet, a career with none, and a retired
- *  career come back unchanged with no line. */
-export function dealWithDirtyMoney<C extends DirtyMoneyHost>(prev: C, way: DirtyWay): { state: C; line: string; caught: boolean | null } {
-  if (way === 'quiet' || !canDealWithDirtyMoney(prev)) return { state: prev, line: '', caught: null };
-  const n = wayNumbers(prev, way);
-  const caught = way === 'wash' ? washIsCaught(prev, n.caughtPct ?? 0) : false;
-  const state = { ...prev };
-  applyNumbers(state, n, caught);
-  const line = way === 'wash' && !caught ? `You washed it through cash businesses. ${resultLine(n, caught)}` : resultLine(n, caught);
-  return { state, line, caught: way === 'wash' ? caught : null };
-}
-
 /** The deck card's wash, the desk's rule on the card's own career: MUTATES and returns the feed line (the deck
  *  contract). `done` is the line the card has always said; the outcome is added to it. */
 export function launderDirtyMoney(c: DirtyMoneyHost, done: string): string {
   if (!canDealWithDirtyMoney(c)) return done;
   const n = wayNumbers(c, 'wash');
   const caught = washIsCaught(c, n.caughtPct ?? 0);
-  applyNumbers(c, n, caught);
-  return caught ? resultLine(n, true) : `${done} ${resultLine(n, false)}`;
+  applyDirtyNumbers(c, n, caught);
+  return caught ? dirtyResultLine(n, true) : `${done} ${dirtyResultLine(n, false)}`;
 }
 
 /** The card's effect line, built from the career it is dealt to, so the words are the effect. The card applies on

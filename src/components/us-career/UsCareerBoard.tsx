@@ -79,7 +79,7 @@ import { answerTalk, endsAfterSeason, manualRetire, pendingTalk, repairHallOnLoa
 import { stampOnRetirement } from '@/lib/usCareerRetirementFlow';
 import { isFarewellSeason, type RetirementChoiceId } from '@/lib/careerRetirement';
 import { hallRecordFor, type HallSpeechId } from '@/lib/careerHallOfFame';
-import { DIRTY_SENTENCE_NO_WASHERS, canDealWithDirtyMoney, dealWithDirtyMoney, washersLeft } from '@/lib/careerDirtyMoney';
+import { DIRTY_SENTENCE_NO_WASHERS, canDealWithDirtyMoney, washersLeft } from '@/lib/careerDirtyMoney';
 
 const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));
 const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeasonReview'));
@@ -1307,14 +1307,14 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           />
         )}
         {/* Round 1500: the dirty money desk. Only in a playing season (the button under the heat meter is drawn
-            only then); the choice is applied by the shared rule, written to the feed and saved like a buy. */}
+            only then); the desk applies the choice by the shared rule in its own lazy chunk, and the board writes
+            it to the feed and saves it like a buy. The desk hands back dealWithDirtyMoney of this career: this
+            career spread with its money fields changed, so it is this career's type. */}
         {panel === 'dirty' && phase === 'season' && (
           <Suspense fallback={null}>
-            <DirtyMoneyDesk career={career} onClose={() => setPanel('none')} onDeal={way => {
-              const res = dealWithDirtyMoney(career, way);
-              if (!res.line) return null;
-              setCareer(res.state); setFeed(f => [res.line, ...f].slice(0, 8)); persist(res.state, 'season', teamQuality);
-              return res;
+            <DirtyMoneyDesk career={career} onClose={() => setPanel('none')} onDealt={(dealt, line) => {
+              const next = dealt as typeof career;
+              setCareer(next); setFeed(f => [line, ...f].slice(0, 8)); persist(next, 'season', teamQuality);
             }} />
           </Suspense>
         )}

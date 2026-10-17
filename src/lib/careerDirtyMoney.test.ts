@@ -4,10 +4,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { keyedRng } from '@/lib/keyedRng';
 import {
-  CLEAN_HEAT_CAP, DIRTY_WAYS, GIVE_KARMA_CAP, US_DIRTY_MONEY_HELP_RULE, bannedAhead, cleanHeatRelief, dealWithDirtyMoney,
-  launderDirtyMoney, launderEffectText, launderKey, previewDirty, washCaughtPct, washerIds, washersLeft,
+  CLEAN_HEAT_CAP, DIRTY_WAYS, GIVE_KARMA_CAP, US_DIRTY_MONEY_HELP_RULE, bannedAhead, cleanHeatRelief,
+  launderDirtyMoney, launderEffectText, launderKey, washCaughtPct, washerIds, washersLeft,
   type DirtyMoneyHost,
 } from '@/lib/careerDirtyMoney';
+import { dealWithDirtyMoney, previewDirty } from '@/lib/careerDirtyMoneyDesk';
 import { NBA_SPEND_ITEMS } from '@/lib/nbaMyCareer';
 import { NFL_SPEND_ITEMS } from '@/lib/nflMyCareer';
 import { MLB_SPEND_ITEMS } from '@/lib/mlbMyCareer';

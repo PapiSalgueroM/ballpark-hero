@@ -185,6 +185,9 @@ const lib = rel => `${ROOT.replaceAll('\\', '/')}/src/lib/${rel}`;
 fs.writeFileSync(path.join(tmp, 'entry.mjs'), [
   'globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };',
   `export * as DM from '${lib('careerDirtyMoney.ts')}';`,
+  /* The desk's words and its apply on a copy live beside it (they load with the desk's lazy chunk); they import the
+     module above, so a control copy of it reaches them too. */
+  `export * as DESK from '${lib('careerDirtyMoneyDesk.ts')}';`,
   `export { keyedRng } from '${lib('keyedRng.ts')}';`,
   `export { defaultAppearance } from '${lib('soccerCareerAppearance.ts')}';`,
   `export { NBA_CAREER_SPORT } from '${lib('nbaCareerSport.ts')}';`,
@@ -207,7 +210,7 @@ async function bundle(swaps, file) {
 }
 const E = await bundle(headSwaps, 'bundle.mjs');
 const B = await bundle(baseSwaps, 'bundle-base.mjs');
-const { DM } = E;
+const DM = { ...E.DM, ...E.DESK };
 const bindOf = X => ({ nba: X.NBA_CAREER_SPORT, nfl: X.NFL_CAREER_SPORT, mlb: X.MLB_CAREER_SPORT, nhl: X.NHL_CAREER_SPORT });
 const BIND = bindOf(E);
 const DECK = { nba: E.getNbaCorruptionEvents, nfl: E.getNflCorruptionEvents, mlb: E.getMlbCorruptionEvents, nhl: E.getNhlCorruptionEvents };

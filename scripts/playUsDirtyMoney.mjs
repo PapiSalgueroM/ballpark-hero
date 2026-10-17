@@ -41,6 +41,7 @@ await build({
     import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
     export const sports = [NBA_CAREER_SPORT, NFL_CAREER_SPORT];
     export * from '@/lib/careerDirtyMoney';
+    export * from '@/lib/careerDirtyMoneyDesk';
   `, resolveDir: ROOT, sourcefile: 'play-us-dirty-engine.ts', loader: 'ts' },
   outfile: bundle, bundle: true, platform: 'node', format: 'cjs', logLevel: 'silent', alias: { '@': path.join(ROOT, 'src') },
 });

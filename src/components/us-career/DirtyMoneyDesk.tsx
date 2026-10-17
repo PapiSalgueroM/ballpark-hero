@@ -1,10 +1,10 @@
 /* Round 1500: the dirty money desk, opened from "Deal with it" under the heat meter of all four US My Careers.
 
    Player report (/nba-my-career, 2026-10-16): "i got shady money and i want to wash it". Four ways out, each tile
-   printing every number it will apply (src/lib/careerDirtyMoney.ts previewDirty, the same function the apply runs),
+   printing every number it will apply (src/lib/careerDirtyMoneyDesk.ts previewDirty, from the numbers the apply runs),
    and a second tap on the same card before anything happens ("Do it" or "Back"): one tap is never enough to spend
-   the money. The board applies the choice, writes the line to the feed and saves; this screen then shows the
-   result once and "Back to your career".
+   the money. This screen applies the choice by the shared rule and hands the board the dealt career to write to the
+   feed and save; it then shows the result once and "Back to your career".
 
    Loaded with the moment it belongs to (a lazy chunk of the board), and imports no sport (scripts/
    simUsCareerWeight.mjs fences src/components/us-career). NO SCROLL RULE: the card that changes pulls itself into
@@ -13,7 +13,8 @@ import { useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { useTapSettle } from '@/hooks/useTapSettle';
-import { DIRTY_WAYS, canDealWithDirtyMoney, dirtyHeld, moneyText, previewDirty, type DirtyMoneyHost, type DirtyWay } from '@/lib/careerDirtyMoney';
+import { DIRTY_WAYS, canDealWithDirtyMoney, dirtyHeld, moneyText, type DirtyMoneyHost, type DirtyWay } from '@/lib/careerDirtyMoney';
+import { dealWithDirtyMoney, previewDirty } from '@/lib/careerDirtyMoneyDesk';
 
 const WAY_COPY: Record<DirtyWay, { emoji: string; title: string }> = {
   clean: { emoji: '\u{1F9FE}', title: 'Come clean' },
@@ -26,14 +27,16 @@ export interface DirtyMoneyDeskResult { line: string; caught: boolean | null }
 
 export interface DirtyMoneyDeskProps {
   career: DirtyMoneyHost;
-  /** Applies one way to the career, saves it and returns the feed line; null when there was nothing to do. */
-  onDeal: (way: DirtyWay) => DirtyMoneyDeskResult | null;
+  /** Takes the career the desk dealt (dealWithDirtyMoney of `career`: the same career spread, its money fields
+   *  changed) and its feed line, and saves it. The rule runs here, in the desk's lazy chunk, so the board's first
+   *  load does not carry the desk's words (the Round 1500 review's weight finding). */
+  onDealt: (state: DirtyMoneyHost, line: string) => void;
   onClose: () => void;
 }
 
 const backButton = 'min-h-11 w-full rounded-xl border border-border bg-card px-3 text-xs font-bold text-foreground hover:bg-secondary';
 
-export default function DirtyMoneyDesk({ career, onDeal, onClose }: DirtyMoneyDeskProps) {
+export default function DirtyMoneyDesk({ career, onDealt, onClose }: DirtyMoneyDeskProps) {
   const [picked, setPicked] = useState<DirtyWay | null>(null);
   const [result, setResult] = useState<DirtyMoneyDeskResult | null>(null);
   /* One shot: two clicks in the same frame must not deal twice (the board reads the career of this render). */
@@ -65,9 +68,10 @@ export default function DirtyMoneyDesk({ career, onDeal, onClose }: DirtyMoneyDe
     if (dealt.current || !tap.settled()) return;
     if (way === 'quiet') { onClose(); return; }
     dealt.current = true;
-    const r = onDeal(way);
-    if (r) setResult(r);
-    else onClose();
+    const r = dealWithDirtyMoney(career, way);
+    if (!r.line) { onClose(); return; }
+    onDealt(r.state, r.line);
+    setResult({ line: r.line, caught: r.caught });
   };
 
   const ways = picked ? [picked] : DIRTY_WAYS;

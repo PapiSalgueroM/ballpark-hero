@@ -30,7 +30,8 @@ import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
 import type { UsCareerSport } from '@/lib/usCareerSport';
-import { DIRTY_SENTENCE_NO_WASHERS, dealWithDirtyMoney, previewDirty, washerIds, type DirtyMoneyHost } from '@/lib/careerDirtyMoney';
+import { DIRTY_SENTENCE_NO_WASHERS, washerIds, type DirtyMoneyHost } from '@/lib/careerDirtyMoney';
+import { dealWithDirtyMoney, previewDirty } from '@/lib/careerDirtyMoneyDesk';
 import { SETTLE_MS } from '@/hooks/useTapSettle';
 
 interface Saved { c: DirtyMoneyHost & { purchased?: string[] }; phase: string; [k: string]: unknown }
