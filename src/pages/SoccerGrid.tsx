@@ -158,6 +158,7 @@ const SoccerGrid = () => {
                     <button
                       key={d.tier}
                       onClick={() => setDifficulty(d.tier)}
+                      disabled={validating}
                       className={cn(
                         'px-4 py-2 rounded-full text-sm font-semibold transition-all',
                         settings.difficulty === d.tier
@@ -178,6 +179,7 @@ const SoccerGrid = () => {
                     <button
                       key={t.mode}
                       onClick={() => setTimerMode(t.mode)}
+                      disabled={validating}
                       className={cn(
                         'px-4 py-2 rounded-full text-sm font-semibold transition-all',
                         settings.timerMode === t.mode
