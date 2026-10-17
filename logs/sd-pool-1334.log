@@ -1,0 +1,5 @@
+treeWithoutMerge: 2f434d8ad61bd667a39880fba1bdfcc3ac9f1225, d10041a9 without b9964c33; conflicts kept from d10041a9: none
+base 2f434d8ad61bd667a39880fba1bdfcc3ac9f1225 (this tree without Round 1334)
+
+runtime 25.4 s
+simSoccerDeck: CONTROL=pool FIRED: section 3 failed (5 failures, red sections 3)

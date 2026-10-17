@@ -1,0 +1,5 @@
+treeWithoutMerge: b3402d11084034614e3f27364b23ac7cca5ae855, d10041a9 without b9964c33; conflicts kept from d10041a9: none
+base b3402d11084034614e3f27364b23ac7cca5ae855 (this tree without Round 1334)
+
+runtime 12.7 s
+simSoccerDeck: CONTROL=ceiling FIRED: section 5 failed (2 failures, red sections 5)

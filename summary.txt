@@ -1,0 +1,33 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+srclib-1337 exit=0 0s | engine, save, shared files and guides byte equal to the tree without Round 1337
+vitest-1337 exit=0 14s |    Duration  13.96s (transform 6.89s, setup 660ms, collect 20.56s, tests 13.53s, environment 3.08s, prepare 834ms)
+opponentLabels-1337 exit=0 45s | 0 failing checks in the report
+storage-1337 exit=0 7s | simStorageWrites: all green (owed: 12)
+storage-gone-1337 exit=1 5s | simStorageWrites (control gone): 1 failed, the control FIRED on src/lib/safeStorage.ts write:plantedNeverWritten gone (owed: 12)
+dash-1337 exit=0 0s | dashBase: 990 added lines since 71e2ea07c330f97b45881f368342f8665f8a6bf0 scanned; with a dash: 0
+potential-1337 exit=0 80s | PASS Soccer potential progress browser
+truths-1337 exit=0 141s | playSoccerScreenTruths: green, W4 W4r W5 W6 W7 W8 pass on the head and every control section is red on the base
+practice1076-1337 exit=0 132s | PASS career practice native: 9 actual panel journeys, 27 effective DOM controls, trusted focus/input, earned banking and unchanged sources.
+vitest-1334 exit=0 92s |    Duration  91.56s (transform 10.92s, setup 3.68s, collect 36.88s, tests 177.37s, environment 21.41s, prepare 5.28s)
+playCareerSquad-1337 exit=0 223s | playCareerSquad: 190 checks, 0 failed
+sd-b-1334 exit=0 59s | simSoccerDeck: green. Sections 6, 7, 9, 10 only.
+sd-bindopen-1334 exit=1 2s | simSoccerDeck: CONTROL=bindopen FIRED: section 1 failed (21 failures, red sections 1)
+sd-a-1334 exit=0 78s | simSoccerDeck: green. Sections 1, 2, 3, 4, 5 only.
+sd-last-1334 exit=1 26s | simSoccerDeck: CONTROL=last FIRED: section 3 failed (3 failures, red sections 3)
+sd-leak-1334 exit=1 38s | simSoccerDeck: CONTROL=leak FIRED: section 2 failed (2 failures, red sections 2)
+sd-neutralmoves-1334 exit=1 21s | simSoccerDeck: CONTROL=neutralmoves FIRED: section 4 failed (1 failures, red sections 4)
+sd-pool-1334 exit=1 26s | simSoccerDeck: CONTROL=pool FIRED: section 3 failed (5 failures, red sections 3)
+sd-silent-1334 exit=1 11s | simSoccerDeck: CONTROL=silent FIRED: section 5 failed (2 failures, red sections 5)
+sd-noreseed-1334 exit=1 20s | simSoccerDeck: CONTROL=noreseed FIRED: section 4 failed (1 failures, red sections 4)
+sd-drop-1334 exit=1 12s | simSoccerDeck: CONTROL=drop FIRED: section 5 failed (2 failures, red sections 5)
+sd-ceiling-1334 exit=1 13s | simSoccerDeck: CONTROL=ceiling FIRED: section 5 failed (2 failures, red sections 5)
+sd-8-1334 exit=0 114s | simSoccerDeck: green. Sections 8 only.
+sd-posleak-1334 exit=1 32s | simSoccerDeck: CONTROL=posleak FIRED: section 6 failed (1 failures, red sections 6)
+sd-mathrandom-1334 exit=1 35s | simSoccerDeck: CONTROL=mathrandom FIRED: section 7 failed (2 failures, red sections 7)
+sd-keyseason-1334 exit=1 34s | simSoccerDeck: CONTROL=keyseason FIRED: section 7 failed (1 failures, red sections 7)
+sd-noresolve-1334 exit=1 8s | simSoccerDeck: CONTROL=noresolve FIRED: section 9 failed (1 failures, red sections 9)
+sd-eager-1334 exit=1 4s | simSoccerDeck: CONTROL=eager FIRED: section 10 failed (2 failures, red sections 10)
+nolazy-1334 exit=1 1s | simEventDeck: 1 failure, red sections 16
+sd-caller-1334 exit=1 3s | simSoccerDeck: CONTROL=caller FIRED: section 10 failed (1 failures, red sections 10)
+gmcompare-1334 exit=0 7s | simGmInbox: green.
+sd-pressure-1334 exit=1 85s | simSoccerDeck: CONTROL=pressure FIRED: section 8 failed (5 failures, red sections 8)
