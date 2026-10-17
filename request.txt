@@ -1,0 +1,29 @@
+#!serve
+#!playwright
+fairness: node scripts/simSoccerDeckFairness.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+worldtruth: node scripts/simSoccerWorldTruth.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+leagueseasons: node scripts/simCareerLeagueSeasons.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+awardsnight: node scripts/simCareerAwardsNight.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+leaguefinish: node scripts/simCareerLeagueFinish.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+programme: node scripts/simCareerProgramme.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+socialbrands: node scripts/simCareerSocialBrands.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+storyrole: node scripts/simCareerStoryRole.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+trophyruns: node scripts/simCareerTrophyRuns.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+development: node scripts/simSoccerCareerDevelopment.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+pressmarket: node scripts/simCareerPressMarket.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+transferbrief: node scripts/simCareerTransferBrief.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+derbyhistory: node scripts/simSoccerDerbyHistory.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+seasonhistory: node scripts/simSoccerSeasonHistory.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+agentreview: node scripts/simSoccerAgentReview.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+farewell: node scripts/simSoccerFarewell.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+intlreturn: node scripts/simSoccerInternationalReturn.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+fair-outside: SIM_SOCCER_DECK_FAIRNESS_CONTROL=outside node scripts/simSoccerDeckFairness.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+truth-outside: WORLD_TRUTH_CONTROL=outside node scripts/simSoccerWorldTruth.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+promises: node scripts/simSoccerEventPromises.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+cooldowns: node scripts/simCareerLifeCooldowns.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+flagship: node scripts/simFlagshipWeight.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+weights: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; cp /tmp/sw.log $RC_OUT/sw.log; grep -E "soccer-career|club-manager|manager-hot-seat|deadline-day|nba-my-career|nfl-my-career|mlb-my-career|nhl-my-career|OVER|over" /tmp/sw.log | head -30; tail -3 /tmp/sw.log; exit $s
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+ctl-fairness-16: n=0; bad=""; for c in shuffle ranking globalpick keyseason newsyear nogate puskas loanclub unit poscode uncapped prefix olddebut injblow injlog outside; do SIM_SOCCER_DECK_FAIRNESS_CONTROL=$c node scripts/simSoccerDeckFairness.mjs > "$TMPDIR/fair-$c.log" 2>&1; s=$?; grep -h "CONTROL $c " "$TMPDIR/fair-$c.log"; if [ $s -eq 1 ] && grep -qE "CONTROL $c FIRED: section [0-9]+ failed \([0-9]+ failures in all\)" "$TMPDIR/fair-$c.log"; then n=$((n+1)); else bad="$bad $c(exit $s)"; tail -5 "$TMPDIR/fair-$c.log"; fi; done; echo "simSoccerDeckFairness: $n of 16 Round 1327 controls fired${bad:+, NOT FIRED:$bad}"; [ $n -eq 16 ]
+ctl-worldtruth-16: n=0; bad=""; for p in goalsonly:1 seasonyear:1 nolegacy:2 realmoves:3 pastchampions:3 summer:3 quizyear:4 arcade:4 outside:6 log:5 boundary:0 panel:5 floor:0 legacy35:2 legacy30:2 extradraw:2; do c=${p%%:*}; k=${p#*:}; WORLD_TRUTH_CONTROL=$c node scripts/simSoccerWorldTruth.mjs > "$TMPDIR/wt-$c.log" 2>&1; s=$?; grep -h "WORLD_TRUTH_CONTROL=$c failed\|WORLD_TRUTH_CONTROL=$c left" "$TMPDIR/wt-$c.log"; if [ $s -eq 1 ] && grep -qF "FIRED: WORLD_TRUTH_CONTROL=$c failed section $k (" "$TMPDIR/wt-$c.log"; then n=$((n+1)); else bad="$bad $c(exit $s)"; tail -5 "$TMPDIR/wt-$c.log"; fi; done; echo "simSoccerWorldTruth: $n of 16 Round 1329 controls fired on their own sections${bad:+, NOT FIRED:$bad}"; [ $n -eq 16 ]
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
