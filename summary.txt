@@ -1,0 +1,2 @@
+unit exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/cmMatchDisplay.test.ts,title=src/lib/cmMatchDisplay.test.ts > the pitch name and the initials (Round 13
+tsc exit=0 50s | 

@@ -1,0 +1,42 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/cmMatchDisplay.test.ts [2m([22m[2m7 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 302[2mms[22m[39m
+   [32m✓[39m the order rule (Round 1340)[2m > [22mputs my club first at home and on a neutral ground, and second away[32m 1[2mms[22m[39m
+   [32m✓[39m the order rule (Round 1340)[2m > [22mreads a field from before the venue existed as today: my club first[32m 0[2mms[22m[39m
+   [32m✓[39m the order rule (Round 1340)[2m > [22mdraws the pair home side first[32m 1[2mms[22m[39m
+   [32m✓[39m the order rule (Round 1340)[2m > [22mreads a report the way the engine wrote it[32m 0[2mms[22m[39m
+   [32m✓[39m the order rule (Round 1340)[2m > [22magrees with the engine on every venue: report home is me exactly when myClubFirst[32m 0[2mms[22m[39m
+   [32m✓[39m the pitch name and the initials (Round 1340b)[2m > [22mkeeps the words a surname carries and drops only a generational suffix[32m 2[2mms[22m[39m
+[31m   [31m×[31m the pitch name and the initials (Round 1340b)[2m > [22mholds over every name the game can put on a pitch[39m[32m 295[2mms[22m[39m
+[31m     → Jhon Jhon: expected true to be false // Object.is equality[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/cmMatchDisplay.test.ts[2m > [22mthe pitch name and the initials (Round 1340b)[2m > [22mholds over every name the game can put on a pitch
+[31m[1mAssertionError[22m: Jhon Jhon: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/lib/cmMatchDisplay.test.ts:[2m98:64[22m[39m
+    [90m 96| [39m      expect(` ${words.join(' ')}`.endsWith(` ${surname}`), name).toBe…
+    [90m 97| [39m      /* Never a first name standing alone where the name has more wor…
+    [90m 98| [39m      if (words.length > 1) expect(surname === words[0], name).toBe(fa…
+    [90m   | [39m                                                               [31m^[39m
+    [90m 99| [39m      [34mexpect[39m([34mpitchInitials[39m(name)[33m,[39m name)[33m.[39m[34mtoMatch[39m([36m/^\p{L}{2,3}$/u[39m)[33m;[39m
+    [90m100| [39m      if (real.has(name) && surname !== lastName(name)) changed.push(`…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m6 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 01:52:06
+[2m   Duration [22m 2.20s[2m (transform 920ms, setup 53ms, collect 1.03s, tests 302ms, environment 359ms, prepare 205ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/cmMatchDisplay.test.ts,title=src/lib/cmMatchDisplay.test.ts > the pitch name and the initials (Round 1340b) > holds over every name the game can put on a pitch,line=98,column=64::AssertionError: Jhon Jhon: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/lib/cmMatchDisplay.test.ts:98:64%0A%0A
