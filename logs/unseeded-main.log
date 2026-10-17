@@ -1,0 +1,10 @@
+24
+  FAIL quiet Brentford (now) (quiet, seed 6221057) at step 1 early-1: the state differs, aiHeadlines: base ...nderland have come in for Caspar Lammert. Match th
+  FAIL quiet Brentford (now) (quiet, seed 6221058) at step 1 early-1: the state differs, aiHeadlines: base ...nderland have come in for Caspar Lammert. Match th
+  FAIL quiet Brentford (now) (quiet, seed 6221059) at step 1 early-1: the state differs, aiHeadlines: base ...nderland have come in for Caspar Lammert. Match th
+  FAIL quiet Cardiff City (now) (quiet, seed 6221057) at step 4 early-4: the state differs, inbox: base ...f protein cereal in the players lounge. your star man
+  FAIL quiet Cardiff City (now) (quiet, seed 6221058) at step 4 early-4: the state differs, decisions: base ...[{"id":"desk-1-4-quietWord","kind":"situation","s
+  FAIL quiet Cardiff City (now) (quiet, seed 6221059) at step 3 early-3: the state differs, decisions: base ...[{"id":"desk-1-2-finesKitty","kind":"situation","
+  FAIL quiet AC Horsens (now) (quiet, seed 6221057) at step 27 finish: the state differs, pendingSummary: base ...d) · £85m budget · the board wants: Win the
+  FAIL quiet AC Horsens (now) (quiet, seed 6221058) at step 27 rest-18: the state differs, approach: base ...ga · £89m budget · the board wants: Win the La L
+simCmUnseededWorld: 112 FAILURE(S)

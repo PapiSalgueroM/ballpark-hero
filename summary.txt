@@ -1,0 +1,5 @@
+headsha exit=0 0s | c06f27b50 Round BJG: m1, merge Round 1501 (r1501-cm-difficulty at 3078b7e7), Club Manager difficulty: Normal, Hard and Legend
+continuity-m2 exit=1 40s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:511:24
+continuity-main exit=1 41s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/.wt-main2/scripts/simManagerWorldContinuity.mjs:511:24
+unseeded-m2 exit=1 187s | simCmUnseededWorld: 112 FAILURE(S)
+unseeded-main exit=1 187s | simCmUnseededWorld: 112 FAILURE(S)

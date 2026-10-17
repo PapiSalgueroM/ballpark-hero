@@ -1,0 +1,5 @@
+headsha: git log --oneline -3
+unseeded-m2: node scripts/simCmUnseededWorld.mjs > /tmp/u.log 2>&1; s=$?; grep -c '^  FAIL' /tmp/u.log; grep '^  FAIL' /tmp/u.log | cut -c1-160 | head -8; tail -1 /tmp/u.log; exit $s
+continuity-m2: node scripts/simManagerWorldContinuity.mjs > /tmp/c.log 2>&1; s=$?; grep '^FAIL\|^PASS' /tmp/c.log | cut -c1-160; tail -3 /tmp/c.log | cut -c1-200; exit $s
+unseeded-main: git worktree add -q .wt-main 60824a23 && cd .wt-main && node scripts/simCmUnseededWorld.mjs > /tmp/um.log 2>&1; s=$?; grep -c '^  FAIL' /tmp/um.log; grep '^  FAIL' /tmp/um.log | cut -c1-160 | head -8; tail -1 /tmp/um.log; exit $s
+continuity-main: git worktree add -q .wt-main2 60824a23 && cd .wt-main2 && node scripts/simManagerWorldContinuity.mjs > /tmp/cm.log 2>&1; s=$?; grep '^FAIL\|^PASS' /tmp/cm.log | cut -c1-160; tail -3 /tmp/cm.log | cut -c1-200; exit $s
