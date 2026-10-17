@@ -1,0 +1,14 @@
+treeWithoutMerge: 8d590d72795ef0a58fb10fb11a2678b383dbbfcf, e2f87e99 without f1e54e17; conflicts kept from e2f87e99: none
+treeWithoutMerge: b9e39630df2d26a3b64fa52c765929982c9b14e4, 8d590d72 without 54100f6e; conflicts kept from 8d590d72: src/pages/WhatsNew.tsx
+base b9e39630df2d26a3b64fa52c765929982c9b14e4
+1) ownership: seeded careers, 6 seasons, seeds 1,2,3,4,5, the head engine
+   opening  45 windows, 198 AI deal lines, 0 not placed at the buyer, ledger 4.4 records and 2321 units a window on average
+   january  270 windows, 1182 AI deal lines, 0 not placed at the buyer, ledger 35.0 records and 3930 units a window on average
+   summer   225 windows, 1000 AI deal lines, 0 not placed at the buyer, ledger 36.6 records and 3467 units a window on average
+   45 careers (0 sacked early), 1272374 listings checked by the one club rule, 5362 moved men followed over 225 rollovers
+   failures by check: (i) 0, (ii) 0, (iii) 0; the first at none
+   the opening window's refusals (deal lines it closed before the seed that the flush could not place): 0 of 198 (expected 0)
+4) the market: 2380 moved men on the screen's market at their buyer (3 hidden behind a namesake, counted), 9520 door presses checked, the buy door locked on 1504; a season later 1909 on sale there, 1206 bought, 66 moved on or retired
+   the screen was checked against 1498986 buildMarket rows; 7156 Talk and buy presses on rows it marks joinedThisSeason
+   marketForScreen 5.39 ms a call against buildMarket's 1.61 ms on the same states (limit 3 x + 5 ms)
+simCmWorldMoves: green, sections 1, 4 held

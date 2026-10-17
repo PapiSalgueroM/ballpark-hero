@@ -1,0 +1,9 @@
+treeWithoutMerge: f1f36454bee88f4b626e8b926e3f4d598039244d, e2f87e99 without f1e54e17; conflicts kept from e2f87e99: none
+treeWithoutMerge: f428eff8782a07b948cd34ef2b28945f608ace56, f1f36454 without 54100f6e; conflicts kept from f1f36454: src/pages/WhatsNew.tsx
+base f428eff8782a07b948cd34ef2b28945f608ace56
+simCmWorldMoves: control joinledger FIRED: section 3 red (154)
+simCmWorldMoves: control nocarry FIRED: section 3 red (318)
+simCmWorldMoves: control seasonone FIRED: section 3 red (198)
+simCmWorldMoves: control norepair FIRED: section 5 red (361)
+simCmWorldMoves: control repairthrows FIRED: section 5 red (361)
+controls (exit/FIRED): joinledger=1/1 nocarry=1/1 seasonone=1/1 norepair=1/1 repairthrows=1/1

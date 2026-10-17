@@ -1,0 +1,9 @@
+treeWithoutMerge: 5ce42092befc2be08cf28a4cd4ac346c6a808000, e2f87e99 without f1e54e17; conflicts kept from e2f87e99: none
+treeWithoutMerge: 56b16dfa30fa1996e1339b8ef1c52eccead1b6f4, 5ce42092 without 54100f6e; conflicts kept from 5ce42092: src/pages/WhatsNew.tsx
+base 56b16dfa30fa1996e1339b8ef1c52eccead1b6f4
+simCmWorldMoves: control nohijack FIRED: section 2 red (45)
+simCmWorldMoves: control nowalk FIRED: section 2 red (45)
+simCmWorldMoves: control noguard FIRED: section 2 red (168)
+simCmWorldMoves: control noskip FIRED: section 10 red (10)
+simCmWorldMoves: control drawshift FIRED: section 11 red (9)
+controls (exit/FIRED): nohijack=1/1 nowalk=1/1 noguard=1/1 noskip=1/1 drawshift=1/1
