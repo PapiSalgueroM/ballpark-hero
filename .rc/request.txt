@@ -1,0 +1,9 @@
+#!serial
+headsha: git log --oneline -3 | cut -c1-120
+appeal: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+appeal-bare-EXPECT-PIN: git show f1e54e17:scripts/fixtures/managerAppealIsolation1081/manifest.json > scripts/fixtures/managerAppealIsolation1081/manifest.json && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs 2>&1 | grep -v "^ *$" | head -12; s=${PIPESTATUS[0]}; git checkout -- scripts src; exit $s
+appeal-without1508: git show f1e54e17:scripts/fixtures/managerAppealIsolation1081/manifest.json > scripts/fixtures/managerAppealIsolation1081/manifest.json && git show 67ec9956:src/lib/clubManager.ts > src/lib/clubManager.ts && git show 67ec9956:src/lib/clubManagerCalendar.ts > src/lib/clubManagerCalendar.ts && git diff --stat | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -6; s=${PIPESTATUS[0]}; git checkout -- scripts src; exit $s
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+anc: node scripts/simActivityNotCompletion.mjs 2>&1 | tail -10; exit ${PIPESTATUS[0]}
+held-after: git status --porcelain --untracked-files=no | head -5; git diff --exit-code HEAD -- src scripts && echo "src and scripts held after every line"
