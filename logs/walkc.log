@@ -1,0 +1,7 @@
+(a) Chelsea, week 17 of 54 after 13 entries: nights done 4, matchday 4 18 scores, matchday 5 18 fixtures, table 36
+(b) Chelsea season over after 41 entries: the engine's final, Manchester City beat PSG
+(c) Sunderland 2005, week 55 of 56: 8 groups, the final won by Chelsea
+(d) Real Madrid, in it, group matchday 2
+== 390 by 844
+   FAIL (c) Sunderland 2005 390: the Cups panel did not open from the hub (the page reads: Skip to main content DOUKNOWBALL Back Track stats SACKED! SOCCER · NOT THIS TIME 🚪 You've been sacked The Sunderland board ran out of patience in Season 1. SEASONS 1 WIN % 13% TROPHIES 0 🚪 Sacked in S1 · 5W 4D 29L · 🏆×0 🧳 OUT OF WORK You are between jobs. Clubs will call, but the longer you sit )
+playWorldUcl: narrowed run (cases c, sizes 390), 1 findings over 0 measured views; not the round's proof

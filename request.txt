@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walkc: PLAY_WORLD_CASES=c PLAY_WORLD_SIZES=390 node scripts/playWorldUcl.mjs
