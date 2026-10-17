@@ -1,0 +1,6 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild-c2f8 exit=0 30s | base served: 200
+weight-vs-c2f8 exit=1 49s |   CSS, every file gzipped: base 56553 B, head 56553 B
+stopbase exit=143 0s | 
+basebuild-33d1 exit=128 3s | base served: 000
+weight-vs-33d1 exit=1 1s | Node.js v24.21.0
