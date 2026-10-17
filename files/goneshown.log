@@ -1,0 +1,42 @@
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   bridge "the window records nothing": 1
+   bridge "recordAiDeals records nothing": 1
+   bridge "the join keeps the departed ledger": 1
+   bridge "the join keeps the run in's gone names and log": 1
+   bridge "a rival closes whatever the ledger says": 1
+   control seedless: 1
+   control norecord: 1
+   control norecord: 1
+   control noflush: 1
+   control nojanuary: 1
+   control nosummer: 1
+   control joinledger: 1
+   control nolock: 1
+   control nolist: 1
+   control norepair: 1
+   control repairthrows: 1
+   control nohijack: 1
+   control nowalk: 1
+   control noguard: 1
+   control nocarry: 1
+   control seasonone: 1
+   control dropbase: 1
+   control noskip: 1
+   control drawshift: 1
+   control slow: 1
+   control seedclose: 1
+   control seedcarry: 1
+   control goneshown: 1
+   control edit made 1 time(s): goneshown: !squadNames.has(p.name) && !gone.has(p.name) && !retired.has
+14) section 3's joins in ADOPTED careers (Round 1508), before and after January and in season two, seeds 1,2,3
+  FAIL section 14: Real Madrid (now, seed 1, before January, adopted): Gianluigi Donnarumma, bought by another club before the adoption (no record by design), is on the screen's market at Manchester City after the move
+  FAIL section 14: Real Madrid (now, seed 1, before January, adopted): Moisés Caicedo, bought by another club before the adoption (no record by design), is on the screen's market at Chelsea after the move
+  FAIL section 14: Real Madrid (now, seed 1, before January, adopted): Dani Olmo, bought by another club before the adoption (no record by design), is on the screen's market at Barcelona after the move
+  FAIL section 14: Real Madrid (now, seed 1, before January, adopted): Aleksandar Pavlovic, bought by another club before the adoption (no record by design), is on the screen's market at Bayern Munich after the move
+  FAIL section 14: Real Madrid (now, seed 1, before January, adopted): Micky van de Ven, bought by another club before the adoption (no record by design), is on the screen's market at Tottenham after the move
+  FAIL section 14: Real Madrid (now, seed 1, after January, adopted): Federico Dimarco, bought by another club before the adoption (no record by design), is on the screen's market at Inter Milan after the move
+  FAIL section 14: Real Madrid (now, seed 1, after January, adopted): Nico Schlotterbeck, bought by another club before the adoption (no record by design), is on the screen's market at Borussia Dortmund after the move
+  FAIL section 14: Real Madrid (now, seed 2, before January, adopted): Khvicha Kvaratskhelia, bought by another club before the adoption (no record by design), is on the screen's market at PSG after the move
+   27 moves (0 could not be set up), 151 departed records kept, 152 deal lines of the run in placed, 163 gone names carried over with 163 deal lines, 145 payloads compared, 462 door presses after the move (71 men bought before the adoption, held by no record and listed nowhere, 0 men the ledger no longer holds at one club, 0 behind a namesake, counted)
+  section 14: 65 more failures not shown
+simCmWorldMoves: control goneshown FIRED: section 14 red (73)

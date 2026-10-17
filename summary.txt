@@ -1,0 +1,5 @@
+wm-goneshown exit=1 39s | simCmWorldMoves: control goneshown FIRED: section 14 red (73)
+tsc exit=0 102s | 
+wm-seedcarry exit=1 75s | simCmWorldMoves: control seedcarry FIRED: section 14 red (636)
+wm-13-14 exit=0 138s | simCmWorldMoves: green, sections 0, 2, 3, 13, 14 held
+wm-seedclose exit=1 50s | simCmWorldMoves: control seedclose FIRED: section 13 red (168)

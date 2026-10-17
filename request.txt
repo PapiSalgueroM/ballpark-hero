@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+wm-13-14: CM_WORLD_MOVES_SECTIONS=0,2,3,13,14 node scripts/simCmWorldMoves.mjs > "$RC_OUT/wm1314.log" 2>&1; s=$?; grep -E 'door presses' "$RC_OUT/wm1314.log" | cut -c1-400; tail -3 "$RC_OUT/wm1314.log"; exit $s
+wm-goneshown: CM_WORLD_MOVES_CONTROL=goneshown CM_WORLD_MOVES_SECTIONS=0,14 node scripts/simCmWorldMoves.mjs > "$RC_OUT/goneshown.log" 2>&1; s=$?; echo "new check failures printed: $(grep -c 'before the adoption (no record by design)' "$RC_OUT/goneshown.log")"; grep -m 3 'before the adoption (no record by design)' "$RC_OUT/goneshown.log" | cut -c1-300; tail -14 "$RC_OUT/goneshown.log" | cut -c1-300; exit $s
+wm-seedcarry: CM_WORLD_MOVES_CONTROL=seedcarry CM_WORLD_MOVES_SECTIONS=0,3,14 node scripts/simCmWorldMoves.mjs
+wm-seedclose: CM_WORLD_MOVES_CONTROL=seedclose CM_WORLD_MOVES_SECTIONS=0,2,13 node scripts/simCmWorldMoves.mjs

@@ -1,0 +1,18 @@
+new check failures printed: 8
+  FAIL section 14: Real Madrid (now, seed 1, before January, adopted): Gianluigi Donnarumma, bought by another club before the adoption (no record by design), is on the screen's market at Manchester City after the move
+  FAIL section 14: Real Madrid (now, seed 1, before January, adopted): Moisés Caicedo, bought by another club before the adoption (no record by design), is on the screen's market at Chelsea after the move
+  FAIL section 14: Real Madrid (now, seed 1, before January, adopted): Dani Olmo, bought by another club before the adoption (no record by design), is on the screen's market at Barcelona after the move
+   control goneshown: 1
+   control edit made 1 time(s): goneshown: !squadNames.has(p.name) && !gone.has(p.name) && !retired.has
+14) section 3's joins in ADOPTED careers (Round 1508), before and after January and in season two, seeds 1,2,3
+  FAIL section 14: Real Madrid (now, seed 1, before January, adopted): Gianluigi Donnarumma, bought by another club before the adoption (no record by design), is on the screen's market at Manchester City after the move
+  FAIL section 14: Real Madrid (now, seed 1, before January, adopted): Moisés Caicedo, bought by another club before the adoption (no record by design), is on the screen's market at Chelsea after the move
+  FAIL section 14: Real Madrid (now, seed 1, before January, adopted): Dani Olmo, bought by another club before the adoption (no record by design), is on the screen's market at Barcelona after the move
+  FAIL section 14: Real Madrid (now, seed 1, before January, adopted): Aleksandar Pavlovic, bought by another club before the adoption (no record by design), is on the screen's market at Bayern Munich after the move
+  FAIL section 14: Real Madrid (now, seed 1, before January, adopted): Micky van de Ven, bought by another club before the adoption (no record by design), is on the screen's market at Tottenham after the move
+  FAIL section 14: Real Madrid (now, seed 1, after January, adopted): Federico Dimarco, bought by another club before the adoption (no record by design), is on the screen's market at Inter Milan after the move
+  FAIL section 14: Real Madrid (now, seed 1, after January, adopted): Nico Schlotterbeck, bought by another club before the adoption (no record by design), is on the screen's market at Borussia Dortmund after the move
+  FAIL section 14: Real Madrid (now, seed 2, before January, adopted): Khvicha Kvaratskhelia, bought by another club before the adoption (no record by design), is on the screen's market at PSG after the move
+   27 moves (0 could not be set up), 151 departed records kept, 152 deal lines of the run in placed, 163 gone names carried over with 163 deal lines, 145 payloads compared, 462 door presses after the move (71 men bought before the adoption, held by no record and listed nowhere, 0 men the ledger no l
+  section 14: 65 more failures not shown
+simCmWorldMoves: control goneshown FIRED: section 14 red (73)
