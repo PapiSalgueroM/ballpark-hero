@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+own1: node scripts/playLiveMatchFit.mjs
+own2: node scripts/playLiveMatchFit.mjs
+s1340a: LIVE_FIT_SEED=1340 node scripts/playLiveMatchFit.mjs
+s1340b: LIVE_FIT_SEED=1340 node scripts/playLiveMatchFit.mjs
+s2026a: LIVE_FIT_SEED=2026 node scripts/playLiveMatchFit.mjs
+s2026b: LIVE_FIT_SEED=2026 node scripts/playLiveMatchFit.mjs
