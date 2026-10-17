@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import type { CareerState } from '@/lib/clubManager';
-import { boardVerdictLine, buildMarket, releaseClauseOf, startCareer } from '@/lib/clubManager';
+import type { CareerState, CustomClubSpec } from '@/lib/clubManager';
+import { boardVerdictLine, buildMarket, playableClubs, releaseClauseOf, startCareer } from '@/lib/clubManager';
 import { DIFFICULTY_LEVELS, readLevel } from '@/lib/managerDifficulty';
 import { ensureEraRosters } from '@/lib/clubManagerEras';
 import { ensureStartOptions, levelFrom, noSackFrom, turnOnNoSack } from '@/lib/clubManagerStart';
@@ -104,6 +104,26 @@ describe('every applier is the identity at its own identity dial', () => {
     const later = setUpCareer({ ...s, week: 5 }, { level: 'hard' }, rebuild);
     expect(calls).toBe(2);
     expect(later.boardObjectives).toBe(s.boardObjectives);
+  });
+
+  it('a created club: the room dial moves only the base ceiling, and the founders\' room comes back whole', () => {
+    /* Critic advice 27 and the review of 2026-10-17 (its mutation m4 applied the dial to the whole ceiling and
+       nothing went red): the first summer takes the founders' room off in full, so the dial must not shrink it. */
+    const replacedClub = playableClubs('premier').at(-1)!.name;
+    const made = startCareer('Level Ground FC', 'now', {
+      name: 'Level Ground FC', stadium: 'Level Ground', budgetTier: 'small', leagueId: 'premier', replacedClub,
+      crest: { shape: 0, pattern: 0, color1: '#112233', color2: '#ffffff', initials: 'LG' },
+    } as CustomClubSpec);
+    const room = made.founderWageRoom ?? 0;
+    expect(room).toBeGreaterThan(0);
+    for (const level of ['hard', 'legend'] as const) {
+      const d = CM_DIFFICULTY_DIALS[level];
+      const out = setUpCareer(made, { level });
+      expect(out.founderWageRoom).toBe(made.founderWageRoom);
+      expect(out.wageCap).toBe(Math.max(60, Math.round(((made.wageCap as number) - room) * d.wageRoom)) + room);
+      /* The case tells the two rules apart: the whole ceiling times the dial is a different number. */
+      expect(out.wageCap).not.toBe(Math.max(60, Math.round((made.wageCap as number) * d.wageRoom)));
+    }
   });
 
   it('No sacking alone writes only its own key', () => {
