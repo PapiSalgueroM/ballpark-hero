@@ -1,0 +1,6 @@
+tsc exit=0 76s | 
+wu-main exit=0 225s | simWorldUcl: green, 475300 checks, 0 failures
+rev-mdearly exit=1 225s | simWorldUcl: RED, 476531 checks, 47617 failures
+oracle-head exit=0 17s | nightOracle1502: GREEN, 27319 checks, 0 failures
+entrant-head exit=0 51s | entrantJoin1502: GREEN, 33 reachable moves to an entrant with no uclGroup, every one dropped the slice
+rev-markearly exit=1 207s | simWorldUcl: RED, 475570 checks, 271 failures
