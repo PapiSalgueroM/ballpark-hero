@@ -155,7 +155,7 @@ it(caseTitles[4], async () => {
   fireEvent.click(screen.getByRole('button', { name: 'Create Account' }));
   const validation = { emailInvalid: screen.getByRole('textbox', { name: 'Email' }).getAttribute('aria-invalid'),
     passwordInvalid: screen.getByLabelText('Password', { exact: true }).getAttribute('aria-invalid'),
-    emailMessage: screen.getByText('Email is required').textContent, passwordMessage: screen.getByText('Password is required').textContent };
+    emailMessage: screen.getByText('Email is required').textContent?.trim(), passwordMessage: screen.getByText('Password is required').textContent?.trim() };
   fireEvent.click(screen.getByRole('button', { name: 'Sign in' }));
   expect(screen.getByRole('heading', { name: 'Welcome Back!' })).toBeInTheDocument();
   const login = form(); await close(opener);

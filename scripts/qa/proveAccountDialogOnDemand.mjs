@@ -13,7 +13,7 @@ assert(process.env.ACCOUNT_DIALOG_OUT && path.isAbsolute(process.env.ACCOUNT_DIA
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const BASE = 'b31c9894ac27283a9b650bf32b53e558b7148834';
 const TEST = 'src/test/accountDialogOnDemand.test.tsx', SELF = 'scripts/qa/proveAccountDialogOnDemand.mjs', OLD = 'src/test/authModalFocus.test.tsx';
-const TEST_SHA = '49f252e9e0f4d1d5f370cf146dbe74d92fbaafc2dee2f243a0e0890fd496d38e';
+const TEST_SHA = 'c0987c82018208d94fba1b71c0973a6efd28436114fde5743865ad2a38876315';
 const FAULTS = {
   'Header leaves the account dialog unevaluated until Log In': 'Closed Header must not initialize AuthModal',
   'Home leaves the account dialog unevaluated until Make a free one': 'Closed Home must not initialize AuthModal',
