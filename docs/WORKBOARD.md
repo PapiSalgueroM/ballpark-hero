@@ -15813,3 +15813,7 @@ No newbackend,timeoutpolicy,saveformat,realdata,fallbackscoring,playerfactsorpro
 ## Codex1403 original counterexamples qualified, 2026-10-17 UTC
 
 TESTED0009 run39022764657/job117367697233success reproduces7exact ownership faults+5healthy; unchanged58oldcases andrealtypespass. Actual12cases/19gates/15posts/9judges/12completioncalls/0RNG. Independentphysicalc57808fd andsemantic4d337297(full5f23ca1f,359checks/0mismatch) qualify original only. Artifact12096683737/SHA6c790f54 is fullyretained;4,872canonical/validatedbodiesclose. Firstnativeauditmetadata-schemaerrorsretainedandrepairedseparately, noapp/CIchange. Minimalgenerationguardnowauthored, testfdaheld, fixedqualificationpending. NotREADY/build/browser/live.
+
+## Codex1403 setup correction, 2026-10-17 UTC
+
+Firstfullrequesta82 failed before productchecks because9fontbodies+manifest werecounted as9total. Allfiveproduct/buildstagesunvisited. CorrectownWF to9bodies/10allfiles, sourceguard0690/testfda/capsheld. Failures/artifactretained, successorqualificationpending. NoREADY/live.

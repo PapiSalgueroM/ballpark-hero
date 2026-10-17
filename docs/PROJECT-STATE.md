@@ -1,3 +1,7 @@
+## Codex1403 runner setup correction, 2026-10-17 UTC
+
+The first fixed request stopped before product checks on an incorrect font-cache file count in its own new workflow. Corrected to nine dependency bodies plus the manifest. Hook and frozen tests unchanged; full rerun pending, no READY claim. Original seven failures remain qualified. See docs/audits/xi-evaluation-reset-1403.md.
+
 ## Codex1403 baseline qualified, fix verification next, 2026-10-17 UTC
 
 Build Your XI: actual original seven late-evaluation faults reproduced before production changes, five normal paths and58existing checks pass. Minimum generation guard now authored in isolated branch, fixed12/old58/picker/build/readers/weights/browser checks pending. No READY/live claim. Claude I owns joined release and spectator/tournament work. See docs/audits/xi-evaluation-reset-1403.md.

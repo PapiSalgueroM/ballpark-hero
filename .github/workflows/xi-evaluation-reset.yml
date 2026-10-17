@@ -77,7 +77,8 @@ jobs:
           python -m pip install fonttools pillow > "$out/fonts-install.log" 2>&1; python -m pip freeze > "$out/python-packages.txt"
           FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
           find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-files.sha256"
-          test "$(find "$out/font-cache" -type f | wc -l)" -eq 9
+          test "$(find "$out/font-cache" -type f ! -name manifest.json | wc -l)" -eq 9
+          test "$(find "$out/font-cache" -type f | wc -l)" -eq 10
           find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-files.sha256"
           find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tool-files.sha256"
       - name: Actual types and current original restored hook observations
