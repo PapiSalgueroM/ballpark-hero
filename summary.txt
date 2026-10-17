@@ -1,0 +1,7 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+preload5 exit=0 139s | head=0 controls: stockdist=1 extra=1 extrabase=1
+vitest exit=0 7s |    Duration  6.61s (transform 3.58s, setup 444ms, collect 5.88s, tests 6.82s, environment 3.23s, prepare 1.01s)
+stale exit=0 2s | head=0 controls: catchreload=1 nowait=1 flagfirst=1 nolistener=1 noguard=1 noprerender=1 nooffline=1 nosave=1 norelease=1 barenudge=1
+walk exit=0 211s | walk=0 walkstock=1
+simFlagshipWeight exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
