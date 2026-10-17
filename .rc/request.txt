@@ -1,0 +1,4 @@
+#!serial
+headsha: git log --oneline -3
+wf302-m13-recorded: R=$PWD; git worktree add -q /tmp/w13 5a8acc1562351cb9cb4bddc5afbdc4debfc7b001 || exit 2; cd /tmp/w13 && P=$(bash $R/.rc/x/lifeMinus.sh 286) || exit 2; echo "286 base $P"; node $R/.rc/x/wfrun.mjs .github/workflows/career-pending-money-gates.yml --set SC_PENDING_MONEY_BASE=6db4f3e05c8a9745b63f31d900ee03f65cfc5fd3 --set SC_PENDING_POPULARITY_BASE=$P --set PRERENDER_ONLY=/soccer-career,/whats-new
+wf302-head-synthetic: M=$(bash .rc/x/lifeMinus.sh 302) || exit 2; P=$(bash .rc/x/lifeMinus.sh 286) || exit 2; echo "302 base $M 286 base $P"; node .rc/x/wfrun.mjs .github/workflows/career-pending-money-gates.yml --set SC_PENDING_MONEY_BASE=$M --set SC_PENDING_POPULARITY_BASE=$P --set PRERENDER_ONLY=/soccer-career,/whats-new
