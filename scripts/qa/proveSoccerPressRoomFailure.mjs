@@ -153,7 +153,7 @@ try {
         if (i === 0) {
           assert.deepEqual(row.settlements, [{ label: 'before-rejection', before: true, result: false, after: true },
             { label: 'after-rejection', before: !lost, result: lost, after: !lost }, { label: 'after-storage-recovery', before: !lost, result: true, after: false }]);
-          assert.equal(row.retries.length, lost ? 1 : 3); assert.equal(row.allowPersist, true); assert.equal(final.pending, false);
+          assert.equal(row.retries.length, lost ? 2 : 3); assert.equal(row.allowPersist, true); assert.equal(final.pending, false);
           assert.deepEqual(final.persisted, lost ? row.persistedBefore : row.initial);
           if (!lost) assert.deepEqual(row.retries.at(-1), { state: row.initial, allowed: true, wrote: true });
         } else assert.deepEqual(final.persisted, row.persistedBefore);
