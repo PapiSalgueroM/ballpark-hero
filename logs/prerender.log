@@ -1,0 +1,11 @@
+16:  FAIL: /whats-new drops the entry "Soccer Career: screens that say what they are.", which means the extractor is throwing away real content again
+17:  FAIL: /whats-new drops the entry "Club Manager: your own transfers, and any club's fixtures.", which means the extractor is throwing away real content again
+18:  FAIL: /whats-new drops the entry "Soccer Career: offers that wait for you, and a better phone.", which means the extractor is throwing away real content again
+19:  FAIL: /whats-new drops the entry "Club Manager: players other clubs buy stay bought.", which means the extractor is throwing away real content again
+20:  FAIL: /whats-new drops the entry "NBA, NFL, MLB and NHL My Career: retire from coaching, and take back a skip.", which means the extractor is throwing away real content again
+21:  FAIL: /whats-new drops the entry "Club Manager: retire when you are ready, and see your highest scoring game.", which means the extractor is throwing away real content again
+22:  FAIL: /whats-new drops 9 entries in total
+44:simPrerender: 7 failures
+   171 documents read, 0 waiting lines found
+
+simPrerender: 7 failures
