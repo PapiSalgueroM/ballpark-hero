@@ -1,0 +1,9 @@
+headsha exit=0 0s | f579a0052 Release BI triage: simLiveMatch section 3 and simClubManagerEraUcl section 7 read a club's roster through the save's world ledger
+prep exit=0 1s | /tmp/ddb/baseline/report.json
+d-e7f111b7 exit=0 73s | Club Manager decision depth fixed: passed; 567 checks, 18 natural/catalog cases, 2 controls, 38 originals, 0 failures, 0 setup failures.
+d-402fa456 exit=0 73s | Club Manager decision depth fixed: passed; 567 checks, 18 natural/catalog cases, 2 controls, 38 originals, 0 failures, 0 setup failures.
+d-bc6badb3 exit=1 84s | Club Manager decision depth fixed: failed; 567 checks, 18 natural/catalog cases, 2 controls, 38 originals, 3 failures, 0 setup failures.
+d-c2f8d746 exit=1 84s | Club Manager decision depth fixed: failed; 567 checks, 18 natural/catalog cases, 2 controls, 38 originals, 3 failures, 0 setup failures.
+d-67ec9956 exit=1 83s | Club Manager decision depth fixed: failed; 567 checks, 18 natural/catalog cases, 2 controls, 38 originals, 3 failures, 0 setup failures.
+d-f1e54e17 exit=1 83s | Club Manager decision depth fixed: failed; 567 checks, 18 natural/catalog cases, 2 controls, 38 originals, 3 failures, 0 setup failures.
+d-8293c758 exit=1 82s | Club Manager decision depth fixed: failed; 567 checks, 18 natural/catalog cases, 2 controls, 38 originals, 3 failures, 0 setup failures.
