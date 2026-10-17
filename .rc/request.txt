@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+guideHeadings: node scripts/simGuideHeadings.mjs
+vitest: node_modules/.bin/vitest run src/test/clubManagerOfferConfirm.test.tsx src/test/cmLeagueLeadersCard.test.tsx src/lib/clubManagerWorldView.test.ts --testTimeout=300000 --hookTimeout=300000
+simAcademy: node scripts/simAcademy.mjs
+simEras: node scripts/simEras.mjs
+simPress: node scripts/simPress.mjs
+simRoles: node scripts/simRoles.mjs
+simWilderness: node scripts/simWilderness.mjs
+simALeague: node scripts/simClubManagerALeague.mjs
+simBudget: node scripts/simClubManagerBudget.mjs
+simMeters: node scripts/simClubManagerMeters.mjs
+simScore: node scripts/simClubManagerScore.mjs
+simBoardVerdict: node scripts/simCmBoardVerdict.mjs
