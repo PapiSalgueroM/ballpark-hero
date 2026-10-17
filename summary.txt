@@ -1,0 +1,10 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+hist-head-1337 exit=0 21s | PASS Luton display component proof
+ol-m12-1337 exit=1 2s | 1 harness not green.
+pins-1337 exit=0 0s | pinsCheck: 19 pins read, 0 differ from the tree
+pins-ctl-1337 exit=1 1s | pinsCheck: 19 pins read, 3 differ from the tree
+rival-bound-1334 exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/data/soccerDeck/starter.ts, src/lib/soccerDeck.test.ts, src/lib/soccerDeck.ts, src/lib/soccerDeckGate.ts: no hones
+rival-head-pin-1334 exit=1 1s | checkout src unchanged after the unbound run
+reach30-1334 exit=0 371s | reach30 done, any red: 0
+ctl-1334 exit=0 22s | ok lines for soccer after the FAIL: 0 (0 expected)
+gmequal-1334 exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/data/soccerDeck/starter.ts, src/lib/soccerDeck.test.ts, src/lib/soccerDeck.ts, src/lib/soccerDeckGate.ts: no hones
