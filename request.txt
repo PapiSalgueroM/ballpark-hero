@@ -1,0 +1,2 @@
+s-swaphome: R=$PWD; W=/tmp/s-swaphome && git worktree add -q --detach $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mut1502b.mjs swaphome $W && mkdir -p $W-tmp && cd $W && TMPDIR=$W-tmp WORLD_UCL_ONLY=1,3,4,7 node scripts/simWorldUcl.mjs
+s-edgeswap: R=$PWD; W=/tmp/s-edgeswap && git worktree add -q --detach $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mut1502b.mjs edgeswap $W && mkdir -p $W-tmp && cd $W && TMPDIR=$W-tmp WORLD_UCL_ONLY=1,3,4,7 node scripts/simWorldUcl.mjs
