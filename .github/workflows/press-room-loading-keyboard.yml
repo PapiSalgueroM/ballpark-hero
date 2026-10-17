@@ -1,0 +1,136 @@
+name: Press room loading keyboard baseline
+on:
+  push:
+    branches: [codex/press-room-loading-keyboard]
+    paths:
+      - .github/workflows/press-room-loading-keyboard.yml
+      - scripts/qa/provePressRoomLoadingKeyboard.mjs
+      - scripts/qa/playPressRoomLoadingKeyboard.mjs
+      - src/test/pressRoomLoadingKeyboard.test.tsx
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retain exact original product and locked installation
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$RUNNER_TEMP/press-room-loading-keyboard-baseline"; test ! -e "$out"; mkdir -p "$out"
+          echo "PRESS_LOADING_KEYBOARD_OUT=$out" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          export PRESS_LOADING_KEYBOARD_OUT="$out"
+          git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
+          sha256sum "$out/source.zip" "$out/request-source-files.sha256" > "$out/initial-source-packet.sha256"
+          git merge-base --is-ancestor cc6605203b00b06ed994cf321fff5eea3060f708 HEAD
+          git diff --exit-code cc6605203b00b06ed994cf321fff5eea3060f708 HEAD -- . ':!docs' ':!src/components/soccer-career/PressRoomTile.tsx' ':!src/test/pressRoomLoadingKeyboard.test.tsx' ':!scripts/qa/provePressRoomLoadingKeyboard.mjs' ':!scripts/qa/playPressRoomLoadingKeyboard.mjs' ':!.github/workflows/press-room-loading-keyboard.yml' > "$out/base-source-hold.log"
+          git diff --exit-code cc6605203b00b06ed994cf321fff5eea3060f708 HEAD -- src/components/soccer-career/PressRoomTile.tsx > "$out/original-product-hold.log"
+          git diff --exit-code HEAD -- . > "$out/admission-working-source-hold.log"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          printf '%s\0' "$(command -v node)" "$(readlink -f "$(command -v npm)")" "$(readlink -f "$(command -v python)")" | sort -z | xargs -0 sha256sum > "$out/runtime-tools-files.sha256"
+          test "$(wc -l < "$out/runtime-tools-files.sha256")" -eq 3
+          npm --version > "$out/npm-version.txt"
+      - name: Locked dependency browser and cached font setup
+        run: |
+          set -euo pipefail
+          out="$PRESS_LOADING_KEYBOARD_OUT"
+          npm ci > "$out/install.log" 2>&1
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$out/dependencies.transport" node scripts/qa/soccerAgentReviewDependencies.mjs before > "$out/dependencies-before.log" 2>&1
+          browser_tools="$RUNNER_TEMP/press-room-loading-keyboard-browser"; test ! -e "$browser_tools"
+          NODE_OPTIONS='' npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright; ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          SIM_OFFLINE_RECEIPT="$out/dependencies.transport" node scripts/qa/soccerAgentReviewDependencies.mjs after > "$out/dependencies-after.log" 2>&1
+          cp soccer-agent-review-artifacts/dependencies-*.json "$out/"
+          SIM_OFFLINE_RECEIPT="$out/dependency-check.transport" node --input-type=module > "$out/dependency-check.log" 2>&1 <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.PRESS_LOADING_KEYBOARD_OUT,before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),after=JSON.parse(fs.readFileSync(out+'/dependencies-after.json'));
+          assert.equal(before.packages.length,521);assert.equal(after.packages.length,521);assert.deepEqual(after.packages,before.packages);assert.deepEqual(after.packageFiles,before.packageFiles);assert.equal(after.addedBrowserPackage,'1.64.0');fs.writeFileSync(out+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n',{flag:'wx'});console.log('PASS 521 held package versions and isolated Playwright 1.64.0.');
+          NODE
+          NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/fonts-install.log" 2>&1; python -m pip freeze > "$out/python-packages.txt"
+          NODE_OPTIONS='' FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-files.sha256"
+          test "$(find "$out/font-cache" -type f ! -name manifest.json | wc -l)" -eq 9
+          test "$(find "$out/font-cache" -type f | wc -l)" -eq 10
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-files.sha256"
+          test "$(wc -l < "$out/installed-files.sha256")" -eq 24466
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tool-files.sha256"
+          test "$(wc -l < "$out/browser-tool-files.sha256")" -eq 176
+      - name: Actual application types and effective offline preload
+        id: types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PRESS_LOADING_KEYBOARD_OUT"
+          preload_check='const assert=require("node:assert/strict");assert.ok((process.env.NODE_OPTIONS||"").includes("offlineTransport.cjs"),"Children retain offline preload");assert.ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")],"Actual offline preload is in require.cache");'
+          status=0; NODE_OPTIONS='' node -e "$preload_check" > "$out/preload-control.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/preload-control.exit"; test "$status" -eq 1; grep -F 'AssertionError' "$out/preload-control.log"; grep -F 'Children retain offline preload' "$out/preload-control.log"
+          node -e "$preload_check" > "$out/preload-normal.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
+      - name: Exact original pending keyboard faults and preserved cases
+        id: proof
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$PRESS_LOADING_KEYBOARD_OUT/proof.transport" node scripts/qa/provePressRoomLoadingKeyboard.mjs baseline > "$PRESS_LOADING_KEYBOARD_OUT/proof.log" 2>&1
+          tail -n 4 "$PRESS_LOADING_KEYBOARD_OUT/proof.log"
+      - name: Retain actual source and every partial proof without weakening failures
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="${PRESS_LOADING_KEYBOARD_OUT:-$RUNNER_TEMP/press-room-loading-keyboard-baseline}"; mkdir -p "$out"; result=0
+          git diff --exit-code HEAD -- . > "$out/source-diff.log" 2>&1 || result=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/validated-source-files.sha256"
+          PRESS_LOADING_KEYBOARD_ARCHIVE_OUT="$out" python - <<'PY'
+          import os,subprocess,zipfile
+          out=os.environ['PRESS_LOADING_KEYBOARD_ARCHIVE_OUT']; files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile(out+'/validated-source.zip','x',zipfile.ZIP_DEFLATED) as archive:
+              for file in sorted(filter(None,files)): archive.write(file,file)
+          PY
+          if test -f "$out/dependencies-before.json"; then
+            SIM_OFFLINE_RECEIPT="$out/dependencies-final.transport" node --input-type=module > "$out/dependencies-final.log" 2>&1 <<'NODE' || result=1
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out=process.env.PRESS_LOADING_KEYBOARD_OUT,before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),sha=x=>createHash('sha256').update(x).digest('hex');
+          const packageFiles=before.packageFiles.map(r=>({file:r.file,sha256:sha(fs.readFileSync(r.file))})),packages=before.packages.map(r=>{const p=JSON.parse(fs.readFileSync(r.directory+'/package.json'));return{directory:r.directory,name:p.name,version:p.version};});
+          fs.writeFileSync(out+'/dependencies-final.json',JSON.stringify({packageFiles,packages},null,2)+'\n',{flag:'wx'});assert.equal(packages.length,521);assert.deepEqual(packageFiles,before.packageFiles);assert.deepEqual(packages,before.packages);console.log('PASS all 521 actual locked versions and both package bodies held.');
+          NODE
+          fi
+          for kind in request-source installed browser-tool runtime-tools font validated-source; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
+          if test -f "$out/initial-source-packet.sha256"; then sha256sum --check "$out/initial-source-packet.sha256" > "$out/initial-source-packet-holds.log" 2>&1 || result=1; fi
+          if test -f "$out/installed-files.sha256"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-after-files.sha256"; cmp "$out/installed-files.sha256" "$out/installed-after-files.sha256" > "$out/installed-inventory-hold.log" 2>&1 || result=1; fi
+          while IFS= read -r -d '' file; do test ! -s "$file" || result=1; done < <(find "$out" -type f -name '*.transport' -print0)
+          printf 'types=%s\nproof=%s\nbuild=skipped\nreaders=skipped\nweights=skipped\n' '${{ steps.types.outcome }}' '${{ steps.proof.outcome }}' > "$out/stage-outcomes.txt"
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: press-room-loading-keyboard-baseline-${{ github.sha }}
+          path: ${{ env.PRESS_LOADING_KEYBOARD_OUT }}
+          if-no-files-found: error
+          retention-days: 14
