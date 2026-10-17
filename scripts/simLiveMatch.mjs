@@ -32,7 +32,9 @@
         match's underlying lean, by the engine's own formula, so the sign
         check asks only where the shot share is decisive.)
      3) The opposition eleven. Eleven named men with a keeper, every name off
-        the era roster, every scorer on the pitch at his minute, the ratings
+        the era roster as the save's world ledger leaves it (Round 1344: a man
+        another club bought plays for them, never for the club he left),
+        every scorer on the pitch at his minute, the ratings
         sheet names the eleven plus the men who came on, subs 0 to 3 in
         56..88 from their own bench, at least one a match over the named
         matches, the pitch at a sub's minute still holding the man replaced
@@ -113,6 +115,10 @@
                 man's old club entry: the pre 742 engine, a man I signed
                 turning out for both sides. Section 10 must go red and
                 nothing else may (no other section signs anyone).
+     noledger   worldRosterFor never reads the world ledger, so a club's
+                eleven is the bare projection again and a man another club
+                bought (Round 1344) turns out for the club he left. Section 3
+                must go red and nothing else may (Release BI).
 
    Thresholds, measured on this harness's own seed and under SIM_SEED=1, 2
    and 3 (2026-09-07; SIM_SEED is folded into every seed the harness draws
@@ -213,6 +219,17 @@ const CONTROLS = {
     ]],
     note: 'mySquadNames is empty, so every rival roster is the raw projection again and a man I signed turns out for both sides; section 10 must go red',
   },
+  /* Release BI: the world ledger is the club's roster since Round 1344 (section 3's oracle reads it). With the ledger
+     unread, a man another club bought turns out for the club he left; section 3 must go red. */
+  noledger: {
+    must: [3], also: [],
+    what: 'the ledger read at the top of worldRosterFor',
+    edits: [[
+      '  if (!worldRosterView(current)) return fallback;\n  const base = fallback.map(bakedToCMPlayer);\n',
+      '  if (current) return fallback;\n  const base = fallback.map(bakedToCMPlayer);\n',
+    ]],
+    note: 'worldRosterFor never reads the world ledger, so a man another club bought plays for the club he left; section 3 must go red',
+  },
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`LIVE_MATCH_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -274,9 +291,10 @@ globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: 
 const mod = await import('${enginePath}');
 export const engine = mod;
 export const noCoach = await import('${noCoachPath}');
+export const worldRoster = await import('${ROOT_URL}/src/lib/clubManagerWorldRoster.ts');
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --alias:@=${ROOT_URL}/src --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
-const { engine: cm, noCoach } = await import(pathToFileURL(BUNDLE).href);
+const { engine: cm, noCoach, worldRoster: wr } = await import(pathToFileURL(BUNDLE).href);
 for (const name of ['startCareer', 'playNextEntry', 'resumeMatch', 'startSecondHalf', 'changeLive', 'makeHalftimeSub',
   'benchForHalftime', 'liveStatsAt', 'oppOnPitchAt', 'myOnPitchAt', 'projectedRoster', 'yearsOn', 'MAX_SUBS', 'squadNumbers', 'liveFeed',
   'matchFacts', 'initScorerRace', 'goldenBootTable']) {
@@ -550,8 +568,24 @@ begin(3, 'The opposition eleven, their bench and their substitutions');
     const names = xi.map(p => p.n);
     if (new Set(names).size !== names.length) fail(`${ctx}: the eleven repeats a name`);
     if (names.some(n => !n)) fail(`${ctx}: an unnamed man in the eleven`);
+    /* Release BI (Round 1344, merged as 54100f6e): a seeded career records every deal between two other clubs in its
+       world ledger from its opening window on (startCareer flushes the window's headlines into it), and a club's
+       teamsheet is read off that ledger (oppRosterFor, worldRosterFor). So the roster a named man must come from is
+       the era projection as this save's own ledger leaves it: less every man the ledger took away from the club, plus
+       every man it holds there. Read straight off the ledger's records rather than through worldRosterFor, so the
+       engine's reader is checked, not copied; a man the ledger moved away who still turns out for his old club is a
+       finding (control noledger). With no record about the club this is the projection it always was. */
     const roster = new Set(projectedRoster(live.opponent, yearsOn(f.ht), f.ht.eraId ?? 'now').map(p => p.n));
-    for (const p of [...xi, ...bench]) if (!roster.has(p.n)) fail(`${ctx}: ${p.n} is not on ${live.opponent}'s era roster`);
+    const ledger = wr.worldRosterView(f.ht);
+    const gone = new Map();
+    for (const r of ledger?.records ?? []) {
+      if (r.origin.club === live.opponent && (r.owner !== live.opponent || r.status !== 'owned')) gone.set(r.origin.name, r.owner ?? r.status);
+    }
+    for (const r of ledger?.records ?? []) if (r.owner === live.opponent && r.status === 'owned') { roster.add(r.player.name); gone.delete(r.player.name); }
+    for (const p of [...xi, ...bench]) {
+      if (gone.has(p.n)) fail(`${ctx}: ${p.n} turns out for ${live.opponent}, and the save's world ledger has him at ${gone.get(p.n)}`);
+      else if (!roster.has(p.n)) fail(`${ctx}: ${p.n} is not on ${live.opponent}'s era roster or held there by the save's world ledger`);
+    }
     for (const b of bench) if (names.includes(b.n)) fail(`${ctx}: ${b.n} is on the bench and the pitch`);
     if (J(d.oppXi) !== J(xi)) fail(`${ctx}: the report's eleven differs from the kick off's`);
     if (d.oppFormationIndex !== live.oppFormationIndex) fail(`${ctx}: the report's formation ${d.oppFormationIndex} differs from the kick off's ${live.oppFormationIndex}`);

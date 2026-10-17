@@ -142,6 +142,11 @@
        ignores the Round 899 long names again. Section 7 must go red
        (measured: 21 findings, the long name nights scoring with shirt
        numbers instead of the 2015 squad).
+     CM_UCL_CONTROL=noledger bundles a copy of the engine whose
+       worldRosterFor never reads the world ledger (Release BI: since Round
+       1344 the ledger holds the deals between other clubs, and section 7's
+       roster is the era roster as the save's ledger leaves it). Section 7
+       must name a man the ledger moved away scoring for his old club.
      Main's own engine before Round 1028, run through section 7: 176
        findings (both regressions at once).
 
@@ -164,7 +169,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.CM_UCL_CONTROL || '';
-if (CONTROL && !['nor16', 'vanish', 'gdonly', 'uclgd', 'adjacent', 'poolnames', 'oldname'].includes(CONTROL)) {
+if (CONTROL && !['nor16', 'vanish', 'gdonly', 'uclgd', 'adjacent', 'poolnames', 'oldname', 'noledger'].includes(CONTROL)) {
   console.error(`CM_UCL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -270,6 +275,15 @@ if (CONTROL === 'oldname') {
   enginePath = rewriteEngine([OLD_NAME_MAP], 'clubManagerEraUcl.oldname.ts', 'the long name roster lookup');
   console.log('NEGATIVE CONTROL ON: the Round 899 long names find no 2015 roster again; section 7 must go red');
 }
+/* Release BI: since Round 1344 the world ledger is a club's roster, and section 7's oracle reads it. This control
+   takes the ledger read out of worldRosterFor, so a man another club bought scores for the club he left. */
+if (CONTROL === 'noledger') {
+  enginePath = rewriteEngine([[
+    '  if (!worldRosterView(current)) return fallback;\n  const base = fallback.map(bakedToCMPlayer);\n',
+    '  if (current) return fallback;\n  const base = fallback.map(bakedToCMPlayer);\n',
+  ]], 'clubManagerEraUcl.noledger.ts', 'the ledger read at the top of worldRosterFor');
+  console.log('NEGATIVE CONTROL ON: worldRosterFor never reads the world ledger, so a man another club bought plays for the club he left; section 7 must go red');
+}
 const PRE1028_ENGINE = rewriteEngine([POOL_GUARD, OLD_NAME_MAP], 'clubManagerEraUcl.pre1028.ts', 'the Round 1028 edits');
 
 /* The engine and the two real cards in one CommonJS bundle (the
@@ -292,6 +306,8 @@ export const render = (Component, props) => renderToStaticMarkup(React.createEle
 /* Round 1028: the static pool (today's squads) and the era rosters, for section 7. */
 export { players as staticPool } from '${ROOT_URL}/src/data/players.ts';
 export { eraRosters } from '${ROOT_URL}/src/lib/clubManagerEras.ts';
+/* Release BI: the save's world ledger, read by section 7's roster oracle. */
+export { worldRosterView } from '${ROOT_URL}/src/lib/clubManagerWorldRoster.ts';
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=cjs --platform=node --jsx=automatic${groupsAlias} --alias:@=${ROOT_URL}/src --outfile="${BUNDLE}" --log-level=error`, {
   stdio: 'inherit',
@@ -308,7 +324,7 @@ execSync(`"${ROOT}/node_modules/.bin/esbuild" "${TWIN_ENTRY}" --bundle --format=
 });
 const store = new Map();
 globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
-const { cm, UclGroupsCard, UclBracketCard, render, staticPool, eraRosters } = createRequire(import.meta.url)(BUNDLE);
+const { cm, UclGroupsCard, UclBracketCard, render, staticPool, eraRosters, worldRosterView } = createRequire(import.meta.url)(BUNDLE);
 const twinCm = createRequire(import.meta.url)(TWIN_BUNDLE).cm;
 /* Round 832: an era's squads load with the era, so the harness fetches all three first. */
 await cm.ensureAllEraRosters();
@@ -1276,6 +1292,21 @@ function checkEraNights(tally) {
     ];
     for (const [opp, rosterKey] of targets) {
       const roster = new Set((world[rosterKey] ?? []).map(p => p.n));
+      const eraSquad = roster.size > 0;
+      /* Release BI (Round 1344, merged as 54100f6e): a seeded career records every deal between two other clubs in
+         its world ledger from its opening window on, and a club's teamsheet is read off that ledger (worldRosterFor).
+         So the era roster a scorer must come from is the one this save's own ledger leaves: less every man it took
+         away from the club, plus every man it holds there. Read straight off the ledger's records, not through
+         worldRosterFor, so the engine's reader is checked rather than copied; a man the ledger moved away who still
+         scores for his old club is a finding (control noledger). With no record about the club this is the era
+         roster it always was. The ledger is the save's before the night: the week's deals are recorded after it. */
+      const gone = new Map();
+      const records = worldRosterView(s)?.records ?? [];
+      for (const r of records) {
+        if (r.origin.club === rosterKey && (r.owner !== rosterKey || r.status !== 'owned')) gone.set(r.origin.name, r.owner ?? r.status);
+      }
+      for (const r of records) if (r.owner === rosterKey && r.status === 'owned') { roster.add(r.player.name); gone.delete(r.player.name); }
+      const ledgerGone = who => gone.has(who) ? `${who} plays for ${opp}, and the save's world ledger has him at ${gone.get(who)}` : null;
       /* Today's men at this club the era's own world does not have: none of
          them may appear anywhere in a report of this night. */
       const forbidden = staticPool.filter(p => p.club === opp && !worldNames.has(p.name)).map(p => p.name);
@@ -1294,7 +1325,8 @@ function checkEraNights(tally) {
         tally.previews += 1;
         for (const n of facts.oppDanger ?? []) {
           tally.dangerMen += 1;
-          if (!roster.has(n)) note('eranames', `${eraId} at ${opp}: the preview's danger man ${n} is not in the ${eraId} ${rosterKey} roster`);
+          if (ledgerGone(n)) note('eranames', `${eraId} at ${opp}: the preview's danger man ${ledgerGone(n)}`);
+          else if (!roster.has(n)) note('eranames', `${eraId} at ${opp}: the preview's danger man ${n} is not in the ${eraId} ${rosterKey} roster or held there by the save's world ledger`);
         }
         const factsText = JSON.stringify(facts);
         for (const n of forbidden) {
@@ -1321,11 +1353,16 @@ function checkEraNights(tally) {
           tally.eraGoals += 1;
           if (exposed) tally.exposedGoals += 1;
           if (rosterKey !== opp) tally.longNameGoals += 1;
-          if (roster.size) {
+          if (ledgerGone(who)) {
+            note('eranames', `${eraId} at ${opp}: ${ledgerGone(who)} (he scored)`);
+          } else if (eraSquad) {
             if (roster.has(who)) tally.rosterGoals += 1;
-            else note('eranames', `${eraId} at ${opp}: ${who} scored, and he is not in the ${eraId} ${rosterKey} roster`);
+            else note('eranames', `${eraId} at ${opp}: ${who} scored, and he is not in the ${eraId} ${rosterKey} roster or held there by the save's world ledger`);
           } else if (who.startsWith(`${opp} No. `) && [7, 8, 9, 10, 11].includes(Number(who.slice(opp.length + 5)))) {
             tally.numberGoals += 1;
+          } else if (roster.has(who)) {
+            /* A club with no era roster that the ledger has since given a man of the era: he is its squad now. */
+            tally.rosterGoals += 1;
           } else {
             note('eranames', `${eraId} at ${opp}: ${who} scored for a club with no ${eraId} roster, where the neutral shirt number line belongs`);
           }
@@ -1466,6 +1503,11 @@ section('7) An era European night names only men of that era, at every club of e
 });
 
 console.log('');
+if (CONTROL === 'noledger') {
+  const moved = buckets.eranames.filter(m => m.includes("the save's world ledger has him at")).length;
+  if (moved > 0) { console.log(`simClubManagerEraUcl control: green. The unread ledger was reported (${moved} findings in section 7 name a man the ledger had moved away).`); process.exit(0); }
+  console.error('simClubManagerEraUcl control: RED. With the ledger unread, section 7 named no man the ledger had moved away.'); process.exit(1);
+}
 if (CONTROL === 'poolnames' || CONTROL === 'oldname') {
   if (buckets.eranames.length > 0) { console.log(`simClubManagerEraUcl control: green. The ${CONTROL} regression was reported (${buckets.eranames.length} findings in section 7).`); process.exit(0); }
   console.error(`simClubManagerEraUcl control: RED. The ${CONTROL} regression went unreported in section 7.`); process.exit(1);
