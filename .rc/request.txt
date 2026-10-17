@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerNoSack.test.tsx src/lib/clubManagerSlots.test.ts src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+diff-base: git worktree add -q /tmp/b1 d8aaa4cb && BASE_ROOT=/tmp/b1 node scripts/simCmDifficulty.mjs
+c-flat: CM_DIFF_CONTROL=flat node scripts/simCmDifficulty.mjs
+c-leak: git worktree add -q /tmp/b2 d8aaa4cb && BASE_ROOT=/tmp/b2 CM_DIFF_CONTROL=leak node scripts/simCmDifficulty.mjs
+c-alloffleak: CM_DIFF_CONTROL=alloffleak node scripts/simCmDifficulty.mjs
+c-gain: CM_DIFF_CONTROL=gain node scripts/simCmDifficulty.mjs
+c-pain: CM_DIFF_CONTROL=pain node scripts/simCmDifficulty.mjs
+c-cut: CM_DIFF_CONTROL=cut node scripts/simCmDifficulty.mjs
+c-cheque: CM_DIFF_CONTROL=cheque node scripts/simCmDifficulty.mjs
+c-wages: CM_DIFF_CONTROL=wages node scripts/simCmDifficulty.mjs
+c-mark: CM_DIFF_CONTROL=mark node scripts/simCmDifficulty.mjs
+c-edge: CM_DIFF_CONTROL=edge node scripts/simCmDifficulty.mjs
+c-clause: CM_DIFF_CONTROL=clause node scripts/simCmDifficulty.mjs
+c-ddreach: CM_DIFF_CONTROL=ddreach node scripts/simCmDifficulty.mjs
+c-helpdrift: CM_DIFF_CONTROL=helpdrift node scripts/simCmDifficulty.mjs
+c-alloff: SECTION=4 SEEDS=2 CM_DIFF_CONTROL=alloff node scripts/simCmDifficulty.mjs
