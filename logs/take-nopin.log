@@ -1,0 +1,10 @@
+treeWithoutMerge: 01d844b401519cba63e6fb6413f922a10d3358b0, 0620a5ca without ea937568; conflicts kept from 0620a5ca: src/pages/WhatsNew.tsx
+base 01d844b401519cba63e6fb6413f922a10d3358b0
+[takeover] 200 handovers (20 by joinClubNow, 0 joins skipped: approached before applying); on CM_BOARD_BASE 109 carried a failed objective, on the head 0
+ok   [takeover] 200 takeovers open at BOARD_FRESH (69) (0 do not; 20 joins of 20 join cases)
+  the card: 109 takeovers dropped a failed objective; the season score compared on 99 of them (the rest were sacked first) at the handover and at the final whistle
+ok   [takeover] on the day of the handover no objective on the card reads failed (0 do)
+ok   [takeover] the card is the base card less exactly its failed objectives, in order
+ok   [takeover] the season score is the same with and without the dropped objectives, at the handover and the final whistle (99 cases)
+FAIL [takeover] every takeover equal to CM_BOARD_BASE but for the opening (and the card), its handover stamp included (26; first Everton era2005 newYear seed 0: .decisions.0.id: head "desk-1-26-spareFunds" base "desk-1-26-finesKitty")
+control nopin FIRED: 1 of 5 checks red

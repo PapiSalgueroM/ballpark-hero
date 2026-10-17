@@ -1,0 +1,22 @@
+treeWithoutMerge: de47f846f0ce9b4de4777f69725ed028107d3c55, a1d29ed0 without ea937568; conflicts kept from a1d29ed0: src/pages/WhatsNew.tsx
+base de47f846f0ce9b4de4777f69725ed028107d3c55
+[grade] 297 season ends: up 54, down 21, escape 20, A by a title or two trophies 66, A by overshoot alone 30, B to F with no fate 106
+  on the base ladder these same seasons: 7 promotions graded C or worse; the relegation cap changes 12 grades
+ok   [grade] every promotion grades A or B with an 'up' line naming the top flight (54 cases)
+ok   [grade] every relegation grades C or worse (B or worse with a trophy) with a 'down' line naming the league below (21 cases)
+ok   [grade] every escape keeps its grade with an 'escape' line (20 cases)
+ok   [grade] an A by a title or two trophies reads the old A lines, an A by overshoot alone the over line (96 cases)
+ok   [grade] the statues and the murals only on a title or two trophies (30 seasons could carry them)
+ok   [grade] every B to F season with no fate grades as the base ladder with a line of the old VERDICTS (106 cases)
+[fate] 297 season ends: up 54, down 21, escape 20, none 202; 32 finishes at exactly the count plus one (the cases fatecount needs)
+ok   [fate] the summary fate is the move the rollover really made, on every season end
+ok   [fate] the season record carries the same fate as the summary
+[stream] 297 season ends handed to both trees; 31 had a base offer outside the step
+ok   [stream] finishSeason draws the same number of times on head and base from the same state
+ok   [stream] and writes the same save but for the grade, the line, the fate and an offer outside the step
+ok   [stream] the offers are equal wherever every base offer was within the step
+ok   [offers] 259 summer offers of the fleets: every one within the step (one tier up, two after a top flight title or the Champions League) (3 of them two tiers up after a big season)
+ok   [offers] 212 mid season approaches: every one from at most one tier above
+ok   [offers] 794 tier 2 to 4 clubs of every world: each has a club exactly one tier up to be approached by
+[offers] the tier 4 fleet: 113 season ends; on CM_BOARD_BASE the same season ends were dealt 54 offers two or more tiers up in 49 seasons (the cases nostep needs)
+simCmBoardVerdict GREEN: 14 of 14 checks green (parts grade, fate, stream, offers, 406 s)

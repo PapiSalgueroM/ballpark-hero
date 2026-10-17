@@ -1,0 +1,9 @@
+treeWithoutMerge: c4aa5bd4bbb73d62e88d550d61ac03caf8656d66, a5e92591 without ea937568; conflicts kept from a5e92591: src/pages/WhatsNew.tsx
+base c4aa5bd4bbb73d62e88d550d61ac03caf8656d66
+[dailies] Hot Seat takeovers: 160 (80 dated, 80 free); on CM_BOARD_BASE 42 of the 110 on the current rules took over with a failed line on the card
+FAIL [dailies] 160 Hot Seat takeovers: the card less its failed lines on the current rules, the whole card on the old rules, nothing else moved but a suitor's name (78; first 2026-10-25 (free run) Samsunspor: the takeover moved beyond its card: .press.pending.id: head "pq-1-7-212" base "pq-1-7-213")
+[dailies] Hot Seat: 80 dates (60 from 2026-09-24 and every seventh day back); 76 identical, 3 differ only in a suitor's name, 1 moved; 6 raised an approach; 14 dates compared with the base's card less the failed lines their takeover dropped
+FAIL [dailies] 80 Hot Seat days: every run equal to CM_BOARD_BASE but for a suitor's name (1; first 2026-10-25: .state.press.pending.id: head "pq-1-16-6" base "pq-1-16-7")
+ok   [dailies] 30 Deadline Day days: the deal, the grade and the state's keys equal to CM_BOARD_BASE
+control hotstart: 1 dates moved without the line
+control hotstart FIRED: 2 of 3 checks red

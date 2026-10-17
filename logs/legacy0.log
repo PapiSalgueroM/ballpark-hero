@@ -1,0 +1,5 @@
+treeWithoutMerge: 477676c7c212944f33cf96415052d93016bbb8a6, 424e0e6e without ea937568; conflicts kept from 424e0e6e: src/pages/WhatsNew.tsx
+base 477676c7c212944f33cf96415052d93016bbb8a6
+ok   [legacy] 68 takeovers on the old rules (startMidSeason at new year and the run in, joinClubNow): every byte equal to CM_BOARD_BASE
+ok   [legacy] 56 careers on the old rules (matchRules 'base' on both trees): every save byte and every draw equal to CM_BOARD_BASE
+simCmBoardVerdict GREEN: 2 of 2 checks green (parts legacy, 249 s)
