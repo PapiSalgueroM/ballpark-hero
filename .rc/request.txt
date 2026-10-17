@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+whead: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/swh.log 2>&1; s=$?; grep -E "club-manager|manager-hot-seat|deadline-day" /tmp/swh.log | head -12; tail -2 /tmp/swh.log; exit $s
+basebuild: git worktree add -f /tmp/wbase d8aaa4cb > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wbase/node_modules && cd /tmp/wbase && npm run build > /tmp/wb.log 2>&1; s=$?; tail -2 /tmp/wb.log; exit $s
+wbase: (node scripts/lib/hostLikeServer.mjs /tmp/wbase/dist 4180 > /tmp/hs.log 2>&1 &) && sleep 4 && cd /tmp/wbase && BASE=http://127.0.0.1:4180 SWEEP_BASE=http://127.0.0.1:4180 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=/tmp/wbase/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/swb.log 2>&1; s=$?; grep -E "club-manager|manager-hot-seat|deadline-day" /tmp/swb.log | head -12; tail -2 /tmp/swb.log; exit $s
+moduleBytes: node_modules/.bin/esbuild src/lib/cmMatchDisplay.ts --minify --format=esm --log-level=error > /tmp/cmd.min.js && echo "cmMatchDisplay.ts minified $(wc -c < /tmp/cmd.min.js) B, gzipped $(gzip -9 -c /tmp/cmd.min.js | wc -c) B"
+tablesFit: (node scripts/lib/hostLikeServer.mjs /tmp/wbase/dist 4181 > /tmp/hs2.log 2>&1 &) && sleep 4 && CM_FIT_PART=all CM_FIT_BASE_SHA=d8aaa4cb CM_FIT_BASE_URL=http://127.0.0.1:4181 CM_FIT_BASE_DIST=/tmp/wbase/dist node scripts/playCmTablesFit.mjs
+compare: MATCHDAY_COMPARE_DIST=/tmp/wbase/dist node scripts/playCmMatchDay.mjs
