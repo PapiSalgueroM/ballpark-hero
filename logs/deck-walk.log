@@ -1,0 +1,160 @@
+ok   ST: the engine dealt a deck training card from the social media screen within 400 seeds
+   ST seed 1: 720 "Beating your man", "Do the one on one work" prints "Dribbling next season +1, Passing next season -1"
+ok   GK: the engine dealt a deck training card from the social media screen within 400 seeds
+   GK seed 1: 701 "Crosses into a crowded box", "Do the extra hour" prints "Morale -1, Aerial Command next season +1, Positioning next season -1"
+ok   390-ST deal: the deck chunk was fetched with the career on screen (soccerDeck-B3NSmbeY.js)
+   timing at 390, throttled: the deck's first load fetched soccerDeck-B3NSmbeY.js (335 ms), soccerMoments-Ua-CluOE.js (281 ms), throughBallDrill-B9fNBoXH.js (191 ms), core-Dsglyqbx.js (262 ms), leagueCore--DUG-EXw.js (171 ms), keyedShuffle-CJAps3xO.js (169 ms), ownGoalRule-J3XQry1d.js (169 ms); 335 ms from its first request to its last byte; already in memory: AppearanceBuilder-Dvgr5RSh.js, keyedRng-BKZQ2UGv.js, SoccerCareer-DJcRrXUK.js, index-B58qTZZU.js, PlayerAvatar-dbboeX5-.js, soccerCareerAppearance-C4EKR5O3.js, soccerBoots-BK_dXNrV.js, soccerBootIds-BWkyFIXk.js, useCareerMoment-BMI6ZWNb.js, clubRivalries-DuNC-DyB.js, formatNumber-CGuttX8h.js, dialogA11y-BCgxbiii.js, useGameCompletion-DbPZVnRw.js, badges-dA-cNW4j.js, GameSeoContent-BeSMw4bo.js, GameReportContext-ND6lJLk2.js, flag-BV58vudn.js, GameNavbar-MvdRm1Ar.js, arrow-left-DbX7nexR.js, star-LiWOmPY-.js, medal-C4Qph-Za.js, GameHelp-YePlQIe4.js, HowToPlayPopover-CW2TQ8Kj.js, circle-help-CH_7MBv8.js, VictoryMoment-D1teZHp7.js, select-Cty9FEYv.js, chevron-down-CvPQtDpB.js, chevron-up-DbrMbo6r.js, confederationGroups-8jgsrX6T.js, soccerInternational-FiWGI8ks.js, lz-string-cemwgVSj.js, intlNames-DiJYNZJt.js, uclFormatHistory-DwuhruDw.js, careerRivalryChoices-B2c2ZYXB.js, managerOffers-EoQ6k_gA.js, careerAwardsNight-BDQnO6dK.js, arcade-CUT7KVjC.js, freeKick-BSoL5hQo.js, Confetti-DNPj95kl.js, Celebration-0qW67xOg.js, CelebrationStyles-D9vlq8vK.js, FlagImg-BjWh2fpt.js, ShareButtons-DkOyRQAX.js, copy-CIofZA4B.js, useRevealScroll-DKweivvE.js, useArrivalTop-D5KoLAuv.js
+ok   390-ST deal: the first card is the deck card node dealt, "Beating your man"
+ok   390-ST deal: its training button prints the gain and the time cost ("Dribbling next season +1, Passing next season -1")
+ok   390-ST deal: no page error
+ok   390-ST fasttap: the deal went on without the deck card (phase random_events, first card 200)
+ok   390-ST fasttap: no page error
+ok   390-ST answer: the toast prints what landed, "You take on a defender in every session. Dribbling next season +1, Passing next season -1."
+ok   390-ST answer: the save queued what node queued ({"dribbling":1,"passing":-1})
+ok   390-ST answer: the deck card left the batch
+ok   390-ST answer: no page error
+ok   390-ST delayed: the second option ("Keep it simple") answers differently from the first, so a second press that went through would show
+ok   390-ST delayed: the press says it is working while the chunk is held
+ok   390-ST delayed: the second press started no second wait (1 loading toasts)
+ok   390-ST delayed: the answer lands once the chunk does, and the toast says what landed
+ok   390-ST delayed: one result toast, the first press's, none for the second press (["You take on a defender in every session. Dribbling next season +1, Passing next season -1."])
+ok   390-ST delayed: the first press's season log line, once
+ok   390-ST delayed: the save holds the FIRST press's answer ({"dribbling":1,"passing":-1}), not the second's
+ok   390-ST delayed: the deck card left the batch
+ok   390-ST delayed: no page error
+ok   390-ST late: past 8000 ms the press says the card is still loading
+ok   390-ST late: the card stays
+ok   390-ST late: once the chunk lands the next press answers it
+ok   390-ST late: the save queued what node queued
+ok   390-ST late: no page error
+ok   390-ST noreload: the press says the card could not load
+ok   390-ST noreload: the card stays on screen
+ok   390-ST noreload: the save still holds the card and nothing landed
+ok   390-ST noreload: no reload happened (1 loads)
+ok   390-ST noreload: no page error but the failed chunk
+ok   390-ST noreload: offline, the next tap tries again without a reload, says so again and the card stays (1 loads)
+ok   390-ST noreload: online, the next tap reloads the page once and the card comes back with its save (2 loads)
+ok   390-ST reload: freshBuild reloaded the tab once (2 loads)
+ok   390-ST reload: the career came back on its card
+ok   390-ST reload: the save is on its phase with its card
+ok   390-ST ceiling: the training ground opens with the deck card on screen
+ok   390-ST ceiling: the toast says nothing landed and nothing was paid ("You take on a defender in every session. Dribbling next season +0, you are at your ceiling, Passing next season +0, you only pay for training that landed.")
+ok   390-ST ceiling: nothing queued past the ceiling
+ok   390-ST ceiling: no page error
+ok   390-GK deal: the deck chunk was fetched with the career on screen (soccerDeck-B3NSmbeY.js)
+ok   390-GK deal: the first card is the deck card node dealt, "Crosses into a crowded box"
+ok   390-GK deal: its training button prints the gain and the time cost ("Morale -1, Aerial Command next season +1, Positioning next season -1")
+ok   390-GK deal: no page error
+ok   390-GK fasttap: the deal went on without the deck card (phase random_events, first card 200)
+ok   390-GK fasttap: no page error
+ok   390-GK answer: the toast prints what landed, "You stay out for the extra hour every day. Morale -1, Aerial Command next season +1, Positioning next season -1."
+ok   390-GK answer: the save queued what node queued ({"physical":1,"defending":-1})
+ok   390-GK answer: the deck card left the batch
+ok   390-GK answer: no page error
+ok   390-GK delayed: the second option ("Stick to the normal plan") answers differently from the first, so a second press that went through would show
+ok   390-GK delayed: the press says it is working while the chunk is held
+ok   390-GK delayed: the second press started no second wait (1 loading toasts)
+ok   390-GK delayed: the answer lands once the chunk does, and the toast says what landed
+ok   390-GK delayed: one result toast, the first press's, none for the second press (["You stay out for the extra hour every day. Morale -1, Aerial Command next season +1, Positioning next season -1."])
+ok   390-GK delayed: the first press's season log line, once
+ok   390-GK delayed: the save holds the FIRST press's answer ({"physical":1,"defending":-1}), not the second's
+ok   390-GK delayed: the deck card left the batch
+ok   390-GK delayed: no page error
+ok   390-GK late: past 8000 ms the press says the card is still loading
+ok   390-GK late: the card stays
+ok   390-GK late: once the chunk lands the next press answers it
+ok   390-GK late: the save queued what node queued
+ok   390-GK late: no page error
+ok   390-GK noreload: the press says the card could not load
+ok   390-GK noreload: the card stays on screen
+ok   390-GK noreload: the save still holds the card and nothing landed
+ok   390-GK noreload: no reload happened (1 loads)
+ok   390-GK noreload: no page error but the failed chunk
+ok   390-GK noreload: offline, the next tap tries again without a reload, says so again and the card stays (1 loads)
+ok   390-GK noreload: online, the next tap reloads the page once and the card comes back with its save (2 loads)
+ok   390-GK reload: freshBuild reloaded the tab once (2 loads)
+ok   390-GK reload: the career came back on its card
+ok   390-GK reload: the save is on its phase with its card
+ok   390-GK ceiling: the training ground opens with the deck card on screen
+ok   390-GK ceiling: the toast says nothing landed and nothing was paid ("You stay out for the extra hour every day. Morale -1, Aerial Command next season +0, you are at your ceiling, Positioning next season +0, you only pay for training that landed.")
+ok   390-GK ceiling: nothing queued past the ceiling
+ok   390-GK ceiling: no page error
+ok   390 help: How to play carries the summer cards line
+ok   1280-ST deal: the deck chunk was fetched with the career on screen (soccerDeck-B3NSmbeY.js)
+ok   1280-ST deal: the first card is the deck card node dealt, "Beating your man"
+ok   1280-ST deal: its training button prints the gain and the time cost ("Dribbling next season +1, Passing next season -1")
+ok   1280-ST deal: no page error
+ok   1280-ST fasttap: the deal went on without the deck card (phase random_events, first card 200)
+ok   1280-ST fasttap: no page error
+ok   1280-ST answer: the toast prints what landed, "You take on a defender in every session. Dribbling next season +1, Passing next season -1."
+ok   1280-ST answer: the save queued what node queued ({"dribbling":1,"passing":-1})
+ok   1280-ST answer: the deck card left the batch
+ok   1280-ST answer: no page error
+ok   1280-ST delayed: the second option ("Keep it simple") answers differently from the first, so a second press that went through would show
+ok   1280-ST delayed: the press says it is working while the chunk is held
+ok   1280-ST delayed: the second press started no second wait (1 loading toasts)
+ok   1280-ST delayed: the answer lands once the chunk does, and the toast says what landed
+ok   1280-ST delayed: one result toast, the first press's, none for the second press (["You take on a defender in every session. Dribbling next season +1, Passing next season -1."])
+ok   1280-ST delayed: the first press's season log line, once
+ok   1280-ST delayed: the save holds the FIRST press's answer ({"dribbling":1,"passing":-1}), not the second's
+ok   1280-ST delayed: the deck card left the batch
+ok   1280-ST delayed: no page error
+ok   1280-ST late: past 8000 ms the press says the card is still loading
+ok   1280-ST late: the card stays
+ok   1280-ST late: once the chunk lands the next press answers it
+ok   1280-ST late: the save queued what node queued
+ok   1280-ST late: no page error
+ok   1280-ST noreload: the press says the card could not load
+ok   1280-ST noreload: the card stays on screen
+ok   1280-ST noreload: the save still holds the card and nothing landed
+ok   1280-ST noreload: no reload happened (1 loads)
+ok   1280-ST noreload: no page error but the failed chunk
+ok   1280-ST noreload: offline, the next tap tries again without a reload, says so again and the card stays (1 loads)
+ok   1280-ST noreload: online, the next tap reloads the page once and the card comes back with its save (2 loads)
+ok   1280-ST reload: freshBuild reloaded the tab once (2 loads)
+ok   1280-ST reload: the career came back on its card
+ok   1280-ST reload: the save is on its phase with its card
+ok   1280-ST ceiling: the training ground opens with the deck card on screen
+ok   1280-ST ceiling: the toast says nothing landed and nothing was paid ("You take on a defender in every session. Dribbling next season +0, you are at your ceiling, Passing next season +0, you only pay for training that landed.")
+ok   1280-ST ceiling: nothing queued past the ceiling
+ok   1280-ST ceiling: no page error
+ok   1280-GK deal: the deck chunk was fetched with the career on screen (soccerDeck-B3NSmbeY.js)
+ok   1280-GK deal: the first card is the deck card node dealt, "Crosses into a crowded box"
+ok   1280-GK deal: its training button prints the gain and the time cost ("Morale -1, Aerial Command next season +1, Positioning next season -1")
+ok   1280-GK deal: no page error
+ok   1280-GK fasttap: the deal went on without the deck card (phase random_events, first card 200)
+ok   1280-GK fasttap: no page error
+ok   1280-GK answer: the toast prints what landed, "You stay out for the extra hour every day. Morale -1, Aerial Command next season +1, Positioning next season -1."
+ok   1280-GK answer: the save queued what node queued ({"physical":1,"defending":-1})
+ok   1280-GK answer: the deck card left the batch
+ok   1280-GK answer: no page error
+ok   1280-GK delayed: the second option ("Stick to the normal plan") answers differently from the first, so a second press that went through would show
+ok   1280-GK delayed: the press says it is working while the chunk is held
+ok   1280-GK delayed: the second press started no second wait (1 loading toasts)
+ok   1280-GK delayed: the answer lands once the chunk does, and the toast says what landed
+ok   1280-GK delayed: one result toast, the first press's, none for the second press (["You stay out for the extra hour every day. Morale -1, Aerial Command next season +1, Positioning next season -1."])
+ok   1280-GK delayed: the first press's season log line, once
+ok   1280-GK delayed: the save holds the FIRST press's answer ({"physical":1,"defending":-1}), not the second's
+ok   1280-GK delayed: the deck card left the batch
+ok   1280-GK delayed: no page error
+ok   1280-GK late: past 8000 ms the press says the card is still loading
+ok   1280-GK late: the card stays
+ok   1280-GK late: once the chunk lands the next press answers it
+ok   1280-GK late: the save queued what node queued
+ok   1280-GK late: no page error
+ok   1280-GK noreload: the press says the card could not load
+ok   1280-GK noreload: the card stays on screen
+ok   1280-GK noreload: the save still holds the card and nothing landed
+ok   1280-GK noreload: no reload happened (1 loads)
+ok   1280-GK noreload: no page error but the failed chunk
+ok   1280-GK noreload: offline, the next tap tries again without a reload, says so again and the card stays (1 loads)
+ok   1280-GK noreload: online, the next tap reloads the page once and the card comes back with its save (2 loads)
+ok   1280-GK reload: freshBuild reloaded the tab once (2 loads)
+ok   1280-GK reload: the career came back on its card
+ok   1280-GK reload: the save is on its phase with its card
+ok   1280-GK ceiling: the training ground opens with the deck card on screen
+ok   1280-GK ceiling: the toast says nothing landed and nothing was paid ("You stay out for the extra hour every day. Morale -1, Aerial Command next season +0, you are at your ceiling, Positioning next season +0, you only pay for training that landed.")
+ok   1280-GK ceiling: nothing queued past the ceiling
+ok   1280-GK ceiling: no page error
+ok   1280 help: How to play carries the summer cards line
+playSoccerDeck: green, every case at 390 and 1280.
