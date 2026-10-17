@@ -1,0 +1,6 @@
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+md-neutrallive: MATCHDAY_CONTROL=neutrallive node scripts/simCmMatchDay.mjs
+md-neutralaway: MATCHDAY_CONTROL=neutralaway node scripts/simCmMatchDay.mjs
+md-oldorder: MATCHDAY_CONTROL=oldorder node scripts/simCmMatchDay.mjs
+md-barorder: MATCHDAY_CONTROL=barorder node scripts/simCmMatchDay.mjs
+md-greenfirst: MATCHDAY_CONTROL=greenfirst node scripts/simCmMatchDay.mjs
