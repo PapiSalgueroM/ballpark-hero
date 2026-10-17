@@ -1,0 +1,14 @@
+treeWithoutMerge: cc07a2616a11ffbec0e9b83f07310a2666d33386, 714a795d without f1e54e17; conflicts kept from 714a795d: none
+treeWithoutMerge: 046ee2f95b06bceba0f5e13fb94d0c37bfec4813, cc07a261 without 54100f6e; conflicts kept from cc07a261: src/pages/WhatsNew.tsx
+base 046ee2f95b06bceba0f5e13fb94d0c37bfec4813
+12) the window entry: Real Madrid, Everton, Aberdeen to the January of season 6, 5 trials an engine, the head's median at most 3 x BASE's + 5 ms
+   Real Madrid (now, seed 1): ledger 22 records on BASE, 63 on the head; the window entry's median BASE 24.0 ms, head 46.1 ms (limit 77.0)
+   Real Madrid (now, seed 2): ledger 23 records on BASE, 66 on the head; the window entry's median BASE 22.9 ms, head 43.7 ms (limit 73.6)
+   Real Madrid (now, seed 3): ledger 22 records on BASE, 70 on the head; the window entry's median BASE 22.0 ms, head 48.8 ms (limit 71.1)
+   Everton (now, seed 1): ledger 12 records on BASE, 56 on the head; the window entry's median BASE 21.4 ms, head 42.4 ms (limit 69.1)
+   Everton (now, seed 2): ledger 12 records on BASE, 51 on the head; the window entry's median BASE 21.9 ms, head 40.4 ms (limit 70.6)
+   Everton (now, seed 3): ledger 15 records on BASE, 63 on the head; the window entry's median BASE 21.7 ms, head 47.5 ms (limit 70.2)
+   Aberdeen (now, seed 1): ledger 4 records on BASE, 53 on the head; the window entry's median BASE 20.4 ms, head 42.8 ms (limit 66.3)
+   Aberdeen (now, seed 2): ledger 5 records on BASE, 53 on the head; the window entry's median BASE 20.9 ms, head 40.3 ms (limit 67.7)
+   Aberdeen (now, seed 3): ledger 5 records on BASE, 42 on the head; the window entry's median BASE 20.3 ms, head 36.4 ms (limit 65.9)
+simCmWorldMoves: green, sections 12 held
