@@ -1,0 +1,22 @@
+simCmDifficulty: sections 0
+  table: normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":1.5}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3}
+0) measure: normal, 4 seeds, 10 seasons, engaged and steady, shard 0/3
+  big   Arsenal (premier, expected 1)
+  mid   Brentford (premier, expected 11)
+  small Hull City (premier, expected 20)
+  big   Real Madrid (laliga, expected 1)
+  mid   Espanyol (laliga, expected 11)
+  small Málaga (laliga, expected 20)
+  big   Inter Milan (seriea, expected 1)
+  mid   Torino (seriea, expected 11)
+  small Frosinone (seriea, expected 20)
+  played 240 seasons in 0 s (0.00 s a season)
+  level  tier  driver   n   ppg  vsExp titles10 troph10   fees  sign  balance over  bMin bMean sacked matches xiS  xiE  clauseU loanU
+  normal big   engaged  60 2.07   1.02    4.67    9.33  66.42  1.28   135.82 0.75 46.46 72.30 0.10  49.70 90.26 90.72     0     0
+  normal big   steady   30 2.05   1.48    3.33    6.33   0.00  0.00   253.17 0.60 37.85 66.27 0.10  47.40 89.16 89.16     0     0
+  normal mid   engaged  30 1.38  -0.81    0.00    0.67   9.59  1.77    19.19 0.83 32.71 59.98 0.10  40.13 81.05 81.32     0     0
+  normal mid   steady   60 1.35  -2.26    0.17    1.00   0.00  0.00    51.68 0.37 37.03 67.97 0.30  38.22 80.29 80.29     0     0
+  normal small engaged  30 1.22  -8.32    1.00    1.00   5.06  2.30     8.54 0.80 31.87 63.69 0.27  38.47 75.88 76.41     0     0
+  normal small steady   30 0.96  -6.69    0.33    0.33   0.00  0.00    17.11 0.37 21.67 55.34 0.47  35.93 75.02 75.02     0     0
+  ok: a shard: the empty cell check is the fold's
+simCmDifficulty: all green (sections 0)
