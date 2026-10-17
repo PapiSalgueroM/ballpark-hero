@@ -1,0 +1,46 @@
+  A-nba-390-reduce tile clean: 🧾 Come clean Pay back all 6.0M plus a 0.6M fine Heat -5 Karma +3
+  A-nba-390-reduce tile give: 🤝 Give it away All 6.0M goes to charity. You keep none of it Karma +6 Heat stays where it is
+  A-nba-390-reduce tile quiet: 🤐 Keep it quiet Nothing changes now It keeps burning: heat climbs every season you hold it At this heat the next season end suspends you and takes all of it
+  A-nba-390-reduce tile wash: 🧼 Wash it Heat +10 now 55 percent chance you are caught Not caught: 4.2M comes out as clean money, and at this heat you still sit out a season to a suspension Caught: all 6.0M is seized, fanbase -30, morale -25, and you sit out 2 seasons
+  A-nba-390-reduce picked-wash: cm-rise none/1
+  A-nba-390-reduce wash: Caught. All 6.0M was seized and the league suspended you. | saved dirty 0 heat 99 net 15.8 to 15.8 karma 53 to 53 susp 1 caught true
+  A-nba-390-reduce result-wash: cm-rise none/1
+  A-mlb-1280-motion tile clean: 🧾 Come clean Pay back all 6.0M plus a 0.6M fine Heat -5 Karma +3
+  A-mlb-1280-motion tile give: 🤝 Give it away All 6.0M goes to charity. You keep none of it Karma +6 Heat stays where it is
+  A-mlb-1280-motion tile quiet: 🤐 Keep it quiet Nothing changes now It keeps burning: heat climbs every season you hold it At this heat the next season end suspends you and takes all of it
+  A-mlb-1280-motion tile wash: 🧼 Wash it Heat +10 now 55 percent chance you are caught Not caught: 4.2M comes out as clean money, and at this heat you still sit out a season to a suspension Caught: all 6.0M is seized, fanbase -30, morale -25, and you sit out 2 seasons
+  A-mlb-1280-motion picked-wash: cm-rise none/1
+  A-mlb-1280-motion wash: You washed it through cash businesses. 4.2M came out clean. | saved dirty 0 heat 99 net 2.8 to 7 karma 50 to 50 susp 0 caught false
+  A-mlb-1280-motion result-wash: cm-rise none/1
+  B-nhl-390-motion tile clean: 🧾 Come clean Pay back all 0.1M plus a 0.1M fine Too little to cool the heat Karma stays where it is
+  B-nhl-390-motion tile give: 🤝 Give it away All 0.1M goes to charity. You keep none of it Karma stays where it is Heat stays where it is
+  B-nhl-390-motion tile quiet: 🤐 Keep it quiet Nothing changes now Nobody is looking yet, but once the heat starts it climbs every season you hold it
+  B-nhl-390-motion tile wash: 🧼 Wash it Heat +10 now 19 percent chance you are caught Not caught: 0.0M comes out as clean money Caught: all 0.1M is seized, fanbase -30, morale -25, and you sit out a season
+  B-nhl-390-motion picked-give: cm-rise none/1
+  B-nhl-390-motion give: You gave all 0.1M to charity and kept none of it. | saved dirty 0 heat 0 net 6.3 to 6.3 karma 50 to 50 susp 0 caught null
+  B-nhl-390-motion result-give: cm-rise none/1
+  C-nhl-1280-reduce tile clean: 🧾 Come clean Pay back all 20.0M plus a 2.0M fine At the top of the meter nothing cools the heat Karma +3 At this heat you still sit out a season to a suspension
+  C-nhl-1280-reduce tile give: 🤝 Give it away All 20.0M goes to charity. You keep none of it Karma +6 Heat stays where it is At this heat you still sit out a season to a suspension
+  C-nhl-1280-reduce tile quiet: 🤐 Keep it quiet Nothing changes now It keeps burning: heat climbs every season you hold it At this heat the next season end suspends you and takes all of it
+  C-nhl-1280-reduce tile wash: 🧼 Wash it Heat is already at the top of the meter 55 percent chance you are caught Not caught: 14.0M comes out as clean money, and at this heat you still sit out a season to a suspension Caught: all 20.0M is seized, fanbase -30, morale -25, and you sit out 2 
+  C-nhl-1280-reduce picked-quiet: cm-rise none/1
+  C-nhl-1280-reduce tile clean: 🧾 Come clean Pay back all 20.0M plus a 2.0M fine At the top of the meter nothing cools the heat Karma +3 At this heat you still sit out a season to a suspension
+  C-nhl-1280-reduce tile give: 🤝 Give it away All 20.0M goes to charity. You keep none of it Karma +6 Heat stays where it is At this heat you still sit out a season to a suspension
+  C-nhl-1280-reduce tile quiet: 🤐 Keep it quiet Nothing changes now It keeps burning: heat climbs every season you hold it At this heat the next season end suspends you and takes all of it
+  C-nhl-1280-reduce tile wash: 🧼 Wash it Heat is already at the top of the meter 55 percent chance you are caught Not caught: 14.0M comes out as clean money, and at this heat you still sit out a season to a suspension Caught: all 20.0M is seized, fanbase -30, morale -25, and you sit out 2 
+  C-nhl-1280-reduce picked-clean: cm-rise none/1
+  C-nhl-1280-reduce clean: You came clean and paid back 20.0M plus a 2.0M fine. Karma +3. | saved dirty 0 heat 100 net 6.3 to 4.3 karma 50 to 53 susp 0 caught null
+  C-nhl-1280-reduce result-clean: cm-rise none/1
+  C-nba-390-motion tile clean: 🧾 Come clean Pay back all 20.0M plus a 2.0M fine At the top of the meter nothing cools the heat Karma +3 At this heat you still sit out a season to a suspension
+  C-nba-390-motion tile give: 🤝 Give it away All 20.0M goes to charity. You keep none of it Karma +6 Heat stays where it is At this heat you still sit out a season to a suspension
+  C-nba-390-motion tile quiet: 🤐 Keep it quiet Nothing changes now It keeps burning: heat climbs every season you hold it At this heat the next season end suspends you and takes all of it
+  C-nba-390-motion tile wash: 🧼 Wash it Heat is already at the top of the meter 55 percent chance you are caught Not caught: 14.0M comes out as clean money, and at this heat you still sit out a season to a suspension Caught: all 20.0M is seized, fanbase -30, morale -25, and you sit out 2 
+  C-nba-390-motion picked-quiet: cm-rise none/1
+  C-nba-390-motion tile clean: 🧾 Come clean Pay back all 20.0M plus a 2.0M fine At the top of the meter nothing cools the heat Karma +3 At this heat you still sit out a season to a suspension
+  C-nba-390-motion tile give: 🤝 Give it away All 20.0M goes to charity. You keep none of it Karma +6 Heat stays where it is At this heat you still sit out a season to a suspension
+  C-nba-390-motion tile quiet: 🤐 Keep it quiet Nothing changes now It keeps burning: heat climbs every season you hold it At this heat the next season end suspends you and takes all of it
+  C-nba-390-motion tile wash: 🧼 Wash it Heat is already at the top of the meter 55 percent chance you are caught Not caught: 14.0M comes out as clean money, and at this heat you still sit out a season to a suspension Caught: all 20.0M is seized, fanbase -30, morale -25, and you sit out 2 
+  C-nba-390-motion picked-give: cm-rise none/1
+  C-nba-390-motion give: You gave all 20.0M to charity and kept none of it. Karma +6. | saved dirty 0 heat 100 net 15.8 to 15.8 karma 53 to 59 susp 0 caught null
+  C-nba-390-motion result-give: cm-rise none/1
+rvwalk1500: ALL GREEN, 5 walks
