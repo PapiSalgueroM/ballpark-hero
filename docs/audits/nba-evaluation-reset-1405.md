@@ -1,0 +1,35 @@
+# NBA Starting 5 review reset, Round1405
+
+Status: claimed, test method being prepared. No new runtime or READY claim.
+
+The review screen leaves Start Over enabled while the remote judge is pending. The hook clears the lineup but does not invalidate that review. Its eventual remote or local verdict can finish the abandoned lineup, record a completion and clear a replacement review's busy flag.
+
+Scope: only the review lifecycle in `src/hooks/useNbaLineup.ts`, its real-hook regression method, an own remote workflow and these closing docs. Frozen actual I base: `8293c758f4284d21baaa2320383cfd5cb5bd4944`. The original hook blob is `7cedec7288ac79bccc00a053c5e63dbad058a486`, 15747 canonical bytes, SHA256 `23dd0e8ed4f0c2dc609e71dbfce2ec1536a42b4aabd7e82c77985f555aaae85b`.
+
+First observe the frozen fictional five-pick test against the original source remotely. Then change only ownership of pending reviews and run that same method against candidate, original and restored candidate. Preserve ordinary request payloads, scoring, position rules, stat enrichment, challenges and fallback behavior. Existing source, dependency, tool, font and dist receipts remain required.
+
+All application runtime is remote. The scoped qualification must include real app types, relevant existing offline tests, a serial build followed by all15 rebuilt-site readers and all14 unchanged fatal page caps. The existing live-table NBA search harness is preserved but is not credited as an offline pass.
+
+Claude I owns the active career and competition work, joined release, main and publication. This optional sibling fix adds no gate to urgent PR308 or other READY packets. No full-suite, provider, new browser journey, physical-device, current I join or live claim is made here.
+
+## First baseline retained, test method corrected
+
+Original95f3ec33/run39028737095 failed its strict classifier: types and41related cases passed, but all12new cases failed rather than7. Six failures reached their precise stale-ownership assertions; unmount and all5ordinary cases instead failed the global fake-timer count with4outstanding timers. That global count measures work beyond this hook and is not the reset outcome. Artifact12098569886,74310352bytes,SHAbe93f71e5d587b0cd29e6b877de1bfdb8da1060f62ef42653a439beea36e8709 is retained outside as failed evidence, not a qualified baseline.
+
+The revised frozen test uses real timers and waits for the actual100ms reset to supply its new challenge. It preserves every title, exact ownership cause, request, state, completion, storage, draw and settled-deferred assertion. Only the fake-clock mechanics and unsupported global timer count change. Revised test24385bytes,SHAa429b483fb303f82d79219a08505e4785e33e73f6db3838f3c3c69046ff5b087. Helper changes only its frozen test pin; workflow and all production source remain unchanged. Await the actual corrected baseline before implementing the fix.
+## Corrected original reproduced, candidate prepared
+
+Actual5f75c17bb3a880d1daa53942b31ab51c3eba9d12/run39029165594/job117385976057 succeeded as an original-source counterexample proof:7exact ownership assertion failures,5ordinary cases passed,41related tests passed, real types0bytes and4effective receipt controls. Artifact12099751514 is74311484bytes,SHAa8e9977c73b91b94e7dcb1fc5bded2c2891af0c7bb01aed49c1c27763aa2bd71. Raw282071bytes,SHAeb60bf9a119835b274014c250459ec5034287a4bd33caa842be066d7c8de46b1. Native physical017c4c1d closes all4873source bodies and memberships; the independent semantic audit verifies actual outcomes rather than trusting the summary. No build/readers/weights ran in this baseline.
+
+After reading that actual proof, root prepared the minimal candidate:16375bytes,SHA6fbb8a55a2d8f525921736585c13c9269787ff20e509d39f5aaf59651b777cc8,blob966abcdd3d1084efcbbf98c44a5910febc22b025.19added/4removed lines. A per-review token is invalidated on start/reset/unmount; awaited remote,JSON and local boundaries ignore abandoned reviews, and only the current review clears busy. A whole native inverse restores the exact original15747bytes. Requests, stat enrichment, scoring, eligibility, challenge rules and fallback policy are held. Full candidate qualification is still pending.
+## Full candidate verification passed
+
+ActualTESTED9b03134d21e040c55600404013da4b0f258d5031/run39029738213/job117387625318 completed SUCCESS. The exact frozena429test produced candidate12pass, original7specific faults plus5healthy, and restored12pass. Both related41-case runs passed with the same titles. The actual original raw282071bytes/SHAeb60bf9a119835b274014c250459ec5034287a4bd33caa842be066d7c8de46b1 equals the separately qualified corrected baseline. Candidate/restored raw279614bytes/SHAb45f77ede97c1a42c3bc69d0f55294fd364c762f21e161ea6c591b5ad6215ebf are byte equal. All5ordinary cases remain whole-equal across the original and fixed hook. The changed payload and unsettled-gate receipt controls were both rejected.
+
+Actual application types passed with0output bytes. The production build completed before all15site readers, each exit0. All14existing page limits remain fatal and passed, including Soccer Career833.0K/834K, Club Manager608.5K/609K and NFL487.8K/488K. No limit was raised and no savings are attributed to this hook change. The live-table NBA search harness remained unexecuted and unchanged. No new evaluation-reset browser journey, physical device, provider, full-suite, current I join or publication is claimed.
+
+Artifact12099634249 is85795111bytes,SHA840f6493faf35813b3601e4a00320aade36511fc32b06d8682278d03ae92ecaf. Native physical receiptf00cccd5b75cf25d02a81939fa32c5b30ea4e7e465bd42412ae6417ac03d5d91 (compactde6e647d06c75b48fb31c40115169c267454db4003333111c1eec8fef727e8f0) verifies17063checks,126payloads,4874request/validated source bodies,13arm-transition maps plus the initialmap,784dist bodies and9physical font bodies plus the manifest. Installed24466, isolated browser176 and runtime2memberships are CI receipt holds, not locally inspected installed bodies. All521locked versions and package source records are held.
+
+The build regenerated exactly public/whats-new/index.html,public/sitemap.xml andscripts/data/lastmod.json. These three bodies remain in the retained validated artifact and are not adopted into the NBA branch. Final differs from the tested request only in the three closing docs. The outside final-source receipt must prove every non-doc final body remains request-exact and explicitly account for the three validated/generated differences, rather than claiming final equals the entire validated tree.
+
+Release handoff follows BII rule2: realmerge actualTESTED9b, closing docs separately, then I regenerates and qualifies the actual joined output. This sibling correction adds no gate to urgent308 or existing READY packets. I retains active careers/competitions, main and deploy_project. Final head, source closure, push receipt and independent semantic detail are recorded outside in NBA-EVALUATION-RESET-1405-READY-FOR-CLAUDE-I.md.

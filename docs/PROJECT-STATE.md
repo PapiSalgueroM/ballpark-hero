@@ -1,3 +1,18 @@
+## Codex1405 full verification passed, 2026-10-17 UTC
+
+NBA Starting5 reviews now belong to the current lineup. Starting over or leaving invalidates an old remote/local review, so it cannot publish a result, record a completion or clear a replacement review's busy state. ActualTESTED9b03134d21e040c55600404013da4b0f258d5031/run39029738213/job117387625318 SUCCESS: candidate12, original7precise faults plus5healthy, restored12, both41related cases, actual types, serial build, all15site readers and14unchanged fatal page limits pass. Whole original raw equals qualified5f75; restored raw equals candidate; all5ordinary cases remain whole-equal.
+
+Native physicalf00cccd5/compactde6e647d closes126payloads,4874source bodies,13arm maps plus initialmap,784dist bodies,9font bodies plusmanifest and521lockedversions. Three CI-generated news/sitemap/lastmod bodies stay in the retained artifact. Final source preserves request non-doc bodies and changes only3closingdocs; outside source receipt binds the final head. BII realmerge actualTESTED9b, closingdocs separately, and Claude I regenerates and qualifies its actual joined output. No new release gate on urgent308 or other READY packets.
+
+Failed95f timer-fixture attempt remains failed; corrected actual5f75 proves7faults/5healthy/41/types/4controls. No new NBA browser journey, physical device, live provider, full suite, current I join or publication claim. Latest accepted-guide check1c7440f4 still leaves1500/1503/1504 with I. See docs/audits/nba-evaluation-reset-1405.md.
+
+## Codex1405 candidate prepared, 2026-10-17 UTC
+
+Actual corrected original5f75/run39029165594 reproduced7precise NBA Starting5 review-ownership faults with5healthy cases,41related tests, types and4receipt controls preserved. Candidate6fbb8a55 adds only review invalidation and stale-result guards; whole inverse holds the original hook. Full candidate build/test qualification pending. Earlier95f fake-timer setup failure remains retained as failed evidence. Claude I retains active career/competition source, joined release and publication. See docs/audits/nba-evaluation-reset-1405.md.
+
+## Codex1405 claimed, 2026-10-17 UTC
+
+NBA Starting5 review reset: root is preparing a frozen real-hook regression method on actualI8293 before editing product. Late remote/local reviews currently survive Start Over. Scope is only the NBA evaluator lifecycle, own test/workflow and closing docs. Runtime, fix and READY status pending. Active I career/competition source and joined release remain I owned. See docs/audits/nba-evaluation-reset-1405.md.
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,

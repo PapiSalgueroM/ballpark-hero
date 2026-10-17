@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { localEvaluateNbaFive } from '@/lib/localLineupEval';
 import { getRandomNbaTeams, NBA_TEAMS, type NbaTeam } from '@/data/nbaTeams';
 import { getRandomStatChallenge } from '@/data/nbaStats';
@@ -96,6 +96,13 @@ export function useNbaLineup() {
   const [isStatSpinning, setIsStatSpinning] = useState(false);
   const [isTeamSpinning, setIsTeamSpinning] = useState(false);
 
+  const evaluationRun = useRef(0);
+  const cancelEvaluation = useCallback(() => {
+    evaluationRun.current += 1;
+    setIsEvaluating(false);
+  }, []);
+  useEffect(() => () => { evaluationRun.current += 1; }, []);
+
   const filledCount = filledSlots.size;
   const currentTeam = useMemo(() => teamAssignments[filledCount] ?? null, [teamAssignments, filledCount]);
 
@@ -126,6 +133,7 @@ export function useNbaLineup() {
   );
 
   const startGame = useCallback(() => {
+    cancelEvaluation();
     const newChallenge = getRandomStatChallenge();
     setChallenge(newChallenge);
     setIsStatSpinning(true);
@@ -135,7 +143,7 @@ export function useNbaLineup() {
     setValidationError(null);
     setEvaluationError(null);
     setSelectedPosition(null);
-  }, []);
+  }, [cancelEvaluation]);
 
   // Auto-start on first load
   useEffect(() => {
@@ -295,6 +303,7 @@ export function useNbaLineup() {
 
   const evaluateTeam = useCallback(async () => {
     if (filledSlotsArray.length !== 5 || !challenge) return;
+    const run = ++evaluationRun.current;
     setIsEvaluating(true);
     setEvaluationError(null);
     try {
@@ -309,13 +318,16 @@ export function useNbaLineup() {
           body: JSON.stringify({ players: filledSlotsArray, challenge }),
         }
       );
+      if (run !== evaluationRun.current) return;
       if (!resp.ok) throw new Error(`Evaluation request failed (${resp.status})`);
       const data = await resp.json();
+      if (run !== evaluationRun.current) return;
       // Guard against a malformed/empty body so we never land on a blank result.
       if (!data || typeof data.rating !== 'string') throw new Error('Malformed verdict');
       setVerdict(data);
       setPhase('result');
     } catch (err) {
+      if (run !== evaluationRun.current) return;
       // AI referee down/out of quota -> offline judge so the game still ends
       // with a real verdict instead of an error state.
       console.error('Evaluation error:', err);
@@ -324,17 +336,20 @@ export function useNbaLineup() {
           filledSlotsArray.map(s => s.playerName),
           `${challenge.direction === 'highest' ? 'Highest' : 'Lowest'} ${challenge.stat}`,
         );
+        if (run !== evaluationRun.current) return;
         setVerdict(local);
         setPhase('result');
       } catch {
+        if (run !== evaluationRun.current) return;
         setEvaluationError('Could not evaluate your lineup. Please try again.');
       }
     } finally {
-      setIsEvaluating(false);
+      if (run === evaluationRun.current) setIsEvaluating(false);
     }
   }, [filledSlotsArray, challenge]);
 
   const resetGame = useCallback(() => {
+    cancelEvaluation();
     setPhase('challenge');
     setChallenge(null);
     setFilledSlots(new Map());
@@ -351,7 +366,7 @@ export function useNbaLineup() {
       setIsStatSpinning(true);
       setTeamAssignments(getRandomNbaTeams(5));
     }, 100);
-  }, []);
+  }, [cancelEvaluation]);
 
   useGameCompletion('nba-starting-5', phase === 'result', verdict ? 500 : 0);
 
