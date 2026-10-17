@@ -353,7 +353,8 @@ function headerLines(career: CareerState, view: WorldCompView): string[] {
   if (view.holder) lines.push(`Holders: ${view.holder}, top of pot one in the draw.`);
   if (view.standIn) lines.push(`${view.standIn.club} stand in for ${view.standIn.for}, one of the real 32 of ${seasonOfYear(career.startYear ?? 0)}: that place belongs to a club of yours in this save, so the strongest club outside the 32 plays it.`);
   if (view.eraField) lines.push(`Every season of this save draws from the same 32 clubs, the real ${seasonOfYear(career.startYear ?? 0)} field, whatever the leagues do.`);
-  if (career.handover && view.mode === 'watching') lines.push('You took this job mid season. If your last club was in the Champions League, its games there are not shown here.');
+  /* fix-1502's seam: a move from a club in it to one watching opens a fresh draw without the old club. */
+  if (career.handover && view.mode === 'watching') lines.push('You took this job mid season. If your last club was in the Champions League, this is a fresh draw without it, so its games there are not shown here.');
   return lines;
 }
 

@@ -1473,9 +1473,9 @@ const ClubManager = () => {
                 <ScreenLoading><CupsPanel
                   career={c}
                   onClubClick={setClubView}
-                  cupTitle={cupName ?? 'Domestic cup'}
-                  cupValue={cupName === null ? (cupSatOut ? 'Not entered' : 'No domestic cup') : cupAlive ? 'Still alive' : c.cupRound === 'won' ? 'CUP WINNERS' : 'Knocked out'}
-                  cupSub={cupAlive ? `Next up: ${c.cupDraw[c.cupRound as CupRound] ?? 'to be drawn'}` : undefined}
+                  cupTitle="Domestic cup"
+                  cupValue={cupName ?? cupSatOut ?? 'No domestic cup'}
+                  cupSub={cupName === null ? (cupSatOut ? 'Not entered' : undefined) : cupAlive ? `Still alive. Next up: ${c.cupDraw[c.cupRound as CupRound] ?? 'to be drawn'}` : c.cupRound === 'won' ? 'Cup winners' : 'Knocked out'}
                   cupLine={cupName === null ? (
                     <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">
                       🏅 {cupSatOut
