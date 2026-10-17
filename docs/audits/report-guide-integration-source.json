@@ -1,0 +1,201 @@
+{
+  "version": 1,
+  "compositionSource": "ae64ca746882bc55877d357423a7b4a711160a69",
+  "protectedBase": "b31c9894ac27283a9b650bf32b53e558b7148834",
+  "protectedRoots": [
+    "src",
+    "scripts",
+    "public",
+    "index.html",
+    "package.json",
+    "package-lock.json",
+    "bun.lock",
+    "bun.lockb"
+  ],
+  "admissionOnlyAddedPath": "scripts/qa/proveRetiredManagerContinueJoined.mjs",
+  "changedPaths": [
+    "scripts/qa/playAccountDialogOnDemand.mjs",
+    "scripts/qa/proveAccountDialogOnDemand.mjs",
+    "scripts/qa/proveAccountDialogOnDemandFixed.mjs",
+    "scripts/qa/proveRetiredManagerContinue.mjs",
+    "scripts/qa/proveRetiredManagerContinueBaseline.mjs",
+    "scripts/simHomeFront.mjs",
+    "src/components/auth/AccountDialogOnDemand.tsx",
+    "src/components/auth/AuthModal.tsx",
+    "src/components/game/GameNavbar.tsx",
+    "src/components/layout/Header.tsx",
+    "src/data/continueSaves.ts",
+    "src/data/gameContent/baseball.ts",
+    "src/data/gameContent/basketball.ts",
+    "src/data/gameContent/clubManagement.ts",
+    "src/data/gameContent/football.ts",
+    "src/data/gameContent/hockey.ts",
+    "src/data/homeFront.ts",
+    "src/pages/Index.tsx",
+    "src/test/accountDialogOnDemand.test.tsx",
+    "src/test/authModalFocus.test.tsx",
+    "src/test/retiredManagerContinue.test.tsx"
+  ],
+  "inputs": [
+    {
+      "path": "scripts/qa/playAccountDialogOnDemand.mjs",
+      "sourceRef": "27088bc0a618e650858cd6c588eb6d3f763a6e04",
+      "blob": "8c3fc677a051d66e7c9c2739ea3225556c0f0641",
+      "bytes": 28235,
+      "sha256": "a2f4ee128ac8d2d3745c591f22f6b5131cde7414e433935d628fb395fc330801"
+    },
+    {
+      "path": "scripts/qa/proveAccountDialogOnDemand.mjs",
+      "sourceRef": "27088bc0a618e650858cd6c588eb6d3f763a6e04",
+      "blob": "e04635193e06edbbe196fe837b130a1ff8b205d9",
+      "bytes": 14537,
+      "sha256": "333e708502af0bc94b0e0a15239341bdbe228fce25b0e6313fef2c6396dddf8e"
+    },
+    {
+      "path": "scripts/qa/proveAccountDialogOnDemandFixed.mjs",
+      "sourceRef": "27088bc0a618e650858cd6c588eb6d3f763a6e04",
+      "blob": "1f907d6a7cc476a0388eca5d06ad8fa336e5ba8b",
+      "bytes": 25055,
+      "sha256": "bf58415beb97976e194350a4dc0b9cd647900a2ba22386a338a10926807f09ae"
+    },
+    {
+      "path": "src/components/auth/AccountDialogOnDemand.tsx",
+      "sourceRef": "27088bc0a618e650858cd6c588eb6d3f763a6e04",
+      "blob": "038e6d119ec3736e300fd997d157afc95e534e25",
+      "bytes": 2741,
+      "sha256": "e43afd0c044268e12642846276870c58615d6b55559172dae0dec7376c3125c2"
+    },
+    {
+      "path": "src/components/auth/AuthModal.tsx",
+      "sourceRef": "27088bc0a618e650858cd6c588eb6d3f763a6e04",
+      "blob": "27f6eb750098cdcd7351a3a4a725fd121cf4392b",
+      "bytes": 21985,
+      "sha256": "f78d4a62ee75e5abd02ff8799ad4a1e2fdd109d94ae831893490a5482e39d275"
+    },
+    {
+      "path": "src/components/game/GameNavbar.tsx",
+      "sourceRef": "27088bc0a618e650858cd6c588eb6d3f763a6e04",
+      "blob": "5b456a79d9151ecfd5f2c0c3e3d5741d903281ef",
+      "bytes": 13111,
+      "sha256": "e65bb8225892410665a4aa707a998062f954c390db63db3d7651d5cbea75150d"
+    },
+    {
+      "path": "src/components/layout/Header.tsx",
+      "sourceRef": "27088bc0a618e650858cd6c588eb6d3f763a6e04",
+      "blob": "a5540a88fbb420c2a104a3a795258c01b68687b4",
+      "bytes": 12786,
+      "sha256": "eaa204fdd42f584093d05e16c74feb90b98b60301e719e35d4adb04370eb369d"
+    },
+    {
+      "path": "src/pages/Index.tsx",
+      "sourceRef": "27088bc0a618e650858cd6c588eb6d3f763a6e04",
+      "blob": "3282e1a67e453411bcc398e6c582087466cef7df",
+      "bytes": 42614,
+      "sha256": "ea45555530b073c2495de261bdae4913dc72d6aff541b138d014feede75fbde1"
+    },
+    {
+      "path": "src/test/accountDialogOnDemand.test.tsx",
+      "sourceRef": "27088bc0a618e650858cd6c588eb6d3f763a6e04",
+      "blob": "7528847c1dc24b1f68d0786f3a24c266d3199cf2",
+      "bytes": 12756,
+      "sha256": "f01fc74252c2f4604c60a1695702dea8bddc3b42f3c0968cbe56a4b7655460b0"
+    },
+    {
+      "path": "src/test/authModalFocus.test.tsx",
+      "sourceRef": "27088bc0a618e650858cd6c588eb6d3f763a6e04",
+      "blob": "f50feb72e3a44e72bbbb92cb4a8a0dc00223004a",
+      "bytes": 4578,
+      "sha256": "d8dcfb2a547f69832468d6fb7e6a11eaa9b7300115d2b23309191b07dba0185c"
+    },
+    {
+      "path": "scripts/qa/proveRetiredManagerContinue.mjs",
+      "sourceRef": "cb7da4faa565014645bafc8ae3400a156ddcae63",
+      "blob": "27c1165b4311271d50a0f063210bae5e1d164226",
+      "bytes": 13917,
+      "sha256": "0c1bc154d59722a9575bfba719281d832ea3cac1fb0e3bb469f72afe096d3e50"
+    },
+    {
+      "path": "scripts/qa/proveRetiredManagerContinueBaseline.mjs",
+      "sourceRef": "cb7da4faa565014645bafc8ae3400a156ddcae63",
+      "blob": "44bcb3cb6adf1c813f93c5475465e3ac0cae3cc4",
+      "bytes": 15691,
+      "sha256": "3d4f1c862c29d18e3302a1acb73c693cb5d07b55d8f58c9d7f3b19f8aec4abf9"
+    },
+    {
+      "path": "scripts/simHomeFront.mjs",
+      "sourceRef": "cb7da4faa565014645bafc8ae3400a156ddcae63",
+      "blob": "1a62eb1e64a7415a2e3e91bbcc7a9676e189485f",
+      "bytes": 50938,
+      "sha256": "0c25361439fa488d250efc30403c0a031e6b4d5aa8adb880702006f2fbd3ac78"
+    },
+    {
+      "path": "src/data/continueSaves.ts",
+      "sourceRef": "cb7da4faa565014645bafc8ae3400a156ddcae63",
+      "blob": "b6802aa4ea39540913e891236c5d9d729aed6db6",
+      "bytes": 8748,
+      "sha256": "1bb1765bf9a53eb16d3dcd67e96bf482d0e7666618b501d1caf92e2895e13333"
+    },
+    {
+      "path": "src/data/homeFront.ts",
+      "sourceRef": "cb7da4faa565014645bafc8ae3400a156ddcae63",
+      "blob": "740bad74a719eecfca025fa4ec74e95aaaab1a73",
+      "bytes": 8229,
+      "sha256": "4339912745f2379d887dabcdc09ad26e0ef3132dad20f8ad37c15ce62b2334f0"
+    },
+    {
+      "path": "src/test/retiredManagerContinue.test.tsx",
+      "sourceRef": "cb7da4faa565014645bafc8ae3400a156ddcae63",
+      "blob": "cb8da2778a4a97b598d5f7ec48b5403448f521f2",
+      "bytes": 11086,
+      "sha256": "e3e005eacd784b3601575109f0e4ffff9b1dd8bec56faf57490966142047b2bf"
+    },
+    {
+      "path": "src/data/gameContent/clubManagement.ts",
+      "sourceRef": "81c8fe517545db234d16ab1b9d048e58cac179ad",
+      "blob": "e1c5f34e5dc55aa92a6b75bb4150d511e77ef72e",
+      "bytes": 26370,
+      "sha256": "cb1cee15e16e3e540df61ff17703680f697469c4adc592c722fd99619bad1858"
+    },
+    {
+      "path": "src/data/gameContent/baseball.ts",
+      "sourceRef": "2ab027bedf6a874fa07aba7f4a77635c4a2e18cb",
+      "blob": "00c2a063a6e09bc0f4cb3466fe756a8cf1a0770c",
+      "bytes": 69043,
+      "sha256": "ca72eb728586c6538cd0bd51e6407f9856c388eef746e87288cc3313cce4630d"
+    },
+    {
+      "path": "src/data/gameContent/basketball.ts",
+      "sourceRef": "2ab027bedf6a874fa07aba7f4a77635c4a2e18cb",
+      "blob": "b6cfda51366ff450c9eb8488bf1d32c2ab0fbbc3",
+      "bytes": 105896,
+      "sha256": "8b0935183e6298cd1035f4345661368b3335a42087bb6dcc30b5878651245549"
+    },
+    {
+      "path": "src/data/gameContent/football.ts",
+      "sourceRef": "2ab027bedf6a874fa07aba7f4a77635c4a2e18cb",
+      "blob": "30b2545f70bf441f4c875e41d6461ce7e3ee0360",
+      "bytes": 79408,
+      "sha256": "dca2b18bae39a3bcb5954cec3f5a0db69f2249ce9c3055c57aa4add5851125ac"
+    },
+    {
+      "path": "src/data/gameContent/hockey.ts",
+      "sourceRef": "2ab027bedf6a874fa07aba7f4a77635c4a2e18cb",
+      "blob": "6b2ad3e8511bfa4419c3f240b1f81cb6dea6d9c9",
+      "bytes": 76205,
+      "sha256": "9f47f1e54e88ce7071e5d2975eba6c306cfc554a4d5bda651a418285431a8ffd"
+    }
+  ],
+  "generatedPaths": [
+    "src/data/searchKeywords.json",
+    "scripts/data/guideHeadingsFrozen.json",
+    "public/club-manager/index.html",
+    "public/nba-my-career/index.html",
+    "public/nfl-my-career/index.html",
+    "public/mlb-my-career/index.html",
+    "public/nhl-my-career/index.html",
+    "public/whats-new/index.html",
+    "public/sitemap.xml",
+    "scripts/data/lastmod.json"
+  ],
+  "scope": "All non-listed protected source is whole-byte held to b31. All listed application/test/method source is exact to its original tested input. This is not current I or incoming main."
+}
