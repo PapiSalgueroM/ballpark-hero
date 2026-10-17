@@ -1,0 +1,9 @@
+pass3: WORLD_UCL_ONLY=3 node scripts/simWorldUcl.mjs
+c-dropnight: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=dropnight node scripts/simWorldUcl.mjs
+c-field32: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=field32 node scripts/simWorldUcl.mjs
+c-eraformat: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=eraformat node scripts/simWorldUcl.mjs
+c-meinfill: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=meinfill node scripts/simWorldUcl.mjs
+c-meindirect: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=meindirect node scripts/simWorldUcl.mjs
+c-nopens: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=nopens node scripts/simWorldUcl.mjs
+c-agall: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=agall node scripts/simWorldUcl.mjs
+c-locale: WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=locale node scripts/simWorldUcl.mjs
