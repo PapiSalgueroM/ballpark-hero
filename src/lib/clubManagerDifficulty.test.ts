@@ -1,9 +1,9 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import type { CareerState } from '@/lib/clubManager';
-import { buildMarket, releaseClauseOf, startCareer } from '@/lib/clubManager';
+import { boardVerdictLine, buildMarket, releaseClauseOf, startCareer } from '@/lib/clubManager';
 import { DIFFICULTY_LEVELS, readLevel } from '@/lib/managerDifficulty';
 import { ensureEraRosters } from '@/lib/clubManagerEras';
-import { ensureStartOptions, levelFrom, noSackFrom } from '@/lib/clubManagerStart';
+import { ensureStartOptions, levelFrom, noSackFrom, turnOnNoSack } from '@/lib/clubManagerStart';
 import {
   CM_DIFFICULTY_DIALS, applyNewJobDials, boardCheque, boardOpening, boardSwing, difficultyOf, markedPrice,
   marketForMe, oppEdge, setUpCareer, wageRoomFor,
@@ -166,5 +166,21 @@ describe('the dials on Hard and Legend', () => {
   it('the opponent: an edge only off Normal', () => {
     expect(oppEdge(hard)).toBe(CM_DIFFICULTY_DIALS.hard.edge);
     expect(oppEdge(legend)).toBe(CM_DIFFICULTY_DIALS.legend.edge);
+  });
+});
+
+describe('the season verdict under No sacking', () => {
+  it('never threatens a sack the board cannot carry out, and reads as it always did otherwise', () => {
+    const s = startCareer('Everton');
+    const on = turnOnNoSack(s);
+    expect(on).not.toBeNull();
+    const threat = 'A poor season. One more like that and you are gone.';
+    const clause = 'Catastrophic. Only the compensation clause saved your job this long.';
+    expect(boardVerdictLine(s, threat)).toBe(threat);
+    expect(boardVerdictLine(s, clause)).toBe(clause);
+    expect(boardVerdictLine(on!, threat)).toBe('A poor season. The board is fuming, and only No sacking is keeping you in the job.');
+    expect(boardVerdictLine(on!, clause)).not.toMatch(/compensation|gone/);
+    const plain = 'Solid work. The board is satisfied and the fans are onside.';
+    expect(boardVerdictLine(on!, plain)).toBe(plain);
   });
 });

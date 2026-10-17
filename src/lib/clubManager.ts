@@ -19398,6 +19398,17 @@ const VERDICTS: Record<'A' | 'B' | 'C' | 'D' | 'F', string[]> = {
   ],
 };
 
+/* Round 1501, the lead's ruling from Round 1342's closing check: under No sacking the board cannot carry out a
+   threat to sack you, so its verdict never makes one. The same pick is taken on every path (the season's draws
+   are what they were), and only these two lines are reworded: the board's disappointment, without the threat. */
+const NO_SACK_VERDICTS: Record<string, string> = {
+  'A poor season. One more like that and you are gone.': 'A poor season. The board is fuming, and only No sacking is keeping you in the job.',
+  'Catastrophic. Only the compensation clause saved your job this long.': 'Catastrophic. No sacking is the only reason you still have a job.',
+};
+export function boardVerdictLine(state: CareerState, line: string): string {
+  return boardMaySack(state) ? line : NO_SACK_VERDICTS[line] ?? line;
+}
+
 /* ---------- Round 168: mid-season approaches ---------- */
 
 /** The suitor pool: bigger clubs than mine, era aware, custom-safe. */
@@ -19796,7 +19807,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   /* One pick on every path, so the season's draws are what they were. A title or two trophies read the A
      lines, an ordinary season its grade's, and only the kinds with their own lines read the module's. */
   const ownLines = graded && graded.kind in VERDICT_LINES ? VERDICT_LINES[graded.kind as keyof typeof VERDICT_LINES] : null;
-  const verdict = ownLines ? fillLeague(pick([...ownLines]), fated?.league ?? '') : pick(VERDICTS[verdictGrade]);
+  const verdict = boardVerdictLine(state, ownLines ? fillLeague(pick([...ownLines]), fated?.league ?? '') : pick(VERDICTS[verdictGrade]));
 
   const byGoals = [...state.squad].sort((a, b) => b.seasonGoals - a.seasonGoals);
   const byAssists = [...state.squad].sort((a, b) => b.seasonAssists - a.seasonAssists);

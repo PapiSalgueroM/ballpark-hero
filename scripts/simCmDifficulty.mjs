@@ -67,7 +67,7 @@ const CONTROLS = {
 const cannot = why => { console.log(`simCmDifficulty: CANNOT RUN: ${why}`); process.exit(2); };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`CM_DIFF_CONTROL=${CONTROL} is not a control this harness knows`);
 const num = (k, d) => (process.env[k] !== undefined && process.env[k] !== '' ? Number(process.env[k]) : d);
-const DEFAULT_SECTIONS = ['1', '2', '3', '6'];
+const DEFAULT_SECTIONS = ['1', '2', '3', '6', '7'];
 const SECTIONS = CONTROL ? CONTROLS[CONTROL]
   : (process.env.SECTION || 'all') === 'all'
     ? [...(process.env.MEASURE === '1' ? ['0'] : []), ...DEFAULT_SECTIONS]
@@ -805,8 +805,39 @@ function fold() {
   assertOutcomes(rows);
 }
 
+/* ---------- 7. the help's worked example is the dial table's ---------- */
+/* The example paragraph of the "How hard" block in ClubManagerHelp.tsx (read from the source, comments out)
+   names, in order: a league defeat at a mid table club on its place with the press neutral (4.5 times pain,
+   rounded the way the engine rounds), a win (4 times gain), a 40m cheque, a man listed at 10m, an opponent
+   of 80, and a bad season that would open at 35. Every number in it must be the one the table gives. */
+function section7() {
+  if (CONTROL === 'helpdrift') { DIALS.hard.cheque = Math.round((DIALS.hard.cheque + 0.05) * 100) / 100; console.log(`NEGATIVE CONTROL ON: Hard's cheque moved to ${DIALS.hard.cheque} in memory`); }
+  console.log('7) the help\'s worked example is the dial table\'s');
+  const r1 = x => Math.round(x * 10) / 10;
+  const fmt = x => String(Math.abs(r1(x)));
+  const want = [];
+  const H = DIALS.hard, L = DIALS.legend;
+  want.push('4.5', fmt(-4.5 * H.pain), fmt(-4.5 * L.pain), '4', fmt(4 * H.gain), fmt(4 * L.gain));
+  want.push('40', fmt(40 * H.cheque), fmt(40 * L.cheque));
+  want.push('10', fmt(Math.max(0.5, 10 * H.mark)), fmt(Math.max(0.5, 10 * L.mark)));
+  want.push('80', fmt(80 + H.edge), fmt(80 + L.edge));
+  want.push('35', fmt(35 - H.cut), fmt(35 - L.cut));
+  const src = code(read('src/components/club-manager/ClubManagerHelp.tsx'));
+  const at = src.indexOf('data-cm-help="difficulty"');
+  const block = at < 0 ? '' : src.slice(at, src.indexOf('</div>', at));
+  const ex = block.split('<p>').find(p => p.includes('Example:')) ?? '';
+  const text = ex.replace(/<[^>]+>/g, ' ');
+  const got = [...text.matchAll(/\d+(?:\.\d+)?/g)].map(x => x[0]);
+  if (!block) fail('ClubManagerHelp.tsx has no "How hard" block');
+  else if (JSON.stringify(got) !== JSON.stringify(want)) fail(`the help's example reads ${got.join(', ')}; the table gives ${want.join(', ')}`);
+  else ok(`the example's ${got.length} numbers are the table's (${got.join(', ')})`);
+  const first = (block.split('<p>')[1] ?? '').replace(/<[^>]+>/g, ' ');
+  if (!/Every number elsewhere on this screen is for a Normal career/.test(first) || !/No sacking/.test(first)) fail('the block does not open by saying the screen\'s other numbers are Normal\'s and that No sacking switches off the zero rule');
+  else ok('the block opens by saying every other number on the screen is Normal\'s, and names No sacking');
+}
+
 /* ---------- run ---------- */
-const RUN = { 0: section0, 1: section1, 2: section2, 3: () => { section3(); section3money(); }, 4: section4, 6: section6 };
+const RUN = { 0: section0, 1: section1, 2: section2, 3: () => { section3(); section3money(); }, 4: section4, 6: section6, 7: section7 };
 if (FOLD) { fold(); console.log(failures ? `simCmDifficulty: ${failures} FAILURES (fold)` : 'simCmDifficulty: all green (fold)'); process.exit(failures ? 1 : 0); }
 for (const s of SECTIONS) {
   if (!RUN[s]) { console.log(`SECTION=${s} is not a section of this harness; could not run`); process.exit(2); }
