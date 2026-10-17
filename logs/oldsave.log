@@ -1,0 +1,9 @@
+base save: 71057 bytes, club Liverpool, live minute 45 home false 1-0 vs Newcastle
+head after Resume: h1 "Liverpool", stages , hub card Newcastle vs Liverpool
+  head: tapped "Resume match"
+  head: tapped "Second half"
+  head: tapped "Skip"
+  head: tapped "Full report"
+head report from the base's mid match save: "Newcastle 1 - 1 Liverpool", first numbers theirs
+head save after the report: 72302 bytes, parses
+rvrun-oldsave: 0 findings
