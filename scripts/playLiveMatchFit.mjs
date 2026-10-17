@@ -790,6 +790,17 @@ function judgeFit(view, m) {
 /* The mean number of overlapping name labels a frame at 390 wide, measured with LIVE_FIT_REPORT=1 on the
    build of the commit named here, BEFORE the full screen match mode. With match mode the mean must be lower. */
 const LABELS_BEFORE = { commit: '6b1caa20', mean: 1.63 };
+/* Round 1340: the same mean at 320 by 568, BEFORE the pitch wore surnames (every label then began with its position
+   number), read over 24 frames on the build of the commit named here (Round 1340a's labels; remote check r1340-b2),
+   three seeds twice each. mean is the six runs' mean; spread is the widest gap between two runs of one seed (the
+   noise of the walk itself); cut is the labels cut a frame (scrollWidth over clientWidth), printed beside the head's. */
+const LABELS_BEFORE_320 = {
+  commit: 'abf78608',
+  seeds: { 3208792607: [2.417, 2.375], 1340: [3.208, 2.792], 2026: [2.375, 2.375] },
+  cut: { 3208792607: 13.917, 1340: 14.958, 2026: 15.0 },
+  mean: 2.590,
+  spread: 0.417,
+};
 
 /** A period being played with at least `need` minutes of it left: a reading taken as a half ends finds the
  *  dressing room where the stage was. Skips on to the next period until there is one. */
