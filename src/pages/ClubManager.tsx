@@ -1242,7 +1242,10 @@ const ClubManager = () => {
               />
               <HubTile
                 icon="📊" title="Stats"
-                value={`${c.squad.reduce((n, p) => n + p.seasonGoals, 0)} goals`}
+                value={(() => {
+                  const goals = c.squad.reduce((n, p) => n + p.seasonGoals, 0);
+                  return `${goals} ${goals === 1 ? 'goal' : 'goals'}`;
+                })()}
                 sub={(() => {
                   const ts = [...c.squad].sort((a, b) => b.seasonGoals - a.seasonGoals)[0];
                   return ts && ts.seasonGoals > 0 ? `${pitchName(ts.name)}: ${ts.seasonGoals}` : 'Goals, assists, ratings';
