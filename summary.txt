@@ -1,0 +1,13 @@
+nfl-head exit=0 2s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDec
+nfl-base exit=0 3s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDec
+nba-head exit=0 22s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+nba-base exit=0 24s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+mlb-head exit=0 23s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+nhl-base exit=0 16s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+nhl-head exit=0 22s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+mlb-base exit=0 25s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simUsCareerAnnualBenefits exit=0 5s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+simUsCareerRecovery exit=0 6s | Career recovery: fictional offline engine fixtures, no native UI, full-career completion, medical effect or real sports-stat claim.
+vitest-lib exit=0 6s |    Duration  5.13s (transform 1.67s, setup 161ms, collect 3.93s, tests 2.15s, environment 1.04s, prepare 422ms)
+simSoccerCurrency exit=0 9s | simSoccerCurrency: green. The money reads in your currency and the game underneath it never noticed.
+simCareerLife exit=0 27s | simCareerLife: green. Every peak is reachable, the critic has an opinion and it is about the football, and nothing about either of them is on the save.
