@@ -73,7 +73,7 @@ async function run(label, args, extra = {}) {
 }
 async function direct(label, kind, extra = {}) {
   const file = path.join(OUT, label + '.vitest.json');
-  const result = await run(label, ['node_modules/vitest/vitest.mjs', 'run', TEST, '--reporter=json', '--outputFile=' + file], extra);
+  const result = await run(label, ['node_modules/vitest/vitest.mjs', 'run', TEST, '--reporter=default', '--reporter=json', '--outputFile=' + file], extra);
   const data = JSON.parse(await readFile(file, 'utf8')), rows = data.testResults.flatMap(entry => entry.assertionResults);
   assert.equal(data.testResults.length, 1); assert.equal(rows.length, 2); assert.deepEqual(rows.map(row => row.title), title);
   assert.equal(data.numPendingTests, 0); assert.equal(data.numTodoTests, 0);
@@ -82,7 +82,11 @@ async function direct(label, kind, extra = {}) {
   if (kind === 'timeout') {
     assert.equal(result.arm.code, 1); assert.equal(data.success, false); assert.equal(data.numFailedTests, 1); assert.equal(data.numPassedTests, 1);
     assert.equal(rows[0].status, 'passed'); assert.equal(failed[0].title, title[1]); assert.equal(failed[0].failureMessages.length, 1);
-    assert(/Test timed out in 5000ms/.test(failed[0].failureMessages[0]), 'Only the original season default timeout is causal');
+    const headers = [...result.text.matchAll(/^\s*FAIL\s+([^\n]+)$/gm)];
+    assert.equal(headers.length, 1, 'The default reporter names exactly one failed test');
+    assert.equal(headers[0][1].trim(), TEST + ' > Club Manager completion shape > ' + title[1]);
+    const block = result.text.slice(headers[0].index);
+    assert(/^Error: Test timed out in 5000ms\./m.test(block), 'The named season failure must report its actual default timeout');
   } else if (kind === 'match') {
     assert.equal(result.arm.code, 1); assert.equal(data.success, false); assert.equal(data.numFailedTests, 2); assert.equal(data.numPassedTests, 0);
     assert(failed.every(row => row.failureMessages.length === 1 && /AssertionError/.test(row.failureMessages[0]) && !/timed out/.test(row.failureMessages[0])));
