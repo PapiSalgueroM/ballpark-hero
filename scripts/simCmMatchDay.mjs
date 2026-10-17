@@ -811,7 +811,7 @@ const total = [...failures.values()].reduce((a, b) => a + b, 0);
 if (CONTROL) {
   const want = CONTROLS[CONTROL];
   const fired = want.filter(s => (failures.get(s) ?? 0) > 0);
-  console.log(`control ${CONTROL}: ${want.map(s => `section ${s} ${failures.get(s) ?? 0} failures (${redBy[s]?.home ?? 0} home, ${redBy[s]?.away ?? 0} away, ${redBy[s]?.neutral ?? 0} neutral matches red)`).join('; ')}`);
+  console.log(`control ${CONTROL}: ${want.map(s => `section ${s} ${failures.get(s) ?? 0} failures (${redBy[s]?.home ?? 0} home, ${redBy[s]?.away ?? 0} away, ${redBy[s]?.neutral ?? 0} neutral matches red${redBy[s]?.prefield ? `, ${redBy[s].prefield} staged with no venue field` : ''})`).join('; ')}`);
   let ok = fired.length === want.length;
   /* oldorder is the screens before this round: red away, and green at home and on a neutral ground. */
   if (CONTROL === 'oldorder') ok = ok && want.every(s => redBy[s].away > 0 && redBy[s].home === 0 && redBy[s].neutral === 0);

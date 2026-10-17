@@ -145,3 +145,29 @@ the league table's goals pair, not a match screen.
   budget on the base already; cmMatchDisplay.ts 1074 B minified, 586 B gzipped; the seeded save compare equal to
   the byte; playCmTablesFit PART 1 green, PART 2's two findings are its base expectations.
 - origin/main holds no Release BI commit (its head is four Lovable editor commits): not merged.
+
+## The fix round after the two reviews (2026-10-17, from 8c6faa8a)
+
+The reviews are results-g/review-run-1340.md and review-read-1340.md in C:/Users/antho/dukb-handoff/2026-10-10.
+Each fix is its own commit, pushed; the full account is results-g/fix-1340.md.
+- Run finding 1 (major): simCmMatchDay sections 2 and 4 now read every stat bar's two segments and the live
+  possession bar's, my green one (bg-primary) first exactly when my number is first and as wide as my share.
+  Control barorder puts the review's mutations m2 and m6 back (segments mine first, numbers in fixture order):
+  r1340-fxB fired on sections 2 (447 away reports, 0 home, 0 neutral) and 4 (64 away live matches), through both
+  segment checks.
+- Run finding 3: section 4 checks my club's name carries the green on the strip, the interval card and the
+  dressing room's card. Control greenfirst (m4 and its twin on the strip) fired on away matches only.
+- Run finding 5: every neutral ground match is now kicked off live too (8 in the fleet), and every live frame is
+  rendered again with the venue field taken off (543 frames), my club first there. Control neutrallive (m3)
+  fired on the 8 neutral live matches and on the staged frames, with home and away green (r1340-fxC).
+- Run finding 4: the unit file pins Ben White, Ben Chilwell and Van Fitzharris (m1 would print "Ben White").
+- Run findings 2 and 6, read finding 8 (the Stats tile): the tile now reads "<pitch name>: <goals>", the wording
+  the round's own walk measured keeping all 200 longest pitch names within two lines at 320 (where "leads with"
+  put Amaimouni-Echghouyab and Oxlade-Chamberlain on three). Save D asserts that wording on two lines, and control
+  fullname (the base's line, his whole name and "leads with") now first proves the tile is green as shipped.
+- Run finding 7: the tile's count says "1 goal", not "1 goals".
+- Read findings 11, 12, 13: What's New says "his surname" (not "his whole surname") and "your club's name in green
+  on each of them" (not "wherever it sits"); the live help says "the way a football scoreboard does it".
+- Read finding 15: simCmMatchDay's header says when its pinned base must move.
+- Not fixed, owed or the lead's: read 9 (the Dutch prefix's case, pinned by the brief), 10 (two compound
+  surnames), 14 (the Tactics tab and the live sub sheet still on the last word), 16 (as the brief owes).
