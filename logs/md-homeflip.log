@@ -1,0 +1,53 @@
+NEGATIVE CONTROL ON: homeflip; section(s) 7 must go red
+fleet: 25 careers, 916 matches (461 home, 447 away, 8 neutral), 0 reports with no fixture read before them, 28s
+live: 173 league matches kicked off live (64 away), 692 live renders
+1) One rule: the fixture's venue and the report's own order agree on every match
+  FAIL [1]: Liverpool now seed 0: Newcastle 4-0 Liverpool (Premier League · Round 1, away): myClubFirst(false) is false but the report's order says true
+  FAIL [1]: Liverpool now seed 0: Ipswich Town 1-2 Liverpool (Premier League · Round 3, away): myClubFirst(false) is false but the report's order says true
+  FAIL [1]: Liverpool now seed 0: Bournemouth 0-0 Liverpool (Premier League · Round 5, away): myClubFirst(false) is false but the report's order says true
+  FAIL [1]: Liverpool now seed 0: Brentford 1-3 Liverpool (Premier League · Round 7, away): myClubFirst(false) is false but the report's order says true
+  FAIL [1]: Liverpool now seed 0: Crystal Palace 1-2 Liverpool (Premier League · Round 10, away): myClubFirst(false) is false but the report's order says true
+  FAIL [1]: Liverpool now seed 0: Everton 2-3 Liverpool (Premier League · Round 12, away): myClubFirst(false) is false but the report's order says true
+   916 matches, 8 reports saying neutral; red: 0 home, 447 away, 8 neutral
+2) The report card: every two sided block in the scoreline's order
+  FAIL [2]: Liverpool now seed 0: Liverpool 2-0 Nottingham Forest (Premier League · Round 2, home): the scorer columns are headed Nottingham Forest and Liverpool
+  FAIL [2]: Liverpool now seed 0: Liverpool 2-0 Nottingham Forest (Premier League · Round 2, home): the first scorer column is theirs
+  FAIL [2]: Liverpool now seed 0: Liverpool 2-0 Nottingham Forest (Premier League · Round 2, home): the first scorer column lists 0 goals, the home side scored 2
+  FAIL [2]: Liverpool now seed 0: Liverpool 2-0 Nottingham Forest (Premier League · Round 2, home): the stats header reads Nottingham Forest v Liverpool
+  FAIL [2]: Liverpool now seed 0: Liverpool 2-0 Nottingham Forest (Premier League · Round 2, home): the Possession bar draws theirs then mine
+  FAIL [2]: Liverpool now seed 0: Liverpool 2-0 Nottingham Forest (Premier League · Round 2, home): the possession bar reads 42% 58% where the home side had 58%
+   916 reports, 9160 stat bars read; red: 461 home, 0 away, 8 neutral
+3) The timeline: home side first, whole names, every mark right after its name
+  FAIL [3]: Liverpool now seed 0: Newcastle 4-0 Liverpool (Premier League · Round 1, away): a me row is drawn in the first column
+  FAIL [3]: Liverpool now seed 0: Newcastle 4-0 Liverpool (Premier League · Round 1, away): a me row is drawn in the first column
+  FAIL [3]: Liverpool now seed 0: Newcastle 4-0 Liverpool (Premier League · Round 1, away): a me row is drawn in the first column
+  FAIL [3]: Liverpool now seed 0: Newcastle 4-0 Liverpool (Premier League · Round 1, away): a opp row is drawn in the second column
+  FAIL [3]: Liverpool now seed 0: Newcastle 4-0 Liverpool (Premier League · Round 1, away): a opp row is drawn in the second column
+  FAIL [3]: Liverpool now seed 0: Newcastle 4-0 Liverpool (Premier League · Round 1, away): a opp row is drawn in the second column
+   916 timelines, 15753 rows, 15753 names, 242 marks; red: 461 home, 447 away, 8 neutral
+4) Live and half time: the strip, the score's digits, the interval card, the stats and the line under the pitch home side first
+  FAIL [4]: Liverpool now seed 0: Newcastle 1-3 Liverpool (Premier League · Round 1, away): at done the line under the pitch is not home side first
+  FAIL [4]: Liverpool now seed 0: Liverpool 1-0 Manchester City (Premier League · Round 6, home): at first the score's digits read opp then me
+  FAIL [4]: Liverpool now seed 0: Liverpool 1-0 Manchester City (Premier League · Round 6, home): at first the strip reads Manchester City v Liverpool
+  FAIL [4]: Liverpool now seed 0: Liverpool 1-0 Manchester City (Premier League · Round 6, home): at first the line under the pitch is not home side first
+  FAIL [4]: Liverpool now seed 0: Liverpool 1-0 Manchester City (Premier League · Round 6, home): at first the stats header reads Manchester City v Liverpool
+  FAIL [4]: Liverpool now seed 0: Liverpool 1-0 Manchester City (Premier League · Round 6, home): at first the possession pair is not home side first
+   173 live matches (173 first, 173 interval, 173 second, 173 done); red: 109 home, 64 away, 0 neutral
+5) The Match Centre: the tie, the form rows and the ones to watch home side first; the odds still Win, Draw, They win
+  FAIL [5]: Liverpool now seed 0: Liverpool 2-0 Nottingham Forest (Premier League · Round 2, home): the sides read opp me opp me opp me
+  FAIL [5]: Liverpool now seed 0: Liverpool 3-0 Fulham (Premier League · Round 4, home): the sides read opp me opp me opp me
+  FAIL [5]: Liverpool now seed 0: Liverpool 0-2 Manchester City (Premier League · Round 6, home): the sides read opp me opp me opp me
+  FAIL [5]: Liverpool now seed 0: Liverpool 1-2 Brighton (Premier League · Round 8, home): the sides read opp me opp me opp me
+  FAIL [5]: Liverpool now seed 0: Liverpool 1-3 Arsenal (Premier League · Round 9, home): the sides read opp me opp me opp me
+  FAIL [5]: Liverpool now seed 0: Liverpool 0-1 Manchester United (Premier League · Round 11, home): the sides read opp me opp me opp me
+   163 Match Centres (76 home, 79 away, 8 neutral, 163 with ones to watch); red: 76 home, 0 away, 0 neutral
+7) A home or neutral match: the card's visible text equals the base's, the board word masked
+  FAIL [7]: Liverpool now seed 0: Liverpool 2-0 Nottingham Forest (Premier League · Round 2, home): the card's text differs from the base at "rpool 2 - 0 Nottingham Forest Nottingham Forest - Liverpool ⚽ Bradley " against "rpool 2 - 0 Nottingham Forest Liverpool ⚽ Bradley Barcola 10' · 🅰️ Fe"
+  FAIL [7]: Liverpool now seed 0: Liverpool 3-0 Fulham (Premier League · Round 4, home): the card's text differs from the base at "ICTORY Liverpool 3 - 0 Fulham Fulham - Liverpool ⚽ Ryan Gravenberch 22" against "ICTORY Liverpool 3 - 0 Fulham Liverpool ⚽ Ryan Gravenberch 22' ⚽ Milos"
+  FAIL [7]: Liverpool now seed 0: Liverpool 0-2 Manchester City (Premier League · Round 6, home): the card's text differs from the base at "verpool 0 - 2 Manchester City Manchester City ⚽ Erling Haaland 16' (P)" against "verpool 0 - 2 Manchester City Liverpool - Manchester City ⚽ Erling Haa"
+  FAIL [7]: Liverpool now seed 0: Liverpool 2-0 QPR (FA Cup · Round of 16, home): the card's text differs from the base at "' VICTORY Liverpool 2 - 0 QPR QPR - Liverpool ⚽ Alexander Isak 8' · 🅰" against "' VICTORY Liverpool 2 - 0 QPR Liverpool ⚽ Alexander Isak 8' · 🅰️ Ryan"
+  FAIL [7]: Liverpool now seed 0: Liverpool 1-2 Brighton (Premier League · Round 8, home): the card's text differs from the base at "FEAT Liverpool 1 - 2 Brighton Brighton ⚽ Charalampos Kostoulas 80' ⚽ Y" against "FEAT Liverpool 1 - 2 Brighton Liverpool ⚽ Dominik Szoboszlai 22' · 🅰️"
+  FAIL [7]: Liverpool now seed 0: Liverpool 1-3 Arsenal (Premier League · Round 9, home): the card's text differs from the base at "EFEAT Liverpool 1 - 3 Arsenal Arsenal ⚽ Viktor Gyökeres 55' ⚽ Kai Have" against "EFEAT Liverpool 1 - 3 Arsenal Liverpool ⚽ Rio Ngumoha 90+3' · 🅰️ Milo"
+   662 home and neutral screens compared with d8aaa4cb (545 live screens and 84 Match Centres among them); red: 646 home, 8 neutral
+control homeflip: section 7 1090 failures (646 home, 0 away, 8 neutral matches red)
+simCmMatchDay: CONTROL homeflip FIRED (29281 failures, section(s) 1, 2, 3, 4, 5, 7)
