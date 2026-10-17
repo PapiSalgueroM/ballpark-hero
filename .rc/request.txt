@@ -1,0 +1,23 @@
+headsha: git log --oneline -2
+simSoccerVeteranOffers: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranOffers.mjs
+simCareerHub: node scripts/simCareerHub.mjs
+simUsCoachCareer: node scripts/simUsCoachCareer.mjs
+simMoneyAppFeedback: node scripts/simMoneyAppFeedback.mjs
+simCareerBadgeMotion: node scripts/simCareerBadgeMotion.mjs
+simCareerSeasonReview: node scripts/simCareerSeasonReview.mjs
+simCareerEntryGuide: node scripts/simCareerEntryGuide.mjs
+simCareerDecisionOutcome: node scripts/simCareerDecisionOutcome.mjs
+simCareerSeasonTruth: CAREER_SEASON_LOCAL_ONLY=1 node scripts/simCareerSeasonTruth.mjs
+simFightCareer: node scripts/simFightCareer.mjs
+simCareerBanking: node scripts/simCareerBanking.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simAwards: node scripts/simAwards.mjs
+simCareerLeagueWorld: node scripts/simCareerLeagueWorld.mjs
+simCareerLifeCooldowns: node scripts/simCareerLifeCooldowns.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simCareerTransferBrief: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs
+simSoccerAgentReview: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
+simSoccerAgentReviewPageControl: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReviewPageControl.mjs
+simSoccerOpponentLabels: SIM_NETWORK=offline SOCCER_OPPONENT_LABELS_OUT="$RUNNER_TEMP/ba-labels" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerOpponentLabels.mjs
