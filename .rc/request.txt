@@ -1,0 +1,1 @@
+vitest-world: node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000
