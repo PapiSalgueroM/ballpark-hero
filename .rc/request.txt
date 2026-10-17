@@ -1,0 +1,9 @@
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+simCmBoardVerdict: node scripts/simCmBoardVerdict.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simCmRealFixtures: node scripts/simCmRealFixtures.mjs
+simCmVar: node scripts/simCmVar.mjs
+simCmSubs: node scripts/simCmSubs.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
