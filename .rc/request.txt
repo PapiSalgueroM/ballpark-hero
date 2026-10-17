@@ -1,0 +1,4 @@
+#!serial
+ban: node .rc/x/rvban1500.mjs
+ban-ctl-cool8: node .rc/x/rvmut1500.mjs cool8 || exit 3; node .rc/x/rvban1500.mjs; s=$?; git checkout -- src scripts; echo "BAN PROBE UNDER cool8 exit=$s"; [ $s -eq 1 ]
+ab-base: BASE=8293c758f4284d21baaa2320383cfd5cb5bd4944 US_DIRTY_MONEY_AB=800 node scripts/simUsDirtyMoney.mjs
