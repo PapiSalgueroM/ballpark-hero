@@ -1,0 +1,32 @@
+MUTATION cool8 applied to src/lib/careerDirtyMoney.ts
+  MISMATCH nba wash caught: heat 88 pending 0 dirty 0.4: printed bannedIfCaught 2, engine served 1 (first end ban false), heat now 44
+  MISMATCH nba wash caught: heat 88 pending 0 dirty 1.1: printed bannedIfCaught 2, engine served 1 (first end ban false), heat now 44
+  MISMATCH nba wash caught: heat 88 pending 0 dirty 6: printed bannedIfCaught 2, engine served 1 (first end ban false), heat now 44
+  MISMATCH nba wash clean: heat 88 pending 0 dirty 20: printed bannedAfter 1, engine served 0 (first end ban false), heat now 44
+  MISMATCH nba wash caught: heat 88 pending 1 dirty 0.4: printed bannedIfCaught 2, engine served 1 (first end ban false), heat now 44
+  MISMATCH nba wash caught: heat 88 pending 1 dirty 1.1: printed bannedIfCaught 2, engine served 1 (first end ban false), heat now 44
+  MISMATCH nba wash caught: heat 88 pending 1 dirty 6: printed bannedIfCaught 2, engine served 1 (first end ban false), heat now 44
+  MISMATCH nba wash clean: heat 88 pending 1 dirty 20: printed bannedAfter 2, engine served 1 (first end ban false), heat now 44
+  MISMATCH nba clean: heat 98 pending 0 dirty 0.4: printed bannedAfter 1, engine served 0 (first end ban false), heat now 44
+  MISMATCH nba give: heat 98 pending 0 dirty 0.4: printed bannedAfter 1, engine served 0 (first end ban false), heat now 44
+  MISMATCH nba give: heat 98 pending 0 dirty 1.1: printed bannedAfter 1, engine served 0 (first end ban false), heat now 44
+  MISMATCH nba give: heat 98 pending 0 dirty 6: printed bannedAfter 1, engine served 0 (first end ban false), heat now 44
+  nba wash caught: 6 mismatches
+  nba wash clean: 2 mismatches
+  nba clean: 4 mismatches
+  nba give: 8 mismatches
+  nfl wash clean: 6 mismatches
+  nfl wash caught: 2 mismatches
+  nfl clean: 4 mismatches
+  nfl give: 8 mismatches
+  mlb wash caught: 4 mismatches
+  mlb wash clean: 4 mismatches
+  mlb clean: 4 mismatches
+  mlb give: 8 mismatches
+  nhl wash caught: 4 mismatches
+  nhl wash clean: 4 mismatches
+  nhl clean: 4 mismatches
+  nhl give: 8 mismatches
+  engine-served banned seasons by way (way:seasons=cases): clean:0=268 clean:1=288 clean:2=20 give:0=256 give:1=288 give:2=32 quiet:0=48 quiet:1=228 quiet:2=240 quiet:3=60 wash:0=94 wash:1=282 wash:2=200
+rvban1500: 80 of 2304 printed bans differ from the engines
+BAN PROBE UNDER cool8 exit=1
