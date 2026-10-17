@@ -1,0 +1,25 @@
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020), Villarreal (era2005), Werder Bremen (era2010), Sevilla (era2015), Marseille (era2020); seeds 1,2,3,4,5
+  1 stand ins: era2005 Valencia for Villarreal; era2010 Manchester City for Werder Bremen; era2015 Liverpool for Sevilla; era2020 Tottenham for Marseille
+  1 and 3: 65 journeys in 136 s
+  7 goals a watched match 2.630 (19680 matches); a domestic league match 2.624
+  7 ties 3106: to extra time 12.0 percent, to penalties 5.5 percent
+  1 device order: 40 group seasons evaluated level both ways
+  1 created club left in the summer: Proof Town Athletic (top of premier, in place of Hull City) to Málaga; the watched field holds not Hull City
+  1 era seasons with a stand in for my club: 38
+  1 opened seasons drawn with the holder first: 132
+  1 seasons a mid season move left with no competition, by the rule: 2
+  1 seasons in the Champions League (not watched): 19
+  1 seasons where exclude took out a direct entrant (a summer move): 2
+  1 watched matches replayed on simAiMatch: 19680
+  1 watched seasons g8: 112
+  1 watched seasons l36: 62
+  7 g8 draws: 112
+  7 l36 slates over the cap: 1
+  7 l36 slates with an association break: 4
+  7 l36 slates: 62
+  7 titles by strength quartile 1: 146
+  7 titles by strength quartile 2: 26
+  7 titles by strength quartile 3: 2
+FAIL 1 created exit setup: the move to Málaga opened no watched competition
+FAIL 1 created exit: after leaving Proof Town Athletic for Málaga, its place did not go back to Hull City, the club it replaced
+simWorldUcl: control nocustomexit DID NOT FIRE CLEANLY (own true, stray 1: 1 created exit setup: the move to Málaga opened no watched competition)
