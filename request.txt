@@ -1,0 +1,4 @@
+vitest: node_modules/.bin/vitest run src/test/usCareerDirtyMoney.test.tsx --testTimeout=300000 --hookTimeout=120000
+ctl-nodesk: US_DIRTY_MONEY_CONTROL=nodesk node scripts/simUsDirtyMoney.mjs
+ctl-sentence: US_DIRTY_MONEY_CONTROL=sentence node scripts/simUsDirtyMoney.mjs
+ctl-anyphase: US_DIRTY_MONEY_CONTROL=anyphase node scripts/simUsDirtyMoney.mjs

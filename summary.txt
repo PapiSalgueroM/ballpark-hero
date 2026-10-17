@@ -1,0 +1,4 @@
+ctl-sentence exit=1 7s | CONTROL sentence FIRED (red sections 6)
+ctl-nodesk exit=1 7s | CONTROL nodesk FIRED (red sections 6)
+vitest exit=0 8s |    Duration  7.67s (transform 2.68s, setup 89ms, collect 3.71s, tests 2.34s, environment 507ms, prepare 417ms)
+ctl-anyphase exit=1 5s | CONTROL anyphase FIRED (red sections 6)
