@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simCmBoardVerdict: node scripts/simCmBoardVerdict.mjs
+simPress: node scripts/simPress.mjs
+playCmRealFixtures: node scripts/playCmRealFixtures.mjs
+playCmTablesFit: node scripts/playCmTablesFit.mjs
