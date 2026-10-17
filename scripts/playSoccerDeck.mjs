@@ -80,7 +80,9 @@ function step(M, s, clubs) {
     default: return null;
   }
 }
-/** The first summary of a career whose next step deals a deck training card, and that card pending. */
+/** A season summary at 19 or younger (no moral dilemma can come before 20, tryTriggerMoralDilemma) whose Continue
+ *  path, through the social media screen only, deals a deck training card first; and that card pending. */
+const CONTINUE_PATH = new Set(['season_summary', 'social_media_action']);
 function findFixture(position) {
   const real = Math.random;
   try {
@@ -89,12 +91,15 @@ function findFixture(position) {
       const M = O.engine, clubs = M.FALLBACK_CLUBS;
       const st = { pace: 62, shooting: 62, passing: 62, dribbling: 62, defending: 62, physical: 62, reflexes: 62 };
       let s = M.initCareer(`Deck Walk ${seed}`, 'England', position, '2010-14', st, 62, 2010, clubs, null);
-      for (let guard = 0; guard < 400 && s && !s.retired && s.seasons.length < 14; guard += 1) {
+      let summary = null;
+      for (let guard = 0; guard < 400 && s && !s.retired && s.age <= 20; guard += 1) {
+        if (s.phase === 'season_summary') summary = copy(s);
+        else if (!CONTINUE_PATH.has(s.phase)) summary = null;
         const next = step(M, s, clubs);
         if (!next) break;
         const first = next.phase === 'random_events' ? next.pendingEvents?.[0] : null;
-        if (s.phase === 'season_summary' && first && isDeck(first.id) && trains(first) && O.momentsRoom(next) >= 1) {
-          return { seed, summary: copy(s), pending: copy(next), card: { id: first.id, title: first.title, labels: first.choices.map(c => c.label), consequence: first.choices[0].consequence } };
+        if (summary && summary.age <= 19 && CONTINUE_PATH.has(s.phase) && first && isDeck(first.id) && trains(first) && O.momentsRoom(next) >= 1) {
+          return { seed, summary, pending: copy(next), card: { id: first.id, title: first.title, labels: first.choices.map(c => c.label), consequence: first.choices[0].consequence } };
         }
         s = next;
       }
@@ -223,7 +228,7 @@ try {
         const { ctx, page, errors } = await open(profile, f.pending, { deck: 'delay' });
         await cardTitle(page, f.card.title).waitFor({ timeout: 60000 });
         await optionOf(page, f.card.labels[0]).click();
-        const busy = await waitToast(page, x => x.includes('Getting this card ready'), 1500);
+        const busy = await waitToast(page, x => x.includes('Loading this card'), 1500);
         check(!!busy, `${id} delayed: the press says it is working while the chunk is held`);
         await optionOf(page, f.card.labels[0]).click().catch(() => undefined);
         const t = await waitToast(page, x => x.includes(want.toast), 12000);

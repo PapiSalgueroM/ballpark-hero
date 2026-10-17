@@ -29,7 +29,7 @@ type SoccerDeckModule = typeof import('./soccerDeck');
  *  (a deck card in 90 to 94 percent of each position group's summers), never
  *  "every summer"; the ceiling rule is the card's own (soccerDeck.ts). */
 export const SOCCER_DECK_HELP_RULES: readonly string[] = [
-  'Summer cards: most summers start with one card, never more, about your position or where your career stands, before the rest of the between seasons news. Training on one adds a point to a skill next season and takes a point from another, because the hours come out of your normal work, and it never lands past your ceiling. Example: a striker who takes penalty duty gets Shooting +1 and Dribbling -1 next season; at your ceiling no training card comes up.',
+  'Summer cards: most summers open with one card about your position or your career. Training on it gives a skill +1 and another -1 next season, since the hours come from your normal work, never past your ceiling. Example: penalty duty for a striker is Shooting +1, Dribbling -1.',
 ];
 
 /** The deck's ids, 700 to 999 (600 to 699 are the other lane's routines). */

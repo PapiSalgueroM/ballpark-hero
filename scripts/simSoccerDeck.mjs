@@ -1015,7 +1015,8 @@ if (runs(8)) {
   /* Round 1504: freetraining strips every training cost and doubles what each option trains (the pack, in memory), so
      the deck raises the legacy score for free; the legacy band must go red. Doubled because the costs stripped alone,
      which is Round 1334's pack, read BEST +1.13 and WORST +1.17 on this paired fleet (rc r1504-s1), inside the band by
-     a hair: a control at that size would be a coin toss, not a proof that the band bites. */
+     a hair: a control at that size would be a coin toss, not a proof that the band bites. Doubled it reads BEST +1.44
+     and WORST +1.66 (rc r1504-s3), both past the band (the hold deals a +2 card only at a room of 2 or more). */
   if (CONTROL === 'freetraining') {
     const costs = PACK.events.flatMap(e => e.choices).filter(c => Object.values(c.fx ?? {}).some(v => v < 0)).length;
     if (costs === 0) { console.error('freetraining control: no option of the pack carries a training cost, refusing to run'); process.exit(2); }

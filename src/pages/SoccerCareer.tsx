@@ -1180,8 +1180,7 @@ export default function SoccerCareer() {
      its season log line says landed (training at the ceiling, morale at 0 or
      100, a cost for training that did not land), never the button's promise.
      Every other card takes the path it always took. */
-  const deckWaitFor = useRef<CareerState | null>(null);
-  const deckLoadFailed = useRef(false);
+  const deckPress = useRef<{ at: CareerState | null; failed: boolean }>({ at: null, failed: false });
   const careerNow = useRef(career);
   careerNow.current = career;
   const answerEvent = (pressed: CareerState, choiceIndex: number) => {
@@ -1203,24 +1202,19 @@ export default function SoccerCareer() {
     const event = career.pendingEvents[0];
     if (!event) return;
     if (!isSoccerDeckId(event.id) || soccerDeckReady()) { answerEvent(career, choiceIndex); return; }
-    if (deckWaitFor.current === career) return;
-    if (deckLoadFailed.current && reloadToRetryChunk()) return;
+    const press = deckPress.current;
+    if (press.at === career) return;
+    if (press.failed && reloadToRetryChunk()) return;
     const pressed = career;
-    deckWaitFor.current = pressed;
-    const waiting = toast.loading('Getting this card ready...', PAGE_TOAST);
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    const late = new Promise<'late'>(done => { timer = setTimeout(() => done('late'), DECK_WAIT_MS); });
+    press.at = pressed;
+    const waiting = toast.loading('Loading this card...', PAGE_TOAST);
+    const late = new Promise<'late'>(done => setTimeout(done, DECK_WAIT_MS, 'late'));
     void Promise.race([loadSoccerDeck().then(() => 'ready' as const, () => 'failed' as const), late]).then(outcome => {
-      clearTimeout(timer);
       toast.dismiss(waiting);
-      if (deckWaitFor.current === pressed) deckWaitFor.current = null;
-      if (outcome === 'ready') {
-        deckLoadFailed.current = false;
-        if (careerNow.current === pressed) answerEvent(pressed, choiceIndex);
-        return;
-      }
-      if (outcome === 'failed') deckLoadFailed.current = true;
-      toast.error(outcome === 'failed' ? 'This card could not load. Tap it again to reload the page, your career is saved.' : 'This card is still loading. Check your connection and tap it again.', PAGE_TOAST);
+      if (press.at === pressed) press.at = null;
+      press.failed = outcome === 'failed';
+      if (outcome === 'ready') { if (careerNow.current === pressed) answerEvent(pressed, choiceIndex); return; }
+      toast.error(press.failed ? 'This card could not load. Tap again to reload.' : 'Still loading. Tap again in a moment.', PAGE_TOAST);
     });
   };
 
