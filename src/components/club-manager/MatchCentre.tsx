@@ -127,9 +127,9 @@ export function MatchCentre({
 
         {/* Form, both dugouts */}
         <div className="flex items-center justify-between mt-3 px-1">
-          <span data-cm-mc-side={formFirst.side}><FormRow form={formFirst.form} align="left" /></span>
+          <span className="inline-flex" data-cm-mc-side={formFirst.side}><FormRow form={formFirst.form} align="left" /></span>
           <span className="text-[9px] text-muted-foreground uppercase tracking-wider">Form</span>
-          <span data-cm-mc-side={formSecond.side}><FormRow form={formSecond.form} align="right" /></span>
+          <span className="inline-flex" data-cm-mc-side={formSecond.side}><FormRow form={formSecond.form} align="right" /></span>
         </div>
 
         {/* Engine odds. Ours, honestly labelled, never a fake fan vote. */}

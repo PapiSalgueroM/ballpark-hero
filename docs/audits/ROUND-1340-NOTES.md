@@ -42,6 +42,15 @@ The brief is C:/Users/antho/dukb-handoff/2026-10-10/briefs/brief-1340.md. This f
   with reduced motion, saves A (Liverpool, away league match next), B (the same career, home), C (a final on a
   neutral ground) and E (an away second leg, pictures only), planted from the real engine on a seeded stream.
   Controls swap, cut and jump (DOM level, save A at 390).
+- a6. playCmMatchDay with MATCHDAY_COMPARE_DIST compares the head build against a build of d8aaa4cb (r1340-a6 on
+  b1251a25): one build walked twice gives the same save to the byte; on A, B and C at 320, 390 and 1280 every save
+  after the same seeded taps is the base's to the byte (71582, 75889 and 160896 bytes) and no screen has more text
+  under 12 px (hub 35 to 40, centre 46 to 71, live 72 to 98, interval 131 to 133, report 232 to 285, equal on both).
+  Heights (head against base): the hub, the live stage and the interval equal; the report taller by 61 to 327 px
+  (timeline names now wrap instead of cutting, and the toggle is 44 px, by design); the Match Centre taller by 8 to
+  11 px, which was the form rows' new wrapper spans taking the card's line height, fixed by making them inline-flex.
+  simMatchDetail's one red on a3c (h1 stoppage 5 for a half with 2 stoppages, an engine band this round cannot
+  move) reran green twice on the head and once on the base (r1340-a6).
 - a7 (help and What's New, sent ahead of a6 so the build says what it does): ClubManagerHelp.tsx's match paragraph
   (line 48) gains one sentence on the order; one What's New entry, true of 1340a alone.
 - Owed to the other lane: src/data/gameContent/clubManagement.ts grepped on this head for dots, shirt, number, vs,
