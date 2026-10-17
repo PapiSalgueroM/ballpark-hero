@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+weight: node scripts/sweepWeight.mjs
