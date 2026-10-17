@@ -1,0 +1,56 @@
+  PASS w1-everton-now-390-reduce: the save watches the Champions League (l36 season 1, 36 clubs, seed 491545946, holder PSG; uclGroup null; Everton season 1 week 0)
+  PASS w1-everton-now-390-reduce: no sideways scroll on the hub
+  PASS w1-everton-now-390-reduce: the Cups panel opens and still says "No European football this season" (dark: no screen reads the slice)
+  PASS w1-everton-now-390-reduce: no sideways scroll on the Cups panel
+  w1-everton-now-390-reduce: presses {"Quick Sim":15,"continue":15}
+  PASS w1-everton-now-390-reduce: played on from week 0 to 20, the same slice kept (l36 season 1, 36 clubs, seed 491545946, holder PSG)
+  PASS w1-everton-now-390-reduce: the slice reads the same after a reload
+  PASS w1-everton-now-390-reduce-resumed: the Cups panel opens and still says "No European football this season" (dark: no screen reads the slice)
+  PASS w1-everton-now-390-reduce-resumed: no sideways scroll on the Cups panel
+  PASS w1-everton-now-390-reduce: no page or console error
+  PASS w2-everton-now-1280-motion: the save watches the Champions League (l36 season 1, 36 clubs, seed 627538164, holder PSG; uclGroup null; Everton season 1 week 0)
+  PASS w2-everton-now-1280-motion: no sideways scroll on the hub
+  PASS w2-everton-now-1280-motion: the Cups panel opens and still says "No European football this season" (dark: no screen reads the slice)
+  PASS w2-everton-now-1280-motion: no sideways scroll on the Cups panel
+  PASS w2-everton-now-1280-motion: no page or console error
+  PASS w3-everton2005-1280-motion: the save watches the Champions League (g8 season 1, 32 clubs, seed 1723789656; uclGroup null; Everton season 1 week 28)
+  PASS w3-everton2005-1280-motion: no sideways scroll on the hub
+  PASS w3-everton2005-1280-motion: the Cups panel opens and still says "No European football this season" (dark: no screen reads the slice)
+  PASS w3-everton2005-1280-motion: no sideways scroll on the Cups panel
+  w3-everton2005-1280-motion: presses {"Quick Sim":15,"continue":15}
+  PASS w3-everton2005-1280-motion: played on from week 28 to 49, the same slice kept (g8 season 1, 32 clubs, seed 1723789656)
+  PASS w3-everton2005-1280-motion: the slice reads the same after a reload
+  PASS w3-everton2005-1280-motion-resumed: the Cups panel opens and still says "No European football this season" (dark: no screen reads the slice)
+  PASS w3-everton2005-1280-motion-resumed: no sideways scroll on the Cups panel
+  PASS w3-everton2005-1280-motion: no page or console error
+  PASS w4-everton2005-390-reduce: the save watches the Champions League (g8 season 1, 32 clubs, seed 1663508089; uclGroup null; Everton season 1 week 28)
+  PASS w4-everton2005-390-reduce: no sideways scroll on the hub
+  PASS w4-everton2005-390-reduce: the Cups panel opens and still says "No European football this season" (dark: no screen reads the slice)
+  PASS w4-everton2005-390-reduce: no sideways scroll on the Cups panel
+  PASS w4-everton2005-390-reduce: no page or console error
+  PASS w5-sevilla-oldsave-390-reduce: the Cups panel opens and still says "No European football this season" (dark: no screen reads the slice)
+  PASS w5-sevilla-oldsave-390-reduce: no sideways scroll on the Cups panel
+  w5-sevilla-oldsave-390-reduce: presses {"Quick Sim":1}
+  PASS w5-sevilla-oldsave-390-reduce after one press: the save watches the Champions League (l36 season 1, 36 clubs, seed 3883786904, holder PSG; uclGroup null; Sevilla season 1 week 50)
+  w5-sevilla-oldsave-390-reduce: presses {"continue":4,"Quick Sim":3,"review":1}
+  w5-sevilla-oldsave-390-reduce season 2: presses {"Quick Sim":1,"continue":1}
+  PASS w5-sevilla-oldsave-390-reduce: season 2 reached, l36 season 2, 36 clubs, seed 291554025, holder Manchester City
+  w5-sevilla-oldsave-390-reduce: season 2 uclField holds 32 clubs
+  PASS w5-sevilla-oldsave-390-reduce: no page or console error
+  PASS w5b-valencia-oldsave-1280-motion: the Cups panel opens and still says "No European football this season" (dark: no screen reads the slice)
+  PASS w5b-valencia-oldsave-1280-motion: no sideways scroll on the Cups panel
+  w5b-valencia-oldsave-1280-motion: presses {"Quick Sim":1}
+  PASS w5b-valencia-oldsave-1280-motion after one press: the save watches the Champions League (l36 season 1, 36 clubs, seed 3013186935, holder PSG; uclGroup null; Valencia season 1 week 50)
+  w5b-valencia-oldsave-1280-motion: presses {"continue":4,"Quick Sim":3,"review":1}
+  w5b-valencia-oldsave-1280-motion season 2: presses {"Quick Sim":1,"continue":1}
+  PASS w5b-valencia-oldsave-1280-motion: season 2 reached, l36 season 2, 36 clubs, seed 309761825, holder Aston Villa
+  w5b-valencia-oldsave-1280-motion: season 2 uclField holds 32 clubs
+  PASS w5b-valencia-oldsave-1280-motion: no page or console error
+  PASS w6-hotseat-390: no localStorage key carries worldComps
+  PASS w6-hotseat-390: no sideways scroll
+  PASS w6-hotseat-390: no page or console error
+  PASS w6-deadlineday-390: no localStorage key carries worldComps
+  PASS w6-deadlineday-390: no sideways scroll
+  PASS w6-deadlineday-390: no page or console error
+  screenshots in /home/runner/work/_temp/rc-out/files/walk1502: w1-everton-now-390-reduce-cups.png w1-everton-now-390-reduce-hub.png w1-everton-now-390-reduce-played.png w1-everton-now-390-reduce-resumed-cups.png w1-everton-now-390-reduce-resumed.png w2-everton-now-1280-motion-cups.png w2-everton-now-1280-motion-hub.png w3-everton2005-1280-motion-cups.png w3-everton2005-1280-motion-hub.png w3-everton2005-1280-motion-played.png w3-everton2005-1280-motion-resumed-cups.png w3-everton2005-1280-motion-resumed.png w4-everton2005-390-reduce-cups.png w4-everton2005-390-reduce-hub.png w5-sevilla-oldsave-390-reduce-cups.png w5-sevilla-oldsave-390-reduce-resumed.png w5-sevilla-oldsave-390-reduce-review.png w5-sevilla-oldsave-390-reduce-season2.png w5b-valencia-oldsave-1280-motion-cups.png w5b-valencia-oldsave-1280-motion-resumed.png w5b-valencia-oldsave-1280-motion-review.png w5b-valencia-oldsave-1280-motion-season2.png w6-deadlineday-390.png w6-hotseat-390.png
+walk1502: GREEN
