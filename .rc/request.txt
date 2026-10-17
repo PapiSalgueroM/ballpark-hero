@@ -1,0 +1,5 @@
+#!playwright
+#!serial
+mutM1: node .rc/x/mutrun-1503.mjs M1; s=$?; git checkout -- src scripts; exit $s
+mutM2: node .rc/x/mutrun-1503.mjs M2; s=$?; git checkout -- src scripts; exit $s
+mutM3: node .rc/x/mutrun-1503.mjs M3; s=$?; git checkout -- src scripts; exit $s
