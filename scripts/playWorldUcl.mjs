@@ -1,0 +1,411 @@
+/**
+ * Round 1503: the Champions League screen in Club Manager, walked on a real build at 320x640, 390x844 and 1280x900.
+ *
+ * The saves are made by the engine itself (scripts/lib/worldUclFleet.mjs bundles src/lib/clubManager.ts and plays
+ * them on a held random stream), planted from /robots.txt on the served build, and the page is pressed like a
+ * player would. Supabase and the ad hosts are aborted; nothing reaches the network.
+ *   (a) a today's world Chelsea save just after matchday 4 (Chelsea watch, the engine's own answer): Cups, the
+ *       Champions League tile, Table (36 rows, eight through, sixteen to the play-offs, twelve out, the legend),
+ *       Matchdays on matchday 4 (18 scores) paged to matchday 5 (18 fixtures, no score), a club tapped (its run:
+ *       four recorded nights and four to come), back, Knockouts (drawn after matchday 8), Final (still to come)
+ *   (b) the same save at the season's end: the season review names the watched final's winner and runner-up,
+ *       the ones the engine's evaluation crowns (today's world plays its final after the last league game)
+ *   (c) an era 2005 watcher (Sunderland): Groups (eight pills, four rows a group), Final won by the engine's winner
+ *   (d) a Real Madrid participant: Table is the old groups card, Matchdays read from the adapter
+ *   (e) on every view of (a), (c) and the new views of (d): scrollY and the document height the same before a
+ *       tile and after its back button, every new control at least 44 px tall, no new text under 12 px, no
+ *       sideways scroll, nothing cut by its box or off the screen, no two controls on top of each other; under
+ *       reduced motion nothing in the panel animates
+ * Exit 0 green, 1 red (or a control that fired), 2 could not run, 3 a control that did not fire.
+ *
+ * Negative controls (PLAY_WORLD_CONTROL; each patches one line of the tree, asserted present exactly once, builds a
+ * second dist into its own temp folder, puts the file back, serves that dist and walks (a) at 390 only):
+ *   notile  the Champions League tile is drawn only for a club in it      (a) red: no tile for a watcher
+ *   ahead   the adapter evaluates one night past the week                  (a) red: matchday 5 shows scores
+ * Runs only on a runner (CI set): it builds and serves. Request lines, with #!serve and #!playwright:
+ *   walk: node scripts/playWorldUcl.mjs
+ *   walk-notile: PLAY_WORLD_CONTROL=notile node scripts/playWorldUcl.mjs
+ * Pictures go to $RC_OUT/shots.
+ */
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { execFileSync, spawn } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { engineOf, tape } from './lib/worldUclFleet.mjs';
+import { chromium } from './lib/playwrightLoader.mjs';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const CONTROL = process.env.PLAY_WORLD_CONTROL || '';
+const SIZES = [[320, 640], [390, 844], [1280, 900]];
+const TEMP = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-world-ucl-walk-'));
+const SHOTS = path.join(process.env.RC_OUT || TEMP, 'shots');
+fs.mkdirSync(SHOTS, { recursive: true });
+const cannot = why => { console.log(`playWorldUcl: could not run. ${why}`); process.exit(2); };
+if (!process.env.CI) cannot('it builds and serves the site, so it runs on a runner only (CI is not set)');
+
+const CONTROLS = {
+  notile: { file: 'src/components/club-manager/WorldCompScreen.tsx',
+    from: `<Tile icon="⭐" title="Champions League" value={status.value} sub={status.sub} testId="ucl" onClick={() => go({ ...HOME, at: 'ucl' })} />`,
+    to: `{career.uclGroup !== null && <Tile icon="⭐" title="Champions League" value={status.value} sub={status.sub} testId="ucl" onClick={() => go({ ...HOME, at: 'ucl' })} />}`,
+    finding: 'no Champions League tile' },
+  ahead: { file: 'src/lib/clubManagerWorldView.ts',
+    from: '    result = evalWorldUcl(career);',
+    to: '    result = evalWorldUcl(career, worldUclNightsDone(career) + 1);',
+    finding: 'matchday 5 shows' },
+};
+if (CONTROL && !CONTROLS[CONTROL]) cannot(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`);
+
+/* ---------- the saves, made by the engine ---------- */
+const E = await engineOf(ROOT, 'walk', {}, cannot);
+const opts = { skipHalftime: true, noCoach: true };
+async function play(club, era, seed, until) {
+  const M = await E.fresh();
+  let s = tape(seed, () => (era ? M.cm.startCareer(club, era) : M.cm.startCareer(club))).value;
+  let i = 0;
+  while (!until(M, s) && s.week < s.calendar.length && i < 400) {
+    s = tape(seed + 1 + i, () => M.cm.playNextEntry(s, opts)).value.state;
+    i += 1;
+  }
+  return { M, s, entries: i };
+}
+function saved(M, s) {
+  M.store.clear();
+  if (!M.cm.saveCareer(s)) cannot('the engine refused to save a walk career');
+  return [...M.store.entries()];
+}
+const saves = {};
+{
+  const a = await play('Chelsea', undefined, 0x1503a, (M, s) => M.cm.worldUclNightsDone(s) >= 4);
+  if (a.s.uclGroup || a.M.cm.worldUclNightsDone(a.s) !== 4) cannot('Chelsea did not reach matchday 4 as a watcher');
+  const r = a.M.cm.evalWorldUcl(a.s);
+  const md4 = r.nights[3].fixtures.filter(f => f.hg !== undefined).length;
+  const md5 = r.nights[4].fixtures.length;
+  saves.a = { items: saved(a.M, a.s), md4, md5, table: r.table.length, cupName: a.M.cm.careerLeagueOf(a.s).cupName };
+  console.log(`(a) Chelsea, week ${a.s.week} of ${a.s.calendar.length} after ${a.entries} entries: nights done 4, matchday 4 ${md4} scores, matchday 5 ${md5} fixtures, table ${r.table.length}`);
+  const b = await play('Chelsea', undefined, 0x1503a, () => false);
+  const end = b.M.cm.evalWorldUcl(b.s);
+  if (!end?.winner || !end.runnerUp) cannot('the Chelsea season ended without a watched winner');
+  const fin = tape(0x1503b, () => b.M.cm.finishSeason(b.s)).value.state;
+  saves.b = { items: saved(b.M, fin), winner: end.winner, runnerUp: end.runnerUp };
+  console.log(`(b) Chelsea season over after ${b.entries} entries: the engine's final, ${end.winner} beat ${end.runnerUp}`);
+  const c = await play('Sunderland', 'era2005', 0x1503c, (M, s) => { const p = M.cm.worldUclNights(s); return !!p && M.cm.worldUclNightsDone(s) >= p.length; });
+  const cr = c.M.cm.evalWorldUcl(c.s);
+  if (c.s.uclGroup || !cr?.winner || c.s.week >= c.s.calendar.length) cannot('the 2005 Sunderland save did not reach a played final before its season ended');
+  saves.c = { items: saved(c.M, c.s), winner: cr.winner, groups: cr.groups.length };
+  console.log(`(c) Sunderland 2005, week ${c.s.week} of ${c.s.calendar.length}: ${cr.groups.length} groups, the final won by ${cr.winner}`);
+  const d = await play('Real Madrid', undefined, 0x1503d, (M, s) => (s.uclGroup?.matchday ?? 0) >= 2);
+  if (!d.s.uclGroup) cannot('Real Madrid are not in the Champions League in this build');
+  saves.d = { items: saved(d.M, d.s), md: d.s.uclGroup.matchday };
+  console.log(`(d) Real Madrid, in it, group matchday ${d.s.uclGroup.matchday}`);
+}
+
+/* ---------- the build: the served one, or a control's own ---------- */
+let url = process.env.BASE || process.env.SWEEP_BASE || 'http://localhost:4173';
+let server = null;
+if (CONTROL) {
+  const c = CONTROLS[CONTROL];
+  const file = path.join(ROOT, c.file);
+  const original = fs.readFileSync(file);
+  const text = original.toString('utf8');
+  const n = text.split(c.from).length - 1;
+  if (n !== 1) cannot(`control ${CONTROL}: its line stands in ${c.file} ${n} times, it must be exactly once`);
+  const out = path.join(TEMP, `dist-${CONTROL}`);
+  try {
+    fs.writeFileSync(file, text.replace(c.from, c.to));
+    execFileSync(path.join(ROOT, 'node_modules', '.bin', 'vite'), ['build', '--outDir', out, '--emptyOutDir'], { cwd: ROOT, stdio: ['ignore', 'ignore', 'inherit'], timeout: 25 * 60000 });
+  } finally {
+    fs.writeFileSync(file, original);
+  }
+  if (!fs.readFileSync(file).equals(original)) cannot(`control ${CONTROL}: ${c.file} was not put back`);
+  server = spawn(process.execPath, [path.join(ROOT, 'scripts', 'lib', 'hostLikeServer.mjs'), out, '4191'], { stdio: 'ignore' });
+  url = 'http://localhost:4191';
+  console.log(`control ${CONTROL}: built ${c.file} with its line patched into ${out}; the file is back as it was`);
+}
+for (let i = 0; i < 60; i += 1) {
+  const up = await fetch(`${url}/robots.txt`).then(r => r.ok).catch(() => false);
+  if (up) break;
+  if (i === 59) cannot(`nothing is served at ${url}`);
+  await new Promise(r => setTimeout(r, 500));
+}
+
+/* ---------- the page ---------- */
+const findings = [];
+const finding = (where, what) => { findings.push(`${where}: ${what}`); console.log(`   FAIL ${where}: ${what}`); };
+const BLOCK = /supabase\.co|googlesyndication|doubleclick|google-analytics|googletagmanager|adservice|fundingchoices/;
+async function press(page, loc, ms = 3000) {
+  try {
+    await loc.first().waitFor({ state: 'visible', timeout: ms });
+    await loc.first().evaluate(el => el.click());
+    await page.waitForTimeout(400);
+    return true;
+  } catch { return false; }
+}
+async function open(browser, items, [w, h], reduced = false) {
+  const ctx = await browser.newContext({ viewport: { width: w, height: h }, reducedMotion: reduced ? 'reduce' : 'no-preference' });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on('pageerror', e => errors.push(String(e).slice(0, 200)));
+  await page.route(BLOCK, r => r.abort());
+  await page.goto(`${url}/robots.txt`);
+  await page.evaluate(entries => { localStorage.clear(); for (const [k, v] of entries) localStorage.setItem(k, v); }, items);
+  await page.goto(`${url}/club-manager`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
+  await press(page, page.getByRole('button', { name: /^Essential only$/i }), 1500);
+  await press(page, page.getByRole('button', { name: 'Resume Career', exact: true }), 5000);
+  return { ctx, page, errors };
+}
+async function toCups(page, where) {
+  const ok = await press(page, page.getByRole('button').filter({ has: page.getByText('Cups', { exact: true }) }), 20000);
+  const tiles = await page.locator('[data-cm-cups-view="tiles"]').waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
+  if (!ok || !tiles) finding(where, 'the Cups panel did not open from the hub');
+  return ok && tiles;
+}
+const shot = async (page, name) => page.screenshot({ path: path.join(SHOTS, `${name}.png`), fullPage: false }).catch(() => {});
+const count = async (page, sel) => page.locator(sel).count();
+let measured = 0;
+
+/** (e) on the panel as it stands: tap sizes, text sizes, nothing cut, overlapping or sideways. */
+async function measure(page, where) {
+  const m = await page.evaluate(() => {
+    const root = document.querySelector('[data-cm-cups-view]');
+    if (!root) return null;
+    const vw = window.innerWidth;
+    const words = el => (el.textContent || el.getAttribute('aria-label') || '').trim().replace(/\s+/g, ' ').slice(0, 40);
+    const shown = el => { const r = el.getBoundingClientRect(); const st = getComputedStyle(el); return r.width > 0 && r.height > 0 && st.visibility !== 'hidden'; };
+    const out = { short: [], small: [], cut: [], overlap: [], controls: 0, texts: 0, sideways: document.scrollingElement.scrollWidth > vw + 1 };
+    const ctl = [...root.querySelectorAll('button, a')].filter(shown);
+    out.controls = ctl.length;
+    for (const el of ctl) { const h = el.getBoundingClientRect().height; if (h < 43.5) out.short.push(`"${words(el)}" ${h.toFixed(1)} px`); }
+    for (let i = 0; i < ctl.length; i += 1) {
+      for (let j = i + 1; j < ctl.length; j += 1) {
+        if (ctl[i].contains(ctl[j]) || ctl[j].contains(ctl[i])) continue;
+        const a = ctl[i].getBoundingClientRect(); const b = ctl[j].getBoundingClientRect();
+        const x = Math.min(a.right, b.right) - Math.max(a.left, b.left); const y = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+        if (x > 2 && y > 2) out.overlap.push(`"${words(ctl[i])}" on "${words(ctl[j])}"`);
+      }
+    }
+    for (const el of root.querySelectorAll('*')) {
+      if (!shown(el) || ![...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) continue;
+      out.texts += 1;
+      const st = getComputedStyle(el); const r = el.getBoundingClientRect();
+      if (parseFloat(st.fontSize) < 11.95) out.small.push(`"${words(el)}" ${st.fontSize}`);
+      if (r.right > vw + 1 || r.left < -1) out.cut.push(`"${words(el)}" runs off the screen`);
+      if ((st.overflowX === 'hidden' || st.overflowX === 'clip' || st.textOverflow === 'ellipsis') && el.scrollWidth > el.clientWidth + 1) out.cut.push(`"${words(el)}" is cut by its box`);
+    }
+    return out;
+  });
+  if (!m) { finding(where, 'the Cups panel is not on the page'); return; }
+  measured += 1;
+  for (const s of m.short) finding(where, `a control under 44 px tall: ${s}`);
+  for (const s of m.small) finding(where, `text under 12 px: ${s}`);
+  for (const s of m.cut) finding(where, s);
+  for (const s of m.overlap) finding(where, `two controls overlap: ${s}`);
+  if (m.sideways) finding(where, 'the page scrolls sideways');
+  console.log(`   ${where}: ${m.controls} controls and ${m.texts} lines measured`);
+}
+
+/** Press a tile, look inside, come back with the view's own back button: the page stands where it stood. */
+async function roundTrip(page, where, loc, inside, { skipMeasure = false } = {}) {
+  await loc.first().scrollIntoViewIfNeeded().catch(() => {});
+  await page.waitForTimeout(250);
+  const before = await page.evaluate(() => [Math.round(window.scrollY), document.scrollingElement.scrollHeight]);
+  if (!(await press(page, loc))) { finding(where, 'its tile or control could not be pressed'); return false; }
+  await page.waitForTimeout(300);
+  await inside();
+  if (!skipMeasure) await measure(page, where);
+  if (!(await press(page, page.locator('[data-cm-world-back]')))) { finding(where, 'no back button'); return false; }
+  await page.waitForTimeout(600);
+  const after = await page.evaluate(() => [Math.round(window.scrollY), document.scrollingElement.scrollHeight]);
+  if (Math.abs(after[0] - before[0]) > 1 || Math.abs(after[1] - before[1]) > 1) {
+    finding(where, `back did not put the page where it was: scrollY ${before[0]} then ${after[0]}, height ${before[1]} then ${after[1]}`);
+  }
+  return true;
+}
+
+/* ---------- the cases ---------- */
+async function caseA(browser, size, tag) {
+  const where = `(a) Chelsea ${tag}`;
+  const { ctx, page, errors } = await open(browser, saves.a.items, size);
+  try {
+    if (!(await toCups(page, where))) return;
+    await measure(page, `${where} tiles`);
+    /* What scripts/playManagerCustomPromotion.mjs (240 and 241) reads off this panel: the panel's rendered text, so
+       a word drawn in capitals by CSS does not count as the word. */
+    const panel = await page.getByRole('button', { name: 'Club home', exact: true }).locator('..').innerText().catch(() => '');
+    if (!saves.a.cupName || !panel.includes(saves.a.cupName) || !panel.includes('No European football this season')) {
+      finding(where, `the panel's text does not hold the cup's name (${saves.a.cupName}) and the no European football line`);
+    }
+    await shot(page, `a-tiles-${tag}`);
+    if (!(await count(page, '[data-cm-world-tile="ucl"]'))) { finding(where, 'no Champions League tile for a club watching it'); return; }
+    await roundTrip(page, `${where} screen`, page.locator('[data-cm-world-tile="ucl"]'), async () => {
+      if (!(await count(page, '[data-cm-world-mode="watching"][data-cm-world-format="l36"]'))) finding(where, 'the screen is not the watched 36 club league phase');
+      await shot(page, `a-screen-${tag}`);
+      await roundTrip(page, `${where} table`, page.locator('[data-cm-world-tile="table"]'), async () => {
+        const rows = await page.locator('[data-cm-world-table]').first().getAttribute('data-cm-world-table').catch(() => null);
+        const zones = [await count(page, '[data-zone="through"]'), await count(page, '[data-zone="playoff"]'), await count(page, '[data-zone="out"]')];
+        if (rows !== String(saves.a.table) || zones.join() !== '8,16,12') finding(where, `the table has ${rows} rows in zones ${zones.join(', ')}, not 36 in 8, 16, 12`);
+        if (!(await count(page, '[data-cm-world-legend]'))) finding(where, 'the table names no zones');
+        await shot(page, `a-table-${tag}`);
+      });
+      await roundTrip(page, `${where} matchdays`, page.locator('[data-cm-world-tile="matchdays"]'), async () => {
+        const md4 = await count(page, '[data-cm-world-fixture="played"]');
+        if (md4 !== saves.a.md4) finding(where, `matchday 4 shows ${md4} scores, the engine played ${saves.a.md4}`);
+        await shot(page, `a-md4-${tag}`);
+        await press(page, page.getByRole('button', { name: 'Night after' }));
+        const played5 = await count(page, '[data-cm-world-fixture="played"]');
+        const open5 = await count(page, '[data-cm-world-fixture="open"]');
+        if (played5) finding(where, `matchday 5 shows ${played5} scores before it is played`);
+        if (open5 !== saves.a.md5) finding(where, `matchday 5 lists ${open5} fixtures to play, the engine has ${saves.a.md5}`);
+        await shot(page, `a-md5-${tag}`);
+        const club = await page.locator('[data-cm-world-fixtures] [data-cm-world-club]').first().getAttribute('data-cm-world-club').catch(() => null);
+        await roundTrip(page, `${where} run`, page.locator('[data-cm-world-fixtures] [data-cm-world-club]'), async () => {
+          const rec = await count(page, '[data-cm-world-run-row="recorded"]');
+          const up = await count(page, '[data-cm-world-run-row="upcoming"]');
+          if (!(await count(page, `[data-cm-world-run="${club}"]`)) || rec !== 4 || up !== 4) finding(where, `${club}'s run shows ${rec} played and ${up} to come, not 4 and 4`);
+          await shot(page, `a-run-${tag}`);
+        });
+      });
+      await roundTrip(page, `${where} knockouts`, page.locator('[data-cm-world-tile="knockouts"]'), async () => {
+        const t = await page.locator('[data-cm-world-undrawn]').first().textContent().catch(() => '');
+        if (!/Drawn after matchday 8/.test(t ?? '')) finding(where, `the knockouts do not say they are drawn after matchday 8 (${t})`);
+      });
+      await roundTrip(page, `${where} final`, page.locator('[data-cm-world-tile="final"]'), async () => {
+        if (!(await count(page, '[data-cm-world-final="open"]'))) finding(where, 'the final is not shown as still to come');
+      });
+      await press(page, page.locator('[data-cm-world-help-toggle]'));
+      if (!(await count(page, '[data-cm-world-help]'))) finding(where, 'the ? opens no rules');
+      else { await measure(page, `${where} help`); await shot(page, `a-help-${tag}`); }
+      await press(page, page.locator('[data-cm-world-help-toggle]'));
+    });
+    if (errors.length) finding(where, `page errors: ${errors.join(' | ')}`);
+  } finally { await ctx.close(); }
+}
+
+async function caseB(browser, size, tag) {
+  const where = `(b) Chelsea season over ${tag}`;
+  const { ctx, page, errors } = await open(browser, saves.b.items, size);
+  try {
+    const line = page.locator('[data-cm-world-final-line]');
+    const got = await line.first().waitFor({ timeout: 20000 }).then(() => true).catch(() => false);
+    const text = got ? ((await line.first().textContent()) ?? '') : '';
+    if (!got || !text.includes(saves.b.winner) || !text.includes(saves.b.runnerUp)) finding(where, `the season review does not name the final (${text || 'no line'}); the engine's: ${saves.b.winner} beat ${saves.b.runnerUp}`);
+    else {
+      await line.first().scrollIntoViewIfNeeded().catch(() => {});
+      const fs12 = await line.first().evaluate(el => parseFloat(getComputedStyle(el).fontSize));
+      if (fs12 < 11.95) finding(where, `the final's line is ${fs12} px`);
+      const wide = await page.evaluate(() => document.scrollingElement.scrollWidth > window.innerWidth + 1);
+      if (wide) finding(where, 'the season review scrolls sideways');
+    }
+    await shot(page, `b-review-${tag}`);
+    if (errors.length) finding(where, `page errors: ${errors.join(' | ')}`);
+  } finally { await ctx.close(); }
+}
+
+async function caseC(browser, size, tag) {
+  const where = `(c) Sunderland 2005 ${tag}`;
+  const { ctx, page, errors } = await open(browser, saves.c.items, size);
+  try {
+    if (!(await toCups(page, where))) return;
+    await roundTrip(page, `${where} screen`, page.locator('[data-cm-world-tile="ucl"]'), async () => {
+      if (!(await count(page, '[data-cm-world-mode="watching"][data-cm-world-format="g8"]'))) finding(where, 'the screen is not the watched eight groups');
+      await shot(page, `c-screen-${tag}`);
+      await roundTrip(page, `${where} groups`, page.locator('[data-cm-world-tile="table"]'), async () => {
+        const pills = await page.locator('[data-cm-world-view="table"] button').filter({ hasText: /^Group [A-H]$/ }).count();
+        const rows = await page.locator('[data-cm-world-table]').first().getAttribute('data-cm-world-table').catch(() => null);
+        if (pills !== saves.c.groups || rows !== '4') finding(where, `${pills} group pills and ${rows} rows, not ${saves.c.groups} and 4`);
+        await shot(page, `c-groups-${tag}`);
+      });
+      await roundTrip(page, `${where} final`, page.locator('[data-cm-world-tile="final"]'), async () => {
+        const t = await page.locator('[data-cm-world-final="done"]').first().textContent().catch(() => '');
+        if (!(t ?? '').includes(saves.c.winner)) finding(where, `the final does not name the engine's winner ${saves.c.winner} (${t || 'no final'})`);
+        await shot(page, `c-final-${tag}`);
+      });
+    });
+    if (errors.length) finding(where, `page errors: ${errors.join(' | ')}`);
+  } finally { await ctx.close(); }
+}
+
+async function caseD(browser, size, tag) {
+  const where = `(d) Real Madrid ${tag}`;
+  const { ctx, page, errors } = await open(browser, saves.d.items, size);
+  try {
+    if (!(await toCups(page, where))) return;
+    await roundTrip(page, `${where} screen`, page.locator('[data-cm-world-tile="ucl"]'), async () => {
+      if (!(await count(page, '[data-cm-world-mode="in"]'))) finding(where, 'the screen does not say the club is in it');
+      /* The old groups card, mounted unedited: its own pills, not the adapter's table. Measured for overflow only. */
+      await roundTrip(page, `${where} table`, page.locator('[data-cm-world-tile="table"]'), async () => {
+        const adapter = await count(page, '[data-cm-world-table]');
+        const old = await page.locator('[data-cm-world-view="table"]').getByText('Group A', { exact: false }).count();
+        if (adapter || !old) finding(where, `Table is not the old groups card (${adapter} adapter tables, ${old} Group A pills)`);
+        const wide = await page.evaluate(() => document.scrollingElement.scrollWidth > window.innerWidth + 1);
+        if (wide) finding(where, 'the old groups card scrolls the page sideways');
+        await shot(page, `d-table-${tag}`);
+      }, { skipMeasure: true });
+      await roundTrip(page, `${where} matchdays`, page.locator('[data-cm-world-tile="matchdays"]'), async () => {
+        const all = await count(page, '[data-cm-world-fixture]');
+        const played = await count(page, '[data-cm-world-fixture="played"]');
+        if (!all || !played) finding(where, `Matchdays shows ${all} fixtures and ${played} scores on matchday ${saves.d.md}`);
+        await shot(page, `d-matchdays-${tag}`);
+      });
+    });
+    if (errors.length) finding(where, `page errors: ${errors.join(' | ')}`);
+  } finally { await ctx.close(); }
+}
+
+/** Reduced motion: with the screen and a view open, nothing inside the panel is animating. */
+async function caseMotion(browser) {
+  const where = '(e) reduced motion 390';
+  const { ctx, page } = await open(browser, saves.a.items, [390, 844], true);
+  try {
+    if (!(await toCups(page, where))) return;
+    let running = 0;
+    for (const sel of ['[data-cm-world-tile="ucl"]', '[data-cm-world-tile="table"]']) {
+      await press(page, page.locator(sel));
+      running += await page.evaluate(() => {
+        const root = document.querySelector('[data-cm-cups-view]');
+        return document.getAnimations().filter(a => a.playState === 'running' && root && a.effect && a.effect.target && root.contains(a.effect.target)).length;
+      });
+    }
+    if (running) finding(where, `${running} animations run inside the panel under reduced motion`);
+    console.log(`   ${where}: ${running} animations inside the panel`);
+  } finally { await ctx.close(); }
+}
+
+/* ---------- run ---------- */
+const browser = await chromium.launch();
+try {
+  if (CONTROL) {
+    await caseA(browser, [390, 844], `390-${CONTROL}`);
+  } else {
+    for (const size of SIZES) {
+      const tag = String(size[0]);
+      console.log(`== ${size[0]} by ${size[1]}`);
+      await caseA(browser, size, tag);
+      await caseB(browser, size, tag);
+      await caseC(browser, size, tag);
+      await caseD(browser, size, tag);
+    }
+    await caseMotion(browser);
+  }
+} finally {
+  await browser.close();
+  if (server) server.kill();
+}
+
+if (CONTROL) {
+  const want = CONTROLS[CONTROL].finding;
+  const hits = findings.filter(f => f.includes(want)).length;
+  if (hits) {
+    console.log(`playWorldUcl control ${CONTROL}: FIRED, "${want}" reported ${hits} time(s) (${findings.length} findings in all)`);
+    process.exit(1);
+  }
+  console.log(`playWorldUcl control ${CONTROL}: DID NOT FIRE, "${want}" was never reported (${findings.length} other findings)`);
+  process.exit(3);
+}
+if (measured < 20) cannot(`only ${measured} views were measured, so the walk did not really walk`);
+if (findings.length) {
+  console.log(`playWorldUcl: FAIL, ${findings.length} findings over ${measured} measured views; pictures in ${SHOTS}`);
+  process.exit(1);
+}
+console.log(`playWorldUcl: green. Four saves at three sizes, ${measured} views measured, every check held; pictures in ${SHOTS}`);
