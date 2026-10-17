@@ -81,6 +81,37 @@ const potOf = (entrants: G8Entrant[], holder?: string): Map<string, number> => {
 };
 const groupsOf = (clubs: string[]): string[][] => Array.from({ length: 8 }, (_, g) => clubs.slice(g * 4, g * 4 + 4));
 
+/* Round 1502 (E2): TieRules.extraTime false sends a level tie straight to penalties, the switch simExtraTime's arm
+   B plays the engine before Round 670 with and a one match cup without extra time will bind. */
+describe('settleTie without extra time', () => {
+  const level = (): SettleableTie => ({ home: 'A', away: 'B', homeGoals: null, awayGoals: null, winner: null });
+  it('one match: one draw of goals, no extra time, penalties on the coin', () => {
+    const t = level();
+    let draws = 0;
+    settleTie(t, { legs: 1, awayGoals: false, deciderScale: 1, etScale: 0.3, extraTime: false }, () => { draws += 1; return [1, 1]; }, () => 0.2);
+    expect(draws).toBe(1);
+    expect(t.aet).toBeUndefined();
+    expect(t.pens).toBe(true);
+    expect(t.winner).toBe('A');
+  });
+  it('two legs: two draws, no extra time, penalties on the coin', () => {
+    const t = level();
+    let draws = 0;
+    settleTie(t, { legs: 2, awayGoals: false, deciderScale: 1, etScale: 0.3, extraTime: false }, () => { draws += 1; return [1, 1]; }, () => 0.7);
+    expect(draws).toBe(2);
+    expect(t.aet).toBeUndefined();
+    expect(t.pens).toBe(true);
+    expect(t.winner).toBe('B');
+  });
+  it('left out, a level decider still plays extra time', () => {
+    const t = level();
+    let draws = 0;
+    settleTie(t, { legs: 1, awayGoals: false, deciderScale: 1, etScale: 0.3 }, () => { draws += 1; return [1, 1]; }, () => 0.2);
+    expect(draws).toBe(2);
+    expect(t.aet).toBe(true);
+  });
+});
+
 describe('drawG8, the eras group draw', () => {
   it('draws 32 clubs into eight groups, one from each pot, inside both rules, the same every time', () => {
     for (let seed = 1; seed <= 60; seed += 1) {
