@@ -20,7 +20,11 @@
  *       play-off and round of 16 card read against the engine's ties (first leg, second leg the right way round,
  *       the aggregate and how it was won), Matchdays paged back to the play-off second legs with every row as the
  *       engine played it, and one club's run holding its second leg (added by the review fix, run lens major 1)
- *   (e) on every view of (a), (c), (k) and the new views of (d): scrollY and the document height the same before a
+ *   (o) an era 2015 save in it from outside the real 32 (the first club of the 2015 leagues that is not one of the
+ *       32 and starts in it, the engine's own answer): the screen names the club and the real club whose place it
+ *       takes, word for word, and the field line says there is one change; the real club left over is read off the
+ *       engine's groups and the era's verified 32, never off the screen's code (closing check, finding 1)
+ *   (e) on every view of (a), (c), (k), (o) and the new views of (d): scrollY and the document height the same before a
  *       tile and after its back button, every new control at least 44 px tall, no new text under 12 px, no
  *       sideways scroll, nothing cut by its box or off the screen, no one word name broken in the middle of the word,
  *       no two controls on top of each other, and the season review's line fully drawn; under
@@ -35,7 +39,10 @@
  *   legflip a tie card prints its second leg's score the wrong way round  (k) red: a card not as the engine played it
  *   swapfinal the season review swaps the winner and the runner-up         (b) red: the line names the final wrongly
  *   r16help the ? for the club in it in today's world tells the eras' rule (d) red: a round of 16 the game never plays
- * (notile and ahead walk (a) at 390; oldcols walks (c) at 320; legflip (k), swapfinal (b) and r16help (d) at 390.
+ *   instandin the view forgets the stand in of the club in it              (o) red: the club from outside not named
+ *   inswap  the screen's line for it names the two clubs the wrong way round (o) red: the line not word for word
+ * (notile and ahead walk (a) at 390; oldcols walks (c) at 320; legflip (k), swapfinal (b) and r16help (d) at 390;
+ *  instandin and inswap (o) at 390.
  *  Controls patch the checkout one at a time, so a request runs them under #!serial.)
  * Runs only on a runner (CI set): it builds and serves. Request lines, with #!serve and #!playwright:
  *   walk: node scripts/playWorldUcl.mjs
@@ -54,7 +61,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PLAY_WORLD_CONTROL || '';
 /* PLAY_WORLD_CASES (for example "c") and PLAY_WORLD_SIZES (for example "390") narrow a run while a finding is chased;
    a narrowed run is never the round's proof, and says so on its last line. */
-const ALL_CASES = 'abcdk';
+const ALL_CASES = 'abcdko';
 const CASES = process.env.PLAY_WORLD_CASES || ALL_CASES;
 const SIZES = [[320, 640], [390, 844], [1280, 900]].filter(([w]) => !process.env.PLAY_WORLD_SIZES || process.env.PLAY_WORLD_SIZES.split(',').includes(String(w)));
 const NARROW = CASES !== ALL_CASES || SIZES.length !== 3;
@@ -89,6 +96,14 @@ const CONTROLS = {
     from: ") : view.mode === 'in' && view.firstKo === 'QF' ? (",
     to: ') : false ? (',
     finding: 'the ? for the club in it', run: 'd' },
+  instandin: { file: 'src/lib/clubManagerWorldView.ts',
+    from: '    ...(standIn ? { standIn } : {}),',
+    to: '    ...(false ? { standIn } : {}),',
+    finding: 'the club in it from outside the real 32', run: 'o' },
+  inswap: { file: 'src/components/club-manager/WorldCompScreen.tsx',
+    from: '`${view.standIn.club} are in it in this save, in the place of ${view.standIn.for}, one of the real 32 of ${eraSeason}.`',
+    to: '`${view.standIn.for} are in it in this save, in the place of ${view.standIn.club}, one of the real 32 of ${eraSeason}.`',
+    finding: 'the club in it from outside the real 32', run: 'o' },
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`);
 
@@ -174,6 +189,33 @@ const saves = {};
   if (!d.s.uclGroup) cannot('Real Madrid are not in the Champions League in this build');
   saves.d = { items: saved(d.M, d.s), md: d.s.uclGroup.matchday };
   console.log(`(d) Real Madrid, in it, group matchday ${d.s.uclGroup.matchday}`);
+  /* (o) The club in it from outside the real 32 of 2015-16, picked the way the unit file picks it (the first club of
+     the era's leagues outside the 32 that starts in it). What the screen must say is written here from the engine's
+     own groups and the era's verified 32: the one club in it that is not one of the 32, and the one of the 32 that
+     is not in it. */
+  {
+    const M0 = await E.fresh();
+    const real = (M0.cm.ERA_UCL_FIELDS.era2015 ?? []).map(e => e.name);
+    if (real.length !== 32) cannot(`the era's verified 2015-16 field holds ${real.length} clubs, not 32`);
+    let club = null;
+    for (const c of (M0.cm.ERA_LEAGUES.era2015 ?? []).flatMap(l => l.clubs).filter(x => !real.includes(x))) {
+      if (tape(0x1503e, () => M0.cm.startCareer(c, 'era2015')).value.uclGroup) { club = c; break; }
+    }
+    if (!club) cannot('no club of the 2015 leagues from outside the real 32 starts in the Champions League');
+    const o = await play(club, 'era2015', 0x1503e, (M, s) => (s.uclGroup?.matchday ?? 0) >= 1);
+    if (!o.s.uclGroup) cannot(`${club} 2015 is not in the Champions League once played`);
+    const inIt = [club, ...o.s.uclGroup.opponents, ...(o.s.uclWorld ?? []).flatMap(g => g.clubs)];
+    const outside = inIt.filter(c => !real.includes(c));
+    const left = real.filter(c => !inIt.includes(c));
+    if (inIt.length !== 32 || outside.join() !== club || left.length !== 1) {
+      cannot(`the 2015 field with ${club} in it is not the real 32 with one change (${inIt.length} clubs, outside: ${outside.join(', ')}, left over: ${left.join(', ')})`);
+    }
+    saves.o = { club, left: left[0], items: saved(o.M, o.s), lines: [
+      `${club} are in it in this save, in the place of ${left[0]}, one of the real 32 of 2015-16.`,
+      'Every season of this save draws from the same 32 clubs, the real 2015-16 field, whatever the leagues do, with the one change named above.',
+    ] };
+    console.log(`(o) ${club} 2015, in it from outside the real 32, group matchday ${o.s.uclGroup.matchday}: in the place of ${left[0]}`);
+  }
 }
 
 /* ---------- the build: the served one, or a control's own ---------- */
@@ -513,6 +555,25 @@ async function caseK(browser, size, tag) {
   } finally { await ctx.close(); }
 }
 
+/** (o) The club in it from outside the real 32: the header's two lines word for word, as the engine drew it. */
+async function caseO(browser, size, tag) {
+  const where = `(o) ${saves.o.club} 2015 ${tag}`;
+  const { ctx, page, errors } = await open(browser, saves.o.items, size);
+  try {
+    if (!(await toCups(page, where))) return;
+    await roundTrip(page, `${where} screen`, page.locator('[data-cm-world-tile="ucl"]'), async () => {
+      if (!(await count(page, '[data-cm-world-mode="in"][data-cm-world-format="g8"]'))) finding(where, 'the screen does not say the club is in the eight groups');
+      const lines = await page.locator('[data-cm-world-mode] p').evaluateAll(els => els.map(e => (e.textContent || '').replace(/\s+/g, ' ').trim()));
+      for (const want of saves.o.lines) {
+        if (!lines.includes(want)) finding(where, `the screen does not name the club in it from outside the real 32 as the engine drew it: no line "${want}" (its lines: "${lines.join(' / ').slice(0, 400)}")`);
+      }
+      if (lines.some(l => l.includes(' stand in for '))) finding(where, 'the club in it is told another club stands in for it');
+      await shot(page, `o-screen-${tag}`);
+    });
+    if (errors.length) finding(where, `page errors: ${errors.join(' | ')}`);
+  } finally { await ctx.close(); }
+}
+
 /** Reduced motion: with the screen and a view open, nothing inside the panel is animating. */
 async function caseMotion(browser) {
   const where = '(e) reduced motion 390';
@@ -533,7 +594,7 @@ async function caseMotion(browser) {
 }
 
 /* ---------- run ---------- */
-const RUN = { a: caseA, b: caseB, c: caseC, d: caseD, k: caseK };
+const RUN = { a: caseA, b: caseB, c: caseC, d: caseD, k: caseK, o: caseO };
 const browser = await chromium.launch();
 try {
   if (CONTROL) {
@@ -573,4 +634,4 @@ if (findings.length) {
   console.log(`playWorldUcl: FAIL, ${findings.length} findings over ${measured} measured views; pictures in ${SHOTS}`);
   process.exit(1);
 }
-console.log(`playWorldUcl: green. Five saves at three sizes, ${measured} views measured, every check held; pictures in ${SHOTS}`);
+console.log(`playWorldUcl: green. Six saves at three sizes, ${measured} views measured, every check held; pictures in ${SHOTS}`);
