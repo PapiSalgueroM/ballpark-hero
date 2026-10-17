@@ -1,0 +1,8 @@
+  5 the holder: 30 rollovers, 25 after a watched final, 21 winners already in the field (0 of those fields in another order), 4 fields the holder changed: Juventus in for nobody; Liverpool in for nobody; Nottingham Forest in for nobody; Manchester United in for nobody
+FAIL 5 holder: Hoffenheim (now) seed 3 s2-rollover: the watched winner Juventus is not in next season's field
+FAIL 5 holder: Everton (now) seed 3 s1-rollover: the watched winner Liverpool is not in next season's field
+FAIL 5 holder: América (now) seed 1 s2-rollover: the watched winner Nottingham Forest is not in next season's field
+FAIL 5 holder: América (now) seed 1 s2-rollover: the watched winner Nottingham Forest is not in next season's watched field
+FAIL 5 holder: América (now) seed 2 s2-rollover: the watched winner Manchester United is not in next season's field
+FAIL 5 holder: América (now) seed 2 s2-rollover: the watched winner Manchester United is not in next season's watched field
+simWorldUcl: control noholder FIRED (6 failures, all its own)

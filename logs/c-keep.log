@@ -1,0 +1,56 @@
+  1 watchers: Chelsea (now), Hoffenheim (now), Everton (now), América (now), Proof Town Athletic (now), Wigan Athletic (era2005), Wolves (era2010), West Ham (era2015), Sheffield United (era2020), Villarreal (era2005), Werder Bremen (era2010), Sevilla (era2015), Marseille (era2020); seeds 1,2,3
+  1 and 3: 39 journeys in 152 s
+  7 goals a watched match NaN (0 matches); a domestic league match 2.628
+  7 ties 0: to extra time NaN percent, to penalties NaN percent
+  4 slice bytes g8: 69 seasons, mean 627, smallest 595, largest 670
+  4 slice bytes l36: 38 seasons, mean 1434, smallest 1411, largest 1481
+  1 seasons a mid season move left with no competition, by the rule: 2
+  1 seasons in the Champions League (not watched): 9
+  1 seasons where exclude took out a direct entrant (a summer move): 2
+  3 date checks g8: 78
+  3 date checks l36: 43
+  3 joins that carried the slice: 14
+  3 joins that dropped the slice: 1
+  3 joins with nothing to carry or open: 2
+  3 states checked: 4694
+FAIL 4 slices: Chelsea (now) seed 1 at s1-rollover: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e1: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e2: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e3: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e4: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e5: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e6: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e7: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e8: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e9: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e10: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e11: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e12: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e13: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e14: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e15: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e16: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e17: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e18: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e19: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e20: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e21: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-reload: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e22: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e23: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e24: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e25: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e26: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e27: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e28: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e29: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e30: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e31: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e32: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e33: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e34: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e35: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e36: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e37: the save holds 2 slices
+FAIL 4 slices: Chelsea (now) seed 1 at s2-e38: the save holds 2 slices
+simWorldUcl: control keep FIRED (2477 failures, all its own)
