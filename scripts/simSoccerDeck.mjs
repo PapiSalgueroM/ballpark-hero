@@ -633,11 +633,17 @@ console.log('4) Neutral: every deck card answered on the option that moves nothi
    every later draw of the career. So both bundles reseed Math.random before every engine step from the career, the
    season, the step's phase and its count in that season, and the deck card's answer has no key of its own (it draws
    from a throwaway stream): the base's draws are the base's whatever the deck does. The noreseed control turns the
-   reseeding off and the fleets part, which proves it is load bearing. */
+   reseeding off and the fleets part, which proves it is load bearing.
+   One driver serves this section and section 8 (review of 2026-10-17, minor 15). Its options: reseed (off only for
+   the noreseed control); onDeck, how a deck card is answered (a function of the card, null for the option that moves
+   nothing, false to leave the card to the step policy like any other card); tag, a prefix that gives section 8 streams
+   of its own; seasons and steps, where the walk stops; and onStep, handed every state from the first on. Without
+   onStep the driver keeps what this section reads: every season end save and the seasons whose deck answer emptied
+   the batch. */
 const neutralOf = card => Math.max(0, card.choices.findIndex(c => c.consequence === 'Nothing changes'));
-function driveKeyed(M, seed, { reseed = true, onDeck = null } = {}) {
+function driveKeyed(M, seed, { reseed = true, onDeck = null, tag = '', seasons = SEASONS, steps = 600, onStep = null } = {}) {
   const real = Math.random;
-  let stream = seeded(hashInt(`${seed}|start`));
+  let stream = seeded(hashInt(`${seed}|${tag}start`));
   Math.random = () => stream();
   const counts = {};
   const ends = [];
@@ -646,22 +652,26 @@ function driveKeyed(M, seed, { reseed = true, onDeck = null } = {}) {
     const clubs = M.FALLBACK_CLUBS;
     let s = startOf(M, seed);
     if (!reseed) stream = seeded(seed + 1);
-    for (let guard = 0; guard < 600 && !s.retired; guard += 1) {
-      if (s.phase === 'playing' && s.seasons.length >= SEASONS) break;
+    if (onStep) onStep(s);
+    for (let guard = 0; guard < steps && !s.retired; guard += 1) {
+      if (s.phase === 'playing' && s.seasons.length >= seasons) break;
       const first = s.phase === 'random_events' ? s.pendingEvents?.[0] : null;
-      const deck = isDeck(first?.id);
+      const deck = onDeck !== false && isDeck(first?.id);
       if (reseed) {
-        if (deck) stream = seeded(hashInt(`${seed}|the deck answer`));
+        if (deck) stream = seeded(hashInt(`${seed}|${tag}the deck answer`));
         else {
           const k = `${seed}|${s.seasons.length}|${s.phase}`;
           counts[k] = (counts[k] ?? 0) + 1;
-          stream = seeded(hashInt(`${k}|${counts[k]}`));
+          stream = seeded(hashInt(`${tag}${k}|${counts[k]}`));
         }
       }
       const next = deck ? M.applyEventChoice(s, onDeck ? onDeck(first) : neutralOf(first), clubs) : step(M, s, seed, clubs);
       if (!next) break;
-      if (deck && !(next.pendingEvents ?? []).length) empties.push(s.seasons.length);
-      if (next.phase === 'playing' && s.phase !== 'playing') ends.push(JSON.stringify(next));
+      if (onStep) onStep(next);
+      else {
+        if (deck && !(next.pendingEvents ?? []).length) empties.push(s.seasons.length);
+        if (next.phase === 'playing' && s.phase !== 'playing') ends.push(JSON.stringify(next));
+      }
       s = next;
     }
     return { ends, empties, s };
@@ -1081,39 +1091,14 @@ if (runs(8)) {
      counts no step, so a deck answer cannot move the base's draws. Before this the fleet ran on one stream a career
      and the first deck answer's catalog draws parted the arms (correction 1), so each arm's mean carried the noise of
      500 careers simulated apart (NEUTRAL read -0.09 on a deck answer that moves nothing). Now an arm differs from the
-     deck off only by what its answers move. */
-  const driveEconomy = (M, seed, { onStep, deckChoice }) => {
-    const real = Math.random;
-    let stream = seeded(hashInt(`${seed}|economy|start`));
-    Math.random = () => stream();
-    const counts = {};
-    try {
-      const clubs = M.FALLBACK_CLUBS;
-      let s = startOf(M, seed);
-      onStep(s);
-      for (let guard = 0; guard < 1500 && !s.retired; guard += 1) {
-        if (s.phase === 'playing' && s.seasons.length >= 40) break;
-        const first = s.phase === 'random_events' ? s.pendingEvents?.[0] : null;
-        const deck = deckChoice && isDeck(first?.id);
-        if (deck) stream = seeded(hashInt(`${seed}|economy|the deck answer`));
-        else {
-          const k = `${seed}|${s.seasons.length}|${s.phase}`;
-          counts[k] = (counts[k] ?? 0) + 1;
-          stream = seeded(hashInt(`economy|${k}|${counts[k]}`));
-        }
-        const next = deck ? M.applyEventChoice(s, deckChoice(first), clubs) : step(M, s, seed, clubs);
-        if (!next) break;
-        s = next;
-        onStep(s);
-      }
-      return { s };
-    } finally { Math.random = real; }
-  };
+     deck off only by what its answers move. Since the review of 2026-10-17 this is driveKeyed (section 4) with section
+     8's own streams (tag), forty seasons, its step limit and onStep; onDeck false lets the deck off arm's cards, if
+     any, go to the step policy as they did. */
   let answers = 0, overRoom = 0;
   const careerOf = (M, seed, arm) => {
     const out = { clean40: 0, queued: 0, starts: 0, past: 0 };
     let prev = null;
-    const r = driveEconomy(M, seed, { onStep: s => {
+    const r = driveKeyed(M, seed, { tag: 'economy|', seasons: 40, steps: 1500, onDeck: arm ? ARMS[arm] : false, onStep: s => {
       const card = prev?.phase === 'random_events' ? prev.pendingEvents?.[0] : null;
       if (arm && card && isDeck(card.id)) {
         answers += 1;
@@ -1129,7 +1114,7 @@ if (runs(8)) {
       }
       if ((s.integrityBonus ?? 0) >= 40) out.clean40 = 1;
       prev = s;
-    }, deckChoice: arm ? ARMS[arm] : null });
+    } });
     out.peak = r.s.peakOverall ?? r.s.overall;
     out.legacy = withStream(() => H.engine.calculateLegacy(r.s).score, seeded(seed)).value;
     out.pastCeiling = out.starts ? out.past / out.starts : 0;
