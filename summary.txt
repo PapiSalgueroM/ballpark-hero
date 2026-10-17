@@ -1,0 +1,6 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simHarnessAnchors exit=0 35s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+sweepWeight exit=1 26s | sweepWeight: 1 failure
+tsc exit=0 50s | 

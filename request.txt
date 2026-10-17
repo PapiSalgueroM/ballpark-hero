@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+sweepWeight: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; cp /tmp/sw.log $RC_OUT/sw.log; grep -E "my-career|OVER|over" /tmp/sw.log | head -20; tail -3 /tmp/sw.log; exit $s
