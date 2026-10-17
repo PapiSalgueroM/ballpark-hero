@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/soccerDeck.test.ts --testTimeout=300000 --hookTimeout=120000
+sd1-5: SIM_SOCCER_DECK_SECTIONS=1,2,3,4,5 node scripts/simSoccerDeck.mjs
+sd6-10: SIM_SOCCER_DECK_SECTIONS=6,7,8,9,10 node scripts/simSoccerDeck.mjs
+sd-base: SIM_SOCCER_DECK_BASE=353d1c267114ed36c3189043f8708498eb787f31 SIM_SOCCER_DECK_SECTIONS=2,3,4 node scripts/simSoccerDeck.mjs
+sd-ctl: ok=0; r=""; for k in statmax onefree freetraining noreseed ceiling bindopen pressure; do SIM_SOCCER_DECK_CONTROL=$k node scripts/simSoccerDeck.mjs > /tmp/sd-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/sd-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+eventdeck: node scripts/simEventDeck.mjs
