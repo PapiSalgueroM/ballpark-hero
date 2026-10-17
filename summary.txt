@@ -1,0 +1,6 @@
+decreg-main exit=1 191s | Node.js v24.21.0
+decreg-m7 exit=1 196s | Node.js v24.21.0
+decreg-r1344 exit=1 200s | Node.js v24.21.0
+seed4-r1344 exit=1 22s | simClubManagerDecisions: 3 findings
+seed4-m7 exit=1 22s | simClubManagerDecisions: 1 findings
+default-r1344 exit=1 20s | simClubManagerDecisions: 3 findings

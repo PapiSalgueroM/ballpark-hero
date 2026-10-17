@@ -1,0 +1,6 @@
+AssertionError [ERR_ASSERTION]: Every current red must also occur with frozen decisions
++ actual - expected
+
++ 'passed'
+
+Node.js v24.21.0

@@ -1,0 +1,4 @@
+FAIL [4] actual press cohort found no recorded mood below35 state within 3 careers of 180 entries
+FAIL [4] actual press cohort added 0 pressPressure answer pairs, expected 3
+FAIL [4] only 33 of 36 card answers were walked; missing pressPressure#0, pressPressure#1, pressPressure#2
+simClubManagerDecisions: 3 findings

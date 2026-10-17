@@ -1,0 +1,6 @@
+AssertionError [ERR_ASSERTION]: Only exact original coverage floors may be characterized
+    at coverageStatus (file:///tmp/w1/scripts/qa/managerDecisionRegression1081.mjs:57:5)
+    at pairedStatus (file:///tmp/w1/scripts/qa/managerDecisionRegression1081.mjs:62:18)
+    at file:///tmp/w1/scripts/qa/managerDecisionRegression1081.mjs:91:20
+
+Node.js v24.21.0
