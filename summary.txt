@@ -1,0 +1,11 @@
+unseeded exit=0 87s | simCmUnseededWorld: green. 49 old saves with no deal play byte equal to 970d36e5 (state, draws and saved bytes at every step), 49 with every deal play byte equal to it up
+u-early exit=1 89s | simCmUnseededWorld: CONTROL early FIRED: adopted as the save opens, the comparison with BASE before the first summer went red (quiet 49, deals 49 saves)
+u-never exit=1 43s | simCmUnseededWorld: CONTROL never FIRED: never adopted, the moved check went red 3164 times after the rollover while the comparison before it stayed green
+u-guard exit=1 86s | simCmUnseededWorld: CONTROL guard FIRED: with the guard out the deal fleet went red (49 saves) and the quiet fleet stayed green
+u-noinverse exit=1 18s | simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
+u-norecord exit=1 51s | simCmUnseededWorld: CONTROL norecord FIRED: adopted without recording my men, the mine check went red 1232 times after the rollover while the comparison before it stayed 
+oldworld exit=0 30s | simCmOldCareersWorld: green, sections 1, 2 held (30s)
+ow-never exit=1 3s | simCmOldCareersWorld: control never FIRED: section 1's moved check red 60 times, the comparison before the summer green (3s)
+ow-early exit=1 3s | simCmOldCareersWorld: control early FIRED: section 1's comparison before the summer red 2 times (3s)
+ow-bridge exit=1 26s | simCmOldCareersWorld: control bridge FIRED: section 2 red on 18 of 18 seeded careers (26s)
+era-prefix exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerAdoption.test.ts,title=src/lib/clubManagerAdoption.test.ts > Round 1508%3A an old career ado

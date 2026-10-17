@@ -1,0 +1,12 @@
+#!serial
+unseeded: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) node scripts/simCmUnseededWorld.mjs
+u-early: CM_UNSEEDED_CONTROL=early CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) node scripts/simCmUnseededWorld.mjs
+u-never: CM_UNSEEDED_CONTROL=never CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) node scripts/simCmUnseededWorld.mjs
+u-guard: CM_UNSEEDED_CONTROL=guard CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) node scripts/simCmUnseededWorld.mjs
+u-noinverse: CM_UNSEEDED_CONTROL=noinverse CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) node scripts/simCmUnseededWorld.mjs
+u-norecord: CM_UNSEEDED_CONTROL=norecord CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) node scripts/simCmUnseededWorld.mjs
+oldworld: node scripts/simCmOldCareersWorld.mjs
+ow-never: CM_OLD_WORLD_CONTROL=never node scripts/simCmOldCareersWorld.mjs
+ow-early: CM_OLD_WORLD_CONTROL=early node scripts/simCmOldCareersWorld.mjs
+ow-bridge: CM_OLD_WORLD_CONTROL=bridge node scripts/simCmOldCareersWorld.mjs
+era-prefix: git checkout 1b96efbe -- src/lib/clubManager.ts && node_modules/.bin/vitest run src/lib/clubManagerAdoption.test.ts --testTimeout=300000; s=$?; git checkout HEAD -- src scripts; exit $s
