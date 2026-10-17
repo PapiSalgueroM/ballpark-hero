@@ -1,0 +1,18 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+'true' !== '1'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playPitchRestartContinuity.mjs:30:8 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'true',
+  expected: '1',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

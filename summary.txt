@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playPitchRestartContinuity exit=1 0s | Node.js v24.21.0
+playManagerHalftimeLineups exit=1 0s | Node.js v24.21.0
+simVictoryMoment exit=0 22s | PASS reduce: motion, final facts, first-frame Continue and 320px layout
+playLiveMatchFit exit=0 141s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+playClubManager exit=0 289s | Played Club Manager through its own screens. 0 findings.
+playCmVar exit=0 604s | playCmVar: green. Every review a player can meet was shown whole, at its minute, over nothing else, and every match settled as the engine settles it.
