@@ -1,0 +1,5 @@
+oracle-head: node .rc/x/nightOracle1502.mjs
+oracle-mdearly: R=$PWD; W=/tmp/o-mdearly && git worktree add -q --detach $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mut1502.mjs mdearly $W && cd $W && node $R/.rc/x/nightOracle1502.mjs
+oracle-markearly: R=$PWD; W=/tmp/o-markearly && git worktree add -q --detach $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mut1502.mjs markearly $W && cd $W && node $R/.rc/x/nightOracle1502.mjs
+entrant-head: node .rc/x/entrantJoin1502.mjs
+entrant-carry: R=$PWD; W=/tmp/e-carry && git worktree add -q --detach $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mut1502.mjs carryentrant $W && cd $W && node $R/.rc/x/entrantJoin1502.mjs
