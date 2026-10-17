@@ -27,7 +27,8 @@
         data-cm-score-of), the interval card, the stats (header, possession, every cell by data-cm-live-stat-n) and
         the line under the pitch are home side first, and HalftimeScreen rendered alone prints its names and score
         in the same order. The possession bar's green segment is mine, first exactly when my number is, as wide
-        as my share (the review's mutation m6).
+        as my share (the review's mutation m6). On the strip, the interval card and the dressing room's card my
+        club's name carries the green (text-primary) and the other club's does not, wherever the two sit (m4).
      5) The Match Centre: matchFacts read before every league match of seed 0's careers and before every neutral
         one, rendered. The tie's two name blocks, the two form rows and the two "Ones to watch" columns (each
         marked data-cm-mc-side) are home side first and each holds its own side's names and form; the odds still
@@ -55,6 +56,9 @@
      barorder     the report's stat bars and the live possession bar draw their segments mine first again while
                   their numbers follow the fixture (the review's m2 and m6). Sections 2 and 4 must go red on away
                   matches only, through the segment checks themselves (each must fire at least once).
+     greenfirst   the dressing room's card and the strip leave the green on the first name whoever it is (the
+                  review's m4). Section 4 must go red on away matches only, through the green checks of the
+                  dressing room's card (in the interval stage and alone) and of the strip.
 
    Exit codes: 0 green, 1 red (or a control that fired), 2 could not run (a fleet under its floors: 100 away,
    100 home and 5 neutral matches, 40 live renders; widen the fleet, never lower a floor), 3 a control that did
@@ -75,10 +79,13 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.MATCHDAY_CONTROL || '';
-const CONTROLS = { neutralaway: [1], oldorder: [2, 3, 4, 5], truncate: [3], numbers: [6], homeflip: [7], barorder: [2, 4] };
+const CONTROLS = { neutralaway: [1], oldorder: [2, 3, 4, 5], truncate: [3], numbers: [6], homeflip: [7], barorder: [2, 4], greenfirst: [4] };
 /* A control that must fire through one particular check names it here: every pattern must match at least one
    failure, so a red from some other check cannot pass for the control firing. */
-const CONTROL_KINDS = { barorder: [/: the [A-Z][a-z ]* bar's segments/, /: at \w+ the possession bar's segments/] };
+const CONTROL_KINDS = {
+  barorder: [/: the [A-Z][a-z ]* bar's segments/, /: at \w+ the possession bar's segments/],
+  greenfirst: [/: the dressing room's card puts the green on/, /: the dressing room's card alone puts the green on/, /: at \w+ the strip puts the green on/],
+};
 const kindHits = (CONTROL_KINDS[CONTROL] ?? []).map(() => 0);
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`MATCHDAY_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 const BASE = process.env.MATCHDAY_BASE || 'd8aaa4cb';
@@ -141,6 +148,18 @@ const PATCHES = {
   barorder: [
     ['components/club-manager/MatchReportCard', 'tsx', [['const [barFirst, barSecond] = inFixtureOrder(mineFirst,', 'const [barFirst, barSecond] = inFixtureOrder(true,']]],
     ['components/club-manager/LiveSimScreen', 'tsx', [['const [barFirst, barSecond] = inFixtureOrder(mineFirst,', 'const [barFirst, barSecond] = inFixtureOrder(true,']]],
+  ],
+  /* The review's mutation m4 and its twin on the strip: the green is left on the first name and the second name
+     stays plain whoever they are, while the names themselves follow the fixture. */
+  greenfirst: [
+    ['components/club-manager/HalftimeScreen', 'tsx', [
+      ["mineFirst ? 'text-primary' : 'text-muted-foreground')}>{nameFirst}", "'text-primary')}>{nameFirst}"],
+      ["mineFirst ? 'text-muted-foreground' : 'text-primary')}>{nameSecond}", "'text-muted-foreground')}>{nameSecond}"],
+    ]],
+    ['components/club-manager/LiveSimScreen', 'tsx', [
+      ["const toneFirst = mineFirst ? 'text-primary' : 'text-foreground';", "const toneFirst = 'text-primary';"],
+      ["const toneSecond = mineFirst ? 'text-foreground' : 'text-primary';", "const toneSecond = 'text-foreground';"],
+    ]],
   ],
   /* The labels before Round 1340b: the position number in front of every name, the number alone in a crowd. */
   numbers: [['components/club-manager/LiveSimScreen', 'tsx', [
@@ -497,6 +516,20 @@ const liveProps = (L, f) => ({
 const halfProps = career => ({ career, onSub: noop, onShape: noop, onTalk: noop, onSecondHalf: noop });
 const stagesSeen = { first: 0, interval: 0, second: 0, done: 0 };
 let liveSegsRead = 0;
+/* My club picked out in green (text-primary) on the strip, the interval card and the dressing room's card: the
+   name that is mine carries it and the other does not, wherever the two sit (the review's mutation m4 left the
+   dressing room's green on the first name with every harness green). */
+const greenOn = cls => /(^| )text-primary( |$)/.test(cls ?? '');
+let greensRead = 0;
+function greenCheck(names, green, club, where, p) {
+  greensRead += 1;
+  if (!same(green, names.map(n => n === club))) p.push(`${where} puts the green on ${names.filter((n, i) => green[i]).join(' and ') || 'nobody'}`);
+}
+const HALF_CARD = /<span class="([^"]*)">([^<]*)<\/span><span class="[^"]*text-3xl[^"]*">(\d+)-(\d+)<\/span><span class="([^"]*)">([^<]*)<\/span>/;
+function halfCard(html) {
+  const x = HALF_CARD.exec(html);
+  return x && { names: [unescape(x[2]), unescape(x[6])], goals: [Number(x[3]), Number(x[4])], green: [greenOn(x[1]), greenOn(x[5])] };
+}
 for (const L of lives) {
   const me = L.fxHome !== false;
   const opp = L.report.home === L.club ? L.report.away : L.report.home;
@@ -514,15 +547,18 @@ for (const L of lives) {
     const digits = attrs(html.slice(html.indexOf('data-cm-live-score')), 'data-cm-score-of').slice(0, 2);
     if (!same(digits, [firstSide, me ? 'opp' : 'me'])) p.push(`at ${stage} the score's digits read ${digits.join(' then ')}`);
     if (stage === 'interval') {
-      const names = /([^<>]*)<\/span> vs <span[^>]*>([^<]*)</.exec(html);
-      if (!names || !same([unescape(names[1]), unescape(names[2])], want)) p.push(`the interval card's names read ${names?.slice(1).join(' v ')}`);
-      const half = /<span class="[^"]*">([^<]*)<\/span><span class="[^"]*text-3xl[^"]*">(\d+)-(\d+)<\/span><span class="[^"]*">([^<]*)<\/span>/.exec(html);
+      const names = /<span(?: class="([^"]*)")?>([^<>]*)<\/span> vs <span(?: class="([^"]*)")?>([^<]*)</.exec(html);
+      if (!names || !same([unescape(names[2]), unescape(names[4])], want)) p.push(`the interval card's names read ${names ? `${names[2]} v ${names[4]}` : 'nothing'}`);
+      else greenCheck(want, [greenOn(names[1]), greenOn(names[3])], L.club, 'the interval card', p);
+      const half = halfCard(html);
       const live = f.career.live;
       const goals = me ? [live.myGoals, live.oppGoals] : [live.oppGoals, live.myGoals];
-      if (!half || !same([unescape(half[1]), unescape(half[4])], want) || !same([Number(half[2]), Number(half[3])], goals)) p.push(`the half time card reads ${half ? `${half[1]} ${half[2]}-${half[3]} ${half[4]}` : 'nothing'}`);
+      if (!half || !same(half.names, want) || !same(half.goals, goals)) p.push(`the half time card reads ${half ? `${half.names[0]} ${half.goals.join('-')} ${half.names[1]}` : 'nothing'}`);
+      else greenCheck(half.names, half.green, L.club, "the dressing room's card", p);
     } else {
-      const strip = /<div class="cm-strip-score"><div[^>]*>([^<]*)<\/div>[\s\S]*?<\/div><div[^>]*>([^<]*)<\/div>/.exec(html);
-      if (!strip || !same([unescape(strip[1]), unescape(strip[2])], want)) p.push(`at ${stage} the strip reads ${strip ? `${strip[1]} v ${strip[2]}` : 'nothing'}`);
+      const strip = /<div class="cm-strip-score"><div class="([^"]*)">([^<]*)<\/div>[\s\S]*?<\/div><div class="([^"]*)">([^<]*)<\/div>/.exec(html);
+      if (!strip || !same([unescape(strip[2]), unescape(strip[4])], want)) p.push(`at ${stage} the strip reads ${strip ? `${strip[2]} v ${strip[4]}` : 'nothing'}`);
+      else greenCheck(want, [greenOn(strip[1]), greenOn(strip[3])], L.club, `at ${stage} the strip`, p);
       const line = html.slice(html.indexOf('data-cm-live-statline'));
       if (html.includes('data-cm-live-statline') && /<span>Poss <b/.test(line) !== me) p.push(`at ${stage} the line under the pitch is not home side first`);
     }
@@ -548,11 +584,12 @@ for (const L of lives) {
   }
   /* The dressing room rendered alone at the interval. */
   const alone = render(HeadHalf, halfProps(L.frames[1].career));
-  const half = /<span class="[^"]*">([^<]*)<\/span><span class="[^"]*text-3xl[^"]*">(\d+)-(\d+)<\/span><span class="[^"]*">([^<]*)<\/span>/.exec(alone);
-  if (!half || !same([unescape(half[1]), unescape(half[4])], want)) p.push(`the half time screen alone reads ${half ? `${half[1]} v ${half[4]}` : 'nothing'}`);
+  const half = halfCard(alone);
+  if (!half || !same(half.names, want)) p.push(`the half time screen alone reads ${half ? `${half.names[0]} v ${half.names[1]}` : 'nothing'}`);
+  else greenCheck(half.names, half.green, L.club, "the dressing room's card alone", p);
   judge(4, m, p);
 }
-console.log(`   ${redBy[4]?.checked ?? 0} live matches (${Object.entries(stagesSeen).map(([k, v]) => `${v} ${k}`).join(', ')}; ${liveSegsRead} possession bar segments); red: ${redBy[4]?.home ?? 0} home, ${redBy[4]?.away ?? 0} away, ${redBy[4]?.neutral ?? 0} neutral`);
+console.log(`   ${redBy[4]?.checked ?? 0} live matches (${Object.entries(stagesSeen).map(([k, v]) => `${v} ${k}`).join(', ')}; ${liveSegsRead} possession bar segments, ${greensRead} green names); red: ${redBy[4]?.home ?? 0} home, ${redBy[4]?.away ?? 0} away, ${redBy[4]?.neutral ?? 0} neutral`);
 
 /* ---------- 5. the Match Centre ---------- */
 console.log('5) The Match Centre: the tie, the form rows and the ones to watch home side first; the odds still Win, Draw, They win');
@@ -745,7 +782,7 @@ if (CONTROL) {
   if (CONTROL === 'oldorder') ok = ok && want.every(s => redBy[s].away > 0 && redBy[s].home === 0 && redBy[s].neutral === 0);
   if (CONTROL === 'neutralaway') ok = ok && redBy[1].neutral > 0 && redBy[1].home === 0 && redBy[1].away === 0;
   /* barorder only moves what an away match draws, like oldorder. */
-  if (CONTROL === 'barorder') ok = ok && want.every(s => redBy[s].away > 0 && redBy[s].home === 0 && redBy[s].neutral === 0);
+  if (CONTROL === 'barorder' || CONTROL === 'greenfirst') ok = ok && want.every(s => redBy[s].away > 0 && redBy[s].home === 0 && redBy[s].neutral === 0);
   if (kindHits.length) {
     console.log(`control ${CONTROL}: the checks it must fire through fired ${kindHits.join(' and ')} times`);
     ok = ok && kindHits.every(n => n > 0);
