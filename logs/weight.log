@@ -1,0 +1,56 @@
+sweepWeight's table, 14 routes, base against head (gzipped JS, K to one decimal and bytes):
+  /                    base 243.2K (249067 B)  head 243.2K (249069 B)  +2 B  budget 244K
+  /club-manager        base 608.5K (623119 B)  head 608.5K (623111 B)  -8 B  budget 609K
+  /soccer-career       base 833.0K (852999 B)  head 833.9K (853919 B)  +920 B  budget 834K
+  /stadium-tycoon      base 302.1K (309306 B)  head 302.1K (309308 B)  +2 B  budget 303K
+  /wonderkid-factory   base 275.8K (282464 B)  head 275.8K (282468 B)  +4 B  budget 277K
+  /minefield           base 293.8K (300806 B)  head 293.8K (300804 B)  -2 B  budget 295K
+  /footle              base 352.2K (360619 B)  head 352.1K (360593 B)  -26 B  budget 354K
+  /nfl-my-career       base 487.8K (499541 B)  head 487.8K (499512 B)  -29 B  budget 488K
+  /front-office        base 372.5K (381397 B)  head 372.4K (381379 B)  -18 B  budget 374K
+  /soccer-grid         base 317.3K (324877 B)  head 317.2K (324862 B)  -15 B  budget 319K
+  /leaderboard         base 251.3K (257303 B)  head 251.3K (257314 B)  +11 B  budget 266K
+  /manager-hot-seat    base 626.4K (641425 B)  head 626.4K (641406 B)  -19 B  budget 627K
+  /deadline-day        base 636.3K (651587 B)  head 636.3K (651562 B)  -25 B  budget 637K
+  /transfer-path       base 377.7K (386798 B)  head 377.7K (386782 B)  -16 B  budget 379K
+routes moving over 0.1K: /soccer-career +0.9K
+  /soccer-career AppearanceBuilder: base 14899 B, head 14898 B, -1 B
+  /soccer-career Celebration: base 820 B, head 818 B, -2 B
+  /soccer-career CelebrationStyles: base 725 B, head 723 B, -2 B
+  /soccer-career Confetti: base 606 B, head 607 B, +1 B
+  /soccer-career FlagImg: base 2976 B, head 2977 B, +1 B
+  /soccer-career GameHelp: base 787 B, head 790 B, +3 B
+  /soccer-career GameNavbar: base 3794 B, head 3795 B, +1 B
+  /soccer-career GameReportContext: base 3026 B, head 3025 B, -1 B
+  /soccer-career HowToPlayPopover: base 773 B, head 769 B, -4 B
+  /soccer-career ShareButtons: base 4534 B, head 4533 B, -1 B
+  /soccer-career SoccerCareer: base 404119 B, head 405047 B, +928 B
+  /soccer-career VictoryMoment: base 1297 B, head 1294 B, -3 B
+  /soccer-career arrow-left: base 265 B, head 264 B, -1 B
+  /soccer-career badges: base 2293 B, head 2292 B, -1 B
+  /soccer-career circle-help: base 303 B, head 302 B, -1 B
+  /soccer-career flag: base 305 B, head 304 B, -1 B
+  /soccer-career index: base 242706 B, head 242713 B, +7 B
+  /soccer-career select: base 7408 B, head 7410 B, +2 B
+  /soccer-career star: base 401 B, head 402 B, +1 B
+  /soccer-career useArrivalTop: base 416 B, head 413 B, -3 B
+  /soccer-career useCareerMoment: base 70618 B, head 70619 B, +1 B
+  /soccer-career useGameCompletion: base 495 B, head 492 B, -3 B
+  /soccer-career useRevealScroll: base 814 B, head 813 B, -1 B
+  src/lib/soccerDeck.ts: soccerDeck-C7W0uiEb.js
+  src/data/soccerDeck/starter.ts: soccerDeck-C7W0uiEb.js
+  src/data/soccerDeck/words.ts: soccerDeck-C7W0uiEb.js
+  src/lib/gmInbox.ts: soccerDeck-C7W0uiEb.js
+  src/lib/soccerDeckGate.ts: SoccerCareer-BtecBu8o.js
+  the gate help line: SoccerCareer-BtecBu8o.js
+  src/lib/season/soccerMoments.ts: soccerMoments-BqYBmtSO.js
+  the deck's first load fetches soccerDeck-C7W0uiEb.js: 10.5K gzipped (soccerDeck.ts, starter.ts, words.ts, gmInbox.ts)
+  the deck's first load fetches ownGoalRule-J3XQry1d.js: 0.2K gzipped
+  the deck's first load fetches keyedShuffle-CJAps3xO.js: 0.1K gzipped
+  the deck's first load fetches leagueCore--DUG-EXw.js: 0.4K gzipped
+  the deck's first load fetches core-Dsglyqbx.js: 7.5K gzipped
+  the deck's first load fetches throughBallDrill-B9fNBoXH.js: 2.3K gzipped
+  the deck's first load fetches soccerMoments-BqYBmtSO.js: 9.1K gzipped (soccerMoments.ts)
+  in all, the deck's first load on /soccer-career fetches 7 chunks, 30.1K gzipped, none of them in the route's first download: yes
+  CSS, every file gzipped: base 56553 B, head 56553 B
+weight1504: done
