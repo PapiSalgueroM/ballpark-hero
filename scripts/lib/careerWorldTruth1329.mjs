@@ -16,8 +16,8 @@
  *
  * Applied IN ORDER to the four files of this round's head they give the base's four files byte for byte (LF):
  *   src/lib/soccerCareerEngine.ts
- *     head sha256 e37b73f25a17e4c63718430365de87cd1d5a001960ba8257ac674834e691dd90
- *     base sha256 d21d2f552bf72ab5e24e0fbca03f330b51f1888f529129140824115c3cebc938
+ *     head sha256 1a1c05feb120de043944ef45ec0880ed53e38f6b324e28889de2064fddd623ef
+ *     base sha256 44f323390d962fc10fd760c593cae47b23175bab676ff4fe0a9dfb3a48bb0900
  *   src/lib/soccerPhone.ts
  *     head sha256 d7f3dd3784f08699af763eee7ac1cf5c960408fa7231940615901d3dbd36390b
  *     base sha256 43c30266828c0d6ed77fd061b29a0a14e70c44d73f157b859ef6f1c15a875000
@@ -27,9 +27,8 @@
  *   src/components/soccer-career/InternationalPanel.tsx
  *     head sha256 5c39697167844a7dc3329e580cd9a984c3dc51412a4556a880e63897bce69ea9
  *     base sha256 df3dd4e16e8a046a6928c832068a2e92f3ecbf15504eeb32fcbf598d59b66bb7
- * (base: git show 3225f123:<file>, which is b9df63b4, release-bd-gate after Rounds 1331 and 1332, with PR275's
- * soccerCareerEngine.ts change and nothing else, recorded in history by Release BH's join; b9df63b4's four files are
- * 082fc277's, origin/main with Release BC, and c5fc5470's, origin/release-bc-gate when the round started, byte for byte), so the recordings
+ * (base: git show b9df63b4:<file>, release-bd-gate after Rounds 1331 and 1332, whose four files are 082fc277's,
+ * origin/main with Release BC, and c5fc5470's, origin/release-bc-gate when the round started, byte for byte), so the recordings
  * and the base pins stay as they were taken: this is an attribution, not a new recording.
  * scripts/simSoccerWorldTruth.mjs section 6 proves every value on every run.
  *
@@ -39,11 +38,11 @@
  */
 import assert from 'node:assert/strict';
 
-export const WORLD_TRUTH_BASE = '3225f1235112bdcb031f059259f74cea48bcb346';
+export const WORLD_TRUTH_BASE = 'b9df63b4e9ad8925c1f19536ec6a32d8a77358ea';
 export const WORLD_TRUTH_SHA256 = {
   "src/lib/soccerCareerEngine.ts": {
-    "head": "e37b73f25a17e4c63718430365de87cd1d5a001960ba8257ac674834e691dd90",
-    "base": "d21d2f552bf72ab5e24e0fbca03f330b51f1888f529129140824115c3cebc938"
+    "head": "1a1c05feb120de043944ef45ec0880ed53e38f6b324e28889de2064fddd623ef",
+    "base": "44f323390d962fc10fd760c593cae47b23175bab676ff4fe0a9dfb3a48bb0900"
   },
   "src/lib/soccerPhone.ts": {
     "head": "d7f3dd3784f08699af763eee7ac1cf5c960408fa7231940615901d3dbd36390b",

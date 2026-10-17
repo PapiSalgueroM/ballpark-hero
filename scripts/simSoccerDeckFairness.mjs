@@ -122,12 +122,8 @@ import { inverseDeckFair, DECK_FAIR_ADDITIONS, DECK_FAIR_BASE_SHA256, DECK_FAIR_
 import { inverseWorldTruth, worldTruthReceiptProblem, WORLD_TRUTH_ADDITIONS } from './lib/careerWorldTruth1329.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-/* The tree this round was cut from. Section 7 bundles it from git.
-   Release BH's join (Round BHH): PR275 changes the engine outside this round's regions (the rival veteran wage), so
-   the base is now 31699c2b, which is c9c77eba with exactly PR275's engine change, recorded in this branch's history
-   by an ours merge. Its engine differs from the engine with Round 1329 taken off by Round 1327 alone; the rows are
-   unchanged and the two pins in scripts/lib/careerDeckFair1327.mjs moved with it. */
-const BASE = '31699c2b0e77a1e46872e5f8c9d634e68007c7d6';
+/* The tree this round was cut from. Section 7 bundles it from git. */
+const BASE = 'c9c77ebab727b9bd624459388e33b6579538e4ca';
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const CONTROL = process.env.SIM_SOCCER_DECK_FAIRNESS_CONTROL || '';
 const SEED_OFFSET = Number(process.env.SEED_OFFSET || 0) * 100000;

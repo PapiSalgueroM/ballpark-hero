@@ -17,9 +17,6 @@ const TEST = 'src/test/soccerCareerColdContext.test.ts', PARENT = '42a7f7c999cb1
    files this packet fixes are still compared with PARENT. Here only soccerCareerEngine.ts and soccerCareerSave.ts
    (the two files Releases BB to BE changed) go to CORE_REF; RealismA and the life chain's files stay with PARENT. */
 const CORE_REF = process.env.SC_COLD_CONTEXT_CORE_REF || PARENT;
-/* Release BH join (Round BHH): SC_COLD_CONTEXT_LIFE_REF (default PARENT) is the ref Life and its captions are held to.
-   PR280 rewrote four Life captions after this packet; the join names PARENT with exactly that change. */
-const LIFE_REF = process.env.SC_COLD_CONTEXT_LIFE_REF || PARENT;
 const ENGINE = path.join(ROOT, 'src/lib/soccerCareerEngine.ts'), REALISM = path.join(ROOT, 'src/lib/soccerCareerRealismA.ts');
 const SAVE = path.join(ROOT, 'src/lib/soccerCareerSave.ts'), LIFE = path.join(ROOT, 'src/lib/soccerCareerLife.ts');
 const CONTRACTS = path.join(ROOT, 'src/lib/soccerCareerContracts.ts'), CAPTIONS = path.join(ROOT, 'src/lib/soccerCareerLifeConsequences.ts');
@@ -93,7 +90,7 @@ const DOCUMENTARY_BODY = `  const documentaryYear = state.seasons[state.seasons.
 `;
 let documentaryLifeBinding = null;
 const parentAppHashes = appFiles.map(file => {
-  const name = path.relative(ROOT, file).replaceAll('\\', '/'), before = git(['show', `${[ENGINE, SAVE].includes(file) ? CORE_REF : [LIFE, CAPTIONS].includes(file) ? LIFE_REF : PARENT}:${name}`]);
+  const name = path.relative(ROOT, file).replaceAll('\\', '/'), before = git(['show', `${[ENGINE, SAVE].includes(file) ? CORE_REF : PARENT}:${name}`]);
   const row = { file: name, parentSha256: sha(before), candidateSha256: sha(sources.get(file)) };
   if (!RED && file === LIFE && sources.get(file) !== before) {
     const current = sources.get(file);

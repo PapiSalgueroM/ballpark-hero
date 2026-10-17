@@ -38,7 +38,6 @@ import { ballonDorSeasonForDisplay } from '@/lib/soccerAwardReveal';
 import { soccerCardLine } from '@/lib/soccerDiscipline';
 import { readLeagueWorldSeason } from '@/lib/soccerCareerLeagueWorld';
 import { belgian2025OpponentLabels } from '@/lib/season/belgianOpponentLabels';
-import { historicalOpponentLabels } from '@/lib/season/historicalOpponentLabels';
 import { readSeasonDerbies } from '@/lib/soccerCareerDerby';
 import { leagueWithArticle, ordinal, readLeagueFinish } from '@/lib/soccerCareerLeague';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
@@ -179,8 +178,7 @@ const RESUME_GAME = 'soccer';
 const RESULTS_WORDS = 'Results only: the game does not have a verified table for this league that season.';
 
 function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, moments: CentreMoments | null, color: string): CentreModel {
-  const historical = historicalOpponentLabels(row, ctx, s);
-  const display = historical ?? belgian2025OpponentLabels(row, s);
+  const display = belgian2025OpponentLabels(row, s);
   const occasion: Record<string, string> = {};
   for (const d of readSeasonDerbies(row)) occasion[d.rival] = d.name;
   const finish = ctx.finish;
@@ -193,7 +191,6 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, m
     : row.injurySevere ? 'Your season ended early with an injury.' : null;
   const trophies = [row.leagueTitle && '🏆 League', row.domesticCup && '🏆 Cup', row.championsLeague && '⭐ UCL', row.clubCupTitle && `⭐ ${row.clubCupTitle}`, row.worldCup && '🌍 World Cup', row.continentalCup && '🌐 Continental', row.ballonDor && "🏅 Ballon d'Or"].filter((t): t is string => !!t);
   const notes: string[] = [];
-  if (historical && s.mode === 'table') notes.push(historical.note);
   const world = readLeagueWorldSeason(row);
   if (world) {
     notes.push('Simulated league world: direct promotion and relegation between two divisions.');
@@ -210,7 +207,7 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, m
   const rating = SOCCER.totals(row, ctx).find(t => t.key === 'rating');
   const ratingRange: [number, number] | null = rating && rating.kind === 'mean' ? [rating.min, rating.max] : null;
   return {
-    season: historical ? { ...s, labels: historical.labels } : s,
+    season: s,
     words: SOCCER.words,
     names: display?.names ?? s.labels.map(l => (l.named ? l.name : SOCCER.words.unnamed)),
     occasion,

@@ -452,7 +452,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
     push({ id: 227, cooldown: COOLDOWN.once, emoji: "🏆", title: "Esports Season Results",
       description: "Your esports team's season just wrapped. The group chat has been suspiciously quiet.",
       category: "life", choices: [
-        { label: "Check the standings", emoji: "📊", color: "bg-purple-600", consequence: SOCCER_LIFE_CONSEQUENCES[227][0],
+        { label: "Check the standings", emoji: "📊", color: "bg-purple-600", consequence: "40%: they won it all (+€2M). 60%: they folded (-€300k more)",
           apply: s => { setFlag(s, "esports", 2); if (rollCareerChance(s, 0.4, "Esports Season Results", "Your team wins", "The organisation folds")) { s.netWorth = Math.round((s.netWorth + 2) * 100) / 100; s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.5) * 100) / 100; s.events = [...s.events, "🏆 Your esports team won the whole thing! +€2M"]; } else { s.netWorth = Math.round((s.netWorth - 0.3) * 100) / 100; s.events = [...s.events, "📉 The esports org folded. The jerseys are collectors items now"]; } return s; } },
         { label: "Sell your stake before the results post", emoji: "💸", color: "bg-muted", consequence: "Net worth +€500k back, you never find out how they did",
           apply: s => { setFlag(s, "esports", 2); money(s, 0.5); log(s, "💸 Sold the esports org the night before the final. You have never checked the score"); return s; } },
@@ -481,9 +481,9 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
     push({ id: 230, cooldown: COOLDOWN.once, emoji: "👟", title: "The Cursed Boots",
       description: "Your new limited-edition boots have not seen a single win. Seven matches. The kit man refuses to touch them. He crosses himself near your locker.",
       category: "life", choices: [
-        { label: "Keep wearing them: superstition is fake", emoji: "🧪", color: "bg-red-600", consequence: SOCCER_LIFE_CONSEQUENCES[230][0],
+        { label: "Keep wearing them: superstition is fake", emoji: "🧪", color: "bg-red-600", consequence: "Science! The curse saga continues next season",
           apply: s => { setFlag(s, "cursedBoots", 1); s.morale = clamp(s.morale - 3, 0, 100); s.events = [...s.events, "👟 Kept the cursed boots. The kit man now salts the doorway"]; return s; } },
-        { label: "Burn them in the parking lot", emoji: "🔥", color: "bg-amber-600", consequence: SOCCER_LIFE_CONSEQUENCES[230][1],
+        { label: "Burn them in the parking lot", emoji: "🔥", color: "bg-amber-600", consequence: "Morale +5, sponsor mildly concerned, the video goes viral",
           apply: s => { s.morale = clamp(s.morale + 5, 0, 100); s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.4) * 100) / 100; s.events = [...s.events, "🔥 Ceremonially burned the cursed boots. The squad attended"]; return s; } },
       ] });
   }
@@ -502,7 +502,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
     push({ id: 232, story: STORY.statueVote, cooldown: COOLDOWN.once, emoji: "🗿", title: "The Statue Vote",
       description: "Your hometown council is voting on a statue of you outside the stadium where you played as a kid.",
       category: "life", choices: [
-        { label: "Attend the vote", emoji: "🗿", color: "bg-amber-600", consequence: SOCCER_LIFE_CONSEQUENCES[232][0],
+        { label: "Attend the vote", emoji: "🗿", color: "bg-amber-600", consequence: "60%: it passes, Legacy +8. 40%: rejected 5 votes to 4, ouch",
           apply: s => { if (rollCareerChance(s, 0.6, "The Statue Vote", "Statue vote passes", "Statue vote fails")) { s.integrityBonus += 8; s.morale = clamp(s.morale + 8, 0, 100); s.events = [...s.events, "🗿 The statue vote passed! Bronze you goes up next spring"]; } else { s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "🗿 The statue vote failed 5 to 4. Councilman Dave will be hearing about this"]; } return s; } },
         { label: "Ask them to fund youth pitches instead", emoji: "⚽", color: "bg-emerald-600", consequence: "Integrity +10, the real legacy",
           apply: s => { s.integrityBonus += 10; s.events = [...s.events, "⚽ Redirected the statue budget to youth pitches. Better than bronze"]; return s; } },
