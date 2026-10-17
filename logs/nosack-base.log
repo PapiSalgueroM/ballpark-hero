@@ -1,0 +1,13 @@
+simCmNoSack: sections 1, 6, compared with the base tree /tmp/b1
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+1) A career without the key plays as the base tree: 9 clubs, 3 seeds, 2 seasons, coach and noCoach
+   54 careers compared, 4017060 draws here, in 96 s
+6) Manager Hot Seat (2026-10-10, 2026-10-11, 2026-10-27) and Deadline Day (2026-10-10, 2026-10-11, 2026-10-18) play as on the base tree
+   Hot Seat 2026-10-10 Athletic Club: identical, no key
+   Hot Seat 2026-10-11 Young Boys: identical, no key
+   Hot Seat 2026-10-27 Nottingham Forest: identical, no key
+   Deadline Day 2026-10-10 Rangers: identical, no key
+   Deadline Day 2026-10-11 Borussia Dortmund: identical, no key
+   Deadline Day 2026-10-18 Nottingham Forest: identical, no key
+   red per daily: Hot Seat 0 of 3, Deadline Day 0 of 3; deadlineDay.ts calls none of the match or No sacking entry points; 1 s
+simCmNoSack: PASS (sections 1, 6)
