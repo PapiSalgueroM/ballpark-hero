@@ -1,3 +1,9 @@
+## Codex1404 scoped READY, 2026-10-17 UTC
+
+Soccer Career event320 now lists its actual heat, integrity and morale effects, removing the promise that all dirty income ends. One catalog string only, all callback code and saved fields held. TESTED2b498a98e4da394a16bc39c7388bc7c0bcfaab37/run39026289537 SUCCESS:18existing tests,40pairs,500normal+500controlled careers,realtypes/build/all15readers/14unchangedfatalcaps pass. Exactone-captioninverse/source4873/dist784/fullholds/ZEROgenerated delta. Physicalf2de6038 andsemantic38f38cdd(full a4f13970,97checks/0mismatch). Finalclosingdocs separately verified outside.
+
+Claude I owns actualjoined build/main/publish. BIIrealmergeactualTESTED2b4, closingdocs separate andIregenerates actualjoined outputs; selectingthisdescendantincludes318/319once. Urgent308 andXI320 stay independent. Newcatalogcaption only, existing savedpendingcaptionsnotmigrated; no direct320callbackruntime/newbrowser/NBA/fullsuite/physicaldevice/currentIjoin/liveclaim. See docs/audits/soccer-syndicate-choice-copy-1404.md. Guidecheckpointfef66a0a stillwaits for accepted1503/1504/1500closingheads.
+
 ## Codex1404 candidate prepared, 2026-10-17 UTC
 
 Soccer Career event320 now lists actual Heat -30, Integrity +14 and Morale up to +10 instead of promising all dirty income ends. One new catalog string only; all callbacks, flags, saved fields and RNG code held. Existing test/build/source gates queued remotely, no READY or live claim. See docs/audits/soccer-syndicate-choice-copy-1404.md.

@@ -15836,3 +15836,7 @@ Plan: nativewhole1spaninverse holdsallcallbacks/storage/RNGcode; existing18previ
 ## Codex1404 candidate prepared, 2026-10-17 UTC
 
 One event320 caption now lists actual heat/integrity/morale benefits, with no income or permanent offer shutdown promise. Catalog31597B/d850, wholeinverse6e/c7df exact. OwnWF8391049f preserves proven1402 runtime blocks and ZEROgen expectation. All actual runtime pending. No activeI source or READY320 change.
+
+## Codex1404 scoped READY, 2026-10-17 UTC
+
+One Soccer Career event320 caption now prints Heat -30, Integrity +14, Morale up to +10 instead of an all-income shutdown promise. Future catalog text only, wholeinverse6e/c7df exact, candidate31597B/d850 andWF8391049f. ActualTESTED2b498a98/run39026289537/job117377814693SUCCESS:18units/40pairs/default500normal+500oneoption sole section5/no collateral/types/normalbuild15readers14unchangedfatalcaps/allholds. Physicalf2de6038/semantic38f38cdd(full a4f13970,97/0) close92payloads/4873source/784dist/ZEROgenerateddelta. Final3closingdocs only, finalnativeclosure/push/PR outside. BIIactualTESTED2b4realmerge,closingdocsseparate,Iactualjoinregen;318/319once,308/320independent. No direct320runtime/newbrowser/savedcaptionmigration/NBA/fullsuite/live claim. Iactive1503/1504/1500/competition/main/publishheld; guidecheckpointfef66a0a stillowesacceptedclosingheads.
