@@ -1,0 +1,13 @@
+[32m✓ built in 33.89s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+the four US My Career routes, base against head (gzipped JS on a first load):
+  /nba-my-career   base 573.3K (587080 B)  head 576.0K (589779 B)  +2699 B
+  /nfl-my-career   base 487.8K (499541 B)  head 490.5K (502230 B)  +2689 B
+  /mlb-my-career   base 561.5K (574973 B)  head 564.1K (577678 B)  +2705 B
+  /nhl-my-career   base 564.1K (577602 B)  head 566.7K (580301 B)  +2699 B
+  the desk chunk: DirtyMoneyDesk-D01iqSMv.js 1771 B gz
+  the rule (careerDirtyMoney) sits in: usCareerSeasonReview-y9qZHP7i.js 155792 B gz
+  /nba-my-career: first load fetches the desk chunk: no
+  /nfl-my-career: first load fetches the desk chunk: no
+  /mlb-my-career: first load fetches the desk chunk: no
+  /nhl-my-career: first load fetches the desk chunk: no

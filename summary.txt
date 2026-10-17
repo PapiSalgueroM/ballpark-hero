@@ -1,0 +1,8 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 6s |    Duration  5.51s (transform 2.51s, setup 106ms, collect 5.46s, tests 3.04s, environment 870ms, prepare 320ms)
+walk-nodesk exit=1 20s | CONTROL nodesk FIRED: W4 red
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+walk exit=0 34s | playUsDirtyMoney: ALL GREEN, 4 walks
+sweepWeight exit=1 29s | sweepWeight: 1 failure
+tsc exit=0 65s | 
+weights exit=0 53s |   /nhl-my-career: first load fetches the desk chunk: no
