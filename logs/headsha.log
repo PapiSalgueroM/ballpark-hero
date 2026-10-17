@@ -1,0 +1,3 @@
+5aeaef990 rc request rBIi-prog for 2d4c237b6557dee05adb87f28c5b3254c6a8fb7d
+2d4c237b6 Round BII: simCmHandoverDesk and PR287's workflow hold the desk test frozen at ff42f7e1
+ff42f7e19 Round BII: PR287's desk test reads a fresh appointment's board at Round 1335's BOARD_FRESH, not the old flat 62

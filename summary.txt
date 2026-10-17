@@ -1,0 +1,6 @@
+headsha exit=0 0s | ff42f7e19 Round BII: PR287's desk test reads a fresh appointment's board at Round 1335's BOARD_FRESH, not the old flat 62
+prog-6db4f3e0 exit=0 63s | 
+prog-5a8acc15 exit=0 63s | 
+prog-ae02832c exit=0 2s | AssertionError [ERR_ASSERTION]: Compatibility arm preserves full original season and RNG
+prog-57d82b0a exit=0 2s | AssertionError [ERR_ASSERTION]: Compatibility arm preserves full original season and RNG
+prog-head exit=1 1s | Node.js v24.21.0
