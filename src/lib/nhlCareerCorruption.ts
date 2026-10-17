@@ -26,6 +26,7 @@
 import type { NhlCareerState, NhlCareerEvent } from './nhlMyCareer';
 import { nhlTeamLabelOf, NHL_SPEND_ITEMS } from './nhlMyCareer';
 import { liquidateUsCareerPurchases } from './usCareerAnnualBenefits';
+import { launderDirtyMoney, launderEffectText } from './careerDirtyMoney';
 
 type DirtyState = NhlCareerState & {
   heat?: number;
@@ -224,8 +225,8 @@ export function getNhlCorruptionEvents(c: NhlCareerState, rng: () => number): Nh
       title: 'The money has nowhere to live',
       body: `You are sitting on ${dm.toFixed(1)}M that cannot be explained to anyone with a badge. Your accountant has said "hypothetically" so often it has lost all meaning.`,
       options: [
-        { label: 'Buy cash businesses', effect: 'Launder it, heat +10 now',
-          apply: (cc) => { setFlag(cc, 'wash', 1); heatUp(cc, 10); return 'You bought two car washes and a skate sharpening chain. The revenue is remarkable for the foot traffic.'; } },
+        { label: 'Buy cash businesses', effect: launderEffectText(D(c)),
+          apply: (cc) => { setFlag(cc, 'wash', 1); return launderDirtyMoney(D(cc), 'You bought two car washes and a skate sharpening chain. The revenue is remarkable for the foot traffic.'); } },
         { label: 'Declare it and eat the tax', effect: 'Lose 55 percent, heat -35',
           apply: (cc) => {
             const keep = Math.round((D(cc).dirtyMoney ?? 0) * 0.45 * 10) / 10;
