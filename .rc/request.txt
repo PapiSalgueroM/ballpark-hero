@@ -1,0 +1,9 @@
+n0: SECTION=4 LEVELS=normal SEEDS=8 SEASONS=6 SHARD=0/2 OUT_JSON=$RC_OUT/n0.json node scripts/simCmDifficulty.mjs
+n1: SECTION=4 LEVELS=normal SEEDS=8 SEASONS=6 SHARD=1/2 OUT_JSON=$RC_OUT/n1.json node scripts/simCmDifficulty.mjs
+h0: SECTION=4 LEVELS=hard SEEDS=8 SEASONS=6 SHARD=0/2 OUT_JSON=$RC_OUT/h0.json node scripts/simCmDifficulty.mjs
+h1: SECTION=4 LEVELS=hard SEEDS=8 SEASONS=6 SHARD=1/2 OUT_JSON=$RC_OUT/h1.json node scripts/simCmDifficulty.mjs
+l0: SECTION=4 LEVELS=legend SEEDS=8 SEASONS=6 SHARD=0/2 OUT_JSON=$RC_OUT/l0.json node scripts/simCmDifficulty.mjs
+l1: SECTION=4 LEVELS=legend SEEDS=8 SEASONS=6 SHARD=1/2 OUT_JSON=$RC_OUT/l1.json node scripts/simCmDifficulty.mjs
+m0: SECTION=0 SEEDS=4 SEASONS=10 SHARD=0/3 OUT_JSON=$RC_OUT/m0.json node scripts/simCmDifficulty.mjs
+m1: SECTION=0 SEEDS=4 SEASONS=10 SHARD=1/3 OUT_JSON=$RC_OUT/m1.json node scripts/simCmDifficulty.mjs
+m2: SECTION=0 SEEDS=4 SEASONS=10 SHARD=2/3 OUT_JSON=$RC_OUT/m2.json node scripts/simCmDifficulty.mjs
