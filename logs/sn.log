@@ -1,0 +1,19 @@
+simCmDifficulty: sections 0
+  table: normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":1.5}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3}
+0) measure: normal, 8 seeds, 6 seasons, steady, shard 0/1
+  big   Arsenal (premier, expected 1)
+  mid   Brentford (premier, expected 11)
+  small Hull City (premier, expected 20)
+  big   Real Madrid (laliga, expected 1)
+  mid   Espanyol (laliga, expected 11)
+  small Málaga (laliga, expected 20)
+  big   Inter Milan (seriea, expected 1)
+  mid   Torino (seriea, expected 11)
+  small Frosinone (seriea, expected 20)
+  played 432 seasons in 246 s (0.57 s a season)
+  level  tier  driver   n   ppg  vsExp titles10 troph10   fees  sign  balance over  bMin bMean sacked matches xiS  xiE  clauseU loanU
+  normal big   steady  144 2.03   1.30    4.17    8.19   0.00  0.00   256.92 0.47 41.87 70.69 0.12  48.26 89.10 89.10     0     0
+  normal mid   steady  144 1.37  -2.30    0.28    0.69   0.00  0.00    53.39 0.38 37.23 65.79 0.26  38.85 80.26 80.26     0     0
+  normal small steady  144 1.09  -7.89    0.49    0.56   0.00  0.00    17.78 0.42 23.47 57.20 0.39  38.08 74.97 74.97     0     0
+  ok: no cell is empty
+simCmDifficulty: all green (sections 0)
