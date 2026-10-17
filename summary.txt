@@ -1,0 +1,2 @@
+anc-load20 exit=0 114s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/hooks/useClubManager.test.ts,title=src/hooks/useClubManager.test.ts > Club Manager completion shape > a fin
+anc-load20-long exit=0 110s | run 3 exit 0:     Duration  30.31s (transform 11.18s, setup 364ms, collect 15.07s, tests 10.93s, environment 2.15s, prepare 443ms)

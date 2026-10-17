@@ -1,0 +1,12 @@
+run 1 exit 1: [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[31m     → Test timed out in 5000ms.
+[31m[1mError[22m: Test timed out in 5000ms.
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/hooks/useClubManager.test.ts,title=src/hooks/useClubManager.test.ts > Club Manager completion shape > a finished season records exactly one completion,line=83,column=3::Error: Test timed out in 5000ms.%0AIf this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".%0A ❯ src/hooks/useClubManager.test.ts:83:3%0A%0A
+run 2 exit 1: [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[31m     → Test timed out in 5000ms.
+[31m[1mError[22m: Test timed out in 5000ms.
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/hooks/useClubManager.test.ts,title=src/hooks/useClubManager.test.ts > Club Manager completion shape > a finished season records exactly one completion,line=83,column=3::Error: Test timed out in 5000ms.%0AIf this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".%0A ❯ src/hooks/useClubManager.test.ts:83:3%0A%0A
+run 3 exit 1: [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[31m     → Test timed out in 5000ms.
+[31m[1mError[22m: Test timed out in 5000ms.
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/hooks/useClubManager.test.ts,title=src/hooks/useClubManager.test.ts > Club Manager completion shape > a finished season records exactly one completion,line=83,column=3::Error: Test timed out in 5000ms.%0AIf this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".%0A ❯ src/hooks/useClubManager.test.ts:83:3%0A%0A
