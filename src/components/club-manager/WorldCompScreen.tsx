@@ -118,13 +118,16 @@ function FixtureList({ night, myClub, onClub, participant }: { night: WorldViewN
   if (!night.fixtures.length) {
     return <p className="text-xs text-muted-foreground">{night.stage === 'md' ? 'No fixtures for this night.' : 'Drawn once the round before it is done.'}</p>;
   }
+  /* The club in it: the engine plays the other ties of a two legged round in full on the second leg's night, so a
+     played first leg night has their fixtures and no score yet. */
+  const waiting = participant && night.played && night.stage !== 'md' && night.fixtures.some(f => f.homeGoals === null || f.awayGoals === null);
   return (
+    <>
     <div className="bg-card border border-border rounded-2xl px-3 py-1" data-cm-world-fixtures={night.fixtures.length}>
       {night.fixtures.map(f => {
         const scored = f.homeGoals !== null && f.awayGoals !== null;
         const middle = scored ? `${f.homeGoals}-${f.awayGoals}`
-          : !night.played ? 'v'
-            : night.stage === 'md' ? 'not kept' : participant ? 'with leg 2' : 'v';
+          : night.played && night.stage === 'md' ? 'not kept' : 'v';
         return (
           <div key={`${f.home}|${f.away}`} className="grid grid-cols-[1fr_4.5rem_1fr] gap-x-2 items-center border-b border-border/30 last:border-b-0" data-cm-world-fixture={scored ? 'played' : 'open'}>
             <ClubName club={f.home} mine={f.home === myClub} onClick={onClub} />
@@ -134,6 +137,8 @@ function FixtureList({ night, myClub, onClub, participant }: { night: WorldViewN
         );
       })}
     </div>
+    {waiting && <p className="text-xs text-muted-foreground px-1" data-cm-world-waiting>The other ties show their scores once the second leg is played.</p>}
+    </>
   );
 }
 
@@ -225,7 +230,8 @@ function MatchdaysView({ view, nav, go, onClub }: ViewProps) {
   const last = view.nights.length - 1;
   const i = Math.max(0, Math.min(last, nav.night ?? Math.max(0, view.nightsDone - 1)));
   const n = view.nights[i];
-  const step = 'inline-flex min-h-[44px] min-w-[44px] items-center gap-1 px-2 rounded-lg border border-border text-xs text-muted-foreground hover:text-foreground disabled:opacity-40';
+  if (!n) return <p className="text-xs text-muted-foreground px-1">There are no Champions League nights on this calendar.</p>;
+  const step ='inline-flex min-h-[44px] min-w-[44px] items-center gap-1 px-2 rounded-lg border border-border text-xs text-muted-foreground hover:text-foreground disabled:opacity-40';
   return (
     <div className="space-y-2" data-cm-world-night={n.id}>
       <div className="flex items-center justify-between gap-2">
@@ -244,10 +250,14 @@ function MatchdaysView({ view, nav, go, onClub }: ViewProps) {
 function KnockoutsView({ career, view, nav, go, onClub, bracketCard }: ViewProps) {
   if (view.mode === 'in') {
     const ko = career.uclKoRound;
+    /* Between the two legs of my tie, the next game is its second leg. */
+    const mine = ko && ko !== 'out' && ko !== 'won'
+      ? view.ties.find(t => t.round === ko && (t.home === view.myClub || t.away === view.myClub)) : undefined;
+    const secondLeg = !!mine && mine.legs === 2 && !!mine.leg1 && !mine.winner;
     return (
       <div className="space-y-2">
         {ko && ko !== 'out' && ko !== 'won' && (
-          <p className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">You are still in it. Next up: the {roundPlural(ko)}, against {career.uclDraw?.[ko] ?? 'a club to be drawn'}.</p>
+          <p className="bg-card border border-border rounded-xl p-3 text-xs text-foreground" data-cm-world-next>You are still in it. Next up: {secondLeg ? `the second leg of the ${roundPlural(ko)}` : `the ${roundPlural(ko)}`}, against {career.uclDraw?.[ko] ?? 'a club to be drawn'}.</p>
         )}
         {ko === 'won' && <p className="bg-card border border-gold/40 rounded-xl p-3 text-xs text-gold font-bold">Champions of Europe.</p>}
         {!career.uclBracket?.length && <p className="text-xs text-muted-foreground px-1">The knockouts are drawn after matchday 6.</p>}
@@ -283,7 +293,7 @@ function FinalView({ view, onClub }: ViewProps) {
   if (view.winner && tie) {
     return (
       <div className="bg-card border border-gold/40 rounded-2xl p-4 space-y-2 text-center" data-cm-world-final="done">
-        <div className="text-xs text-muted-foreground uppercase tracking-wider">Winners {view.season}</div>
+        <div className="text-xs text-muted-foreground uppercase tracking-wider">Winners of {view.season} in this save</div>
         <button type="button" onClick={() => onClub(view.winner!)} className="min-h-[44px] text-lg font-bold font-display text-gold hover:underline">🏆 {view.winner}</button>
         <p className="text-xs text-foreground">{tieWords(tie)}.</p>
         <p className="text-xs text-muted-foreground">Runners-up: <button type="button" onClick={() => onClub(view.runnerUp!)} className="min-h-[44px] hover:underline text-foreground">{view.runnerUp}</button></p>
@@ -352,10 +362,14 @@ function headerLines(career: CareerState, view: WorldCompView): string[] {
   if (modern && view.mode === 'watching') lines.push('This is the real format. In a season your club qualifies, it plays the game\'s stand in instead: eight groups of four into the quarter-finals.');
   if (modern && view.mode === 'in') lines.push('Your club plays the game\'s stand in: eight groups of four into the quarter-finals. In a season you are not in it, the one you follow from outside plays the real 36 club format.');
   if (view.holder) lines.push(`Holders: ${view.holder}, top of pot one in the draw.`);
-  if (view.standIn) lines.push(`${view.standIn.club} stand in for ${view.standIn.for}, one of the real 32 of ${seasonOfYear(career.startYear ?? 0)}: that place belongs to a club of yours in this save, so the strongest club outside the 32 plays it.`);
-  if (view.eraField) lines.push(`Every season of this save draws from the same 32 clubs, the real ${seasonOfYear(career.startYear ?? 0)} field, whatever the leagues do.`);
-  /* fix-1502's seam: a move from a club in it to one watching opens a fresh draw without the old club. */
-  if (career.handover && view.mode === 'watching') lines.push('You took this job mid season. If your last club was in the Champions League, this is a fresh draw without it, so its games there are not shown here.');
+  const eraSeason = seasonOfYear(career.startYear ?? 0);
+  if (view.standIn && view.mode === 'watching') lines.push(`${view.standIn.club} stand in for ${view.standIn.for}, one of the real 32 of ${eraSeason}: that place belongs to a club of yours in this save, so the strongest club in this save's leagues from outside the 32 plays it.`);
+  /* The club in it that is not one of the real 32 takes the place of one of them (initUclWorld leaves one over). */
+  if (view.standIn && view.mode === 'in') lines.push(`${view.standIn.club} are in it in this save, in the place of ${view.standIn.for}, one of the real 32 of ${eraSeason}.`);
+  if (view.eraField) lines.push(`Every season of this save draws from the same 32 clubs, the real ${eraSeason} field, whatever the leagues do${view.standIn ? ', with the one change named above' : ''}.`);
+  /* fix-1502's seam: a move from a club in it to one watching opens a fresh draw of the whole field, which leaves
+     out only the new club, so the old club can be in it with games the game played for it. */
+  if (career.handover && view.mode === 'watching') lines.push('You took this job mid season. If your last club was in the Champions League, this is a fresh draw of the whole thing: your last club can be in it, with games the game played for it rather than the ones you played.');
   return lines;
 }
 
@@ -365,12 +379,16 @@ function HowItWorks({ view }: { view: WorldCompView }) {
     <div className="bg-card border border-border rounded-xl p-3 space-y-2 text-xs text-muted-foreground" data-cm-world-help>
       {l36 ? (
         <p>36 clubs play eight games each, four at home and four away, in one table. 1st to 8th go straight to the round of 16, 9th to 24th play a two legged play-off for the other eight places, and 25th and below are out. Two legs from the play-offs to the semi-finals, then a one match final. A tie level on aggregate goes to extra time, then penalties.</p>
+      ) : view.mode === 'in' && view.firstKo === 'QF' ? (
+        /* The club in it in today's world plays the stand in: group winners into the quarter-finals, and my club as
+           runner-up takes the last group winner's place (uclSeededField in clubManager.ts). */
+        <p>Eight groups of four, everyone playing the other three home and away. The eight group winners go through to the quarter-finals. Finish second in your group and you go through as well, in the last group winner's place. Two legs to the semi-finals, then a one match final.</p>
       ) : (
         <p>Eight groups of four, everyone playing the other three home and away. The top two of each group go through to a round of 16 drawn winner against runner-up, never from the same group or the same country. Two legs to the semi-finals, then a one match final.{view.mode === 'watching' ? ' A tie level on aggregate goes to the side with more away goals, then extra time and penalties.' : ''}</p>
       )}
       {view.mode === 'in' ? (
         <p>The draw is the game's own, and every night sits on your own calendar, so the dates are the game's.</p>
-      ) : <p>What the game plays in place of the real thing: the draw is its own, with the pots set by how strong the clubs are in this save and the holders first. The quarter-finals and semi-finals follow a fixed bracket rather than an open draw, and every night sits on your own calendar, so the dates are the game's.{l36 ? ' The last places in the field go to the next best placed clubs of the strongest leagues, not through qualifying, and the winner is in next season\'s field as the holders.' : ''}</p>}
+      ) : <p>What the game plays in place of the real thing: the draw is its own, with the pots set by how strong the clubs are in this save and the holders first.{l36 ? '' : ' The quarter-finals and semi-finals follow a fixed bracket rather than an open draw.'} Every night sits on your own calendar, so the dates are the game's.{l36 ? ' The last places in the field go to the next best placed clubs of the strongest leagues, not through qualifying, and the winner is in next season\'s field as the holders.' : ''}</p>}
       {!l36 && view.mode === 'watching' && <p>In the 2015-16 and 2020-21 saves the group draw keeps Russian and Ukrainian clubs apart, as the real draws did. The round of 16 draw here does not. A save keeps its era's format for its whole life.</p>}
     </div>
   );
