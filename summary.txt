@@ -1,0 +1,5 @@
+headsha exit=0 0s | 6814e2319 Round BJG: m8, merge PR303 (codex/career-pending-overall-gates at b5f54aaa), Soccer Career's queued Life choices check the overall they promise
+cont-m3 exit=0 53s | contCmp m3: green, the log equals the tree without m3 line for line
+cont-1508 exit=0 53s | contCmp 1508: green, the log equals the tree without 1508 line for line
+unseeded exit=0 150s | simCmUnseededWorld: green. 49 old saves with no deal play byte equal to 6c83b911 (state, draws and saved bytes at every step), 49 with every deal play byte equal to it up
+un-ctl exit=0 455s | controls (each must be 1): guard=1 early=1 never=1 norecord=1 noinverse=1

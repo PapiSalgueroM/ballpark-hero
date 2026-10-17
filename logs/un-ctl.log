@@ -1,0 +1,7 @@
+treeWithoutMerge: af65c641ef215f754accd54ea0af24b76eee88c2, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+guard: last: simCmUnseededWorld: CONTROL guard FIRED: with the guard out the deal fleet went red (49 saves) and the quiet fleet stayed green
+early: last: simCmUnseededWorld: CONTROL early FIRED: adopted as the save opens, the comparison with BASE before the first summer went red (quiet 49, deals 49 saves)
+never: last: simCmUnseededWorld: CONTROL never FIRED: never adopted, the moved check went red 3178 times after the rollover while the comparison before it stayed green
+norecord: last: simCmUnseededWorld: CONTROL norecord FIRED: adopted without recording my men, the mine check went red 1232 times after the rollover while the comparison before it stayed green (red by check: {"mine":1232,"moved":224})
+noinverse: last: simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
+controls (each must be 1): guard=1 early=1 never=1 norecord=1 noinverse=1
