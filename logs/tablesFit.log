@@ -1,0 +1,28 @@
+PART 1, CSS: built dist/assets (41 file(s)), every request blocked
+   the base is drawn with the base build's stylesheet (/tmp/wbase/dist/assets)
+PART 1 BASE (d8aaa4cb, expected red: the findings this round closes): 0 findings (none)
+PART 1 HEAD: 0 findings (none)
+   note: base liverpoolAllFinal at 390: Show the other kept scrollY 525 to 525, row top 400 to 400
+   note: base: the name column is 140 px at 768
+   note: head liverpoolAllFinal at 390: Show the other kept scrollY 525 to 525, row top 400 to 400
+   note: head: the name column is 140 px at 768
+   under 12 px, base>head, per screen and size: squad|320 171>171; desk liverpool|320 77>77; desk liverpoolAllFinal|320 376>376; room|320 14>14; card everton|320 6>6; card manager|320 13>13; card liverpool|320 6>6; squad|390 171>171; desk liverpool|390 77>77; desk liverpoolAllFinal|390 376>376; room|390 14>14; card everton|390 6>6; card manager|390 13>13; card liverpool|390 6>6; squad|768 312>312; desk liverpool|768 77>77; desk liverpoolAllFinal|768 376>376; room|768 14>14; card everton|768 6>6; card manager|768 13>13; card liverpool|768 6>6; squad|1280 312>312; desk liverpool|1280 77>77; desk liverpoolAllFinal|1280 376>376; room|1280 14>14; card everton|1280 6>6; card manager|1280 13>13; card liverpool|1280 6>6
+PART 1: green on this tree, every rule met at all four sizes
+PART 2: this tree at http://localhost:4173, the base at http://127.0.0.1:4181
+   comparator: a save altered by one byte is reported, an equal one is not
+   head Liverpool 2026-27 at 390: ok the Squad tab, ok every sort key once (the phone picker), ok three rows opened and shut, ok the Home tab, ok the Dressing room tile, ok 2 men opened in the dressing room, ok back to the hub, ok the Manager tile, ok 3 of 3 Quick Sims; 5117 random draws; save 82739 chars
+   B Hertha at 320: "💀 Worst defeat: 2-3 vs Nürnberg"
+   head Hertha book save at 320: ok the Squad tab, ok every sort key once (the phone picker), ok three rows opened and shut, ok the Home tab, ok the Dressing room tile, ok 2 men opened in the dressing room, ok back to the hub, ok the Manager tile, ok 3 of 3 Quick Sims; 4015 random draws; save 105239 chars
+   base Liverpool 2026-27 at 390: ok the Squad tab, ok every sort key once (the phone picker), ok three rows opened and shut, ok the Home tab, ok the Dressing room tile, ok 2 men opened in the dressing room, ok back to the hub, ok the Manager tile, ok 3 of 3 Quick Sims; 5117 random draws; save 82739 chars
+   base Hertha book save at 320: ok the Squad tab, ok every sort key once (the phone picker), ok three rows opened and shut, ok the Home tab, ok the Dressing room tile, ok 2 men opened in the dressing room, ok back to the hub, ok the Manager tile, ok 3 of 3 Quick Sims; 4015 random draws; save 105239 chars
+   D liverpool: the saves are byte equal, 82739 chars
+   D liverpool: 5117 random draws on both builds
+   D hertha: the saves are byte equal, 105239 chars
+   D hertha: 4015 random draws on both builds
+   B head Everton at 320: "💀 Worst defeat: 1-5 vs Newcastle"
+   FAIL B base: the Everton save's worst defeat reads "💀 Worst defeat: 1-5 vs Newcastle", not "5-1 vs Newcastle"
+   C reduced motion: squad list 0 running (0 on the whole page), contracts desk 0 running (0 on the whole page), dressing room 0 running (0 on the whole page), career card 0 running (0 on the whole page)
+   E: the chunks holding the save key: base clubManager-yuiXXicp.js (823878 bytes), index-BN9hujk7.js (796647 bytes), managerHotSeat-CVf-_JOB.js (32020 bytes); this tree clubManager-CYS3jFuX.js (823734 bytes), index-2rg3gsqt.js (796647 bytes), managerHotSeat-DUXOoeyV.js (32020 bytes); same name and bytes as built: no
+   FAIL E: the chunks holding the save key differ in their own code, not only in the hashed names they import
+PART 2: FAIL, 2 findings
+Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
