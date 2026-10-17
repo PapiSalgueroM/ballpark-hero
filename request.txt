@@ -1,0 +1,3 @@
+#!serial
+headsha: git log --oneline -3
+wf286: node .rc/x/wfrun.mjs .github/workflows/career-pending-popularity-gates.yml --set SC_PENDING_POPULARITY_BASE=3f101218f91248e473c4c23c9466c0d2071570a4 --set PRERENDER_ONLY=/soccer-career,/whats-new
