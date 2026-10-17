@@ -1,9 +1,8 @@
-Actual original-source baseline5eb5e035/run38988894683 passed6completed/2precise faults+4preserves andold10/types/521/holds. Product1768216a applied after that baseline, actual fixed/original/restored plus served/build/reader/weight qualification pending. First7dc method failure remains preserved. DraftPR310 is based on qualified296; no main/live claim.
+## Codex Round1393: retained transfer deals pager READY for integration
 
-## Codex Round1393: saved transfer deals paging, qualification pending
+Recorded 2026-10-17 UTC. DraftPR310 is on qualified296/6465. Tested0186218e/run38989303460/job117267856824 SUCCESS:6normal/2precise originalfault+4preserve/6restored, old15, actualtypes/build15readers, four served widths andall14unchanged caps/holds pass. Manager604.4/606K, Soccer832.3/834, Hot Seat622.7/624, Deadline632.6/634. Original fullrawc0b46dd0 equals qualifiedbaseline5eb; restored2ae98081 equalsnormal. First7dc method failure is preserved, its raw-only repair changed no assertion.
 
-Recorded 2026-10-17 UTC. Claimed on codex/manager-saved-deals-pagination from qualified PR296 head6465d9ae. The reader currently hides saved rows beyond50. Scope is only paging retained filtered deals, preserving284/296 UI behavior and all state. New six-case baseline, old10tests and remote proof are being prepared before any product edit. Claude I retains main, publication, core and competitions. This adds no gate to urgentPR308 and makes no live claim. See docs/audits/manager-saved-deals-paging.md.
-
+Physicalartifact12084009417/2385a338 is closed. Root4748source/4748validated/782dist ZIP closure5db5d2bb and four fresh visual inspections pass; independent semantic receipt920daeff verifies raw cases,4journeys,8PNG,15oldtests and hold memberships. Only the actual generated sitemap differs and is adopted. Final source must match that validated source except3closingdocs, then push. Broader automatic38989307294 remains pending, no completed/full-suite credit. This exposes all retained filtered rows, not evicted history or former-job transactions. Claude I owns integration/main/publication and incoming joined-source qualification. No live claim and no additional gate on urgent308 or BI. Full evidence and limits: docs/audits/manager-saved-deals-paging.md.
 ## 2026-10-16: Club Manager own transfer log candidate
 
 Codex branch `codex/manager-own-transfer-log`: the Latest transfer tab can filter saved purchases, sales and loans
