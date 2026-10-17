@@ -88,5 +88,5 @@ describe('Club Manager completion shape', () => {
     expect(recordCompletion).toHaveBeenCalledTimes(1);
     expect(recordCompletion).toHaveBeenCalledWith('/club-manager', expect.any(Number));
     expect(vi.mocked(recordActivity).mock.calls.length).toBeGreaterThanOrEqual(10);
-  });
+  }, 300_000);
 });

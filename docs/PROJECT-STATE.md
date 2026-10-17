@@ -18506,3 +18506,9 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+
+## Codex1399 source candidate
+
+See docs/audits/manager-completion-timeout-1399.md. Frozen actual I a5b0e767, full-season-only test timeout; remote proof and build gates pending. No product/main/live change. I owns integration and publish.
+
