@@ -1,0 +1,11 @@
+vitest-world exit=0 2s |    Duration  2.05s (transform 957ms, setup 32ms, collect 1.18s, tests 366ms, environment 193ms, prepare 86ms)
+simWorldUcl exit=0 0s | simWorldUcl: green, 369 checks, 0 failures
+golden-check-head exit=0 0s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+golden-base exit=0 0s | GOLDEN-BASE-SAME
+dry exit=0 0s | fxorder: 1
+mut-tieleg1 exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > is deterministic 
+mut-tieagg exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > is deterministic 
+mut-finalone exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > a binding that makes t
+mut-finalnights exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > a binding that makes t
+mut-fxorder exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > the module groupF
+clean-after exit=0 2s |    Duration  1.78s (transform 843ms, setup 29ms, collect 1.02s, tests 330ms, environment 159ms, prepare 68ms)
