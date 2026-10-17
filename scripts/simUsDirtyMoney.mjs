@@ -17,7 +17,7 @@
  *      the card's own sentence kept on a clean wash) and still close the card. Both outcomes must be seen per sport.
  *   5. A/B against the base decks, rebuilt from the head by taking this round's three hunks per deck back out (no
  *      sha to go stale; with BASE=<40 hex> the rebuilt files are also compared with that commit's to the byte).
- *      400 careers a sport (US_DIRTY_MONEY_AB), each on its own seeded stream on both: every career that never took
+ *      400 careers a sport (US_DIRTY_MONEY_AB, and on until three took the card), each on its own seeded stream on both: every career that never took
  *      the launder option is byte equal after every season and every card; the takers are counted and none fails.
  *   6. Controls only: the board test (src/test/usCareerDirtyMoney.test.tsx) run against a copy of the shared board
  *      with the desk (nodesk), the honest sentence (sentence) or the season guard (anyphase) taken out; exactly the
@@ -528,6 +528,10 @@ const fnv = s => { let h = 0x811c9dc5 >>> 0; for (let i = 0; i < s.length; i++) 
 const mulberry = seed => { let a = seed >>> 0; return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
 function abCareer(X, sport, slug, i) {
   Math.random = mulberry(fnv(`ab|${slug}|${i}`));
+/* A fleet that saw one taker is green by luck (the NFL's 400 careers held one, r1500-s5a, the Round 1500 review's read
+   minor 2), so each sport runs on past AB until at least AB_TAKERS careers took the launder option, up to ten times AB.
+   Every career is still its own fixed stream, so the run is the same every time. */
+const AB_TAKERS = 3;
   const pos = sport.create.positions[i % sport.create.positions.length];
   const archs = sport.create.archetypes[pos];
   const c = sport.startCareer(`AB ${slug} ${i}`, pos, archs[i % archs.length], Math.random, X.defaultAppearance(), sport.create.eras[i % sport.create.eras.length].id);
@@ -563,7 +567,8 @@ const abCount = {};
 try {
   for (const slug of SPORTS) {
     let same = 0, took = 0, passedOn = 0;
-    for (let i = 0; i < AB; i++) {
+    let i = 0;
+    for (; i < AB * 10 && (i < AB || took < AB_TAKERS); i++) {
       const head = abCareer(E, BIND[slug], slug, i);
       const base = abCareer(B, BBIND[slug], slug, i);
       if (head.took) { took += 1; continue; }
@@ -573,8 +578,8 @@ try {
       else same += 1;
     }
     abCount[slug] = { same, took, passedOn };
-    console.log(`   ${slug}: ${AB} careers, ${same} byte equal to the base after every step, ${took} took the launder option (not compared), ${passedOn} were dealt the card and passed on it`);
-    if (!took) fail(5, `${slug} takers`, 'the fleet never exercised the change: widen it (US_DIRTY_MONEY_AB)');
+    console.log(`   ${slug}: ${i} careers, ${same} byte equal to the base after every step, ${took} took the launder option (not compared), ${passedOn} were dealt the card and passed on it`);
+    if (took < AB_TAKERS) fail(5, `${slug} takers`, `${took} of ${i} careers took the launder option, under ${AB_TAKERS}: widen it (US_DIRTY_MONEY_AB)`);
   }
 } finally {
   Math.random = streamRandom;
