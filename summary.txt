@@ -1,0 +1,2 @@
+headsha exit=0 0s | f0b868755 Round BII: merge PR287 (codex/manager-handover-desk at 0bd4152a), taking over a club no longer hands you the last manager's decision desk
+wf288 exit=1 287s | wfrun career-life-stories.yml: 10 steps ran, 5 failed: Retain exact source and install locked packages | Actual application type gate | Exact real-component causal baseli

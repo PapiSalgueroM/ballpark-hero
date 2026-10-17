@@ -1,0 +1,3 @@
+#!serial
+headsha: git log --oneline -3
+wf288: node .rc/x/wfrun.mjs .github/workflows/career-life-stories.yml --set PRERENDER_ONLY=/soccer-career,/whats-new
