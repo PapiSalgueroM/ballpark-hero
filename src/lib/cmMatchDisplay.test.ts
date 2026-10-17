@@ -52,6 +52,9 @@ describe('the pitch name and the initials (Round 1340b)', () => {
       /* An agnome is the name a man is known by: never dropped, it joins the word before it. */
       ['Pedro Neto', 'Pedro Neto', 'PN'], ['Mauro Júnior', 'Mauro Júnior', 'MJ'], ['Vinicius Junior', 'Vinicius Junior', 'VJ'],
       ['Prince Amoako Junior', 'Amoako Junior', 'PAJ'], ['Cristian Cásseres Jr.', 'Cásseres', 'CC'],
+      /* A first word that is also a particle word is his first name, never part of the surname: the rosters hold
+         eighteen men called Ben and one Van (the review's mutation m1 put "Ben White" on the pitch). */
+      ['Ben White', 'White', 'BW'], ['Ben Chilwell', 'Chilwell', 'BC'], ['Van Fitzharris', 'Fitzharris', 'VF'],
       /* The engine's numbered fallback for a youth name never puts a digit on the pitch. */
       ['Joe Bloggs 2 (Youth)', 'Bloggs', 'JB'],
     ];
