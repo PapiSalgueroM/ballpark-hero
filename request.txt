@@ -1,0 +1,2 @@
+appeal-head: node scripts/simManagerAppealIsolation.mjs
+appeal-base: git worktree add -f /tmp/rbase b5aed9d4 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/rbase/node_modules && cd /tmp/rbase && node scripts/simManagerAppealIsolation.mjs
