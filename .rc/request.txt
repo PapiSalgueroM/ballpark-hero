@@ -1,0 +1,9 @@
+simManagerWorldContinuity: node scripts/simManagerWorldContinuity.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simCmVar: node scripts/simCmVar.mjs
+simCmSubs: node scripts/simCmSubs.mjs
+simCmQuickSubs: node scripts/simCmQuickSubs.mjs
+simEras: node scripts/simEras.mjs
+simManagerEraWorldOracles: node scripts/simManagerEraWorldOracles.mjs
+simClubManagerEraUcl: node scripts/simClubManagerEraUcl.mjs
+simClubManagerEraMidSeason: node scripts/simClubManagerEraMidSeason.mjs
