@@ -1,0 +1,8 @@
+rivals exit=0 26s | No rival product names found. 0 findings.
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+anchors exit=0 61s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+wm-goneshown exit=1 37s | simCmWorldMoves: control goneshown FIRED: section 14 red (73)
+tsc exit=0 104s | 
+wm-13-14 exit=0 142s | simCmWorldMoves: green, sections 0, 2, 3, 13, 14 held
+wm-seedclose exit=1 68s | simCmWorldMoves: control seedclose FIRED: section 13 red (168)
+wm-seedcarry exit=1 76s | simCmWorldMoves: control seedcarry FIRED: section 14 red (636)
