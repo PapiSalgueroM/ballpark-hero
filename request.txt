@@ -1,0 +1,2 @@
+#!playwright
+f-writes-base: R=$PWD; W=/tmp/f-base && git worktree add -q --detach $W d8aaa4cb && ln -s $R/node_modules $W/node_modules && cd $W && { node_modules/.bin/vite build > /tmp/vb.log 2>&1 || { tail -5 /tmp/vb.log; exit 3; }; } && node scripts/simWritesAreSent.mjs
