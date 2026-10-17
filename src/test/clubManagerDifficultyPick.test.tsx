@@ -11,7 +11,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, renderHook, fireEvent, screen, waitFor, act } from '@testing-library/react';
 import { CM_ROSTERS, CM_PARTIAL } from '@/data/clubManagerRosters';
-import { buildMarket, startCareer } from '@/lib/clubManager';
+import { marketForScreen, startCareer } from '@/lib/clubManager';
 import { levelFrom, noSackFrom } from '@/lib/clubManagerStart';
 import { CM_DIFFICULTY_DIALS } from '@/lib/clubManagerDifficulty';
 import { ManagerForm } from '@/components/club-manager/ManagerForm';
@@ -86,7 +86,7 @@ describe('the hook', () => {
     expect(noSackFrom(c)).toBeNull();
     const plain = startCareer(CLUB);
     expect(c.budget).toBe(Math.round(plain.budget * CM_DIFFICULTY_DIALS.legend.cheque * 10) / 10);
-    const list = buildMarket(c);
+    const list = marketForScreen(c);
     const shown = r.result.current.market;
     expect(shown.length).toBe(list.length);
     expect(shown.every((mp, i) => mp.name === list[i].name && mp.price === Math.max(0.5, Math.round(list[i].price * CM_DIFFICULTY_DIALS.legend.mark * 10) / 10))).toBe(true);
@@ -100,6 +100,6 @@ describe('the hook', () => {
     const c = r.result.current.career;
     expect(levelFrom(c)).toBe('normal');
     expect(c.startOptions === undefined || !('difficulty' in (c.startOptions as object))).toBe(true);
-    expect(r.result.current.market).toEqual(buildMarket(c));
+    expect(r.result.current.market).toEqual(marketForScreen(c));
   });
 });
