@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+markProbe: node .rc/x/markProbe.mjs
+playCmMatchDay: node scripts/playCmMatchDay.mjs
+pmd-fullname: PLAY_MATCHDAY_CONTROL=fullname node scripts/playCmMatchDay.mjs
+playCmHubLanding: node scripts/playCmHubLanding.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unitcm: node_modules/.bin/vitest run $(grep -l "club-manager\|clubManager\|ClubManager\|cmMatchDisplay\|TacticsScreen" src/test/*.test.ts* src/lib/*.test.ts) --testTimeout=300000 --hookTimeout=120000
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs
+pmd-cut: PLAY_MATCHDAY_CONTROL=cut node scripts/playCmMatchDay.mjs

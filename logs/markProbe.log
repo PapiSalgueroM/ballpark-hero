@@ -1,0 +1,4 @@
+pre: 1815 on the last line, 114 on the next line with no room on the last, 3 off it with room (a fault)
+nowrap: 1815 on the last line, 97 on the next line with no room on the last, 20 off it with room (a fault)
+control: 0 on the last line, 1926 on the next line with no room on the last, 6 off it with room (a fault)
+markProbe: RED

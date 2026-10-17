@@ -1,0 +1,24 @@
+save A: Liverpool against Newcastle (Premier League · Round 1), away, 55704 bytes
+save B: Liverpool against Nottingham Forest (Premier League · Round 2), home, 71342 bytes
+save C: Real Madrid against Villarreal (Copa del Rey · Final), neutral, 160429 bytes
+save E: Real Madrid against Roma (Champions League · Quarter-final · second leg), away, 141299 bytes
+save D: Eintracht Frankfurt with Ayoube Amaimouni-Echghouyab on 12 goals (planted), the tile should read "Amaimouni-Echghouyab leads with 12", 53979 bytes
+A-320: heights hub 28334, centre 27406, live 26575, interval 27975, report 28573; 10 timeline names, 0 marks (0 on the next line, no room on the last)
+A-390: heights hub 22752, centre 21887, live 21112, interval 22446, report 23313; 19 timeline names, 0 marks (0 on the next line, no room on the last)
+A-1280: heights hub 13574, centre 13120, live 12388, interval 13680, report 14317; 18 timeline names, 1 marks (0 on the next line, no room on the last)
+B-320: heights hub 28330, centre 27400, live 26575, interval 27975, report 28920; 18 timeline names, 0 marks (0 on the next line, no room on the last)
+B-390: heights hub 22752, centre 21899, live 21112, interval 22446, report 23311; 18 timeline names, 1 marks (0 on the next line, no room on the last)
+B-1280: heights hub 13574, centre 13132, live 12388, interval 13680, report 14391; 21 timeline names, 1 marks (0 on the next line, no room on the last)
+C-320: heights hub 28293, centre 27494, live 26575, interval 27961, report 29139; 24 timeline names, 0 marks (0 on the next line, no room on the last)
+C-390: heights hub 22687, centre 21993, live 21112, interval 22432, report 23123; 21 timeline names, 1 marks (0 on the next line, no room on the last)
+C-1280: heights hub 13544, centre 13226, live 12388, interval 13680, report 14273; 15 timeline names, 0 marks (0 on the next line, no room on the last)
+E-320: heights hub 28308, centre 27525, live 26575, interval 28009, report 29037; 22 timeline names, 0 marks (0 on the next line, no room on the last)
+E-390: heights hub 22707, centre 21994, live 21112, interval 22465, report 23079; 18 timeline names, 1 marks (0 on the next line, no room on the last)
+E-1280: heights hub 13544, centre 13226, live 12388, interval 13699, report 14168; 16 timeline names, 1 marks (0 on the next line, no room on the last)
+A-390-rm: heights hub 22752, centre 21887, live 21112, interval 22446, report 23583; 29 timeline names, 1 marks (0 on the next line, no room on the last)
+B-390-rm: heights hub 22752, centre 21899, live 21112, interval 22446, report 23227; 19 timeline names, 1 marks (0 on the next line, no room on the last)
+C-390-rm: heights hub 22687, centre 21993, live 21112, interval 22416, report 22990; 15 timeline names, 1 marks (0 on the next line, no room on the last)
+D-320: the Stats tile reads "Amaimouni-Echghouyab leads with 12" on 3 line(s), the tile 133 px tall
+  FAIL: D-320: the Stats tile's line wraps to 3 lines ("Amaimouni-Echghouyab leads with 12")
+15 walks, 267 checks, 190s; pictures in /home/runner/work/_temp/rc-out/files/matchday
+playCmMatchDay: RED, 1 failures

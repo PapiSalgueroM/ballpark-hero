@@ -1,0 +1,9 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+markProbe exit=1 5s | markProbe: RED
+pmd-fullname exit=1 5s | playCmMatchDay: CONTROL fullname FIRED
+tsc exit=0 76s | 
+playCmHubLanding exit=0 103s | playCmHubLanding: green (A 8 pass 0 fail, B 65 pass 0 fail, C 111 pass 0 fail, E 63 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its first frame
+simManagerMatchPlans exit=0 9s | simManagerMatchPlans: 13 actual outcomes passed.
+pmd-cut exit=1 16s | playCmMatchDay: CONTROL cut FIRED
+playCmMatchDay exit=1 194s | playCmMatchDay: RED, 1 failures
+unitcm exit=0 181s |    Duration  180.97s (transform 12.81s, setup 5.18s, collect 47.87s, tests 425.51s, environment 37.25s, prepare 7.90s)
