@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+basebuild-67ec: git worktree add -f .base 67ec99568cb67c0d1bf287bef2629b6d35def549 > /dev/null 2>&1 && cd .base && ../node_modules/.bin/vite build --outDir ../dist-base --emptyOutDir > /tmp/basebuild.log 2>&1; s=$?; tail -2 /tmp/basebuild.log; cd .. && (nohup node scripts/lib/hostLikeServer.mjs dist-base 4174 > /tmp/base-server.log 2>&1 &) ; sleep 3; echo "base served: $(curl -s -o /dev/null -w '%{http_code}' http://localhost:4174/soccer-career)"; exit $s
+weight-vs-67ec: cp .rc/x/weight1334.mjs scripts/weight1334.tmp.mjs && node scripts/weight1334.tmp.mjs > /tmp/wk.log 2>&1; s=$?; rm -f scripts/weight1334.tmp.mjs; cp /tmp/wk.log $RC_OUT/weight-vs-67ec.log; grep -E "soccer-career|club-manager|manager-hot-seat|deadline-day|nfl-my-career|^ *\/ " /tmp/wk.log | head -20; tail -3 /tmp/wk.log; exit $s
+weights: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; cp /tmp/sw.log $RC_OUT/sw.log; grep -E "soccer-career|club-manager|manager-hot-seat|deadline-day|nba-my-career|nfl-my-career|mlb-my-career|nhl-my-career|OVER|over" /tmp/sw.log | head -30; tail -3 /tmp/sw.log; exit $s
