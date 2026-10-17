@@ -1,0 +1,10 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerWorldView.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 990[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m15 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 12:47:25
+[2m   Duration [22m 3.53s[2m (transform 1.67s, setup 49ms, collect 1.72s, tests 990ms, environment 327ms, prepare 140ms)[22m
+
