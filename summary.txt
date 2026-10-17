@@ -1,0 +1,8 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simClubManagerMeters exit=0 25s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simClubManagerScore exit=0 71s | ALL SEASON SCORE CHECKS PASSED
+simClubManagerBudget exit=0 132s | simClubManagerBudget: PASS
+playCmRealFixtures exit=1 0s | Node.js v24.21.0
+playCmTablesFit exit=1 158s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+simCmBoardVerdict exit=0 397s | simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 396 s)
+simPress exit=0 1214s | ALL PRESS AND TEAM TALK CHECKS PASSED
