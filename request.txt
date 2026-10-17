@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node scripts/playUsDirtyMoney.mjs
+walk-nodesk: mkdir -p $RC_OUT/ctl && RC_OUT=$RC_OUT/ctl PLAY_US_DIRTY_CONTROL=nodesk ENGINES=chromium node scripts/playUsDirtyMoney.mjs
+sweepWeight: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; cp /tmp/sw.log $RC_OUT/sw.log; grep -E "my-career|FAIL" /tmp/sw.log | head -20; tail -3 /tmp/sw.log; exit $s
+cp-units: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/soccerCareerProgramme.test.ts src/test/soccerCareerProgrammeUi.test.tsx src/lib/usCareerProgramme.test.ts src/test/usCareerProgrammeUi.test.tsx src/lib/careerChanceWheel.test.ts src/test/careerChanceWheelUi.test.tsx src/lib/soccerSeasonCalendar.test.ts src/test/soccerSeasonCalendarUi.test.tsx src/lib/soccerCupOpening.test.ts src/test/soccerClubStartingElevenUi.test.tsx src/lib/soccerClubSquad.test.ts src/test/soccerSeasonCompetitions.test.tsx src/test/cookieConsentStorage.test.tsx src/test/helpConsentFocus.test.tsx --maxWorkers=1 --minWorkers=1 && node scripts/checkCareerProgrammeUnits.mjs
+cp-sim: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+cp-play: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerProgramme.mjs
+cp-deckc: ONLY=simUsCareerDeckC node scripts/runAllSims.mjs --browser
+cp-rivalry: ONLY=simCareerRivalryEvents node scripts/runAllSims.mjs --browser
+cp-hub: ONLY=simCareerHub node scripts/runAllSims.mjs --browser
+cp-season: ONLY=simUsSeasonCentre node scripts/runAllSims.mjs --browser

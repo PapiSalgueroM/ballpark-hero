@@ -1,0 +1,64 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/soccerClubSquad.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 924[2mms[22m[39m
+   [33m[2m✓[22m[39m the living squad[2m > [22mnames the right man as the last one in ahead of him: never himself, always the lowest of his line in the eleven [33m 353[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCareerProgramme.test.ts [2m([22m[2m66 tests[22m[2m)[22m[32m 92[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerProgrammeUi.test.tsx [2m([22m[2m34 tests[22m[2m)[22m[33m 2610[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer career programme UI[2m > [22mshows rules and a worked example before any choices and can reopen them [33m 377[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/soccerSeasonCompetitions.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 1083[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career competition navigation keeps the actual league view[2m > [22mfreezes and resumes the same live clock, pause state and completed review across cup tabs [33m 777[2mms[22m[39m
+ [32m✓[39m src/lib/usCareerProgramme.test.ts [2m([22m[2m55 tests[22m[2m)[22m[32m 213[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 1369[2mms[22m[39m
+ [32m✓[39m src/test/soccerClubStartingElevenUi.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 674[2mms[22m[39m
+ [32m✓[39m src/test/cookieConsentStorage.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 406[2mms[22m[39m
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mEssential only receives focus inside initial rules and keeps its original consent behavior
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mAccept receives focus inside initial rules and keeps its original consent behavior
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mkeeps its single pending banner reachable when initial help is dismissed
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mreuses the banner and its choices when help is reopened without a decision
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mhonors storage choices and restores pending choices within the same open rules
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mpreserves the normal modal trap and manual opener once consent is answered
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/helpConsentFocus.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 732[2mms[22m[39m
+ [32m✓[39m src/test/soccerSeasonCalendarUi.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 943[2mms[22m[39m
+ [32m✓[39m src/lib/soccerSeasonCalendar.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCupOpening.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 101[2mms[22m[39m
+ [32m✓[39m src/test/careerChanceWheelUi.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 499[2mms[22m[39m
+ [32m✓[39m src/lib/careerChanceWheel.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+[2m      Tests [22m [1m[32m304 passed[39m[22m[90m (304)[39m
+[2m   Start at [22m 15:33:46
+[2m   Duration [22m 33.66s[2m (transform 3.73s, setup 891ms, collect 7.86s, tests 9.67s, environment 5.60s, prepare 1.10s)[22m
+
+node:fs:483
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open 'career-programme-artifacts/units.json'
+    at Object.readFileSync (node:fs:483:20)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/checkCareerProgrammeUnits.mjs:4:29
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'career-programme-artifacts/units.json'
+}
+
+Node.js v24.21.0

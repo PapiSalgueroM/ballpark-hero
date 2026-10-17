@@ -1,0 +1,11 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-nodesk exit=1 22s | CONTROL nodesk FIRED: W4 red
+sweepWeight exit=1 28s | sweepWeight: 1 failure
+walk exit=0 35s | playUsDirtyMoney: ALL GREEN, 4 walks
+cp-play exit=1 1s | Node.js v24.21.0
+cp-units exit=1 35s | Node.js v24.21.0
+cp-rivalry exit=0 11s | All 1 harnesses green.
+cp-hub exit=0 1s | All 1 harnesses green.
+cp-deckc exit=0 80s | All 1 harnesses green.
+cp-sim exit=0 107s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
+cp-season exit=0 99s | All 1 harnesses green.
