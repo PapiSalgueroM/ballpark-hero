@@ -1,0 +1,8 @@
+head-simClubDetailCurrentRoster: node scripts/simClubDetailCurrentRoster.mjs
+base-simClubDetailCurrentRoster: git worktree add -q /tmp/b1 d8aaa4cb && ln -s "$PWD/node_modules" /tmp/b1/node_modules && cd /tmp/b1 && node scripts/simClubDetailCurrentRoster.mjs
+head-simClubManagerDecisionDeadline: node scripts/simClubManagerDecisionDeadline.mjs
+base-simClubManagerDecisionDeadline: git worktree add -q /tmp/b2 d8aaa4cb && ln -s "$PWD/node_modules" /tmp/b2/node_modules && cd /tmp/b2 && node scripts/simClubManagerDecisionDeadline.mjs
+head-simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+base-simCmLeagueRules: git worktree add -q /tmp/b3 d8aaa4cb && ln -s "$PWD/node_modules" /tmp/b3/node_modules && cd /tmp/b3 && node scripts/simCmLeagueRules.mjs
+head-simCreateClub: node scripts/simCreateClub.mjs
+base-simCreateClub: git worktree add -q /tmp/b4 d8aaa4cb && ln -s "$PWD/node_modules" /tmp/b4/node_modules && cd /tmp/b4 && node scripts/simCreateClub.mjs

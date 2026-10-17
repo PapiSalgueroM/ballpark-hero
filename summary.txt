@@ -1,0 +1,8 @@
+head-simClubManagerDecisionDeadline exit=1 0s | Node.js v24.21.0
+head-simClubDetailCurrentRoster exit=1 0s | Node.js v24.21.0
+base-simClubDetailCurrentRoster exit=1 0s | Node.js v24.21.0
+base-simClubManagerDecisionDeadline exit=1 0s | Node.js v24.21.0
+head-simCreateClub exit=1 9s | simCreateClub: 1 failure
+base-simCreateClub exit=1 9s | simCreateClub: 1 failure
+head-simCmLeagueRules exit=1 47s | simCmLeagueRules: 47 failure(s)
+base-simCmLeagueRules exit=1 47s | simCmLeagueRules: 47 failure(s)

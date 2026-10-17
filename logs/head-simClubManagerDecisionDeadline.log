@@ -1,0 +1,25 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Only fixed Decisions may differ from the held parent app
++ actual - expected
+
++ '0e4a4183bb892e5409598a4bbeda1aa9f12ac72ae4b237241f1adc1d59f379d8'
+- '3b0cc3a70ab1b7c475fd43ff069f8c66c91aa2bb5abef4dab9c5433ad5253446'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simClubManagerDecisionDeadline.mjs:65:41
+    at Array.map (<anonymous>)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simClubManagerDecisionDeadline.mjs:62:29
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '0e4a4183bb892e5409598a4bbeda1aa9f12ac72ae4b237241f1adc1d59f379d8',
+  expected: '3b0cc3a70ab1b7c475fd43ff069f8c66c91aa2bb5abef4dab9c5433ad5253446',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
