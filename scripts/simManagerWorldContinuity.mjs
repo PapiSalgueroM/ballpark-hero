@@ -121,6 +121,10 @@ function neutral(B, input, bridge = false) {
      which the pinned engine does not know: it comes off the current arm's summer too. */
   if (bridge && 'worldComps' in summer) delete summer.worldComps;
   assert.equal(B.cm.saveCareer(c), true); const loaded = B.cm.loadCareer();
+  /* Release BJ's join (Round BJG): and since Round 1502 a save from before the watched competition opens it as it
+     loads (repairWorldUcl, writing nothing back), which the pinned engine does not know either: it comes off the
+     current arm's loaded state the same way, never off the save or the storage compared beside it. */
+  if (bridge && loaded && 'worldComps' in loaded) delete loaded.worldComps;
   return { reads, match, summer, loaded, storage: [...B.store.entries()] };
 }
 async function arm(control) {
