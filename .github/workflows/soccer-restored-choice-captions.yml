@@ -1,0 +1,127 @@
+name: Soccer restored choice caption baseline
+on:
+  push:
+    branches: [codex/soccer-restored-choice-captions]
+    paths:
+      - .github/workflows/soccer-restored-choice-captions.yml
+      - scripts/qa/proveSoccerCorruptionChoicePreviews.mjs
+      - src/test/soccerCareerCorruptionChoicePreviews.test.ts
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retain exact original product and locked installation
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/soccer-restored-choice-captions-baseline"; test ! -e "$out"; mkdir -p "$out"
+          echo "CORRUPTION_PREVIEWS_OUT=$out" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
+          sha256sum "$out/source.zip" "$out/request-source-files.sha256" > "$out/initial-source-packet.sha256"
+          git merge-base --is-ancestor dccd1e146c27c7f6c889b180f371581d60e75b4b HEAD
+          git diff --exit-code dccd1e146c27c7f6c889b180f371581d60e75b4b HEAD -- . ':!docs' ':!src/test/soccerCareerCorruptionChoicePreviews.test.ts' ':!scripts/qa/proveSoccerCorruptionChoicePreviews.mjs' ':!.github/workflows/soccer-restored-choice-captions.yml' > "$out/base-source-hold.log"
+          git diff --exit-code HEAD -- . > "$out/admission-working-source-hold.log"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          printf '%s\0' "$(command -v node)" "$(readlink -f "$(command -v npm)")" "$(readlink -f "$(command -v python)")" | sort -z | xargs -0 sha256sum > "$out/runtime-tools-files.sha256"
+          npm --version > "$out/npm-version.txt"
+          npm ci > "$out/install.log" 2>&1
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$out/dependencies.transport" node scripts/qa/soccerAgentReviewDependencies.mjs before > "$out/dependencies-before.log" 2>&1
+          cp soccer-agent-review-artifacts/dependencies-before.json "$out/"
+          SIM_OFFLINE_RECEIPT="$out/dependency-check.transport" node --input-type=module > "$out/dependency-check.log" 2>&1 <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const out=process.env.CORRUPTION_PREVIEWS_OUT,inventory=JSON.parse(fs.readFileSync(out+'/dependencies-before.json'));
+          assert.equal(inventory.packages.length,521);fs.writeFileSync(out+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n',{flag:'wx'});console.log('PASS 521 actual locked installed package versions.');
+          NODE
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-files.sha256"
+      - name: Actual application types and effective offline preload
+        id: types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$CORRUPTION_PREVIEWS_OUT"
+          preload_check='const assert=require("node:assert/strict");assert.ok((process.env.NODE_OPTIONS||"").includes("offlineTransport.cjs"),"Children retain offline preload");assert.ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")],"Actual offline preload is in require.cache");'
+          status=0; NODE_OPTIONS='' node -e "$preload_check" > "$out/preload-control.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/preload-control.exit"; test "$status" -eq 1; grep -F 'AssertionError' "$out/preload-control.log"; grep -F 'Children retain offline preload' "$out/preload-control.log"
+          node -e "$preload_check" > "$out/preload-normal.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
+      - name: Exact four original caption faults and six preserved cases
+        id: proof
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$CORRUPTION_PREVIEWS_OUT/proof.transport" node scripts/qa/proveSoccerCorruptionChoicePreviews.mjs baseline > "$CORRUPTION_PREVIEWS_OUT/proof.log" 2>&1
+          tail -n 4 "$CORRUPTION_PREVIEWS_OUT/proof.log"
+      - name: Unchanged eighteen Life preview and callback cases
+        id: life
+        if: ${{ !cancelled() && steps.types.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$CORRUPTION_PREVIEWS_OUT"
+          status=0; SIM_OFFLINE_RECEIPT="$out/life.transport" node_modules/.bin/vitest run src/test/soccerCareerLifeChoicePreviews.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$out/life.vitest.json" > "$out/life.stdout.log" 2> "$out/life.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/life.exit.txt"
+          SIM_OFFLINE_RECEIPT="$out/life-classifier.transport" node --input-type=module > "$out/life-classification.log" 2>&1 <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.CORRUPTION_PREVIEWS_OUT,u=JSON.parse(fs.readFileSync(out+'/life.vitest.json')),rows=u.testResults.flatMap(s=>s.assertionResults),log=fs.readFileSync(out+'/life.stdout.log','utf8')+fs.readFileSync(out+'/life.stderr.log','utf8');
+          assert.equal(fs.readFileSync(out+'/life.exit.txt','utf8').trim(),'0');assert.equal(u.success,true);assert.equal(u.testResults.length,1);assert(u.testResults[0].name.replaceAll('\\','/').endsWith('/src/test/soccerCareerLifeChoicePreviews.test.ts'));assert.equal(u.numTotalTests,18);assert.equal(u.numPassedTests,18);assert.equal(u.numFailedTests,0);assert.equal(u.numPendingTests,0);assert.equal(u.numTodoTests,0);assert.equal(rows.length,18);assert(rows.every(r=>r.status==='passed'));assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to load|Cannot find module|No test files found|SIM_OFFLINE_BLOCK/i.test(log));console.log('PASS all eighteen unchanged Life preview and callback cases.');
+          NODE
+          tail -n 4 "$out/life.stdout.log"
+      - name: Retain actual source and every partial proof without weakening failures
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="${CORRUPTION_PREVIEWS_OUT:-$RUNNER_TEMP/soccer-restored-choice-captions-baseline}"; mkdir -p "$out"; result=0
+          git diff --exit-code HEAD -- . > "$out/source-diff.log" 2>&1 || result=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/validated-source-files.sha256"
+          CORRUPTION_PREVIEWS_ARCHIVE_OUT="$out" python - <<'PY'
+          import os,subprocess,zipfile
+          out=os.environ['CORRUPTION_PREVIEWS_ARCHIVE_OUT']; files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile(out+'/validated-source.zip','x',zipfile.ZIP_DEFLATED) as archive:
+              for file in sorted(filter(None,files)): archive.write(file,file)
+          PY
+          if test -f "$out/dependencies-before.json"; then
+            SIM_OFFLINE_RECEIPT="$out/dependencies-final.transport" node --input-type=module > "$out/dependencies-after.log" 2>&1 <<'NODE' || result=1
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out=process.env.CORRUPTION_PREVIEWS_OUT,before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),sha=x=>createHash('sha256').update(x).digest('hex');
+          const packageFiles=before.packageFiles.map(r=>({file:r.file,sha256:sha(fs.readFileSync(r.file))})),packages=before.packages.map(r=>{const p=JSON.parse(fs.readFileSync(r.directory+'/package.json'));return{directory:r.directory,name:p.name,version:p.version};});
+          fs.writeFileSync(out+'/dependencies-after.json',JSON.stringify({packageFiles,packages},null,2)+'\n',{flag:'wx'});assert.equal(packages.length,521);assert.deepEqual(packageFiles,before.packageFiles);assert.deepEqual(packages,before.packages);console.log('PASS all 521 actual locked versions and both package bodies held.');
+          NODE
+          fi
+          for kind in request-source installed runtime-tools validated-source; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
+          if test -f "$out/initial-source-packet.sha256"; then sha256sum --check "$out/initial-source-packet.sha256" > "$out/initial-source-packet-holds.log" 2>&1 || result=1; fi
+          if test -f "$out/installed-files.sha256"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-after-files.sha256"; cmp "$out/installed-files.sha256" "$out/installed-after-files.sha256" > "$out/installed-inventory-hold.log" 2>&1 || result=1; fi
+          while IFS= read -r -d '' file; do test ! -s "$file" || result=1; done < <(find "$out" -type f -name '*.transport' -print0)
+          printf 'types=%s\nproof=%s\nlife=%s\nbuild=skipped\nreaders=skipped\nweights=skipped\n' '${{ steps.types.outcome }}' '${{ steps.proof.outcome }}' '${{ steps.life.outcome }}' > "$out/stage-outcomes.txt"
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-restored-choice-captions-baseline-${{ github.sha }}
+          path: ${{ env.CORRUPTION_PREVIEWS_OUT }}
+          if-no-files-found: error
+          retention-days: 14
