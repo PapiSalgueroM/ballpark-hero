@@ -1,0 +1,4 @@
+#!playwright
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+appealIsolation-base: git worktree add -f .rc-base b5aed9d4 > /dev/null 2>&1 && cd .rc-base && node scripts/simManagerAppealIsolation.mjs
