@@ -1,3 +1,7 @@
+## Codex1404 claimed, 2026-10-17 UTC
+
+One Soccer Career event320 consequence narrows its promise to leaving the syndicate. Existing callback does not end all dirty income. Copy-only on final1402, own workflow and docs; exact code/money/storage/RNG held. Runtime and ready status pending. No activeI or320XI dependency. See docs/audits/soccer-syndicate-choice-copy-1404.md.
+
 ## Codex1402 scoped READY, 2026-10-17 UTC
 
 PR319 includes qualified1401/318 plus3cost/payment caption strings; actualTESTED932aaf0a2f18a7ab1b3bbe35582bf1c59962ebcb/run39019968910/job117359661025 SUCCESS on frozen225b. Wholeinverse holds callbacks/math/guards/all315copy. Actual18units/40pairs/500normal+500effectiveoneoption/types/ordinarybuild/all15readers/all14fatalweights/fullholds pass. Physical9d777772/semantic9a2e0d4e (91/0) close artifact12095788837/6b468edd,92payloads/4872source/784dist. ZEROgenerateddelta, request=validatedall4872. Finalonly3closingdocs,4304nondoc exact; outside source closure/push receipt bindfinalhead. BIIactualTESTED932realmerge, closingdocsseparate, Iregenerates actualjoin;318captionsonce. Existing savedcaptions/directtargetparity/NBA/fullsuite/live unclaimed. Urgent308independent; actualIownsactiveSC/core/competition/spectator1503/tournaments1509+/main/publish. Newselected-gatecheckpoint eb7168b1 andBIdmissingrecipe2ce2 handedtoI. See docs/audits/soccer-corruption-cost-copy-1402.md.
