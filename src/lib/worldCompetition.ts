@@ -1,6 +1,7 @@
 /**
  * Round 1347: the world's Champions League as a competition engine, played whether or not your club is in it,
- * in the format of its era. Nothing in the game calls this yet: Round 1502 binds it to Club Manager (the saved
+ * in the format of its era. The participant engine (clubManager.ts) settles its AI ties with settleTie and plays
+ * its groups' matchdays with groupFixtures (Round 1347's E2); Round 1502 binds the rest to Club Manager (the saved
  * slice, the season it belongs to, the nights of the calendar) and Round 1503 shows it.
  *
  * TWO FORMATS. 'g8', the eras' group stage: 32 clubs in eight groups of four, a double round robin, the top two
@@ -102,14 +103,19 @@ export interface WorldCompSlice {
   clashes?: number;
   /** The holder at the draw (top of pot one) when the save knew one. */
   holder?: string;
+  /** Nights already shown when the slice was carried across a mid season job move (Round 1502): the new club's
+   *  calendar can sit behind the old one, and a night once shown is never taken back. */
+  seen?: number;
 }
 
 /** One night of the season, in order. */
 export interface WorldNight { id: string; stage: 'md' | WorldKoRound; md?: number; leg?: 1 | 2 }
 
 /** How a knockout round is settled: its legs, whether away goals split a level aggregate, and the scale of the
- *  deciding ninety minutes and of extra time (the participant engine's ET_DEFLATOR and ET_MINUTES). */
-export interface TieRules { legs: 1 | 2; awayGoals: boolean; deciderScale: number; etScale: number }
+ *  deciding ninety minutes and of extra time (the participant engine's ET_DEFLATOR and ET_MINUTES). `extraTime`
+ *  false sends a level tie straight to penalties (a one match cup that has no extra time, and the engine before
+ *  Round 670, which scripts/simExtraTime.mjs plays as its arm B); left out, a level decider plays extra time. */
+export interface TieRules { legs: 1 | 2; awayGoals: boolean; deciderScale: number; etScale: number; extraTime?: boolean }
 
 /** A tie as the participant engine keeps one (its UclTie has these fields and more). */
 export interface SettleableTie {
@@ -158,11 +164,9 @@ export interface WorldCompResult {
 const GROUP_NAMES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
 /** The two fixtures of one matchday in a four club double round robin. Every club plays every matchday, and
- *  every pairing happens exactly twice with the venue swapped. RECORDED DEBT: today this is a COPY of
- *  clubManager.ts's groupFixtures (the same six matchdays in the same order; its clamp written as Math.max and
- *  Math.min). Round 1347's E2, held for the lead's weight ruling, deletes the engine's copy and imports this one so
- *  the participant's groups and the watched ones play one schedule; until then the unit file holds the two
- *  matchday tables to the same text. */
+ *  every pairing happens exactly twice with the venue swapped. The one writing: clubManager.ts imports it for
+ *  the participant's groups (Round 1347's E2 deleted the engine's own copy, the same six matchdays in the same
+ *  order), so the participant's groups and the watched ones play one schedule. */
 export function groupFixtures(clubs: string[], md: number): [string, string][] {
   const [a, b, c, d] = clubs;
   const rounds: [string, string][][] = [
@@ -213,16 +217,15 @@ export function leaguePhaseNightRounds(rounds: number, lastGroupRound: number, m
 }
 
 /**
- * Settle one knockout tie, exactly the way the participant engine's advanceUclBracket settles a tie it is not
- * in (and, from Round 1347's E2, by this function): two legs, the second at the other ground and deciding the
- * tie, extra time added to leg two when level, then penalties on a coin; or one match, extra time, penalties.
- * `sim(home, away, scale)` returns the goals in the order handed. The tie's fields are written in the order the
- * engine always wrote them (legs, leg1, leg2, aet, the aggregate, byAwayGoals even when undefined, pens, the
- * winner), so a saved bracket is the same bytes whichever of the two calls this.
- * RECORDED DEBT: until E2 (held for the lead's weight ruling) lifts advanceUclBracket's AI tie onto this
- * function, this is a SECOND WRITING of that tie. It is held to the base engine by the golden table
- * (scripts/data/worldTieGolden1347.json) and to the engine of any later commit by
- * `node scripts/recordWorldTieGolden1347.mjs --ref <commit> --check`, which must say SAME before anything merges.
+ * Settle one knockout tie: the participant engine's advanceUclBracket settles every tie it is not in by this
+ * function (Round 1347's E2 lifted its body here), and the watched competition settles all of its ties by it.
+ * Two legs, the second at the other ground and deciding the tie, extra time added to leg two when level, then
+ * penalties on a coin; or one match, extra time, penalties. `sim(home, away, scale)` returns the goals in the
+ * order handed. The tie's fields are written in the order the engine always wrote them (legs, leg1, leg2, aet,
+ * the aggregate, byAwayGoals even when undefined, pens, the winner), so a saved bracket is the same bytes it was
+ * before the lift. Held to the base engine's own tie by the golden table (scripts/data/worldTieGolden1347.json,
+ * recorded from d4f2c6f6) and to the engine of any later commit by
+ * `node scripts/recordWorldTieGolden1347.mjs --ref <commit> --check`, which must say SAME.
  */
 export function settleTie(
   t: SettleableTie, rules: TieRules,
@@ -235,7 +238,7 @@ export function settleTie(
     t.leg1 = { homeGoals: h1, awayGoals: a1 };
     t.leg2 = { homeGoals: h2, awayGoals: a2 };
     let out = uclTieOutcome(t, rules.awayGoals);
-    if (out.winner === null) {
+    if (out.winner === null && rules.extraTime !== false) {
       const [ea, eh] = sim(t.away, t.home, rules.etScale);
       t.leg2 = { homeGoals: h2 + eh, awayGoals: a2 + ea };
       t.aet = true;
@@ -253,7 +256,7 @@ export function settleTie(
     return;
   }
   let [hg, ag] = sim(t.home, t.away, rules.deciderScale);
-  if (hg === ag) {
+  if (hg === ag && rules.extraTime !== false) {
     const [eh, ea] = sim(t.home, t.away, rules.etScale);
     hg += eh;
     ag += ea;

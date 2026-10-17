@@ -81,6 +81,37 @@ const potOf = (entrants: G8Entrant[], holder?: string): Map<string, number> => {
 };
 const groupsOf = (clubs: string[]): string[][] => Array.from({ length: 8 }, (_, g) => clubs.slice(g * 4, g * 4 + 4));
 
+/* Round 1502 (E2): TieRules.extraTime false sends a level tie straight to penalties, the switch simExtraTime's arm
+   B plays the engine before Round 670 with and a one match cup without extra time will bind. */
+describe('settleTie without extra time', () => {
+  const level = (): SettleableTie => ({ home: 'A', away: 'B', homeGoals: null, awayGoals: null, winner: null });
+  it('one match: one draw of goals, no extra time, penalties on the coin', () => {
+    const t = level();
+    let draws = 0;
+    settleTie(t, { legs: 1, awayGoals: false, deciderScale: 1, etScale: 0.3, extraTime: false }, () => { draws += 1; return [1, 1]; }, () => 0.2);
+    expect(draws).toBe(1);
+    expect(t.aet).toBeUndefined();
+    expect(t.pens).toBe(true);
+    expect(t.winner).toBe('A');
+  });
+  it('two legs: two draws, no extra time, penalties on the coin', () => {
+    const t = level();
+    let draws = 0;
+    settleTie(t, { legs: 2, awayGoals: false, deciderScale: 1, etScale: 0.3, extraTime: false }, () => { draws += 1; return [1, 1]; }, () => 0.7);
+    expect(draws).toBe(2);
+    expect(t.aet).toBeUndefined();
+    expect(t.pens).toBe(true);
+    expect(t.winner).toBe('B');
+  });
+  it('left out, a level decider still plays extra time', () => {
+    const t = level();
+    let draws = 0;
+    settleTie(t, { legs: 1, awayGoals: false, deciderScale: 1, etScale: 0.3 }, () => { draws += 1; return [1, 1]; }, () => 0.2);
+    expect(draws).toBe(2);
+    expect(t.aet).toBe(true);
+  });
+});
+
 describe('drawG8, the eras group draw', () => {
   it('draws 32 clubs into eight groups, one from each pot, inside both rules, the same every time', () => {
     for (let seed = 1; seed <= 60; seed += 1) {
@@ -373,19 +404,20 @@ describe('evaluateWorldComp', () => {
     expect(seen.size).toBe(12);
     expect([...seen.values()].every(n => n === 1)).toBe(true);
   });
-  /* RECORDED DEBT until E2 (the read review's M3): the module's groupFixtures is a copy of the engine's, which is
-     not exported, so the two matchday tables are held to the same code text here. E2 deletes the engine's copy
-     and this check with it. */
-  it('the module groupFixtures plays the engine matchday table, line for line, until E2 deletes the copy', () => {
-    const table = (file: string): string => {
-      const src = readFileSync(path.join(process.cwd(), file), 'utf8');
-      const at = src.indexOf('function groupFixtures(');
-      const from = src.indexOf('const rounds', at);
-      const to = src.indexOf('];', from);
-      expect(at >= 0 && from > at && to > from, `${file}: no groupFixtures matchday table`).toBe(true);
-      return src.slice(from, to).replace(/\s+/g, ' ');
-    };
-    expect(table('src/lib/worldCompetition.ts')).toBe(table('src/lib/clubManager.ts'));
+  /* Round 1347 E2 (the read review's M3 closed): the engine's own copies are gone. clubManager.ts imports
+     groupFixtures and settleTie from this module, declares neither, and advanceUclBracket settles its AI tie with
+     one settleTie call. Read off the code with its comments stripped, so the prose saying so cannot pass it. */
+  it('the participant engine plays groupFixtures and settleTie from this module, one writing each', () => {
+    const raw = readFileSync(path.join(process.cwd(), 'src/lib/clubManager.ts'), 'utf8').replace(/\r\n/g, '\n');
+    const code = raw.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+    expect(code).toMatch(/import \{[^}]*\bgroupFixtures\b[^}]*\bsettleTie\b[^}]*\} from '@\/lib\/worldCompetition';/);
+    expect(code.includes('function groupFixtures(')).toBe(false);
+    expect(code.includes('function settleTie(')).toBe(false);
+    const at = code.indexOf('function advanceUclBracket(');
+    const body = code.slice(at, code.indexOf('\n}\n', at));
+    expect(at).toBeGreaterThan(0);
+    expect(body.split('settleTie(').length - 1).toBe(1);
+    expect(body.includes('simAiMatch(state, t.')).toBe(false);
   });
 });
 

@@ -68,6 +68,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { withoutWorldSeed } from './lib/cmWorldSeed1250.mjs';
+import { withoutWatchedHolder } from './lib/worldUclHolder1502.mjs';
 import { withRulePreAz } from './lib/cmOwnClubMarket1339.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -159,6 +160,9 @@ function tape(seed, action) {
   };
   try { return { value: action(), draws }; } finally { Math.random = original; }
 }
+
+/* Round 1502: a state with its watched Champions League left out, for comparison only. */
+const withoutWatched = st => (st && typeof st === 'object' && 'worldComps' in st ? { ...st, worldComps: undefined } : st);
 
 /* Where two states first part: the first top level key whose value differs, and forty characters either side of
    the first character that differs in it. */
@@ -276,13 +280,17 @@ async function journey(E, input, plan, seed, bridge = false, living = null) {
     if (bridge && got.state && 'matchRules' in got.state) { got.state = { ...got.state }; delete got.state.matchRules; }
     if (got.state) s = got.state;
     if (label === 'rollover') after = true;
-    steps.push({ label, note: got.note ?? '', json: JSON.stringify(s), draws: r.draws.length, drawSha: sha(r.draws), saved: got.saved ?? null, after });
+    /* Round 1502 (the critic's correction 3): a club outside the Champions League carries the one it watches
+       (worldComps), keyed on the world seed, so the inverse arm (no seed) opens a different slice and the pinned
+       base none at all. It draws nothing (the draws are compared as before), so it comes out of the comparison on
+       every arm, never out of the career a step plays on. */
+    steps.push({ label, note: got.note ?? '', json: JSON.stringify(withoutWatched(s)), draws: r.draws.length, drawSha: sha(r.draws), saved: got.saved ?? null, after });
     if (living && after) livingCheck(M, s, label, got.note ?? '', got.deal ?? null, living);
   };
   const reload = () => step('save-and-reload', cur => {
     M.store.clear();
     if (!M.cm.saveCareer(cur)) return { note: 'the save was refused' };
-    const saved = sha([...M.store.entries()].sort());
+    const saved = sha([...M.store.entries()].sort().map(([k, v]) => (k === M.cm.SAVE_KEY ? [k, JSON.stringify(withoutWatched(JSON.parse(v)))] : [k, v])));
     const loaded = M.cm.loadCareer();
     return { state: loaded, saved, note: loaded ? '' : 'the reload was refused' };
   });
@@ -430,16 +438,21 @@ const ERAS = ['now', 'era2020', 'era2015', 'era2010', 'era2005'];
 const SEEDS = QUICK ? [0x5eed01] : [0x5eed01, 0x5eed02, 0x5eed03];
 const HOT_DATES = QUICK ? [] : ['2026-10-10', '2026-10-27', '2027-01-19'];
 
+/* Round 1502, step E5 (the critic's correction 5): from E5 a season after a watched final hands its winner to next
+   season's field as the holder, which the pinned base cannot know. It is the one line of the watched competition
+   that moves anything outside worldComps, so every arm of this tree plays with it reverted
+   (scripts/lib/worldUclHolder1502.mjs, asserted present exactly once) and the comparison stays the seed's alone. */
+const held = text => { try { return withoutWatchedHolder(text); } catch (e) { cannot(e.message); } };
 const baseEngine = await engine('base', { base: true, edit: text => { try { return withRulePreAz(text); } catch (e) { cannot(e.message); } } });
 const sections = CONTROL === 'noinverse' ? ['fresh'] : CONTROL === 'guard' || CONTROL === 'early' ? ['quiet', 'deals']
   : CONTROL === 'never' || CONTROL === 'norecord' ? ['deals'] : ['quiet', 'deals', 'fresh'];
 const thisTree = CONTROL === 'guard'
-  ? await engine('noguard', { edit: text => { const n = text.split(GUARD).length - 1; if (n !== 1) cannot(`control guard: the guard is in ${ENGINE} ${n} times, it must be exactly once`); return text.replace(GUARD, ''); } })
-  : CONTROL === 'early' ? await engine('early', { edit: once('early', LOAD_REPAIR, `${LOAD_REPAIR}    Object.assign(parsed, adoptLivingWorld(parsed));\n`) })
-  : CONTROL === 'never' ? await engine('never', { edit: once('never', ADOPT, '') })
-  : CONTROL === 'norecord' ? await engine('norecord', { edit: once('norecord', RECORD_MINE, '') })
-  : await engine('tree');
-const inverse = CONTROL === 'noinverse' ? await engine('tree') : await engine('inverse', { edit: withoutWorldSeed });
+  ? await engine('noguard', { edit: text => { const n = text.split(GUARD).length - 1; if (n !== 1) cannot(`control guard: the guard is in ${ENGINE} ${n} times, it must be exactly once`); return held(text.replace(GUARD, '')); } })
+  : CONTROL === 'early' ? await engine('early', { edit: text => held(once('early', LOAD_REPAIR, `${LOAD_REPAIR}    Object.assign(parsed, adoptLivingWorld(parsed));\n`)(text)) })
+  : CONTROL === 'never' ? await engine('never', { edit: text => held(once('never', ADOPT, '')(text)) })
+  : CONTROL === 'norecord' ? await engine('norecord', { edit: text => held(once('norecord', RECORD_MINE, '')(text)) })
+  : await engine('tree', { edit: held });
+const inverse = CONTROL === 'noinverse' ? await engine('tree', { edit: held }) : await engine('inverse', { edit: text => held(withoutWorldSeed(text)) });
 
 /* The fleet, picked from the base engine's own tables and printed, so a data update that moves a club shows. */
 const M0 = await baseEngine.fresh();

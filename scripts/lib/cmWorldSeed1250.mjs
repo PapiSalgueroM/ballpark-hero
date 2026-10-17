@@ -34,8 +34,23 @@ const CLOSE = '    state.worldSeed = world.worldSeed;\n  }\n';
 /* Round 1344: startCareer's last line records the opening window's deals once the seed is drawn (the post seed
    flush). With the seed block cut there is no seed and that line hands back the same state, so the inverse still
    makes every new save a save from before Release AZ. Either last line is accepted, so the legs that apply this
-   in throwaway checkouts of older commits still run. */
+   in throwaway checkouts of older commits still run.
+   Round 1502 (the critic's correction 3, the one agreed shape): the seed block may be followed by the rounds'
+   named blocks, each kept as it is, then one of the last lines. Round 1502's is the watched Champions League,
+   opened on the seed; with the seed block cut it keys on the save's own start instead, a different slice, so a
+   harness comparing whole states across the inverse strips worldComps on both arms. */
 const AFTERS = ['  return state;\n}\n', '  return recordAiDeals(state, unrecorded);\n}\n'];
+const NAMED_BLOCKS = [
+  '  /* Round 1502: a club not in the Champions League watches it, opened after the seed it is keyed on. */\n  openWorldUclOnStart(state, world);\n',
+];
+const afterSeedBlock = (text, end) => {
+  let at = end;
+  for (let moved = true; moved;) {
+    moved = false;
+    for (const block of NAMED_BLOCKS) if (text.startsWith(block, at)) { at += block.length; moved = true; }
+  }
+  return AFTERS.some(after => text.startsWith(after, at));
+};
 /* Round 1508: the line of startNextSeason that adopts a career with no seed into the living world (one source). */
 export { ADOPT };
 
@@ -48,7 +63,7 @@ export function withoutWorldSeed(source) {
   const close = text.indexOf(CLOSE, start);
   if (close < 0) throw new Error(`cmWorldSeed1250: the seed block in ${FILE} does not end with its else branch`);
   const end = close + CLOSE.length;
-  if (!AFTERS.some(after => text.startsWith(after, end))) throw new Error(`cmWorldSeed1250: the seed block in ${FILE} is not the last thing startCareer does`);
+  if (!afterSeedBlock(text, end)) throw new Error(`cmWorldSeed1250: the seed block in ${FILE} is not the last thing startCareer does`);
   const block = text.slice(start, end);
   if (block.split('\n').length > 14 || !block.includes('state.worldSeed = Math.floor(')) throw new Error(`cmWorldSeed1250: the cut in ${FILE} is not the seed block`);
   let out = text.slice(0, start) + text.slice(end);

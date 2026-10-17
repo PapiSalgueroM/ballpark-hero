@@ -359,6 +359,10 @@ export function startDeadlineDay(setup: DeadlineSetup): DeadlineRun {
        (the post seed flush), and a daily holds none (Y3), so it comes off with the seed. scripts/simDailyDeals.mjs
        holds it: its ledgerdeadline control puts this line back out. */
     delete state0.worldRoster;
+    /* Round 1502: nor a watched Champions League (startCareer opens one for a club that is not in it). It
+       draws nothing, so the deal cannot move; scripts/simDailyDeals.mjs holds the state's shape, and its
+       worlddeadline control puts this line back out. */
+    delete state0.worldComps;
     const rng = mulberry32(mixSeed(setup.seed, SEED_BRIEF));
     const count = rng() < 0.5 ? 3 : 4;
     const market = buildMarket(state0);

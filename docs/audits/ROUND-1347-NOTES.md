@@ -28,6 +28,12 @@ binding but never lifts the ban in words: the lead acknowledges this file at the
 
 ## RECORDED DEBT until E2 (do not merge this branch without E2 or the lead's written acceptance)
 
+CLOSED by E2, built on Round 1502's branch (r1502-cm-ucl-binding) under the lead's ruling of 2026-10-16 (the
+weight accepted): clubManager.ts no longer declares groupFixtures and settles advanceUclBracket's AI tie with one
+settleTie call, both imported from worldCompetition.ts. The unit file now holds that (the participant engine plays
+groupFixtures and settleTie from this module, one writing each), and the recorder's --check stays the tie's proof.
+The two items below are the history of the debt.
+
 - `settleTie` in worldCompetition.ts is a second writing of advanceUclBracket's AI tie (clubManager.ts). It is held
   to d4f2c6f6 by the golden table, and to any later engine by
   `node scripts/recordWorldTieGolden1347.mjs --ref <commit> --check`, which records that commit's engine and

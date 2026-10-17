@@ -148,7 +148,9 @@ console.log('1) Every club in the field has a reason to be there');
   for (const { club, fin, next } of runs) {
     if (!next.uclField) { fail(`${club}: season two carries no derived field at all`); continue; }
     const tables = finalTables(fin);
-    const holder = fin.uclBracket ? (fin.uclBracket.find(t => t.round === 'F') || {}).winner : null;
+    /* Round 1502 (E5, the critic's correction 4): the holder is the engine's own uclHolderOf, my final or the
+       watched one, never a second writing of it here. */
+    const holder = cm.uclHolderOf(fin);
     /* A club's best reason: its finishing place in its own league. The top up
        rule reaches at most eight places past the qualifying cut. */
     for (const name of next.uclField) {
@@ -179,7 +181,9 @@ console.log('2) The club that just missed is really out');
   for (const { club, fin, next } of runs) {
     if (!next.uclField) continue;
     const field = new Set(next.uclField);
-    const holder = fin.uclBracket ? (fin.uclBracket.find(t => t.round === 'F') || {}).winner : null;
+    /* Round 1502 (E5, the critic's correction 4): the holder is the engine's own uclHolderOf, my final or the
+       watched one, never a second writing of it here. */
+    const holder = cm.uclHolderOf(fin);
     const tables = finalTables(fin);
     for (const { lg, rows } of tables.values()) {
       const slots = uclPlacesIn(lg);

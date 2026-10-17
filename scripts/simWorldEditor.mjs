@@ -332,7 +332,9 @@ function seasonOn(edit, club, label) {
     league,
     clubs: (league.id === L ? cm.sortedWorldTable(end, L, end.table) : end.world?.[league.id] ? cm.sortedWorldTable(end, league.id, end.world[league.id].table) : []).map(r => r.club),
   }));
-  const earned = cm.uclFieldFromTables(played, end.uclBracket?.find(t => t.round === 'F')?.winner);
+  /* Round 1502 (E5, the critic's correction 4): the holder the summer hands on is the engine's own uclHolderOf
+     (my final, else the watched one), never a second writing of it. */
+  const earned = cm.uclFieldFromTables(played, cm.uclHolderOf(end));
   const field = next.uclField ?? [];
   ok(field.length > 0 && JSON.stringify(field) === JSON.stringify(earned), `${label}: next season's Champions League is not the one the played tables earned (${field.slice(0, 4).join(', ')} against ${earned.slice(0, 4).join(', ')})`);
   const europeans = new Set(played.flatMap(t => t.clubs));
