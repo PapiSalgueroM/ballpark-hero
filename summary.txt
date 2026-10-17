@@ -1,0 +1,3 @@
+headsha exit=0 0s | 0d3f4d3b2 Round BJG: m7, merge PR306 (codex/xi-selection-race at ddffe5af), Build Your XI holds the picker while a player's history is checked
+wf303x exit=1 195s | wfrun career-pending-overall-gates.yml: 14 steps ran, 2 failed: Complete build and all rebuilt-site readers | Unchanged full route weights
+vitest exit=0 2s |    Duration  1.79s (transform 786ms, setup 143ms, collect 2.75s, tests 553ms, environment 789ms, prepare 264ms)
