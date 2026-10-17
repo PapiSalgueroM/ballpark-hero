@@ -1,0 +1,3 @@
+#!serial
+headsha: git log --oneline -3
+wf296: node .rc/x/wfrun.mjs .github/workflows/manager-desk-feedback.yml --set CM_DESK_FEEDBACK_BASE=f85b1dd57e00463b6bb9eeddc721cd18ab8ff147
