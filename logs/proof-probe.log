@@ -1,0 +1,5 @@
+base d8aaa4cb; fleet (1): Real Madrid (now, participant)
+seeds 1; modes nocoach; strip nothing
+ok   Real Madrid (now, participant, nocoach, seed 1, 2 seasons): 111 steps, 3.8 s
+journeys 1, steps compared 111, tree journeys whose save carried worldComps 0, 4 s
+proofWorldUclFleet: GREEN, 1 journeys and 111 steps byte equal to d8aaa4cb, draws equal

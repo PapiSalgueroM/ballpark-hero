@@ -1,0 +1,7 @@
+golden-head exit=0 1s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+simSeasonLaw exit=0 1s | simSeasonLaw: 14 checks, 0 failed
+vitest-world exit=0 4s |    Duration  3.22s (transform 1.41s, setup 53ms, collect 1.72s, tests 630ms, environment 309ms, prepare 209ms)
+simUclSeasonOne exit=0 17s | simUclSeasonOne: all green
+proof-probe exit=0 5s | proofWorldUclFleet: GREEN, 1 journeys and 111 steps byte equal to d8aaa4cb, draws equal
+simHarnessAnchors exit=0 35s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 53s | 
