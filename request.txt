@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+whead: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/swh.log 2>&1; s=$?; grep -E "club-manager|manager-hot-seat|deadline-day|OVER" /tmp/swh.log | head -12; tail -2 /tmp/swh.log; exit $s
+wbase: git worktree add -f /tmp/wbase d8aaa4cb > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wbase/node_modules && (cd /tmp/wbase && node_modules/.bin/vite build > /tmp/wb.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/wbase/dist 4180 > /tmp/hs.log 2>&1 &) && sleep 4 && BASE=http://127.0.0.1:4180 SWEEP_BASE=http://127.0.0.1:4180 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/swb.log 2>&1; grep -E "club-manager|manager-hot-seat|deadline-day|OVER" /tmp/swb.log | head -12; tail -2 /tmp/swb.log
+compare: MATCHDAY_COMPARE_DIST=/tmp/wbase/dist node scripts/playCmMatchDay.mjs
