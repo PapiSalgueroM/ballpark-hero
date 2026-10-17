@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sd1-5: SIM_SOCCER_DECK_SECTIONS=1,2,3,4,5 node scripts/simSoccerDeck.mjs
+sd8: SIM_SOCCER_DECK_SECTIONS=8 node scripts/simSoccerDeck.mjs
+ctl-statmax: SIM_SOCCER_DECK_CONTROL=statmax node scripts/simSoccerDeck.mjs
+ctl-freetraining: SIM_SOCCER_DECK_CONTROL=freetraining node scripts/simSoccerDeck.mjs
+vitest: node_modules/.bin/vitest run src/lib/soccerDeck.test.ts --testTimeout=300000 --hookTimeout=120000
