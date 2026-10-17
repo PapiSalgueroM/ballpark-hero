@@ -1,0 +1,12 @@
+tactics-fit2nd exit=0 65s | simTacticsEngine control fit2nd: PASS (the named section went red, the rest stayed green)
+simTacticsEngine exit=0 66s | simTacticsEngine: PASS. A man is read in his slot, a second position is earned over counted weeks, the armband and the takers reach the stream, a duty moves the football 
+simDailyDeals exit=0 2s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+simCmNoSack exit=0 98s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
+simManagerAppealIsolation exit=0 33s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simHarnessAnchors exit=0 37s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simClubManagerStart exit=0 2s | simClubManagerStart: green. The defaults are the shipped game, the currency never reaches the engine, and no setting can switch off the haggle.
+simBoardAsks exit=0 23s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+simClubManagerSlots exit=0 45s | simClubManagerSlots: all sections green
+simClubManagerMeters exit=0 23s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simCmBoardVerdict exit=0 345s | simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 345 s)

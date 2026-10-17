@@ -1,0 +1,12 @@
+simCmNoSack: git worktree add -q /tmp/b1 d8aaa4cb && BASE_ROOT=/tmp/b1 node scripts/simCmNoSack.mjs
+simTacticsEngine: node scripts/simTacticsEngine.mjs
+tactics-fit2nd: TACTICS_CONTROL=fit2nd node scripts/simTacticsEngine.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simBoardAsks: node scripts/simBoardAsks.mjs
+simClubManagerStart: node scripts/simClubManagerStart.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simCmBoardVerdict: node scripts/simCmBoardVerdict.mjs
