@@ -1,0 +1,6 @@
+simCmMatchDay exit=0 24s | simCmMatchDay: all sections green (916 matches: 461 home, 447 away, 8 neutral)
+md-neutrallive exit=1 24s | simCmMatchDay: CONTROL neutrallive FIRED (3804 failures, section(s) 4, 7)
+md-neutralaway exit=1 25s | simCmMatchDay: CONTROL neutralaway FIRED (232 failures, section(s) 1, 4, 5, 7)
+md-oldorder exit=1 24s | simCmMatchDay: CONTROL oldorder FIRED (22776 failures, section(s) 2, 3, 4, 5)
+md-greenfirst exit=1 23s | simCmMatchDay: CONTROL greenfirst FIRED (320 failures, section(s) 4)
+md-barorder exit=1 24s | simCmMatchDay: CONTROL barorder FIRED (4726 failures, section(s) 2, 4)

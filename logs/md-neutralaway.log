@@ -1,0 +1,43 @@
+NEGATIVE CONTROL ON: neutralaway; section(s) 1 must go red
+fleet: 25 careers, 916 matches (461 home, 447 away, 8 neutral), 0 reports with no fixture read before them, 13s
+live: 181 matches kicked off live (64 away, 8 on a neutral ground), 724 live renders
+1) One rule: the fixture's venue and the report's own order agree on every match
+  FAIL [1]: Celta Vigo now seed 3: Celta Vigo 2-5 Villarreal (Copa del Rey · Final, neutral): myClubFirst(null) is false but the report's order says true
+  FAIL [1]: OB now seed 4: OB 0-3 FC Copenhagen (Danish Cup · Final, neutral): myClubFirst(null) is false but the report's order says true
+  FAIL [1]: Barcelona era2015 seed 0: Barcelona 3-0 Juventus (Champions League · Final, neutral): myClubFirst(null) is false but the report's order says true
+  FAIL [1]: Barcelona era2015 seed 2: Barcelona 3-1 Sevilla (Copa del Rey · Final, neutral): myClubFirst(null) is false but the report's order says true
+  FAIL [1]: Barcelona era2015 seed 2: Barcelona 3-1 Arsenal (Champions League · Final, neutral): myClubFirst(null) is false but the report's order says true
+  FAIL [1]: Barcelona era2015 seed 3: Barcelona 4-0 Atlético Madrid (Copa del Rey · Final, neutral): myClubFirst(null) is false but the report's order says true
+   916 matches, 8 reports saying neutral; red: 0 home, 0 away, 8 neutral
+2) The report card: every two sided block in the scoreline's order
+   916 reports, 9160 stat bars read (18320 bar segments); red: 0 home, 0 away, 0 neutral
+3) The timeline: home side first, whole names, every mark right after its name
+   916 timelines, 15753 rows, 15753 names, 242 marks; red: 0 home, 0 away, 0 neutral
+4) Live and half time: the strip, the score's digits, the interval card, the stats and the line under the pitch home side first
+  FAIL [4]: Celta Vigo now seed 3: Celta Vigo 1-3 Villarreal (Copa del Rey · Final, neutral): at first the score's digits read opp then me
+  FAIL [4]: Celta Vigo now seed 3: Celta Vigo 1-3 Villarreal (Copa del Rey · Final, neutral): at first the strip reads Villarreal v Celta Vigo
+  FAIL [4]: Celta Vigo now seed 3: Celta Vigo 1-3 Villarreal (Copa del Rey · Final, neutral): at first the line under the pitch is not home side first
+  FAIL [4]: Celta Vigo now seed 3: Celta Vigo 1-3 Villarreal (Copa del Rey · Final, neutral): at first the stats header reads Villarreal v Celta Vigo
+  FAIL [4]: Celta Vigo now seed 3: Celta Vigo 1-3 Villarreal (Copa del Rey · Final, neutral): at first the possession pair is not home side first
+  FAIL [4]: Celta Vigo now seed 3: Celta Vigo 1-3 Villarreal (Copa del Rey · Final, neutral): at first the possession bar's segments draw my green one second
+   362 live matches judged, 8 of them on a neutral ground (181 first, 181 interval, 181 second, 181 done; 543 frames staged with no venue field; 2534 possession bar segments, 1951 green names); red: 0 home, 0 away, 8 neutral, 0 staged with no venue field
+5) The Match Centre: the tie, the form rows and the ones to watch home side first; the odds still Win, Draw, They win
+  FAIL [5]: Celta Vigo now seed 3: Celta Vigo 2-5 Villarreal (Copa del Rey · Final, neutral): the sides read opp me opp me opp me
+  FAIL [5]: OB now seed 4: OB 0-3 FC Copenhagen (Danish Cup · Final, neutral): the sides read opp me opp me opp me
+  FAIL [5]: Barcelona era2015 seed 0: Barcelona 3-0 Juventus (Champions League · Final, neutral): the sides read opp me opp me opp me
+  FAIL [5]: Barcelona era2015 seed 2: Barcelona 3-1 Sevilla (Copa del Rey · Final, neutral): the sides read opp me opp me opp me
+  FAIL [5]: Barcelona era2015 seed 2: Barcelona 3-1 Arsenal (Champions League · Final, neutral): the sides read opp me opp me opp me
+  FAIL [5]: Barcelona era2015 seed 3: Barcelona 4-0 Atlético Madrid (Copa del Rey · Final, neutral): the sides read opp me opp me opp me
+   163 Match Centres (76 home, 79 away, 8 neutral, 163 with ones to watch); red: 0 home, 0 away, 8 neutral
+6) The pitch: every dot label is the man's pitch name, his initials or his slot's role, never a number
+   15870 dot labels over 724 pitches: 7907 of mine named (13 in initials), 4916 named opponents, 3047 nameless opponents (1991 of them staged); red: 0 home, 0 away, 0 neutral
+7) A home or neutral match: the card's visible text equals the base's, the board word and the pitch labels masked
+  FAIL [7]: Celta Vigo now seed 3: Celta Vigo 1-3 Villarreal (Copa del Rey · Final, neutral): at first the text differs from the base at "glow { animation: none; } } ? Villarreal 0 - 1 Celta Vigo Copa del Rey" against "glow { animation: none; } } ? Celta Vigo 1 - 0 Villarreal Copa del Rey"
+  FAIL [7]: Celta Vigo now seed 3: Celta Vigo 1-3 Villarreal (Copa del Rey · Final, neutral): at interval the text differs from the base at "a del Rey · Final · Half time 0 - 1 Villarreal vs Celta Vigo Villarrea" against "a del Rey · Final · Half time 1 - 0 Celta Vigo vs Villarreal Celta Vig"
+  FAIL [7]: Celta Vigo now seed 3: Celta Vigo 1-3 Villarreal (Copa del Rey · Final, neutral): at second the text differs from the base at "glow { animation: none; } } ? Villarreal 1 - 1 Celta Vigo Copa del Rey" against "glow { animation: none; } } ? Celta Vigo 1 - 1 Villarreal Copa del Rey"
+  FAIL [7]: Celta Vigo now seed 3: Celta Vigo 1-3 Villarreal (Copa del Rey · Final, neutral): at half time alone the text differs from the base at "opa del Rey · Final · neutral Villarreal 0-1 Celta Vigo Against the ru" against "opa del Rey · Final · neutral Celta Vigo 1-0 Villarreal Against the ru"
+  FAIL [7]: OB now seed 4: OB 0-0 FC Copenhagen (Danish Cup · Final, neutral): at first the text differs from the base at "glow { animation: none; } } ? FC Copenhagen 0 - 0 OB Danish Cup · Fina" against "glow { animation: none; } } ? OB 0 - 0 FC Copenhagen Danish Cup · Fina"
+  FAIL [7]: OB now seed 4: OB 0-0 FC Copenhagen (Danish Cup · Final, neutral): at interval the text differs from the base at "Cup · Final · Half time 0 - 0 FC Copenhagen vs OB FC Copenhagen Balanc" against "Cup · Final · Half time 0 - 0 OB vs FC Copenhagen OB Balance of play F"
+   670 home and neutral screens compared with d8aaa4cb (585 live screens and 84 Match Centres among them); red: 0 home, 16 neutral
+control neutralaway: section 1 8 failures (0 home, 0 away, 8 neutral matches red)
+simCmMatchDay: CONTROL neutralaway FIRED (232 failures, section(s) 1, 4, 5, 7)
