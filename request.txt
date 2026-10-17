@@ -1,0 +1,3 @@
+#!serial
+headsha: git log --oneline -3
+prove306: B=$(bash .rc/x/pktMinus.sh 306) || exit 2; echo "reference $B: $(git log -1 --format=%s $B)"; mkdir -p "$RC_OUT/c306"; CI=1 SIM_NETWORK=offline XI_SELECTION_RACE_PHASE=fixed XI_RACE_OUT="$RC_OUT/c306" XI_RACE_BASELINE_RAW_SHA256=7c65d7f1a66eb9a2f29fb5c24fce53bb91aec76abb59e4131c5de923fb7d65bf SIM_OFFLINE_RECEIPT="$RC_OUT/c306/new.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node .rc/x/rebind.mjs scripts/qa/proveXiSelectionRaceFixed.mjs $B; s=$?; echo "files:"; find "$RC_OUT/c306" -type f | sort | while read f; do echo "$(sha256sum "$f" | cut -c1-64) $(wc -c < "$f") ${f#$RC_OUT/}"; done | head -40; git status --porcelain --untracked-files=no | head -5; exit $s

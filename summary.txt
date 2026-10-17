@@ -1,0 +1,2 @@
+headsha exit=0 0s | e2f9b3378 Round BJG: m6, merge PR305 (codex/safari-interaction-reports at 93730ed2), Soccer Career's Begin Career waits for the roll after a position change
+prove306 exit=0 5s | be6f067d3b88fa21434c4c08030dfd033485bbf89f650609080a51fc9322ddb3 536038 c306/fixed-proof/tracked.before.json

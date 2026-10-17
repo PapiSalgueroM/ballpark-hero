@@ -1,0 +1,104 @@
+reference ae709582aff399f4d03a38c96707d0b303097cb5: 0d3f4d3b2e464708baa16671bc80658b8a69e45a without PR306's product lines (cb750990..439a23dd, src/hooks/useLineupBuilder.ts only)
+rebind: scripts/qa/proveXiSelectionRaceFixed.mjs BASE cb7509907ca84af9bf85f99f10e67990805edb4c -> ae709582aff399f4d03a38c96707d0b303097cb5 (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/rebound-proveXiSelectionRaceFixed.mjs)
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race missing: a late history cannot replace the latest enabled-picker selection 21ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: a matching-primary club pick stays local and immediate 4ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: valid history still admits the originally selected player 4ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: refused history releases the picker for a valid retry 4ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: an unverified nation pick releases the picker and retry can succeed 5ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: reroll abandons a pending history without publishing into its new team 4ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: reset abandons a pending history without repopulating the formation 4ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: the existing next-door history wait stays busy and settles normally 3ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  18:26:53
+   Duration  1.10s (transform 212ms, setup 72ms, collect 326ms, tests 51ms, environment 318ms, prepare 134ms)
+
+JSON report written to /home/runner/work/_temp/rc-out/files/c306/fixed-proof/normal/units.json
+XI history normal:8 completed;8 passed;0 exact ownership faults;28 complete snapshots.
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ × src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race missing: a late history cannot replace the latest enabled-picker selection 27ms
+   → XI_SELECTION_RACE_OWNERSHIP: late history replaced the most recent pick accepted by the enabled picker: expected false to be true // Object.is equality
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: a matching-primary club pick stays local and immediate 4ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: valid history still admits the originally selected player 4ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: refused history releases the picker for a valid retry 4ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: an unverified nation pick releases the picker and retry can succeed 5ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: reroll abandons a pending history without publishing into its new team 4ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: reset abandons a pending history without repopulating the formation 3ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: the existing next-door history wait stays busy and settles normally 3ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 7 passed (8)
+   Start at  18:26:54
+   Duration  1.04s (transform 209ms, setup 69ms, collect 310ms, tests 54ms, environment 296ms, prepare 124ms)
+
+JSON report written to /home/runner/work/_temp/rc-out/files/c306/fixed-proof/original/units.json
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race missing: a late history cannot replace the latest enabled-picker selection
+AssertionError: XI_SELECTION_RACE_OWNERSHIP: late history replaced the most recent pick accepted by the enabled picker: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/test/xiSelectionHistoryRace.test.tsx:115:89
+    113|     const afterHistory = state(view.result), expectedOwner = retryEnab…
+    114|     retain('overlap', { before, duringHistory, retryEnabled, afterRetr…
+    115|     expect(view.result.current.filledSlots.get(9)?.playerName === expe…
+       |                                                                                         ^
+    116|     expect(view.result.current.filledSlots.size).toBe(1);
+    117|     expect(view.result.current.isValidating).toBe(false);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+XI history original:8 completed;7 passed;1 exact ownership faults;28 complete snapshots.
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race missing: a late history cannot replace the latest enabled-picker selection 20ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: a matching-primary club pick stays local and immediate 3ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: valid history still admits the originally selected player 3ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: refused history releases the picker for a valid retry 4ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: an unverified nation pick releases the picker and retry can succeed 5ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: reroll abandons a pending history without publishing into its new team 4ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: reset abandons a pending history without repopulating the formation 3ms
+ ✓ src/test/xiSelectionHistoryRace.test.tsx > Build Your XI history selection ownership > history race preservation: the existing next-door history wait stays busy and settles normally 3ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  18:26:56
+   Duration  1.10s (transform 218ms, setup 71ms, collect 323ms, tests 47ms, environment 303ms, prepare 73ms)
+
+JSON report written to /home/runner/work/_temp/rc-out/files/c306/fixed-proof/restored/units.json
+XI history restored:8 completed;8 passed;0 exact ownership faults;28 complete snapshots.
+XI fixed unit proof:8 current passes;1 exact original overwrite fault+7 preserves;8 restored passes;84 complete snapshots;source and actual baseline raw held.
+Prepared actual-hook proof only. No browser, live database or physical-device root-cause qualification.
+files:
+db4b0caca0aca7a915eefdfc38b5e8bfa4034f16972a1a7a041cb279f7f59664 20244 c306/fixed-proof/hook.current.ts
+701faa1be4fb74af91db2395367b9f1cd0c0a90ea04f8960a90d5e34b16f1455 20181 c306/fixed-proof/hook.inverse.ts
+701faa1be4fb74af91db2395367b9f1cd0c0a90ea04f8960a90d5e34b16f1455 20181 c306/fixed-proof/hook.original.ts
+44035a4cc3fbf2d2d6bb4fb5993c075962a64626165243e03dccf2838accfc96 113820 c306/fixed-proof/normal/raw.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 c306/fixed-proof/normal/stderr.log
+c7a37366a0f92a052b2f728009ea8e52c620431d63139961f7799bba92e9ab45 1830 c306/fixed-proof/normal/stdout.log
+51252ac70dc7f906a84350a3db3200efeb7fdd518ef9429a697b771e72357658 3791 c306/fixed-proof/normal/units.json
+7c65d7f1a66eb9a2f29fb5c24fce53bb91aec76abb59e4131c5de923fb7d65bf 115967 c306/fixed-proof/original/raw.json
+159a8bb0fa5ca1b92a36f8c8270481b70a97aef0c0bf5eda929874e090a7a5df 1069 c306/fixed-proof/original/stderr.log
+39bd75576f965b062ce6e69d91e38aff0dec8f145559b5ac3f72b3e8543c0039 2001 c306/fixed-proof/original/stdout.log
+75beb002e5f798c9d9df243d8a5ae6dbfd637f9d7cce080e73c6b316cabdb7f7 4177 c306/fixed-proof/original/units.json
+a9ecf1c07cfd2a6a6c7b1a8df2d47cccd913e74d8aa4451313611870404fc4be 905 c306/fixed-proof/product.diff
+f7b351004599e958c34ed21ca9d4b101d6b74f220ccca18994d2709e75ce5d98 258245 c306/fixed-proof/report.json
+44035a4cc3fbf2d2d6bb4fb5993c075962a64626165243e03dccf2838accfc96 113820 c306/fixed-proof/restored/raw.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 c306/fixed-proof/restored/stderr.log
+d83872bd500b809430162fea0115b62c71afde91ba1bc2ea934084571aa2d7f6 1831 c306/fixed-proof/restored/stdout.log
+84f0880ee7c9abc6354819d788cb3ac73e9d825c9d71285a92aa2e6a4a226a90 3793 c306/fixed-proof/restored/units.json
+be6f067d3b88fa21434c4c08030dfd033485bbf89f650609080a51fc9322ddb3 536038 c306/fixed-proof/tracked.after.json
+be6f067d3b88fa21434c4c08030dfd033485bbf89f650609080a51fc9322ddb3 536038 c306/fixed-proof/tracked.before.json
