@@ -1,0 +1,2 @@
+#!serial
+title-played: BASE_SHA=$(bash .rc/x/minus1335.sh) && export BASE_SHA && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c3) SHARD=0/2 SIM_CM_BOARD_CONTROL=played node scripts/simCmBoardVerdict.mjs --part=title

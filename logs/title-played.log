@@ -1,0 +1,19 @@
+treeWithoutMerge: 63f44fccb5ee90974dcd38586408a4292a5fa5e2, d5a5ac6d without ea937568; conflicts kept from d5a5ac6d: src/pages/WhatsNew.tsx
+base 63f44fccb5ee90974dcd38586408a4292a5fa5e2
+[title] 197 rollovers, 184 stays: on CM_BOARD_BASE 88 of 119 A or B seasons opened under Safe (57 of 76 titles); on the head 0
+  by fate, none n 169: base mean 49.53 (p10 37.5 to p90 61), head mean 58.57 (p10 35.5 to p90 69)
+  by fate, up n 11: base mean 79.55 (p10 77.5 to p90 82), head mean 78.45 (p10 75.5 to p90 82)
+  by fate, down n 2: base mean 35 (p10 35 to p90 35), head mean 35 (p10 35 to p90 35)
+  by fate, escape n 2: base mean 60.75 (p10 58 to p90 63.5), head mean 69.25 (p10 69 to p90 69.5)
+  by grade, A n 87: base mean 56.93 (p10 49 to p90 62.5), head mean 69.8 (p10 69 to p90 69)
+  by grade, C n 49: base mean 43.62 (p10 36.5 to p90 47.5), head mean 41.79 (p10 35 to p90 45.5)
+  by grade, B n 32: base mean 53.83 (p10 40.5 to p90 77.5), head mean 70.23 (p10 69 to p90 75.5)
+  by grade, D n 16: base mean 39.06 (p10 35 to p90 51.5), head mean 37.69 (p10 35 to p90 49.5)
+ok   [title] every A or B season opens the next at Safe or more (0 of 119 under)
+ok   [title] every D or F season opens the next under Safe (0 of 16 at Safe or more)
+ok   [title] every move at the summer opens at BOARD_FRESH (0 of 13 do not)
+  184 stays recomputed from the season they had; 21 where the summer moved the club's expectation, 184 with a card that weighs a hit other than one
+FAIL [title] every stay opens at the sum of the season it had (the expectation as played, the card's weights) (20; first West Ham season 1: opened at 82, the season it had gives 69)
+ok   [title] startNextSeason draws the same number of times on head and base wherever the kitty band did not bind
+ok   [title] and writes the same save but for the opening (14 rollovers where the band bound left to section kitty)
+control played FIRED: 1 of 6 checks red
