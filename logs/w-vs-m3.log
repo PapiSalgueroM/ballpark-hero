@@ -1,0 +1,11 @@
+The nine routes, base (main 60824a23) against head (gzipped JS):
+  /club-manager                      base 618.3K (633166 B)  head 618.4K (633234 B)  +68 B (+0.07K)
+  /manager-hot-seat                  base 635.4K (650674 B)  head 635.5K (650736 B)  +62 B (+0.06K)
+  /deadline-day                      base 644.9K (660395 B)  head 645.0K (660462 B)  +67 B (+0.07K)
+  /soccer-career                     base 833.0K (853000 B)  head 834.1K (854102 B)  +1102 B (+1.08K)
+  /nba-my-career                     base 573.3K (587051 B)  head 575.8K (589602 B)  +2551 B (+2.49K)
+  /nfl-my-career                     base 487.8K (499516 B)  head 490.3K (502048 B)  +2532 B (+2.47K)
+  /mlb-my-career                     base 561.5K (574950 B)  head 564.0K (577496 B)  +2546 B (+2.49K)
+  /nhl-my-career                     base 564.0K (577580 B)  head 566.5K (580122 B)  +2542 B (+2.48K)
+  /champions-league-format-history   base 249.4K (255434 B)  head 249.5K (255471 B)  +37 B (+0.04K)
+weightBJ: done

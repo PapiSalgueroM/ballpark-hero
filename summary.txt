@@ -1,0 +1,5 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+build-m2 exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+build-m3 exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+w-vs-m2 exit=143 34s | weightBJ: done
+w-vs-m3 exit=0 35s | weightBJ: done

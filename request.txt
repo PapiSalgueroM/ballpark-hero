@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+build-m2: git worktree add -q --detach /tmp/wt-m2 20fa77a6 && ln -s "$PWD/node_modules" /tmp/wt-m2/node_modules && (cd /tmp/wt-m2 && npm run build > /tmp/build-m2.log 2>&1); s=$?; tail -1 /tmp/build-m2.log; exit $s
+build-m3: git worktree add -q --detach /tmp/wt-m3 65126da0 && ln -s "$PWD/node_modules" /tmp/wt-m3/node_modules && (cd /tmp/wt-m3 && npm run build > /tmp/build-m3.log 2>&1); s=$?; tail -1 /tmp/build-m3.log; exit $s
+w-vs-m2: nohup node scripts/lib/hostLikeServer.mjs /tmp/wt-m2/dist 4174 > /tmp/server-m2.log 2>&1 & for i in $(seq 1 20); do curl -s -o /dev/null http://localhost:4174/club-manager && break; sleep 1; done; BASE_DIST=/tmp/wt-m2/dist node .rc/x/weightBJ.mjs; s=$?; pkill -f 'hostLikeServer.mjs /tmp/wt-m2/dist' ; exit $s
+w-vs-m3: sleep 2; nohup node scripts/lib/hostLikeServer.mjs /tmp/wt-m3/dist 4174 > /tmp/server-m3.log 2>&1 & for i in $(seq 1 20); do curl -s -o /dev/null http://localhost:4174/club-manager && break; sleep 1; done; BASE_DIST=/tmp/wt-m3/dist node .rc/x/weightBJ.mjs
