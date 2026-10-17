@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+#!serial
+weights: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; mkdir -p "$RC_OUT"; cp /tmp/sw.log "$RC_OUT/sw.log"; grep -E 'FAIL|/club-manager |/manager-hot-seat |/deadline-day |/soccer-career |/nba-my-career |/nfl-my-career |/mlb-my-career |/nhl-my-career |/champions-league-format-history ' /tmp/sw.log | cut -c1-200; tail -1 /tmp/sw.log; exit $s
+diff-walk: node scripts/playCmDifficulty.mjs
+diff-jump: WIDTHS=320 PLAY_DIFF_CONTROL=jump node scripts/playCmDifficulty.mjs
+diff-nopill: WIDTHS=390 PLAY_DIFF_CONTROL=nopill node scripts/playCmDifficulty.mjs
+nosack-walk: node scripts/playCmNoSack.mjs
+md-walk: node scripts/playCmMatchDay.mjs
+md-ctl: ok=0; r=""; for k in swap cut jump fullname; do PLAY_MATCHDAY_CONTROL=$k node scripts/playCmMatchDay.mjs > /tmp/pmd-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/pmd-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+livefit: node scripts/playLiveMatchFit.mjs
+livefit-ctl: ok=0; r=""; for k in widelabels digits; do LIVE_FIT_CONTROL=$k node scripts/playLiveMatchFit.mjs > /tmp/lf-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/lf-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+fixtures-walk: node scripts/playCmLeagueFixtures.mjs
+cm-walk: node scripts/playClubManager.mjs
+twotabs: ENGINES=chromium CASES=9 node scripts/playTwoTabs.mjs

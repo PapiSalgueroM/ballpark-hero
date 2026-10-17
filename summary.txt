@@ -1,0 +1,13 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weights exit=1 26s | sweepWeight: 4 failures
+diff-walk exit=0 84s |   PASS  no page errors
+diff-jump exit=0 30s | playCmDifficulty control jump: all 1 guarded checks fired (mutations landed: {"blurb":2})
+diff-nopill exit=0 59s | playCmDifficulty control nopill: all 1 guarded checks fired (mutations landed: {"pill":3})
+nosack-walk exit=0 260s |   PASS  no page errors
+md-walk exit=0 182s | playCmMatchDay: green. 15 walks over 4 saves, every match day screen home side first, whole names on the timeline, a 44 px toggle, the page never moved
+md-ctl exit=0 34s | controls (each must be 1): swap=1 cut=1 jump=1 fullname=1
+livefit exit=0 142s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+livefit-ctl exit=0 170s | controls (each must be 1): widelabels=1 digits=1
+fixtures-walk exit=0 93s | playCmLeagueFixtures: green. 6 journeys (EFL Championship, La Liga, Bundesliga at 390 and 1280), one with its list three seconds late and 7 of the review's (two takeovers
+cm-walk exit=0 287s | Played Club Manager through its own screens. 0 findings.
+twotabs exit=0 72s | playTwoTabs: green at 320x640, 390x844, 1280x900
