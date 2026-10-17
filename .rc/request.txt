@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: node scripts/simUsDirtyMoney.mjs
+sim-big: US_DIRTY_MONEY_CAREERS=360 US_DIRTY_MONEY_AB=800 node scripts/simUsDirtyMoney.mjs
+ctl-words: US_DIRTY_MONEY_CONTROL=words node scripts/simUsDirtyMoney.mjs
+ctl-mathrandom: US_DIRTY_MONEY_CONTROL=mathrandom node scripts/simUsDirtyMoney.mjs
+ctl-flat: US_DIRTY_MONEY_CONTROL=flat node scripts/simUsDirtyMoney.mjs
+ctl-farm: US_DIRTY_MONEY_CONTROL=farm node scripts/simUsDirtyMoney.mjs
+ctl-deck: US_DIRTY_MONEY_CONTROL=deck node scripts/simUsDirtyMoney.mjs
+ctl-noop-nba: US_DIRTY_MONEY_CONTROL=noop US_DIRTY_MONEY_SPORT=nba node scripts/simUsDirtyMoney.mjs
+ctl-noop-nfl: US_DIRTY_MONEY_CONTROL=noop US_DIRTY_MONEY_SPORT=nfl node scripts/simUsDirtyMoney.mjs
+ctl-noop-mlb: US_DIRTY_MONEY_CONTROL=noop US_DIRTY_MONEY_SPORT=mlb node scripts/simUsDirtyMoney.mjs
+ctl-noop-nhl: US_DIRTY_MONEY_CONTROL=noop US_DIRTY_MONEY_SPORT=nhl node scripts/simUsDirtyMoney.mjs
+ctl-nodesk: US_DIRTY_MONEY_CONTROL=nodesk node scripts/simUsDirtyMoney.mjs
+ctl-sentence: US_DIRTY_MONEY_CONTROL=sentence node scripts/simUsDirtyMoney.mjs
+vitest: node_modules/.bin/vitest run src/lib/careerDirtyMoney.test.ts src/test/usCareerDirtyMoney.test.tsx src/test/usCareerHelpRules1104.test.tsx --testTimeout=300000 --hookTimeout=120000
+parity: node scripts/simUsBoardParity.mjs
+fences: node scripts/simNoRivalNames.mjs && node scripts/simHarnessAnchors.mjs && node scripts/simUsCareerWeight.mjs && node scripts/simNoInventedQuotes.mjs && node scripts/simStorageWrites.mjs
