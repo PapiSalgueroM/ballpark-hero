@@ -1,0 +1,6 @@
+wu-1: WORLD_UCL_ONLY=1 node scripts/simWorldUcl.mjs
+c-nocustomexit: WORLD_UCL_CONTROL=nocustomexit node scripts/simWorldUcl.mjs
+c-field32: WORLD_UCL_CONTROL=field32 node scripts/simWorldUcl.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
+pin1081: node scripts/simManagerAppealIsolation.mjs
