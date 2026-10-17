@@ -1,0 +1,141 @@
+name: Urgent career and XI report hotfix
+
+on:
+  push:
+    branches: [codex/urgent-report-hotfix]
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      SAFARI_REPORT_PHASE: fixed
+      SOCCER_CREATION_BASE: http://127.0.0.1:4173
+      XI_SELECTION_BASE: http://127.0.0.1:4173
+      XI_PENDING_BASE: http://127.0.0.1:4173
+      XI_SELECTION_HOOK_SOURCE_REF: ${{ github.sha }}
+      XI_PENDING_HOOK_SOURCE_REF: ${{ github.sha }}
+    steps:
+      - name: Allocate evidence directories
+        run: |
+          echo "URGENT_REPORT_OUT=$RUNNER_TEMP/urgent-reports" >> "$GITHUB_ENV"
+          echo "SAFARI_REPORT_FONT_CACHE=$RUNNER_TEMP/urgent-report-fonts" >> "$GITHUB_ENV"
+          echo "SOCCER_CREATION_OUT=$RUNNER_TEMP/urgent-reports/creation" >> "$GITHUB_ENV"
+          echo "XI_SELECTION_OUT=$RUNNER_TEMP/urgent-reports/xi-selection" >> "$GITHUB_ENV"
+          echo "XI_PENDING_OUT=$RUNNER_TEMP/urgent-reports/xi-pending" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact source locked packages and isolated browser tools
+        run: |
+          set -euo pipefail
+          mkdir -p "$URGENT_REPORT_OUT"
+          git rev-parse HEAD > "$URGENT_REPORT_OUT/head.txt"
+          git archive --format=zip HEAD > "$URGENT_REPORT_OUT/source.zip"
+          git status --porcelain --untracked-files=no > "$URGENT_REPORT_OUT/source-before.txt"
+          test ! -s "$URGENT_REPORT_OUT/source-before.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$URGENT_REPORT_OUT/source-files.sha256"
+          npm ci > "$URGENT_REPORT_OUT/install.log" 2>&1
+          cat "$URGENT_REPORT_OUT/install.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed=Object.entries(lock.packages).filter(([p])=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(([p,entry])=>{
+            const version=JSON.parse(fs.readFileSync(p+'/package.json')).version;
+            assert.equal(version,entry.version,p); return {path:p,version};
+          });
+          assert.equal(installed.length,521);
+          fs.writeFileSync(process.env.URGENT_REPORT_OUT+'/installed-versions.json',JSON.stringify(installed,null,2)+'\n');
+          fs.writeFileSync(process.env.URGENT_REPORT_OUT+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n');
+          console.log('Bound all521 installed locked package manifests.');
+          NODE
+          npm install --prefix "$RUNNER_TEMP/urgent-report-tools" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$RUNNER_TEMP/urgent-report-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/urgent-report-tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/urgent-report-tools/node_modules/playwright/cli.js" install --with-deps chromium webkit
+          python -m pip install fonttools pillow
+          python -m pip freeze > "$URGENT_REPORT_OUT/python-packages.txt"
+          node -p "require('playwright/package.json').version" > "$URGENT_REPORT_OUT/playwright-version.txt"
+          SOCCER_CAREER_SAVE_RETRY_FONT_CACHE="$SAFARI_REPORT_FONT_CACHE" node scripts/qa/soccerCareerSaveRetry1078.mjs --prefetch-fonts-only > "$URGENT_REPORT_OUT/fonts.log" 2>&1
+          cp -R "$SAFARI_REPORT_FONT_CACHE" "$URGENT_REPORT_OUT/fonts"
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$URGENT_REPORT_OUT/installed-files.sha256"
+          find "$RUNNER_TEMP/urgent-report-tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$URGENT_REPORT_OUT/browser-tool-files.sha256"
+      - name: Actual app types and combined method syntax
+        run: |
+          set -euo pipefail
+          node --check scripts/qa/proveUrgentReportComposition.mjs
+          node --check scripts/qa/playUrgentXiSelection.mjs
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$URGENT_REPORT_OUT/types.log"
+      - name: Exact combined source and preserved report and picker outcomes
+        run: |
+          set -euo pipefail
+          SIM_OFFLINE_RECEIPT="$URGENT_REPORT_OUT/units.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/proveUrgentReportComposition.mjs 2>&1 | tee "$URGENT_REPORT_OUT/composition.log"
+      - name: Actual production build
+        id: build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build 2>&1 | tee "$URGENT_REPORT_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$URGENT_REPORT_OUT/dist-files.sha256"
+          python -c "import os,zipfile; z=zipfile.ZipFile(os.environ['URGENT_REPORT_OUT']+'/dist.zip','w',zipfile.ZIP_DEFLATED); [(z.write(os.path.join(r,f),os.path.join(r,f))) for r,ds,fs in os.walk('dist') for f in fs]; z.close()"
+      - name: Every built site reader
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          failed=0
+          for sim in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$sim.mjs" > "$URGENT_REPORT_OUT/$sim.log" 2>&1 || failed=1
+            tail -n 3 "$URGENT_REPORT_OUT/$sim.log"
+          done
+          exit "$failed"
+      - name: Native creation selection pending validation and unchanged weights
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$URGENT_REPORT_OUT/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do curl --fail --silent http://127.0.0.1:4173/ > /dev/null && break || sleep 1; done
+          failed=0
+          SIM_OFFLINE_RECEIPT="$URGENT_REPORT_OUT/creation.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSoccerCreation1388.mjs > "$URGENT_REPORT_OUT/creation-browser.log" 2>&1 || failed=1
+          cat "$URGENT_REPORT_OUT/creation-browser.log"
+          SIM_OFFLINE_RECEIPT="$URGENT_REPORT_OUT/selection.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playUrgentXiSelection.mjs > "$URGENT_REPORT_OUT/selection-browser.log" 2>&1 || failed=1
+          cat "$URGENT_REPORT_OUT/selection-browser.log"
+          SIM_OFFLINE_RECEIPT="$URGENT_REPORT_OUT/pending.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playXiPendingHistory.mjs > "$URGENT_REPORT_OUT/pending-browser.log" 2>&1 || failed=1
+          cat "$URGENT_REPORT_OUT/pending-browser.log"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$URGENT_REPORT_OUT/weights.log" 2>&1 || failed=1
+          cat "$URGENT_REPORT_OUT/weights.log"
+          exit "$failed"
+      - name: Complete source dependencies browser tools and built bytes held
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$URGENT_REPORT_OUT/source-files.sha256" > "$URGENT_REPORT_OUT/source-holds.log" 2>&1
+          sha256sum --check "$URGENT_REPORT_OUT/installed-files.sha256" > "$URGENT_REPORT_OUT/installed-holds.log" 2>&1
+          sha256sum --check "$URGENT_REPORT_OUT/browser-tool-files.sha256" > "$URGENT_REPORT_OUT/browser-tool-holds.log" 2>&1
+          if test -f "$URGENT_REPORT_OUT/dist-files.sha256"; then sha256sum --check "$URGENT_REPORT_OUT/dist-files.sha256" > "$URGENT_REPORT_OUT/dist-holds.log" 2>&1; fi
+          for receipt in units creation selection pending; do test ! -s "$URGENT_REPORT_OUT/$receipt.transport"; done
+          git status --porcelain --untracked-files=no > "$URGENT_REPORT_OUT/source-after.txt"
+          test ! -s "$URGENT_REPORT_OUT/source-after.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: urgent-report-hotfix-${{ github.sha }}
+          path: ${{ env.URGENT_REPORT_OUT }}
+          if-no-files-found: error
+          retention-days: 14
