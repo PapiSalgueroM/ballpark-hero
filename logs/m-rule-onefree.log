@@ -1,0 +1,6 @@
+mutfix1504: rule applied to src/lib/soccerDeck.ts
+   onefree control: 701 "Do the extra hour" loses its cost ({"gk_aerial_command":1,"gk_positioning":-1} becomes {"gk_aerial_command":1})
+   FAIL training with no cost: the bind check passes it
+   FAIL a cost below the training: the bind check passes it
+simSoccerDeck: CONTROL=onefree FIRED: section 1 failed (2 failures, red sections 1)
+rule deleted, onefree control exit=1 (3 means it did not fire, as it must not)
