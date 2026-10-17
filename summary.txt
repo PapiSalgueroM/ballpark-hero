@@ -1,0 +1,14 @@
+fleet-pc exit=0 155s | proofWorldUclFleet: GREEN, 30 journeys and 3252 steps byte equal to 5a85d7376692700c4e986945f87963d61d314dc6 (a watching state without worldComps), draws equal
+fleet-pn exit=0 110s | proofWorldUclFleet: GREEN, 30 journeys and 3227 steps byte equal to c4b98e18a0f7cdb357bd300246c29bc80ee6c425 (a watching state without worldComps), draws equal
+fleet-wc exit=0 465s | proofWorldUclFleet: GREEN, 65 journeys and 8883 steps byte equal to 005f11b687875699fcedcec3cefe8a48d028ddab (a watching state without worldComps), draws equal
+fleet-wn exit=0 372s | proofWorldUclFleet: GREEN, 65 journeys and 8916 steps byte equal to aca72d2cc058e6fb278648cc88e6ac994418f076 (a watching state without worldComps), draws equal
+worlducl exit=0 1474s | simWorldUcl: green, 496030 checks, 0 failures
+wu-ctl-a exit=0 2428s | controls (each must be 1): dropnight=1 field32=1 eraformat=1 meinfill=1 meindirect=1 nopens=1 agall=1 locale=1 swaphome=1 edgeswap=1 standweak=1 noholdertop=1 nocustomexi
+wu-ctl-b exit=0 1593s | controls (each must be 1): stream=1 participant=1 form=1 ahead=1 live=1 noseen=1 marks=1 keep=1 noholder=1
+dd-world exit=0 6s | controls (each must be 1): world=1 worlddeadline=1
+cont-m3 exit=0 53s | contCmp m3: green, the log equals the tree without m3 line for line
+unseeded exit=0 149s | simCmUnseededWorld: green. 49 old saves with no deal play byte equal to 876fa937 (state, draws and saved bytes at every step), 49 with every deal play byte equal to it up
+un-ctl exit=0 459s | controls (each must be 1): guard=1 early=1 never=1 norecord=1 noinverse=1
+vitest-1503 exit=0 4s |    Duration  4.07s (transform 1.67s, setup 225ms, collect 4.84s, tests 2.95s, environment 1.33s, prepare 481ms)
+ucl-family exit=0 112s | simUclSeasonOne exit 0: simUclSeasonOne: all green
+cont-nobridge exit=0 54s | without the loaded bridge contCmp m3 is RED as it must

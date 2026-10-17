@@ -1,0 +1,5 @@
+treeWithoutMerge: 5f12056fae995c3d9dde2a12f812d26e7dcae52d, 3fb90faf without 65126da0; conflicts kept from 3fb90faf: src/pages/WhatsNew.tsx
+contCmp m3: base 5f12056fae995c3d9dde2a12f812d26e7dcae52d (the tree without m3); head exit 1, base exit 1; 95 and 95 lines; 0 differ
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
+contCmp m3: green, the log equals the tree without m3 line for line

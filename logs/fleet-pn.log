@@ -1,0 +1,36 @@
+treeWithoutMerge: c4b98e18a0f7cdb357bd300246c29bc80ee6c425, 3fb90faf without 65126da0; conflicts kept from 3fb90faf: src/pages/WhatsNew.tsx
+base c4b98e18a0f7cdb357bd300246c29bc80ee6c425; fleet (6): Real Madrid (now, participant); Arsenal (now, participant); Arsenal (era2005, participant); Arsenal (era2010, participant); Arsenal (era2015, participant); Manchester City (era2020, participant)
+seeds 1,2,3,4,5; modes nocoach; strip worldComps; this tree with the holder line reverted
+ok   Real Madrid (now, participant, nocoach, seed 1, 2 seasons): 111 steps, 4.5 s
+ok   Real Madrid (now, participant, nocoach, seed 2, 2 seasons): 112 steps, 4.4 s
+ok   Real Madrid (now, participant, nocoach, seed 3, 2 seasons): 113 steps, 4.4 s
+ok   Real Madrid (now, participant, nocoach, seed 4, 2 seasons): 109 steps, 4.3 s
+ok   Real Madrid (now, participant, nocoach, seed 5, 2 seasons): 111 steps, 4.3 s
+ok   Arsenal (now, participant, nocoach, seed 1, 2 seasons): 110 steps, 4.3 s
+ok   Arsenal (now, participant, nocoach, seed 2, 2 seasons): 111 steps, 4.5 s
+ok   Arsenal (now, participant, nocoach, seed 3, 2 seasons): 105 steps, 4.3 s
+ok   Arsenal (now, participant, nocoach, seed 4, 2 seasons): 109 steps, 4.2 s
+ok   Arsenal (now, participant, nocoach, seed 5, 2 seasons): 108 steps, 4.4 s
+ok   Arsenal (era2005, participant, nocoach, seed 1, 2 seasons): 111 steps, 3.1 s
+ok   Arsenal (era2005, participant, nocoach, seed 2, 2 seasons): 106 steps, 3.1 s
+ok   Arsenal (era2005, participant, nocoach, seed 3, 2 seasons): 109 steps, 3.1 s
+ok   Arsenal (era2005, participant, nocoach, seed 4, 2 seasons): 105 steps, 3.1 s
+ok   Arsenal (era2005, participant, nocoach, seed 5, 2 seasons): 109 steps, 3.1 s
+ok   Arsenal (era2010, participant, nocoach, seed 1, 2 seasons): 105 steps, 3.2 s
+ok   Arsenal (era2010, participant, nocoach, seed 2, 2 seasons): 109 steps, 3.3 s
+ok   Arsenal (era2010, participant, nocoach, seed 3, 2 seasons): 103 steps, 3.3 s
+ok   Arsenal (era2010, participant, nocoach, seed 4, 2 seasons): 97 steps, 3.0 s
+ok   Arsenal (era2010, participant, nocoach, seed 5, 2 seasons): 106 steps, 3.2 s
+ok   Arsenal (era2015, participant, nocoach, seed 1, 2 seasons): 109 steps, 3.3 s
+ok   Arsenal (era2015, participant, nocoach, seed 2, 2 seasons): 95 steps, 3.0 s
+ok   Arsenal (era2015, participant, nocoach, seed 3, 2 seasons): 105 steps, 3.2 s
+ok   Arsenal (era2015, participant, nocoach, seed 4, 2 seasons): 98 steps, 3.1 s
+ok   Arsenal (era2015, participant, nocoach, seed 5, 2 seasons): 106 steps, 3.3 s
+ok   Manchester City (era2020, participant, nocoach, seed 1, 2 seasons): 117 steps, 3.6 s
+ok   Manchester City (era2020, participant, nocoach, seed 2, 2 seasons): 117 steps, 3.6 s
+ok   Manchester City (era2020, participant, nocoach, seed 3, 2 seasons): 111 steps, 3.5 s
+ok   Manchester City (era2020, participant, nocoach, seed 4, 2 seasons): 104 steps, 3.2 s
+ok   Manchester City (era2020, participant, nocoach, seed 5, 2 seasons): 106 steps, 3.4 s
+journeys 30, steps compared 3227, tree journeys whose save carried worldComps 6, evaluations on the live state 3227, 108 s
+old saves (written by c4b98e18a0f7cdb357bd300246c29bc80ee6c425): 90 loaded by both engines, 10 gained a watched Champions League at load, 80 did not, 0 against the rule
+proofWorldUclFleet: GREEN, 30 journeys and 3227 steps byte equal to c4b98e18a0f7cdb357bd300246c29bc80ee6c425 (a watching state without worldComps), draws equal
