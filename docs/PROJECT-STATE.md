@@ -1,3 +1,11 @@
+## Round1414 career-release guides qualified, 2026-10-17
+
+Actual TESTEDff907ae7290f4b5d814f6df0656934485175119d, run39056603419/job117465729944 SUCCESS, [draft PR331](https://github.com/PapiSalgueroM/ballpark-hero/pull/331). Exactly six guide items explain I's accepted1503 competition screen,1504 summer cards and1500 dirty-money desk across four US careers. Whole PR317 Manager guide stays once. This packet is for BJ after those features join, not publication before them or a feature-runtime proof.
+
+All six fixture additions,125 other route records/root metadata held,12 effective source/fixture controls and10 child processes qualify. Two keyword outputs are byte-equal10979B/fdcb7541. Types, serial seven-page build then15 readers and14 unchanged fatal caps pass. CM609.1K reports rounded609 under the existing609K gate; SC833.1/834, NFL488.0/488, Grid317.4/319. No cap or rounding-predicate change. I must still measure the combined BJ feature/guide join, especially1504's prior57B SC headroom.
+
+Native physical3a0a671c(157170/0), core5d257e5b(19822/0), commonaec20c46(2295/0). Artifact12110031875/84412815B/a0870c18. First run39052820977 remains FAILED on the21-versus24 font classifier; only that method was repaired with exact source/log binding and effective controls. Fresh build had0 redraws and21 denied font lines. Ten generated outputs stay outside for I's actual join regeneration. Final pushed head/source closure belongs in the outside handoff after closing docs. I retains release/main/publication; urgent PR308 independent.
+
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
