@@ -1,0 +1,6 @@
+headsha exit=0 0s | a5b0e7675 Round BIK: retake the Round 1081 manifest once more, on the final tree of Release BI (Round 1508 in)
+wf284x exit=1 210s | wfrun wf284x.yml: 9 steps ran, 1 failed: Every rebuilt-site reader
+wf296x exit=0 255s | wfrun manager-desk-feedback.yml: 6 steps ran, 0 failed
+wf285 exit=1 167s | wfrun club-detail-fixtures.yml: 8 steps ran, 1 failed: Every rebuilt-site reader
+wf287x exit=1 313s | wfrun manager-handover-desk.yml: 9 steps ran, 1 failed: All fifteen build and snapshot readers
+wf301x exit=0 851s | wfrun manager-decision-method.yml: 5 steps ran, 0 failed

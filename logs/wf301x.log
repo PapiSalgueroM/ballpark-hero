@@ -1,0 +1,95 @@
+base 3b8734920607696b12e6c46bf7881d40bb2146b1
+wfrun: HEAD moved from the request commit 6e77ef015f5d to the branch head it checks, 8293c758f428
+wfrun: running in a fresh worktree of 8293c758f428 at /home/runner/work/ballpark-hero/wfrun-wt-xN0QWu
+wfrun .github/workflows/manager-decision-method.yml job verify at 8293c758f4284d21baaa2320383cfd5cb5bd4944; sets: METHOD_BASE=3b8734920607696b12e6c46bf7881d40bb2146b1
+STEP 1/8 uses actions/checkout@v4: skipped (uses)
+STEP 2/8 uses actions/setup-node@v4: skipped (uses)
+::: STEP 3/8 Bind application historical evidence and single pin retake
+127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co
+npm warn deprecated abab@2.0.6: Use your platform's native atob() and btoa() methods instead
+npm warn deprecated whatwg-encoding@2.0.0: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+npm warn deprecated domexception@4.0.0: Use your platform's native DOMException instead
+npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+
+added 521 packages, and audited 522 packages in 9s
+
+101 packages are looking for funding
+  run `npm fund` for details
+
+23 vulnerabilities (5 moderate, 16 high, 2 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+npm warn install-scripts 3 packages have install scripts not yet covered by allowScripts:
+npm warn install-scripts   @swc/core@1.13.2 (postinstall: node postinstall.js)
+npm warn install-scripts   esbuild@0.21.5 (postinstall: node install.js)
+npm warn install-scripts   esbuild@0.25.0 (postinstall: node install.js)
+npm warn install-scripts
+npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+STEP 3/8 Bind application historical evidence and single pin retake: exit 0 (14s)
+::: STEP 4/8 Actual types syntax and source fences
+1) every harness parses
+   ok   943 harnesses pass node --check
+2) no harness carries an anchor it can never match
+   943 harnesses, 252 carry a multi line anchor into src, 308 normalised reads guard one
+   ok   252 harnesses are in scope, so the check is looking at something
+   ok   every read a multi line anchor can search normalises line endings first
+
+simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+Checked 81 product names against 4087 files
+  scanned: src, public, supabase, scripts, index.html
+  skipped: node_modules, dist, dist-ssr, .git, .playwright-mcp, coverage, .cache, and docs/ on purpose (see the note above)
+  FIFA is allowlisted in 27 shapes, so the governing body, its
+    rankings and its World Cup all pass while the video game does not
+  6 live identifiers are left alone because renaming them is a
+    data migration, not a copy edit: routes, save keys and one Supabase table
+  lines ending in "rival-names-allow" are skipped, for the sims that carry
+    a banned-name list of their own because checking for them IS their job
+
+No rival product names found. 0 findings.
+1. every storage write is inside a try of its own function, or allowed with a reason that still holds
+   ok    130 .setItem calls in 94 files: 128 inside a try of their own function, 2 allowed, 0 that can throw
+2. the storage seam is the first thing src/main.tsx imports
+   ok    main.tsx starts with import "./lib/safeStorage"
+3. the Supabase client takes its auth storage from the seam
+   ok    auth.storage is safeLocalStorage and the file never names localStorage
+4. the storage seam only READS as it loads: no write, remove or clear at module scope or in what module scope calls
+   ok    14 write, remove or clear calls in the seam, 0 of them at module scope or in rawRequested, resolve, standInForLocks
+5. the seam writes its probe only under the once flag (the first probe) or while it already says full (the recheck)
+   ok    4 probe writes: 2 in probeStorageWrites under "!probedWrites", 2 in recheckStorageWrites under "refusedWrite"
+6. "full" is taken back in one place, the recheck, and never while a game holds a refused save
+   ok    1 place takes "full" back, in recheckStorageWrites (line 339), behind the held save's guard (line 333)
+7. a save a game remembers was refused is named to the seam, or listed with the reason it need not be
+   ok    128 guarded writes, 89 with an empty catch; 58 keys in 33 files, each on one list: 1 named to the seam (1 entry), 41 with nothing held (27 entries), 16 owed (12 entries)
+           owed: src/pages/SoccerCareer.tsx [state:saveFailed], owner the other lane, listed 2026-10-10
+           owed: src/hooks/useGame.ts [state:practiceSaveFailed, state:unlimitedSaveFailed], owner the other lane, listed 2026-10-10
+           owed: src/pages/RankEm.tsx [state:saveFailed, keeps:saveCircuit], owner the other lane, listed 2026-10-10
+           owed: src/hooks/useClubManager.ts [state:saveFailed, keeps:saveCareer], owner this lane, after Release AT lands (the train edits this file), listed 2026-10-10
+           owed: src/hooks/useAussieRulesLeague.ts [state:storageNotice], owner this lane, listed 2026-10-10
+           owed: src/hooks/useAussieRulesManager.ts [state:storageNotice], owner this lane, listed 2026-10-10
+           owed: src/hooks/useStadiumTycoon.ts [state:ticketSaveFailed, keeps:saveTicketState], owner to be named by the lead, listed 2026-10-10
+           owed: src/lib/tycoonRewards.ts [write:saveLedger], owner to be named by the lead, listed 2026-10-10
+           owed: src/hooks/useMmaPromotion.ts [write:change], owner to be named by the lead, listed 2026-10-10
+           owed: src/hooks/useNbaConnections.ts [state:notesWarning], owner to be named by the lead (low: scratch notes, the daily result has its own save), listed 2026-10-10
+           owed: src/hooks/useNhlConnections.ts [state:notesWarning], owner to be named by the lead (low: scratch notes, the daily result has its own save), listed 2026-10-10
+           owed: src/hooks/useGamePicks.ts [write:toggle], owner to be named by the lead (low: a list of pinned games, not a game), listed 2026-10-10
+
+simStorageWrites: all green (owed: 12)
+STEP 4/8 Actual types syntax and source fences: exit 0 (120s)
+::: STEP 5/8 All ten actual normal runs and healthy observation control
+Default current: passed; frozen historical: passed.
+All declared paired seeds retained: 1=passed, 2=passed, 3=passed, 4=passed. All ten normal runs passed; current and frozen outputs remain independently retained.
+Original loss control fired in section 3 beside a healthy seed-1 baseline.
+STEP 5/8 All ten actual normal runs and healthy observation control: exit 0 (325s)
+::: STEP 6/8 Every original executable negative control
+All twelve original copied controls reached their intended semantic assertion.
+STEP 6/8 Every original executable negative control: exit 0 (390s)
+::: STEP 7/8 Retain regression observations and exact source holds
+STEP 7/8 Retain regression observations and exact source holds: exit 0 (1s)
+STEP 8/8 Retain concrete method evidence: skipped (uses)
+wfrun manager-decision-method.yml: 5 steps ran, 0 failed
