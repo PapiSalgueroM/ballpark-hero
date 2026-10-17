@@ -25,7 +25,7 @@ describe('Round 1500: every way does exactly what its button prints', () => {
   it('the preview numbers are the applied change, over a grid of money, heat, karma and cash', () => {
     vi.spyOn(Math, 'random').mockImplementation(() => { throw new Error('the desk drew Math.random'); });
     let caughtSeen = 0, freeSeen = 0, grid = 0;
-    for (const dirtyMoney of DIRTY) for (const heat of HEAT) for (const karma of [undefined, 0, 50, 98, 100]) for (const netWorth of [undefined, 0, 0.3, 40]) for (const suspendedSeasons of [undefined, 0, 1]) {
+    for (const dirtyMoney of DIRTY) for (const heat of HEAT) for (const karma of [undefined, 0, 50, 98, 100]) for (const netWorth of [undefined, 0, 0.3, 0.35, 40]) for (const suspendedSeasons of [undefined, 0, 1]) {
       const c = host({ name: `Desk ${grid++}`, dirtyMoney, heat, karma, netWorth, suspendedSeasons, fanbase: heat > 50 ? 12 : 60 });
       const frozen = JSON.stringify(c);
       for (const way of DIRTY_WAYS) {
@@ -38,7 +38,7 @@ describe('Round 1500: every way does exactly what its button prints', () => {
         const net0 = netWorth ?? 0;
         /* 0 - fine, never -fine: a fine of 0 must read as 0, not -0 (Object.is tells them apart). */
         const netChange = way === 'clean' ? 0 - p.fine : way === 'wash' && !r.caught ? p.keep : 0;
-        expect(Math.round(((s.netWorth ?? 0) - net0) * 10) / 10, `${way}: money`).toBe(netChange);
+        expect(Math.round(((s.netWorth ?? 0) - net0) * 100) / 100, `${way}: money, to the hundredth`).toBe(netChange);
         expect(s.netWorth ?? 0, `${way}: never below zero`).toBeGreaterThanOrEqual(0);
         expect(Math.round(((s.heat ?? 0) - heat) * 100) / 100, `${way}: heat`).toBe(p.heat);
         expect((s.karma ?? 50) - (karma ?? 50), `${way}: karma`).toBe(p.karma);
@@ -101,6 +101,30 @@ describe('Round 1500: every way does exactly what its button prints', () => {
     expect(launderEffectText(host({ heat: 89 }))).toBe('Keep 70 percent, heat +10, 55 percent chance you are caught, and at this heat you sit out a season either way. Caught: all of it seized, fanbase -30, morale -25, 2 seasons out');
     expect(launderEffectText(host({ heat: 40 }))).toBe('Keep 70 percent, heat +10, 35 percent chance you are caught. Caught: all of it seized, fanbase -30, morale -25, a season out');
     expect(launderEffectText(host({ heat: 40, fanbase: 12, morale: 7 }))).toContain('fanbase -12, morale -7, a season out');
+  });
+
+  it('a sliver, the top of the meter and a suspension print what really happens (review minors 4 and 14)', () => {
+    /* The NHL brewery's 0.05M: the amount is not printed as 0.1M, the fine floor is the help's, and a wash that
+       banks nothing says so instead of "0.0M". */
+    const sliver = host({ dirtyMoney: 0.05, heat: 0, netWorth: 12.35 });
+    expect(previewDirty(sliver, 'clean').lines[0]).toBe('Pay back all 0.05M plus a 0.1M fine');
+    expect(previewDirty(sliver, 'give').lines[0]).toBe('All 0.05M goes to charity. You keep none of it');
+    expect(previewDirty(sliver, 'wash').lines).toContain('Not caught: too little of it to come out as clean money');
+    expect(previewDirty(sliver, 'wash').lines.join(' ')).toContain('Caught: all 0.05M is seized');
+    expect(dealWithDirtyMoney(sliver, 'clean').state.netWorth, 'NHL hundredths are kept').toBe(12.25);
+    expect(dealWithDirtyMoney(host({ dirtyMoney: 5, netWorth: 0.35 }), 'clean').state.netWorth, 'all the clean money, to the hundredth').toBe(0);
+    /* A wash near the top never prints a fraction of heat. */
+    expect(previewDirty(host({ heat: 95.25 }), 'wash').lines[0]).toBe('Heat goes to the top of the meter now');
+    expect(launderEffectText(host({ heat: 95.25 }))).toContain(', heat to the top of the meter,');
+    expect(previewDirty(host({ heat: 100 }), 'wash').lines[0]).toBe('Heat is already at the top of the meter');
+    /* A suspension that starts at a season end costs what the engines take; one already pending was paid for. */
+    expect(previewDirty(host({ heat: 99 }), 'give').lines).toContain('At this heat you still sit out a season to a suspension, fanbase -30 and morale -25 when it starts');
+    expect(previewDirty(host({ heat: 40, suspendedSeasons: 1 }), 'give').lines).toContain('At this heat you still sit out a season to a suspension');
+    expect(previewDirty(host({ heat: 89 }), 'wash').lines.join(' ')).toContain('you sit out 2 seasons, the next suspension costing fanbase -30 and morale -25 again');
+    expect(previewDirty(host({ heat: 86 }), 'quiet').lines).toContain('At this heat the next season end suspends you, takes all of it, and costs fanbase -30 and morale -25');
+    /* The help says the floor and says the heat only climbs once it has started. */
+    expect(US_DIRTY_MONEY_HELP_RULE).toContain('plus a 10 percent fine, never under 0.1M');
+    expect(US_DIRTY_MONEY_HELP_RULE.startsWith('Once your heat is above zero, dirty money raises it every season you hold it.')).toBe(true);
   });
 });
 

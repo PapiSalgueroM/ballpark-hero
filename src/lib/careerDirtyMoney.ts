@@ -73,7 +73,10 @@ const BAN_HEAT = 90;
 
 const round1 = (v: number) => Math.round(v * 10) / 10;
 const round2 = (v: number) => Math.round(v * 100) / 100;
-const m = (v: number) => `${round1(v).toFixed(1)}M`;
+/** Money as the desk prints it: a tenth of a million, or a hundredth when the amount holds one (the NHL keeps
+ *  hundredths, and its brewery pays 0.05M, which must not read as 0.1M). */
+export const moneyText = (v: number): string => { const r = round2(v); return `${round1(r) === r ? r.toFixed(1) : r.toFixed(2)}M`; };
+const m = moneyText;
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
 /** Dirty money the career holds, as the board prints it. */
@@ -113,17 +116,24 @@ export function washCaughtPct(heatAfter: number): number {
  *  their season end: a banned year first takes one off the count, then the heat cools 9, and at 90 or more a new
  *  suspension starts once nothing is pending. Heat only falls with nothing held, so four seasons settle it. */
 export function bannedAhead(heat: number, suspended: number): number {
+  return banAhead(heat, suspended).seasons;
+}
+
+/** bannedAhead, with how many of those suspensions start at a season end (each start costs the fanbase and the
+ *  morale the engines take; one already pending was paid for when it started). */
+function banAhead(heat: number, suspended: number): { seasons: number; starts: number } {
   let h = heat;
   let s = Math.max(0, suspended);
   let banned = 0;
+  let starts = 0;
   for (let i = 0; i < 4; i++) {
     if (s > 0) { s -= 1; banned += 1; }
     if (h > 0) {
       h = Math.max(0, Math.min(100, h - SEASON_COOL));
-      if (h >= BAN_HEAT && s === 0) s = 1;
+      if (h >= BAN_HEAT && s === 0) { s = 1; starts += 1; }
     }
   }
-  return banned + s;
+  return { seasons: banned + s, starts };
 }
 
 /** Every number one way changes, worked out once; the lines print these and the apply applies these. */
@@ -150,6 +160,10 @@ export interface DirtyNumbers {
   bannedAfter: number;
   /** A wash: seasons served banned ahead when it is caught. */
   bannedIfCaught: number;
+  /** How many suspensions start at a season end in bannedAfter, and (a wash) in bannedIfCaught after the one being
+   *  caught starts: each costs the fanbase and the morale again. */
+  startsAfter: number;
+  startsIfCaught: number;
   /** Keep it quiet: whether the next season end suspends you and takes it all. */
   burnsToBan: boolean;
 }
@@ -159,19 +173,22 @@ export function wayNumbers(c: DirtyMoneyHost, way: DirtyWay): DirtyNumbers {
   const heat = c.heat ?? 0;
   const karma = c.karma ?? 50;
   const pending = Math.max(0, c.suspendedSeasons ?? 0);
+  const now = banAhead(heat, pending);
   const n: DirtyNumbers = {
     way, amount, keep: 0, fine: 0, fineIsAll: false, heat: 0, karma: 0, caughtPct: null,
-    caughtFanbase: 0, caughtMorale: 0, bannedAfter: bannedAhead(heat, pending), bannedIfCaught: 0, burnsToBan: false,
+    caughtFanbase: 0, caughtMorale: 0, bannedAfter: now.seasons, bannedIfCaught: 0, startsAfter: now.starts, startsIfCaught: 0, burnsToBan: false,
   };
   if (way === 'clean') {
     const owed = Math.max(0.1, round1(amount * CLEAN_FINE_RATE));
-    const cash = Math.floor(Math.max(0, c.netWorth ?? 0) * 10) / 10;
+    const cash = Math.floor(round2(Math.max(0, c.netWorth ?? 0)) * 100 + 1e-6) / 100;
     n.fine = Math.min(owed, cash);
     n.fineIsAll = n.fine < owed;
     const relief = cleanHeatRelief(amount, heat);
     n.heat = relief > 0 ? -relief : 0;
     n.karma = cleanKarma(amount, karma);
-    n.bannedAfter = bannedAhead(heat + n.heat, pending);
+    const ahead = banAhead(heat + n.heat, pending);
+    n.bannedAfter = ahead.seasons;
+    n.startsAfter = ahead.starts;
   } else if (way === 'give') {
     n.karma = giveKarma(amount, karma);
   } else if (way === 'wash') {
@@ -181,11 +198,16 @@ export function wayNumbers(c: DirtyMoneyHost, way: DirtyWay): DirtyNumbers {
     n.caughtPct = washCaughtPct(after);
     n.caughtFanbase = Math.min(CAUGHT_FANBASE, Math.max(0, c.fanbase));
     n.caughtMorale = Math.min(CAUGHT_MORALE, Math.max(0, c.morale));
-    n.bannedAfter = bannedAhead(after, pending);
-    n.bannedIfCaught = bannedAhead(after, Math.max(1, pending));
+    const free = banAhead(after, pending);
+    const held = banAhead(after, Math.max(1, pending));
+    n.bannedAfter = free.seasons;
+    n.startsAfter = free.starts;
+    n.bannedIfCaught = held.seasons;
+    n.startsIfCaught = held.starts;
   } else {
     /* The season end with the money still held: it climbs by up to 8, and at 90 the league takes it. */
     n.bannedAfter = 0;
+    n.startsAfter = 0;
     const next = heat > 0 ? Math.min(100, heat + Math.min(8, 2 + amount * 0.5)) : heat;
     n.burnsToBan = heat > 0 && next >= BAN_HEAT && Math.max(0, pending - 1) === 0;
   }
@@ -193,10 +215,13 @@ export function wayNumbers(c: DirtyMoneyHost, way: DirtyWay): DirtyNumbers {
 }
 
 const sitOut = (n: number) => (n === 1 ? 'a season' : `${n} seasons`);
+/* What every suspension the engines start at a season end takes (nbaMyCareer.ts 926 to 927 and its three copies),
+   the same numbers a caught wash takes at once. */
+const startCost = (starts: number) => (starts <= 0 ? '' : `, fanbase -${CAUGHT_FANBASE} and morale -${CAUGHT_MORALE} ${starts === 1 ? 'when it starts' : 'each time one starts'}`);
 
 /** The lines a way's button prints, built only from its numbers. */
 export function wayLines(n: DirtyNumbers, heatNow: number): string[] {
-  const banLine = n.bannedAfter > 0 ? [`At this heat you still sit out ${sitOut(n.bannedAfter)} to a suspension`] : [];
+  const banLine = n.bannedAfter > 0 ? [`At this heat you still sit out ${sitOut(n.bannedAfter)} to a suspension${startCost(n.startsAfter)}`] : [];
   if (n.way === 'clean') {
     return [
       n.fine > 0
@@ -216,17 +241,18 @@ export function wayLines(n: DirtyNumbers, heatNow: number): string[] {
     ];
   }
   if (n.way === 'wash') {
+    const washed = n.keep > 0 ? `${m(n.keep)} comes out as clean money` : 'too little of it to come out as clean money';
     return [
-      n.heat > 0 ? `Heat +${n.heat} now` : 'Heat is already at the top of the meter',
+      n.heat >= WASH_HEAT ? `Heat +${n.heat} now` : n.heat > 0 ? 'Heat goes to the top of the meter now' : 'Heat is already at the top of the meter',
       `${n.caughtPct} percent chance you are caught`,
-      `Not caught: ${m(n.keep)} comes out as clean money${n.bannedAfter > 0 ? `, and at this heat you still sit out ${sitOut(n.bannedAfter)} to a suspension` : ''}`,
-      `Caught: all ${m(n.amount)} is seized, fanbase -${n.caughtFanbase}, morale -${n.caughtMorale}, and you sit out ${sitOut(n.bannedIfCaught)}`,
+      `Not caught: ${washed}${n.bannedAfter > 0 ? `, and at this heat you still sit out ${sitOut(n.bannedAfter)} to a suspension${startCost(n.startsAfter)}` : ''}`,
+      `Caught: all ${m(n.amount)} is seized, fanbase -${n.caughtFanbase}, morale -${n.caughtMorale}, and you sit out ${sitOut(n.bannedIfCaught)}${n.startsIfCaught > 0 ? `, the next suspension costing fanbase -${CAUGHT_FANBASE} and morale -${CAUGHT_MORALE} again` : ''}`,
     ];
   }
   return [
     'Nothing changes now',
     heatNow > 0 ? 'It keeps burning: heat climbs every season you hold it' : 'Nobody is looking yet, but once the heat starts it climbs every season you hold it',
-    ...(n.burnsToBan ? ['At this heat the next season end suspends you and takes all of it'] : []),
+    ...(n.burnsToBan ? [`At this heat the next season end suspends you, takes all of it, and costs fanbase -${CAUGHT_FANBASE} and morale -${CAUGHT_MORALE}`] : []),
   ];
 }
 
@@ -251,8 +277,8 @@ export function washIsCaught(c: DirtyMoneyHost, caughtPct: number): boolean {
 /** Applies a way's numbers to the career, mutating it. Writes only the fields that change. */
 function applyNumbers(c: DirtyMoneyHost, n: DirtyNumbers, caught: boolean): void {
   c.dirtyMoney = 0;
-  if (n.way === 'clean' && n.fine > 0) c.netWorth = round1((c.netWorth ?? 0) - n.fine);
-  if (n.way === 'wash' && !caught) c.netWorth = round1((c.netWorth ?? 0) + n.keep);
+  if (n.way === 'clean' && n.fine > 0) c.netWorth = round2((c.netWorth ?? 0) - n.fine);
+  if (n.way === 'wash' && !caught) c.netWorth = round2((c.netWorth ?? 0) + n.keep);
   if (n.heat !== 0) c.heat = Math.max(0, Math.min(100, round2((c.heat ?? 0) + n.heat)));
   if (n.karma !== 0) c.karma = Math.max(0, Math.min(100, (c.karma ?? 50) + n.karma));
   if (n.way === 'wash' && caught) {
@@ -269,7 +295,7 @@ function resultLine(n: DirtyNumbers, caught: boolean): string {
   if (n.way === 'give') return `You gave all ${m(n.amount)} to charity and kept none of it.${tail}`;
   return caught
     ? `Caught. All ${m(n.amount)} was seized and the league suspended you.`
-    : `${m(n.keep)} came out clean.`;
+    : n.keep > 0 ? `${m(n.keep)} came out clean.` : 'Too little of it came out to count.';
 }
 
 /** The desk: deals with all the dirty money one way, on a copy. Keep it quiet, a career with none, and a retired
@@ -301,7 +327,8 @@ export function launderEffectText(c: DirtyMoneyHost): string {
   const n = wayNumbers(c, 'wash');
   const ban = n.bannedAfter > 0 ? `, and at this heat you sit out ${sitOut(n.bannedAfter)} either way` : '';
   const caught = `Caught: all of it seized, fanbase -${n.caughtFanbase}, morale -${n.caughtMorale}, ${sitOut(n.bannedIfCaught)} out`;
-  return `Keep ${Math.round(WASH_KEEP * 100)} percent, ${n.heat > 0 ? `heat +${n.heat}` : 'heat already at the top'}, ${n.caughtPct} percent chance you are caught${ban}. ${caught}`;
+  const heat = n.heat >= WASH_HEAT ? `heat +${n.heat}` : n.heat > 0 ? 'heat to the top of the meter' : 'heat already at the top';
+  return `Keep ${Math.round(WASH_KEEP * 100)} percent, ${heat}, ${n.caughtPct} percent chance you are caught${ban}. ${caught}`;
 }
 
 /** A shop item, as far as the washers go. */
@@ -329,5 +356,5 @@ export const US_DIRTY_MONEY_HELP_RULE = ((): string => {
   const clean = wayNumbers(example, 'clean');
   const give = wayNumbers(example, 'give');
   const wash = wayNumbers(example, 'wash');
-  return `Dirty money raises your heat every season you hold it. Press Deal with it under the heat meter and every way prints its cost before you choose: come clean (pay it all back plus a ${Math.round(CLEAN_FINE_RATE * 100)} percent fine, heat falls a little and karma rises a little), give it away (it all goes, karma rises, heat stays), keep it quiet (nothing changes and it keeps burning) or wash it (heat +${WASH_HEAT} now and a chance of getting caught that grows with your heat, from ${Math.round(WASH_CATCH_FLOOR * 100)} to ${Math.round(WASH_CATCH_CEIL * 100)} percent: caught, the money is seized and you are suspended; not caught, ${Math.round(WASH_KEEP * 100)} percent of it comes out clean). The card about cash businesses is its own one time deal. For example: ${m(example.dirtyMoney ?? 0)} of dirty money comes clean for a ${m(clean.fine)} fine with heat ${clean.heat} and karma +${clean.karma}, goes to charity for karma +${give.karma}, or washes into ${m(wash.keep)} with a ${wash.caughtPct} percent chance of getting caught when the meter has just turned FLAGGED.`;
+  return `Once your heat is above zero, dirty money raises it every season you hold it. Press Deal with it under the heat meter and every way prints its cost before you choose: come clean (pay it all back plus a ${Math.round(CLEAN_FINE_RATE * 100)} percent fine, never under ${m(0.1)}, heat falls a little and karma rises a little), give it away (it all goes, karma rises, heat stays), keep it quiet (nothing changes and it keeps burning) or wash it (heat +${WASH_HEAT} now and a chance of getting caught that grows with your heat, from ${Math.round(WASH_CATCH_FLOOR * 100)} to ${Math.round(WASH_CATCH_CEIL * 100)} percent: caught, the money is seized and you are suspended; not caught, ${Math.round(WASH_KEEP * 100)} percent of it comes out clean). The card about cash businesses is its own one time deal. For example: ${m(example.dirtyMoney ?? 0)} of dirty money comes clean for a ${m(clean.fine)} fine with heat ${clean.heat} and karma +${clean.karma}, goes to charity for karma +${give.karma}, or washes into ${m(wash.keep)} with a ${wash.caughtPct} percent chance of getting caught when the meter has just turned FLAGGED.`;
 })();

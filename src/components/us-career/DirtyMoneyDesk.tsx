@@ -13,7 +13,7 @@ import { useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { useTapSettle } from '@/hooks/useTapSettle';
-import { DIRTY_WAYS, canDealWithDirtyMoney, dirtyHeld, previewDirty, type DirtyMoneyHost, type DirtyWay } from '@/lib/careerDirtyMoney';
+import { DIRTY_WAYS, canDealWithDirtyMoney, dirtyHeld, moneyText, previewDirty, type DirtyMoneyHost, type DirtyWay } from '@/lib/careerDirtyMoney';
 
 const WAY_COPY: Record<DirtyWay, { emoji: string; title: string }> = {
   clean: { emoji: '\u{1F9FE}', title: 'Come clean' },
@@ -74,7 +74,7 @@ export default function DirtyMoneyDesk({ career, onDeal, onClose }: DirtyMoneyDe
   return (
     <div ref={cardRef} className="space-y-2">
       <p className="text-[11px] leading-snug text-muted-foreground">
-        {`$${dirtyHeld(career).toFixed(1)}M nobody can explain, heat ${Math.round(career.heat ?? 0)}. Every way shows exactly what it does before you choose.`}
+        {`$${moneyText(dirtyHeld(career))} nobody can explain, heat ${Math.round(career.heat ?? 0)}. Every way shows exactly what it does before you choose.`}
       </p>
       <div className={cn('grid gap-2', !picked && 'sm:grid-cols-2')}>
         {ways.map(way => {

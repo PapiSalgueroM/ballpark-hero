@@ -65,7 +65,7 @@ const SPORTS = ['nba', 'nfl', 'mlb', 'nhl'];
 const DECK_FILE = { nba: 'src/lib/nbaCareerCorruption.ts', nfl: 'src/lib/nflCareerCorruption.ts', mlb: 'src/lib/mlbCareerCorruption.ts', nhl: 'src/lib/nhlCareerCorruption.ts' };
 
 const CONTROLS = {
-  words: ['  if (n.way === \'wash\' && !caught) c.netWorth = round1((c.netWorth ?? 0) + n.keep);', '  if (n.way === \'wash\' && !caught) c.netWorth = round1((c.netWorth ?? 0) + round1(n.amount * 0.6));', [1]],
+  words: ['  if (n.way === \'wash\' && !caught) c.netWorth = round2((c.netWorth ?? 0) + n.keep);', '  if (n.way === \'wash\' && !caught) c.netWorth = round2((c.netWorth ?? 0) + round1(n.amount * 0.6));', [1]],
   mathrandom: ['  return keyedRng(launderKey(c))() < caughtPct / 100;', '  return Math.random() < caughtPct / 100;', [2]],
   flat: ['  if (heat >= 100) return 0;\n  return Math.max(0, Math.min(CLEAN_HEAT_CAP, Math.floor(dirty), Math.floor(heat)));', '  return Math.max(0, Math.min(35, Math.floor(heat)));', [7]],
   farm: ['export const GIVE_KARMA_CAP = 6;', 'export const GIVE_KARMA_CAP = 12;', [7]],
@@ -231,11 +231,16 @@ const GRID_DIRTY = [0.05, 0.1, 0.4, 0.9, 1, 1.1, 2.5, 6, 9.5, 20, 40];
 const GRID_HEAT = [0, 0.55, 3, 9, 39.5, 40, 64, 81, 88.95, 89, 90, 98, 99, 100];
 const host = o => ({ name: 'Grid', year: 2031, seasons: [1, 2, 3], netWorth: 12, dirtyMoney: 5, heat: 40, fanbase: 60, morale: 70, karma: 55, ...o });
 const num = (text, re) => { const mm = text.match(re); return mm ? Number(mm[1]) : null; };
-function printed(way, lines) {
+function printed(way, lines, heatNow) {
   const t = lines.join(' | ');
-  if (way === 'clean') return { net: -(num(t, /plus a (\d+\.\d)M fine/) ?? 0), heat: num(t, /Heat (-\d+)/) ?? 0, karma: num(t, /Karma \+(\d+)/) ?? 0 };
+  if (way === 'clean') return { net: -(num(t, /plus a (\d+\.\d+)M fine/) ?? 0), heat: num(t, /Heat (-\d+)/) ?? 0, karma: num(t, /Karma \+(\d+)/) ?? 0 };
   if (way === 'give') return { net: 0, heat: 0, karma: num(t, /Karma \+(\d+)/) ?? 0 };
-  if (way === 'wash') return { heat: num(t, /Heat \+([\d.]+) now/) ?? 0, pct: num(t, /(\d+) percent chance/), keep: num(t, /Not caught: (\d+\.\d)M/), fan: num(t, /fanbase -(\d+)/), mor: num(t, /morale -(\d+)/), seized: num(t, /Caught: all (\d+\.\d)M/) };
+  if (way === 'wash') {
+    /* A wash near the top prints "goes to the top of the meter" (the rest of it), never a fraction. */
+    const heat = t.includes('Heat goes to the top of the meter now') ? r2(100 - heatNow) : num(t, /Heat \+(\d+) now/) ?? 0;
+    const keep = t.includes('Not caught: too little of it') ? 0 : num(t, /Not caught: (\d+\.\d+)M/);
+    return { heat, pct: num(t, /(\d+) percent chance/), keep, fan: num(t, /is seized, fanbase -(\d+)/), mor: num(t, /is seized, fanbase -\d+, morale -(\d+)/), seized: num(t, /Caught: all (\d+\.\d+)M/) };
+  }
   return {};
 }
 console.log('1-3) the grid: words, keys and the rule');
@@ -244,7 +249,7 @@ const realRandom = Math.random;
 let drewRandom = 0;
 Math.random = () => { drewRandom += 1; throw new Error('Math.random during the desk'); };
 try {
-  for (const dirtyMoney of GRID_DIRTY) for (const heat of GRID_HEAT) for (const karma of [undefined, 0, 50, 98, 100]) for (const netWorth of [undefined, 0, 0.3, 40]) for (const suspendedSeasons of [undefined, 0, 1]) {
+  for (const dirtyMoney of GRID_DIRTY) for (const heat of GRID_HEAT) for (const karma of [undefined, 0, 50, 98, 100]) for (const netWorth of [undefined, 0, 0.3, 0.35, 40]) for (const suspendedSeasons of [undefined, 0, 1]) {
     const c = host({ name: `Grid ${idx++}`, dirtyMoney, heat, karma, netWorth, suspendedSeasons, fanbase: heat > 50 ? 12 : 60 });
     const frozen = JSON.stringify(c);
     for (const way of DM.DIRTY_WAYS) {
@@ -254,8 +259,8 @@ try {
       try { p = DM.previewDirty(c, way); r = DM.dealWithDirtyMoney(c, way); } catch (e) { fail(2, way, `threw: ${e.message}`); continue; }
       if (JSON.stringify(c) !== frozen) fail(1, who, 'the desk changed its input');
       if (way === 'quiet') { if (r.state !== c || r.line !== '') fail(1, who, 'keep it quiet changed something'); continue; }
-      const s = r.state, w = printed(way, p.lines);
-      const dNet = r1((s.netWorth ?? 0) - (netWorth ?? 0)), dHeat = r2((s.heat ?? 0) - heat), dKarma = (s.karma ?? 50) - (karma ?? 50);
+      const s = r.state, w = printed(way, p.lines, heat);
+      const dNet = r2((s.netWorth ?? 0) - (netWorth ?? 0)), dHeat = r2((s.heat ?? 0) - heat), dKarma = (s.karma ?? 50) - (karma ?? 50);
       if (s.dirtyMoney !== 0) fail(1, who, `dirty money left: ${s.dirtyMoney}`);
       if ((s.netWorth ?? 0) < 0) fail(1, who, `below zero: ${s.netWorth}`);
       if (way === 'wash') {
@@ -266,7 +271,7 @@ try {
         if (r.caught !== (draw < (w.pct ?? -1) / 100)) fail(3, who, `caught ${r.caught} but the draw ${draw.toFixed(4)} against ${w.pct} percent says otherwise`);
         if (r.caught) caught += 1;
         if (dHeat !== w.heat) fail(1, who, `heat ${dHeat} applied, ${w.heat} printed`);
-        if (w.seized !== r1(dirtyMoney) && !(dirtyMoney === 0.05 && w.seized === 0.1)) fail(1, who, `printed seized ${w.seized}`);
+        if (w.seized !== r2(dirtyMoney)) fail(1, who, `printed seized ${w.seized}`);
         if (r.caught) {
           if (dNet !== 0) fail(1, who, `a caught wash banked ${dNet}`);
           if (c.fanbase - s.fanbase !== w.fan || c.morale - s.morale !== w.mor) fail(1, who, `fanbase or morale off the print (${c.fanbase - s.fanbase}, ${c.morale - s.morale} against ${w.fan}, ${w.mor})`);
@@ -423,7 +428,7 @@ for (const slug of SPORTS) {
     const line = opt.apply(x, E.keyedRng(`apply|${slug}|${i}`));
     const twin = DM.dealWithDirtyMoney(clone(c), 'wash');
     if (twin.caught) caughtN += 1; else freeN += 1;
-    const banked = r1((x.netWorth ?? 0) - (c.netWorth ?? 0));
+    const banked = r2((x.netWorth ?? 0) - (c.netWorth ?? 0));
     if ((x.dirtyMoney ?? 0) !== 0) fail(4, who, `the launder option left ${x.dirtyMoney}M dirty`);
     if (flagsOf(x).wash !== 1) fail(4, who, 'the card no longer closes itself (the wash flag)');
     if (withoutFlags(x) !== withoutFlags(twin.state)) fail(4, who, 'the card and the desk wash to different careers');
