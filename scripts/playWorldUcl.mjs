@@ -37,7 +37,11 @@ import { chromium } from './lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PLAY_WORLD_CONTROL || '';
-const SIZES = [[320, 640], [390, 844], [1280, 900]];
+/* PLAY_WORLD_CASES (for example "c") and PLAY_WORLD_SIZES (for example "390") narrow a run while a finding is chased;
+   a narrowed run is never the round's proof, and says so on its last line. */
+const CASES = process.env.PLAY_WORLD_CASES || 'abcd';
+const SIZES = [[320, 640], [390, 844], [1280, 900]].filter(([w]) => !process.env.PLAY_WORLD_SIZES || process.env.PLAY_WORLD_SIZES.split(',').includes(String(w)));
+const NARROW = CASES !== 'abcd' || SIZES.length !== 3;
 const TEMP = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-world-ucl-walk-'));
 const SHOTS = path.join(process.env.RC_OUT || TEMP, 'shots');
 fs.mkdirSync(SHOTS, { recursive: true });
@@ -158,7 +162,11 @@ async function open(browser, items, [w, h], reduced = false) {
 async function toCups(page, where) {
   const ok = await press(page, page.getByRole('button').filter({ has: page.getByText('Cups', { exact: true }) }), 20000);
   const tiles = await page.locator('[data-cm-cups-view="tiles"]').waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
-  if (!ok || !tiles) finding(where, 'the Cups panel did not open from the hub');
+  if (!ok || !tiles) {
+    const seen = ((await page.locator('#root').innerText().catch(() => '')) || '').replace(/\s+/g, ' ').slice(0, 300);
+    finding(where, `the Cups panel did not open from the hub (the page reads: ${seen})`);
+    await shot(page, `fail-${where.replace(/[^a-z0-9]+/gi, '-')}`);
+  }
   return ok && tiles;
 }
 const shot = async (page, name) => page.screenshot({ path: path.join(SHOTS, `${name}.png`), fullPage: false }).catch(() => {});
@@ -381,12 +389,12 @@ try {
     for (const size of SIZES) {
       const tag = String(size[0]);
       console.log(`== ${size[0]} by ${size[1]}`);
-      await caseA(browser, size, tag);
-      await caseB(browser, size, tag);
-      await caseC(browser, size, tag);
-      await caseD(browser, size, tag);
+      if (CASES.includes('a')) await caseA(browser, size, tag);
+      if (CASES.includes('b')) await caseB(browser, size, tag);
+      if (CASES.includes('c')) await caseC(browser, size, tag);
+      if (CASES.includes('d')) await caseD(browser, size, tag);
     }
-    await caseMotion(browser);
+    if (!NARROW) await caseMotion(browser);
   }
 } finally {
   await browser.close();
@@ -402,6 +410,10 @@ if (CONTROL) {
   }
   console.log(`playWorldUcl control ${CONTROL}: DID NOT FIRE, "${want}" was never reported (${findings.length} other findings)`);
   process.exit(3);
+}
+if (NARROW) {
+  console.log(`playWorldUcl: narrowed run (cases ${CASES}, sizes ${SIZES.map(x => x[0]).join(', ')}), ${findings.length} findings over ${measured} measured views; not the round's proof`);
+  process.exit(findings.length ? 1 : 0);
 }
 if (measured < 20) cannot(`only ${measured} views were measured, so the walk did not really walk`);
 if (findings.length) {
