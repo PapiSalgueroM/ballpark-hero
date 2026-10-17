@@ -1,0 +1,15 @@
+simBallonDorTruth: node scripts/simBallonDorTruth.mjs
+simCareerCleanSheets: node scripts/simCareerCleanSheets.mjs
+simCareerDomesticCup: node scripts/simCareerDomesticCup.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs
+simCareerStoryRole: node scripts/simCareerStoryRole.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simMoney: node scripts/simMoney.mjs
+simPhone2: node scripts/simPhone2.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSoccerCareerDevelopment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+simSoccerWorldTruth: node scripts/simSoccerWorldTruth.mjs
+simPhone: node scripts/simPhone.mjs
