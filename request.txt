@@ -1,0 +1,18 @@
+headsha: git log --oneline -3
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+appeal: node scripts/simManagerAppealIsolation.mjs
+leaguerules: node scripts/simCmLeagueRules.mjs
+decisions: node scripts/simClubManagerDecisions.mjs
+decisions-s4: SIM_SEED=4 node scripts/simClubManagerDecisions.mjs
+dailydeals: node scripts/simDailyDeals.mjs
+savesize: node scripts/simClubManagerSaveSize.mjs
+slots: node scripts/simClubManagerSlots.mjs
+worlducl: node scripts/simWorldUcl.mjs
+sd1-5: SIM_SOCCER_DECK_SECTIONS=1,2,3,4,5 node scripts/simSoccerDeck.mjs
+sd6-10: SIM_SOCCER_DECK_SECTIONS=6,7,8,9,10 node scripts/simSoccerDeck.mjs
+sd-base: SIM_SOCCER_DECK_BASE=353d1c267114ed36c3189043f8708498eb787f31 SIM_SOCCER_DECK_SECTIONS=2,3,4 node scripts/simSoccerDeck.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+dg-m3: git worktree add -q .wt-m3 65126da0 && cd .wt-m3 && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write > /tmp/dg-m3.log 2>&1; s=$?; tail -1 /tmp/dg-m3.log; cd .. && git -C .wt-m3 show HEAD:scripts/data/cmLeagueRulesDigest.json > /dev/null; if cmp -s .wt-m3/scripts/data/cmLeagueRulesDigest.json scripts/data/cmLeagueRulesDigest.json; then echo "the digest written on m3 65126da0 equals the committed retake"; else echo "the digest written on m3 differs from the committed retake"; s=1; fi; exit $s
