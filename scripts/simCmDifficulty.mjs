@@ -14,7 +14,8 @@
         and clubManagerDifficulty.ts imports at runtime only files that do not
         import the engine back.
      2) Normal is the base, to the byte: the nine clubs, an Everton 2005-06
-        career, a created club and a New year takeover, set up as the Dugout
+        career, a created club, a New year takeover, a mid season move through
+        joinClubNow and a job taken in the wilderness, set up as the Dugout
         step sets them up with Normal chosen, SEEDS seeds, SEASONS seasons, the
         coach on and off: the whole state at every season end and the count of
         draws equal to BASE_ROOT's (a worktree of the commit the branch started
@@ -26,7 +27,8 @@
         after the first match; P1 the next match card, the match facts and the
         odds, and from the code that only the seven readers of your match read
         the edge and simAiMatch keeps strengthOf; B2 a stay's opening; M1 day
-        one and the summer cheque; M2 day one and a summer move's ceiling; T1
+        one, the summer cheque and a joinClubNow move's money; M2 day one, a
+        summer move's ceiling and a joinClubNow move's ceiling; T1
         the marked market, Buy's charge, the clause floor and the AI's deals.
      4) outcomes over the fleet at the three levels for the engaged driver,
         held to the lead's bands (see the table below). Long: run it as its
@@ -34,8 +36,9 @@
      6) Manager Hot Seat and Deadline Day dates play as on the base, with no
         level; Deadline Day's code reaches no lever.
      7) the help's worked example (ClubManagerHelp.tsx, comments out) holds
-        exactly the numbers the table gives, and the block opens by saying
-        every other number on that screen is Normal's.
+        exactly the numbers the table gives at a Challengers club, and the block
+        opens by saying everything else on that screen, numbers and promises,
+        is Normal's, and that one bad night in a new job can take you under Safe.
 
    MEASURED (GitHub runner, remote checks r1501-m1 at 08a2a7b8; the dials are the starting table, untuned,
    because they met every band on the first measurement). Section 4, the engaged driver, 9 clubs, 8 seeds,
@@ -67,6 +70,7 @@
      gain, pain, cut, cheque, wages, mark, edge
                  that lever of Hard set back to Normal's                   3
      clause      the clause floor at the card's price taken out            3
+     nojoin      joinClubNow returns the new job without its dials         3 (M1 and M2 on a mid season move)
      ddreach     deadlineDay.ts gains a call to oppStrengthVsMe            6
      alloff      Hard and Legend carry Normal's dials                      4
      helpdrift   Hard's cheque moved by 0.05 in memory                     7
@@ -90,7 +94,7 @@ const BASE_ROOT = process.env.BASE_ROOT ? path.resolve(ROOT, process.env.BASE_RO
 const CONTROL = process.env.CM_DIFF_CONTROL || '';
 /* Each control and the sections it must turn red. */
 const CONTROLS = {
-  flat: ['1'], leak: ['2', '6'], alloffleak: ['2'], alloff: ['4'], clause: ['3'],
+  flat: ['1'], leak: ['2', '6'], alloffleak: ['2'], alloff: ['4'], clause: ['3'], nojoin: ['3'],
   gain: ['3'], pain: ['3'], cut: ['3'], cheque: ['3'], wages: ['3'], mark: ['3'], edge: ['3'], ddreach: ['6'], helpdrift: ['7'],
 };
 const cannot = why => { console.log(`simCmDifficulty: CANNOT RUN: ${why}`); process.exit(2); };
@@ -115,6 +119,8 @@ const code = src => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*
 const PATCHES = {
   leak: { file: 'clubManagerStart.ts', from: "  return readLevel(o && typeof o === 'object' ? o.difficulty : undefined);", to: "  return readLevel(o && typeof o === 'object' && o.difficulty !== undefined ? o.difficulty : 'hard');" },
   clause: { file: 'clubManager.ts', from: '  return Math.max(1, Math.round(base * mult * 10) / 10, mp.price);', to: '  return Math.max(1, Math.round(base * mult * 10) / 10);' },
+  /* A merge that drops the dials from a mid season move (review of 2026-10-17: nothing saw it). */
+  nojoin: { file: 'clubManagerCalendar.ts', from: '  return applyNewJobDials(joined);', to: '  return joined;' },
 };
 /* Without BASE_ROOT, section 2 compares with this tree with every dial read as Normal's: the same claim (a
    career without the key never takes a lever's path), held for as long as the levers exist. */
@@ -434,14 +440,42 @@ function section0() {
 
 /* ---------- 2. Normal is the base, to the byte ---------- */
 const SPEC = { name: 'Difficulty Town', stadium: 'Level Ground', crest: { shape: 0, pattern: 0, color1: '#112233', color2: '#ffffff', initials: 'DT' }, budgetTier: 'small', leagueId: 'premier', replacedClub: '' };
-/** The careers section 2 replays: the nine clubs, an Everton career in 2005-06, a created club, and a New
-    year takeover, each set up the way the Dugout step does it with Normal chosen. */
+/** The careers section 2 replays: the nine clubs, an Everton career in 2005-06, a created club, a New year
+    takeover, a mid season move through joinClubNow and a job taken in the wilderness (the last two from the
+    review of 2026-10-17: the brief's decision 8 lists them), each set up the way the Dugout step does it with
+    Normal chosen. The two job paths count how often they reached the new job, and section 2 requires every time. */
 function identityCareers() {
-  const out = fleetClubs().map(c => ({ tag: c.name, era: null, make: m => m.cm.startCareer(c.name) }));
+  const fleet = fleetClubs();
+  const out = fleet.map(c => ({ tag: c.name, era: null, make: m => m.cm.startCareer(c.name) }));
   out.push({ tag: 'Everton 2005-06', era: 'era2005', make: m => m.cm.startCareer('Everton', 'era2005') });
   const spec = { ...SPEC, replacedClub: cm.playableClubs('premier').at(-1).name };
   out.push({ tag: 'a created club', era: null, make: m => m.cm.startCareer(spec.name, 'now', spec) });
   out.push({ tag: 'Brentford, New year takeover', era: null, make: m => m.cal.startMidSeason(m.cm.startCareer('Brentford'), 'newYear') });
+  const sixEntries = (m, club) => {
+    let s = m.cm.startCareer(club);
+    for (let g = 0; g < 6; g += 1) s = m.cm.playNextEntry(s, { skipHalftime: true }).state;
+    return s;
+  };
+  const mid = fleet.find(c => c.tier === 'mid' && c.league === 'premier').name;
+  const small = fleet.find(c => c.tier === 'small' && c.league === 'premier').name;
+  out.push({ tag: `${mid}, a joinClubNow move`, era: null, job: true, tried: 0, reached: 0, make(m) {
+    this.tried += 1;
+    const s = sixEntries(m, mid);
+    const to = moveTarget(m, s.clubName);
+    const j = to && !s.sacked ? m.cal.joinClubNow(accepted(s, to)) : null;
+    if (j && j.clubName === to) this.reached += 1;
+    return j ?? s;
+  } });
+  out.push({ tag: `${small}, a wilderness job`, era: null, job: true, tried: 0, reached: 0, make(m) {
+    this.tried += 1;
+    const s = sixEntries(m, small);
+    let w = m.cm.enterWilderness({ ...s, sacked: true, boardConfidence: 0 });
+    for (let g = 0; g < 40 && !(w.wilderness?.offers?.length); g += 1) w = m.cm.wildernessWeek(w);
+    const offer = w.wilderness?.offers?.[0];
+    const j = offer ? m.cm.acceptWildernessJob(w, offer.club) : null;
+    if (j && !j.sacked && !j.wilderness) this.reached += 1;
+    return j ?? w;
+  } });
   return out;
 }
 const setUp = (m, s, setup) => (m.dif ? m.dif.setUpCareer(s, setup, rebuildAsksOf(m)) : s);
@@ -500,6 +534,10 @@ async function section2() {
   }
   if (keyed) fail(`${keyed} Normal careers carry the difficulty key`);
   ok(`${compared} Normal careers compared with the base, ${draws} draws, in ${((performance.now() - t0) / 1000).toFixed(0)} s`);
+  for (const c of careers.filter(x => x.job)) {
+    if (!c.tried || c.reached !== c.tried) fail(`${c.tag}: reached the new job ${c.reached} of ${c.tried} times, so that path was not compared`);
+    else ok(`${c.tag}: reached the new job all ${c.tried} times, on both trees`);
+  }
   /* The picker path: Normal with No sacking off is the very object it was given. */
   const m = fresh(HEAD), s0 = m.cm.startCareer('Everton');
   if (m.dif.setUpCareer(s0, { level: 'normal', noSack: false }, () => { throw new Error('rebuilt'); }) === s0 && m.dif.setUpCareer(s0) === s0) ok('setUpCareer on Normal with No sacking off returns its argument');
@@ -587,7 +625,7 @@ function seasonEnd(m, club, seed) {
 const keyed = (s, level) => ({ ...s, startOptions: { ...(s.startOptions ?? {}), difficulty: level } });
 function section3() {
   const seeds = num('SEEDS3', 4);
-  if (LEVER_OF[CONTROL] || CONTROL === 'clause') console.log(`NEGATIVE CONTROL ON: ${CONTROL === 'clause' ? 'the clause floor at the card\'s price is gone' : `Hard's ${LEVER_OF[CONTROL].join(' and ')} set back to Normal's`}`);
+  if (LEVER_OF[CONTROL] || CONTROL === 'clause' || CONTROL === 'nojoin') console.log(`NEGATIVE CONTROL ON: ${CONTROL === 'clause' ? 'the clause floor at the card\'s price is gone' : CONTROL === 'nojoin' ? 'joinClubNow returns the new job without its dials' : `Hard's ${LEVER_OF[CONTROL].join(' and ')} set back to Normal's`}`);
   console.log(`3) each lever does what its dial says (Hard with one lever on, the rest Normal's), ${seeds} seeds`);
   const clubs = fleetClubs();
   /* B1: the board's change after the first match. */
@@ -651,6 +689,20 @@ function section3() {
 
 /** The summer rolled from one season end state on a stream of its own (simClubManagerBudget's rollWith). */
 const rollOn = (m, s, seed, club) => withStream(seed, () => m.cm.startNextSeason(s, club));
+/** A mid season move through joinClubNow (clubManagerCalendar.ts): an approach the manager has said yes to,
+    on a stream of its own, so both modules take the same draws and only the new job's dials can differ. */
+const accepted = (s, to) => ({ ...s, jobHunt: { open: { club: to, league: 'Premier League', tier: 2, season: s.season, week: s.week, matchesLeft: 0, roll: 0, status: 'accepted', decidedWeek: s.week }, cooldowns: [], sentSeason: s.season, sent: 1, summerMove: null } });
+const joinOn = (m, s, seed, to) => withStream(seed, () => m.cal.joinClubNow(accepted(s, to)));
+/** Six entries into a season under the steady driver's quick sims, on the Normal module m. */
+function sixIn(m, club, seed) {
+  return withStream(seed, () => {
+    let s = m.cm.startCareer(club);
+    for (let g = 0; g < 6; g += 1) s = m.cm.playNextEntry(s, { skipHalftime: true }).state;
+    return s;
+  });
+}
+/** Where a mid season move goes: a Premier League club in the middle of the table, never the manager's own. */
+const moveTarget = (m, from) => m.cm.playableClubs('premier').find(c => c.name !== from && c.expectation > 8 && c.expectation < 14)?.name;
 function section3money() {
   const seeds = num('SEEDS3', 4);
   const clubs = fleetClubs().filter(c => c.tier !== 'big');
@@ -661,6 +713,29 @@ function section3money() {
     if (s) ends.push({ club: c.name, s, seed: 13000 + seed * 7 + clubs.indexOf(c) });
   }
   console.log(`  ${ends.length} season ends rolled (the steady driver at the mid and small clubs)`);
+  /* Mid season moves through joinClubNow: six entries in at every club of the fleet, then an accepted approach. */
+  const mids = [];
+  for (const [i, c] of fleetClubs().entries()) {
+    const s = sixIn(mn, c.name, 14000 + i);
+    const to = moveTarget(mn, c.name);
+    if (!s.sacked && to) mids.push({ club: c.name, s, to, seed: 15000 + i });
+  }
+  console.log(`  ${mids.length} mid season states ready for a joinClubNow move`);
+  /* M1 and M2 on joinClubNow: the new job's money is Normal's times the cheque and its ceiling Normal's times
+     the room (founders' room aside), from the same draws. lever is the dial under test, read is the number. */
+  const joinCheck = (label, lever, wantOf, read) => {
+    const { m, dial } = leverModule([lever]);
+    let n = 0, bad = 0;
+    for (const e of mids) {
+      const a = joinOn(mn, e.s, e.seed, e.to), b = joinOn(m, keyed(e.s, 'hard'), e.seed, e.to);
+      if (!a || !b || a.clubName !== e.to || b.clubName !== e.to) { fail(`${label} joinClubNow ${e.club} to ${e.to}: the move did not happen`); continue; }
+      n += 1;
+      const want = wantOf(a, dial);
+      if (!close(read(b), want, 1e-9)) { bad += 1; if (bad <= 3) fail(`${label} joinClubNow ${e.club} to ${e.to}: Normal ${read(a)}, Hard ${read(b)}, the dial says ${want}`); }
+    }
+    if (n < 6) fail(`${label} joinClubNow: only ${n} mid season moves read, the floor is 6`);
+    else if (!bad) ok(`${label} joinClubNow: ${n} mid season moves start on Normal's ${label === 'M1' ? 'money' : 'ceiling'} times ${dial[lever]}`);
+  };
   /* B2: a stay's opening. At or above Safe it is Normal's; under Safe it is Normal's minus the cut. */
   {
     const { m, dial } = leverModule(['cut']);
@@ -691,6 +766,7 @@ function section3money() {
     if (n < 6) fail(`M1: only ${n} summers read`);
     else if (!bad) ok(`M1: day one and ${n} summer cheques are Normal's times ${dial.cheque}`);
   }
+  joinCheck('M1', 'cheque', (a, d) => Math.round(a.budget * d.cheque * 10) / 10, j => j.budget);
   /* M2: the wage ceiling of a new job (day one, and a summer move); a stay grows the one it has. */
   {
     const { m, dial } = leverModule(['wageRoom']);
@@ -712,6 +788,7 @@ function section3money() {
     if (n < 8) fail(`M2: only ${n} new jobs read`);
     else if (!bad) ok(`M2: ${n} new jobs (day one and summer moves) start on Normal's ceiling times ${dial.wageRoom}`);
   }
+  joinCheck('M2', 'wageRoom', (a, d) => { const room = a.founderWageRoom ?? 0; return Math.max(60, Math.round((a.wageCap - room) * d.wageRoom)) + room; }, j => j.wageCap);
   /* T1: the market listed to you. Same men, same order, marked prices; Buy charges the marked price; the
      clause never undercuts it (at Legend's mark, where on the old rule it could); the AI's headlines are Normal's. */
   {
