@@ -1,0 +1,5 @@
+#!serial
+v-head: node_modules/.bin/vite build > /tmp/b.log 2>&1; echo "head SoccerCareer chunk gzipped $(gzip -9 -c dist/assets/SoccerCareer-*.js | wc -c) B"
+v-nohelp: sed -i "s/^  'Summer cards: .*',$/  '',/" src/lib/soccerDeckGate.ts && git diff --stat -- src && node_modules/.bin/vite build > /tmp/b.log 2>&1; echo "no help line: $(gzip -9 -c dist/assets/SoccerCareer-*.js | wc -c) B"; git checkout -- src
+v-nopage: git checkout 8293c758 -- src/pages/SoccerCareer.tsx && node_modules/.bin/vite build > /tmp/b.log 2>&1; echo "base page over this gate: $(gzip -9 -c dist/assets/SoccerCareer-*.js | wc -c) B"; git checkout HEAD -- src
+v-base: git checkout 8293c758 -- src && node_modules/.bin/vite build > /tmp/b.log 2>&1; echo "base: $(gzip -9 -c dist/assets/SoccerCareer-*.js | wc -c) B"; git checkout HEAD -- src
