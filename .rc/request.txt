@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -3
+weights: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; cp /tmp/sw.log $RC_OUT/sw.log; grep -E "soccer-career|club-manager|manager-hot-seat|deadline-day|nba-my-career|nfl-my-career|mlb-my-career|nhl-my-career|OVER|over" /tmp/sw.log | head -30; tail -3 /tmp/sw.log; exit $s
+playCmRealFixtures: mkdir -p .tmp-fx/fcrf && export FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/fcrf"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
