@@ -269,7 +269,8 @@ describe('Live simcast motion', () => {
   }, 30000);
 
   it('pause freezes the ball and player pose, and the same player still opens changes', async () => {
-    const mounted = mount(structuredClone(fixtures.get('save')!.career));
+    const saved = structuredClone(fixtures.get('save')!.career);
+    const mounted = mount(saved);
     await step(730);
     fireEvent.click(mounted.getByRole('button', { name: 'Pause' }));
     const pitch = mounted.container.querySelector('[data-cm-live-pitch]')!;
@@ -281,7 +282,11 @@ describe('Live simcast motion', () => {
     const id = player.dataset.cmDot;
     fireEvent.click(player);
     expect(mounted.container.querySelector('[data-cm-live-sheet]')?.getAttribute('data-cm-live-sheet')).toBe(id);
-    expect(player.getAttribute('aria-label')).toContain('number');
+    /* Round 1340: the pitch shows no numbers, so the label names the man by his whole name. */
+    const man = saved.squad.find(p => p.id === id);
+    expect(man).toBeTruthy();
+    expect(player.getAttribute('aria-label')).toContain(man!.name);
+    expect(player.getAttribute('aria-label')).not.toContain('number');
   });
 
   it('motion leaves committed state and settled results identical', async () => {

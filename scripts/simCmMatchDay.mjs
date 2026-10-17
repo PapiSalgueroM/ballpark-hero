@@ -29,10 +29,17 @@
         one, rendered. The tie's two name blocks, the two form rows and the two "Ones to watch" columns (each
         marked data-cm-mc-side) are home side first and each holds its own side's names and form; the odds still
         read Win, Draw, They win, in that order. Floors: 40 home, 40 away, 3 neutral, 40 with ones to watch.
+     6) The pitch (Round 1340b): on every live render of section 4 no dot label is empty, begins with a digit or is
+        a number; my named man's label is his pitchName or pitchInitials and his dot's label for a screen reader
+        holds his whole name and no "number"; a named opponent's label is the pitch name or initials of a man in
+        their eleven or on their bench; a nameless opponent's is a slot's role (CB, ST). The fleet's saves all
+        carry an eleven, so a nameless side is staged on every live match by taking the eleven off its first
+        frame. Floors: 40 pitches, 400 of my men, 200 named and 40 staged nameless opponents.
      7) A home match reads as before: on every home and neutral match the card's visible text, in document order,
         equals the card at MATCHDAY_BASE (the round's files as they were at the base, everything else this tree's),
         with only the board word masked (it now says what the header's meter says); every live frame of a home
-        match, and the dressing room alone, reads exactly as at the base; and so does every home and neutral
+        match, and the dressing room alone, reads exactly as at the base but for the pitch labels (masked: section
+        6 reads them); and so does every home and neutral
         Match Centre.
 
    Negative controls (MATCHDAY_CONTROL=...), each asserting its anchor first, printing how often it fired:
@@ -40,6 +47,7 @@
      oldorder     myClubFirst and mineFirstOfReport answer true always, the screens before this round. Sections 2,
                   3, 4 and 5 must go red on away matches and stay green on home and neutral ones.
      truncate     the timeline's name span is cut again. Section 3 must go red.
+     numbers      the pitch labels as before Round 1340b, the position number in front. Section 6 must go red.
      homeflip     my club is drawn second at home. Section 7 must go red.
 
    Exit codes: 0 green, 1 red (or a control that fired), 2 could not run (a fleet under its floors: 100 away,
@@ -61,7 +69,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.MATCHDAY_CONTROL || '';
-const CONTROLS = { neutralaway: [1], oldorder: [2, 3, 4, 5], truncate: [3], homeflip: [7] };
+const CONTROLS = { neutralaway: [1], oldorder: [2, 3, 4, 5], truncate: [3], numbers: [6], homeflip: [7] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`MATCHDAY_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 const BASE = process.env.MATCHDAY_BASE || 'd8aaa4cb';
 const lf = s => s.replaceAll('\r\n', '\n');
@@ -117,6 +125,11 @@ const PATCHES = {
   oldorder: [['lib/cmMatchDisplay', 'ts', [['  return home !== false;\n', '  return true;\n'], ['  return report.home === clubName;\n', '  return true;\n']]]],
   homeflip: [['lib/cmMatchDisplay', 'ts', [['  return home !== false;\n', '  return home !== false && home !== true;\n'], ['  return report.home === clubName;\n', '  return report.home !== clubName;\n']]]],
   truncate: [['components/club-manager/MatchTimeline', 'tsx', [['<span data-cm-tl-name="1" title=', '<span className="truncate" data-cm-tl-name="1" title=']]]],
+  /* The labels before Round 1340b: the position number in front of every name, the number alone in a crowd. */
+  numbers: [['components/club-manager/LiveSimScreen', 'tsx', [
+    ["{short.has(d.key) && m.name ? pitchInitials(m.name) || m.label : m.label}{m.gen ? '*' : ''}", "{m.number}{m.label && !short.has(d.key) ? ` ${m.label}` : ''}{m.gen ? '*' : ''}"],
+    ['{short.has(d.key) && m.name ? pitchInitials(m.name) || m.label : m.label}', "{m.number}{short.has(d.key) ? '' : ` ${m.label}`}"],
+  ]]],
 };
 const headCopies = {};
 for (const [key, ext, edits] of PATCHES[CONTROL] ?? []) {
@@ -562,9 +575,76 @@ for (const C of centres) {
 console.log(`   ${redBy[5]?.checked ?? 0} Match Centres (${centreCounts.home} home, ${centreCounts.away} away, ${centreCounts.neutral} neutral, ${centreCounts.watch} with ones to watch); red: ${redBy[5]?.home ?? 0} home, ${redBy[5]?.away ?? 0} away, ${redBy[5]?.neutral ?? 0} neutral`);
 if (centreCounts.home < 40 || centreCounts.away < 40 || centreCounts.neutral < 3 || centreCounts.watch < 40) cannotRun('section 5 read under 40 home, 40 away, 3 neutral or 40 Match Centres with ones to watch: widen the sample, never lower a floor');
 
+/* ---------- 6. the pitch wears names ---------- */
+console.log('6) The pitch: every dot label is the man\'s pitch name, his initials or his slot\'s role, never a number');
+const SLOT_LABELS = new Set(cm.FORMATIONS.flatMap(f => f.slots.map(s => s.label)));
+/** Every dot on a rendered pitch: whose (me or opp), its id or number, its aria-label, and its label's text. */
+function dotsOf(html) {
+  const out = [];
+  for (const d of html.matchAll(/<(?:button|div)\b[^>]*\bdata-cm-dot(-opp)?="([^"]*)"[^>]*>/g)) {
+    const at = html.indexOf('<span class="cm-dot-label', d.index);
+    const end = at < 0 ? -1 : spanClose(html, at);
+    if (end < 0) { out.push({ side: d[1] ? 'opp' : 'me', key: d[2], text: null }); continue; }
+    const inner = html.slice(html.indexOf('>', at) + 1, end - '</span>'.length);
+    const text = unescape(inner.replace(/<span\b[^>]*>C<\/span>/g, '').replace(/<!--[^>]*-->/g, '').replace(/<[^>]*>/g, '')).trim();
+    out.push({ side: d[1] ? 'opp' : 'me', key: d[2], aria: unescape(/aria-label="([^"]*)"/.exec(d[0])?.[1] ?? ''), text });
+  }
+  return out;
+}
+const asName = (t, name) => t === order.pitchName(name) || t === order.pitchInitials(name);
+const dotCounts = { read: 0, mine: 0, theirsNamed: 0, theirsNameless: 0, staged: 0, initials: 0, frames: 0 };
+function judgeDots(html, career, oppNames, p, where) {
+  const dots = dotsOf(html);
+  if (dots.length) dotCounts.frames += 1;
+  for (const d of dots) {
+    dotCounts.read += 1;
+    if (d.text === null) { p.push(`${where}: a dot has no label`); continue; }
+    const t = d.side === 'opp' ? d.text.replace(/\*$/, '') : d.text;
+    if (!t) { p.push(`${where}: a ${d.side} dot's label is empty`); continue; }
+    if (/^\d/.test(t)) { p.push(`${where}: a ${d.side} dot's label "${d.text}" begins with a digit`); continue; }
+    if (d.side === 'me') {
+      const man = d.key ? career.squad.find(q => q.id === d.key) : null;
+      if (!man) { if (!SLOT_LABELS.has(t)) p.push(`${where}: my nameless dot reads "${t}", not a slot's role`); continue; }
+      dotCounts.mine += 1;
+      if (t !== order.pitchName(man.name)) dotCounts.initials += 1;
+      if (!asName(t, man.name)) p.push(`${where}: my ${man.name} reads "${t}", not his pitch name or initials`);
+      if (!d.aria.includes(man.name) || /\bnumber\b/.test(d.aria)) p.push(`${where}: my ${man.name}'s label for a screen reader is "${d.aria}"`);
+    } else if (!oppNames.length) {
+      dotCounts.theirsNameless += 1;
+      if (!SLOT_LABELS.has(t)) p.push(`${where}: a nameless opponent reads "${t}", not a slot's role`);
+    } else {
+      dotCounts.theirsNamed += 1;
+      if (!oppNames.some(n => asName(t, n))) p.push(`${where}: an opponent reads "${t}", the pitch name or initials of nobody in their eleven or on their bench`);
+    }
+  }
+  return dots.length;
+}
+for (const L of lives) {
+  const m = { club: L.club, era: L.era, seed: L.seed, fxHome: L.fxHome, report: L.report };
+  const p = [];
+  for (const f of L.frames) {
+    const oppNames = f.report
+      ? (f.report.detail?.oppXi ?? []).map(x => x.n)
+      : [...(f.career.live.oppXi ?? []), ...(f.career.live.oppBench ?? [])].map(x => x.n);
+    judgeDots(f.html, f.career, oppNames, p, f.stage);
+  }
+  /* A side with no eleven (a save from before Round 504 has none): staged by taking the eleven off a live state. */
+  const staged = structuredClone(L.frames[0].career);
+  delete staged.live.oppXi;
+  delete staged.live.oppBench;
+  const before = dotCounts.theirsNameless;
+  judgeDots(render(HeadLive, liveProps(L, { career: staged })), staged, [], p, 'a nameless side');
+  dotCounts.staged += dotCounts.theirsNameless - before;
+  judge(6, m, p);
+}
+console.log(`   ${dotCounts.read} dot labels over ${dotCounts.frames} pitches: ${dotCounts.mine} of mine named (${dotCounts.initials} in initials), ${dotCounts.theirsNamed} named opponents, ${dotCounts.theirsNameless} nameless opponents (${dotCounts.staged} of them staged); red: ${redBy[6]?.home ?? 0} home, ${redBy[6]?.away ?? 0} away, ${redBy[6]?.neutral ?? 0} neutral`);
+if (dotCounts.frames < 40 || dotCounts.mine < 400 || dotCounts.theirsNamed < 200 || dotCounts.staged < 40) cannotRun(`section 6 read ${dotCounts.frames} pitches, ${dotCounts.mine} of mine, ${dotCounts.theirsNamed} named and ${dotCounts.staged} staged nameless opponents: under its floors (40, 400, 200, 40)`);
+
 /* ---------- 7. a home match reads as before ---------- */
-console.log('7) A home or neutral match: the card\'s visible text equals the base\'s, the board word masked');
+console.log('7) A home or neutral match: the card\'s visible text equals the base\'s, the board word and the pitch labels masked');
 const maskBoard = html => html.replace(/(>Board<\/div><div[^>]*>[\s\S]*?<\/span><\/div><div[^>]*>)[^<]*(<\/div>)/, '$1#$2');
+/* Round 1340b: the pitch labels changed on purpose (surnames, never numbers); section 6 reads them. */
+const maskDots = html => html.replace(/<span class="cm-dot-label[^"]*">(?:[^<]|<!--[^>]*-->|<span\b[^>]*>[^<]*<\/span>)*<\/span>/g, '<span>#</span>');
 for (const m of matches) {
   if (!homeIsMe(m)) continue;
   const head = visible(maskBoard(m.html));
@@ -587,8 +667,8 @@ for (const L of lives) {
     [render(HeadHalf, halfProps(L.frames[1].career)), render(BaseHalf, halfProps(L.frames[1].career)), 'half time alone']];
   for (const [headHtml, baseHtml, stage] of pairs) {
     liveCompared += 1;
-    const head = visible(headHtml);
-    const base = visible(baseHtml);
+    const head = visible(maskDots(headHtml));
+    const base = visible(maskDots(baseHtml));
     if (head === base) continue;
     let i = 0;
     while (i < head.length && head[i] === base[i]) i += 1;

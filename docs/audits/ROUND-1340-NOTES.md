@@ -66,3 +66,22 @@ scripts/simMatchScreen.mjs 403 (POSSESSION, repointed in a2), scripts/simCmMatch
 1792 (a3), src/test/pitchOwnGoal.test.tsx 687 (a3), scripts/playClubManager.mjs 495 (a3), scripts/playLiveMatchFit.mjs
 404, 678, 1275 and 1286 (read by attribute or as a change of text: no edit). scripts/simClubManagerMeters.mjs 499 reads
 the league table's goals pair, not a match screen.
+
+## 1340b, the pitch and the tile
+
+- a fix found by 1340a's final proof (r1340-F4 on 604bc788): at 320 one (O.G) mark dropped alone onto a third line
+  under "Giorgi Mamardashvili" (the mark span was white-space pre, and Chromium broke the line in front of its
+  leading space). 349aea26 makes it nowrap, which holds the space to the name's last word; a Chromium probe over
+  every column width from 60 to 220 px is sent with the walk (r1340-m1).
+- b1 (93c6e3b7, 80bf6edc): pitchName and pitchInitials in src/lib/cmMatchDisplay.ts, their unit file pinning the
+  brief's names and the whole pool's properties (r1340-x1 unit green on 80bf6edc).
+- b2 (9a330320): LABELS_BEFORE_320 recorded on abf78608 (whose pitch is 1340a's), playLiveMatchFit at 320 by 568,
+  three seeds twice each (r1340-b2): the walk's own seed 3208792607 2.417 and 2.375, seed 1340 3.208 and 2.792, seed
+  2026 2.375 and 2.375 overlapping pairs a frame; mean 2.590, spread 0.417 (seed 1340's two runs); cut a frame 13.917,
+  14.958 and 15.0; every one of the 504 to 528 label readings began with a digit.
+- b3: the dots wear pitchName (initials from pitchInitials in labelsShort's crowd, a nameless opponent his slot's
+  role), my dot's label for a screen reader is the man's whole name, the two comments rewritten (labelsAbove and
+  labelsShort's code unchanged), liveSimMotion's aria test reads the whole name, the help's pitch sentence, the
+  live help's surname bullet and the What's New entry extended in the same commit. simCmMatchDay section 6 with
+  control numbers; section 7 masks the pitch labels. playLiveMatchFit holds 320 to LABELS_BEFORE_320's ceiling and
+  every size to no label beginning with a digit, controls widelabels and digits.

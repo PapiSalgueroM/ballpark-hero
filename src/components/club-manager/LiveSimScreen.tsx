@@ -32,7 +32,7 @@ import { scorerMark } from '@/lib/clubManagerScorerLine';
 import type { GoalMarks } from '@/lib/clubManagerScorerLine';
 import { cmVarEventWaiting, cmVarPlayWaiting, cmVarCanAnnounce, cmVarPlayedReviewIds, cmVarLabel, cmVarKindsOf } from '@/lib/clubManagerVar';
 import { ClubManagerVarReview } from '@/components/club-manager/ClubManagerVarReview';
-import { inFixtureOrder, mineFirstOfReport, myClubFirst } from '@/lib/cmMatchDisplay';
+import { inFixtureOrder, mineFirstOfReport, myClubFirst, pitchInitials, pitchName } from '@/lib/cmMatchDisplay';
 
 /**
  * Round 158: the Live Sim. His words, the ones he said to really pay
@@ -246,7 +246,7 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
       const slot = myFormation.slots[i];
       if (!slot || goneIds.has(id)) return;
       const p = career.squad.find(q => q.id === id);
-      mine.push({ key: `m${i}`, slot, label: p ? lastName(p.name) : slot.label, name: p?.name, number: numbers.get(id) ?? i + 1, id, side: 'me' });
+      mine.push({ key: `m${i}`, slot, label: p ? pitchName(p.name) : slot.label, name: p?.name, number: numbers.get(id) ?? i + 1, id, side: 'me' });
     });
     const oppFormation = FORMATIONS[live.oppFormationIndex ?? DEFAULT_OPP_FORMATION] ?? FORMATIONS[DEFAULT_OPP_FORMATION];
     if (live.oppXi) {
@@ -258,10 +258,10 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
         if (!slot || sentOff.has(p.n)) return;
         const started = live.oppXi?.[i]?.n === p.n;
         const benchIdx = (live.oppBench ?? []).findIndex(b => b.n === p.n);
-        theirs.push({ key: `o${i}`, slot, label: lastName(p.n), name: p.n, number: started ? i + 1 : 12 + Math.max(0, benchIdx), side: 'opp', gen: p.g });
+        theirs.push({ key: `o${i}`, slot, label: pitchName(p.n), name: p.n, number: started ? i + 1 : 12 + Math.max(0, benchIdx), side: 'opp', gen: p.g });
       });
     } else {
-      oppFormation.slots.forEach((slot, i) => theirs.push({ key: `o${i}`, slot, label: '', number: i + 1, side: 'opp' }));
+      oppFormation.slots.forEach((slot, i) => theirs.push({ key: `o${i}`, slot, label: slot.label, number: i + 1, side: 'opp' }));
     }
     return { mine, theirs };
   }
@@ -269,13 +269,13 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
   const xi = resolveXI(career);
   myFormation.slots.forEach((slot, i) => {
     const p = xi[i];
-    mine.push({ key: `m${i}`, slot, label: p ? lastName(p.name) : slot.label, name: p?.name, number: i + 1, id: p?.id, side: 'me' });
+    mine.push({ key: `m${i}`, slot, label: p ? pitchName(p.name) : slot.label, name: p?.name, number: i + 1, id: p?.id, side: 'me' });
   });
   const d = report?.detail;
   const oppFormation = FORMATIONS[d?.oppFormationIndex ?? DEFAULT_OPP_FORMATION] ?? FORMATIONS[DEFAULT_OPP_FORMATION];
   oppFormation.slots.forEach((slot, i) => {
     const p = d?.oppXi?.[i];
-    theirs.push({ key: `o${i}`, slot, label: p ? lastName(p.n) : '', name: p?.n, number: i + 1, side: 'opp', gen: p?.g });
+    theirs.push({ key: `o${i}`, slot, label: p ? pitchName(p.n) : slot.label, name: p?.n, number: i + 1, side: 'opp', gen: p?.g });
   });
   return { mine, theirs };
 }
@@ -331,9 +331,9 @@ export function labelsAbove(figures: { key: string; x: number; y: number }[]): S
   }
   return up;
 }
-/** Round 1101: who shows his number without his name for now. Three or more men level and shoulder to
- *  shoulder (a free kick's wall) have no room for three names in any two rows, so each shows his number
- *  until they break. So does a man in a crowd: with three or more others inside the room his own name and
+/** Round 1101: who shows his initials instead of his surname for now (Round 1340: the pitch shows no numbers,
+ *  so this is the initials, never a digit). Three or more men level and shoulder to shoulder (a free kick's
+ *  wall) have no room for three names in any two rows, so each shows his initials until they break. So does a man in a crowd: with three or more others inside the room his own name and
  *  the next one would need (a corner coming in, a scramble in the area) the names print through each other
  *  whichever row each takes, worst on a 320 px phone. A pure function of the frame. */
 const LABEL_WALL = 8;
@@ -438,6 +438,7 @@ function LiveMatchHelp({ onClose, kinds = [] }: { onClose: () => void; kinds?: r
         <li>Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them.</li>
         <li>{penalties ? 'The score changes when the ball is in the net, not before. A penalty a review gives waits for the review first.' : 'The score changes when the ball is in the net, not before.'}</li>
         <li>The home side is named first, on the left of the score, the way every scoreboard does it, so away from home your club is on the right. Your club is the one picked out in green wherever it sits, and the stats follow the same order.</li>
+        <li>On the pitch each man wears his surname, or his initials when players bunch up at a wall or a corner. No side in the game carries real shirt numbers, so the pitch shows none, and a side the game has no names for shows each man's position instead (CB, ST).</li>
         <li>A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net. On the pitch the ball goes in off him and he holds his head.</li>
         {reviews && <li>VAR here reviews {goals && penalties ? 'goals and penalties only' : goals ? 'goals only' : 'penalty calls only'}, and you only see a review that changed the call.{goals ? ' A goal that gets ruled out goes in first: the check opens with the ball in the net, the score does not move, and it adds no scorer or shot stats.' : ''}{penalties ? ' A foul the referee missed can become a penalty, and that kick can go in, be saved or miss.' : ''}</li>}
         <li>Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.</li>
@@ -1706,7 +1707,9 @@ export function LiveSimScreen({
                   It takes every pixel the rows around it leave. */}
               <div className="cm-pitchbox">
                 <PitchSurface frame={motion} orientation={orientation} className="cm-stage-pitch" style={{ aspectRatio: 'auto' }}>
-                  {/* their dots: numbers, and names when the engine has an eleven for them */}
+                  {/* their dots: surnames (initials in a crowd) when the engine has an eleven for them, and each
+                      slot's role (CB, ST) when it has none. Round 1340: never a number, the game holds no real
+                      shirt numbers */}
                   {motion.theirs.map(d => {
                     const m = manOf.get(d.key);
                     if (!m) return null;
@@ -1720,7 +1723,7 @@ export function LiveSimScreen({
                       >
                         <LivePitchPlayer color="#d6e6ed" keeper={d.keeper} pose={motion.poses[d.key]} />
                         <span className={cn('cm-dot-label text-[9px] text-white/80 leading-none truncate tabular-nums', up ? 'mb-0.5' : 'mt-0.5')}>
-                          {m.number}{m.label && !short.has(d.key) ? ` ${m.label}` : ''}{m.gen ? '*' : ''}
+                          {short.has(d.key) && m.name ? pitchInitials(m.name) || m.label : m.label}{m.gen ? '*' : ''}
                         </span>
                       </div>
                     );
@@ -1738,7 +1741,7 @@ export function LiveSimScreen({
                         type="button"
                         data-cm-dot={m.id ?? ''}
                         data-cm-captain={captain ? '1' : undefined}
-                        aria-label={`${m.label}, number ${m.number}${captain ? ', captain' : ''}. Tap to bring somebody on or change the shape.`}
+                        aria-label={`${m.name ?? m.label}${captain ? ', captain' : ''}. Tap to bring somebody on or change the shape.`}
                         disabled={!canChange || !m.id}
                         onClick={() => { if (m.id) openSheet(m.id); }}
                         className={cn(
@@ -1750,7 +1753,7 @@ export function LiveSimScreen({
                       >
                         <LivePitchPlayer color={clubColor} keeper={d.keeper} pose={motion.poses[d.key]} selected={picking === m.id} />
                         <span className={cn('cm-dot-label text-[9px] text-white/90 leading-none truncate tabular-nums', up ? 'mb-0.5' : 'mt-0.5')}>
-                          {m.number}{short.has(d.key) ? '' : ` ${m.label}`}
+                          {short.has(d.key) && m.name ? pitchInitials(m.name) || m.label : m.label}
                           {captain && (
                             <span className="ml-0.5 inline-block px-[2px] rounded-sm bg-yellow-400 text-black font-black leading-[9px] align-middle">C</span>
                           )}
