@@ -1,0 +1,3 @@
+sn: SECTION=0 LEVELS=normal DRIVERS=steady SEEDS=8 SEASONS=6 OUT_JSON=$RC_OUT/sn.json node scripts/simCmDifficulty.mjs
+sh: SECTION=0 LEVELS=hard DRIVERS=steady SEEDS=8 SEASONS=6 OUT_JSON=$RC_OUT/sh.json node scripts/simCmDifficulty.mjs
+sl: SECTION=0 LEVELS=legend DRIVERS=steady SEEDS=8 SEASONS=6 OUT_JSON=$RC_OUT/sl.json node scripts/simCmDifficulty.mjs
