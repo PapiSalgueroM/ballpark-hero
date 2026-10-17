@@ -1,0 +1,7 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCmMatchDay exit=0 181s | playCmMatchDay: green. 15 walks over 4 saves, every match day screen home side first, whole names on the timeline, a 44 px toggle, the page never moved
+pmd-fullname exit=1 3s | playCmMatchDay: CONTROL fullname FIRED
+pmd-swap exit=1 3s | playCmMatchDay: CONTROL swap FIRED
+pmd-cut exit=1 13s | playCmMatchDay: CONTROL cut FIRED
+pmd-jump exit=1 13s | playCmMatchDay: CONTROL jump FIRED
+playCmHubLanding exit=0 91s | playCmHubLanding: green (A 8 pass 0 fail, B 65 pass 0 fail, C 111 pass 0 fail, E 63 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its first frame
