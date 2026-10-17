@@ -1,0 +1,40 @@
+#!serve
+#!playwright
+headsha: git log --oneline -3 | cut -c1-120
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simDailyDeals: node scripts/simDailyDeals.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simPrerender: node scripts/simPrerender.mjs > /tmp/pr.log 2>&1; s=$?; grep -nE "FAIL|failure" /tmp/pr.log | head -14; tail -3 /tmp/pr.log; exit $s
+playTwoTabs: RC_OUT=/tmp/tt PORT=4610 ENGINES=chromium node scripts/playTwoTabs.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+simResultMoment: node scripts/simResultMoment.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+simWritesAreSent: node scripts/simWritesAreSent.mjs 2>&1 | tail -10; exit ${PIPESTATUS[0]}
+playHomeFold: node scripts/playHomeFold.mjs
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+playClubManagerSlots: ENGINES=chromium node scripts/playClubManagerSlots.mjs
+playCmHubLanding: ENGINES=chromium node scripts/playCmHubLanding.mjs
