@@ -1,0 +1,3 @@
+deadline: CM_DEADLINE_CORE_REF=HEAD MANAGER_DEADLINE_OUT="$PWD/dl1" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisionDeadline.mjs
+leagueRules-base: git worktree add -f /tmp/lb d8aaa4cb > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/lb/node_modules && cd /tmp/lb && node scripts/simCmLeagueRules.mjs
+worldCont-base: git worktree add -f /tmp/wc d8aaa4cb > /dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/wc/node_modules && cd /tmp/wc && NODE_OPTIONS="--require=/tmp/wc/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
