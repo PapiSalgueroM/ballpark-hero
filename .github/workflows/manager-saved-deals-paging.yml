@@ -1,0 +1,84 @@
+name: Manager saved deals paging baseline
+
+on:
+  push:
+    branches: [codex/manager-saved-deals-pagination]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Allocate retained evidence
+        run: |
+          echo "MSDL_OUT=$RUNNER_TEMP/manager-saved-deals-paging" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/manager-saved-deals-paging"
+      - name: Bind original source and locked dependencies
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > "$MSDL_OUT/head.txt"
+          git archive --format=zip HEAD > "$MSDL_OUT/source.zip"
+          git status --porcelain --untracked-files=no > "$MSDL_OUT/source-before.txt"
+          test ! -s "$MSDL_OUT/source-before.txt"
+          git diff --exit-code 6465d9aeac1bc10f37d08fcb1a41b7521a886a1a HEAD -- src scripts public package.json package-lock.json bun.lock bun.lockb ':!src/test/managerSavedDealsPaging.test.tsx' ':!scripts/qa/proveManagerSavedDealsPaging.mjs'
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$MSDL_OUT/source-files.sha256"
+          npm ci > "$MSDL_OUT/install.log" 2>&1
+          cat "$MSDL_OUT/install.log"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, entry]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, entry.version, p); return { path: p, version };
+          });
+          assert.equal(installed.length, 521);
+          fs.writeFileSync(process.env.MSDL_OUT + '/installed-versions.json', JSON.stringify(installed, null, 2) + '\n');
+          fs.writeFileSync(process.env.MSDL_OUT + '/node-versions.json', JSON.stringify(process.versions, null, 2) + '\n');
+          console.log('All521 installed locked package manifests bound.');
+          NODE
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$MSDL_OUT/installed-files.sha256"
+      - name: Actual application types and proof syntax
+        run: |
+          set -euo pipefail
+          SIM_OFFLINE_RECEIPT="$MSDL_OUT/types.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$MSDL_OUT/types.log"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --check scripts/qa/proveManagerSavedDealsPaging.mjs
+      - name: Six precise baseline cases and unchanged ten own-history cases
+        run: |
+          set -euo pipefail
+          SIM_OFFLINE_RECEIPT="$MSDL_OUT/method.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/proveManagerSavedDealsPaging.mjs 2>&1 | tee "$MSDL_OUT/baseline.log"
+      - name: All source and installed bytes held
+        if: always()
+        run: |
+          set -euo pipefail
+          result=0
+          sha256sum --check "$MSDL_OUT/source-files.sha256" > "$MSDL_OUT/source-holds.log" 2>&1 || result=1
+          sha256sum --check "$MSDL_OUT/installed-files.sha256" > "$MSDL_OUT/installed-holds.log" 2>&1 || result=1
+          for receipt in "$MSDL_OUT/"*.transport "$MSDL_OUT/baseline-proof/"*.transport; do test ! -s "$receipt" || result=1; done
+          git status --porcelain --untracked-files=no > "$MSDL_OUT/source-after.txt"
+          test ! -s "$MSDL_OUT/source-after.txt" || result=1
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manager-saved-deals-paging-baseline-${{ github.sha }}
+          path: ${{ env.MSDL_OUT }}
+          if-no-files-found: error
+          retention-days: 14

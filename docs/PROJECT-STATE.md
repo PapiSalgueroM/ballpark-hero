@@ -1,3 +1,7 @@
+## Codex Round1393: saved transfer deals paging, baseline pending
+
+Recorded 2026-10-17 UTC. Claimed on codex/manager-saved-deals-pagination from qualified PR296 head6465d9ae. The reader currently hides saved rows beyond50. Scope is only paging retained filtered deals, preserving284/296 UI behavior and all state. New six-case baseline, old10tests and remote proof are being prepared before any product edit. Claude I retains main, publication, core and competitions. This adds no gate to urgentPR308 and makes no live claim. See docs/audits/manager-saved-deals-paging.md.
+
 ## 2026-10-16: Club Manager own transfer log candidate
 
 Codex branch `codex/manager-own-transfer-log`: the Latest transfer tab can filter saved purchases, sales and loans
