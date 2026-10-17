@@ -1,0 +1,49 @@
+treeWithoutMerge: e166cf98fb5792dff0ffc01bf4c5a09ccfa3b0df, ee056162 without 54100f6e; conflicts kept from ee056162: none
+base e166cf98fb5792dff0ffc01bf4c5a09ccfa3b0df
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   bridge "the window records nothing": 1
+   bridge "recordAiDeals records nothing": 1
+   bridge "the join keeps the departed ledger": 1
+   bridge "the join keeps the run in's gone names and log": 1
+   bridge "a rival closes whatever the ledger says": 1
+   control seedless: 1
+   control norecord: 1
+   control norecord: 1
+   control noflush: 1
+   control nojanuary: 1
+   control nosummer: 1
+   control joinledger: 1
+   control nolock: 1
+   control nolist: 1
+   control norepair: 1
+   control repairthrows: 1
+   control nohijack: 1
+   control nowalk: 1
+   control noguard: 1
+   control nocarry: 1
+   control seasonone: 1
+   control dropbase: 1
+   control noskip: 1
+   control drawshift: 1
+   control slow: 1
+   control edit made 1 time(s): slow: if (working && seen) { const moved = recordAiDeal(working, {
+12) the window entry: Real Madrid, Everton, Aberdeen to the January of season 6, 5 trials an engine, the head's median at most 3 x BASE's + 5 ms
+   Real Madrid (now, seed 1): ledger 22 records on BASE, 63 on the head; the window entry's median BASE 29.8 ms, head 140.3 ms (limit 94.3)
+  FAIL section 12: Real Madrid (now, seed 1): the head's window entry took 140.3 ms against BASE's 29.8 ms, over 3 x + 5 ms
+   Real Madrid (now, seed 2): ledger 23 records on BASE, 66 on the head; the window entry's median BASE 29.6 ms, head 133.1 ms (limit 93.7)
+  FAIL section 12: Real Madrid (now, seed 2): the head's window entry took 133.1 ms against BASE's 29.6 ms, over 3 x + 5 ms
+   Real Madrid (now, seed 3): ledger 22 records on BASE, 70 on the head; the window entry's median BASE 29.3 ms, head 142.6 ms (limit 92.9)
+  FAIL section 12: Real Madrid (now, seed 3): the head's window entry took 142.6 ms against BASE's 29.3 ms, over 3 x + 5 ms
+   Everton (now, seed 1): ledger 12 records on BASE, 56 on the head; the window entry's median BASE 27.2 ms, head 126.7 ms (limit 86.7)
+  FAIL section 12: Everton (now, seed 1): the head's window entry took 126.7 ms against BASE's 27.2 ms, over 3 x + 5 ms
+   Everton (now, seed 2): ledger 12 records on BASE, 51 on the head; the window entry's median BASE 28.4 ms, head 114.7 ms (limit 90.3)
+  FAIL section 12: Everton (now, seed 2): the head's window entry took 114.7 ms against BASE's 28.4 ms, over 3 x + 5 ms
+   Everton (now, seed 3): ledger 15 records on BASE, 63 on the head; the window entry's median BASE 29.2 ms, head 141.3 ms (limit 92.5)
+  FAIL section 12: Everton (now, seed 3): the head's window entry took 141.3 ms against BASE's 29.2 ms, over 3 x + 5 ms
+   Aberdeen (now, seed 1): ledger 4 records on BASE, 53 on the head; the window entry's median BASE 26.7 ms, head 120.3 ms (limit 85.2)
+  FAIL section 12: Aberdeen (now, seed 1): the head's window entry took 120.3 ms against BASE's 26.7 ms, over 3 x + 5 ms
+   Aberdeen (now, seed 2): ledger 5 records on BASE, 53 on the head; the window entry's median BASE 27.5 ms, head 119.6 ms (limit 87.4)
+  FAIL section 12: Aberdeen (now, seed 2): the head's window entry took 119.6 ms against BASE's 27.5 ms, over 3 x + 5 ms
+   Aberdeen (now, seed 3): ledger 5 records on BASE, 42 on the head; the window entry's median BASE 26.9 ms, head 102.3 ms (limit 85.6)
+  section 12: 1 more failures not shown
+simCmWorldMoves: control slow FIRED: section 12 red (9)

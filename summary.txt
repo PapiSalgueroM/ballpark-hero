@@ -1,0 +1,6 @@
+edge-carried exit=0 4s |    Duration  3.90s (transform 1.29s, setup 56ms, collect 59ms, tests 3.01s, environment 318ms, prepare 189ms)
+pr269-head exit=0 11s |    Duration  9.01s (transform 1.31s, setup 55ms, collect 43ms, tests 6.77s, environment 301ms, prepare 122ms)
+s12 exit=0 127s | simCmWorldMoves: green, sections 12 held
+c-slow exit=1 135s | simCmWorldMoves: control slow FIRED: section 12 red (9)
+ledgerbound exit=0 326s | simCmLedgerBound: green, all four sections held
+rules-bridged exit=0 76s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
