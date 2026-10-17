@@ -44,6 +44,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { withoutWorldSeed } from './lib/cmWorldSeed1250.mjs';
+import { withoutWatchedHolder } from './lib/worldUclHolder1502.mjs';
 import { withRulePreAz } from './lib/cmOwnClubMarket1339.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -270,12 +271,17 @@ const ERAS = ['now', 'era2020', 'era2015', 'era2010', 'era2005'];
 const SEEDS = QUICK ? [0x5eed01] : [0x5eed01, 0x5eed02, 0x5eed03];
 const HOT_DATES = QUICK ? [] : ['2026-10-10', '2026-10-27', '2027-01-19'];
 
+/* Round 1502, step E5 (the critic's correction 5): from E5 a season after a watched final hands its winner to next
+   season's field as the holder, which the pinned base cannot know. It is the one line of the watched competition
+   that moves anything outside worldComps, so every arm of this tree plays with it reverted
+   (scripts/lib/worldUclHolder1502.mjs, asserted present exactly once) and the comparison stays the seed's alone. */
+const held = text => { try { return withoutWatchedHolder(text); } catch (e) { cannot(e.message); } };
 const baseEngine = await engine('base', { base: true, edit: text => { try { return withRulePreAz(text); } catch (e) { cannot(e.message); } } });
 const sections = CONTROL === 'noinverse' ? ['fresh'] : CONTROL === 'guard' ? ['quiet', 'deals'] : ['quiet', 'deals', 'fresh'];
 const thisTree = CONTROL === 'guard'
-  ? await engine('noguard', { edit: text => { const n = text.split(GUARD).length - 1; if (n !== 1) cannot(`control guard: the guard is in ${ENGINE} ${n} times, it must be exactly once`); return text.replace(GUARD, ''); } })
-  : await engine('tree');
-const inverse = CONTROL === 'noinverse' ? await engine('tree') : await engine('inverse', { edit: withoutWorldSeed });
+  ? await engine('noguard', { edit: text => { const n = text.split(GUARD).length - 1; if (n !== 1) cannot(`control guard: the guard is in ${ENGINE} ${n} times, it must be exactly once`); return held(text.replace(GUARD, '')); } })
+  : await engine('tree', { edit: held });
+const inverse = CONTROL === 'noinverse' ? await engine('tree', { edit: held }) : await engine('inverse', { edit: text => held(withoutWorldSeed(text)) });
 
 /* The fleet, picked from the base engine's own tables and printed, so a data update that moves a club shows. */
 const M0 = await baseEngine.fresh();

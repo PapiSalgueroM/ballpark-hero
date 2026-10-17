@@ -12685,7 +12685,24 @@ function initUclGroup(qualified: boolean, myClub: string, eraId?: string, field?
 export function uclQualifiersFrom(career: CareerState): string[] {
   const tables = uclFinalTables(career);
   if (!tables) return [];
-  return uclFieldFromTables(tables, career.uclBracket?.find(t => t.round === 'F')?.winner);
+  return uclFieldFromTables(tables, uclHolderOf(career));
+}
+
+/**
+ * Round 1502 (step E5): the Champions League holder a finished season hands
+ * the next one, read in ONE place (the critic's correction 4). The final of my
+ * own bracket when my club was in the competition, else the winner of the one
+ * it watched: the holders go in whatever their league did (the real route,
+ * uclDirectQualifiersFromTables), and until this round a season my club
+ * watched lost them. So from here a season after a watched final can draw a
+ * different field, and with it different groups, which is why the last line
+ * is the whole of the change: scripts/lib/worldUclHolder1502.mjs reverts it
+ * for the harnesses that need the engine without it. Null when the season
+ * crowned nobody this save knows of.
+ */
+export function uclHolderOf(career: CareerState): string | null {
+  const own = career.uclBracket?.find(t => t.round === 'F')?.winner ?? null;
+  return own ?? worldUclWinner(career);
 }
 
 /**
@@ -20731,7 +20748,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 1502: the watched Champions League reads the very same final tables, here for the same reason, and
      the season's winner as the holder the participant's field is handed. */
   const watchTables = uclFinalTables(career);
-  const watchHolder = career.uclBracket?.find(t => t.round === 'F')?.winner ?? null;
+  const watchHolder = uclHolderOf(career);
   registerLeagueOverrides(pr.overrides);
   /* Round 146: inside a historic save, a "playable club" is an era club, so
      the move guard consults the era world before the modern one. */

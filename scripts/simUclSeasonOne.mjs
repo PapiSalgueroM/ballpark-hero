@@ -637,7 +637,9 @@ await run('8', `The rollover's field follows the rule, and it and season two are
         : (save.world && save.world[lg.id] ? e1.sortedWorldTable(save, lg.id, save.world[lg.id].table) : []);
       if (rows.length) tables.push({ id: lg.id, places: EURO_SLOTS[lg.id].ucl, clubs: rows.map(r => r.club) });
     }
-    const holder = (save.uclBracket || []).find(t => t.round === 'F')?.winner;
+    /* Round 1502 (E5, the critic's correction 4): the holder is the engine's own uclHolderOf (my final, else the
+       watched one), never a second writing of it. */
+    const holder = e1.uclHolderOf(save);
     const rule = ruleOver(tables, holder).field;
     if (tables.length < 10) fail(`${c.label}: only ${tables.length} European tables in the finished save, so the rule was not exercised`);
     if (json(field) !== json(rule)) fail(`${c.label}: the rollover's field is not the rule applied to the tables the save finished with (${firstDiff(json(field), json(rule))})`);

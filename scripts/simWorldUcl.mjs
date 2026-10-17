@@ -34,7 +34,10 @@
  *      evaluates the same; the nights' dates rise with the legs of a tie a week apart, in the fleet and at every
  *      league size of every world.
  *   4  the save: at most one slice, always the season in play's; its bytes per format printed.
- *   5  the holder (step E5).
+ *   5  the holder (step E5): today's world's watchers on the engine and on it with the holder line reverted
+ *      (scripts/lib/worldUclHolder1502.mjs): a watched winner is in next season's field (and the watched one,
+ *      unless it is my club now), a winner already in the field leaves its clubs alone, and the two engines part
+ *      only at a rollover after a watched final, on the field. Prints the fields the holder changed.
  *   6  the dailies' state shape: no Hot Seat or Deadline Day state carries worldComps.
  *   7  measured and printed, asserting nothing: titles by strength quartile, goals a watched and a domestic match,
  *      extra time and shootouts, slates and draws that bent a rule.
@@ -56,6 +59,7 @@
  *              snapshot: red across a move) noseen (a carried slice forgets the nights it had shown) marks (two
  *              league phase nights on one league round)
  *   section 4: keep (the rollover keeps last season's slice under a second key)
+ *   section 5: noholder (the holder line reverted: the watched winner stays out of next season's field)
  */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -64,6 +68,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { engineOf, pickFleet, tape, ERAS as ERAS_OF_FLEET } from './lib/worldUclFleet.mjs';
+import { HOLDER_EDIT, HOLDER_LINE } from './lib/worldUclHolder1502.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const text = file => fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
@@ -116,6 +121,7 @@ Object.assign(CONTROLS, {
   noseen: [3, /^3 falls: /, /^3 /],
   marks: [3, /^3 dates: /],
   keep: [4, /^4 slices: /, /^4 /],
+  noholder: [5, /^5 holder: .*is not in next season's field/, /^5 /],
 });
 const CAREER_EDITS = {
   dropnight: [{ file: MODULE_FILE, from: '  for (let md = 0; md < firstStage; md += 1) {', to: '  for (let md = 0; md < firstStage - 1; md += 1) {' }],
@@ -141,6 +147,7 @@ const CAREER_EDITS = {
     { file: MODULE_FILE, from: '    const r = Math.max(prev + 1, at(f));', to: '    const r = at(f);' },
     { file: MODULE_FILE, from: '0.79, 0.82, 0.87, 0.90, 1.0];', to: '0.79, 0.82, 0.87, 0.87, 1.0];' },
   ],
+  noholder: [HOLDER_EDIT],
   keep: [{ file: CM, from: '    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);', to: '    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);\n    (state as unknown as Record<string, unknown>).worldCompsKept = career.worldComps;' }],
 };
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control ${CONTROL}`);
@@ -621,8 +628,11 @@ async function watcherPass() {
  *  coach modes, every key but a watching state's worldComps equal and every draw equal, the evaluation called on
  *  the live state after every step of this arm (the critic's correction 6b). */
 async function selfRelative() {
-  const head = await engineOf(ROOT, 'head2', { edits: careerEdits() }, cannot);
-  const off = await engineOf(ROOT, 'off', { edits: BINDING_OFF }, cannot);
+  /* From step E5 the holder line is reverted in BOTH arms, so this section compares the binding alone; what the
+     holder moves is section 5's, by attribution. */
+  const holder = text(CM).includes(HOLDER_LINE) ? [HOLDER_EDIT] : [];
+  const head = await engineOf(ROOT, 'head2', { edits: [...careerEdits(), ...holder] }, cannot);
+  const off = await engineOf(ROOT, 'off', { edits: [...BINDING_OFF, ...holder] }, cannot);
   if (careerEdits().length) changed = true;
   const fleet = pickFleet(await head.fresh(), 'all', cannot);
   const record = st => (!st ? 'null' : JSON.stringify(!st.uclGroup && 'worldComps' in st ? { ...st, worldComps: undefined } : st));
@@ -724,6 +734,57 @@ async function localeCheck(slices) {
   console.log(`  1 device order: ${slices.length} group seasons evaluated level both ways`);
 }
 
+/**
+ * Section 5 (step E5): the holder. Today's world's watchers through three seasons on the engine as it is and on
+ * the same engine with the holder line reverted (scripts/lib/worldUclHolder1502.mjs). Every season that ends with
+ * a watched winner hands it to next season's field (and to the watched field, unless it is my club now); where
+ * the winner was already in the field, the field holds the same clubs; and the two engines part only at a
+ * rollover after a watched final, on the field (the attribution: the line is the whole of the change).
+ */
+async function holderSection() {
+  if (!text(CM).includes(HOLDER_LINE)) { console.log('  5 the holder: not in this tree (step E5 not built)'); return; }
+  const head = await engineOf(ROOT, 'holder', { edits: careerEdits() }, cannot);
+  const ref = await engineOf(ROOT, 'holder-off', { edits: [HOLDER_EDIT] }, cannot);
+  if (careerEdits().length) changed = true;
+  const fleet = pickFleet(await head.fresh(), 'watchers', cannot).filter(f => f.era === 'now');
+  let rollovers = 0, withWinner = 0, moved = 0, already = 0, reordered = 0;
+  const movedClubs = [];
+  for (const f of fleet) for (const seed of SEEDS) {
+    const name = `${f.club} (${f.era}) seed ${seed}`;
+    const rolls = [[], []];
+    const watch = side => (M, s, label, got) => {
+      if (got?.prev) rolls[side].push({ label, W: M.cm.worldUclWinner(got.prev), field: s.uclField ?? [], watched: s.worldComps?.ucl?.clubs ?? [], club: s.clubName, inIt: !!s.uclGroup });
+    };
+    const record = st => JSON.stringify(st);
+    const a = await careerJourney(head, { ...f, seed }, { seasons: 3, record, onStep: watch(0) });
+    const b = await careerJourney(ref, { ...f, seed }, { seasons: 3, record, onStep: watch(1) });
+    rolls[0].forEach((ra, j) => {
+      const rb = rolls[1][j];
+      rollovers += 1;
+      if (!ra.W || !rb) return;
+      withWinner += 1;
+      if (ra.field.length) ok(ra.field.includes(ra.W), `5 holder: ${name} ${ra.label}: the watched winner ${ra.W} is not in next season's field`);
+      if (!ra.inIt && ra.W !== ra.club && ra.watched.length) ok(ra.watched.includes(ra.W), `5 holder: ${name} ${ra.label}: the watched winner ${ra.W} is not in next season's watched field`);
+      if (rb.field.includes(ra.W)) {
+        already += 1;
+        ok(same([...ra.field].sort(), [...rb.field].sort()), `5 holder: ${name} ${ra.label}: ${ra.W} was in the field already and the field still changed its clubs`);
+        if (!same(ra.field, rb.field)) reordered += 1;
+      } else if (rb.field.length) { moved += 1; movedClubs.push(`${ra.W} in for ${rb.field.filter(c => !ra.field.includes(c)).join(' and ') || 'nobody'}`); }
+    });
+    const at = a.findIndex((x, i) => !b[i] || x.json !== b[i].json || x.drawSha !== b[i].drawSha);
+    if (at < 0) continue;
+    const label = a[at].label;
+    ok(/rollover/.test(label) && !!rolls[0].find(r => r.label === label)?.W, `5 attribution: ${name}: the engine without the holder line parts at ${label}, not at a rollover after a watched final`);
+    if (b[at]) {
+      const A = JSON.parse(a[at].json), B = JSON.parse(b[at].json);
+      const keys = Object.keys(A).filter(k => JSON.stringify(A[k]) !== JSON.stringify(B[k]));
+      ok(keys.includes('uclField') || keys.includes('worldComps'), `5 attribution: ${name}: the two part at ${label} on ${keys.slice(0, 4).join(', ')} with the same fields`);
+    }
+  }
+  ok(withWinner > 0, '5 holder: no watched season ended with a winner, so nothing was checked');
+  console.log(`  5 the holder: ${rollovers} rollovers, ${withWinner} after a watched final, ${already} winners already in the field (${reordered} of those fields in another order), ${moved} fields the holder changed: ${movedClubs.slice(0, 8).join('; ') || 'none'}`);
+}
+
 /** Section 6: the dailies' state shape (scripts/simDailyDeals.mjs holds the deal). */
 async function dailies() {
   const E = await engineOf(ROOT, 'daily', { edits: careerEdits() }, cannot);
@@ -752,6 +813,7 @@ try {
     if (runs(3)) { await leagueSizes(); await joinProbe(); }
   }
   if (runs(2)) await selfRelative();
+  if (runs(5)) await holderSection();
   if (runs(6)) await dailies();
   for (const [k, v] of Object.entries(counts).sort()) if (typeof v === 'number') console.log(`  ${k}: ${v}`);
 } catch (e) {
