@@ -22,8 +22,10 @@
         review, whose mutation m2 moved the segments back with every harness green).
      3) The timeline: its header and every row's first cell are the home side's; no name span is cut (truncate);
         every (P) and (O.G) mark sits outside the name span and right after it (Round 1146's promise).
-     4) Live and half time: every fifth league match of the fleet is also kicked off live and rendered in the first
-        half, at the interval, in the second half and at the whistle. The strip's names, the score's digits (by
+     4) Live and half time: every fifth league match of the fleet, and every match on a neutral ground, is also
+        kicked off live and rendered in the first half, at the interval, in the second half and at the whistle;
+        and every live frame is rendered again with the venue field taken off, as a save from before the field
+        held it, where my club must come first (floors: 5 neutral live matches, 40 staged frames). The strip's names, the score's digits (by
         data-cm-score-of), the interval card, the stats (header, possession, every cell by data-cm-live-stat-n) and
         the line under the pitch are home side first, and HalftimeScreen rendered alone prints its names and score
         in the same order. The possession bar's green segment is mine, first exactly when my number is, as wide
@@ -56,6 +58,9 @@
      barorder     the report's stat bars and the live possession bar draw their segments mine first again while
                   their numbers follow the fixture (the review's m2 and m6). Sections 2 and 4 must go red on away
                   matches only, through the segment checks themselves (each must fire at least once).
+     neutrallive  the live viewer takes "at home" off the field alone (the review's m3), so a neutral ground and a
+                  save from before the field existed are drawn as away. Section 4 must go red on neutral matches
+                  and on the staged frames with no venue field, and stay green at home and away.
      greenfirst   the dressing room's card and the strip leave the green on the first name whoever it is (the
                   review's m4). Section 4 must go red on away matches only, through the green checks of the
                   dressing room's card (in the interval stage and alone) and of the strip.
@@ -79,7 +84,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.MATCHDAY_CONTROL || '';
-const CONTROLS = { neutralaway: [1], oldorder: [2, 3, 4, 5], truncate: [3], numbers: [6], homeflip: [7], barorder: [2, 4], greenfirst: [4] };
+const CONTROLS = { neutralaway: [1], oldorder: [2, 3, 4, 5], truncate: [3], numbers: [6], homeflip: [7], barorder: [2, 4], greenfirst: [4], neutrallive: [4] };
 /* A control that must fire through one particular check names it here: every pattern must match at least one
    failure, so a red from some other check cannot pass for the control firing. */
 const CONTROL_KINDS = {
@@ -149,6 +154,9 @@ const PATCHES = {
     ['components/club-manager/MatchReportCard', 'tsx', [['const [barFirst, barSecond] = inFixtureOrder(mineFirst,', 'const [barFirst, barSecond] = inFixtureOrder(true,']]],
     ['components/club-manager/LiveSimScreen', 'tsx', [['const [barFirst, barSecond] = inFixtureOrder(mineFirst,', 'const [barFirst, barSecond] = inFixtureOrder(true,']]],
   ],
+  /* The review's mutation m3: the live viewer reads "at home" off the field and draws a neutral ground, and a
+     save from before the field existed, as away. */
+  neutrallive: [['components/club-manager/LiveSimScreen', 'tsx', [['const mineFirst = liveNow ? myClubFirst(liveNow.home) :', 'const mineFirst = liveNow ? liveNow.home === true :']]]],
   /* The review's mutation m4 and its twin on the strip: the green is left on the first name and the second name
      stays plain whoever they are, while the names themselves follow the fixture. */
   greenfirst: [
@@ -263,7 +271,7 @@ const lives = [];
 const centres = [];
 let unpaired = 0;
 let careersStarted = 0;
-/* Every fifth league match of the fleet is also kicked off live, from the same state on a seed of its own (the
+/* Every fifth league match of the fleet, and every match on a neutral ground, is also kicked off live, from the same state on a seed of its own (the
    fleet's own walk goes on from its quick sim): a frame in the first half, the interval, the second half and the
    whistle, the way simCmMatchCentre builds its live screens. */
 function liveFrames(pre, club, fxHome, seed) {
@@ -310,7 +318,7 @@ function playSeason(club, era, seed, keep, live = false) {
       else if (keep(fx.home)) {
         matches.push({ club, era: era ?? 'now', seed, fxHome: fx.home, report: r });
         if (facts) centres.push({ club, era: era ?? 'now', seed, fxHome: fx.home, report: r, facts });
-        if (live && fx.competition === 'league' && leagueSeen++ % 5 === 0) {
+        if ((live && fx.competition === 'league' && leagueSeen++ % 5 === 0) || fx.home === null) {
           const L = liveFrames(s, club, fx.home, seed * 7121 + guard * 13 + 3);
           if (L) lives.push({ ...L, era: era ?? 'now', seed });
         }
@@ -328,20 +336,22 @@ for (const [club, era] of FLEET) {
   }
 }
 const neutralCount = () => matches.filter(m => m.fxHome === null).length;
-for (let pass = 0; pass < 5 && neutralCount() < 8; pass++) {
+const neutralLiveCount = () => lives.filter(L => L.fxHome === null).length;
+const neutralShort = () => neutralCount() < 8 || neutralLiveCount() < 5;
+for (let pass = 0; pass < 5 && neutralShort(); pass++) {
   for (const [club, era] of NEUTRAL_WALK) {
-    if (neutralCount() >= 8) break;
+    if (!neutralShort()) break;
     playSeason(club, era, 100 + pass, home => home === null);
   }
 }
 const homeIsMe = m => m.report.home === m.club;
-const venueOf = m => (m.fxHome === null ? 'neutral' : m.fxHome === false ? 'away' : 'home');
+const venueOf = m => (m.prefield ? 'prefield' : m.fxHome === null ? 'neutral' : m.fxHome === false ? 'away' : 'home');
 const ctxOf = m => `${m.club} ${m.era} seed ${m.seed}: ${m.report.home} ${m.report.homeGoals}-${m.report.awayGoals} ${m.report.away} (${m.report.compLabel}, ${venueOf(m)})`;
 const counts = { home: 0, away: 0, neutral: 0 };
 for (const m of matches) counts[venueOf(m)] += 1;
 console.log(`fleet: ${careersStarted} careers, ${matches.length} matches (${counts.home} home, ${counts.away} away, ${counts.neutral} neutral), ${unpaired} reports with no fixture read before them, ${((Date.now() - started) / 1000).toFixed(0)}s`);
 const liveRenders = lives.length * 4;
-console.log(`live: ${lives.length} league matches kicked off live (${lives.filter(L => L.fxHome === false).length} away), ${liveRenders} live renders`);
+console.log(`live: ${lives.length} matches kicked off live (${lives.filter(L => L.fxHome === false).length} away, ${neutralLiveCount()} on a neutral ground), ${liveRenders} live renders`);
 if (counts.away < 100 || counts.home < 100 || counts.neutral < 5 || liveRenders < 40) cannotRun(`the fleet is under its floors (100 away, 100 home, 5 neutral, 40 live renders): widen it, never lower a floor`);
 /* A report whose opponent is not the one nextFixture named before it (a draw made that same week) cannot be tied
    to a venue, so it is left out and counted; a fleet where that is common cannot judge section 1. */
@@ -381,7 +391,7 @@ for (const m of matches) m.html = render(HeadCard, cardProps(m));
 const redBy = {};
 function judge(sec, m, problems) {
   section = sec;
-  redBy[sec] ??= { home: 0, away: 0, neutral: 0, checked: 0 };
+  redBy[sec] ??= { home: 0, away: 0, neutral: 0, prefield: 0, checked: 0 };
   redBy[sec].checked += 1;
   if (!problems.length) return;
   redBy[sec][venueOf(m)] += 1;
@@ -530,35 +540,25 @@ function halfCard(html) {
   const x = HALF_CARD.exec(html);
   return x && { names: [unescape(x[2]), unescape(x[6])], goals: [Number(x[3]), Number(x[4])], green: [greenOn(x[1]), greenOn(x[5])] };
 }
-for (const L of lives) {
-  const me = L.fxHome !== false;
-  const opp = L.report.home === L.club ? L.report.away : L.report.home;
-  const want = me ? [L.club, opp] : [opp, L.club];
-  const firstSide = me ? 'me' : 'opp';
-  const m = { club: L.club, era: L.era, seed: L.seed, fxHome: L.fxHome, report: L.report };
-  const p = [];
-  if (L.frames[1].career.live.home !== L.fxHome) p.push(`the live match's home is ${L.frames[1].career.live.home}, the fixture said ${L.fxHome}`);
-  for (const f of L.frames) {
-    const html = render(HeadLive, liveProps(L, f));
-    f.html = html;
+/** One live frame read the way this section reads it: the order, the green and the bars of all it draws. */
+function readFrame(html, f, { me, want, firstSide, club }, p) {
     const stage = /data-cm-live-stage="([^"]*)"/.exec(html)?.[1];
-    if (stage !== f.stage) { p.push(`the ${f.stage} frame rendered as ${stage}`); continue; }
-    stagesSeen[stage] += 1;
+    if (stage !== f.stage) { p.push(`the ${f.stage} frame rendered as ${stage}`); return null; }
     const digits = attrs(html.slice(html.indexOf('data-cm-live-score')), 'data-cm-score-of').slice(0, 2);
     if (!same(digits, [firstSide, me ? 'opp' : 'me'])) p.push(`at ${stage} the score's digits read ${digits.join(' then ')}`);
     if (stage === 'interval') {
       const names = /<span(?: class="([^"]*)")?>([^<>]*)<\/span> vs <span(?: class="([^"]*)")?>([^<]*)</.exec(html);
       if (!names || !same([unescape(names[2]), unescape(names[4])], want)) p.push(`the interval card's names read ${names ? `${names[2]} v ${names[4]}` : 'nothing'}`);
-      else greenCheck(want, [greenOn(names[1]), greenOn(names[3])], L.club, 'the interval card', p);
+      else greenCheck(want, [greenOn(names[1]), greenOn(names[3])], club, 'the interval card', p);
       const half = halfCard(html);
       const live = f.career.live;
       const goals = me ? [live.myGoals, live.oppGoals] : [live.oppGoals, live.myGoals];
       if (!half || !same(half.names, want) || !same(half.goals, goals)) p.push(`the half time card reads ${half ? `${half.names[0]} ${half.goals.join('-')} ${half.names[1]}` : 'nothing'}`);
-      else greenCheck(half.names, half.green, L.club, "the dressing room's card", p);
+      else greenCheck(half.names, half.green, club, "the dressing room's card", p);
     } else {
       const strip = /<div class="cm-strip-score"><div class="([^"]*)">([^<]*)<\/div>[\s\S]*?<\/div><div class="([^"]*)">([^<]*)<\/div>/.exec(html);
       if (!strip || !same([unescape(strip[2]), unescape(strip[4])], want)) p.push(`at ${stage} the strip reads ${strip ? `${strip[2]} v ${strip[4]}` : 'nothing'}`);
-      else greenCheck(want, [greenOn(strip[1]), greenOn(strip[3])], L.club, `at ${stage} the strip`, p);
+      else greenCheck(want, [greenOn(strip[1]), greenOn(strip[3])], club, `at ${stage} the strip`, p);
       const line = html.slice(html.indexOf('data-cm-live-statline'));
       if (html.includes('data-cm-live-statline') && /<span>Poss <b/.test(line) !== me) p.push(`at ${stage} the line under the pitch is not home side first`);
     }
@@ -581,15 +581,46 @@ for (const L of lives) {
         if (attrs(cell, 'data-cm-live-stat-n')[0] !== sideWord(me)) { p.push(`at ${stage} a stat cell is not home side first`); break; }
       }
     }
-  }
-  /* The dressing room rendered alone at the interval. */
-  const alone = render(HeadHalf, halfProps(L.frames[1].career));
-  const half = halfCard(alone);
-  if (!half || !same(half.names, want)) p.push(`the half time screen alone reads ${half ? `${half.names[0]} v ${half.names[1]}` : 'nothing'}`);
-  else greenCheck(half.names, half.green, L.club, "the dressing room's card alone", p);
-  judge(4, m, p);
+    return stage;
 }
-console.log(`   ${redBy[4]?.checked ?? 0} live matches (${Object.entries(stagesSeen).map(([k, v]) => `${v} ${k}`).join(', ')}; ${liveSegsRead} possession bar segments, ${greensRead} green names); red: ${redBy[4]?.home ?? 0} home, ${redBy[4]?.away ?? 0} away, ${redBy[4]?.neutral ?? 0} neutral`);
+/** The dressing room rendered alone at the interval. */
+function readAlone(career, { want, club }, p) {
+  const half = halfCard(render(HeadHalf, halfProps(career)));
+  if (!half || !same(half.names, want)) p.push(`the half time screen alone reads ${half ? `${half.names[0]} v ${half.names[1]}` : 'nothing'}`);
+  else greenCheck(half.names, half.green, club, "the dressing room's card alone", p);
+}
+let prefieldFrames = 0;
+for (const L of lives) {
+  const me = L.fxHome !== false;
+  const opp = L.report.home === L.club ? L.report.away : L.report.home;
+  const ctx = { me, want: me ? [L.club, opp] : [opp, L.club], firstSide: me ? 'me' : 'opp', club: L.club };
+  const m = { club: L.club, era: L.era, seed: L.seed, fxHome: L.fxHome, report: L.report };
+  const p = [];
+  if (L.frames[1].career.live.home !== L.fxHome) p.push(`the live match's home is ${L.frames[1].career.live.home}, the fixture said ${L.fxHome}`);
+  for (const f of L.frames) {
+    f.html = render(HeadLive, liveProps(L, f));
+    const stage = readFrame(f.html, f, ctx, p);
+    if (stage) stagesSeen[stage] += 1;
+  }
+  readAlone(L.frames[1].career, ctx, p);
+  judge(4, m, p);
+  /* The same live match as a save from before the live match knew its venue (no home field) would hold it: every
+     screen draws my club first, as they all did then (myClubFirst(undefined)). Judged apart, as "prefield". */
+  const old = { me: true, want: [L.club, opp], firstSide: 'me', club: L.club };
+  const q = [];
+  for (const f of L.frames) {
+    if (!f.career.live || f.report) continue;
+    const career = structuredClone(f.career);
+    delete career.live.home;
+    readFrame(render(HeadLive, liveProps(L, { ...f, career })), { ...f, career }, old, q);
+    if (f.stage === 'interval') readAlone(career, old, q);
+    prefieldFrames += 1;
+  }
+  judge(4, { ...m, prefield: true }, q);
+}
+const neutralLives = lives.filter(L => L.fxHome === null).length;
+console.log(`   ${redBy[4]?.checked ?? 0} live matches judged, ${neutralLives} of them on a neutral ground (${Object.entries(stagesSeen).map(([k, v]) => `${v} ${k}`).join(', ')}; ${prefieldFrames} frames staged with no venue field; ${liveSegsRead} possession bar segments, ${greensRead} green names); red: ${redBy[4]?.home ?? 0} home, ${redBy[4]?.away ?? 0} away, ${redBy[4]?.neutral ?? 0} neutral, ${redBy[4]?.prefield ?? 0} staged with no venue field`);
+if (neutralLives < 5 || prefieldFrames < 40) cannotRun(`section 4 met ${neutralLives} neutral live matches and staged ${prefieldFrames} frames with no venue field: under its floors (5, 40)`);
 
 /* ---------- 5. the Match Centre ---------- */
 console.log('5) The Match Centre: the tie, the form rows and the ones to watch home side first; the odds still Win, Draw, They win');
@@ -783,6 +814,8 @@ if (CONTROL) {
   if (CONTROL === 'neutralaway') ok = ok && redBy[1].neutral > 0 && redBy[1].home === 0 && redBy[1].away === 0;
   /* barorder only moves what an away match draws, like oldorder. */
   if (CONTROL === 'barorder' || CONTROL === 'greenfirst') ok = ok && want.every(s => redBy[s].away > 0 && redBy[s].home === 0 && redBy[s].neutral === 0);
+  /* neutrallive moves only a neutral ground's live screens and the staged saves with no venue field. */
+  if (CONTROL === 'neutrallive') ok = ok && redBy[4].neutral > 0 && redBy[4].prefield > 0 && redBy[4].home === 0 && redBy[4].away === 0;
   if (kindHits.length) {
     console.log(`control ${CONTROL}: the checks it must fire through fired ${kindHits.join(' and ')} times`);
     ok = ok && kindHits.every(n => n > 0);
