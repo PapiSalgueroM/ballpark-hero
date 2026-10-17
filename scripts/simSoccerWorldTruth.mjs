@@ -129,8 +129,9 @@ const esbuild = require('esbuild');
    history by an ours merge. Its four files differ from this tree by Round 1329 alone (the same patch id as 3225f123
    against the tree before PR289); the rows are unchanged, the phone's two pins moved. Without it section 6 failed
    on the pins and section 4 counted every old save as growing a phone field (the base built its phones without
-   PR289's four budget keys). */
-const BASE = '9e93b3826daa012e0a4f8f6b1865269f252bc09a';
+   PR289's four budget keys). Then 285f8f81 rewrote those four lines as conditional spreads, so the base is now
+   c2d21574, 9e93b382 with exactly that phone change, recorded the same way. */
+const BASE = 'c2d215747b153390c42b5646fa75cc04be26e4c0';
 /* Release BF join: the base bundle reads the files named here from this tree instead of BASE, so a later round's
    engine input that this round never touched is the same on both sides of the lockstep. By default these are the
    Soccer Career life chain's five engine inputs, Life, its routine events and captions, Contracts and RealismA
