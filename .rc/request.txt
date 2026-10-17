@@ -1,0 +1,8 @@
+#!build
+#!playwright
+usCareerSaveRecovery1084: export SIM_NETWORK=offline ENGINES=chromium TZ=UTC && mkdir -p us-career-save-recovery-artifacts && node scripts/qa/usCareerSaveRecovery1084.mjs --prefetch-fonts-only > /tmp/assets.log 2>&1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/usCareerSaveRecovery1084.mjs > /tmp/native.log 2>&1; s=$?; tail -8 /tmp/native.log; exit $s
+summer-rest: SIM_SECTIONS=1,2,3,3b,4,5,7,8,9,10,11,12 node scripts/simUsCareerSummer.mjs
+summer6-nhl: SIM_SECTIONS=6 SIM_SPORTS=nhl node scripts/simUsCareerSummer.mjs
+summer6-mlb: SIM_SECTIONS=6 SIM_SPORTS=mlb node scripts/simUsCareerSummer.mjs
+summer6-nba: SIM_SECTIONS=6 SIM_SPORTS=nba node scripts/simUsCareerSummer.mjs
+summer6-nfl: SIM_SECTIONS=6 SIM_SPORTS=nfl node scripts/simUsCareerSummer.mjs
