@@ -1,0 +1,7 @@
+ctl-deck-kctl1 exit=0 45s | kctl: every control exited 1 and fired
+ctl-deck-kctl2 exit=0 5s | kctl: every control exited 1 and fired
+ctl-deck-kctl3 exit=0 11s | kctl: every control exited 1 and fired
+ctl-deck-kctl4 exit=0 234s | kctl: every control exited 1 and fired
+ctl-deck-kctl5 exit=0 60s | kctl: every control exited 1 and fired
+anchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+helpers exit=0 8s | twm 1344: exit 0 ebb916fc8d29 treeWithoutMerge: ebb916fc8d299af68fa0f4c7e8d904eaebf921c0, 5c0b5478 without 54100f6e; conflicts kept from 5c0b5478: src/pages/WhatsNew.tsx

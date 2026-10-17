@@ -1,0 +1,26 @@
+coreBE f727cfbf: exit 0 d571c328fc14 
+coreBE ffc16131: exit 0 b624a60a7b4b 
+coreBE 80084c4b: exit 0 b2fcfdf51521 
+coreBE 50f49993: exit 0 ae69b323e6eb 
+coreBE 33b722fb: exit 0 2e5434593867 
+coreBE 26cad60f: exit 0 be1bae3e5a5e 
+coreBE 25c6b0d2: exit 0 798375ce4808 
+lifeBH 527ca178: exit 0 d6a1e0cb5798 
+lifeBH 42a7f7c9: exit 0 53ffa6ad2b7f 
+lifeBH 1b383132: exit 0 f94a335e5db2 
+lifeBH bd3b6244: exit 0 b8b82d41402a 
+minus1335: exit 1  Node.js v24.21.0
+minus1343: exit 0 7c555d746548 treeWithoutMerge: 7c555d74654823498b73702328767e8d7cec15a8, 26e75ed1 without 819d9d16; conflicts kept from 26e75ed1: scripts/simCmLeagueRule
+lifeMinus 286: exit 0 b3c800bbcfe3 
+lifeMinus 302: exit 0 b575416bbcae 
+phoneMinus 289: exit 0 f3c9aeb41505 
+phoneMinus 297: exit 0 69f917b12b99 
+minus284: exit 0 99683b15b72c 
+minus296: exit 0 594061632be1 
+minus287: exit 0 27fb1083506b 
+minus301: exit 0 05ea65fdba46 
+twm 1337: exit 0 de2ce74db901 treeWithoutMerge: de2ce74db901e3a1cf5da59f97379856c0707135, 5c0b5478 without 33d1b7b6; conflicts kept from 5c0b5478: none
+twm 1334: exit 0 b10c18e75690 treeWithoutMerge: b10c18e7569066880b4ac3fa1ba0b640d395355a, 5c0b5478 without b9964c33; conflicts kept from 5c0b5478: none
+twm 1332: exit 0 24b2890e6639 treeWithoutMerge: 24b2890e6639fb7fd0727ad4f119cd240fca6683, 5c0b5478 without b9df63b4; conflicts kept from 5c0b5478: scripts/data/eventDeckW
+twm 1338: exit 0 10ca4cc29162 treeWithoutMerge: 10ca4cc29162f09f7fc0e22feb8bc2172ae58321, 5c0b5478 without a7094670; conflicts kept from 5c0b5478: none
+twm 1344: exit 0 ebb916fc8d29 treeWithoutMerge: ebb916fc8d299af68fa0f4c7e8d904eaebf921c0, 5c0b5478 without 54100f6e; conflicts kept from 5c0b5478: src/pages/WhatsNew.tsx
