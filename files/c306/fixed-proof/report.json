@@ -1,0 +1,12 @@
+{
+  "head": "cbd0186cc5cd7ee480eb13cedf23dd129a837bad",
+  "base": "ae709582aff399f4d03a38c96707d0b303097cb5",
+  "phase": "fixed",
+  "baselineRawSha256": "7c65d7f1a66eb9a2f29fb5c24fce53bb91aec76abb59e4131c5de923fb7d65bf",
+  "scope": "Actual-hook prepared deferred-history unit qualification only",
+  "arms": [],
+  "inverse": [],
+  "sourceHeld": true,
+  "qualified": false,
+  "error": "AssertionError [ERR_ASSERTION]: Actual source Git read: merge-base --is-ancestor ae709582aff399f4d03a38c96707d0b303097cb5 cbd0186cc5cd7ee480eb13cedf23dd129a837bad\n    at git (file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/rebound-proveXiSelectionRaceFixed.mjs:26:3)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/rebound-proveXiSelectionRaceFixed.mjs:116:3\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+}

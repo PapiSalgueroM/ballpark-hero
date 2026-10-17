@@ -1,0 +1,32 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/xiSelectionHistoryRace.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+[90mstderr[2m | src/test/soccerCareerCreationRoll.test.tsx[2m > [22m[2mSoccer Career creation roll belongs to its selected position[2m > [22m[2mcreation roll preservation: a fresh settled roll starts and saves the displayed player
+[22m[39mWarning: validateDOMNesting(...): <span> cannot appear as a child of <option>.
+    at span
+    at option
+    at SelectItem (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:99:24)
+    at SelectGroup (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:107:25)
+    at SelectContent (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:96:27)
+    at select
+    at Select (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:87:20)
+    at div
+    at div
+    at div
+    at CreationScreen (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/SoccerCareer.tsx:3606:57)
+    at main
+    at div
+    at SoccerCareer (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/SoccerCareer.tsx:2144:59)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+
+ [32m✓[39m src/test/soccerCareerCreationRoll.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1008[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career creation roll belongs to its selected position[2m > [22mcreation roll preservation: a fresh settled roll starts and saves the displayed player [33m 425[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 18:20:05
+[2m   Duration [22m 3.93s[2m (transform 1.83s, setup 115ms, collect 2.58s, tests 1.05s, environment 566ms, prepare 268ms)[22m
+

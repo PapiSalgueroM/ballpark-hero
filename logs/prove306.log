@@ -1,0 +1,25 @@
+reference ae709582aff399f4d03a38c96707d0b303097cb5: 0d3f4d3b2e464708baa16671bc80658b8a69e45a without PR306's product lines (cb750990..439a23dd, src/hooks/useLineupBuilder.ts only)
+rebind: scripts/qa/proveXiSelectionRaceFixed.mjs BASE cb7509907ca84af9bf85f99f10e67990805edb4c -> ae709582aff399f4d03a38c96707d0b303097cb5 (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/rebound-proveXiSelectionRaceFixed.mjs)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Actual source Git read: merge-base --is-ancestor ae709582aff399f4d03a38c96707d0b303097cb5 cbd0186cc5cd7ee480eb13cedf23dd129a837bad
+    at git (file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/rebound-proveXiSelectionRaceFixed.mjs:26:3)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/rebound-proveXiSelectionRaceFixed.mjs:116:3
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+files:
+ff4b63c7a1a7c57b9d9f5fe8a0114365efd47ecd349e0eaa4fdb189c03efb736 984 c306/fixed-proof/report.json
+da69b3d9e7269d6098934745ca0df463fcd137a930a1d83f4c6caea5aac52b91 536038 c306/fixed-proof/tracked.after.json
+da69b3d9e7269d6098934745ca0df463fcd137a930a1d83f4c6caea5aac52b91 536038 c306/fixed-proof/tracked.before.json
