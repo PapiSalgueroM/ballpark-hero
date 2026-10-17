@@ -1,0 +1,4 @@
+#!serial
+headsha: git log --oneline -3
+wf288-m15-recorded: R=$PWD; git worktree add -q /tmp/w15 d7b7fffc1ceac6f418ff3be15135f012731ecb30 || exit 2; cd /tmp/w15 && node $R/.rc/x/wfrun.mjs .github/workflows/career-life-stories.yml --set GITHUB_REF_NAME=codex/career-life-stories --set PRERENDER_ONLY=/soccer-career,/whats-new
+wf288-head: node .rc/x/wfrun.mjs .github/workflows/career-life-stories.yml --set GITHUB_REF_NAME=codex/career-life-stories --set PRERENDER_ONLY=/soccer-career,/whats-new

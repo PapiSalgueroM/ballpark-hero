@@ -1,0 +1,3 @@
+headsha exit=0 0s | 0640c995e Round BII: What's New for the other lane's packets, one Club Manager entry (your own transfers, a club's fixtures, the refusal note, a clean desk on a takeover)
+wf288-m15-recorded exit=1 356s | wfrun career-life-stories.yml: 10 steps ran, 1 failed: Fixed phase served phone Life and unchanged full download budgets
+wf288-head exit=1 305s | wfrun career-life-stories.yml: 10 steps ran, 1 failed: Fixed phase served phone Life and unchanged full download budgets
