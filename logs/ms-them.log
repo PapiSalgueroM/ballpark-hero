@@ -1,0 +1,281 @@
+NEGATIVE CONTROL ON: the opposition is called Them again; section 3 must go red
+1) The clock: stoppage time on the screen, for both halves, from the half it followed
+   348 halves: the board is the base, the half's stoppages and the roll in 348; 0 (0.00%) kept a board that a change at the half's last minute played out differently
+   174 reports rendered, every one showing 45+n' and 90+m' as the screen's own row
+   first half board 1 to 5 (mean 3.59), second half 2 to 8 (mean 6.10)
+2) Possession: two shares of one hundred, both wearing a percent sign
+   174 pairs on screen, every one summing to 100 and every one the sim's own share
+3) Both clubs named, counted rather than string matched
+  FAIL [3]: Everton v Crystal Palace: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Crystal Palace: the screen still labels a block "Them"
+  FAIL [3]: Everton v Bournemouth: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Bournemouth: the screen still labels a block "Them"
+  FAIL [3]: Everton v Manchester United: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Manchester United: the screen still labels a block "Them"
+  FAIL [3]: Everton v Tottenham: the screen still labels a block "Them"
+  FAIL [3]: Everton v Ipswich Town: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Ipswich Town: the screen still labels a block "Them"
+  FAIL [3]: Everton v Hull City: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Hull City: the screen still labels a block "Them"
+  FAIL [3]: Everton v Chelsea: the screen still labels a block "Them"
+  FAIL [3]: Everton v Leeds United: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Leeds United: the screen still labels a block "Them"
+  FAIL [3]: Everton v Arsenal: the screen still labels a block "Them"
+  FAIL [3]: Everton v Newcastle: the screen still labels a block "Them"
+  FAIL [3]: Everton v Coventry City: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Coventry City: the screen still labels a block "Them"
+  FAIL [3]: Everton v Brentford: the screen still labels a block "Them"
+  FAIL [3]: Everton v Liverpool: the screen still labels a block "Them"
+  FAIL [3]: Everton v Aston Villa: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Aston Villa: the screen still labels a block "Them"
+  FAIL [3]: Everton v Fulham: the screen still labels a block "Them"
+  FAIL [3]: Everton v Brighton: the screen still labels a block "Them"
+  FAIL [3]: Everton v Derby County: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Derby County: the screen still labels a block "Them"
+  FAIL [3]: Everton v Nottingham Forest: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Nottingham Forest: the screen still labels a block "Them"
+  FAIL [3]: Everton v Sunderland: the screen still labels a block "Them"
+  FAIL [3]: Everton v Manchester City: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Manchester City: the screen still labels a block "Them"
+  FAIL [3]: Everton v Leeds United: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Leeds United: the screen still labels a block "Them"
+  FAIL [3]: Everton v Aston Villa: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Aston Villa: the screen still labels a block "Them"
+  FAIL [3]: Everton v Coventry City: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Coventry City: the screen still labels a block "Them"
+  FAIL [3]: Everton v Brentford: the screen still labels a block "Them"
+  FAIL [3]: Everton v Liverpool: the screen still labels a block "Them"
+  FAIL [3]: Everton v Newcastle: the screen still labels a block "Them"
+  FAIL [3]: Everton v Leeds United: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Leeds United: the screen still labels a block "Them"
+  FAIL [3]: Everton v Sunderland: the screen still labels a block "Them"
+  FAIL [3]: Everton v Nottingham Forest: named mine 6 times and theirs 3
+  FAIL [3]: Everton v Nottingham Forest: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Deportivo La Coruña: named mine 6 times and theirs 3
+  FAIL [3]: Real Madrid v Deportivo La Coruña: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Atlético Madrid: named mine 5 times and theirs 3
+  FAIL [3]: Real Madrid v Atlético Madrid: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Celta Vigo: named mine 6 times and theirs 3
+  FAIL [3]: Real Madrid v Celta Vigo: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Porto: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Alavés: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Real Sociedad: named mine 6 times and theirs 3
+  FAIL [3]: Real Madrid v Real Sociedad: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Barcelona: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Thun: named mine 5 times and theirs 3
+  FAIL [3]: Real Madrid v Thun: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Sevilla: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Sporting Gijón: named mine 5 times and theirs 3
+  FAIL [3]: Real Madrid v Sporting Gijón: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Valencia: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Osasuna: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v RB Leipzig: named mine 6 times and theirs 3
+  FAIL [3]: Real Madrid v RB Leipzig: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Málaga: named mine 5 times and theirs 3
+  FAIL [3]: Real Madrid v Málaga: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Villarreal: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Porto: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Real Betis: named mine 6 times and theirs 3
+  FAIL [3]: Real Madrid v Real Betis: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Elche: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Thun: named mine 5 times and theirs 3
+  FAIL [3]: Real Madrid v Thun: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Athletic Club: named mine 6 times and theirs 3
+  FAIL [3]: Real Madrid v Athletic Club: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Getafe: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Barcelona: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Espanyol: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v RB Leipzig: named mine 6 times and theirs 3
+  FAIL [3]: Real Madrid v RB Leipzig: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Levante: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Racing Santander: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Rayo Vallecano: named mine 6 times and theirs 3
+  FAIL [3]: Real Madrid v Rayo Vallecano: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Deportivo La Coruña: named mine 6 times and theirs 3
+  FAIL [3]: Real Madrid v Deportivo La Coruña: the screen still labels a block "Them"
+  FAIL [3]: Real Madrid v Atlético Madrid: named mine 6 times and theirs 3
+  FAIL [3]: Real Madrid v Atlético Madrid: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Millwall: named mine 5 times and theirs 3
+  FAIL [3]: Wolves v Millwall: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Derby County: named mine 6 times and theirs 3
+  FAIL [3]: Wolves v Derby County: the screen still labels a block "Them"
+  FAIL [3]: Wolves v West Brom: named mine 6 times and theirs 3
+  FAIL [3]: Wolves v West Brom: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Norwich City: named mine 6 times and theirs 3
+  FAIL [3]: Wolves v Norwich City: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Cardiff City: named mine 5 times and theirs 3
+  FAIL [3]: Wolves v Cardiff City: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Blackburn Rovers: named mine 5 times and theirs 3
+  FAIL [3]: Wolves v Blackburn Rovers: the screen still labels a block "Them"
+  FAIL [3]: Wolves v West Ham: named mine 6 times and theirs 3
+  FAIL [3]: Wolves v West Ham: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Birmingham City: named mine 6 times and theirs 3
+  FAIL [3]: Wolves v Birmingham City: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Nottingham Forest: named mine 6 times and theirs 3
+  FAIL [3]: Wolves v Nottingham Forest: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Lincoln City: named mine 5 times and theirs 3
+  FAIL [3]: Wolves v Lincoln City: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Portsmouth: named mine 5 times and theirs 3
+  FAIL [3]: Wolves v Portsmouth: the screen still labels a block "Them"
+  FAIL [3]: Wolves v QPR: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Charlton Athletic: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Stoke City: named mine 6 times and theirs 3
+  FAIL [3]: Wolves v Stoke City: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Watford: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Middlesbrough: named mine 6 times and theirs 3
+  FAIL [3]: Wolves v Middlesbrough: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Sheffield United: named mine 6 times and theirs 3
+  FAIL [3]: Wolves v Sheffield United: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Bristol City: named mine 6 times and theirs 3
+  FAIL [3]: Wolves v Bristol City: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Preston North End: named mine 5 times and theirs 3
+  FAIL [3]: Wolves v Preston North End: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Bolton Wanderers: named mine 5 times and theirs 3
+  FAIL [3]: Wolves v Bolton Wanderers: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Wrexham: named mine 6 times and theirs 3
+  FAIL [3]: Wolves v Wrexham: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Burnley: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Swansea City: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Southampton: named mine 6 times and theirs 3
+  FAIL [3]: Wolves v Southampton: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Millwall: named mine 5 times and theirs 3
+  FAIL [3]: Wolves v Millwall: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Derby County: named mine 6 times and theirs 3
+  FAIL [3]: Wolves v Derby County: the screen still labels a block "Them"
+  FAIL [3]: Wolves v West Brom: named mine 6 times and theirs 3
+  FAIL [3]: Wolves v West Brom: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Norwich City: named mine 6 times and theirs 3
+  FAIL [3]: Wolves v Norwich City: the screen still labels a block "Them"
+  FAIL [3]: Wolves v Cardiff City: named mine 5 times and theirs 3
+  FAIL [3]: Wolves v Cardiff City: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Udinese: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Genoa: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Lazio: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Dinamo Zagreb: named mine 5 times and theirs 3
+  FAIL [3]: Napoli v Dinamo Zagreb: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Torino: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Lecce: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Monza: the screen still labels a block "Them"
+  FAIL [3]: Napoli v LASK: named mine 5 times and theirs 3
+  FAIL [3]: Napoli v LASK: the screen still labels a block "Them"
+  FAIL [3]: Napoli v AC Milan: named mine 6 times and theirs 3
+  FAIL [3]: Napoli v AC Milan: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Venezia: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Venezia: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Como: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Club Brugge: named mine 6 times and theirs 3
+  FAIL [3]: Napoli v Club Brugge: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Juventus: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Cagliari: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Dinamo Zagreb: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Atalanta: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Sassuolo: the screen still labels a block "Them"
+  FAIL [3]: Napoli v LASK: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Roma: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Bologna: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Atalanta: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Frosinone: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Club Brugge: named mine 6 times and theirs 3
+  FAIL [3]: Napoli v Club Brugge: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Inter Milan: named mine 6 times and theirs 3
+  FAIL [3]: Napoli v Inter Milan: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Parma: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Fiorentina: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Udinese: the screen still labels a block "Them"
+  FAIL [3]: Napoli v Genoa: the screen still labels a block "Them"
+  FAIL [3]: Ajax v NEC Nijmegen: the screen still labels a block "Them"
+  FAIL [3]: Ajax v PSV: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Utrecht: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Willem II: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Feyenoord: the screen still labels a block "Them"
+  FAIL [3]: Ajax v AZ Alkmaar: named mine 6 times and theirs 3
+  FAIL [3]: Ajax v AZ Alkmaar: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Utrecht: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Twente: the screen still labels a block "Them"
+  FAIL [3]: Ajax v PEC Zwolle: named mine 5 times and theirs 3
+  FAIL [3]: Ajax v PEC Zwolle: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Cambuur: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Go Ahead Eagles: the screen still labels a block "Them"
+  FAIL [3]: Ajax v ADO Den Haag: named mine 5 times and theirs 3
+  FAIL [3]: Ajax v ADO Den Haag: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Telstar: named mine 5 times and theirs 3
+  FAIL [3]: Ajax v Telstar: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Sparta Rotterdam: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Groningen: named mine 5 times and theirs 3
+  FAIL [3]: Ajax v Groningen: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Excelsior: named mine 5 times and theirs 3
+  FAIL [3]: Ajax v Excelsior: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Heerenveen: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Fortuna Sittard: the screen still labels a block "Them"
+  FAIL [3]: Ajax v NEC Nijmegen: named mine 5 times and theirs 3
+  FAIL [3]: Ajax v NEC Nijmegen: the screen still labels a block "Them"
+  FAIL [3]: Ajax v PSV: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Utrecht: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Willem II: named mine 5 times and theirs 3
+  FAIL [3]: Ajax v Willem II: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Feyenoord: the screen still labels a block "Them"
+  FAIL [3]: Ajax v AZ Alkmaar: named mine 6 times and theirs 3
+  FAIL [3]: Ajax v AZ Alkmaar: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Twente: the screen still labels a block "Them"
+  FAIL [3]: Ajax v PEC Zwolle: named mine 5 times and theirs 3
+  FAIL [3]: Ajax v PEC Zwolle: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Cambuur: named mine 5 times and theirs 3
+  FAIL [3]: Ajax v Cambuur: the screen still labels a block "Them"
+  FAIL [3]: Ajax v Go Ahead Eagles: named mine 5 times and theirs 3
+  FAIL [3]: Ajax v Go Ahead Eagles: the screen still labels a block "Them"
+  FAIL [3]: Ajax v ADO Den Haag: named mine 5 times and theirs 3
+  FAIL [3]: Ajax v ADO Den Haag: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Liverpool: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Tottenham: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Bournemouth: named mine 6 times and theirs 3
+  FAIL [3]: Newcastle v Bournemouth: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Leeds United: named mine 6 times and theirs 3
+  FAIL [3]: Newcastle v Leeds United: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Hull City: named mine 6 times and theirs 3
+  FAIL [3]: Newcastle v Hull City: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Coventry City: named mine 6 times and theirs 3
+  FAIL [3]: Newcastle v Coventry City: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Aston Villa: named mine 6 times and theirs 3
+  FAIL [3]: Newcastle v Aston Villa: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Brighton: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Crystal Palace: named mine 6 times and theirs 3
+  FAIL [3]: Newcastle v Crystal Palace: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Everton: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Fulham: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Arsenal: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Brighton: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Manchester United: named mine 6 times and theirs 3
+  FAIL [3]: Newcastle v Manchester United: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Sunderland: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Ipswich Town: named mine 6 times and theirs 3
+  FAIL [3]: Newcastle v Ipswich Town: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Brentford: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Manchester City: named mine 6 times and theirs 3
+  FAIL [3]: Newcastle v Manchester City: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Nottingham Forest: named mine 6 times and theirs 3
+  FAIL [3]: Newcastle v Nottingham Forest: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Chelsea: named mine 6 times and theirs 4
+  FAIL [3]: Newcastle v Chelsea: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Manchester United: named mine 6 times and theirs 3
+  FAIL [3]: Newcastle v Manchester United: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Fulham: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Arsenal: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Brighton: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Everton: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Chelsea: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Manchester City: named mine 5 times and theirs 3
+  FAIL [3]: Newcastle v Manchester City: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Brentford: the screen still labels a block "Them"
+  FAIL [3]: Newcastle v Nottingham Forest: named mine 6 times and theirs 3
+  FAIL [3]: Newcastle v Nottingham Forest: the screen still labels a block "Them"
+   174 reports name the other club 3 to 12 times (mean 5.2, floor 3.5), and 12 live viewers name both clubs
+4) Every text block centred inside the card
+   174 cards rendered, 0 left aligned blocks, every card centring its text
+5) Momentum reads as swings, not as one number
+   174 charts: 3.02 sign changes a match (floor 1.9), 88.5 percent reach both sides (floor 62)
+   every chart drew the report's own nine buckets
+6) Historical no-coach baseline: the same fixture and seed finish identically
+   24 fixtures replayed both ways, 13 distinct scorelines, every pair identical down to the momentum series
+   the engine plays a match in 1 places, both off one kick off, and each of the two screens offers exactly 2 ways in (7 buttons on the Match Centre)
+
+simMatchScreen: PASS. Effective them fault failed only section 3; untouched baseline passed and source bytes held.
