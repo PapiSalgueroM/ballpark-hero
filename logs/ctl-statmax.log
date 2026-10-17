@@ -1,0 +1,25 @@
+NEGATIVE CONTROL ON: statmax (section 5 must fail)
+simSoccerDeck: head and base e814c2de bundled (1.7 s); the shipped pack holds 28 cards, CONTROL=statmax
+1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing
+2) Inert: the deck not loaded, 200 careers of 12 seasons, every save byte equal to the base's after every step and the Math.random count equal
+3) Adds, never replaces: at each deal, from one identical state, the old batch is the base's and a deck card is first
+4) Neutral: every deck card answered on the option that moves nothing, every season end save is the base's but for the deck's own stamps
+5) Promises: every option moves what its button prints, to the bound and no further, says what landed, and never moves money or fame
+     701 "Do the extra hour" at room 1, morale 50: events, statBoostNextSeason not as printed (Aerial Command next season +1, Positioning next season -1."] against ing next season +0, you only pay for training that landed."]; {"physical":1,"defending":-1} against {})
+     702 "Work on short passing" at room 1, morale 50: events, statBoostNextSeason not as printed (istribution next season +1, Sweeping Speed next season -1."] against eed next season +0, you only pay for training that landed."]; {"passing":1,"pace":-1} against {})
+     703 "Study it" at room 1, morale 50: events, statBoostNextSeason not as printed (nalty Saving next season +1, Shot Stopping next season -1."] against ing next season +0, you only pay for training that landed."]; {"dribbling":1,"shooting":-1} against {})
+     704 "Do the sprint work" at room 1, morale 50: events, statBoostNextSeason not as printed (weeping Speed next season +1, Distribution next season -1."] against ion next season +0, you only pay for training that landed."]; {"pace":1,"passing":-1} against {})
+   4176 answers (2016 on the option that moves nothing), 1568 effects at a bound, 160 trainings held at 99
+   FAIL 160 answers move something other than what they print, or say it wrong
+   ok 320 deals at room 0 and 1, none with training that would not fit
+   the banked drill: room 1 at the deal, 0 after the drill; the answer logs "🔋 Pressing from the front: You push through the sprint work. Morale -1, Pace next season +0, you are at your ceiling, Shooting next season +0, you only pay for training that landed."
+   ok a drill banked between the deal and the answer: the answer lands nothing past the ceiling and its line says so
+   the fleet: 1264 deck training answers, 0 clamped (expected 0: the deck card is answered first); with a full drill banked after each, 195 (15.4%) would pass the ceiling only because of the deck's boost (the drills' rule, owed)
+6) Reach by position: every position card reaches its own group and never another, every situation card someone, no keeper word for an outfielder
+7) Keyed: the slot and the deck's answers draw no Math.random, the same save deals the same card in a fresh bundle, and the season moves the pick
+8) Economy: four answer arms against the deck off, over five seeds of whole careers
+9) Old saves: the base's saves load and play here as they do there; a save with a deck card pending loads on the base (skipped, its stamp handed back) and answers here
+10) Lazy: the page and the engine reach the gate and nothing of the deck, and the page is the one caller that loads it
+
+runtime 13.1 s
+simSoccerDeck: CONTROL=statmax FIRED: section 5 failed (1 failures, red sections 5)

@@ -1,0 +1,6 @@
+sd1-5 exit=0 84s | simSoccerDeck: green. Sections 1, 2, 3, 4, 5 only.
+ctl-statmax exit=1 13s | simSoccerDeck: CONTROL=statmax FIRED: section 5 failed (1 failures, red sections 5)
+tsc exit=0 101s | 
+vitest exit=0 4s |    Duration  3.84s (transform 2.02s, setup 108ms, collect 2.48s, tests 187ms, environment 487ms, prepare 177ms)
+sd8 exit=0 112s | simSoccerDeck: green. Sections 8 only.
+ctl-freetraining exit=1 80s | simSoccerDeck: CONTROL=freetraining FIRED: section 8 failed (2 failures, red sections 8)
