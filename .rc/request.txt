@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walk: node scripts/playWorldUcl.mjs
+walk-notile: PLAY_WORLD_CONTROL=notile node scripts/playWorldUcl.mjs
+walk-ahead: PLAY_WORLD_CONTROL=ahead node scripts/playWorldUcl.mjs
