@@ -1,0 +1,26 @@
+headsha: git log --oneline -2
+simCareerSeasonRatings: node scripts/simCareerSeasonRatings.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simSoccerCareer: node scripts/simSoccerCareer.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerDomesticCup: node scripts/simCareerDomesticCup.mjs
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs
+simCareerPracticeLifecycle: node scripts/simCareerPracticeLifecycle.mjs
+simSoccerPracticeLifecycle: node scripts/simSoccerPracticeLifecycle.mjs
+simSoccerCareerSaveRetry: node scripts/simSoccerCareerSaveRetry.mjs
+simCareerRecordedStats: node scripts/simCareerRecordedStats.mjs
+simCareerTraining: node scripts/simCareerTraining.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+simCareerDrills: node scripts/simCareerDrills.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerWallShotFriendly: node scripts/simCareerWallShotFriendly.mjs
+simSoccerAwardReveal: node scripts/simSoccerAwardReveal.mjs
+simSoccerCareerLeagueWorld: node scripts/simSoccerCareerLeagueWorld.mjs
+simSoccerCareerOpponents: node scripts/simSoccerCareerOpponents.mjs
+simTrophyCabinet: node scripts/simTrophyCabinet.mjs
+simSoccerCareerAmbitions: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerAmbitions.mjs
+simSoccerCareerDevelopment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+simCareerStoryRole: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
