@@ -1,0 +1,3 @@
+headsha exit=0 0s | f579a0052 Release BI triage: simLiveMatch section 3 and simClubManagerEraUcl section 7 read a club's roster through the save's world ledger
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

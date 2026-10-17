@@ -1,0 +1,3 @@
+2973c261e rc request rBI-trF for 71444b77918d40fde277e3835db533ffdac23681
+71444b779 Release BI triage: playClubManagerDecisionDepth boots its prepared save with the engine's own role repair applied
+f579a0052 Release BI triage: simLiveMatch section 3 and simClubManagerEraUcl section 7 read a club's roster through the save's world ledger
