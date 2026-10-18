@@ -1,0 +1,31 @@
+bindAt: scripts/qa/proveCareerReleaseGuides.mjs bound
+bindAt: e32dd9facafc -> 4a6083b58a05
+runProver: p1414 at d83b9d5b1d9780f08a0106f47e340b0a5f97e69b (release BK bound: 5ada8244f19f with its pinned bases bound to the joined tree)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: guide-headings: successful child
+
+1 !== 0
+
+    at run (file:///tmp/rp-wt-p1414/scripts/qa/proveCareerReleaseGuides.mjs:68:80)
+    at file:///tmp/rp-wt-p1414/scripts/qa/proveCareerReleaseGuides.mjs:118:3
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+runProver: p1414 exit 1
+1) the words: labels in every h2, full sections, no repeats, no dashes, every frozen sentence once
+   ok  266 renders of 133 games (133 with a guide) walked for top heading and levels; /budget-builder 13 h3 and 1 h4; /rebuild 18 h3 and 2 h4; /dart-draft 14 h3 and 1 h4; /career-ladder 14 h3 and 1 h4; /who-am-i 12 h3 and 2 h4; /club-manager 13 h3 and 9 h4; /manager-hot-seat 16 h3 and 3 h4; /deadlin
+   ok  131 converted (/budget-builder, /rebuild, /dart-draft, /career-ladder, /who-am-i, /club-manager, /manager-hot-seat, /deadline-day, /soccer-conquest, /stadium-tycoon, /wonderkid-factory, /contract-chaos, /world-xi, /player-bingo, /sports-bingo, /alphabet-sprint, /clue-auction, /rarity-round, /
+4) the saved pages match the render once prerendered
+   RED 131 saved pages compared, 0 skipped

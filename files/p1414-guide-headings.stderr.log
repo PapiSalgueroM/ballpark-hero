@@ -1,0 +1,2 @@
+  FAIL: /club-manager: the saved page's guide headings differ from the render at h3 "How do I retire?" (saved h3 "Does my career save?")
+simGuideHeadings: RED, 1 failure in section 4

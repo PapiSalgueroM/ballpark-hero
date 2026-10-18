@@ -1,0 +1,5 @@
+p1414 exit=1 8s |    RED 131 saved pages compared, 0 skipped
+gh-main exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+gh-m3 exit=1 1s | simGuideHeadings: RED, 7 failures in sections 1, 4
+p310 exit=1 11s | runProver: p310 exit 1
+p310-own exit=0 15s | runProver: p310own exit 0

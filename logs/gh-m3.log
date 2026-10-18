@@ -1,0 +1,11 @@
+  FAIL: /club-manager: the rules sentence "Open the Cups panel to follow the whole Champions League, even when yo..." is not in the frozen original, so it was invented or edited
+  FAIL: /mlb-my-career: the howToPlay sentence "During a playing season, open Deal with it under the heat meter when y..." is not in the frozen original, so it was invented or edited
+  FAIL: /nba-my-career: the howToPlay sentence "During a playing season, open Deal with it under the heat meter when y..." is not in the frozen original, so it was invented or edited
+  FAIL: /nfl-my-career: the howToPlay sentence "During a playing season, open Deal with it under the heat meter when y..." is not in the frozen original, so it was invented or edited
+  FAIL: /nhl-my-career: the howToPlay sentence "During a playing season, open Deal with it under the heat meter when y..." is not in the frozen original, so it was invented or edited
+  FAIL: /soccer-career: the howToPlay sentence "Most summers open with one card about your position or your career, be..." is not in the frozen original, so it was invented or edited
+2) the outline: one top heading, no skipped level, 8 h3 and 1 h4 in a converted guide
+  FAIL: /club-manager: the saved page's guide headings differ from the render at h3 "How do I retire?" (saved h3 "Does my career save?")
+   RED 131 saved pages compared, 0 skipped
+
+simGuideHeadings: RED, 7 failures in sections 1, 4

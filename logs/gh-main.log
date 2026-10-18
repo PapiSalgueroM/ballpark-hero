@@ -1,0 +1,4 @@
+2) the outline: one top heading, no skipped level, 8 h3 and 1 h4 in a converted guide
+   ok  131 saved pages compared, 0 skipped
+
+simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.

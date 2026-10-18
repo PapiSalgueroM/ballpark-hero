@@ -1,0 +1,27 @@
+runProver: p310own at 0186218ef64743446d32ca8aa839507e8e4e44a4 (Round 1393: page every retained transfer deal)
+    138|     const next = view.queryByRole('button', { name: 'Next deals' });
+    139|     expect(next !== null, 'The next fee page must expose the remaining…
+       |                                                                                         ^
+    140|     const allFees = fees(log), ownFees = fees(log, career.clubName);
+    141|     expect(names(view)).toEqual(allFees.slice(0, 50));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ RUN  v3.2.7 /tmp/rp-wt-p310own
+
+ ✓ src/test/managerSavedDealsPaging.test.tsx > saved Club Manager deal pages > all retained own deals are reachable in newest-first pages 625ms
+ ✓ src/test/managerSavedDealsPaging.test.tsx > saved Club Manager deal pages > fee pages sort the complete retained list and reset safely 620ms
+ ✓ src/test/managerSavedDealsPaging.test.tsx > saved Club Manager deal pages > all clubs keeps the existing first fifty newest saved deals 55ms
+ ✓ src/test/managerSavedDealsPaging.test.tsx > saved Club Manager deal pages > small own histories keep counterparties loan flags and saved gross fees 156ms
+ ✓ src/test/managerSavedDealsPaging.test.tsx > saved Club Manager deal pages > empty single and fifty-row histories keep their boundary states 351ms
+ ✓ src/test/managerSavedDealsPaging.test.tsx > saved Club Manager deal pages > browsing keeps career ledger feedback callbacks and random stream unchanged 173ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  16:04:47
+   Duration  4.35s (transform 1.26s, setup 51ms, collect 1.67s, tests 1.98s, environment 291ms, prepare 68ms)
+
+JSON report written to /tmp/rp-out-p310own/fixed-proof/restored/units.json
+Saved deals paging fixed:6 normal,2 precise original faults plus4 preserves,6 restored;original baseline raw exact;restored raw exact;source held.
+runProver: p310own exit 0

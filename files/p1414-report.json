@@ -1,0 +1,365 @@
+{
+  "status": "failed",
+  "base": "4a6083b58a0566fb4303083beb5e7901677ed45e",
+  "scope": "Guide-only handback for BJ after the accepted features join, not a feature runtime or combined-join cap proof",
+  "items": [
+    {
+      "file": "src/data/gameContent/clubManagement.ts",
+      "route": "/club-manager",
+      "part": "rules",
+      "indent": 10,
+      "anchor": "Every league plays its real length: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs.",
+      "item": "Open the Cups panel to follow the whole Champions League, even when your club is not in it: table or groups, matchdays, knockouts and final. Tap a club to read its run. These are your game's simulated results.",
+      "originalSha256": "c1b3eac551e1c844d74da58c8cb74475b44c8a96206b5c569477457d1850ae2f",
+      "candidateSha256": "1c04714e5c1d9c615c4984bea586aa827f123077761b466a43a82a73aed8ea89",
+      "wholeInverse": true
+    },
+    {
+      "file": "src/data/gameContent/soccer2.ts",
+      "route": "/soccer-career",
+      "part": "howToPlay",
+      "indent": 10,
+      "anchor": "Advance season by season through simulated stats, newspaper headlines, random events, and decisions.",
+      "item": "Most summers open with one card about your position or your career, before the rest of the news between seasons. Training can trade one skill for another next season, with gains stopping at your ceiling.",
+      "originalSha256": "20aab3b4ee41257696e1e07e9bcd597d98b7b3252fea5ba36541aae5df9c41b9",
+      "candidateSha256": "98ba32e78858b8fd575299b507cd716cd30e50411d1c673158f70bef22ca2023",
+      "wholeInverse": true
+    },
+    {
+      "file": "src/data/gameContent/basketball.ts",
+      "route": "/nba-my-career",
+      "part": "howToPlay",
+      "indent": 14,
+      "anchor": "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
+      "item": "During a playing season, open Deal with it under the heat meter when you're holding dirty money. Choose Come clean, Give it away, Keep it quiet or Wash it after reading the cost and any catch risk.",
+      "originalSha256": "e1b088d5052f8c20453901148bb4f213e5ada339b661d0bcb5ef5d40c728a4ac",
+      "candidateSha256": "ae1bf69a568e217c14f4f408a63e39de26af450f2fd855c531c381b8620c609c",
+      "wholeInverse": true
+    },
+    {
+      "file": "src/data/gameContent/football.ts",
+      "route": "/nfl-my-career",
+      "part": "howToPlay",
+      "indent": 14,
+      "anchor": "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
+      "item": "During a playing season, open Deal with it under the heat meter when you're holding dirty money. Choose Come clean, Give it away, Keep it quiet or Wash it after reading the cost and any catch risk.",
+      "originalSha256": "36afa136fb9dbf28b1d83ed48118cb268a6783760c614e018a010a27b860170f",
+      "candidateSha256": "9fad782f747797a5f21b797b27f44258e99deed2ad92e26880b49f6540a925f8",
+      "wholeInverse": true
+    },
+    {
+      "file": "src/data/gameContent/baseball.ts",
+      "route": "/mlb-my-career",
+      "part": "howToPlay",
+      "indent": 14,
+      "anchor": "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
+      "item": "During a playing season, open Deal with it under the heat meter when you're holding dirty money. Choose Come clean, Give it away, Keep it quiet or Wash it after reading the cost and any catch risk.",
+      "originalSha256": "d7dfa980cd2da8908b776f776e8bddf8d9e4c2c429acdfb2a88826ada4bd1896",
+      "candidateSha256": "ddb4b95b2295a6191bb40da05706d6a846fe4f51ed3a5a969f3001d4ed563fd3",
+      "wholeInverse": true
+    },
+    {
+      "file": "src/data/gameContent/hockey.ts",
+      "route": "/nhl-my-career",
+      "part": "howToPlay",
+      "indent": 10,
+      "anchor": "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
+      "item": "During a playing season, open Deal with it under the heat meter when you're holding dirty money. Choose Come clean, Give it away, Keep it quiet or Wash it after reading the cost and any catch risk.",
+      "originalSha256": "b79f74061ca6465f6f7c32a031d6d78087775306ead0ab866a4baee8d94fe5e4",
+      "candidateSha256": "769fff9b8e658d90da7bce0e8b70071cec6356ef5b6ee4890d4adf5e68309f3b",
+      "wholeInverse": true
+    }
+  ],
+  "contexts": [
+    {
+      "round": "1503",
+      "head": "13c8f3afa6007c0e45e107d146e0325e3cb517a0",
+      "file": "src/lib/clubManagerWorldView.ts",
+      "blob": "f3ac3f8a08d57358556ee3cc42e462331f0d79fe",
+      "sha256": "b5b5225f38e18eebb1c4d098c10f493dd46d18c320ac2e6ec1e1867c30f7df9c",
+      "retained": "context-1503-clubManagerWorldView.ts",
+      "executed": false
+    },
+    {
+      "round": "1503",
+      "head": "13c8f3afa6007c0e45e107d146e0325e3cb517a0",
+      "file": "src/components/club-manager/WorldCompScreen.tsx",
+      "blob": "1962a57a0a5451c0eaf90cb85d99c84658e1ebba",
+      "sha256": "d7517164af4ebd89112061253d8a8ae35dee9f4ccf3e6e4231832236f9aeff2b",
+      "retained": "context-1503-WorldCompScreen.tsx",
+      "executed": false
+    },
+    {
+      "round": "1504",
+      "head": "d468997ad2978a22722f31468f5813c0e9321e35",
+      "file": "src/lib/soccerDeckGate.ts",
+      "blob": "39d0b682ba64eb0d4c76db69a980709766551405",
+      "sha256": "ee12e3251b5d63f737960a797035b0174acb91a2379cbc8a520c02468d3d664f",
+      "retained": "context-1504-soccerDeckGate.ts",
+      "executed": false
+    },
+    {
+      "round": "1504",
+      "head": "d468997ad2978a22722f31468f5813c0e9321e35",
+      "file": "src/lib/soccerDeck.ts",
+      "blob": "f6c6a4f8033d2d241f81c11e2f77a7e05169428a",
+      "sha256": "f3f8f22f3066bc6faadfd7f393857c949c34ddbe37f3b51031bd5c29582e55c6",
+      "retained": "context-1504-soccerDeck.ts",
+      "executed": false
+    },
+    {
+      "round": "1504",
+      "head": "d468997ad2978a22722f31468f5813c0e9321e35",
+      "file": "src/pages/SoccerCareer.tsx",
+      "blob": "76333d0b3d1571fa77e134585d67211c6c2dd2d6",
+      "sha256": "cad4fd101e13ed9916a9746d36fe0ccddac748d46a4e1117073c2ade687d026b",
+      "retained": "context-1504-SoccerCareer.tsx",
+      "executed": false
+    },
+    {
+      "round": "1504",
+      "head": "d468997ad2978a22722f31468f5813c0e9321e35",
+      "file": "src/data/soccerDeck/starter.ts",
+      "blob": "ff324082b503dc3a72cae460c51dce6199c2157a",
+      "sha256": "bf64469d437d5c2cb017b6857d9cfe225515808c3aadf98f293595a67502894b",
+      "retained": "context-1504-starter.ts",
+      "executed": false
+    },
+    {
+      "round": "1500",
+      "head": "76716d06b4f3ef8738d4b7e080e8fc9b620a026e",
+      "file": "src/components/us-career/UsCareerBoard.tsx",
+      "blob": "7a920adf9d7e27f461c5f6ad1663d56361e88748",
+      "sha256": "aff340d053a74bdec2551bad398a9a837850c334fc6c40bc00c2c1e2e8038641",
+      "retained": "context-1500-UsCareerBoard.tsx",
+      "executed": false
+    },
+    {
+      "round": "1500",
+      "head": "76716d06b4f3ef8738d4b7e080e8fc9b620a026e",
+      "file": "src/components/us-career/DirtyMoneyDesk.tsx",
+      "blob": "b9908a0fd1b06fdcfb1be72fe84d73a7f223b57e",
+      "sha256": "3fc04aec2df3ec21499c2bc4d6f97748ed8dcdf1a994008ffb3483f8c7fd88d5",
+      "retained": "context-1500-DirtyMoneyDesk.tsx",
+      "executed": false
+    },
+    {
+      "round": "1500",
+      "head": "76716d06b4f3ef8738d4b7e080e8fc9b620a026e",
+      "file": "src/lib/careerDirtyMoney.ts",
+      "blob": "bce8b6c549aba30caf30b72d86c3d19ecb6ef963",
+      "sha256": "1634bd4303bd12cb40c198451b27011cc4adf1274559a5e017969228620738ff",
+      "retained": "context-1500-careerDirtyMoney.ts",
+      "executed": false
+    },
+    {
+      "round": "1500",
+      "head": "76716d06b4f3ef8738d4b7e080e8fc9b620a026e",
+      "file": "src/lib/careerDirtyMoneyDesk.ts",
+      "blob": "ac49d74bd6fda5c92928be831a9dd79ba4378562",
+      "sha256": "c65183d4f168528cf503b9c730a3e2dff67de378adbb86e9a22d34a75e289259",
+      "retained": "context-1500-careerDirtyMoneyDesk.ts",
+      "executed": false
+    }
+  ],
+  "controls": [
+    {
+      "kind": "missing-source-item",
+      "route": "/club-manager",
+      "changedSha256": "c1b3eac551e1c844d74da58c8cb74475b44c8a96206b5c569477457d1850ae2f",
+      "rejected": true,
+      "wholeUndo": true
+    },
+    {
+      "kind": "missing-source-item",
+      "route": "/soccer-career",
+      "changedSha256": "20aab3b4ee41257696e1e07e9bcd597d98b7b3252fea5ba36541aae5df9c41b9",
+      "rejected": true,
+      "wholeUndo": true
+    },
+    {
+      "kind": "missing-source-item",
+      "route": "/nba-my-career",
+      "changedSha256": "e1b088d5052f8c20453901148bb4f213e5ada339b661d0bcb5ef5d40c728a4ac",
+      "rejected": true,
+      "wholeUndo": true
+    },
+    {
+      "kind": "missing-source-item",
+      "route": "/nfl-my-career",
+      "changedSha256": "36afa136fb9dbf28b1d83ed48118cb268a6783760c614e018a010a27b860170f",
+      "rejected": true,
+      "wholeUndo": true
+    },
+    {
+      "kind": "missing-source-item",
+      "route": "/mlb-my-career",
+      "changedSha256": "d7dfa980cd2da8908b776f776e8bddf8d9e4c2c429acdfb2a88826ada4bd1896",
+      "rejected": true,
+      "wholeUndo": true
+    },
+    {
+      "kind": "missing-source-item",
+      "route": "/nhl-my-career",
+      "changedSha256": "b79f74061ca6465f6f7c32a031d6d78087775306ead0ab866a4baee8d94fe5e4",
+      "rejected": true,
+      "wholeUndo": true
+    },
+    {
+      "kind": "missing-fixture-item",
+      "route": "/club-manager",
+      "changedSha256": "6ec1c64331796a85d66d5d1781a09828b46c7fed41ca437e176704a1886fc56b",
+      "rejected": true,
+      "wholeUndo": true
+    },
+    {
+      "kind": "missing-fixture-item",
+      "route": "/soccer-career",
+      "changedSha256": "5e095671cde2ec54eac57d39e59d7c2b45ebf390b1337d04ebd237acf617525f",
+      "rejected": true,
+      "wholeUndo": true
+    },
+    {
+      "kind": "missing-fixture-item",
+      "route": "/nba-my-career",
+      "changedSha256": "faf89aa2357a884cbe285f70623628acfa29d0398c06ff6d698524cee9edcc59",
+      "rejected": true,
+      "wholeUndo": true
+    },
+    {
+      "kind": "missing-fixture-item",
+      "route": "/nfl-my-career",
+      "changedSha256": "83d65d4327f01215329e81f10b35c62495c9848a190def9d5b525a32b7ba1cd5",
+      "rejected": true,
+      "wholeUndo": true
+    },
+    {
+      "kind": "missing-fixture-item",
+      "route": "/mlb-my-career",
+      "changedSha256": "7d4d84703cd1547e6d7008c444061d4acd1bb441960682fa99f61a2b23639677",
+      "rejected": true,
+      "wholeUndo": true
+    },
+    {
+      "kind": "missing-fixture-item",
+      "route": "/nhl-my-career",
+      "changedSha256": "75316c02e9fb42402f42fff894bb232973edecdf3a6238235eae4444d7881248",
+      "rejected": true,
+      "wholeUndo": true
+    }
+  ],
+  "runs": [
+    {
+      "label": "refresh-club-manager",
+      "args": [
+        "scripts/simGuideHeadings.mjs",
+        "--refresh",
+        "/club-manager"
+      ],
+      "startedAt": "2026-10-18T16:04:13.922Z",
+      "endedAt": "2026-10-18T16:04:14.261Z",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "refresh-soccer-career",
+      "args": [
+        "scripts/simGuideHeadings.mjs",
+        "--refresh",
+        "/soccer-career"
+      ],
+      "startedAt": "2026-10-18T16:04:14.624Z",
+      "endedAt": "2026-10-18T16:04:14.961Z",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "refresh-nba-my-career",
+      "args": [
+        "scripts/simGuideHeadings.mjs",
+        "--refresh",
+        "/nba-my-career"
+      ],
+      "startedAt": "2026-10-18T16:04:15.294Z",
+      "endedAt": "2026-10-18T16:04:15.638Z",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "refresh-nfl-my-career",
+      "args": [
+        "scripts/simGuideHeadings.mjs",
+        "--refresh",
+        "/nfl-my-career"
+      ],
+      "startedAt": "2026-10-18T16:04:15.975Z",
+      "endedAt": "2026-10-18T16:04:16.316Z",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "refresh-mlb-my-career",
+      "args": [
+        "scripts/simGuideHeadings.mjs",
+        "--refresh",
+        "/mlb-my-career"
+      ],
+      "startedAt": "2026-10-18T16:04:16.652Z",
+      "endedAt": "2026-10-18T16:04:16.990Z",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "refresh-nhl-my-career",
+      "args": [
+        "scripts/simGuideHeadings.mjs",
+        "--refresh",
+        "/nhl-my-career"
+      ],
+      "startedAt": "2026-10-18T16:04:17.327Z",
+      "endedAt": "2026-10-18T16:04:17.662Z",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "keywords-first",
+      "args": [
+        "scripts/genSearchKeywords.mjs"
+      ],
+      "startedAt": "2026-10-18T16:04:18.122Z",
+      "endedAt": "2026-10-18T16:04:18.259Z",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "keywords-second",
+      "args": [
+        "scripts/genSearchKeywords.mjs"
+      ],
+      "startedAt": "2026-10-18T16:04:18.596Z",
+      "endedAt": "2026-10-18T16:04:18.738Z",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "guide-headings",
+      "args": [
+        "scripts/simGuideHeadings.mjs"
+      ],
+      "startedAt": "2026-10-18T16:04:19.084Z",
+      "endedAt": "2026-10-18T16:04:19.922Z",
+      "exit": 1,
+      "signal": null,
+      "error": null
+    }
+  ],
+  "error": "AssertionError [ERR_ASSERTION]: guide-headings: successful child\n\n1 !== 0\n\n    at run (file:///tmp/rp-wt-p1414/scripts/qa/proveCareerReleaseGuides.mjs:68:80)\n    at file:///tmp/rp-wt-p1414/scripts/qa/proveCareerReleaseGuides.mjs:118:3\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"
+}
