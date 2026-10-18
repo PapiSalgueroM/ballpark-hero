@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unit-euro: node_modules/.bin/vitest run src/lib/euroAccess.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+simWorldEuro: node scripts/simWorldEuro.mjs
+dashscan: if git diff 77556430 HEAD | grep -nP '\x{2013}|\x{2014}'; then echo "dash found"; exit 1; else echo "no dash in the diff"; fi
