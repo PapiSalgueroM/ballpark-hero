@@ -47,6 +47,8 @@ import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade 
 import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 /* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */
 import { keyedRng } from '@/lib/keyedRng';
+import { entrantsFrom, evaluateOneOff, myOneOffFixture, oneOffRowFor } from '@/lib/worldOneOffs';
+import { nightDateAt, nightsDoneAt, placeNights } from '@/lib/worldNights';
 /* Round 1229: the one scorer weight table. It imports a type and nothing else, so there is no cycle. */
 import { goalWeight, assistWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWeight';
 /* Round 1229: the league book, pure. It imports the keyed generator, the own goal rule and the weight table. */
@@ -18905,6 +18907,7 @@ export interface SeasonWorld {
    real club in today's world only: a historic era never reads the overrides,
    and a custom club is placed against the real lineups. */
 export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld, edit?: Record<string, string[]> | null, opts?: StartCareerOptions): CareerState {
+  if ((globalThis as Record<string, unknown>).__w1510) (globalThis as Record<string, unknown>).__w1510 = [evaluateOneOff, entrantsFrom, oneOffRowFor, myOneOffFixture, placeNights, nightDateAt, nightsDoneAt];
   /* Round 132: the era decides what year season one is, and the year decides
      everything else: the squad you are handed, how good every other club is,
      and who is on the market. The default era is the current one and its
