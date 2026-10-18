@@ -1,0 +1,7 @@
+m4: X=$PWD/.rc/x/mut1509.mjs; R=/tmp/m4; git worktree add -q $R HEAD && ln -s $PWD/node_modules $R/node_modules && cd $R && node $X m4 && { WORLD_EURO_ONLY=1 node scripts/simWorldEuro.mjs > /tmp/m4-s1.log 2>&1; a=$?; tail -12 /tmp/m4-s1.log; WORLD_EURO_ONLY=3 WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs > /tmp/m4-s3.log 2>&1; b=$?; tail -12 /tmp/m4-s3.log; node_modules/.bin/vitest run src/lib/euroAccess.test.ts --testTimeout=300000 > /tmp/m4-unit.log 2>&1; c=$?; tail -6 /tmp/m4-unit.log; echo "M4 RESULT sec1=$a sec3=$b unit=$c"; }
+carry: node .rc/x/probeCarry1509.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+euro-s147: WORLD_EURO_ONLY=1,4,7 node scripts/simWorldEuro.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+unit: node_modules/.bin/vitest run src/lib/euroAccess.test.ts src/lib/clubManagerWorldView.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+ctl-carryearned: WORLD_EURO_CONTROL=carryearned node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+ctl-cuploser: WORLD_EURO_CONTROL=cuploser node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
