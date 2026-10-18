@@ -276,20 +276,20 @@ let pure = null;
 const oracleLib = async () => (pure ??= await bundle('oracle', { ea: MODULE_FILE, ft: 'src/data/clubManagerFinalTables2025_26.ts' }));
 
 /** The field and my club's route the rule gives at an open, worked out here from the engine's own inputs. */
-function oracleField(M, O, st, prev) {
+function oracleField(M, O, st, pre) {
   const excluded = [st.clubName, st.customClub?.replacedClub].filter(Boolean);
   const nation = id => M.cm.LEAGUE_RULES[id]?.nationId;
   let src, cups = {}, holder = null;
-  if (!prev) {
+  if (!pre) {
     if (st.season !== 1) return null;
     src = M.cm.REAL_LEAGUES.filter(l => l.euro).map(league => ({ league, clubs: O.ft.CM_FINAL_TABLES_PARTIAL.includes(league.id) ? [] : (O.ft.CM_FINAL_TABLES_2025_26.leagues[league.id]?.table ?? []) }));
     for (const t of src) cups[nation(t.league.id)] = O.ea.SEASON_ONE_CUP_WINNERS[t.league.id] ?? null;
     holder = O.ea.SEASON_ONE_UECL_HOLDER;
   } else {
-    src = M.cm.uclFinalTables(prev);
+    src = pre.tables;
     if (!src) return null;
     for (const t of src) if (t.league.euro) cups[nation(t.league.id)] = null;
-    const cup = M.cm.euroCupOf(prev);
+    const cup = pre.cup;
     if (Object.prototype.hasOwnProperty.call(cups, cup.nationId)) cups[cup.nationId] = cup.winner;
   }
   const tables = src.filter(t => t.league.euro).map(t => ({ leagueId: t.league.id, nationId: nation(t.league.id), clubs: t.clubs,
@@ -342,7 +342,9 @@ async function journey(E, f, { seasons, mode = 'nocoach', join = null, evalEach 
     if (!over) throw new Error(`season ${season} did not end in 260 entries`);
     step(`s${season}-finish`, cur => ({ state: M.cm.finishSeason(cur).state }));
     onSeasonEnd?.(M, s, season);
-    if (season < seasons) step(`s${season}-rollover`, cur => ({ state: M.cm.startNextSeason(cur), prev: cur, open: true }));
+    /* The rule's inputs are read off the finished season BEFORE the rollover registers next season's leagues (the
+       engine reads them there too): read after it, a relegated club's own table is the world's copy. */
+    if (season < seasons) step(`s${season}-rollover`, cur => { const pre = { tables: M.cm.uclFinalTables(cur), cup: M.cm.euroCupOf(cur) }; return { state: M.cm.startNextSeason(cur), prev: cur, pre, open: true }; });
   }
   return steps;
 }
@@ -416,7 +418,7 @@ async function europaPass() {
       /* 1: an open is the rule's own answer (the oracle). A join opens only when it does not carry. */
       const carried = got?.joined && !!sl && !!got.joined.worldComps?.uel && got.joined.worldComps.uel.seed === sl.seed && same(got.joined.worldComps.uel.clubs, sl.clubs);
       if (got?.open || (got?.joined && !carried)) {
-        const o = got?.joined && s.season > 1 ? null : oracleField(M, O, s, got?.prev ?? null);
+        const o = got?.joined && s.season > 1 ? null : oracleField(M, O, s, got?.pre ?? null);
         if (!o || o.field.clubs.length !== 36) ok(!sl, `1 none: ${name} at ${label}: a Europa League opened where the rule has no field`);
         else {
           ok(!!sl, `1 none: ${name} at ${label}: no Europa League opened where the rule has a field`);
@@ -434,7 +436,7 @@ async function europaPass() {
         /* The cup the rollover hands on has a winner, whoever went out early (ruling 1f); a season with no cup
            of its own passes the cup's place down, counted. */
         if (got?.prev) {
-          const cup = M.cm.euroCupOf(got.prev);
+          const cup = got.pre?.cup ?? M.cm.euroCupOf(got.prev);
           if (got.prev.cupBracket?.length) ok(!!cup.winner, `1 cup: ${name} at ${label}: the season's cup final crowned nobody`);
           else bump('1 rollovers whose season had no cup bracket (its place passed down)');
           if (cup.winner && cup.winner !== got.prev.clubName) bump('1 rollovers whose cup another club won');

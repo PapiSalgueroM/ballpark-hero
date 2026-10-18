@@ -168,8 +168,25 @@ for (const f of chosen) {
         const historic = T.eras.isHistoricEra(lt.eraId);
         const should = !lt.uclGroup && lt.week < lt.calendar.length && (historic || lt.season === 1);
         const has = !!lt.worldComps?.ucl;
-        if (has) oldSaves.gained += 1; else oldSaves.kept += 1;
-        if (has !== should) { oldSaves.wrong += 1; fails.push(`${name} at ${x.label}: an old save ${has ? 'gained' : 'did not gain'} a watched Champions League (${historic ? 'an era' : `season ${lt.season}`}, uclGroup ${lt.uclGroup ? 'set' : 'null'})`); }
+        /* Round 1509: a base from Round 1502 on writes saves that already follow a Champions League; such a save
+           must load with the very slice the base's own load keeps, and only a save without one is held to the
+           repair's rule. */
+        const baseKeeps = !!lb.worldComps?.ucl;
+        if (baseKeeps) {
+          oldSaves.carried = (oldSaves.carried ?? 0) + 1;
+          if (JSON.stringify(lt.worldComps?.ucl ?? null) !== JSON.stringify(lb.worldComps.ucl)) { oldSaves.wrong += 1; fails.push(`${name} at ${x.label}: an old save that follows a Champions League loads another one`); }
+        } else {
+          if (has) oldSaves.gained += 1; else oldSaves.kept += 1;
+          if (has !== should) { oldSaves.wrong += 1; fails.push(`${name} at ${x.label}: an old save ${has ? 'gained' : 'did not gain'} a watched Champions League (${historic ? 'an era' : `season ${lt.season}`}, uclGroup ${lt.uclGroup ? 'set' : 'null'})`); }
+        }
+        /* Round 1509: and the Europa League, which no base save carries, is gained at load exactly where its repair
+           says: season one of today's world, a season not over, in the Champions League or not. */
+        if (!lb.worldComps?.uel) {
+          const shouldUel = !historic && lt.season === 1 && lt.week < lt.calendar.length;
+          const hasUel = !!lt.worldComps?.uel;
+          if (hasUel) oldSaves.uelGained = (oldSaves.uelGained ?? 0) + 1;
+          if (hasUel !== shouldUel && !(shouldUel && T.cm.worldCompField && !T.cm.worldCompField(lt, 'uel', null))) { oldSaves.wrong += 1; fails.push(`${name} at ${x.label}: an old save ${hasUel ? 'gained' : 'did not gain'} a Europa League (${historic ? 'an era' : `season ${lt.season}`})`); }
+        }
       }
       steps += a.length;
       if (b.some(y => y.carries)) carriers += 1;
@@ -182,8 +199,8 @@ for (const x of fails.slice(0, 12)) console.log(`  FAIL ${x}`);
 console.log(`journeys ${journeys}, steps compared ${steps}, tree journeys whose save carried worldComps ${carriers}, evaluations on the live state ${evals}, ${((Date.now() - t0) / 1000).toFixed(0)} s`);
 if (EVAL && !evals) cannot('--eval was asked for and no evaluation ran');
 if (OLD_SAVES) {
-  console.log(`old saves (written by ${BASE}): ${oldSaves.loaded} loaded by both engines, ${oldSaves.gained} gained a watched Champions League at load, ${oldSaves.kept} did not, ${oldSaves.wrong} against the rule`);
-  if (!oldSaves.loaded || !oldSaves.gained) cannot('--old-saves loaded no save, or none that the rule repairs');
+  console.log(`old saves (written by ${BASE}): ${oldSaves.loaded} loaded by both engines, ${oldSaves.gained} gained a watched Champions League at load, ${oldSaves.kept} did not, ${oldSaves.carried ?? 0} already followed one and kept it, ${oldSaves.uelGained ?? 0} gained a Europa League, ${oldSaves.wrong} against the rule`);
+  if (!oldSaves.loaded || !(oldSaves.gained || oldSaves.carried)) cannot('--old-saves loaded no save, or none that the rule repairs or keeps');
 }
 if (!journeys) cannot('no journey ran');
 console.log(fails.length
