@@ -11,6 +11,11 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(import.meta.url);
 assert(require.cache[require.resolve('./lib/offlineTransport.cjs')], 'Ordinary offline preload must be active');
+const runtimeAliases = {
+  'react/jsx-dev-runtime': require.resolve('react/jsx-dev-runtime'),
+  'react/jsx-runtime': require.resolve('react/jsx-runtime'),
+  react: require.resolve('react'),
+};
 const OUT = process.env.APPEARANCE_OPTIONS_OUT || fs.mkdtempSync(path.join(os.tmpdir(), 'soccer-appearance-'));
 fs.mkdirSync(OUT, { recursive: true });
 const BASE = '775564305e9da84dab59f2b9fe246d044a3cc8e9';
@@ -38,7 +43,8 @@ function run(name, env = {}, pattern, want = { passed: 28, failed: 0, pending: 0
     '--maxWorkers=1', '--no-file-parallelism', '--reporter=json', '--outputFile=' + report];
   if (pattern) args.push('-t', pattern);
   const child = spawnSync(process.execPath, args, { cwd: ROOT, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024,
-    env: { ...process.env, APPEARANCE_OPTIONS_SVG_BASELINE: baseline, SIM_OFFLINE_RECEIPT: receipt, ...env } });
+    env: { ...process.env, APPEARANCE_OPTIONS_SVG_BASELINE: baseline, SIM_OFFLINE_RECEIPT: receipt, ...env,
+      NO_DOUBLE_SWAP: JSON.stringify({ ...runtimeAliases, ...JSON.parse(env.NO_DOUBLE_SWAP || '{}') }) } });
   fs.writeFileSync(path.join(OUT, name + '.log'), (child.stdout || '') + (child.stderr || ''));
   assert.ifError(child.error); assert.equal(child.signal, null);
   assert.equal(child.status, want.failed ? 1 : 0, `${name}: unexpected test status, see ${name}.log`);
