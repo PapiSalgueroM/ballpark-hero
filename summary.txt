@@ -1,0 +1,2 @@
+writesSent exit=1 1s | simWritesAreSent: 1 failure
+resultMoment exit=0 5s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
