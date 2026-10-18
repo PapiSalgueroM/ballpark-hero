@@ -1,0 +1,6 @@
+ctl-cuploser exit=1 132s | simWorldEuro: control cuploser FIRED (170 failures, all its own)
+euro-s1 exit=0 134s | simWorldEuro: green, 35897 checks, 0 failures
+ctl-oneplace exit=1 135s | simWorldEuro: control oneplace FIRED (142 failures, all its own)
+unit exit=0 4s |    Duration  3.55s (transform 1.48s, setup 150ms, collect 3.37s, tests 1.22s, environment 691ms, prepare 239ms)
+ctl-noworld exit=1 102s | simWorldEuro: control noworld FIRED (1311 failures, all its own)
+ctl-twocomps exit=1 102s | simWorldEuro: control twocomps FIRED (4684 failures, all its own)

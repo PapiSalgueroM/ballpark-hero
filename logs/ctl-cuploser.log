@@ -1,0 +1,61 @@
+  1 and 4: 95 journeys, 131 s
+  7 example, season one of a Chelsea career, the English clubs in it: Brighton F, Crystal Palace H, Bournemouth L, Sunderland P
+  7 routes over every open: C 183, F 555, H 39, L 1485, P 1302
+  7 my club's earned route at an open: C 6, L 12, P 2, none 79
+  7 titles by strength quartile (strongest first): 81, 10, 0, 0
+  7 goals a league phase match: 2.60 over 13104; ties after extra time 336, shootouts 176
+  7 the slice's bytes: 1421 to 1503 over 99 opens
+  7 the nights' months against 2026/27's (U7): 999 the same month, 678 a month off, 6 further; 1683 of 1683 on a Thursday
+  1 carry probes (a slice that earned a route carried to a club outside the field): 13
+  1 opens join: 8
+  1 opens rollover: 60
+  1 opens start: 35
+  1 rollovers whose cup another club won: 47
+  1 rollovers whose cup my club won: 9
+  1 rollovers whose season had no cup bracket (its place passed down): 4
+  1 seasons that ended with no Europa League: 4
+  4 joins outside the field carried: 5
+  4 joins to an entrant opened: 4
+  4 joins to an entrant with none: 4
+  4 seen probes (a carry onto a calendar behind): 35
+FAIL 1 field: participant Real Madrid (now) seed 1 at s1-rollover: the field is not the rule's
+FAIL 1 via: participant Real Madrid (now) seed 1 at s1-rollover: a route is not the rule's
+FAIL 1 rule: participant Real Madrid (now) seed 1 at s1-rollover: route C is Racing Santander where the tables give Celta Vigo
+FAIL 1 cup: participant Real Madrid (now) seed 1 at s1-rollover: euroCupOf says Racing Santander of spain, the final was won by Celta Vigo of spain
+FAIL 1 field: participant Real Madrid (now) seed 2 at s1-rollover: the field is not the rule's
+FAIL 1 via: participant Real Madrid (now) seed 2 at s1-rollover: a route is not the rule's
+FAIL 1 rule: participant Real Madrid (now) seed 2 at s1-rollover: route C is Rayo Vallecano where the tables give nobody
+FAIL 1 cup: participant Real Madrid (now) seed 2 at s1-rollover: euroCupOf says Rayo Vallecano of spain, the final was won by Real Madrid of spain
+FAIL 1 via: participant Real Madrid (now) seed 3 at s1-rollover: a route is not the rule's
+FAIL 1 rule: participant Real Madrid (now) seed 3 at s1-rollover: route C is nobody where the tables give Racing Santander
+FAIL 1 cup: participant Real Madrid (now) seed 3 at s1-rollover: euroCupOf says Real Madrid of spain, the final was won by Racing Santander of spain
+FAIL 1 via: participant Real Madrid (now) seed 4 at s1-rollover: a route is not the rule's
+FAIL 1 rule: participant Real Madrid (now) seed 4 at s1-rollover: route C is Levante where the tables give nobody
+FAIL 1 cup: participant Real Madrid (now) seed 4 at s1-rollover: euroCupOf says Levante of spain, the final was won by Barcelona of spain
+FAIL 1 cup: participant Real Madrid (now) seed 5 at s1-rollover: euroCupOf says Celta Vigo of spain, the final was won by Real Madrid of spain
+FAIL 1 cup: participant Arsenal (now) seed 1 at s1-rollover: euroCupOf says Arsenal of england, the final was won by Liverpool of england
+FAIL 1 field: participant Arsenal (now) seed 2 at s1-rollover: the field is not the rule's
+FAIL 1 via: participant Arsenal (now) seed 2 at s1-rollover: a route is not the rule's
+FAIL 1 rule: participant Arsenal (now) seed 2 at s1-rollover: route C is Bournemouth where the tables give nobody
+FAIL 1 cup: participant Arsenal (now) seed 2 at s1-rollover: euroCupOf says Bournemouth of england, the final was won by Arsenal of england
+FAIL 1 via: participant Arsenal (now) seed 3 at s1-rollover: a route is not the rule's
+FAIL 1 earned: participant Arsenal (now) seed 3 at s1-rollover: the slice says C, the rule none
+FAIL 1 rule: participant Arsenal (now) seed 3 at s1-rollover: route C is nobody where the tables give Bournemouth
+FAIL 1 cup: participant Arsenal (now) seed 3 at s1-rollover: euroCupOf says Arsenal of england, the final was won by Bournemouth of england
+FAIL 1 cup: participant Arsenal (now) seed 4 at s1-rollover: euroCupOf says Chelsea of england, the final was won by Arsenal of england
+FAIL 1 cup: participant Arsenal (now) seed 5 at s1-rollover: euroCupOf says Manchester City of england, the final was won by Arsenal of england
+FAIL 1 field: watcher Chelsea (now) seed 1 at s1-rollover: the field is not the rule's
+FAIL 1 via: watcher Chelsea (now) seed 1 at s1-rollover: a route is not the rule's
+FAIL 1 rule: watcher Chelsea (now) seed 1 at s1-rollover: route C is Augsburg where the tables give nobody
+FAIL 1 cup: watcher Chelsea (now) seed 1 at s1-rollover: euroCupOf says Augsburg of germany, the final was won by Stuttgart of germany
+FAIL 1 field: watcher Chelsea (now) seed 1 at s2-rollover: the field is not the rule's
+FAIL 1 via: watcher Chelsea (now) seed 1 at s2-rollover: a route is not the rule's
+FAIL 1 earned: watcher Chelsea (now) seed 1 at s2-rollover: the slice says C, the rule none
+FAIL 1 rule: watcher Chelsea (now) seed 1 at s2-rollover: route C is nobody where the tables give Mainz
+FAIL 1 cup: watcher Chelsea (now) seed 1 at s2-rollover: euroCupOf says Werder Bremen of germany, the final was won by Mainz of germany
+FAIL 1 cup: watcher Chelsea (now) seed 2 at s1-rollover: euroCupOf says AZ Alkmaar of netherlands, the final was won by PSV of netherlands
+FAIL 1 field: watcher Chelsea (now) seed 2 at s2-rollover: the field is not the rule's
+FAIL 1 via: watcher Chelsea (now) seed 2 at s2-rollover: a route is not the rule's
+FAIL 1 rule: watcher Chelsea (now) seed 2 at s2-rollover: route C is Sparta Rotterdam where the tables give Feyenoord
+FAIL 1 cup: watcher Chelsea (now) seed 2 at s2-rollover: euroCupOf says Sparta Rotterdam of netherlands, the final was won by Feyenoord of netherlands
+simWorldEuro: control cuploser FIRED (170 failures, all its own)
