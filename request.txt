@@ -1,0 +1,7 @@
+# Release BK fix (fix-BK.md) fx4: rc-BEb's playDepth line exactly as that file sends it (with its header lines, its headsha and fonts lines above it, and its extra prepInstalled.mjs), on the fixed head. Send with: rcg.sh rBK-fx4 rc-fx4.txt prepInstalled.mjs
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -2
+fonts: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1
+playDepth: mkdir -p /tmp/ddb && gh run download 38329792123 -n manager-decision-depth-38329792123 -D /tmp/ddb && B=$(find /tmp/ddb -path '*baseline/report.json' | head -1) && MANAGER_DECISION_DEPTH_BASELINE_REPORT="$B" MANAGER_DECISION_DEPTH_OUT="$PWD/mdd" MANAGER_DECISION_DEPTH_PHASE=fixed NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playClubManagerDecisionDepth.mjs
