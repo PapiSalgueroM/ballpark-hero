@@ -16,6 +16,9 @@ assert(out && path.isAbsolute(out) && fs.existsSync(out), 'Existing absolute out
 assert(!path.relative(process.cwd(), out).split(path.sep).every(part => part !== '..'), 'Evidence stays outside checkout');
 assert(process.env.NODE_OPTIONS?.includes('offlineTransport.cjs'), 'Offline preload inherited');
 assert.equal(process.versions.node.split('.')[0], '24');
+const controlDir = path.resolve('src/test/__appearanceSelectionControls');
+assert(!fs.existsSync(controlDir), 'Exclusive temporary control folder is initially absent');
+const ownedCopies = [];
 const sha = body => createHash('sha256').update(body).digest('hex');
 const clean = value => value.replace(/\x1b\[[0-9;]*m/g, '');
 const original = execFileSync('git', ['show', `${base}:${component}`], { encoding: 'utf8' });
@@ -59,9 +62,12 @@ function run(name, input, file, faults = [], total = 40) {
   const env = { ...process.env, APPEARANCE_SELECTION_RAW: file === fixture ? raw : '', SIM_OFFLINE_RECEIPT: path.join(out, `${name}.transport`) };
   delete env.NO_DOUBLE_SWAP;
   if (input !== null) {
-    const redirect = path.join(out, `${name}.component.tsx`);
+    if (ownedCopies.length === 0) fs.mkdirSync(controlDir);
+    const redirect = path.join(controlDir, `${name}.component.tsx`);
     const copied = replaceOnce(input, 'from "./PlayerAvatar"', 'from "@/components/soccer-career/PlayerAvatar"');
     fs.writeFileSync(redirect, copied, { flag: 'wx' });
+    ownedCopies.push({ file: redirect, body: copied });
+    write(`${name}.component.tsx`, copied);
     env.NO_DOUBLE_SWAP = JSON.stringify({ '@/components/soccer-career/AppearanceBuilder': redirect });
   }
   const args = ['node_modules/vitest/vitest.mjs', 'run', file, '--maxWorkers=1', '--no-file-parallelism', '--reporter=json', `--outputFile=${report}`];
@@ -80,6 +86,7 @@ function run(name, input, file, faults = [], total = 40) {
   assert.equal(json.numPendingTests, 0, `${name} no skipped cases`);
   assert.equal(json.numTodoTests, 0, `${name} no todo cases`);
   assert.equal(json.testResults.length, 1, `${name} one actual test file`);
+  assert.equal(json.testResults[0].message, '', `${name} no suite setup failure`);
   if (json.numRuntimeErrorTestSuites !== undefined) assert.equal(json.numRuntimeErrorTestSuites, 0, `${name} no runtime errors`);
   if (json.unhandledErrors !== undefined) assert.deepEqual(json.unhandledErrors, [], `${name} no unhandled errors`);
   assert.equal(json.success, faults.length === 0, `${name} overall test result`);
@@ -146,5 +153,15 @@ try {
   manifest.status = 'failed'; manifest.error = String(error.stack || error); throw error;
 } finally {
   assert.equal(fs.readFileSync(component, 'utf8'), source, 'Final actual component held');
+  if (ownedCopies.length) {
+    assert.deepEqual(fs.readdirSync(controlDir).sort(), ownedCopies.map(copy => path.basename(copy.file)).sort(), 'Only owned temporary controls exist');
+    for (const copy of ownedCopies) {
+      assert.equal(fs.readFileSync(copy.file, 'utf8'), copy.body, 'Only exact owned temporary bodies are removed');
+      fs.unlinkSync(copy.file);
+    }
+    fs.rmdirSync(controlDir);
+  }
+  assert(!fs.existsSync(controlDir), 'Exclusive temporary controls are absent after proof');
+  manifest.temporaryControlsRemoved = true;
   write('proof.json', JSON.stringify(manifest, null, 2) + '\n');
 }
