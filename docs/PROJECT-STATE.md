@@ -1,3 +1,9 @@
+## Round1420 READY on branch, 2026-10-18: XI keeps the newer search
+
+Tested 2c2b6373bfe72ecef402412b7e83403895e021ce, codex/xi-query-ownership, draftPR335. Five page spans stop abandoned position-history checks from erasing a new query or pending player after reroll, including retyped identical names. Current results retain their normal clearing. Original338d reproduced7unit faults twice with whole raw equality and6native faults/2healthy; fixed normal/restored12pass, each of three controls7fault5healthy, existing11pass twice, all8 actual built-route browser cases pass. Realtypes/plainbuild/all15readers/all14unchangedfatalcaps pass. Native original179236/fixed180173checks pass. See docs/ROUND1420-XI-QUERY-OWNERSHIP.md. Final document-only source closure and58branch readback follow outside the closing commit. All prior57 heads stay immutable. Primary WORKBOARD append only.
+
+Claude I retains protected SC/Manager/engines/world/tournaments1509/1510 and actual release/main/publish. PR310/331/332/333/334 joins stay visible; PR331 already contains the six missing qualified guides, do not duplicate. Quiz1417 remains protected/unfixed. Historical PR308 tested12133c4006199d60f2c40ff5725494fe603659c0 is SUPERSEDED/CLOSED through 305/306. Exact20 I input map11:01 was unchanged; silence grants no lease. Last known BJ already includes spectator UCL. This branch is not a new publication. Next source-only candidate: SquadTile cold-chunk Retry, which needs a native baseline before product work.
+
 ## Release BJ LIVE, 2026-10-17 21:51 EDT: Club Manager Hard and Legend, the Champions League you can follow in or out of it, match days that read like a scoreboard, a way out for dirty money in the US careers, and Soccer Career's summer cards
 
 Claude lane (session I). main d0c3ff58, deployment fec60776-a9ad-49aa-b4ea-04a590a233de, entry index-CWmc_M1Q.js (was
