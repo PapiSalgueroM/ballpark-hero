@@ -281,6 +281,21 @@
  * as before; 18 of 19 fixed saves a sport moved (rookie, saved before any
  * season, did not) and 19 of 19 screen walks; 2,298,730 bytes. Section A's
  * counts are the ones above, the four named saves and MLB's raised push kept.
+ * Release BK (2026-10-18) re-recorded it on purpose for the other lane's PR333
+ * (the appearance builder's buttons now say which one is chosen, with
+ * aria-pressed), which every US board shows on its create screen. Proof
+ * first: the release tree without PR333's merge (treeWithoutMerge 99154ea3
+ * 52419816) replays the Round 1313 recording green in all four sports
+ * (rBK-tr1 parity-no333). Then recorded twice on a GitHub runner from the
+ * branch head ff7d97ca, byte for byte the same (rBK-tr1 record). New against
+ * old, in each sport alike: only the markup hash of the 17 path steps that
+ * stand on the create screen moved (the first career's nine, the second
+ * career's seven and the last step, the screen the final restart opens; in
+ * the NFL steps 0 to 8, 301 to 307 and 474), and the create screen's first
+ * paint grew by 376 characters; every click, save hash, field, text excerpt,
+ * length, coverage count, fixed save and screen walk is the same, compared
+ * step for step over all 5,518 (68 moved, each in its markup hash alone).
+ * 2,298,731 bytes.
  *
  * Controls, one per run (each is a full replay, about three minutes):
  *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared
