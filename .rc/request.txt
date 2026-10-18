@@ -1,0 +1,4 @@
+helpA: mkdir -p /tmp/hA && export TEMP=/tmp/hA TMP=/tmp/hA TMPDIR=/tmp/hA && bash .rc/x/readers.sh simCmDifficulty simClubManagerMeters simClubManagerBudget
+helpB: mkdir -p /tmp/hB && export TEMP=/tmp/hB TMP=/tmp/hB TMPDIR=/tmp/hB && bash .rc/x/readers.sh simClubManagerALeague simCmLeagueFixtures simCmVarLedger
+helpC: mkdir -p /tmp/hC && export TEMP=/tmp/hC TMP=/tmp/hC TMPDIR=/tmp/hC && bash .rc/x/readers.sh simEras
+helpD: mkdir -p /tmp/hD && export TEMP=/tmp/hD TMP=/tmp/hD TMPDIR=/tmp/hD && bash .rc/x/readers.sh simPress simRoles simWilderness simTrustCopy
