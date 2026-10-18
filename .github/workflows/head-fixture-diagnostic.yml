@@ -1,4 +1,4 @@
-name: HEAD fixture observations only
+name: HEAD fixture WebKit observations only
 on:
   push:
     branches: [codex/tennis-chain-score-ownership]
@@ -39,7 +39,7 @@ jobs:
           NODE_OPTIONS='' npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
           test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
           ln -s "$browser_tools/node_modules/playwright" node_modules/playwright; ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
-          NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps webkit > "$out/webkit-install.log" 2>&1
           echo "HEAD_FIXTURE_BROWSER_TOOLS=$browser_tools" >> "$GITHUB_ENV"
       - name: Thirty synthetic protocol and consumer observations
         run: |
@@ -53,7 +53,7 @@ jobs:
           import { createHash } from 'node:crypto';
           import { createRequire } from 'node:module';
           import { execFileSync } from 'node:child_process';
-          import { chromium } from './scripts/lib/playwrightLoader.mjs';
+          import { webkit } from './scripts/lib/playwrightLoader.mjs';
           const require = createRequire(import.meta.url), out = process.env.HEAD_FIXTURE_OUT;
           assert(require.cache[require.resolve('./scripts/lib/offlineTransport.cjs')]);
           assert(process.env.CI === '1' && process.env.SIM_NETWORK === 'offline');
@@ -78,7 +78,7 @@ jobs:
           fs.writeFileSync(path.join(out, 'source-before.json'), JSON.stringify({ source, frozen }, null, 2));
           fs.writeFileSync(path.join(out, 'dependencies-before.json'), JSON.stringify(dependencies, null, 2));
           assert.equal(JSON.parse(fs.readFileSync('node_modules/playwright/package.json')).version, '1.64.0');
-          const browserMetadata = JSON.parse(fs.readFileSync('node_modules/playwright-core/browsers.json')).browsers.find(row => row.name === 'chromium');
+          const browserMetadata = JSON.parse(fs.readFileSync('node_modules/playwright-core/browsers.json')).browsers.find(row => row.name === 'webkit');
           const base = 'http://127.0.0.1:4173', cross = 'https://fixture.invalid';
           const cors = { 'access-control-allow-origin': '*', 'access-control-allow-methods': 'GET,HEAD,OPTIONS', 'access-control-allow-headers': 'prefer', 'access-control-expose-headers': 'content-range' };
           const metadata = { ...cors, 'content-type': 'application/json', 'content-range': '0-0/6' };
@@ -94,7 +94,7 @@ jobs:
           const report = { version: 1, disposition: 'OBSERVATIONS_ONLY', productQualified: false, originalQualified: false,
             scope: 'Synthetic HTTP fixture/consumer matrix only. Every document/API request locally fulfilled under the unmodified ordinary offline guard. Request failures are retained observations, never transport passes. Text reading is diagnostic only. No product or original proof qualification.',
             sourceBasis: ['https://fetch.spec.whatwg.org/#garbage-collection', 'https://raw.githubusercontent.com/supabase/supabase-js/v2.95.3/packages/core/postgrest-js/src/PostgrestBuilder.ts'],
-            head: git(['rev-parse', 'HEAD']).toString().trim(), frozen, playwright: '1.64.0', browserMetadata, expectedContexts: 30,
+            head: git(['rev-parse', 'HEAD']).toString().trim(), frozen, playwright: '1.64.0', engine: 'webkit', browserMetadata, expectedContexts: 30,
             census: specs.map(({ id, repeat, fixture, consumer }) => ({ id, repeat, fixture: fixture.name, consumer })), cases: [], collectionComplete: false };
           const save = () => fs.writeFileSync(path.join(out, 'observations.json'), JSON.stringify(report, null, 2));
           const wall = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -105,8 +105,8 @@ jobs:
             finally { clearTimeout(timer); }
           };
           const prepared = async (label, work) => { const result = await bounded(label, work, 5000); assert(result.completed, result.error || label); return result.value; };
-          const browser = await chromium.launch({ headless: true, timeout: 30000 }); report.browserVersion = browser.version();
-          assert.equal(report.browserVersion, browserMetadata.browserVersion, 'Same pinned Chromium as original workflow');
+          const browser = await webkit.launch({ headless: true, timeout: 30000 }); report.browserVersion = browser.version();
+          assert.equal(report.browserVersion, browserMetadata.browserVersion, 'Exact pinned WebKit metadata version');
           try {
             for (const spec of specs) {
               const row = { id: spec.id, repeat: spec.repeat, consumer: spec.consumer, fixture: { ...spec.fixture, status: 200, bodyBytes: Buffer.byteLength(spec.fixture.body), bodySha256: hash(spec.fixture.body), correspondingGetRepresentation: '[]' },
@@ -189,7 +189,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: head-fixture-observations-${{ github.sha }}
+          name: head-fixture-webkit-observations-${{ github.sha }}
           path: ${{ env.HEAD_FIXTURE_OUT }}/
           if-no-files-found: error
           retention-days: 14
