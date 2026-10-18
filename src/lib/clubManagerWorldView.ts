@@ -498,7 +498,9 @@ export interface SuperCupView {
   era: boolean;
 }
 
-const SETTLED_BEFORE = "Your club's place was settled before you arrived. Your first super cup is next summer.";
+/* The critic's correction 8 words, its second sentence made true (fix-1510 minors 6 and 13): a place next summer is
+   earned, never promised, as the help says. */
+const SETTLED_BEFORE = "Your club's place was settled before you arrived. Your first super cup is the next one your club earns, from next summer.";
 const STUB_WORDS: Record<OneOffSkip, (name: string) => string> = {
   seasonOne: () => SETTLED_BEFORE,
   joined: () => SETTLED_BEFORE,
