@@ -29,7 +29,7 @@ const fontRoot = process.env.FREE_KICK_FONT_CACHE; assert(fontRoot && path.isAbs
 const fonts = new Map(JSON.parse(fs.readFileSync(path.join(fontRoot, 'manifest.json'))).map(row => {
   const body = fs.readFileSync(path.join(fontRoot, row.file)); assert.equal(hash(body), row.sha256, row.url); return [row.url, { body, contentType: row.contentType }];
 }));
-const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': 'authorization,apikey,content-type,x-client-info', 'access-control-allow-methods': 'GET,HEAD,POST,OPTIONS', 'access-control-expose-headers': 'content-range' };
+const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': 'authorization, apikey, content-type, x-client-info', 'access-control-allow-methods': 'GET, HEAD, POST, OPTIONS', 'access-control-expose-headers': 'content-range' };
 const emptyImage = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aV0sAAAAASUVORK5CYII=', 'base64');
 const oldRow = { nickname: 'Fixture Alpha', score: 100, chain_length: 1, mode: 'unlimited' };
 const newRow = { nickname: 'Fixture Beta', score: 0, chain_length: 0, mode: 'unlimited' };
