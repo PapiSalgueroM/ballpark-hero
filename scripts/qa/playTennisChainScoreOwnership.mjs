@@ -52,7 +52,7 @@ try {
     const row = { ...spec, status: 'failed', originalFault: false, healthy: false, actions: [], requests: [], scoreRequests: [], rankRequests: [], completions: [], validators: [], searchFixtures: [], readFixtures: [], externalFulfilled: [], unexpectedWrites: [], errors: [], expectedHttpErrors: [], assets: [], observations: [], storeHolds: [], screenshots: [] };
     report.cases.push(row);
     const context = await browser.newContext({ viewport: { width, height: 844 }, deviceScaleFactor: 1, isMobile: width === 390, hasTouch: width === 390, locale: 'en-US', timezoneId: 'UTC', reducedMotion: 'reduce', serviceWorkers: 'block', storageState: { cookies: [], origins: [{ origin: base, localStorage: [{ name: 'cookie-consent', value: 'essential' }, { name: 'rules-gate-seen:' + routePath, value: '1' }, { name: 'dukb-guest-handle', value: 'FixtureChainGuest' }, { name: 'tennis-score-held-save', value: '{"held":true}' }] }] } });
-    const held = new Map(), responses = [];
+    const held = new Map(), responses = [], rankByRequest = new Map();
     let page;
     try {
       await context.addInitScript(() => { Math.random = () => 0; });
@@ -89,8 +89,8 @@ try {
             if (method === 'HEAD') {
               const length = url.searchParams.get('chain_length'); assert(['gt.1', 'gt.0'].includes(length));
               const count = scenario === 'normal-error-retry' && row.rankRequests.length === 0 ? null : 6;
-              const captured = { method, url: url.href, chainLength: Number(length.slice(3)), count, intercepted: true, fulfilled: false }; row.rankRequests.push(captured);
-              const finish = () => route.fulfill({ status: 200, headers: { ...cors, ...(count === null ? {} : { 'content-range': '0-0/' + count }) }, body: '' });
+              const captured = { method, url: url.href, chainLength: Number(length.slice(3)), count, intercepted: true, fulfilled: false, responses: [], terminals: [] }; row.rankRequests.push(captured); rankByRequest.set(request, captured);
+              const finish = () => route.fulfill({ status: 200, headers: { ...cors, 'content-type': 'application/json', 'content-length': '0', ...(count === null ? {} : { 'content-range': '0-0/' + count }) }, body: '' });
               if (!scenario.startsWith('normal-') && scenario.endsWith('rank') && row.rankRequests.length === 1) return await hold('old-rank', captured, finish);
               await finish(); captured.fulfilled = true; return;
             }
@@ -116,13 +116,16 @@ try {
       await context.routeWebSocket('**/*', socket => socket.close());
       page = await context.newPage(); page.setDefaultTimeout(15000);
       page.on('pageerror', error => row.errors.push('Page: ' + error.message));
-      page.on('requestfailed', request => row.errors.push('Request: ' + request.url() + ' ' + JSON.stringify(request.failure())));
+      page.on('requestfinished', request => { const rank = rankByRequest.get(request); if (rank) rank.terminals.push({ event: 'requestfinished', failure: request.failure() }); });
+      page.on('requestfailed', request => { const rank = rankByRequest.get(request); if (rank) rank.terminals.push({ event: 'requestfailed', failure: request.failure() }); row.errors.push('Request: ' + request.url() + ' ' + JSON.stringify(request.failure())); });
       page.on('console', message => {
         if (message.type() !== 'error') return;
         if (scenario === 'normal-error-retry' && message.location().url.startsWith(api + '/rest/v1/tennis_chain_scores') && /^Failed to load resource: the server responded with a status of 400/.test(message.text())) row.expectedHttpErrors.push({ text: message.text(), url: message.location().url });
         else row.errors.push('Console: ' + message.text());
       });
       page.on('response', response => {
+        const rank = rankByRequest.get(response.request());
+        if (rank) { rank.responses.push({ status: response.status(), headers: response.headers() }); return; }
         if (new URL(response.url()).origin !== base) return;
         responses.push((async () => {
           assert.equal(response.status(), 200, response.url()); const body = await response.body(), pathname = new URL(response.url()).pathname;
@@ -229,6 +232,11 @@ try {
       assert.equal(held.size, 0, 'No score IO remains held'); assert(row.scoreRequests.every(request => request.intercepted && request.fulfilled)); assert(row.rankRequests.every(request => request.intercepted && request.fulfilled));
       assert.deepEqual(row.completions.map(request => request.body.score), [100, 0], 'Actual completions retain both distinct round scores');
       if (!scenario.startsWith('normal-')) assert.deepEqual(row.rankRequests.map(request => request.chainLength), mode === 'fixed' && scenario.startsWith('overlap-') ? [1, 0] : [1]);
+      await poll('every rank request terminal event', async () => row.rankRequests.every(request => request.terminals.length > 0), Boolean);
+      for (const request of row.rankRequests) {
+        assert.deepEqual(request.responses, [{ status: 200, headers: { ...cors, 'content-type': 'application/json', 'content-length': '0', ...(request.count === null ? {} : { 'content-range': '0-0/' + request.count }) } }], 'Exact locally fulfilled HEAD status and response headers');
+        assert.deepEqual(request.terminals, [{ event: 'requestfinished', failure: null }], 'Rank HEAD finishes without failure before context close');
+      }
       await Promise.all(responses); assert(row.assets.length > 5 && row.assets.some(asset => [routePath, routePath + '/'].includes(asset.path)), 'Actual route document and application loaded');
       assert.deepEqual(row.errors, []); assert.deepEqual(row.unexpectedWrites, []);
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Route fits declared viewport'); row.status = 'passed';
