@@ -22320,7 +22320,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      hands its place back to the club it replaced, as the Champions League's field does. */
   {
     const exit = (c: string | null): string | null => (c && moving ? customExitUclField(career, [c])[0] : c);
-    const tables = { table: oneOffFrom.table && moving ? customExitUclField(career, oneOffFrom.table) : oneOffFrom.table, cupWinner: exit(oneOffFrom.cupWinner), cupRunnerUp: exit(oneOffFrom.cupRunnerUp) };
+    const tables = { table: oneOffFrom.table && moving ? customExitUclField(career, [...oneOffFrom.table]) : oneOffFrom.table, cupWinner: exit(oneOffFrom.cupWinner), cupRunnerUp: exit(oneOffFrom.cupRunnerUp) };
     openOneOff(state, oneOffFrom.nation === oneOffNationOf(state) ? { tables, seasonOne: false } : { tables: null, seasonOne: false, skip: 'moved' });
   }
   /* Round 978: the new season's international windows. An older save gets its

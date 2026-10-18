@@ -27,7 +27,8 @@
  *      before the rollover (the double rule and its mark, a move abroad 'moved', an unfinished season, no final);
  *      every finished cup one winner, extra time only on an 'et' row, penalties only after a level match.
  *   2  the calendar and the books of a participant (the season's cup handed to my club at the read, so every
- *      season two is mine): its nights are the row's at the one placer's slots, `{ oneOff, dsc, n }` in order; with
+ *      season two is mine), its first season with nights held to its twin (from that night the two arms part):
+ *      its nights are the row's at the one placer's slots, `{ oneOff, dsc, n }` in order; with
  *      them taken out the calendar is its twin's (the same engine with the insertion off) entry for entry, and every
  *      other entry's DATE is the twin's; dates rise, a night three days or more from its neighbours, at most three
  *      matches in seven days to it; the season charges the twin's number of wage weeks; the summer window closes
@@ -593,7 +594,7 @@ async function calendarSection() {
                 const dates = M.cal.entryDatesOf(s);
                 out.after.push({ season: s.season, cal: s.calendar, dates: dates.map(iso), plan: !!M.cal.seasonPlanOf(s), dsc: s.worldComps?.dsc ?? null, mine: s.clubName });
                 out.predicted.push({ season: s.season, w: M.cal.windowSpans(s).find(w => w.kind === 'summer')?.deadlineWeek ?? null });
-                out.fit0 = fitOf(s);
+                if (out.fit0 === null) out.fit0 = fitOf(s);
               }
             },
           } };
@@ -602,6 +603,7 @@ async function calendarSection() {
         await journey(head, f, seed, mode, a.hooks);
         const b = pick();
         await journey(twin, f, seed, mode, b.hooks);
+        let firstNight = null;
         for (let i = 0; i < a.out.after.length; i += 1) {
           const x = a.out.after[i], y = b.out.after[i];
           if (!y) { ok(false, `2 ${tag}: the twin has no season ${x.season}`); continue; }
@@ -610,6 +612,10 @@ async function calendarSection() {
           const mine = x.dsc && !x.dsc.skip && x.dsc.clubs?.includes(x.mine);
           ok(!mine === (idx.length === 0), `2 nights: ${tag} season ${x.season}: ${idx.length} nights on the calendar of a club ${mine ? 'in' : 'not in'} its super cup`);
           if (!mine) continue;
+          /* Only the first season with nights is held to the twin: from its first night the two arms part (the week
+             keyed events above, and so a different season), so a later season is a different season, not a comparison. */
+          if (firstNight !== null) { bump('2 later participant seasons (not held to the twin: the arms have parted)'); continue; }
+          firstNight = x.season;
           nights += idx.length;
           const rowT = W.o.oneOffRowById(x.dsc.row);
           const want = W.n.placeNights(y.cal, y.dates.map(d => { const [yy, mm, dd] = d.split('-').map(Number); return { y: yy, m: mm, d: dd }; }), W.o.oneOffNightsOf(rowT));
@@ -635,9 +641,12 @@ async function calendarSection() {
            wages themselves are printed, not asserted: the staff desk's and the scouts' weekly events are keyed on
            the week index, which a night before them moves by one, so a poach can land a week apart (measured on
            the first smoke, Chelsea season two: staff wages 7.952 against 8.084, weeks 54 and 54). */
-        ok(same(a.out.end.map(e => [e.season, e.weeks]), b.out.end.map(e => [e.season, e.weeks])), `2 books: ${tag}: the season charged ${a.out.end.map(e => e.weeks).join(' ')} weeks, the twin with no nights ${b.out.end.map(e => e.weeks).join(' ')}`);
+        const upTo = e => firstNight === null || e.season <= firstNight;
+        const wk = list => list.filter(upTo).map(e => [e.season, e.weeks]);
+        ok(same(wk(a.out.end), wk(b.out.end)), `2 books: ${tag}: the season charged ${wk(a.out.end).map(e => e[1]).join(' ')} weeks, the twin with no nights ${wk(b.out.end).map(e => e[1]).join(' ')}`);
         if (!same(a.out.end, b.out.end)) bump('2 participant journeys whose wages differ from the twin by a week keyed event (printed, not asserted)');
-        ok(same(a.out.closes, b.out.closes), `2 window: ${tag}: the summer window closes after ${a.out.closes.join(' ')}, the twin after ${b.out.closes.join(' ')}`);
+        const cl = list => list.filter(c => firstNight === null || Number(c.split(':')[0]) <= firstNight);
+        ok(same(cl(a.out.closes), cl(b.out.closes)), `2 window: ${tag}: the summer window closes after ${cl(a.out.closes).join(' ')}, the twin after ${cl(b.out.closes).join(' ')}`);
         /* The deadline the calendar draws (windowSpans, over myMatchWeeks) is the match the engine closes it on. */
         for (const p of a.out.predicted) {
           const act = a.out.actual.find(x => x.season === p.season);
