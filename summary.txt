@@ -1,0 +1,3 @@
+readers1 exit=0 407s | readers: 11 run, 0 red on this tree and not as on main
+readers3 exit=1 737s | readers: 10 run, 1 red on this tree and not as on main
+readers2 exit=1 2767s | readers: 11 run, 2 red on this tree and not as on main

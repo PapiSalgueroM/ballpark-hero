@@ -1,0 +1,11 @@
+simFreeAgents: head exit 0 | simFreeAgents: all sections passed
+simManagerCustomPromotion: head exit 0 | PASS all five actual save/load summers: identical outcomes and RNG draws; source bytes held
+simManagerSpec: head exit 0 | simManagerSpec: all green
+simTacticsEngine: head exit 0 | simTacticsEngine: PASS. A man is read in his slot, a second position is earned over counted weeks, the armband and the takers reach the stream, a duty moves the
+simTycoonLeague: head exit 0 |    Every older save lands in the division it had earned, no club that can compete is walled in, and all ten controls fired.
+simSaveKeeper: head exit 0 | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simClubManagerFinances: head exit 0 | simClubManagerFinances: PASS. The books add up, the projection lands, prices move the fans and the board, and the sponsor desk pays what it says.
+simCmCopy: head exit 0 | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simStatsCentre: head exit 0 | ALL STATS CENTRE CHECKS PASSED
+simCmLeagueRules: head exit 1 | main exit 0 | MINE | head: simCmLeagueRules: 27 failure(s) | main: simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+readers: 10 run, 1 red on this tree and not as on main

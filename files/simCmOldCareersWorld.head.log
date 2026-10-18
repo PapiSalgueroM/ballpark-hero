@@ -1,0 +1,18 @@
+simCmOldCareersWorld: BASE 77556430, sections 1, 2
+  fixture pre: 1 tape(s) passed over (tape 0: the next season ended (or the manager was sacked) before its January window (season 2 week 27 of 54, match, sacked true, wilderness false, board 0))
+  FAIL section 1: [equal] pre (Arsenal, now) before the summer, at step 0 load: the state differs
+  pre (Arsenal, now): 20 steps equal to BASE before the summer, 31 after it
+  mid (Bayern Munich, era2015): 18 steps equal to BASE before the summer, 29 after it
+section 1: 2 old saves, 19 steps equal to BASE before the summer, 60 steps after it at 8 checkpoints; deals between two other clubs placed at their buyers: 9 in the summer, 12 in January (60 placements checked); 60 joined rows on the screen; red by check {"equal":1}
+  pre: 1427 bytes of ledger after January (16 records)
+  pre: the adoption adds 55 bytes to the state (an empty ledger)
+  mid: 1534 bytes of ledger after January (17 records)
+  mid: the adoption adds 59 bytes to the state (an empty ledger)
+  FAIL section 2: Real Madrid (now, seed 1): saved string 1 of 7 differs from BASE's (the head saved 7 times)
+  FAIL section 2: Real Madrid (now, seed 2): saved string 1 of 7 differs from BASE's (the head saved 7 times)
+  FAIL section 2: Everton (now, seed 1): saved string 1 of 6 differs from BASE's (the head saved 6 times)
+  FAIL section 2: Everton (now, seed 2): saved string 1 of 7 differs from BASE's (the head saved 7 times)
+  FAIL section 2: Aberdeen (now, seed 1): saved string 1 of 6 differs from BASE's (the head saved 6 times)
+  FAIL section 2: Aberdeen (now, seed 2): saved string 1 of 6 differs from BASE's (the head saved 6 times)
+section 2: 18 seeded careers, 111 saves, 929325 draws, 30 January windows and 48 deals of mine on the head, 6 red
+simCmOldCareersWorld: RED, 7 failure(s) (section 1 1, section 2 6) (81s)

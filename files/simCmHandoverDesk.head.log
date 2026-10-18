@@ -1,0 +1,468 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Complete calendar differs from bound base only at the two clearing fields
++ actual - expected
+... Skipped lines
+
+  '/**\n' +
+    ' * Round 466: the calendar you can click.\n' +
+    ' *\n' +
+    ' * His words (docs/TWEAKS-2026-08-28.md): "Calendar: click any day and sim to\n' +
+    ' * it (keep the four fast forwards), bigger emojis, match days name the\n' +
+...
+    '  playNextEntry, fixtureFor, entryInvolvesMe, careerLeagueOf, leagueRulesOf, CUP_LABELS, UCL_LABELS,\n' +
++   '  cupProgressRank, uclProgressRank, objectiveStatuses, openObjectives,\n' +
+-   '  cupProgressRank, uclProgressRank, objectiveStatuses,\n' +
+    '  /* Round 783: the mid season takeover an accepted application walks into. */\n' +
++   '  startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, livingWorldOf, customExitUclField, SAVE_CAPS,\n' +
++   "  /* Round 1335: the old season rules' switch, read by both handovers. */\n" +
++   '  legacySeason,\n' +
++   '  /* Round 1502: the watched Champions League across a move, and where its nights sit. */\n' +
++   '  carryWorldUcl, carryWorldComp, worldCompNights,\n' +
+-   '  startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, customExitUclField,\n' +
+    "} from '@/lib/clubManager';\n" +
++   "import type { WorldCompKey } from '@/lib/worldCompetition';\n" +
+    "import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';\n" +
++   "import { BOARD_FRESH, LEGACY_BOARD_START, LEGACY_NEW_JOB_BOARD } from '@/lib/clubManagerBoardVerdict';\n" +
++   "import { applyNewJobDials } from '@/lib/clubManagerDifficulty';\n" +
+    "import type { CmVarAsk } from '@/lib/clubManagerVar';\n" +
+    "import { CM_BASE_YEAR, DEFAULT_ERA_ID, eraById, isHistoricEra } from '@/lib/clubManagerEras';\n" +
+    "import { closeOnJoiningNow, jobHuntOf, leavingLine } from '@/lib/clubManagerJobHunt';\n" +
+    "import { plainCopy, snapshotWorldRosterClub, worldRosterView } from '@/lib/clubManagerWorldRoster';\n" +
+    '\n' +
+...
+    '\n' +
+-   "/** The opening Saturday of the save's current season. */\n" +
+-   "export function kickoffOf(state: Pick<CareerState, 'startYear' | 'season' | 'eraId' | 'clubName' | 'customClub'>): CalDate {\n" +
+-   '  return seasonPlanOf(state)?.kickoff ?? seasonKickoff(worldYearOf(state));\n' +
+-   '}\n' +
+-   '\n' +
+    '/**\n' +
++   ' * Round 1502: the date of every night of the watched Champions League this\n' +
++   " * season, on the save's own calendar (the game's dates, never the real ones).\n" +
++   " * A night that is a calendar week of its own (a European midweek, an era's\n" +
++   " * knockout leg) takes that week's date; a league phase night that follows a\n" +
++   " * league round is the Wednesday after it (the round's date plus four, the\n" +
++   ' * midweek rule above), and one past the last league round goes a week at a\n' +
++   " * time after the last round's Wednesday. Null when the save watches nothing.\n" +
++   " * Round 1509: keyed. The Europa League's nights are the Thursday of the same\n" +
++   ' * weeks, so each is the day after the date this rule gives.\n' +
++   ' */\n' +
++   'export function worldCompNightDates(state: CareerState, comp: WorldCompKey): CalDate[] | null {\n' +
++   '  const places = worldCompNights(state, comp);\n' +
++   '  if (!places) return null;\n' +
++   '  const dates = entryDatesOf(state);\n' +
++   "  const league = state.calendar.flatMap((e, i) => (e.type === 'league' ? [dates[i]] : []));\n" +
++   '  if (!league.length) return null;\n' +
++   "  const thursday = comp === 'uel' ? 1 : 0;\n" +
++   '  return places.map(p => {\n' +
++   '    if (p.entry) return thursday ? addDays(dates[p.at], thursday) : dates[p.at];\n' +
++   '    const last = league.length - 1;\n' +
++   '    return p.round <= last ? addDays(league[p.round], 4 + thursday) : addDays(league[last], 4 + thursday '... 45998 more characters
+-   " * A late season's dates. Drawn from the real opening Saturday, the January\n" +
+-   ' * window entry, which the engine puts after nearly half the league rounds,\n' +
+-   ' * would land weeks into January. The real leagues got through the autumn by\n' +
+-   " * playing league rounds in midweek (football-data.co.uk's files: the big five\n" +
+-   ' * played 9 to 22 midweek league matches each in December 2020 alone), so the\n' +
+-   ' * same happens here: as many rounds as the window is late, the last ones\n' +
+-   ' * before it that qualify, move to the Wednesday between two Saturday rounds,\n' +
+-   ' * which brings the window back to the first Saturday of January. Each of\n' +
+-   ' * those rounds sits between two league rounds (or a league round and the\n' +
+-   ' * window), so it gains exactly one week and never meets a cup or European\n' +
+-   " * night. The engine's mix of cup and European nights leaves few rounds that\n" +
+-   ' * qualify, so the last one before the window lands at the new year (30\n' +
+-   ' * December, or 6 January where the window is a week late) and the others\n' +
+-   ' * fall early: rounds 2 and 5 on 16 and 30\n' +
+-   ' * September for the Premier League and La Liga, 23 September and 7 October\n' +
+-   ' * for Serie A. That is earlier than the real squeeze, which came mostly in\n' +
+-   ' * December: in September 2020 football-data.co.uk has 6 such La Liga\n' +
+-   ' * matches, 4 Ligue 1 and 3 Serie A, and none at all in England or Germany\n' +
+-   " * (Round 1021 review, recounted 2026-10-06), so the Premier League's two\n" +
+-   ' * September Wednesdays here have no real twin. Moving them later would\n' +
+-   " * need a round that sits between two league rounds, and the engine's cup\n"... 39832 more characters
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmHandoverDesk.mjs:39:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '/**\n' +
+    ' * Round 466: the calendar you can click.\n' +
+    ' *\n' +
+    ' * His words (docs/TWEAKS-2026-08-28.md): "Calendar: click any day and sim to\n' +
+    ' * it (keep the four fast forwards), bigger emojis, match days name the\n' +
+    ' * opponent, transfer window open and close clearly marked."\n' +
+    ' *\n' +
+    ' * This module holds the PURE parts of the Club Manager calendar, so the\n' +
+    ' * screen stays a function of the save and a harness can measure all of it\n' +
+    ' * without a browser:\n' +
+    ' *\n' +
+    ' *  - the date maths (moved here from CalendarScreen, where Round 158 wrote\n' +
+    ' *    it): Gregorian helpers with no Date object, the season kickoff, and the\n' +
+    ' *    date of every calendar entry;\n' +
+    ' *  - what a day holds: a match with its opponent, venue and competition, the\n' +
+    ' *    day a transfer window opens, deadline day, a training day or a rest day;\n' +
+    " *  - where the two windows sit on the grid, derived from the engine's own\n" +
+    ' *    rule (a window spans a fixed number of MY match weeks, see\n' +
+    ' *    WINDOW_MATCH_WEEKS) and, once a window has run, from the results the\n' +
+    ' *    save actually recorded;\n' +
+    ' *  - the sim to a day rule, and the one loop that both a tap on a day and\n' +
+    " *    the four fast forwards go through. The loop calls the engine's own\n" +
+    ' *    playNextEntry, entry by entry, and never re-implements a week of it.\n' +
+    ' *\n' +
+    ' * Nothing here mutates a save. Every function takes the state and returns a\n' +
+    ' * new one or a plain description.\n' +
+    ' */\n' +
+    'import {\n' +
+    '  playNextEntry, fixtureFor, entryInvolvesMe, careerLeagueOf, leagueRulesOf, CUP_LABELS, UCL_LABELS,\n' +
+    '  cupProgressRank, uclProgressRank, objectiveStatuses, openObjectives,\n' +
+    '  /* Round 783: the mid season takeover an accepted application walks into. */\n' +
+    '  startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, livingWorldOf, customExitUclField, SAVE_CAPS,\n' +
+    "  /* Round 1335: the old season rules' switch, read by both handovers. */\n" +
+    '  legacySeason,\n' +
+    '  /* Round 1502: the watched Champions League across a move, and where its nights sit. */\n' +
+    '  carryWorldUcl, carryWorldComp, worldCompNights,\n' +
+    "} from '@/lib/clubManager';\n" +
+    "import type { WorldCompKey } from '@/lib/worldCompetition';\n" +
+    "import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';\n" +
+    "import { BOARD_FRESH, LEGACY_BOARD_START, LEGACY_NEW_JOB_BOARD } from '@/lib/clubManagerBoardVerdict';\n" +
+    "import { applyNewJobDials } from '@/lib/clubManagerDifficulty';\n" +
+    "import type { CmVarAsk } from '@/lib/clubManagerVar';\n" +
+    "import { CM_BASE_YEAR, DEFAULT_ERA_ID, eraById, isHistoricEra } from '@/lib/clubManagerEras';\n" +
+    "import { closeOnJoiningNow, jobHuntOf, leavingLine } from '@/lib/clubManagerJobHunt';\n" +
+    "import { plainCopy, snapshotWorldRosterClub, worldRosterView } from '@/lib/clubManagerWorldRoster';\n" +
+    '\n' +
+    '/* ================================================================== */\n' +
+    '/* Dates                                                              */\n' +
+    '/* ================================================================== */\n' +
+    '\n' +
+    '/* Round 946: the pure date helpers (CalDate, dayOfWeek, daysInMonth,\n' +
+    '   addDays, dateKey, daysBetween, MONTH_NAMES, shortDate) live in\n' +
+    '   src/lib/calDate.ts now, shared with the GM calendar. They are re-exported\n' +
+    '   here unchanged, so every import from this module keeps working; the\n' +
+    '   fixture scripts/data/calDateFixture946.json, recorded before the move,\n' +
+    '   proves the calendar built on them did not move a day. */\n' +
+    "import { addDays, dateKey, dayOfWeek, daysBetween, daysInMonth, shortDate } from '@/lib/calDate';\n" +
+    "import type { CalDate } from '@/lib/calDate';\n" +
+    "export { addDays, dateKey, dayOfWeek, daysBetween, daysInMonth, MONTH_NAMES, shortDate } from '@/lib/calDate';\n" +
+    "export type { CalDate } from '@/lib/calDate';\n" +
+    '\n' +
+    '/** The next Saturday strictly after a date. */\n' +
+    'function saturdayAfter(date: CalDate): CalDate {\n' +
+    '  const next = addDays(date, 1);\n' +
+    '  const dow = dayOfWeek(next.y, next.m, next.d);\n' +
+    '  return addDays(next, (6 - dow + 7) % 7);\n' +
+    '}\n' +
+    '\n' +
+    "/** The season's opening Saturday: the second Saturday of August, world year. */\n" +
+    'export function seasonKickoff(worldYear: number): CalDate {\n' +
+    '  const firstDow = dayOfWeek(worldYear, 8, 1);\n' +
+    '  const firstSaturday = 1 + ((6 - firstDow + 7) % 7);\n' +
+    '  return { y: worldYear, m: 8, d: firstSaturday + 7 };\n' +
+    '}\n' +
+    '\n' +
+    '/** The date of a calendar entry: one Saturday per engine week. */\n' +
+    'export function dateOfWeek(worldYear: number, weekIdx: number): CalDate {\n' +
+    '  return addDays(seasonKickoff(worldYear), weekIdx * 7);\n' +
+    '}\n' +
+    '\n' +
+    '/**\n' +
+    ' * Round 158, the honest mapping: league rounds and the window take the\n' +
+    ' * Saturdays, cup and European entries slot into the midweek, exactly like a\n' +
+    ' * real season. Dates stay strictly in entry order.\n' +
+    ' *\n' +
+    " * Round 466: the January window lands in January. The engine's window entry\n" +
+    ' * sits 47 percent of the way through the league rounds, which the plain\n' +
+    ' * Saturday count put on 12 to 25 December for an 18 or 20 club league while\n' +
+    ' * every headline and screen calls it the January window. The window now\n' +
+    ' * takes the first Saturday of the new year if the count would have put it\n' +
+    ' * earlier (a winter break of one to three weeks on the grid, the way the\n' +
+    ' * Bundesliga and La Liga really pause), and a league long enough to reach\n' +
+    ' * January on its own (the 24 club Championship) is left where it was. The\n' +
+    " * engine's week index is untouched: this is where the week is DRAWN.\n" +
+    ' *\n' +
+    ' * Round 1021: a season that really started late (see seasonPlanOf) passes\n' +
+    ' * its plan, and only then does anything below change; with no plan every\n' +
+    ' * date is the one this function always drew.\n' +
+    ' */\n' +
+    'export function dateOfEntries(worldYear: number, calendar: { type: string }[], plan?: SeasonPlan | null): CalDate[] {\n' +
+    '  if (plan) return lateEntryDates(worldYear, calendar, plan);\n' +
+    '  return drawEntries(seasonKickoff(worldYear), worldYear, calendar, NO_MIDWEEK_ROUNDS);\n' +
+    '}\n' +
+    '\n' +
+    'const NO_MIDWEEK_ROUNDS: ReadonlySet<number> = new Set();\n' +
+    '\n' +
+    '/** The drawing rule above from a given opening Saturday, with the league\n' +
+    ' *  rounds named in `midweek` played on the Wednesday after a Saturday. */\n' +
+    'function drawEntries(kickoff: CalDate, worldYear: number, calendar: { type: string }[], midweek: ReadonlySet<number>): CalDate[] {\n' +
+    '  const out: CalDate[] = [];\n' +
+    '  let last = addDays(kickoff, -7);\n' +
+    '  const newYear: CalDate = { y: worldYear + 1, m: 1, d: 1 };\n' +
+    '  for (const [i, entry] of calendar.entries()) {\n' +
+    "    if ((entry.type === 'league' && !midweek.has(i)) || entry.type === 'window') {\n" +
+    '      let next = saturdayAfter(last);\n' +
+    "      if (entry.type === 'window' && dateKey(next) < dateKey(newYear)) {\n" +
+    '        // The first Saturday on or after 1 January.\n' +
+    '        next = saturdayAfter(addDays(newYear, -1));\n' +
+    '      }\n' +
+    '      out.push(next);\n' +
+    '      last = next;\n' +
+    '    } else {\n' +
+    '      // Midweek: the Wednesday after a Saturday, or a week on from another midweek.\n' +
+    '      const wasSaturday = dayOfWeek(last.y, last.m, last.d) === 6;\n' +
+    '      const next = addDays(last, wasSaturday ? 4 : 7);\n' +
+    '      out.push(next);\n' +
+    '      last = next;\n' +
+    '    }\n' +
+    '  }\n' +
+    '  return out;\n' +
+    '}\n' +
+    '\n' +
+    "/** The real world year a save's current season runs in. */\n" +
+    "export function worldYearOf(state: Pick<CareerState, 'startYear' | 'season'>): number {\n" +
+    '  return (state.startYear ?? CM_BASE_YEAR) + state.season - 1;\n' +
+    '}\n' +
+    '\n' +
+    '/* ---------- Round 1021: the season that started late ---------- */\n' +
+    '\n' +
+    '/**\n' +
+    ' * Every season here opens on the second Saturday of August (seasonKickoff).\n' +
+    ' * 2020-21 did not: the pandemic pushed the end of 2019-20 into August, so\n' +
+    ' * the big five opened between late August and mid September and the summer\n' +
+    ' * window stayed open to 5 October. Each of those leagues carries its real\n' +
+    ' * opening Saturday and deadline on its rules row (lateStart on the 2020 rows\n' +
+    ' * of LEAGUE_RULES in clubManager.ts, with the sources), and a season keeps\n' +
+    ' * those dates only in the world year they were played. So only an era2020\n' +
+    " * save's first season moves: its second (2021-22) opened in August as usual,\n" +
+    " * and no other era's league has the field.\n" +
+    ' */\n' +
+    '\n' +
+    "/** One save's late season: its league's opening Saturday and the real summer deadline. */\n" +
+    'export interface SeasonPlan { kickoff: CalDate; summerClose: CalDate; }\n' +
+    '\n' +
+    "/** The plan for the save's current season, or null for a season that opened on time. */\n" +
+    "export function seasonPlanOf(state: Pick<CareerState, 'startYear' | 'season' | 'eraId' | 'clubName' | 'customClub'>): SeasonPlan | null {\n" +
+    '  const late = leagueRulesOf(careerLeagueOf(state).id).lateStart;\n' +
+    '  return late && late.kickoff.y === worldYearOf(state) ? { kickoff: late.kickoff, summerClose: late.summerClose } : null;\n' +
+    '}\n' +
+    '\n' +
+    "/** Every entry's date for the save's current season, late start included. */\n" +
+    "export function entryDatesOf(state: Pick<CareerState, 'startYear' | 'season' | 'eraId' | 'clubName' | 'customClub' | 'calendar'>): CalDate[] {\n" +
+    '  return dateOfEntries(worldYearOf(state), state.calendar, seasonPlanOf(state));\n' +
+    '}\n' +
+    '\n' +
+    '/**\n' +
+    ' * Round 1502: the date of every night of the watched Champions League this\n' +
+    " * season, on the save's own calendar (the game's dates, never the real ones).\n" +
+    " * A night that is a calendar week of its own (a European midweek, an era's\n" +
+    " * knockout leg) takes that week's date; a league phase night that follows a\n" +
+    " * league round is the Wednesday after it (the round's date plus four, the\n" +
+    ' * midweek rule above), and one past the last league round goes a week at a\n' +
+    " * time after the last round's Wednesday. Null when the save watches nothing.\n" +
+    " * Round 1509: keyed. The Europa League's nights are the Thursday of the same\n" +
+    ' * weeks, so each is the day after the date this rule gives.\n' +
+    ' */\n' +
+    'export function worldCompNightDates(state: CareerState, comp: WorldCompKey): CalDate[] | null {\n' +
+    '  const places = worldCompNights(state, comp);\n' +
+    '  if (!places) return null;\n' +
+    '  const dates = entryDatesOf(state);\n' +
+    "  const league = state.calendar.flatMap((e, i) => (e.type === 'league' ? [dates[i]] : []));\n" +
+    '  if (!league.length) return null;\n' +
+    "  const thursday = comp === 'uel' ? 1 : 0;\n" +
+    '  return places.map(p => {\n' +
+    '    if (p.entry) return thursday ? addDays(dates[p.at], thursday) : dates[p.at];\n' +
+    '    const last = league.length - 1;\n' +
+    '    return p.round <= last ? addDays(league[p.round], 4 + thursday) : addDays(league[last], 4 + thursday '... 45998 more characters,
+  expected: '/**\n' +
+    ' * Round 466: the calendar you can click.\n' +
+    ' *\n' +
+    ' * His words (docs/TWEAKS-2026-08-28.md): "Calendar: click any day and sim to\n' +
+    ' * it (keep the four fast forwards), bigger emojis, match days name the\n' +
+    ' * opponent, transfer window open and close clearly marked."\n' +
+    ' *\n' +
+    ' * This module holds the PURE parts of the Club Manager calendar, so the\n' +
+    ' * screen stays a function of the save and a harness can measure all of it\n' +
+    ' * without a browser:\n' +
+    ' *\n' +
+    ' *  - the date maths (moved here from CalendarScreen, where Round 158 wrote\n' +
+    ' *    it): Gregorian helpers with no Date object, the season kickoff, and the\n' +
+    ' *    date of every calendar entry;\n' +
+    ' *  - what a day holds: a match with its opponent, venue and competition, the\n' +
+    ' *    day a transfer window opens, deadline day, a training day or a rest day;\n' +
+    " *  - where the two windows sit on the grid, derived from the engine's own\n" +
+    ' *    rule (a window spans a fixed number of MY match weeks, see\n' +
+    ' *    WINDOW_MATCH_WEEKS) and, once a window has run, from the results the\n' +
+    ' *    save actually recorded;\n' +
+    ' *  - the sim to a day rule, and the one loop that both a tap on a day and\n' +
+    " *    the four fast forwards go through. The loop calls the engine's own\n" +
+    ' *    playNextEntry, entry by entry, and never re-implements a week of it.\n' +
+    ' *\n' +
+    ' * Nothing here mutates a save. Every function takes the state and returns a\n' +
+    ' * new one or a plain description.\n' +
+    ' */\n' +
+    'import {\n' +
+    '  playNextEntry, fixtureFor, entryInvolvesMe, careerLeagueOf, leagueRulesOf, CUP_LABELS, UCL_LABELS,\n' +
+    '  cupProgressRank, uclProgressRank, objectiveStatuses,\n' +
+    '  /* Round 783: the mid season takeover an accepted application walks into. */\n' +
+    '  startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, customExitUclField,\n' +
+    "} from '@/lib/clubManager';\n" +
+    "import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';\n" +
+    "import type { CmVarAsk } from '@/lib/clubManagerVar';\n" +
+    "import { CM_BASE_YEAR, DEFAULT_ERA_ID, eraById, isHistoricEra } from '@/lib/clubManagerEras';\n" +
+    "import { closeOnJoiningNow, jobHuntOf, leavingLine } from '@/lib/clubManagerJobHunt';\n" +
+    "import { plainCopy, snapshotWorldRosterClub, worldRosterView } from '@/lib/clubManagerWorldRoster';\n" +
+    '\n' +
+    '/* ================================================================== */\n' +
+    '/* Dates                                                              */\n' +
+    '/* ================================================================== */\n' +
+    '\n' +
+    '/* Round 946: the pure date helpers (CalDate, dayOfWeek, daysInMonth,\n' +
+    '   addDays, dateKey, daysBetween, MONTH_NAMES, shortDate) live in\n' +
+    '   src/lib/calDate.ts now, shared with the GM calendar. They are re-exported\n' +
+    '   here unchanged, so every import from this module keeps working; the\n' +
+    '   fixture scripts/data/calDateFixture946.json, recorded before the move,\n' +
+    '   proves the calendar built on them did not move a day. */\n' +
+    "import { addDays, dateKey, dayOfWeek, daysBetween, daysInMonth, shortDate } from '@/lib/calDate';\n" +
+    "import type { CalDate } from '@/lib/calDate';\n" +
+    "export { addDays, dateKey, dayOfWeek, daysBetween, daysInMonth, MONTH_NAMES, shortDate } from '@/lib/calDate';\n" +
+    "export type { CalDate } from '@/lib/calDate';\n" +
+    '\n' +
+    '/** The next Saturday strictly after a date. */\n' +
+    'function saturdayAfter(date: CalDate): CalDate {\n' +
+    '  const next = addDays(date, 1);\n' +
+    '  const dow = dayOfWeek(next.y, next.m, next.d);\n' +
+    '  return addDays(next, (6 - dow + 7) % 7);\n' +
+    '}\n' +
+    '\n' +
+    "/** The season's opening Saturday: the second Saturday of August, world year. */\n" +
+    'export function seasonKickoff(worldYear: number): CalDate {\n' +
+    '  const firstDow = dayOfWeek(worldYear, 8, 1);\n' +
+    '  const firstSaturday = 1 + ((6 - firstDow + 7) % 7);\n' +
+    '  return { y: worldYear, m: 8, d: firstSaturday + 7 };\n' +
+    '}\n' +
+    '\n' +
+    '/** The date of a calendar entry: one Saturday per engine week. */\n' +
+    'export function dateOfWeek(worldYear: number, weekIdx: number): CalDate {\n' +
+    '  return addDays(seasonKickoff(worldYear), weekIdx * 7);\n' +
+    '}\n' +
+    '\n' +
+    '/**\n' +
+    ' * Round 158, the honest mapping: league rounds and the window take the\n' +
+    ' * Saturdays, cup and European entries slot into the midweek, exactly like a\n' +
+    ' * real season. Dates stay strictly in entry order.\n' +
+    ' *\n' +
+    " * Round 466: the January window lands in January. The engine's window entry\n" +
+    ' * sits 47 percent of the way through the league rounds, which the plain\n' +
+    ' * Saturday count put on 12 to 25 December for an 18 or 20 club league while\n' +
+    ' * every headline and screen calls it the January window. The window now\n' +
+    ' * takes the first Saturday of the new year if the count would have put it\n' +
+    ' * earlier (a winter break of one to three weeks on the grid, the way the\n' +
+    ' * Bundesliga and La Liga really pause), and a league long enough to reach\n' +
+    ' * January on its own (the 24 club Championship) is left where it was. The\n' +
+    " * engine's week index is untouched: this is where the week is DRAWN.\n" +
+    ' *\n' +
+    ' * Round 1021: a season that really started late (see seasonPlanOf) passes\n' +
+    ' * its plan, and only then does anything below change; with no plan every\n' +
+    ' * date is the one this function always drew.\n' +
+    ' */\n' +
+    'export function dateOfEntries(worldYear: number, calendar: { type: string }[], plan?: SeasonPlan | null): CalDate[] {\n' +
+    '  if (plan) return lateEntryDates(worldYear, calendar, plan);\n' +
+    '  return drawEntries(seasonKickoff(worldYear), worldYear, calendar, NO_MIDWEEK_ROUNDS);\n' +
+    '}\n' +
+    '\n' +
+    'const NO_MIDWEEK_ROUNDS: ReadonlySet<number> = new Set();\n' +
+    '\n' +
+    '/** The drawing rule above from a given opening Saturday, with the league\n' +
+    ' *  rounds named in `midweek` played on the Wednesday after a Saturday. */\n' +
+    'function drawEntries(kickoff: CalDate, worldYear: number, calendar: { type: string }[], midweek: ReadonlySet<number>): CalDate[] {\n' +
+    '  const out: CalDate[] = [];\n' +
+    '  let last = addDays(kickoff, -7);\n' +
+    '  const newYear: CalDate = { y: worldYear + 1, m: 1, d: 1 };\n' +
+    '  for (const [i, entry] of calendar.entries()) {\n' +
+    "    if ((entry.type === 'league' && !midweek.has(i)) || entry.type === 'window') {\n" +
+    '      let next = saturdayAfter(last);\n' +
+    "      if (entry.type === 'window' && dateKey(next) < dateKey(newYear)) {\n" +
+    '        // The first Saturday on or after 1 January.\n' +
+    '        next = saturdayAfter(addDays(newYear, -1));\n' +
+    '      }\n' +
+    '      out.push(next);\n' +
+    '      last = next;\n' +
+    '    } else {\n' +
+    '      // Midweek: the Wednesday after a Saturday, or a week on from another midweek.\n' +
+    '      const wasSaturday = dayOfWeek(last.y, last.m, last.d) === 6;\n' +
+    '      const next = addDays(last, wasSaturday ? 4 : 7);\n' +
+    '      out.push(next);\n' +
+    '      last = next;\n' +
+    '    }\n' +
+    '  }\n' +
+    '  return out;\n' +
+    '}\n' +
+    '\n' +
+    "/** The real world year a save's current season runs in. */\n" +
+    "export function worldYearOf(state: Pick<CareerState, 'startYear' | 'season'>): number {\n" +
+    '  return (state.startYear ?? CM_BASE_YEAR) + state.season - 1;\n' +
+    '}\n' +
+    '\n' +
+    '/* ---------- Round 1021: the season that started late ---------- */\n' +
+    '\n' +
+    '/**\n' +
+    ' * Every season here opens on the second Saturday of August (seasonKickoff).\n' +
+    ' * 2020-21 did not: the pandemic pushed the end of 2019-20 into August, so\n' +
+    ' * the big five opened between late August and mid September and the summer\n' +
+    ' * window stayed open to 5 October. Each of those leagues carries its real\n' +
+    ' * opening Saturday and deadline on its rules row (lateStart on the 2020 rows\n' +
+    ' * of LEAGUE_RULES in clubManager.ts, with the sources), and a season keeps\n' +
+    ' * those dates only in the world year they were played. So only an era2020\n' +
+    " * save's first season moves: its second (2021-22) opened in August as usual,\n" +
+    " * and no other era's league has the field.\n" +
+    ' */\n' +
+    '\n' +
+    "/** One save's late season: its league's opening Saturday and the real summer deadline. */\n" +
+    'export interface SeasonPlan { kickoff: CalDate; summerClose: CalDate; }\n' +
+    '\n' +
+    "/** The plan for the save's current season, or null for a season that opened on time. */\n" +
+    "export function seasonPlanOf(state: Pick<CareerState, 'startYear' | 'season' | 'eraId' | 'clubName' | 'customClub'>): SeasonPlan | null {\n" +
+    '  const late = leagueRulesOf(careerLeagueOf(state).id).lateStart;\n' +
+    '  return late && late.kickoff.y === worldYearOf(state) ? { kickoff: late.kickoff, summerClose: late.summerClose } : null;\n' +
+    '}\n' +
+    '\n' +
+    "/** Every entry's date for the save's current season, late start included. */\n" +
+    "export function entryDatesOf(state: Pick<CareerState, 'startYear' | 'season' | 'eraId' | 'clubName' | 'customClub' | 'calendar'>): CalDate[] {\n" +
+    '  return dateOfEntries(worldYearOf(state), state.calendar, seasonPlanOf(state));\n' +
+    '}\n' +
+    '\n' +
+    "/** The opening Saturday of the save's current season. */\n" +
+    "export function kickoffOf(state: Pick<CareerState, 'startYear' | 'season' | 'eraId' | 'clubName' | 'customClub'>): CalDate {\n" +
+    '  return seasonPlanOf(state)?.kickoff ?? seasonKickoff(worldYearOf(state));\n' +
+    '}\n' +
+    '\n' +
+    '/**\n' +
+    " * A late season's dates. Drawn from the real opening Saturday, the January\n" +
+    ' * window entry, which the engine puts after nearly half the league rounds,\n' +
+    ' * would land weeks into January. The real leagues got through the autumn by\n' +
+    " * playing league rounds in midweek (football-data.co.uk's files: the big five\n" +
+    ' * played 9 to 22 midweek league matches each in December 2020 alone), so the\n' +
+    ' * same happens here: as many rounds as the window is late, the last ones\n' +
+    ' * before it that qualify, move to the Wednesday between two Saturday rounds,\n' +
+    ' * which brings the window back to the first Saturday of January. Each of\n' +
+    ' * those rounds sits between two league rounds (or a league round and the\n' +
+    ' * window), so it gains exactly one week and never meets a cup or European\n' +
+    " * night. The engine's mix of cup and European nights leaves few rounds that\n" +
+    ' * qualify, so the last one before the window lands at the new year (30\n' +
+    ' * December, or 6 January where the window is a week late) and the others\n' +
+    ' * fall early: rounds 2 and 5 on 16 and 30\n' +
+    ' * September for the Premier League and La Liga, 23 September and 7 October\n' +
+    ' * for Serie A. That is earlier than the real squeeze, which came mostly in\n' +
+    ' * December: in September 2020 football-data.co.uk has 6 such La Liga\n' +
+    ' * matches, 4 Ligue 1 and 3 Serie A, and none at all in England or Germany\n' +
+    " * (Round 1021 review, recounted 2026-10-06), so the Premier League's two\n" +
+    ' * September Wednesdays here have no real twin. Moving them later would\n' +
+    " * need a round that sits between two league rounds, and the engine's cup\n"... 39832 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

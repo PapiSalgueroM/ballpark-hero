@@ -1,0 +1,12 @@
+simCmMatchDay: head exit 0 | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+simCmOldCareersWorld: head exit 1 | main exit 0 | MINE | head: simCmOldCareersWorld: RED, 7 failure(s) (section 1 1, section 2 6) (81s) | main: simCmOldCareersWorld: green, sections 1, 2 held (81s)
+simCmRealFixtures: head exit 0 | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+simCmWorldMoves: head exit 1 | main exit 1 | MINE | head: simCmWorldMoves: RED, sections 5 (84), 6 (270), 8 (55) | main: simCmWorldMoves: RED, sections 5 (66), 6 (270), 8 (54)
+simDealDepth: head exit 0 | simDealDepth: all green
+simEra2005: head exit 0 | simEra2005: green. 2005 is real, sealed, and plays like 2005.
+simEra2010: head exit 0 | simEra2010: green. 2010 is real, sealed, and plays like 2010.
+simEra2020: head exit 0 | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+simEraBakeExtend: head exit 0 | simEraBakeExtend: green. The shared extend step still fails closed on every guard.
+simEraWorldTables: head exit 0 | simEraWorldTables: green. Era worlds play, the picker lists the truth, and the knockout takes the top twos.
+simEventDeck: head exit 0 | simEventDeck: green.
+readers: 11 run, 2 red on this tree and not as on main

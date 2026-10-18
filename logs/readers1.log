@@ -1,0 +1,12 @@
+simBracketMoment: head exit 1 | main exit 1 | main | head: 1 FAILURES (by section {"3":1}) | main: 1 FAILURES (by section {"3":1})
+simCareerClubPool: head exit 0 | simCareerClubPool: all sections green
+simCareerDerbies: head exit 0 | simCareerDerbies: all 8 sections green
+simCareerDomesticCup: head exit 0 | simCareerDomesticCup: all sections green
+simCareerLeagueSeasons: head exit 0 | simCareerLeagueSeasons: all sections green
+simClubManagerClubList: head exit 0 | simClubManagerClubList: green. 27 leagues and 454 clubs reach the render and the saved page.
+simClubManagerStaff: head exit 0 | simClubManagerStaff: PASS. Four made up men who cost what the desk says, lift only their own half of the pitch, tax nobody who ignores them, and can be taken of
+simCmApplications: head exit 0 | simCmApplications: green. The answer is earned, the limits hold, a summer move fires once, joining now moves the manager that week, and old saves load.
+simCmFixtureFleet: head exit 0 | simCmFixtureFleet: green. 10 registered league(s), 9 in a file of their own. nofetch NOT RUN, oldsaves NOT RUN, dailies 11 clubs.
+simCmHandoverDesk: head exit 1 | main exit 1 | main | head: Node.js v24.21.0 | main: Node.js v24.21.0
+simCmInternationals: head exit 0 | simCmInternationals: all green
+readers: 11 run, 0 red on this tree and not as on main
