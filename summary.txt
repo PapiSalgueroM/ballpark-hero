@@ -1,0 +1,17 @@
+unit-lib exit=0 39s |    Duration  38.15s (transform 4.53s, setup 2.66s, collect 14.32s, tests 67.24s, environment 14.25s, prepare 3.36s)
+tsc exit=0 100s | tsc exit=0
+unit-cm exit=0 140s |    Duration  139.70s (transform 7.50s, setup 2.62s, collect 28.99s, tests 233.85s, environment 16.89s, prepare 4.23s)
+s2 exit=0 309s | simOneOffCups: green, 6458 checks (309 s)
+s46 exit=0 49s | simOneOffCups: green, 132 checks (49 s)
+s4-two exit=0 32s | simOneOffCups: green, 102 checks (32 s)
+s0157 exit=0 842s | simOneOffCups: green, 140891 checks (841 s)
+s3 exit=0 852s | simOneOffCups: green, 14299 checks (852 s)
+ctl-long exit=0 343s | etall exit=1 | simOneOffCups: control etall FIRED (16 failures, all its own: 1 extra time: Manchester City (now) seed 3 nocoach: extra time on a straight to penalties cup
+ctl-light exit=0 738s | keep exit=1 | simOneOffCups: control keep FIRED (467 failures, all its own: 5 slices: Arsenal (now) seed 1 nocoach at s1-rollover: worldComps holds uel dsc dscOld)
+appeal1081 exit=0 35s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+mut-typekeep exit=0 4s | vitest exit=1 (must be 1)
+pin-attr exit=1 43s | unretaken, clubManager.ts alone back to 78881aea exit=1 (must be 0) | Node.js v24.21.0
+lr-head exit=0 59s | simCmLeagueRules: 27 failure(s)
+dashscan exit=0 0s | no dash in the diff
+rules exit=0 53s | simStorageWrites exit=0 | simStorageWrites: all green (owed: 12)
+readers1 exit=0 2097s | simCmBoardVerdict exit=0 | simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 422 s)

@@ -1,0 +1,8 @@
+mutfx: type applied to src/lib/worldNights.ts
+mutfx: keep applied to src/lib/worldNights.ts
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/worldNights.test.ts[2m > [22mplaceNights[2m > [22mreads dates, not types: a league round drawn on a Wednesday is no Saturday
+[41m[1m FAIL [22m[49m src/lib/worldNights.test.ts[2m > [22mplaceNights[2m > [22mtakes no gap that would move a date when the caller can redraw the calendar
+[41m[1m FAIL [22m[49m src/lib/worldNights.test.ts[2m > [22mplaceNights on the engine calendars[2m > [22mdoes the same on the late seasons of 2020, each with its own plan
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m6 passed[39m[22m[90m (9)[39m
+vitest exit=1 (must be 1)
