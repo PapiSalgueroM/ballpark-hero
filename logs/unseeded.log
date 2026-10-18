@@ -1,0 +1,12 @@
+treeWithoutMerge: 4e34c9207d32f607a3d991e05cb06c8536d76243, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+base afd88e056d0ac84b8541eda0640c4446ab9a64de
+  era2015: Chelsea, Eibar, and the thinnest roster of the era GFC Ajaccio (2 projected men)
+  era2010: Blackburn Rovers, Espanyol, and the thinnest roster of the era Cesena (3 projected men)
+  era2005: Blackburn Rovers, Celta Vigo, and the thinnest roster of the era Cádiz (1 projected men)
+quiet: 49 saves, 2221 steps compared, 0 red, 46s
+deals: 49 saves, 2655 steps compared (up to the rollover), 0 red, 77s
+  deals on the base engine: buy done 49, buy-2 done 49, loan-option done 49, release done 31, release refused 18, release-2 done 31, release-2 refused 18, sale done 49, sale-2 done 49, swap done 49
+  after the rollover (Round 1508, this tree only): 49 adopted careers, 686 states checked, 3178 deal lines between two other clubs placed, 5341 owned records held at one club, 3521 joined rows on the screen; deals of mine: 31 releases, 49 buys, 49 sales; red by check: {}
+fresh: 15 saves, 1034 steps compared, 0 red, 19s
+  deals on the base engine: buy done 15, buy-2 done 15, loan-option done 15, release done 9, release refused 6, release-2 done 9, release-2 refused 6, sale done 15, sale-2 done 15, swap done 15
+simCmUnseededWorld: green. 49 old saves with no deal play byte equal to afd88e05 (state, draws and saved bytes at every step), 49 with every deal play byte equal to it up to their first summer and hold the living world's invariants after it, and 15 new careers with the seed block out play byte equal all the way

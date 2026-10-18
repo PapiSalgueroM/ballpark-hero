@@ -1,0 +1,4 @@
+#!serial
+unseeded: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && echo "base $CM_UNSEEDED_BASE" && node scripts/simCmUnseededWorld.mjs 2>&1 | tail -10; exit ${PIPESTATUS[0]}
+continuity: node scripts/simManagerWorldContinuity.mjs 2>&1 | tail -10; exit ${PIPESTATUS[0]}
+storage: node scripts/simStorageWrites.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
