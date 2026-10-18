@@ -187,6 +187,7 @@ try {
       });
       const NOW = Date.parse('2026-10-18T16:00:00Z'); await page.clock.install({ time: new Date(NOW - 1000) }); await page.clock.pauseAt(new Date(NOW));
       await page.goto(BASE + '/build-your-xi', { waitUntil: 'domcontentloaded' });
+      await page.getByRole('button', { name: /^4-4-2\s*11 players$/ }).waitFor({ state: 'visible' });
       await pointer(page, page.getByRole('button', { name: /^4-4-2\s*11 players$/ }), row, 'actual4-4-2');
       await poll(() => snapshot(page), state => state.teamPrompt === 'Name a player who has played for Real Madrid', 'initial actual team');
       await pointer(page, page.getByRole('button', { name: 'ST', exact: true }).first(), row, 'actual first ST');
