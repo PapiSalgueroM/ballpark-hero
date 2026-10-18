@@ -1,0 +1,7 @@
+simWorldUcl: node scripts/simWorldUcl.mjs > /tmp/wu.log 2>&1; s=$?; grep -E "^FAIL" /tmp/wu.log | head -8 | cut -c1-300; tail -1 /tmp/wu.log; exit $s
+euro-s0: WORLD_EURO_ONLY=0 node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+euro-s147: WORLD_EURO_ONLY=1,4,7 node scripts/simWorldEuro.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+euro-s2: WORLD_EURO_ONLY=2 node scripts/simWorldEuro.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+euro-s3: WORLD_EURO_ONLY=3 WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+euro-s5: WORLD_EURO_ONLY=5 node scripts/simWorldEuro.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+euro-s6: WORLD_EURO_ONLY=6 WORLD_EURO_BASE=77556430 node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
