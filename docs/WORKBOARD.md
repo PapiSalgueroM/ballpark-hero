@@ -15895,3 +15895,14 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+
+## Round1426 claim: a delayed report cannot erase a newer draft
+
+Root owns only UI request/draft/session/timer lifecycle in src/components/game/ReportSiteIssue.tsx and ReportQuestion.tsx, plus at most one small report-specific shared lifecycle hook if both forms need it, new focused tests/proof/browser/workflow and closing docs. Base775564305e9da84dab59f2b9fe246d044a3cc8e9, isolated codex/report-draft-lifecycle. Source finding: both forms allow editing and close/reopen while relay/direct fallback waits, then unconditionally show success and clear fields1500ms later. This may erase a newer unsent draft. No product adoption until actual original unit and built-route fault is admitted.
+
+Keep captured delivery/context/payload, relay then direct fallback, typed-description requirement, category lists, error retry, normal1500ms success close and trigger focus. Keep editing available and prevent duplicate submission while delivery waits. Stale outcomes/timers may not replace, close or erase a newer draft/session. Unmount cleanup must not cancel already captured report delivery. No new reporting data, live report, email, schema, SDK/API, image, dependency, style or game-state change.
+
+Plan: push this claim before diagnostic code; remotely reproduce actual forms with controlled pending relay/fallback and success timer, alongside healthy ordinary delivery; then adopt the smallest UI lifecycle change. Prove exact original and relevant effective guard controls, restored results and existing report tests/source fences. Real app types, serial plain production build, all15 built-site readers and all14 unchanged fatal caps remain required. All app/parser/test/build/browser runtime stays in Actions with ordinary offline preload. Native local text/Git/hash/ZIP/savedJSON only, no DB or actual reporter messages.
+
+Earlier63 report heads stay sealed. Primary WORKBOARD append only. I retains SC page/core/economy/save/world/calendar/MoneyScreens, all Manager/tournaments, actual release/main/publish. The new bounded20 checkpoint is unchanged and grants no new protected lease. Missing Yamal remains unproven; fresh roster/UI checks do not establish the visitor's saved-player fault. Root's new source-only trace will be handed back without a fake player-data fix.
