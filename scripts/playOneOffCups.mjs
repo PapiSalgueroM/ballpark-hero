@@ -120,12 +120,14 @@ if (CONTROL) {
      served on one port, so one built the other's patch, read the other's patched file as its "original", and
      walked the other's dist (r1510-fx-d: swap built with notile's tile gone, hubweek's server never came up).
      Now the read, the patch, the build and the putting back hold one lock (a directory beside the system's temp
-     files, keyed on this checkout), and each control serves its dist on a port of its own. Other harnesses that
+     files, keyed on this checkout: /tmp on Linux), and each control serves its dist on a port of its own. Other harnesses that
      read these source files (the type gate, simHarnessAnchors) still belong on another request. */
   const c = CONTROLS[CONTROL];
   const file = path.join(ROOT, c.file);
   const out = path.join(TEMP, `dist-${CONTROL}`);
-  const lock = path.join(os.tmpdir(), `dukb-play-one-off-cups-${ROOT.replace(/[^A-Za-z0-9]/g, '_').slice(-80)}.lock`);
+  /* /tmp itself on Linux: a runner gives every request line its own TMPDIR, so os.tmpdir() is no shared place
+     there (r1510-fx-e: swap still built notile's patch with the lock under os.tmpdir()). */
+  const lock = path.join(process.platform === 'win32' ? os.tmpdir() : '/tmp', `dukb-play-one-off-cups-${ROOT.replace(/[^A-Za-z0-9]/g, '_').slice(-80)}.lock`);
   for (let i = 0; ; i += 1) {
     try { fs.mkdirSync(lock); break; } catch (e) {
       if (e.code !== 'EEXIST') throw e;
