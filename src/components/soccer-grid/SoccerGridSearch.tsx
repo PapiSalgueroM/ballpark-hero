@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Loader2 } from 'lucide-react';
 import { toTitleCase } from '@/lib/smartSearch';
+import { normalizeName } from '@/lib/playerSearch';
 import { FlagImg } from '@/components/FlagImg';
 
 interface PlayerSuggestion {
@@ -22,9 +23,10 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
-  const suggestions = query.length >= 2
+  const normalizedQuery = normalizeName(query);
+  const suggestions = query.length >= 2 && normalizedQuery.length > 0
     ? players
-        .filter(p => p.name.toLowerCase().includes(query.toLowerCase()))
+        .filter(p => normalizeName(p.name).includes(normalizedQuery))
         .slice(0, 8)
     : [];
 
@@ -34,7 +36,7 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
 
   useEffect(() => {
     setHighlightIndex(0);
-    setShowDropdown(suggestions.length > 0);
+    setShowDropdown(query.length >= 2);
   }, [query]);
 
   useEffect(() => {
@@ -48,6 +50,10 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
   }, [onSelect]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setShowDropdown(false);
+      return;
+    }
     if (!showDropdown || suggestions.length === 0) return;
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -55,8 +61,6 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       setHighlightIndex(i => Math.max(i - 1, 0));
-    } else if (e.key === 'Escape') {
-      setShowDropdown(false);
     }
   };
 
@@ -79,7 +83,7 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
-          onFocus={() => suggestions.length > 0 && setShowDropdown(true)}
+          onFocus={() => query.length >= 2 && setShowDropdown(true)}
           onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
           placeholder="Type a player name…"
           aria-label="Search for a player"

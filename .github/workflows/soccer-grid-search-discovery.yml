@@ -122,6 +122,102 @@ jobs:
           console.log('Unchanged related tests: 37 passed,0failed,0pending.');
           NODE
           sha256sum --check "$out/source-files.sha256" > "$out/after-tests-source-hold.log"
+      - name: Actual ordinary default Soccer Grid proof invocation
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$SOCCER_GRID_SEARCH_OUT/default-invocation.transport" node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import os from 'node:os';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { createRequire } from 'node:module';
+          import { execFileSync, spawnSync } from 'node:child_process';
+
+          const PINS = {"simSha256":"fb764fd7fc8a3af0813b7359bcf21b173a4e8d1a356875e3e3076dd94daca030","testSha256":"410176fc8d41f755a63b6d6bdc0c310e3056e8c50ad50bb5f7f8ff5599ccdb52","searchSha256":"fdd669af0d5238464dcaedd831f2151d16f4a30fe6b9be6d2231a50093bd6924"};
+          const ROOT = process.cwd(), mainOut = process.env.SOCCER_GRID_SEARCH_OUT;
+          const hash = body => createHash('sha256').update(body).digest('hex');
+          const require = createRequire(path.join(ROOT, 'package.json'));
+          assert(require.cache[require.resolve('./scripts/lib/offlineTransport.cjs')], 'Ordinary offline preload must already be active');
+          assert.equal(process.env.SIM_NETWORK, 'offline');
+          for (const [key, value] of Object.entries(PINS)) assert(/^[0-9a-f]{64}$/.test(value), 'UNBOUND future default source pin ' + key);
+          assert(mainOut && path.isAbsolute(mainOut) && path.relative(ROOT, mainOut).split(path.sep).includes('..'));
+          const out = path.join(mainOut, 'default-invocation'), copied = path.join(mainOut, 'default-evidence');
+          assert(!fs.existsSync(out) && !fs.existsSync(copied), 'Fresh default capture paths'); fs.mkdirSync(out);
+          const outerTransport = path.join(mainOut, 'default-invocation.transport'); assert.equal(process.env.SIM_OFFLINE_RECEIPT, outerTransport);
+          fs.writeFileSync(outerTransport, '', { flag: 'wx' });
+          const git = args => execFileSync('git', args, { cwd: ROOT, maxBuffer: 64 * 1024 * 1024 });
+          const tracked = git(['ls-files', '-z']), status = git(['status', '--porcelain=v1', '--untracked-files=all']); assert.equal(status.length, 0);
+          const head = git(['rev-parse', 'HEAD']).toString('utf8').trim();
+          const source = tracked.toString('utf8').split('\0').filter(Boolean).map(file => ({ file, sha256: hash(fs.readFileSync(path.join(ROOT, file))) }));
+          for (const [file, key] of [['scripts/simSoccerGridSearchDiscovery.mjs', 'simSha256'], ['src/test/soccerGridSearchDiscovery.test.tsx', 'testSha256'], ['src/components/soccer-grid/SoccerGridSearch.tsx', 'searchSha256']]) assert.equal(hash(fs.readFileSync(path.join(ROOT, file))), PINS[key]);
+          fs.writeFileSync(path.join(out, 'tracked-files.before'), tracked); fs.writeFileSync(path.join(out, 'status.before'), status);
+          fs.writeFileSync(path.join(out, 'source-files.json'), JSON.stringify(source, null, 2) + '\n');
+          const tree = root => {
+            const rows = [];
+            const walk = relative => {
+              const directory = path.join(root, relative); assert(!fs.lstatSync(directory).isSymbolicLink());
+              for (const name of fs.readdirSync(directory).sort()) {
+                const next = path.join(relative, name), file = path.join(root, next), stat = fs.lstatSync(file); assert(!stat.isSymbolicLink(), 'No symlinks in actual external packet');
+                if (stat.isDirectory()) walk(next); else { assert(stat.isFile()); rows.push({ file: next.split(path.sep).join('/'), bytes: stat.size, sha256: hash(fs.readFileSync(file)) }); }
+              }
+            };
+            walk(''); return rows.sort((a, b) => a.file < b.file ? -1 : a.file > b.file ? 1 : 0);
+          };
+          const tempRoot = fs.realpathSync(os.tmpdir()), prefix = 'soccer-grid-search-evidence-';
+          const inventory = () => fs.readdirSync(tempRoot).filter(name => name.startsWith(prefix)).sort().map(name => {
+            const file = path.join(tempRoot, name), stat = fs.lstatSync(file); assert(stat.isDirectory() && !stat.isSymbolicLink());
+            return { name, realpath: fs.realpathSync(file), files: tree(file) };
+          });
+          const before = inventory(); fs.writeFileSync(path.join(out, 'tmp-prefix.before.json'), JSON.stringify(before, null, 2) + '\n');
+          const receipt = { version: 1, status: 'failed', head, pins: PINS, checkoutRoot: ROOT, tempRoot, prefix, childCommand: [process.execPath, 'scripts/simSoccerGridSearchDiscovery.mjs'],
+            deletedEnvironmentKeys: ['SOCCER_GRID_SEARCH_MODE', 'SOCCER_GRID_SEARCH_OUT'], outerTransportFile: 'default-invocation.transport', ordinaryOfflinePreload: true, sourceHeld: false, copied: false, productQualified: false };
+          const save = () => fs.writeFileSync(path.join(out, 'receipt.json'), JSON.stringify(receipt, null, 2) + '\n'); save();
+          const env = { ...process.env }; delete env.SOCCER_GRID_SEARCH_MODE; delete env.SOCCER_GRID_SEARCH_OUT;
+          const child = spawnSync(process.execPath, ['scripts/simSoccerGridSearchDiscovery.mjs'], { cwd: ROOT, env, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 720000 });
+          fs.writeFileSync(path.join(out, 'stdout.log'), child.stdout || ''); fs.writeFileSync(path.join(out, 'stderr.log'), child.stderr || '');
+          fs.writeFileSync(path.join(out, 'exit-code.json'), JSON.stringify({ status: child.status, signal: child.signal, error: child.error ? String(child.error) : null }) + '\n');
+          try {
+            const after = inventory(); fs.writeFileSync(path.join(out, 'tmp-prefix.after.json'), JSON.stringify(after, null, 2) + '\n');
+            const fresh = after.filter(row => !before.some(previous => previous.name === row.name)); receipt.freshCandidates = fresh.map(row => ({ name: row.name, realpath: row.realpath })); save();
+            assert.equal(fresh.length, 1, 'Exactly one fresh actual default output packet');
+            const actual = fresh[0].realpath; assert.equal(path.dirname(actual), tempRoot); assert(path.basename(actual).startsWith(prefix));
+            assert(path.relative(ROOT, actual).split(path.sep).includes('..'), 'Actual default packet is outside checkout');
+            receipt.actualEvidenceRoot = actual; receipt.outputExternal = true; receipt.outputFresh = true; save();
+            fs.cpSync(actual, copied, { recursive: true, errorOnExist: true, force: false });
+            const copiedTree = tree(copied); assert.deepEqual(copiedTree, fresh[0].files, 'Complete actual/default copy bytes and membership held');
+            fs.writeFileSync(path.join(out, 'copied-files.json'), JSON.stringify(copiedTree, null, 2) + '\n'); receipt.copied = true; save();
+            for (const previous of before) assert.deepEqual(after.find(row => row.name === previous.name), previous, 'Prior temp prefix packet held');
+            assert.ifError(child.error); assert.equal(child.signal, null); assert.equal(child.status, 0);
+            assert(!/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?/i.test((child.stdout || '') + (child.stderr || '')), 'No unhandled default child output');
+            const lines = (child.stdout || '').split(/\r?\n/).filter(line => line.startsWith('{"kind":"SOCCER_GRID_SEARCH_RESULT",'));
+            assert.equal(lines.length, 1, 'One actual structured default result'); const metadata = JSON.parse(lines[0]); receipt.metadata = metadata; save();
+            assert.equal(metadata.kind, 'SOCCER_GRID_SEARCH_RESULT'); assert.equal(metadata.mode, 'fixed');
+            assert.equal(metadata.modeEnvAbsent, true); assert.equal(metadata.outEnvAbsent, true); assert.equal(metadata.evidenceRoot, actual);
+            assert.equal(metadata.sourceHeld, true); assert.equal(metadata.temporaryModulesRemoved, true); assert.equal(metadata.productQualified, false);
+            assert.equal(metadata.summarySha256, hash(fs.readFileSync(path.join(actual, 'unit/summary.json'))));
+            assert.equal(metadata.summarySha256, hash(fs.readFileSync(path.join(copied, 'unit/summary.json'))));
+            receipt.status = 'passed';
+          } catch (error) { receipt.error = String(error?.stack ?? error); throw error; }
+          finally {
+            try {
+              const trackedAfter = git(['ls-files', '-z']), statusAfter = git(['status', '--porcelain=v1', '--untracked-files=all']);
+              fs.writeFileSync(path.join(out, 'tracked-files.after'), trackedAfter); fs.writeFileSync(path.join(out, 'status.after'), statusAfter);
+              assert(tracked.equals(trackedAfter)); assert(status.equals(statusAfter));
+              const sourceAfter = source.map(entry => ({ file: entry.file, sha256: hash(fs.readFileSync(path.join(ROOT, entry.file))) }));
+              fs.writeFileSync(path.join(out, 'source-files.after.json'), JSON.stringify(sourceAfter, null, 2) + '\n');
+              assert.deepEqual(sourceAfter, source, 'Every actual tracked source byte held');
+              receipt.sourceHeld = true;
+              assert.equal(fs.readFileSync(outerTransport, 'utf8'), '', 'Actual outer default child transport receipt stays empty');
+            } catch (error) { receipt.status = 'failed'; receipt.sourceError = String(error?.stack ?? error); throw error; }
+            finally { save(); }
+          }
+          assert.equal(receipt.status, 'passed'); assert.equal(receipt.sourceHeld, true); assert.equal(receipt.copied, true);
+          console.log(JSON.stringify({ kind: 'SOCCER_GRID_SEARCH_DEFAULT_CAPTURE', status: receipt.status, actualEvidenceRoot: receipt.actualEvidenceRoot,
+            copiedEvidence: copied, summarySha256: receipt.metadata.summarySha256, sourceHeld: true, productQualified: false }));
+          NODE
       - name: Serial plain production build
         id: build
         run: |
