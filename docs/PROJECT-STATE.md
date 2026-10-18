@@ -1,3 +1,8 @@
+## Round1417 diagnostic closed, 18 October2026: Soccer Career Ball Quiz loses its result display
+
+Actual original PhonePanel/engine diagnostic8fb4db60943e6132f7ea7e28c247e088dc9c2aed, run39110609048/job117625764207, completed types and7cases: four exact missing-result faults at scores0..3, plus three healthy lock/no-history/unfinished re-entry paths. Actual state, literal reward/bookkeeping and unrelated stores/RNG hold. Native880checks/0, complete59payloads and4919source bodies closed. This diagnoses the existing display bug; no product fix, green product suite, browser/build/cap or release qualification is claimed.
+
+MoneyScreens' one-condition UI proposal remains outside and untested as a fixed candidate. Root requested the named render seam or I-owned fix, with no new lease in the unchanged20mapped I files at08:22. Existing qualifiedPR310 pager is still open/draft/unmerged; main775's entire incoming leaf equals its qualified original and the exact tested pager patch passes native check. I should select it for retained51..80 deals; all-career retention is separate I writer work. I1509/1510 and actual release/main/publish remain protected. See docs/ROUND1417-BALL-QUIZ-COMPLETION-DIAGNOSIS.md, including the preserved failed first diagnostic and method-only repair. Normal tests gain no permanent red file.
 ## Release BJ LIVE, 2026-10-17 21:51 EDT: Club Manager Hard and Legend, the Champions League you can follow in or out of it, match days that read like a scoreboard, a way out for dirty money in the US careers, and Soccer Career's summer cards
 
 Claude lane (session I). main d0c3ff58, deployment fec60776-a9ad-49aa-b4ea-04a590a233de, entry index-CWmc_M1Q.js (was
