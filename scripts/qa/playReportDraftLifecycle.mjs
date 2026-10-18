@@ -47,7 +47,7 @@ const specs = forms.flatMap(form => [390, 1280].flatMap(width => scenarios.map(s
 const report = {
   version: 1, mode, originalHead, source, productQualified: false, status: 'failed',
   scope: 'Two actual built production report forms, fully intercepted report delivery, no real report or email.',
-  clock: 'Finite Playwright page clock installed only after route hydration. Paused before form interaction; explicit 250ms dialog transitions and 1499/1500/1501ms success deadlines. No app state injection.',
+  clock: 'Finite Playwright page clock installed only after route hydration. Paused before form interaction; explicit 250ms dialog transitions, a separate 1ms focus cleanup turn after DOM removal, and 1499/1500/1501ms success deadlines. No app state injection.',
   census: specs.map(spec => ({ id: spec.id, form: spec.form.id, route: spec.form.route, width: spec.width, input: spec.width === 390 ? 'touch and native text input' : 'keyboard', scenario: spec.scenario, originalFaultExpected: spec.scenario !== 'normal-held-fallback' })),
   expected: { contexts: 12, originalFaults: mode === 'baseline' ? 8 : 0, healthyDeliveryContexts: 4 }, cases: [],
 };
@@ -63,7 +63,7 @@ const browser = await chromium.launch({ headless: true });
 try {
   for (const spec of specs) {
     const { form, width, scenario } = spec;
-    const row = { id: spec.id, form: form.id, route: form.route, width, scenario, status: 'failed', originalFault: false, actions: [], requests: [], reportRequests: [], externalFulfilled: [], unexpectedWrites: [], errors: [], assets: [], screenshots: [], observations: [] };
+    const row = { id: spec.id, form: form.id, route: form.route, width, scenario, status: 'failed', originalFault: false, actions: [], requests: [], reportRequests: [], readFixtures: [], externalFulfilled: [], unexpectedWrites: [], errors: [], assets: [], screenshots: [], observations: [] };
     report.cases.push(row);
     const context = await browser.newContext({ viewport: { width, height: 844 }, deviceScaleFactor: 1, isMobile: width === 390, hasTouch: width === 390, locale: 'en-US', timezoneId: 'UTC', reducedMotion: 'reduce', serviceWorkers: 'block', storageState: { cookies: [], origins: [{ origin: base, localStorage: [{ name: 'cookie-consent', value: 'essential' }, { name: 'rules-gate-seen:' + form.route, value: '1' }] }] } });
     const held = new Map(), responses = [];
@@ -76,6 +76,11 @@ try {
           if (url.origin === base) { assert.equal(request.method(), 'GET', 'No local write'); return await route.continue(); }
           row.externalFulfilled.push(url.href);
           if (request.method() === 'OPTIONS') return await route.fulfill({ status: 204, headers: cors, body: '' });
+          if (url.href === 'https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today' && request.method() === 'POST') {
+            assert.equal(request.postData(), '{"p_min":3,"p_limit":3}', 'Exact existing read-only most-played RPC arguments');
+            row.readFixtures.push({ url: url.href, method: request.method(), rawBody: request.postData(), body: request.postDataJSON(), reply: [], intercepted: true, fulfilled: true });
+            return await route.fulfill({ status: 200, headers: cors, contentType: 'application/json', body: '[]' });
+          }
           const channel = url.pathname === '/functions/v1/report-relay' ? 'relay' : url.pathname === '/rest/v1/question_reports' ? 'fallback' : null;
           if (channel) {
             assert.equal(url.origin, 'https://flawuiqbvjobmkfkauhw.supabase.co', 'Only the existing production report transport shape');
@@ -148,9 +153,15 @@ try {
         if (fullPage) { await page.screenshot({ path: path.join(out, name + '-full.png'), fullPage: true, animations: 'disabled' }); row.screenshots.push(name + '-full.png'); }
       };
       const open = async () => { await activate(trigger, 'open actual ' + form.id + ' report'); await poll('open report dialog', read, value => value.open); };
+      const settleClosedDialog = async () => {
+        await poll('closed report DOM commit', read, value => !value.open);
+        await page.clock.runFor(250);
+        await poll('removed report dialog', async () => page.locator('[role="dialog"]').count(), count => count === 0);
+        await page.clock.runFor(1);
+      };
       const close = async () => {
         await activate(dialog.getByRole('button', { name: 'Close', exact: true }), 'close report');
-        await page.clock.runFor(250); await poll('closed report dialog', read, value => !value.open);
+        await settleClosedDialog();
         assert(await trigger.evaluate(element => document.activeElement === element), 'Manual close returns focus to the actual trigger');
       };
       const edit = async (details, category) => {
@@ -213,7 +224,7 @@ try {
           assert.deepEqual(settled, { open: true, success: true, details: null, category: '', disabled: null, error: false }, 'Original late completion visibly replaced the newer draft');
           row.originalFault = true; row.fault = 'Old relay completion replaces the reopened, edited draft with its success panel';
           await screenshot('observed-original-completion-fault', true); await page.clock.runFor(1501); await poll('original forced close', read, value => !value.open);
-          await page.clock.runFor(250); await open(); assert.equal((await read()).details, '', 'Original older reset erased the newer draft'); assert.equal((await read()).category, '');
+          await settleClosedDialog(); await open(); assert.equal((await read()).details, '', 'Original older reset erased the newer draft'); assert.equal((await read()).category, '');
           await screenshot('original-erased-draft');
         } else { await assertDraft(newText); await page.clock.runFor(1501); await assertDraft(newText); await screenshot('preserved-after-old-completion', true); }
       } else if (scenario === 'old-success-timer') {
@@ -230,7 +241,7 @@ try {
         row.oldTimer = { successAt, remainingMs: remaining, targetMs: 1501 };
         await page.clock.runFor(remaining);
         if (mode === 'baseline') {
-          await poll('original old-timer forced close', read, value => !value.open); await page.clock.runFor(250); await screenshot('original-forced-close');
+          await poll('original old-timer forced close', read, value => !value.open); await settleClosedDialog(); await screenshot('original-forced-close');
           await open(); assert.equal((await read()).details, ''); assert.equal((await read()).category, ''); await screenshot('original-reset-on-reopen');
         } else { await assertDraft(newText); await screenshot('preserved-past-old-timer', true); }
       } else {
@@ -239,7 +250,7 @@ try {
         assert.equal(row.reportRequests.length, 2); assert.deepEqual(row.reportRequests[1].body, expectedPayload, 'Direct fallback delivers exactly the already captured report');
         await screenshot('held-fallback'); await release('fallback', {}); await poll('normal success panel', read, value => value.success);
         await screenshot('normal-success'); await page.clock.runFor(1499); assert((await observe('normal-success-at1499ms')).success, 'Normal success remains visible at1499ms');
-        await page.clock.runFor(1); await poll('normal1500ms auto close', read, value => !value.open); await observe('normal-closed-at1500ms'); await page.clock.runFor(250);
+        await page.clock.runFor(1); await poll('normal1500ms auto close', read, value => !value.open); await observe('normal-closed-at1500ms'); await settleClosedDialog();
         assert(await trigger.evaluate(element => document.activeElement === element), 'Normal success returns focus to its actual trigger');
         await open(); assert.deepEqual(await read(), initial, 'A normally completed report reopens blank with no stale category or success');
         await screenshot('normal-blank-reopen', true); row.healthyDelivery = true;
