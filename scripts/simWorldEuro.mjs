@@ -96,7 +96,9 @@ const CONTROLS = {
   wiki: [0, /^K1: .* is a wiki/, /^K1/],
   thinused: [0, /^A6 is not verified and carries/, /^A6/],
   receipt: [0, /does not carry the hash/],
-  twocomps: [1, /^1 both: /, /^1 /],
+  /* fix-1509: since the carry refuses a field sharing clubs with the Champions League, the seen probe's carry of
+     this control's broken field draws it again, so its nights start over: the control's own fault, said here. */
+  twocomps: [1, /^1 both: /, /^(1 |4 falls: .*carried onto a calendar behind)/],
   meinfield: [1, /^1 (mine|none): /, /^1 /],
   earned: [1, /^1 earned: /, /^1 /],
   carryearned: [1, /^1 carry: /, /^1 /],
