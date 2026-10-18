@@ -1,0 +1,11 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 499ec5ac8 Release BK triage: the finance desk's wrap plant takes the kitty figure out of the column, so it fires on any 
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+anchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+dashscan exit=0 0s | no dash in the diff
+desk-green exit=0 27s | playCmFinanceDesk: green. The Finances desk reads at 12px, taps at 44px, cuts nothing, keeps every figure on one line and shows what the board covers and what the kitty k
+ctl-desk-wrap exit=0 27s | playCmFinanceDesk: CONTROL wrap FIRED (3 failures, as it must)
+ctl-desk-wrap-2 exit=0 27s | playCmFinanceDesk: CONTROL wrap FIRED (3 failures, as it must)
+ctl-desk-small exit=0 27s | playCmFinanceDesk: CONTROL small FIRED (9 failures, as it must)
+ctl-desk-cut exit=0 28s | playCmFinanceDesk: CONTROL cut FIRED (3 failures, as it must)
+figs-wrap exit=0 28s | FIRED-OK

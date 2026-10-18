@@ -1,0 +1,6 @@
+  figsDiag: 4 of 4 figures written
+  FAIL: 320x640: a figure off one line, "+£63m" in the kitty row breaks over 4 lines
+  figsDiag: 4 of 4 figures written
+  FAIL: 390x844: a figure off one line, "+£63m" in the kitty row breaks over 4 lines
+playCmFinanceDesk: CONTROL wrap FIRED (3 failures, as it must)
+FIRED-OK
