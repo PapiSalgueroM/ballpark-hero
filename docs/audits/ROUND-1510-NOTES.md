@@ -47,6 +47,16 @@ partial (toVerify, no constant): eng-2005, eng-2010, eng-2015, eng-2020, esp-202
 - S4b the match: entryInvolvesMe and fixtureFor, the completion (the slice replaced with my result, a won final a
   minor trophy and trophyWon), the shootout link, the stats view, help line 50, the help and What's New rewritten.
 
+## Where it stands
+- Round 1509's closed head f2bb6325 is merged (fb54fb19); simWorldUcl section 2 compares saves bare of
+  worldComps.dsc too (0a6d6fba); the Round 1081 pin is retaken last on the merged tree (0e168502).
+- The final proof (r1510-fin-b): with worldComps.dsc stripped and a participant's nights left off its calendar
+  (scripts/lib/oneOffNights1510.mjs, proofWorldUclFleet --dsc-nights-off), 190 journeys (60 participants, 130
+  watchers, both coach modes, eval and old saves) are byte equal to f2bb6325 on every step, draws equal.
+- simOneOffCups green (123,395 checks) with every control firing; playOneOffCups green at 320, 390 and 1280.
+- WEIGHT: +3.7K on each of the three engine rows (624.4K, 641.5K, 651.0K), 0.2K over the lead's accepted +3.5K:
+  stopped and reported.
+
 ## Proofs and owed items
 See finish-1510.md for every runner result name, exit code and number, what was not run and why, and what the lead
 must do by hand (the weight rows, the 1081 pin if main moves, the guide sentence owed to the other lane).
