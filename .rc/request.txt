@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walkcarry: node .rc/x/walkCarry1509.mjs
