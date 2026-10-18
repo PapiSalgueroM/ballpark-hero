@@ -1,5 +1,5 @@
 # Synthetic HTML and held physical CSS only. No application/backend qualification.
-name: WebKit persistent startup native encoding diagnostic
+name: WebKit persistent native touch actionability diagnostic
 on:
   push:
     branches: [codex/soccer-grid-search-discovery]
@@ -34,8 +34,8 @@ jobs:
           out="$RUNNER_TEMP/grid-css-response-byte-diagnostic"; test ! -e "$out"; mkdir "$out"
           echo "CSS_DIAGNOSTIC_OUT=$out" >> "$GITHUB_ENV"
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          git merge-base --is-ancestor 3f0cd0e2ec33f9a3cd9746f91bcb1563684594cd HEAD
-          git diff --exit-code 3f0cd0e2ec33f9a3cd9746f91bcb1563684594cd HEAD -- . ':!.github/workflows/grid-css-response-byte-diagnostic.yml' > "$out/source-boundary.log"
+          git merge-base --is-ancestor c8c2d0de77ca79323aee48ef4066cd6463002ef6 HEAD
+          git diff --exit-code c8c2d0de77ca79323aee48ef4066cd6463002ef6 HEAD -- . ':!.github/workflows/grid-css-response-byte-diagnostic.yml' > "$out/source-boundary.log"
           test -f .github/workflows/grid-css-response-byte-diagnostic.yml
           cp .github/workflows/grid-css-response-byte-diagnostic.yml "$out/executed-workflow.yml"
           git rev-parse HEAD > "$out/head.txt"
@@ -60,7 +60,7 @@ jobs:
           find "$browser_tools/node_modules" -type f -print0 | sort -z > "$out/browser-tool-members.before"
           find "$PLAYWRIGHT_BROWSERS_PATH" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-binary-files.sha256"
           find "$PLAYWRIGHT_BROWSERS_PATH" -type f -print0 | sort -z > "$out/browser-binary-members.before"
-      - name: Twelve fresh persistent WebKit startup processes
+      - name: Twelve fresh persistent UTF8 activation and native input processes
         id: matrix
         timeout-minutes: 12
         run: |
@@ -105,11 +105,12 @@ jobs:
           fs.writeFileSync(configFile, configBody, { flag: 'wx' });
           const profileRoot = path.join(OUT, 'profiles'); fs.mkdirSync(profileRoot);
           const variants = [
-            { name: 'native-default', nativeUtf8: false, metaUtf8: false, htmlStringBody: false, cssStringBody: false },
-            { name: 'native-utf8', nativeUtf8: true, metaUtf8: false, htmlStringBody: false, cssStringBody: false },
+            { name: 'utf8-no-added-activation', nativeUtf8: true, activateBeforeFrames: false, metaUtf8: false, htmlStringBody: false, cssStringBody: false },
+            { name: 'utf8-bring-to-front', nativeUtf8: true, activateBeforeFrames: true, metaUtf8: false, htmlStringBody: false, cssStringBody: false },
           ];
           const report = { version: 2, status: 'incomplete', diagnosticOnly: true, productQualified: false,
-            scope: 'Synthetic WebKit persistent startup native-default versus declared UTF8 settings, metadata-free HTML and exact held CSS Buffer, cross-origin headers-only HEAD and trusted input. No application, auth, backend, feature or release qualification.',
+            scope: 'Synthetic WebKit persistent native UTF8 profiles, unchanged versus one public bringToFront before required native frame sampling. Metadata-free HTML, exact CSS Buffer, fatal input errors with independent HEAD collection. No app, auth, backend, feature or release qualification.',
+            priorProbe: { head: 'c8c2d0de77ca79323aee48ef4066cd6463002ef6', reportSha256: 'c6bcf48c38080ebeec7182afa618f60abcedae15a360529fcd6a1803ed249630', status: 'diagnostic-failed-strict-checks', originalDefaultByteFailuresRetained: true, originalPhoneTapFailuresRetained: true },
             head: fs.readFileSync(path.join(OUT, 'head.txt'), 'utf8').trim(), workflowRef: process.env.GITHUB_WORKFLOW_REF, workflowEventSha: process.env.GITHUB_SHA, packageVersion, coreSha256: hash(coreBody), webkitInstallation,
             startup: { onlyExistingBlankPage: true, localeOptionSupplied: false, configFile, configBytes: configBody.length, configSha256: hash(configBody), profileRoot, browserDebugScope: 'pw:browser', browserLogsFile: 'stderr.log' },
             physical: { member: 'assets/index-Jf4zrVqc.css', bytes: physical.length, sha256: physicalSha, gzipBytes: packed.length, gzipSha256: hash(packed), strictUtf8Roundtrip: true },
@@ -169,6 +170,8 @@ jobs:
                 page.on('pageerror', error => { row.errors.push('pageerror: ' + String(error?.stack ?? error)); save(); });
                 await bounded(page.addInitScript(() => {
                   window.__nativeProbeEvents = [];
+                  window.__nativeLifecycleEvents = [];
+                  for (const type of ['focus', 'blur', 'visibilitychange']) window.addEventListener(type, event => window.__nativeLifecycleEvents.push({ type, trusted: event.isTrusted, visibilityState: document.visibilityState, hidden: document.hidden, hasFocus: document.hasFocus(), timestamp: performance.now() }), true);
                   for (const type of ['touchstart', 'pointerdown', 'keydown', 'click']) document.addEventListener(type, event => {
                     if (event.target instanceof Element && event.target.closest('#native-probe')) window.__nativeProbeEvents.push({ type, trusted: event.isTrusted, key: event.key ?? null, pointerType: event.pointerType ?? null });
                   }, true);
@@ -227,17 +230,60 @@ jobs:
                 });
                 await bounded(page.goto(BASE + '/?context=' + id, { waitUntil: 'load', timeout: 15000 }), 'page.goto load', 20000, row.waits);
                 await bounded(page.waitForLoadState('networkidle', { timeout: 15000 }), 'page.networkidle', 20000, row.waits);
-                const probe = page.locator('#native-probe'), bounds = await bounded(probe.boundingBox(), 'native target bounds', 15000, row.waits);
-                assert(bounds && bounds.x >= 0 && bounds.y >= 0 && bounds.x + bounds.width <= width && bounds.y + bounds.height <= height, 'Actual native target fits the viewport');
-                if (width === 390) await bounded(probe.tap(), 'trusted phone tap', 15000, row.waits);
-                else {
-                  await bounded(page.keyboard.press('Tab'), 'native keyboard Tab', 15000, row.waits);
-                  assert.equal(await bounded(page.evaluate(() => document.activeElement?.id), 'native keyboard focus', 10000, row.waits), 'native-probe');
-                  await bounded(page.keyboard.press('Enter'), 'native keyboard Enter', 15000, row.waits);
+                const targetSnapshot = () => page.evaluate(() => {
+                  const target = document.querySelector('#native-probe'), rect = target.getBoundingClientRect(), style = getComputedStyle(target);
+                  const describe = element => element ? { tag: element.tagName, id: element.id, className: element.className } : null;
+                  const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }, hit = document.elementFromPoint(center.x, center.y);
+                  return { characterSet: document.characterSet, language: navigator.language, languages: [...navigator.languages], visibilityState: document.visibilityState, hidden: document.hidden, hasFocus: document.hasFocus(), activeElement: describe(document.activeElement),
+                    viewport: { width: innerWidth, height: innerHeight, visual: window.visualViewport ? { width: visualViewport.width, height: visualViewport.height, scale: visualViewport.scale, offsetLeft: visualViewport.offsetLeft, offsetTop: visualViewport.offsetTop } : null }, scroll: { x: scrollX, y: scrollY },
+                    target: { connected: target.isConnected, disabled: target.disabled, bounds: { x: rect.x, y: rect.y, width: rect.width, height: rect.height }, center, hit: describe(hit), centerHitsTarget: hit === target || target.contains(hit), hitStack: document.elementsFromPoint(center.x, center.y).map(describe),
+                      style: { display: style.display, visibility: style.visibility, pointerEvents: style.pointerEvents, animationName: style.animationName, animationDuration: style.animationDuration, transitionProperty: style.transitionProperty, transitionDuration: style.transitionDuration } } };
+                });
+                row.preActivation = await bounded(targetSnapshot(), 'passive target before activation', 10000, row.waits); save();
+                row.activation = { requested: variant.activateBeforeFrames, calls: 0, status: variant.activateBeforeFrames ? 'pending' : 'not-requested' }; save();
+                if (variant.activateBeforeFrames) {
+                  row.activation.calls++; save();
+                  try { await bounded(page.bringToFront(), 'sole public page.bringToFront', 10000, row.waits); row.activation.status = 'passed'; }
+                  catch (error) { row.activation.status = 'failed'; row.activation.error = String(error?.stack ?? error); row.errors.push('native activation: ' + row.activation.error); }
+                  save();
                 }
-                row.nativeAction = await bounded(page.evaluate(() => ({ count: document.querySelector('#native-probe').dataset.count, focused: document.activeElement?.id, events: window.__nativeProbeEvents })), 'native action observation', 10000, row.waits); row.nativeAction.bounds = bounds; save();
-                assert.equal(row.nativeAction.count, '1'); assert(row.nativeAction.events.some(event => event.type === 'click' && event.trusted), 'Actual trusted click delivery');
-                assert(row.nativeAction.events.some(event => event.trusted && (width === 390 ? event.type === 'touchstart' : event.type === 'keydown' && event.key === 'Enter')), 'Actual touch or Enter event');
+                try {
+                  row.frameSample = await bounded(page.evaluate(() => new Promise(resolve => {
+                    const frames = [], startedAt = performance.now(); let request, done = false;
+                    const sample = timestamp => {
+                      if (done) return;
+                      const rect = document.querySelector('#native-probe').getBoundingClientRect();
+                      frames.push({ timestamp, x: rect.x, y: rect.y, width: rect.width, height: rect.height });
+                      request = requestAnimationFrame(sample);
+                    };
+                    request = requestAnimationFrame(sample);
+                    setTimeout(() => { done = true; cancelAnimationFrame(request); resolve({ windowMs: 750, startedAt, endedAt: performance.now(), frames, visibilityState: document.visibilityState, hidden: document.hidden, hasFocus: document.hasFocus() }); }, 750);
+                  })), 'native frame sample after declared activation', 5000, row.waits); save();
+                  assert(row.frameSample.frames.length >= 2, 'Actual native frames advance within the declared 750ms observation');
+                  assert(row.frameSample.frames.every((frame, index, frames) => index === 0 || frame.timestamp > frames[index - 1].timestamp), 'Actual native frame timestamps strictly advance');
+                } catch (error) { row.errors.push('native frame progress: ' + String(error?.stack ?? error)); save(); }
+                row.preInput = await bounded(targetSnapshot(), 'actual target before native input', 10000, row.waits); save();
+                const probe = page.locator('#native-probe'), bounds = await bounded(probe.boundingBox(), 'native target bounds', 15000, row.waits);
+                row.nativeInput = { method: width === 390 ? 'locator.tap' : 'native Tab Enter', innerTapTimeoutMs: width === 390 ? 5000 : null, outerTimeoutMs: 15000, status: 'pending' }; save();
+                try {
+                  assert(bounds && bounds.x >= 0 && bounds.y >= 0 && bounds.x + bounds.width <= width && bounds.y + bounds.height <= height, 'Actual native target fits the viewport');
+                  row.nativeInput.centerHitsTargetBeforeAction = row.preInput.target.centerHitsTarget; save();
+                  if (width === 390) await bounded(probe.tap({ timeout: 5000 }), 'trusted phone tap with native inner timeout', 15000, row.waits);
+                  else {
+                    await bounded(page.keyboard.press('Tab'), 'native keyboard Tab', 15000, row.waits);
+                    assert.equal(await bounded(page.evaluate(() => document.activeElement?.id), 'native keyboard focus', 10000, row.waits), 'native-probe');
+                    await bounded(page.keyboard.press('Enter'), 'native keyboard Enter', 15000, row.waits);
+                  }
+                  row.nativeAction = await bounded(page.evaluate(() => ({ count: document.querySelector('#native-probe').dataset.count, focused: document.activeElement?.id, events: window.__nativeProbeEvents })), 'native action observation', 10000, row.waits); row.nativeAction.bounds = bounds; save();
+                  assert.equal(row.nativeAction.count, '1'); assert(row.nativeAction.events.some(event => event.type === 'click' && event.trusted), 'Actual trusted click delivery');
+                  assert(row.nativeAction.events.some(event => event.trusted && (width === 390 ? event.type === 'touchstart' : event.type === 'keydown' && event.key === 'Enter')), 'Actual touch or Enter event');
+                  row.nativeInput.status = 'passed'; save();
+                } catch (error) {
+                  row.nativeInput.status = 'failed'; row.nativeInput.error = String(error?.stack ?? error); row.errors.push('native input: ' + row.nativeInput.error); save();
+                  try { row.nativeActionAfterFailure = await bounded(page.evaluate(() => ({ count: document.querySelector('#native-probe').dataset.count, focused: document.activeElement?.id, events: window.__nativeProbeEvents })), 'native action observation after fatal input failure', 10000, row.waits); save(); }
+                  catch (readError) { row.errors.push('native input failure observation: ' + String(readError?.stack ?? readError)); save(); }
+                }
+                row.independentHeadAfterInput = { inputStatus: row.nativeInput.status, errorsRetainedBeforeHead: row.errors.length }; save();
                 row.headRead = await bounded(page.evaluate(async url => {
                   const response = await window.fetch(url, { method: 'HEAD' });
                   window.__nativeHeadResponse = response;
@@ -249,6 +295,8 @@ jobs:
                 row.headRetainedAfterFinished = await bounded(page.evaluate(() => ({ isNativeResponse: window.__nativeHeadResponse instanceof Response, status: window.__nativeHeadResponse.status, bodyUsed: window.__nativeHeadResponse.bodyUsed })), 'retained native HEAD Response after requestfinished', 10000, row.waits); save();
                 assert.deepEqual(row.headRetainedAfterFinished, { isNativeResponse: true, status: 200, bodyUsed: false });
                 row.dom = await bounded(page.evaluate(() => ({ characterSet: document.characterSet, preloadLinks: document.querySelectorAll('link[rel="preload"][as="style"]').length, stylesheetLinks: document.querySelectorAll('link[rel="stylesheet"]').length, loadedStylesheets: [...document.styleSheets].map(sheet => ({ href: sheet.href, rules: sheet.cssRules.length })), stylesheetAttributes: [...document.querySelectorAll('link[rel="stylesheet"]')].map(link => ({ href: link.href, crossorigin: link.getAttribute('crossorigin'), media: link.getAttribute('media'), onload: link.getAttribute('onload') })), language: navigator.language, languages: [...navigator.languages], userAgent: navigator.userAgent })), 'document observation', 10000, row.waits); save();
+                row.lifecycleEvents = await bounded(page.evaluate(() => window.__nativeLifecycleEvents), 'passive native lifecycle events after input and HEAD', 10000, row.waits); save();
+                assert.equal(row.activation.calls, variant.activateBeforeFrames ? 1 : 0); assert.equal(row.activation.status, variant.activateBeforeFrames ? 'passed' : 'not-requested');
                 assert.equal(row.dom.preloadLinks, 0); assert.equal(row.dom.stylesheetLinks, 2);
                 row.startupPageIdentityHeld = context.pages().length === 1 && context.pages()[0] === startupPage && page === startupPage; save();
                 assert.equal(row.startupPageIdentityHeld, true); assert.equal(variant.metaUtf8, false);
@@ -298,7 +346,7 @@ jobs:
             report.strictAllResponsesPhysical = report.cases.length === 12 && report.failedContexts === 0 && report.fatalErrors.length === 0 && report.cleanupErrors.length === 0;
             report.status = report.strictAllResponsesPhysical ? 'diagnostic-complete-all-bytes-held' : 'diagnostic-failed-strict-checks'; save();
           }
-          console.log(JSON.stringify({ kind: 'WEBKIT_PERSISTENT_STARTUP_DIAGNOSTIC', status: report.status, contexts: report.measuredContexts, failedContexts: report.failedContexts, variantCounts: report.variantCounts, strictAllResponsesPhysical: report.strictAllResponsesPhysical, evidenceRoot: OUT, reportSha256: hash(fs.readFileSync(path.join(OUT, 'report.json'))), diagnosticOnly: true, productQualified: false }));
+          console.log(JSON.stringify({ kind: 'WEBKIT_PERSISTENT_TOUCH_ACTIONABILITY_DIAGNOSTIC', status: report.status, contexts: report.measuredContexts, failedContexts: report.failedContexts, variantCounts: report.variantCounts, strictAllResponsesPhysical: report.strictAllResponsesPhysical, evidenceRoot: OUT, reportSha256: hash(fs.readFileSync(path.join(OUT, 'report.json'))), diagnosticOnly: true, productQualified: false }));
           assert.equal(report.cases.length, 12); for (const counts of report.variantCounts) { assert.equal(counts.contexts, 6); for (const width of counts.widths) assert.equal(width.contexts, 3); } assert.equal(report.fatalErrors.length, 0); assert.equal(report.cleanupErrors.length, 0);
           assert.equal(report.strictAllResponsesPhysical, true, 'No physical-byte, request, observer, bounded-wait or cleanup error waiver');
           NODE
@@ -342,7 +390,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: round1429-webkit-persistent-startup-diagnostic-${{ github.run_id }}
+          name: round1429-webkit-persistent-touch-actionability-${{ github.run_id }}
           path: ${{ runner.temp }}/grid-css-response-byte-diagnostic
           if-no-files-found: error
           retention-days: 30
