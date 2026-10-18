@@ -1,0 +1,6 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+assets1082 exit=0 8s | Prepared 92 actual font and flag dependencies for 84 career-club countries.
+simSoccerOpponentLabels-forwalk exit=0 26s | PASS simSoccerOpponentLabels: complete original/current careers, display controls and whole undo
+labels-b1 exit=0 12s | diagBJ labels: status pass
+labels-b2 exit=0 10s | diagBJ labels: status pass

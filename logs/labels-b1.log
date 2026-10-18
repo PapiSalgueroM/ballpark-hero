@@ -1,0 +1,5 @@
+PASS simSoccerOpponentLabels browser: 3 actual saved-row journeys, complete saves and read vectors
+journey 320 pass 
+journey 390 pass 
+journey 1280 pass 
+diagBJ labels: status pass

@@ -1,0 +1,9 @@
+# Release BJ triage rerun (rBJ-tr): kit lines copied byte for byte by label from .tmp-fx/bj
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+assets1082: pip3 install --quiet fonttools pillow && node scripts/qa/soccerOfferAssets1082.mjs
+simSoccerOpponentLabels-forwalk: SIM_NETWORK=offline SOCCER_OPPONENT_LABELS_OUT="$RUNNER_TEMP/ba-labels" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerOpponentLabels.mjs
+labels-b1: SOCCER_OPPONENT_LABELS_BROWSER=1 SOCCER_OPPONENT_LABELS_INPUT="$RUNNER_TEMP/ba-labels" SOCCER_OPPONENT_LABELS_OUT="$RUNNER_TEMP/ba-labels-b1" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerOpponentLabels.mjs; s=$?; node .rc/x/diagBJ.mjs labels "$RUNNER_TEMP/ba-labels-b1/report.json"; exit $s
+labels-b2: SOCCER_OPPONENT_LABELS_BROWSER=1 SOCCER_OPPONENT_LABELS_INPUT="$RUNNER_TEMP/ba-labels" SOCCER_OPPONENT_LABELS_OUT="$RUNNER_TEMP/ba-labels-b2" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerOpponentLabels.mjs; s=$?; node .rc/x/diagBJ.mjs labels "$RUNNER_TEMP/ba-labels-b2/report.json"; exit $s
