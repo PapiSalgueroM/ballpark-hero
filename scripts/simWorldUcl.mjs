@@ -444,7 +444,7 @@ async function careerJourney(E, f, { seasons, mode = 'nocoach', join = false, mo
     });
     const got = r.value ?? {};
     if (got.state) s = got.state;
-    steps.push({ label, json: record ? record(s) : null, inIt: !!s?.uclGroup, carries: !!s && !!s.worldComps?.ucl, draws: r.draws.length, drawSha: createHash('sha256').update(JSON.stringify(r.draws)).digest('hex').slice(0, 16), saved: got.saved ?? null });
+    steps.push({ label, json: record ? record(s) : null, inIt: !!s?.uclGroup, carries: !!s && !!s.worldComps?.ucl, uel: !!s?.worldComps?.uel, draws: r.draws.length, drawSha: createHash('sha256').update(JSON.stringify(r.draws)).digest('hex').slice(0, 16), saved: got.saved ?? null });
     onStep?.(M, s, label, got);
   };
   step('start', () => ({ state: f.custom ? M.cm.startCareer(f.club, f.era, f.custom) : M.cm.startCareer(f.club, f.era) }));
@@ -917,7 +917,8 @@ async function selfRelative() {
       if (y.inIt && y.carries) why.push('a state in the Champions League carries worldComps.ucl');
       if (x.json !== y.json) why.push(`the state differs (${firstKeys(x.json, y.json)})`);
       if (x.draws !== y.draws || x.drawSha !== y.drawSha) why.push(`the draws differ (${x.draws} against ${y.draws})`);
-      if (y.inIt && x.saved !== y.saved) why.push('the saved bytes differ');
+      /* Round 1509: a save holding the followed Europa League (the head arm's alone) is not compared byte for byte. */
+      if (y.inIt && !y.uel && x.saved !== y.saved) why.push('the saved bytes differ');
       if (why.length) { ok(false, `2 ${name} at ${x.label}: ${why.join('; ')}`); break; }
     }
   }
