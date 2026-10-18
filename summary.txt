@@ -1,0 +1,4 @@
+simWorldEuro exit=0 0s | simWorldEuro: green, 675 checks, 0 failures
+dashscan exit=0 0s | no dash in the diff
+unit-euro exit=0 2s |    Duration  1.26s (transform 77ms, setup 90ms, collect 48ms, tests 13ms, environment 451ms, prepare 218ms)
+tsc exit=0 68s | 
