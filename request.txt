@@ -1,0 +1,10 @@
+#!build
+#!playwright
+#!serial
+# Release BK triage tr5 (rBK-tr5) on 8ef7ad52: the wrap plant at its min-content width as a block (one glyph a line, so
+# nothing overflows and nothing is cut), with the gate's figures written in and on the career's own figures, twice.
+# Send with: rc.sh rBK-tr5 rc-tr5.txt wrapDiag.mjs
+headsha: git log --oneline -2 | cut -c1-120
+wd-minblock-figs: node .rc/x/wrapDiag.mjs > /dev/null && DIAG_PLANT=minblock DIAG_FIGS=1 ENGINES=chromium CM_FINANCE_CONTROL=wrap PORT=4195 node scripts/playDeskWrapDiag.mjs > /tmp/w5.log 2>&1; s=$?; grep -E "wrapDiag:|kitty row|FAIL" /tmp/w5.log | head -5 | cut -c1-220; tail -1 /tmp/w5.log; exit $s
+wd-minblock-1: node .rc/x/wrapDiag.mjs > /dev/null && DIAG_PLANT=minblock ENGINES=chromium CM_FINANCE_CONTROL=wrap PORT=4196 node scripts/playDeskWrapDiag.mjs > /tmp/w6.log 2>&1; s=$?; grep -E "kitty row|FAIL" /tmp/w6.log | head -4 | cut -c1-220; tail -1 /tmp/w6.log; exit $s
+wd-minblock-2: node .rc/x/wrapDiag.mjs > /dev/null && DIAG_PLANT=minblock ENGINES=chromium CM_FINANCE_CONTROL=wrap PORT=4197 node scripts/playDeskWrapDiag.mjs > /tmp/w7.log 2>&1; s=$?; grep -E "kitty row|FAIL" /tmp/w7.log | head -4 | cut -c1-220; tail -1 /tmp/w7.log; exit $s

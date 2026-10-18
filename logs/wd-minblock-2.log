@@ -1,0 +1,5 @@
+  FAIL: 320x640: a figure off one line, "+£62.2m" in the kitty row breaks over 5 lines
+  320x640: 108 text holders, 14 buttons and 28 figures measured; kitty row at y 1095 (on screen at 528), reads Kitty change | +£11.9m | +£62.2m; cover Board covers running costs | +£13.2m | +£71m
+  FAIL: 390x844: a figure off one line, "+£62.2m" in the kitty row breaks over 5 lines
+  390x844: 108 text holders, 14 buttons and 28 figures measured; kitty row at y 972 (on screen at 451), reads Kitty change | +£11.9m | +£62.2m; cover Board covers running costs | +£13.2m | +£71m
+playCmFinanceDesk: CONTROL wrap FIRED (3 failures, as it must)

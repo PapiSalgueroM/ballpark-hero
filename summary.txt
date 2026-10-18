@@ -1,0 +1,5 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 8ef7ad529 Release BK triage: the US board fixture re-recorded for PR333's aria-pressed on the appearance builder
+wd-minblock-figs exit=1 27s | playCmFinanceDesk: CONTROL wrap FIRED (3 failures, as it must)
+wd-minblock-1 exit=1 27s | playCmFinanceDesk: CONTROL wrap FIRED (3 failures, as it must)
+wd-minblock-2 exit=1 27s | playCmFinanceDesk: CONTROL wrap FIRED (3 failures, as it must)
