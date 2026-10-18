@@ -1,0 +1,8 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+s0-onesource exit=1 0s | simOneOffCups: control onesource FIRED (1 failures, all its own: eng-2026 decider stands on official (1 hosts), not an official and a press page on two hosts)
+s0 exit=0 0s | simOneOffCups: green, 168 checks (0 s)
+s0-receipt exit=1 0s | simOneOffCups: control receipt FIRED (1 failures, all its own: the receipt does not carry the hash of scripts/data/cmOneOffFormats.json (08f6f5b97a13575059cc706a1aef9e0d2
+sweepWeight exit=1 28s | sweepWeight: 3 failures
+dashscan exit=0 0s | en or em dashes in the diff and messages: 0
+rules exit=0 58s | simStorageWrites exit=0 | simStorageWrites: all green (owed: 12)
+tsc exit=0 66s | 

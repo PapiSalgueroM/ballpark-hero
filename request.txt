@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+s0: ONE_OFF_ONLY=0 node scripts/simOneOffCups.mjs
+s0-onesource: ONE_OFF_CONTROL=onesource node scripts/simOneOffCups.mjs
+s0-receipt: ONE_OFF_CONTROL=receipt node scripts/simOneOffCups.mjs
+rules: f=0; for h in simHarnessAnchors simNoRivalNames simStorageWrites; do node scripts/$h.mjs > /tmp/q-$h.log 2>&1; s=$?; echo "$h exit=$s | $(grep -v "^\s*$" /tmp/q-$h.log | tail -1 | cut -c1-160)"; [ $s -eq 0 ] || f=1; done; exit $f
+sweepWeight: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; grep -E "club-manager|manager-hot-seat|deadline-day" /tmp/sw.log | head -8 | cut -c1-200; tail -2 /tmp/sw.log | cut -c1-200; exit $s
+dashscan: git diff c8ad8de8 7b46bede > /tmp/d.txt; git log --format=%B c8ad8de8..7b46bede >> /tmp/d.txt; node -e "const t=require('fs').readFileSync('/tmp/d.txt','utf8');const n=[...t].filter(c=>c===String.fromCharCode(0x2013)||c===String.fromCharCode(0x2014)).length;console.log('en or em dashes in the diff and messages: '+n);process.exit(n?1:0)"
