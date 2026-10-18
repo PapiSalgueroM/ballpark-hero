@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unit-lib: node_modules/.bin/vitest run src/lib/clubManager*.test.ts src/lib/worldCompetition.test.ts src/lib/uclLeaguePhase.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -15; exit ${PIPESTATUS[0]}
+unit-cm: node_modules/.bin/vitest run src/test/clubManager*.test.ts src/test/clubManager*.test.tsx src/test/cm*.test.ts src/test/cm*.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -15; exit ${PIPESTATUS[0]}
+golden: node scripts/recordWorldTieGolden1347.mjs --ref HEAD --check
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+dashscan: if git diff 77556430 HEAD | grep -nP '\x{2013}|\x{2014}'; then echo "dash found"; exit 1; else echo "no dash in the diff"; fi
+simDailyDeals: node scripts/simDailyDeals.mjs
+dd-world: ok=0; r=""; for k in world worlddeadline; do DAILY_DEALS_CONTROL=$k node scripts/simDailyDeals.mjs > /tmp/dd-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/dd-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+simCmShootoutOrder: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutOrder.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
