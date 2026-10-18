@@ -137,3 +137,21 @@ dukb-handoff/2026-10-10/briefs/brief-1509.md. Kept at every push; the builder's 
 - Not fixed here: the board panel's "On track" for a cup winner seventh in its league with no reason given
   (ClubManagerBoardPanel.tsx is outside this round's files); the brief's realSaves rule, which lives only in
   simCmBoardVerdict, whose kit refuses on main too (owed at the join).
+
+## Closing check fix (fix2-1509, 2026-10-18)
+
+- The board says why. objectiveStatuses carries an optional `why` line on a European rung met otherwise than by
+  the position asked: the cup won (C), the cup's place passed down the table (P), or a league place passed down
+  past a club going into the Champions League to a club below the target (L). ClubManagerBoardPanel.tsx shows it
+  under the ask at 12 px. That file is outside this round's FILES list: the lead's closing check asked for it as a
+  major (run minor 6). src/pages/ClubManager.tsx stays untouched. Unit tested in euroAccess.test.ts; the L case
+  only arises on a played season and is held by the runner's board walk (r1509-fx2b: Eintracht Frankfurt, cup won
+  from seventh, sixth at the end against a target of fifth).
+- The brief's realSaves rule, evidenced without simCmBoardVerdict's kit (which still refuses): every Club Manager
+  save scripts/lib/realSaves.mjs builds on 77556430, plus 17 more the base engine writes (season one week 20, a
+  paused review, season two, two eras), loads to the same JSON on this tree and on 77556430 with worldComps.uel
+  taken off (r1509-fx2b: 21 saves, 9 gained a Europa League, 0 differ; its leak control fired on 9). A paused review
+  gains none, as the Champions League's repair of 1502 opens nothing on a finished season.
+- simWorldUcl section 2's saved bytes compare with worldComps.uel taken off has its own control, savedbytes: a save
+  holding the Europa League also writes matchRules, which loadCareer deletes, so only that compare can turn red.
+- The Round 1081 pin was retaken once more, last, after the two clubManager.ts changes above (fee5af48).
