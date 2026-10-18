@@ -1,0 +1,19 @@
+treeWithoutMerge: 3b708426a1693892a2a2b9fd1198969bedce83d4, 2e1f4fc8 without f1e54e17; conflicts kept from 2e1f4fc8: scripts/lib/cmWorldSeed1250.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+simCmOldCareersWorld: BASE 3b708426 (CM_OLD_WORLD_BASE), sections 1, control never
+  fixture pre: 1 tape(s) passed over (tape 0: the next season ended (or the manager was sacked) before its January window (season 2 week 27 of 54, match, sacked true, wilderness false, board 0))
+  FAIL section 1: [adopted] pre (Arsenal, now) at rollover: it holds no readable ledger
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Bradley Barcola (Liverpool to Nottingham Forest): 0 owned records at the buyer
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Matheus Cunha (Manchester United to Tottenham): 0 owned records at the buyer
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Yan Diomande (Real Madrid to Manchester City): 0 owned records at the buyer
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Antonio Nusa (RB Leipzig to Brentford): 0 owned records at the buyer
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Álex Baena (Atlético Madrid to Liverpool): 0 owned records at the buyer
+  FAIL section 1: [adopted] pre (Arsenal, now) at save-and-reload after the summer: it holds no readable ledger
+  FAIL section 1: [moved] pre (Arsenal, now) at save-and-reload after the summer: Bradley Barcola (Liverpool to Nottingham Forest): 0 owned records at the buyer
+  pre (Arsenal, now): 20 steps equal to BASE before the summer, 31 after it
+  mid (Bayern Munich, era2015): 18 steps equal to BASE before the summer, 29 after it
+section 1: 2 old saves, 38 steps equal to BASE before the summer, 60 steps after it at 8 checkpoints; deals between two other clubs placed at their buyers: 9 in the summer, 12 in January (0 placements checked); 0 joined rows on the screen; red by check {"adopted":60,"moved":60}
+  pre: 4 bytes of ledger after January (0 records)
+  pre: the adoption adds 55 bytes to the state (an empty ledger)
+  mid: 4 bytes of ledger after January (0 records)
+  mid: the adoption adds 59 bytes to the state (an empty ledger)
+simCmOldCareersWorld: control never FIRED: section 1's moved check red 60 times, the comparison before the summer green (7s)
