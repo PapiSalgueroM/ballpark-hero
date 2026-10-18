@@ -174,7 +174,7 @@ describe('recorded club trophy campaigns', () => {
     expect(scroll.scrollTop).toBe(0);
     fireEvent.click(view.getByRole('button', { name: 'Trophy cabinet help' }));
     expect(view.getByText(/Example: 27 season goals can include 3 in this cup/)).toBeVisible();
-    fireEvent.click(view.getByRole('button', { name: 'Back to wins' }));
+    fireEvent.click(view.getByRole('button', { name: 'Back to season' }));
     expect(view.getByRole('heading', { name: 'European club title' })).toHaveFocus();
     fireEvent.click(view.getByRole('button', { name: '‹ All wins' }));
     expect(scroll.scrollTop).toBe(312);
@@ -199,7 +199,7 @@ describe('recorded club trophy campaigns', () => {
     const view = render(<TrophyCabinet career={source} category="ucl" onClose={vi.fn()} />);
     open(view.container);
     fireEvent.click(view.getByRole('button', { name: 'Trophy cabinet help' }));
-    fireEvent.click(view.getByRole('button', { name: 'Back to wins' }));
+    fireEvent.click(view.getByRole('button', { name: 'Back to season' }));
     fireEvent.click(view.getByRole('button', { name: '‹ All wins' }));
     expect(source.seasons[0]).toBe(row);
     expect(row.clubCupRun).toBe(run);

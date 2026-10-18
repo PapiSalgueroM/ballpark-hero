@@ -164,7 +164,7 @@ export default function TrophyCabinet({ career, category, onClose }: {
               <p>Example: a season with one league title and one domestic cup appears once in each category. It is two trophies from the same season.</p>
               <p>European and club cup details show only the simulated campaign that season kept. Each card is one saved game, including separate legs. The campaign goal total and your goals in each game are different from your season totals.</p>
               <p>Example: 27 season goals can include 3 in this cup. A 2-1 first leg and 1-1 second leg stay separate cards, with 3-2 on aggregate only when recorded. Penalties are separate from the match score. Extra time goals are already included in it.</p>
-              <button type="button" onClick={() => setHelp(false)} data-trophy-help-back className="min-h-11 rounded-lg border border-border px-3 font-bold">Back to wins</button>
+              <button type="button" onClick={() => setHelp(false)} data-trophy-help-back className="min-h-11 rounded-lg border border-border px-3 font-bold">{picked ? 'Back to season' : 'Back to wins'}</button>
             </div>
           ) : picked ? (
             <div className="space-y-3" data-trophy-detail={picked.year}>
