@@ -13389,8 +13389,11 @@ function setWorldComp(state: CareerState, comp: WorldCompKey, slice: WorldCompSl
   if (dsc) next.dsc = dsc;
   /* Taking the Champions League's key off takes the object off first and puts back what is left, the way the
      engine has always written it (delete, then assign), so the object stands where it always stood among the
-     save's keys; the Europa League's key is written in place. */
-  if (comp === 'ucl' && !slice) delete state.worldComps;
+     save's keys; the Europa League's key is written in place. Release BK triage (section 7): only when that key
+     is there. Before Round 1509 the delete met no object without it, so clearing a key the state does not hold
+     (a club in the Champions League, at every load's repair) leaves the object where it stands, and a save the
+     engine wrote loads to the same bytes. */
+  if (comp === 'ucl' && !slice && state.worldComps?.ucl) delete state.worldComps;
   if (next.ucl || next.uel || next.dsc) state.worldComps = next;
   else delete state.worldComps;
 }
@@ -13682,7 +13685,8 @@ export function repairWorldComp(state: CareerState, comp: WorldCompKey): void {
     const inIt = comp === 'ucl' && !!state.uclGroup;
     const slice = state.worldComps?.[comp];
     if (slice && slice.s === state.season && !inIt) return;
-    setWorldComp(state, comp, null);
+    /* Release BK triage (section 7): a key the save does not hold is not touched. */
+    if (slice !== undefined) setWorldComp(state, comp, null);
     if (inIt || !Array.isArray(state.calendar) || state.week >= state.calendar.length) return;
     const fmt = worldCompFormatOf(state, comp);
     if (fmt === 'l36' && state.season !== 1) return;
