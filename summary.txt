@@ -1,0 +1,4 @@
+holder-part exit=0 292s | proofWorldUclFleet: GREEN, 60 journeys and 6479 steps byte equal to 39978122, draws equal
+final-part exit=0 308s | proofWorldUclFleet: GREEN, 60 journeys and 6479 steps byte equal to 77556430 (a watching state without worldComps.uel), draws equal
+final-watch exit=0 816s | proofWorldUclFleet: GREEN, 130 journeys and 17799 steps byte equal to 77556430 (a watching state without worldComps.uel), draws equal
+holder-watch exit=0 668s | proofWorldUclFleet: GREEN, 130 journeys and 17799 steps byte equal to 39978122, draws equal
