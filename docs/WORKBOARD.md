@@ -15895,3 +15895,8 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+
+## Round1423 claim: Tennis Player replay clears an obsolete surrender prompt
+Root owns only TennisPlayerBoard.tsx Play Again local confirmation reset, new focused regression/proof/browser/workflow and closing docs on codex/tennis-give-up-replay, base775564305e9da84dab59f2b9fe246d044a3cc8e9. Source hypothesis: correct search can finish while Give Up is open; next same-puzzle Unlimited round may inherit the prompt. Require original remote unit and actual built-route reproduction before product adoption, then exact original-source negative control and fixed replay/Cancel/surrender/scoring checks. Hook/search/types/styles/shared UI/data remain held. App runtime stays remote Actions with ordinary offline preload; types, serial plain build, all15readers/all14unchangedfatalcaps. All60priorheads sealed, dirtyprimary WORKBOARD append only. I keeps protected SC/Manager/tournaments and actual release/main/publish. Plan docs/ROUND1423-TENNIS-REPLAY.md.
+
