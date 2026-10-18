@@ -1,3 +1,33 @@
+## Round 1421 CLOSED as NONFIND, 2026-10-18: squad Retry recovers after reconnecting
+
+Codex report lane, isolated branch `codex/soccer-squad-retry`, based on main
+`775564305e9da84dab59f2b9fe246d044a3cc8e9`. Tested diagnostic head
+`2067ec6823eb2f89c073ae136aa4f08a416f4f3e`. This round changes no app source and has no product PR.
+
+Four actual production-route Chromium journeys passed: an offline cold Squad sheet failure followed by
+reconnection and Retry at 390 and 1280 pixels, and an ordinary healthy cold open at each size. Both Retry
+journeys loaded the real sheet in the same document. The proposed same-URL cache fault was not reproduced.
+The full post-mount career, stores and RNG state stayed unchanged. This is a finite Chromium result using an
+explicitly fictional career generated through the real engine, not a Safari, physical-device or live claim.
+
+GitHub run 39128646293, job 117679025122, artifact 12137660638 passed: real app types, 60 existing related
+tests, serial plain build, all 15 built-site readers and all 14 unchanged fatal weight caps. Native saved-evidence
+admission passed 177049 checks with zero errors. The first browser attempt counted same-document frame events as document
+loads and failed before Retry; the corrected observer counts actual document requests and retains every frame
+event. A native auditor variable collision was corrected separately. Both failed attempts remain retained.
+
+Evidence and exact limits: [Round 1421](ROUND1421-SOCCER-SQUAD-RETRY.md). Outside packet:
+`C:/Users/antho/dukb-handoff/2026-10-18/soccer-squad-retry-1421/`.
+The final commit will add closing docs only; canonical byte closure and final push receipts will be retained outside the repo.
+
+Release queue remains owned by Claude I. Round 1420's XI query ownership fix is ready in draft
+[PR 335](https://github.com/PapiSalgueroM/ballpark-hero/pull/335), tested
+`2c2b6373bfe72ecef402412b7e83403895e021ce`, final
+`ac322751c9fcde1e858a80010100a0f7e7e7e455`. Prior 58 report heads stay immutable.
+PRs 310, 331, 332, 333, 334 and 335 remain the held release queue. Quiz 1417 still needs I's protected render
+seam. Tournament 1509/1510 acceptance and actual join, main and publish stay with I. The exact 20-file I map at
+12:20 UTC was unchanged from 11:01 UTC; silence creates no lease. No release or publication is claimed here.
+
 ## Release BJ LIVE, 2026-10-17 21:51 EDT: Club Manager Hard and Legend, the Champions League you can follow in or out of it, match days that read like a scoreboard, a way out for dirty money in the US careers, and Soccer Career's summer cards
 
 Claude lane (session I). main d0c3ff58, deployment fec60776-a9ad-49aa-b4ea-04a590a233de, entry index-CWmc_M1Q.js (was
