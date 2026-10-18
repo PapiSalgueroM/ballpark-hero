@@ -115,6 +115,8 @@ export function TransferScreen({
   const [mode, setMode] = useState<'buy' | 'sell' | 'news'>('buy');
   const [newsSort, setNewsSort] = useState<'recent' | 'fee'>('recent');
   const [newsClub, setNewsClub] = useState<'all' | 'mine'>('all');
+  const [newsPage, setNewsPage] = useState(0);
+  const newsPane = useRef<HTMLDivElement>(null);
   /* Round 161: the deep filters. */
   const [posExact, setPosExact] = useState<'any' | Position>('any');
   const [ageBand, setAgeBand] = useState<(typeof AGE_BANDS)[number]['id']>('any');
@@ -262,8 +264,15 @@ export function TransferScreen({
   const news = useMemo(() => {
     const items = log.filter(n => newsClub === 'all' || n.from === career.clubName || n.to === career.clubName).reverse();
     if (newsSort === 'fee') items.sort((a, b) => b.fee - a.fee);
-    return items.slice(0, 50);
+    return items;
   }, [log, newsSort, newsClub, career.clubName]);
+  const newsLastPage = Math.max(0, Math.ceil(news.length / 50) - 1);
+  const newsCurrentPage = Math.min(newsPage, newsLastPage);
+  if (newsPage !== newsCurrentPage) setNewsPage(newsCurrentPage);
+  const newsRows = news.slice(newsCurrentPage * 50, (newsCurrentPage + 1) * 50);
+  useLayoutEffect(() => {
+    if (newsPane.current) newsPane.current.scrollTop = 0;
+  }, [newsCurrentPage, newsClub, newsSort, career.clubName]);
 
   const canSell = (p: CMPlayer) => windowOpen && canLeaveSquad(career, p);
   const loansUsed = activeLoans(career);
@@ -1187,7 +1196,7 @@ export function TransferScreen({
         <div className="space-y-2">
           <div className="flex gap-1.5">
             <button
-              onClick={() => setNewsClub('all')}
+              onClick={() => { setNewsClub('all'); setNewsPage(0); }}
               aria-pressed={newsClub === 'all'}
               className={cn('min-h-[32px] px-2.5 py-1 rounded-full border text-[10px] font-bold transition-all',
                 newsClub === 'all' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-muted-foreground hover:border-primary')}
@@ -1195,7 +1204,7 @@ export function TransferScreen({
               All clubs
             </button>
             <button
-              onClick={() => setNewsClub('mine')}
+              onClick={() => { setNewsClub('mine'); setNewsPage(0); }}
               aria-pressed={newsClub === 'mine'}
               className={cn('min-h-[32px] px-2.5 py-1 rounded-full border text-[10px] font-bold transition-all',
                 newsClub === 'mine' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-muted-foreground hover:border-primary')}
@@ -1205,14 +1214,14 @@ export function TransferScreen({
           </div>
           <div className="flex gap-1.5">
             <button
-              onClick={() => setNewsSort('recent')}
+              onClick={() => { setNewsSort('recent'); setNewsPage(0); }}
               className={cn('px-2.5 py-1 rounded-full border text-[10px] font-bold transition-all',
                 newsSort === 'recent' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-muted-foreground hover:border-primary')}
             >
               Most recent
             </button>
             <button
-              onClick={() => setNewsSort('fee')}
+              onClick={() => { setNewsSort('fee'); setNewsPage(0); }}
               className={cn('px-2.5 py-1 rounded-full border text-[10px] font-bold transition-all',
                 newsSort === 'fee' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-muted-foreground hover:border-primary')}
             >
@@ -1220,8 +1229,8 @@ export function TransferScreen({
             </button>
           </div>
           <p className="text-[10px] text-muted-foreground">Recent recorded deals only. Older moves may no longer be in this save.</p>
-          <div className="bg-card border border-border rounded-xl p-2 max-h-96 overflow-y-auto">
-            {news.map((n, i) => (
+          <div ref={newsPane} data-testid="cm-transfer-news" className={cn('bg-card border border-border rounded-xl p-2 max-h-96 overflow-y-auto', news.length > 50 && 'h-96')}>
+            {newsRows.map((n, i) => (
               <div key={i} className="flex items-center gap-2 py-1.5 border-b border-border/30 last:border-0 text-xs">
                 <span className="shrink-0 text-[9px] text-muted-foreground w-8">S{n.season}</span>
                 <div className="flex-1 min-w-0 text-foreground truncate">
@@ -1236,6 +1245,23 @@ export function TransferScreen({
               <p className="text-xs text-muted-foreground text-center py-4">{newsClub === 'mine' ? 'No recent recorded deals for your club.' : 'No transfers yet. Open a window and make some noise.'}</p>
             )}
           </div>
+          {news.length > 50 && (
+            <div className="flex items-center justify-between gap-2">
+              <button aria-label="Previous deals" disabled={newsCurrentPage === 0}
+                onClick={() => setNewsPage(newsCurrentPage - 1)}
+                className="min-h-[44px] min-w-[44px] px-3 rounded-lg border border-border text-xs font-bold disabled:opacity-40">
+                Previous
+              </button>
+              <p aria-live="polite" className="text-[10px] text-center text-muted-foreground">
+                {newsCurrentPage * 50 + 1} to {Math.min((newsCurrentPage + 1) * 50, news.length)} of {news.length}
+              </p>
+              <button aria-label="Next deals" disabled={newsCurrentPage === newsLastPage}
+                onClick={() => setNewsPage(newsCurrentPage + 1)}
+                className="min-h-[44px] min-w-[44px] px-3 rounded-lg border border-border text-xs font-bold disabled:opacity-40">
+                Next
+              </button>
+            </div>
+          )}
         </div>
       )}
       {/* Round 634 review: why the last press did nothing, in the engine's own
