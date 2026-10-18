@@ -1,0 +1,10 @@
+unit-lib exit=0 66s |    Duration  64.81s (transform 6.03s, setup 3.77s, collect 22.82s, tests 121.87s, environment 25.23s, prepare 5.85s)
+tsc exit=2 170s |   The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+unit-cm exit=0 245s |    Duration  244.20s (transform 12.32s, setup 4.10s, collect 44.46s, tests 392.33s, environment 26.65s, prepare 6.02s)
+sec2 exit=1 530s | simOneOffCups: 8 FAILURES of 720 checks (529 s)
+simClubManagerCalendar exit=0 64s | simClubManagerCalendar: all green
+simCalendar exit=0 1s | simCalendar: all green
+simDailyDeals exit=0 6s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+dashscan exit=0 0s | no dash in the diff
+ctl-s2 exit=0 898s | adjacent exit=1 | simOneOffCups: control adjacent FIRED (162 failures, all its own: 2 slots: Arsenal seed 1 coach season 2: the nights sit before entries 28,28, the place
+sec13567 exit=1 2059s | simOneOffCups: 14 FAILURES of 122013 checks (2059 s)

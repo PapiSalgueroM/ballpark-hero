@@ -1,0 +1,11 @@
+  2 calendar: 80 participant seasons beside their twins, 80 nights; the closest neighbour of a night 3 days, at most 1 matches in seven days to a night
+  2 participant journeys whose wages differ from the twin by a week keyed event (printed, not asserted): 33
+  FAIL 2 window: Chelsea seed 4 coach: the summer window closes after 1:league:3:5 2:uclGroup:0:4 3:uclGroup:0:4, the twin after 1:league:3:5 2:uclGroup:0:4 3:league:3:5
+  FAIL 2 window: Everton seed 2 coach: the summer window closes after 1:league:3:5 2:uclGroup:0:4 3:league:3:5, the twin after 1:league:3:5 2:uclGroup:0:4 3:uclGroup:0:4
+  FAIL 2 calendar: Everton seed 5 coach season 3: with the nights taken out the calendar is not the twin's
+  FAIL 2 dates: Everton seed 5 coach season 3: an entry's date moved (first: 2028-09-20)
+  FAIL 2 books: Everton seed 5 coach: the season charged 54 54 54 weeks, the twin with no nights 54 54 62
+  FAIL 2 calendar: Birmingham City seed 3 coach season 3: with the nights taken out the calendar is not the twin's
+  FAIL 2 dates: Birmingham City seed 3 coach season 3: an entry's date moved (first: 2028-09-20)
+  FAIL 2 books: Birmingham City seed 3 coach: the season charged 62 62 54 weeks, the twin with no nights 62 62 62
+simOneOffCups: 8 FAILURES of 720 checks (529 s)

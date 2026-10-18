@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unit-lib: node_modules/.bin/vitest run src/lib/clubManager*.test.ts src/lib/worldCompetition.test.ts src/lib/euroAccess.test.ts src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+unit-cm: node_modules/.bin/vitest run src/test/clubManager*.test.ts src/test/clubManager*.test.tsx src/test/cm*.test.ts src/test/cm*.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+sec2: ONE_OFF_ONLY=2 node scripts/simOneOffCups.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+ctl-s2: f=0; for c in tick adjacent; do ONE_OFF_CONTROL=$c node scripts/simOneOffCups.mjs > /tmp/g-$c.log 2>&1; s=$?; echo "$c exit=$s | $(tail -1 /tmp/g-$c.log | cut -c1-220)"; [ $s -eq 1 ] && grep -q FIRED /tmp/g-$c.log || f=1; done; exit $f
+sec13567: ONE_OFF_ONLY=1,3,5,6,7 node scripts/simOneOffCups.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simCalendar: node scripts/simCalendar.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simDailyDeals: node scripts/simDailyDeals.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+dashscan: if git diff cad4edcf HEAD | grep -nP '\x{2013}|\x{2014}'; then echo "dash found"; exit 1; else echo "no dash in the diff"; fi

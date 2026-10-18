@@ -1,0 +1,30 @@
+  1 participants (my club earned a place: played from the match half): 71
+  1 plain fields (champions v cup winners): 110
+  1 rollovers of a manager outside the top flight (the afterswap control reads these): 142
+  3 participant journeys compared up to their first night: 26
+  5 bytes of a followed one slice: 42831
+  5 bytes of a stub: 156146
+  5 followed one slices measured: 400
+  5 stubs measured: 3274
+  7 season one followed: 100
+  7 season one stub seasonOne: 40
+  7 settled in 90 minutes: 310
+  7 settled on penalties: 90
+  7 won by the stronger side: 209
+  7 won by the weaker side: 186
+  1 rows seen: eng-2026
+  FAIL 1 season one: Chelsea (now) seed 1 coach at s2-rollover: a carried slice holds my club Manchester City, so the game would play it without me
+  FAIL 1 season one: Chelsea (now) seed 1 nocoach at s1-rollover: a carried slice holds my club Manchester City, so the game would play it without me
+  FAIL 1 season one: Chelsea (now) seed 2 coach at s1-rollover: a carried slice holds my club Manchester City, so the game would play it without me
+  FAIL 1 season one: Chelsea (now) seed 2 nocoach at s1-rollover: a carried slice holds my club Manchester City, so the game would play it without me
+  FAIL 1 season one: Chelsea (now) seed 5 nocoach at s2-rollover: a carried slice holds my club Manchester City, so the game would play it without me
+  FAIL 1 season one: Chelsea (now) seed 1 coach forced at s2-rollover: a carried slice holds my club Manchester City, so the game would play it without me
+  FAIL 1 season one: Chelsea (now) seed 1 nocoach forced at s1-rollover: a carried slice holds my club Manchester City, so the game would play it without me
+  FAIL 1 season one: Chelsea (now) seed 2 coach forced at s1-rollover: a carried slice holds my club Manchester City, so the game would play it without me
+  FAIL 1 season one: Chelsea (now) seed 2 nocoach forced at s1-rollover: a carried slice holds my club Manchester City, so the game would play it without me
+  FAIL 1 season one: Chelsea (now) seed 2 nocoach forced at s2-rollover: a carried slice holds my club Manchester City, so the game would play it without me
+  FAIL 1 season one: Chelsea (now) seed 3 coach forced at s1-rollover: a carried slice holds my club Manchester City, so the game would play it without me
+  FAIL 1 season one: Chelsea (now) seed 3 nocoach forced at s1-rollover: a carried slice holds my club Manchester City, so the game would play it without me
+  FAIL 1 season one: Chelsea (now) seed 5 coach forced at s1-rollover: a carried slice holds my club Manchester City, so the game would play it without me
+  FAIL 1 season one: Chelsea (now) seed 5 nocoach forced at s2-rollover: a carried slice holds my club Manchester City, so the game would play it without me
+simOneOffCups: 14 FAILURES of 122013 checks (2059 s)
