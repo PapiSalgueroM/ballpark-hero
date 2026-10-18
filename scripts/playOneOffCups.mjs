@@ -33,7 +33,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PLAY_ONEOFF_CONTROL || '';
 const SIZES = [[320, 640], [390, 844], [1280, 900]];
 const TEMP = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-one-off-walk-'));
-const SHOTS = path.join(process.env.RC_OUT || TEMP, 'shots');
+const SHOTS = path.join(process.env.RC_OUT || TEMP, CONTROL ? `shots-${CONTROL}` : 'shots');
 fs.mkdirSync(SHOTS, { recursive: true });
 const cannot = why => { console.log(`playOneOffCups: could not run. ${why}`); process.exit(2); };
 if (!process.env.CI) cannot('it builds and serves the site, so it runs on a runner only (CI is not set)');
