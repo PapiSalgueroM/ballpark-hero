@@ -1,0 +1,13 @@
+#!build
+#!playwright
+#!serial
+# Release BK triage tr4 (rBK-tr4) on 8ef7ad52: does f77d6c88's wrap plant (word-break: break-all) fire on the gate's
+# figures? A runner only copy of the desk walk (wrapDiag.mjs) picks the plant and writes the gate's own kitty and cover
+# figures into their cells before it plants, so the unseeded career cannot decide. Each line prints the walk's last line
+# and exits with its code (1 FIRED, 3 DID NOT FIRE).
+# Send with: rc.sh rBK-tr4 rc-tr4.txt wrapDiag.mjs
+headsha: git log --oneline -2 | cut -c1-120
+wd-old-figs: node .rc/x/wrapDiag.mjs > /dev/null && DIAG_PLANT=old DIAG_FIGS=1 ENGINES=chromium CM_FINANCE_CONTROL=wrap PORT=4191 node scripts/playDeskWrapDiag.mjs > /tmp/w1.log 2>&1; s=$?; grep -E "wrapDiag:|kitty row|FAIL" /tmp/w1.log | head -4 | cut -c1-220; tail -1 /tmp/w1.log; exit $s
+wd-breakall-figs: node .rc/x/wrapDiag.mjs > /dev/null && DIAG_PLANT=breakall DIAG_FIGS=1 ENGINES=chromium CM_FINANCE_CONTROL=wrap PORT=4192 node scripts/playDeskWrapDiag.mjs > /tmp/w2.log 2>&1; s=$?; grep -E "wrapDiag:|kitty row|FAIL" /tmp/w2.log | head -4 | cut -c1-220; tail -1 /tmp/w2.log; exit $s
+wd-block-figs: node .rc/x/wrapDiag.mjs > /dev/null && DIAG_PLANT=block DIAG_FIGS=1 ENGINES=chromium CM_FINANCE_CONTROL=wrap PORT=4193 node scripts/playDeskWrapDiag.mjs > /tmp/w3.log 2>&1; s=$?; grep -E "wrapDiag:|kitty row|FAIL" /tmp/w3.log | head -4 | cut -c1-220; tail -1 /tmp/w3.log; exit $s
+wd-block: node .rc/x/wrapDiag.mjs > /dev/null && DIAG_PLANT=block ENGINES=chromium CM_FINANCE_CONTROL=wrap PORT=4194 node scripts/playDeskWrapDiag.mjs > /tmp/w4.log 2>&1; s=$?; grep -E "kitty row|FAIL" /tmp/w4.log | head -3 | cut -c1-220; tail -1 /tmp/w4.log; exit $s
