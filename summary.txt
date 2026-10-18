@@ -1,0 +1,4 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 59s | playOneOffCups: green, five cases at three sizes, pictures in /home/runner/work/_temp/rc-out/files/shots
+worldWalk exit=0 261s | playWorldUcl: green. Nine saves at three sizes, 93 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
+sweepWeight exit=1 26s |    /deadline-day       651K gz over  47 files (budget 646K, 651.0K to the tenth)
