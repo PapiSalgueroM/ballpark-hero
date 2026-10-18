@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "ledgerKey": "cm-one-off-formats-v1",
+  "dataFile": "scripts/data/cmOneOffFormats.json",
+  "readOn": "2026-10-18",
+  "readBy": "the builder of Round 1510, desktop Claude lane",
+  "method": "Every page was opened on the read day through a page reader that answers with lines quoted from the page; a literal is a line it quoted, cut short where the reader cut it. Curly quotes and apostrophes are written straight. The Sports Cast's, Outlook India's, Graphic Online's and Reuters' pages were found by a web search and then opened the same way. A date is the page's own; the Arsenal and Liverpool pages carry none and are marked undated.",
+  "limits": [
+    "No copy of a page was kept, so there is no snapshot hash.",
+    "The official family's line for the 2026 decider is Liverpool FC's for the 2025 edition (no official 2026 page the reader opened says how a level match ends); the press line is the 2026 edition's (Sports Mole, 14 August 2026). The Premier League's explainer of 14 August 2026 and The FA's 2026 page do not say.",
+    "The double rule's official line is the Premier League's general explainer of 2026, not a rulebook; the press line (The Sports Cast) says the runners-up usually take the place.",
+    "Only England's 2026 row and its season one edition are verified. The four England era rows and the 2026 rows of Spain, Italy, Germany and France are toVerify: their candidates are memory or the other lane's notes, never facts, and the game plays no super cup for them.",
+    "The 2026 edition's real result and date are not recorded: the game plays its own season one, on its own calendar."
+  ],
+  "checkedBy": "scripts/simOneOffCups.mjs",
+  "sha256": "92fd652bf436ee4653bdb815db0c38fb997e7dc865c043b194a26a463daf74c7"
+}
