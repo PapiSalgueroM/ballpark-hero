@@ -1,0 +1,4 @@
+simClubManagerALeague: head exit 0 | simClubManagerALeague: all checks passed
+simCmLeagueFixtures: head exit 0 | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+simCmVarLedger: head exit 0 | simCmVarLedger: all 691 checks passed.
+readers: 3 run, 0 red on this tree and not as on main

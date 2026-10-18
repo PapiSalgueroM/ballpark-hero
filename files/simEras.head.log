@@ -1,0 +1,21 @@
+1) Year zero is the identity
+   454 clubs, 5113 players compared field by field against the real data
+   the real data: the bake's 4401, less 1 moved by a newer squad list (Ryan Fraser from Southampton), plus 713 in 2 generated leagues (A-League Men 310, Russian Premier League 403) = 5113
+2) A thirty three year old declines, a twenty two year old does not
+   10 clubs x 24 seasons, mean rating change per season by the age he turned
+   outfield  18:3.07 19:2.61 20:2.08 21:1.53 22:0.84 23:0.88 24:0.52 25:0.49 26:0.39 27:0.15 28:0.10 29:0.12 30:-0.47 31:-0.91 32:-1.45 33:-1.94 34:-2.50 35:-2.81 36:-3.23 37:-4.36 38:-5.19
+   keepers   19:2.15 20:1.52 21:1.43 22:0.78 23:0.46 24:0.53 25:0.45 26:0.28 27:0.07 28:0.07 29:0.06 30:0.00 31:-0.28 32:-0.41 33:-0.75 34:-0.93 35:-1.21 36:-1.47 37:-1.85
+   353 retirements: youngest 32, median 37, oldest 42
+3) A retired player never comes back
+   19 retired names, 98 market checks, none reappeared
+   2026:gone 2027:gone 2028:gone 2029:gone 2030:gone 2031:gone 2032:gone 2033:gone 2034:gone 2035:gone 2036:gone 2037:gone 2038:gone
+4) Twenty seasons out, the league is still a league
+   10 careers x 20 seasons, champions: Arsenal 27, Everton 19, Manchester City 18, Manchester United 13, Chelsea 11, Liverpool 9
+   established clubs took 44% of the titles
+   my squad: size 23.3 (min 22), average age 28.0, oldest 36.1 (max 40), XI 77.3
+   world + 0y: 5113 players, mean age 25.0, club XI mean 70.1 (min 57.5, max 89.6), oldest club man median 31
+   world + 5y: 5113 players, mean age 25.2, club XI mean 70.8 (min 57.7, max 91.7), oldest club man median 31
+   world +10y: 5113 players, mean age 25.5, club XI mean 70.6 (min 59.3, max 90), oldest club man median 32
+   world +20y: 5113 players, mean age 25.3, club XI mean 70.8 (min 57.8, max 92), oldest club man median 31
+   world +30y: 5113 players, mean age 25.4, club XI mean 70.8 (min 57.9, max 92), oldest club man median 32
+5) Balance did not move: ticking clock against a frozen one
