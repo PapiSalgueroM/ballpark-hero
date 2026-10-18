@@ -1,0 +1,6 @@
+appeal1081 exit=0 36s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+leagueRules exit=0 57s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+golden exit=0 1s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+ctl-light exit=0 677s | keep exit=1 | simOneOffCups: control keep FIRED (467 failures, all its own: 5 slices: Arsenal (now) seed 1 nocoach at s1-rollover: worldComps holds uel dsc dscOld)
+dd-controls exit=0 32s | controls (each must be 1): bind=1 binddeadline=1 seed=1 seeddeadline=1 ledger=1 ledgerdeadline=1 rulesall=1 rulesstale=1 world=1 worlddeadline=1
+keywords-fresh exit=0 1s |   guide source hash 2db5e80e6a16e5ff
