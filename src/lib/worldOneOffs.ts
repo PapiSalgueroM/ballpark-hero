@@ -1,6 +1,8 @@
 /**
- * Round 1510: the one match cups a save follows or plays, pure and sport free (the match is injected), so a later
- * cup or another sport's preseason can bind the same code. The first is each country's domestic super cup
+ * Round 1510: the one match cups a save follows or plays, pure. The rules (entrantsFrom, oneOffFixturesOf,
+ * evaluateOneOff) take the row and the match as arguments, so a later cup or another sport's preseason can bind
+ * them; the row lookups (oneOffRowFor, oneOffRowById, oneOffPartial) read Club Manager's own rows
+ * (src/data/cmOneOffRows.ts), and a second sport passes its rows in instead. The first is each country's domestic super cup
  * (CareerState.worldComps.dsc in Club Manager): England's FA Community Shield where the ledger proves it.
  *
  * Three shapes: 'one' (one match), 'two' (two legs, settled on aggregate, away goals where the row has them) and
