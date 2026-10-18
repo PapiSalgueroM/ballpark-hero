@@ -1,0 +1,10 @@
+offAttr1510: the three opens are out
+off exit 1, 7 failure lines, sha 105cdf521e72e193
+  FAIL section 1: [equal] pre (Arsenal, now) before the summer, at step 0 load: the state differs
+  FAIL section 2: Aberdeen (now, seed 1): saved string 1 of 6 differs from BASE's (the head saved 6 times)
+  FAIL section 2: Aberdeen (now, seed 2): saved string 1 of 6 differs from BASE's (the head saved 6 times)
+  FAIL section 2: Everton (now, seed 1): saved string 1 of 6 differs from BASE's (the head saved 6 times)
+  FAIL section 2: Everton (now, seed 2): saved string 1 of 7 differs from BASE's (the head saved 7 times)
+  FAIL section 2: Real Madrid (now, seed 1): saved string 1 of 7 differs from BASE's (the head saved 7 times)
+  FAIL section 2: Real Madrid (now, seed 2): saved string 1 of 7 differs from BASE's (the head saved 7 times)
+simCmOldCareersWorld: RED, 7 failure(s) (section 1 1, section 2 6) (81s)
