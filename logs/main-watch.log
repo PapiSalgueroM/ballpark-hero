@@ -1,0 +1,13 @@
+offAttr1510: the three opens are out
+ok   Marseille (era2020, watcher, nocoach, seed 2, 3 seasons): 143 steps, 4.9 s
+ok   Marseille (era2020, watcher, nocoach, seed 3, 3 seasons): 140 steps, 5.6 s
+ok   Marseille (era2020, watcher, nocoach, seed 4, 3 seasons): 136 steps, 5.3 s
+ok   Marseille (era2020, watcher, nocoach, seed 5, 3 seasons): 136 steps, 5.3 s
+ok   Marseille (era2020, watcher, coach, seed 1, 3 seasons): 137 steps, 6.8 s
+ok   Marseille (era2020, watcher, coach, seed 2, 3 seasons): 135 steps, 6.7 s
+ok   Marseille (era2020, watcher, coach, seed 3, 3 seasons): 135 steps, 6.5 s
+ok   Marseille (era2020, watcher, coach, seed 4, 3 seasons): 134 steps, 7.3 s
+ok   Marseille (era2020, watcher, coach, seed 5, 3 seasons): 139 steps, 7.1 s
+journeys 130, steps compared 17799, tree journeys whose save carried worldComps 130, evaluations on the live state 17799, 912 s
+old saves (written by 77556430): 650 loaded by both engines, 0 gained a watched Champions League at load, 70 did not, 580 already followed one and kept it, 50 gained a Europa League, 0 against the rule
+proofWorldUclFleet: GREEN, 130 journeys and 17799 steps byte equal to 77556430 (a watching state without worldComps.uel), draws equal

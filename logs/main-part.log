@@ -1,0 +1,13 @@
+offAttr1510: the three opens are out
+ok   Manchester City (era2020, participant, nocoach, seed 2, 2 seasons): 117 steps, 4.4 s
+ok   Manchester City (era2020, participant, nocoach, seed 3, 2 seasons): 111 steps, 4.0 s
+ok   Manchester City (era2020, participant, nocoach, seed 4, 2 seasons): 104 steps, 3.7 s
+ok   Manchester City (era2020, participant, nocoach, seed 5, 2 seasons): 106 steps, 3.9 s
+ok   Manchester City (era2020, participant, coach, seed 1, 2 seasons): 111 steps, 5.3 s
+ok   Manchester City (era2020, participant, coach, seed 2, 2 seasons): 111 steps, 5.3 s
+ok   Manchester City (era2020, participant, coach, seed 3, 2 seasons): 120 steps, 5.6 s
+ok   Manchester City (era2020, participant, coach, seed 4, 2 seasons): 119 steps, 5.6 s
+ok   Manchester City (era2020, participant, coach, seed 5, 2 seasons): 117 steps, 5.6 s
+journeys 60, steps compared 6479, tree journeys whose save carried worldComps 29, evaluations on the live state 6479, 311 s
+old saves (written by 77556430): 180 loaded by both engines, 0 gained a watched Champions League at load, 158 did not, 22 already followed one and kept it, 20 gained a Europa League, 0 against the rule
+proofWorldUclFleet: GREEN, 60 journeys and 6479 steps byte equal to 77556430 (a watching state without worldComps.uel), draws equal
