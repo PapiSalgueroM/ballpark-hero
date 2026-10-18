@@ -399,6 +399,21 @@ function byHand(input, out) {
   return { L, C };
 }
 
+/** A stored value with the followed Europa League taken off the saved career (and worldComps with it when that
+ *  was its only key), so a save of the head arm can be compared byte for byte with one that never had it. */
+function withoutUelSaved(v) {
+  try {
+    const o = JSON.parse(v);
+    if (o && typeof o === 'object' && o.worldComps && typeof o.worldComps === 'object' && 'uel' in o.worldComps) {
+      delete o.worldComps.uel;
+      if (!Object.keys(o.worldComps).length) delete o.worldComps;
+    }
+    return JSON.stringify(o);
+  } catch {
+    return v;
+  }
+}
+
 /** One journey of one save through `seasons` seasons on one engine, every step on its own stretch of the stream
  *  (worldUclFleet's tape), with a reload at entry 20 and, with `join`, a mid season move at entry 25. */
 async function journey(E, f, { seasons, mode = 'nocoach', join = null, evalEach = false, onStep, onSeasonEnd }) {
@@ -416,13 +431,15 @@ async function journey(E, f, { seasons, mode = 'nocoach', join = null, evalEach 
     });
     const got = r.value ?? {};
     if (got.state) s = got.state;
-    steps.push({ label, s, draws: r.draws.length, drawSha: createHash('sha256').update(JSON.stringify(r.draws)).digest('hex').slice(0, 16), saved: got.saved ?? null });
+    steps.push({ label, s, draws: r.draws.length, drawSha: createHash('sha256').update(JSON.stringify(r.draws)).digest('hex').slice(0, 16), saved: got.saved ?? null, savedBare: got.savedBare ?? null });
     onStep?.(M, s, label, got);
   };
   const reload = cur => {
     M.store.clear();
     if (!M.cm.saveCareer(cur)) return { saved: 'refused' };
-    return { state: M.cm.loadCareer(), saved: createHash('sha256').update(JSON.stringify([...M.store.entries()].sort())).digest('hex').slice(0, 16), reload: cur };
+    const entries = [...M.store.entries()].sort();
+    return { state: M.cm.loadCareer(), saved: createHash('sha256').update(JSON.stringify(entries)).digest('hex').slice(0, 16),
+      savedBare: createHash('sha256').update(JSON.stringify(entries.map(([key, v]) => [key, withoutUelSaved(v)]))).digest('hex').slice(0, 16), reload: cur };
   };
   step('start', () => ({ state: f.custom ? M.cm.startCareer(f.club, f.era, f.custom) : M.cm.startCareer(f.club, f.era), open: true }));
   for (let season = 1; season <= seasons; season += 1) {
@@ -711,7 +728,8 @@ async function selfRelative() {
       if (x.s?.worldComps?.uel) why.push('the arm without the opens carries a Europa League');
       if (withoutUel(x.s) !== withoutUel(y.s)) why.push('the state differs');
       if (x.draws !== y.draws || x.drawSha !== y.drawSha) why.push(`the draws differ (${x.draws} against ${y.draws})`);
-      if (!y.s?.worldComps?.uel && x.saved !== y.saved) why.push('the saved bytes differ');
+      /* fix-1509 minor 16: a save holding the followed Europa League is compared too, with that key taken off. */
+      if (y.s?.worldComps?.uel ? x.savedBare !== y.savedBare : x.saved !== y.saved) why.push(`the saved bytes differ${y.s?.worldComps?.uel ? ' (worldComps.uel taken off)' : ''}`);
       if (why.length) { ok(false, `2 ${name} at ${x.label}: ${why.join('; ')}`); break; }
     }
   }
