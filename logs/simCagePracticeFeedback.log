@@ -1,0 +1,20 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/cagePracticeFeedback.test.tsx[2m > [22mCage Practice feedback outcomes[2m > [22mshows actual three shot progress and requires 90 gas after releasing controls[32m 120[2mms[22m[39m
+ [32m✓[39m src/test/cagePracticeFeedback.test.tsx[2m > [22mCage Practice feedback outcomes[2m > [22mdistinguishes a real clinch and defended attempt from an earned top takedown[32m 32[2mms[22m[39m
+ [32m✓[39m src/test/cagePracticeFeedback.test.tsx[2m > [22mCage Practice feedback outcomes[2m > [22mshows the players actual pressure and only accepts their finished submission[32m 42[2mms[22m[39m
+ [32m✓[39m src/test/cagePracticeFeedback.test.tsx[2m > [22mCage Practice feedback outcomes[2m > [22mrequires full earned guard and actual standing rather than half guard or a flag alone[32m 28[2mms[22m[39m
+ [32m✓[39m src/test/cagePracticeFeedback.test.tsx[2m > [22mCage Practice feedback outcomes[2m > [22mrenders actual defended and resisted messages without changing input RNG scores or storage[32m 47[2mms[22m[39m
+ [32m✓[39m src/test/cagePracticeFeedback.test.tsx[2m > [22mCage Practice feedback outcomes[2m > [22mupdates feedback through actual mounted practice inputs while Quick and Circuit remain isolated[33m 497[2mms[22m[39m
+ [32m✓[39m src/test/cagePracticeFeedback.test.tsx[2m > [22mCage Practice feedback outcomes[2m > [22mflushes the same actual practice tick into feedback and HUD when pause or help interrupts repaint[32m 67[2mms[22m[39m
+ [32m✓[39m src/test/cagePracticeFeedback.test.tsx[2m > [22mCage Practice feedback outcomes[2m > [22mholds actual practice combat and a strict saved promotion independently of feedback[32m 4[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 18:23:09
+[2m   Duration [22m 3.28s[2m (transform 504ms, setup 140ms, collect 815ms, tests 840ms, environment 709ms, prepare 284ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/cage-practice-feedback-artifacts/mounted/normal-report.json
+
+simCagePracticeFeedback normal: exact actual outcomes and independent engine baseline passed.
