@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+golden: node scripts/recordWorldTieGolden1347.mjs --ref HEAD --check
+simOneOffCups: node scripts/simOneOffCups.mjs
+dashscan: if git diff cad4edcf HEAD | grep -nP '\x{2013}|\x{2014}'; then echo "dash found"; exit 1; else echo "no dash in the diff"; fi

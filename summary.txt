@@ -1,0 +1,5 @@
+golden exit=0 1s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+simOneOffCups exit=0 1s | simOneOffCups: green, 161 checks (0 s)
+dashscan exit=0 0s | no dash in the diff
+units exit=0 5s |    Duration  4.31s (transform 2.14s, setup 282ms, collect 2.66s, tests 1.41s, environment 1.55s, prepare 734ms)
+tsc exit=0 59s | 
