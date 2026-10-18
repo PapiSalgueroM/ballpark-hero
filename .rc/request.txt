@@ -1,0 +1,2 @@
+#!serial
+unseeded: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh 2>/dev/null) && export CM_UNSEEDED_BASE && node scripts/simCmUnseededWorld.mjs > /tmp/un.log 2>&1; s=$?; grep -E "FAIL|red|simCmUnseeded" /tmp/un.log | head -12 | cut -c1-300; exit $s
