@@ -1,0 +1,22 @@
+playCmDifficulty: seed 2543157748 (replay with DIFF_SEED=2543157748), widths 320, control jump
+
+== 320 by 640
+  PASS  320: the Dugout step offers Normal, Hard and Legend with Normal pressed ([["Normal","true"],["Hard","false"],["Legend","false"]])
+  PASS  320: a Normal career carries no key and wears no level pill
+  PASS  320: Legend is pressed
+  CAUGHT  320: pressing Hard, Legend, Normal, Hard, Legend and the switch moves nothing (start 2047/30135, hard 2047/30151, legend 2047/30135, normal 2047/30135, hard 2047/30151, legend 2047/30135, switch 2047/30135)
+  PASS  320: the card's shortest button is 44.0 px and its smallest text 12 px
+  PASS  320: the Dugout step is no wider than the screen
+  PASS  320: the Legend career is running
+  PASS  320: the save holds Legend and No sacking (legend, 1)
+  PASS  320: the hub wears the Legend pill ("Legend")
+  PASS  320: and the No sacking pill beside it
+  PASS  320: nothing in the header overlaps or runs off the page (0 overlaps)
+   320: header 92 px on Legend with No sacking, 62 px on Normal
+  PASS  320: the Options tile reads "⚙️ OPTIONS £ · Legend Currency, nation job, haggling"
+  PASS  320: Options shows "🎚️ How hard Legend Everything against you. Good luck. Picked when thi" with nothing to press
+  PASS  320: and No sacking on
+  PASS  320: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 1 of 54 · Board 69/100 🏆 0 tro"
+  PASS  no page errors
+
+playCmDifficulty control jump: all 1 guarded checks fired (mutations landed: {"blurb":2})
