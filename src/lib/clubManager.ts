@@ -13576,7 +13576,12 @@ export function carryWorldComp(career: CareerState, joined: CareerState, comp: W
   try {
     setWorldComp(joined, comp, null);
     if (comp === 'ucl' && joined.uclGroup) return;
-    const slice = career.worldComps?.[comp];
+    const held = career.worldComps?.[comp];
+    /* fix-1509: the Europa League is carried only while it stays apart from the Champions League the joined
+       season plays. A move can change that one (a club in it leaving for one outside, or a watcher joining one
+       of the 36 it watched, which draws it again), and the carried field would then share clubs with it: the
+       rule a career with nothing to carry follows decides instead (season one draws it again, later none). */
+    const slice = comp === 'uel' && held && uclEntrantsOf(joined).some(c => held.clubs.includes(c)) ? undefined : held;
     const names = [joined.clubName, joined.eraId ? eraEuroName(joined.eraId, joined.clubName) : joined.clubName];
     if (slice && slice.s === career.season && slice.s === joined.season && !names.some(c => slice.clubs.includes(c))) {
       const seen = Math.max(slice.seen ?? 0, worldCompNightsDone(career, comp));

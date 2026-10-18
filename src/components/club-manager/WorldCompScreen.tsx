@@ -401,7 +401,7 @@ function uelHeaderLines(career: CareerState, view: WorldCompView): string[] {
       : 'This season\'s field is last season\'s tables in your save, put through the game\'s rule.',
     /* 1502's rule for a job move: carried with the nights shown, or drawn again without the new club when the new
        club was in it (season one), or none. */
-    ...(career.handover ? ['You took this job mid season. If your new club was in it, the game drew it again without your club, so the nights before you moved can read differently.'] : []),
+    ...(career.handover ? ['You took this job mid season. If your new club was in it, or the move changed who plays the Champions League, the game drew it again, so the nights before you moved can read differently.'] : []),
   ];
 }
 

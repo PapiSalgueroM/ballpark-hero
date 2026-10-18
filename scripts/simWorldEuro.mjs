@@ -35,7 +35,9 @@
  *   4  in step and stable: after every step the nights done never fall, a night counts only once the week is
  *      past it and shows no score before, a night shown never changes, a reload evaluates the same and keeps
  *      the same slice; the nights' dates rise; a mid season move to a club outside the field keeps every night
- *      shown, and one to an entrant follows the rule (a fresh field in season one, none later).
+ *      shown, and one to an entrant follows the rule (a fresh field in season one, none later). fix-1509: so does
+ *      a move that changes the Champions League so that it shares clubs with the field (a participant leaving it,
+ *      a watcher joining one of its 36), which no fleet made before.
  *   3  the board (step 6a): at every season's end of today's world, euroPlaceOf says 'uel' exactly when the
  *      rollover's rule, run without my club kept out, gives it a route, and 'ucl' exactly when the next season puts
  *      it in the Champions League; over the fleets and a search of mid table clubs of the four deepest leagues for
@@ -61,6 +63,7 @@
  *   section 1, the engine edited in the bundle: twocomps (the field is not kept apart from the Champions League)
  *              meinfield (my club is not kept out) earned (my club's route worked out with it kept out)
  *              carryearned (the job move's carry keeps the old club's route for the new club)
+ *              carryboth (the carry keeps a field that now shares clubs with the Champions League the move changed)
  *              cuploser (euroCupOf hands the cup's route to the final's loser: the oracle reads the bracket itself)
  *              noworld (uclEntrantsOf forgets a participant's AI groups: the harness builds that set itself)
  *              oneplace (the rule gives each league one Europa League league place more, in the engine and the
@@ -97,6 +100,7 @@ const CONTROLS = {
   meinfield: [1, /^1 (mine|none): /, /^1 /],
   earned: [1, /^1 earned: /, /^1 /],
   carryearned: [1, /^1 carry: /, /^1 /],
+  carryboth: [1, /^1 both: .* at s1-join: /, /^(1|4) /],
   cuploser: [1, /^1 cup: /, /^1 /],
   noworld: [1, /^1 both: /, /^1 /],
   oneplace: [1, /^1 rule: /, /^1 /],
@@ -121,6 +125,7 @@ const CAREER_EDITS = {
   meinfield: [{ file: CM, from: '  const field = euroFieldFromTables({ ...input, exclude: out });', to: '  const field = euroFieldFromTables({ ...input, exclude: out.slice(1) });' }],
   earned: [{ file: CM, from: '  const mine = euroFieldFromTables({ ...input, exclude: out.filter(c => c !== state.clubName), noFill: [state.clubName] });', to: '  const mine = euroFieldFromTables({ ...input, exclude: out, noFill: [state.clubName] });' }],
   carryearned: [{ file: CM, from: '      if (carried && joined.clubName !== career.clubName) delete carried.earned;\n', to: '' }],
+  carryboth: [{ file: CM, from: "    const slice = comp === 'uel' && held && uclEntrantsOf(joined).some(c => held.clubs.includes(c)) ? undefined : held;", to: '    const slice = held;' }],
   cuploser: [CUP_TO_LOSER],
   oneplace: [{ file: 'src/lib/euroAccess.ts', from: '    for (let k = 0; k < t.uelLast - t.uclPlaces && clubs.length < input.size; k += 1) {', to: '    for (let k = 0; k <= t.uelLast - t.uclPlaces && clubs.length < input.size; k += 1) {' }],
   noworld: [{ file: CM, from: '  if (state.uclGroup) return [state.clubName, ...state.uclGroup.opponents, ...(state.uclWorld ?? []).flatMap(g => g.clubs)];', to: '  if (state.uclGroup) return [state.clubName, ...state.uclGroup.opponents];' }],
@@ -485,6 +490,16 @@ function plainTarget(M, st) {
   const other = leagues.find(l => l !== mine && mine && l.clubs.length !== mine.clubs.length) ?? leagues.find(l => l !== mine);
   return other ? { club: other.clubs[other.clubs.length - 1], leagueId: other.id, entrant: false } : null;
 }
+/** fix-1509: a club of the watched Champions League, which a move into it draws again without the new club. */
+function uclEntrantTarget(M, st) {
+  const sl = st.worldComps?.ucl;
+  if (!sl) return null;
+  for (const club of [...sl.clubs].sort(byPlain)) {
+    const lg = M.cm.REAL_LEAGUES.find(l => l.clubs.includes(club));
+    if (lg && club !== st.clubName) return { club, leagueId: lg.id, entrant: false };
+  }
+  return null;
+}
 function entrantTarget(M, st) {
   const sl = st.worldComps?.uel;
   if (!sl) return null;
@@ -513,8 +528,11 @@ async function europaPass() {
   for (const f of fleet) for (const seed of SEEDS) {
     const now = f.era === 'now';
     const seasons = !now ? 1 : f.kind === 'participant' ? 2 : 3;
-    const join = now && f.kind === 'watcher' && !f.custom
-      ? (seed === SEEDS[0] ? { season: 1, pick: outsideTarget } : seed === SEEDS[1] ? { season: 1, pick: entrantTarget } : seed === SEEDS[2] ? { season: 2, pick: outsideTarget } : seed === SEEDS[3] ? { season: 2, pick: entrantTarget } : null) : null;
+    /* fix-1509: also the two moves that change the Champions League the season plays, a participant leaving for a
+       club outside both and a watcher joining one of the 36 it watched (season one draws that one again). */
+    const join = !now || f.custom ? null : f.kind === 'watcher'
+      ? (seed === SEEDS[0] ? { season: 1, pick: outsideTarget } : seed === SEEDS[1] ? { season: 1, pick: entrantTarget } : seed === SEEDS[2] ? { season: 2, pick: outsideTarget } : seed === SEEDS[3] ? { season: 2, pick: entrantTarget } : seed === SEEDS[4] ? { season: 1, pick: uclEntrantTarget } : null)
+      : seed === SEEDS[0] ? { season: 1, pick: outsideTarget } : null;
     const name = `${f.kind} ${f.club} (${f.era}) seed ${seed}`;
     let prevDone = 0, sliceKey = '', shown = new Map(), probed = false, carryProbed = false;
     const onStep = (M, s, label, got) => {
@@ -590,8 +608,12 @@ async function europaPass() {
       }
       if (got?.joined) {
         const before = got.joined.worldComps?.uel;
-        bump(`4 joins ${got.entrant ? 'to an entrant' : 'outside the field'} ${carried ? 'carried' : sl ? 'opened' : 'with none'}`);
-        if (!got.entrant && before && before.s === s.season) ok(carried, `4 join: ${name} at ${label}: a move outside the field did not carry the Europa League`);
+        /* fix-1509: a move that changed the Champions League so that it shares clubs with the old field never
+           carries that field (the open is then the oracle's, checked above). */
+        const ucl = new Set(uclPlayedOf(s));
+        const clash = !!before && before.clubs.some(c => ucl.has(c));
+        bump(`4 joins ${got.entrant ? 'to an entrant' : 'outside the field'}${clash ? ' that changed the Champions League' : ''} ${carried ? 'carried' : sl ? 'opened' : 'with none'}`);
+        if (!got.entrant && before && before.s === s.season) ok(clash ? !carried : carried, clash ? `4 join: ${name} at ${label}: a move that changed the Champions League carried a field it now shares clubs with` : `4 join: ${name} at ${label}: a move outside the field did not carry the Europa League`);
         if (got.entrant) ok(!carried, `4 join: ${name} at ${label}: a move to an entrant carried the competition it is in`);
         if (got.entrant && s.season > 1) ok(!sl, `4 join: ${name} at ${label}: a move to an entrant in season ${s.season} opened one`);
       }
