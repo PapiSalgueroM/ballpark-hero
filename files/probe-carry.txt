@@ -1,0 +1,9 @@
+Liverpool seed 11 season 1 (earned L) moved at week 32 to Venezia: carried true, joined slice earned none; the screen's first line reads "Venezia are not in it this season"
+   after a reload: earned none
+Liverpool seed 12 season 1 (earned L) moved at week 31 to Venezia: carried true, joined slice earned none; the screen's first line reads "Venezia are not in it this season"
+   after a reload: earned none
+Aston Villa seed 13 season 1 (earned none) moved at week 25 to Venezia: carried true, joined slice earned none; the screen's first line reads "Venezia are not in it this season"
+   after a reload: earned none
+Newcastle: the move to Venezia was refused
+Chelsea: the move to Villarreal was refused
+PROBE CARRY: 0 moves keep an earned route that is not the joined club's

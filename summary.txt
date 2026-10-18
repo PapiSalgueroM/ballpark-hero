@@ -1,0 +1,7 @@
+carry exit=0 9s | PROBE CARRY: 0 moves keep an earned route that is not the joined club's
+tsc exit=0 82s | 
+unit exit=0 5s |    Duration  4.72s (transform 2.10s, setup 172ms, collect 4.46s, tests 1.65s, environment 804ms, prepare 402ms)
+euro-s147 exit=0 181s | simWorldEuro: green, 36095 checks, 0 failures
+ctl-carryearned exit=1 184s | simWorldEuro: control carryearned FIRED (15 failures, all its own)
+ctl-cuploser exit=1 158s | simWorldEuro: control cuploser FIRED (181 failures, all its own)
+m4 exit=0 550s | M4 RESULT sec1=1 sec3=1 unit=1

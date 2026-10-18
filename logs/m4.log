@@ -1,0 +1,32 @@
+mut1509: applied m4 to src/lib/clubManager.ts
+FAIL 1 rule: watcher Chelsea (now) seed 1 at s1-rollover: route C is Augsburg where the tables give nobody
+FAIL 1 cup: watcher Chelsea (now) seed 1 at s1-rollover: euroCupOf says Augsburg of germany, the final was won by Stuttgart of germany
+FAIL 1 field: watcher Chelsea (now) seed 1 at s2-rollover: the field is not the rule's
+FAIL 1 via: watcher Chelsea (now) seed 1 at s2-rollover: a route is not the rule's
+FAIL 1 earned: watcher Chelsea (now) seed 1 at s2-rollover: the slice says C, the rule none
+FAIL 1 rule: watcher Chelsea (now) seed 1 at s2-rollover: route C is nobody where the tables give Mainz
+FAIL 1 cup: watcher Chelsea (now) seed 1 at s2-rollover: euroCupOf says Werder Bremen of germany, the final was won by Mainz of germany
+FAIL 1 cup: watcher Chelsea (now) seed 2 at s1-rollover: euroCupOf says AZ Alkmaar of netherlands, the final was won by PSV of netherlands
+FAIL 1 field: watcher Chelsea (now) seed 2 at s2-rollover: the field is not the rule's
+FAIL 1 via: watcher Chelsea (now) seed 2 at s2-rollover: a route is not the rule's
+FAIL 1 rule: watcher Chelsea (now) seed 2 at s2-rollover: route C is Sparta Rotterdam where the tables give Feyenoord
+simWorldEuro: RED, 36098 checks, 181 failures
+  3 attribution, computed: search Hoffenheim seed 3 season 2 (1 graded otherwise): the season score's objectives term 24 on this tree, 18 on the base; next season's opening confidence 49 against 49 (the base's rollover of the same save, its grade the head's)
+  3 attribution, computed: search Hoffenheim seed 4 season 1 (1 graded otherwise): the season score's objectives term 30 on this tree, 24 on the base; next season's opening confidence 69 against 69 (the base's rollover of the same save, its grade the head's)
+  3 attribution, computed: search Hoffenheim seed 4 season 3 (1 graded otherwise): the season score's objectives term 24 on this tree, 18 on the base; next season's opening confidence n/a (no rollover) against n/a (the base's rollover of the same save, its grade the head's)
+  3 agreement: 252 season ends, 37 with a Europa League route both agree on, 37 Champions League places; my club won its cup in 24, from outside the Champions League places in 11: watcher Everton seed 1 season 2 (no route); search Coventry City seed 1 season 1 (no route); search Everton seed 1 season 2 (no route); search Deportivo La Coruña seed 3 season 1 (no route); search Espanyol seed 1 season 1 (L); search Inter Milan seed 3 season 2 (no route); search Inter Milan seed 6 season 2 (no route); search Freiburg seed 3 season 1 (L)
+  3 attribution: 12 objectives graded otherwise than the base, by my club's route: L 2, C 5, P 5; each one done adds W_OBJ_EACH (6, capped at 30) to the season score's objectives term and reaches 1335's opening confidence through the same statuses; 360 s
+FAIL 3 cupwin: watcher Everton seed 1 season 2: my club won its cup final and the rollover's rule gives it no route
+FAIL 3 cupwin: search Everton seed 1 season 2: my club won its cup final and the rollover's rule gives it no route
+FAIL 3 cupwin: search Deportivo La Coruña seed 3 season 1: my club won its cup final and the rollover's rule gives it no route
+FAIL 3 cupwin: search Inter Milan seed 3 season 2: my club won its cup final and the rollover's rule gives it no route
+FAIL 3 cupwin: search Inter Milan seed 6 season 2: my club won its cup final and the rollover's rule gives it no route
+FAIL 3 cupwin: search Köln seed 3 season 2: my club won its cup final and the rollover's rule gives it no route
+simWorldEuro: RED, 527 checks, 6 failures
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m15 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 10:51:02
+[2m   Duration [22m 1.96s[2m (transform 1.06s, setup 52ms, collect 1.31s, tests 68ms, environment 224ms, prepare 85ms)[22m
+
+
+::error file=/tmp/m4/src/lib/euroAccess.test.ts,title=src/lib/euroAccess.test.ts > the board reads the rule (Round 1509) > reads the season's cup off its final (euroCupOf)%3A the winner home or away%2C on penalties%2C or nobody before it is played,line=164,column=26::AssertionError: expected { nationId: 'england', …(1) } to deeply equal { nationId: 'england', …(1) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "nationId": "england",%0A-   "winner": "Everton",%0A+   "winner": "Arsenal",%0A  }%0A%0A ❯ src/lib/euroAccess.test.ts:164:26%0A%0A
+M4 RESULT sec1=1 sec3=1 unit=1
