@@ -1,0 +1,8 @@
+head-s2 exit=0 351s | simCareerHall nfl: all 34 checks green
+head-s1 exit=1 395s | simCareerHall nfl: RED [base]
+no1500-s1 exit=0 417s | simCareerHall nfl: all 34 checks green
+no1500-s2 exit=0 375s | simCareerHall nfl: all 34 checks green
+head-s3 exit=0 346s | simCareerHall nfl: all 34 checks green
+no1500-s3 exit=0 421s | simCareerHall nfl: all 34 checks green
+head-s4 exit=0 335s | simCareerHall nfl: all 34 checks green
+no1500-s4 exit=1 331s | simCareerHall nfl: RED [base]

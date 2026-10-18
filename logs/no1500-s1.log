@@ -1,0 +1,4 @@
+treeWithoutMerge: d123eb367af2f899a3d2430593c9f0e461a38083, 43c1c93b without 353d1c26; conflicts kept from 43c1c93b: src/pages/WhatsNew.tsx
+simCareerHall nfl: 2000 careers, 0 crashed, seed 1
+  19 (a) base: median base credit TE 111.9 (109.2 to 114.7), LB 109.1 (106.4 to 112.3), CB 108.6 (105.3 to 114.1), EDGE 108.9 (105.6 to 111.8); misses []
+simCareerHall nfl: all 34 checks green
