@@ -1,0 +1,2 @@
+continuity-head exit=1 16s |         facilities: {
+continuity-base exit=1 16s |     at async file:///tmp/cbase/scripts/simManagerWorldContinuity.mjs:523:24
