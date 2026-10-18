@@ -1,5 +1,5 @@
 # Synthetic HTML and held physical CSS only. No application/backend qualification.
-name: Grid CSS response byte diagnostic
+name: Grid CSS document encoding diagnostic
 on:
   push:
     branches: [codex/soccer-grid-search-discovery]
@@ -60,7 +60,7 @@ jobs:
           find "$browser_tools/node_modules" -type f -print0 | sort -z > "$out/browser-tool-members.before"
           find "$PLAYWRIGHT_BROWSERS_PATH" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-binary-files.sha256"
           find "$PLAYWRIGHT_BROWSERS_PATH" -type f -print0 | sort -z > "$out/browser-binary-members.before"
-      - name: Twenty four fresh contexts and all physical response bytes
+      - name: Forty eight fresh contexts across document and CSS encoding
         id: matrix
         timeout-minutes: 12
         run: |
@@ -95,16 +95,20 @@ jobs:
           fs.writeFileSync(path.join(OUT, 'physical.css'), physical, { flag: 'wx' });
           const MIME = 'text/css; charset=utf-8', BASE = 'http://127.0.0.1:4199';
           const variants = [
-            { name: 'buffer-header', stringBody: false, contentTypeOption: false },
-            { name: 'utf8-string-header', stringBody: true, contentTypeOption: false },
-            { name: 'buffer-content-type-option', stringBody: false, contentTypeOption: true },
-            { name: 'utf8-string-content-type-option', stringBody: true, contentTypeOption: true },
+            { name: 'meta-none-html-buffer-css-buffer', metaUtf8: false, htmlStringBody: false, cssStringBody: false },
+            { name: 'meta-none-html-buffer-css-string', metaUtf8: false, htmlStringBody: false, cssStringBody: true },
+            { name: 'meta-none-html-string-css-buffer', metaUtf8: false, htmlStringBody: true, cssStringBody: false },
+            { name: 'meta-none-html-string-css-string', metaUtf8: false, htmlStringBody: true, cssStringBody: true },
+            { name: 'meta-utf8-html-buffer-css-buffer', metaUtf8: true, htmlStringBody: false, cssStringBody: false },
+            { name: 'meta-utf8-html-buffer-css-string', metaUtf8: true, htmlStringBody: false, cssStringBody: true },
+            { name: 'meta-utf8-html-string-css-buffer', metaUtf8: true, htmlStringBody: true, cssStringBody: false },
+            { name: 'meta-utf8-html-string-css-string', metaUtf8: true, htmlStringBody: true, cssStringBody: true },
           ];
           const report = { version: 1, status: 'incomplete', diagnosticOnly: true, productQualified: false,
-            scope: 'Synthetic duplicate preload/stylesheet HTML with actual held dist CSS. No application, backend, feature or release qualification.',
+            scope: 'Synthetic meta NONE/UTF8, HTML Buffer/string and CSS Buffer/string with actual held dist CSS. No application, backend, feature or release qualification.',
             head: fs.readFileSync(path.join(OUT, 'head.txt'), 'utf8').trim(), workflowRef: process.env.GITHUB_WORKFLOW_REF, workflowEventSha: process.env.GITHUB_SHA, packageVersion, coreSha256: hash(coreBody),
             physical: { member: 'assets/index-Jf4zrVqc.css', bytes: physical.length, sha256: physicalSha, gzipBytes: packed.length, gzipSha256: hash(packed), strictUtf8Roundtrip: true },
-            variants, widths: [390, 1280], repeatsPerVariantPerWidth: 3, expectedContexts: 24, browserEngine: 'webkit', browserVersion: null, cases: [], waits: [], cleanupErrors: [], fatalErrors: [] };
+            variants, widths: [390, 1280], repeatsPerVariantPerWidth: 3, expectedContexts: 48, browserEngine: 'webkit', browserVersion: null, cases: [], waits: [], cleanupErrors: [], fatalErrors: [] };
           const save = () => fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2) + '\n'); save();
           process.on('unhandledRejection', error => { report.fatalErrors.push('unhandledRejection: ' + String(error?.stack ?? error)); save(); process.exitCode = 1; });
           process.on('uncaughtException', error => { report.fatalErrors.push('uncaughtException: ' + String(error?.stack ?? error)); save(); process.exit(1); });
@@ -124,8 +128,9 @@ jobs:
               report.cases.push(row); save(); let context; const observers = [], routes = [], active = new Set(), activeRoutes = new Set(), ids = new Map();
               const requestRow = request => { if (!ids.has(request)) { const value = { id: ids.size, method: request.method(), url: request.url(), resourceType: request.resourceType(), headers: request.headers(), finishedCount: 0, failures: [] }; ids.set(request, value); row.requests.push(value); save(); } return ids.get(request); };
               const cssUrl = BASE + '/physical.css?context=' + id;
-              const html = '<!doctype html><html><head><meta charset="utf-8"><link rel="icon" href="data:,"><link rel="preload" as="style" href="' + cssUrl + '"><link rel="preload" as="style" href="' + cssUrl + '"><link rel="stylesheet" href="' + cssUrl + '"><link rel="stylesheet" href="' + cssUrl + '"></head><body><div id="probe">Physical CSS response bytes</div></body></html>';
-              const htmlBytes = Buffer.from(html, 'utf8'); row.document = { bytes: htmlBytes.length, sha256: hash(htmlBytes), preloadLinks: 2, stylesheetLinks: 2 };
+              const meta = variant.metaUtf8 ? '<meta charset="utf-8">' : '';
+              const html = '<!doctype html><html><head>' + meta + '<link rel="icon" href="data:,"><link rel="stylesheet" crossorigin href="' + cssUrl + '" media="print" onload="this.media=\'all\'"><link rel="stylesheet" href="' + cssUrl + '"></head><body><div id="probe">Physical CSS response bytes</div></body></html>';
+              const htmlBytes = Buffer.from(html, 'utf8'); row.document = { bytes: htmlBytes.length, sha256: hash(htmlBytes), preloadLinks: 0, stylesheetLinks: 2, metaUtf8: variant.metaUtf8, bodyType: variant.htmlStringBody ? 'utf8-string' : 'Buffer' };
               fs.writeFileSync(path.join(OUT, id + '-document.html'), htmlBytes, { flag: 'wx' }); save();
               try {
                 context = await bounded(browser.newContext({ viewport: { width, height }, isMobile: width === 390, hasTouch: width === 390 }), 'context.new', 15000, row.waits);
@@ -142,14 +147,13 @@ jobs:
                   try {
                     assert.equal(request.method(), 'GET'); assert.equal(url.origin, BASE);
                     if (url.pathname === '/' && url.search === '?context=' + id) {
-                      const fixture = { requestId: captured.id, kind: 'synthetic-document', status: 200, declaredContentType: 'text/html; charset=utf-8', bytes: htmlBytes.length, sha256: hash(htmlBytes), fulfilled: false }; row.fixtures.push(fixture); save();
-                      await bounded(route.fulfill({ status: 200, contentType: fixture.declaredContentType, headers: { 'cache-control': 'no-store', 'content-length': String(htmlBytes.length) }, body: html }), 'fixture.fulfill request ' + captured.id, 15000, row.waits); fixture.fulfilled = true; save(); return;
+                      const fixture = { requestId: captured.id, kind: 'synthetic-document', bodyType: variant.htmlStringBody ? 'utf8-string' : 'Buffer', metaUtf8: variant.metaUtf8, status: 200, declaredContentType: 'text/html; charset=utf-8', bytes: htmlBytes.length, sha256: hash(htmlBytes), fulfilled: false }; row.fixtures.push(fixture); save();
+                      await bounded(route.fulfill({ status: 200, contentType: fixture.declaredContentType, headers: { 'cache-control': 'no-store', 'content-length': String(htmlBytes.length) }, body: variant.htmlStringBody ? html : htmlBytes }), 'fixture.fulfill request ' + captured.id, 15000, row.waits); fixture.fulfilled = true; save(); return;
                     }
                     assert.equal(request.url(), cssUrl, 'Every actual request belongs to this exact local CSS fixture');
-                    const fixture = { requestId: captured.id, kind: 'physical-css', status: 200, bodyType: variant.stringBody ? 'utf8-string' : 'Buffer', mimePlacement: variant.contentTypeOption ? 'contentType-option' : 'headers', declaredContentType: MIME, bytes: physical.length, sha256: physicalSha, fulfilled: false }; row.fixtures.push(fixture); save();
-                    const headers = { 'cache-control': 'no-store', 'content-length': String(physical.length) };
-                    const options = { status: 200, headers, body: variant.stringBody ? cssText : physical };
-                    if (variant.contentTypeOption) options.contentType = MIME; else headers['content-type'] = MIME;
+                    const fixture = { requestId: captured.id, kind: 'physical-css', status: 200, bodyType: variant.cssStringBody ? 'utf8-string' : 'Buffer', mimePlacement: 'headers', declaredContentType: MIME, bytes: physical.length, sha256: physicalSha, fulfilled: false }; row.fixtures.push(fixture); save();
+                    const headers = { 'cache-control': 'no-store', 'content-length': String(physical.length), 'content-type': MIME };
+                    const options = { status: 200, headers, body: variant.cssStringBody ? cssText : physical };
                     await bounded(route.fulfill(options), 'fixture.fulfill request ' + captured.id, 15000, row.waits); fixture.fulfilled = true; save();
                   } catch (error) { row.errors.push('route: ' + String(error?.stack ?? error)); save(); try { await bounded(route.abort('failed'), 'route.abort request ' + captured.id, 5000, row.waits); } catch (abortError) { row.errors.push('route.abort: ' + String(abortError?.stack ?? abortError)); save(); } }
                   })().finally(() => { activeRoutes.delete(captured.id); save(); }); routes.push(task); return task;
@@ -161,11 +165,11 @@ jobs:
                     try {
                       assert.equal(observer.httpStatus, 200); const expected = response.url() === cssUrl ? physical : htmlBytes;
                       assert(response.url() === cssUrl || response.url() === BASE + '/?context=' + id);
-                      const finishError = await bounded(response.finished(), 'response.finished ' + observer.id, 15000, row.waits);
-                      observer.finished = true; observer.finishError = finishError === null ? null : String(finishError); save(); assert.equal(finishError, null);
                       const body = await bounded(response.body(), 'response.body ' + observer.id, 15000, row.waits);
                       observer.file = id + '-response-' + observer.id + '.bin'; fs.writeFileSync(path.join(OUT, observer.file), body, { flag: 'wx' });
                       observer.actualBytes = body.length; observer.actualSha256 = hash(body); observer.expectedBytes = expected.length; observer.expectedSha256 = hash(expected); observer.exactPhysicalBytes = body.equals(expected); save();
+                      const finishError = await bounded(response.finished(), 'response.finished ' + observer.id, 15000, row.waits);
+                      observer.finished = true; observer.finishError = finishError === null ? null : String(finishError); save(); assert.equal(finishError, null);
                       assert.equal(observer.headers['content-length'], String(expected.length));
                       assert(body.equals(expected), 'Every captured response body equals its complete physical CSS or exact synthetic document fixture');
                       observer.status = 'passed';
@@ -175,8 +179,8 @@ jobs:
                 });
                 await bounded(page.goto(BASE + '/?context=' + id, { waitUntil: 'load', timeout: 15000 }), 'page.goto load', 20000, row.waits);
                 await bounded(page.waitForLoadState('networkidle', { timeout: 15000 }), 'page.networkidle', 20000, row.waits);
-                row.dom = await bounded(page.evaluate(() => ({ characterSet: document.characterSet, preloadLinks: document.querySelectorAll('link[rel="preload"][as="style"]').length, stylesheetLinks: document.querySelectorAll('link[rel="stylesheet"]').length, loadedStylesheets: [...document.styleSheets].map(sheet => ({ href: sheet.href, rules: sheet.cssRules.length })), userAgent: navigator.userAgent })), 'document observation', 10000, row.waits); save();
-                assert.equal(row.dom.preloadLinks, 2); assert.equal(row.dom.stylesheetLinks, 2); assert.equal(row.dom.characterSet, 'UTF-8');
+                row.dom = await bounded(page.evaluate(() => ({ characterSet: document.characterSet, preloadLinks: document.querySelectorAll('link[rel="preload"][as="style"]').length, stylesheetLinks: document.querySelectorAll('link[rel="stylesheet"]').length, loadedStylesheets: [...document.styleSheets].map(sheet => ({ href: sheet.href, rules: sheet.cssRules.length })), stylesheetAttributes: [...document.querySelectorAll('link[rel="stylesheet"]')].map(link => ({ href: link.href, crossorigin: link.getAttribute('crossorigin'), media: link.getAttribute('media'), onload: link.getAttribute('onload') })), userAgent: navigator.userAgent })), 'document observation', 10000, row.waits); save();
+                assert.equal(row.dom.preloadLinks, 0); assert.equal(row.dom.stylesheetLinks, 2); if (variant.metaUtf8) assert.equal(row.dom.characterSet, 'UTF-8');
                 await bounded(Promise.all(routes), 'all fixture fulfillments before cleanup', 30000, row.waits);
                 await bounded(Promise.all(observers), 'all response observers before cleanup', 30000, row.waits);
               } catch (error) { row.errors.push('case: ' + String(error?.stack ?? error)); save(); }
@@ -188,7 +192,9 @@ jobs:
                 row.pendingAfterCleanup = active.size; row.pendingRoutesAfterCleanup = activeRoutes.size;
                 for (const request of row.requests) if (request.finishedCount !== 1 || request.failures.length) row.errors.push('Missing or failed unique requestfinished for request ' + request.id);
                 const cssFixtures = row.fixtures.filter(fixture => fixture.kind === 'physical-css');
-                if (!cssFixtures.length || !row.observers.some(observer => observer.url === cssUrl)) row.errors.push('No actual CSS request/response observed');
+                const cssRequests = row.requests.filter(request => request.url === cssUrl), cssResponses = row.observers.filter(observer => observer.url === cssUrl);
+                row.stylesheetPair = { expectedCssRequests: 2, actualCssRequests: cssRequests.length, actualCssFixtures: cssFixtures.length, actualCssResponses: cssResponses.length };
+                if (cssRequests.length !== 2 || cssFixtures.length !== 2 || cssResponses.length !== 2) row.errors.push('Both actual crossorigin and ordinary stylesheet requests/fixtures/responses are required');
                 for (const fixture of row.fixtures) if (!fixture.fulfilled || row.observers.filter(observer => observer.requestId === fixture.requestId).length !== 1) row.errors.push('Missing fulfillment/unique response for request ' + fixture.requestId);
                 if (row.pendingBeforeCleanup || row.pendingAfterCleanup || row.pendingRoutesBeforeCleanup || row.pendingRoutesAfterCleanup) row.errors.push('Pending fixture routes/response observers after bounded collection');
                 row.status = row.errors.length || row.observers.some(observer => observer.status !== 'passed') ? 'failed' : 'passed'; save();
@@ -199,11 +205,11 @@ jobs:
             if (browser) { try { await bounded(browser.close(), 'browser.close', 15000, report.waits); } catch (error) { report.cleanupErrors.push(String(error?.stack ?? error)); save(); } }
             report.measuredContexts = report.cases.length; report.failedContexts = report.cases.filter(row => row.status !== 'passed' || row.errors.length || row.observers.some(observer => observer.status !== 'passed')).length;
             report.variantCounts = variants.map(variant => { const rows = report.cases.filter(row => row.variant === variant.name); return { variant: variant.name, contexts: rows.length, passed: rows.filter(row => row.status === 'passed').length, failed: rows.filter(row => row.status !== 'passed').length, cssResponses: rows.flatMap(row => row.observers).filter(observer => observer.url.includes('/physical.css?')).length, physicalCssMismatches: rows.flatMap(row => row.observers).filter(observer => observer.url.includes('/physical.css?') && observer.exactPhysicalBytes === false).length, widths: report.widths.map(width => ({ width, contexts: rows.filter(row => row.width === width).length, failed: rows.filter(row => row.width === width && row.status !== 'passed').length })) }; });
-            report.strictAllResponsesPhysical = report.cases.length === 24 && report.failedContexts === 0 && report.fatalErrors.length === 0 && report.cleanupErrors.length === 0;
+            report.strictAllResponsesPhysical = report.cases.length === 48 && report.failedContexts === 0 && report.fatalErrors.length === 0 && report.cleanupErrors.length === 0;
             report.status = report.strictAllResponsesPhysical ? 'diagnostic-complete-all-bytes-held' : 'diagnostic-failed-strict-checks'; save();
           }
-          console.log(JSON.stringify({ kind: 'CSS_RESPONSE_BYTE_DIAGNOSTIC', status: report.status, contexts: report.measuredContexts, failedContexts: report.failedContexts, variantCounts: report.variantCounts, strictAllResponsesPhysical: report.strictAllResponsesPhysical, evidenceRoot: OUT, reportSha256: hash(fs.readFileSync(path.join(OUT, 'report.json'))), diagnosticOnly: true, productQualified: false }));
-          assert.equal(report.cases.length, 24); for (const counts of report.variantCounts) { assert.equal(counts.contexts, 6); for (const width of counts.widths) assert.equal(width.contexts, 3); } assert.equal(report.fatalErrors.length, 0); assert.equal(report.cleanupErrors.length, 0);
+          console.log(JSON.stringify({ kind: 'CSS_DOCUMENT_ENCODING_DIAGNOSTIC', status: report.status, contexts: report.measuredContexts, failedContexts: report.failedContexts, variantCounts: report.variantCounts, strictAllResponsesPhysical: report.strictAllResponsesPhysical, evidenceRoot: OUT, reportSha256: hash(fs.readFileSync(path.join(OUT, 'report.json'))), diagnosticOnly: true, productQualified: false }));
+          assert.equal(report.cases.length, 48); for (const counts of report.variantCounts) { assert.equal(counts.contexts, 6); for (const width of counts.widths) assert.equal(width.contexts, 3); } assert.equal(report.fatalErrors.length, 0); assert.equal(report.cleanupErrors.length, 0);
           assert.equal(report.strictAllResponsesPhysical, true, 'No physical-byte, request, observer, bounded-wait or cleanup error waiver');
           NODE
           : > "$out/matrix.transport"; : > "$out/matrix-parent.transport"
@@ -235,7 +241,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: round1429-css-response-byte-diagnostic-${{ github.run_id }}
+          name: round1429-css-document-encoding-diagnostic-${{ github.run_id }}
           path: ${{ runner.temp }}/grid-css-response-byte-diagnostic
           if-no-files-found: error
           retention-days: 30
