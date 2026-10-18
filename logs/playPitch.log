@@ -1,0 +1,8 @@
+treeWithoutMerge: 72336784a5d5d85267e8b2bba9931506afacaf99, f572f10b without c76a6827; conflicts kept from f572f10b: scripts/playPitchRestartContinuity.mjs, scripts/simPitchRestartContinuity.mjs
+PITCH_RESTART_PARENT_REF 72336784a5d5d85267e8b2bba9931506afacaf99 (this head without Round 1366s merge c76a6827; first parent ed9b483d)
+prepInstalled: 521 installed locked versions written to /home/runner/work/ballpark-hero/ballpark-hero/prw
+simPitchRestartContinuity: normal qualified (actual committed coordinates); browser paint unmeasured
+Actual standalone pitch: six fixed phone/desktop journeys, six whole-parent control journeys, three distinct effective continuity faults.
+Retained browser evidence: 24 untouched originals, full layout/rAF coordinate tapes and actual compositor paint/screenshot traces.
+Held 11 sources, 4 bundles, three packages and 521 locked versions; zero match RNG or external requests.
+playPitchRestartContinuity: green in the prepared shared-pitch scope; no real Manager journey or painted-old-jump claim.
