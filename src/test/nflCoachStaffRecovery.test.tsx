@@ -70,7 +70,7 @@ function mounted(initial: CoachCareerState) {
   }
   return { ...render(<LivePanel />), changed };
 }
-const recovery = (view: ReturnType<typeof mounted>) => view.queryByRole('button', { name: 'Take a staff role', exact: true });
+const recovery = (view: ReturnType<typeof mounted>) => view.queryByRole('button', { name: 'Take a staff role' });
 function sameEmployment(input: CoachCareerState, next: CoachCareerState) {
   expect(next.job?.tier).toBe(4);
   expect(next.job?.seasonsHere).toBe(0);
