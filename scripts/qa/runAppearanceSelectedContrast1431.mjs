@@ -6,7 +6,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { execFileSync, spawn, spawnSync } from 'node:child_process';
-import { appearanceContrastPlan, appearanceContrastSources } from '../simAppearanceSelectedContrast.mjs';
+import { appearanceContrastPlan, appearanceContrastSources } from './appearanceSelectedContrast1431.mjs';
 
 async function main() {
 const root = process.cwd(), out = process.env.APPEARANCE_CONTRAST_OUT, mode = process.env.APPEARANCE_CONTRAST_MODE;

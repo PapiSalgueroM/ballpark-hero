@@ -7,7 +7,7 @@ on:
       - src/components/soccer-career/AppearanceBuilder.tsx
       - scripts/qa/replayAppearanceScroll1431.mjs
       - scripts/qa/runAppearanceSelectedContrast1431.mjs
-      - scripts/simAppearanceSelectedContrast.mjs
+      - scripts/qa/appearanceSelectedContrast1431.mjs
       - scripts/qa/playAppearanceSelectedContrast.mjs
   workflow_dispatch:
 permissions:
@@ -50,7 +50,7 @@ jobs:
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
           base=62d7c8b3338809a1aec3d0aaa6b5c373ac9f581a
           git merge-base --is-ancestor "$base" HEAD
-          git diff --exit-code "$base" HEAD -- . ':!docs/ROUND1431-APPEARANCE-SELECTED-CONTRAST.md' ':!docs/PROJECT-STATE.md' ':!docs/WORKBOARD.md' ':!src/components/soccer-career/AppearanceBuilder.tsx' ':!scripts/simAppearanceSelectedContrast.mjs' ':!scripts/qa/playAppearanceSelectedContrast.mjs' ':!scripts/qa/replayAppearanceScroll1431.mjs' ':!scripts/qa/runAppearanceSelectedContrast1431.mjs' ':!.github/workflows/appearance-selected-contrast.yml' > "$out/source-boundary.log"
+          git diff --exit-code "$base" HEAD -- . ':!docs/ROUND1431-APPEARANCE-SELECTED-CONTRAST.md' ':!docs/PROJECT-STATE.md' ':!docs/WORKBOARD.md' ':!src/components/soccer-career/AppearanceBuilder.tsx' ':!scripts/qa/appearanceSelectedContrast1431.mjs' ':!scripts/qa/playAppearanceSelectedContrast.mjs' ':!scripts/qa/replayAppearanceScroll1431.mjs' ':!scripts/qa/runAppearanceSelectedContrast1431.mjs' ':!.github/workflows/appearance-selected-contrast.yml' > "$out/source-boundary.log"
           mode=baseline
           for file in src/components/soccer-career/AppearanceBuilder.tsx; do
             git show "$base:$file" > "$out/original-$(basename "$file")"
@@ -117,13 +117,14 @@ jobs:
           out="$APPEARANCE_CONTRAST_OUT"
           SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
           test ! -e "$out/proof.transport"; : > "$out/proof.transport"
-          SIM_OFFLINE_RECEIPT="$out/proof.transport" node scripts/simAppearanceSelectedContrast.mjs > "$out/proof.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/proof.transport" node scripts/qa/appearanceSelectedContrast1431.mjs > "$out/proof.log" 2>&1
           cat "$out/proof.log"
           test ! -e "$out/historical-parent.transport"; : > "$out/historical-parent.transport"
           SIM_OFFLINE_RECEIPT="$out/historical-parent.transport" node scripts/qa/replayAppearanceScroll1431.mjs > "$out/historical-parent.log" 2>&1
           cat "$out/historical-parent.log"
           mkdir "$out/existing"
           unset APPEARANCE_OPTIONS_CAPTURE APPEARANCE_OPTIONS_SVG_BASELINE APPEARANCE_OPTIONS_BASELINE NO_DOUBLE_SWAP
+          test ! -e "$out/existing/transport.transport"; : > "$out/existing/transport.transport"
           status=0
           SIM_OFFLINE_RECEIPT="$out/existing/transport.transport" node node_modules/vitest/vitest.mjs run src/test/appearanceSportCopy.test.tsx src/test/soccerAppearanceOptions.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$out/existing/vitest.json" > "$out/existing/stdout.log" 2> "$out/existing/stderr.log" || status=$?
           printf '%s\n' "$status" > "$out/existing/exit-code.txt"
@@ -140,6 +141,7 @@ jobs:
           NODE
           git show 62d7c8b3338809a1aec3d0aaa6b5c373ac9f581a:scripts/simSoccerAppearanceOptions.mjs > "$out/original-simSoccerAppearanceOptions.mjs"
           cmp scripts/simSoccerAppearanceOptions.mjs "$out/original-simSoccerAppearanceOptions.mjs"
+          test ! -e "$out/appearance-options.transport"; : > "$out/appearance-options.transport"
           status=0; SIM_OFFLINE_RECEIPT="$out/appearance-options.transport" APPEARANCE_OPTIONS_OUT="$out/appearance-options" node scripts/simSoccerAppearanceOptions.mjs > "$out/simSoccerAppearanceOptions.log" 2>&1 || status=$?
           printf '%s\n' "$status" > "$out/appearance-options-exit-code.txt"
           printf 'simSoccerAppearanceOptions\t%s\n' "$status" > "$out/existing.tsv"

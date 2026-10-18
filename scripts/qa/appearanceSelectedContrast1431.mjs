@@ -63,8 +63,8 @@ export function appearanceContrastSources(original) {
 }
 
 function main() {
-  const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), require = createRequire(import.meta.url);
-  assert(require.cache[require.resolve('./lib/offlineTransport.cjs')], 'Ordinary offline preload must be active');
+  const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..'), require = createRequire(import.meta.url);
+  assert(require.cache[require.resolve('../lib/offlineTransport.cjs')], 'Ordinary offline preload must be active');
   assert.equal(process.env.SIM_NETWORK, 'offline');
   const outerTransport = process.env.SIM_OFFLINE_RECEIPT;
   assert(outerTransport && fs.existsSync(outerTransport) && fs.statSync(outerTransport).size === 0, 'Caller creates the empty outer transport before invocation');
