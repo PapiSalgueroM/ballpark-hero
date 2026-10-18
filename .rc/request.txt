@@ -1,0 +1,6 @@
+euro-s1: WORLD_EURO_ONLY=1 node scripts/simWorldEuro.mjs
+ctl-cuploser: WORLD_EURO_CONTROL=cuploser node scripts/simWorldEuro.mjs
+ctl-oneplace: WORLD_EURO_CONTROL=oneplace node scripts/simWorldEuro.mjs
+ctl-noworld: WORLD_EURO_CONTROL=noworld node scripts/simWorldEuro.mjs
+unit: node_modules/.bin/vitest run src/lib/euroAccess.test.ts src/lib/clubManagerWorldView.test.ts --testTimeout=300000 --hookTimeout=120000
+ctl-twocomps: WORLD_EURO_CONTROL=twocomps node scripts/simWorldEuro.mjs
