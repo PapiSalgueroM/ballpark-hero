@@ -1,0 +1,12 @@
+stock control dist written to /home/runner/work/ballpark-hero/ballpark-hero/dist-stock2: one chunk dispatches vite:preloadError and it does not wait (vite 5.4.21)
+FAIL D / tap /soccer-career 1280 host: 2 issue(s) | SoccerCareer-DTjlU3DV.js:host@1199 SoccerCareer-DTjlU3DV.js:served@3826
+   the hold ended before the 800 ms sample
+   the tap made 1 document request(s): not a client side link
+   trace {"docs":[{"n":1,"path":"/","at":15},{"n":2,"path":"/soccer-career","at":1234,"heldMs":2500}],"navigated":[{"at":21,"path":"/"},{"at":92,"path":"/"},{"at":1172,"path":"/soccer-career"},{"at":3749,"path":"/soccer-career"}],"lastReport":2492,"samples":[{"t":792,"broke":false,"loading":false,"tiles":13,"about":true,"seo":null,"flag":"1","scrollY":2849},{"t":1492,"broke":false,"loading":false,
+
+playChunkReloadWait: 1 of 16 rows red
+playChunkReloadWait: 1 of 16 rows red
+walk red once (the known row D timing race, finish-BIG.md 9.2): rerun alone
+playChunkReloadWait: green on 16 rows. A page that loses a file waits for its one reload, no broken page, no error, nothing moved.
+playChunkReloadWait: control stock fired on all 16 rows: the stock wrapper flashes the bug, so the walk can see it.
+walk=0 walkstock=1

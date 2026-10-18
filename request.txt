@@ -1,0 +1,17 @@
+# Release BI, Round 1338 (lazy chunks wait for the reload), merged in Round BIG as a7094670 (first parent e814c2de).
+# simPreloadWait section 5 compares the stock build with the base built twice: the base is this tree WITHOUT Round
+# 1338 (scripts/lib/treeWithoutMerge.mjs a7094670 e814c2de), so the other rounds of the release are on both sides.
+# The lazy walks of Round 1338 are rc-BFb's lazy lines (unchanged). Controls: each loop line exits 0 only when every
+# control exits 1. Walk: walkstock must exit 1 (the stock wrapper flashes the bug). The walk has a timing race on row D
+# (home tile tap to /soccer-career at 1280, host way: "the tap made 1 document request(s)"): 2 red of 15 runs on the
+# Round BIG head, 0 of 6 on the m1 tree; so it runs #!serial and, when red, reruns ALONE once and the line reads the
+# rerun (both results are printed). finish-BIG.md section 9.2 has the evidence.
+#!build
+#!playwright
+#!serial
+preload5: node scripts/simPreloadWait.mjs --build-stock dist-stock 2>&1 | tail -1; B=$(node scripts/lib/treeWithoutMerge.mjs a7094670 e814c2de) || exit 2; git worktree add -f .base $B > /dev/null 2>&1; (cd .base && ../node_modules/.bin/vite build --outDir ../dist-base > /tmp/b1.log 2>&1 && ../node_modules/.bin/vite build --outDir ../dist-base2 > /tmp/b2.log 2>&1); echo "base builds=$?"; export PRELOAD_WAIT_STOCK_DIST=dist-stock PRELOAD_WAIT_BASE_DIST=dist-base PRELOAD_WAIT_BASE_DIST2=dist-base2; node scripts/simPreloadWait.mjs; a=$?; r=""; for k in stockdist extra extrabase; do PRELOAD_WAIT_CONTROL=$k node scripts/simPreloadWait.mjs > /tmp/p-$k.log 2>&1; r="$r $k=$?"; tail -1 /tmp/p-$k.log; done; echo "head=$a controls:$r"; [ $a = 0 ] && [ "$r" = " stockdist=1 extra=1 extrabase=1" ]
+vitest: node_modules/.bin/vitest run src/test/freshBuildReloadWait.test.ts src/test/freshBuildOptionalChunk.test.ts src/test/freshBuildBlockedStorage.test.ts src/test/clubManagerEraLoad.test.tsx src/test/clubManagerStartWait.test.tsx src/test/homeSearchRecovery.test.tsx src/test/routeErrorHeldSave.test.tsx src/test/routeErrorRecovery.test.tsx src/test/soccerCareerSaveFence.test.tsx src/test/soccerCareerPackedFence.test.tsx --testTimeout=300000 --hookTimeout=120000
+stale: node scripts/simStaleChunk.mjs; a=$?; r=""; for k in catchreload nowait flagfirst nolistener noguard noprerender nooffline nosave norelease barenudge; do SIM_STALE_CHUNK_CONTROL=$k node scripts/simStaleChunk.mjs > /tmp/s-$k.log 2>&1; r="$r $k=$?"; done; echo "head=$a controls:$r"; [ $a = 0 ] && [ "$r" = " catchreload=1 nowait=1 flagfirst=1 nolistener=1 noguard=1 noprerender=1 nooffline=1 nosave=1 norelease=1 barenudge=1" ]
+walk: node scripts/simPreloadWait.mjs --build-stock dist-stock2 2>&1 | tail -1; node scripts/playChunkReloadWait.mjs > /tmp/w.log 2>&1; a=$?; grep -A7 "^FAIL" /tmp/w.log | cut -c1-400 | head -40; tail -1 /tmp/w.log; if [ $a != 0 ]; then echo "walk red once (the known row D timing race, finish-BIG.md 9.2): rerun alone"; node scripts/playChunkReloadWait.mjs > /tmp/w2.log 2>&1; a=$?; grep -A7 "^FAIL" /tmp/w2.log | cut -c1-400 | head -20; tail -1 /tmp/w2.log; fi; PLAY_RELOAD_WAIT_CONTROL=stock PRELOAD_WAIT_STOCK_DIST=dist-stock2 node scripts/playChunkReloadWait.mjs > /tmp/ws.log 2>&1; b=$?; tail -1 /tmp/ws.log; echo "walk=$a walkstock=$b"; [ $a = 0 ] && [ $b = 1 ]
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
