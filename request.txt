@@ -1,0 +1,3 @@
+old: node .rc/x/probeOld1509.mjs
+savekeeper: node scripts/simSaveKeeper.mjs
+savesize: node scripts/simClubManagerSaveSize.mjs
