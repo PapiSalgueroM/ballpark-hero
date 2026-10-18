@@ -1,0 +1,1 @@
+probe: git worktree add -q --detach /tmp/pm 77556430 && ln -s "$PWD/node_modules" /tmp/pm/node_modules && git worktree add -q --detach /tmp/po HEAD && ln -s "$PWD/node_modules" /tmp/po/node_modules && node .rc/x/offAttr.mjs /tmp/po off,holder,board && for r in $PWD /tmp/pm /tmp/po /tmp/po /tmp/pm $PWD; do node .rc/x/probeSeason.mjs $r 3 8 || exit 1; done
