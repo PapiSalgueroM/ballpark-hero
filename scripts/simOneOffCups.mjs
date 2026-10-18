@@ -25,7 +25,9 @@
  *      is one of them, and no season one slice (or slice carried onto my new club with a night ahead) holds my club;
  *      every later season's are the rule over the FINISHED season's top flight and cup final, read here off the save
  *      before the rollover (the double rule and its mark, a move abroad 'moved', an unfinished season, no final);
- *      every finished cup one winner, extra time only on an 'et' row, penalties only after a level match.
+ *      every finished cup one winner, extra time only on an 'et' row, penalties only after a level match; NEVER
+ *      FALLS (the critic's correction 7): the nights a save has passed never go down within a season, a mid season
+ *      move included, and a cup finished before a move is finished after it with the same winner.
  *   2  the calendar and the books of a participant (the season's cup handed to my club at the read, so every
  *      season two is mine), its first season with nights held to its twin (from that night the two arms part):
  *      its nights are the row's at the one placer's slots, `{ oneOff, dsc, n }` in order; with
@@ -60,7 +62,8 @@
  *   section 1, the engine edited in the bundle: wrongyear (the row read by worldYearOf, not the format year)
  *              nodouble (the double rule skipped: the forced fleet) afterswap (the read after next season's
  *              memberships: a promoted manager) etall (extra time on a straight to penalties row) seasononeplay
- *              (season one's stub for my club taken out)
+ *              (season one's stub for my club taken out) carryseen (the move's carry off by one: a club joined
+ *              after its night shown becomes a 'joined' stub, the shown night taken back)
  *   section 2: tick (a skipped night ticks a week) adjacent (every night of a forced four club cup in the first
  *              gap: two midweeks in a row, a later date moves) countdown (a played night counts a window week)
  *              calweeks (the calendar's myMatchWeeks counts a night: its deadline is not the engine's)
@@ -68,11 +71,14 @@
  *              participant (a watcher given nights too)
  *   section 4: weighs (the minor filter taken out of weighedTrophies) notrophy (a won final pushes no trophy)
  *   section 5: keep (the rollover keeps last season's slice under a second key)
- *   A control whose case the fleet does not hold (no level match for etall, no promoted manager for afterswap)
- *   exits 3. Not controls here, with the reason: `ahead`, `noseen` and `othersemi` need a night that is not the
- *   opening one, and the only verified row is an 'open' cup, played before the season's first entry on every
- *   calendar (so it is never early, a move can never take it back, and it has no semi final). The placer's and
- *   the evaluation's rules for those places stand on the unit files (worldNights.test.ts, worldOneOffs.test.ts).
+ *   A control whose case the fleet does not hold (no level match for etall, no promoted manager for afterswap, no
+ *   move after a shown night for carryseen, no night before a league opener for leaguestarted, no played night
+ *   for norecovery) exits 3. Not controls here, with the reason: `ahead`, `noseen` and `othersemi` need a night
+ *   that is not the opening one, and the only verified row is an 'open' cup, played before the season's first
+ *   entry on every calendar (so it is never early, a new calendar always counts it passed, so dropping `seen`
+ *   changes nothing, and it has no semi final); carryseen breaks the carry where an 'open' cup does reach it.
+ *   The placer's and the evaluation's rules for those places stand on the unit files (worldNights.test.ts, which
+ *   also runs the placer on the engine's own calendars, and worldOneOffs.test.ts).
  */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -259,6 +265,9 @@ const ENGINE_EDITS = {
   afterswap: [{ file: CM, from: '  const oneOffFrom = oneOffTablesOf(career);\n  registerLeagueOverrides(pr.overrides);', to: '  registerLeagueOverrides(pr.overrides);\n  const oneOffFrom = oneOffTablesOf(career);' }],
   etall: [{ file: ONE, from: "deciderScale: row.decider === 'et' ? bind.deciderScale : 1, etScale: bind.etScale, extraTime: row.decider === 'et' };", to: "deciderScale: row.decider === 'et' ? bind.deciderScale : 1, etScale: bind.etScale, extraTime: true };" }],
   seasononeplay: [{ file: CM, from: "    if (mine && from.seasonOne) { stub('seasonOne'); return; }\n", to: '' }],
+  /* A shown night taken back at a move: the carry's test off by one, so joining a club whose night is already
+     shown makes a 'joined' stub (the reviewer's mutant; Chelsea joins Manchester City after the Shield). */
+  carryseen: [{ file: CM, from: '    if (slice.clubs?.includes(joined.clubName) && seen < oneOffNightsOf(row).length) {', to: '    if (slice.clubs?.includes(joined.clubName) && seen <= oneOffNightsOf(row).length) {' }],
   stream: [{ file: ONE, from: '    const rand = keyedRng(keyOf(fx));\n    const t: SettleableTie', to: '    const rand = Math.random;\n    const t: SettleableTie' }],
   form: [{ file: CM, from: '  const out = evaluateOneOff(slice, row, k, oneOffBind(state));\n  memo.set(k, out);', to: '  const out = evaluateOneOff(slice, row, k, oneOffBind(state));\n  if (out) for (const f of out.fixtures) if (f.hg !== undefined) noteForm(state, f.home, f.away, f.hg, f.ag as number);\n  memo.set(k, out);' }],
   keep: [{ file: CM, from: '  if (slice) next.dsc = slice;\n  else delete next.dsc;', to: '  if (slice) { if (next.dsc) (next as Record<string, unknown>).dscOld = next.dsc; next.dsc = slice; }\n  else delete next.dsc;' }],
@@ -269,6 +278,7 @@ Object.assign(CONTROLS, {
   afterswap: [1, /^1 entrants: /, /^1 /],
   etall: [1, /^1 extra time: /, /^1 /],
   seasononeplay: [1, /^1 season one: /, /^1 /],
+  carryseen: [1, /^1 never falls: /, /^1 /],
   stream: [3, /^3 .*the draws differ/, /^3 /],
   form: [3, /^3 .*the state differs/, /^3 /],
   keep: [5, /^5 slices: /, /^5 /],
@@ -384,11 +394,23 @@ async function fleetPass(forced) {
       for (const mode of COACH === 'both' ? ['coach', 'nocoach'] : [COACH]) {
         const tag = `${f.club} (${f.era}) seed ${seed} ${mode}${forced ? ' forced' : ''}`;
         let joined = false;
+        let last = { season: 0, n: 0 };
         await journey(E, f, seed, mode, {
           onStep: (M, s, stepLabel, got) => {
             if (!s) return;
             if (/-rollover$/.test(stepLabel)) joined = false;
             if (got.joined) joined = true;
+            /* 1: never falls (the critic's correction 7): the nights a save has passed never go down within a season,
+               a mid season move included, and a cup finished before the move is finished after it, with the same
+               winner (the carry keeps `seen`, and a club joined after its night is no 'joined' stub). */
+            const doneNow = M.cm.oneOffNightsDone(s);
+            if (s.season === last.season) ok(doneNow >= last.n, `1 never falls: ${tag} at ${stepLabel}: ${doneNow} nights shown after ${last.n}`);
+            if (got.joined) {
+              const was = M.cm.evalOneOff(got.joined), now = M.cm.evalOneOff(s);
+              if (was?.done) ok(!!now?.done && now.winner === was.winner, `1 never falls: ${tag} at ${stepLabel}: the cup finished before the move (won by ${was.winner}) shows ${now ? `${now.nightsDone} of ${now.nights} nights` : 'nothing'} after it`);
+              if (was && was.nightsDone > 0) bump('1 moves carrying a cup already shown (the carryseen control reads these)');
+            }
+            last = { season: s.season, n: doneNow };
             const want = expectedRow(M, R, s);
             const dsc = s.worldComps?.dsc;
             /* 1: the right row, every step. */
@@ -767,7 +789,7 @@ try {
   process.exit(2);
 }
 /* A control must have its case in the fleet: a count it reads at least one, else it could pass empty (exit 3). */
-const NEEDS = { afterswap: '1 rollovers into another league (the afterswap control reads these)', etall: '1 level matches on a pens row (the etall control needs one)', nodouble: '1 doubles (the runners up took the cup place)' };
+const NEEDS = { afterswap: '1 rollovers into another league (the afterswap control reads these)', etall: '1 level matches on a pens row (the etall control needs one)', nodouble: '1 doubles (the runners up took the cup place)', carryseen: '1 moves carrying a cup already shown (the carryseen control reads these)', leaguestarted: '2 states after a night and before the league opener (the leaguestarted control reads these)', norecovery: '2 nights whose squad was read (the norecovery control reads these)' };
 if (CONTROL && NEEDS[CONTROL] && !(counts[NEEDS[CONTROL]] > 0) && CONTROL !== 'nodouble') { console.log(`simOneOffCups: control ${CONTROL} DID NOT FIRE: its case is not in the fleet (${NEEDS[CONTROL]}: 0)`); process.exit(3); }
 const secs = Math.round((Date.now() - t0) / 1000);
 if (CONTROL) {
