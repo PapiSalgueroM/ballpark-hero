@@ -1,0 +1,9 @@
+dropnight: last: simWorldUcl: control dropnight FIRED (13360 failures, all its own)
+field32: last: simWorldUcl: control field32 FIRED (66 failures, all its own)
+eraformat: last: simWorldUcl: control eraformat FIRED (124 failures, all its own)
+meinfill: last: simWorldUcl: control meinfill FIRED (10 failures, all its own)
+meindirect: last: simWorldUcl: control meindirect FIRED (4 failures, all its own)
+nopens: last: simWorldUcl: control nopens FIRED (78 failures, all its own)
+agall: last: simWorldUcl: control agall FIRED (149 failures, all its own)
+locale: last: simWorldUcl: control locale FIRED (40 failures, all its own)
+controls (each must be 1): dropnight=1 field32=1 eraformat=1 meinfill=1 meindirect=1 nopens=1 agall=1 locale=1

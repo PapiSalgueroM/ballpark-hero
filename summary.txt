@@ -1,0 +1,5 @@
+proof-part exit=0 317s | proofWorldUclFleet: GREEN, 60 journeys and 6483 steps byte equal to cad4edcf, draws equal
+proof-watch exit=0 994s | proofWorldUclFleet: GREEN, 130 journeys and 17798 steps byte equal to cad4edcf, draws equal
+simWorldUcl exit=0 1733s | simWorldUcl: green, 495871 checks, 0 failures
+ctl-a exit=0 1606s | controls (each must be 1): dropnight=1 field32=1 eraformat=1 meinfill=1 meindirect=1 nopens=1 agall=1 locale=1
+ctl-b exit=0 3807s | controls (each must be 1): stream=1 participant=1 form=1 ahead=1 live=1 noseen=1 marks=1 keep=1 noholder=1

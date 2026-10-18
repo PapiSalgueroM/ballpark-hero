@@ -1,0 +1,25 @@
+  1 watched seasons l36: 60
+  3 calendar checks g8 uclGroup: 29856
+  3 calendar checks g8 uclKo: 34832
+  3 calendar checks l36 date: 29909
+  3 calendar checks l36 uclGroup: 16314
+  3 date checks g8: 131
+  3 date checks l36: 78
+  3 joins that carried the slice g8: 10
+  3 joins that carried the slice l36: 5
+  3 joins that carried the slice: 15
+  3 joins that dropped the slice: 1
+  3 joins that opened a fresh slice: 5
+  3 joins to an entrant that still watches, a fresh slice opened: 4
+  3 joins with nothing to carry or open: 2
+  3 reloads right after a join: 30
+  3 states checked: 7695
+  7 g8 draws: 113
+  7 l36 slates over the cap: 14
+  7 l36 slates with an association break: 9
+  7 l36 slates: 60
+  7 titles by strength quartile 1: 146
+  7 titles by strength quartile 2: 22
+  7 titles by strength quartile 3: 4
+  7 titles by strength quartile 4: 1
+simWorldUcl: green, 495871 checks, 0 failures
