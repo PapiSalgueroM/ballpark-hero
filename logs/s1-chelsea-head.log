@@ -1,0 +1,30 @@
+  0 ledger: verified eng-2026 eng-2026-s1 | to verify eng-2005 eng-2010 eng-2015 eng-2020 esp-2026 ita-2026 ger-2026 fra-2026 | 9 pages
+  0 constants: 1 rows (eng-2026), 1 season one editions, partial eng-2005 eng-2010 eng-2015 eng-2020 esp-2026 ita-2026 ger-2026 fra-2026
+  1 fleet: Chelsea (now, watcher)
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  1 forced: Chelsea (now, watcher)
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  2 calendar: 3 participant seasons beside their twins, 3 nights; the closest neighbour of a night 3 days, at most 1 matches in seven days to a night
+  7 fitness into the league opener: 79.8 after the super cup night, 100.0 in the twin with no night, 100.0 at the rollover (3 seasons)
+  4 honours: 6 arms (won and lost), 27 weighing readers compared with and without a minor trophy
+  3 self relative: 3 journeys, 317 steps each arm, 317 steps carrying a super cup
+  6 dailies: 20 daily states and 10 handovers, none with a super cup
+  1 level matches on a pens row (the etall control needs one): 7
+  1 moves carrying a cup already shown (the carryseen control reads these): 6
+  1 participants (my club earned a place: played from the match half): 5
+  1 plain fields (champions v cup winners): 1
+  2 men who paid a night (sum): 33
+  2 nights whose squad was read (the norecovery control reads these): 3
+  2 participant journeys whose wages differ from the twin by a week keyed event (printed, not asserted): 3
+  2 states after a night and before the league opener (the leaguestarted control reads these): 3
+  3 participant journeys compared up to their first night: 2
+  4 super cups my club won (section 1 fleet): 5
+  5 bytes of a followed one slice: 1463
+  5 followed one slices measured: 12
+  7 season one followed: 6
+  7 settled in 90 minutes: 5
+  7 settled on penalties: 7
+  7 won by the stronger side: 6
+  7 won by the weaker side: 6
+  1 rows seen: eng-2026
+simOneOffCups: green, 3554 checks (82 s)

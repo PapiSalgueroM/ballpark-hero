@@ -1,0 +1,13 @@
+units exit=0 7s |    Duration  6.79s (transform 3.12s, setup 437ms, collect 5.40s, tests 4.90s, environment 1.93s, prepare 459ms)
+tsc exit=0 77s | 
+m-carryseen exit=1 85s | MUTANT carryseen: sim exit=1 (0 means it SURVIVED)
+s1-chelsea-head exit=0 82s | simOneOffCups: green, 3554 checks (82 s)
+s4-small-head exit=0 27s | simOneOffCups: green, 68 checks (27 s)
+probe exit=0 5s | probeRead1510: 47 careers; tile None here 0, Not confirmed 45; no-row cards that print the season one line 0
+head-small exit=0 272s | simOneOffCups: green, 22581 checks (272 s)
+m-leaguestarted exit=1 282s | MUTANT leaguestarted: sim exit=1 (0 means it SURVIVED)
+s4-more-b exit=0 40s | simOneOffCups: green, 102 checks (40 s)
+join-head exit=0 6s | rvjoin1510: the shown cup held in all 3 cases
+m-norecovery exit=1 281s | MUTANT norecovery: sim exit=1 (0 means it SURVIVED)
+c-weighs exit=1 22s | simOneOffCups: control weighs FIRED (25 failures, all its own: 4 weighs: Chelsea seed 1: nationStanding reads 75.5 without a minor trophy and 89.5 with one)
+s4-more-a exit=0 53s | simOneOffCups: green, 102 checks (52 s)
