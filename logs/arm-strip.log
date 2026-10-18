@@ -1,0 +1,21 @@
+lrAttr: /tmp/lr1 patched with strip
+  FAIL: modern: now|premier differs in europeNext, wholeNext, s2_table, s2_results, s2_world, s2_cup, s2_europe, s2_whole
+  FAIL: modern: now|laliga differs in europeNext, wholeNext, s2_europe, s2_whole
+  FAIL: modern: now|seriea differs in europeNext, wholeNext, s2_europe, s2_whole
+  FAIL: modern: now|bundesliga differs in summary, europeNext, wholeNext, s2_europe, s2_whole
+  FAIL: modern: now|saudi differs in europeNext, wholeNext
+  FAIL: modern: now|mlsWest differs in europeNext, wholeNext
+  FAIL: modern: now|primeira differs in europeNext, wholeNext
+  FAIL: modern: now|superlig differs in wholeNext
+  FAIL: modern: now|proleague differs in europeNext, wholeNext
+  FAIL: modern: now|croatia differs in europeNext, wholeNext
+  FAIL: modern: now|brasileirao differs in europeNext, wholeNext
+  FAIL: modern: now|aleague differs in europeNext, wholeNext
+  FAIL: modern: now|serieb differs in europeNext, wholeNext, s2_europe, s2_whole
+  FAIL: modern: now|ligue2 differs in wholeNext, s2_whole
+  FAIL: modern: now|segunda differs in europeNext, wholeNext, s2_europe, s2_whole
+   27 entries compared, 15 differ
+   20 entries compared, 0 differ
+   48 entries compared, 0 differ
+simCmLeagueRules: 15 failure(s)
+lrAttr: states stripped of worldComps.uel before hashing: 89

@@ -1,0 +1,5 @@
+arm-strip exit=1 67s | lrAttr: states stripped of worldComps.uel before hashing: 89
+head-full exit=1 68s | simCmLeagueRules: 27 failure(s)
+arm-strip-holder exit=1 69s | lrAttr: states stripped of worldComps.uel before hashing: 89
+arm-all exit=0 51s | lrAttr: states stripped of worldComps.uel before hashing: 89
+arm-holder-board-nostrip exit=1 51s | simCmLeagueRules: 27 failure(s)

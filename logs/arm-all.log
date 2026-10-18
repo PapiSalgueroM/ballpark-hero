@@ -1,0 +1,6 @@
+lrAttr: /tmp/lr3 patched with strip, holder, board
+   27 entries compared, 0 differ
+   20 entries compared, 0 differ
+   48 entries compared, 0 differ
+simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+lrAttr: states stripped of worldComps.uel before hashing: 89
