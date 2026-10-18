@@ -1,0 +1,3 @@
+#!serial
+unseeded: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && echo "base $CM_UNSEEDED_BASE" && node scripts/simCmUnseededWorld.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+contCmp: bash .rc/x/contCmp1509.sh 77556430
