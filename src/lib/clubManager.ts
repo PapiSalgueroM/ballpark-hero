@@ -13389,12 +13389,9 @@ function setWorldComp(state: CareerState, comp: WorldCompKey, slice: WorldCompSl
   if (dsc) next.dsc = dsc;
   /* Taking the Champions League's key off takes the object off first and puts back what is left, the way the
      engine has always written it (delete, then assign), so the object stands where it always stood among the
-     save's keys; the Europa League's key is written in place. Release BK triage (section 7): the old engine took
-     the object off before every slice it wrote, and its delete only ever met an object holding that key. So the
-     object is taken off when a Champions League slice is written or a Champions League key that is there comes
-     off, and never when clearing a key the state does not hold (a club in the Champions League, at every load's
-     repair): that leaves the object where it stands, and a save the engine wrote loads to the same bytes. */
-  if (comp === 'ucl' && (slice || state.worldComps?.ucl)) delete state.worldComps;
+     save's keys; the Europa League's key is written in place. Release BK fix: the load repair never calls this for
+     a key the save does not hold (repairWorldComp), so a load leaves the object where it stands. */
+  if (comp === 'ucl' && !slice) delete state.worldComps;
   if (next.ucl || next.uel || next.dsc) state.worldComps = next;
   else delete state.worldComps;
 }
@@ -13686,7 +13683,10 @@ export function repairWorldComp(state: CareerState, comp: WorldCompKey): void {
     const inIt = comp === 'ucl' && !!state.uclGroup;
     const slice = state.worldComps?.[comp];
     if (slice && slice.s === state.season && !inIt) return;
-    /* Release BK triage (section 7): a key the save does not hold is not touched. */
+    /* Release BK triage (section 7): a key the save does not hold is not touched. Clearing the Champions League's
+       key takes the whole object off and puts it back, so on a club in the Champions League (which never holds
+       that key, but since Round 1509 holds the Europa League's) it moved worldComps to the end of the save at
+       every load: equal values, other bytes. */
     if (slice !== undefined) setWorldComp(state, comp, null);
     if (inIt || !Array.isArray(state.calendar) || state.week >= state.calendar.length) return;
     const fmt = worldCompFormatOf(state, comp);
