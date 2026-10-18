@@ -1,0 +1,6 @@
+bindAt: scripts/qa/proveSoccerGridSettingsRace.mjs bound
+bindAt: f17130e8fc06 -> 89a92d1e888d
+M1407 89a92d1e888dc7e25149853496459158c4ca12e4 C 5be494c769e4403498973a68562b3a0b993c6aa4
+runProver: p1412 at 5be494c769e4403498973a68562b3a0b993c6aa4 (release BK bound: c1c993472c6f with its pinned bases bound to the joined tree)
+Soccer Grid settings fixed: passed; 5 actual arm(s), 2 prior suite run(s); qualified=true
+runProver: p1412 exit 0

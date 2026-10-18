@@ -1,0 +1,27 @@
+bindAt: scripts/qa/proveCareerReleaseGuides.mjs bound
+bindAt: e32dd9facafc -> 4a6083b58a05
+M1400 4a6083b58a0566fb4303083beb5e7901677ed45e C d83b9d5b1d9780f08a0106f47e340b0a5f97e69b
+runProver: p1414 at d83b9d5b1d9780f08a0106f47e340b0a5f97e69b (release BK bound: 5ada8244f19f with its pinned bases bound to the joined tree)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: guide-headings: successful child
+
+1 !== 0
+
+    at run (file:///tmp/rp-wt-p1414/scripts/qa/proveCareerReleaseGuides.mjs:68:80)
+    at file:///tmp/rp-wt-p1414/scripts/qa/proveCareerReleaseGuides.mjs:118:3
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+runProver: p1414 exit 1

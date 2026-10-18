@@ -1,0 +1,6 @@
+bindAt: scripts/qa/proveSoccerGridInitialTimer.mjs bound
+bindAt: cba9081632e5 -> c1c993472c6f
+C 1402b3bff7db12bb0e919d7e1e0e95284badc325
+runProver: p1413 at 1402b3bff7db12bb0e919d7e1e0e95284badc325 (release BK bound: 1e4795349a2e with its pinned bases bound to the joined tree)
+Grid initial timer fixed: passed; 4 arm(s), 2 related run(s); qualified=true
+runProver: p1413 exit 0
