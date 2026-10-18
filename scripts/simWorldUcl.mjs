@@ -891,7 +891,16 @@ async function selfRelative() {
   const off = await engineOf(ROOT, 'off', { edits: [...BINDING_OFF, ...holder] }, cannot);
   if (careerEdits().length) changed = true;
   const fleet = pickFleet(await head.fresh(), 'all', cannot);
-  const record = st => (!st ? 'null' : JSON.stringify(!st.uclGroup && 'worldComps' in st ? { ...st, worldComps: undefined } : st));
+  /* Round 1509: the Europa League every career of today's world follows (worldComps.uel) is simWorldEuro's section 2,
+     and this section's other arm takes out the start that opens it too, so it comes off every state compared here. */
+  const withoutUel = st => {
+    if (!st?.worldComps?.uel) return st;
+    const rest = { ...st.worldComps }; delete rest.uel;
+    return { ...st, worldComps: Object.keys(rest).length ? rest : undefined };
+  };
+  const record = st => (!st ? 'null' : JSON.stringify(withoutUel(!st.uclGroup && 'worldComps' in st ? { ...st, worldComps: undefined } : st)));
+  /* The first keys two recorded states differ on, so a red says where. */
+  const firstKeys = (a, b) => { try { const A = JSON.parse(a), B = JSON.parse(b); return [...new Set([...Object.keys(A ?? {}), ...Object.keys(B ?? {})])].filter(k => JSON.stringify(A?.[k]) !== JSON.stringify(B?.[k])).slice(0, 4).join(', ') || 'the key order'; } catch { return 'unreadable'; } };
   const t0 = Date.now();
   let journeys = 0, steps = 0, carried = 0;
   for (const f of fleet) for (const mode of ['nocoach', 'coach']) for (const seed of SEEDS) {
@@ -906,7 +915,7 @@ async function selfRelative() {
       if (!x || !y || x.label !== y.label) { ok(false, `2 ${name}: the steps part at ${i}`); break; }
       const why = [];
       if (y.inIt && y.carries) why.push('a state in the Champions League carries worldComps.ucl');
-      if (x.json !== y.json) why.push('the state differs');
+      if (x.json !== y.json) why.push(`the state differs (${firstKeys(x.json, y.json)})`);
       if (x.draws !== y.draws || x.drawSha !== y.drawSha) why.push(`the draws differ (${x.draws} against ${y.draws})`);
       if (y.inIt && x.saved !== y.saved) why.push('the saved bytes differ');
       if (why.length) { ok(false, `2 ${name} at ${x.label}: ${why.join('; ')}`); break; }
