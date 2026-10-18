@@ -13711,6 +13711,25 @@ function oneOffNightRow(state: CareerState, night: NightRef | undefined): { slic
   return row ? { slice, row } : null;
 }
 
+/** The words a super cup night wears on the calendar and the match screens: the cup's name for one match, with
+ *  the stage for a four club cup or a two legged one. Null for anything else. */
+export function oneOffEntryLabel(state: CareerState, entry: CalendarEntry): string | null {
+  const got = oneOffNightRow(state, entry.night);
+  if (!got) return null;
+  const n = entry.night!.n;
+  if (got.row.shape === 'four') return `${got.row.name} · ${n === 0 ? 'Semi-final' : 'Final'}`;
+  if (got.row.shape === 'two') return `${got.row.name} · ${n === 0 ? 'First leg' : 'Second leg'}`;
+  return got.row.name;
+}
+
+/** A four club cup's final while my semi final is still to be played: a maybe on the calendar, never an invented
+ *  fixture (potentialEntry's rule). */
+export function oneOffPotential(state: CareerState, entry: CalendarEntry): boolean {
+  const got = oneOffNightRow(state, entry.night);
+  if (!got || got.row.shape !== 'four' || entry.night!.n !== 1 || !got.slice.clubs?.includes(state.clubName)) return false;
+  return !Object.keys(got.slice.mine ?? {}).some(k => Number(k) < 2);
+}
+
 /** Round 670's rule for a night: extra time when level only on a row whose decider is 'et'. */
 function oneOffPlaysExtraTime(state: CareerState, entry: CalendarEntry): boolean {
   return oneOffNightRow(state, entry.night)?.row.decider === 'et';
@@ -13725,6 +13744,14 @@ function nightVarKey(state: CareerState, night: NightRef): string {
  *  won, or null. Nothing yet: no calendar holds a night before the match half. */
 function completeOneOffNight(_state: CareerState, _night: NightRef, _mine: number, _theirs: number, _et: boolean, _shootoutWon: boolean | null, _events: string[]): string | null {
   return null;
+}
+
+/** Round 1510 (the critic's correction 13): a league entry of this season has been played. "Week 0" meant that
+ *  until a participant's super cup night could stand before the opening league round. */
+export function leagueStarted(state: Pick<CareerState, 'week' | 'calendar'>): boolean {
+  const cal = Array.isArray(state.calendar) ? state.calendar : [];
+  for (let i = 0; i < state.week && i < cal.length; i += 1) if (cal[i].type === 'league') return true;
+  return state.week > 0 && cal.length === 0;
 }
 
 /** The country the save's league is in. */
@@ -13790,10 +13817,22 @@ function openOneOff(state: CareerState, from: { tables: OneOffTables | null; sea
        never plays my club without me. A two legged cup is followed only (answer 1b). */
     if (mine && from.seasonOne) { stub('seasonOne'); return; }
     if (mine && row.shape === 'two') { stub('legs'); return; }
+    /* A participant's nights go on its own calendar at the one placer's slots (the calendar half of the round). */
+    const slots = mine ? placeNights(state.calendar, entryDatesOf(state), oneOffNightsOf(row), oneOffRedate(state)) : [];
+    if (slots.some(s => s === null)) { stub('noNight'); return; }
     setOneOffSlice(state, { v: 1, s: state.season, row: row.id, clubs, str: clubs.map(c => worldUclStrength(state, c)), ...(dbl ? { dbl: 1 as const } : {}), seed: worldCompSeed(state, 'dsc') });
+    if (mine) insertOneOffNights(state, slots as number[]);
   } catch {
     setOneOffSlice(state, null);
   }
+}
+
+/** A participant's nights spliced into its calendar at the placer's slots, the last first so the earlier slots
+ *  stay where they were: `{ type: 'oneOff', round: 0, night: { k: 'dsc', n } }`. Only at a rollover (startCareer
+ *  never inserts), and no other entry's date moves (the placer took only gaps that keep every date). */
+function insertOneOffNights(state: CareerState, slots: number[]): void {
+  const order = slots.map((at, n) => ({ at, n })).sort((a, b) => b.at - a.at || b.n - a.n);
+  for (const { at, n } of order) state.calendar.splice(at, 0, { type: 'oneOff', round: 0, night: { k: 'dsc', n } });
 }
 
 /** startCareer's last step for the super cup: a new career opens season one's edition, followed (my club in it is a
@@ -20330,14 +20369,14 @@ export function matchFacts(career: CareerState): MatchFacts | null {
     if (loss < 0) { draw += loss; loss = 0; }
 
     const table = sortedLeagueTable(career);
-    const myPos = career.week === 0 ? null : Math.max(1, table.findIndex(r => r.club === career.clubName) + 1) || null;
+    const myPos = !leagueStarted(career) ? null : Math.max(1, table.findIndex(r => r.club === career.clubName) + 1) || null;
     const myLeague = careerLeagueOf(career);
     let oppPos: number | null = null;
     let oppLeagueName: string | null = null;
     const inMyLeague = career.leagueClubs.includes(fx.opponent);
     if (inMyLeague) {
       const idx = table.findIndex(r => r.club === fx.opponent);
-      oppPos = career.week === 0 ? null : idx >= 0 ? idx + 1 : null;
+      oppPos = !leagueStarted(career) ? null : idx >= 0 ? idx + 1 : null;
     } else {
       const oppLeague = career.eraId && isHistoricEra(career.eraId)
         ? eraLeagueOf(fx.opponent, career.eraId)

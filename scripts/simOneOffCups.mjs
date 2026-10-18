@@ -26,10 +26,18 @@
  *      every later season's are the rule over the FINISHED season's top flight and cup final, read here off the save
  *      before the rollover (the double rule and its mark, a move abroad 'moved', an unfinished season, no final);
  *      every finished cup one winner, extra time only on an 'et' row, penalties only after a level match.
+ *   2  the calendar and the books of a participant (the season's cup handed to my club at the read, so every
+ *      season two is mine): its nights are the row's at the one placer's slots, `{ oneOff, dsc, n }` in order; with
+ *      them taken out the calendar is its twin's (the same engine with the insertion off) entry for entry, and every
+ *      other entry's DATE is the twin's; dates rise, a night three days or more from its neighbours, at most three
+ *      matches in seven days to it; the season charges the twin's number of wage weeks; the summer window closes
+ *      after the same entry as the twin's. Wages are printed: the staff desk's weekly events are keyed on the week
+ *      index, which a night before them moves by one.
  *   3  SELF RELATIVE: the engine against itself with this round's three opens taken out (startCareer's, the
  *      rollover's, the move's carry, each asserted present once): every fleet save, both coach modes, equal at every
  *      step in every key but worldComps.dsc, every draw equal by count and value, evalOneOff called on the live state
- *      after every step of the head arm.
+ *      after every step of the head arm. A participant's season is compared with its nights taken out of the
+ *      calendar, up to the step whose week passes its first night (from there it moves because it played).
  *   5  the save: at most the three keys worldComps knows, the slice of the season in play, no minor trophy before the
  *      match half; the bytes of a slice and of a stub printed.
  *   6  the dailies: no Hot Seat or Deadline Day state, and no career a Hot Seat hands over, carries a super cup.
@@ -46,6 +54,8 @@
  *              nodouble (the double rule skipped: the forced fleet) afterswap (the read after next season's
  *              memberships: a promoted manager) etall (extra time on a straight to penalties row) seasononeplay
  *              (season one's stub for my club taken out)
+ *   section 2: tick (a skipped night ticks a week) adjacent (every night of a forced four club cup in the first
+ *              gap: two midweeks in a row, a later date moves)
  *   section 3: stream (a followed match draws Math.random) form (the evaluation writes the clubs' form)
  *   section 5: keep (the rollover keeps last season's slice under a second key)
  *   A control whose case the fleet does not hold (no level match for etall, no promoted manager for afterswap)
@@ -253,7 +263,6 @@ Object.assign(CONTROLS, {
   form: [3, /^3 .*the state differs/, /^3 /],
   keep: [5, /^5 slices: /, /^5 /],
 });
-if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control ${CONTROL}`);
 const editsFor = (extra = []) => [...(ENGINE_EDITS[CONTROL] ?? []), ...extra];
 const counts = {};
 const bump = (k, n = 1) => { counts[k] = (counts[k] ?? 0) + n; };
@@ -279,7 +288,7 @@ function fleetOf(M) {
 /** One journey: startCareer, every playNextEntry, finishSeason, startNextSeason, through `seasons`, with a reload in
  *  every season, a mid season move where the fleet row asks (season one, entry 25) and a summer move where it asks
  *  (the first rollover). Every step on its own stretch of the counter stream; `onStep` sees every state. */
-async function journey(E, f, seed, mode, { evalEach = false, record = null, onStep, onRollover } = {}) {
+async function journey(E, f, seed, mode, { evalEach = false, record = null, mark = null, onStep, onRollover } = {}) {
   const M = await E.fresh();
   const opts = mode === 'coach' ? { skipHalftime: true } : { skipHalftime: true, noCoach: true };
   const steps = [];
@@ -294,7 +303,7 @@ async function journey(E, f, seed, mode, { evalEach = false, record = null, onSt
     });
     const got = r.value ?? {};
     if (got.state) s = got.state;
-    steps.push({ label, h: record && s ? createHash('sha256').update(record(s)).digest('hex').slice(0, 16) : null, draws: r.draws.length, drawSha: createHash('sha256').update(JSON.stringify(r.draws)).digest('hex').slice(0, 16) });
+    steps.push({ label, m: mark && s ? mark(s) : false, h: record && s ? createHash('sha256').update(record(s)).digest('hex').slice(0, 16) : null, draws: r.draws.length, drawSha: createHash('sha256').update(JSON.stringify(r.draws)).digest('hex').slice(0, 16) });
     onStep?.(M, s, label, got);
   };
   step('start', () => ({ state: f.custom ? M.cm.startCareer(f.club, f.era, f.custom) : M.cm.startCareer(f.club, f.era) }));
@@ -461,17 +470,24 @@ async function selfRelative() {
     for (const seed of SEEDS) {
       for (const mode of COACH === 'both' ? ['coach', 'nocoach'] : [COACH]) {
         const tag = `${f.club} (${f.era}) seed ${seed} ${mode}`;
-        const a = await journey(head, f, seed, mode, { evalEach: true, record: withoutDsc, onStep: (M, s) => { if (s?.worldComps?.dsc) carried += 1; } });
+        /* A participant's season holds its nights: compared with them taken out of the calendar, and only until the
+           week passes the first of them (from there it moves because it played, the match half's attribution). */
+        const headRecord = st => ((st.calendar ?? []).some(e => e.night) ? withoutDsc({ ...st, calendar: st.calendar.filter(e => !e.night) }) : withoutDsc(st));
+        const pastNight = st => (st.calendar ?? []).some((e, i) => e.night && i < st.week);
+        const a = await journey(head, f, seed, mode, { evalEach: true, record: headRecord, mark: pastNight, onStep: (M, s) => { if (s?.worldComps?.dsc) carried += 1; } });
         const b = await journey(off, f, seed, mode, { record: st => JSON.stringify(st) });
         journeys += 1;
         stepsSeen += a.length;
-        if (a.length !== b.length) { ok(false, `3 ${tag}: ${a.length} steps against ${b.length}`); continue; }
-        for (let i = 0; i < a.length; i += 1) {
+        let compared = 0;
+        for (let i = 0; i < Math.min(a.length, b.length); i += 1) {
           const x = a[i], y = b[i];
+          if (x.m) { bump('3 participant journeys compared up to their first night'); break; }
           if (x.draws !== y.draws || x.drawSha !== y.drawSha) { ok(false, `3 ${tag} at ${x.label}: the draws differ (${x.draws} against ${y.draws})`); break; }
           if (x.h !== y.h) { ok(false, `3 ${tag} at ${x.label}: the state differs in a key other than worldComps.dsc`); break; }
           ok(true, '');
+          compared += 1;
         }
+        if (compared === Math.min(a.length, b.length)) ok(a.length === b.length, `3 ${tag}: ${a.length} steps against ${b.length}`);
       }
     }
   }
@@ -499,7 +515,107 @@ async function dailies() {
   console.log(`  6 dailies: ${days} daily states and 10 handovers, none with a super cup`);
 }
 
+
+/* ── Section 2: the calendar and the books of a participant ── */
+/* The participant fleet: the season's cup handed to my own club at the read, so every season two is played. */
+const FORCE_MINE = { file: CM, from: '  const oneOffFrom = oneOffTablesOf(career);\n', to: '  const oneOffFrom = (t => ({ ...t, cupWinner: career.clubName }))(oneOffTablesOf(career));\n' };
+const INSERT_OFF = { file: CM, from: '    if (mine) insertOneOffNights(state, slots as number[]);\n', to: '' };
+Object.assign(ENGINE_EDITS, {
+  tick: [{ file: CM, from: '      if (!entry.night) tickWeek(state, null);\n', to: '      tickWeek(state, null);\n' }],
+  /* A naive placing on a forced four club new year cup: every night of the cup in the first gap the search found,
+     two midweeks in a row (the rule "never two midweeks in one gap" forgotten). The engine's own leagues give no
+     season where the first gap of a search is not free, so the naive slot is made to differ this way. */
+  adjacent: [
+    { file: CM, from: '  const order = slots.map((at, n) => ({ at, n })).sort((a, b) => b.at - a.at || b.n - a.n);', to: '  const order = slots.map((_, n) => ({ at: slots[0], n })).sort((a, b) => b.at - a.at || b.n - a.n);' },
+    { file: ROWS_FILE, from: "'FA Community Shield', 'one', 'pens', 'champCup', 'leagueRunnerUp', 'open', 'n'],", to: "'FA Community Shield', 'four', 'pens', 'top2cup2', 'nextLeague', 'newYear', 'n', 0, [0, 3, 2, 1]]," },
+  ],
+});
+Object.assign(CONTROLS, {
+  tick: [2, /^2 books: /, /^2 /],
+  adjacent: [2, /^2 dates: /, /^2 /],
+});
+const nightIdx = cal => cal.map((e, i) => (e.night ? i : -1)).filter(i => i >= 0);
+const iso = d => `${d.y}-${String(d.m).padStart(2, '0')}-${String(d.d).padStart(2, '0')}`;
+
+async function calendarSection() {
+  const head = await engineOf(ROOT, 'cal-head', { edits: editsFor([FORCE_MINE]) }, cannot);
+  const twin = await engineOf(ROOT, 'cal-twin', { edits: [...(CONTROL === 'adjacent' ? ENGINE_EDITS.adjacent.filter(e => e.file === ROWS_FILE) : []), FORCE_MINE, INSERT_OFF] }, cannot);
+  const W = await bundle('nights', { n: 'src/lib/worldNights.ts', o: ONE });
+  const probe = await head.fresh();
+  const fleet = fleetOf(probe).filter(f => ['Chelsea', 'Everton', 'Arsenal', 'Birmingham City'].includes(f.club) && f.era === 'now').map(f => ({ ...f, join: undefined }));
+  let seasons = 0, nights = 0, maxIn7 = 0, gapMin = 99;
+  for (const f of fleet) {
+    for (const seed of SEEDS) {
+      for (const mode of COACH === 'both' ? ['coach', 'nocoach'] : [COACH]) {
+        const tag = `${f.club} seed ${seed} ${mode}`;
+        const pick = () => {
+          const out = { after: [], end: [], closes: [] };
+          let window = null;
+          return { out, hooks: {
+            onStep: (M, s, label) => {
+              if (!s) return;
+              if (window === 'summer' && s.transferWindow === null) {
+                const played = s.calendar.slice(0, s.week).filter(e => !e.night);
+                const last = played[played.length - 1];
+                out.closes.push(`${s.season}:${last?.type}:${last?.round}:${played.length}`);
+              }
+              window = s.transferWindow;
+              if (/-finish$/.test(label)) out.end.push({ season: s.season, weeks: s.books?.season?.weeks ?? null, pw: s.books?.season?.playerWages ?? null, sw: s.books?.season?.staffWages ?? null });
+              if (/-rollover$/.test(label)) {
+                const dates = M.cal.entryDatesOf(s);
+                out.after.push({ season: s.season, cal: s.calendar, dates: dates.map(iso), plan: !!M.cal.seasonPlanOf(s), dsc: s.worldComps?.dsc ?? null, mine: s.clubName });
+              }
+            },
+          } };
+        };
+        const a = pick();
+        await journey(head, f, seed, mode, a.hooks);
+        const b = pick();
+        await journey(twin, f, seed, mode, b.hooks);
+        for (let i = 0; i < a.out.after.length; i += 1) {
+          const x = a.out.after[i], y = b.out.after[i];
+          if (!y) { ok(false, `2 ${tag}: the twin has no season ${x.season}`); continue; }
+          seasons += 1;
+          const idx = nightIdx(x.cal);
+          const mine = x.dsc && !x.dsc.skip && x.dsc.clubs?.includes(x.mine);
+          ok(!mine === (idx.length === 0), `2 nights: ${tag} season ${x.season}: ${idx.length} nights on the calendar of a club ${mine ? 'in' : 'not in'} its super cup`);
+          if (!mine) continue;
+          nights += idx.length;
+          const rowT = W.o.oneOffRowById(x.dsc.row);
+          const want = W.n.placeNights(y.cal, y.dates.map(d => { const [yy, mm, dd] = d.split('-').map(Number); return { y: yy, m: mm, d: dd }; }), W.o.oneOffNightsOf(rowT));
+          const placed = idx.map((at, k) => at - k);
+          ok(same(placed, want), `2 slots: ${tag} season ${x.season}: the nights sit before entries ${placed.join(',')}, the placer gives ${want.join(',')}`);
+          ok(idx.every((at, n) => x.cal[at].type === 'oneOff' && x.cal[at].night.k === 'dsc' && x.cal[at].night.n === n), `2 nights: ${tag} season ${x.season}: a night entry is not { oneOff, dsc, n } in order`);
+          const stripped = x.cal.filter(e => !e.night);
+          ok(same(stripped, y.cal), `2 calendar: ${tag} season ${x.season}: with the nights taken out the calendar is not the twin's`);
+          const others = x.dates.filter((_, i2) => !idx.includes(i2));
+          ok(same(others, y.dates), `2 dates: ${tag} season ${x.season}${x.plan ? ' (a late season)' : ''}: an entry's date moved (first: ${others.find((d, k) => d !== y.dates[k])})`);
+          const days = x.dates.map(d => Date.parse(`${d}T00:00:00Z`) / 86400000);
+          ok(days.every((d, k) => k === 0 || d > days[k - 1]), `2 dates: ${tag} season ${x.season}: dates do not rise`);
+          for (const at of idx) {
+            const before = at > 0 ? days[at] - days[at - 1] : 99, after = at + 1 < days.length ? days[at + 1] - days[at] : 99;
+            gapMin = Math.min(gapMin, before, after);
+            ok(before >= 3 && after >= 3, `2 dates: ${tag} season ${x.season}: a night ${before} and ${after} days from its neighbours`);
+            const inWeek = days.filter(d => d > days[at] - 7 && d <= days[at]).length;
+            maxIn7 = Math.max(maxIn7, inWeek);
+            ok(inWeek <= 3, `2 dates: ${tag} season ${x.season}: ${inWeek} matches in the seven days to a night`);
+          }
+        }
+        /* The critic's correction 2: a night is no wage week, so the season charges the twin's number of weeks. The
+           wages themselves are printed, not asserted: the staff desk's and the scouts' weekly events are keyed on
+           the week index, which a night before them moves by one, so a poach can land a week apart (measured on
+           the first smoke, Chelsea season two: staff wages 7.952 against 8.084, weeks 54 and 54). */
+        ok(same(a.out.end.map(e => [e.season, e.weeks]), b.out.end.map(e => [e.season, e.weeks])), `2 books: ${tag}: the season charged ${a.out.end.map(e => e.weeks).join(' ')} weeks, the twin with no nights ${b.out.end.map(e => e.weeks).join(' ')}`);
+        if (!same(a.out.end, b.out.end)) bump('2 participant journeys whose wages differ from the twin by a week keyed event (printed, not asserted)');
+        ok(same(a.out.closes, b.out.closes), `2 window: ${tag}: the summer window closes after ${a.out.closes.join(' ')}, the twin after ${b.out.closes.join(' ')}`);
+      }
+    }
+  }
+  if (CONTROL === 'adjacent' && !fails.some(x => /^2 dates: /.test(x))) { console.log('simOneOffCups: control adjacent DID NOT FIRE: no forced new year season where the naive slot and the search differ'); process.exit(3); }
+  console.log(`  2 calendar: ${seasons} participant seasons beside their twins, ${nights} nights; the closest neighbour of a night ${gapMin} days, at most ${maxIn7} matches in seven days to a night`);
+}
 /* ── Run ── */
+if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control ${CONTROL}`);
 const t0 = Date.now();
 try {
   if (runs(0)) { section0(); await section0Engine(); }
@@ -507,6 +623,7 @@ try {
     await fleetPass(false);
     if (!CONTROL || CONTROL === 'nodouble') await fleetPass(true);
   }
+  if (runs(2)) await calendarSection();
   if (runs(3)) await selfRelative();
   if (runs(6)) await dailies();
   for (const [k, v] of Object.entries(counts).sort()) console.log(`  ${k}: ${v}`);

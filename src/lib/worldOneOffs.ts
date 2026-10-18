@@ -53,8 +53,8 @@ export function oneOffPartial(nation: string, year: number): boolean {
 
 /** Why a season's cup is not followed or not played: no finished season to read, a cup with no final, the manager
  *  arrived from another country this summer, an entrant that is not a club of this world, season one with my club
- *  in it, a mid season move into an entrant, or a two legged cup my club is in. */
-export type OneOffSkip = 'unfinished' | 'noFinal' | 'moved' | 'notInWorld' | 'seasonOne' | 'joined' | 'legs';
+ *  in it, a mid season move into an entrant, a two legged cup my club is in, or no free midweek for my nights. */
+export type OneOffSkip = 'unfinished' | 'noFinal' | 'moved' | 'notInWorld' | 'seasonOne' | 'joined' | 'legs' | 'noNight';
 
 /** A season of one cup as a save keeps it. A stub (`skip`) carries nothing else. */
 export interface OneOffSlice {

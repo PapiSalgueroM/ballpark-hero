@@ -486,6 +486,7 @@ const STUB_WORDS: Record<OneOffSkip, (name: string) => string> = {
   noFinal: () => "Last season's cup had no final in this game, so there is no field for this one.",
   moved: name => `You arrived from another country this summer, so this season's ${name} is not in your game.`,
   notInWorld: () => "One of its clubs is not in this game's world, so it is not shown.",
+  noNight: () => 'There is no free midweek for it on this season\'s calendar, so it is not played.',
 };
 
 function formatWords(row: OneOffRow): string {
