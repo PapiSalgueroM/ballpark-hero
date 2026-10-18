@@ -1,0 +1,29 @@
+  3 agreement: 252 season ends, 5 with a Europa League route both agree on, 37 Champions League places; my club won its cup in 24, from outside the Champions League places in 11: watcher Everton seed 1 season 2 (C); search Coventry City seed 1 season 1 (C); search Everton seed 1 season 2 (C); search Deportivo La Coruña seed 3 season 1 (C); search Espanyol seed 1 season 1 (L); search Inter Milan seed 3 season 2 (C); search Inter Milan seed 6 season 2 (C); search Freiburg seed 3 season 1 (L)
+  3 attribution: 0 objectives graded otherwise than the base, by my club's route: none; each one done adds W_OBJ_EACH (6, capped at 30) to the season score's objectives term and reaches 1335's opening confidence through the same statuses; 609 s
+FAIL 3 agreement: watcher Chelsea seed 2 season 2: euroPlaceOf says none and the rollover's rule L
+FAIL 3 agreement: watcher Hoffenheim seed 2 season 1: euroPlaceOf says none and the rollover's rule L
+FAIL 3 agreement: watcher Hoffenheim seed 5 season 2: euroPlaceOf says none and the rollover's rule P
+FAIL 3 agreement: watcher Everton seed 1 season 2: euroPlaceOf says none and the rollover's rule C
+FAIL 3 agreement: watcher Everton seed 5 season 1: euroPlaceOf says none and the rollover's rule L
+FAIL 3 agreement: search Coventry City seed 1 season 1: euroPlaceOf says none and the rollover's rule C
+FAIL 3 agreement: search Crystal Palace seed 1 season 1: euroPlaceOf says none and the rollover's rule P
+FAIL 3 agreement: search Everton seed 1 season 2: euroPlaceOf says none and the rollover's rule C
+FAIL 3 agreement: search Everton seed 5 season 1: euroPlaceOf says none and the rollover's rule L
+FAIL 3 agreement: search Fulham seed 5 season 1: euroPlaceOf says none and the rollover's rule P
+FAIL 3 agreement: search Deportivo La Coruña seed 3 season 1: euroPlaceOf says none and the rollover's rule C
+FAIL 3 agreement: search Espanyol seed 1 season 1: euroPlaceOf says none and the rollover's rule L
+FAIL 3 agreement: search Inter Milan seed 3 season 2: euroPlaceOf says none and the rollover's rule C
+FAIL 3 agreement: search Inter Milan seed 6 season 2: euroPlaceOf says none and the rollover's rule C
+FAIL 3 agreement: search Juventus seed 3 season 2: euroPlaceOf says none and the rollover's rule L
+FAIL 3 agreement: search Juventus seed 6 season 1: euroPlaceOf says none and the rollover's rule L
+FAIL 3 agreement: search Juventus seed 6 season 2: euroPlaceOf says none and the rollover's rule L
+FAIL 3 agreement: search Lazio seed 6 season 1: euroPlaceOf says none and the rollover's rule L
+FAIL 3 agreement: search Hamburg seed 1 season 1: euroPlaceOf says none and the rollover's rule C
+FAIL 3 agreement: search Hamburg seed 5 season 1: euroPlaceOf says none and the rollover's rule L
+FAIL 3 agreement: search Hamburg seed 6 season 1: euroPlaceOf says none and the rollover's rule P
+FAIL 3 agreement: search Hoffenheim seed 2 season 1: euroPlaceOf says none and the rollover's rule L
+FAIL 3 agreement: search Hoffenheim seed 5 season 2: euroPlaceOf says none and the rollover's rule P
+FAIL 3 agreement: search Köln seed 2 season 1: euroPlaceOf says none and the rollover's rule L
+FAIL 3 agreement: search Köln seed 3 season 2: euroPlaceOf says none and the rollover's rule C
+FAIL 3 agreement: search Köln seed 6 season 2: euroPlaceOf says none and the rollover's rule L
+simWorldEuro: control position FIRED (26 failures, all its own)

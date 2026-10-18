@@ -1,0 +1,42 @@
+  2 self relative: 190 journeys, 14775 steps each arm, 70 journeys carried one, 922 s
+FAIL 2 participant Real Madrid (now) nocoach seed 1 at start: the state differs
+FAIL 2 participant Real Madrid (now) nocoach seed 2 at start: the state differs
+FAIL 2 participant Real Madrid (now) nocoach seed 3 at start: the state differs
+FAIL 2 participant Real Madrid (now) nocoach seed 4 at start: the state differs
+FAIL 2 participant Real Madrid (now) nocoach seed 5 at start: the state differs
+FAIL 2 participant Real Madrid (now) coach seed 1 at start: the state differs
+FAIL 2 participant Real Madrid (now) coach seed 2 at start: the state differs
+FAIL 2 participant Real Madrid (now) coach seed 3 at start: the state differs
+FAIL 2 participant Real Madrid (now) coach seed 4 at start: the state differs
+FAIL 2 participant Real Madrid (now) coach seed 5 at start: the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 1 at start: the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 2 at start: the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 3 at start: the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 4 at start: the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 5 at start: the state differs
+FAIL 2 participant Arsenal (now) coach seed 1 at start: the state differs
+FAIL 2 participant Arsenal (now) coach seed 2 at start: the state differs
+FAIL 2 participant Arsenal (now) coach seed 3 at start: the state differs
+FAIL 2 participant Arsenal (now) coach seed 4 at start: the state differs
+FAIL 2 participant Arsenal (now) coach seed 5 at start: the state differs
+FAIL 2 watcher Chelsea (now) nocoach seed 1 at start: the state differs
+FAIL 2 watcher Chelsea (now) nocoach seed 2 at start: the state differs
+FAIL 2 watcher Chelsea (now) nocoach seed 3 at start: the state differs
+FAIL 2 watcher Chelsea (now) nocoach seed 4 at start: the state differs
+FAIL 2 watcher Chelsea (now) nocoach seed 5 at start: the state differs
+FAIL 2 watcher Chelsea (now) coach seed 1 at start: the state differs
+FAIL 2 watcher Chelsea (now) coach seed 2 at start: the state differs
+FAIL 2 watcher Chelsea (now) coach seed 3 at start: the state differs
+FAIL 2 watcher Chelsea (now) coach seed 4 at start: the state differs
+FAIL 2 watcher Chelsea (now) coach seed 5 at start: the state differs
+FAIL 2 watcher Hoffenheim (now) nocoach seed 1 at start: the state differs
+FAIL 2 watcher Hoffenheim (now) nocoach seed 2 at start: the state differs
+FAIL 2 watcher Hoffenheim (now) nocoach seed 3 at start: the state differs
+FAIL 2 watcher Hoffenheim (now) nocoach seed 4 at start: the state differs
+FAIL 2 watcher Hoffenheim (now) nocoach seed 5 at start: the state differs
+FAIL 2 watcher Hoffenheim (now) coach seed 1 at start: the state differs
+FAIL 2 watcher Hoffenheim (now) coach seed 2 at start: the state differs
+FAIL 2 watcher Hoffenheim (now) coach seed 3 at start: the state differs
+FAIL 2 watcher Hoffenheim (now) coach seed 4 at start: the state differs
+FAIL 2 watcher Hoffenheim (now) coach seed 5 at start: the state differs
+simWorldEuro: control leak FIRED (70 failures, all its own)

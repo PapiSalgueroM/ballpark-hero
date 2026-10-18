@@ -1,0 +1,42 @@
+  5 the holder: 60 rollovers after a Europa League final, the winner in next season's Champions League in 24, a participant's 32 already full in 0; the two engines parted on 0 steps, 312 s
+FAIL 5 holder: participant Real Madrid seed 3 at s1-rollover: the Europa League's winner Atalanta is not in next season's Champions League
+FAIL 5 holder: participant Real Madrid seed 4 at s1-rollover: the Europa League's winner Bournemouth is not in next season's Champions League
+FAIL 5 holder: participant Real Madrid seed 4 at s1-rollover: Bournemouth is in next season's Europa League too
+FAIL 5 holder: participant Arsenal seed 1 at s1-rollover: the Europa League's winner AC Milan is not in next season's Champions League
+FAIL 5 holder: participant Arsenal seed 3 at s1-rollover: the Europa League's winner AC Milan is not in next season's Champions League
+FAIL 5 holder: participant Arsenal seed 4 at s1-rollover: the Europa League's winner Real Sociedad is not in next season's Champions League
+FAIL 5 holder: participant Arsenal seed 4 at s1-rollover: Real Sociedad is in next season's Europa League too
+FAIL 5 holder: watcher Chelsea seed 2 at s1-rollover: the Europa League's winner Crystal Palace is not in next season's Champions League
+FAIL 5 holder: watcher Chelsea seed 3 at s2-rollover: the Europa League's winner Lens is not in next season's Champions League
+FAIL 5 holder: watcher Chelsea seed 3 at s2-rollover: Lens is in next season's Europa League too
+FAIL 5 holder: watcher Chelsea seed 4 at s1-rollover: the Europa League's winner Sunderland is not in next season's Champions League
+FAIL 5 holder: watcher Chelsea seed 4 at s1-rollover: Sunderland is in next season's Europa League too
+FAIL 5 holder: watcher Chelsea seed 5 at s2-rollover: the Europa League's winner Roma is not in next season's Champions League
+FAIL 5 holder: watcher Chelsea seed 5 at s2-rollover: Roma is in next season's Europa League too
+FAIL 5 holder: watcher Hoffenheim seed 1 at s1-rollover: the Europa League's winner Crystal Palace is not in next season's Champions League
+FAIL 5 holder: watcher Hoffenheim seed 1 at s2-rollover: the Europa League's winner Nottingham Forest is not in next season's Champions League
+FAIL 5 holder: watcher Hoffenheim seed 2 at s1-rollover: the Europa League's winner Sunderland is not in next season's Champions League
+FAIL 5 holder: watcher Hoffenheim seed 3 at s1-rollover: the Europa League's winner Crystal Palace is not in next season's Champions League
+FAIL 5 holder: watcher Hoffenheim seed 4 at s1-rollover: the Europa League's winner Bournemouth is not in next season's Champions League
+FAIL 5 holder: watcher Hoffenheim seed 5 at s1-rollover: the Europa League's winner Bournemouth is not in next season's Champions League
+FAIL 5 holder: watcher Hoffenheim seed 5 at s1-rollover: Bournemouth is in next season's Europa League too
+FAIL 5 holder: watcher Everton seed 1 at s1-rollover: the Europa League's winner Bournemouth is not in next season's Champions League
+FAIL 5 holder: watcher Everton seed 1 at s1-rollover: Bournemouth is in next season's Europa League too
+FAIL 5 holder: watcher Everton seed 1 at s2-rollover: the Europa League's winner Bournemouth is not in next season's Champions League
+FAIL 5 holder: watcher Everton seed 1 at s2-rollover: Bournemouth is in next season's Europa League too
+FAIL 5 holder: watcher Everton seed 2 at s1-rollover: the Europa League's winner Sunderland is not in next season's Champions League
+FAIL 5 holder: watcher Everton seed 3 at s1-rollover: the Europa League's winner Sunderland is not in next season's Champions League
+FAIL 5 holder: watcher Everton seed 4 at s1-rollover: the Europa League's winner Sunderland is not in next season's Champions League
+FAIL 5 holder: watcher Everton seed 4 at s2-rollover: the Europa League's winner AC Milan is not in next season's Champions League
+FAIL 5 holder: watcher Everton seed 5 at s1-rollover: the Europa League's winner Eintracht Frankfurt is not in next season's Champions League
+FAIL 5 holder: watcher Everton seed 5 at s1-rollover: Eintracht Frankfurt is in next season's Europa League too
+FAIL 5 holder: watcher América seed 1 at s1-rollover: the Europa League's winner Crystal Palace is not in next season's Champions League
+FAIL 5 holder: watcher América seed 1 at s2-rollover: the Europa League's winner Bournemouth is not in next season's Champions League
+FAIL 5 holder: watcher América seed 2 at s2-rollover: the Europa League's winner Manchester City is not in next season's Champions League
+FAIL 5 holder: watcher América seed 3 at s1-rollover: the Europa League's winner Crystal Palace is not in next season's Champions League
+FAIL 5 holder: watcher América seed 4 at s1-rollover: the Europa League's winner Atalanta is not in next season's Champions League
+FAIL 5 holder: watcher América seed 4 at s1-rollover: Atalanta is in next season's Europa League too
+FAIL 5 holder: watcher América seed 4 at s2-rollover: the Europa League's winner Atalanta is not in next season's Champions League
+FAIL 5 holder: watcher América seed 4 at s2-rollover: Atalanta is in next season's Europa League too
+FAIL 5 holder: watcher América seed 5 at s1-rollover: the Europa League's winner Trabzonspor is not in next season's Champions League
+simWorldEuro: control noholder FIRED (51 failures, all its own)

@@ -1,0 +1,60 @@
+  1 and 4: 95 journeys, 224 s
+  7 example, season one of a Chelsea career, the English clubs in it: Brighton F, Crystal Palace H, Bournemouth L, Sunderland P
+  7 routes over every open: C 173, F 555, H 39, L 1485, P 1312
+  7 my club's earned route at an open: C 5, L 12, P 2, none 80
+  7 titles by strength quartile (strongest first): 76, 13, 2, 0
+  7 goals a league phase match: 2.60 over 13104; ties after extra time 363, shootouts 192
+  7 the slice's bytes: 1419 to 1506 over 99 opens
+  7 the nights' months against 2026/27's (U7): 999 the same month, 678 a month off, 6 further; 1683 of 1683 on a Thursday
+  1 opens join: 8
+  1 opens rollover: 60
+  1 opens start: 35
+  1 rollovers whose cup another club won: 47
+  1 rollovers whose cup my club won: 9
+  1 rollovers whose season had no cup bracket (its place passed down): 4
+  1 seasons that ended with no Europa League: 4
+  4 joins outside the field carried: 5
+  4 joins to an entrant opened: 4
+  4 joins to an entrant with none: 4
+  4 seen probes (a carry onto a calendar behind): 35
+FAIL 4 early: participant Real Madrid (now) seed 1 at s1-e3: night 1 counts with the week at 3 and the night at 3
+FAIL 4 early: participant Real Madrid (now) seed 1 at s1-e7: night 2 counts with the week at 7 and the night at 7
+FAIL 4 early: participant Real Madrid (now) seed 1 at s1-e12: night 3 counts with the week at 12 and the night at 12
+FAIL 4 early: participant Real Madrid (now) seed 1 at s1-e15: night 4 counts with the week at 15 and the night at 15
+FAIL 4 early: participant Real Madrid (now) seed 1 at s1-e18: night 5 counts with the week at 18 and the night at 18
+FAIL 4 early: participant Real Madrid (now) seed 1 at s1-e23: night 6 counts with the week at 23 and the night at 23
+FAIL 4 early: participant Real Madrid (now) seed 1 at s1-e28: night 7 counts with the week at 28 and the night at 28
+FAIL 4 early: participant Real Madrid (now) seed 1 at s1-e29: night 8 counts with the week at 29 and the night at 29
+FAIL 4 early: participant Real Madrid (now) seed 1 at s1-e34: night 9 counts with the week at 34 and the night at 34
+FAIL 4 early: participant Real Madrid (now) seed 1 at s1-e35: night 10 counts with the week at 35 and the night at 35
+FAIL 4 early: participant Real Madrid (now) seed 1 at s1-e38: night 11 counts with the week at 38 and the night at 38
+FAIL 4 early: participant Real Madrid (now) seed 1 at s1-e42: night 13 counts with the week at 44 and the night at 44
+FAIL 4 early: participant Real Madrid (now) seed 1 at s1-e45: night 15 counts with the week at 48 and the night at 48
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e3: night 1 counts with the week at 3 and the night at 3
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e7: night 2 counts with the week at 7 and the night at 7
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e12: night 3 counts with the week at 12 and the night at 12
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e15: night 4 counts with the week at 15 and the night at 15
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e18: night 5 counts with the week at 18 and the night at 18
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e23: night 6 counts with the week at 23 and the night at 23
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e28: night 7 counts with the week at 28 and the night at 28
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e29: night 8 counts with the week at 29 and the night at 29
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e34: night 9 counts with the week at 34 and the night at 34
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e35: night 10 counts with the week at 35 and the night at 35
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e38: night 11 counts with the week at 38 and the night at 38
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e39: night 12 counts with the week at 39 and the night at 39
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e44: night 13 counts with the week at 44 and the night at 44
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e45: night 14 counts with the week at 45 and the night at 45
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e48: night 15 counts with the week at 48 and the night at 48
+FAIL 4 early: participant Real Madrid (now) seed 1 at s2-e49: night 16 counts with the week at 49 and the night at 49
+FAIL 4 early: participant Real Madrid (now) seed 2 at s1-e3: night 1 counts with the week at 3 and the night at 3
+FAIL 4 early: participant Real Madrid (now) seed 2 at s1-e7: night 2 counts with the week at 7 and the night at 7
+FAIL 4 early: participant Real Madrid (now) seed 2 at s1-e12: night 3 counts with the week at 12 and the night at 12
+FAIL 4 early: participant Real Madrid (now) seed 2 at s1-e15: night 4 counts with the week at 15 and the night at 15
+FAIL 4 early: participant Real Madrid (now) seed 2 at s1-e18: night 5 counts with the week at 18 and the night at 18
+FAIL 4 early: participant Real Madrid (now) seed 2 at s1-e23: night 6 counts with the week at 23 and the night at 23
+FAIL 4 early: participant Real Madrid (now) seed 2 at s1-e28: night 7 counts with the week at 28 and the night at 28
+FAIL 4 early: participant Real Madrid (now) seed 2 at s1-e29: night 8 counts with the week at 29 and the night at 29
+FAIL 4 early: participant Real Madrid (now) seed 2 at s1-e34: night 9 counts with the week at 34 and the night at 34
+FAIL 4 early: participant Real Madrid (now) seed 2 at s1-e35: night 10 counts with the week at 35 and the night at 35
+FAIL 4 early: participant Real Madrid (now) seed 2 at s1-e38: night 11 counts with the week at 38 and the night at 38
+simWorldEuro: control ahead FIRED (1297 failures, all its own)

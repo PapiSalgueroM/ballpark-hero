@@ -1,0 +1,60 @@
+  1 and 4: 95 journeys, 229 s
+  7 example, season one of a Chelsea career, the English clubs in it: Liverpool L, Manchester City C, Crystal Palace H, Bournemouth F
+  7 routes over every open: C 472, F 555, H 39, L 1485, P 1013
+  7 my club's earned route at an open: C 6, L 13, none 80
+  7 titles by strength quartile (strongest first): 79, 10, 2, 0
+  7 goals a league phase match: 2.62 over 13104; ties after extra time 350, shootouts 190
+  7 the slice's bytes: 1419 to 1514 over 99 opens
+  7 the nights' months against 2026/27's (U7): 1039 the same month, 638 a month off, 6 further; 1683 of 1683 on a Thursday
+  1 opens join: 8
+  1 opens rollover: 60
+  1 opens start: 35
+  1 rollovers whose cup another club won: 47
+  1 rollovers whose cup my club won: 9
+  1 rollovers whose season had no cup bracket (its place passed down): 4
+  1 seasons that ended with no Europa League: 4
+  4 joins outside the field carried: 5
+  4 joins to an entrant opened: 4
+  4 joins to an entrant with none: 4
+  4 seen probes (a carry onto a calendar behind): 35
+FAIL 1 both: participant Real Madrid (now) seed 1 at start: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 field: participant Real Madrid (now) seed 1 at start: the field is not the rule's
+FAIL 1 via: participant Real Madrid (now) seed 1 at start: a route is not the rule's
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e1: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e2: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e3: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e4: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e5: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e6: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e7: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e8: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e9: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e10: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e11: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e12: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e13: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e14: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e15: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e16: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e17: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e18: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e19: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e20: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e21: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-reload: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e22: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e23: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e24: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e25: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e26: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e27: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e28: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e29: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e30: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e31: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e32: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e33: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e34: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e35: Manchester City, Bayern Munich, Inter Milan in both competitions
+FAIL 1 both: participant Real Madrid (now) seed 1 at s1-e36: Manchester City, Bayern Munich, Inter Milan in both competitions
+simWorldEuro: control twocomps FIRED (4531 failures, all its own)

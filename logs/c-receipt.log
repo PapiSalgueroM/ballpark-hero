@@ -1,0 +1,4 @@
+  0 ledger: verified A1 A2 A3 A4 A5 Q2 Q3 Q4 C0 K1 K2 K3 K4 K5 K6 K7 K8 K9 K10 K11 K12 K13 K14 K15 K16 U-legs U7 | one publisher A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 | to verify U5 U6
+  0 constants: partial A1 A3 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 U5 U6; cup winners Manchester City, Inter Milan, Real Sociedad, Bayern Munich, Lens, AZ Alkmaar, none, Celtic, Trabzonspor, Union Saint-Gilloise, LASK, OFI, FC Midtjylland, St. Gallen, Dinamo Zagreb; nations england spain italy germany france netherlands portugal scotland turkey belgium austria greece denmark switzerland croatia
+FAIL the receipt does not carry the hash of scripts/data/cmEuroAccess.json (9c997be14c8c1dbaeabfe91042c925718800c27512ecf8819034ab9e9ebb98c9)
+simWorldEuro: control receipt FIRED (1 failures, all its own)

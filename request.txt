@@ -1,0 +1,27 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unit: node_modules/.bin/vitest run src/lib/euroAccess.test.ts src/lib/clubManagerWorldView.test.ts --testTimeout=300000 --hookTimeout=120000
+euro0: WORLD_EURO_ONLY=0 node scripts/simWorldEuro.mjs
+euro147: WORLD_EURO_ONLY=1,4,7 node scripts/simWorldEuro.mjs
+euro3: WORLD_EURO_ONLY=3 WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs
+euro5: WORLD_EURO_ONLY=5 node scripts/simWorldEuro.mjs
+euro6: WORLD_EURO_ONLY=6 WORLD_EURO_BASE=77556430 node scripts/simWorldEuro.mjs
+euro2: WORLD_EURO_ONLY=2 node scripts/simWorldEuro.mjs
+c-onesource: WORLD_EURO_CONTROL=onesource node scripts/simWorldEuro.mjs
+c-wiki: WORLD_EURO_CONTROL=wiki node scripts/simWorldEuro.mjs
+c-thinused: WORLD_EURO_CONTROL=thinused node scripts/simWorldEuro.mjs
+c-receipt: WORLD_EURO_CONTROL=receipt node scripts/simWorldEuro.mjs
+c-twocomps: WORLD_EURO_CONTROL=twocomps node scripts/simWorldEuro.mjs
+c-meinfield: WORLD_EURO_CONTROL=meinfield node scripts/simWorldEuro.mjs
+c-earned: WORLD_EURO_CONTROL=earned node scripts/simWorldEuro.mjs
+c-live: WORLD_EURO_CONTROL=live node scripts/simWorldEuro.mjs
+c-ahead: WORLD_EURO_CONTROL=ahead node scripts/simWorldEuro.mjs
+c-noseen: WORLD_EURO_CONTROL=noseen node scripts/simWorldEuro.mjs
+c-position: WORLD_EURO_CONTROL=position WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs
+c-noholder: WORLD_EURO_CONTROL=noholder node scripts/simWorldEuro.mjs
+c-stream: WORLD_EURO_CONTROL=stream node scripts/simWorldEuro.mjs
+c-form: WORLD_EURO_CONTROL=form node scripts/simWorldEuro.mjs
+c-leak: WORLD_EURO_CONTROL=leak node scripts/simWorldEuro.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+names: node scripts/simInventedNames.mjs

@@ -1,0 +1,39 @@
+  1 and 4: 95 journeys, 215 s
+  7 example, season one of a Chelsea career, the English clubs in it: Brighton F, Crystal Palace H, Bournemouth L, Sunderland P
+  7 routes over every open: C 140, F 449, H 31, L 1200, P 1060
+  7 my club's earned route at an open: none 80
+  7 titles by strength quartile (strongest first): 60, 12, 2, 0
+  7 goals a league phase match: 2.61 over 10656; ties after extra time 299, shootouts 155
+  7 the slice's bytes: 1419 to 1507 over 80 opens
+  7 the nights' months against 2026/27's (U7): 834 the same month, 522 a month off, 4 further; 1360 of 1360 on a Thursday
+  1 opens join: 7
+  1 opens rollover: 60
+  1 opens start: 35
+  1 rollovers whose cup another club won: 48
+  1 rollovers whose cup my club won: 8
+  1 rollovers whose season had no cup bracket (its place passed down): 4
+  1 seasons that ended with no Europa League: 21
+  4 joins outside the field carried: 4
+  4 joins outside the field opened: 1
+  4 joins to an entrant with none: 6
+  4 seen probes (a carry onto a calendar behind): 35
+FAIL 1 none: watcher Chelsea (now) seed 2 at s1-join: no Europa League opened where the rule has a field
+FAIL 1 none: watcher Chelsea (now) seed 2 at s1-rollover: no Europa League opened where the rule has a field
+FAIL 1 none: watcher Chelsea (now) seed 4 at s2-rollover: no Europa League opened where the rule has a field
+FAIL 1 none: watcher Hoffenheim (now) seed 1 at start: no Europa League opened where the rule has a field
+FAIL 1 none: watcher Hoffenheim (now) seed 1 at s1-rollover: no Europa League opened where the rule has a field
+FAIL 1 none: watcher Hoffenheim (now) seed 1 at s2-rollover: no Europa League opened where the rule has a field
+FAIL 1 none: watcher Hoffenheim (now) seed 2 at start: no Europa League opened where the rule has a field
+FAIL 1 none: watcher Hoffenheim (now) seed 2 at s1-rollover: no Europa League opened where the rule has a field
+FAIL 1 none: watcher Hoffenheim (now) seed 3 at start: no Europa League opened where the rule has a field
+FAIL 1 none: watcher Hoffenheim (now) seed 4 at start: no Europa League opened where the rule has a field
+FAIL 1 none: watcher Hoffenheim (now) seed 4 at s1-rollover: no Europa League opened where the rule has a field
+FAIL 1 none: watcher Hoffenheim (now) seed 5 at start: no Europa League opened where the rule has a field
+FAIL 1 none: watcher Hoffenheim (now) seed 5 at s2-rollover: no Europa League opened where the rule has a field
+FAIL 1 none: watcher Everton (now) seed 2 at s1-join: no Europa League opened where the rule has a field
+FAIL 1 none: watcher Everton (now) seed 2 at s1-rollover: no Europa League opened where the rule has a field
+FAIL 1 none: watcher Everton (now) seed 5 at s1-rollover: no Europa League opened where the rule has a field
+FAIL 1 none: watcher América (now) seed 2 at s1-join: no Europa League opened where the rule has a field
+FAIL 1 none: watcher América (now) seed 2 at s1-rollover: no Europa League opened where the rule has a field
+FAIL 1 none: watcher América (now) seed 4 at s2-rollover: no Europa League opened where the rule has a field
+simWorldEuro: control meinfield FIRED (19 failures, all its own)
