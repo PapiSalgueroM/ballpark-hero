@@ -1,3 +1,49 @@
+## Release BJ LIVE, 2026-10-17 21:51 EDT: Club Manager Hard and Legend, the Champions League you can follow in or out of it, match days that read like a scoreboard, a way out for dirty money in the US careers, and Soccer Career's summer cards
+
+Claude lane (session I). main d0c3ff58, deployment fec60776-a9ad-49aa-b4ea-04a590a233de, entry index-CWmc_M1Q.js (was
+index-CZEmz5Ia.js, Release BI, published 13:07 on 2026-10-17). Proof at 21:53: x-deployment-id carries fec60776 from
+21:51:41; /whats-new carries "Soccer Career: summer cards about the job you actually do", "My Career: a way out for dirty
+money", "Club Manager: follow the Champions League every season, in it or not", "Club Manager: match days read like a
+scoreboard" and "Club Manager: Hard and Legend"; /, /club-manager, /soccer-career, /nba-my-career, /nfl-my-career,
+/champions-league-format-history and /whats-new answer 200; every site request on /club-manager answered 200; one third
+party request timed out on /club-manager and /soccer-career (the database host answered in 0.1 s: a passing blip).
+
+What a player gets:
+- Club Manager difficulty (1501, the report "plsss make the game harder"): Normal is today's game to the byte; Hard
+  (measured: points per game 14.8 percent lower for an engaged manager at a mid club, sackings 2.5 times as often, less
+  money) and Legend (24 percent lower, 3.5 times); a big club on Hard still wins its league about 2.4 seasons in ten;
+  No sacking's verdict loses its threat.
+- The world's Champions League every season (1502 and 1503, the report "if you don't make the UCL you can't see the
+  fixtures"): the table or groups, every matchday, the knockouts and the final, followed whether or not you qualified,
+  in each era's format (the 36 club league phase today), from the Cups panel; the watched winner on the season review.
+- Club Manager match days (1340): your club where it really plays, home or away, across the report, timeline, live
+  screen, half time, Match Centre and the hub card; pitch names; No sacking's report card no longer says Dead man walking.
+- NBA, NFL, MLB and NHL My Career (1500, the report "i got shady money and i want to wash it"): come clean, give it
+  away, keep quiet, or wash it with the risk printed before you choose.
+- Soccer Career (1504): one summer card a season about your own position and where your career stands, its choices
+  costing something real.
+- The other lane's PR303, PR305 and PR306.
+
+GATE ON GITHUB RUNNERS on 1b5bb3e6 (budgets: /club-manager 619, /manager-hot-seat 636, /deadline-day 646,
+/nfl-my-career 491, /soccer-career 835; the Champions League engine accepted at about +8K on the three engine routes),
+46 requests: every BJ lane green; triage (triage-BJ.md) on 0696ae46: the Soccer Career walks' oracles load the summer
+deck, kit rebinds (pitch lines minus 1366, lifeBH.sh with PR303, BJa's node_modules links, mut-fxcopy for the retired
+mut-fxorder, playPitch's hidden crash); 69 base lines of BI retired (their base cannot form on this head; proven in BI's
+gate); simCareerHall nfl section 19(a) a one seed coin toss (owed: a fleet statistic); live pass 19 of 19. Build output
+d0c3ff58. rBJ-pub 20 of 20.
+
+Known and left: playSoccerCareer check 6, simMoney and simPhone2 on save size, the live database fences on runners,
+simWritesAreSent's Guess the Nation step; owed: a lazy dirty money desk (+2.46K on each My Career page), Legend at small
+clubs sacks the bot in season one (accepted, opt in), the old Champions League card's 24.5 px buttons, the eras' round of
+16 draw row G4-early.
+
+### For Codex
+1. Release BJ is on main at d0c3ff58 and live, with your PR303, PR305 and PR306 at the heads your workflows passed;
+   please close them. PR308 must never join beside PR305 and PR306; PR304 and PR307 were not READY.
+2. Guide sentences owed to you: clubManagement.ts (Hard and Legend; following the Champions League; match days),
+   basketball.ts, football.ts, baseball.ts, hockey.ts (the dirty money desk), the soccer career guide (summer cards),
+   then genSearchKeywords. Texts in each round's finish report.
+
 ## Release BI LIVE, 2026-10-17 13:07 EDT: the player reports answered: No sacking, retire as a manager, transfers that stick, coach retirement in the US careers, the board that reads your season, plus the other lane's transfer history, club fixtures and Soccer Career fixes
 
 Claude lane (session I). main 50078b21, deployment 2a7766d5-aff6-4293-bd1c-40778bc78141, entry index-CZEmz5Ia.js (was
