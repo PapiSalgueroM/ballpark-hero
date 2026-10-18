@@ -1,0 +1,18 @@
+headsha exit=0 0s | 6672eed3a Release BK fix: a Champions League slice written still moves worldComps to the end, as the old engine wrote it
+unit-new exit=0 7s |       Tests  3 passed (3)
+unit-new-pre exit=0 8s | RED-AS-WANTED
+unit-lib exit=0 59s |    Duration  58.04s (transform 6.96s, setup 3.33s, collect 22.87s, tests 107.29s, environment 21.77s, prepare 4.63s)
+notes exit=0 14s | Phase fixed: three text-only snapshot observations; 3 effective copied old-caption controls; no gameplay, core or schema change.
+tsc exit=0 148s | 
+appeal1081 exit=0 67s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+golden exit=0 1s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+dd-controls exit=0 47s | controls (each must be 1): bind=1 binddeadline=1 seed=1 seeddeadline=1 ledger=1 ledgerdeadline=1 rulesall=1 rulesstale=1 world=1 worlddeadline=1
+unit-cm exit=0 201s |    Duration  199.41s (transform 11.82s, setup 3.91s, collect 40.85s, tests 326.29s, environment 25.02s, prepare 5.42s)
+lr exit=0 84s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+saveSize exit=0 91s | simClubManagerSaveSize: all sections green
+slots exit=0 107s | simClubManagerSlots: all sections green
+rivals exit=0 19s | No rival product names found. 0 findings.
+dashscan exit=0 1s | commit message lines with one: 0
+anchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-light exit=0 693s | keep exit=1 | simOneOffCups: control keep FIRED (735 failures, all its own: 5 slices: Arsenal (now) seed 1 nocoach at s1-rollover: worldComps holds uel dsc dscOld)

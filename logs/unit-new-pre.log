@@ -1,0 +1,12 @@
+ [31m×[39m src/lib/clubManagerWorldCompsReload.test.ts[2m > [22mClub Manager: a save the engine wrote loads to the same bytes, whatever worldComps holds[2m > [22ma club in the Champions League, following the Europa League and the super cup[33m 496[2mms[22m[39m
+[31m   → Arsenal mid season one: the first load differs from the save the engine wrote (the key order differs: worldComps at 67 of 79, then at 78 of 79): expected false to be true // Object.is equality[39m
+ [32m✓[39m src/lib/clubManagerWorldCompsReload.test.ts[2m > [22mClub Manager: a save the engine wrote loads to the same bytes, whatever worldComps holds[2m > [22ma club watching the Champions League, the Europa League and the super cup[32m 273[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldCompsReload.test.ts[2m > [22mClub Manager: a save the engine wrote loads to the same bytes, whatever worldComps holds[2m > [22ma club in the Champions League, after its first summer[33m 1089[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/clubManagerWorldCompsReload.test.ts[2m > [22mClub Manager: a save the engine wrote loads to the same bytes, whatever worldComps holds[2m > [22ma club in the Champions League, following the Europa League and the super cup
+[31m[1mAssertionError[22m: Arsenal mid season one: the first load differs from the save the engine wrote (the key order differs: worldComps at 67 of 79, then at 78 of 79): expected false to be true // Object.is equality[39m
+    [90m 68| [39m  expect(firstJson === saved, `${label}: the first load differs from t…
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+vitest exit 1 on 62463fd5 (want 1)
+RED-AS-WANTED

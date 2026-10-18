@@ -1,0 +1,5 @@
+ [32m✓[39m src/lib/clubManagerWorldCompsReload.test.ts[2m > [22mClub Manager: a save the engine wrote loads to the same bytes, whatever worldComps holds[2m > [22ma club in the Champions League, following the Europa League and the super cup[33m 519[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldCompsReload.test.ts[2m > [22mClub Manager: a save the engine wrote loads to the same bytes, whatever worldComps holds[2m > [22ma club watching the Champions League, the Europa League and the super cup[33m 339[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldCompsReload.test.ts[2m > [22mClub Manager: a save the engine wrote loads to the same bytes, whatever worldComps holds[2m > [22ma club in the Champions League, after its first summer[33m 1464[2mms[22m[39m
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m3 passed[39m[22m[90m (3)[39m
