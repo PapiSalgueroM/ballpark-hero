@@ -1,0 +1,4 @@
+proof-part exit=0 411s | proofWorldUclFleet: GREEN, 60 journeys and 6479 steps byte equal to 85414f0b (a watching state without worldComps.uel), draws equal
+proof-watch exit=0 1285s | proofWorldUclFleet: GREEN, 130 journeys and 17799 steps byte equal to 85414f0b (a watching state without worldComps.uel), draws equal
+ctl-participant exit=1 1430s | simWorldUcl: control participant FIRED (87 failures, all its own)
+simWorldUcl exit=1 1978s | simWorldUcl: RED, 496065 checks, 35 failures
