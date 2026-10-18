@@ -1,0 +1,4 @@
+appeal1081 exit=0 58s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+dashscan exit=0 0s | no dash in the diff
+saveSize15 exit=0 90s |    the season 15 save: 205952 bytes, h2h 300 rows, at most 14 per opponent
+saveSize15-base exit=0 90s |    the season 15 save: 205841 bytes, h2h 300 rows, at most 14 per opponent
