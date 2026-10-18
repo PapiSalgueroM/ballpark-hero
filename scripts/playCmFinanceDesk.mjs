@@ -30,11 +30,13 @@
  *                             between any two letters: the one line check FIRES
  * Release BK triage: the wrap control squeezed the figure but left the line
  * breaking to the figure's own text, so whether it fired hung on the digits the
- * career happened to reach. On Release BJ the Liverpool kitty read "+£64.7m"
- * and broke over 2 lines; Rounds 1509 and 1510 move that career's money and it
- * reads "+£63m", which Chromium keeps on one line at 1 px, so the control did
- * not fire (rBK-rgK) with nothing wrong in the check. word-break: break-all makes
- * the plant break every figure whatever it reads; the check is unchanged.
+ * career happened to reach. The ten weeks are played unseeded, so the figure
+ * differs from run to run on one tree: in Release BK's gate (rBK-rgK) the small,
+ * cut and wrap controls read "+£63.1m", "+£62.6m" and "+£63m", and Release BH's
+ * cut control read "+£63m" too. On Release BJ the wrap run read "+£64.7m" and
+ * broke over 2 lines; "+£63m" Chromium keeps on one line at 1 px, so the control
+ * did not fire with nothing wrong in the check. word-break: break-all makes the
+ * plant break every figure whatever it reads; the check is unchanged.
  * The one line check is the walk's own first finding: on 559a0c62 the signed
  * figures of the cover and kitty rows broke after their plus sign at 320 and
  * at 390 ("+" over "£13.2m"), which no cut check sees because nothing is cut.
