@@ -1,0 +1,16 @@
+unit-lib exit=0 44s |    Duration  44.15s (transform 4.38s, setup 2.66s, collect 16.62s, tests 78.98s, environment 18.02s, prepare 3.96s)
+tsc exit=0 115s | 
+unit-cm exit=0 159s |    Duration  159.38s (transform 7.83s, setup 3.20s, collect 32.43s, tests 265.98s, environment 21.36s, prepare 4.76s)
+golden exit=0 0s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+dd-controls exit=0 37s | controls (each must be 1): bind=1 binddeadline=1 seed=1 seeddeadline=1 ledger=1 ledgerdeadline=1 rulesall=1 rulesstale=1 world=1 worlddeadline=1
+readers1 exit=0 306s | simWorldEditor exit=0 | simWorldEditor: 2478 checks, 0 failures
+appeal1081 exit=0 44s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+saveSize exit=0 72s | simClubManagerSaveSize: all sections green
+slots exit=0 81s | simClubManagerSlots: all sections green
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+dashscan exit=0 0s | no dash in the diff
+ctl-light exit=0 741s | keep exit=1 | simOneOffCups: control keep FIRED (467 failures, all its own: 5 slices: Arsenal (now) seed 1 nocoach at s1-rollover: worldComps holds uel dsc dscOld)
+simOneOffCups exit=0 1932s | simOneOffCups: green, 123395 checks (1931 s)
