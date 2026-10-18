@@ -121,6 +121,95 @@ jobs:
           console.log('Unchanged related tests: 74 passed,0failed,0pending.');
           NODE
           sha256sum --check "$out/source-files.sha256" > "$out/after-tests-source-hold.log"
+      - name: Actual ordinary default Tennis Chain proof invocation
+        timeout-minutes: 12
+        shell: bash
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$TENNIS_SCORE_OUT/default-invocation.transport" node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import os from 'node:os';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { createRequire } from 'node:module';
+          import { execFileSync, spawnSync } from 'node:child_process';
+          const require = createRequire(import.meta.url), root = fs.realpathSync(process.cwd());
+          assert(require.cache[require.resolve('./scripts/lib/offlineTransport.cjs')], 'Ordinary preload active in the invoking process');
+          assert.equal(process.env.SIM_NETWORK, 'offline'); assert(['1', 'true'].includes(process.env.CI));
+          const artifact = process.env.TENNIS_SCORE_OUT;
+          assert(artifact && path.isAbsolute(artifact) && path.relative(root, artifact).split(path.sep).includes('..'));
+          const invocation = path.join(artifact, 'default-invocation'), copied = path.join(artifact, 'default-evidence');
+          assert(!fs.existsSync(invocation) && !fs.existsSync(copied), 'Fresh default invocation and copied evidence'); fs.mkdirSync(invocation);
+          const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+          const git = args => execFileSync('git', args, { cwd: root, maxBuffer: 64 * 1024 * 1024 });
+          const tempRoot = fs.realpathSync(os.tmpdir()), prefix = 'tennis-score-evidence-';
+          const temps = () => fs.readdirSync(tempRoot, { withFileTypes: true }).filter(row => row.name.startsWith(prefix)).map(row => {
+            assert(row.isDirectory() && !row.isSymbolicLink(), 'Every existing prefix entry is an actual directory'); return row.name;
+          }).sort();
+          const snapshot = () => {
+            const membership = git(['ls-files', '-z']), status = git(['status', '--porcelain=v1', '--untracked-files=all']).toString();
+            return { head: git(['rev-parse', 'HEAD']).toString().trim(), branch: git(['branch', '--show-current']).toString().trim(),
+              status, membershipSha256: hash(membership), files: membership.toString().split('\0').filter(Boolean).map(file => {
+                const bytes = fs.readFileSync(path.join(root, file)); return { file, bytes: bytes.length, sha256: hash(bytes) };
+              }) };
+          };
+          const tree = directory => {
+            const rows = [];
+            const walk = folder => { for (const row of fs.readdirSync(folder, { withFileTypes: true })) {
+              assert(!row.isSymbolicLink(), 'No linked default evidence'); const file = path.join(folder, row.name);
+              if (row.isDirectory()) walk(file); else { assert(row.isFile(), 'Ordinary default evidence file'); const bytes = fs.readFileSync(file);
+                rows.push({ file: path.relative(directory, file).split(path.sep).join('/'), bytes: bytes.length, sha256: hash(bytes) }); }
+            } }; walk(directory); return rows.sort((a, b) => a.file < b.file ? -1 : a.file > b.file ? 1 : 0);
+          };
+          const write = (file, value) => fs.writeFileSync(path.join(invocation, file), JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
+          const before = snapshot(), prefixBefore = temps(); write('source-before.json', before); assert.equal(before.status, '', 'Clean actual checkout before default invocation');
+          const env = { ...process.env }; delete env.TENNIS_SCORE_MODE; delete env.TENNIS_SCORE_OUT;
+          const keys = Object.keys(process.env).filter(key => !['TENNIS_SCORE_MODE', 'TENNIS_SCORE_OUT'].includes(key));
+          assert.deepEqual(Object.keys(env).sort(), keys.sort()); for (const key of keys) assert.equal(env[key], process.env[key], 'Other child environment held');
+          assert.equal(env.NODE_OPTIONS, process.env.NODE_OPTIONS); assert.equal(env.SIM_OFFLINE_RECEIPT, process.env.SIM_OFFLINE_RECEIPT);
+          const observer = { version: 1, kind: 'TENNIS_SCORE_DEFAULT_INVOCATION', status: 'failed', productQualified: false,
+            head: before.head, sourceRoot: root, tempRoot, tempPrefix: prefix, environmentRemoved: ['TENNIS_SCORE_MODE', 'TENNIS_SCORE_OUT'],
+            otherEnvironmentHeld: true, ordinaryOfflinePreload: true, command: { executable: process.execPath, args: ['scripts/simTennisChainScoreOwnership.mjs'], cwd: root }, prefixBefore, failures: [] };
+          let child, result, candidate;
+          try {
+            child = spawnSync(process.execPath, ['scripts/simTennisChainScoreOwnership.mjs'], { cwd: root, env, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 600000 });
+            fs.writeFileSync(path.join(invocation, 'stdout.log'), child.stdout || '', { flag: 'wx' });
+            fs.writeFileSync(path.join(invocation, 'stderr.log'), child.stderr || '', { flag: 'wx' });
+            write('exit-code.json', { status: child.status, signal: child.signal, error: child.error ? String(child.error) : null });
+            assert.ifError(child.error); assert.equal(child.signal, null); assert.equal(child.status, 0, 'Actual default child completed successfully');
+            assert(!/Unhandled\s+(?:Errors?|Rejections?)|Uncaught\s+Exceptions?/i.test((child.stdout || '') + (child.stderr || '')), 'No unhandled default child output');
+            const results = (child.stdout || '').split(/\r?\n/).filter(Boolean).map(line => { try { return JSON.parse(line); } catch { return null; } }).filter(row => row?.kind === 'TENNIS_SCORE_RESULT');
+            assert.equal(results.length, 1, 'Exactly one actual structured child result'); [result] = results; write('result.json', result);
+            assert.deepEqual(Object.keys(result).sort(), ['kind', 'mode', 'evidenceRoot', 'modeEnvAbsent', 'outEnvAbsent', 'summarySha256', 'sourceHeld', 'controlsRemoved', 'productQualified'].sort());
+            assert.equal(result.mode, 'fixed'); for (const key of ['modeEnvAbsent', 'outEnvAbsent', 'sourceHeld', 'controlsRemoved']) assert.equal(result[key], true, key);
+            assert.equal(result.productQualified, false); assert(/^[0-9a-f]{64}$/.test(result.summarySha256));
+          } catch (error) { observer.failures.push(String(error?.stack ?? error)); }
+          try {
+            observer.prefixAfter = temps(); const added = observer.prefixAfter.filter(name => !prefixBefore.includes(name));
+            assert.deepEqual(observer.prefixAfter.filter(name => prefixBefore.includes(name)), prefixBefore, 'Pre-existing prefix entries held');
+            assert.equal(added.length, 1, 'Exactly one fresh actual default packet'); assert(/^tennis-score-evidence-[A-Za-z0-9]+$/.test(added[0]));
+            candidate = path.join(tempRoot, added[0]); assert.equal(fs.realpathSync(candidate), candidate);
+            assert.equal(path.dirname(candidate), tempRoot); assert(path.relative(root, candidate).split(path.sep).includes('..'));
+            observer.evidenceRoot = candidate; observer.outputFresh = true; observer.outputExternal = true;
+            observer.originalPacketTree = tree(candidate); assert(observer.originalPacketTree.length > 0);
+            fs.cpSync(candidate, copied, { recursive: true, force: false, errorOnExist: true }); observer.copiedPacketTree = tree(copied);
+            assert.deepEqual(observer.copiedPacketTree, observer.originalPacketTree, 'Every actual default file copied with exact bytes');
+            assert(!fs.existsSync(path.join(candidate, 'unit', 'control-sources')) && !fs.existsSync(path.join(copied, 'unit', 'control-sources')));
+            if (result) { assert.equal(result.evidenceRoot, candidate); assert.equal(hash(fs.readFileSync(path.join(candidate, 'unit', 'summary.json'))), result.summarySha256); }
+          } catch (error) { observer.failures.push(String(error?.stack ?? error)); }
+          try {
+            const after = snapshot(); write('source-after.json', after); assert.deepEqual(after, before, 'All tracked source, membership and status held'); assert.equal(after.status, '');
+            observer.sourceHeld = true; observer.sourceClean = true;
+            const receipt = process.env.SIM_OFFLINE_RECEIPT; assert(receipt); assert.equal(fs.existsSync(receipt) ? fs.readFileSync(receipt, 'utf8') : '', '', 'Empty ordinary default transport receipt'); observer.transportEmpty = true;
+          } catch (error) { observer.failures.push(String(error?.stack ?? error)); }
+          observer.result = result ?? null;
+          if (!observer.failures.length) observer.status = 'passed';
+          write('observer.json', observer);
+          assert.deepEqual(observer.failures, [], 'Actual default invocation observations must all pass');
+          assert.equal(observer.status, 'passed'); console.log('Actual ordinary default invocation retained: ' + candidate + ', exact full packet copied, source and ordinary transport held. No product qualification.');
+          NODE
       - name: Serial plain production build
         id: build
         run: |

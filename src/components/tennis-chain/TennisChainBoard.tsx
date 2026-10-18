@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTennisChain } from '@/hooks/useTennisChain';
 import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { TennisChainSearch } from './TennisChainSearch';
@@ -25,6 +25,7 @@ export function TennisChainBoard() {
   const [playerRank, setPlayerRank] = useState<number | null>(null);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [saving, setSaving] = useState(false);
+  const roundRevision = useRef(0);
   /* Round 953: the result moment plays only for a finish this mount watched happen. */
   const liveFinish = useLiveFinish(gameState ? `${gameState.mode}:${gameState.chain[0]?.playerName ?? ''}` : null, gameState?.gameStatus === 'ended');
 
@@ -49,6 +50,7 @@ export function TennisChainBoard() {
 
   const handleSaveScore = async () => {
     if (!gameState || !nickname.trim() || saving) return;
+    const saveRevision = roundRevision.current;
     setSaving(true);
     const chainLength = gameState.chain.length - 1;
 
@@ -64,14 +66,18 @@ export function TennisChainBoard() {
         .from('tennis_chain_scores')
         .select('*', { count: 'exact', head: true })
         .gt('chain_length', chainLength);
-      setPlayerRank((count ?? 0) + 1);
-      setScoreSubmitted(true);
+      if (saveRevision === roundRevision.current) {
+        setPlayerRank((count ?? 0) + 1);
+        setScoreSubmitted(true);
+      }
       fetchLeaderboard();
     }
-    setSaving(false);
+    if (saveRevision === roundRevision.current) setSaving(false);
   };
 
   const handleReset = () => {
+    roundRevision.current += 1;
+    setSaving(false);
     setScoreSubmitted(false);
     setPlayerRank(null);
     setNickname('');
