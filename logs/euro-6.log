@@ -1,0 +1,4 @@
+  6 a Hot Seat start 2026-10-25 Samsunspor: head 230.6 ms, base 275.7 ms, -45.1 ms more
+  6 a Hot Seat start 2026-10-26 Le Havre: head 314.7 ms, base 425.8 ms, -111.1 ms more
+  6 a Hot Seat start, the median a date costs more on this tree: -46.1 ms (ruling 1l: measured 54.9 ms on startCareer alone before the options object)
+simWorldEuro: green, 30 checks, 0 failures
