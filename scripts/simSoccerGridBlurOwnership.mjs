@@ -24,7 +24,7 @@ const TEST_SHA = '0a729c297dfd40fca179de9d7876ff53387602702f95ba49c5398c94602a8b
 const ORIGINAL_SHA = '5c6f26caebb97853faf481691ee82b1e82f59f145a65b1fcee2d6dfc05a5e6e0';
 const PROPOSED_SHA = 'fc4aa832904388a6363bb47e7a0f07cfb121f96d4a0cd2a8177665dd02f0d34e';
 const INHERITED_SHA = '410176fc8d41f755a63b6d6bdc0c310e3056e8c50ad50bb5f7f8ff5599ccdb52';
-const ORIGINAL_ADMISSION = null;
+const ORIGINAL_ADMISSION = {"scope":"full-original-units-browser-native-pixels","head":"e44896c3954a1956916e87a9bd516d69da8a2fd8","originalSourceSha256":"5c6f26caebb97853faf481691ee82b1e82f59f145a65b1fcee2d6dfc05a5e6e0","testSha256":"0a729c297dfd40fca179de9d7876ff53387602702f95ba49c5398c94602a8ba3","commonSha256":"50d0c9682986ee79f26a68c9c02016f70644bf37372eb3a641fe040f83758214","featureSha256":"c47397698f2f70efd5867d3fe8112c481ba46a0d903aafc36faabac8595c0875","pixelSha256":"7b6b70882e215b5470fe28c22cb7b046e4913b105c2cb8b9d75312d0e5a48b3b","fullAdmissionSha256":"073612c582f1066d39e9cd6aaa49df515a24a8efe9303de92e2f406d4aef41bb"};
 const hash = value => createHash('sha256').update(value).digest('hex');
 const git = args => execFileSync('git', args, { cwd: ROOT, maxBuffer: 64 * 1024 * 1024 });
 const tracked = git(['ls-files', '-z']), status = git(['status', '--porcelain=v1', '--untracked-files=all']);
