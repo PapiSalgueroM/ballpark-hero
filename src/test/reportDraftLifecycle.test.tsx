@@ -52,7 +52,8 @@ const category = (view: View, name: string) => fireEvent.click(view.getByRole('b
 const send = async (view: View) => { await act(async () => { fireEvent.click(sendControl(view)); }); };
 const advance = async (ms: number) => { await act(async () => { vi.advanceTimersByTime(ms); }); };
 const close = async (view: View) => {
-  await act(async () => { fireEvent.click(view.getByRole('button', { name: 'Close' })); vi.advanceTimersByTime(50); });
+  await act(async () => { fireEvent.click(view.getByRole('button', { name: 'Close' })); });
+  await advance(50);
   expect(view.queryByRole('dialog')).toBeNull();
   expect(document.activeElement).toBe(view.getByRole('button', { name: 'Report a problem' }));
 };
