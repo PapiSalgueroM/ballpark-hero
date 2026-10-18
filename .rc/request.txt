@@ -1,0 +1,15 @@
+#!build
+#!playwright
+#!serial
+# Release BK triage tr6 (rBK-tr6) on 499ec5ac: the finance desk's wrap plant as committed, by the gate's own rc-K lines (twice for wrap, on the career's own figures), on the gate's figures that missed (figsDiag.mjs, a runner only copy that writes them into the cells first), the other two desk controls and the walk itself.
+# Send with: rc.sh rBK-tr6 rc-tr6.txt figsDiag.mjs
+headsha: git log --oneline -2 | cut -c1-120
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+anchors: node scripts/simHarnessAnchors.mjs
+dashscan: if git diff 77556430 HEAD | grep -nP '\x{2013}|\x{2014}'; then echo "dash found"; exit 1; else echo "no dash in the diff"; fi
+desk-green: ENGINES=chromium node scripts/playCmFinanceDesk.mjs > /tmp/dg.log 2>&1; s=$?; tail -1 /tmp/dg.log | cut -c1-200; exit $s
+ctl-desk-wrap: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ENGINES=chromium CM_FINANCE_CONTROL=wrap node scripts/playCmFinanceDesk.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'playCmFinanceDesk: CONTROL wrap FIRED (' "$TMPDIR/ctl.log"
+ctl-desk-wrap-2: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ENGINES=chromium CM_FINANCE_CONTROL=wrap node scripts/playCmFinanceDesk.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'playCmFinanceDesk: CONTROL wrap FIRED (' "$TMPDIR/ctl.log"
+ctl-desk-small: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ENGINES=chromium CM_FINANCE_CONTROL=small node scripts/playCmFinanceDesk.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'playCmFinanceDesk: CONTROL small FIRED (' "$TMPDIR/ctl.log"
+ctl-desk-cut: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ENGINES=chromium CM_FINANCE_CONTROL=cut node scripts/playCmFinanceDesk.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'playCmFinanceDesk: CONTROL cut FIRED (' "$TMPDIR/ctl.log"
+figs-wrap: node .rc/x/figsDiag.mjs > /dev/null && ENGINES=chromium CM_FINANCE_CONTROL=wrap node scripts/playDeskFigsDiag.mjs > /tmp/fw.log 2>&1; s=$?; grep -E "figsDiag:|FAIL" /tmp/fw.log | head -4 | cut -c1-200; tail -1 /tmp/fw.log; [ $s = 1 ] && grep -qF "playCmFinanceDesk: CONTROL wrap FIRED (3 failures" /tmp/fw.log && echo FIRED-OK
