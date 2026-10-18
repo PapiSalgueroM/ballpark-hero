@@ -20,13 +20,20 @@ dukb-handoff/2026-10-10/briefs/brief-1509.md. Kept at every push; the builder's 
    (the rule over the finished tables, or over the real 2025-26 tables, cup winners and Conference League winner in
    season one), `via` and `earned` on the slice; the Europa League's legs from row U-legs; its nights on the six
    European midweeks and the Champions League's first ten marks with its final at 0.95; dated the Thursday.
+   Ruling 1l, 4ca130e0: startCareer alone cost a median 54.9 ms more a daily date with the Europa League open, over
+   the 10 ms line, so startCareer takes one options object (StartCareerOptions, `noWorldComps`; DAILY_START) and
+   both dailies pass it; their strips stay as the shape guard.
 5. The screen, b0236c4c: a third tile on the Cups panel, the competition screen by key, its ?, how each club got
    in, the place my club earned; the help block; What's New; the walk's cases (u) and (v) and the controls
    notileuel and wednesday.
 6. (a) The board, 39978122: euroPlaceOf and europeRungOf, objectiveStatuses' league branch (an era save keeps its
    position grade), simWorldEuro section 3. (b) The winner, a06f9e18: uelHolderOf into next season's Champions
    League (the participant's field and the watched one), scripts/lib/worldUelHolder1509.mjs, simWorldEuro
-   section 5.
+   section 5. Fixes a0061f75, cd03aa46, 02bc87d1 (season one's field keeps to clubs of a European nation's league,
+   for an edited world).
+7. The readers and the proof, 3b2c40f4 to 71374d36: simWorldUcl section 2 and its saved bytes, the fleet proof's
+   --euro-board-off and its whole worldComps comparison when the base carries it, and the Round 1081 pin retaken
+   last (scripts/fixtures/managerAppealIsolation1081/manifest.json: only clubManager.ts's hash moved).
 
 ## Decisions taken by the builder
 
@@ -55,6 +62,14 @@ dukb-handoff/2026-10-10/briefs/brief-1509.md. Kept at every push; the builder's 
 - Season one of a Chelsea career: the English clubs in the Europa League are Bournemouth (league place, Liverpool
   fifth being in the Champions League on its fill), Sunderland (the FA Cup's place passed down, Manchester City in
   the Champions League), Crystal Palace (the Conference League's winners) and Brighton (the fill).
+- simWorldEuro section 7 over its fleet: routes C 173, F 555, H 39, L 1485, P 1312; titles by strength quartile
+  76, 13, 2, 0; 2.60 goals a match; a slice 1,419 to 1,506 bytes; 1,683 of 1,683 nights on a Thursday.
+- Section 3: 252 season ends; 31 Europa League routes and 37 Champions League places on which euroPlaceOf and the
+  rollover agree; my club won its cup in 24 seasons, 11 of them from outside the Champions League places.
+- Section 5: 60 rollovers after a watched final; the winner is in next season's Champions League in all 60.
+- Dailies: with the options object a Hot Seat start is a median 69.8 ms faster than with both competitions open.
+- The board: simCmUnseededWorld's Hot Seat day of 2026-10-27 (Nottingham Forest) scores 34 against the base's 28,
+  one objective more under the rule's grading; its tree arms revert both of the round's lines.
 
 ## Owed
 
@@ -63,4 +78,6 @@ dukb-handoff/2026-10-10/briefs/brief-1509.md. Kept at every push; the builder's 
   panel; win your cup and the board counts it.", then their genSearchKeywords.
 - To the lead: the three engine weight rows (sweepWeight is red over 619, 636 and 646 by about 1.6K each, inside
   the accepted +3.0K); scripts/data/cmLeagueRulesDigest.json moves by the new key (named, not retaken); the saved
-  What's New page; the participant's own Europa League nights (a later number).
+  What's New page; the participant's own Europa League nights (a later number); simCmBoardVerdict's kit
+  (x/minus1335.sh no longer forms a base even on main 77556430: taking Round 1335 out conflicts in
+  ClubManagerSeasonSummary.tsx, clubManager.ts and clubManagerCalendar.ts, so the harness exits 2 on main and here).
