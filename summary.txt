@@ -1,0 +1,25 @@
+units exit=0 8s |    Duration  7.26s (transform 3.52s, setup 792ms, collect 7.63s, tests 3.08s, environment 2.69s, prepare 984ms)
+c-onesource exit=1 1s | simOneOffCups: control onesource FIRED (1 failures, all its own: eng-2026 decider stands on official (1 hosts), not an official and a press page on two hosts)
+c-wiki exit=1 1s | simOneOffCups: control wiki FIRED (1 failures, all its own: SM-0814: https://en.wikipedia.org/wiki/2026_FA_Community_Shield is a wiki)
+c-thinused exit=1 1s | simOneOffCups: control thinused FIRED (1 failures, all its own: eng-2015 is not verified and carries CM_ONE_OFF_ROWS.eng-2015)
+c-receipt exit=1 1s | simOneOffCups: control receipt FIRED (1 failures, all its own: the receipt does not carry the hash of scripts/data/cmOneOffFormats.json (4f6ad63a14bc45a15195aa64043ae981b
+c-notinworld exit=1 1s | simOneOffCups: control notinworld FIRED (3 failures, all its own: eng-2026-s1: the constant ["eng-2026","2025-26",["Arsenal","Torreense"],"the Principality Stadium in Car
+c-wrongyear exit=1 67s | simOneOffCups: control wrongyear FIRED (846 failures, all its own: 1 row: Arsenal (now) seed 1 nocoach at s1-rollover: holds no super cup, its country plays eng-2026)
+tsc exit=0 100s | tsc exit=0
+c-nodouble exit=1 134s | simOneOffCups: control nodouble FIRED (23 failures, all its own: 1 entrants: Arsenal (now) seed 2 nocoach season 2: my club's cup holds unfinished, the rule says Arsenal 
+c-afterswap exit=1 279s | simOneOffCups: control afterswap FIRED (3 failures, all its own: 1 entrants: Everton (now) seed 1 nocoach season 3: unfinished, the rule says Manchester City and Fulham)
+c-seasononeplay exit=1 67s | simOneOffCups: control seasononeplay FIRED (226 failures, all its own: 1 season one: Arsenal (now) seed 1 nocoach at start: a season one slice holds my club Arsenal, so t
+c-etall exit=1 278s | simOneOffCups: control etall FIRED (16 failures, all its own: 1 extra time: Manchester City (now) seed 3 nocoach: extra time on a straight to penalties cup)
+c-tick exit=1 50s | simOneOffCups: control tick FIRED (8 failures, all its own: 2 books: Arsenal seed 1 nocoach: the season charged 54 55 weeks, the twin with no nights 54 54)
+c-adjacent exit=1 50s | simOneOffCups: control adjacent FIRED (16 failures, all its own: 2 slots: Arsenal seed 1 nocoach season 2: the nights sit before entries 28,28, the placer gives 0)
+c-countdown exit=1 49s | simOneOffCups: control countdown FIRED (16 failures, all its own: 2 window: Arsenal seed 1 nocoach: the summer window closes after 1:uclGroup:0:4 2:league:2:3, the twin a
+c-calweeks exit=1 49s | simOneOffCups: control calweeks FIRED (8 failures, all its own: 2 window: Arsenal seed 1 nocoach season 2: the calendar draws the deadline at entry 3, the engine closes t
+c-stream exit=1 142s | simOneOffCups: control stream FIRED (11 failures, all its own: 3 Arsenal (now) seed 1 nocoach at s1-rollover: the draws differ (843 against 839))
+c-form exit=1 143s | simOneOffCups: control form FIRED (11 failures, all its own: 3 Arsenal (now) seed 1 nocoach at s1-rollover: the state differs in a key other than worldComps.dsc)
+c-weighs exit=1 30s | simOneOffCups: control weighs FIRED (25 failures, all its own: 4 weighs: Chelsea seed 1: nationStanding reads 75.5 without a minor trophy and 89.5 with one)
+c-notrophy exit=1 31s | simOneOffCups: control notrophy FIRED (9 failures, all its own: 4 trophy: Chelsea seed 1 won: 0 minor trophies ([]), not exactly the FA Community Shield of season 2)
+c-participant exit=1 141s | simOneOffCups: control participant FIRED (11 failures, all its own: 3 Arsenal (now) seed 1 nocoach at s2-e1: the state differs in a key other than worldComps.dsc)
+c-keep exit=1 66s | simOneOffCups: control keep FIRED (467 failures, all its own: 5 slices: Arsenal (now) seed 1 nocoach at s1-rollover: worldComps holds uel dsc dscOld)
+dashscan exit=0 1s | no dash in the diff
+fences exit=1 305s | fences done, any red: 1
+simOneOffCups exit=0 2487s | simOneOffCups: green, 123395 checks (2487 s)

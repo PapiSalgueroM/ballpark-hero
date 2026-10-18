@@ -1,0 +1,20 @@
+  1 fleet: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher); Birmingham City (now, second tier watcher); Proof Town Athletic (now, created club in the Championship); Real Madrid (now, no row (Spain)); Bayern Munich (now, no row (Germany)); América (now, no row (Mexico, no cup)); Arsenal (era2005, era row partial)
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  1 level matches on a pens row (the etall control needs one): 4
+  1 moved stubs: 2
+  1 participants (my club earned a place: played from the match half): 7
+  1 plain fields (champions v cup winners): 7
+  1 rollovers into another league (the afterswap control reads these): 4
+  1 rollovers of a manager outside the top flight: 7
+  4 super cups my club won (section 1 fleet): 3
+  5 bytes of a followed one slice: 2772
+  5 bytes of a stub: 15697
+  5 followed one slices measured: 24
+  5 stubs measured: 329
+  7 season one followed: 10
+  7 season one stub seasonOne: 4
+  7 settled in 90 minutes: 20
+  7 settled on penalties: 4
+  7 won by the stronger side: 11
+  7 won by the weaker side: 13
+simOneOffCups: control keep FIRED (467 failures, all its own: 5 slices: Arsenal (now) seed 1 nocoach at s1-rollover: worldComps holds uel dsc dscOld)

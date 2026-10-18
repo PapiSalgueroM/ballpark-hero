@@ -1,0 +1,24 @@
+  1 fleet: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher); Birmingham City (now, second tier watcher); Proof Town Athletic (now, created club in the Championship); Real Madrid (now, no row (Spain)); Bayern Munich (now, no row (Germany)); América (now, no row (Mexico, no cup)); Arsenal (era2005, era row partial)
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  1 forced: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher); Birmingham City (now, second tier watcher); Proof Town Athletic (now, created club in the Championship); Real Madrid (now, no row (Spain)); Bayern Munich (now, no row (Germany)); América (now, no row (Mexico, no cup)); Arsenal (era2005, era row partial)
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  1 doubles (the runners up took the cup place): 7
+  1 level matches on a pens row (the etall control needs one): 6
+  1 moved stubs: 4
+  1 participants (my club earned a place: played from the match half): 14
+  1 plain fields (champions v cup winners): 7
+  1 rollovers into another league (the afterswap control reads these): 8
+  1 rollovers of a manager outside the top flight: 14
+  4 super cups my club won (section 1 fleet): 2
+  5 bytes of a followed one slice: 3561
+  5 bytes of a stub: 72494
+  5 followed one slices measured: 32
+  5 stubs measured: 1480
+  7 season one followed: 20
+  7 season one stub seasonOne: 8
+  7 settled in 90 minutes: 26
+  7 settled on penalties: 6
+  7 won by the stronger side: 15
+  7 won by the weaker side: 17
+  1 rows seen: eng-2026
+simOneOffCups: control nodouble FIRED (23 failures, all its own: 1 entrants: Arsenal (now) seed 2 nocoach season 2: my club's cup holds unfinished, the rule says Arsenal and Crystal Palace)
