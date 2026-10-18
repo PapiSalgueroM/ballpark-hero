@@ -1,0 +1,2 @@
+#!playwright
+writesSent-main: R=/tmp/wm; git worktree add -q --detach $R 77556430 && ln -s $PWD/node_modules $R/node_modules && cd $R && npm run build > /tmp/wmb.log 2>&1 && node scripts/simWritesAreSent.mjs > /tmp/wm.log 2>&1; s=$?; grep -E "FAIL" /tmp/wm.log | head -6 | cut -c1-240; tail -1 /tmp/wm.log | cut -c1-200; exit $s
