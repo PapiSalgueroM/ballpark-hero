@@ -1,0 +1,2 @@
+ctl-noseen: WORLD_EURO_CONTROL=noseen WORLD_EURO_SEEDS=1,2 node scripts/simWorldEuro.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+euro-s4: WORLD_EURO_ONLY=4 WORLD_EURO_SEEDS=1,2 node scripts/simWorldEuro.mjs 2>&1 | grep -E "seen probes|simWorldEuro|FAIL" | head -8; exit ${PIPESTATUS[0]}

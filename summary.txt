@@ -1,0 +1,2 @@
+ctl-noseen exit=1 71s | simWorldEuro: control noseen FIRED (14 failures, all its own)
+euro-s4 exit=0 72s | simWorldEuro: green, 14650 checks, 0 failures
