@@ -174,6 +174,7 @@ export function useSoccerGrid() {
   const startTimerIfNeeded = useCallback(() => {
     if (settings.timerMode === 0 || timerStartedAt !== null) return;
     const now = Date.now();
+    setNowTick(now);
     saveTimerStartedAt(todayStr, now);
     setTimerStartedAtState(now);
     // eslint-disable-next-line react-hooks/exhaustive-deps
