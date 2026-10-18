@@ -156,8 +156,10 @@ const STRIPS = {
   seeddeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldSeed;' },
   ledger: { file: 'managerHotSeat.ts', line: '  delete s.worldRoster;' },
   ledgerdeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldRoster;' },
-  world: { file: 'managerHotSeat.ts', line: '  delete s.worldComps;' },
-  worlddeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldComps;' },
+  /* Round 1509 (ruling 1l): the dailies start with DAILY_START and open nothing, so the strip is the shape guard
+     behind it: each world control takes both off, the option and the strip, and the day keeps what it opened. */
+  world: { file: 'managerHotSeat.ts', line: '  delete s.worldComps;', also: [['startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, DAILY_START)', 'startCareer(setup.club)']] },
+  worlddeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldComps;', also: [['startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, DAILY_START)', 'startCareer(setup.club)']] },
   rulesall: { file: 'managerHotSeat.ts', line: "  if (setup.daily) return setup.daily < HOT_SEAT_RULES_FROM ? 'base' : undefined;", to: '  if (setup.daily) return undefined;' },
   rulesstale: { file: 'managerHotSeat.ts', line: "export const HOT_SEAT_RULES_FROM = '", to: "export const HOT_SEAT_RULES_FROM = '2026-10-01'; const HOT_SEAT_RULES_WAS = '" },
 };
@@ -170,12 +172,15 @@ const controlPlugin = {
   name: 'daily-deals-control',
   setup(b) {
     if (!CONTROL) return;
-    const { file, line, to = '' } = STRIPS[CONTROL];
+    const { file, line, to = '', also = [] } = STRIPS[CONTROL];
     b.onLoad({ filter: new RegExp(file.replace('.', '[.]') + '$') }, async args => {
-      const source = await fs.promises.readFile(args.path, 'utf8');
-      const count = source.split(line).length - 1;
-      if (count !== 1) cannot(`control ${CONTROL}: its line is in ${file} ${count} times, it must be exactly once`);
-      return { contents: source.replace(line, to), loader: 'ts' };
+      let source = await fs.promises.readFile(args.path, 'utf8');
+      for (const [from, into] of [[line, to], ...also]) {
+        const count = source.split(from).length - 1;
+        if (count !== 1) cannot(`control ${CONTROL}: its line is in ${file} ${count} times, it must be exactly once`);
+        source = source.replace(from, () => into);
+      }
+      return { contents: source, loader: 'ts' };
     });
   },
 };

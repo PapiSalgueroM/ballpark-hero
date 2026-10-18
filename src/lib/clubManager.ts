@@ -13293,6 +13293,18 @@ function worldUelField(state: CareerState, tables: { league: Pick<LeagueDef, 'id
   return tagged;
 }
 
+/**
+ * Round 1509 (ruling 1l): what a caller asks of startCareer beyond the career itself, one options object.
+ * `noWorldComps`: a daily (Manager Hot Seat, Deadline Day) follows no competition from outside. Its state is
+ * stripped of worldComps anyway; this skips opening them, which cost a daily start a median of 55 ms a date on a
+ * runner (simWorldEuro section 6). Opening draws nothing, so no deal moves either way.
+ */
+export interface StartCareerOptions { noWorldComps?: boolean }
+/** The options both dailies start a career with. */
+export const DAILY_START: StartCareerOptions = { noWorldComps: true };
+/* The states a start was asked to open nothing on, read by openWorldUclOnStart (a set of objects, never saved). */
+const NO_WORLD_COMPS = new WeakSet<CareerState>();
+
 /** Round 1509: the competitions in the order their keys are written. */
 const WORLD_COMP_KEYS: readonly WorldCompKey[] = ['ucl', 'uel'];
 
@@ -13388,7 +13400,7 @@ export function openWorldUcl(state: CareerState, field: string[] | null, holder?
  * competition must never stop a career starting (correction 15).
  */
 function openWorldUclOnStart(state: CareerState, world: SeasonWorld | undefined): void {
-  if (world) return;
+  if (world || NO_WORLD_COMPS.has(state)) return;
   if (!state.uclGroup) {
     try {
       openWorldUcl(state, worldUclField(state, null), worldUclFormatOf(state) === 'l36' ? CM_FINAL_TABLES_2025_26.holders : null);
@@ -18884,7 +18896,7 @@ export interface SeasonWorld {
    where an edited world is a fresh start in every other way. It applies to a
    real club in today's world only: a historic era never reads the overrides,
    and a custom club is placed against the real lineups. */
-export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld, edit?: Record<string, string[]> | null): CareerState {
+export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld, edit?: Record<string, string[]> | null, opts?: StartCareerOptions): CareerState {
   /* Round 132: the era decides what year season one is, and the year decides
      everything else: the squad you are handed, how good every other club is,
      and who is on the market. The default era is the current one and its
@@ -19015,6 +19027,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     promisedStarts: [],
     pairResults: {},
   };
+  /* Round 1509 (ruling 1l): a daily follows no competition from outside, so its start opens none. */
+  if (opts?.noWorldComps) NO_WORLD_COMPS.add(state);
   if (world?.rosterCareer && (worldRosterView(world.rosterCareer) || worldSeedOf(world.rosterCareer) !== undefined)) {
     state.season = world.rosterCareer.season;
     state.startYear = world.rosterCareer.startYear;

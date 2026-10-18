@@ -41,9 +41,10 @@
  *      participant's field unless its 32 were already full of direct places, counted) and not in its Europa League;
  *      against the engine with the line reverted (scripts/lib/worldUelHolder1509.mjs), the two part only at a
  *      rollover after a final, a watcher on worldComps alone, a participant on its field and draw.
- *   6  the dailies: no Hot Seat or Deadline Day state, the handover included, carries worldComps; startCareer's
- *      time per daily date on this tree and on the base (WORLD_EURO_BASE), printed (ruling 1l: over 10 ms more
- *      a date, the dailies take the one options object).
+ *   6  the dailies: no Hot Seat or Deadline Day state, the handover included, carries worldComps; a Hot Seat start's
+ *      time per daily date on this tree and on the base (WORLD_EURO_BASE), printed. Ruling 1l: startCareer alone
+ *      cost a median 54.9 ms more a date with the Europa League open (r1509-s4c), over the 10 ms line, so the
+ *      dailies start with startCareer's one options object, DAILY_START, and open nothing.
  *   7  measured and printed, never asserted on a max: routes, passes down, the fill, my club's earned routes,
  *      titles by strength quartile, goals, extra time and shootouts, the slice's bytes, the nights' months.
  *
@@ -614,9 +615,16 @@ async function dailies() {
   const E = await engineOf(ROOT, 'daily', { edits: careerEdits() }, cannot);
   const baseRef = process.env.WORLD_EURO_BASE || '';
   const B = baseRef ? await engineOf(ROOT, 'dailybase', { base: baseRef }, cannot) : null;
-  const time = async (Eng, club) => {
+  /* A day's own start (the Hot Seat's, with DAILY_START since step 6b's ruling 1l), the median of three. */
+  const time = async (Eng, date) => {
     const ms = [];
-    for (let i = 0; i < 3; i += 1) { const M = await Eng.fresh(); const t = performance.now(); tape(0x1509 + i, () => M.cm.startCareer(club)); ms.push(performance.now() - t); }
+    for (let i = 0; i < 3; i += 1) {
+      const M = await Eng.fresh();
+      const setup = M.hs.dailyHotSeat(date);
+      const t = performance.now();
+      tape(0x1509 + i, () => M.hs.startHotSeat({ club: setup.club, seed: setup.seed, daily: date }));
+      ms.push(performance.now() - t);
+    }
     return ms.sort((p, q) => p - q)[1];
   };
   let days = 0, following = 0;
@@ -633,13 +641,13 @@ async function dailies() {
     ok(!('worldComps' in dd.state), `6 daily: the Deadline Day of ${date} carries worldComps`);
     if (tape(0x1509, () => M.cm.startCareer(setup.club)).value.worldComps?.uel) following += 1;
     days += 2;
-    if (B) cost.push({ date, club: setup.club, head: await time(E, setup.club), base: await time(B, setup.club) });
+    if (B) cost.push({ date, club: setup.club, head: await time(E, date), base: await time(B, date) });
   }
   console.log(`  6 dailies: ${days} days, ${following} of the Hot Seat clubs follow a Europa League before the strip`);
-  for (const c of cost) console.log(`  6 startCareer ${c.date} ${c.club}: head ${c.head.toFixed(1)} ms, base ${c.base.toFixed(1)} ms, ${(c.head - c.base).toFixed(1)} ms more`);
+  for (const c of cost) console.log(`  6 a Hot Seat start ${c.date} ${c.club}: head ${c.head.toFixed(1)} ms, base ${c.base.toFixed(1)} ms, ${(c.head - c.base).toFixed(1)} ms more`);
   if (cost.length) {
     const more = cost.map(c => c.head - c.base).sort((p, q) => p - q);
-    console.log(`  6 startCareer, the median a date costs more on this tree: ${more[Math.floor(more.length / 2)].toFixed(1)} ms (ruling 1l: over 10 ms, the dailies take the options object)`);
+    console.log(`  6 a Hot Seat start, the median a date costs more on this tree: ${more[Math.floor(more.length / 2)].toFixed(1)} ms (ruling 1l: measured 54.9 ms on startCareer alone before the options object)`);
   }
 }
 
