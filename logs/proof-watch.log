@@ -1,0 +1,10 @@
+FAIL Chelsea (now, watcher, nocoach, seed 1, 3 seasons): 156 steps, 8.5 s
+FAIL Chelsea (now, watcher, nocoach, seed 2, 3 seasons): 146 steps, 7.4 s
+FAIL Chelsea (now, watcher, nocoach, seed 3, 3 seasons): 145 steps, 8.1 s
+FAIL Chelsea (now, watcher, nocoach, seed 4, 3 seasons): 151 steps, 8.7 s
+FAIL Chelsea (now, watcher, nocoach, seed 5, 3 seasons): 147 steps, 7.7 s
+FAIL Chelsea (now, watcher, coach, seed 1, 3 seasons): 148 steps, 10.2 s
+FAIL Chelsea (now, watcher, coach, seed 2, 3 seasons): 146 steps, 11.5 s
+FAIL Chelsea (now, watcher, coach, seed 3, 3 seasons): 150 steps, 12.4 s
+FAIL Chelsea (now, watcher, coach, seed 4, 3 seasons): 159 steps, 11.5 s
+FAIL Chelsea (now, watcher, coach, seed 5, 3 seasons): 141 steps, 10.7 s

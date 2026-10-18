@@ -1,0 +1,5 @@
+field32: last: simWorldUcl: control field32 FIRED (66 failures, all its own)
+meindirect: last: simWorldUcl: control meindirect FIRED (4 failures, all its own)
+keep: last: simWorldUcl: control keep FIRED (5047 failures, all its own)
+participant: last: simWorldUcl: control participant FIRED (87 failures, all its own)
+controls (each must be 1): field32=1 meindirect=1 keep=1 participant=1

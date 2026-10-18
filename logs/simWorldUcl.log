@@ -1,0 +1,16 @@
+FAIL 2 watcher Chelsea (now) nocoach seed 2 at s2-reload: the state differs
+FAIL 2 watcher Chelsea (now) nocoach seed 3 at s2-reload: the state differs
+FAIL 2 watcher Chelsea (now) nocoach seed 4 at s2-reload: the state differs
+FAIL 2 watcher Chelsea (now) nocoach seed 5 at s2-reload: the state differs
+FAIL 2 watcher Chelsea (now) coach seed 2 at s2-reload: the state differs
+FAIL 2 watcher Chelsea (now) coach seed 3 at s2-reload: the state differs
+FAIL 2 watcher Chelsea (now) coach seed 4 at s2-reload: the state differs
+FAIL 2 watcher Chelsea (now) coach seed 5 at s2-reload: the state differs
+FAIL 2 watcher Hoffenheim (now) coach seed 1 at s2-reload: the state differs
+FAIL 2 watcher Everton (now) nocoach seed 2 at s2-reload: the state differs
+FAIL 2 watcher Everton (now) coach seed 2 at s2-reload: the state differs
+FAIL 2 watcher América (now) nocoach seed 1 at s2-reload: the state differs
+FAIL 2 watcher América (now) coach seed 1 at s2-reload: the state differs
+FAIL 2 watcher Proof Town Athletic (now) nocoach seed 1 at s1-join: the state differs
+FAIL 2 watcher Proof Town Athletic (now) coach seed 1 at s1-join: the state differs
+simWorldUcl: RED, 495906 checks, 35 failures

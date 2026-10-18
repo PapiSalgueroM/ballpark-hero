@@ -1,0 +1,11 @@
+grep: write error: Broken pipe
+FAIL Real Madrid (now, participant, nocoach, seed 1, 2 seasons): 111 steps, 5.3 s
+FAIL Real Madrid (now, participant, nocoach, seed 2, 2 seasons): 112 steps, 5.2 s
+FAIL Real Madrid (now, participant, nocoach, seed 3, 2 seasons): 113 steps, 5.4 s
+FAIL Real Madrid (now, participant, nocoach, seed 4, 2 seasons): 109 steps, 4.9 s
+FAIL Real Madrid (now, participant, nocoach, seed 5, 2 seasons): 111 steps, 5.1 s
+FAIL Real Madrid (now, participant, coach, seed 1, 2 seasons): 116 steps, 8.1 s
+FAIL Real Madrid (now, participant, coach, seed 2, 2 seasons): 111 steps, 8.4 s
+FAIL Real Madrid (now, participant, coach, seed 3, 2 seasons): 112 steps, 8.6 s
+FAIL Real Madrid (now, participant, coach, seed 4, 2 seasons): 110 steps, 8.0 s
+FAIL Real Madrid (now, participant, coach, seed 5, 2 seasons): 110 steps, 8.0 s

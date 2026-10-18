@@ -1,0 +1,4 @@
+proof-part exit=1 302s | FAIL Real Madrid (now, participant, coach, seed 5, 2 seasons): 110 steps, 8.0 s
+proof-watch exit=1 895s | FAIL Chelsea (now, watcher, coach, seed 5, 3 seasons): 141 steps, 10.7 s
+simWorldUcl exit=1 1523s | simWorldUcl: RED, 495906 checks, 35 failures
+ctl-ucl exit=0 1536s | controls (each must be 1): field32=1 meindirect=1 keep=1 participant=1
