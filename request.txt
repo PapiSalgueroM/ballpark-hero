@@ -1,0 +1,3 @@
+# Release BJ, Round 1501, the bands: SECTION=4 alone (about 36 minutes on a runner). Send on its own name.
+sec4: SECTION=4 node scripts/simCmDifficulty.mjs
+sec4-alloff: SECTION=4 SEEDS=2 CM_DIFF_CONTROL=alloff node scripts/simCmDifficulty.mjs; s=$?; [ $s = 1 ] && echo "alloff FIRED as it must" && exit 0; echo "alloff did not exit 1 ($s)"; exit 1
