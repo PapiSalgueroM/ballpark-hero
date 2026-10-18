@@ -15895,3 +15895,17 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+
+# Rounds1427 and1428 claimed for original reproduction, 2026-10-18
+
+No product adoption or runtime qualification yet. Prior64 report heads including PR340 final26ea50a4d9c617436ded353e22640e064cfa2011 remain sealed. Primary checkout stays WORKBOARD append only. No main, preview or publication claim.
+
+Round1427, isolated `codex/tennis-chain-score-ownership`, base775564305e9da84dab59f2b9fe246d044a3cc8e9. Root owns only `src/components/tennis-chain/TennisChainBoard.tsx` UI score-save ownership, focused new unit/proof/browser/workflow and closing docs. Source hypothesis: old round A's score insert/rank await can settle after Play Again and mark completed round B submitted, hide its nickname form or release B's pending save. Require actual board plus actual hook original faults and built /tennis-chain390/1280 reproduction before product edits. Captured A insert still completes. Hold exact score payloads, normal current saves/ranks, errors/retry, duplicate protection, hooks, validators, rules, real data, schema and API.
+
+Round1428, isolated `codex/appearance-category-scroll`, base PR339 final8fc62292db90a7a973389336bbe8cff6de184fae. Root owns only the options scroller/category-change lifetime in `src/components/soccer-career/AppearanceBuilder.tsx`, focused new unit/proof/browser/workflow and closing docs. Source hypothesis: scrolling gear options then choosing Celebration retains the previous list offset and hides the new category's first choices. Require actual original DOM and built creator native scroll at390/1280 across all5sports before adoption. New category starts at top; current-tab click and choosing an option keep current internal scroll. Keep outer page position, current appearance/callback semantics, stores, RNG, catalogues/avatar drawings, PR333 selection semantics and PR339 additions. No protected creator page/engine/save changes. PR339 and PR331 remain prerequisites at release join.
+
+Both rounds keep runtime in remote Actions with the ordinary offline preload. All score/API requests are locally intercepted fixtures; no actual score/report/email or DB operations. Real app types, serial production build, all15 built-site readers and all14 unchanged Math.round fatal caps remain required. Preserve full source/dependency/browser/font/dist holds and relevant old tests. Controls must change executable code and fail exact intended assertions; complete original adoption precedes source fix, restoration must recover whole source.
+
+One bounded20 checkpoint after1426: only8lines appended to session-i-ledger,19other sources unchanged. The ledger reports BK join696b697b and pending gate prep, no completed gate or publication evidence. It grants no protected-source lease. I retains Manager/SC/MoneyScreens/world/calendar/tournaments, joined-tree checks, main and publish. Named main775/release-bi-gate50078 were observed unchanged at17:28:46UTC. Checkpoint `C:/Users/antho/dukb-handoff/2026-10-18/continue-after-1426/i-checkpoint/`. NFL playing free agency source trace is NONFIND: valid windows retain a signable incumbent;1424 coaching remains the demonstrated no-offers fix. No speculative free-agency change.
+
