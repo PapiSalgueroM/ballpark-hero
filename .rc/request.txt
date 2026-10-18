@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unit-euro: node_modules/.bin/vitest run src/lib/euroAccess.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -5; exit ${PIPESTATUS[0]}
+unit-whymut: X=$PWD/.rc/x/mutWhy.mjs; R=/tmp/whymut; git worktree add -q $R HEAD && ln -s $PWD/node_modules $R/node_modules && cd $R && node $X && { node_modules/.bin/vitest run src/lib/euroAccess.test.ts > /tmp/whymut.log 2>&1; v=$?; grep -E "Tests |FAIL" /tmp/whymut.log | head -4 | cut -c1-200; if [ $v -ne 0 ]; then echo "the why unit test caught the mutation"; exit 1; else echo "MUTATION NOT CAUGHT"; exit 0; fi; }
+walkboard: node .rc/x/walkBoard.mjs 2>&1 | tail -16; exit ${PIPESTATUS[0]}
+realsaves: R=/tmp/rsbase; git worktree add -q $R 77556430 && ln -s $PWD/node_modules $R/node_modules && node .rc/x/probeRealSaves.mjs $R 77556430 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+realsaves-leak: R=/tmp/rsbase2; git worktree add -q $R 77556430 && ln -s $PWD/node_modules $R/node_modules && PROBE_CONTROL=leak node .rc/x/probeRealSaves.mjs $R 77556430 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+ucl-s2: WORLD_UCL_ONLY=2 node scripts/simWorldUcl.mjs > /tmp/us2.log 2>&1; s=$?; echo "FAIL lines $(grep -c '^FAIL' /tmp/us2.log)"; grep '^FAIL' /tmp/us2.log | head -3 | cut -c1-240; tail -3 /tmp/us2.log; exit $s
+appeal1081: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
