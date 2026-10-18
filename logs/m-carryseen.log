@@ -1,0 +1,28 @@
+rvmut1510: MUTATED carryseen in src/lib/clubManager.ts
+  0 ledger: verified eng-2026 eng-2026-s1 | to verify eng-2005 eng-2010 eng-2015 eng-2020 esp-2026 ita-2026 ger-2026 fra-2026 | 9 pages
+  0 constants: 1 rows (eng-2026), 1 season one editions, partial eng-2005 eng-2010 eng-2015 eng-2020 esp-2026 ita-2026 ger-2026 fra-2026
+  1 fleet: Chelsea (now, watcher)
+  1 forced: Chelsea (now, watcher)
+  2 calendar: 3 participant seasons beside their twins, 3 nights; the closest neighbour of a night 3 days, at most 1 matches in seven days to a night
+  7 fitness into the league opener: 79.8 after the super cup night, 100.0 in the twin with no night, 100.0 at the rollover (3 seasons)
+  4 honours: 6 arms (won and lost), 27 weighing readers compared with and without a minor trophy
+  3 self relative: 3 journeys, 317 steps each arm, 317 steps carrying a super cup
+  6 dailies: 20 daily states and 10 handovers, none with a super cup
+  1 level matches on a pens row (the etall control needs one): 1
+  1 participants (my club earned a place: played from the match half): 5
+  1 plain fields (champions v cup winners): 1
+  2 participant journeys whose wages differ from the twin by a week keyed event (printed, not asserted): 3
+  3 participant journeys compared up to their first night: 2
+  4 super cups my club won (section 1 fleet): 5
+  5 bytes of a followed one slice: 787
+  5 bytes of a stub: 6440
+  5 followed one slices measured: 6
+  5 stubs measured: 140
+  7 season one followed: 6
+  7 settled in 90 minutes: 5
+  7 settled on penalties: 1
+  7 won by the stronger side: 4
+  7 won by the weaker side: 2
+  1 rows seen: eng-2026
+simOneOffCups: green, 2600 checks (68 s)
+MUTANT carryseen: sim exit=0 (0 means it SURVIVED)

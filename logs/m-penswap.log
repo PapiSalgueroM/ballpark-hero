@@ -1,0 +1,36 @@
+rvmut1510: MUTATED penswap in src/lib/clubManager.ts
+  1 fleet: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher); Birmingham City (now, second tier watcher); Proof T
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  1 forced: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher); Birmingham City (now, second tier watcher); Proof 
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  1 doubles (the runners up took the cup place): 60
+  1 level matches on a pens row (the etall control needs one): 41
+  1 moved stubs: 10
+  1 participants (my club earned a place: played from the match half): 31
+  1 plain fields (champions v cup winners): 59
+  1 rollovers into another league (the afterswap control reads these): 24
+  1 rollovers of a manager outside the top flight: 70
+  4 super cups my club won (section 1 fleet): 12
+  5 bytes of a followed one slice: 22333
+  5 bytes of a stub: 78224
+  5 followed one slices measured: 200
+  5 stubs measured: 1640
+  7 season one followed: 50
+  7 season one stub seasonOne: 20
+  7 settled in 90 minutes: 159
+  7 settled on penalties: 41
+  7 won by the stronger side: 104
+  7 won by the weaker side: 95
+  1 rows seen: eng-2026
+  FAIL 5 trophies: Arsenal (now) seed 4 nocoach at s2-finish: my club did not win it and the cabinet holds 1 of this season
+  FAIL 5 trophies: Manchester City (now) seed 2 nocoach at s3-finish: my club did not win it and the cabinet holds 1 of this season
+  FAIL 5 trophies: Liverpool (now) seed 1 nocoach at s2-finish: my club won the cup and the cabinet holds 0 of this season
+  FAIL 5 trophies: Liverpool (now) seed 2 nocoach at s2-finish: my club did not win it and the cabinet holds 1 of this season
+  FAIL 5 trophies: Manchester City (now) seed 1 nocoach forced at s2-finish: my club did not win it and the cabinet holds 1 of this season
+  FAIL 5 trophies: Manchester City (now) seed 2 nocoach forced at s3-finish: my club did not win it and the cabinet holds 1 of this season
+  FAIL 5 trophies: Manchester City (now) seed 3 nocoach forced at s3-finish: my club won the cup and the cabinet holds 0 of this season
+  FAIL 5 trophies: Chelsea (now) seed 5 nocoach forced at s3-finish: my club did not win it and the cabinet holds 1 of this season
+  FAIL 5 trophies: Liverpool (now) seed 1 nocoach forced at s2-finish: my club won the cup and the cabinet holds 0 of this season
+simOneOffCups: 9 FAILURES of 54157 checks (372 s)
+simOneOffCups: 9 FAILURES of 54157 checks (372 s)
+MUTANT penswap: sim exit=1 (0 means it SURVIVED)

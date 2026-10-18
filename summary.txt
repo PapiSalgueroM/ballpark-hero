@@ -1,0 +1,5 @@
+m-norecovery exit=1 244s | MUTANT norecovery: sim exit=1 vitest exit=0 (0 and 0 means it SURVIVED)
+m-carryseen exit=0 68s | MUTANT carryseen: sim exit=0 (0 means it SURVIVED)
+m-leaguestarted exit=1 379s | MUTANT leaguestarted: sim exit=1 vitest exit=0 (0 and 0 means it SURVIVED)
+m-resswap exit=1 374s | MUTANT resswap: sim exit=1 (0 means it SURVIVED)
+m-penswap exit=1 373s | MUTANT penswap: sim exit=1 (0 means it SURVIVED)

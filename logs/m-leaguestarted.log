@@ -1,0 +1,11 @@
+rvmut1510: MUTATED leaguestarted in src/lib/clubManager.ts
+  FAIL 4 weighs: Everton seed 1: xp reads {"v":1,"xp":436,"points":{"tactics":0,"recruitment":0,"negotiation":0,"youth":0,"manManagement":0,"finance":0,"media":0},"graduatesSeen":0} without a minor trophy and {"v":1,"xp"
+simOneOffCups: 1 FAILURES of 17349 checks (244 s)
+
+[2m Test Files [22m [1m[32m55 passed[39m[22m[90m (55)[39m
+[2m      Tests [22m [1m[32m786 passed[39m[22m[2m | [22m[33m3 skipped[39m[90m (789)[39m
+[2m   Start at [22m 11:14:50
+[2m   Duration [22m 134.52s[2m (transform 5.34s, setup 3.21s, collect 24.40s, tests 245.13s, environment 21.53s, prepare 4.50s)[22m
+
+simOneOffCups: 1 FAILURES of 17349 checks (244 s)
+MUTANT leaguestarted: sim exit=1 vitest exit=0 (0 and 0 means it SURVIVED)
