@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unit-euro: node_modules/.bin/vitest run src/lib/euroAccess.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+unit-lib: node_modules/.bin/vitest run src/lib/clubManager*.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+unit-cm: node_modules/.bin/vitest run src/test/clubManager*.test.ts src/test/clubManager*.test.tsx src/test/cm*.test.ts src/test/cm*.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+euro-s3: WORLD_EURO_ONLY=3 WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs 2>&1 | tail -16; exit ${PIPESTATUS[0]}
+ctl-position: WORLD_EURO_CONTROL=position WORLD_EURO_BASE=b0236c4c WORLD_EURO_SEEDS=1,2 WORLD_EURO_SEARCH_SEEDS=1,2 node scripts/simWorldEuro.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simBoardObjectives: bash .rc/x/cmpMain.sh node scripts/simBoardObjectives.mjs
+simBoard: bash .rc/x/cmpMain.sh node scripts/simBoard.mjs
+simBoardAsks: bash .rc/x/cmpMain.sh node scripts/simBoardAsks.mjs
+simClubManagerScore: bash .rc/x/cmpMain.sh node scripts/simClubManagerScore.mjs
+simClubManager: bash .rc/x/cmpMain.sh node scripts/simClubManager.mjs
+simAcademy: bash .rc/x/cmpMain.sh node scripts/simAcademy.mjs
+boardVerdict: bash .rc/x/cmpMain.sh node scripts/simCmBoardVerdict.mjs --part=pure,fresh,saves,dailies
+calendar: bash .rc/x/cmpMain.sh node scripts/simClubManagerCalendar.mjs

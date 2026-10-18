@@ -1,0 +1,2 @@
+head exit 2: section pure needs CM_BOARD_BASE (its ladder oracle is the base engine); could not run
+main exit 2: section pure needs CM_BOARD_BASE (its ladder oracle is the base engine); could not run

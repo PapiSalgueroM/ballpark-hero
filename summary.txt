@@ -1,0 +1,14 @@
+unit-euro exit=0 6s |    Duration  4.61s (transform 2.45s, setup 86ms, collect 3.14s, tests 139ms, environment 505ms, prepare 290ms)
+unit-lib exit=0 38s |    Duration  36.58s (transform 4.75s, setup 2.05s, collect 12.70s, tests 69.72s, environment 13.37s, prepare 3.13s)
+tsc exit=0 114s | 
+unit-cm exit=0 156s |    Duration  155.62s (transform 8.87s, setup 3.25s, collect 32.49s, tests 250.02s, environment 18.43s, prepare 4.71s)
+simBoardObjectives exit=0 1s | main exit 0: simBoardObjectives: green. Every board talks like a board.
+simBoard exit=0 10s | main exit 0: ALL BOARD CHECKS PASSED
+simBoardAsks exit=0 105s | main exit 0: simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+ctl-position exit=1 171s | simWorldEuro: control position FIRED (9 failures, all its own)
+simClubManager exit=0 87s | main exit 0: ALL CLUB MANAGER SIMS PASSED
+simClubManagerScore exit=0 225s | main exit 0: ALL SEASON SCORE CHECKS PASSED
+boardVerdict exit=0 1s | main exit 2: section pure needs CM_BOARD_BASE (its ladder oracle is the base engine); could not run
+euro-s3 exit=0 477s | simWorldEuro: green, 511 checks, 0 failures
+calendar exit=0 68s | main exit 0: simClubManagerCalendar: all green
+simAcademy exit=0 717s |    IGNORED: 0.0 academy players in the squad, best of them 0.0, 0.0 of them 72 plus
