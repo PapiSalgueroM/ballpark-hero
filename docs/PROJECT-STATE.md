@@ -1,3 +1,11 @@
+## Round1419 product qualified and pushed, 2026-10-18
+
+Soccer Career drills now leave native Close, Back, Start/action buttons and the power slider their keyboard events. Body shortcuts, scoring, daily records and match behavior are held. One product guard line, no engine/host/save/data edit. Tested head `e8c08a91e7af2d4fa23e550d9730bc5d35fee274`, branch `codex/career-drill-keyboard`, draft [PR334](https://github.com/PapiSalgueroM/ballpark-hero/pull/334). See `docs/ROUND1419-CAREER-DRILL-KEYBOARD.md` for exact controls and retained failures.
+
+Remote run39120346421/job117654506333 passed real application types, normal/restored35 cases, exact26/20/6 fault controls, existing11 tests twice, actual-component native41 cases plus6 action subchecks, plain production build, all15 readers and all14 unchanged fatal page-size limits. Soccer Career834.0K/835K, Club Manager618.4K/619K, NFL490.2K/491K. Repeatable original run39119689293 matched complete unit evidence across two children before adoption. Final source closure and all57 push receipt are outside the repo after closing. This is not a full production-route, physical-device, AT or publication claim.
+
+Claude I retains protected Soccer Career/Manager/tournaments and actual release integration/main/publish. The exact20-file10:32UTC checkpoint was unchanged. READY PR310,331,332,333 and this334 still need I's release disposition; PR331 has the already-qualified six spectator/summer/dirty-money guide additions, so do not duplicate them. The quiz rendering finding remains handed back to the protected MoneyScreens owner. No new lease or tournament acceptance is inferred.
+
 ## Release BJ LIVE, 2026-10-17 21:51 EDT: Club Manager Hard and Legend, the Champions League you can follow in or out of it, match days that read like a scoreboard, a way out for dirty money in the US careers, and Soccer Career's summer cards
 
 Claude lane (session I). main d0c3ff58, deployment fec60776-a9ad-49aa-b4ea-04a590a233de, entry index-CWmc_M1Q.js (was
