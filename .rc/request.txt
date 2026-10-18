@@ -1,0 +1,7 @@
+# Release BJ triage rerun (rBJ-tr): kit lines copied byte for byte by label from .tmp-fx/bj
+#!serial
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+dry: git rev-parse HEAD; node .rc/x/mut1347fix.mjs --dry
+mut-fxcopy: node .rc/x/mut1347fix.mjs fxcopy && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 > /tmp/fxcopy.log 2>&1; s=$?; git checkout -- src scripts; grep -E "Tests .*(failed|passed)" /tmp/fxcopy.log | tail -1; [ $s = 1 ] && grep -q "the participant engine plays groupFixtures and settleTie from this module, one writing each" /tmp/fxcopy.log && grep -qE "Tests +.*[^0-9]1 failed" /tmp/fxcopy.log && echo "fxcopy FIRED as it must: the one writing check caught the engine copy" && exit 0; echo "fxcopy did not fire as it must (vitest exit $s)"; exit 1
+clean-after: git status --short src scripts | head -5; node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000
+ledger-again: node scripts/simCmLedgerBound.mjs
