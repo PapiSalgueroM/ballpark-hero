@@ -1,0 +1,27 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerContracts.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 108[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerPendingPopularity.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 110[2mms[22m[39m
+[90mstdout[2m | src/test/soccerCareerStatRewards.test.ts[2m > [22m[2mSoccer Career stat rewards and truthful Life previews[2m > [22m[2mstat rewards missing: earned bonuses reach the actual next-season boundary once
+[22m[39mRetained actual stat-boundary unit sources: /home/runner/work/ballpark-hero/ballpark-hero/tmp/career-stat-boundary-unit-uOnpib
+
+ [32m✓[39m src/test/soccerCareerStatRewards.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 922[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards missing: earned bonuses reach the actual next-season boundary once [33m 840[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoHonours.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 58[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerPendingMorale.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 110[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoWorldCupAlias.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoTransport.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 126[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerLifeChoicePreviews.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoRodriHonour.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/test/worldXiRespins.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 217[2mms[22m[39m
+ [32m✓[39m src/test/worldXiSummary.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1529[2mms[22m[39m
+   [33m[2m✓[22m[39m World XI ratings and club chemistry display[2m > [22mshows the exact card overall for every player after simulation [33m 487[2mms[22m[39m
+   [33m[2m✓[22m[39m World XI ratings and club chemistry display[2m > [22mshows the actual shared-club pairs behind the chemistry count [33m 354[2mms[22m[39m
+   [33m[2m✓[22m[39m World XI ratings and club chemistry display[2m > [22mshows zero shared clubs and clears the old detail on replay [33m 473[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[32m153 passed[39m[22m[90m (153)[39m
+[2m   Start at [22m 17:38:26
+[2m   Duration [22m 4.66s[2m (transform 1.56s, setup 692ms, collect 3.83s, tests 3.26s, environment 2.54s, prepare 633ms)[22m
+

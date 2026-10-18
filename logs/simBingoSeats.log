@@ -1,0 +1,40 @@
+Sports Bingo seats: pool 557, 33 conditions in 6 families
+
+1. EVERY SEAT ITS OWN CARD
+  540 tables dealt (two, three and four seats, three family picks, 60 seeds each): 1800 pairs of seats, pairs holding the same card in the same order 0
+  tables dealt a card count other than their seat count 0, seat views carrying a card other than the seat's own 0
+
+2. THE FAMILIES MEAN WHAT THEY SAY
+  63 family picks, 10 can fill a card on their own; 2835 cards dealt
+  cards outside the pick when it could fill 0; fallback flag wrong 0; topped up cards missing an allowed condition 0, with the wrong shortfall 0
+
+3. EVERY CARD IS COMPLETABLE FROM THE SHARED PACKS
+  1620 cards over 540 tables: incompletable from the table's packs 0, blacked out by a perfect seat on the table's packs 1620
+
+4. EVERY TURN ON THE TABLE'S PACK, AND THE VERDICT IS THE RULE
+  720 tables played (both goals, 6 lineups of two to four seats, 60 seeds each): verdicts off the rule 0, doneAt off the harness's count 0
+  tables that stopped on the wrong pack 0, seats that took the wrong turns 0
+  turns judged off the table's open pack: 0 of 8147 human turns (every square of the card tapped), 0 of 3031 CPU turns (replayed square for square)
+  decided by the goal 664, by the square count after ten packs 56, shared 13; tables where seats reached the goal with different counts 119, of which the fewest count seat had fewer squares than another finisher 78
+
+5. THE TEMPERS KEEP THEIR ORDER AT A TABLE
+  over 120 four seat tables on the full card goal: casual 9.4, sharp 17.9, ruthless 22.2 squares
+  the same tempers solo, on simSportsBingo's recipe: casual 9.5, sharp 18.0, ruthless 22.3
+  difficulties run 20, 15, 10 seconds a pack, the middle one the solo pace
+
+6. SAVES LOAD UNCHANGED, WRECKAGE LOADS AS NOTHING
+  the Round 428 daily record loads unchanged
+  a finished table and a table mid turn (7 squares marked, 2 players up) both round trip byte for byte
+  8 of 8 kinds of wreckage load as nothing
+
+7. THE HAND OVER HIDES EVERY CARD
+  BingoHandOver (51 lines, comments stripped) reads nothing of the deal
+  the page hands the hand over 6 props and none of them reads the deal
+
+8. ONE SEED, ONE TABLE
+  seed 31337 replays byte for byte across three seats and a verdict, seed 31338 differs
+
+9. THE SOLO DEAL IS THE ROUND 428 DEAL
+  1030 solo deals (730 daily dates from 2026-01-01, 300 more seeds) against the engine at d1032ac3: moved 0
+
+simBingoSeats: all checks passed
