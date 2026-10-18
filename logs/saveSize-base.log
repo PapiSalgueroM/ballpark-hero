@@ -1,0 +1,12 @@
+   46 men sent out on loan one at a time at Real Madrid season 3 and Athletic Club season 4: 0 still listed while away
+7) The loan desk is not a money pump: one loan out a season
+   Florian Wirtz at Liverpool, budget 137m: 1 of 25 loan out and recall cycles went through, net +3.2m (one loan fee is 6.4m), refused on attempt 2: "Florian Wirtz has already been out on loan once this season. One loan out a season."
+   a loan approach for him after the recall: refused
+   loanOutRefusal against loanOutPlayer: 78 men over three states, 0 disagreements
+   after the summer, season 2: he can go out on loan again true
+8) Every market door agrees with its reason, and talks refuse a released man or a man on loan at the door
+   2600 presses over 8 states and 81 cards: 1338 refused, 0 where the engine and the reason disagree
+   talks for Kylian Mbappé, released: opened false, reason "You released Kylian Mbappé. He will not sign for you again."
+   talks for Andriy Lunin, out on loan: opened false, reason "Andriy Lunin is already yours, out on loan at Sevilla. Bring him back from the loan desk instead."
+
+simClubManagerSaveSize: all sections green

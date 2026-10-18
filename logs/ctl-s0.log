@@ -1,0 +1,5 @@
+onesource exit=1 | simOneOffCups: control onesource FIRED (1 failures, all its own: eng-2026 decider stands on official (1 hosts), not an official and a press page on two hosts)
+wiki exit=1 | simOneOffCups: control wiki FIRED (1 failures, all its own: SM-0814: https://en.wikipedia.org/wiki/2026_FA_Community_Shield is a wiki)
+thinused exit=1 | simOneOffCups: control thinused FIRED (1 failures, all its own: eng-2015 is not verified and carries CM_ONE_OFF_ROWS.eng-2015)
+receipt exit=1 | simOneOffCups: control receipt FIRED (1 failures, all its own: the receipt does not carry the hash of scripts/data/cmOneOffFormats.json (4f6ad63a14bc45a15195aa64043ae981b378aa61e1923f9bca26192ae7c83a8
+notinworld exit=1 | simOneOffCups: control notinworld FIRED (3 failures, all its own: eng-2026-s1: the constant ["eng-2026","2025-26",["Arsenal","Torreense"],"the Principality Stadium in Cardiff"] is not its ledger row)

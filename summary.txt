@@ -1,0 +1,18 @@
+unit-lib exit=0 60s |    Duration  59.12s (transform 5.94s, setup 3.76s, collect 20.14s, tests 111.03s, environment 23.64s, prepare 5.40s)
+tsc exit=2 156s |   The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+ctl-s0 exit=0 2s | notinworld exit=1 | simOneOffCups: control notinworld FIRED (3 failures, all its own: eng-2026-s1: the constant ["eng-2026","2025-26",["Arsenal","Torreense"],"the Princip
+unit-cm exit=0 219s |    Duration  218.86s (transform 11.44s, setup 4.18s, collect 42.79s, tests 363.11s, environment 26.80s, prepare 6.23s)
+simOneOffCups exit=0 2765s | simOneOffCups: green, 124385 checks (2764 s)
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+dd-controls exit=0 51s | controls (each must be 1): bind=1 binddeadline=1 seed=1 seeddeadline=1 ledger=1 ledgerdeadline=1 rulesall=1 rulesstale=1 world=1 worlddeadline=1
+simCmShootoutOrder exit=0 35s | simCmShootoutOrder: all sections passed
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+saveSize exit=0 96s | simClubManagerSaveSize: all sections green
+saveSize-base exit=0 96s | simClubManagerSaveSize: all sections green
+slots exit=0 106s | simClubManagerSlots: all sections green
+simStatsCentre exit=0 5s | ALL STATS CENTRE CHECKS PASSED
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 61s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+dashscan exit=0 0s | no dash in the diff
+ctl-s35 exit=0 3350s | keep exit=1 | simOneOffCups: control keep FIRED (5725 failures, all its own: 5 slices: Arsenal (now) seed 1 coach at s1-rollover: worldComps holds uel dsc dscOld)
+ctl-s1 exit=0 3736s | seasononeplay exit=1 | simOneOffCups: control seasononeplay FIRED (1102 failures, all its own: 1 season one: Arsenal (now) seed 1 coach at start: a season one slice holds

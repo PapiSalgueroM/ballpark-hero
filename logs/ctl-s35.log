@@ -1,0 +1,3 @@
+stream exit=1 | simOneOffCups: control stream FIRED (80 failures, all its own: 3 Arsenal (now) seed 1 coach at s1-rollover: the draws differ (836 against 832))
+form exit=1 | simOneOffCups: control form FIRED (80 failures, all its own: 3 Arsenal (now) seed 1 coach at s1-rollover: the state differs in a key other than worldComps.dsc)
+keep exit=1 | simOneOffCups: control keep FIRED (5725 failures, all its own: 5 slices: Arsenal (now) seed 1 coach at s1-rollover: worldComps holds uel dsc dscOld)

@@ -1,0 +1,5 @@
+wrongyear exit=1 | simOneOffCups: control wrongyear FIRED (8431 failures, all its own: 1 row: Arsenal (now) seed 1 coach at s1-rollover: holds no super cup, its country plays eng-2026)
+nodouble exit=1 | simOneOffCups: control nodouble FIRED (288 failures, all its own: 1 entrants: Arsenal (now) seed 2 coach season 3: unfinished, the rule says Newcastle and Chelsea (a double))
+afterswap exit=1 | simOneOffCups: control afterswap FIRED (6 failures, all its own: 1 entrants: Everton (now) seed 1 nocoach season 3: unfinished, the rule says Manchester City and Fulham)
+etall exit=1 | simOneOffCups: control etall FIRED (44 failures, all its own: 1 extra time: Arsenal (now) seed 2 coach: extra time on a straight to penalties cup)
+seasononeplay exit=1 | simOneOffCups: control seasononeplay FIRED (1102 failures, all its own: 1 season one: Arsenal (now) seed 1 coach at start: a season one slice holds my club Arsenal, so the game would play it without me)
