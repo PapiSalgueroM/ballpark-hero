@@ -1,0 +1,4 @@
+src/lib/clubManager.ts: committed 5481f07a base 655104df 5481f07a REPRODUCES tree 2b7dfd3c (moved)
+src/lib/clubManagerSlots.ts: committed c899d2af base 655104df c899d2af REPRODUCES tree c899d2af (unchanged)
+scripts/simClubManagerSlots.mjs: committed c7bd9818 base 655104df c7bd9818 REPRODUCES tree c7bd9818 (unchanged)
+scripts/simClubManagerDecisions.mjs: committed 3383d016 base 655104df 3383d016 REPRODUCES tree 3383d016 (unchanged)
