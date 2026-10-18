@@ -1,0 +1,15 @@
+ M public/club-manager/index.html
+ M public/f1-constructor/index.html
+ M public/gauntlet-draft/index.html
+ M public/hockey-grid/index.html
+ M public/mlb-my-career/index.html
+ M public/nba-my-career/index.html
+ M public/nfl-connect-4/index.html
+ M public/nfl-gauntlet-draft/index.html
+ M public/nfl-my-career/index.html
+ M public/nhl-my-career/index.html
+ M public/perfect-season-nfl/index.html
+ M public/sitemap.xml
+ M public/soccer-career/index.html
+ M public/whats-new/index.html
+ M scripts/data/lastmod.json
