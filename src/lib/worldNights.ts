@@ -103,7 +103,8 @@ export function nightDateAt(dates: readonly CalDate[], slot: number): CalDate | 
 
 /** How many of a watched season's nights the save has passed: a night sits before calendar entry `slot`, so it is
  *  played once every entry before it has been (`week >= slot`), and a whole season counts every night. A prefix,
- *  and never fewer than `seen`, the nights shown before a mid season move. */
+ *  and never fewer than `seen`, the nights shown before a mid season move. A participant's own night entry at index
+ *  i is passed once its week is played, so its caller hands i + 1 (Club Manager's oneOffNightsDone). */
 export function nightsDoneAt(week: number, calendarLength: number, slots: readonly (number | null)[], seen = 0): number {
   let n = 0;
   if (week >= calendarLength) n = slots.length;

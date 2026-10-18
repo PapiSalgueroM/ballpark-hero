@@ -48,7 +48,7 @@ import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 /* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */
 import { keyedRng } from '@/lib/keyedRng';
 /* Round 1510: the shared night of a participant and the one match cups. Pure modules: no cycle. */
-import { placeNights } from '@/lib/worldNights';
+import { nightsDoneAt, placeNights } from '@/lib/worldNights';
 import type { CalDate } from '@/lib/calDate';
 import type { NightRef, NightResult } from '@/lib/worldNights';
 import { entrantsFrom, evaluateOneOff, myOneOffFixture, oneOffNightsOf, oneOffPartial, oneOffRowById, oneOffRowFor } from '@/lib/worldOneOffs';
@@ -13920,10 +13920,9 @@ export function oneOffNightPlaces(state: CareerState): { at: number; entry: bool
 export function oneOffNightsDone(state: CareerState): number {
   const places = oneOffNightPlaces(state);
   if (!places) return 0;
-  let n = 0;
-  if (state.week >= state.calendar.length) n = places.length;
-  else while (n < places.length && (places[n].entry ? state.week > places[n].at : state.week >= places[n].at)) n += 1;
-  return Math.max(n, Math.min(state.worldComps?.dsc?.seen ?? 0, places.length));
+  /* The shared count (worldNights.ts). A participant's night is its own entry, passed once that entry's week is
+     played, so it counts as sitting before the entry after it. */
+  return nightsDoneAt(state.week, state.calendar.length, places.map(p => (p.entry ? p.at + 1 : p.at)), state.worldComps?.dsc?.seen ?? 0);
 }
 
 /** The match a followed super cup plays: the watched Champions League's own (the home edge over the snapshot,
