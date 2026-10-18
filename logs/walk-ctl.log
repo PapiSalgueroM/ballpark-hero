@@ -1,0 +1,3 @@
+notile: last: playOneOffCups: control notile FIRED (3 findings of "no Super cup tile", 3 in all)
+swap: last: playOneOffCups: control swap DID NOT FIRE (0 findings: )
+controls (each must be 1): notile=1 swap=3

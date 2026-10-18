@@ -1,0 +1,4 @@
+  PASS  [6f] a stored value that is not a sport is ignored (first section soccer)
+  PASS  [6g] tapping Golf moves golf first (golf), remembers it (golf), and the page does not move (scroll 0 to 0, chips at 3762 to 3762)
+
+playHomeFold: green. The first thing on the page is something to play.

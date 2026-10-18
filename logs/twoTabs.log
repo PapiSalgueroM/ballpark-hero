@@ -1,0 +1,4 @@
+  ok    no jump: scrollY 120 and height 9396 before and after
+  ok    the notice: Reload 44 px, smallest text 16 px, no animation, no toast, Tab stayed inside true
+cases red: none; pictures in /home/runner/work/_temp/rc-out/files
+playTwoTabs: green at 320x640, 390x844, 1280x900
