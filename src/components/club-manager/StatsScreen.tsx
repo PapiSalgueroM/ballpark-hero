@@ -190,7 +190,7 @@ export function StatsScreen({ career }: StatsScreenProps) {
   /* An old save only splits matches played since the splits existed. Say so
      rather than letting a half empty Europe tab read like a bug. */
   const splitsPartial = career.squad.some(p => {
-    const total = (p.comp?.league?.apps ?? 0) + (p.comp?.cup?.apps ?? 0) + (p.comp?.ucl?.apps ?? 0);
+    const total = (p.comp?.league?.apps ?? 0) + (p.comp?.cup?.apps ?? 0) + (p.comp?.ucl?.apps ?? 0) + (p.comp?.other?.apps ?? 0);
     return (p.apps ?? 0) > total;
   });
 
