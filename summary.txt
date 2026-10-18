@@ -1,0 +1,1 @@
+carry exit=0 6s | PROBE CARRY: 2 moves keep an earned route that is not the joined club's
