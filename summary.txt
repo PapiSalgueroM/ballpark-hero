@@ -1,0 +1,4 @@
+old-off exit=0 80s | simCmOldCareersWorld: green, sections 1, 2 held (79s)
+old-lines exit=1 83s | simCmOldCareersWorld: RED, 7 failure(s) (section 1 1, section 2 6) (82s)
+moves-off exit=1 1211s | simCmWorldMoves: RED, sections 5 (66), 6 (270), 8 (54)
+moves-lines exit=1 1191s | simCmWorldMoves: RED, sections 5 (84), 6 (270), 8 (54)
