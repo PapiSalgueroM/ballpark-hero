@@ -1,0 +1,14 @@
+unit-lib exit=0 57s |    Duration  56.40s (transform 5.79s, setup 3.13s, collect 19.87s, tests 107.51s, environment 20.60s, prepare 4.23s)
+euro-s0 exit=0 1s | simWorldEuro: green, 675 checks, 0 failures
+simDailyDeals exit=0 10s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+dd-world exit=0 19s | controls (each must be 1): world=1 worlddeadline=1
+simCmShootoutOrder exit=1 42s | simCmShootoutOrder: 3 FAILURE(S)
+golden exit=0 0s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+tsc exit=0 153s | 
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+dashscan exit=0 0s | no dash in the diff
+simUclSeasonOne exit=0 22s | simUclSeasonOne: all green
+simHarnessAnchors exit=0 65s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simUclField exit=0 7s | simUclField: all green
+simWorldEditor exit=0 10s | simWorldEditor: 2478 checks, 0 failures
+unit-cm exit=0 212s |    Duration  211.72s (transform 11.51s, setup 3.64s, collect 40.17s, tests 344.47s, environment 23.17s, prepare 5.33s)

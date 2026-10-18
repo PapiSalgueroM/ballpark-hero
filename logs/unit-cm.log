@@ -1,0 +1,8 @@
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22mtwo goals in the last two clock places of a first half are both drawn, each with its own card, in order (seed 1773) [33m 2884[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22mSkip during the card of the last kick ends the half at once, on the engine score (seed 1742) [33m 1739[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m35 passed[39m[22m[90m (35)[39m
+[2m      Tests [22m [1m[32m447 passed[39m[22m[2m | [22m[33m3 skipped[39m[90m (450)[39m
+[2m   Start at [22m 04:12:06
+[2m   Duration [22m 211.72s[2m (transform 11.51s, setup 3.64s, collect 40.17s, tests 344.47s, environment 23.17s, prepare 5.33s)[22m
+

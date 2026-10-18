@@ -1,0 +1,8 @@
+ [32m✓[39m src/lib/clubManagerReportAge.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 3227[2mms[22m[39m
+   [33m[2m✓[22m[39m reported historical Club Manager retirement[2m > [22mclassifies the first simulated Messi contract expiry separately from retirement and renewal [33m 2960[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m23 passed[39m[22m[90m (23)[39m
+[2m      Tests [22m [1m[32m442 passed[39m[22m[90m (442)[39m
+[2m   Start at [22m 04:12:06
+[2m   Duration [22m 56.40s[2m (transform 5.79s, setup 3.13s, collect 19.87s, tests 107.51s, environment 20.60s, prepare 4.23s)[22m
+
