@@ -9,3 +9,5 @@ Runtime stays in remote GitHub Actions under the ordinary offline preload. Actua
 The PerfectLineup name-query candidate was rejected before claim: its route is retired and both affected leaves are unreachable on main775. No route restoration or dormant-source product edit is part of1431.
 
 Status: claim only. Original runtime, pixel review and admission remain owed. No product change adopted.
+
+Original proof attempt: actual product source stays exactly PR341. Current15 and unchanged historical75/old39/full1425 remain separate regressions. Browser normal arm declares20 actual contexts with42 computed text pairs each;320 selected Light failures and520 healthy pairs are predictions to verify, not measured results. Fixed controls are present as source only and refuse until the original is admitted. No product adoption, test result or release claim.
