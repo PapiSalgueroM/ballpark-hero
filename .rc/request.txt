@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+playOneOffCups: node scripts/playOneOffCups.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+po-notile: PLAY_ONEOFF_CONTROL=notile node scripts/playOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+po-swap: PLAY_ONEOFF_CONTROL=swap node scripts/playOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+po-norowline: PLAY_ONEOFF_CONTROL=norowline node scripts/playOneOffCups.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+po-hubweek: PLAY_ONEOFF_CONTROL=hubweek node scripts/playOneOffCups.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+po-tileweek: PLAY_ONEOFF_CONTROL=tileweek node scripts/playOneOffCups.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
