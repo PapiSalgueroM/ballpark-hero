@@ -4,7 +4,7 @@ import { Trophy, Star, Medal, Flame, ArrowLeft, UserPlus } from 'lucide-react';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
 import { useDailyLegend } from '@/hooks/useDailyLegend';
 import { useAuth } from '@/contexts/AuthContext';
-import { AuthModal } from '@/components/auth/AuthModal';
+import { AccountDialogOnDemand as AuthModal } from '@/components/auth/AccountDialogOnDemand';
 import SharedResultCard from '@/components/game/SharedResultCard';
 
 const DailyLegendOverlay = lazy(() => import('./DailyLegendOverlay').then(module => ({ default: module.DailyLegendOverlay })));

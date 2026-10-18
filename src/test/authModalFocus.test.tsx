@@ -40,6 +40,7 @@ async function openFrom(name: 'Log In' | 'Sign Up') {
   const opener = screen.getByRole('button', { name });
   opener.focus();
   fireEvent.click(opener);
+  await screen.findByRole('textbox', { name: 'Email' });
   const dialog = await screen.findByRole('dialog');
   await waitFor(() => expect(dialog).toContainElement(document.activeElement as HTMLElement));
   expect(screen.getByRole('textbox', { name: 'Email' })).toHaveFocus();
