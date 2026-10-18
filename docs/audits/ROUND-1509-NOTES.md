@@ -70,6 +70,22 @@ dukb-handoff/2026-10-10/briefs/brief-1509.md. Kept at every push; the builder's 
 - Dailies: with the options object a Hot Seat start is a median 69.8 ms faster than with both competitions open.
 - The board: simCmUnseededWorld's Hot Seat day of 2026-10-27 (Nottingham Forest) scores 34 against the base's 28,
   one objective more under the rule's grading; its tree arms revert both of the round's lines.
+- The proof: 190 journeys (60 participants, 130 watchers, both coaches, eval and old saves) byte equal to main
+  77556430 on every step with worldComps.uel stripped and the two named lines reverted.
+- Weight on the final engine: /club-manager 620.7K, /manager-hot-seat 637.8K, /deadline-day 647.3K, +2.3K each over
+  Release BJ, inside the lead's +3.0K.
+
+## Recordings and harnesses that move, attributed
+
+- scripts/data/cmLeagueRulesDigest.json (simCmLeagueRules, 27 modern saves): with every state hashed without
+  worldComps.uel, 15 remain; with the holder line reverted too, 1 (bundesliga's summary, the board's rung); with the
+  rung line reverted too, every part green. Not retaken: the lead retakes it at the join.
+- simCmOldCareersWorld compares the tree with its merge base with main, so on this branch it compares the round with
+  main: 7 failures, all the followed Europa League's key at load and in the first save (green with the four opens
+  and both lines taken out; the same 7 with the lines alone taken out).
+- simCmWorldMoves is red on main (sections 5, 6, 8); with the opens and both lines taken out its log equals main's
+  line for line; the round adds 18 lines to section 5 (the key at load) and, through the holder and the rung, one to
+  section 8 and a few AI deal lines.
 
 ## Owed
 
@@ -80,4 +96,7 @@ dukb-handoff/2026-10-10/briefs/brief-1509.md. Kept at every push; the builder's 
   the accepted +3.0K); scripts/data/cmLeagueRulesDigest.json moves by the new key (named, not retaken); the saved
   What's New page; the participant's own Europa League nights (a later number); simCmBoardVerdict's kit
   (x/minus1335.sh no longer forms a base even on main 77556430: taking Round 1335 out conflicts in
-  ClubManagerSeasonSummary.tsx, clubManager.ts and clubManagerCalendar.ts, so the harness exits 2 on main and here).
+  ClubManagerSeasonSummary.tsx, clubManager.ts and clubManagerCalendar.ts, so the harness exits 2 on main and here);
+  simCmOldCareersWorld and simCmWorldMoves read at the join as attributed above; the Round 1081 pin
+  (scripts/fixtures/managerAppealIsolation1081/manifest.json) retaken again, last, if main changes clubManager.ts
+  before this merges.
