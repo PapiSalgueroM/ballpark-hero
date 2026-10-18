@@ -1,0 +1,4 @@
+treeWithoutMerge: 4916e59dbed96fde8cc8969c4ed440a6f0b2ccc4, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+base ea6702bc1635e5d7a2109d553724ec61e9c382c3
+unseeded exit 0: simCmUnseededWorld: green. 49 old saves with no deal play byte equal to ea6702bc (state, draws and saved bytes at every step), 49 with every deal play byte equal to it up to their first summer and hold the living world's
+contCmp exit 0: contCmp1509: green, the log equals main line for line

@@ -1,0 +1,3 @@
+unseeded-cont exit=0 313s | contCmp exit 0: contCmp1509: green, the log equals main line for line
+readersC exit=0 419s | readers: 10 run, 0 red on this tree and not as on main
+readersB exit=0 854s | readers: 8 run, 0 red on this tree and not as on main

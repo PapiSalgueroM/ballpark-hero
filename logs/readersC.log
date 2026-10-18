@@ -1,0 +1,11 @@
+simManagerHotSeat: head exit 0 | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries o
+simDeadlineDay: head exit 0 | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registr
+simCmNoSack: head exit 0 | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
+simCmRetire: head exit 0 | simCmRetire: all 18 checks passed (record, oldsave, pens, base, retire, dashes)
+simDailyClubPool: head exit 0 | simDailyClubPool: all sections green
+simSaveFence: head exit 0 | simSaveFence: all green (tabs, source, fleet)
+simUclField: head exit 0 | simUclField: all green
+simWorldEditor: head exit 0 | simWorldEditor: 2478 checks, 0 failures
+simUclSeasonOne: head exit 0 | simUclSeasonOne: all green
+simCmShootoutOrder: head exit 0 | simCmShootoutOrder: all sections passed
+readers: 10 run, 0 red on this tree and not as on main

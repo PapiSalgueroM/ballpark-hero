@@ -1,0 +1,9 @@
+simBoardObjectives: head exit 0 | simBoardObjectives: green. Every board talks like a board.
+simBoard: head exit 0 | ALL BOARD CHECKS PASSED
+simBoardAsks: head exit 0 | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+simClubManagerScore: head exit 0 | ALL SEASON SCORE CHECKS PASSED
+simClubManagerCalendar: head exit 0 | simClubManagerCalendar: all green
+simAcademy: head exit 0 | ALL ACADEMY CHECKS PASSED
+simClubManagerSaveSize: head exit 0 | simClubManagerSaveSize: all sections green
+simClubManagerSlots: head exit 0 | simClubManagerSlots: all sections green
+readers: 8 run, 0 red on this tree and not as on main
