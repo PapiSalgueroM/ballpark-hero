@@ -524,14 +524,24 @@ function namesOf(career: CareerState, row: OneOffRow): { league: string; cup: st
   return { league: top?.name ?? 'league', cup: (top && leagueRulesOf(top.id).cup) || 'cup' };
 }
 
-/** This season's super cup for the Cups panel's card, read off the save. A country with no row says so. Pure and
+/** This season's super cup for the Cups panel's card, read off the save. A country with no row says it is not
+ *  confirmed (a stub line, no name). Pure and
  *  read only: the evaluation is memoised and shared, so it is copied here and never written into. */
 export function superCupView(career: CareerState): SuperCupView {
   const era = !!career.eraId && isHistoricEra(career.eraId);
   const slice = career.worldComps?.dsc && career.worldComps.dsc.s === career.season ? career.worldComps.dsc : null;
   const row = slice ? oneOffRowById(slice.row) : oneOffRowOf(career);
   const base = { clubs: [], matches: [], mine: false, seasonOne: career.season === 1, era };
-  if (!row) return { ...base, name: null, partial: oneOffPartialOf(career), format: '', ground: '' };
+  /* No row: the game has not proved this country's super cup (no 'none' row stands on two families either), so
+     it says it is not confirmed and plays nothing, never that there is none. */
+  if (!row) {
+    const partial = oneOffPartialOf(career);
+    const where = `this country's super cup${era ? ' in this era' : ''}`;
+    const stub = partial
+      ? `The game looked for ${where} and could not confirm it on two sources, so none is followed or played here.`
+      : `The game has not confirmed ${era ? 'a super cup for this country in this era' : 'a super cup for this country'} yet, so none is followed or played here.`;
+    return { ...base, name: null, partial, format: '', ground: '', stub };
+  }
   const view: SuperCupView = { ...base, name: row.name, partial: false, format: formatWords(row), ground: '' };
   if (!slice) { view.stub = 'It opens next summer, when this season is done.'; return view; }
   if (slice.skip) {

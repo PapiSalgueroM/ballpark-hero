@@ -546,7 +546,7 @@ const TAB_NAMES: Record<Tab, (v: WorldCompView) => string> = {
 function SuperCupCard({ view, myClub, onClub }: { view: SuperCupView; myClub: string; onClub: (c: string) => void }) {
   return (
     <div className="bg-card border border-border rounded-2xl p-3 space-y-2" data-cm-super-cup={view.stub ? 'stub' : view.winner ? 'done' : 'ahead'}>
-      <div className="text-sm font-bold font-display text-foreground break-words">{view.name}</div>
+      <div className="text-sm font-bold font-display text-foreground break-words">{view.name ?? 'Not confirmed'}</div>
       {view.format && <div className="text-xs text-muted-foreground">{view.format}</div>}
       {view.ground && <div className="text-xs text-muted-foreground">{view.ground}</div>}
       {view.stub && <div className="text-xs text-foreground" data-cm-super-cup-stub>{view.stub}</div>}
@@ -571,7 +571,7 @@ function SuperCupCard({ view, myClub, onClub }: { view: SuperCupView; myClub: st
           {m.winner && <div className="text-xs text-muted-foreground">{m.winner} won{m.pens ? ' on penalties' : m.aet ? ' after extra time' : ''}.</div>}
         </div>
       ))}
-      {view.seasonOne && !view.stub && !view.mine && <div className="text-xs text-muted-foreground">The game plays this one: you follow it from outside, and play in it from a summer your club earns a place.</div>}
+      {view.name && view.seasonOne && !view.stub && !view.mine && <div className="text-xs text-muted-foreground">The game plays this one: you follow it from outside, and play in it from a summer your club earns a place.</div>}
       {view.era && view.name && <div className="text-xs text-muted-foreground">This save keeps its era's super cup every season.</div>}
     </div>
   );

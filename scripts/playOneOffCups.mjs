@@ -7,17 +7,22 @@
  *       engine's own evaluation gives, word for word.
  *   (b) a 2026-27 Arsenal career in season one: the tile and the card say the club's place was settled before the
  *       manager arrived, and show no score.
- *   (c) a 2005-06 era career (its row not confirmed): the tile says so.
+ *   (c) a 2005-06 era career (its row not confirmed) and a 2026-27 Liga MX career (no row looked at): the tile says
+ *       Not confirmed, never that there is none, and the card is titled, says why, and shows no match and no
+ *       promise of a cup the game never plays.
  *   (d) a 2026-27 Arsenal career rolled into season two with the cup final handed to Arsenal (crafted, so the
  *       Shield is certain): the hub names the FA Community Shield and the other club as the next match and still
  *       says the season has not started; the Super cup tile says the club is in it.
  *   (e) the same save after the Shield, on the first stream of twelve where Arsenal won it: the hub's Cabinet
- *       names it, and (f) the stats centre has its Super cups view.
+ *       names it, the hub still says the season has not started and the League tile reads Not started (no league
+ *       entry is played yet), and (f) the stats centre has its Super cups view.
  *   (e) on every view: scrollY and the document height the same before a tile and after its back button, every
  *       control at least 44 px tall, no text under 12 px, no sideways scroll, nothing cut or overlapping.
  * Pictures of every view go into $RC_OUT/shots (dsc-<case>-<width>.png) to be looked at.
  * CONTROLS (PLAY_ONEOFF_CONTROL; each builds its own dist from a patched copy of one line, put back after): notile
- * (the Super cup tile taken out: (a) red), swap (the card shows the score the wrong way round: (a) red). Not a
+ * (the Super cup tile taken out: (a) red), swap (the card shows the score the wrong way round: (a) red), norowline
+ * (the no-row card's reason taken out: (c) red), hubweek and tileweek (the hub's header line and the League tile
+ * back on the week 0 rule: (e) red). Each runs only the case it targets. Not a
  * control here, with the reason: `ahead` (a result shown a week early) needs a night after the season's first entry,
  * and the only verified row is played before it on every calendar, so there is no earlier week to show it in.
  * Exit 0 green, 1 a finding (or a control that fired), 2 could not run. */
@@ -38,12 +43,24 @@ fs.mkdirSync(SHOTS, { recursive: true });
 const cannot = why => { console.log(`playOneOffCups: could not run. ${why}`); process.exit(2); };
 if (!process.env.CI) cannot('it builds and serves the site, so it runs on a runner only (CI is not set)');
 const CONTROLS = {
-  notile: { file: 'src/components/club-manager/WorldCompScreen.tsx',
+  notile: { file: 'src/components/club-manager/WorldCompScreen.tsx', cases: ['a'],
     from: `<Tile icon="🛡️" title="Super cup" value={dscStatus.value} sub={dscStatus.sub} testId="dsc" onClick={() => go({ ...HOME, at: 'dsc' })} />`,
     to: '', finding: 'no Super cup tile' },
-  swap: { file: 'src/lib/clubManagerWorldView.ts',
+  swap: { file: 'src/lib/clubManagerWorldView.ts', cases: ['a'],
     from: '        homeGoals: got?.hg ?? null, awayGoals: got?.ag ?? null,',
     to: '        homeGoals: got?.ag ?? null, awayGoals: got?.hg ?? null,', finding: 'the card shows' },
+  /* Fix-1510: the no-row card's reason taken out (it was an empty box). */
+  norowline: { file: 'src/lib/clubManagerWorldView.ts', cases: ['c'],
+    from: "    return { ...base, name: null, partial, format: '', ground: '', stub };",
+    to: "    return { ...base, name: null, partial, format: '', ground: '' };", finding: 'the no-row card does not say why' },
+  /* Fix-1510: the hub's header back on the week 0 rule (a night starts the season). */
+  hubweek: { file: 'src/pages/ClubManager.tsx', cases: ['e'],
+    from: "          <span>{!leagueStarted(c) ? 'Season not started' : `#${g.myPosition || '-'} in league`}</span>",
+    to: "          <span>{c.week === 0 ? 'Season not started' : `#${g.myPosition || '-'} in league`}</span>", finding: 'the hub says it has after the Shield' },
+  /* Fix-1510: the League tile back on the week 0 rule. */
+  tileweek: { file: 'src/pages/ClubManager.tsx', cases: ['e'],
+    from: '                value={leagueTileValue(leagueStarted(c) ? c.week : 0, g.myPosition)}',
+    to: '                value={leagueTileValue(c.week, g.myPosition)}', finding: 'the League tile reads' },
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`unknown control ${CONTROL}`);
 
@@ -81,8 +98,17 @@ const saves = {};
   const club = M3.cm.ERA_LEAGUES.era2005?.find(l => /premier/.test(l.id))?.clubs.find(c => c === 'Everton') ?? 'Everton';
   const c = tape(0x1510c, () => M3.cm.startCareer(club, 'era2005')).value;
   if (c.worldComps?.dsc) cannot('the 2005 era save holds a super cup, its row is not confirmed');
-  saves.c = { items: saved(M3, c), club };
+  saves.c = { items: saved(M3, c), club, key: 'era', label: '2005' };
   console.log(`(c) ${club} 2005: no super cup (the era's row is partial)`);
+  /* Fix-1510 (read lens, major B): a country of today's world the round did not look at (Mexico), whose card was an
+     empty box with the season one line. */
+  const M4 = await E.fresh();
+  const mx = M4.cm.REAL_LEAGUES.find(l => /mx/i.test(l.id));
+  if (!mx) cannot('no Liga MX league in REAL_LEAGUES');
+  const c2 = tape(0x1510c2, () => M4.cm.startCareer(mx.clubs[0])).value;
+  if (c2.worldComps?.dsc) cannot(`${mx.clubs[0]} holds a super cup, Mexico has no row`);
+  saves.c2 = { items: saved(M4, c2), club: mx.clubs[0], key: 'now', label: '2026-27' };
+  console.log(`(c) ${mx.clubs[0]} 2026-27: no super cup (no row for Mexico)`);
 }
 
 /* ---------- the build: the served one, or a control's own ---------- */
@@ -237,15 +263,26 @@ async function caseB(browser, size, tag) {
   } finally { await ctx.close(); }
 }
 async function caseC(browser, size, tag) {
-  const where = `(c) ${saves.c.club} 2005 ${tag}`;
-  const { ctx, page, errors } = await open(browser, saves.c.items, size);
-  try {
-    if (!(await toCups(page, where))) return;
-    const tile = await textOf(page, '[data-cm-world-tile="dsc"]');
-    if (!tile.includes('Not confirmed')) finding(where, `the tile reads "${tile.slice(0, 160)}"`);
-    await shot(page, `dsc-c-tiles-${tag}`);
-    if (errors.length) finding(where, `page errors: ${errors.slice(0, 2).join(' | ')}`);
-  } finally { await ctx.close(); }
+  for (const sv of [saves.c, saves.c2]) {
+    const where = `(c) ${sv.club} ${sv.label} ${tag}`;
+    const { ctx, page, errors } = await open(browser, sv.items, size);
+    try {
+      if (!(await toCups(page, where))) continue;
+      const tile = await textOf(page, '[data-cm-world-tile="dsc"]');
+      if (!tile.includes('Not confirmed') || /none here/i.test(tile)) finding(where, `the tile reads "${tile.slice(0, 160)}"`);
+      await shot(page, `dsc-c-tiles-${sv.key}-${tag}`);
+      /* The card: titled, the reason given, no match and no promise of a cup the game never plays. */
+      await roundTrip(page, where, async () => {
+        await shot(page, `dsc-c-card-${sv.key}-${tag}`);
+        const card = await textOf(page, '[data-cm-super-cup]');
+        if (!card.includes('none is followed or played here')) finding(where, `the no-row card does not say why (it reads: ${card.slice(0, 200)})`);
+        if (!card.startsWith('Not confirmed')) finding(where, `the no-row card has no title (it reads: ${card.slice(0, 120)})`);
+        if (card.includes('The game plays this one')) finding(where, 'the no-row card says the game plays a cup it never plays');
+        if (await count(page, '[data-cm-super-cup-match]')) finding(where, 'the no-row card shows a match');
+      });
+      if (errors.length) finding(where, `page errors: ${errors.slice(0, 2).join(' | ')}`);
+    } finally { await ctx.close(); }
+  }
 }
 
 
@@ -303,6 +340,11 @@ async function caseE(browser, size, tag) {
     /* innerText carries the CSS case (the hub's small headings are upper case), so the words are read lower case. */
     const text = ((await page.locator('#root').innerText().catch(() => '')) || '').replace(/\s+/g, ' ').toLowerCase();
     if (!text.includes('cabinet') || !text.includes('fa community shield')) finding(where, 'the hub does not show the Shield in the cabinet');
+    /* Fix-1510 (run lens, major 2; the critic's correction 13): after the Shield and before the league opener the
+       season has not started, so the hub reads no league position off an unplayed table. */
+    if (!text.includes('season not started')) finding(where, 'the season has not started, and the hub says it has after the Shield');
+    const league = ((await page.getByRole('button').filter({ has: page.getByText('League', { exact: true }) }).first().innerText().catch(() => '')) || '').replace(/\s+/g, ' ');
+    if (!/not started/i.test(league) || /#\s*\d/.test(league)) finding(where, `the League tile reads "${league.slice(0, 80)}" after the Shield, before the league opener`);
     await shot(page, `dsc-e-hub-${tag}`);
     /* (f) the stats centre's Super cups view, once one is played. */
     const ok = await press(page, page.getByRole('button').filter({ has: page.getByText('Stats', { exact: true }) }), 15000);
@@ -316,10 +358,10 @@ async function caseE(browser, size, tag) {
 }
 const browser = await chromium.launch();
 try {
+  const CASES = { a: caseA, b: caseB, c: caseC, d: caseD, e: caseE };
   for (const size of SIZES) {
     const tag = String(size[0]);
-    await caseA(browser, size, tag);
-    if (!CONTROL) { await caseB(browser, size, tag); await caseC(browser, size, tag); await caseD(browser, size, tag); await caseE(browser, size, tag); }
+    for (const k of CONTROL ? CONTROLS[CONTROL].cases : Object.keys(CASES)) await CASES[k](browser, size, tag);
   }
 } finally {
   await browser.close();
