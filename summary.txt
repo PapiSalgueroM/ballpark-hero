@@ -1,0 +1,3 @@
+eras-head exit=0 1497s | eras head exit 0 in 1497 s: ALL ERA AND AGEING CHECKS PASSED
+eras-off exit=0 1509s | eras off exit 0 in 1508 s: ALL ERA AND AGEING CHECKS PASSED
+eras-main exit=0 1521s | eras main exit 0 in 1520 s: ALL ERA AND AGEING CHECKS PASSED
