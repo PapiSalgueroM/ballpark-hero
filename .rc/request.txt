@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1509.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+final-watch: node scripts/proofWorldUclFleet.mjs --base 77556430 --fleet watchers --coach both --eval --old-saves --strip worldComps.uel --uel-holder-off --euro-board-off > /tmp/fw.log 2>&1; s=$?; echo "ok journeys $(grep -c '^ok ' /tmp/fw.log)"; grep -E "^  FAIL|old saves|^journeys|proofWorld" /tmp/fw.log | head -8 | cut -c1-400; exit $s
+final-part: node scripts/proofWorldUclFleet.mjs --base 77556430 --fleet participants --coach both --eval --old-saves --strip worldComps.uel --uel-holder-off --euro-board-off > /tmp/fp.log 2>&1; s=$?; echo "ok journeys $(grep -c '^ok ' /tmp/fp.log)"; grep -E "^  FAIL|old saves|^journeys|proofWorld" /tmp/fp.log | head -8 | cut -c1-400; exit $s
+lr-head: node scripts/simCmLeagueRules.mjs > /tmp/lrh.log 2>&1; s=$?; grep -c "differs" /tmp/lrh.log; tail -3 /tmp/lrh.log; exit $s
+lr-all3: X=$PWD/.rc/x/lrAttr.mjs; R=/tmp/lr3; git worktree add -q $R HEAD && ln -s $PWD/node_modules $R/node_modules && node $X $R strip,holder,board && cd $R && node scripts/simCmLeagueRules.mjs > /tmp/lr3.log 2>&1; s=$?; tail -4 /tmp/lr3.log; exit $s
+lr-strip: X=$PWD/.rc/x/lrAttr.mjs; R=/tmp/lrs; git worktree add -q $R HEAD && ln -s $PWD/node_modules $R/node_modules && node $X $R strip && cd $R && node scripts/simCmLeagueRules.mjs > /tmp/lrs.log 2>&1; s=$?; grep "FAIL" /tmp/lrs.log | head -16 | cut -c1-160; tail -2 /tmp/lrs.log; exit $s
