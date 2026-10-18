@@ -151,11 +151,13 @@ console.log('1) Every club in the field has a reason to be there');
     /* Round 1502 (E5, the critic's correction 4): the holder is the engine's own uclHolderOf, my final or the
        watched one, never a second writing of it here. */
     const holder = cm.uclHolderOf(fin);
+    /* Round 1509 (ruling 1k): and the Europa League's winner, the engine's own uelHolderOf, admitted the same way. */
+    const uelHolder = cm.uelHolderOf ? cm.uelHolderOf(fin) : null;
     /* A club's best reason: its finishing place in its own league. The top up
        rule reaches at most eight places past the qualifying cut. */
     for (const name of next.uclField) {
       checked += 1;
-      if (name === holder) continue;
+      if (name === holder || name === uelHolder) continue;
       let reason = null;
       for (const { lg, rows } of tables.values()) {
         const at = rows.findIndex(r => r.club === name);
@@ -184,6 +186,7 @@ console.log('2) The club that just missed is really out');
     /* Round 1502 (E5, the critic's correction 4): the holder is the engine's own uclHolderOf, my final or the
        watched one, never a second writing of it here. */
     const holder = cm.uclHolderOf(fin);
+    const uelHolder = cm.uelHolderOf ? cm.uelHolderOf(fin) : null;
     const tables = finalTables(fin);
     for (const { lg, rows } of tables.values()) {
       const slots = uclPlacesIn(lg);
@@ -195,7 +198,7 @@ console.log('2) The club that just missed is really out');
          through its finishing position. */
       const justMissed = rows[slots];
       if (!justMissed) continue;
-      if (field.has(justMissed.club) && justMissed.club !== holder) {
+      if (field.has(justMissed.club) && justMissed.club !== holder && justMissed.club !== uelHolder) {
         /* Allowed only if the field needed topping up at all. A full field
            built purely from qualifying places must not contain him. */
         const qualifiers = [...tables.values()].reduce((a, t) => a + Math.min(uclPlacesIn(t.lg), t.rows.length), 0);

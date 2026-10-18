@@ -79,6 +79,8 @@ export function g8DrawRules(year: number): { assocApart: boolean; bans: readonly
 const byText = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
 
 export type WorldCompFormat = 'g8' | 'l36';
+/** Round 1509: the competitions a save follows from outside, one slice each (CareerState.worldComps). */
+export type WorldCompKey = 'ucl' | 'uel';
 export type WorldKoRound = 'PO' | 'R16' | 'QF' | 'SF' | 'F';
 
 /**
@@ -103,6 +105,11 @@ export interface WorldCompSlice {
   clashes?: number;
   /** The holder at the draw (top of pot one) when the save knew one. */
   holder?: string;
+  /** Round 1509, the Europa League only: how each entrant got in, one character per club in `clubs` order (the
+   *  codes of euroAccess.ts's EuroRoute), and the route the save's own club earned by the same rule (it is
+   *  never an entrant yet). Shown by the screen, read by no function of this engine. */
+  via?: string;
+  earned?: string;
   /** Nights already shown when the slice was carried across a mid season job move (Round 1502): the new club's
    *  calendar can sit behind the old one, and a night once shown is never taken back. */
   seen?: number;

@@ -7,14 +7,17 @@ import { careerLeagueOf, uclGroupRule, worldUclFormatOf } from '@/lib/clubManage
 import { shortDate, type CalDate } from '@/lib/clubManagerCalendar';
 import { uclGroupFootnote } from '@/lib/clubManagerUclGroups';
 import { leaguePhaseFootnote } from '@/lib/uclLeaguePhase';
-import type { WorldKoRound } from '@/lib/worldCompetition';
+import type { WorldCompKey, WorldKoRound } from '@/lib/worldCompetition';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import {
-  clubRun, firstStageNights, nextNight, nightLabel, ordinal, roundPlural, worldUclStatus, worldUclView,
+  clubRun, firstStageNights, nextNight, nightLabel, ordinal, realFifthNation, roundPlural, routeWords, worldCompView, worldUclStatus, worldUelStatus,
   type WorldCompView, type WorldViewNight, type WorldViewTie,
 } from '@/lib/clubManagerWorldView';
 
 /**
+ * Round 1509: a third tile, the Europa League, followed every season of today's world, shown by the same screen
+ * by key (the Champions League's own words and its participant cards stay the Champions League's).
+ *
  * Round 1503: the Cups panel as two tiles (the domestic cup and the Champions League), and the Champions League
  * screen behind the second one: Table (Groups in the eras), Matchdays, Knockouts and Final, and any club's run in
  * it. The same screen for the club in it and the club watching it from outside (clubManagerWorldView.ts reads
@@ -28,8 +31,10 @@ import {
  */
 
 type Tab = 'table' | 'matchdays' | 'knockouts' | 'final';
-interface Nav { at: 'tiles' | 'cup' | 'ucl'; tab: Tab | null; run: string | null; night: number | null; ko: WorldKoRound | null; group: string | null }
+interface Nav { at: 'tiles' | 'cup' | 'ucl' | 'uel'; tab: Tab | null; run: string | null; night: number | null; ko: WorldKoRound | null; group: string | null }
 const HOME: Nav = { at: 'tiles', tab: null, run: null, night: null, ko: null, group: null };
+/** Round 1509: the competitions this screen shows, by key. */
+const COMP_NAME: Record<WorldCompKey, string> = { ucl: 'Champions League', uel: 'Europa League' };
 const depthOf = (n: Nav): number => (n.at === 'tiles' ? 0 : n.run ? 3 : n.tab ? 2 : 1);
 
 /* The club page replaces the whole hub (ClubManager.tsx draws ClubDetailScreen alone), which unmounts this panel.
@@ -189,6 +194,8 @@ const ROUND_PILL: Record<WorldKoRound, string> = { PO: 'Play-offs', R16: 'Last 1
 
 interface ViewProps {
   career: CareerState;
+  /** Round 1509: which competition (the Champions League or the Europa League). */
+  comp: WorldCompKey;
   view: WorldCompView;
   nav: Nav;
   go: (next: Nav) => void;
@@ -197,7 +204,7 @@ interface ViewProps {
   bracketCard?: ReactElement;
 }
 
-function TableView({ career, view, nav, go, onClub, groupsCard }: ViewProps) {
+function TableView({ career, comp, view, nav, go, onClub, groupsCard }: ViewProps) {
   if (view.mode === 'in') return <div className="space-y-2">{withClubHandler(groupsCard, onClub)}</div>;
   const played = view.nightsDone > 0;
   if (view.groups) {
@@ -221,16 +228,17 @@ function TableView({ career, view, nav, go, onClub, groupsCard }: ViewProps) {
         <span>25th to 36th: out</span>
       </div>
       <TableRows rows={view.table ?? []} format="l36" myClub={view.myClub} onClub={onClub} played={played} />
-      <p className="text-xs text-muted-foreground px-1">{leaguePhaseFootnote()}</p>
+      {/* fix-1509 minor 15: the Europa League's own order (ledger row U6) is not checked, so its table says whose it uses. */}
+      <p className="text-xs text-muted-foreground px-1">{comp === 'uel' ? 'Clubs level on points are ordered the way the Champions League orders them. ' : ''}{leaguePhaseFootnote()}</p>
     </div>
   );
 }
 
-function MatchdaysView({ view, nav, go, onClub }: ViewProps) {
+function MatchdaysView({ comp, view, nav, go, onClub }: ViewProps) {
   const last = view.nights.length - 1;
   const i = Math.max(0, Math.min(last, nav.night ?? Math.max(0, view.nightsDone - 1)));
   const n = view.nights[i];
-  if (!n) return <p className="text-xs text-muted-foreground px-1">There are no Champions League nights on this calendar.</p>;
+  if (!n) return <p className="text-xs text-muted-foreground px-1">There are no {COMP_NAME[comp]} nights on this calendar.</p>;
   const step ='inline-flex min-h-[44px] min-w-[44px] items-center gap-1 px-2 rounded-lg border border-border text-xs text-muted-foreground hover:text-foreground disabled:opacity-40';
   return (
     <div className="space-y-2" data-cm-world-night={n.id}>
@@ -287,7 +295,7 @@ function KnockoutsView({ career, view, nav, go, onClub, bracketCard }: ViewProps
   );
 }
 
-function FinalView({ view, onClub }: ViewProps) {
+function FinalView({ comp, view, onClub }: ViewProps) {
   const night = view.nights.find(n => n.stage === 'F');
   const tie = view.ties.find(t => t.round === 'F');
   if (view.winner && tie) {
@@ -312,7 +320,7 @@ function FinalView({ view, onClub }: ViewProps) {
         </div>
       ) : <p className="text-xs text-muted-foreground">The two finalists are not known yet.</p>}
       <p className="text-xs text-muted-foreground">{night?.date ? `To be played on ${shortDate(night.date)}.` : 'To be played after the semi-finals.'}</p>
-      {view.mode === 'watching' && view.format === 'l36' && (
+      {comp === 'ucl' && view.mode === 'watching' && view.format === 'l36' && (
         <p className="text-xs text-muted-foreground">It comes after your last league game, so the winner shows on your season review.</p>
       )}
     </div>
@@ -322,12 +330,15 @@ function FinalView({ view, onClub }: ViewProps) {
 function RunView({ view, nav, onClubPage }: ViewProps & { onClubPage: (club: string) => void }) {
   const club = nav.run as string;
   const run = clubRun(view, club);
+  /* Round 1509: how a Europa League club got in. */
+  const how = routeWords(view.via?.[club]);
   return (
     <div className="space-y-2" data-cm-world-run={club}>
       <div className="bg-card border border-border rounded-2xl p-3 space-y-1">
         <div className="text-sm font-bold text-foreground break-words">{club}</div>
         {run?.place && <p className="text-xs text-muted-foreground">{run.place}</p>}
         <p className="text-xs text-foreground font-bold">{run ? run.finish : 'Not in this competition.'}</p>
+        {how && <p className="text-xs text-muted-foreground" data-cm-world-via>Got in by {how}.</p>}
         <button type="button" onClick={() => onClubPage(club)} className="inline-flex min-h-[44px] items-center text-xs font-bold text-primary hover:underline" data-cm-world-club-page>Open {club}'s club page</button>
       </div>
       {run && run.rows.length > 0 && (
@@ -359,6 +370,9 @@ function headerLines(career: CareerState, view: WorldCompView): string[] {
   lines.push(view.mode === 'in'
     ? 'You are in it: your group is Group A.'
     : `${career.clubName} are not in it this season, so you are following it from outside.`);
+  /* fix-1509 (advice 21): a season one club whose real fifth place the game does not play says why it is in neither. */
+  const fifth = view.mode === 'watching' ? realFifthNation(career) : null;
+  if (fifth) lines.push(`${career.clubName} finished fifth in 2025-26. In the real 2026-27 that was a Champions League place, a one year bonus place ${fifth} earned (a European Performance Spot), which the game does not play: here ${fifth} has four places, fifth goes to the Europa League, and your own Europa League nights are not in the game yet.`);
   if (modern && view.mode === 'watching') lines.push('This is the real format. In a season your club qualifies, it plays the game\'s stand in instead: eight groups of four into the quarter-finals.');
   if (modern && view.mode === 'in') lines.push('Your club plays the game\'s stand in: eight groups of four into the quarter-finals. In a season you are not in it, the one you follow from outside plays the real 36 club format.');
   if (view.holder) lines.push(`Holders: ${view.holder}, top of pot one in the draw.`);
@@ -371,6 +385,36 @@ function headerLines(career: CareerState, view: WorldCompView): string[] {
      out only the new club, so the old club can be in it with games the game played for it. */
   if (career.handover && view.mode === 'watching') lines.push('You took this job mid season. If your last club was in the Champions League, this is a fresh draw of the whole thing: your last club can be in it, with games the game played for it rather than the ones you played.');
   return lines;
+}
+
+/** Round 1509: the Europa League's lines under the heading: how my club stands, what this is, where the field
+ *  came from. My club only ever follows it from outside in this round. */
+function uelHeaderLines(career: CareerState, view: WorldCompView): string[] {
+  const how = routeWords(view.earned);
+  return [
+    how
+      ? `${career.clubName} earned a place in it by ${how}, but your own Europa League nights are not in the game yet, so the place went to the next club in line and you follow it from outside.`
+      : `${career.clubName} are not in it this season, so you are following it from outside.`,
+    'This is the real format: 36 clubs in one table, then knockouts, each night but the final the day after the Champions League\'s.',
+    career.season === 1
+      ? 'This season\'s field is the real 2025-26 tables and cup winners, put through the game\'s rule.'
+      : 'This season\'s field is last season\'s tables in your save, put through the game\'s rule.',
+    /* 1502's rule for a job move: carried with the nights shown, or drawn again without the new club when the new
+       club was in it (season one), or none. */
+    ...(career.handover ? ['You took this job mid season. If your new club was in it, or the move changed who plays the Champions League, the game drew it again, so the nights before you moved can read differently.'] : []),
+  ];
+}
+
+/** Round 1509: the Europa League's ?, the rule and what stands in for the real thing. */
+function UelHowItWorks() {
+  return (
+    <div className="bg-card border border-border rounded-xl p-3 space-y-2 text-xs text-muted-foreground" data-cm-world-help="uel">
+      <p>36 clubs play eight games each, four at home and four away, in one table. 1st to 8th go straight to the round of 16, 9th to 24th play a two legged play-off for the other eight places, and 25th and below are out. Two legs from the play-offs to the semi-finals, then a one match final. A tie level on aggregate goes to extra time, then penalties.</p>
+      <p>Who is in it, by the game's rule: in each league, the club just below its Champions League places, and your own country's cup winner. A club already in the Champions League, or a cup winner already in, hands its place down the table to the next club. Cups abroad are not played in the game, so from your second season their place goes down their league too. The last places go to the next best placed clubs of the leagues with the most Champions League places. In your first season the field is the real 2025-26 tables, cup winners and Conference League winner, put through the same rule. The winner goes into next season's Champions League (in a season your own club is in that one, only when the game's smaller field has room).</p>
+      <p>What the game plays in place of the real thing: those places are simplified and the same every season. In the real 2026-27, England and Spain had a fifth Champions League place and France sent its fourth to Champions League qualifying, so the real field was not quite this one. The pots are set by how strong the clubs are in your save, the bracket and the order of clubs level on points are the Champions League's, and every night sits on your own calendar, the day after a Champions League night, with the final between the Champions League's semi-finals and its final, so the dates are the game's.</p>
+      <p>Your club: your own Europa League nights are not in the game yet, so a place the rule gives your club goes to the next club in line, and the screen says which way you earned it. The board counts that place all the same: through the season it reads your league place and, once it is played, your cup final, and a place that only comes down to you once every league has finished counts when the season ends.</p>
+    </div>
+  );
 }
 
 function HowItWorks({ view }: { view: WorldCompView }) {
@@ -403,20 +447,24 @@ interface ScreenProps {
   heading: ReactNode;
   groupsCard?: ReactElement;
   bracketCard?: ReactElement;
+  /** Round 1509: which competition; the Champions League when left out. */
+  comp?: WorldCompKey;
 }
 
-/** The Champions League screen: the heading, the lines, four tiles, and the one view a tile opens. */
-export function WorldCompScreen({ career, nav, go, onClubPage, heading, groupsCard, bracketCard }: ScreenProps) {
+/** A competition's screen (the Champions League's, and since Round 1509 the Europa League's): the heading, the
+ *  lines, four tiles, and the one view a tile opens. */
+export function WorldCompScreen({ career, nav, go, onClubPage, heading, groupsCard, bracketCard, comp = 'ucl' }: ScreenProps) {
   const [help, setHelp] = useState(false);
-  const view = useMemo(() => worldUclView(career), [career]);
+  const view = useMemo(() => worldCompView(career, comp), [career, comp]);
+  const name = COMP_NAME[comp];
   const back = (to: Nav): void => go(to);
   const openRun = (club: string): void => go({ ...nav, run: club });
-  const props: ViewProps | null = view ? { career, view, nav, go, onClub: openRun, groupsCard, bracketCard } : null;
+  const props: ViewProps | null = view ? { career, comp, view, nav, go, onClub: openRun, groupsCard, bracketCard } : null;
 
   if (nav.run && props) {
     return (
       <div className="space-y-2">
-        <Back label={nav.tab ? TAB_NAMES[nav.tab](view!) : 'Champions League'} onClick={() => back({ ...nav, run: null })} />
+        <Back label={nav.tab ? TAB_NAMES[nav.tab](view!) : name} onClick={() => back({ ...nav, run: null })} />
         <RunView {...props} onClubPage={onClubPage} />
       </div>
     );
@@ -425,14 +473,14 @@ export function WorldCompScreen({ career, nav, go, onClubPage, heading, groupsCa
     const View = { table: TableView, matchdays: MatchdaysView, knockouts: KnockoutsView, final: FinalView }[nav.tab];
     return (
       <div className="space-y-2" data-cm-world-view={nav.tab}>
-        <Back label="Champions League" onClick={() => back({ ...nav, tab: null, run: null })} />
+        <Back label={name} onClick={() => back({ ...nav, tab: null, run: null })} />
         <div className="text-sm font-bold text-foreground">{TAB_NAMES[nav.tab](view!)}</div>
         <View {...props} />
       </div>
     );
   }
 
-  const link = (
+  const link = comp !== 'ucl' ? null : (
     <Link to="/champions-league-format-history" className="inline-flex items-center min-h-[44px] text-xs text-primary hover:underline">
       The real competition's format, season by season
     </Link>
@@ -444,23 +492,23 @@ export function WorldCompScreen({ career, nav, go, onClubPage, heading, groupsCa
         {heading}
         <p className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">
           {career.handover && modernLater
-            ? 'You joined after the draw, so there is nothing to follow here this season. The Champions League shows here again from next season.'
-            : 'There is nothing to follow here this season. The Champions League shows here again from next season.'}
+            ? `You joined after the draw, so there is nothing to follow here this season. The ${name} shows here again from next season.`
+            : `There is nothing to follow here this season. The ${name} shows here again from next season.`}
         </p>
         {link}
       </div>
     );
   }
-  const status = worldUclStatus(career, view);
+  const status = comp === 'ucl' ? worldUclStatus(career, view) : worldUelStatus(career, view);
   const first = firstStageNights(view);
   const drawn = KO_ROUNDS[view.format].filter(r => view.ties.some(t => t.round === r));
   const finalNight = view.nights.find(n => n.stage === 'F');
   const top = view.table?.[0]?.club;
   return (
-    <div className="space-y-2" data-cm-world-mode={view.mode} data-cm-world-format={view.format}>
+    <div className="space-y-2" data-cm-world-mode={view.mode} data-cm-world-format={view.format} data-cm-world-comp={comp}>
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">{heading}</div>
-        <button type="button" aria-label="How the Champions League works here" aria-expanded={help} onClick={() => setHelp(!help)} data-cm-world-help-toggle
+        <button type="button" aria-label={`How the ${name} works here`} aria-expanded={help} onClick={() => setHelp(!help)} data-cm-world-help-toggle
           className="shrink-0 inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-lg border border-border text-muted-foreground hover:text-foreground">
           <HelpCircle className="w-4 h-4" />
         </button>
@@ -468,9 +516,9 @@ export function WorldCompScreen({ career, nav, go, onClubPage, heading, groupsCa
       <div className="bg-card border border-border rounded-xl p-3 space-y-1">
         <div className="text-sm font-bold text-foreground">{view.season} · {view.format === 'l36' ? '36 clubs in one table, then knockouts' : 'eight groups of four, then knockouts'}</div>
         <div className="text-xs text-foreground font-bold" data-cm-world-status>{status.value}</div>
-        {headerLines(career, view).map(l => <p key={l} className="text-xs text-muted-foreground">{l}</p>)}
+        {(comp === 'ucl' ? headerLines(career, view) : uelHeaderLines(career, view)).map(l => <p key={l} className="text-xs text-muted-foreground">{l}</p>)}
       </div>
-      {help && <HowItWorks view={view} />}
+      {help && (comp === 'ucl' ? <HowItWorks view={view} /> : <UelHowItWorks />)}
       <div className="grid grid-cols-2 gap-2">
         <Tile icon="📋" title={view.format === 'l36' ? 'Table' : 'Groups'} testId="table" onClick={() => go({ ...nav, tab: 'table' })}
           value={view.format === 'l36' ? (top && view.nightsDone > 0 ? `${top} top` : '36 clubs') : `${view.groups?.length ?? 8} groups`} />
@@ -511,7 +559,8 @@ interface CupsPanelProps {
   bracketCard?: ReactElement;
 }
 
-/** The Cups panel: two tiles, then one competition at a time. */
+/** The Cups panel: its tiles (the cup, the Champions League and, in today's world, the Europa League), then one
+ *  competition at a time. */
 export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cupLine, cupBracket, uclHeading, groupsCard, bracketCard }: CupsPanelProps) {
   const key = saveKey(career);
   const [nav, setNav] = useState<Nav>(() => (resume && resume.key === key ? resume.nav : HOME));
@@ -544,8 +593,13 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
     resume = { key, nav };
     onClubClick(club);
   };
-  const view = useMemo(() => worldUclView(career), [career]);
+  const view = useMemo(() => worldCompView(career, 'ucl'), [career]);
   const status = worldUclStatus(career, view);
+  /* Round 1509: the Europa League, followed every season of today's world (an era save keeps its era's format,
+     which has none in this round, so it shows no tile). */
+  const uelOn = worldUclFormatOf(career) === 'l36';
+  const uelView = useMemo(() => (uelOn ? worldCompView(career, 'uel') : null), [career, uelOn]);
+  const uelStatus = worldUelStatus(career, uelView);
   /* The panel's old condition, word for word in effect: no group, and no knockout run still alive or won. */
   const noEurope = career.uclGroup === null && (career.uclKoRound === null || career.uclKoRound === 'out');
   const euro = careerLeagueOf(career).euro;
@@ -568,6 +622,14 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
         <WorldCompScreen career={career} nav={nav} go={go} onClubPage={clubPage} heading={uclHeading} groupsCard={groupsCard} bracketCard={bracketCard} />
       </div>
     );
+  } else if (nav.at === 'uel') {
+    body = (
+      <div className="space-y-2" data-cm-cups-view="uel">
+        {!nav.tab && !nav.run && <Back label="Cups" onClick={() => go(HOME)} />}
+        <WorldCompScreen comp="uel" career={career} nav={nav} go={go} onClubPage={clubPage}
+          heading={<div className="text-xs text-muted-foreground uppercase tracking-wider">🌍 Europa League</div>} />
+      </div>
+    );
   } else {
     body = (
       <div className="space-y-2" data-cm-cups-view="tiles">
@@ -577,6 +639,7 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
         <div className="grid grid-cols-2 gap-2">
           <Tile icon="🏅" title={cupTitle} value={cupValue} sub={cupSub} testId="cup" onClick={() => go({ ...HOME, at: 'cup' })} />
           <Tile icon="⭐" title="Champions League" value={status.value} sub={status.sub} testId="ucl" onClick={() => go({ ...HOME, at: 'ucl' })} />
+          {uelOn && <Tile icon="🌍" title="Europa League" value={uelStatus.value} sub={uelStatus.sub} testId="uel" onClick={() => go({ ...HOME, at: 'uel' })} />}
         </div>
       </div>
     );

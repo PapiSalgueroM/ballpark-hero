@@ -22,7 +22,10 @@
    --strip <key> (that key of THIS TREE's state is left out of the comparison, never out of the save it plays on,
    at every step whose state is NOT in the Champions League (uclGroup null), in either fleet: a participant can
    miss Europe in a later season and watch it; every step whose state IS in it is compared on every key and
-   fails if it carries worldComps; from Round 1502's E3 both fleets run with --strip worldComps), --eval (THIS TREE calls
+   fails if it carries worldComps; from Round 1502's E3 both fleets run with --strip worldComps; Round 1509: a dotted
+   key, --strip worldComps.uel, takes that one key out of EVERY state, in it or not, and the object with it when it
+   is left empty, so the Champions League slice is compared; the rule on a state in it reads worldComps.ucl),
+   --eval (THIS TREE calls
    evalWorldUcl and worldUclNightsDone on the live state after every step, inside that step's stretch of the
    stream, the way the screen will: the critic's correction 6b, so an evaluation that drew from Math.random or
    wrote into the save shows as a difference; the base has no such function and is left alone).
@@ -34,6 +37,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { engineOf, pickFleet, tape } from './lib/worldUclFleet.mjs';
 import { HOLDER_EDIT } from './lib/worldUclHolder1502.mjs';
+import { EURO_BOARD_EDIT, UEL_HOLDER_EDIT } from './lib/worldUelHolder1509.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (name, dflt) => { const i = process.argv.indexOf(name); return i > 0 ? process.argv[i + 1] : dflt; };
@@ -57,6 +61,13 @@ const OLD_SAVES = process.argv.includes('--old-saves');
    Green with it is the attribution of E5 against the base: the one line reverted, every key but a watching state's
    worldComps is the base's. */
 const HOLDER_OFF = process.argv.includes('--holder-off');
+/* --uel-holder-off (Round 1509, step 6(b)): THIS TREE plays with the Europa League's winner kept out of the next
+   Champions League (scripts/lib/worldUelHolder1509.mjs). Green with it against step 6(a) is that step's attribution:
+   the one line reverted, the engine is the step before in every key. */
+const UEL_HOLDER_OFF = process.argv.includes('--uel-holder-off');
+/* --euro-board-off (Round 1509, step 6(a)): and the European rungs graded by position again. With both off and
+   --strip worldComps.uel, the round's final tree is held to main in every other key (the round's final proof). */
+const EURO_BOARD_OFF = process.argv.includes('--euro-board-off');
 const oldSaves = { loaded: 0, gained: 0, kept: 0, wrong: 0 };
 const sha = v => createHash('sha256').update(typeof v === 'string' ? v : JSON.stringify(v)).digest('hex').slice(0, 16);
 
@@ -70,16 +81,24 @@ async function journey(E, f, seasons, mode, compareStrip, evalEach = false) {
     k += 1;
     const r = tape((f.seed * 0x9e3779b1 + k * 7919) >>> 0, () => {
       const out = fn(s);
-      if (evalEach && out?.state) { M.cm.evalWorldUcl(out.state); M.cm.worldUclNightsDone(out.state); evals += 1; }
+      if (evalEach && out?.state) {
+        M.cm.evalWorldUcl(out.state); M.cm.worldUclNightsDone(out.state); evals += 1;
+        /* Round 1509 (the critic's 9(b)): and the Europa League, on the live state, when this tree has it. */
+        if (M.cm.evalWorldComp) { M.cm.evalWorldComp(out.state, 'uel'); M.cm.worldCompNightsDone(out.state, 'uel'); }
+      }
       return out;
     });
     const got = r.value ?? {};
     if (got.state) s = got.state;
     let shown = s;
     const watching = !!s && !s.uclGroup;
-    if (compareStrip && watching && compareStrip in s) { shown = { ...s }; delete shown[compareStrip]; }
+    const [top, sub] = compareStrip.split('.');
+    if (compareStrip && sub && s && s[top] && sub in s[top]) {
+      shown = { ...s, [top]: { ...s[top] } }; delete shown[top][sub];
+      if (!Object.keys(shown[top]).length) delete shown[top];
+    } else if (compareStrip && !sub && watching && compareStrip in s) { shown = { ...s }; delete shown[compareStrip]; }
     steps.push({ label, json: JSON.stringify(shown), draws: r.draws.length, drawSha: sha(r.draws), saved: got.saved ?? null, raw: got.raw ?? null,
-      carries: !!s && 'worldComps' in s, stripped: shown !== s, inIt: !!s && !!s.uclGroup });
+      carries: !!s && 'worldComps' in s, carriesUcl: !!s && !!s.worldComps?.ucl, stripped: shown !== s, inIt: !!s && !!s.uclGroup });
   };
   const reload = label => step(label, cur => {
     M.store.clear();
@@ -114,11 +133,11 @@ function firstDifference(a, b) {
 }
 
 const baseEngine = await engineOf(ROOT, 'base', { base: BASE }, cannot);
-const treeEngine = await engineOf(ROOT, 'tree', { edits: HOLDER_OFF ? [HOLDER_EDIT] : [] }, cannot);
+const treeEngine = await engineOf(ROOT, 'tree', { edits: [...(HOLDER_OFF ? [HOLDER_EDIT] : []), ...(UEL_HOLDER_OFF ? [UEL_HOLDER_EDIT] : []), ...(EURO_BOARD_OFF ? [EURO_BOARD_EDIT] : [])] }, cannot);
 const fleet = pickFleet(await treeEngine.fresh(), FLEET, cannot);
 const chosen = fleet.filter(f => !ONLY || f.club.includes(ONLY));
 console.log(`base ${BASE}; fleet (${chosen.length}): ${chosen.map(f => `${f.club} (${f.era}, ${f.kind})`).join('; ')}`);
-console.log(`seeds ${SEEDS.join(',')}; modes ${COACH}; strip ${STRIP || 'nothing'}${HOLDER_OFF ? '; this tree with the holder line reverted' : ''}`);
+console.log(`seeds ${SEEDS.join(',')}; modes ${COACH}; strip ${STRIP || 'nothing'}${HOLDER_OFF ? '; this tree with the holder line reverted' : ''}${UEL_HOLDER_OFF ? '; this tree with the Europa League holder line reverted' : ''}${EURO_BOARD_OFF ? '; this tree with the European rung line reverted' : ''}`);
 
 let journeys = 0, steps = 0, carriers = 0, evals = 0;
 const fails = [];
@@ -142,8 +161,9 @@ for (const f of chosen) {
         if (x.json !== y.json) why.push(`the state differs, ${firstDifference(x.json, y.json)}`);
         if (x.draws !== y.draws || x.drawSha !== y.drawSha) why.push(`the draws differ (${x.draws} against ${y.draws})`);
         if (x.saved !== y.saved && !y.stripped) why.push('the saved bytes differ');
-        if (y.inIt && y.carries) why.push('a state in the Champions League carries worldComps');
-        if (!STRIP && y.carries) why.push('a state carries worldComps and no --strip was asked for');
+        if (y.inIt && y.carriesUcl) why.push('a state in the Champions League carries worldComps.ucl');
+        /* Round 1509: against a base that carries worldComps too (a step of this round), the key is compared whole. */
+        if (!STRIP && y.carries && !x.carries) why.push('a state carries worldComps and no --strip was asked for');
         if (why.length) bad = `at step ${i} ${x.label}: ${why.join('; ')}`;
       }
       if (OLD_SAVES) for (const x of a.filter(z => z.raw)) {
@@ -156,9 +176,26 @@ for (const f of chosen) {
         if (aside(lt) !== aside(lb)) fails.push(`${name} at ${x.label}: an old save loads otherwise, ${firstDifference(aside(lb), aside(lt))}`.slice(0, 700));
         const historic = T.eras.isHistoricEra(lt.eraId);
         const should = !lt.uclGroup && lt.week < lt.calendar.length && (historic || lt.season === 1);
-        const has = 'worldComps' in lt;
-        if (has) oldSaves.gained += 1; else oldSaves.kept += 1;
-        if (has !== should) { oldSaves.wrong += 1; fails.push(`${name} at ${x.label}: an old save ${has ? 'gained' : 'did not gain'} a watched Champions League (${historic ? 'an era' : `season ${lt.season}`}, uclGroup ${lt.uclGroup ? 'set' : 'null'})`); }
+        const has = !!lt.worldComps?.ucl;
+        /* Round 1509: a base from Round 1502 on writes saves that already follow a Champions League; such a save
+           must load with the very slice the base's own load keeps, and only a save without one is held to the
+           repair's rule. */
+        const baseKeeps = !!lb.worldComps?.ucl;
+        if (baseKeeps) {
+          oldSaves.carried = (oldSaves.carried ?? 0) + 1;
+          if (JSON.stringify(lt.worldComps?.ucl ?? null) !== JSON.stringify(lb.worldComps.ucl)) { oldSaves.wrong += 1; fails.push(`${name} at ${x.label}: an old save that follows a Champions League loads another one`); }
+        } else {
+          if (has) oldSaves.gained += 1; else oldSaves.kept += 1;
+          if (has !== should) { oldSaves.wrong += 1; fails.push(`${name} at ${x.label}: an old save ${has ? 'gained' : 'did not gain'} a watched Champions League (${historic ? 'an era' : `season ${lt.season}`}, uclGroup ${lt.uclGroup ? 'set' : 'null'})`); }
+        }
+        /* Round 1509: and the Europa League, which no base save carries, is gained at load exactly where its repair
+           says: season one of today's world, a season not over, in the Champions League or not. */
+        if (!lb.worldComps?.uel) {
+          const shouldUel = !historic && lt.season === 1 && lt.week < lt.calendar.length;
+          const hasUel = !!lt.worldComps?.uel;
+          if (hasUel) oldSaves.uelGained = (oldSaves.uelGained ?? 0) + 1;
+          if (hasUel !== shouldUel && !(shouldUel && T.cm.worldCompField && !T.cm.worldCompField(lt, 'uel', null))) { oldSaves.wrong += 1; fails.push(`${name} at ${x.label}: an old save ${hasUel ? 'gained' : 'did not gain'} a Europa League (${historic ? 'an era' : `season ${lt.season}`})`); }
+        }
       }
       steps += a.length;
       if (b.some(y => y.carries)) carriers += 1;
@@ -171,8 +208,8 @@ for (const x of fails.slice(0, 12)) console.log(`  FAIL ${x}`);
 console.log(`journeys ${journeys}, steps compared ${steps}, tree journeys whose save carried worldComps ${carriers}, evaluations on the live state ${evals}, ${((Date.now() - t0) / 1000).toFixed(0)} s`);
 if (EVAL && !evals) cannot('--eval was asked for and no evaluation ran');
 if (OLD_SAVES) {
-  console.log(`old saves (written by ${BASE}): ${oldSaves.loaded} loaded by both engines, ${oldSaves.gained} gained a watched Champions League at load, ${oldSaves.kept} did not, ${oldSaves.wrong} against the rule`);
-  if (!oldSaves.loaded || !oldSaves.gained) cannot('--old-saves loaded no save, or none that the rule repairs');
+  console.log(`old saves (written by ${BASE}): ${oldSaves.loaded} loaded by both engines, ${oldSaves.gained} gained a watched Champions League at load, ${oldSaves.kept} did not, ${oldSaves.carried ?? 0} already followed one and kept it, ${oldSaves.uelGained ?? 0} gained a Europa League, ${oldSaves.wrong} against the rule`);
+  if (!oldSaves.loaded || !(oldSaves.gained || oldSaves.carried)) cannot('--old-saves loaded no save, or none that the rule repairs or keeps');
 }
 if (!journeys) cannot('no journey ran');
 console.log(fails.length

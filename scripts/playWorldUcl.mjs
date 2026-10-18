@@ -29,7 +29,17 @@
  *       one's score and each second leg night every tie at the other ground with leg two turned, as the bracket
  *       holds them (both legs stored home first, UclTie in clubManager.ts), and one club's run holding its second
  *       leg away (closing check, finding 2: the participant's second leg night was guarded by the unit file only)
- *   (e) on every view of (a), (c), (k), (o), (r) and the new views of (d): scrollY and the document height the same before a
+ *   Round 1509, the Europa League (one walk with the Champions League's, ruling 5):
+ *   (u) the (a) stream stopped once the Europa League has played 4 nights: Cups shows a third tile, Europa League;
+ *       its screen follows it from outside in the 36 club format; Table (36 rows, 8, 16, 12), Matchdays on night 4
+ *       with the engine's scores and the engine's date (a Thursday), paged to night 5 (fixtures, no score), a club's
+ *       run with how it got in (the slice's own route, in the screen's words), Knockouts, Final, and its ?
+ *   (v) a club that earned a place by its cup: an Everton season played to its end with the cup final's winner
+ *       set to Everton (crafted, so the line can be read), then rolled over: the tile says the place was earned and
+ *       its nights are not played yet, and the screen's first line names the cup, word for word
+ *   (c) and (d) also: the 2005 save shows two tiles and no Europa League; the Real Madrid participant shows the
+ *       Europa League tile, and its screen follows it from outside
+ *   (e) on every view of (a), (c), (k), (o), (r), (u), (v) and the new views of (d): scrollY and the document height the same before a
  *       tile and after its back button, every new control at least 44 px tall, no new text under 12 px, no
  *       sideways scroll, nothing cut by its box or off the screen, no one word name broken in the middle of the word,
  *       no two controls on top of each other, and the season review's line fully drawn; under
@@ -47,6 +57,8 @@
  *   instandin the view forgets the stand in of the club in it              (o) red: the club from outside not named
  *   inswap  the screen's line for it names the two clubs the wrong way round (o) red: the line not word for word
  *   legturn the club in it's second leg night keeps leg two unturned       (r) red: a night not as the bracket holds it
+ *   notileuel (Round 1509) the Europa League tile is not drawn             (u) red: no Europa League tile
+ *   wednesday (Round 1509) the Europa League's nights keep the Champions League's Wednesday (u) red: night 4 dated otherwise
  *           (the run reviewer's mutation M7, which the walk let through before case (r))
  * (notile and ahead walk (a) at 390; oldcols walks (c) at 320; legflip (k), swapfinal (b) and r16help (d) at 390;
  *  instandin and inswap (o) and legturn (r) at 390.
@@ -68,7 +80,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PLAY_WORLD_CONTROL || '';
 /* PLAY_WORLD_CASES (for example "c") and PLAY_WORLD_SIZES (for example "390") narrow a run while a finding is chased;
    a narrowed run is never the round's proof, and says so on its last line. */
-const ALL_CASES = 'abcdkor';
+const ALL_CASES = 'abcdkoruv';
 const CASES = process.env.PLAY_WORLD_CASES || ALL_CASES;
 const SIZES = [[320, 640], [390, 844], [1280, 900]].filter(([w]) => !process.env.PLAY_WORLD_SIZES || process.env.PLAY_WORLD_SIZES.split(',').includes(String(w)));
 const NARROW = CASES !== ALL_CASES || SIZES.length !== 3;
@@ -84,8 +96,8 @@ const CONTROLS = {
     to: `{career.uclGroup !== null && <Tile icon="⭐" title="Champions League" value={status.value} sub={status.sub} testId="ucl" onClick={() => go({ ...HOME, at: 'ucl' })} />}`,
     finding: 'no Champions League tile' },
   ahead: { file: 'src/lib/clubManagerWorldView.ts',
-    from: '    result = evalWorldUcl(career);',
-    to: '    result = evalWorldUcl(career, worldUclNightsDone(career) + 1);',
+    from: '    result = evalWorldComp(career, comp);',
+    to: '    result = evalWorldComp(career, comp, worldCompNightsDone(career, comp) + 1);',
     finding: 'matchday 5 shows' },
   oldcols: { file: 'src/components/club-manager/WorldCompScreen.tsx',
     from: "const cols = 'grid grid-cols-[1.25rem_1fr_1.1rem_1.1rem_1.1rem_1.75rem_1.75rem] gap-x-1 items-center';",
@@ -115,6 +127,14 @@ const CONTROLS = {
     from: 'homeGoals: t.leg2 ? t.leg2.awayGoals : null, awayGoals: t.leg2 ? t.leg2.homeGoals : null',
     to: 'homeGoals: t.leg2 ? t.leg2.homeGoals : null, awayGoals: t.leg2 ? t.leg2.awayGoals : null',
     finding: 'knockout night not as the bracket holds it', run: 'r' },
+  notileuel: { file: 'src/components/club-manager/WorldCompScreen.tsx',
+    from: `{uelOn && <Tile icon="🌍" title="Europa League" value={uelStatus.value} sub={uelStatus.sub} testId="uel" onClick={() => go({ ...HOME, at: 'uel' })} />}`,
+    to: '',
+    finding: 'no Europa League tile', run: 'u' },
+  wednesday: { file: 'src/lib/clubManagerCalendar.ts',
+    from: "  const thursday = comp === 'uel' ? 1 : 0;",
+    to: '  const thursday = 0;',
+    finding: 'night 4 dated', run: 'u' },
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`);
 
@@ -253,6 +273,39 @@ const saves = {};
     };
     console.log(`(r) Real Madrid, week ${r.s.week} of ${r.s.calendar.length} after ${r.entries} entries: both semi-finals settled, ${differ} of the six second legs read differently turned, run of ${t0.home}`);
   }
+}
+
+/* ---------- Round 1509: the Europa League's saves ---------- */
+/* How the screen words a route (clubManagerWorldView.ts's routeWords), the walk's own copy: the line must read it. */
+const ROUTE_WORDS = { L: 'its league place', C: 'winning its cup', P: "its cup's place, passed down its league", H: 'winning the Conference League', F: 'the fill, as the next best placed club of a strong league' };
+{
+  const u = await play('Chelsea', undefined, 0x1503a, (M, s) => M.cm.worldCompNightsDone(s, 'uel') >= 4);
+  const ud = u.M.cm.worldCompNightsDone(u.s, 'uel');
+  const ur = u.M.cm.evalWorldComp(u.s, 'uel');
+  const sl = u.s.worldComps?.uel;
+  if (ud !== 4 || !ur || !sl?.via) cannot(`Chelsea did not reach the Europa League's night 4 with a slice (${ud} nights done)`);
+  const dates = u.M.cal.worldCompNightDates(u.s, 'uel');
+  const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const d4 = dates[3];
+  const day4 = new Date(Date.UTC(d4.y, d4.m - 1, d4.d)).getUTCDay();
+  if (day4 !== 4) cannot(`the engine dates the Europa League's night 4 on a ${DAYS[day4]}, not a Thursday`);
+  saves.u = {
+    items: saved(u.M, u.s), md4: ur.nights[3].fixtures.filter(x => x.hg !== undefined).length, md5: ur.nights[4].fixtures.length,
+    table: ur.table.length, date4: `${DAYS[day4]} ${d4.d} ${MONTHS[d4.m - 1]}`,
+    via: Object.fromEntries(sl.clubs.map((c, i) => [c, sl.via[i]])),
+  };
+  console.log(`(u) Chelsea, week ${u.s.week}: the Europa League's 4 nights done, night 4 ${saves.u.md4} scores on ${saves.u.date4}, night 5 ${saves.u.md5} fixtures`);
+  /* (v) crafted: the cup final's winner set to Everton before the rollover, so the place earned by the cup shows. */
+  const v = await play('Everton', undefined, 0x1509a, () => false);
+  const fin = tape(0x1509b, () => v.M.cm.finishSeason(v.s)).value.state;
+  const final = (fin.cupBracket ?? []).find(t => t.round === 'F');
+  if (!final) cannot('the Everton season has no cup final to set');
+  final.winner = 'Everton';
+  const next = tape(0x1509c, () => v.M.cm.startNextSeason(fin)).value;
+  if (next.uclGroup || next.worldComps?.uel?.earned !== 'C') cannot(`the crafted Everton rollover did not earn the cup's place (${next.uclGroup ? 'in the Champions League' : next.worldComps?.uel?.earned ?? 'no route'})`);
+  saves.v = { items: saved(v.M, next) };
+  console.log(`(v) Everton, season ${next.season}: the cup final's winner set to Everton, the Europa League's earned route C`);
 }
 
 /* ---------- the build: the served one, or a control's own ---------- */
@@ -486,6 +539,9 @@ async function caseC(browser, size, tag) {
   const { ctx, page, errors } = await open(browser, saves.c.items, size);
   try {
     if (!(await toCups(page, where))) return;
+    /* Round 1509: an era save keeps its era's format, which has no Europa League in this round: two tiles. */
+    const tiles = await count(page, '[data-cm-cups-view="tiles"] [data-cm-world-tile]');
+    if (tiles !== 2 || (await count(page, '[data-cm-world-tile="uel"]'))) finding(where, `the 2005 save shows ${tiles} tiles, a Europa League among them or not two`);
     await roundTrip(page, `${where} screen`, page.locator('[data-cm-world-tile="ucl"]'), async () => {
       if (!(await count(page, '[data-cm-world-mode="watching"][data-cm-world-format="g8"]'))) finding(where, 'the screen is not the watched eight groups');
       if (saves.c.standIn) {
@@ -514,6 +570,12 @@ async function caseD(browser, size, tag) {
   const { ctx, page, errors } = await open(browser, saves.d.items, size);
   try {
     if (!(await toCups(page, where))) return;
+    /* Round 1509: a club in the Champions League follows the Europa League from outside too. */
+    if (!(await count(page, '[data-cm-world-tile="uel"]'))) finding(where, 'no Europa League tile for a club in the Champions League');
+    else await roundTrip(page, `${where} Europa League`, page.locator('[data-cm-world-tile="uel"]'), async () => {
+      if (!(await count(page, '[data-cm-world-comp="uel"][data-cm-world-mode="watching"]'))) finding(where, 'the Europa League screen of a club in the Champions League does not follow it from outside');
+      await shot(page, `d-uel-${tag}`);
+    });
     await roundTrip(page, `${where} screen`, page.locator('[data-cm-world-tile="ucl"]'), async () => {
       if (!(await count(page, '[data-cm-world-mode="in"]'))) finding(where, 'the screen does not say the club is in it');
       /* The ? describes what this club plays (review fix, read lens M1): today's stand in sends the group winners to
@@ -539,6 +601,80 @@ async function caseD(browser, size, tag) {
         if (!all || !played) finding(where, `Matchdays shows ${all} fixtures and ${played} scores on matchday ${saves.d.md}`);
         await shot(page, `d-matchdays-${tag}`);
       });
+    });
+    if (errors.length) finding(where, `page errors: ${errors.join(' | ')}`);
+  } finally { await ctx.close(); }
+}
+
+/** (u) Round 1509: the Europa League followed from outside, against the engine. */
+async function caseU(browser, size, tag) {
+  const where = `(u) Chelsea Europa League ${tag}`;
+  const { ctx, page, errors } = await open(browser, saves.u.items, size);
+  try {
+    if (!(await toCups(page, where))) return;
+    if (!(await count(page, '[data-cm-world-tile="uel"]'))) { finding(where, 'no Europa League tile on the Cups panel'); return; }
+    await measure(page, `${where} tiles`);
+    await shot(page, `u-tiles-${tag}`);
+    await roundTrip(page, `${where} screen`, page.locator('[data-cm-world-tile="uel"]'), async () => {
+      if (!(await count(page, '[data-cm-world-comp="uel"][data-cm-world-mode="watching"][data-cm-world-format="l36"]'))) finding(where, 'the screen is not the followed 36 club Europa League');
+      await shot(page, `u-screen-${tag}`);
+      await roundTrip(page, `${where} table`, page.locator('[data-cm-world-tile="table"]'), async () => {
+        const rows = await page.locator('[data-cm-world-table]').first().getAttribute('data-cm-world-table').catch(() => null);
+        const zones = [await count(page, '[data-zone="through"]'), await count(page, '[data-zone="playoff"]'), await count(page, '[data-zone="out"]')];
+        if (rows !== String(saves.u.table) || zones.join() !== '8,16,12') finding(where, `the table has ${rows} rows in zones ${zones.join(', ')}, not 36 in 8, 16, 12`);
+        await shot(page, `u-table-${tag}`);
+      });
+      await roundTrip(page, `${where} matchdays`, page.locator('[data-cm-world-tile="matchdays"]'), async () => {
+        const md4 = await count(page, '[data-cm-world-fixture="played"]');
+        if (md4 !== saves.u.md4) finding(where, `night 4 shows ${md4} scores, the engine played ${saves.u.md4}`);
+        const head = ((await page.locator('[data-cm-world-night]').first().textContent().catch(() => '')) ?? '').replace(/\s+/g, ' ');
+        if (!head.includes(saves.u.date4)) finding(where, `night 4 dated otherwise than the engine's ${saves.u.date4}: "${head.slice(0, 80)}"`);
+        await shot(page, `u-md4-${tag}`);
+        await press(page, page.getByRole('button', { name: 'Night after' }));
+        const played5 = await count(page, '[data-cm-world-fixture="played"]');
+        const open5 = await count(page, '[data-cm-world-fixture="open"]');
+        if (played5 || open5 !== saves.u.md5) finding(where, `night 5 shows ${played5} scores and ${open5} fixtures to play, the engine has 0 and ${saves.u.md5}`);
+        const club = await page.locator('[data-cm-world-fixtures] [data-cm-world-club]').first().getAttribute('data-cm-world-club').catch(() => null);
+        await roundTrip(page, `${where} run`, page.locator('[data-cm-world-fixtures] [data-cm-world-club]'), async () => {
+          const rec = await count(page, '[data-cm-world-run-row="recorded"]');
+          const up = await count(page, '[data-cm-world-run-row="upcoming"]');
+          if (rec !== 4 || up !== 4) finding(where, `${club}'s run shows ${rec} played and ${up} to come, not 4 and 4`);
+          const via = ((await page.locator('[data-cm-world-via]').first().textContent().catch(() => '')) ?? '').trim();
+          const want = `Got in by ${ROUTE_WORDS[saves.u.via[club]]}.`;
+          if (via !== want) finding(where, `${club}'s run reads "${via}", the slice's route reads "${want}"`);
+          await shot(page, `u-run-${tag}`);
+        });
+      });
+      await roundTrip(page, `${where} knockouts`, page.locator('[data-cm-world-tile="knockouts"]'), async () => {
+        const t = await page.locator('[data-cm-world-undrawn]').first().textContent().catch(() => '');
+        if (!/Drawn after matchday 8/.test(t ?? '')) finding(where, `the knockouts do not say they are drawn after matchday 8 (${t})`);
+      });
+      await roundTrip(page, `${where} final`, page.locator('[data-cm-world-tile="final"]'), async () => {
+        if (!(await count(page, '[data-cm-world-final="open"]'))) finding(where, 'the final is not shown as still to come');
+      });
+      await press(page, page.locator('[data-cm-world-help-toggle]'));
+      if (!(await count(page, '[data-cm-world-help="uel"]'))) finding(where, 'the ? opens no Europa League rules');
+      else { await measure(page, `${where} help`); await shot(page, `u-help-${tag}`); }
+      await press(page, page.locator('[data-cm-world-help-toggle]'));
+    });
+    if (errors.length) finding(where, `page errors: ${errors.join(' | ')}`);
+  } finally { await ctx.close(); }
+}
+
+/** (v) Round 1509: a place earned by the cup, said on the tile and on the screen's first line. */
+async function caseV(browser, size, tag) {
+  const where = `(v) Everton earned by the cup ${tag}`;
+  const { ctx, page, errors } = await open(browser, saves.v.items, size);
+  try {
+    if (!(await toCups(page, where))) return;
+    const tile = ((await page.locator('[data-cm-world-tile="uel"]').first().textContent().catch(() => '')) ?? '').replace(/\s+/g, ' ');
+    if (!tile.includes('You earned a place, but your own nights are not played yet')) finding(where, `the Europa League tile does not say the place was earned: "${tile.slice(0, 120)}"`);
+    await shot(page, `v-tiles-${tag}`);
+    await roundTrip(page, `${where} screen`, page.locator('[data-cm-world-tile="uel"]'), async () => {
+      const text = ((await page.locator('[data-cm-world-comp="uel"]').first().textContent().catch(() => '')) ?? '').replace(/\s+/g, ' ');
+      const want = 'Everton earned a place in it by winning its cup, but your own Europa League nights are not in the game yet, so the place went to the next club in line and you follow it from outside.';
+      if (!text.includes(want)) finding(where, `the screen's first line is not "${want.slice(0, 60)}...": "${text.slice(0, 160)}"`);
+      await shot(page, `v-screen-${tag}`);
     });
     if (errors.length) finding(where, `page errors: ${errors.join(' | ')}`);
   } finally { await ctx.close(); }
@@ -659,7 +795,7 @@ async function caseMotion(browser) {
   try {
     if (!(await toCups(page, where))) return;
     let running = 0;
-    for (const sel of ['[data-cm-world-tile="ucl"]', '[data-cm-world-tile="table"]']) {
+    for (const sel of ['[data-cm-world-tile="ucl"]', '[data-cm-world-tile="table"]', '[data-cm-world-back]', '[data-cm-world-back]', '[data-cm-world-tile="uel"]', '[data-cm-world-tile="table"]']) {
       await press(page, page.locator(sel));
       running += await page.evaluate(() => {
         const root = document.querySelector('[data-cm-cups-view]');
@@ -672,7 +808,7 @@ async function caseMotion(browser) {
 }
 
 /* ---------- run ---------- */
-const RUN = { a: caseA, b: caseB, c: caseC, d: caseD, k: caseK, o: caseO, r: caseR };
+const RUN = { a: caseA, b: caseB, c: caseC, d: caseD, k: caseK, o: caseO, r: caseR, u: caseU, v: caseV };
 const browser = await chromium.launch();
 try {
   if (CONTROL) {
@@ -712,4 +848,4 @@ if (findings.length) {
   console.log(`playWorldUcl: FAIL, ${findings.length} findings over ${measured} measured views; pictures in ${SHOTS}`);
   process.exit(1);
 }
-console.log(`playWorldUcl: green. Seven saves at three sizes, ${measured} views measured, every check held; pictures in ${SHOTS}`);
+console.log(`playWorldUcl: green. Nine saves at three sizes, ${measured} views measured, every check held; pictures in ${SHOTS}`);

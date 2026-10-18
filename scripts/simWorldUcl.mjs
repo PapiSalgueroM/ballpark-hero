@@ -71,7 +71,8 @@
  *              summer move away from a created club hands its watched place to the created club's name, so the
  *              open throws and the season watches nothing)
  *   section 2: stream (the watched match draws from Math.random) participant (a club in the Champions League
- *              opens a watched one too) form (the evaluation writes the clubs' form)
+ *              opens a watched one too) form (the evaluation writes the clubs' form) savedbytes (a save holding
+ *              the followed Europa League also writes a key loadCareer drops, so only the saved bytes differ)
  *   section 3: ahead (a night counts one week early) live (the evaluation reads today's strengths, not the
  *              snapshot: red across a move) noseen (a carried slice forgets the nights it had shown) marks (two
  *              league phase nights on one league round) mdearly (a matchday placed at the league entry before
@@ -95,6 +96,10 @@ import { engineOf, pickFleet, tape, CREATED, ERAS as ERAS_OF_FLEET } from './lib
 const HOLDER_LIB = path.join(path.dirname(fileURLToPath(import.meta.url)), 'lib', 'worldUclHolder1502.mjs');
 const { HOLDER_EDIT = null, HOLDER_LINE = null } = fs.existsSync(HOLDER_LIB) ? await import(pathToFileURL(HOLDER_LIB).href) : {};
 const hasE5 = () => !!HOLDER_LINE && text(CM).includes(HOLDER_LINE);
+/* Round 1509 (ruling 1k): the Europa League's winner admitted to the Champions League moves the field too, so section 2
+   plays both arms with it reverted (scripts/lib/worldUelHolder1509.mjs), and the binding is compared alone. */
+const UEL_HOLDER_LIB = path.join(path.dirname(fileURLToPath(import.meta.url)), 'lib', 'worldUelHolder1509.mjs');
+const { UEL_HOLDER_EDIT = null } = fs.existsSync(UEL_HOLDER_LIB) ? await import(pathToFileURL(UEL_HOLDER_LIB).href) : {};
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const text = file => fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
@@ -153,29 +158,32 @@ Object.assign(CONTROLS, {
 const CAREER_EDITS = {
   dropnight: [{ file: MODULE_FILE, from: '  for (let md = 0; md < firstStage; md += 1) {', to: '  for (let md = 0; md < firstStage - 1; md += 1) {' }],
   field32: [
-    { file: CM, from: '    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, worldUclExcluded(state))', to: '    ? uclFieldFromTables(tables, holder, 32, worldUclExcluded(state))' },
+    /* Round 1509: the watched field's call passes the Europa League's winner on (ruling 1k). */
+    { file: CM, from: '    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, worldUclExcluded(state), uelHolder)', to: '    ? uclFieldFromTables(tables, holder, 32, worldUclExcluded(state), uelHolder)' },
     { file: CM, from: '    : state.season === 1 ? seasonOneUclField(state.eraId ?? DEFAULT_ERA_ID, UCL_LEAGUE.clubs, worldUclExcluded(state)) : null;', to: '    : state.season === 1 ? seasonOneUclField(state.eraId ?? DEFAULT_ERA_ID, 32, worldUclExcluded(state)) : null;' },
   ],
   eraformat: [{ file: CM, from: "  return uclSeasonYear(state.eraId) <= UCL_R16_LAST_YEAR ? 'g8' : 'l36';", to: "  return 'l36';" }],
   meinfill: [{ file: CM, from: '    : state.season === 1 ? seasonOneUclField(state.eraId ?? DEFAULT_ERA_ID, UCL_LEAGUE.clubs, worldUclExcluded(state)) : null;', to: '    : state.season === 1 ? seasonOneUclField(state.eraId ?? DEFAULT_ERA_ID, UCL_LEAGUE.clubs) : null;' }],
-  meindirect: [{ file: CM, from: '    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, worldUclExcluded(state))', to: '    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs)' }],
+  meindirect: [{ file: CM, from: '    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, worldUclExcluded(state), uelHolder)', to: '    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, undefined, uelHolder)' }],
   nopens: [{ file: MODULE_FILE, from: '\n    t.pens = true;\n    t.winner = coin() < 0.5 ? t.home : t.away;\n', to: '\n    t.pens = true;\n' }],
   agall: [{ file: CM, from: '    awayGoals: uclAwayGoalsApply(state.eraId),\n    deciderScale: ET_DEFLATOR,', to: '    awayGoals: true,\n    deciderScale: ET_DEFLATOR,' }],
   stream: [{ file: CM, from: 'sim: (strH, strA, scale, rand) => simScore(strH, strA, 0.2, -0.08, scale, rand), tie };', to: 'sim: (strH, strA, scale, rand) => simScore(strH, strA, 0.2, -0.08, scale), tie };' }],
   participant: [
-    { file: CM, from: '  if (world || state.uclGroup) return;\n  try {\n    openWorldUcl(', to: '  if (world) return;\n  try {\n    openWorldUcl(' },
-    { file: CM, from: '  if (state.uclGroup || !field) return;', to: '  if (!field) return;' },
+    /* Round 1509: the start opens the Champions League only when my club is not in it, then the Europa League. */
+    { file: CM, from: '  if (!state.uclGroup) {\n    try {\n      openWorldUcl(', to: '  if (true) {\n    try {\n      openWorldUcl(' },
+    /* Round 1509: the open is keyed (openWorldComp); the Champions League's guard is the comp's own. */
+    { file: CM, from: "  if ((comp === 'ucl' && state.uclGroup) || !field) return;", to: '  if (!field) return;' },
   ],
   form: [{ file: CM, from: '  memo.set(key, out);\n  return out;\n}', to: '  for (const n of out.nights) for (const fx of n.fixtures) if (fx.hg !== undefined) noteForm(state, fx.home, fx.away, fx.hg, fx.ag as number);\n  memo.set(key, out);\n  return out;\n}' }],
   ahead: [{ file: CM, from: '  else while (n < places.length && state.week > places[n].at) n += 1;', to: '  else while (n < places.length && state.week >= places[n].at) n += 1;' }],
-  live: [{ file: CM, from: '  const out = evaluateWorldComp(slice, k, worldUclBind(state, slice.f));', to: '  const out = evaluateWorldComp({ ...slice, str: slice.clubs.map(c => worldUclStrength(state, c)) }, k, worldUclBind(state, slice.f));' }],
-  noseen: [{ file: CM, from: '      joined.worldComps = { ucl: { ...slice, ...(seen > 0 ? { seen } : {}) } };', to: '      joined.worldComps = { ucl: { ...slice, seen: undefined } };' }],
+  live: [{ file: CM, from: '  const out = evaluateWorldComp(slice, k, worldCompBind(state, comp, slice.f));', to: '  const out = evaluateWorldComp({ ...slice, str: slice.clubs.map(c => worldUclStrength(state, c)) }, k, worldCompBind(state, comp, slice.f));' }],
+  noseen: [{ file: CM, from: '      setWorldComp(joined, comp, { ...slice, ...(seen > 0 ? { seen } : {}) });', to: '      setWorldComp(joined, comp, { ...slice, seen: undefined });' }],
   marks: [
     { file: MODULE_FILE, from: '    const r = Math.max(prev + 1, at(f));', to: '    const r = at(f);' },
     { file: MODULE_FILE, from: '0.79, 0.82, 0.87, 0.90, 1.0];', to: '0.79, 0.82, 0.87, 0.87, 1.0];' },
   ],
   noholder: HOLDER_EDIT ? [HOLDER_EDIT] : [],
-  keep: [{ file: CM, from: '    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);', to: '    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);\n    (state as unknown as Record<string, unknown>).worldCompsKept = career.worldComps;' }],
+  keep: [{ file: CM, from: '    openWorldUcl(state, worldUclField(state, tables, watchHolder, watchUelHolder), watchHolder);', to: '    openWorldUcl(state, worldUclField(state, tables, watchHolder, watchUelHolder), watchHolder);\n    (state as unknown as Record<string, unknown>).worldCompsKept = career.worldComps;' }],
 };
 /* The review of 2026-10-17 (results-g/review-run-1502.md and review-read-1502.md): each mutation it showed every
    section green under, now a control of the check that answers it. */
@@ -202,6 +210,11 @@ Object.assign(CONTROLS, {
   /* Advice 24: a summer move away from a created club hands its watched place to the created club's name (the
      open then throws on a club the new world does not know, and the season watches nothing). */
   nocustomexit: [1, /^1 (no competition: the created club's summer exit|created exit: )/],
+  /* fix2-1509 (closing check major 3): section 2's saved bytes compare with worldComps.uel taken off, on its own. A
+     save holding the followed Europa League writes matchRules too, which loadCareer deletes, so the loaded state and
+     the draws stay equal and only that compare can see it: on every state in the Champions League, a participant's
+     or a watcher's once it qualified or joined a club in it (runner r1509-fx2b). */
+  savedbytes: [2, /^2 (participant|watcher) .* at [^:]*: the saved bytes differ \(worldComps\.uel taken off\)$/],
 });
 Object.assign(CAREER_EDITS, {
   mdearly: [{ file: CM, from: '      put(night, i < 0 ? prev.at : i, i < 0 ? prev.round : roundOf(i), i >= 0);', to: '      put(night, i < 0 ? prev.at : i - 1, i < 0 ? prev.round : roundOf(i), i >= 0);' }],
@@ -215,6 +228,7 @@ Object.assign(CAREER_EDITS, {
   noholdertop: [{ file: CM, from: '  const top = holder && field.includes(holder) ? holder : undefined;', to: '  const top: string | undefined = undefined;' }],
   memokey: [{ file: CM, from: "  const key = `${state.eraId ?? ''}|${k}`;", to: "  const key = `${state.eraId ?? ''}`;" }],
   nocustomexit: [{ file: CM, from: '    const tables = moving && watchTables ? watchTables.map(t => ({ ...t, clubs: customExitUclField(career, t.clubs) })) : watchTables;', to: '    const tables = watchTables;' }],
+  savedbytes: [{ file: CM, from: '      localStorage.setItem(SAVE_KEY, JSON.stringify(full));\n', to: '      localStorage.setItem(SAVE_KEY, JSON.stringify(full.worldComps?.uel ? { ...full, matchRules: 1 } : full));\n' }],
 });
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control ${CONTROL}`);
 const runs = n => (CONTROL ? CONTROLS[CONTROL][0] === n : ONLY.length === 0 || ONLY.includes(n));
@@ -373,7 +387,7 @@ const bump = (k, n = 1) => { counts[k] = (counts[k] ?? 0) + n; };
 const careerEdits = () => CAREER_EDITS[CONTROL] ?? [];
 const byPlain = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
 const OPEN_LINE = '  /* Round 1502: a club not in the Champions League watches it, opened after the seed it is keyed on. */\n  openWorldUclOnStart(state, world);\n';
-const ROLL_LINE = '    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);\n';
+const ROLL_LINE = '    openWorldUcl(state, worldUclField(state, tables, watchHolder, watchUelHolder), watchHolder);\n';
 const CARRY_LINE = '  carryWorldUcl(career, joined);\n';
 /* The binding switched off (section 2's other arm): the four calls that open, carry or repair a slice (the
    load repair since the review of 2026-10-17: with it in both arms a repair that drew or wrote elsewhere moved
@@ -423,6 +437,21 @@ function entrantTarget(M, st) {
  * `join` a mid season move at entry 25 of season one. Every step on its own stretch of the stream; `onStep`
  * sees every state (and the label of the step), `onSeasonEnd` every finished season before its rollover.
  */
+/** A stored value with the followed Europa League taken off the saved career (and worldComps with it when that
+ *  was its only key), so a save of the head arm can be compared byte for byte with one that never had it. */
+function withoutUelSaved(v) {
+  try {
+    const o = JSON.parse(v);
+    if (o && typeof o === 'object' && o.worldComps && typeof o.worldComps === 'object' && 'uel' in o.worldComps) {
+      delete o.worldComps.uel;
+      if (!Object.keys(o.worldComps).length) delete o.worldComps;
+    }
+    return JSON.stringify(o);
+  } catch {
+    return v;
+  }
+}
+
 async function careerJourney(E, f, { seasons, mode = 'nocoach', join = false, move = null, evalEach = false, record = null, onStep, onSeasonEnd }) {
   const M = await E.fresh();
   const opts = mode === 'coach' ? { skipHalftime: true } : { skipHalftime: true, noCoach: true };
@@ -437,14 +466,16 @@ async function careerJourney(E, f, { seasons, mode = 'nocoach', join = false, mo
     });
     const got = r.value ?? {};
     if (got.state) s = got.state;
-    steps.push({ label, json: record ? record(s) : null, inIt: !!s?.uclGroup, carries: !!s && 'worldComps' in s, draws: r.draws.length, drawSha: createHash('sha256').update(JSON.stringify(r.draws)).digest('hex').slice(0, 16), saved: got.saved ?? null });
+    steps.push({ label, json: record ? record(s) : null, inIt: !!s?.uclGroup, carries: !!s && !!s.worldComps?.ucl, uel: !!s?.worldComps?.uel, draws: r.draws.length, drawSha: createHash('sha256').update(JSON.stringify(r.draws)).digest('hex').slice(0, 16), saved: got.saved ?? null, savedBare: got.savedBare ?? null });
     onStep?.(M, s, label, got);
   };
   step('start', () => ({ state: f.custom ? M.cm.startCareer(f.club, f.era, f.custom) : M.cm.startCareer(f.club, f.era) }));
   const reload = cur => {
     M.store.clear();
     if (!M.cm.saveCareer(cur)) return { saved: 'refused' };
-    return { state: M.cm.loadCareer(), saved: createHash('sha256').update(JSON.stringify([...M.store.entries()].sort())).digest('hex').slice(0, 16), reload: cur };
+    const entries = [...M.store.entries()].sort();
+    return { state: M.cm.loadCareer(), saved: createHash('sha256').update(JSON.stringify(entries)).digest('hex').slice(0, 16),
+      savedBare: createHash('sha256').update(JSON.stringify(entries.map(([key, v]) => [key, withoutUelSaved(v)]))).digest('hex').slice(0, 16), reload: cur };
   };
   /* `join` is true (season one, the bottom club of another league), a season number, or { season, to: 'entrant' }. */
   const joinSeason = join === true ? 1 : typeof join === 'number' ? join : join ? join.season : 0;
@@ -680,7 +711,8 @@ function stepTracker(name) {
   const dates = (M, s, at) => checkDates(M, s, name, at);
   return (M, s, label, got) => {
     if (!s) return;
-    const json = JSON.stringify(s);
+    /* Round 1509: the Europa League's own slice (worldComps.uel) is simWorldEuro's; this counts every other. */
+    const json = JSON.stringify(s.worldComps?.uel ? { ...s, worldComps: { ...s.worldComps, uel: undefined } } : s);
     const slices = (json.match(/"v":1,"s":\d+,"f":"(g8|l36)"/g) ?? []).length;
     ok(slices <= 1, `4 slices: ${name} at ${label}: the save holds ${slices} slices`);
     const slice = s.worldComps?.ucl;
@@ -690,7 +722,7 @@ function stepTracker(name) {
     if (slice) ok(!myNames(M, s).some(c => slice.clubs.includes(c)), `4 own: ${name} at ${label}: ${s.clubName} watches a competition that lists it among its entrants`);
     if (s.season !== season) {
       season = s.season; prevDone = 0; shown = new Map();
-      if (slice) { counts[`4 slice bytes ${slice.f}`] = [...(counts[`4 slice bytes ${slice.f}`] ?? []), JSON.stringify(s.worldComps).length]; dates(M, s, label); }
+      if (slice) { counts[`4 slice bytes ${slice.f}`] = [...(counts[`4 slice bytes ${slice.f}`] ?? []), JSON.stringify({ ucl: slice }).length]; dates(M, s, label); }
     }
     if (got?.joined) {
       const before = got.joined.worldComps?.ucl;
@@ -878,12 +910,21 @@ async function watcherPass() {
 async function selfRelative() {
   /* From step E5 the holder line is reverted in BOTH arms, so this section compares the binding alone; what the
      holder moves is section 5's, by attribution. */
-  const holder = hasE5() ? [HOLDER_EDIT] : [];
+  const holder = [...(hasE5() ? [HOLDER_EDIT] : []), ...(UEL_HOLDER_EDIT ? [UEL_HOLDER_EDIT] : [])];
   const head = await engineOf(ROOT, 'head2', { edits: [...careerEdits(), ...holder] }, cannot);
   const off = await engineOf(ROOT, 'off', { edits: [...BINDING_OFF, ...holder] }, cannot);
   if (careerEdits().length) changed = true;
   const fleet = pickFleet(await head.fresh(), 'all', cannot);
-  const record = st => (!st ? 'null' : JSON.stringify(!st.uclGroup && 'worldComps' in st ? { ...st, worldComps: undefined } : st));
+  /* Round 1509: the Europa League every career of today's world follows (worldComps.uel) is simWorldEuro's section 2,
+     and this section's other arm takes out the start that opens it too, so it comes off every state compared here. */
+  const withoutUel = st => {
+    if (!st?.worldComps?.uel) return st;
+    const rest = { ...st.worldComps }; delete rest.uel;
+    return { ...st, worldComps: Object.keys(rest).length ? rest : undefined };
+  };
+  const record = st => (!st ? 'null' : JSON.stringify(withoutUel(!st.uclGroup && 'worldComps' in st ? { ...st, worldComps: undefined } : st)));
+  /* The first keys two recorded states differ on, so a red says where. */
+  const firstKeys = (a, b) => { try { const A = JSON.parse(a), B = JSON.parse(b); return [...new Set([...Object.keys(A ?? {}), ...Object.keys(B ?? {})])].filter(k => JSON.stringify(A?.[k]) !== JSON.stringify(B?.[k])).slice(0, 4).join(', ') || 'the key order'; } catch { return 'unreadable'; } };
   const t0 = Date.now();
   let journeys = 0, steps = 0, carried = 0;
   for (const f of fleet) for (const mode of ['nocoach', 'coach']) for (const seed of SEEDS) {
@@ -897,10 +938,12 @@ async function selfRelative() {
       const x = a[i], y = b[i];
       if (!x || !y || x.label !== y.label) { ok(false, `2 ${name}: the steps part at ${i}`); break; }
       const why = [];
-      if (y.inIt && y.carries) why.push('a state in the Champions League carries worldComps');
-      if (x.json !== y.json) why.push('the state differs');
+      if (y.inIt && y.carries) why.push('a state in the Champions League carries worldComps.ucl');
+      if (x.json !== y.json) why.push(`the state differs (${firstKeys(x.json, y.json)})`);
       if (x.draws !== y.draws || x.drawSha !== y.drawSha) why.push(`the draws differ (${x.draws} against ${y.draws})`);
-      if (y.inIt && x.saved !== y.saved) why.push('the saved bytes differ');
+      /* Round 1509: a save holding the followed Europa League (the head arm's alone) is compared byte for byte with
+         that one key taken off the saved career (fix-1509 minor 16: it used to be left out of the compare). */
+      if (y.inIt && (y.uel ? x.savedBare !== y.savedBare : x.saved !== y.saved)) why.push(`the saved bytes differ${y.uel ? ' (worldComps.uel taken off)' : ''}`);
       if (why.length) { ok(false, `2 ${name} at ${x.label}: ${why.join('; ')}`); break; }
     }
   }
@@ -922,9 +965,9 @@ async function leagueSizes() {
       const M = await E.fresh();
       const club = lg.clubs[lg.clubs.length - 1];
       const st = tape(0x1502 + size, () => M.cm.startCareer(club, era)).value;
-      if (!st.worldComps) { st.uclGroup = null; M.cm.openWorldUcl(st, M.cm.worldUclField(st, null), null); }
-      ok(!!st.worldComps, `3 dates: ${era} league of ${size} (${club}): no watched competition opens`);
-      if (st.worldComps) checkDates(M, st, `${era} league of ${size} (${club})`, 'season one');
+      if (!st.worldComps?.ucl) { st.uclGroup = null; M.cm.openWorldUcl(st, M.cm.worldUclField(st, null), null); }
+      ok(!!st.worldComps?.ucl, `3 dates: ${era} league of ${size} (${club}): no watched competition opens`);
+      if (st.worldComps?.ucl) checkDates(M, st, `${era} league of ${size} (${club})`, 'season one');
       seen.push(`${era} ${size}`);
     }
   }

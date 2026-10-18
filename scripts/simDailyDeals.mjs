@@ -156,8 +156,10 @@ const STRIPS = {
   seeddeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldSeed;' },
   ledger: { file: 'managerHotSeat.ts', line: '  delete s.worldRoster;' },
   ledgerdeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldRoster;' },
-  world: { file: 'managerHotSeat.ts', line: '  delete s.worldComps;' },
-  worlddeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldComps;' },
+  /* Round 1509 (ruling 1l): the dailies start with DAILY_START and open nothing, so the strip is the shape guard
+     behind it: each world control takes both off, the option and the strip, and the day keeps what it opened. */
+  world: { file: 'managerHotSeat.ts', line: '  delete s.worldComps;', also: [['startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, DAILY_START)', 'startCareer(setup.club)']] },
+  worlddeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldComps;', also: [['startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, DAILY_START)', 'startCareer(setup.club)']] },
   rulesall: { file: 'managerHotSeat.ts', line: "  if (setup.daily) return setup.daily < HOT_SEAT_RULES_FROM ? 'base' : undefined;", to: '  if (setup.daily) return undefined;' },
   rulesstale: { file: 'managerHotSeat.ts', line: "export const HOT_SEAT_RULES_FROM = '", to: "export const HOT_SEAT_RULES_FROM = '2026-10-01'; const HOT_SEAT_RULES_WAS = '" },
 };
@@ -170,12 +172,15 @@ const controlPlugin = {
   name: 'daily-deals-control',
   setup(b) {
     if (!CONTROL) return;
-    const { file, line, to = '' } = STRIPS[CONTROL];
+    const { file, line, to = '', also = [] } = STRIPS[CONTROL];
     b.onLoad({ filter: new RegExp(file.replace('.', '[.]') + '$') }, async args => {
-      const source = await fs.promises.readFile(args.path, 'utf8');
-      const count = source.split(line).length - 1;
-      if (count !== 1) cannot(`control ${CONTROL}: its line is in ${file} ${count} times, it must be exactly once`);
-      return { contents: source.replace(line, to), loader: 'ts' };
+      let source = await fs.promises.readFile(args.path, 'utf8');
+      for (const [from, into] of [[line, to], ...also]) {
+        const count = source.split(from).length - 1;
+        if (count !== 1) cannot(`control ${CONTROL}: its line is in ${file} ${count} times, it must be exactly once`);
+        source = source.replace(from, () => into);
+      }
+      return { contents: source, loader: 'ts' };
     });
   },
 };
@@ -183,7 +188,7 @@ const controlPlugin = {
 const work = fs.mkdtempSync(path.join(os.tmpdir(), 'daily-deals-'));
 const entry = path.join(work, 'entry.ts');
 const P = f => JSON.stringify(path.join(ROOT, f).split(path.sep).join('/'));
-fs.writeFileSync(entry, `export * as hs from ${P('src/lib/managerHotSeat.ts')};\nexport * as dd from ${P('src/lib/deadlineDay.ts')};\n`);
+fs.writeFileSync(entry, `export * as hs from ${P('src/lib/managerHotSeat.ts')};\nexport * as dd from ${P('src/lib/deadlineDay.ts')};\nexport * as cm from ${P('src/lib/clubManager.ts')};\n`);
 const bundle = path.join(work, 'daily.cjs');
 await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: bundle, logLevel: 'silent', alias: { '@': path.join(ROOT, 'src') }, plugins: [controlPlugin] });
 const store = new Map();
@@ -270,12 +275,20 @@ const out = { hot: {}, deadline: {} };
 const fails = { hot: [], deadline: [] };
 const reasons = {};
 const watching = { hot: [], deadline: [], scripted: [] };
+/* Round 1509: a day FOLLOWS a competition from outside when its club watches the Champions League (above) or when
+   startCareer opens the Europa League for it, which today's world does for every club, in the Champions League or
+   not: the engine's own answer, read on a fresh start of the day's club after the day is dealt, so no deal moves.
+   The world controls turn exactly those dates red (the counts moved with the round: printed, never loosened). */
+const europa = new Map();
+const followsEuropa = club => { if (!europa.has(club)) { const st = fresh().cm.startCareer(club); europa.set(club, !!st.worldComps?.uel); } return europa.get(club); };
+const following = { hot: [], deadline: [], scripted: [] };
 for (const [kind, rows, deal] of [['hot', HOT, hotSeat], ['deadline', DEADLINE, deadline]]) {
   for (const [date, club] of rows) {
     const got = deal(date);
     if (club && got.club !== club) cannot(`${kind} ${date} deals ${got.club}, the window expects ${club}: the window no longer holds this Premier League day`);
     out[kind][date] = got.digest;
     if (got.watches) watching[kind].push(date);
+    if (got.watches || followsEuropa(got.club)) following[kind].push(date);
     console.log(`  ${kind.padEnd(8)} ${date} ${club ? 'PL ' : '   '}${got.digest} ${got.line}${got.watches ? '; watches' : ''}`);
     if (PRINT) continue;
     const why = [];
@@ -298,6 +311,7 @@ for (const [date] of DEADLINE) {
   const got = scripted(date);
   scriptedOut[date] = { digest: got.digest, grade: got.grade, actions: got.actions };
   if (got.watches) watching.scripted.push(date);
+  if (got.watches || followsEuropa(got.club)) following.scripted.push(date);
   console.log(`  scripted ${date}    ${got.digest} ${got.line}; replayed ${got.replayApplied} of ${got.replayWanted} actions${got.watches ? '; watches' : ''}`);
   if (PRINT) continue;
   const why = [];
@@ -354,18 +368,19 @@ if (CONTROL === 'rulesall' || CONTROL === 'rulesstale') {
   process.exit(fired ? 1 : 3);
 }
 console.log(`  watching dates (Round 1502): Hot Seat ${watching.hot.length} of ${HOT.length}, Deadline Day ${watching.deadline.length} of ${DEADLINE.length}, scripted ${watching.scripted.length}`);
+console.log(`  following dates (Round 1509, the Champions League watched or the Europa League): Hot Seat ${following.hot.length} of ${HOT.length}, Deadline Day ${following.deadline.length} of ${DEADLINE.length}, scripted ${following.scripted.length}`);
 if (CONTROL === 'world' || CONTROL === 'worlddeadline') {
   /* Round 1502: red on exactly the watching dates of its own game (the scripted days too, for Deadline Day), each
      on the watched sentence, and on no other date of either game. */
   const hot = CONTROL === 'world';
-  const want = hot ? watching.hot.map(d => `hot ${d}`) : [...watching.deadline.map(d => `deadline ${d}`), ...watching.scripted.map(d => `scripted ${d}`)];
+  const want = hot ? following.hot.map(d => `hot ${d}`) : [...following.deadline.map(d => `deadline ${d}`), ...following.scripted.map(d => `scripted ${d}`)];
   const onWatched = Object.keys(reasons).filter(k => reasons[k].includes(WATCHED)).sort();
   const red = (hot ? fails.hot.map(d => `hot ${d}`) : fails.deadline.map(d => (d.startsWith('scripted ') ? d : `deadline ${d}`))).sort();
   const other = hot ? fails.deadline : fails.hot;
   const wanted = [...want].sort();
   const fired = want.length > 0 && JSON.stringify(onWatched) === JSON.stringify(wanted) && JSON.stringify(red) === JSON.stringify(wanted) && other.length === 0;
   console.log(fired
-    ? `simDailyDeals: CONTROL ${CONTROL} FIRED: exactly its ${want.length} watching dates went red on "${WATCHED}" and nothing else moved`
+    ? `simDailyDeals: CONTROL ${CONTROL} FIRED: exactly its ${want.length} following dates went red on "${WATCHED}" and nothing else moved`
     : `simDailyDeals: CONTROL ${CONTROL} DID NOT FIRE as it must: red on [${red.join(', ')}], on the watched sentence [${onWatched.join(', ')}], wanted exactly [${wanted.join(', ')}], the other game red on [${other.join(', ')}]`);
   process.exit(fired ? 1 : 3);
 }

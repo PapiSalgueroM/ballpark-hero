@@ -33,8 +33,9 @@ import {
   /* Round 1335: the old season rules' switch, read by both handovers. */
   legacySeason,
   /* Round 1502: the watched Champions League across a move, and where its nights sit. */
-  carryWorldUcl, worldUclNights,
+  carryWorldUcl, carryWorldComp, worldCompNights,
 } from '@/lib/clubManager';
+import type { WorldCompKey } from '@/lib/worldCompetition';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
 import { BOARD_FRESH, LEGACY_BOARD_START, LEGACY_NEW_JOB_BOARD } from '@/lib/clubManagerBoardVerdict';
 import { applyNewJobDials } from '@/lib/clubManagerDifficulty';
@@ -170,19 +171,23 @@ export function entryDatesOf(state: Pick<CareerState, 'startYear' | 'season' | '
  * league round is the Wednesday after it (the round's date plus four, the
  * midweek rule above), and one past the last league round goes a week at a
  * time after the last round's Wednesday. Null when the save watches nothing.
+ * Round 1509: keyed. The Europa League's nights are the Thursday of the same
+ * weeks, so each is the day after the date this rule gives.
  */
-export function worldUclNightDates(state: CareerState): CalDate[] | null {
-  const places = worldUclNights(state);
+export function worldCompNightDates(state: CareerState, comp: WorldCompKey): CalDate[] | null {
+  const places = worldCompNights(state, comp);
   if (!places) return null;
   const dates = entryDatesOf(state);
   const league = state.calendar.flatMap((e, i) => (e.type === 'league' ? [dates[i]] : []));
   if (!league.length) return null;
+  const thursday = comp === 'uel' ? 1 : 0;
   return places.map(p => {
-    if (p.entry) return dates[p.at];
+    if (p.entry) return thursday ? addDays(dates[p.at], thursday) : dates[p.at];
     const last = league.length - 1;
-    return p.round <= last ? addDays(league[p.round], 4) : addDays(league[last], 4 + 7 * (p.round - last));
+    return p.round <= last ? addDays(league[p.round], 4 + thursday) : addDays(league[last], 4 + thursday + 7 * (p.round - last));
   });
 }
+export function worldUclNightDates(state: CareerState): CalDate[] | null { return worldCompNightDates(state, 'ucl'); }
 
 /** The opening Saturday of the save's current season. */
 export function kickoffOf(state: Pick<CareerState, 'startYear' | 'season' | 'eraId' | 'clubName' | 'customClub'>): CalDate {
@@ -1061,6 +1066,8 @@ export function joinClubNow(career: CareerState): CareerState | null {
   /* Round 1502: the watched Champions League, decided on the joined season and year (carried with the nights
      already shown, opened where its field is fixed data, or taken off). */
   carryWorldUcl(career, joined);
+  /* Round 1509: and the Europa League, by the same rule, its own nights shown kept (seen). */
+  carryWorldComp(career, joined, 'uel');
   /* Round 1501: the level's cheque and wage room on the new job (the identity on Normal). */
   return applyNewJobDials(joined);
 }

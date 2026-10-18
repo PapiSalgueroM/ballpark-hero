@@ -156,9 +156,14 @@ import { uclTieOutcome } from '@/lib/uclTieRule';
    Round 1228's library drawing the league phase. */
 import {
   groupFixtures, settleTie,
-  G8_SHAPE, drawG8, evaluateWorldComp, g8DrawRules, leaguePhaseNightRounds, nightsOf, worldCompWinner,
-  type TieRules, type WorldCompBind, type WorldCompFormat, type WorldCompResult, type WorldCompSlice, type WorldKoRound, type WorldNight,
+  G8_SHAPE, drawG8, evaluateWorldComp, g8DrawRules, leaguePhaseNightRounds, nightsOf, worldCompWinner, LEAGUE_PHASE_NIGHT_MARKS,
+  type TieRules, type WorldCompBind, type WorldCompFormat, type WorldCompKey, type WorldCompResult, type WorldCompSlice, type WorldKoRound, type WorldNight,
 } from '@/lib/worldCompetition';
+/* Round 1509: the Europa League's access rule and its ledger's constants. The module imports nothing from here. */
+import {
+  euroFieldFromTables, SEASON_ONE_CUP_WINNERS, SEASON_ONE_UECL_HOLDER, UEL_FINAL_MARK, UEL_LEGS,
+  type EuroRoute, type EuroTable,
+} from '@/lib/euroAccess';
 import { UCL_LEAGUE, drawUclLeaguePhase } from '@/lib/uclLeaguePhase';
 /* Round 781: the match clock with the board in it. The module imports nothing. */
 import { clockOrder, playedBy } from '@/lib/clubManagerClock';
@@ -2874,8 +2879,12 @@ export interface CareerState {
    *  snapshot, a seed and, for the league phase, the slate). Written only
    *  when such a competition exists, replaced at every rollover and never
    *  kept beside a group of my own; every result is derived from it against
-   *  the week (evalWorldUcl). Absent on every save from before the round. */
-  worldComps?: { ucl?: WorldCompSlice };
+   *  the week (evalWorldUcl). Absent on every save from before the round.
+   *  Round 1509: and `uel`, the world's Europa League, followed every season
+   *  of today's world (my club is never one of its entrants yet). One object,
+   *  two keys, written in the order ucl, uel by setWorldComp, and gone when
+   *  both are. */
+  worldComps?: { ucl?: WorldCompSlice; uel?: WorldCompSlice };
   /** Round 617: the league fixture list alternates home and away (the circle
    *  method's standard venue rule, see roundPairs). Set on every new career
    *  and on every season rollover. Absent on a save from before the round,
@@ -12871,7 +12880,8 @@ function initUclGroup(qualified: boolean, myClub: string, eraId?: string, field?
 export function uclQualifiersFrom(career: CareerState): string[] {
   const tables = uclFinalTables(career);
   if (!tables) return [];
-  return uclFieldFromTables(tables, uclHolderOf(career));
+  /* Round 1509 (ruling 1k): and the Europa League's winner, row Q4. */
+  return uclFieldFromTables(tables, uclHolderOf(career), undefined, undefined, uelHolderOf(career));
 }
 
 /**
@@ -12889,6 +12899,17 @@ export function uclQualifiersFrom(career: CareerState): string[] {
 export function uclHolderOf(career: CareerState): string | null {
   const own = career.uclBracket?.find(t => t.round === 'F')?.winner ?? null;
   return own ?? worldUclWinner(career);
+}
+
+/**
+ * Round 1509 (rulings 1j and 1k): the Europa League's winner a finished season hands the next Champions League
+ * (row Q4: the titleholder is admitted to its league phase), read in one place, the one line reader of
+ * worldCompWinnerOf. My club is never an entrant of the Europa League yet, so it is never this. Null when the
+ * season crowned nobody this save knows of. scripts/lib/worldUelHolder1509.mjs reverts its route for the harnesses
+ * that need the engine without it.
+ */
+export function uelHolderOf(career: CareerState): string | null {
+  return worldCompWinnerOf(career, 'uel');
 }
 
 /**
@@ -12941,9 +12962,11 @@ export function uclFieldFromTables(
   holder?: string | null,
   size: number = UCL_FIELD_SIZE,
   exclude?: string | readonly string[],
+  uelHolder?: string | null,
 ): string[] {
-  /* The league places, then the holders (uclDirectQualifiersFromTables). */
-  const field = uclDirectQualifiersFromTables(tables, holder, exclude);
+  /* The league places, then the holders (uclDirectQualifiersFromTables), then since Round 1509 the Europa League's
+     winner. Every call without `uelHolder` is the call it was. */
+  const field = uclDirectQualifiersFromTables(tables, holder, exclude, uelHolder);
   if (!field.length) return [];
   const seen = new Set<string>(field);
   for (const club of excludedClubs(exclude)) seen.add(club);
@@ -12986,6 +13009,7 @@ export function uclDirectQualifiersFromTables(
   tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[],
   holder?: string | null,
   exclude?: string | readonly string[],
+  uelHolder?: string | null,
 ): string[] {
   /* Round 1347 E2: `exclude` (uclFieldFromTables says why) is never taken,
      by its league place or as the holders. */
@@ -13006,6 +13030,8 @@ export function uclDirectQualifiersFromTables(
   /* The holders go in whatever their league did, which is the real rule and
      the one route that is not a finishing position. */
   if (holder) take(holder);
+  /* Round 1509 (ruling 1k, row Q4): the Europa League's titleholder is admitted too, right after the holders. */
+  if (uelHolder) take(uelHolder);
   return field;
 }
 
@@ -13187,23 +13213,146 @@ export function worldUclEraField(state: Pick<CareerState, 'eraId' | 'clubName' |
  * no honest field: a later season of today's world with no finished tables to
  * read (a rollover from a season cut short, a job move from season two on).
  */
-export function worldUclField(
+export function worldCompField(
   state: CareerState,
+  comp: WorldCompKey,
   tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[] | null,
   holder?: string | null,
+  cup?: EuroCup | null,
+  uelHolder?: string | null,
 ): string[] | null {
+  if (comp === 'uel') return worldUelField(state, tables, cup ?? null);
   if (worldUclFormatOf(state) === 'g8') return worldUclEraField(state)?.field ?? null;
   const field = tables
-    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, worldUclExcluded(state))
+    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, worldUclExcluded(state), uelHolder)
     : state.season === 1 ? seasonOneUclField(state.eraId ?? DEFAULT_ERA_ID, UCL_LEAGUE.clubs, worldUclExcluded(state)) : null;
   return field && field.length ? field : null;
+}
+export function worldUclField(state: CareerState, tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[] | null, holder?: string | null, uelHolder?: string | null): string[] | null { return worldCompField(state, 'ucl', tables, holder, null, uelHolder); }
+
+/* ---------- Round 1509: the world's Europa League, followed every season of today's world ---------- */
+
+/** A nation's domestic cup as a finished season hands it on: its nation and its winner (null when the season
+ *  crowned nobody the game knows, so the cup's place passes down the league). */
+export interface EuroCup { nationId: string; winner: string | null }
+
+/** A Europa League field with how each entrant got in and the route the save's own club earned. */
+type TaggedField = string[] & { via?: Record<string, EuroRoute>; earned?: EuroRoute | null };
+
+/** The clubs of the Champions League this season really plays (the critic's 2(b)): my group and the AI groups
+ *  with my club when it is in, else the one the save follows. */
+export function uclEntrantsOf(state: Pick<CareerState, 'clubName' | 'uclGroup' | 'uclWorld' | 'worldComps'>): string[] {
+  if (state.uclGroup) return [state.clubName, ...state.uclGroup.opponents, ...(state.uclWorld ?? []).flatMap(g => g.clubs)];
+  return [...(state.worldComps?.ucl?.clubs ?? [])];
+}
+
+/** The European leagues of a set of final tables, in world order, as the access rule reads them. */
+function euroTablesOf(tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[]): EuroTable[] {
+  return tables.filter(t => t.league.euro).map(t => ({
+    leagueId: t.league.id, nationId: leagueRulesOf(t.league.id).nationId, clubs: t.clubs,
+    uclPlaces: uclPlacesIn(t.league), uelLast: EURO_SLOTS[t.league.id]?.uel ?? uclPlacesIn(t.league),
+  }));
+}
+
+/** The domestic cup the season of `career` played: its nation's id and the final's winner, null when the final
+ *  crowned nobody (no bracket, or a final not played). */
+export function euroCupOf(career: CareerState): EuroCup {
+  return { nationId: leagueRulesOf(careerLeagueOf(career).id).nationId, winner: career.cupBracket?.find(t => t.round === 'F')?.winner ?? null };
+}
+
+/**
+ * The Europa League field of the season `state` is opening (rulings 1f and 1g), or null when there is no honest
+ * one: an era save (it keeps its era's format, which has no Europa League in this round), or a later season of
+ * today's world with no finished tables to read. One rule, euroAccess.ts's, over `tables` (the season just
+ * finished, uclFinalTables) with `cup` the save's own domestic cup and every other nation's cup place passed
+ * down its league (the stand in the screen names); or, in season one, over the real 2025-26 tables with the real
+ * 2025-26 cup winners and the Conference League titleholder (rows K1 to K16). The Champions League it is kept
+ * apart from is the one this season really plays (uclEntrantsOf), so `state` has opened that first. My club is
+ * kept out of every route and its place passes on; the route it would have had by the same rule is `earned`.
+ */
+function worldUelField(state: CareerState, tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[] | null, cup: EuroCup | null): TaggedField | null {
+  const eraId = state.eraId ?? DEFAULT_ERA_ID;
+  if (isHistoricEra(eraId)) return null;
+  const real = !tables && state.season === 1 && eraById(eraId).startYear === CM_FINAL_TABLES_2025_26.startYear + 1;
+  /* Season one reads the real 2025-26 tables, which know nothing of a world edited at the start (the World Editor
+     can move a club into a league outside Europe): a club that no longer plays in a European nation's league takes
+     no place, and its place passes on. Every club of an unedited world plays where those tables have it. */
+  const nations = new Set(worldLeagueDefs(state).filter(l => l.euro).map(l => leagueRulesOf(l.id).nationId));
+  const inEurope = (c: string | null): string | null => {
+    if (!c || !real) return c;
+    try { return nations.has(leagueRulesOf(leagueOf(c).id).nationId) ? c : null; } catch { return null; }
+  };
+  const src = tables ?? (real ? seasonOneTables().map(t => ({ ...t, clubs: t.clubs.filter(c => inEurope(c) !== null) })) : null);
+  if (!src) return null;
+  const euro = euroTablesOf(src);
+  const cups: Record<string, string | null> = {};
+  for (const t of euro) cups[t.nationId] = real ? inEurope(SEASON_ONE_CUP_WINNERS[t.leagueId] ?? null) : null;
+  if (!real && cup && Object.prototype.hasOwnProperty.call(cups, cup.nationId)) cups[cup.nationId] = cup.winner;
+  const input = { tables: euro, cups, uclEntrants: uclEntrantsOf(state), ueclHolder: real ? inEurope(SEASON_ONE_UECL_HOLDER) : null, size: UCL_LEAGUE.clubs };
+  const out = worldUclExcluded(state);
+  const field = euroFieldFromTables({ ...input, exclude: out });
+  if (field.clubs.length !== UCL_LEAGUE.clubs) return null;
+  const tagged = field.clubs as TaggedField;
+  tagged.via = field.via;
+  /* The route my club earned: the same rule with my club not kept out (the club a created club replaced still
+     is, it does not exist while I manage the created one) and the fill never taking it. */
+  const mine = euroFieldFromTables({ ...input, exclude: out.filter(c => c !== state.clubName), noFill: [state.clubName] });
+  tagged.earned = mine.via[state.clubName] ?? null;
+  return tagged;
+}
+
+/**
+ * Round 1509 (ruling 1l): what a caller asks of startCareer beyond the career itself, one options object.
+ * `noWorldComps`: a daily (Manager Hot Seat, Deadline Day) follows no competition from outside. Its state is
+ * stripped of worldComps anyway; this skips opening them, which cost a daily start a median of 55 ms a date on a
+ * runner (simWorldEuro section 6). Opening draws nothing, so no deal moves either way.
+ */
+export interface StartCareerOptions { noWorldComps?: boolean }
+/** The options both dailies start a career with. */
+export const DAILY_START: StartCareerOptions = { noWorldComps: true };
+/* The states a start was asked to open nothing on, read by openWorldUclOnStart (a set of objects, never saved). */
+const NO_WORLD_COMPS = new WeakSet<CareerState>();
+
+/** Round 1509: the competitions in the order their keys are written. */
+const WORLD_COMP_KEYS: readonly WorldCompKey[] = ['ucl', 'uel'];
+
+/** Where each league phase night after matchday 6 sits (ruling 1h): the Champions League's eleven marks, and for
+ *  the Europa League the first ten of them with its final at UEL_FINAL_MARK, before the season's end. Read at
+ *  the call, never at module scope (an imported value evaluated at load is how an import cycle crashes). */
+function worldCompMarks(comp: WorldCompKey): readonly number[] {
+  return comp === 'uel' ? [...LEAGUE_PHASE_NIGHT_MARKS.slice(0, 10), UEL_FINAL_MARK] : LEAGUE_PHASE_NIGHT_MARKS;
+}
+
+/**
+ * Round 1509 (ruling 2b): write one key of worldComps, or take it off with null, leaving every other key as it
+ * was. The keys are written in the order ucl, uel and the object goes when it is empty, so a save that follows
+ * one competition is the save it was before this round, and never carries `worldComps: {}` or an undefined key.
+ */
+function setWorldComp(state: CareerState, comp: WorldCompKey, slice: WorldCompSlice | null): void {
+  const next: { ucl?: WorldCompSlice; uel?: WorldCompSlice } = {};
+  for (const k of WORLD_COMP_KEYS) {
+    const s = k === comp ? slice : state.worldComps?.[k];
+    if (s) next[k] = s;
+  }
+  /* Taking the Champions League's key off takes the object off first and puts back what is left, the way the
+     engine has always written it (delete, then assign), so the object stands where it always stood among the
+     save's keys; the Europa League's key is written in place. */
+  if (comp === 'ucl' && !slice) delete state.worldComps;
+  if (next.ucl || next.uel) state.worldComps = next;
+  else delete state.worldComps;
+}
+
+/** The format a competition plays in this save: the Champions League's (worldUclFormatOf), and the Europa League
+ *  of today's world, the league phase (an era save follows no Europa League in this round). */
+export function worldCompFormatOf(state: Pick<CareerState, 'eraId'>, comp: WorldCompKey): WorldCompFormat {
+  return comp === 'ucl' ? worldUclFormatOf(state) : 'l36';
 }
 
 /** The keyed seed of a watched season: the world seed when the save has one,
  *  else the save's own start, and the season's year. */
-function worldUclSeed(state: CareerState): number {
+function worldCompSeed(state: CareerState, comp: WorldCompKey): number {
   const base = worldSeedOf(state) ?? `${state.clubName}|${state.eraId ?? ''}|${state.startYear}`;
-  return Math.floor(keyedRng(`world-ucl|${base}|${worldYear(state)}`)() * 0x100000000);
+  return Math.floor(keyedRng(`world-${comp}|${base}|${worldYear(state)}`)() * 0x100000000);
 }
 
 /** One decimal, the strength every watched match reads (the snapshot). */
@@ -13218,14 +13367,14 @@ const worldUclStrength = (state: CareerState, club: string): number => Math.roun
  * of different clubs, when my club is in it, or when the draw cannot be made.
  * Draws nothing from Math.random and writes nothing but the key.
  */
-export function openWorldUcl(state: CareerState, field: string[] | null, holder?: string | null): void {
-  delete state.worldComps;
-  if (state.uclGroup || !field) return;
-  const f = worldUclFormatOf(state);
+export function openWorldComp(state: CareerState, comp: WorldCompKey, field: string[] | null, holder?: string | null): void {
+  setWorldComp(state, comp, null);
+  if ((comp === 'ucl' && state.uclGroup) || !field) return;
+  const f = worldCompFormatOf(state, comp);
   const size = f === 'g8' ? G8_SHAPE.clubs : UCL_LEAGUE.clubs;
   if (field.length !== size || new Set(field).size !== size || field.includes(state.clubName)) return;
   const str = new Map(field.map(club => [club, worldUclStrength(state, club)]));
-  const seed = worldUclSeed(state);
+  const seed = worldCompSeed(state, comp);
   const top = holder && field.includes(holder) ? holder : undefined;
   let slice: WorldCompSlice | null = null;
   if (f === 'g8') {
@@ -13242,8 +13391,13 @@ export function openWorldUcl(state: CareerState, field: string[] | null, holder?
         fx: slate.fx, breaks: slate.breaks, overCap: slate.overCap, ...(slate.fallback ? { fallback: true as const } : {}), ...(top ? { holder: top } : {}) };
     }
   }
-  if (slice) state.worldComps = { ucl: slice };
+  /* Round 1509: the Europa League keeps how each entrant got in, in its clubs' order, and my club's own route. */
+  const tagged = field as TaggedField;
+  if (slice && comp === 'uel' && tagged.via) slice.via = slice.clubs.map(c => tagged.via![c] ?? 'F').join('');
+  if (slice && comp === 'uel' && tagged.earned) slice.earned = tagged.earned;
+  if (slice) setWorldComp(state, comp, slice);
 }
+export function openWorldUcl(state: CareerState, field: string[] | null, holder?: string | null): void { openWorldComp(state, 'ucl', field, holder); }
 
 /**
  * startCareer's last step: a new career that is not in the Champions League
@@ -13254,11 +13408,21 @@ export function openWorldUcl(state: CareerState, field: string[] | null, holder?
  * competition must never stop a career starting (correction 15).
  */
 function openWorldUclOnStart(state: CareerState, world: SeasonWorld | undefined): void {
-  if (world || state.uclGroup) return;
+  if (world || NO_WORLD_COMPS.has(state)) return;
+  if (!state.uclGroup) {
+    try {
+      openWorldUcl(state, worldUclField(state, null), worldUclFormatOf(state) === 'l36' ? CM_FINAL_TABLES_2025_26.holders : null);
+    } catch {
+      setWorldComp(state, 'ucl', null);
+    }
+  }
+  /* Round 1509 (ruling 1c): then the Europa League, for every new career of today's world, in the Champions League
+     or not (my club is never one of its entrants yet), after the Champions League it is kept apart from, in its
+     own try. Season one's field is the real 2025-26 tables (worldUelField); an era save has none. */
   try {
-    openWorldUcl(state, worldUclField(state, null), worldUclFormatOf(state) === 'l36' ? CM_FINAL_TABLES_2025_26.holders : null);
+    openWorldComp(state, 'uel', worldCompField(state, 'uel', null), null);
   } catch {
-    delete state.worldComps;
+    setWorldComp(state, 'uel', null);
   }
 }
 
@@ -13269,11 +13433,13 @@ function openWorldUclOnStart(state: CareerState, world: SeasonWorld | undefined)
  * goals, ET_DEFLATOR and ET_MINUTES; the league phase's play-off has the round
  * of 16's two legs). The eras' groups read the era's own order (uclGroupRule)
  * and their round of 16 is the participant's own draw (drawUclRoundOf16, with
- * its venue rule for two legs).
+ * its venue rule for two legs). Round 1509: keyed, one binding for every
+ * competition the save follows.
  */
-function worldUclBind(state: CareerState, f: WorldCompFormat): WorldCompBind {
+function worldCompBind(state: CareerState, comp: WorldCompKey, f: WorldCompFormat): WorldCompBind {
   const tie = (round: WorldKoRound): TieRules => ({
-    legs: uclLegsFor(state.eraId, round === 'PO' ? 'R16' : round),
+    /* Round 1509: the Europa League's legs are its own ledger row (U-legs); the Champions League's the participant's. */
+    legs: comp === 'uel' ? UEL_LEGS[round] : uclLegsFor(state.eraId, round === 'PO' ? 'R16' : round),
     awayGoals: uclAwayGoalsApply(state.eraId),
     deciderScale: ET_DEFLATOR,
     etScale: ET_DEFLATOR * ET_MINUTES / 90,
@@ -13309,11 +13475,11 @@ export interface WorldUclNightPlace { night: WorldNight; at: number; round: numb
  * is put where a fresh one has it (the round of 16 at UCL_R16_MARK, a second
  * leg a round after its first). Never earlier than the night before it.
  */
-export function worldUclNights(state: CareerState): WorldUclNightPlace[] | null {
-  const slice = state.worldComps?.ucl;
+export function worldCompNights(state: CareerState, comp: WorldCompKey): WorldUclNightPlace[] | null {
+  const slice = state.worldComps?.[comp];
   const cal = state.calendar;
   if (!slice || slice.s !== state.season || !Array.isArray(cal) || !cal.length) return null;
-  const bind = worldUclBind(state, slice.f);
+  const bind = worldCompBind(state, comp, slice.f);
   const nights = nightsOf(slice.f, r => bind.tie(r).legs);
   const leagueAt: number[] = [];
   cal.forEach((e, i) => { if (e.type === 'league') leagueAt.push(i); });
@@ -13331,7 +13497,7 @@ export function worldUclNights(state: CareerState): WorldUclNightPlace[] | null 
   /* Every calendar carries six European midweeks (buildCalendar's uclGroup weeks): the league phase plays its
      first six matchdays on them and its other eleven nights on the marks. */
   const weeks = 6;
-  const marks = slice.f === 'l36' ? leaguePhaseNightRounds(rounds, roundOf(Math.max(0, groupAt(weeks - 1)))) : [];
+  const marks = slice.f === 'l36' ? leaguePhaseNightRounds(rounds, roundOf(Math.max(0, groupAt(weeks - 1))), worldCompMarks(comp)) : [];
   nights.forEach((night, n) => {
     if (slice.f === 'l36' && n >= weeks) {
       const r = marks[n - weeks];
@@ -13351,17 +13517,19 @@ export function worldUclNights(state: CareerState): WorldUclNightPlace[] | null 
   });
   return places;
 }
+export function worldUclNights(state: CareerState): WorldUclNightPlace[] | null { return worldCompNights(state, 'ucl'); }
 
 /** How many nights of the watched season the save has passed: a prefix, and
  *  never fewer than a slice carried across a job move had already shown. */
-export function worldUclNightsDone(state: CareerState): number {
-  const places = worldUclNights(state);
+export function worldCompNightsDone(state: CareerState, comp: WorldCompKey): number {
+  const places = worldCompNights(state, comp);
   if (!places) return 0;
   let n = 0;
   if (state.week >= state.calendar.length) n = places.length;
   else while (n < places.length && state.week > places[n].at) n += 1;
-  return Math.max(n, Math.min(state.worldComps?.ucl?.seen ?? 0, places.length));
+  return Math.max(n, Math.min(state.worldComps?.[comp]?.seen ?? 0, places.length));
 }
+export function worldUclNightsDone(state: CareerState): number { return worldCompNightsDone(state, 'ucl'); }
 
 /* Evaluations kept per slice and night count. A result is shared: read it, never write into it. */
 const WORLD_UCL_MEMO = new WeakMap<WorldCompSlice, Map<string, WorldCompResult>>();
@@ -13372,18 +13540,25 @@ const WORLD_UCL_MEMO = new WeakMap<WorldCompSlice, Map<string, WorldCompResult>>
  * winner. Null when the save watches nothing this season. Pure: it draws
  * nothing from Math.random and writes nothing into `state`.
  */
-export function evalWorldUcl(state: CareerState, nights?: number): WorldCompResult | null {
-  const slice = state.worldComps?.ucl;
+export function evalWorldComp(state: CareerState, comp: WorldCompKey, nights?: number): WorldCompResult | null {
+  const slice = state.worldComps?.[comp];
   if (!slice || slice.s !== state.season) return null;
-  const k = nights ?? worldUclNightsDone(state);
+  const k = nights ?? worldCompNightsDone(state, comp);
   const key = `${state.eraId ?? ''}|${k}`;
   let memo = WORLD_UCL_MEMO.get(slice);
   if (!memo) { memo = new Map(); WORLD_UCL_MEMO.set(slice, memo); }
   const hit = memo.get(key);
   if (hit) return hit;
-  const out = evaluateWorldComp(slice, k, worldUclBind(state, slice.f));
+  const out = evaluateWorldComp(slice, k, worldCompBind(state, comp, slice.f));
   memo.set(key, out);
   return out;
+}
+export function evalWorldUcl(state: CareerState, nights?: number): WorldCompResult | null { return evalWorldComp(state, 'ucl', nights); }
+
+/** The holder a fresh season one draw puts top of pot one: the real 2025-26 Champions League winner in today's
+ *  world. The Europa League's holder is always in the Champions League (row Q4), so it never has one. */
+function worldCompStartHolder(state: Pick<CareerState, 'eraId'>, comp: WorldCompKey): string | null {
+  return comp === 'ucl' && worldUclFormatOf(state) === 'l36' ? CM_FINAL_TABLES_2025_26.holders : null;
 }
 
 /**
@@ -13397,24 +13572,34 @@ export function evalWorldUcl(state: CareerState, nights?: number): WorldCompResu
  * of an era), else the key comes off: the load repair's own rule, so a reload
  * never opens a competition the move left out. Never throws.
  */
-export function carryWorldUcl(career: CareerState, joined: CareerState): void {
+export function carryWorldComp(career: CareerState, joined: CareerState, comp: WorldCompKey): void {
   try {
-    delete joined.worldComps;
-    if (joined.uclGroup) return;
-    const slice = career.worldComps?.ucl;
+    setWorldComp(joined, comp, null);
+    if (comp === 'ucl' && joined.uclGroup) return;
+    const held = career.worldComps?.[comp];
+    /* fix-1509: the Europa League is carried only while it stays apart from the Champions League the joined
+       season plays. A move can change that one (a club in it leaving for one outside, or a watcher joining one
+       of the 36 it watched, which draws it again), and the carried field would then share clubs with it: the
+       rule a career with nothing to carry follows decides instead (season one draws it again, later none). */
+    const slice = comp === 'uel' && held && uclEntrantsOf(joined).some(c => held.clubs.includes(c)) ? undefined : held;
     const names = [joined.clubName, joined.eraId ? eraEuroName(joined.eraId, joined.clubName) : joined.clubName];
     if (slice && slice.s === career.season && slice.s === joined.season && !names.some(c => slice.clubs.includes(c))) {
-      const seen = Math.max(slice.seen ?? 0, worldUclNightsDone(career));
-      joined.worldComps = { ucl: { ...slice, ...(seen > 0 ? { seen } : {}) } };
+      const seen = Math.max(slice.seen ?? 0, worldCompNightsDone(career, comp));
+      setWorldComp(joined, comp, { ...slice, ...(seen > 0 ? { seen } : {}) });
+      /* `earned` is the route of the club the slice was opened for. The rule kept out only that club, so a club
+         outside the field earned no place by it: the carried slice says none for the new club (fix-1509). */
+      const carried = joined.worldComps?.[comp];
+      if (carried && joined.clubName !== career.clubName) delete carried.earned;
       return;
     }
     /* Nothing to carry, or my new club is an entrant of the one it watched (it cannot watch itself play): the
        rule of a career with nothing to carry decides, the one repairWorldUcl applies at the next load. */
-    openWorldUcl(joined, worldUclField(joined, null), worldUclFormatOf(joined) === 'l36' ? CM_FINAL_TABLES_2025_26.holders : null);
+    openWorldComp(joined, comp, worldCompField(joined, comp, null), worldCompStartHolder(joined, comp));
   } catch {
-    delete joined.worldComps;
+    setWorldComp(joined, comp, null);
   }
 }
+export function carryWorldUcl(career: CareerState, joined: CareerState): void { carryWorldComp(career, joined, 'ucl'); }
 
 /**
  * The load repair (step E6, narrowly: the critic's answer 4 and correction
@@ -13427,31 +13612,35 @@ export function carryWorldUcl(career: CareerState, joined: CareerState): void {
  * catch: a repair that fails leaves the save without a slice, never without
  * the save (loadCareer's catch would hand back no career at all).
  */
-export function repairWorldUcl(state: CareerState): void {
+export function repairWorldComp(state: CareerState, comp: WorldCompKey): void {
   try {
-    const slice = state.worldComps?.ucl;
-    if (slice && slice.s === state.season && !state.uclGroup) return;
-    if (state.worldComps) delete state.worldComps;
-    if (state.uclGroup || !Array.isArray(state.calendar) || state.week >= state.calendar.length) return;
-    const fmt = worldUclFormatOf(state);
+    const inIt = comp === 'ucl' && !!state.uclGroup;
+    const slice = state.worldComps?.[comp];
+    if (slice && slice.s === state.season && !inIt) return;
+    setWorldComp(state, comp, null);
+    if (inIt || !Array.isArray(state.calendar) || state.week >= state.calendar.length) return;
+    const fmt = worldCompFormatOf(state, comp);
     if (fmt === 'l36' && state.season !== 1) return;
-    openWorldUcl(state, worldUclField(state, null), fmt === 'l36' ? CM_FINAL_TABLES_2025_26.holders : null);
+    openWorldComp(state, comp, worldCompField(state, comp, null), worldCompStartHolder(state, comp));
   } catch {
-    delete state.worldComps;
+    setWorldComp(state, comp, null);
   }
 }
+export function repairWorldUcl(state: CareerState): void { repairWorldComp(state, 'ucl'); }
 
-/** The winner of the watched season, once the season is over (every night
- *  played and a final won), else null. Never throws. */
-export function worldUclWinner(career: CareerState): string | null {
-  const slice = career.worldComps?.ucl;
+/** The winner of a followed competition's season, once the season is over
+ *  (every night played and a final won), else null. Never throws. Round 1509
+ *  (ruling 1j): the one name this round and Round 1510 read a winner by. */
+export function worldCompWinnerOf(career: CareerState, comp: WorldCompKey): string | null {
+  const slice = career.worldComps?.[comp];
   if (!slice || slice.s !== career.season || !Array.isArray(career.calendar) || career.week < career.calendar.length) return null;
   try {
-    return worldCompWinner(evalWorldUcl(career, Infinity) as WorldCompResult)?.winner ?? null;
+    return worldCompWinner(evalWorldComp(career, comp, Infinity) as WorldCompResult)?.winner ?? null;
   } catch {
     return null;
   }
 }
+export function worldUclWinner(career: CareerState): string | null { return worldCompWinnerOf(career, 'ucl'); }
 
 /**
  * Bring every AI group up to my own group's matchday. Lockstep on a normal
@@ -14158,12 +14347,120 @@ export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSi
   return objs;
 }
 
+/* ---------- Round 1509 (rulings 1e and 1i): the board's European rungs, graded by the one rule ---------- */
+
+/** Where my club stands for Europe: in the Champions League, in the Europa League, or neither. */
+export type EuroPlace = 'ucl' | 'uel' | null;
+
+/* One answer per state and moment: objectiveStatuses runs on every render. Keyed on the week, because the engine
+   plays entries into a state it then hands on, and the table is only ever moved by an entry. */
+const EURO_PLACE_MEMO = new WeakMap<CareerState, { key: string; place: EuroPlace; route: EuroRoute | null }>();
+
+/** The route behind euroPlaceOf's 'uel' (a league place, the cup, the cup's place passed down), or null. Read by
+ *  scripts/simWorldEuro.mjs section 3 to print the board's moves by route. */
+export function euroPlaceRouteOf(career: CareerState): EuroRoute | null {
+  euroPlaceOf(career);
+  return EURO_PLACE_MEMO.get(career)?.route ?? null;
+}
+
+/**
+ * Where MY club stands for Europe by the rule that fills the competitions (rulings 1e and 1i). 'ucl' exactly when
+ * qualifiedUcl's own expression says so (a league place, position within uclPlacesIn; startNextSeason), never
+ * membership of an AI field. 'uel' when the Europa League's rule, run WITHOUT my club kept out and with the fill
+ * never taking it, gives my club a place. Mid season it reads my league's own table, my nation's cup final once
+ * that is played, and the places those pass down inside my league (before the final: league places only). At
+ * the season's end it reads what the rollover will: every European league's final table, the cup, and the
+ * Champions League the rollover will draw with my club kept out, whose fill takes the fifth placed club of the
+ * deepest leagues, so a place there can pass to sixth. On a summer move it answers for the club the season was
+ * played with. Never throws: on an error it gives the position grade of before this round.
+ */
+export function euroPlaceOf(career: CareerState): EuroPlace {
+  const key = `${career.season}|${career.week}|${career.calendar?.length ?? 0}|${career.clubName}`;
+  const hit = EURO_PLACE_MEMO.get(career);
+  if (hit && hit.key === key) return hit.place;
+  const league = careerLeagueOf(career);
+  const table = sortedLeagueTable(career);
+  const pos = table.findIndex(r => r.club === career.clubName) + 1;
+  const places = uclPlacesIn(league);
+  let place: EuroPlace;
+  let route: EuroRoute | null = null;
+  try {
+    if (league.euro && pos > 0 && pos <= places) place = 'ucl';
+    else {
+      const over = Array.isArray(career.calendar) && career.calendar.length > 0 && career.week >= career.calendar.length;
+      route = over ? euroRouteAtEnd(career, league, table) : euroRouteNow(career, league, table);
+      place = route ? 'uel' : null;
+    }
+  } catch {
+    const uelLast = EURO_SLOTS[league.id]?.uel ?? places;
+    place = league.euro && pos > 0 && pos <= places ? 'ucl' : league.euro && pos > 0 && pos <= uelLast ? 'uel' : null;
+  }
+  EURO_PLACE_MEMO.set(career, { key, place, route });
+  return place;
+}
+
+/** My club's route mid season: my league's own table and my nation's cup final once it is played. */
+function euroRouteNow(career: CareerState, league: LeagueDef, table: TableRow[]): EuroRoute | null {
+  const nationId = leagueRulesOf(league.id).nationId;
+  if (!worldLeagueDefs(career).some(l => l.euro && leagueRulesOf(l.id).nationId === nationId)) return null;
+  const winner = career.cupBracket?.find(t => t.round === 'F')?.winner ?? null;
+  const clubs = league.euro ? table.map(r => r.club) : [];
+  const ucl = league.euro ? uclPlacesIn(league) : 0;
+  const mine: EuroTable = { leagueId: league.id, nationId, clubs, uclPlaces: ucl, uelLast: league.euro ? (EURO_SLOTS[league.id]?.uel ?? ucl) : 0 };
+  const field = euroFieldFromTables({
+    tables: [mine], cups: winner ? { [nationId]: winner } : {}, uclEntrants: clubs.slice(0, ucl), size: UCL_LEAGUE.clubs,
+    exclude: worldUclExcluded(career).slice(1), noFill: [career.clubName],
+  });
+  return field.via[career.clubName] ?? null;
+}
+
+/** My club's route at the season's end: the rollover's own inputs, read off the finished season. */
+function euroRouteAtEnd(career: CareerState, league: LeagueDef, table: TableRow[]): EuroRoute | null {
+  const tables = uclFinalTables(career);
+  if (!tables) return euroRouteNow(career, league, table);
+  const watched = uclFieldFromTables(tables, uclHolderOf(career), UCL_LEAGUE.clubs, worldUclExcluded(career), uelHolderOf(career));
+  const euro = euroTablesOf(tables);
+  const cups: Record<string, string | null> = {};
+  for (const t of euro) cups[t.nationId] = null;
+  const cup = euroCupOf(career);
+  if (Object.prototype.hasOwnProperty.call(cups, cup.nationId)) cups[cup.nationId] = cup.winner;
+  const field = euroFieldFromTables({
+    tables: euro, cups, uclEntrants: watched, size: UCL_LEAGUE.clubs,
+    exclude: worldUclExcluded(career).slice(1), noFill: [career.clubName],
+  });
+  return field.via[career.clubName] ?? null;
+}
+
+/** Which European rung a league objective is, read off the three labels leagueDemand writes (ruling 1i). */
+export function europeRungOf(objective: Pick<BoardObjective, 'id' | 'label'>): 'ucl' | 'uel' | 'uecl' | null {
+  if (objective.id !== 'league') return null;
+  if (objective.label === 'Qualify for the Champions League') return 'ucl';
+  if (objective.label === 'Qualify for the Europa League') return 'uel';
+  if (objective.label === 'Qualify for the Conference League') return 'uecl';
+  return null;
+}
+
+/** The one line the board panel shows under a European rung met otherwise than by finishing where the board asked
+ *  (fix2-1509, run minor 6): the cup won (C), the cup's place passed down the table (P), or a league place passed
+ *  down past a club going into the Champions League to a club below the asked position (L, `below`). Undefined
+ *  for any other case. */
+function euroRungWhy(career: CareerState, route: EuroRoute | null, below: boolean): string | undefined {
+  const cup = careerLeagueOf(career).cupName ?? 'cup';
+  if (route === 'C') return `Your ${cup} win counts: the cup winner gets a Europa League place.`;
+  if (route === 'L') return below ? 'A club above you goes into the Champions League, so a Europa League place passes down the table to you.' : undefined;
+  if (route !== 'P') return undefined;
+  return euroCupOf(career).winner
+    ? `The ${cup} winner already has a European place, so its Europa League place passes down to you.`
+    : `The ${cup}'s Europa League place passes down the table to you.`;
+}
+
 /**
  * Live status of every board objective. Pure; the hub renders this and
  * finishSeason grades from it (seasonDone flips onTrack/behind into
- * done/failed).
+ * done/failed). `why`, only on a European rung met otherwise than by the
+ * position asked (euroRungWhy), is the line the board panel shows under it.
  */
-export function objectiveStatuses(career: CareerState): { objective: BoardObjective; status: ObjectiveStatus }[] {
+export function objectiveStatuses(career: CareerState): { objective: BoardObjective; status: ObjectiveStatus; why?: string }[] {
   const objs = career.boardObjectives ?? [];
   const table = sortedLeagueTable(career);
   const myIdx = table.findIndex(r => r.club === career.clubName);
@@ -14180,8 +14477,19 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
     if (asked) return { objective, status: asked };
     let status: ObjectiveStatus = 'onTrack';
     if (objective.id === 'league') {
-      const met = myPos <= objective.target;
+      /* Round 1509 (ruling 1i): a European rung of today's world is met by the rule that fills the competitions
+         (euroPlaceOf): the Champions League's by its places, the Europa League's by any route into it or above,
+         the Conference League's by its position or by either place above it. An era save keeps its position grade,
+         and so does every other league objective. */
+      const rung = isHistoricEra(career.eraId) ? null : europeRungOf(objective);
+      const place = rung ? euroPlaceOf(career) : null;
+      const met = rung === 'ucl' ? place === 'ucl'
+        : rung === 'uel' ? place === 'ucl' || place === 'uel'
+          : rung === 'uecl' ? myPos <= objective.target || place === 'ucl' || place === 'uel'
+            : myPos <= objective.target;
       status = seasonDone ? (met ? 'done' : 'failed') : (met ? 'onTrack' : 'behind');
+      const why = met && place === 'uel' ? euroRungWhy(career, euroPlaceRouteOf(career), myPos > objective.target) : undefined;
+      if (why) return { objective, status, why };
     } else if (objective.id === 'cup') {
       const { rank, alive } = cupProgressRank(career);
       status = rank >= objective.target ? 'done' : alive ? 'onTrack' : 'failed';
@@ -18622,7 +18930,7 @@ export interface SeasonWorld {
    where an edited world is a fresh start in every other way. It applies to a
    real club in today's world only: a historic era never reads the overrides,
    and a custom club is placed against the real lineups. */
-export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld, edit?: Record<string, string[]> | null): CareerState {
+export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld, edit?: Record<string, string[]> | null, opts?: StartCareerOptions): CareerState {
   /* Round 132: the era decides what year season one is, and the year decides
      everything else: the squad you are handed, how good every other club is,
      and who is on the market. The default era is the current one and its
@@ -18753,6 +19061,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     promisedStarts: [],
     pairResults: {},
   };
+  /* Round 1509 (ruling 1l): a daily follows no competition from outside, so its start opens none. */
+  if (opts?.noWorldComps) NO_WORLD_COMPS.add(state);
   if (world?.rosterCareer && (worldRosterView(world.rosterCareer) || worldSeedOf(world.rosterCareer) !== undefined)) {
     state.season = world.rosterCareer.season;
     state.startYear = world.rosterCareer.startYear;
@@ -20962,6 +21272,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      the season's winner as the holder the participant's field is handed. */
   const watchTables = uclFinalTables(career);
   const watchHolder = uclHolderOf(career);
+  /* Round 1509: and the domestic cup the season played, for the Europa League's cup place, and the Europa League's
+     winner, admitted to the watched Champions League as nextUclField admits it (row Q4). */
+  const watchCup = euroCupOf(career);
+  const watchUelHolder = uelHolderOf(career);
   registerLeagueOverrides(pr.overrides);
   /* Round 146: inside a historic save, a "playable club" is an era club, so
      the move guard consults the era world before the modern one. */
@@ -21505,9 +21819,18 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      (customExitUclField). Never throws: a rollover always completes. */
   try {
     const tables = moving && watchTables ? watchTables.map(t => ({ ...t, clubs: customExitUclField(career, t.clubs) })) : watchTables;
-    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);
+    openWorldUcl(state, worldUclField(state, tables, watchHolder, watchUelHolder), watchHolder);
   } catch {
-    delete state.worldComps;
+    setWorldComp(state, 'ucl', null);
+  }
+  /* Round 1509 (ruling 1c): and the season's Europa League, every season of today's world, off the same final tables
+     and the cup the season played, kept apart from the Champions League just opened. Last season's slice came
+     with the copy, so it is always replaced or taken off here. Its own try: a rollover always completes. */
+  try {
+    const tables = moving && watchTables ? watchTables.map(t => ({ ...t, clubs: customExitUclField(career, t.clubs) })) : watchTables;
+    openWorldComp(state, 'uel', worldCompField(state, 'uel', tables, null, watchCup), null);
+  } catch {
+    setWorldComp(state, 'uel', null);
   }
   // Round 165: a fresh golden boot race too (the new table is all zeros).
   state.scorerRace = initScorerRace(state);
@@ -21999,6 +22322,9 @@ export function loadCareer(): CareerState | null {
        fixed data (repairWorldUcl). After the registrations, because the strengths it snapshots read the
        registered world; it never throws. */
     repairWorldUcl(parsed);
+    /* Round 1509: and its Europa League, season one of today's world only, after the Champions League it is kept
+       apart from; its own try inside, so it never throws either. */
+    repairWorldComp(parsed, 'uel');
     /* Round 474: the specific asks, LAST, because the country an ask counts
        and the market it is measured against both read the league, and the
        league is not settled until the two registrations above have run. */

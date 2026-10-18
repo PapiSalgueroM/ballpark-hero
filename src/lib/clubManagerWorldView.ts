@@ -24,12 +24,13 @@
  */
 import type { CareerState, TableRow, UclTie } from '@/lib/clubManager';
 import {
-  ERA_UCL_FIELDS, evalWorldUcl, sortedUclGroup, uclLegsFor, worldUclNights, worldUclNightsDone,
+  ERA_UCL_FIELDS, evalWorldComp, sortedUclGroup, uclLegsFor, worldCompNights, worldCompNightsDone,
 } from '@/lib/clubManager';
-import { entryDatesOf, worldUclNightDates, worldYearOf, type CalDate } from '@/lib/clubManagerCalendar';
+import { entryDatesOf, worldCompNightDates, worldYearOf, type CalDate } from '@/lib/clubManagerCalendar';
 import { isHistoricEra } from '@/lib/clubManagerEras';
+import { CM_FINAL_TABLES_2025_26 } from '@/data/clubManagerFinalTables2025_26';
 import { UCL_GROUP_LEDGER } from '@/lib/clubManagerUclGroups';
-import { groupFixtures, type WorldCompFormat, type WorldKoRound } from '@/lib/worldCompetition';
+import { groupFixtures, type WorldCompFormat, type WorldCompKey, type WorldKoRound } from '@/lib/worldCompetition';
 
 export type WorldViewStage = 'md' | WorldKoRound;
 
@@ -86,6 +87,10 @@ export interface WorldCompView {
   standIn?: { club: string; for: string };
   /** An era save: every season's field is that era's real 32, whatever the leagues did. */
   eraField: boolean;
+  /** Round 1509, the Europa League: how each entrant got in (euroAccess.ts's route codes), and the route my club
+   *  earned by the same rule (it is never an entrant yet). */
+  via?: Record<string, string>;
+  earned?: string;
 }
 
 /** "2026-27" for the save's season. */
@@ -219,18 +224,18 @@ function standInOf(career: CareerState, clubs: string[]): { club: string; for: s
   return club && left ? { club, for: left } : undefined;
 }
 
-function watcherView(career: CareerState): WorldCompView | null {
-  const slice = career.worldComps?.ucl;
-  if (!slice || slice.s !== career.season || career.uclGroup) return null;
-  let result: ReturnType<typeof evalWorldUcl> = null;
-  let places: ReturnType<typeof worldUclNights> = null;
+function watcherView(career: CareerState, comp: WorldCompKey): WorldCompView | null {
+  const slice = career.worldComps?.[comp];
+  if (!slice || slice.s !== career.season || (comp === 'ucl' && career.uclGroup)) return null;
+  let result: ReturnType<typeof evalWorldComp> = null;
+  let places: ReturnType<typeof worldCompNights> = null;
   let dates: CalDate[] | null = null;
   let done = 0;
   try {
-    result = evalWorldUcl(career);
-    places = worldUclNights(career);
-    dates = worldUclNightDates(career);
-    done = worldUclNightsDone(career);
+    result = evalWorldComp(career, comp);
+    places = worldCompNights(career, comp);
+    dates = worldCompNightDates(career, comp);
+    done = worldCompNightsDone(career, comp);
   } catch {
     return null;
   }
@@ -268,17 +273,23 @@ function watcherView(career: CareerState): WorldCompView | null {
     ...(slice.holder ? { holder: slice.holder } : {}),
     ...(() => { const s = standInOf(career, slice.clubs); return s ? { standIn: s } : {}; })(),
     eraField: isHistoricEra(career.eraId),
+    ...(slice.via && slice.via.length === slice.clubs.length ? { via: Object.fromEntries(slice.clubs.map((c, i) => [c, slice.via![i]])) } : {}),
+    ...(slice.earned ? { earned: slice.earned } : {}),
   };
 }
 
-/** The Champions League as this save sees it this season, in it or watching, or null when there is neither. */
-export function worldUclView(career: CareerState): WorldCompView | null {
+/** A competition as this save sees it this season, in it or watching, or null when there is neither. Round 1509:
+ *  keyed; my club is in the Champions League alone (the Europa League is only ever followed from outside yet). */
+export function worldCompView(career: CareerState, comp: WorldCompKey): WorldCompView | null {
   try {
-    return career.uclGroup ? participantView(career) : watcherView(career);
+    return comp === 'ucl' && career.uclGroup ? participantView(career) : watcherView(career, comp);
   } catch {
     return null;
   }
 }
+
+/** The Champions League as this save sees it this season, in it or watching, or null when there is neither. */
+export function worldUclView(career: CareerState): WorldCompView | null { return worldCompView(career, 'ucl'); }
 
 /* ---------- the tile's words, and one club's run ---------- */
 
@@ -299,6 +310,26 @@ export function nextNight(view: WorldCompView): WorldViewNight | null {
 }
 
 export interface WorldUclStatus { mode: 'in' | 'watching' | 'none'; value: string; sub: string }
+
+/**
+ * fix-1509 (the brief's advice 21, last item): the leagues whose fifth placed club of 2025-26 played the real
+ * 2026-27 Champions League through a European Performance Spot, rows A1 and A3 of scripts/data/cmEuroAccess.json
+ * (verified, each on two publishers). The game plays its own four places there (both rows are in
+ * EURO_ACCESS_PARTIAL), so that club starts a season one career in neither competition, and the tile says why.
+ * Read for that line alone, never for a place.
+ */
+const REAL_FIFTH_IN_UCL: Readonly<Record<string, string>> = { premier: 'England', laliga: 'Spain' };
+
+/** The nation whose real fifth Champions League place this club held, in season one of today's world where the
+ *  game's rule made that fifth place a Europa League one instead; else null. */
+export function realFifthNation(career: CareerState): string | null {
+  if (career.season !== 1 || career.uclGroup || isHistoricEra(career.eraId) || career.worldComps?.uel?.earned !== 'L') return null;
+  for (const [id, nation] of Object.entries(REAL_FIFTH_IN_UCL)) if (CM_FINAL_TABLES_2025_26.leagues[id]?.table[4] === career.clubName) return nation;
+  return null;
+}
+
+/** The tile's line for that club: why it is in neither. */
+export const REAL_FIFTH_TILE = 'Fifth was a real Champions League place, a Europa League one here, not played yet';
 
 /** The Champions League tile's two lines on the Cups panel. */
 export function worldUclStatus(career: CareerState, view: WorldCompView | null): WorldUclStatus {
@@ -325,9 +356,27 @@ export function worldUclStatus(career: CareerState, view: WorldCompView | null):
     const value = view.winner ? `Won by ${view.winner}`
       : !next ? 'Season over'
         : next.stage === 'md' ? `Matchday ${(next.md ?? 0) + 1} of ${first} next` : `${nightLabel(next)} next`;
-    return { mode: 'watching', value, sub: 'You are watching from outside' };
+    return { mode: 'watching', value, sub: realFifthNation(career) ? REAL_FIFTH_TILE : 'You are watching from outside' };
   }
   return { mode: 'none', value: 'Nothing to follow', sub: 'It shows here from next season' };
+}
+
+/** Round 1509: how a club got into the Europa League, in a few words, by its route code (euroAccess.ts). */
+export function routeWords(code: string | undefined): string | null {
+  return code === 'L' ? 'its league place' : code === 'C' ? 'winning its cup' : code === 'P' ? "its cup's place, passed down its league"
+    : code === 'H' ? 'winning the Conference League' : code === 'F' ? 'the fill, as the next best placed club of a strong league' : null;
+}
+
+/** Round 1509: the Europa League tile's two lines on the Cups panel. My club only ever follows it from outside in
+ *  this round, so a place it earned says so and that its own nights are not played yet. */
+export function worldUelStatus(career: CareerState, view: WorldCompView | null): WorldUclStatus {
+  if (!view) return { mode: 'none', value: 'Nothing to follow', sub: 'It shows here from next season' };
+  const next = nextNight(view);
+  const first = firstStageNights(view);
+  const value = view.winner ? `Won by ${view.winner}`
+    : !next ? 'Season over'
+      : next.stage === 'md' ? `Matchday ${(next.md ?? 0) + 1} of ${first} next` : `${nightLabel(next)} next`;
+  return { mode: 'watching', value, sub: view.earned ? 'You earned a place, but your own nights are not played yet' : 'You are following it from outside' };
 }
 
 /** One game of a club's run, in the club fixtures reader's row shape (round is the night here). */
