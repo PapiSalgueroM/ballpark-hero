@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/lib/euroAccess.test.ts src/lib/clubManagerWorldView.test.ts src/test/clubManagerWorldEditor.test.tsx src/test/clubManagerWorldEditorPage.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+simWorldEditor: node scripts/simWorldEditor.mjs > /tmp/we.log 2>&1; s=$?; grep -E "FAIL|RED" /tmp/we.log | head -8 | cut -c1-300; tail -1 /tmp/we.log; exit $s
+euro-s5: WORLD_EURO_ONLY=5 node scripts/simWorldEuro.mjs 2>&1 | grep -E "^FAIL|^  5|simWorldEuro" | head -14 | cut -c1-300; exit ${PIPESTATUS[0]}
+euro-s147: WORLD_EURO_ONLY=1,4,7 node scripts/simWorldEuro.mjs 2>&1 | tail -24; exit ${PIPESTATUS[0]}
