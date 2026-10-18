@@ -14440,11 +14440,14 @@ export function europeRungOf(objective: Pick<BoardObjective, 'id' | 'label'>): '
   return null;
 }
 
-/** The one line the board panel shows under a European rung met through the cup rather than the table (fix2-1509,
- *  run minor 6): the cup won (C), or the cup's place passed down the table (P). Undefined for any other route. */
-function euroRungWhy(career: CareerState, route: EuroRoute | null): string | undefined {
+/** The one line the board panel shows under a European rung met otherwise than by finishing where the board asked
+ *  (fix2-1509, run minor 6): the cup won (C), the cup's place passed down the table (P), or a league place passed
+ *  down past a club going into the Champions League to a club below the asked position (L, `below`). Undefined
+ *  for any other case. */
+function euroRungWhy(career: CareerState, route: EuroRoute | null, below: boolean): string | undefined {
   const cup = careerLeagueOf(career).cupName ?? 'cup';
   if (route === 'C') return `Your ${cup} win counts: the cup winner gets a Europa League place.`;
+  if (route === 'L') return below ? 'A club above you goes into the Champions League, so a Europa League place passes down the table to you.' : undefined;
   if (route !== 'P') return undefined;
   return euroCupOf(career).winner
     ? `The ${cup} winner already has a European place, so its Europa League place passes down to you.`
@@ -14454,8 +14457,8 @@ function euroRungWhy(career: CareerState, route: EuroRoute | null): string | und
 /**
  * Live status of every board objective. Pure; the hub renders this and
  * finishSeason grades from it (seasonDone flips onTrack/behind into
- * done/failed). `why`, only on a European rung met through the cup, is the
- * line the board panel shows under it.
+ * done/failed). `why`, only on a European rung met otherwise than by the
+ * position asked (euroRungWhy), is the line the board panel shows under it.
  */
 export function objectiveStatuses(career: CareerState): { objective: BoardObjective; status: ObjectiveStatus; why?: string }[] {
   const objs = career.boardObjectives ?? [];
@@ -14485,7 +14488,7 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
           : rung === 'uecl' ? myPos <= objective.target || place === 'ucl' || place === 'uel'
             : myPos <= objective.target;
       status = seasonDone ? (met ? 'done' : 'failed') : (met ? 'onTrack' : 'behind');
-      const why = met && place === 'uel' ? euroRungWhy(career, euroPlaceRouteOf(career)) : undefined;
+      const why = met && place === 'uel' ? euroRungWhy(career, euroPlaceRouteOf(career), myPos > objective.target) : undefined;
       if (why) return { objective, status, why };
     } else if (objective.id === 'cup') {
       const { rank, alive } = cupProgressRank(career);
