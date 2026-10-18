@@ -1,0 +1,15 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 89ad5dc3e Release BK triage: the finance desk header says why the wrap control missed (an unseeded career), not a money 
+dashscan exit=0 0s | no dash in the diff
+anchors exit=0 60s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simUsBoardParity exit=0 82s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+parity-ctl-label exit=0 82s | simUsBoardParity control label: green. The control turned its own sports red for its own reason.
+vitest-oldsaves exit=0 3s |       Tests  37 passed (37)
+wrapProof exit=1 1s | wrapProof: old plant keeps +£63m on one line: false; new plant breaks every figure: true
+parity-ctl-fixture exit=0 80s | simUsBoardParity control fixture: green. The control turned its own sports red for its own reason.
+simUsDirtyMoney exit=0 92s | simUsDirtyMoney: all sections green
+depth-order-head exit=1 102s | Club Manager decision depth fixed: failed; 567 checks, 18 natural/catalog cases, 2 controls, 38 originals, 17 failures, 0 setup failures.
+depth-order-m1 exit=1 165s | Club Manager decision depth fixed: failed; 567 checks, 18 natural/catalog cases, 2 controls, 38 originals, 17 failures, 0 setup failures.
+notes-guard exit=0 13s | Phase fixed: three text-only snapshot observations; 3 effective copied old-caption controls; no gameplay, core or schema change.
+depth-main exit=0 160s | Club Manager decision depth fixed: passed; 567 checks, 18 natural/catalog cases, 2 controls, 38 originals, 0 failures, 0 setup failures.
+depth-guard exit=0 159s | []

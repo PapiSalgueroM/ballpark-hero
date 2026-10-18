@@ -1,0 +1,4 @@
+control label: Vitest exit 1, passed [], failed [nfl, nba, mlb, nhl]
+  CONTROL FIRED: [nfl, nba, mlb, nhl] red on "the screen reads", the rest green
+simUsBoardParity control label: green. The control turned its own sports red for its own reason.
+simUsBoardParity control label: green. The control turned its own sports red for its own reason.

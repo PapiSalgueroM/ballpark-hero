@@ -1,0 +1,4 @@
+control fixture: Vitest exit 1, passed [nfl, nba, nhl], failed [mlb]
+  CONTROL FIRED: [mlb] red on "mlb click path step 40", the rest green
+simUsBoardParity control fixture: green. The control turned its own sports red for its own reason.
+simUsBoardParity control fixture: green. The control turned its own sports red for its own reason.
