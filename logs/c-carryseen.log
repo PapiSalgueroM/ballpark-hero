@@ -1,0 +1,21 @@
+  1 fleet: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher); Birmingham City (now, second tier watcher); Proof Town Athletic (now, created club in the Championship); Real Madrid (now, no row (Spain)); Bayern Munich (now, no row (Germany)); América (now, no row (Mexico, no cup)); Arsenal (era2005, era row partial)
+  1 level matches on a pens row (the etall control needs one): 2
+  1 moved stubs: 2
+  1 moves carrying a cup already shown (the carryseen control reads these): 3
+  1 participants (my club earned a place: played from the match half): 7
+  1 plain fields (champions v cup winners): 7
+  1 rollovers into another league (the afterswap control reads these): 4
+  1 rollovers of a manager outside the top flight: 7
+  4 super cups my club won (section 1 fleet): 3
+  5 bytes of a followed one slice: 2547
+  5 bytes of a stub: 17859
+  5 followed one slices measured: 22
+  5 stubs measured: 376
+  7 season one followed: 10
+  7 season one stub seasonOne: 4
+  7 settled in 90 minutes: 20
+  7 settled on penalties: 2
+  7 won by the stronger side: 10
+  7 won by the weaker side: 12
+  1 rows seen: eng-2026
+simOneOffCups: control carryseen FIRED (4 failures, all its own: 1 never falls: Chelsea (now) seed 1 nocoach at s1-join: 0 nights shown after 1)

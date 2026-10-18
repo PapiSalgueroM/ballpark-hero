@@ -1,0 +1,11 @@
+s1-small: ONE_OFF_ONLY=1 ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+c-carryseen: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=carryseen node scripts/simOneOffCups.mjs
+s2-small: ONE_OFF_ONLY=2 ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 node scripts/simOneOffCups.mjs
+c-leaguestarted: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=leaguestarted node scripts/simOneOffCups.mjs
+c-norecovery: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=norecovery node scripts/simOneOffCups.mjs
+s4-12-two: ONE_OFF_ONLY=4 ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+s4-789-two: ONE_OFF_ONLY=4 ONE_OFF_SEEDS=7,8,9 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+s4-456-three: ONE_OFF_ONLY=4 ONE_OFF_SEEDS=4,5,6 ONE_OFF_SEASONS=3 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+c-weighs: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=weighs node scripts/simOneOffCups.mjs
+c-tick: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=tick node scripts/simOneOffCups.mjs
+c-adjacent: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=adjacent node scripts/simOneOffCups.mjs

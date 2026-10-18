@@ -1,0 +1,11 @@
+c-carryseen exit=1 66s | simOneOffCups: control carryseen FIRED (4 failures, all its own: 1 never falls: Chelsea (now) seed 1 nocoach at s1-join: 0 nights shown after 1)
+c-leaguestarted exit=1 50s | simOneOffCups: control leaguestarted FIRED (16 failures, all its own: 2 league started: Arsenal seed 1 nocoach at s2-e1: leagueStarted reads true with no league entry pla
+s2-small exit=0 122s | simOneOffCups: green, 1794 checks (122 s)
+s1-small exit=0 136s | simOneOffCups: green, 19542 checks (136 s)
+s4-12-two exit=0 36s | simOneOffCups: green, 68 checks (36 s)
+c-norecovery exit=1 50s | simOneOffCups: control norecovery FIRED (16 failures, all its own: 2 fitness: Arsenal seed 1 nocoach at s2-e1: 4 men's fitness after the night is neither the week's recov
+s4-789-two exit=0 54s | simOneOffCups: green, 102 checks (55 s)
+c-weighs exit=1 37s | simOneOffCups: control weighs FIRED (25 failures, all its own: 4 weighs: Chelsea seed 1: nationStanding reads 75.5 without a minor trophy and 89.5 with one)
+s4-456-three exit=0 77s | simOneOffCups: green, 102 checks (77 s)
+c-tick exit=1 49s | simOneOffCups: control tick FIRED (16 failures, all its own: 2 fitness: Arsenal seed 1 nocoach at s2-e1: a night my club did not play moved 11 men's fitness)
+c-adjacent exit=1 45s | simOneOffCups: control adjacent FIRED (18 failures, all its own: 2 slots: Arsenal seed 1 nocoach season 2: the nights sit before entries 28,28, the placer gives 0)

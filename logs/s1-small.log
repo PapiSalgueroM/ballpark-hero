@@ -1,0 +1,25 @@
+  1 fleet: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher); Birmingham City (now, second tier watcher); Proof Town Athletic (now, created club in the Championship); Real Madrid (now, no row (Spain)); Bayern Munich (now, no row (Germany)); América (now, no row (Mexico, no cup)); Arsenal (era2005, era row partial)
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  1 forced: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher); Birmingham City (now, second tier watcher); Proof Town Athletic (now, created club in the Championship); Real Madrid (now, no row (Spain)); Bayern Munich (now, no row (Germany)); América (now, no row (Mexico, no cup)); Arsenal (era2005, era row partial)
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  1 doubles (the runners up took the cup place): 7
+  1 level matches on a pens row (the etall control needs one): 10
+  1 moved stubs: 4
+  1 moves carrying a cup already shown (the carryseen control reads these): 6
+  1 participants (my club earned a place: played from the match half): 14
+  1 plain fields (champions v cup winners): 7
+  1 rollovers into another league (the afterswap control reads these): 8
+  1 rollovers of a manager outside the top flight: 14
+  4 super cups my club won (section 1 fleet): 6
+  5 bytes of a followed one slice: 5646
+  5 bytes of a stub: 31394
+  5 followed one slices measured: 48
+  5 stubs measured: 658
+  7 season one followed: 20
+  7 season one stub seasonOne: 8
+  7 settled in 90 minutes: 38
+  7 settled on penalties: 10
+  7 won by the stronger side: 26
+  7 won by the weaker side: 22
+  1 rows seen: eng-2026
+simOneOffCups: green, 19542 checks (136 s)
