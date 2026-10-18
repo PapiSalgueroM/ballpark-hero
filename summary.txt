@@ -1,0 +1,6 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=1 58s | playOneOffCups: 6 FINDINGS
+walk-ctl exit=1 90s | controls (each must be 1): notile=1 swap=3
+worldWalk exit=0 260s | playWorldUcl: green. Nine saves at three sizes, 93 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
+playClubManager exit=0 287s | 
+sweepWeight exit=1 27s |    /deadline-day       651K gz over  47 files (budget 646K, 651.0K to the tenth)

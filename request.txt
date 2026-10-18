@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+walk: node scripts/playOneOffCups.mjs > /tmp/w.log 2>&1; s=$?; grep -E "FAIL|^\(.\)|playOneOffCups" /tmp/w.log | head -30 | cut -c1-300; exit $s
+walk-ctl: ok=0; r=""; for k in notile swap; do PLAY_ONEOFF_CONTROL=$k node scripts/playOneOffCups.mjs > /tmp/po-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/po-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+worldWalk: node scripts/playWorldUcl.mjs > /tmp/ww.log 2>&1; s=$?; grep -E "FAIL|playWorldUcl" /tmp/ww.log | head -20 | cut -c1-300; exit $s
+playClubManager: node scripts/playClubManager.mjs > /tmp/pc.log 2>&1; s=$?; grep -E "FAIL|fail|green|PASS" /tmp/pc.log | tail -8 | cut -c1-250; exit $s
+sweepWeight: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; grep -E "club-manager|manager-hot-seat|deadline-day" /tmp/sw.log | head -8 | cut -c1-200; exit $s

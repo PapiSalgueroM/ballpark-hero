@@ -1,0 +1,3 @@
+notile: last: playOneOffCups: control notile FIRED (3 findings of "no Super cup tile", 3 in all)
+swap: last: playOneOffCups: control swap DID NOT FIRE (3 findings: (a) Chelsea season one 320: the card shows "The match · Wed 5 Aug Arsenal 1-0 Manchester City Manchester City won.", the engine played Arsenal 0
+controls (each must be 1): notile=1 swap=3

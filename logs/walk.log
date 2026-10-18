@@ -1,0 +1,12 @@
+(a) Chelsea season one: Arsenal 0-1 Manchester City, won by Manchester City, night Wed 5 Aug
+(b) Arsenal season one: the seasonOne stub
+(c) Everton 2005: no super cup (the era's row is partial)
+(d) Arsenal season two: the Shield against Liverpool on Wed 11 Aug, the first entry of the calendar
+(e) Arsenal season two after the Shield, won: the cabinet holds FA Community Shield
+   FAIL (d) Arsenal season two 320: the hub does not name the FA Community Shield as the next match
+   FAIL (e) Arsenal after the Shield 320: the hub does not show the Shield in the cabinet
+   FAIL (d) Arsenal season two 390: the hub does not name the FA Community Shield as the next match
+   FAIL (e) Arsenal after the Shield 390: the hub does not show the Shield in the cabinet
+   FAIL (d) Arsenal season two 1280: the hub does not name the FA Community Shield as the next match
+   FAIL (e) Arsenal after the Shield 1280: the hub does not show the Shield in the cabinet
+playOneOffCups: 6 FINDINGS
