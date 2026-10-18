@@ -400,7 +400,7 @@ async function europaPass() {
     const join = now && f.kind === 'watcher' && !f.custom
       ? (seed === SEEDS[0] ? { season: 1, pick: outsideTarget } : seed === SEEDS[1] ? { season: 1, pick: entrantTarget } : seed === SEEDS[2] ? { season: 2, pick: outsideTarget } : seed === SEEDS[3] ? { season: 2, pick: entrantTarget } : null) : null;
     const name = `${f.kind} ${f.club} (${f.era}) seed ${seed}`;
-    let prevDone = 0, sliceKey = '', shown = new Map();
+    let prevDone = 0, sliceKey = '', shown = new Map(), probed = false;
     const onStep = (M, s, label, got) => {
       if (!s) return;
       const sl = s.worldComps?.uel;
@@ -465,6 +465,18 @@ async function europaPass() {
       ok(done >= prevDone, `4 falls: ${name} at ${label}: ${done} nights done after ${prevDone}`);
       prevDone = done;
       const places = M.cm.worldCompNights(s, 'uel') ?? [];
+      /* The carry's seen, held directly once a journey (the moves above rarely land the new calendar behind): the
+         state carried onto a copy of itself whose week stands on the last night it has shown, so that night is not
+         passed on the copy's calendar, must still show every night it had shown. */
+      if (!probed && done >= 2 && s.week < s.calendar.length && !sl.seen) {
+        probed = true;
+        const behind = JSON.parse(JSON.stringify(s));
+        behind.week = places[done - 1].at;
+        M.cm.carryWorldComp(s, behind, 'uel');
+        const after = M.cm.worldCompNightsDone(behind, 'uel');
+        ok(after >= done, `4 falls: ${name} at ${label}: carried onto a calendar behind, it shows ${after} nights after ${done}`);
+        bump('4 seen probes (a carry onto a calendar behind)');
+      }
       if (!sl.seen) for (let i = 0; i < done; i += 1) {
         if (!(s.week >= s.calendar.length || s.week > places[i].at)) { ok(false, `4 early: ${name} at ${label}: night ${i + 1} counts with the week at ${s.week} and the night at ${places[i].at}`); break; }
       }
