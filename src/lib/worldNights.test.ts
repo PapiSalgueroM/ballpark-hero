@@ -1,12 +1,18 @@
 /* Round 1510: the shared night placer (worldNights.ts) on calendars built by hand, dated by a copy of the drawing
  * rule written out here (league and window entries on Saturdays, anything else the Wednesday after a Saturday or a
- * week after another midweek). Every expected index is written out. The placer on the engine's own calendars, every
- * league size and the late seasons of 2020, is the S2 half of this file's work (simOneOffCups section 2 and the
- * engine's export of buildCalendar). */
+ * week after another midweek). Every expected index is written out. Then the placer on the ENGINE's own calendars
+ * (the lead's decision 2f, the critic's correction 12): buildCalendar at every league size REAL_LEAGUES and
+ * ERA_LEAGUES hold, with and without a cup, a round of 16 and two legs, dated by the engine's own dateOfEntries in
+ * every world year the game plays, and the late 2020 seasons (every LEAGUE_RULES row with a lateStart, its plan). */
 import { describe, expect, it } from 'vitest';
 import { addDays, dayOfWeek } from './calDate';
 import type { CalDate } from './calDate';
+import { ERA_LEAGUES, LEAGUE_RULES, REAL_LEAGUES, buildCalendar } from './clubManager';
+import { dateOfEntries } from './clubManagerCalendar';
+import type { SeasonPlan } from './clubManagerCalendar';
 import { nightDateAt, nightsDoneAt, placeNights } from './worldNights';
+import type { NightWant } from './worldNights';
+import { oneOffNightsOf } from './worldOneOffs';
 
 const KICKOFF: CalDate = { y: 2026, m: 8, d: 8 };
 /** The drawing rule, from the opening Saturday, with `mid` the indexes of league rounds played on a Wednesday. */
@@ -87,5 +93,68 @@ describe('nightsDoneAt', () => {
     expect(nightsDoneAt(40, 40, [5, null])).toBe(2);
     expect(nightsDoneAt(4, 40, [5, 8], 1)).toBe(1);
     expect(nightsDoneAt(4, 40, [5, 8], 9)).toBe(2);
+  });
+});
+
+/* Fix-1510 (read lens, major C): the placer on every calendar the engine can build. For each calendar, world year
+   and late plan, and each shape and place a row can have (a one match cup open, early or in the new year, a two
+   legged one, a four club one early or in the new year, and two keys in one list), the night entries spliced at the
+   slots the way insertOneOffNights does are redrawn by the engine's dateOfEntries: every other entry keeps its date,
+   each night is drawn on the Wednesday nightDateAt gives a watcher, three days or more from both neighbours, the
+   nights are in the order wanted and never two in one gap, and every night finds a slot. A four club cup played
+   before the season ('open') is not a shape any row has: its final would need a second gap before the opener. */
+describe('placeNights on the engine calendars', () => {
+  const eraYears = Object.keys(ERA_LEAGUES).map(e => Number(e.replace(/\D/g, ''))).filter(y => y > 1990);
+  const years = [...new Set([2026, 2027, 2028, ...eraYears.flatMap(y => [y, y + 1])])];
+  const sizes = [...new Set([...REAL_LEAGUES, ...Object.values(ERA_LEAGUES).flat()].map(l => l.clubs.length))].sort((a, b) => a - b);
+  const one = (place: 'open' | 'early' | 'newYear') => oneOffNightsOf({ shape: 'one', place });
+  const four = (place: 'early' | 'newYear') => oneOffNightsOf({ shape: 'four', place });
+  const WANTS: [string, NightWant[]][] = [
+    ['one open', one('open')], ['one early', one('early')], ['one newYear', one('newYear')],
+    ['two', oneOffNightsOf({ shape: 'two', place: 'open' })], ['four early', four('early')], ['four newYear', four('newYear')],
+    ['one early and four newYear', [...one('early'), ...four('newYear')]],
+  ];
+  const FLAGS = [true, false].flatMap(cup => [false, true].flatMap(r16 => [false, true].map(two => ({ cup, r16, two }))));
+  let placed = 0;
+  function check(tag: string, cal: { type: string }[], year: number, plan: SeasonPlan | null): void {
+    const dates = dateOfEntries(year, cal, plan);
+    const redate = (types: { type: string }[]) => dateOfEntries(year, types, plan);
+    for (const [name, wants] of WANTS) {
+      const where = `${tag} ${name}`;
+      const slots = placeNights(cal, dates, wants, redate);
+      expect(slots.every(s => s !== null), `${where}: a night with no slot (${slots.join(',')})`).toBe(true);
+      const at = slots as number[];
+      for (let i = 1; i < at.length; i += 1) expect(at[i] > at[i - 1], `${where}: slots ${at.join(',')} out of order or two in one gap`).toBe(true);
+      const withIt: { type: string; n?: number }[] = cal.map(e => ({ type: e.type }));
+      for (const { s, n } of at.map((s, n) => ({ s, n })).sort((a, b) => b.s - a.s || b.n - a.n)) withIt.splice(s, 0, { type: 'oneOff', n });
+      const drawn = dateOfEntries(year, withIt, plan);
+      expect(drawn.filter((_, i) => withIt[i].type !== 'oneOff').map(iso), `${where}: an entry moved`).toEqual(dates.map(iso));
+      const day = (d: CalDate) => Date.UTC(d.y, d.m - 1, d.d) / 86400000;
+      withIt.forEach((e, i) => {
+        if (e.type !== 'oneOff') return;
+        const d = drawn[i];
+        expect(iso(d), `${where}: night ${e.n} is not on nightDateAt's date`).toBe(iso(nightDateAt(dates, at[e.n as number])));
+        expect(dayOfWeek(d.y, d.m, d.d), `${where}: night ${e.n} on ${iso(d)} is no Wednesday`).toBe(3);
+        if (i > 0) expect(day(d) - day(drawn[i - 1]) >= 3, `${where}: night ${e.n} ${iso(d)} after ${iso(drawn[i - 1])}`).toBe(true);
+        if (i + 1 < drawn.length) expect(day(drawn[i + 1]) - day(d) >= 3, `${where}: night ${e.n} ${iso(d)} before ${iso(drawn[i + 1])}`).toBe(true);
+      });
+      placed += 1;
+    }
+  }
+  it('finds a slot that moves no date on every league size, with and without a cup, a round of 16 and two legs, in every year', () => {
+    expect(sizes.length).toBeGreaterThan(3);
+    for (const size of sizes) for (const f of FLAGS) for (const y of years) check(`${size} clubs ${JSON.stringify(f)} ${y}`, buildCalendar(size, f.r16, f.two, f.cup), y, null);
+    expect(placed).toBe(sizes.length * FLAGS.length * years.length * WANTS.length);
+  });
+  it('does the same on the late seasons of 2020, each with its own plan', () => {
+    const late = Object.entries(LEAGUE_RULES).flatMap(([id, r]) => (r.lateStart ? [{ id, plan: { kickoff: r.lateStart.kickoff, summerClose: r.lateStart.summerClose } }] : []));
+    expect(late.length).toBeGreaterThanOrEqual(4);
+    const before = placed;
+    for (const { id, plan } of late) {
+      const size = Object.values(ERA_LEAGUES).flat().find(l => l.id === id)?.clubs.length ?? REAL_LEAGUES.find(l => l.id === id)?.clubs.length;
+      expect(size, `${id}: no league of that id`).toBeTruthy();
+      for (const f of FLAGS) check(`${id} late ${JSON.stringify(f)}`, buildCalendar(size as number, f.r16, f.two, f.cup), plan.kickoff.y, plan);
+    }
+    expect(placed - before).toBe(late.length * FLAGS.length * WANTS.length);
   });
 });
