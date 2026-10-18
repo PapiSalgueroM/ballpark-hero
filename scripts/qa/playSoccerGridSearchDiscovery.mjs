@@ -71,7 +71,7 @@ report.browserEngine = 'webkit'; report.browserVersion = browser.version();
 try {
   for (const spec of specs) {
     const row = { id: spec.id, width: spec.width, scenario: spec.scenario, query: spec.query, canonical: spec.canonical, status: 'failed', originalFault: false,
-      healthyDelivery: false, actions: [], observations: [], requests: [], fixtures: [], invokes: [], counts: [], headResponses: [], finishedRequests: [], selections: [], readFixtures: [], externalFulfilled: [], unexpectedWrites: [], errors: [], assets: [], screenshots: [], waits: [], responseObservers: [] };
+      healthyDelivery: false, actions: [], observations: [], requests: [], fixtures: [], invokes: [], counts: [], headResponses: [], finishedRequests: [], selections: [], readFixtures: [], externalFulfilled: [], localCssFixtures: [], diagnostics: [], unexpectedWrites: [], errors: [], assets: [], screenshots: [], waits: [], responseObservers: [] };
     report.cases.push(row); save();
     const context = await browser.newContext({ viewport: { width: spec.width, height: 844 }, deviceScaleFactor: 1, isMobile: spec.width === 390, hasTouch: spec.width === 390,
       locale: 'en-US', timezoneId: 'UTC', reducedMotion: 'reduce', serviceWorkers: 'block', storageState: { cookies: [], origins: [{ origin: base, localStorage: [
@@ -102,7 +102,18 @@ try {
           await new Promise(resolve => { pending.set(key, async () => { await finish(); pending.delete(key); resolve(); }); });
         };
         try {
-          if (url.origin === base) { assert.equal(request.method(), 'GET', 'No local application write'); return await route.continue(); }
+          if (url.origin === base) {
+            assert.equal(request.method(), 'GET', 'No local application write');
+            if (url.pathname.endsWith('.css')) {
+              const physical = path.resolve('dist', '.' + decodeURIComponent(url.pathname)); assert(physical.startsWith(path.resolve('dist') + path.sep));
+              const body = fs.readFileSync(physical), contentType = 'text/css; charset=utf-8';
+              const fixture = { requestId: captured.id, url: url.href, member: path.relative(path.resolve('dist'), physical).split(path.sep).join('/'), status: 200, contentType, bytes: body.length, sha256: hash(body), fulfilled: false };
+              row.localCssFixtures.push(fixture); save();
+              await route.fulfill({ status: 200, headers: { 'content-type': contentType, 'content-length': String(body.length), 'cache-control': 'no-store' }, body });
+              fixture.fulfilled = true; save(); return;
+            }
+            return await route.continue();
+          }
           if (request.method() === 'OPTIONS') { assert.equal(url.origin, api, 'Only the existing API has preflight'); return await fulfill('api-preflight', { status: 204, headers: cors(request), body: '' }); }
           if (fonts.has(url.href)) { assert.equal(request.method(), 'GET'); return await fulfill('verified-font-cache', { status: 200, headers: cors(request), ...fonts.get(url.href) }); }
           if (url.origin === api) {
@@ -145,7 +156,7 @@ try {
               assert(request.headers().prefer?.split(',').includes('count=exact'), 'Actual rarity count HEAD has Prefer count=exact');
               const index = row.counts.length; assert(index < 2); assert.equal(url.searchParams.get('player_name'), index === 0 ? null : 'eq.' + spec.canonical.toLowerCase());
               const count = index === 0 ? 9 : 1; row.counts.push({ requestId: captured.id, index, count, player: index === 0 ? null : spec.canonical.toLowerCase() });
-              return await fulfill('synthetic-rarity-count', { status: 200, contentType: 'application/json; charset=utf-8',
+              return await fulfill('synthetic-rarity-count', { status: 200, contentType: 'application/json',
                 headers: { ...cors(request), 'content-range': '0-' + (count - 1) + '/' + count, 'content-length': '0' }, body: '' });
             }
             if (url.pathname === '/rest/v1/soccer_grid_selections' && request.method() === 'POST') {
@@ -205,11 +216,19 @@ try {
           });
         }
         if (new URL(response.url()).origin !== base) return;
-        observeResponse('Response', response, async () => {
+        observeResponse('Response', response, async observer => {
           assert.equal(response.status(), 200, response.url()); const body = await response.body(), pathname = new URL(response.url()).pathname;
           const relative = pathname.endsWith('/') ? pathname + 'index.html' : path.extname(pathname) ? pathname : pathname + '/index.html';
           const physical = path.resolve('dist', '.' + decodeURIComponent(relative)); assert(physical.startsWith(path.resolve('dist') + path.sep));
-          assert.equal(hash(body), hash(fs.readFileSync(physical)), 'Every local response matches completed physical dist'); row.assets.push({ path: pathname, bytes: body.length, sha256: hash(body) });
+          const expected = fs.readFileSync(physical);
+          if (hash(body) !== hash(expected)) {
+            const file = spec.id + '-observer-' + observer.id + '-actual.bin'; fs.writeFileSync(path.join(out, file), body);
+            row.diagnostics.push({ id: observer.id, url: response.url(), member: path.relative(path.resolve('dist'), physical).split(path.sep).join('/'), status: response.status(), headers: response.headers(), actualBytes: body.length, actualSha256: hash(body), expectedBytes: expected.length, expectedSha256: hash(expected), file }); save();
+          }
+          assert.equal(hash(body), hash(fs.readFileSync(physical)), 'Every local response matches completed physical dist');
+          const asset = { path: pathname, bytes: body.length, sha256: hash(body) };
+          if (pathname.endsWith('.css')) { const headers = response.headers(); asset.headers = { contentType: headers['content-type'], contentLength: headers['content-length'] }; }
+          row.assets.push(asset);
         });
       });
       const field = page.getByRole('textbox', { name: 'Search for a player', exact: true });
@@ -323,7 +342,7 @@ try {
       assert.equal(pending.size, 0); await bounded(row.waits, 'response observers before outcome assertions', () => Promise.all(responses), 30000);
       assert.equal(row.headResponses.length, spec.scenario === 'canonical-valid' ? 2 : 0);
       for (const receipt of row.headResponses) { assert(receipt.finished && receipt.finishError === null); assert.equal(row.finishedRequests.filter(request => request.method === 'HEAD' && request.url === receipt.url).length, 1, 'Every actual count HEAD emits requestfinished'); }
-      assert.deepEqual(row.errors, []); assert.deepEqual(row.unexpectedWrites, []);
+      assert.deepEqual(row.errors, []); assert.deepEqual(row.unexpectedWrites, []); assert.deepEqual(row.diagnostics, []);
       row.status = 'passed'; console.log(spec.id + ': actual parent discovery/delivery observations passed');
     } catch (error) {
       row.error = String(error?.stack ?? error); save();
