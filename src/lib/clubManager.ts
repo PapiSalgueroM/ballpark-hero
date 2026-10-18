@@ -13581,6 +13581,10 @@ export function carryWorldComp(career: CareerState, joined: CareerState, comp: W
     if (slice && slice.s === career.season && slice.s === joined.season && !names.some(c => slice.clubs.includes(c))) {
       const seen = Math.max(slice.seen ?? 0, worldCompNightsDone(career, comp));
       setWorldComp(joined, comp, { ...slice, ...(seen > 0 ? { seen } : {}) });
+      /* `earned` is the route of the club the slice was opened for. The rule kept out only that club, so a club
+         outside the field earned no place by it: the carried slice says none for the new club (fix-1509). */
+      const carried = joined.worldComps?.[comp];
+      if (carried && joined.clubName !== career.clubName) delete carried.earned;
       return;
     }
     /* Nothing to carry, or my new club is an entrant of the one it watched (it cannot watch itself play): the

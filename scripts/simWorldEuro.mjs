@@ -22,7 +22,8 @@
  *      its route (`via`), and the field and my club's own route (`earned`) are exactly what the rule gives when
  *      worked out here again from the engine's own inputs (an oracle beside the engine); an era save follows
  *      none; at the season's end every night played, every league phase pair once, eight games a club, every
- *      tie's aggregate its legs, one winner and one runner-up.
+ *      tie's aggregate its legs, one winner and one runner-up. A slice carried across a job move keeps no route
+ *      the new club did not earn (fix-1509: a club outside the field earned none).
  *   2  SELF RELATIVE: the engine against itself with this round's four opens taken out (the start, the rollover,
  *      the job move's carry, the load repair, each asserted present once): watchers AND participants, both coach
  *      modes, equal on every key but worldComps.uel, every draw equal by count and value, the Europa League
@@ -57,6 +58,7 @@
  *              thinused (A6, one publisher, carries a constant) receipt (the hash of another file)
  *   section 1, the engine edited in the bundle: twocomps (the field is not kept apart from the Champions League)
  *              meinfield (my club is not kept out) earned (my club's route worked out with it kept out)
+ *              carryearned (the job move's carry keeps the old club's route for the new club)
  *   section 2: stream (the Europa League's matches draw from Math.random) form (its evaluation writes the clubs'
  *              form) leak (its open writes a key outside worldComps)
  *   section 3: position (euroPlaceOf grades by position alone, as before the round)
@@ -86,6 +88,7 @@ const CONTROLS = {
   twocomps: [1, /^1 both: /, /^1 /],
   meinfield: [1, /^1 (mine|none): /, /^1 /],
   earned: [1, /^1 earned: /, /^1 /],
+  carryearned: [1, /^1 carry: /, /^1 /],
   stream: [2, /^2 .*the draws differ/, /^2 /],
   form: [2, /^2 .*the state differs/, /^2 /],
   leak: [2, /^2 .*the state differs/, /^2 /],
@@ -102,6 +105,7 @@ const CAREER_EDITS = {
   twocomps: [{ file: CM, from: '  const input = { tables: euro, cups, uclEntrants: uclEntrantsOf(state),', to: '  const input = { tables: euro, cups, uclEntrants: [] as string[],' }],
   meinfield: [{ file: CM, from: '  const field = euroFieldFromTables({ ...input, exclude: out });', to: '  const field = euroFieldFromTables({ ...input, exclude: out.slice(1) });' }],
   earned: [{ file: CM, from: '  const mine = euroFieldFromTables({ ...input, exclude: out.filter(c => c !== state.clubName), noFill: [state.clubName] });', to: '  const mine = euroFieldFromTables({ ...input, exclude: out, noFill: [state.clubName] });' }],
+  carryearned: [{ file: CM, from: '      if (carried && joined.clubName !== career.clubName) delete carried.earned;\n', to: '' }],
   stream: [{ file: CM, from: '  const out = evaluateWorldComp(slice, k, worldCompBind(state, comp, slice.f));', to: "  const bound = worldCompBind(state, comp, slice.f);\n  const out = evaluateWorldComp(slice, k, comp === 'uel' ? { ...bound, sim: (h, a, scale) => simScore(h, a, 0.2, -0.08, scale) } : bound);" }],
   form: [{ file: CM, from: '  memo.set(key, out);\n  return out;\n}', to: "  if (comp === 'uel') for (const n of out.nights) for (const fx of n.fixtures) if (fx.hg !== undefined) noteForm(state, fx.home, fx.away, fx.hg, fx.ag as number);\n  memo.set(key, out);\n  return out;\n}" }],
   leak: [{ file: CM, from: "  if (slice && comp === 'uel' && tagged.earned) slice.earned = tagged.earned;", to: "  if (slice && comp === 'uel' && tagged.earned) slice.earned = tagged.earned;\n  if (slice && comp === 'uel') (state as unknown as Record<string, unknown>).uelLeak = slice.clubs.length;" }],
@@ -419,7 +423,7 @@ async function europaPass() {
     const join = now && f.kind === 'watcher' && !f.custom
       ? (seed === SEEDS[0] ? { season: 1, pick: outsideTarget } : seed === SEEDS[1] ? { season: 1, pick: entrantTarget } : seed === SEEDS[2] ? { season: 2, pick: outsideTarget } : seed === SEEDS[3] ? { season: 2, pick: entrantTarget } : null) : null;
     const name = `${f.kind} ${f.club} (${f.era}) seed ${seed}`;
-    let prevDone = 0, sliceKey = '', shown = new Map(), probed = false;
+    let prevDone = 0, sliceKey = '', shown = new Map(), probed = false, carryProbed = false;
     const onStep = (M, s, label, got) => {
       if (!s) return;
       const sl = s.worldComps?.uel;
@@ -436,6 +440,22 @@ async function europaPass() {
       }
       /* 1: an open is the rule's own answer (the oracle). A join opens only when it does not carry. */
       const carried = got?.joined && !!sl && !!got.joined.worldComps?.uel && got.joined.worldComps.uel.seed === sl.seed && same(got.joined.worldComps.uel.clubs, sl.clubs);
+      /* 1: a carried slice keeps no route the new club did not earn (fix-1509). The rule kept out only the old
+         club, so a club outside the field earned nothing by it: on a real move, and on a probe that carries a
+         slice that earned a route onto a copy of the save managing a club outside the field. */
+      if (carried && got.joined.clubName !== s.clubName) ok(!sl.earned, `1 carry: ${name} at ${label}: moved to ${s.clubName}, the slice still says it earned ${sl.earned}`);
+      if (sl?.earned && !carryProbed) {
+        const to = outsideTarget(M, s);
+        if (to) {
+          carryProbed = true;
+          const moved = JSON.parse(JSON.stringify(s));
+          moved.clubName = to.club;
+          M.cm.carryWorldComp(s, moved, 'uel');
+          const after = moved.worldComps?.uel;
+          ok(!!after && !after.earned, `1 carry: ${name} at ${label}: carried to ${to.club}, ${after ? `the slice still says it earned ${after.earned}` : 'nothing was carried'}`);
+          bump(`1 carry probes (a slice that earned a route carried to a club outside the field)`);
+        }
+      }
       if (got?.open || (got?.joined && !carried)) {
         const o = got?.joined && s.season > 1 ? null : oracleField(M, O, s, got?.pre ?? null);
         if (!o || o.field.clubs.length !== 36) ok(!sl, `1 none: ${name} at ${label}: a Europa League opened where the rule has no field`);
