@@ -1,0 +1,6 @@
+euro-s3 exit=0 624s | simWorldEuro: green, 521 checks, 0 failures
+euro-s2 exit=0 1018s | simWorldEuro: green, 14776 checks, 0 failures
+ctl-cupwin exit=1 625s | simWorldEuro: control cupwin FIRED (6 failures, all its own)
+ucl-s2 exit=0 1639s | simWorldUcl: green, 23897 checks, 0 failures
+ctl-position exit=1 624s | simWorldEuro: control position FIRED (26 failures, all its own)
+ucl-ctl-participant exit=1 1211s | simWorldUcl: control participant FIRED (86 failures, all its own)

@@ -1,0 +1,4 @@
+FAIL 3 cupwin: search Inter Milan seed 3 season 2: my club won its cup final and the rollover's rule gives it no route
+FAIL 3 cupwin: search Inter Milan seed 6 season 2: my club won its cup final and the rollover's rule gives it no route
+FAIL 3 cupwin: search Köln seed 3 season 2: my club won its cup final and the rollover's rule gives it no route
+simWorldEuro: control cupwin FIRED (6 failures, all its own)

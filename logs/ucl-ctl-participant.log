@@ -1,0 +1,2 @@
+FAIL 2 participant Arsenal (era2010) coach seed 5 at start: a state in the Champions League carries worldComps.ucl; the state differs (worldComps)
+simWorldUcl: control participant FIRED (86 failures, all its own)
