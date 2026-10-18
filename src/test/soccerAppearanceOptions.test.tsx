@@ -3,10 +3,12 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import AppearanceBuilder from '@/components/soccer-career/AppearanceBuilder';
 import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';
 import { ACCESSORIES, FACIAL_HAIR, HAIR_COLORS, HAIRSTYLES, SKIN_TONES, defaultAppearance, getFacialHair, getHairstyle, randomAppearance, type PlayerAppearance } from '@/lib/soccerCareerAppearance';
 import type { AppearanceSport } from '@/lib/careerAppearanceCopy';
+import legacy from './fixtures/soccerAppearanceLegacy1425.json';
 
 const HAIR = [
   ['texturedcrop', 'Textured Crop'], ['sidefringe', 'Side Fringe'], ['twists', 'Twists'],
@@ -28,6 +30,8 @@ const legacySvgs = () => Object.fromEntries([32, 52, 104].flatMap(size => [
   ...SKIN_TONES.map(option => [`${size}/skin/${option.id}`, svg({ ...LOOK, skinTone: option.id }, size)]),
   ...HAIR_COLORS.map(option => [`${size}/colour/${option.id}`, svg({ ...LOOK, hairstyle: 'quiff', facialHair: 'boxed', hairColor: option.id }, size)]),
 ]));
+const hashes = (values: Record<string, string>) => Object.fromEntries(Object.entries(values)
+  .map(([key, value]) => [key, createHash('sha256').update(value).digest('hex')]));
 
 function Editor({ sport = 'soccer' }: { sport?: AppearanceSport }) {
   const [look, setLook] = useState(LOOK);
@@ -111,9 +115,13 @@ if (process.env.APPEARANCE_OPTIONS_CAPTURE === '1') {
     });
 
     it('holds exact original SVG for every old choice at all three sizes', () => {
-      const expected = JSON.parse(fs.readFileSync(process.env.APPEARANCE_OPTIONS_SVG_BASELINE!, 'utf8'));
-      expect({ HAIRSTYLES, FACIAL_HAIR, HAIR_COLORS, SKIN_TONES, ACCESSORIES }).toEqual(expected.catalogues);
-      expect(legacySvgs()).toEqual(expected.svg);
+      if (process.env.APPEARANCE_OPTIONS_SVG_BASELINE) {
+        const captured = JSON.parse(fs.readFileSync(process.env.APPEARANCE_OPTIONS_SVG_BASELINE, 'utf8'));
+        expect(captured.catalogues).toEqual(legacy.catalogues);
+        expect(hashes(captured.svg)).toEqual(legacy.svgSha256);
+      }
+      expect({ HAIRSTYLES, FACIAL_HAIR, HAIR_COLORS, SKIN_TONES, ACCESSORIES }).toEqual(legacy.catalogues);
+      expect(hashes(legacySvgs())).toEqual(legacy.svgSha256);
     });
 
     it('retains unknown-ID fallbacks and resolves every new beard before drawing', () => {

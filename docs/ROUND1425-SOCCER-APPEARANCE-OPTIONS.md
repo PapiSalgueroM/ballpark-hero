@@ -1,6 +1,6 @@
 # Round 1425: more Soccer Career hair and beard choices
 
-Status: claimed design, not implemented or runtime qualified.
+Status: implemented, awaiting fixed runtime qualification and visual review.
 
 Owner report: more hair and beard options in Soccer Career. Root claims only
 soccer-specific extended catalogues/lookup in soccerCareerAppearance.ts, their
@@ -32,3 +32,22 @@ local text/Git/ZIP/hash/savedJSON only. No sports facts, real-person likeness,
 image host, source/dependency/transport/cap waiver, integration or live claim.
 Prior61 report heads stay sealed. Shared primary WORKBOARD append only. I keeps
 protected SC/Manager/tournament and actual release/main/publication work.
+
+Proof scope also includes the compact test-only original SVG hash fixture at
+src/test/fixtures/soccerAppearanceLegacy1425.json. It comes from admitted remote
+original output using native saved-JSON hashing. Ordinary Vitest must work
+without a proof environment; the sim independently captures original full SVG.
+
+After original admission, the exact appearance guide sentence in
+src/data/gameContent/soccer2.ts changes only the hair/beard counts to29/18.
+The main775 public snapshot and derived ledger stay untouched here. I must join
+PR331 first, then prerender the merged Soccer Career guide and regenerate the
+derived sitemap/lastmod ledger before publication. This packet cannot claim
+updated raw snapshot copy or completed integration.
+
+Root admitted original b90dad7f4cb49807b7db18e562487ea83ced123c from remote
+run39140724392/job117714424940/artifact12141447508. Capture produced243 actual
+old SVG values and the unchanged23/14 catalogues. The original product produced
+21 exact feature-absence failures and7 healthy cases; all11 existing appearance
+cases and full simCreation passed. The two earlier preparation failures remain
+preserved separately and earn no absence credit. Fixed results remain pending.

@@ -86,8 +86,8 @@ if (baselineMode) {
     assert.notEqual(changed, avatar);
     const copy = path.join(OUT, `missing-${id}.tsx`); fs.writeFileSync(copy, changed);
     const failed = run(`missing-${id}`, { NO_DOUBLE_SWAP: JSON.stringify({ '@/components/soccer-career/PlayerAvatar': copy }) },
-      `drawing ${id} `, { passed: 0, failed: 1, pending: 27 });
-    assert(failed[0].fullName.includes(`drawing ${id} `), `Missing ${id} rejected by its actual render case`);
+      `drawing '${id}' `, { passed: 0, failed: 1, pending: 27 });
+    assert(failed[0].fullName.includes(`drawing '${id}' `), `Missing ${id} rejected by its actual render case`);
   }
   assert.equal(oldDrawingSource, original[avatarFile], 'Removing only the ten new drawings restores the complete original avatar source');
   const oldDrawing = 'opacity="0.55"';
@@ -98,6 +98,23 @@ if (baselineMode) {
   const oldFailed = run('changed-old-drawing', { NO_DOUBLE_SWAP: JSON.stringify({ '@/components/soccer-career/PlayerAvatar': oldCopy }) },
     'holds exact original SVG', { passed: 0, failed: 1, pending: 27 });
   assert(oldFailed[0].fullName.includes('holds exact original SVG'));
+  const lookSource = fs.readFileSync(path.join(ROOT, files['@/lib/soccerCareerAppearance']), 'utf8');
+  const oldLabel = '{ id: "buzz", label: "Buzz Cut" }';
+  assert.equal(lookSource.split(oldLabel).length, 2, 'An actual old catalogue entry is the control target');
+  const changedLabel = lookSource.replace(oldLabel, '{ id: "buzz", label: "Changed Crop" }');
+  assert.notEqual(changedLabel, lookSource);
+  const labelCopy = path.join(OUT, 'changed-shared-catalogue.ts'); fs.writeFileSync(labelCopy, changedLabel);
+  const labelFailed = run('changed-shared-catalogue', { NO_DOUBLE_SWAP: JSON.stringify({ '@/lib/soccerCareerAppearance': labelCopy }) },
+    'holds exact original SVG', { passed: 0, failed: 1, pending: 27 });
+  assert(labelFailed[0].fullName.includes('holds exact original SVG'));
+  const randomStart = 'export function randomAppearance(): PlayerAppearance {\n  return {';
+  assert.equal(lookSource.split(randomStart).length, 2, 'One actual random roll function');
+  const extraRandom = lookSource.replace(randomStart, 'export function randomAppearance(): PlayerAppearance {\n  Math.random();\n  return {');
+  assert.notEqual(extraRandom, lookSource);
+  const randomCopy = path.join(OUT, 'extra-random-draw.ts'); fs.writeFileSync(randomCopy, extraRandom);
+  const randomFailed = run('extra-random-draw', { NO_DOUBLE_SWAP: JSON.stringify({ '@/lib/soccerCareerAppearance': randomCopy }) },
+    'retains original defaults and the exact seven', { passed: 0, failed: 1, pending: 27 });
+  assert(randomFailed[0].fullName.includes('retains original defaults and the exact seven'));
   const builder = fs.readFileSync(path.join(ROOT, files['@/components/soccer-career/AppearanceBuilder']), 'utf8');
   const fromHair = 'sport === "soccer" ? SOCCER_HAIRSTYLES : HAIRSTYLES';
   const fromBeard = 'sport === "soccer" ? SOCCER_FACIAL_HAIR : FACIAL_HAIR';

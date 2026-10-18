@@ -1765,7 +1765,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Creating your player and building your look",
         items: [
           "Create your player: name, one of 50 nationalities, one of 10 positions, and a starting era from the 1990s to the 2020s.",
-          "Build your look in the appearance editor: 12 skin tones, 23 hairstyles, 16 hair colours, 14 beard styles, 16 accessories, 18 boot lines, and 19 signature celebrations, or hit Surprise me.",
+          "Build your look in the appearance editor: 12 skin tones, 29 hairstyles, 16 hair colours, 18 beard styles, 16 accessories, 18 boot lines, and 19 signature celebrations, or hit Surprise me.",
         ],
       },
       {

@@ -8,6 +8,8 @@ on:
       - src/components/soccer-career/AppearanceBuilder.tsx
       - src/components/soccer-career/PlayerAvatar.tsx
       - src/test/soccerAppearanceOptions.test.tsx
+      - src/test/fixtures/soccerAppearanceLegacy1425.json
+      - src/data/gameContent/soccer2.ts
       - scripts/simSoccerAppearanceOptions.mjs
       - scripts/qa/playSoccerAppearanceOptions.mjs
   workflow_dispatch:
@@ -49,7 +51,7 @@ jobs:
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
           base=775564305e9da84dab59f2b9fe246d044a3cc8e9
           git merge-base --is-ancestor "$base" HEAD
-          git diff --exit-code "$base" HEAD -- . ':!docs' ':!src/lib/soccerCareerAppearance.ts' ':!src/components/soccer-career/AppearanceBuilder.tsx' ':!src/components/soccer-career/PlayerAvatar.tsx' ':!src/test/soccerAppearanceOptions.test.tsx' ':!scripts/simSoccerAppearanceOptions.mjs' ':!scripts/qa/playSoccerAppearanceOptions.mjs' ':!.github/workflows/soccer-appearance-options.yml' > "$out/source-boundary.log"
+          git diff --exit-code "$base" HEAD -- . ':!docs' ':!src/lib/soccerCareerAppearance.ts' ':!src/components/soccer-career/AppearanceBuilder.tsx' ':!src/components/soccer-career/PlayerAvatar.tsx' ':!src/data/gameContent/soccer2.ts' ':!src/test/soccerAppearanceOptions.test.tsx' ':!src/test/fixtures/soccerAppearanceLegacy1425.json' ':!scripts/simSoccerAppearanceOptions.mjs' ':!scripts/qa/playSoccerAppearanceOptions.mjs' ':!.github/workflows/soccer-appearance-options.yml' > "$out/source-boundary.log"
           if git diff --quiet "$base" HEAD -- src/lib/soccerCareerAppearance.ts src/components/soccer-career/AppearanceBuilder.tsx src/components/soccer-career/PlayerAvatar.tsx; then mode=baseline; else mode=fixed; fi
           echo "mode=$mode" >> "$GITHUB_OUTPUT"
           echo "APPEARANCE_OPTIONS_MODE=$mode" >> "$GITHUB_ENV"
@@ -75,6 +77,9 @@ jobs:
           if test "$APPEARANCE_OPTIONS_MODE" = baseline; then export APPEARANCE_OPTIONS_BASELINE=1; fi
           SIM_OFFLINE_RECEIPT="$out/proof.transport" node scripts/simSoccerAppearanceOptions.mjs > "$out/proof.log" 2>&1
           cat "$out/proof.log"
+          if test "$APPEARANCE_OPTIONS_MODE" = fixed; then
+            env -u APPEARANCE_OPTIONS_SVG_BASELINE -u APPEARANCE_OPTIONS_CAPTURE -u APPEARANCE_OPTIONS_BASELINE SIM_OFFLINE_RECEIPT="$out/bare.transport" node node_modules/vitest/vitest.mjs run src/test/soccerAppearanceOptions.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile="$out/bare.json" > "$out/bare.log" 2>&1
+          fi
           SIM_OFFLINE_RECEIPT="$out/existing.transport" node node_modules/vitest/vitest.mjs run src/test/appearanceSportCopy.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=json --outputFile="$out/existing.json" > "$out/existing.log" 2>&1
           SIM_OFFLINE_RECEIPT="$out/creation.transport" node scripts/simCreation.mjs > "$out/creation.log" 2>&1
           tail -n 6 "$out/creation.log"

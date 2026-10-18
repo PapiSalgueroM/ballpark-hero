@@ -47,7 +47,9 @@ try {
       if (fonts.has(url.href)) return route.fulfill({ status: 200, ...fonts.get(url.href), headers: { 'access-control-allow-origin': '*' } });
       assert.notEqual(request.resourceType(), 'font', 'Actual fonts are in the checked cache');
       const script = request.resourceType() === 'script', css = request.resourceType() === 'stylesheet';
-      return route.fulfill({ status: 200, contentType: script ? 'application/javascript' : css ? 'text/css' : 'application/json', body: script || css ? '' : '[]' });
+      return route.fulfill({ status: 200, headers: { 'access-control-allow-origin': BASE, 'access-control-allow-credentials': 'true',
+        'access-control-allow-methods': 'GET,HEAD,POST,OPTIONS', 'access-control-allow-headers': request.headers()['access-control-request-headers'] || '*' },
+        contentType: script ? 'application/javascript' : css ? 'text/css' : 'application/json', body: script || css ? '' : '[]' });
     });
     await context.routeWebSocket('**/*', socket => socket.close());
     await context.addInitScript(() => {
@@ -131,14 +133,17 @@ try {
     outfile: compiled, bundle: true, platform: 'node', format: 'cjs', jsx: 'automatic', alias: { '@': path.join(ROOT, 'src') }, metafile: true, logLevel: 'error' });
   fs.writeFileSync(path.join(OUT, 'atlas-metafile.json'), JSON.stringify(built.metafile, null, 2));
   const { svg } = require(compiled);
-  const atlas = await browser.newPage({ viewport: { width: 1180, height: 760 }, deviceScaleFactor: 1 });
+  const atlas = await browser.newPage({ viewport: { width: 1320, height: 760 }, deviceScaleFactor: 1 });
   for (const [skinTone, hairColor, accessory] of [['porcelain', 'black', 'none'], ['ebony', 'platinum', 'none'], ['ebony', 'black', 'headband'], ['porcelain', 'platinum', 'goggles']]) {
     const cards = [...HAIR.map(([id, label]) => ({ id, label, hairstyle: id, facialHair: 'none' })),
       ...BEARDS.map(([id, label]) => ({ id, label, hairstyle: 'bald', facialHair: id }))];
     const html = `<html><head><meta charset="utf-8"><style>body{margin:24px;background:#0a0a0b;color:#eee;font:16px Arial}h1{font-size:22px;margin:0 0 8px}p{margin:0 0 20px;color:#bbb}.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.card{border:1px solid #444;border-radius:12px;padding:14px;background:#191919}.portraits{display:flex;gap:8px;align-items:end;height:112px}h2{font-size:15px;margin:0 0 10px}.sizes{margin:12px 0 0;font-size:12px;color:#bbb}</style></head><body><h1>Soccer Career new looks: component atlas</h1><p>Actual PlayerAvatar component with supplied values. ${skinTone} skin, ${hairColor} hair, ${accessory}. Sizes 104, 52 and 32 pixels. Production route journeys are saved separately.</p><div class="grid">${cards.map(card => `<section class="card"><h2>${card.label}</h2><div class="portraits">${[104, 52, 32].map(size => svg({ skinTone, hairColor, accessory, hairstyle: card.hairstyle, facialHair: card.facialHair, celebration: 'knee_slide', boots: 'vortex_strike' }, size)).join('')}</div><p class="sizes">104px preview, 52px and 32px headers</p></section>`).join('')}</div></body></html>`;
     const name = `component-atlas-${skinTone}-${hairColor}-${accessory}`;
     fs.writeFileSync(path.join(OUT, name + '.html'), html);
-    await atlas.setContent(html); await atlas.screenshot({ path: path.join(OUT, name + '.png'), fullPage: true });
+    await atlas.setContent(html);
+    const sizes = await atlas.locator('svg').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().width));
+    assert.deepEqual(sizes, cards.flatMap(() => [104, 52, 32]), 'Atlas drawings retain their declared physical pixel sizes');
+    await atlas.screenshot({ path: path.join(OUT, name + '.png'), fullPage: true });
     report.atlases.push({ name, scope: 'actual component with supplied values', skinTone, hairColor, accessory, styles: cards.map(card => card.id), sizes: [104, 52, 32] }); save();
   }
   await atlas.close();
