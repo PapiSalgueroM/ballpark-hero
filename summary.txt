@@ -1,0 +1,7 @@
+headsha exit=0 0s | 6672eed3a Release BK fix: a Champions League slice written still moves worldComps to the end, as the old engine wrote it
+euro-0147 exit=0 412s | simWorldEuro: green, 36995 checks, 0 failures
+euro-2 exit=0 795s | simWorldEuro: green, 14795 checks, 0 failures
+ucl-s2 exit=0 1228s | simWorldUcl: green, 23917 checks, 0 failures
+ucl-savedbytes exit=1 1232s | simWorldUcl: control savedbytes FIRED (35 failures, all its own)
+euro-6 exit=0 16s | simWorldEuro: green, 30 checks, 0 failures
+euro-3 exit=0 334s | simWorldEuro: green, 521 checks, 0 failures

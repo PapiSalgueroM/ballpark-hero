@@ -1,0 +1,8 @@
+# Release BK fix (fix-BK.md) fx3: simWorldUcl section 2 and its savedbytes control (as rc-BKa sends them), and simWorldEuro by sections as Round 1510 and rc-BKc-b ran it. Send with: rc.sh rBK-fx3 rc-fx3.txt
+headsha: git log --oneline -5 | cut -c1-120
+ucl-s2: WORLD_UCL_ONLY=2 node scripts/simWorldUcl.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+ucl-savedbytes: WORLD_UCL_CONTROL=savedbytes node scripts/simWorldUcl.mjs > /tmp/usb.log 2>&1; s=$?; grep -c "the saved bytes differ (worldComps.uel and worldComps.dsc taken off)" /tmp/usb.log; tail -3 /tmp/usb.log | cut -c1-300; exit $s
+euro-0147: WORLD_EURO_ONLY=0,1,4,5,7 node scripts/simWorldEuro.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+euro-2: WORLD_EURO_ONLY=2 node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+euro-3: WORLD_EURO_ONLY=3 WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+euro-6: WORLD_EURO_ONLY=6 WORLD_EURO_BASE=77556430 node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}

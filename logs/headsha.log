@@ -1,0 +1,5 @@
+252ff0532 rc request rBK-fx3 for 65c7ce49c5a54efd2d196e46b1e90b2ab187aa30
+65c7ce49c Release BK fix: the Round 1081 pin retaken last, on the narrowed fix
+6b3035421 Release BK fix: narrowed to the load repair alone; setWorldComp is Round 1509's again
+bee83cea2 Release BK fix: the Round 1081 pin retaken again, last, after the refined worldComps rule
+6672eed3a Release BK fix: a Champions League slice written still moves worldComps to the end, as the old engine wrote it
