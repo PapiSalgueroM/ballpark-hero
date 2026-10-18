@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unit-lib: node_modules/.bin/vitest run src/lib/clubManager*.test.ts src/lib/worldCompetition.test.ts src/lib/uclLeaguePhase.test.ts src/lib/euroAccess.test.ts src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+unit-cm: node_modules/.bin/vitest run src/test/clubManager*.test.ts src/test/clubManager*.test.tsx src/test/cm*.test.ts src/test/cm*.test.tsx src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+golden: node scripts/recordWorldTieGolden1347.mjs --ref HEAD --check
+simDailyDeals: node scripts/simDailyDeals.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+dd-controls: ok=0; r=""; for k in bind binddeadline seed seeddeadline ledger ledgerdeadline rulesall rulesstale world worlddeadline; do DAILY_DEALS_CONTROL=$k node scripts/simDailyDeals.mjs > /tmp/dd-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: $(tail -1 /tmp/dd-$k.log | cut -c1-180)"; done; echo "controls (each must be 1):$r"; exit $ok
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simStatsCentre: node scripts/simStatsCentre.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simCalendar: node scripts/simCalendar.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simExtraTime: node scripts/simExtraTime.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simUclLegs: node scripts/simUclLegs.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simCup: node scripts/simCup.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simMatchDetail: node scripts/simMatchDetail.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simCmVarLedger: node scripts/simCmVarLedger.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simOneOffCups: node scripts/simOneOffCups.mjs
+dashscan: if git diff cad4edcf HEAD | grep -nP '\x{2013}|\x{2014}'; then echo "dash found"; exit 1; else echo "no dash in the diff"; fi
