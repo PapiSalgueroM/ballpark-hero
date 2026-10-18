@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { chromium } from '../lib/playwrightLoader.mjs';
+import { webkit } from '../lib/playwrightLoader.mjs';
 
 const base = 'http://127.0.0.1:4173', routePath = '/tennis-chain';
 const api = 'https://flawuiqbvjobmkfkauhw.supabase.co';
@@ -45,7 +45,9 @@ const poll = async (label, read, accept) => {
   for (let attempt = 0; attempt < 200; attempt++) { const value = await read(); if (accept(value)) return value; await wall(20); }
   assert.fail('Setup or completion did not reach ' + label + '; no timeout or setup fault credit');
 };
-const browser = await chromium.launch({ headless: true });
+const browser = await webkit.launch({ headless: true });
+assert.equal(browser.version(), '27.2', 'Pinned WebKit fixture engine');
+report.browserEngine = 'webkit'; report.browserVersion = browser.version();
 try {
   for (const spec of specs) {
     const { width, scenario } = spec;
