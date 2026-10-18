@@ -1,0 +1,6 @@
+euro-s2: WORLD_EURO_ONLY=2 node scripts/simWorldEuro.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+euro-s3: WORLD_EURO_ONLY=3 WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs 2>&1 | tail -24; exit ${PIPESTATUS[0]}
+ucl-s2: WORLD_UCL_ONLY=2 node scripts/simWorldUcl.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+ctl-cupwin: WORLD_EURO_CONTROL=cupwin WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+ctl-position: WORLD_EURO_CONTROL=position WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+ucl-ctl-participant: WORLD_UCL_CONTROL=participant node scripts/simWorldUcl.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
