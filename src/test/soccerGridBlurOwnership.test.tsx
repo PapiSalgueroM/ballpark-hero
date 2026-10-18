@@ -39,14 +39,22 @@ beforeAll(() => {
 });
 beforeEach(() => {
   vi.useFakeTimers(); vi.setSystemTime(new Date('2026-10-18T16:00:00Z')); selected.mockClear(); elapsed = 0; phases = [];
-  localStorage.clear(); sessionStorage.clear(); localStorage.setItem('blur-held-local', '{"held":true}'); sessionStorage.setItem('blur-held-session', 'held'); beforeStores = stores();
+  expect(view).toBeNull(); expect(document.querySelector('input[aria-label="Search for a player"]')).toBeNull();
+  const hadLocalNonempty = localStorage.length > 0, hadSessionNonempty = sessionStorage.length > 0;
+  localStorage.clear(); sessionStorage.clear(); localStorage.setItem('blur-held-local', '{"held":true}'); sessionStorage.setItem('blur-held-session', 'held');
+  const setupTimersBefore = vi.getTimerCount();
+  expect(setupTimersBefore).toBe(2 + Number(hadLocalNonempty) + Number(hadSessionNonempty));
+  act(() => { vi.advanceTimersByTime(0); });
+  const setupTimersAfter = vi.getTimerCount(); expect(setupTimersAfter).toBe(0); beforeStores = stores();
+  phases.push({ phase: 'fixture-storage-setup', setupTimersBefore, setupTimersAfter, hadLocalNonempty, hadSessionNonempty });
 });
 afterEach(context => {
   const final = state(), pendingBeforeCleanup = vi.getTimerCount();
   cleanup(); view = null;
   act(() => { vi.runOnlyPendingTimers(); });
   const pendingAfterCleanup = vi.getTimerCount(), afterStores = stores();
-  cases.push({ name: context.task.name, phases, final, pendingBeforeCleanup, pendingAfterCleanup, beforeStores, afterStores });
+  const setup = phases.shift();
+  cases.push({ name: context.task.name, setup, phases, final, pendingBeforeCleanup, pendingAfterCleanup, beforeStores, afterStores });
   expect(pendingAfterCleanup).toBe(0); expect(afterStores, 'Search must preserve every stored field').toBe(beforeStores); vi.useRealTimers();
 });
 afterAll(() => {

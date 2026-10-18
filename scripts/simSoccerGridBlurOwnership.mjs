@@ -20,7 +20,7 @@ const BASE = '2077ffbe9214fcf5e8ba8df727e0c44a2430121f';
 const productFile = 'src/components/soccer-grid/SoccerGridSearch.tsx', testFile = 'src/test/soccerGridBlurOwnership.test.tsx';
 const inheritedFile = 'src/test/soccerGridSearchDiscovery.test.tsx';
 const ALIAS = '@/components/soccer-grid/SoccerGridSearch';
-const TEST_SHA = '083cc0edf08b2d110478a3393a0ee77ab937a7b1ab64ffbc7fb17904540f35ca';
+const TEST_SHA = '0a729c297dfd40fca179de9d7876ff53387602702f95ba49c5398c94602a8ba3';
 const ORIGINAL_SHA = '5c6f26caebb97853faf481691ee82b1e82f59f145a65b1fcee2d6dfc05a5e6e0';
 const PROPOSED_SHA = 'fc4aa832904388a6363bb47e7a0f07cfb121f96d4a0cd2a8177665dd02f0d34e';
 const INHERITED_SHA = '410176fc8d41f755a63b6d6bdc0c310e3056e8c50ad50bb5f7f8ff5599ccdb52';
@@ -155,6 +155,7 @@ function run(name, faults = [], swaps = {}, bare = false) {
   const expectedStores = JSON.stringify([[['blur-held-local', '{"held":true}']], [['blur-held-session', 'held']]]);
   for (let index = 0; index < titles.length; index++) {
     const rows = trace.cases.filter(row => row.name === titles[index]); assert.equal(rows.length, 1); const row = rows[0], expected = expectedCase(index, faults.includes(index));
+    assert.deepEqual(row.setup, { phase: 'fixture-storage-setup', setupTimersBefore: index === 0 ? 2 : 4, setupTimersAfter: 0, hadLocalNonempty: index !== 0, hadSessionNonempty: index !== 0 }, 'Only documented pre-mount storage-event timers are drained');
     assert.deepEqual(row.phases, expected.phases, 'Every actual deadline/focus/callback/timer phase'); assert.deepEqual(row.final, expected.final);
     assert.equal(row.pendingBeforeCleanup, expected.final.timers); assert.equal(row.pendingAfterCleanup, 0);
     assert.equal(row.beforeStores, expectedStores); assert.equal(row.afterStores, expectedStores);
