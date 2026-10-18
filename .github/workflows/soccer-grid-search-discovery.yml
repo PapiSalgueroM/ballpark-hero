@@ -78,7 +78,9 @@ jobs:
           NODE_OPTIONS='' npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
           test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
           ln -s "$browser_tools/node_modules/playwright" node_modules/playwright; ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
-          NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium firefox > "$out/chromium-install.log" 2>&1
+          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/soccer-grid-search-discovery-executables"; test ! -e "$PLAYWRIGHT_BROWSERS_PATH"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+          NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium webkit > "$out/chromium-install.log" 2>&1
           python -m pip install fonttools pillow > "$out/font-tools-install.log" 2>&1
           NODE_OPTIONS='' FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
           SIM_OFFLINE_RECEIPT="$out/dependencies-after.transport" node --input-type=module > "$out/dependencies-after.log" 2>&1 <<'NODE'
@@ -95,6 +97,8 @@ jobs:
           find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-files.before"
           find "$browser_tools/node_modules" -type f -print0 | sort -z > "$out/browser-tool-files.before"
           find "$out/font-cache" -type f -print0 | sort -z > "$out/font-files.before"
+          find "$PLAYWRIGHT_BROWSERS_PATH" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-executable-files.sha256"
+          find "$PLAYWRIGHT_BROWSERS_PATH" -type f -print0 | sort -z > "$out/browser-executable-files.before"
           git diff --exit-code HEAD
       - name: Actual types focused proof and unchanged related tests
         id: tests
@@ -230,7 +234,7 @@ jobs:
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist-files.sha256"
           find dist -type f -print0 | sort -z > "$out/dist-members.before"
           (cd dist && zip -qr "$out/dist.zip" .)
-      - name: Actual built Soccer Grid search discovery journeys
+      - name: Unqualified actual-route persistent startup experiment
         id: browser
         timeout-minutes: 12
         run: |
@@ -240,8 +244,22 @@ jobs:
           SIM_OFFLINE_RECEIPT="$out/server-browser.transport" node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-browser.log" 2>&1 &
           server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
           ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
-          SIM_OFFLINE_RECEIPT="$out/browser.transport" node scripts/qa/playSoccerGridSearchDiscovery.mjs > "$out/browser.log" 2>&1
-          cat "$out/browser.log"
+          : > "$out/browser.transport"; : > "$out/browser-parent.transport"
+          SIM_OFFLINE_RECEIPT="$out/browser-parent.transport" node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import path from 'node:path'; import assert from 'node:assert/strict'; import { spawnSync } from 'node:child_process';
+          const out = process.env.SOCCER_GRID_SEARCH_OUT;
+          const child = spawnSync(process.execPath, ['scripts/qa/playSoccerGridSearchDiscovery.mjs'], { cwd: process.cwd(), env: { ...process.env, DEBUG: 'pw:browser', SIM_OFFLINE_RECEIPT: path.join(out, 'browser.transport') }, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, timeout: 600000 });
+          fs.writeFileSync(path.join(out, 'browser.log'), child.stdout ?? ''); fs.writeFileSync(path.join(out, 'browser-native-stderr.log'), child.stderr ?? '');
+          fs.writeFileSync(path.join(out, 'browser-process.json'), JSON.stringify({ status: child.status, signal: child.signal, error: child.error ? String(child.error) : null }, null, 2) + '\n');
+          const stderr = child.stderr ?? '', nativeLines = stderr.split(/\r?\n/).filter(line => /\[pid=\d+\]\[(?:err|out)\]/.test(line));
+          const warningOrErrorLines = nativeLines.filter(line => /\b(?:warn(?:ing)?|error|critical|fatal)\b|unknown option|unrecognized option|(?:config|settings).*failed|failed.*(?:config|settings)/i.test(line));
+          const launchPids = [...stderr.matchAll(/<launched> pid=(\d+)/g)].map(match => match[1]);
+          const validation = { debugScope: 'pw:browser', rawFile: 'browser-native-stderr.log', hasDebugOutput: stderr.includes('pw:browser') && stderr.includes('<launching>'), launchPids, uniquePids: [...new Set(launchPids)], nativeLines, warningOrErrorLines, status: 'incomplete' };
+          validation.status = validation.hasDebugOutput && launchPids.length === 12 && validation.uniquePids.length === 12 && warningOrErrorLines.length === 0 ? 'passed' : 'failed';
+          fs.writeFileSync(path.join(out, 'browser-native-log-validation.json'), JSON.stringify(validation, null, 2) + '\n');
+          process.stdout.write(child.stdout ?? ''); process.stderr.write(stderr);
+          assert.ifError(child.error); assert.equal(child.signal, null); assert.equal(child.status, 0); assert.equal(validation.status, 'passed', 'All twelve actual native processes finish without warnings/errors');
+          NODE
       - name: All fifteen built-site readers
         id: readers
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
@@ -282,10 +300,12 @@ jobs:
           git status --porcelain --untracked-files=all > "$out/final-status.txt"; test ! -s "$out/final-status.txt" || result=1
           git ls-files -z | sort -z > "$out/tracked-files.after"; cmp "$out/tracked-files.before" "$out/tracked-files.after" || result=1
           sha256sum --check "$out/source-files.sha256" > "$out/final-source-hold.log" || result=1
-          for name in dependency-files browser-tool-files font-files; do if test -f "$out/$name.sha256"; then sha256sum --check "$out/$name.sha256" > "$out/final-$name-hold.log" || result=1; fi; done
+          for name in dependency-files browser-tool-files browser-executable-files font-files; do if test -f "$out/$name.sha256"; then sha256sum --check "$out/$name.sha256" > "$out/final-$name-hold.log" || result=1; fi; done
           if test -f "$out/dependency-files.before"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-files.after"; cmp "$out/dependency-files.before" "$out/dependency-files.after" || result=1; fi
           if test -f "$out/browser-tool-files.before"; then find "$RUNNER_TEMP/soccer-grid-search-discovery-browser/node_modules" -type f -print0 | sort -z > "$out/browser-tool-files.after"; cmp "$out/browser-tool-files.before" "$out/browser-tool-files.after" || result=1; fi
           if test -f "$out/font-files.before"; then find "$out/font-cache" -type f -print0 | sort -z > "$out/font-files.after"; cmp "$out/font-files.before" "$out/font-files.after" || result=1; fi
+          if test -f "$out/browser-executable-files.before"; then find "$PLAYWRIGHT_BROWSERS_PATH" -type f -print0 | sort -z > "$out/browser-executable-files.after"; cmp "$out/browser-executable-files.before" "$out/browser-executable-files.after" || result=1; fi
+          if test -f "$out/browser/native-utf8-settings.ini"; then printf '[websettings]\ndefault-charset=UTF-8\n' | cmp - "$out/browser/native-utf8-settings.ini" || result=1; sha256sum "$out/browser/native-utf8-settings.ini" > "$out/native-settings.sha256"; else result=1; fi
           if test -f "$out/dist-files.sha256"; then sha256sum --check "$out/dist-files.sha256" > "$out/final-dist-hold.log" || result=1; find dist -type f -print0 | sort -z > "$out/dist-members.after"; cmp "$out/dist-members.before" "$out/dist-members.after" || result=1; fi
           while IFS= read -r -d '' file; do
             case "$file" in "$out/weights.transport") ;; *) test ! -s "$file" || result=1 ;; esac

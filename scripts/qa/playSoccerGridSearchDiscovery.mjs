@@ -1,10 +1,11 @@
-/* Round 1429: actual built parent, pool loader and native search discovery. */
+/* Round 1429: unqualified actual-route persistent startup experiment. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { firefox } from '../lib/playwrightLoader.mjs';
+import { createRequire } from 'node:module';
+import { webkit } from '../lib/playwrightLoader.mjs';
 
 const base = 'http://127.0.0.1:4173', api = 'https://flawuiqbvjobmkfkauhw.supabase.co';
 const mode = process.env.SOCCER_GRID_SEARCH_MODE, evidenceRoot = process.env.SOCCER_GRID_SEARCH_OUT;
@@ -15,6 +16,24 @@ assert(process.env.NODE_OPTIONS?.includes('offlineTransport.cjs'), 'Ordinary off
 assert(evidenceRoot && path.isAbsolute(evidenceRoot) && path.relative(process.cwd(), evidenceRoot).split(path.sep).includes('..'), 'External evidence root');
 const out = path.join(evidenceRoot, 'browser'); assert(!fs.existsSync(out)); fs.mkdirSync(out, { recursive: true });
 const hash = value => createHash('sha256').update(value).digest('hex');
+const require = createRequire(path.join(process.cwd(), 'package.json'));
+const coreDir = path.dirname(require.resolve('playwright-core'));
+assert.equal(JSON.parse(fs.readFileSync(path.join(coreDir, 'package.json'))).version, '1.64.0');
+assert.equal(JSON.parse(fs.readFileSync(path.join(path.dirname(require.resolve('playwright')), 'package.json'))).version, '1.64.0');
+const coreBody = fs.readFileSync(path.join(coreDir, 'lib/coreBundle.js')), browsersBody = fs.readFileSync(path.join(coreDir, 'browsers.json'));
+assert.equal(hash(coreBody), '2325ca4c1c83070e89dc49fb82525508f0a68e0cf12e2a624277968da216b7e0');
+assert.equal(hash(browsersBody), '2cfd419f71ac6475d81e1301fa86c34cf2a2a6bae2a0da4b5a2b18310216b6bf');
+const installedWebKit = JSON.parse(browsersBody).browsers.filter(entry => entry.name === 'webkit'); assert.equal(installedWebKit.length, 1);
+const binaryRoot = process.env.PLAYWRIGHT_BROWSERS_PATH; assert(binaryRoot && path.isAbsolute(binaryRoot));
+const executablePath = fs.realpathSync(webkit.executablePath()); assert(executablePath.startsWith(fs.realpathSync(binaryRoot) + path.sep));
+fs.writeFileSync(path.join(out, 'actual-playwright-coreBundle.js'), coreBody, { flag: 'wx' });
+fs.writeFileSync(path.join(out, 'actual-browsers.json'), browsersBody, { flag: 'wx' });
+const configFile = path.join(out, 'native-utf8-settings.ini'), configBody = Buffer.from('[websettings]\ndefault-charset=UTF-8\n', 'utf8');
+fs.writeFileSync(configFile, configBody, { flag: 'wx' });
+const profileRoot = path.join(out, 'profiles'); fs.mkdirSync(profileRoot);
+const storageFixture = { origin: base, entries: [
+  ['cookie-consent', 'essential'], ['sg-rules-seen', '1'], ['rules-gate-seen:/soccer-grid', '1'], ['grid-search-held-career', '{"held":"unrelated career"}'],
+] };
 const git = args => execFileSync('git', args, { maxBuffer: 64 * 1024 * 1024 });
 const files = ['src/components/soccer-grid/SoccerGridSearch.tsx', 'src/pages/SoccerGrid.tsx',
   'src/components/soccer-grid/SoccerGridBoard.tsx', 'src/hooks/useSoccerGrid.ts', 'src/hooks/useDailyPuzzle.ts',
@@ -44,10 +63,13 @@ const scenarios = [{ scenario: 'accent', query: 'fixture alex one', canonical: n
   { scenario: 'canonical-valid', query: names[0], canonical: names[0] },
   { scenario: 'manual-unverified', query: '  fixture missing entry  ', canonical: 'Fixture Missing Entry' }];
 const specs = [390, 1280].flatMap(width => scenarios.map(spec => ({ ...spec, width, id: width + '-' + spec.scenario })));
-const report = { version: 1, mode, originalHead, source, status: 'failed', productQualified: false, fixedBrowserPassed: false,
+const report = { version: 2, mode, originalHead, source, status: 'failed', productQualified: false, fixedBrowserPassed: false, unqualifiedActualRouteExperiment: true,
+  nativeMethod: { kind: 'webkit-persistent-startup', addedActivation: false, localeOptionSupplied: false, configFile, configBytes: configBody.length, configSha256: hash(configBody), profileRoot,
+    packageVersion: '1.64.0', coreSha256: hash(coreBody), browsersJsonSha256: hash(browsersBody), installedWebKit: installedWebKit[0], binaryRoot, executablePath, storageFixture,
+    nativeBrowserLogFile: 'browser-native-stderr.log', nativeLogValidationFile: 'browser-native-log-validation.json', processFile: 'browser-process.json' },
   scope: 'Actual built /soccer-grid Page/Search/hook/DailyPuzzle/career loader. Four fictional names and one authored synthetic board; all traffic locally fulfilled. No real-player, validator correctness, complete player-universe or live-data claim.',
   fixtures: { puzzle, players, seasons, counts: { totalBefore: 9, playerBefore: 1, expectedRarity: 20 } },
-  setup: 'Fresh storage has no daily grid save. Only consent/rules dismissal and an unrelated held save are preloaded. Native positioning is recorded; no no-scroll claim. Transport instrumentation preserves fetch results and records actual SDK body consumption.',
+  setup: 'Fresh persistent profile; the same four consent/rules/held-career fixture values are written once in the declared main-frame pre-app init callback with empty/exact readback. No daily/auth/player/progress/RNG state is seeded. Original startup page only, no added activation. Native positioning is recorded; no no-scroll claim. Passive transport instrumentation preserves fetch results and observes actual SDK body consumption.',
   census: specs.map(({ id, width, scenario, query, canonical }) => ({ id, width, scenario, query, canonical, originalFaultExpected: !['canonical-valid', 'manual-unverified'].includes(scenario) })),
   expected: { contexts: 12, originalFaults: mode === 'baseline' ? 8 : 0, discoveryContexts: 8, healthyDeliveryContexts: 4 }, waits: [], cleanupErrors: [], cases: [] };
 const save = () => fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2));
@@ -65,19 +87,17 @@ const poll = async (label, read, predicate) => {
   for (let attempt = 0; attempt < 200; attempt++) { const value = await read(); if (predicate(value)) return value; await wall(20); }
   assert.fail('Setup or completion did not reach ' + label + '; no original-fault credit');
 };
-const browser = await firefox.launch({ headless: true });
-assert.equal(browser.version(), '157.0', 'Pinned Firefox fixture engine');
-report.browserEngine = 'firefox'; report.browserVersion = browser.version();
+report.browserEngine = 'webkit'; report.browserVersion = null;
 try {
   for (const spec of specs) {
     const row = { id: spec.id, width: spec.width, scenario: spec.scenario, query: spec.query, canonical: spec.canonical, status: 'failed', originalFault: false,
       healthyDelivery: false, actions: [], observations: [], requests: [], fixtures: [], invokes: [], counts: [], headResponses: [], finishedRequests: [], selections: [], readFixtures: [], externalFulfilled: [], localCssFixtures: [], diagnostics: [], unexpectedWrites: [], errors: [], assets: [], screenshots: [], waits: [], responseObservers: [] };
     report.cases.push(row); save();
-    const context = await browser.newContext({ viewport: { width: spec.width, height: 844 }, deviceScaleFactor: 1, isMobile: spec.width === 390, hasTouch: spec.width === 390,
-      locale: 'en-US', timezoneId: 'UTC', reducedMotion: 'reduce', serviceWorkers: 'block', storageState: { cookies: [], origins: [{ origin: base, localStorage: [
-        { name: 'cookie-consent', value: 'essential' }, { name: 'sg-rules-seen', value: '1' }, { name: 'rules-gate-seen:/soccer-grid', value: '1' },
-        { name: 'grid-search-held-career', value: '{"held":"unrelated career"}' },
-      ] }] } });
+    let context, browser, startupPage;
+    let resolveContextClosed, resolveBrowserDisconnected;
+    const contextClosed = new Promise(resolve => { resolveContextClosed = resolve; }), browserDisconnected = new Promise(resolve => { resolveBrowserDisconnected = resolve; });
+    row.nativeLifecycle = { contextCloseEvents: 0, browserDisconnectedEvents: 0, startupPageCloseEvents: 0, extraPages: 0 };
+    row.settles = [];
     const pending = new Map(), responses = [];
     let page;
     const observeResponse = (kind, response, read) => {
@@ -92,6 +112,26 @@ try {
       'access-control-allow-headers': request.headers()['access-control-request-headers'] || 'authorization,apikey,content-type,x-client-info,prefer,range,range-unit', 'access-control-expose-headers': 'content-range,date' });
     const release = async key => { assert(pending.has(key), 'An actual intercepted request is held: ' + key); await pending.get(key)(); };
     try {
+      const userDataDir = path.join(profileRoot, spec.id), args = ['--config-file=' + configFile];
+      assert(!fs.existsSync(userDataDir), 'Each actual journey owns an absent fresh native profile');
+      const options = { headless: true, viewport: { width: spec.width, height: 844 }, deviceScaleFactor: 1, isMobile: spec.width === 390, hasTouch: spec.width === 390,
+        timezoneId: 'UTC', reducedMotion: 'reduce', serviceWorkers: 'block', args };
+      row.nativeStartup = { userDataDir, absentBeforeLaunch: true, args, addedActivation: false, localeOptionSupplied: Object.hasOwn(options, 'locale'), storageStateOptionSupplied: Object.hasOwn(options, 'storageState'), ignoreDefaultArgsSupplied: Object.hasOwn(options, 'ignoreDefaultArgs'), headless: true }; save();
+      assert.equal(row.nativeStartup.localeOptionSupplied, false); assert.equal(row.nativeStartup.storageStateOptionSupplied, false); assert.equal(row.nativeStartup.ignoreDefaultArgsSupplied, false);
+      assert(fs.readFileSync(configFile).equals(configBody), 'Exact native settings are held before launch');
+      context = await bounded(row.waits, 'persistent WebKit launch', () => webkit.launchPersistentContext(userDataDir, options), 30000);
+      context.once('close', () => { row.nativeLifecycle.contextCloseEvents++; resolveContextClosed(); save(); });
+      browser = context.browser(); assert(browser, 'Persistent launch exposes its actual browser');
+      browser.once('disconnected', () => { row.nativeLifecycle.browserDisconnectedEvents++; resolveBrowserDisconnected(); save(); });
+      row.nativeStartup.browserVersion = browser.version(); report.browserVersion ??= browser.version();
+      assert.equal(browser.version(), installedWebKit[0].browserVersion); assert.equal(browser.version(), '27.2', 'Pinned actual WebKit engine');
+      row.nativeStartup.realUserDataDir = fs.realpathSync(userDataDir); assert.equal(row.nativeStartup.realUserDataDir, userDataDir);
+      const pages = context.pages(); row.nativeStartup.initialPageCount = pages.length; save(); assert.equal(pages.length, 1);
+      page = pages[0]; startupPage = page; row.nativeStartup.initialUrl = page.url(); save(); assert.equal(page.url(), 'about:blank');
+      page.once('close', () => { row.nativeLifecycle.startupPageCloseEvents++; save(); });
+      context.on('page', () => { row.nativeLifecycle.extraPages++; row.errors.push('Unexpected extra exposed page in native persistent journey'); save(); });
+      row.nativeStartup.document = await bounded(row.waits, 'original startup blank observation', () => page.evaluate(() => ({ url: location.href, characterSet: document.characterSet, language: navigator.language, languages: [...navigator.languages] })), 10000); save();
+      assert.equal(row.nativeStartup.document.url, 'about:blank');
       await context.route('**/*', async route => {
         const request = route.request(), url = new URL(request.url());
         const captured = { id: row.requests.length, url: url.href, method: request.method(), resourceType: request.resourceType() }; row.requests.push(captured);
@@ -177,7 +217,14 @@ try {
         } catch (error) { row.errors.push('Route: ' + String(error?.stack ?? error)); try { await route.abort('failed'); } catch (abortError) { row.errors.push('Route abort: ' + String(abortError)); } }
       });
       await context.routeWebSocket('**/*', socket => socket.close());
-      await context.addInitScript(() => {
+      await context.addInitScript(({ origin, entries }) => {
+        if (window === window.top && location.origin === origin) {
+          const readStores = () => ({ local: Object.fromEntries(Object.entries(localStorage).sort()), session: Object.fromEntries(Object.entries(sessionStorage).sort()) });
+          const before = readStores();
+          if (Object.keys(before.local).length || Object.keys(before.session).length) throw new Error('Declared four-key fixture requires fresh empty native storage');
+          for (const [key, value] of entries) localStorage.setItem(key, value);
+          window.__gridStorageFixture = { origin: location.origin, topFrame: true, readyState: document.readyState, before, writes: entries, after: readStores() };
+        }
         window.__gridEvents = []; window.__gridTransport = [];
         const fetch = window.fetch.bind(window);
         window.fetch = async (...args) => {
@@ -196,8 +243,8 @@ try {
           const target = event.target instanceof Element ? event.target.closest('input,button,li,form') : null;
           if (target) window.__gridEvents.push({ type, trusted: event.isTrusted, key: event.key, label: target.getAttribute('aria-label') || target.textContent?.trim().slice(0, 160), value: target instanceof HTMLInputElement ? target.value : undefined });
         }, true);
-      });
-      page = await context.newPage(); page.setDefaultTimeout(15000);
+      }, storageFixture);
+      assert.equal(page, startupPage); page.setDefaultTimeout(15000);
       page.on('pageerror', error => row.errors.push('Page: ' + error.message));
       page.on('console', message => { if (message.type() === 'error') row.errors.push('Console: ' + message.text()); });
       page.on('requestfailed', request => row.errors.push('Request: ' + request.url() + ' ' + JSON.stringify(request.failure())));
@@ -234,7 +281,17 @@ try {
       const field = page.getByRole('textbox', { name: 'Search for a player', exact: true });
       const cells = page.locator('#root [data-grid-cell-status]');
       const form = () => field.locator('xpath=ancestor::form');
-      const settle = async () => { await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))); await wall(80); };
+      const settle = async () => {
+        const receipt = { index: row.settles.length, status: 'pending', wallWaitMs: 80 }; row.settles.push(receipt); save();
+        try {
+          receipt.timestamps = await bounded(row.waits, 'native settle ' + receipt.index, async () => {
+            const timestamps = await page.evaluate(() => new Promise(resolve => requestAnimationFrame(first => requestAnimationFrame(second => resolve([first, second])))));
+            await wall(80); return timestamps;
+          }, 5000);
+          assert.equal(receipt.timestamps.length, 2); assert(receipt.timestamps.every(Number.isFinite)); assert(receipt.timestamps[1] > receipt.timestamps[0], 'The existing two sequential native frames advance');
+          receipt.status = 'passed'; save();
+        } catch (error) { receipt.status = 'failed'; receipt.error = String(error?.stack ?? error); save(); throw error; }
+      };
       const stores = () => page.evaluate(() => ({ local: Object.fromEntries(Object.entries(localStorage).sort()), session: Object.fromEntries(Object.entries(sessionStorage).sort()) }));
       const read = () => page.evaluate(() => {
         const root = document.querySelector('#root'), input = root.querySelector('input[aria-label="Search for a player"]'), form = input?.closest('form'), list = form?.querySelector('ul');
@@ -275,6 +332,13 @@ try {
       };
 
       await page.goto(base + '/soccer-grid', { waitUntil: 'domcontentloaded' });
+      row.storageFixtureReadback = await bounded(row.waits, 'declared pre-app storage fixture readback', () => page.evaluate(() => window.__gridStorageFixture), 10000); save();
+      assert(row.storageFixtureReadback); assert.equal(row.storageFixtureReadback.origin, base); assert.equal(row.storageFixtureReadback.topFrame, true); assert.equal(row.storageFixtureReadback.readyState, 'loading');
+      assert.deepEqual(row.storageFixtureReadback.before, { local: {}, session: {} }); assert.deepEqual(row.storageFixtureReadback.writes, storageFixture.entries);
+      assert.deepEqual(row.storageFixtureReadback.after, { local: Object.fromEntries(storageFixture.entries), session: {} });
+      row.cookiesAfterFixture = await bounded(row.waits, 'initial native cookies readback', () => context.cookies(), 10000); save(); assert.deepEqual(row.cookiesAfterFixture, []);
+      row.actualDocument = await bounded(row.waits, 'actual route native document observation', () => page.evaluate(() => ({ url: location.href, characterSet: document.characterSet, language: navigator.language, languages: [...navigator.languages], visibilityState: document.visibilityState, hasFocus: document.hasFocus() })), 10000); save();
+      assert.equal(row.actualDocument.url, base + '/soccer-grid'); assert.equal(row.actualDocument.characterSet, 'UTF-8', 'Native setting actually selects UTF8 for the unchanged physical route');
       await poll('actual synthetic board committed', async () => ({ cells: await cells.count(), row: await page.getByText('Fixture Club 1', { exact: true }).count(), col: await page.getByText('Fixture Position 1', { exact: true }).count() }), value => value.cells === 9 && value.row === 1 && value.col === 1);
       await page.evaluate(() => document.fonts.ready); await settle();
       if (spec.scenario !== 'delayed-pool') await delivered(); else await poll('actual seasons request held after player reply', async () => pending.has('seasons') && row.fixtures.some(item => item.table === 'career_players' && item.delivered), Boolean);
@@ -343,6 +407,10 @@ try {
       assert.equal(row.headResponses.length, spec.scenario === 'canonical-valid' ? 2 : 0);
       for (const receipt of row.headResponses) { assert(receipt.finished && receipt.finishError === null); assert.equal(row.finishedRequests.filter(request => request.method === 'HEAD' && request.url === receipt.url).length, 1, 'Every actual count HEAD emits requestfinished'); }
       assert.deepEqual(row.errors, []); assert.deepEqual(row.unexpectedWrites, []); assert.deepEqual(row.diagnostics, []);
+      row.appDocumentRequests = row.requests.filter(request => request.method === 'GET' && request.resourceType === 'document' && new URL(request.url).origin === base).length;
+      assert.equal(row.appDocumentRequests, 1, 'One actual app document receives the declared fresh fixture');
+      row.startupPageIdentityHeld = page === startupPage && context.pages().length === 1 && context.pages()[0] === startupPage; save(); assert.equal(row.startupPageIdentityHeld, true);
+      assert.equal(row.nativeLifecycle.extraPages, 0); assert(fs.readFileSync(configFile).equals(configBody));
       row.status = 'passed'; console.log(spec.id + ': actual parent discovery/delivery observations passed');
     } catch (error) {
       row.error = String(error?.stack ?? error); save();
@@ -351,7 +419,20 @@ try {
       row.pendingBeforeCleanup = pending.size; row.pendingObserversBeforeCleanup = row.responseObservers.filter(observer => observer.status === 'pending').length; save();
       for (const key of [...pending.keys()]) { try { await bounded(row.waits, 'pending fixture cleanup ' + key, () => release(key)); } catch (error) { row.errors.push('Pending cleanup: ' + String(error?.stack ?? error)); } }
       row.pendingAfterCleanup = pending.size; save();
-      try { await bounded(row.waits, 'context.close', () => context.close()); } catch (error) { row.errors.push('Context cleanup: ' + String(error?.stack ?? error)); }
+      if (context) {
+        try {
+          await bounded(row.waits, 'context.close', () => context.close());
+          await bounded(row.waits, 'persistent context close event', () => contextClosed, 10000);
+          await bounded(row.waits, 'persistent browser disconnected event', () => browserDisconnected, 10000);
+          row.nativeLifecycle.browserConnectedAfterClose = browser.isConnected(); save();
+          assert.equal(row.nativeLifecycle.browserConnectedAfterClose, false); assert.equal(row.nativeLifecycle.contextCloseEvents, 1); assert.equal(row.nativeLifecycle.browserDisconnectedEvents, 1); assert.equal(row.nativeLifecycle.startupPageCloseEvents, 1); assert.equal(row.nativeLifecycle.extraPages, 0);
+        } catch (error) { row.errors.push('Context cleanup: ' + String(error?.stack ?? error)); }
+      }
+      row.nativeSettingsHeldAfterClose = fs.readFileSync(configFile).equals(configBody); if (!row.nativeSettingsHeldAfterClose) row.errors.push('Native settings changed'); save();
+      if (row.nativeStartup?.userDataDir && fs.existsSync(row.nativeStartup.userDataDir)) {
+        row.nativeProfileAfterClose = { realUserDataDir: fs.realpathSync(row.nativeStartup.userDataDir), directory: fs.statSync(row.nativeStartup.userDataDir).isDirectory(), topLevelEntries: fs.readdirSync(row.nativeStartup.userDataDir).sort() }; save();
+        if (!row.nativeProfileAfterClose.directory || row.nativeProfileAfterClose.realUserDataDir !== row.nativeStartup.userDataDir || row.nativeProfileAfterClose.realUserDataDir !== row.nativeStartup.realUserDataDir) row.errors.push('Native profile path changed');
+      } else { row.errors.push('Native profile missing after close'); save(); }
       try { await bounded(row.waits, 'response observers after context cleanup', () => Promise.all(responses), 30000); } catch (error) { row.errors.push('Response cleanup: ' + String(error?.stack ?? error)); }
       row.pendingObserversAfterCleanup = row.responseObservers.filter(observer => observer.status === 'pending').length;
       if (row.pendingObserversAfterCleanup) row.errors.push('Response observers remain pending after cleanup: ' + row.pendingObserversAfterCleanup);
@@ -360,7 +441,10 @@ try {
     }
   }
 } finally {
-  try { await bounded(report.waits, 'browser.close', () => browser.close()); } catch (error) { report.cleanupErrors.push(String(error?.stack ?? error)); }
+  report.nativeSettingsHeld = fs.readFileSync(configFile).equals(configBody);
+  if (!report.nativeSettingsHeld) report.cleanupErrors.push('Native settings changed');
+  report.uniqueNativeProfiles = new Set(report.cases.map(row => row.nativeStartup?.userDataDir)).size;
+  if (report.uniqueNativeProfiles !== 12) report.cleanupErrors.push('Twelve distinct native persistent profiles required');
   report.sourceAfter = Object.fromEntries(files.map(file => [file, hash(fs.readFileSync(file))])); save();
   for (const bound of source) assert.equal(report.sourceAfter[bound.file], bound.actualSha256, bound.file + ' remains held');
   assert.deepEqual(git(['status', '--porcelain=v1', '--untracked-files=all']), sourceStatus, 'Source and untracked status held'); save();
