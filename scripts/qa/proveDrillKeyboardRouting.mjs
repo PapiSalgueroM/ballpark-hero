@@ -130,7 +130,10 @@ function relatedRuns(label) {
 }
 try {
   if (mode === 'baseline') {
-    run('baseline-original', null, fixture, cases.filter(row => row.group !== 'healthy').map(row => row.title));
+    const faults = cases.filter(row => row.group !== 'healthy').map(row => row.title);
+    const first = run('baseline-original', null, fixture, faults);
+    const replay = run('baseline-original-replay', null, fixture, faults);
+    assert.equal(replay.rawSha256, first.rawSha256, 'Two independent original children retain the whole raw observations');
     relatedRuns('baseline-related'); manifest.status = 'diagnosed-original-only';
   } else {
     assert.match(process.env.DRILL_KEYBOARD_BASELINE_RAW_SHA ?? '', /^[a-f0-9]{64}$/, 'Actual received baseline raw required');

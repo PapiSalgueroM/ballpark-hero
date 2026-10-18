@@ -75,13 +75,16 @@ function expectedRecord(kind: Kind) {
 }
 
 beforeEach(() => {
-  vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'performance', 'requestAnimationFrame', 'cancelAnimationFrame'] });
+  vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'performance'] });
   vi.setSystemTime(NOW);
+  vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) =>
+    window.setTimeout(() => callback(performance.now()), 16));
+  vi.stubGlobal('cancelAnimationFrame', (handle: number) => window.clearTimeout(handle));
   localStorage.clear(); sessionStorage.clear();
   localStorage.setItem('fixture-drill-local', 'unchanged'); sessionStorage.setItem('fixture-drill-session', 'unchanged');
   draws = []; vi.spyOn(Math, 'random').mockImplementation(() => { draws.push(0.4); return 0.4; });
 });
-afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); });
+afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.useRealTimers(); vi.restoreAllMocks(); });
 afterAll(() => {
   const output = process.env.DRILL_KEYBOARD_RAW;
   if (!output) return;
