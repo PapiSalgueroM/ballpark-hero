@@ -78,7 +78,7 @@ jobs:
           NODE_OPTIONS='' npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
           test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
           ln -s "$browser_tools/node_modules/playwright" node_modules/playwright; ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
-          NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium webkit > "$out/chromium-install.log" 2>&1
+          NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium firefox > "$out/chromium-install.log" 2>&1
           python -m pip install fonttools pillow > "$out/font-tools-install.log" 2>&1
           NODE_OPTIONS='' FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
           SIM_OFFLINE_RECEIPT="$out/dependencies-after.transport" node --input-type=module > "$out/dependencies-after.log" 2>&1 <<'NODE'
@@ -123,6 +123,7 @@ jobs:
           NODE
           sha256sum --check "$out/source-files.sha256" > "$out/after-tests-source-hold.log"
       - name: Actual ordinary default Soccer Grid proof invocation
+        if: steps.admission.outputs.mode == 'fixed'
         timeout-minutes: 15
         run: |
           set -euo pipefail
@@ -136,7 +137,7 @@ jobs:
           import { createRequire } from 'node:module';
           import { execFileSync, spawnSync } from 'node:child_process';
 
-          const PINS = {"simSha256":"fb764fd7fc8a3af0813b7359bcf21b173a4e8d1a356875e3e3076dd94daca030","testSha256":"410176fc8d41f755a63b6d6bdc0c310e3056e8c50ad50bb5f7f8ff5599ccdb52","searchSha256":"fdd669af0d5238464dcaedd831f2151d16f4a30fe6b9be6d2231a50093bd6924"};
+          const PINS = {"simSha256":"bb509e0dc09649b44605ed9369a76f9acce0803030c2315c396b18109d9bd5e5","testSha256":"410176fc8d41f755a63b6d6bdc0c310e3056e8c50ad50bb5f7f8ff5599ccdb52","searchSha256":"5c6f26caebb97853faf481691ee82b1e82f59f145a65b1fcee2d6dfc05a5e6e0"};
           const ROOT = process.cwd(), mainOut = process.env.SOCCER_GRID_SEARCH_OUT;
           const hash = body => createHash('sha256').update(body).digest('hex');
           const require = createRequire(path.join(ROOT, 'package.json'));

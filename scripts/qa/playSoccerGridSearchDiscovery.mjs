@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { webkit } from '../lib/playwrightLoader.mjs';
+import { firefox } from '../lib/playwrightLoader.mjs';
 
 const base = 'http://127.0.0.1:4173', api = 'https://flawuiqbvjobmkfkauhw.supabase.co';
 const mode = process.env.SOCCER_GRID_SEARCH_MODE, evidenceRoot = process.env.SOCCER_GRID_SEARCH_OUT;
@@ -65,9 +65,9 @@ const poll = async (label, read, predicate) => {
   for (let attempt = 0; attempt < 200; attempt++) { const value = await read(); if (predicate(value)) return value; await wall(20); }
   assert.fail('Setup or completion did not reach ' + label + '; no original-fault credit');
 };
-const browser = await webkit.launch({ headless: true });
-assert.equal(browser.version(), '27.2', 'Pinned WebKit fixture engine');
-report.browserEngine = 'webkit'; report.browserVersion = browser.version();
+const browser = await firefox.launch({ headless: true });
+assert.equal(browser.version(), '157.0', 'Pinned Firefox fixture engine');
+report.browserEngine = 'firefox'; report.browserVersion = browser.version();
 try {
   for (const spec of specs) {
     const row = { id: spec.id, width: spec.width, scenario: spec.scenario, query: spec.query, canonical: spec.canonical, status: 'failed', originalFault: false,
