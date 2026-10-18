@@ -1,0 +1,4 @@
+   (a) Chelsea season one 390 tiles: 3 controls measured
+   FAIL (a) Chelsea season one 390: no Super cup tile
+   FAIL (a) Chelsea season one 1280: the Cups panel did not open from the hub
+playOneOffCups: control swap DID NOT FIRE (3 findings: (a) Chelsea season one 320: no Super cup tile / (a) Chelsea season one 390: no Super cup tile)

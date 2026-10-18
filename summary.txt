@@ -1,0 +1,9 @@
+build exit=0 37s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+po-notile exit=1 59s | playOneOffCups: control notile FIRED (3 findings of "no Super cup tile", 3 in all)
+po-swap exit=3 75s | playOneOffCups: control swap DID NOT FIRE (3 findings: (a) Chelsea season one 320: no Super cup tile / (a) Chelsea season one 390: no Super cup tile)
+playOneOffCups exit=0 91s | playOneOffCups: green, five cases at three sizes, pictures in /home/runner/work/_temp/rc-out/files/shots
+po-norowline exit=1 79s | playOneOffCups: control norowline FIRED (6 findings of "the no-row card does not say why", 6 in all)
+po-hubweek exit=1 67s | Node.js v24.21.0
+po-tileweek exit=1 74s | playOneOffCups: control tileweek FIRED (3 findings of "the League tile reads", 6 in all)
+playWorldUcl exit=0 271s | playWorldUcl: green. Nine saves at three sizes, 93 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
+fences exit=1 318s | fences done, any red: 1
