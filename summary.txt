@@ -1,0 +1,5 @@
+simOneOffCups exit=0 0s | simOneOffCups: green, 161 checks (0 s)
+controls0 exit=0 1s | notinworld exit=1 | simOneOffCups: control notinworld FIRED (fired 1, 3 failures, all its own)
+dashscan exit=0 0s | no dash in the diff
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+tsc exit=0 52s | 

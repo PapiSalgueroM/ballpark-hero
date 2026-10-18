@@ -1,0 +1,5 @@
+onesource exit=1 | simOneOffCups: control onesource FIRED (fired 1, 1 failures, all its own)
+wiki exit=1 | simOneOffCups: control wiki FIRED (fired 1, 1 failures, all its own)
+thinused exit=1 | simOneOffCups: control thinused FIRED (fired 1, 1 failures, all its own)
+receipt exit=1 | simOneOffCups: control receipt FIRED (fired 1, 1 failures, all its own)
+notinworld exit=1 | simOneOffCups: control notinworld FIRED (fired 1, 3 failures, all its own)

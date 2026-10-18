@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simOneOffCups: node scripts/simOneOffCups.mjs
+controls0: f=0; for c in onesource wiki thinused receipt notinworld; do ONE_OFF_CONTROL=$c node scripts/simOneOffCups.mjs > /tmp/c.log 2>&1; s=$?; echo "$c exit=$s | $(tail -1 /tmp/c.log)"; [ $s -eq 1 ] && grep -q FIRED /tmp/c.log || f=1; done; exit $f
+simNoRivalNames: node scripts/simNoRivalNames.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+dashscan: if git diff cad4edcf HEAD | grep -nP '\x{2013}|\x{2014}'; then echo "dash found"; exit 1; else echo "no dash in the diff"; fi
