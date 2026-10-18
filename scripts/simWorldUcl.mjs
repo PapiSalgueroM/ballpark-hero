@@ -213,8 +213,9 @@ Object.assign(CONTROLS, {
   /* fix2-1509 (closing check major 3): section 2's saved bytes compare with worldComps.uel taken off, on its own. A
      save holding the followed Europa League writes matchRules too, which loadCareer deletes, so the loaded state and
      the draws stay equal and only that compare can see it: on every state in the Champions League, a participant's
-     or a watcher's once it qualified or joined a club in it (runner r1509-fx2b). */
-  savedbytes: [2, /^2 (participant|watcher) .* at [^:]*: the saved bytes differ \(worldComps\.uel taken off\)$/],
+     or a watcher's once it qualified or joined a club in it (runner r1509-fx2b). Release BK: since Round 1510 the
+     compare takes worldComps.dsc off too and its sentence names both keys, so the control reads that sentence. */
+  savedbytes: [2, /^2 (participant|watcher) .* at [^:]*: the saved bytes differ \(worldComps\.uel and worldComps\.dsc taken off\)$/],
 });
 Object.assign(CAREER_EDITS, {
   mdearly: [{ file: CM, from: '      put(night, i < 0 ? prev.at : i, i < 0 ? prev.round : roundOf(i), i >= 0);', to: '      put(night, i < 0 ? prev.at : i - 1, i < 0 ? prev.round : roundOf(i), i >= 0);' }],
