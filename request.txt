@@ -1,0 +1,4 @@
+euro-s5: WORLD_EURO_ONLY=5 node scripts/simWorldEuro.mjs 2>&1 | grep -E "^FAIL|^  5|simWorldEuro" | head -12 | cut -c1-300; exit ${PIPESTATUS[0]}
+euro-s3: WORLD_EURO_ONLY=3 WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs 2>&1 | grep -E "^FAIL|^  3|simWorldEuro" | head -12 | cut -c1-600; exit ${PIPESTATUS[0]}
+simUclSeasonOne: node scripts/simUclSeasonOne.mjs > /tmp/s1.log 2>&1; s=$?; grep -iE "fail|section|green" /tmp/s1.log | head -20 | cut -c1-300; exit $s
+simWorldEditor: node scripts/simWorldEditor.mjs > /tmp/we.log 2>&1; s=$?; grep -iE "fail|not |red" /tmp/we.log | head -12 | cut -c1-400; tail -2 /tmp/we.log; exit $s

@@ -1,0 +1,2 @@
+Base: origin/main as this branch left it (77556430) already carries Round 612, so sections 6 to 9 compare against this engine with season one switched off, and section 8 holds the rollover to the rule written out here
+simUclSeasonOne: all green

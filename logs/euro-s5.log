@@ -1,0 +1,5 @@
+  5 the holder: 60 rollovers after a Europa League final, the winner in next season's Champions League in 60, a participant's 32 already full in 0; the two engines parted on 29 steps, 183 s
+FAIL 5 attribution: watcher Chelsea seed 2 at s1-rollover: the line moved squad beside uclField, uclGroup, uclWorld, worldComps
+FAIL 5 attribution: watcher Chelsea seed 4 at s1-rollover: the line moved squad beside uclField, uclGroup, uclWorld, worldComps
+FAIL 5 attribution: watcher Hoffenheim seed 1 at s1-rollover: the line moved squad, aiHeadlines, goneNames, cupDraw, cupBracket beside uclField, uclGroup, uclWorld, worldComps
+simWorldEuro: RED, 179 checks, 3 failures

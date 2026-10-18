@@ -1,0 +1,4 @@
+simUclSeasonOne exit=0 18s | simUclSeasonOne: all green
+simWorldEditor exit=1 10s | simWorldEditor: 2478 checks, 1 failures
+euro-s5 exit=1 185s | simWorldEuro: RED, 179 checks, 3 failures
+euro-s3 exit=0 341s | simWorldEuro: green, 511 checks, 0 failures
