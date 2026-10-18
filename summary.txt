@@ -1,0 +1,4 @@
+storage exit=0 2s | simStorageWrites: all green (owed: 12)
+writesSent exit=1 0s | Node.js v24.21.0
+resultMoment exit=1 0s | Node.js v24.21.0
+main-three exit=0 4s | main simResultMoment exit=1 | Node.js v24.21.0

@@ -1,0 +1,3 @@
+main simStorageWrites exit=0 | simStorageWrites: all green (owed: 12)
+main simWritesAreSent exit=1 | Node.js v24.21.0
+main simResultMoment exit=1 | Node.js v24.21.0
