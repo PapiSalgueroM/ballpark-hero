@@ -1,0 +1,1 @@
+probe exit=0 3s | probeRead1510: 47 careers; tile None here 33, Not confirmed 12; no-row cards that print the season one line 45
