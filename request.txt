@@ -1,0 +1,7 @@
+s4-small-head: ONE_OFF_ONLY=4 ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+xp-e1-s2: RVXP_CLUB=Everton RVXP_SEED=1 RVXP_SEASONS=2 node .rc/x/rvxp1510.mjs
+xp-e1-s3: RVXP_CLUB=Everton RVXP_SEED=1 RVXP_SEASONS=3 node .rc/x/rvxp1510.mjs
+join-head: node .rc/x/rvjoin1510.mjs
+join-mut: R=$PWD; git worktree add -q --detach /tmp/jm HEAD && ln -s "$R/node_modules" /tmp/jm/node_modules && cd /tmp/jm && node .rc/x/rvmut1510.mjs carryseen && node .rc/x/rvjoin1510.mjs
+s4-more-a: ONE_OFF_ONLY=4 ONE_OFF_SEEDS=4,5,6 ONE_OFF_SEASONS=3 node scripts/simOneOffCups.mjs
+s4-more-b: ONE_OFF_ONLY=4 ONE_OFF_SEEDS=7,8,9 ONE_OFF_SEASONS=2 node scripts/simOneOffCups.mjs

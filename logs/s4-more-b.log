@@ -1,0 +1,6 @@
+  4 honours: 12 arms (won and lost), 54 weighing readers compared with and without a minor trophy
+  FAIL 4 weighs: Everton seed 8: grade reads D without a minor trophy and F with one
+  FAIL 4 weighs: Everton seed 9: grade reads B without a minor trophy and A with one
+  FAIL 4 weighs: Everton seed 9: offers reads [] without a minor trophy and ["Liverpool","Bayern Munich"] with one
+  FAIL 4 weighs: Everton seed 9: xp reads {"v":1,"xp":234,"points":{"tactics":0,"recruitment":0,"negotiation":0,"youth":0,"manManagement":0,"finance":0,"media":0},"graduatesSeen":0} without a minor trophy and {"v":1,"xp":534,"points":{"tactics":0,"recruitment":0,"negotiation":0,"youth":0,"manManagement":0,"finance":0,"media":0},"graduatesSeen":0} with one
+simOneOffCups: 4 FAILURES of 96 checks (34 s)

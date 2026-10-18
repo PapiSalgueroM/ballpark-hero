@@ -1,0 +1,7 @@
+xp-e1-s2 exit=0 5s | rvxp1510: XP DIFFERS
+xp-e1-s3 exit=0 7s | rvxp1510: XP EQUAL
+join-head exit=0 6s | rvjoin1510: the shown cup held in all 3 cases
+join-mut exit=1 7s | rvjoin1510: a shown super cup FELL after the move in 3 of 3 cases
+s4-small-head exit=1 30s | simOneOffCups: 1 FAILURES of 64 checks (30 s)
+s4-more-b exit=1 35s | simOneOffCups: 4 FAILURES of 96 checks (34 s)
+s4-more-a exit=0 53s | simOneOffCups: green, 96 checks (52 s)
