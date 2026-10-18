@@ -1,0 +1,11 @@
+bind: simDailyDeals: CONTROL bind FIRED: its 5 Premier League dates went red (2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06) and no other date moved
+binddeadline: simDailyDeals: CONTROL binddeadline FIRED: its 3 Premier League dates went red (2026-10-18, 2026-11-01, 2026-11-09) and no other date moved
+seed: simDailyDeals: CONTROL seed FIRED: all 12 of its dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+seeddeadline: simDailyDeals: CONTROL seeddeadline FIRED: all 12 of its dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+ledger: simDailyDeals: CONTROL ledger FIRED: 12 of its 12 dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+ledgerdeadline: simDailyDeals: CONTROL ledgerdeadline FIRED: 12 of its 12 dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+rulesall: simDailyDeals: CONTROL rulesall FIRED: red on [2026-10-10, 2026-10-11, 2026-10-12, 2026-10-13, 2026-10-14, 2026-10-15, 2026-10-16] and nowhere else
+rulesstale: simDailyDeals: CONTROL rulesstale FIRED: red on [2026-10-10, 2026-10-12, 2026-10-13, 2026-10-14, 2026-10-15, cutover] and nowhere else
+world: simDailyDeals: CONTROL world FIRED: exactly its 12 following dates went red on "the state carries a watched Champions League" and nothing else moved
+worlddeadline: simDailyDeals: CONTROL worlddeadline FIRED: exactly its 12 following dates went red on "the state carries a watched Champions League" and nothing else moved
+controls (each must be 1): bind=1 binddeadline=1 seed=1 seeddeadline=1 ledger=1 ledgerdeadline=1 rulesall=1 rulesstale=1 world=1 worlddeadline=1

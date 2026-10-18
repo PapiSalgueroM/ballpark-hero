@@ -1,0 +1,18 @@
+unit-lib exit=0 46s |    Duration  44.31s (transform 4.71s, setup 3.01s, collect 16.50s, tests 79.42s, environment 17.90s, prepare 4.47s)
+golden exit=0 1s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+simDailyDeals exit=0 7s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+dd-controls exit=0 53s | controls (each must be 1): bind=1 binddeadline=1 seed=1 seeddeadline=1 ledger=1 ledgerdeadline=1 rulesall=1 rulesstale=1 world=1 worlddeadline=1
+tsc exit=0 119s | 
+simStatsCentre exit=0 4s | ALL STATS CENTRE CHECKS PASSED
+simCalendar exit=0 1s | simCalendar: all green
+simCmShootoutOrder exit=0 25s | simCmShootoutOrder: all sections passed
+unit-cm exit=0 158s |    Duration  157.45s (transform 8.28s, setup 2.98s, collect 34.88s, tests 261.29s, environment 20.52s, prepare 4.15s)
+simUclLegs exit=0 4s | simUclLegs: green. Two legs, the right ground each week, and each season judged by its own rule for a level tie.
+simClubManagerCalendar exit=0 43s | simClubManagerCalendar: all green
+simMatchDetail exit=0 7s | simMatchDetail: all green
+simCmVarLedger exit=0 0s | simCmVarLedger: all 691 checks passed.
+simClubManagerMeters exit=0 28s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simOneOffCups exit=0 0s | simOneOffCups: green, 161 checks (0 s)
+dashscan exit=0 0s | no dash in the diff
+simCup exit=0 53s | ALL CUP CHECKS PASSED
+simExtraTime exit=0 89s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (
