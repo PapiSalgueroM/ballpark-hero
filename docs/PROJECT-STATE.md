@@ -1,3 +1,15 @@
+## Root Round1424 qualified source, 18 October2026
+
+An NFL retiree with no automatic coaching offers can now choose Take a staff role. It uses an existing generated T4 vacancy and the ordinary acceptance transition. Year, earned history and playing reputation are held; idle time resets normally. Finished/employed/offered/non-NFL careers are guarded before RNG. Automatic offers, sit-out outcomes and playing-career retirement/free agency remain unchanged. Draft PR338: https://github.com/PapiSalgueroM/ballpark-hero/pull/338.
+
+Tested6fd8663a63a392ecdeb29a4c3cbef676f8e142a4, remote39142654806/job117720058676/artifact12142313702. Root admitted all saved source/archive/gates and actual feature proof: fixed/restored23/23, whole-original/button-removed21pass2missing, neutral transition21pass2callback; all14 original retirement cases in all5arms;3 engine inverse and22 panel inverse refusal controls;5 existing coach sims and all11 historical parity controls; real app types; serial plain build;9 actual built-route contexts with no missing actions/errors/writes;15 readers;14 unchanged fatal caps. NFL490.4K/491, SC834.0K/835, CM618.3K/619.
+
+Packet C:/Users/antho/dukb-handoff/2026-10-18/nfl-coach-staff-recovery-1424. Root fixed admissionfd0fa2376af5ad6e1d7cc7385fb3a64267ba9f608c0f1deef0c2b9bb35b4de38. Four unadmitted preparation attempts retained: unsupported test option, a JSDOM visibility assertion, Git source-read buffer, and copied-panel package resolution. None earns original/control failure credit. Product source and frozen23-case suite were held through the proof-only corrections.
+
+Historical replay reconstructs the whole main775 coaching panel with SHA9390fab969844b20ca4f7adbc097664191d3f5ea082090553f479305fe85d321; fixture, current engine, old assertions and controls held. It earns no current-panel visual-parity credit. Current panel has separate23-case and9-route proof. New empty-market action and staff-season images reviewed at390/1280. Four staff-job viewport captures miss the job card and earn no job-card visual credit; actual saved employment/reload/progression assertions passed.
+
+The reproduced issue is the post-retirement coaching dead end. No exact reporter save was provided, so this is not a claim about every playing-career offer complaint. No fullsuite, joined tree, production DB or publication credit. I owns release integration, main, preview and publish. Not live. The older release header below is retained historical evidence, not a new publication check.
+
 ## Release BJ LIVE, 2026-10-17 21:51 EDT: Club Manager Hard and Legend, the Champions League you can follow in or out of it, match days that read like a scoreboard, a way out for dirty money in the US careers, and Soccer Career's summer cards
 
 Claude lane (session I). main d0c3ff58, deployment fec60776-a9ad-49aa-b4ea-04a590a233de, entry index-CWmc_M1Q.js (was
