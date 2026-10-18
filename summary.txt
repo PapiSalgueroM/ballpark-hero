@@ -1,0 +1,9 @@
+takeover exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerSeasonSummary.tsx, src/lib/clubManager.ts, src/lib/clubManagerCalendar.ts, src/
+small exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerSeasonSummary.tsx, src/lib/clubManager.ts, src/lib/clubManagerCalendar.ts, src/
+fleet0 exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerSeasonSummary.tsx, src/lib/clubManager.ts, src/lib/clubManagerCalendar.ts, src/
+fleet1 exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerSeasonSummary.tsx, src/lib/clubManager.ts, src/lib/clubManagerCalendar.ts, src/
+fleet2 exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerSeasonSummary.tsx, src/lib/clubManager.ts, src/lib/clubManagerCalendar.ts, src/
+title0 exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerSeasonSummary.tsx, src/lib/clubManager.ts, src/lib/clubManagerCalendar.ts, src/
+legacy1 exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerSeasonSummary.tsx, src/lib/clubManager.ts, src/lib/clubManagerCalendar.ts, src/
+title1 exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerSeasonSummary.tsx, src/lib/clubManager.ts, src/lib/clubManagerCalendar.ts, src/
+legacy0 exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerSeasonSummary.tsx, src/lib/clubManager.ts, src/lib/clubManagerCalendar.ts, src/
