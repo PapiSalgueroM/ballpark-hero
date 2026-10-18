@@ -24,7 +24,7 @@ jobs:
       ENGINES: chromium
       TZ: UTC
       # Root binds the qualified original raw before a fixed candidate can run.
-      XI_QUERY_BASELINE_RAW_SHA: ''
+      XI_QUERY_BASELINE_RAW_SHA: '8507cb631c0020babdd9cf66a3d45ff000ce0a847e08d9823789a6ec2f0c5aab'
     steps:
       - uses: actions/checkout@v4
         with:

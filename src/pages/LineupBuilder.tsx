@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useLineupBuilder } from '@/hooks/useLineupBuilder';
 import { FORMATIONS, type Formation } from '@/types/lineupBuilder';
 import { GameNav } from '@/components/game/GameNav';
@@ -55,6 +55,7 @@ const LineupBuilder = () => {
   } = useLineupBuilder();
 
   const [playerInput, setPlayerInput] = useState('');
+  const inputRevision = useRef(0);
   const [showRules, setShowRules] = useState(false);
 
   useEffect(() => {
@@ -138,6 +139,7 @@ const LineupBuilder = () => {
      so it has to survive the validator renaming the pick. */
   const handleSelectPlayer = async (entity: PlayerEntity) => {
     if (isValidating) return;
+    const revision = inputRevision.current;
     const raw = typeof entity.meta.position === 'string' ? entity.meta.position : undefined;
     await submitPlayer(entity.name, {
       rawName: entity.rawName,
@@ -149,7 +151,7 @@ const LineupBuilder = () => {
       age: typeof entity.meta.age === 'number' ? entity.meta.age : undefined,
       year: typeof entity.meta.year === 'number' ? entity.meta.year : undefined,
     });
-    setPlayerInput('');
+    if (inputRevision.current === revision) setPlayerInput('');
   };
 
   /* Round 825: role fit, chemistry and balance, slot by slot, off the rows
@@ -332,7 +334,7 @@ const LineupBuilder = () => {
                     <div className="flex-1">
                       <PlayerAutocomplete
                         value={playerInput}
-                        onChange={setPlayerInput}
+                        onChange={value => { inputRevision.current += 1; setPlayerInput(value); }}
                         onSelect={handleSelectPlayer}
                         searchOptions={{ source: teamScopedSource ?? SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers, boostNames: cappedNames }}
                         placeholder={currentTeam ? `Search a ${currentTeam.name} player...` : 'Enter player name...'}
