@@ -27,7 +27,7 @@ jobs:
       ENGINES: chromium
       TZ: UTC
       # Root binds the qualified original raw before a fixed candidate can run.
-      DRILL_KEYBOARD_BASELINE_RAW_SHA: ''
+      DRILL_KEYBOARD_BASELINE_RAW_SHA: 'e7f7d8f130cd2594a1b589d4e17966155a78182b5e1cd633b8de0ab3435ee238'
     steps:
       - uses: actions/checkout@v4
         with:
