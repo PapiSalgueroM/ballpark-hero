@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walk: node scripts/playOneOffCups.mjs > /tmp/w.log 2>&1; s=$?; grep -E "FAIL|^\(.\)|playOneOffCups" /tmp/w.log | head -30 | cut -c1-300; exit $s
+worldWalk: node scripts/playWorldUcl.mjs > /tmp/ww.log 2>&1; s=$?; grep -E "FAIL|playWorldUcl" /tmp/ww.log | head -20 | cut -c1-300; exit $s
+sweepWeight: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; grep -E "club-manager|manager-hot-seat|deadline-day" /tmp/sw.log | head -8 | cut -c1-200; exit $s
