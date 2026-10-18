@@ -1,0 +1,3 @@
+xp-same: RVXP_ORDER=same RVXP_CLUB=Everton RVXP_SEED=1 RVXP_SEASONS=2 node .rc/x/rvxp1510b.mjs
+xp-rev: RVXP_ORDER=reverse RVXP_CLUB=Everton RVXP_SEED=1 RVXP_SEASONS=2 node .rc/x/rvxp1510b.mjs
+xp-same3: RVXP_ORDER=same RVXP_CLUB=Everton RVXP_SEED=1 RVXP_SEASONS=3 node .rc/x/rvxp1510b.mjs

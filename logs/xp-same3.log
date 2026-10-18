@@ -1,0 +1,12 @@
+Everton seed 1, 3 seasons: season two's cup Arsenal v Everton mine {"0":{"h":0,"a":3}}, trophies [{"name":"FA Community Shield","emoji":"🛡️","season":2,"minor":true}]
+order same: a = the state without the trophy, b = the SAME state again
+finishSeason draws 32 without, 32 with; startNextSeason draws 851 without, 851 with
+finishSeason state keys that differ: 
+finishSeason summary keys that differ: 
+startNextSeason state keys that differ: squad xiIds setPieces
+xp without: {"v":1,"xp":711,"points":{"tactics":0,"recruitment":0,"negotiation":0,"youth":0,"manManagement":0,"finance":0,"media":0},"graduatesSeen":0}
+xp with:    {"v":1,"xp":711,"points":{"tactics":0,"recruitment":0,"negotiation":0,"youth":0,"manManagement":0,"finance":0,"media":0},"graduatesSeen":0}
+next.squad: [{"id":"p-james-garner","name":"James Garner","position":"CDM","rating":87,"age":26,"fitness":100,"morale":70,"injuryWeeks":0,"suspendedMatches":0,"isYouth":false,"seasonGoals":0,"seasonAssists":0,"value":43.8,"wage":48, || [{"id":"p-james-garner","name":"James Garner","position":"CDM","rating":87,"age":26,"fitness":100,"morale":70,"injuryWeeks":0,"suspendedMatches":0,"isYouth":false,"seasonGoals":0,"seasonAssists":0,"value":43.8,"wage":48,
+next.xiIds: ["youth-mv2cdxc0-6-199","p-jake-o-brien","fa-sergio-ramos-s3","p-james-garner","youth-mv2cdxc0-5-198","p-hayden-hackney","p-kiernan-dewsbury-hall","p-carlos-alcaraz","p-tyler-dibling","youth-mv2cdxc0-20-681","p-tyrique-g || ["youth-mv2cdxc0-6-199","p-jake-o-brien","fa-sergio-ramos-s3","p-james-garner","youth-mv2cdxc0-5-198","p-hayden-hackney","p-kiernan-dewsbury-hall","p-carlos-alcaraz","p-tyler-dibling","youth-mv2cdxc0-27-681","p-tyrique-g
+next.setPieces: {"captain":"p-jack-grealish","cornersLeft":"p-tyrique-george","cornersRight":"p-jack-grealish","freeKicks":"p-tyrique-george","penalties":"youth-mv2cdxc0-20-681"} || {"captain":"p-jack-grealish","cornersLeft":"p-tyrique-george","cornersRight":"p-jack-grealish","freeKicks":"p-tyrique-george","penalties":"youth-mv2cdxc0-27-681"}
+rvxp1510: XP EQUAL
