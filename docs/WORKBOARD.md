@@ -15895,3 +15895,8 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+
+## Round1425 claim: Soccer Career hair and beard options
+Root owns only soccer-specific extended catalogues/lookup in soccerCareerAppearance.ts, soccer catalogue selection in AppearanceBuilder.tsx and new PlayerAvatar.tsx drawings, plus tests/proof/browser/workflow/closing docs, branchcodex/soccer-appearance-options/base775. Six newhair/fourbeards, soccer29/18; legacy shared23/14 arrays, exactsevenrandomdraws/results, Manager/USlists/rolls, oldIDs/defaults/drawings and PR333 selectedstate work held. No protectedpage/core/Manager/save edit. Design docs/ROUND1425-SOCCER-APPEARANCE-OPTIONS.md. Remote actualeditor/unit/productionroute/drawingvisibility/persistence/negativecontrols plus types/plainbuild/all15readers/all14unchangedfatalcaps. All app runtime remoteActions/ordinaryofflinepreload. Prior61sealedheads and I protectedSC/Manager/tournaments/release/main/publish held; primaryappendonly.
+
