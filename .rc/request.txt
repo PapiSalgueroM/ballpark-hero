@@ -1,0 +1,22 @@
+# Release BI, the gate lines the rounds' own reports ask the lead to add that no kit file carried yet (checked by grep
+# over every kit file before writing). Only Round 1347's are owed here: finish-1347.md "For the lead" item 3 asks for
+# simWorldUcl, its ten controls and src/lib/worldCompetition.test.ts; rc-BIf.txt already runs the plain simWorldUcl and
+# the unit file, so only the ten controls are new. Command lines exactly as the round's own final gate sent them
+# (origin/rc-results/r1347-final request.txt lines 5 to 14). Each control must exit 1 and print "simWorldUcl: control
+# <name> FIRED (1 failures, all its own)"; an exit 0 or any other last line means the control proves nothing.
+# Already in the kit, so NOT repeated here: Round 1334's simSoccerDeck three slices, its sixteen controls and
+# src/lib/soccerDeck.test.ts (rc-BIj.txt, every line bound to the tree without 1334); Round 1346's simUsCoachRetirement,
+# simUsCareerSkips and playUsCareerReports with their controls (rc-BIg.txt); Round 1508's simCmOldCareersWorld with its
+# three controls, simCmUnseededWorld's early and never controls and playCmOldCareersWorld with its control (rc-BIk.txt).
+# No build, no browser, no base, nothing written into src: the controls twist the data in memory (section 0 runs in
+# about a second). No helper to send.
+ctl-onesource-1347: WORLD_UCL_CONTROL=onesource node scripts/simWorldUcl.mjs
+ctl-wiki-1347: WORLD_UCL_CONTROL=wiki node scripts/simWorldUcl.mjs
+ctl-thinused-1347: WORLD_UCL_CONTROL=thinused node scripts/simWorldUcl.mjs
+ctl-figure-1347: WORLD_UCL_CONTROL=figure node scripts/simWorldUcl.mjs
+ctl-receipt-1347: WORLD_UCL_CONTROL=receipt node scripts/simWorldUcl.mjs
+ctl-cover-1347: WORLD_UCL_CONTROL=cover node scripts/simWorldUcl.mjs
+ctl-const-1347: WORLD_UCL_CONTROL=const node scripts/simWorldUcl.mjs
+ctl-partial-1347: WORLD_UCL_CONTROL=partial node scripts/simWorldUcl.mjs
+ctl-ban-1347: WORLD_UCL_CONTROL=ban node scripts/simWorldUcl.mjs
+ctl-order-1347: WORLD_UCL_CONTROL=order node scripts/simWorldUcl.mjs
