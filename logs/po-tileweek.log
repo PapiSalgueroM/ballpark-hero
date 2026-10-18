@@ -1,0 +1,6 @@
+(d) Arsenal season two: the Shield against Liverpool on Wed 11 Aug, the first entry of the calendar
+(e) Arsenal season two after the Shield, won: the cabinet holds FA Community Shield
+   FAIL (e) Arsenal after the Shield 320: the League tile reads "🏆 LEAGUE #1 Form: W" after the Shield, before the league opener
+   FAIL (e) Arsenal after the Shield 390: the League tile reads "🏆 LEAGUE #1 Form: W" after the Shield, before the league opener
+   FAIL (e) Arsenal after the Shield 1280: the League tile reads "🏆 LEAGUE #1 Form: W" after the Shield, before the league opener
+playOneOffCups: control tileweek FIRED (3 findings of "the League tile reads", 3 in all)
