@@ -31,3 +31,21 @@ export function withoutUelHolder(source) {
   if (count !== 1) throw new Error(`worldUelHolder1509: the Europa League holder line stands in ${UEL_HOLDER_FILE} ${count} times, it must be exactly once`);
   return text.replace(UEL_HOLDER_LINE, UEL_HOLDER_REVERTED);
 }
+
+/* The round's other line that moves anything outside worldComps, step 6(a) (rulings 1e and 1i): objectiveStatuses
+ * grades a European rung of today's world by the rule (euroPlaceOf) instead of the position alone, so a season my
+ * club ends in the Europa League by its cup, a place passed down, or the fill's pass from fifth to sixth grades
+ * "Qualify for the Europa League" done where it was failed, and the board, the season score's objectives term and
+ * the next season's opening confidence follow. A kit pinned to an old engine that crosses a season's end plays its
+ * tree arm with it reverted (scripts/simCmUnseededWorld.mjs: its Hot Seat day of 2026-10-27 handed over, Nottingham
+ * Forest, scores 34 against the base's 28, one objective more at W_OBJ_EACH 6). Fails closed like the line above. */
+export const EURO_BOARD_LINE = '      const rung = isHistoricEra(career.eraId) ? null : europeRungOf(objective);\n';
+export const EURO_BOARD_REVERTED = '      const rung = null;\n';
+export const EURO_BOARD_EDIT = { file: UEL_HOLDER_FILE, from: EURO_BOARD_LINE, to: EURO_BOARD_REVERTED };
+
+export function withoutEuroBoard(source) {
+  const text = source.split('\r\n').join('\n');
+  const count = text.split(EURO_BOARD_LINE).length - 1;
+  if (count !== 1) throw new Error(`worldUelHolder1509: the European rung line stands in ${UEL_HOLDER_FILE} ${count} times, it must be exactly once`);
+  return text.replace(EURO_BOARD_LINE, EURO_BOARD_REVERTED);
+}

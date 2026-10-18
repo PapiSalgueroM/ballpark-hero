@@ -69,7 +69,7 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { withoutWorldSeed } from './lib/cmWorldSeed1250.mjs';
 import { withoutWatchedHolder } from './lib/worldUclHolder1502.mjs';
-import { withoutUelHolder } from './lib/worldUelHolder1509.mjs';
+import { withoutEuroBoard, withoutUelHolder } from './lib/worldUelHolder1509.mjs';
 import { withRulePreAz } from './lib/cmOwnClubMarket1339.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -443,9 +443,10 @@ const HOT_DATES = QUICK ? [] : ['2026-10-10', '2026-10-27', '2027-01-19'];
    season's field as the holder, which the pinned base cannot know. It is the one line of the watched competition
    that moves anything outside worldComps, so every arm of this tree plays with it reverted
    (scripts/lib/worldUclHolder1502.mjs, asserted present exactly once) and the comparison stays the seed's alone. */
-/* Round 1509 (ruling 1k): and the Europa League's winner admitted to the next Champions League, the same kind of
-   line, reverted the same way (scripts/lib/worldUelHolder1509.mjs). */
-const held = text => { try { return withoutUelHolder(withoutWatchedHolder(text)); } catch (e) { cannot(e.message); } };
+/* Round 1509: and the round's two lines that move anything outside worldComps, the Europa League's winner admitted
+   to the next Champions League (ruling 1k) and the European rungs graded by the rule (rulings 1e and 1i), reverted
+   the same way (scripts/lib/worldUelHolder1509.mjs). */
+const held = text => { try { return withoutEuroBoard(withoutUelHolder(withoutWatchedHolder(text))); } catch (e) { cannot(e.message); } };
 const baseEngine = await engine('base', { base: true, edit: text => { try { return withRulePreAz(text); } catch (e) { cannot(e.message); } } });
 const sections = CONTROL === 'noinverse' ? ['fresh'] : CONTROL === 'guard' || CONTROL === 'early' ? ['quiet', 'deals']
   : CONTROL === 'never' || CONTROL === 'norecord' ? ['deals'] : ['quiet', 'deals', 'fresh'];
