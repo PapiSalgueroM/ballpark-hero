@@ -1,6 +1,6 @@
 # Round1426: keep the newer report draft
 
-Status: diagnosis in progress, no product change or runtime credit yet.
+Status: original admitted, source fix in progress. No fixed or live credit yet.
 
 Both report forms capture the submitted payload correctly, but their async UI completion and1500ms reset are not bound to that submitted draft or dialog opening. A player can edit, close and reopen while the request waits. The older completion can then hide and erase the current draft. This is a source hypothesis until actual remote reproduction is admitted.
 
@@ -9,3 +9,9 @@ Chosen behavior: preserve editable drafts and existing delivery. A late relay/fa
 Verify on both actual components: details-only edit; category-only edit; pending close/reopen without edits; reopened edit while direct fallback waits; reopening after a success timer starts; late failure on a newer session followed by current retry; ordinary success at1499/1500ms with focus and blank reopen. Preserve existing reportDetails19 and reportContext5 cases and the source report fences. Browser proof uses actual built route forms at390/1280, native actions, fully intercepted requests, and explicitly identified timer control if used. No real report or email may be sent.
 
 Actual original failure precedes product adoption. The fixed proof must exercise genuine code-removal controls and restored equality, not zero-test/setup/timeout faults. Type gate, serial plain build,15 readers and14 unchanged fatal caps. No fullsuite, protected source, integration or live claim.
+
+Original admitted at1bcdf95d093436d865ab5ad04f6f376d63e9e945, run39147889794, job117735357429, artifact12144256160. The original14cases produce12 exact draft/session assertion faults and2 healthy normal successes. The actual built browser completes12 contexts at390/1280, with8 observed original faults and4 healthy held-fallback deliveries. Existing24, context plus4 controls, types, plain build, all15 built readers and all14 unchanged fatal caps pass. Native feature receipt53f45a11d9408cc3ba9820129112c61a076cd2c45e3792e0abcd87bda8654bff and common receipt44d530c5717fa6720938511b4f4a6e9eb5711ecdd3c72554d4b377c49813f92e are saved in the external1426 packet. Four earlier setup failures remain retained and unqualified.
+
+The one explicitly named additional product leaf is `src/hooks/useReportDraftLifecycle.ts`, shared only by the two owned report forms. It owns UI lifecycle only. Transport and captured payload stay in the components. The14 test cases are frozen after original admission. Fixed controls separately remove completion ownership, then timer cancellation plus deadline ownership, and must restore complete hook equality.
+
+Browser clock control is explicit. Native scroll to the actual trigger is recorded before initial storage capture and before each open. This round earns no no-scroll qualification. All report POSTs are locally intercepted; the exact existing most-played read RPC is fulfilled with an empty local fixture. Whole simReportRelay remains NOT RUN because it unconditionally calls the live database, and earns no relay, schema or database qualification.

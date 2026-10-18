@@ -6,6 +6,7 @@ on:
       - .github/workflows/report-draft-lifecycle.yml
       - src/components/game/ReportSiteIssue.tsx
       - src/components/game/ReportQuestion.tsx
+      - src/hooks/useReportDraftLifecycle.ts
       - src/test/reportDraftLifecycle.test.tsx
       - scripts/simReportDraftLifecycle.mjs
       - scripts/qa/playReportDraftLifecycle.mjs
@@ -50,12 +51,13 @@ jobs:
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
           base=775564305e9da84dab59f2b9fe246d044a3cc8e9
           git merge-base --is-ancestor "$base" HEAD
-          git diff --exit-code "$base" HEAD -- . ':!docs' ':!src/components/game/ReportSiteIssue.tsx' ':!src/components/game/ReportQuestion.tsx' ':!src/test/reportDraftLifecycle.test.tsx' ':!scripts/simReportDraftLifecycle.mjs' ':!scripts/qa/playReportDraftLifecycle.mjs' ':!.github/workflows/report-draft-lifecycle.yml' > "$out/source-boundary.log"
+          git diff --exit-code "$base" HEAD -- . ':!docs' ':!src/components/game/ReportSiteIssue.tsx' ':!src/components/game/ReportQuestion.tsx' ':!src/hooks/useReportDraftLifecycle.ts' ':!src/test/reportDraftLifecycle.test.tsx' ':!scripts/simReportDraftLifecycle.mjs' ':!scripts/qa/playReportDraftLifecycle.mjs' ':!.github/workflows/report-draft-lifecycle.yml' > "$out/source-boundary.log"
           mode=baseline
           for file in src/components/game/ReportSiteIssue.tsx src/components/game/ReportQuestion.tsx; do
             git show "$base:$file" > "$out/original-$(basename "$file")"
             cmp -s "$file" "$out/original-$(basename "$file")" || mode=fixed
           done
+          if test "$mode" = baseline; then test ! -e src/hooks/useReportDraftLifecycle.ts; else test -f src/hooks/useReportDraftLifecycle.ts; fi
           echo "mode=$mode" >> "$GITHUB_OUTPUT"; echo "REPORT_DRAFT_MODE=$mode" >> "$GITHUB_ENV"
           git diff --exit-code HEAD; test -z "$(git status --porcelain --untracked-files=all)"
           SIM_OFFLINE_RECEIPT="$out/preload.transport" node -e 'require("node:assert/strict").ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")])'
