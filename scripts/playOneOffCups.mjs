@@ -43,7 +43,7 @@ const CONTROLS = {
     to: '', finding: 'no Super cup tile' },
   swap: { file: 'src/lib/clubManagerWorldView.ts',
     from: '        homeGoals: got?.hg ?? null, awayGoals: got?.ag ?? null,',
-    to: '        homeGoals: got?.ag ?? null, awayGoals: got?.hg ?? null,', finding: 'the score on the card' },
+    to: '        homeGoals: got?.ag ?? null, awayGoals: got?.hg ?? null,', finding: 'the card shows' },
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`unknown control ${CONTROL}`);
 
@@ -284,10 +284,11 @@ async function caseD(browser, size, tag) {
   try {
     await page.waitForTimeout(800);
     await shot(page, `dsc-d-hub-${tag}`);
-    const text = ((await page.locator('#root').innerText().catch(() => '')) || '').replace(/\s+/g, ' ');
-    if (!text.includes('FA Community Shield')) finding(where, 'the hub does not name the FA Community Shield as the next match');
-    if (!text.includes(saves.d.opp)) finding(where, `the hub does not name ${saves.d.opp}`);
-    if (!text.includes('Season not started')) finding(where, 'the hub does not say the season has not started before the Shield');
+    /* innerText carries the CSS case (the hub's small headings are upper case), so the words are read lower case. */
+    const text = ((await page.locator('#root').innerText().catch(() => '')) || '').replace(/\s+/g, ' ').toLowerCase();
+    if (!text.includes('fa community shield')) finding(where, 'the hub does not name the FA Community Shield as the next match');
+    if (!text.includes(saves.d.opp.toLowerCase())) finding(where, `the hub does not name ${saves.d.opp}`);
+    if (!text.includes('season not started')) finding(where, 'the hub does not say the season has not started before the Shield');
     if (!(await toCups(page, where))) return;
     const tile = await textOf(page, '[data-cm-world-tile="dsc"]');
     if (!tile.includes('Your club is in it')) finding(where, `the Super cup tile reads "${tile.slice(0, 160)}"`);
@@ -299,8 +300,9 @@ async function caseE(browser, size, tag) {
   const { ctx, page, errors } = await open(browser, saves.e.items, size);
   try {
     await page.waitForTimeout(800);
-    const text = ((await page.locator('#root').innerText().catch(() => '')) || '').replace(/\s+/g, ' ');
-    if (!text.includes('Cabinet') || !text.includes('FA Community Shield')) finding(where, 'the hub does not show the Shield in the cabinet');
+    /* innerText carries the CSS case (the hub's small headings are upper case), so the words are read lower case. */
+    const text = ((await page.locator('#root').innerText().catch(() => '')) || '').replace(/\s+/g, ' ').toLowerCase();
+    if (!text.includes('cabinet') || !text.includes('fa community shield')) finding(where, 'the hub does not show the Shield in the cabinet');
     await shot(page, `dsc-e-hub-${tag}`);
     /* (f) the stats centre's Super cups view, once one is played. */
     const ok = await press(page, page.getByRole('button').filter({ has: page.getByText('Stats', { exact: true }) }), 15000);
