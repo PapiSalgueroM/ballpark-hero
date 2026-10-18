@@ -1,0 +1,8 @@
+unit-euro exit=0 4s |    Duration  3.58s (transform 1.93s, setup 81ms, collect 2.39s, tests 104ms, environment 384ms, prepare 223ms)
+appeal1081 exit=0 47s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simHarnessAnchors exit=0 51s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+dashscan exit=0 0s | no dash in the diff
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+tsc exit=0 76s | 
+ucl-savedbytes exit=1 857s | simWorldUcl: control savedbytes FIRED (35 failures, all its own)
