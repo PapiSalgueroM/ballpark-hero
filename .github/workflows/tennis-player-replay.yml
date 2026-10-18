@@ -63,13 +63,13 @@ jobs:
           python -m pip install fonttools pillow > "$out/font-tools-install.log" 2>&1
           FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
-          echo "NODE_OPTIONS=$NODE_OPTIONS" >> "$GITHUB_ENV"
           SIM_OFFLINE_RECEIPT="$out/preload.transport" node -e 'require("node:assert/strict").ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")])'
           git diff --exit-code HEAD
       - name: Real types and original or fixed regression with effective control
         id: tests
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           out="$TENNIS_REPLAY_OUT"
           SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
           if test "$TENNIS_REPLAY_MODE" = baseline; then export TENNIS_REPLAY_BASELINE=1; fi
@@ -82,6 +82,7 @@ jobs:
         id: build
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           SIM_OFFLINE_RECEIPT="$TENNIS_REPLAY_OUT/build.transport" npm run build > "$TENNIS_REPLAY_OUT/build.log" 2>&1
           tail -n 6 "$TENNIS_REPLAY_OUT/build.log"
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$TENNIS_REPLAY_OUT/dist-files.sha256"
@@ -90,6 +91,7 @@ jobs:
         id: browser
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           out="$TENNIS_REPLAY_OUT"
           node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-browser.log" 2>&1 &
           server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
@@ -101,6 +103,7 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           out="$TENNIS_REPLAY_OUT"
           node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-readers.log" 2>&1 &
           server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
@@ -117,6 +120,7 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           out="$TENNIS_REPLAY_OUT"
           node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-weights.log" 2>&1 &
           server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
@@ -127,6 +131,7 @@ jobs:
         if: always()
         run: |
           set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           out="$TENNIS_REPLAY_OUT"; result=0
           git diff --exit-code HEAD > "$out/final-diff.log" || result=1
           git status --porcelain --untracked-files=all > "$out/final-status.txt"; test ! -s "$out/final-status.txt" || result=1
