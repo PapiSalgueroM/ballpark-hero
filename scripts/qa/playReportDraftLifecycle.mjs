@@ -187,6 +187,11 @@ try {
         assert(await trigger.evaluate(element => !!element.closest('[data-seo-content]')?.querySelector('article') && element.closest('[data-no-prerender]').parentElement.firstElementChild === element.closest('[data-no-prerender]')), 'Actual game report sits above its loaded guide');
       }
       await trigger.scrollIntoViewIfNeeded();
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      if (form.route === '/') {
+        assert(await page.evaluate(() => scrollY > 0), 'The native footer scroll reached a positive home offset');
+        row.initialNativeScroll = await poll('native home scroll memory settled', () => page.evaluate(() => ({ y: scrollY, saved: sessionStorage.getItem('home-scroll-y') })), value => value.y > 0 && value.saved === String(value.y));
+      }
       row.storesBefore = await stores();
       row.hydratedDateET = await page.evaluate(() => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(new Date()));
       await page.clock.install({ time: new Date('2026-10-18T16:00:00.000Z') });
