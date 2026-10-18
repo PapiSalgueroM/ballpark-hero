@@ -26,17 +26,24 @@
  * the page before it applies, or the run refuses with exit 2):
  *   CM_FINANCE_CONTROL=small  the cover row at 11 px: the font check FIRES naming it
  *   CM_FINANCE_CONTROL=cut    the kitty label held to 40 px with nowrap: the cut check FIRES
- *   CM_FINANCE_CONTROL=wrap   the season kitty figure squeezed to 1 px wide and allowed to break
- *                             between any two letters: the one line check FIRES
- * Release BK triage: the wrap control squeezed the figure but left the line
- * breaking to the figure's own text, so whether it fired hung on the digits the
- * career happened to reach. The ten weeks are played unseeded, so the figure
- * differs from run to run on one tree: in Release BK's gate (rBK-rgK) the small,
- * cut and wrap controls read "+£63.1m", "+£62.6m" and "+£63m", and Release BH's
- * cut control read "+£63m" too. On Release BJ the wrap run read "+£64.7m" and
- * broke over 2 lines; "+£63m" Chromium keeps on one line at 1 px, so the control
- * did not fire with nothing wrong in the check. word-break: break-all makes the
- * plant break every figure whatever it reads; the check is unchanged.
+ *   CM_FINANCE_CONTROL=wrap   the season kitty figure taken out of the table's column as a
+ *                             block at its min-content width, breaking between any two
+ *                             letters (one glyph a line): the one line check FIRES
+ * Release BK triage: the wrap control squeezed the figure's cell to 1 px, but a
+ * table cell is as wide as its column, and the column is as wide as the widest
+ * nowrap figure in it, so whether the kitty figure broke hung on the figures the
+ * career happened to reach. The ten weeks are played unseeded, so they differ
+ * from run to run on one tree: in Release BK's gate (rBK-rgK) the small, cut and
+ * wrap controls read "+£63.1m", "+£62.6m" and "+£63m", and Release BH's cut
+ * control read "+£63m" too. On Release BJ the wrap run read "+£64.7m" and broke
+ * over 2 lines; on BK "+£63m" (bold) fitted the column the cover row's "+£70.8m"
+ * set, so the control did not fire with nothing wrong in the check. Adding
+ * word-break: break-all (f77d6c88) did not change that: with the gate's figures
+ * written into the cells, the old plant and that one both still did not fire,
+ * and only a block out of the column sizing fired (rBK-tr4, rBK-tr5). At
+ * min-content width that block holds one glyph a line, so nothing overflows and
+ * the plant adds no cut finding (3 failures, the kitty row at the three sizes).
+ * The check is unchanged.
  * The one line check is the walk's own first finding: on 559a0c62 the signed
  * figures of the cover and kitty rows broke after their plus sign at 320 and
  * at 390 ("+" over "£13.2m"), which no cut check sees because nothing is cut.
@@ -202,7 +209,7 @@ async function applyControl() {
     ? `${target} { font-size: 11px !important; }`
     : CONTROL === 'cut'
       ? `${target} { display: block !important; width: 40px !important; max-width: 40px !important; white-space: nowrap !important; overflow: hidden !important; }`
-      : `${target} { white-space: normal !important; word-break: break-all !important; width: 1px !important; max-width: 1px !important; }`;
+      : `${target} { display: block !important; white-space: normal !important; word-break: break-all !important; width: min-content !important; }`;
   await page.addStyleTag({ content: css });
   await page.waitForTimeout(200);
 }
