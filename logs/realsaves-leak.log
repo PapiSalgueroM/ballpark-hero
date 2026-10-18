@@ -1,0 +1,6 @@
+  note Brentford (now) paused review: season one of today's world, no Europa League after the load
+FAIL Liverpool (now) season 1 week 27: head and base load to different JSON, worldComps.uel aside (boardConfidence)
+FAIL Liverpool (now) season 1 week 27: the head's load saved and loaded again moved (boardConfidence), the base's did not
+  note Liverpool (now) paused review: season one of today's world, no Europa League after the load
+probeRealSaves: 21 saves written by 77556430 (4 from realSaves), 9 gained a Europa League at the head's load, 9 differ but for worldComps.uel, 18 failures
+probeRealSaves: control leak FIRED (9 saves differ)
