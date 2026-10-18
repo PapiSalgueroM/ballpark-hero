@@ -1,0 +1,1 @@
+ucl-s2: WORLD_UCL_ONLY=2 node scripts/simWorldUcl.mjs > /tmp/u2.log 2>&1; s=$?; grep -E "FAIL|self relative|simWorldUcl" /tmp/u2.log | head -24 | cut -c1-300; exit $s

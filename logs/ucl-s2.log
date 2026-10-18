@@ -1,0 +1,24 @@
+  2 self relative: 190 journeys, 23896 steps each arm, 141 journeys carried a slice, 1081 s
+FAIL 2 participant Real Madrid (now) nocoach seed 1 at s1-reload: the saved bytes differ
+FAIL 2 participant Real Madrid (now) nocoach seed 2 at s1-reload: the saved bytes differ
+FAIL 2 participant Real Madrid (now) nocoach seed 3 at s1-reload: the saved bytes differ
+FAIL 2 participant Real Madrid (now) nocoach seed 4 at s1-reload: the saved bytes differ
+FAIL 2 participant Real Madrid (now) nocoach seed 5 at s1-reload: the saved bytes differ
+FAIL 2 participant Real Madrid (now) coach seed 1 at s1-reload: the saved bytes differ
+FAIL 2 participant Real Madrid (now) coach seed 2 at s1-reload: the saved bytes differ
+FAIL 2 participant Real Madrid (now) coach seed 3 at s1-reload: the saved bytes differ
+FAIL 2 participant Real Madrid (now) coach seed 4 at s1-reload: the saved bytes differ
+FAIL 2 participant Real Madrid (now) coach seed 5 at s1-reload: the saved bytes differ
+FAIL 2 participant Arsenal (now) nocoach seed 1 at s1-reload: the saved bytes differ
+FAIL 2 participant Arsenal (now) nocoach seed 2 at s1-reload: the saved bytes differ
+FAIL 2 participant Arsenal (now) nocoach seed 3 at s1-reload: the saved bytes differ
+FAIL 2 participant Arsenal (now) nocoach seed 4 at s1-reload: the saved bytes differ
+FAIL 2 participant Arsenal (now) nocoach seed 5 at s1-reload: the saved bytes differ
+FAIL 2 participant Arsenal (now) coach seed 1 at s1-reload: the saved bytes differ
+FAIL 2 participant Arsenal (now) coach seed 2 at s1-reload: the saved bytes differ
+FAIL 2 participant Arsenal (now) coach seed 3 at s1-reload: the saved bytes differ
+FAIL 2 participant Arsenal (now) coach seed 4 at s1-reload: the saved bytes differ
+FAIL 2 participant Arsenal (now) coach seed 5 at s1-reload: the saved bytes differ
+FAIL 2 watcher Proof Town Athletic (now) nocoach seed 1 at s1-join-reload: the saved bytes differ
+FAIL 2 watcher Proof Town Athletic (now) coach seed 1 at s1-join-reload: the saved bytes differ
+simWorldUcl: RED, 23919 checks, 22 failures
