@@ -1,0 +1,4 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sweepWeight exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+ucl-ctl exit=0 97s | controls (each must be 1): notile=1 ahead=1
+ucl-walk exit=0 195s | playWorldUcl: green. Seven saves at three sizes, 63 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
