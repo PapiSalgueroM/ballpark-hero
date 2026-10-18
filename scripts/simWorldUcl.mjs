@@ -71,7 +71,8 @@
  *              summer move away from a created club hands its watched place to the created club's name, so the
  *              open throws and the season watches nothing)
  *   section 2: stream (the watched match draws from Math.random) participant (a club in the Champions League
- *              opens a watched one too) form (the evaluation writes the clubs' form)
+ *              opens a watched one too) form (the evaluation writes the clubs' form) savedbytes (a save holding
+ *              the followed Europa League also writes a key loadCareer drops, so only the saved bytes differ)
  *   section 3: ahead (a night counts one week early) live (the evaluation reads today's strengths, not the
  *              snapshot: red across a move) noseen (a carried slice forgets the nights it had shown) marks (two
  *              league phase nights on one league round) mdearly (a matchday placed at the league entry before
@@ -209,6 +210,10 @@ Object.assign(CONTROLS, {
   /* Advice 24: a summer move away from a created club hands its watched place to the created club's name (the
      open then throws on a club the new world does not know, and the season watches nothing). */
   nocustomexit: [1, /^1 (no competition: the created club's summer exit|created exit: )/],
+  /* fix2-1509 (closing check major 3): section 2's saved bytes compare with worldComps.uel taken off, on its own. A
+     save holding the followed Europa League writes matchRules too, which loadCareer deletes, so the loaded state and
+     the draws stay equal and only that compare can see it. */
+  savedbytes: [2, /^2 participant .* at [^:]*: the saved bytes differ \(worldComps\.uel taken off\)$/],
 });
 Object.assign(CAREER_EDITS, {
   mdearly: [{ file: CM, from: '      put(night, i < 0 ? prev.at : i, i < 0 ? prev.round : roundOf(i), i >= 0);', to: '      put(night, i < 0 ? prev.at : i - 1, i < 0 ? prev.round : roundOf(i), i >= 0);' }],
@@ -222,6 +227,7 @@ Object.assign(CAREER_EDITS, {
   noholdertop: [{ file: CM, from: '  const top = holder && field.includes(holder) ? holder : undefined;', to: '  const top: string | undefined = undefined;' }],
   memokey: [{ file: CM, from: "  const key = `${state.eraId ?? ''}|${k}`;", to: "  const key = `${state.eraId ?? ''}`;" }],
   nocustomexit: [{ file: CM, from: '    const tables = moving && watchTables ? watchTables.map(t => ({ ...t, clubs: customExitUclField(career, t.clubs) })) : watchTables;', to: '    const tables = watchTables;' }],
+  savedbytes: [{ file: CM, from: '      localStorage.setItem(SAVE_KEY, JSON.stringify(full));\n', to: '      localStorage.setItem(SAVE_KEY, JSON.stringify(full.worldComps?.uel ? { ...full, matchRules: 1 } : full));\n' }],
 });
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control ${CONTROL}`);
 const runs = n => (CONTROL ? CONTROLS[CONTROL][0] === n : ONLY.length === 0 || ONLY.includes(n));
