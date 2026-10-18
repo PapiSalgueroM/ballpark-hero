@@ -1,0 +1,26 @@
+mut1509: applied m5 to src/lib/clubManager.ts
+FAIL 4 falls: participant Real Madrid (now) seed 1 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Real Madrid (now) seed 2 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Real Madrid (now) seed 3 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Real Madrid (now) seed 4 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Real Madrid (now) seed 5 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Arsenal (now) seed 1 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Arsenal (now) seed 2 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Arsenal (now) seed 3 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Arsenal (now) seed 4 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Arsenal (now) seed 5 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 join: watcher América (now) seed 3 at s2-join: a move outside the field did not carry the Europa League
+simWorldEuro: RED, 35408 checks, 11 failures
+FAIL 4 falls: participant Real Madrid (now) seed 1 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Real Madrid (now) seed 2 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Real Madrid (now) seed 3 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Real Madrid (now) seed 4 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Real Madrid (now) seed 5 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Arsenal (now) seed 1 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Arsenal (now) seed 2 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Arsenal (now) seed 3 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Arsenal (now) seed 4 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 falls: participant Arsenal (now) seed 5 at s1-e8: carried onto a calendar behind, it shows 0 nights after 2
+FAIL 4 join: watcher América (now) seed 3 at s2-join: a move outside the field did not carry the Europa League
+simWorldEuro: RED, 35408 checks, 11 failures
+M5 RESULT sec4=1 sec1=1

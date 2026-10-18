@@ -1,0 +1,23 @@
+mut1509: applied m4 to src/lib/clubManager.ts
+  1 opens join: 8
+  1 opens rollover: 60
+  1 opens start: 35
+  1 rollovers whose cup another club won: 50
+  1 rollovers whose cup my club won: 6
+  1 rollovers whose season had no cup bracket (its place passed down): 4
+  1 seasons that ended with no Europa League: 4
+  4 joins outside the field carried: 5
+  4 joins to an entrant opened: 4
+  4 joins to an entrant with none: 4
+  4 seen probes (a carry onto a calendar behind): 35
+simWorldEuro: green, 35567 checks, 0 failures
+  3 agreement: 252 season ends, 37 with a Europa League route both agree on, 37 Champions League places; my club won its cup in 23, from outside the Champions League places in 16: participant Arsenal seed 3 season 1 (C); watcher Chelsea seed 3 season 2 (C); watcher Chelsea seed 4 season 2 (C); watcher Hoffenheim seed 3 season 2 (C); search Crystal Palace seed 2 season 2 (C); search Crystal Palace seed 3 season 1 (C); search Deportivo La Coruña seed 5 season 2 (C); search Elche seed 3 season 1 (C)
+  3 attribution: 12 objectives graded otherwise than the base, by my club's route: L 2, C 5, P 5; each one done adds W_OBJ_EACH (6, capped at 30) to the season score's objectives term and reaches 1335's opening confidence through the same statuses; 531 s
+simWorldEuro: green, 517 checks, 0 failures
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m15 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 08:15:22
+[2m   Duration [22m 3.02s[2m (transform 1.63s, setup 74ms, collect 2.10s, tests 97ms, environment 283ms, prepare 79ms)[22m
+
+M4 RESULT sec1=0 sec3=0 unit=0

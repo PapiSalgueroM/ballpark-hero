@@ -1,0 +1,29 @@
+mut1509: applied m1 to src/lib/euroAccess.ts
+::error file=/tmp/m1/src/lib/euroAccess.test.ts,title=src/lib/euroAccess.test.ts > the Europa League access rule (Round 1509) > takes a cup winner from below the top division%2C which no table lists,line=51,column=40::AssertionError: expected undefined to be 'C' // Object.is equality%0A%0A- Expected: %0A"C"%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/lib/euroAccess.test.ts:51:40%0A%0A
+
+::error file=/tmp/m1/src/lib/euroAccess.test.ts,title=src/lib/euroAccess.test.ts > the Europa League access rule (Round 1509) > passes the cup place down when there is no winner to place (null)%2C and gives none before the final (left out),line=56,column=25::AssertionError: expected 'L' to be 'P' // Object.is equality%0A%0AExpected: "P"%0AReceived: "L"%0A%0A ❯ src/lib/euroAccess.test.ts:56:25%0A%0A
+
+::error file=/tmp/m1/src/lib/euroAccess.test.ts,title=src/lib/euroAccess.test.ts > the Europa League access rule (Round 1509) > gives a nation with no European row nothing for its cup,line=65,column=21::AssertionError: expected [ 'E5', 'E6', 'S5', 'S6' ] to deeply equal [ 'E5', 'S5', 'N3', 'C2' ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "E5",%0A+   "E6",%0A    "S5",%0A-   "N3",%0A-   "C2",%0A+   "S6",%0A  ]%0A%0A ❯ src/lib/euroAccess.test.ts:65:21%0A%0A
+
+::error file=/tmp/m1/src/lib/euroAccess.test.ts,title=src/lib/euroAccess.test.ts > the Europa League access rule (Round 1509) > keeps my club out of every route%2C its place passing on%2C and the fill never takes it,line=72,column=22::AssertionError: expected 'L' to be 'P' // Object.is equality%0A%0AExpected: "P"%0AReceived: "L"%0A%0A ❯ src/lib/euroAccess.test.ts:72:22%0A%0A
+
+::error file=/tmp/m1/src/lib/euroAccess.test.ts,title=src/lib/euroAccess.test.ts > the Europa League access rule (Round 1509) > fills to the size from the deepest leagues first%2C plain text order between equals%2C no club twice,line=86,column=63::AssertionError: expected [ 'S8', 'E8' ] to deeply equal [ 'S7', 'E7' ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A-   "S7",%0A-   "E7",%0A+   "S8",%0A+   "E8",%0A  ]%0A%0A ❯ src/lib/euroAccess.test.ts:86:63%0A%0A
+
+::error file=/tmp/m1/src/lib/euroAccess.test.ts,title=src/lib/euroAccess.test.ts > the Europa League access rule (Round 1509) > puts the Conference League titleholder in%2C unless it is already in,line=91,column=70::AssertionError: expected undefined to be 'H' // Object.is equality%0A%0A- Expected: %0A"H"%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/lib/euroAccess.test.ts:91:70%0A%0A
+
+::error file=/tmp/m1/src/lib/euroAccess.test.ts,title=src/lib/euroAccess.test.ts > the board reads the rule (Round 1509) > before the cup final counts the league places only,line=144,column=32::AssertionError: expected 'uel' to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A"uel"%0A%0A ❯ src/lib/euroAccess.test.ts:144:32%0A%0A
+
+::error file=/tmp/m1/src/lib/euroAccess.test.ts,title=src/lib/euroAccess.test.ts > the board reads the rule (Round 1509) > after the final counts the cup%3A my club winning it from outside the places%2C or a winner already in passing its place down to me,line=154,column=38::AssertionError: expected 'L' to be 'P' // Object.is equality%0A%0AExpected: "P"%0AReceived: "L"%0A%0A ❯ src/lib/euroAccess.test.ts:154:38%0A%0A
+  1 opens join: 8
+  1 opens rollover: 60
+  1 opens start: 35
+  1 rollovers whose cup another club won: 47
+  1 rollovers whose cup my club won: 9
+  1 rollovers whose season had no cup bracket (its place passed down): 4
+  1 seasons that ended with no Europa League: 4
+  4 joins outside the field carried: 5
+  4 joins to an entrant opened: 4
+  4 joins to an entrant with none: 4
+  4 seen probes (a carry onto a calendar behind): 35
+simWorldEuro: green, 35513 checks, 0 failures
+M1 RESULT unit=1 sec1=0

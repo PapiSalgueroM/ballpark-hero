@@ -1,0 +1,6 @@
+m1 exit=0 208s | M1 RESULT unit=1 sec1=0
+m2 exit=0 474s | M2 RESULT sec1=0 sec5=1 unit=0
+m3 exit=0 559s | M3 RESULT unit=0 sec3=1
+m5 exit=0 408s | M5 RESULT sec4=1 sec1=1
+m4 exit=0 736s | M4 RESULT sec1=0 sec3=0 unit=0
+m6 exit=0 486s | M6 RESULT sec3=0 unit=0

@@ -1,0 +1,32 @@
+mut1509: applied m2 to src/lib/clubManager.ts
+  1 opens join: 8
+  1 opens rollover: 60
+  1 opens start: 35
+  1 rollovers whose cup another club won: 47
+  1 rollovers whose cup my club won: 9
+  1 rollovers whose season had no cup bracket (its place passed down): 4
+  1 seasons that ended with no Europa League: 4
+  4 joins outside the field carried: 5
+  4 joins to an entrant opened: 4
+  4 joins to an entrant with none: 4
+  4 seen probes (a carry onto a calendar behind): 35
+simWorldEuro: green, 35567 checks, 0 failures
+FAIL 5 holder: participant Arsenal seed 2 at s1-rollover: the Europa League's winner Liverpool is not in next season's Champions League
+FAIL 5 holder: participant Arsenal seed 4 at s1-rollover: the Europa League's winner Liverpool is not in next season's Champions League
+FAIL 5 holder: participant Arsenal seed 5 at s1-rollover: the Europa League's winner Liverpool is not in next season's Champions League
+FAIL 5 holder: watcher Chelsea seed 1 at s1-rollover: the Europa League's winner Fenerbahçe is not in next season's Champions League
+FAIL 5 holder: watcher Chelsea seed 2 at s1-rollover: the Europa League's winner Crystal Palace is not in next season's Champions League
+FAIL 5 holder: watcher Chelsea seed 3 at s1-rollover: the Europa League's winner Bayer Leverkusen is not in next season's Champions League
+FAIL 5 holder: watcher Chelsea seed 4 at s1-rollover: the Europa League's winner Sunderland is not in next season's Champions League
+FAIL 5 holder: watcher Chelsea seed 4 at s1-rollover: Sunderland is in next season's Europa League too
+FAIL 5 holder: watcher Chelsea seed 5 at s1-rollover: the Europa League's winner Fenerbahçe is not in next season's Champions League
+FAIL 5 holder: watcher Hoffenheim seed 1 at s1-rollover: the Europa League's winner Crystal Palace is not in next season's Champions League
+FAIL 5 holder: watcher Everton seed 2 at s1-rollover: the Europa League's winner Sunderland is not in next season's Champions League
+simWorldEuro: RED, 169 checks, 15 failures
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m15 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 08:07:31
+[2m   Duration [22m 3.83s[2m (transform 2.17s, setup 70ms, collect 2.70s, tests 127ms, environment 354ms, prepare 189ms)[22m
+
+M2 RESULT sec1=0 sec5=1 unit=0

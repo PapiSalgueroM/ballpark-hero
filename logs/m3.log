@@ -1,0 +1,17 @@
+mut1509: applied m3 to src/lib/clubManager.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/m3[39m
+
+ [32m✓[39m src/lib/euroAccess.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 97[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m15 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 07:59:42
+[2m   Duration [22m 3.99s[2m (transform 2.11s, setup 84ms, collect 2.66s, tests 97ms, environment 407ms, prepare 295ms)[22m
+
+  3 agreement: 252 season ends, 31 with a Europa League route both agree on, 37 Champions League places; my club won its cup in 24, from outside the Champions League places in 11: watcher Everton seed 1 season 2 (C); search Coventry City seed 1 season 1 (C); search Everton seed 1 season 2 (C); search Deportivo La Coruña seed 3 season 1 (C); search Espanyol seed 1 season 1 (L); search Inter Milan seed 3 season 2 (C); search Inter Milan seed 6 season 2 (C); search Freiburg seed 3 season 1 (L)
+  3 attribution: 8 objectives graded otherwise than the base, by my club's route: none 2, L 2, P 4; each one done adds W_OBJ_EACH (6, capped at 30) to the season score's objectives term and reaches 1335's opening confidence through the same statuses; 551 s
+FAIL 3 attribution: watcher Hoffenheim seed 1 season 1: "Qualify for the Europa League" graded failed where the base grades done, ucl European place
+FAIL 3 attribution: search Hoffenheim seed 1 season 1: "Qualify for the Europa League" graded failed where the base grades done, ucl European place
+simWorldEuro: RED, 513 checks, 2 failures
+M3 RESULT unit=0 sec3=1
