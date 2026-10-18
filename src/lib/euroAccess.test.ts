@@ -107,7 +107,7 @@ describe('the Europa League access rule (Round 1509)', () => {
 });
 
 /* Round 1509 step 6a: the board's European rungs, graded by the rule (rulings 1e and 1i). */
-import { REAL_LEAGUES, buildBoardObjectives, euroPlaceOf, euroPlaceRouteOf, europeRungOf, startCareer, type CareerState } from '@/lib/clubManager';
+import { REAL_LEAGUES, buildBoardObjectives, euroCupOf, euroPlaceOf, euroPlaceRouteOf, europeRungOf, startCareer, type CareerState } from '@/lib/clubManager';
 
 describe('the board reads the rule (Round 1509)', () => {
   it('names a rung for each of the three European labels the board writes, and for nothing else', () => {
@@ -154,5 +154,21 @@ describe('the board reads the rule (Round 1509)', () => {
     expect(euroPlaceRouteOf(passed)).toBe('P');
     expect(euroPlaceOf(at(7, clubAt(s6, 2)))).toBeNull();
     expect(euroPlaceOf(at(6, 'Somebody From Below'))).toBeNull();
+  });
+  /* fix-1509: the cup the rollover hands on is the final's winner, whichever side it was, never the loser. */
+  it('reads the season\'s cup off its final (euroCupOf): the winner home or away, on penalties, or nobody before it is played', () => {
+    const s = JSON.parse(JSON.stringify(base)) as CareerState;
+    const final = (home: string, away: string, hg: number | null, ag: number | null, winner: string | null, pens = false) =>
+      [{ round: 'F', slot: 0, home, away, homeGoals: hg, awayGoals: ag, winner, mine: false, ...(pens ? { pens: true } : {}) } as never];
+    s.cupBracket = final('Arsenal', 'Everton', 0, 2, 'Everton');
+    expect(euroCupOf(s)).toEqual({ nationId: 'england', winner: 'Everton' });
+    s.cupBracket = final('Everton', 'Arsenal', 3, 1, 'Everton');
+    expect(euroCupOf(s).winner).toBe('Everton');
+    s.cupBracket = final('Arsenal', 'Everton', 1, 1, 'Arsenal', true);
+    expect(euroCupOf(s).winner).toBe('Arsenal');
+    s.cupBracket = final('Arsenal', 'Everton', null, null, null);
+    expect(euroCupOf(s).winner).toBeNull();
+    s.cupBracket = undefined;
+    expect(euroCupOf(s).winner).toBeNull();
   });
 });

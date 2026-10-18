@@ -100,3 +100,40 @@ dukb-handoff/2026-10-10/briefs/brief-1509.md. Kept at every push; the builder's 
   simCmOldCareersWorld and simCmWorldMoves read at the join as attributed above; the Round 1081 pin
   (scripts/fixtures/managerAppealIsolation1081/manifest.json) retaken again, last, if main changes clubManager.ts
   before this merges.
+
+## Fix round (fix-1509, 2026-10-18), after the run and read reviews
+
+- The carry (major, both lenses): a mid season move kept the old club's `earned` on the carried Europa League slice,
+  so the tile and the screen said the new club had earned a place. carryWorldComp now takes `earned` off a carried
+  slice when the club changes (the rule kept out only the old club, so a club outside the field earned nothing).
+  simWorldEuro section 1 checks it on every real move and on a probe once a journey, control carryearned.
+- The cup's route (major, run lens m4): every check read the cup through the engine's own euroCupOf, so handing the
+  route to the final's loser stayed green. The harness now reads the final's winner off the bracket (cupOfBracket),
+  section 1 holds euroCupOf to it, section 3 requires a route for a final my club won, and euroAccess.test.ts tests
+  euroCupOf. Controls cuploser and cupwin. The harness also builds the Champions League really played from the save
+  (uclPlayedOf, control noworld) and works the league places and the cup winners out by hand (byHand, control
+  oneplace, which edits the rule in the engine and the oracle alike), so a wrong edit of euroAccess.ts no longer
+  passes runAllSims with only the vitest file to catch it.
+- Advice 21's last item (major, read lens): a season one club whose real fifth place went to the 2026-27 Champions
+  League (England and Spain, rows A1 and A3, both verified; Liverpool and Real Betis in an unedited world) gets one
+  line on the Champions League tile and one in the screen's header saying why it is in neither.
+- The ?'s clause "several smaller leagues sent only their cup winner" stood on rows A11 to A15, kassiesa.net only
+  (onePublisher): cut. Other words made true of the game: the final is not the day after a Champions League night,
+  the winner's Champions League place holds when the field has room (a participant's 32 has none when both
+  holders finished outside their league places; simWorldEuro section 5 counts those as "a participant's 32 already
+  full"), the board's live reading is said, the Europa League table names the Champions League's tiebreak as the
+  one it uses (row U6 is toVerify), and What's New names your own country's cup winner.
+- Critic 9(g), the grep: `grep -n -i "russia\|ukrain" src/lib/clubManager.ts` finds the Russian Premier League
+  (LEAGUE_RULES.russia, line 3815, `europe: null`, with its UEFA suspension sourced at 3794 to 3797) and no
+  Ukrainian league. euroTablesOf keeps only `league.euro` tables and euroRouteNow returns null for a nation with no
+  European league, so no Russian club takes a league place, a cup place, the fill or a holder route.
+  simWorldEuro section 0.9 asserts it in code.
+- Scope, said plainly: managerHotSeat.ts and deadlineDay.ts (listed NOT TOUCHED) gained the DAILY_START import and
+  argument, which ruling 1l's options object needs; scripts/simCmShootoutOrder.mjs (in no FILES list) deletes
+  worldComps from the state it hashes, which on a participant is the Europa League's key alone.
+- simWorldUcl section 2 and simWorldEuro section 2 now compare a save holding the followed Europa League byte for
+  byte with that key taken off, instead of leaving it out. Section 3 prints, for each season graded otherwise, the
+  season score's objectives term on both engines and next season's opening confidence from the base's own rollover.
+- Not fixed here: the board panel's "On track" for a cup winner seventh in its league with no reason given
+  (ClubManagerBoardPanel.tsx is outside this round's files); the brief's realSaves rule, which lives only in
+  simCmBoardVerdict, whose kit refuses on main too (owed at the join).
