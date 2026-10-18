@@ -163,7 +163,8 @@ const CAREER_EDITS = {
   agall: [{ file: CM, from: '    awayGoals: uclAwayGoalsApply(state.eraId),\n    deciderScale: ET_DEFLATOR,', to: '    awayGoals: true,\n    deciderScale: ET_DEFLATOR,' }],
   stream: [{ file: CM, from: 'sim: (strH, strA, scale, rand) => simScore(strH, strA, 0.2, -0.08, scale, rand), tie };', to: 'sim: (strH, strA, scale, rand) => simScore(strH, strA, 0.2, -0.08, scale), tie };' }],
   participant: [
-    { file: CM, from: '  if (world || state.uclGroup) return;\n  try {\n    openWorldUcl(', to: '  if (world) return;\n  try {\n    openWorldUcl(' },
+    /* Round 1509: the start opens the Champions League only when my club is not in it, then the Europa League. */
+    { file: CM, from: '  if (!state.uclGroup) {\n    try {\n      openWorldUcl(', to: '  if (true) {\n    try {\n      openWorldUcl(' },
     /* Round 1509: the open is keyed (openWorldComp); the Champions League's guard is the comp's own. */
     { file: CM, from: "  if ((comp === 'ucl' && state.uclGroup) || !field) return;", to: '  if (!field) return;' },
   ],
@@ -438,7 +439,7 @@ async function careerJourney(E, f, { seasons, mode = 'nocoach', join = false, mo
     });
     const got = r.value ?? {};
     if (got.state) s = got.state;
-    steps.push({ label, json: record ? record(s) : null, inIt: !!s?.uclGroup, carries: !!s && 'worldComps' in s, draws: r.draws.length, drawSha: createHash('sha256').update(JSON.stringify(r.draws)).digest('hex').slice(0, 16), saved: got.saved ?? null });
+    steps.push({ label, json: record ? record(s) : null, inIt: !!s?.uclGroup, carries: !!s && !!s.worldComps?.ucl, draws: r.draws.length, drawSha: createHash('sha256').update(JSON.stringify(r.draws)).digest('hex').slice(0, 16), saved: got.saved ?? null });
     onStep?.(M, s, label, got);
   };
   step('start', () => ({ state: f.custom ? M.cm.startCareer(f.club, f.era, f.custom) : M.cm.startCareer(f.club, f.era) }));
@@ -681,7 +682,8 @@ function stepTracker(name) {
   const dates = (M, s, at) => checkDates(M, s, name, at);
   return (M, s, label, got) => {
     if (!s) return;
-    const json = JSON.stringify(s);
+    /* Round 1509: the Europa League's own slice (worldComps.uel) is simWorldEuro's; this counts every other. */
+    const json = JSON.stringify(s.worldComps?.uel ? { ...s, worldComps: { ...s.worldComps, uel: undefined } } : s);
     const slices = (json.match(/"v":1,"s":\d+,"f":"(g8|l36)"/g) ?? []).length;
     ok(slices <= 1, `4 slices: ${name} at ${label}: the save holds ${slices} slices`);
     const slice = s.worldComps?.ucl;
@@ -691,7 +693,7 @@ function stepTracker(name) {
     if (slice) ok(!myNames(M, s).some(c => slice.clubs.includes(c)), `4 own: ${name} at ${label}: ${s.clubName} watches a competition that lists it among its entrants`);
     if (s.season !== season) {
       season = s.season; prevDone = 0; shown = new Map();
-      if (slice) { counts[`4 slice bytes ${slice.f}`] = [...(counts[`4 slice bytes ${slice.f}`] ?? []), JSON.stringify(s.worldComps).length]; dates(M, s, label); }
+      if (slice) { counts[`4 slice bytes ${slice.f}`] = [...(counts[`4 slice bytes ${slice.f}`] ?? []), JSON.stringify({ ucl: slice }).length]; dates(M, s, label); }
     }
     if (got?.joined) {
       const before = got.joined.worldComps?.ucl;
@@ -898,7 +900,7 @@ async function selfRelative() {
       const x = a[i], y = b[i];
       if (!x || !y || x.label !== y.label) { ok(false, `2 ${name}: the steps part at ${i}`); break; }
       const why = [];
-      if (y.inIt && y.carries) why.push('a state in the Champions League carries worldComps');
+      if (y.inIt && y.carries) why.push('a state in the Champions League carries worldComps.ucl');
       if (x.json !== y.json) why.push('the state differs');
       if (x.draws !== y.draws || x.drawSha !== y.drawSha) why.push(`the draws differ (${x.draws} against ${y.draws})`);
       if (y.inIt && x.saved !== y.saved) why.push('the saved bytes differ');
@@ -923,9 +925,9 @@ async function leagueSizes() {
       const M = await E.fresh();
       const club = lg.clubs[lg.clubs.length - 1];
       const st = tape(0x1502 + size, () => M.cm.startCareer(club, era)).value;
-      if (!st.worldComps) { st.uclGroup = null; M.cm.openWorldUcl(st, M.cm.worldUclField(st, null), null); }
-      ok(!!st.worldComps, `3 dates: ${era} league of ${size} (${club}): no watched competition opens`);
-      if (st.worldComps) checkDates(M, st, `${era} league of ${size} (${club})`, 'season one');
+      if (!st.worldComps?.ucl) { st.uclGroup = null; M.cm.openWorldUcl(st, M.cm.worldUclField(st, null), null); }
+      ok(!!st.worldComps?.ucl, `3 dates: ${era} league of ${size} (${club}): no watched competition opens`);
+      if (st.worldComps?.ucl) checkDates(M, st, `${era} league of ${size} (${club})`, 'season one');
       seen.push(`${era} ${size}`);
     }
   }

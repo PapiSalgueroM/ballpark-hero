@@ -105,6 +105,11 @@ export interface WorldCompSlice {
   clashes?: number;
   /** The holder at the draw (top of pot one) when the save knew one. */
   holder?: string;
+  /** Round 1509, the Europa League only: how each entrant got in, one character per club in `clubs` order (the
+   *  codes of euroAccess.ts's EuroRoute), and the route the save's own club earned by the same rule (it is
+   *  never an entrant yet). Shown by the screen, read by no function of this engine. */
+  via?: string;
+  earned?: string;
   /** Nights already shown when the slice was carried across a mid season job move (Round 1502): the new club's
    *  calendar can sit behind the old one, and a night once shown is never taken back. */
   seen?: number;

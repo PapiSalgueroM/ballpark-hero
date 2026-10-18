@@ -33,7 +33,7 @@ import {
   /* Round 1335: the old season rules' switch, read by both handovers. */
   legacySeason,
   /* Round 1502: the watched Champions League across a move, and where its nights sit. */
-  carryWorldUcl, worldCompNights,
+  carryWorldUcl, carryWorldComp, worldCompNights,
 } from '@/lib/clubManager';
 import type { WorldCompKey } from '@/lib/worldCompetition';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
@@ -1066,6 +1066,8 @@ export function joinClubNow(career: CareerState): CareerState | null {
   /* Round 1502: the watched Champions League, decided on the joined season and year (carried with the nights
      already shown, opened where its field is fixed data, or taken off). */
   carryWorldUcl(career, joined);
+  /* Round 1509: and the Europa League, by the same rule, its own nights shown kept (seen). */
+  carryWorldComp(career, joined, 'uel');
   /* Round 1501: the level's cheque and wage room on the new job (the identity on Normal). */
   return applyNewJobDials(joined);
 }
