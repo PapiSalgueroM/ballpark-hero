@@ -27,6 +27,7 @@
  * and the only verified row is played before it on every calendar, so there is no earlier week to show it in.
  * Exit 0 green, 1 a finding (or a control that fired), 2 could not run. */
 import fs from 'node:fs';
+import net from 'node:net';
 import os from 'node:os';
 import path from 'node:path';
 import { execFileSync, spawn } from 'node:child_process';
@@ -115,23 +116,50 @@ const saves = {};
 let url = process.env.BASE || process.env.SWEEP_BASE || 'http://localhost:4173';
 let server = null;
 if (CONTROL) {
+  /* Fix-1510: two controls run side by side (a runner's three lines at a time) once patched one shared tree and
+     served on one port, so one built the other's patch, read the other's patched file as its "original", and
+     walked the other's dist (r1510-fx-d: swap built with notile's tile gone, hubweek's server never came up).
+     Now the read, the patch, the build and the putting back hold one lock (a directory beside the system's temp
+     files, keyed on this checkout), and each control serves its dist on a port of its own. Other harnesses that
+     read these source files (the type gate, simHarnessAnchors) still belong on another request. */
   const c = CONTROLS[CONTROL];
   const file = path.join(ROOT, c.file);
-  const original = fs.readFileSync(file);
-  const text = original.toString('utf8').replaceAll('\r\n', '\n');
-  const n = text.split(c.from).length - 1;
-  if (n !== 1) cannot(`control ${CONTROL}: its line stands in ${c.file} ${n} times, it must be exactly once`);
   const out = path.join(TEMP, `dist-${CONTROL}`);
-  try {
-    fs.writeFileSync(file, text.replace(c.from, c.to));
-    execFileSync(path.join(ROOT, 'node_modules', '.bin', 'vite'), ['build', '--outDir', out, '--emptyOutDir'], { cwd: ROOT, stdio: ['ignore', 'ignore', 'inherit'], timeout: 25 * 60000 });
-  } finally {
-    fs.writeFileSync(file, original);
+  const lock = path.join(os.tmpdir(), `dukb-play-one-off-cups-${ROOT.replace(/[^A-Za-z0-9]/g, '_').slice(-80)}.lock`);
+  for (let i = 0; ; i += 1) {
+    try { fs.mkdirSync(lock); break; } catch (e) {
+      if (e.code !== 'EEXIST') throw e;
+      const age = Date.now() - (fs.statSync(lock, { throwIfNoEntry: false })?.mtimeMs ?? Date.now());
+      if (age > 30 * 60000) { try { fs.rmdirSync(lock); } catch { /* another control took it */ } continue; }
+      if (i > 3600) cannot(`control ${CONTROL}: waited an hour for another control's build`);
+      await new Promise(r => setTimeout(r, 1000));
+    }
   }
-  if (!fs.readFileSync(file).equals(original)) cannot(`control ${CONTROL}: ${c.file} was not put back`);
-  server = spawn(process.execPath, [path.join(ROOT, 'scripts', 'lib', 'hostLikeServer.mjs'), out, '4192'], { stdio: 'ignore' });
-  url = 'http://localhost:4192';
-  console.log(`control ${CONTROL}: built ${c.file} with its line patched into ${out}; the file is back as it was`);
+  /* process.exit skips a finally, so every way out of the locked part lets the lock go first. */
+  const unlock = () => { try { fs.rmdirSync(lock); } catch { /* gone already */ } };
+  let why = '';
+  try {
+    const original = fs.readFileSync(file);
+    const text = original.toString('utf8').replaceAll('\r\n', '\n');
+    const n = text.split(c.from).length - 1;
+    if (n !== 1) why = `control ${CONTROL}: its line stands in ${c.file} ${n} times, it must be exactly once`;
+    else {
+      try {
+        fs.writeFileSync(file, text.replace(c.from, c.to));
+        execFileSync(path.join(ROOT, 'node_modules', '.bin', 'vite'), ['build', '--outDir', out, '--emptyOutDir'], { cwd: ROOT, stdio: ['ignore', 'ignore', 'inherit'], timeout: 25 * 60000 });
+      } finally {
+        fs.writeFileSync(file, original);
+      }
+      if (!fs.readFileSync(file).equals(original)) why = `control ${CONTROL}: ${c.file} was not put back`;
+    }
+  } finally {
+    unlock();
+  }
+  if (why) cannot(why);
+  const port = await new Promise((res, rej) => { const s = net.createServer(); s.on('error', rej); s.listen(0, () => { const p = s.address().port; s.close(() => res(p)); }); });
+  server = spawn(process.execPath, [path.join(ROOT, 'scripts', 'lib', 'hostLikeServer.mjs'), out, String(port)], { stdio: 'ignore' });
+  url = `http://localhost:${port}`;
+  console.log(`control ${CONTROL}: built ${c.file} with its line patched into ${out} (served on ${port}); the file is back as it was`);
 }
 for (let i = 0; i < 60; i += 1) {
   const up = await fetch(`${url}/robots.txt`).then(r => r.ok).catch(() => false);
