@@ -1,0 +1,4 @@
+  FAIL: 320x640: cut text, data-finance-projection: "+£63m" scrollWidth 24 over clientWidth 9
+  FAIL: 320x640: a figure off one line, "+£63m" in the kitty row breaks over 4 lines
+  320x640: 108 text holders, 14 buttons and 28 figures measured; kitty row at y 1095 (on screen at 528), reads Kitty change | +£12.2m | +£63m; cover Board covers running costs | +£13.1m | +£70.7m
+playCmFinanceDesk: CONTROL wrap FIRED (6 failures, as it must)
