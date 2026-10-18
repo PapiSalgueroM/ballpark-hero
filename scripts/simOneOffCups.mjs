@@ -368,7 +368,7 @@ function oracleOf(M, prev, forced) {
   const cupWinner = forced ? table[0] ?? null : f?.winner ?? null;
   const champ = table[0] ?? null;
   const doubled = !!cupWinner && cupWinner === champ;
-  return { nation, finished, champ, cupWinner, doubled, clubs: champ && cupWinner ? [champ, doubled ? table[1] : cupWinner] : null, promoted: lg.id !== top?.id };
+  return { nation, finished, champ, cupWinner, doubled, clubs: champ && cupWinner ? [champ, doubled ? table[1] : cupWinner] : null, promoted: lg.id !== top?.id, leagueId: lg.id };
 }
 
 /** Sections 1, 5 and 7: every fleet save, both coach modes, every seed; with `forced` the double fleet. */
@@ -424,7 +424,8 @@ async function fleetPass(forced) {
                 const sh = dsc.str[dsc.clubs.indexOf(fx.home)], sa = dsc.str[dsc.clubs.indexOf(fx.away)];
                 if (sh !== sa) bump(fx.winner === (sh > sa ? fx.home : fx.away) ? '7 won by the stronger side' : '7 won by the weaker side');
               }
-              const mineWon = res?.winner === s.clubName;
+              /* Won by my club and played by my club: a cup carried onto my new club after a move is not mine. */
+              const mineWon = res?.winner === s.clubName && Object.keys(dsc.mine ?? {}).length > 0;
               ok((s.trophies ?? []).filter(t => t.minor && t.season === s.season).length === (mineWon ? 1 : 0), `5 trophies: ${tag} at ${stepLabel}: ${mineWon ? "my club won the cup and" : "my club did not win it and"} the cabinet holds ${(s.trophies ?? []).filter(t => t.minor && t.season === s.season).length} of this season`);
               if (mineWon) bump("4 super cups my club won (section 1 fleet)");
               bump(`5 bytes of a followed ${want.row.shape} slice`, JSON.stringify(dsc).length);
@@ -444,7 +445,8 @@ async function fleetPass(forced) {
               const dsc = s.worldComps?.dsc;
               const row = expectedRow(M, R, s);
               const t = `${tag} season ${season + 1}`;
-              if (want.promoted) bump('1 rollovers of a manager outside the top flight (the afterswap control reads these)');
+              if (want.promoted) bump('1 rollovers of a manager outside the top flight');
+              if (M.cm.careerLeagueOf(s).id !== want.leagueId) bump('1 rollovers into another league (the afterswap control reads these)');
               if (!row.row) { ok(!dsc, `1 entrants: ${t}: a super cup where the game has no row`); return; }
               if (want.nation !== row.nation) { ok(dsc?.skip === 'moved', `1 entrants: ${t}: a move from ${want.nation} holds ${dsc?.skip ?? dsc?.clubs?.join(' ')}, not the moved stub`); bump('1 moved stubs'); return; }
               if (!want.finished) { ok(dsc?.skip === 'unfinished', `1 entrants: ${t}: an unfinished season holds ${dsc?.skip ?? 'a slice'}`); return; }
@@ -535,7 +537,12 @@ async function dailies() {
 const FORCE_MINE = { file: CM, from: '  const oneOffFrom = oneOffTablesOf(career);\n', to: '  const oneOffFrom = (t => ({ ...t, cupWinner: career.clubName }))(oneOffTablesOf(career));\n' };
 const INSERT_OFF = { file: CM, from: '    if (mine) insertOneOffNights(state, slots as number[]);\n', to: '' };
 Object.assign(ENGINE_EDITS, {
-  tick: [{ file: CM, from: '      if (!entry.night) tickWeek(state, null);\n', to: '      tickWeek(state, null);\n' }],
+  /* The guard taken out, on nights the participant does not play (its arm answering no), so each is skipped and
+     the skip ticks: an 'open' one match night is always played in the match half, so only a skip reaches it. */
+  tick: [
+    { file: CM, from: '      if (!entry.night) tickWeek(state, null);\n', to: '      tickWeek(state, null);\n' },
+    { file: CM, from: "    case 'oneOff': return oneOffMyFixture(state, entry) !== null;", to: "    case 'oneOff': return false;" },
+  ],
   countdown: [{ file: CM, from: '  if (state.transferWindow !== null && !entry.night) {', to: '  if (state.transferWindow !== null) {' }],
   calweeks: [
     { file: CAL, from: "    if (r.week < state.week && r.competition !== 'oneOff') weeks.add(r.week);", to: '    if (r.week < state.week) weeks.add(r.week);' },
@@ -760,7 +767,7 @@ try {
   process.exit(2);
 }
 /* A control must have its case in the fleet: a count it reads at least one, else it could pass empty (exit 3). */
-const NEEDS = { afterswap: '1 rollovers of a manager outside the top flight (the afterswap control reads these)', etall: '1 level matches on a pens row (the etall control needs one)', nodouble: '1 doubles (the runners up took the cup place)' };
+const NEEDS = { afterswap: '1 rollovers into another league (the afterswap control reads these)', etall: '1 level matches on a pens row (the etall control needs one)', nodouble: '1 doubles (the runners up took the cup place)' };
 if (CONTROL && NEEDS[CONTROL] && !(counts[NEEDS[CONTROL]] > 0) && CONTROL !== 'nodouble') { console.log(`simOneOffCups: control ${CONTROL} DID NOT FIRE: its case is not in the fleet (${NEEDS[CONTROL]}: 0)`); process.exit(3); }
 const secs = Math.round((Date.now() - t0) / 1000);
 if (CONTROL) {
