@@ -1,0 +1,1 @@
+rules exit=0 47s | simStorageWrites exit=0 | simStorageWrites: all green (owed: 12)
