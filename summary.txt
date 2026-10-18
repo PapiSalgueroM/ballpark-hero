@@ -1,0 +1,7 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+md-walk exit=0 179s | playCmMatchDay: green. 15 walks over 4 saves, every match day screen home side first, whole names on the timeline, a 44 px toggle, the page never moved
+md-walk-ctl exit=0 31s | controls (each must be 1): swap=1 cut=1 jump=1 fullname=1
+livefit exit=0 140s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+livefit-ctl exit=0 167s | controls (each must be 1): widelabels=1 digits=1
+hub exit=0 88s | playCmHubLanding: green (A 8 pass 0 fail, B 65 pass 0 fail, C 109 pass 0 fail, E 63 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its first frame
+fixtures exit=0 89s | playCmLeagueFixtures: green. 6 journeys (EFL Championship, La Liga, Bundesliga at 390 and 1280), one with its list three seconds late and 7 of the review's (two takeovers
