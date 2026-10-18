@@ -1,0 +1,10 @@
+unit-lib exit=0 57s |    Duration  56.55s (transform 5.78s, setup 3.50s, collect 19.00s, tests 109.72s, environment 21.35s, prepare 4.69s)
+golden exit=0 2s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+simHarnessAnchors exit=0 78s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 159s | 
+dashscan exit=0 0s | no dash in the diff
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+dd-world exit=0 10s | controls (each must be 1): world=1 worlddeadline=1
+simCmShootoutOrder exit=0 25s | simCmShootoutOrder: all sections passed
+unit-cm exit=0 206s |    Duration  205.11s (transform 10.77s, setup 4.30s, collect 40.58s, tests 348.69s, environment 26.14s, prepare 5.94s)

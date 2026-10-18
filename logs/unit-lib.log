@@ -1,0 +1,15 @@
+ [32m✓[39m src/lib/clubManagerTrajectory.test.ts [2m([22m[2m44 tests[22m[2m)[22m[33m 48869[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mleaves every real season-zero source row byte-exact without adding potential [33m 833[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mreplays complete outputs after serialization and arbitrary read order [33m 1031[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mrespects every source age curve, rating floor and carried potential ceiling [33m 37387[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mmeasures save variety and leader changes across the complete real source pool [33m 1003[2mms[22m[39m
+   [33m[2m✓[22m[39m save-scoped actual world projections[2m > [22mpreserves complete worlds through saved seed serialization, reordered reads and interleaved careers without draws [33m 581[2mms[22m[39m
+   [33m[2m✓[22m[39m save-scoped actual world projections[2m > [22muses the actual curve and value scale while carrying original identities and simulated ceilings [33m 900[2mms[22m[39m
+   [33m[2m✓[22m[39m save-scoped actual world projections[2m > [22mmeasures actual seeded world leader changes without asserting an unmeasured frequency [33m 6194[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerGoalWeight.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 140[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m22 passed[39m[22m[90m (22)[39m
+[2m      Tests [22m [1m[32m431 passed[39m[22m[90m (431)[39m
+[2m   Start at [22m 03:25:32
+[2m   Duration [22m 56.55s[2m (transform 5.78s, setup 3.50s, collect 19.00s, tests 109.72s, environment 21.35s, prepare 4.69s)[22m
+

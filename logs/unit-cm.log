@@ -1,0 +1,15 @@
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'red' (a chance at the same place: false): both are told, and the card sits over nothing [33m 2030[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's substitution: the change is told and the review is whole [33m 2429[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('disallowed'): its own card, over nothing, on the score the engine has [33m 8745[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('awarded'): its own card, over nothing, on the score the engine has [33m 2765[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion false) [33m 2525[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1860, reduced motion false) [33m 2204[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion true) [33m 2344[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22mtwo goals in the last two clock places of a first half are both drawn, each with its own card, in order (seed 1773) [33m 3097[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22mSkip during the card of the last kick ends the half at once, on the engine score (seed 1742) [33m 1849[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m35 passed[39m[22m[90m (35)[39m
+[2m      Tests [22m [1m[32m447 passed[39m[22m[2m | [22m[33m3 skipped[39m[90m (450)[39m
+[2m   Start at [22m 03:25:32
+[2m   Duration [22m 205.11s[2m (transform 10.77s, setup 4.30s, collect 40.58s, tests 348.69s, environment 26.14s, prepare 5.94s)[22m
+
