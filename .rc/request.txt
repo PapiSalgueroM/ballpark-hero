@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/lib/worldNights.test.ts src/lib/worldOneOffs.test.ts src/lib/clubManagerWorldView.test.ts --testTimeout=300000 --hookTimeout=120000
+m-carryseen: R=$PWD; git worktree add -q --detach /tmp/vf-cs HEAD && ln -s "$R/node_modules" /tmp/vf-cs/node_modules && cd /tmp/vf-cs && node .rc/x/rvmut1510.mjs carryseen || exit 2; ONE_OFF_FLEET=Chelsea ONE_OFF_SEEDS=1,2,3 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs > /tmp/vf-m2.log 2>&1; s=$?; grep -E "^  [0-9] |FAIL" /tmp/vf-m2.log | cut -c1-220 | head -40; tail -1 /tmp/vf-m2.log; echo "MUTANT carryseen: sim exit=$s (0 means it SURVIVED)"; exit $s
+s1-chelsea-head: ONE_OFF_FLEET=Chelsea ONE_OFF_SEEDS=1,2,3 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+head-small: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+m-leaguestarted: R=$PWD; git worktree add -q --detach /tmp/vf-ls HEAD && ln -s "$R/node_modules" /tmp/vf-ls/node_modules && cd /tmp/vf-ls && node .rc/x/rvmut1510.mjs leaguestarted || exit 2; ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs > /tmp/vf-m3.log 2>&1; s=$?; grep -E "^  [0-9] |FAIL" /tmp/vf-m3.log | cut -c1-220 | head -40; tail -1 /tmp/vf-m3.log; echo "MUTANT leaguestarted: sim exit=$s (0 means it SURVIVED)"; exit $s
+s4-small-head: ONE_OFF_ONLY=4 ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+probe: node .rc/x/probeRead1510.mjs
+m-norecovery: R=$PWD; git worktree add -q --detach /tmp/vf-nr HEAD && ln -s "$R/node_modules" /tmp/vf-nr/node_modules && cd /tmp/vf-nr && node .rc/x/rvmut1510.mjs norecovery || exit 2; ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs > /tmp/vf-m1.log 2>&1; s=$?; grep -E "^  [0-9] |FAIL" /tmp/vf-m1.log | cut -c1-220 | head -40; tail -1 /tmp/vf-m1.log; echo "MUTANT norecovery: sim exit=$s (0 means it SURVIVED)"; exit $s
+s4-more-b: ONE_OFF_ONLY=4 ONE_OFF_SEEDS=7,8,9 ONE_OFF_SEASONS=2 node scripts/simOneOffCups.mjs
+s4-more-a: ONE_OFF_ONLY=4 ONE_OFF_SEEDS=4,5,6 ONE_OFF_SEASONS=3 node scripts/simOneOffCups.mjs
+join-head: node .rc/x/rvjoin1510.mjs
+c-weighs: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=weighs node scripts/simOneOffCups.mjs
