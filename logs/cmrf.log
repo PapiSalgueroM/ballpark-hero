@@ -1,0 +1,8 @@
+playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved states and source bytes held.
+case 390-real passed=true 
+case 390-legacy passed=true 
+case 390-later passed=true 
+case 1280-real passed=true 
+case 1280-legacy passed=true 
+case 1280-later passed=true 
+diagBJ cmrf: 6 cases, controls ["visible-fixture","neutral-result"]

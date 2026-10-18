@@ -1,0 +1,14 @@
+ok   390-push: initial: the page fetched the summer deck chunk, the deck the oracle plays with
+ok   390-push: chosen-plan-reload: the page fetched the summer deck chunk, the deck the oracle plays with
+ok   390-push: recorded-season-reload: the page fetched the summer deck chunk, the deck the oracle plays with
+ok   390-push: summary-plan-reload: the page fetched the summer deck chunk, the deck the oracle plays with
+ok   390-recovery: initial: the page fetched the summer deck chunk, the deck the oracle plays with
+ok   390-recovery: chosen-plan-reload: the page fetched the summer deck chunk, the deck the oracle plays with
+ok   390-recovery: recorded-season-reload: the page fetched the summer deck chunk, the deck the oracle plays with
+ok   390-recovery: summary-plan-reload: the page fetched the summer deck chunk, the deck the oracle plays with
+Soccer Career development native: 333 checks, 0 failed, 6 actual journeys. Screenshots and complete saved-state evidence: /home/runner/work/ballpark-hero/ballpark-hero/career-development-artifacts/native/playSoccerCareerDevelopment
+deck 1280-mentor-10-dismissMoralDilemma-actual.json: pendingEvents [724]
+deck 1280-mentor-10-dismissMoralDilemma-expected.json: pendingEvents [724]
+deck 390-mentor-10-dismissMoralDilemma-actual.json: pendingEvents [724]
+deck 390-mentor-10-dismissMoralDilemma-expected.json: pendingEvents [724]
+diagBJ deck: 10 files read, 4 hold a summer deck card

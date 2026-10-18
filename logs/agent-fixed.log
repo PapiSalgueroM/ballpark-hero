@@ -1,0 +1,11 @@
+sim first: PASS agent review product and proof source bytes held.
+PASS 1280-self 164 checks
+Soccer agent review native 1976 checks,12 journeys,3 copied observation controls,0 failures.
+deck 390-cousin-finish-social_media_action-2-whole-save.json: expected [711]; actual [711]
+deck 390-self-finish-random_events-3-whole-save.json: input [711]
+deck 390-self-finish-social_media_action-2-whole-save.json: expected [711]; actual [711]
+deck 390-shark-finish-random_events-3-whole-save.json: input [711]
+deck 390-shark-finish-social_media_action-2-whole-save.json: expected [711]; actual [711]
+deck 390-super-finish-random_events-3-whole-save.json: input [711]
+deck 390-super-finish-social_media_action-2-whole-save.json: expected [711]; actual [711]
+diagBJ deck: 240 files read, 24 hold a summer deck card
