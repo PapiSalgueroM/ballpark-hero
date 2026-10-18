@@ -1,3 +1,12 @@
+## Round1427 scoped fixed validation passed, 18 October 2026
+
+Tennis Chain score saves now keep their UI ownership across Play Again. Six Board hunks capture a round revision, reset current busy/result state and guard old rank/submitted/busy callbacks while captured insert, rank and shared leaderboard IO still completes. No hook, scoring, data or backend change.
+
+Tested `86bfa8a7fe32228b84cfbbea2fde162df6a5d7d0`, run 39159741910/job 117770341747/artifact 12148990186, ZIP `f93a2bf6…` (61,667,222B). Saved common `aacfe63e…`, standalone actual default `220ea2f1…`, fixed feature `bd2bbf9b…` and Root 16/52 pixel `c6305f79…` receipts are PASS. Explicit/default six-arm packets each account for 66 outcomes: normal 11, bare 11, whole-original 5+6 faults, rank-neutral 6+5 faults, busy-neutral 7+4 faults, restored 11. Existing 74, twelve actual WebKit27.2 contexts, types, plain build, fifteen Chromium readers, fourteen unchanged fatal caps and complete declared holds passed. Full original 8822 was admitted before source edits, including Root 16/60 original pixels.
+
+Independent full saved-evidence review a511fcbfca2a691a8f7118dd0046047046ec6bab3793adbd7f09868b6edfc8a1 passed. PR342 is open/draft/unmerged at https://github.com/PapiSalgueroM/ballpark-hero/pull/342. Canonical docs-only source closure is required before the external final handoff. Integrator I must preserve PR337 Give Up controls and rerun fresh joined source/runtime/prerender/sitemap/lastmod gates. Protected leases, main and publish are unchanged by this branch. No unmount, full-suite, global no-scroll, live backend or real-data claim. Packet: `C:/Users/antho/dukb-handoff/2026-10-18/tennis-chain-score-ownership-1427`.
+
+
 ## Release BJ LIVE, 2026-10-17 21:51 EDT: Club Manager Hard and Legend, the Champions League you can follow in or out of it, match days that read like a scoreboard, a way out for dirty money in the US careers, and Soccer Career's summer cards
 
 Claude lane (session I). main d0c3ff58, deployment fec60776-a9ad-49aa-b4ea-04a590a233de, entry index-CWmc_M1Q.js (was

@@ -15909,3 +15909,13 @@ Both rounds keep runtime in remote Actions with the ordinary offline preload. Al
 
 One bounded20 checkpoint after1426: only8lines appended to session-i-ledger,19other sources unchanged. The ledger reports BK join696b697b and pending gate prep, no completed gate or publication evidence. It grants no protected-source lease. I retains Manager/SC/MoneyScreens/world/calendar/tournaments, joined-tree checks, main and publish. Named main775/release-bi-gate50078 were observed unchanged at17:28:46UTC. Checkpoint `C:/Users/antho/dukb-handoff/2026-10-18/continue-after-1426/i-checkpoint/`. NFL playing free agency source trace is NONFIND: valid windows retain a signable incumbent;1424 coaching remains the demonstrated no-offers fix. No speculative free-agency change.
 
+
+
+### Round1427 fixed validation: Tennis Chain score-save ownership
+
+Owned product leaf: only the six round-revision lifecycle hunks in `src/components/tennis-chain/TennisChainBoard.tsx`, plus its claimed focused proof/workflow/docs. Captured inserts, rank reads and global leaderboard refresh remain active; old callbacks cannot change a new round's submitted/rank/busy UI. The frozen 11 cases and actual route browser remain held.
+
+Tested head 86bfa8a7/run 39159741910/job 117770341747/artifact 12148990186 has saved common/default/feature/pixel PASS receipts (`aacfe63e…`/`220ea2f1…`/`bd2bbf9b…`/`c6305f79…`). Explicit and ordinary-default six-arm, 66-outcome packets, related 74, twelve WebKit contexts, fifteen Chromium readers and fourteen unchanged fatal caps passed. Root viewed 16/52 fixed PNGs after full original 8822 admission with 16/60 original pixels. Native reader array repair was external only; the prior refusal is retained. Independent full raw review a511fcbf passed. PR342 is open/draft/unmerged, with final docs-only canonical closure required before handoff.
+
+No broader source or release lease. I must preserve PR337 Give Up behavior during the join and run fresh joined source/runtime/derived gates before publication. Main/protected ownership stays intact. No unmount, full-suite, global no-scroll, live backend or real-data qualification. Evidence: `C:/Users/antho/dukb-handoff/2026-10-18/tennis-chain-score-ownership-1427`.
+
