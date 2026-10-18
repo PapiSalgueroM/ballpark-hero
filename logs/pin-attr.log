@@ -1,0 +1,5 @@
+manifest of c0895512 (unretaken) on the head exit=1 (must be 1)
+AssertionError [ERR_ASSERTION]: Historical engine and original assertion hold: src/lib/clubManager.ts
+Node.js v24.21.0
+the same with clubManager.ts alone back to 78881aea exit=0 (must be 0)
+Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
