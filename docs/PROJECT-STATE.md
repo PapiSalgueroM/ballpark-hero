@@ -1,3 +1,28 @@
+## Round 1423 READY, 2026-10-18: Tennis Player starts replay without an old surrender prompt
+
+Codex report lane, branch `codex/tennis-give-up-replay`, base
+`775564305e9da84dab59f2b9fe246d044a3cc8e9`. TESTED fixed
+`9ac03fa96705bd7e1c9cd948a3bb2da51a7bc859`.
+One Play Again handler clears the obsolete local Give Up confirmation. The
+original actual route reproduced the prompt in fresh rounds at 390/1280 before
+product adoption. Fixed normal/restored units pass all fifteen cases; the
+whole-original control fails only the new replay case. Both fixed native
+journeys pass, with Cancel, scoring and ordinary surrender held.
+
+Remote types, serial plain build, all fifteen built-site readers and all fourteen
+unchanged fatal weight gates passed. SC 834.0/835, CM 618.3/619, NFL 490.2/491.
+Run 39137900795, job 117706073334, artifact 12140289053. Native saved-evidence
+admission passed. [Evidence and limits](ROUND1423-TENNIS-REPLAY.md).
+Outside packet: `C:/Users/antho/dukb-handoff/2026-10-18/tennis-give-up-replay-1423/`.
+
+The saved Round 1422 handoff remains authoritative for the older report queue:
+PR310 and PR331 through PR336 await I's qualified release join. Round1421 is a
+closed NONFIND; quiz1417 still needs I's protected render seam. Historical PR308
+is superseded through305/306 and must not join beside them. These are held
+queue receipts, without fresh PR acceptance or live inference in this round.
+All sixty earlier report heads stay sealed. I keeps protected SC/Manager/
+tournament work and actual release/main/publication. This fix is not published.
+
 ## Release BJ LIVE, 2026-10-17 21:51 EDT: Club Manager Hard and Legend, the Champions League you can follow in or out of it, match days that read like a scoreboard, a way out for dirty money in the US careers, and Soccer Career's summer cards
 
 Claude lane (session I). main d0c3ff58, deployment fec60776-a9ad-49aa-b4ea-04a590a233de, entry index-CWmc_M1Q.js (was
