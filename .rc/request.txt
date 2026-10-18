@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+appeal1081: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+unit-euro: node_modules/.bin/vitest run src/lib/euroAccess.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -5; exit ${PIPESTATUS[0]}
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simNoRivalNames: node scripts/simNoRivalNames.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simStorageWrites: node scripts/simStorageWrites.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+dashscan: if git diff 77556430 HEAD | grep -nP '\x{2013}|\x{2014}'; then echo "dash found"; exit 1; else echo "no dash in the diff"; fi
+ucl-savedbytes: WORLD_UCL_CONTROL=savedbytes node scripts/simWorldUcl.mjs > /tmp/usb.log 2>&1; s=$?; echo "participant $(grep -c "^FAIL 2 participant" /tmp/usb.log) watcher $(grep -c "^FAIL 2 watcher" /tmp/usb.log) shown"; grep "^FAIL" /tmp/usb.log | grep -v "the saved bytes differ (worldComps.uel taken off)$" | head -3 | cut -c1-240; tail -2 /tmp/usb.log; exit $s
