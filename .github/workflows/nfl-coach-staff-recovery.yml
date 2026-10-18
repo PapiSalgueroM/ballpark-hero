@@ -9,6 +9,9 @@ on:
       - src/test/nflCoachStaffRecovery.test.tsx
       - scripts/simNflCoachStaffRecovery.mjs
       - scripts/qa/playNflCoachStaffRecovery.mjs
+      - scripts/lib/usNflStaffRecoveryHunks.mjs
+      - scripts/simUsCoachPoaching.mjs
+      - scripts/simUsBoardParity.mjs
   workflow_dispatch:
 permissions:
   contents: read
@@ -50,7 +53,7 @@ jobs:
           git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
           base=775564305e9da84dab59f2b9fe246d044a3cc8e9
           git merge-base --is-ancestor "$base" HEAD
-          git diff --exit-code "$base" HEAD -- . ':!docs' ':!src/lib/usCoachCareer.ts' ':!src/components/us-career/CoachCareerPanel.tsx' ':!src/test/nflCoachStaffRecovery.test.tsx' ':!scripts/simNflCoachStaffRecovery.mjs' ':!scripts/qa/playNflCoachStaffRecovery.mjs' ':!.github/workflows/nfl-coach-staff-recovery.yml' > "$out/source-boundary.log"
+          git diff --exit-code "$base" HEAD -- . ':!docs' ':!src/lib/usCoachCareer.ts' ':!src/components/us-career/CoachCareerPanel.tsx' ':!src/test/nflCoachStaffRecovery.test.tsx' ':!scripts/simNflCoachStaffRecovery.mjs' ':!scripts/qa/playNflCoachStaffRecovery.mjs' ':!scripts/lib/usNflStaffRecoveryHunks.mjs' ':!scripts/simUsCoachPoaching.mjs' ':!scripts/simUsBoardParity.mjs' ':!.github/workflows/nfl-coach-staff-recovery.yml' > "$out/source-boundary.log"
           mode=baseline
           for file in src/lib/usCoachCareer.ts src/components/us-career/CoachCareerPanel.tsx; do
             git show "$base:$file" > "$out/original-$(basename "$file")"
@@ -109,6 +112,12 @@ jobs:
             printf '%s\t%s\n' "$method" "$status" >> "$out/existing.tsv"; tail -n 3 "$out/$method.log"
             test "$status" -eq 0 || failed=1; test ! -s "$out/$method.transport" || failed=1
           done
+          for control in label draw binding restore era talk fixture wheel nosave nophase noresult; do
+            status=0; SIM_OFFLINE_RECEIPT="$out/parity-$control.transport" US_BOARD_PARITY_CONTROL="$control" node scripts/simUsBoardParity.mjs > "$out/parity-$control.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$control" "$status" >> "$out/parity-controls.tsv"; tail -n 3 "$out/parity-$control.log"
+            test "$status" -eq 0 || failed=1; test ! -s "$out/parity-$control.transport" || failed=1
+          done
+          test "$(wc -l < "$out/parity-controls.tsv")" -eq 11
           sha256sum --check "$out/source-files.sha256" > "$out/after-tests-source-hold.log"
           exit "$failed"
       - name: Serial plain production build

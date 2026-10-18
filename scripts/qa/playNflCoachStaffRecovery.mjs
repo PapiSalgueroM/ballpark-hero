@@ -74,7 +74,14 @@ try {
       const button = name => page.getByRole('button', { name, exact: typeof name === 'string' });
       const read = () => page.evaluate(key => JSON.parse(localStorage.getItem(key)), saveKey);
       const waitCoach = expected => page.waitForFunction(({ key, expected }) => { const value = JSON.parse(localStorage.getItem(key)); return value?.coach?.year === expected.year && value.coach.results.length === expected.results; }, { key: saveKey, expected });
-      const shot = async name => { const file = `${spec.sport}-${spec.kind}-${spec.width}-${name}.png`; await page.screenshot({ path: path.join(out, file), fullPage: true }); row.screenshots.push(file); };
+      const shot = async name => {
+        const file = `${spec.sport}-${spec.kind}-${spec.width}-${name}.png`;
+        await page.screenshot({ path: path.join(out, file), fullPage: true }); row.screenshots.push(file);
+        if (['empty-hub', 'staff-job', 'staff-season'].includes(name)) {
+          const viewportFile = `${spec.sport}-${spec.kind}-${spec.width}-${name}-viewport.png`;
+          await page.screenshot({ path: path.join(out, viewportFile), fullPage: false }); row.screenshots.push(viewportFile);
+        }
+      };
       await page.goto(base + routePath);
       if (spec.kind === 'fresh') {
         await button('Go after a coaching job').waitFor(); await shot('retired'); await button('Go after a coaching job').click();

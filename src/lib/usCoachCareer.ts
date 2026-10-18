@@ -279,6 +279,25 @@ export function acceptCoachOffer(prev: CoachCareerState, index: number): CoachCa
   };
 }
 
+/** An explicit NFL staff entry when the automatic market has nothing. */
+export function takeNflStaffRole(
+  prev: CoachCareerState,
+  rng: () => number = Math.random,
+): CoachCareerState {
+  if (prev.sport !== 'nfl' || prev.done || !prev.unemployed || prev.job !== null || prev.offers.length !== 0) return prev;
+  const opening = coachingVacancies('nfl', rng).find(job => job.tier === 4)!;
+  return acceptCoachOffer({
+    ...prev,
+    offers: [{
+      ...opening,
+      brief: briefFor(4, 'nfl', rng),
+      roster: rosterFor(4, rng),
+      reason: 'You chose a staff role to get back to work.',
+      keenness: 0,
+    }],
+  }, 0);
+}
+
 /* ---------------- playing a coaching season ---------------- */
 
 /**

@@ -7,6 +7,7 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { build } from 'esbuild';
 import { stripRetireHunks } from './lib/usCoachRetireHunks.mjs';
+import { stripNflStaffRecoveryHunk } from './lib/usNflStaffRecoveryHunks.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const engine = 'src/lib/usCoachCareer.ts', test = 'src/lib/usCoachPoaching.test.ts';
@@ -51,7 +52,7 @@ for (const anchor of [departure, credit]) {
    checkout to LF first), and stripped before the hash, so
    the pinned pre-888 hash is unchanged and still proves no other line of the engine moved. The anchors live in
    scripts/lib/usCoachRetireHunks.mjs, shared with simUsCoachRetirement. */
-const preRetire = stripRetireHunks(source);
+const preRetire = stripRetireHunks(stripNflStaffRecoveryHunk(source));
 const original = preRetire.replace(departure, oldDeparture).replace(credit + '\n', '');
 assert.equal(createHash('sha256').update(original).digest('hex'), originalHash, 'Reconstructed original matches the captured pre-repair engine exactly');
 let subject = source;

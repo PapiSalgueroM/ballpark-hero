@@ -328,12 +328,14 @@
  * Nothing here reaches the network. Run: node scripts/simUsBoardParity.mjs
  */
 import { spawnSync } from 'node:child_process';
+import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { US_CAREER_BOARD, usCareerSport, wrapperProblems } from './lib/usCareerFiles.mjs';
+import { NFL_STAFF_RECOVERY_PANEL_HUNKS, stripNflStaffRecoveryPanelHunks } from './lib/usNflStaffRecoveryHunks.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TEST = 'src/test/usBoardFixture.test.tsx';
@@ -350,6 +352,32 @@ process.on('exit', () => {
   try { fs.rmSync(tmp, { recursive: true, force: true }); } catch { /* best effort */ }
 });
 const read = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
+
+/* Round 1424: this recording predates the explicit NFL staff action. Only the
+   proved original Panel presentation is replayed; the current engine stays live. */
+const currentCoachPanel = read(path.join(ROOT, 'src/components/us-career/CoachCareerPanel.tsx'));
+const historicalCoachPanel = stripNflStaffRecoveryPanelHunks(currentCoachPanel);
+assert.equal(stripNflStaffRecoveryPanelHunks(currentCoachPanel.replaceAll('\n', '\r\n')), historicalCoachPanel, 'Whole historical panel LF and CRLF inverse agree');
+for (const [, hunk] of NFL_STAFF_RECOVERY_PANEL_HUNKS) {
+  const altered = hunk.slice(0, -1) + 'X';
+  assert.notEqual(altered, hunk);
+  for (const subject of [currentCoachPanel.replace(hunk, ''), currentCoachPanel.replace(hunk, () => altered), currentCoachPanel + hunk]) {
+    assert.notEqual(subject, currentCoachPanel, 'Effective historical inverse control');
+    assert.throws(() => stripNflStaffRecoveryPanelHunks(subject), /Exactly one NFL staff panel inverse hunk/, 'Missing altered or duplicated panel hunk refuses');
+  }
+}
+assert.throws(() => stripNflStaffRecoveryPanelHunks(currentCoachPanel + '\n// Unrelated source.\n'), /Whole historical panel SHA/, 'Unrelated panel source refuses');
+const historicalPanelFile = path.join(tmp, 'CoachCareerPanel.historical.tsx');
+fs.writeFileSync(historicalPanelFile, historicalCoachPanel, { flag: 'wx' });
+const nativeRequire = createRequire(path.join(ROOT, 'package.json'));
+const historicalAliases = {
+  ...Object.fromEntries(['react/jsx-dev-runtime', 'react/jsx-runtime', 'react'].map(id => [id, nativeRequire.resolve(id)])),
+  '@/components/us-career/CoachCareerPanel': historicalPanelFile,
+};
+const inheritedAliases = JSON.parse(process.env.NO_DOUBLE_SWAP || '{}');
+for (const alias of Object.keys(historicalAliases)) assert(!(alias in inheritedAliases), 'No inherited alias replaces the proved historical Panel or native React');
+const replayAliases = { ...historicalAliases, ...inheritedAliases };
+console.log('Round1424 historical presentation: proved main775 coaching Panel SHA9390fab969844b20ca4f7adbc097664191d3f5ea082090553f479305fe85d321, current engine and unchanged fixture. This replay gives no current-Panel visual parity credit.');
 
 /* The source controls. Each changes one thing in a copy of one file and
    points the replay at the copy. `red` is which sports that file draws: the
@@ -457,6 +485,7 @@ function wholeProblems(fx) {
 }
 
 function replay(env) {
+  assert.equal(read(historicalPanelFile), historicalCoachPanel, 'Proved historical Panel copy held');
   const out = path.join(tmp, `report-${Date.now()}.json`);
   const report = path.join(tmp, `problems-${Date.now()}.txt`);
   fs.writeFileSync(report, '');
@@ -465,7 +494,7 @@ function replay(env) {
     [VITEST, 'run', TEST, '--reporter=json', `--outputFile.json=${out}`, '--reporter=default'],
     {
       cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024,
-      env: { ...process.env, ...env, US_BOARD_FIXTURE: 'replay', US_BOARD_FIXTURE_REPORT: report, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' },
+      env: { ...process.env, ...env, NO_DOUBLE_SWAP: JSON.stringify(replayAliases), US_BOARD_FIXTURE: 'replay', US_BOARD_FIXTURE_REPORT: report, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' },
     },
   );
   const text = (r.stdout || '') + (r.stderr || '');
@@ -606,4 +635,4 @@ if (failures) {
   console.error(`simUsBoardParity: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
 }
-console.log('simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.');
+console.log('simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.');
