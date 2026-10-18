@@ -1,0 +1,1 @@
+example: cp .rc/x/simWorldEuro.mjs scripts/simWorldEuro.mjs && WORLD_EURO_ONLY=1 WORLD_EURO_SEEDS=1 node scripts/simWorldEuro.mjs 2>&1 | grep -E "^  7|^FAIL|simWorldEuro" | head -20; exit ${PIPESTATUS[0]}
