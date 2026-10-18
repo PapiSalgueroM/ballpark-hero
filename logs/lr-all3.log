@@ -1,0 +1,6 @@
+lrAttr: /tmp/lr3 patched with strip, holder, board
+5) the built chunks: each era in its own chunk, reached only by a dynamic import
+   (no build in dist/, skipped: run vite build first)
+
+simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+lrAttr: states stripped of worldComps.uel before hashing: 89

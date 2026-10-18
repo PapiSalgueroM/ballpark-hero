@@ -1,0 +1,5 @@
+27
+5) the built chunks: each era in its own chunk, reached only by a dynamic import
+   (no build in dist/, skipped: run vite build first)
+
+simCmLeagueRules: 27 failure(s)

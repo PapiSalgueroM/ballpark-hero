@@ -1,0 +1,5 @@
+lr-head: node scripts/simCmLeagueRules.mjs > /tmp/lrh.log 2>&1; s=$?; grep -c "differs" /tmp/lrh.log; tail -4 /tmp/lrh.log; exit $s
+lr-all3: X=$PWD/.rc/x/lrAttr.mjs; R=/tmp/lr3; git worktree add -q $R HEAD && ln -s $PWD/node_modules $R/node_modules && node $X $R strip,holder,board && cd $R && node scripts/simCmLeagueRules.mjs > /tmp/lr3.log 2>&1; s=$?; tail -5 /tmp/lr3.log; exit $s
+lr-strip: X=$PWD/.rc/x/lrAttr.mjs; R=/tmp/lrs; git worktree add -q $R HEAD && ln -s $PWD/node_modules $R/node_modules && node $X $R strip && cd $R && node scripts/simCmLeagueRules.mjs > /tmp/lrs.log 2>&1; s=$?; grep "FAIL\|differs" /tmp/lrs.log | head -20 | cut -c1-200; tail -3 /tmp/lrs.log; exit $s
+lr-main: R=/tmp/lrm; git worktree add -q $R 77556430 && ln -s $PWD/node_modules $R/node_modules && cd $R && node scripts/simCmLeagueRules.mjs > /tmp/lrm.log 2>&1; s=$?; tail -3 /tmp/lrm.log; exit $s
+appeal: node scripts/simManagerAppealIsolation.mjs
