@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+po-swap exit=3 61s | playOneOffCups: control swap DID NOT FIRE (3 findings: (a) Chelsea season one 320: no Super cup tile / (a) Chelsea season one 390: no Super cup tile)
+po-notile exit=1 61s | playOneOffCups: control notile FIRED (3 findings of "no Super cup tile", 3 in all)
+playOneOffCups exit=0 95s | playOneOffCups: green, five cases at three sizes, pictures in /home/runner/work/_temp/rc-out/files/shots
+po-hubweek exit=1 70s | playOneOffCups: control hubweek FIRED (3 findings of "the hub says it has after the Shield", 3 in all)
+po-norowline exit=1 86s | playOneOffCups: control norowline FIRED (6 findings of "the no-row card does not say why", 6 in all)
+po-tileweek exit=1 67s | playOneOffCups: control tileweek FIRED (3 findings of "the League tile reads", 6 in all)
