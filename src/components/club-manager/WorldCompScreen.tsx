@@ -204,7 +204,7 @@ interface ViewProps {
   bracketCard?: ReactElement;
 }
 
-function TableView({ career, view, nav, go, onClub, groupsCard }: ViewProps) {
+function TableView({ career, comp, view, nav, go, onClub, groupsCard }: ViewProps) {
   if (view.mode === 'in') return <div className="space-y-2">{withClubHandler(groupsCard, onClub)}</div>;
   const played = view.nightsDone > 0;
   if (view.groups) {
@@ -228,7 +228,8 @@ function TableView({ career, view, nav, go, onClub, groupsCard }: ViewProps) {
         <span>25th to 36th: out</span>
       </div>
       <TableRows rows={view.table ?? []} format="l36" myClub={view.myClub} onClub={onClub} played={played} />
-      <p className="text-xs text-muted-foreground px-1">{leaguePhaseFootnote()}</p>
+      {/* fix-1509 minor 15: the Europa League's own order (ledger row U6) is not checked, so its table says whose it uses. */}
+      <p className="text-xs text-muted-foreground px-1">{comp === 'uel' ? 'Clubs level on points are ordered the way the Champions League orders them. ' : ''}{leaguePhaseFootnote()}</p>
     </div>
   );
 }
@@ -394,7 +395,7 @@ function uelHeaderLines(career: CareerState, view: WorldCompView): string[] {
     how
       ? `${career.clubName} earned a place in it by ${how}, but your own Europa League nights are not in the game yet, so the place went to the next club in line and you follow it from outside.`
       : `${career.clubName} are not in it this season, so you are following it from outside.`,
-    'This is the real format: 36 clubs in one table, then knockouts, each night the day after the Champions League\'s.',
+    'This is the real format: 36 clubs in one table, then knockouts, each night but the final the day after the Champions League\'s.',
     career.season === 1
       ? 'This season\'s field is the real 2025-26 tables and cup winners, put through the game\'s rule.'
       : 'This season\'s field is last season\'s tables in your save, put through the game\'s rule.',
@@ -409,9 +410,9 @@ function UelHowItWorks() {
   return (
     <div className="bg-card border border-border rounded-xl p-3 space-y-2 text-xs text-muted-foreground" data-cm-world-help="uel">
       <p>36 clubs play eight games each, four at home and four away, in one table. 1st to 8th go straight to the round of 16, 9th to 24th play a two legged play-off for the other eight places, and 25th and below are out. Two legs from the play-offs to the semi-finals, then a one match final. A tie level on aggregate goes to extra time, then penalties.</p>
-      <p>Who is in it, by the game's rule: in each league, the club just below its Champions League places, and your own country's cup winner. A club already in the Champions League, or a cup winner already in, hands its place down the table to the next club. Cups abroad are not played in the game, so from your second season their place goes down their league too. The last places go to the next best placed clubs of the leagues with the most Champions League places. In your first season the field is the real 2025-26 tables, cup winners and Conference League winner, put through the same rule. The winner goes into next season's Champions League.</p>
-      <p>What the game plays in place of the real thing: those places are simplified and the same every season. In the real 2026-27, England and Spain had a fifth Champions League place, France sent its fourth to Champions League qualifying, and several smaller leagues sent only their cup winner, so the real field was not quite this one. The pots are set by how strong the clubs are in your save, the bracket and the order of clubs level on points are the Champions League's, and every night sits on your own calendar, the day after the Champions League's, so the dates are the game's.</p>
-      <p>Your club: your own Europa League nights are not in the game yet, so a place the rule gives your club goes to the next club in line, and the screen says which way you earned it. The board counts that place all the same.</p>
+      <p>Who is in it, by the game's rule: in each league, the club just below its Champions League places, and your own country's cup winner. A club already in the Champions League, or a cup winner already in, hands its place down the table to the next club. Cups abroad are not played in the game, so from your second season their place goes down their league too. The last places go to the next best placed clubs of the leagues with the most Champions League places. In your first season the field is the real 2025-26 tables, cup winners and Conference League winner, put through the same rule. The winner goes into next season's Champions League (in a season your own club is in that one, only when the game's smaller field has room).</p>
+      <p>What the game plays in place of the real thing: those places are simplified and the same every season. In the real 2026-27, England and Spain had a fifth Champions League place and France sent its fourth to Champions League qualifying, so the real field was not quite this one. The pots are set by how strong the clubs are in your save, the bracket and the order of clubs level on points are the Champions League's, and every night sits on your own calendar, the day after a Champions League night, with the final between the Champions League's semi-finals and its final, so the dates are the game's.</p>
+      <p>Your club: your own Europa League nights are not in the game yet, so a place the rule gives your club goes to the next club in line, and the screen says which way you earned it. The board counts that place all the same: through the season it reads your league place and, once it is played, your cup final, and a place that only comes down to you once every league has finished counts when the season ends.</p>
     </div>
   );
 }
