@@ -1,0 +1,5 @@
+units exit=0 10s |    Duration  8.39s (transform 3.19s, setup 356ms, collect 9.38s, tests 5.46s, environment 2.10s, prepare 849ms)
+simWorldEditor exit=0 12s | simWorldEditor: 2478 checks, 0 failures
+tsc exit=0 78s | 
+euro-s147 exit=0 144s | simWorldEuro: green, 35567 checks, 0 failures
+euro-s5 exit=0 186s | simWorldEuro: green, 179 checks, 0 failures
