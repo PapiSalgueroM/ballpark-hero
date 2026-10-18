@@ -21,7 +21,8 @@
  *      different clubs, none of them in the Champions League the season really plays, never my club, each with
  *      its route (`via`), and the field and my club's own route (`earned`) are exactly what the rule gives when
  *      worked out here again from the engine's own inputs (an oracle beside the engine; the cup it reads is the
- *      final's winner off the bracket, and euroCupOf must say the same); an era save follows
+ *      final's winner off the bracket, and euroCupOf must say the same; the league places and the cup winners are
+ *      also worked out by hand, byHand, which reads no rule); an era save follows
  *      none; at the season's end every night played, every league phase pair once, eight games a club, every
  *      tie's aggregate its legs, one winner and one runner-up. A slice carried across a job move keeps no route
  *      the new club did not earn (fix-1509: a club outside the field earned none).
@@ -62,6 +63,9 @@
  *              carryearned (the job move's carry keeps the old club's route for the new club)
  *              cuploser (euroCupOf hands the cup's route to the final's loser: the oracle reads the bracket itself)
  *              noworld (uclEntrantsOf forgets a participant's AI groups: the harness builds that set itself)
+ *              oneplace (the rule gives each league one Europa League league place more, in the engine and the
+ *              oracle alike, as a wrong edit of euroAccess.ts would: the league places and cup winners are also
+ *              worked out by hand, byHand, which reads no rule)
  *   section 2: stream (the Europa League's matches draw from Math.random) form (its evaluation writes the clubs'
  *              form) leak (its open writes a key outside worldComps)
  *   section 3: position (euroPlaceOf grades by position alone, as before the round) cupwin (cuploser's edit: a
@@ -95,6 +99,7 @@ const CONTROLS = {
   carryearned: [1, /^1 carry: /, /^1 /],
   cuploser: [1, /^1 cup: /, /^1 /],
   noworld: [1, /^1 both: /, /^1 /],
+  oneplace: [1, /^1 rule: /, /^1 /],
   cupwin: [3, /^3 cupwin: /, /^3 /],
   stream: [2, /^2 .*the draws differ/, /^2 /],
   form: [2, /^2 .*the state differs/, /^2 /],
@@ -117,6 +122,7 @@ const CAREER_EDITS = {
   earned: [{ file: CM, from: '  const mine = euroFieldFromTables({ ...input, exclude: out.filter(c => c !== state.clubName), noFill: [state.clubName] });', to: '  const mine = euroFieldFromTables({ ...input, exclude: out, noFill: [state.clubName] });' }],
   carryearned: [{ file: CM, from: '      if (carried && joined.clubName !== career.clubName) delete carried.earned;\n', to: '' }],
   cuploser: [CUP_TO_LOSER],
+  oneplace: [{ file: 'src/lib/euroAccess.ts', from: '    for (let k = 0; k < t.uelLast - t.uclPlaces && clubs.length < input.size; k += 1) {', to: '    for (let k = 0; k <= t.uelLast - t.uclPlaces && clubs.length < input.size; k += 1) {' }],
   noworld: [{ file: CM, from: '  if (state.uclGroup) return [state.clubName, ...state.uclGroup.opponents, ...(state.uclWorld ?? []).flatMap(g => g.clubs)];', to: '  if (state.uclGroup) return [state.clubName, ...state.uclGroup.opponents];' }],
   cupwin: [CUP_TO_LOSER],
   stream: [{ file: CM, from: '  const out = evaluateWorldComp(slice, k, worldCompBind(state, comp, slice.f));', to: "  const bound = worldCompBind(state, comp, slice.f);\n  const out = evaluateWorldComp(slice, k, comp === 'uel' ? { ...bound, sim: (h, a, scale) => simScore(h, a, 0.2, -0.08, scale) } : bound);" }],
@@ -309,7 +315,23 @@ let fleetLib = null;
 const lib = async () => (fleetLib ??= await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'worldUclFleet.mjs')).href));
 let pure = null;
 /** The rule and the 2025-26 tables, bundled on their own: the oracle beside the engine. */
-const oracleLib = async () => (pure ??= await bundle('oracle', { ea: MODULE_FILE, ft: 'src/data/clubManagerFinalTables2025_26.ts' }));
+/* A control that edits the rule itself (euroAccess.ts) edits the oracle's copy as well, as a wrong edit of the file
+   would: what it proves is the check that does not read the rule (byHand). */
+const ruleEdits = () => careerEdits().filter(e => e.file === MODULE_FILE);
+const ruleEditPlugin = {
+  name: 'world-euro-rule-edit',
+  setup(b) {
+    b.onLoad({ filter: /euroAccess\.ts$/ }, args => {
+      let src = fs.readFileSync(args.path, 'utf8').replaceAll('\r\n', '\n');
+      for (const e of ruleEdits()) {
+        if (src.split(e.from).length !== 2) cannot(`the oracle's edit does not stand exactly once in ${MODULE_FILE}`);
+        src = src.replace(e.from, e.to);
+      }
+      return { contents: src, loader: 'ts', resolveDir: path.dirname(args.path) };
+    });
+  },
+};
+const oracleLib = async () => (pure ??= await bundle('oracle', { ea: MODULE_FILE, ft: 'src/data/clubManagerFinalTables2025_26.ts' }, ruleEdits().length ? [ruleEditPlugin] : []));
 
 /** The Champions League this season really plays, built here from the save and never through the engine's
  *  uclEntrantsOf (fix-1509 minor 3: reading it, a participant's AI groups forgotten left section 1 green): my
@@ -350,7 +372,31 @@ function oracleField(M, O, st, pre) {
   const input = { tables, cups, uclEntrants: uclPlayedOf(st), ueclHolder: holder, size: 36 };
   const field = O.ea.euroFieldFromTables({ ...input, exclude: excluded });
   const mine = O.ea.euroFieldFromTables({ ...input, exclude: excluded.slice(1), noFill: [st.clubName] });
-  return { field, earned: mine.via[st.clubName] ?? null };
+  return { field, earned: mine.via[st.clubName] ?? null, hand: byHand(input, new Set(excluded)) };
+}
+
+/** Two routes worked out by hand from the tables, never through euroFieldFromTables (fix-1509 minor 4: the oracle
+ *  bundles the same rule as the engine, so a wrong edit of the rule moved both): in world order, each league's
+ *  league places are the first clubs below its Champions League places that are neither in the Champions League
+ *  nor kept out, as many as its last Europa League place leaves; then each nation's cup winner that is free and
+ *  not in by its league takes the cup's place. The passes down, the holder and the fill stay the oracle's. */
+function byHand(input, out) {
+  const ucl = new Set(input.uclEntrants);
+  const L = [], C = [];
+  const taken = new Set();
+  for (const t of input.tables) {
+    let want = t.uelLast - t.uclPlaces;
+    for (let i = Math.max(0, t.uclPlaces); i < t.clubs.length && want > 0 && taken.size < input.size; i += 1) {
+      const c = t.clubs[i];
+      if (ucl.has(c) || out.has(c)) continue;
+      L.push(c); taken.add(c); want -= 1;
+    }
+  }
+  for (const t of input.tables) {
+    const w = input.cups[t.nationId];
+    if (w && !ucl.has(w) && !out.has(w) && !taken.has(w) && taken.size < input.size) { C.push(w); taken.add(w); }
+  }
+  return { L, C };
 }
 
 /** One journey of one save through `seasons` seasons on one engine, every step on its own stretch of the stream
@@ -495,6 +541,10 @@ async function europaPass() {
             ok(same(sortedCopy(sl.clubs), sortedCopy(o.field.clubs)), `1 field: ${name} at ${label}: the field is not the rule's`);
             ok(sl.clubs.every((c, i) => sl.via[i] === o.field.via[c]), `1 via: ${name} at ${label}: a route is not the rule's`);
             ok((sl.earned ?? null) === o.earned, `1 earned: ${name} at ${label}: the slice says ${sl.earned ?? 'none'}, the rule ${o.earned ?? 'none'}`);
+            for (const r of ['L', 'C']) {
+              const got1 = sortedCopy(sl.clubs.filter((c, i) => sl.via[i] === r)), want = sortedCopy(o.hand[r]);
+              ok(same(got1, want), `1 rule: ${name} at ${label}: route ${r} is ${got1.join(', ') || 'nobody'} where the tables give ${want.join(', ') || 'nobody'}`);
+            }
             for (const c of sl.via) measured.routes[c] = (measured.routes[c] ?? 0) + 1;
             measured.earned[sl.earned ?? 'none'] = (measured.earned[sl.earned ?? 'none'] ?? 0) + 1;
             measured.bytes.push(JSON.stringify({ uel: sl }).length);
