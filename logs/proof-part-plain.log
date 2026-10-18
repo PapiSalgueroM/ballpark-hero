@@ -1,0 +1,15 @@
+  FAIL Real Madrid (now, participant, nocoach, seed 1, 2 seasons) at step 22 s1-reload: the state differs, the key order differs
+  FAIL Real Madrid (now, participant, nocoach, seed 2, 2 seasons) at step 22 s1-reload: the state differs, the key order differs
+  FAIL Real Madrid (now, participant, nocoach, seed 3, 2 seasons) at step 22 s1-reload: the state differs, the key order differs
+  FAIL Real Madrid (now, participant, nocoach, seed 4, 2 seasons) at step 22 s1-reload: the state differs, the key order differs
+  FAIL Real Madrid (now, participant, nocoach, seed 5, 2 seasons) at step 22 s1-reload: the state differs, the key order differs
+  FAIL Real Madrid (now, participant, coach, seed 1, 2 seasons) at step 22 s1-reload: the state differs, the key order differs
+  FAIL Real Madrid (now, participant, coach, seed 2, 2 seasons) at step 22 s1-reload: the state differs, the key order differs
+  FAIL Real Madrid (now, participant, coach, seed 3, 2 seasons) at step 22 s1-reload: the state differs, the key order differs
+  FAIL Real Madrid (now, participant, coach, seed 4, 2 seasons) at step 22 s1-reload: the state differs, the key order differs
+  FAIL Real Madrid (now, participant, coach, seed 5, 2 seasons) at step 22 s1-reload: the state differs, the key order differs
+  FAIL Arsenal (now, participant, nocoach, seed 1, 2 seasons) at step 22 s1-reload: the state differs, the key order differs
+  FAIL Arsenal (now, participant, nocoach, seed 2, 2 seasons) at step 22 s1-reload: the state differs, the key order differs
+first differences: 12 printed, at a reload by the key order: 12, anything else: 0
+old saves (written by 5f7b13b1): 180 loaded by both engines, 0 gained a watched Champions League at load, 158 did not, 22 already followed one and kept it, 0 gained a Europa League, 0 against the rule
+proofWorldUclFleet: RED, 20 journeys differ from 5f7b13b1 (of 60)

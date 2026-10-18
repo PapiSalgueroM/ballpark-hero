@@ -1,0 +1,7 @@
+applyFix: literal: 1 edit(s) made in /tmp/lit/src/lib/clubManager.ts
+  FAIL Chelsea (now, watcher, nocoach, seed 1, 3 seasons) at step 47 s1-rollover: the state differs, the key order differs
+  FAIL Hoffenheim (now, watcher, nocoach, seed 1, 3 seasons) at step 44 s1-rolled-reload: the state differs, the key order differs
+  FAIL Everton (now, watcher, nocoach, seed 1, 3 seasons) at step 45 s1-rollover: the state differs, the key order differs
+  FAIL América (now, watcher, nocoach, seed 1, 3 seasons) at step 39 s1-rollover: the state differs, the key order differs
+  FAIL Proof Town Athletic (now, watcher, nocoach, seed 1, 3 seasons) at step 53 s1-rollover: the state differs, the key order differs
+proofWorldUclFleet: RED, 5 journeys differ from 5f7b13b1 (of 13)

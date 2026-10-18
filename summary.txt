@@ -1,0 +1,6 @@
+headsha exit=0 0s | 6672eed3a Release BK fix: a Champions League slice written still moves worldComps to the end, as the old engine wrote it
+proof-part-plain exit=1 406s | proofWorldUclFleet: RED, 20 journeys differ from 5f7b13b1 (of 60)
+proof-part exit=0 412s | proofWorldUclFleet: GREEN, 60 journeys and 6483 steps byte equal to d5ae03fa901f0587de256313fa922e6cadcefb90 (a watching state without worldComps.dsc), draws equal
+lit-watch exit=1 119s | proofWorldUclFleet: RED, 5 journeys differ from 5f7b13b1 (of 13)
+proof-watch exit=0 1091s | proofWorldUclFleet: GREEN, 130 journeys and 17798 steps byte equal to d5ae03fa901f0587de256313fa922e6cadcefb90 (a watching state without worldComps.dsc), draws equal
+proof-watch-plain exit=1 960s | proofWorldUclFleet: RED, 13 journeys differ from 5f7b13b1 (of 130)
