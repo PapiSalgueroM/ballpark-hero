@@ -478,7 +478,7 @@ export interface SuperCupMatch {
 export interface SuperCupView {
   /** The cup's plain name, or null when this country has no row. */
   name: string | null;
-  /** A country and year the round could not prove (no row). */
+  /** A country and year the round looked at and could not prove (no row, named in CM_ONE_OFF_PARTIAL). */
   partial: boolean;
   /** One line on how it is played. */
   format: string;
@@ -590,11 +590,7 @@ export function superCupView(career: CareerState): SuperCupView {
 
 /** The super cup tile's two lines on the Cups panel. */
 export function superCupStatus(view: SuperCupView): { value: string; sub: string } {
-  if (!view.name) {
-    return view.partial
-      ? { value: 'Not confirmed', sub: "The game could not confirm this country's super cup yet" }
-      : { value: 'None here', sub: 'No super cup for this country in the game' };
-  }
+  if (!view.name) return { value: 'Not confirmed', sub: `No super cup confirmed for this country${view.era ? ' in this era' : ''} yet` };
   if (view.stub) return { value: view.name, sub: view.stub };
   const played = view.matches.filter(m => m.homeGoals !== null);
   const last = played[played.length - 1];
