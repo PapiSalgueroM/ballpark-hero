@@ -86,6 +86,10 @@ export interface WorldCompView {
   standIn?: { club: string; for: string };
   /** An era save: every season's field is that era's real 32, whatever the leagues did. */
   eraField: boolean;
+  /** Round 1509, the Europa League: how each entrant got in (euroAccess.ts's route codes), and the route my club
+   *  earned by the same rule (it is never an entrant yet). */
+  via?: Record<string, string>;
+  earned?: string;
 }
 
 /** "2026-27" for the save's season. */
@@ -268,6 +272,8 @@ function watcherView(career: CareerState, comp: WorldCompKey): WorldCompView | n
     ...(slice.holder ? { holder: slice.holder } : {}),
     ...(() => { const s = standInOf(career, slice.clubs); return s ? { standIn: s } : {}; })(),
     eraField: isHistoricEra(career.eraId),
+    ...(slice.via && slice.via.length === slice.clubs.length ? { via: Object.fromEntries(slice.clubs.map((c, i) => [c, slice.via![i]])) } : {}),
+    ...(slice.earned ? { earned: slice.earned } : {}),
   };
 }
 
@@ -332,6 +338,24 @@ export function worldUclStatus(career: CareerState, view: WorldCompView | null):
     return { mode: 'watching', value, sub: 'You are watching from outside' };
   }
   return { mode: 'none', value: 'Nothing to follow', sub: 'It shows here from next season' };
+}
+
+/** Round 1509: how a club got into the Europa League, in a few words, by its route code (euroAccess.ts). */
+export function routeWords(code: string | undefined): string | null {
+  return code === 'L' ? 'its league place' : code === 'C' ? 'winning its cup' : code === 'P' ? "its cup's place, passed down its league"
+    : code === 'H' ? 'winning the Conference League' : code === 'F' ? 'the fill, as the next best placed club of a strong league' : null;
+}
+
+/** Round 1509: the Europa League tile's two lines on the Cups panel. My club only ever follows it from outside in
+ *  this round, so a place it earned says so and that its own nights are not played yet. */
+export function worldUelStatus(career: CareerState, view: WorldCompView | null): WorldUclStatus {
+  if (!view) return { mode: 'none', value: 'Nothing to follow', sub: 'It shows here from next season' };
+  const next = nextNight(view);
+  const first = firstStageNights(view);
+  const value = view.winner ? `Won by ${view.winner}`
+    : !next ? 'Season over'
+      : next.stage === 'md' ? `Matchday ${(next.md ?? 0) + 1} of ${first} next` : `${nightLabel(next)} next`;
+  return { mode: 'watching', value, sub: view.earned ? 'You earned a place, but your own nights are not played yet' : 'You are following it from outside' };
 }
 
 /** One game of a club's run, in the club fixtures reader's row shape (round is the night here). */
