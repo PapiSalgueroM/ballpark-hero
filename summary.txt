@@ -1,0 +1,10 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+assets1082 exit=0 6s | Prepared 92 actual font and flag dependencies for 84 career-club countries.
+simSoccerAgentReview-forwalk exit=0 10s | PASS agent review product and proof source bytes held.
+playSoccerAgentReview exit=0 471s | Soccer agent review native 1976 checks,12 journeys,3 copied observation controls,0 failures.
+playSoccerOfferReview1082 exit=0 76s | Soccer offer review: 9 actual-route journeys, 12 effective restored DOM controls, no forwarded writes.
+simSoccerOpponentLabels-forwalk exit=0 26s | PASS simSoccerOpponentLabels: complete original/current careers, display controls and whole undo
+labels-c1 exit=0 10s | diagBJ labels: status pass
+labels-c2 exit=0 10s | diagBJ labels: status pass
+labels-c3 exit=0 10s | diagBJ labels: status pass
