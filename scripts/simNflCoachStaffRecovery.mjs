@@ -50,7 +50,7 @@ assert(['1', 'true'].includes(process.env.CI) && process.env.SIM_NETWORK === 'of
 assert(process.env.NODE_OPTIONS?.includes('offlineTransport.cjs'), 'Ordinary offline transport inherited');
 assert(!process.env.NFL_COACH_MODE || process.env.NFL_COACH_MODE === 'fixed', 'Fixed qualification only; original88aa evidence is retained separately');
 for (const key of ['US_BOARD_CONTROL_ALIAS', 'US_BOARD_CONTROL_FILE', 'NO_DOUBLE_SWAP', 'US_COACH_RETIRE_CONTROL']) assert(!process.env[key], 'No inherited control ' + key);
-const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' });
+const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
 const sha = value => createHash('sha256').update(value).digest('hex');
 const lf = value => value.replaceAll('\r\n', '\n');
 const clean = value => value.replace(/\x1b\[[0-9;]*m/g, '');
