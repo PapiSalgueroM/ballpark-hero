@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "mode": "fixed",
+  "base": "1e4795349a2eae0e67865d7fae384bf58ed8a299",
+  "status": "passed",
+  "qualified": true,
+  "arms": [
+    {
+      "label": "normal",
+      "status": "qualified",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/test/__soccerPressRoomFailure1411.test.tsx",
+        "--maxWorkers=1",
+        "--minWorkers=1",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/tmp/rp-out-p1411/normal/vitest.json"
+      ],
+      "expectedCopies": {
+        "src/test/__soccerPressRoomFailure1411.test.tsx": "eabe7947a461651ba446d6c5546cbf1849e942981ad7a47456c4284c03605575",
+        "src/components/soccer-career/__PressRoomTile1411.tsx": "39b584d461e6a242973f55749652c09bb829dd92184ccba1a3f2e8b5632b54f9"
+      },
+      "passed": 5,
+      "failed": 0,
+      "rawBytes": 650362,
+      "rawSha256": "e3685a22b9a9bc9b593ca9e6b2e50be0865ae00cd8c39cf807c00afc2a252a55"
+    },
+    {
+      "label": "original",
+      "status": "qualified",
+      "exit": 1,
+      "signal": null,
+      "error": null,
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/test/__soccerPressRoomFailure1411.test.tsx",
+        "--maxWorkers=1",
+        "--minWorkers=1",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/tmp/rp-out-p1411/original/vitest.json"
+      ],
+      "expectedCopies": {
+        "src/test/__soccerPressRoomFailure1411.test.tsx": "eabe7947a461651ba446d6c5546cbf1849e942981ad7a47456c4284c03605575",
+        "src/components/soccer-career/__PressRoomTile1411.tsx": "f1c214f65d09d80352cc081f02199f2dd9cbe2310b609bcae389344fd190fd21"
+      },
+      "passed": 3,
+      "failed": 2,
+      "rawBytes": 636123,
+      "rawSha256": "873782955dbd5d0f190d84d6ddfa8bee56ccd0f33832b91fda22190dc8e6e93e"
+    },
+    {
+      "label": "boundary-removed",
+      "status": "qualified",
+      "exit": 1,
+      "signal": null,
+      "error": null,
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/test/__soccerPressRoomFailure1411.test.tsx",
+        "--maxWorkers=1",
+        "--minWorkers=1",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/tmp/rp-out-p1411/boundary-removed/vitest.json"
+      ],
+      "expectedCopies": {
+        "src/test/__soccerPressRoomFailure1411.test.tsx": "eabe7947a461651ba446d6c5546cbf1849e942981ad7a47456c4284c03605575",
+        "src/components/soccer-career/__PressRoomTile1411.tsx": "bdc2ad28fc6bbe1a35cf25d2ae25298a65b11a5c83f043061a8439a38ce059f6"
+      },
+      "passed": 3,
+      "failed": 2,
+      "rawBytes": 636127,
+      "rawSha256": "a075d5446349065d184f45dfc805a4c69fab41ff288a637023cdf7bc3e087277"
+    },
+    {
+      "label": "restored",
+      "status": "qualified",
+      "exit": 0,
+      "signal": null,
+      "error": null,
+      "args": [
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/test/__soccerPressRoomFailure1411.test.tsx",
+        "--maxWorkers=1",
+        "--minWorkers=1",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/tmp/rp-out-p1411/restored/vitest.json"
+      ],
+      "expectedCopies": {
+        "src/test/__soccerPressRoomFailure1411.test.tsx": "eabe7947a461651ba446d6c5546cbf1849e942981ad7a47456c4284c03605575",
+        "src/components/soccer-career/__PressRoomTile1411.tsx": "39b584d461e6a242973f55749652c09bb829dd92184ccba1a3f2e8b5632b54f9"
+      },
+      "passed": 5,
+      "failed": 0,
+      "rawBytes": 650362,
+      "rawSha256": "e3685a22b9a9bc9b593ca9e6b2e50be0865ae00cd8c39cf807c00afc2a252a55"
+    }
+  ],
+  "limits": "Real optional panel, route boundary and pending-save registry. Only dynamic import IO is deferred. No browser chunk, global reload, storage backend failure or focus-trap runtime claim.",
+  "sourceHeld": true
+}

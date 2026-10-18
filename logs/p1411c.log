@@ -1,0 +1,10 @@
+bindAt: scripts/qa/proveSoccerPressRoomFailure.mjs bound
+bindAt: 8293c758f428 -> 1e4795349a2e
+runProver: p1411 at 5a5399501707fff7f1f025ff7a695530bd3a9ce9 (release BK bound: 7f2ad3548ea5 with its pinned bases bound to the joined tree)
+Press-room isolation fixed: passed; 4 arm receipt(s), qualified=true
+runProver: p1411 exit 0
+  "status": "passed",
+      "status": "qualified",
+      "status": "qualified",
+      "status": "qualified",
+      "status": "qualified",
