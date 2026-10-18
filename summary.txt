@@ -1,0 +1,4 @@
+dashscan exit=0 0s | no dash in the diff
+difffiles exit=0 0s | scripts/simWorldEuro.mjs
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
