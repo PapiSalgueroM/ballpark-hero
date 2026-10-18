@@ -32,8 +32,8 @@ export type OneOffRowTuple = readonly [
   (0 | 1)?, (readonly [number, number, number, number])?,
 ];
 
-/** The rows the game plays. Ledger row eng-2026 (The FA, the Premier League, Liverpool FC; Sports Mole, The Sports
- *  Cast, Graphic Online, Reuters). */
+/** The rows the game plays. Ledger row eng-2026 (The FA, the Premier League, Arsenal FC, Liverpool FC; Sports
+ *  Mole, The Sports Cast, Graphic Online, Reuters). */
 export const CM_ONE_OFF_ROWS: readonly OneOffRowTuple[] = [
   ['eng-2026', 'england', 2026, 'FA Community Shield', 'one', 'pens', 'champCup', 'leagueRunnerUp', 'open', 'n'],
 ];

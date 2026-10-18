@@ -46,7 +46,9 @@ dukb-handoff/2026-10-10/results-g/finish-1510.md.
 ## The data (S0)
 scripts/data/cmOneOffFormats.json and its receipt; src/data/cmOneOffRows.ts. Verified on an official page and a press
 page each: eng-2026 (name, shape, decider, entry, double rule, place, venue rule) and eng-2026-s1 (Arsenal and
-Manchester City, the Principality Stadium). The edition's clubs are also the game's own verified 2025-26 data
+Manchester City, the Principality Stadium). The decider's official line is Arsenal FC's preview of the 2026 edition
+(found by the closing check of 2026-10-18; before it, Liverpool FC's page on the 2025 edition stood alone, and it
+still corroborates). The edition's clubs are also the game's own verified 2025-26 data
 (CM_FINAL_TABLES_2025_26's champions, Round 1509's SEASON_ONE_CUP_WINNERS.premier), checked by section 0. Marked
 partial (toVerify, no constant): eng-2005, eng-2010, eng-2015, eng-2020, esp-2026, ita-2026, ger-2026, fra-2026.
 
