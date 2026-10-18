@@ -5,7 +5,7 @@ import {
 } from '@/lib/clubManager';
 import { dateKey } from '@/lib/clubManagerCalendar';
 import { ensureEraRosters } from '@/lib/clubManagerEras';
-import { clubRun, firstStageNights, worldCompView, worldUclStatus, worldUclView, type WorldCompView } from '@/lib/clubManagerWorldView';
+import { REAL_FIFTH_TILE, clubRun, firstStageNights, realFifthNation, worldCompView, worldUclStatus, worldUclView, type WorldCompView } from '@/lib/clubManagerWorldView';
 
 /* Round 1503: the one view of the Champions League the screen reads, for the club watching it and for the club
    in it. Every check here is an identity of the save itself (the engine's own evaluation, the participant's own
@@ -68,6 +68,18 @@ describe('the club watching it: today\'s world, the 36 club league phase', () =>
     expect(v.nights[0].fixtures).toHaveLength(18);
     expect(v.nights.flatMap(n => n.fixtures).every(f => f.homeGoals === null)).toBe(true);
     expect(worldUclStatus(start, v)).toEqual({ mode: 'watching', value: 'Matchday 1 of 8 next', sub: 'You are watching from outside' });
+    expect(realFifthNation(start)).toBeNull();
+  });
+
+  /* fix-1509 (advice 21): fifth in the real 2025-26 Premier League (row A1) went to the real 2026-27 Champions
+     League; the game's rule makes it a Europa League place, so the tile says why the club is in neither. */
+  it('says on the tile why a season one Liverpool career is in neither competition', () => {
+    const liv = startCareer('Liverpool');
+    expect(liv.uclGroup).toBeNull();
+    expect(liv.worldComps?.uel?.earned).toBe('L');
+    expect(realFifthNation(liv)).toBe('England');
+    expect(worldUclStatus(liv, worldUclView(liv)).sub).toBe(REAL_FIFTH_TILE);
+    expect(realFifthNation({ ...liv, season: 2 })).toBeNull();
   });
 
   it('shows the nights the week has passed, and only those, with the engine\'s own scores', () => {

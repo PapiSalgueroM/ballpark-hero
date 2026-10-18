@@ -28,6 +28,7 @@ import {
 } from '@/lib/clubManager';
 import { entryDatesOf, worldCompNightDates, worldYearOf, type CalDate } from '@/lib/clubManagerCalendar';
 import { isHistoricEra } from '@/lib/clubManagerEras';
+import { CM_FINAL_TABLES_2025_26 } from '@/data/clubManagerFinalTables2025_26';
 import { UCL_GROUP_LEDGER } from '@/lib/clubManagerUclGroups';
 import { groupFixtures, type WorldCompFormat, type WorldCompKey, type WorldKoRound } from '@/lib/worldCompetition';
 
@@ -310,6 +311,26 @@ export function nextNight(view: WorldCompView): WorldViewNight | null {
 
 export interface WorldUclStatus { mode: 'in' | 'watching' | 'none'; value: string; sub: string }
 
+/**
+ * fix-1509 (the brief's advice 21, last item): the leagues whose fifth placed club of 2025-26 played the real
+ * 2026-27 Champions League through a European Performance Spot, rows A1 and A3 of scripts/data/cmEuroAccess.json
+ * (verified, each on two publishers). The game plays its own four places there (both rows are in
+ * EURO_ACCESS_PARTIAL), so that club starts a season one career in neither competition, and the tile says why.
+ * Read for that line alone, never for a place.
+ */
+const REAL_FIFTH_IN_UCL: Readonly<Record<string, string>> = { premier: 'England', laliga: 'Spain' };
+
+/** The nation whose real fifth Champions League place this club held, in season one of today's world where the
+ *  game's rule made that fifth place a Europa League one instead; else null. */
+export function realFifthNation(career: CareerState): string | null {
+  if (career.season !== 1 || career.uclGroup || isHistoricEra(career.eraId) || career.worldComps?.uel?.earned !== 'L') return null;
+  for (const [id, nation] of Object.entries(REAL_FIFTH_IN_UCL)) if (CM_FINAL_TABLES_2025_26.leagues[id]?.table[4] === career.clubName) return nation;
+  return null;
+}
+
+/** The tile's line for that club: why it is in neither. */
+export const REAL_FIFTH_TILE = 'Fifth was a real Champions League place, a Europa League one here, not played yet';
+
 /** The Champions League tile's two lines on the Cups panel. */
 export function worldUclStatus(career: CareerState, view: WorldCompView | null): WorldUclStatus {
   if (career.uclGroup) {
@@ -335,7 +356,7 @@ export function worldUclStatus(career: CareerState, view: WorldCompView | null):
     const value = view.winner ? `Won by ${view.winner}`
       : !next ? 'Season over'
         : next.stage === 'md' ? `Matchday ${(next.md ?? 0) + 1} of ${first} next` : `${nightLabel(next)} next`;
-    return { mode: 'watching', value, sub: 'You are watching from outside' };
+    return { mode: 'watching', value, sub: realFifthNation(career) ? REAL_FIFTH_TILE : 'You are watching from outside' };
   }
   return { mode: 'none', value: 'Nothing to follow', sub: 'It shows here from next season' };
 }
