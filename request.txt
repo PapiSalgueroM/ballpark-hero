@@ -1,0 +1,2 @@
+#!serial
+contCmp: bash .rc/x/contCmp1509.sh 77556430

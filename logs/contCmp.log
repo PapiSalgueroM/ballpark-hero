@@ -1,0 +1,4 @@
+contCmp1509: base 77556430; head exit 1, base exit 1; 95 and 95 lines; 0 differ
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
+contCmp1509: green, the log equals main line for line

@@ -1,0 +1,1 @@
+contCmp exit=0 55s | contCmp1509: green, the log equals main line for line
