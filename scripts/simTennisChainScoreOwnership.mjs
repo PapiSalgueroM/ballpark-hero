@@ -140,6 +140,11 @@ function expectedTrace(index, flavor, pendingIndices) {
   if (flavor === 'rank' && index < 2) { nickname = null; rank = 'You ranked #7 today!'; }
   return { name: titles[index], pendingBeforeCleanup: pendingIndices.includes(index) ? 1 : 0, pendingAfterCleanup: 0, insertedRows, rankLengths, completionScores, nickname, rank, finalScore };
 }
+const busyFailurePrefix = "Error: expect(element).toBeDisabled()\n\nReceived element is not disabled:\n  <button\n  class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-black\"\n/>\n";
+const busyFailureStack = /\n    at pendingCurrent \([^\n]+\/src\/test\/tennisChainScoreOwnership\.test\.tsx:75:101\)\n    at [^\n]+\/src\/test\/tennisChainScoreOwnership\.test\.tsx:144:35\n/;
+const busyUnitLines = fs.readFileSync(path.join(ROOT, testFile), 'utf8').split(/\r?\n/);
+assert.equal(busyUnitLines[74], "  unsaved(); expect(sendControl(), 'An older save must not release the current round pending save').toBeDisabled();", 'Frozen pendingCurrent matcher line75');
+assert.equal(busyUnitLines[143], "      await old.release(outcome); pendingCurrent(); expect(io.rank.mock.calls.map(call => call[0])).toEqual(boundary === 'insert' && outcome === 'error' ? [] : [1]);", 'Frozen post-old-release matcher line144');
 function run(name, { bare = false, flavor = 'fixed', failures = [], pendingIndices = [], copy = null } = {}) {
   const dir = path.join(OUT, name); fs.mkdirSync(dir);
   const receipt = path.join(dir, 'transport.transport'), raw = path.join(dir, 'vitest.json');
@@ -165,7 +170,13 @@ function run(name, { bare = false, flavor = 'fixed', failures = [], pendingIndic
     if (row.status === 'passed') { assert.deepEqual(row.failureMessages, []); continue; }
     const index = declared.indexOf(row.fullName);
     const purpose = flavor === 'busy' ? 'An older save must not release the current round pending save' : flavor === 'rank' || index < 2 ? 'The new round must keep its own unsaved score form' : 'Reset must release the older round save busy state';
-    assert.equal(row.failureMessages.length, 1); assert(row.failureMessages[0].startsWith('AssertionError: ' + purpose + ':'), name + ': exact leading purpose assertion');
+    assert.equal(row.failureMessages.length, 1);
+    if (flavor === 'busy') {
+      assert([2, 3, 4, 5].includes(index), name + ': four exact declared busy cases');
+      const plain = row.failureMessages[0].replace(/\u001b\[[0-9;]*m/g, '');
+      assert(plain.startsWith(busyFailurePrefix + '    at '), name + ': exact busy disabled-button error and full markup');
+      assert(busyFailureStack.test(plain), name + ': exact frozen pendingCurrent and post-old-release frames');
+    } else assert(row.failureMessages[0].startsWith('AssertionError: ' + purpose + ':'), name + ': exact leading purpose assertion');
     assert(!/TestingLibraryElementError|Test timed out|Cannot find module|Failed to resolve import|Transform failed|ReferenceError|SyntaxError|TypeError/.test(row.failureMessages[0]), name + ': no setup or preparation failure credit');
   }
   const trace = JSON.parse(fs.readFileSync(path.join(dir, 'trace.json'), 'utf8')); assert.equal(trace.version, 1);
