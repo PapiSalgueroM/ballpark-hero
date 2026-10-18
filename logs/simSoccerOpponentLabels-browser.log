@@ -1,0 +1,16 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: all3 native saved-row journeys
+    at browserProof (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOpponentLabels.mjs:271:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOpponentLabels.mjs:284:53 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
