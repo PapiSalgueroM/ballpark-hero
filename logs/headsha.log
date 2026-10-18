@@ -1,0 +1,3 @@
+0f64ce71b rc request rBK-rgBIi for db94ed2b9eceaba86f558f5dd4f5c7db124cff33
+db94ed2b9 Release BK: the lead sets the weight rows from the join's runner measurement
+696b697b5 Release BK: refresh scripts/data/guideHeadingsFrozen.json for PR331's six guide items, the generated output the packet left for the join (from PR331's own prover on the joined tree, runner rBKb3 p1414: simGuideHeadings --refresh on /club-manager, /soccer-career and the four US My Careers; exactly six items inserted, every other route and the metadata held)

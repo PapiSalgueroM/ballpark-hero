@@ -1,0 +1,6 @@
+headsha exit=0 0s | 696b697b5 Release BK: refresh scripts/data/guideHeadingsFrozen.json for PR331's six guide items, the generated output the packet left for the join (from PR331's own prove
+wf284x exit=2 0s | error: src/components/club-manager/TransferScreen.tsx: patch does not apply
+wf296x exit=2 0s | error: src/components/club-manager/TransferScreen.tsx: patch does not apply
+wf285 exit=1 229s | wfrun club-detail-fixtures.yml: 8 steps ran, 1 failed: Every rebuilt-site reader
+wf287x exit=1 327s | wfrun manager-handover-desk.yml: 9 steps ran, 1 failed: All fifteen build and snapshot readers
+wf301x exit=0 888s | wfrun manager-decision-method.yml: 5 steps ran, 0 failed
