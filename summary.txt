@@ -1,0 +1,3 @@
+euro-s147 exit=1 171s | simWorldEuro: RED, 36120 checks, 642 failures
+ctl-s4 exit=1 204s | controls (each must be 1): live=1 ahead=1 noseen=3
+ctl-s1 exit=1 205s | controls (each must be 1): twocomps=3 meinfield=1 earned=3

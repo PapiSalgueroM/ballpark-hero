@@ -1,0 +1,4 @@
+live: last: simWorldEuro: control live FIRED (1106 failures, all its own)
+ahead: last: simWorldEuro: control ahead FIRED (1172 failures, all its own)
+noseen: last: simWorldEuro: control noseen DID NOT FIRE CLEANLY (own false, stray 0: )
+controls (each must be 1): live=1 ahead=1 noseen=3

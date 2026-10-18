@@ -1,0 +1,4 @@
+twocomps: last: simWorldEuro: control twocomps DID NOT FIRE CLEANLY (own true, stray 664: 4 changed: watcher Chelsea (now) seed 2 at s1-join: night MD1 shown again otherwise / 4 changed: watcher Chelsea (now) seed 2 at s1-join: night MD
+meinfield: last: simWorldEuro: control meinfield FIRED (11 failures, all its own)
+earned: last: simWorldEuro: control earned DID NOT FIRE CLEANLY (own true, stray 642: 4 changed: watcher Chelsea (now) seed 2 at s1-join: night MD1 shown again otherwise / 4 changed: watcher Chelsea (now) seed 2 at s1-join: night MD2 
+controls (each must be 1): twocomps=3 meinfield=1 earned=3
