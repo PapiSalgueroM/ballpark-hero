@@ -592,6 +592,11 @@ function playCup(state, seed, engine = cm) {
     if (r.report.competition !== 'cup') abort(`seed ${seed}: played a ${r.report.competition} match, not the cup`);
     /* Round 1331: the bridge's key comes off before anything is hashed (see oldRules). */
     if (r.state && 'matchRules' in r.state) delete r.state.matchRules;
+    /* Round 1509: so does the Europa League every new career of today's world now follows (worldComps), the
+       Champions League's participants included: the pinned and historical engines have none, it is opened on the
+       seed the historical arm takes out, and a match reads it and never writes it (scripts/simWorldEuro.mjs
+       section 2 holds that). Everything else the match wrote is still hashed. */
+    if (r.state && 'worldComps' in r.state) delete r.state.worldComps;
     const rep = r.report;
     return {
       seed, decidedBy: rep.decidedBy, shootoutWon: rep.shootoutWon ?? null,

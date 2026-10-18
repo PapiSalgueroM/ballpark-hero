@@ -429,6 +429,11 @@ async function europaPass() {
             for (const c of sl.via) measured.routes[c] = (measured.routes[c] ?? 0) + 1;
             measured.earned[sl.earned ?? 'none'] = (measured.earned[sl.earned ?? 'none'] ?? 0) + 1;
             measured.bytes.push(JSON.stringify({ uel: sl }).length);
+            /* The help's worked example: season one of a Chelsea career, the Premier League's clubs in it and how. */
+            if (label === 'start' && f.club === 'Chelsea' && !measured.example) {
+              const eng = new Set(M.cm.REAL_LEAGUES.filter(l => M.cm.LEAGUE_RULES[l.id]?.nationId === 'england').flatMap(l => l.clubs));
+              measured.example = sl.clubs.map((c, i) => [c, sl.via[i]]).filter(([c]) => eng.has(c)).map(([c, v]) => `${c} ${v}`).join(', ');
+            }
             datesOf(M, s, name, label);
           }
         }
@@ -452,7 +457,9 @@ async function europaPass() {
       }
       if (!sl) { sliceKey = ''; return; }
       /* 4: in step and stable. */
-      const key = `${sl.s}|${sl.seed}`;
+      /* A slice is its season, seed and field: a move to an entrant of the field draws it again without the new
+         club (1502's rule), the same seed and another field, and its nights start again. */
+      const key = `${sl.s}|${sl.seed}|${sl.clubs.join(',')}`;
       if (key !== sliceKey) { sliceKey = key; prevDone = 0; shown = new Map(); }
       const done = M.cm.worldCompNightsDone(s, 'uel');
       ok(done >= prevDone, `4 falls: ${name} at ${label}: ${done} nights done after ${prevDone}`);
@@ -611,6 +618,7 @@ async function dailies() {
 /** Section 7: measured and printed, never asserted on a max. */
 function printMeasured() {
   const m = measured;
+  if (m.example) console.log(`  7 example, season one of a Chelsea career, the English clubs in it: ${m.example}`);
   console.log(`  7 routes over every open: ${Object.entries(m.routes).sort().map(([k, v]) => `${k} ${v}`).join(', ')}`);
   console.log(`  7 my club's earned route at an open: ${Object.entries(m.earned).sort().map(([k, v]) => `${k} ${v}`).join(', ')}`);
   console.log(`  7 titles by strength quartile (strongest first): ${m.titles.join(', ')}`);
