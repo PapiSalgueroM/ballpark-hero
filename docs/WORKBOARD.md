@@ -15895,3 +15895,8 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+
+## Round1424 claim: NFL no-offer coaching recovery
+Root owns only explicit NFL T4 staff-entry action in usCoachCareer.ts and empty-market button/copy in CoachCareerPanel.tsx, plus new test/proof/browser/workflow and closing docs, branchcodex/nfl-coach-staff-recovery/base775. Direct owner NFL retirement/no-offer report. Preserve automatic market/distributions, playing reputation/history, year, done careers, earned offers, nonNFL and dirtysharedhostUsCareerBoard. Real original engine/component and built-route reproduction precede product adoption. Design docs/ROUND1424-NFL-STAFF-RECOVERY.md. All runtime remoteActions/ordinaryofflinepreload, types/plainbuild/all15readers/all14unchangedfatalcaps. I protectedSC/Manager/tournaments and release/main/publish held; prior61branches sealed; primaryappendonly.
+
