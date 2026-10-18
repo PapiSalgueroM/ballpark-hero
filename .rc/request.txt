@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+playOneOffCups: node scripts/playOneOffCups.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+po-notile: PLAY_ONEOFF_CONTROL=notile node scripts/playOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+po-swap: PLAY_ONEOFF_CONTROL=swap node scripts/playOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+po-norowline: PLAY_ONEOFF_CONTROL=norowline node scripts/playOneOffCups.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+po-hubweek: PLAY_ONEOFF_CONTROL=hubweek node scripts/playOneOffCups.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+po-tileweek: PLAY_ONEOFF_CONTROL=tileweek node scripts/playOneOffCups.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+playWorldUcl: node scripts/playWorldUcl.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+fences: f=0; for h in simLiveScores simNoRivalNames simInventedNames simHarnessAnchors simNoInventedQuotes simNoInventedConduct simLegalPages simSingleFooter simCompletionSlugs simCompletionOnce simNoDoubleRecord simDailyPuzzleContract simDailySaveHardening simWritesAreSent simSchemaNames simFetchRetry simGoogleOnlyReturn simReportRelay simNavbarStatsReads simLeaderboardCaps simScoringCoverage simSiteSearch simResultMoment simGuideHeadings; do node scripts/$h.mjs > /tmp/fx-$h.log 2>&1; s=$?; echo "$h exit=$s | $(grep -v '^\s*$' /tmp/fx-$h.log | tail -1 | cut -c1-150)"; [ $s -eq 0 ] || f=1; done; echo "fences done, any red: $f"; exit $f
