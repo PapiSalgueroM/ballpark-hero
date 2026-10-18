@@ -431,11 +431,13 @@ function entrantTarget(M, st) {
  * sees every state (and the label of the step), `onSeasonEnd` every finished season before its rollover.
  */
 /** A stored value with the followed Europa League taken off the saved career (and worldComps with it when that
- *  was its only key), so a save of the head arm can be compared byte for byte with one that never had it. */
+ *  was its only key), so a save of the head arm can be compared byte for byte with one that never had it.
+ *  Round 1510: the domestic super cup's key (worldComps.dsc) comes off with it. */
 function withoutUelSaved(v) {
   try {
     const o = JSON.parse(v);
-    if (o && typeof o === 'object' && o.worldComps && typeof o.worldComps === 'object' && 'uel' in o.worldComps) {
+    if (o && typeof o === 'object' && o.worldComps && typeof o.worldComps === 'object' && ('uel' in o.worldComps || 'dsc' in o.worldComps)) {
+      delete o.worldComps.dsc;
       delete o.worldComps.uel;
       if (!Object.keys(o.worldComps).length) delete o.worldComps;
     }
@@ -939,7 +941,9 @@ async function selfRelative() {
       if (x.draws !== y.draws || x.drawSha !== y.drawSha) why.push(`the draws differ (${x.draws} against ${y.draws})`);
       /* Round 1509: a save holding the followed Europa League (the head arm's alone) is compared byte for byte with
          that one key taken off the saved career (fix-1509 minor 16: it used to be left out of the compare). */
-      if (y.inIt && (y.uel ? x.savedBare !== y.savedBare : x.saved !== y.saved)) why.push(`the saved bytes differ${y.uel ? ' (worldComps.uel taken off)' : ''}`);
+      /* Round 1510: and the domestic super cup's key (worldComps.dsc) taken off in both arms, which this section's
+         other arm keeps where a reload's repair moves the map in one arm only: so every save is compared bare. */
+      if (y.inIt && x.savedBare !== y.savedBare) why.push('the saved bytes differ (worldComps.uel and worldComps.dsc taken off)');
       if (why.length) { ok(false, `2 ${name} at ${x.label}: ${why.join('; ')}`); break; }
     }
   }
