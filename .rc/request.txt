@@ -1,0 +1,5 @@
+#!serial
+storage: node scripts/simStorageWrites.mjs > /tmp/s1.log 2>&1; s=$?; grep -E "Error|error|at |FAIL|owed" /tmp/s1.log | head -16 | cut -c1-260; tail -2 /tmp/s1.log | cut -c1-200; exit $s
+writesSent: node scripts/simWritesAreSent.mjs > /tmp/s2.log 2>&1; s=$?; grep -E "Error|error|at |FAIL" /tmp/s2.log | head -16 | cut -c1-260; tail -2 /tmp/s2.log | cut -c1-200; exit $s
+resultMoment: node scripts/simResultMoment.mjs > /tmp/s3.log 2>&1; s=$?; grep -E "Error|error|at |FAIL" /tmp/s3.log | head -16 | cut -c1-260; tail -2 /tmp/s3.log | cut -c1-200; exit $s
+main-three: R=/tmp/m3t; git worktree add -q --detach $R 77556430 && ln -s $PWD/node_modules $R/node_modules && cd $R && for h in simStorageWrites simWritesAreSent simResultMoment; do node scripts/$h.mjs > /tmp/m-$h.log 2>&1; echo "main $h exit=$? | $(tail -1 /tmp/m-$h.log | cut -c1-160)"; done
