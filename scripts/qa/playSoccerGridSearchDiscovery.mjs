@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { chromium } from '../lib/playwrightLoader.mjs';
+import { webkit } from '../lib/playwrightLoader.mjs';
 
 const base = 'http://127.0.0.1:4173', api = 'https://flawuiqbvjobmkfkauhw.supabase.co';
 const mode = process.env.SOCCER_GRID_SEARCH_MODE, evidenceRoot = process.env.SOCCER_GRID_SEARCH_OUT;
@@ -49,18 +49,29 @@ const report = { version: 1, mode, originalHead, source, status: 'failed', produ
   fixtures: { puzzle, players, seasons, counts: { totalBefore: 9, playerBefore: 1, expectedRarity: 20 } },
   setup: 'Fresh storage has no daily grid save. Only consent/rules dismissal and an unrelated held save are preloaded. Native positioning is recorded; no no-scroll claim. Transport instrumentation preserves fetch results and records actual SDK body consumption.',
   census: specs.map(({ id, width, scenario, query, canonical }) => ({ id, width, scenario, query, canonical, originalFaultExpected: !['canonical-valid', 'manual-unverified'].includes(scenario) })),
-  expected: { contexts: 12, originalFaults: mode === 'baseline' ? 8 : 0, discoveryContexts: 8, healthyDeliveryContexts: 4 }, cases: [] };
+  expected: { contexts: 12, originalFaults: mode === 'baseline' ? 8 : 0, discoveryContexts: 8, healthyDeliveryContexts: 4 }, waits: [], cleanupErrors: [], cases: [] };
 const save = () => fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2));
 const wall = ms => new Promise(resolve => setTimeout(resolve, ms));
+const bounded = async (waits, label, run, timeoutMs = 15000) => {
+  const receipt = { label, timeoutMs, status: 'pending' }; waits.push(receipt); save();
+  let timer;
+  try {
+    const result = await Promise.race([run(), new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(label + ' exceeded ' + timeoutMs + 'ms')), timeoutMs); })]);
+    receipt.status = 'passed'; return result;
+  } catch (error) { receipt.status = 'failed'; receipt.error = String(error?.stack ?? error); throw error; }
+  finally { clearTimeout(timer); save(); }
+};
 const poll = async (label, read, predicate) => {
   for (let attempt = 0; attempt < 200; attempt++) { const value = await read(); if (predicate(value)) return value; await wall(20); }
   assert.fail('Setup or completion did not reach ' + label + '; no original-fault credit');
 };
-const browser = await chromium.launch({ headless: true });
+const browser = await webkit.launch({ headless: true });
+assert.equal(browser.version(), '27.2', 'Pinned WebKit fixture engine');
+report.browserEngine = 'webkit'; report.browserVersion = browser.version();
 try {
   for (const spec of specs) {
     const row = { id: spec.id, width: spec.width, scenario: spec.scenario, query: spec.query, canonical: spec.canonical, status: 'failed', originalFault: false,
-      healthyDelivery: false, actions: [], observations: [], requests: [], fixtures: [], invokes: [], counts: [], headResponses: [], finishedRequests: [], selections: [], readFixtures: [], externalFulfilled: [], unexpectedWrites: [], errors: [], assets: [], screenshots: [] };
+      healthyDelivery: false, actions: [], observations: [], requests: [], fixtures: [], invokes: [], counts: [], headResponses: [], finishedRequests: [], selections: [], readFixtures: [], externalFulfilled: [], unexpectedWrites: [], errors: [], assets: [], screenshots: [], waits: [], responseObservers: [] };
     report.cases.push(row); save();
     const context = await browser.newContext({ viewport: { width: spec.width, height: 844 }, deviceScaleFactor: 1, isMobile: spec.width === 390, hasTouch: spec.width === 390,
       locale: 'en-US', timezoneId: 'UTC', reducedMotion: 'reduce', serviceWorkers: 'block', storageState: { cookies: [], origins: [{ origin: base, localStorage: [
@@ -69,6 +80,14 @@ try {
       ] }] } });
     const pending = new Map(), responses = [];
     let page;
+    const observeResponse = (kind, response, read) => {
+      const observer = { id: row.responseObservers.length, kind, url: response.url(), status: 'pending' }; row.responseObservers.push(observer); save();
+      responses.push((async () => {
+        try { await read(observer); observer.status = 'passed'; }
+        catch (error) { observer.status = 'failed'; observer.error = String(error?.stack ?? error); row.errors.push(kind + ': ' + observer.error); }
+        finally { save(); }
+      })());
+    };
     const cors = request => ({ 'access-control-allow-origin': '*', 'access-control-allow-methods': 'GET,HEAD,POST,OPTIONS',
       'access-control-allow-headers': request.headers()['access-control-request-headers'] || 'authorization,apikey,content-type,x-client-info,prefer,range,range-unit', 'access-control-expose-headers': 'content-range,date' });
     const release = async key => { assert(pending.has(key), 'An actual intercepted request is held: ' + key); await pending.get(key)(); };
@@ -174,20 +193,24 @@ try {
       page.on('requestfinished', request => row.finishedRequests.push({ url: request.url(), method: request.method() }));
       page.on('response', response => {
         if (response.request().method() === 'HEAD') {
-          responses.push((async () => {
-            const headers = await response.allHeaders();
+          observeResponse('HEAD response', response, async observer => {
+            const headers = response.headers();
             const receipt = { url: response.url(), status: response.status(), headers: { contentType: headers['content-type'], contentLength: headers['content-length'], contentRange: headers['content-range'] }, finished: false, finishError: null };
-            row.headResponses.push(receipt); assert.equal(response.status(), 200, 'Actual count HEAD keeps200');
-            const error = await response.finished(); receipt.finishError = error ? String(error) : null; assert.equal(error, null, 'Actual count HEAD response finished'); receipt.finished = true;
-          })().catch(error => row.errors.push('HEAD response: ' + String(error?.stack ?? error))));
+            row.headResponses.push(receipt); save(); assert.equal(response.status(), 200, 'Actual count HEAD keeps200');
+            try {
+              const error = await bounded(row.waits, 'HEAD response.finished observer ' + observer.id, () => response.finished());
+              receipt.finishError = error ? String(error) : null; assert.equal(error, null, 'Actual count HEAD response finished'); receipt.finished = true;
+            } catch (error) { receipt.observerError = String(error?.stack ?? error); throw error; }
+            finally { save(); }
+          });
         }
         if (new URL(response.url()).origin !== base) return;
-        responses.push((async () => {
+        observeResponse('Response', response, async () => {
           assert.equal(response.status(), 200, response.url()); const body = await response.body(), pathname = new URL(response.url()).pathname;
           const relative = pathname.endsWith('/') ? pathname + 'index.html' : path.extname(pathname) ? pathname : pathname + '/index.html';
           const physical = path.resolve('dist', '.' + decodeURIComponent(relative)); assert(physical.startsWith(path.resolve('dist') + path.sep));
           assert.equal(hash(body), hash(fs.readFileSync(physical)), 'Every local response matches completed physical dist'); row.assets.push({ path: pathname, bytes: body.length, sha256: hash(body) });
-        })().catch(error => row.errors.push('Response: ' + String(error?.stack ?? error))));
+        });
       });
       const field = page.getByRole('textbox', { name: 'Search for a player', exact: true });
       const cells = page.locator('#root [data-grid-cell-status]');
@@ -297,27 +320,34 @@ try {
       assert(!row.events.some(event => event.type === 'unhandledrejection')); assert(row.events.some(event => event.type === 'input' && event.trusted && event.value === spec.query), 'Trusted native query input recorded');
       assert(row.events.some(event => event.type === 'click' && event.trusted), 'Trusted native cell/control action recorded');
       for (const request of row.requests.filter(item => new URL(item.url).origin !== base)) assert.equal(row.externalFulfilled.filter(item => item.requestId === request.id).length, 1, 'Every external request was fulfilled locally once');
-      assert.equal(pending.size, 0); await Promise.all(responses);
+      assert.equal(pending.size, 0); await bounded(row.waits, 'response observers before outcome assertions', () => Promise.all(responses), 30000);
       assert.equal(row.headResponses.length, spec.scenario === 'canonical-valid' ? 2 : 0);
       for (const receipt of row.headResponses) { assert(receipt.finished && receipt.finishError === null); assert.equal(row.finishedRequests.filter(request => request.method === 'HEAD' && request.url === receipt.url).length, 1, 'Every actual count HEAD emits requestfinished'); }
       assert.deepEqual(row.errors, []); assert.deepEqual(row.unexpectedWrites, []);
       row.status = 'passed'; console.log(spec.id + ': actual parent discovery/delivery observations passed');
     } catch (error) {
-      row.error = String(error?.stack ?? error);
+      row.error = String(error?.stack ?? error); save();
       if (page) { const file = spec.id + '-failure.png'; try { await page.screenshot({ path: path.join(out, file), animations: 'disabled' }); row.screenshots.push(file); } catch (captureError) { row.errors.push('Screenshot: ' + String(captureError)); } }
     } finally {
-      row.pendingBeforeCleanup = pending.size;
-      for (const key of [...pending.keys()]) { try { await release(key); } catch (error) { row.errors.push('Pending cleanup: ' + String(error)); } }
-      row.pendingAfterCleanup = pending.size; await context.close(); await Promise.all(responses);
-      if (row.status === 'passed' && (row.errors.length || row.pendingBeforeCleanup || row.pendingAfterCleanup)) { row.status = 'failed'; row.error = 'Late error or unfinished fixture delivery'; }
+      row.pendingBeforeCleanup = pending.size; row.pendingObserversBeforeCleanup = row.responseObservers.filter(observer => observer.status === 'pending').length; save();
+      for (const key of [...pending.keys()]) { try { await bounded(row.waits, 'pending fixture cleanup ' + key, () => release(key)); } catch (error) { row.errors.push('Pending cleanup: ' + String(error?.stack ?? error)); } }
+      row.pendingAfterCleanup = pending.size; save();
+      try { await bounded(row.waits, 'context.close', () => context.close()); } catch (error) { row.errors.push('Context cleanup: ' + String(error?.stack ?? error)); }
+      try { await bounded(row.waits, 'response observers after context cleanup', () => Promise.all(responses), 30000); } catch (error) { row.errors.push('Response cleanup: ' + String(error?.stack ?? error)); }
+      row.pendingObserversAfterCleanup = row.responseObservers.filter(observer => observer.status === 'pending').length;
+      if (row.pendingObserversAfterCleanup) row.errors.push('Response observers remain pending after cleanup: ' + row.pendingObserversAfterCleanup);
+      if (row.status === 'passed' && (row.errors.length || row.pendingBeforeCleanup || row.pendingAfterCleanup)) { row.status = 'failed'; row.error = 'Late error, unfinished fixture delivery or unfinished response observer'; }
       save();
     }
   }
 } finally {
-  await browser.close(); report.sourceAfter = Object.fromEntries(files.map(file => [file, hash(fs.readFileSync(file))]));
+  try { await bounded(report.waits, 'browser.close', () => browser.close()); } catch (error) { report.cleanupErrors.push(String(error?.stack ?? error)); }
+  report.sourceAfter = Object.fromEntries(files.map(file => [file, hash(fs.readFileSync(file))])); save();
   for (const bound of source) assert.equal(report.sourceAfter[bound.file], bound.actualSha256, bound.file + ' remains held');
   assert.deepEqual(git(['status', '--porcelain=v1', '--untracked-files=all']), sourceStatus, 'Source and untracked status held'); save();
 }
+assert.deepEqual(report.cleanupErrors, [], 'Browser cleanup must finish without errors or timeout');
+assert(report.cases.every(row => row.errors.length === 0 && row.responseObservers.every(observer => observer.status === 'passed')), 'No late errors or pending response observers after browser cleanup');
 assert.equal(report.cases.length, 12); assert(report.cases.every(row => row.status === 'passed'), 'Every actual built context must reach its exact observations');
 assert.equal(report.cases.filter(row => row.originalFault).length, report.expected.originalFaults); assert.equal(report.cases.filter(row => row.healthyDelivery).length, 4);
 report.status = 'passed'; report.fixedBrowserPassed = mode === 'fixed'; save();

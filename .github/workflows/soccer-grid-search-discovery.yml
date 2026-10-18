@@ -78,7 +78,7 @@ jobs:
           NODE_OPTIONS='' npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
           test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
           ln -s "$browser_tools/node_modules/playwright" node_modules/playwright; ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
-          NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium webkit > "$out/chromium-install.log" 2>&1
           python -m pip install fonttools pillow > "$out/font-tools-install.log" 2>&1
           NODE_OPTIONS='' FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
           SIM_OFFLINE_RECEIPT="$out/dependencies-after.transport" node --input-type=module > "$out/dependencies-after.log" 2>&1 <<'NODE'
@@ -135,6 +135,7 @@ jobs:
           (cd dist && zip -qr "$out/dist.zip" .)
       - name: Actual built Soccer Grid search discovery journeys
         id: browser
+        timeout-minutes: 12
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
