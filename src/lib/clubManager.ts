@@ -13274,13 +13274,21 @@ function worldUelField(state: CareerState, tables: { league: Pick<LeagueDef, 'id
   const eraId = state.eraId ?? DEFAULT_ERA_ID;
   if (isHistoricEra(eraId)) return null;
   const real = !tables && state.season === 1 && eraById(eraId).startYear === CM_FINAL_TABLES_2025_26.startYear + 1;
-  const src = tables ?? (real ? seasonOneTables() : null);
+  /* Season one reads the real 2025-26 tables, which know nothing of a world edited at the start (the World Editor
+     can move a club into a league outside Europe): a club that no longer plays in a European nation's league takes
+     no place, and its place passes on. Every club of an unedited world plays where those tables have it. */
+  const nations = new Set(worldLeagueDefs(state).filter(l => l.euro).map(l => leagueRulesOf(l.id).nationId));
+  const inEurope = (c: string | null): string | null => {
+    if (!c || !real) return c;
+    try { return nations.has(leagueRulesOf(leagueOf(c).id).nationId) ? c : null; } catch { return null; }
+  };
+  const src = tables ?? (real ? seasonOneTables().map(t => ({ ...t, clubs: t.clubs.filter(c => inEurope(c) !== null) })) : null);
   if (!src) return null;
   const euro = euroTablesOf(src);
   const cups: Record<string, string | null> = {};
-  for (const t of euro) cups[t.nationId] = real ? (SEASON_ONE_CUP_WINNERS[t.leagueId] ?? null) : null;
+  for (const t of euro) cups[t.nationId] = real ? inEurope(SEASON_ONE_CUP_WINNERS[t.leagueId] ?? null) : null;
   if (!real && cup && Object.prototype.hasOwnProperty.call(cups, cup.nationId)) cups[cup.nationId] = cup.winner;
-  const input = { tables: euro, cups, uclEntrants: uclEntrantsOf(state), ueclHolder: real ? SEASON_ONE_UECL_HOLDER : null, size: UCL_LEAGUE.clubs };
+  const input = { tables: euro, cups, uclEntrants: uclEntrantsOf(state), ueclHolder: real ? inEurope(SEASON_ONE_UECL_HOLDER) : null, size: UCL_LEAGUE.clubs };
   const out = worldUclExcluded(state);
   const field = euroFieldFromTables({ ...input, exclude: out });
   if (field.clubs.length !== UCL_LEAGUE.clubs) return null;

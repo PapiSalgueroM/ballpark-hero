@@ -739,9 +739,9 @@ const SEARCH_SEEDS = (process.env.WORLD_EURO_SEARCH_SEEDS || '1,2,3,4,5,6').spli
 /** Section 5 (step 6b, ruling 1k): the Europa League's winner into the next Champions League. Today's world, both
  *  fleets, on the engine and on it with the line reverted (scripts/lib/worldUelHolder1509.mjs): the winner is in
  *  next season's Champions League (the watched one, or the participant's field unless its 32 were already full of
- *  direct places, counted), and the two engines part first at a rollover after a Europa League final, on the field
- *  and its draw alone (uclField, which every save carries, the participant's groups, and worldComps); whatever moves
- *  after that moved through them, so the journey is let go there. */
+ *  direct places, counted), and the two engines part first at a rollover after a Europa League final, with the
+ *  field among what moved (uclField, which every save carries, or worldComps: Round 1502's rule for its own holder,
+ *  simWorldUcl section 5); the rest of that summer reads the field, so the journey is let go there. */
 async function holderSection() {
   const { engineOf, pickFleet } = await lib();
   const { UEL_HOLDER_EDIT } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'worldUelHolder1509.mjs')).href);
@@ -751,7 +751,7 @@ async function holderSection() {
   const fleet = pickFleet(await head.fresh(), 'all', cannot).filter(f => f.era === 'now');
   const t0 = Date.now();
   let rollovers = 0, inField = 0, full = 0, parted = 0;
-  const ALLOWED = new Set(['uclField', 'uclGroup', 'uclWorld', 'worldComps']);
+  const FIELD = ['uclField', 'worldComps'];
   for (const f of fleet) for (const seed of SEEDS) {
     const name = `${f.kind} ${f.club} seed ${seed}`;
     const seasons = f.kind === 'participant' ? 2 : 3;
@@ -776,8 +776,8 @@ async function holderSection() {
       if (!x || !y) continue;
       const keys = [...new Set([...Object.keys(x), ...Object.keys(y)])].filter(k => JSON.stringify(x[k]) !== JSON.stringify(y[k]));
       if (!keys.length) continue;
-      const stray = keys.filter(k => !ALLOWED.has(k));
-      ok(stray.length === 0, `5 attribution: ${name} at ${a[i].label}: the line moved ${stray.slice(0, 5).join(', ')} beside ${keys.filter(k => ALLOWED.has(k)).join(', ')}`);
+      ok(keys.some(k => FIELD.includes(k)), `5 attribution: ${name} at ${a[i].label}: the engines part on ${keys.slice(0, 5).join(', ')} with no field among them`);
+      bump(`5 parted on ${keys.filter(k => FIELD.includes(k) || k === 'uclGroup').join(' and ')}`);
       ok(a[i].label.includes('rollover'), `5 attribution: ${name}: the engines part first at ${a[i].label}, not at a rollover`);
       parted += 1;
       break;
@@ -785,6 +785,7 @@ async function holderSection() {
   }
   ok(rollovers > 0 && inField > 0, '5 holder: no rollover after a Europa League final, so nothing was checked');
   console.log(`  5 the holder: ${rollovers} rollovers after a Europa League final, the winner in next season's Champions League in ${inField}, a participant's 32 already full in ${full}; the two engines parted on ${parted} steps, ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+  for (const [k, v] of Object.entries(counts).sort()) if (k.startsWith('5 ')) console.log(`  ${k}: ${v}`);
 }
 
 /* ── Run ───────────────────────────────────────────────────────────────────────────────────────────── */
