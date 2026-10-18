@@ -14300,6 +14300,99 @@ export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSi
   return objs;
 }
 
+/* ---------- Round 1509 (rulings 1e and 1i): the board's European rungs, graded by the one rule ---------- */
+
+/** Where my club stands for Europe: in the Champions League, in the Europa League, or neither. */
+export type EuroPlace = 'ucl' | 'uel' | null;
+
+/* One answer per state and moment: objectiveStatuses runs on every render. Keyed on the week, because the engine
+   plays entries into a state it then hands on, and the table is only ever moved by an entry. */
+const EURO_PLACE_MEMO = new WeakMap<CareerState, { key: string; place: EuroPlace; route: EuroRoute | null }>();
+
+/** The route behind euroPlaceOf's 'uel' (a league place, the cup, the cup's place passed down), or null. Read by
+ *  scripts/simWorldEuro.mjs section 3 to print the board's moves by route. */
+export function euroPlaceRouteOf(career: CareerState): EuroRoute | null {
+  euroPlaceOf(career);
+  return EURO_PLACE_MEMO.get(career)?.route ?? null;
+}
+
+/**
+ * Where MY club stands for Europe by the rule that fills the competitions (rulings 1e and 1i). 'ucl' exactly when
+ * qualifiedUcl's own expression says so (a league place, position within uclPlacesIn; startNextSeason), never
+ * membership of an AI field. 'uel' when the Europa League's rule, run WITHOUT my club kept out and with the fill
+ * never taking it, gives my club a place. Mid season it reads my league's own table, my nation's cup final once
+ * that is played, and the places those pass down inside my league (before the final: league places only). At
+ * the season's end it reads what the rollover will: every European league's final table, the cup, and the
+ * Champions League the rollover will draw with my club kept out, whose fill takes the fifth placed club of the
+ * deepest leagues, so a place there can pass to sixth. On a summer move it answers for the club the season was
+ * played with. Never throws: on an error it gives the position grade of before this round.
+ */
+export function euroPlaceOf(career: CareerState): EuroPlace {
+  const key = `${career.season}|${career.week}|${career.calendar?.length ?? 0}|${career.clubName}`;
+  const hit = EURO_PLACE_MEMO.get(career);
+  if (hit && hit.key === key) return hit.place;
+  const league = careerLeagueOf(career);
+  const table = sortedLeagueTable(career);
+  const pos = table.findIndex(r => r.club === career.clubName) + 1;
+  const places = uclPlacesIn(league);
+  let place: EuroPlace;
+  let route: EuroRoute | null = null;
+  try {
+    if (league.euro && pos > 0 && pos <= places) place = 'ucl';
+    else {
+      const over = Array.isArray(career.calendar) && career.calendar.length > 0 && career.week >= career.calendar.length;
+      route = over ? euroRouteAtEnd(career, league, table) : euroRouteNow(career, league, table);
+      place = route ? 'uel' : null;
+    }
+  } catch {
+    const uelLast = EURO_SLOTS[league.id]?.uel ?? places;
+    place = league.euro && pos > 0 && pos <= places ? 'ucl' : league.euro && pos > 0 && pos <= uelLast ? 'uel' : null;
+  }
+  EURO_PLACE_MEMO.set(career, { key, place, route });
+  return place;
+}
+
+/** My club's route mid season: my league's own table and my nation's cup final once it is played. */
+function euroRouteNow(career: CareerState, league: LeagueDef, table: TableRow[]): EuroRoute | null {
+  const nationId = leagueRulesOf(league.id).nationId;
+  if (!worldLeagueDefs(career).some(l => l.euro && leagueRulesOf(l.id).nationId === nationId)) return null;
+  const winner = career.cupBracket?.find(t => t.round === 'F')?.winner ?? null;
+  const clubs = league.euro ? table.map(r => r.club) : [];
+  const ucl = league.euro ? uclPlacesIn(league) : 0;
+  const mine: EuroTable = { leagueId: league.id, nationId, clubs, uclPlaces: ucl, uelLast: league.euro ? (EURO_SLOTS[league.id]?.uel ?? ucl) : 0 };
+  const field = euroFieldFromTables({
+    tables: [mine], cups: winner ? { [nationId]: winner } : {}, uclEntrants: clubs.slice(0, ucl), size: UCL_LEAGUE.clubs,
+    exclude: worldUclExcluded(career).slice(1), noFill: [career.clubName],
+  });
+  return field.via[career.clubName] ?? null;
+}
+
+/** My club's route at the season's end: the rollover's own inputs, read off the finished season. */
+function euroRouteAtEnd(career: CareerState, league: LeagueDef, table: TableRow[]): EuroRoute | null {
+  const tables = uclFinalTables(career);
+  if (!tables) return euroRouteNow(career, league, table);
+  const watched = uclFieldFromTables(tables, uclHolderOf(career), UCL_LEAGUE.clubs, worldUclExcluded(career));
+  const euro = euroTablesOf(tables);
+  const cups: Record<string, string | null> = {};
+  for (const t of euro) cups[t.nationId] = null;
+  const cup = euroCupOf(career);
+  if (Object.prototype.hasOwnProperty.call(cups, cup.nationId)) cups[cup.nationId] = cup.winner;
+  const field = euroFieldFromTables({
+    tables: euro, cups, uclEntrants: watched, size: UCL_LEAGUE.clubs,
+    exclude: worldUclExcluded(career).slice(1), noFill: [career.clubName],
+  });
+  return field.via[career.clubName] ?? null;
+}
+
+/** Which European rung a league objective is, read off the three labels leagueDemand writes (ruling 1i). */
+export function europeRungOf(objective: Pick<BoardObjective, 'id' | 'label'>): 'ucl' | 'uel' | 'uecl' | null {
+  if (objective.id !== 'league') return null;
+  if (objective.label === 'Qualify for the Champions League') return 'ucl';
+  if (objective.label === 'Qualify for the Europa League') return 'uel';
+  if (objective.label === 'Qualify for the Conference League') return 'uecl';
+  return null;
+}
+
 /**
  * Live status of every board objective. Pure; the hub renders this and
  * finishSeason grades from it (seasonDone flips onTrack/behind into
@@ -14322,7 +14415,16 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
     if (asked) return { objective, status: asked };
     let status: ObjectiveStatus = 'onTrack';
     if (objective.id === 'league') {
-      const met = myPos <= objective.target;
+      /* Round 1509 (ruling 1i): a European rung of today's world is met by the rule that fills the competitions
+         (euroPlaceOf): the Champions League's by its places, the Europa League's by any route into it or above,
+         the Conference League's by its position or by either place above it. An era save keeps its position grade,
+         and so does every other league objective. */
+      const rung = isHistoricEra(career.eraId) ? null : europeRungOf(objective);
+      const place = rung ? euroPlaceOf(career) : null;
+      const met = rung === 'ucl' ? place === 'ucl'
+        : rung === 'uel' ? place === 'ucl' || place === 'uel'
+          : rung === 'uecl' ? myPos <= objective.target || place === 'ucl' || place === 'uel'
+            : myPos <= objective.target;
       status = seasonDone ? (met ? 'done' : 'failed') : (met ? 'onTrack' : 'behind');
     } else if (objective.id === 'cup') {
       const { rank, alive } = cupProgressRank(career);

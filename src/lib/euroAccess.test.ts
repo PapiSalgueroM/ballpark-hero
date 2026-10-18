@@ -105,3 +105,54 @@ describe('the Europa League access rule (Round 1509)', () => {
     });
   });
 });
+
+/* Round 1509 step 6a: the board's European rungs, graded by the rule (rulings 1e and 1i). */
+import { REAL_LEAGUES, buildBoardObjectives, euroPlaceOf, euroPlaceRouteOf, europeRungOf, startCareer, type CareerState } from '@/lib/clubManager';
+
+describe('the board reads the rule (Round 1509)', () => {
+  it('names a rung for each of the three European labels the board writes, and for nothing else', () => {
+    const labels = new Set<string>();
+    for (const league of REAL_LEAGUES.filter(l => l.euro)) {
+      for (const club of league.clubs) for (const o of buildBoardObjectives(club, false, league.clubs.length, undefined, league.clubs)) if (o.id === 'league') labels.add(o.label);
+    }
+    const rungs = [...labels].map(l => [l, europeRungOf({ id: 'league', label: l })] as const);
+    expect(new Set(rungs.map(([, r]) => r).filter(Boolean))).toEqual(new Set(['ucl', 'uel', 'uecl']));
+    for (const [label, rung] of rungs) expect(rung !== null).toBe(/^Qualify for the (Champions|Europa|Conference) League$/.test(label));
+    expect(europeRungOf({ id: 'cup', label: 'Qualify for the Europa League' })).toBeNull();
+  });
+
+  /* A mid season state of a Premier League career, its table set so my club stands where a case needs it. */
+  const base = startCareer('Chelsea');
+  const at = (pos: number, cupWinner?: string): CareerState => {
+    const s = JSON.parse(JSON.stringify(base)) as CareerState;
+    s.week = 10;
+    const others = s.table.map(r => r.club).filter(c => c !== s.clubName);
+    const order = [...others.slice(0, pos - 1), s.clubName, ...others.slice(pos - 1)];
+    s.table = order.map((club, i) => ({ club, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 100 - i }));
+    s.cupBracket = cupWinner ? [{ round: 'F', slot: 0, home: cupWinner, away: 'Somebody', homeGoals: 1, awayGoals: 0, winner: cupWinner, mine: cupWinner === s.clubName } as never] : undefined;
+    return s;
+  };
+  const clubAt = (s: CareerState, pos: number) => s.table[pos - 1].club;
+
+  it('in the Champions League places is the Champions League, by its places alone', () => {
+    expect(euroPlaceOf(at(3))).toBe('ucl');
+    expect(euroPlaceOf(at(4))).toBe('ucl');
+  });
+  it('before the cup final counts the league places only', () => {
+    expect(euroPlaceOf(at(5))).toBe('uel');
+    expect(euroPlaceRouteOf(at(5))).toBe('L');
+    expect(euroPlaceOf(at(6))).toBeNull();
+    expect(euroPlaceOf(at(12))).toBeNull();
+  });
+  it('after the final counts the cup: my club winning it from outside the places, or a winner already in passing its place down to me', () => {
+    const won = at(12, 'Chelsea');
+    expect(euroPlaceOf(won)).toBe('uel');
+    expect(euroPlaceRouteOf(won)).toBe('C');
+    const s6 = at(6);
+    const passed = at(6, clubAt(s6, 2));
+    expect(euroPlaceOf(passed)).toBe('uel');
+    expect(euroPlaceRouteOf(passed)).toBe('P');
+    expect(euroPlaceOf(at(7, clubAt(s6, 2)))).toBeNull();
+    expect(euroPlaceOf(at(6, 'Somebody From Below'))).toBeNull();
+  });
+});

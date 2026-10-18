@@ -31,6 +31,12 @@
  *      past it and shows no score before, a night shown never changes, a reload evaluates the same and keeps
  *      the same slice; the nights' dates rise; a mid season move to a club outside the field keeps every night
  *      shown, and one to an entrant follows the rule (a fresh field in season one, none later).
+ *   3  the board (step 6a): at every season's end of today's world, euroPlaceOf says 'uel' exactly when the
+ *      rollover's rule, run without my club kept out, gives it a route, and 'ucl' exactly when the next season puts
+ *      it in the Champions League; over the fleets and a search of mid table clubs of the four deepest leagues for
+ *      seasons my club wins its cup (printed, at least one required); then the attribution: the base's
+ *      objectiveStatuses (WORLD_EURO_BASE) on the very same save, each objective graded otherwise a European rung
+ *      the head graded done by a route the base did not have, printed by route.
  *   6  the dailies: no Hot Seat or Deadline Day state, the handover included, carries worldComps; startCareer's
  *      time per daily date on this tree and on the base (WORLD_EURO_BASE), printed (ruling 1l: over 10 ms more
  *      a date, the dailies take the one options object).
@@ -46,6 +52,7 @@
  *              meinfield (my club is not kept out) earned (my club's route worked out with it kept out)
  *   section 2: stream (the Europa League's matches draw from Math.random) form (its evaluation writes the clubs'
  *              form) leak (its open writes a key outside worldComps)
+ *   section 3: position (euroPlaceOf grades by position alone, as before the round)
  *   section 4: live (the evaluation reads today's strengths, not the snapshot) ahead (a night counts a week
  *              early) noseen (the job move's carry forgets the nights it had shown)
  */
@@ -77,6 +84,7 @@ const CONTROLS = {
   live: [4, /^4 changed: /, /^4 /],
   ahead: [4, /^4 early: /, /^4 /],
   noseen: [4, /^4 falls: /, /^4 /],
+  position: [3, /^3 agreement: /, /^3 /],
 };
 /* The engine edits of sections 1 to 4, each line asserted to stand exactly once (worldUclFleet's engineOf). */
 const CM = 'src/lib/clubManager.ts';
@@ -90,6 +98,7 @@ const CAREER_EDITS = {
   leak: [{ file: CM, from: "  if (slice && comp === 'uel' && tagged.earned) slice.earned = tagged.earned;", to: "  if (slice && comp === 'uel' && tagged.earned) slice.earned = tagged.earned;\n  if (slice && comp === 'uel') (state as unknown as Record<string, unknown>).uelLeak = slice.clubs.length;" }],
   live: [{ file: CM, from: '  const out = evaluateWorldComp(slice, k, worldCompBind(state, comp, slice.f));', to: "  const out = evaluateWorldComp(comp === 'uel' ? { ...slice, str: slice.clubs.map(c => worldUclStrength(state, c)) } : slice, k, worldCompBind(state, comp, slice.f));" }],
   ahead: [{ file: CM, from: '  else while (n < places.length && state.week > places[n].at) n += 1;', to: "  else while (n < places.length && (comp === 'uel' ? state.week >= places[n].at : state.week > places[n].at)) n += 1;" }],
+  position: [{ file: CM, from: '      route = over ? euroRouteAtEnd(career, league, table) : euroRouteNow(career, league, table);', to: "      route = pos > 0 && pos <= (EURO_SLOTS[league.id]?.uel ?? places) ? 'L' : null;" }],
   noseen: [{ file: CM, from: '      setWorldComp(joined, comp, { ...slice, ...(seen > 0 ? { seen } : {}) });', to: "      setWorldComp(joined, comp, comp === 'uel' ? { ...slice, seen: undefined } : { ...slice, ...(seen > 0 ? { seen } : {}) });" }],
 };
 /* Section 2's other arm: this round's four opens taken out. */
@@ -641,11 +650,82 @@ function printMeasured() {
   for (const [k, v] of Object.entries(counts).sort()) console.log(`  ${k}: ${v}`);
 }
 
+/** Section 3 (step 6a): the board's European rungs, graded by the rule. The agreement (euroPlaceOf says 'uel' at a
+ *  season's end exactly when the rollover's rule, run without my club kept out, gives it a route; 'ucl' exactly
+ *  when the next season puts it in the Champions League), over the fleets and a search for seasons where my club
+ *  wins its cup from outside the places; then the attribution (the base's objectiveStatuses on the very same
+ *  state: each objective graded otherwise is a European rung the head met by a route the base did not have). */
+async function boardSection() {
+  const { engineOf, pickFleet } = await lib();
+  const E = await engineOf(ROOT, 'board', { edits: careerEdits() }, cannot);
+  if (careerEdits().length) changed = true;
+  const baseRef = process.env.WORLD_EURO_BASE || '';
+  if (!baseRef) cannot('section 3 needs WORLD_EURO_BASE, the commit before the board step');
+  const B = await engineOf(ROOT, 'boardbase', { base: baseRef }, cannot);
+  const fleet = pickFleet(await E.fresh(), 'all', cannot).filter(f => f.era === 'now');
+  /* The search: mid table clubs of the four deepest leagues, the ones a cup win from outside the places can carry. */
+  const M0 = await E.fresh();
+  const extra = ['premier', 'laliga', 'seriea', 'bundesliga'].flatMap(id => (M0.cm.REAL_LEAGUES.find(l => l.id === id)?.clubs ?? []).slice(6, 10))
+    .map(club => ({ kind: 'search', era: 'now', club }));
+  const t0 = Date.now();
+  let seasons = 0, agreeUel = 0, agreeUcl = 0, differences = 0;
+  const byRoute = {}, cupWins = [];
+  for (const f of [...fleet, ...extra]) for (const seed of (f.kind === 'search' ? SEARCH_SEEDS : SEEDS)) {
+    const name = `${f.kind} ${f.club} seed ${seed}`;
+    let ends = null;
+    const onSeasonEnd = (M, s) => {
+      const place = M.cm.euroPlaceOf(s);
+      const route = M.cm.euroPlaceRouteOf ? M.cm.euroPlaceRouteOf(s) : null;
+      ends = { place, route, club: s.clubName, season: s.season };
+      /* The attribution: the base's grading of the same save, loaded by the base's own loader. */
+      M.store.clear();
+      if (M.cm.saveCareer(s)) {
+        const Bm = baseCtx;
+        Bm.store.clear();
+        for (const [k, v] of M.store.entries()) Bm.store.set(k, v);
+        const loaded = Bm.cm.loadCareer();
+        const head = M.cm.objectiveStatuses(s);
+        const base = loaded ? Bm.cm.objectiveStatuses(loaded) : null;
+        if (base) head.forEach((h, i) => {
+          const b = base[i];
+          if (!b || b.status === h.status) return;
+          differences += 1;
+          const rung = M.cm.europeRungOf(h.objective);
+          const ok3 = !!rung && rung !== 'ucl' && h.status === 'done' && b.status === 'failed' && place === 'uel';
+          ok(ok3, `3 attribution: ${name} season ${s.season}: "${h.objective.label}" graded ${h.status} where the base grades ${b.status}, ${place ?? 'no'} European place`);
+          byRoute[route ?? 'none'] = (byRoute[route ?? 'none'] ?? 0) + 1;
+        });
+      }
+    };
+    let baseCtx = await B.fresh();
+    const onStep = (M, s, label, got) => {
+      if (!got?.prev || !ends || got.prev.clubName !== s.clubName) return;
+      seasons += 1;
+      const earned = s.worldComps?.uel?.earned ?? null;
+      if (s.worldComps?.uel) {
+        ok((ends.place === 'uel') === !!earned, `3 agreement: ${name} season ${ends.season}: euroPlaceOf says ${ends.place ?? 'none'} and the rollover's rule ${earned ?? 'nothing'}`);
+        if (ends.place === 'uel' && earned) agreeUel += 1;
+      } else bump('3 rollovers with no Europa League to agree with');
+      ok((ends.place === 'ucl') === !!s.uclGroup, `3 agreement: ${name} season ${ends.season}: euroPlaceOf says ${ends.place ?? 'none'} and the next season is ${s.uclGroup ? '' : 'not '}in the Champions League`);
+      if (ends.place === 'ucl') agreeUcl += 1;
+      const cup = got.pre?.cup;
+      if (cup?.winner === s.clubName) cupWins.push(`${name} season ${ends.season} (${earned ?? 'no route'})`);
+      ends = null;
+    };
+    try { await journey(E, { ...f, seed }, { seasons: f.kind === 'participant' ? 2 : 3, onStep, onSeasonEnd }); } catch (e) { ok(false, `3 threw: ${name}: ${e.message}`); }
+  }
+  ok(cupWins.length > 0, '3 search: no season of the fleet or the search saw my club win its cup, so the cup route was never agreed');
+  console.log(`  3 agreement: ${seasons} season ends, ${agreeUel} with a Europa League route both agree on, ${agreeUcl} Champions League places; my club won its cup in ${cupWins.length}: ${cupWins.slice(0, 6).join('; ')}`);
+  console.log(`  3 attribution: ${differences} objectives graded otherwise than the base, by my club's route: ${Object.entries(byRoute).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'}; each one done adds W_OBJ_EACH (6, capped at 30) to the season score's objectives term and reaches 1335's opening confidence through the same statuses; ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+}
+const SEARCH_SEEDS = (process.env.WORLD_EURO_SEARCH_SEEDS || '1,2,3,4,5,6').split(',').map(Number);
+
 /* ── Run ───────────────────────────────────────────────────────────────────────────────────────────── */
 try {
   if (runs(0)) { section0(); await section0Engine(); }
   if (runs(1) || runs(4) || runs(7)) await europaPass();
   if (runs(2)) await selfRelative();
+  if (runs(3)) await boardSection();
   if (runs(6)) await dailies();
   if (runs(1) || runs(4) || runs(7)) printMeasured();
 } catch (err) {
