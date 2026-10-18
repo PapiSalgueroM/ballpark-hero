@@ -1,0 +1,3 @@
+FAIL Drill pointer cancellation: three six-case arms, two original-binding assertion failures, five held markup cases, four diagnostic controls
+["Expected values to be strictly equal:\n\n42689 !== 42504\n"]
+406c3c0a6 Release BK m-PR334: merge the other lane's PR334 at its docs only final cb12c1f6 (qualified by its t

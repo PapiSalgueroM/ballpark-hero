@@ -1,0 +1,3 @@
+lrAttr: /tmp/lr4s patched with strip, holder, board
+offAttr1510: the three opens are out
+exit 1, 27 failure lines, sha c6e919492d5ad80c (the merged engine against main's digest on 9a705e19 read 27, sha c6e919492d5ad80c)

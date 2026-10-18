@@ -1,0 +1,4 @@
+  320x640: 108 text holders, 14 buttons and 28 figures measured; kitty row at y 1095 (on screen at 528), reads Kitty change | +£13.1m | +£64.2m; cover Board covers running costs | +£13.2m | +£71.3m
+  390x844: 108 text holders, 14 buttons and 28 figures measured; kitty row at y 972 (on screen at 451), reads Kitty change | +£13.1m | +£64.2m; cover Board covers running costs | +£13.2m | +£71.3m
+  1280x900: 108 text holders, 14 buttons and 28 figures measured; kitty row at y 928 (on screen at 565), reads Kitty change | +£13.1m | +£64.2m; cover Board covers running costs | +£13.2m | +£71.3m
+playCmFinanceDesk: green. The Finances desk reads at 12px, taps at 44px, cuts nothing, keeps every figure on one line and shows what the board covers and what the kitty keeps, at 320, 390 and 1280.

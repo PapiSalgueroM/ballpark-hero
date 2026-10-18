@@ -1,0 +1,9 @@
+treeWithoutMerge: c240b9b58aaebc6fef3b1afad57cbb7ab7603a21, 4c93bc41 without 99154ea3; conflicts kept from 4c93bc41: none
+base c240b9b58aaebc6fef3b1afad57cbb7ab7603a21 (this head without PR333's merge 99154ea3)
+ src/components/soccer-career/AppearanceBuilder.tsx |  11 +-
+ src/test/careerAppearanceSelection.test.tsx        | 178 +++++++++++++++++++++
+ 2 files changed, 186 insertions(+), 3 deletions(-)
+B) the replay: every click, every save, every screen
+   Vitest exit 0, passed [nfl, nba, mlb, nhl], failed []
+
+simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.

@@ -1,0 +1,10 @@
+saved /soccer-career holds PR331's sentence: 0
+lastmod: routes-only pass, every date left exactly as the ledger already had it
+sitemap.xml: 171 URLs (133 games, 38 static, 0 legacy)
+prerendered 1 routes, 0 failed
+lastmod: 170 unchanged and holding their old date, 1 rewritten today, 0 new, 0 with no snapshot to read
+sitemap.xml: 171 URLs (133 games, 38 static, 0 legacy)
+ M public/sitemap.xml
+ M public/soccer-career/index.html
+ M scripts/data/lastmod.json
+redrawn /soccer-career holds it: 1
