@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simWorldEuro: node scripts/simWorldEuro.mjs
+ctl-onesource: WORLD_EURO_CONTROL=onesource node scripts/simWorldEuro.mjs
+ctl-wiki: WORLD_EURO_CONTROL=wiki node scripts/simWorldEuro.mjs
+ctl-thinused: WORLD_EURO_CONTROL=thinused node scripts/simWorldEuro.mjs
+ctl-receipt: WORLD_EURO_CONTROL=receipt node scripts/simWorldEuro.mjs
+unit-lib: node_modules/.bin/vitest run src/lib/clubManager*.test.ts src/lib/worldCompetition.test.ts src/lib/uclLeaguePhase.test.ts --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+dashscan: if git diff 77556430 HEAD | grep -nP '\x{2013}|\x{2014}'; then echo "dash found"; exit 1; else echo "no dash in the diff"; fi

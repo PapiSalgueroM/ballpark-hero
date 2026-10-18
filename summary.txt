@@ -1,0 +1,9 @@
+simWorldEuro exit=0 1s | simWorldEuro: green, 675 checks, 0 failures
+ctl-onesource exit=1 1s | simWorldEuro: control onesource FIRED (2 failures, all its own)
+ctl-thinused exit=1 1s | simWorldEuro: control thinused FIRED (2 failures, all its own)
+ctl-wiki exit=1 1s | simWorldEuro: control wiki FIRED (1 failures, all its own)
+ctl-receipt exit=1 1s | simWorldEuro: control receipt FIRED (1 failures, all its own)
+simNoRivalNames exit=0 31s | No rival product names found. 0 findings.
+dashscan exit=0 0s | no dash in the diff
+unit-lib exit=0 39s |    Duration  38.13s (transform 4.64s, setup 2.49s, collect 13.66s, tests 72.42s, environment 13.62s, prepare 3.09s)
+tsc exit=0 86s | 
