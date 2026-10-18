@@ -1,0 +1,5 @@
+
+simCmLeagueRules: all checks passed (modern, eras, pure)
+write exit 0
+ 1 file changed, 115 insertions(+), 115 deletions(-)
+simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)

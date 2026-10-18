@@ -1,0 +1,5 @@
+lrAttr: /tmp/lr4 patched with strip, holder, board
+offAttr1510: the three opens are out
+
+simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+lrAttr: states stripped of worldComps.uel before hashing: 89
