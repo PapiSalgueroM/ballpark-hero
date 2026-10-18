@@ -329,6 +329,7 @@
  */
 import { spawnSync } from 'node:child_process';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -371,13 +372,14 @@ const historicalPanelFile = path.join(tmp, 'CoachCareerPanel.historical.tsx');
 fs.writeFileSync(historicalPanelFile, historicalCoachPanel, { flag: 'wx' });
 const nativeRequire = createRequire(path.join(ROOT, 'package.json'));
 const historicalAliases = {
-  ...Object.fromEntries(['react/jsx-dev-runtime', 'react/jsx-runtime', 'react'].map(id => [id, nativeRequire.resolve(id)])),
+  ...Object.fromEntries(['react/jsx-dev-runtime', 'react/jsx-runtime', 'react', 'lucide-react'].map(id => [id, nativeRequire.resolve(id)])),
   '@/components/us-career/CoachCareerPanel': historicalPanelFile,
 };
 const inheritedAliases = JSON.parse(process.env.NO_DOUBLE_SWAP || '{}');
-for (const alias of Object.keys(historicalAliases)) assert(!(alias in inheritedAliases), 'No inherited alias replaces the proved historical Panel or native React');
+for (const alias of Object.keys(historicalAliases)) assert(!(alias in inheritedAliases), 'No inherited alias replaces the proved historical Panel or installed packages');
 const replayAliases = { ...historicalAliases, ...inheritedAliases };
 console.log('Round1424 historical presentation: proved main775 coaching Panel SHA9390fab969844b20ca4f7adbc097664191d3f5ea082090553f479305fe85d321, current engine and unchanged fixture. This replay gives no current-Panel visual parity credit.');
+console.log('Historical installed aliases: ' + JSON.stringify(Object.entries(historicalAliases).filter(([id]) => !id.startsWith('@/')).map(([id, file]) => ({ id, file, sha256: createHash('sha256').update(fs.readFileSync(file)).digest('hex') }))));
 
 /* The source controls. Each changes one thing in a copy of one file and
    points the replay at the copy. `red` is which sports that file draws: the

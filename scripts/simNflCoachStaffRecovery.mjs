@@ -142,9 +142,9 @@ const report = { version: 2, base, admitted, head: git(['rev-parse', 'HEAD']).tr
 write('source-before.json', initial);
 write('source-bindings.json', { engine: sha(fixedEngine), panel: sha(fixedPanel), suite: sha(read(suite)), oldSuite: sha(read(oldSuite)), originalEngine: sha(originalEngine), originalPanel: sha(originalPanel), titles, oldTitles, faults });
 const require = createRequire(import.meta.url);
-const reactAliases = Object.fromEntries(['react/jsx-dev-runtime', 'react/jsx-runtime', 'react'].map(id => [id, require.resolve(id)]));
-for (const file of Object.values(reactAliases)) assert(file.startsWith(path.join(root, 'node_modules') + path.sep) && fs.statSync(file).isFile(), 'Native installed React alias');
-write('react-aliases.json', Object.entries(reactAliases).map(([id, file]) => ({ id, file, sha256: sha(fs.readFileSync(file)) })));
+const installedAliases = Object.fromEntries(['react/jsx-dev-runtime', 'react/jsx-runtime', 'react', 'lucide-react'].map(id => [id, require.resolve(id)]));
+for (const file of Object.values(installedAliases)) assert(file.startsWith(path.join(root, 'node_modules') + path.sep) && fs.statSync(file).isFile(), 'Native installed copied-panel alias');
+write('installed-aliases.json', Object.entries(installedAliases).map(([id, file]) => ({ id, file, sha256: sha(fs.readFileSync(file)) })));
 const controls = path.join(out, 'control-sources'), owned = new Map();
 function copiedEngine(body) {
   const from = "from './usCareerToCoach'", to = "from '@/lib/usCareerToCoach'";
@@ -168,7 +168,7 @@ function run(name, fault = null, aliases = null) {
   const arm = path.join(out, name); fs.mkdirSync(arm);
   const receipt = path.join(arm, 'transport.transport'), fixture = path.join(arm, 'fixtures.json');
   const env = { ...process.env, FORCE_COLOR: '0', NFL_COACH_FIXTURE_OUT: fixture, SIM_OFFLINE_RECEIPT: receipt };
-  if (aliases) env.NO_DOUBLE_SWAP = JSON.stringify({ ...reactAliases, ...aliases });
+  if (aliases) env.NO_DOUBLE_SWAP = JSON.stringify({ ...installedAliases, ...aliases });
   const args = [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', suite, oldSuite, '--maxWorkers=1', '--no-file-parallelism', '--reporter=verbose', '--reporter=json', '--outputFile=' + path.join(arm, 'vitest.json')];
   const child = spawnSync(process.execPath, args, { cwd: root, env, encoding: 'utf8', timeout: 240000, maxBuffer: 32 * 1024 * 1024 });
   write(name + '/stdout.log', child.stdout ?? ''); write(name + '/stderr.log', child.stderr ?? '');
