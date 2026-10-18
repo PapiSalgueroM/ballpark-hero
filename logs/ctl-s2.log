@@ -1,0 +1,4 @@
+tick exit=1 | simOneOffCups: control tick FIRED (40 failures, all its own: 2 books: Arsenal seed 1 coach: the season charged 54 55 weeks, the twin with no nights 54 54)
+adjacent exit=1 | simOneOffCups: control adjacent FIRED (80 failures, all its own: 2 slots: Arsenal seed 1 coach season 2: the nights sit before entries 28,28, the placer gives 0)
+countdown exit=1 | simOneOffCups: control countdown FIRED (120 failures, all its own: 2 window: Arsenal seed 1 coach: the summer window closes after 1:uclGroup:0:4 2:league:2:3, the twin after 1:uclGroup:0:4 2:uclGroup:0:4)
+calweeks exit=1 | simOneOffCups: control calweeks FIRED (80 failures, all its own: 2 window: Arsenal seed 1 coach season 2: the calendar draws the deadline at entry 3, the engine closes the window after entry 4)

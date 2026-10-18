@@ -1,0 +1,18 @@
+unit-lib exit=0 49s |    Duration  48.82s (transform 5.08s, setup 2.82s, collect 19.13s, tests 87.95s, environment 18.93s, prepare 4.61s)
+tsc exit=0 124s | 
+ctl-s0 exit=0 1s | notinworld exit=1 | simOneOffCups: control notinworld FIRED (3 failures, all its own: eng-2026-s1: the constant ["eng-2026","2025-26",["Arsenal","Torreense"],"the Princip
+unit-cm exit=0 173s |    Duration  173.09s (transform 9.14s, setup 3.20s, collect 36.68s, tests 285.78s, environment 21.05s, prepare 5.19s)
+ctl-s2 exit=0 1601s | calweeks exit=1 | simOneOffCups: control calweeks FIRED (80 failures, all its own: 2 window: Arsenal seed 1 coach season 2: the calendar draws the deadline at entry 3, th
+simOneOffCups exit=0 2682s | simOneOffCups: green, 123395 checks (2682 s)
+simDailyDeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+dd-controls exit=0 44s | controls (each must be 1): bind=1 binddeadline=1 seed=1 seeddeadline=1 ledger=1 ledgerdeadline=1 rulesall=1 rulesstale=1 world=1 worlddeadline=1
+golden exit=0 1s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+readers1 exit=0 308s | simGuideHeadings exit=0 | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a c
+saveSize exit=0 83s | simClubManagerSaveSize: all sections green
+saveSize-base exit=0 82s | simClubManagerSaveSize: all sections green
+ctl-s1 exit=0 3208s | seasononeplay exit=1 | simOneOffCups: control seasononeplay FIRED (1127 failures, all its own: 1 season one: Arsenal (now) seed 1 coach at start: a season one slice holds
+slots exit=0 92s | simClubManagerSlots: all sections green
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+dashscan exit=0 0s | no dash in the diff
+simHarnessAnchors exit=0 46s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-s345 exit=0 3174s | keep exit=1 | simOneOffCups: control keep FIRED (5818 failures, all its own: 5 slices: Arsenal (now) seed 1 coach at s1-rollover: worldComps holds uel dsc dscOld)

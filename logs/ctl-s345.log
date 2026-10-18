@@ -1,0 +1,6 @@
+stream exit=1 | simOneOffCups: control stream FIRED (66 failures, all its own: 3 Arsenal (now) seed 1 nocoach at s1-rollover: the draws differ (843 against 839))
+form exit=1 | simOneOffCups: control form FIRED (66 failures, all its own: 3 Arsenal (now) seed 1 nocoach at s1-rollover: the state differs in a key other than worldComps.dsc)
+participant exit=1 | simOneOffCups: control participant FIRED (66 failures, all its own: 3 Arsenal (now) seed 1 nocoach at s2-e1: the state differs in a key other than worldComps.dsc)
+weighs exit=1 | simOneOffCups: control weighs FIRED (39 failures, all its own: 4 weighs: Chelsea seed 1: nationStanding reads 75.5 without a minor trophy and 89.5 with one)
+notrophy exit=1 | simOneOffCups: control notrophy FIRED (12 failures, all its own: 4 trophy: Chelsea seed 1 won: 0 minor trophies ([]), not exactly the FA Community Shield of season 2)
+keep exit=1 | simOneOffCups: control keep FIRED (5818 failures, all its own: 5 slices: Arsenal (now) seed 1 coach at s1-rollover: worldComps holds uel dsc dscOld)
