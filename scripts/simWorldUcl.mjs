@@ -228,7 +228,10 @@ Object.assign(CAREER_EDITS, {
   standweak: [{ file: CM, from: '    .sort((a, b) => b.xi - a.xi || plain(a.c, b.c))[0]?.c;', to: '    .sort((a, b) => a.xi - b.xi || plain(a.c, b.c))[0]?.c;' }],
   noholdertop: [{ file: CM, from: '  const top = holder && field.includes(holder) ? holder : undefined;', to: '  const top: string | undefined = undefined;' }],
   memokey: [{ file: CM, from: "  const key = `${state.eraId ?? ''}|${k}`;", to: "  const key = `${state.eraId ?? ''}`;" }],
-  nocustomexit: [{ file: CM, from: '    const tables = moving && watchTables ? watchTables.map(t => ({ ...t, clubs: customExitUclField(career, t.clubs) })) : watchTables;', to: '    const tables = watchTables;' }],
+  /* Release BK triage: Round 1509 opens the Europa League off the same tables with a copy of this line, so it stood
+     twice and the control could not run (rBK-rgBJc wu-ctl-a). The edit now takes in the Champions League's open
+     below it, which is the one this control always meant; the Europa League's copy is left as it is. */
+  nocustomexit: [{ file: CM, from: '    const tables = moving && watchTables ? watchTables.map(t => ({ ...t, clubs: customExitUclField(career, t.clubs) })) : watchTables;\n    openWorldUcl(state, worldUclField(', to: '    const tables = watchTables;\n    openWorldUcl(state, worldUclField(' }],
   savedbytes: [{ file: CM, from: '      localStorage.setItem(SAVE_KEY, JSON.stringify(full));\n', to: '      localStorage.setItem(SAVE_KEY, JSON.stringify(full.worldComps?.uel ? { ...full, matchRules: 1 } : full));\n' }],
 });
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control ${CONTROL}`);
