@@ -1,0 +1,6 @@
+simDailyDeals exit=0 6s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+units-daily exit=0 7s |    Duration  6.31s (transform 2.96s, setup 382ms, collect 9.64s, tests 2.56s, environment 2.02s, prepare 621ms)
+dd-world exit=0 10s | controls (each must be 1): world=1 worlddeadline=1
+euro-s6 exit=0 25s | simWorldEuro: green, 30 checks, 0 failures
+tsc exit=0 73s | 
+dailyReaders exit=0 838s | readers: 11 run, 0 red on this tree and not as on main
