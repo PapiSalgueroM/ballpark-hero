@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: node .rc/x/rvwalk1510.mjs
+playOneOffCups: node scripts/playOneOffCups.mjs
+po-notile: PLAY_ONEOFF_CONTROL=notile node scripts/playOneOffCups.mjs
+po-swap: PLAY_ONEOFF_CONTROL=swap node scripts/playOneOffCups.mjs
