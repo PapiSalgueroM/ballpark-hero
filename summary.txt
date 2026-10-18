@@ -1,0 +1,21 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest1346 exit=0 15s |    Duration  14.23s (transform 4.18s, setup 657ms, collect 12.00s, tests 20.70s, environment 3.54s, prepare 852ms)
+coachret-ctl exit=0 18s | controls (exit/FIRED): drift=1/1 early=1/1 noretire=1/1 noguard=1/1 nosit=1/1 noaccept=1/1 norefresh=1/1
+coachret exit=0 40s | PASS: ALL US COACHING RETIREMENT CHECKS PASSED
+skips-ctl exit=0 3s | controls (exit/FIRED): noundo=1/1 leak=1/1 graded=1/1 clamp=1/1
+tsc exit=0 78s | 
+confirm exit=0 7s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+poach exit=0 3s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+coachcareer exit=0 3s | PASS: ALL US COACHING CAREER CHECKS PASSED
+coaching exit=0 5s | PASS: ALL US COACHING CHECKS PASSED
+parity exit=1 58s | simUsBoardParity: 3 failures
+draftnight exit=0 0s | simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.
+skips exit=0 77s | PASS: ALL US CAREER SKIP CHECKS PASSED
+usweight exit=0 1s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+prospect exit=0 11s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+predraft exit=0 18s | simCareerPreDraft [seed set a]: ALL GREEN
+c993-reveal exit=0 4s | Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-rev
+c993 exit=0 28s | Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-head
+walk exit=0 123s | playUsCareerReports: ALL GREEN, 22 walks
+draftnight-walk exit=0 213s | playDraftNight: ALL GREEN, 49 nights walked
+walk-ctl exit=0 566s | controls (exit/FIRED): noretire=1/1 noundo=1/1 noreplay=1/1 nosettle=1/1
