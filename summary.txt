@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 260s | playWorldUcl: green. Nine saves at three sizes, 93 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
+walk-ctl exit=0 191s | controls (each must be 1): notile=1 ahead=1 notileuel=1 wednesday=1
+eraMid exit=0 6s | simClubManagerEraMidSeason: PASS. His 2005 save plays every league, the picker lists one La Liga, and the Cups tab shows the cup it names.
+eraMid-cupspanel exit=0 6s | simClubManagerEraMidSeason control: green. The unmounted cup bracket was reported (1 finding).
+sweepWeight exit=1 26s |    /deadline-day       647K gz over  47 files (budget 646K, 646.6K to the tenth)
+shots exit=0 0s | v-tiles-390.png
