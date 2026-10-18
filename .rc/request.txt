@@ -1,0 +1,17 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unit-lib: node_modules/.bin/vitest run src/lib/clubManager*.test.ts src/lib/worldCompetition.test.ts src/lib/uclLeaguePhase.test.ts src/lib/euroAccess.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+unit-cm: node_modules/.bin/vitest run src/test/clubManager*.test.ts src/test/clubManager*.test.tsx src/test/cm*.test.ts src/test/cm*.test.tsx src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+unit-whymut: X=$PWD/.rc/x/mutWhy.mjs; R=/tmp/whymut; git worktree add -q $R HEAD && ln -s $PWD/node_modules $R/node_modules && cd $R && node $X && { node_modules/.bin/vitest run src/lib/euroAccess.test.ts > /tmp/whymut.log 2>&1; v=$?; grep -E "Tests |FAIL" /tmp/whymut.log | head -4 | cut -c1-200; if [ $v -ne 0 ]; then echo "the why unit test caught the mutation"; exit 1; else echo "MUTATION NOT CAUGHT"; exit 0; fi; }
+walkboard: node .rc/x/walkBoard.mjs 2>&1 | tail -16; exit ${PIPESTATUS[0]}
+pin-check: node .rc/x/pinAll.mjs 08729217
+appeal-head: node scripts/simManagerAppealIsolation.mjs > /tmp/aph.log 2>&1; s=$?; grep -v "^    at " /tmp/aph.log | head -24 | cut -c1-300; exit $s
+appeal-revert: R=/tmp/ap; git worktree add -q $R HEAD && ln -s $PWD/node_modules $R/node_modules && cd $R && git show 08729217:src/lib/clubManager.ts > src/lib/clubManager.ts && git diff --stat | tail -1 && node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+ucl-savedbytes: WORLD_UCL_CONTROL=savedbytes node scripts/simWorldUcl.mjs > /tmp/usb.log 2>&1; s=$?; grep -c "^FAIL 2 participant" /tmp/usb.log; grep "^FAIL" /tmp/usb.log | head -3 | cut -c1-240; tail -3 /tmp/usb.log; exit $s
+realsaves: R=/tmp/rsbase; git worktree add -q $R 77556430 && ln -s $PWD/node_modules $R/node_modules && node .rc/x/probeRealSaves.mjs $R 77556430 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+realsaves-leak: R=/tmp/rsbase2; git worktree add -q $R 77556430 && ln -s $PWD/node_modules $R/node_modules && PROBE_CONTROL=leak node .rc/x/probeRealSaves.mjs $R 77556430 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simNoRivalNames: node scripts/simNoRivalNames.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simStorageWrites: node scripts/simStorageWrites.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+dashscan: if git diff 77556430 HEAD | grep -nP '\x{2013}|\x{2014}'; then echo "dash found"; exit 1; else echo "no dash in the diff"; fi
