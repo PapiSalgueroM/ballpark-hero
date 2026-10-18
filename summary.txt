@@ -1,0 +1,6 @@
+euro-s0 exit=0 1s | simWorldEuro: green, 675 checks, 0 failures
+simHarnessAnchors exit=0 48s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-meinfield exit=1 184s | simWorldEuro: control meinfield FIRED (24 failures, all its own)
+ctl-twocomps exit=1 190s | simWorldEuro: control twocomps FIRED (4716 failures, all its own)
+ctl-live exit=1 171s | simWorldEuro: control live FIRED (953 failures, all its own)
+ctl-ahead exit=1 122s | simWorldEuro: control ahead FIRED (1292 failures, all its own)

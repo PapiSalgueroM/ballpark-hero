@@ -1,0 +1,6 @@
+ctl-twocomps: WORLD_EURO_CONTROL=twocomps node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+euro-s0: WORLD_EURO_ONLY=0 node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+ctl-meinfield: WORLD_EURO_CONTROL=meinfield node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+ctl-live: WORLD_EURO_CONTROL=live node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+ctl-ahead: WORLD_EURO_CONTROL=ahead node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
