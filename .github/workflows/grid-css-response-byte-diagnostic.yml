@@ -240,8 +240,8 @@ jobs:
                 for (const request of row.requests) if (request.finishedCount !== 1 || request.failures.length) row.errors.push('Missing or failed unique requestfinished for request ' + request.id);
                 const cssFixtures = row.fixtures.filter(fixture => fixture.kind === 'physical-css');
                 const cssRequests = row.requests.filter(request => request.url === cssUrl), cssResponses = row.observers.filter(observer => observer.url === cssUrl);
-                row.stylesheetPair = { expectedCssRequests: 3, actualCssRequests: cssRequests.length, actualCssFixtures: cssFixtures.length, actualCssResponses: cssResponses.length };
-                if (cssRequests.length !== 3 || cssFixtures.length !== 3 || cssResponses.length !== 3) row.errors.push('Exactly three actual stylesheet requests/fixtures/responses are required; no engine census alternative');
+                row.stylesheetPair = { expectedCssRequests: 2, actualCssRequests: cssRequests.length, actualCssFixtures: cssFixtures.length, actualCssResponses: cssResponses.length };
+                if (cssRequests.length !== 2 || cssFixtures.length !== 2 || cssResponses.length !== 2) row.errors.push('Exactly two actual stylesheet requests/fixtures/responses are required; no engine census alternative');
                 for (const fixture of row.fixtures) if (!fixture.fulfilled || row.observers.filter(observer => observer.requestId === fixture.requestId).length !== 1) row.errors.push('Missing fulfillment/unique response for request ' + fixture.requestId);
                 if (row.pendingBeforeCleanup || row.pendingAfterCleanup || row.pendingRoutesBeforeCleanup || row.pendingRoutesAfterCleanup) row.errors.push('Pending fixture routes/response observers after bounded collection');
                 row.status = row.errors.length || row.observers.some(observer => observer.status !== 'passed') ? 'failed' : 'passed'; save();
