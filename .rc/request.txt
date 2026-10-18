@@ -1,0 +1,10 @@
+# Release BJ triage rerun (rBJ-tr): kit lines copied byte for byte by label from .tmp-fx/bj
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simCmRealFixtures-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+cmrf-1: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/c1.log 2>&1; s=$?; tail -1 /tmp/c1.log | cut -c1-200; node .rc/x/diagBJ.mjs cmrf cm-real-fixture-artifacts/native/report.json | tail -7; exit $s
+cmrf-2: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/c2.log 2>&1; s=$?; tail -1 /tmp/c2.log | cut -c1-200; node .rc/x/diagBJ.mjs cmrf cm-real-fixture-artifacts/native/report.json | tail -7; exit $s
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
