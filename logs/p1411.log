@@ -1,0 +1,9 @@
+bindAt: scripts/qa/proveSoccerPressRoomFailure.mjs bound
+bindAt: 8293c758f428 -> 1e4795349a2e
+runProver: p1411 at 5a5399501707fff7f1f025ff7a695530bd3a9ce9 (release BK bound: 7f2ad3548ea5 with its pinned bases bound to the joined tree)
+Press-room isolation fixed: failed; 2 arm receipt(s), qualified=false
+runProver: p1411 exit 1
+  "status": "failed",
+      "status": "qualified",
+      "status": "qualified",
+    "message": "Whole original raw equals separately qualified baseline\n+ actual - expected\n\n+ '873782955dbd5d0f190d84d6ddfa8bee56ccd0f33832b91fda22190dc8e6e93e'\n- 'c71b9ed27dba8cad2de3a1468230ffbaab9f8cb7dbdddda18040e7c02c6f9ef2'\n",

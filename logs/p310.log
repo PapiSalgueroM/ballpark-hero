@@ -1,0 +1,30 @@
+bindAt: scripts/qa/proveManagerSavedDealsPagingFixed.mjs bound
+bindAt: 6465d9aeac1b -> 5ada8244f19f
+bindAt: 5eb5e035832d -> cdac40e6c5d3
+runProver: p310 at 6a99052786714db51f74d0a027cce6ae7b50f1d6 (release BK bound: 4d7797c0d365 with its pinned bases bound to the joined tree)
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Original full raw bytes equal the actual qualified baseline artifact
++ actual - expected
+
++ '1aff5e675804ce64a10e20c7c6374256797aaa7b4f4b9f1fb59d8c2996f71789'
+- 'c0b46dd052f38f6692a1e766a91b1403eff35444547f350fe69cb047fa037759'
+
+    at file:///tmp/rp-wt-p310/scripts/qa/proveManagerSavedDealsPagingFixed.mjs:115:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '1aff5e675804ce64a10e20c7c6374256797aaa7b4f4b9f1fb59d8c2996f71789',
+  expected: 'c0b46dd052f38f6692a1e766a91b1403eff35444547f350fe69cb047fa037759',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+runProver: p310 exit 1
