@@ -1,0 +1,25 @@
+simLiveScores exit=0 | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simNoRivalNames exit=0 | No rival product names found. 0 findings.
+simInventedNames exit=0 | simInventedNames: green. Every invented man on this site is invented all the way down.
+simHarnessAnchors exit=0 | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoInventedQuotes exit=0 | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNoInventedConduct exit=0 | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+simLegalPages exit=0 | simLegalPages: all green
+simSingleFooter exit=0 | simSingleFooter: green. One footer, rendered once, on every page.
+simCompletionSlugs exit=0 | simCompletionSlugs: green. Every recorded slug names a game the site can find.
+simCompletionOnce exit=0 | simCompletionOnce: all green
+simNoDoubleRecord exit=0 | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; 115 recorders read)
+simDailyPuzzleContract exit=0 | simDailyPuzzleContract: green. Every caller honours the contract the selection memo depends on.
+simDailySaveHardening exit=0 | simDailySaveHardening: part all green
+simWritesAreSent exit=1 | Node.js v24.21.0
+simSchemaNames exit=1 | SUPABASE UNREACHABLE. NOTHING WAS CHECKED.
+simFetchRetry exit=0 | simFetchRetry: green. A transient page failure costs a retry and the rows come back whole.
+simGoogleOnlyReturn exit=0 |    8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.
+simReportRelay exit=0 | simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
+simNavbarStatsReads exit=0 | Artifacts: /home/runner/work/_temp/t-fences/navbar-stats-OovrBj
+simLeaderboardCaps exit=1 | the database refused game_score_caps?select=game,max_score&limit=2000: TypeError: fetch failed
+simScoringCoverage exit=0 | simScoringCoverage: all green
+simSiteSearch exit=0 | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simResultMoment exit=1 | Node.js v24.21.0
+simGuideHeadings exit=1 | simGuideHeadings: RED, 1 failure in section 4
+  FAIL: /club-manager: the saved page's guide headings differ from the render at h3 "How do I retire?" (saved h3 "Does my career save?")

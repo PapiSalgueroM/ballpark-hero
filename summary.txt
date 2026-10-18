@@ -1,0 +1,8 @@
+tsc exit=0 103s | 
+simDailyDeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+saveSize exit=0 96s | simClubManagerSaveSize: all sections green
+slots exit=0 108s | simClubManagerSlots: all sections green
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+dashscan exit=0 0s | commit message lines with one: 0
+fences exit=1 399s |   FAIL: /club-manager: the saved page's guide headings differ from the render at h3 "How do I retire?" (saved h3 "Does my career save?")
+vitest-all exit=0 622s |  Test Files  590 passed | 2 skipped (592)
