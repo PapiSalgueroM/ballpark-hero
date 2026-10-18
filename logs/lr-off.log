@@ -1,0 +1,29 @@
+offAttr1510: the three opens are out
+  FAIL: modern: now|aleague differs in start, whole, europeNext, wholeNext
+  FAIL: modern: now|austria differs in start, whole, wholeNext
+  FAIL: modern: now|brasileirao differs in start, whole, europeNext, wholeNext
+  FAIL: modern: now|bundesliga differs in start, whole, summary, europeNext, wholeNext, s2_europe, s2_whole
+  FAIL: modern: now|bundesliga2 differs in start, whole, wholeNext, s2_whole
+  FAIL: modern: now|championship differs in start, whole
+  FAIL: modern: now|croatia differs in start, whole, europeNext, wholeNext
+  FAIL: modern: now|denmark differs in start, whole, wholeNext
+  FAIL: modern: now|eredivisie differs in start, whole, wholeNext
+  FAIL: modern: now|greece differs in start, whole, wholeNext
+  FAIL: modern: now|laliga differs in start, whole, europeNext, wholeNext, s2_europe, s2_whole
+  FAIL: modern: now|ligamx differs in start, whole, wholeNext
+  FAIL: modern: now|ligue1 differs in start, whole, wholeNext, s2_whole
+  FAIL: modern: now|ligue2 differs in start, whole, wholeNext, s2_whole
+  FAIL: modern: now|mlsEast differs in start, whole, wholeNext
+  FAIL: modern: now|mlsWest differs in start, whole, europeNext, wholeNext
+  FAIL: modern: now|premier differs in start, whole, europeNext, wholeNext, s2_table, s2_results, s2_world, s2_cup, s2_europe, s2_whole
+  FAIL: modern: now|primeira differs in start, whole, europeNext, wholeNext
+  FAIL: modern: now|proleague differs in start, whole, europeNext, wholeNext
+  FAIL: modern: now|russia differs in start, whole, wholeNext
+  FAIL: modern: now|saudi differs in start, whole, europeNext, wholeNext
+  FAIL: modern: now|scottish differs in start, whole, wholeNext
+  FAIL: modern: now|segunda differs in start, whole, europeNext, wholeNext, s2_europe, s2_whole
+  FAIL: modern: now|seriea differs in start, whole, europeNext, wholeNext, s2_europe, s2_whole
+  FAIL: modern: now|serieb differs in start, whole, europeNext, wholeNext, s2_europe, s2_whole
+  FAIL: modern: now|superlig differs in start, whole, wholeNext
+  FAIL: modern: now|switzerland differs in start, whole, wholeNext
+off exit 1, 27 failure lines, sha 7dd793e77ce8dd21
