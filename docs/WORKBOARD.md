@@ -15895,3 +15895,6 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Round1429 claim: Soccer Grid name search
+Root reserves only SoccerGridSearch.tsx plus new original/fixed proof and closing docs in codex/soccer-grid-search-discovery, original775564305e9da84dab59f2b9fe246d044a3cc8e9. User reports missing names and rejected correct answers. Source hypotheses: raw lowercase matching misses normalized names, and a matching pool arriving after a focused query leaves the dropdown hidden. Original actual Search/parent/loader and native built route must reproduce first. Only then existing normalizeName plus minimal open-intent behavior, preserving canonical/manual submissions, raw threshold, cap/navigation, disabled, Escape/blur, stores and all IO/data. No page/hook/loader/utility/validator/cache edits or real sports data. ExistingRound613 and sealed1407/1412/1413 stay separate; no correct-answer or full-universe claim. Remote ordinary offline preload, types/plain build15readers14unchangedfatalcaps/fullholds/effective controls required. No local app runtime or actual DB/score/report/email. I retains Manager/SC and joined release/main/publish. Prior64 sealed,1427/1428 remain active, primary append only.
