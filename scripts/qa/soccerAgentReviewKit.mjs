@@ -58,7 +58,10 @@ export function evidence(name, value) {
 export async function bundleAgentReview({ original = false, patches = [], browser = false } = {}) {
   const soccerDeck = [], deckFair = [], worldTruth = [], loaded = [], faults = [], temp = fs.mkdtempSync(path.join(os.tmpdir(), 'soccer-agent-review-'));
   const file = path.join(temp, 'oracle.cjs');
-  const entry = "export * as engine from './src/lib/soccerCareerEngine';export * as life from './src/lib/soccerCareerLife';" + (original ? '' : "export * as review from './src/lib/soccerAgentReview';export * as moments from './src/components/soccer-career/careerMoments';export * as reveal from './src/lib/soccerAwardReveal';");
+  const entry = "export * as engine from './src/lib/soccerCareerEngine';export * as life from './src/lib/soccerCareerLife';" + (original ? '' : "export * as review from './src/lib/soccerAgentReview';export * as moments from './src/components/soccer-career/careerMoments';export * as reveal from './src/lib/soccerAwardReveal';")
+    /* Release BJ triage: the browser oracle also carries the summer deck's gate, so scripts/playSoccerAgentReview.mjs
+       can load the deck the way the page has since Round 1504; the node bundles are unchanged. */
+    + (browser ? "export * as deckGate from './src/lib/soccerDeckGate';" : '');
   try {
     const result = await build({
       stdin: { contents: entry, resolveDir: ROOT, loader: 'ts' }, bundle: true,
