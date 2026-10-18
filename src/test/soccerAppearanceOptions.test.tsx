@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import fs from 'node:fs';
 import AppearanceBuilder from '@/components/soccer-career/AppearanceBuilder';
 import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';
-import { ACCESSORIES, FACIAL_HAIR, HAIR_COLORS, HAIRSTYLES, SKIN_TONES, defaultAppearance, getFacialHair, randomAppearance, type PlayerAppearance } from '@/lib/soccerCareerAppearance';
+import { ACCESSORIES, FACIAL_HAIR, HAIR_COLORS, HAIRSTYLES, SKIN_TONES, defaultAppearance, getFacialHair, getHairstyle, randomAppearance, type PlayerAppearance } from '@/lib/soccerCareerAppearance';
 import type { AppearanceSport } from '@/lib/careerAppearanceCopy';
 
 const HAIR = [
@@ -44,7 +44,8 @@ if (process.env.APPEARANCE_OPTIONS_CAPTURE === '1') {
     expect(HAIRSTYLES).toHaveLength(23); expect(FACIAL_HAIR).toHaveLength(14);
     const values = legacySvgs();
     expect(Object.keys(values)).toHaveLength(243);
-    fs.writeFileSync(process.env.APPEARANCE_OPTIONS_SVG_BASELINE!, JSON.stringify(values));
+    fs.writeFileSync(process.env.APPEARANCE_OPTIONS_SVG_BASELINE!, JSON.stringify({ svg: values,
+      catalogues: { HAIRSTYLES, FACIAL_HAIR, HAIR_COLORS, SKIN_TONES, ACCESSORIES } }));
   });
 } else {
   describe('Soccer Career manual hair and beard choices', () => {
@@ -53,7 +54,7 @@ if (process.env.APPEARANCE_OPTIONS_CAPTURE === '1') {
       const before = view.getByRole('img', { name: 'Player avatar' }).outerHTML;
       const stores = { ...localStorage };
       tab(view, option.tab);
-      fireEvent.click(view.getByRole('button', { name: option.label, exact: true }));
+      fireEvent.click(view.getByRole('button', { name: option.label }));
       expect(saved(view)).toEqual({ ...LOOK, [option.field]: option.id });
       expect(view.getByRole('img', { name: 'Player avatar' }).outerHTML, `drawing ${option.id}`).not.toBe(before);
       tab(view, 'Skin'); tab(view, option.tab);
@@ -75,8 +76,8 @@ if (process.env.APPEARANCE_OPTIONS_CAPTURE === '1') {
       const view = render(<Editor sport={sport} />);
       for (const [label, choices] of [['Hair', HAIRSTYLES], ['Beard', FACIAL_HAIR]] as const) {
         tab(view, label);
-        for (const option of choices) expect(view.getByRole('button', { name: option.label, exact: true })).toBeVisible();
-        for (const option of NEW) expect(view.queryByRole('button', { name: option.label, exact: true })).not.toBeInTheDocument();
+        for (const option of choices) expect(view.getByRole('button', { name: option.label })).toBeVisible();
+        for (const option of NEW) expect(view.queryByRole('button', { name: option.label })).not.toBeInTheDocument();
       }
       expect(saved(view)).toEqual(LOOK);
     });
@@ -87,7 +88,7 @@ if (process.env.APPEARANCE_OPTIONS_CAPTURE === '1') {
       for (const [label, field, choices] of [['Hair', 'hairstyle', HAIRSTYLES], ['Beard', 'facialHair', FACIAL_HAIR]] as const) {
         tab(view, label);
         for (const option of choices) {
-          fireEvent.click(view.getByRole('button', { name: option.label, exact: true }));
+          fireEvent.click(view.getByRole('button', { name: option.label }));
           expected = { ...expected, [field]: option.id };
           expect(saved(view)).toEqual(expected);
         }
@@ -111,7 +112,8 @@ if (process.env.APPEARANCE_OPTIONS_CAPTURE === '1') {
 
     it('holds exact original SVG for every old choice at all three sizes', () => {
       const expected = JSON.parse(fs.readFileSync(process.env.APPEARANCE_OPTIONS_SVG_BASELINE!, 'utf8'));
-      expect(legacySvgs()).toEqual(expected);
+      expect({ HAIRSTYLES, FACIAL_HAIR, HAIR_COLORS, SKIN_TONES, ACCESSORIES }).toEqual(expected.catalogues);
+      expect(legacySvgs()).toEqual(expected.svg);
     });
 
     it('retains unknown-ID fallbacks and resolves every new beard before drawing', () => {
@@ -119,6 +121,7 @@ if (process.env.APPEARANCE_OPTIONS_CAPTURE === '1') {
       expect(svg({ ...LOOK, facialHair: 'unknown-beard' })).toBe(svg(LOOK));
       expect(getFacialHair('unknown-beard').id).toBe('none');
       for (const [id] of BEARDS) expect(getFacialHair(id).id).toBe(id);
+      for (const [id] of HAIR) expect(getHairstyle(id).id).toBe(id);
     });
   });
 }

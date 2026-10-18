@@ -44,6 +44,9 @@ function run(name, env = {}, pattern, want = { passed: 28, failed: 0, pending: 0
   assert.equal(child.status, want.failed ? 1 : 0, `${name}: unexpected test status, see ${name}.log`);
   const result = JSON.parse(fs.readFileSync(report, 'utf8'));
   assert.equal(result.numRuntimeErrorTestSuites || 0, 0, `${name}: infrastructure error`);
+  assert.equal(result.numTotalTests, want.passed + want.failed + want.pending, `${name}: complete declared census`);
+  assert.equal(result.numTodoTests, 0, `${name}: no deferred cases`);
+  if (result.unhandledErrors !== undefined) assert.deepEqual(result.unhandledErrors, [], `${name}: no unhandled errors`);
   assert.equal(result.numPassedTests, want.passed, `${name}: passed cases`);
   assert.equal(result.numFailedTests, want.failed, `${name}: failed cases`);
   assert.equal(result.numPendingTests, want.pending, `${name}: skipped cases`);
@@ -57,7 +60,7 @@ function run(name, env = {}, pattern, want = { passed: 28, failed: 0, pending: 0
 }
 run('capture-original', { APPEARANCE_OPTIONS_CAPTURE: '1', NO_DOUBLE_SWAP: JSON.stringify(mapping) }, undefined,
   { passed: 1, failed: 0, pending: 0 });
-assert.equal(Object.keys(JSON.parse(fs.readFileSync(baseline, 'utf8'))).length, 243);
+assert.equal(Object.keys(JSON.parse(fs.readFileSync(baseline, 'utf8')).svg).length, 243);
 const baselineMode = process.env.APPEARANCE_OPTIONS_BASELINE === '1';
 if (baselineMode) {
   const failed = run('original-feature-absence', {}, undefined, { passed: 7, failed: 21, pending: 0 });
@@ -67,10 +70,12 @@ if (baselineMode) {
   const avatarFile = files['@/components/soccer-career/PlayerAvatar'];
   const avatar = fs.readFileSync(path.join(ROOT, avatarFile), 'utf8');
   const ids = ['texturedcrop', 'sidefringe', 'twists', 'shortlocs', 'halfup', 'afropuff', 'circlebeard', 'handlebar', 'ducktail', 'muttonchops'];
+  let oldDrawingSource = avatar;
   for (const id of ids) {
     const anchor = new RegExp(`    ${id}: \\([\\s\\S]*?\\n    \\),\\n`);
     const entries = avatar.match(anchor);
     assert(entries, `One executable ${id} drawing entry`);
+    oldDrawingSource = oldDrawingSource.replace(anchor, '');
     const changed = avatar.replace(anchor, `    ${id}: null,\n`);
     assert.notEqual(changed, avatar);
     const copy = path.join(OUT, `missing-${id}.tsx`); fs.writeFileSync(copy, changed);
@@ -78,6 +83,15 @@ if (baselineMode) {
       `drawing ${id} `, { passed: 0, failed: 1, pending: 27 });
     assert(failed[0].fullName.includes(`drawing ${id} `), `Missing ${id} rejected by its actual render case`);
   }
+  assert.equal(oldDrawingSource, original[avatarFile], 'Removing only the ten new drawings restores the complete original avatar source');
+  const oldDrawing = 'opacity="0.55"';
+  assert(avatar.includes(oldDrawing), 'Existing buzz-cut opacity control has a real drawing target');
+  const changedOldDrawing = avatar.replace(oldDrawing, 'opacity="0.15"');
+  assert.notEqual(changedOldDrawing, avatar);
+  const oldCopy = path.join(OUT, 'changed-old-drawing.tsx'); fs.writeFileSync(oldCopy, changedOldDrawing);
+  const oldFailed = run('changed-old-drawing', { NO_DOUBLE_SWAP: JSON.stringify({ '@/components/soccer-career/PlayerAvatar': oldCopy }) },
+    'holds exact original SVG', { passed: 0, failed: 1, pending: 27 });
+  assert(oldFailed[0].fullName.includes('holds exact original SVG'));
   const builder = fs.readFileSync(path.join(ROOT, files['@/components/soccer-career/AppearanceBuilder']), 'utf8');
   const fromHair = 'sport === "soccer" ? SOCCER_HAIRSTYLES : HAIRSTYLES';
   const fromBeard = 'sport === "soccer" ? SOCCER_FACIAL_HAIR : FACIAL_HAIR';
