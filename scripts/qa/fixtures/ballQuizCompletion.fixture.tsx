@@ -76,9 +76,9 @@ function mountPhone(initial: CareerState, actions: MoneyAction[], toasts: (strin
   const stateJSON = () => view.getByTestId('quiz-career-json').textContent!;
   const openQuiz = () => fireEvent.click(phone().getByRole('button', { name: /Ball Quiz$/ }));
   const home = () => {
-    const back = panel().querySelector<HTMLButtonElement>('[data-phone-back]');
-    expect(back).not.toBeNull();
-    fireEvent.click(back!);
+    const back = phone().getByRole('button', { name: /^‹ Home$/ });
+    expect(back).toBeVisible();
+    fireEvent.click(back);
   };
   const observe = () => ({ html: panel().innerHTML, text: panel().textContent,
     focused: document.activeElement instanceof HTMLElement ? document.activeElement.outerHTML : null,

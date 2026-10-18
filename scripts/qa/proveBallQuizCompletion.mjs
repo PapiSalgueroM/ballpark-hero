@@ -8,7 +8,7 @@ import { execFileSync, spawnSync } from 'node:child_process';
 
 const BASE = '775564305e9da84dab59f2b9fe246d044a3cc8e9';
 const FIXTURE = 'scripts/qa/fixtures/ballQuizCompletion.fixture.tsx';
-const FIXTURE_SHA = 'b7bbe432b96ec664020b3745a8a92a638599d6fc87659b8ea8615bdc98fb5490';
+const FIXTURE_SHA = 'dae42689fc3e27b0b5d8dcb8f421bf9cc7a39cde84f370090d821166452af573';
 const TEMP = 'src/test/__ballQuizCompletionDiagnostic.test.tsx';
 const SELF = 'scripts/qa/proveBallQuizCompletion.mjs';
 const WORKFLOW = '.github/workflows/career-phone-quiz-results.yml';
@@ -23,7 +23,7 @@ const EMPTY = 'Not enough football has happened yet for it to ask you anything. 
 const require = createRequire(import.meta.url), out = process.env.BALL_QUIZ_COMPLETION_OUT;
 assert.equal(process.argv[2], 'baseline');
 assert(['1', 'true'].includes(process.env.CI) && process.env.SIM_NETWORK === 'offline', 'Remote offline CI only');
-assert.equal(process.versions.node.split('.')[0], '20');
+assert.equal(process.versions.node.split('.')[0], '24');
 assert(process.env.NODE_OPTIONS?.includes('offlineTransport.cjs') && require.cache[require.resolve('../lib/offlineTransport.cjs')], 'Actual inherited offline preload');
 assert(out && path.isAbsolute(out) && path.resolve(out) !== path.resolve('.') && !path.resolve(out).startsWith(path.resolve('.') + path.sep), 'Absolute evidence outside source');
 fs.mkdirSync(out, { recursive: true }); assert(!fs.existsSync(path.join(out, 'report.json')), 'Fresh owned diagnostic report');

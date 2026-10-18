@@ -28,7 +28,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
       - name: Preserve exact diagnostic request and unchanged application
         run: |
@@ -50,7 +50,7 @@ jobs:
           SIM_OFFLINE_RECEIPT="$out/admission.transport" npm --version > "$out/npm-version.txt"
           SIM_OFFLINE_RECEIPT="$out/toolmeta.transport" node --input-type=module > "$out/toolmeta.log" 2>&1 <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';
-          assert.equal(process.versions.node.split('.')[0],'20');fs.writeFileSync(process.env.BALL_QUIZ_COMPLETION_OUT+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n',{flag:'wx'});
+          assert.equal(process.versions.node.split('.')[0],'24');fs.writeFileSync(process.env.BALL_QUIZ_COMPLETION_OUT+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n',{flag:'wx'});
           NODE
           printf '%s\n' 'DIAGNOSTIC ONLY: unchanged original product. Expected four missing-result assertions, not a fix or READY qualification. No build, browser or cap claim.' > "$out/diagnostic-scope.txt"
       - name: Locked npm installation, the sole bootstrap network allowance
