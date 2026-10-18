@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unit-view: node_modules/.bin/vitest run src/lib/clubManagerWorldView.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+unit-cm: node_modules/.bin/vitest run src/test/clubManager*.test.ts src/test/clubManager*.test.tsx src/test/cm*.test.ts src/test/cm*.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+helpReaders: ok=0; r=""; for h in simClubManagerScore simCmBoardVerdict simCmDifficulty simClubManagerMeters simClubManagerBudget simAcademy simClubManagerALeague simCmLeagueFixtures simCmVarLedger simEras simPress simRoles simWilderness simTrustCopy; do node scripts/$h.mjs > /tmp/h-$h.log 2>&1; e=$?; r="$r $h=$e"; [ $e = 0 ] || ok=1; done; echo "exits:$r"; exit $ok
+simAccessibility: node scripts/simAccessibility.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+dashscan: if git diff 77556430 HEAD | grep -nP '\x{2013}|\x{2014}'; then echo "dash found"; exit 1; else echo "no dash in the diff"; fi

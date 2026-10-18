@@ -1,0 +1,8 @@
+unit-view exit=0 9s |    Duration  8.12s (transform 3.51s, setup 233ms, collect 3.37s, tests 2.86s, environment 680ms, prepare 475ms)
+tsc exit=0 136s | 
+simAccessibility exit=0 0s | simAccessibility: all green
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+unit-cm exit=0 202s |    Duration  201.16s (transform 9.01s, setup 3.30s, collect 35.39s, tests 312.87s, environment 23.00s, prepare 5.03s)
+dashscan exit=0 0s | no dash in the diff
+simHarnessAnchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+helpReaders exit=124 4200s | 
