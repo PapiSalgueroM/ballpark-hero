@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/lib/clubManager*.test.ts src/lib/euroAccess.test.ts src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+euro-s5: WORLD_EURO_ONLY=5 node scripts/simWorldEuro.mjs 2>&1 | tail -10; exit ${PIPESTATUS[0]}
+ctl-noholder: WORLD_EURO_CONTROL=noholder WORLD_EURO_SEEDS=1,2 node scripts/simWorldEuro.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+euro-s147: WORLD_EURO_ONLY=1,4,7 node scripts/simWorldEuro.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+euro-s3: WORLD_EURO_ONLY=3 WORLD_EURO_BASE=39978122 node scripts/simWorldEuro.mjs 2>&1 | tail -10; exit ${PIPESTATUS[0]}
+simUclField: node scripts/simUclField.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simWorldEditor: node scripts/simWorldEditor.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simUclSeasonOne: node scripts/simUclSeasonOne.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+simDailyDeals: node scripts/simDailyDeals.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}

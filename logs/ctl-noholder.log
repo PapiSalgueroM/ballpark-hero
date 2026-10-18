@@ -1,0 +1,3 @@
+FAIL 5 holder: watcher América seed 2 at s2-rollover: the Europa League's winner Manchester City is not in next season's Champions League
+FAIL 5 holder: watcher Proof Town Athletic seed 1 at s1-rollover: the Europa League's winner Marseille is not in next season's Champions League
+simWorldEuro: control noholder FIRED (14 failures, all its own)

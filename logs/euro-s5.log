@@ -1,0 +1,10 @@
+FAIL 5 attribution: watcher Chelsea seed 2 at s2-e16: the line moved budget, boardConfidence, squad, table, form beside worldComps
+FAIL 5 attribution: watcher Chelsea seed 2: the engines part first at s2-e16, not at a rollover
+FAIL 5 attribution: watcher Chelsea seed 2 at s2-e17: the line moved budget, boardConfidence, squad, table, form beside worldComps
+FAIL 5 attribution: watcher Chelsea seed 2: the engines part first at s2-e17, not at a rollover
+FAIL 5 attribution: watcher Chelsea seed 2 at s2-e18: the line moved budget, boardConfidence, squad, table, aiHeadlines beside worldComps
+FAIL 5 attribution: watcher Chelsea seed 2: the engines part first at s2-e18, not at a rollover
+FAIL 5 attribution: watcher Chelsea seed 2 at s2-e19: the line moved budget, boardConfidence, squad, table, form beside worldComps
+FAIL 5 attribution: watcher Chelsea seed 2: the engines part first at s2-e19, not at a rollover
+FAIL 5 attribution: watcher Chelsea seed 2 at s2-e20: the line moved budget, boardConfidence, squad, table, form beside worldComps
+simWorldEuro: RED, 3907 checks, 3137 failures

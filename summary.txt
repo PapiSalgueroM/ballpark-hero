@@ -1,0 +1,10 @@
+units exit=0 43s |    Duration  41.84s (transform 5.01s, setup 2.31s, collect 16.35s, tests 78.55s, environment 14.82s, prepare 3.37s)
+tsc exit=0 119s | 
+ctl-noholder exit=1 128s | simWorldEuro: control noholder FIRED (14 failures, all its own)
+euro-s5 exit=1 322s | simWorldEuro: RED, 3907 checks, 3137 failures
+simUclField exit=0 7s | simUclField: all green
+simWorldEditor exit=1 12s | simWorldEditor: 2478 checks, 1 failures
+euro-s147 exit=0 227s | simWorldEuro: green, 35567 checks, 0 failures
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simUclSeasonOne exit=1 19s | 3 failure(s) in section(s) 8
+euro-s3 exit=0 468s | simWorldEuro: green, 505 checks, 0 failures
