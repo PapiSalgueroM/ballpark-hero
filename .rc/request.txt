@@ -1,0 +1,3 @@
+readers1: bash .rc/x/readers.sh simBracketMoment simCareerClubPool simCareerDerbies simCareerDomesticCup simCareerLeagueSeasons simClubManagerClubList simClubManagerStaff simCmApplications simCmFixtureFleet simCmHandoverDesk simCmInternationals
+readers2: bash .rc/x/readers.sh simCmMatchDay simCmOldCareersWorld simCmRealFixtures simCmWorldMoves simDealDepth simEra2005 simEra2010 simEra2020 simEraBakeExtend simEraWorldTables simEventDeck
+readers3: bash .rc/x/readers.sh simFreeAgents simManagerCustomPromotion simManagerSpec simTacticsEngine simTycoonLeague simSaveKeeper simClubManagerFinances simCmCopy simStatsCentre simCmLeagueRules
