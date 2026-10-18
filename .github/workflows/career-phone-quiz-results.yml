@@ -1,0 +1,109 @@
+name: Ball quiz original result diagnostic only
+on:
+  push:
+    branches: [codex/career-phone-quiz-results]
+    paths:
+      - .github/workflows/career-phone-quiz-results.yml
+      - scripts/qa/proveBallQuizCompletion.mjs
+      - scripts/qa/fixtures/ballQuizCompletion.fixture.tsx
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnostic-original:
+    name: Original product faults only, no candidate qualification
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Preserve exact diagnostic request and unchanged application
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$RUNNER_TEMP/career-phone-quiz-results-diagnostic"; test ! -e "$out"; mkdir -p "$out"
+          export BALL_QUIZ_COMPLETION_OUT="$out"
+          echo "BALL_QUIZ_COMPLETION_OUT=$out" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
+          sha256sum "$out/source.zip" > "$out/source.sha256"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
+          git merge-base --is-ancestor 775564305e9da84dab59f2b9fe246d044a3cc8e9 HEAD
+          git diff --exit-code 775564305e9da84dab59f2b9fe246d044a3cc8e9 HEAD -- . ':!docs' ':!scripts/qa/fixtures/ballQuizCompletion.fixture.tsx' ':!scripts/qa/proveBallQuizCompletion.mjs' ':!.github/workflows/career-phone-quiz-results.yml' > "$out/base-source-hold.log"
+          git diff --exit-code HEAD -- . > "$out/admission-source-hold.log"
+          test -z "$(git status --porcelain --untracked-files=all)"
+          printf '%s\0' "$(command -v node)" "$(readlink -f "$(command -v npm)")" | sort -z | xargs -0 sha256sum > "$out/runtime-tools-files.sha256"
+          test "$(wc -l < "$out/runtime-tools-files.sha256")" -eq 2
+          SIM_OFFLINE_RECEIPT="$out/admission.transport" npm --version > "$out/npm-version.txt"
+          SIM_OFFLINE_RECEIPT="$out/toolmeta.transport" node --input-type=module > "$out/toolmeta.log" 2>&1 <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          assert.equal(process.versions.node.split('.')[0],'20');fs.writeFileSync(process.env.BALL_QUIZ_COMPLETION_OUT+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n',{flag:'wx'});
+          NODE
+          printf '%s\n' 'DIAGNOSTIC ONLY: unchanged original product. Expected four missing-result assertions, not a fix or READY qualification. No build, browser or cap claim.' > "$out/diagnostic-scope.txt"
+      - name: Locked npm installation, the sole bootstrap network allowance
+        run: |
+          set -euo pipefail
+          out="$BALL_QUIZ_COMPLETION_OUT"
+          NODE_OPTIONS='' npm ci > "$out/install.log" 2>&1
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$out/dependencies.transport" node scripts/qa/soccerAgentReviewDependencies.mjs before > "$out/dependencies-before.log" 2>&1
+          cp soccer-agent-review-artifacts/dependencies-before.json "$out/dependencies-before.json"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-files.sha256"
+          sha256sum package.json package-lock.json scripts/qa/soccerAgentReviewDependencies.mjs scripts/lib/offlineTransport.cjs vitest.config.ts tsconfig.app.json > "$out/locked-method-files.sha256"
+      - name: Actual temporary fixture types and seven original diagnostic cases
+        id: diagnostic
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$BALL_QUIZ_COMPLETION_OUT"
+          preload_check='const assert=require("node:assert/strict");assert.ok((process.env.NODE_OPTIONS||"").includes("offlineTransport.cjs"),"Children retain offline preload");assert.ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")],"Actual offline preload is in require.cache");'
+          status=0; NODE_OPTIONS='' node -e "$preload_check" > "$out/preload-control.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/preload-control.exit"; test "$status" -eq 1; grep -F 'AssertionError' "$out/preload-control.log"; grep -F 'Children retain offline preload' "$out/preload-control.log"
+          SIM_OFFLINE_RECEIPT="$out/preload.transport" node -e "$preload_check" > "$out/preload-normal.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/proof.transport" node scripts/qa/proveBallQuizCompletion.mjs baseline > "$out/proof.log" 2>&1
+          tail -n 4 "$out/proof.log"
+      - name: Always retain partial evidence and enforce exact source dependency transport holds
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="${BALL_QUIZ_COMPLETION_OUT:-$RUNNER_TEMP/career-phone-quiz-results-diagnostic}"; mkdir -p "$out"; result=0
+          test ! -e src/test/__ballQuizCompletionDiagnostic.test.tsx || result=1
+          git diff --exit-code HEAD -- . > "$out/final-source-diff.log" 2>&1 || result=1
+          git status --porcelain --untracked-files=all > "$out/final-source-status.txt"; test ! -s "$out/final-source-status.txt" || result=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-after-files.sha256"
+          if test ! -f "$out/source.zip"; then git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"; sha256sum "$out/source.zip" > "$out/source.sha256"; fi
+          if test -f "$out/dependencies-before.json"; then
+            SIM_OFFLINE_RECEIPT="$out/dependencies-after.transport" node --input-type=module > "$out/dependencies-after.log" 2>&1 <<'NODE' || result=1
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out=process.env.BALL_QUIZ_COMPLETION_OUT,before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),sha=x=>createHash('sha256').update(x).digest('hex');
+          const packageFiles=before.packageFiles.map(r=>({file:r.file,sha256:sha(fs.readFileSync(r.file))})),packages=before.packages.map(r=>{const p=JSON.parse(fs.readFileSync(r.directory+'/package.json'));return{directory:r.directory,name:p.name,version:p.version};});
+          fs.writeFileSync(out+'/dependencies-after.json',JSON.stringify({packageFiles,packages},null,2)+'\n',{flag:'wx'});assert.equal(packages.length,521);assert.deepEqual(packageFiles,before.packageFiles);assert.deepEqual(packages,before.packages);console.log('PASS all521 actual installed locked versions and both package bodies held; no browser install.');
+          NODE
+          fi
+          for name in source-files source-after-files installed-files runtime-tools-files locked-method-files; do file="$out/$name.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$name-holds.log" 2>&1 || result=1; fi; done
+          if test -f "$out/source.sha256"; then sha256sum --check "$out/source.sha256" > "$out/source-archive-hold.log" 2>&1 || result=1; fi
+          if test -f "$out/installed-files.sha256"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-after-files.sha256"; cmp "$out/installed-files.sha256" "$out/installed-after-files.sha256" > "$out/installed-inventory-hold.log" 2>&1 || result=1; fi
+          while IFS= read -r -d '' file; do test ! -s "$file" || result=1; done < <(find "$out" -type f -name '*.transport' -print0)
+          printf 'diagnostic=%s\n' '${{ steps.diagnostic.outcome }}' > "$out/stage-outcomes.txt"
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ball-quiz-original-diagnostic-${{ github.sha }}
+          path: ${{ env.BALL_QUIZ_COMPLETION_OUT }}
+          if-no-files-found: error
+          retention-days: 14
