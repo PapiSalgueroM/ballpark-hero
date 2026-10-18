@@ -1,0 +1,3 @@
+#!serial
+small-mainbase: R=$PWD; git worktree add -q --detach /tmp/m1335 77556430 && B=$(cd /tmp/m1335 && bash $R/.rc/x/minus1335.sh) && export BASE_SHA=$B && echo "base $BASE_SHA (main without Round 1335; this tree carries Round 1509 on top)" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b1) node scripts/simCmBoardVerdict.mjs --part=pure,fresh,saves,dailies 2>&1 | tail -20; exit ${PIPESTATUS[0]}
+takeover-mainbase: R=$PWD; B=$(cd /tmp/m1335 && bash $R/.rc/x/minus1335.sh) && export BASE_SHA=$B && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b2) node scripts/simCmBoardVerdict.mjs --part=takeover 2>&1 | tail -12; exit ${PIPESTATUS[0]}
