@@ -1,0 +1,46 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simSoccerVeteranTalks exit=0 61s | ok   five production browser fixtures including USD, all raw amounts remain EUR
+playSoccerVeteranTalks exit=0 163s | ok   strict geometry and three effective copied observation detectors
+agent-units exit=0 14s | PASS agent review units: {"mode":"units","total":129,"files":[{"file":"soccerAgentReview.test.ts","passed":83},{"file":"soccerAgentReviewUi.test.tsx","passed":28},{"file"
+agent-outcomes exit=0 10s | PASS agent review outcomes: {"mode":"outcomes","groups":8,"originalWholePairs":120,"readVectors":120,"sourceControls":7,"branches":4,"sourceHeld":true}
+agent-page-control exit=0 18s | PASS agent review page-control: {"mode":"page-control","pageBaseline":10,"componentBaseline":28,"sourceControls":2,"intendedFailures":[{"id":"page-double-callback","faile
+return-units exit=0 15s | PASS international return units: {"mode":"units","total":122,"files":[{"file":"soccerInternationalReturn.test.ts","passed":83},{"file":"soccerInternationalReturnUi.test.t
+return-outcomes exit=0 6s | PASS international return outcomes: {"mode":"outcomes","groups":8,"originalWholePairs":90,"readVectors":90,"sourceControls":6,"branches":4,"sourceHeld":true}
+return-page-control exit=0 18s | PASS international return page-control: {"mode":"page-control","pageBaseline":10,"componentBaseline":21,"sourceControls":2,"intendedFailures":[{"id":"page-double-callback
+return-native exit=0 115s | PASS international return native: {"mode":"native","checks":854,"journeys":12,"wholePairs":102,"postStartupExactVectors":90,"rawReloads":48,"unfilteredStartupObservations
+farewell-units exit=0 14s | PASS farewell units: {"mode":"units","total":85,"files":[{"file":"soccerCareerFarewell.test.ts","passed":50},{"file":"soccerFarewellUi.test.tsx","passed":14},{"file":"soc
+farewell-outcomes exit=0 6s | PASS farewell outcomes: {"mode":"outcomes","groups":9,"neutralPairs":168,"sourceControls":6,"preparedBranches":6,"sourceHeld":true}
+farewell-page-control exit=0 24s | PASS farewell page-control: {"mode":"page-control","baseline":13,"componentBaseline":14,"componentSourceControls":1,"pageSourceControls":2,"intendedFailures":[{"id":"anno
+farewell-native exit=0 249s | PASS farewell native: {"mode":"native","checks":1343,"journeys":18,"wholePairs":105,"postStartupExactVectors":138,"rawReloads":72,"unfilteredStartupObservations":72,"layo
+brief-units exit=0 14s | Units: 87 actual passed assertions in all4 required files,0 skipped.
+brief-outcomes exit=0 7s | Outcomes:9 healthy groups,60 entire original/current state+RNG pairs,8 independently compiled effective exact faults,9 native fixture branches.
+brief-page-control exit=0 9s | Page source control:2 intended actual equality failures,4 unrelated page cases passed,6-case untouched copied baseline passed.
+brief-native exit=0 179s | Native: 1341 checks,27 journeys,90 whole-save pairs,90 raw reloads,81 exact post-startup read/engine RNG vectors,90 unfiltered startup value/stack observations,48 PNGs,20
+vitest-promise exit=0 3s |    Duration  2.27s (transform 1.03s, setup 58ms, collect 1.39s, tests 227ms, environment 255ms, prepare 92ms)
+simLineupRecordPositions exit=0 3s | PASS simLineupRecordPositions
+labels-pure exit=0 26s | PASS simSoccerOpponentLabels: complete original/current careers, display controls and whole undo
+labels-browser exit=0 10s | PASS simSoccerOpponentLabels browser: 3 actual saved-row journeys, complete saves and read vectors
+pm-fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+pm-units exit=0 20s | Units: 244 actual passed assertions in all7 required files.
+pm-outcomes exit=0 6s | Outcomes:6 healthy groups,27 entire original/current state+RNG pairs,6 effective exact copied failures,18 prepared fixture branches.
+pm-native exit=0 373s | Native: 1899 checks,54 journeys,225 whole-save pairs,252 raw reloads,147 engine RNG pairs,93 PNGs,186 layouts,30 exact restorations,3 copied detectors.
+ctl-fit-oldgrid exit=0 44s | Shots and part1.json: /home/runner/work/_temp/t-ctl-fit-oldgrid/out/shots
+ctl-fit-scrollbox exit=0 45s | Shots and part1.json: /home/runner/work/_temp/t-ctl-fit-scrollbox/out/shots
+ctl-fit-truncate exit=0 44s | Shots and part1.json: /home/runner/work/_temp/t-ctl-fit-truncate/out/shots
+ctl-fit-smalltap exit=0 44s | Shots and part1.json: /home/runner/work/_temp/t-ctl-fit-smalltap/out/shots
+ctl-desk-small exit=0 27s | playCmFinanceDesk: CONTROL small FIRED (9 failures, as it must)
+ctl-desk-cut exit=0 27s | playCmFinanceDesk: CONTROL cut FIRED (3 failures, as it must)
+ctl-desk-wrap exit=1 27s | playCmFinanceDesk: CONTROL wrap DID NOT FIRE (0 failures, none of them the one it plants)
+ctl-hub-noscroll exit=0 20s | playCmHubLanding: CONTROL noscroll FIRED, 8 A check(s) went red, first: liverpool-take-390: hub header top -1912 px at scrollY 2025 on the first hub frame (screen 844 px)
+ctl-hub-nosticky exit=0 21s | playCmHubLanding: CONTROL nosticky FIRED, 9 B check(s) went red, first: celta-320 first row, an in page click: the day strip is wholly on screen (573 to 645 of 640) (B 52
+ctl-hub-stale exit=0 21s | playCmHubLanding: CONTROL stale FIRED, 1 B check(s) went red, first: banner-390: the strip rides the foot once the banner is answered (bottom 683, foot 832, banner gone) 
+ctl-hub-small exit=0 26s | playCmHubLanding: CONTROL small FIRED, 57 C check(s) went red, first: s320 Liverpool hub: under 12px: tile line: "Elite patience" at 11px (C 106 pass 57 fail)
+ctl-hub-cut exit=0 26s | playCmHubLanding: CONTROL cut FIRED, 60 C check(s) went red, first: s320 Liverpool team: cut: Board wants line: "Board wants Win the Premier League" (242/40 wide, 17/17 t
+ctl-seat-smalltap exit=0 242s | playCollegeSeat CONTROL smalltap FIRED: the 44 px check went red (red: S2 (12), S3 (18), S5 (4), S6 (6), S8 (6))
+tt-all exit=0 463s | playTwoTabs: green at 320x640, 390x844, 1280x900
+ctl-tt-nofence exit=0 797s | CONTROL FIRED: TWO_TABS_CONTROL=nofence dropped 204 writes and turned case(s) 1, 2, 3, 6, 9, 10, 11, 12, 14, 15 red
+ctl-tt-nolanding exit=0 22s | CONTROL FIRED: TWO_TABS_CONTROL=nolanding dropped 3 writes and turned case(s) 4 red
+ctl-tt-nokeep exit=0 80s | CONTROL FIRED: TWO_TABS_CONTROL=nokeep dropped 6 writes and turned case(s) 5 red
+hubgrid1089 exit=0 52s | Evidence: soccer-hub-grid-artifacts/native
+saveRetry1078 exit=0 13s | Soccer Career save recovery: 3 real-page journeys, 9 effective DOM controls, exact earned-state retry and reload.
