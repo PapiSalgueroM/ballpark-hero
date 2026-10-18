@@ -1,0 +1,4 @@
+proof-part exit=1 393s | proofWorldUclFleet: RED, 4 journeys differ from 65ad85c9 (of 60)
+proof-watch exit=1 1260s | proofWorldUclFleet: RED, 168 journeys differ from 65ad85c9 (of 130)
+simWorldUcl exit=0 2013s | simWorldUcl: green, 496030 checks, 0 failures
+ctl-moved exit=0 1957s | controls (each must be 1): participant=1 live=1 noseen=1

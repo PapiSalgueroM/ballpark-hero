@@ -1,0 +1,12 @@
+  FAIL Chelsea (now, watcher, nocoach, seed 3, 3 seasons) at s3-reload: an old save gained a watched Champions League (season 3, uclGroup null)
+  FAIL Chelsea (now, watcher, nocoach, seed 4, 3 seasons) at s2-rolled-reload: an old save gained a watched Champions League (season 3, uclGroup null)
+  FAIL Chelsea (now, watcher, nocoach, seed 4, 3 seasons) at s3-reload: an old save gained a watched Champions League (season 3, uclGroup null)
+  FAIL Chelsea (now, watcher, nocoach, seed 5, 3 seasons) at s2-rolled-reload: an old save gained a watched Champions League (season 3, uclGroup null)
+  FAIL Chelsea (now, watcher, nocoach, seed 5, 3 seasons) at s3-reload: an old save gained a watched Champions League (season 3, uclGroup null)
+  FAIL Chelsea (now, watcher, coach, seed 1, 3 seasons) at s2-rolled-reload: an old save gained a watched Champions League (season 3, uclGroup null)
+  FAIL Chelsea (now, watcher, coach, seed 1, 3 seasons) at s3-reload: an old save gained a watched Champions League (season 3, uclGroup null)
+  FAIL Chelsea (now, watcher, coach, seed 2, 3 seasons) at s2-rolled-reload: an old save gained a watched Champions League (season 3, uclGroup null)
+  FAIL Chelsea (now, watcher, coach, seed 2, 3 seasons) at s3-reload: an old save gained a watched Champions League (season 3, uclGroup null)
+journeys 130, steps compared 17799, tree journeys whose save carried worldComps 130, evaluations on the live state 17799, 1257 s
+old saves (written by 65ad85c9): 650 loaded by both engines, 580 gained a watched Champions League at load, 70 did not, 168 against the rule
+proofWorldUclFleet: RED, 168 journeys differ from 65ad85c9 (of 130)
