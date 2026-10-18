@@ -1,0 +1,5 @@
+mutCup: euroCupOf now hands the cup to the loser
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/euroAccess.test.ts[2m > [22mthe board reads the rule (Round 1509)[2m > [22mreads the season's cup off its final (euroCupOf): the winner home or away, on penalties
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m15 passed[39m[22m[90m (16)[39m
+the euroCupOf unit test caught the loser mutation

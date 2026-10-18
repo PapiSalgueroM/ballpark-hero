@@ -1,0 +1,22 @@
+  1 and 4: 95 journeys, 153 s
+  7 example, season one of a Chelsea career, the English clubs in it: Brighton F, Crystal Palace H, Bournemouth L, Sunderland P
+  7 routes over every open: C 193, F 580, H 44, L 1560, P 1367
+  7 my club's earned route at an open: C 6, L 16, P 1, none 81
+  7 titles by strength quartile (strongest first): 80, 9, 2, 0
+  7 goals a league phase match: 2.60 over 13104; ties after extra time 359, shootouts 187
+  7 the slice's bytes: 1407 to 1506 over 104 opens
+  7 the nights' months against 2026/27's (U7): 1055 the same month, 707 a month off, 6 further; 1768 of 1768 on a Thursday
+  1 carry probes (a slice that earned a route carried to a club outside the field): 13
+  1 opens join: 13
+  1 opens rollover: 60
+  1 opens start: 35
+  1 rollovers whose cup another club won: 47
+  1 rollovers whose cup my club won: 11
+  1 rollovers whose season had no cup bracket (its place passed down): 2
+  1 seasons that ended with no Europa League: 4
+  4 joins outside the field carried: 6
+  4 joins outside the field that changed the Champions League opened: 5
+  4 joins to an entrant opened: 4
+  4 joins to an entrant with none: 4
+  4 seen probes (a carry onto a calendar behind): 35
+simWorldEuro: green, 36095 checks, 0 failures

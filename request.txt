@@ -1,0 +1,22 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unit-lib: node_modules/.bin/vitest run src/lib/clubManager*.test.ts src/lib/worldCompetition.test.ts src/lib/uclLeaguePhase.test.ts src/lib/euroAccess.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+unit-cm: node_modules/.bin/vitest run src/test/clubManager*.test.ts src/test/clubManager*.test.tsx src/test/cm*.test.ts src/test/cm*.test.tsx src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+euro-s0: WORLD_EURO_ONLY=0 node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+euro-s147: WORLD_EURO_ONLY=1,4,7 node scripts/simWorldEuro.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+euro-s5: WORLD_EURO_ONLY=5 node scripts/simWorldEuro.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+euro-s6: WORLD_EURO_ONLY=6 WORLD_EURO_BASE=77556430 node scripts/simWorldEuro.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+ctl-carryearned: WORLD_EURO_CONTROL=carryearned node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+ctl-cuploser: WORLD_EURO_CONTROL=cuploser node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+ctl-noworld: WORLD_EURO_CONTROL=noworld node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+ctl-oneplace: WORLD_EURO_CONTROL=oneplace node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+ctl-twocomps: WORLD_EURO_CONTROL=twocomps node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+ctl-earned: WORLD_EURO_CONTROL=earned node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+unit-cupmut: X=$PWD/.rc/x/mutCup.mjs; R=/tmp/cupmut; git worktree add -q $R HEAD && ln -s $PWD/node_modules $R/node_modules && cd $R && node $X && { node_modules/.bin/vitest run src/lib/euroAccess.test.ts > /tmp/cupmut.log 2>&1; v=$?; grep -E "Tests |FAIL" /tmp/cupmut.log | head -4 | cut -c1-200; if [ $v -ne 0 ]; then echo "the euroCupOf unit test caught the loser mutation"; exit 1; else echo "MUTATION NOT CAUGHT"; exit 0; fi; }
+appeal1081: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+golden: node scripts/recordWorldTieGolden1347.mjs --ref HEAD --check
+simDailyDeals: node scripts/simDailyDeals.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simNoRivalNames: node scripts/simNoRivalNames.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+simStorageWrites: node scripts/simStorageWrites.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+dashscan: if git diff 77556430 HEAD | grep -nP '\x{2013}|\x{2014}'; then echo "dash found"; exit 1; else echo "no dash in the diff"; fi
+ctl-carryboth: WORLD_EURO_CONTROL=carryboth node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
