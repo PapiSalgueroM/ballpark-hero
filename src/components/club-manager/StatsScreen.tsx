@@ -29,6 +29,8 @@ const VIEW_LABELS: { key: View; label: string }[] = [
   { key: 'league', label: 'League' },
   { key: 'cup', label: 'Cup' },
   { key: 'ucl', label: 'Europe' },
+  /* Round 1510: every one match cup (a super cup), shown once the club has played one this season. */
+  { key: 'other', label: 'Super cups' },
 ];
 
 function lineFor(p: CMPlayer, view: View): Line {
@@ -166,6 +168,7 @@ export function StatsScreen({ career }: StatsScreenProps) {
   const cupName = careerLeagueOf(career).cupName;
   const team = useMemo(() => teamCompRecord(career, cupName), [career, cupName]);
   const inEurope = career.uclGroup !== null || !!career.uclKoRound;
+  const superCups = team.other.p > 0;
 
   const lines = useMemo(() => {
     const built = career.squad.map(p => lineFor(p, view)).filter(l => l.apps > 0 || view === 'all');
@@ -187,7 +190,7 @@ export function StatsScreen({ career }: StatsScreenProps) {
   /* An old save only splits matches played since the splits existed. Say so
      rather than letting a half empty Europe tab read like a bug. */
   const splitsPartial = career.squad.some(p => {
-    const total = (p.comp?.league?.apps ?? 0) + (p.comp?.cup?.apps ?? 0) + (p.comp?.ucl?.apps ?? 0);
+    const total = (p.comp?.league?.apps ?? 0) + (p.comp?.cup?.apps ?? 0) + (p.comp?.ucl?.apps ?? 0) + (p.comp?.other?.apps ?? 0);
     return (p.apps ?? 0) > total;
   });
 
@@ -215,7 +218,7 @@ export function StatsScreen({ career }: StatsScreenProps) {
       {/* Competition filter */}
       <div className="flex gap-1.5 overflow-x-auto pb-1">
         {/* Round 832: a league with no domestic cup has no cup tab. */}
-        {VIEW_LABELS.filter(v => (v.key !== 'ucl' || inEurope) && (v.key !== 'cup' || cupName !== null)).map(v => (
+        {VIEW_LABELS.filter(v => (v.key !== 'ucl' || inEurope) && (v.key !== 'cup' || cupName !== null) && (v.key !== 'other' || superCups)).map(v => (
           <button
             key={v.key}
             onClick={() => setView(v.key)}
@@ -240,7 +243,7 @@ export function StatsScreen({ career }: StatsScreenProps) {
       {/* Team record in this view */}
       <div className="bg-card border border-border rounded-2xl p-3">
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">
-          📊 {career.clubName} · {view === 'all' ? 'all competitions' : view === 'ucl' ? 'Champions League' : view === 'cup' ? cupName : 'league'}
+          📊 {career.clubName} · {view === 'all' ? 'all competitions' : view === 'ucl' ? 'Champions League' : view === 'cup' ? cupName : view === 'other' ? 'super cups' : 'league'}
         </div>
         {teamLine.p === 0 ? (
           <p className="text-xs text-muted-foreground">No matches in this competition yet this season.</p>

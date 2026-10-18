@@ -38,6 +38,7 @@ import { fileURLToPath } from 'node:url';
 import { engineOf, pickFleet, tape } from './lib/worldUclFleet.mjs';
 import { HOLDER_EDIT } from './lib/worldUclHolder1502.mjs';
 import { EURO_BOARD_EDIT, UEL_HOLDER_EDIT } from './lib/worldUelHolder1509.mjs';
+import { DSC_NIGHTS_EDIT } from './lib/oneOffNights1510.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (name, dflt) => { const i = process.argv.indexOf(name); return i > 0 ? process.argv[i + 1] : dflt; };
@@ -68,6 +69,10 @@ const UEL_HOLDER_OFF = process.argv.includes('--uel-holder-off');
 /* --euro-board-off (Round 1509, step 6(a)): and the European rungs graded by position again. With both off and
    --strip worldComps.uel, the round's final tree is held to main in every other key (the round's final proof). */
 const EURO_BOARD_OFF = process.argv.includes('--euro-board-off');
+/* --dsc-nights-off (Round 1510): THIS TREE plays with a super cup participant's nights left off its calendar
+   (scripts/lib/oneOffNights1510.mjs, the lead's decision 5 bridge). With --strip worldComps.dsc it holds the round's
+   tree to the base on every other key, participants of the cup included. */
+const DSC_NIGHTS_OFF = process.argv.includes('--dsc-nights-off');
 const oldSaves = { loaded: 0, gained: 0, kept: 0, wrong: 0 };
 const sha = v => createHash('sha256').update(typeof v === 'string' ? v : JSON.stringify(v)).digest('hex').slice(0, 16);
 
@@ -133,7 +138,7 @@ function firstDifference(a, b) {
 }
 
 const baseEngine = await engineOf(ROOT, 'base', { base: BASE }, cannot);
-const treeEngine = await engineOf(ROOT, 'tree', { edits: [...(HOLDER_OFF ? [HOLDER_EDIT] : []), ...(UEL_HOLDER_OFF ? [UEL_HOLDER_EDIT] : []), ...(EURO_BOARD_OFF ? [EURO_BOARD_EDIT] : [])] }, cannot);
+const treeEngine = await engineOf(ROOT, 'tree', { edits: [...(HOLDER_OFF ? [HOLDER_EDIT] : []), ...(UEL_HOLDER_OFF ? [UEL_HOLDER_EDIT] : []), ...(EURO_BOARD_OFF ? [EURO_BOARD_EDIT] : []), ...(DSC_NIGHTS_OFF ? [DSC_NIGHTS_EDIT] : [])] }, cannot);
 const fleet = pickFleet(await treeEngine.fresh(), FLEET, cannot);
 const chosen = fleet.filter(f => !ONLY || f.club.includes(ONLY));
 console.log(`base ${BASE}; fleet (${chosen.length}): ${chosen.map(f => `${f.club} (${f.era}, ${f.kind})`).join('; ')}`);

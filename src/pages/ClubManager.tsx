@@ -15,7 +15,7 @@ import {
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
   worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
-  nationOfferFor, SHOOTOUT_MAX_ORDER, shootoutOrderOf, cupSatOutBy,
+  nationOfferFor, SHOOTOUT_MAX_ORDER, shootoutOrderOf, cupSatOutBy, leagueStarted,
 } from '@/lib/clubManager';
 // Round 1035: the A-League Men's squads come from their own generated file.
 import { generatedLeagueCountClauses, generatedLeagueMonthClause } from '@/data/clubManagerWorldRosters';
@@ -1032,7 +1032,7 @@ const ClubManager = () => {
               club is on zero points, so the "position" was just wherever the
               shuffled table happened to put you: a brand new Manchester City
               save opened on "#15 in league", which reads as broken. */}
-          <span>{c.week === 0 ? 'Season not started' : `#${g.myPosition || '-'} in league`}</span>
+          <span>{!leagueStarted(c) ? 'Season not started' : `#${g.myPosition || '-'} in league`}</span>
           {c.customClub && c.customClub.name === c.clubName && (
             <span className="inline-flex items-center gap-1">
               🏟 {c.customClub.stadium}{c.customClub.capacity ? ` (${Math.round(c.customClub.capacity / 1000)}k)` : ''}
@@ -1099,7 +1099,7 @@ const ClubManager = () => {
               seven year old you have had since day one is the biggest thing
               that happened between May and August, and until this round it was
               a thing that could never happen at all. */}
-          {c.week === 0 && (c.retiredLastSummer ?? []).length > 0 && (
+          {!leagueStarted(c) && (c.retiredLastSummer ?? []).length > 0 && (
             <div className="rounded-xl border border-border bg-card p-2.5">
               <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">👟 Hung up their boots</div>
               <div className="text-xs text-foreground">
@@ -1175,8 +1175,8 @@ const ClubManager = () => {
                   </button>
                 )}
                 {/* Round 782: a knockout tie can end on penalties, so the
-                    shootout order is one tap from the pre match card. */}
-                {(fx.competition === 'cup' || fx.competition === 'uclKo') && (
+                    shootout order is one tap from the pre match card. Round 1510: and a super cup night. */}
+                {(fx.competition === 'cup' || fx.competition === 'uclKo' || fx.competition === 'oneOff') && (
                   <button
                     onClick={() => { setTacticsTile('shootout'); g.setActiveTab('tactics'); }}
                     data-cm-shootout-link="1"
@@ -1238,7 +1238,7 @@ const ClubManager = () => {
               />
               <HubTile
                 icon="🏆" title="League"
-                value={leagueTileValue(c.week, g.myPosition)}
+                value={leagueTileValue(leagueStarted(c) ? c.week : 0, g.myPosition)}
                 sub={c.form.length ? `Form: ${c.form.join(' ')}` : careerLeagueOf(c).name}
                 onClick={() => g.setActiveTab('table')}
               />

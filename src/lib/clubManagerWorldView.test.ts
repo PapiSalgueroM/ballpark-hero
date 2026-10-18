@@ -1,11 +1,12 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import type { CareerState } from '@/lib/clubManager';
 import {
-  ERA_LEAGUES, ERA_UCL_FIELDS, evalWorldUcl, playNextEntry, startCareer, worldUclEraField, worldUclNightsDone,
+  ERA_LEAGUES, ERA_UCL_FIELDS, REAL_LEAGUES, evalWorldUcl, oneOffRowOf, playNextEntry, startCareer, worldUclEraField,
+  worldUclNightsDone,
 } from '@/lib/clubManager';
 import { dateKey } from '@/lib/clubManagerCalendar';
 import { ensureEraRosters } from '@/lib/clubManagerEras';
-import { REAL_FIFTH_TILE, clubRun, firstStageNights, realFifthNation, worldCompView, worldUclStatus, worldUclView, type WorldCompView } from '@/lib/clubManagerWorldView';
+import { REAL_FIFTH_TILE, clubRun, firstStageNights, realFifthNation, superCupStatus, superCupView, worldCompView, worldUclStatus, worldUclView, type WorldCompView } from '@/lib/clubManagerWorldView';
 
 /* Round 1503: the one view of the Champions League the screen reads, for the club watching it and for the club
    in it. Every check here is an identity of the save itself (the engine's own evaluation, the participant's own
@@ -321,4 +322,32 @@ describe('an era save watching: eight groups of four, and its stand in', () => {
     moved.worldComps!.ucl!.seen = worldUclNightsDone(era) + 2;
     sameKeyedView(era, moved);
   });
+});
+
+/* Fix-1510 (read lens, majors A and B): a country and year with no row has not been proved, so the Super cup tile
+   says Not confirmed and the card says why, never that there is none, and the card is never an empty box. Every
+   league of today's world and of every era, one new career each (its first club). */
+describe('the super cup where the game has no row', () => {
+  const eras = Object.keys(ERA_LEAGUES);
+  beforeAll(async () => { for (const e of eras) await ensureEraRosters(e); }, 300_000);
+  it('says Not confirmed with its reason on every league with no row, and names the cup where there is one', () => {
+    const starts: [string, string | undefined][] = [
+      ...REAL_LEAGUES.map(l => [l.clubs[0], undefined] as [string, undefined]),
+      ...eras.flatMap(e => (ERA_LEAGUES[e] ?? []).map(l => [l.clubs[0], e] as [string, string])),
+    ];
+    let noRow = 0;
+    for (const [club, era] of starts) {
+      const s = era ? startCareer(club, era) : startCareer(club);
+      const view = superCupView(s);
+      const tile = superCupStatus(view);
+      expect(tile.value, `${club} ${era ?? 'now'}`).not.toBe('None here');
+      if (oneOffRowOf(s)) { expect(view.name, `${club} ${era ?? 'now'}`).toBeTruthy(); continue; }
+      noRow += 1;
+      expect(view.name).toBeNull();
+      expect(tile.value).toBe('Not confirmed');
+      expect(tile.sub).toBe(`No super cup confirmed for this country${era ? ' in this era' : ''} yet`);
+      expect(view.stub ?? '', `${club} ${era ?? 'now'}`).toMatch(view.partial ? /could not confirm it on two sources, so none is followed or played here\.$/ : /has not confirmed a super cup for this country.* yet, so none is followed or played here\.$/);
+    }
+    expect(noRow).toBeGreaterThan(30);
+  }, 300_000);
 });

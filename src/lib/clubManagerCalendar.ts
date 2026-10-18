@@ -34,6 +34,8 @@ import {
   legacySeason,
   /* Round 1502: the watched Champions League across a move, and where its nights sit. */
   carryWorldUcl, carryWorldComp, worldCompNights,
+  /* Round 1510: the domestic super cup across a move. */
+  carryOneOffs, oneOffEntryLabel, oneOffPotential,
 } from '@/lib/clubManager';
 import type { WorldCompKey } from '@/lib/worldCompetition';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
@@ -294,12 +296,14 @@ export interface WindowSpan {
  */
 export function myMatchWeeks(state: CareerState): number[] {
   const weeks = new Set<number>();
+  /* Round 1510: a night (a super cup) is a match but never a window week (the engine's countdown skips it), so it
+     is left out on both sides. */
   for (const r of state.resultLog ?? []) {
-    if (r.week < state.week) weeks.add(r.week);
+    if (r.week < state.week && r.competition !== 'oneOff') weeks.add(r.week);
   }
   for (let w = state.week; w < state.calendar.length; w++) {
     const entry = state.calendar[w];
-    if (entry.type === 'window') continue;
+    if (entry.type === 'window' || entry.night) continue;
     if (fixtureFor(state, entry)) weeks.add(w);
   }
   return [...weeks].sort((a, b) => a - b);
@@ -417,6 +421,8 @@ export function dayEmoji(day: CalendarDay): string {
   if (day.kind === 'match') {
     if (day.competition === 'cup') return '\u{1F3C5}';
     if (day.competition === 'uclGroup' || day.competition === 'uclKo') return '⭐';
+    /* Round 1510: a super cup night. */
+    if (day.competition === 'oneOff') return '🛡️';
     return '⚽';
   }
   return '';
@@ -452,6 +458,8 @@ const ROUND_RANK: Record<'R16' | 'QF' | 'SF' | 'F', number> = { R16: 0, QF: 1, S
  * either inventing a fixture or leaving a blank where a final might be.
  */
 export function potentialEntry(state: CareerState, entry: CalendarEntry): boolean {
+  /* Round 1510: a four club super cup's final while my semi final is to come. */
+  if (entry.type === 'oneOff') return oneOffPotential(state, entry);
   if (entry.type === 'cup' && entry.cupRound) {
     const cur = state.cupRound;
     return cur !== 'out' && cur !== 'won' && ROUND_RANK[entry.cupRound] > ROUND_RANK[cur];
@@ -469,6 +477,8 @@ export function potentialEntry(state: CareerState, entry: CalendarEntry): boolea
 
 /** The competition label for an entry that involves me but has no fixture yet (a cup or European draw to come). */
 function pendingLabel(state: CareerState, entry: CalendarEntry): string {
+  /* Round 1510: a super cup night names its cup. */
+  if (entry.type === 'oneOff') return oneOffEntryLabel(state, entry) ?? 'Super cup';
   const league = careerLeagueOf(state);
   if (entry.type === 'cup' && entry.cupRound) return `${league.cupName} · ${CUP_LABELS[entry.cupRound]}`;
   if (entry.type === 'uclKo' && entry.uclRound) return `Champions League · ${UCL_LABELS[entry.uclRound]}`;
@@ -1068,6 +1078,9 @@ export function joinClubNow(career: CareerState): CareerState | null {
   carryWorldUcl(career, joined);
   /* Round 1509: and the Europa League, by the same rule, its own nights shown kept (seen). */
   carryWorldComp(career, joined, 'uel');
+  /* Round 1510: and the super cup, its nights shown and my own results kept; a 'joined' stub when my new club is an
+     entrant of a night still ahead (the critic's corrections 6 to 8). */
+  carryOneOffs(career, joined);
   /* Round 1501: the level's cheque and wage room on the new job (the identity on Normal). */
   return applyNewJobDials(joined);
 }

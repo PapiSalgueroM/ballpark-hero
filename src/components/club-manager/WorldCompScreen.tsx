@@ -11,6 +11,7 @@ import type { WorldCompKey, WorldKoRound } from '@/lib/worldCompetition';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import {
   clubRun, firstStageNights, nextNight, nightLabel, ordinal, realFifthNation, roundPlural, routeWords, worldCompView, worldUclStatus, worldUelStatus,
+  superCupStatus, superCupView, type SuperCupView,
   type WorldCompView, type WorldViewNight, type WorldViewTie,
 } from '@/lib/clubManagerWorldView';
 
@@ -31,7 +32,7 @@ import {
  */
 
 type Tab = 'table' | 'matchdays' | 'knockouts' | 'final';
-interface Nav { at: 'tiles' | 'cup' | 'ucl' | 'uel'; tab: Tab | null; run: string | null; night: number | null; ko: WorldKoRound | null; group: string | null }
+interface Nav { at: 'tiles' | 'cup' | 'ucl' | 'uel' | 'dsc'; tab: Tab | null; run: string | null; night: number | null; ko: WorldKoRound | null; group: string | null }
 const HOME: Nav = { at: 'tiles', tab: null, run: null, night: null, ko: null, group: null };
 /** Round 1509: the competitions this screen shows, by key. */
 const COMP_NAME: Record<WorldCompKey, string> = { ucl: 'Champions League', uel: 'Europa League' };
@@ -541,6 +542,41 @@ const TAB_NAMES: Record<Tab, (v: WorldCompView) => string> = {
   final: () => 'The final',
 };
 
+/** Round 1510: the domestic super cup's one card, behind the Cups panel's fourth tile. */
+function SuperCupCard({ view, myClub, onClub }: { view: SuperCupView; myClub: string; onClub: (c: string) => void }) {
+  return (
+    <div className="bg-card border border-border rounded-2xl p-3 space-y-2" data-cm-super-cup={view.stub ? 'stub' : view.winner ? 'done' : 'ahead'}>
+      <div className="text-sm font-bold font-display text-foreground break-words">{view.name ?? 'Not confirmed'}</div>
+      {view.format && <div className="text-xs text-muted-foreground">{view.format}</div>}
+      {view.ground && <div className="text-xs text-muted-foreground">{view.ground}</div>}
+      {view.stub && <div className="text-xs text-foreground" data-cm-super-cup-stub>{view.stub}</div>}
+      {view.clubs.length > 0 && (
+        <div className="space-y-0.5">
+          {view.clubs.map(c => (
+            <div key={c.club} className="flex flex-wrap items-center gap-x-2">
+              <ClubName club={c.club} mine={c.club === myClub} onClick={onClub} />
+              <span className="text-xs text-muted-foreground">{c.why}</span>
+            </div>
+          ))}
+        </div>
+      )}
+      {view.matches.map(m => (
+        <div key={m.label} className="border-t border-border/50 pt-2" data-cm-super-cup-match={m.homeGoals === null ? 'ahead' : 'played'}>
+          <div className="text-xs text-muted-foreground">{m.label} · {dateText(m.date)}</div>
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-x-2">
+            <ClubName club={m.home} mine={m.home === myClub} onClick={onClub} />
+            <span className="text-sm font-bold text-foreground text-center">{m.homeGoals === null ? 'v' : `${m.homeGoals}-${m.awayGoals}`}</span>
+            <span className="text-right"><ClubName club={m.away} mine={m.away === myClub} onClick={onClub} /></span>
+          </div>
+          {m.winner && <div className="text-xs text-muted-foreground">{m.winner} won{m.pens ? ' on penalties' : m.aet ? ' after extra time' : ''}.</div>}
+        </div>
+      ))}
+      {view.name && view.seasonOne && !view.stub && !view.mine && <div className="text-xs text-muted-foreground">The game plays this one: you follow it from outside, and play in it from a summer your club earns a place.</div>}
+      {view.era && view.name && <div className="text-xs text-muted-foreground">This save keeps its era's super cup every season.</div>}
+    </div>
+  );
+}
+
 interface CupsPanelProps {
   career: CareerState;
   /** Opens a club page (ClubManager.tsx's setClubView). */
@@ -600,6 +636,9 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
   const uelOn = worldUclFormatOf(career) === 'l36';
   const uelView = useMemo(() => (uelOn ? worldCompView(career, 'uel') : null), [career, uelOn]);
   const uelStatus = worldUelStatus(career, uelView);
+  /* Round 1510: the country's super cup, every season (a country the game has no row for says so on the tile). */
+  const dscView = useMemo(() => superCupView(career), [career]);
+  const dscStatus = superCupStatus(dscView);
   /* The panel's old condition, word for word in effect: no group, and no knockout run still alive or won. */
   const noEurope = career.uclGroup === null && (career.uclKoRound === null || career.uclKoRound === 'out');
   const euro = careerLeagueOf(career).euro;
@@ -622,6 +661,14 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
         <WorldCompScreen career={career} nav={nav} go={go} onClubPage={clubPage} heading={uclHeading} groupsCard={groupsCard} bracketCard={bracketCard} />
       </div>
     );
+  } else if (nav.at === 'dsc') {
+    body = (
+      <div className="space-y-2" data-cm-cups-view="dsc">
+        <Back label="Cups" onClick={() => go(HOME)} />
+        <div className="text-xs text-muted-foreground uppercase tracking-wider">🛡️ Super cup</div>
+        <SuperCupCard view={dscView} myClub={career.clubName} onClub={clubPage} />
+      </div>
+    );
   } else if (nav.at === 'uel') {
     body = (
       <div className="space-y-2" data-cm-cups-view="uel">
@@ -640,6 +687,7 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
           <Tile icon="🏅" title={cupTitle} value={cupValue} sub={cupSub} testId="cup" onClick={() => go({ ...HOME, at: 'cup' })} />
           <Tile icon="⭐" title="Champions League" value={status.value} sub={status.sub} testId="ucl" onClick={() => go({ ...HOME, at: 'ucl' })} />
           {uelOn && <Tile icon="🌍" title="Europa League" value={uelStatus.value} sub={uelStatus.sub} testId="uel" onClick={() => go({ ...HOME, at: 'uel' })} />}
+          <Tile icon="🛡️" title="Super cup" value={dscStatus.value} sub={dscStatus.sub} testId="dsc" onClick={() => go({ ...HOME, at: 'dsc' })} />
         </div>
       </div>
     );
