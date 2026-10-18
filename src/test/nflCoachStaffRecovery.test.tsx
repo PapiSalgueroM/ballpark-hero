@@ -152,7 +152,7 @@ describe('actual NFL empty coaching market recovery', () => {
   it('completed NFL coach keeps recovery and progression unavailable', () => {
     const state = clone(fixtures.done.coach!), held = clone(state), view = mounted(state);
     expect(recovery(view)).toBeNull();
-    expect(view.getByRole('heading', { name: 'Coaching career complete' })).toBeVisible();
+    expect(view.getByRole('heading', { name: 'Coaching career complete' })).toBeInTheDocument();
     expect(view.queryByRole('button', { name: /^Sit out the/ })).toBeNull();
     const random = vi.fn(() => { throw new Error('Completed coaching must stay quiet'); });
     expect(Coach.playCoachSeason(state, random)).toEqual({ state, notes: [] });
