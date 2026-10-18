@@ -1,0 +1,3 @@
+FAIL 2 watcher América (now) nocoach seed 1 at s2-rollover: the state differs
+FAIL 2 watcher América (now) nocoach seed 2 at s2-rollover: the state differs
+simWorldEuro: RED, 14833 checks, 57 failures
