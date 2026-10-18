@@ -1,0 +1,8 @@
+treeWithoutMerge: 804a7b19fd27b6078b3a813f63404f8db1321990, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+base cf6a1b1688dfd744406b19407e645b161c3f2cf9
+deals: 49 saves, 2655 steps compared (up to the rollover), 0 red, 81s
+  deals on the base engine: buy done 49, buy-2 done 49, loan-option done 49, release done 31, release refused 18, release-2 done 31, release-2 refused 18, sale done 49, sale-2 done 49, swap done 49
+  after the rollover (Round 1508, this tree only): 49 adopted careers, 686 states checked, 3178 deal lines between two other clubs placed, 5341 owned records held at one club, 3521 joined rows on the screen; deals of mine: 31 releases, 49 buys, 49 sales; red by check: {}
+fresh: 15 saves, 1034 steps compared, 0 red, 20s
+  deals on the base engine: buy done 15, buy-2 done 15, loan-option done 15, release done 9, release refused 6, release-2 done 9, release-2 refused 6, sale done 15, sale-2 done 15, swap done 15
+simCmUnseededWorld: 1 FAILURE(S)

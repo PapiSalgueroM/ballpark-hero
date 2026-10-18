@@ -1,0 +1,2 @@
+unseeded exit=1 153s | simCmUnseededWorld: 1 FAILURE(S)
+contCmp exit=0 54s | contCmp1509: green, the log equals main line for line
