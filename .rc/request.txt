@@ -1,0 +1,4 @@
+#!serial
+# Release BK triage tr2 (rBK-tr2): rBK-rgBIh2 ledgerbound (simCmLedgerBound, a timing bound) rerun alone, twice, on the gate's own command.
+ledgerbound-1: node scripts/simCmLedgerBound.mjs > /tmp/lb1.log 2>&1; s=$?; grep -E "FAIL|green|RED" /tmp/lb1.log | head -4 | cut -c1-200; exit $s
+ledgerbound-2: node scripts/simCmLedgerBound.mjs > /tmp/lb2.log 2>&1; s=$?; grep -E "FAIL|green|RED" /tmp/lb2.log | head -4 | cut -c1-200; exit $s
