@@ -1,0 +1,5 @@
+tsc exit=0 46s | tsc exit=0
+units exit=0 4s |    Duration  3.53s (transform 1.54s, setup 307ms, collect 3.14s, tests 2.52s, environment 1.07s, prepare 378ms)
+mut-type exit=0 3s | vitest exit=1 (must be 1)
+mut-keep exit=0 3s | vitest exit=1 (must be 1)
+mut-share exit=0 2s | vitest exit=1 (must be 1)

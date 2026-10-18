@@ -1,0 +1,8 @@
+mutfx: share applied to src/lib/worldNights.ts
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/worldNights.test.ts[2m > [22mplaceNights[2m > [22mnewYear is the first Saturday gap from the window on, and a final a league entry after its semi finals
+[31m[1mAssertionError[22m: expected [ 6, 8 ] to deeply equal [ 6, 7 ][39m
+[41m[1m FAIL [22m[49m src/lib/worldNights.test.ts[2m > [22mplaceNights[2m > [22mtwo nights never share a gap, and a night with no gap is null
+[31m[1mAssertionError[22m: expected [ +0, +0 ] to deeply equal [ +0, null ][39m
+[41m[1m FAIL [22m[49m src/lib/worldNights.test.ts[2m > [22mplaceNights on the engine calendars[2m > [22mfinds a slot that moves no date on every league size, with and without a cup, a round of 16 and two legs, in every year
+vitest exit=1 (must be 1)

@@ -1,0 +1,6 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json; s=$?; echo "tsc exit=$s"; exit $s
+units: node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/lib/clubManagerWorldView.test.ts src/lib/euroAccess.test.ts --testTimeout=300000 --hookTimeout=300000 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+mut-type: node .rc/x/mutfx.mjs type && node_modules/.bin/vitest run src/lib/worldNights.test.ts --testTimeout=300000 > /tmp/mt.log 2>&1; s=$?; grep -E "Tests |FAIL|AssertionError" /tmp/mt.log | head -6; git checkout -- src scripts; echo "vitest exit=$s (must be 1)"; [ $s -eq 1 ]
+mut-keep: node .rc/x/mutfx.mjs keep && node_modules/.bin/vitest run src/lib/worldNights.test.ts --testTimeout=300000 > /tmp/mk.log 2>&1; s=$?; grep -E "Tests |FAIL|AssertionError" /tmp/mk.log | head -6; git checkout -- src scripts; echo "vitest exit=$s (must be 1)"; [ $s -eq 1 ]
+mut-share: node .rc/x/mutfx.mjs share && node_modules/.bin/vitest run src/lib/worldNights.test.ts --testTimeout=300000 > /tmp/ms.log 2>&1; s=$?; grep -E "Tests |FAIL|AssertionError" /tmp/ms.log | head -6; git checkout -- src scripts; echo "vitest exit=$s (must be 1)"; [ $s -eq 1 ]

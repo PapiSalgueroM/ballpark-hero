@@ -1,0 +1,7 @@
+mutfx: keep applied to src/lib/worldNights.ts
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/worldNights.test.ts[2m > [22mplaceNights[2m > [22mtakes no gap that would move a date when the caller can redraw the calendar
+[31m[1mAssertionError[22m: expected [ 1 ] to deeply equal [ 4 ][39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m8 passed[39m[22m[90m (9)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldNights.test.ts,title=src/lib/worldNights.test.ts > placeNights > takes no gap that would move a date when the caller can redraw the calendar,line=68,column=67::AssertionError: expected [ 1 ] to deeply equal [ 4 ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A-   4,%0A+   1,%0A  ]%0A%0A ❯ src/lib/worldNights.test.ts:68:67%0A%0A
+vitest exit=1 (must be 1)
