@@ -1,0 +1,5 @@
+mutWhy: objectiveStatuses no longer carries the why line
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/euroAccess.test.ts[2m > [22mthe board reads the rule (Round 1509)[2m > [22mtells the board panel why a Europa League ask is on track when the cup put my club in, 
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (17)[39m
+the why unit test caught the mutation
