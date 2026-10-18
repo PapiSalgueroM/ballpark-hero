@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/soccerPotentialProgress.test.tsx [2m([22m[2m20 tests[22m[2m)[22m[33m 360[2mms[22m[39m
+ [32m✓[39m src/test/drillBoardMatch.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 776[2mms[22m[39m
+ [32m✓[39m src/test/soccerAwardReveal.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 99[2mms[22m[39m
+ [32m✓[39m src/test/drillBoardMarkup.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 634[2mms[22m[39m
+   [33m[2m✓[22m[39m the training boards with no match prop[2m > [22mdraws the Wall Shot as recorded [33m 326[2mms[22m[39m
+ [32m✓[39m src/test/perfectSeasonNbaRetry.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 5982[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Perfect Season recoverable archive failures[2m > [22mretries the initial archive in the chosen mode and refuses a stale prior-mode wheel [33m 1911[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Perfect Season recoverable archive failures[2m > [22mkeeps an earlier pick through a failed next spin and finishes one complete 82-game season [33m 1380[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Perfect Season recoverable archive failures[2m > [22mdoes not spend rerolls on repeated unusable or failed fetches and charges one usable recovery [33m 510[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Perfect Season recoverable archive failures[2m > [22mkeeps an ordinary healthy draft and restart unchanged with one completion per run [33m 1951[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m42 passed[39m[22m[90m (42)[39m
+[2m   Start at [22m 17:39:53
+[2m   Duration [22m 7.83s[2m (transform 2.23s, setup 336ms, collect 5.30s, tests 7.85s, environment 2.11s, prepare 635ms)[22m
+
