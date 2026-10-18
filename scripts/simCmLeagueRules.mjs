@@ -541,6 +541,25 @@
       --part=modern,eras,pure --write on the tree itself (remote check
       r1344-dg, line write-digest, 234 lines changed), then run green whole
       on the same runner.
+      Release BK's join (2026-10-18) took it ONCE, after Rounds 1509 (the
+      Europa League followed every season) and 1510 (each country's super
+      cup) were merged. The tree moves 27 modern saves (start, whole and
+      wholeNext in all 27, europeNext in 13, s2_whole in 10, s2_europe in
+      6, the Premier League save's s2 table, results, world and cup, and
+      the Bundesliga save's summary); eras and pure held. Attribution on a
+      GitHub runner at 9a705e19 (remote check rBKa-m2): the tree itself 27
+      failure lines (sha c6e91949, the same as Round 1510's head); a
+      throwaway checkout with worldComps.uel stripped before hashing, the
+      Europa League holder line and the board's European rung taken back
+      (Round 1509's lrAttr strip, holder and board) and Round 1510's three
+      super cup opens taken out is green whole against the committed file,
+      so those four changes are the only cause. Round 1509's own legs
+      (fix-1509 r1509-fixB3: the key alone 12, the winner into the
+      Champions League 14 more, the rung bundesliga's summary) and Round
+      1510's (r1510-lr: one line, the Championship save's worldComps.dsc in
+      wholeNext and s2_whole) stand. Written with --part=modern,eras,pure
+      --write on the tree itself (line lr-write, 115 lines changed), then
+      run green whole on the same runner.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
