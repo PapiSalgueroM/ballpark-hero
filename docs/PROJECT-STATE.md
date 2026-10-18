@@ -1,3 +1,17 @@
+## Round1426 source-qualified draft, 2026-10-18: newer report drafts survive older submissions
+
+[PR340](https://github.com/PapiSalgueroM/ballpark-hero/pull/340), branch `codex/report-draft-lifecycle`, is an open draft for Claude I to integrate. Tested source `48225075cf3ff2937a83e38e7e8c0807ca0ace64`, base main `775564305e9da84dab59f2b9fe246d044a3cc8e9`. This entry carries source qualification only. The historical publication entry below is preserved and is not a new live observation.
+
+Both report forms now preserve a newer edited or reopened draft when an older request or success timer finishes. Existing captured delivery, fallback, current retry, normal1500ms reset and focus behavior stay intact. Product scope: the two report components and one shared UI lifecycle hook.
+
+Remote run39148882363, job117738259286, artifact12144462646 passed:14 normal cases,14 bare and14 restored; effective original12-fault, completion10-fault and timer2-fault controls;12 built browser contexts; unchanged24 report cases and context4 controls; actual types, production build, all15 built-site readers and all14 unchanged fatal caps. Native common receipt `bb3d1bc97328ddf51dc31f09e3d7c6230fe36618fd6550ac8b3763162e0c2df8`, feature receipt `44d8c1c52ee6b833614e2806f93f9f1e72c19703cd570fd4067f450d029cf42e`. Full packet is `C:/Users/antho/dukb-handoff/2026-10-18/report-draft-lifecycle-1426/`. See `docs/ROUND1426-REPORT-DRAFT-LIFECYCLE.md` for scope and proof.
+
+Whole simReportRelay was NOT RUN because it accesses the live database. No backend, email, unmount runtime, no-scroll or full-suite credit. Standalone home243.5/244K, Club Manager618.6/619K, Soccer Career834.3/835K, NFL490.5/491K; I must qualify the combined tree. No main, preview or publication claim. Manager and other protected work remain with I.
+
+Previous project state follows.
+
+
+
 ## Release BJ LIVE, 2026-10-17 21:51 EDT: Club Manager Hard and Legend, the Champions League you can follow in or out of it, match days that read like a scoreboard, a way out for dirty money in the US careers, and Soccer Career's summer cards
 
 Claude lane (session I). main d0c3ff58, deployment fec60776-a9ad-49aa-b4ea-04a590a233de, entry index-CWmc_M1Q.js (was
