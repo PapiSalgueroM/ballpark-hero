@@ -27,6 +27,7 @@ const callbacks = { close: [] as unknown[][], complete: [] as unknown[][], drill
 const draws: number[] = [];
 const requests: Array<{ url: string; method: string }> = [];
 const events: Array<Record<string, unknown>> = [];
+const eventRefs = new WeakMap<Record<string, unknown>, Event>();
 let parentMounts = 0;
 let parentUnmounts = 0;
 let clock = 0;
@@ -71,12 +72,13 @@ for (const type of ['keydown', 'keyup', 'click'] as const) {
     const row: Record<string, unknown> = {
       type, key: event instanceof KeyboardEvent ? event.key : null,
       code: event instanceof KeyboardEvent ? event.code : null,
-      trusted: event.isTrusted, target: identify(event.target), defaultPrevented: null,
+      trusted: event.isTrusted, target: identify(event.target),
     };
+    eventRefs.set(row, event);
     events.push(row);
-    // Observe after every bubble listener, including the real DrillBoard listener.
-    queueMicrotask(() => { row.defaultPrevented = event.defaultPrevented; });
-  });
+    // Capture sees clicks that the actual panel stops from bubbling.
+    // read() observes the retained event after its native dispatch completes.
+  }, true);
 }
 const stores = (storage: Storage) => Object.fromEntries(
   Array.from({ length: storage.length }, (_, index) => storage.key(index)!)
@@ -104,7 +106,9 @@ const read = () => {
     power: range ? Number(range.value) : null,
     aim: aim ? { x: Number(aim.getAttribute('cx')), y: Number(aim.getAttribute('cy')) } : null,
     active: identify(document.activeElement), local: stores(localStorage), session: stores(sessionStorage),
-    callbacks, draws, requests, events, clock, clockSteps,
+    callbacks, draws, requests,
+    events: events.map(row => ({ ...row, defaultPrevented: eventRefs.get(row)!.defaultPrevented })),
+    clock, clockSteps,
     pendingTimers: Array.from(timers, ([id, timer]) => ({ id, at: timer.at, every: timer.every })),
     html: document.getElementById('root')!.innerHTML,
   }));
