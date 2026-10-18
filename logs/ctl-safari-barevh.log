@@ -1,0 +1,13 @@
+CONTROL barevh: src/__control__/barevh.css added to the scan in memory
+0) The scan covers what ships: no shipped file imports a test file
+   2253 files under src, 637 test files left out (493 under src/test, 144 *.test.* or *.spec.* elsewhere), 1616 scanned, 6481 local imports read
+1) No date string is handed back to the parser
+   1616 shipped files scanned, 0 date round trips
+2) No lookbehind in shipped code
+3) No very new JavaScript the phone in his pocket may not have
+4) No raw 100vh, because mobile Safari measures it wrong
+  FAIL: src/__control__/barevh.css: hand written 100vh, which overflows under the iOS toolbar (use 100dvh)
+5) The viewport tag lets a phone zoom, and nothing blocks touch
+6) The gap this file cannot close is written down
+
+simSafari: control barevh FIRED: section 4 failed on src/__control__/barevh.css (0 other failures in the run)

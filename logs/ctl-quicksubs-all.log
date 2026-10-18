@@ -1,0 +1,29 @@
+PASS Quick substitutions normal
+simCmQuickSubs normal: real coaching outcomes and independent unmanaged baseline passed.
+PASS Quick substitutions early
+simCmQuickSubs early: real coaching outcomes and independent unmanaged baseline passed.
+PASS Quick substitutions late
+simCmQuickSubs late: real coaching outcomes and independent unmanaged baseline passed.
+PASS Quick substitutions extra
+simCmQuickSubs extra: real coaching outcomes and independent unmanaged baseline passed.
+PASS Quick substitutions clock
+simCmQuickSubs clock: real coaching outcomes and independent unmanaged baseline passed.
+PASS Quick substitutions loan
+simCmQuickSubs loan: real coaching outcomes and independent unmanaged baseline passed.
+PASS Quick substitutions fourth
+simCmQuickSubs fourth: real coaching outcomes and independent unmanaged baseline passed.
+PASS Quick substitutions red
+simCmQuickSubs red: real coaching outcomes and independent unmanaged baseline passed.
+PASS Quick substitutions unavailable
+simCmQuickSubs unavailable: real coaching outcomes and independent unmanaged baseline passed.
+PASS Quick substitutions fresh
+simCmQuickSubs fresh: real coaching outcomes and independent unmanaged baseline passed.
+PASS Quick substitutions reserve
+simCmQuickSubs reserve: real coaching outcomes and independent unmanaged baseline passed.
+PASS Quick substitutions paused
+simCmQuickSubs paused: real coaching outcomes and independent unmanaged baseline passed.
+PASS Quick substitutions entry
+simCmQuickSubs entry: real coaching outcomes and independent unmanaged baseline passed.
+PASS Quick substitutions immutable
+simCmQuickSubs immutable: real coaching outcomes and independent unmanaged baseline passed.
+simCmQuickSubs: 10 actual outcomes and 13 effective controls passed.
