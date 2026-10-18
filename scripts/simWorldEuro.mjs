@@ -37,6 +37,10 @@
  *      seasons my club wins its cup (printed, at least one required); then the attribution: the base's
  *      objectiveStatuses (WORLD_EURO_BASE) on the very same save, each objective graded otherwise a European rung
  *      the head graded done by a route the base did not have, printed by route.
+ *   5  the holder (step 6b): the Europa League's winner is in next season's Champions League (the watched one, or the
+ *      participant's field unless its 32 were already full of direct places, counted) and not in its Europa League;
+ *      against the engine with the line reverted (scripts/lib/worldUelHolder1509.mjs), the two part only at a
+ *      rollover after a final, a watcher on worldComps alone, a participant on its field and draw.
  *   6  the dailies: no Hot Seat or Deadline Day state, the handover included, carries worldComps; startCareer's
  *      time per daily date on this tree and on the base (WORLD_EURO_BASE), printed (ruling 1l: over 10 ms more
  *      a date, the dailies take the one options object).
@@ -53,6 +57,7 @@
  *   section 2: stream (the Europa League's matches draw from Math.random) form (its evaluation writes the clubs'
  *              form) leak (its open writes a key outside worldComps)
  *   section 3: position (euroPlaceOf grades by position alone, as before the round)
+ *   section 5: noholder (the line reverted: the winner stays out of the next Champions League)
  *   section 4: live (the evaluation reads today's strengths, not the snapshot) ahead (a night counts a week
  *              early) noseen (the job move's carry forgets the nights it had shown)
  */
@@ -85,6 +90,7 @@ const CONTROLS = {
   ahead: [4, /^4 early: /, /^4 /],
   noseen: [4, /^4 falls: /, /^4 /],
   position: [3, /^3 agreement: /, /^3 /],
+  noholder: [5, /^5 holder: /, /^5 /],
 };
 /* The engine edits of sections 1 to 4, each line asserted to stand exactly once (worldUclFleet's engineOf). */
 const CM = 'src/lib/clubManager.ts';
@@ -98,7 +104,8 @@ const CAREER_EDITS = {
   leak: [{ file: CM, from: "  if (slice && comp === 'uel' && tagged.earned) slice.earned = tagged.earned;", to: "  if (slice && comp === 'uel' && tagged.earned) slice.earned = tagged.earned;\n  if (slice && comp === 'uel') (state as unknown as Record<string, unknown>).uelLeak = slice.clubs.length;" }],
   live: [{ file: CM, from: '  const out = evaluateWorldComp(slice, k, worldCompBind(state, comp, slice.f));', to: "  const out = evaluateWorldComp(comp === 'uel' ? { ...slice, str: slice.clubs.map(c => worldUclStrength(state, c)) } : slice, k, worldCompBind(state, comp, slice.f));" }],
   ahead: [{ file: CM, from: '  else while (n < places.length && state.week > places[n].at) n += 1;', to: "  else while (n < places.length && (comp === 'uel' ? state.week >= places[n].at : state.week > places[n].at)) n += 1;" }],
-  position: [{ file: CM, from: '      route = over ? euroRouteAtEnd(career, league, table) : euroRouteNow(career, league, table);', to: "      route = pos > 0 && pos <= (EURO_SLOTS[league.id]?.uel ?? places) ? 'L' : null;" }],
+  noholder: [{ file: CM, from: '  if (uelHolder) take(uelHolder);\n', to: '' }],
+  position: [{ file: CM, from:'      route = over ? euroRouteAtEnd(career, league, table) : euroRouteNow(career, league, table);', to: "      route = pos > 0 && pos <= (EURO_SLOTS[league.id]?.uel ?? places) ? 'L' : null;" }],
   noseen: [{ file: CM, from: '      setWorldComp(joined, comp, { ...slice, ...(seen > 0 ? { seen } : {}) });', to: "      setWorldComp(joined, comp, comp === 'uel' ? { ...slice, seen: undefined } : { ...slice, ...(seen > 0 ? { seen } : {}) });" }],
 };
 /* Section 2's other arm: this round's four opens taken out. */
@@ -720,12 +727,63 @@ async function boardSection() {
 }
 const SEARCH_SEEDS = (process.env.WORLD_EURO_SEARCH_SEEDS || '1,2,3,4,5,6').split(',').map(Number);
 
+/** Section 5 (step 6b, ruling 1k): the Europa League's winner into the next Champions League. Today's world, both
+ *  fleets, on the engine and on it with the line reverted (scripts/lib/worldUelHolder1509.mjs): the winner is in
+ *  next season's Champions League (the watched one, or the participant's field unless its 32 were already full of
+ *  direct places, counted), and the two engines part only at a rollover after a Europa League final, on the field:
+ *  a watcher only on worldComps, a participant on its field and its draw, after which its journey is let go. */
+async function holderSection() {
+  const { engineOf, pickFleet } = await lib();
+  const { UEL_HOLDER_EDIT } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'worldUelHolder1509.mjs')).href);
+  const head = await engineOf(ROOT, 'h5', { edits: careerEdits() }, cannot);
+  const ref = await engineOf(ROOT, 'h5off', { edits: [UEL_HOLDER_EDIT] }, cannot);
+  if (careerEdits().length) changed = true;
+  const fleet = pickFleet(await head.fresh(), 'all', cannot).filter(f => f.era === 'now');
+  const t0 = Date.now();
+  let rollovers = 0, inField = 0, full = 0, parted = 0;
+  const ALLOWED = { watcher: new Set(['worldComps']), participant: new Set(['uclField', 'uclGroup', 'uclWorld', 'worldComps']) };
+  for (const f of fleet) for (const seed of SEEDS) {
+    const name = `${f.kind} ${f.club} seed ${seed}`;
+    const seasons = f.kind === 'participant' ? 2 : 3;
+    const onStep = (M, st, label, got) => {
+      if (!got?.prev) return;
+      const w = M.cm.worldCompWinnerOf(got.prev, 'uel');
+      if (!w) return;
+      rollovers += 1;
+      const ucl = new Set(M.cm.uclEntrantsOf(st));
+      if (st.uclGroup) {
+        const direct = M.cm.uclDirectQualifiersFromTables(got.pre.tables, M.cm.uclHolderOf(got.prev)).length;
+        if (!ucl.has(w) && direct >= 32) { full += 1; return; }
+      }
+      ok(ucl.has(w), `5 holder: ${name} at ${label}: the Europa League's winner ${w} is not in next season's Champions League`);
+      if (ucl.has(w)) inField += 1;
+      ok(!(st.worldComps?.uel?.clubs ?? []).includes(w), `5 holder: ${name} at ${label}: ${w} is in next season's Europa League too`);
+    };
+    const a = await journey(head, { ...f, seed }, { seasons, onStep });
+    const b = await journey(ref, { ...f, seed }, { seasons });
+    for (let i = 0; i < Math.min(a.length, b.length); i += 1) {
+      const x = a[i].s, y = b[i].s;
+      if (!x || !y) continue;
+      const keys = [...new Set([...Object.keys(x), ...Object.keys(y)])].filter(k => JSON.stringify(x[k]) !== JSON.stringify(y[k]));
+      if (!keys.length) continue;
+      const stray = keys.filter(k => !ALLOWED[f.kind].has(k));
+      ok(stray.length === 0, `5 attribution: ${name} at ${a[i].label}: the line moved ${stray.slice(0, 5).join(', ')} beside ${keys.filter(k => ALLOWED[f.kind].has(k)).join(', ')}`);
+      ok(a[i].label.includes('rollover') || keys.every(k => k === 'worldComps') || f.kind === 'participant', `5 attribution: ${name}: the engines part first at ${a[i].label}, not at a rollover`);
+      parted += 1;
+      if (f.kind === 'participant') break;
+    }
+  }
+  ok(rollovers > 0 && inField > 0, '5 holder: no rollover after a Europa League final, so nothing was checked');
+  console.log(`  5 the holder: ${rollovers} rollovers after a Europa League final, the winner in next season's Champions League in ${inField}, a participant's 32 already full in ${full}; the two engines parted on ${parted} steps, ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+}
+
 /* ── Run ───────────────────────────────────────────────────────────────────────────────────────────── */
 try {
   if (runs(0)) { section0(); await section0Engine(); }
   if (runs(1) || runs(4) || runs(7)) await europaPass();
   if (runs(2)) await selfRelative();
   if (runs(3)) await boardSection();
+  if (runs(5)) await holderSection();
   if (runs(6)) await dailies();
   if (runs(1) || runs(4) || runs(7)) printMeasured();
 } catch (err) {

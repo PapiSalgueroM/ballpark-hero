@@ -37,6 +37,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { engineOf, pickFleet, tape } from './lib/worldUclFleet.mjs';
 import { HOLDER_EDIT } from './lib/worldUclHolder1502.mjs';
+import { UEL_HOLDER_EDIT } from './lib/worldUelHolder1509.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (name, dflt) => { const i = process.argv.indexOf(name); return i > 0 ? process.argv[i + 1] : dflt; };
@@ -60,6 +61,10 @@ const OLD_SAVES = process.argv.includes('--old-saves');
    Green with it is the attribution of E5 against the base: the one line reverted, every key but a watching state's
    worldComps is the base's. */
 const HOLDER_OFF = process.argv.includes('--holder-off');
+/* --uel-holder-off (Round 1509, step 6(b)): THIS TREE plays with the Europa League's winner kept out of the next
+   Champions League (scripts/lib/worldUelHolder1509.mjs). Green with it against step 6(a) is that step's attribution:
+   the one line reverted, the engine is the step before in every key. */
+const UEL_HOLDER_OFF = process.argv.includes('--uel-holder-off');
 const oldSaves = { loaded: 0, gained: 0, kept: 0, wrong: 0 };
 const sha = v => createHash('sha256').update(typeof v === 'string' ? v : JSON.stringify(v)).digest('hex').slice(0, 16);
 
@@ -125,11 +130,11 @@ function firstDifference(a, b) {
 }
 
 const baseEngine = await engineOf(ROOT, 'base', { base: BASE }, cannot);
-const treeEngine = await engineOf(ROOT, 'tree', { edits: HOLDER_OFF ? [HOLDER_EDIT] : [] }, cannot);
+const treeEngine = await engineOf(ROOT, 'tree', { edits: [...(HOLDER_OFF ? [HOLDER_EDIT] : []), ...(UEL_HOLDER_OFF ? [UEL_HOLDER_EDIT] : [])] }, cannot);
 const fleet = pickFleet(await treeEngine.fresh(), FLEET, cannot);
 const chosen = fleet.filter(f => !ONLY || f.club.includes(ONLY));
 console.log(`base ${BASE}; fleet (${chosen.length}): ${chosen.map(f => `${f.club} (${f.era}, ${f.kind})`).join('; ')}`);
-console.log(`seeds ${SEEDS.join(',')}; modes ${COACH}; strip ${STRIP || 'nothing'}${HOLDER_OFF ? '; this tree with the holder line reverted' : ''}`);
+console.log(`seeds ${SEEDS.join(',')}; modes ${COACH}; strip ${STRIP || 'nothing'}${HOLDER_OFF ? '; this tree with the holder line reverted' : ''}${UEL_HOLDER_OFF ? '; this tree with the Europa League holder line reverted' : ''}`);
 
 let journeys = 0, steps = 0, carriers = 0, evals = 0;
 const fails = [];

@@ -95,6 +95,10 @@ import { engineOf, pickFleet, tape, CREATED, ERAS as ERAS_OF_FLEET } from './lib
 const HOLDER_LIB = path.join(path.dirname(fileURLToPath(import.meta.url)), 'lib', 'worldUclHolder1502.mjs');
 const { HOLDER_EDIT = null, HOLDER_LINE = null } = fs.existsSync(HOLDER_LIB) ? await import(pathToFileURL(HOLDER_LIB).href) : {};
 const hasE5 = () => !!HOLDER_LINE && text(CM).includes(HOLDER_LINE);
+/* Round 1509 (ruling 1k): the Europa League's winner admitted to the Champions League moves the field too, so section 2
+   plays both arms with it reverted (scripts/lib/worldUelHolder1509.mjs), and the binding is compared alone. */
+const UEL_HOLDER_LIB = path.join(path.dirname(fileURLToPath(import.meta.url)), 'lib', 'worldUelHolder1509.mjs');
+const { UEL_HOLDER_EDIT = null } = fs.existsSync(UEL_HOLDER_LIB) ? await import(pathToFileURL(UEL_HOLDER_LIB).href) : {};
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const text = file => fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
@@ -153,12 +157,13 @@ Object.assign(CONTROLS, {
 const CAREER_EDITS = {
   dropnight: [{ file: MODULE_FILE, from: '  for (let md = 0; md < firstStage; md += 1) {', to: '  for (let md = 0; md < firstStage - 1; md += 1) {' }],
   field32: [
-    { file: CM, from: '    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, worldUclExcluded(state))', to: '    ? uclFieldFromTables(tables, holder, 32, worldUclExcluded(state))' },
+    /* Round 1509: the watched field's call passes the Europa League's winner on (ruling 1k). */
+    { file: CM, from: '    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, worldUclExcluded(state), uelHolder)', to: '    ? uclFieldFromTables(tables, holder, 32, worldUclExcluded(state), uelHolder)' },
     { file: CM, from: '    : state.season === 1 ? seasonOneUclField(state.eraId ?? DEFAULT_ERA_ID, UCL_LEAGUE.clubs, worldUclExcluded(state)) : null;', to: '    : state.season === 1 ? seasonOneUclField(state.eraId ?? DEFAULT_ERA_ID, 32, worldUclExcluded(state)) : null;' },
   ],
   eraformat: [{ file: CM, from: "  return uclSeasonYear(state.eraId) <= UCL_R16_LAST_YEAR ? 'g8' : 'l36';", to: "  return 'l36';" }],
   meinfill: [{ file: CM, from: '    : state.season === 1 ? seasonOneUclField(state.eraId ?? DEFAULT_ERA_ID, UCL_LEAGUE.clubs, worldUclExcluded(state)) : null;', to: '    : state.season === 1 ? seasonOneUclField(state.eraId ?? DEFAULT_ERA_ID, UCL_LEAGUE.clubs) : null;' }],
-  meindirect: [{ file: CM, from: '    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, worldUclExcluded(state))', to: '    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs)' }],
+  meindirect: [{ file: CM, from: '    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, worldUclExcluded(state), uelHolder)', to: '    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, undefined, uelHolder)' }],
   nopens: [{ file: MODULE_FILE, from: '\n    t.pens = true;\n    t.winner = coin() < 0.5 ? t.home : t.away;\n', to: '\n    t.pens = true;\n' }],
   agall: [{ file: CM, from: '    awayGoals: uclAwayGoalsApply(state.eraId),\n    deciderScale: ET_DEFLATOR,', to: '    awayGoals: true,\n    deciderScale: ET_DEFLATOR,' }],
   stream: [{ file: CM, from: 'sim: (strH, strA, scale, rand) => simScore(strH, strA, 0.2, -0.08, scale, rand), tie };', to: 'sim: (strH, strA, scale, rand) => simScore(strH, strA, 0.2, -0.08, scale), tie };' }],
@@ -177,7 +182,7 @@ const CAREER_EDITS = {
     { file: MODULE_FILE, from: '0.79, 0.82, 0.87, 0.90, 1.0];', to: '0.79, 0.82, 0.87, 0.87, 1.0];' },
   ],
   noholder: HOLDER_EDIT ? [HOLDER_EDIT] : [],
-  keep: [{ file: CM, from: '    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);', to: '    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);\n    (state as unknown as Record<string, unknown>).worldCompsKept = career.worldComps;' }],
+  keep: [{ file: CM, from: '    openWorldUcl(state, worldUclField(state, tables, watchHolder, watchUelHolder), watchHolder);', to: '    openWorldUcl(state, worldUclField(state, tables, watchHolder, watchUelHolder), watchHolder);\n    (state as unknown as Record<string, unknown>).worldCompsKept = career.worldComps;' }],
 };
 /* The review of 2026-10-17 (results-g/review-run-1502.md and review-read-1502.md): each mutation it showed every
    section green under, now a control of the check that answers it. */
@@ -375,7 +380,7 @@ const bump = (k, n = 1) => { counts[k] = (counts[k] ?? 0) + n; };
 const careerEdits = () => CAREER_EDITS[CONTROL] ?? [];
 const byPlain = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
 const OPEN_LINE = '  /* Round 1502: a club not in the Champions League watches it, opened after the seed it is keyed on. */\n  openWorldUclOnStart(state, world);\n';
-const ROLL_LINE = '    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);\n';
+const ROLL_LINE = '    openWorldUcl(state, worldUclField(state, tables, watchHolder, watchUelHolder), watchHolder);\n';
 const CARRY_LINE = '  carryWorldUcl(career, joined);\n';
 /* The binding switched off (section 2's other arm): the four calls that open, carry or repair a slice (the
    load repair since the review of 2026-10-17: with it in both arms a repair that drew or wrote elsewhere moved
@@ -881,7 +886,7 @@ async function watcherPass() {
 async function selfRelative() {
   /* From step E5 the holder line is reverted in BOTH arms, so this section compares the binding alone; what the
      holder moves is section 5's, by attribution. */
-  const holder = hasE5() ? [HOLDER_EDIT] : [];
+  const holder = [...(hasE5() ? [HOLDER_EDIT] : []), ...(UEL_HOLDER_EDIT ? [UEL_HOLDER_EDIT] : [])];
   const head = await engineOf(ROOT, 'head2', { edits: [...careerEdits(), ...holder] }, cannot);
   const off = await engineOf(ROOT, 'off', { edits: [...BINDING_OFF, ...holder] }, cannot);
   if (careerEdits().length) changed = true;

@@ -12880,7 +12880,8 @@ function initUclGroup(qualified: boolean, myClub: string, eraId?: string, field?
 export function uclQualifiersFrom(career: CareerState): string[] {
   const tables = uclFinalTables(career);
   if (!tables) return [];
-  return uclFieldFromTables(tables, uclHolderOf(career));
+  /* Round 1509 (ruling 1k): and the Europa League's winner, row Q4. */
+  return uclFieldFromTables(tables, uclHolderOf(career), undefined, undefined, uelHolderOf(career));
 }
 
 /**
@@ -12898,6 +12899,17 @@ export function uclQualifiersFrom(career: CareerState): string[] {
 export function uclHolderOf(career: CareerState): string | null {
   const own = career.uclBracket?.find(t => t.round === 'F')?.winner ?? null;
   return own ?? worldUclWinner(career);
+}
+
+/**
+ * Round 1509 (rulings 1j and 1k): the Europa League's winner a finished season hands the next Champions League
+ * (row Q4: the titleholder is admitted to its league phase), read in one place, the one line reader of
+ * worldCompWinnerOf. My club is never an entrant of the Europa League yet, so it is never this. Null when the
+ * season crowned nobody this save knows of. scripts/lib/worldUelHolder1509.mjs reverts its route for the harnesses
+ * that need the engine without it.
+ */
+export function uelHolderOf(career: CareerState): string | null {
+  return worldCompWinnerOf(career, 'uel');
 }
 
 /**
@@ -12950,9 +12962,11 @@ export function uclFieldFromTables(
   holder?: string | null,
   size: number = UCL_FIELD_SIZE,
   exclude?: string | readonly string[],
+  uelHolder?: string | null,
 ): string[] {
-  /* The league places, then the holders (uclDirectQualifiersFromTables). */
-  const field = uclDirectQualifiersFromTables(tables, holder, exclude);
+  /* The league places, then the holders (uclDirectQualifiersFromTables), then since Round 1509 the Europa League's
+     winner. Every call without `uelHolder` is the call it was. */
+  const field = uclDirectQualifiersFromTables(tables, holder, exclude, uelHolder);
   if (!field.length) return [];
   const seen = new Set<string>(field);
   for (const club of excludedClubs(exclude)) seen.add(club);
@@ -12995,6 +13009,7 @@ export function uclDirectQualifiersFromTables(
   tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[],
   holder?: string | null,
   exclude?: string | readonly string[],
+  uelHolder?: string | null,
 ): string[] {
   /* Round 1347 E2: `exclude` (uclFieldFromTables says why) is never taken,
      by its league place or as the holders. */
@@ -13015,6 +13030,8 @@ export function uclDirectQualifiersFromTables(
   /* The holders go in whatever their league did, which is the real rule and
      the one route that is not a finishing position. */
   if (holder) take(holder);
+  /* Round 1509 (ruling 1k, row Q4): the Europa League's titleholder is admitted too, right after the holders. */
+  if (uelHolder) take(uelHolder);
   return field;
 }
 
@@ -13202,15 +13219,16 @@ export function worldCompField(
   tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[] | null,
   holder?: string | null,
   cup?: EuroCup | null,
+  uelHolder?: string | null,
 ): string[] | null {
   if (comp === 'uel') return worldUelField(state, tables, cup ?? null);
   if (worldUclFormatOf(state) === 'g8') return worldUclEraField(state)?.field ?? null;
   const field = tables
-    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, worldUclExcluded(state))
+    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, worldUclExcluded(state), uelHolder)
     : state.season === 1 ? seasonOneUclField(state.eraId ?? DEFAULT_ERA_ID, UCL_LEAGUE.clubs, worldUclExcluded(state)) : null;
   return field && field.length ? field : null;
 }
-export function worldUclField(state: CareerState, tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[] | null, holder?: string | null): string[] | null { return worldCompField(state, 'ucl', tables, holder); }
+export function worldUclField(state: CareerState, tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[] | null, holder?: string | null, uelHolder?: string | null): string[] | null { return worldCompField(state, 'ucl', tables, holder, null, uelHolder); }
 
 /* ---------- Round 1509: the world's Europa League, followed every season of today's world ---------- */
 
@@ -14371,7 +14389,7 @@ function euroRouteNow(career: CareerState, league: LeagueDef, table: TableRow[])
 function euroRouteAtEnd(career: CareerState, league: LeagueDef, table: TableRow[]): EuroRoute | null {
   const tables = uclFinalTables(career);
   if (!tables) return euroRouteNow(career, league, table);
-  const watched = uclFieldFromTables(tables, uclHolderOf(career), UCL_LEAGUE.clubs, worldUclExcluded(career));
+  const watched = uclFieldFromTables(tables, uclHolderOf(career), UCL_LEAGUE.clubs, worldUclExcluded(career), uelHolderOf(career));
   const euro = euroTablesOf(tables);
   const cups: Record<string, string | null> = {};
   for (const t of euro) cups[t.nationId] = null;
@@ -21206,8 +21224,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      the season's winner as the holder the participant's field is handed. */
   const watchTables = uclFinalTables(career);
   const watchHolder = uclHolderOf(career);
-  /* Round 1509: and the domestic cup the season played, for the Europa League's cup place. */
+  /* Round 1509: and the domestic cup the season played, for the Europa League's cup place, and the Europa League's
+     winner, admitted to the watched Champions League as nextUclField admits it (row Q4). */
   const watchCup = euroCupOf(career);
+  const watchUelHolder = uelHolderOf(career);
   registerLeagueOverrides(pr.overrides);
   /* Round 146: inside a historic save, a "playable club" is an era club, so
      the move guard consults the era world before the modern one. */
@@ -21751,7 +21771,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      (customExitUclField). Never throws: a rollover always completes. */
   try {
     const tables = moving && watchTables ? watchTables.map(t => ({ ...t, clubs: customExitUclField(career, t.clubs) })) : watchTables;
-    openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);
+    openWorldUcl(state, worldUclField(state, tables, watchHolder, watchUelHolder), watchHolder);
   } catch {
     setWorldComp(state, 'ucl', null);
   }

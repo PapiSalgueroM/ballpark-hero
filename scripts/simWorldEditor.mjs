@@ -334,7 +334,8 @@ function seasonOn(edit, club, label) {
   }));
   /* Round 1502 (E5, the critic's correction 4): the holder the summer hands on is the engine's own uclHolderOf
      (my final, else the watched one), never a second writing of it. */
-  const earned = cm.uclFieldFromTables(played, cm.uclHolderOf(end));
+  /* Round 1509 (ruling 1k): and the Europa League's winner, the engine's own uelHolderOf, admitted after them. */
+  const earned = cm.uclFieldFromTables(played, cm.uclHolderOf(end), undefined, undefined, cm.uelHolderOf ? cm.uelHolderOf(end) : null);
   const field = next.uclField ?? [];
   ok(field.length > 0 && JSON.stringify(field) === JSON.stringify(earned), `${label}: next season's Champions League is not the one the played tables earned (${field.slice(0, 4).join(', ')} against ${earned.slice(0, 4).join(', ')})`);
   const europeans = new Set(played.flatMap(t => t.clubs));
