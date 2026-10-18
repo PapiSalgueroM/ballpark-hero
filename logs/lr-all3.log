@@ -1,0 +1,5 @@
+lrAttr: /tmp/lr3 patched with strip, holder, board
+   (no build in dist/, skipped: run vite build first)
+
+simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+lrAttr: states stripped of worldComps.uel before hashing: 89
