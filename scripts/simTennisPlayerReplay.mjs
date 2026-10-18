@@ -95,7 +95,8 @@ function run(name, expectFault, controlFile) {
       if (failed) {
         const message = clean(row.failureMessages[0]);
         assert(message.startsWith('AssertionError: A replay must not inherit the previous surrender decision:'), 'Only the stale prompt assertion fails');
-        assert.match(message, /expected[\s\S]*<button[\s\S]*Yes, Give Up[\s\S]*to be null/, 'Failure is the retained actual surrender button');
+        assert.match(message, /expected <button[^\n]*> to be null/, 'Failure is the retained actual surrender button');
+        assert.match(clean(child.stderr ?? ''), /\+ Received:[\s\S]*<button[\s\S]*Yes, Give Up[\s\S]*<\/button>/, 'Full runner output names the actual retained confirmation');
         failures.push({ title: row.title, message });
       }
     }
