@@ -1,0 +1,6 @@
+probe exit=0 14s | PROBE TWO COMPS: 9 moves, 0 with a club in both competitions
+tsc exit=0 105s | 
+ctl-carryboth exit=1 235s | simWorldEuro: control carryboth FIRED (107 failures, all its own)
+euro-s147 exit=0 237s | simWorldEuro: green, 36095 checks, 0 failures
+ctl-noseen exit=1 203s | simWorldEuro: control noseen FIRED (35 failures, all its own)
+ctl-carryearned exit=1 162s | simWorldEuro: control carryearned FIRED (15 failures, all its own)

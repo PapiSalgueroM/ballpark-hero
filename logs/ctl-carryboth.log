@@ -1,0 +1,3 @@
+FAIL 1 both: participant Arsenal (now) seed 1 at s1-e38: Liverpool, AC Milan, Lyon in both competitions
+FAIL 1 both: participant Arsenal (now) seed 1 at s1-e39: Liverpool, AC Milan, Lyon in both competitions
+simWorldEuro: control carryboth FIRED (107 failures, all its own)

@@ -1,0 +1,6 @@
+probe: node .rc/x/probeTwoComps.mjs 2>&1 | tail -10; exit ${PIPESTATUS[0]}
+euro-s147: WORLD_EURO_ONLY=1,4,7 node scripts/simWorldEuro.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+ctl-carryboth: WORLD_EURO_CONTROL=carryboth node scripts/simWorldEuro.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ctl-noseen: WORLD_EURO_CONTROL=noseen node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
+ctl-carryearned: WORLD_EURO_CONTROL=carryearned node scripts/simWorldEuro.mjs 2>&1 | tail -2; exit ${PIPESTATUS[0]}
