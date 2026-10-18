@@ -1,0 +1,14 @@
+fixture: table mode table, unnamed slot 8, first meeting md 12; severe mode results
+FAIL [luton] 390x844 table: Luton Town twice in the fixture list, no placeholder (another club)
+FAIL [luton] 390x844 table: review carries the membership note
+FAIL [luton] 390x844 table: league game 12 is Arsenal v Luton Town
+FAIL [luton] 390x844 severe: results season names Luton Town twice (the PR's severe arm)
+FAIL [luton] 1280x900 table: kickoff table names Luton Town once and no placeholder
+FAIL [luton] 1280x900 table: Luton Town twice in the fixture list, no placeholder (another club)
+FAIL [luton] 1280x900 table: review carries the membership note
+FAIL [luton] 1280x900 table: final table names Luton Town once and no placeholder
+FAIL [luton] 1280x900 table: league game 12 is Arsenal v Luton Town
+FAIL [luton] 1280x900 severe: results season names Luton Town twice (the PR's severe arm)
+lutonWalk: luton checks 0/10, base checks 22/22
+lutonWalk: CONTROL FIRED: main turned all 10 Luton checks red, 22 base checks green
+FIRED-OK
