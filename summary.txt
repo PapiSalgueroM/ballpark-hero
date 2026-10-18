@@ -1,0 +1,3 @@
+p310b exit=0 16s | runProver: p310b exit 0
+p1411b exit=1 10s |     "message": "Whole original raw equals separately qualified baseline\n+ actual - expected\n\n+ 'f369c4bf08d799577214af73508da61231bcd6eba7b6a00aa933eb37829f30b9'\n- '8
+p1411own exit=1 9s | runProver: p1411own exit 1
