@@ -1,3 +1,11 @@
+## Round1416 closed as a non-finding, 18 October2026
+
+No record-book product change is warranted by the observed path. Actual original390touch browser scrolls the club list to612px, then the same pane opens the long spell at0px with the first2032season fully visible and painted. This contradicts the hypothesized clipping bug. The two assigned-offset jsdom failures do not model that browser result. Back and1280 remain unmeasured. No classifier relaxation, replay or product reset was applied.
+
+Original run39105967871/job117611758749 at3f319b4e9c4e2129bb22bac0e25339f1ef1f758a remains FAILED at the browser's expected-defect assertion. Types, the declared2fault+1healthy unit proof, build,15readers and14unchanged caps passed. Complete failed artifact12128652094 and all4new diagnostic method sources remain preserved in Git/sourceZIP/outside candidate files. The four own temporary test/helper/browser/workflow files are removed from the final tree so they cannot add two unsupported permanent unit failures. Final runtime bodies return exactly to qualified1415 final85a13119a18a8cbabdfabeedae3324a33b707f77; only three closing docs differ. Do not merge1416 as a product fix. See docs/ROUND1416-RECORD-BOOK-SCROLL-INVESTIGATION.md.
+
+Release BJ main77556430 now contains the exact reported Start Career and XI fixes through305/306. Own duplicate308 is SUPERSEDED/CLOSED through 305/306, with tested12133c4006199d60f2c40ff5725494fe603659c0/branch/proof preserved. Five publicHTML responses matchBJ's entry and deployment. I owns1509 Europa League,1510cups and actualjoin/main/publish; optional1415 PR332 remains separatelyREADY. No new fullworkflow-success, physical-device, unmeasured navigation or release claim for1416.
+
 ## Round1415 scoped READY, 17 October 2026: Keyboard exits while Soccer Career's Press Room loads
 
 The pending Press Room now takes focus and closes with Escape or Back. Late download completion stays closed; reopening and both actual loaded exits remain healthy. One product span adds89 source bytes. Actual tested25ae19bf518dd4c4441a088e6f022595e62abbc0 passed run39059855670/job117475392563, draft PR332. Original2 precise faults+2healthy qualify first; fixed6arms,185 unchanged related cases twice,4production390/1280 journeys and8viewed PNGs pass, with complete careers, storage, pending-save registry, RNG and source held.
