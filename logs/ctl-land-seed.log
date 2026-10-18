@@ -1,0 +1,79 @@
+chainBase: src/lib/careerDirtyMoney.ts
+chainBase: src/lib/careerDirtyMoneyDesk.ts
+chainBase: src/lib/careerPreDraft.ts
+chainBase: src/lib/clubDetailFixtures.ts
+chainBase: src/lib/clubManager.ts
+chainBase: src/lib/clubManagerBoardAsks.ts
+chainBase: src/lib/clubManagerBoardVerdict.ts
+chainBase: src/lib/clubManagerCalendar.ts
+chainBase: src/lib/clubManagerDifficulty.ts
+chainBase: src/lib/clubManagerMeters.ts
+chainBase: src/lib/clubManagerRecords.ts
+chainBase: src/lib/clubManagerRetire.ts
+chainBase: src/lib/clubManagerSlots.ts
+chainBase: src/lib/clubManagerStart.ts
+chainBase: src/lib/clubManagerUclGroups.ts
+chainBase: src/lib/clubManagerWorldRoster.ts
+chainBase: src/lib/clubManagerWorldView.ts
+chainBase: src/lib/cmMatchDisplay.ts
+chainBase: src/lib/deadlineDay.ts
+chainBase: src/lib/euroAccess.ts
+chainBase: src/lib/freshBuild.ts
+chainBase: src/lib/gmInbox.ts
+chainBase: src/lib/managerDifficulty.ts
+chainBase: src/lib/managerHotSeat.ts
+chainBase: src/lib/mlbCareerCorruption.ts
+chainBase: src/lib/nbaCareerCorruption.ts
+chainBase: src/lib/nflCareerCorruption.ts
+chainBase: src/lib/nhlCareerCorruption.ts
+chainBase: src/lib/playerBingo.ts
+chainBase: src/lib/season/historicalOpponentLabels.ts
+chainBase: src/lib/soccerCareerContracts.ts
+chainBase: src/lib/soccerCareerEngine.ts
+chainBase: src/lib/soccerCareerLife.ts
+chainBase: src/lib/soccerCareerLifeConsequences.ts
+chainBase: src/lib/soccerCareerRealismA.ts
+chainBase: src/lib/soccerCareerRoutineEvents.ts
+chainBase: src/lib/soccerClubSquadSheet.ts
+chainBase: src/lib/soccerDeck.ts
+chainBase: src/lib/soccerDeckGate.ts
+chainBase: src/lib/soccerPhone.ts
+chainBase: src/lib/uclFormatHistoryEngine.ts
+chainBase: src/lib/usCoachCareer.ts
+chainBase: src/lib/usCoachRetirement.ts
+chainBase: src/lib/worldCompetition.ts
+chainBase: src/lib/worldNights.ts
+chainBase: src/lib/worldOneOffs.ts
+chainBase: src/lib/worldXi.ts
+chainBase: 47 file(s) from HEAD into /tmp/lc
+chainBase: added data src/data/careerHistoricalOpponentDisplay.ts
+chainBase: added data src/data/cmOneOffRows.ts
+chainBase: added data src/data/soccerDeck/index.ts
+chainBase: added data src/data/soccerDeck/starter.ts
+chainBase: added data src/data/soccerDeck/words.ts
+chainBase: 5 added data file(s) from HEAD into /tmp/lc
+deckBase1504: Round 1504's deck loader added to /tmp/lc/src/pages/SoccerCareer.tsx
+seed 1987332285; arms head, base; sections bytes; sizes 320x640, 390x844, 1280x900; CONTROL seed
+== bytes (390x844)
+   base on seed 1987332285: 37 saves through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, stopped with what it needed after 35 steps, 35 steps, 4 Next Year or Next Season presses (3 Next Season)
+   head on seed 1987332286: 37 saves through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, rivalry_event, stopped with what it needed after 35 steps, 35 steps, 4 Next Year or Next Season presses (3 Next Season)
+  FAIL [bytes 390x844]: the save parts from the base at Begin Career (head e9045518d28e00c4) against Begin Career (base 1a8457964b40aa46)
+   bytes reached: three Next Seasons yes, a random event choice yes, a transfer window choice yes, a phone action yes
+== bytes: old saves (realSaves, seeds 0 to 7, 390x844)
+   save 0 (playing, pressed "Next Season"): the bytes after the mount write differ; the bytes after one press differ; the hub names "🇪🇸Real Save 1" on head and "Real Save 0" on the base, fence 1 to 2
+  FAIL [bytes 390x844]: old save 0 (playing, pressed "Next Season"): the bytes after the mount write differ; the bytes after one press differ; the hub names "🇪🇸Real Save 1" on head and "Real Save 0" on the base
+   save 1 (playing, pressed "Next Season"): the bytes after the mount write differ; the bytes after one press differ; the hub names "🇫🇷Real Save 2" on head and "🇪🇸Real Save 1" on the base, fence 2 to 3
+  FAIL [bytes 390x844]: old save 1 (playing, pressed "Next Season"): the bytes after the mount write differ; the bytes after one press differ; the hub names "🇫🇷Real Save 2" on head and "🇪🇸Real Save 1" on the base
+   save 2 (playing, pressed "null"): the bytes after the mount write differ; the bytes after one press differ; the hub names "🇧🇷Real Save 3" on head and "🇫🇷Real Save 2" on the base, fence 2 to 2
+  FAIL [bytes 390x844]: old save 2 (playing, pressed "null"): the bytes after the mount write differ; the bytes after one press differ; the hub names "🇧🇷Real Save 3" on head and "🇫🇷Real Save 2" on the base
+   save 3 (transfer_window, pressed "Next Season"): the bytes after the mount write differ; the bytes after one press differ; the hub names "🇩🇪Real Save 4" on head and "🇧🇷Real Save 3" on the base, fence 2 to 3
+  FAIL [bytes 390x844]: old save 3 (transfer_window, pressed "Next Season"): the bytes after the mount write differ; the bytes after one press differ; the hub names "🇩🇪Real Save 4" on head and "🇧🇷Real Save 3" on the base
+   save 4 (playing, pressed "Next Season"): the bytes after the mount write differ; the bytes after one press differ; the hub names "🇦🇷Real Save 5" on head and "🇩🇪Real Save 4" on the base, fence 2 to 3
+  FAIL [bytes 390x844]: old save 4 (playing, pressed "Next Season"): the bytes after the mount write differ; the bytes after one press differ; the hub names "🇦🇷Real Save 5" on head and "🇩🇪Real Save 4" on the base
+   save 5 (playing, pressed "Next Season"): the bytes after the mount write differ; the bytes after one press differ; the hub names "🇵🇹Real Save 6" on head and "🇦🇷Real Save 5" on the base, fence 2 to 3
+  FAIL [bytes 390x844]: old save 5 (playing, pressed "Next Season"): the bytes after the mount write differ; the bytes after one press differ; the hub names "🇵🇹Real Save 6" on head and "🇦🇷Real Save 5" on the base
+   save 6 (playing, pressed "null"): the bytes after the mount write differ; the bytes after one press differ; the hub names "🇮🇹Real Save 7" on head and "🇵🇹Real Save 6" on the base, fence 2 to 2
+  FAIL [bytes 390x844]: old save 6 (playing, pressed "null"): the bytes after the mount write differ; the bytes after one press differ; the hub names "🇮🇹Real Save 7" on head and "🇵🇹Real Save 6" on the base
+   save 7 (transfer_window, pressed "Next Season"): the bytes after the mount write differ; the bytes after one press differ; the hub names "Real Save 0" on head and "🇮🇹Real Save 7" on the base, fence 2 to 3
+  FAIL [bytes 390x844]: old save 7 (transfer_window, pressed "Next Season"): the bytes after the mount write differ; the bytes after one press differ; the hub names "Real Save 0" on head and "🇮🇹Real Save 7" on the base
+CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed 1987332286 and the byte check went red, and the old save comparison went red on 8 save(s) given the next seed's save
