@@ -1,0 +1,2 @@
+small-mainbase exit=2 1s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerSeasonSummary.tsx, src/lib/clubManager.ts, src/lib/clubManagerCalendar.ts: no h
+takeover-mainbase exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerSeasonSummary.tsx, src/lib/clubManager.ts, src/lib/clubManagerCalendar.ts: no h
