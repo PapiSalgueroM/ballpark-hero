@@ -1,0 +1,2 @@
+unseeded exit=0 161s | simCmUnseededWorld: green. 49 old saves with no deal play byte equal to d181d56d (state, draws and saved bytes at every step), 49 with every deal play byte equal to it up
+unseeded-ctl exit=0 440s | controls (each must be 1): guard=1 noinverse=1 early=1 never=1 norecord=1
