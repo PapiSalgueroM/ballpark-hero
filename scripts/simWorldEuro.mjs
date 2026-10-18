@@ -26,7 +26,9 @@
  *   2  SELF RELATIVE: the engine against itself with this round's four opens taken out (the start, the rollover,
  *      the job move's carry, the load repair, each asserted present once): watchers AND participants, both coach
  *      modes, equal on every key but worldComps.uel, every draw equal by count and value, the Europa League
- *      evaluated on the live state after every step of the head arm (the critic's 9(b)).
+ *      evaluated on the live state after every step of the head arm (the critic's 9(b)). Since step 6 both arms
+ *      play with the two named lines reverted (the holder and the European rung, scripts/lib/worldUelHolder1509.mjs),
+ *      which sections 5 and 3 attribute on their own.
  *   4  in step and stable: after every step the nights done never fall, a night counts only once the week is
  *      past it and shows no score before, a night shown never changes, a reload evaluates the same and keeps
  *      the same slice; the nights' dates rise; a mid season move to a club outside the field keeps every night
@@ -578,8 +580,13 @@ const withoutUel = st => {
 /** Section 2: the engine against itself with this round's four opens taken out. */
 async function selfRelative() {
   const { engineOf, pickFleet } = await lib();
-  const head = await engineOf(ROOT, 'head2', { edits: careerEdits() }, cannot);
-  const off = await engineOf(ROOT, 'off', { edits: UEL_OFF }, cannot);
+  /* Both arms play without the round's two named lines (scripts/lib/worldUelHolder1509.mjs): the winner into next
+     season's Champions League and the board's European rung each move a key outside worldComps by design, and each
+     has its own attribution (sections 5 and 3). Without them the opens must move nothing but worldComps.uel. */
+  const { UEL_HOLDER_EDIT, EURO_BOARD_EDIT } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'worldUelHolder1509.mjs')).href);
+  const named = [UEL_HOLDER_EDIT, EURO_BOARD_EDIT];
+  const head = await engineOf(ROOT, 'head2', { edits: [...careerEdits(), ...named] }, cannot);
+  const off = await engineOf(ROOT, 'off', { edits: [...UEL_OFF, ...named] }, cannot);
   if (careerEdits().length) changed = true;
   const fleet = pickFleet(await head.fresh(), 'all', cannot);
   const t0 = Date.now();
