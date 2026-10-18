@@ -1,0 +1,4 @@
+unit-lib exit=0 44s |    Duration  43.32s (transform 5.04s, setup 2.35s, collect 15.42s, tests 81.31s, environment 15.60s, prepare 3.82s)
+simDailyDeals exit=0 6s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+euro-s1-quick exit=1 62s | simWorldEuro: RED, 7366 checks, 6 failures
+tsc exit=0 96s | 

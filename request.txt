@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unit-lib: node_modules/.bin/vitest run src/lib/clubManager*.test.ts src/lib/worldCompetition.test.ts src/lib/uclLeaguePhase.test.ts src/lib/euroAccess.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -25; exit ${PIPESTATUS[0]}
+euro-s1-quick: WORLD_EURO_ONLY=1 WORLD_EURO_SEEDS=1 node scripts/simWorldEuro.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+simDailyDeals: node scripts/simDailyDeals.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}

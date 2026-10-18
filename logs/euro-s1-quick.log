@@ -1,0 +1,18 @@
+  1 and 4: 19 journeys, 59 s
+  7 routes over every open: C 33, F 107, H 7, L 285, P 252
+  7 my club's earned route at an open: L 2, none 17
+  7 titles by strength quartile (strongest first): 17, 2, 0, 0
+  7 goals a league phase match: 2.59 over 2736; ties after extra time 83, shootouts 48
+  7 the slice's bytes: 1419 to 1498 over 19 opens
+  7 the nights' months against 2026/27's (U7): 197 the same month, 125 a month off, 1 further; 323 of 323 on a Thursday
+  1 opens rollover: 12
+  1 opens start: 7
+  1 rollovers whose cup another club won: 12
+  4 joins outside the field carried: 3
+FAIL 1 field: watcher Everton (now) seed 1 at s1-rollover: the field is not the rule's
+FAIL 1 via: watcher Everton (now) seed 1 at s1-rollover: a route is not the rule's
+FAIL 1 field: watcher Everton (now) seed 1 at s2-rollover: the field is not the rule's
+FAIL 1 via: watcher Everton (now) seed 1 at s2-rollover: a route is not the rule's
+FAIL 1 field: watcher América (now) seed 1 at s2-rollover: the field is not the rule's
+FAIL 1 via: watcher América (now) seed 1 at s2-rollover: a route is not the rule's
+simWorldEuro: RED, 7366 checks, 6 failures
