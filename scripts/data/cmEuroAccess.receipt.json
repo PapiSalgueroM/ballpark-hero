@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "ledgerKey": "cm-euro-access-v1",
+  "dataFile": "scripts/data/cmEuroAccess.json",
+  "readOn": "2026-10-17",
+  "readBy": "the builder of Round 1509, desktop Claude lane",
+  "method": "Two ways of reading, each written down here. (1) The regulations (documents.uefa.com), the access list and the calendar (kassiesa.net), the Premier League's explainer and UEFA's two 2026/27 Europa League pages were opened on the read day through a page reader that answers with lines quoted from the page; a literal from them is a line it quoted. The reader cut long sentences of the regulations at 125 characters, so a regulation literal is one such piece. The reader printed the access list's rows with their blank cells dropped, so an access list literal is one association's non-blank cells joined by spaces, in the page's order, and a club's line from UEFA's list is the club's name, a full stop and the line printed beside it. (2) The cup winners (rows K1 to K16) were read off a web search on the read day: a literal there is the page's title as the search listed it (the page itself was not opened), except Anadolu Ajansi's, opened through the page reader for its sentence and its date. A date is the page's own or the one in its address; otherwise the source says undated.",
+  "limits": [
+    "No copy of a page was kept, so there is no snapshot hash.",
+    "Annex A of the 2026/27 regulations, the access list itself, would not open on documents.uefa.com (its page carries only the title) and the regulations' PDF on kassiesa.net was over the reader's size limit, so the access rows stand on Bert Kassies' access list and UEFA's list of who qualified. Where only the access list prints a league's places (the Netherlands, Portugal, Belgium, Turkiye, Greece, Austria, Scotland, Denmark, Switzerland, Croatia), the row is onePublisher and named in EURO_ACCESS_PARTIAL.",
+    "The access list's columns are read off the page order (accessList.reading in the data file). Every row whose reading depends on that order is named in EURO_ACCESS_PARTIAL, so nothing the game plays stands on it.",
+    "Only Serie A and the Bundesliga have a real 2026/27 access that is the game's LEAGUE_RULES row (four Champions League places, fifth in the Europa League, the cup winner). The game plays its own row for the other thirteen leagues and the screen says the places are its simplification. LEAGUE_RULES is not edited by this round.",
+    "Nothing here says when the Europa League winner's Champions League place (Q4) or the cup's pass down (Q3) began: both are read for 2026/27, and no era save reads them.",
+    "U5 and U6 (the Europa League's bracket and its table order) were not read: the Champions League's library plays them, said on the screen."
+  ],
+  "checkedBy": "scripts/simWorldEuro.mjs",
+  "sha256": "7b83c2688fb222e81030c734c7304e3576c58c04ba7acaac9c38da1d139537e1"
+}
