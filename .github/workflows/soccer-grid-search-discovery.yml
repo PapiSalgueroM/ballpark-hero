@@ -141,7 +141,7 @@ jobs:
           import { createRequire } from 'node:module';
           import { execFileSync, spawnSync } from 'node:child_process';
 
-          const PINS = {"simSha256":"bb509e0dc09649b44605ed9369a76f9acce0803030c2315c396b18109d9bd5e5","testSha256":"410176fc8d41f755a63b6d6bdc0c310e3056e8c50ad50bb5f7f8ff5599ccdb52","searchSha256":"5c6f26caebb97853faf481691ee82b1e82f59f145a65b1fcee2d6dfc05a5e6e0"};
+          const PINS = {"simSha256":"0f894c8f68beee63df76b8aada8520b646590958b5f866e9483ea20674cd6a3f","testSha256":"410176fc8d41f755a63b6d6bdc0c310e3056e8c50ad50bb5f7f8ff5599ccdb52","searchSha256":"5c6f26caebb97853faf481691ee82b1e82f59f145a65b1fcee2d6dfc05a5e6e0"};
           const ROOT = process.cwd(), mainOut = process.env.SOCCER_GRID_SEARCH_OUT;
           const hash = body => createHash('sha256').update(body).digest('hex');
           const require = createRequire(path.join(ROOT, 'package.json'));

@@ -21,7 +21,7 @@ const productFile = 'src/components/soccer-grid/SoccerGridSearch.tsx', testFile 
 const ALIAS = '@/components/soccer-grid/SoccerGridSearch';
 const TEST_SHA = '410176fc8d41f755a63b6d6bdc0c310e3056e8c50ad50bb5f7f8ff5599ccdb52';
 const ORIGINAL_SHA = 'b466739d757ac2f3b15578e18e072d45baab87ed81d276c5ee12bf9ff624095d';
-const ORIGINAL_ADMISSION = {"scope":"full-original-units-browser-native-pixels","head":"da3688ff87042f0dcf9c2f06aa9bb7165c8daa66","originalSourceSha256":"b466739d757ac2f3b15578e18e072d45baab87ed81d276c5ee12bf9ff624095d","testSha256":"410176fc8d41f755a63b6d6bdc0c310e3056e8c50ad50bb5f7f8ff5599ccdb52","commonSha256":"3c9a6dbd7424d6708a0bc8e43a2d96ea1f0934e38b46b2a40604353b152613a2","featureSha256":"36b46cf7084b646713fd9a183a8841d689b43b97cf6bc5b9b4fbd6a1e6fbdd2d","pixelSha256":"7693e000ba4a97ea4f86c720326030c565d9535864dfc2f9deb8bca4d2c39c9e"};
+const ORIGINAL_ADMISSION = {"scope":"full-original-units-browser-native-pixels","head":"07255a1516b1c22ba8e8c2ee7024c48325d9c455","originalSourceSha256":"b466739d757ac2f3b15578e18e072d45baab87ed81d276c5ee12bf9ff624095d","testSha256":"410176fc8d41f755a63b6d6bdc0c310e3056e8c50ad50bb5f7f8ff5599ccdb52","commonSha256":"09282e0e27c6080824c66a5ce30b983ae933d19d102ad98acb7c2b10eee0f04e","featureSha256":"13caf4e2c40c84b4083d46727bf20b4d594dedb2dcf878d82462fcbd60700051","pixelSha256":"0b9d9347d57ad768eeec15e3c9a25f49e0904d4e6468e52379a1e72c85a4d0e1"};
 const hash = value => createHash('sha256').update(value).digest('hex');
 const git = args => execFileSync('git', args, { cwd: ROOT, maxBuffer: 64 * 1024 * 1024 });
 const tracked = git(['ls-files', '-z']), status = git(['status', '--porcelain=v1', '--untracked-files=all']);
