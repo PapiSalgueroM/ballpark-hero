@@ -42,6 +42,8 @@ const CLOSE = '    state.worldSeed = world.worldSeed;\n  }\n';
 const AFTERS = ['  return state;\n}\n', '  return recordAiDeals(state, unrecorded);\n}\n'];
 const NAMED_BLOCKS = [
   '  /* Round 1502: a club not in the Champions League watches it, opened after the seed it is keyed on. */\n  openWorldUclOnStart(state, world);\n',
+  /* Round 1510 (the lead's ruling 2d): the domestic super cup's season one edition, keyed on the seed the same way. */
+  "  /* Round 1510: the country's super cup, season one's edition, followed, opened after the seed it is keyed on. */\n  openOneOffsOnStart(state, world);\n",
 ];
 const afterSeedBlock = (text, end) => {
   let at = end;

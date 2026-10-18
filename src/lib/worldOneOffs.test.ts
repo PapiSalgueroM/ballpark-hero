@@ -41,9 +41,9 @@ describe('entrantsFrom', () => {
   const one = row({});
   it('champions against cup winners, and a double by the row', () => {
     expect(entrantsFrom(one, T(['A', 'B', 'C'], 'D'))).toEqual({ clubs: ['A', 'D'] });
-    expect(entrantsFrom(one, T(['A', 'B', 'C'], 'A', 'E'))).toEqual({ clubs: ['A', 'B'] });
-    expect(entrantsFrom(row({ double: 'nextLeague' }), T(['A', 'B', 'C'], 'A', 'E'))).toEqual({ clubs: ['A', 'B'] });
-    expect(entrantsFrom(row({ double: 'cupRunnerUp' }), T(['A', 'B', 'C'], 'A', 'E'))).toEqual({ clubs: ['A', 'E'] });
+    expect(entrantsFrom(one, T(['A', 'B', 'C'], 'A', 'E'))).toEqual({ clubs: ['A', 'B'], doubled: true });
+    expect(entrantsFrom(row({ double: 'nextLeague' }), T(['A', 'B', 'C'], 'A', 'E'))).toEqual({ clubs: ['A', 'B'], doubled: true });
+    expect(entrantsFrom(row({ double: 'cupRunnerUp' }), T(['A', 'B', 'C'], 'A', 'E'))).toEqual({ clubs: ['A', 'E'], doubled: true });
     expect(entrantsFrom(row({ double: 'cupRunnerUp' }), T(['A', 'B', 'C'], 'A', null))).toEqual({ skip: 'unfinished' });
   });
   it('no table, a table of one, or no cup final is a skip, never padded', () => {
@@ -55,9 +55,9 @@ describe('entrantsFrom', () => {
   it('a four: the top two and both finalists, a finalist already in hands its place down the league', () => {
     const four = row({ shape: 'four', entry: 'top2cup2', double: 'nextLeague', pairing: [0, 3, 2, 1] });
     expect(entrantsFrom(four, T(['A', 'B', 'C', 'D'], 'C', 'E'))).toEqual({ clubs: ['A', 'B', 'C', 'E'] });
-    expect(entrantsFrom(four, T(['A', 'B', 'C', 'D'], 'A', 'B'))).toEqual({ clubs: ['A', 'B', 'C', 'D'] });
-    expect(entrantsFrom(four, T(['A', 'B', 'C', 'D'], 'E', 'A'))).toEqual({ clubs: ['A', 'B', 'E', 'C'] });
-    expect(entrantsFrom(four, T(['A', 'B', 'C', 'D'], 'B', 'E'))).toEqual({ clubs: ['A', 'B', 'C', 'E'] });
+    expect(entrantsFrom(four, T(['A', 'B', 'C', 'D'], 'A', 'B'))).toEqual({ clubs: ['A', 'B', 'C', 'D'], doubled: true });
+    expect(entrantsFrom(four, T(['A', 'B', 'C', 'D'], 'E', 'A'))).toEqual({ clubs: ['A', 'B', 'E', 'C'], doubled: true });
+    expect(entrantsFrom(four, T(['A', 'B', 'C', 'D'], 'B', 'E'))).toEqual({ clubs: ['A', 'B', 'C', 'E'], doubled: true });
     expect(entrantsFrom(four, T(['A', 'B', 'C', 'D'], 'E', null))).toEqual({ skip: 'noFinal' });
     expect(entrantsFrom(four, T(['A', 'B', 'C'], 'A', 'B'))).toEqual({ skip: 'unfinished' });
   });

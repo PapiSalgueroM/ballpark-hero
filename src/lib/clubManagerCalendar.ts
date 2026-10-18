@@ -34,6 +34,8 @@ import {
   legacySeason,
   /* Round 1502: the watched Champions League across a move, and where its nights sit. */
   carryWorldUcl, carryWorldComp, worldCompNights,
+  /* Round 1510: the domestic super cup across a move. */
+  carryOneOffs,
 } from '@/lib/clubManager';
 import type { WorldCompKey } from '@/lib/worldCompetition';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
@@ -1070,6 +1072,9 @@ export function joinClubNow(career: CareerState): CareerState | null {
   carryWorldUcl(career, joined);
   /* Round 1509: and the Europa League, by the same rule, its own nights shown kept (seen). */
   carryWorldComp(career, joined, 'uel');
+  /* Round 1510: and the super cup, its nights shown and my own results kept; a 'joined' stub when my new club is an
+     entrant of a night still ahead (the critic's corrections 6 to 8). */
+  carryOneOffs(career, joined);
   /* Round 1501: the level's cheque and wage room on the new job (the identity on Normal). */
   return applyNewJobDials(joined);
 }

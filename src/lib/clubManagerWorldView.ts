@@ -25,7 +25,12 @@
 import type { CareerState, TableRow, UclTie } from '@/lib/clubManager';
 import {
   ERA_UCL_FIELDS, evalWorldComp, sortedUclGroup, uclLegsFor, worldCompNights, worldCompNightsDone,
+  /* Round 1510: the domestic super cup. */
+  evalOneOff, leagueRulesOf, oneOffNightPlaces, oneOffPartialOf, oneOffRowOf, worldLeagueDefs,
 } from '@/lib/clubManager';
+import { oneOffFixturesOf, oneOffRowById, type OneOffRow, type OneOffSkip } from '@/lib/worldOneOffs';
+import { nightDateAt } from '@/lib/worldNights';
+import { CM_ONE_OFF_SEASON_ONE } from '@/data/cmOneOffRows';
 import { entryDatesOf, worldCompNightDates, worldYearOf, type CalDate } from '@/lib/clubManagerCalendar';
 import { isHistoricEra } from '@/lib/clubManagerEras';
 import { UCL_GROUP_LEDGER } from '@/lib/clubManagerUclGroups';
@@ -429,4 +434,153 @@ export function clubRun(view: WorldCompView, club: string): { rows: WorldRunRow[
       : 'Through, waiting on the draw';
   }
   return { rows, place: place ? `${place.text}${stageOver ? '' : ' so far'}` : null, finish };
+}
+
+/* ================================================================== */
+/* Round 1510: the domestic super cup, one card behind a tile          */
+/* ================================================================== */
+
+/** One match of the super cup as the card shows it, home first (the first named on a neutral ground). */
+export interface SuperCupMatch {
+  label: string;
+  date: CalDate | null;
+  home: string;
+  away: string;
+  homeGoals: number | null;
+  awayGoals: number | null;
+  aet?: true;
+  pens?: true;
+  winner?: string;
+  mine?: true;
+}
+
+export interface SuperCupView {
+  /** The cup's plain name, or null when this country has no row. */
+  name: string | null;
+  /** A country and year the round could not prove (no row). */
+  partial: boolean;
+  /** One line on how it is played. */
+  format: string;
+  /** Where: the season one edition's sourced ground, else the row's rule. */
+  ground: string;
+  /** Each club and why it is in. */
+  clubs: { club: string; why: string }[];
+  matches: SuperCupMatch[];
+  winner?: string;
+  /** The stub's line, when there is no cup to follow this season. */
+  stub?: string;
+  /** My club is one of its clubs. */
+  mine: boolean;
+  /** Season one of a new career, followed: the game played it. */
+  seasonOne: boolean;
+  /** An era save keeps its era's row every season. */
+  era: boolean;
+}
+
+const SETTLED_BEFORE = "Your club's place was settled before you arrived. Your first super cup is next summer.";
+const STUB_WORDS: Record<OneOffSkip, (name: string) => string> = {
+  seasonOne: () => SETTLED_BEFORE,
+  joined: () => SETTLED_BEFORE,
+  legs: name => `Your club is in this year's two legged ${name}. Club Manager plays one match super cups for now, so this one is not shown.`,
+  unfinished: () => 'Last season did not finish in this game, so there is no field for this one.',
+  noFinal: () => "Last season's cup had no final in this game, so there is no field for this one.",
+  moved: name => `You arrived from another country this summer, so this season's ${name} is not in your game.`,
+  notInWorld: () => "One of its clubs is not in this game's world, so it is not shown.",
+};
+
+function formatWords(row: OneOffRow): string {
+  if (row.shape === 'two') return `Two legs, settled on aggregate${row.awayGoals ? ', away goals counting' : ''}.`;
+  if (row.shape === 'four') return 'Four clubs: two semi finals, then the final.';
+  return row.decider === 'pens'
+    ? 'One match. Level after 90 minutes, it goes straight to penalties.'
+    : 'One match. Level after 90 minutes, extra time and then penalties.';
+}
+
+/** The country's top flight name and cup name, for why a club is in. */
+function namesOf(career: CareerState, row: OneOffRow): { league: string; cup: string } {
+  const top = worldLeagueDefs(career).find(l => { const r = leagueRulesOf(l.id); return r.nationId === row.nation && r.ladder === 'top'; });
+  return { league: top?.name ?? 'league', cup: (top && leagueRulesOf(top.id).cup) || 'cup' };
+}
+
+/** This season's super cup for the Cups panel's card, read off the save. A country with no row says so. Pure and
+ *  read only: the evaluation is memoised and shared, so it is copied here and never written into. */
+export function superCupView(career: CareerState): SuperCupView {
+  const era = !!career.eraId && isHistoricEra(career.eraId);
+  const slice = career.worldComps?.dsc && career.worldComps.dsc.s === career.season ? career.worldComps.dsc : null;
+  const row = slice ? oneOffRowById(slice.row) : oneOffRowOf(career);
+  const base = { clubs: [], matches: [], mine: false, seasonOne: career.season === 1, era };
+  if (!row) return { ...base, name: null, partial: oneOffPartialOf(career), format: '', ground: '' };
+  const view: SuperCupView = { ...base, name: row.name, partial: false, format: formatWords(row), ground: '' };
+  if (!slice) { view.stub = 'It opens next summer, when this season is done.'; return view; }
+  if (slice.skip) {
+    view.stub = STUB_WORDS[slice.skip](row.name);
+    view.mine = slice.skip === 'seasonOne' || slice.skip === 'joined' || slice.skip === 'legs';
+    return view;
+  }
+  const clubs = slice.clubs ?? [];
+  const names = namesOf(career, row);
+  view.mine = clubs.includes(career.clubName);
+  view.clubs = clubs.map((club, i) => ({
+    club,
+    why: i === 0 ? `${names.league} champions` : slice.dbl ? `${names.league} runners up, as the champions won the ${names.cup} too` : `${names.cup} winners`,
+  }));
+  const edition = career.season === 1 ? CM_ONE_OFF_SEASON_ONE.find(e => e[0] === row.id) : undefined;
+  view.ground = edition?.[3] ? `Played at ${edition[3]}.` : row.venue === 'n' ? 'On a neutral ground.' : `At ${row.venue === 'c' ? clubs[0] : clubs[1]}'s ground.`;
+  try {
+    const places = oneOffNightPlaces(career) ?? [];
+    const dates = entryDatesOf(career);
+    const dateOf = (night: number): CalDate | null => {
+      const p = places[night];
+      if (!p) return null;
+      return p.entry ? dates[p.at] ?? null : nightDateAt(dates, p.at);
+    };
+    const done = evalOneOff(career);
+    const shown = new Map((done?.fixtures ?? []).map(f => [f.n, f]));
+    for (const f of oneOffFixturesOf(clubs, row)) {
+      const got = shown.get(f.n);
+      view.matches.push({
+        label: row.shape === 'four' ? `Semi final ${f.n + 1}` : row.shape === 'two' ? `Leg ${f.leg}` : 'The match',
+        date: dateOf(f.night), home: f.home, away: f.away,
+        homeGoals: got?.hg ?? null, awayGoals: got?.ag ?? null,
+        ...(got?.aet ? { aet: true as const } : {}), ...(got?.pens ? { pens: true as const } : {}),
+        ...(got?.winner && f.settles ? { winner: got.winner } : {}),
+        ...(f.home === career.clubName || f.away === career.clubName ? { mine: true as const } : {}),
+      });
+    }
+    if (row.shape === 'four') {
+      const final = done?.fixtures.find(f => f.n === 2);
+      const semis = done?.fixtures.filter(f => f.night === 0) ?? [];
+      view.matches.push({
+        label: 'The final', date: dateOf(1),
+        home: final?.home ?? semis[0]?.winner ?? 'Winner of semi final 1', away: final?.away ?? semis[1]?.winner ?? 'Winner of semi final 2',
+        homeGoals: final?.hg ?? null, awayGoals: final?.ag ?? null,
+        ...(final?.aet ? { aet: true as const } : {}), ...(final?.pens ? { pens: true as const } : {}), ...(final?.winner ? { winner: final.winner } : {}),
+        ...(final?.mine ? { mine: true as const } : {}),
+      });
+    }
+    if (done?.done && done.winner) view.winner = done.winner;
+  } catch {
+    view.matches = [];
+    view.stub = 'This one cannot be shown right now.';
+  }
+  return view;
+}
+
+/** The super cup tile's two lines on the Cups panel. */
+export function superCupStatus(view: SuperCupView): { value: string; sub: string } {
+  if (!view.name) {
+    return view.partial
+      ? { value: 'Not confirmed', sub: "The game could not confirm this country's super cup yet" }
+      : { value: 'None here', sub: 'No super cup for this country in the game' };
+  }
+  if (view.stub) return { value: view.name, sub: view.stub };
+  const played = view.matches.filter(m => m.homeGoals !== null);
+  const last = played[played.length - 1];
+  const next = view.matches.find(m => m.homeGoals === null);
+  if (view.winner && last) {
+    const how = last.pens ? ' on penalties' : last.aet ? ' after extra time' : '';
+    return { value: `Won by ${view.winner}${how}`, sub: `${last.home} ${last.homeGoals}-${last.awayGoals} ${last.away}` };
+  }
+  if (next) return { value: view.mine ? 'Your club is in it' : view.name, sub: `${next.home} v ${next.away}` };
+  return { value: view.name, sub: 'Followed from outside' };
 }

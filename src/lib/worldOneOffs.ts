@@ -69,6 +69,8 @@ export interface OneOffSlice {
   clubs?: string[];
   /** Each entrant's strength at the open, one decimal, same order: every followed match reads this. */
   str?: number[];
+  /** A place went by the double rule (a club held two), so the screen can say why the second club is in. */
+  dbl?: 1;
   seed?: number;
   /** The participant's own results by fixture index (src/lib/worldNights.ts). */
   mine?: Record<number, NightResult>;
@@ -84,17 +86,18 @@ export interface OneOffTables { table: readonly string[] | null; cupWinner: stri
  * twice goes by the row's double rule, never to a club already in: 'leagueRunnerUp' and 'nextLeague' take the next
  * league club not yet in, 'cupRunnerUp' the cup's runners up. Always distinct clubs, or a skip.
  */
-export function entrantsFrom(row: Pick<OneOffRow, 'shape' | 'entry' | 'double'>, t: OneOffTables): { clubs: string[] } | { skip: OneOffSkip } {
+export function entrantsFrom(row: Pick<OneOffRow, 'shape' | 'entry' | 'double'>, t: OneOffTables): { clubs: string[]; doubled?: true } | { skip: OneOffSkip } {
   const table = t.table ?? [];
   if (table.length < 2) return { skip: 'unfinished' };
   if (!t.cupWinner) return { skip: 'noFinal' };
   const out: string[] = [];
+  let doubled = false;
   const nextLeague = (): string | null => table.find(c => !out.includes(c)) ?? null;
   /* A place: its club, or when that club is already in, the double rule's club (a cup place under 'cupRunnerUp'
      needs the cup's runners up and fails without them: never padded from the league). */
   const take = (club: string | null, isCup: boolean): boolean => {
     let c = club;
-    if (!c || out.includes(c)) c = isCup && row.double === 'cupRunnerUp' ? t.cupRunnerUp : nextLeague();
+    if (!c || out.includes(c)) { c = isCup && row.double === 'cupRunnerUp' ? t.cupRunnerUp : nextLeague(); doubled = true; }
     if (!c || out.includes(c)) return false;
     out.push(c);
     return true;
@@ -106,7 +109,7 @@ export function entrantsFrom(row: Pick<OneOffRow, 'shape' | 'entry' | 'double'>,
     if (!take(table[0], false) || !take(table[1], false) || !take(t.cupWinner, true) || !take(t.cupRunnerUp, true)) return { skip: 'unfinished' };
   }
   const want = row.shape === 'four' ? 4 : 2;
-  return out.length === want && new Set(out).size === want ? { clubs: out } : { skip: 'unfinished' };
+  return out.length === want && new Set(out).size === want ? { clubs: out, ...(doubled ? { doubled: true as const } : {}) } : { skip: 'unfinished' };
 }
 
 /** One fixture of a cup: its index, its night, the two clubs in its orientation, and whether it is on a neutral

@@ -48,9 +48,12 @@ import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 /* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */
 import { keyedRng } from '@/lib/keyedRng';
 /* Round 1510: the shared night of a participant and the one match cups. Pure modules: no cycle. */
+import { placeNights } from '@/lib/worldNights';
+import type { CalDate } from '@/lib/calDate';
 import type { NightRef } from '@/lib/worldNights';
-import { oneOffRowById } from '@/lib/worldOneOffs';
-import type { OneOffRow, OneOffSlice } from '@/lib/worldOneOffs';
+import { entrantsFrom, evaluateOneOff, oneOffNightsOf, oneOffPartial, oneOffRowById, oneOffRowFor } from '@/lib/worldOneOffs';
+import type { OneOffResult, OneOffRow, OneOffSkip, OneOffSlice, OneOffTables } from '@/lib/worldOneOffs';
+import { CM_ONE_OFF_SEASON_ONE } from '@/data/cmOneOffRows';
 /* Round 1229: the one scorer weight table. It imports a type and nothing else, so there is no cycle. */
 import { goalWeight, assistWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWeight';
 /* Round 1229: the league book, pure. It imports the keyed generator, the own goal rule and the weight table. */
@@ -142,7 +145,7 @@ import type { IntlDuty } from '@/lib/clubManagerInternationals';
 /* Round 1021: the late 2020-21 start's summer window. Called inside
    startCareer only, never at module scope: the calendar module imports this
    one, the same loop the internationals module already closes. */
-import { lateSummerWindowWeeks } from '@/lib/clubManagerCalendar';
+import { dateOfEntries, entryDatesOf, lateSummerWindowWeeks, seasonPlanOf, worldYearOf } from '@/lib/clubManagerCalendar';
 /* Round 478: the Champions League orders a level group table by its own
    rule, not a league one. That module imports nothing but types from here,
    so there is no cycle at all. */
@@ -13724,6 +13727,169 @@ function completeOneOffNight(_state: CareerState, _night: NightRef, _mine: numbe
   return null;
 }
 
+/** The country the save's league is in. */
+function oneOffNationOf(state: Pick<CareerState, 'clubName' | 'eraId' | 'customClub'>): string {
+  return leagueRulesOf(careerLeagueOf(state).id).nationId;
+}
+
+/** The super cup row this save's country plays in its format year (uclSeasonYear: an era save keeps its era's for
+ *  life, today's world the 2026 row every season), or null: a country with no row plays and follows none. */
+export function oneOffRowOf(state: Pick<CareerState, 'clubName' | 'eraId' | 'customClub'>): OneOffRow | null {
+  return oneOffRowFor(oneOffNationOf(state), uclSeasonYear(state.eraId));
+}
+
+/** True when the round looked at this save's country and year and could not prove its super cup (the tile says so). */
+export function oneOffPartialOf(state: Pick<CareerState, 'clubName' | 'eraId' | 'customClub'>): boolean {
+  return oneOffPartial(oneOffNationOf(state), uclSeasonYear(state.eraId));
+}
+
+/** What a FINISHED season hands its country's next super cup: the top flight's final order (my table when I am in
+ *  it, the world's otherwise, the same reading as the Champions League's) and the cup final. Read in
+ *  startNextSeason before registerLeagueOverrides, so a promoted club is read in the league it played in. */
+export function oneOffTablesOf(career: CareerState): OneOffTables & { nation: string } {
+  const nation = oneOffNationOf(career);
+  const tables = finishedLeagueTables(career, l => { const r = leagueRulesOf(l.id); return r.nationId === nation && r.ladder === 'top'; });
+  const cup = cupFinalistsOf(career);
+  const table = tables && tables.length === 1 && tables[0].clubs.length ? tables[0].clubs : null;
+  return { nation, table, cupWinner: cup.winner, cupRunnerUp: cup.runnerUp };
+}
+
+/** A club of this save's world (a league of it, or my own club). */
+function oneOffClubInWorld(state: CareerState, club: string): boolean {
+  return club === state.clubName || worldLeagueDefs(state).some(l => l.clubs.includes(club));
+}
+
+/**
+ * Open this season's super cup on `state` from a finished season's tables (or season one's edition), writing
+ * only its own key: no key at all for a country with no row, a stub with its reason when there is no honest field
+ * (an unfinished season, a cup with no final, a summer move abroad, an entrant that is not a club of this world,
+ * my club in season one's cup or in a two legged one), else the slice: the entrants, their strength snapshot and
+ * the keyed seed. Draws nothing from Math.random. Never throws: an optional competition never stops a season.
+ */
+function openOneOff(state: CareerState, from: { tables: OneOffTables | null; seasonOne: boolean; skip?: OneOffSkip }): void {
+  try {
+    const row = oneOffRowOf(state);
+    if (!row) { setOneOffSlice(state, null); return; }
+    const stub = (skip: OneOffSkip): void => setOneOffSlice(state, { v: 1, s: state.season, row: row.id, skip });
+    if (from.skip) { stub(from.skip); return; }
+    let clubs: string[];
+    let dbl = false;
+    if (from.seasonOne) {
+      const edition = CM_ONE_OFF_SEASON_ONE.find(e => e[0] === row.id);
+      if (!edition) { stub('unfinished'); return; }
+      clubs = [...edition[2]];
+    } else {
+      const got = entrantsFrom(row, from.tables ?? { table: null, cupWinner: null, cupRunnerUp: null });
+      if ('skip' in got) { stub(got.skip); return; }
+      clubs = got.clubs;
+      dbl = !!got.doubled;
+    }
+    if (!clubs.every(c => oneOffClubInWorld(state, c))) { stub('notInWorld'); return; }
+    const mine = clubs.includes(state.clubName);
+    /* The critic's correction 8: my club's place in season one's cup was settled before I arrived, and the game
+       never plays my club without me. A two legged cup is followed only (answer 1b). */
+    if (mine && from.seasonOne) { stub('seasonOne'); return; }
+    if (mine && row.shape === 'two') { stub('legs'); return; }
+    setOneOffSlice(state, { v: 1, s: state.season, row: row.id, clubs, str: clubs.map(c => worldUclStrength(state, c)), ...(dbl ? { dbl: 1 as const } : {}), seed: worldCompSeed(state, 'dsc') });
+  } catch {
+    setOneOffSlice(state, null);
+  }
+}
+
+/** startCareer's last step for the super cup: a new career opens season one's edition, followed (my club in it is a
+ *  'seasonOne' stub). A job move (`world`) decides in joinClubNow; the dailies open nothing (DAILY_START). */
+function openOneOffsOnStart(state: CareerState, world: SeasonWorld | undefined): void {
+  if (world || NO_WORLD_COMPS.has(state)) return;
+  openOneOff(state, { tables: null, seasonOne: true });
+}
+
+/** A late season redraws its midweek league rounds from their neighbours, so a night's gap is taken only if every
+ *  entry keeps its date (the placer's `redate`). */
+function oneOffRedate(state: CareerState): (types: { type: string }[]) => CalDate[] {
+  const year = worldYearOf(state);
+  const plan = seasonPlanOf(state);
+  return types => dateOfEntries(year, types, plan);
+}
+
+/**
+ * Where each night of this season's super cup sits on this save's calendar. A participant's calendar holds its
+ * nights as entries (`entry`, counted once its week is played); a watcher's sit where the one placer puts them
+ * (counted once every entry before the slot is). Null without a live slice of this season.
+ */
+export function oneOffNightPlaces(state: CareerState): { at: number; entry: boolean }[] | null {
+  const slice = state.worldComps?.dsc;
+  if (!slice || slice.skip || slice.s !== state.season || !Array.isArray(state.calendar) || !state.calendar.length) return null;
+  const row = oneOffRowById(slice.row);
+  if (!row) return null;
+  const wants = oneOffNightsOf(row);
+  const own = wants.map((_, n) => state.calendar.findIndex(e => e.night?.k === 'dsc' && e.night.n === n));
+  if (own.every(i => i >= 0)) return own.map(at => ({ at, entry: true }));
+  const slots = placeNights(state.calendar, entryDatesOf(state), wants, oneOffRedate(state));
+  return slots.map(s => ({ at: s ?? state.calendar.length, entry: false }));
+}
+
+/** How many nights of this season's super cup the save has passed: a prefix, never fewer than the nights shown
+ *  before a mid season move (`seen`), every night once the season is over. */
+export function oneOffNightsDone(state: CareerState): number {
+  const places = oneOffNightPlaces(state);
+  if (!places) return 0;
+  let n = 0;
+  if (state.week >= state.calendar.length) n = places.length;
+  else while (n < places.length && (places[n].entry ? state.week > places[n].at : state.week >= places[n].at)) n += 1;
+  return Math.max(n, Math.min(state.worldComps?.dsc?.seen ?? 0, places.length));
+}
+
+/** The match a followed super cup plays: the watched Champions League's own (the home edge over the snapshot,
+ *  never a third writing of it) and the engine's extra time scales. */
+function oneOffBind(state: CareerState) {
+  return { sim: worldCompBind(state, 'ucl', 'l36').sim, deciderScale: ET_DEFLATOR, etScale: ET_DEFLATOR * ET_MINUTES / 90 };
+}
+
+/* Evaluations kept per slice and night count; a result is shared, never written into. A slice my results are
+   written into is replaced (a new object), so its memo is fresh. */
+const ONE_OFF_MEMO = new WeakMap<OneOffSlice, Map<number, OneOffResult | null>>();
+
+/** This season's super cup as far as the save has played it (or as far as `nights`), from the slice alone. Null
+ *  without a live slice. Pure: draws nothing from Math.random and writes nothing into `state`. */
+export function evalOneOff(state: CareerState, nights?: number): OneOffResult | null {
+  const slice = state.worldComps?.dsc;
+  if (!slice || slice.skip || slice.s !== state.season) return null;
+  const row = oneOffRowById(slice.row);
+  if (!row) return null;
+  const k = nights ?? oneOffNightsDone(state);
+  let memo = ONE_OFF_MEMO.get(slice);
+  if (!memo) { memo = new Map(); ONE_OFF_MEMO.set(slice, memo); }
+  if (memo.has(k)) return memo.get(k) ?? null;
+  const out = evaluateOneOff(slice, row, k, oneOffBind(state));
+  memo.set(k, out);
+  return out;
+}
+
+/**
+ * A mid season job move (joinClubNow): this season's super cup comes along, its nights already shown kept (`seen`:
+ * the new calendar can sit behind the old one, and a night once shown is never taken back), and my own results
+ * with it, so nothing shown moves. When my new club is an entrant of a night still ahead it is a 'joined' stub (its
+ * place was settled before I arrived, and the game never plays it without me). A save with none gets none.
+ */
+export function carryOneOffs(career: CareerState, joined: CareerState): void {
+  try {
+    const slice = career.worldComps?.dsc;
+    setOneOffSlice(joined, null);
+    if (!slice || slice.s !== career.season || slice.s !== joined.season) return;
+    if (slice.skip) { setOneOffSlice(joined, slice); return; }
+    const row = oneOffRowById(slice.row);
+    const seen = Math.max(slice.seen ?? 0, oneOffNightsDone(career));
+    if (!row) return;
+    if (slice.clubs?.includes(joined.clubName) && seen < oneOffNightsOf(row).length) {
+      setOneOffSlice(joined, { v: 1, s: slice.s, row: slice.row, skip: 'joined' });
+      return;
+    }
+    setOneOffSlice(joined, { ...slice, ...(seen > 0 ? { seen } : {}) });
+  } catch {
+    setOneOffSlice(joined, null);
+  }
+}
+
 /**
  * Bring every AI group up to my own group's matchday. Lockstep on a normal
  * week, catch-up when an old save arrives without a uclWorld mid campaign.
@@ -19280,6 +19446,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   }
   /* Round 1502: a club not in the Champions League watches it, opened after the seed it is keyed on. */
   openWorldUclOnStart(state, world);
+  /* Round 1510: the country's super cup, season one's edition, followed, opened after the seed it is keyed on. */
+  openOneOffsOnStart(state, world);
   return recordAiDeals(state, unrecorded);
 }
 
@@ -21385,6 +21553,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      winner, admitted to the watched Champions League as nextUclField admits it (row Q4). */
   const watchCup = euroCupOf(career);
   const watchUelHolder = uelHolderOf(career);
+  /* Round 1510: and what the season hands its country's super cup (the top flight's order and the cup final),
+     here for the same reason: after the swap a promoted club would be read in the wrong league. */
+  const oneOffFrom = oneOffTablesOf(career);
   registerLeagueOverrides(pr.overrides);
   /* Round 146: inside a historic save, a "playable club" is an era club, so
      the move guard consults the era world before the modern one. */
@@ -22053,6 +22224,15 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     delete state.cupByes;
   }
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
+  /* Round 1510: the season's super cup, off the season just finished (read above, before the swap), after the cup
+     bracket and before the windows. The literal copied last season's map, so this key is always replaced or taken
+     off here. A summer move abroad: that cup was never this country's ('moved'); a move away from a created club
+     hands its place back to the club it replaced, as the Champions League's field does. */
+  {
+    const exit = (c: string | null): string | null => (c && moving ? customExitUclField(career, [c])[0] : c);
+    const tables = { table: oneOffFrom.table && moving ? customExitUclField(career, oneOffFrom.table) : oneOffFrom.table, cupWinner: exit(oneOffFrom.cupWinner), cupRunnerUp: exit(oneOffFrom.cupRunnerUp) };
+    openOneOff(state, oneOffFrom.nation === oneOffNationOf(state) ? { tables, seasonOne: false } : { tables: null, seasonOne: false, skip: 'moved' });
+  }
   /* Round 978: the new season's international windows. An older save gets its
      first block here, so its first season with windows is a whole one. */
   state.intl = freshIntl(state);

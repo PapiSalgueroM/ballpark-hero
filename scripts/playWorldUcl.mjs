@@ -37,7 +37,7 @@
  *   (v) a club that earned a place by its cup: an Everton season played to its end with the cup final's winner
  *       set to Everton (crafted, so the line can be read), then rolled over: the tile says the place was earned and
  *       its nights are not played yet, and the screen's first line names the cup, word for word
- *   (c) and (d) also: the 2005 save shows two tiles and no Europa League; the Real Madrid participant shows the
+ *   (c) and (d) also: the 2005 save shows three tiles (Round 1510: the super cup beside them) and no Europa League; the Real Madrid participant shows the
  *       Europa League tile, and its screen follows it from outside
  *   (e) on every view of (a), (c), (k), (o), (r), (u), (v) and the new views of (d): scrollY and the document height the same before a
  *       tile and after its back button, every new control at least 44 px tall, no new text under 12 px, no
@@ -539,9 +539,10 @@ async function caseC(browser, size, tag) {
   const { ctx, page, errors } = await open(browser, saves.c.items, size);
   try {
     if (!(await toCups(page, where))) return;
-    /* Round 1509: an era save keeps its era's format, which has no Europa League in this round: two tiles. */
+    /* Round 1509: an era save keeps its era's format, which has no Europa League in this round. Round 1510: and the
+       super cup tile beside it (the era's row is not confirmed, which the tile says): three tiles. */
     const tiles = await count(page, '[data-cm-cups-view="tiles"] [data-cm-world-tile]');
-    if (tiles !== 2 || (await count(page, '[data-cm-world-tile="uel"]'))) finding(where, `the 2005 save shows ${tiles} tiles, a Europa League among them or not two`);
+    if (tiles !== 3 || (await count(page, '[data-cm-world-tile="uel"]')) || !(await count(page, '[data-cm-world-tile="dsc"]'))) finding(where, `the 2005 save shows ${tiles} tiles, a Europa League among them, no super cup tile, or not three`);
     await roundTrip(page, `${where} screen`, page.locator('[data-cm-world-tile="ucl"]'), async () => {
       if (!(await count(page, '[data-cm-world-mode="watching"][data-cm-world-format="g8"]'))) finding(where, 'the screen is not the watched eight groups');
       if (saves.c.standIn) {
