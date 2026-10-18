@@ -1,0 +1,33 @@
+  1 and 4: 95 journeys, 144 s
+  7 example, season one of a Chelsea career, the English clubs in it: Brighton F, Crystal Palace H, Bournemouth L, Sunderland P
+  7 routes over every open: C 173, F 555, H 39, L 1485, P 1312
+  7 my club's earned route at an open: C 5, L 12, P 2, none 80
+  7 titles by strength quartile (strongest first): 76, 13, 2, 0
+  7 goals a league phase match: 2.60 over 13104; ties after extra time 363, shootouts 192
+  7 the slice's bytes: 1419 to 1506 over 99 opens
+  7 the nights' months against 2026/27's (U7): 999 the same month, 678 a month off, 6 further; 1683 of 1683 on a Thursday
+  1 carry probes (a slice that earned a route carried to a club outside the field): 11
+  1 opens join: 8
+  1 opens rollover: 60
+  1 opens start: 35
+  1 rollovers whose cup another club won: 47
+  1 rollovers whose cup my club won: 9
+  1 rollovers whose season had no cup bracket (its place passed down): 4
+  1 seasons that ended with no Europa League: 4
+  4 joins outside the field carried: 5
+  4 joins to an entrant opened: 4
+  4 joins to an entrant with none: 4
+  4 seen probes (a carry onto a calendar behind): 35
+FAIL 1 carry: watcher Chelsea (now) seed 2 at s1-join: carried to Tottenham, the slice still says it earned C
+FAIL 1 carry: watcher Chelsea (now) seed 4 at s2-rollover: carried to Venezia, the slice still says it earned L
+FAIL 1 carry: watcher Hoffenheim (now) seed 1 at start: carried to Tottenham, the slice still says it earned L
+FAIL 1 carry: watcher Hoffenheim (now) seed 1 at s1-join: moved to Tottenham, the slice still says it earned L
+FAIL 1 carry: watcher Hoffenheim (now) seed 2 at start: carried to Tottenham, the slice still says it earned L
+FAIL 1 carry: watcher Hoffenheim (now) seed 3 at start: carried to Tottenham, the slice still says it earned L
+FAIL 1 carry: watcher Hoffenheim (now) seed 4 at start: carried to Tottenham, the slice still says it earned L
+FAIL 1 carry: watcher Hoffenheim (now) seed 5 at start: carried to Tottenham, the slice still says it earned L
+FAIL 1 carry: watcher Everton (now) seed 2 at s1-join: carried to Tottenham, the slice still says it earned C
+FAIL 1 carry: watcher Everton (now) seed 5 at s1-rollover: carried to Werder Bremen, the slice still says it earned L
+FAIL 1 carry: watcher América (now) seed 2 at s1-join: carried to Tottenham, the slice still says it earned C
+FAIL 1 carry: watcher América (now) seed 4 at s2-rollover: carried to Tottenham, the slice still says it earned L
+simWorldEuro: control carryearned FIRED (12 failures, all its own)

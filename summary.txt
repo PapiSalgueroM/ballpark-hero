@@ -1,0 +1,3 @@
+tsc exit=0 77s | 
+euro-s1 exit=0 145s | simWorldEuro: green, 35583 checks, 0 failures
+ctl-carryearned exit=1 146s | simWorldEuro: control carryearned FIRED (12 failures, all its own)
