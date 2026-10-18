@@ -1,0 +1,4 @@
+appeal1081: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+saveSize15: node scripts/simClubManagerSaveSize.mjs 2>&1 | grep -E "seasons 15|season 15 save|^1\)|slope" | head -10 | cut -c1-230; exit ${PIPESTATUS[0]}
+saveSize15-base: git worktree add -q --detach /tmp/ssb cad4edcf && ln -s "$PWD/node_modules" /tmp/ssb/node_modules && cd /tmp/ssb && node scripts/simClubManagerSaveSize.mjs 2>&1 | grep -E "seasons 15|season 15 save|^1\)|slope" | head -10 | cut -c1-230; exit ${PIPESTATUS[0]}
+dashscan: if git diff cad4edcf HEAD | grep -nP '\x{2013}|\x{2014}'; then echo "dash found"; exit 1; else echo "no dash in the diff"; fi
