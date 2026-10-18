@@ -1,0 +1,6 @@
+  6 a Hot Seat start 2026-10-23 Elche: head 197.4 ms, base 232.9 ms, -35.6 ms more
+  6 a Hot Seat start 2026-10-24 Athletico Paranaense: head 219.8 ms, base 299.2 ms, -79.4 ms more
+  6 a Hot Seat start 2026-10-25 Samsunspor: head 233.8 ms, base 246.4 ms, -12.6 ms more
+  6 a Hot Seat start 2026-10-26 Le Havre: head 235.1 ms, base 345.2 ms, -110.1 ms more
+  6 a Hot Seat start, the median a date costs more on this tree: -12.6 ms (ruling 1l: measured 54.9 ms on startCareer alone before the options object)
+simWorldEuro: green, 30 checks, 0 failures
