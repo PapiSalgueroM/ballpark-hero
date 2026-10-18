@@ -552,10 +552,21 @@ export function superCupView(career: CareerState): SuperCupView {
   const clubs = slice.clubs ?? [];
   const names = namesOf(career, row);
   view.mine = clubs.includes(career.clubName);
-  view.clubs = clubs.map((club, i) => ({
-    club,
-    why: i === 0 ? `${names.league} champions` : slice.dbl ? `${names.league} runners up, as the champions won the ${names.cup} too` : `${names.cup} winners`,
-  }));
+  /* Why each is in, by the row's entry rule and entrantsFrom's order: 'champCup' is the champions then the cup
+     winners (on a double the league's or the cup's runners up, as the row's rule says); 'top2cup2' is the league's
+     top two then the cup's two finalists, and on a double a cup place goes to whoever the rule hands it. Only
+     'champCup' with 'leagueRunnerUp' is played today (eng-2026); the others stand for rows a later ledger proves. */
+  const why = (i: number): string => {
+    if (i === 0) return `${names.league} champions`;
+    if (row.entry === 'top2cup2') {
+      if (i === 1) return `${names.league} runners up`;
+      if (slice.dbl) return `in on a ${names.cup} place, passed down as its club was already in`;
+      return i === 2 ? `${names.cup} winners` : `${names.cup} runners up`;
+    }
+    if (!slice.dbl) return `${names.cup} winners`;
+    return row.double === 'cupRunnerUp' ? `${names.cup} runners up, as the champions won the ${names.cup} too` : `${names.league} runners up, as the champions won the ${names.cup} too`;
+  };
+  view.clubs = clubs.map((club, i) => ({ club, why: why(i) }));
   const edition = career.season === 1 ? CM_ONE_OFF_SEASON_ONE.find(e => e[0] === row.id) : undefined;
   view.ground = edition?.[3] ? `Played at ${edition[3]}.` : row.venue === 'n' ? 'On a neutral ground.' : `At ${row.venue === 'c' ? clubs[0] : clubs[1]}'s ground.`;
   try {
