@@ -1,0 +1,4 @@
+euro-0147: WORLD_EURO_ONLY=0,1,4,5,7 node scripts/simWorldEuro.mjs 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+euro-2: WORLD_EURO_ONLY=2 node scripts/simWorldEuro.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+euro-3: WORLD_EURO_ONLY=3 WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+euro-6: WORLD_EURO_ONLY=6 WORLD_EURO_BASE=77556430 node scripts/simWorldEuro.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
