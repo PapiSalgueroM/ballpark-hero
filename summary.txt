@@ -1,0 +1,7 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sweepWeight exit=1 29s | sweepWeight: 3 failures
+ucl-ctl exit=0 111s | controls (each must be 1): notile=1 ahead=1
+saveSize-head exit=0 87s | simClubManagerSaveSize: all sections green
+saveSize-base exit=0 75s | simClubManagerSaveSize: all sections green
+slots exit=0 81s | simClubManagerSlots: all sections green
+ucl-walk exit=0 205s | playWorldUcl: green. Seven saves at three sizes, 63 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots

@@ -1,0 +1,12 @@
+1) Fifteen seasons at three clubs: under 214000 bytes, slope under 2000 bytes a season, every ledger inside its cap
+   Real Madrid   seasons 15, day one 62836, season 1 175788, season 15 203416, slope after season 3 1258 bytes a season
+   Everton       seasons 15, day one 59072, season 1 163468, season 15 206829, slope after season 3 1516 bytes a season
+   Lincoln City  seasons 15, day one 58400, season 1 162389, season 15 207465, slope after season 3 1287 bytes a season
+   a season from the trimmed save and from the oversized one, same seed: identical (table, results, squad, budget, board, trophies, career stats)
+   the season 15 save: 206829 bytes, h2h 300 rows, at most 14 per opponent
+4) The hook, rendered: the pagehide write, the hidden tab write, the same bytes, and saveFailed
+   Real Madrid for three seasons, then Athletic Club at season 4: squad 21, Nando Hedlund x2 (p-nando-hedlund ST 23 r73 | p-nando-hedlund-2 GK 18 r63)
+   Andriy Lunin (GK 26) out on loan; the pre 634 market listed him at Real Madrid for 13.2 as GK 26
+   46 men sent out on loan one at a time at Real Madrid season 3 and Athletic Club season 4: 0 still listed while away
+   Florian Wirtz at Liverpool, budget 137m: 1 of 25 loan out and recall cycles went through, net +3.2m (one loan fee is 6.4m), refused on attempt 2: "Florian Wirtz has already been out on loan once this season. One loan out a season."
+simClubManagerSaveSize: all sections green

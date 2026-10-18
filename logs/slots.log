@@ -1,0 +1,6 @@
+   6 refused swaps from slot 3; holdings unchanged: Everton s15 | Lincoln City s15 | Barcelona s15
+4) An old save, from before slots: slot 1, and reading writes nothing
+   old save (season 5, week 19, 189 h2h rows, 147234 chars) in slot 1, 1 key on the device, bytes untouched: true
+   through slot 2 and back: equal but h2h true, h2h 189 -> 188 rows, last six per opponent kept true
+
+simClubManagerSlots: all sections green
