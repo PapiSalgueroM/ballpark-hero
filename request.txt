@@ -1,0 +1,4 @@
+euro-s147: WORLD_EURO_ONLY=1,4,7 node scripts/simWorldEuro.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+ctl-s1: ok=0; r=""; for k in twocomps meinfield earned; do WORLD_EURO_CONTROL=$k WORLD_EURO_SEEDS=1,2 node scripts/simWorldEuro.mjs > /tmp/we-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/we-$k.log | cut -c1-220)"; done; echo "controls (each must be 1):$r"; exit $ok
+ctl-noseen: WORLD_EURO_CONTROL=noseen node scripts/simWorldEuro.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+shootout: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutOrder.mjs > /tmp/so.log 2>&1; s=$?; grep -E "FAIL|passed|FAILURE" /tmp/so.log | head -10 | cut -c1-300; exit $s

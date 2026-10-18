@@ -1,0 +1,4 @@
+twocomps: last: simWorldEuro: control twocomps FIRED (1900 failures, all its own)
+meinfield: last: simWorldEuro: control meinfield FIRED (11 failures, all its own)
+earned: last: simWorldEuro: control earned FIRED (11 failures, all its own)
+controls (each must be 1): twocomps=1 meinfield=1 earned=1

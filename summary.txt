@@ -1,0 +1,4 @@
+euro-s147 exit=0 175s | simWorldEuro: green, 35478 checks, 0 failures
+ctl-noseen exit=3 175s | simWorldEuro: control noseen DID NOT FIRE CLEANLY (own false, stray 0: )
+shootout exit=0 21s | simCmShootoutOrder: all sections passed
+ctl-s1 exit=0 207s | controls (each must be 1): twocomps=1 meinfield=1 earned=1
