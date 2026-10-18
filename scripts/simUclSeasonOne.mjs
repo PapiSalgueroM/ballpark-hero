@@ -402,13 +402,15 @@ function ruleFromData(data) {
 
 /** THE RULE, written out again here from its description rather than imported,
  *  over European leagues in world order: { id, places, clubs in finishing order }. */
-function ruleOver(tables, holder) {
+function ruleOver(tables, holder, uelHolder = null) {
   const out = [];
   const reason = new Map();
   const add = (c, why) => { if (c && !out.includes(c)) { out.push(c); reason.set(c, why); } };
   for (const t of tables) t.clubs.slice(0, t.places).forEach((c, i) => add(c, `${t.id} ${i + 1}`));
   if (!out.length) return { field: [], reason };
   add(holder, 'holders');
+  /* Round 1509 (ruling 1k, row Q4): the Europa League's titleholder, right after the holders. */
+  add(uelHolder, 'Europa League holders');
   const deepest = [...tables].sort((a, b) => (b.places - a.places) || (a.id < b.id ? -1 : 1));
   for (let k = 0; out.length < 32 && k < 8; k++) {
     for (const t of deepest) {
@@ -640,7 +642,9 @@ await run('8', `The rollover's field follows the rule, and it and season two are
     /* Round 1502 (E5, the critic's correction 4): the holder is the engine's own uclHolderOf (my final, else the
        watched one), never a second writing of it. */
     const holder = e1.uclHolderOf(save);
-    const rule = ruleOver(tables, holder).field;
+    /* Round 1509 (ruling 1k): and the Europa League's winner, the engine's own uelHolderOf, admitted after them. */
+    const uelHolder = e1.uelHolderOf ? e1.uelHolderOf(save) : null;
+    const rule = ruleOver(tables, holder, uelHolder).field;
     if (tables.length < 10) fail(`${c.label}: only ${tables.length} European tables in the finished save, so the rule was not exercised`);
     if (json(field) !== json(rule)) fail(`${c.label}: the rollover's field is not the rule applied to the tables the save finished with (${firstDiff(json(field), json(rule))})`);
     else byRule += 1;

@@ -684,7 +684,7 @@ async function boardSection() {
     .map(club => ({ kind: 'search', era: 'now', club }));
   const t0 = Date.now();
   let seasons = 0, agreeUel = 0, agreeUcl = 0, differences = 0;
-  const byRoute = {}, cupWins = [];
+  const byRoute = {}, cupWins = [], cupOutside = [];
   for (const f of [...fleet, ...extra]) for (const seed of (f.kind === 'search' ? SEARCH_SEEDS : SEEDS)) {
     const name = `${f.kind} ${f.club} seed ${seed}`;
     let ends = null;
@@ -725,12 +725,13 @@ async function boardSection() {
       if (ends.place === 'ucl') agreeUcl += 1;
       const cup = got.pre?.cup;
       if (cup?.winner === s.clubName) cupWins.push(`${name} season ${ends.season} (${earned ?? 'no route'})`);
+      if (cup?.winner === s.clubName && ends.place !== 'ucl') cupOutside.push(`${name} season ${ends.season} (${earned ?? 'no route'})`);
       ends = null;
     };
     try { await journey(E, { ...f, seed }, { seasons: f.kind === 'participant' ? 2 : 3, onStep, onSeasonEnd }); } catch (e) { ok(false, `3 threw: ${name}: ${e.message}`); }
   }
-  ok(cupWins.length > 0, '3 search: no season of the fleet or the search saw my club win its cup, so the cup route was never agreed');
-  console.log(`  3 agreement: ${seasons} season ends, ${agreeUel} with a Europa League route both agree on, ${agreeUcl} Champions League places; my club won its cup in ${cupWins.length}: ${cupWins.slice(0, 6).join('; ')}`);
+  ok(cupOutside.length > 0, '3 search: no season of the fleet or the search saw my club win its cup from outside the Champions League places, so the cup route was never agreed');
+  console.log(`  3 agreement: ${seasons} season ends, ${agreeUel} with a Europa League route both agree on, ${agreeUcl} Champions League places; my club won its cup in ${cupWins.length}, from outside the Champions League places in ${cupOutside.length}: ${cupOutside.slice(0, 8).join('; ')}`);
   console.log(`  3 attribution: ${differences} objectives graded otherwise than the base, by my club's route: ${Object.entries(byRoute).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'}; each one done adds W_OBJ_EACH (6, capped at 30) to the season score's objectives term and reaches 1335's opening confidence through the same statuses; ${((Date.now() - t0) / 1000).toFixed(0)} s`);
 }
 const SEARCH_SEEDS = (process.env.WORLD_EURO_SEARCH_SEEDS || '1,2,3,4,5,6').split(',').map(Number);
@@ -738,8 +739,9 @@ const SEARCH_SEEDS = (process.env.WORLD_EURO_SEARCH_SEEDS || '1,2,3,4,5,6').spli
 /** Section 5 (step 6b, ruling 1k): the Europa League's winner into the next Champions League. Today's world, both
  *  fleets, on the engine and on it with the line reverted (scripts/lib/worldUelHolder1509.mjs): the winner is in
  *  next season's Champions League (the watched one, or the participant's field unless its 32 were already full of
- *  direct places, counted), and the two engines part only at a rollover after a Europa League final, on the field:
- *  a watcher only on worldComps, a participant on its field and its draw, after which its journey is let go. */
+ *  direct places, counted), and the two engines part first at a rollover after a Europa League final, on the field
+ *  and its draw alone (uclField, which every save carries, the participant's groups, and worldComps); whatever moves
+ *  after that moved through them, so the journey is let go there. */
 async function holderSection() {
   const { engineOf, pickFleet } = await lib();
   const { UEL_HOLDER_EDIT } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'worldUelHolder1509.mjs')).href);
@@ -749,7 +751,7 @@ async function holderSection() {
   const fleet = pickFleet(await head.fresh(), 'all', cannot).filter(f => f.era === 'now');
   const t0 = Date.now();
   let rollovers = 0, inField = 0, full = 0, parted = 0;
-  const ALLOWED = { watcher: new Set(['worldComps']), participant: new Set(['uclField', 'uclGroup', 'uclWorld', 'worldComps']) };
+  const ALLOWED = new Set(['uclField', 'uclGroup', 'uclWorld', 'worldComps']);
   for (const f of fleet) for (const seed of SEEDS) {
     const name = `${f.kind} ${f.club} seed ${seed}`;
     const seasons = f.kind === 'participant' ? 2 : 3;
@@ -774,11 +776,11 @@ async function holderSection() {
       if (!x || !y) continue;
       const keys = [...new Set([...Object.keys(x), ...Object.keys(y)])].filter(k => JSON.stringify(x[k]) !== JSON.stringify(y[k]));
       if (!keys.length) continue;
-      const stray = keys.filter(k => !ALLOWED[f.kind].has(k));
-      ok(stray.length === 0, `5 attribution: ${name} at ${a[i].label}: the line moved ${stray.slice(0, 5).join(', ')} beside ${keys.filter(k => ALLOWED[f.kind].has(k)).join(', ')}`);
-      ok(a[i].label.includes('rollover') || keys.every(k => k === 'worldComps') || f.kind === 'participant', `5 attribution: ${name}: the engines part first at ${a[i].label}, not at a rollover`);
+      const stray = keys.filter(k => !ALLOWED.has(k));
+      ok(stray.length === 0, `5 attribution: ${name} at ${a[i].label}: the line moved ${stray.slice(0, 5).join(', ')} beside ${keys.filter(k => ALLOWED.has(k)).join(', ')}`);
+      ok(a[i].label.includes('rollover'), `5 attribution: ${name}: the engines part first at ${a[i].label}, not at a rollover`);
       parted += 1;
-      if (f.kind === 'participant') break;
+      break;
     }
   }
   ok(rollovers > 0 && inField > 0, '5 holder: no rollover after a Europa League final, so nothing was checked');
