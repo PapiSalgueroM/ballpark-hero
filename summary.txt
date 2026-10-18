@@ -1,0 +1,5 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+po-notile exit=1 51s | playOneOffCups: control notile FIRED (3 findings of "no Super cup tile", 3 in all)
+playOneOffCups exit=0 65s | playOneOffCups: green, five cases at three sizes, pictures in /home/runner/work/_temp/rc-out/files/shots
+po-swap exit=1 52s | playOneOffCups: control swap FIRED (3 findings of "the card shows", 3 in all)
+walk exit=0 124s | rvwalk1510: no findings
