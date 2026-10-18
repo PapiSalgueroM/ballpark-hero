@@ -1,0 +1,5 @@
+proof-part exit=0 423s | proofWorldUclFleet: GREEN, 60 journeys and 6483 steps byte equal to f2bb6325 (a watching state without worldComps.dsc), draws equal
+proof-watch exit=0 1334s | proofWorldUclFleet: GREEN, 130 journeys and 17798 steps byte equal to f2bb6325 (a watching state without worldComps.dsc), draws equal
+unseeded exit=0 242s | simCmUnseededWorld: green. 49 old saves with no deal play byte equal to 0add4942 (state, draws and saved bytes at every step), 49 with every deal play byte equal to it up
+simWorldEuro exit=2 1257s | simWorldEuro: cannot run: section 3 needs WORLD_EURO_BASE, the commit before the board step
+simWorldUcl exit=0 2103s | simWorldUcl: green, 498818 checks, 0 failures
