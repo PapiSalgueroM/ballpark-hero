@@ -1,3 +1,13 @@
+## Root Round1425 qualified source, 18 October 2026
+
+More Soccer Career looks: six hairstyles and four beard styles,29 hair choices and18 beard choices. Existing IDs, defaults, random pools and seven random draws remain unchanged; other sports and Manager keep their original lists. No protected page/core/save edit. Draft PR339: https://github.com/PapiSalgueroM/ballpark-hero/pull/339.
+
+Tested bc1140d626a1e61e1500189bcc2fc27bbe4c546d, remote run39141814801/job117717616670/artifact12142296286. Root admitted saved source/ZIP/gates and feature outputs. Normal, bare and restored28/28; existing appearance11/11;243 actual old SVGs held;14 effective mutation arms; full simCreation; real app types; serial plain build;12 actual creator/save/reload journeys;15 readers;14 unchanged fatal caps. SC834.7K/835, CM618.5K/619, NFL490.9K/491. Four actual-component atlases and representative route pixels reviewed with no visual blocker.
+
+Packet C:/Users/antho/dukb-handoff/2026-10-18/soccer-appearance-options-1425. Fixed admission9915397d0e6ad396466812bff5e27bbe36d434a8afaec04942d1daa88bab4cde. Two earlier preparation failures are retained without feature-absence credit. Source and locked package inputs held; no full executable dependency-file hold claim. No full suite or joined runtime credit.
+
+Release requirement: join PR331 first, retain the new29/18 source guide counts, then prerender merged pages and regenerate derived sitemap/lastmod before publication. This branch retains main775 raw snapshots and ledger. I owns integration, main, preview and publish. Not live. The older release header below is retained historical evidence, not a new publication check.
+
 ## Release BJ LIVE, 2026-10-17 21:51 EDT: Club Manager Hard and Legend, the Champions League you can follow in or out of it, match days that read like a scoreboard, a way out for dirty money in the US careers, and Soccer Career's summer cards
 
 Claude lane (session I). main d0c3ff58, deployment fec60776-a9ad-49aa-b4ea-04a590a233de, entry index-CWmc_M1Q.js (was

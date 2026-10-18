@@ -1,6 +1,6 @@
 # Round 1425: more Soccer Career hair and beard choices
 
-Status: implemented, awaiting fixed runtime qualification and visual review.
+Status: qualified on tested bc1140d626a1e61e1500189bcc2fc27bbe4c546d. Draft PR339, not published.
 
 Owner report: more hair and beard options in Soccer Career. Root claims only
 soccer-specific extended catalogues/lookup in soccerCareerAppearance.ts, their
@@ -51,3 +51,6 @@ old SVG values and the unchanged23/14 catalogues. The original product produced
 21 exact feature-absence failures and7 healthy cases; all11 existing appearance
 cases and full simCreation passed. The two earlier preparation failures remain
 preserved separately and earn no absence credit. Fixed results remain pending.
+
+
+Closing qualification: run39141814801/job117717616670/artifact12142296286, all required scoped gates passed. Normal/bare/restored28, existing11,243 old SVGs held,14 effective mutation arms, fullCreation,12 actual save/reload journeys,15 readers and14 unchanged caps. Root reviewed four component atlases and representative route pixels. Native fixed admission9915397d0e6ad396466812bff5e27bbe36d434a8afaec04942d1daa88bab4cde. Packet and integration limits are recorded at the top of PROJECT-STATE. No whole dependency binary hold, fullsuite, merged snapshot or publication claim.
