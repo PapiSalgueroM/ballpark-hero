@@ -1,0 +1,14 @@
+bindAt: scripts/qa/proveXiQueryOwnership.mjs bound
+bindAt: 775564305e9d -> 406c3c0a6e5f
+C 4e28e56ec968d7e03f802667bcf004d094424a48
+runProver: p335 at 4e28e56ec968d7e03f802667bcf004d094424a48 (release BK bound: 561ab227b234 with its pinned bases bound to the joined tree)
+related-normal-0: 8 pass, 0 exact semantic faults
+related-normal-1: 3 pass, 0 exact semantic faults
+normal: 12 pass, 0 exact semantic faults
+original-inverse: 5 pass, 7 exact semantic faults
+remove-increment: 5 pass, 7 exact semantic faults
+remove-guard: 5 pass, 7 exact semantic faults
+restored: 12 pass, 0 exact semantic faults
+related-restored-0: 8 pass, 0 exact semantic faults
+related-restored-1: 3 pass, 0 exact semantic faults
+runProver: p335 exit 0

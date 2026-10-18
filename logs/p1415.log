@@ -1,0 +1,6 @@
+bindAt: scripts/qa/provePressRoomLoadingKeyboard.mjs bound
+bindAt: cc6605203b00 -> 7f2ad3548ea5
+M1411 7f2ad3548ea56ef04ed197928090f61d2d9e8585 C e1bbb5ce593064ecca7e7bf0c0f8ebdc0eb2f514
+runProver: p1415 at e1bbb5ce593064ecca7e7bf0c0f8ebdc0eb2f514 (release BK bound: 52419816f54c with its pinned bases bound to the joined tree)
+Press loading keyboard fixed: passed; 6 arm(s), 2 related run(s); qualified=true
+runProver: p1415 exit 0

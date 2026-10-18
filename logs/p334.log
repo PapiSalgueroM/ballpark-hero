@@ -1,0 +1,14 @@
+bindAt: scripts/qa/proveDrillKeyboardRouting.mjs bound
+bindAt: 775564305e9d -> 99154ea3af1b
+C 7a4471800647b22d5d8e443fbd90d714ea85a8d0
+runProver: p334 at 7a4471800647b22d5d8e443fbd90d714ea85a8d0 (release BK bound: 406c3c0a6e5f with its pinned bases bound to the joined tree)
+related-normal-0: 6 pass, 0 exact semantic faults
+related-normal-1: 5 pass, 0 exact semantic faults
+normal: 35 pass, 0 exact semantic faults
+original-inverse: 9 pass, 26 exact semantic faults
+remove-interactive: 15 pass, 20 exact semantic faults
+remove-prevented: 29 pass, 6 exact semantic faults
+restored: 35 pass, 0 exact semantic faults
+related-restored-0: 6 pass, 0 exact semantic faults
+related-restored-1: 5 pass, 0 exact semantic faults
+runProver: p334 exit 0

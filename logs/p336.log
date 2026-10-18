@@ -1,0 +1,8 @@
+bindAt: scripts/qa/proveTrophyHelpReturn.mjs bound
+bindAt: 775564305e9d -> 561ab227b234
+C e7b549c0c12aa8624ce423d24716e108849e4eac
+runProver: p336 at e7b549c0c12aa8624ce423d24716e108849e4eac (release BK bound: 22695d7a60df with its pinned bases bound to the joined tree)
+normal: 30 pass, 0 exact caption lookup faults
+original-caption-control: 27 pass, 3 exact caption lookup faults
+restored: 30 pass, 0 exact caption lookup faults
+runProver: p336 exit 0
