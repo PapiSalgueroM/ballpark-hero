@@ -1,0 +1,31 @@
+offAttr: /tmp/po patched with off, holder, board (6 edits)
+probe1509 /home/runner/work/ballpark-hero/ballpark-hero: 3 careers x 8 seasons, 262 entries
+  season's entries: median 515 ms, total 3.7 s
+  objectiveStatuses on a fresh copy at the season's end: median 0.03 ms
+  finishSeason: median 6.1 ms, total 0.0 s
+  startNextSeason: median 97.2 ms, total 0.5 s
+probe1509 /tmp/pm: 3 careers x 8 seasons, 262 entries
+  season's entries: median 510 ms, total 3.8 s
+  objectiveStatuses on a fresh copy at the season's end: median 0.05 ms
+  finishSeason: median 6.8 ms, total 0.0 s
+  startNextSeason: median 96.8 ms, total 0.5 s
+probe1509 /tmp/po: 3 careers x 8 seasons, 262 entries
+  season's entries: median 511 ms, total 3.8 s
+  objectiveStatuses on a fresh copy at the season's end: median 0.04 ms
+  finishSeason: median 7.3 ms, total 0.0 s
+  startNextSeason: median 98.6 ms, total 0.5 s
+probe1509 /tmp/po: 3 careers x 8 seasons, 262 entries
+  season's entries: median 520 ms, total 3.7 s
+  objectiveStatuses on a fresh copy at the season's end: median 0.04 ms
+  finishSeason: median 6.2 ms, total 0.0 s
+  startNextSeason: median 114.8 ms, total 0.5 s
+probe1509 /tmp/pm: 3 careers x 8 seasons, 262 entries
+  season's entries: median 522 ms, total 3.8 s
+  objectiveStatuses on a fresh copy at the season's end: median 0.03 ms
+  finishSeason: median 6.0 ms, total 0.0 s
+  startNextSeason: median 97.2 ms, total 0.5 s
+probe1509 /home/runner/work/ballpark-hero/ballpark-hero: 3 careers x 8 seasons, 262 entries
+  season's entries: median 528 ms, total 3.8 s
+  objectiveStatuses on a fresh copy at the season's end: median 0.03 ms
+  finishSeason: median 6.0 ms, total 0.0 s
+  startNextSeason: median 100.2 ms, total 0.5 s

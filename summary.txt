@@ -1,0 +1,1 @@
+probe exit=0 29s |   startNextSeason: median 100.2 ms, total 0.5 s
