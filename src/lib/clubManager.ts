@@ -50,9 +50,9 @@ import { keyedRng } from '@/lib/keyedRng';
 /* Round 1510: the shared night of a participant and the one match cups. Pure modules: no cycle. */
 import { placeNights } from '@/lib/worldNights';
 import type { CalDate } from '@/lib/calDate';
-import type { NightRef } from '@/lib/worldNights';
-import { entrantsFrom, evaluateOneOff, oneOffNightsOf, oneOffPartial, oneOffRowById, oneOffRowFor } from '@/lib/worldOneOffs';
-import type { OneOffResult, OneOffRow, OneOffSkip, OneOffSlice, OneOffTables } from '@/lib/worldOneOffs';
+import type { NightRef, NightResult } from '@/lib/worldNights';
+import { entrantsFrom, evaluateOneOff, myOneOffFixture, oneOffNightsOf, oneOffPartial, oneOffRowById, oneOffRowFor } from '@/lib/worldOneOffs';
+import type { OneOffFixture, OneOffResult, OneOffRow, OneOffSkip, OneOffSlice, OneOffTables } from '@/lib/worldOneOffs';
 import { CM_ONE_OFF_SEASON_ONE } from '@/data/cmOneOffRows';
 /* Round 1229: the one scorer weight table. It imports a type and nothing else, so there is no cycle. */
 import { goalWeight, assistWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWeight';
@@ -13740,10 +13740,49 @@ function nightVarKey(state: CareerState, night: NightRef): string {
   return `oneOff:${state.worldComps?.dsc?.row ?? night.k}`;
 }
 
-/** A night's completion (the match half of the round): writes my result into the slice and returns the trophy
- *  won, or null. Nothing yet: no calendar holds a night before the match half. */
-function completeOneOffNight(_state: CareerState, _night: NightRef, _mine: number, _theirs: number, _et: boolean, _shootoutWon: boolean | null, _events: string[]): string | null {
-  return null;
+/** My fixture of a super cup night, still to be played: the night's match my club is in (a final only once my
+ *  semi final is won), or null when there is none or it has been played. */
+function oneOffMyFixture(state: CareerState, entry: CalendarEntry): OneOffFixture | null {
+  const got = oneOffNightRow(state, entry.night);
+  if (!got || !got.slice.clubs?.includes(state.clubName)) return null;
+  const n = entry.night!.n;
+  const before = n > 0 ? evalOneOff(state, n) : null;
+  const fx = myOneOffFixture(before, got.slice, got.row, state.clubName, n);
+  return fx && !got.slice.mine?.[fx.n] ? fx : null;
+}
+
+/**
+ * A night's completion: my result goes into the slice by fixture index in the fixture's own orientation, the slice
+ * REPLACED (a new object, so the memoised evaluation of the old one is never served again), and on a won final
+ * the cup goes in the cabinet as a minor trophy (no confidence bonus: the board takes the result's ordinary
+ * swing). The other semi final and a final I am not in come from the slice's own keyed streams. Returns the
+ * trophy's name when one was won, else null.
+ */
+function completeOneOffNight(state: CareerState, night: NightRef, mine: number, theirs: number, et: boolean, shootoutWon: boolean | null, events: string[]): string | null {
+  const got = oneOffNightRow(state, night);
+  if (!got) return null;
+  const n = night.n;
+  const fx = myOneOffFixture(n > 0 ? evalOneOff(state, n) : null, got.slice, got.row, state.clubName, n);
+  if (!fx || got.slice.mine?.[fx.n]) return null;
+  const iAmHome = fx.home === state.clubName;
+  const res: NightResult = { h: iAmHome ? mine : theirs, a: iAmHome ? theirs : mine };
+  if (et) res.et = 1;
+  if (shootoutWon !== null) res.pens = shootoutWon === iAmHome ? 'h' : 'a';
+  setOneOffSlice(state, { ...got.slice, mine: { ...(got.slice.mine ?? {}), [fx.n]: res } });
+  const won = shootoutWon !== null ? shootoutWon : mine > theirs;
+  const opp = iAmHome ? fx.away : fx.home;
+  const final = n === oneOffNightsOf(got.row).length - 1;
+  if (!final) {
+    events.push(won ? `🛡️ Into the ${got.row.name} final.` : `❌ Out of the ${got.row.name} in the semi final.`);
+    return null;
+  }
+  if (!won) {
+    events.push(`🛡️ The ${got.row.name} goes to ${opp}.`);
+    return null;
+  }
+  state.trophies.push({ name: got.row.name, emoji: '🛡️', season: state.season, minor: true });
+  events.push(`🛡️ The ${got.row.name} is yours!`);
+  return got.row.name;
 }
 
 /** Round 1510 (the critic's correction 13): a league entry of this season has been played. "Week 0" meant that
@@ -14203,8 +14242,8 @@ export function entryInvolvesMe(state: CareerState, entry: CalendarEntry): boole
     case 'cup': return state.cupRound === entry.cupRound;
     case 'uclGroup': return state.uclGroup !== null && state.uclKoRound === null;
     case 'uclKo': return state.uclKoRound === entry.uclRound;
-    /* Round 1510: a super cup night (S2 of the round: the arm is in place and answers no until the match half). */
-    case 'oneOff': return false;
+    /* Round 1510: a super cup night with a fixture of mine still to play (a semi final lost has no final). */
+    case 'oneOff': return oneOffMyFixture(state, entry) !== null;
     default: return false;
   }
 }
@@ -17361,6 +17400,18 @@ export function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture 
       compLabel: `Champions League · ${UCL_LABELS[entry.uclRound]}${legLabel}`,
       opponent,
       home: atHome,
+      ...(playsExtraTime(state, entry) ? { extraTime: true } : {}),
+    };
+  }
+  /* Round 1510: a super cup night, my fixture of it (on a neutral ground nobody is at home). */
+  if (entry.type === 'oneOff') {
+    const fx = oneOffMyFixture(state, entry);
+    if (!fx) return null;
+    return {
+      competition: 'oneOff',
+      compLabel: oneOffEntryLabel(state, entry) ?? 'Super cup',
+      opponent: fx.home === state.clubName ? fx.away : fx.home,
+      home: fx.neutral ? null : fx.home === state.clubName,
       ...(playsExtraTime(state, entry) ? { extraTime: true } : {}),
     };
   }

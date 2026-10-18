@@ -8,6 +8,11 @@
  *   (b) a 2026-27 Arsenal career in season one: the tile and the card say the club's place was settled before the
  *       manager arrived, and show no score.
  *   (c) a 2005-06 era career (its row not confirmed): the tile says so.
+ *   (d) a 2026-27 Arsenal career rolled into season two with the cup final handed to Arsenal (crafted, so the
+ *       Shield is certain): the hub names the FA Community Shield and the other club as the next match and still
+ *       says the season has not started; the Super cup tile says the club is in it.
+ *   (e) the same save after the Shield, on the first stream of twelve where Arsenal won it: the hub's Cabinet
+ *       names it, and (f) the stats centre has its Super cups view.
  *   (e) on every view: scrollY and the document height the same before a tile and after its back button, every
  *       control at least 44 px tall, no text under 12 px, no sideways scroll, nothing cut or overlapping.
  * Pictures of every view go into $RC_OUT/shots (dsc-<case>-<width>.png) to be looked at.
@@ -51,13 +56,18 @@ function saved(M, s) {
 }
 const saves = {};
 {
-  const M = await E.fresh();
-  const a = tape(0x1510a, () => M.cm.startCareer('Chelsea')).value;
-  const dsc = a.worldComps?.dsc;
-  if (!dsc || dsc.skip || dsc.row !== 'eng-2026') cannot(`Chelsea's season one holds no followed Community Shield (${JSON.stringify(dsc)})`);
-  const r = M.cm.evalOneOff(a);
-  const fx = r?.fixtures?.[0];
-  if (!r?.done || !fx) cannot('the season one Shield is not played at week 0');
+  /* The first stream whose Shield is not level, so the swap control has a score the wrong way round to show. */
+  let M = null, a = null, r = null, fx = null;
+  for (let k = 0; k < 20 && !(fx && fx.hg !== fx.ag); k += 1) {
+    M = await E.fresh();
+    a = tape(0x1510a + k, () => M.cm.startCareer('Chelsea')).value;
+    const dsc = a.worldComps?.dsc;
+    if (!dsc || dsc.skip || dsc.row !== 'eng-2026') cannot(`Chelsea's season one holds no followed Community Shield (${JSON.stringify(dsc)})`);
+    r = M.cm.evalOneOff(a);
+    fx = r?.fixtures?.[0];
+    if (!r?.done || !fx) cannot('the season one Shield is not played at week 0');
+  }
+  if (fx.hg === fx.ag) cannot('twenty streams gave a level season one Shield');
   const dates = M.cal.entryDatesOf(a);
   const night = M.cal.shortDate(M.cal.addDays(dates[0], -3));
   saves.a = { items: saved(M, a), home: fx.home, away: fx.away, score: `${fx.hg}-${fx.ag}`, winner: r.winner, pens: !!fx.pens, night };
@@ -238,12 +248,76 @@ async function caseC(browser, size, tag) {
   } finally { await ctx.close(); }
 }
 
+
+/* ---------- the played half's saves: (d) a season two Arsenal entrant at week 0, (e) after it won the Shield ---------- */
+{
+  const M = await E.fresh();
+  let s = tape(0x1510d, () => M.cm.startCareer('Arsenal')).value;
+  for (let i = 0; i < 300 && s.week < s.calendar.length; i += 1) s = tape(0x1510d + 1 + i, () => M.cm.playNextEntry(s, { skipHalftime: true, noCoach: true })).value.state;
+  const fin = tape(0x1510e, () => M.cm.finishSeason(s)).value.state;
+  /* Crafted, so a season two Shield is certain: the season's cup final handed to Arsenal (the walk's only edit). */
+  const final = (fin.cupBracket ?? []).find(t => t.round === 'F');
+  if (!final) cannot('the Arsenal season has no cup final to set');
+  final.winner = 'Arsenal';
+  const d = tape(0x1510f, () => M.cm.startNextSeason(fin)).value;
+  const dsc = d.worldComps?.dsc;
+  if (!dsc || dsc.skip || !dsc.clubs.includes('Arsenal') || d.calendar[0]?.type !== 'oneOff') cannot(`the crafted Arsenal season two is not a participant with its night first (${JSON.stringify(dsc)})`);
+  const night = M.cal.shortDate(M.cal.entryDatesOf(d)[0]);
+  const opp = dsc.clubs.find(c => c !== 'Arsenal');
+  saves.d = { items: saved(M, d), night, opp };
+  console.log(`(d) Arsenal season two: the Shield against ${opp} on ${night}, the first entry of the calendar`);
+  let e = null;
+  for (let k = 0; k < 12 && !e; k += 1) {
+    const M2 = await E.fresh();
+    const st = JSON.parse(JSON.stringify(d));
+    const after = tape(0x1510f0 + k, () => M2.cm.playNextEntry(st, { skipHalftime: true, noCoach: true })).value.state;
+    if (after.trophies.some(t => t.minor && t.season === after.season)) e = { M: M2, s: after };
+  }
+  if (!e) cannot('Arsenal did not win the season two Shield on twelve streams');
+  saves.e = { items: saved(e.M, e.s) };
+  console.log(`(e) Arsenal season two after the Shield, won: the cabinet holds ${e.s.trophies.filter(t => t.minor).map(t => t.name).join(', ')}`);
+}
+
+async function caseD(browser, size, tag) {
+  const where = `(d) Arsenal season two ${tag}`;
+  const { ctx, page, errors } = await open(browser, saves.d.items, size);
+  try {
+    await page.waitForTimeout(800);
+    await shot(page, `dsc-d-hub-${tag}`);
+    const text = ((await page.locator('#root').innerText().catch(() => '')) || '').replace(/\s+/g, ' ');
+    if (!text.includes('FA Community Shield')) finding(where, 'the hub does not name the FA Community Shield as the next match');
+    if (!text.includes(saves.d.opp)) finding(where, `the hub does not name ${saves.d.opp}`);
+    if (!text.includes('Season not started')) finding(where, 'the hub does not say the season has not started before the Shield');
+    if (!(await toCups(page, where))) return;
+    const tile = await textOf(page, '[data-cm-world-tile="dsc"]');
+    if (!tile.includes('Your club is in it')) finding(where, `the Super cup tile reads "${tile.slice(0, 160)}"`);
+    if (errors.length) finding(where, `page errors: ${errors.slice(0, 2).join(' | ')}`);
+  } finally { await ctx.close(); }
+}
+async function caseE(browser, size, tag) {
+  const where = `(e) Arsenal after the Shield ${tag}`;
+  const { ctx, page, errors } = await open(browser, saves.e.items, size);
+  try {
+    await page.waitForTimeout(800);
+    const text = ((await page.locator('#root').innerText().catch(() => '')) || '').replace(/\s+/g, ' ');
+    if (!text.includes('Cabinet') || !text.includes('FA Community Shield')) finding(where, 'the hub does not show the Shield in the cabinet');
+    await shot(page, `dsc-e-hub-${tag}`);
+    /* (f) the stats centre's Super cups view, once one is played. */
+    const ok = await press(page, page.getByRole('button').filter({ has: page.getByText('Stats', { exact: true }) }), 15000);
+    if (!ok) { finding(where, 'the Stats tile could not be pressed'); return; }
+    await page.waitForTimeout(1500);
+    const pill = page.getByRole('button', { name: 'Super cups', exact: true });
+    if (!(await pill.count())) finding(where, 'the stats centre shows no Super cups view after a super cup was played');
+    await shot(page, `dsc-f-stats-${tag}`);
+    if (errors.length) finding(where, `page errors: ${errors.slice(0, 2).join(' | ')}`);
+  } finally { await ctx.close(); }
+}
 const browser = await chromium.launch();
 try {
   for (const size of SIZES) {
     const tag = String(size[0]);
     await caseA(browser, size, tag);
-    if (!CONTROL) { await caseB(browser, size, tag); await caseC(browser, size, tag); }
+    if (!CONTROL) { await caseB(browser, size, tag); await caseC(browser, size, tag); await caseD(browser, size, tag); await caseE(browser, size, tag); }
   }
 } finally {
   await browser.close();
@@ -256,5 +330,5 @@ if (CONTROL) {
   console.log(`playOneOffCups: control ${CONTROL} DID NOT FIRE (${findings.length} findings: ${findings.slice(0, 2).join(' / ')})`);
   process.exit(3);
 }
-console.log(findings.length ? `playOneOffCups: ${findings.length} FINDINGS` : `playOneOffCups: green, three cases at three sizes, pictures in ${SHOTS}`);
+console.log(findings.length ? `playOneOffCups: ${findings.length} FINDINGS` : `playOneOffCups: green, five cases at three sizes, pictures in ${SHOTS}`);
 process.exit(findings.length ? 1 : 0);

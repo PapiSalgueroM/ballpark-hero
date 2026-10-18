@@ -1175,8 +1175,8 @@ const ClubManager = () => {
                   </button>
                 )}
                 {/* Round 782: a knockout tie can end on penalties, so the
-                    shootout order is one tap from the pre match card. */}
-                {(fx.competition === 'cup' || fx.competition === 'uclKo') && (
+                    shootout order is one tap from the pre match card. Round 1510: and a super cup night. */}
+                {(fx.competition === 'cup' || fx.competition === 'uclKo' || fx.competition === 'oneOff') && (
                   <button
                     onClick={() => { setTacticsTile('shootout'); g.setActiveTab('tactics'); }}
                     data-cm-shootout-link="1"

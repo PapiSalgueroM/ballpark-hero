@@ -893,9 +893,12 @@ async function selfRelative() {
   const fleet = pickFleet(await head.fresh(), 'all', cannot);
   /* Round 1509: the Europa League every career of today's world follows (worldComps.uel) is simWorldEuro's section 2,
      and this section's other arm takes out the start that opens it too, so it comes off every state compared here. */
+  /* Round 1510: and the domestic super cup (worldComps.dsc, simOneOffCups' section 3), which keeps the map alive
+     where this section's other arm has none, so a reload's repair moves the map among the save's keys in one arm
+     only: it comes off every state compared here too. */
   const withoutUel = st => {
-    if (!st?.worldComps?.uel) return st;
-    const rest = { ...st.worldComps }; delete rest.uel;
+    if (!st?.worldComps?.uel && !st?.worldComps?.dsc) return st;
+    const rest = { ...st.worldComps }; delete rest.uel; delete rest.dsc;
     return { ...st, worldComps: Object.keys(rest).length ? rest : undefined };
   };
   const record = st => (!st ? 'null' : JSON.stringify(withoutUel(!st.uclGroup && 'worldComps' in st ? { ...st, worldComps: undefined } : st)));
