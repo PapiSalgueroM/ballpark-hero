@@ -85,6 +85,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
         {TABS.map(t => (
           <button
             key={t.key}
+            aria-pressed={tab === t.key}
             onClick={() => setTab(t.key)}
             className={`py-2 rounded-lg text-[11px] font-bold border transition-all ${
               tab === t.key
@@ -112,6 +113,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
             {SKIN_TONES.map(s => (
               <button
                 key={s.id}
+                aria-pressed={appearance.skinTone === s.id}
                 onClick={() => set({ skinTone: s.id })}
                 title={s.label}
                 aria-label={s.label}
@@ -128,7 +130,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
           <div className="space-y-3">
             <div className="flex flex-wrap gap-1.5">
               {HAIRSTYLES.map(h => (
-                <button key={h.id} onClick={() => set({ hairstyle: h.id })} className={chip(appearance.hairstyle === h.id)}>
+                <button key={h.id} aria-pressed={appearance.hairstyle === h.id} onClick={() => set({ hairstyle: h.id })} className={chip(appearance.hairstyle === h.id)}>
                   {h.label}
                 </button>
               ))}
@@ -137,6 +139,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
               {HAIR_COLORS.map(c => (
                 <button
                   key={c.id}
+                  aria-pressed={appearance.hairColor === c.id}
                   onClick={() => set({ hairColor: c.id })}
                   title={c.label}
                   aria-label={c.label}
@@ -153,7 +156,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
         {tab === "beard" && (
           <div className="flex flex-wrap gap-1.5">
             {FACIAL_HAIR.map(f => (
-              <button key={f.id} onClick={() => set({ facialHair: f.id })} className={chip(appearance.facialHair === f.id)}>
+              <button key={f.id} aria-pressed={appearance.facialHair === f.id} onClick={() => set({ facialHair: f.id })} className={chip(appearance.facialHair === f.id)}>
                 {f.label}
               </button>
             ))}
@@ -165,6 +168,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
             {copy.boots.map(b => (
               <button
                 key={b.id}
+                aria-pressed={appearance.boots === b.id}
                 onClick={() => set({ boots: b.id })}
                 className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-[11px] font-semibold border transition-all text-left ${
                   appearance.boots === b.id
@@ -182,7 +186,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
         {tab === "extras" && (
           <div className="flex flex-wrap gap-1.5">
             {copy.accessories.map(a => (
-              <button key={a.id} onClick={() => set({ accessory: a.id })} className={chip(appearance.accessory === a.id)}>
+              <button key={a.id} aria-pressed={appearance.accessory === a.id} onClick={() => set({ accessory: a.id })} className={chip(appearance.accessory === a.id)}>
                 {a.label}
               </button>
             ))}
@@ -194,6 +198,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
             {copy.celebrations.map(c => (
               <button
                 key={c.id}
+                aria-pressed={appearance.celebration === c.id}
                 onClick={() => set({ celebration: c.id })}
                 className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-[11px] font-semibold border transition-all text-left ${
                   appearance.celebration === c.id

@@ -23,7 +23,7 @@ jobs:
       ENGINES: chromium
       TZ: UTC
       # Root binds the qualified original raw before a fixed candidate can run.
-      APPEARANCE_SELECTION_BASELINE_SHA: ''
+      APPEARANCE_SELECTION_BASELINE_SHA: d174571a9c9706dba869e683a3d86d0cf5d090b37b7aaeac9dc2664b494e52db
     steps:
       - uses: actions/checkout@v4
         with:
