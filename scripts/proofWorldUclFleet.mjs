@@ -162,7 +162,8 @@ for (const f of chosen) {
         if (x.draws !== y.draws || x.drawSha !== y.drawSha) why.push(`the draws differ (${x.draws} against ${y.draws})`);
         if (x.saved !== y.saved && !y.stripped) why.push('the saved bytes differ');
         if (y.inIt && y.carriesUcl) why.push('a state in the Champions League carries worldComps.ucl');
-        if (!STRIP && y.carries) why.push('a state carries worldComps and no --strip was asked for');
+        /* Round 1509: against a base that carries worldComps too (a step of this round), the key is compared whole. */
+        if (!STRIP && y.carries && !x.carries) why.push('a state carries worldComps and no --strip was asked for');
         if (why.length) bad = `at step ${i} ${x.label}: ${why.join('; ')}`;
       }
       if (OLD_SAVES) for (const x of a.filter(z => z.raw)) {
