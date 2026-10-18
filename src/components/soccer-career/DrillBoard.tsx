@@ -342,6 +342,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
   useEffect(() => {
     if (phase !== 'playing' && phase !== 'ready') return;
     const down = (e: KeyboardEvent) => {
+      if (e.defaultPrevented || (e.target instanceof Element && e.target.closest('button, a[href], input, select, textarea, [contenteditable]:not([contenteditable="false"])'))) return;
       if (phase === 'ready') { if (e.key === ' ' || e.key === 'Enter') { beginRound(); e.preventDefault(); } return; }
       if (kind === 'wallshot') {
         if (e.key === 'ArrowLeft') { setAimX(x => Math.max(-1.15, x - 0.06)); e.preventDefault(); }
