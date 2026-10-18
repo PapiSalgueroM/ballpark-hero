@@ -46,7 +46,7 @@ const scenarios = ['pending-relay', 'old-success-timer', 'normal-held-fallback']
 const specs = forms.flatMap(form => [390, 1280].flatMap(width => scenarios.map(scenario => ({ form, width, scenario, id: form.id + '-' + width + '-' + scenario }))));
 const report = {
   version: 1, mode, originalHead, source, productQualified: false, status: 'failed',
-  scope: 'Two actual built production report forms, fully intercepted report delivery, no real report or email.',
+  scope: 'Two actual built production report forms, fully intercepted report delivery, no real report or email. Native return-to-trigger scrolling is explicit; no no-scroll qualification.',
   clock: 'Finite Playwright page clock installed only after route hydration. Paused before form interaction; explicit 250ms dialog transitions, a separate 1ms focus cleanup turn after DOM removal, and 1499/1500/1501ms success deadlines. No app state injection.',
   census: specs.map(spec => ({ id: spec.id, form: spec.form.id, route: spec.form.route, width: spec.width, input: spec.width === 390 ? 'touch and native text input' : 'keyboard', scenario: spec.scenario, originalFaultExpected: spec.scenario !== 'normal-held-fallback' })),
   expected: { contexts: 12, originalFaults: mode === 'baseline' ? 8 : 0, healthyDeliveryContexts: 4 }, cases: [],
@@ -152,7 +152,17 @@ try {
         await page.screenshot({ path: path.join(out, name + '-viewport.png'), fullPage: false, animations: 'disabled' }); row.screenshots.push(name + '-viewport.png');
         if (fullPage) { await page.screenshot({ path: path.join(out, name + '-full.png'), fullPage: true, animations: 'disabled' }); row.screenshots.push(name + '-full.png'); }
       };
-      const open = async () => { await activate(trigger, 'open actual ' + form.id + ' report'); await poll('open report dialog', read, value => value.open); };
+      const scrollTriggerIntoView = async stage => {
+        const before = await page.evaluate(() => ({ x: scrollX, y: scrollY, width: innerWidth, height: innerHeight }));
+        const boundsBefore = await trigger.boundingBox();
+        await trigger.evaluate(element => element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' }));
+        const after = await page.evaluate(() => ({ x: scrollX, y: scrollY, width: innerWidth, height: innerHeight }));
+        row.actions.push({ action: 'scroll actual ' + form.id + ' report into view', stage, input: 'native DOM scrollIntoView', before, after, boundsBefore, boundsAfter: await trigger.boundingBox(), at: await page.evaluate(() => Date.now()) });
+      };
+      const open = async () => {
+        await scrollTriggerIntoView('before native open');
+        await activate(trigger, 'open actual ' + form.id + ' report'); await poll('open report dialog', read, value => value.open);
+      };
       const settleClosedDialog = async () => {
         await poll('closed report DOM commit', read, value => !value.open);
         await page.clock.runFor(250);
@@ -186,7 +196,7 @@ try {
         await page.locator('#root [data-seo-content="ready"]').waitFor();
         assert(await trigger.evaluate(element => !!element.closest('[data-seo-content]')?.querySelector('article') && element.closest('[data-no-prerender]').parentElement.firstElementChild === element.closest('[data-no-prerender]')), 'Actual game report sits above its loaded guide');
       }
-      await trigger.scrollIntoViewIfNeeded();
+      await scrollTriggerIntoView('initial preclock setup');
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
       if (form.route === '/') {
         assert(await page.evaluate(() => scrollY > 0), 'The native footer scroll reached a positive home offset');
