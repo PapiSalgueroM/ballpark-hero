@@ -1,0 +1,4 @@
+   (a) Chelsea season one 1280 tiles: 4 controls measured
+   FAIL (a) Chelsea season one 1280: the card shows "The match · Wed 5 Aug Arsenal 1-0 Manchester City Manchester City won.", the engine played Arsenal 0-1 Manchester City
+   (a) Chelsea season one 1280 card: 5 controls measured
+playOneOffCups: control swap FIRED (3 findings of "the card shows", 3 in all)
