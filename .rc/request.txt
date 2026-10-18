@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+sweepWeight: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; grep -E "club-manager|manager-hot-seat|deadline-day" /tmp/sw.log | head -8 | cut -c1-200; tail -2 /tmp/sw.log | cut -c1-200; exit $s
