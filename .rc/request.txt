@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unit-lib: node_modules/.bin/vitest run src/lib/clubManager*.test.ts src/lib/worldCompetition.test.ts src/lib/uclLeaguePhase.test.ts src/lib/euroAccess.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+unit-cm: node_modules/.bin/vitest run src/test/clubManager*.test.ts src/test/clubManager*.test.tsx src/test/cm*.test.ts src/test/cm*.test.tsx src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+unit-whymut: X=$PWD/.rc/x/mutWhy.mjs; R=/tmp/whymut; git worktree add -q $R HEAD && ln -s $PWD/node_modules $R/node_modules && cd $R && node $X && { node_modules/.bin/vitest run src/lib/euroAccess.test.ts > /tmp/whymut.log 2>&1; v=$?; grep -E "Tests |FAIL" /tmp/whymut.log | head -4 | cut -c1-200; if [ $v -ne 0 ]; then echo "the why unit test caught the mutation"; exit 1; else echo "MUTATION NOT CAUGHT"; exit 0; fi; }
+pin-check: node .rc/x/pinAll.mjs 08729217
+appeal-head: node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+appeal-revert: R=/tmp/ap; git worktree add -q $R HEAD && ln -s $PWD/node_modules $R/node_modules && cd $R && git show 08729217:src/lib/clubManager.ts > src/lib/clubManager.ts && git diff --stat | tail -1 && node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+walkboard: node .rc/x/walkBoard.mjs 2>&1 | tail -16; exit ${PIPESTATUS[0]}
