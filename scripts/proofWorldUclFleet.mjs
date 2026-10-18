@@ -22,7 +22,10 @@
    --strip <key> (that key of THIS TREE's state is left out of the comparison, never out of the save it plays on,
    at every step whose state is NOT in the Champions League (uclGroup null), in either fleet: a participant can
    miss Europe in a later season and watch it; every step whose state IS in it is compared on every key and
-   fails if it carries worldComps; from Round 1502's E3 both fleets run with --strip worldComps), --eval (THIS TREE calls
+   fails if it carries worldComps; from Round 1502's E3 both fleets run with --strip worldComps; Round 1509: a dotted
+   key, --strip worldComps.uel, takes that one key out of EVERY state, in it or not, and the object with it when it
+   is left empty, so the Champions League slice is compared; the rule on a state in it reads worldComps.ucl),
+   --eval (THIS TREE calls
    evalWorldUcl and worldUclNightsDone on the live state after every step, inside that step's stretch of the
    stream, the way the screen will: the critic's correction 6b, so an evaluation that drew from Math.random or
    wrote into the save shows as a difference; the base has no such function and is left alone).
@@ -70,16 +73,24 @@ async function journey(E, f, seasons, mode, compareStrip, evalEach = false) {
     k += 1;
     const r = tape((f.seed * 0x9e3779b1 + k * 7919) >>> 0, () => {
       const out = fn(s);
-      if (evalEach && out?.state) { M.cm.evalWorldUcl(out.state); M.cm.worldUclNightsDone(out.state); evals += 1; }
+      if (evalEach && out?.state) {
+        M.cm.evalWorldUcl(out.state); M.cm.worldUclNightsDone(out.state); evals += 1;
+        /* Round 1509 (the critic's 9(b)): and the Europa League, on the live state, when this tree has it. */
+        if (M.cm.evalWorldComp) { M.cm.evalWorldComp(out.state, 'uel'); M.cm.worldCompNightsDone(out.state, 'uel'); }
+      }
       return out;
     });
     const got = r.value ?? {};
     if (got.state) s = got.state;
     let shown = s;
     const watching = !!s && !s.uclGroup;
-    if (compareStrip && watching && compareStrip in s) { shown = { ...s }; delete shown[compareStrip]; }
+    const [top, sub] = compareStrip.split('.');
+    if (compareStrip && sub && s && s[top] && sub in s[top]) {
+      shown = { ...s, [top]: { ...s[top] } }; delete shown[top][sub];
+      if (!Object.keys(shown[top]).length) delete shown[top];
+    } else if (compareStrip && !sub && watching && compareStrip in s) { shown = { ...s }; delete shown[compareStrip]; }
     steps.push({ label, json: JSON.stringify(shown), draws: r.draws.length, drawSha: sha(r.draws), saved: got.saved ?? null, raw: got.raw ?? null,
-      carries: !!s && 'worldComps' in s, stripped: shown !== s, inIt: !!s && !!s.uclGroup });
+      carries: !!s && 'worldComps' in s, carriesUcl: !!s && !!s.worldComps?.ucl, stripped: shown !== s, inIt: !!s && !!s.uclGroup });
   };
   const reload = label => step(label, cur => {
     M.store.clear();
@@ -142,7 +153,7 @@ for (const f of chosen) {
         if (x.json !== y.json) why.push(`the state differs, ${firstDifference(x.json, y.json)}`);
         if (x.draws !== y.draws || x.drawSha !== y.drawSha) why.push(`the draws differ (${x.draws} against ${y.draws})`);
         if (x.saved !== y.saved && !y.stripped) why.push('the saved bytes differ');
-        if (y.inIt && y.carries) why.push('a state in the Champions League carries worldComps');
+        if (y.inIt && y.carriesUcl) why.push('a state in the Champions League carries worldComps.ucl');
         if (!STRIP && y.carries) why.push('a state carries worldComps and no --strip was asked for');
         if (why.length) bad = `at step ${i} ${x.label}: ${why.join('; ')}`;
       }
@@ -156,7 +167,7 @@ for (const f of chosen) {
         if (aside(lt) !== aside(lb)) fails.push(`${name} at ${x.label}: an old save loads otherwise, ${firstDifference(aside(lb), aside(lt))}`.slice(0, 700));
         const historic = T.eras.isHistoricEra(lt.eraId);
         const should = !lt.uclGroup && lt.week < lt.calendar.length && (historic || lt.season === 1);
-        const has = 'worldComps' in lt;
+        const has = !!lt.worldComps?.ucl;
         if (has) oldSaves.gained += 1; else oldSaves.kept += 1;
         if (has !== should) { oldSaves.wrong += 1; fails.push(`${name} at ${x.label}: an old save ${has ? 'gained' : 'did not gain'} a watched Champions League (${historic ? 'an era' : `season ${lt.season}`}, uclGroup ${lt.uclGroup ? 'set' : 'null'})`); }
       }

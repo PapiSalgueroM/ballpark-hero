@@ -164,12 +164,13 @@ const CAREER_EDITS = {
   stream: [{ file: CM, from: 'sim: (strH, strA, scale, rand) => simScore(strH, strA, 0.2, -0.08, scale, rand), tie };', to: 'sim: (strH, strA, scale, rand) => simScore(strH, strA, 0.2, -0.08, scale), tie };' }],
   participant: [
     { file: CM, from: '  if (world || state.uclGroup) return;\n  try {\n    openWorldUcl(', to: '  if (world) return;\n  try {\n    openWorldUcl(' },
-    { file: CM, from: '  if (state.uclGroup || !field) return;', to: '  if (!field) return;' },
+    /* Round 1509: the open is keyed (openWorldComp); the Champions League's guard is the comp's own. */
+    { file: CM, from: "  if ((comp === 'ucl' && state.uclGroup) || !field) return;", to: '  if (!field) return;' },
   ],
   form: [{ file: CM, from: '  memo.set(key, out);\n  return out;\n}', to: '  for (const n of out.nights) for (const fx of n.fixtures) if (fx.hg !== undefined) noteForm(state, fx.home, fx.away, fx.hg, fx.ag as number);\n  memo.set(key, out);\n  return out;\n}' }],
   ahead: [{ file: CM, from: '  else while (n < places.length && state.week > places[n].at) n += 1;', to: '  else while (n < places.length && state.week >= places[n].at) n += 1;' }],
-  live: [{ file: CM, from: '  const out = evaluateWorldComp(slice, k, worldUclBind(state, slice.f));', to: '  const out = evaluateWorldComp({ ...slice, str: slice.clubs.map(c => worldUclStrength(state, c)) }, k, worldUclBind(state, slice.f));' }],
-  noseen: [{ file: CM, from: '      joined.worldComps = { ucl: { ...slice, ...(seen > 0 ? { seen } : {}) } };', to: '      joined.worldComps = { ucl: { ...slice, seen: undefined } };' }],
+  live: [{ file: CM, from: '  const out = evaluateWorldComp(slice, k, worldCompBind(state, comp, slice.f));', to: '  const out = evaluateWorldComp({ ...slice, str: slice.clubs.map(c => worldUclStrength(state, c)) }, k, worldCompBind(state, comp, slice.f));' }],
+  noseen: [{ file: CM, from: '      setWorldComp(joined, comp, { ...slice, ...(seen > 0 ? { seen } : {}) });', to: '      setWorldComp(joined, comp, { ...slice, seen: undefined });' }],
   marks: [
     { file: MODULE_FILE, from: '    const r = Math.max(prev + 1, at(f));', to: '    const r = at(f);' },
     { file: MODULE_FILE, from: '0.79, 0.82, 0.87, 0.90, 1.0];', to: '0.79, 0.82, 0.87, 0.87, 1.0];' },

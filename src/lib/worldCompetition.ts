@@ -79,6 +79,8 @@ export function g8DrawRules(year: number): { assocApart: boolean; bans: readonly
 const byText = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
 
 export type WorldCompFormat = 'g8' | 'l36';
+/** Round 1509: the competitions a save follows from outside, one slice each (CareerState.worldComps). */
+export type WorldCompKey = 'ucl' | 'uel';
 export type WorldKoRound = 'PO' | 'R16' | 'QF' | 'SF' | 'F';
 
 /**

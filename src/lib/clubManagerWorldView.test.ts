@@ -5,7 +5,7 @@ import {
 } from '@/lib/clubManager';
 import { dateKey } from '@/lib/clubManagerCalendar';
 import { ensureEraRosters } from '@/lib/clubManagerEras';
-import { clubRun, firstStageNights, worldUclStatus, worldUclView, type WorldCompView } from '@/lib/clubManagerWorldView';
+import { clubRun, firstStageNights, worldCompView, worldUclStatus, worldUclView, type WorldCompView } from '@/lib/clubManagerWorldView';
 
 /* Round 1503: the one view of the Champions League the screen reads, for the club watching it and for the club
    in it. Every check here is an identity of the save itself (the engine's own evaluation, the participant's own
@@ -19,6 +19,16 @@ function playUntil(s: CareerState, stop: (s: CareerState) => boolean, limit = 40
   return cur;
 }
 const seasonOver = (s: CareerState): boolean => s.week >= s.calendar.length;
+
+/* Round 1509: the keyed adapter. worldCompView(career, 'ucl') is the view worldUclView always gave, on every
+   fixture below, and nothing of this round's Europa League shows on a save that carries none. */
+function sameKeyedView(...states: (CareerState | null)[]): void {
+  for (const st of states) {
+    if (!st) continue;
+    expect(JSON.stringify(worldCompView(st, 'ucl'))).toBe(JSON.stringify(worldUclView(st)));
+    if (!st.worldComps?.uel) expect(worldCompView(st, 'uel')).toBeNull();
+  }
+}
 
 function deepFreeze<T>(o: T): T {
   if (o && typeof o === 'object' && !Object.isFrozen(o)) {
@@ -134,6 +144,8 @@ describe('the club watching it: today\'s world, the 36 club league phase', () =>
     }
     expect(twoLegged).toBe(8 + 8 + 4 + 2);
   });
+
+  it('is the same view keyed (Round 1509)', () => sameKeyedView(start, mid, end));
 });
 
 describe('the club in it: the participant engine read, not simulated again', () => {
@@ -219,6 +231,8 @@ describe('the club in it: the participant engine read, not simulated again', () 
     for (const c of left) expect(clubRun(v, c)!.finish).toBe('Out in the group stage');
     for (const c of inBracket) expect(clubRun(v, c)!.finish).not.toBe('Out in the group stage');
   });
+
+  it('is the same view keyed (Round 1509)', () => sameKeyedView(groups, after));
 });
 
 /* Review fix (run lens, major 3): an era save whose club is in it but is not one of the real 32 takes the place of
@@ -246,6 +260,8 @@ describe('an era save in it from outside the real 32', () => {
     expect(v.clubs).not.toContain(v.standIn!.for);
     expect(v.clubs.filter(c => !real.includes(c))).toEqual([s!.clubName]);
   });
+
+  it('is the same view keyed (Round 1509)', () => sameKeyedView(s));
 });
 
 describe('an era save watching: eight groups of four, and its stand in', () => {
@@ -285,5 +301,12 @@ describe('an era save watching: eight groups of four, and its stand in', () => {
     delete none.worldComps;
     expect(worldUclView(none)).toBeNull();
     expect(worldUclStatus(none, null).mode).toBe('none');
+    sameKeyedView(none);
+  });
+
+  it('is the same view keyed (Round 1509)', () => {
+    const moved = JSON.parse(JSON.stringify(era)) as CareerState;
+    moved.worldComps!.ucl!.seen = worldUclNightsDone(era) + 2;
+    sameKeyedView(era, moved);
   });
 });

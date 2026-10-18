@@ -24,12 +24,12 @@
  */
 import type { CareerState, TableRow, UclTie } from '@/lib/clubManager';
 import {
-  ERA_UCL_FIELDS, evalWorldUcl, sortedUclGroup, uclLegsFor, worldUclNights, worldUclNightsDone,
+  ERA_UCL_FIELDS, evalWorldComp, sortedUclGroup, uclLegsFor, worldCompNights, worldCompNightsDone,
 } from '@/lib/clubManager';
-import { entryDatesOf, worldUclNightDates, worldYearOf, type CalDate } from '@/lib/clubManagerCalendar';
+import { entryDatesOf, worldCompNightDates, worldYearOf, type CalDate } from '@/lib/clubManagerCalendar';
 import { isHistoricEra } from '@/lib/clubManagerEras';
 import { UCL_GROUP_LEDGER } from '@/lib/clubManagerUclGroups';
-import { groupFixtures, type WorldCompFormat, type WorldKoRound } from '@/lib/worldCompetition';
+import { groupFixtures, type WorldCompFormat, type WorldCompKey, type WorldKoRound } from '@/lib/worldCompetition';
 
 export type WorldViewStage = 'md' | WorldKoRound;
 
@@ -219,18 +219,18 @@ function standInOf(career: CareerState, clubs: string[]): { club: string; for: s
   return club && left ? { club, for: left } : undefined;
 }
 
-function watcherView(career: CareerState): WorldCompView | null {
-  const slice = career.worldComps?.ucl;
-  if (!slice || slice.s !== career.season || career.uclGroup) return null;
-  let result: ReturnType<typeof evalWorldUcl> = null;
-  let places: ReturnType<typeof worldUclNights> = null;
+function watcherView(career: CareerState, comp: WorldCompKey): WorldCompView | null {
+  const slice = career.worldComps?.[comp];
+  if (!slice || slice.s !== career.season || (comp === 'ucl' && career.uclGroup)) return null;
+  let result: ReturnType<typeof evalWorldComp> = null;
+  let places: ReturnType<typeof worldCompNights> = null;
   let dates: CalDate[] | null = null;
   let done = 0;
   try {
-    result = evalWorldUcl(career);
-    places = worldUclNights(career);
-    dates = worldUclNightDates(career);
-    done = worldUclNightsDone(career);
+    result = evalWorldComp(career, comp);
+    places = worldCompNights(career, comp);
+    dates = worldCompNightDates(career, comp);
+    done = worldCompNightsDone(career, comp);
   } catch {
     return null;
   }
@@ -271,14 +271,18 @@ function watcherView(career: CareerState): WorldCompView | null {
   };
 }
 
-/** The Champions League as this save sees it this season, in it or watching, or null when there is neither. */
-export function worldUclView(career: CareerState): WorldCompView | null {
+/** A competition as this save sees it this season, in it or watching, or null when there is neither. Round 1509:
+ *  keyed; my club is in the Champions League alone (the Europa League is only ever followed from outside yet). */
+export function worldCompView(career: CareerState, comp: WorldCompKey): WorldCompView | null {
   try {
-    return career.uclGroup ? participantView(career) : watcherView(career);
+    return comp === 'ucl' && career.uclGroup ? participantView(career) : watcherView(career, comp);
   } catch {
     return null;
   }
 }
+
+/** The Champions League as this save sees it this season, in it or watching, or null when there is neither. */
+export function worldUclView(career: CareerState): WorldCompView | null { return worldCompView(career, 'ucl'); }
 
 /* ---------- the tile's words, and one club's run ---------- */
 

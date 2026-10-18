@@ -157,7 +157,7 @@ import { uclTieOutcome } from '@/lib/uclTieRule';
 import {
   groupFixtures, settleTie,
   G8_SHAPE, drawG8, evaluateWorldComp, g8DrawRules, leaguePhaseNightRounds, nightsOf, worldCompWinner,
-  type TieRules, type WorldCompBind, type WorldCompFormat, type WorldCompResult, type WorldCompSlice, type WorldKoRound, type WorldNight,
+  type TieRules, type WorldCompBind, type WorldCompFormat, type WorldCompKey, type WorldCompResult, type WorldCompSlice, type WorldKoRound, type WorldNight,
 } from '@/lib/worldCompetition';
 import { UCL_LEAGUE, drawUclLeaguePhase } from '@/lib/uclLeaguePhase';
 /* Round 781: the match clock with the board in it. The module imports nothing. */
@@ -2874,8 +2874,12 @@ export interface CareerState {
    *  snapshot, a seed and, for the league phase, the slate). Written only
    *  when such a competition exists, replaced at every rollover and never
    *  kept beside a group of my own; every result is derived from it against
-   *  the week (evalWorldUcl). Absent on every save from before the round. */
-  worldComps?: { ucl?: WorldCompSlice };
+   *  the week (evalWorldUcl). Absent on every save from before the round.
+   *  Round 1509: and `uel`, the world's Europa League, followed every season
+   *  of today's world (my club is never one of its entrants yet). One object,
+   *  two keys, written in the order ucl, uel by setWorldComp, and gone when
+   *  both are. */
+  worldComps?: { ucl?: WorldCompSlice; uel?: WorldCompSlice };
   /** Round 617: the league fixture list alternates home and away (the circle
    *  method's standard venue rule, see roundPairs). Set on every new career
    *  and on every season rollover. Absent on a save from before the round,
@@ -13187,23 +13191,50 @@ export function worldUclEraField(state: Pick<CareerState, 'eraId' | 'clubName' |
  * no honest field: a later season of today's world with no finished tables to
  * read (a rollover from a season cut short, a job move from season two on).
  */
-export function worldUclField(
+export function worldCompField(
   state: CareerState,
+  comp: WorldCompKey,
   tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[] | null,
   holder?: string | null,
 ): string[] | null {
+  if (comp !== 'ucl') return null;
   if (worldUclFormatOf(state) === 'g8') return worldUclEraField(state)?.field ?? null;
   const field = tables
     ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, worldUclExcluded(state))
     : state.season === 1 ? seasonOneUclField(state.eraId ?? DEFAULT_ERA_ID, UCL_LEAGUE.clubs, worldUclExcluded(state)) : null;
   return field && field.length ? field : null;
 }
+export function worldUclField(state: CareerState, tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[] | null, holder?: string | null): string[] | null { return worldCompField(state, 'ucl', tables, holder); }
+
+/** Round 1509: the competitions in the order their keys are written. */
+const WORLD_COMP_KEYS: readonly WorldCompKey[] = ['ucl', 'uel'];
+
+/**
+ * Round 1509 (ruling 2b): write one key of worldComps, or take it off with null, leaving every other key as it
+ * was. The keys are written in the order ucl, uel and the object goes when it is empty, so a save that follows
+ * one competition is the save it was before this round, and never carries `worldComps: {}` or an undefined key.
+ */
+function setWorldComp(state: CareerState, comp: WorldCompKey, slice: WorldCompSlice | null): void {
+  const next: { ucl?: WorldCompSlice; uel?: WorldCompSlice } = {};
+  for (const k of WORLD_COMP_KEYS) {
+    const s = k === comp ? slice : state.worldComps?.[k];
+    if (s) next[k] = s;
+  }
+  if (next.ucl || next.uel) state.worldComps = next;
+  else delete state.worldComps;
+}
+
+/** The format a competition plays in this save: the Champions League's (worldUclFormatOf), and the Europa League
+ *  of today's world, the league phase (an era save follows no Europa League in this round). */
+export function worldCompFormatOf(state: Pick<CareerState, 'eraId'>, comp: WorldCompKey): WorldCompFormat {
+  return comp === 'ucl' ? worldUclFormatOf(state) : 'l36';
+}
 
 /** The keyed seed of a watched season: the world seed when the save has one,
  *  else the save's own start, and the season's year. */
-function worldUclSeed(state: CareerState): number {
+function worldCompSeed(state: CareerState, comp: WorldCompKey): number {
   const base = worldSeedOf(state) ?? `${state.clubName}|${state.eraId ?? ''}|${state.startYear}`;
-  return Math.floor(keyedRng(`world-ucl|${base}|${worldYear(state)}`)() * 0x100000000);
+  return Math.floor(keyedRng(`world-${comp}|${base}|${worldYear(state)}`)() * 0x100000000);
 }
 
 /** One decimal, the strength every watched match reads (the snapshot). */
@@ -13218,14 +13249,14 @@ const worldUclStrength = (state: CareerState, club: string): number => Math.roun
  * of different clubs, when my club is in it, or when the draw cannot be made.
  * Draws nothing from Math.random and writes nothing but the key.
  */
-export function openWorldUcl(state: CareerState, field: string[] | null, holder?: string | null): void {
-  delete state.worldComps;
-  if (state.uclGroup || !field) return;
-  const f = worldUclFormatOf(state);
+export function openWorldComp(state: CareerState, comp: WorldCompKey, field: string[] | null, holder?: string | null): void {
+  setWorldComp(state, comp, null);
+  if ((comp === 'ucl' && state.uclGroup) || !field) return;
+  const f = worldCompFormatOf(state, comp);
   const size = f === 'g8' ? G8_SHAPE.clubs : UCL_LEAGUE.clubs;
   if (field.length !== size || new Set(field).size !== size || field.includes(state.clubName)) return;
   const str = new Map(field.map(club => [club, worldUclStrength(state, club)]));
-  const seed = worldUclSeed(state);
+  const seed = worldCompSeed(state, comp);
   const top = holder && field.includes(holder) ? holder : undefined;
   let slice: WorldCompSlice | null = null;
   if (f === 'g8') {
@@ -13242,8 +13273,9 @@ export function openWorldUcl(state: CareerState, field: string[] | null, holder?
         fx: slate.fx, breaks: slate.breaks, overCap: slate.overCap, ...(slate.fallback ? { fallback: true as const } : {}), ...(top ? { holder: top } : {}) };
     }
   }
-  if (slice) state.worldComps = { ucl: slice };
+  if (slice) setWorldComp(state, comp, slice);
 }
+export function openWorldUcl(state: CareerState, field: string[] | null, holder?: string | null): void { openWorldComp(state, 'ucl', field, holder); }
 
 /**
  * startCareer's last step: a new career that is not in the Champions League
@@ -13258,7 +13290,7 @@ function openWorldUclOnStart(state: CareerState, world: SeasonWorld | undefined)
   try {
     openWorldUcl(state, worldUclField(state, null), worldUclFormatOf(state) === 'l36' ? CM_FINAL_TABLES_2025_26.holders : null);
   } catch {
-    delete state.worldComps;
+    setWorldComp(state, 'ucl', null);
   }
 }
 
@@ -13269,9 +13301,10 @@ function openWorldUclOnStart(state: CareerState, world: SeasonWorld | undefined)
  * goals, ET_DEFLATOR and ET_MINUTES; the league phase's play-off has the round
  * of 16's two legs). The eras' groups read the era's own order (uclGroupRule)
  * and their round of 16 is the participant's own draw (drawUclRoundOf16, with
- * its venue rule for two legs).
+ * its venue rule for two legs). Round 1509: keyed, one binding for every
+ * competition the save follows.
  */
-function worldUclBind(state: CareerState, f: WorldCompFormat): WorldCompBind {
+function worldCompBind(state: CareerState, comp: WorldCompKey, f: WorldCompFormat): WorldCompBind {
   const tie = (round: WorldKoRound): TieRules => ({
     legs: uclLegsFor(state.eraId, round === 'PO' ? 'R16' : round),
     awayGoals: uclAwayGoalsApply(state.eraId),
@@ -13309,11 +13342,11 @@ export interface WorldUclNightPlace { night: WorldNight; at: number; round: numb
  * is put where a fresh one has it (the round of 16 at UCL_R16_MARK, a second
  * leg a round after its first). Never earlier than the night before it.
  */
-export function worldUclNights(state: CareerState): WorldUclNightPlace[] | null {
-  const slice = state.worldComps?.ucl;
+export function worldCompNights(state: CareerState, comp: WorldCompKey): WorldUclNightPlace[] | null {
+  const slice = state.worldComps?.[comp];
   const cal = state.calendar;
   if (!slice || slice.s !== state.season || !Array.isArray(cal) || !cal.length) return null;
-  const bind = worldUclBind(state, slice.f);
+  const bind = worldCompBind(state, comp, slice.f);
   const nights = nightsOf(slice.f, r => bind.tie(r).legs);
   const leagueAt: number[] = [];
   cal.forEach((e, i) => { if (e.type === 'league') leagueAt.push(i); });
@@ -13351,17 +13384,19 @@ export function worldUclNights(state: CareerState): WorldUclNightPlace[] | null 
   });
   return places;
 }
+export function worldUclNights(state: CareerState): WorldUclNightPlace[] | null { return worldCompNights(state, 'ucl'); }
 
 /** How many nights of the watched season the save has passed: a prefix, and
  *  never fewer than a slice carried across a job move had already shown. */
-export function worldUclNightsDone(state: CareerState): number {
-  const places = worldUclNights(state);
+export function worldCompNightsDone(state: CareerState, comp: WorldCompKey): number {
+  const places = worldCompNights(state, comp);
   if (!places) return 0;
   let n = 0;
   if (state.week >= state.calendar.length) n = places.length;
   else while (n < places.length && state.week > places[n].at) n += 1;
-  return Math.max(n, Math.min(state.worldComps?.ucl?.seen ?? 0, places.length));
+  return Math.max(n, Math.min(state.worldComps?.[comp]?.seen ?? 0, places.length));
 }
+export function worldUclNightsDone(state: CareerState): number { return worldCompNightsDone(state, 'ucl'); }
 
 /* Evaluations kept per slice and night count. A result is shared: read it, never write into it. */
 const WORLD_UCL_MEMO = new WeakMap<WorldCompSlice, Map<string, WorldCompResult>>();
@@ -13372,18 +13407,25 @@ const WORLD_UCL_MEMO = new WeakMap<WorldCompSlice, Map<string, WorldCompResult>>
  * winner. Null when the save watches nothing this season. Pure: it draws
  * nothing from Math.random and writes nothing into `state`.
  */
-export function evalWorldUcl(state: CareerState, nights?: number): WorldCompResult | null {
-  const slice = state.worldComps?.ucl;
+export function evalWorldComp(state: CareerState, comp: WorldCompKey, nights?: number): WorldCompResult | null {
+  const slice = state.worldComps?.[comp];
   if (!slice || slice.s !== state.season) return null;
-  const k = nights ?? worldUclNightsDone(state);
+  const k = nights ?? worldCompNightsDone(state, comp);
   const key = `${state.eraId ?? ''}|${k}`;
   let memo = WORLD_UCL_MEMO.get(slice);
   if (!memo) { memo = new Map(); WORLD_UCL_MEMO.set(slice, memo); }
   const hit = memo.get(key);
   if (hit) return hit;
-  const out = evaluateWorldComp(slice, k, worldUclBind(state, slice.f));
+  const out = evaluateWorldComp(slice, k, worldCompBind(state, comp, slice.f));
   memo.set(key, out);
   return out;
+}
+export function evalWorldUcl(state: CareerState, nights?: number): WorldCompResult | null { return evalWorldComp(state, 'ucl', nights); }
+
+/** The holder a fresh season one draw puts top of pot one: the real 2025-26 Champions League winner in today's
+ *  world. The Europa League's holder is always in the Champions League (row Q4), so it never has one. */
+function worldCompStartHolder(state: Pick<CareerState, 'eraId'>, comp: WorldCompKey): string | null {
+  return comp === 'ucl' && worldUclFormatOf(state) === 'l36' ? CM_FINAL_TABLES_2025_26.holders : null;
 }
 
 /**
@@ -13397,24 +13439,25 @@ export function evalWorldUcl(state: CareerState, nights?: number): WorldCompResu
  * of an era), else the key comes off: the load repair's own rule, so a reload
  * never opens a competition the move left out. Never throws.
  */
-export function carryWorldUcl(career: CareerState, joined: CareerState): void {
+export function carryWorldComp(career: CareerState, joined: CareerState, comp: WorldCompKey): void {
   try {
-    delete joined.worldComps;
-    if (joined.uclGroup) return;
-    const slice = career.worldComps?.ucl;
+    setWorldComp(joined, comp, null);
+    if (comp === 'ucl' && joined.uclGroup) return;
+    const slice = career.worldComps?.[comp];
     const names = [joined.clubName, joined.eraId ? eraEuroName(joined.eraId, joined.clubName) : joined.clubName];
     if (slice && slice.s === career.season && slice.s === joined.season && !names.some(c => slice.clubs.includes(c))) {
-      const seen = Math.max(slice.seen ?? 0, worldUclNightsDone(career));
-      joined.worldComps = { ucl: { ...slice, ...(seen > 0 ? { seen } : {}) } };
+      const seen = Math.max(slice.seen ?? 0, worldCompNightsDone(career, comp));
+      setWorldComp(joined, comp, { ...slice, ...(seen > 0 ? { seen } : {}) });
       return;
     }
     /* Nothing to carry, or my new club is an entrant of the one it watched (it cannot watch itself play): the
        rule of a career with nothing to carry decides, the one repairWorldUcl applies at the next load. */
-    openWorldUcl(joined, worldUclField(joined, null), worldUclFormatOf(joined) === 'l36' ? CM_FINAL_TABLES_2025_26.holders : null);
+    openWorldComp(joined, comp, worldCompField(joined, comp, null), worldCompStartHolder(joined, comp));
   } catch {
-    delete joined.worldComps;
+    setWorldComp(joined, comp, null);
   }
 }
+export function carryWorldUcl(career: CareerState, joined: CareerState): void { carryWorldComp(career, joined, 'ucl'); }
 
 /**
  * The load repair (step E6, narrowly: the critic's answer 4 and correction
@@ -13427,31 +13470,35 @@ export function carryWorldUcl(career: CareerState, joined: CareerState): void {
  * catch: a repair that fails leaves the save without a slice, never without
  * the save (loadCareer's catch would hand back no career at all).
  */
-export function repairWorldUcl(state: CareerState): void {
+export function repairWorldComp(state: CareerState, comp: WorldCompKey): void {
   try {
-    const slice = state.worldComps?.ucl;
-    if (slice && slice.s === state.season && !state.uclGroup) return;
-    if (state.worldComps) delete state.worldComps;
-    if (state.uclGroup || !Array.isArray(state.calendar) || state.week >= state.calendar.length) return;
-    const fmt = worldUclFormatOf(state);
+    const inIt = comp === 'ucl' && !!state.uclGroup;
+    const slice = state.worldComps?.[comp];
+    if (slice && slice.s === state.season && !inIt) return;
+    setWorldComp(state, comp, null);
+    if (inIt || !Array.isArray(state.calendar) || state.week >= state.calendar.length) return;
+    const fmt = worldCompFormatOf(state, comp);
     if (fmt === 'l36' && state.season !== 1) return;
-    openWorldUcl(state, worldUclField(state, null), fmt === 'l36' ? CM_FINAL_TABLES_2025_26.holders : null);
+    openWorldComp(state, comp, worldCompField(state, comp, null), worldCompStartHolder(state, comp));
   } catch {
-    delete state.worldComps;
+    setWorldComp(state, comp, null);
   }
 }
+export function repairWorldUcl(state: CareerState): void { repairWorldComp(state, 'ucl'); }
 
-/** The winner of the watched season, once the season is over (every night
- *  played and a final won), else null. Never throws. */
-export function worldUclWinner(career: CareerState): string | null {
-  const slice = career.worldComps?.ucl;
+/** The winner of a followed competition's season, once the season is over
+ *  (every night played and a final won), else null. Never throws. Round 1509
+ *  (ruling 1j): the one name this round and Round 1510 read a winner by. */
+export function worldCompWinnerOf(career: CareerState, comp: WorldCompKey): string | null {
+  const slice = career.worldComps?.[comp];
   if (!slice || slice.s !== career.season || !Array.isArray(career.calendar) || career.week < career.calendar.length) return null;
   try {
-    return worldCompWinner(evalWorldUcl(career, Infinity) as WorldCompResult)?.winner ?? null;
+    return worldCompWinner(evalWorldComp(career, comp, Infinity) as WorldCompResult)?.winner ?? null;
   } catch {
     return null;
   }
 }
+export function worldUclWinner(career: CareerState): string | null { return worldCompWinnerOf(career, 'ucl'); }
 
 /**
  * Bring every AI group up to my own group's matchday. Lockstep on a normal
@@ -21507,7 +21554,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     const tables = moving && watchTables ? watchTables.map(t => ({ ...t, clubs: customExitUclField(career, t.clubs) })) : watchTables;
     openWorldUcl(state, worldUclField(state, tables, watchHolder), watchHolder);
   } catch {
-    delete state.worldComps;
+    setWorldComp(state, 'ucl', null);
   }
   // Round 165: a fresh golden boot race too (the new table is all zeros).
   state.scorerRace = initScorerRace(state);
