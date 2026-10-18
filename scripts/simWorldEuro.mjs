@@ -61,6 +61,7 @@
  *              meinfield (my club is not kept out) earned (my club's route worked out with it kept out)
  *              carryearned (the job move's carry keeps the old club's route for the new club)
  *              cuploser (euroCupOf hands the cup's route to the final's loser: the oracle reads the bracket itself)
+ *              noworld (uclEntrantsOf forgets a participant's AI groups: the harness builds that set itself)
  *   section 2: stream (the Europa League's matches draw from Math.random) form (its evaluation writes the clubs'
  *              form) leak (its open writes a key outside worldComps)
  *   section 3: position (euroPlaceOf grades by position alone, as before the round) cupwin (cuploser's edit: a
@@ -93,6 +94,7 @@ const CONTROLS = {
   earned: [1, /^1 earned: /, /^1 /],
   carryearned: [1, /^1 carry: /, /^1 /],
   cuploser: [1, /^1 cup: /, /^1 /],
+  noworld: [1, /^1 both: /, /^1 /],
   cupwin: [3, /^3 cupwin: /, /^3 /],
   stream: [2, /^2 .*the draws differ/, /^2 /],
   form: [2, /^2 .*the state differs/, /^2 /],
@@ -115,6 +117,7 @@ const CAREER_EDITS = {
   earned: [{ file: CM, from: '  const mine = euroFieldFromTables({ ...input, exclude: out.filter(c => c !== state.clubName), noFill: [state.clubName] });', to: '  const mine = euroFieldFromTables({ ...input, exclude: out, noFill: [state.clubName] });' }],
   carryearned: [{ file: CM, from: '      if (carried && joined.clubName !== career.clubName) delete carried.earned;\n', to: '' }],
   cuploser: [CUP_TO_LOSER],
+  noworld: [{ file: CM, from: '  if (state.uclGroup) return [state.clubName, ...state.uclGroup.opponents, ...(state.uclWorld ?? []).flatMap(g => g.clubs)];', to: '  if (state.uclGroup) return [state.clubName, ...state.uclGroup.opponents];' }],
   cupwin: [CUP_TO_LOSER],
   stream: [{ file: CM, from: '  const out = evaluateWorldComp(slice, k, worldCompBind(state, comp, slice.f));', to: "  const bound = worldCompBind(state, comp, slice.f);\n  const out = evaluateWorldComp(slice, k, comp === 'uel' ? { ...bound, sim: (h, a, scale) => simScore(h, a, 0.2, -0.08, scale) } : bound);" }],
   form: [{ file: CM, from: '  memo.set(key, out);\n  return out;\n}', to: "  if (comp === 'uel') for (const n of out.nights) for (const fx of n.fixtures) if (fx.hg !== undefined) noteForm(state, fx.home, fx.away, fx.hg, fx.ag as number);\n  memo.set(key, out);\n  return out;\n}" }],
@@ -308,6 +311,11 @@ let pure = null;
 /** The rule and the 2025-26 tables, bundled on their own: the oracle beside the engine. */
 const oracleLib = async () => (pure ??= await bundle('oracle', { ea: MODULE_FILE, ft: 'src/data/clubManagerFinalTables2025_26.ts' }));
 
+/** The Champions League this season really plays, built here from the save and never through the engine's
+ *  uclEntrantsOf (fix-1509 minor 3: reading it, a participant's AI groups forgotten left section 1 green): my
+ *  club, its group and the AI groups when it is in, else the one the save follows. */
+const uclPlayedOf = st => (st.uclGroup ? [st.clubName, ...st.uclGroup.opponents, ...(st.uclWorld ?? []).flatMap(g => g.clubs)] : [...(st.worldComps?.ucl?.clubs ?? [])]);
+
 /** The season's own cup read off its bracket here, never through the engine's euroCupOf (fix-1509 major 2: with
  *  the oracle reading euroCupOf, a cup route handed to the final's loser moved both sides of every check): the
  *  nation of the save's league, and the final's winner by its score, or when it was level the tie's own winner,
@@ -339,7 +347,7 @@ function oracleField(M, O, st, pre) {
   }
   const tables = src.filter(t => t.league.euro).map(t => ({ leagueId: t.league.id, nationId: nation(t.league.id), clubs: t.clubs,
     uclPlaces: M.cm.uclPlacesIn(t.league), uelLast: M.cm.EURO_SLOTS[t.league.id]?.uel ?? M.cm.uclPlacesIn(t.league) }));
-  const input = { tables, cups, uclEntrants: M.cm.uclEntrantsOf(st), ueclHolder: holder, size: 36 };
+  const input = { tables, cups, uclEntrants: uclPlayedOf(st), ueclHolder: holder, size: 36 };
   const field = O.ea.euroFieldFromTables({ ...input, exclude: excluded });
   const mine = O.ea.euroFieldFromTables({ ...input, exclude: excluded.slice(1), noFill: [st.clubName] });
   return { field, earned: mine.via[st.clubName] ?? null };
@@ -454,7 +462,7 @@ async function europaPass() {
       if (sl) {
         ok(sl.s === s.season && sl.f === 'l36', `1 shape: ${name} at ${label}: season ${sl.s} format ${sl.f}`);
         ok(sl.clubs.length === 36 && new Set(sl.clubs).size === 36, `1 size: ${name} at ${label}: ${sl.clubs.length} entrants`);
-        const ucl = new Set(M.cm.uclEntrantsOf(s));
+        const ucl = new Set(uclPlayedOf(s));
         const both = sl.clubs.filter(c => ucl.has(c));
         ok(both.length === 0, `1 both: ${name} at ${label}: ${both.slice(0, 3).join(', ')} in both competitions`);
         ok(!sl.clubs.includes(s.clubName), `1 mine: ${name} at ${label}: ${s.clubName} is an entrant`);
@@ -817,7 +825,7 @@ async function holderSection() {
       const w = M.cm.worldCompWinnerOf(got.prev, 'uel');
       if (!w) return;
       rollovers += 1;
-      const ucl = new Set(M.cm.uclEntrantsOf(st));
+      const ucl = new Set(uclPlayedOf(st));
       if (st.uclGroup) {
         const direct = M.cm.uclDirectQualifiersFromTables(got.pre.tables, M.cm.uclHolderOf(got.prev)).length;
         if (!ucl.has(w) && direct >= 32) { full += 1; return; }
