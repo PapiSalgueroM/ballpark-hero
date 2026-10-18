@@ -1,0 +1,5 @@
+simCmLedgerBound exit=0 328s | simCmLedgerBound: green, all four sections held
+dry exit=0 0s | fxcopy: 1
+mut-fxcopy exit=0 4s | fxcopy FIRED as it must: the one writing check caught the engine copy
+clean-after exit=0 4s |    Duration  2.83s (transform 1.30s, setup 65ms, collect 1.54s, tests 570ms, environment 286ms, prepare 99ms)
+ledger-again exit=0 322s | simCmLedgerBound: green, all four sections held
