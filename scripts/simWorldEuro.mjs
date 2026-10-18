@@ -795,7 +795,8 @@ async function boardSection() {
     .map(club => ({ kind: 'search', era: 'now', club }));
   const t0 = Date.now();
   let seasons = 0, agreeUel = 0, agreeUcl = 0, differences = 0;
-  const byRoute = {}, cupWins = [], cupOutside = [];
+  const byRoute = {}, cupWins = [], cupOutside = [], attrRows = [];
+  const { tape } = await lib();
   for (const f of [...fleet, ...extra]) for (const seed of (f.kind === 'search' ? SEARCH_SEEDS : SEEDS)) {
     const name = `${f.kind} ${f.club} seed ${seed}`;
     let ends = null;
@@ -812,6 +813,7 @@ async function boardSection() {
         const loaded = Bm.cm.loadCareer();
         const head = M.cm.objectiveStatuses(s);
         const base = loaded ? Bm.cm.objectiveStatuses(loaded) : null;
+        const before = differences;
         if (base) head.forEach((h, i) => {
           const b = base[i];
           if (!b || b.status === h.status) return;
@@ -821,12 +823,18 @@ async function boardSection() {
           ok(ok3, `3 attribution: ${name} season ${s.season}: "${h.objective.label}" graded ${h.status} where the base grades ${b.status}, ${place ?? 'no'} European place`);
           byRoute[route ?? 'none'] = (byRoute[route ?? 'none'] ?? 0) + 1;
         });
+        /* Brief 1.3(6), advice 16 (fix-1509 minor 18): what each such season moves, computed rather than said. The
+           score's objectives term on both engines over the very same finished season, and (after the journey, on
+           a fresh base) next season's opening confidence from the base's own rollover of the same save. */
+        if (differences > before) attrRows.push({ name, season: s.season, n: differences - before, store: new Map(M.store),
+          headObj: M.cm.seasonScoreParts(s).objectives, baseObj: Bm.cm.seasonScoreParts ? Bm.cm.seasonScoreParts(loaded).objectives : null, headOpen: null, baseOpen: null });
       }
     };
     let baseCtx = await B.fresh();
     const onStep = (M, s, label, got) => {
       if (!got?.prev || !ends || got.prev.clubName !== s.clubName) return;
       seasons += 1;
+      for (const r of attrRows) if (r.name === name && r.season === ends.season) r.headOpen = s.boardConfidence ?? null;
       const earned = s.worldComps?.uel?.earned ?? null;
       if (s.worldComps?.uel) {
         ok((ends.place === 'uel') === !!earned, `3 agreement: ${name} season ${ends.season}: euroPlaceOf says ${ends.place ?? 'none'} and the rollover's rule ${earned ?? 'nothing'}`);
@@ -844,7 +852,18 @@ async function boardSection() {
       ends = null;
     };
     try { await journey(E, { ...f, seed }, { seasons: f.kind === 'participant' ? 2 : 3, onStep, onSeasonEnd }); } catch (e) { ok(false, `3 threw: ${name}: ${e.message}`); }
+    for (const r of attrRows) {
+      if (r.name !== name || r.headOpen === null) continue;
+      try {
+        const R = await B.fresh();
+        R.store.clear();
+        for (const [k, v] of r.store) R.store.set(k, v);
+        const l = R.cm.loadCareer();
+        r.baseOpen = l ? tape(0x1509, () => R.cm.startNextSeason(l)).value?.boardConfidence ?? null : null;
+      } catch { r.baseOpen = null; }
+    }
   }
+  for (const r of attrRows) console.log(`  3 attribution, computed: ${r.name} season ${r.season} (${r.n} graded otherwise): the season score's objectives term ${r.headObj} on this tree, ${r.baseObj ?? 'n/a'} on the base; next season's opening confidence ${r.headOpen ?? 'n/a (no rollover)'} against ${r.baseOpen ?? 'n/a'} (the base's rollover of the same save, its grade the head's)`);
   ok(cupOutside.length > 0, '3 search: no season of the fleet or the search saw my club win its cup from outside the Champions League places, so the cup route was never agreed');
   console.log(`  3 agreement: ${seasons} season ends, ${agreeUel} with a Europa League route both agree on, ${agreeUcl} Champions League places; my club won its cup in ${cupWins.length}, from outside the Champions League places in ${cupOutside.length}: ${cupOutside.slice(0, 8).join('; ')}`);
   console.log(`  3 attribution: ${differences} objectives graded otherwise than the base, by my club's route: ${Object.entries(byRoute).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'}; each one done adds W_OBJ_EACH (6, capped at 30) to the season score's objectives term and reaches 1335's opening confidence through the same statuses; ${((Date.now() - t0) / 1000).toFixed(0)} s`);
