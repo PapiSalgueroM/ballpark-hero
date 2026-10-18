@@ -1,0 +1,9 @@
+diff-leak exit=0 138s | leak FIRED as it must
+diff-base exit=0 187s | simCmDifficulty: all green (sections 1,2,3,6,7)
+nosack exit=0 131s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
+vitest-1501 exit=0 10s |    Duration  9.78s (transform 2.41s, setup 311ms, collect 8.28s, tests 10.74s, environment 2.41s, prepare 719ms)
+meters exit=0 26s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+wilderness exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+diff-ctl exit=0 251s | controls (each must be 1): nojoin=1 helpdrift=1 cheque=1 wages=1 alloffleak=1
+sec2-fleet exit=0 395s | simCmDifficulty: all green (sections 2)
+tactics exit=0 71s | simTacticsEngine: PASS. A man is read in his slot, a second position is earned over counted weeks, the armband and the takers reach the stream, a duty moves the football 
