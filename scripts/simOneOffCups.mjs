@@ -49,7 +49,8 @@
  *      the won season's history row holds the name; the result log holds the game in both; and, per weighing reader
  *      at the unit level, one state with and without a minor trophy reads the same (the nation's standing, the job
  *      market's count, the sponsor's offers, the season's grade and offers, the XP, the kitty, the wage cap, the
- *      fans' trophy term).
+ *      fans' trophy term), each arm in its own fresh engine with the state loaded through the save, so neither
+ *      reads under memberships the other's startNextSeason registered.
  *   5  the save: at most the three keys worldComps knows, the slice of the season in play, no minor trophy before the
  *      match half; the bytes of a slice and of a stub printed.
  *   6  the dailies: no Hot Seat or Deadline Day state, and no career a Hot Seat hands over, carries a super cup.
@@ -801,7 +802,7 @@ async function honours() {
         const g = { out: {} };
         await journey(E, f, seed, 'nocoach', { onStep: (M, s, label) => {
           if (label === 's2-finish' && s) g.out.fin = s;
-          if (/^s2-e/.test(label) && s) { g.out.pre = s; g.out.M = M; }
+          if (/^s2-e/.test(label) && s) g.out.pre = JSON.stringify(s);
         } });
         pre[name] = g.out;
       }
@@ -820,11 +821,20 @@ async function honours() {
         if (name === 'won') ok(!!hist && hist.trophies.includes(rowName), `4 history: ${tag} won: season two's history row holds ${JSON.stringify(hist?.trophies)}, not the ${rowName}`);
         const log = (x.fin.resultLog ?? []).filter(r => r.competition === 'oneOff');
         ok(log.length === 1, `4 record: ${tag} ${name}: ${log.length} super cup games in the result log`);
-        /* Unit level, per reader: one state with and without the minor trophy reads the same. */
-        if (name === 'won' && x.pre && x.M) {
-          const withIt = JSON.parse(JSON.stringify(x.pre));
+        /* Unit level, per reader: one state with and without the minor trophy reads the same. Each arm in its own
+           fresh engine with the state loaded through the save (loadCareer registers the save's own league
+           memberships): readersOf runs startNextSeason, which registers the NEXT season's memberships in module
+           state, so two arms in one engine read under different memberships (the reviewer's M4: XP 436 then 711
+           on one state twice with two seasons, the same with three only because the journey had registered them). */
+        if (name === 'won' && x.pre) {
+          const without = JSON.parse(x.pre);
+          const withIt = JSON.parse(x.pre);
           withIt.trophies = [...withIt.trophies, { name: rowName, emoji: '🛡️', season: withIt.season, minor: true }];
-          const a = readersOf(x.M, MT, x.pre, 0x4510 + seed), b = readersOf(x.M, MT, withIt, 0x4510 + seed);
+          const armOf = async st => { const M = await won.fresh(); M.store.clear(); if (!M.cm.saveCareer(st)) return null; const back = M.cm.loadCareer(); return back ? { M, st: back } : null; };
+          const A = await armOf(without), B = await armOf(withIt);
+          if (!A || !B) { ok(false, `4 weighs: ${tag}: the state did not save and load (${!!A} ${!!B})`); continue; }
+          ok(B.st.trophies.length === A.st.trophies.length + 1, `4 weighs: ${tag}: the loaded arms differ by ${B.st.trophies.length - A.st.trophies.length} trophies, not the one minor trophy`);
+          const a = readersOf(A.M, MT, A.st, 0x4510 + seed), b = readersOf(B.M, MT, B.st, 0x4510 + seed);
           for (const k of Object.keys(a)) { readers += 1; ok(a[k] === b[k], `4 weighs: ${tag}: ${k} reads ${a[k]} without a minor trophy and ${b[k]} with one`); }
         }
       }
