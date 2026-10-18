@@ -1,0 +1,16 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+unit-lib exit=0 59s |    Duration  57.72s (transform 5.61s, setup 3.16s, collect 19.83s, tests 111.03s, environment 21.58s, prepare 5.14s)
+unit-whymut exit=1 9s | the why unit test caught the mutation
+walkboard exit=0 57s | WALK BOARD DONE 0 problems
+pin-check exit=0 0s | scripts/simClubManagerDecisions.mjs: committed 3383d016 base 08729217 3383d016 REPRODUCES tree 3383d016 (unchanged)
+appeal-head exit=1 11s | Node.js v24.21.0
+tsc exit=0 150s | 
+appeal-revert exit=0 58s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+realsaves exit=0 15s | probeRealSaves: GREEN
+unit-cm exit=0 214s |    Duration  213.45s (transform 10.78s, setup 4.08s, collect 42.18s, tests 352.24s, environment 25.52s, prepare 6.16s)
+realsaves-leak exit=1 20s | probeRealSaves: control leak FIRED (9 saves differ)
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+dashscan exit=0 0s | no dash in the diff
+simHarnessAnchors exit=0 55s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ucl-savedbytes exit=3 1116s | simWorldUcl: control savedbytes DID NOT FIRE CLEANLY (own true, stray 15: 2 watcher Chelsea (now) nocoach seed 2 at s2-reload: the saved bytes differ (worldComps.uel take

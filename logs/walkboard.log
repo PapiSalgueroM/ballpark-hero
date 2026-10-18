@@ -1,0 +1,13 @@
+cupwin: Fiorentina seed 606 won its cup at week 49, table 3, "Qualify for the Europa League" target 5 onTrack, route null, why ""
+cupwin: Eintracht Frankfurt seed 101 won its cup at week 46, table 3, "Qualify for the Europa League" target 5 onTrack, route null, why ""
+cupwin: Eintracht Frankfurt seed 303 won its cup at week 46, table 7, "Qualify for the Europa League" target 5 onTrack, route C, why "Your DFB-Pokal win counts: the cup winner gets a Europa League place."
+cupwin-end: Eintracht Frankfurt finished 6, done, route L, why "A club above you goes into the Champions League, so a Europa League place passes down the table to you."
+cupwin: searched 15 seasons in 31 s, found Eintracht Frankfurt
+cupMid-320: why "Your DFB-Pokal win counts: the cup winner gets a Europa League place." at 12 px, box 29 to 291 of 320
+cupMid-390: why "Your DFB-Pokal win counts: the cup winner gets a Europa League place." at 12 px, box 29 to 361 of 390
+cupMid-1280: why "Your DFB-Pokal win counts: the cup winner gets a Europa League place." at 12 px, box 221 to 1059 of 1280
+cupEnd-320: why "A club above you goes into the Champions League, so a Europa League place passes down the table to you." at 12 px, box 29 to 291 of 320
+cupEnd-390: why "A club above you goes into the Champions League, so a Europa League place passes down the table to you." at 12 px, box 29 to 361 of 390
+cupEnd-1280: why "A club above you goes into the Champions League, so a Europa League place passes down the table to you." at 12 px, box 221 to 1059 of 1280
+walkBoard: 0 problems, 6 lines measured
+WALK BOARD DONE 0 problems

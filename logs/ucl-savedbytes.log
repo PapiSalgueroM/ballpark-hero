@@ -1,0 +1,7 @@
+20
+FAIL 2 participant Real Madrid (now) nocoach seed 1 at s1-reload: the saved bytes differ (worldComps.uel taken off)
+FAIL 2 participant Real Madrid (now) nocoach seed 2 at s1-reload: the saved bytes differ (worldComps.uel taken off)
+FAIL 2 participant Real Madrid (now) nocoach seed 3 at s1-reload: the saved bytes differ (worldComps.uel taken off)
+FAIL 2 watcher Proof Town Athletic (now) nocoach seed 1 at s1-join-reload: the saved bytes differ (worldComps.uel taken off)
+FAIL 2 watcher Proof Town Athletic (now) coach seed 1 at s1-join-reload: the saved bytes differ (worldComps.uel taken off)
+simWorldUcl: control savedbytes DID NOT FIRE CLEANLY (own true, stray 15: 2 watcher Chelsea (now) nocoach seed 2 at s2-reload: the saved bytes differ (worldComps.uel taken off) / 2 watcher Chelsea (now) nocoach seed 3 at s2-reload: the saved bytes differ (worldComps.uel taken off) / 2 watcher Chelsea (now) nocoach seed 4 at s2-reload: the saved bytes differ (worldComps.uel taken off))
