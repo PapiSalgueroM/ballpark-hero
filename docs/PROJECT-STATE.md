@@ -1,3 +1,30 @@
+## Round 1422 READY, 2026-10-18: trophy help names its actual return destination
+
+Codex report lane, `codex/soccer-trophy-help`, base
+`775564305e9da84dab59f2b9fe246d044a3cc8e9`. TESTED
+`450bb91aaf1d4fdedccd488f2ce85e7ea931bea7`.
+Help opened from a selected winning season now says "Back to season". Help opened from the list keeps
+"Back to wins". One caption expression and four necessary existing test role-name lookups changed.
+The existing return destination, focus, scrolling and career state remain held.
+
+The original production route reproduced two caption faults at 390 and 1280 pixels; both list cases were healthy.
+Only after native original admission passed 254649 checks with zero errors was the correction adopted.
+The fixed build passed all four native journeys, all 30 existing trophy tests, an original-caption inverse with
+exactly three expected failures and 27 healthy cases, then all 30 restored tests. Real app types, plain build,
+all 15 built-site readers and all 14 unchanged fatal weight caps passed. Fixed native saved-evidence admission
+passed 308949 checks with zero errors. Run 39133586912, job 117693510950, artifact 12139446067.
+
+[Round 1422 evidence and limits](ROUND1422-TROPHY-HELP-RETURN.md).
+Outside packet: `C:/Users/antho/dukb-handoff/2026-10-18/soccer-trophy-help-1422/`.
+Closing commit adds only PROJECT-STATE, WORKBOARD and the round document. Its final canonical source closure,
+PR identity, all-60-branch push check and shared handoff receipts will be retained outside the repo.
+
+All prior 59 report heads remain immutable, including Round 1420's XI fix in PR 335 and Round 1421's
+squad Retry nonfinding. I keeps the protected flagship engines, Manager and tournament work, actual release
+join, main and publication. The finite 13:12 UTC I checkpoint reports tournament 1509 ledger-closed at
+5f7b13b1 with join checks still owed and 1510 building. That report gives no new Root lease or live credit.
+This caption fix is ready for release integration and is not claimed published.
+
 ## Release BJ LIVE, 2026-10-17 21:51 EDT: Club Manager Hard and Legend, the Champions League you can follow in or out of it, match days that read like a scoreboard, a way out for dirty money in the US careers, and Soccer Career's summer cards
 
 Claude lane (session I). main d0c3ff58, deployment fec60776-a9ad-49aa-b4ea-04a590a233de, entry index-CWmc_M1Q.js (was
