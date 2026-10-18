@@ -47,6 +47,10 @@ import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade 
 import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 /* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */
 import { keyedRng } from '@/lib/keyedRng';
+/* Round 1510: the shared night of a participant and the one match cups. Pure modules: no cycle. */
+import type { NightRef } from '@/lib/worldNights';
+import { oneOffRowById } from '@/lib/worldOneOffs';
+import type { OneOffRow, OneOffSlice } from '@/lib/worldOneOffs';
 /* Round 1229: the one scorer weight table. It imports a type and nothing else, so there is no cycle. */
 import { goalWeight, assistWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWeight';
 /* Round 1229: the league book, pure. It imports the keyed generator, the own goal rule and the weight table. */
@@ -186,11 +190,14 @@ import { clockOrder, playedBy } from '@/lib/clubManagerClock';
 
 export type Mentality = 'defensive' | 'balanced' | 'attacking';
 export type FormResult = 'W' | 'D' | 'L';
-export type Competition = 'league' | 'cup' | 'uclGroup' | 'uclKo';
+/** Round 1510: 'oneOff' is a one match cup a participant plays on a night of its own (the domestic super cup,
+ *  CareerState.worldComps.dsc). */
+export type Competition = 'league' | 'cup' | 'uclGroup' | 'uclKo' | 'oneOff';
 
 /** Round 164: how the stats centre buckets football. The two UCL phases are
- *  one competition to a fan, so they share a bucket. */
-export type CompBucket = 'league' | 'cup' | 'ucl';
+ *  one competition to a fan, so they share a bucket. Round 1510: 'other' holds
+ *  every one match cup. */
+export type CompBucket = 'league' | 'cup' | 'ucl' | 'other';
 
 export interface CompStatLine {
   apps: number;
@@ -203,7 +210,8 @@ export interface CompStatLine {
 }
 
 export function compBucketOf(c: Competition): CompBucket {
-  return c === 'league' ? 'league' : c === 'cup' ? 'cup' : 'ucl';
+  /* Round 1510: before the fall through, or a one match cup's goals would land in the Champions League column. */
+  return c === 'league' ? 'league' : c === 'cup' ? 'cup' : c === 'oneOff' ? 'other' : 'ucl';
 }
 
 export interface TeamCompLine {
@@ -239,7 +247,7 @@ export interface RaceScorer {
  */
 export function teamCompRecord(state: CareerState, cupName: string | null): Record<CompBucket | 'all', TeamCompLine> {
   const mk = (): TeamCompLine => ({ p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0 });
-  const out: Record<CompBucket | 'all', TeamCompLine> = { all: mk(), league: mk(), cup: mk(), ucl: mk() };
+  const out: Record<CompBucket | 'all', TeamCompLine> = { all: mk(), league: mk(), cup: mk(), ucl: mk(), other: mk() };
   for (const e of state.resultLog ?? []) {
     const bucket: CompBucket = e.competition
       ? compBucketOf(e.competition)
@@ -1696,7 +1704,16 @@ export interface TransferNews {
   week: number;
 }
 
-export interface Trophy { name: string; emoji: string; season: number; }
+/** Round 1510: `minor` marks a one match cup (a super cup): shown everywhere a trophy is shown, weighed nowhere a
+ *  season is judged or paid (weighedTrophies). */
+export interface Trophy { name: string; emoji: string; season: number; minor?: true; }
+
+/** Round 1510: the trophies that count where a season is judged or paid (the grade, the offers, the kitty, the
+ *  XP, the wage cap, the sponsor, a federation's view, the job market, the fans): every one but a minor cup. The
+ *  one helper every weighing reader goes through; a display reads the whole list. */
+export function weighedTrophies(list: readonly Trophy[]): Trophy[] {
+  return list.filter(t => !t.minor);
+}
 
 export interface ScorerLine {
   name: string;
@@ -2024,6 +2041,12 @@ export interface CalendarEntry {
    * keeps playing the ties it was already halfway through.
    */
   uclLeg?: 1 | 2;
+  /**
+   * Round 1510: a participant's NIGHT (src/lib/worldNights.ts), a match only my calendar holds, backed by a
+   * worldComps slice: its key and the night's index there. A night never ticks a week, never counts a window week
+   * and never charges the books; skipped, the week moves on and nothing else happens. Absent on every other entry.
+   */
+  night?: NightRef;
 }
 
 export interface UclGroupState {
@@ -2220,7 +2243,7 @@ export interface NationOffer {
 export function nationStanding(career: CareerState): number {
   const def = clubDefFor(career.clubName);
   const tierWorth = [26, 16, 8, 3][def.tier - 1] ?? 3;
-  const trophies = career.trophies.length * 14;
+  const trophies = weighedTrophies(career.trophies).length * 14;
   const seasons = Math.min(career.history.length, 12) * 3;
   const wins = career.careerStats.played > 0
     ? (career.careerStats.wins / career.careerStats.played) * 30
@@ -2368,7 +2391,7 @@ export function wildernessProfile(career: CareerState): ManagerProfile {
   return {
     playingRep: 0,
     seasonsSinceRetired: 0,
-    managerTrophies: career.trophies.length,
+    managerTrophies: weighedTrophies(career.trophies).length,
     promotions,
     relegations,
     seasonsManaged: Math.max(0, career.season - 1) + (career.history.length ? 0 : 0),
@@ -2578,7 +2601,7 @@ function sponsorPull(state: CareerState): number {
   const byTier = [1, 0.62, 0.4, 0.26][def.tier - 1] ?? 0.26;
   const europe = state.uclGroup ? 1.35 : 1;
   /* A club that just won something is worth more in the room. */
-  const trophies = (state.trophies?.length ?? 0);
+  const trophies = weighedTrophies(state.trophies ?? []).length;
   const form = 1 + Math.min(trophies, 6) * 0.04;
   const era = eraHist ? 0.7 : 1;
   return byTier * europe * form * era;
@@ -2883,8 +2906,10 @@ export interface CareerState {
    *  Round 1509: and `uel`, the world's Europa League, followed every season
    *  of today's world (my club is never one of its entrants yet). One object,
    *  two keys, written in the order ucl, uel by setWorldComp, and gone when
-   *  both are. */
-  worldComps?: { ucl?: WorldCompSlice; uel?: WorldCompSlice };
+   *  both are. Round 1510: and `dsc`, the country's domestic super cup (a
+   *  slice or a stub with its reason, worldOneOffs.ts), written and taken off
+   *  by its own writer alone (setOneOffSlice) and carried by setWorldComp. */
+  worldComps?: { ucl?: WorldCompSlice; uel?: WorldCompSlice; dsc?: OneOffSlice };
   /** Round 617: the league fixture list alternates home and away (the circle
    *  method's standard venue rule, see roundPairs). Set on every new career
    *  and on every season rollover. Absent on a save from before the round,
@@ -11714,8 +11739,9 @@ const UCL_SECOND_LEG_GAP = 0.035;
 
 /* Round 832: `cup` false is a league with no domestic cup (cupName null on
    its rules row): its season carries no cup week at all. Every league before
-   this round has one, and for them the calendar is the one it always was. */
-function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false, cup = true): CalendarEntry[] {
+   this round has one, and for them the calendar is the one it always was.
+   Round 1510: exported so the night placer's unit file builds every league size on the engine's own calendar. */
+export function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false, cup = true): CalendarEntry[] {
   // Odd-sized leagues carry a BYE ghost, so the schedule runs 2*n rounds.
   const effSize = leagueSize % 2 === 0 ? leagueSize : leagueSize + 1;
   const rounds = 2 * (effSize - 1);
@@ -12397,6 +12423,8 @@ export const ET_DEFLATOR = 0.965;
 /** Round 670: does this week's match, if level when the ninety minutes are
  *  up, play extra time? Only a Champions League match that settles its tie. */
 function playsExtraTime(state: CareerState, entry: CalendarEntry): boolean {
+  /* Round 1510: a one match cup's night plays it when its row's decider is extra time ('et'), never on 'pens'. */
+  if (entry.type === 'oneOff') return oneOffPlaysExtraTime(state, entry);
   if (entry.type !== 'uclKo' || !entry.uclRound) return false;
   /* A legacy week carries no uclLeg and is the whole tie (Round 507). */
   const twoLegs = uclLegsFor(state.eraId, entry.uclRound) === 2 && !!entry.uclLeg;
@@ -12922,6 +12950,16 @@ export function uelHolderOf(career: CareerState): string | null {
  */
 export function uclFinalTables(career: CareerState): { league: LeagueDef; clubs: string[] }[] | null {
   if (!!career.eraId && isHistoricEra(career.eraId)) return null;
+  return finishedLeagueTables(career, l => !!l.euro);
+}
+
+/**
+ * Round 1510 (answer 7): the final tables of the season just played, every league of the save's world `keep`
+ * keeps, in world order, each in its own finishing order with its own tiebreaks, or null when the season did not
+ * finish (the guard below). Lifted out of uclFinalTables unchanged, which keeps its era guard and its European
+ * filter over it, so the super cups read the same tables the Champions League reads, never a second reading.
+ */
+export function finishedLeagueTables(career: CareerState, keep: (l: LeagueDef) => boolean): { league: LeagueDef; clubs: string[] }[] | null {
   if (!career.world || !Array.isArray(career.table) || !career.table.length) return null;
   /* Only a season that actually FINISHED has a table worth reading. syncWorld
      drags the rest of the world to the same fraction of its season that I am
@@ -12934,7 +12972,7 @@ export function uclFinalTables(career: CareerState): { league: LeagueDef; clubs:
   if (!Array.isArray(career.calendar) || career.week < career.calendar.length) return null;
   const myLeague = careerLeagueOf(career);
   /* Each European league's own table with its own tiebreaks, in world order. */
-  return worldLeagueDefs(career).filter(l => l.euro).map(league => {
+  return worldLeagueDefs(career).filter(keep).map(league => {
     const rows = league.id === myLeague.id
       ? sortedLeagueTable(career)
       : (career.world![league.id] ? sortedWorldTable(career, league.id, career.world![league.id].table) : null);
@@ -13260,6 +13298,15 @@ export function euroCupOf(career: CareerState): EuroCup {
   return { nationId: leagueRulesOf(careerLeagueOf(career).id).nationId, winner: career.cupBracket?.find(t => t.round === 'F')?.winner ?? null };
 }
 
+/** Round 1510 (advice 15): the domestic cup final the season played (the bracket's 'F' tie), its winner and the
+ *  club it beat, both null when no final was won. One reading for the super cups and the Europa League's later
+ *  participant half. */
+export function cupFinalistsOf(career: Pick<CareerState, 'cupBracket'>): { winner: string | null; runnerUp: string | null } {
+  const f = career.cupBracket?.find(t => t.round === 'F');
+  if (!f?.winner) return { winner: null, runnerUp: null };
+  return { winner: f.winner, runnerUp: f.winner === f.home ? f.away : f.home };
+}
+
 /**
  * The Europa League field of the season `state` is opening (rulings 1f and 1g), or null when there is no honest
  * one: an era save (it keeps its era's format, which has no Europa League in this round), or a later season of
@@ -13329,16 +13376,30 @@ function worldCompMarks(comp: WorldCompKey): readonly number[] {
  * one competition is the save it was before this round, and never carries `worldComps: {}` or an undefined key.
  */
 function setWorldComp(state: CareerState, comp: WorldCompKey, slice: WorldCompSlice | null): void {
-  const next: { ucl?: WorldCompSlice; uel?: WorldCompSlice } = {};
+  const next: NonNullable<CareerState['worldComps']> = {};
   for (const k of WORLD_COMP_KEYS) {
     const s = k === comp ? slice : state.worldComps?.[k];
     if (s) next[k] = s;
   }
+  /* Round 1510 (ruling 2c): every key this writer does not own rides along as it was, after its two. */
+  const dsc = state.worldComps?.dsc;
+  if (dsc) next.dsc = dsc;
   /* Taking the Champions League's key off takes the object off first and puts back what is left, the way the
      engine has always written it (delete, then assign), so the object stands where it always stood among the
      save's keys; the Europa League's key is written in place. */
   if (comp === 'ucl' && !slice) delete state.worldComps;
-  if (next.ucl || next.uel) state.worldComps = next;
+  if (next.ucl || next.uel || next.dsc) state.worldComps = next;
+  else delete state.worldComps;
+}
+
+/** Round 1510 (ruling 2c): the domestic super cup's own writer: a NEW map with its key set, or its key taken off,
+ *  the map gone when nothing is left; never an undefined key and never a write into last season's object (the
+ *  rollover's literal carries the old career's map). */
+function setOneOffSlice(state: CareerState, slice: OneOffSlice | null): void {
+  const next: NonNullable<CareerState['worldComps']> = { ...(state.worldComps ?? {}) };
+  if (slice) next.dsc = slice;
+  else delete next.dsc;
+  if (next.ucl || next.uel || next.dsc) state.worldComps = next;
   else delete state.worldComps;
 }
 
@@ -13349,8 +13410,9 @@ export function worldCompFormatOf(state: Pick<CareerState, 'eraId'>, comp: World
 }
 
 /** The keyed seed of a watched season: the world seed when the save has one,
- *  else the save's own start, and the season's year. */
-function worldCompSeed(state: CareerState, comp: WorldCompKey): number {
+ *  else the save's own start, and the season's year. Round 1510: the domestic
+ *  super cup's slice ('dsc') is seeded the same way under its own key. */
+function worldCompSeed(state: CareerState, comp: WorldCompKey | 'dsc'): number {
   const base = worldSeedOf(state) ?? `${state.clubName}|${state.eraId ?? ''}|${state.startYear}`;
   return Math.floor(keyedRng(`world-${comp}|${base}|${worldYear(state)}`)() * 0x100000000);
 }
@@ -13633,6 +13695,35 @@ export function worldCompWinnerOf(career: CareerState, comp: WorldCompKey): stri
 }
 export function worldUclWinner(career: CareerState): string | null { return worldCompWinnerOf(career, 'ucl'); }
 
+/* ================================================================== */
+/* Round 1510: the domestic super cup (worldComps.dsc)                */
+/* ================================================================== */
+
+/** The live super cup slice of this season, with its row, behind a night of the calendar. Null for anything else. */
+function oneOffNightRow(state: CareerState, night: NightRef | undefined): { slice: OneOffSlice; row: OneOffRow } | null {
+  if (!night || night.k !== 'dsc') return null;
+  const slice = state.worldComps?.dsc;
+  if (!slice || slice.skip || slice.s !== state.season) return null;
+  const row = oneOffRowById(slice.row);
+  return row ? { slice, row } : null;
+}
+
+/** Round 670's rule for a night: extra time when level only on a row whose decider is 'et'. */
+function oneOffPlaysExtraTime(state: CareerState, entry: CalendarEntry): boolean {
+  return oneOffNightRow(state, entry.night)?.row.decider === 'et';
+}
+
+/** The VAR coverage key of a night's competition: `oneOff:<row>`, which no coverage row holds (none is sourced). */
+function nightVarKey(state: CareerState, night: NightRef): string {
+  return `oneOff:${state.worldComps?.dsc?.row ?? night.k}`;
+}
+
+/** A night's completion (the match half of the round): writes my result into the slice and returns the trophy
+ *  won, or null. Nothing yet: no calendar holds a night before the match half. */
+function completeOneOffNight(_state: CareerState, _night: NightRef, _mine: number, _theirs: number, _et: boolean, _shootoutWon: boolean | null, _events: string[]): string | null {
+  return null;
+}
+
 /**
  * Bring every AI group up to my own group's matchday. Lockstep on a normal
  * week, catch-up when an old save arrives without a uclWorld mid campaign.
@@ -13907,6 +13998,8 @@ export function entryInvolvesMe(state: CareerState, entry: CalendarEntry): boole
     case 'cup': return state.cupRound === entry.cupRound;
     case 'uclGroup': return state.uclGroup !== null && state.uclKoRound === null;
     case 'uclKo': return state.uclKoRound === entry.uclRound;
+    /* Round 1510: a super cup night (S2 of the round: the arm is in place and answers no until the match half). */
+    case 'oneOff': return false;
     default: return false;
   }
 }
@@ -16849,6 +16942,33 @@ export function liveStatsAt(
 export const MATCH_FITNESS_COST = 20;
 export const MATCH_FITNESS_SPREAD = 8;
 
+/** Round 116's week of recovery by the training plan, read by tickWeek and by a night (Round 1510). */
+function weekRecoveryOf(state: CareerState): { recoveryMod: number; flat: number } {
+  const plan = state.training ?? DEFAULT_TRAINING;
+  return {
+    recoveryMod: plan.intensity === 'double' ? 0.78 : plan.intensity === 'light' ? 1.18 : 1,
+    flat: plan.intensity === 'light' ? 6 : plan.intensity === 'double' ? 3 : 4,
+  };
+}
+
+/** One man's fitness after a week's recovery and, if he played, the match's cost (its spread is the week's draw). */
+function fitnessAfterWeek(fitness: number, played: boolean, recoveryMod: number, flat: number): number {
+  const recovery = Math.round((100 - fitness) * 0.71 * recoveryMod) + flat;
+  const cost = played ? MATCH_FITNESS_COST + ri(0, MATCH_FITNESS_SPREAD) : 0;
+  return clamp(fitness + recovery - cost, 20, 100);
+}
+
+/**
+ * Round 1510 (ruling 2b): what a NIGHT does to the squad in place of tickWeek. The recovery and the match cost a
+ * European midweek gets from its own tick, and nothing else: no knock risk, no injury or retraining countdown, no
+ * facilities, no books (a night is no wage week), no severance count. Without the recovery a club with a night
+ * between two Saturdays would carry the night's cost into the weekend (Round 95's fatigue collapse).
+ */
+function nightSquadTick(state: CareerState, playedIds: Set<string>): void {
+  const { recoveryMod, flat } = weekRecoveryOf(state);
+  state.squad = state.squad.map(p => ({ ...p, fitness: fitnessAfterWeek(p.fitness, playedIds.has(p.id), recoveryMod, flat) }));
+}
+
 function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   /* Round 619: a settlement counts down HERE, in the same function that charges
      the wage bill, and a row at zero is gone.
@@ -16870,16 +16990,13 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   // pick up knocks on the training ground, and that is the price of the
   // development the same setting buys you at the end of the season.
   const plan = state.training ?? DEFAULT_TRAINING;
-  const recoveryMod = plan.intensity === 'double' ? 0.78 : plan.intensity === 'light' ? 1.18 : 1;
-  const flat = plan.intensity === 'light' ? 6 : plan.intensity === 'double' ? 3 : 4;
+  const { recoveryMod, flat } = weekRecoveryOf(state);
   const knockRisk = plan.intensity === 'double' ? 0.005 : 0;
   /* Round 505: anyone who finished learning a second position this week. */
   const learned: string[] = [];
   state.squad = state.squad.map(p => {
     const played = playedIds ? playedIds.has(p.id) : false;
-    const recovery = Math.round((100 - p.fitness) * 0.71 * recoveryMod) + flat;
-    const cost = played ? MATCH_FITNESS_COST + ri(0, MATCH_FITNESS_SPREAD) : 0;
-    const fitness = clamp(p.fitness + recovery - cost, 20, 100);
+    const fitness = fitnessAfterWeek(p.fitness, played, recoveryMod, flat);
     let injuryWeeks = Math.max(0, p.injuryWeeks - 1);
     if (knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
     const out: CMPlayer = { ...p, fitness, injuryWeeks };
@@ -17403,7 +17520,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       }
     : null;
   const firstLegTonight = !!uclLeg && uclLeg.twoLegs && uclLeg.leg === 1;
-  const isKnockout = (fx.competition === 'cup' || fx.competition === 'uclKo') && !firstLegTonight;
+  /* Round 1510: a one match cup's night settles the cup or its semi final, so a draw goes to the shootout. */
+  const isKnockout = (fx.competition === 'cup' || fx.competition === 'uclKo' || fx.competition === 'oneOff') && !firstLegTonight;
 
   const suspendedNow = state.squad.filter(p => p.suspendedMatches > 0).map(p => p.id);
   /* Round 127: who could actually have played today, taken before the match
@@ -17760,6 +17878,14 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       events.push(`❌ Champions League run ends at the ${UCL_LABELS[koRound].toLowerCase()}.`);
       confDelta -= 4;
     }
+  }
+
+  /* Round 1510: a super cup night writes my result into its slice (the other semi final and a final I am not in
+     come from the slice's own keyed streams), and a won final goes in the cabinet as a minor trophy: no
+     confidence bonus, nothing weighed. */
+  if (fx.competition === 'oneOff' && entry.night) {
+    const won = completeOneOffNight(state, entry.night, myGoals, oppGoals, etPlayed, shootoutWon, events);
+    if (won) trophyWon = won;
   }
 
   /* ----- Round 73: full stat lines for everyone who played ----- */
@@ -18204,15 +18330,19 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   // The talk only ever covered the match it was given for.
   state.teamTalk = null;
 
-  tickWeek(state, new Set(xi.map(p => p.id)));
+  /* Round 1510 (ruling 2b): a night is not a week. The men who played pay the match and get a midweek's
+     recovery (nightSquadTick); nothing else ticks: no wage week, no knock, no countdown, no window week. */
+  if (entry.night) nightSquadTick(state, new Set(xi.map(p => p.id)));
+  else tickWeek(state, new Set(xi.map(p => p.id)));
   /* Round 141: a window no longer slams shut the moment you play a match,
      because real windows run through the early fixtures and because the
      instant sell is gone, so listing a man needs actual weeks for offers to
      arrive. The window now spans a few match weeks (4 in summer, 3 in
      January), fresh bids can land in any of them, and open offers stay on
      the table instead of being wiped every Saturday. When the weeks run out
-     the deadline hits: deals die, bids die, grudges are forgotten. */
-  if (state.transferWindow !== null) {
+     the deadline hits: deals die, bids die, grudges are forgotten.
+     Round 1510: a night (a super cup) never counts a window week; the calendar's myMatchWeeks skips it too. */
+  if (state.transferWindow !== null && !entry.night) {
     const left = (state.windowWeeksLeft ?? 1) - 1;
     state.windowWeeksLeft = Math.max(0, left);
     if (left <= 0) {
@@ -19286,7 +19416,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
         advanceCupBracket(state, entry.cupRound);
       }
       state.week += 1;
-      tickWeek(state, null);
+      /* Round 1510 (ruling 2a): a night I do not play (a semi final lost, a stub) moves the week on and ticks nothing. */
+      if (!entry.night) tickWeek(state, null);
       continue;
     }
     // Round 95: the rest of the football world plays its round too.
@@ -19347,7 +19478,8 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
   const live: LiveMatch = {
     /* Round 1218: and only where the competition uses reviews in real life (scripts/data/cmVarCompetitions.json). */
     ...(varReviews && worldYear(state) >= 2026 && !isHistoricEra(state.eraId ?? DEFAULT_ERA_ID) && varKinds.length > 0
-      && cmVarCovers(entry.type === 'league' ? `league:${careerLeagueOf(state).id}` : entry.type === 'cup' ? `cup:${careerLeagueOf(state).cupName}` : 'ucl',
+      /* Round 1510: a night keys its own competition (`oneOff:<row>` for a super cup), which no coverage row holds. */
+      && cmVarCovers(entry.night ? nightVarKey(state, entry.night) : entry.type === 'league' ? `league:${careerLeagueOf(state).id}` : entry.type === 'cup' ? `cup:${careerLeagueOf(state).cupName}` : 'ucl',
         entry.type === 'cup' ? entry.cupRound : entry.type === 'uclGroup' ? 'group' : entry.uclRound) ? { varReviews: true as const, ...(varReviews === true ? {} : { varKinds }) } : {}),
     week: state.week,
     myGoals: 0,
@@ -20612,21 +20744,24 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     state.trophies.push({ name: LEAGUE_TITLE_NAME, emoji: '🏆', season: state.season });
   }
   const seasonTrophies = state.trophies.filter(t => t.season === state.season).map(t => t.name);
+  /* Round 1510: what the grade and the offers weigh, a minor cup left out; the summary and the history below keep
+     every trophy of the season (seasonTrophies). */
+  const weighed = weighedTrophies(state.trophies.filter(t => t.season === state.season)).map(t => t.name);
   const overshoot = club.expectation - position;
   /* Round 1335: the grade knows the summer move the season earned (going up is at least a B, going down at
      most a C, a B with a trophy) and names why; the old rules (legacySeason) keep the ladder below. */
   const legacy = legacySeason(state);
   const fated = legacy ? null : fateRead(state);
   const fate = fated?.fate ?? null;
-  const graded = legacy ? null : seasonGrade({ position, expectation: club.expectation, trophies: seasonTrophies.length,
-    europeWon: seasonTrophies.includes('Champions League'), fate });
+  const graded = legacy ? null : seasonGrade({ position, expectation: club.expectation, trophies: weighed.length,
+    europeWon: weighed.includes('Champions League'), fate });
 
   let verdictGrade: 'A' | 'B' | 'C' | 'D' | 'F';
   if (graded) {
     verdictGrade = graded.grade;
-  } else if (seasonTrophies.includes('Champions League') || position === 1 || overshoot >= 3 || seasonTrophies.length >= 2) {
+  } else if (weighed.includes('Champions League') || position === 1 || overshoot >= 3 || weighed.length >= 2) {
     verdictGrade = 'A';
-  } else if (overshoot >= 0 || seasonTrophies.length >= 1) {
+  } else if (overshoot >= 0 || weighed.length >= 1) {
     verdictGrade = 'B';
   } else if (overshoot >= -3) {
     verdictGrade = 'C';
@@ -20695,7 +20830,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
      so a job you are offered is a chair that really empties and the
      merry-go-round that runs at the rollover honors this exact list. */
   state.pendingVacancies = pickSummerSackings(state);
-  if (overshoot >= 2 || seasonTrophies.length > 0) {
+  if (overshoot >= 2 || weighed.length > 0) {
     // Round 70: suitors can come from any of the five leagues now.
     // Round 146: inside a historic save they come from the era's own two
     // leagues, because a 2010 manager cannot be poached by a 2026 club.
@@ -20724,7 +20859,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
        Champions League (a second tier title is not one: the promotion already pays it). Filtered after the
        two shuffles, so the season's draws are what they were and the first callers keep their order. The
        handshake and an application's yes above are never filtered; the old rules keep every caller. */
-    const big = (position === 1 && !PYRAMIDS.some(p => p.second === careerLeagueOf(state).id)) || seasonTrophies.includes('Champions League');
+    const big = (position === 1 && !PYRAMIDS.some(p => p.second === careerLeagueOf(state).id)) || weighed.includes('Champions League');
     const suitors = [...vacancySuitors, ...classic].filter(c => legacy || offerStepOk(club.tier, c.tier, big));
     for (const s of suitors.slice(0, ri(1, 2))) {
       const myLeague = careerLeagueOf(state);
@@ -21442,7 +21577,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   }
   rosterCareer = pruneWorldRoster(refreshWorldRoster(snapshotWorldRosterClub(rosterCareer, clubName)));
 
-  const seasonTrophyCount = career.trophies.filter(t => t.season === career.season).length;
+  const seasonTrophyCount = weighedTrophies(career.trophies.filter(t => t.season === career.season)).length;
 
   /* Round 513: what the season was worth to the manager himself. Every figure
      here is one the rollover already knows, which is the point: XP is a reading

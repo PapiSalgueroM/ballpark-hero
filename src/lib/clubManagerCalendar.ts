@@ -294,12 +294,14 @@ export interface WindowSpan {
  */
 export function myMatchWeeks(state: CareerState): number[] {
   const weeks = new Set<number>();
+  /* Round 1510: a night (a super cup) is a match but never a window week (the engine's countdown skips it), so it
+     is left out on both sides. */
   for (const r of state.resultLog ?? []) {
-    if (r.week < state.week) weeks.add(r.week);
+    if (r.week < state.week && r.competition !== 'oneOff') weeks.add(r.week);
   }
   for (let w = state.week; w < state.calendar.length; w++) {
     const entry = state.calendar[w];
-    if (entry.type === 'window') continue;
+    if (entry.type === 'window' || entry.night) continue;
     if (fixtureFor(state, entry)) weeks.add(w);
   }
   return [...weeks].sort((a, b) => a - b);
