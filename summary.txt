@@ -1,0 +1,3 @@
+euro-s6 exit=0 18s | simWorldEuro: green, 30 checks, 0 failures
+ctl-s2 exit=0 482s | controls (each must be 1): stream=1 form=1 leak=1
+euro-s2 exit=0 724s | simWorldEuro: green, 14776 checks, 0 failures

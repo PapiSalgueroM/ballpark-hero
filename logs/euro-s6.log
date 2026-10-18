@@ -1,0 +1,13 @@
+  6 dailies: 20 days, 10 of the Hot Seat clubs follow a Europa League before the strip
+  6 startCareer 2026-10-17 Trabzonspor: head 124.2 ms, base 109.1 ms, 15.1 ms more
+  6 startCareer 2026-10-18 Al-Ahli: head 188.6 ms, base 133.7 ms, 54.9 ms more
+  6 startCareer 2026-10-19 Hamburg: head 187.8 ms, base 73.0 ms, 114.8 ms more
+  6 startCareer 2026-10-20 Toulouse: head 142.5 ms, base 99.1 ms, 43.4 ms more
+  6 startCareer 2026-10-21 Anderlecht: head 140.1 ms, base 113.0 ms, 27.1 ms more
+  6 startCareer 2026-10-22 León: head 131.9 ms, base 63.7 ms, 68.2 ms more
+  6 startCareer 2026-10-23 Elche: head 170.9 ms, base 178.8 ms, -7.9 ms more
+  6 startCareer 2026-10-24 Athletico Paranaense: head 154.7 ms, base 65.1 ms, 89.6 ms more
+  6 startCareer 2026-10-25 Samsunspor: head 69.1 ms, base 72.3 ms, -3.2 ms more
+  6 startCareer 2026-10-26 Le Havre: head 138.2 ms, base 78.6 ms, 59.6 ms more
+  6 startCareer, the median a date costs more on this tree: 54.9 ms (ruling 1l: over 10 ms, the dailies take the options object)
+simWorldEuro: green, 30 checks, 0 failures
