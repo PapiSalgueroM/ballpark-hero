@@ -35,7 +35,10 @@
  *      other entry's DATE is the twin's; dates rise, a night three days or more from its neighbours, at most three
  *      matches in seven days to it; the season charges the twin's number of wage weeks; the summer window closes
  *      after the same entry as the twin's. Wages are printed: the staff desk's weekly events are keyed on the week
- *      index, which a night before them moves by one.
+ *      index, which a night before them moves by one. At every step of the participant's arm: the season has
+ *      started only once a league entry is played (leagueStarted, and the preview's league positions null before
+ *      the opener: the critic's correction 13), and the step that plays a night moves each man's fitness by ruling
+ *      2b's rule alone (the week's recovery, less the match's cost for a man who played, at least eleven of them).
  *   3  SELF RELATIVE: the engine against itself with this round's three opens taken out (startCareer's, the
  *      rollover's, the move's carry, each asserted present once): every fleet save, both coach modes, equal at every
  *      step in every key but worldComps.dsc, every draw equal by count and value, evalOneOff called on the live state
@@ -67,6 +70,8 @@
  *   section 2: tick (a skipped night ticks a week) adjacent (every night of a forced four club cup in the first
  *              gap: two midweeks in a row, a later date moves) countdown (a played night counts a window week)
  *              calweeks (the calendar's myMatchWeeks counts a night: its deadline is not the engine's)
+ *              leaguestarted (the week 0 rule back: a night starts the season) norecovery (a night's cost with
+ *              no midweek recovery)
  *   section 3: stream (a followed match draws Math.random) form (the evaluation writes the clubs' form)
  *              participant (a watcher given nights too)
  *   section 4: weighs (the minor filter taken out of weighedTrophies) notrophy (a won final pushes no trophy)
@@ -580,7 +585,15 @@ Object.assign(ENGINE_EDITS, {
     { file: ROWS_FILE, from: "'FA Community Shield', 'one', 'pens', 'champCup', 'leagueRunnerUp', 'open', 'n'],", to: "'FA Community Shield', 'four', 'pens', 'top2cup2', 'nextLeague', 'newYear', 'n', 0, [0, 3, 2, 1]]," },
   ],
 });
+Object.assign(ENGINE_EDITS, {
+  /* The week 0 rule back (the critic's correction 13 undone): a night counts as the season started. */
+  leaguestarted: [{ file: CM, from: "  for (let i = 0; i < state.week && i < cal.length; i += 1) if (cal[i].type === 'league') return true;", to: '  if (state.week > 0) return true;' }],
+  /* The night's cost with no midweek recovery (the critic's "midweekCost", which ruling 2b forbids). */
+  norecovery: [{ file: CM, from: '  state.squad = state.squad.map(p => ({ ...p, fitness: fitnessAfterWeek(p.fitness, playedIds.has(p.id), recoveryMod, flat) }));', to: '  state.squad = state.squad.map(p => ({ ...p, fitness: fitnessAfterWeek(p.fitness, playedIds.has(p.id), 0 * recoveryMod, 0 * flat) }));' }],
+});
 Object.assign(CONTROLS, {
+  leaguestarted: [2, /^2 league started: /, /^2 /],
+  norecovery: [2, /^2 fitness: /, /^2 /],
   tick: [2, /^2 books: /, /^2 /],
   countdown: [2, /^2 window: /, /^2 /],
   calweeks: [2, /^2 window: /, /^2 /],
@@ -593,6 +606,52 @@ const fits = [];
 const fitOf = s => { const xi = (s.xiIds ?? []).map(id => s.squad.find(p => p.id === id)).filter(Boolean); return xi.length ? xi.reduce((n, p) => n + p.fitness, 0) / xi.length : null; };
 const iso = d => `${d.y}-${String(d.m).padStart(2, '0')}-${String(d.d).padStart(2, '0')}`;
 
+/** The participant's arm, every step against the step before it in the same season:
+ *  (a) the critic's correction 13: the season has started only once a league entry is played, so a save past its
+ *      night and before its league opener says so (leagueStarted) and its next match preview reads no league
+ *      position (matchFacts, one of leagueStarted's readers);
+ *  (b) ruling 2b: the step that plays a night moves every man's fitness by nightSquadTick's rule alone, the week's
+ *      recovery (Round 116's by the training plan) to a man who did not play, and that recovery less the match's
+ *      cost (MATCH_FITNESS_COST plus up to MATCH_FITNESS_SPREAD) to a man who did, and at least an eleven paid.
+ *      Exact bounds, not a band: the cost without the recovery (the critic's forbidden "midweekCost", the
+ *      reviewer's norecovery mutant) puts a played man up to the whole recovery below them. */
+function nightChecks(M, prev, s, where) {
+  const leagueDone = s.calendar.slice(0, s.week).some(e => e.type === 'league');
+  const started = M.cm.leagueStarted(s);
+  ok(started === leagueDone, `2 league started: ${where}: leagueStarted reads ${started} with ${leagueDone ? 'a' : 'no'} league entry played`);
+  if (!leagueDone && s.week > 0) {
+    bump('2 states after a night and before the league opener (the leaguestarted control reads these)');
+    const mf = M.cm.matchFacts(s);
+    ok(!!mf && mf.myPos === null && mf.oppPos === null, `2 league started: ${where}: before the league opener the preview reads position ${mf?.myPos} against ${mf?.oppPos}`);
+  }
+  if (!prev.calendar?.[prev.week]?.night) return;
+  const before = new Map(prev.squad.map(p => [p.id, p.fitness]));
+  /* A night my club does not play (a four club cup's final after a lost semi final) is skipped with no tick. */
+  if (Object.keys(s.worldComps?.dsc?.mine ?? {}).length <= Object.keys(prev.worldComps?.dsc?.mine ?? {}).length) {
+    const moved = s.squad.filter(p => before.has(p.id) && before.get(p.id) !== p.fitness);
+    ok(moved.length === 0, `2 fitness: ${where}: a night my club did not play moved ${moved.length} men's fitness`);
+    return;
+  }
+  bump('2 nights whose squad was read (the norecovery control reads these)');
+  const plan = (s.training ?? prev.training ?? {}).intensity ?? 'normal';
+  const mod = plan === 'double' ? 0.78 : plan === 'light' ? 1.18 : 1;
+  const flat = plan === 'light' ? 6 : plan === 'double' ? 3 : 4;
+  const fit = x => Math.max(20, Math.min(100, x));
+  let paid = 0;
+  const odd = [];
+  for (const p of s.squad) {
+    const fb = before.get(p.id);
+    if (fb === undefined) continue;
+    const rec = Math.round((100 - fb) * 0.71 * mod) + flat;
+    if (p.fitness === fit(fb + rec)) continue;
+    if (p.fitness >= fit(fb + rec - M.cm.MATCH_FITNESS_COST - M.cm.MATCH_FITNESS_SPREAD) && p.fitness <= fit(fb + rec - M.cm.MATCH_FITNESS_COST)) { paid += 1; continue; }
+    odd.push(`${p.name} ${fb} to ${p.fitness}`);
+  }
+  ok(odd.length === 0, `2 fitness: ${where}: ${odd.length} men's fitness after the night is neither the week's recovery nor that less the match's cost (${odd.slice(0, 3).join(', ')})`);
+  ok(paid >= 11, `2 fitness: ${where}: ${paid} men paid the night's cost, fewer than an eleven`);
+  bump('2 men who paid a night (sum)', paid);
+}
+
 async function calendarSection() {
   const head = await engineOf(ROOT, 'cal-head', { edits: editsFor([FORCE_MINE]) }, cannot);
   const twin = await engineOf(ROOT, 'cal-twin', { edits: [...(CONTROL === 'adjacent' ? ENGINE_EDITS.adjacent.filter(e => e.file === ROWS_FILE) : []), FORCE_MINE, INSERT_OFF] }, cannot);
@@ -604,12 +663,15 @@ async function calendarSection() {
     for (const seed of SEEDS) {
       for (const mode of COACH === 'both' ? ['coach', 'nocoach'] : [COACH]) {
         const tag = `${f.club} seed ${seed} ${mode}`;
-        const pick = () => {
+        const pick = head => {
           const out = { after: [], end: [], closes: [], actual: [], predicted: [], fit0: null, fit1: null };
           let window = null;
+          let prev = null;
           return { out, hooks: {
             onStep: (M, s, label) => {
               if (!s) return;
+              if (head && prev && prev.season === s.season && /^s\d+-e\d+$/.test(label)) nightChecks(M, prev, s, `${tag} at ${label}`);
+              prev = s;
               if (window === 'summer' && s.transferWindow === null) {
                 const played = s.calendar.slice(0, s.week).filter(e => !e.night);
                 const last = played[played.length - 1];
@@ -628,9 +690,9 @@ async function calendarSection() {
             },
           } };
         };
-        const a = pick();
+        const a = pick(true);
         await journey(head, f, seed, mode, a.hooks);
-        const b = pick();
+        const b = pick(false);
         await journey(twin, f, seed, mode, b.hooks);
         let firstNight = null;
         for (let i = 0; i < a.out.after.length; i += 1) {
@@ -687,8 +749,9 @@ async function calendarSection() {
   }
   if (CONTROL === 'adjacent' && !fails.some(x => /^2 dates: /.test(x))) { console.log('simOneOffCups: control adjacent DID NOT FIRE: no forced new year season where the naive slot and the search differ'); process.exit(3); }
   console.log(`  2 calendar: ${seasons} participant seasons beside their twins, ${nights} nights; the closest neighbour of a night ${gapMin} days, at most ${maxIn7} matches in seven days to a night`);
-  /* Section 7's fitness line, printed and asserted nothing (no band has been measured yet): the eleven's mean
-     fitness going into the league opener after a night, beside the twin's going into the same opener with none. */
+  /* Section 7's fitness line, printed: the eleven's mean fitness going into the league opener after a night, beside
+     the twin's going into the same opener with none (measured 80.2 against 100.0 on the default fleet, 76.3 with
+     the recovery taken out). The rule itself is asserted man by man in nightChecks ('2 fitness'). */
   const mean = k => (fits.length ? (fits.reduce((n, f) => n + f[k], 0) / fits.length).toFixed(1) : 'none');
   console.log(`  7 fitness into the league opener: ${mean(0)} after the super cup night, ${mean(1)} in the twin with no night, ${mean(2)} at the rollover (${fits.length} seasons)`);
 }
