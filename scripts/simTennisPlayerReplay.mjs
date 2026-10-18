@@ -67,13 +67,15 @@ write('source-before.json', initial); write('original-TennisPlayerBoard.tsx', or
 write('source-bindings.json', { base, original: sha(original), fixed: sha(fixed), actual: sha(fs.readFileSync(path.join(root, boardFile))), oldSuite: sha(fs.readFileSync(path.join(root, oldSuite))), newSuite: sha(fs.readFileSync(path.join(root, newSuite))), suites });
 function run(name, expectFault, controlFile) {
   fs.mkdirSync(path.join(out, name));
-  const env = { ...process.env, SIM_OFFLINE_RECEIPT: path.join(out, name, 'transport.log') };
+  const transport = path.join(out, name, 'transport.transport');
+  const env = { ...process.env, SIM_OFFLINE_RECEIPT: transport };
   if (controlFile) { env.US_BOARD_CONTROL_ALIAS = '@/components/tennis-player/TennisPlayerBoard'; env.US_BOARD_CONTROL_FILE = controlFile; }
   const args = [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', ...suites.map(suite => suite.file), '--maxWorkers=1', '--no-file-parallelism', '--reporter=default', '--reporter=json', `--outputFile=${path.join(out, name, 'vitest.json')}`];
   const child = spawnSync(process.execPath, args, { cwd: root, env, encoding: 'utf8', timeout: 240000, maxBuffer: 32 * 1024 * 1024 });
   write(`${name}/stdout.log`, child.stdout ?? ''); write(`${name}/stderr.log`, child.stderr ?? '');
   write(`${name}/process.json`, { command: process.execPath, args, status: child.status, signal: child.signal, error: child.error ? String(child.error) : null, copiedOriginal: Boolean(controlFile) });
   assert.ifError(child.error); assert.equal(child.signal, null, 'No timeout or signal');
+  assert(!fs.existsSync(transport) || fs.statSync(transport).size === 0, 'No swallowed child transport denials');
   assert.doesNotMatch(clean(`${child.stdout ?? ''}\n${child.stderr ?? ''}`), /Unhandled (?:Errors?|Rejection)|Uncaught (?:Exception|Error)|(?:^|\n)(?:TypeError|ReferenceError|SyntaxError):|Cannot find (?:module|package)|Failed to (?:load|resolve)|ERR_MODULE_NOT_FOUND/, 'No runtime or setup faults');
   const json = JSON.parse(fs.readFileSync(path.join(out, name, 'vitest.json'), 'utf8'));
   assert.equal(child.status, expectFault ? 1 : 0); assert.equal(json.testResults.length, 2); assert.equal(json.numTotalTests, 15);
