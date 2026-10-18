@@ -1,0 +1,219 @@
+name: XI query ownership verification
+on:
+  push:
+    branches: [codex/xi-query-ownership]
+    paths:
+      - .github/workflows/xi-query-ownership.yml
+      - scripts/qa/proveXiQueryOwnership.mjs
+      - scripts/qa/playXiQueryOwnership.mjs
+      - src/test/xiQueryOwnership.test.tsx
+      - src/pages/LineupBuilder.tsx
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      # Root binds the qualified original raw before a fixed candidate can run.
+      XI_QUERY_BASELINE_RAW_SHA: '8507cb631c0020babdd9cf66a3d45ff000ce0a847e08d9823789a6ec2f0c5aab'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact request source and original or fixed phase
+        id: admission
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export XI_QUERY_OUT="$RUNNER_TEMP/xi-query-ownership"
+          out="$XI_QUERY_OUT"; test ! -e "$out"; mkdir -p "$out"
+          echo "XI_QUERY_OUT=$out" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git -c core.autocrlf=false archive --format=zip HEAD > "$out/source.zip"
+          git ls-files -z | sort -z > "$out/tracked-files.before"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/request-source-files.sha256"
+          cp "$out/request-source-files.sha256" "$out/source-files.sha256"
+          sha256sum "$out/source.zip" "$out/request-source-files.sha256" "$out/source-files.sha256" > "$out/initial-source-packet.sha256"
+          base=775564305e9da84dab59f2b9fe246d044a3cc8e9
+          git merge-base --is-ancestor "$base" HEAD
+          git diff --exit-code "$base" HEAD -- . ':!docs' ':!src/pages/LineupBuilder.tsx' ':!src/test/xiQueryOwnership.test.tsx' ':!scripts/qa/proveXiQueryOwnership.mjs' ':!scripts/qa/playXiQueryOwnership.mjs' ':!.github/workflows/xi-query-ownership.yml' > "$out/base-source-hold.log"
+          git diff --exit-code HEAD -- . > "$out/admission-working-source-hold.log"
+          test -z "$(git status --porcelain --untracked-files=all)"
+          test "$(git rev-parse "$base:src/pages/LineupBuilder.tsx")" = 565364a20a6a407b7722c5af20b4b4c009ff965d
+          git show "$base:src/pages/LineupBuilder.tsx" > "$out/original-LineupBuilder.tsx"
+          if cmp -s src/pages/LineupBuilder.tsx "$out/original-LineupBuilder.tsx"; then mode=baseline; else mode=fixed; fi
+          printf '%s\n' "$mode" > "$out/proof-mode.txt"; echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          if test "$mode" = fixed; then [[ "$XI_QUERY_BASELINE_RAW_SHA" =~ ^[0-9a-f]{64}$ ]]; fi
+          printf 'baseline diagnoses the original XI query ownership; fixed covers the declared query ownership change. Both phases build and inspect the real production route with fictional fulfilled IO, without physical-device, assistive-technology or live claims\n' > "$out/scope.txt"
+          printf '%s\0' "$(command -v node)" "$(readlink -f "$(command -v npm)")" "$(readlink -f "$(command -v python)")" | sort -z | xargs -0 sha256sum > "$out/runtime-tools-files.sha256"
+          test "$(wc -l < "$out/runtime-tools-files.sha256")" -eq 3
+          SIM_OFFLINE_RECEIPT="$out/admission.transport" npm --version > "$out/npm-version.txt"
+      - name: Locked packages isolated browser and cached fonts
+        run: |
+          set -euo pipefail
+          out="$XI_QUERY_OUT"
+          npm ci > "$out/install.log" 2>&1
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$out/dependencies.transport" node scripts/qa/soccerAgentReviewDependencies.mjs before > "$out/dependencies-before.log" 2>&1
+          browser_tools="$RUNNER_TEMP/xi-query-ownership-browser"; test ! -e "$browser_tools"
+          NODE_OPTIONS='' npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright; ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          SIM_OFFLINE_RECEIPT="$out/dependencies.transport" node scripts/qa/soccerAgentReviewDependencies.mjs after > "$out/dependencies-after.log" 2>&1
+          cp soccer-agent-review-artifacts/dependencies-*.json "$out/"
+          SIM_OFFLINE_RECEIPT="$out/dependency-check.transport" node --input-type=module > "$out/dependency-check.log" 2>&1 <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.XI_QUERY_OUT,before=JSON.parse(fs.readFileSync(out+'/dependencies-before.json')),after=JSON.parse(fs.readFileSync(out+'/dependencies-after.json'));
+          assert.equal(before.packages.length,521);assert.equal(after.packages.length,521);assert.deepEqual(after.packages,before.packages);assert.deepEqual(after.packageFiles,before.packageFiles);assert.equal(after.addedBrowserPackage,'1.64.0');fs.writeFileSync(out+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n',{flag:'wx'});console.log('PASS 521 held package versions and isolated Playwright 1.64.0.');
+          NODE
+          NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/fonts-install.log" 2>&1; python -m pip freeze > "$out/python-packages.txt"
+          NODE_OPTIONS='' FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-files.sha256"
+          test "$(find "$out/font-cache" -type f ! -name manifest.json | wc -l)" -eq 9
+          test "$(find "$out/font-cache" -type f | wc -l)" -eq 10
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-files.sha256"
+          test "$(wc -l < "$out/installed-files.sha256")" -eq 24466
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tool-files.sha256"
+          test "$(wc -l < "$out/browser-tool-files.sha256")" -eq 176
+      - name: Actual application types and XI query ownership proof
+        id: checks
+        timeout-minutes: 25
+        env:
+          PROOF_MODE: ${{ steps.admission.outputs.mode }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$XI_QUERY_OUT"
+          preload_check='const assert=require("node:assert/strict");assert.ok((process.env.NODE_OPTIONS||"").includes("offlineTransport.cjs"),"Children retain offline preload");assert.ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")],"Actual offline preload is in require.cache");'
+          status=0; NODE_OPTIONS='' node -e "$preload_check" > "$out/preload-control.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/preload-control.exit"; test "$status" -eq 1; grep -F 'AssertionError' "$out/preload-control.log"; grep -F 'Children retain offline preload' "$out/preload-control.log"
+          SIM_OFFLINE_RECEIPT="$out/preload-normal.transport" node -e "$preload_check" > "$out/preload-normal.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/proof.transport" node scripts/qa/proveXiQueryOwnership.mjs "$PROOF_MODE" > "$out/proof.log" 2>&1
+          tail -n 4 "$out/proof.log"
+          sha256sum --check "$out/request-source-files.sha256" > "$out/checks-source-holds.log"
+      - name: Actual production build in both phases
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$XI_QUERY_OUT/build.transport" npm run build > "$XI_QUERY_OUT/build.log" 2>&1
+          tail -n 6 "$XI_QUERY_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$XI_QUERY_OUT/dist-files.sha256"
+      - name: Actual production XI query ownership browser cases
+        id: browser
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 20
+        env:
+          PROOF_MODE: ${{ steps.admission.outputs.mode }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$XI_QUERY_OUT"
+          export XI_QUERY_BASE=http://127.0.0.1:4173
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-browser.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent "$XI_QUERY_BASE/" > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          SIM_OFFLINE_RECEIPT="$out/browser-runner.transport" node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+          const out=process.env.XI_QUERY_OUT,mode=process.env.PROOF_MODE,args=['scripts/qa/playXiQueryOwnership.mjs',mode];assert(['baseline','fixed'].includes(mode));assert(!fs.existsSync(path.join(out,'browser')),'Fresh browser evidence directory');
+          const child=spawnSync(process.execPath,args,{env:{...process.env,SIM_OFFLINE_RECEIPT:path.join(out,'browser-child.transport')},encoding:'utf8',timeout:1050000,maxBuffer:64*1024*1024});
+          fs.writeFileSync(out+'/browser.log',child.stdout||'',{flag:'wx'});fs.writeFileSync(out+'/browser-stderr.log',child.stderr||'',{flag:'wx'});fs.writeFileSync(out+'/browser-process.json',JSON.stringify({args,exit:child.status,signal:child.signal,error:child.error?{name:child.error.name,message:child.error.message}:null},null,2)+'\n',{flag:'wx'});
+          process.stdout.write(child.stdout||'');process.stderr.write(child.stderr||'');assert(!child.error&&!child.signal,'Actual browser child completed');assert.equal(child.status,0,'Actual browser phase passed');
+          const report=JSON.parse(fs.readFileSync(out+'/browser/report.json'));assert.equal(report.version,1);assert.equal(report.status,'passed');assert.equal(report.qualified,true);assert.equal(report.mode,mode);assert.equal(report.cases.length,8);assert(report.cases.every(row=>row.status==='passed'));assert.equal(report.observedFaults,mode==='baseline'?6:0);assert.equal(report.healthy,mode==='baseline'?2:8);if(mode==='baseline')assert.equal(report.productQualified,false);
+          NODE
+          sha256sum --check "$out/request-source-files.sha256" > "$out/browser-source-holds.log"
+          sha256sum --check "$out/dist-files.sha256" > "$out/browser-dist-holds.log"
+      - name: All fifteen readers against the completed build
+        id: readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$XI_QUERY_OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-readers.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            status=0; SIM_OFFLINE_RECEIPT="$out/$method.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv"; tail -n 3 "$out/$method.log"
+            test "$status" -eq 0 || failed=1; test ! -s "$out/$method.transport" || failed=1
+          done
+          test "$(wc -l < "$out/readers.tsv")" -eq 15; exit "$failed"
+      - name: Unchanged full fourteen page weights with every failure fatal
+        id: weights
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$XI_QUERY_OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-weights.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          status=0; SIM_OFFLINE_RECEIPT="$out/weights.transport" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
+          cat "$out/weights.log"; printf '%s\n' "$status" > "$out/weights-exit.txt"; exit "$status"
+      - name: Complete held source and optional completed dist
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="${XI_QUERY_OUT:-$RUNNER_TEMP/xi-query-ownership}"; mkdir -p "$out"; result=0
+          git diff --exit-code HEAD -- . > "$out/final-source-diff.log" 2>&1 || result=1
+          git status --porcelain --untracked-files=all > "$out/final-status.txt"; test ! -s "$out/final-status.txt" || result=1
+          git ls-files -z | sort -z > "$out/tracked-files.after"
+          if test -f "$out/tracked-files.before"; then cmp "$out/tracked-files.before" "$out/tracked-files.after" > "$out/tracked-membership-hold.log" 2>&1 || result=1; fi
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/validated-source-files.sha256"
+          if test -f "$out/request-source-files.sha256"; then cmp "$out/request-source-files.sha256" "$out/validated-source-files.sha256" > "$out/source-inventory-hold.log" 2>&1 || result=1; fi
+          XI_QUERY_ARCHIVE_OUT="$out" python - <<'PY'
+          import os,subprocess,zipfile
+          out=os.environ['XI_QUERY_ARCHIVE_OUT'];files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile(out+'/validated-source.zip','x',zipfile.ZIP_DEFLATED) as archive:
+              for file in sorted(filter(None,files)): archive.write(file,file)
+          if os.path.isdir('dist'):
+              with zipfile.ZipFile(out+'/dist.zip','x',zipfile.ZIP_DEFLATED) as archive:
+                  for folder,dirs,names in os.walk('dist'):
+                      for name in sorted(names): archive.write(os.path.join(folder,name),os.path.join(folder,name))
+          PY
+          if test -d dist; then find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist-after-files.sha256"; fi
+          if test -f "$out/dist-files.sha256"; then cmp "$out/dist-files.sha256" "$out/dist-after-files.sha256" > "$out/dist-inventory-hold.log" 2>&1 || result=1; fi
+          printf 'mode=%s\nchecks=%s\nbuild=%s\nbrowser=%s\nreaders=%s\nweights=%s\n' '${{ steps.admission.outputs.mode }}' '${{ steps.checks.outcome }}' '${{ steps.build.outcome }}' '${{ steps.browser.outcome }}' '${{ steps.readers.outcome }}' '${{ steps.weights.outcome }}' > "$out/stage-outcomes.txt"
+          exit "$result"
+      - name: Full source installed tools font and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="${XI_QUERY_OUT:-$RUNNER_TEMP/xi-query-ownership}"; result=0
+          for kind in source installed browser-tool runtime-tools font validated-source dist; do file="$out/$kind-files.sha256"; if test -f "$file"; then sha256sum --check "$file" > "$out/$kind-holds.log" 2>&1 || result=1; fi; done
+          if test -f "$out/initial-source-packet.sha256"; then sha256sum --check "$out/initial-source-packet.sha256" > "$out/initial-source-packet-holds.log" 2>&1 || result=1; fi
+          if test -f "$out/installed-files.sha256"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/installed-after-files.sha256"; cmp "$out/installed-files.sha256" "$out/installed-after-files.sha256" > "$out/installed-inventory-hold.log" 2>&1 || result=1; fi
+          while IFS= read -r -d '' file; do case "$file" in "$out/weights.transport") ;; *) test ! -s "$file" || result=1 ;; esac; done < <(find "$out" -type f -name '*.transport' -print0)
+          # Only unchanged offline weight asset denials are retained separately, without outbound credit.
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: xi-query-ownership-${{ steps.admission.outputs.mode || 'unclassified' }}-${{ github.sha }}
+          path: ${{ env.XI_QUERY_OUT }}
+          if-no-files-found: error
+          retention-days: 14
