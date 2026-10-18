@@ -1,0 +1,10 @@
+participant out: Real Madrid seed 1 week 25 to Tottenham: Europa League carried, Champions League watched; in both: Liverpool, AC Milan, Real Betis, Lyon
+participant to a club in the watched one: Real Madrid seed 1 week 25 to Brighton: Europa League carried, Champions League watched; in both: Liverpool, AC Milan, Real Betis, Lyon
+watcher to an entrant: Chelsea seed 1 week 31 to AC Milan: Europa League carried, Champions League watched; in both: NEC Nijmegen
+participant out: Real Madrid seed 2 week 25 to Tottenham: Europa League carried, Champions League watched; in both: Liverpool, AC Milan, Lyon, Real Betis
+participant to a club in the watched one: Real Madrid seed 2 week 25 to Brighton: Europa League carried, Champions League watched; in both: Liverpool, AC Milan, Lyon, Real Betis
+watcher to an entrant: Chelsea seed 2 week 31 to AC Milan: Europa League carried, Champions League watched; in both: NEC Nijmegen
+participant out: Real Madrid seed 3 week 25 to Tottenham: Europa League carried, Champions League watched; in both: Liverpool, AC Milan, Lyon, Real Betis
+participant to a club in the watched one: Real Madrid seed 3 week 25 to Brighton: Europa League carried, Champions League watched; in both: Liverpool, AC Milan, Lyon, Real Betis
+watcher to an entrant: Chelsea seed 3 week 32 to AC Milan: Europa League carried, Champions League watched; in both: NEC Nijmegen
+PROBE TWO COMPS: 9 moves, 9 with a club in both competitions

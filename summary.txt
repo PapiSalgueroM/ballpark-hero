@@ -1,0 +1,1 @@
+probe exit=0 9s | PROBE TWO COMPS: 9 moves, 9 with a club in both competitions
