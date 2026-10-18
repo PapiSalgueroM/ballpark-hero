@@ -1,0 +1,5 @@
+proof-part: node scripts/proofWorldUclFleet.mjs --base cad4edcf --fleet participants --coach both --eval --old-saves --strip worldComps.dsc --dsc-nights-off 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+proof-watch: node scripts/proofWorldUclFleet.mjs --base cad4edcf --fleet watchers --coach both --eval --old-saves --strip worldComps.dsc --dsc-nights-off 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+simWorldUcl: node scripts/simWorldUcl.mjs 2>&1 | tail -25; exit ${PIPESTATUS[0]}
+unseeded: mkdir -p /tmp/tU && export TEMP=/tmp/tU TMP=/tmp/tU TMPDIR=/tmp/tU && CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && node scripts/simCmUnseededWorld.mjs > /tmp/un.log 2>&1; u=$?; grep -E "FAIL" /tmp/un.log | head -5 | cut -c1-250; tail -2 /tmp/un.log | cut -c1-250; exit $u
+leagueRules: node scripts/simCmLeagueRules.mjs > /tmp/lr.log 2>&1; s=$?; grep -E "FAIL|differ" /tmp/lr.log | head -14 | cut -c1-260; tail -1 /tmp/lr.log; exit $s

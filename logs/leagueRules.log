@@ -1,0 +1,15 @@
+  FAIL: modern: now|premier differs in start, whole, europeNext, wholeNext, s2_table, s2_results, s2_world, s2_cup, s2_europe, s2_whole
+  FAIL: modern: now|championship differs in start, whole, wholeNext, s2_whole
+  FAIL: modern: now|laliga differs in start, whole, europeNext, wholeNext, s2_europe, s2_whole
+  FAIL: modern: now|seriea differs in start, whole, europeNext, wholeNext, s2_europe, s2_whole
+  FAIL: modern: now|bundesliga differs in start, whole, summary, europeNext, wholeNext, s2_europe, s2_whole
+  FAIL: modern: now|ligue1 differs in start, whole, wholeNext, s2_whole
+  FAIL: modern: now|eredivisie differs in start, whole, wholeNext
+  FAIL: modern: now|saudi differs in start, whole, europeNext, wholeNext
+  FAIL: modern: now|mlsEast differs in start, whole, wholeNext
+  FAIL: modern: now|mlsWest differs in start, whole, europeNext, wholeNext
+  FAIL: modern: now|primeira differs in start, whole, europeNext, wholeNext
+  FAIL: modern: now|scottish differs in start, whole, wholeNext
+  FAIL: modern: now|superlig differs in start, whole, wholeNext
+  FAIL: modern: now|bundesliga2 differs in start, whole, wholeNext, s2_whole
+simCmLeagueRules: 27 failure(s)

@@ -1,0 +1,3 @@
+treeWithoutMerge: b934c2ef2fa3914b26109633b8974ff9e9c74dd0, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+  deals on the base engine: buy done 15, buy-2 done 15, loan-option done 15, release done 9, release refused 6, release-2 done 9, release-2 refused 6, sale done 15, sale-2 done 15, swap done 15
+simCmUnseededWorld: green. 49 old saves with no deal play byte equal to 85577b5f (state, draws and saved bytes at every step), 49 with every deal play byte equal to it up to their first summer and hold the living world's invariants after it, and 15 n

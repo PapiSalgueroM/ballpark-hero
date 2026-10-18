@@ -1,0 +1,5 @@
+proof-part exit=0 404s | proofWorldUclFleet: GREEN, 60 journeys and 6483 steps byte equal to cad4edcf (a watching state without worldComps.dsc), draws equal
+unseeded exit=0 237s | simCmUnseededWorld: green. 49 old saves with no deal play byte equal to 85577b5f (state, draws and saved bytes at every step), 49 with every deal play byte equal to it up
+leagueRules exit=1 85s | simCmLeagueRules: 27 failure(s)
+proof-watch exit=0 1137s | proofWorldUclFleet: GREEN, 130 journeys and 17798 steps byte equal to cad4edcf (a watching state without worldComps.dsc), draws equal
+simWorldUcl exit=0 1770s | simWorldUcl: green, 498818 checks, 0 failures
