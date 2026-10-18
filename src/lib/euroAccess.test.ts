@@ -107,7 +107,7 @@ describe('the Europa League access rule (Round 1509)', () => {
 });
 
 /* Round 1509 step 6a: the board's European rungs, graded by the rule (rulings 1e and 1i). */
-import { REAL_LEAGUES, buildBoardObjectives, euroCupOf, euroPlaceOf, euroPlaceRouteOf, europeRungOf, startCareer, type CareerState } from '@/lib/clubManager';
+import { REAL_LEAGUES, buildBoardObjectives, euroCupOf, euroPlaceOf, euroPlaceRouteOf, europeRungOf, objectiveStatuses, startCareer, type CareerState } from '@/lib/clubManager';
 
 describe('the board reads the rule (Round 1509)', () => {
   it('names a rung for each of the three European labels the board writes, and for nothing else', () => {
@@ -154,6 +154,24 @@ describe('the board reads the rule (Round 1509)', () => {
     expect(euroPlaceRouteOf(passed)).toBe('P');
     expect(euroPlaceOf(at(7, clubAt(s6, 2)))).toBeNull();
     expect(euroPlaceOf(at(6, 'Somebody From Below'))).toBeNull();
+  });
+  /* fix2-1509 (run minor 6): the board says why a rung is met when the cup, not the table, met it. */
+  it('tells the board panel why a Europa League ask is on track when the cup put my club in, and says nothing otherwise', () => {
+    const asked = (s: CareerState, label = 'Qualify for the Europa League'): CareerState => ({ ...s, boardObjectives: [{ id: 'league', label, target: 5 }] });
+    const whyOf = (s: CareerState) => objectiveStatuses(s)[0];
+    const won = whyOf(asked(at(12, 'Chelsea')));
+    expect(won.status).toBe('onTrack');
+    expect(won.why).toBe('Your FA Cup win counts: the cup winner gets a Europa League place.');
+    const s6 = at(6);
+    const passed = whyOf(asked(at(6, clubAt(s6, 2))));
+    expect(passed.status).toBe('onTrack');
+    expect(passed.why).toBe('The FA Cup winner already has a European place, so its Europa League place passes down to you.');
+    expect(whyOf(asked(at(12, 'Chelsea'), 'Qualify for the Conference League')).why).toMatch(/^Your FA Cup win counts/);
+    const byTable = whyOf(asked(at(5)));
+    expect(byTable.status).toBe('onTrack');
+    expect('why' in byTable).toBe(false);
+    expect('why' in whyOf(asked(at(12)))).toBe(false);
+    expect('why' in whyOf(asked(at(12, 'Chelsea'), 'Finish in the top half'))).toBe(false);
   });
   /* fix-1509: the cup the rollover hands on is the final's winner, whichever side it was, never the loser. */
   it('reads the season\'s cup off its final (euroCupOf): the winner home or away, on penalties, or nobody before it is played', () => {

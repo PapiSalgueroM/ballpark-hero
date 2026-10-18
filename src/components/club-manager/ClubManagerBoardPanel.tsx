@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { ClipboardList } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { TIER_INFO } from '@/lib/clubManager';
@@ -22,13 +23,17 @@ export default function ClubManagerBoardPanel({ club, objStatuses }: {
                     <ClipboardList className="w-3 h-3" /> Board expectations · {TIER_INFO[club.tier].blurb}
                   </div>
                   <div className="space-y-1.5">
-                    {objStatuses.filter(s => !isBoardAsk(s.objective.id)).map(({ objective, status }) => (
-                      <div key={objective.id} className="flex items-center justify-between gap-2">
-                        <span className="text-xs text-foreground min-w-0 truncate">{objective.label}</span>
-                        <span className={cn('shrink-0 text-[9px] font-bold border rounded-full px-2 py-0.5', OBJ_CHIP[status].cls)}>
-                          {OBJ_CHIP[status].label}
-                        </span>
-                      </div>
+                    {objStatuses.filter(s => !isBoardAsk(s.objective.id)).map(({ objective, status, why }) => (
+                      <Fragment key={objective.id}>
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs text-foreground min-w-0 truncate">{objective.label}</span>
+                          <span className={cn('shrink-0 text-[9px] font-bold border rounded-full px-2 py-0.5', OBJ_CHIP[status].cls)}>
+                            {OBJ_CHIP[status].label}
+                          </span>
+                        </div>
+                        {/* Round 1509: a European ask met through the cup, not the table, says so. */}
+                        {why && <p data-cm-board-why className="text-xs text-muted-foreground leading-snug">{why}</p>}
+                      </Fragment>
                     ))}
                   </div>
                   {/* Round 474: the two asks you go out and DO, kept apart from
