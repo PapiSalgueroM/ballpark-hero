@@ -137,6 +137,7 @@
      foldflat    FOLD with Easy and Very Easy as copies of Medium's seasons  the fold's easy bands
    Round 1512 closing check:
      vefloor     the easy mark's floor at what a sale banks taken out      3 (the Very Easy pass)
+     helplines   the help's first two level lines folded into one          7
 
    Run: node scripts/simCmDifficulty.mjs     (SECTION=1, MEASURE=1 SEEDS=4 SEASONS=10)
         git worktree add /tmp/base <base sha> && BASE_ROOT=/tmp/base node scripts/simCmDifficulty.mjs
@@ -162,8 +163,8 @@ const CONTROLS = {
   /* Round 1512: the easy rows and the change between matches. */
   flate: ['1'], oldlevel: ['2'], 've-gain': ['3'], 've-pain': ['3'], 've-cheque': ['3'], 've-wages': ['3'], 've-mark': ['3'], 've-edge': ['3'],
   helpdrifte: ['7'], midleak: ['8'], easyclear: ['8'], midnolevel: ['8'], foldflat: [],
-  /* Round 1512 closing check: the easy market's floor at what a sale banks. */
-  vefloor: ['3'],
+  /* Round 1512 closing check: the easy market's floor at what a sale banks; two levels on one line of the help. */
+  vefloor: ['3'], helplines: ['7'],
 };
 const cannot = why => { console.log(`simCmDifficulty: CANNOT RUN: ${why}`); process.exit(2); };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`CM_DIFF_CONTROL=${CONTROL} is not a control this harness knows`);
@@ -1218,13 +1219,30 @@ function section7() {
   const four = f => [H, L, E, V].map(d => fmt(f(d)));
   want.push('4.5', ...four(d => -4.5 * d.pain), '4', ...four(d => 4 * d.gain));
   want.push('40', ...four(d => 40 * d.cheque));
-  want.push('10', ...four(d => Math.max(0.5, 10 * d.mark)));
+  /* Round 1512 closing check: the man is 23 or under (the engine lists him at 1.25 of his value), so on the
+     easy rows the floor at what a sale banks (0.9 of a value of 8, 7.2) sits under the marked price. */
+  want.push('23', '10', ...four(d => Math.max(0.5, 10 * d.mark)));
+  const saleFloor = Math.round((10 / 1.25) * 0.9 * 10) / 10;
+  for (const [w, d] of [['Easy', E], ['Very Easy', V]]) if (Math.max(0.5, Math.round(10 * d.mark * 10) / 10) < saleFloor) fail(`the example's man of 23 costs ${fmt(10 * d.mark)}m on ${w}, under the ${saleFloor}m a sale banks, so the market lists him at the floor instead`);
   want.push('80', ...four(d => 80 + d.edge));
   want.push('35', fmt(35 - H.cut), fmt(35 - L.cut), fmt(35 - E.cut));
   if (E.cut !== V.cut) fail(`the example names one opening for Easy and Very Easy, but their cuts are ${E.cut} and ${V.cut}`);
   const src = code(read('src/components/club-manager/ClubManagerHelp.tsx'));
   const at = src.indexOf('data-cm-help="difficulty"');
-  const block = at < 0 ? '' : src.slice(at, src.indexOf('</div>', at));
+  let block = at < 0 ? '' : src.slice(at, src.indexOf('</div>', at));
+  if (CONTROL === 'helplines') {
+    if (!/<\/li>\s*<li>/.test(block)) cannot('helplines: the How hard block has no two lines in a row to fold into one');
+    block = block.replace(/<\/li>\s*<li>/, ' ');
+    console.log('NEGATIVE CONTROL ON: two levels of the help folded into one line');
+  }
+  /* Round 1512 closing check (review minor 12, the brief's decision 6): the block names the five levels one
+     short line each, easiest first, every line opening with its level's name. */
+  const lines = [...block.matchAll(/<li>([\s\S]*?)<\/li>/g)].map(x => x[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim());
+  const named = lines.map(l => l.split(':')[0]);
+  const words = LEVELS.map(l => LEVEL_WORD[l]);
+  if (JSON.stringify(named) !== JSON.stringify(words)) fail(`the help's level lines open ${named.join(', ') || 'with nothing'}; one line a level, easiest first, would be ${words.join(', ')}`);
+  else if (lines.some(l => l.length > 160)) fail(`a level line runs to ${Math.max(...lines.map(l => l.length))} characters, not one short line`);
+  else ok(`the help gives the five levels one short line each (${lines.map(l => l.length).join(', ')} characters)`);
   const ex = block.split('<p>').find(p => p.includes('Example:')) ?? '';
   const text = ex.replace(/<[^>]+>/g, ' ');
   const got = [...text.matchAll(/\d+(?:\.\d+)?/g)].map(x => x[0]);
@@ -1241,7 +1259,9 @@ function section7() {
   /* Round 1512: Normal is called Medium on screen now (its saved id is still 'normal'). */
   if (!/Everything elsewhere on this screen, every number and every promise, is for a Medium career/.test(first) || !/No sacking/.test(first)) fail('the block does not open by saying everything else on the screen is Medium\'s and that No sacking switches off the zero rule');
   else ok('the block opens by saying everything else on the screen, numbers and promises, is Medium\'s, and names No sacking');
-  if (!/one bad night can already take you under Safe/.test(first)) fail('the block does not say that one bad night in a new job can take you under Safe on Hard and Legend');
+  /* Round 1512 closing check: with one line a level, the detail sits in its own paragraph after the lines. */
+  const prose = block.split('<p>').filter(p => !p.includes('Example:')).join(' ').replace(/<[^>]+>/g, ' ');
+  if (!/one bad night can already take you under Safe/.test(prose)) fail('the block does not say that one bad night in a new job can take you under Safe on Hard and Legend');
   else ok('the block says one bad night in a new job can take you under Safe');
 }
 
