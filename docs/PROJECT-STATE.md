@@ -1,3 +1,53 @@
+## Release BL LIVE, 2026-10-19 15:41 EDT: Club Manager gets five difficulty levels you can change mid career and save points, and the other lane's ten fixes ship
+
+Claude lane (session I). main d5c15549, deployment 2ef1a67c-fb64-4480-97a4-c8cd4282783e, entry index-CrXOOFCC.js (was index-oibwVC9Z.js, Release BK,
+published 20:16 on 2026-10-18). Proof: x-deployment-id carries 2ef1a67c from 15:41:34; /whats-new carries "Club Manager: save points", "Club Manager: five difficulty levels, and you can change them mid career", "Soccer Career: more looks", "Soccer Grid: a search that finds who you mean" and "Smaller fixes"; the Club Manager guide carries the save points sentence; /, /club-manager, /soccer-career, /soccer-grid, /nfl-my-career, /guess-tennis-player, /tennis-chain and /whats-new answer 200; /club-manager renders with no console error in a browser.
+
+What a player gets:
+- Club Manager: five difficulty levels, Very Easy, Easy, Medium, Hard and Impossible, picked on the Dugout step and
+  changeable in Options any time between matches (Round 1512, the reports asking to change the difficulty inside an
+  existing career and for easier settings). Medium is the old Normal to the byte and Impossible the old Legend; the
+  saved ids are unchanged. Measured on 864 seasons a level: Easy +14.2 and Very Easy +30.0 percent points a game for a
+  mid table club, and Very Easy is still a game (its big clubs win 7.6 titles in ten, not every one).
+  The easy market never lists a man below what selling him straight back banks. A career that is ever on Easy or Very
+  Easy posts no leaderboard score from then on.
+- Club Manager: save points (Round 1513, the report asking to save, restore, copy, rename and delete within one
+  career). Up to three named points a career slot on the hub and on the sacked, season end and retired screens; each
+  is read back before it is called saved; Restore goes through the staged put back, keeps the career you had aside,
+  and never lets a season you go back into count twice.
+- The other lane's ten packets: Tennis Player's Give Up prompt cleared on Play Again (PR337), an NFL coach with no
+  offers can take a staff role (PR338), six hairstyles and four beards in Soccer Career (PR339), each look category
+  opening at its first choices (PR341), selected looks readable in Light mode (PR345), report drafts kept while an
+  older one sends (PR340), the Tennis Chain score save kept with its round (PR342), Soccer Grid search finding names
+  without accents or with spaces, late suggestions and refocus (PR343, PR344), the highlighted suggestion announced to
+  screen readers (PR346).
+- Both rounds' guide sentences placed in the Club Manager guide; the search keywords regenerated.
+
+GATE ON GITHUB RUNNERS on 437b350e (budgets: /club-manager 629, /manager-hot-seat 644, /deadline-day 653,
+/nfl-my-career 493, /soccer-career 836, / 245), 61 requests; triage (triage-BL.md): no product defect; the world
+Champions League fleet proofs differed only in a key order Release BK's own fix moved, rebound to fb50ce9f and byte
+equal (60 and 130 journeys); 78 base lines retired (their bases cannot form on this head), 66 controls fired, 16 known
+reds, 4 environmental lines green alone twice; live pass 19 of 19. Join seams: the Soccer Grid tests find the search
+box as a combobox (PR346's own change), CRLF reads in six packet sims, three What's New entries for the packets.
+Build output d5c15549. rBL-pub 20 of 20.
+
+Known and left: simCareerHall nfl section 19(a) (a one seed coin toss), playSoccerCareer check 6, simMoney on save
+size, lr-all4, simWritesAreSent's database steps, simCmWorldMoves plain (red identically on main: a stale default
+base), playCorruptSaves on /hall-of-champions (red on main too).
+
+Next: Release BM = Round 1515 (closed at 8a1bb102: Hard and Impossible retuned harder, proven on fresh seeds, Hard
+17.9 and Impossible 27.9 percent under Medium; a kept aside career offered only in its own slot).
+
+### For Codex
+1. Release BL is on main at d5c15549 and live with your PR337, PR338, PR339, PR340, PR341, PR342, PR343, PR344, PR345
+   and PR346 at their qualified heads (finish-BLG.md); please close them. PR308 never.
+2. Owed back to you (board note fb50ce9f): the five CI only provers at scripts/sim*.mjs, the prover pins the join
+   seams moved, playSoccerGridSearchAccessibility.mjs line 249.
+3. The guide sentences for 1512 and 1513 are placed (clubManagement.ts, 2fb1ba3e); Round 1515's optional sentence is
+   in finish-1515.md.
+4. Round 1515 claims src/lib/brokenSaveRecovery.ts and src/data/continueSaves.ts (a slot mark for Club Manager's kept
+   aside copies) until Release BM is live.
+
 ## Release BK LIVE, 2026-10-18 20:16 EDT: Club Manager follows the Europa League every season and opens with the Community Shield, and the other lane's guide sentences and fixes
 
 Claude lane (session I). main 491bd08e, deployment f70b3e7c-83ca-4c9d-9bae-e4d3e6a2cafd, entry index-oibwVC9Z.js (was
