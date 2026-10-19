@@ -1,0 +1,13 @@
+# Round 1515 review (run lens) on 718aa65f: section 4 on FRESH seeds 16 to 31 (SEED_OFFSET=16), Medium, Hard and Impossible, 4 shards each, to see whether the new bands hold off the tuning fleet (folded by the reviewer)
+n0: SECTION=4 LEVELS=normal SHARD=0/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/normal-0.json node scripts/simCmDifficulty.mjs
+h0: SECTION=4 LEVELS=hard SHARD=0/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/hard-0.json node scripts/simCmDifficulty.mjs
+l0: SECTION=4 LEVELS=legend SHARD=0/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/legend-0.json node scripts/simCmDifficulty.mjs
+n1: SECTION=4 LEVELS=normal SHARD=1/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/normal-1.json node scripts/simCmDifficulty.mjs
+h1: SECTION=4 LEVELS=hard SHARD=1/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/hard-1.json node scripts/simCmDifficulty.mjs
+l1: SECTION=4 LEVELS=legend SHARD=1/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/legend-1.json node scripts/simCmDifficulty.mjs
+n2: SECTION=4 LEVELS=normal SHARD=2/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/normal-2.json node scripts/simCmDifficulty.mjs
+h2: SECTION=4 LEVELS=hard SHARD=2/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/hard-2.json node scripts/simCmDifficulty.mjs
+l2: SECTION=4 LEVELS=legend SHARD=2/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/legend-2.json node scripts/simCmDifficulty.mjs
+n3: SECTION=4 LEVELS=normal SHARD=3/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/normal-3.json node scripts/simCmDifficulty.mjs
+h3: SECTION=4 LEVELS=hard SHARD=3/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/hard-3.json node scripts/simCmDifficulty.mjs
+l3: SECTION=4 LEVELS=legend SHARD=3/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/legend-3.json node scripts/simCmDifficulty.mjs

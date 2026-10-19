@@ -1,0 +1,10 @@
+simCmDifficulty: sections 4
+  table: veryeasy {"gain":1.4,"pain":0.6,"cut":0,"cheque":1.5,"wageRoom":1.12,"mark":0.8,"edge":-3}; easy {"gain":1.2,"pain":0.8,"cut":0,"cheque":1.2,"wageRoom":1.06,"mark":0.87,"edge":-1.5}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":2.5}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":4.3}
+4) outcomes: normal, 16 seeds from 16, 6 seasons, engaged, shard 3/4
+  played 216 seasons in 279 s (1.29 s a season)
+  level  tier  driver   n   ppg  vsExp titles10 troph10   fees  sign  balance over  bMin bMean sacked matches xiS  xiE  clauseU loanU
+  normal big   engaged  72 2.03   1.31    4.44   10.56  51.05  1.11   170.89 0.68 44.64 74.09 0.11  49.35 89.77 90.06     0     0
+  normal mid   engaged  72 1.37  -2.02    0.28    0.42  14.52  1.86    25.75 0.65 31.68 61.32 0.28  37.93 80.44 80.75     0     0
+  normal small engaged  72 1.08  -8.02    1.11    1.11   7.66  2.47     8.66 0.83 24.24 58.80 0.42  38.06 74.77 75.42     0     0
+  ok: a shard: the bands are the fold's (FOLD=<dir of OUT_JSON files>)
+simCmDifficulty: all green (sections 4)
