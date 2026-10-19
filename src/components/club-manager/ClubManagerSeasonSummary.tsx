@@ -10,6 +10,7 @@ import { TeamLines } from '@/components/club-manager/SeasonHonoursCard';
 import type { CareerState, SeasonSummary } from '@/lib/clubManager';
 import type { SeasonFate } from '@/lib/clubManagerBoardVerdict';
 import type { useClubManager } from '@/hooks/useClubManager';
+import { SavePointsDoor } from '@/components/club-manager/SavePointsDoor';
 
 /* Round 633: the five terms, in the order they are worth. Kept beside the
    screen that prints them rather than in the engine, because the wording is
@@ -33,7 +34,7 @@ const FATE_WORD: Record<SeasonFate, string> = { up: 'promoted', down: 'relegated
 export default function ClubManagerSeasonSummary({ sm, c, g }: {
   sm: SeasonSummary;
   c: CareerState;
-  g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'>;
+  g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot'>>;
 }) {
   const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
   /* Optional: a summary stored before Round 633 carries no breakdown, and the
@@ -305,13 +306,15 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
               </div>
             )}
           </div>
+          {/* Round 1513 review: the save points, before the summer runs. */}
+          {g.pointsSlot && <div className="mt-3"><SavePointsDoor career={c} pointsSlot={g.pointsSlot} /></div>}
         </ResultScreen>
   );
 }
 
 export function SackedCareerSummary({ c, g }: {
   c: CareerState;
-  g: Pick<ReturnType<typeof useClubManager>, 'startNew' | 'takeJob' | 'waitAWeek'>;
+  g: Pick<ReturnType<typeof useClubManager>, 'startNew' | 'takeJob' | 'waitAWeek'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot'>>;
 }) {
   return (
 <ResultScreen
@@ -386,6 +389,8 @@ export function SackedCareerSummary({ c, g }: {
               Trophies and promotions open doors; relegations shut them. Waiting costs you standing, so the job you hold out for may not be there when you finally say yes. Somebody always needs a manager in the end.
             </p>
           </div>
+          {/* Round 1513 review: the moment a save point is for, so the way back is right here. */}
+          {g.pointsSlot && <div className="mb-3"><SavePointsDoor career={c} pointsSlot={g.pointsSlot} /></div>}
           <div className="text-left space-y-1.5 mb-2">
             <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Career record</div>
             {c.history.length === 0 && <p className="text-xs text-muted-foreground">Sacked before finishing a single season. Brutal.</p>}

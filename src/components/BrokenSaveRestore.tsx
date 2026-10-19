@@ -55,8 +55,12 @@ type Offer = { entry: ContinueSave; backupKey: string; hasSave: boolean; when: s
 
 /** What the load did with a put back, in plain words. */
 function outcomeWords(o: KeeperOutcome): string {
+  /* Round 1513: a save point put back. The point itself stays in its list either way. */
+  /* Review of 2026-10-19: the season mark written before staging stays on a refused load (the safe side), so the card says so. */
+  if (o.copy && !o.ok) return 'The save point was not put back. Its season still won\'t post a score.';
   if (o.ok) {
-    const first = o.kept ? 'The game you had before is kept aside in this browser' : 'This is the save that was kept aside';
+    /* Review of 2026-10-19: a point equal to the save being played (restored twice, or before a match) keeps nothing aside. */
+    const first = o.kept ? 'The game you had before is kept aside in this browser' : o.copy ? 'Nothing needed keeping aside' : 'This is the save that was kept aside';
     if (o.dropped) return `${first}. Each game keeps its three newest kept aside saves, so the oldest one was dropped.`;
     return o.kept ? `${first}, so nothing was deleted.` : `${first}.`;
   }
@@ -106,7 +110,7 @@ export function BrokenSaveRestore({ pathname }: { pathname: string }) {
   if (outcome) {
     return (
       <div data-dukb-set-aside="" data-dukb-put-back={outcome.ok ? 'done' : 'refused'} role="region" aria-label="Your kept aside save" className={shell}>
-        <p className="font-semibold text-foreground mb-1">{outcome.ok ? 'Your save is back' : 'Nothing changed'}</p>
+        <p className="font-semibold text-foreground mb-1">{outcome.ok ? (outcome.copy ? 'Back at your save point' : 'Your save is back') : 'Nothing changed'}</p>
         <p role="status" className="mb-3">{outcomeWords(outcome)}</p>
         <div className="flex flex-wrap gap-2">
           <button type="button" onClick={() => setOutcome(null)} className={primary}>OK</button>

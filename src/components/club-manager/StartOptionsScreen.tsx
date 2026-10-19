@@ -7,6 +7,8 @@ import {
 } from '@/lib/clubManagerStart';
 import type { CurrencyCode } from '@/lib/clubManagerStart';
 import { DIFFICULTY_INFO, DIFFICULTY_LEVELS, isEasyLevel } from '@/lib/managerDifficulty';
+import { activeSlot } from '@/lib/clubManagerSlots';
+import { seasonPosts } from '@/lib/cmSavePointsStore';
 import type { DifficultyLevel } from '@/lib/managerDifficulty';
 
 interface StartOptionsScreenProps {
@@ -28,6 +30,9 @@ export function DifficultyOption({ career, onDifficulty }: { career: CareerState
   const level = levelFrom(career);
   /* A tile that would stop the leaderboards waits for a second tap. */
   const easySince = easyFrom(career);
+  /* Round 1513 review: the hook also asks the save points record, so a season a restore landed in (or one that
+     posted already) is told it posts no score, whatever the level. */
+  const seasonOff = !seasonPosts(activeSlot(), career.season);
   const [armedLevel, setArmedLevel] = useState<DifficultyLevel | null>(null);
   /* Review of 2026-10-19: a match paused at halftime refuses the change (setDifficulty), so the tiles say so
      rather than taking a tap that does nothing. */
@@ -81,12 +86,14 @@ export function DifficultyOption({ career, onDifficulty }: { career: CareerState
           </p>
         </div>
         {/* Review of 2026-10-19: No sacking stops the scores too (postsScore), so a No sacking career is told so here. */}
-        <p className="text-[10px] text-muted-foreground" data-cm-level-scores={easySince !== null || noSackFrom(career) !== null ? 'off' : 'on'}>
+        <p className="text-[10px] text-muted-foreground" data-cm-level-scores={easySince !== null || noSackFrom(career) !== null ? 'off' : seasonOff ? 'season' : 'on'}>
           {easySince !== null
             ? `This career went easy${easySince > 1 ? ` in season ${easySince}` : ''}, so it posts no leaderboard scores now, whatever the level.`
             : noSackFrom(career) !== null
               ? 'No sacking is on, so this career posts no leaderboard scores at any level.'
-              : 'Medium, Hard and Impossible post leaderboard scores. Very Easy and Easy do not, from the moment you pick one.'}
+              : seasonOff
+                ? `Season ${career.season} posts no leaderboard score (it posted already, or you went back into it with a save point). From next season Medium, Hard and Impossible post, and Very Easy and Easy do not, from the moment you pick one.`
+                : 'Medium, Hard and Impossible post leaderboard scores. Very Easy and Easy do not, from the moment you pick one.'}
           {' '}Negotiation strictness in Options is a separate setting.
         </p>
       </div>

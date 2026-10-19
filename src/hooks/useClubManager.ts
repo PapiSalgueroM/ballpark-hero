@@ -34,6 +34,7 @@ import { eraById, eraRostersLoaded, ensureEraRosters, isHistoricEra } from '@/li
 import { ensureRealLeagueFixtures, realLeagueFixturesLoaded, realLeagueFixtureKeyFor } from '@/lib/clubManagerFixtures';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { readSlots, switchSlot, deleteSlot, activeSlot, type SlotView } from '@/lib/clubManagerSlots';
+import { clearSlotPoints, noteSeasonCredited, seasonPosts } from '@/lib/cmSavePointsStore';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
@@ -43,7 +44,7 @@ import type { ConcessionTier } from '@/lib/clubManagerFinances';
 import { hireStaff, matchStaffOffer, releaseToPoacher, sackStaff } from '@/lib/clubManagerStaff';
 import type { StaffPostId } from '@/lib/clubManagerStaff';
 import { spendSkillPoint } from '@/lib/clubManagerXp';
-import { postsScore, setDifficulty as setDifficultyFor, setStartOption, turnOnNoSack as turnOnNoSackFor } from '@/lib/clubManagerStart';
+import { postsScore as careerPostsScore, setDifficulty as setDifficultyFor, setStartOption, turnOnNoSack as turnOnNoSackFor } from '@/lib/clubManagerStart';
 import type { DifficultyLevel } from '@/lib/managerDifficulty';
 /* Round 1501: the level, applied with No sacking on the Dugout step's choice, and the market listed to you. */
 import { marketForMe, setUpCareer } from '@/lib/clubManagerDifficulty';
@@ -143,6 +144,18 @@ import { takeLandOnHub } from '@/lib/clubManagerLanding';
    market as it is listed to you. Draws nothing (buildBoardAsks picks by a hash). */
 function rebuildBoardAsks(s: CareerState): BoardObjective[] {
   return [...(s.boardObjectives ?? []).filter(o => !isBoardAsk(o.id)), ...buildBoardAsks(s)];
+}
+
+/* Round 1513: a season posts its score once per career. The record sits
+   outside the save (src/lib/cmSavePointsStore.ts), so going back to a save
+   point cannot post a season twice; a career with no points has no record.
+   Every scored ping below asks this, the engine's rule (No sacking, the easy
+   mark) and then the record; creditSeason notes a season as it finishes. */
+function postsScore(s: CareerState): boolean {
+  return careerPostsScore(s) && seasonPosts(activeSlot(), s.season);
+}
+function creditSeason(s: CareerState): void {
+  noteSeasonCredited(activeSlot(), s.season);
 }
 
 export function useClubManager() {
@@ -540,6 +553,8 @@ export function useClubManager() {
        slot just switched to, and a damaged active one is cleared for good
        (the screen asks first). The career the picker starts is this slot's. */
     clearCareer();
+    /* Round 1513: a new career never finds an old one's save points. */
+    clearSlotPoints(slot);
     ownSlot.current = slot;
     careerRef.current = null;
     setCareer(null);
@@ -560,6 +575,8 @@ export function useClubManager() {
     } else {
       deleteSlot(slot);
     }
+    /* Round 1513: the career's save points and its score record go with it. */
+    clearSlotPoints(slot);
     const views = readSlots();
     setSlots(views);
     setSlotNote(null);
@@ -642,6 +659,7 @@ export function useClubManager() {
       /* Round 549: a mid season takeover plays the run-in first, under the
          manager before you, and hands the club over where it stands. */
       const s = setUpCareer(entry ? startMidSeason(fresh, entry) : fresh, setup, rebuildBoardAsks);
+      clearSlotPoints(activeSlot());
       setCareer(s);
       setActiveTab('overview');
       setPhase('hub');
@@ -712,6 +730,7 @@ export function useClubManager() {
   const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec, manager?: ManagerSpec, entry?: MidSeasonEntry, setup?: CareerSetup) => {
     const fresh = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec, manager);
     const s = setUpCareer(entry ? startMidSeason(fresh, entry) : fresh, setup, rebuildBoardAsks);
+    clearSlotPoints(activeSlot());
     setCareer(s);
     setPendingClub(null);
     setActiveTab('overview');
@@ -854,6 +873,7 @@ export function useClubManager() {
       const { state, summary: sm } = finishSeason(res.state);
       if (postsScore(state)) recordCompletion('/club-manager', sm.seasonScore);
       else recordCompletion('/club-manager');
+      creditSeason(state);
       setCareer(state);
       setSummary(sm);
       setPhase('seasonEnd');
@@ -887,6 +907,7 @@ export function useClubManager() {
       const { state: done, summary: sm } = finishSeason(run.state);
       if (postsScore(done)) recordCompletion('/club-manager', sm.seasonScore);
       else recordCompletion('/club-manager');
+      creditSeason(done);
       setCareer(done);
       setSummary(sm);
       setPhase('seasonEnd');
@@ -908,6 +929,7 @@ export function useClubManager() {
     if (career.sacked) {
       if (postsScore(career)) recordCompletion('/club-manager', currentSeasonScore(career));
       else recordCompletion('/club-manager');
+      creditSeason(career);
       /* Round 201: the sack opens the wilderness rather than closing the
          save. The screen is the same route ('sacked'), what changed is that
          it now has a way onward. */
@@ -919,6 +941,7 @@ export function useClubManager() {
       const { state, summary: sm } = finishSeason(career);
       if (postsScore(state)) recordCompletion('/club-manager', sm.seasonScore);
       else recordCompletion('/club-manager');
+      creditSeason(state);
       setCareer(state);
       setSummary(sm);
       setPhase('seasonEnd');
@@ -1310,6 +1333,8 @@ export function useClubManager() {
     bootError, bootNoun, retryBoot,
     startWait, retryStart, startWithoutList,
     slots, slotNote, openSlot, newInSlot, removeSlot, showSlots,
+    /* Round 1513: the slot whose save points this page may touch; null on a page another tab has moved on from. */
+    pointsSlot: (): number | null => (holdsActiveSlot() ? ownSlot.current : null),
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
     resume, startNew, retire, chooseClub, confirmClub, confirmCustomClub,

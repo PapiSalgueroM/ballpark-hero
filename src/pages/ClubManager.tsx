@@ -39,6 +39,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { ClubManagerClubList } from '@/components/club-manager/ClubManagerClubList';
 import { CURRENCIES, STRICTNESS_DEFAULT, STRICTNESS_INFO, levelFrom, noSackFrom, startOptionsOf } from '@/lib/clubManagerStart';
 import { DIFFICULTY_INFO } from '@/lib/managerDifficulty';
+import { POINTS_CAP, readPointsIndex } from '@/lib/cmSavePointsStore';
 import type { CareerSetup } from '@/lib/clubManagerStart';
 import { withWorldEdit, worldEditMoves, realLeagueIdOf } from '@/lib/clubManagerWorldEdit';
 import type { WorldEdit } from '@/lib/clubManagerWorldEdit';
@@ -95,6 +96,8 @@ const XpScreen = lazy(() => import('@/components/club-manager/XpScreen').then(m 
 const StartOptionsScreen = lazy(() => import('@/components/club-manager/StartOptionsScreen').then(m => ({ default: m.StartOptionsScreen })));
 /* Round 1512 review: the Difficulty row on the sacked screen, which has no Options tile. */
 const DifficultyOption = lazy(() => import('@/components/club-manager/StartOptionsScreen').then(m => ({ default: m.DifficultyOption })));
+/* Round 1513: the save points, with lz-string, load when the tile opens. */
+const SavePointsScreen = lazy(() => import('@/components/club-manager/SavePointsScreen').then(m => ({ default: m.SavePointsScreen })));
 const PressScreen = lazy(() => import('@/components/club-manager/PressScreen').then(m => ({ default: m.PressScreen })));
 const MatchCentre = lazy(() => import('@/components/club-manager/MatchCentre').then(m => ({ default: m.MatchCentre })));
 const LiveSimScreen = lazy(() => import('@/components/club-manager/LiveSimScreen').then(m => ({ default: m.LiveSimScreen })));
@@ -163,7 +166,7 @@ function HubTile({ icon, title, value, sub, accent, onClick }: {
   );
 }
 
-type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities' | 'staff' | 'xp' | 'options';
+type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities' | 'staff' | 'xp' | 'options' | 'points';
 
 const ClubManager = () => {
   const g = useClubManager();
@@ -1342,6 +1345,20 @@ const ClubManager = () => {
                 })()}
                 onClick={() => setHubPanel('options')}
               />
+              {/* Round 1513: named save points. On the hub, beside Options,
+                  because a player who just lost a match looks here first. */}
+              {(() => {
+                const slot = g.pointsSlot();
+                const held = slot === null ? [] : readPointsIndex(slot)?.points ?? [];
+                return (
+                  <HubTile
+                    icon="💾" title="Save points"
+                    value={held.length ? `${held.length} of ${POINTS_CAP} made` : 'None yet'}
+                    sub={held.length ? held[held.length - 1].name : 'Go back after a mistake'}
+                    onClick={() => setHubPanel('points')}
+                  />
+                );
+              })()}
               <HubTile
                 icon="🧢" title="Manager" accent={!!c.approach || !!nationOffer || c.jobHunt?.open?.status === 'accepted'}
                 value={c.jobHunt?.open?.status === 'accepted' ? '✅ A club said yes' : c.approach ? '📞 A club is calling' : nationOffer ? '🌐 Your country is calling' : recordLine(c.careerStats)}
@@ -1574,6 +1591,13 @@ const ClubManager = () => {
                   onDifficulty={g.setDifficulty}
                 /></ScreenLoading>
               )}
+
+              {hubPanel === 'points' && (() => {
+                const slot = g.pointsSlot();
+                return slot === null
+                  ? <p className="text-sm text-muted-foreground">Reload the page to use your save points.</p>
+                  : <ScreenLoading><SavePointsScreen career={c} slot={slot} /></ScreenLoading>;
+              })()}
 
               {hubPanel === 'trophies' && (
                 <div className="bg-card border border-border rounded-xl p-3">
