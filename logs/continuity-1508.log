@@ -1,0 +1,5 @@
+treeWithoutMerge: 20113676294bc58c8450649a90a95c5f8e4e5a08, adc3ddd8 without f1e54e17; conflicts kept from adc3ddd8: scripts/lib/cmWorldSeed1250.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+contCmp1508: base 20113676294bc58c8450649a90a95c5f8e4e5a08 (the tree without 1508); head exit 1, base exit 1; 95 and 95 lines; 0 differ
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
+contCmp1508: green, the log equals the tree without 1508 line for line
