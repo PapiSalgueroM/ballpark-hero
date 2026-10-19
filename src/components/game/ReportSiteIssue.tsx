@@ -148,6 +148,7 @@ export function ReportSiteIssue() {
 
               <button
                 onClick={handleSubmit}
+                aria-label="Send report"
                 disabled={!details.trim() || status === 'loading'}
                 className={cn(
                   'w-full py-2.5 rounded-xl font-semibold text-sm transition-all inline-flex items-center justify-center gap-2',

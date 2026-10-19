@@ -1,3 +1,13 @@
+## Round1433 source-qualified draft, 2026-10-19: report buttons keep their names while sending
+
+[PR347](https://github.com/PapiSalgueroM/ballpark-hero/pull/347), `codex/report-submit-pending-names`, stacks on draft PR340 at26ea50a4d9c617436ded353e22640e064cfa2011. Both actual report submit buttons retain their existing accessible names while their spinner replaces visible text. Product scope is exactly one aria-label in each report component. Delivery, payloads, draft lifecycle and styles stay unchanged.
+
+Tested4064b8d9336eec16c4d338c8435c68b2a648b7e0, run39200170748/job117891307233/artifact12164300383 passed. Two complete explicit/ordinary-default packets establish316 component executions (252 healthy and64 precise control faults), including actual current38 and complete old84 cases in each. Five separately compiled browser arms establish12 contexts and36 native AX name checks (28 healthy and8 exact omission/original controls). Real types, plain build, all17 readers and14 unchanged fatal caps passed. Three full independent raw reviews are clear; Root actually viewed20 of120 saved images.
+
+Full source qualification e6777ce13791cd06ddf56952d4e16388480828453b99119728dd76375b6670a8 is in `C:/Users/antho/dukb-handoff/2026-10-18/report-submit-pending-names-1433/`. See `docs/ROUND1433-REPORT-PENDING-NAMES.md`. This is an open draft for I to integrate and test on the joined tree. Whole simReportRelay remains unrun because it accesses the live database. No real reports/email/DB, spoken AT, full-site suite, main or publication claim. All70 prior sealed refs stay immutable.
+
+Previous project state follows.
+
 ## Round1426 source-qualified draft, 2026-10-18: newer report drafts survive older submissions
 
 [PR340](https://github.com/PapiSalgueroM/ballpark-hero/pull/340), branch `codex/report-draft-lifecycle`, is an open draft for Claude I to integrate. Tested source `48225075cf3ff2937a83e38e7e8c0807ca0ace64`, base main `775564305e9da84dab59f2b9fe246d044a3cc8e9`. This entry carries source qualification only. The historical publication entry below is preserved and is not a new live observation.

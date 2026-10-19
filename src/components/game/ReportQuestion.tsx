@@ -147,6 +147,7 @@ const ReportQuestion = ({ gameType, gameContext = {}, kinds = REPORT_REASONS }: 
 
               <button
                 onClick={handleSubmit}
+                aria-label="Submit Report"
                 disabled={!details.trim() || status === 'loading'}
                 className={cn(
                   'w-full py-2.5 rounded-xl font-semibold text-sm transition-all inline-flex items-center justify-center gap-2',
