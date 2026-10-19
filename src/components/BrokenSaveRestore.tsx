@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import type { ContinueSave } from '@/data/continueSaves';
 import {
   BACKUPS_KEPT, backupDate, backupKeysOf, browserStorage, deleteBackup, dismissBackup, offeredBackup, routeSaveEntry,
+  SLOT_SWITCH_EVENT,
 } from '@/lib/brokenSaveRecovery';
 import { reopenGame, restoreNow, takeCopyTrouble, takeOutcome, type KeeperOutcome } from '@/lib/saveKeeper';
 
@@ -79,6 +80,12 @@ export function BrokenSaveRestore({ pathname }: { pathname: string }) {
   const [uncopied, setUncopied] = useState<string | null>(null);
   /* Holds "Leave it aside" for this visit even where storage refuses to remember it. */
   const hidden = useRef(new Set<string>());
+  /* Round 1515: Club Manager switches careers in the page, and a copy is offered only in its own slot. */
+  const [switches, bump] = useReducer((n: number) => n + 1, 0);
+  useEffect(() => {
+    addEventListener(SLOT_SWITCH_EVENT, bump);
+    return () => removeEventListener(SLOT_SWITCH_EVENT, bump);
+  }, []);
 
   useEffect(() => {
     setFailed(null);
@@ -101,7 +108,7 @@ export function BrokenSaveRestore({ pathname }: { pathname: string }) {
        drop one (the backup it comes from is never counted). */
     const crowded = backupKeysOf(entry, storage).length > BACKUPS_KEPT;
     setOffer({ entry, backupKey, hasSave, when, crowded });
-  }, [pathname]);
+  }, [pathname, switches]);
 
   const primary = 'px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity';
   const plain = 'px-4 py-2 rounded-lg bg-transparent border border-border text-foreground font-medium text-sm hover:bg-muted transition-colors';
