@@ -237,7 +237,7 @@ export function TennisPlayerBoard() {
 
             {gameState.mode === 'unlimited' && (
               <button
-                onClick={resetGame}
+                onClick={() => { resetGame(); setShowGiveUpConfirm(false); }}
                 className="mt-2 px-6 py-2 rounded-xl bg-purple-700 hover:bg-purple-800 font-bold text-white transition-colors"
               >
                 Play Again
