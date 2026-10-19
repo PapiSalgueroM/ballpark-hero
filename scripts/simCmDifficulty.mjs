@@ -114,7 +114,37 @@
      NOT THIS ROUND'S, FOR THE LEAD: Hard and Impossible are main's rows, untouched here, and the engine has
      moved since Round 1501's table above (Medium's mid ppg 1.42 then, 1.33 now). Their pooled drops still sit in
      the bands (9.8 in 8 to 20, 18.6 in 18 to 35), but block one alone is 8.05 on Hard and 17.27 on Impossible,
-     under its floor: both bands are now coin tosses on the current engine.
+     under its floor: both bands are now coin tosses on the current engine. (Round 1515 retuned them, below.)
+
+   MEASURED FOR ROUND 1515, THE RETUNE (GitHub runners). Only the edge moved: Hard 1.5 to 2.5, Impossible 3 to
+   4.3; every other dial of both rows, and the Medium and easy rows, as Round 1512 left them. Section 4 as
+   above (engaged driver, 9 clubs, seeds 0 to 15, 6 seasons, 864 seasons a level), Hard and Impossible
+   sharded 4 a level on r1515-t3a (the dials merged by DIALS_JSON on eca68d2e) and again with the committed
+   table on r1515-m1, folded with Round 1512's Medium and easy shards (Medium's shard 0 played on this branch
+   came back byte equal to r1512-m1's, r1515-t2a):
+                         mid ppg   vs Medium   sacked seasons      spend a season    big titles   small ppg
+     Very Easy           1.73      +30.0%       0 of 864 (0.00x)   38.19m (+40.4%)   7.60         1.45
+     Easy                1.52      +14.2%      44 of 864 (0.18x)   32.89m (+20.9%)   4.72         1.37
+     Medium              1.33                 244 of 864 (0.28)    27.20m            3.89         1.09
+     Hard                1.09      -18.5%     622 of 864 (2.55x)   23.71m (-12.8%)   1.60         0.66
+     Impossible          0.98      -26.4%     776 of 864 (3.18x)   14.73m (-45.8%)   0.90         0.47
+     the lead's bands:   Hard down 13 to 20 in each block, sacked at least 1.6x, spend down at least 12%, big
+                         titles at least 1.2; Impossible down 23 to 32 in each block, at least 2.4x, big
+                         titles at least 0.5.
+     Seed blocks (0 to 7 | 8 to 15): Hard -18.98 | -17.96, Impossible -27.26 | -25.60. Medium against Medium
+     (even seeds against odd) 1.35 and 1.31, a 2.9% gap, so a drop of one block moves by about two points.
+     The nearest edges: Hard's spend, 12.81 against its floor of 12, and Hard's block one, 18.98 against 20.
+     Dials tried first (edge only unless named; Hard | Impossible pooled, blocks in brackets):
+       Hard 3.0: 20.80 (21.83 | 19.81), over;  Impossible 5.0: 35.64, over, big titles 0.49.
+       Hard 2.25 with cheque 0.7 and mark 1.25: 14.40 (17.77 | 11.20), block two under.  Impossible 4 with
+         cheque 0.6 and mark 1.4: 28.44, big titles 0.49, under its floor (0.69 at edge 4 alone). The money
+         dials added little drop and cost Impossible its big titles, so they stayed where they were.
+       Hard 2.4: 16.05 (18.26 | 13.90).  Impossible 4.0: 24.47 (24.34 | 24.61), big titles 0.69.
+       Hard 2.45: 18.92 (18.53 | 19.31).  Impossible 4.2: 29.20 (30.99 | 27.41), big titles 0.66.
+       Hard 2.6: 18.45 (17.98 | 18.97), big titles 1.32.  Impossible 3.8: 25.25 (28.32 | 22.42), block two under.
+     The drop does not climb smoothly with the edge (2.4, 2.45 and 2.5 give 16.1, 18.9 and 18.5): a step of a
+     tenth moves which matches swing, so each setting is its own measurement. 2.5 and 4.3 hold every band in
+     both blocks with the widest least margin of the settings measured.
 
    Negative controls (CM_DIFF_CONTROL), each patched in memory or into the
    bundle, never into src; each must turn its section red:
