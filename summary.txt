@@ -1,0 +1,15 @@
+vitest exit=0 6s |    Duration  6.07s (transform 2.51s, setup 298ms, collect 7.63s, tests 5.83s, environment 1.33s, prepare 539ms)
+helpdrift exit=1 0s | simCmDifficulty: 1 FAILURES (sections 7)
+s178 exit=0 7s | simCmDifficulty: all green (sections 1,7,8)
+helpdrifte exit=1 0s | simCmDifficulty: 1 FAILURES (sections 7)
+alloff-kids exit=1 27s | simCmDifficulty: 3 FAILURES (sections 4)
+alloff-kids-old exit=1 30s | simCmDifficulty: 1 FAILURES (sections 4)
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+tsc exit=0 78s | 
+simHarnessAnchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simEarlyReturnScope exit=0 9s | simEarlyReturnScope: all green
+simManagerAppealIsolation exit=0 28s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simCmNoSack exit=0 94s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)

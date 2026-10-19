@@ -1,0 +1,20 @@
+NEGATIVE CONTROL ON: every level carries Medium's dials
+simCmDifficulty: sections 4, control alloff
+  table: veryeasy {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; easy {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; legend {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}
+4) outcomes: easy, normal, 1 seeds from 0, 2 seasons, engaged, shard 0/1
+  4 shards (2 a level, 2 at a time), 36 seasons
+  level  tier  driver   n   ppg  vsExp titles10 troph10   fees  sign  balance over  bMin bMean sacked matches xiS  xiE  clauseU loanU
+  easy   big   engaged   6 2.10   0.60    6.67   10.00  58.05  1.33   147.80 0.50 55.38 82.68 0.17  44.33 88.74 89.05     0     0
+  easy   mid   engaged   6 1.38  -1.40    0.00    0.00  14.37  2.33    21.05 0.50 45.83 73.67 0.17  38.67 79.64 79.76     0     0
+  easy   small engaged   6 0.67  -1.33    0.00    0.00   9.17  3.67     3.94 0.50 20.75 57.52 0.50  35.33 73.27 73.71     0     0
+  normal big   engaged   6 2.10   0.60    6.67   10.00  58.05  1.33   147.80 0.50 55.38 82.68 0.17  44.33 88.74 89.05     0     0
+  normal mid   engaged   6 1.38  -1.40    0.00    0.00  14.37  2.33    21.05 0.50 45.83 73.67 0.17  38.67 79.64 79.76     0     0
+  normal small engaged   6 0.67  -1.33    0.00    0.00   9.17  3.67     3.94 0.50 20.75 57.52 0.50  35.33 73.27 73.71     0     0
+  Normal: mid points per game 1.38, sacked 5 of 18 seasons (0.28), spend 27.20m a season, big club titles 6.67 in ten
+  Normal against Normal (even seeds against odd): mid points per game 1.38 and   -  , a gap of   -   percent
+  easy: mid points per game 1.38 (up 0.00 percent), sacked 5 of 18 (0.28, 1.00 times Medium), spend 27.20m (up 0.00 percent), big club titles 6.67 in ten, small club points a game 0.67
+  FAIL: easy: the mid clubs' points per game rose 0.00 percent, the band is 6 to 20
+  FAIL: easy: sacked 1.00 times as often as Medium, the ceiling is 0.75
+  FAIL: easy: spend per season moved 0.00 percent, it must go up
+CONTROL alloff FIRED: 3 failures
+simCmDifficulty: 3 FAILURES (sections 4)
