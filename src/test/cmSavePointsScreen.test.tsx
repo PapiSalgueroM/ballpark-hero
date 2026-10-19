@@ -12,7 +12,9 @@ import { CONTINUE_SAVES } from '@/data/continueSaves';
 import { SAVE_KEY, startCareer } from '@/lib/clubManager';
 import { createPoint, pointText, stageCopy } from '@/lib/cmSavePoints';
 import { runSaveKeeper } from '@/lib/saveKeeper';
-import { pointKey, pointsIndexKey, readPointsIndex } from '@/lib/cmSavePointsStore';
+import { pointKey, pointsIndexKey, readPointsIndex, writePointsIndex } from '@/lib/cmSavePointsStore';
+import { DifficultyOption } from '@/components/club-manager/StartOptionsScreen';
+import { activeSlot } from '@/lib/clubManagerSlots';
 
 afterEach(() => { cleanup(); localStorage.clear(); });
 
@@ -85,6 +87,19 @@ describe('the save points screen names the right cause', () => {
     fireEvent.click(v.getByTestId('cm-point-confirm'));
     expect(note(v)).toBe('The save point "Before the derby" is damaged and will not open, so nothing changed. You can delete it.');
     expect(localStorage.getItem('dukb-save-pending')).toBeNull();
+  });
+});
+
+describe('the Difficulty row\'s scores line asks the save points record too', () => {
+  it('a season a restore landed in is told it posts no score; an unmarked one keeps the usual line', () => {
+    const c = startCareer('Everton');
+    const plain = render(<DifficultyOption career={c} />);
+    expect(plain.container.querySelector('[data-cm-level-scores]')?.getAttribute('data-cm-level-scores')).toBe('on');
+    cleanup();
+    expect(writePointsIndex(activeSlot(), { v: 1, points: [], credited: [], blocked: [c.season] })).toBe(true);
+    const line = render(<DifficultyOption career={c} />).container.querySelector('[data-cm-level-scores]');
+    expect(line?.getAttribute('data-cm-level-scores')).toBe('season');
+    expect(line?.textContent).toContain(`Season ${c.season} posts no leaderboard score`);
   });
 });
 
