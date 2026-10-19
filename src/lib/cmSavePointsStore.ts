@@ -44,12 +44,12 @@ const emptyIndex = (): PointsIndex => ({ v: 1, points: [], credited: [], blocked
 const whole = (n: unknown): n is number => typeof n === 'number' && Number.isInteger(n) && n >= 0;
 const seasons = (a: unknown): number[] => (Array.isArray(a) ? a.filter(whole) : []);
 
+/** A listed point as stored, or null when any field is not what createPoint writes (the row is then not offered). */
 function readMeta(o: unknown): PointMeta | null {
-  if (!o || typeof o !== 'object') return null;
-  const m = o as Record<string, unknown>;
-  if (typeof m.id !== 'string' || !/^[a-z0-9]{1,24}$/.test(m.id) || typeof m.name !== 'string' || typeof m.club !== 'string') return null;
-  if (!whole(m.season) || !whole(m.week) || !whole(m.at) || !whole(m.len) || !whole(m.sum) || !whole(m.size)) return null;
-  return { id: m.id, name: m.name.slice(0, POINT_NAME_MAX), season: m.season, week: m.week, club: m.club, at: m.at, len: m.len, sum: m.sum, size: m.size };
+  const m = (o && typeof o === 'object' ? o : {}) as Record<string, unknown>;
+  const ok = typeof m.id === 'string' && /^[a-z0-9]{1,24}$/.test(m.id) && typeof m.name === 'string' && typeof m.club === 'string'
+    && ['season', 'week', 'at', 'len', 'sum', 'size'].every(k => whole(m[k]));
+  return ok ? (m as unknown as PointMeta) : null;
 }
 
 /** The slot's index as stored, or null when there is none. Unreadable reads as empty. Never throws. */

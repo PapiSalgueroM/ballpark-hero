@@ -56,11 +56,7 @@ type Offer = { entry: ContinueSave; backupKey: string; hasSave: boolean; when: s
 /** What the load did with a put back, in plain words. */
 function outcomeWords(o: KeeperOutcome): string {
   /* Round 1513: a save point put back. The point itself stays in its list either way. */
-  if (o.copy && !o.ok) {
-    return o.why === 'no-room'
-      ? 'Your browser is out of room, so the save point could not be put back. Your career and your save points are as they were.'
-      : 'The save point could not be put back, so your career is as it was. Your save points are still there.';
-  }
+  if (o.copy && !o.ok) return 'The save point could not be put back, so your career and your save points are as they were.';
   if (o.ok) {
     const first = o.kept ? 'The game you had before is kept aside in this browser' : 'This is the save that was kept aside';
     if (o.dropped) return `${first}. Each game keeps its three newest kept aside saves, so the oldest one was dropped.`;

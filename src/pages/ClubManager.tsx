@@ -1591,7 +1591,7 @@ const ClubManager = () => {
               {hubPanel === 'points' && (() => {
                 const slot = g.pointsSlot();
                 return slot === null
-                  ? <p className="text-sm text-muted-foreground">This career was played on in another tab. Reload the page to use your save points.</p>
+                  ? <p className="text-sm text-muted-foreground">Reload the page to use your save points.</p>
                   : <ScreenLoading><SavePointsScreen career={c} slot={slot} /></ScreenLoading>;
               })()}
 
