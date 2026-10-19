@@ -1,0 +1,3 @@
+vitest-door exit=0 14s |    Duration  13.34s (transform 5.64s, setup 659ms, collect 18.43s, tests 6.91s, environment 3.55s, prepare 1.06s)
+simHarnessAnchors exit=0 55s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 80s | 
