@@ -1,0 +1,12 @@
+m-normal-0: SECTION=4 LEVELS=normal SHARD=0/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/normal-0.json node scripts/simCmDifficulty.mjs
+m-normal-1: SECTION=4 LEVELS=normal SHARD=1/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/normal-1.json node scripts/simCmDifficulty.mjs
+m-normal-2: SECTION=4 LEVELS=normal SHARD=2/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/normal-2.json node scripts/simCmDifficulty.mjs
+m-normal-3: SECTION=4 LEVELS=normal SHARD=3/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/normal-3.json node scripts/simCmDifficulty.mjs
+m-easy-0: SECTION=4 LEVELS=easy SHARD=0/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/easy-0.json node scripts/simCmDifficulty.mjs
+m-easy-1: SECTION=4 LEVELS=easy SHARD=1/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/easy-1.json node scripts/simCmDifficulty.mjs
+m-easy-2: SECTION=4 LEVELS=easy SHARD=2/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/easy-2.json node scripts/simCmDifficulty.mjs
+m-easy-3: SECTION=4 LEVELS=easy SHARD=3/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/easy-3.json node scripts/simCmDifficulty.mjs
+m-veryeasy-0: SECTION=4 LEVELS=veryeasy SHARD=0/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/veryeasy-0.json node scripts/simCmDifficulty.mjs
+m-veryeasy-1: SECTION=4 LEVELS=veryeasy SHARD=1/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/veryeasy-1.json node scripts/simCmDifficulty.mjs
+m-veryeasy-2: SECTION=4 LEVELS=veryeasy SHARD=2/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/veryeasy-2.json node scripts/simCmDifficulty.mjs
+m-veryeasy-3: SECTION=4 LEVELS=veryeasy SHARD=3/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/veryeasy-3.json node scripts/simCmDifficulty.mjs
