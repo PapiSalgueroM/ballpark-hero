@@ -1,0 +1,3 @@
+pin-old exit=0 38s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+pin-mix exit=1 8s | Node.js v24.21.0
+pin-head exit=0 37s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
