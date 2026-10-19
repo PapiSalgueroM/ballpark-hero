@@ -122,7 +122,8 @@
      clause      the clause floor at the card's price taken out            3
      nojoin      joinClubNow returns the new job without its dials         3 (M1 and M2 on a mid season move)
      ddreach     deadlineDay.ts gains a call to oppStrengthVsMe            6
-     alloff      Hard and Legend carry Normal's dials                      4
+     alloff      every level off Medium carries Medium's dials, in the     4
+                 shard children too (Round 1512 review)
      helpdrift   Hard's cheque moved by 0.05 in memory                     7
    Round 1512:
      flate       Easy's gain set to Medium's                               1
@@ -1114,7 +1115,8 @@ async function fleetInChildren(levels, seeds, seasons, drivers) {
     const env = { ...process.env, SECTION: '4', LEVELS: lv, SHARD: `${k}/${parts}`, OUT_JSON: out, SEEDS: String(seeds), SEASONS: String(seasons), DRIVERS: drivers.join(',') };
     /* A child is a measurement, never a control run; the alloff control reaches it as a dial edit instead. */
     delete env.CM_DIFF_CONTROL;
-    if (CONTROL === 'alloff') env.DIALS_JSON = JSON.stringify({ hard: { ...DIALS.normal }, legend: { ...DIALS.normal } });
+    /* Round 1512 review: every level off Medium, the two easy rows included, as the in memory edit does. */
+    if (CONTROL === 'alloff') env.DIALS_JSON = JSON.stringify(Object.fromEntries(OFF_MEDIUM.map(l => [l, { ...DIALS.normal }])));
     const child = spawn(process.execPath, [fileURLToPath(import.meta.url)], { env, stdio: ['ignore', 'pipe', 'pipe'] });
     let tail = '';
     child.stdout.on('data', d => { tail = (tail + d).slice(-400); });
