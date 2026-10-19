@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk2-tight: PASSES2=390r LEAVE=3000 node .rc/x/walk2Run1513.mjs
