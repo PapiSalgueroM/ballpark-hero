@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+playCmDifficulty: node scripts/playCmDifficulty.mjs
+playCmSavePoints: node scripts/playCmSavePoints.mjs
+sweepWeight: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; cp /tmp/sw.log $RC_OUT/sweepWeight.log; grep -E "FAIL|/club-manager|/manager-hot-seat|/deadline-day|/soccer-career |/soccer-grid|/nfl-my-career| / |sweepWeight:" /tmp/sw.log | head -24 | cut -c1-200; exit $s
+walk-nolevel: WIDTHS=390 PLAY_DIFF_CONTROL=nolevel node scripts/playCmDifficulty.mjs
+walk-nodoor: WIDTHS=390 POINTS_CONTROL=nodoor node scripts/playCmSavePoints.mjs
+w1513: bash .rc/x/basesrv.sh 1ba9f08d f66eba35 4174 && BASE_DIST=/tmp/wt-4174/dist node .rc/x/weightBJ.mjs
+simWorldUcl: node scripts/simWorldUcl.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+simOneOffCups: node scripts/simOneOffCups.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+wm-head: CM_WORLD_MOVES_SECTIONS=0,5,6,8 node scripts/simCmWorldMoves.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+wm-main: R=$PWD && git worktree add -q /tmp/m b967a309 && cd /tmp/m && ln -s "$R/node_modules" node_modules && CM_WORLD_MOVES_SECTIONS=0,5,6,8 node scripts/simCmWorldMoves.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+euro-3: WORLD_EURO_ONLY=3 WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+euro-6: WORLD_EURO_ONLY=6 WORLD_EURO_BASE=77556430 node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+euro-57: WORLD_EURO_ONLY=5,7 node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
