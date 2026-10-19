@@ -112,6 +112,7 @@ export function ReportSiteIssue() {
                 {REPORT_KINDS.map((k) => (
                   <button
                     key={k}
+                    aria-pressed={kind === k}
                     onClick={() => {
                       if (kind !== k) markDraftChanged();
                       setKind(k);
