@@ -1,0 +1,46 @@
+rvlv: wrote scripts/_rvLvC.mjs (section 2 at RV_LEVEL=(unset))
+simCmDifficulty: sections 2
+  table: veryeasy {"gain":1.4,"pain":0.6,"cut":0,"cheque":1.5,"wageRoom":1.12,"mark":0.8,"edge":-3}; easy {"gain":1.2,"pain":0.8,"cut":0,"cheque":1.2,"wageRoom":1.06,"mark":0.87,"edge":-1.5}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":1.6}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3}
+2) Normal plays as the base tree /tmp/bc: 1 seeds, 1 seasons, coach and noCoach
+  FAIL: Brentford seed 0 noCoach: 38112 draws here, 48261 on the base
+  FAIL: Brentford seed 0 noCoach: season 1 differs from the base, first at key week
+  FAIL: Hull City seed 0 coach: season 1 differs from the base, first at key squad
+  FAIL: Real Madrid seed 0 coach: 62296 draws here, 61067 on the base
+  FAIL: Real Madrid seed 0 coach: season 1 differs from the base, first at key budget
+  FAIL: Real Madrid seed 0 noCoach: 50806 draws here, 50410 on the base
+  FAIL: Real Madrid seed 0 noCoach: season 1 differs from the base, first at key budget
+  FAIL: Espanyol seed 0 coach: 50139 draws here, 50297 on the base
+  FAIL: Espanyol seed 0 coach: season 1 differs from the base, first at key budget
+  FAIL: Málaga seed 0 coach: 38015 draws here, 24389 on the base
+  FAIL: Málaga seed 0 coach: season 1 differs from the base, first at key week
+  FAIL: Málaga seed 0 noCoach: 27847 draws here, 29094 on the base
+  FAIL: Málaga seed 0 noCoach: season 1 differs from the base, first at key week
+  FAIL: Inter Milan seed 0 coach: 27799 draws here, 51755 on the base
+  FAIL: Inter Milan seed 0 coach: season 1 differs from the base, first at key week
+  FAIL: Inter Milan seed 0 noCoach: 44155 draws here, 49619 on the base
+  FAIL: Inter Milan seed 0 noCoach: season 1 differs from the base, first at key week
+  FAIL: Torino seed 0 coach: 22565 draws here, 22618 on the base
+  FAIL: Torino seed 0 coach: season 1 differs from the base, first at key budget
+  FAIL: Torino seed 0 noCoach: 47592 draws here, 47644 on the base
+  FAIL: Torino seed 0 noCoach: season 1 differs from the base, first at key budget
+  FAIL: Frosinone seed 0 coach: 28293 draws here, 34972 on the base
+  FAIL: Frosinone seed 0 coach: season 1 differs from the base, first at key week
+  FAIL: Frosinone seed 0 noCoach: 34947 draws here, 24165 on the base
+  FAIL: Frosinone seed 0 noCoach: season 1 differs from the base, first at key week
+  FAIL: Everton 2005-06 seed 0 coach: 16616 draws here, 12179 on the base
+  FAIL: Everton 2005-06 seed 0 coach: season 1 differs from the base, first at key week
+  FAIL: Brentford, New year takeover seed 0 noCoach: 48976 draws here, 48959 on the base
+  FAIL: Brentford, New year takeover seed 0 noCoach: season 1 differs from the base, first at key budget
+  FAIL: Brentford, a joinClubNow move seed 0 coach: season 1 differs from the base, first at key world
+  FAIL: Hull City, a wilderness job seed 0 coach: 63237 draws here, 63787 on the base
+  FAIL: Hull City, a wilderness job seed 0 coach: season 1 differs from the base, first at key budget
+  FAIL: Hull City, a wilderness job seed 0 noCoach: 58341 draws here, 58561 on the base
+  FAIL: Hull City, a wilderness job seed 0 noCoach: season 1 differs from the base, first at key budget
+  ok: 28 Normal careers compared with the base, 1072212 draws, in 45 s
+  ok: Brentford, a joinClubNow move: reached the new job all 4 times, on both trees
+  ok: Hull City, a wilderness job: reached the new job all 4 times, on both trees
+  ok: setUpCareer on Normal with No sacking off returns its argument
+  ok: 2c: 14 of 14 saves the base wrote open here as they open there, Normal with No sacking off
+  ok: 2d: 18 old saves (the four fixtures as they are and keyed Hard and Legend, and six Hard and Legend seasons the base wrote) open here byte for byte as there, each on its own level
+  ok: 2b: 18 of 18 Hard careers on Normal's dials play as Normal, the key aside
+simCmDifficulty: 34 FAILURES (sections 2)

@@ -1,0 +1,45 @@
+simCmDifficulty: sections 3, control nojoin
+  table: veryeasy {"gain":1.4,"pain":0.6,"cut":0,"cheque":1.5,"wageRoom":1.12,"mark":0.8,"edge":-3}; easy {"gain":1.2,"pain":0.8,"cut":0,"cheque":1.2,"wageRoom":1.06,"mark":0.87,"edge":-1.5}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":1.5}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3}
+NEGATIVE CONTROL ON: joinClubNow returns the new job without its dials
+3) each lever does what its dial says (Hard with one lever on, the rest Medium's), 4 seeds
+  ok: B1: 35 first matches (22 up, 13 down), Hard's change is Normal's times the dial every time
+  ok: P1 Hard: 9 next match cards and match facts read the opponent at strength plus 1.5, the odds turned against you in all 9
+  ok: P1: oppStrengthVsMe is read in exactly the seven readers of your match (talkTargetNow, firstHalfLambdas, secondHalfLambdas, playMyMatch, talkEdgeFor, nextFixtureFrom, matchFacts)
+  ok: P1: simAiMatch reads plain strengthOf, so no match between other clubs moves
+  11 season ends rolled (the steady driver at the mid and small clubs)
+  ok: B2: 6 bad openings fell by exactly 8, 5 at or above Safe stayed
+  ok: M1: day one and 11 summer cheques are Normal's times 0.8
+  FAIL: M1 joinClubNow Arsenal to Aston Villa: Normal 80.19, Hard 80.19, the dial says 64.2
+  FAIL: M1 joinClubNow Brentford to Aston Villa: Normal 80.47, Hard 80.47, the dial says 64.4
+  FAIL: M1 joinClubNow Hull City to Aston Villa: Normal 79.97, Hard 79.97, the dial says 64
+  FAIL: M1 joinClubNow: 9 moves in all off the dial
+  ok: M2: 10 new jobs (day one and summer moves) start on Normal's ceiling times 0.94
+  FAIL: M2 joinClubNow Arsenal to Aston Villa: Normal 814, Hard 814, the dial says 765
+  FAIL: M2 joinClubNow Brentford to Aston Villa: Normal 814, Hard 814, the dial says 765
+  FAIL: M2 joinClubNow Hull City to Aston Villa: Normal 874, Hard 874, the dial says 822
+  FAIL: M2 joinClubNow: 9 moves in all off the dial
+  ok: T1: all 5080 cards are the same men in the same order at 1.15 times the list
+  ok: T1 Hard: Buy charges the marked price (204.9 for a man listed at 178.2)
+  ok: T1: none of 1799 release clauses undercuts the price at Legend's mark
+  ok: T1: the AI's own deals are Normal's (8 headlines after six entries)
+NEGATIVE CONTROL ON: joinClubNow returns the new job without its dials
+3) each lever does what its dial says (Very Easy with one lever on, the rest Medium's), 4 seeds
+  ok: B1: 35 first matches (22 up, 13 down), Very Easy's change is Normal's times the dial every time
+  ok: P1 Very Easy: 9 next match cards and match facts read the opponent at strength plus -3, the odds turned for you in all 9
+  11 season ends rolled (the steady driver at the mid and small clubs)
+  ok: B2: 6 bad openings fell by exactly 0, 5 at or above Safe stayed
+  ok: M1: day one and 11 summer cheques are Normal's times 1.5
+  FAIL: M1 joinClubNow Arsenal to Aston Villa: Normal 80.19, Very Easy 80.19, the dial says 120.3
+  FAIL: M1 joinClubNow Brentford to Aston Villa: Normal 80.47, Very Easy 80.47, the dial says 120.7
+  FAIL: M1 joinClubNow Hull City to Aston Villa: Normal 79.97, Very Easy 79.97, the dial says 120
+  FAIL: M1 joinClubNow: 9 moves in all off the dial
+  ok: M2: 10 new jobs (day one and summer moves) start on Normal's ceiling times 1.12
+  FAIL: M2 joinClubNow Arsenal to Aston Villa: Normal 814, Very Easy 814, the dial says 912
+  FAIL: M2 joinClubNow Brentford to Aston Villa: Normal 814, Very Easy 814, the dial says 912
+  FAIL: M2 joinClubNow Hull City to Aston Villa: Normal 874, Very Easy 874, the dial says 979
+  FAIL: M2 joinClubNow: 9 moves in all off the dial
+  ok: T1: all 5080 cards are the same men in the same order at 0.8 times the list
+  ok: T1 Very Easy: Buy charges the marked price (142.6 for a man listed at 178.2)
+  ok: T1 Very Easy: the AI's own deals are Medium's (8 headlines after six entries)
+CONTROL nojoin FIRED: 16 failures
+simCmDifficulty: 16 FAILURES (sections 3)

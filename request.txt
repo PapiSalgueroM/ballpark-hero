@@ -1,0 +1,40 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerNoSack.test.tsx --testTimeout=300000 --hookTimeout=120000
+s178: SECTION=1,7,8 node scripts/simCmDifficulty.mjs
+s2big: mkdir -p /tmp/b2 && git archive b967a309 src | tar -x -C /tmp/b2 && BASE_ROOT=/tmp/b2 SECTION=2 SEEDS=3 SEASONS=3 node scripts/simCmDifficulty.mjs
+s3: SECTION=3 node scripts/simCmDifficulty.mjs
+s3-easy: SECTION=3 LEVER_LEVELS=easy node scripts/simCmDifficulty.mjs
+s6: mkdir -p /tmp/b6 && git archive b967a309 src | tar -x -C /tmp/b6 && BASE_ROOT=/tmp/b6 SECTION=6 node scripts/simCmDifficulty.mjs
+lv-hard: node .rc/x/rvlv.mjs scripts/_rvLvH.mjs && mkdir -p /tmp/bh && git archive b967a309 src | tar -x -C /tmp/bh && RV_LEVEL=hard BASE_ROOT=/tmp/bh SECTION=2 node scripts/_rvLvH.mjs
+lv-legend: node .rc/x/rvlv.mjs scripts/_rvLvL.mjs && mkdir -p /tmp/bl && git archive b967a309 src | tar -x -C /tmp/bl && RV_LEVEL=legend BASE_ROOT=/tmp/bl SECTION=2 node scripts/_rvLvL.mjs
+lv-control: node .rc/x/rvlv.mjs scripts/_rvLvC.mjs && mkdir -p /tmp/bc && git archive b967a309 src | tar -x -C /tmp/bc && RV_CONTROL=1 RV_LEVEL=hard BASE_ROOT=/tmp/bc SECTION=2 SEEDS=1 SEASONS=1 node scripts/_rvLvC.mjs
+c-flate: CM_DIFF_CONTROL=flate node scripts/simCmDifficulty.mjs
+c-oldlevel: mkdir -p /tmp/bo && git archive b967a309 src | tar -x -C /tmp/bo && BASE_ROOT=/tmp/bo CM_DIFF_CONTROL=oldlevel node scripts/simCmDifficulty.mjs
+c-ve-gain: CM_DIFF_CONTROL=ve-gain node scripts/simCmDifficulty.mjs
+c-ve-pain: CM_DIFF_CONTROL=ve-pain node scripts/simCmDifficulty.mjs
+c-ve-cheque: CM_DIFF_CONTROL=ve-cheque node scripts/simCmDifficulty.mjs
+c-ve-wages: CM_DIFF_CONTROL=ve-wages node scripts/simCmDifficulty.mjs
+c-ve-mark: CM_DIFF_CONTROL=ve-mark node scripts/simCmDifficulty.mjs
+c-ve-edge: CM_DIFF_CONTROL=ve-edge node scripts/simCmDifficulty.mjs
+c-helpdrifte: CM_DIFF_CONTROL=helpdrifte node scripts/simCmDifficulty.mjs
+c-midleak: CM_DIFF_CONTROL=midleak node scripts/simCmDifficulty.mjs
+c-easyclear: CM_DIFF_CONTROL=easyclear node scripts/simCmDifficulty.mjs
+c-midnolevel: CM_DIFF_CONTROL=midnolevel node scripts/simCmDifficulty.mjs
+c-flat: CM_DIFF_CONTROL=flat node scripts/simCmDifficulty.mjs
+c-leak: mkdir -p /tmp/bk && git archive b967a309 src | tar -x -C /tmp/bk && BASE_ROOT=/tmp/bk CM_DIFF_CONTROL=leak node scripts/simCmDifficulty.mjs
+c-alloffleak: CM_DIFF_CONTROL=alloffleak node scripts/simCmDifficulty.mjs
+c-gain: CM_DIFF_CONTROL=gain node scripts/simCmDifficulty.mjs
+c-pain: CM_DIFF_CONTROL=pain node scripts/simCmDifficulty.mjs
+c-cut: CM_DIFF_CONTROL=cut node scripts/simCmDifficulty.mjs
+c-wages: CM_DIFF_CONTROL=wages node scripts/simCmDifficulty.mjs
+c-mark: CM_DIFF_CONTROL=mark node scripts/simCmDifficulty.mjs
+c-clause: CM_DIFF_CONTROL=clause node scripts/simCmDifficulty.mjs
+c-nojoin: CM_DIFF_CONTROL=nojoin node scripts/simCmDifficulty.mjs
+c-ddreach: CM_DIFF_CONTROL=ddreach node scripts/simCmDifficulty.mjs
+c-helpdrift: CM_DIFF_CONTROL=helpdrift node scripts/simCmDifficulty.mjs
+simCmNoSack: node scripts/simCmNoSack.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simClubManagerStart: node scripts/simClubManagerStart.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs

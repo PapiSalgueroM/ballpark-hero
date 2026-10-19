@@ -1,0 +1,31 @@
+simCmDifficulty: sections 2, control alloffleak
+  table: veryeasy {"gain":1.4,"pain":0.6,"cut":0,"cheque":1.5,"wageRoom":1.12,"mark":0.8,"edge":-3}; easy {"gain":1.2,"pain":0.8,"cut":0,"cheque":1.2,"wageRoom":1.06,"mark":0.87,"edge":-1.5}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":1.5}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3}
+2) Normal plays as this tree with every dial read as Normal's: 2 seeds, 2 seasons, coach and noCoach
+  ok: 56 Normal careers compared with the base, 3900625 draws, in 174 s
+  ok: Brentford, a joinClubNow move: reached the new job all 8 times, on both trees
+  ok: Hull City, a wilderness job: reached the new job all 8 times, on both trees
+  ok: setUpCareer on Normal with No sacking off returns its argument
+  ok: 2c: 14 of 14 saves the base wrote open here as they open there, Normal with No sacking off
+  ok: 2d: 18 old saves (the four fixtures as they are and keyed Hard and Legend, and six Hard and Legend seasons the base wrote) open here byte for byte as there, each on its own level
+NEGATIVE CONTROL ON: 2b keeps Hard's edge on
+  FAIL: 2b Arsenal coach: Hard with Normal's dials took 37220 draws, Normal 122787
+  FAIL: 2b Arsenal noCoach: Hard with Normal's dials took 10147 draws, Normal 41530
+  FAIL: 2b Brentford coach: Hard with Normal's dials took 79269 draws, Normal 105736
+  FAIL: 2b Brentford noCoach: Hard with Normal's dials took 77316 draws, Normal 79772
+  FAIL: 2b Hull City coach: Hard with Normal's dials took 35842 draws, Normal 30204
+  FAIL: 2b Hull City noCoach: Hard with Normal's dials took 33911 draws, Normal 44495
+  FAIL: 2b Real Madrid coach: Hard with Normal's dials took 120798 draws, Normal 119878
+  FAIL: 2b Real Madrid noCoach: Hard with Normal's dials took 100412 draws, Normal 101208
+  FAIL: 2b Espanyol coach: Hard with Normal's dials took 17647 draws, Normal 76650
+  FAIL: 2b Espanyol noCoach: Hard with Normal's dials took 38735 draws, Normal 67808
+  FAIL: 2b Málaga coach: Hard with Normal's dials took 98865 draws, Normal 40098
+  FAIL: 2b Málaga noCoach: Hard with Normal's dials took 45916 draws, Normal 91432
+  FAIL: 2b Inter Milan coach: Hard with Normal's dials took 37564 draws, Normal 77347
+  FAIL: 2b Inter Milan noCoach: Hard with Normal's dials took 69210 draws, Normal 97672
+  FAIL: 2b Torino coach: Hard with Normal's dials took 27556 draws, Normal 85644
+  FAIL: 2b Torino noCoach: Hard with Normal's dials took 23155 draws, Normal 74531
+  FAIL: 2b Frosinone coach: Hard with Normal's dials took 98762 draws, Normal 27363
+  FAIL: 2b Frosinone noCoach: Hard with Normal's dials took 27944 draws, Normal 29245
+  ok: 2b: 0 of 18 Hard careers on Normal's dials play as Normal, the key aside
+CONTROL alloffleak FIRED: 18 failures
+simCmDifficulty: 18 FAILURES (sections 2)
