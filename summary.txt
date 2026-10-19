@@ -1,0 +1,8 @@
+m-hard-2 exit=0 219s | simCmDifficulty: all green (sections 4)
+m-hard-0 exit=0 222s | simCmDifficulty: all green (sections 4)
+m-hard-1 exit=0 236s | simCmDifficulty: all green (sections 4)
+m-legend-0 exit=0 168s | simCmDifficulty: all green (sections 4)
+m-legend-1 exit=0 158s | simCmDifficulty: all green (sections 4)
+m-hard-3 exit=0 227s | simCmDifficulty: all green (sections 4)
+m-legend-2 exit=0 128s | simCmDifficulty: all green (sections 4)
+m-legend-3 exit=0 128s | simCmDifficulty: all green (sections 4)
