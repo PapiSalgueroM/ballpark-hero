@@ -23,7 +23,7 @@ import { useTapSettle } from '@/hooks/useTapSettle';
 /* Round 530: the season result is a moment. Same kit as the season curtain. */
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import {
-  acceptCoachOffer, playCoachSeason, sitOutCoachSeason, retireCoachCareer,
+  acceptCoachOffer, playCoachSeason, sitOutCoachSeason, retireCoachCareer, takeNflStaffRole,
   coachOutlook, coachHotSeat, coachTotals, coachVerdict, formatCoachRecord,
 } from '@/lib/usCoachCareer';
 import type { CoachCareerState } from '@/lib/usCoachCareer';
@@ -55,6 +55,10 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
   const seat = coachHotSeat(state);
   const totals = coachTotals(state);
   const last = state.results[state.results.length - 1];
+  const canTakeStaffRole = state.sport === 'nfl' && !state.done && state.unemployed && state.job === null && state.offers.length === 0;
+  const marketNote = canTakeStaffRole
+    ? 'No automatic offers right now. You can take a staff role or wait for another opening.'
+    : state.offerNote;
 
   /* How to describe being out of work. profile.seasonsOut ticks up the moment
      you are let go, which is right for the maths and wrong for the sentence:
@@ -101,6 +105,11 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
   const take = (i: number) => {
     const o = state.offers[i];
     onChange(acceptCoachOffer(state, i), [`You took the ${o.team} job as their ${o.role}.`]);
+  };
+  const takeStaffRole = () => {
+    const next = takeNflStaffRole(state);
+    if (next === state) return;
+    onChange(next, [`You took a staff role with ${next.job!.team}. Work your way up from here.`]);
   };
   /* Round 1346: the player ends it himself, behind the shared confirm. Only `done` changes. */
   const retire = () => { retireSettle.mark(); onChange(retireCoachCareer(state), ['You stepped away from coaching. The record and the log stay.']); };
@@ -181,7 +190,7 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
             )}
             {state.offers.length === 0 ? (
               <div className="rounded-2xl border border-border bg-card p-4 text-center">
-                <p className="text-xs text-muted-foreground">{state.done ? 'You retired from coaching, so nobody is calling now.' : state.offerNote || 'Nothing on the table right now.'}</p>
+                <p className="text-xs text-muted-foreground">{state.done ? 'You retired from coaching, so nobody is calling now.' : marketNote || 'Nothing on the table right now.'}</p>
               </div>
             ) : (
               state.offers.map((o, i) => (
@@ -347,7 +356,7 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
             <div className="cm-rise text-center">
               <p className="text-2xl">📪</p>
               <p className="text-sm font-black text-foreground">{outLabel}</p>
-              <p className="mt-1 text-[11px] italic text-muted-foreground">{state.offerNote}</p>
+              <p className="mt-1 text-[11px] italic text-muted-foreground">{marketNote}</p>
             </div>
             {state.offers.map((o, i) => (
               <button
@@ -365,13 +374,21 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
                 <span className="mt-0.5 block text-[10px] text-gold">{o.reason}</span>
               </button>
             ))}
+            {canTakeStaffRole && (
+              <button
+                onClick={takeStaffRole}
+                className="min-h-11 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+              >
+                Take a staff role
+              </button>
+            )}
             <button
               onClick={sitOut}
               className="w-full rounded-full border border-border px-4 py-2.5 text-sm font-bold text-foreground hover:border-primary/60"
             >
               Sit out the {state.year} season
             </button>
-            {state.offers.length === 0 && (
+            {state.offers.length === 0 && !canTakeStaffRole && (
               <p className="text-center text-[10px] text-muted-foreground">
                 It gets harder every year you wait. That is the point.
               </p>
