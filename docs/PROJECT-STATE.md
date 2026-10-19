@@ -1,3 +1,17 @@
+## Round1435 verified draft: exact Soccer Grid names first, 2026-10-19
+
+[PR349](https://github.com/PapiSalgueroM/ballpark-hero/pull/349) is an attached, open draft stacked on PR348. Tested source is39cd6c1cfda629b26538010d2ff2b7b11ffe6ef0. Full fixed qualification56c7b461d44a2a53d9c4094dc91557363991756e5717fd79ce123e8790212776 binds actual common894b880d, featurea5986a8c and Root pixelsfaedbbf0, with all three complete actual peer MDs whole-read by Root. Integration and publication remain with I.
+
+Typing an exact name could leave it behind eight longer matches and make Enter select the wrong name. The one-clause Search change puts stable normalized exact matches first, then keeps the existing eight-result cap and original canonical objects. Whole original368e and fixedd383 invert exactly. The shared proof helper changes only its authenticated original-admission literal, with whole inverse to nullc435. All other4950 source bodies remain held.
+
+Original admission64e6104a preceded adoption9db9ee17. Actual fixed evidence has two complete1326-execution packets, explicit and genuine MODE/OUT-absent ordinary default:2652 executions,246 reports/traces,2414 healthy and238 precise intended faults. Each separately runs32 new cases, actual current38 and1256 historical executions. Repeated old defaults stay historical, with no extra uniqueness claim. Normal/bare/restored new arms are healthy; only the removed-priority arm reproduces the three declared callback faults. Browser normal4/restored4 select exact canonical names; separately compiled removed2 reproduce only the two expected wrong-name callbacks. Root actually viewed24of100 PNGs. All17 readers,14 unchanged caps, real app types, plain build and complete physical holds pass. Grid317.8KiB remains below319KiB.
+
+No real-player completeness, answer adjudication, live backend, full-suite, spoken AT/full WCAG, global no-scroll, combined release or publication claim. All72 prior sealed packets/refs/worktrees remain immutable. Final docs-only source closure and73-ref/handoff/seal receipts are external to this tested runtime source.
+
+Latest career reports remain source-only intake in new-owner-reports-2026-10-19: deduplicated NBA trade/roster-help/all30 free-agency/waiver requests; ambiguous pt-BR phone-English feedback; potential-choice discoverability; academy preview/start club mismatch. Existing NBA conditional yearly ask-out and Soccer Career rerolls are recorded. The academy preview and engine independently choose clubs, a strong source finding awaiting I-owned fix and runtime verification. No protected lease or engine/validator/data change was taken.
+
+Previous state follows unchanged.
+
 ## Round1435 in progress: exact Soccer Grid names, 2026-10-19
 
 Fresh isolated branch codex/soccer-grid-exact-name-priority stacks sealed PR348/a153d2ea. Original Search368e9488 remains unmodified. Proposed exact-normalized-name priority preserves cap8 and order within groups; full original proof and all remote gates are owed before product adoption. Only the new Search ordering leaf and exact recoverable QA support are claimed in ROUND1435-GRID-EXACT-NAME-PRIORITY.md. All72 prior sealed refs/worktrees/packets, primary source/index and I's protected game/data/validator/cache/integration/main/publication scopes remain held. No1435 runtime/PR/release claim.
