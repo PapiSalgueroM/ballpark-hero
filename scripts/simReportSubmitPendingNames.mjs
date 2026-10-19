@@ -86,7 +86,7 @@ function vitest(name, tests, passed, failed, aliases = {}, bare = false) {
   return { directory, cases: rawCases(raw, passed + failed, passed, failed, tests.length), result: raw };
 }
 function validateTrace(trace, faults) {
-  assert.equal(trace.version, 1); assert.equal(trace.scope, 'report-submit-pending-names'); assert.deepEqual(trace.cases.map(row => row.name), TITLES);
+  assert.equal(trace.version, 1); assert.equal(trace.scope, 'report-submit-pending-names'); assert.deepEqual(trace.cases.map(row => row.name), TITLES.map(title => title.replace(' submit names ', ' submit names > ')));
   for (const [index, row] of trace.cases.entries()) {
     const label = LABELS[index < 3 ? 0 : 1]; const idle = index % 3 === 0; const fallback = index % 3 === 2;
     assert.deepEqual(row.beforeStores, [[['report-pending-held-save', '{"career":"held"}']], [['report-pending-held-session', 'held']]]);
@@ -122,7 +122,7 @@ function runArm(name, faults, aliases = {}, bare = false) {
   for (const test of failures) {
     assert.equal(test.failureMessages.length, 1); const message = clean(test.failureMessages[0]);
     const index = TITLES.indexOf(test.fullName); const label = LABELS[index < 3 ? 0 : 1];
-    const leading = message.split(/\n\s*❯ /u)[0].trimEnd();
+    const leading = message.split('\n    at ')[0].trimEnd();
     assert.equal(leading, `Error: expect(element).toHaveAccessibleName()\n\nExpected element to have accessible name:\n  ${label}\nReceived:`, `${name}: only the exact computed-name matcher fault`);
     assert.match(message, /src\/test\/reportSubmitPendingNames\.test\.tsx:127:[0-9]+/);
     assert(!/TestingLibraryElementError|Test timed out|Cannot find module|Failed to resolve import|Transform failed|ReferenceError|SyntaxError|TypeError/.test(message));
