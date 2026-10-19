@@ -1,3 +1,13 @@
+## Round1437 source-qualified draft, 2026-10-19: report category pressed state
+
+[PR351](https://github.com/PapiSalgueroM/ballpark-hero/pull/351), `codex/report-category-pressed-state`, stacks on report PR347 at9d31a7d2e839523f5a3826a5150184dae91f520c. The category buttons in both report forms now expose the same selection already shown by their colors. Product scope is exactly `aria-pressed={kind === k}` in ReportSiteIssue and `aria-pressed={reason === r}` in ReportQuestion.
+
+Tested7485f3cc58ea2420dd9ab3bfbc4f351d885fcf7a, successful run39268928867/job118115779132/artifact12194907353. Explicit and actual absent-environment default packets each retain48 new case executions,44 current passes and242 separately attributed historical executions. There are six distinct new cases. Twelve compiled browser contexts retain180 actual AX captures and180 PNGs; Root viewed44 saved viewport images. Types, plain build, all17 readers,14 unchanged fatal caps and complete input/source/dist holds passed. Root whole-read three complete independent actual reviews.
+
+Original admission94a1c7ddd0ac06b8e89db68e665145aeb1e9bc8a070dec9564f8ddb66550bca4 and fixed qualificationde88bdda351d8312fe1dee178bc45cfb50226ec467d8a24378e647277689f5f0 are in `C:/Users/antho/dukb-handoff/2026-10-19/report-category-pressed-state-1437/`. See `docs/ROUND1437-REPORT-CATEGORY-PRESSED-STATE.md`. Final source, refs and handoff seals are recorded externally. I retains joined integration, protected engines/data, derived artifacts, main and publication. Whole simReportRelay remains unrun because it reads a live table. No live report/email/DB, full-site suite, spoken AT, full WCAG, global scroll or publication claim. All74 older seals remain immutable.
+
+Previous project state follows.
+
 ## Round1433 source-qualified draft, 2026-10-19: report buttons keep their names while sending
 
 [PR347](https://github.com/PapiSalgueroM/ballpark-hero/pull/347), `codex/report-submit-pending-names`, stacks on draft PR340 at26ea50a4d9c617436ded353e22640e064cfa2011. Both actual report submit buttons retain their existing accessible names while their spinner replaces visible text. Product scope is exactly one aria-label in each report component. Delivery, payloads, draft lifecycle and styles stay unchanged.
