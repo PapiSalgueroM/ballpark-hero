@@ -1,0 +1,5 @@
+# Release BL: the timing rule. soccerGridSettingsRace.test.tsx (PR329, main) failed 3 cases in rBLk's vitest-all, which ran
+# three wide beside two long harness loops, and passed in rBLc-b's. Rerun alone, then vitest-all alone with its summary.
+#!serial
+race-alone: node_modules/.bin/vitest run src/test/soccerGridSettingsRace.test.tsx > /tmp/r1.log 2>&1; s=$?; sed 's/\x1b\[[0-9;]*m//g' /tmp/r1.log | grep -E 'Tests |Test Files|FAIL' | head -6 | cut -c1-200; exit $s
+vitest-all-alone: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > /tmp/va.log 2>&1; s=$?; sed 's/\x1b\[[0-9;]*m//g' /tmp/va.log | grep -E '^ FAIL ' | sed 's/ >.*//' | sort | uniq -c; sed 's/\x1b\[[0-9;]*m//g' /tmp/va.log | grep -E 'Test Files|Tests  ' | tail -2; exit $s
