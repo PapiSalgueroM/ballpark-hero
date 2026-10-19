@@ -1,0 +1,14 @@
+   mlb click path step 0 (after "MOUNT"): the markup differs under the same words ("Create your playerYou are a fictional prospect entering the ")
+   mlb click path step 1 (after "create: 🎲 Surprise me"): the markup differs under the same words ("Create your playerYou are a fictional prospect entering the ")
+   mlb click path step 2 (after "create: SS"): the markup differs under the same words ("Create your playerYou are a fictional prospect entering the ")
+   nhl click path step 0 (after "MOUNT"): the markup differs under the same words ("Create your playerYou are a fictional prospect entering the ")
+   nhl click path step 1 (after "create: (Honey)"): the markup differs under the same words ("Create your playerYou are a fictional prospect entering the ")
+   nhl click path step 2 (after "create: G"): the markup differs under the same words ("Create your playerYou are a fictional prospect entering the ")
+  FAIL: the replay exited 1
+  FAIL: the replay passed [], not all four sports
+  FAIL: 20 steps differ from the fixture
+
+  If your round meant to change what a US career does, re-record from your tree
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures

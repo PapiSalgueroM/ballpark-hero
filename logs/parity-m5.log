@@ -1,0 +1,5 @@
+wt: pm5 at 9afad878515a (Release BL m5: merge the other lane's PR345 (codex/appearance-selected-contrast,)
+  If your round meant to change what a US career does, re-record from your tree
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures

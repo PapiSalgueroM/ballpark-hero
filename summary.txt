@@ -1,0 +1,4 @@
+anchors exit=1 46s | simHarnessAnchors: 6 failure(s)
+parity-head exit=1 44s | simUsBoardParity: 3 failures
+parity-m4 exit=0 45s | simUsBoardParity: 3 failures
+parity-m5 exit=0 45s | simUsBoardParity: 3 failures

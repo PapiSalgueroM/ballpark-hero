@@ -1,0 +1,5 @@
+wt: pm4 at 5a58cf7b6618 (Release BL m4: merge the other lane's PR341 (codex/appearance-category-scroll, R)
+  If your round meant to change what a US career does, re-record from your tree
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures

@@ -1,0 +1,11 @@
+1) every harness parses
+2) no harness carries an anchor it can never match
+   964 harnesses, 263 carry a multi line anchor into src, 316 normalised reads guard one
+   FAIL simNflCoachStaffRecovery.mjs reads src/lib/usCoachCareer.ts raw at line 138 and searches it with a multi line anchor (line 63), so on a CRLF checkout it matches nothing (3 raw reads in all)
+   FAIL simReportDraftLifecycle.mjs reads src/components/game/ReportQuestion.tsx raw at line 31 and searches it with a multi line anchor (line 111), so on a CRLF checkout it matches nothing (2 raw reads in all)
+   FAIL simSoccerAppearanceOptions.mjs reads src/lib/soccerCareerAppearance.ts raw at line 28 and searches it with a multi line anchor (line 110), so on a CRLF checkout it matches nothing (5 raw reads in all)
+   FAIL simSoccerGridBlurOwnership.mjs reads src/components/soccer-grid/SoccerGridSearch.tsx raw at line 35 and searches it with a multi line anchor (line 77), so on a CRLF checkout it matches nothing (4 raw reads in all)
+   FAIL simSoccerGridSearchDiscovery.mjs reads src/components/soccer-grid/SoccerGridSearch.tsx raw at line 32 and searches it with a multi line anchor (line 157), so on a CRLF checkout it matches nothing (4 raw reads in all)
+   FAIL simTennisChainScoreOwnership.mjs reads src/components/tennis-chain/TennisChainBoard.tsx raw at line 25 and searches it with a multi line anchor (line 67), so on a CRLF checkout it matches nothing (3 raw reads in all)
+
+simHarnessAnchors: 6 failure(s)

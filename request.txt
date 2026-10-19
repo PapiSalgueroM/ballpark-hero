@@ -1,0 +1,7 @@
+# Release BL triage b: simHarnessAnchors' six failures on bff30423 in full, and simUsBoardParity's three failures
+# attributed by merge: at m4 5a58cf7b (PR339 and PR341 in, PR345 not), m5 9afad878 (PR345 in) and the head. Send with wt.sh.
+#!serial
+anchors: node scripts/simHarnessAnchors.mjs > /tmp/a.log 2>&1; s=$?; grep -v "^ *ok" /tmp/a.log | tail -30 | cut -c1-260; exit $s
+parity-head: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsBoardParity.mjs > /tmp/p0.log 2>&1; s=$?; tail -14 /tmp/p0.log | cut -c1-260; exit $s
+parity-m4: bash .rc/x/wt.sh 5a58cf7b pm4 bash -c 'NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsBoardParity.mjs 2>&1 | tail -4 | cut -c1-200'
+parity-m5: bash .rc/x/wt.sh 9afad878 pm5 bash -c 'NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsBoardParity.mjs 2>&1 | tail -4 | cut -c1-200'
