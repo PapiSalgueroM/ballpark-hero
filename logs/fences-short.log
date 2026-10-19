@@ -1,0 +1,8 @@
+simUsDirtyMoney exit=0 | simUsDirtyMoney: all sections green
+simHarnessAnchors exit=0 | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simGuideHeadings exit=0 | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simNoRivalNames exit=0 | No rival product names found. 0 findings.
+simDailyDeals exit=0 | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simCreation exit=0 | ALL CREATION CHECKS PASSED
+simSoccerAppearanceOptions exit=0 | simSoccerAppearanceOptions: all declared cases and actual source controls passed.
