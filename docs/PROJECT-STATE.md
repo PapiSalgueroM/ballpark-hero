@@ -1,3 +1,43 @@
+## Release BK LIVE, 2026-10-18 20:16 EDT: Club Manager follows the Europa League every season and opens with the Community Shield, and the other lane's guide sentences and fixes
+
+Claude lane (session I). main 491bd08e, deployment f70b3e7c-83ca-4c9d-9bae-e4d3e6a2cafd, entry index-oibwVC9Z.js (was
+index-CWmc_M1Q.js, Release BJ, published 21:51 on 2026-10-17). Proof at 20:17: x-deployment-id carries f70b3e7c from
+20:16:19; /whats-new carries "Club Manager: the season opens with the Community Shield" and "Club Manager: the Europa
+League, every season"; /, /club-manager, /soccer-career, /nba-my-career, /soccer-grid and /whats-new answer 200; on
+/club-manager the scores ticker's database read answered 200 and one request outside the site timed out (as at BJ).
+
+What a player gets:
+- The Europa League followed every season beside the Champions League in today's world (1509, the report "Add Europa
+  League, so if you finish 5th or win the FA cup you get europa league"): its field from each league's access rule and
+  the cup winners (39 ledger rows; 13 of 15 leagues' places marked as the game's simplification), its table, Thursday
+  nights, knockouts and final in the Cups panel, the board grading the European places by the same rule, the winner into
+  next season's Champions League. Your own club playing in it comes later.
+- Each country's season opening super cup (1510, the report "adding ... the community shield"): England's Community
+  Shield (champions against the FA Cup winners, straight to penalties) followed every August and played by your club
+  from its second summer when it earns a place, a minor trophy in the cabinet; other countries and eras marked partial.
+- The other lane's packets: PR331 (the guide sentences owed for Releases BH to BJ; the search keywords regenerated),
+  PR310, PR329, PR330, PR332, PR333, PR334, PR335, PR336.
+- Found in the gate and fixed before publishing (6b303542): loading a Club Manager save in the Champions League no
+  longer reorders its competitions in the save (Round 1509's repair cleared a key the save did not hold).
+
+GATE ON GITHUB RUNNERS on db94ed2b (budgets: /club-manager 626, /manager-hot-seat 642, /deadline-day 652), 54 requests;
+triage (triage-BK.md) on 499ec5ac: the US board fixture re-recorded for PR333 (markup only), the nocustomexit anchor,
+the desk wrap control, kit rebinds; 79 base lines retired (their bases cannot form on this head; each proven in its own
+release); one product defect fixed (fix-BK.md, 65c7ce49: a failing reload test first, the two packet lines, both rounds'
+fleet proofs, simWorldUcl, simWorldEuro, simOneOffCups green, the 1081 pin retaken); live pass 19 of 19. Build output
+491bd08e. rBK-pub 20 of 20.
+
+Known and left: playSoccerCareer check 6, simMoney and simPhone2 on save size, simCareerHall nfl section 19(a) (a one
+seed coin toss, owed a fleet statistic), the live database fences on runners, simWritesAreSent's Guess the Nation step;
+owed: the Europa League for your own club, its eras (Round 1511), the UEFA Super Cup, the Club World Cup, preseason
+friendlies, a lazy dirty money desk, simCmBoardVerdict's kit bridge.
+
+### For Codex
+1. Release BK is on main at 491bd08e and live with your PR331, PR310, PR329, PR330, PR332, PR333, PR334, PR335 and PR336
+   at their qualified heads (finish-BKG.md); please close them. PR337 (Round 1423) qualified and is next; PR308 never.
+2. Guide sentences owed to you for 1509 and 1510 (the Europa League followed every season; the season opens with the
+   country's super cup): texts in finish-1509.md and finish-1510.md, then genSearchKeywords.
+
 ## Release BJ LIVE, 2026-10-17 21:51 EDT: Club Manager Hard and Legend, the Champions League you can follow in or out of it, match days that read like a scoreboard, a way out for dirty money in the US careers, and Soccer Career's summer cards
 
 Claude lane (session I). main d0c3ff58, deployment fec60776-a9ad-49aa-b4ea-04a590a233de, entry index-CWmc_M1Q.js (was
