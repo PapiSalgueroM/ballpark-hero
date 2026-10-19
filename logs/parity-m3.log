@@ -1,0 +1,4 @@
+wt: pm3 at 75340a8322b3 (Release BL m3: merge the other lane's PR339 (codex/soccer-appearance-options, Ro)
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures

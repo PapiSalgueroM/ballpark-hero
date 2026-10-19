@@ -1,0 +1,11 @@
+wt: rec1 at dd033ebf83b5 (Release BL seam: PR333's selection test reads each sport's own hair and beard li)
+recording at dd033ebf83b59bdb201ad79d7a60461088b56832
+  nhl: 421 clicks on the path, 24 seasons, 19 fixed saves, 900 screen steps
+recordUsBoardFixture: wrote ../../home/runner/work/_temp/rc-out/files/usBoardFixture-1.json (2301090 bytes)
+wt: rec2 at dd033ebf83b5 (Release BL seam: PR333's selection test reads each sport's own hair and beard li)
+recording at dd033ebf83b59bdb201ad79d7a60461088b56832
+  nhl: 421 clicks on the path, 24 seasons, 19 fixed saves, 900 screen steps
+recordUsBoardFixture: wrote ../../home/runner/work/_temp/rc-out/files/usBoardFixture-2.json (2301090 bytes)
+byte equal
+ae1eae5b3e7d16872cf9a0614cbfa0539811bf716f8661408c09501949604212  /home/runner/work/_temp/rc-out/files/usBoardFixture-1.json
+2301090
