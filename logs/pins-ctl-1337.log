@@ -1,0 +1,20 @@
+pinsCheck: ok   yml pins (line 53): scripts/genCareerLeagueSeasons.mjs pinned 10719 0e66daf84027, tree 10719 0e66daf84027
+pinsCheck: ok   yml pins (line 53): src/data/careerHistoricalOpponentDisplay.ts pinned 499 a3f4b8563daa, tree 499 a3f4b8563daa
+pinsCheck: ok   yml pins (line 53): src/lib/season/historicalOpponentLabels.ts pinned 2490 8c6796034205, tree 2490 8c6796034205
+pinsCheck: BAD  yml pins (line 53): src/components/soccer-career/SoccerSeasonCentre.tsx pinned 31506 f65e0f08aa8a, tree 31496 94c3c55e9d5c
+pinsCheck: ok   yml pins (line 53): src/test/historicalOpponentLabels.test.ts pinned 6038 412887e712a5, tree 6038 412887e712a5
+pinsCheck: ok   yml pins (line 53): scripts/qa/soccerHistoricalOpponentDisplayProof.mjs pinned 26837 33d5c8cb683a, tree 26837 33d5c8cb683a
+pinsCheck: ok   yml pins (line 53): scripts/qa/soccerHistoricalOpponentDisplayObserver.tsx pinned 15618 ea06f12213cd, tree 15618 ea06f12213cd
+pinsCheck: ok   yml pins (line 53): docs/CAREER-HISTORICAL-OPPONENT-LABELS.md pinned 2074 e805a5c49368, tree 2074 e805a5c49368
+pinsCheck: ok   yml PINS (line 140): scripts/genCareerLeagueSeasons.mjs pinned 10719 0e66daf84027, tree 10719 0e66daf84027
+pinsCheck: ok   yml PINS (line 140): src/data/careerHistoricalOpponentDisplay.ts pinned 499 a3f4b8563daa, tree 499 a3f4b8563daa
+pinsCheck: ok   yml PINS (line 140): src/lib/season/historicalOpponentLabels.ts pinned 2490 8c6796034205, tree 2490 8c6796034205
+pinsCheck: BAD  yml PINS (line 140): src/components/soccer-career/SoccerSeasonCentre.tsx pinned 31506 f65e0f08aa8a, tree 31496 94c3c55e9d5c
+pinsCheck: ok   yml PINS (line 140): src/test/historicalOpponentLabels.test.ts pinned 6038 412887e712a5, tree 6038 412887e712a5
+pinsCheck: ok   proof pins (line 31): scripts/genCareerLeagueSeasons.mjs pinned 10719 0e66daf84027, tree 10719 0e66daf84027
+pinsCheck: ok   proof pins (line 31): src/data/careerHistoricalOpponentDisplay.ts pinned 499 a3f4b8563daa, tree 499 a3f4b8563daa
+pinsCheck: ok   proof pins (line 31): src/lib/season/historicalOpponentLabels.ts pinned 2490 8c6796034205, tree 2490 8c6796034205
+pinsCheck: BAD  proof pins (line 31): src/components/soccer-career/SoccerSeasonCentre.tsx pinned 31506 f65e0f08aa8a, tree 31496 94c3c55e9d5c
+pinsCheck: ok   proof pins (line 31): src/test/historicalOpponentLabels.test.ts pinned 6038 412887e712a5, tree 6038 412887e712a5
+pinsCheck: ok   yml HELPER hash (line 145) 33d5c8cb683a
+pinsCheck: 19 pins read, 3 differ from the tree

@@ -1,0 +1,7 @@
+MUTATION m12 applied to src/components/soccer-career/SoccerSeasonCentre.tsx
+  FAIL  simSoccerOpponentLabels.mjs     0.8s
+----- simSoccerOpponentLabels.mjs (FAIL) -----
+✘ [ERROR] FAIL component reverse anchor: REVERSE pair 10 of 10 is found 0 times in src/components/soccer-career/SoccerSeasonCentre.tsx, not once, so a later edit changed that text. Add its new words to REVERSE as [current, legacy]. The stale side starts "\"Earlier seasons use the league's real clubs and competition rules where the game has them checked. " [plugin retained-opponent-source]
+node_modules/esbuild/lib/main.js:1275:27: ERROR: [plugin: retained-opponent-source] FAIL component reverse anchor: REVERSE pair 10 of 10 is found 0 times in src/components/soccer-career/SoccerSeasonCentre.tsx, not once, so a later edit changed that text. Add its new words to REVERSE as [current, legacy]. The stale side starts "\"Earlier seasons use the league's real clubs and competition rules whe
+
+1 harness not green.
