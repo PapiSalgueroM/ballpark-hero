@@ -1,0 +1,5 @@
+keyOrderProbe: base 5f7b13b1; Chelsea (now, watcher, coach, seed 1); 148 and 148 steps
+first difference at step 47 s1-rolled-reload (tree s1-rolled-reload): keys 82 and 82; keys whose value differs: []
+worldComps: base at 81 of 82 ["uel"], tree at 79 of 82 ["uel"]
+key order parts at index 79: base approach,pendingMove,worldComps tree worldComps,approach,pendingMove
+step before: s1-rollover equal; uclGroup set

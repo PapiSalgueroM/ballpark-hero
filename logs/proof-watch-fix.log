@@ -1,0 +1,14 @@
+applyFix: fix: 1 edit(s) made in /tmp/fbw/src/lib/clubManager.ts
+base fdb48f190ee044250463fbb72c4a78a0398e5378 (5f7b13b1 with the fix's line)
+ok   Marseille (era2020, watcher, nocoach, seed 2, 3 seasons): 143 steps, 4.8 s
+ok   Marseille (era2020, watcher, nocoach, seed 3, 3 seasons): 140 steps, 5.0 s
+ok   Marseille (era2020, watcher, nocoach, seed 4, 3 seasons): 136 steps, 5.1 s
+ok   Marseille (era2020, watcher, nocoach, seed 5, 3 seasons): 136 steps, 5.4 s
+ok   Marseille (era2020, watcher, coach, seed 1, 3 seasons): 137 steps, 7.0 s
+ok   Marseille (era2020, watcher, coach, seed 2, 3 seasons): 135 steps, 6.6 s
+ok   Marseille (era2020, watcher, coach, seed 3, 3 seasons): 135 steps, 6.5 s
+ok   Marseille (era2020, watcher, coach, seed 4, 3 seasons): 134 steps, 6.6 s
+ok   Marseille (era2020, watcher, coach, seed 5, 3 seasons): 139 steps, 7.1 s
+journeys 130, steps compared 17798, tree journeys whose save carried worldComps 130, evaluations on the live state 17798, 928 s
+old saves (written by fdb48f190ee044250463fbb72c4a78a0398e5378): 650 loaded by both engines, 0 gained a watched Champions League at load, 70 did not, 580 already followed one and kept it, 0 gained a Europa League, 0 against the rule
+proofWorldUclFleet: GREEN, 130 journeys and 17798 steps byte equal to fdb48f190ee044250463fbb72c4a78a0398e5378 (a watching state without worldComps.dsc), draws equal

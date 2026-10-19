@@ -1,0 +1,5 @@
+keyOrderProbe: base 5f7b13b1; Arsenal (now, participant, nocoach, seed 1); 110 and 110 steps
+first difference at step 22 s1-reload (tree s1-reload): keys 79 and 79; keys whose value differs: []
+worldComps: base at 78 of 79 ["uel"], tree at 67 of 79 ["uel"]
+key order parts at index 67: base worldRoster,facilities,books tree worldComps,worldRoster,facilities
+step before: s1-e21 equal; uclGroup set

@@ -1,0 +1,7 @@
+headsha exit=0 0s | 31eb78332 Release BL seam: refresh scripts/data/guideHeadingsFrozen.json for /club-manager, the generated output of the 
+probe-part exit=0 10s | step before: s1-e21 equal; uclGroup set
+probe-watch exit=0 19s | step before: s1-rollover equal; uclGroup set
+proof-part-main exit=0 416s | proofWorldUclFleet: GREEN, 60 journeys and 6490 steps byte equal to fb50ce9f, draws equal
+proof-part-fix exit=0 423s | proofWorldUclFleet: GREEN, 60 journeys and 6483 steps byte equal to 70299f7cd84162c463ee29c7661931660c226c53 (a watching state without worldComps.dsc), draws equal
+proof-watch-main exit=0 1077s | proofWorldUclFleet: GREEN, 130 journeys and 17789 steps byte equal to fb50ce9f, draws equal
+proof-watch-fix exit=0 932s | proofWorldUclFleet: GREEN, 130 journeys and 17798 steps byte equal to fdb48f190ee044250463fbb72c4a78a0398e5378 (a watching state without worldComps.dsc), draws equal

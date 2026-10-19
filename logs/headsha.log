@@ -1,0 +1,3 @@
+d744f84b4 rc request rBL-tr1 for 437b350ee9dbbfbc20f9921ecf2a72509522ddb8
+437b350ee Release BL: the lead sets the weight rows from the join's runner measurement
+31eb78332 Release BL seam: refresh scripts/data/guideHeadingsFrozen.json for /club-manager, the generated output of the 
