@@ -1,0 +1,12 @@
+h2 exit=0 203s | simCmDifficulty: all green (sections 4)
+h0 exit=0 208s | simCmDifficulty: all green (sections 4)
+h1 exit=0 212s | simCmDifficulty: all green (sections 4)
+l0 exit=0 143s | simCmDifficulty: all green (sections 4)
+l1 exit=0 141s | simCmDifficulty: all green (sections 4)
+h3 exit=0 207s | simCmDifficulty: all green (sections 4)
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+l3 exit=0 141s | simCmDifficulty: all green (sections 4)
+l2 exit=0 146s | simCmDifficulty: all green (sections 4)
+simWorldEuro exit=2 1295s | simWorldEuro: cannot run: section 3 needs WORLD_EURO_BASE, the commit before the board step
+simWorldUcl exit=0 2056s | simWorldUcl: green, 498818 checks, 0 failures
+simOneOffCups exit=0 2691s | simOneOffCups: green, 161787 checks (2691 s)
