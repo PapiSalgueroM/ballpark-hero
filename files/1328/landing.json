@@ -1,0 +1,20 @@
+{
+ "landing": [],
+ "fails": [
+  {
+   "section": "C",
+   "msg": "s320 Liverpool: the Finances tile's -£7.7m is the desk's Kitty change row (+£63m)"
+  },
+  {
+   "section": "C",
+   "msg": "s390 Liverpool: the Finances tile's -£7.6m is the desk's Kitty change row (+£63.4m)"
+  },
+  {
+   "section": "C",
+   "msg": "s1280 Celta Vigo: the Finances tile's -£13.8m is the desk's Kitty change row (+£7m)"
+  }
+ ],
+ "counts": {
+  "C": 109
+ }
+}
