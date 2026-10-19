@@ -1,0 +1,23 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > /tmp/va.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  " /tmp/va.log | head -30 | cut -c1-250; exit $s
+s178: SECTION=1,7,8 node scripts/simCmDifficulty.mjs
+s2: mkdir -p /tmp/b2 && git archive b967a309 src | tar -x -C /tmp/b2 && BASE_ROOT=/tmp/b2 SECTION=2 node scripts/simCmDifficulty.mjs
+s3: SECTION=3 LEVER_LEVELS=hard,easy,veryeasy node scripts/simCmDifficulty.mjs
+s6: mkdir -p /tmp/b6 && git archive b967a309 src | tar -x -C /tmp/b6 && BASE_ROOT=/tmp/b6 SECTION=6 node scripts/simCmDifficulty.mjs
+simCmSavePoints: node scripts/simCmSavePoints.mjs
+ctl1513: bash .rc/x/ctl1513.sh unpacked lossy noindexback noreadback nosum noaside evict orphan blocked nocredit unguarded noclear pointless
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simCmNoSack: node scripts/simCmNoSack.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+fences: f=0; for h in simGuideHeadings simSiteSearch simHarnessAnchors simNoRivalNames simTrustCopy; do node scripts/$h.mjs > /tmp/fs-$h.log 2>&1; s=$?; echo "$h exit=$s | $(tail -1 /tmp/fs-$h.log | cut -c1-170)"; [ $s -eq 0 ] || f=1; done; exit $f
+dashscan: node .rc/x/dashscan.mjs 6d91ed19; a=$?; n=$(git diff b967a309 HEAD | grep -cP '^\+.*(\x{2013}|\x{2014})'); m=$(git log --format=%B b967a309..HEAD | grep -cP '\x{2013}|\x{2014}'); echo "release added dash lines $n, commit message lines $m"; [ $a = 0 ] && [ "$n" = 0 ] && [ "$m" = 0 ]

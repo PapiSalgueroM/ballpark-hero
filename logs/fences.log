@@ -1,0 +1,5 @@
+simGuideHeadings exit=1 | simGuideHeadings: RED, 1 failure in section 1
+simSiteSearch exit=0 | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simHarnessAnchors exit=0 | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 | No rival product names found. 0 findings.
+simTrustCopy exit=0 | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
