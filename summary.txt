@@ -1,0 +1,13 @@
+headsha exit=0 0s | b30d6955c Release BM m1: merge Round 1515 (r1515-cm-followups at its closing head 8a1bb102: Hard and Impossible retuned harder on 32 seeds, Hard edge 2.2 and Impossible e
+vitest-bh exit=0 9s |    Duration  8.28s (transform 2.54s, setup 1.34s, collect 6.00s, tests 6.13s, environment 4.66s, prepare 1.16s)
+rodri-proof exit=0 10s | simPlayerBingoRodriHonour: fixed proof passed; complete raw reports and changed-copy receipts retained. Offline only.
+simSportsBingo exit=0 0s | simSportsBingo: green. Every card can be finished, and the packs play fair.
+simBingoSeats exit=0 1s | simBingoSeats: all checks passed
+simMarketYearScope exit=0 0s | simMarketYearScope: all green
+wx-original-ctl exit=0 4s | wxOriginal: CONTROL FIRED-OK on base 5b630266: 3 display tests failed on their markers, the season test passed, both files restored
+simWorldXiSeasonReport exit=0 2s | simWorldXiSeasonReport: green. The report says a great deal more, every number adds up and comes off who played, and nobody real says a word.
+simWorldXiReport exit=0 1s | simWorldXiReport: green. The report says more and the season it describes did not move.
+life-original-ctl exit=0 3s | lifeOriginal: CONTROL FIRED-OK on base 33ee6161: exactly the 8 preview cases failed, 10 preserved, both files restored
+simCareerLife exit=0 22s | simCareerLife: green. Every peak is reachable, the critic has an opinion and it is about the football, and nothing about either of them is on the save.
+simCareerDilemmaTruth exit=0 5s | simCareerDilemmaTruth: all green
+held-after exit=0 0s | src and scripts held after every line
