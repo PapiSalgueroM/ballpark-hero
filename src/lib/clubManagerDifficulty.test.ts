@@ -253,7 +253,8 @@ describe('Round 1512: the dials on Easy and Very Easy', () => {
       const after = buyPlayer(rich, vet as MarketPlayer) as CareerState;
       const signed = after.squad.find(p => p.name === (vet as MarketPlayer).name);
       expect(signed).toBeDefined();
-      expect(rich.budget - after.budget).toBeGreaterThanOrEqual(sellValue(signed as CMPlayer));
+      /* 9999 less the fee comes back as 47.29999999999927 for a fee of 47.3, so the paid side carries 1e-9. */
+      expect(rich.budget - after.budget + 1e-9).toBeGreaterThanOrEqual(sellValue(signed as CMPlayer));
     }
   });
 });
