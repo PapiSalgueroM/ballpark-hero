@@ -195,7 +195,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
       },
       {
         q: "Does my career save?",
-        a: "Yes, on this device, and you can keep three managers going at once, each in its own slot. Close the tab mid season and the game resumes where you stopped. Made a mistake? Tap Save points on the hub to keep up to three named copies of your career, then restore one to go back to that week; a season you go back into won't post a leaderboard score again.",
+        a: "Yes, on this device, and you can keep three managers going at once, each in its own slot. Close the tab mid season and the game resumes where you stopped. Made a mistake? Tap Save points on the hub to keep up to three named copies of your career, then restore one to go back to that week; a season you go back into won't post a leaderboard score again. A save kept aside, before a save point restore say, is offered back only in the slot it came from (a few older ones show in every slot).",
       },
       {
         q: "Are the players real?",
