@@ -1,0 +1,5 @@
+The routes, base (e86f0fe2) against head (gzipped JS):
+  /club-manager                      base 625.5K (640555 B)  head 626.6K (641664 B)  +1109 B (+1.08K)
+  /soccer-career                     base 834.2K (854267 B)  head 834.3K (854373 B)  +106 B (+0.10K)
+  /                                  base 243.2K (249080 B)  head 243.4K (249198 B)  +118 B (+0.12K)
+weightBJ: done
