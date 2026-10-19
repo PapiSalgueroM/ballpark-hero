@@ -18,6 +18,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
         heading: "Pick an era, a nation and a real club",
         items: [
           "Pick your era (today, 2020-21, 2015-16, 2010-11 or 2005-06), then your nation, your league, and your club. Every tile quotes what that board will actually demand.",
+          "You pick how hard Club Manager plays when you start, from Very Easy through Easy, Medium and Hard to Impossible, and you can change it in Options any time between matches. A change counts from your next match and your next cheque (the market's prices to you change straight away), and nothing you have already played changes. Easy and Very Easy give you a kinder board, more money, cheaper signings and weaker opponents, but a career that is ever on either posts no leaderboard scores from then on.",
         ],
         subsections: [
           {
@@ -194,7 +195,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
       },
       {
         q: "Does my career save?",
-        a: "Yes, on this device, and you can keep three managers going at once, each in its own slot. Close the tab mid season and the game resumes where you stopped.",
+        a: "Yes, on this device, and you can keep three managers going at once, each in its own slot. Close the tab mid season and the game resumes where you stopped. Made a mistake? Tap Save points on the hub to keep up to three named copies of your career, then restore one to go back to that week; a season you go back into won't post a leaderboard score again.",
       },
       {
         q: "Are the players real?",
