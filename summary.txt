@@ -1,0 +1,6 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-nolevel exit=0 46s | playCmDifficulty control nolevel: all 8 guarded checks fired (mutations landed: {"change":5})
+sweepWeight exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+walk exit=0 117s |   PASS  no page errors
+rvwalk exit=0 191s | rvwalk: 49 ok, 0 BAD
+playCmNoSack exit=0 261s |   PASS  no page errors

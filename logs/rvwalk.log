@@ -1,0 +1,114 @@
+
+== 390 by 844, reduced motion off
+  SEE: dugout tiles Very Easy 94x44@46,-573; Easy 94x44@148,-573; Medium 94x44@250,-573; Hard 94x44@46,-521; Impossible 94x44@148,-521
+  ok: 390-off: five Dugout tiles, none cut off, off screen or overlapping
+  SEE: dugout Very Easy line: "A patient board, lots of money, cheap signings and weaker opponents. This career posts no leaderboard scores, even if you move it up later in Options."
+  ok: 390-off: the Dugout step has no sideways scroll
+  ok: 390-off: a Very Easy career saves veryeasy with the mark of season 1 ({"level":"veryeasy","easySince":1,"noSack":null,"played":0,"week":0,"season":1,"sacked":false,"live":false,"budget":103.5,"wageCap":860})
+  SEE: hub pill "Very Easy"
+  SEE: options row (Very Easy): veryeasy scores off "🎚️ Difficulty Very Easy Very Easy Easy Medium Hard Impossible A patient board, lots of money, cheap signings and weaker opponents. A change counts from your next match and the money from your next cheque or new job, the market's prices to you change straight "
+  ok: 390-off: five Options tiles, none cut off or overlapping (Very Easy 107x44, Easy 107x44, Medium 107x44, Hard 107x44, Impossible 107x44)
+  ok: 390-off: Options has no sideways scroll
+  ok: 390-off: one tap on Medium switches, keeps the mark, the budget and the wage ceiling ({"level":null,"easySince":1,"noSack":null,"played":0,"week":0,"season":1,"sacked":false,"live":false,"budget":103.5,"wageCap":860})
+  SEE: after Play Live the save has live=true, week 0
+  SEE: hub after the reload: the live button reads "Resume match", meters true
+  SEE: tap hard failed locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[data
+  SEE: options with a paused match: row normal -> normal; saved level null -> null, live true; text "🎚️ Difficulty Medium Very Easy Easy Medium Hard Impossible The game as it has always played. Your match is paused at halftime, so finish it first, then switch. A change counts from your next match an"
+  ok: 390-off: with a match paused at halftime the Options tiles either work or say why they do not (tap on Hard: saved null)
+  SEE: sacked screen: SACKED shown true, level controls 6, options buttons 0, buttons: Back | Track stats | ⏭️ Wait a week for the phone to ring | Share result | Copy challenge | 📋 Copy Score Card | 🖼️ Save Image | Start New Career | 👋 Retire from management | Very Easy | Easy | Medium | Hard | Impossible
+  ok: 390-off: a sacked manager (out of work) can reach a way to change the level
+  SEE: the help, opened on the sacked screen, says: "you can change it any time between matches in Options, or on the sacked screen while you are out of work"
+  ok: 390-off: an old Legend save wears the Impossible pill ("Impossible")
+  ok: 390-off: Options on the old Legend save reads Impossible with scores on (legend, on)
+  ok: 390-off: one tap on Easy asks first (armed yes, saved legend)
+  ok: 390-off: the second tap switches to Easy, marks season 1 and turns scores off ({"level":"easy","easySince":1,"noSack":null,"played":0,"week":0,"season":1,"sacked":false,"live":false,"budget":103.5,"wageCap":860})
+  SEE: options after going easy: "🎚️ Difficulty Easy Very Easy Easy Medium Hard Impossible A kinder board, more money and a bit of help in every match. A change counts from your next match and the money from your next cheque or new job, the market's prices to you change straight away, and not"
+  SEE: No sacking career, Options level row: scores off "🎚️ Difficulty Medium Very Easy Easy Medium Hard Impossible The game as it has always played. A change counts from your next match and the money from your next cheque or new job, the market's prices to you change straight away, and nothing you have already played changes. No sacking is on, so this c"
+
+== 390 by 844, reduced motion reduce
+  SEE: dugout tiles Very Easy 94x44@46,2047; Easy 94x44@148,2047; Medium 94x44@250,2047; Hard 94x44@46,2099; Impossible 94x44@148,2099
+  ok: 390-reduce: five Dugout tiles, none cut off, off screen or overlapping
+  SEE: dugout Very Easy line: "A patient board, lots of money, cheap signings and weaker opponents. This career posts no leaderboard scores, even if you move it up later in Options."
+  ok: 390-reduce: the Dugout step has no sideways scroll
+  ok: 390-reduce: a Very Easy career saves veryeasy with the mark of season 1 ({"level":"veryeasy","easySince":1,"noSack":null,"played":0,"week":0,"season":1,"sacked":false,"live":false,"budget":103.5,"wageCap":860})
+  SEE: hub pill "Very Easy"
+  SEE: options row (Very Easy): veryeasy scores off "🎚️ Difficulty Very Easy Very Easy Easy Medium Hard Impossible A patient board, lots of money, cheap signings and weaker opponents. A change counts from your next match and the money from your next cheque or new job, the market's prices to you change straight "
+  ok: 390-reduce: five Options tiles, none cut off or overlapping (Very Easy 107x44, Easy 107x44, Medium 107x44, Hard 107x44, Impossible 107x44)
+  ok: 390-reduce: Options has no sideways scroll
+  ok: 390-reduce: one tap on Medium switches, keeps the mark, the budget and the wage ceiling ({"level":null,"easySince":1,"noSack":null,"played":0,"week":0,"season":1,"sacked":false,"live":false,"budget":103.5,"wageCap":860})
+  SEE: after Play Live the save has live=true, week 0
+  SEE: hub after the reload: the live button reads "Resume match", meters true
+  SEE: tap hard failed locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[data
+  SEE: options with a paused match: row normal -> normal; saved level null -> null, live true; text "🎚️ Difficulty Medium Very Easy Easy Medium Hard Impossible The game as it has always played. Your match is paused at halftime, so finish it first, then switch. A change counts from your next match an"
+  ok: 390-reduce: with a match paused at halftime the Options tiles either work or say why they do not (tap on Hard: saved null)
+  SEE: sacked screen: SACKED shown true, level controls 6, options buttons 0, buttons: Back | Track stats | ⏭️ Wait a week for the phone to ring | Share result | Copy challenge | 📋 Copy Score Card | 🖼️ Save Image | Start New Career | 👋 Retire from management | Very Easy | Easy | Medium | Hard | Impossible
+  ok: 390-reduce: a sacked manager (out of work) can reach a way to change the level
+  SEE: the help, opened on the sacked screen, says: "you can change it any time between matches in Options, or on the sacked screen while you are out of work"
+  ok: 390-reduce: an old Legend save wears the Impossible pill ("Impossible")
+  ok: 390-reduce: Options on the old Legend save reads Impossible with scores on (legend, on)
+  ok: 390-reduce: one tap on Easy asks first (armed yes, saved legend)
+  ok: 390-reduce: the second tap switches to Easy, marks season 1 and turns scores off ({"level":"easy","easySince":1,"noSack":null,"played":0,"week":0,"season":1,"sacked":false,"live":false,"budget":103.5,"wageCap":860})
+  SEE: options after going easy: "🎚️ Difficulty Easy Very Easy Easy Medium Hard Impossible A kinder board, more money and a bit of help in every match. A change counts from your next match and the money from your next cheque or new job, the market's prices to you change straight away, and not"
+  SEE: No sacking career, Options level row: scores off "🎚️ Difficulty Medium Very Easy Easy Medium Hard Impossible The game as it has always played. A change counts from your next match and the money from your next cheque or new job, the market's prices to you change straight away, and nothing you have already played changes. No sacking is on, so this c"
+
+== 1280 by 900, reduced motion off
+  SEE: dugout tiles Very Easy 114x44@338,1711; Easy 114x44@460,1711; Medium 114x44@583,1711; Hard 114x44@705,1711; Impossible 114x44@828,1711
+  ok: 1280-off: five Dugout tiles, none cut off, off screen or overlapping
+  SEE: dugout Very Easy line: "A patient board, lots of money, cheap signings and weaker opponents. This career posts no leaderboard scores, even if you move it up later in Options."
+  ok: 1280-off: the Dugout step has no sideways scroll
+  ok: 1280-off: a Very Easy career saves veryeasy with the mark of season 1 ({"level":"veryeasy","easySince":1,"noSack":null,"played":0,"week":0,"season":1,"sacked":false,"live":false,"budget":103.5,"wageCap":860})
+  SEE: hub pill "Very Easy"
+  SEE: options row (Very Easy): veryeasy scores off "🎚️ Difficulty Very Easy Very Easy Easy Medium Hard Impossible A patient board, lots of money, cheap signings and weaker opponents. A change counts from your next match and the money from your next cheque or new job, the market's prices to you change straight "
+  ok: 1280-off: five Options tiles, none cut off or overlapping (Very Easy 161x44, Easy 161x44, Medium 161x44, Hard 161x44, Impossible 161x44)
+  ok: 1280-off: Options has no sideways scroll
+  ok: 1280-off: one tap on Medium switches, keeps the mark, the budget and the wage ceiling ({"level":null,"easySince":1,"noSack":null,"played":0,"week":0,"season":1,"sacked":false,"live":false,"budget":103.5,"wageCap":860})
+  SEE: after Play Live the save has live=true, week 0
+  SEE: hub after the reload: the live button reads "Resume match", meters true
+  SEE: tap hard failed locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[data
+  SEE: options with a paused match: row normal -> normal; saved level null -> null, live true; text "🎚️ Difficulty Medium Very Easy Easy Medium Hard Impossible The game as it has always played. Your match is paused at halftime, so finish it first, then switch. A change counts from your next match an"
+  ok: 1280-off: with a match paused at halftime the Options tiles either work or say why they do not (tap on Hard: saved null)
+  SEE: sacked screen: SACKED shown true, level controls 6, options buttons 0, buttons: Back | Sign up to track your stats | ⏭️ Wait a week for the phone to ring | Share result | Copy challenge | 📋 Copy Score Card | 🖼️ Save Image | Start New Career | 👋 Retire from management | Very Easy | Easy | Medium | Hard | Impossible
+  ok: 1280-off: a sacked manager (out of work) can reach a way to change the level
+  SEE: the help, opened on the sacked screen, says: "you can change it any time between matches in Options, or on the sacked screen while you are out of work"
+  ok: 1280-off: an old Legend save wears the Impossible pill ("Impossible")
+  ok: 1280-off: Options on the old Legend save reads Impossible with scores on (legend, on)
+  ok: 1280-off: one tap on Easy asks first (armed yes, saved legend)
+  ok: 1280-off: the second tap switches to Easy, marks season 1 and turns scores off ({"level":"easy","easySince":1,"noSack":null,"played":0,"week":0,"season":1,"sacked":false,"live":false,"budget":103.5,"wageCap":860})
+  SEE: options after going easy: "🎚️ Difficulty Easy Very Easy Easy Medium Hard Impossible A kinder board, more money and a bit of help in every match. A change counts from your next match and the money from your next cheque or new job, the market's prices to you change straight away, and not"
+  SEE: No sacking career, Options level row: scores off "🎚️ Difficulty Medium Very Easy Easy Medium Hard Impossible The game as it has always played. A change counts from your next match and the money from your next cheque or new job, the market's prices to you change straight away, and nothing you have already played changes. No sacking is on, so this c"
+
+== 1280 by 900, reduced motion reduce
+  SEE: dugout tiles Very Easy 114x44@338,1711; Easy 114x44@460,1711; Medium 114x44@583,1711; Hard 114x44@705,1711; Impossible 114x44@828,1711
+  ok: 1280-reduce: five Dugout tiles, none cut off, off screen or overlapping
+  SEE: dugout Very Easy line: "A patient board, lots of money, cheap signings and weaker opponents. This career posts no leaderboard scores, even if you move it up later in Options."
+  ok: 1280-reduce: the Dugout step has no sideways scroll
+  ok: 1280-reduce: a Very Easy career saves veryeasy with the mark of season 1 ({"level":"veryeasy","easySince":1,"noSack":null,"played":0,"week":0,"season":1,"sacked":false,"live":false,"budget":103.5,"wageCap":860})
+  SEE: hub pill "Very Easy"
+  SEE: options row (Very Easy): veryeasy scores off "🎚️ Difficulty Very Easy Very Easy Easy Medium Hard Impossible A patient board, lots of money, cheap signings and weaker opponents. A change counts from your next match and the money from your next cheque or new job, the market's prices to you change straight "
+  ok: 1280-reduce: five Options tiles, none cut off or overlapping (Very Easy 161x44, Easy 161x44, Medium 161x44, Hard 161x44, Impossible 161x44)
+  ok: 1280-reduce: Options has no sideways scroll
+  ok: 1280-reduce: one tap on Medium switches, keeps the mark, the budget and the wage ceiling ({"level":null,"easySince":1,"noSack":null,"played":0,"week":0,"season":1,"sacked":false,"live":false,"budget":103.5,"wageCap":860})
+  SEE: after Play Live the save has live=true, week 0
+  SEE: hub after the reload: the live button reads "Resume match", meters true
+  SEE: tap hard failed locator.click: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator('[data
+  SEE: options with a paused match: row normal -> normal; saved level null -> null, live true; text "🎚️ Difficulty Medium Very Easy Easy Medium Hard Impossible The game as it has always played. Your match is paused at halftime, so finish it first, then switch. A change counts from your next match an"
+  ok: 1280-reduce: with a match paused at halftime the Options tiles either work or say why they do not (tap on Hard: saved null)
+  SEE: sacked screen: SACKED shown true, level controls 6, options buttons 0, buttons: Back | Sign up to track your stats | ⏭️ Wait a week for the phone to ring | Share result | Copy challenge | 📋 Copy Score Card | 🖼️ Save Image | Start New Career | 👋 Retire from management | Very Easy | Easy | Medium | Hard | Impossible
+  ok: 1280-reduce: a sacked manager (out of work) can reach a way to change the level
+  SEE: the help, opened on the sacked screen, says: "you can change it any time between matches in Options, or on the sacked screen while you are out of work"
+  ok: 1280-reduce: an old Legend save wears the Impossible pill ("Impossible")
+  ok: 1280-reduce: Options on the old Legend save reads Impossible with scores on (legend, on)
+  ok: 1280-reduce: one tap on Easy asks first (armed yes, saved legend)
+  ok: 1280-reduce: the second tap switches to Easy, marks season 1 and turns scores off ({"level":"easy","easySince":1,"noSack":null,"played":0,"week":0,"season":1,"sacked":false,"live":false,"budget":103.5,"wageCap":860})
+  SEE: options after going easy: "🎚️ Difficulty Easy Very Easy Easy Medium Hard Impossible A kinder board, more money and a bit of help in every match. A change counts from your next match and the money from your next cheque or new job, the market's prices to you change straight away, and not"
+  SEE: No sacking career, Options level row: scores off "🎚️ Difficulty Medium Very Easy Easy Medium Hard Impossible The game as it has always played. A change counts from your next match and the money from your next cheque or new job, the market's prices to you change straight away, and nothing you have already played changes. No sacking is on, so this c"
+  ok: no page errors
+rvwalk: 49 ok, 0 BAD
