@@ -1,0 +1,15 @@
+
+== walk2 390r
+  ok: a first match
+  ok: the screen opens
+  ok: one point
+  storage filled, 3431 characters free; point sizes in the index: [[15740,77771]]
+  ok: the screen opens with the storage full
+  ok: a point with no room is refused ("Your browser is out of room, so nothing was saved. Your career and your other save points are untouched.")
+  ok: the career, the index and the point keys are as they were (1 point keys)
+  ok: a restore with no room to stage is refused ("Your browser is out of room, so nothing was saved. Your career and your other save points are untouched.")
+  ok: the season mark was taken back and the career is as it was (blocked [])
+  ok: nothing staged
+  ok: deleting the career took its points (none left)
+  ok: a new career in the slot starts with no points (💾 SAVE POINTS None yet Go back after a mistake)
+walk2Run1513: OK
