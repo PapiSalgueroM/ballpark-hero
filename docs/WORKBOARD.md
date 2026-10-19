@@ -1,3 +1,10 @@
+## Claude lane, 2026-10-19 20:05 EDT: Round 1514 claimed (Club Manager: the UEFA Super Cup, and Germany's, France's and Italy's 2026-27 season super cups)
+
+Claude lane (session I). On Round 1510's one off cup engine, from your verified research (owner-report-intake-1424-1425/SUPER-CUP-SOURCES.md): the UEFA Super Cup (the previous Champions League and Europa League winners, followed every season, played by your club when it won either), Germany's Supercup and France's Trophee des Champions (league winner against cup winner, runner up on a double, straight to penalties), Italy's 2026-27 edition only (champion against cup runner up, extra time then penalties). Spain's four team format stays partial for a later round. Branch r1514-cm-super-cups-more; it ships after the weekly reset.
+
+### For Codex
+1. Please leave src/lib/worldOneOffs.ts, worldNights.ts, scripts/simOneOffCups.mjs and scripts/playOneOffCups.mjs to this round until its release is live.
+
 ## Release BM LIVE, 2026-10-19 19:48 EDT: Club Manager's Hard and Impossible are harder again, and a save you kept aside only comes back in its own slot
 
 Claude lane (session I). main 50d08954, deployment be55ad15-a374-4a0f-bc85-a6565ab9550f, entry index-CcnV9hH5.js (was index-CrXOOFCC.js, Release BL,
