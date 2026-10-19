@@ -1,0 +1,11 @@
+vitest-world exit=0 3s |    Duration  2.57s (transform 1.19s, setup 52ms, collect 1.42s, tests 533ms, environment 224ms, prepare 121ms)
+simWorldUcl exit=0 1197s | simWorldUcl: green, 498818 checks, 0 failures
+golden-check-head exit=0 1s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+golden-base exit=0 0s | GOLDEN-BASE-SAME
+dry exit=0 0s | fxcopy: 1
+mut-tieleg1 exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > is deterministic 
+mut-tieagg exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > is deterministic 
+mut-finalone exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > a binding that makes t
+mut-finalnights exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > a binding that makes t
+mut-fxcopy exit=0 3s | fxcopy FIRED as it must: the one writing check caught the engine copy
+clean-after exit=0 3s |    Duration  2.61s (transform 1.22s, setup 52ms, collect 1.46s, tests 539ms, environment 224ms, prepare 106ms)
