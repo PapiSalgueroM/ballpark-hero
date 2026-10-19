@@ -1,0 +1,27 @@
+  AdBanner.js                                      base 1081  head 1082  +1
+  ClubManager.js                                   base 27416  head 28324  +908
+  FlagImg.js                                       base 2977  head 2978  +1
+  GameHelp-DMd-E35S.js                             base 0  head 788  +788
+  GameHelp.js                                      base 789  head 0  -789
+  GameNavbar.js                                    base 3795  head 3798  +3
+  GameReportContext-CdVerM--.js                    base 0  head 3025  +3025
+  GameReportContext.js                             base 3024  head 0  -3024
+  GameSeoContent-elqG0d-9.js                       base 2435  head 0  -2435
+  GameSeoContent.js                                base 0  head 2436  +2436
+  GameShell-BAT_UU-4.js                            base 0  head 744  +744
+  GameShell.js                                     base 743  head 0  -743
+  HowToPlayPopover.js                              base 772  head 773  +1
+  arrow-left-Btv95-Kb.js                           base 0  head 265  +265
+  arrow-left.js                                    base 264  head 0  -264
+  circle-help-zj-g6QA4.js                          base 0  head 303  +303
+  circle-help.js                                   base 303  head 0  -303
+  clubManager.js                                   base 288583  head 288590  +7
+  flag.js                                          base 304  head 305  +1
+  index-DFhLeZI-.js                                base 242737  head 0  -242737
+  index.js                                         base 0  head 242840  +242840
+  medal.js                                         base 387  head 389  +2
+  star.js                                          base 403  head 404  +1
+  tabs.js                                          base 1347  head 1348  +1
+  useArrivalTop.js                                 base 416  head 415  -1
+  useRevealScroll.js                               base 814  head 813  -1
+weightParts1513: /club-manager 50 scripts, base 640682 B, head 641712 B, +1030 B
