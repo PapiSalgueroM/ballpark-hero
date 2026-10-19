@@ -1,0 +1,10 @@
+# Release BL triage e-a: the US board fixture (simUsBoardParity red on the head and at m4 and m5: the create screen
+# markup differs in all four sports, 20 steps). Pinpoint the merge (m2 ab1fe605 before the appearance packets, m3
+# 75340a83 PR339), then record twice from the branch head (HEAD^ of the request commit), byte compare, and diff the
+# recording against the committed fixture with Release BK's usBoardDiff.mjs (STOP on anything but markup hashes).
+# Send with: wt.sh usBoardDiff.mjs
+#!serial
+parity-m2: bash .rc/x/wt.sh ab1fe605 pm2 bash -c 'NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsBoardParity.mjs 2>&1 | tail -3 | cut -c1-200'
+parity-m3: bash .rc/x/wt.sh 75340a83 pm3 bash -c 'NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsBoardParity.mjs 2>&1 | tail -3 | cut -c1-200'
+record: for i in 1 2; do bash .rc/x/wt.sh HEAD^ rec$i bash -c "git log -1 --format='recording at %H' && node scripts/recordUsBoardFixture.mjs $RC_OUT/usBoardFixture-$i.json > /tmp/rec$i.log 2>&1; e=\$?; tail -2 /tmp/rec$i.log | cut -c1-200; exit \$e" || exit 1; done; cmp $RC_OUT/usBoardFixture-1.json $RC_OUT/usBoardFixture-2.json && echo "byte equal" && sha256sum $RC_OUT/usBoardFixture-1.json && wc -c < $RC_OUT/usBoardFixture-1.json
+diff: node .rc/x/usBoardDiff.mjs scripts/data/usBoardFixture.json $RC_OUT/usBoardFixture-1.json 2>&1 | tail -30 | cut -c1-240; exit ${PIPESTATUS[0]}
