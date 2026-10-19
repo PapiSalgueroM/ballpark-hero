@@ -1,0 +1,4 @@
+gh-before exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+gh-refresh exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simCmLeagueRules exit=0 47s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
