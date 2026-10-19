@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+walk: node scripts/playCmDifficulty.mjs
+walk-nolevel: WIDTHS=390 PLAY_DIFF_CONTROL=nolevel node scripts/playCmDifficulty.mjs
+rvwalk: node .rc/x/rvwalk.mjs
+sweepWeight: node scripts/sweepWeight.mjs
+playCmNoSack: node scripts/playCmNoSack.mjs
