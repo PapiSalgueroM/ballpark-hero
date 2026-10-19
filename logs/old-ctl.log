@@ -1,0 +1,15 @@
+Preparing worktree (detached HEAD e86f0fe20)
+HEAD is now at e86f0fe20 Round 1512: simCmDifficulty for five levels (the table order, old Hard and Legend saves open byte equal, the easy levers, the easy bands and a per block fold, section 8 for the change between matches) and Very Easy's cheque 1.5 and mark 0.8, with the help's example to match
+A: 567 cases over 21 games, 567 staged by the base, 252 differ
+   /soccer-career plain 10: base {"path":"/soccer-career","ok":true,"kept":true} head {"path":"/soccer-career","ok":true,"kept":true} (stores differ)
+   /soccer-career plain 2000: base {"path":"/soccer-career","ok":true,"kept":true} head {"path":"/soccer-career","ok":true,"kept":true} (stores differ)
+   /soccer-career plain 60000: base {"path":"/soccer-career","ok":true,"kept":true} head {"path":"/soccer-career","ok":true,"kept":true} (stores differ)
+   /soccer-career nosave 10: base {"path":"/soccer-career","ok":true,"kept":false} head {"path":"/soccer-career","ok":true,"kept":false} (stores differ)
+   /soccer-career nosave 2000: base {"path":"/soccer-career","ok":true,"kept":false} head {"path":"/soccer-career","ok":true,"kept":false} (stores differ)
+   /soccer-career nosave 60000: base {"path":"/soccer-career","ok":true,"kept":false} head {"path":"/soccer-career","ok":true,"kept":false} (stores differ)
+   /soccer-career cap 10: base {"path":"/soccer-career","ok":true,"kept":true,"dropped":1} head {"path":"/soccer-career","ok":true,"kept":true,"dropped":1} (stores differ)
+   /soccer-career cap 2000: base {"path":"/soccer-career","ok":true,"kept":true,"dropped":1} head {"path":"/soccer-career","ok":true,"kept":true,"dropped":1} (stores differ)
+B: 3 slots x 20 seasons, 0 refused or indexed, 0 writes, store byte equal
+D: base build meets a save point journal: outcome null; left: dukb-save-pending-copy
+D: head build meets a cut save point journal: outcome null; left: dukb-save-pending-copy (150024 chars)
+oldSave1513: control differ FIRED (252 cases differ)

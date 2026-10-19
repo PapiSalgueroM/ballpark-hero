@@ -1,0 +1,3 @@
+old-ctl exit=1 1s | oldSave1513: control differ FIRED (252 cases differ)
+old-live exit=0 1s | oldSave1513: OK, 567 put backs equal and a no point store untouched
+old-base exit=0 1s | oldSave1513: OK, 567 put backs equal and a no point store untouched

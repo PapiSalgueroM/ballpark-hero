@@ -1,0 +1,3 @@
+old-base: git worktree add /tmp/base1 e86f0fe2 && node .rc/x/oldSave1513.mjs /tmp/base1
+old-live: git worktree add /tmp/base3 491bd08e && node .rc/x/oldSave1513.mjs /tmp/base3
+old-ctl: git worktree add /tmp/base2 e86f0fe2 && CONTROL=differ node .rc/x/oldSave1513.mjs /tmp/base2
