@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+# Release BM proof, part w, on the merged head: the save points walk with controls nomark and noevent, playSaveKeeper with the release gate's base (a build of fb8d6811), sweepWeight on the head and on origin/main 580b27f0 with the index probe (the database host blocked by the walks and the runner)
+walk: node scripts/playCmSavePoints.mjs
+walk-nomark: WIDTHS=390 POINTS_CONTROL=nomark node scripts/playCmSavePoints.mjs
+walk-noevent: WIDTHS=390 POINTS_CONTROL=noevent node scripts/playCmSavePoints.mjs
+keeper: git worktree add -q --detach /tmp/kbase fb8d6811 && ln -s "$PWD/node_modules" /tmp/kbase/node_modules && (cd /tmp/kbase && node_modules/.bin/vite build --outDir /tmp/kbase-dist > /tmp/kbase-build.log 2>&1; tail -1 /tmp/kbase-build.log) && KEEPER_BASE_DIST=/tmp/kbase-dist node scripts/playSaveKeeper.mjs
+weight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
+weight-base: R=$PWD && git worktree add -q --detach /tmp/wbase 580b27f0 && cd /tmp/wbase && ln -s $R/node_modules node_modules && npm run build > /tmp/wbase-build.log 2>&1 && (node $R/scripts/lib/hostLikeServer.mjs /tmp/wbase/dist 4174 > /tmp/wbase-serve.log 2>&1 &) && sleep 4 && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 SWEEP_OFFLINE=1 ENGINES=chromium node $R/scripts/sweepWeight.mjs; s=$?; node $R/.rc/x/weigh1515.mjs /tmp/wbase/dist $R/dist; exit $s
