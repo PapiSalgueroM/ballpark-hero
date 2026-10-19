@@ -1,0 +1,5 @@
+vitest exit=0 10s |    Duration  8.78s (transform 5.34s, setup 488ms, collect 11.50s, tests 4.52s, environment 2.85s, prepare 1.04s)
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 26s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 83s | 
