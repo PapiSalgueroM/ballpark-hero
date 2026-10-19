@@ -1,0 +1,13 @@
+#!serial
+# Round 1515 review (run lens) on 718aa65f: mutations of the slot mark and the retune, each applied by .rc/x/mut1515b.mjs and restored in the same line
+v0: node_modules/.bin/vitest run src/lib/brokenSaveRecovery.test.ts src/test/routeErrorRecovery.test.tsx src/test/saveKeeper.test.ts --testTimeout=300000 --hookTimeout=120000
+m1: node .rc/x/mut1515b.mjs M1 && node_modules/.bin/vitest run src/lib/brokenSaveRecovery.test.ts src/test/routeErrorRecovery.test.tsx src/test/saveKeeper.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m1b: node .rc/x/mut1515b.mjs M1b && node_modules/.bin/vitest run src/lib/brokenSaveRecovery.test.ts src/test/routeErrorRecovery.test.tsx src/test/saveKeeper.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m2: node .rc/x/mut1515b.mjs M2 && node_modules/.bin/vitest run src/lib/brokenSaveRecovery.test.ts src/test/routeErrorRecovery.test.tsx src/test/saveKeeper.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m3: node .rc/x/mut1515b.mjs M3 && node_modules/.bin/vitest run src/lib/brokenSaveRecovery.test.ts src/test/routeErrorRecovery.test.tsx src/test/saveKeeper.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m4: node .rc/x/mut1515b.mjs M4 && node_modules/.bin/vitest run src/lib/brokenSaveRecovery.test.ts src/test/routeErrorRecovery.test.tsx src/test/saveKeeper.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m5: node .rc/x/mut1515b.mjs M5 && node_modules/.bin/vitest run src/lib/brokenSaveRecovery.test.ts src/test/routeErrorRecovery.test.tsx src/test/saveKeeper.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m9: node .rc/x/mut1515b.mjs M9 && node_modules/.bin/vitest run src/lib/brokenSaveRecovery.test.ts src/test/routeErrorRecovery.test.tsx src/test/saveKeeper.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m11: node .rc/x/mut1515b.mjs M11 && node_modules/.bin/vitest run src/lib/brokenSaveRecovery.test.ts src/test/routeErrorRecovery.test.tsx src/test/saveKeeper.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m6: node .rc/x/mut1515b.mjs M6 && SECTION=1,3,7,8 node scripts/simCmDifficulty.mjs; s=$?; git checkout -- src scripts; exit $s
+m7: node .rc/x/mut1515b.mjs M7 && SECTION=1,3,7,8 node scripts/simCmDifficulty.mjs; s=$?; git checkout -- src scripts; exit $s
