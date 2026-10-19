@@ -1,0 +1,5 @@
+wm-gate: B=$(bash .rc/x/minus1344.sh) && export CM_WORLD_MOVES_BASE=$B && echo "base $B" && CM_WORLD_MOVES_SECTIONS=0,5,6,8 node scripts/simCmWorldMoves.mjs
+wm-main: R=$PWD && git worktree add -q /tmp/m 28cfa45e && cd /tmp/m && ln -s "$R/node_modules" node_modules && CM_WORLD_MOVES_SECTIONS=0,5,6,8 node scripts/simCmWorldMoves.mjs
+euro-3: WORLD_EURO_ONLY=3 WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+euro-6: WORLD_EURO_ONLY=6 WORLD_EURO_BASE=77556430 node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+euro-57: WORLD_EURO_ONLY=5,7 node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
