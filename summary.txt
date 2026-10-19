@@ -1,0 +1,3 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk2 exit=0 79s | walk1515: OK at 390:reduce 1280:no-preference
+walk-base exit=1 158s | walk1515: FAIL, 12 check(s) and 0 page error(s)
