@@ -1,0 +1,26 @@
+# Release BJ, Round 1503 (the Champions League you can follow, in it or not) holding Round 1502 (the watched
+# competition's engine), merged in Round BJG as m3 65126da0 (first parent 20fa77a6). The round time proof
+# (proofWorldUclFleet) takes the tree WITHOUT the merge as its base (treeWithoutMerge 65126da0 20fa77a6, which forms on
+# the final tree keeping the head's What's New). Proven per merge on runners bjg-m3 and bjg-m3f (--base 20fa77a6): every
+# fleet green (participants 30 journeys each mode, watchers 65 each mode, old saves 325 loaded, 0 against the rule),
+# simWorldUcl sections 0,1,3,4,5,6,7 green, its seven controls fired, the dailies' world controls fired.
+# Since Round BJG the continuity kit's bridge also takes worldComps off the loaded state (ec2015e5); the harness stays red
+# on main in two groups (CARRIED, owed to its owner), so its check is contCmpBJ.sh: the log equals the tree without m3.
+# simCmUnseededWorld needs the kit's base (x/baseDeck.sh): with its default pinned base it reads 112 failures on main.
+# cont-nobridge is the negative control of that bridge (runner bjg-ctl: 240 lines differ, worldComps among them).
+# Send with x/contCmpBJ.sh x/contNorm1508.mjs x/baseDeck.sh. #!serial because several lines form bases and worktrees.
+#!serial
+fleet-pc: B=$(node scripts/lib/treeWithoutMerge.mjs 65126da0 20fa77a6) || exit 2; node scripts/proofWorldUclFleet.mjs --base $B --fleet participants --coach coach --strip worldComps --eval --holder-off --old-saves
+fleet-pn: B=$(node scripts/lib/treeWithoutMerge.mjs 65126da0 20fa77a6) || exit 2; node scripts/proofWorldUclFleet.mjs --base $B --fleet participants --coach nocoach --strip worldComps --eval --holder-off --old-saves
+fleet-wc: B=$(node scripts/lib/treeWithoutMerge.mjs 65126da0 20fa77a6) || exit 2; node scripts/proofWorldUclFleet.mjs --base $B --fleet watchers --coach coach --strip worldComps --eval --holder-off --old-saves
+fleet-wn: B=$(node scripts/lib/treeWithoutMerge.mjs 65126da0 20fa77a6) || exit 2; node scripts/proofWorldUclFleet.mjs --base $B --fleet watchers --coach nocoach --strip worldComps --eval --holder-off --old-saves
+worlducl: node scripts/simWorldUcl.mjs
+wu-ctl-a: ok=0; r=""; for k in dropnight field32 eraformat meinfill meindirect nopens agall locale swaphome edgeswap standweak noholdertop nocustomexit memokey titles markearly mdearly carryentrant nofall; do WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=$k node scripts/simWorldUcl.mjs > /tmp/wu-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/wu-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+wu-ctl-b: ok=0; r=""; for k in stream participant form; do WORLD_UCL_SEEDS=1 WORLD_UCL_CONTROL=$k node scripts/simWorldUcl.mjs > /tmp/wu-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/wu-$k.log | cut -c1-200)"; done; for k in ahead live noseen marks keep noholder; do WORLD_UCL_SEEDS=1,2,3 WORLD_UCL_CONTROL=$k node scripts/simWorldUcl.mjs > /tmp/wu-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/wu-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+dd-world: ok=0; r=""; for k in world worlddeadline; do DAILY_DEALS_CONTROL=$k node scripts/simDailyDeals.mjs > /tmp/dd-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/dd-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+cont-m3: bash .rc/x/contCmpBJ.sh 65126da0 20fa77a6 m3
+unseeded: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && node scripts/simCmUnseededWorld.mjs
+un-ctl: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && ok=0; r=""; for k in guard early never norecord noinverse; do CM_UNSEEDED_CONTROL=$k node scripts/simCmUnseededWorld.mjs > /tmp/un-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/un-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+vitest-1503: node_modules/.bin/vitest run src/lib/worldCompetition.test.ts src/lib/clubManagerWorldView.test.ts src/test/clubManagerBracketMoment.test.tsx --testTimeout=300000 --hookTimeout=120000
+ucl-family: ok=0; for h in simUclField simSeasonLaw simExtraTime simWorldEditor simUclFormatHistory simUclSeasonOne; do node scripts/$h.mjs > /tmp/$h.log 2>&1; e=$?; [ $e = 0 ] || ok=1; echo "$h exit $e: $(tail -1 /tmp/$h.log | cut -c1-160)"; done; exit $ok
+cont-nobridge: git show ec2015e5^:scripts/simManagerWorldContinuity.mjs > scripts/simManagerWorldContinuity.mjs && bash .rc/x/contCmpBJ.sh 65126da0 20fa77a6 m3; s=$?; git checkout -- scripts; [ $s = 1 ] && echo "without the loaded bridge contCmp m3 is RED as it must" && exit 0; echo "contCmp m3 without the bridge exited $s, not 1"; exit 1
