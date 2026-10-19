@@ -49,15 +49,18 @@
  * nosum (2), noaside (3), evict (4), orphan (5), blocked (6), nocredit (6),
  * unguarded (7), noclear (7), pointless (8).
  *
- * MEASURED (section 1, on GitHub runners, Round 1513 build r1513-f and every
- * run since; the careers are seeded, so the numbers repeat): a point is 21.0
- * to 25.9 percent of its career's characters. Everton 101,393 / 21,303 at
- * season 1, 150,415 / 37,082 at season 8, 152,746 / 39,536 at season 15;
- * Lincoln City 101,154 / 21,370, 150,061 / 35,906, 154,354 / 38,585. The
- * bound is half, so the largest point measured sits at about half the bound.
- * A restore costs more than a point (section 3 prints it): the staged copy
- * and the kept aside career are plain text, a whole career each (about 153K
- * characters at season 15), and the game keeps three kept aside careers.
+ * MEASURED (section 1, GitHub runners, runs r1513-f and r1513-fx3; the
+ * careers are seeded and their lengths repeat exactly, the points move by a
+ * few dozen characters between builds): a point is 21.0 to 25.9 percent of
+ * its career's characters. Everton 101,393 / 21,303 at season 1, 150,415 /
+ * 37,010 to 37,082 at season 8, 152,746 / 39,528 to 39,536 at season 15;
+ * Lincoln City 101,154 / 21,339 to 21,370, 150,061 / 35,876 to 35,906,
+ * 154,354 / 38,537 to 38,585. The bound is half, so the largest point
+ * measured sits at about half the bound.
+ * A restore costs more than a point (section 3 prints it; r1513-fx3: a staged
+ * plain copy of 99,990 characters until the load, then a kept aside career of
+ * 104,473, for a point of 21,078 at season 1). Both are whole plain careers
+ * (about 153K characters at season 15), and the game keeps three kept aside.
  */
 import os from 'node:os';
 import fs from 'node:fs';
@@ -94,7 +97,7 @@ const CONTROLS = {
     to: 'size: text.length,' },
   lossy: { file: 'src/lib/cmSavePoints.ts', section: 1,
     from: 'return { ok: true, meta, text, packed };',
-    to: 'return { ok: true, meta, text: text.slice(1), packed };' },
+    to: `return { ok: true, meta, text: text.replace('"week":', '"week": '), packed };` },
   /* Review of 2026-10-19: the index read back had no guard (a store that cuts the index). */
   noindexback: { file: 'src/lib/cmSavePointsStore.ts', section: 2,
     from: '    return storage.getItem(pointsIndexKey(slot)) === text;',
