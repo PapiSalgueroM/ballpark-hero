@@ -1,0 +1,4 @@
+gh-before: node scripts/simGuideHeadings.mjs
+gh-refresh: node scripts/simGuideHeadings.mjs --refresh /club-manager && cp scripts/data/guideHeadingsFrozen.json $RC_OUT/guideHeadingsFrozen.json && git diff --stat -- scripts/data/guideHeadingsFrozen.json && node scripts/simGuideHeadings.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
