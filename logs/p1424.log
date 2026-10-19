@@ -1,0 +1,25 @@
+bindAt: scripts/simNflCoachStaffRecovery.mjs bound
+bindAt: 775564305e9d -> 539f635b75b5
+runProver: p1424 at d0455872d5300c652510b1fedbd759f80dbb5b60 (release BK bound: ab1fe605a285 with its pinned bases bound to the joined tree)
+simNflCoachStaffRecovery: fixed23pass, whole-original21pass2missing, button-removed21pass2missing, transition-neutral21pass2callback, restored23pass.
+simNflCoachStaffRecovery: all fourteen original retirement cases pass in every arm; whole fixtures, tracked bodies, membership and empty child/direct transports held.
+simNflCoachStaffRecovery: exact engine/panel inverses, unchanged historical hash and effective inverse controls held (3 engine,22 panel).
+simNflCoachStaffRecovery: component evidence /tmp/rp-out-p1424/unit/report.json; actual production-route evidence is separate.
+simUsCoachCareer: PASS: ALL US COACHING CAREER CHECKS PASSED
+simUsCoachRetirement: PASS: ALL US COACHING RETIREMENT CHECKS PASSED
+simUsCoaching: PASS: ALL US COACHING CHECKS PASSED
+simUsCoachPoaching: Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+simUsBoardParity: simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+parity-label: simUsBoardParity control label: green. The control turned its own sports red for its own reason.
+parity-draw: simUsBoardParity control draw: green. The control turned its own sports red for its own reason.
+parity-binding: simUsBoardParity control binding: green. The control turned its own sports red for its own reason.
+parity-restore: simUsBoardParity control restore: green. The control turned its own sports red for its own reason.
+parity-era: simUsBoardParity control era: green. The control turned its own sports red for its own reason.
+parity-talk: simUsBoardParity control talk: green. The control turned its own sports red for its own reason.
+parity-fixture: simUsBoardParity control fixture: green. The control turned its own sports red for its own reason.
+parity-wheel: simUsBoardParity control wheel: green. The control turned its own sport red for its own reason.
+parity-nosave: simUsBoardParity control nosave: green. The control turned its own sport red for its own reason.
+parity-nophase: simUsBoardParity control nophase: green. The control turned its own sport red for its own reason.
+parity-noresult: simUsBoardParity control noresult: green. The control turned its own sport red for its own reason.
+p1424 PROOF DONE
+runProver: p1424 exit 0

@@ -1,0 +1,12 @@
+bindAt: scripts/simTennisPlayerReplay.mjs bound
+bindAt: 775564305e9d -> b967a30991ea
+runProver: p1423 at 0061289f612836e5305dd805a0a7d4ce8142fb85 (release BK bound: 539f635b75b5 with its pinned bases bound to the joined tree)
+simTennisPlayerReplay: fixed checks 15 passing outcomes and one effective original-source control.
+simTennisPlayerReplay: same fictional puzzle ID across replay; original hook, payouts, score posts and daily progress.
+simTennisPlayerReplay: Cancel, fresh surrender, active hint/guess progress and all ten original feedback cases held.
+simTennisPlayerReplay: tracked bodies and untracked membership held; disposable control removed.
+simTennisPlayerReplay: component evidence /tmp/rp-out-p1423/unit/report.json; built-route evidence is separate.
+simTennisPlayerFeedback: finite420/static reduced cues, complete name binding and owned44px actions.
+simTennisPlayerFeedback: original bytes held and only owned disposable files cleaned.
+p1423 PROOF DONE
+runProver: p1423 exit 0
