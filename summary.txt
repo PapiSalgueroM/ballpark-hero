@@ -1,0 +1,6 @@
+dashscan exit=0 0s | commit message lines with one: 0
+keywords-fresh exit=0 1s |   guide source hash 62b9c45bf374960a
+tsc exit=0 111s | 
+parity exit=0 308s | fixture exit=0 | simUsBoardParity control fixture: green. The control turned its own sports red for its own reason.
+vitest-all exit=0 779s |  Test Files  605 passed | 2 skipped (607)
+fences-short exit=0 763s | simSoccerAppearanceOptions exit=0 | simSoccerAppearanceOptions: all declared cases and actual source controls passed.
