@@ -1,0 +1,4 @@
+# Round 1515 fix: header only commit on simCmDifficulty, its parse and fences
+s1: SECTION=1 node scripts/simCmDifficulty.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
