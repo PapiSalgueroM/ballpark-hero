@@ -31,6 +31,17 @@ const WHY: Record<PointRefusal, string> = {
   damaged: 'That save point is damaged and will not open, so nothing changed. You can delete it.',
 };
 
+/**
+ * A refusal in words for one point (review of 2026-10-19): a damaged point is
+ * named, so the player knows which row to delete, and a restore with no room
+ * says nothing changed rather than the create line's "nothing was saved".
+ */
+function whyFor(why: PointRefusal, p: PointMeta, restoring = false): string {
+  if (why === 'damaged') return `The save point "${p.name}" is damaged and will not open, so nothing changed. You can delete it.`;
+  if (why === 'no-room' && restoring) return 'Your browser is out of room to go back, so nothing changed. Your career and your save points are untouched.';
+  return WHY[why];
+}
+
 const madeOn = (at: number): string => new Date(at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
 
 type Ask = { id: string; kind: 'restore' | 'delete' | 'rename' } | null;
@@ -53,19 +64,23 @@ export function SavePointsScreen({ career, slot }: Props) {
   const copy = (p: PointMeta) => {
     const r = copyPoint(slot, p.id);
     reread();
-    if (r.ok) say(`Copied as "${r.meta.name}".`); else if ('why' in r) say(WHY[r.why], true);
+    if (r.ok) say(`Copied as "${r.meta.name}".`); else if ('why' in r) say(whyFor(r.why, p), true);
   };
+  /* Review of 2026-10-19: a point another tab removed is said to be gone, not out of room or still there. */
+  const listed = (id: string): boolean => (readPointsIndex(slot)?.points ?? []).some(q => q.id === id);
   const rename = (p: PointMeta) => {
     const ok = renamePoint(slot, p.id, newName);
+    const gone = !ok && !listed(p.id);
     reread();
     setAsk(null);
-    say(ok ? 'Renamed.' : WHY['no-room'], !ok);
+    say(ok ? 'Renamed.' : gone ? WHY.gone : WHY['no-room'], !ok);
   };
   const remove = (p: PointMeta) => {
     const ok = deletePoint(slot, p.id);
+    const gone = !ok && !listed(p.id);
     reread();
     setAsk(null);
-    say(ok ? `Deleted "${p.name}".` : 'Your browser would not let us delete it, so it is still there.', !ok);
+    say(ok ? `Deleted "${p.name}".` : gone ? WHY.gone : 'Your browser would not let us delete it, so it is still there.', !ok);
   };
   const goBack = (p: PointMeta) => {
     const r = restorePoint(slot, p.id, career);
@@ -73,7 +88,7 @@ export function SavePointsScreen({ career, slot }: Props) {
     if (r.ok) { markLandOnHub(); reopenGame('/club-manager'); return; }
     setAsk(null);
     reread();
-    if ('why' in r) say(WHY[r.why], true);
+    if ('why' in r) say(whyFor(r.why, p, true), true);
   };
 
   const small = 'min-h-[44px] px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors';
