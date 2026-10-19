@@ -1,0 +1,6 @@
+euro-0147 exit=0 404s | simWorldEuro: green, 36995 checks, 0 failures
+euro-2 exit=0 782s | simWorldEuro: green, 14795 checks, 0 failures
+euro-3 exit=0 465s | simWorldEuro: green, 521 checks, 0 failures
+euro-6 exit=0 19s | simWorldEuro: green, 30 checks, 0 failures
+simWorldUcl exit=0 1699s | simWorldUcl: green, 498818 checks, 0 failures
+simOneOffCups exit=0 2222s | simOneOffCups: green, 161787 checks (2222 s)
