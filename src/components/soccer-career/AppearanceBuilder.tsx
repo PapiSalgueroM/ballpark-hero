@@ -110,7 +110,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
           fixed window with its own scroll: the tabs, the preview and the
           buttons underneath never move no matter which tab you are on, which
           is the whole point of the tile rule. */}
-      <div className="min-h-[92px] max-h-[190px] overflow-y-auto scrollbar-thin pr-0.5">
+      <div key={tab} className="min-h-[92px] max-h-[190px] overflow-y-auto scrollbar-thin pr-0.5">
         {tab === "face" && (
           <div className="flex flex-wrap gap-2">
             {SKIN_TONES.map(s => (
