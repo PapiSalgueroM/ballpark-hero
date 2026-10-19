@@ -1,0 +1,6 @@
+nojoin: last: simCmDifficulty: 16 FAILURES (sections 3)
+helpdrift: last: simCmDifficulty: 1 FAILURES (sections 7)
+cheque: last: simCmDifficulty: 8 FAILURES (sections 3)
+wages: last: simCmDifficulty: 8 FAILURES (sections 3)
+alloffleak: last: simCmDifficulty: 18 FAILURES (sections 2)
+controls (each must be 1): nojoin=1 helpdrift=1 cheque=1 wages=1 alloffleak=1
