@@ -1,0 +1,10 @@
+646ae24f exit=1 1 FAIL: simNflCoachStaffRecovery.mjs 
+8fc62292 exit=1 1 FAIL: simSoccerAppearanceOptions.mjs 
+26ea50a4 exit=1 1 FAIL: simReportDraftLifecycle.mjs 
+d5f811dd exit=1 1 FAIL: simTennisChainScoreOwnership.mjs 
+2077ffbe exit=1 1 FAIL: simSoccerGridSearchDiscovery.mjs 
+f568e4f7 exit=1 2 FAIL: simSoccerGridBlurOwnership.mjs simSoccerGridSearchDiscovery.mjs 
+d96777c4 exit=1 2 FAIL: simSoccerGridBlurOwnership.mjs simSoccerGridSearchDiscovery.mjs 
+5e26b6de exit=0 0 FAIL: 
+62d7c8b3 exit=1 1 FAIL: simSoccerAppearanceOptions.mjs 
+66b179d8 exit=1 1 FAIL: simSoccerAppearanceOptions.mjs 

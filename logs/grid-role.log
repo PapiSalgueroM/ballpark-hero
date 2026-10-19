@@ -1,0 +1,6 @@
+wt: grole at dd033ebf83b5 (Release BL seam: PR333's selection test reads each sport's own hair and beard li)
+gridRole: src/test/soccerGridSearchDiscovery.test.tsx: 3 role selectors adapted
+gridRole: src/test/soccerGridBlurOwnership.test.tsx: 4 role selectors adapted
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m24 passed[39m[22m[90m (24)[39m

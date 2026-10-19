@@ -1,0 +1,4 @@
+sel-seam exit=0 10s |       Tests  40 passed (40)
+anchors-own exit=0 423s | 66b179d8 exit=1 1 FAIL: simSoccerAppearanceOptions.mjs 
+grid-role exit=0 3s |       Tests  24 passed (24)
+new-sims exit=0 126s | simSoccerGridSearchAccessibility exit=1 | AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:

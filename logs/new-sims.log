@@ -1,0 +1,9 @@
+simTennisPlayerReplay exit=0 | 
+simNflCoachStaffRecovery exit=1 | AssertionError [ERR_ASSERTION]: Frozen whole source: scripts/data/usBoardFixture.json
+simSoccerAppearanceOptions exit=0 | capture-original: 1 passed, 0 expected failures, 0 skipped
+simAppearanceCategoryScroll exit=1 | AssertionError [ERR_ASSERTION]: Removing only the category key recovers the entire PR339 builder
+simReportDraftLifecycle exit=0 | normal: 14 passed, 0 expected failures, 0 skipped
+simTennisChainScoreOwnership exit=0 | 
+simSoccerGridSearchDiscovery exit=1 | AssertionError [ERR_ASSERTION]: Present ordinary outer transport receipt
+simSoccerGridBlurOwnership exit=1 | AssertionError [ERR_ASSERTION]: Present ordinary outer transport receipt
+simSoccerGridSearchAccessibility exit=1 | AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:

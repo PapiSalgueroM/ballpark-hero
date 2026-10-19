@@ -1,0 +1,10 @@
+# Release BL triage e-b: (1) PR333's selection test after the seam dd033ebf; (2) simHarnessAnchors at the packets' own
+# heads (is the CRLF anchor red theirs before any join?); (3) PR346's role adaptation applied to the two frozen old Grid
+# tests on the head (gridRole.mjs, PR346's own transformation) and the two files run plainly, the patch kept for the
+# lead in files/grid-role.patch; (4) each new packet sim run plainly on the head as runAllSims would (CI=1,
+# SIM_NETWORK=offline, the preload), to tell the lead which are not head runnable. Send with: wt.sh gridRole.mjs
+#!serial
+sel-seam: node_modules/.bin/vitest run src/test/careerAppearanceSelection.test.tsx > /tmp/s1.log 2>&1; s=$?; grep -E "Tests |FAIL" /tmp/s1.log | head -5 | cut -c1-200; exit $s
+anchors-own: for h in 646ae24f 8fc62292 26ea50a4 d5f811dd 2077ffbe f568e4f7 d96777c4 5e26b6de 62d7c8b3 66b179d8; do bash .rc/x/wt.sh $h an$h bash -c 'node scripts/simHarnessAnchors.mjs > /tmp/an.log 2>&1; echo "exit=$? $(grep -c "^   FAIL" /tmp/an.log) FAIL: $(grep "^   FAIL" /tmp/an.log | cut -d" " -f5 | tr "\n" " ")"' | tail -1 | sed "s/^/$h /"; done
+grid-role: bash .rc/x/wt.sh HEAD^ grole bash -c 'node '"$PWD"'/.rc/x/gridRole.mjs && git diff > '"$RC_OUT"'/grid-role.patch && git diff --stat | tail -1 && node_modules/.bin/vitest run src/test/soccerGridSearchDiscovery.test.tsx src/test/soccerGridBlurOwnership.test.tsx > /tmp/gr.log 2>&1; s=$?; grep -E "Tests |Test Files" /tmp/gr.log; exit $s'
+new-sims: for h in simTennisPlayerReplay simNflCoachStaffRecovery simSoccerAppearanceOptions simAppearanceCategoryScroll simReportDraftLifecycle simTennisChainScoreOwnership simSoccerGridSearchDiscovery simSoccerGridBlurOwnership simSoccerGridSearchAccessibility; do CI=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout 900 node scripts/$h.mjs > /tmp/ns-$h.log 2>&1; s=$?; echo "$h exit=$s | $(grep -v '^    at ' /tmp/ns-$h.log | grep -E 'Error|assert|passed|green|DONE' | head -1 | cut -c1-150)"; done
