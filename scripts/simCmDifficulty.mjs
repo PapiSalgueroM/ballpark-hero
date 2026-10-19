@@ -1,9 +1,26 @@
-/* Club Manager difficulty: Normal, Hard and Legend (Round 1501).
+/* Club Manager difficulty: Very Easy, Easy, Medium, Hard and Impossible (Round 1501's Normal, Hard and Legend;
+   Round 1512 added the two easy rows and the change between matches).
 
    A player's report on /club-manager, 2026-10-14: "plsss make the game harder
-   its simply way too easy". The levels are picked on the Dugout step and fixed
-   for the career; the dials are one table, CM_DIFFICULTY_DIALS in
-   src/lib/clubManagerDifficulty.ts. Normal is the game as it was, to the byte.
+   its simply way too easy". Two more on 2026-10-18 asked to change the level
+   inside a running career, with five levels. The saved ids stay: 'normal' is
+   Medium on screen, 'legend' is Impossible; 'veryeasy' and 'easy' are new. The
+   level is picked on the Dugout step and changeable in Options between matches
+   (setDifficulty in clubManagerStart.ts); a career that is ever on Easy or Very
+   Easy posts no leaderboard score from then on (startOptions.easySince, one
+   way). The dials are one table, CM_DIFFICULTY_DIALS in
+   src/lib/clubManagerDifficulty.ts. Medium ('normal') is the game as it was, to
+   the byte. Below, "Normal" in a section's words is Medium.
+
+   Round 1512 additions: section 1 holds all five rows (no dial easier at a
+   harder level; every dial but the cut strictly ordered; the cut 0 on both easy
+   rows; the easy rows' caps). Section 2d opens the four committed save fixtures,
+   as they are and keyed Hard and Legend, and six Hard and Legend seasons the
+   base itself wrote, here and on the base: byte equal, the level as written.
+   Section 3 runs its lever checks on Hard and on Very Easy (LEVER_LEVELS, the
+   easy row's edge turns the odds FOR you). Section 4 holds the easy bands too,
+   and FOLD prints each seed block. Section 7's example names all four off
+   Medium levels. Section 8 is the change between matches.
 
    Sections (SECTION=<n> runs one, SECTION=all the default set; MEASURE=1 adds 0):
      0) measure: the Normal table (or LEVELS=normal,hard,legend) per tier and
@@ -39,6 +56,14 @@
         exactly the numbers the table gives at a Challengers club, and the block
         opens by saying everything else on that screen, numbers and promises,
         is Normal's, and that one bad night in a new job can take you under Safe.
+     8) the change between matches (Round 1512): Medium careers six entries in at
+        three clubs, changed to each other level: the state outside startOptions
+        byte equal, inside it only the level and the easy mark; saved and loaded
+        back; the next match reads the new edge; the mark one way (up through
+        Impossible to Medium keeps it, a career that only went harder posts);
+        the same level, a junk id and a halftime refused, a sacked career may
+        change; then season ends changed to each level roll a summer cheque of
+        Medium's times the new dial.
 
    MEASURED (GitHub runner, remote checks r1501-m1 at 08a2a7b8; the dials are the starting table, untuned,
    because they met every band on the first measurement). Section 4, the engaged driver, 9 clubs, 8 seeds,
@@ -74,6 +99,16 @@
      ddreach     deadlineDay.ts gains a call to oppStrengthVsMe            6
      alloff      Hard and Legend carry Normal's dials                      4
      helpdrift   Hard's cheque moved by 0.05 in memory                     7
+   Round 1512:
+     flate       Easy's gain set to Medium's                               1
+     oldlevel    a load reads Impossible (legend) back as Hard             2 (2d)
+     ve-gain, ve-pain, ve-cheque, ve-wages, ve-mark, ve-edge
+                 that lever of Very Easy set back to Medium's              3 (the Very Easy pass only)
+     helpdrifte  Easy's cheque moved by 0.05 in memory                     7
+     midleak     setDifficulty also moves the board's mood                 8 (8a)
+     easyclear   going back up clears the easy mark                        8 (8d)
+     midnolevel  setDifficulty says yes and writes nothing                 8 (8b, 8c, 8d, 8f)
+     foldflat    FOLD with Easy and Very Easy as copies of Medium's seasons  the fold's easy bands
 
    Run: node scripts/simCmDifficulty.mjs     (SECTION=1, MEASURE=1 SEEDS=4 SEASONS=10)
         git worktree add /tmp/base <base sha> && BASE_ROOT=/tmp/base node scripts/simCmDifficulty.mjs
@@ -1029,7 +1064,7 @@ function assertOutcomes(rows) {
     const spendRise = x.spend / n.spend - 1;
     console.log(`  ${l}: mid points per game ${f2(x.midPpg)} (up ${f2(rise * 100)} percent), sacked ${x.sacks} of ${x.seasons} (${f2(x.sack)}, ${f2(sackRatio)} times Medium), spend ${f2(x.spend)}m (up ${f2(spendRise * 100)} percent), big club titles ${f2(x.bigTitles10)} in ten, small club points a game ${f2(x.smallPpg)}`);
     const [lo, hi] = EASY_BANDS[l].rise;
-    if (!(rise >= lo && rise <= hi)) fail(`${l}: the mid clubs' points per game rose ${f2(rise * 100)} percent, the band is ${lo * 100} to ${hi * 100}`);
+    if (!(rise >= lo && rise <= hi)) fail(`${l}: the mid clubs' points per game rose ${f2(rise * 100)} percent, the band is ${Math.round(lo * 100)} to ${Math.round(hi * 100)}`);
     if (!(n.sack > 0)) fail(`${l}: Medium was never sacked, so the sack ratio has nothing to compare with`);
     else if (!(sackRatio <= EASY_BANDS[l].sackMax)) fail(`${l}: sacked ${f2(sackRatio)} times as often as Medium, the ceiling is ${EASY_BANDS[l].sackMax}`);
     if (!(spendRise > 0)) fail(`${l}: spend per season moved ${f2(spendRise * 100)} percent, it must go up`);
