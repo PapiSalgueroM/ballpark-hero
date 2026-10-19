@@ -98,7 +98,7 @@ describe('the card after the load says what a save point restore did', () => {
     expect(stageCopy(entry, text, localStorage).ok).toBe(true);
     runSaveKeeper();
     const words = said();
-    expect(words).toBe('Your career was already at this save point, so nothing needed keeping aside.');
+    expect(words).toBe('You were already at this save point.');
     expect(words).not.toContain('This is the save that was kept aside');
   });
 
@@ -108,6 +108,6 @@ describe('the card after the load says what a save point restore did', () => {
     expect(stageCopy(entry, text, localStorage, new Date(Date.now() - 10 * 60 * 1000)).ok).toBe(true);
     runSaveKeeper();
     expect(localStorage.getItem(SAVE_KEY)).toBe(`${text} `);
-    expect(said()).toContain('still won\'t post a leaderboard score');
+    expect(said()).toContain('Its season still won\'t post a score.');
   });
 });
