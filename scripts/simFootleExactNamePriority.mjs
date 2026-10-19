@@ -65,7 +65,8 @@ function child(args, env, dir, timeoutMs = 120000) {
   write(path.join(dir, 'process.json'), { status: result.status, signal: result.signal, error: result.error ? String(result.error) : null,
     args, timeoutMs, elapsedMs: Date.now() - start, noDoubleSwapPresent: Object.hasOwn(actualEnv, 'NO_DOUBLE_SWAP'),
     oldControlEnvAbsent: !Object.hasOwn(actualEnv, 'PLAYER_SEARCH_KEYBOARD_CONTROL'),
-    oldControl: actualEnv.PLAYER_SEARCH_KEYBOARD_CONTROL ?? null });
+    oldControl: actualEnv.PLAYER_SEARCH_KEYBOARD_CONTROL ?? null,
+    noColorValue: actualEnv.NO_COLOR ?? null, forceColorEnvAbsent: !Object.hasOwn(actualEnv, 'FORCE_COLOR') });
   assert.ifError(result.error); assert.equal(result.signal, null); assert.equal(fs.readFileSync(receipt, 'utf8'), '');
   assert(!forbidden.test((result.stdout || '') + (result.stderr || '')), 'No runtime, setup or transport diagnostics'); return result;
 }
@@ -156,7 +157,7 @@ try {
     assert.deepEqual(unitRun('restored', sourceForArm(plan, 'restored'), false, []), normal, 'Executed whole-inverse restored module traces equal'); }
   const cliRows = [], replayRows = [];
   for (const [control, mutation] of Object.entries(OLD_CONTROLS)) {
-    const faults = mutation?.[3] || [], env = { ...process.env, FORCE_COLOR: '0' }; delete env.NO_DOUBLE_SWAP; delete env.FOOTLE_EXACT_TRACE_DIR; delete env.PLAYER_SEARCH_KEYBOARD_CONTROL;
+    const faults = mutation?.[3] || [], env = { ...process.env, NO_COLOR: '1' }; delete env.FORCE_COLOR; delete env.NO_DOUBLE_SWAP; delete env.FOOTLE_EXACT_TRACE_DIR; delete env.PLAYER_SEARCH_KEYBOARD_CONTROL;
     if (control !== 'normal') env.PLAYER_SEARCH_KEYBOARD_CONTROL = control;
     const cliDir = path.join(OUT, 'old-cli', control), cli = child([path.join(ROOT, OLD_CLI)], env, cliDir, 150000); assert.equal(cli.status, 0);
     if (control === 'normal') assert(cli.stdout.includes('Footle search:12/12 actual-component cases pass, no skips or diagnostic faults.'));
