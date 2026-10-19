@@ -296,6 +296,28 @@
  * length, coverage count, fixed save and screen walk is the same, compared
  * step for step over all 5,518 (68 moved, each in its markup hash alone).
  * 2,298,731 bytes.
+ * Release BL (2026-10-19) re-recorded it on purpose for the other lane's
+ * PR339 and PR345, through the appearance builder that every US board shows
+ * on its create screen and that this file's test renders as "soccer" (the
+ * Round 996 historical projection, the vi.mock in usBoardFixture.test.tsx):
+ * PR339 gives Soccer Career six more hairstyles and four more beards, so the
+ * projection shows 29 and 18 (the live US boards keep their own 23 and 14),
+ * and PR345 adds a Light mode text class to the selected chip. Proof first:
+ * the tree before PR339's merge (ab1fe605) replays the BK recording green
+ * (rBLe-a parity-m2); with PR339's builder hunk alone it goes red in the NBA
+ * only, at the second career's hair tab (rBLi). Recorded twice on a runner
+ * from the branch head dd033ebf with the proved historical Panel aliased in,
+ * exactly as this replay runs since Round 1424, byte for byte the same
+ * (rBLh rec-hist, sha256 210cbd1a). New against old: in the NFL, the MLB and
+ * the NHL only the markup hash of the 17 create screen steps moved and the
+ * first paint grew by 31 characters (the class, with its escaped ampersand);
+ * in the NBA the same, and at step 345 the seeded walk, choosing among 6 more
+ * hair buttons, presses Brown where it pressed Auburn and then Extras where
+ * it pressed Boots, so the second career's player is created with another
+ * look: the only save field that differs is c.appearance (step 348), and
+ * with it every later save hash of that career and the markup of the screens
+ * that show his avatar. No other click, no text excerpt, no length, no
+ * coverage count and none of the 76 fixed saves moved. 2,298,731 bytes.
  *
  * Controls, one per run (each is a full replay, about three minutes):
  *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared
