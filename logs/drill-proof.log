@@ -1,0 +1,5 @@
+treeWithoutMerge: 89ea736f2a4ae9113393e83bba17419d6b3b150f, 803eab47 without 406c3c0a; conflicts kept from 803eab47: none
+base 89ea736f2a4ae9113393e83bba17419d6b3b150f (this head without PR334's merge 406c3c0a)
+runProver: drill at 89ea736f2a4ae9113393e83bba17419d6b3b150f (803eab47 without 406c3c0a (back to 99154ea3))
+PASS Drill pointer cancellation: three six-case arms, two original-binding assertion failures, five held markup cases, four diagnostic controls
+runProver: drill exit 0
