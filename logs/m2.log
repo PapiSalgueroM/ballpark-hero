@@ -1,0 +1,72 @@
+mut1515b: M2 applied to src/lib/brokenSaveRecovery.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/saveKeeper.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 81[2mms[22m[39m
+ [32m✓[39m src/test/routeErrorRecovery.test.tsx [2m([22m[2m65 tests[22m[2m)[22m[33m 879[2mms[22m[39m
+ [31m❯[39m src/lib/brokenSaveRecovery.test.ts [2m([22m[2m7 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 17[2mms[22m[39m
+   [32m✓[39m Round 1515: the kept aside copy carries its slot[2m > [22mnames the slot index of Club Manager only[32m 2[2mms[22m[39m
+[31m   [31m×[31m Round 1515: the kept aside copy carries its slot[2m > [22mreads the slot exactly as activeSlot() does for every index that parses, and slot 0 (no marking) for one that does not[39m[32m 10[2mms[22m[39m
+[31m     → expected [ '{"active":3}', 1 ] to deeply equal [ '{"active":3}', 3 ][39m
+   [32m✓[39m Round 1515: the kept aside copy carries its slot[2m > [22mmarks that do not parse, or a marks key holding null, pass nothing over[32m 1[2mms[22m[39m
+[31m   [31m×[31m Round 1515: the kept aside copy carries its slot[2m > [22mwrites the mark beside a Club Manager copy, and drops the marks of copies that are gone[39m[32m 2[2mms[22m[39m
+[31m     → expected { …(1) } to deeply equal { …(1) }[39m
+   [32m✓[39m Round 1515: the kept aside copy carries its slot[2m > [22moffers a copy only in its own slot, and an unmarked old copy in every slot[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1515: the kept aside copy carries its slot[2m > [22ma fresh start marks the copy too, and a refused mark leaves the copy standing, unmarked[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1515: the kept aside copy carries its slot[2m > [22mevery other game reads and writes exactly what it did: no mark, no slot index[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/brokenSaveRecovery.test.ts[2m > [22mRound 1515: the kept aside copy carries its slot[2m > [22mreads the slot exactly as activeSlot() does for every index that parses, and slot 0 (no marking) for one that does not
+[31m[1mAssertionError[22m: expected [ '{"active":3}', 1 ] to deeply equal [ '{"active":3}', 3 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    "{\"active\":3}",[22m
+[32m-   3,[39m
+[31m+   1,[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/lib/brokenSaveRecovery.test.ts:[2m48:53[22m[39m
+    [90m 46| [39m      localStorage[33m.[39m[34mclear[39m()[33m;[39m
+    [90m 47| [39m      [35mif[39m (raw [33m!==[39m [35mnull[39m) localStorage[33m.[39m[34msetItem[39m([33mSLOTS_INDEX_KEY[39m[33m,[39m raw)[33m;[39m
+    [90m 48| [39m      expect([raw, slotMarks(CM, localStorage)[0]]).toEqual([raw, acti…
+    [90m   | [39m                                                    [31m^[39m
+    [90m 49| [39m    }
+    [90m 50| [39m    [35mfor[39m ([35mconst[39m raw [35mof[39m [[32m''[39m[33m,[39m [32m'junk'[39m[33m,[39m [32m'{"active":'[39m]) {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/brokenSaveRecovery.test.ts[2m > [22mRound 1515: the kept aside copy carries its slot[2m > [22mwrites the mark beside a Club Manager copy, and drops the marks of copies that are gone
+[31m[1mAssertionError[22m: expected { …(1) } to deeply equal { …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "dukb-club-manager-save.broken-2026-10-19T10-00-02": 3,[39m
+[31m+   "dukb-club-manager-save.broken-2026-10-19T10-00-02": 1,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/lib/brokenSaveRecovery.test.ts:[2m77:23[22m[39m
+    [90m 75| [39m    [34minSlot[39m(st[33m,[39m [34m3[39m)[33m;[39m
+    [90m 76| [39m    [35mconst[39m b [33m=[39m [34mcopyAside[39m([33mCM[39m[33m,[39m st[33m,[39m [34mat[39m([34m2[39m))[33m;[39m
+    [90m 77| [39m    expect(marks(st)).toEqual({ [b.ok ? b.backupKey as string : '']: 3…
+    [90m   | [39m                      [31m^[39m
+    [90m 78| [39m    [90m/* No index at all is slot 1, as activeSlot() says. */[39m
+    [90m 79| [39m    st[33m.[39mmap[33m.[39m[35mdelete[39m([33mSLOTS_INDEX_KEY[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m105 passed[39m[22m[90m (107)[39m
+[2m   Start at [22m 16:28:19
+[2m   Duration [22m 2.83s[2m (transform 1.84s, setup 244ms, collect 2.44s, tests 977ms, environment 1.21s, prepare 241ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/brokenSaveRecovery.test.ts,title=src/lib/brokenSaveRecovery.test.ts > Round 1515%3A the kept aside copy carries its slot > reads the slot exactly as activeSlot() does for every index that parses%2C and slot 0 (no marking) for one that does not,line=48,column=53::AssertionError: expected [ '{"active":3}', 1 ] to deeply equal [ '{"active":3}', 3 ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "{\"active\":3}",%0A-   3,%0A+   1,%0A  ]%0A%0A ❯ src/lib/brokenSaveRecovery.test.ts:48:53%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/brokenSaveRecovery.test.ts,title=src/lib/brokenSaveRecovery.test.ts > Round 1515%3A the kept aside copy carries its slot > writes the mark beside a Club Manager copy%2C and drops the marks of copies that are gone,line=77,column=23::AssertionError: expected { …(1) } to deeply equal { …(1) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "dukb-club-manager-save.broken-2026-10-19T10-00-02": 3,%0A+   "dukb-club-manager-save.broken-2026-10-19T10-00-02": 1,%0A  }%0A%0A ❯ src/lib/brokenSaveRecovery.test.ts:77:23%0A%0A

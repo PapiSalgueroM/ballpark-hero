@@ -1,0 +1,11 @@
+v0 exit=0 3s |    Duration  2.82s (transform 1.76s, setup 260ms, collect 2.82s, tests 839ms, environment 1.28s, prepare 523ms)
+m1 exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/brokenSaveRecovery.test.ts,title=src/lib/brokenSaveRecovery.test.ts > Round 1515%3A the kept aside copy
+m1b exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveKeeper.test.ts,title=src/test/saveKeeper.test.ts > the apply%2C before any game is in memory (Roun
+m2 exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/brokenSaveRecovery.test.ts,title=src/lib/brokenSaveRecovery.test.ts > Round 1515%3A the kept aside copy
+m3 exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/brokenSaveRecovery.test.ts,title=src/lib/brokenSaveRecovery.test.ts > Round 1515%3A the kept aside copy
+m4 exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/routeErrorRecovery.test.tsx,title=src/test/routeErrorRecovery.test.tsx > setAsideSave (Round 958) > ta
+m5 exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/brokenSaveRecovery.test.ts,title=src/lib/brokenSaveRecovery.test.ts > Round 1515%3A the kept aside copy
+m9 exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/brokenSaveRecovery.test.ts,title=src/lib/brokenSaveRecovery.test.ts > Round 1515%3A the kept aside copy
+m11 exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/routeErrorRecovery.test.tsx,title=src/test/routeErrorRecovery.test.tsx > setAsideSave (Round 958) > ta
+m6 exit=1 61s | simCmDifficulty: 50 FAILURES (sections 1,3,7,8)
+m7 exit=1 61s | simCmDifficulty: 3 FAILURES (sections 1,3,7,8)

@@ -1,0 +1,155 @@
+mut1515b: M11 applied to src/lib/brokenSaveRecovery.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/saveKeeper.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 78[2mms[22m[39m
+ [31m❯[39m src/test/routeErrorRecovery.test.tsx [2m([22m[2m65 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 913[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22mkeeps the existing screen text[32m 139[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /soccer-career when a save is held, and moves the save aside[32m 36[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /club-manager when a save is held, and moves the save aside[32m 32[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /stadium-tycoon when a save is held, and moves the save aside[32m 20[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /wonderkid-factory when a save is held, and moves the save aside[32m 35[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /rebuild when a save is held, and moves the save aside[32m 20[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /front-office when a save is held, and moves the save aside[32m 15[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /nfl-my-career when a save is held, and moves the save aside[32m 26[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /cfb-dynasty when a save is held, and moves the save aside[32m 27[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /cbb-dynasty when a save is held, and moves the save aside[32m 34[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /nba-front-office when a save is held, and moves the save aside[32m 22[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /nba-my-career when a save is held, and moves the save aside[32m 47[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /mlb-my-career when a save is held, and moves the save aside[32m 20[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /mlb-front-office when a save is held, and moves the save aside[32m 15[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /nhl-my-career when a save is held, and moves the save aside[32m 14[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /nhl-front-office when a save is held, and moves the save aside[32m 20[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /aussie-rules-manager when a save is held, and moves the save aside[32m 14[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /fight-career when a save is held, and moves the save aside[32m 16[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /fight-promoter when a save is held, and moves the save aside[32m 15[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /fight-gym when a save is held, and moves the save aside[32m 12[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /hall-of-champions when a save is held, and moves the save aside[32m 10[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22moffers a fresh start on /idle-arena when a save is held, and moves the save aside[32m 11[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22mcovers all 21 long games on the list[32m 0[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22mfinds the game on the trailing slash form of its address[32m 9[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22mshows only the reload on a route that keeps no long save[32m 13[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22mshows only the reload on a registered route with no save in this browser[32m 8[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22mremoves nothing and says so when the copy cannot be written[32m 17[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22mnever offers a fresh start for a chunk that failed to load, even with a save held[32m 9[2mms[22m[39m
+   [32m✓[39m RouteErrorBoundary fresh start (Round 958)[2m > [22mstill offers it for an ordinary throw on the same route, so the chunk test is not vacuous[32m 8[2mms[22m[39m
+   [32m✓[39m setAsideSave (Round 958)[2m > [22mkeeps both backups when two fresh starts land in the same second[32m 1[2mms[22m[39m
+   [32m✓[39m setAsideSave (Round 958)[2m > [22mis still a fresh start when the save is already gone[32m 0[2mms[22m[39m
+   [32m✓[39m setAsideSave (Round 958)[2m > [22mrefuses without storage[32m 0[2mms[22m[39m
+   [32m✓[39m setAsideSave (Round 958)[2m > [22mremoves nothing when the copy is silently dropped (the read back check)[32m 1[2mms[22m[39m
+[31m   [31m×[31m setAsideSave (Round 958)[2m > [22mtakes the copy back out when the original will not go, so a retry cannot stack backups[39m[32m 6[2mms[22m[39m
+[31m     → expected [ 'dukb-club-manager-save', …(1) ] to deeply equal [ 'dukb-club-manager-save' ][39m
+   [32m✓[39m setAsideSave (Round 958)[2m > [22mnever throws when every storage call throws[32m 1[2mms[22m[39m
+   [32m✓[39m restoreBackup and backupKeysOf (Round 958 review)[2m > [22mlists this game's backups newest first, the same second suffix in number order[32m 0[2mms[22m[39m
+   [32m✓[39m restoreBackup and backupKeysOf (Round 958 review)[2m > [22mputs a backup back when the game has no save now, and drops the backup[32m 0[2mms[22m[39m
+   [32m✓[39m restoreBackup and backupKeysOf (Round 958 review)[2m > [22msets the save the player has now aside first, so the swap deletes nothing[32m 0[2mms[22m[39m
+   [32m✓[39m restoreBackup and backupKeysOf (Round 958 review)[2m > [22mkeeps the backup when the restored copy does not read back[32m 0[2mms[22m[39m
+   [32m✓[39m restoreBackup and backupKeysOf (Round 958 review)[2m > [22mrefuses a key that is not a backup of this game[32m 0[2mms[22m[39m
+   [32m✓[39m BrokenSaveRestore, the way back (Round 958 review)[2m > [22ma fresh start is reversible end to end: crash, start fresh, put it back[32m 46[2mms[22m[39m
+   [32m✓[39m BrokenSaveRestore, the way back (Round 958 review)[2m > [22msays the save the player has now is kept aside, and keeps it[32m 20[2mms[22m[39m
+   [32m✓[39m BrokenSaveRestore, the way back (Round 958 review)[2m > [22mafter a put back and its undo the card still offers the first save, press after press[32m 66[2mms[22m[39m
+   [32m✓[39m BrokenSaveRestore, the way back (Round 958 review)[2m > [22mnames the cap before the press when more than three are kept aside, and says when one was dropped[32m 14[2mms[22m[39m
+   [32m✓[39m BrokenSaveRestore, the way back (Round 958 review)[2m > [22mwith three or fewer kept aside the offer still says nothing is deleted, and nothing is[32m 9[2mms[22m[39m
+   [32m✓[39m BrokenSaveRestore, the way back (Round 958 review)[2m > [22msays so once when a save from another version could not be copied aside for want of room[32m 6[2mms[22m[39m
+   [32m✓[39m BrokenSaveRestore, the way back (Round 958 review)[2m > [22mdoes not offer back a backup that is exactly the save being played[32m 1[2mms[22m[39m
+   [32m✓[39m BrokenSaveRestore, the way back (Round 958 review)[2m > [22msays so when the load could not put the save back, and still offers it[32m 16[2mms[22m[39m
+   [32m✓[39m BrokenSaveRestore, the way back (Round 958 review)[2m > [22mshows nothing without a backup, or on a route that keeps no long save[32m 1[2mms[22m[39m
+   [32m✓[39m BrokenSaveRestore, the way back (Round 958 review)[2m > [22m"Leave it aside" hides it and touches nothing[32m 6[2mms[22m[39m
+   [32m✓[39m BrokenSaveRestore, the way back (Round 958 review)[2m > [22msays so and changes nothing when the browser will not take the swap[32m 9[2mms[22m[39m
+   [32m✓[39m backups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22mthe boundary tells the player the cap it applies[32m 3[2mms[22m[39m
+   [32m✓[39m backups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22mevery fresh start keeps the newest three of that game, step by step, and never touches another game[32m 1[2mms[22m[39m
+   [32m✓[39m backups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22ma clock set back never prunes the save it just moved[32m 1[2mms[22m[39m
+   [32m✓[39m backups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22ma swap at the cap drops nothing[32m 1[2mms[22m[39m
+   [32m✓[39m backups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22moffers the newest backup until it is waved off, then the next newer one only[32m 1[2mms[22m[39m
+   [32m✓[39m backups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22mevery kept aside save is offered until it is answered, newest first, and the save being played is passed over[32m 1[2mms[22m[39m
+   [32m✓[39m backups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22mreads a waved off record written before the list (one key a game), and forgets backups that are gone[32m 1[2mms[22m[39m
+   [32m✓[39m backups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22ma save put back that breaks the page again, try after try, never costs the career he had[32m 4[2mms[22m[39m
+   [32m✓[39m backups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22man older backup with the same bytes as the save just set aside does not take a second slot[32m 0[2mms[22m[39m
+   [32m✓[39m backups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22ma damaged waved-off record means nothing was waved off[32m 0[2mms[22m[39m
+   [32m✓[39m backups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22mdeleteBackup takes only a backup of this game[32m 0[2mms[22m[39m
+   [32m✓[39m backups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22mreads the date a backup was made from its key[32m 0[2mms[22m[39m
+   [32m✓[39m backups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22m"Leave it aside" is remembered on the next visit, and a newer backup is offered again[32m 10[2mms[22m[39m
+   [32m✓[39m backups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22m"Delete it" asks first, "Keep it" keeps it, and yes deletes only that backup[32m 21[2mms[22m[39m
+ [31m❯[39m src/lib/brokenSaveRecovery.test.ts [2m([22m[2m7 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 16[2mms[22m[39m
+   [32m✓[39m Round 1515: the kept aside copy carries its slot[2m > [22mnames the slot index of Club Manager only[32m 2[2mms[22m[39m
+   [32m✓[39m Round 1515: the kept aside copy carries its slot[2m > [22mreads the slot exactly as activeSlot() does for every index that parses, and slot 0 (no marking) for one that does not[32m 2[2mms[22m[39m
+   [32m✓[39m Round 1515: the kept aside copy carries its slot[2m > [22mmarks that do not parse, or a marks key holding null, pass nothing over[32m 1[2mms[22m[39m
+[31m   [31m×[31m Round 1515: the kept aside copy carries its slot[2m > [22mwrites the mark beside a Club Manager copy, and drops the marks of copies that are gone[39m[32m 8[2mms[22m[39m
+[31m     → expected {} to deeply equal { …(1) }[39m
+[31m   [31m×[31m Round 1515: the kept aside copy carries its slot[2m > [22moffers a copy only in its own slot, and an unmarked old copy in every slot[39m[32m 2[2mms[22m[39m
+[31m     → expected 'dukb-club-manager-save.broken-2026-10…' to be 'dukb-club-manager-save.broken-2026-10…' // Object.is equality[39m
+   [32m✓[39m Round 1515: the kept aside copy carries its slot[2m > [22ma fresh start marks the copy too, and a refused mark leaves the copy standing, unmarked[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1515: the kept aside copy carries its slot[2m > [22mevery other game reads and writes exactly what it did: no mark, no slot index[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/brokenSaveRecovery.test.ts[2m > [22mRound 1515: the kept aside copy carries its slot[2m > [22mwrites the mark beside a Club Manager copy, and drops the marks of copies that are gone
+[31m[1mAssertionError[22m: expected {} to deeply equal { …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- {[39m
+[32m-   "dukb-club-manager-save.broken-2026-10-19T10-00-01": 2,[39m
+[32m- }[39m
+[31m+ {}[39m
+
+[36m [2m❯[22m src/lib/brokenSaveRecovery.test.ts:[2m73:23[22m[39m
+    [90m 71| [39m    [35mconst[39m a [33m=[39m [34mcopyAside[39m([33mCM[39m[33m,[39m st[33m,[39m [34mat[39m([34m1[39m))[33m;[39m
+    [90m 72| [39m    expect(a.ok && a.backupKey).toBe(`${SAVE_KEY}${BROKEN_SAVE_MARK}20…
+    [90m 73| [39m    expect(marks(st)).toEqual({ [a.ok ? a.backupKey as string : '']: 2…
+    [90m   | [39m                      [31m^[39m
+    [90m 74| [39m    st[33m.[39mmap[33m.[39m[35mdelete[39m(a[33m.[39mok [33m?[39m a[33m.[39mbackupKey [35mas[39m string [33m:[39m [32m''[39m)[33m;[39m
+    [90m 75| [39m    [34minSlot[39m(st[33m,[39m [34m3[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/brokenSaveRecovery.test.ts[2m > [22mRound 1515: the kept aside copy carries its slot[2m > [22moffers a copy only in its own slot, and an unmarked old copy in every slot
+[31m[1mAssertionError[22m: expected 'dukb-club-manager-save.broken-2026-10…' to be 'dukb-club-manager-save.broken-2026-10…' // Object.is equality[39m
+
+Expected: [32m"dukb-club-manager-save.broken-2026-10-[7m01T09[27m-00-0[7m0[27m"[39m
+Received: [31m"dukb-club-manager-save.broken-2026-10-[7m19T10[27m-00-0[7m5[27m"[39m
+
+[36m [2m❯[22m src/lib/brokenSaveRecovery.test.ts:[2m97:35[22m[39m
+    [90m 95| [39m    [34minSlot[39m(st[33m,[39m [34m2[39m)[33m;[39m
+    [90m 96| [39m    st[33m.[39mmap[33m.[39m[35mset[39m([33mSAVE_KEY[39m[33m,[39m [32m'{"career":"slot two"}'[39m)[33m;[39m
+    [90m 97| [39m    expect(offeredBackup(CM, st)).toBe(`${SAVE_KEY}${BROKEN_SAVE_MARK}…
+    [90m   | [39m                                  [31m^[39m
+    [90m 98| [39m    [90m/* An empty slot 2 is the same. */[39m
+    [90m 99| [39m    st[33m.[39mmap[33m.[39m[35mdelete[39m([33mSAVE_KEY[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/routeErrorRecovery.test.tsx[2m > [22msetAsideSave (Round 958)[2m > [22mtakes the copy back out when the original will not go, so a retry cannot stack backups
+[31m[1mAssertionError[22m: expected [ 'dukb-club-manager-save', …(1) ] to deeply equal [ 'dukb-club-manager-save' ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    "dukb-club-manager-save",[22m
+[31m+   "dukb-set-aside-slot",[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/routeErrorRecovery.test.tsx:[2m221:27[22m[39m
+    [90m219| [39m    [34mexpect[39m([34msetAsideSave[39m(entry[33m,[39m s[33m,[39m when))[33m.[39m[34mtoEqual[39m({ ok[33m:[39m [35mfalse[39m })[33m;[39m
+    [90m220| [39m    [34mexpect[39m([34msetAsideSave[39m(entry[33m,[39m s[33m,[39m when))[33m.[39m[34mtoEqual[39m({ ok[33m:[39m [35mfalse[39m })[33m;[39m
+    [90m221| [39m    [34mexpect[39m([[33m...[39mm[33m.[39m[34mkeys[39m()])[33m.[39m[34mtoEqual[39m([entry[33m.[39msaveKey])[33m;[39m
+    [90m   | [39m                          [31m^[39m
+    [90m222| [39m  })[33m;[39m
+    [90m223| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m104 passed[39m[22m[90m (107)[39m
+[2m   Start at [22m 16:28:39
+[2m   Duration [22m 2.90s[2m (transform 1.88s, setup 254ms, collect 2.51s, tests 1.01s, environment 1.29s, prepare 467ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/brokenSaveRecovery.test.ts,title=src/lib/brokenSaveRecovery.test.ts > Round 1515%3A the kept aside copy carries its slot > writes the mark beside a Club Manager copy%2C and drops the marks of copies that are gone,line=73,column=23::AssertionError: expected {} to deeply equal { …(1) }%0A%0A- Expected%0A+ Received%0A%0A- {%0A-   "dukb-club-manager-save.broken-2026-10-19T10-00-01": 2,%0A- }%0A+ {}%0A%0A ❯ src/lib/brokenSaveRecovery.test.ts:73:23%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/brokenSaveRecovery.test.ts,title=src/lib/brokenSaveRecovery.test.ts > Round 1515%3A the kept aside copy carries its slot > offers a copy only in its own slot%2C and an unmarked old copy in every slot,line=97,column=35::AssertionError: expected 'dukb-club-manager-save.broken-2026-10…' to be 'dukb-club-manager-save.broken-2026-10…' // Object.is equality%0A%0AExpected: "dukb-club-manager-save.broken-2026-10-01T09-00-00"%0AReceived: "dukb-club-manager-save.broken-2026-10-19T10-00-05"%0A%0A ❯ src/lib/brokenSaveRecovery.test.ts:97:35%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/routeErrorRecovery.test.tsx,title=src/test/routeErrorRecovery.test.tsx > setAsideSave (Round 958) > takes the copy back out when the original will not go%2C so a retry cannot stack backups,line=221,column=27::AssertionError: expected [ 'dukb-club-manager-save', …(1) ] to deeply equal [ 'dukb-club-manager-save' ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "dukb-club-manager-save",%0A+   "dukb-set-aside-slot",%0A  ]%0A%0A ❯ src/test/routeErrorRecovery.test.tsx:221:27%0A%0A
