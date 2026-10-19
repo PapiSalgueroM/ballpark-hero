@@ -1,0 +1,13 @@
+PART 1, CSS: built dist/assets (41 file(s)), every request blocked
+CONTROL truncate: RolesScreen.tsx changed in the bundle only
+control truncate: 12 findings (cut 22)
+   cut at 320: room front: "0 starts, 2 off the bench in last 6 · star man" is cut (261 of 116 px wide)
+   cut at 320: room front: "0 starts, 2 off the bench in last 6 · key first te" is cut (303 of 116 px wide)
+   cut at 320: room front: "0 starts, 2 off the bench in last 6 · rotation opt" is cut (296 of 102 px wide)
+   cut at 320: room rung 1: "0 starts, 2 off the bench in last 6" is cut (196 of 116 px wide)
+   cut at 320: room rung 2: "0 starts, 2 off the bench in last 6" is cut (196 of 116 px wide)
+   cut at 320: room rung 3: "0 starts, 2 off the bench in last 6" is cut (196 of 102 px wide)
+   cut at 390: room front: "0 starts, 2 off the bench in last 6 · star man" is cut (261 of 186 px wide)
+   cut at 390: room front: "0 starts, 2 off the bench in last 6 · key first te" is cut (303 of 186 px wide)
+CONTROL truncate FIRED: 11 cut findings at 320, first: room front: "0 starts, 2 off the bench in last 6 · star man" is cut (261 of 116 px wide)
+Shots and part1.json: /home/runner/work/_temp/t-ctl-fit-truncate/out/shots
