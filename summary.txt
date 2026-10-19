@@ -1,0 +1,6 @@
+vitest exit=0 11s |    Duration  9.45s (transform 4.14s, setup 416ms, collect 11.89s, tests 9.85s, environment 2.12s, prepare 1.03s)
+s178 exit=0 12s | simCmDifficulty: all green (sections 1,7,8)
+vefloor exit=1 96s | simCmDifficulty: 4 FAILURES (sections 3)
+helplines exit=1 0s | simCmDifficulty: 1 FAILURES (sections 7)
+tsc exit=0 115s | 
+s3 exit=0 126s | simCmDifficulty: all green (sections 3)
