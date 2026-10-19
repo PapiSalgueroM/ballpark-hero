@@ -1,0 +1,5 @@
+fences exit=1 116s | simAccessibility exit=0 | simAccessibility: all green
+dashscan exit=0 1s | release added dash lines 0, commit message lines 0
+tsc exit=0 136s | 
+crlf-six exit=0 140s | simTennisChainScoreOwnership exit=0 | 
+vitest-all exit=0 685s |  Test Files  600 passed | 2 skipped (602)

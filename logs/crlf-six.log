@@ -1,0 +1,6 @@
+simNflCoachStaffRecovery exit=1 | AssertionError [ERR_ASSERTION]: Frozen whole source: scripts/data/usBoardFixture.json
+simReportDraftLifecycle exit=0 | normal: 14 passed, 0 expected failures, 0 skipped
+simSoccerAppearanceOptions exit=0 | capture-original: 1 passed, 0 expected failures, 0 skipped
+simSoccerGridBlurOwnership exit=1 | AssertionError [ERR_ASSERTION]: Present ordinary outer transport receipt
+simSoccerGridSearchDiscovery exit=1 | AssertionError [ERR_ASSERTION]: Present ordinary outer transport receipt
+simTennisChainScoreOwnership exit=0 | 
