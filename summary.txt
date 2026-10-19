@@ -1,0 +1,13 @@
+vitest exit=0 11s |    Duration  9.67s (transform 3.95s, setup 462ms, collect 11.59s, tests 9.64s, environment 2.31s, prepare 1.06s)
+s178 exit=0 13s | simCmDifficulty: all green (sections 1,7,8)
+tsc exit=0 118s | 
+helplines exit=1 1s | simCmDifficulty: 1 FAILURES (sections 7)
+helpdrift exit=1 1s | simCmDifficulty: 1 FAILURES (sections 7)
+helpdrifte exit=1 1s | simCmDifficulty: 1 FAILURES (sections 7)
+s3 exit=0 144s | simCmDifficulty: all green (sections 3)
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+vefloor exit=1 99s | simCmDifficulty: 4 FAILURES (sections 3)
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simHarnessAnchors exit=0 59s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+s2 exit=0 251s | simCmDifficulty: all green (sections 2)
