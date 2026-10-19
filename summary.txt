@@ -1,0 +1,6 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-nolevel exit=0 44s | playCmDifficulty control nolevel: all 8 guarded checks fired (mutations landed: {"change":5})
+tsc exit=0 57s | 
+vitest exit=0 5s |    Duration  4.24s (transform 1.81s, setup 206ms, collect 4.99s, tests 4.27s, environment 1.01s, prepare 317ms)
+walk exit=0 115s |   PASS  no page errors
+rvwalk exit=0 188s | rvwalk: 49 ok, 0 BAD

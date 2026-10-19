@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+rvwalk: node .rc/x/rvwalk.mjs
+walk: node scripts/playCmDifficulty.mjs
+walk-nolevel: WIDTHS=390 PLAY_DIFF_CONTROL=nolevel node scripts/playCmDifficulty.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerNoSack.test.tsx --testTimeout=300000 --hookTimeout=120000
