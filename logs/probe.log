@@ -1,0 +1,2 @@
+&a.season>0?a.season:1),e}function OA(a,n){return dh(n)!==n||a.live||Rl(a)===n?null:{...a,startOptions:gh(a,n)}}function T1(a,n){return n!=nu
+,n,e){const r=(n==null?void 0:n.level)??"normal";let o=a;return r!=="normal"&&(o=Ch({...a,startOptions:gh(a,r)}),e&&o.week===0&&!o.midSeasonS
