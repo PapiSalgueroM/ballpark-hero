@@ -1,3 +1,12 @@
+## Round1438 qualified draft, 2026-10-19: report send failure alerts
+
+[Draft PR352](https://github.com/PapiSalgueroM/ballpark-hero/pull/352) stacks on report PR351, base `3ead1aa0f0a22a9341d66b911f007c7a58dc653b`. Tested `43fc92dd49667f6d32c0769aadac13a0d3bcab90` adds `role="alert"` to the two existing report failure paragraphs. Existing copy, draft edits, retries, category state, delivery and reset/focus behavior remain held.
+
+[CI39294485971](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/39294485971) passed real app types, serial plain build, all 17 built-site checks and 14 unchanged fatal caps. Each explicit and genuine absent-env default packet contains 48 new executions from six cases, 50 actual-current regressions and 576 separately attributed historical executions. Twelve browser contexts retain 204 AX snapshots and 204 PNGs; Root viewed 34. Root whole-read the three complete actual UNIT/BROWSER/WHOLE reports. Authorship boundaries are disclosed in ROUND1438.
+
+Fixed qualification `e40f2a38858e0e7a333a40c0cd35169239a219f431ffad7926d8154774d39b33` covers saved remote offline evidence. Final native closure remains Root's gate. Full simReportRelay remains unrun because it reads a live table. No other report fix, stored goal-count repair, real delivery, full-suite, spoken AT/full WCAG, merge or publication claim. I retains protected scopes, integration and publication; all 75 earlier seals remain immutable.
+
+Previous project state follows.
 ## Round1437 source-qualified draft, 2026-10-19: report category pressed state
 
 [PR351](https://github.com/PapiSalgueroM/ballpark-hero/pull/351), `codex/report-category-pressed-state`, stacks on report PR347 at9d31a7d2e839523f5a3826a5150184dae91f520c. The category buttons in both report forms now expose the same selection already shown by their colors. Product scope is exactly `aria-pressed={kind === k}` in ReportSiteIssue and `aria-pressed={reason === r}` in ReportQuestion.

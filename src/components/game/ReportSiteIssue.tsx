@@ -144,7 +144,7 @@ export function ReportSiteIssue() {
               />
 
               {status === 'error' && (
-                <p className="text-xs text-destructive">Something went wrong. Try again.</p>
+                <p role="alert" className="text-xs text-destructive">Something went wrong. Try again.</p>
               )}
 
               <button
