@@ -1,0 +1,8 @@
+control unpacked exit=1 | simCmSavePoints: control unpacked FIRED, section 1 red (6 failure(s)) | failures by section: {"1":6,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0}; board nudges 174
+control lossy exit=1 | simCmSavePoints: control lossy FIRED, section 1 red (6 failure(s)) | failures by section: {"1":6,"2":0,"3":2,"4":1,"5":1,"6":0,"7":0,"8":0}; board nudges 174
+control noindexback exit=1 | simCmSavePoints: control noindexback FIRED, section 2 red (4 failure(s)) | failures by section: {"1":0,"2":4,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0}; board nudges 15
+control noreadback exit=1 | simCmSavePoints: control noreadback FIRED, section 2 red (2 failure(s)) | failures by section: {"1":0,"2":2,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0}; board nudges 15
+control nosum exit=1 | simCmSavePoints: control nosum FIRED, section 2 red (3 failure(s)) | failures by section: {"1":0,"2":3,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0}; board nudges 15
+control evict exit=1 | simCmSavePoints: control evict FIRED, section 4 red (3 failure(s)) | failures by section: {"1":0,"2":0,"3":0,"4":3,"5":0,"6":0,"7":0,"8":0}; board nudges 15
+control orphan exit=1 | simCmSavePoints: control orphan FIRED, section 5 red (1 failure(s)) | failures by section: {"1":0,"2":2,"3":0,"4":0,"5":1,"6":0,"7":0,"8":0}; board nudges 15
+ctl1513: every control FIRED (unpacked lossy noindexback noreadback nosum evict orphan)

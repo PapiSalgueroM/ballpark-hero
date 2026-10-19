@@ -1,0 +1,10 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 15s |    Duration  15.09s (transform 3.55s, setup 1.02s, collect 10.58s, tests 20.98s, environment 5.95s, prepare 1.84s)
+simCmSavePoints exit=0 34s | simCmSavePoints: OK, all eight sections green
+tsc exit=0 58s | 
+playCmSavePoints exit=0 73s | playCmSavePoints: OK at 390 and 1280
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+simSaveKeeper exit=0 5s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simHarnessAnchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-a exit=0 99s | ctl1513: every control FIRED (unpacked lossy noindexback noreadback nosum evict orphan)

@@ -1,0 +1,39 @@
+
+1. sizes: a point at week 10 of seasons 1, 8 and 15
+   Everton       season  1: career 101393 characters, point 21306 (21.0 percent)
+   Everton       season  8: career 150415 characters, point 36954 (24.6 percent)
+   Everton       season 15: career 152746 characters, point 39541 (25.9 percent)
+   Lincoln City  season  1: career 101154 characters, point 21344 (21.1 percent)
+   Lincoln City  season  8: career 150061 characters, point 35913 (23.9 percent)
+   Lincoln City  season 15: career 154354 characters, point 38556 (25.0 percent)
+
+2. a point is what it says
+   a store that cuts what it is handed: refused (no-room)
+   a store that cuts the index, the first point: refused (no-room)
+   a store that cuts the index, over one point: refused (no-room)
+   a point holding another point's career: refused (damaged), staged 0
+
+3. restore after three matches
+   what a restore holds: a staged plain copy of 99990 characters until the load, then a kept aside career of 104473 (the game keeps its three newest); the point is 21102
+   week 14 back to week 11; save equal true, reload equal true, kept aside 1, offered true
+
+4. three a career, never one dropped
+   fourth: full; copy at three: full; listed 3
+
+5. a full store keeps the career and every point
+   room for the point but not its index: no-room, store equal true
+   room for nothing: no-room, store equal true
+   no room to keep the career aside: no-room, career kept true
+
+6. a season posts once per career
+   season 1: 12 pings, 0 completions; seasons 2 and 3: 1 and 1 completions; season 4 pings 6; blocked [1,2], credited [1,2,3]
+
+7. the hook, read as code
+   4 scored completions, 4 credited; slot clears in 4 of 4
+
+8. a career that never makes a point writes nothing new
+   47 pings, 0 refused; keys beside the save: none
+
+failures by section: {"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0}; board nudges 174
+sizes (characters, career then point): Everton s1 101393/21306; Everton s8 150415/36954; Everton s15 152746/39541; Lincoln City s1 101154/21344; Lincoln City s8 150061/35913; Lincoln City s15 154354/38556
+simCmSavePoints: OK, all eight sections green
