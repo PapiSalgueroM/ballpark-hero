@@ -1,0 +1,4 @@
+m-or exit=1 269s | mutation or: KILLED by node_modules/.bin/vitest run --testTimeout=300000
+m-blockseason exit=1 44s | mutation blockseason: KILLED by node scripts/simCmSavePoints.mjs
+m-indexnoreadback exit=0 44s | mutation indexnoreadback: SURVIVED every check
+m-clearkeepsindex exit=1 46s | mutation clearkeepsindex: KILLED by node_modules/.bin/vitest run --testTimeout=300000

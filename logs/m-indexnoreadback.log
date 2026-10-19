@@ -1,0 +1,18 @@
+MUTATION indexnoreadback applied to src/lib/cmSavePointsStore.ts
+--- node scripts/simCmSavePoints.mjs
+    exit=0 41s
+    8. a career that never makes a point writes nothing new
+       47 pings, 0 refused; keys beside the save: none
+    
+    failures by section: {"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0}; board nudges 174
+    sizes (characters, career then point): Everton s1 101393/21305; Everton s8 150415/37029; Everton s15 152746/39523; Lincoln City s1 101154/21363; Lincoln City s8 150061/35863; Lincoln City s15 154354/38495
+    simCmSavePoints: OK, all eight sections green
+--- node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 src/test/cmSavePoints.test.ts
+    exit=0 3s
+     [32m✓[39m src/test/cmSavePoints.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 595[2mms[22m[39m
+    
+    [2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+    [2m      Tests [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+    [2m   Start at [22m 10:01:02
+    [2m   Duration [22m 2.91s[2m (transform 1.34s, setup 63ms, collect 1.61s, tests 595ms, environment 284ms, prepare 118ms)[22m
+mutation indexnoreadback: SURVIVED every check

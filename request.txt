@@ -1,0 +1,5 @@
+#!serial
+m-or: node .rc/x/mut1513.mjs or; s=$?; git checkout -- src scripts; exit $s
+m-blockseason: node .rc/x/mut1513.mjs blockseason; s=$?; git checkout -- src scripts; exit $s
+m-indexnoreadback: node .rc/x/mut1513.mjs indexnoreadback; s=$?; git checkout -- src scripts; exit $s
+m-clearkeepsindex: node .rc/x/mut1513.mjs clearkeepsindex; s=$?; git checkout -- src scripts; exit $s

@@ -1,0 +1,55 @@
+MUTATION or applied to src/hooks/useClubManager.ts
+--- node scripts/simCmSavePoints.mjs
+    exit=0 42s
+    8. a career that never makes a point writes nothing new
+       47 pings, 0 refused; keys beside the save: none
+    
+    failures by section: {"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0}; board nudges 174
+    sizes (characters, career then point): Everton s1 101393/21303; Everton s8 150415/37049; Everton s15 152746/39516; Lincoln City s1 101154/21347; Lincoln City s8 150061/35888; Lincoln City s15 154354/38518
+    simCmSavePoints: OK, all eight sections green
+--- node scripts/simCmNoSack.mjs
+    exit=0 120s
+       Deadline Day 2026-10-11 Borussia Dortmund: identical, no key
+       Deadline Day 2026-10-18 Nottingham Forest: identical, no key
+       red per daily: Hot Seat 0 of 3, Deadline Day 0 of 3; deadlineDay.ts calls none of the match or No sacking entry points; 1 s
+    7) A promise to win before every match, the board planted on 2, 3.5, 5, 6.5 in turn, at Hull City, Málaga, Frosinone: 2 seeds, 36 matches each, the Normal twin played beside it (fleet seed 0)
+       twins kept the job and matched to the byte: 70; twins sacked at the recheck after a broken promise: 83 (floor 36); both floors in one match: 63 (floor 28); at the first check with no promise broken: 0; 9 s
+    simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
+--- node scripts/simClubManagerScore.mjs
+    exit=0 93s
+       at the takeover, no team picked yet: the constant read a form term above 0 in 34 of 54 saves (median 6, p90 32, max 48 of 48) and a whole score of median 8, p90 35, max 51; the replay reads form 0 in all of them and a whole score of median 3, p90 6, max 10
+       at the whistle, league terms (form and title) against the record: replay median 0, p90 0, max 0; constant median 7, p90 14, max 19
+       at the whistle, whole score against the record: replay median 3, p90 10, max 22; constant median 6, p90 13, max 20 (the cup, Europe and board terms are paid at share on a legacy save by design, not subtracted, so the whole score keeps that gap)
+       the 60 entry cap: 54 of 54 logs missing his first league match fell back to the constant; 54 of 54 missing a cup or European entry still replayed exactly
+    
+    ALL SEASON SCORE CHECKS PASSED
+--- node scripts/simSessionMarks.mjs
+    exit=0 0s
+    3) Stadium Tycoon marks once per session, on the first real action
+    4) The marked paths are routes App.tsx actually serves
+    5) Club Manager pings a match and completes a season; Soccer Career pings a season
+    6) No em or en dash in any touched file
+    
+    simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+--- node scripts/simActivityNotCompletion.mjs
+    exit=0 5s
+    2) Soccer Career, as code: the season advance pings activity and the file owns no completion
+       advance calls: 1, ping 44 characters after the call (window 600), advance ping present: true, own completions: 0
+    3) The ping is light, as code: recordActivity reaches neither the streak record nor the signed in save
+       body 755 characters, writes the anonymous row: true
+    
+    simActivityNotCompletion: all green
+--- node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 src/test/cmSavePoints.test.ts src/test/clubManagerNoSack.test.tsx src/hooks/useClubManager.test.ts src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerSlots.test.tsx
+    exit=1 8s
+        [90m114| [39m    [34mexpect[39m(recordActivity)[33m.[39m[34mtoHaveBeenCalledWith[39m([32m'/club-manager'[39m)[33m;[39m
+        [90m   | [39m                           [31m^[39m
+        [90m115| [39m    expect(vi.mocked(recordActivity).mock.calls.every(c => c.length ==…
+        [90m116| [39m  })[33m;[39m
+    
+    [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+    failing lines:
+      [31m   [31m×[31m the hook[2m > [22mRound 1512: a career started on Easy pings no score, and a change mid career moves only the level and is saved[39m[32m 148[2mms[22m[39m
+      [31m   [31m×[31m the hook[2m > [22ma career started with No sacking carries it and pings no score[39m[32m 141[2mms[22m[39m
+      [41m[1m FAIL [22m[49m src/test/clubManagerDifficultyPick.test.tsx[2m > [22mthe hook[2m > [22mRound 1512: a career started on Easy pings no score, and a change mid career moves only the level and is saved
+      [41m[1m FAIL [22m[49m src/test/clubManagerNoSack.test.tsx[2m > [22mthe hook[2m > [22ma career started with No sacking carries it and pings no score
+mutation or: KILLED by node_modules/.bin/vitest run --testTimeout=300000

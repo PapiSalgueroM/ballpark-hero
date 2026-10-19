@@ -1,0 +1,21 @@
+MUTATION blockseason applied to src/lib/cmSavePoints.ts
+--- node scripts/simCmSavePoints.mjs
+    exit=1 41s
+       47 pings, 0 refused; keys beside the save: none
+    
+    failures by section: {"1":0,"2":0,"3":0,"4":0,"5":0,"6":1,"7":0,"8":0}; board nudges 174
+    sizes (characters, career then point): Everton s1 101393/21303; Everton s8 150415/37061; Everton s15 152746/39519; Lincoln City s1 101154/21352; Lincoln City s8 150061/35898; Lincoln City s15 154354/38542
+    simCmSavePoints: FAIL, 1 failure(s)
+      FAIL (6): season 4 stopped posting after the replay (a later season must post as usual)
+    failing lines:
+      simCmSavePoints: FAIL, 1 failure(s)
+        FAIL (6): season 4 stopped posting after the replay (a later season must post as usual)
+--- node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 src/test/cmSavePoints.test.ts
+    exit=0 4s
+     [32m✓[39m src/test/cmSavePoints.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 611[2mms[22m[39m
+    
+    [2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+    [2m      Tests [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+    [2m   Start at [22m 10:00:17
+    [2m   Duration [22m 3.04s[2m (transform 1.39s, setup 65ms, collect 1.68s, tests 611ms, environment 286ms, prepare 64ms)[22m
+mutation blockseason: KILLED by node scripts/simCmSavePoints.mjs
