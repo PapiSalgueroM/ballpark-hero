@@ -54,7 +54,7 @@ const report = { version: 1, mode, arm, base: plan.base, source, sourceSearchSha
   scope: 'Actual built Soccer Grid Page/Search/Board/hook/DailyPuzzle/career loaders and native Chromium accessibility tree. Four disclosed fictional names and one synthetic board. All external IO locally fulfilled. No spoken assistive-technology, full WCAG, real-player, adjudication, live-backend, no-scroll or release claim.',
   nativeMethod: { engine: 'chromium', packageVersion, coreSha256: hash(coreBody), browsersJsonSha256: hash(browsersBody), installedChromium, binaryRoot, publicExecutablePath, storageFixture, logAttribution: 'Parent DEBUG=pw:browser log binds each sequential launch ordinal to its actual command, PID, installed executable and clean exit. Public executable path is not asserted to be the launched headless-shell path.' },
   fixtures: { puzzle, players, seasons, validatorReply: { valid: false, unverified: true, reason: 'Synthetic no-penalty retry' } },
-  expected: { contexts: specs.length, canonicalUnverifiedDeliveries: specs.length, faultGroups: legacy ? ['role', 'active', 'selected'] : arm.endsWith('-control') ? [arm.slice(0, -8)] : [] },
+  expected: { contexts: specs.length, canonicalUnverifiedDeliveries: specs.length, faultGroups: legacy ? ['role', 'active', 'selected'] : arm === 'role-control' ? ['role', 'active'] : arm.endsWith('-control') ? [arm.slice(0, -8)] : [] },
   census: specs, distBefore, distAfter: null, cases: [], cleanupErrors: [] };
 const save = () => fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2));
 const wall = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -245,7 +245,14 @@ try {
           const activePass = dom.input.attributes['aria-expanded'] === 'true' && property(inputNode, 'expanded')?.value === true && !!listId && dom.input.attributes['aria-controls'] === listId
             && relation(inputNode, 'controls').length === 1 && relation(inputNode, 'controls')[0].backendDOMNodeId === receipt.listBackendNodeId
             && !!currentId && dom.input.attributes['aria-activedescendant'] === currentId && relation(inputNode, 'activedescendant').length === 1 && relation(inputNode, 'activedescendant')[0].backendDOMNodeId === receipt.optionBackendNodeIds[current];
-          check(phase, 'active', activePass, 'Native controls and active descendant bind the exact rendered UL and visually current canonical LI backend IDs', legacy || arm === 'active-control');
+          if (arm === 'role-control') {
+            assert.equal(dom.input.attributes.role, 'textbox'); assert.equal(inputNode.role?.value, 'textbox');
+            assert.equal(dom.input.attributes['aria-expanded'], 'true'); assert.equal((inputNode.properties || []).filter(value => value.name === 'expanded').length, 0, 'Textbox role control has no native expanded property');
+            assert(listId && currentId); assert.equal(dom.input.attributes['aria-controls'], listId); assert.equal(dom.input.attributes['aria-activedescendant'], currentId);
+            assert.equal(relation(inputNode, 'controls').length, 1); assert.equal(relation(inputNode, 'controls')[0].backendDOMNodeId, receipt.listBackendNodeId);
+            assert.equal(relation(inputNode, 'activedescendant').length, 1); assert.equal(relation(inputNode, 'activedescendant')[0].backendDOMNodeId, receipt.optionBackendNodeIds[current]);
+          }
+          check(phase, 'active', activePass, 'Native controls and active descendant bind the exact rendered UL and visually current canonical LI backend IDs', legacy || arm === 'active-control' || arm === 'role-control');
           const selectedPass = dom.options.every((option, i) => option.attributes['aria-selected'] === String(i === current) && property(optionNodes[i], 'selected')?.value === (i === current));
           check(phase, 'selected', selectedPass, 'Only the visually current canonical option is selected in the actual DOM and native AX tree', legacy || arm === 'selected-control');
         } else {
