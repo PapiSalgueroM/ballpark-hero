@@ -21,6 +21,79 @@ interface StartOptionsScreenProps {
 }
 
 /**
+ * Round 1512: the Difficulty row, in Options and (review of 2026-10-19) on the sacked screen too, because a
+ * manager out of work has no Options tile and the brief lets him change the level there.
+ */
+export function DifficultyOption({ career, onDifficulty }: { career: CareerState; onDifficulty?: (level: DifficultyLevel) => void }) {
+  const level = levelFrom(career);
+  /* A tile that would stop the leaderboards waits for a second tap. */
+  const easySince = easyFrom(career);
+  const [armedLevel, setArmedLevel] = useState<DifficultyLevel | null>(null);
+  /* Review of 2026-10-19: a match paused at halftime refuses the change (setDifficulty), so the tiles say so
+     rather than taking a tap that does nothing. */
+  const paused = !!career.live;
+  const pickLevel = (lv: DifficultyLevel) => {
+    if (paused) return;
+    if (lv === level) { setArmedLevel(null); return; }
+    if (isEasyLevel(lv) && postsScore(career) && armedLevel !== lv) { setArmedLevel(lv); return; }
+    setArmedLevel(null);
+    onDifficulty?.(lv);
+  };
+
+  /* Round 1501: how hard. Round 1512: changeable here between matches, sacked or out of work included.
+     Five small tiles, three to a row on a phone. Going to Very Easy or Easy on a career that still posts
+     scores asks first, because that stops the leaderboards for good; every other change is one tap. The
+     lines under the tiles sit in one grid cell each, so a tap never moves the page. */
+  return (
+      <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-2" data-cm-level-option={level}>
+        <div className="flex items-center justify-between gap-2">
+          <div className="text-xs font-bold text-foreground">🎚️ Difficulty</div>
+          <div className="text-xs text-gold font-bold">{DIFFICULTY_INFO[level].label}</div>
+        </div>
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5" role="radiogroup" aria-label="Difficulty">
+          {DIFFICULTY_LEVELS.map(lv => (
+            <button
+              key={lv}
+              type="button"
+              role="radio"
+              aria-checked={level === lv}
+              disabled={paused}
+              onClick={() => pickLevel(lv)}
+              data-cm-level-choice={lv}
+              data-cm-level-armed={armedLevel === lv ? 'yes' : undefined}
+              className={cn(
+                'min-h-[44px] rounded-lg border px-1.5 py-1.5 text-xs font-bold transition-colors disabled:opacity-60',
+                level === lv ? 'bg-primary text-primary-foreground border-primary'
+                  : armedLevel === lv ? 'border-primary bg-primary/10 text-foreground'
+                    : 'bg-secondary border-border text-muted-foreground hover:text-foreground',
+              )}
+            >
+              {DIFFICULTY_INFO[lv].label}
+            </button>
+          ))}
+        </div>
+        <div className="grid text-xs text-muted-foreground">
+          <p className={cn('col-start-1 row-start-1', armedLevel && 'invisible')} aria-hidden={!!armedLevel}>
+            {DIFFICULTY_INFO[level].blurb} {paused && <span className="text-foreground" data-cm-level-paused>Your match is paused at halftime, so finish it first, then switch. </span>}A change counts from your next match and the money from your next cheque or new job, the market's prices to you change straight away, and nothing you have already played changes.
+          </p>
+          <p className={cn('col-start-1 row-start-1 text-foreground', !armedLevel && 'invisible')} aria-hidden={!armedLevel}>
+            Tap {armedLevel ? DIFFICULTY_INFO[armedLevel].label : 'it'} again to switch. On Very Easy or Easy this career stops posting leaderboard scores for good, even if you go back up later.
+          </p>
+        </div>
+        {/* Review of 2026-10-19: No sacking stops the scores too (postsScore), so a No sacking career is told so here. */}
+        <p className="text-[10px] text-muted-foreground" data-cm-level-scores={easySince !== null || noSackFrom(career) !== null ? 'off' : 'on'}>
+          {easySince !== null
+            ? `This career went easy${easySince > 1 ? ` in season ${easySince}` : ''}, so it posts no leaderboard scores now, whatever the level.`
+            : noSackFrom(career) !== null
+              ? 'No sacking is on, so this career posts no leaderboard scores at any level.'
+              : 'Medium, Hard and Impossible post leaderboard scores. Very Easy and Easy do not, from the moment you pick one.'}
+          {' '}Negotiation strictness below is a separate setting.
+        </p>
+      </div>
+  );
+}
+
+/**
  * Round 514: his three start options, spec line "display currency,
  * international job offers on or off, negotiation strictness slider".
  *
@@ -38,65 +111,11 @@ export function StartOptionsScreen({ career, onCurrency, onNationJobs, onStrictn
   /* Round 1342: the first tap asks, the second switches it on. */
   const [arming, setArming] = useState(false);
   const noSackSince = noSackFrom(career);
-  const level = levelFrom(career);
   const outOfWork = career.sacked || !!career.wilderness;
-  /* Round 1512: the level. A tile that would stop the leaderboards waits for a second tap. */
-  const easySince = easyFrom(career);
-  const [armedLevel, setArmedLevel] = useState<DifficultyLevel | null>(null);
-  const pickLevel = (lv: DifficultyLevel) => {
-    if (lv === level) { setArmedLevel(null); return; }
-    if (isEasyLevel(lv) && postsScore(career) && armedLevel !== lv) { setArmedLevel(lv); return; }
-    setArmedLevel(null);
-    onDifficulty?.(lv);
-  };
 
   return (
     <div className="space-y-3" data-cm-start-options>
-      {/* Round 1501: how hard. Round 1512: changeable here between matches, sacked or out of work included.
-          Five small tiles, three to a row on a phone. Going to Very Easy or Easy on a career that still posts
-          scores asks first, because that stops the leaderboards for good; every other change is one tap. The
-          lines under the tiles sit in one grid cell each, so a tap never moves the page. */}
-      <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-2" data-cm-level-option={level}>
-        <div className="flex items-center justify-between gap-2">
-          <div className="text-xs font-bold text-foreground">🎚️ Difficulty</div>
-          <div className="text-xs text-gold font-bold">{DIFFICULTY_INFO[level].label}</div>
-        </div>
-        <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5" role="radiogroup" aria-label="Difficulty">
-          {DIFFICULTY_LEVELS.map(lv => (
-            <button
-              key={lv}
-              type="button"
-              role="radio"
-              aria-checked={level === lv}
-              onClick={() => pickLevel(lv)}
-              data-cm-level-choice={lv}
-              data-cm-level-armed={armedLevel === lv ? 'yes' : undefined}
-              className={cn(
-                'min-h-[40px] rounded-lg border px-1.5 py-1.5 text-xs font-bold transition-colors',
-                level === lv ? 'bg-primary text-primary-foreground border-primary'
-                  : armedLevel === lv ? 'border-primary bg-primary/10 text-foreground'
-                    : 'bg-secondary border-border text-muted-foreground hover:text-foreground',
-              )}
-            >
-              {DIFFICULTY_INFO[lv].label}
-            </button>
-          ))}
-        </div>
-        <div className="grid text-xs text-muted-foreground">
-          <p className={cn('col-start-1 row-start-1', armedLevel && 'invisible')} aria-hidden={!!armedLevel}>
-            {DIFFICULTY_INFO[level].blurb} A change counts from your next match, the money from your next cheque or new job, and nothing you have already played changes.
-          </p>
-          <p className={cn('col-start-1 row-start-1 text-foreground', !armedLevel && 'invisible')} aria-hidden={!armedLevel}>
-            Tap {armedLevel ? DIFFICULTY_INFO[armedLevel].label : 'it'} again to switch. On Very Easy or Easy this career stops posting leaderboard scores for good, even if you go back up later.
-          </p>
-        </div>
-        <p className="text-[10px] text-muted-foreground" data-cm-level-scores={easySince !== null ? 'off' : 'on'}>
-          {easySince !== null
-            ? `This career went easy${easySince > 1 ? ` in season ${easySince}` : ''}, so it posts no leaderboard scores now, whatever the level.`
-            : 'Medium, Hard and Impossible post leaderboard scores. Very Easy and Easy do not, from the moment you pick one.'}
-          {' '}Negotiation strictness below is a separate setting.
-        </p>
-      </div>
+      <DifficultyOption career={career} onDifficulty={onDifficulty} />
 
       {/* Round 1342: No sacking. On for good once it is on; refused while out of work, so it can never undo a sack. */}
       <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-2" data-cm-nosack-option={noSackSince !== null ? 'on' : 'off'}>

@@ -1,9 +1,26 @@
-/* Club Manager difficulty: Normal, Hard and Legend (Round 1501).
+/* Club Manager difficulty: Very Easy, Easy, Medium, Hard and Impossible (Round 1501's Normal, Hard and Legend;
+   Round 1512 added the two easy rows and the change between matches).
 
    A player's report on /club-manager, 2026-10-14: "plsss make the game harder
-   its simply way too easy". The levels are picked on the Dugout step and fixed
-   for the career; the dials are one table, CM_DIFFICULTY_DIALS in
-   src/lib/clubManagerDifficulty.ts. Normal is the game as it was, to the byte.
+   its simply way too easy". Two more on 2026-10-18 asked to change the level
+   inside a running career, with five levels. The saved ids stay: 'normal' is
+   Medium on screen, 'legend' is Impossible; 'veryeasy' and 'easy' are new. The
+   level is picked on the Dugout step and changeable in Options between matches
+   (setDifficulty in clubManagerStart.ts); a career that is ever on Easy or Very
+   Easy posts no leaderboard score from then on (startOptions.easySince, one
+   way). The dials are one table, CM_DIFFICULTY_DIALS in
+   src/lib/clubManagerDifficulty.ts. Medium ('normal') is the game as it was, to
+   the byte. Below, "Normal" in a section's words is Medium.
+
+   Round 1512 additions: section 1 holds all five rows (no dial easier at a
+   harder level; every dial but the cut strictly ordered; the cut 0 on both easy
+   rows; the easy rows' caps). Section 2d opens the four committed save fixtures,
+   as they are and keyed Hard and Legend, and six Hard and Legend seasons the
+   base itself wrote, here and on the base: byte equal, the level as written.
+   Section 3 runs its lever checks on Hard and on Very Easy (LEVER_LEVELS, the
+   easy row's edge turns the odds FOR you). Section 4 holds the easy bands too,
+   and FOLD prints each seed block. Section 7's example names all four off
+   Medium levels. Section 8 is the change between matches.
 
    Sections (SECTION=<n> runs one, SECTION=all the default set; MEASURE=1 adds 0):
      0) measure: the Normal table (or LEVELS=normal,hard,legend) per tier and
@@ -39,6 +56,14 @@
         exactly the numbers the table gives at a Challengers club, and the block
         opens by saying everything else on that screen, numbers and promises,
         is Normal's, and that one bad night in a new job can take you under Safe.
+     8) the change between matches (Round 1512): Medium careers six entries in at
+        three clubs, changed to each other level: the state outside startOptions
+        byte equal, inside it only the level and the easy mark; saved and loaded
+        back; the next match reads the new edge; the mark one way (up through
+        Impossible to Medium keeps it, a career that only went harder posts);
+        the same level, a junk id and a halftime refused, a sacked career may
+        change; then season ends changed to each level roll a summer cheque of
+        Medium's times the new dial.
 
    MEASURED (GitHub runner, remote checks r1501-m1 at 08a2a7b8; the dials are the starting table, untuned,
    because they met every band on the first measurement). Section 4, the engaged driver, 9 clubs, 8 seeds,
@@ -62,6 +87,31 @@
    Section 0 on Normal, both drivers, 4 seeds, 10 seasons: the engaged buyer's mid ppg 1.40 against
    the steady keeper's 1.39, big club titles 4.25 and 3.83 in ten. One season takes about 0.7 s on a runner.
 
+   MEASURED AGAIN FOR ROUND 1512 (GitHub runners, the engine of Release BK). Section 4, the engaged driver, 9
+   clubs, seeds 0 to 15, 6 seasons a level (864 seasons each), sharded 4 a level and folded: Medium, Easy, Hard
+   and Impossible from r1512-m1 and r1512-m1b on a1882d3e, Very Easy from r1512-m2 on e86f0fe2 (its final dials;
+   no other row moved between the two commits, and each career plays on its own module and stream).
+                         mid ppg   vs Medium   sacked seasons      spend a season    big titles   small ppg
+     Very Easy           1.71      +28.3%       1 of 864 (0.00x)   40.74m (+49.8%)   6.88         1.47
+     Easy                1.55      +16.5%      44 of 864 (0.18x)   33.58m (+23.5%)   4.93         1.36
+     Medium              1.33                 244 of 864 (0.28)    27.20m            3.89         1.09
+     Hard                1.20      -9.8%      535 of 864 (2.19x)   22.30m (-18.0%)   2.19         0.73
+     Impossible          1.08      -18.6%     729 of 864 (2.99x)   14.69m (-46.0%)   1.15         0.56
+     the lead's bands:   Easy up 6 to 20, sacked at most 0.75x, spend up; Very Easy up 14 to 35, at most 0.5x,
+                         spend above Easy's, big titles under 9, small ppg under 2.3.
+     Medium against Medium (even seeds against odd): 1.35 and 1.31, a 2.9% gap.
+     Seed blocks (0 to 7 | 8 to 15): Very Easy +28.1 | +28.6, spend 39.75 | 41.74m; Easy +17.2 | +15.9, spend
+     34.75 | 32.42m; Hard -8.1 | -11.8; Impossible -17.3 | -20.0. Every easy band holds in both blocks; the
+     nearest edge is Easy's ceiling of 20 (2.8 points over block one's 17.2).
+     Very Easy first measured at cheque 1.4 and mark 0.75 (r1512-m1): +29.7%, spend 35.41m against Easy's
+     33.58m, but 35.09 against 34.75m in block one, so "spend above Easy's" was 0.34m from a coin toss; the
+     dials moved to cheque 1.5 and mark 0.8 (a cheaper market lowers the fee per man, so it pulled the spend
+     down), never the band.
+     NOT THIS ROUND'S, FOR THE LEAD: Hard and Impossible are main's rows, untouched here, and the engine has
+     moved since Round 1501's table above (Medium's mid ppg 1.42 then, 1.33 now). Their pooled drops still sit in
+     the bands (9.8 in 8 to 20, 18.6 in 18 to 35), but block one alone is 8.05 on Hard and 17.27 on Impossible,
+     under its floor: both bands are now coin tosses on the current engine.
+
    Negative controls (CM_DIFF_CONTROL), each patched in memory or into the
    bundle, never into src; each must turn its section red:
      flat        Hard's pain set to 1                                      1
@@ -74,6 +124,16 @@
      ddreach     deadlineDay.ts gains a call to oppStrengthVsMe            6
      alloff      Hard and Legend carry Normal's dials                      4
      helpdrift   Hard's cheque moved by 0.05 in memory                     7
+   Round 1512:
+     flate       Easy's gain set to Medium's                               1
+     oldlevel    a load reads Impossible (legend) back as Hard             2 (2d)
+     ve-gain, ve-pain, ve-cheque, ve-wages, ve-mark, ve-edge
+                 that lever of Very Easy set back to Medium's              3 (the Very Easy pass only)
+     helpdrifte  Easy's cheque moved by 0.05 in memory                     7
+     midleak     setDifficulty also moves the board's mood                 8 (8a)
+     easyclear   going back up clears the easy mark                        8 (8d)
+     midnolevel  setDifficulty says yes and writes nothing                 8 (8b, 8c, 8d, 8f)
+     foldflat    FOLD with Easy and Very Easy as copies of Medium's seasons  the fold's easy bands
 
    Run: node scripts/simCmDifficulty.mjs     (SECTION=1, MEASURE=1 SEEDS=4 SEASONS=10)
         git worktree add /tmp/base <base sha> && BASE_ROOT=/tmp/base node scripts/simCmDifficulty.mjs
@@ -1029,7 +1089,7 @@ function assertOutcomes(rows) {
     const spendRise = x.spend / n.spend - 1;
     console.log(`  ${l}: mid points per game ${f2(x.midPpg)} (up ${f2(rise * 100)} percent), sacked ${x.sacks} of ${x.seasons} (${f2(x.sack)}, ${f2(sackRatio)} times Medium), spend ${f2(x.spend)}m (up ${f2(spendRise * 100)} percent), big club titles ${f2(x.bigTitles10)} in ten, small club points a game ${f2(x.smallPpg)}`);
     const [lo, hi] = EASY_BANDS[l].rise;
-    if (!(rise >= lo && rise <= hi)) fail(`${l}: the mid clubs' points per game rose ${f2(rise * 100)} percent, the band is ${lo * 100} to ${hi * 100}`);
+    if (!(rise >= lo && rise <= hi)) fail(`${l}: the mid clubs' points per game rose ${f2(rise * 100)} percent, the band is ${Math.round(lo * 100)} to ${Math.round(hi * 100)}`);
     if (!(n.sack > 0)) fail(`${l}: Medium was never sacked, so the sack ratio has nothing to compare with`);
     else if (!(sackRatio <= EASY_BANDS[l].sackMax)) fail(`${l}: sacked ${f2(sackRatio)} times as often as Medium, the ceiling is ${EASY_BANDS[l].sackMax}`);
     if (!(spendRise > 0)) fail(`${l}: spend per season moved ${f2(spendRise * 100)} percent, it must go up`);

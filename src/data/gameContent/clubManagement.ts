@@ -214,7 +214,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
       },
       {
         q: "The board wants a signing I cannot afford. Is that a bug?",
-        a: "It should never happen, and there is a harness that walks every club in every era to prove it. Both asks are worked out from the market that save really has and the money you really hold, with spare targets on top, and the two together are checked against your pot before either goes on the board. If you genuinely cannot see a way to meet one, report it: the board is meant to ask for hard things, not impossible ones."
+        a: "It should never happen at the difficulty the board set it on, and there is a harness that walks every club in every era to prove it. Both asks are worked out from the market that save really has and the money you really hold, with spare targets on top, and the two together are checked against your pot before either goes on the board. Moving the difficulty up afterwards raises the market's prices to you straight away, so that can put one out of reach; otherwise, if you genuinely cannot see a way to meet one, report it: the board is meant to ask for hard things, not impossible ones."
       },
       {
         q: "Why does the board ask for a 21 year old rated 80 rather than one who will reach 90?",

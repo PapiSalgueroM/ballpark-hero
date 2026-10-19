@@ -19,7 +19,7 @@ import { easyFrom, levelFrom, noSackFrom } from '@/lib/clubManagerStart';
 import { recordActivity } from '@/lib/completions';
 import { CM_DIFFICULTY_DIALS } from '@/lib/clubManagerDifficulty';
 import { ManagerForm } from '@/components/club-manager/ManagerForm';
-import { StartOptionsScreen } from '@/components/club-manager/StartOptionsScreen';
+import { DifficultyOption, StartOptionsScreen } from '@/components/club-manager/StartOptionsScreen';
 
 vi.mock('@/lib/completions', () => ({
   recordCompletion: vi.fn(),
@@ -124,6 +124,36 @@ describe('the Options panel', () => {
     expect(line?.textContent).toContain('season 2');
     fireEvent.click(tile('easy'));
     expect(onDifficulty).toHaveBeenLastCalledWith('easy');
+  });
+
+  /* Review of 2026-10-19: the sacked screen has no Options tile, so it renders this row on its own. */
+  it('the row on its own, for a sacked manager, changes the level in one tap', () => {
+    const onDifficulty = vi.fn();
+    render(<DifficultyOption career={{ ...at('legend'), sacked: true }} onDifficulty={onDifficulty} />);
+    expect(document.querySelector('[data-cm-level-option]')?.getAttribute('data-cm-level-option')).toBe('legend');
+    fireEvent.click(tile('hard'));
+    expect(onDifficulty).toHaveBeenLastCalledWith('hard');
+  });
+
+  /* Review of 2026-10-19: setDifficulty refuses while a match is paused, so the tiles must not look live. */
+  it('with a match paused at halftime the tiles are off and the row says why', () => {
+    const onDifficulty = vi.fn();
+    const live = { ...at(), live: {} } as unknown as ReturnType<typeof at>;
+    render(<DifficultyOption career={live} onDifficulty={onDifficulty} />);
+    expect((tile('hard') as HTMLButtonElement).disabled).toBe(true);
+    fireEvent.click(tile('hard'));
+    expect(onDifficulty).not.toHaveBeenCalled();
+    expect(document.querySelector('[data-cm-level-paused]')?.textContent).toContain('finish it first');
+  });
+
+  /* Review of 2026-10-19: No sacking posts no score at any level, and the row must not say Medium does. */
+  it('on a No sacking career the scores line says none post, at any level', () => {
+    const career = { ...at(), startOptions: { ...at().startOptions, noSack: 1 } } as ReturnType<typeof at>;
+    render(<DifficultyOption career={career} onDifficulty={vi.fn()} />);
+    const line = document.querySelector('[data-cm-level-scores]');
+    expect(line?.getAttribute('data-cm-level-scores')).toBe('off');
+    expect(line?.textContent).toContain('No sacking is on');
+    expect(line?.textContent).not.toContain('Impossible post leaderboard scores');
   });
 });
 
