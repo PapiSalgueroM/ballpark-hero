@@ -1,0 +1,3 @@
+vitest exit=0 10s |    Duration  8.63s (transform 4.05s, setup 430ms, collect 10.42s, tests 8.18s, environment 2.32s, prepare 788ms)
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+tsc exit=0 74s | 
