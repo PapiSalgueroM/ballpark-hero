@@ -1,0 +1,13 @@
+# Round 1515 measure on 718aa65f: section 4's Hard and Impossible shards with the COMMITTED table (no DIALS_JSON), and the sims that must not move
+h0: SECTION=4 LEVELS=hard SHARD=0/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/hard-0.json node scripts/simCmDifficulty.mjs
+h1: SECTION=4 LEVELS=hard SHARD=1/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/hard-1.json node scripts/simCmDifficulty.mjs
+h2: SECTION=4 LEVELS=hard SHARD=2/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/hard-2.json node scripts/simCmDifficulty.mjs
+h3: SECTION=4 LEVELS=hard SHARD=3/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/hard-3.json node scripts/simCmDifficulty.mjs
+l0: SECTION=4 LEVELS=legend SHARD=0/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/legend-0.json node scripts/simCmDifficulty.mjs
+l1: SECTION=4 LEVELS=legend SHARD=1/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/legend-1.json node scripts/simCmDifficulty.mjs
+l2: SECTION=4 LEVELS=legend SHARD=2/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/legend-2.json node scripts/simCmDifficulty.mjs
+l3: SECTION=4 LEVELS=legend SHARD=3/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/legend-3.json node scripts/simCmDifficulty.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simWorldUcl: node scripts/simWorldUcl.mjs
+simWorldEuro: node scripts/simWorldEuro.mjs
+simOneOffCups: node scripts/simOneOffCups.mjs
