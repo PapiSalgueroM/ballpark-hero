@@ -90,9 +90,11 @@ const header = page => page.evaluate(() => {
 });
 const pillOf = async page => ((await page.locator('[data-cm-level-pill]').innerText().catch(() => '')) || '').trim();
 /* setDifficulty's last line, return { ...state, startOptions: optionsAtLevel(state, level) }, as the build writes
-   it; the control hands the state back with its old block, so a tap changes nothing. */
-const NOLEVEL_FIND = /return\{\.\.\.([\w$]+),startOptions:[\w$]+\(\1,[\w$]+\)\}/g;
-const NOLEVEL_REPLACE = 'return{...$1}';
+   it: the minifier folds its two refusals into one ternary, so it reads ?null:{...a,startOptions:gh(a,n)}
+   (probe r1512-pr on 7a8b18cf). setUpCareer's own spread sits inside a call, never after ?null:, so it is left
+   alone. The control hands the state back with its old block, so a tap changes nothing. */
+const NOLEVEL_FIND = /\?null:\{\.\.\.([\w$]+),startOptions:[\w$]+\(\1,[\w$]+\)\}/g;
+const NOLEVEL_REPLACE = '?null:{...$1}';
 
 const browser = await chromium.launch();
 async function newCtx(vp) {
