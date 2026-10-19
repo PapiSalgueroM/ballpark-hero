@@ -1,0 +1,8 @@
+  PASS  simSoccerOpponentLabels.mjs    44.2s
+
+All 1 harnesses green.
+control current actual [] expected []
+control remove-overlay actual ["genuine2025/display","json-reload/display","recorded-valid-name/display","recorded-alias/display"] expected ["genuine2025/display","json-reload/display","recorded-valid-name/display","recorded-alias/display"]
+control widen-year actual ["year2024/display","actual2024/display"] expected ["year2024/display","actual2024/display"]
+control whole-undo actual [] expected []
+0 failing checks in the report
