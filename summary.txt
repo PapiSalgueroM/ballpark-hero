@@ -1,0 +1,2 @@
+probe-m3 exit=0 50s | nba click path step 345 (after "create: (Auburn)"): pressed "create: (Brown)", fixture pressed "create: (Auburn)"; the markup differs under the same words ("Create your p
+probe-m2 exit=0 50s | 3
