@@ -1,0 +1,3 @@
+widelabels: last: playLiveMatchFit: control widelabels turned the 320 label ceiling red on the line it must (1 failure, 21 label nodes touched) and left the rest green.
+digits: last: playLiveMatchFit: control digits turned the digit check red on the line it must (5 failures, 1638 label nodes touched) and left the rest green.
+controls (each must be 1): widelabels=1 digits=1
