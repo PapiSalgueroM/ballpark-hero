@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+# Round 1515 walks, controls, weights and the save keeper walk on 718aa65f (the database host blocked by the walks and the runner)
+weight-base: R=$PWD && git worktree add -q /tmp/base 1a028447 && cd /tmp/base && ln -s $R/node_modules node_modules && npm run build > /tmp/base-build.log 2>&1 && touch /tmp/base-done && (node $R/scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/base-serve.log 2>&1 &) && sleep 4 && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 SWEEP_OFFLINE=1 ENGINES=chromium node $R/scripts/sweepWeight.mjs; s=$?; node $R/.rc/x/weigh1515.mjs /tmp/base/dist $R/dist; exit $s
+keeper: for i in $(seq 1 120); do [ -f /tmp/base-done ] && break; sleep 5; done; KEEPER_BASE_DIST=/tmp/base/dist node scripts/playSaveKeeper.mjs
+weight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
+walk: node scripts/playCmSavePoints.mjs
+walk-nomark: WIDTHS=390 POINTS_CONTROL=nomark node scripts/playCmSavePoints.mjs
+walk-noevent: WIDTHS=390 POINTS_CONTROL=noevent node scripts/playCmSavePoints.mjs
