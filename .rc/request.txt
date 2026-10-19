@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+playCmSavePoints: node scripts/playCmSavePoints.mjs
+walk-nodoor: WIDTHS=390 POINTS_CONTROL=nodoor node scripts/playCmSavePoints.mjs
