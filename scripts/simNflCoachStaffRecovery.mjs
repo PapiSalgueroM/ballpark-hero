@@ -144,7 +144,7 @@ write('source-bindings.json', { engine: sha(fixedEngine), panel: sha(fixedPanel)
 const require = createRequire(import.meta.url);
 const installedAliases = Object.fromEntries(['react/jsx-dev-runtime', 'react/jsx-runtime', 'react', 'lucide-react'].map(id => [id, require.resolve(id)]));
 for (const file of Object.values(installedAliases)) assert(file.startsWith(path.join(root, 'node_modules') + path.sep) && fs.statSync(file).isFile(), 'Native installed copied-panel alias');
-write('installed-aliases.json', Object.entries(installedAliases).map(([id, file]) => ({ id, file, sha256: sha(fs.readFileSync(file)) })));
+write('installed-aliases.json', Object.entries(installedAliases).map(([id, file]) => ({ id, file, sha256: sha(Buffer.from(fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n'))) })));
 const controls = path.join(out, 'control-sources'), owned = new Map();
 function copiedEngine(body) {
   const from = "from './usCareerToCoach'", to = "from '@/lib/usCareerToCoach'";
@@ -234,7 +234,7 @@ try {
   assert.equal(once(neutralEngine, changedHunk, expectedHunk), fixedEngine, 'Transition control changes only actual recovery acceptance');
   const neutralCopy = copy('transition-neutral-engine.ts', copiedEngine(neutralEngine));
   run('transition-neutral', 'callback', { '@/lib/usCoachCareer': neutralCopy, '@/components/us-career/CoachCareerPanel': path.join(root, panel) });
-  for (const [file, body] of owned) assert.equal(fs.readFileSync(file, 'utf8'), body, 'Copied control body held');
+  for (const [file, body] of owned) assert.equal(fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n'), body, 'Copied control body held');
   assert.deepEqual(fs.readdirSync(controls).sort(), [...owned.keys()].map(file => path.basename(file)).sort(), 'Exact disposable control membership');
   removeControls(); assert(!fs.existsSync(controls)); report.temporaryControlsRemoved = true;
   assert.equal(git(['status', '--porcelain', '--untracked-files=all']), statusBefore, 'Controls removed before restored runtime');

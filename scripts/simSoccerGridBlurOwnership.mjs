@@ -36,7 +36,7 @@ const source = Object.fromEntries(tracked.toString('utf8').split('\0').filter(Bo
 assert.equal(hash(fs.readFileSync(path.join(ROOT, testFile))), TEST_SHA, 'The eight-case body is frozen');
 assert.equal(hash(fs.readFileSync(path.join(ROOT, inheritedFile))), INHERITED_SHA, 'The inherited sixteen-case body is unchanged');
 const original = git(['show', BASE + ':' + productFile]).toString('utf8'); assert.equal(hash(original), ORIGINAL_SHA);
-const actual = fs.readFileSync(path.join(ROOT, productFile), 'utf8');
+const actual = fs.readFileSync(path.join(ROOT, productFile), 'utf8').replace(/\r\n/g, '\n');
 fs.writeFileSync(path.join(OUT, 'original-SoccerGridSearch.tsx'), original);
 const heldFiles = [productFile, inheritedFile, 'src/test/playerSearchIdentity.test.ts', 'src/test/playerSearchLocal.test.ts',
   'src/pages/SoccerGrid.tsx', 'src/hooks/useSoccerGrid.ts', 'src/hooks/useDailyPuzzle.ts', 'src/lib/fetchCareerPlayers.ts',
@@ -44,7 +44,7 @@ const heldFiles = [productFile, inheritedFile, 'src/test/playerSearchIdentity.te
   'src/lib/playerSearch.ts', 'src/lib/nameFold.ts', 'src/lib/smartSearch.ts', 'src/components/soccer-grid/SoccerGridBoard.tsx',
   'src/lib/gridRarity.ts', 'scripts/simSoccerGridSearchDiscovery.mjs', 'scripts/lib/offlineTransport.cjs', 'vitest.config.ts'];
 const boundSource = heldFiles.map(file => {
-  const before = git(['show', BASE + ':' + file]), body = fs.readFileSync(path.join(ROOT, file));
+  const before = git(['show', BASE + ':' + file]), body = Buffer.from(fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n'));
   if (file !== productFile || MODE === 'baseline') assert(body.equals(before), 'Whole stacked source held: ' + file);
   return { file, originalSha256: hash(before), actualSha256: hash(body) };
 });

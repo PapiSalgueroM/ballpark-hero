@@ -191,7 +191,7 @@ function run(name, { bare = false, flavor = 'fixed', failures = [], pendingIndic
 let armsComplete = false;
 try {
   if (MODE === 'baseline') {
-    assert(fs.readFileSync(path.join(ROOT, productFile)).equals(originalBytes), 'Baseline accepts only the whole original main775 Board');
+    assert(Buffer.from(fs.readFileSync(path.join(ROOT, productFile), 'utf8').replace(/\r\n/g, '\n')).equals(originalBytes), 'Baseline accepts only the whole original main775 Board');
     const normal = run('normal', { flavor: 'original', failures: [0, 1, 2, 3, 4, 5] });
     const bare = run('bare', { bare: true, flavor: 'original', failures: [0, 1, 2, 3, 4, 5] }); assert.deepEqual(bare, normal, 'Original normal/bare exact trace parity');
     assert.deepEqual(summary.arms.map(arm => arm.name), ['normal', 'bare']);

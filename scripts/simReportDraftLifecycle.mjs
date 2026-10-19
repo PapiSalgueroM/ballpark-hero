@@ -231,7 +231,7 @@ try {
 } finally {
   fs.rmSync(TEMP, { recursive: true, force: true });
   assert(!fs.existsSync(TEMP), 'Temporary module copies removed');
-  for (const file of heldFiles) assert.deepEqual(fs.readFileSync(path.join(ROOT, file)), sourceBefore[file], `${file}: source bytes held`);
+  for (const file of heldFiles) assert.deepEqual(Buffer.from(fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n')), sourceBefore[file], `${file}: source bytes held`);
   fs.writeFileSync(path.join(OUT, 'summary.json'), JSON.stringify({ base: BASE, mode: MODE, cases: summary, controls, formInverses,
     sourceBefore: Object.fromEntries(heldFiles.map(file => [file, hash(sourceBefore[file])])), sourceHeld: true, temporaryModulesRemoved: true }, null, 2));
 }

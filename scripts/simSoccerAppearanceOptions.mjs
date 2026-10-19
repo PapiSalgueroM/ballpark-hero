@@ -74,7 +74,7 @@ if (baselineMode) {
 } else {
   run('normal');
   const avatarFile = files['@/components/soccer-career/PlayerAvatar'];
-  const avatar = fs.readFileSync(path.join(ROOT, avatarFile), 'utf8');
+  const avatar = fs.readFileSync(path.join(ROOT, avatarFile), 'utf8').replace(/\r\n/g, '\n');
   const ids = ['texturedcrop', 'sidefringe', 'twists', 'shortlocs', 'halfup', 'afropuff', 'circlebeard', 'handlebar', 'ducktail', 'muttonchops'];
   let oldDrawingSource = avatar;
   for (const id of ids) {
@@ -98,7 +98,7 @@ if (baselineMode) {
   const oldFailed = run('changed-old-drawing', { NO_DOUBLE_SWAP: JSON.stringify({ '@/components/soccer-career/PlayerAvatar': oldCopy }) },
     'holds exact original SVG', { passed: 0, failed: 1, pending: 27 });
   assert(oldFailed[0].fullName.includes('holds exact original SVG'));
-  const lookSource = fs.readFileSync(path.join(ROOT, files['@/lib/soccerCareerAppearance']), 'utf8');
+  const lookSource = fs.readFileSync(path.join(ROOT, files['@/lib/soccerCareerAppearance']), 'utf8').replace(/\r\n/g, '\n');
   const oldLabel = '{ id: "buzz", label: "Buzz Cut" }';
   assert.equal(lookSource.split(oldLabel).length, 2, 'An actual old catalogue entry is the control target');
   const changedLabel = lookSource.replace(oldLabel, '{ id: "buzz", label: "Changed Crop" }');
@@ -115,7 +115,7 @@ if (baselineMode) {
   const randomFailed = run('extra-random-draw', { NO_DOUBLE_SWAP: JSON.stringify({ '@/lib/soccerCareerAppearance': randomCopy }) },
     'retains original defaults and the exact seven', { passed: 0, failed: 1, pending: 27 });
   assert(randomFailed[0].fullName.includes('retains original defaults and the exact seven'));
-  const builder = fs.readFileSync(path.join(ROOT, files['@/components/soccer-career/AppearanceBuilder']), 'utf8');
+  const builder = fs.readFileSync(path.join(ROOT, files['@/components/soccer-career/AppearanceBuilder']), 'utf8').replace(/\r\n/g, '\n');
   const fromHair = 'sport === "soccer" ? SOCCER_HAIRSTYLES : HAIRSTYLES';
   const fromBeard = 'sport === "soccer" ? SOCCER_FACIAL_HAIR : FACIAL_HAIR';
   assert.equal(builder.split(fromHair).length, 2); assert.equal(builder.split(fromBeard).length, 2);
@@ -128,6 +128,6 @@ if (baselineMode) {
   assert(failed.every(test => /retains its old hair and beard/.test(test.fullName)));
   run('restored');
 }
-for (const file of Object.values(files)) assert.equal(fs.readFileSync(path.join(ROOT, file), 'utf8'), sourceBefore[file], `${file} held byte-identical`);
+for (const file of Object.values(files)) assert.equal(fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n'), sourceBefore[file], `${file} held byte-identical`);
 fs.writeFileSync(path.join(OUT, 'summary.json'), JSON.stringify({ base: BASE, mode: baselineMode ? 'baseline' : 'fixed', cases: summary }, null, 2));
 console.log('simSoccerAppearanceOptions: all declared cases and actual source controls passed.');
