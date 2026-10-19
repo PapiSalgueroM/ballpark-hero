@@ -5,7 +5,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, isAbsolute } from 'node:path';
 import AppearanceBuilder from '@/components/soccer-career/AppearanceBuilder';
 import { careerAppearanceCopy, type AppearanceSport } from '@/lib/careerAppearanceCopy';
-import { FACIAL_HAIR, HAIR_COLORS, HAIRSTYLES, SKIN_TONES,
+import { FACIAL_HAIR, HAIR_COLORS, HAIRSTYLES, SKIN_TONES, SOCCER_FACIAL_HAIR, SOCCER_HAIRSTYLES,
   type AppearanceOption, type PlayerAppearance } from '@/lib/soccerCareerAppearance';
 
 const SPORTS = ['soccer', 'nfl', 'nba', 'mlb', 'nhl'] as const;
@@ -50,9 +50,9 @@ function choices(sport: AppearanceSport, field: Field): readonly AppearanceOptio
   const copy = careerAppearanceCopy(sport);
   switch (field) {
     case 'skinTone': return SKIN_TONES;
-    case 'hairstyle': return HAIRSTYLES;
+    case 'hairstyle': return sport === 'soccer' ? SOCCER_HAIRSTYLES : HAIRSTYLES;
     case 'hairColor': return HAIR_COLORS;
-    case 'facialHair': return FACIAL_HAIR;
+    case 'facialHair': return sport === 'soccer' ? SOCCER_FACIAL_HAIR : FACIAL_HAIR;
     case 'boots': return copy.boots;
     case 'accessory': return copy.accessories;
     case 'celebration': return copy.celebrations;
@@ -61,8 +61,9 @@ function choices(sport: AppearanceSport, field: Field): readonly AppearanceOptio
 function fieldButtons(view: View, sport: AppearanceSport, field: Field) {
   const options = choices(sport, field), hair = FIELD_TAB[field] === 1;
   const all = buttons(view);
-  expect(all).toHaveLength(7 + (hair ? HAIRSTYLES.length + HAIR_COLORS.length : options.length));
-  const start = 7 + (field === 'hairColor' ? HAIRSTYLES.length : 0);
+  const hairstyles = choices(sport, 'hairstyle');
+  expect(all).toHaveLength(7 + (hair ? hairstyles.length + HAIR_COLORS.length : options.length));
+  const start = 7 + (field === 'hairColor' ? hairstyles.length : 0);
   const group = all.slice(start, start + options.length);
   group.forEach((button, index) => {
     const option = options[index];
