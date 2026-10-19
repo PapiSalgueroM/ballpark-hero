@@ -133,6 +133,7 @@ for (const W of WIDTHS) {
     page.locator('[data-testid="cm-point-confirm"]').first().click(),
   ]);
   await pause(page, 1500);
+  check(await visible(page.locator('[data-cm-meters]')), 'the restore opens the career straight on its hub');
   check((await raw(page)) === bytes, 'after the reload the save is the point\'s career byte for byte');
   const card = page.locator('[data-dukb-put-back="done"]');
   check(await visible(card), 'the card says the point is back');

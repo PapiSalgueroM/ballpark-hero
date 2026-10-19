@@ -15,6 +15,7 @@ import {
   copyPoint, createPoint, defaultPointName, deletePoint, renamePoint, restorePoint, type PointRefusal,
 } from '@/lib/cmSavePoints';
 import { reopenGame } from '@/lib/saveKeeper';
+import { markLandOnHub } from '@/lib/clubManagerLanding';
 
 interface Props {
   career: CareerState;
@@ -68,7 +69,8 @@ export function SavePointsScreen({ career, slot }: Props) {
   };
   const goBack = (p: PointMeta) => {
     const r = restorePoint(slot, p.id, career);
-    if (r.ok) { reopenGame('/club-manager'); return; }
+    /* The reload opens the career straight on its hub, not the managers screen. */
+    if (r.ok) { markLandOnHub(); reopenGame('/club-manager'); return; }
     setAsk(null);
     reread();
     if ('why' in r) say(WHY[r.why], true);
