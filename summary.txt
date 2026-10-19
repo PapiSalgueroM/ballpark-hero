@@ -1,0 +1,10 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 437b350ee Release BL: the lead sets the weight rows from the join's runner measurement
+vitest-luton-unit exit=0 3s |    Duration  2.15s (transform 1.11s, setup 69ms, collect 1.34s, tests 79ms, environment 300ms, prepare 100ms)
+luton-proof exit=0 19s | PASS Luton display component proof
+genCareerLeagueSeasons-check exit=0 0s | careerLeagueSeasons.ts is current
+simCareerLeagueSeasons exit=0 17s | simCareerLeagueSeasons: all sections green
+luton-walk exit=0 12s | lutonWalk: PASS 32 checks
+base-minus278 exit=0 37s | /tmp/wt-4174
+luton-walk-ctl-minus278 exit=0 11s | FIRED-OK
+playSoccerCareerOpponents exit=0 11s | playSoccerCareerOpponents: 164 checks, 0 failed
