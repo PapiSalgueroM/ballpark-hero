@@ -1,0 +1,5 @@
+      8  FAIL  src/test/soccerGridBlurOwnership.test.tsx
+     16  FAIL  src/test/soccerGridSearchDiscovery.test.tsx
+      6  FAIL  src/test/soccerGridSettingsRace.test.tsx
+ Test Files  3 failed | 597 passed | 2 skipped (602)
+      Tests  30 failed | 9109 passed | 58 skipped (9197)

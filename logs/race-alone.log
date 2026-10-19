@@ -1,0 +1,6 @@
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/soccerGridSettingsRace.test.tsx > Soccer Grid first-check settings ownership > the first validator check keeps both settings groups locked
+ FAIL  src/test/soccerGridSettingsRace.test.tsx > Soccer Grid first-check settings ownership > the first rarity check keeps both settings groups locked
+ FAIL  src/test/soccerGridSettingsRace.test.tsx > Soccer Grid first-check settings ownership > the first selection write keeps both settings groups locked
+ FAIL  src/test/soccerGridSettingsRace.test.tsx > Soccer Grid first-check settings ownership > an unverified first answer releases settings without spending a guess
+ FAIL  src/test/soccerGridSettingsRace.test.tsx > Soccer Grid first-check settings ownership > an ordinary first valid answer keeps its board and complete daily save

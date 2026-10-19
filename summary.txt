@@ -1,0 +1,2 @@
+race-alone exit=1 8s |  FAIL  src/test/soccerGridSettingsRace.test.tsx > Soccer Grid first-check settings ownership > an ordinary first valid answer keeps its board and complete daily save
+vitest-all-alone exit=1 448s |       Tests  30 failed | 9109 passed | 58 skipped (9197)
