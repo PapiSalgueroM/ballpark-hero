@@ -11,6 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { buildReportContext } from '@/lib/reportContext';
 import { REPORT_KINDS_QUESTION } from '@/components/game/reportKinds';
+import { useReportDraftLifecycle } from '@/hooks/useReportDraftLifecycle';
 
 interface ReportQuestionProps {
   gameType: string;
@@ -24,18 +25,18 @@ interface ReportQuestionProps {
 const REPORT_REASONS = REPORT_KINDS_QUESTION;
 
 const ReportQuestion = ({ gameType, gameContext = {}, kinds = REPORT_REASONS }: ReportQuestionProps) => {
-  const [open, setOpen] = useState(false);
   // Release BA: the form opens from a plain button, not a DialogTrigger, so
   // Radix has no trigger to give focus back to on close. Hand it back here.
   const trigger = useRef<HTMLButtonElement>(null);
   const [reason, setReason] = useState('');
   const [details, setDetails] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const { open, status, changeOpen, markDraftChanged, beginSubmission, completeSubmission, failSubmission } = useReportDraftLifecycle();
 
   const handleSubmit = async () => {
     const text = details.trim();
     if (!text || status === 'loading') return;
-    setStatus('loading');
+    const submission = beginSubmission();
+    if (!submission) return;
     try {
       const description = [reason, text].filter(Boolean).join(': ');
       const context = buildReportContext(gameContext);
@@ -59,15 +60,12 @@ const ReportQuestion = ({ gameType, gameContext = {}, kinds = REPORT_REASONS }: 
         } as any);
         if (error) throw error;
       }
-      setStatus('success');
-      setTimeout(() => {
-        setOpen(false);
-        setStatus('idle');
+      completeSubmission(submission, () => {
         setReason('');
         setDetails('');
-      }, 1500);
+      });
     } catch {
-      setStatus('error');
+      failSubmission(submission);
     }
   };
 
@@ -75,7 +73,7 @@ const ReportQuestion = ({ gameType, gameContext = {}, kinds = REPORT_REASONS }: 
     <>
       <button
         ref={trigger}
-        onClick={() => setOpen(true)}
+        onClick={() => changeOpen(true)}
         /* Round 209: py-2, not py-1.5. The sweep measured 28px, two short of
            the 30 a thumb needs, on 63 pages. */
         className="inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-foreground"
@@ -85,7 +83,7 @@ const ReportQuestion = ({ gameType, gameContext = {}, kinds = REPORT_REASONS }: 
         Report a problem
       </button>
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={changeOpen}>
         <DialogContent
           className="max-w-sm"
           onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}
@@ -112,7 +110,10 @@ const ReportQuestion = ({ gameType, gameContext = {}, kinds = REPORT_REASONS }: 
                 {kinds.map((r) => (
                   <button
                     key={r}
-                    onClick={() => setReason(r)}
+                    onClick={() => {
+                      if (reason !== r) markDraftChanged();
+                      setReason(r);
+                    }}
                     className={cn(
                       'px-3 py-1.5 rounded-full text-xs font-medium transition-all border',
                       reason === r
@@ -128,7 +129,10 @@ const ReportQuestion = ({ gameType, gameContext = {}, kinds = REPORT_REASONS }: 
               {/* Details */}
               <textarea
                 value={details}
-                onChange={(e) => setDetails(e.target.value)}
+                onChange={(e) => {
+                  if (details !== e.target.value) markDraftChanged();
+                  setDetails(e.target.value);
+                }}
                 placeholder="What did you do, what happened, and what did you expect?"
                 aria-label="Describe the problem"
                 required

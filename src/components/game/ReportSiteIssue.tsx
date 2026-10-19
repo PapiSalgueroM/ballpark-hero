@@ -11,6 +11,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { buildReportContext } from '@/lib/reportContext';
+import { useReportDraftLifecycle } from '@/hooks/useReportDraftLifecycle';
 
 /**
  * Sitewide "Report a bug" (owner Aug 12 2026: "add a button in which people
@@ -31,18 +32,18 @@ import { buildReportContext } from '@/lib/reportContext';
 const REPORT_KINDS = REPORT_KINDS_SITEWIDE;
 
 export function ReportSiteIssue() {
-  const [open, setOpen] = useState(false);
   // Release BA: a plain button opens the form, so Radix has no trigger to give
   // focus back to on close. Hand it back here.
   const trigger = useRef<HTMLButtonElement>(null);
   const [kind, setKind] = useState('');
   const [details, setDetails] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const { open, status, changeOpen, markDraftChanged, beginSubmission, completeSubmission, failSubmission } = useReportDraftLifecycle();
 
   const handleSubmit = async () => {
     const text = details.trim();
     if (!text || status === 'loading') return;
-    setStatus('loading');
+    const submission = beginSubmission();
+    if (!submission) return;
     const description = [kind, text].filter(Boolean).join(': ');
     const context = buildReportContext({}, 'footer-report-button');
     try {
@@ -63,15 +64,12 @@ export function ReportSiteIssue() {
         } as any);
         if (error) throw error;
       }
-      setStatus('success');
-      setTimeout(() => {
-        setOpen(false);
-        setStatus('idle');
+      completeSubmission(submission, () => {
         setKind('');
         setDetails('');
-      }, 1500);
+      });
     } catch {
-      setStatus('error');
+      failSubmission(submission);
     }
   };
 
@@ -79,7 +77,7 @@ export function ReportSiteIssue() {
     <>
       <button
         ref={trigger}
-        onClick={() => setOpen(true)}
+        onClick={() => changeOpen(true)}
         /* Round 209: padded so the footer report link is a real target. */
         className="inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-foreground"
         title="Report a problem"
@@ -88,7 +86,7 @@ export function ReportSiteIssue() {
         Report a problem
       </button>
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={changeOpen}>
         <DialogContent
           className="max-w-sm"
           onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}
@@ -114,7 +112,10 @@ export function ReportSiteIssue() {
                 {REPORT_KINDS.map((k) => (
                   <button
                     key={k}
-                    onClick={() => setKind(k)}
+                    onClick={() => {
+                      if (kind !== k) markDraftChanged();
+                      setKind(k);
+                    }}
                     className={cn(
                       'px-3 py-1.5 rounded-full text-xs font-medium transition-all border',
                       kind === k
@@ -129,7 +130,10 @@ export function ReportSiteIssue() {
 
               <textarea
                 value={details}
-                onChange={(e) => setDetails(e.target.value)}
+                onChange={(e) => {
+                  if (details !== e.target.value) markDraftChanged();
+                  setDetails(e.target.value);
+                }}
                 placeholder="What did you do, what happened, and what did you expect?"
                 aria-label="Describe the problem"
                 required
