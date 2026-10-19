@@ -1,0 +1,12 @@
+treeWithoutMerge: 196c9c85711936ee48900c44c84178bed9637ccd, 9f5a94e8 without c855520d; conflicts kept from 9f5a94e8: scripts/playPlayerAutocompleteTouchScroll.mjs, scripts/simPlayerAutocompleteTouchScroll.mjs
+bindAt: scripts/simPlayerAutocompleteTouchScroll.mjs bound
+bindAt: 36cc9ffe7e13 -> 196c9c857119
+runProver: touchctl at 9e7cefc69411846a3c7d0b9c83bec16bd6559b5d (release BK bound: 9f5a94e8018c with its pinned bases bound to the joined tree)
+Touch scroll: one actual component unit file, all20 named outcomes, 14 passes and 6 exact intended faults; childexit1.
+Complete raw outcomes, logs and process receipt retained; 14 unchanged source copies and 10 parent bindings.
+Two complete physical TSX compilations retained with source hashes, output hashes and actual compiler version.
+Actual application mutation: none; effective copied source faults1; no file, setup or pending credit.
+Effective pointerdown control: 7c11c31109912ccb50b23817b53c6c1e0c2ac809d6d7f9ce525fed2c36ffbe82 -> 5bac9b698f7f341c9952cafb817fb313f1a583ad8feed258b4396ad727437093; whole fixed-source inverse held.
+simPlayerAutocompleteTouchScroll pointerdown: green.
+runProver: touchctl exit 0
+FIRED-OK
