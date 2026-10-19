@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerNoSack.test.tsx --testTimeout=300000 --hookTimeout=120000
+s178: SECTION=1,7,8 node scripts/simCmDifficulty.mjs
+helpdrift: CM_DIFF_CONTROL=helpdrift SECTION=7 node scripts/simCmDifficulty.mjs
+helpdrifte: CM_DIFF_CONTROL=helpdrifte SECTION=7 node scripts/simCmDifficulty.mjs
+alloff-kids: CM_DIFF_CONTROL=alloff SECTION=4 LEVELS=easy,normal SEEDS=1 SEASONS=2 PARTS=2 PAR=2 node scripts/simCmDifficulty.mjs
+alloff-kids-old: git show d9c9d628:scripts/simCmDifficulty.mjs > scripts/simCmDifficultyOld.mjs && CM_DIFF_CONTROL=alloff SECTION=4 LEVELS=easy,normal SEEDS=1 SEASONS=2 PARTS=2 PAR=2 node scripts/simCmDifficultyOld.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simCmNoSack: node scripts/simCmNoSack.mjs
+simEarlyReturnScope: node scripts/simEarlyReturnScope.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
