@@ -40,7 +40,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
   const chip = (active: boolean) =>
     `px-3 py-2 rounded-lg text-xs font-semibold border transition-all ${
       active
-        ? "border-emerald-500 bg-emerald-500/15 text-emerald-300"
+        ? "border-emerald-500 bg-emerald-500/15 text-emerald-300 [.light_&]:text-foreground"
         : "border-border bg-muted/20 text-muted-foreground hover:bg-muted/40 hover:text-foreground"
     }`;
 
@@ -92,7 +92,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
             onClick={() => setTab(t.key)}
             className={`py-2 rounded-lg text-[11px] font-bold border transition-all ${
               tab === t.key
-                ? "border-emerald-500 bg-emerald-500/15 text-emerald-300"
+                ? "border-emerald-500 bg-emerald-500/15 text-emerald-300 [.light_&]:text-foreground"
                 : "border-border bg-muted/20 text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -175,7 +175,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
                 onClick={() => set({ boots: b.id })}
                 className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-[11px] font-semibold border transition-all text-left ${
                   appearance.boots === b.id
-                    ? "border-emerald-500 bg-emerald-500/15 text-emerald-300"
+                    ? "border-emerald-500 bg-emerald-500/15 text-emerald-300 [.light_&]:text-foreground"
                     : "border-border bg-muted/20 text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -205,7 +205,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
                 onClick={() => set({ celebration: c.id })}
                 className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-[11px] font-semibold border transition-all text-left ${
                   appearance.celebration === c.id
-                    ? "border-emerald-500 bg-emerald-500/15 text-emerald-300"
+                    ? "border-emerald-500 bg-emerald-500/15 text-emerald-300 [.light_&]:text-foreground"
                     : "border-border bg-muted/20 text-muted-foreground hover:text-foreground"
                 }`}
               >
