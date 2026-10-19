@@ -62,7 +62,7 @@ export function DifficultyOption({ career, onDifficulty }: { career: CareerState
               data-cm-level-choice={lv}
               data-cm-level-armed={armedLevel === lv ? 'yes' : undefined}
               className={cn(
-                'min-h-[40px] rounded-lg border px-1.5 py-1.5 text-xs font-bold transition-colors disabled:opacity-60',
+                'min-h-[44px] rounded-lg border px-1.5 py-1.5 text-xs font-bold transition-colors disabled:opacity-60',
                 level === lv ? 'bg-primary text-primary-foreground border-primary'
                   : armedLevel === lv ? 'border-primary bg-primary/10 text-foreground'
                     : 'bg-secondary border-border text-muted-foreground hover:text-foreground',
