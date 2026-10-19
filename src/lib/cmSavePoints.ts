@@ -29,7 +29,7 @@ import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import { SAVE_KEY, trimCareer, type CareerState } from '@/lib/clubManager';
 import { summarize } from '@/lib/clubManagerSlots';
 import { CONTINUE_SAVES, type ContinueSave } from '@/data/continueSaves';
-import { browserStorage, type ListableStorage } from '@/lib/brokenSaveRecovery';
+import { BACKUPS_KEPT, backupKeysOf, browserStorage, type ListableStorage } from '@/lib/brokenSaveRecovery';
 import { PENDING_COPY_KEY, PENDING_RESTORE_KEY, sumOf, type KeeperRefusal } from '@/lib/saveKeeper';
 import { getStorageTrouble, settlePendingSaves } from '@/lib/safeStorage';
 import {
@@ -185,6 +185,18 @@ function restoreCopyNow(entry: ContinueSave, text: string): { ok: true } | { ok:
   if (getStorageTrouble() === 'blocked') return { ok: false, why: 'blocked' };
   if (!settlePendingSaves()) return { ok: false, why: 'no-room' };
   return stageCopy(entry, text, browserStorage());
+}
+
+/**
+ * Review of 2026-10-19: whether a restore now may drop the oldest kept aside
+ * save. Club Manager keeps its BACKUPS_KEPT newest kept aside saves, shared by
+ * every slot, and a restore keeps the career he has aside as one more, so with
+ * that many held already the oldest can go. The confirm names the cap then,
+ * before the press, as the broken save card does. Never throws.
+ */
+export function restoreMayDrop(storage: ListableStorage | null = browserStorage()): boolean {
+  const entry = CONTINUE_SAVES.find(e => e.saveKey === SAVE_KEY);
+  return !!entry && backupKeysOf(entry, storage).length >= BACKUPS_KEPT;
 }
 
 type Stage = (entry: ContinueSave, text: string) => { ok: true } | { ok: false; why: KeeperRefusal };

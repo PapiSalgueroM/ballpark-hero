@@ -63,6 +63,16 @@ describe('the save points screen names the right cause', () => {
     expect(note(v)).toContain('out of room');
   });
 
+  it('the restore confirm names the three kept aside cap only when a restore may drop one', () => {
+    const { v } = screenWithOnePoint('Before the derby');
+    fireEvent.click(v.getByTestId('cm-point-restore'));
+    expect(v.queryByTestId('cm-point-crowded')).toBeNull();
+    fireEvent.click(v.getByText('Cancel'));
+    for (let i = 1; i <= 3; i += 1) localStorage.setItem(`dukb-club-manager-save.broken-${1700000000000 + i}`, `{"aside":${i}}`);
+    fireEvent.click(v.getByTestId('cm-point-restore'));
+    expect(v.getByTestId('cm-point-crowded').textContent).toContain('three newest kept aside saves');
+  });
+
   it('a damaged point is named in the refusal, and nothing is staged', () => {
     const { id, v } = screenWithOnePoint('Before the derby');
     const packed = localStorage.getItem(pointKey(1, id))!;
