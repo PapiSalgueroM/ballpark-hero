@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+# Round 1515 review (run lens) on 718aa65f: the reviewer's walk again with the put back judged by matches played (the page re-saves the career it opens), at 390 reduced motion and 1280 full motion; and the same walk against a build of the base 1a028447, which must go red on the slot checks
+walk2: COMBOS=390:reduce,1280:no-preference node .rc/x/walk1515.mjs
+walk-base: R=$PWD && mkdir -p $RC_OUT/base && git worktree add -q /tmp/base 1a028447 && cd /tmp/base && ln -s $R/node_modules node_modules && npm run build > /tmp/base-build.log 2>&1 && (node $R/scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/base-serve.log 2>&1 &) && sleep 4 && cd $R && RC_OUT=$RC_OUT/base BASE=http://localhost:4174 COMBOS=390:reduce node .rc/x/walk1515.mjs
