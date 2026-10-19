@@ -1,0 +1,107 @@
+{
+  "cases": [],
+  "timing": {
+    "profile": "390, 150 ms latency, 1.6 Mbps down",
+    "deckFile": "soccerDeck-B4A6yKDa.js",
+    "deps": [
+      "AppearanceBuilder-CTjydPqy.js",
+      "keyedRng-BKZQ2UGv.js",
+      "SoccerCareer-CoFjSTKo.js",
+      "soccerMoments-6RaMPH_I.js",
+      "index-Dt1sHGfV.js",
+      "PlayerAvatar-sAs1ZIZ9.js",
+      "soccerCareerAppearance-BDCQQaP7.js",
+      "soccerBoots-BK_dXNrV.js",
+      "soccerBootIds-BWkyFIXk.js",
+      "useCareerMoment-C7zOyrov.js",
+      "clubRivalries-DuNC-DyB.js",
+      "formatNumber-CGuttX8h.js",
+      "dialogA11y-BCgxbiii.js",
+      "useGameCompletion-mik38ih6.js",
+      "badges-CMXNJNkE.js",
+      "GameSeoContent-doUfg8w4.js",
+      "GameReportContext-BiPBfVVy.js",
+      "flag-CLQwfHq-.js",
+      "GameNavbar-Cd_lzZhw.js",
+      "arrow-left-Bou9hb6Z.js",
+      "star-CjX3SKiO.js",
+      "medal-DjL9RRw9.js",
+      "GameHelp-COw84CDi.js",
+      "HowToPlayPopover-BDWwFBCE.js",
+      "circle-help-D0S8IL_-.js",
+      "VictoryMoment-Cth-q-zK.js",
+      "select-BIEuYASi.js",
+      "chevron-down-DpGO19SN.js",
+      "chevron-up-FdyS63MX.js",
+      "confederationGroups-8jgsrX6T.js",
+      "soccerInternational-FiWGI8ks.js",
+      "lz-string-cemwgVSj.js",
+      "intlNames-DiJYNZJt.js",
+      "uclFormatHistory-DwuhruDw.js",
+      "careerRivalryChoices-B2c2ZYXB.js",
+      "managerOffers-EoQ6k_gA.js",
+      "careerAwardsNight-BDQnO6dK.js",
+      "arcade-CUT7KVjC.js",
+      "freeKick-BSoL5hQo.js",
+      "Confetti-Cgmdw6jq.js",
+      "Celebration-DZhzMdaQ.js",
+      "CelebrationStyles-Dq2DRroU.js",
+      "FlagImg-Bse7jwju.js",
+      "ShareButtons-CZakFqAE.js",
+      "copy-CDDU0BjS.js",
+      "useRevealScroll-Bp_zSayY.js",
+      "useArrivalTop-Cf8HK931.js",
+      "throughBallDrill-B9fNBoXH.js",
+      "core-Dsglyqbx.js",
+      "leagueCore--DUG-EXw.js",
+      "keyedShuffle-CJAps3xO.js",
+      "ownGoalRule-J3XQry1d.js"
+    ],
+    "fetched": [
+      {
+        "file": "soccerDeck-B4A6yKDa.js",
+        "start": 11587,
+        "end": 11921,
+        "before": false
+      },
+      {
+        "file": "soccerMoments-6RaMPH_I.js",
+        "start": 11587,
+        "end": 11867,
+        "before": false
+      },
+      {
+        "file": "throughBallDrill-B9fNBoXH.js",
+        "start": 11587,
+        "end": 11779,
+        "before": false
+      },
+      {
+        "file": "core-Dsglyqbx.js",
+        "start": 11587,
+        "end": 11851,
+        "before": false
+      },
+      {
+        "file": "leagueCore--DUG-EXw.js",
+        "start": 11587,
+        "end": 11758,
+        "before": false
+      },
+      {
+        "file": "ownGoalRule-J3XQry1d.js",
+        "start": 11587,
+        "end": 11757,
+        "before": false
+      },
+      {
+        "file": "keyedShuffle-CJAps3xO.js",
+        "start": 11587,
+        "end": 11757,
+        "before": false
+      }
+    ],
+    "ms": 334
+  },
+  "failures": 0
+}
