@@ -1,0 +1,6 @@
+# Release BL triage j: what the AppearanceBuilder is given on the US boards' create screens at m3 75340a83 and m2
+# ab1fe605, logged by probeBuilder.mjs during the board replay (summary of distinct sport, tab, list length, hair,
+# colour). Send with: wt.sh probeBuilder.mjs
+#!serial
+probe-m3: bash .rc/x/wt.sh 75340a83 pj3 bash -c "node $PWD/.rc/x/probeBuilder.mjs && BLPROBE=1 CI=1 US_BOARD_FIXTURE=replay US_BOARD_FIXTURE_REPORT=/tmp/rep3.txt node_modules/.bin/vitest run src/test/usBoardFixture.test.tsx > /tmp/pj3.log 2>&1; grep -o 'BLPROBE {[^}]*}' /tmp/pj3.log | cut -c9- | sort | uniq -c | sort -rn | head -14; grep -c BLPROBE /tmp/pj3.log; grep -E '^nba' /tmp/rep3.txt | head -3 | cut -c1-200"
+probe-m2: bash .rc/x/wt.sh ab1fe605 pj2 bash -c "node $PWD/.rc/x/probeBuilder.mjs && BLPROBE=1 CI=1 US_BOARD_FIXTURE=replay US_BOARD_FIXTURE_REPORT=/tmp/rep2.txt node_modules/.bin/vitest run src/test/usBoardFixture.test.tsx > /tmp/pj2.log 2>&1; grep -o 'BLPROBE {[^}]*}' /tmp/pj2.log | cut -c9- | sort | uniq -c | sort -rn | head -14; grep -c BLPROBE /tmp/pj2.log; grep -E '^nba' /tmp/rep2.txt | head -3 | cut -c1-200"
