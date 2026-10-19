@@ -1,0 +1,7 @@
+# Release BL: PR346's role adaptation on all three Grid tests that find the search input as a textbox (PR343's and PR344's
+# frozen bodies, PR346's own red, and PR329's settings race test, the join's), applied on the head; the three files run
+# plainly, the patch kept for the lead. Send with gridRole.mjs wt.sh
+#!serial
+grid-role3: bash .rc/x/wt.sh HEAD^ grole3 bash -c 'GRID_ROLE_SETTINGS=1 node '"$PWD"'/.rc/x/gridRole.mjs && git diff > '"$RC_OUT"'/grid-role.patch && git diff --stat | tail -1 && node_modules/.bin/vitest run src/test/soccerGridSearchDiscovery.test.tsx src/test/soccerGridBlurOwnership.test.tsx src/test/soccerGridSettingsRace.test.tsx > /tmp/gr.log 2>&1; s=$?; sed "s/\x1b\[[0-9;]*m//g" /tmp/gr.log | grep -E "Tests |Test Files|FAIL" | head -8; exit $s'
+race-main: bash .rc/x/wt.sh b967a309 rmain bash -c 'node_modules/.bin/vitest run src/test/soccerGridSettingsRace.test.tsx 2>&1 | sed "s/\x1b\[[0-9;]*m//g" | grep -E "Tests " | head -2'
+race-m9: bash .rc/x/wt.sh 29c94aa5 rm9 bash -c 'node_modules/.bin/vitest run src/test/soccerGridSettingsRace.test.tsx 2>&1 | sed "s/\x1b\[[0-9;]*m//g" | grep -E "Tests " | head -2'
