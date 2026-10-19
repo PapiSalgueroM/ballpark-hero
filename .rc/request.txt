@@ -1,0 +1,2 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/cmSavePointsScreen.test.tsx src/test/cmSavePointsHook.test.tsx src/test/cmSavePointsDoor.test.tsx --testTimeout=300000 --hookTimeout=120000
