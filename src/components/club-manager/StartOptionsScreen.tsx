@@ -94,7 +94,7 @@ export function DifficultyOption({ career, onDifficulty }: { career: CareerState
               : seasonOff
                 ? `Season ${career.season} posts no leaderboard score (it posted already, or you went back into it with a save point). From next season Medium, Hard and Impossible post, and Very Easy and Easy do not, from the moment you pick one.`
                 : 'Medium, Hard and Impossible post leaderboard scores. Very Easy and Easy do not, from the moment you pick one.'}
-          {' '}Negotiation strictness below is a separate setting.
+          {' '}Negotiation strictness in Options is a separate setting.
         </p>
       </div>
   );

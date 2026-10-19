@@ -88,21 +88,25 @@
    the steady keeper's 1.39, big club titles 4.25 and 3.83 in ten. One season takes about 0.7 s on a runner.
 
    MEASURED AGAIN FOR ROUND 1512 (GitHub runners, the engine of Release BK). Section 4, the engaged driver, 9
-   clubs, seeds 0 to 15, 6 seasons a level (864 seasons each), sharded 4 a level and folded: Medium, Easy, Hard
-   and Impossible from r1512-m1 and r1512-m1b on a1882d3e, Very Easy from r1512-m2 on e86f0fe2 (its final dials;
-   no other row moved between the two commits, and each career plays on its own module and stream).
+   clubs, seeds 0 to 15, 6 seasons a level (864 seasons each), sharded 4 a level and folded: Medium, Hard and
+   Impossible from r1512-m1 and r1512-m1b on a1882d3e; Easy and Very Easy from r1512-fx2-m on 32813bb5, the
+   easy market's sale floor in (markedPriceOf; the same shard of Medium played there came back byte equal to
+   a1882d3e's, and each career plays on its own module and stream).
                          mid ppg   vs Medium   sacked seasons      spend a season    big titles   small ppg
-     Very Easy           1.71      +28.3%       1 of 864 (0.00x)   40.74m (+49.8%)   6.88         1.47
-     Easy                1.55      +16.5%      44 of 864 (0.18x)   33.58m (+23.5%)   4.93         1.36
+     Very Easy           1.73      +30.0%       0 of 864 (0.00x)   38.19m (+40.4%)   7.60         1.45
+     Easy                1.52      +14.2%      44 of 864 (0.18x)   32.89m (+20.9%)   4.72         1.37
      Medium              1.33                 244 of 864 (0.28)    27.20m            3.89         1.09
      Hard                1.20      -9.8%      535 of 864 (2.19x)   22.30m (-18.0%)   2.19         0.73
      Impossible          1.08      -18.6%     729 of 864 (2.99x)   14.69m (-46.0%)   1.15         0.56
      the lead's bands:   Easy up 6 to 20, sacked at most 0.75x, spend up; Very Easy up 14 to 35, at most 0.5x,
                          spend above Easy's, big titles under 9, small ppg under 2.3.
      Medium against Medium (even seeds against odd): 1.35 and 1.31, a 2.9% gap.
-     Seed blocks (0 to 7 | 8 to 15): Very Easy +28.1 | +28.6, spend 39.75 | 41.74m; Easy +17.2 | +15.9, spend
-     34.75 | 32.42m; Hard -8.1 | -11.8; Impossible -17.3 | -20.0. Every easy band holds in both blocks; the
-     nearest edge is Easy's ceiling of 20 (2.8 points over block one's 17.2).
+     Seed blocks (0 to 7 | 8 to 15): Very Easy +28.5 | +31.4, spend 39.17 | 37.22m, big titles 7.85 | 7.36;
+     Easy +12.7 | +15.7, spend 34.00 | 31.78m; Hard -8.1 | -11.8; Impossible -17.3 | -20.0. Every easy band
+     holds in both blocks; the nearest edge is Very Easy's big titles, 7.85 in block one against under 9.
+     Before the sale floor (r1512-m2 on e86f0fe2, same dials): Very Easy +28.3%, spend 40.74m, big titles
+     6.88; Easy +16.5%, spend 33.58m, big titles 4.93. The floor lifts what a man of 30 or over (and on Very
+     Easy a man of 24 to 29) costs you, so the spend a season fell and the bands still hold.
      Very Easy first measured at cheque 1.4 and mark 0.75 (r1512-m1): +29.7%, spend 35.41m against Easy's
      33.58m, but 35.09 against 34.75m in block one, so "spend above Easy's" was 0.34m from a coin toss; the
      dials moved to cheque 1.5 and mark 0.8 (a cheaper market lowers the fee per man, so it pulled the spend
@@ -122,7 +126,8 @@
      clause      the clause floor at the card's price taken out            3
      nojoin      joinClubNow returns the new job without its dials         3 (M1 and M2 on a mid season move)
      ddreach     deadlineDay.ts gains a call to oppStrengthVsMe            6
-     alloff      Hard and Legend carry Normal's dials                      4
+     alloff      every level off Medium carries Medium's dials, in the     4
+                 shard children too (Round 1512 review)
      helpdrift   Hard's cheque moved by 0.05 in memory                     7
    Round 1512:
      flate       Easy's gain set to Medium's                               1
@@ -134,6 +139,9 @@
      easyclear   going back up clears the easy mark                        8 (8d)
      midnolevel  setDifficulty says yes and writes nothing                 8 (8b, 8c, 8d, 8f)
      foldflat    FOLD with Easy and Very Easy as copies of Medium's seasons  the fold's easy bands
+   Round 1512 closing check:
+     vefloor     the easy mark's floor at what a sale banks taken out      3 (the Very Easy pass)
+     helplines   the help's first two level lines folded into one          7
 
    Run: node scripts/simCmDifficulty.mjs     (SECTION=1, MEASURE=1 SEEDS=4 SEASONS=10)
         git worktree add /tmp/base <base sha> && BASE_ROOT=/tmp/base node scripts/simCmDifficulty.mjs
@@ -159,6 +167,8 @@ const CONTROLS = {
   /* Round 1512: the easy rows and the change between matches. */
   flate: ['1'], oldlevel: ['2'], 've-gain': ['3'], 've-pain': ['3'], 've-cheque': ['3'], 've-wages': ['3'], 've-mark': ['3'], 've-edge': ['3'],
   helpdrifte: ['7'], midleak: ['8'], easyclear: ['8'], midnolevel: ['8'], foldflat: [],
+  /* Round 1512 closing check: the easy market's floor at what a sale banks; two levels on one line of the help. */
+  vefloor: ['3'], helplines: ['7'],
 };
 const cannot = why => { console.log(`simCmDifficulty: CANNOT RUN: ${why}`); process.exit(2); };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`CM_DIFF_CONTROL=${CONTROL} is not a control this harness knows`);
@@ -192,6 +202,8 @@ const PATCHES = {
   easyclear: { file: 'clubManagerStart.ts', from: "  if (level === 'normal') delete next.difficulty;", to: "  if (!isEasyLevel(level)) delete next.easySince;\n  if (level === 'normal') delete next.difficulty;" },
   /* A change that says yes but writes nothing: the next match and the next cheque stay on the old level. */
   midnolevel: { file: 'clubManagerStart.ts', from: '  return { ...state, startOptions: optionsAtLevel(state, level) };', to: '  return { ...state };' },
+  /* Round 1512 closing check: the easy mark without its floor, so a man is listed under what his sale banks. */
+  vefloor: { file: 'clubManagerDifficulty.ts', from: '  return Math.min(mp.price, Math.max(marked, Math.round(mp.value * SALE_SHARE * 10) / 10));', to: '  return marked;' },
 };
 /* Without BASE_ROOT, section 2 compares with this tree with every dial read as Normal's: the same claim (a
    career without the key never takes a lever's path), held for as long as the levers exist. */
@@ -768,7 +780,7 @@ function seasonEnd(m, club, seed) {
 const keyed = (s, level) => ({ ...s, startOptions: { ...(s.startOptions ?? {}), difficulty: level } });
 function section3() {
   const seeds = num('SEEDS3', 4);
-  if (LEVER_CONTROL || CONTROL === 'clause' || CONTROL === 'nojoin') console.log(`NEGATIVE CONTROL ON: ${CONTROL === 'clause' ? 'the clause floor at the card\'s price is gone' : CONTROL === 'nojoin' ? 'joinClubNow returns the new job without its dials' : `${LEVEL_WORD[LEVER_CONTROL.level]}'s ${LEVER_CONTROL.keys.join(' and ')} set back to Medium's`}`);
+  if (LEVER_CONTROL || CONTROL === 'clause' || CONTROL === 'nojoin' || CONTROL === 'vefloor') console.log(`NEGATIVE CONTROL ON: ${CONTROL === 'clause' ? 'the clause floor at the card\'s price is gone' : CONTROL === 'vefloor' ? 'the easy mark\'s floor at what a sale banks is gone' : CONTROL === 'nojoin' ? 'joinClubNow returns the new job without its dials' : `${LEVEL_WORD[LEVER_CONTROL.level]}'s ${LEVER_CONTROL.keys.join(' and ')} set back to Medium's`}`);
   console.log(`3) each lever does what its dial says (${LVN} with one lever on, the rest Medium's), ${seeds} seeds`);
   const clubs = fleetClubs();
   /* B1: the board's change after the first match. */
@@ -945,8 +957,14 @@ function section3money() {
     const s0 = withStream(5, () => m.cm.startCareer('Brentford'));
     const sh = { ...setUp(m, s0, { level: LV }), budget: 9999, transferWindow: s0.transferWindow ?? 'summer' };
     const base = m.cm.buildMarket(sh), mine = m.dif.marketForMe(sh, base);
+    /* Round 1512 closing check: under 1 the mark never lists a man under 0.9 of his value (what selling him
+       straight back banks) nor over Medium's price; the signings below hold that against the engine's sellValue. */
+    const listed = mp => {
+      const plain = Math.max(0.5, Math.round(mp.price * dial.mark * 10) / 10);
+      return dial.mark < 1 && mp.value !== undefined ? Math.min(mp.price, Math.max(plain, Math.round(mp.value * 0.9 * 10) / 10)) : plain;
+    };
     let marked = 0;
-    mine.forEach((mp, i) => { if (mp.name === base[i].name && mp.value === base[i].value && mp.price === Math.max(0.5, Math.round(base[i].price * dial.mark * 10) / 10)) marked += 1; });
+    mine.forEach((mp, i) => { if (mp.name === base[i].name && mp.value === base[i].value && mp.price === listed(base[i])) marked += 1; });
     if (marked !== base.length || (dial.mark !== 1 && mine.every((mp, i) => mp.price === base[i].price))) fail(`T1: ${marked} of ${base.length} cards are the same man at the marked price`);
     else ok(`T1: all ${base.length} cards are the same men in the same order at ${dial.mark} times the list`);
     /* Round 1512: a card the mark moved (on an easy row a cheap man can sit on the 0.5 floor at his list price). */
@@ -956,6 +974,24 @@ function section3money() {
     else ok(`T1 ${LVN}: Buy charges the marked price (${pick.price} for a man listed at ${base[mine.indexOf(pick)].price})`);
     const floor = mine.filter(mp => mp.price < 0.5).length;
     if (floor) fail(`T1 ${LVN}: ${floor} cards are listed under the 0.5 floor`);
+    /* Round 1512 closing check (review minor 4): on a row under 1, buying a man must never cost less than selling
+       him straight back banks, or a Very Easy career buys a man over 30 at 0.72 of his value and sells him at 0.9.
+       Every card that can be signed is bought on its own from the same state and read back by sellValue. */
+    if (dial.mark < 1) {
+      let n = 0, under = 0, older = 0, first = '';
+      for (const mp of mine) {
+        const after = m.cm.buyPlayer(sh, mp);
+        const signed = after && after.squad.find(p => p.name === mp.name && !sh.squad.some(q => q.id === p.id));
+        if (!signed) continue;
+        n += 1;
+        if (mp.age >= 30) older += 1;
+        const paid = sh.budget - after.budget, sale = m.cm.sellValue(signed);
+        if (paid < sale - 1e-9) { under += 1; if (!first) first = `${mp.name}, ${mp.age}, ${f2(paid)}m paid against ${f2(sale)}m banked`; }
+      }
+      if (n < 200 || older < 20) fail(`T1 ${LVN}: only ${n} signings (${older} of 30 or over) to hold the floor against`);
+      else if (under) fail(`T1 ${LVN}: ${under} of ${n} signings cost less than selling him straight back banks (first ${first})`);
+      else ok(`T1 ${LVN}: none of ${n} signings (${older} of 30 or over) costs less than selling him straight back banks`);
+    }
     if (LV !== 'hard') {
       const runA = withStream(21, () => { let s = mn.cm.startCareer('Brentford'); for (let i = 0; i < 6; i += 1) s = mn.cm.playNextEntry(s, { skipHalftime: true }).state; return s.aiHeadlines; });
       const runB = withStream(21, () => { let s = setUp(m, m.cm.startCareer('Brentford'), { level: LV }); for (let i = 0; i < 6; i += 1) s = m.cm.playNextEntry(s, { skipHalftime: true }).state; return s.aiHeadlines; });
@@ -1114,7 +1150,8 @@ async function fleetInChildren(levels, seeds, seasons, drivers) {
     const env = { ...process.env, SECTION: '4', LEVELS: lv, SHARD: `${k}/${parts}`, OUT_JSON: out, SEEDS: String(seeds), SEASONS: String(seasons), DRIVERS: drivers.join(',') };
     /* A child is a measurement, never a control run; the alloff control reaches it as a dial edit instead. */
     delete env.CM_DIFF_CONTROL;
-    if (CONTROL === 'alloff') env.DIALS_JSON = JSON.stringify({ hard: { ...DIALS.normal }, legend: { ...DIALS.normal } });
+    /* Round 1512 review: every level off Medium, the two easy rows included, as the in memory edit does. */
+    if (CONTROL === 'alloff') env.DIALS_JSON = JSON.stringify(Object.fromEntries(OFF_MEDIUM.map(l => [l, { ...DIALS.normal }])));
     const child = spawn(process.execPath, [fileURLToPath(import.meta.url)], { env, stdio: ['ignore', 'pipe', 'pipe'] });
     let tail = '';
     child.stdout.on('data', d => { tail = (tail + d).slice(-400); });
@@ -1186,13 +1223,30 @@ function section7() {
   const four = f => [H, L, E, V].map(d => fmt(f(d)));
   want.push('4.5', ...four(d => -4.5 * d.pain), '4', ...four(d => 4 * d.gain));
   want.push('40', ...four(d => 40 * d.cheque));
-  want.push('10', ...four(d => Math.max(0.5, 10 * d.mark)));
+  /* Round 1512 closing check: the man is 23 or under (the engine lists him at 1.25 of his value), so on the
+     easy rows the floor at what a sale banks (0.9 of a value of 8, 7.2) sits under the marked price. */
+  want.push('23', '10', ...four(d => Math.max(0.5, 10 * d.mark)));
+  const saleFloor = Math.round((10 / 1.25) * 0.9 * 10) / 10;
+  for (const [w, d] of [['Easy', E], ['Very Easy', V]]) if (Math.max(0.5, Math.round(10 * d.mark * 10) / 10) < saleFloor) fail(`the example's man of 23 costs ${fmt(10 * d.mark)}m on ${w}, under the ${saleFloor}m a sale banks, so the market lists him at the floor instead`);
   want.push('80', ...four(d => 80 + d.edge));
   want.push('35', fmt(35 - H.cut), fmt(35 - L.cut), fmt(35 - E.cut));
   if (E.cut !== V.cut) fail(`the example names one opening for Easy and Very Easy, but their cuts are ${E.cut} and ${V.cut}`);
   const src = code(read('src/components/club-manager/ClubManagerHelp.tsx'));
   const at = src.indexOf('data-cm-help="difficulty"');
-  const block = at < 0 ? '' : src.slice(at, src.indexOf('</div>', at));
+  let block = at < 0 ? '' : src.slice(at, src.indexOf('</div>', at));
+  if (CONTROL === 'helplines') {
+    if (!/<\/li>\s*<li>/.test(block)) cannot('helplines: the How hard block has no two lines in a row to fold into one');
+    block = block.replace(/<\/li>\s*<li>/, ' ');
+    console.log('NEGATIVE CONTROL ON: two levels of the help folded into one line');
+  }
+  /* Round 1512 closing check (review minor 12, the brief's decision 6): the block names the five levels one
+     short line each, easiest first, every line opening with its level's name. */
+  const lines = [...block.matchAll(/<li>([\s\S]*?)<\/li>/g)].map(x => x[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim());
+  const named = lines.map(l => l.split(':')[0]);
+  const words = LEVELS.map(l => LEVEL_WORD[l]);
+  if (JSON.stringify(named) !== JSON.stringify(words)) fail(`the help's level lines open ${named.join(', ') || 'with nothing'}; one line a level, easiest first, would be ${words.join(', ')}`);
+  else if (lines.some(l => l.length > 160)) fail(`a level line runs to ${Math.max(...lines.map(l => l.length))} characters, not one short line`);
+  else ok(`the help gives the five levels one short line each (${lines.map(l => l.length).join(', ')} characters)`);
   const ex = block.split('<p>').find(p => p.includes('Example:')) ?? '';
   const text = ex.replace(/<[^>]+>/g, ' ');
   const got = [...text.matchAll(/\d+(?:\.\d+)?/g)].map(x => x[0]);
@@ -1209,7 +1263,9 @@ function section7() {
   /* Round 1512: Normal is called Medium on screen now (its saved id is still 'normal'). */
   if (!/Everything elsewhere on this screen, every number and every promise, is for a Medium career/.test(first) || !/No sacking/.test(first)) fail('the block does not open by saying everything else on the screen is Medium\'s and that No sacking switches off the zero rule');
   else ok('the block opens by saying everything else on the screen, numbers and promises, is Medium\'s, and names No sacking');
-  if (!/one bad night can already take you under Safe/.test(first)) fail('the block does not say that one bad night in a new job can take you under Safe on Hard and Legend');
+  /* Round 1512 closing check: with one line a level, the detail sits in its own paragraph after the lines. */
+  const prose = block.split('<p>').filter(p => !p.includes('Example:')).join(' ').replace(/<[^>]+>/g, ' ');
+  if (!/one bad night can already take you under Safe/.test(prose)) fail('the block does not say that one bad night in a new job can take you under Safe on Hard and Legend');
   else ok('the block says one bad night in a new job can take you under Safe');
 }
 

@@ -12,7 +12,8 @@
  *   cheque  the board's money (day one, every summer, a move) times this
  *   wageRoom the wage ceiling a job starts with times this (never under 60)
  *   mark    the price the market lists FOR YOU times this; the AI's own deals
- *           and every man's value are untouched
+ *           and every man's value are untouched. Under 1, never under what
+ *           selling him straight back banks (markedPriceOf)
  *   edge    strength points the other side adds in your matches only. Round 1512: negative on
  *           Very Easy and Easy. Every reader of oppStrengthVsMe takes that safely: the goal rates
  *           (halfLambdas and matchFacts) clamp to 0.12 to 4.2, the shootout's made up takers and
@@ -106,12 +107,29 @@ export function markedPrice(state: CareerState, price: number): number {
   return mark === 1 ? price : Math.max(0.5, Math.round(price * mark * 10) / 10);
 }
 
+/** What selling a man you have just signed banks: sellValue's 0.9 of his value (src/lib/clubManager.ts), for a
+ *  signing on a deal of two years or more. A number here, not an import, because this file must not import the
+ *  engine at runtime; simCmDifficulty section 3 holds it against the engine's own sellValue. */
+const SALE_SHARE = 0.9;
+
+/** T1: one man as the market lists him to you. Round 1512 closing check: on an easy row the mark never takes
+ *  him under what selling him straight back would bank, and never over the price Medium lists him at. Without
+ *  that floor a Very Easy career could buy a man over 30 at 0.72 of his value and sell him at 0.9. The rows
+ *  over 1 (Hard and Impossible) are markedPrice exactly, as before. */
+export function markedPriceOf(state: CareerState, mp: MarketPlayer): number {
+  const { mark } = dialsOf(state);
+  if (mark === 1) return mp.price;
+  const marked = markedPrice(state, mp.price);
+  if (mark > 1 || mp.value === undefined) return marked;
+  return Math.min(mp.price, Math.max(marked, Math.round(mp.value * SALE_SHARE * 10) / 10));
+}
+
 /** T1: the market as you see it. The same array at Normal; otherwise the same men in
  *  the same order, every field kept, only the price marked (never the value, which a
  *  signing stores on the man and a sale reads back). */
 export function marketForMe(state: CareerState, market: MarketPlayer[]): MarketPlayer[] {
   if (dialsOf(state).mark === 1) return market;
-  return market.map(mp => ({ ...mp, price: markedPrice(state, mp.price) }));
+  return market.map(mp => ({ ...mp, price: markedPriceOf(state, mp) }));
 }
 
 /** P1: what the other side adds to its strength in your match. */
