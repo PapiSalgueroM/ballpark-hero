@@ -1,0 +1,4 @@
+vemark exit=1 49s | simCmDifficulty: 2 FAILURES (sections 3)
+vitest-dif exit=1 8s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerDifficulty.test.ts,title=src/lib/clubManagerDifficulty.test.ts > Round 1512%3A the dials on 
+vefloor exit=1 85s | simCmDifficulty: 4 FAILURES (sections 3)
+s3 exit=0 114s | simCmDifficulty: all green (sections 3)

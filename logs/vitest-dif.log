@@ -1,0 +1,51 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerDifficulty.test.ts [2m([22m[2m23 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1902[2mms[22m[39m
+   [32m✓[39m readLevel and the stored key[2m > [22mreads only the five exact ids, everything else is Medium (normal)[32m 7[2mms[22m[39m
+   [32m✓[39m readLevel and the stored key[2m > [22ma fresh career is Normal and carries no key at all[32m 96[2mms[22m[39m
+   [32m✓[39m readLevel and the stored key[2m > [22mensureStartOptions keeps the level and No sacking off a broken block, and is idempotent[32m 104[2mms[22m[39m
+   [32m✓[39m the table[2m > [22mMedium is the identity row; no dial is easier at a harder level, and the board, money, market and edge dials are strictly ordered[32m 1[2mms[22m[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22mon a Normal career[32m 41[2mms[22m[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22msetUpCareer on Normal with No sacking off returns the very career it was given[32m 0[2mms[22m[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22ma level writes its key, cuts the cheque and the room by the dial, and rebuilds the asks on day one only[32m 2[2mms[22m[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22ma created club: the room dial moves only the base ceiling, and the founders' room comes back whole[32m 42[2mms[22m[39m
+   [32m✓[39m every applier is the identity at its own identity dial[2m > [22mNo sacking alone writes only its own key[32m 4[2mms[22m[39m
+   [32m✓[39m the dials on Hard and Legend[2m > [22mthe board: a win gives less, a defeat takes more, and only a bad season opens lower[32m 1[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22mthe market: the same men in the same order, every price marked, every value untouched [33m 480[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22ma release clause is never the cheaper door round the mark, and on Normal it is exactly what it was [33m 327[2mms[22m[39m
+   [32m✓[39m the dials on Hard and Legend[2m > [22mthe opponent: an edge only off Normal[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1512: the dials on Easy and Very Easy[2m > [22mthe board gives more for a win and takes less for a defeat, and a bad season opens where it would on Medium[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1512: the dials on Easy and Very Easy[2m > [22mmore money, more wage room, a cheaper market (never under 0.5) and a weaker side against you[32m 209[2mms[22m[39m
+[31m   [31m×[31m Round 1512: the dials on Easy and Very Easy[2m > [22mthe easy market never lists a man under what selling him straight back banks, nor over Medium's price[39m[33m 303[2mms[22m[39m
+[31m     → expected 47.29999999999927 to be greater than or equal to 47.3[39m
+   [32m✓[39m Round 1512: changing the level between matches[2m > [22mmoves only the level (and the easy mark), never the calendar, the record, the money or the ceiling[32m 9[2mms[22m[39m
+   [32m✓[39m Round 1512: changing the level between matches[2m > [22mback to Medium writes no level key; the same level, a junk value or a match at halftime is refused[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1512: changing the level between matches[2m > [22mis allowed while sacked or out of work[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1512: changing the level between matches[2m > [22mgoing easy stops the leaderboards from that season on, one way, and going back up keeps the mark[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1512: changing the level between matches[2m > [22monly a positive whole number reads as the mark, and ensureStartOptions carries it over a broken block[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1512: changing the level between matches[2m > [22msetStartOption refuses the level and the mark at run time, not only by its type[32m 0[2mms[22m[39m
+   [32m✓[39m the season verdict under No sacking[2m > [22mnever threatens a sack the board cannot carry out, and reads as it always did otherwise[32m 48[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerDifficulty.test.ts[2m > [22mRound 1512: the dials on Easy and Very Easy[2m > [22mthe easy market never lists a man under what selling him straight back banks, nor over Medium's price
+[31m[1mAssertionError[22m: expected 47.29999999999927 to be greater than or equal to 47.3[39m
+[36m [2m❯[22m src/lib/clubManagerDifficulty.test.ts:[2m256:42[22m[39m
+    [90m254| [39m      const signed = after.squad.find(p => p.name === (vet as MarketPl…
+    [90m255| [39m      [34mexpect[39m(signed)[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m256| [39m      expect(rich.budget - after.budget).toBeGreaterThanOrEqual(sellVa…
+    [90m   | [39m                                         [31m^[39m
+    [90m257| [39m    }
+    [90m258| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m22 passed[39m[22m[90m (23)[39m
+[2m   Start at [22m 10:50:14
+[2m   Duration [22m 6.88s[2m (transform 2.94s, setup 109ms, collect 3.62s, tests 1.90s, environment 529ms, prepare 283ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerDifficulty.test.ts,title=src/lib/clubManagerDifficulty.test.ts > Round 1512%3A the dials on Easy and Very Easy > the easy market never lists a man under what selling him straight back banks%2C nor over Medium's price,line=256,column=42::AssertionError: expected 47.29999999999927 to be greater than or equal to 47.3%0A ❯ src/lib/clubManagerDifficulty.test.ts:256:42%0A%0A
