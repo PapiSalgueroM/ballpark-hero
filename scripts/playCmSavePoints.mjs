@@ -26,7 +26,7 @@
  * brings the offer back. Controls (WIDTHS=390, the walk stops after this step):
  * POINTS_CONTROL=nomark drops the slot mark's write (dukb-set-aside-slot), so
  * both slot 2 checks go red; POINTS_CONTROL=noevent stops the page's slot
- * switch event (dukb-slot-switch) before the card hears it, so the in place
+ * switch event (the same name, dukb-set-aside-slot) before the card hears it, so the in place
  * check and the way back go red and the reload stays green. Each ends FIRED.
  *
  *   #!serve then: node scripts/playCmSavePoints.mjs        (WIDTHS=390 for one width)
@@ -49,11 +49,11 @@ if (CONTROL && !['nodoor', 'nomark', 'noevent'].includes(CONTROL)) { console.err
 if (CONTROL === 'nodoor' && !fs.readFileSync('src/components/club-manager/SavePointsDoor.tsx', 'utf8').includes('data-cm-points-door')) {
   console.error('playCmSavePoints: control nodoor cannot run, SavePointsDoor.tsx carries no data-cm-points-door'); process.exit(2);
 }
-/* Round 1515: the kept aside copy's slot mark and the event the page sends when it switches slots in place. */
-const MARK_KEY = 'dukb-set-aside-slot', SWITCH_EVENT = 'dukb-slot-switch';
+/* Round 1515: the kept aside copy's slot mark, whose name is also the event the page sends when it switches slots in place. */
+const MARK_KEY = 'dukb-set-aside-slot', SWITCH_EVENT = MARK_KEY;
 const recoverySrc = fs.readFileSync('src/lib/brokenSaveRecovery.ts', 'utf8');
 if (CONTROL === 'nomark' && !recoverySrc.includes(`'${MARK_KEY}'`)) { console.error(`playCmSavePoints: control nomark cannot run, brokenSaveRecovery.ts names no ${MARK_KEY}`); process.exit(2); }
-if (CONTROL === 'noevent' && !recoverySrc.includes(`'${SWITCH_EVENT}'`)) { console.error(`playCmSavePoints: control noevent cannot run, brokenSaveRecovery.ts names no ${SWITCH_EVENT}`); process.exit(2); }
+if (CONTROL === 'noevent' && !(recoverySrc.includes(`'${SWITCH_EVENT}'`) && fs.readFileSync('src/hooks/useClubManager.ts', 'utf8').includes('dispatchEvent(new Event(SET_ASIDE_SLOT_KEY))'))) { console.error(`playCmSavePoints: control noevent cannot run, useClubManager.ts sends no ${SWITCH_EVENT}`); process.exit(2); }
 const errors = [];
 let failures = 0;
 let doorFailures = 0;

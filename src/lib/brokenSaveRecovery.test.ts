@@ -4,7 +4,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { CONTINUE_SAVES, type ContinueSave } from '@/data/continueSaves';
 import {
-  BROKEN_SAVE_MARK, SET_ASIDE_SLOT_KEY, copyAside, offeredBackup, setAsideSave, slotNow, type ListableStorage,
+  BROKEN_SAVE_MARK, SET_ASIDE_SLOT_KEY, copyAside, offeredBackup, setAsideSave, slotMarks, type ListableStorage,
 } from '@/lib/brokenSaveRecovery';
 import { SLOT_COUNT, SLOTS_INDEX_KEY, activeSlot } from '@/lib/clubManagerSlots';
 import { SAVE_KEY } from '@/lib/clubManager';
@@ -39,13 +39,28 @@ describe('Round 1515: the kept aside copy carries its slot', () => {
     expect(CONTINUE_SAVES.filter(e => e.slots).map(e => e.path)).toEqual(['/club-manager']);
   });
 
-  it('reads the slot exactly as activeSlot() does, whatever the index holds', () => {
-    const shapes: (string | null)[] = [null, '', 'junk', 'null', '[]', '{}', '"2"', '{"active":"2"}', '{"active":1.5}', '{"active":0}',
+  it('reads the slot exactly as activeSlot() does for every index that parses, and slot 0 (no marking) for one that does not', () => {
+    const shapes: (string | null)[] = [null, 'null', '[]', '{}', '"2"', '{"active":"2"}', '{"active":1.5}', '{"active":0}',
       '{"active":-1}', '{"active":null}', ...Array.from({ length: SLOT_COUNT + 1 }, (_, i) => JSON.stringify({ active: i + 1 }))];
     for (const raw of shapes) {
       localStorage.clear();
       if (raw !== null) localStorage.setItem(SLOTS_INDEX_KEY, raw);
-      expect([raw, slotNow(CM, localStorage)]).toEqual([raw, activeSlot()]);
+      expect([raw, slotMarks(CM, localStorage)[0]]).toEqual([raw, activeSlot()]);
+    }
+    for (const raw of ['', 'junk', '{"active":']) {
+      localStorage.clear();
+      localStorage.setItem(SLOTS_INDEX_KEY, raw);
+      expect([raw, slotMarks(CM, localStorage)]).toEqual([raw, [0, {}]]);
+    }
+  });
+
+  it('marks that do not parse, or a marks key holding null, pass nothing over', () => {
+    const st = memStore();
+    st.map.set(`${SAVE_KEY}${BROKEN_SAVE_MARK}2026-10-02T09-00-00`, '{"career":"kept"}');
+    inSlot(st, 2);
+    for (const bad of ['junk', 'null', '7']) {
+      st.map.set(SET_ASIDE_SLOT_KEY, bad);
+      expect([bad, offeredBackup(CM, st)]).toEqual([bad, `${SAVE_KEY}${BROKEN_SAVE_MARK}2026-10-02T09-00-00`]);
     }
   });
 
@@ -124,6 +139,7 @@ describe('Round 1515: the kept aside copy carries its slot', () => {
     st.map.set(OTHER.saveKey, '{"season":4}');
     expect(offeredBackup(OTHER, st)).toBe(key);
     expect(st.log.filter(l => l.includes(SET_ASIDE_SLOT_KEY) || l.includes(SLOTS_INDEX_KEY))).toEqual([]);
-    expect(slotNow(OTHER, st)).toBe(0);
+    expect(slotMarks(OTHER, st, key)).toEqual([0, {}]);
+    expect(st.log.filter(l => l.includes(SET_ASIDE_SLOT_KEY) || l.includes(SLOTS_INDEX_KEY))).toEqual([]);
   });
 });

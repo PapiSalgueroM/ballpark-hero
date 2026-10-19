@@ -135,7 +135,7 @@ type StartHold = { key: string; begin: () => void; settle: () => void; over: boo
 /* Round 1323: the save fence, imported here beside the hook that uses it. */
 import { saveFence, fenceKeyOf } from '@/lib/saveFence';
 import { SAVE_KEY } from '@/lib/clubManager';
-import { setAsideSave, browserStorage, SLOT_SWITCH_EVENT } from '@/lib/brokenSaveRecovery';
+import { setAsideSave, browserStorage, SET_ASIDE_SLOT_KEY } from '@/lib/brokenSaveRecovery';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
 import { takeLandOnHub } from '@/lib/clubManagerLanding';
 
@@ -458,8 +458,8 @@ export function useClubManager() {
       return false;
     }
     ownSlot.current = slot;
-    /* Round 1515: the kept aside card asks its offer again, for this slot. */
-    dispatchEvent(new Event(SLOT_SWITCH_EVENT));
+    /* Round 1515: the kept aside card asks its offer again, for this slot (the slot marks key is the event's name). */
+    dispatchEvent(new Event(SET_ASIDE_SLOT_KEY));
     setSlotNote(null);
     careerRef.current = null;
     setCareer(null);
