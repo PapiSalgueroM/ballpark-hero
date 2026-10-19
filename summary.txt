@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simStorageWrites exit=0 6s | simStorageWrites: all green (owed: 12)
+vitest exit=0 6s |    Duration  5.34s (transform 3.33s, setup 560ms, collect 5.39s, tests 1.65s, environment 2.62s, prepare 726ms)
+simNoRivalNames exit=0 27s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 56s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 89s | 
+corrupt exit=1 136s | playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all

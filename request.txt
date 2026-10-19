@@ -1,0 +1,8 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/brokenSaveRecovery.test.ts src/test/routeErrorRecovery.test.tsx src/test/saveKeeper.test.ts --testTimeout=300000 --hookTimeout=120000
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+corrupt: node scripts/playCorruptSaves.mjs
