@@ -1,0 +1,18 @@
+wt: recm2 at ab1fe605a285 (Release BL m2: merge the other lane's PR338 (codex/nfl-coach-staff-recovery, Rou)
+recordUsBoardFixture: wrote ../../home/runner/work/_temp/rc-out/files/usb-m2.json (2301090 bytes)
+  STOP nfl.path step 194 ("coach: 📜Coaching Log0 seasons · 0-0"): fields s, m, t
+  STOP nfl.path step 195 ("coach: ‹ Back"): fields s, m, t
+  STOP nfl.path step 196 ("coach: 📜Coaching Log0 seasons · 0-0"): fields s, m, t
+  STOP nfl.path step 197 ("coach: ‹ Back"): fields s, m, t
+  STOP nfl.path step 198 ("coach: Coach the 2045 season"): fields a, s, m, d, t
+  STOP nfl.path step 199 ("coach: 🗞️The Market13 jobs open · 0 for"): fields a, s, m, t
+  STOP nfl.path step 200 ("coach: ‹ Back"): fields s, m, t
+  STOP nfl.path step 201 ("coach: Coach the 2046 season"): fields a, s, m, d, t
+  STOP nfl.path step 202 ("coach: 📜Coaching Log2 seasons · 16-18"): fields a, s, m, t
+  STOP nfl.path step 203 ("coach: ‹ Back"): fields s, m, t
+  STOP nfl.path step 204 ("coach: 🗞️The Market13 jobs open · 0 for"): fields a, s, m, t
+nfl: 1403 steps compared, 0 differ in markup only (none); first paint ssrCreate same
+nba: 1453 steps compared, 0 differ in markup only (none); first paint ssrCreate same
+mlb: 1341 steps compared, 0 differ in markup only (none); first paint ssrCreate same
+nhl: 1321 steps compared, 0 differ in markup only (none); first paint ssrCreate same
+usBoardDiff: 314 STOP(s), 0 markup only steps

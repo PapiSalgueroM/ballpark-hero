@@ -1,0 +1,3 @@
+parity-m3 exit=0 52s | simUsBoardParity: 3 failures
+record-m3 exit=0 50s | usBoardDiff: 488 STOP(s), 3 markup only steps
+record-m2 exit=0 50s | usBoardDiff: 314 STOP(s), 0 markup only steps

@@ -1,0 +1,6 @@
+# Release BL triage f: why the US board parity is red from m3 (PR339) on: the parity output at m3 in full, and a
+# recording at m3 diffed against the committed fixture (markup only? which first paint length?). Send with wt.sh usBoardDiff.mjs
+#!serial
+parity-m3: bash .rc/x/wt.sh 75340a83 pm3b bash -c 'NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsBoardParity.mjs 2>&1 | tail -40 | cut -c1-260'
+record-m3: bash .rc/x/wt.sh 75340a83 recm3 bash -c "node scripts/recordUsBoardFixture.mjs $RC_OUT/usb-m3.json > /tmp/rm3.log 2>&1; tail -1 /tmp/rm3.log | cut -c1-160" && node .rc/x/usBoardDiff.mjs scripts/data/usBoardFixture.json $RC_OUT/usb-m3.json 2>&1 | tail -16 | cut -c1-240
+record-m2: bash .rc/x/wt.sh ab1fe605 recm2 bash -c "node scripts/recordUsBoardFixture.mjs $RC_OUT/usb-m2.json > /tmp/rm2.log 2>&1; tail -1 /tmp/rm2.log | cut -c1-160" && node .rc/x/usBoardDiff.mjs scripts/data/usBoardFixture.json $RC_OUT/usb-m2.json 2>&1 | tail -16 | cut -c1-240

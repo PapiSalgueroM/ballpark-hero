@@ -1,0 +1,22 @@
+wt: pm3b at 75340a8322b3 (Release BL m3: merge the other lane's PR339 (codex/soccer-appearance-options, Ro)
+Round1424 historical presentation: proved main775 coaching Panel SHA9390fab969844b20ca4f7adbc097664191d3f5ea082090553f479305fe85d321, current engine and unchanged fixture. This replay gives no current-Panel visual parity credit.
+Historical installed aliases: [{"id":"react/jsx-dev-runtime","file":"/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/jsx-dev-runtime.js","sha256":"25a7dbfdb2ae574b67fcdd2aab811080b415edd1c8043ead46866a533e99320e"},{"id":"react/jsx-runtime","fi
+A) the fixture is whole
+   recorded from ff7d97ca4208b499c02d64c133ca9447cca1fb18 (not main: src differs from 775564305e9da84dab59f2b9fe246d044a3cc8e9)
+   nfl: 475 clicks, 24 seasons, 19 fixed saves, 928 screen steps; 16 wheel steps, 13 steps saved in an extension talk, 27 in free agency
+   nba: 521 clicks, 24 seasons, 19 fixed saves, 932 screen steps; 14 wheel steps, 13 steps saved in an extension talk, 20 in free agency
+   mlb: 455 clicks, 24 seasons, 19 fixed saves, 886 screen steps; 6 wheel steps, 5 steps saved in an extension talk, 13 in free agency
+   nhl: 421 clicks, 24 seasons, 19 fixed saves, 900 screen steps; 6 wheel steps, 11 steps saved in an extension talk, 6 in free agency
+B) the replay: every click, every save, every screen
+   Vitest exit 1, passed [nfl, mlb, nhl], failed [nba]
+   nba click path step 343 (after "create: 💇Hair"): the markup differs under the same words ("Create your playerYou are a fictional prospect entering the ")
+   nba click path step 344 (after "create: Point GodThe offense runs through you"): the markup differs under the same words ("Create your playerYou are a fictional prospect entering the ")
+   nba click path step 345 (after "create: (Auburn)"): pressed "create: (Brown)", fixture pressed "create: (Auburn)"; the markup differs under the same words ("Create your playerYou are a fictional prospect entering the ")
+  FAIL: the replay exited 1
+  FAIL: the replay passed [nfl, mlb, nhl], not all four sports
+  FAIL: 4 steps differ from the fixture
+
+  If your round meant to change what a US career does, re-record from your tree
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures
