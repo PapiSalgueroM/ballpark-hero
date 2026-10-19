@@ -1,0 +1,89 @@
+
+== 390 wide, reduced motion reduce
+  ok: a first match played in slot 1
+  ok: slot 1 holds a career
+  ok: slot 1 offers its own copy, the newest (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: the card sits inside the screen
+  ok: the page is no wider than the screen
+  ok: slot 2 is active ({"v":1,"active":2})
+  ok: in place in slot 2 the card offers the old unmarked copy, not slot 1's (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: slot 2: the page is no wider than the screen
+  ok: after a reload in slot 2, the same (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: left aside, slot 2 offers nothing (slot 1's copy stays hidden)
+  ok: back in slot 1 the card offers its copy again (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  FAIL: the put back holds slot 1's copy (77398 chars)
+  ok: the career it replaced is kept aside and marked slot 1 ({"dukb-club-manager-save.broken-2026-10-15T09-00-00":1,"dukb-club-manager-save.broken-2026-10-19T16-37-22":1})
+  ok: the put back card says what happened (Your save is backThe game you had before is kept aside in this browser, so nothing was del)
+  ok: slot 2 again: nothing of slot 1's after the put back (card: )
+  ok: Soccer Career offers its own copy as before (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: Soccer Career wrote no slot mark
+
+== 390 wide, reduced motion no-preference
+  ok: a first match played in slot 1
+  ok: slot 1 holds a career
+  ok: slot 1 offers its own copy, the newest (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: the card sits inside the screen
+  ok: the page is no wider than the screen
+  ok: slot 2 is active ({"v":1,"active":2})
+  ok: in place in slot 2 the card offers the old unmarked copy, not slot 1's (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: slot 2: the page is no wider than the screen
+  ok: after a reload in slot 2, the same (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: left aside, slot 2 offers nothing (slot 1's copy stays hidden)
+  ok: back in slot 1 the card offers its copy again (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  FAIL: the put back holds slot 1's copy (77018 chars)
+  ok: the career it replaced is kept aside and marked slot 1 ({"dukb-club-manager-save.broken-2026-10-15T09-00-00":1,"dukb-club-manager-save.broken-2026-10-19T16-37-53":1})
+  ok: the put back card says what happened (Your save is backThe game you had before is kept aside in this browser, so nothing was del)
+  ok: slot 2 again: nothing of slot 1's after the put back (card: )
+  ok: Soccer Career offers its own copy as before (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: Soccer Career wrote no slot mark
+
+== 1280 wide, reduced motion reduce
+  ok: a first match played in slot 1
+  ok: slot 1 holds a career
+  ok: slot 1 offers its own copy, the newest (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: the card sits inside the screen
+  ok: the page is no wider than the screen
+  ok: slot 2 is active ({"v":1,"active":2})
+  ok: in place in slot 2 the card offers the old unmarked copy, not slot 1's (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: slot 2: the page is no wider than the screen
+  ok: after a reload in slot 2, the same (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: left aside, slot 2 offers nothing (slot 1's copy stays hidden)
+  ok: back in slot 1 the card offers its copy again (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  FAIL: the put back holds slot 1's copy (76964 chars)
+  ok: the career it replaced is kept aside and marked slot 1 ({"dukb-club-manager-save.broken-2026-10-15T09-00-00":1,"dukb-club-manager-save.broken-2026-10-19T16-38-23":1})
+  ok: the put back card says what happened (Your save is backThe game you had before is kept aside in this browser, so nothing was del)
+  ok: slot 2 again: nothing of slot 1's after the put back (card: )
+  ok: Soccer Career offers its own copy as before (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: Soccer Career wrote no slot mark
+
+== 1280 wide, reduced motion no-preference
+  ok: a first match played in slot 1
+  ok: slot 1 holds a career
+  ok: slot 1 offers its own copy, the newest (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: the card sits inside the screen
+  ok: the page is no wider than the screen
+  ok: slot 2 is active ({"v":1,"active":2})
+  ok: in place in slot 2 the card offers the old unmarked copy, not slot 1's (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: slot 2: the page is no wider than the screen
+  ok: after a reload in slot 2, the same (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: left aside, slot 2 offers nothing (slot 1's copy stays hidden)
+  ok: back in slot 1 the card offers its copy again (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  FAIL: the put back holds slot 1's copy (77763 chars)
+  ok: the career it replaced is kept aside and marked slot 1 ({"dukb-club-manager-save.broken-2026-10-15T09-00-00":1,"dukb-club-manager-save.broken-2026-10-19T16-38-53":1})
+  ok: the put back card says what happened (Your save is backThe game you had before is kept aside in this browser, so nothing was del)
+  ok: slot 2 again: nothing of slot 1's after the put back (card: )
+  ok: Soccer Career offers its own copy as before (card: You have a save kept asideThere's a save of this game kept aside in this browser from Oct )
+  ok: Soccer Career wrote no slot mark
+  ok: help 390: the example's opponent line is the new table's (620 chars)
+  ok: help 390: the page is no wider than the screen
+  ok: help 1280: the example's opponent line is the new table's (620 chars)
+  ok: help 1280: the page is no wider than the screen
+  ok: whatsnew 390: the entry reads whole (640 chars)
+  ok: whatsnew 390: the round's entry is the newest Club Manager one
+  ok: whatsnew 390: no dash in the entry
+  ok: whatsnew 390: the page is no wider than the screen
+  ok: whatsnew 1280: the entry reads whole (640 chars)
+  ok: whatsnew 1280: the round's entry is the newest Club Manager one
+  ok: whatsnew 1280: no dash in the entry
+  ok: whatsnew 1280: the page is no wider than the screen
+walk1515: FAIL, 4 check(s) and 0 page error(s)

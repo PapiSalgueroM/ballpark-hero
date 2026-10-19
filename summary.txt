@@ -1,0 +1,5 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+points-nomark exit=1 37s | playCmSavePoints: control nomark FIRED (2 slot check(s) red, 2 in all)
+points-noevent exit=1 36s | playCmSavePoints: control noevent FIRED (2 slot check(s) red, 2 in all)
+points exit=0 134s | playCmSavePoints: OK at 390 and 1280
+walk exit=1 136s | walk1515: FAIL, 4 check(s) and 0 page error(s)
