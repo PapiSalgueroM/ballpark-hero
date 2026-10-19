@@ -1,0 +1,59 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/saveKeeper.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 122[2mms[22m[39m
+ [32m✓[39m src/test/routeErrorRecovery.test.tsx [2m([22m[2m65 tests[22m[2m)[22m[33m 1981[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerDifficulty.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 2909[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22mthe market: the same men in the same order, every price marked, every value untouched [33m 612[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22ma release clause is never the cheaper door round the mark, and on Normal it is exactly what it was [33m 377[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1512: the dials on Easy and Very Easy[2m > [22mmore money, more wage room, a cheaper market (never under 0.5) and a weaker side against you [33m 329[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1512: the dials on Easy and Very Easy[2m > [22mthe easy market never lists a man under what selling him straight back banks, nor over Medium's price [33m 931[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerRetire.test.tsx [2m([22m[2m24 tests[22m[2m)[22m[33m 3039[2mms[22m[39m
+   [33m[2m✓[22m[39m retiring through the hook[2m > [22mwrites first, then opens the farewell, and the disk holds the retirement [33m 620[2mms[22m[39m
+   [33m[2m✓[22m[39m retiring through the hook[2m > [22ma reload lands on the managers screen, never on hub, seasonEnd or sacked, and opening it shows the farewell [33m 305[2mms[22m[39m
+   [33m[2m✓[22m[39m retiring through the hook[2m > [22ma retired save that is also sacked, or holds a season summary, opens on the farewell and nowhere else [33m 1051[2mms[22m[39m
+ [32m✓[39m src/test/cmLeagueLeadersCard.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 5981[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mnames the league's most assists and most clean sheets from the book, and an older summary prints as it did [33m 1372[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mwithholds the new awards in a league whose data is too thin, and says why [33m 1051[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22ma league between the floor and 95 is settled by the book and still carries the honest line, on the card and on the review [33m 1456[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22ma season on a late book says the book covered only part of it, not that its data was thin [33m 1216[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePoints.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1714[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerSlots.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 4900[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mtwo managers survive leaving the page, and either one opens [33m 748[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mthe screen asks before it deletes, and every tile says what it holds [33m 336[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mdelete takes one career and leaves the other [33m 315[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mclosing the old tab after a switch in another never wipes the career switched in [33m 373[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22ma change in the old tab writes nothing over the other career and goes back to the managers [33m 568[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mthe old tab live clock writes nothing over the career switched in [33m 373[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mManagers tapped on the old tab hub writes nothing over the other career [33m 329[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22ma new manager from the old tab managers screen parks the other career where it belongs [33m 360[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mthe old tab managers screen follows the other tab, and a stale New manager says why it did nothing [33m 421[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: a parked era career[2m > [22mopens through the era boot, squads first [33m 496[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerSlots.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1110[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDifficultyPick.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 4097[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22moffers five levels with Medium pressed, and Skip on Medium hands nothing on [33m 898[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mImpossible and No sacking ride on both buttons [33m 1301[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mEasy and Very Easy say plainly that the career posts no leaderboard scores [33m 586[2mms[22m[39m
+   [33m[2m✓[22m[39m the hook[2m > [22mRound 1512: a career started on Easy pings no score, and a change mid career moves only the level and is saved [33m 335[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsScreen.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1352[2mms[22m[39m
+   [33m[2m✓[22m[39m the save points screen names the right cause[2m > [22ma delete of a point another tab removed says it is gone, not still there [33m 529[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerNoSack.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 2634[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mstarts with No sacking off and Skip hands nothing on [33m 790[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mthe switch rides on both buttons [33m 796[2mms[22m[39m
+   [33m[2m✓[22m[39m the hook[2m > [22ma career started with No sacking carries it and pings no score [33m 427[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerOfferConfirm.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 1272[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1335: an offer asks first[2m > [22ma tap on an offer moves nothing and opens the question in the same panel [33m 514[2mms[22m[39m
+ [32m✓[39m src/hooks/useClubManager.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 4008[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager completion shape[2m > [22ma played match records activity and not a completion [33m 509[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager completion shape[2m > [22ma finished season records exactly one completion [33m 3497[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsDoor.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1195[2mms[22m[39m
+   [33m[2m✓[22m[39m the save points button off the hub[2m > [22mopens the save points screen on the sacked screen, with the slot's points listed [33m 595[2mms[22m[39m
+   [33m[2m✓[22m[39m the save points button off the hub[2m > [22mis on the season end and the retired screens too [33m 347[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsHook.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 731[2mms[22m[39m
+   [33m[2m✓[22m[39m the hook asks the points record before a scored ping[2m > [22ma season with no mark pings its score (the baseline) [33m 374[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m15 passed[39m[22m[90m (15)[39m
+[2m      Tests [22m [1m[32m246 passed[39m[22m[90m (246)[39m
+[2m   Start at [22m 15:27:37
+[2m   Duration [22m 26.41s[2m (transform 5.64s, setup 2.41s, collect 18.70s, tests 37.05s, environment 10.42s, prepare 2.61s)[22m
+
