@@ -1,0 +1,14 @@
+# Release BL triage a: attribute the vitest-all reds of rBLc-b (bff30423) by running the failing files at the merges and
+# at the packets' own heads. careerAppearanceSelection (PR333's test, main) at main b967a309, m3 75340a83, m4 5a58cf7b,
+# m5 9afad878 and the head; the two old Grid tests (PR343's and PR344's frozen bodies) at PR344's own head f568e4f7,
+# PR346's own head d96777c4, m9 29c94aa5 and the head. Send with wt.sh.
+#!serial
+sel-head: node_modules/.bin/vitest run src/test/careerAppearanceSelection.test.tsx > /tmp/s0.log 2>&1; s=$?; grep -E "FAIL|Error|Expected|Received|Unable|Tests " /tmp/s0.log | head -24 | cut -c1-220; exit $s
+sel-main: bash .rc/x/wt.sh b967a309 selmain bash -c 'node_modules/.bin/vitest run src/test/careerAppearanceSelection.test.tsx 2>&1 | grep -E "Tests |FAIL" | head -6'
+sel-m3: bash .rc/x/wt.sh 75340a83 selm3 bash -c 'node_modules/.bin/vitest run src/test/careerAppearanceSelection.test.tsx 2>&1 | grep -E "Tests |FAIL" | head -6'
+sel-m4: bash .rc/x/wt.sh 5a58cf7b selm4 bash -c 'node_modules/.bin/vitest run src/test/careerAppearanceSelection.test.tsx 2>&1 | grep -E "Tests |FAIL" | head -6'
+sel-m5: bash .rc/x/wt.sh 9afad878 selm5 bash -c 'node_modules/.bin/vitest run src/test/careerAppearanceSelection.test.tsx 2>&1 | grep -E "Tests |FAIL" | head -6'
+grid-head: node_modules/.bin/vitest run src/test/soccerGridSearchDiscovery.test.tsx src/test/soccerGridBlurOwnership.test.tsx > /tmp/g0.log 2>&1; s=$?; grep -E "Error|Unable|Tests |Test Files" /tmp/g0.log | head -12 | cut -c1-220; exit $s
+grid-own344: bash .rc/x/wt.sh f568e4f7 g344 bash -c 'node_modules/.bin/vitest run src/test/soccerGridSearchDiscovery.test.tsx src/test/soccerGridBlurOwnership.test.tsx 2>&1 | grep -E "Tests |Test Files" | head -4'
+grid-own346: bash .rc/x/wt.sh d96777c4 g346 bash -c 'node_modules/.bin/vitest run src/test/soccerGridSearchDiscovery.test.tsx src/test/soccerGridBlurOwnership.test.tsx 2>&1 | grep -E "Tests |Test Files|Unable" | head -6 | cut -c1-200'
+grid-m9: bash .rc/x/wt.sh 29c94aa5 gm9 bash -c 'node_modules/.bin/vitest run src/test/soccerGridSearchDiscovery.test.tsx src/test/soccerGridBlurOwnership.test.tsx 2>&1 | grep -E "Tests |Test Files" | head -4'

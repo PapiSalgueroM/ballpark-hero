@@ -1,0 +1,14 @@
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/careerAppearanceSelection.test.tsx[2m > [22mselected appearance on the actual controlled editor[2m > [22msoccer appearance hairstyle exposes its selected button
+[41m[1m FAIL [22m[49m src/test/careerAppearanceSelection.test.tsx[2m > [22mselected appearance on the actual controlled editor[2m > [22msoccer appearance hairColor exposes its selected button
+[31m[1mAssertionError[22m: expected [ <button …(1)></button>, …(51) ] to have a length of 46 but got 52[39m
+[32m- Expected[39m
+[31m+ Received[39m
+[41m[1m FAIL [22m[49m src/test/careerAppearanceSelection.test.tsx[2m > [22mselected appearance on the actual controlled editor[2m > [22msoccer appearance facialHair exposes its selected button
+[31m[1mAssertionError[22m: expected [ <button …(1)></button>, …(24) ] to have a length of 21 but got 25[39m
+[32m- Expected[39m
+[31m+ Received[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m37 passed[39m[22m[90m (40)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerAppearanceSelection.test.tsx,title=src/test/careerAppearanceSelection.test.tsx > selected appearance on the actual controlled editor > soccer appe
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerAppearanceSelection.test.tsx,title=src/test/careerAppearanceSelection.test.tsx > selected appearance on the actual controlled editor > soccer appe
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerAppearanceSelection.test.tsx,title=src/test/careerAppearanceSelection.test.tsx > selected appearance on the actual controlled editor > soccer appe

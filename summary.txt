@@ -1,0 +1,9 @@
+sel-head exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerAppearanceSelection.test.tsx,title=src/test/careerAppearanceSelection.test.tsx > selected appear
+sel-main exit=0 5s |       Tests  40 passed (40)
+sel-m3 exit=0 5s |       Tests  3 failed | 37 passed (40)
+sel-m4 exit=0 5s |       Tests  3 failed | 37 passed (40)
+sel-m5 exit=0 5s |       Tests  3 failed | 37 passed (40)
+grid-head exit=1 2s | grep: write error: Broken pipe
+grid-own344 exit=0 2s |       Tests  24 passed (24)
+grid-own346 exit=0 2s | grep: write error: Broken pipe
+grid-m9 exit=0 2s |       Tests  24 passed (24)
