@@ -1,0 +1,15 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simCmTablesTruth exit=0 23s | simCmTablesTruth: every case green
+simEarlyReturnScope exit=0 14s | simEarlyReturnScope: all green
+simNationJob exit=0 3s | simNationJob: green. You can manage a country now, and it is a job you have to earn and can lose.
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+retire exit=0 44s | simCmRetire: all 18 checks passed (record, oldsave, pens, base, retire, dashes)
+simCmShootoutOrder exit=0 36s | simCmShootoutOrder: all sections passed
+decisions-seed4 exit=0 45s | simClubManagerDecisions: 0 findings
+retire-ctl exit=0 161s | controls: tielast=1/1 skipgame=1/1 nomissed=1/1 basewrites=1/1 pensdrawn=1/1 retiretouch=1/1 legacydrop=1/1 liveok=1/1 seasonover=1/1 drawone=1/1 dash=1/1
+simCmQuickLegs exit=0 89s | simCmQuickLegs: PASS, 10 sections green
+playCmRetire exit=0 107s | playCmRetire: all 60 checks passed. Pictures in /home/runner/work/_temp/rc-out/files/head
+simCmVar exit=0 191s | simCmVar normal: actual review outcomes and full prior baseline passed.
+playCmRetire-strip exit=1 27s | control strip FIRED: 6 of 18 checks red
+playCmRetire-norecord exit=1 98s | control norecord FIRED: 6 of 52 checks red
+decisionRegression1081 exit=0 372s | Original loss control fired in section 3 beside a healthy seed-1 baseline.
