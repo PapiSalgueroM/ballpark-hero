@@ -1,0 +1,7 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-noevent exit=1 38s | playCmSavePoints: control noevent FIRED (2 slot check(s) red, 2 in all)
+walk-nomark exit=1 38s | playCmSavePoints: control nomark FIRED (2 slot check(s) red, 2 in all)
+playSaveKeeper exit=2 0s | playSaveKeeper: REFUSED. Give it that build (the header says which), or set KEEPER_NO_BASE=1 to walk the branch arm alone; the closing line then says the control was not 
+weight exit=1 30s | sweepWeight: 2 failures
+weight-base exit=1 56s | all js gz: A 4544103 B 4545639 delta 1536
+walk exit=0 135s | playCmSavePoints: OK at 390 and 1280

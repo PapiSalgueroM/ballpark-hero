@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+# Round 1515 part B walks and weights on eca68d2e (database host blocked by the walks and the runner)
+walk: node scripts/playCmSavePoints.mjs
+walk-nomark: WIDTHS=390 POINTS_CONTROL=nomark node scripts/playCmSavePoints.mjs
+walk-noevent: WIDTHS=390 POINTS_CONTROL=noevent node scripts/playCmSavePoints.mjs
+playSaveKeeper: node scripts/playSaveKeeper.mjs
+weight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
+weight-base: R=$PWD && git worktree add -q /tmp/base 1a028447 && cd /tmp/base && ln -s $R/node_modules node_modules && npm run build > /tmp/base-build.log 2>&1 && (node $R/scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/base-serve.log 2>&1 &) && sleep 4 && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs; s=$?; node $R/.rc/x/weigh1515.mjs /tmp/base/dist $R/dist; exit $s
