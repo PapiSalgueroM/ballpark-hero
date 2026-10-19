@@ -1,0 +1,43 @@
+# Release BL part two (Round BLI, finish-BLI.md section 6): ROUND 1513's proof lines (Club Manager save points), taken
+# from finish-1513.md (the r1513-f list and r1513-f2's controls), fix-1513.md (r1513-fx3, r1513-fx4, r1513-fx8) and
+# fix2-1513.md and verify2-1513.md (r1513-fx10, r1513-vf2, r1513-vf2b on its closed head 1a028447).
+# Not the same file as rc-BLc-a, rc-BLc-b or rc-BLc-c (part one's guide refresh and final gate): this one is 1513's alone.
+# BINDING. B1513 is the head of release-bl-gate before the merge m12 (1ba9f08d) brought 1513 in: f66eba35 (m11, which
+# holds 1512). M12 is that merge. Only the weight line binds: basesrv.sh builds this head WITHOUT the merge M12
+# (treeWithoutMerge M12 B1513, which forms cleanly on the joined tree: BLI formed b49c5e89 from 2fb1ba3e) on 4174, and
+# weightBJ.mjs measures its routes there and on the head's build on 4173, so the line prints 1513's own move on the
+# joined tree (finish-1513.md: +1051 B on /club-manager, accepted by the lead for Release BL). Override with B1513=<sha>
+# M12=<sha> in front of the line. No other 1513 proof reads a base.
+# The thirteen simCmSavePoints controls run one at a time through ctl1513.sh (each must exit 1 with a last line saying
+# FIRED; the script exits 0 only when every one did). walk-nodoor must exit 1 with "control nodoor FIRED (7 door
+# check(s) red, 7 in all)". Note from verify2-1513.md: the walk and its control write the same 390 screenshot names into
+# $RC_OUT, so in one request the 390 door shots are the control's; the walk's own 390 result is its log.
+# No line writes into src (every control edits a bundled or in memory copy, the walk control hides the served door), so
+# no #!serial.
+# Send: bash rc.sh <name> rc-BLc.txt ctl1513.sh basesrv.sh weightBJ.mjs
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/cmSavePoints.test.ts src/test/cmSavePointsScreen.test.tsx src/test/cmSavePointsHook.test.tsx src/test/cmSavePointsDoor.test.tsx src/test/saveKeeper.test.ts src/test/routeErrorRecovery.test.tsx src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerNoSack.test.tsx src/lib/clubManagerDifficulty.test.ts src/hooks/useClubManager.test.ts src/test/clubManagerSlots.test.tsx src/lib/clubManagerSlots.test.ts src/test/clubManagerOfferConfirm.test.tsx src/test/cmLeagueLeadersCard.test.tsx src/test/clubManagerRetire.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCmSavePoints: node scripts/simCmSavePoints.mjs
+ctl1513: bash .rc/x/ctl1513.sh unpacked lossy noindexback noreadback nosum noaside evict orphan blocked nocredit unguarded noclear pointless
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+simCmNoSack: node scripts/simCmNoSack.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simEarlyReturnScope: node scripts/simEarlyReturnScope.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+playCmSavePoints: node scripts/playCmSavePoints.mjs
+walk-nodoor: WIDTHS=390 POINTS_CONTROL=nodoor node scripts/playCmSavePoints.mjs
+w1513: B1513=${B1513:-f66eba35}; M12=${M12:-1ba9f08d}; bash .rc/x/basesrv.sh $M12 $B1513 4174 && BASE_DIST=/tmp/wt-4174/dist node .rc/x/weightBJ.mjs
