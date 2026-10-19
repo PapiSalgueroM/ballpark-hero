@@ -1,0 +1,5 @@
+fences exit=0 82s |    ok   every read a multi line anchor can search normalises line endings first
+crlf-six exit=0 80s | simTennisChainScoreOwnership exit=0 | 
+dashscan exit=0 1s | release added dash lines 0, commit message lines 0
+crlf-head exit=1 63s | restored: 0 src changes left
+crlf-before exit=0 2s | simTennisChainScoreOwnership at b4d4c4a8 under CRLF exit=1 | AssertionError [ERR_ASSERTION]: Frozen eleven-case original test body

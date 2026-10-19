@@ -1,0 +1,9 @@
+simHarnessAnchors exit=0 | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simGuideHeadings exit=0 | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simNoRivalNames exit=0 | No rival product names found. 0 findings.
+simTrustCopy exit=0 | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simAccessibility exit=0 | simAccessibility: all green
+   ok   964 harnesses pass node --check
+   ok   263 harnesses are in scope, so the check is looking at something
+   ok   every read a multi line anchor can search normalises line endings first

@@ -1,0 +1,5 @@
+src files now CRLF: 2209
+simReportDraftLifecycle exit=0 | normal: 14 passed, 0 expected failures, 0 skipped
+simSoccerAppearanceOptions exit=0 | capture-original: 1 passed, 0 expected failures, 0 skipped
+simTennisChainScoreOwnership exit=1 | AssertionError [ERR_ASSERTION]: Frozen eleven-case original test body
+restored: 0 src changes left
