@@ -1,0 +1,51 @@
+
+== 390 by 844
+  ok: a first match played
+  ok: the Save points tile opens its screen
+  ok: the screen fits the width
+  ok: one row named "Before the run" ([{"title":"Before the run","where":"Season 1, week 2 · Brentford"}])
+  ok: the row says season 1, week 2 (Season 1, week 2 · Brentford)
+  ok: three more matches played
+  ok: the career moved on (week 1 to 5)
+  ok: the screen opens again
+  ok: the restore opens the career straight on its hub
+  ok: after the reload the save is the point's career byte for byte
+  ok: the card says the point is back
+  ok: the card names the save point
+  ok: the week and the matches are back (week 1, played 1; the point had 1 and 1)
+  ok: the save is still the point's career on the hub
+  ok: a reload keeps the restored career
+  ok: the card offers the career he had
+  ok: the screen opens after the reload
+  ok: the point is still listed after its restore
+  ok: the copy is listed (["Before the run","Copy of Before the run"])
+  ok: rename touched one row (Before the run|Renamed copy)
+  ok: delete took one row (Renamed copy)
+  ok: the screen still fits the width
+  ok: copy, rename and delete never touched the career
+
+== 1280 by 900
+  ok: a first match played
+  ok: the Save points tile opens its screen
+  ok: the screen fits the width
+  ok: one row named "Before the run" ([{"title":"Before the run","where":"Season 1, week 2 · Brentford"}])
+  ok: the row says season 1, week 2 (Season 1, week 2 · Brentford)
+  ok: three more matches played
+  ok: the career moved on (week 1 to 5)
+  ok: the screen opens again
+  ok: the restore opens the career straight on its hub
+  ok: after the reload the save is the point's career byte for byte
+  ok: the card says the point is back
+  ok: the card names the save point
+  ok: the week and the matches are back (week 1, played 1; the point had 1 and 1)
+  ok: the save is still the point's career on the hub
+  ok: a reload keeps the restored career
+  ok: the card offers the career he had
+  ok: the screen opens after the reload
+  ok: the point is still listed after its restore
+  ok: the copy is listed (["Before the run","Copy of Before the run"])
+  ok: rename touched one row (Before the run|Renamed copy)
+  ok: delete took one row (Renamed copy)
+  ok: the screen still fits the width
+  ok: copy, rename and delete never touched the career
+playCmSavePoints: OK at 390 and 1280
