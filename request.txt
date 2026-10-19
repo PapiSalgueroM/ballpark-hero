@@ -1,0 +1,3 @@
+#!playwright
+corrupt-base-hoc: R=$PWD && git worktree add -q /tmp/base 1a028447 && cd /tmp/base && ln -s $R/node_modules node_modules && npm run build > /tmp/base-build.log 2>&1 && ONLY=/hall-of-champions node scripts/playCorruptSaves.mjs
+corrupt-main-hoc: R=$PWD && git worktree add -q /tmp/main fb50ce9f && cd /tmp/main && ln -s $R/node_modules node_modules && npm run build > /tmp/main-build.log 2>&1 && ONLY=/hall-of-champions node scripts/playCorruptSaves.mjs

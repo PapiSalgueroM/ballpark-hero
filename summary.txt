@@ -1,0 +1,2 @@
+corrupt-base-hoc exit=1 42s | playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all
+corrupt-main-hoc exit=1 42s | playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all
