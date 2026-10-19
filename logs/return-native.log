@@ -1,0 +1,58 @@
+sim first: PASS international return copied production source bytes held.
+PASS 320-selected 73 checks
+PASS 320-not-selected 67 checks
+PASS 320-ban 75 checks
+PASS 320-tournament 73 checks
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+route.fetch: socket hang up (ECONNRESET)
+Call log:
+  - → GET http://127.0.0.1:45455/assets/useArrivalTop-CGmh_Fd5.js
+    - user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36
+    - accept: */*
+    - accept-encoding: gzip,deflate,br
+    - origin: http://127.0.0.1:45455
+    - referer: http://127.0.0.1:45455/soccer-career
+    - sec-ch-ua: "Not:A-Brand";v="8", "Chromium";v="156", "HeadlessChrome";v="156"
+    - sec-ch-ua-mobile: ?0
+    - sec-ch-ua-platform: "Linux"
+
+    at route._innerContinue (/home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/offlineTransport.cjs:163:65)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:65:133
+    at owner._onRoute (/home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/offlineTransport.cjs:170:12) {
+  log: [
+    '  - → GET http://127.0.0.1:45455/assets/useArrivalTop-CGmh_Fd5.js',
+    '    - user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36',
+    '    - accept: */*',
+    '    - accept-encoding: gzip,deflate,br',
+    '    - origin: http://127.0.0.1:45455',
+    '    - referer: http://127.0.0.1:45455/soccer-career',
+    '    - sec-ch-ua: "Not:A-Brand";v="8", "Chromium";v="156", "HeadlessChrome";v="156"',
+    '    - sec-ch-ua-mobile: ?0',
+    '    - sec-ch-ua-platform: "Linux"'
+  ],
+  name: 'Error',
+  code: 'ECONNRESET'
+}
+
+Node.js v24.21.0
+node:fs:483
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/soccer-international-return-artifacts/native/report.json'
+    at Object.readFileSync (node:fs:483:20)
+    at read (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/checkSoccerInternationalReturn.mjs:5:32)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/checkSoccerInternationalReturn.mjs:23:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/soccer-international-return-artifacts/native/report.json'
+}
+
+Node.js v24.21.0
