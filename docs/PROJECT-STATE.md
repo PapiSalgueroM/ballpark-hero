@@ -1,3 +1,9 @@
+## Round1435 in progress: exact Soccer Grid names, 2026-10-19
+
+Fresh isolated branch codex/soccer-grid-exact-name-priority stacks sealed PR348/a153d2ea. Original Search368e9488 remains unmodified. Proposed exact-normalized-name priority preserves cap8 and order within groups; full original proof and all remote gates are owed before product adoption. Only the new Search ordering leaf and exact recoverable QA support are claimed in ROUND1435-GRID-EXACT-NAME-PRIORITY.md. All72 prior sealed refs/worktrees/packets, primary source/index and I's protected game/data/validator/cache/integration/main/publication scopes remain held. No1435 runtime/PR/release claim.
+
+Previous project state follows unchanged.
+
 ## Round1434 Soccer Grid copied apostrophes qualified, 2026-10-19
 
 Soccer Grid now matches an ASCII apostrophe and U+2019 RIGHT SINGLE QUOTATION MARK in either query/catalog direction. The product is exactly one local comparison line. Displayed suggestions and selected validation requests keep the catalog spelling. Existing accents/spacing, manual entry, ordering/cap8, keyboard/AX, blur ownership, disabled/Escape and no-penalty retry stay held. Fictional fixtures only; this does not establish real-player coverage or correct-answer adjudication.

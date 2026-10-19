@@ -1,3 +1,8 @@
+/* Round1435: exact-name priority compatibility. Complete prior entry follows unchanged. */
+async function runExactNameCompatibility1435() {
+  return (await import('./qa/gridExactNameCompatibility1435.mjs')).dispatchHistorical1435(import.meta.url);
+}
+if (await runExactNameCompatibility1435()) process.exit(process.exitCode ?? 0);
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
