@@ -57,7 +57,7 @@ export interface CmDials {
  *  cheaper market for you and a weaker side against you (a negative edge). Their cut stays 0, so a bad season
  *  opens where it would on Medium ('normal'), never higher. */
 export const CM_DIFFICULTY_DIALS: Record<DifficultyLevel, CmDials> = {
-  veryeasy: { gain: 1.4, pain: 0.6, cut: 0, cheque: 1.4, wageRoom: 1.12, mark: 0.75, edge: -3 },
+  veryeasy: { gain: 1.4, pain: 0.6, cut: 0, cheque: 1.5, wageRoom: 1.12, mark: 0.8, edge: -3 },
   easy: { gain: 1.2, pain: 0.8, cut: 0, cheque: 1.2, wageRoom: 1.06, mark: 0.87, edge: -1.5 },
   normal: { gain: 1, pain: 1, cut: 0, cheque: 1, wageRoom: 1, mark: 1, edge: 0 },
   hard: { gain: 0.8, pain: 1.25, cut: 8, cheque: 0.8, wageRoom: 0.94, mark: 1.15, edge: 1.5 },

@@ -96,11 +96,14 @@ const CONTROL = process.env.CM_DIFF_CONTROL || '';
 const CONTROLS = {
   flat: ['1'], leak: ['2', '6'], alloffleak: ['2'], alloff: ['4'], clause: ['3'], nojoin: ['3'],
   gain: ['3'], pain: ['3'], cut: ['3'], cheque: ['3'], wages: ['3'], mark: ['3'], edge: ['3'], ddreach: ['6'], helpdrift: ['7'],
+  /* Round 1512: the easy rows and the change between matches. */
+  flate: ['1'], oldlevel: ['2'], 've-gain': ['3'], 've-pain': ['3'], 've-cheque': ['3'], 've-wages': ['3'], 've-mark': ['3'], 've-edge': ['3'],
+  helpdrifte: ['7'], midleak: ['8'], easyclear: ['8'], midnolevel: ['8'], foldflat: [],
 };
 const cannot = why => { console.log(`simCmDifficulty: CANNOT RUN: ${why}`); process.exit(2); };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`CM_DIFF_CONTROL=${CONTROL} is not a control this harness knows`);
 const num = (k, d) => (process.env[k] !== undefined && process.env[k] !== '' ? Number(process.env[k]) : d);
-const DEFAULT_SECTIONS = ['1', '2', '3', '6', '7'];
+const DEFAULT_SECTIONS = ['1', '2', '3', '6', '7', '8'];
 const SECTIONS = CONTROL ? CONTROLS[CONTROL]
   : (process.env.SECTION || 'all') === 'all'
     ? [...(process.env.MEASURE === '1' ? ['0'] : []), ...DEFAULT_SECTIONS]
@@ -121,6 +124,14 @@ const PATCHES = {
   clause: { file: 'clubManager.ts', from: '  return Math.max(1, Math.round(base * mult * 10) / 10, mp.price);', to: '  return Math.max(1, Math.round(base * mult * 10) / 10);' },
   /* A merge that drops the dials from a mid season move (review of 2026-10-17: nothing saw it). */
   nojoin: { file: 'clubManagerCalendar.ts', from: '  return applyNewJobDials(joined);', to: '  return joined;' },
+  /* Round 1512: a load that rewrites a level (Impossible read back as Hard), the migration decision 1 forbids. */
+  oldlevel: { file: 'clubManagerStart.ts', from: "  return readLevel(o && typeof o === 'object' ? o.difficulty : undefined);", to: "  return readLevel(o && typeof o === 'object' ? (o.difficulty === 'legend' ? 'hard' : o.difficulty) : undefined);" },
+  /* A change between matches that also touches something already played (the board's mood). */
+  midleak: { file: 'clubManagerStart.ts', from: '  return { ...state, startOptions: optionsAtLevel(state, level) };', to: '  return { ...state, boardConfidence: (state.boardConfidence ?? 50) + 1, startOptions: optionsAtLevel(state, level) };' },
+  /* Going back up clears the leaderboard mark, so the one way rule breaks. */
+  easyclear: { file: 'clubManagerStart.ts', from: "  if (level === 'normal') delete next.difficulty;", to: "  if (!isEasyLevel(level)) delete next.easySince;\n  if (level === 'normal') delete next.difficulty;" },
+  /* A change that says yes but writes nothing: the next match and the next cheque stay on the old level. */
+  midnolevel: { file: 'clubManagerStart.ts', from: '  return { ...state, startOptions: optionsAtLevel(state, level) };', to: '  return { ...state };' },
 };
 /* Without BASE_ROOT, section 2 compares with this tree with every dial read as Normal's: the same claim (a
    career without the key never takes a lever's path), held for as long as the levers exist. */
@@ -163,7 +174,9 @@ const store = new Map();
 globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
 Date.now = () => 1791547200000;
 const req = createRequire(import.meta.url);
-const LEVELS = ['normal', 'hard', 'legend'];
+/* Round 1512: five levels, easiest first. The saved ids of Medium and Impossible are still 'normal' and 'legend'. */
+const LEVELS = ['veryeasy', 'easy', 'normal', 'hard', 'legend'];
+const OFF_MEDIUM = LEVELS.filter(l => l !== 'normal');
 const KEYS = ['gain', 'pain', 'cut', 'cheque', 'wageRoom', 'mark', 'edge'];
 const HARDER = { gain: -1, pain: 1, cut: 1, cheque: -1, wageRoom: -1, mark: 1, edge: 1 };
 /* DIALS_JSON (tuning on a runner without a commit): merged over the table of every module this run loads. */
@@ -180,7 +193,8 @@ function fresh(b) {
   return m;
 }
 if (CONTROL === 'flat') { memEdit = D => { D.hard.pain = 1; }; console.log('NEGATIVE CONTROL ON: Hard\'s pain is 1, the same as Normal\'s'); }
-if (CONTROL === 'alloff') { memEdit = D => { Object.assign(D.hard, D.normal); Object.assign(D.legend, D.normal); }; console.log('NEGATIVE CONTROL ON: Hard and Legend carry Normal\'s dials'); }
+if (CONTROL === 'alloff') { memEdit = D => { for (const l of OFF_MEDIUM) Object.assign(D[l], D.normal); }; console.log('NEGATIVE CONTROL ON: every level carries Medium\'s dials'); }
+if (CONTROL === 'flate') { memEdit = D => { D.easy.gain = D.normal.gain; }; console.log('NEGATIVE CONTROL ON: Easy\'s gain is 1, the same as Medium\'s'); }
 
 const FOLD = process.env.FOLD || '';
 const HEAD = FOLD ? null : await bundleOf(ROOT, 'head', PATCHES[CONTROL] ? [PATCHES[CONTROL]] : []);
@@ -197,13 +211,23 @@ function section1() {
   const identity = { gain: 1, pain: 1, cut: 0, cheque: 1, wageRoom: 1, mark: 1, edge: 0 };
   if (KEYS.every(k => n[k] === identity[k]) && Object.keys(n).length === KEYS.length) ok('Normal is the identity row');
   else fail(`Normal is not the identity row: ${JSON.stringify(n)}`);
+  /* Round 1512, decision 3: no dial easier at a harder level, and the board (gain, pain), the money (cheque,
+     wageRoom), the market (mark) and the edge strictly ordered across all five. The cut is 0 on Medium and both
+     easy rows (no lift above the opening rule), then strictly up. */
+  const tableLevels = Object.keys(DIALS);
+  if (JSON.stringify(tableLevels) !== JSON.stringify(LEVELS)) fail(`the table's rows are ${tableLevels.join(', ')}, the five levels easiest first are ${LEVELS.join(', ')}`);
+  let ordered = 0;
   for (let i = 1; i < LEVELS.length; i++) {
     const a = DIALS[LEVELS[i - 1]], b = DIALS[LEVELS[i]];
     for (const k of KEYS) {
-      const harder = HARDER[k] > 0 ? b[k] > a[k] : b[k] < a[k];
-      if (!harder) fail(`${LEVELS[i]} is not strictly harder than ${LEVELS[i - 1]} on ${k} (${a[k]} then ${b[k]})`);
+      const strict = k !== 'cut' || LEVELS.indexOf(LEVELS[i]) > LEVELS.indexOf('normal');
+      const harder = HARDER[k] > 0 ? (strict ? b[k] > a[k] : b[k] >= a[k]) : (strict ? b[k] < a[k] : b[k] <= a[k]);
+      if (!harder) fail(`${LEVELS[i]} is not ${strict ? 'strictly ' : ''}harder than ${LEVELS[i - 1]} on ${k} (${a[k]} then ${b[k]})`);
+      else ordered += 1;
     }
   }
+  ok(`${ordered} of ${KEYS.length * (LEVELS.length - 1)} neighbour pairs ordered (every dial but the cut strictly)`);
+  for (const lv of ['veryeasy', 'easy']) if (DIALS[lv].cut !== 0) fail(`${lv} cut is ${DIALS[lv].cut}; the lead kept it at 0 (no lift above the opening rule)`);
   /* The caps the brief set (decision 6): never gain under 0.6, cheque under 0.6, mark over 1.4,
      room under 0.85; the edge at most 3 on Hard and 5 on Legend; pain at most 1.5 and 1.8. */
   const caps = [
@@ -213,6 +237,12 @@ function section1() {
     const d = DIALS[lv];
     caps.push([lv, 'gain', v => v >= 0.6], [lv, 'cheque', v => v >= 0.6], [lv, 'mark', v => v <= 1.4], [lv, 'wageRoom', v => v >= 0.85]);
     if (!(d.cut > 0 && d.cut < 25)) fail(`${lv} cut ${d.cut} is outside 0 to 25`);
+  }
+  /* Round 1512: the easy rows' caps, the builder's mirror of the brief's (no lead number): never gain over 1.6,
+     pain under 0.4, cheque over 1.6, room over 1.2, a mark under 0.6, or an edge under -5. */
+  for (const lv of ['veryeasy', 'easy']) {
+    caps.push([lv, 'gain', v => v <= 1.6], [lv, 'pain', v => v >= 0.4], [lv, 'cheque', v => v <= 1.6], [lv, 'wageRoom', v => v <= 1.2],
+      [lv, 'mark', v => v >= 0.6], [lv, 'edge', v => v >= -5 && v < 0]);
   }
   let capped = 0;
   for (const [lv, k, okFn] of caps) { if (okFn(DIALS[lv][k])) capped += 1; else fail(`${lv} ${k} = ${DIALS[lv][k]} is past its cap`); }
@@ -570,6 +600,50 @@ async function section2() {
   }
   ok(`2c: ${loaded} of ${careers.length} saves the base wrote open here as they open there, Normal with No sacking off`);
 
+  /* 2d (Round 1512, decision 1). Old saves on Hard and Legend open unchanged: the four committed save fixtures as
+     they are and keyed to Hard and to Legend, and careers the base itself set up on Hard and Legend and saved after
+     a season. Each opens here to exactly what the base opens it to (the bytes), and its level reads as written, so
+     no load or migration rewrites a level or an earned record. */
+  {
+    if (CONTROL === 'oldlevel') console.log('NEGATIVE CONTROL ON: a load reads Impossible (legend) back as Hard');
+    const saves = [];
+    for (const f of ['cmBookSaveEvertonFixture', 'cmBookSaveHerthaFixture', 'cmOldSave1052Fixture', 'cmSecondTierOldSaveFixture']) {
+      const p = path.join(ROOT, 'scripts/data', `${f}.json`);
+      if (!fs.existsSync(p)) { fail(`2d: scripts/data/${f}.json is gone`); continue; }
+      const raw = fs.readFileSync(p, 'utf8');
+      const o = JSON.parse(raw);
+      saves.push({ tag: f, raw, want: 'normal', era: o.eraId });
+      for (const lv of ['hard', 'legend']) saves.push({ tag: `${f} keyed ${lv}`, raw: JSON.stringify({ ...o, startOptions: { ...(o.startOptions ?? {}), difficulty: lv } }), want: lv, era: o.eraId });
+    }
+    for (const lv of ['hard', 'legend']) for (const career of careers.slice(0, 3)) {
+      const mb = fresh(BASE);
+      if (!mb.dif) { fail('2d: the base has no difficulty module, so it cannot write a Hard save'); break; }
+      const s = withStream(19000 + careers.indexOf(career) + (lv === 'legend' ? 50 : 0), () => {
+        let x = setUp(mb, career.make(mb), { level: lv });
+        for (let guard = 0; guard < 160; guard += 1) { const res = mb.cm.playNextEntry(x, { skipHalftime: true }); x = res.state; if (res.kind === 'seasonOver' || x.sacked) break; }
+        return x;
+      });
+      mb.cm.saveCareer(s);
+      saves.push({ tag: `${career.tag}, a ${lv} season the base wrote`, raw: store.get(mb.cm.SAVE_KEY) ?? JSON.stringify(s), want: lv, era: career.era });
+    }
+    let same = 0;
+    for (const sv of saves) {
+      const openOn = async b => {
+        const m = fresh(b);
+        if (sv.era && sv.era !== 'now' && m.eras?.ensureEraRosters) await m.eras.ensureEraRosters(sv.era);
+        store.set(m.cm.SAVE_KEY, sv.raw);
+        const c = m.cm.loadCareer();
+        return { json: JSON.stringify(c), level: c ? m.st.levelFrom(c) : null };
+      };
+      const a = await openOn(HEAD), b = await openOn(BASE);
+      if (a.json !== b.json) fail(`2d ${sv.tag}: opens differently here, first at key ${firstDiff(a.json, b.json)}`);
+      else if (a.level !== sv.want) fail(`2d ${sv.tag}: reads as ${a.level} here, it was written ${sv.want}`);
+      else same += 1;
+    }
+    if (saves.length < 18) fail(`2d: only ${saves.length} saves opened, 18 are expected`);
+    else if (same === saves.length) ok(`2d: ${same} old saves (the four fixtures as they are and keyed Hard and Legend, and six Hard and Legend seasons the base wrote) open here byte for byte as there, each on its own level`);
+  }
+
   /* 2b. Every lever is its dial: Hard with every dial set to Normal's plays as Normal, the key aside. */
   const leakEdge = CONTROL === 'alloffleak';
   if (leakEdge) console.log('NEGATIVE CONTROL ON: 2b keeps Hard\'s edge on');
@@ -595,13 +669,22 @@ async function section2() {
    one take the same draws up to that lever. The lever's control sets that dial back to Normal's too, and
    its check must then go red. */
 const LEVER_OF = { gain: ['gain'], pain: ['pain'], cut: ['cut'], cheque: ['cheque'], wages: ['wageRoom'], mark: ['mark'], edge: ['edge'] };
+/* Round 1512: the same checks run on each level of LEVER_LEVELS (default Hard and Very Easy, the far end of the
+   new rows: Easy reads the same code with smaller numbers). LV is the level under test, LVN its word. A lever
+   control named ve-<lever> sets Very Easy's lever back to Medium's and runs the Very Easy pass only; a plain one
+   (gain, edge...) does the same to Hard and runs the Hard pass only. */
+const LEVER_CONTROL = CONTROL.startsWith('ve-') && LEVER_OF[CONTROL.slice(3)] ? { level: 'veryeasy', keys: LEVER_OF[CONTROL.slice(3)] }
+  : LEVER_OF[CONTROL] ? { level: 'hard', keys: LEVER_OF[CONTROL] } : null;
+const LEVER_LEVELS = LEVER_CONTROL ? [LEVER_CONTROL.level] : (process.env.LEVER_LEVELS || 'hard,veryeasy').split(',');
+const LEVEL_WORD = { veryeasy: 'Very Easy', easy: 'Easy', normal: 'Medium', hard: 'Hard', legend: 'Impossible' };
+let LV = 'hard', LVN = 'Hard';
 function leverModule(keys) {
   const m = fresh(HEAD);
-  const D = m.dif.CM_DIFFICULTY_DIALS, hard = { ...D.hard };
-  Object.assign(D.hard, D.normal);
-  for (const k of keys) D.hard[k] = hard[k];
-  if (LEVER_OF[CONTROL] && keys.some(k => LEVER_OF[CONTROL].includes(k))) for (const k of LEVER_OF[CONTROL]) D.hard[k] = D.normal[k];
-  return { m, dial: hard };
+  const D = m.dif.CM_DIFFICULTY_DIALS, own = { ...D[LV] };
+  Object.assign(D[LV], D.normal);
+  for (const k of keys) D[LV][k] = own[k];
+  if (LEVER_CONTROL && LEVER_CONTROL.level === LV && keys.some(k => LEVER_CONTROL.keys.includes(k))) for (const k of LEVER_CONTROL.keys) D[LV][k] = D.normal[k];
+  return { m, dial: own };
 }
 const close = (a, b, tol) => Math.abs(a - b) <= tol;
 /** The first match a career plays: its report and the state after it. */
@@ -625,8 +708,8 @@ function seasonEnd(m, club, seed) {
 const keyed = (s, level) => ({ ...s, startOptions: { ...(s.startOptions ?? {}), difficulty: level } });
 function section3() {
   const seeds = num('SEEDS3', 4);
-  if (LEVER_OF[CONTROL] || CONTROL === 'clause' || CONTROL === 'nojoin') console.log(`NEGATIVE CONTROL ON: ${CONTROL === 'clause' ? 'the clause floor at the card\'s price is gone' : CONTROL === 'nojoin' ? 'joinClubNow returns the new job without its dials' : `Hard's ${LEVER_OF[CONTROL].join(' and ')} set back to Normal's`}`);
-  console.log(`3) each lever does what its dial says (Hard with one lever on, the rest Normal's), ${seeds} seeds`);
+  if (LEVER_CONTROL || CONTROL === 'clause' || CONTROL === 'nojoin') console.log(`NEGATIVE CONTROL ON: ${CONTROL === 'clause' ? 'the clause floor at the card\'s price is gone' : CONTROL === 'nojoin' ? 'joinClubNow returns the new job without its dials' : `${LEVEL_WORD[LEVER_CONTROL.level]}'s ${LEVER_CONTROL.keys.join(' and ')} set back to Medium's`}`);
+  console.log(`3) each lever does what its dial says (${LVN} with one lever on, the rest Medium's), ${seeds} seeds`);
   const clubs = fleetClubs();
   /* B1: the board's change after the first match. */
   {
@@ -636,18 +719,18 @@ function section3() {
       const sd = 9000 + seed * 31 + clubs.indexOf(c);
       const mn = fresh(HEAD);
       const a = withStream(sd, () => firstMatch(mn, mn.cm.startCareer(c.name)));
-      const b = withStream(sd, () => firstMatch(mh, setUp(mh, mh.cm.startCareer(c.name), { level: 'hard' })));
+      const b = withStream(sd, () => firstMatch(mh, setUp(mh, mh.cm.startCareer(c.name), { level: LV })));
       if (!a || !b) { fail(`B1 ${c.name} seed ${seed}: no first match`); continue; }
       const dn = a.report.confidenceDelta, dh = b.report.confidenceDelta;
       if (Math.abs(dn) < 0.5) continue;
       n += 1;
       const want = dn > 0 ? dn * dial.gain : dn * dial.pain;
       if (dn > 0) up += 1; else down += 1;
-      if (!close(dh, want, 0.13) || Math.sign(dh) !== Math.sign(dn)) { bad += 1; if (bad <= 3) fail(`B1 ${c.name} seed ${seed}: Normal ${dn}, Hard ${dh}, the dial says ${want.toFixed(2)}`); }
+      if (!close(dh, want, 0.13) || Math.sign(dh) !== Math.sign(dn)) { bad += 1; if (bad <= 3) fail(`B1 ${c.name} seed ${seed}: Normal ${dn}, ${LVN} ${dh}, the dial says ${want.toFixed(2)}`); }
     }
     if (bad > 3) fail(`B1: ${bad} matches in all off the dial`);
     if (n < 20 || up < 3 || down < 3) fail(`B1: only ${n} first matches (${up} up, ${down} down) moved the board by 0.5 or more, the floor is 20 with 3 each way`);
-    else if (!bad) ok(`B1: ${n} first matches (${up} up, ${down} down), Hard's change is Normal's times the dial every time`);
+    else if (!bad) ok(`B1: ${n} first matches (${up} up, ${down} down), ${LVN}'s change is Normal's times the dial every time`);
   }
   /* P1: the match facts and the next match card show the edge; the odds turn against you; no AI match reads it. */
   {
@@ -656,7 +739,7 @@ function section3() {
     let n = 0, worse = 0;
     for (const c of clubs) {
       const sn = withStream(11, () => mn.cm.startCareer(c.name));
-      const sh = withStream(11, () => setUp(mh, mh.cm.startCareer(c.name), { level: 'hard' }));
+      const sh = withStream(11, () => setUp(mh, mh.cm.startCareer(c.name), { level: LV }));
       const opp = mn.cm.nextFixtureFrom(sn, sn.week);
       const oh = mh.cm.nextFixtureFrom(sh, sh.week);
       if (!opp?.opponent || !oh?.opponent || opp.opponent !== oh.opponent) continue;
@@ -665,11 +748,16 @@ function section3() {
       if (!close(mh.cm.oppStrengthVsMe(sh, oh.opponent), want, 1e-9)) fail(`P1 ${c.name}: the opponent reads ${mh.cm.oppStrengthVsMe(sh, oh.opponent)}, the dial says ${want}`);
       if (oh.oppStrength !== Math.round(want)) fail(`P1 ${c.name}: the next match card shows ${oh.oppStrength}, the dial says ${Math.round(want)}`);
       const fn = mn.cm.matchFacts(sn), fh = mh.cm.matchFacts(sh);
-      if (fn && fh && fh.odds.loss > fn.odds.loss && fh.odds.win < fn.odds.win) worse += 1;
+      /* Round 1512: on an easy row the edge is negative, so the odds must turn FOR you. */
+      const harder = dial.edge > 0;
+      if (fn && fh && (harder ? fh.odds.loss > fn.odds.loss && fh.odds.win < fn.odds.win : fh.odds.loss < fn.odds.loss && fh.odds.win > fn.odds.win)) worse += 1;
     }
+    const way = dial.edge > 0 ? 'against you' : 'for you';
     if (n < 6) fail(`P1: only ${n} clubs had a next fixture to read`);
-    else if (worse < n) fail(`P1: the odds turned against you in ${worse} of ${n} match facts`);
-    else ok(`P1: ${n} next match cards and match facts read the opponent at strength plus ${dial.edge}, the odds worse in all ${n}`);
+    else if (worse < n) fail(`P1 ${LVN}: the odds turned ${way} in ${worse} of ${n} match facts`);
+    else ok(`P1 ${LVN}: ${n} next match cards and match facts read the opponent at strength plus ${dial.edge}, the odds turned ${way} in all ${n}`);
+    /* The code reads below hold for every level, so they run on the Hard pass only. */
+    if (LV !== 'hard') return;
     /* No AI against AI match reads it: in the engine (comments stripped) oppStrengthVsMe is called in the seven
        readers of your match only, and simAiMatch keeps strengthOf. */
     const src = code(read('src/lib/clubManager.ts'));
@@ -727,11 +815,11 @@ function section3money() {
       const a = joinAfterSix(fresh(HEAD), c.name, seed, 'normal');
       const { m, dial } = leverModule([lever]);
       dialValue = dial[lever];
-      const b = joinAfterSix(m, c.name, seed, 'hard');
-      if (!a || !b || a.clubName !== b.clubName) { fail(`${label} joinClubNow ${c.name}: Normal moved to ${a?.clubName ?? 'nowhere'}, Hard to ${b?.clubName ?? 'nowhere'}`); continue; }
+      const b = joinAfterSix(m, c.name, seed, LV);
+      if (!a || !b || a.clubName !== b.clubName) { fail(`${label} joinClubNow ${c.name}: Normal moved to ${a?.clubName ?? 'nowhere'}, ${LVN} to ${b?.clubName ?? 'nowhere'}`); continue; }
       n += 1;
       const want = wantOf(a, dial);
-      if (!close(read(b), want, 1e-9)) { bad += 1; if (bad <= 3) fail(`${label} joinClubNow ${c.name} to ${a.clubName}: Normal ${read(a)}, Hard ${read(b)}, the dial says ${want}`); }
+      if (!close(read(b), want, 1e-9)) { bad += 1; if (bad <= 3) fail(`${label} joinClubNow ${c.name} to ${a.clubName}: Normal ${read(a)}, ${LVN} ${read(b)}, the dial says ${want}`); }
     }
     if (bad > 3) fail(`${label} joinClubNow: ${bad} moves in all off the dial`);
     if (n < 6) fail(`${label} joinClubNow: only ${n} mid season moves read, the floor is 6`);
@@ -742,10 +830,10 @@ function section3money() {
     const { m, dial } = leverModule(['cut']);
     let below = 0, above = 0, bad = 0;
     for (const e of ends) {
-      const a = rollOn(mn, e.s, e.seed), b = rollOn(m, keyed(e.s, 'hard'), e.seed);
+      const a = rollOn(mn, e.s, e.seed), b = rollOn(m, keyed(e.s, LV), e.seed);
       const want = a.boardConfidence >= 60 ? a.boardConfidence : a.boardConfidence - dial.cut;
       if (a.boardConfidence >= 60) above += 1; else below += 1;
-      if (b.boardConfidence !== want) { bad += 1; if (bad <= 3) fail(`B2 ${e.club}: Normal opens at ${a.boardConfidence}, Hard at ${b.boardConfidence}, the dial says ${want}`); }
+      if (b.boardConfidence !== want) { bad += 1; if (bad <= 3) fail(`B2 ${e.club}: Normal opens at ${a.boardConfidence}, ${LVN} at ${b.boardConfidence}, the dial says ${want}`); }
     }
     if (below < 4 || above < 1) fail(`B2: ${below} openings under Safe and ${above} at or above it; the floors are 4 and 1`);
     else if (!bad) ok(`B2: ${below} bad openings fell by exactly ${dial.cut}, ${above} at or above Safe stayed`);
@@ -756,14 +844,14 @@ function section3money() {
     let n = 0, bad = 0;
     for (const e of ends) {
       const empty = { ...e.s, budget: 0 };
-      const a = rollOn(mn, empty, e.seed), b = rollOn(m, keyed(empty, 'hard'), e.seed);
+      const a = rollOn(mn, empty, e.seed), b = rollOn(m, keyed(empty, LV), e.seed);
       n += 1;
       const want = Math.round(a.budget * dial.cheque * 10) / 10;
-      if (!close(b.budget, want, 0.11)) { bad += 1; if (bad <= 3) fail(`M1 ${e.club}: Normal's cheque ${a.budget}, Hard's ${b.budget}, the dial says ${want}`); }
+      if (!close(b.budget, want, 0.11)) { bad += 1; if (bad <= 3) fail(`M1 ${e.club}: Normal's cheque ${a.budget}, ${LVN}'s ${b.budget}, the dial says ${want}`); }
     }
     const day = fresh(HEAD).cm.startCareer('Brentford');
-    const dh = setUp(m, m.cm.startCareer('Brentford'), { level: 'hard' });
-    if (dh.budget !== Math.round(day.budget * dial.cheque * 10) / 10) fail(`M1 day one: Normal ${day.budget}, Hard ${dh.budget}`);
+    const dh = setUp(m, m.cm.startCareer('Brentford'), { level: LV });
+    if (dh.budget !== Math.round(day.budget * dial.cheque * 10) / 10) fail(`M1 day one: Normal ${day.budget}, ${LVN} ${dh.budget}`);
     if (n < 6) fail(`M1: only ${n} summers read`);
     else if (!bad) ok(`M1: day one and ${n} summer cheques are Normal's times ${dial.cheque}`);
   }
@@ -774,17 +862,17 @@ function section3money() {
     let n = 0, bad = 0;
     const want = cap => Math.max(60, Math.round(cap * dial.wageRoom));
     for (const c of clubs.slice(0, 4)) {
-      const a = withStream(3, () => mn.cm.startCareer(c.name)), b = withStream(3, () => setUp(m, m.cm.startCareer(c.name), { level: 'hard' }));
+      const a = withStream(3, () => mn.cm.startCareer(c.name)), b = withStream(3, () => setUp(m, m.cm.startCareer(c.name), { level: LV }));
       n += 1;
-      if (b.wageCap !== want(a.wageCap)) { bad += 1; fail(`M2 day one ${c.name}: Normal ${a.wageCap}, Hard ${b.wageCap}, the dial says ${want(a.wageCap)}`); }
+      if (b.wageCap !== want(a.wageCap)) { bad += 1; fail(`M2 day one ${c.name}: Normal ${a.wageCap}, ${LVN} ${b.wageCap}, the dial says ${want(a.wageCap)}`); }
     }
     const league = cm.playableClubs('premier');
     for (const e of ends.slice(0, 6)) {
       const to = league.find(c => c.name !== e.club && c.expectation > 8)?.name;
-      const a = rollOn(mn, e.s, e.seed, to), b = rollOn(m, keyed(e.s, 'hard'), e.seed, to);
+      const a = rollOn(mn, e.s, e.seed, to), b = rollOn(m, keyed(e.s, LV), e.seed, to);
       if (a.clubName !== to || b.clubName !== to) { fail(`M2 move ${e.club} to ${to}: the move did not happen`); continue; }
       n += 1;
-      if (b.wageCap !== want(a.wageCap)) { bad += 1; if (bad <= 3) fail(`M2 move to ${to}: Normal ${a.wageCap}, Hard ${b.wageCap}, the dial says ${want(a.wageCap)}`); }
+      if (b.wageCap !== want(a.wageCap)) { bad += 1; if (bad <= 3) fail(`M2 move to ${to}: Normal ${a.wageCap}, ${LVN} ${b.wageCap}, the dial says ${want(a.wageCap)}`); }
     }
     if (n < 8) fail(`M2: only ${n} new jobs read`);
     else if (!bad) ok(`M2: ${n} new jobs (day one and summer moves) start on Normal's ceiling times ${dial.wageRoom}`);
@@ -795,16 +883,26 @@ function section3money() {
   {
     const { m, dial } = leverModule(['mark']);
     const s0 = withStream(5, () => m.cm.startCareer('Brentford'));
-    const sh = { ...setUp(m, s0, { level: 'hard' }), budget: 9999, transferWindow: s0.transferWindow ?? 'summer' };
+    const sh = { ...setUp(m, s0, { level: LV }), budget: 9999, transferWindow: s0.transferWindow ?? 'summer' };
     const base = m.cm.buildMarket(sh), mine = m.dif.marketForMe(sh, base);
     let marked = 0;
     mine.forEach((mp, i) => { if (mp.name === base[i].name && mp.value === base[i].value && mp.price === Math.max(0.5, Math.round(base[i].price * dial.mark * 10) / 10)) marked += 1; });
     if (marked !== base.length || (dial.mark !== 1 && mine.every((mp, i) => mp.price === base[i].price))) fail(`T1: ${marked} of ${base.length} cards are the same man at the marked price`);
     else ok(`T1: all ${base.length} cards are the same men in the same order at ${dial.mark} times the list`);
-    const pick = mine.find(mp => m.cm.buyPlayer(sh, mp));
+    /* Round 1512: a card the mark moved (on an easy row a cheap man can sit on the 0.5 floor at his list price). */
+    const pick = mine.find((mp, i) => mp.price !== base[i].price && m.cm.buyPlayer(sh, mp));
     const after = pick && m.cm.buyPlayer(sh, pick);
-    if (!after || !close(sh.budget - after.budget, pick.price, 1e-9) || pick.price === base[mine.indexOf(pick)].price) fail(`T1: Buy did not charge the marked price${pick ? ` (${sh.budget - after?.budget} for a card of ${pick.price})` : ''}`);
-    else ok(`T1: Buy charges the marked price (${pick.price} for a man listed at ${base[mine.indexOf(pick)].price})`);
+    if (!after || !close(sh.budget - after.budget, pick.price, 1e-9) || pick.price === base[mine.indexOf(pick)].price) fail(`T1 ${LVN}: Buy did not charge the marked price${pick ? ` (${sh.budget - after?.budget} for a card of ${pick.price})` : ''}`);
+    else ok(`T1 ${LVN}: Buy charges the marked price (${pick.price} for a man listed at ${base[mine.indexOf(pick)].price})`);
+    const floor = mine.filter(mp => mp.price < 0.5).length;
+    if (floor) fail(`T1 ${LVN}: ${floor} cards are listed under the 0.5 floor`);
+    if (LV !== 'hard') {
+      const runA = withStream(21, () => { let s = mn.cm.startCareer('Brentford'); for (let i = 0; i < 6; i += 1) s = mn.cm.playNextEntry(s, { skipHalftime: true }).state; return s.aiHeadlines; });
+      const runB = withStream(21, () => { let s = setUp(m, m.cm.startCareer('Brentford'), { level: LV }); for (let i = 0; i < 6; i += 1) s = m.cm.playNextEntry(s, { skipHalftime: true }).state; return s.aiHeadlines; });
+      if (JSON.stringify(runA) !== JSON.stringify(runB)) fail(`T1 ${LVN}: the AI's headlines on a marked market differ from Medium's`);
+      else ok(`T1 ${LVN}: the AI's own deals are Medium's (${runA.length} headlines after six entries)`);
+      return;
+    }
     const legendMark = DIALS.legend.mark;
     let under = 0, clauses = 0;
     for (const mp of base) {
@@ -817,7 +915,7 @@ function section3money() {
     if (under) fail(`T1: ${under} of ${clauses} release clauses undercut the price at Legend's mark`);
     else ok(`T1: none of ${clauses} release clauses undercuts the price at Legend's mark`);
     const runA = withStream(21, () => { let s = mn.cm.startCareer('Brentford'); for (let i = 0; i < 6; i += 1) s = mn.cm.playNextEntry(s, { skipHalftime: true }).state; return s.aiHeadlines; });
-    const runB = withStream(21, () => { let s = setUp(m, m.cm.startCareer('Brentford'), { level: 'hard' }); for (let i = 0; i < 6; i += 1) s = m.cm.playNextEntry(s, { skipHalftime: true }).state; return s.aiHeadlines; });
+    const runB = withStream(21, () => { let s = setUp(m, m.cm.startCareer('Brentford'), { level: LV }); for (let i = 0; i < 6; i += 1) s = m.cm.playNextEntry(s, { skipHalftime: true }).state; return s.aiHeadlines; });
     if (JSON.stringify(runA) !== JSON.stringify(runB)) fail('T1: the AI\'s headlines on a marked market differ from Normal\'s');
     else ok(`T1: the AI's own deals are Normal's (${runA.length} headlines after six entries)`);
   }
@@ -877,6 +975,11 @@ async function section6() {
    wins its league in at least one season in ten. The bands are the lead's; the measured numbers and the
    spread of Normal against Normal on other seeds are in the header table. */
 const BANDS = { hard: { drop: [0.08, 0.20], sack: 1.4 }, legend: { drop: [0.18, 0.35], sack: 2 } };
+/* Round 1512, decision 3: the easy rows against Medium. The mid clubs' points per game UP 6 to 20 percent on
+   Easy and 14 to 35 on Very Easy; sacked seasons at most 0.75 and 0.5 times Medium's; spend a season up on Easy
+   and up further on Very Easy; and still a game: Very Easy's big clubs win under 9 titles in ten and its small
+   clubs average under 2.3 points a game. */
+const EASY_BANDS = { easy: { rise: [0.06, 0.20], sackMax: 0.75 }, veryeasy: { rise: [0.14, 0.35], sackMax: 0.5 } };
 function outcomesOf(rows) {
   const eng = l => rows.filter(r => r.level === l && r.driver === 'engaged');
   const out = {};
@@ -890,6 +993,7 @@ function outcomesOf(rows) {
       sacks: all.filter(r => r.sacked).length,
       spend: sum(all, r => r.fees) / all.length,
       bigTitles10: cell(all.filter(r => r.tier === 'big')).titles10,
+      smallPpg: cell(all.filter(r => r.tier === 'small')).ppg,
     };
   }
   return out;
@@ -917,6 +1021,22 @@ function assertOutcomes(rows) {
     if (l === 'hard' && !(spendDrop >= 0.10)) fail(`hard: spend per season fell ${f2(spendDrop * 100)} percent, the floor is 10`);
     if (l === 'hard' && !(x.bigTitles10 >= 1)) fail(`hard: a big club won its league ${f2(x.bigTitles10)} seasons in ten, the floor is 1`);
   }
+  for (const l of ['easy', 'veryeasy']) {
+    const x = o[l];
+    if (!x) continue;
+    const rise = x.midPpg / n.midPpg - 1;
+    const sackRatio = n.sack > 0 ? x.sack / n.sack : NaN;
+    const spendRise = x.spend / n.spend - 1;
+    console.log(`  ${l}: mid points per game ${f2(x.midPpg)} (up ${f2(rise * 100)} percent), sacked ${x.sacks} of ${x.seasons} (${f2(x.sack)}, ${f2(sackRatio)} times Medium), spend ${f2(x.spend)}m (up ${f2(spendRise * 100)} percent), big club titles ${f2(x.bigTitles10)} in ten, small club points a game ${f2(x.smallPpg)}`);
+    const [lo, hi] = EASY_BANDS[l].rise;
+    if (!(rise >= lo && rise <= hi)) fail(`${l}: the mid clubs' points per game rose ${f2(rise * 100)} percent, the band is ${lo * 100} to ${hi * 100}`);
+    if (!(n.sack > 0)) fail(`${l}: Medium was never sacked, so the sack ratio has nothing to compare with`);
+    else if (!(sackRatio <= EASY_BANDS[l].sackMax)) fail(`${l}: sacked ${f2(sackRatio)} times as often as Medium, the ceiling is ${EASY_BANDS[l].sackMax}`);
+    if (!(spendRise > 0)) fail(`${l}: spend per season moved ${f2(spendRise * 100)} percent, it must go up`);
+  }
+  if (o.easy && o.veryeasy && !(o.veryeasy.spend > o.easy.spend)) fail(`veryeasy: spend ${f2(o.veryeasy.spend)}m a season is not above Easy's ${f2(o.easy.spend)}m`);
+  if (o.veryeasy && !(o.veryeasy.bigTitles10 < 9)) fail(`veryeasy: a big club won its league ${f2(o.veryeasy.bigTitles10)} seasons in ten, the ceiling is under 9`);
+  if (o.veryeasy && !(o.veryeasy.smallPpg < 2.3)) fail(`veryeasy: a small club averages ${f2(o.veryeasy.smallPpg)} points a game, the ceiling is under 2.3`);
   if (failures === before) ok('every level sits inside the bands the lead set');
 }
 /* A whole fleet in one process loads a fresh engine for every career, and on 2026-10-16 the 432 careers of seeds
@@ -969,6 +1089,21 @@ function fold() {
   console.log(`4) outcomes folded from ${files.length} files, ${rows.length} seasons`);
   const levels = LEVELS.filter(l => rows.some(r => r.level === l));
   printTable(rows, levels);
+  /* Round 1512: each seed block on its own (seeds 0 to 7 and 8 to 15), printed only, so the header can say
+     whether a band is a coin toss over the two blocks. The bands hold on the pooled fleet. */
+  for (const [name, inBlock] of [['seeds 0 to 7', r => r.seed < 8], ['seeds 8 to 15', r => r.seed >= 8]]) {
+    const o = outcomesOf(rows.filter(inBlock));
+    if (!o.normal) continue;
+    console.log(`  block ${name}: ${Object.entries(o).map(([l, x]) => `${l} mid ${f2(x.midPpg)} (${f2((x.midPpg / o.normal.midPpg - 1) * 100)}%), sacked ${f2(x.sack)} (${f2(x.sack / o.normal.sack)}x), spend ${f2(x.spend)}m, big titles ${f2(x.bigTitles10)}, small ppg ${f2(x.smallPpg)}`).join('; ')}`);
+  }
+  if (CONTROL === 'foldflat') {
+    /* The easy rows replaced by Medium's own seasons under their names: both easy bands must go red. */
+    const med = rows.filter(r => r.level === 'normal');
+    const flat = [...rows.filter(r => r.level !== 'easy' && r.level !== 'veryeasy'), ...med.map(r => ({ ...r, level: 'easy' })), ...med.map(r => ({ ...r, level: 'veryeasy' }))];
+    console.log('NEGATIVE CONTROL ON: Easy and Very Easy folded as copies of Medium\'s seasons');
+    assertOutcomes(flat);
+    return;
+  }
   assertOutcomes(rows);
 }
 
@@ -979,17 +1114,22 @@ function fold() {
    rounded the way the engine rounds), a win (4 times gain), a 40m cheque, a man listed at 10m, an opponent
    of 80, and a bad season that would open at 35. Every number in it must be the one the table gives. */
 function section7() {
+  if (CONTROL === 'helpdrifte') { DIALS.easy.cheque = Math.round((DIALS.easy.cheque + 0.05) * 100) / 100; console.log(`NEGATIVE CONTROL ON: Easy's cheque moved to ${DIALS.easy.cheque} in memory`); }
   if (CONTROL === 'helpdrift') { DIALS.hard.cheque = Math.round((DIALS.hard.cheque + 0.05) * 100) / 100; console.log(`NEGATIVE CONTROL ON: Hard's cheque moved to ${DIALS.hard.cheque} in memory`); }
   console.log('7) the help\'s worked example is the dial table\'s');
   const r1 = x => Math.round(x * 10) / 10;
   const fmt = x => String(Math.abs(r1(x)));
   const want = [];
-  const H = DIALS.hard, L = DIALS.legend;
-  want.push('4.5', fmt(-4.5 * H.pain), fmt(-4.5 * L.pain), '4', fmt(4 * H.gain), fmt(4 * L.gain));
-  want.push('40', fmt(40 * H.cheque), fmt(40 * L.cheque));
-  want.push('10', fmt(Math.max(0.5, 10 * H.mark)), fmt(Math.max(0.5, 10 * L.mark)));
-  want.push('80', fmt(80 + H.edge), fmt(80 + L.edge));
-  want.push('35', fmt(35 - H.cut), fmt(35 - L.cut));
+  /* Round 1512: Hard, Impossible, then Easy and Very Easy, in the order the paragraph names them; the last
+     sentence names one opening for both easy rows, so their cuts must be equal. */
+  const H = DIALS.hard, L = DIALS.legend, E = DIALS.easy, V = DIALS.veryeasy;
+  const four = f => [H, L, E, V].map(d => fmt(f(d)));
+  want.push('4.5', ...four(d => -4.5 * d.pain), '4', ...four(d => 4 * d.gain));
+  want.push('40', ...four(d => 40 * d.cheque));
+  want.push('10', ...four(d => Math.max(0.5, 10 * d.mark)));
+  want.push('80', ...four(d => 80 + d.edge));
+  want.push('35', fmt(35 - H.cut), fmt(35 - L.cut), fmt(35 - E.cut));
+  if (E.cut !== V.cut) fail(`the example names one opening for Easy and Very Easy, but their cuts are ${E.cut} and ${V.cut}`);
   const src = code(read('src/components/club-manager/ClubManagerHelp.tsx'));
   const at = src.indexOf('data-cm-help="difficulty"');
   const block = at < 0 ? '' : src.slice(at, src.indexOf('</div>', at));
@@ -1006,14 +1146,122 @@ function section7() {
   /* Everything, not only every number: Round 1335's "one bad night usually still leaves you Safe" has no number
      in it and is false at a big club on Hard (review of 2026-10-17), so the block must cover words too and say
      where that one stops holding. */
-  if (!/Everything elsewhere on this screen, every number and every promise, is for a Normal career/.test(first) || !/No sacking/.test(first)) fail('the block does not open by saying everything else on the screen is Normal\'s and that No sacking switches off the zero rule');
-  else ok('the block opens by saying everything else on the screen, numbers and promises, is Normal\'s, and names No sacking');
+  /* Round 1512: Normal is called Medium on screen now (its saved id is still 'normal'). */
+  if (!/Everything elsewhere on this screen, every number and every promise, is for a Medium career/.test(first) || !/No sacking/.test(first)) fail('the block does not open by saying everything else on the screen is Medium\'s and that No sacking switches off the zero rule');
+  else ok('the block opens by saying everything else on the screen, numbers and promises, is Medium\'s, and names No sacking');
   if (!/one bad night can already take you under Safe/.test(first)) fail('the block does not say that one bad night in a new job can take you under Safe on Hard and Legend');
   else ok('the block says one bad night in a new job can take you under Safe');
 }
 
+/* ---------- 8. changing the level between matches ---------- */
+/* Decisions 4 and 5 of Round 1512's brief. Careers set up on Medium at three clubs (a mid, a small and a big
+   one), six entries in, changed to each of the other four levels with setDifficulty: (a) the whole state apart
+   from startOptions is byte equal, and inside startOptions only the level and the easy mark move; (b) the level
+   reads as set, and a save writes it and a load reads it back; (c) the next match reads the new edge (the next
+   match card and oppStrengthVsMe), where the unchanged career reads none; (d) going easy stores this season
+   and stops the score, going back up through Impossible to Medium keeps that mark, and a career that only
+   went harder still posts and ends on the block it started with; (e) the same level, an id that is not one
+   of the five and a match paused at halftime are refused, and a sacked career can change. Then (f) season
+   ends on Medium, changed to each level, roll into a summer cheque of Medium's times the new dial. */
+function section8() {
+  if (CONTROL === 'midleak') console.log('NEGATIVE CONTROL ON: a change of level also moves the board\'s mood');
+  if (CONTROL === 'easyclear') console.log('NEGATIVE CONTROL ON: going back up clears the leaderboard mark');
+  console.log('8) changing the level between matches');
+  const isEasy = lv => lv === 'easy' || lv === 'veryeasy';
+  const without = (o, keys) => { const x = { ...o }; for (const k of keys) delete x[k]; return x; };
+  const clubs = fleetClubs();
+  let n = 0;
+  const good = { a: 0, b: 0, c: 0, d: 0, e: 0 };
+  for (const [i, club] of [clubs[1], clubs[5], clubs[6]].entries()) {
+    const m = fresh(HEAD);
+    const D = m.dif.CM_DIFFICULTY_DIALS;
+    const s = withStream(21000 + i, () => {
+      let x = setUp(m, m.cm.startCareer(club.name), { level: 'normal' });
+      for (let g = 0; g < 6; g += 1) { const res = m.cm.playNextEntry(x, { skipHalftime: true }); x = res.state; if (res.kind === 'seasonOver' || x.sacked) break; }
+      return x;
+    });
+    if (s.sacked || m.st.levelFrom(s) !== 'normal') { fail(`8 ${club.name}: the Medium career is ${s.sacked ? 'sacked' : m.st.levelFrom(s)} six entries in`); continue; }
+    const seasonNo = Number.isInteger(s.season) && s.season > 0 ? s.season : 1;
+    const before = JSON.stringify(s);
+    const rest = JSON.stringify(without(s, ['startOptions']));
+    const block = JSON.stringify(without(m.st.startOptionsOf(s), ['difficulty', 'easySince']));
+    const fx = m.cm.nextFixtureFrom(s, s.week);
+    for (const lv of OFF_MEDIUM) {
+      n += 1;
+      const t = m.st.setDifficulty(s, lv);
+      const tag = `${club.name} Medium to ${LEVEL_WORD[lv]}`;
+      if (JSON.stringify(s) !== before) { fail(`8a ${tag}: setDifficulty changed the state it was handed`); continue; }
+      if (!t) { fail(`8a ${tag}: refused between matches`); continue; }
+      const tRest = JSON.stringify(without(t, ['startOptions']));
+      if (tRest !== rest) fail(`8a ${tag}: the state moved outside startOptions, first at key ${firstDiff(tRest, rest)}`);
+      else if (JSON.stringify(without(t.startOptions, ['difficulty', 'easySince'])) !== block) fail(`8a ${tag}: startOptions moved beyond the level and the mark`);
+      else good.a += 1;
+      m.cm.saveCareer(t);
+      const back = m.cm.loadCareer();
+      if (m.st.levelFrom(t) !== lv || !back || m.st.levelFrom(back) !== lv || m.st.easyFrom(back) !== m.st.easyFrom(t)) fail(`8b ${tag}: reads ${m.st.levelFrom(t)}, and after a save and a load ${back ? m.st.levelFrom(back) : 'nothing'}`);
+      else good.b += 1;
+      if (!fx?.opponent) fail(`8c ${tag}: no next fixture to read`);
+      else {
+        const plain = m.cm.strengthOf(s, fx.opponent), want = plain + D[lv].edge;
+        const after = m.cm.nextFixtureFrom(t, t.week);
+        if (!close(m.cm.oppStrengthVsMe(s, fx.opponent), plain, 1e-9)) fail(`8c ${tag}: the Medium career reads ${fx.opponent} off its plain strength`);
+        else if (!close(m.cm.oppStrengthVsMe(t, fx.opponent), want, 1e-9) || after?.oppStrength !== Math.round(want)) fail(`8c ${tag}: the next match reads ${m.cm.oppStrengthVsMe(t, fx.opponent)} (card ${after?.oppStrength}), the new dial says ${want}`);
+        else good.c += 1;
+      }
+      if (isEasy(lv)) {
+        const up = m.st.setDifficulty(t, 'legend');
+        const home = up && m.st.setDifficulty(up, 'normal');
+        const marked = x => !!x && m.st.easyFrom(x) === seasonNo && !m.st.postsScore(x);
+        if (!marked(t)) fail(`8d ${tag}: the mark is ${m.st.easyFrom(t)} (season ${seasonNo}) and the score ${m.st.postsScore(t) ? 'still posts' : 'stops'}`);
+        else if (!marked(up) || !marked(home) || 'difficulty' in home.startOptions) fail(`8d ${tag}: going back up to Impossible and then Medium cleared the mark or the score came back`);
+        else good.d += 1;
+      } else {
+        const next = lv === 'hard' ? m.st.setDifficulty(t, 'legend') : m.st.setDifficulty(t, 'hard');
+        const home = next && m.st.setDifficulty(next, 'normal');
+        if (m.st.easyFrom(t) !== null || ![t, next, home].every(x => x && m.st.postsScore(x)) || JSON.stringify(home.startOptions) !== JSON.stringify(m.st.startOptionsOf(s))) fail(`8d ${tag}: a career that only went harder lost its score or did not end on its own block`);
+        else good.d += 1;
+      }
+    }
+    const refused = [m.st.setDifficulty(s, 'normal'), m.st.setDifficulty(s, 'medium'), m.st.setDifficulty({ ...s, live: { paused: true } }, 'hard')];
+    const sackedMove = m.st.setDifficulty({ ...s, sacked: true }, 'easy');
+    if (refused.some(x => x !== null)) fail(`8e ${club.name}: setDifficulty took ${refused.map(x => (x === null ? 'null' : 'a state')).join(', ')} for the same level, a junk id and a match at halftime`);
+    else if (!sackedMove || m.st.levelFrom(sackedMove) !== 'easy') fail(`8e ${club.name}: a sacked career cannot change its level`);
+    else good.e += 1;
+  }
+  if (n < 12) fail(`8: only ${n} changes made, 12 are expected`);
+  else if (good.a === n && good.b === n && good.c === n && good.d === n && good.e === 3) ok(`8a to 8e: ${n} changes mid season at three clubs: nothing but the level and the mark moved, each saved and loaded back, the next match read the new edge, the leaderboard mark one way, and the refusals held`);
+  /* (f) The next summer cheque. Season ends on Medium (the steady driver), each changed to a level and rolled
+     on a module of that level's own, against the Medium roll from the same stream (section 3's M1 method). */
+  const mn = fresh(HEAD);
+  const ends = [];
+  for (const [i, club] of clubs.entries()) {
+    if (club.tier === 'big' || ends.length >= 4) continue;
+    const e = seasonEnd(mn, club.name, 22000 + i);
+    if (e) ends.push({ club: club.name, s: { ...e, budget: 0 }, seed: 23000 + i });
+  }
+  let f = 0, fn = 0;
+  for (const lv of OFF_MEDIUM) {
+    const mm = fresh(HEAD);
+    const dial = mm.dif.CM_DIFFICULTY_DIALS[lv].cheque;
+    for (const e of ends) {
+      fn += 1;
+      const a = rollOn(mn, e.s, e.seed);
+      const t = mm.st.setDifficulty(e.s, lv);
+      const b = t && rollOn(mm, t, e.seed);
+      const want = Math.round(a.budget * dial * 10) / 10;
+      if (!b || !close(b.budget, want, 0.11)) fail(`8f ${e.club} to ${LEVEL_WORD[lv]}: the summer cheque is ${b?.budget}, Medium's ${a.budget} times ${dial} is ${want}`);
+      else f += 1;
+    }
+  }
+  if (ends.length < 3) fail(`8f: only ${ends.length} season ends rolled, 3 are the floor`);
+  else if (f === fn) ok(`8f: ${fn} summer cheques after a change at the season's end (${ends.length} clubs, four levels) are Medium's times the new dial`);
+}
+
 /* ---------- run ---------- */
-const RUN = { 0: section0, 1: section1, 2: section2, 3: () => { section3(); section3money(); }, 4: section4, 6: section6, 7: section7 };
+const RUN = {
+  0: section0, 1: section1, 2: section2, 4: section4, 6: section6, 7: section7, 8: section8,
+  3: () => { for (const lv of LEVER_LEVELS) { LV = lv; LVN = LEVEL_WORD[lv]; section3(); section3money(); } },
+};
 if (FOLD) { fold(); console.log(failures ? `simCmDifficulty: ${failures} FAILURES (fold)` : 'simCmDifficulty: all green (fold)'); process.exit(failures ? 1 : 0); }
 for (const s of SECTIONS) {
   if (!RUN[s]) { console.log(`SECTION=${s} is not a section of this harness; could not run`); process.exit(2); }
