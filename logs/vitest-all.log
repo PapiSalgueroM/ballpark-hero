@@ -1,0 +1,30 @@
+[22m[39mCGFAILCLOSED| board cg611-003: yes Franco Harris, no Tom Brady
+[22m[39mCGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after the network healed
+[22m[39mCGFAILCLOSED| decoder: 44 of 44 damaged pairs refused
+[41m[1m FAIL [22m[49m src/test/careerAppearanceSelection.test.tsx[2m > [22mselected appearance on the actual controlled editor[2m > [22msoccer appearance hairstyle exposes its selected button
+[41m[1m FAIL [22m[49m src/test/careerAppearanceSelection.test.tsx[2m > [22mselected appearance on the actual controlled editor[2m > [22msoccer appearance hairColor exposes its selected button
+[41m[1m FAIL [22m[49m src/test/careerAppearanceSelection.test.tsx[2m > [22mselected appearance on the actual controlled editor[2m > [22msoccer appearance facialHair exposes its selected button
+[41m[1m FAIL [22m[49m src/test/soccerGridBlurOwnership.test.tsx[2m > [22mSoccer Grid blur ownership[2m > [22mkeeps the refocused canonical menu beyond the old blur deadline
+[41m[1m FAIL [22m[49m src/test/soccerGridBlurOwnership.test.tsx[2m > [22mSoccer Grid blur ownership[2m > [22mgives a newer final blur its own full150ms grace
+[41m[1m FAIL [22m[49m src/test/soccerGridBlurOwnership.test.tsx[2m > [22mSoccer Grid blur ownership[2m > [22mcancels the owned pending blur timeout on actual unmount
+[41m[1m FAIL [22m[49m src/test/soccerGridBlurOwnership.test.tsx[2m > [22mSoccer Grid blur ownership[2m > [22mkeeps uninterrupted blur open at149ms and closed at150ms
+[41m[1m FAIL [22m[49m src/test/soccerGridBlurOwnership.test.tsx[2m > [22mSoccer Grid blur ownership[2m > [22mkeeps pointer selection canonical and exactly once
+[41m[1m FAIL [22m[49m src/test/soccerGridBlurOwnership.test.tsx[2m > [22mSoccer Grid blur ownership[2m > [22mkeeps keyboard selection canonical and exactly once
+[41m[1m FAIL [22m[49m src/test/soccerGridBlurOwnership.test.tsx[2m > [22mSoccer Grid blur ownership[2m > [22mkeeps trimmed title-cased manual submission
+[41m[1m FAIL [22m[49m src/test/soccerGridBlurOwnership.test.tsx[2m > [22mSoccer Grid blur ownership[2m > [22mreopens matching suggestions after an expired blur without editing
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mshows the canonical name for "fixture alex one"
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mshows the canonical name for "fixture oren two"
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mshows the canonical name for "  fixture   plain three  "
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mshows a matching pool arriving under an unchanged focused query
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mshows the actual parent career pool arriving after its focused query
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mselects canonical accented spelling and retains visible-menu Escape recovery
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mkeeps ordinary case-insensitive canonical selection
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mkeeps the eight-result cap and bounded arrow selection
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mkeeps trimmed title-cased manual entry when no suggestion exists
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mkeeps disabled input and form submission inert
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mkeeps further query editing as recovery after late pool delivery
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mkeeps actual parent unverified selection free of a counted guess
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mkeeps the raw one-character query gate
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mkeeps all-whitespace queries empty and unable to submit
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mkeeps Escape before held pool delivery closed
+[41m[1m FAIL [22m[49m src/test/soccerGridSearchDiscovery.test.tsx[2m > [22mSoccer Grid search discovery[2m > [22mkeeps completed150ms blur before held pool delivery closed

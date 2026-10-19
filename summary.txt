@@ -1,0 +1,7 @@
+tsc exit=0 161s | 
+simDailyDeals exit=0 9s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+dashscan exit=0 1s | commit message lines with one: 0
+keywords-fresh exit=0 1s |   guide source hash f9f4ab1db819948c
+fences exit=1 533s | simGuideHeadings exit=0 | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a c
+vitest-all exit=1 1057s |  FAIL  src/test/soccerGridSearchDiscovery.test.tsx > Soccer Grid search discovery > keeps completed150ms blur before held pool delivery closed
+existing exit=1 985s | simReportContext exit=0 | simReportContext: all green
