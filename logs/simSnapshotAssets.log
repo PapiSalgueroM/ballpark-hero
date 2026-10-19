@@ -1,0 +1,14 @@
+1) the committed snapshots stay hash free
+   172 committed documents, 0 carrying a hashed path
+2) every shipped page carries THIS build's assets
+   180 of 180 shipped pages carry their own tags, 0 pointing at a file this build did not make
+3) the injected stylesheet does not block the paint
+   0 render blocking stylesheet injections
+4) the boot script survives as the fallback
+   180 of 180 still reference /prerender-boot.js
+5) the retired signposts are left alone
+   11 signposts, 0 touched
+6) the calm boot: the mark on a cover before React, the whole page without JS
+   180 of 180 shipped pages carry the cover, and the home template carries its own
+
+simSnapshotAssets: green. Every page knows where its own code is, and finding out costs nobody a round trip.

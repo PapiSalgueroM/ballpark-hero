@@ -1,0 +1,6 @@
+Free-agency feedback:13/13 actual shared-component and real pushFaOffer cases passed; none skipped.
+Free-agency feedback: raised11.3M x3years, held10M x2years and withdrawn offers preserve exact engine state, signing indices and one-use callbacks.
+Free-agency feedback: only the committed requested offer announces actual annual/year/total deltas or held/withdrawn terms.
+Free-agency feedback: restored/passive/no-op windows stay quiet, replacement markets clear stale feedback and prop clones cannot replay the earned receipt.
+Free-agency feedback: opener focus uses preventScroll, intentional outside focus is held and only the earned card/receipt gets bounded motion with explicit reduced CSS.
+Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or career persistence.
