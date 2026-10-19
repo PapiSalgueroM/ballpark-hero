@@ -1,0 +1,7 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight exit=1 28s | sweepWeight: 2 failures
+weight-base exit=1 70s | all js gz: A 4544103 B 4546276 delta 2173
+walk-nomark exit=1 37s | playCmSavePoints: control nomark FIRED (2 slot check(s) red, 2 in all)
+walk-noevent exit=1 37s | playCmSavePoints: control noevent FIRED (2 slot check(s) red, 2 in all)
+walk exit=0 136s | playCmSavePoints: OK at 390 and 1280
+keeper exit=1 858s | playSaveKeeper: RED, 5 problem(s).

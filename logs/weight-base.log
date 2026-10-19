@@ -1,0 +1,41 @@
+1) Every page is inside its download budget
+  FAIL: /club-manager: 58K against a 626K budget, so the budget is stale and should be lowered in this round
+  FAIL: /soccer-career: 79K against a 835K budget, so the budget is stale and should be lowered in this round
+  FAIL: /stadium-tycoon: 23K against a 303K budget, so the budget is stale and should be lowered in this round
+  FAIL: /wonderkid-factory: 11K against a 277K budget, so the budget is stale and should be lowered in this round
+  FAIL: /minefield: 27K against a 295K budget, so the budget is stale and should be lowered in this round
+  FAIL: /footle: 60K against a 354K budget, so the budget is stale and should be lowered in this round
+  FAIL: /nfl-my-career: 49K against a 491K budget, so the budget is stale and should be lowered in this round
+  FAIL: /front-office: 38K against a 374K budget, so the budget is stale and should be lowered in this round
+  FAIL: /soccer-grid: 39K against a 319K budget, so the budget is stale and should be lowered in this round
+  FAIL: /manager-hot-seat: 85K against a 642K budget, so the budget is stale and should be lowered in this round
+  FAIL: /deadline-day: 85K against a 652K budget, so the budget is stale and should be lowered in this round
+  FAIL: /transfer-path: 87K against a 379K budget, so the budget is stale and should be lowered in this round
+   /                     0K gz over   3 files (budget 244K, 0.0K to the tenth)
+   /club-manager        58K gz over  43 files (budget 626K, 57.7K to the tenth)
+   /soccer-career       79K gz over  48 files (budget 835K, 79.2K to the tenth)
+   /stadium-tycoon      23K gz over  24 files (budget 303K, 23.0K to the tenth)
+   /wonderkid-factory   11K gz over  20 files (budget 277K, 10.6K to the tenth)
+   /minefield           27K gz over  21 files (budget 295K, 27.4K to the tenth)
+   /footle              60K gz over  39 files (budget 354K, 60.0K to the tenth)
+   /nfl-my-career       49K gz over  48 files (budget 491K, 49.1K to the tenth)
+   /front-office        38K gz over  38 files (budget 374K, 38.3K to the tenth)
+   /soccer-grid         39K gz over  35 files (budget 319K, 39.1K to the tenth)
+   /leaderboard          0K gz over   9 files (budget 266K, 0.0K to the tenth)
+   /manager-hot-seat    85K gz over  45 files (budget 642K, 84.9K to the tenth)
+   /deadline-day        85K gz over  47 files (budget 652K, 84.9K to the tenth)
+   /transfer-path       87K gz over  39 files (budget 379K, 87.4K to the tenth)
+2) The two things Round 210 moved off the critical path stay off it
+   the screenshot library and the merged guide map are both off the critical path
+3) Every guide is still reachable, one sport at a time
+   132 guides across 13 sport files, every one of them routed
+4) The data these pages never read is in none of the files they fetch
+  FAIL: /soccer-career fetches no file with the national team pools, and it is the page that reads them: either they moved or the probes cannot see them
+   10 probe sets (400 probes) all found in the build; 4 routes checked, 0 findings; /soccer-career still fetches the pools (no file)
+
+sweepWeight: 13 failures
+recovery: A index-DLr3luiR.js gz 242815 raw 797009 | B index-wKq_N_QW.js gz 243011 raw 797491 | delta gz 196 raw 482
+card: A index-DLr3luiR.js gz 242815 raw 797009 | B index-wKq_N_QW.js gz 243011 raw 797491 | delta gz 196 raw 482
+cm hook: A ClubManager-Dt0um5a-.js gz 28369 raw 90089 | B ClubManager-DlHnmABg.js gz 28390 raw 90127 | delta gz 21 raw 38
+entry: A index-DLr3luiR.js gz 242815 raw 797009 | B index-wKq_N_QW.js gz 243011 raw 797491 | delta gz 196 raw 482
+all js gz: A 4544103 B 4546276 delta 2173
