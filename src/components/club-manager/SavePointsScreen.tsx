@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import type { CareerState } from '@/lib/clubManager';
 import { POINTS_CAP, POINT_NAME_MAX, readPointsIndex, type PointMeta } from '@/lib/cmSavePointsStore';
 import {
-  copyPoint, createPoint, defaultPointName, deletePoint, dropStrayCopy, renamePoint, restoreMayDrop, restorePoint, type PointRefusal,
+  copyPoint, createPoint, defaultPointName, deletePoint, dropStrayCopy, renamePoint, restorePoint, type PointRefusal,
 } from '@/lib/cmSavePoints';
 import { reopenGame } from '@/lib/saveKeeper';
 import { markLandOnHub } from '@/lib/clubManagerLanding';
@@ -44,8 +44,7 @@ function whyFor(why: PointRefusal, p: PointMeta, restoring = false): string {
 
 const madeOn = (at: number): string => new Date(at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
 
-/* `crowded`: a restore may drop the oldest kept aside save, read when Restore is pressed (restoreMayDrop). */
-type Ask = { id: string; kind: 'restore' | 'delete' | 'rename'; crowded?: boolean } | null;
+type Ask = { id: string; kind: 'restore' | 'delete' | 'rename' } | null;
 
 export function SavePointsScreen({ career, slot }: Props) {
   const [points, setPoints] = useState<PointMeta[]>(() => readPointsIndex(slot)?.points ?? []);
@@ -139,7 +138,8 @@ export function SavePointsScreen({ career, slot }: Props) {
             {ask?.id === p.id && ask.kind === 'restore' && (
               <div className="mt-2 text-xs text-foreground space-y-2">
                 <p>Go back to this point? The career you have now is kept aside in this browser, and Season {p.season} won't post a leaderboard score after this.
-                  {ask.crowded && <span data-testid="cm-point-crowded"> This game keeps its three newest kept aside saves, so the oldest one may go.</span>}
+                  {/* Review of 2026-10-19: the kept aside cap is named before the press, as the broken save card names it. */}
+                  <span data-testid="cm-point-cap"> This game keeps its three newest kept aside saves, so a fourth drops the oldest.</span>
                 </p>
                 <div className="flex gap-2">
                   <button type="button" onClick={() => goBack(p)} data-testid="cm-point-confirm" className={main}>Go back</button>
@@ -172,7 +172,7 @@ export function SavePointsScreen({ career, slot }: Props) {
             )}
             {ask?.id !== p.id && (
               <div className="mt-2 flex flex-wrap gap-1.5">
-                <button type="button" onClick={() => { setNote(null); setAsk({ id: p.id, kind: 'restore', crowded: restoreMayDrop() }); }} data-testid="cm-point-restore" className={main}>Restore</button>
+                <button type="button" onClick={() => { setNote(null); setAsk({ id: p.id, kind: 'restore' }); }} data-testid="cm-point-restore" className={main}>Restore</button>
                 <button type="button" onClick={() => copy(p)} disabled={full} data-testid="cm-point-copy" className={`${plain} disabled:opacity-50`}>Copy</button>
                 <button type="button" onClick={() => { setNote(null); setNewName(p.name); setAsk({ id: p.id, kind: 'rename' }); }} data-testid="cm-point-rename" className={plain}>Rename</button>
                 <button type="button" onClick={() => { setNote(null); setAsk({ id: p.id, kind: 'delete' }); }} data-testid="cm-point-delete" className={plain}>Delete</button>
