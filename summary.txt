@@ -1,0 +1,23 @@
+vitest exit=1 27s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveKeeper.test.ts,title=src/test/saveKeeper.test.ts > the copy before a version step (Round 1219) > a
+simCmSavePoints exit=0 70s | simCmSavePoints: OK, all eight sections green
+tsc exit=0 105s | 
+ctl-b exit=0 38s | ctl1513: every control FIRED (noaside evict orphan blocked)
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+ctl-c exit=0 39s | ctl1513: every control FIRED (nocredit unguarded noclear pointless)
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simSaveKeeper exit=1 6s | simSaveKeeper: RED in section(s) 2.
+ctl-a exit=1 154s | ctl1513: a control did not fire (unpacked lossy noindexback noreadback nosum)
+simErrorBoundary exit=0 1s | simErrorBoundary: all green
+simHarnessAnchors exit=0 62s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simSaveFence exit=0 69s | simSaveFence: all green (tabs, source, fleet)
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simActivityNotCompletion exit=0 8s | simActivityNotCompletion: all green
+simCompletionOnce exit=0 7s | simCompletionOnce: all green
+simNoDoubleRecord exit=0 34s | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; 115 recorders read)
+simClubManagerScore exit=0 136s | ALL SEASON SCORE CHECKS PASSED
+simCmNoSack exit=0 175s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
+simDailyDeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simEarlyReturnScope exit=0 13s | simEarlyReturnScope: all green
+simClubManagerSlots exit=0 104s | simClubManagerSlots: all sections green
+simClubManagerSaveSize exit=0 77s | simClubManagerSaveSize: all sections green

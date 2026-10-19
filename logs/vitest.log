@@ -1,0 +1,126 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/saveKeeper.test.ts [2m([22m[2m35 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 130[2mms[22m[39m
+   [32m✓[39m staging a put back (Round 1219)[2m > [22mwrites one journal record and never touches the game's key or the backup[32m 5[2mms[22m[39m
+   [32m✓[39m staging a put back (Round 1219)[2m > [22mrefuses a key that is not this game's backup, a backup that is gone, and a store that will not take the record[32m 4[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22mdoes nothing and writes nothing when nothing is staged[32m 1[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22mkeeps the save it replaces aside, keeps the backup it came from, and leaves no journal[32m 4[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22mafter a put back and its undo the card still offers the other save, however often the two are swapped[32m 4[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22mwith play between the presses the card offers the game just put down, and both careers stay in a key[32m 2[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22mwith no save at the key, the backup stays and the card stops offering the game already being played[32m 0[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22ma put back at the cap drops nothing[32m 1[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22msays how many kept aside saves the cap dropped, on the second put back with play between[32m 1[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22mpast the cap it drops the oldest, never the copy it just made and never the save now being played[32m 1[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22mchanges nothing when the copy aside will not fit[32m 1[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22mchanges nothing when the key will not take the save, and takes its own copy back out[32m 0[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22mnever applies a journal that waited, or one stamped in the future[32m 1[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22ma staged put back is good for a few minutes and no longer, in minutes written out[32m 1[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22ma put back that already landed is answered as done however late the next load comes[32m 0[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22mremoves a journal it cannot read and changes nothing[32m 3[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22msays the backup is gone when it is, or when it is no longer the save that was staged[32m 1[2mms[22m[39m
+   [32m✓[39m the apply, before any game is in memory (Round 1219)[2m > [22manswers "already done" from the journal alone, even with the backup gone[32m 1[2mms[22m[39m
+   [32m✓[39m the crash loop: the store dies at every storage call in turn (Round 1219)[2m > [22ma game at the key: nothing is lost at any crash point, and every staged put back ends applied[32m 25[2mms[22m[39m
+   [32m✓[39m the crash loop: the store dies at every storage call in turn (Round 1219)[2m > [22mno game at the key: nothing is lost at any crash point, and every staged put back ends applied[32m 8[2mms[22m[39m
+   [32m✓[39m the crash loop: the store dies at every storage call in turn (Round 1219)[2m > [22mat the cap: nothing is lost at any crash point, and every staged put back ends applied[32m 23[2mms[22m[39m
+   [32m✓[39m the copy before a version step (Round 1219)[2m > [22mevery row of the table is a long game, and reads a whole number where it says[32m 1[2mms[22m[39m
+[31m   [31m×[31m the copy before a version step (Round 1219)[2m > [22man ordinary boot writes nothing and reads exactly the journal and the games that act on a version[39m[32m 28[2mms[22m[39m
+[31m     → expected [ Array(8) ] to deeply equal [ Array(7) ][39m
+   [32m✓[39m the copy before a version step (Round 1219)[2m > [22mcopies an older save aside once, byte for byte, quietly, and a second boot writes nothing more[32m 1[2mms[22m[39m
+   [32m✓[39m the copy before a version step (Round 1219)[2m > [22mcopies a NEWER save too (an older cached build would refuse it and start over)[32m 0[2mms[22m[39m
+   [32m✓[39m the copy before a version step (Round 1219)[2m > [22mnever prunes: three backups held, an older save, and all three are still there beside the copy[32m 0[2mms[22m[39m
+   [32m✓[39m the copy before a version step (Round 1219)[2m > [22mleaves alone a game that ignores its version, and does not even read its save[32m 0[2mms[22m[39m
+   [32m✓[39m the copy before a version step (Round 1219)[2m > [22mcopies a save with no number, a text number, and one that does not parse, once each[32m 1[2mms[22m[39m
+   [32m✓[39m the copy before a version step (Round 1219)[2m > [22mchanges nothing when the copy will not fit, and remembers it for that game's page, once[32m 1[2mms[22m[39m
+   [32m✓[39m the copy before a version step (Round 1219)[2m > [22ma copy that fits is no trouble to report[32m 0[2mms[22m[39m
+   [32m✓[39m restoreNow and the boot call, in the browser's own storage (Round 1219)[2m > [22mrefuses under blocked storage before anything is staged, and a boot there applies nothing[32m 2[2mms[22m[39m
+   [32m✓[39m restoreNow and the boot call, in the browser's own storage (Round 1219)[2m > [22mreopens the game with location.replace, never assign, so no way back into the old page is left[32m 2[2mms[22m[39m
+   [32m✓[39m restoreNow and the boot call, in the browser's own storage (Round 1219)[2m > [22monly ever stages: the key is untouched until the next load applies it[32m 2[2mms[22m[39m
+   [32m✓[39m restoreNow and the boot call, in the browser's own storage (Round 1219)[2m > [22mretries a save the game is still holding BEFORE it stages, and stays when that save is still refused[32m 1[2mms[22m[39m
+   [32m✓[39m restoreNow and the boot call, in the browser's own storage (Round 1219)[2m > [22man ordinary boot leaves the storage exactly as it was[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/routeErrorRecovery.test.tsx [2m([22m[2m65 tests[22m[2m)[22m[33m 1731[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerDifficulty.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 2871[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22mthe market: the same men in the same order, every price marked, every value untouched [33m 655[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22ma release clause is never the cheaper door round the mark, and on Normal it is exactly what it was [33m 365[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1512: the dials on Easy and Very Easy[2m > [22mmore money, more wage room, a cheaper market (never under 0.5) and a weaker side against you [33m 452[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1512: the dials on Easy and Very Easy[2m > [22mthe easy market never lists a man under what selling him straight back banks, nor over Medium's price [33m 827[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerRetire.test.tsx [2m([22m[2m24 tests[22m[2m)[22m[33m 2897[2mms[22m[39m
+   [33m[2m✓[22m[39m retiring through the hook[2m > [22mwrites first, then opens the farewell, and the disk holds the retirement [33m 364[2mms[22m[39m
+   [33m[2m✓[22m[39m retiring through the hook[2m > [22ma reload lands on the managers screen, never on hub, seasonEnd or sacked, and opening it shows the farewell [33m 317[2mms[22m[39m
+   [33m[2m✓[22m[39m retiring through the hook[2m > [22ma retired save that is also sacked, or holds a season summary, opens on the farewell and nowhere else [33m 1115[2mms[22m[39m
+ [32m✓[39m src/test/cmLeagueLeadersCard.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 5572[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mnames the league's most assists and most clean sheets from the book, and an older summary prints as it did [33m 1531[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mwithholds the new awards in a league whose data is too thin, and says why [33m 931[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22ma league between the floor and 95 is settled by the book and still carries the honest line, on the card and on the review [33m 1287[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22ma season on a late book says the book covered only part of it, not that its data was thin [33m 1013[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePoints.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1612[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerSlots.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 5276[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mtwo managers survive leaving the page, and either one opens [33m 736[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mleaving in the middle of a swap never writes the outgoing career back [33m 343[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mthe screen asks before it deletes, and every tile says what it holds [33m 344[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mclosing the old tab after a switch in another never wipes the career switched in [33m 394[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22ma change in the old tab writes nothing over the other career and goes back to the managers [33m 504[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mthe old tab live clock writes nothing over the career switched in [33m 528[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mManagers tapped on the old tab hub writes nothing over the other career [33m 407[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22ma new manager from the old tab managers screen parks the other career where it belongs [33m 499[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mthe old tab managers screen follows the other tab, and a stale New manager says why it did nothing [33m 318[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: Retire and Start New Career keep the career[2m > [22mparks the career and starts the new one in an empty slot, and with every slot full deletes nothing [33m 376[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: a parked era career[2m > [22mopens through the era boot, squads first [33m 527[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerSlots.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1010[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDifficultyPick.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 3195[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22moffers five levels with Medium pressed, and Skip on Medium hands nothing on [33m 730[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mImpossible and No sacking ride on both buttons [33m 1019[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mEasy and Very Easy say plainly that the career posts no leaderboard scores [33m 341[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsScreen.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1387[2mms[22m[39m
+   [33m[2m✓[22m[39m the save points screen names the right cause[2m > [22ma delete of a point another tab removed says it is gone, not still there [33m 452[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerNoSack.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 2782[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mstarts with No sacking off and Skip hands nothing on [33m 832[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mthe switch rides on both buttons [33m 908[2mms[22m[39m
+   [33m[2m✓[22m[39m the hook[2m > [22ma career started with No sacking carries it and pings no score [33m 457[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerOfferConfirm.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 1013[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1335: an offer asks first[2m > [22ma tap on an offer moves nothing and opens the question in the same panel [33m 332[2mms[22m[39m
+ [32m✓[39m src/hooks/useClubManager.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 4607[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager completion shape[2m > [22ma played match records activity and not a completion [33m 569[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager completion shape[2m > [22ma finished season records exactly one completion [33m 4036[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsDoor.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 859[2mms[22m[39m
+   [33m[2m✓[22m[39m the save points button off the hub[2m > [22mopens the save points screen on the sacked screen, with the slot's points listed [33m 394[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsHook.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 724[2mms[22m[39m
+   [33m[2m✓[22m[39m the hook asks the points record before a scored ping[2m > [22ma season with no mark pings its score (the baseline) [33m 443[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/saveKeeper.test.ts[2m > [22mthe copy before a version step (Round 1219)[2m > [22man ordinary boot writes nothing and reads exactly the journal and the games that act on a version
+[31m[1mAssertionError[22m: expected [ Array(8) ] to deeply equal [ Array(7) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    "aussie-rules-manager-save-v2",[22m
+[2m    "dukb-club-manager-save",[22m
+[2m    "dukb-save-pending",[22m
+[31m+   "dukb-save-pending-copy",[39m
+[2m    "hallOfChampionsV1",[22m
+[2m    "rebuild-table",[22m
+[2m    "stadiumTycoonSaveV1",[22m
+[2m    "wonderkidFactoryV1",[22m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/saveKeeper.test.ts:[2m366:32[22m[39m
+    [90m364| [39m    const acting = CONTINUE_SAVES.filter(e => SAVE_VERSIONS[e.path] &&…
+    [90m365| [39m    [34mexpect[39m(acting)[33m.[39m[34mtoHaveLength[39m([34m6[39m)[33m;[39m
+    [90m366| [39m    expect([...s.read].sort()).toEqual([PENDING_RESTORE_KEY, ...acting…
+    [90m   | [39m                               [31m^[39m
+    [90m367| [39m  })[33m;[39m
+    [90m368| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m14 passed[39m[22m[90m (15)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m245 passed[39m[22m[90m (246)[39m
+[2m   Start at [22m 11:38:46
+[2m   Duration [22m 25.72s[2m (transform 5.64s, setup 2.46s, collect 18.49s, tests 35.67s, environment 9.91s, prepare 2.43s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveKeeper.test.ts,title=src/test/saveKeeper.test.ts > the copy before a version step (Round 1219) > an ordinary boot writes nothing and reads exactly the journal and the games that act on a version,line=366,column=32::AssertionError: expected [ Array(8) ] to deeply equal [ Array(7) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "aussie-rules-manager-save-v2",%0A    "dukb-club-manager-save",%0A    "dukb-save-pending",%0A+   "dukb-save-pending-copy",%0A    "hallOfChampionsV1",%0A    "rebuild-table",%0A    "stadiumTycoonSaveV1",%0A    "wonderkidFactoryV1",%0A  ]%0A%0A ❯ src/test/saveKeeper.test.ts:366:32%0A%0A
