@@ -1,0 +1,10 @@
+# Release BL triage h: the US board fixture. (1) parity at m3 again and at m4 in detail (is the NBA hair tab step a
+# flake?); (2) record twice from the branch head the way the parity harness replays since Round 1424 (the historical
+# main775 coaching Panel aliased in, recordHistorical.mjs), byte compare, diff against the committed fixture with
+# usBoardDiff.mjs; (3) the new recording replayed on the head by simUsBoardParity, with its label and fixture controls.
+# Send with: wt.sh usBoardDiff.mjs recordHistorical.mjs
+#!serial
+parity-m3b: bash .rc/x/wt.sh 75340a83 pm3c bash -c 'NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsBoardParity.mjs 2>&1 | grep -E "Vitest exit|click path step|FAIL|green" | head -8 | cut -c1-220'
+parity-m4b: bash .rc/x/wt.sh 5a58cf7b pm4c bash -c 'NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsBoardParity.mjs 2>&1 | grep -E "Vitest exit|click path step|FAIL|green" | head -8 | cut -c1-220'
+rec-hist: for i in 1 2; do bash .rc/x/wt.sh HEAD^ rh$i bash -c "node $PWD/.rc/x/recordHistorical.mjs $RC_OUT/usb-h$i.json > /tmp/rh$i.log 2>&1; e=\$?; grep -E 'recordHistorical|wrote' /tmp/rh$i.log | cut -c1-200; exit \$e" || exit 1; done; cmp $RC_OUT/usb-h1.json $RC_OUT/usb-h2.json && echo "byte equal" && sha256sum $RC_OUT/usb-h1.json | cut -c1-64 && node .rc/x/usBoardDiff.mjs scripts/data/usBoardFixture.json $RC_OUT/usb-h1.json 2>&1 | tail -16 | cut -c1-240
+replay-new: bash .rc/x/wt.sh HEAD^ rnew bash -c "cp $RC_OUT/usb-h1.json scripts/data/usBoardFixture.json && for c in none label fixture; do if [ \$c = none ]; then NODE_OPTIONS=--require=\$PWD/scripts/lib/offlineTransport.cjs node scripts/simUsBoardParity.mjs > /tmp/rn-\$c.log 2>&1; else US_BOARD_PARITY_CONTROL=\$c NODE_OPTIONS=--require=\$PWD/scripts/lib/offlineTransport.cjs node scripts/simUsBoardParity.mjs > /tmp/rn-\$c.log 2>&1; fi; echo \"\$c exit=\$? | \$(tail -1 /tmp/rn-\$c.log | cut -c1-170)\"; done"

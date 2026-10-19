@@ -1,0 +1,24 @@
+wt: rh1 at dd033ebf83b5 (Release BL seam: PR333's selection test reads each sport's own hair and beard li)
+recordHistorical: historical panel 32548 chars, aliases react/jsx-dev-runtime, react/jsx-runtime, react, lucide-react, @/components/us-career/CoachCareerPanel
+recordUsBoardFixture: wrote ../../home/runner/work/_temp/rc-out/files/usb-h1.json (2298731 bytes)
+wt: rh2 at dd033ebf83b5 (Release BL seam: PR333's selection test reads each sport's own hair and beard li)
+recordHistorical: historical panel 32548 chars, aliases react/jsx-dev-runtime, react/jsx-runtime, react, lucide-react, @/components/us-career/CoachCareerPanel
+recordUsBoardFixture: wrote ../../home/runner/work/_temp/rc-out/files/usb-h2.json (2298731 bytes)
+byte equal
+210cbd1a1e32db370a5a0cdfc24d27d7b764a24d40fb74c1610a1286930b89fd
+  STOP nba.path step 357 ("hub: Play the 2004 season"): fields s
+  STOP nba.path step 358 ("curtain: Continue"): fields s
+  STOP nba.path step 359 ("rival beat: Continue"): fields s, m
+  STOP nba.path step 360 ("event: Take the challenger money and the"): fields s, m
+  STOP nba.path step 361 ("hub: 💰The Bank$6.6M$0.8M a year, 2 year"): fields s
+  STOP nba.path step 362 ("box: 🃏 Cards"): fields s
+  STOP nba.path step 363 ("box: 📈 Market"): fields s
+  STOP nba.path step 364 ("box: Hub"): fields s, m
+  STOP nba.path step 365 ("hub: Play the 2005 season"): fields s
+nba: 1453 steps compared, 15 differ in markup only (path 15); first paint ssrCreate differs (len 10228 to 10259)
+    15 x screen text "Create your playerYou are a fictio"
+mlb: 1341 steps compared, 17 differ in markup only (path 17); first paint ssrCreate differs (len 10989 to 11020)
+    17 x screen text "Create your playerYou are a fictio"
+nhl: 1321 steps compared, 17 differ in markup only (path 17); first paint ssrCreate differs (len 10498 to 10529)
+    17 x screen text "Create your playerYou are a fictio"
+usBoardDiff: 174 STOP(s), 66 markup only steps

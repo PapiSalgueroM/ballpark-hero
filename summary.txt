@@ -1,0 +1,4 @@
+parity-m3b exit=0 53s |   FAIL: 4 steps differ from the fixture
+parity-m4b exit=0 53s |   FAIL: 4 steps differ from the fixture
+rec-hist exit=0 105s | usBoardDiff: 174 STOP(s), 66 markup only steps
+replay-new exit=0 154s | fixture exit=0 | simUsBoardParity control fixture: green. The control turned its own sports red for its own reason.
