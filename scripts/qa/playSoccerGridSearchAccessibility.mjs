@@ -163,7 +163,7 @@ try {
         window.addEventListener('unhandledrejection', event => window.__gridA11y.rejections.push(String(event.reason?.stack ?? event.reason)));
         for (const type of ['input', 'keydown', 'mousedown', 'click', 'submit', 'focus', 'blur', 'touchstart']) window.addEventListener(type, event => {
           const target = event.target instanceof Element ? event.target.closest('input,button,li,form') : null;
-          if (target) window.__gridA11y.events.push({ type, trusted: event.isTrusted, time: performance.now(), key: event.key || null, label: target.getAttribute('aria-label') || target.textContent?.trim().slice(0, 160), value: target instanceof HTMLInputElement ? target.value : null });
+          if (target) window.__gridA11y.events.push({ type, trusted: event.isTrusted, time: performance.now(), key: event.key || null, label: target.getAttribute('aria-label') || target.textContent?.trim().slice(0, 160), value: target instanceof HTMLInputElement ? target.value : null, eventTargetTag: event.target instanceof Element ? event.target.tagName : null, eventTargetId: event.target instanceof Element ? event.target.id : null, eventTargetRole: event.target instanceof Element ? event.target.getAttribute('role') : null });
         }, { capture: true, passive: true });
       }, base));
       page = await bounded(row, 'create actual page', () => context.newPage()); row.lifecycle.pageCreated = true; page.setDefaultTimeout(15000);
@@ -285,7 +285,43 @@ try {
       await type(''); await snapshot('query-cleared', { query: '', focused: true, open: false });
       await type('fixture zz no match'); await snapshot('no-results', { query: 'fixture zz no match', focused: true, open: false });
       await type(spec.query); await snapshot('before-normal-blur', { query: spec.query, focused: true, open: true, current: 0 });
-      await key('Tab'); assert(await form().getByRole('button', { name: 'Submit', exact: true }).evaluate(element => document.activeElement === element), 'Native Tab lands on actual Submit');
+      row.blurTransition = { version: 1, scope: 'Strict native Tab preparation, no semantic-purpose credit', beforeBindings: row.axSnapshots.find(value => value.phase === 'before-normal-blur'), steps: [], nativeTabCount: 0 };
+      const focusState = label => bounded(row, 'actual native blur target ' + label, () => page.evaluate(() => {
+        const input = document.querySelector('input[aria-label="Search for a player"]'), form = input?.closest('form'), popup = form?.querySelector('ul'), submit = form?.querySelector('button[type="submit"]'), active = document.activeElement;
+        const popupStyle = popup ? getComputedStyle(popup) : null;
+        const isSubmit = !!submit && active === submit && submit.closest('form') === form;
+        const isOwnedPopup = !!popup && active === popup && popup.tagName === 'UL' && popup.closest('form') === form;
+        return { performanceNow: performance.now(), query: input?.value ?? null, inputFocused: active === input, submitEnabled: !!submit && !submit.disabled, isSubmit,
+          isOwnedOverflowList: isOwnedPopup && popup.scrollHeight > popup.clientHeight && popupStyle.overflowY === 'auto',
+          activeElement: active instanceof Element ? { tagName: active.tagName, id: active.id, role: active.getAttribute('role'), ariaLabel: active.getAttribute('aria-label'), text: active.textContent?.trim(), tabIndex: active.tabIndex } : null,
+          popup: popup ? { nodeName: popup.tagName, id: popup.id, ownedByActualForm: popup.closest('form') === form, scrollHeight: popup.scrollHeight, clientHeight: popup.clientHeight, clientWidth: popup.clientWidth, scrollTop: popup.scrollTop, overflowY: popupStyle.overflowY } : null,
+          events: window.__gridA11y.events };
+      }), 5000);
+      row.blurTransition.before = await focusState('before-first-Tab');
+      assert.equal(row.blurTransition.before.inputFocused, true); assert.equal(row.blurTransition.before.submitEnabled, true); assert.equal(row.blurTransition.before.query, spec.query);
+      const blurEventStart = row.blurTransition.before.events.length;
+      await key('Tab'); row.blurTransition.nativeTabCount = 1;
+      let tabTarget = await focusState('after-first-Tab'); row.blurTransition.steps.push({ tabOrdinal: 1, ...tabTarget, eventsSinceBefore: tabTarget.events.slice(blurEventStart) }); save();
+      assert.equal(tabTarget.query, spec.query); assert.equal(tabTarget.inputFocused, false); assert.equal(tabTarget.submitEnabled, true);
+      assert(tabTarget.isSubmit || tabTarget.isOwnedOverflowList, 'Native first Tab must reach actual Submit or the exact actual overflowing UL');
+      if (tabTarget.isOwnedOverflowList) {
+        assert.equal(tabTarget.activeElement.tagName, 'UL'); assert.equal(tabTarget.popup.ownedByActualForm, true); assert(tabTarget.popup.scrollHeight > tabTarget.popup.clientHeight); assert.equal(tabTarget.popup.overflowY, 'auto');
+        assert(tabTarget.events.slice(blurEventStart).some(event => event.type === 'focus' && event.trusted && event.eventTargetTag === 'UL'), 'The actual overflowing UL receives trusted native focus');
+        await key('Tab'); row.blurTransition.nativeTabCount = 2;
+        tabTarget = await focusState('after-second-Tab'); row.blurTransition.steps.push({ tabOrdinal: 2, ...tabTarget, eventsSinceBefore: tabTarget.events.slice(blurEventStart) }); save();
+      }
+      assert.equal(tabTarget.isSubmit, true, 'Native Tab lands on actual Submit after at most the one real overflow-list stop'); assert.equal(tabTarget.inputFocused, false); assert.equal(tabTarget.submitEnabled, true); assert.equal(tabTarget.query, spec.query);
+      row.blurTransition.events = tabTarget.events.slice(blurEventStart);
+      const tabKeys = row.blurTransition.events.filter(event => event.type === 'keydown' && event.key === 'Tab');
+      assert.equal(tabKeys.length, row.blurTransition.nativeTabCount); assert(tabKeys.every(event => event.trusted)); assert.equal(tabKeys[0].eventTargetTag, 'INPUT'); if (tabKeys.length === 2) assert.equal(tabKeys[1].eventTargetTag, 'UL');
+      row.blurTransition.inputBlurEvents = row.blurTransition.events.filter(event => event.type === 'blur' && event.eventTargetTag === 'INPUT' && event.label === 'Search for a player');
+      assert.equal(row.blurTransition.inputBlurEvents.length, 1); assert.equal(row.blurTransition.inputBlurEvents[0].trusted, true);
+      assert(row.blurTransition.events.some(event => event.type === 'focus' && event.trusted && event.eventTargetTag === 'BUTTON' && event.label === 'Submit'), 'Actual Submit receives trusted native focus');
+      const focusDocument = await send('DOM.getDocument', { depth: 0 }), focusSelection = await send('DOM.querySelector', { nodeId: focusDocument.root.nodeId, selector: 'form:has(input[aria-label="Search for a player"]) button[type="submit"]' });
+      assert(focusSelection.nodeId > 0); const focusDescription = await send('DOM.describeNode', { nodeId: focusSelection.nodeId }), focusAX = await send('Accessibility.getPartialAXTree', { backendNodeId: focusDescription.node.backendNodeId, fetchRelatives: true });
+      const submitAX = focusAX.nodes.filter(node => !node.ignored && node.backendDOMNodeId === focusDescription.node.backendNodeId); assert.equal(submitAX.length, 1); assert.equal(submitAX[0].role?.value, 'button'); assert.equal(submitAX[0].name?.value, 'Submit'); assert.equal(property(submitAX[0], 'focused')?.value, true, 'Native AX agrees with the final actual Submit focus');
+      const focusRawFile = spec.id + '-native-blur-transition.json', focusRaw = Buffer.from(JSON.stringify({ transition: row.blurTransition, finalSubmit: { document: focusDocument, selection: focusSelection, description: focusDescription, partialAX: focusAX } }, null, 2));
+      fs.writeFileSync(path.join(out, focusRawFile), focusRaw, { flag: 'wx' }); row.blurTransition.raw = { file: focusRawFile, bytes: focusRaw.length, sha256: hash(focusRaw), submitBackendNodeId: focusDescription.node.backendNodeId }; save();
       await wall(180); await snapshot('expired-blur', { query: spec.query, focused: false, open: false });
       await key('Shift+Tab'); await key('ArrowDown'); await key('ArrowDown'); await key('ArrowUp');
       await snapshot('canonical-current', { query: spec.query, focused: true, open: true, current: 1 }); await screenshot('canonical-current');
