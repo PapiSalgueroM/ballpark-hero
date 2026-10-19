@@ -1,0 +1,3 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCmSavePoints exit=0 116s | playCmSavePoints: OK at 390 and 1280
+walk-nodoor exit=1 176s | playCmSavePoints: control nodoor FIRED (7 door check(s) red, 7 in all)
