@@ -5,8 +5,8 @@
  * A player report forwarded on 2026-10-18 asked for a point he can make at
  * any time in one career, go back to after a mistake, copy, rename and
  * delete. src/lib/cmSavePoints.ts and src/lib/cmSavePointsStore.ts hold them;
- * a restore goes through src/lib/saveKeeper.ts (stageCopy, then applyPending
- * on the next load). src/test/cmSavePoints.test.ts holds the storage rules
+ * a restore goes through stageCopy in src/lib/cmSavePoints.ts, then applyPending in src/lib/saveKeeper.ts
+ * on the next load. src/test/cmSavePoints.test.ts holds the storage rules
  * one at a time on a fresh career; this plays whole careers through them.
  *
  *   1) SIZES. Two careers (Everton and Lincoln City, today), a point at week
@@ -174,7 +174,7 @@ if (ctl && ctl.file !== 'src/hooks/useClubManager.ts' && !swapped.has(ctl.file))
 const { cm, st, pts, ps, keeper, rec, saves, lz } = await import(pathToFileURL(BUNDLE).href);
 const { startCareer, playNextEntry, finishSeason, startNextSeason, saveCareer, loadCareer, trimCareer } = cm;
 for (const [name, fn] of Object.entries({ startCareer, playNextEntry, finishSeason, startNextSeason, saveCareer, loadCareer, trimCareer,
-  postsScore: st.postsScore, createPoint: pts.createPoint, restorePoint: pts.restorePoint, stageCopy: keeper.stageCopy, applyPending: keeper.applyPending })) {
+  postsScore: st.postsScore, createPoint: pts.createPoint, restorePoint: pts.restorePoint, stageCopy: pts.stageCopy, applyPending: keeper.applyPending })) {
   if (typeof fn !== 'function') abort(`the harness could not reach ${name}; the bundle is not the shape it expects`);
 }
 if (cm.SAVE_KEY !== SAVE_KEY) abort(`SAVE_KEY is ${cm.SAVE_KEY}, not the key the save points restore into`);
@@ -190,7 +190,7 @@ const snap = () => JSON.stringify([...store.entries()].sort());
 const T0 = new Date('2026-10-19T12:00:00Z');
 let tick = 0;
 const now = () => new Date(T0.getTime() + (tick += 1000));
-const stageHere = when => (e, text) => keeper.stageCopy(e, text, ls, when);
+const stageHere = when => (e, text) => pts.stageCopy(e, text, ls, when);
 
 /** The stream from scripts/lib/seedRandom.mjs, rooted per career and season. */
 function reseed(career, season, salt = 0) {

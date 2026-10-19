@@ -20,7 +20,7 @@
  *   - A restore never swaps under a live page. The point is opened and checked
  *     (it opens, it parses, it reads as a career of this era, its length and
  *     sum match what was saved) and only then staged through Round 1219's put
- *     back (stageCopy in src/lib/saveKeeper.ts): the page reloads, and before
+ *     back (stageCopy below, in the save keeper's journal): the page reloads, and before
  *     React mounts the career he had is copied aside, where the broken save
  *     card offers it back, and the point's career takes its place.
  *   - The season a restore lands in posts no score again (see the store).
@@ -30,7 +30,8 @@ import { SAVE_KEY, trimCareer, type CareerState } from '@/lib/clubManager';
 import { summarize } from '@/lib/clubManagerSlots';
 import { CONTINUE_SAVES, type ContinueSave } from '@/data/continueSaves';
 import { browserStorage, type ListableStorage } from '@/lib/brokenSaveRecovery';
-import { restoreCopyNow, sumOf } from '@/lib/saveKeeper';
+import { PENDING_COPY_KEY, PENDING_RESTORE_KEY, sumOf, type KeeperRefusal } from '@/lib/saveKeeper';
+import { getStorageTrouble, settlePendingSaves } from '@/lib/safeStorage';
 import {
   POINTS_CAP, POINT_NAME_MAX, pointKey, pointsIndexKey, readPointsIndex, writePointsIndex, type PointMeta, type PointsIndex,
 } from '@/lib/cmSavePointsStore';
@@ -152,7 +153,41 @@ export function deletePoint(slot: number, id: string, storage: ListableStorage |
   return true;
 }
 
-type Stage = (entry: ContinueSave, text: string) => { ok: true } | { ok: false; why: 'blocked' | 'no-room' | 'gone' | 'stale' };
+/**
+ * Stages a put back of a point's career for the next load, in the save
+ * keeper's own journal (src/lib/saveKeeper.ts, PENDING_COPY_KEY): the journal
+ * is written and read back, then the career's text and read back, and the
+ * next load applies it exactly as it applies a backup: the save he has is
+ * copied aside first, and the game's key is never emptied. The journal goes
+ * first so a tab closed between the two writes leaves a journal whose copy is
+ * missing, which the next load forgets ('gone'), and never a large copy
+ * nothing points at. A refused step removes what this wrote. Never throws.
+ */
+export function stageCopy(entry: ContinueSave, text: string, storage: ListableStorage | null, now: Date = new Date()): { ok: true } | { ok: false; why: KeeperRefusal } {
+  if (!storage) return { ok: false, why: 'blocked' };
+  const journal = JSON.stringify({ v: 1, path: entry.path, backupKey: PENDING_COPY_KEY, at: now.getTime(), len: text.length, sum: sumOf(text) });
+  try {
+    storage.setItem(PENDING_RESTORE_KEY, journal);
+    if (storage.getItem(PENDING_RESTORE_KEY) !== journal) throw new Error('journal did not read back');
+    storage.setItem(PENDING_COPY_KEY, text);
+    if (storage.getItem(PENDING_COPY_KEY) !== text) throw new Error('copy did not read back');
+  } catch {
+    for (const k of [PENDING_RESTORE_KEY, PENDING_COPY_KEY]) {
+      try { storage.removeItem(k); } catch { /* the next load forgets a journal it cannot apply */ }
+    }
+    return { ok: false, why: 'no-room' };
+  }
+  return { ok: true };
+}
+
+/** restoreNow (src/lib/saveKeeper.ts) for a point: a save the page still holds is retried first. The caller then calls reopenGame. */
+function restoreCopyNow(entry: ContinueSave, text: string): { ok: true } | { ok: false; why: KeeperRefusal } {
+  if (getStorageTrouble() === 'blocked') return { ok: false, why: 'blocked' };
+  if (!settlePendingSaves()) return { ok: false, why: 'no-room' };
+  return stageCopy(entry, text, browserStorage());
+}
+
+type Stage = (entry: ContinueSave, text: string) => { ok: true } | { ok: false; why: KeeperRefusal };
 
 /**
  * Restore a point: checked first, then the season it lands in is marked as

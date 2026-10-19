@@ -9,12 +9,12 @@ import { SAVE_KEY, startCareer, trimCareer, type CareerState } from '@/lib/clubM
 import { simToWeek } from '@/lib/clubManagerCalendar';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
 import { backupKeysOf, offeredBackup, type ListableStorage } from '@/lib/brokenSaveRecovery';
-import { PENDING_COPY_KEY, PENDING_RESTORE_KEY, applyPending, stageCopy } from '@/lib/saveKeeper';
+import { PENDING_COPY_KEY, PENDING_RESTORE_KEY, applyPending } from '@/lib/saveKeeper';
 import {
   POINTS_CAP, clearSlotPoints, noteSeasonCredited, pointKey, pointsIndexKey, readPointsIndex, seasonPosts,
 } from '@/lib/cmSavePointsStore';
 import {
-  copyPoint, createPoint, defaultPointName, deletePoint, openPoint, pointText, renamePoint, restorePoint,
+  copyPoint, createPoint, defaultPointName, deletePoint, openPoint, pointText, renamePoint, restorePoint, stageCopy,
 } from '@/lib/cmSavePoints';
 
 const T0 = new Date('2026-10-19T12:00:00Z');

@@ -87,10 +87,12 @@ import { getStorageTrouble, settlePendingSaves } from '@/lib/safeStorage';
 export const PENDING_RESTORE_KEY = 'dukb-save-pending';
 /**
  * Round 1513: a put back whose save is not a kept aside backup (Club Manager's
- * save points, which are stored compressed) is staged from a plain copy here.
- * The copy goes as the put back finishes, whatever the outcome: the save it
- * was made from is still where the player made it, so this is never the only
- * copy of anything.
+ * save points, which are stored compressed) is staged from a plain copy here,
+ * by stageCopy in src/lib/cmSavePoints.ts (it loads with the points screen, so
+ * every page does not carry it): the same journal, with this key as its
+ * backupKey. The copy goes as the put back finishes, whatever the outcome:
+ * the save it was made from is still where the player made it, so this is
+ * never the only copy of anything.
  */
 export const PENDING_COPY_KEY = 'dukb-save-pending-copy';
 /** How long a staged put back stays good. The load it waits for takes seconds. */
@@ -220,33 +222,6 @@ export function stageRestore(entry: ContinueSave, backupKey: string, storage: Li
     if (storage.getItem(PENDING_RESTORE_KEY) !== text) throw new Error('journal did not read back');
   } catch {
     forget(storage);
-    return { ok: false, why: 'no-room' };
-  }
-  return { ok: true };
-}
-
-/**
- * Round 1513: stages a put back of a save handed in as text (a save point the
- * page has already opened and checked). The journal is written and read
- * back, then the text to PENDING_COPY_KEY and read back, and the next load
- * applies it exactly as it applies a backup: the save he has is copied aside
- * first, and the game's key is never emptied. The journal goes first so a tab
- * closed between the two writes leaves a journal whose copy is missing, which
- * the next load forgets ('gone'), and never a large copy nothing points at.
- * A refused step removes what this wrote and changes nothing else. Never throws.
- */
-export function stageCopy(entry: ContinueSave, text: string, storage: ListableStorage | null, now: Date = new Date()): { ok: true } | { ok: false; why: KeeperRefusal } {
-  if (!storage) return { ok: false, why: 'blocked' };
-  const rec: Staged = { v: 1, path: entry.path, backupKey: PENDING_COPY_KEY, at: now.getTime(), len: text.length, sum: sumOf(text) };
-  const journal = JSON.stringify(rec);
-  try {
-    storage.setItem(PENDING_RESTORE_KEY, journal);
-    if (storage.getItem(PENDING_RESTORE_KEY) !== journal) throw new Error('journal did not read back');
-    storage.setItem(PENDING_COPY_KEY, text);
-    if (storage.getItem(PENDING_COPY_KEY) !== text) throw new Error('copy did not read back');
-  } catch {
-    forget(storage);
-    try { storage.removeItem(PENDING_COPY_KEY); } catch { /* the next copy staged writes over it */ }
     return { ok: false, why: 'no-room' };
   }
   return { ok: true };
@@ -430,13 +405,6 @@ export function restoreNow(entry: ContinueSave, backupKey: string): { ok: true }
   if (getStorageTrouble() === 'blocked') return { ok: false, why: 'blocked' };
   if (!settlePendingSaves()) return { ok: false, why: 'no-room' };
   return stageRestore(entry, backupKey, browserStorage());
-}
-
-/** restoreNow for a save handed in as text (Round 1513's save points). The caller then calls reopenGame. */
-export function restoreCopyNow(entry: ContinueSave, text: string): { ok: true } | { ok: false; why: KeeperRefusal } {
-  if (getStorageTrouble() === 'blocked') return { ok: false, why: 'blocked' };
-  if (!settlePendingSaves()) return { ok: false, why: 'no-room' };
-  return stageCopy(entry, text, browserStorage());
 }
 
 /**
