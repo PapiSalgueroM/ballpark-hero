@@ -1,0 +1,11 @@
+simCmDifficulty: sections 4
+  table: veryeasy {"gain":1.4,"pain":0.6,"cut":0,"cheque":1.5,"wageRoom":1.12,"mark":0.8,"edge":-3}; easy {"gain":1.2,"pain":0.8,"cut":0,"cheque":1.2,"wageRoom":1.06,"mark":0.87,"edge":-1.5}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":2.2}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3.9}
+4) outcomes: legend, 32 seeds from 0, 6 seasons, engaged, shard 1/8
+  played 216 seasons in 143 s (0.66 s a season)
+  level  tier  driver   n   ppg  vsExp titles10 troph10   fees  sign  balance over  bMin bMean sacked matches xiS  xiE  clauseU loanU
+  legend big   engaged  72 1.72   1.29    0.56    1.67  31.31  2.03   108.20 1.00  5.76 43.85 0.81  27.68 88.31 88.34     0     5
+  legend mid   engaged  72 1.00  -2.83    0.00    0.14  11.16  2.00     7.00 1.00  2.47 41.15 0.92  21.33 79.20 79.24     0     2
+  legend small engaged  72 0.51  -9.00    0.00    0.00   3.03  2.00     6.90 0.99  0.78 38.25 0.99  18.69 73.28 73.47     0     0
+  ok: a shard: the bands are the fold's (FOLD=<dir of OUT_JSON files>)
+simCmDifficulty: all green (sections 4)
+legend39-1.json byte equal to r1515-vfy
