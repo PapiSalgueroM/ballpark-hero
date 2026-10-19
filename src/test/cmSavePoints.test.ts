@@ -14,7 +14,7 @@ import {
   POINTS_CAP, clearSlotPoints, noteSeasonCredited, pointKey, pointsIndexKey, readPointsIndex, seasonPosts,
 } from '@/lib/cmSavePointsStore';
 import {
-  copyPoint, createPoint, defaultPointName, deletePoint, openPoint, pointText, renamePoint, restorePoint, stageCopy,
+  copyPoint, createPoint, defaultPointName, deletePoint, dropStrayCopy, openPoint, pointText, renamePoint, restorePoint, stageCopy,
 } from '@/lib/cmSavePoints';
 
 const T0 = new Date('2026-10-19T12:00:00Z');
@@ -218,12 +218,19 @@ describe('restore', () => {
     expect(restorePoint(1, r.meta.id, { ...c3, eraId: 'not-this-era' }, api, () => ({ ok: true }))).toEqual({ ok: false, why: 'damaged' });
   });
 
-  /* Review of 2026-10-19 (run minor 4): a cut journal left the plain copy until the next restore wrote over it. */
-  it('a staged copy a cut journal points at goes on the next load, and a load with nothing staged writes nothing', () => {
+  /* Review of 2026-10-19 (run minor 4): a cut journal, or one an older tab forgot, left the plain copy until the next restore. */
+  it('a staged copy no journal points at goes when the points screen opens; a staged one stays; a load with nothing staged writes nothing', () => {
     const copy = pointText(c3);
     const cut = store({ [SAVE_KEY]: 'held', [PENDING_RESTORE_KEY]: '{"v":1,"path":"/club-manager","backupKey":"dukb-save-pen', [PENDING_COPY_KEY]: copy });
     expect(applyPending(cut.api, T0)).toBeNull();
+    expect([...cut.m.keys()].sort()).toEqual([PENDING_COPY_KEY, SAVE_KEY].sort());
+    dropStrayCopy(cut.api);
     expect([...cut.m.keys()]).toEqual([SAVE_KEY]);
+    const staged = store({ [SAVE_KEY]: 'held' });
+    expect(stageCopy(entry, copy, staged.api, T0).ok).toBe(true);
+    const before = [...staged.m.entries()].sort().join('|');
+    dropStrayCopy(staged.api);
+    expect([...staged.m.entries()].sort().join('|')).toBe(before);
     const clean = store({ [SAVE_KEY]: 'held' });
     expect(applyPending(clean.api, T0)).toBeNull();
     expect(clean.s.sets + clean.s.removes).toBe(0);

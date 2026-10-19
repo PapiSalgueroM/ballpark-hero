@@ -8,11 +8,11 @@
  * call goes through src/lib/cmSavePoints.ts, which never throws and says no
  * plainly; this screen only says what that answer means.
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { CareerState } from '@/lib/clubManager';
 import { POINTS_CAP, POINT_NAME_MAX, readPointsIndex, type PointMeta } from '@/lib/cmSavePointsStore';
 import {
-  copyPoint, createPoint, defaultPointName, deletePoint, renamePoint, restoreMayDrop, restorePoint, type PointRefusal,
+  copyPoint, createPoint, defaultPointName, deletePoint, dropStrayCopy, renamePoint, restoreMayDrop, restorePoint, type PointRefusal,
 } from '@/lib/cmSavePoints';
 import { reopenGame } from '@/lib/saveKeeper';
 import { markLandOnHub } from '@/lib/clubManagerLanding';
@@ -53,6 +53,8 @@ export function SavePointsScreen({ career, slot }: Props) {
   const [ask, setAsk] = useState<Ask>(null);
   const [newName, setNewName] = useState('');
   const [note, setNote] = useState<{ text: string; bad: boolean } | null>(null);
+  /* Review of 2026-10-19: a staged copy no journal points at goes as the screen opens (dropStrayCopy). */
+  useEffect(() => { dropStrayCopy(); }, []);
   const full = points.length >= POINTS_CAP;
   const reread = () => setPoints(readPointsIndex(slot)?.points ?? []);
   const say = (text: string, bad = false) => setNote({ text, bad });

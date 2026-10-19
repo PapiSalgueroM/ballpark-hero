@@ -180,6 +180,20 @@ export function stageCopy(entry: ContinueSave, text: string, storage: ListableSt
   return { ok: true };
 }
 
+/**
+ * Review of 2026-10-19: a staged copy no journal points at (the next load forgot a cut journal, or a tab still on
+ * an older build read this build's journal as junk and forgot only the journal) would sit in the store, about a
+ * whole career, until the next restore wrote over it. The points screen drops it as it opens. Here and not in the
+ * boot: an ordinary boot reads exactly the journal and the versioned games (simSaveKeeper section 2), and the
+ * boot ships in every page. The journal is written before the copy and removed before it, so a copy with no
+ * journal is never one a load is about to apply. Never throws.
+ */
+export function dropStrayCopy(storage: ListableStorage | null = browserStorage()): void {
+  try {
+    if (storage && storage.getItem(PENDING_RESTORE_KEY) === null && storage.getItem(PENDING_COPY_KEY) !== null) storage.removeItem(PENDING_COPY_KEY);
+  } catch { /* left for the next restore to write over */ }
+}
+
 /** restoreNow (src/lib/saveKeeper.ts) for a point: a save the page still holds is retried first. The caller then calls reopenGame. */
 function restoreCopyNow(entry: ContinueSave, text: string): { ok: true } | { ok: false; why: KeeperRefusal } {
   if (getStorageTrouble() === 'blocked') return { ok: false, why: 'blocked' };
