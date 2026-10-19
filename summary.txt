@@ -1,0 +1,8 @@
+h2 exit=0 205s | simCmDifficulty: all green (sections 4)
+h0 exit=0 206s | simCmDifficulty: all green (sections 4)
+h1 exit=0 218s | simCmDifficulty: all green (sections 4)
+l0 exit=0 147s | simCmDifficulty: all green (sections 4)
+l1 exit=0 147s | simCmDifficulty: all green (sections 4)
+h3 exit=0 208s | simCmDifficulty: all green (sections 4)
+l2 exit=0 125s | simCmDifficulty: all green (sections 4)
+l3 exit=0 123s | simCmDifficulty: all green (sections 4)
