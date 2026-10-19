@@ -1,0 +1,2 @@
+# Release BM kit probe: can a runner line read the result branch of r1515-vfy (for the in line cmp of rc-BMa)
+probe: git show origin/rc-results/r1515-vfy:files/hard22-0.json | wc -c; git show origin/rc-results/r1515-vfy:files/legend39-7.json | sha1sum
