@@ -1,0 +1,21 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerNoSack.test.tsx --testTimeout=300000 --hookTimeout=120000
+s178: SECTION=1,7,8 node scripts/simCmDifficulty.mjs
+s2: mkdir -p /tmp/b2 && git archive 28cfa45e src | tar -x -C /tmp/b2 && BASE_ROOT=/tmp/b2 SECTION=2 node scripts/simCmDifficulty.mjs
+s3: SECTION=3 node scripts/simCmDifficulty.mjs
+s6: mkdir -p /tmp/b6 && git archive 28cfa45e src | tar -x -C /tmp/b6 && BASE_ROOT=/tmp/b6 SECTION=6 node scripts/simCmDifficulty.mjs
+s3-easy: SECTION=3 LEVER_LEVELS=easy node scripts/simCmDifficulty.mjs
+c-oldlevel: mkdir -p /tmp/bo && git archive 28cfa45e src | tar -x -C /tmp/bo && BASE_ROOT=/tmp/bo CM_DIFF_CONTROL=oldlevel node scripts/simCmDifficulty.mjs
+c-ve-gain: CM_DIFF_CONTROL=ve-gain node scripts/simCmDifficulty.mjs
+c-ve-pain: CM_DIFF_CONTROL=ve-pain node scripts/simCmDifficulty.mjs
+c-ve-cheque: CM_DIFF_CONTROL=ve-cheque node scripts/simCmDifficulty.mjs
+c-ve-wages: CM_DIFF_CONTROL=ve-wages node scripts/simCmDifficulty.mjs
+c-ve-mark: CM_DIFF_CONTROL=ve-mark node scripts/simCmDifficulty.mjs
+c-ve-edge: CM_DIFF_CONTROL=ve-edge node scripts/simCmDifficulty.mjs
+c-edge: CM_DIFF_CONTROL=edge node scripts/simCmDifficulty.mjs
+c-cheque: CM_DIFF_CONTROL=cheque node scripts/simCmDifficulty.mjs
+c-midleak: CM_DIFF_CONTROL=midleak node scripts/simCmDifficulty.mjs
+c-easyclear: CM_DIFF_CONTROL=easyclear node scripts/simCmDifficulty.mjs
+c-midnolevel: CM_DIFF_CONTROL=midnolevel node scripts/simCmDifficulty.mjs
+c-flate: CM_DIFF_CONTROL=flate node scripts/simCmDifficulty.mjs
+c-helpdrifte: CM_DIFF_CONTROL=helpdrifte node scripts/simCmDifficulty.mjs
