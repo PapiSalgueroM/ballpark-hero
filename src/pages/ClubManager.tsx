@@ -93,6 +93,8 @@ const TrainingScreen = lazy(() => import('@/components/club-manager/TrainingScre
 const RolesScreen = lazy(() => import('@/components/club-manager/RolesScreen').then(m => ({ default: m.RolesScreen })));
 const XpScreen = lazy(() => import('@/components/club-manager/XpScreen').then(m => ({ default: m.XpScreen })));
 const StartOptionsScreen = lazy(() => import('@/components/club-manager/StartOptionsScreen').then(m => ({ default: m.StartOptionsScreen })));
+/* Round 1512 review: the Difficulty row on the sacked screen, which has no Options tile. */
+const DifficultyOption = lazy(() => import('@/components/club-manager/StartOptionsScreen').then(m => ({ default: m.DifficultyOption })));
 const PressScreen = lazy(() => import('@/components/club-manager/PressScreen').then(m => ({ default: m.PressScreen })));
 const MatchCentre = lazy(() => import('@/components/club-manager/MatchCentre').then(m => ({ default: m.MatchCentre })));
 const LiveSimScreen = lazy(() => import('@/components/club-manager/LiveSimScreen').then(m => ({ default: m.LiveSimScreen })));
@@ -924,6 +926,8 @@ const ClubManager = () => {
         <ScreenLoading><SackedCareerSummary c={c} g={g} /></ScreenLoading>
         {/* Round 1343: or stop waiting for the phone. */}
         <div className="mt-4 mx-auto max-w-sm"><Suspense fallback={<div className="min-h-11" />}><CmRetireDoor c={c} retire={g.retire} onOpen={preloadFarewell} /></Suspense></div>
+        {/* Round 1512 review: the level, changeable while out of work too (the brief and the help say so). */}
+        <div className="mt-4 mx-auto max-w-sm text-left" data-cm-sacked-level><Suspense fallback={<div className="min-h-[11rem]" />}><DifficultyOption career={c} onDifficulty={g.setDifficulty} /></Suspense></div>
         <button onClick={g.showSlots} data-testid="cm-show-slots-sacked" className="mt-4 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors">
           Your managers
         </button>
@@ -1001,7 +1005,7 @@ const ClubManager = () => {
           <span className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
             {worldSeasonLabel(c)} · Season {c.season}
           </span>
-          {/* Round 1501: a Hard or Legend career wears its level for its whole life. No pill on Normal. */}
+          {/* Round 1501: a career off Medium wears its level (Round 1512: whichever it is on now). No pill on Medium. */}
           {levelFrom(c) !== 'normal' && (
             <span data-cm-level-pill={levelFrom(c)} className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
               {DIFFICULTY_INFO[levelFrom(c)].label}
@@ -1325,7 +1329,7 @@ const ClubManager = () => {
                 icon="⚙️" title="Options"
                 value={(() => {
                   const o = startOptionsOf(c);
-                  /* Round 1501: a Hard or Legend career shows its level here, never the haggle's Normal, and
+                  /* Round 1501: a career off Medium shows its level here, never the haggle's Normal, and
                      after it the haggle's word whenever that is not the default, so no setting hides. */
                   const lv = levelFrom(c);
                   const haggle = STRICTNESS_INFO[o.strictness]?.label ?? 'Normal';
@@ -1567,6 +1571,7 @@ const ClubManager = () => {
                   onNationJobs={g.setNationJobs}
                   onStrictness={g.setStrictness}
                   onNoSack={g.turnOnNoSack}
+                  onDifficulty={g.setDifficulty}
                 /></ScreenLoading>
               )}
 

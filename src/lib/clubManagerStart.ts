@@ -38,7 +38,7 @@
  */
 import type { CareerState } from '@/lib/clubManager';
 /* Round 1501: the level's reader, from a file that imports nothing. */
-import { readLevel } from '@/lib/managerDifficulty';
+import { isEasyLevel, readLevel } from '@/lib/managerDifficulty';
 import type { DifficultyLevel } from '@/lib/managerDifficulty';
 
 /* ================================================================== */
@@ -112,9 +112,13 @@ export interface StartOptions {
   /** Round 1342: No sacking, stored as the season it was switched on. One way:
    *  absent is off and nothing deletes it. Only a positive whole number counts. */
   noSack?: number;
-  /** Round 1501: how hard the career plays, picked on the Dugout step and fixed for its life.
-   *  Absent is Normal, so every older save is Normal and a Normal career writes nothing. */
-  difficulty?: 'hard' | 'legend';
+  /** Round 1501: how hard the career plays, picked on the Dugout step. Round 1512: five levels, and
+   *  changeable between matches from Options (setDifficulty). Absent is Medium ('normal'), so every older
+   *  save is Medium and a Medium career writes nothing. */
+  difficulty?: Exclude<DifficultyLevel, 'normal'>;
+  /** Round 1512: the season the career first went to Very Easy or Easy, the same shape as noSack. One way:
+   *  absent is never, nothing deletes it, and from then on the career posts no leaderboard score. */
+  easySince?: number;
 }
 
 export function defaultStartOptions(): StartOptions {
@@ -156,21 +160,28 @@ export function ensureStartOptions(state: CareerState): StartOptions {
     const noSack = noSackFrom(state);
     /* Round 1501: and so does the level, for the same reason. */
     const level = levelFrom(state);
+    /* Round 1512: and the leaderboard mark of a career that went easy, which is one way like No sacking. */
+    const easySince = easyFrom(state);
     state.startOptions = defaultStartOptions();
     if (noSack !== null) state.startOptions.noSack = noSack;
     if (level !== 'normal') state.startOptions.difficulty = level;
+    if (easySince !== null) state.startOptions.easySince = easySince;
   }
   return state.startOptions as StartOptions;
 }
 
 /** Set one option. Returns null when it cannot be done, the shape the hook takes.
     No sacking is not one of them: it only ever goes on, through turnOnNoSack.
-    Round 1501: nor is the level, which is fixed when the career begins. */
-export function setStartOption<K extends keyof Omit<StartOptions, 'v' | 'noSack' | 'difficulty'>>(
+    Round 1501: nor is the level. Round 1512: the level changes through setDifficulty, which keeps the
+    one way leaderboard mark (easySince) with it, so neither key is ever set here. */
+export function setStartOption<K extends keyof Omit<StartOptions, 'v' | 'noSack' | 'difficulty' | 'easySince'>>(
   career: CareerState,
   key: K,
   value: StartOptions[K],
 ): CareerState | null {
+  /* Round 1512: refused at run time too, not only by the type, so no caller can slip the level past setDifficulty. */
+  const k: string = key;
+  if (k === 'noSack' || k === 'difficulty' || k === 'easySince') return null;
   const next: StartOptions = { ...startOptionsOf(career), [key]: value };
   if (!isValidStartOptions(next)) return null;
   const current = startOptionsOf(career);
@@ -255,9 +266,10 @@ export function boardMaySack(state: CareerState): boolean {
   return noSackFrom(state) === null;
 }
 
-/** Whether this career's pings carry a score to the leaderboards. */
+/** Whether this career's pings carry a score to the leaderboards. Round 1512: nor does a career that
+    has ever been on Very Easy or Easy, from the season it first went there. */
 export function postsScore(state: CareerState): boolean {
-  return noSackFrom(state) === null;
+  return noSackFrom(state) === null && easyFrom(state) === null;
 }
 
 /** Switch No sacking on for good. Null when it is already on, or the manager is sacked or out of work. */
@@ -278,6 +290,55 @@ export interface CareerSetup {
 export function levelFrom(state: CareerState): DifficultyLevel {
   const o = state.startOptions as { difficulty?: unknown } | null | undefined;
   return readLevel(o && typeof o === 'object' ? o.difficulty : undefined);
+}
+
+/* ================================================================== */
+/* Round 1512: five levels, changeable between matches               */
+/* ================================================================== */
+
+/*
+ * Two player reports on /club-manager, 2026-10-18, asked for the same thing:
+ * change the level inside a running career, with Very Easy, Easy, Medium, Hard
+ * and Impossible. The level is only ever read where a dial bites (the next
+ * match, the next summer cheque, the next job), so changing it touches the one
+ * key and nothing already played moves: the calendar, the record, the world,
+ * the budget you hold and the wage ceiling you hold stay exactly as they are.
+ *
+ * Going easy is one way for the leaderboards, the same shape as No sacking:
+ * easySince holds the season it first happened, and going back up keeps it.
+ * Nothing here draws.
+ */
+
+/** The season the career first went to Very Easy or Easy, or null when it never has. Read off the raw
+    block, so a damaged block keeps it (ensureStartOptions carries it over). */
+export function easyFrom(state: CareerState): number | null {
+  const o = state.startOptions as { easySince?: unknown } | null | undefined;
+  return readNoSack(o && typeof o === 'object' ? o.easySince : undefined);
+}
+
+/** The block at a level: the career's own block (or the default one, carrying No sacking and the easy mark
+    off a damaged block), the level written (absent on Medium), and the easy mark set the first time. */
+export function optionsAtLevel(state: CareerState, level: DifficultyLevel): StartOptions {
+  const next: StartOptions = { ...startOptionsOf(state) };
+  const noSack = noSackFrom(state);
+  if (noSack !== null) next.noSack = noSack;
+  const easySince = easyFrom(state);
+  if (easySince !== null) next.easySince = easySince;
+  if (level === 'normal') delete next.difficulty;
+  else next.difficulty = level;
+  if (isEasyLevel(level) && easySince === null) {
+    next.easySince = Number.isInteger(state.season) && state.season > 0 ? state.season : 1;
+  }
+  return next;
+}
+
+/** Change the level of a running career. Null when it is already that level, when the value is not one of
+    the five, or while a match is paused at halftime (the change waits for the next match). Allowed while
+    sacked or out of work. Only startOptions moves, and inside it only difficulty and the easy mark. */
+export function setDifficulty(state: CareerState, level: DifficultyLevel): CareerState | null {
+  if (readLevel(level) !== level || state.live) return null;
+  if (levelFrom(state) === level) return null;
+  return { ...state, startOptions: optionsAtLevel(state, level) };
 }
 
 export function applyCareerSetup(state: CareerState, setup?: CareerSetup): CareerState {
