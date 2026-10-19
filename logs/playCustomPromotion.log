@@ -1,0 +1,493 @@
+Prepared 9 declared font dependencies for local fulfillment.
+PASS all five actual save/load summers: identical outcomes and RNG draws; source bytes held
+PASS 390-championship: Actual site font faces load from retained original bytes
+PASS 390-championship: resume-control: visible stable content with no horizontal overflow
+PASS 390-championship: resume-control: the actual control is enabled
+PASS 390-championship: resume-control: measured action button is at least 30px in both dimensions
+PASS 390-championship: Actual season review retains the genuinely earned finish and identity
+PASS 390-championship: season-review: visible stable content with no horizontal overflow
+PASS 390-championship: continue-control: visible stable content with no horizontal overflow
+PASS 390-championship: continue-control: the actual control is enabled
+PASS 390-championship: continue-control: measured action button is at least 30px in both dimensions
+PASS 390-championship: The actual synchronous rollover uses exactly the recorded RNG and releases the stream
+PASS 390-championship: Created identity reaches its earned division while preserving the original pinned real slot
+PASS 390-championship: Every real club remains in exactly one configured world slot
+PASS 390-championship: Actual hub preserves the season and created stadium identity
+PASS 390-championship: promoted-hub: visible stable content with no horizontal overflow
+PASS 390-championship: Actual League tile names the newly earned division
+PASS 390-championship: league-control: visible stable content with no horizontal overflow
+PASS 390-championship: league-control: the actual control is enabled
+PASS 390-championship: league-control: measured action button is at least 30px in both dimensions
+PASS 390-championship: Actual own-league table uses the promoted division
+PASS 390-championship: promoted-table: visible stable content with no horizontal overflow
+PASS 390-championship: home-control: visible stable content with no horizontal overflow
+PASS 390-championship: home-control: the actual control is enabled
+PASS 390-championship: Actual Home tab activation selects Home and exposes the calendar tile
+PASS 390-championship: calendar-control: visible stable content with no horizontal overflow
+PASS 390-championship: calendar-control: the actual control is enabled
+PASS 390-championship: calendar-control: measured action button is at least 30px in both dimensions
+PASS 390-championship: first-league-fixture-control: visible stable content with no horizontal overflow
+PASS 390-championship: first-league-fixture-control: the actual control is enabled
+PASS 390-championship: first-league-fixture-control: measured action button is at least 30px in both dimensions
+PASS 390-championship: Actual new-season calendar opens the correct new-division opponent, venue and competition
+PASS 390-championship: promoted-calendar: visible stable content with no horizontal overflow
+PASS 390-championship: calendar-back-control: visible stable content with no horizontal overflow
+PASS 390-championship: calendar-back-control: the actual control is enabled
+PASS 390-championship: calendar-back-control: measured action button is at least 30px in both dimensions
+PASS 390-championship: cups-control: visible stable content with no horizontal overflow
+PASS 390-championship: cups-control: the actual control is enabled
+PASS 390-championship: cups-control: measured action button is at least 30px in both dimensions
+PASS 390-championship: Actual domestic cup panel uses the promoted division cup
+PASS 390-championship: An earned second-tier promotion does not award immediate Champions League qualification
+PASS 390-championship: promoted-cups: visible stable content with no horizontal overflow
+PASS 390-championship: Read-only table, calendar and cup inspections preserve every saved byte
+PASS 390-championship: reload-resume-control: visible stable content with no horizontal overflow
+PASS 390-championship: reload-resume-control: the actual control is enabled
+PASS 390-championship: reload-resume-control: measured action button is at least 30px in both dimensions
+PASS 390-championship: Reload restores the identical complete promoted career and serialized bytes
+PASS 390-championship: reloaded-hub: visible stable content with no horizontal overflow
+PASS 390-championship: No save failure notice appears
+PASS 390-championship: Unrelated career bytes are untouched
+PASS 390-championship: No page errors or failed built assets
+PASS 390-segunda: Actual site font faces load from retained original bytes
+PASS 390-segunda: resume-control: visible stable content with no horizontal overflow
+PASS 390-segunda: resume-control: the actual control is enabled
+PASS 390-segunda: resume-control: measured action button is at least 30px in both dimensions
+PASS 390-segunda: Actual season review retains the genuinely earned finish and identity
+PASS 390-segunda: season-review: visible stable content with no horizontal overflow
+PASS 390-segunda: continue-control: visible stable content with no horizontal overflow
+PASS 390-segunda: continue-control: the actual control is enabled
+PASS 390-segunda: continue-control: measured action button is at least 30px in both dimensions
+PASS 390-segunda: The actual synchronous rollover uses exactly the recorded RNG and releases the stream
+PASS 390-segunda: Created identity reaches its earned division while preserving the original pinned real slot
+PASS 390-segunda: Every real club remains in exactly one configured world slot
+PASS 390-segunda: Actual hub preserves the season and created stadium identity
+PASS 390-segunda: promoted-hub: visible stable content with no horizontal overflow
+PASS 390-segunda: Actual League tile names the newly earned division
+PASS 390-segunda: league-control: visible stable content with no horizontal overflow
+PASS 390-segunda: league-control: the actual control is enabled
+PASS 390-segunda: league-control: measured action button is at least 30px in both dimensions
+PASS 390-segunda: Actual own-league table uses the promoted division
+PASS 390-segunda: promoted-table: visible stable content with no horizontal overflow
+PASS 390-segunda: home-control: visible stable content with no horizontal overflow
+PASS 390-segunda: home-control: the actual control is enabled
+PASS 390-segunda: Actual Home tab activation selects Home and exposes the calendar tile
+PASS 390-segunda: calendar-control: visible stable content with no horizontal overflow
+PASS 390-segunda: calendar-control: the actual control is enabled
+PASS 390-segunda: calendar-control: measured action button is at least 30px in both dimensions
+PASS 390-segunda: first-league-fixture-control: visible stable content with no horizontal overflow
+PASS 390-segunda: first-league-fixture-control: the actual control is enabled
+PASS 390-segunda: first-league-fixture-control: measured action button is at least 30px in both dimensions
+PASS 390-segunda: Actual new-season calendar opens the correct new-division opponent, venue and competition
+PASS 390-segunda: promoted-calendar: visible stable content with no horizontal overflow
+PASS 390-segunda: calendar-back-control: visible stable content with no horizontal overflow
+PASS 390-segunda: calendar-back-control: the actual control is enabled
+PASS 390-segunda: calendar-back-control: measured action button is at least 30px in both dimensions
+PASS 390-segunda: cups-control: visible stable content with no horizontal overflow
+PASS 390-segunda: cups-control: the actual control is enabled
+PASS 390-segunda: cups-control: measured action button is at least 30px in both dimensions
+PASS 390-segunda: Actual domestic cup panel uses the promoted division cup
+PASS 390-segunda: An earned second-tier promotion does not award immediate Champions League qualification
+PASS 390-segunda: promoted-cups: visible stable content with no horizontal overflow
+PASS 390-segunda: Read-only table, calendar and cup inspections preserve every saved byte
+PASS 390-segunda: reload-resume-control: visible stable content with no horizontal overflow
+PASS 390-segunda: reload-resume-control: the actual control is enabled
+PASS 390-segunda: reload-resume-control: measured action button is at least 30px in both dimensions
+PASS 390-segunda: Reload restores the identical complete promoted career and serialized bytes
+PASS 390-segunda: reloaded-hub: visible stable content with no horizontal overflow
+PASS 390-segunda: No save failure notice appears
+PASS 390-segunda: Unrelated career bytes are untouched
+PASS 390-segunda: No page errors or failed built assets
+PASS 390-serieb: Actual site font faces load from retained original bytes
+PASS 390-serieb: resume-control: visible stable content with no horizontal overflow
+PASS 390-serieb: resume-control: the actual control is enabled
+PASS 390-serieb: resume-control: measured action button is at least 30px in both dimensions
+PASS 390-serieb: Actual season review retains the genuinely earned finish and identity
+PASS 390-serieb: season-review: visible stable content with no horizontal overflow
+PASS 390-serieb: continue-control: visible stable content with no horizontal overflow
+PASS 390-serieb: continue-control: the actual control is enabled
+PASS 390-serieb: continue-control: measured action button is at least 30px in both dimensions
+PASS 390-serieb: The actual synchronous rollover uses exactly the recorded RNG and releases the stream
+PASS 390-serieb: Created identity reaches its earned division while preserving the original pinned real slot
+PASS 390-serieb: Every real club remains in exactly one configured world slot
+PASS 390-serieb: Actual hub preserves the season and created stadium identity
+PASS 390-serieb: promoted-hub: visible stable content with no horizontal overflow
+PASS 390-serieb: Actual League tile names the newly earned division
+PASS 390-serieb: league-control: visible stable content with no horizontal overflow
+PASS 390-serieb: league-control: the actual control is enabled
+PASS 390-serieb: league-control: measured action button is at least 30px in both dimensions
+PASS 390-serieb: Actual own-league table uses the promoted division
+PASS 390-serieb: promoted-table: visible stable content with no horizontal overflow
+PASS 390-serieb: home-control: visible stable content with no horizontal overflow
+PASS 390-serieb: home-control: the actual control is enabled
+PASS 390-serieb: Actual Home tab activation selects Home and exposes the calendar tile
+PASS 390-serieb: calendar-control: visible stable content with no horizontal overflow
+PASS 390-serieb: calendar-control: the actual control is enabled
+PASS 390-serieb: calendar-control: measured action button is at least 30px in both dimensions
+PASS 390-serieb: first-league-fixture-control: visible stable content with no horizontal overflow
+PASS 390-serieb: first-league-fixture-control: the actual control is enabled
+PASS 390-serieb: first-league-fixture-control: measured action button is at least 30px in both dimensions
+PASS 390-serieb: Actual new-season calendar opens the correct new-division opponent, venue and competition
+PASS 390-serieb: promoted-calendar: visible stable content with no horizontal overflow
+PASS 390-serieb: calendar-back-control: visible stable content with no horizontal overflow
+PASS 390-serieb: calendar-back-control: the actual control is enabled
+PASS 390-serieb: calendar-back-control: measured action button is at least 30px in both dimensions
+PASS 390-serieb: cups-control: visible stable content with no horizontal overflow
+PASS 390-serieb: cups-control: the actual control is enabled
+PASS 390-serieb: cups-control: measured action button is at least 30px in both dimensions
+PASS 390-serieb: Actual domestic cup panel uses the promoted division cup
+PASS 390-serieb: An earned second-tier promotion does not award immediate Champions League qualification
+PASS 390-serieb: promoted-cups: visible stable content with no horizontal overflow
+PASS 390-serieb: Read-only table, calendar and cup inspections preserve every saved byte
+PASS 390-serieb: reload-resume-control: visible stable content with no horizontal overflow
+PASS 390-serieb: reload-resume-control: the actual control is enabled
+PASS 390-serieb: reload-resume-control: measured action button is at least 30px in both dimensions
+PASS 390-serieb: Reload restores the identical complete promoted career and serialized bytes
+PASS 390-serieb: reloaded-hub: visible stable content with no horizontal overflow
+PASS 390-serieb: No save failure notice appears
+PASS 390-serieb: Unrelated career bytes are untouched
+PASS 390-serieb: No page errors or failed built assets
+PASS 390-bundesliga2: Actual site font faces load from retained original bytes
+PASS 390-bundesliga2: resume-control: visible stable content with no horizontal overflow
+PASS 390-bundesliga2: resume-control: the actual control is enabled
+PASS 390-bundesliga2: resume-control: measured action button is at least 30px in both dimensions
+PASS 390-bundesliga2: Actual season review retains the genuinely earned finish and identity
+PASS 390-bundesliga2: season-review: visible stable content with no horizontal overflow
+PASS 390-bundesliga2: continue-control: visible stable content with no horizontal overflow
+PASS 390-bundesliga2: continue-control: the actual control is enabled
+PASS 390-bundesliga2: continue-control: measured action button is at least 30px in both dimensions
+PASS 390-bundesliga2: The actual synchronous rollover uses exactly the recorded RNG and releases the stream
+PASS 390-bundesliga2: Created identity reaches its earned division while preserving the original pinned real slot
+PASS 390-bundesliga2: Every real club remains in exactly one configured world slot
+PASS 390-bundesliga2: Actual hub preserves the season and created stadium identity
+PASS 390-bundesliga2: promoted-hub: visible stable content with no horizontal overflow
+PASS 390-bundesliga2: Actual League tile names the newly earned division
+PASS 390-bundesliga2: league-control: visible stable content with no horizontal overflow
+PASS 390-bundesliga2: league-control: the actual control is enabled
+PASS 390-bundesliga2: league-control: measured action button is at least 30px in both dimensions
+PASS 390-bundesliga2: Actual own-league table uses the promoted division
+PASS 390-bundesliga2: promoted-table: visible stable content with no horizontal overflow
+PASS 390-bundesliga2: home-control: visible stable content with no horizontal overflow
+PASS 390-bundesliga2: home-control: the actual control is enabled
+PASS 390-bundesliga2: Actual Home tab activation selects Home and exposes the calendar tile
+PASS 390-bundesliga2: calendar-control: visible stable content with no horizontal overflow
+PASS 390-bundesliga2: calendar-control: the actual control is enabled
+PASS 390-bundesliga2: calendar-control: measured action button is at least 30px in both dimensions
+PASS 390-bundesliga2: first-league-fixture-control: visible stable content with no horizontal overflow
+PASS 390-bundesliga2: first-league-fixture-control: the actual control is enabled
+PASS 390-bundesliga2: first-league-fixture-control: measured action button is at least 30px in both dimensions
+PASS 390-bundesliga2: Actual new-season calendar opens the correct new-division opponent, venue and competition
+PASS 390-bundesliga2: promoted-calendar: visible stable content with no horizontal overflow
+PASS 390-bundesliga2: calendar-back-control: visible stable content with no horizontal overflow
+PASS 390-bundesliga2: calendar-back-control: the actual control is enabled
+PASS 390-bundesliga2: calendar-back-control: measured action button is at least 30px in both dimensions
+PASS 390-bundesliga2: cups-control: visible stable content with no horizontal overflow
+PASS 390-bundesliga2: cups-control: the actual control is enabled
+PASS 390-bundesliga2: cups-control: measured action button is at least 30px in both dimensions
+PASS 390-bundesliga2: Actual domestic cup panel uses the promoted division cup
+PASS 390-bundesliga2: An earned second-tier promotion does not award immediate Champions League qualification
+PASS 390-bundesliga2: promoted-cups: visible stable content with no horizontal overflow
+PASS 390-bundesliga2: Read-only table, calendar and cup inspections preserve every saved byte
+PASS 390-bundesliga2: reload-resume-control: visible stable content with no horizontal overflow
+PASS 390-bundesliga2: reload-resume-control: the actual control is enabled
+PASS 390-bundesliga2: reload-resume-control: measured action button is at least 30px in both dimensions
+PASS 390-bundesliga2: Reload restores the identical complete promoted career and serialized bytes
+PASS 390-bundesliga2: reloaded-hub: visible stable content with no horizontal overflow
+PASS 390-bundesliga2: No save failure notice appears
+PASS 390-bundesliga2: Unrelated career bytes are untouched
+PASS 390-bundesliga2: No page errors or failed built assets
+PASS 390-ligue2: Actual site font faces load from retained original bytes
+PASS 390-ligue2: resume-control: visible stable content with no horizontal overflow
+PASS 390-ligue2: resume-control: the actual control is enabled
+PASS 390-ligue2: resume-control: measured action button is at least 30px in both dimensions
+PASS 390-ligue2: Actual season review retains the genuinely earned finish and identity
+PASS 390-ligue2: season-review: visible stable content with no horizontal overflow
+PASS 390-ligue2: continue-control: visible stable content with no horizontal overflow
+PASS 390-ligue2: continue-control: the actual control is enabled
+PASS 390-ligue2: continue-control: measured action button is at least 30px in both dimensions
+PASS 390-ligue2: The actual synchronous rollover uses exactly the recorded RNG and releases the stream
+PASS 390-ligue2: Created identity reaches its earned division while preserving the original pinned real slot
+PASS 390-ligue2: Every real club remains in exactly one configured world slot
+PASS 390-ligue2: Actual hub preserves the season and created stadium identity
+PASS 390-ligue2: promoted-hub: visible stable content with no horizontal overflow
+PASS 390-ligue2: Actual League tile names the newly earned division
+PASS 390-ligue2: league-control: visible stable content with no horizontal overflow
+PASS 390-ligue2: league-control: the actual control is enabled
+PASS 390-ligue2: league-control: measured action button is at least 30px in both dimensions
+PASS 390-ligue2: Actual own-league table uses the promoted division
+PASS 390-ligue2: promoted-table: visible stable content with no horizontal overflow
+PASS 390-ligue2: home-control: visible stable content with no horizontal overflow
+PASS 390-ligue2: home-control: the actual control is enabled
+PASS 390-ligue2: Actual Home tab activation selects Home and exposes the calendar tile
+PASS 390-ligue2: calendar-control: visible stable content with no horizontal overflow
+PASS 390-ligue2: calendar-control: the actual control is enabled
+PASS 390-ligue2: calendar-control: measured action button is at least 30px in both dimensions
+PASS 390-ligue2: first-league-fixture-control: visible stable content with no horizontal overflow
+PASS 390-ligue2: first-league-fixture-control: the actual control is enabled
+PASS 390-ligue2: first-league-fixture-control: measured action button is at least 30px in both dimensions
+PASS 390-ligue2: Actual new-season calendar opens the correct new-division opponent, venue and competition
+PASS 390-ligue2: promoted-calendar: visible stable content with no horizontal overflow
+PASS 390-ligue2: calendar-back-control: visible stable content with no horizontal overflow
+PASS 390-ligue2: calendar-back-control: the actual control is enabled
+PASS 390-ligue2: calendar-back-control: measured action button is at least 30px in both dimensions
+PASS 390-ligue2: cups-control: visible stable content with no horizontal overflow
+PASS 390-ligue2: cups-control: the actual control is enabled
+PASS 390-ligue2: cups-control: measured action button is at least 30px in both dimensions
+PASS 390-ligue2: Actual domestic cup panel uses the promoted division cup
+PASS 390-ligue2: An earned second-tier promotion does not award immediate Champions League qualification
+PASS 390-ligue2: promoted-cups: visible stable content with no horizontal overflow
+PASS 390-ligue2: Read-only table, calendar and cup inspections preserve every saved byte
+PASS 390-ligue2: reload-resume-control: visible stable content with no horizontal overflow
+PASS 390-ligue2: reload-resume-control: the actual control is enabled
+PASS 390-ligue2: reload-resume-control: measured action button is at least 30px in both dimensions
+PASS 390-ligue2: Reload restores the identical complete promoted career and serialized bytes
+PASS 390-ligue2: reloaded-hub: visible stable content with no horizontal overflow
+PASS 390-ligue2: No save failure notice appears
+PASS 390-ligue2: Unrelated career bytes are untouched
+PASS 390-ligue2: No page errors or failed built assets
+PASS 1280-championship: Actual site font faces load from retained original bytes
+PASS 1280-championship: resume-control: visible stable content with no horizontal overflow
+PASS 1280-championship: resume-control: the actual control is enabled
+PASS 1280-championship: resume-control: measured action button is at least 30px in both dimensions
+PASS 1280-championship: Actual season review retains the genuinely earned finish and identity
+PASS 1280-championship: season-review: visible stable content with no horizontal overflow
+PASS 1280-championship: continue-control: visible stable content with no horizontal overflow
+PASS 1280-championship: continue-control: the actual control is enabled
+PASS 1280-championship: continue-control: measured action button is at least 30px in both dimensions
+PASS 1280-championship: The actual synchronous rollover uses exactly the recorded RNG and releases the stream
+PASS 1280-championship: Created identity reaches its earned division while preserving the original pinned real slot
+PASS 1280-championship: Every real club remains in exactly one configured world slot
+PASS 1280-championship: Actual hub preserves the season and created stadium identity
+PASS 1280-championship: promoted-hub: visible stable content with no horizontal overflow
+PASS 1280-championship: Actual League tile names the newly earned division
+PASS 1280-championship: league-control: visible stable content with no horizontal overflow
+PASS 1280-championship: league-control: the actual control is enabled
+PASS 1280-championship: league-control: measured action button is at least 30px in both dimensions
+PASS 1280-championship: Actual own-league table uses the promoted division
+PASS 1280-championship: promoted-table: visible stable content with no horizontal overflow
+PASS 1280-championship: home-control: visible stable content with no horizontal overflow
+PASS 1280-championship: home-control: the actual control is enabled
+PASS 1280-championship: Actual Home tab activation selects Home and exposes the calendar tile
+PASS 1280-championship: calendar-control: visible stable content with no horizontal overflow
+PASS 1280-championship: calendar-control: the actual control is enabled
+PASS 1280-championship: calendar-control: measured action button is at least 30px in both dimensions
+PASS 1280-championship: first-league-fixture-control: visible stable content with no horizontal overflow
+PASS 1280-championship: first-league-fixture-control: the actual control is enabled
+PASS 1280-championship: first-league-fixture-control: measured action button is at least 30px in both dimensions
+PASS 1280-championship: Actual new-season calendar opens the correct new-division opponent, venue and competition
+PASS 1280-championship: promoted-calendar: visible stable content with no horizontal overflow
+PASS 1280-championship: calendar-back-control: visible stable content with no horizontal overflow
+PASS 1280-championship: calendar-back-control: the actual control is enabled
+PASS 1280-championship: calendar-back-control: measured action button is at least 30px in both dimensions
+PASS 1280-championship: cups-control: visible stable content with no horizontal overflow
+PASS 1280-championship: cups-control: the actual control is enabled
+PASS 1280-championship: cups-control: measured action button is at least 30px in both dimensions
+PASS 1280-championship: Actual domestic cup panel uses the promoted division cup
+PASS 1280-championship: An earned second-tier promotion does not award immediate Champions League qualification
+PASS 1280-championship: promoted-cups: visible stable content with no horizontal overflow
+PASS 1280-championship: Read-only table, calendar and cup inspections preserve every saved byte
+PASS 1280-championship: reload-resume-control: visible stable content with no horizontal overflow
+PASS 1280-championship: reload-resume-control: the actual control is enabled
+PASS 1280-championship: reload-resume-control: measured action button is at least 30px in both dimensions
+PASS 1280-championship: Reload restores the identical complete promoted career and serialized bytes
+PASS 1280-championship: reloaded-hub: visible stable content with no horizontal overflow
+PASS 1280-championship: No save failure notice appears
+PASS 1280-championship: Unrelated career bytes are untouched
+PASS 1280-championship: No page errors or failed built assets
+PASS 1280-segunda: Actual site font faces load from retained original bytes
+PASS 1280-segunda: resume-control: visible stable content with no horizontal overflow
+PASS 1280-segunda: resume-control: the actual control is enabled
+PASS 1280-segunda: resume-control: measured action button is at least 30px in both dimensions
+PASS 1280-segunda: Actual season review retains the genuinely earned finish and identity
+PASS 1280-segunda: season-review: visible stable content with no horizontal overflow
+PASS 1280-segunda: continue-control: visible stable content with no horizontal overflow
+PASS 1280-segunda: continue-control: the actual control is enabled
+PASS 1280-segunda: continue-control: measured action button is at least 30px in both dimensions
+PASS 1280-segunda: The actual synchronous rollover uses exactly the recorded RNG and releases the stream
+PASS 1280-segunda: Created identity reaches its earned division while preserving the original pinned real slot
+PASS 1280-segunda: Every real club remains in exactly one configured world slot
+PASS 1280-segunda: Actual hub preserves the season and created stadium identity
+PASS 1280-segunda: promoted-hub: visible stable content with no horizontal overflow
+PASS 1280-segunda: Actual League tile names the newly earned division
+PASS 1280-segunda: league-control: visible stable content with no horizontal overflow
+PASS 1280-segunda: league-control: the actual control is enabled
+PASS 1280-segunda: league-control: measured action button is at least 30px in both dimensions
+PASS 1280-segunda: Actual own-league table uses the promoted division
+PASS 1280-segunda: promoted-table: visible stable content with no horizontal overflow
+PASS 1280-segunda: home-control: visible stable content with no horizontal overflow
+PASS 1280-segunda: home-control: the actual control is enabled
+PASS 1280-segunda: Actual Home tab activation selects Home and exposes the calendar tile
+PASS 1280-segunda: calendar-control: visible stable content with no horizontal overflow
+PASS 1280-segunda: calendar-control: the actual control is enabled
+PASS 1280-segunda: calendar-control: measured action button is at least 30px in both dimensions
+PASS 1280-segunda: first-league-fixture-control: visible stable content with no horizontal overflow
+PASS 1280-segunda: first-league-fixture-control: the actual control is enabled
+PASS 1280-segunda: first-league-fixture-control: measured action button is at least 30px in both dimensions
+PASS 1280-segunda: Actual new-season calendar opens the correct new-division opponent, venue and competition
+PASS 1280-segunda: promoted-calendar: visible stable content with no horizontal overflow
+PASS 1280-segunda: calendar-back-control: visible stable content with no horizontal overflow
+PASS 1280-segunda: calendar-back-control: the actual control is enabled
+PASS 1280-segunda: calendar-back-control: measured action button is at least 30px in both dimensions
+PASS 1280-segunda: cups-control: visible stable content with no horizontal overflow
+PASS 1280-segunda: cups-control: the actual control is enabled
+PASS 1280-segunda: cups-control: measured action button is at least 30px in both dimensions
+PASS 1280-segunda: Actual domestic cup panel uses the promoted division cup
+PASS 1280-segunda: An earned second-tier promotion does not award immediate Champions League qualification
+PASS 1280-segunda: promoted-cups: visible stable content with no horizontal overflow
+PASS 1280-segunda: Read-only table, calendar and cup inspections preserve every saved byte
+PASS 1280-segunda: reload-resume-control: visible stable content with no horizontal overflow
+PASS 1280-segunda: reload-resume-control: the actual control is enabled
+PASS 1280-segunda: reload-resume-control: measured action button is at least 30px in both dimensions
+PASS 1280-segunda: Reload restores the identical complete promoted career and serialized bytes
+PASS 1280-segunda: reloaded-hub: visible stable content with no horizontal overflow
+PASS 1280-segunda: No save failure notice appears
+PASS 1280-segunda: Unrelated career bytes are untouched
+PASS 1280-segunda: No page errors or failed built assets
+PASS 1280-serieb: Actual site font faces load from retained original bytes
+PASS 1280-serieb: resume-control: visible stable content with no horizontal overflow
+PASS 1280-serieb: resume-control: the actual control is enabled
+PASS 1280-serieb: resume-control: measured action button is at least 30px in both dimensions
+PASS 1280-serieb: Actual season review retains the genuinely earned finish and identity
+PASS 1280-serieb: season-review: visible stable content with no horizontal overflow
+PASS 1280-serieb: continue-control: visible stable content with no horizontal overflow
+PASS 1280-serieb: continue-control: the actual control is enabled
+PASS 1280-serieb: continue-control: measured action button is at least 30px in both dimensions
+PASS 1280-serieb: The actual synchronous rollover uses exactly the recorded RNG and releases the stream
+PASS 1280-serieb: Created identity reaches its earned division while preserving the original pinned real slot
+PASS 1280-serieb: Every real club remains in exactly one configured world slot
+PASS 1280-serieb: Actual hub preserves the season and created stadium identity
+PASS 1280-serieb: promoted-hub: visible stable content with no horizontal overflow
+PASS 1280-serieb: Actual League tile names the newly earned division
+PASS 1280-serieb: league-control: visible stable content with no horizontal overflow
+PASS 1280-serieb: league-control: the actual control is enabled
+PASS 1280-serieb: league-control: measured action button is at least 30px in both dimensions
+PASS 1280-serieb: Actual own-league table uses the promoted division
+PASS 1280-serieb: promoted-table: visible stable content with no horizontal overflow
+PASS 1280-serieb: home-control: visible stable content with no horizontal overflow
+PASS 1280-serieb: home-control: the actual control is enabled
+PASS 1280-serieb: Actual Home tab activation selects Home and exposes the calendar tile
+PASS 1280-serieb: calendar-control: visible stable content with no horizontal overflow
+PASS 1280-serieb: calendar-control: the actual control is enabled
+PASS 1280-serieb: calendar-control: measured action button is at least 30px in both dimensions
+PASS 1280-serieb: first-league-fixture-control: visible stable content with no horizontal overflow
+PASS 1280-serieb: first-league-fixture-control: the actual control is enabled
+PASS 1280-serieb: first-league-fixture-control: measured action button is at least 30px in both dimensions
+PASS 1280-serieb: Actual new-season calendar opens the correct new-division opponent, venue and competition
+PASS 1280-serieb: promoted-calendar: visible stable content with no horizontal overflow
+PASS 1280-serieb: calendar-back-control: visible stable content with no horizontal overflow
+PASS 1280-serieb: calendar-back-control: the actual control is enabled
+PASS 1280-serieb: calendar-back-control: measured action button is at least 30px in both dimensions
+PASS 1280-serieb: cups-control: visible stable content with no horizontal overflow
+PASS 1280-serieb: cups-control: the actual control is enabled
+PASS 1280-serieb: cups-control: measured action button is at least 30px in both dimensions
+PASS 1280-serieb: Actual domestic cup panel uses the promoted division cup
+PASS 1280-serieb: An earned second-tier promotion does not award immediate Champions League qualification
+PASS 1280-serieb: promoted-cups: visible stable content with no horizontal overflow
+PASS 1280-serieb: Read-only table, calendar and cup inspections preserve every saved byte
+PASS 1280-serieb: reload-resume-control: visible stable content with no horizontal overflow
+PASS 1280-serieb: reload-resume-control: the actual control is enabled
+PASS 1280-serieb: reload-resume-control: measured action button is at least 30px in both dimensions
+PASS 1280-serieb: Reload restores the identical complete promoted career and serialized bytes
+PASS 1280-serieb: reloaded-hub: visible stable content with no horizontal overflow
+PASS 1280-serieb: No save failure notice appears
+PASS 1280-serieb: Unrelated career bytes are untouched
+PASS 1280-serieb: No page errors or failed built assets
+PASS 1280-bundesliga2: Actual site font faces load from retained original bytes
+PASS 1280-bundesliga2: resume-control: visible stable content with no horizontal overflow
+PASS 1280-bundesliga2: resume-control: the actual control is enabled
+PASS 1280-bundesliga2: resume-control: measured action button is at least 30px in both dimensions
+PASS 1280-bundesliga2: Actual season review retains the genuinely earned finish and identity
+PASS 1280-bundesliga2: season-review: visible stable content with no horizontal overflow
+PASS 1280-bundesliga2: continue-control: visible stable content with no horizontal overflow
+PASS 1280-bundesliga2: continue-control: the actual control is enabled
+PASS 1280-bundesliga2: continue-control: measured action button is at least 30px in both dimensions
+PASS 1280-bundesliga2: The actual synchronous rollover uses exactly the recorded RNG and releases the stream
+PASS 1280-bundesliga2: Created identity reaches its earned division while preserving the original pinned real slot
+PASS 1280-bundesliga2: Every real club remains in exactly one configured world slot
+PASS 1280-bundesliga2: Actual hub preserves the season and created stadium identity
+PASS 1280-bundesliga2: promoted-hub: visible stable content with no horizontal overflow
+PASS 1280-bundesliga2: Actual League tile names the newly earned division
+PASS 1280-bundesliga2: league-control: visible stable content with no horizontal overflow
+PASS 1280-bundesliga2: league-control: the actual control is enabled
+PASS 1280-bundesliga2: league-control: measured action button is at least 30px in both dimensions
+PASS 1280-bundesliga2: Actual own-league table uses the promoted division
+PASS 1280-bundesliga2: promoted-table: visible stable content with no horizontal overflow
+PASS 1280-bundesliga2: home-control: visible stable content with no horizontal overflow
+PASS 1280-bundesliga2: home-control: the actual control is enabled
+PASS 1280-bundesliga2: Actual Home tab activation selects Home and exposes the calendar tile
+PASS 1280-bundesliga2: calendar-control: visible stable content with no horizontal overflow
+PASS 1280-bundesliga2: calendar-control: the actual control is enabled
+PASS 1280-bundesliga2: calendar-control: measured action button is at least 30px in both dimensions
+PASS 1280-bundesliga2: first-league-fixture-control: visible stable content with no horizontal overflow
+PASS 1280-bundesliga2: first-league-fixture-control: the actual control is enabled
+PASS 1280-bundesliga2: first-league-fixture-control: measured action button is at least 30px in both dimensions
+PASS 1280-bundesliga2: Actual new-season calendar opens the correct new-division opponent, venue and competition
+PASS 1280-bundesliga2: promoted-calendar: visible stable content with no horizontal overflow
+PASS 1280-bundesliga2: calendar-back-control: visible stable content with no horizontal overflow
+PASS 1280-bundesliga2: calendar-back-control: the actual control is enabled
+PASS 1280-bundesliga2: calendar-back-control: measured action button is at least 30px in both dimensions
+PASS 1280-bundesliga2: cups-control: visible stable content with no horizontal overflow
+PASS 1280-bundesliga2: cups-control: the actual control is enabled
+PASS 1280-bundesliga2: cups-control: measured action button is at least 30px in both dimensions
+PASS 1280-bundesliga2: Actual domestic cup panel uses the promoted division cup
+PASS 1280-bundesliga2: An earned second-tier promotion does not award immediate Champions League qualification
+PASS 1280-bundesliga2: promoted-cups: visible stable content with no horizontal overflow
+PASS 1280-bundesliga2: Read-only table, calendar and cup inspections preserve every saved byte
+PASS 1280-bundesliga2: reload-resume-control: visible stable content with no horizontal overflow
+PASS 1280-bundesliga2: reload-resume-control: the actual control is enabled
+PASS 1280-bundesliga2: reload-resume-control: measured action button is at least 30px in both dimensions
+PASS 1280-bundesliga2: Reload restores the identical complete promoted career and serialized bytes
+PASS 1280-bundesliga2: reloaded-hub: visible stable content with no horizontal overflow
+PASS 1280-bundesliga2: No save failure notice appears
+PASS 1280-bundesliga2: Unrelated career bytes are untouched
+PASS 1280-bundesliga2: No page errors or failed built assets
+PASS 1280-ligue2: Actual site font faces load from retained original bytes
+PASS 1280-ligue2: resume-control: visible stable content with no horizontal overflow
+PASS 1280-ligue2: resume-control: the actual control is enabled
+PASS 1280-ligue2: resume-control: measured action button is at least 30px in both dimensions
+PASS 1280-ligue2: Actual season review retains the genuinely earned finish and identity
+PASS 1280-ligue2: season-review: visible stable content with no horizontal overflow
+PASS 1280-ligue2: continue-control: visible stable content with no horizontal overflow
+PASS 1280-ligue2: continue-control: the actual control is enabled
+PASS 1280-ligue2: continue-control: measured action button is at least 30px in both dimensions
+PASS 1280-ligue2: The actual synchronous rollover uses exactly the recorded RNG and releases the stream
+PASS 1280-ligue2: Created identity reaches its earned division while preserving the original pinned real slot
+PASS 1280-ligue2: Every real club remains in exactly one configured world slot
+PASS 1280-ligue2: Actual hub preserves the season and created stadium identity
+PASS 1280-ligue2: promoted-hub: visible stable content with no horizontal overflow
+PASS 1280-ligue2: Actual League tile names the newly earned division
+PASS 1280-ligue2: league-control: visible stable content with no horizontal overflow
+PASS 1280-ligue2: league-control: the actual control is enabled
+PASS 1280-ligue2: league-control: measured action button is at least 30px in both dimensions
+PASS 1280-ligue2: Actual own-league table uses the promoted division
+PASS 1280-ligue2: promoted-table: visible stable content with no horizontal overflow
+PASS 1280-ligue2: home-control: visible stable content with no horizontal overflow
+PASS 1280-ligue2: home-control: the actual control is enabled
+PASS 1280-ligue2: Actual Home tab activation selects Home and exposes the calendar tile
+PASS 1280-ligue2: calendar-control: visible stable content with no horizontal overflow
+PASS 1280-ligue2: calendar-control: the actual control is enabled
+PASS 1280-ligue2: calendar-control: measured action button is at least 30px in both dimensions
+PASS 1280-ligue2: first-league-fixture-control: visible stable content with no horizontal overflow
+PASS 1280-ligue2: first-league-fixture-control: the actual control is enabled
+PASS 1280-ligue2: first-league-fixture-control: measured action button is at least 30px in both dimensions
+PASS 1280-ligue2: Actual new-season calendar opens the correct new-division opponent, venue and competition
+PASS 1280-ligue2: promoted-calendar: visible stable content with no horizontal overflow
+PASS 1280-ligue2: calendar-back-control: visible stable content with no horizontal overflow
+PASS 1280-ligue2: calendar-back-control: the actual control is enabled
+PASS 1280-ligue2: calendar-back-control: measured action button is at least 30px in both dimensions
+PASS 1280-ligue2: cups-control: visible stable content with no horizontal overflow
+PASS 1280-ligue2: cups-control: the actual control is enabled
+PASS 1280-ligue2: cups-control: measured action button is at least 30px in both dimensions
+PASS 1280-ligue2: Actual domestic cup panel uses the promoted division cup
+PASS 1280-ligue2: An earned second-tier promotion does not award immediate Champions League qualification
+PASS 1280-ligue2: promoted-cups: visible stable content with no horizontal overflow
+PASS 1280-ligue2: Read-only table, calendar and cup inspections preserve every saved byte
+PASS 1280-ligue2: reload-resume-control: visible stable content with no horizontal overflow
+PASS 1280-ligue2: reload-resume-control: the actual control is enabled
+PASS 1280-ligue2: reload-resume-control: measured action button is at least 30px in both dimensions
+PASS 1280-ligue2: Reload restores the identical complete promoted career and serialized bytes
+PASS 1280-ligue2: reloaded-hub: visible stable content with no horizontal overflow
+PASS 1280-ligue2: No save failure notice appears
+PASS 1280-ligue2: Unrelated career bytes are untouched
+PASS 1280-ligue2: No page errors or failed built assets
+playManagerCustomPromotion: 10 genuine promotion journeys, 520 checks, 0 failed, 0 external requests forwarded

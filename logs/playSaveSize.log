@@ -1,0 +1,169 @@
+ok   390-raw: Actual home continue card preserves the saved club and age
+ok   390-raw: Complete loaded logical state equals the actual existing normalization, including every history and optional field
+ok   390-raw: Actual UI writes packed JSON under the unchanged 60000-character cap
+ok   390-raw: Saved continue metadata is unchanged after the UI write
+ok   390-raw: Every original season and story chapter survives migration
+ok   390-raw: Actual receipt acknowledgement changes only the exact reducer output, preserving its original roll and the whole career
+ok   390-raw: Acknowledged actual UI save remains within the existing cap
+ok   390-raw: Record-book totals equal all retained senior rows
+ok   390-raw: Every saved club spell appears in the actual history
+ok   390-raw: Club spell 1 contains every original saved senior season
+ok   390-raw: Club spell 2 contains every original saved senior season
+ok   390-raw: Club spell 3 contains every original saved senior season
+ok   390-raw: Club spell 4 contains every original saved senior season
+ok   390-raw: Club spell 5 contains every original saved senior season
+ok   390-raw: Actual Career Story lists every saved chapter and the current log
+ok   390-raw: Earliest chapter displays every saved line
+ok   390-raw: Chapter preserves the recorded age and club
+ok   390-raw: Latest chapter displays every saved line
+ok   390-raw: Chapter preserves the recorded age and club
+ok   390-raw: Reading Stats, every club spell and story leaves packed save bytes untouched
+ok   390-raw: Reload restores the identical complete career and packed bytes
+ok   390-raw: No save failure notice appears
+ok   390-raw: Actual site font faces load from retained offline bytes
+ok   390-raw: No horizontal overflow
+ok   390-raw: Unrelated save bytes are untouched
+ok   390-raw: No page errors or failed built assets
+ok   390-packed: Actual home continue card preserves the saved club and age
+ok   390-packed: Complete loaded logical state equals the actual existing normalization, including every history and optional field
+ok   390-packed: Actual UI writes packed JSON under the unchanged 60000-character cap
+ok   390-packed: Saved continue metadata is unchanged after the UI write
+ok   390-packed: Every original season and story chapter survives migration
+ok   390-packed: Actual receipt acknowledgement changes only the exact reducer output, preserving its original roll and the whole career
+ok   390-packed: Acknowledged actual UI save remains within the existing cap
+ok   390-packed: Record-book totals equal all retained senior rows
+ok   390-packed: Every saved club spell appears in the actual history
+ok   390-packed: Club spell 1 contains every original saved senior season
+ok   390-packed: Club spell 2 contains every original saved senior season
+ok   390-packed: Club spell 3 contains every original saved senior season
+ok   390-packed: Club spell 4 contains every original saved senior season
+ok   390-packed: Club spell 5 contains every original saved senior season
+ok   390-packed: Actual Career Story lists every saved chapter and the current log
+ok   390-packed: Earliest chapter displays every saved line
+ok   390-packed: Chapter preserves the recorded age and club
+ok   390-packed: Latest chapter displays every saved line
+ok   390-packed: Chapter preserves the recorded age and club
+ok   390-packed: Reading Stats, every club spell and story leaves packed save bytes untouched
+ok   390-packed: Reload restores the identical complete career and packed bytes
+ok   390-packed: No save failure notice appears
+ok   390-packed: Actual site font faces load from retained offline bytes
+ok   390-packed: No horizontal overflow
+ok   390-packed: Unrelated save bytes are untouched
+ok   390-packed: No page errors or failed built assets
+ok   390-corrupt: Invalid packed history is refused by the actual loader
+ok   390-corrupt: Refusal preserves the complete original invalid bytes
+ok   390-corrupt: No partial career is opened
+ok   390-corrupt: Reload refuses again and leaves the invalid bytes untouched
+ok   390-corrupt: Actual site font faces load from retained offline bytes
+ok   390-corrupt: No horizontal overflow
+ok   390-corrupt: Unrelated save bytes are untouched
+ok   390-corrupt: No page errors or failed built assets
+ok   390-future: Invalid packed history is refused by the actual loader
+ok   390-future: Refusal preserves the complete original invalid bytes
+ok   390-future: No partial career is opened
+ok   390-future: Reload refuses again and leaves the invalid bytes untouched
+ok   390-future: Actual site font faces load from retained offline bytes
+ok   390-future: No horizontal overflow
+ok   390-future: Unrelated save bytes are untouched
+ok   390-future: No page errors or failed built assets
+ok   390-corrupt-story: Invalid packed history is refused by the actual loader
+ok   390-corrupt-story: Refusal preserves the complete original invalid bytes
+ok   390-corrupt-story: No partial career is opened
+ok   390-corrupt-story: Reload refuses again and leaves the invalid bytes untouched
+ok   390-corrupt-story: Actual site font faces load from retained offline bytes
+ok   390-corrupt-story: No horizontal overflow
+ok   390-corrupt-story: Unrelated save bytes are untouched
+ok   390-corrupt-story: No page errors or failed built assets
+ok   390-future-story: Invalid packed history is refused by the actual loader
+ok   390-future-story: Refusal preserves the complete original invalid bytes
+ok   390-future-story: No partial career is opened
+ok   390-future-story: Reload refuses again and leaves the invalid bytes untouched
+ok   390-future-story: Actual site font faces load from retained offline bytes
+ok   390-future-story: No horizontal overflow
+ok   390-future-story: Unrelated save bytes are untouched
+ok   390-future-story: No page errors or failed built assets
+ok   1280-raw: Actual home continue card preserves the saved club and age
+ok   1280-raw: Complete loaded logical state equals the actual existing normalization, including every history and optional field
+ok   1280-raw: Actual UI writes packed JSON under the unchanged 60000-character cap
+ok   1280-raw: Saved continue metadata is unchanged after the UI write
+ok   1280-raw: Every original season and story chapter survives migration
+ok   1280-raw: Actual receipt acknowledgement changes only the exact reducer output, preserving its original roll and the whole career
+ok   1280-raw: Acknowledged actual UI save remains within the existing cap
+ok   1280-raw: Record-book totals equal all retained senior rows
+ok   1280-raw: Every saved club spell appears in the actual history
+ok   1280-raw: Club spell 1 contains every original saved senior season
+ok   1280-raw: Club spell 2 contains every original saved senior season
+ok   1280-raw: Club spell 3 contains every original saved senior season
+ok   1280-raw: Club spell 4 contains every original saved senior season
+ok   1280-raw: Club spell 5 contains every original saved senior season
+ok   1280-raw: Actual Career Story lists every saved chapter and the current log
+ok   1280-raw: Earliest chapter displays every saved line
+ok   1280-raw: Chapter preserves the recorded age and club
+ok   1280-raw: Latest chapter displays every saved line
+ok   1280-raw: Chapter preserves the recorded age and club
+ok   1280-raw: Reading Stats, every club spell and story leaves packed save bytes untouched
+ok   1280-raw: Reload restores the identical complete career and packed bytes
+ok   1280-raw: No save failure notice appears
+ok   1280-raw: Actual site font faces load from retained offline bytes
+ok   1280-raw: No horizontal overflow
+ok   1280-raw: Unrelated save bytes are untouched
+ok   1280-raw: No page errors or failed built assets
+ok   1280-packed: Actual home continue card preserves the saved club and age
+ok   1280-packed: Complete loaded logical state equals the actual existing normalization, including every history and optional field
+ok   1280-packed: Actual UI writes packed JSON under the unchanged 60000-character cap
+ok   1280-packed: Saved continue metadata is unchanged after the UI write
+ok   1280-packed: Every original season and story chapter survives migration
+ok   1280-packed: Actual receipt acknowledgement changes only the exact reducer output, preserving its original roll and the whole career
+ok   1280-packed: Acknowledged actual UI save remains within the existing cap
+ok   1280-packed: Record-book totals equal all retained senior rows
+ok   1280-packed: Every saved club spell appears in the actual history
+ok   1280-packed: Club spell 1 contains every original saved senior season
+ok   1280-packed: Club spell 2 contains every original saved senior season
+ok   1280-packed: Club spell 3 contains every original saved senior season
+ok   1280-packed: Club spell 4 contains every original saved senior season
+ok   1280-packed: Club spell 5 contains every original saved senior season
+ok   1280-packed: Actual Career Story lists every saved chapter and the current log
+ok   1280-packed: Earliest chapter displays every saved line
+ok   1280-packed: Chapter preserves the recorded age and club
+ok   1280-packed: Latest chapter displays every saved line
+ok   1280-packed: Chapter preserves the recorded age and club
+ok   1280-packed: Reading Stats, every club spell and story leaves packed save bytes untouched
+ok   1280-packed: Reload restores the identical complete career and packed bytes
+ok   1280-packed: No save failure notice appears
+ok   1280-packed: Actual site font faces load from retained offline bytes
+ok   1280-packed: No horizontal overflow
+ok   1280-packed: Unrelated save bytes are untouched
+ok   1280-packed: No page errors or failed built assets
+ok   1280-corrupt: Invalid packed history is refused by the actual loader
+ok   1280-corrupt: Refusal preserves the complete original invalid bytes
+ok   1280-corrupt: No partial career is opened
+ok   1280-corrupt: Reload refuses again and leaves the invalid bytes untouched
+ok   1280-corrupt: Actual site font faces load from retained offline bytes
+ok   1280-corrupt: No horizontal overflow
+ok   1280-corrupt: Unrelated save bytes are untouched
+ok   1280-corrupt: No page errors or failed built assets
+ok   1280-future: Invalid packed history is refused by the actual loader
+ok   1280-future: Refusal preserves the complete original invalid bytes
+ok   1280-future: No partial career is opened
+ok   1280-future: Reload refuses again and leaves the invalid bytes untouched
+ok   1280-future: Actual site font faces load from retained offline bytes
+ok   1280-future: No horizontal overflow
+ok   1280-future: Unrelated save bytes are untouched
+ok   1280-future: No page errors or failed built assets
+ok   1280-corrupt-story: Invalid packed history is refused by the actual loader
+ok   1280-corrupt-story: Refusal preserves the complete original invalid bytes
+ok   1280-corrupt-story: No partial career is opened
+ok   1280-corrupt-story: Reload refuses again and leaves the invalid bytes untouched
+ok   1280-corrupt-story: Actual site font faces load from retained offline bytes
+ok   1280-corrupt-story: No horizontal overflow
+ok   1280-corrupt-story: Unrelated save bytes are untouched
+ok   1280-corrupt-story: No page errors or failed built assets
+ok   1280-future-story: Invalid packed history is refused by the actual loader
+ok   1280-future-story: Refusal preserves the complete original invalid bytes
+ok   1280-future-story: No partial career is opened
+ok   1280-future-story: Reload refuses again and leaves the invalid bytes untouched
+ok   1280-future-story: Actual site font faces load from retained offline bytes
+ok   1280-future-story: No horizontal overflow
+ok   1280-future-story: Unrelated save bytes are untouched
+ok   1280-future-story: No page errors or failed built assets
+playSoccerCareerSaveSize: 168 checks, 0 failed, 0 external requests forwarded
