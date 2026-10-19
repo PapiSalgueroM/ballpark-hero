@@ -1,0 +1,4 @@
+simGuideHeadings: refreshed /soccer-career from its actual guide (howToPlay 17, rules 25, example 4, tips 7)
+ scripts/data/guideHeadingsFrozen.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+39c3ccba8bb9cc055b75606cc4a3a94ff886bc9a5987a5c2d3f175dd05a9da27  scripts/data/guideHeadingsFrozen.json

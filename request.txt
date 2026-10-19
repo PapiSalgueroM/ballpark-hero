@@ -1,0 +1,8 @@
+# Release BL: the /soccer-career guide fixture refresh PR345's note asks for (PR339 moved the guide to 29 hairstyles and
+# 18 beard styles, verified against SOCCER_HAIRSTYLES 23+6 and SOCCER_FACIAL_HAIR 14+4), brought back via RC_OUT, then
+# the fence before and after on the runner's tree.
+#!serial
+gh-before: node scripts/simGuideHeadings.mjs > $RC_OUT/gh-before.log 2>&1; s=$?; tail -4 $RC_OUT/gh-before.log | cut -c1-300; exit $s
+refresh: node scripts/simGuideHeadings.mjs --refresh /soccer-career && cp scripts/data/guideHeadingsFrozen.json $RC_OUT/guideHeadingsFrozen.json && git diff --stat && sha256sum scripts/data/guideHeadingsFrozen.json
+gh-after: node scripts/simGuideHeadings.mjs > $RC_OUT/gh-after.log 2>&1; s=$?; tail -4 $RC_OUT/gh-after.log | cut -c1-300; exit $s
+siteSearch: node scripts/simSiteSearch.mjs > $RC_OUT/ss.log 2>&1; s=$?; tail -4 $RC_OUT/ss.log | cut -c1-300; exit $s

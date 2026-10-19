@@ -1,0 +1,4 @@
+   a query that matches: 0.410ms. A query that has to fall back to spelling: 0.412ms
+   the typo fallback costs 1.0x a plain query
+
+simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.

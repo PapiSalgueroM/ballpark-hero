@@ -1,0 +1,4 @@
+gh-before exit=1 0s | simGuideHeadings: RED, 2 failures in section 1
+refresh exit=0 0s | 39c3ccba8bb9cc055b75606cc4a3a94ff886bc9a5987a5c2d3f175dd05a9da27  scripts/data/guideHeadingsFrozen.json
+gh-after exit=0 0s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+siteSearch exit=0 1s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
