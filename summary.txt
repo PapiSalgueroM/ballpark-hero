@@ -1,0 +1,2 @@
+vitest exit=0 9s |    Duration  8.60s (transform 3.03s, setup 442ms, collect 10.09s, tests 9.02s, environment 2.48s, prepare 806ms)
+tsc exit=0 73s | 
