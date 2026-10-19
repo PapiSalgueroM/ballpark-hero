@@ -15,6 +15,9 @@
  *       played; a reload keeps Impossible and the easy mark, the hub wears the Impossible pill and Options still
  *       says scores off.
  *   (c) The Managers screen's card names the level the career is on now.
+ *   (s) At PLAY_WIDTHS only (Round 1512 review): the save marked sacked opens on the sacked screen, which carries
+ *       the Difficulty row on the saved level; one tap on Hard switches, the career still sacked, the easy mark
+ *       kept and nothing played moved.
  *
  * The database host is blocked; the page plays on a seeded stream (DIFF_SEED, scripts/lib/pageSeed.mjs).
  * Pictures of each step go to $RC_OUT when it is set; look at them.
@@ -26,7 +29,7 @@
  *     is as tall as the pressed one only: the tile press check goes red at 320 (the control is aimed at 320 alone
  *     and refuses to run without it).
  *   PLAY_DIFF_CONTROL=nolevel makes the Options row's change call do nothing (Round 1512): the change checks go
- *     red at every play width.
+ *     red at every play width, the sacked screen's tap among them.
  *
  *   #!serve then: node scripts/playCmDifficulty.mjs        WIDTHS=390 PLAY_DIFF_CONTROL=nopill node scripts/playCmDifficulty.mjs
  *                 WIDTHS=320 PLAY_DIFF_CONTROL=jump node scripts/playCmDifficulty.mjs
@@ -291,11 +294,38 @@ for (const W of WIDTHS) {
   say(new RegExp(WORD[now]).test(slot), `${W}: the Managers card reads "${slot.slice(0, 90)}"`, CONTROL === 'nolevel' && plays);
   await shot(pc, `diff-slots-${W}.png`);
   await pc.close();
+
+  /* (s) Round 1512 review: out of work. The sacked screen has no Options tile, so it carries the Difficulty row
+     itself. The save is marked sacked the way the review's walk did it (the flag, with no match left live). */
+  if (plays) {
+    const ps = await ctxA.newPage();
+    ps.on('pageerror', e => errors.push(String(e)));
+    await ps.goto(`${BASE}/about`, { waitUntil: 'domcontentloaded' });
+    await ps.evaluate(key => { const c = JSON.parse(localStorage.getItem(key)); c.sacked = true; delete c.live; localStorage.setItem(key, JSON.stringify(c)); }, KEY).catch(() => {});
+    await ps.goto(`${BASE}/club-manager`, { waitUntil: 'networkidle' });
+    await pause(ps, 1500);
+    const resume = ps.getByRole('button', { name: /Resume Career/i });
+    if (await visible(resume)) { await resume.first().click({ timeout: 5000 }).catch(() => {}); await pause(ps, 1500); }
+    const row = ps.locator('[data-cm-sacked-level] [data-cm-level-option]');
+    await row.waitFor({ timeout: 8000 }).catch(() => {});
+    const s5 = await readSave(ps);
+    const on = await row.getAttribute('data-cm-level-option').catch(() => null);
+    const sackedShown = await ps.locator('h1', { hasText: 'SACKED!' }).count() > 0;
+    say(sackedShown && !!s5 && s5.sacked && on === (s5.level ?? 'normal'), `${W}: the sacked screen carries the Difficulty row on the saved level (heading ${sackedShown}, row ${on}, saved ${s5 && s5.level})`);
+    await row.scrollIntoViewIfNeeded().catch(() => {});
+    await ps.locator('[data-cm-sacked-level] [data-cm-level-choice="hard"]').click({ timeout: 5000 }).catch(() => {});
+    await pause(ps, 600);
+    const s6 = await readSave(ps);
+    say(!!s6 && s6.sacked && s6.level === 'hard' && s6.easySince === 1 && s6.played === s5?.played && s6.week === s5?.week,
+      `${W}: out of work, one tap on Hard switches, still sacked, the easy mark kept and nothing played moved (saved ${s6 && s6.level}, mark ${s6 && s6.easySince}, sacked ${s6 && s6.sacked})`, CONTROL === 'nolevel');
+    await shot(ps, `diff-sacked-${W}.png`);
+    await ps.close();
+  }
   await ctxA.close();
 }
 await browser.close();
 say(errors.length === 0, `no page errors${errors.length ? `: ${errors.slice(0, 3).join(' | ')}` : ''}`);
 const minGuarded = CONTROL === 'jump' ? WIDTHS.filter(w => w === 320).length
-  : CONTROL === 'nolevel' ? 6 * WIDTHS.filter(w => PLAY_WIDTHS.includes(w)).length
+  : CONTROL === 'nolevel' ? 7 * WIDTHS.filter(w => PLAY_WIDTHS.includes(w)).length
     : WIDTHS.length + WIDTHS.filter(w => PLAY_WIDTHS.includes(w)).length;
 process.exit(verdict('playCmDifficulty', proof, { minGuarded }));

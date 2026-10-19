@@ -19,7 +19,7 @@ import { easyFrom, levelFrom, noSackFrom } from '@/lib/clubManagerStart';
 import { recordActivity } from '@/lib/completions';
 import { CM_DIFFICULTY_DIALS } from '@/lib/clubManagerDifficulty';
 import { ManagerForm } from '@/components/club-manager/ManagerForm';
-import { StartOptionsScreen } from '@/components/club-manager/StartOptionsScreen';
+import { DifficultyOption, StartOptionsScreen } from '@/components/club-manager/StartOptionsScreen';
 
 vi.mock('@/lib/completions', () => ({
   recordCompletion: vi.fn(),
@@ -124,6 +124,15 @@ describe('the Options panel', () => {
     expect(line?.textContent).toContain('season 2');
     fireEvent.click(tile('easy'));
     expect(onDifficulty).toHaveBeenLastCalledWith('easy');
+  });
+
+  /* Review of 2026-10-19: the sacked screen has no Options tile, so it renders this row on its own. */
+  it('the row on its own, for a sacked manager, changes the level in one tap', () => {
+    const onDifficulty = vi.fn();
+    render(<DifficultyOption career={{ ...at('legend'), sacked: true }} onDifficulty={onDifficulty} />);
+    expect(document.querySelector('[data-cm-level-option]')?.getAttribute('data-cm-level-option')).toBe('legend');
+    fireEvent.click(tile('hard'));
+    expect(onDifficulty).toHaveBeenLastCalledWith('hard');
   });
 });
 

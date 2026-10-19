@@ -21,26 +21,12 @@ interface StartOptionsScreenProps {
 }
 
 /**
- * Round 514: his three start options, spec line "display currency,
- * international job offers on or off, negotiation strictness slider".
- *
- * They are changeable at any time rather than only before kickoff, which is a
- * deliberate departure from the word "start": two of the three are settings a
- * player will want to correct once they have seen the game, and locking them
- * behind a new career would just cost people their save. None of the three
- * touches anything already recorded, so changing one mid career is safe.
- * Round 1342: No sacking is the exception, it only ever goes on, never off.
+ * Round 1512: the Difficulty row, in Options and (review of 2026-10-19) on the sacked screen too, because a
+ * manager out of work has no Options tile and the brief lets him change the level there.
  */
-export function StartOptionsScreen({ career, onCurrency, onNationJobs, onStrictness, onNoSack, onDifficulty }: StartOptionsScreenProps) {
-  const opts = startOptionsOf(career);
-  const levels = [];
-  for (let i = STRICTNESS_MIN; i <= STRICTNESS_MAX; i++) levels.push(i);
-  /* Round 1342: the first tap asks, the second switches it on. */
-  const [arming, setArming] = useState(false);
-  const noSackSince = noSackFrom(career);
+export function DifficultyOption({ career, onDifficulty }: { career: CareerState; onDifficulty?: (level: DifficultyLevel) => void }) {
   const level = levelFrom(career);
-  const outOfWork = career.sacked || !!career.wilderness;
-  /* Round 1512: the level. A tile that would stop the leaderboards waits for a second tap. */
+  /* A tile that would stop the leaderboards waits for a second tap. */
   const easySince = easyFrom(career);
   const [armedLevel, setArmedLevel] = useState<DifficultyLevel | null>(null);
   const pickLevel = (lv: DifficultyLevel) => {
@@ -50,12 +36,11 @@ export function StartOptionsScreen({ career, onCurrency, onNationJobs, onStrictn
     onDifficulty?.(lv);
   };
 
+  /* Round 1501: how hard. Round 1512: changeable here between matches, sacked or out of work included.
+     Five small tiles, three to a row on a phone. Going to Very Easy or Easy on a career that still posts
+     scores asks first, because that stops the leaderboards for good; every other change is one tap. The
+     lines under the tiles sit in one grid cell each, so a tap never moves the page. */
   return (
-    <div className="space-y-3" data-cm-start-options>
-      {/* Round 1501: how hard. Round 1512: changeable here between matches, sacked or out of work included.
-          Five small tiles, three to a row on a phone. Going to Very Easy or Easy on a career that still posts
-          scores asks first, because that stops the leaderboards for good; every other change is one tap. The
-          lines under the tiles sit in one grid cell each, so a tap never moves the page. */}
       <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-2" data-cm-level-option={level}>
         <div className="flex items-center justify-between gap-2">
           <div className="text-xs font-bold text-foreground">🎚️ Difficulty</div>
@@ -97,6 +82,32 @@ export function StartOptionsScreen({ career, onCurrency, onNationJobs, onStrictn
           {' '}Negotiation strictness below is a separate setting.
         </p>
       </div>
+  );
+}
+
+/**
+ * Round 514: his three start options, spec line "display currency,
+ * international job offers on or off, negotiation strictness slider".
+ *
+ * They are changeable at any time rather than only before kickoff, which is a
+ * deliberate departure from the word "start": two of the three are settings a
+ * player will want to correct once they have seen the game, and locking them
+ * behind a new career would just cost people their save. None of the three
+ * touches anything already recorded, so changing one mid career is safe.
+ * Round 1342: No sacking is the exception, it only ever goes on, never off.
+ */
+export function StartOptionsScreen({ career, onCurrency, onNationJobs, onStrictness, onNoSack, onDifficulty }: StartOptionsScreenProps) {
+  const opts = startOptionsOf(career);
+  const levels = [];
+  for (let i = STRICTNESS_MIN; i <= STRICTNESS_MAX; i++) levels.push(i);
+  /* Round 1342: the first tap asks, the second switches it on. */
+  const [arming, setArming] = useState(false);
+  const noSackSince = noSackFrom(career);
+  const outOfWork = career.sacked || !!career.wilderness;
+
+  return (
+    <div className="space-y-3" data-cm-start-options>
+      <DifficultyOption career={career} onDifficulty={onDifficulty} />
 
       {/* Round 1342: No sacking. On for good once it is on; refused while out of work, so it can never undo a sack. */}
       <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-2" data-cm-nosack-option={noSackSince !== null ? 'on' : 'off'}>
