@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk2: node .rc/x/walk2Run1513.mjs
+playSaveKeeper: KEEPER_NO_BASE=1 node scripts/playSaveKeeper.mjs
