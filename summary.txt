@@ -1,0 +1,6 @@
+edge-carried exit=0 3s |    Duration  3.21s (transform 1.14s, setup 47ms, collect 38ms, tests 2.58s, environment 209ms, prepare 137ms)
+pr269-head exit=0 9s |    Duration  7.88s (transform 1.18s, setup 45ms, collect 24ms, tests 5.88s, environment 200ms, prepare 65ms)
+s12 exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerHelp.tsx, src/hooks/useClubManager.ts, src/lib/clubManager.ts, src/lib/deadline
+c-slow exit=2 0s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerHelp.tsx, src/hooks/useClubManager.ts, src/lib/clubManager.ts, src/lib/deadline
+ledgerbound exit=0 228s | simCmLedgerBound: green, all four sections held
+rules-bridged exit=2 1s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerHelp.tsx, src/hooks/useClubManager.ts, src/lib/clubManager.ts, src/lib/deadline
