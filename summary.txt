@@ -1,0 +1,2 @@
+vitest-door exit=0 6s |    Duration  5.55s (transform 3.12s, setup 340ms, collect 8.68s, tests 2.89s, environment 2.05s, prepare 672ms)
+tsc exit=0 70s | 
