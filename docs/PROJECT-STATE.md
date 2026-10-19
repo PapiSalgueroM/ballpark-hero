@@ -1,3 +1,10 @@
+## Round1434 in progress: copied apostrophes in Soccer Grid, 2026-10-19
+
+Fresh isolated branch codex/soccer-grid-apostrophe-search stacks sealed PR346 atd96777c42ccbac08e0c3c794b329a114fe884256. The proposed app change is one local comparison line folding only U+2019 to ASCII apostrophe, keeping displayed and submitted catalog spelling. Original app remains unmodified. Fictional fixtures exercise both spellings, canonical/manual entry and unchanged unverified retry; no real-player or answer-adjudication claim.
+
+Proof preparation also preserves the three old discoverable search defaults through exact additive prefixes and a narrow historical dispatcher. Entire old entry bodies and guards stay recoverable and strict. Actual current32 remains separate. Complete original remote types/build/unit/browser/readers/caps, native raw/pixel admission and three independent reviews are still owed before product adoption. No1434 runtime, PR, merge or publication is claimed by this preparation note.
+
+Packet: C:/Users/antho/dukb-handoff/2026-10-18/soccer-grid-apostrophe-search-1434. All71 prior sealed refs/worktrees/packets, primary source/index and I's protected game/data/integration/publication scopes remain held. See ROUND1434-GRID-APOSTROPHE-SEARCH.md for the exact claim and compatibility amendment.
 # Round1432 scoped report work, 18 October 2026
 
 Soccer Grid Search semantics qualify on tested055e7e9a through full saved-evidence receipt0ba99b38. Stable combobox/listbox/current-option relationships now follow the visible canonical suggestion. All725 raw unit cases, seven actual compiled Chromium variants,187 native semantic checks,17 actual readers,14 unchanged fatal caps and complete source/input/dist holds pass. Grid317.8/319KiB. Root viewed16of132 fixed PNGs and read all three complete peer reviews. Failed fixed1 and preparation attempts remain retained without qualification credit.

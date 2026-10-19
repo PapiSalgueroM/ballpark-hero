@@ -1,3 +1,8 @@
+/* Round1434: exact comparison compatibility. Complete prior entry follows unchanged. */
+async function runApostropheCompatibility1434() {
+  return (await import('./qa/gridApostropheCompatibility1434.mjs')).dispatchHistorical1434(import.meta.url);
+}
+if (await runApostropheCompatibility1434()) process.exit(process.exitCode ?? 0);
 /* Round1432 delegates to its complete QA CLI with the caller environment held. */
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
