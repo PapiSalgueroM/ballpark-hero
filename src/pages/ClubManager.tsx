@@ -1001,7 +1001,7 @@ const ClubManager = () => {
           <span className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
             {worldSeasonLabel(c)} · Season {c.season}
           </span>
-          {/* Round 1501: a Hard or Legend career wears its level for its whole life. No pill on Normal. */}
+          {/* Round 1501: a career off Medium wears its level (Round 1512: whichever it is on now). No pill on Medium. */}
           {levelFrom(c) !== 'normal' && (
             <span data-cm-level-pill={levelFrom(c)} className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
               {DIFFICULTY_INFO[levelFrom(c)].label}
@@ -1325,7 +1325,7 @@ const ClubManager = () => {
                 icon="⚙️" title="Options"
                 value={(() => {
                   const o = startOptionsOf(c);
-                  /* Round 1501: a Hard or Legend career shows its level here, never the haggle's Normal, and
+                  /* Round 1501: a career off Medium shows its level here, never the haggle's Normal, and
                      after it the haggle's word whenever that is not the default, so no setting hides. */
                   const lv = levelFrom(c);
                   const haggle = STRICTNESS_INFO[o.strictness]?.label ?? 'Normal';
@@ -1567,6 +1567,7 @@ const ClubManager = () => {
                   onNationJobs={g.setNationJobs}
                   onStrictness={g.setStrictness}
                   onNoSack={g.turnOnNoSack}
+                  onDifficulty={g.setDifficulty}
                 /></ScreenLoading>
               )}
 

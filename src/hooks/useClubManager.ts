@@ -43,7 +43,8 @@ import type { ConcessionTier } from '@/lib/clubManagerFinances';
 import { hireStaff, matchStaffOffer, releaseToPoacher, sackStaff } from '@/lib/clubManagerStaff';
 import type { StaffPostId } from '@/lib/clubManagerStaff';
 import { spendSkillPoint } from '@/lib/clubManagerXp';
-import { postsScore, setStartOption, turnOnNoSack as turnOnNoSackFor } from '@/lib/clubManagerStart';
+import { postsScore, setDifficulty as setDifficultyFor, setStartOption, turnOnNoSack as turnOnNoSackFor } from '@/lib/clubManagerStart';
+import type { DifficultyLevel } from '@/lib/managerDifficulty';
 /* Round 1501: the level, applied with No sacking on the Dugout step's choice, and the market listed to you. */
 import { marketForMe, setUpCareer } from '@/lib/clubManagerDifficulty';
 import { buildBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
@@ -137,7 +138,7 @@ import { setAsideSave, browserStorage } from '@/lib/brokenSaveRecovery';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
 import { takeLandOnHub } from '@/lib/clubManagerLanding';
 
-/* Round 1501: the board's card for a career set up on Hard or Legend before a ball is kicked. Everything
+/* Round 1501: the board's card for a career set up off Medium (Round 1512: any of the other four levels) before a ball is kicked. Everything
    that is not one of the board's asks stays; the asks are built again for the smaller cheque and the
    market as it is listed to you. Draws nothing (buildBoardAsks picks by a hash). */
 function rebuildBoardAsks(s: CareerState): BoardObjective[] {
@@ -1039,6 +1040,11 @@ export function useClubManager() {
   const turnOnNoSack = useCallback(() => {
     setCareer(prev => (prev ? turnOnNoSackFor(prev) ?? prev : prev));
   }, []);
+  /* Round 1512: the level, changed between matches from Options. Null (the same level, a match at halftime)
+     leaves the save alone; anything else moves only the level and the one way easy mark. */
+  const setDifficulty = useCallback((level: DifficultyLevel) => {
+    setCareer(prev => (prev ? setDifficultyFor(prev, level) ?? prev : prev));
+  }, []);
   /* Round 513: a point into a tree. One way only, so it never needs a refund
      path, and null when there is nothing free to spend. */
   /* Round 965: the Edit manager sheet. editManager returns null on a refused
@@ -1314,7 +1320,7 @@ export function useClubManager() {
     buy,
     negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,
-    setCurrency, setNationJobs, setStrictness, turnOnNoSack,
+    setCurrency, setNationJobs, setStrictness, turnOnNoSack, setDifficulty,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, renewWithClause, terminate, signFree, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,

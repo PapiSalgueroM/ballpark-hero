@@ -20,6 +20,7 @@
 import { SAVE_KEY, leanCareer, worldSeasonLabel, type CareerState } from './clubManager';
 import { eraById, isHistoricEra } from './clubManagerEras';
 import { levelFrom, noSackFrom } from '@/lib/clubManagerStart';
+import type { DifficultyLevel } from '@/lib/managerDifficulty';
 import { saveFence } from '@/lib/saveFence';
 
 export const SLOT_COUNT = 3;
@@ -40,8 +41,8 @@ export interface SlotSummary {
   sacked: boolean;
   /** Round 1342: present, and true, only on a No sacking career. */
   noSack?: true;
-  /** Round 1501: present only on a Hard or Legend career. */
-  level?: 'hard' | 'legend';
+  /** Round 1501: present only on a career off Medium (Round 1512: any of the other four levels). */
+  level?: Exclude<DifficultyLevel, 'normal'>;
   /** Round 1343: present, and true, only on a career that has retired. */
   retired?: true;
 }
@@ -112,7 +113,7 @@ export function summarize(raw: string | null): SlotSummary | null {
       historic: isHistoricEra(eraId ?? undefined),
       sacked: c.sacked === true,
       ...(noSackFrom(c as CareerState) !== null ? { noSack: true as const } : {}),
-      ...(levelFrom(c as CareerState) !== 'normal' ? { level: levelFrom(c as CareerState) as 'hard' | 'legend' } : {}),
+      ...(levelFrom(c as CareerState) !== 'normal' ? { level: levelFrom(c as CareerState) as Exclude<DifficultyLevel, 'normal'> } : {}),
       ...(c.retired && typeof c.retired === 'object' ? { retired: true as const } : {}),
     };
   } catch {

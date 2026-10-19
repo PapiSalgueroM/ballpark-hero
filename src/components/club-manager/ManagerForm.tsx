@@ -9,7 +9,7 @@ import HomelandSelect from '@/components/club-manager/HomelandSelect';
 import { MIDSEASON_ENTRY } from '@/lib/clubManagerCalendar';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import type { CareerSetup } from '@/lib/clubManagerStart';
-import { DIFFICULTY_INFO, DIFFICULTY_LEVELS } from '@/lib/managerDifficulty';
+import { DIFFICULTY_INFO, DIFFICULTY_LEVELS, isEasyLevel } from '@/lib/managerDifficulty';
 import type { DifficultyLevel } from '@/lib/managerDifficulty';
 
 /**
@@ -51,7 +51,7 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
   const [triedSubmit, setTriedSubmit] = useState(false);
   /* Round 1342: No sacking, off unless he switches it on. */
   const [noSack, setNoSack] = useState(false);
-  /* Round 1501: how hard, Normal unless he picks another. Fixed for the career once it starts. */
+  /* Round 1501: how hard, Medium ('normal') unless he picks another. Round 1512: changeable later in Options. */
   const [level, setLevel] = useState<DifficultyLevel>('normal');
 
   const nameError = useMemo(() => validateManagerName(name), [name]);
@@ -208,12 +208,12 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
             page does not move when it is pressed. */}
         <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-2" data-cm-career-options>
           <div className="text-xs font-bold text-foreground">⚙️ Career options</div>
-          {/* Round 1501: how hard. Three tiles in one row, Normal pressed; the line under them says what the
-              pressed one does. All three lines sit in the same grid cell and only the pressed one is visible,
+          {/* Round 1501: how hard. Round 1512: five tiles, three to a row on a phone, Medium pressed; the line under them says what the
+              pressed one does. All five lines sit in the same grid cell and only the pressed one is visible,
               so the box is always as tall as the longest of them at any width and pressing a tile never moves
               the page (a fixed two line box let Hard's line wrap to three at 320 and push the page 16 px). */}
           <div className="text-xs text-muted-foreground">How hard do you want it?</div>
-          <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="How hard" data-cm-level-tiles={level}>
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2" role="radiogroup" aria-label="How hard" data-cm-level-tiles={level}>
             {DIFFICULTY_LEVELS.map(lv => (
               <button
                 key={lv}
@@ -223,7 +223,7 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
                 onClick={() => setLevel(lv)}
                 data-cm-level-tile={lv}
                 className={cn(
-                  'min-h-[44px] rounded-xl border px-2 py-2 text-sm font-bold transition-colors',
+                  'min-h-[44px] rounded-xl border px-1.5 py-2 text-xs sm:text-sm font-bold transition-colors',
                   level === lv ? 'border-primary bg-primary/10 text-foreground' : 'border-border bg-background text-muted-foreground hover:border-primary/60',
                 )}
               >
@@ -234,7 +234,7 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
           <div className="grid text-xs text-muted-foreground" data-cm-level-blurb={level}>
             {DIFFICULTY_LEVELS.map(lv => (
               <p key={lv} className={cn('col-start-1 row-start-1', lv !== level && 'invisible')} aria-hidden={lv !== level}>
-                {DIFFICULTY_INFO[lv].blurb} Picked once, it stays for this career.
+                {DIFFICULTY_INFO[lv].blurb} {isEasyLevel(lv) ? 'This career posts no leaderboard scores, even if you move it up later in Options.' : 'You can change it any time in Options.'}
               </p>
             ))}
           </div>

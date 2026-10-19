@@ -86,7 +86,7 @@ const strip = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '
 const PATCHES = {
   sack: { file: 'clubManagerStart.ts', from: 'export function boardMaySack(state: CareerState): boolean {\n  return noSackFrom(state) === null;', to: 'export function boardMaySack(state: CareerState): boolean {\n  return true;' },
   refuse: { file: 'clubManagerStart.ts', from: '  if (state.sacked || state.wilderness || noSackFrom(state) !== null) return null;', to: '  if (noSackFrom(state) !== null) return null;' },
-  ranked: { file: 'clubManagerStart.ts', from: 'export function postsScore(state: CareerState): boolean {\n  return noSackFrom(state) === null;', to: 'export function postsScore(state: CareerState): boolean {\n  return true;' },
+  ranked: { file: 'clubManagerStart.ts', from: 'export function postsScore(state: CareerState): boolean {\n  return noSackFrom(state) === null && easyFrom(state) === null;', to: 'export function postsScore(state: CareerState): boolean {\n  return true;' },
   leak: { file: 'clubManagerStart.ts', from: '    strictness: STRICTNESS_DEFAULT,\n  };', to: '    strictness: STRICTNESS_DEFAULT,\n    noSack: 1,\n  };' },
   stale: { file: 'clubManagerStart.ts', from: '  const season = Number.isInteger(state.season) && state.season > 0 ? state.season : 1;', to: '  const season = 1;' },
   noslot: { file: 'clubManagerSlots.ts', from: '      ...(noSackFrom(c as CareerState) !== null ? { noSack: true as const } : {}),\n', to: '' },

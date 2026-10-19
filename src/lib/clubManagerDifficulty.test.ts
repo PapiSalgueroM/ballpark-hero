@@ -14,14 +14,16 @@ import {
    career set up on Normal with No sacking off is the very object startCareer returned. The engine
    side (the levers inside a match and a summer, the fleet, the dailies) is scripts/simCmDifficulty.mjs. */
 
-const withLevel = (s: CareerState, level: 'hard' | 'legend'): CareerState =>
+const withLevel = (s: CareerState, level: 'veryeasy' | 'easy' | 'hard' | 'legend'): CareerState =>
   ({ ...s, startOptions: { ...(s.startOptions as object), difficulty: level } } as CareerState);
 
 describe('readLevel and the stored key', () => {
-  it('reads only the two exact words, everything else is Normal', () => {
-    expect(readLevel('hard')).toBe('hard');
-    expect(readLevel('legend')).toBe('legend');
-    for (const odd of [undefined, null, 'Normal', 'normal', 'HARD', 'Legend', 0, -1, 1.5, '3', 2, {}, []]) {
+  it('reads only the five exact ids, everything else is Medium (normal)', () => {
+    /* Round 1512: five ids, easiest first; the three of Round 1501 kept as they were. */
+    expect(DIFFICULTY_LEVELS).toEqual(['veryeasy', 'easy', 'normal', 'hard', 'legend']);
+    for (const id of DIFFICULTY_LEVELS) expect(readLevel(id)).toBe(id);
+    for (const odd of [undefined, null, 'Normal', 'HARD', 'Legend', 'Easy', 'VeryEasy', 'very easy', 'veryEasy', 'medium',
+      'Medium', 'impossible', 'Impossible', ' easy', 'easy ', 0, -1, 1.5, '3', 2, true, {}, [], ['easy']]) {
       expect(readLevel(odd)).toBe('normal');
     }
   });
@@ -51,18 +53,22 @@ describe('readLevel and the stored key', () => {
 });
 
 describe('the table', () => {
-  it('Normal is the identity row and each level is strictly harder than the one before on every dial', () => {
+  it('Medium is the identity row; no dial is easier at a harder level, and the board, money, market and edge dials are strictly ordered', () => {
     expect(CM_DIFFICULTY_DIALS.normal).toEqual({ gain: 1, pain: 1, cut: 0, cheque: 1, wageRoom: 1, mark: 1, edge: 0 });
+    expect(Object.keys(CM_DIFFICULTY_DIALS)).toEqual([...DIFFICULTY_LEVELS]);
     for (let i = 1; i < DIFFICULTY_LEVELS.length; i++) {
       const a = CM_DIFFICULTY_DIALS[DIFFICULTY_LEVELS[i - 1]], b = CM_DIFFICULTY_DIALS[DIFFICULTY_LEVELS[i]];
       expect(b.gain).toBeLessThan(a.gain);
       expect(b.pain).toBeGreaterThan(a.pain);
-      expect(b.cut).toBeGreaterThan(a.cut);
       expect(b.cheque).toBeLessThan(a.cheque);
       expect(b.wageRoom).toBeLessThan(a.wageRoom);
       expect(b.mark).toBeGreaterThan(a.mark);
       expect(b.edge).toBeGreaterThan(a.edge);
+      /* The cut lifts nothing: 0 on Medium and both easy rows, then strictly up. */
+      expect(b.cut).toBeGreaterThanOrEqual(a.cut);
     }
+    expect([CM_DIFFICULTY_DIALS.veryeasy.cut, CM_DIFFICULTY_DIALS.easy.cut]).toEqual([0, 0]);
+    expect(CM_DIFFICULTY_DIALS.hard.cut).toBeGreaterThan(0);
   });
 });
 
