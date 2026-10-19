@@ -259,7 +259,7 @@ try {
           row.assets.push(asset);
         });
       });
-      const field = page.getByRole('textbox', { name: 'Search for a player', exact: true });
+      const field = page.getByRole('combobox', { name: 'Search for a player', exact: true });
       const cells = page.locator('#root [data-grid-cell-status]');
       const form = () => field.locator('xpath=ancestor::form');
       const settle = async () => {

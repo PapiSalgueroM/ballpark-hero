@@ -58,7 +58,7 @@ let view: View | null = null, heldStores = '';
 const traces: unknown[] = [];
 const scrollDescriptor = Object.getOwnPropertyDescriptor(Element.prototype, 'scrollIntoView');
 const stores = () => JSON.stringify([localStorage, sessionStorage].map(storage => Array.from({ length: storage.length }, (_, i) => storage.key(i)!).sort().map(key => [key, storage.getItem(key)])));
-const input = () => view!.getByRole('textbox', { name: 'Search for a player' }) as HTMLInputElement;
+const input = () => view!.getByRole('combobox', { name: 'Search for a player' }) as HTMLInputElement;
 const visibleNames = () => Array.from(view!.container.querySelectorAll('form ul li > span:first-child'), node => node.textContent);
 const query = (value: string) => fireEvent.change(input(), { target: { value } });
 const formSubmit = async () => { await act(async () => { fireEvent.submit(input().closest('form')!); }); };
@@ -96,7 +96,7 @@ beforeEach(() => {
 afterEach(async context => {
   const pendingBeforeCleanup = pending.size;
   await act(async () => { for (const drain of [...pending]) drain(); vi.runOnlyPendingTimers(); });
-  traces.push({ name: context.task.name, pendingBeforeCleanup, pendingAfterCleanup: pending.size, query: view?.queryByRole('textbox', { name: 'Search for a player' })?.getAttribute('value') ?? null,
+  traces.push({ name: context.task.name, pendingBeforeCleanup, pendingAfterCleanup: pending.size, query: view?.queryByRole('combobox', { name: 'Search for a player' })?.getAttribute('value') ?? null,
     visibleNames: view ? visibleNames() : [], selected: io.select.mock.calls.map(call => call[0]), tables: [...io.tables], invoked: io.invoke.mock.calls,
     focused: document.activeElement?.getAttribute('aria-label') === 'Search for a player' });
   cleanup(); view = null; expect(stores(), 'Search must preserve all local and session stored fields').toBe(heldStores); vi.useRealTimers();
@@ -155,7 +155,7 @@ describe('Soccer Grid search discovery', () => {
   it('keeps actual parent unverified selection free of a counted guess', async () => {
     await parent(); query(names[2]); expect(visibleNames()).toEqual([names[2]]); const before = dailySave(); await formSubmit();
     expect(io.invoke).toHaveBeenCalledExactlyOnceWith('soccer-grid-validate', { body: { playerName: names[2], rowAttribute: 'Fixture Club 1', colAttribute: 'Fixture Position 1' } });
-    expect(before).toBeNull(); expect(dailySave()).toBeNull(); expect(view!.getByText('15')).toBeVisible(); expect(view!.queryByRole('textbox', { name: 'Search for a player' })).toBeNull();
+    expect(before).toBeNull(); expect(dailySave()).toBeNull(); expect(view!.getByText('15')).toBeVisible(); expect(view!.queryByRole('combobox', { name: 'Search for a player' })).toBeNull();
     expect(io.tables.map(row => row.table)).toEqual(['soccer_grid_puzzles', 'career_players', 'career_seasons']);
   });
   it('keeps the raw one-character query gate', async () => {

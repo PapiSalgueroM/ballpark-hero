@@ -127,7 +127,7 @@ async function ready() {
 }
 async function submit() {
   fireEvent.click(document.querySelectorAll<HTMLButtonElement>('[data-grid-cell-status]')[0]);
-  const input = screen.getByRole('textbox', { name: 'Search for a player' });
+  const input = screen.getByRole('combobox', { name: 'Search for a player' });
   fireEvent.change(input, { target: { value: NAME } });
   fireEvent.submit(input.closest('form')!); await flush();
 }
@@ -164,7 +164,7 @@ describe('Soccer Grid first-check settings ownership', () => {
   ] as const) it(TITLES[key], async () => {
     await ready(); const before = snapshot('ready'); const stop = queueValid(boundary)!;
     await submit(); const pending = snapshot('pending');
-    expect(screen.getByRole('textbox', { name: 'Search for a player' })).toBeDisabled();
+    expect(screen.getByRole('combobox', { name: 'Search for a player' })).toBeDisabled();
     expect(deferred).toHaveLength(1); expect(stop.settled).toBe(false);
     const heldButtons = buttons(); const disabled = { difficulty: heldButtons.difficulty.map(button => button.disabled), timer: heldButtons.timer.map(button => button.disabled) };
     fireEvent.click(heldButtons.difficulty[2]); await flush(); fireEvent.click(buttons().timer[0]); await flush();

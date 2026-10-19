@@ -16,10 +16,10 @@ const cases: unknown[] = [];
 let phases: unknown[] = [];
 const scrollDescriptor = Object.getOwnPropertyDescriptor(Element.prototype, 'scrollIntoView');
 const stores = () => JSON.stringify([localStorage, sessionStorage].map(storage => Array.from({ length: storage.length }, (_, i) => storage.key(i)!).sort().map(key => [key, storage.getItem(key)])));
-const input = () => view!.getByRole('textbox', { name: 'Search for a player' }) as HTMLInputElement;
+const input = () => view!.getByRole('combobox', { name: 'Search for a player' }) as HTMLInputElement;
 const visibleNames = () => Array.from(view?.container.querySelectorAll('form ul li > span:first-child') ?? [], node => node.textContent);
-const state = () => ({ elapsed, timers: vi.getTimerCount(), mounted: !!view?.queryByRole('textbox', { name: 'Search for a player' }),
-  query: view?.queryByRole('textbox', { name: 'Search for a player' })?.getAttribute('value') ?? null,
+const state = () => ({ elapsed, timers: vi.getTimerCount(), mounted: !!view?.queryByRole('combobox', { name: 'Search for a player' }),
+  query: view?.queryByRole('combobox', { name: 'Search for a player' })?.getAttribute('value') ?? null,
   focused: document.activeElement?.getAttribute('aria-label') === 'Search for a player', visibleNames: visibleNames(), selected: selected.mock.calls.map(call => call[0]) });
 const mark = (phase: string) => { phases.push({ phase, ...state() }); };
 const advance = (ms: number, phase: string) => { act(() => { vi.advanceTimersByTime(ms); }); elapsed += ms; mark(phase); };
@@ -82,7 +82,7 @@ describe('Soccer Grid blur ownership', () => {
   });
   it('cancels the owned pending blur timeout on actual unmount', () => {
     open(); blur('pending-blur'); expect(vi.getTimerCount()).toBe(1);
-    act(() => { view!.unmount(); }); expect(view!.queryByRole('textbox', { name: 'Search for a player' })).toBeNull(); mark('unmounted');
+    act(() => { view!.unmount(); }); expect(view!.queryByRole('combobox', { name: 'Search for a player' })).toBeNull(); mark('unmounted');
     expect(vi.getTimerCount(), 'Unmount must cancel the owned pending blur timeout').toBe(0); expect(selected).not.toHaveBeenCalled();
   });
   it('keeps uninterrupted blur open at149ms and closed at150ms', () => {

@@ -161,7 +161,7 @@ async function journey(width, kind) {
     for (const handle of previous) await handle.dispose();
   };
   const submit = async label => {
-    await pointer(page.locator('[data-grid-cell-status]').first(), label + ': select first cell'); const input = page.getByRole('textbox', { name: 'Search for a player', exact: true }); await input.waitFor(); await pointer(input, label + ': focus player input'); await page.keyboard.type(NAME); await pointer(named('Submit'), label + ': submit fictional answer'); return input;
+    await pointer(page.locator('[data-grid-cell-status]').first(), label + ': select first cell'); const input = page.getByRole('combobox', { name: 'Search for a player', exact: true }); await input.waitFor(); await pointer(input, label + ': focus player input'); await page.keyboard.type(NAME); await pointer(named('Submit'), label + ': submit fictional answer'); return input;
   };
   const unchangedBoard = (value, ready, epoch) => {
     assert.deepEqual(value.labels, ready.labels); assert(value.cells.every(cell => cell.status === 'empty')); assert.equal(value.dailyJSON, null); assert.deepEqual(value.counts, { guessesLeft: '15', correct: '0' });
