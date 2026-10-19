@@ -1,3 +1,14 @@
+## Round1436 verified draft: exact Footle names first, 2026-10-19
+
+[PR350](https://github.com/PapiSalgueroM/ballpark-hero/pull/350) is an attached open draft stacked on PR349. Tested source is d8d34da0f9a10f6a3639c7e3c550eb6d4a3add85. Full fixed qualification 94aca540 binds common 4869cbd1, feature 0fe69dd1, Root pixels 037ac443 and three complete actual peer reviews whole-read by Root.
+
+An exact full name could sit below ten longer partial matches, so Enter selected another player. One local PlayerSearch ordering hunk puts the same lowercase and whitespace words first before the held smartScore ranking and cap10. Canonical objects, existing exclusions and keyboard behavior stay held. Footle is the sole production consumer. No sports data, parent game, shared matcher or protected engine changes.
+
+Full original admission ea3979a3 preceded adoption. Actual fixed explicit and genuine mode/output-absent default retain 208 raw cases in20 reports and eight traces:176 healthy and32 precise intended faults. The additional144 unchanged old CLI executions remain log-only, with no credit for their deleted inner reports. Normal/bare/restored new cases pass; each removed-priority unit arm reproduces only three intended identity faults. Native normal/restored four contexts select the exact canonical name, while removed two contexts reproduce the wrong-name control. Root viewed24of48 PNGs. Actual app types, serial plain build,17 built readers,14 unchanged fatal caps and full source/input/dist/transport holds pass. Footle352.3KiB stays under354KiB.
+
+The external packet records subsequent docs-only source closure, final local/remote refs, PR metadata, preserved handoff histories and seals: C:/Users/antho/dukb-handoff/2026-10-18/footle-exact-name-priority-1436 . All73 prior sealed refs/worktrees/packets remain immutable. No full-suite, real-player completeness, live backend, spoken AT/full WCAG, global no-scroll, merge or publication claim. I retains protected career/manager/validator/data/derived/integration/main/publication work and the latest NBA/Soccer Career report intake. This scoped draft does not clear the joined1431 blockers.
+
+Previous state follows unchanged.
 ## Round1435 verified draft: exact Soccer Grid names first, 2026-10-19
 
 [PR349](https://github.com/PapiSalgueroM/ballpark-hero/pull/349) is an attached, open draft stacked on PR348. Tested source is39cd6c1cfda629b26538010d2ff2b7b11ffe6ef0. Full fixed qualification56c7b461d44a2a53d9c4094dc91557363991756e5717fd79ce123e8790212776 binds actual common894b880d, featurea5986a8c and Root pixelsfaedbbf0, with all three complete actual peer MDs whole-read by Root. Integration and publication remain with I.
