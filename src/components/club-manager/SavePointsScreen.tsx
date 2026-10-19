@@ -47,12 +47,12 @@ export function SavePointsScreen({ career, slot }: Props) {
   const make = () => {
     const r = createPoint(slot, career, name);
     reread();
-    if (r.ok) { setName(''); say(`Saved "${r.meta.name}".`); } else say(WHY[r.why], true);
+    if (r.ok) { setName(''); say(`Saved "${r.meta.name}".`); } else if ('why' in r) say(WHY[r.why], true);
   };
   const copy = (p: PointMeta) => {
     const r = copyPoint(slot, p.id);
     reread();
-    if (r.ok) say(`Copied as "${r.meta.name}".`); else say(WHY[r.why], true);
+    if (r.ok) say(`Copied as "${r.meta.name}".`); else if ('why' in r) say(WHY[r.why], true);
   };
   const rename = (p: PointMeta) => {
     const ok = renamePoint(slot, p.id, newName);
@@ -71,7 +71,7 @@ export function SavePointsScreen({ career, slot }: Props) {
     if (r.ok) { reopenGame('/club-manager'); return; }
     setAsk(null);
     reread();
-    say(WHY[r.why], true);
+    if ('why' in r) say(WHY[r.why], true);
   };
 
   const small = 'min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors';

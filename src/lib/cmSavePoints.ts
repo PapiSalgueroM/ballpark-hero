@@ -172,5 +172,5 @@ export function restorePoint(slot: number, id: string, career: CareerState, stor
   const staged = stage(entry, opened.text);
   if (staged.ok) return { ok: true };
   if (!marked) writePointsIndex(slot, idx, storage);
-  return { ok: false, why: staged.why === 'blocked' ? 'blocked' : 'no-room' };
+  return { ok: false, why: 'why' in staged && staged.why === 'blocked' ? 'blocked' : 'no-room' };
 }
