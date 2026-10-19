@@ -1,0 +1,7 @@
+source: every call in src that writes the Club Manager save or the Soccer Career save is fenced or allowed
+  FAIL [source]: src/pages/SoccerCareer.tsx: the restoredSave initialiser starts with "let saved: string | null;", not saveFence.adopt(SAVE_KEY); (adopt before the read)
+  Soccer Career: the restoredSave initialiser starts with let saved: string | null;; 1 read(s) after it; 1 adopt call(s) in the page
+  98 files write storage; 6 writes of the save inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+  Soccer Career: 3 writes of soccerCareerSave inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+  section source: 18 checks, 1 red
+CONTROL FIRED: SAVE_FENCE_CONTROL=adoptlate fired 1 times and section source went red with 1 findings

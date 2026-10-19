@@ -1,0 +1,5 @@
+MUTATION ON: the break before extra time line is gone from LiveSimScreen.tsx
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/liveSimMotion.test.tsx > Live simcast motion > the extra time banner says what is true: a second leg is level on aggregate
+      Tests  1 failed | 55 skipped (56)
+vitest exit 1, src files still changed after the restore: 0

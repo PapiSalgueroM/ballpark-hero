@@ -1,0 +1,26 @@
+1) Both report forms use the bounded shared context on both delivery paths
+   src/components/game/ReportQuestion.tsx: shared context, 2 delivery paths
+   src/components/game/ReportSiteIssue.tsx: shared context, 2 delivery paths
+2) Footle reports its mode and the tier that mode used
+   mode and tier present, the unlimited selector gone
+3) Inventory: what the other pages send (printed, not failed)
+   75 report buttons across 170 pages; 26 pass no context, 0 pass an empty one: AlphabetSprint.tsx, CbbGrid.tsx, ClueAuction.tsx, DealOrNoDeal.tsx, GauntletDraft.tsx, HigherLowerTransfers.tsx, HockeyGrid.tsx, ListQuiz.tsx, MissingXi.tsx, MlbGauntletDraft.tsx, MlbGrid.tsx, NbaGauntletDraft.tsx, NbaGrid.tsx, NbaStatLine.tsx, NflGauntletDraft.tsx, NhlGauntletDraft.tsx, PackBattle.tsx, PerfectSeasonMlb.tsx, PerfectSeasonNfl.tsx, PerfectSeasonNhl.tsx, PuckDetective.tsx, SearchAndDiscard.tsx, SportsBingo.tsx, SportsMillionaire.tsx, WhoAmI.tsx, WorldXi.tsx
+   every one of them now carries the route and the date through the component
+4) The privacy page says what the report flow already sends
+   category, typed text, page, Eastern date and limited game details disclosed on both lines
+  FAIL: Reported issues does not disclose "submittedAt" (/time in UTC/i)
+  FAIL: Reported issues does not disclose "source" (/which Report button/i)
+  FAIL: Reported issues does not disclose "diagnostics" (/diagnostics/i)
+  FAIL: Reported issues does not disclose "contextTruncated" (/shortened/i)
+  FAIL: Reported issues does not disclose "build" (/build filename/i)
+  FAIL: Reported issues does not disclose "viewport" (/viewport size/i)
+  FAIL: Reported issues does not disclose "timezone" (/timezone|time zone/i)
+  FAIL: Reported issues does not disclose "browser" (/user agent/i)
+  FAIL: Reported issues does not disclose "language" (/language/i)
+  FAIL: Reported issues does not disclose "width" (/viewport size/i)
+  FAIL: Reported issues does not disclose "height" (/viewport size/i)
+  FAIL: Reported issues does not disclose "pixelRatio" (/pixel ratio/i)
+  FAIL: FormSubmit does not point at the browser diagnostics
+   keys checked against the Reported issues bullet: 6 context keys, 8 diagnostics keys (build, viewport, timezone, browser, language, width, height, pixelRatio)
+
+control "diagnostics": 13 failure(s) fired in section 4 as expected, the check works
