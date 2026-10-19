@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk-nolevel: WIDTHS=390 PLAY_DIFF_CONTROL=nolevel node scripts/playCmDifficulty.mjs
