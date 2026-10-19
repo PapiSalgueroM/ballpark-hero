@@ -6,6 +6,7 @@ import { careerLegacy, farewellShareText, ordinal, printedWeek, type CareerLegac
 import { formatNumber } from '@/lib/formatNumber';
 import type { CareerState } from '@/lib/clubManager';
 import type { useClubManager } from '@/hooks/useClubManager';
+import { SavePointsDoor } from '@/components/club-manager/SavePointsDoor';
 
 /* Round 1343: the farewell. A retired career ends on the site's one result card, with three tiles that open in
    place (the clubs, the trophy cabinet, the records) and a Back on each, so the page never stacks. It records
@@ -42,7 +43,7 @@ type Tile = 'clubs' | 'cabinet' | 'records';
 
 export default function ClubManagerFarewell({ c, g }: {
   c: CareerState;
-  g: Pick<ReturnType<typeof useClubManager>, 'startNew' | 'showSlots'>;
+  g: Pick<ReturnType<typeof useClubManager>, 'startNew' | 'showSlots'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot'>>;
 }) {
   const [open, setOpen] = useState<Tile | null>(null);
   const l = useMemo(() => careerLegacy(c), [c]);
@@ -115,6 +116,8 @@ export default function ClubManagerFarewell({ c, g }: {
           </>
         )) : tile('records', '📋', 'Records', `${l.winRate}% of ${count(l.played, 'match', 'matches')} won`)}
       </div>
+      {/* Round 1513 review: a save point from before the farewell still opens from here. */}
+      {g.pointsSlot && <div className="mb-3"><SavePointsDoor career={c} pointsSlot={g.pointsSlot} /></div>}
     </ResultScreen>
   );
 }
