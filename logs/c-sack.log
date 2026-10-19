@@ -1,0 +1,72 @@
+simCmNoSack: sections 2, 3, 7, control sack
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+2) The hoard keeper for three seasons at the nine clubs, with No sacking and without (fleet seed 0)
+  FAIL (section 2): Arsenal: sacked at match 125 with No sacking on
+  FAIL (section 2): Arsenal: the twin was sacked at match 125 and the No sacking career shows no No sacking line there
+   Arsenal                No sacking: 2 seasons, board low 0.0, 0 lines; twin sacked at match 125
+   Brentford              No sacking: 3 seasons, board low 34.5, 0 lines; twin kept the job for 3 seasons
+  FAIL (section 2): Hull City: sacked at match 18 with No sacking on
+  FAIL (section 2): Hull City: the twin was sacked at match 18 and the No sacking career shows no No sacking line there
+   Hull City              No sacking: 0 seasons, board low 0.0, 0 lines; twin sacked at match 18
+  FAIL (section 2): Real Madrid: sacked at match 122 with No sacking on
+  FAIL (section 2): Real Madrid: the twin was sacked at match 122 and the No sacking career shows no No sacking line there
+   Real Madrid            No sacking: 2 seasons, board low 0.0, 0 lines; twin sacked at match 122
+  FAIL (section 2): Espanyol: sacked at match 99 with No sacking on
+  FAIL (section 2): Espanyol: the twin was sacked at match 99 and the No sacking career shows no No sacking line there
+   Espanyol               No sacking: 2 seasons, board low 0.0, 0 lines; twin sacked at match 99
+  FAIL (section 2): Málaga: sacked at match 27 with No sacking on
+  FAIL (section 2): Málaga: the twin was sacked at match 27 and the No sacking career shows no No sacking line there
+   Málaga                 No sacking: 0 seasons, board low 0.0, 0 lines; twin sacked at match 27
+  FAIL (section 2): Inter Milan: sacked at match 94 with No sacking on
+  FAIL (section 2): Inter Milan: the twin was sacked at match 94 and the No sacking career shows no No sacking line there
+   Inter Milan            No sacking: 1 seasons, board low 0.0, 0 lines; twin sacked at match 94
+  FAIL (section 2): Torino: sacked at match 95 with No sacking on
+  FAIL (section 2): Torino: the twin was sacked at match 95 and the No sacking career shows no No sacking line there
+   Torino                 No sacking: 2 seasons, board low 0.0, 0 lines; twin sacked at match 95
+  FAIL (section 2): Frosinone: sacked at match 99 with No sacking on
+  FAIL (section 2): Frosinone: the twin was sacked at match 99 and the No sacking career shows no No sacking line there
+   Frosinone              No sacking: 2 seasons, board low 0.0, 0 lines; twin sacked at match 99
+   twins sacked 8 of 9 (floor 5), each survived at that very match by its No sacking career: 0; No sacking lines 0; 50 s
+  FAIL (section 2): the No sacking line never showed over the whole fleet
+3) A No sacking save planted at confidence 1 before every match at Frosinone, to its first defeat, three seeds
+  FAIL (section 3): seed 0, defeat in match 1 (0-2): sacked with No sacking on
+  FAIL (section 3): seed 0, defeat in match 1 (0-2): no No sacking line in the report
+  FAIL (section 3): seed 0, defeat in match 1 (0-2): opened sacked
+   seed 0, defeat in match 1 (0-2): board 0, SACKED, reopened on 0
+  FAIL (section 3): seed 1, defeat in match 1 (3-4): sacked with No sacking on
+  FAIL (section 3): seed 1, defeat in match 1 (3-4): no No sacking line in the report
+  FAIL (section 3): seed 1, defeat in match 1 (3-4): opened sacked
+   seed 1, defeat in match 1 (3-4): board 0, SACKED, reopened on 0
+  FAIL (section 3): seed 2, defeat in match 1 (2-1): sacked with No sacking on
+  FAIL (section 3): seed 2, defeat in match 1 (2-1): no No sacking line in the report
+  FAIL (section 3): seed 2, defeat in match 1 (2-1): opened sacked
+   seed 2, defeat in match 1 (2-1): board 0, SACKED, reopened on 0
+7) A promise to win before every match, the board planted on 2, 3.5, 5, 6.5 in turn, at Hull City, Málaga, Frosinone: 2 seeds, 36 matches each, the Normal twin played beside it (fleet seed 0)
+  FAIL (section 7): Hull City seed 0 entry 1: sacked with No sacking on (the twin went at the first check)
+  FAIL (section 7): Hull City seed 0 entry 1: 0 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 0 entry 1: both floors fired, and the one line is not the first floor's (line -1, promise 1)
+  FAIL (section 7): Hull City seed 0: only 1 of 36 matches played
+  FAIL (section 7): Hull City seed 1 entry 5: sacked with No sacking on (the twin went at the first check)
+  FAIL (section 7): Hull City seed 1 entry 5: 0 No sacking lines in one report, one a match
+  FAIL (section 7): Hull City seed 1 entry 5: both floors fired, and the one line is not the first floor's (line -1, promise 1)
+  FAIL (section 7): Hull City seed 1: only 5 of 36 matches played
+  FAIL (section 7): Málaga seed 0 entry 1: sacked with No sacking on (the twin went at the first check)
+  FAIL (section 7): Málaga seed 0 entry 1: 0 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 0 entry 1: both floors fired, and the one line is not the first floor's (line -1, promise 1)
+  FAIL (section 7): Málaga seed 0: only 1 of 36 matches played
+  FAIL (section 7): Málaga seed 1 entry 3: sacked with No sacking on (the twin went at the recheck, after the broken promise)
+  FAIL (section 7): Málaga seed 1 entry 3: 0 No sacking lines in one report, one a match
+  FAIL (section 7): Málaga seed 1 entry 3: the twin went at the recheck, and the No sacking line is not after the broken promise (line -1, promise 2)
+  FAIL (section 7): Málaga seed 1: only 3 of 36 matches played
+  FAIL (section 7): Frosinone seed 0 entry 2: sacked with No sacking on (the twin went at the recheck, after the broken promise)
+  FAIL (section 7): Frosinone seed 0 entry 2: 0 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 0 entry 2: the twin went at the recheck, and the No sacking line is not after the broken promise (line -1, promise 1)
+  FAIL (section 7): Frosinone seed 0: only 2 of 36 matches played
+  FAIL (section 7): Frosinone seed 1 entry 2: sacked with No sacking on (the twin went at the recheck, after the broken promise)
+  FAIL (section 7): Frosinone seed 1 entry 2: 0 No sacking lines in one report, one a match
+  FAIL (section 7): Frosinone seed 1 entry 2: the twin went at the recheck, and the No sacking line is not after the broken promise (line -1, promise 1)
+  FAIL (section 7): Frosinone seed 1: only 2 of 36 matches played
+   twins kept the job and matched to the byte: 8; twins sacked at the recheck after a broken promise: 3 (floor 36); both floors in one match: 3 (floor 28); at the first check with no promise broken: 0; 2 s
+  FAIL (section 7): only 3 twins went at the recheck (floor 36), so the second floor was not tested
+  FAIL (section 7): only 3 matches fired both floors (floor 28), so one line a match was not tested
+simCmNoSack: CONTROL sack FIRED: section 2 red (17 failures), section 3 red (9 failures), section 7 red (26 failures)
