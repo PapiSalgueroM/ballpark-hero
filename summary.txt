@@ -1,0 +1,4 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simHarnessAnchors exit=0 52s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+walk-nodoor exit=1 270s | playCmSavePoints: control nodoor FIRED (7 door check(s) red, 8 in all)
+playCmSavePoints exit=1 360s | playCmSavePoints: FAIL, 8 check(s) and 0 page error(s)
