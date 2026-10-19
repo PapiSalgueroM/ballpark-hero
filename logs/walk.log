@@ -1,0 +1,113 @@
+
+== 390r: 390 by 844, reduced motion on
+  ok: a first match played
+  posts after match 1: 1 rows, 1 scored
+  ok: the Save points tile opens its screen
+  ok: one row (["Before the run"])
+  ok: three more matches
+  posts before the restore: 4 rows, 4 scored
+  ok: the screen opens again
+  ok: the save is the point byte for byte after the restore
+  ok: three matches replayed after the restore
+  replay posts: 3 rows, 0 scored
+  ok: the replayed matches still post their activity (3 rows)
+  ok: the replayed season posts no score (0 scored rows)
+  ok: the screen opens for more points
+  ok: three points (["Before the run","WWWWWWWWWWWWWWWWWWWWWWWW","MMMMMMMMMMMMMMMMMMMMMMMM"])
+  ok: every name is 24 characters or fewer (14,24,24)
+  ok: at three the name box is replaced by the cap line
+  ok: the full screen fits the width
+  ok: the first point's key was found to damage (dukb-cm-point-1-mvf34iti)
+  ok: a damaged point is refused in plain words ("That save point is damaged and will not open, so nothing changed. You can delete it.")
+  ok: the refusal changed nothing (no reload, the save equal)
+  ok: nothing staged after the refusal
+  ok: the copy (["WWWWWWWWWWWWWWWWWWWWWWWW","MMMMMMMMMMMMMMMMMMMMMMMM","Copy of WWWWWWWWWWWWWWWW"])
+  ok: no point key without a row (none)
+  ok: after a reload the tile says three (💾 SAVE POINTS 3 of 3 made Copy of WWWWWWWWWWWWWWWW)
+
+== 1280n: 1280 by 900, reduced motion off
+  ok: a first match played
+  posts after match 1: 1 rows, 1 scored
+  ok: the Save points tile opens its screen
+  ok: one row (["Before the run"])
+  ok: three more matches
+  posts before the restore: 4 rows, 4 scored
+  ok: the screen opens again
+  ok: the save is the point byte for byte after the restore
+  ok: three matches replayed after the restore
+  replay posts: 3 rows, 0 scored
+  ok: the replayed matches still post their activity (3 rows)
+  ok: the replayed season posts no score (0 scored rows)
+  ok: the screen opens for more points
+  ok: three points (["Before the run","WWWWWWWWWWWWWWWWWWWWWWWW","MMMMMMMMMMMMMMMMMMMMMMMM"])
+  ok: every name is 24 characters or fewer (14,24,24)
+  ok: at three the name box is replaced by the cap line
+  ok: the full screen fits the width
+  ok: the first point's key was found to damage (dukb-cm-point-1-mvf359c1)
+  ok: a damaged point is refused in plain words ("That save point is damaged and will not open, so nothing changed. You can delete it.")
+  ok: the refusal changed nothing (no reload, the save equal)
+  ok: nothing staged after the refusal
+  ok: the copy (["WWWWWWWWWWWWWWWWWWWWWWWW","MMMMMMMMMMMMMMMMMMMMMMMM","Copy of WWWWWWWWWWWWWWWW"])
+  ok: no point key without a row (none)
+  ok: after a reload the tile says three (💾 SAVE POINTS 3 of 3 made Copy of WWWWWWWWWWWWWWWW)
+
+== 390n: 390 by 844, reduced motion off
+  ok: a first match played
+  posts after match 1: 1 rows, 1 scored
+  ok: the Save points tile opens its screen
+  ok: one row (["Before the run"])
+  ok: three more matches
+  posts before the restore: 4 rows, 4 scored
+  ok: the screen opens again
+  ok: the save is the point byte for byte after the restore
+  ok: three matches replayed after the restore
+  replay posts: 3 rows, 0 scored
+  ok: the replayed matches still post their activity (3 rows)
+  ok: the replayed season posts no score (0 scored rows)
+  ok: the screen opens for more points
+  ok: three points (["Before the run","WWWWWWWWWWWWWWWWWWWWWWWW","MMMMMMMMMMMMMMMMMMMMMMMM"])
+  ok: every name is 24 characters or fewer (14,24,24)
+  ok: at three the name box is replaced by the cap line
+  ok: the full screen fits the width
+  ok: the first point's key was found to damage (dukb-cm-point-1-mvf360rj)
+  ok: a damaged point is refused in plain words ("That save point is damaged and will not open, so nothing changed. You can delete it.")
+  ok: the refusal changed nothing (no reload, the save equal)
+  ok: nothing staged after the refusal
+  ok: the copy (["WWWWWWWWWWWWWWWWWWWWWWWW","MMMMMMMMMMMMMMMMMMMMMMMM","Copy of WWWWWWWWWWWWWWWW"])
+  ok: no point key without a row (none)
+  ok: after a reload the tile says three (💾 SAVE POINTS 3 of 3 made Copy of WWWWWWWWWWWWWWWW)
+
+== 1280r: 1280 by 900, reduced motion on
+  ok: a first match played
+  posts after match 1: 1 rows, 1 scored
+  ok: the Save points tile opens its screen
+  ok: one row (["Before the run"])
+  ok: three more matches
+  posts before the restore: 4 rows, 4 scored
+  ok: the screen opens again
+  ok: the save is the point byte for byte after the restore
+  ok: three matches replayed after the restore
+  replay posts: 3 rows, 0 scored
+  ok: the replayed matches still post their activity (3 rows)
+  ok: the replayed season posts no score (0 scored rows)
+  ok: the screen opens for more points
+  ok: three points (["Before the run","WWWWWWWWWWWWWWWWWWWWWWWW","MMMMMMMMMMMMMMMMMMMMMMMM"])
+  ok: every name is 24 characters or fewer (14,24,24)
+  ok: at three the name box is replaced by the cap line
+  ok: the full screen fits the width
+  ok: the first point's key was found to damage (dukb-cm-point-1-mvf36r88)
+  ok: a damaged point is refused in plain words ("That save point is damaged and will not open, so nothing changed. You can delete it.")
+  ok: the refusal changed nothing (no reload, the save equal)
+  ok: nothing staged after the refusal
+  ok: the copy (["WWWWWWWWWWWWWWWWWWWWWWWW","MMMMMMMMMMMMMMMMMMMMMMMM","Copy of WWWWWWWWWWWWWWWW"])
+  ok: no point key without a row (none)
+  ok: after a reload the tile says three (💾 SAVE POINTS 3 of 3 made Copy of WWWWWWWWWWWWWWWW)
+  measured: 390r restore to hub 774 ms
+  measured: 390r buttons Restore:36 Copy:36 Rename:36 Delete:36 Restore:36
+  measured: 1280n restore to hub 742 ms
+  measured: 1280n buttons Restore:36 Copy:36 Rename:36 Delete:36 Restore:36
+  measured: 390n restore to hub 778 ms
+  measured: 390n buttons Restore:36 Copy:36 Rename:36 Delete:36 Restore:36
+  measured: 1280r restore to hub 746 ms
+  measured: 1280r buttons Restore:36 Copy:36 Rename:36 Delete:36 Restore:36
+walkRun1513: OK on 390r 1280n 390n 1280r

@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: node .rc/x/walkRun1513.mjs
+playCmSavePoints: node scripts/playCmSavePoints.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+playSaveKeeper: node scripts/playSaveKeeper.mjs

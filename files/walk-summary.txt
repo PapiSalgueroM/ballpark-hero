@@ -1,0 +1,8 @@
+390r restore to hub 774 ms
+390r buttons Restore:36 Copy:36 Rename:36 Delete:36 Restore:36
+1280n restore to hub 742 ms
+1280n buttons Restore:36 Copy:36 Rename:36 Delete:36 Restore:36
+390n restore to hub 778 ms
+390n buttons Restore:36 Copy:36 Rename:36 Delete:36 Restore:36
+1280r restore to hub 746 ms
+1280r buttons Restore:36 Copy:36 Rename:36 Delete:36 Restore:36
