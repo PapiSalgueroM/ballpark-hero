@@ -1,0 +1,55 @@
+# Release BL part two (Round BLI, finish-BLI.md section 6): ROUND 1512's proof lines (Club Manager's five difficulty
+# levels), taken from finish-1512.md, fix-1512.md, fix2-1512.md and verify2-1512.md as the round's own gates ran them
+# (r1512-s3 and r1512-s4 on its builder heads, r1512-fx2-g, r1512-fx2-w and r1512-vf2 on its closed head 73feadb3).
+# Not the same file as rc-BLb1, rc-BLb2 or rc-BLb3 (part one's packet proofs): this one is Round 1512's alone.
+# BINDING. B1512 is the head of release-bl-gate before the merge m11 (f66eba35) brought 1512 in: 6d91ed19. Every line
+# that compares with a base (s2 and s6, the Medium and Hot Seat plus Deadline Day must not move proofs, and the oldlevel
+# control) builds it from B1512 with git archive, so the line asks "does the joined tree play Medium as the tree did
+# before 1512 joined". Override with B1512=<sha> in front of a line. The release base b967a309 gives the same answer
+# (part one touches no Club Manager engine file, and 1513 touches no engine file); BLI's proof rBLI-p1 used b967a309.
+# 1512 cannot be taken out of the joined tree with treeWithoutMerge (1513 edits its lines: StartOptionsScreen.tsx,
+# useClubManager.ts, ClubManager.tsx), so no line forms a "head without 1512" base.
+# Section 4 (the measured fleet) is NOT here: shard it as finish-1512.md item 2 says (SECTION=4 LEVELS=<lv> SHARD=<k>/4
+# SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/<lv>-<k>.json, 20 lines) and fold with FOLD=<dir> on the gate's machine.
+# Controls: each must exit 1 with a FAILURES line (exit 2 "CANNOT RUN" is an abort, exit 3 a control that did not
+# fire); the walk controls exit 0 with "all N guarded checks fired". No line writes into src (the sim controls edit an
+# in memory or bundled copy, the walk controls edit the served code), so no #!serial.
+# Send: bash rc.sh <name> rc-BLb.txt     (no extra files; #!serve builds dist and serves it on 4173 for the walks)
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerNoSack.test.tsx --testTimeout=300000 --hookTimeout=120000
+s178: SECTION=1,7,8 node scripts/simCmDifficulty.mjs
+s2: B1512=${B1512:-6d91ed19}; mkdir -p /tmp/b2 && git archive $B1512 src | tar -x -C /tmp/b2 && BASE_ROOT=/tmp/b2 SECTION=2 node scripts/simCmDifficulty.mjs
+s3: SECTION=3 LEVER_LEVELS=hard,easy,veryeasy node scripts/simCmDifficulty.mjs
+s6: B1512=${B1512:-6d91ed19}; mkdir -p /tmp/b6 && git archive $B1512 src | tar -x -C /tmp/b6 && BASE_ROOT=/tmp/b6 SECTION=6 node scripts/simCmDifficulty.mjs
+c-oldlevel: B1512=${B1512:-6d91ed19}; mkdir -p /tmp/bo && git archive $B1512 src | tar -x -C /tmp/bo && BASE_ROOT=/tmp/bo CM_DIFF_CONTROL=oldlevel node scripts/simCmDifficulty.mjs
+c-ve-gain: CM_DIFF_CONTROL=ve-gain node scripts/simCmDifficulty.mjs
+c-ve-pain: CM_DIFF_CONTROL=ve-pain node scripts/simCmDifficulty.mjs
+c-ve-cheque: CM_DIFF_CONTROL=ve-cheque node scripts/simCmDifficulty.mjs
+c-ve-wages: CM_DIFF_CONTROL=ve-wages node scripts/simCmDifficulty.mjs
+c-ve-mark: CM_DIFF_CONTROL=ve-mark node scripts/simCmDifficulty.mjs
+c-ve-edge: CM_DIFF_CONTROL=ve-edge node scripts/simCmDifficulty.mjs
+c-edge: CM_DIFF_CONTROL=edge node scripts/simCmDifficulty.mjs
+c-cheque: CM_DIFF_CONTROL=cheque node scripts/simCmDifficulty.mjs
+c-midleak: CM_DIFF_CONTROL=midleak node scripts/simCmDifficulty.mjs
+c-easyclear: CM_DIFF_CONTROL=easyclear node scripts/simCmDifficulty.mjs
+c-midnolevel: CM_DIFF_CONTROL=midnolevel node scripts/simCmDifficulty.mjs
+c-flate: CM_DIFF_CONTROL=flate node scripts/simCmDifficulty.mjs
+c-helpdrift: CM_DIFF_CONTROL=helpdrift node scripts/simCmDifficulty.mjs
+c-helpdrifte: CM_DIFF_CONTROL=helpdrifte node scripts/simCmDifficulty.mjs
+c-helplines: CM_DIFF_CONTROL=helplines node scripts/simCmDifficulty.mjs
+c-vefloor: CM_DIFF_CONTROL=vefloor LEVER_LEVELS=easy,veryeasy node scripts/simCmDifficulty.mjs
+simCmNoSack: node scripts/simCmNoSack.mjs
+simClubManagerStart: node scripts/simClubManagerStart.mjs
+simSquadRows: node scripts/simSquadRows.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+walk: node scripts/playCmDifficulty.mjs
+walk-nolevel: WIDTHS=390 PLAY_DIFF_CONTROL=nolevel node scripts/playCmDifficulty.mjs
+walk-nopill: WIDTHS=390 PLAY_WIDTHS=390 PLAY_DIFF_CONTROL=nopill node scripts/playCmDifficulty.mjs
+walk-jump: WIDTHS=320 PLAY_DIFF_CONTROL=jump node scripts/playCmDifficulty.mjs
+playCmNoSack: node scripts/playCmNoSack.mjs

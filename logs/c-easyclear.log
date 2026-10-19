@@ -1,0 +1,13 @@
+simCmDifficulty: sections 8, control easyclear
+  table: veryeasy {"gain":1.4,"pain":0.6,"cut":0,"cheque":1.5,"wageRoom":1.12,"mark":0.8,"edge":-3}; easy {"gain":1.2,"pain":0.8,"cut":0,"cheque":1.2,"wageRoom":1.06,"mark":0.87,"edge":-1.5}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":2.2}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3.9}
+NEGATIVE CONTROL ON: going back up clears the leaderboard mark
+8) changing the level between matches
+  FAIL: 8d Brentford Medium to Very Easy: going back up to Impossible and then Medium cleared the mark or the score came back
+  FAIL: 8d Brentford Medium to Easy: going back up to Impossible and then Medium cleared the mark or the score came back
+  FAIL: 8d Málaga Medium to Very Easy: going back up to Impossible and then Medium cleared the mark or the score came back
+  FAIL: 8d Málaga Medium to Easy: going back up to Impossible and then Medium cleared the mark or the score came back
+  FAIL: 8d Inter Milan Medium to Very Easy: going back up to Impossible and then Medium cleared the mark or the score came back
+  FAIL: 8d Inter Milan Medium to Easy: going back up to Impossible and then Medium cleared the mark or the score came back
+  ok: 8f: 12 summer cheques after a change at the season's end (3 clubs, four levels) are Medium's times the new dial
+CONTROL easyclear FIRED: 6 failures
+simCmDifficulty: 6 FAILURES (sections 8)
