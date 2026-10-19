@@ -1,0 +1,10 @@
+simCmDifficulty: sections 4
+  table: veryeasy {"gain":1.4,"pain":0.6,"cut":0,"cheque":1.5,"wageRoom":1.12,"mark":0.8,"edge":-3}; easy {"gain":1.2,"pain":0.8,"cut":0,"cheque":1.2,"wageRoom":1.06,"mark":0.87,"edge":-1.5}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":1.5}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3}
+4) outcomes: veryeasy, 16 seeds from 0, 6 seasons, engaged, shard 0/4
+  played 216 seasons in 374 s (1.73 s a season)
+  level  tier  driver   n   ppg  vsExp titles10 troph10   fees  sign  balance over  bMin bMean sacked matches xiS  xiE  clauseU loanU
+  veryeasy big   engaged  72 2.23   0.47    7.50   17.50  71.98  0.85   299.64 0.68 65.86 93.06 0.00  52.82 90.66 91.12     0     0
+  veryeasy mid   engaged  72 1.73  -5.47    1.25    4.03  27.00  1.63    56.62 0.71 67.16 91.80 0.00  45.49 82.14 82.79     0     0
+  veryeasy small engaged  72 1.48  -9.53    1.81    2.50  10.51  1.78    17.55 0.83 61.91 86.66 0.00  42.44 77.41 78.21     0     0
+  ok: a shard: the bands are the fold's (FOLD=<dir of OUT_JSON files>)
+simCmDifficulty: all green (sections 4)
