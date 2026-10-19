@@ -1,0 +1,19 @@
+bindAt: scripts/simAppearanceCategoryScroll.mjs bound
+bindAt: 8fc62292db90 -> 75340a8322b3
+bindAt: scripts/qa/appearanceSelectedContrast1431.mjs bound
+bindAt: scripts/qa/replayAppearanceScroll1431.mjs bound
+bindAt: scripts/simAppearanceCategoryScroll.mjs bound
+bindAt: 8fc62292db90 -> 75340a8322b3
+bindAt: 62d7c8b33388 -> ee7352ec4b6a
+bindHash: scripts/qa/appearanceSelectedContrast1431.mjs bound
+bindHash: scripts/qa/replayAppearanceScroll1431.mjs bound
+bindHash: 94a22773c507 -> 145b59ddb669
+bindHash: abbf03e4ffe7 -> 573fb04507c2
+runProver: p1431 at 3e268954bb363e376bba3dc7fdd600edcdd5a3e1 (release BL hash bound: 618885e49675 with pinned file hashes bound to the joined tree)
+Current appearance scroll:15 actual unchanged cases passed. Ink inverse/source controls are declarations; measured contrast remains separate.
+{"kind":"APPEARANCE_CONTRAST_RESULT","mode":"fixed","evidenceRoot":"/tmp/rp-out-p1431","summarySha256":"248cca6a70008f20208f67a350790ee03c085b39cbe00169c66e1eb77e3a11c8","sourceHeld":true,"productQualified":false,"renderedContrastProofPassed":false}
+Preparing worktree (detached HEAD 3e268954b)
+Historical1428: unchanged five-arm75-case predicate and key control on exact PR341 Builder. Current15 cases have separate current-source credit.
+simSoccerAppearanceOptions: all declared cases and actual source controls passed.
+p1431 PROOF DONE
+runProver: p1431 exit 0

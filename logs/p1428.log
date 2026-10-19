@@ -1,0 +1,12 @@
+bindAt: scripts/simAppearanceCategoryScroll.mjs bound
+bindAt: 8fc62292db90 -> 75340a8322b3
+runProver: p1428 at ee7352ec4b6af4ba601342ceeaeca1652722a728 (release BK bound: 5a58cf7b6618 with its pinned bases bound to the joined tree)
+normal: 15 passed, 0 expected category-reset faults, 0 skipped
+bare: 15 passed, 0 expected category-reset faults, 0 skipped
+original: 10 passed, 5 expected category-reset faults, 0 skipped
+removed-category-key: 10 passed, 5 expected category-reset faults, 0 skipped
+restored: 15 passed, 0 expected category-reset faults, 0 skipped
+simAppearanceCategoryScroll: normal, bare, whole-original, effective key removal and inverse-restored cases passed.
+simSoccerAppearanceOptions: all declared cases and actual source controls passed.
+p1428 PROOF DONE
+runProver: p1428 exit 0
