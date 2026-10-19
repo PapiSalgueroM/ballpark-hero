@@ -1,0 +1,13 @@
+# Round 1515 fix: retune, Hard 2.2 (0-31) and Impossible 3.8 (16-31; 0-15 is r1515-t2b)
+h22-0: SECTION=4 LEVELS=hard SHARD=0/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.2}}' OUT_JSON=$RC_OUT/hard22-0.json node scripts/simCmDifficulty.mjs
+h22-1: SECTION=4 LEVELS=hard SHARD=1/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.2}}' OUT_JSON=$RC_OUT/hard22-1.json node scripts/simCmDifficulty.mjs
+h22-2: SECTION=4 LEVELS=hard SHARD=2/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.2}}' OUT_JSON=$RC_OUT/hard22-2.json node scripts/simCmDifficulty.mjs
+h22-3: SECTION=4 LEVELS=hard SHARD=3/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.2}}' OUT_JSON=$RC_OUT/hard22-3.json node scripts/simCmDifficulty.mjs
+h22-4: SECTION=4 LEVELS=hard SHARD=4/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.2}}' OUT_JSON=$RC_OUT/hard22-4.json node scripts/simCmDifficulty.mjs
+h22-5: SECTION=4 LEVELS=hard SHARD=5/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.2}}' OUT_JSON=$RC_OUT/hard22-5.json node scripts/simCmDifficulty.mjs
+h22-6: SECTION=4 LEVELS=hard SHARD=6/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.2}}' OUT_JSON=$RC_OUT/hard22-6.json node scripts/simCmDifficulty.mjs
+h22-7: SECTION=4 LEVELS=hard SHARD=7/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.2}}' OUT_JSON=$RC_OUT/hard22-7.json node scripts/simCmDifficulty.mjs
+l38-0: SECTION=4 LEVELS=legend SHARD=0/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 DIALS_JSON='{"legend":{"edge":3.8}}' OUT_JSON=$RC_OUT/legend38hi-0.json node scripts/simCmDifficulty.mjs
+l38-1: SECTION=4 LEVELS=legend SHARD=1/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 DIALS_JSON='{"legend":{"edge":3.8}}' OUT_JSON=$RC_OUT/legend38hi-1.json node scripts/simCmDifficulty.mjs
+l38-2: SECTION=4 LEVELS=legend SHARD=2/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 DIALS_JSON='{"legend":{"edge":3.8}}' OUT_JSON=$RC_OUT/legend38hi-2.json node scripts/simCmDifficulty.mjs
+l38-3: SECTION=4 LEVELS=legend SHARD=3/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 DIALS_JSON='{"legend":{"edge":3.8}}' OUT_JSON=$RC_OUT/legend38hi-3.json node scripts/simCmDifficulty.mjs
