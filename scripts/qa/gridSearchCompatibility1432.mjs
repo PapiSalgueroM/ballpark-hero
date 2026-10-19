@@ -138,7 +138,7 @@ export async function dispatchHistorical1432(entryUrl) {
   console.log('Historical compatibility only: exact old entry bodies and Search restored, new current semantics are proved separately.');
   console.log('Historical default cleanup: external source removed, caller tracked source and membership held.');
   console.log(JSON.stringify({ kind: 'GRID_SEARCH_HISTORICAL_COMPATIBILITY_RESULT', status: record.status, entry: relative, evidenceRoot: evidence,
-    actualSourceSha256, historical: true, currentAccessibilitySource: false, modeEnvAbsent: true, outEnvAbsent: true,
+    actualSourceSha256: actualSha256, historical: true, currentAccessibilitySource: false, modeEnvAbsent: true, outEnvAbsent: true,
     receiptSha256: hash(fs.readFileSync(receiptFile)), sourceHeld: record.sourceHeld, worktreeRemoved: record.worktreeRemoved, productQualified: false }));
   return true;
 }
