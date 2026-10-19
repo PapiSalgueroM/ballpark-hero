@@ -1,3 +1,8 @@
+/* Round1434: exact comparison compatibility. Complete prior entry follows unchanged. */
+async function runApostropheCompatibility1434() {
+  return (await import('./qa/gridApostropheCompatibility1434.mjs')).dispatchHistorical1434(import.meta.url);
+}
+if (await runApostropheCompatibility1434()) process.exit(process.exitCode ?? 0);
 /* Round1432: exact historical default compatibility. Original body follows unchanged. */
 if (await (await import('./qa/gridSearchCompatibility1432.mjs')).dispatchHistorical1432(import.meta.url)) {
   process.exit(0);

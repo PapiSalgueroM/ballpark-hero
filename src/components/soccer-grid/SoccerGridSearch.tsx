@@ -10,6 +10,7 @@ const FORMAT_CHARS = /\p{Cf}/gu;
 function normalizeName(s: string | null | undefined): string {
   return foldSpecialLatin(
     (s ?? '')
+      .replace(/\u2019/g, "'")
       .replace(FORMAT_CHARS, '')
       .normalize('NFD')
       .replace(DIACRITICS, '')
