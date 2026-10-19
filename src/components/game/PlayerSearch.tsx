@@ -19,10 +19,13 @@ export function PlayerSearch({ players, guessedNames, onSelect }: PlayerSearchPr
 
   const filtered = useMemo(() => {
     if (!query.trim() || query.trim().length < 2) return [];
+    const nameKey = (value: string) => value.toLowerCase().split(/\s+/).filter(Boolean).join(' ');
+    const queryKey = nameKey(query);
     return players
       .filter(p => !guessedNames.some(g => g.toLowerCase() === p.name.toLowerCase()))
       .filter(p => smartMatch(p.name, query))
-      .sort((a, b) => smartScore(a.name, query) - smartScore(b.name, query))
+      .sort((a, b) => Number(nameKey(b.name) === queryKey) - Number(nameKey(a.name) === queryKey)
+        || smartScore(a.name, query) - smartScore(b.name, query))
       .slice(0, 10);
   }, [query, players, guessedNames]);
   const hasOptions = isOpen && filtered.length > 0;

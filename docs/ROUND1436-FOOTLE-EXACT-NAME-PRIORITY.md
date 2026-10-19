@@ -1,0 +1,17 @@
+# Round1436: Footle exact-name priority
+
+Source-only plan, no product adopted. First reproduce the buried exact match using fictional players and actual current component/native built Footle. Then adopt only local exact-word priority, execute removal/restoration and ordinary default, and qualify all required held gates. All original/fixed raw, peer and pixel evidence remains pending. Scope and policy follow the current Round1436 WORKBOARD claim.
+
+Original attempt69c1fbed stopped when the unchanged keyboard control rejected ANSI formatting inside its intended assertion message. Required build, browser, readers and size gates did not run, so no full original admission was earned. The failed artifact and common refusal are retained. The new caller disables color for the unchanged old CLI and its separately retained direct replays, and records that child environment. Old method, test, product, source predicates and purpose assertions stay held. A complete remote retry is still required.
+
+## Verified fixed draft, 2026-10-19
+
+PR350 is attached and stacked on PR349. The original complete run39238772784 at c865216f was admitted through ea3979a3 before the exact two-file product/shared metadata adoption. The source hunk and full inverse are exact. Fixed tested head d8d34da0f9a10f6a3639c7e3c550eb6d4a3add85 passed run39244077636. Artifact12183251600 is76531176 bytes, SHA6791cac39c243cdc3b10382a069722e10ee76939cb0d8d864978a8e2912f98df. All5384 source archive members and4959 bodies equal the fixed native canonical archive.
+
+Common4869cbd1, feature0fe69dd1 and Root24of48 pixel receipt037ac443 precede full qualification94aca540. Root whole-read complete actual unit ce5cb085, browser dcc77cae and whole2f829a95 peer MDs. Explicit and genuine absent-env default each retain104 cases,10 reports and4 traces, totaling176 healthy and32 precise intended faults. The additional144 unchanged old CLI executions are separately log-only. Normal/bare/restored new outcomes are healthy; removing priority restores only the frozen line56 faults. All95 copied ordinary-default files, source modules, inverses, refusals, cleanup and288 complete states are bound.
+
+Six actual native Chromium journeys bind24 AX captures,342 complete request/response/finished triples, natural single-guess saves and exact canonical parent state. Normal/restored select the exact name in four contexts; removed controls select the longer name in two. Actual types, serial plain production build,17 readers,14 unchanged fatal caps and all37213 saved checksum outcomes pass. Footle352.3/354KiB, Grid317.9/319KiB. Known native platform diagnostics, build warnings and17 declared weight asset refusals are retained.
+
+Original failed attempt, two original native reader representation refusals, the fixed Windows POSIX-parent reader refusal and peer-only native preparation mistakes remain saved without app-fault credit. The final focused reader changes only the exact POSIX parent comparison, independently reviewed before its successful fixed invocation. No raw or app source was changed by those reader corrections.
+
+Only PROJECT-STATE, this round record and WORKBOARD close after the tested source. The external final source/ref/PR/history/seal packet supplies exact final identities. I retains integration, protected engine/data/validator work, joined derived artifacts, main and publication. No full suite, live backend, real-player completeness, spoken AT/full WCAG or global no-scroll claim.
