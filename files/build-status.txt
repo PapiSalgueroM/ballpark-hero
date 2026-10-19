@@ -1,0 +1,8 @@
+ M public/club-manager/index.html
+ M public/f1-constructor/index.html
+ M public/f1-higher-lower/index.html
+ M public/free-kick/index.html
+ M public/gauntlet-draft/index.html
+ M public/player-stock-market/index.html
+ M public/whats-new/index.html
+ M scripts/data/lastmod.json
