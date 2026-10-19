@@ -1,0 +1,5 @@
+# Release BL triage g: the AppearanceBuilder's hair tab per sport at m2 ab1fe605 and m3 75340a83 (probeHairTab.test.tsx
+# copied into src/test of a worktree), to see what PR339 changes on the NBA create screen. Send with wt.sh probeHairTab.test.tsx
+#!serial
+hair-m2: bash .rc/x/wt.sh ab1fe605 hm2 bash -c "cp $PWD/.rc/x/probeHairTab.test.tsx src/test/ && node_modules/.bin/vitest run src/test/probeHairTab.test.tsx 2>&1 | grep -E 'PROBE|Tests ' | cut -c1-300"
+hair-m3: bash .rc/x/wt.sh 75340a83 hm3 bash -c "cp $PWD/.rc/x/probeHairTab.test.tsx src/test/ && node_modules/.bin/vitest run src/test/probeHairTab.test.tsx 2>&1 | grep -E 'PROBE|Tests ' | cut -c1-300"
