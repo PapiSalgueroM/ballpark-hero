@@ -173,8 +173,10 @@
      vefloor     the easy mark's floor at what a sale banks taken out      3 (the Very Easy pass)
      helplines   the help's first two level lines folded into one          7
    Round 1515:
-     foldblock   FOLD with Hard's seasons of seeds 8 to 15 as Medium's     the fold's per block drop check
+     foldblock   FOLD with Hard's seasons of seeds 16 to 31 as Medium's   the fold's per block drop check
      foldbig     FOLD with Impossible's big club titles taken away         the fold's Impossible title floor
+   Round 1515 fix (the fleet is seeds 0 to 31):
+     foldhalf    FOLD with Hard's seasons of seeds 16 to 31 left out       the fold's every block played check
 
    Run: node scripts/simCmDifficulty.mjs     (SECTION=1, MEASURE=1 SEEDS=4 SEASONS=10)
         git worktree add /tmp/base <base sha> && BASE_ROOT=/tmp/base node scripts/simCmDifficulty.mjs
@@ -203,7 +205,7 @@ const CONTROLS = {
   /* Round 1512 closing check: the easy market's floor at what a sale banks; two levels on one line of the help. */
   vefloor: ['3'], helplines: ['7'],
   /* Round 1515: the retune's new fold checks, each seed block's drop and Impossible's big club title floor. */
-  foldblock: [], foldbig: [],
+  foldblock: [], foldbig: [], foldhalf: [],
 };
 const cannot = why => { console.log(`simCmDifficulty: CANNOT RUN: ${why}`); process.exit(2); };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`CM_DIFF_CONTROL=${CONTROL} is not a control this harness knows`);
@@ -1106,12 +1108,17 @@ async function section6() {
    wins its league in at least one season in ten. The bands are the lead's; the measured numbers and the
    spread of Normal against Normal on other seeds are in the header table.
    Round 1515 (the retune, the lead's decision 1): the mid clubs' points per game fall 13 to 20 percent on Hard
-   and 23 to 32 on Impossible, pooled AND in each seed block (0 to 7, 8 to 15); sacked seasons at least 1.6 and
+   and 23 to 32 on Impossible, pooled AND in each seed block (0 to 15, 16 to 31); sacked seasons at least 1.6 and
    2.4 times Medium's; spend a season on Hard at least 12 percent under; a big club still wins its league at
-   least 1.2 seasons in ten on Hard and 0.5 on Impossible. */
+   least 1.2 seasons in ten on Hard and 0.5 on Impossible.
+   Round 1515 review: the first retune held on seeds 0 to 15 and fell out of both drop bands on seeds 16 to 31,
+   so the fleet is seeds 0 to 31 and each block is sixteen seeds (more careers, never a wider band). */
 const BANDS = { hard: { drop: [0.13, 0.20], sack: 1.6, spend: 0.12, big: 1.2 }, legend: { drop: [0.23, 0.32], sack: 2.4, big: 0.5 } };
 /* The two seed blocks a band must hold in on its own (Round 1512 printed them; Round 1515 holds the drops to them). */
-const BLOCKS = [['seeds 0 to 7', r => r.seed < 8], ['seeds 8 to 15', r => r.seed >= 8]];
+const BLOCKS = [['seeds 0 to 15', r => r.seed < 16], ['seeds 16 to 31', r => r.seed >= 16]];
+/* Medium's seasons on the seeds a level was played on, so a level folded from fewer seeds than Medium's (the
+   easy rows' shards hold seeds 0 to 15) is held against the same careers, never against other seeds. */
+const mediumOn = (rows, l) => { const s = new Set(rows.filter(r => r.level === l).map(r => r.seed)); return outcomesOf(rows.filter(r => r.level === 'normal' && s.has(r.seed))).normal; };
 /* Failures of the per block drop check, so control foldblock can say it was that check that went red. */
 let blockFails = 0;
 /* Round 1512, decision 3: the easy rows against Medium. The mid clubs' points per game UP 6 to 20 percent on
@@ -1150,6 +1157,7 @@ function assertOutcomes(rows) {
   for (const l of ['hard', 'legend']) {
     const x = o[l];
     if (!x) continue;
+    const n = mediumOn(rows, l);
     const drop = 1 - x.midPpg / n.midPpg;
     const sackRatio = n.sack > 0 ? x.sack / n.sack : (x.sack > 0 ? Infinity : NaN);
     const spendDrop = 1 - x.spend / n.spend;
@@ -1161,9 +1169,10 @@ function assertOutcomes(rows) {
     if (!(x.bigTitles10 >= BANDS[l].big)) fail(`${l}: a big club won its league ${f2(x.bigTitles10)} seasons in ten, the floor is ${BANDS[l].big}`);
     /* Round 1515: the drop in each seed block on its own, so a band is never met by one block carrying the other. */
     for (const [name, inBlock] of BLOCKS) {
-      const ob = outcomesOf(rows.filter(inBlock));
-      if (!ob.normal || !ob[l]) continue;
-      const d = 1 - ob[l].midPpg / ob.normal.midPpg;
+      const br = rows.filter(inBlock), ob = outcomesOf(br);
+      /* A block the fleet never played is a red, not a pass: the bands are held over seeds 0 to 31. */
+      if (!ob[l]) { blockFails += 1; fail(`${l} has no seasons in ${name}: section 4's bands are held over seeds 0 to 31 (SEEDS=32)`); continue; }
+      const d = 1 - ob[l].midPpg / mediumOn(br, l).midPpg;
       if (!(d >= lo && d <= hi)) { blockFails += 1; fail(`${l} in ${name}: the mid clubs' points per game fell ${f2(d * 100)} percent, the band is ${Math.round(lo * 100)} to ${Math.round(hi * 100)} in each block`); }
       else ok(`${l} in ${name}: down ${f2(d * 100)} percent, inside ${Math.round(lo * 100)} to ${Math.round(hi * 100)}`);
     }
@@ -1171,6 +1180,7 @@ function assertOutcomes(rows) {
   for (const l of ['easy', 'veryeasy']) {
     const x = o[l];
     if (!x) continue;
+    const n = mediumOn(rows, l);
     const rise = x.midPpg / n.midPpg - 1;
     const sackRatio = n.sack > 0 ? x.sack / n.sack : NaN;
     const spendRise = x.spend / n.spend - 1;
@@ -1194,7 +1204,7 @@ function assertOutcomes(rows) {
 async function fleetInChildren(levels, seeds, seasons, drivers) {
   const { spawn } = await import('node:child_process');
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cmdiff-fleet-'));
-  const parts = num('PARTS', 4), par = num('PAR', 3);
+  const parts = num('PARTS', 8), par = num('PAR', 3);
   const jobs = levels.flatMap(lv => Array.from({ length: parts }, (_, k) => ({ lv, k })));
   const run = ({ lv, k }) => new Promise(resolve => {
     const out = path.join(dir, `${lv}-${k}.json`);
@@ -1220,11 +1230,11 @@ async function fleetInChildren(levels, seeds, seasons, drivers) {
   return rows;
 }
 async function section4() {
-  const seeds = num('SEEDS', 16), seasons = num('SEASONS', 6);
+  const seeds = num('SEEDS', 32), seasons = num('SEASONS', 6);
   const levels = (process.env.LEVELS || LEVELS.join(',')).split(',');
   const drivers = (process.env.DRIVERS || 'engaged').split(',');
   console.log(`4) outcomes: ${levels.join(', ')}, ${seeds} seeds from ${num('SEED_OFFSET', 0)}, ${seasons} seasons, ${drivers.join(' and ')}, shard ${process.env.SHARD || '0/1'}`);
-  const whole = !process.env.SHARD && num('PARTS', 4) > 1;
+  const whole = !process.env.SHARD && num('PARTS', 8) > 1;
   const rows = whole ? await fleetInChildren(levels, seeds, seasons, drivers) : runFleet(levels, seeds, seasons, drivers);
   printTable(rows, levels);
   if (process.env.SHARD && process.env.SHARD !== '0/1') { ok('a shard: the bands are the fold\'s (FOLD=<dir of OUT_JSON files>)'); return; }
@@ -1253,14 +1263,24 @@ function fold() {
     return;
   }
   if (CONTROL === 'foldblock') {
-    /* Round 1515: Hard's seasons of seeds 8 to 15 folded as Medium's own, so that block's drop is 0: the per
+    /* Round 1515: Hard's seasons of seeds 16 to 31 folded as Medium's own, so that block's drop is 0: the per
        block check must go red (whatever the pooled one does). */
-    const med2 = rows.filter(r => r.level === 'normal' && r.seed >= 8);
-    if (!med2.length || !rows.some(r => r.level === 'hard' && r.seed >= 8)) cannot('foldblock: the fold holds no Hard or Medium seasons of seeds 8 to 15 to swap');
-    console.log('NEGATIVE CONTROL ON: Hard\'s seasons of seeds 8 to 15 folded as Medium\'s');
-    assertOutcomes([...rows.filter(r => !(r.level === 'hard' && r.seed >= 8)), ...med2.map(r => ({ ...r, level: 'hard' }))]);
+    const med2 = rows.filter(r => r.level === 'normal' && r.seed >= 16);
+    if (!med2.length || !rows.some(r => r.level === 'hard' && r.seed >= 16)) cannot('foldblock: the fold holds no Hard or Medium seasons of seeds 16 to 31 to swap');
+    console.log('NEGATIVE CONTROL ON: Hard\'s seasons of seeds 16 to 31 folded as Medium\'s');
+    assertOutcomes([...rows.filter(r => !(r.level === 'hard' && r.seed >= 16)), ...med2.map(r => ({ ...r, level: 'hard' }))]);
     if (!blockFails) { console.log('CONTROL foldblock DID NOT FIRE'); process.exit(3); }
     console.log(`CONTROL foldblock FIRED: ${blockFails} block failures`);
+    return;
+  }
+  if (CONTROL === 'foldhalf') {
+    /* Round 1515 fix: Hard played on seeds 0 to 15 only, as the first retune was: the block it never played must
+       go red, not pass by being skipped. */
+    if (!rows.some(r => r.level === 'hard' && r.seed >= 16)) cannot('foldhalf: the fold holds no Hard seasons of seeds 16 to 31 to leave out');
+    console.log('NEGATIVE CONTROL ON: Hard\'s seasons of seeds 16 to 31 left out of the fold');
+    assertOutcomes(rows.filter(r => !(r.level === 'hard' && r.seed >= 16)));
+    if (!blockFails) { console.log('CONTROL foldhalf DID NOT FIRE'); process.exit(3); }
+    console.log(`CONTROL foldhalf FIRED: ${blockFails} block failures`);
     return;
   }
   if (CONTROL === 'foldbig') {
