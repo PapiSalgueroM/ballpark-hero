@@ -1,0 +1,11 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 437b350ee Release BL: the lead sets the weight rows from the join's runner measurement
+playSoccerCareerRoutineEvents exit=0 71s | Soccer routine browser: passed; 1863 checks, 24 natural cases, 2 controls, 50 originals, 0 failures, 0 setup failures.
+playSoccerCareerLifeReviews exit=0 51s | Soccer life-review browser: passed; 1539 checks, 12 natural cases, 2 controls, 26 originals, 0 failures, 0 setup failures.
+playSoccerCareerPendingLife exit=0 77s | Soccer pending-Life browser: passed; 2173 checks, 21 natural cases, 2 controls, 44 originals, 0 failures, 0 setup failures.
+playSoccerCareerStatRewards exit=0 62s | Soccer stat-rewards browser: passed; 1836 checks, 14 natural cases, 2 controls, 30 originals, 0 failures, 0 setup failures.
+playSoccerCareerPendingMorale exit=0 117s | Soccer pending-morale browser: passed; 2189 checks, 14 played cases, 2 controls, 54 originals, 0 failures, 0 setup failures.
+playSoccerCareerPendingPopularity exit=0 72s | Soccer pending-popularity browser: passed; 1694 checks, 7 played cases, 2 controls, 28 originals, 0 failures, 0 setup failures.
+playSoccerCareerDocumentaryReview exit=0 53s | Soccer documentary browser: passed; 1593 checks, 12 played, 2 controls, 26 originals, 0 failures, 0 setup failures.
+playSoccerCareerSavedLoan exit=0 59s | Soccer saved loan browser: passed; 1538 checks, 6 played, 2 controls, 26 originals, 0 failures, 0 setup failures.
+playSoccerCareerBuildLazy exit=0 32s | lazyCheck FIXED: three healthy creator flows load the editor on Customize, with actual failed-chunk recovery and omission control.
