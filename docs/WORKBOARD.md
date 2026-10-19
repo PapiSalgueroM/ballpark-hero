@@ -15946,3 +15946,9 @@ Runtime stays in remote GitHub Actions under the ordinary offline preload. Actua
 
 The PerfectLineup name-query candidate was rejected before claim: its route is retired and both affected leaves are unreachable on main775. No route restoration or dormant-source product edit is part of1431.
 
+
+
+## Round1431 selected appearance Light contrast, qualified draft, 2026-10-18
+
+PR345 https://github.com/PapiSalgueroM/ballpark-hero/pull/345, stacked on PR341, tested a7b5f68b3e8ea044dbd9f6646162c617b5c63d2f. Four active Light-only ink suffixes in AppearanceBuilder; full old dark paint/catalogue/avatar/key/callback/RNG held. Original93a3fd6d admitted327add0e before adoption4007e557:320 selected Light faults/520 healthy; later expanded-peer addendumdeb3406a records its actual after-adoption chronology. Fixed run39179976370/artifact12157006095/ZIP13a69936 passed:45 native contexts,1890 pairs, precise0/6/6/2/2/16/0 faults,945 original-dark comparisons,14.9277:1 fixed Light contrast. Commonff47b4a4/feature1679c267/pixelsb05f855e plus separate full raw/source/receipt reviews pass. Root viewed40 of270 images. Current15/bridged75/related39/full1425 seventeen arms+243SVG, actual types/plain builds/all15 readers/all14 unchanged caps/full holds passed. Classified270 native startup diagnostics remain raw; unknown output and app/IO errors stay fatal. Final docs-only identity/PR/source closure is in the external1431 packet receipt. I owns PR331->339->341 prerequisite join, preservation of333, fresh combined gates and derived prerender/sitemap/lastmod before release. No protected Manager/SC core/save/data, main, live backend, full-suite, global-no-scroll or publication credit.
+
