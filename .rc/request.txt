@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerNoSack.test.tsx --testTimeout=300000 --hookTimeout=120000
+s178: SECTION=1,7,8 node scripts/simCmDifficulty.mjs
+s3: SECTION=3 LEVER_LEVELS=hard,easy,veryeasy node scripts/simCmDifficulty.mjs
+vefloor: CM_DIFF_CONTROL=vefloor LEVER_LEVELS=easy,veryeasy node scripts/simCmDifficulty.mjs
+helplines: CM_DIFF_CONTROL=helplines node scripts/simCmDifficulty.mjs
