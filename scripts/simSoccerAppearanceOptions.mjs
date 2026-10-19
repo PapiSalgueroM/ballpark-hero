@@ -25,7 +25,7 @@ const files = {
   '@/components/soccer-career/AppearanceBuilder': 'src/components/soccer-career/AppearanceBuilder.tsx',
 };
 const original = {}, mapping = {};
-const sourceBefore = Object.fromEntries(Object.values(files).map(file => [file, fs.readFileSync(path.join(ROOT, file), 'utf8')]));
+const sourceBefore = Object.fromEntries(Object.values(files).map(file => [file, fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n')]));
 for (const [alias, file] of Object.entries(files)) {
   const read = spawnSync('git', ['show', `${BASE}:${file}`], { cwd: ROOT, encoding: 'utf8' });
   assert.equal(read.status, 0, `Read original ${file}: ${read.stderr}`);

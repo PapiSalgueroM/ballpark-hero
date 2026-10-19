@@ -22,7 +22,7 @@ const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const lf = text => text.replace(/\r\n/g, '\n');
 const git = args => execFileSync('git', args, { cwd: ROOT, maxBuffer: 64 * 1024 * 1024 });
 const tracked = git(['ls-files', '-z']), status = git(['status', '--porcelain=v1', '--untracked-files=all']);
-const source = Object.fromEntries(tracked.toString().split('\0').filter(Boolean).map(file => [file, hash(fs.readFileSync(path.join(ROOT, file)))]));
+const source = Object.fromEntries(tracked.toString().split('\0').filter(Boolean).map(file => [file, hash(fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n'))]));
 const testHash = hash(fs.readFileSync(path.join(ROOT, testFile)));
 assert.equal(testHash, 'ea570467ba22bc996b97d9fb235d216d6adf810337192cf75eb25e1926e6ad46', 'Frozen eleven-case original test body');
 const originalBytes = git(['show', BASE + ':' + productFile]), original = lf(originalBytes.toString('utf8'));
@@ -219,7 +219,7 @@ try {
   try {
     removeControls(); assert(!fs.existsSync(controlDir), 'No disposable control source survives');
     assert(tracked.equals(git(['ls-files', '-z'])), 'Tracked source membership held');
-    for (const [file, sha256] of Object.entries(source)) assert.equal(hash(fs.readFileSync(path.join(ROOT, file))), sha256, 'Tracked bytes held: ' + file);
+    for (const [file, sha256] of Object.entries(source)) assert.equal(hash(fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n')), sha256, 'Tracked bytes held: ' + file);
     assert.equal(hash(fs.readFileSync(path.join(ROOT, testFile))), testHash, 'Frozen original test bytes held');
     assert(status.equals(git(['status', '--porcelain=v1', '--untracked-files=all'])), 'Tracked/untracked status held');
     summary.sourceHeld = true; summary.controlsRemovedBeforeRestored = MODE === 'fixed' && armsComplete;

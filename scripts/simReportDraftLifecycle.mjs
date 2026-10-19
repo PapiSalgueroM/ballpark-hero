@@ -28,7 +28,7 @@ const heldFiles = [...Object.values(forms), 'src/test/reportDraftLifecycle.test.
 const hookFile = 'src/hooks/useReportDraftLifecycle.ts';
 if (MODE === 'fixed') heldFiles.push(hookFile);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-const sourceBefore = Object.fromEntries(heldFiles.map(file => [file, fs.readFileSync(path.join(ROOT, file))]));
+const sourceBefore = Object.fromEntries(heldFiles.map(file => [file, Buffer.from(fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n'))]));
 assert.equal(hash(sourceBefore['src/test/reportDraftLifecycle.test.tsx']), 'ca6774ec49cdf7fe4d64aff59deebab94bc43f9925833c4f7a9d8a631dca3255', 'The admitted fourteen-case test body is frozen');
 const runtimeAliases = {
   'react/jsx-dev-runtime': require.resolve('react/jsx-dev-runtime'),

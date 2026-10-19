@@ -135,7 +135,7 @@ assert(path.relative(root, artifactRoot).split(path.sep).includes('..'), 'Eviden
 const out = path.join(artifactRoot, 'unit'); assert(!fs.existsSync(out)); fs.mkdirSync(out);
 const write = (file, body) => fs.writeFileSync(path.join(out, file), typeof body === 'string' || Buffer.isBuffer(body) ? body : JSON.stringify(body, null, 2) + '\n', { flag: 'wx' });
 function sourceMap() {
-  return git(['ls-files', '-z']).split('\0').filter(Boolean).sort().map(file => { const body = fs.readFileSync(path.join(root, file)); return { file, bytes: body.length, sha256: sha(body) }; });
+  return git(['ls-files', '-z']).split('\0').filter(Boolean).sort().map(file => { const body = Buffer.from(fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n/g, '\n')); return { file, bytes: body.length, sha256: sha(body) }; });
 }
 const initial = sourceMap(), statusBefore = git(['status', '--porcelain', '--untracked-files=all']);
 const report = { version: 2, base, admitted, head: git(['rev-parse', 'HEAD']).trim(), mode: 'fixed', qualified: false, productQualified: false, cases: 23, arms: [], sourceHeld: false, temporaryControlsRemoved: false, historicalHash, inverseControls: ['missing', 'altered', 'duplicated'], panelInverseControls: { hunks: 7, cases: 22, kinds: ['missing', 'changed', 'duplicated', 'unrelated'] } };

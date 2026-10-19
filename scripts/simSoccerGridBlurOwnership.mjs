@@ -32,7 +32,7 @@ const ORIGINAL_ADMISSION = {"scope":"full-original-units-browser-native-pixels",
 const hash = value => createHash('sha256').update(value).digest('hex');
 const git = args => execFileSync('git', args, { cwd: ROOT, maxBuffer: 64 * 1024 * 1024 });
 const tracked = git(['ls-files', '-z']), status = git(['status', '--porcelain=v1', '--untracked-files=all']);
-const source = Object.fromEntries(tracked.toString('utf8').split('\0').filter(Boolean).map(file => [file, hash(fs.readFileSync(path.join(ROOT, file)))]));
+const source = Object.fromEntries(tracked.toString('utf8').split('\0').filter(Boolean).map(file => [file, hash(fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n'))]));
 assert.equal(hash(fs.readFileSync(path.join(ROOT, testFile))), TEST_SHA, 'The eight-case body is frozen');
 assert.equal(hash(fs.readFileSync(path.join(ROOT, inheritedFile))), INHERITED_SHA, 'The inherited sixteen-case body is unchanged');
 const original = git(['show', BASE + ':' + productFile]).toString('utf8'); assert.equal(hash(original), ORIGINAL_SHA);
@@ -216,7 +216,7 @@ try {
 } finally {
   if (TEMP && fs.existsSync(TEMP)) fs.rmSync(TEMP, { recursive: true, force: true }); assert(!TEMP || !fs.existsSync(TEMP), 'Temporary modules removed');
   assert(tracked.equals(git(['ls-files', '-z'])), 'Tracked membership held');
-  for (const [file, sha256] of Object.entries(source)) assert.equal(hash(fs.readFileSync(path.join(ROOT, file))), sha256, 'Tracked source held: ' + file);
+  for (const [file, sha256] of Object.entries(source)) assert.equal(hash(fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n')), sha256, 'Tracked source held: ' + file);
   assert.equal(hash(fs.readFileSync(path.join(ROOT, testFile))), TEST_SHA); assert.equal(hash(fs.readFileSync(path.join(ROOT, inheritedFile))), INHERITED_SHA);
   assert(status.equals(git(['status', '--porcelain=v1', '--untracked-files=all'])), 'Status held');
   summary.sourceHeld = true; summary.temporaryModulesRemoved = true;
