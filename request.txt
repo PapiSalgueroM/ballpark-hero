@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+base: git worktree add -q --detach /tmp/wt-4174 73feadb3 && ln -s "$PWD/node_modules" /tmp/wt-4174/node_modules && (cd /tmp/wt-4174 && npm run build > /tmp/build-4174.log 2>&1) && (nohup node scripts/lib/hostLikeServer.mjs /tmp/wt-4174/dist 4174 > /tmp/server-4174.log 2>&1 &) ; sleep 6; curl -s -o /dev/null -w "base served: %{http_code}\n" http://localhost:4174/club-manager
+parts: BASE_DIST=/tmp/wt-4174/dist node .rc/x/weightParts1513.mjs
+parts-home: ROUTE=/ BASE_DIST=/tmp/wt-4174/dist node .rc/x/weightParts1513.mjs

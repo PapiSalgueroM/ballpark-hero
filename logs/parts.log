@@ -1,0 +1,23 @@
+  AdBanner.js                                      base 1080  head 1082  +2
+  ClubManager-CEu9r-al.js                          base 27422  head 0  -27422
+  ClubManager.js                                   base 0  head 28380  +28380
+  FlagImg.js                                       base 2974  head 2977  +3
+  GameHelp.js                                      base 789  head 790  +1
+  GameNav.js                                       base 1720  head 1722  +2
+  GameNavbar.js                                    base 3793  head 3796  +3
+  GameSeoContent.js                                base 2437  head 2439  +2
+  HowToPlayPopover.js                              base 768  head 773  +5
+  arrow-left.js                                    base 264  head 265  +1
+  briefcase.js                                     base 296  head 299  +3
+  circle-help.js                                   base 302  head 305  +3
+  clubManager.js                                   base 288645  head 288653  +8
+  clubManagerMeters.js                             base 1014  head 1013  -1
+  flag-B.js                                        base 0  head 306  +306
+  flag.js                                          base 304  head 0  -304
+  index.js                                         base 242722  head 242827  +105
+  medal.js                                         base 386  head 390  +4
+  star.js                                          base 400  head 404  +4
+  tabs.js                                          base 1346  head 1348  +2
+  useArrivalTop.js                                 base 414  head 416  +2
+  useRevealScroll.js                               base 813  head 815  +2
+weightParts1513: /club-manager 45 scripts, base 640715 B, head 641826 B, +1111 B
