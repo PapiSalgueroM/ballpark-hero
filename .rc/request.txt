@@ -1,0 +1,5 @@
+#!build
+#!playwright
+# Round 1515 review (run lens) on 718aa65f: the two rule fences that crashed in r1515-run1 for want of Chromium and a dist, rerun with both
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
