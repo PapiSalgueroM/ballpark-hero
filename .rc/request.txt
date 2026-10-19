@@ -1,0 +1,4 @@
+s3: SECTION=3 LEVER_LEVELS=hard,easy,veryeasy node scripts/simCmDifficulty.mjs
+vefloor: CM_DIFF_CONTROL=vefloor LEVER_LEVELS=easy,veryeasy node scripts/simCmDifficulty.mjs
+vemark: CM_DIFF_CONTROL=ve-mark node scripts/simCmDifficulty.mjs
+vitest-dif: node_modules/.bin/vitest run src/lib/clubManagerDifficulty.test.ts --testTimeout=300000 --hookTimeout=120000
