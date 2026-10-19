@@ -1,0 +1,2 @@
+hair-m2 exit=0 3s |       Tests  3 passed (3)
+hair-m3 exit=0 3s |       Tests  3 passed (3)
