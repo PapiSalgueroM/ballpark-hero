@@ -1,0 +1,7 @@
+simStorageWrites exit=0 5s | simStorageWrites: all green (owed: 12)
+vitest exit=0 7s |    Duration  6.15s (transform 4.08s, setup 644ms, collect 6.17s, tests 2.62s, environment 2.44s, prepare 658ms)
+simCmSavePoints exit=0 60s | simCmSavePoints: OK, all eight sections green
+tsc exit=0 99s | 
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simClubManagerScore exit=0 129s | ALL SEASON SCORE CHECKS PASSED
+simClubManagerSaveSize exit=0 75s | simClubManagerSaveSize: all sections green
