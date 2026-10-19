@@ -1,0 +1,21 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerDifficulty.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 1788[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22mthe market: the same men in the same order, every price marked, every value untouched [33m 596[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22ma release clause is never the cheaper door round the mark, and on Normal it is exactly what it was [33m 447[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1512: the dials on Easy and Very Easy[2m > [22mmore money, more wage room, a cheaper market (never under 0.5) and a weaker side against you [33m 325[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerNoSack.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 2155[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mstarts with No sacking off and Skip hands nothing on [33m 707[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mthe switch rides on both buttons [33m 800[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDifficultyPick.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 2929[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22moffers five levels with Medium pressed, and Skip on Medium hands nothing on [33m 687[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mImpossible and No sacking ride on both buttons [33m 1058[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mEasy and Very Easy say plainly that the career posts no leaderboard scores [33m 323[2mms[22m[39m
+   [33m[2m✓[22m[39m the hook[2m > [22ma career started on Legend carries the key and the level from day one [33m 339[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m39 passed[39m[22m[90m (39)[39m
+[2m   Start at [22m 06:10:08
+[2m   Duration [22m 7.50s[2m (transform 3.20s, setup 455ms, collect 8.49s, tests 6.87s, environment 2.05s, prepare 901ms)[22m
+

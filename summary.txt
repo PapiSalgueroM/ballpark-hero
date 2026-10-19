@@ -1,0 +1,4 @@
+noSack4 exit=0 1s | simCmNoSack: PASS (sections 4)
+noSack-ranked exit=1 1s | simCmNoSack: CONTROL ranked FIRED: section 4 red (1 failures)
+vitest exit=0 8s |    Duration  7.50s (transform 3.20s, setup 455ms, collect 8.49s, tests 6.87s, environment 2.05s, prepare 901ms)
+tsc exit=0 69s | 
