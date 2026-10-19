@@ -1,0 +1,10 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | f442fc9a8 Release BM seam: the guide sentence Round 1515 owed, placed in the Club Manager guide's FAQ Does my career save? (src/data/gameContent/clubManagement.ts), after
+vitest-luton-unit exit=0 3s |    Duration  2.09s (transform 1.10s, setup 61ms, collect 1.33s, tests 76ms, environment 270ms, prepare 119ms)
+luton-proof exit=0 19s | PASS Luton display component proof
+genCareerLeagueSeasons-check exit=0 0s | careerLeagueSeasons.ts is current
+simCareerLeagueSeasons exit=0 17s | simCareerLeagueSeasons: all sections green
+luton-walk exit=0 12s | lutonWalk: PASS 32 checks
+base-minus278 exit=0 34s | /tmp/wt-4174
+luton-walk-ctl-minus278 exit=0 11s | FIRED-OK
+playSoccerCareerOpponents exit=0 10s | playSoccerCareerOpponents: 164 checks, 0 failed
