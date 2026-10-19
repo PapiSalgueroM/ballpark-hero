@@ -1,0 +1,18 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/lib/zzProbe1515cap.test.ts[2m > [22m[2mprobe: the cap of three is game wide, the offer is per slot[2m > [22m[2mslot 2 drops slot 1 kept aside career that slot 2 never offered
+[22m[39mPROBE slot 1 offer: dukb-club-manager-save.broken-2026-10-19T10-00-01
+PROBE slot 2 before fresh start 1: offer null, A held true
+PROBE slot 2 before fresh start 2: offer dukb-club-manager-save.broken-2026-10-19T10-00-10, A held true
+PROBE slot 2 before fresh start 3: offer dukb-club-manager-save.broken-2026-10-19T10-00-11, A held true
+PROBE after three slot 2 fresh starts: A held false, backups 3
+PROBE back in slot 1: offer null
+
+ [32m✓[39m src/lib/zzProbe1515cap.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 16:13:12
+[2m   Duration [22m 2.56s[2m (transform 1.42s, setup 54ms, collect 1.79s, tests 4ms, environment 290ms, prepare 131ms)[22m
+

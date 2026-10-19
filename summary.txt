@@ -1,0 +1,3 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+cap exit=0 3s |    Duration  2.56s (transform 1.42s, setup 54ms, collect 1.79s, tests 4ms, environment 290ms, prepare 131ms)
+corrupt exit=1 132s | playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all
