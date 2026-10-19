@@ -120,12 +120,12 @@ for (const surface of views) describe(`${surface.surface} category state`, () =>
     if (surface.gameType !== 'site') expect(call[1].body.game_context).toMatchObject({ phase: 'fixture', criterion: 'category-pressed' });
     return plain(call[1].body);
   };
-  const closeReopen = async (trigger: HTMLButtonElement) => {
+  const closeReopen = async (trigger: HTMLElement) => {
     fireEvent.keyDown(document.activeElement ?? document.body, { key: 'Escape' }); await flush(50);
     expect(document.querySelector('[role="dialog"]')).toBeNull(); expect(document.activeElement).toBe(trigger); mark('closed');
     fireEvent.click(trigger); await flush(); expect(document.querySelector('[role="dialog"]')).not.toBeNull(); mark('reopened');
   };
-  const successReset = async (view: ReturnType<typeof render>, trigger: HTMLButtonElement) => {
+  const successReset = async (view: ReturnType<typeof render>, trigger: HTMLElement) => {
     expect(view.getByText(surface.success)).toBeInTheDocument(); mark('success');
     await flush(1499); expect(view.getByRole('dialog')).toBeInTheDocument(); mark('success-1499');
     await flush(1); await flush(50); expect(document.querySelector('[role="dialog"]')).toBeNull(); expect(document.activeElement).toBe(trigger); mark('reset-closed');

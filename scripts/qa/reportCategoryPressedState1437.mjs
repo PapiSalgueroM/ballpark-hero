@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 
 export const BASE = '9d31a7d2e839523f5a3826a5150184dae91f520c';
 export const ORIGINAL_ADMISSION = null;
-export const TEST_SHA256 = '81151e4ba307840a209d684d022b8d16bef55e3460711f0798066618f2956f1c';
+export const TEST_SHA256 = 'f3dd55f3a794c074a298a7a3397654a9f977bb2299a38fd77f07ecd86ace3935';
 export const FORM_FILES = ['src/components/game/ReportSiteIssue.tsx', 'src/components/game/ReportQuestion.tsx'];
 export const FORM_ALIASES = ['@/components/game/ReportSiteIssue', '@/components/game/ReportQuestion'];
 export const ORIGINAL_SHA256 = {
