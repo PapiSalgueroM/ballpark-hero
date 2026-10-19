@@ -1,0 +1,14 @@
+rvmut livegate: applied to src/lib/clubManagerStart.ts
+  sim178 exit=1 |   ok: 8f: 12 summer cheques after a change at the season's end (3 clubs, four levels) are Medium's times the new dial | simCmDifficulty: 3 FAILURES (sections 1,7,8)
+     FAIL: 8e Brentford: setDifficulty took null, null, a state for the same level, a junk id and a match at halftime
+     FAIL: 8e Málaga: setDifficulty took null, null, a state for the same level, a junk id and a match at halftime
+     FAIL: 8e Inter Milan: setDifficulty took null, null, a state for the same level, a junk id and a match at halftime
+     simCmDifficulty: 3 FAILURES (sections 1,7,8)
+  vitest exit=1 |     [90m269| [39m | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+     [31m   [31m×[31m Round 1512: changing the level between matches[2m > [22mback to Medium writes no level key; the same level, a junk value or a match at halftime is refused[39m[32m 69[2mms[22m[39m
+     [31m     → expected { saveVersion: 3, …(71) } to be null[39m
+     ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerDifficulty.test.ts,title=src/lib/clubManagerDifficulty.test.ts > Round 1512%3A changing the level between matches > back to Medium writes no l
+     [41m[1m FAIL [22m[49m src/lib/clubManagerDifficulty.test.ts[2m > [22mRound 1512: changing the level between matches[2m > [22mback to Medium writes no level key; the same level, a junk value or a match at halftime
+     [31m[1mAssertionError[22m: expected { saveVersion: 3, …(71) } to be null[39m
+  simCmNoSack exit=0 |    twins kept the job and matched to the byte: 70; twins sacked at the recheck after a broken promise: 83 (floor 36); both floors in one match: 63 (floor 28); at the first check with no promise broken: 0; 9 s | simCmNoSa
+MUTATION livegate CAUGHT by sim178, vitest

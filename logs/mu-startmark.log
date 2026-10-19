@@ -1,0 +1,11 @@
+rvmut startmark: applied to src/lib/clubManagerDifficulty.ts
+  sim178 exit=0 |   ok: 8f: 12 summer cheques after a change at the season's end (3 clubs, four levels) are Medium's times the new dial | simCmDifficulty: all green (sections 1,7,8)
+  vitest exit=1 |     [90m296| [39m    [34mexpect[39m([34measyFrom[39m([34msetUpCareer[39m(s[33m,[39m { level[33m:[39m [32m'hard'[39m })))[33m.[39m[34mtoBeNull[39m()[33m;[39m | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[
+     [31m   [31m×[31m every applier is the identity at its own identity dial[2m > [22ma level writes its key, cuts the cheque and the room by the dial, and rebuilds the asks on day one only[39m[32m 10[2mms[22m[39m
+     [31m     → expected 'normal' to be 'legend' // Object.is equality[39m
+     [31m   [31m×[31m Round 1512: changing the level between matches[2m > [22mgoing easy stops the leaderboards from that season on, one way, and going back up keeps the mark[39m[32m 2[2mms[22m[39m
+     [31m     → expected null to be 1 // Object.is equality[39m
+     [31m   [31m×[31m the hook[2m > [22mRound 1512: a career started on Easy pings no score, and a change mid career moves only the level and is saved[39m[32m 79[2mms[22m[39m
+     [31m     → expected null to be 1 // Object.is equality[39m
+  simCmNoSack exit=0 |    twins kept the job and matched to the byte: 70; twins sacked at the recheck after a broken promise: 83 (floor 36); both floors in one match: 63 (floor 28); at the first check with no promise broken: 0; 9 s | simCmNoSa
+MUTATION startmark CAUGHT by vitest

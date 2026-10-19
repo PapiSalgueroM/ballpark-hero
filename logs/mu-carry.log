@@ -1,0 +1,10 @@
+rvmut carry: applied to src/lib/clubManagerStart.ts
+  sim178 exit=0 |   ok: 8f: 12 summer cheques after a change at the season's end (3 clubs, four levels) are Medium's times the new dial | simCmDifficulty: all green (sections 1,7,8)
+  vitest exit=1 |     [90m309| [39m    [35mconst[39m once [33m=[39m [33mJSON[39m[33m.[39m[34mstringify[39m(broken[33m.[39mstartOptions)[33m;[39m | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+     [31m   [31m×[31m Round 1512: changing the level between matches[2m > [22monly a positive whole number reads as the mark, and ensureStartOptions carries it over a broken block[39m[32m 11[2mms[22m[39m
+     [31m     → expected null to be 2 // Object.is equality[39m
+     ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerDifficulty.test.ts,title=src/lib/clubManagerDifficulty.test.ts > Round 1512%3A changing the level between matches > only a positive whole numb
+     [41m[1m FAIL [22m[49m src/lib/clubManagerDifficulty.test.ts[2m > [22mRound 1512: changing the level between matches[2m > [22monly a positive whole number reads as the mark, and ensureStartOptions carries it over 
+     [31m[1mAssertionError[22m: expected null to be 2 // Object.is equality[39m
+  simCmNoSack exit=0 |    twins kept the job and matched to the byte: 70; twins sacked at the recheck after a broken promise: 83 (floor 36); both floors in one match: 63 (floor 28); at the first check with no promise broken: 0; 9 s | simCmNoSa
+MUTATION carry CAUGHT by vitest

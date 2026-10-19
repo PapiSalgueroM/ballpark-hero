@@ -1,0 +1,8 @@
+mu-postsfull exit=0 137s | MUTATION postsfull CAUGHT by sim178, vitest
+mu-readeasy exit=0 135s | MUTATION readeasy CAUGHT by sim178, vitest
+mu-carry exit=0 136s | MUTATION carry CAUGHT by vitest
+mu-startmark exit=0 139s | MUTATION startmark CAUGHT by vitest
+mu-livegate exit=0 138s | MUTATION livegate CAUGHT by sim178, vitest
+mu-markseason exit=0 139s | MUTATION markseason CAUGHT by sim178, vitest
+mu-veedge exit=0 139s | MUTATION veedge CAUGHT by sim178, vitest
+mu-clean exit=0 0s | simCmDifficulty: all green (sections 1)

@@ -1,0 +1,9 @@
+#!serial
+mu-postsfull: node .rc/x/rvmut.mjs postsfull; s=$?; git checkout -- src scripts; exit $s
+mu-readeasy: node .rc/x/rvmut.mjs readeasy; s=$?; git checkout -- src scripts; exit $s
+mu-carry: node .rc/x/rvmut.mjs carry; s=$?; git checkout -- src scripts; exit $s
+mu-startmark: node .rc/x/rvmut.mjs startmark; s=$?; git checkout -- src scripts; exit $s
+mu-livegate: node .rc/x/rvmut.mjs livegate; s=$?; git checkout -- src scripts; exit $s
+mu-markseason: node .rc/x/rvmut.mjs markseason; s=$?; git checkout -- src scripts; exit $s
+mu-veedge: node .rc/x/rvmut.mjs veedge; s=$?; git checkout -- src scripts; exit $s
+mu-clean: git diff --stat src scripts | tail -2; SECTION=1 node scripts/simCmDifficulty.mjs | tail -1
