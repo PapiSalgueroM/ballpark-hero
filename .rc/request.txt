@@ -1,0 +1,14 @@
+# Round 1515 review (run lens) on 718aa65f: type gate, unit cases, simCmDifficulty sections and controls, the save harnesses, the rule fences (three that read the live database left out)
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+s2: mkdir -p /tmp/b2 && git archive 1a028447 | tar -x -C /tmp/b2 && BASE_ROOT=/tmp/b2 SECTION=2 node scripts/simCmDifficulty.mjs
+vitest: node_modules/.bin/vitest run src/lib/brokenSaveRecovery.test.ts src/test/routeErrorRecovery.test.tsx src/test/saveKeeper.test.ts src/lib/clubManagerSlots.test.ts src/test/clubManagerSlots.test.tsx src/test/cmSavePoints.test.ts src/test/cmSavePointsHook.test.tsx src/lib/clubManagerDifficulty.test.ts src/test/clubManagerDifficultyPick.test.tsx --testTimeout=300000 --hookTimeout=120000
+s3: SECTION=3 node scripts/simCmDifficulty.mjs
+s178: SECTION=1,7,8 node scripts/simCmDifficulty.mjs
+c-helpdrift: CM_DIFF_CONTROL=helpdrift SECTION=7 node scripts/simCmDifficulty.mjs
+c-edge: CM_DIFF_CONTROL=edge SECTION=3 node scripts/simCmDifficulty.mjs
+c-helplines: CM_DIFF_CONTROL=helplines SECTION=7 node scripts/simCmDifficulty.mjs
+c-oldlevel: mkdir -p /tmp/b3 && git archive 1a028447 | tar -x -C /tmp/b3 && BASE_ROOT=/tmp/b3 CM_DIFF_CONTROL=oldlevel SECTION=2 node scripts/simCmDifficulty.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+fences: f=0; for h in simLiveScores simNoRivalNames simInventedNames simHarnessAnchors simNoInventedQuotes simNoInventedConduct simLegalPages simSingleFooter simCompletionOnce simNoDoubleRecord simDailyPuzzleContract simDailySaveHardening simWritesAreSent simSchemaNames simFetchRetry simGoogleOnlyReturn simNavbarStatsReads simScoringCoverage simSiteSearch simResultMoment simGuideHeadings; do node scripts/$h.mjs > /tmp/f-$h.log 2>&1; e=$?; echo "FENCE $h exit=$e | $(tail -1 /tmp/f-$h.log | cut -c1-160)"; [ $e -ne 0 ] && f=1; done; exit $f
