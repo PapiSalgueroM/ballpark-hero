@@ -1,0 +1,12 @@
+vitest exit=0 20s |    Duration  19.89s (transform 4.33s, setup 1.97s, collect 14.78s, tests 27.59s, environment 7.24s, prepare 1.71s)
+simCmSavePoints exit=0 53s | simCmSavePoints: OK, all eight sections green
+ctl-b exit=0 31s | ctl1513: every control FIRED (noaside evict orphan blocked)
+tsc exit=0 84s | 
+simSaveKeeper exit=0 5s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+ctl-c exit=0 29s | ctl1513: every control FIRED (nocredit unguarded noclear pointless)
+simErrorBoundary exit=0 0s | simErrorBoundary: all green
+ctl-a exit=0 123s | ctl1513: every control FIRED (unpacked lossy noindexback noreadback nosum)
+simSaveFence exit=0 59s | simSaveFence: all green (tabs, source, fleet)
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

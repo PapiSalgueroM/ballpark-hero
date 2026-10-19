@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/cmSavePoints.test.ts src/test/cmSavePointsScreen.test.tsx src/test/cmSavePointsHook.test.tsx src/test/cmSavePointsDoor.test.tsx src/test/saveKeeper.test.ts src/test/routeErrorRecovery.test.tsx src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerNoSack.test.tsx src/lib/clubManagerDifficulty.test.ts src/hooks/useClubManager.test.ts src/test/clubManagerSlots.test.tsx src/lib/clubManagerSlots.test.ts src/test/clubManagerOfferConfirm.test.tsx src/test/cmLeagueLeadersCard.test.tsx src/test/clubManagerRetire.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCmSavePoints: node scripts/simCmSavePoints.mjs
+ctl-a: bash .rc/x/ctl1513.sh unpacked lossy noindexback noreadback nosum
+ctl-b: bash .rc/x/ctl1513.sh noaside evict orphan blocked
+ctl-c: bash .rc/x/ctl1513.sh nocredit unguarded noclear pointless
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

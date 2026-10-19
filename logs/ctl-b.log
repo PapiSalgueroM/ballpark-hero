@@ -1,0 +1,5 @@
+control noaside exit=1 | simCmSavePoints: control noaside FIRED, section 3 red (3 failure(s)) | failures by section: {"1":0,"2":0,"3":3,"4":0,"5":2,"6":0,"7":0,"8":0}; board nudges 15
+control evict exit=1 | simCmSavePoints: control evict FIRED, section 4 red (3 failure(s)) | failures by section: {"1":0,"2":0,"3":0,"4":3,"5":0,"6":0,"7":0,"8":0}; board nudges 15
+control orphan exit=1 | simCmSavePoints: control orphan FIRED, section 5 red (1 failure(s)) | failures by section: {"1":0,"2":2,"3":0,"4":0,"5":1,"6":0,"7":0,"8":0}; board nudges 15
+control blocked exit=1 | simCmSavePoints: control blocked FIRED, section 6 red (1 failure(s)) | failures by section: {"1":0,"2":0,"3":0,"4":0,"5":0,"6":1,"7":0,"8":0}; board nudges 15
+ctl1513: every control FIRED (noaside evict orphan blocked)
