@@ -11,7 +11,7 @@ export const TEST_FILE = 'src/test/soccerGridApostropheSearch.test.tsx';
 export const TEST_SHA = 'a7265faffaaeacc166824368a5dc686abc2f514a9df61308fa7925f430f1f6b9';
 export const ORIGINAL_SHA = '33e9b7ab8dcd37c6941fe30c867f71c3e2498fcd602b49325842a4c1d0e5c285';
 export const FIXED_SHA = '368e948894d44cd04d086bc60b0b76e928138f12b317a2e76c6c828d9a1f0738';
-export const ORIGINAL_ADMISSION = null;
+export const ORIGINAL_ADMISSION = {"status":"PASS","scope":"full-original-grid-apostrophe-search","productAdopted":false,"head":"b8bbb9d314c646319bb04da27f3e66c59136e518","sourceSha256":"33e9b7ab8dcd37c6941fe30c867f71c3e2498fcd602b49325842a4c1d0e5c285","testSha256":"a7265faffaaeacc166824368a5dc686abc2f514a9df61308fa7925f430f1f6b9","commonSha256":"128b14ad23f6ee7d69838076aff5be6be97cf472b8de18f5dc071d4eeb274195","featureSha256":"42f297847d9c25f1c0817fb40a649e315804d7ca1bfbaa3aa4bd0f8fa4fa5a09","pixelSha256":"af4c782f31c192599c45196e1099472640dc10a65c24f665da3daf7377909a72","fullAdmissionSha256":"90f9343dd0ce3b655d196db8819b099856f24140f1480c391db3eae3dba297f8"};
 export const HUNK = {
   original: "    (s ?? '')\n      .replace(FORMAT_CHARS, '')",
   fixed: "    (s ?? '')\n      .replace(/\\u2019/g, \"'\")\n      .replace(FORMAT_CHARS, '')",
