@@ -1,3 +1,5 @@
+import { dispatchHistoricalErrorDefault1438 } from './qa/reportErrorCompatibility1438.mjs';
+if (await dispatchHistoricalErrorDefault1438(import.meta.url)) process.exit(0);
 import { dispatchHistoricalCategoryDefault1437 } from './qa/reportCategoryCompatibility1437.mjs';
 if (await dispatchHistoricalCategoryDefault1437(import.meta.url)) process.exit(0);
 import assert from 'node:assert/strict';
