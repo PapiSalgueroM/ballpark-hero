@@ -1,0 +1,38 @@
+  0 ledger: verified eng-2026 eng-2026-s1 | to verify eng-2005 eng-2010 eng-2015 eng-2020 esp-2026 ita-2026 ger-2026 fra-2026 | 10 pages
+  0 constants: 1 rows (eng-2026), 1 season one editions, partial eng-2005 eng-2010 eng-2015 eng-2020 esp-2026 ita-2026 ger-2026 fra-2026
+  1 fleet: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher); Birmingham City (now, second tier watcher); Proof Town Athletic (now, created club in the Championship); Real Madrid (now, no row (Spain)); Bayern Munich (now, no row (Germany)); América (now, no row (Mexico, no cup)); Arsenal (era2005, era row partial)
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  1 forced: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher); Birmingham City (now, second tier watcher); Proof Town Athletic (now, created club in the Championship); Real Madrid (now, no row (Spain)); Bayern Munich (now, no row (Germany)); América (now, no row (Mexico, no cup)); Arsenal (era2005, era row partial)
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  2 calendar: 80 participant seasons beside their twins, 40 nights; the closest neighbour of a night 3 days, at most 1 matches in seven days to a night
+  7 fitness into the league opener: 80.2 after the super cup night, 100.0 in the twin with no night, 100.0 at the rollover (40 seasons)
+  4 honours: 12 arms (won and lost), 54 weighing readers compared with and without a minor trophy
+  3 self relative: 110 journeys, 16519 steps each arm, 11768 steps carrying a super cup
+  6 dailies: 20 daily states and 10 handovers, none with a super cup
+  1 doubles (the runners up took the cup place): 124
+  1 level matches on a pens row (the etall control needs one): 95
+  1 moved stubs: 20
+  1 moves carrying a cup already shown (the carryseen control reads these): 36
+  1 participants (my club earned a place: played from the match half): 68
+  1 plain fields (champions v cup winners): 108
+  1 rollovers into another league (the afterswap control reads these): 50
+  1 rollovers of a manager outside the top flight: 142
+  2 later participant seasons (not held to the twin: the arms have parted): 40
+  2 men who paid a night (sum): 901
+  2 nights whose squad was read (the norecovery control reads these): 80
+  2 participant journeys whose wages differ from the twin by a week keyed event (printed, not asserted): 39
+  2 states after a night and before the league opener (the leaguestarted control reads these): 80
+  3 participant journeys compared up to their first night: 26
+  4 super cups my club won (section 1 fleet): 32
+  5 bytes of a followed one slice: 44914
+  5 bytes of a stub: 156146
+  5 followed one slices measured: 400
+  5 stubs measured: 3274
+  7 season one followed: 100
+  7 season one stub seasonOne: 40
+  7 settled in 90 minutes: 305
+  7 settled on penalties: 95
+  7 won by the stronger side: 204
+  7 won by the weaker side: 192
+  1 rows seen: eng-2026
+simOneOffCups: green, 161787 checks (1312 s)

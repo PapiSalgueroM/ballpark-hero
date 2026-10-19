@@ -1,0 +1,14 @@
+m-veryeasy-0 exit=0 212s | simCmDifficulty: all green (sections 4)
+m-veryeasy-1 exit=0 213s | simCmDifficulty: all green (sections 4)
+m-veryeasy-2 exit=0 216s | simCmDifficulty: all green (sections 4)
+m-veryeasy-3 exit=0 207s | simCmDifficulty: all green (sections 4)
+simWorldEuro exit=2 707s | simWorldEuro: cannot run: section 3 needs WORLD_EURO_BASE, the commit before the board step
+simCmWorldMoves exit=1 929s | simCmWorldMoves: RED, sections 5 (84), 6 (270), 8 (56)
+simClubManagerSaveSize exit=0 54s | simClubManagerSaveSize: all sections green
+simClubManagerSlots exit=0 61s | simClubManagerSlots: all sections green
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simCmLeagueRules exit=0 49s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simCmNoSack exit=0 111s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+simWorldUcl exit=0 1244s | simWorldUcl: green, 498818 checks, 0 failures
+simOneOffCups exit=0 1312s | simOneOffCups: green, 161787 checks (1312 s)
