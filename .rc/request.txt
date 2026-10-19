@@ -1,0 +1,4 @@
+#!build
+#!playwright
+corrupt: node scripts/playCorruptSaves.mjs
+cap: cp .rc/x/probe1515cap.test.ts src/lib/zzProbe1515cap.test.ts && node_modules/.bin/vitest run src/lib/zzProbe1515cap.test.ts --testTimeout=300000
