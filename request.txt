@@ -1,0 +1,21 @@
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: node scripts/simCmSavePoints.mjs
+c-noreadback: SIM_CM_POINTS_CONTROL=noreadback node scripts/simCmSavePoints.mjs
+c-nosum: SIM_CM_POINTS_CONTROL=nosum node scripts/simCmSavePoints.mjs
+c-noaside: SIM_CM_POINTS_CONTROL=noaside node scripts/simCmSavePoints.mjs
+c-evict: SIM_CM_POINTS_CONTROL=evict node scripts/simCmSavePoints.mjs
+c-orphan: SIM_CM_POINTS_CONTROL=orphan node scripts/simCmSavePoints.mjs
+c-blocked: SIM_CM_POINTS_CONTROL=blocked node scripts/simCmSavePoints.mjs
+c-nocredit: SIM_CM_POINTS_CONTROL=nocredit node scripts/simCmSavePoints.mjs
+c-unguarded: SIM_CM_POINTS_CONTROL=unguarded node scripts/simCmSavePoints.mjs
+c-noclear: SIM_CM_POINTS_CONTROL=noclear node scripts/simCmSavePoints.mjs
+c-pointless: SIM_CM_POINTS_CONTROL=pointless node scripts/simCmSavePoints.mjs
+vitest: node_modules/.bin/vitest run src/test/cmSavePoints.test.ts src/test/saveKeeper.test.ts --testTimeout=300000 --hookTimeout=120000
+simStorageWrites: node scripts/simStorageWrites.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simEarlyReturnScope: node scripts/simEarlyReturnScope.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
