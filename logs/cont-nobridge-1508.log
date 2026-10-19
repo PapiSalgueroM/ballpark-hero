@@ -1,0 +1,21 @@
+mutCont1508: the adoption bridge is out of scripts/simManagerWorldContinuity.mjs
+treeWithoutMerge: 2c208601d928cad6b15bc7a3875d689ea347663e, f1b328e5 without f1e54e17; conflicts kept from f1b328e5: scripts/lib/cmWorldSeed1250.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+contCmp1508: base 2c208601d928cad6b15bc7a3875d689ea347663e (the tree without 1508); head exit 1, base exit 1; 109 and 95 lines; 14 differ
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
+60,73d59
+< ...
+<       },
+< +     worldRoster: {
+< +       eraId: 'now',
+< +       packedFormat: 'rows-v1',
+< +       packedRecords: '᭤ᄦ塉䅝⁔倾恇Ōݕₖ祀睍ፋ䂇NĬ搪煗㒰⹁.\x8Cᑜ⁽᳢䀬㎍ 殫ʠⷄ⸶䑅⣪剁恢᪹ಠ֠⛃㍰ոʆ簕•㜵ፕ庂狵僨嗓匀坫㨠ೱォມू䃃㎛〠�
+< +       records: [],
+< +       version: 1
+< +     },
+<       xiIds: [
+<         'youth-mv2cdxc0-3-495',
+<         'p-jarrad-branthwaite',
+<         'p-james-tarkowski',
+<         'p-michael-keane',
+contCmp1508: RED, the log differs from the tree without 1508
