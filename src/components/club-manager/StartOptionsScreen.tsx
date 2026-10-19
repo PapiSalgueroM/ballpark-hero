@@ -87,7 +87,7 @@ export function DifficultyOption({ career, onDifficulty }: { career: CareerState
             : noSackFrom(career) !== null
               ? 'No sacking is on, so this career posts no leaderboard scores at any level.'
               : 'Medium, Hard and Impossible post leaderboard scores. Very Easy and Easy do not, from the moment you pick one.'}
-          {' '}Negotiation strictness below is a separate setting.
+          {' '}Negotiation strictness in Options is a separate setting.
         </p>
       </div>
   );
