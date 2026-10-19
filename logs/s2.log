@@ -1,0 +1,11 @@
+simCmDifficulty: sections 2
+  table: veryeasy {"gain":1.4,"pain":0.6,"cut":0,"cheque":1.5,"wageRoom":1.12,"mark":0.8,"edge":-3}; easy {"gain":1.2,"pain":0.8,"cut":0,"cheque":1.2,"wageRoom":1.06,"mark":0.87,"edge":-1.5}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":2.2}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3.9}
+2) Normal plays as the base tree /tmp/b2: 2 seeds, 2 seasons, coach and noCoach
+  ok: 56 Normal careers compared with the base, 3900625 draws, in 160 s
+  ok: Brentford, a joinClubNow move: reached the new job all 8 times, on both trees
+  ok: Hull City, a wilderness job: reached the new job all 8 times, on both trees
+  ok: setUpCareer on Normal with No sacking off returns its argument
+  ok: 2c: 14 of 14 saves the base wrote open here as they open there, Normal with No sacking off
+  ok: 2d: 18 old saves (the four fixtures as they are and keyed Hard and Legend, and six Hard and Legend seasons the base wrote) open here byte for byte as there, each on its own level
+  ok: 2b: 18 of 18 Hard careers on Normal's dials play as Normal, the key aside
+simCmDifficulty: all green (sections 2)

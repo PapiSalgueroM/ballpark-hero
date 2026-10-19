@@ -1,0 +1,49 @@
+simCmDifficulty: sections 1, 3, 7, 8
+  table: veryeasy {"gain":1.4,"pain":0.6,"cut":0,"cheque":1.5,"wageRoom":1.12,"mark":0.8,"edge":-3}; easy {"gain":1.2,"pain":0.8,"cut":0,"cheque":1.2,"wageRoom":1.06,"mark":0.87,"edge":-1.5}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":2.2}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3.9}
+1) the table
+  ok: Normal is the identity row
+  ok: 28 of 28 neighbour pairs ordered (every dial but the cut strictly)
+  ok: 24 of 24 caps hold
+  ok: src/lib/managerDifficulty.ts: no growth, potential, rating, draw or clock in its code
+  ok: src/lib/clubManagerDifficulty.ts: no growth, potential, rating, draw or clock in its code
+  ok: clubManagerDifficulty.ts runtime imports: @/lib/clubManagerStart, @/lib/clubManagerBoardVerdict
+  ok: src/lib/clubManagerStart.ts does not import the engine or this module at runtime
+  ok: src/lib/clubManagerBoardVerdict.ts does not import the engine or this module at runtime
+3) each lever does what its dial says (Hard with one lever on, the rest Medium's), 4 seeds
+  ok: B1: 35 first matches (22 up, 13 down), Hard's change is Normal's times the dial every time
+  ok: P1 Hard: 9 next match cards and match facts read the opponent at strength plus 2.2, the odds turned against you in all 9
+  ok: P1: oppStrengthVsMe is read in exactly the seven readers of your match (talkTargetNow, firstHalfLambdas, secondHalfLambdas, playMyMatch, talkEdgeFor, nextFixtureFrom, matchFacts)
+  ok: P1: simAiMatch reads plain strengthOf, so no match between other clubs moves
+  11 season ends rolled (the steady driver at the mid and small clubs)
+  ok: B2: 6 bad openings fell by exactly 8, 5 at or above Safe stayed
+  ok: M1: day one and 11 summer cheques are Normal's times 0.8
+  ok: M1 joinClubNow: 9 mid season moves start on Normal's money times 0.8
+  ok: M2: 10 new jobs (day one and summer moves) start on Normal's ceiling times 0.94
+  ok: M2 joinClubNow: 9 mid season moves start on Normal's ceiling times 0.94
+  ok: T1: all 5080 cards are the same men in the same order at 1.15 times the list
+  ok: T1 Hard: Buy charges the marked price (204.9 for a man listed at 178.2)
+  ok: T1: none of 1799 release clauses undercuts the price at Legend's mark
+  ok: T1: the AI's own deals are Normal's (8 headlines after six entries)
+3) each lever does what its dial says (Very Easy with one lever on, the rest Medium's), 4 seeds
+  ok: B1: 35 first matches (22 up, 13 down), Very Easy's change is Normal's times the dial every time
+  ok: P1 Very Easy: 9 next match cards and match facts read the opponent at strength plus -3, the odds turned for you in all 9
+  11 season ends rolled (the steady driver at the mid and small clubs)
+  ok: B2: 6 bad openings fell by exactly 0, 5 at or above Safe stayed
+  ok: M1: day one and 11 summer cheques are Normal's times 1.5
+  ok: M1 joinClubNow: 9 mid season moves start on Normal's money times 1.5
+  ok: M2: 10 new jobs (day one and summer moves) start on Normal's ceiling times 1.12
+  ok: M2 joinClubNow: 9 mid season moves start on Normal's ceiling times 1.12
+  ok: T1: all 5080 cards are the same men in the same order at 0.8 times the list
+  ok: T1 Very Easy: Buy charges the marked price (145.8 for a man listed at 178.2)
+  ok: T1 Very Easy: none of 5080 signings (727 of 30 or over) costs less than selling him straight back banks
+  ok: T1 Very Easy: the AI's own deals are Medium's (8 headlines after six entries)
+7) the help's worked example is the dial table's
+  ok: the help gives the five levels one short line each (140, 119, 41, 130, 143 characters)
+  ok: the example's 30 numbers are the table's (4.5, 5.6, 6.7, 3.6, 2.7, 4, 3.2, 2.6, 4.8, 5.6, 40, 32, 26, 48, 60, 23, 10, 11.5, 13, 8.7, 8, 80, 82.2, 83.9, 78.5, 77, 35, 27, 21, 35)
+  ok: the example places its defeat at a Challengers club, where patience is 1
+  ok: the block opens by saying everything else on the screen, numbers and promises, is Medium's, and names No sacking
+  ok: the block says one bad night in a new job can take you under Safe
+8) changing the level between matches
+  ok: 8a to 8e: 12 changes mid season at three clubs: nothing but the level and the mark moved, each saved and loaded back, the next match read the new edge, the leaderboard mark one way, and the refusals held
+  ok: 8f: 12 summer cheques after a change at the season's end (3 clubs, four levels) are Medium's times the new dial
+simCmDifficulty: all green (sections 1,3,7,8)
