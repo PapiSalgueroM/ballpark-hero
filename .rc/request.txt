@@ -1,0 +1,17 @@
+# Release BM proof, section 4: the committed dials (no DIALS_JSON) for Hard and Impossible on seeds 0 to 31, every shard as Round 1515's verify ran it (r1515-vfy), each JSON to be cmp'd with r1515-vfy's files
+h0: SECTION=4 LEVELS=hard SHARD=0/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/hard22-0.json node scripts/simCmDifficulty.mjs
+h1: SECTION=4 LEVELS=hard SHARD=1/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/hard22-1.json node scripts/simCmDifficulty.mjs
+h2: SECTION=4 LEVELS=hard SHARD=2/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/hard22-2.json node scripts/simCmDifficulty.mjs
+h3: SECTION=4 LEVELS=hard SHARD=3/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/hard22-3.json node scripts/simCmDifficulty.mjs
+h4: SECTION=4 LEVELS=hard SHARD=4/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/hard22-4.json node scripts/simCmDifficulty.mjs
+h5: SECTION=4 LEVELS=hard SHARD=5/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/hard22-5.json node scripts/simCmDifficulty.mjs
+h6: SECTION=4 LEVELS=hard SHARD=6/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/hard22-6.json node scripts/simCmDifficulty.mjs
+h7: SECTION=4 LEVELS=hard SHARD=7/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/hard22-7.json node scripts/simCmDifficulty.mjs
+l0: SECTION=4 LEVELS=legend SHARD=0/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/legend39-0.json node scripts/simCmDifficulty.mjs
+l1: SECTION=4 LEVELS=legend SHARD=1/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/legend39-1.json node scripts/simCmDifficulty.mjs
+l2: SECTION=4 LEVELS=legend SHARD=2/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/legend39-2.json node scripts/simCmDifficulty.mjs
+l3: SECTION=4 LEVELS=legend SHARD=3/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/legend39-3.json node scripts/simCmDifficulty.mjs
+l4: SECTION=4 LEVELS=legend SHARD=4/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/legend39-4.json node scripts/simCmDifficulty.mjs
+l5: SECTION=4 LEVELS=legend SHARD=5/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/legend39-5.json node scripts/simCmDifficulty.mjs
+l6: SECTION=4 LEVELS=legend SHARD=6/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/legend39-6.json node scripts/simCmDifficulty.mjs
+l7: SECTION=4 LEVELS=legend SHARD=7/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 OUT_JSON=$RC_OUT/legend39-7.json node scripts/simCmDifficulty.mjs
