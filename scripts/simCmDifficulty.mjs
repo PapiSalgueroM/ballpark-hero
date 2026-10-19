@@ -135,6 +135,8 @@
      easyclear   going back up clears the easy mark                        8 (8d)
      midnolevel  setDifficulty says yes and writes nothing                 8 (8b, 8c, 8d, 8f)
      foldflat    FOLD with Easy and Very Easy as copies of Medium's seasons  the fold's easy bands
+   Round 1512 closing check:
+     vefloor     the easy mark's floor at what a sale banks taken out      3 (the Very Easy pass)
 
    Run: node scripts/simCmDifficulty.mjs     (SECTION=1, MEASURE=1 SEEDS=4 SEASONS=10)
         git worktree add /tmp/base <base sha> && BASE_ROOT=/tmp/base node scripts/simCmDifficulty.mjs
@@ -160,6 +162,8 @@ const CONTROLS = {
   /* Round 1512: the easy rows and the change between matches. */
   flate: ['1'], oldlevel: ['2'], 've-gain': ['3'], 've-pain': ['3'], 've-cheque': ['3'], 've-wages': ['3'], 've-mark': ['3'], 've-edge': ['3'],
   helpdrifte: ['7'], midleak: ['8'], easyclear: ['8'], midnolevel: ['8'], foldflat: [],
+  /* Round 1512 closing check: the easy market's floor at what a sale banks. */
+  vefloor: ['3'],
 };
 const cannot = why => { console.log(`simCmDifficulty: CANNOT RUN: ${why}`); process.exit(2); };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`CM_DIFF_CONTROL=${CONTROL} is not a control this harness knows`);
@@ -193,6 +197,8 @@ const PATCHES = {
   easyclear: { file: 'clubManagerStart.ts', from: "  if (level === 'normal') delete next.difficulty;", to: "  if (!isEasyLevel(level)) delete next.easySince;\n  if (level === 'normal') delete next.difficulty;" },
   /* A change that says yes but writes nothing: the next match and the next cheque stay on the old level. */
   midnolevel: { file: 'clubManagerStart.ts', from: '  return { ...state, startOptions: optionsAtLevel(state, level) };', to: '  return { ...state };' },
+  /* Round 1512 closing check: the easy mark without its floor, so a man is listed under what his sale banks. */
+  vefloor: { file: 'clubManagerDifficulty.ts', from: '  return Math.min(mp.price, Math.max(marked, Math.round(mp.value * SALE_SHARE * 10) / 10));', to: '  return marked;' },
 };
 /* Without BASE_ROOT, section 2 compares with this tree with every dial read as Normal's: the same claim (a
    career without the key never takes a lever's path), held for as long as the levers exist. */
@@ -769,7 +775,7 @@ function seasonEnd(m, club, seed) {
 const keyed = (s, level) => ({ ...s, startOptions: { ...(s.startOptions ?? {}), difficulty: level } });
 function section3() {
   const seeds = num('SEEDS3', 4);
-  if (LEVER_CONTROL || CONTROL === 'clause' || CONTROL === 'nojoin') console.log(`NEGATIVE CONTROL ON: ${CONTROL === 'clause' ? 'the clause floor at the card\'s price is gone' : CONTROL === 'nojoin' ? 'joinClubNow returns the new job without its dials' : `${LEVEL_WORD[LEVER_CONTROL.level]}'s ${LEVER_CONTROL.keys.join(' and ')} set back to Medium's`}`);
+  if (LEVER_CONTROL || CONTROL === 'clause' || CONTROL === 'nojoin' || CONTROL === 'vefloor') console.log(`NEGATIVE CONTROL ON: ${CONTROL === 'clause' ? 'the clause floor at the card\'s price is gone' : CONTROL === 'vefloor' ? 'the easy mark\'s floor at what a sale banks is gone' : CONTROL === 'nojoin' ? 'joinClubNow returns the new job without its dials' : `${LEVEL_WORD[LEVER_CONTROL.level]}'s ${LEVER_CONTROL.keys.join(' and ')} set back to Medium's`}`);
   console.log(`3) each lever does what its dial says (${LVN} with one lever on, the rest Medium's), ${seeds} seeds`);
   const clubs = fleetClubs();
   /* B1: the board's change after the first match. */
@@ -946,8 +952,14 @@ function section3money() {
     const s0 = withStream(5, () => m.cm.startCareer('Brentford'));
     const sh = { ...setUp(m, s0, { level: LV }), budget: 9999, transferWindow: s0.transferWindow ?? 'summer' };
     const base = m.cm.buildMarket(sh), mine = m.dif.marketForMe(sh, base);
+    /* Round 1512 closing check: under 1 the mark never lists a man under 0.9 of his value (what selling him
+       straight back banks) nor over Medium's price; the signings below hold that against the engine's sellValue. */
+    const listed = mp => {
+      const plain = Math.max(0.5, Math.round(mp.price * dial.mark * 10) / 10);
+      return dial.mark < 1 && mp.value !== undefined ? Math.min(mp.price, Math.max(plain, Math.round(mp.value * 0.9 * 10) / 10)) : plain;
+    };
     let marked = 0;
-    mine.forEach((mp, i) => { if (mp.name === base[i].name && mp.value === base[i].value && mp.price === Math.max(0.5, Math.round(base[i].price * dial.mark * 10) / 10)) marked += 1; });
+    mine.forEach((mp, i) => { if (mp.name === base[i].name && mp.value === base[i].value && mp.price === listed(base[i])) marked += 1; });
     if (marked !== base.length || (dial.mark !== 1 && mine.every((mp, i) => mp.price === base[i].price))) fail(`T1: ${marked} of ${base.length} cards are the same man at the marked price`);
     else ok(`T1: all ${base.length} cards are the same men in the same order at ${dial.mark} times the list`);
     /* Round 1512: a card the mark moved (on an easy row a cheap man can sit on the 0.5 floor at his list price). */
@@ -957,6 +969,24 @@ function section3money() {
     else ok(`T1 ${LVN}: Buy charges the marked price (${pick.price} for a man listed at ${base[mine.indexOf(pick)].price})`);
     const floor = mine.filter(mp => mp.price < 0.5).length;
     if (floor) fail(`T1 ${LVN}: ${floor} cards are listed under the 0.5 floor`);
+    /* Round 1512 closing check (review minor 4): on a row under 1, buying a man must never cost less than selling
+       him straight back banks, or a Very Easy career buys a man over 30 at 0.72 of his value and sells him at 0.9.
+       Every card that can be signed is bought on its own from the same state and read back by sellValue. */
+    if (dial.mark < 1) {
+      let n = 0, under = 0, older = 0, first = '';
+      for (const mp of mine) {
+        const after = m.cm.buyPlayer(sh, mp);
+        const signed = after && after.squad.find(p => p.name === mp.name && !sh.squad.some(q => q.id === p.id));
+        if (!signed) continue;
+        n += 1;
+        if (mp.age >= 30) older += 1;
+        const paid = sh.budget - after.budget, sale = m.cm.sellValue(signed);
+        if (paid < sale - 1e-9) { under += 1; if (!first) first = `${mp.name}, ${mp.age}, ${f2(paid)}m paid against ${f2(sale)}m banked`; }
+      }
+      if (n < 200 || older < 20) fail(`T1 ${LVN}: only ${n} signings (${older} of 30 or over) to hold the floor against`);
+      else if (under) fail(`T1 ${LVN}: ${under} of ${n} signings cost less than selling him straight back banks (first ${first})`);
+      else ok(`T1 ${LVN}: none of ${n} signings (${older} of 30 or over) costs less than selling him straight back banks`);
+    }
     if (LV !== 'hard') {
       const runA = withStream(21, () => { let s = mn.cm.startCareer('Brentford'); for (let i = 0; i < 6; i += 1) s = mn.cm.playNextEntry(s, { skipHalftime: true }).state; return s.aiHeadlines; });
       const runB = withStream(21, () => { let s = setUp(m, m.cm.startCareer('Brentford'), { level: LV }); for (let i = 0; i < 6; i += 1) s = m.cm.playNextEntry(s, { skipHalftime: true }).state; return s.aiHeadlines; });

@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import type { CareerState, CustomClubSpec } from '@/lib/clubManager';
-import { boardVerdictLine, buildMarket, playableClubs, releaseClauseOf, startCareer } from '@/lib/clubManager';
+import type { CareerState, CMPlayer, CustomClubSpec, MarketPlayer } from '@/lib/clubManager';
+import { boardVerdictLine, buildMarket, buyPlayer, playableClubs, releaseClauseOf, sellValue, startCareer } from '@/lib/clubManager';
 import { DIFFICULTY_LEVELS, readLevel } from '@/lib/managerDifficulty';
 import { ensureEraRosters } from '@/lib/clubManagerEras';
 import {
@@ -227,6 +227,34 @@ describe('Round 1512: the dials on Easy and Very Easy', () => {
       expect(mp.value).toBe(base[i].value);
       expect({ ...mp, price: base[i].price }).toEqual(base[i]);
     });
+  });
+
+  it('the easy market never lists a man under what selling him straight back banks, nor over Medium\'s price', () => {
+    /* Round 1512 closing check: at 0.8 of an over 30's list (0.9 of his value) a Very Easy career bought him at
+       0.72 of his value and sold him at 0.9. The floor is sellValue's share, and a signed man proves it. */
+    const base = buildMarket(s);
+    for (const level of [easy, veryeasy]) {
+      const mine = marketForMe(level, base);
+      let floored = 0, under = 0;
+      mine.forEach((mp, i) => {
+        expect(mp.price).toBeLessThanOrEqual(base[i].price);
+        expect(typeof base[i].value).toBe('number');
+        const share = Math.round((base[i].value as number) * 0.9 * 10) / 10;
+        expect(mp.price).toBeGreaterThanOrEqual(Math.min(base[i].price, share));
+        if (mp.price > markedPrice(level, base[i].price)) floored += 1;
+        if (mp.price < base[i].price) under += 1;
+        if (base[i].age >= 30) expect(mp.price).toBe(base[i].price);
+      });
+      expect(floored).toBeGreaterThan(0);
+      expect(under).toBeGreaterThan(0);
+      const rich = { ...level, budget: 9999, transferWindow: level.transferWindow ?? 'summer' } as CareerState;
+      const vet = mine.find(mp => mp.age >= 31 && buyPlayer(rich, mp));
+      expect(vet).toBeDefined();
+      const after = buyPlayer(rich, vet as MarketPlayer) as CareerState;
+      const signed = after.squad.find(p => p.name === (vet as MarketPlayer).name);
+      expect(signed).toBeDefined();
+      expect(rich.budget - after.budget).toBeGreaterThanOrEqual(sellValue(signed as CMPlayer));
+    }
   });
 });
 
