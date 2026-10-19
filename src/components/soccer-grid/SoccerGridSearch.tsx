@@ -45,6 +45,7 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
   const suggestions = query.length >= 2 && normalizedQuery.length > 0
     ? players
         .filter(p => normalizeName(p.name).includes(normalizedQuery))
+        .sort((a, b) => Number(normalizeName(b.name) === normalizedQuery) - Number(normalizeName(a.name) === normalizedQuery))
         .slice(0, 8)
     : [];
   const popupOpen = showDropdown && suggestions.length > 0;
