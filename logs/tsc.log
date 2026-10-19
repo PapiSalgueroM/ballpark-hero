@@ -1,0 +1,8 @@
+src/components/club-manager/SavePointsScreen.tsx(50,79): error TS2339: Property 'why' does not exist on type 'PointResult'.
+  Property 'why' does not exist on type '{ ok: true; meta: PointMeta; }'.
+src/components/club-manager/SavePointsScreen.tsx(55,66): error TS2339: Property 'why' does not exist on type 'PointResult'.
+  Property 'why' does not exist on type '{ ok: true; meta: PointMeta; }'.
+src/components/club-manager/SavePointsScreen.tsx(74,15): error TS2339: Property 'why' does not exist on type '{ ok: true; } | { ok: false; why: PointRefusal; }'.
+  Property 'why' does not exist on type '{ ok: true; }'.
+src/lib/cmSavePoints.ts(175,35): error TS2339: Property 'why' does not exist on type '{ ok: true; } | { ok: false; why: "blocked" | "no-room" | "gone" | "stale"; }'.
+  Property 'why' does not exist on type '{ ok: true; }'.

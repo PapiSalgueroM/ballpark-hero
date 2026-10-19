@@ -1,0 +1,11 @@
+simStorageWrites exit=1 4s | simStorageWrites: 1 failed (owed: 12)
+vitest exit=0 9s |    Duration  8.62s (transform 3.52s, setup 771ms, collect 5.85s, tests 8.95s, environment 3.10s, prepare 994ms)
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simActivityNotCompletion exit=0 6s | simActivityNotCompletion: all green
+tsc exit=2 79s |   Property 'why' does not exist on type '{ ok: true; }'.
+simErrorBoundary exit=0 1s | simErrorBoundary: all green
+simClubManagerSlots exit=0 85s | simClubManagerSlots: all sections green
+simNoRivalNames exit=0 16s | No rival product names found. 0 findings.
+simSaveFence exit=0 53s | simSaveFence: all green (tabs, source, fleet)
+simCmNoSack exit=0 139s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
