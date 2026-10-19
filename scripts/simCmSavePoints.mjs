@@ -12,9 +12,11 @@
  *   1) SIZES. Two careers (Everton and Lincoln City, today), a point at week
  *      10 of seasons 1, 8 and 15: the career's plain text and the stored
  *      point, in characters. Each point opens back to the career's exact
- *      text. Skipped under a control (no control aims at it).
+ *      text, and is under half its career. Skipped under a control that aims
+ *      at another section.
  *   2) A POINT IS WHAT IT SAYS. On a store that silently cuts what it is
- *      handed, a point is refused, never reported saved. A point whose bytes
+ *      handed, a point is refused, never reported saved, and so is one whose
+ *      index the store cuts (the first point, and over one). A point whose bytes
  *      were swapped for another point's career (a damaged store, the length
  *      and sum no longer match) is refused at restore and nothing is staged.
  *   3) RESTORE AFTER SEVERAL MATCHES. A point at week 10, three matches
@@ -43,11 +45,19 @@
  *
  * NEGATIVE CONTROLS (SIM_CM_POINTS_CONTROL=<name>), each asserts the text it
  * changes is in the file first, changes a copy only, and must turn its
- * section red: noreadback (2), nosum (2), noaside (3), evict (4), orphan (5),
- * blocked (6), nocredit (6), unguarded (7), noclear (7), pointless (8).
+ * section red: unpacked (1), lossy (1), noindexback (2), noreadback (2),
+ * nosum (2), noaside (3), evict (4), orphan (5), blocked (6), nocredit (6),
+ * unguarded (7), noclear (7), pointless (8).
  *
- * MEASURED: see the closing lines of a run; the numbers are in the Round 1513
- * finish report.
+ * MEASURED (section 1, on GitHub runners, Round 1513 build r1513-f and every
+ * run since; the careers are seeded, so the numbers repeat): a point is 21.0
+ * to 25.9 percent of its career's characters. Everton 101,393 / 21,303 at
+ * season 1, 150,415 / 37,082 at season 8, 152,746 / 39,536 at season 15;
+ * Lincoln City 101,154 / 21,370, 150,061 / 35,906, 154,354 / 38,585. The
+ * bound is half, so the largest point measured sits at about half the bound.
+ * A restore costs more than a point (section 3 prints it): the staged copy
+ * and the kept aside career are plain text, a whole career each (about 153K
+ * characters at season 15), and the game keeps three kept aside careers.
  */
 import os from 'node:os';
 import fs from 'node:fs';
@@ -78,6 +88,17 @@ function findUp(rel) {
 
 /* ---------- the controls: a file, the text there, what replaces it, the section that must go red ---------- */
 const CONTROLS = {
+  /* Review of 2026-10-19: section 1's two checks had no control. */
+  unpacked: { file: 'src/lib/cmSavePoints.ts', section: 1,
+    from: 'size: packed.length,',
+    to: 'size: text.length,' },
+  lossy: { file: 'src/lib/cmSavePoints.ts', section: 1,
+    from: 'return { ok: true, meta, text, packed };',
+    to: 'return { ok: true, meta, text: text.slice(1), packed };' },
+  /* Review of 2026-10-19: the index read back had no guard (a store that cuts the index). */
+  noindexback: { file: 'src/lib/cmSavePointsStore.ts', section: 2,
+    from: '    return storage.getItem(pointsIndexKey(slot)) === text;',
+    to: '    return true;' },
   noreadback: { file: 'src/lib/cmSavePoints.ts', section: 2,
     from: "if (back !== packed || decompressFromUTF16(back) !== text) throw new Error('point did not read back');",
     to: "if (back === null) throw new Error('point did not read back');" },
@@ -244,7 +265,7 @@ function restoreTo(point, cur, label) {
 /* ---------- 1. sizes ---------- */
 console.log('\n1. sizes: a point at week 10 of seasons 1, 8 and 15');
 const sizes = [];
-if (ctl) console.log('   skipped under a control');
+if (ctl && ctl.section !== 1) console.log('   skipped under a control that aims elsewhere');
 else {
   for (const [ci, club] of ['Everton', 'Lincoln City'].entries()) {
     reseed(ci, 0);
@@ -282,6 +303,20 @@ globalThis.__cut = k => k.startsWith('dukb-cm-point-');
   if (r.ok) fail('a point the store cut short was reported saved');
   if (snap() !== before) fail('a refused point left something behind');
   console.log(`   a store that cuts what it is handed: ${r.ok ? 'reported saved' : `refused (${r.why})`}`);
+}
+/* Review of 2026-10-19: the same store cutting the next index write only, once with no index there and once over
+   one point (the cut is once, so the index put back as it was is not cut again). */
+for (const first of [false, true]) {
+  store.clear();
+  if (first && !pts.createPoint(1, base, 'First', ls, now()).ok) abort('section 2 could not make its first point');
+  const before = snap();
+  let cuts = 1;
+  globalThis.__cut = k => k === ps.pointsIndexKey(1) && cuts-- > 0;
+  const r = pts.createPoint(1, base, 'Liar index', ls, now());
+  globalThis.__cut = null;
+  if (r.ok) fail(`an index the store cut short was reported saved (${first ? 'over one point' : 'the first point'})`);
+  if (snap() !== before) fail(`a refused index left the store changed (${first ? 'over one point' : 'the first point'})`);
+  console.log(`   a store that cuts the index, ${first ? 'over one point' : 'the first point'}: ${r.ok ? 'reported saved' : `refused (${r.why})`}`);
 }
 store.clear();
 const later = play(base, { matches: 3 }).s;
@@ -321,6 +356,9 @@ if (had === pointBytes || moved.week <= atPoint.week) abort(`three matches did n
   const r = pts.restorePoint(1, p3.meta.id, moved, ls, stageHere(when));
   if (!r.ok) fail(`the restore was refused (${r.why})`);
   if (store.get(SAVE_KEY) !== had) fail('the restore wrote the save under a live page');
+  /* Review of 2026-10-19: what a restore costs the browser, beside what the point costs. */
+  const stagedLen = store.get(keeper.PENDING_COPY_KEY)?.length ?? 0;
+  console.log(`   what a restore holds: a staged plain copy of ${stagedLen} characters until the load, then a kept aside career of ${had.length} (the game keeps its three newest); the point is ${p3.meta.size}`);
   const out = keeper.applyPending(ls, when);
   if (!out || !out.ok || !out.copy || !out.kept) fail(`the load's outcome was ${JSON.stringify(out)}`);
   if (store.get(SAVE_KEY) !== pointBytes) fail('the save after the load is not the point byte for byte');
