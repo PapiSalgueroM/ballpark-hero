@@ -218,15 +218,12 @@ describe('restore', () => {
     expect(restorePoint(1, r.meta.id, { ...c3, eraId: 'not-this-era' }, api, () => ({ ok: true }))).toEqual({ ok: false, why: 'damaged' });
   });
 
-  /* Review of 2026-10-19 (run minor 4): a cut journal, or one an older tab read as junk and forgot, left the plain copy for good. */
-  it('a staged copy no journal can apply goes on the next load, and a load with neither writes nothing', () => {
+  /* Review of 2026-10-19 (run minor 4): a cut journal left the plain copy until the next restore wrote over it. */
+  it('a staged copy a cut journal points at goes on the next load, and a load with nothing staged writes nothing', () => {
     const copy = pointText(c3);
     const cut = store({ [SAVE_KEY]: 'held', [PENDING_RESTORE_KEY]: '{"v":1,"path":"/club-manager","backupKey":"dukb-save-pen', [PENDING_COPY_KEY]: copy });
     expect(applyPending(cut.api, T0)).toBeNull();
     expect([...cut.m.keys()]).toEqual([SAVE_KEY]);
-    const forgotten = store({ [SAVE_KEY]: 'held', [PENDING_COPY_KEY]: copy });
-    expect(applyPending(forgotten.api, T0)).toBeNull();
-    expect([...forgotten.m.keys()]).toEqual([SAVE_KEY]);
     const clean = store({ [SAVE_KEY]: 'held' });
     expect(applyPending(clean.api, T0)).toBeNull();
     expect(clean.s.sets + clean.s.removes).toBe(0);

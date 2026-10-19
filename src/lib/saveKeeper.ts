@@ -257,10 +257,12 @@ function tidy(entry: ContinueSave, storage: ListableStorage, made: string | null
 export function applyPending(storage: ListableStorage | null, now: Date = new Date()): KeeperOutcome | null {
   if (!storage) return null;
   const staged = readStaged(storage);
-  if (staged === 'none' || staged === 'junk') {
-    /* Review of 2026-10-19: a save point copy no journal can apply (a cut journal, or one an older tab forgot) goes too. */
+  if (staged === 'none') return null;
+  if (staged === 'junk') {
+    forget(storage);
+    /* Review of 2026-10-19: a save point copy a cut journal pointed at goes too. Only here: an ordinary boot
+       reads exactly the journal and the versioned games (simSaveKeeper section 2), so it does not look for one. */
     try { if (storage.getItem(PENDING_COPY_KEY) !== null) storage.removeItem(PENDING_COPY_KEY); } catch { /* the next load */ }
-    if (staged === 'junk') forget(storage);
     return null;
   }
   const { rec, entry } = staged;
