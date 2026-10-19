@@ -1,0 +1,10 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sweepWeight exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+walk-nolevel exit=1 42s | playCmDifficulty control nolevel: the mutation change matched no served code, so it proves nothing
+walk-jump exit=0 29s | playCmDifficulty control jump: all 1 guarded checks fired (mutations landed: {"blurb":2})
+simClubManagerStart exit=0 4s | simClubManagerStart: green. The defaults are the shipped game, the currency never reaches the engine, and no setting can switch off the haggle.
+simSquadRows exit=0 3s | simSquadRows: all green
+walk exit=0 107s |   PASS  no page errors
+simManagerAppealIsolation exit=0 39s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+walk-nopill exit=0 160s | playCmDifficulty control nopill: all 2 guarded checks fired (mutations landed: {"pill":4})
+playCmNoSack exit=0 259s |   PASS  no page errors

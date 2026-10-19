@@ -1,0 +1,33 @@
+playCmDifficulty: seed 2543157748 (replay with DIFF_SEED=2543157748), widths 390, play widths 390, control nopill
+
+== 390 by 844, with matches
+  PASS  390: the Dugout step offers Very Easy, Easy, Medium, Hard and Impossible with Medium pressed ([["Very Easy","false"],["Easy","false"],["Medium","true"],["Hard","false"],["Impossible","false"]])
+  PASS  390: a Medium career carries no level and no easy mark and wears no level pill
+  PASS  390: Options reads Medium with scores on ("🎚️ Difficulty Medium Very Easy Easy Medium Hard Impossible The game as it has a")
+  PASS  390: one tap on Easy only asks (armed yes, saved level null)
+  PASS  390: one tap on Hard switches with no question (saved hard)
+  PASS  390: Easy is pressed
+  PASS  390: pressing every tile in turn moves nothing (start 1800/24282, veryeasy 1800/24282, easy 1800/24282, hard 1800/24282, legend 1800/24282, normal 1800/24282, easy 1800/24282)
+  PASS  390: the card's shortest button is 44.0 px and its smallest text 12 px
+  PASS  390: the Dugout step is no wider than the screen
+  PASS  390: the Easy career is running
+  PASS  390: the save holds Easy and the easy mark of season 1 (easy, 1)
+  CAUGHT  390: the hub wears the Easy pill ("")
+  PASS  390: nothing in the header overlaps or runs off the page (0 overlaps)
+   390: header 62 px on Easy, 62 px on Medium
+   played 2 (wanted 2) in 3 steps
+  PASS  390: two matches played on Easy
+  PASS  390: the Options tile reads "⚙️ OPTIONS £ · Easy Currency, nation job, haggling"
+  PASS  390: Options reads Easy with scores off ("🎚️ Difficulty Easy Very Easy Easy Medium Hard Impossible A kinder board, more money and a")
+  PASS  390: one tap on Impossible switches between matches, the easy mark kept and nothing played moved (saved legend, mark 1, played 2 then 2)
+  PASS  390: Options is no wider than the screen
+   played 1 (wanted 1) in 1 steps
+  PASS  390: one more match played
+  PASS  390: after that match the save is on Impossible with the easy mark (legend, 1)
+  PASS  390: after a reload the save is still Impossible with the easy mark (legend, 1)
+  CAUGHT  390: the hub wears the Impossible pill after the reload ("")
+  PASS  390: Options after the reload reads Impossible with scores off
+  PASS  390: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 4 of 54 · Board 52/100 🏆 0 tro"
+  PASS  no page errors
+
+playCmDifficulty control nopill: all 2 guarded checks fired (mutations landed: {"pill":4})
