@@ -1,3 +1,35 @@
+## Release BM LIVE, 2026-10-19 19:48 EDT: Club Manager's Hard and Impossible are harder again, and a save you kept aside only comes back in its own slot
+
+Claude lane (session I). main 50d08954, deployment be55ad15-a374-4a0f-bc85-a6565ab9550f, entry index-CcnV9hH5.js (was index-CrXOOFCC.js, Release BL,
+published 15:41 the same day). Proof: x-deployment-id carries be55ad15 from 19:48:56; /whats-new carries "Club Manager: Hard and Impossible are harder again."; the Club Manager guide carries "offered back only in the slot it came from"; the entry bundle carries the slot mark key; /, /club-manager, /soccer-career, /manager-hot-seat, /deadline-day and /whats-new answer 200; in a browser every /club-manager asset answered 200 and one background request to the home page timed out (as at BJ and BK).
+
+What a player gets:
+- Club Manager's Hard and Impossible are clearly harder again (Round 1515). The world rounds since Round 1501 had made
+  Medium itself tougher, so the gap had shrunk to about 10 and 19 percent fewer points a game for a mid table club.
+  Only the strength opponents add in your own matches moved (Hard 1.5 to 2.2, Impossible 3 to 3.9); Medium and the
+  easy levels play exactly as before. Measured on seeds no tuning run used (32 to 47): Hard 17.9 and Impossible 27.9
+  percent fewer points a game, sacked 2.5x and 3.3x as often as on Medium, and still winnable (big clubs win about 1.9
+  and 0.9 titles in ten). Old Hard and Impossible saves open as they were; their next matches play harder.
+- A save kept aside (before a save point restore, say) is offered back only in the career slot it came from (Round
+  1515), so a restore in slot 1 no longer shows up as an offer in slot 2. Older unmarked copies are offered as before;
+  every other game's saves are untouched.
+
+GATE ON GITHUB RUNNERS on f442fc9a, 62 requests (the 78 base lines retired at BL dropped from the sender); triaged by
+the lead: every red a control that fired, a known red, or environmental (playSoccerCareerDevelopment, a reset in the
+offline transport, green alone twice: rBM-tr-dev); Hard and Impossible's 16 section 4 shard results byte equal to the
+round's own verify on the joined tree; Medium and the easy rows byte equal to main; live pass 19 of 19. Build output
+50d08954. rBM-pub 20 of 20.
+
+Known and left: as at BL (simCareerHall nfl section 19(a), playSoccerCareer check 6, simMoney on save size, lr-all4,
+simWritesAreSent's database steps, simCmWorldMoves plain, playCorruptSaves on /hall-of-champions); the game wide cap of
+three kept aside copies (the offer is per slot now, the cap is not).
+
+### For Codex
+1. Release BM is on main at 50d08954. The Club Manager guide FAQ "Does my career save?" gained Round 1515's sentence and
+   searchKeywords.json has a new source hash: a lane editing that guide merges after this and reruns genSearchKeywords.
+2. src/lib/brokenSaveRecovery.ts and src/data/continueSaves.ts are free again (Round 1515 added the slot mark,
+   dukb-set-aside-slot, read only for Club Manager).
+
 ## Release BL LIVE, 2026-10-19 15:41 EDT: Club Manager gets five difficulty levels you can change mid career and save points, and the other lane's ten fixes ship
 
 Claude lane (session I). main d5c15549, deployment 2ef1a67c-fb64-4480-97a4-c8cd4282783e, entry index-CrXOOFCC.js (was index-oibwVC9Z.js, Release BK,
