@@ -74,7 +74,7 @@ export function DifficultyOption({ career, onDifficulty }: { career: CareerState
         </div>
         <div className="grid text-xs text-muted-foreground">
           <p className={cn('col-start-1 row-start-1', armedLevel && 'invisible')} aria-hidden={!!armedLevel}>
-            {DIFFICULTY_INFO[level].blurb} {paused && <span className="text-foreground" data-cm-level-paused>Your match is paused at halftime, so finish it first, then switch. </span>}A change counts from your next match, the money from your next cheque or new job, and nothing you have already played changes.
+            {DIFFICULTY_INFO[level].blurb} {paused && <span className="text-foreground" data-cm-level-paused>Your match is paused at halftime, so finish it first, then switch. </span>}A change counts from your next match and the money from your next cheque or new job, the market's prices to you change straight away, and nothing you have already played changes.
           </p>
           <p className={cn('col-start-1 row-start-1 text-foreground', !armedLevel && 'invisible')} aria-hidden={!armedLevel}>
             Tap {armedLevel ? DIFFICULTY_INFO[armedLevel].label : 'it'} again to switch. On Very Easy or Easy this career stops posting leaderboard scores for good, even if you go back up later.
