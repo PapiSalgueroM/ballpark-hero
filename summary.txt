@@ -1,0 +1,5 @@
+wm-gate exit=2 1s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerHelp.tsx, src/hooks/useClubManager.ts, src/lib/clubManager.ts, src/lib/deadline
+euro-6 exit=0 28s | simWorldEuro: green, 30 checks, 0 failures
+euro-57 exit=0 538s | simWorldEuro: green, 36320 checks, 0 failures
+euro-3 exit=0 605s | simWorldEuro: green, 521 checks, 0 failures
+wm-main exit=1 618s | simCmWorldMoves: RED, sections 5 (84), 6 (270), 8 (56)
