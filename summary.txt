@@ -1,0 +1,6 @@
+headsha exit=0 0s | 31eb78332 Release BL seam: refresh scripts/data/guideHeadingsFrozen.json for /club-manager, the generated output of the 1512 level sentence placed in 2fb1ba3e (node scrip
+wf284x exit=2 0s | error: src/components/club-manager/TransferScreen.tsx: patch does not apply
+wf296x exit=2 0s | error: src/components/club-manager/TransferScreen.tsx: patch does not apply
+wf285 exit=1 131s | wfrun club-detail-fixtures.yml: 8 steps ran, 1 failed: Every rebuilt-site reader
+wf287x exit=1 216s | wfrun manager-handover-desk.yml: 9 steps ran, 1 failed: All fifteen build and snapshot readers
+wf301x exit=0 562s | wfrun manager-decision-method.yml: 5 steps ran, 0 failed
