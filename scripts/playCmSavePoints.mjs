@@ -237,7 +237,9 @@ for (const W of WIDTHS) {
   const doorCheck = (ok, msg) => { if (!ok) doorFailures += 1; return check(ok, msg); };
   const tryDoor = async where => {
     await door.first().waitFor({ timeout: 10000 }).catch(() => {});
-    const h = await doorBtn.first().evaluate(e => Math.round(e.getBoundingClientRect().height)).catch(() => 0);
+    /* ResultScreen enters with zoom-in-95 over 300 ms, so a button measured the moment it mounts reads 42 px. */
+    await pause(page, 800);
+    const h =await doorBtn.first().evaluate(e => Math.round(e.getBoundingClientRect().height)).catch(() => 0);
     doorCheck(await visible(doorBtn) && h >= 44, `${where}: the Save points button is there, ${h} px tall`);
     await doorBtn.first().click({ timeout: 5000 }).catch(() => {});
     const opened = await door.locator('[data-testid="cm-points"]').first().waitFor({ timeout: 10000 }).then(() => true).catch(() => false);
@@ -249,7 +251,8 @@ for (const W of WIDTHS) {
   const seasonDone = page.locator('h1', { hasText: /^SEASON \d+ COMPLETE$/ });
   const sackedHead = page.locator('h1', { hasText: 'SACKED!' });
   const stopAt = page.locator('h1', { hasText: /^(SEASON \d+ COMPLETE|SACKED!)$/ });
-  for (let i = 0; i < 16 && !(await visible(seasonDone)) && !(await visible(sackedHead)); i += 1) {
+  let passes = 0;
+  for (; passes < 16 && !(await visible(seasonDone)) && !(await visible(sackedHead)); passes += 1) {
     const review = page.locator('button', { hasText: 'See Season Review' });
     if (await visible(review)) { await review.first().click({ timeout: 4000 }).catch(() => {}); await pause(page, 1500); continue; }
     const win = page.locator('button', { hasText: 'Open the Window' });
@@ -258,12 +261,15 @@ for (const W of WIDTHS) {
     if (await visible(stopAt)) break;
     const home = page.getByRole('tab', { name: 'Home', exact: true });
     if (await visible(home)) await home.first().click({ timeout: 4000 }).catch(() => {});
-    await page.locator('button', { hasText: 'Calendar' }).first().click({ timeout: 4000 }).catch(() => {});
+    /* A hub panel left open (the points screen, the calendar) hides the tiles: its Club home closes it. */
+    const clubHome = page.locator('button', { hasText: 'Club home' });
+    if (await visible(clubHome)) { await clubHome.first().click({ timeout: 4000 }).catch(() => {}); await pause(page, 500); }
+    await page.locator('button').filter({ hasText: '📅' }).filter({ hasText: 'Calendar' }).first().click({ timeout: 4000 }).catch(() => {});
     await pause(page, 800);
     const rest = page.locator('button', { hasText: 'Rest of season' });
     if (await visible(rest)) { await rest.first().click({ timeout: 4000 }).catch(() => {}); await pause(page, 2500); }
   }
-  check(await visible(seasonDone), 'the season ran to its review by the calendar\'s Rest of season');
+  check(await visible(seasonDone), `the season ran to its review by the calendar's Rest of season (${passes} passes, week ${(await readSave(page))?.week})`);
   await tryDoor('season-end');
   await doorBtn.first().click({ timeout: 4000 }).catch(() => {});
 
