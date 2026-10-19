@@ -1,0 +1,6 @@
+# Release BL triage i: which of PR339's three app files moves the NBA create screen in the US board replay. At m2
+# ab1fe605 (parity green), take files from m3 75340a83 one set at a time and replay. Send with: wt.sh
+#!serial
+lib: bash .rc/x/wt.sh ab1fe605 i1 bash -c 'git checkout 75340a83 -- src/lib/soccerCareerAppearance.ts && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsBoardParity.mjs 2>&1 | grep -E "Vitest exit|click path step|green" | head -4 | cut -c1-200'
+lib-avatar: bash .rc/x/wt.sh ab1fe605 i2 bash -c 'git checkout 75340a83 -- src/lib/soccerCareerAppearance.ts src/components/soccer-career/PlayerAvatar.tsx && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsBoardParity.mjs 2>&1 | grep -E "Vitest exit|click path step|green" | head -4 | cut -c1-200'
+lib-builder: bash .rc/x/wt.sh ab1fe605 i3 bash -c 'git checkout 75340a83 -- src/lib/soccerCareerAppearance.ts src/components/soccer-career/AppearanceBuilder.tsx && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsBoardParity.mjs 2>&1 | grep -E "Vitest exit|click path step|green" | head -4 | cut -c1-200'

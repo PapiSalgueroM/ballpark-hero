@@ -1,0 +1,5 @@
+wt: i3 at ab1fe605a285 (Release BL m2: merge the other lane's PR338 (codex/nfl-coach-staff-recovery, Rou)
+   Vitest exit 1, passed [nfl, mlb, nhl], failed [nba]
+   nba click path step 343 (after "create: 💇Hair"): the markup differs under the same words ("Create your playerYou are a fictional prospect entering the ")
+   nba click path step 344 (after "create: Point GodThe offense runs through you"): the markup differs under the same words ("Create your playerYou are a fictional prospect entering the ")
+   nba click path step 345 (after "create: (Auburn)"): pressed "create: (Brown)", fixture pressed "create: (Auburn)"; the markup differs under the same words ("Create your playerYou are a fictional pr
