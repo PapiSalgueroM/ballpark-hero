@@ -81,6 +81,19 @@ try {
             row.readFixtures.push({ requestId: captured.id, kind: 'live-scores-empty', url: url.href, method: 'GET', reply: [] }); return await json('live-scores-empty', []);
           }
           if (url.href === api + '/rest/v1/rpc/most_played_today' && request.method() === 'POST') { assert.equal(form.id, 'footer'); assert.equal(request.postData(), '{"p_min":3,"p_limit":3}'); row.readFixtures.push({ requestId: captured.id, kind: 'most-played-empty', rawBody: request.postData(), reply: [] }); return await json('most-played-empty', []); }
+          if (url.origin === api && url.pathname === '/rest/v1/daily_polls' && request.method() === 'GET') {
+            assert.equal(form.id, 'footer'); assert.equal(captured.resourceType, 'fetch'); assert.equal(request.postData(), null);
+            assert.deepEqual([...url.searchParams.keys()], ['select', 'poll_date', 'order']);
+            assert.equal(url.searchParams.get('select'), 'poll_key,question,option_a,option_a_emoji,option_a_flag,option_b,option_b_emoji,option_b_flag,option_c,option_c_emoji,option_c_flag,option_d,option_d_emoji,option_d_flag,sort_order');
+            assert.equal(url.searchParams.get('order'), 'sort_order.asc');
+            const nativeNow = new Date(), pinnedNow = new Date('2026-10-18T16:00:01.000Z');
+            const allowedPollDates = [nativeNow, pinnedNow].map(value => 'eq.' + new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(new Date(value.getTime() - 12 * 60 * 60 * 1000)));
+            assert(allowedPollDates.includes(url.searchParams.get('poll_date')), 'Only source getPollDayET native or declared PageClock date');
+            row.readFixtures.push({ requestId: captured.id, kind: 'daily-polls-empty', url: url.href, method: 'GET', query: [...url.searchParams], reply: [],
+              dateBasis: { nativeNow: nativeNow.toISOString(), pinnedNow: pinnedNow.toISOString(), allowedPollDates,
+                pollSourceSha256: hash(fs.readFileSync('src/components/home/PollOfTheDay.tsx')), dateSourceSha256: hash(fs.readFileSync('src/lib/dateUtils.ts')) } });
+            return await json('daily-polls-empty', []);
+          }
           if (fonts.has(url.href)) { assert.equal(request.method(), 'GET'); return await fulfill('held-font', { status: 200, headers: cors(request), ...fonts.get(url.href) }); }
           row.unexpectedWrites.push({ url: url.href, method: request.method(), rawBody: request.postData() }); assert.fail('Unknown request, no broad empty fixture: ' + request.method() + ' ' + url.href);
         } catch (error) { row.errors.push('Route: ' + String(error?.stack || error)); try { await route.abort('failed'); } catch (abortError) { row.errors.push(String(abortError)); } } finally { pendingRoutes.delete(captured.id); save(); }
