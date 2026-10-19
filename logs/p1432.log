@@ -1,0 +1,31 @@
+bindAt: scripts/qa/gridSearchAccessibility1432.mjs bound
+bindAt: scripts/qa/gridSearchCompatibility1432.mjs bound
+bindAt: f568e4f74c81 -> 29c94aa5546f
+bindAt: 2077ffbe9214 -> 21c8fc4b1d61
+runProver: p1432 at b724aa6cfe052c2015f3117cf874f7824f451e08 (release BK bound: 6bae5306f423 with its pinned bases bound to the joined tree)
+selected-control:8 actual semantic cases,1 exact purpose faults,0 pending after cleanup.
+stale-active-control:8 actual semantic cases,1 exact purpose faults,0 pending after cleanup.
+restored:8 actual semantic cases,0 exact purpose faults,0 pending after cleanup.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+1 !== 0
+
+    at defaults (file:///tmp/rp-wt-p1432/scripts/qa/checkGridSearchAccessibility1432.mjs:87:66)
+    at file:///tmp/rp-wt-p1432/scripts/qa/checkGridSearchAccessibility1432.mjs:207:3
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+runProver: p1432 exit 1

@@ -1,0 +1,30 @@
+bindAt: scripts/simSoccerGridBlurOwnership.mjs bound
+bindAt: scripts/qa/replayGridDiscovery1430.mjs bound
+bindAt: 2077ffbe9214 -> 21c8fc4b1d61
+runProver: p1430 at 2c6767cf3d71ced2268c00b3e9d3eaabf486a96a (release BK bound: 29c94aa5546f with its pinned bases bound to the joined tree)
+restored:8 actual cases,0 precise intended faults,0 cleanup timers.
+Inherited discovery:16 actual current-source cases passed,0failed,0pending.
+{"kind":"SOCCER_GRID_BLUR_RESULT","mode":"fixed","evidenceRoot":"/tmp/rp-out-p1430","modeEnvAbsent":false,"outEnvAbsent":false,"summarySha256":"51491d9bb8bdf6ff9e064d12a30a898c37f46b6207ddb28955c9198b71ec47d2","sourceHeld":true,"temporaryModulesRemoved":true,"productQualified":false}
+Preparing worktree (detached HEAD 2c6767cf3)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+1 !== 0
+
+    at file:///tmp/rp-wt-p1430/scripts/qa/replayGridDiscovery1430.mjs:54:73
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+runProver: p1430 exit 1

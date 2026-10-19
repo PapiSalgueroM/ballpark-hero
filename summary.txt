@@ -1,0 +1,5 @@
+p1426 exit=0 14s | runProver: p1426 exit 0
+p1427 exit=0 13s | runProver: p1427 exit 0
+p1429 exit=0 13s | runProver: p1429 exit 0
+p1430 exit=1 12s | runProver: p1430 exit 1
+p1432 exit=1 11s | runProver: p1432 exit 1
