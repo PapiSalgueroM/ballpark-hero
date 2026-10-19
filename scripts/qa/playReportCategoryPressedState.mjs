@@ -194,7 +194,7 @@ try {
       page.on('console', message => {
         const entry = { type: message.type(), text: message.text(), location: message.location() }; row.console.push(entry);
         if (entry.type === 'error') {
-          if (row.declaredFailureReleased && entry.text === 'Failed to load resource: the server responded with a status of 400 ()' && entry.location.url === api + '/rest/v1/question_reports' && row.expectedTransportDiagnostics.length === 0) row.expectedTransportDiagnostics.push({ ...entry, classification: 'declared-fictional-fallback-http400' });
+          if (row.declaredFailureReleased && entry.text === 'Failed to load resource: the server responded with a status of 400 (Bad Request)' && entry.location.url === api + '/rest/v1/question_reports' && row.expectedTransportDiagnostics.length === 0) row.expectedTransportDiagnostics.push({ ...entry, classification: 'declared-fictional-fallback-http400' });
           else row.errors.push('Console: ' + JSON.stringify(entry));
         }
       });
