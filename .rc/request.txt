@@ -1,0 +1,14 @@
+m-veryeasy-0: SECTION=4 LEVELS=veryeasy SHARD=0/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/veryeasy-0.json node scripts/simCmDifficulty.mjs
+m-veryeasy-1: SECTION=4 LEVELS=veryeasy SHARD=1/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/veryeasy-1.json node scripts/simCmDifficulty.mjs
+m-veryeasy-2: SECTION=4 LEVELS=veryeasy SHARD=2/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/veryeasy-2.json node scripts/simCmDifficulty.mjs
+m-veryeasy-3: SECTION=4 LEVELS=veryeasy SHARD=3/4 SEEDS=16 SEASONS=6 OUT_JSON=$RC_OUT/veryeasy-3.json node scripts/simCmDifficulty.mjs
+simCmWorldMoves: node scripts/simCmWorldMoves.mjs
+simWorldUcl: node scripts/simWorldUcl.mjs
+simWorldEuro: node scripts/simWorldEuro.mjs
+simOneOffCups: node scripts/simOneOffCups.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCmNoSack: node scripts/simCmNoSack.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
