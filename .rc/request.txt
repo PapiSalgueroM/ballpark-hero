@@ -1,0 +1,3 @@
+# Round BLH: the type gate and vitest-all on the final head 6d91ed19 (rBLH ran them on b4d4c4a8; 6d91ed19 touches only six scripts/sim*.mjs that no src file names).
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > /tmp/va.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  " /tmp/va.log | head -30 | cut -c1-250; exit $s
