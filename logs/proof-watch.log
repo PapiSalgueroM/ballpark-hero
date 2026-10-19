@@ -1,0 +1,12 @@
+ok   Marseille (era2020, watcher, nocoach, seed 2, 3 seasons): 143 steps, 6.5 s
+ok   Marseille (era2020, watcher, nocoach, seed 3, 3 seasons): 140 steps, 7.6 s
+ok   Marseille (era2020, watcher, nocoach, seed 4, 3 seasons): 136 steps, 7.7 s
+ok   Marseille (era2020, watcher, nocoach, seed 5, 3 seasons): 136 steps, 7.5 s
+ok   Marseille (era2020, watcher, coach, seed 1, 3 seasons): 137 steps, 10.6 s
+ok   Marseille (era2020, watcher, coach, seed 2, 3 seasons): 135 steps, 11.8 s
+ok   Marseille (era2020, watcher, coach, seed 3, 3 seasons): 135 steps, 13.3 s
+ok   Marseille (era2020, watcher, coach, seed 4, 3 seasons): 134 steps, 9.7 s
+ok   Marseille (era2020, watcher, coach, seed 5, 3 seasons): 139 steps, 10.2 s
+journeys 130, steps compared 17789, tree journeys whose save carried worldComps 130, evaluations on the live state 17789, 1303 s
+old saves (written by fb50ce9f): 650 loaded by both engines, 0 gained a watched Champions League at load, 68 did not, 582 already followed one and kept it, 0 gained a Europa League, 0 against the rule
+proofWorldUclFleet: GREEN, 130 journeys and 17789 steps byte equal to fb50ce9f, draws equal
