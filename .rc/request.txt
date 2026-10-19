@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+# Round 1515 review (run lens) on 718aa65f: the reviewer's walk (slots and kept aside copies, the help example, What's New) at 390 and 1280 with reduced motion on and off, and the round's own walk with both controls. The database host is blocked by every walk and by the runner.
+walk: node .rc/x/walk1515.mjs
+points: node scripts/playCmSavePoints.mjs
+points-nomark: WIDTHS=390 POINTS_CONTROL=nomark node scripts/playCmSavePoints.mjs
+points-noevent: WIDTHS=390 POINTS_CONTROL=noevent node scripts/playCmSavePoints.mjs
