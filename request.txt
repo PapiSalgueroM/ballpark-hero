@@ -1,0 +1,7 @@
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+gh-lostline: GUIDE_HEADINGS_CONTROL=lostline node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+dashscan: node .rc/x/dashscan.mjs 6d91ed19; a=$?; n=$(git diff b967a309 HEAD | grep -cP '^\+.*(\x{2013}|\x{2014})'); m=$(git log --format=%B b967a309..HEAD | grep -cP '\x{2013}|\x{2014}'); echo "release added dash lines $n, commit message lines $m"; [ $a = 0 ] && [ "$n" = 0 ] && [ "$m" = 0 ]
