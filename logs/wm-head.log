@@ -1,0 +1,8 @@
+  FAIL section 8: Real Madrid (now, seed 2, seeded): with the bridge, saved string 1 of 4 differs from BASE's
+  FAIL section 8: Real Madrid (now, seed 2, seeded): with the bridge, the last state differs from BASE's
+  FAIL section 8: Everton (now, seed 0, seeded): with the bridge, saved string 1 of 4 differs from BASE's
+   27 careers: with the bridge every one checked against BASE; without it 27 differ (first at save 1 x27) and 0 do not
+  section 5: 76 more failures not shown
+  section 6: 262 more failures not shown
+  section 8: 48 more failures not shown
+simCmWorldMoves: RED, sections 5 (84), 6 (270), 8 (56)

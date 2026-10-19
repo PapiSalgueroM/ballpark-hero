@@ -1,0 +1,12 @@
+  FAIL: /club-manager: 628K of gzipped JavaScript against a budget of 626K
+  FAIL: /nfl-my-career: 492K of gzipped JavaScript against a budget of 491K
+  FAIL: /manager-hot-seat: 643K of gzipped JavaScript against a budget of 642K
+   /                   244K gz over   3 files (budget 244K, 243.7K to the tenth)
+   /club-manager       628K gz over  43 files (budget 626K, 627.5K to the tenth)
+   /soccer-career      835K gz over  48 files (budget 835K, 835.4K to the tenth)
+   /nfl-my-career      492K gz over  48 files (budget 491K, 491.7K to the tenth)
+   /soccer-grid        318K gz over  36 files (budget 319K, 318.4K to the tenth)
+   /manager-hot-seat   643K gz over  45 files (budget 642K, 642.8K to the tenth)
+   /deadline-day       652K gz over  47 files (budget 652K, 652.3K to the tenth)
+   10 probe sets (400 probes) all found in the build; 4 routes checked, 0 findings; /soccer-career still fetches the pools (SoccerCareer-Bl4cYXR_.js)
+sweepWeight: 3 failures

@@ -1,0 +1,14 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sweepWeight exit=1 27s | sweepWeight: 3 failures
+walk-nolevel exit=0 45s | playCmDifficulty control nolevel: all 8 guarded checks fired (mutations landed: {"change":5})
+playCmDifficulty exit=0 116s |   PASS  no page errors
+playCmSavePoints exit=0 118s | playCmSavePoints: OK at 390 and 1280
+w1513 exit=0 77s | weightBJ: done
+walk-nodoor exit=1 177s | playCmSavePoints: control nodoor FIRED (7 door check(s) red, 7 in all)
+wm-head exit=1 673s | simCmWorldMoves: RED, sections 5 (84), 6 (270), 8 (56)
+wm-main exit=1 656s | simCmWorldMoves: RED, sections 5 (84), 6 (270), 8 (56)
+euro-3 exit=0 668s | simWorldEuro: green, 521 checks, 0 failures
+euro-6 exit=0 25s | simWorldEuro: green, 30 checks, 0 failures
+simWorldUcl exit=0 2331s | simWorldUcl: green, 498818 checks, 0 failures
+euro-57 exit=0 455s | simWorldEuro: green, 36320 checks, 0 failures
+simOneOffCups exit=0 3062s | simOneOffCups: green, 161787 checks (3062 s)
