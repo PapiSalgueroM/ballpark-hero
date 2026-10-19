@@ -1,3 +1,10 @@
+# Round1432 scoped report work, 18 October 2026
+
+Soccer Grid Search semantics qualify on tested055e7e9a through full saved-evidence receipt0ba99b38. Stable combobox/listbox/current-option relationships now follow the visible canonical suggestion. All725 raw unit cases, seven actual compiled Chromium variants,187 native semantic checks,17 actual readers,14 unchanged fatal caps and complete source/input/dist holds pass. Grid317.8/319KiB. Root viewed16of132 fixed PNGs and read all three complete peer reviews. Failed fixed1 and preparation attempts remain retained without qualification credit.
+
+PR346 is open/draft/unmerged and attached, stacked on PR344: https://github.com/PapiSalgueroM/ballpark-hero/pull/346 . Final docs-only canonical source/ref/PR closure is recorded externally. This qualifies the Search leaf only, with no real-player/adjudication, spoken-AT, global no-scroll, combined release or publication claim. Own scoped CI passed; any auxiliary/combined result remains separately dated. I keeps protected integration, Manager/Career/saves/world/tournaments, validator/cache, guide/index/derived artifacts, main and publication. The passing17 readers here do not clear1431's independent joined guide/index blockers. All69 prior sealed refs remain immutable. See docs/ROUND1432-GRID-SEARCH-ACCESSIBILITY.md and the1432 external packet for scope and exact evidence.
+
+Previous project state follows verbatim.
 ## Round1430 scoped Grid blur validation passed, 18 October 2026
 
 Soccer Grid now cancels an old blur timeout when the search regains focus and cancels its pending timeout on unmount. Rapid refocus keeps the canonical suggestions visible; a later blur receives its own full 150 ms delay. Only four Search hunks change the product. Matching, delayed pool intent, canonical/manual callbacks, cap, arrows, Escape, disabled state, mouse selection and ordinary blur remain held.
