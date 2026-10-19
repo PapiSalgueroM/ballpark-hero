@@ -33,6 +33,9 @@ export interface ContinueSave {
   path: string;
   /** The localStorage key the game itself saves under. */
   saveKey: string;
+  /** Round 1515: the key of the game's slot index ({ active: n }), for a game whose careers take turns at one
+   *  save key (Club Manager, Round 928). A copy kept aside is marked with its slot (brokenSaveRecovery.ts). */
+  slots?: string;
   /** The save's own name for what you are running: a club, a team, a fighter. */
   name?: SavePath;
   /** A whole number and how to say it. An array here counts its entries. */
@@ -43,7 +46,7 @@ export interface ContinueSave {
 
 export const CONTINUE_SAVES: readonly ContinueSave[] = [
   { path: '/soccer-career', saveKey: 'soccerCareerSave', name: ['currentClub'], count: { at: ['age'], say: 'age {n}' }, ended: { at: ['retired'], say: 'retired' } },
-  { path: '/club-manager', saveKey: 'dukb-club-manager-save', name: ['clubName'], count: { at: ['season'], say: 'season {n}' }, ended: { at: ['sacked'], say: 'sacked' } },
+  { path: '/club-manager', saveKey: 'dukb-club-manager-save', slots: 'dukb-cm-slots', name: ['clubName'], count: { at: ['season'], say: 'season {n}' }, ended: { at: ['sacked'], say: 'sacked' } },
   { path: '/stadium-tycoon', saveKey: 'stadiumTycoonSaveV1', name: ['clubName'], count: { at: ['matchNo'], say: '{n} matches played', one: '1 match played' } },
   { path: '/wonderkid-factory', saveKey: 'wonderkidFactoryV1', count: { at: ['prospects'], say: '{n} kids in the academy', one: '1 kid in the academy' } },
   { path: '/rebuild', saveKey: 'rebuild-table', name: ['seats', '0', 'club'] },

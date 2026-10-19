@@ -20,6 +20,14 @@
  * Control POINTS_CONTROL=nodoor hides the button (data-cm-points-door, asserted
  * in SavePointsDoor.tsx first): every door check goes red, nothing else, and
  * the last line says FIRED with exit 1.
+ * Round 1515: the copy the restore kept aside is slot 1's. With its offer up,
+ * the walk switches to slot 2 in place (Managers, New manager): the card
+ * offers nothing of slot 1's, nor after a reload in slot 2; slot 1's Resume
+ * brings the offer back. Controls (WIDTHS=390, the walk stops after this step):
+ * POINTS_CONTROL=nomark drops the slot mark's write (dukb-set-aside-slot), so
+ * both slot 2 checks go red; POINTS_CONTROL=noevent stops the page's slot
+ * switch event (the same name, dukb-set-aside-slot) before the card hears it, so the in place
+ * check and the way back go red and the reload stays green. Each ends FIRED.
  *
  *   #!serve then: node scripts/playCmSavePoints.mjs        (WIDTHS=390 for one width)
  */
@@ -37,15 +45,23 @@ const HEIGHTS = { 390: 844, 1280: 900 };
 const WIDTHS = (process.env.WIDTHS || '390,1280').split(',').map(Number);
 const KEY = 'dukb-club-manager-save';
 const CONTROL = process.env.POINTS_CONTROL || '';
-if (CONTROL && CONTROL !== 'nodoor') { console.error(`playCmSavePoints: unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['nodoor', 'nomark', 'noevent'].includes(CONTROL)) { console.error(`playCmSavePoints: unknown control ${CONTROL}`); process.exit(2); }
 if (CONTROL === 'nodoor' && !fs.readFileSync('src/components/club-manager/SavePointsDoor.tsx', 'utf8').includes('data-cm-points-door')) {
   console.error('playCmSavePoints: control nodoor cannot run, SavePointsDoor.tsx carries no data-cm-points-door'); process.exit(2);
 }
+/* Round 1515: the kept aside copy's slot mark, whose name is also the event the page sends when it switches slots in place. */
+const MARK_KEY = 'dukb-set-aside-slot', SWITCH_EVENT = MARK_KEY;
+const recoverySrc = fs.readFileSync('src/lib/brokenSaveRecovery.ts', 'utf8');
+if (CONTROL === 'nomark' && !recoverySrc.includes(`'${MARK_KEY}'`)) { console.error(`playCmSavePoints: control nomark cannot run, brokenSaveRecovery.ts names no ${MARK_KEY}`); process.exit(2); }
+if (CONTROL === 'noevent' && !(recoverySrc.includes(`'${SWITCH_EVENT}'`) && fs.readFileSync('src/hooks/useClubManager.ts', 'utf8').includes('dispatchEvent(new Event(SET_ASIDE_SLOT_KEY))'))) { console.error(`playCmSavePoints: control noevent cannot run, useClubManager.ts sends no ${SWITCH_EVENT}`); process.exit(2); }
 const errors = [];
 let failures = 0;
 let doorFailures = 0;
+let slotFailures = 0;
 const check = (ok, msg) => { if (!ok) { failures += 1; console.error(`  FAIL: ${msg}`); } else console.log(`  ok: ${msg}`); return ok; };
-const shot = async (page, name) => { if (OUT) await page.screenshot({ path: path.join(OUT, name) }).catch(() => {}); };
+/* Round 1515 review: a control run's shots carry the control's name, so a walk and its controls sent side by side
+   into one RC_OUT never overwrite each other's pictures (a control's slot 2 card read as the walk's). */
+const shot = async (page, name) => { if (OUT) await page.screenshot({ path: path.join(OUT, CONTROL ? `${CONTROL}-${name}` : name) }).catch(() => {}); };
 const pause = (page, ms) => page.waitForTimeout(ms);
 const visible = async loc => (await loc.count()) > 0 && await loc.first().isVisible().catch(() => false);
 const raw = page => page.evaluate(k => localStorage.getItem(k), KEY).catch(() => null);
@@ -85,6 +101,13 @@ async function newCtx(vp, posts) {
     st.textContent = '[data-cm-points-door]{display:none!important}';
     document.head.appendChild(st);
   }));
+  /* nomark: the browser keeps no slot mark (the write is dropped), so every copy is unmarked. */
+  if (CONTROL === 'nomark') await ctx.addInitScript(k => {
+    const set = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (key, value) { if (key !== k) set.call(this, key, value); };
+  }, MARK_KEY);
+  /* noevent: the page's slot switch never reaches the card (stopped before the card's own listener). */
+  if (CONTROL === 'noevent') await ctx.addInitScript(n => { window.addEventListener(n, e => e.stopImmediatePropagation()); }, SWITCH_EVENT);
   await seedPages(ctx, SEED);
   return ctx;
 }
@@ -197,6 +220,26 @@ for (const W of WIDTHS) {
   await pause(page, 1500);
   check((await raw(page)) === bytes, 'a reload keeps the restored career');
   check(await visible(page.locator('[data-dukb-set-aside]', { hasText: 'kept aside' })), 'the card offers the career he had');
+
+  /* Round 1515: that kept aside copy is slot 1's. Switched to slot 2 in place (Managers, then New manager on slot
+     2) the card offers nothing of slot 1's, nor after a reload in slot 2; back in slot 1 (its Resume) it is there. */
+  const keptCard = page.locator('[data-dukb-set-aside]', { hasText: 'kept aside' });
+  const slotCheck = (ok, msg) => { if (!ok) slotFailures += 1; return check(ok, msg); };
+  await page.locator('[data-testid="cm-show-slots"]').first().click({ timeout: 5000 }).catch(() => {});
+  await page.locator('[data-testid="cm-slot-2"] button', { hasText: 'New manager' }).first().click({ timeout: 5000 }).catch(() => {});
+  await pause(page, 1200);
+  const index = await page.evaluate(() => localStorage.getItem('dukb-cm-slots')).catch(() => null);
+  check(/"active":2/.test(index || ''), `slot 2 is the active slot after New manager (${index})`);
+  slotCheck(!(await visible(keptCard)), 'switched to slot 2 in place, the card offers nothing of slot 1\'s');
+  await shot(page, `points-slot2-${W}.png`);
+  await page.reload({ waitUntil: 'networkidle' });
+  await pause(page, 1500);
+  slotCheck(!(await visible(keptCard)), 'a reload in slot 2 offers nothing of slot 1\'s either');
+  await page.locator('[data-testid="cm-slot-1"] [data-cm-slot-open="resume"]').first().click({ timeout: 5000 }).catch(() => {});
+  await pause(page, 1500);
+  slotCheck(await visible(keptCard), 'back in slot 1, the card offers the career he had again');
+  check((await raw(page)) === bytes, 'back in slot 1 the save is still the point\'s career');
+  if (CONTROL === 'nomark' || CONTROL === 'noevent') { await ctx.close(); continue; }
   await page.locator('[data-dukb-set-aside] button', { hasText: 'Leave it aside' }).click({ timeout: 4000 }).catch(() => {});
   await toHub(page);
 
@@ -304,8 +347,9 @@ await browser.close();
 for (const e of errors) console.error(`  page error: ${e}`);
 const total = failures + errors.length;
 if (CONTROL) {
-  console.log(doorFailures > 0 ? `playCmSavePoints: control ${CONTROL} FIRED (${doorFailures} door check(s) red, ${failures} in all)` : `playCmSavePoints: control ${CONTROL} DID NOT FIRE`);
-  process.exit(doorFailures > 0 ? 1 : 0);
+  const [n, what] = CONTROL === 'nodoor' ? [doorFailures, 'door'] : [slotFailures, 'slot'];
+  console.log(n > 0 ? `playCmSavePoints: control ${CONTROL} FIRED (${n} ${what} check(s) red, ${failures} in all)` : `playCmSavePoints: control ${CONTROL} DID NOT FIRE`);
+  process.exit(n > 0 ? 1 : 0);
 }
 console.log(total ? `playCmSavePoints: FAIL, ${failures} check(s) and ${errors.length} page error(s)` : `playCmSavePoints: OK at ${WIDTHS.join(' and ')}`);
 process.exit(total ? 1 : 0);

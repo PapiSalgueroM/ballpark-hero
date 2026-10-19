@@ -164,7 +164,7 @@ function pruneBackups(entry: ContinueSave, storage: SaveStorage | null, keep: st
  * copies a save before it is replaced or refused instead of moving it: a key
  * that is never emptied is never lost to a crash between two writes.
  */
-export function copyAside(entry: ContinueSave, storage: SaveStorage | null, now: Date = new Date()): SetAsideResult {
+export function copyAside(entry: ContinueSave, storage: SaveStorage | null, now: Date = new Date(), unmarked?: boolean): SetAsideResult {
   if (!storage) return { ok: false };
   let raw: string | null;
   try {
@@ -190,12 +190,58 @@ export function copyAside(entry: ContinueSave, storage: SaveStorage | null, now:
     try { storage.removeItem(backupKey); } catch { /* nothing more to do */ }
     return { ok: false };
   }
+  /* moveAside marks its copy only once the original is gone, so a refused move leaves nothing behind. */
+  if (!unmarked) slotMarks(entry, storage, backupKey);
   return { ok: true, backupKey };
+}
+
+/**
+ * Round 1515: which slot each kept aside copy of a game with slots came from.
+ * Club Manager runs three careers that take turns at one save key (Round 928),
+ * so a copy kept aside in slot 1 (a save point restored, a put back, a fresh
+ * start) was offered in slot 2 as well, where taking it would play slot 1's
+ * career under slot 2's record. One key for the site holds a map of backup key
+ * to slot. A copy with no mark (made before this round, or refused its mark)
+ * is offered in every slot, exactly as before. A game with no slots writes and
+ * reads nothing here, so its copies and its offer are what they were.
+ * The same name is the event the page sends when it switches slots in place,
+ * so the card asks its offer again (one string in a file every page loads).
+ */
+export const SET_ASIDE_SLOT_KEY = 'dukb-set-aside-slot';
+
+/**
+ * The slot a game with slots is playing and the marks, as [slot, marks]. The
+ * slot is read the way activeSlot() in clubManagerSlots.ts reads a readable
+ * index (slot 1 unless it names 2 or 3, and slot 1 with no index at all; that
+ * module pulls in the engine, so it is not imported into a file every page
+ * loads, and src/lib/brokenSaveRecovery.test.ts holds the two equal). [0, {}]
+ * for a game with no slots, which reads nothing, and for an index or marks that
+ * do not parse: then nothing is marked and nothing is passed over, which is
+ * exactly how every copy was offered before this round.
+ * Given a backup key (a copy just made), it also marks that copy with the slot
+ * beside it, dropping the marks of copies that are gone. A mark the browser
+ * refuses leaves the copy unmarked, offered in every slot as before; the copy
+ * itself stands either way.
+ */
+export function slotMarks(entry: ContinueSave, storage: SaveStorage, mark?: string): [number, Record<string, number>] {
+  try {
+    if (entry.slots) {
+      const a = JSON.parse(storage.getItem(entry.slots) as string)?.active, slot = a === 2 || a === 3 ? a : 1;
+      const marks = JSON.parse(storage.getItem(SET_ASIDE_SLOT_KEY) as string) || {};
+      if (mark) {
+        for (const k in marks) storage.getItem(k) ?? delete marks[k];
+        marks[mark] = slot;
+        storage.setItem(SET_ASIDE_SLOT_KEY, JSON.stringify(marks));
+      }
+      return [slot, marks];
+    }
+  } catch { /* as a game with no slots */ }
+  return [0, {}];
 }
 
 /** setAsideSave without the pruning, for restoreBackup's swap: copyAside, then the original goes. */
 function moveAside(entry: ContinueSave, storage: SaveStorage | null, now: Date): SetAsideResult {
-  const copied = copyAside(entry, storage, now);
+  const copied = copyAside(entry, storage, now, true);
   if (!storage || !copied.ok || copied.backupKey === null) return copied;
   try {
     storage.removeItem(entry.saveKey);
@@ -206,6 +252,7 @@ function moveAside(entry: ContinueSave, storage: SaveStorage | null, now: Date):
     try { storage.removeItem(copied.backupKey); } catch { /* a duplicate copy is harmless */ }
     return { ok: false };
   }
+  slotMarks(entry, storage, copied.backupKey);
   return copied;
 }
 
@@ -341,9 +388,13 @@ export function offeredBackup(entry: ContinueSave, storage: ListableStorage | nu
   const waved = seenMap(storage)[entry.saveKey] ?? [];
   try {
     const playing = storage.getItem(entry.saveKey);
+    const [slot, marks] = slotMarks(entry, storage);
     for (const k of backupKeysOf(entry, storage)) {
       if (waved.includes(k)) continue;
       if (playing !== null && storage.getItem(k) === playing) continue;
+      /* Round 1515: a copy marked with another slot is that slot's to offer. An unmarked copy gives NaN
+         and its own slot 0, so both are offered. */
+      if (marks[k] - slot) continue;
       return k;
     }
   } catch {

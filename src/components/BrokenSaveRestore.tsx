@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { ContinueSave } from '@/data/continueSaves';
 import {
   BACKUPS_KEPT, backupDate, backupKeysOf, browserStorage, deleteBackup, dismissBackup, offeredBackup, routeSaveEntry,
+  SET_ASIDE_SLOT_KEY,
 } from '@/lib/brokenSaveRecovery';
 import { reopenGame, restoreNow, takeCopyTrouble, takeOutcome, type KeeperOutcome } from '@/lib/saveKeeper';
 
@@ -79,28 +80,35 @@ export function BrokenSaveRestore({ pathname }: { pathname: string }) {
   const [uncopied, setUncopied] = useState<string | null>(null);
   /* Holds "Leave it aside" for this visit even where storage refuses to remember it. */
   const hidden = useRef(new Set<string>());
-
   useEffect(() => {
-    setFailed(null);
-    setConfirming(false);
-    const entry = routeSaveEntry(pathname);
-    /* Asked once per load: what a staged put back did on the way in. */
-    const told = takeOutcome(pathname);
-    setOutcome(prev => told ?? (prev && entry && prev.path === entry.path ? prev : null));
-    const noCopy = takeCopyTrouble(pathname);
-    setUncopied(prev => (entry && (noCopy || prev === entry.path) ? entry.path : null));
-    const storage = browserStorage();
-    /* The newest kept aside save he has not answered and is not playing right now. */
-    const backupKey = entry ? offeredBackup(entry, storage) : null;
-    if (!entry || !storage || !backupKey || hidden.current.has(backupKey)) { setOffer(null); return; }
-    let hasSave = false;
-    try { hasSave = storage.getItem(entry.saveKey) !== null; } catch { /* treat as no save */ }
-    const made = backupDate(backupKey);
-    const when = made ? made.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : null;
-    /* With at most BACKUPS_KEPT held before the press, the put back cannot
-       drop one (the backup it comes from is never counted). */
-    const crowded = backupKeysOf(entry, storage).length > BACKUPS_KEPT;
-    setOffer({ entry, backupKey, hasSave, when, crowded });
+    const ask = () => {
+      setFailed(null);
+      setConfirming(false);
+      const entry = routeSaveEntry(pathname);
+      /* Asked once per load: what a staged put back did on the way in. */
+      const told = takeOutcome(pathname);
+      setOutcome(prev => told ?? (prev && entry && prev.path === entry.path ? prev : null));
+      const noCopy = takeCopyTrouble(pathname);
+      setUncopied(prev => (entry && (noCopy || prev === entry.path) ? entry.path : null));
+      const storage = browserStorage();
+      /* The newest kept aside save he has not answered and is not playing right now. */
+      const backupKey = entry ? offeredBackup(entry, storage) : null;
+      if (!entry || !storage || !backupKey || hidden.current.has(backupKey)) { setOffer(null); return; }
+      let hasSave = false;
+      try { hasSave = storage.getItem(entry.saveKey) !== null; } catch { /* treat as no save */ }
+      const made = backupDate(backupKey);
+      const when = made ? made.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : null;
+      /* With at most BACKUPS_KEPT held before the press, the put back cannot
+         drop one (the backup it comes from is never counted). */
+      const crowded = backupKeysOf(entry, storage).length > BACKUPS_KEPT;
+      setOffer({ entry, backupKey, hasSave, when, crowded });
+    };
+    ask();
+    /* Round 1515: Club Manager switches careers in the page, and a kept aside copy is offered only in its own
+       slot, so a switch (the page sends the marks key's name as an event) asks again (takeOutcome and takeCopyTrouble
+       answer once, so the cards keep what they had). */
+    addEventListener(SET_ASIDE_SLOT_KEY, ask);
+    return () => removeEventListener(SET_ASIDE_SLOT_KEY, ask);
   }, [pathname]);
 
   const primary = 'px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity';

@@ -50,6 +50,9 @@
      4) outcomes over the fleet at the three levels for the engaged driver,
         held to the lead's bands (see the table below). Long: run it as its
         own line, or sharded (SHARD=k/n with OUT_JSON) and folded (FOLD=<dir>).
+        Since the Round 1515 fix it plays seeds 0 to 31 (SEEDS=32; a whole run
+        splits each level into PARTS=8 children), so on a runner shard it as
+        SEEDS=32 SHARD=k/8, one line a shard and a level.
      6) Manager Hot Seat and Deadline Day dates play as on the base, with no
         level; Deadline Day's code reaches no lever.
      7) the help's worked example (ClubManagerHelp.tsx, comments out) holds
@@ -114,7 +117,58 @@
      NOT THIS ROUND'S, FOR THE LEAD: Hard and Impossible are main's rows, untouched here, and the engine has
      moved since Round 1501's table above (Medium's mid ppg 1.42 then, 1.33 now). Their pooled drops still sit in
      the bands (9.8 in 8 to 20, 18.6 in 18 to 35), but block one alone is 8.05 on Hard and 17.27 on Impossible,
-     under its floor: both bands are now coin tosses on the current engine.
+     under its floor: both bands are now coin tosses on the current engine. (Round 1515 retuned them, below.)
+
+   MEASURED FOR ROUND 1515, THE RETUNE (GitHub runners). Only the edge moved: Hard 1.5 to 2.2, Impossible 3 to
+   3.9; every other dial of both rows, and the Medium and easy rows, as Round 1512 left them. Section 4 over seeds
+   0 to 31 (engaged driver, 9 clubs, 6 seasons, 1728 seasons a level), sharded and folded: Hard from r1515-fxtB
+   and Impossible from r1515-fxtD (SEEDS=32 SHARD=k/8, the dials merged by DIALS_JSON on 718aa65f); Medium from
+   r1512-m1 (seeds 0 to 15) and r1515-run-seeds (seeds 16 to 31, the review's, on 718aa65f); Easy and Very Easy
+   are Round 1512's seeds 0 to 15, held against Medium on those same seeds:
+                         mid ppg   vs Medium   sacked seasons       spend a season    big titles   small ppg
+     Very Easy (0-15)    1.73      +30.0%        0 of 864 (0.00x)   38.19m (+40.4%)   7.60         1.45
+     Easy (0-15)         1.52      +14.2%       44 of 864 (0.18x)   32.89m (+20.9%)   4.72         1.37
+     Medium              1.36                  466 of 1728 (0.27)   27.01m            3.98         1.10
+     Hard                1.12      -17.6%     1217 of 1728 (2.61x)  22.72m (-15.9%)   1.82         0.68
+     Impossible          0.97      -28.4%     1568 of 1728 (3.36x)  15.44m (-42.9%)   0.61         0.48
+     the lead's bands:   Hard down 13 to 20 in each block, sacked at least 1.6x, spend down at least 12%, big
+                         titles at least 1.2; Impossible down 23 to 32 in each block, at least 2.4x, big
+                         titles at least 0.5.
+     Seed blocks of sixteen (0 to 15 | 16 to 31), which each drop must hold in: Hard -17.27 | -17.87, Impossible
+     -27.97 | -28.84. Blocks of eight, printed only: Hard -17.94, -16.62, -18.57, -17.18; Impossible -27.66,
+     -28.28, -28.49, -29.19. Medium against Medium (even seeds against odd) 1.37 and 1.34, a 1.5% gap. The
+     nearest edge is Impossible's big club titles: 0.61 pooled against its floor of 0.5, only 35 titles in 576
+     seasons (0.73 | 0.49 by block; the floor is held pooled), the noisiest band there is. Then Hard's block
+     two, 17.87 against 20.
+     Why seeds 0 to 31: the first retune (Hard 2.5, Impossible 4.3) held every band on seeds 0 to 15, its
+     tuning seeds (Hard -18.46, blocks of eight -18.98 | -17.96; Impossible -26.44), and the review's fresh
+     seeds 16 to 31 put them at -22.50 and -33.51, both out (Round 1515 review, run lens, major 1). Every
+     setting measured on seeds 0 to 31 (pooled | blocks of sixteen | blocks of eight), seeds 0 to 15 from
+     r1515-t2a, t2b and m1 where the same setting was already played there:
+       Hard 2.1: 17.14 | 17.89 16.51 | 17.99 17.79 14.05 19.05, spend -19.7, big titles 1.63
+       Hard 2.2: 17.58 | 17.27 17.87 | 17.94 16.62 18.57 17.18, spend -15.9, big titles 1.82
+       Hard 2.3: 17.26 | 16.15 18.31 | 15.62 16.68 18.03 18.60, spend -16.6, big titles 1.77
+       Hard 2.4: 17.75 | 16.05 19.38 | 18.26 13.90 17.82 20.94, spend -15.8, big titles 1.28
+       Hard 2.5: 20.53 | 18.46 22.50 | 18.98 17.96 23.91 21.23, spend -14.6, big titles 1.56
+       Impossible 3.8: 27.40 | 25.25 29.49 | 28.32 22.42 28.44 30.54, big titles 0.76
+       Impossible 3.9: 28.42 | 27.97 28.84 | 27.66 28.28 28.49 29.19, big titles 0.61
+       Impossible 4.0: 27.37 | 24.47 30.23 | 24.34 24.61 26.45 34.33, big titles 0.45, under its floor
+       Impossible 4.1: 28.77 | 25.76 31.76 | 26.08 25.44 30.03 33.58, big titles 0.61
+       Impossible 4.3: 29.94 | 26.44 33.51 | 27.26 25.60 31.52 35.60, big titles 0.83
+     Over thirty two seeds the drop hardly moves from Hard 2.1 to 2.4 (17.1 to 17.8) or from Impossible 3.8 to
+     4.1 (27.4 to 28.8), while one block of eight seeds swings by up to seven points: a tenth on the edge is far
+     inside the noise of a small fleet, which is why the first pick fitted it. 2.2 and 3.9 sit mid plateau, near
+     the middle of each band, and every block of eight lands inside too. Impossible's big titles do not fall
+     with the edge either (0.76, 0.61, 0.45, 0.61, 0.83): about 0.65 with a spread of 0.13 a fleet.
+     Out of sample (r1515-fxv on 8cb05b24, the committed table, no DIALS_JSON): seeds 32 to 47, never used in
+     any tuning, Medium 1.37 (even against odd a 0.26% gap); Hard -17.87 (blocks of eight -17.90 | -17.92),
+     sacked 2.51x, spend -21.56%, big titles 1.94; Impossible -27.92 (-27.08 | -28.77), sacked 3.28x, big titles
+     0.87. Every band holds there too. Its two shards of seeds 0 to 31 (SHARD=0/8) came back byte equal to
+     r1515-fxtB's and fxtD's, so the committed table plays exactly as the DIALS_JSON runs above.
+     Settings tried on seeds 0 to 15 only, in the first retune: Hard 3.0: 20.80; Hard 2.25 with cheque 0.7 and
+     mark 1.25: 14.40 (block two 11.20); Impossible 5.0: 35.64, big titles 0.49; Impossible 4 with cheque 0.6
+     and mark 1.4: 28.44, big titles 0.49. The money dials added little drop and cost Impossible its big titles,
+     so they stayed where they were.
 
    Negative controls (CM_DIFF_CONTROL), each patched in memory or into the
    bundle, never into src; each must turn its section red:
@@ -142,6 +196,11 @@
    Round 1512 closing check:
      vefloor     the easy mark's floor at what a sale banks taken out      3 (the Very Easy pass)
      helplines   the help's first two level lines folded into one          7
+   Round 1515:
+     foldblock   FOLD with Hard's seasons of seeds 16 to 31 as Medium's   the fold's per block drop check
+     foldbig     FOLD with Impossible's big club titles taken away         the fold's Impossible title floor
+   Round 1515 fix (the fleet is seeds 0 to 31):
+     foldhalf    FOLD with Hard's seasons of seeds 16 to 31 left out       the fold's every block played check
 
    Run: node scripts/simCmDifficulty.mjs     (SECTION=1, MEASURE=1 SEEDS=4 SEASONS=10)
         git worktree add /tmp/base <base sha> && BASE_ROOT=/tmp/base node scripts/simCmDifficulty.mjs
@@ -169,6 +228,8 @@ const CONTROLS = {
   helpdrifte: ['7'], midleak: ['8'], easyclear: ['8'], midnolevel: ['8'], foldflat: [],
   /* Round 1512 closing check: the easy market's floor at what a sale banks; two levels on one line of the help. */
   vefloor: ['3'], helplines: ['7'],
+  /* Round 1515: the retune's new fold checks, each seed block's drop and Impossible's big club title floor. */
+  foldblock: [], foldbig: [], foldhalf: [],
 };
 const cannot = why => { console.log(`simCmDifficulty: CANNOT RUN: ${why}`); process.exit(2); };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`CM_DIFF_CONTROL=${CONTROL} is not a control this harness knows`);
@@ -1069,8 +1130,21 @@ async function section6() {
    on Legend; his seasons ending in a sacking (all nine clubs) are at least 1.4 times Normal's on Hard and 2
    times on Legend; his spend per season is at least 10 percent lower on Hard; and a big club on Hard still
    wins its league in at least one season in ten. The bands are the lead's; the measured numbers and the
-   spread of Normal against Normal on other seeds are in the header table. */
-const BANDS = { hard: { drop: [0.08, 0.20], sack: 1.4 }, legend: { drop: [0.18, 0.35], sack: 2 } };
+   spread of Normal against Normal on other seeds are in the header table.
+   Round 1515 (the retune, the lead's decision 1): the mid clubs' points per game fall 13 to 20 percent on Hard
+   and 23 to 32 on Impossible, pooled AND in each seed block (0 to 15, 16 to 31); sacked seasons at least 1.6 and
+   2.4 times Medium's; spend a season on Hard at least 12 percent under; a big club still wins its league at
+   least 1.2 seasons in ten on Hard and 0.5 on Impossible.
+   Round 1515 review: the first retune held on seeds 0 to 15 and fell out of both drop bands on seeds 16 to 31,
+   so the fleet is seeds 0 to 31 and each block is sixteen seeds (more careers, never a wider band). */
+const BANDS = { hard: { drop: [0.13, 0.20], sack: 1.6, spend: 0.12, big: 1.2 }, legend: { drop: [0.23, 0.32], sack: 2.4, big: 0.5 } };
+/* The two seed blocks a band must hold in on its own (Round 1512 printed them; Round 1515 holds the drops to them). */
+const BLOCKS = [['seeds 0 to 15', r => r.seed < 16], ['seeds 16 to 31', r => r.seed >= 16]];
+/* Medium's seasons on the seeds a level was played on, so a level folded from fewer seeds than Medium's (the
+   easy rows' shards hold seeds 0 to 15) is held against the same careers, never against other seeds. */
+const mediumOn = (rows, l) => { const s = new Set(rows.filter(r => r.level === l).map(r => r.seed)); return outcomesOf(rows.filter(r => r.level === 'normal' && s.has(r.seed))).normal; };
+/* Failures of the per block drop check, so control foldblock can say it was that check that went red. */
+let blockFails = 0;
 /* Round 1512, decision 3: the easy rows against Medium. The mid clubs' points per game UP 6 to 20 percent on
    Easy and 14 to 35 on Very Easy; sacked seasons at most 0.75 and 0.5 times Medium's; spend a season up on Easy
    and up further on Very Easy; and still a game: Very Easy's big clubs win under 9 titles in ten and its small
@@ -1107,19 +1181,30 @@ function assertOutcomes(rows) {
   for (const l of ['hard', 'legend']) {
     const x = o[l];
     if (!x) continue;
+    const n = mediumOn(rows, l);
     const drop = 1 - x.midPpg / n.midPpg;
     const sackRatio = n.sack > 0 ? x.sack / n.sack : (x.sack > 0 ? Infinity : NaN);
     const spendDrop = 1 - x.spend / n.spend;
     console.log(`  ${l}: mid points per game ${f2(x.midPpg)} (down ${f2(drop * 100)} percent), sacked ${x.sacks} of ${x.seasons} (${f2(x.sack)}, ${f2(sackRatio)} times Normal), spend ${f2(x.spend)}m (down ${f2(spendDrop * 100)} percent), big club titles ${f2(x.bigTitles10)} in ten`);
     const [lo, hi] = BANDS[l].drop;
-    if (!(drop >= lo && drop <= hi)) fail(`${l}: the mid clubs' points per game fell ${f2(drop * 100)} percent, the band is ${lo * 100} to ${hi * 100}`);
+    if (!(drop >= lo && drop <= hi)) fail(`${l}: the mid clubs' points per game fell ${f2(drop * 100)} percent, the band is ${Math.round(lo * 100)} to ${Math.round(hi * 100)}`);
     if (!(sackRatio >= BANDS[l].sack)) fail(`${l}: sacked ${f2(sackRatio)} times as often as Normal, the floor is ${BANDS[l].sack}`);
-    if (l === 'hard' && !(spendDrop >= 0.10)) fail(`hard: spend per season fell ${f2(spendDrop * 100)} percent, the floor is 10`);
-    if (l === 'hard' && !(x.bigTitles10 >= 1)) fail(`hard: a big club won its league ${f2(x.bigTitles10)} seasons in ten, the floor is 1`);
+    if (BANDS[l].spend && !(spendDrop >= BANDS[l].spend)) fail(`${l}: spend per season fell ${f2(spendDrop * 100)} percent, the floor is ${Math.round(BANDS[l].spend * 100)}`);
+    if (!(x.bigTitles10 >= BANDS[l].big)) fail(`${l}: a big club won its league ${f2(x.bigTitles10)} seasons in ten, the floor is ${BANDS[l].big}`);
+    /* Round 1515: the drop in each seed block on its own, so a band is never met by one block carrying the other. */
+    for (const [name, inBlock] of BLOCKS) {
+      const br = rows.filter(inBlock), ob = outcomesOf(br);
+      /* A block the fleet never played is a red, not a pass: the bands are held over seeds 0 to 31. */
+      if (!ob[l]) { blockFails += 1; fail(`${l} has no seasons in ${name}: section 4's bands are held over seeds 0 to 31 (SEEDS=32)`); continue; }
+      const d = 1 - ob[l].midPpg / mediumOn(br, l).midPpg;
+      if (!(d >= lo && d <= hi)) { blockFails += 1; fail(`${l} in ${name}: the mid clubs' points per game fell ${f2(d * 100)} percent, the band is ${Math.round(lo * 100)} to ${Math.round(hi * 100)} in each block`); }
+      else ok(`${l} in ${name}: down ${f2(d * 100)} percent, inside ${Math.round(lo * 100)} to ${Math.round(hi * 100)}`);
+    }
   }
   for (const l of ['easy', 'veryeasy']) {
     const x = o[l];
     if (!x) continue;
+    const n = mediumOn(rows, l);
     const rise = x.midPpg / n.midPpg - 1;
     const sackRatio = n.sack > 0 ? x.sack / n.sack : NaN;
     const spendRise = x.spend / n.spend - 1;
@@ -1143,7 +1228,7 @@ function assertOutcomes(rows) {
 async function fleetInChildren(levels, seeds, seasons, drivers) {
   const { spawn } = await import('node:child_process');
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cmdiff-fleet-'));
-  const parts = num('PARTS', 4), par = num('PAR', 3);
+  const parts = num('PARTS', 8), par = num('PAR', 3);
   const jobs = levels.flatMap(lv => Array.from({ length: parts }, (_, k) => ({ lv, k })));
   const run = ({ lv, k }) => new Promise(resolve => {
     const out = path.join(dir, `${lv}-${k}.json`);
@@ -1169,11 +1254,11 @@ async function fleetInChildren(levels, seeds, seasons, drivers) {
   return rows;
 }
 async function section4() {
-  const seeds = num('SEEDS', 16), seasons = num('SEASONS', 6);
+  const seeds = num('SEEDS', 32), seasons = num('SEASONS', 6);
   const levels = (process.env.LEVELS || LEVELS.join(',')).split(',');
   const drivers = (process.env.DRIVERS || 'engaged').split(',');
   console.log(`4) outcomes: ${levels.join(', ')}, ${seeds} seeds from ${num('SEED_OFFSET', 0)}, ${seasons} seasons, ${drivers.join(' and ')}, shard ${process.env.SHARD || '0/1'}`);
-  const whole = !process.env.SHARD && num('PARTS', 4) > 1;
+  const whole = !process.env.SHARD && num('PARTS', 8) > 1;
   const rows = whole ? await fleetInChildren(levels, seeds, seasons, drivers) : runFleet(levels, seeds, seasons, drivers);
   printTable(rows, levels);
   if (process.env.SHARD && process.env.SHARD !== '0/1') { ok('a shard: the bands are the fold\'s (FOLD=<dir of OUT_JSON files>)'); return; }
@@ -1188,7 +1273,7 @@ function fold() {
   printTable(rows, levels);
   /* Round 1512: each seed block on its own (seeds 0 to 7 and 8 to 15), printed only, so the header can say
      whether a band is a coin toss over the two blocks. The bands hold on the pooled fleet. */
-  for (const [name, inBlock] of [['seeds 0 to 7', r => r.seed < 8], ['seeds 8 to 15', r => r.seed >= 8]]) {
+  for (const [name, inBlock] of BLOCKS) {
     const o = outcomesOf(rows.filter(inBlock));
     if (!o.normal) continue;
     console.log(`  block ${name}: ${Object.entries(o).map(([l, x]) => `${l} mid ${f2(x.midPpg)} (${f2((x.midPpg / o.normal.midPpg - 1) * 100)}%), sacked ${f2(x.sack)} (${f2(x.sack / o.normal.sack)}x), spend ${f2(x.spend)}m, big titles ${f2(x.bigTitles10)}, small ppg ${f2(x.smallPpg)}`).join('; ')}`);
@@ -1199,6 +1284,37 @@ function fold() {
     const flat = [...rows.filter(r => r.level !== 'easy' && r.level !== 'veryeasy'), ...med.map(r => ({ ...r, level: 'easy' })), ...med.map(r => ({ ...r, level: 'veryeasy' }))];
     console.log('NEGATIVE CONTROL ON: Easy and Very Easy folded as copies of Medium\'s seasons');
     assertOutcomes(flat);
+    return;
+  }
+  if (CONTROL === 'foldblock') {
+    /* Round 1515: Hard's seasons of seeds 16 to 31 folded as Medium's own, so that block's drop is 0: the per
+       block check must go red (whatever the pooled one does). */
+    const med2 = rows.filter(r => r.level === 'normal' && r.seed >= 16);
+    if (!med2.length || !rows.some(r => r.level === 'hard' && r.seed >= 16)) cannot('foldblock: the fold holds no Hard or Medium seasons of seeds 16 to 31 to swap');
+    console.log('NEGATIVE CONTROL ON: Hard\'s seasons of seeds 16 to 31 folded as Medium\'s');
+    assertOutcomes([...rows.filter(r => !(r.level === 'hard' && r.seed >= 16)), ...med2.map(r => ({ ...r, level: 'hard' }))]);
+    if (!blockFails) { console.log('CONTROL foldblock DID NOT FIRE'); process.exit(3); }
+    console.log(`CONTROL foldblock FIRED: ${blockFails} block failures`);
+    return;
+  }
+  if (CONTROL === 'foldhalf') {
+    /* Round 1515 fix: Hard played on seeds 0 to 15 only, as the first retune was: the block it never played must
+       go red, not pass by being skipped. */
+    if (!rows.some(r => r.level === 'hard' && r.seed >= 16)) cannot('foldhalf: the fold holds no Hard seasons of seeds 16 to 31 to leave out');
+    console.log('NEGATIVE CONTROL ON: Hard\'s seasons of seeds 16 to 31 left out of the fold');
+    assertOutcomes(rows.filter(r => !(r.level === 'hard' && r.seed >= 16)));
+    if (!blockFails) { console.log('CONTROL foldhalf DID NOT FIRE'); process.exit(3); }
+    console.log(`CONTROL foldhalf FIRED: ${blockFails} block failures`);
+    return;
+  }
+  if (CONTROL === 'foldbig') {
+    /* Round 1515: Impossible's big clubs never win the league: its title floor must go red. */
+    if (!rows.some(r => r.level === 'legend' && r.tier === 'big' && r.title)) cannot('foldbig: no Impossible big club title in the fold to take away');
+    console.log('NEGATIVE CONTROL ON: Impossible\'s big club titles taken away');
+    const before = failures;
+    assertOutcomes(rows.map(r => (r.level === 'legend' && r.tier === 'big' ? { ...r, title: false } : r)));
+    if (failures === before) { console.log('CONTROL foldbig DID NOT FIRE'); process.exit(3); }
+    console.log(`CONTROL foldbig FIRED: ${failures - before} failures`);
     return;
   }
   assertOutcomes(rows);
