@@ -1,3 +1,8 @@
+/* Round1435: exact-name priority compatibility. Complete prior entry follows unchanged. */
+async function runExactNameCompatibility1435() {
+  return (await import('./qa/gridExactNameCompatibility1435.mjs')).dispatchHistorical1435(import.meta.url);
+}
+if (await runExactNameCompatibility1435()) process.exit(process.exitCode ?? 0);
 /* Round1434: exact comparison compatibility. Complete prior entry follows unchanged. */
 async function runApostropheCompatibility1434() {
   return (await import('./qa/gridApostropheCompatibility1434.mjs')).dispatchHistorical1434(import.meta.url);
