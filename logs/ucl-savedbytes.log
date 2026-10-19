@@ -1,0 +1,4 @@
+35
+FAIL 2 watcher Proof Town Athletic (now) nocoach seed 1 at s1-join-reload: the saved bytes differ (worldComps.uel and worldComps.dsc taken off)
+FAIL 2 watcher Proof Town Athletic (now) coach seed 1 at s1-join-reload: the saved bytes differ (worldComps.uel and worldComps.dsc taken off)
+simWorldUcl: control savedbytes FIRED (35 failures, all its own)
