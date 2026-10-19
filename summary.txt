@@ -1,0 +1,7 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-noevent exit=1 38s | playCmSavePoints: control noevent FIRED (2 slot check(s) red, 2 in all)
+walk-nomark exit=1 40s | playCmSavePoints: control nomark FIRED (2 slot check(s) red, 2 in all)
+weight exit=0 33s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+walk exit=0 141s | playCmSavePoints: OK at 390 and 1280
+weight-base exit=1 70s | all js gz: A 4547534 B 4547649 delta 115
+keeper exit=0 860s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new beyond the 2 key(s) named in KEYS_ADDED_ON_PURPOS
