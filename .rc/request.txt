@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+# Round 1515 fix: the save points walk with its screenshots named per run, and control nomark (the database host blocked by the walk and the runner)
+walk: node scripts/playCmSavePoints.mjs
+walk-nomark: WIDTHS=390 POINTS_CONTROL=nomark node scripts/playCmSavePoints.mjs
