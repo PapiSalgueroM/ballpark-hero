@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+playCmSavePoints: node scripts/playCmSavePoints.mjs
+walk-nodoor: WIDTHS=390 POINTS_CONTROL=nodoor node scripts/playCmSavePoints.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
