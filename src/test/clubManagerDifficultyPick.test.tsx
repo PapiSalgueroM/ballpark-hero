@@ -145,6 +145,16 @@ describe('the Options panel', () => {
     expect(onDifficulty).not.toHaveBeenCalled();
     expect(document.querySelector('[data-cm-level-paused]')?.textContent).toContain('finish it first');
   });
+
+  /* Review of 2026-10-19: No sacking posts no score at any level, and the row must not say Medium does. */
+  it('on a No sacking career the scores line says none post, at any level', () => {
+    const career = { ...at(), startOptions: { ...at().startOptions, noSack: 1 } } as ReturnType<typeof at>;
+    render(<DifficultyOption career={career} onDifficulty={vi.fn()} />);
+    const line = document.querySelector('[data-cm-level-scores]');
+    expect(line?.getAttribute('data-cm-level-scores')).toBe('off');
+    expect(line?.textContent).toContain('No sacking is on');
+    expect(line?.textContent).not.toContain('Impossible post leaderboard scores');
+  });
 });
 
 describe('the hook', () => {

@@ -80,10 +80,13 @@ export function DifficultyOption({ career, onDifficulty }: { career: CareerState
             Tap {armedLevel ? DIFFICULTY_INFO[armedLevel].label : 'it'} again to switch. On Very Easy or Easy this career stops posting leaderboard scores for good, even if you go back up later.
           </p>
         </div>
-        <p className="text-[10px] text-muted-foreground" data-cm-level-scores={easySince !== null ? 'off' : 'on'}>
+        {/* Review of 2026-10-19: No sacking stops the scores too (postsScore), so a No sacking career is told so here. */}
+        <p className="text-[10px] text-muted-foreground" data-cm-level-scores={easySince !== null || noSackFrom(career) !== null ? 'off' : 'on'}>
           {easySince !== null
             ? `This career went easy${easySince > 1 ? ` in season ${easySince}` : ''}, so it posts no leaderboard scores now, whatever the level.`
-            : 'Medium, Hard and Impossible post leaderboard scores. Very Easy and Easy do not, from the moment you pick one.'}
+            : noSackFrom(career) !== null
+              ? 'No sacking is on, so this career posts no leaderboard scores at any level.'
+              : 'Medium, Hard and Impossible post leaderboard scores. Very Easy and Easy do not, from the moment you pick one.'}
           {' '}Negotiation strictness below is a separate setting.
         </p>
       </div>
