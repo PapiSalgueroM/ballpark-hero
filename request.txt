@@ -1,0 +1,8 @@
+# Release BL final gate part c (#!serve: a plain vite build of the committed head served on 4173 with BASE and SWEEP_BASE
+# set): the fifteen built-site readers every packet's own workflow ran, then sweepWeight with the offline preload (the
+# fourteen fatal caps and the weights the lead sets). simBrand needs fonttools and pillow.
+#!serve
+#!playwright
+#!serial
+readers: pip3 install --quiet fonttools pillow > /tmp/pip.log 2>&1; f=0; export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"; for h in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do node scripts/$h.mjs > /tmp/r-$h.log 2>&1; s=$?; echo "$h exit=$s | $(tail -1 /tmp/r-$h.log | cut -c1-170)"; [ $s -eq 0 ] || f=1; done; exit $f
+sweepWeight: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; cp /tmp/sw.log $RC_OUT/sweepWeight.log; grep -E "FAIL|/club-manager|/manager-hot-seat|/deadline-day|/soccer-career |/soccer-grid|/tennis-player|/tennis-chain|/nfl-my-career|sweepWeight:" /tmp/sw.log | head -24 | cut -c1-200; exit $s
