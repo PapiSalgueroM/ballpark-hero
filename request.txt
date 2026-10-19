@@ -1,0 +1,20 @@
+# Round 1515 gates on 718aa65f: the type gate, the unit cases, the save keeper and recovery harnesses, and simCmDifficulty's sections 1, 2, 3, 6, 7, 8
+s2: mkdir -p /tmp/b2 && git archive 1a028447 | tar -x -C /tmp/b2 && BASE_ROOT=/tmp/b2 SECTION=2 node scripts/simCmDifficulty.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+s3: SECTION=3 node scripts/simCmDifficulty.mjs
+vitest: node_modules/.bin/vitest run src/lib/brokenSaveRecovery.test.ts src/test/routeErrorRecovery.test.tsx src/test/saveKeeper.test.ts src/lib/clubManagerSlots.test.ts src/test/clubManagerSlots.test.tsx src/test/clubManagerRetire.test.tsx src/test/cmSavePoints.test.ts src/test/cmSavePointsHook.test.tsx src/test/cmSavePointsDoor.test.tsx src/test/cmSavePointsScreen.test.tsx src/lib/clubManagerDifficulty.test.ts src/test/clubManagerDifficultyPick.test.tsx --testTimeout=300000 --hookTimeout=120000
+s178: SECTION=1,7,8 node scripts/simCmDifficulty.mjs
+s6: mkdir -p /tmp/b6 && git archive 1a028447 | tar -x -C /tmp/b6 && BASE_ROOT=/tmp/b6 SECTION=6 node scripts/simCmDifficulty.mjs
+c-helpdrift: CM_DIFF_CONTROL=helpdrift SECTION=7 node scripts/simCmDifficulty.mjs
+c-edge: CM_DIFF_CONTROL=edge SECTION=3 node scripts/simCmDifficulty.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simCmSavePoints: node scripts/simCmSavePoints.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

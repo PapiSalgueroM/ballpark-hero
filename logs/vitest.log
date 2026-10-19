@@ -1,0 +1,47 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/saveKeeper.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 133[2mms[22m[39m
+ [32m✓[39m src/test/routeErrorRecovery.test.tsx [2m([22m[2m65 tests[22m[2m)[22m[33m 1862[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerDifficulty.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 3084[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22mthe market: the same men in the same order, every price marked, every value untouched [33m 700[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22ma release clause is never the cheaper door round the mark, and on Normal it is exactly what it was [33m 403[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1512: the dials on Easy and Very Easy[2m > [22mmore money, more wage room, a cheaper market (never under 0.5) and a weaker side against you [33m 396[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1512: the dials on Easy and Very Easy[2m > [22mthe easy market never lists a man under what selling him straight back banks, nor over Medium's price [33m 916[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerRetire.test.tsx [2m([22m[2m24 tests[22m[2m)[22m[33m 3197[2mms[22m[39m
+   [33m[2m✓[22m[39m retiring through the hook[2m > [22mwrites first, then opens the farewell, and the disk holds the retirement [33m 607[2mms[22m[39m
+   [33m[2m✓[22m[39m retiring through the hook[2m > [22ma reload lands on the managers screen, never on hub, seasonEnd or sacked, and opening it shows the farewell [33m 324[2mms[22m[39m
+   [33m[2m✓[22m[39m retiring through the hook[2m > [22ma retired save that is also sacked, or holds a season summary, opens on the farewell and nowhere else [33m 824[2mms[22m[39m
+   [33m[2m✓[22m[39m retiring through the hook[2m > [22mopens a retired career parked in another slot on its farewell, through the boot [33m 377[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerSlots.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 5423[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mtwo managers survive leaving the page, and either one opens [33m 818[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mleaving in the middle of a swap never writes the outgoing career back [33m 410[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mthe screen asks before it deletes, and every tile says what it holds [33m 376[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mdelete takes one career and leaves the other [33m 305[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mclosing the old tab after a switch in another never wipes the career switched in [33m 442[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22ma change in the old tab writes nothing over the other career and goes back to the managers [33m 577[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mthe old tab live clock writes nothing over the career switched in [33m 430[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mManagers tapped on the old tab hub writes nothing over the other career [33m 436[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22ma new manager from the old tab managers screen parks the other career where it belongs [33m 501[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mthe old tab managers screen follows the other tab, and a stale New manager says why it did nothing [33m 407[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: a parked era career[2m > [22mopens through the era boot, squads first [33m 463[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePoints.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1389[2mms[22m[39m
+ [32m✓[39m src/lib/brokenSaveRecovery.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerSlots.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1426[2mms[22m[39m
+   [33m[2m✓[22m[39m an old save, from before slots[2m > [22mis slot 1, and reading the slots writes nothing [33m 353[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDifficultyPick.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 3493[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22moffers five levels with Medium pressed, and Skip on Medium hands nothing on [33m 678[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mImpossible and No sacking ride on both buttons [33m 1196[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mEasy and Very Easy say plainly that the career posts no leaderboard scores [33m 359[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsScreen.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1383[2mms[22m[39m
+   [33m[2m✓[22m[39m the save points screen names the right cause[2m > [22ma delete of a point another tab removed says it is gone, not still there [33m 377[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsDoor.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1232[2mms[22m[39m
+   [33m[2m✓[22m[39m the save points button off the hub[2m > [22mopens the save points screen on the sacked screen, with the slot's points listed [33m 818[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsHook.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 748[2mms[22m[39m
+   [33m[2m✓[22m[39m the hook asks the points record before a scored ping[2m > [22ma season with no mark pings its score (the baseline) [33m 367[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m      Tests [22m [1m[32m223 passed[39m[22m[90m (223)[39m
+[2m   Start at [22m 14:54:14
+[2m   Duration [22m 20.11s[2m (transform 5.89s, setup 1.71s, collect 15.80s, tests 23.39s, environment 8.45s, prepare 3.18s)[22m
+
