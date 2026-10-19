@@ -143,7 +143,7 @@ const ReportQuestion = ({ gameType, gameContext = {}, kinds = REPORT_REASONS }: 
               />
 
               {status === 'error' && (
-                <p className="text-xs text-destructive">Something went wrong. Try again.</p>
+                <p role="alert" className="text-xs text-destructive">Something went wrong. Try again.</p>
               )}
 
               <button

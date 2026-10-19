@@ -5,7 +5,7 @@ import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 
 export const BASE = '3ead1aa0f0a22a9341d66b911f007c7a58dc653b';
-export const ORIGINAL_ADMISSION = null;
+export const ORIGINAL_ADMISSION = {"status":"PASS","scope":"full-original-report-error-alerts","head":"9b82462acc2b09d6dda192bf2a61ee470805c535","productAdopted":false,"commonSha256":"156206a68270743d16a5edaf2e2c718389c48914a97e48192b7d313f3b8e1e76","featureSha256":"1ee0576bbc000cda11e04712fe75b5812ab94ad060f4d0366ee179e9f31c3a37","pixelSha256":"a9f7aed58aee43b10eccbe99e9ab15fcd299bcc40e3b3c0bb71e98eb08e45a2c","admissionSha256":"30b6829339a8703e57cbf96cc07b223ad67cc36d0ac7087fc9627edab852b171","testSha256":"2c297e0c6cd189706efa090832910134bf4ff5d5ebcfcdbae9528f59e95354af","sourceSha256":{"src/components/game/ReportSiteIssue.tsx":"700cc63a32be7eb53edc555eef582e332d26c5e906e75d785b3dd163934732c6","src/components/game/ReportQuestion.tsx":"f16ca016c5a96b56d554490c1eb0516ee91cf9d0a3f84589173356e91e311dc6"}};
 export const TEST_SHA256 = '2c297e0c6cd189706efa090832910134bf4ff5d5ebcfcdbae9528f59e95354af';
 export const FORM_FILES = ['src/components/game/ReportSiteIssue.tsx', 'src/components/game/ReportQuestion.tsx'];
 export const FORM_ALIASES = ['@/components/game/ReportSiteIssue', '@/components/game/ReportQuestion'];
