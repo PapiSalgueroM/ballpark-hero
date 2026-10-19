@@ -59,7 +59,9 @@ let failures = 0;
 let doorFailures = 0;
 let slotFailures = 0;
 const check = (ok, msg) => { if (!ok) { failures += 1; console.error(`  FAIL: ${msg}`); } else console.log(`  ok: ${msg}`); return ok; };
-const shot = async (page, name) => { if (OUT) await page.screenshot({ path: path.join(OUT, name) }).catch(() => {}); };
+/* Round 1515 review: a control run's shots carry the control's name, so a walk and its controls sent side by side
+   into one RC_OUT never overwrite each other's pictures (a control's slot 2 card read as the walk's). */
+const shot = async (page, name) => { if (OUT) await page.screenshot({ path: path.join(OUT, CONTROL ? `${CONTROL}-${name}` : name) }).catch(() => {}); };
 const pause = (page, ms) => page.waitForTimeout(ms);
 const visible = async loc => (await loc.count()) > 0 && await loc.first().isVisible().catch(() => false);
 const raw = page => page.evaluate(k => localStorage.getItem(k), KEY).catch(() => null);
