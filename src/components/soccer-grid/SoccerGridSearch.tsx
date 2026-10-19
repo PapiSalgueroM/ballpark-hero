@@ -37,6 +37,7 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
   const [showDropdown, setShowDropdown] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
+  const blurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const normalizedQuery = normalizeName(query);
   const suggestions = query.length >= 2 && normalizedQuery.length > 0
@@ -44,6 +45,10 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
         .filter(p => normalizeName(p.name).includes(normalizedQuery))
         .slice(0, 8)
     : [];
+
+  useEffect(() => () => {
+    if (blurTimer.current !== null) clearTimeout(blurTimer.current);
+  }, []);
 
   useEffect(() => {
     if (!disabled) inputRef.current?.focus();
@@ -98,8 +103,17 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
-          onFocus={() => query.length >= 2 && setShowDropdown(true)}
-          onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
+          onFocus={() => {
+            if (blurTimer.current !== null) clearTimeout(blurTimer.current);
+            blurTimer.current = null;
+            if (query.length >= 2) setShowDropdown(true);
+          }}
+          onBlur={() => {
+            blurTimer.current = setTimeout(() => {
+              blurTimer.current = null;
+              setShowDropdown(false);
+            }, 150);
+          }}
           placeholder="Type a player name…"
           aria-label="Search for a player"
           disabled={disabled}
