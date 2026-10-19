@@ -1,0 +1,3 @@
+vitest exit=0 7s |    Duration  6.15s (transform 2.93s, setup 227ms, collect 4.73s, tests 2.66s, environment 1.30s, prepare 602ms)
+simCmSavePoints exit=0 51s | simCmSavePoints: OK, all eight sections green
+tsc exit=0 76s | 

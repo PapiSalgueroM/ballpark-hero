@@ -1,0 +1,11 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/routeErrorRecovery.test.tsx [2m([22m[2m65 tests[22m[2m)[22m[33m 1526[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePoints.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 1135[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m79 passed[39m[22m[90m (79)[39m
+[2m   Start at [22m 09:28:56
+[2m   Duration [22m 6.15s[2m (transform 2.93s, setup 227ms, collect 4.73s, tests 2.66s, environment 1.30s, prepare 602ms)[22m
+
