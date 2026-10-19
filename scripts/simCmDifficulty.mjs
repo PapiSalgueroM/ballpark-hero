@@ -142,6 +142,9 @@
    Round 1512 closing check:
      vefloor     the easy mark's floor at what a sale banks taken out      3 (the Very Easy pass)
      helplines   the help's first two level lines folded into one          7
+   Round 1515:
+     foldblock   FOLD with Hard's seasons of seeds 8 to 15 as Medium's     the fold's per block drop check
+     foldbig     FOLD with Impossible's big club titles taken away         the fold's Impossible title floor
 
    Run: node scripts/simCmDifficulty.mjs     (SECTION=1, MEASURE=1 SEEDS=4 SEASONS=10)
         git worktree add /tmp/base <base sha> && BASE_ROOT=/tmp/base node scripts/simCmDifficulty.mjs
@@ -169,6 +172,8 @@ const CONTROLS = {
   helpdrifte: ['7'], midleak: ['8'], easyclear: ['8'], midnolevel: ['8'], foldflat: [],
   /* Round 1512 closing check: the easy market's floor at what a sale banks; two levels on one line of the help. */
   vefloor: ['3'], helplines: ['7'],
+  /* Round 1515: the retune's new fold checks, each seed block's drop and Impossible's big club title floor. */
+  foldblock: [], foldbig: [],
 };
 const cannot = why => { console.log(`simCmDifficulty: CANNOT RUN: ${why}`); process.exit(2); };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`CM_DIFF_CONTROL=${CONTROL} is not a control this harness knows`);
@@ -1069,8 +1074,16 @@ async function section6() {
    on Legend; his seasons ending in a sacking (all nine clubs) are at least 1.4 times Normal's on Hard and 2
    times on Legend; his spend per season is at least 10 percent lower on Hard; and a big club on Hard still
    wins its league in at least one season in ten. The bands are the lead's; the measured numbers and the
-   spread of Normal against Normal on other seeds are in the header table. */
-const BANDS = { hard: { drop: [0.08, 0.20], sack: 1.4 }, legend: { drop: [0.18, 0.35], sack: 2 } };
+   spread of Normal against Normal on other seeds are in the header table.
+   Round 1515 (the retune, the lead's decision 1): the mid clubs' points per game fall 13 to 20 percent on Hard
+   and 23 to 32 on Impossible, pooled AND in each seed block (0 to 7, 8 to 15); sacked seasons at least 1.6 and
+   2.4 times Medium's; spend a season on Hard at least 12 percent under; a big club still wins its league at
+   least 1.2 seasons in ten on Hard and 0.5 on Impossible. */
+const BANDS = { hard: { drop: [0.13, 0.20], sack: 1.6, spend: 0.12, big: 1.2 }, legend: { drop: [0.23, 0.32], sack: 2.4, big: 0.5 } };
+/* The two seed blocks a band must hold in on its own (Round 1512 printed them; Round 1515 holds the drops to them). */
+const BLOCKS = [['seeds 0 to 7', r => r.seed < 8], ['seeds 8 to 15', r => r.seed >= 8]];
+/* Failures of the per block drop check, so control foldblock can say it was that check that went red. */
+let blockFails = 0;
 /* Round 1512, decision 3: the easy rows against Medium. The mid clubs' points per game UP 6 to 20 percent on
    Easy and 14 to 35 on Very Easy; sacked seasons at most 0.75 and 0.5 times Medium's; spend a season up on Easy
    and up further on Very Easy; and still a game: Very Easy's big clubs win under 9 titles in ten and its small
@@ -1112,10 +1125,18 @@ function assertOutcomes(rows) {
     const spendDrop = 1 - x.spend / n.spend;
     console.log(`  ${l}: mid points per game ${f2(x.midPpg)} (down ${f2(drop * 100)} percent), sacked ${x.sacks} of ${x.seasons} (${f2(x.sack)}, ${f2(sackRatio)} times Normal), spend ${f2(x.spend)}m (down ${f2(spendDrop * 100)} percent), big club titles ${f2(x.bigTitles10)} in ten`);
     const [lo, hi] = BANDS[l].drop;
-    if (!(drop >= lo && drop <= hi)) fail(`${l}: the mid clubs' points per game fell ${f2(drop * 100)} percent, the band is ${lo * 100} to ${hi * 100}`);
+    if (!(drop >= lo && drop <= hi)) fail(`${l}: the mid clubs' points per game fell ${f2(drop * 100)} percent, the band is ${Math.round(lo * 100)} to ${Math.round(hi * 100)}`);
     if (!(sackRatio >= BANDS[l].sack)) fail(`${l}: sacked ${f2(sackRatio)} times as often as Normal, the floor is ${BANDS[l].sack}`);
-    if (l === 'hard' && !(spendDrop >= 0.10)) fail(`hard: spend per season fell ${f2(spendDrop * 100)} percent, the floor is 10`);
-    if (l === 'hard' && !(x.bigTitles10 >= 1)) fail(`hard: a big club won its league ${f2(x.bigTitles10)} seasons in ten, the floor is 1`);
+    if (BANDS[l].spend && !(spendDrop >= BANDS[l].spend)) fail(`${l}: spend per season fell ${f2(spendDrop * 100)} percent, the floor is ${Math.round(BANDS[l].spend * 100)}`);
+    if (!(x.bigTitles10 >= BANDS[l].big)) fail(`${l}: a big club won its league ${f2(x.bigTitles10)} seasons in ten, the floor is ${BANDS[l].big}`);
+    /* Round 1515: the drop in each seed block on its own, so a band is never met by one block carrying the other. */
+    for (const [name, inBlock] of BLOCKS) {
+      const ob = outcomesOf(rows.filter(inBlock));
+      if (!ob.normal || !ob[l]) continue;
+      const d = 1 - ob[l].midPpg / ob.normal.midPpg;
+      if (!(d >= lo && d <= hi)) { blockFails += 1; fail(`${l} in ${name}: the mid clubs' points per game fell ${f2(d * 100)} percent, the band is ${Math.round(lo * 100)} to ${Math.round(hi * 100)} in each block`); }
+      else ok(`${l} in ${name}: down ${f2(d * 100)} percent, inside ${Math.round(lo * 100)} to ${Math.round(hi * 100)}`);
+    }
   }
   for (const l of ['easy', 'veryeasy']) {
     const x = o[l];
@@ -1188,7 +1209,7 @@ function fold() {
   printTable(rows, levels);
   /* Round 1512: each seed block on its own (seeds 0 to 7 and 8 to 15), printed only, so the header can say
      whether a band is a coin toss over the two blocks. The bands hold on the pooled fleet. */
-  for (const [name, inBlock] of [['seeds 0 to 7', r => r.seed < 8], ['seeds 8 to 15', r => r.seed >= 8]]) {
+  for (const [name, inBlock] of BLOCKS) {
     const o = outcomesOf(rows.filter(inBlock));
     if (!o.normal) continue;
     console.log(`  block ${name}: ${Object.entries(o).map(([l, x]) => `${l} mid ${f2(x.midPpg)} (${f2((x.midPpg / o.normal.midPpg - 1) * 100)}%), sacked ${f2(x.sack)} (${f2(x.sack / o.normal.sack)}x), spend ${f2(x.spend)}m, big titles ${f2(x.bigTitles10)}, small ppg ${f2(x.smallPpg)}`).join('; ')}`);
@@ -1199,6 +1220,27 @@ function fold() {
     const flat = [...rows.filter(r => r.level !== 'easy' && r.level !== 'veryeasy'), ...med.map(r => ({ ...r, level: 'easy' })), ...med.map(r => ({ ...r, level: 'veryeasy' }))];
     console.log('NEGATIVE CONTROL ON: Easy and Very Easy folded as copies of Medium\'s seasons');
     assertOutcomes(flat);
+    return;
+  }
+  if (CONTROL === 'foldblock') {
+    /* Round 1515: Hard's seasons of seeds 8 to 15 folded as Medium's own, so that block's drop is 0: the per
+       block check must go red (whatever the pooled one does). */
+    const med2 = rows.filter(r => r.level === 'normal' && r.seed >= 8);
+    if (!med2.length || !rows.some(r => r.level === 'hard' && r.seed >= 8)) cannot('foldblock: the fold holds no Hard or Medium seasons of seeds 8 to 15 to swap');
+    console.log('NEGATIVE CONTROL ON: Hard\'s seasons of seeds 8 to 15 folded as Medium\'s');
+    assertOutcomes([...rows.filter(r => !(r.level === 'hard' && r.seed >= 8)), ...med2.map(r => ({ ...r, level: 'hard' }))]);
+    if (!blockFails) { console.log('CONTROL foldblock DID NOT FIRE'); process.exit(3); }
+    console.log(`CONTROL foldblock FIRED: ${blockFails} block failures`);
+    return;
+  }
+  if (CONTROL === 'foldbig') {
+    /* Round 1515: Impossible's big clubs never win the league: its title floor must go red. */
+    if (!rows.some(r => r.level === 'legend' && r.tier === 'big' && r.title)) cannot('foldbig: no Impossible big club title in the fold to take away');
+    console.log('NEGATIVE CONTROL ON: Impossible\'s big club titles taken away');
+    const before = failures;
+    assertOutcomes(rows.map(r => (r.level === 'legend' && r.tier === 'big' ? { ...r, title: false } : r)));
+    if (failures === before) { console.log('CONTROL foldbig DID NOT FIRE'); process.exit(3); }
+    console.log(`CONTROL foldbig FIRED: ${failures - before} failures`);
     return;
   }
   assertOutcomes(rows);

@@ -164,7 +164,7 @@ function pruneBackups(entry: ContinueSave, storage: SaveStorage | null, keep: st
  * copies a save before it is replaced or refused instead of moving it: a key
  * that is never emptied is never lost to a crash between two writes.
  */
-export function copyAside(entry: ContinueSave, storage: SaveStorage | null, now: Date = new Date()): SetAsideResult {
+export function copyAside(entry: ContinueSave, storage: SaveStorage | null, now: Date = new Date(), unmarked = false): SetAsideResult {
   if (!storage) return { ok: false };
   let raw: string | null;
   try {
@@ -190,18 +190,22 @@ export function copyAside(entry: ContinueSave, storage: SaveStorage | null, now:
     try { storage.removeItem(backupKey); } catch { /* nothing more to do */ }
     return { ok: false };
   }
-  const slot = slotNow(entry, storage);
-  if (slot) {
-    /* Round 1515: the copy's slot, beside it. Marks of copies that are gone drop off here. A mark the browser
-       refuses leaves the copy unmarked, offered in every slot as before; the copy itself stands either way. */
-    try {
-      const marks = slotMarks(storage);
-      for (const k in marks) if (storage.getItem(k) === null) delete marks[k];
-      marks[backupKey] = slot;
-      storage.setItem(SET_ASIDE_SLOT_KEY, JSON.stringify(marks));
-    } catch { /* unmarked */ }
-  }
+  /* moveAside marks its copy only once the original is gone, so a refused move leaves nothing behind. */
+  if (!unmarked) markSlot(entry, storage, backupKey);
   return { ok: true, backupKey };
+}
+
+/** Round 1515: the copy's slot, beside it. Marks of copies that are gone drop off here. A mark the browser refuses
+ *  leaves the copy unmarked, offered in every slot as before; the copy itself stands either way. */
+function markSlot(entry: ContinueSave, storage: SaveStorage, backupKey: string): void {
+  const slot = slotNow(entry, storage);
+  if (!slot) return;
+  try {
+    const marks = slotMarks(storage);
+    for (const k in marks) if (storage.getItem(k) === null) delete marks[k];
+    marks[backupKey] = slot;
+    storage.setItem(SET_ASIDE_SLOT_KEY, JSON.stringify(marks));
+  } catch { /* unmarked */ }
 }
 
 /**
@@ -247,7 +251,7 @@ function slotMarks(storage: SaveStorage): Record<string, number> {
 
 /** setAsideSave without the pruning, for restoreBackup's swap: copyAside, then the original goes. */
 function moveAside(entry: ContinueSave, storage: SaveStorage | null, now: Date): SetAsideResult {
-  const copied = copyAside(entry, storage, now);
+  const copied = copyAside(entry, storage, now, true);
   if (!storage || !copied.ok || copied.backupKey === null) return copied;
   try {
     storage.removeItem(entry.saveKey);
@@ -258,6 +262,7 @@ function moveAside(entry: ContinueSave, storage: SaveStorage | null, now: Date):
     try { storage.removeItem(copied.backupKey); } catch { /* a duplicate copy is harmless */ }
     return { ok: false };
   }
+  markSlot(entry, storage, copied.backupKey);
   return copied;
 }
 
