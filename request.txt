@@ -1,0 +1,14 @@
+# Release BJ, Round 1340 (Club Manager match day screens: home side first, whole names, the Stats tile), merged in
+# Round BJG as m2 20fa77a6 (first parent c06f27b5). simCmMatchDay section 7 compares the round's five files at
+# MATCHDAY_BASE: on the final tree that is the tree WITHOUT Round 1340 (treeWithoutMerge 20fa77a6 c06f27b5; it forms,
+# keeping the head's What's New). Proven per merge on runner bjg-m2 (MATCHDAY_BASE=c06f27b5): matchday 0 (918
+# matches), all eight controls 1, simMatchScreen, simCmMatchCentre, simCmStoppageTime, simLiveSimMotion,
+# simManagerMatchPlans 0. The walks are rc-BJb2.
+matchday: B=$(node scripts/lib/treeWithoutMerge.mjs 20fa77a6 c06f27b5) || exit 2; MATCHDAY_BASE=$B node scripts/simCmMatchDay.mjs
+md-ctl: B=$(node scripts/lib/treeWithoutMerge.mjs 20fa77a6 c06f27b5) || exit 2; ok=0; r=""; for k in neutralaway oldorder truncate numbers homeflip barorder greenfirst neutrallive; do MATCHDAY_BASE=$B MATCHDAY_CONTROL=$k node scripts/simCmMatchDay.mjs > /tmp/md-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/md-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+vitest-1340: node_modules/.bin/vitest run src/lib/cmMatchDisplay.test.ts src/test/clubManagerVarScreen.test.tsx src/test/cmReportBoardWord.test.tsx src/test/liveSimMotion.test.tsx src/test/managerHalftimeLineups.test.tsx src/test/managerScorerMarks.test.tsx src/test/pitchOwnGoal.test.tsx --testTimeout=300000 --hookTimeout=120000
+matchscreen: node scripts/simMatchScreen.mjs
+matchcentre: node scripts/simCmMatchCentre.mjs
+stoppage: node scripts/simCmStoppageTime.mjs
+motion: node scripts/simLiveSimMotion.mjs
+plans: node scripts/simManagerMatchPlans.mjs
