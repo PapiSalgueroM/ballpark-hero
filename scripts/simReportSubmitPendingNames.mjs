@@ -1,3 +1,5 @@
+import { dispatchHistoricalCategoryDefault1437 } from './qa/reportCategoryCompatibility1437.mjs';
+if (await dispatchHistoricalCategoryDefault1437(import.meta.url)) process.exit(0);
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';

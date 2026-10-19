@@ -1,3 +1,5 @@
+import { dispatchHistoricalCategoryDefault1437 } from './qa/reportCategoryCompatibility1437.mjs';
+if (await dispatchHistoricalCategoryDefault1437(import.meta.url)) process.exit(0);
 /* Round 1426: actual report forms retain newer drafts across late delivery. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

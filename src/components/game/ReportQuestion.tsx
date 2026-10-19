@@ -110,6 +110,7 @@ const ReportQuestion = ({ gameType, gameContext = {}, kinds = REPORT_REASONS }: 
                 {kinds.map((r) => (
                   <button
                     key={r}
+                    aria-pressed={reason === r}
                     onClick={() => {
                       if (reason !== r) markDraftChanged();
                       setReason(r);
