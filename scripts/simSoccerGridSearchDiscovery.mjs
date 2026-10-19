@@ -1,3 +1,7 @@
+/* Round1432: exact historical default compatibility. Original body follows unchanged. */
+if (await (await import('./qa/gridSearchCompatibility1432.mjs')).dispatchHistorical1432(import.meta.url)) {
+  process.exit(0);
+}
 /* Round1429: actual Soccer Grid search discovery regression proof. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

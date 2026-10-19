@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useId } from 'react';
 import { Loader2 } from 'lucide-react';
 import { toTitleCase } from '@/lib/smartSearch';
 import { foldSpecialLatin } from '@/lib/nameFold';
@@ -38,6 +38,7 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const blurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const searchId = useId();
 
   const normalizedQuery = normalizeName(query);
   const suggestions = query.length >= 2 && normalizedQuery.length > 0
@@ -45,6 +46,9 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
         .filter(p => normalizeName(p.name).includes(normalizedQuery))
         .slice(0, 8)
     : [];
+  const popupOpen = showDropdown && suggestions.length > 0;
+  const activeOptionId = popupOpen && highlightIndex >= 0 && highlightIndex < suggestions.length
+    ? `${searchId}-option-${highlightIndex}` : undefined;
 
   useEffect(() => () => {
     if (blurTimer.current !== null) clearTimeout(blurTimer.current);
@@ -116,18 +120,29 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
           }}
           placeholder="Type a player name…"
           aria-label="Search for a player"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={popupOpen}
+          aria-controls={popupOpen ? `${searchId}-listbox` : undefined}
+          aria-activedescendant={activeOptionId}
           disabled={disabled}
           autoComplete="off"
           className="w-full rounded-full border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--sg-accent))]/50 disabled:opacity-50"
         />
-        {showDropdown && suggestions.length > 0 && (
+        {popupOpen && (
           <ul
+            id={`${searchId}-listbox`}
+            role="listbox"
+            aria-label="Player suggestions"
             ref={listRef}
             className="absolute z-50 left-0 right-0 top-full mt-1 max-h-64 overflow-y-auto rounded-xl border border-border bg-card shadow-lg"
           >
             {suggestions.map((p, i) => (
               <li
                 key={p.name}
+                id={`${searchId}-option-${i}`}
+                role="option"
+                aria-selected={i === highlightIndex}
                 onMouseDown={() => submit(p.name)}
                 onMouseEnter={() => setHighlightIndex(i)}
                 className={`flex items-center justify-between px-4 py-2.5 text-sm cursor-pointer transition-colors ${
