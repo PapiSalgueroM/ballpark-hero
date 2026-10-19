@@ -12,9 +12,18 @@
  * three matches are played again after the restore: the game_completions
  * inserts are kept (then aborted), the season scored before the restore, and
  * the replay posts rows with no score.
+ * Closing check: the Save points button (SavePointsDoor.tsx) is driven on the
+ * three screens the hub tile is not on, each reached the page's own way: the
+ * season's end (the calendar's Rest of season), out of work (the save marked
+ * sacked), the farewell (the sacked screen's retire door). Each opens the
+ * points screen in place listing the point; the farewell's Restore puts it back.
+ * Control POINTS_CONTROL=nodoor hides the button (data-cm-points-door, asserted
+ * in SavePointsDoor.tsx first): every door check goes red, nothing else, and
+ * the last line says FIRED with exit 1.
  *
  *   #!serve then: node scripts/playCmSavePoints.mjs        (WIDTHS=390 for one width)
  */
+import fs from 'node:fs';
 import path from 'node:path';
 import pw from './lib/playwrightLoader.mjs';
 import { pageSeedOf, seedPages } from './lib/pageSeed.mjs';
@@ -27,8 +36,14 @@ try { SEED = pageSeedOf(import.meta.url, process.env.POINTS_SEED); } catch (e) {
 const HEIGHTS = { 390: 844, 1280: 900 };
 const WIDTHS = (process.env.WIDTHS || '390,1280').split(',').map(Number);
 const KEY = 'dukb-club-manager-save';
+const CONTROL = process.env.POINTS_CONTROL || '';
+if (CONTROL && CONTROL !== 'nodoor') { console.error(`playCmSavePoints: unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL === 'nodoor' && !fs.readFileSync('src/components/club-manager/SavePointsDoor.tsx', 'utf8').includes('data-cm-points-door')) {
+  console.error('playCmSavePoints: control nodoor cannot run, SavePointsDoor.tsx carries no data-cm-points-door'); process.exit(2);
+}
 const errors = [];
 let failures = 0;
+let doorFailures = 0;
 const check = (ok, msg) => { if (!ok) { failures += 1; console.error(`  FAIL: ${msg}`); } else console.log(`  ok: ${msg}`); return ok; };
 const shot = async (page, name) => { if (OUT) await page.screenshot({ path: path.join(OUT, name) }).catch(() => {}); };
 const pause = (page, ms) => page.waitForTimeout(ms);
@@ -65,12 +80,18 @@ async function newCtx(vp, posts) {
     }
     return r.abort();
   });
+  if (CONTROL === 'nodoor') await ctx.addInitScript(() => document.addEventListener('DOMContentLoaded', () => {
+    const st = document.createElement('style');
+    st.textContent = '[data-cm-points-door]{display:none!important}';
+    document.head.appendChild(st);
+  }));
   await seedPages(ctx, SEED);
   return ctx;
 }
 const scoredIn = list => list.filter(b => typeof b.score === 'number').length;
-async function toHub(page) {
+async function toHub(page, stop = null) {
   for (let i = 0; i < 8 && !(await visible(page.locator('[data-cm-meters]'))); i += 1) {
+    if (stop && await visible(stop)) return;
     const resume = page.locator('[data-cm-slot-open="resume"]');
     const home = page.locator('button', { hasText: 'Club home' });
     const onward = page.locator('button:visible').filter({ hasText: /^(Continue|Next|Play on|Back to the club|Go to)/ });
@@ -206,10 +227,79 @@ for (const W of WIDTHS) {
   check(await playMatches(page, 3) >= 3, 'the three matches played again after the restore');
   const replay = posts.slice(before);
   check(replay.length > 0 && scoredIn(replay) === 0, `the replayed season posts no score (${replay.length} rows, ${scoredIn(replay)} scored)`);
+
+  /* Closing check: the Save points button on the three screens the hub tile is not on (SavePointsDoor.tsx), each
+     reached the page's own way. The season's end by the calendar's Rest of season; out of work by the save marked
+     sacked (the way playCmDifficulty does it); the farewell by the sacked screen's own retire door. On each the
+     button opens the same screen in place, listing the point; on the farewell its Restore puts the point back. */
+  const door = page.locator('[data-cm-points-door]');
+  const doorBtn = page.locator('[data-testid="cm-points-door"]');
+  const doorCheck = (ok, msg) => { if (!ok) doorFailures += 1; return check(ok, msg); };
+  const tryDoor = async where => {
+    await door.first().waitFor({ timeout: 10000 }).catch(() => {});
+    const h = await doorBtn.first().evaluate(e => Math.round(e.getBoundingClientRect().height)).catch(() => 0);
+    doorCheck(await visible(doorBtn) && h >= 44, `${where}: the Save points button is there, ${h} px tall`);
+    await doorBtn.first().click({ timeout: 5000 }).catch(() => {});
+    const opened = await door.locator('[data-testid="cm-points"]').first().waitFor({ timeout: 10000 }).then(() => true).catch(() => false);
+    const list = opened ? (await rows(page)).map(r => r.title).join('|') : '';
+    doorCheck(opened && list === 'Renamed copy', `${where}: it opens the points screen in place, listing the point (${list})`);
+    check(await fits(page), `${where}: the page still fits the width`);
+    await shot(page, `points-door-${where}-${W}.png`);
+  };
+  const seasonDone = page.locator('h1', { hasText: /^SEASON \d+ COMPLETE$/ });
+  const sackedHead = page.locator('h1', { hasText: 'SACKED!' });
+  const stopAt = page.locator('h1', { hasText: /^(SEASON \d+ COMPLETE|SACKED!)$/ });
+  for (let i = 0; i < 16 && !(await visible(seasonDone)) && !(await visible(sackedHead)); i += 1) {
+    const review = page.locator('button', { hasText: 'See Season Review' });
+    if (await visible(review)) { await review.first().click({ timeout: 4000 }).catch(() => {}); await pause(page, 1500); continue; }
+    const win = page.locator('button', { hasText: 'Open the Window' });
+    if (await visible(win)) { await win.first().click({ timeout: 4000 }).catch(() => {}); await pause(page, 600); }
+    await toHub(page, stopAt);
+    if (await visible(stopAt)) break;
+    const home = page.getByRole('tab', { name: 'Home', exact: true });
+    if (await visible(home)) await home.first().click({ timeout: 4000 }).catch(() => {});
+    await page.locator('button', { hasText: 'Calendar' }).first().click({ timeout: 4000 }).catch(() => {});
+    await pause(page, 800);
+    const rest = page.locator('button', { hasText: 'Rest of season' });
+    if (await visible(rest)) { await rest.first().click({ timeout: 4000 }).catch(() => {}); await pause(page, 2500); }
+  }
+  check(await visible(seasonDone), 'the season ran to its review by the calendar\'s Rest of season');
+  await tryDoor('season-end');
+  await doorBtn.first().click({ timeout: 4000 }).catch(() => {});
+
+  await page.goto(`${BASE}/about`, { waitUntil: 'domcontentloaded' });
+  await page.evaluate(k => { const c = JSON.parse(localStorage.getItem(k)); c.sacked = true; delete c.live; localStorage.setItem(k, JSON.stringify(c)); }, KEY).catch(() => {});
+  await page.goto(`${BASE}/club-manager`, { waitUntil: 'networkidle' });
+  await pause(page, 1500);
+  const resumeSlot = page.locator('[data-cm-slot-open="resume"]');
+  if (await visible(resumeSlot)) { await resumeSlot.first().click({ timeout: 4000 }).catch(() => {}); await pause(page, 1500); }
+  check(await visible(sackedHead), 'the save marked sacked opens on the sacked screen');
+  await tryDoor('sacked');
+  await doorBtn.first().click({ timeout: 4000 }).catch(() => {});
+
+  await page.locator('[data-cm-retire-door]').first().click({ timeout: 5000 }).catch(() => {});
+  await pause(page, 900);
+  await page.locator('[data-cm-retire-yes]').first().click({ timeout: 5000 }).catch(() => {});
+  await page.locator('[data-cm-retired]').first().waitFor({ timeout: 10000 }).catch(() => {});
+  check(await visible(page.locator('[data-cm-retired]')), 'the sacked screen\'s retire door opens the farewell');
+  await tryDoor('retired');
+  await door.locator('[data-testid="cm-point-restore"]').first().click({ timeout: 5000 }).catch(() => {});
+  await pause(page, 300);
+  await Promise.all([
+    page.waitForNavigation({ waitUntil: 'networkidle', timeout: 30000 }).catch(() => {}),
+    door.locator('[data-testid="cm-point-confirm"]').first().click({ timeout: 5000 }).catch(() => {}),
+  ]);
+  await pause(page, 1500);
+  doorCheck(await visible(page.locator('[data-cm-meters]')) && (await raw(page)) === bytes, 'retired: Restore from the farewell puts the point back, on its hub, byte for byte');
+  await shot(page, `points-door-restored-${W}.png`);
   await ctx.close();
 }
 await browser.close();
 for (const e of errors) console.error(`  page error: ${e}`);
 const total = failures + errors.length;
+if (CONTROL) {
+  console.log(doorFailures > 0 ? `playCmSavePoints: control ${CONTROL} FIRED (${doorFailures} door check(s) red, ${failures} in all)` : `playCmSavePoints: control ${CONTROL} DID NOT FIRE`);
+  process.exit(doorFailures > 0 ? 1 : 0);
+}
 console.log(total ? `playCmSavePoints: FAIL, ${failures} check(s) and ${errors.length} page error(s)` : `playCmSavePoints: OK at ${WIDTHS.join(' and ')}`);
 process.exit(total ? 1 : 0);
