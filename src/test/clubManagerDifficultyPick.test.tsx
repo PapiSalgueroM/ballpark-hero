@@ -134,6 +134,17 @@ describe('the Options panel', () => {
     fireEvent.click(tile('hard'));
     expect(onDifficulty).toHaveBeenLastCalledWith('hard');
   });
+
+  /* Review of 2026-10-19: setDifficulty refuses while a match is paused, so the tiles must not look live. */
+  it('with a match paused at halftime the tiles are off and the row says why', () => {
+    const onDifficulty = vi.fn();
+    const live = { ...at(), live: {} } as unknown as ReturnType<typeof at>;
+    render(<DifficultyOption career={live} onDifficulty={onDifficulty} />);
+    expect((tile('hard') as HTMLButtonElement).disabled).toBe(true);
+    fireEvent.click(tile('hard'));
+    expect(onDifficulty).not.toHaveBeenCalled();
+    expect(document.querySelector('[data-cm-level-paused]')?.textContent).toContain('finish it first');
+  });
 });
 
 describe('the hook', () => {
