@@ -1,0 +1,3 @@
+grid-role3 exit=0 12s |       Tests  31 passed (31)
+race-main exit=0 11s |       Tests  7 passed (7)
+race-m9 exit=0 11s |       Tests  7 passed (7)

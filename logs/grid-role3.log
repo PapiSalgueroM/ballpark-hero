@@ -1,0 +1,7 @@
+wt: grole3 at e8683a19af04 (Release BL triage: the US board fixture re-recorded for PR339 and PR345 on the a)
+gridRole: src/test/soccerGridSearchDiscovery.test.tsx: 3 role selectors adapted
+gridRole: src/test/soccerGridBlurOwnership.test.tsx: 4 role selectors adapted
+gridRole: src/test/soccerGridSettingsRace.test.tsx: 2 role selectors adapted
+ 3 files changed, 9 insertions(+), 9 deletions(-)
+ Test Files  3 passed (3)
+      Tests  31 passed (31)
