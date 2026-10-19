@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCmSavePoints exit=0 66s | playCmSavePoints: OK at 390 and 1280
+playCmDifficulty exit=0 113s |   PASS  no page errors
+base exit=0 40s | base served: 200
+weight exit=0 12s | weightBJ: done
+m-or exit=0 4s | mutation or: KILLED by node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 src/test/cmSavePointsHook.test.tsx
+m-indexnoreadback exit=0 42s | mutation indexnoreadback: KILLED by node scripts/simCmSavePoints.mjs

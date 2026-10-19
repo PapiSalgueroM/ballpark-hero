@@ -1,0 +1,12 @@
+MUTATION or applied to src/hooks/useClubManager.ts
+--- node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 src/test/cmSavePointsHook.test.tsx
+    exit=1
+        [90m 68| [39m    [35mconst[39m calls [33m=[39m [35mawait[39m [34mpingsOfOneMatch[39m([32m'credited'[39m)[33m;[39m
+        [90m 69| [39m    [34mexpect[39m(calls[33m.[39mlength)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+        [90m 70| [39m    expect(calls.every(c => c[0] === '/club-manager' && c.length === 1…
+        [90m   | [39m                                                                         [31m^[39m
+        [90m 71| [39m  })[33m;[39m
+        [90m 72| [39m})[33m;[39m
+    
+    [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+mutation or: KILLED by node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 src/test/cmSavePointsHook.test.tsx

@@ -1,0 +1,12 @@
+MUTATION indexnoreadback applied to src/lib/cmSavePointsStore.ts
+--- node scripts/simCmSavePoints.mjs
+    exit=1
+    
+    failures by section: {"1":0,"2":4,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0}; board nudges 174
+    sizes (characters, career then point): Everton s1 101393/21303; Everton s8 150415/36982; Everton s15 152746/39514; Lincoln City s1 101154/21321; Lincoln City s8 150061/35893; Lincoln City s15 154354/38518
+    simCmSavePoints: FAIL, 4 failure(s)
+      FAIL (2): an index the store cut short was reported saved (the first point)
+      FAIL (2): a refused index left the store changed (the first point)
+      FAIL (2): an index the store cut short was reported saved (over one point)
+      FAIL (2): a refused index left the store changed (over one point)
+mutation indexnoreadback: KILLED by node scripts/simCmSavePoints.mjs
