@@ -1,0 +1,15 @@
+vitest exit=0 11s |    Duration  10.91s (transform 3.35s, setup 761ms, collect 7.11s, tests 12.33s, environment 3.15s, prepare 1.66s)
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simSaveKeeper exit=0 5s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simCmSavePoints exit=0 50s | simCmSavePoints: OK, all eight sections green
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+tsc exit=0 72s | 
+simActivityNotCompletion exit=0 6s | simActivityNotCompletion: all green
+simCmNoSack exit=0 129s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
+simClubManagerScore exit=0 98s | ALL SEASON SCORE CHECKS PASSED
+simClubManagerSlots exit=0 73s | simClubManagerSlots: all sections green
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simErrorBoundary exit=0 0s | simErrorBoundary: all green
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simSaveFence exit=0 38s | simSaveFence: all green (tabs, source, fleet)
+simClubManagerSaveSize exit=0 51s | simClubManagerSaveSize: all sections green

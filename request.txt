@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/cmSavePoints.test.ts src/test/saveKeeper.test.ts src/test/routeErrorRecovery.test.tsx src/lib/clubManagerSlots.test.ts src/test/clubManagerSlots.test.tsx src/hooks/useClubManager.test.ts src/test/clubManagerDifficultyPick.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCmSavePoints: node scripts/simCmSavePoints.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simCmNoSack: node scripts/simCmNoSack.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+simSaveFence: node scripts/simSaveFence.mjs
