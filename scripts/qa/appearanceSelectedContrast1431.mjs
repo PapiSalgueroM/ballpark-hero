@@ -73,7 +73,7 @@ function main() {
   const evidenceRoot = process.env.APPEARANCE_CONTRAST_OUT;
   assert(evidenceRoot && path.isAbsolute(evidenceRoot) && path.relative(ROOT, evidenceRoot).split(path.sep).includes('..'));
   const out = path.join(evidenceRoot, 'unit'); assert(!fs.existsSync(out)); fs.mkdirSync(out, { recursive: true });
-  const ORIGINAL_ADMISSION = null;
+  const ORIGINAL_ADMISSION = {"scope":"full-original-rendered-contrast-native-pixels","originalSourceSha256":"94a22773c5075085f47e032f4cb7b9e3d5baf733a70a18cf63265c2523625e05","head":"93a3fd6db0847f0450ad8daa163118d5d9bcbbac","commonSha256":"9d7f5ddc7a086e34cb0157c32000087cd8102d4b9ec4090023858253af5de986","featureSha256":"56c1bd63b70ebac12dc6ec5ddc0cd66713d7d3f9c88762f89054ca7ae5a6c7da","pixelSha256":"751bbfc06110446590fb802a8e21aabd95231083de42b437e739775f6c30a800","fullAdmissionSha256":"327add0e3ae23b8330accec74ee0e0ea5256aafb7cc495185af3762be107ca6b"};
   const hash = value => createHash('sha256').update(value).digest('hex');
   const git = args => execFileSync('git', args, { cwd: ROOT, maxBuffer: 64 * 1024 * 1024 });
   const tracked = git(['ls-files', '-z']), status = git(['status', '--porcelain=v1', '--untracked-files=all']);
