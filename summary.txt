@@ -1,0 +1,6 @@
+headsha exit=0 0s | b30d6955c Release BM m1: merge Round 1515 (r1515-cm-followups at its closing head 8a1bb102: Hard and Impossible retuned harder on 32 seeds, Hard edge 2.2 and Impossible e
+wf286x exit=1 268s | wfrun career-pending-popularity-gates.yml: 8 steps ran, 1 failed: Complete build and all rebuilt-site readers
+wf302x exit=1 245s | wfrun career-pending-money-gates.yml: 13 steps ran, 1 failed: Complete build and all rebuilt-site readers
+wf288 exit=1 290s | wfrun career-life-stories.yml: 10 steps ran, 1 failed: Fixed phase all fifteen rebuilt-site readers
+wf289x exit=1 343s | wfrun career-phone-season-budget.yml: 10 steps ran, 1 failed: Complete build and all rebuilt-site readers
+wf297x exit=1 348s | wfrun career-phone-state-isolation.yml: 11 steps ran, 1 failed: Complete build and all rebuilt-site readers
