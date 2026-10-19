@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node scripts/playCmDifficulty.mjs
+sweepWeight: node scripts/sweepWeight.mjs
