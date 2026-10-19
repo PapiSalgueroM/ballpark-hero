@@ -10,7 +10,7 @@ export const ORIGINAL_SHA = 'fc4aa832904388a6363bb47e7a0f07cfb121f96d4a0cd2a8177
 export const FIXED_SHA = '33e9b7ab8dcd37c6941fe30c867f71c3e2498fcd602b49325842a4c1d0e5c285';
 export const TEST_FILE = 'src/test/soccerGridSearchAccessibility.test.tsx';
 export const TEST_SHA = '6c7a7b2deabaf8dc08f7b03310fca77a2d5c376dee3f94cbd96d97aa6fe4407d';
-export const ORIGINAL_ADMISSION = null;
+export const ORIGINAL_ADMISSION = {"scope":"full-original-grid-search-accessibility","head":"3c07f698e71244b1ac3741967bdfca4424b46edd","originalSourceSha256":"fc4aa832904388a6363bb47e7a0f07cfb121f96d4a0cd2a8177665dd02f0d34e","testSha256":"6c7a7b2deabaf8dc08f7b03310fca77a2d5c376dee3f94cbd96d97aa6fe4407d","commonSha256":"996bfa3bccccb3f448901b80632ec2debd0b562de7a48ca177c334b33fe8861c","featureSha256":"ec640892c75676aa60e762803c3d4f19517cdbd42808dfaf9f601dffe7a93642","pixelSha256":"9ceb56767acce6e7c720de318aa65c318e46b4f52f19e5d125064c79fb55bf5a","fullAdmissionSha256":"24f993f7f4fb51aac5b18834581cf4b25adbe44445a4f27d40d5dd31e02d9cc4"};
 export const hash = body => createHash('sha256').update(body).digest('hex');
 export const git = (root, args) => execFileSync('git', args, { cwd: root, maxBuffer: 64 * 1024 * 1024 });
 export const OLD_ENTRIES = ['scripts/simSoccerGridBlurOwnership.mjs', 'scripts/simSoccerGridSearchDiscovery.mjs'];
