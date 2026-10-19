@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+base exit=0 39s | base served: 200
+parts exit=0 4s | weightParts1513: /club-manager 46 scripts, base 640715 B, head 641766 B, +1051 B
+parts-home exit=0 4s | weightParts1513: / 3 scripts, base 249080 B, head 249170 B, +90 B
