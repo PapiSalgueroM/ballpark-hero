@@ -1,0 +1,13 @@
+vitest exit=0 12s |    Duration  11.55s (transform 4.10s, setup 825ms, collect 9.87s, tests 12.35s, environment 4.78s, prepare 951ms)
+s3 exit=0 70s | simCmDifficulty: all green (sections 3)
+tsc exit=0 84s | 
+c-helpdrift exit=1 1s | simCmDifficulty: 1 FAILURES (sections 7)
+s178 exit=0 7s | simCmDifficulty: all green (sections 1,7,8)
+c-helplines exit=1 1s | simCmDifficulty: 1 FAILURES (sections 7)
+c-edge exit=1 35s | simCmDifficulty: 19 FAILURES (sections 3)
+simSaveKeeper exit=0 4s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simErrorBoundary exit=0 0s | simErrorBoundary: all green
+s2 exit=0 195s | simCmDifficulty: all green (sections 2)
+c-oldlevel exit=1 165s | simCmDifficulty: 7 FAILURES (sections 2)
+fences exit=1 255s | FENCE simGuideHeadings exit=0 | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks rend

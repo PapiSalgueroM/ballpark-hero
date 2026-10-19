@@ -1,0 +1,11 @@
+simCmDifficulty: sections 7, control helplines
+  table: veryeasy {"gain":1.4,"pain":0.6,"cut":0,"cheque":1.5,"wageRoom":1.12,"mark":0.8,"edge":-3}; easy {"gain":1.2,"pain":0.8,"cut":0,"cheque":1.2,"wageRoom":1.06,"mark":0.87,"edge":-1.5}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":2.5}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":4.3}
+7) the help's worked example is the dial table's
+NEGATIVE CONTROL ON: two levels of the help folded into one line
+  FAIL: the help's level lines open Very Easy, Medium, Hard, Impossible; one line a level, easiest first, would be Very Easy, Easy, Medium, Hard, Impossible
+  ok: the example's 30 numbers are the table's (4.5, 5.6, 6.7, 3.6, 2.7, 4, 3.2, 2.6, 4.8, 5.6, 40, 32, 26, 48, 60, 23, 10, 11.5, 13, 8.7, 8, 80, 82.5, 84.3, 78.5, 77, 35, 27, 21, 35)
+  ok: the example places its defeat at a Challengers club, where patience is 1
+  ok: the block opens by saying everything else on the screen, numbers and promises, is Medium's, and names No sacking
+  ok: the block says one bad night in a new job can take you under Safe
+CONTROL helplines FIRED: 1 failures
+simCmDifficulty: 1 FAILURES (sections 7)
