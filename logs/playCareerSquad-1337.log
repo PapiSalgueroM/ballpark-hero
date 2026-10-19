@@ -1,0 +1,6 @@
+ok   6. page, save B: the save string is byte identical after the sheet has been through every screen
+ok   10. page, save A at 1280: the season list is inside the Career Timeline card, one row a season, and the card ends where the list ends (rows 5 of 5, grid children 2, card {"t":263,"b":593,"l":144,"r":404}, list {"t":305,"b":592,"l":145,"r":403}, hub column {"t":263,"b":2686,"l":416,"r":1136})
+ok   10. page, save A at 1280: the hub column is in the same grid as the card, to its right (rows 5 of 5, grid children 2, card {"t":263,"b":593,"l":144,"r":404}, list {"t":305,"b":592,"l":145,"r":403}, hub column {"t":263,"b":2686,"l":416,"r":1136})
+ok   7. page, save A at 1280: the sheet covers the screen and its panel sits inside it, and the page stayed at 0 (sheet 0,0 1280x800, panel 416,185 to 864,616, screen 1280x800; now 0)
+   screenshots in /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/shots, work folder /home/runner/work/_temp/t-playCareerSquad-1337/careersquadplay-FXzIGQ
+playCareerSquad: 190 checks, 0 failed
