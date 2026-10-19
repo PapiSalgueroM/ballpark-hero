@@ -1,0 +1,5 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simHarnessAnchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+playCmSavePoints exit=0 120s | playCmSavePoints: OK at 390 and 1280
+walk-nodoor exit=1 179s | playCmSavePoints: control nodoor FIRED (7 door check(s) red, 7 in all)
