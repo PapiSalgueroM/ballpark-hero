@@ -1,0 +1,4 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+dev1 exit=0 57s | Soccer Career development native: 333 checks, 0 failed, 6 actual journeys. Screenshots and complete saved-state evidence: /home/runner/work/ballpark-hero/ballpark-hero/ca
+dev2 exit=0 56s | Soccer Career development native: 333 checks, 0 failed, 6 actual journeys. Screenshots and complete saved-state evidence: /home/runner/work/ballpark-hero/ballpark-hero/ca
