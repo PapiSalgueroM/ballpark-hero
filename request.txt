@@ -1,0 +1,12 @@
+# Round 1515 part B gates on eca68d2e
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/brokenSaveRecovery.test.ts src/test/routeErrorRecovery.test.tsx src/test/saveKeeper.test.ts src/lib/clubManagerSlots.test.ts src/test/clubManagerSlots.test.tsx src/test/clubManagerRetire.test.tsx src/test/cmSavePoints.test.ts src/test/cmSavePointsHook.test.tsx src/test/cmSavePointsDoor.test.tsx src/test/cmSavePointsScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simCmSavePoints: node scripts/simCmSavePoints.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

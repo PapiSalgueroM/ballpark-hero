@@ -1,0 +1,11 @@
+simSaveKeeper exit=0 10s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simStorageWrites exit=0 6s | simStorageWrites: all green (owed: 12)
+vitest exit=1 17s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/routeErrorRecovery.test.tsx,title=src/test/routeErrorRecovery.test.tsx > setAsideSave (Round 958) > ta
+simErrorBoundary exit=0 1s | simErrorBoundary: all green
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+tsc exit=0 106s | 
+simClubManagerSaveSize exit=0 92s | simClubManagerSaveSize: all sections green
+simClubManagerSlots exit=0 102s | simClubManagerSlots: all sections green
+simNoRivalNames exit=0 25s | No rival product names found. 0 findings.
+simCmSavePoints exit=0 56s | simCmSavePoints: OK, all eight sections green
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
