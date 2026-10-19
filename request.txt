@@ -1,0 +1,3 @@
+#!serial
+# Release BM proof, part gh: simGuideHeadings alone on the merged head (no refresh line beside it)
+simGuideHeadings: node scripts/simGuideHeadings.mjs
