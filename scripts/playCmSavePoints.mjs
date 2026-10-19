@@ -8,6 +8,10 @@
  * the week is back, the card says so and offers the career he had. A reload
  * after that: still there. Then Copy, Rename and Delete, each touching only
  * its own row. At every screen the panel fits the width (no sideways scroll).
+ * Review fixes: every button on the screen is at least 44 px tall, and the
+ * three matches are played again after the restore: the game_completions
+ * inserts are kept (then aborted), the season scored before the restore, and
+ * the replay posts rows with no score.
  *
  *   #!serve then: node scripts/playCmSavePoints.mjs        (WIDTHS=390 for one width)
  */
@@ -42,13 +46,29 @@ const rows = async page => page.locator('[data-testid="cm-point-row"]').evaluate
   where: e.querySelector('[data-testid="cm-point-where"]')?.textContent?.trim() ?? '',
 }))).catch(() => []);
 
+/* Every button on the points screen, and its height. */
+const buttonHeights = page => page.locator('[data-testid="cm-points"] button').evaluateAll(els => els.map(e => ({
+  text: (e.textContent || '').trim(), h: Math.round(e.getBoundingClientRect().height),
+}))).catch(() => []);
+
 const browser = await chromium.launch();
-async function newCtx(vp) {
+/* Review run minor 2: every game_completions insert is kept (then aborted), so
+   the leaderboard rule is watched in the real hook, not replayed in a harness. */
+async function newCtx(vp, posts) {
   const ctx = await browser.newContext({ viewport: vp });
-  await ctx.route(/supabase\.co/, r => r.abort());
+  await ctx.route(/supabase\.co/, r => {
+    const req = r.request();
+    if (req.method() === 'POST' && /game_completions/.test(req.url())) {
+      let body = null;
+      try { body = JSON.parse(req.postData() || 'null'); } catch { body = null; }
+      for (const b of Array.isArray(body) ? body : [body]) if (b && b.game === 'club-manager') posts.push(b);
+    }
+    return r.abort();
+  });
   await seedPages(ctx, SEED);
   return ctx;
 }
+const scoredIn = list => list.filter(b => typeof b.score === 'number').length;
 async function toHub(page) {
   for (let i = 0; i < 8 && !(await visible(page.locator('[data-cm-meters]'))); i += 1) {
     const resume = page.locator('[data-cm-slot-open="resume"]');
@@ -85,7 +105,8 @@ async function openPoints(page) {
 for (const W of WIDTHS) {
   const vp = { width: W, height: HEIGHTS[W] ?? 900 };
   console.log(`\n== ${vp.width} by ${vp.height}`);
-  const ctx = await newCtx(vp);
+  const posts = [];
+  const ctx = await newCtx(vp, posts);
   const page = await ctx.newPage();
   page.on('pageerror', e => errors.push(`${W}: ${String(e)}`));
   await page.goto(`${BASE}/club-manager`, { waitUntil: 'networkidle' });
@@ -119,12 +140,17 @@ for (const W of WIDTHS) {
   const at = await readSave(page);
   const bytes = await raw(page);
   check(!!at && made[0]?.where.startsWith(`Season ${at.season}, week ${at.week + 1} ·`), `the row says season ${at?.season}, week ${(at?.week ?? 0) + 1} (${made[0]?.where})`);
+  /* Review minors 3 and 15: the taps are 44 px, like the Managers link and 1512's tiles. */
+  const tall = await buttonHeights(page);
+  check(tall.length >= 5 && tall.every(b => b.h >= 44), `every button on the screen is at least 44 px tall (${tall.map(b => `${b.text}:${b.h}`).join(' ')})`);
   await shot(page, `points-made-${W}.png`);
 
   /* Three matches, then back. */
   check(await playMatches(page, 3) >= 3, 'three more matches played');
   const moved = await readSave(page);
   check(!!moved && moved.week > at.week && (await raw(page)) !== bytes, `the career moved on (week ${at?.week} to ${moved?.week})`);
+  const scoredBefore = scoredIn(posts);
+  check(scoredBefore > 0, `the season posted scores before the restore (${posts.length} rows, ${scoredBefore} scored), so the replay check below can fail`);
   check(await openPoints(page), 'the screen opens again');
   await page.locator('[data-testid="cm-point-restore"]').first().click();
   await pause(page, 300);
@@ -174,6 +200,12 @@ for (const W of WIDTHS) {
   check(await fits(page), 'the screen still fits the width');
   check((await raw(page)) === bytes, 'copy, rename and delete never touched the career');
   await shot(page, `points-after-${W}.png`);
+
+  /* The replay: the season the restore landed in posts no score again, and the activity still counts. */
+  const before = posts.length;
+  check(await playMatches(page, 3) >= 3, 'the three matches played again after the restore');
+  const replay = posts.slice(before);
+  check(replay.length > 0 && scoredIn(replay) === 0, `the replayed season posts no score (${replay.length} rows, ${scoredIn(replay)} scored)`);
   await ctx.close();
 }
 await browser.close();

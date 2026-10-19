@@ -76,7 +76,7 @@ export function SavePointsScreen({ career, slot }: Props) {
     if ('why' in r) say(WHY[r.why], true);
   };
 
-  const small = 'min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors';
+  const small = 'min-h-[44px] px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors';
   const plain = `${small} bg-secondary text-foreground hover:bg-muted`;
   const main = `${small} bg-primary text-primary-foreground hover:opacity-90`;
 
