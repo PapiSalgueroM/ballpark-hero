@@ -1,0 +1,7 @@
+tsc exit=0 168s | 
+simDailyDeals exit=0 8s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+dashscan exit=0 0s | commit message lines with one: 0
+keywords-fresh exit=0 1s |   guide source hash c0612b7273c5a97d
+fences exit=1 558s | simGuideHeadings exit=0 | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a c
+vitest-all exit=0 1112s |  Test Files  604 passed | 2 skipped (606)
+existing exit=0 1034s | simReportContext exit=0 | simReportContext: all green
