@@ -1,0 +1,13 @@
+# Round 1515 fix: retune on seeds 0 to 31, Hard 2.1 (0-31) and Hard 2.4 (16-31; 0-15 is r1515-t2a)
+h21-0: SECTION=4 LEVELS=hard SHARD=0/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.1}}' OUT_JSON=$RC_OUT/hard21-0.json node scripts/simCmDifficulty.mjs
+h21-1: SECTION=4 LEVELS=hard SHARD=1/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.1}}' OUT_JSON=$RC_OUT/hard21-1.json node scripts/simCmDifficulty.mjs
+h21-2: SECTION=4 LEVELS=hard SHARD=2/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.1}}' OUT_JSON=$RC_OUT/hard21-2.json node scripts/simCmDifficulty.mjs
+h21-3: SECTION=4 LEVELS=hard SHARD=3/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.1}}' OUT_JSON=$RC_OUT/hard21-3.json node scripts/simCmDifficulty.mjs
+h21-4: SECTION=4 LEVELS=hard SHARD=4/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.1}}' OUT_JSON=$RC_OUT/hard21-4.json node scripts/simCmDifficulty.mjs
+h21-5: SECTION=4 LEVELS=hard SHARD=5/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.1}}' OUT_JSON=$RC_OUT/hard21-5.json node scripts/simCmDifficulty.mjs
+h21-6: SECTION=4 LEVELS=hard SHARD=6/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.1}}' OUT_JSON=$RC_OUT/hard21-6.json node scripts/simCmDifficulty.mjs
+h21-7: SECTION=4 LEVELS=hard SHARD=7/8 SEED_OFFSET=0 SEEDS=32 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.1}}' OUT_JSON=$RC_OUT/hard21-7.json node scripts/simCmDifficulty.mjs
+h24-0: SECTION=4 LEVELS=hard SHARD=0/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.4}}' OUT_JSON=$RC_OUT/hard24hi-0.json node scripts/simCmDifficulty.mjs
+h24-1: SECTION=4 LEVELS=hard SHARD=1/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.4}}' OUT_JSON=$RC_OUT/hard24hi-1.json node scripts/simCmDifficulty.mjs
+h24-2: SECTION=4 LEVELS=hard SHARD=2/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.4}}' OUT_JSON=$RC_OUT/hard24hi-2.json node scripts/simCmDifficulty.mjs
+h24-3: SECTION=4 LEVELS=hard SHARD=3/4 SEED_OFFSET=16 SEEDS=16 SEASONS=6 DIALS_JSON='{"hard":{"edge":2.4}}' OUT_JSON=$RC_OUT/hard24hi-3.json node scripts/simCmDifficulty.mjs
