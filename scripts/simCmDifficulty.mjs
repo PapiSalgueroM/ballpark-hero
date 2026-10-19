@@ -87,6 +87,31 @@
    Section 0 on Normal, both drivers, 4 seeds, 10 seasons: the engaged buyer's mid ppg 1.40 against
    the steady keeper's 1.39, big club titles 4.25 and 3.83 in ten. One season takes about 0.7 s on a runner.
 
+   MEASURED AGAIN FOR ROUND 1512 (GitHub runners, the engine of Release BK). Section 4, the engaged driver, 9
+   clubs, seeds 0 to 15, 6 seasons a level (864 seasons each), sharded 4 a level and folded: Medium, Easy, Hard
+   and Impossible from r1512-m1 and r1512-m1b on a1882d3e, Very Easy from r1512-m2 on e86f0fe2 (its final dials;
+   no other row moved between the two commits, and each career plays on its own module and stream).
+                         mid ppg   vs Medium   sacked seasons      spend a season    big titles   small ppg
+     Very Easy           1.71      +28.3%       1 of 864 (0.00x)   40.74m (+49.8%)   6.88         1.47
+     Easy                1.55      +16.5%      44 of 864 (0.18x)   33.58m (+23.5%)   4.93         1.36
+     Medium              1.33                 244 of 864 (0.28)    27.20m            3.89         1.09
+     Hard                1.20      -9.8%      535 of 864 (2.19x)   22.30m (-18.0%)   2.19         0.73
+     Impossible          1.08      -18.6%     729 of 864 (2.99x)   14.69m (-46.0%)   1.15         0.56
+     the lead's bands:   Easy up 6 to 20, sacked at most 0.75x, spend up; Very Easy up 14 to 35, at most 0.5x,
+                         spend above Easy's, big titles under 9, small ppg under 2.3.
+     Medium against Medium (even seeds against odd): 1.35 and 1.31, a 2.9% gap.
+     Seed blocks (0 to 7 | 8 to 15): Very Easy +28.1 | +28.6, spend 39.75 | 41.74m; Easy +17.2 | +15.9, spend
+     34.75 | 32.42m; Hard -8.1 | -11.8; Impossible -17.3 | -20.0. Every easy band holds in both blocks; the
+     nearest edge is Easy's ceiling of 20 (2.8 points over block one's 17.2).
+     Very Easy first measured at cheque 1.4 and mark 0.75 (r1512-m1): +29.7%, spend 35.41m against Easy's
+     33.58m, but 35.09 against 34.75m in block one, so "spend above Easy's" was 0.34m from a coin toss; the
+     dials moved to cheque 1.5 and mark 0.8 (a cheaper market lowers the fee per man, so it pulled the spend
+     down), never the band.
+     NOT THIS ROUND'S, FOR THE LEAD: Hard and Impossible are main's rows, untouched here, and the engine has
+     moved since Round 1501's table above (Medium's mid ppg 1.42 then, 1.33 now). Their pooled drops still sit in
+     the bands (9.8 in 8 to 20, 18.6 in 18 to 35), but block one alone is 8.05 on Hard and 17.27 on Impossible,
+     under its floor: both bands are now coin tosses on the current engine.
+
    Negative controls (CM_DIFF_CONTROL), each patched in memory or into the
    bundle, never into src; each must turn its section red:
      flat        Hard's pain set to 1                                      1
