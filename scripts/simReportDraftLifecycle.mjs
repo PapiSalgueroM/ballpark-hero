@@ -117,7 +117,17 @@ function recoverOriginalForms() {
   ];
   for (const spec of specs) {
     const file = forms[spec.alias], fixed = sourceBefore[file].toString('utf8');
+    const admitted = {
+      'src/components/game/ReportSiteIssue.tsx': '4e5c2049c07a2aa5154ba05f6d5ee973af549f9b09233f556fe8547efcf210ca',
+      'src/components/game/ReportQuestion.tsx': '02b8fd8654cd1fd36000f618c7cf9b49c337215607523f4b8a83420cc8a115fb',
+    };
+    const label = spec.alias === '@/components/game/ReportQuestion' ? 'Submit Report' : 'Send report';
+    const nameHunk = { name: 'pending action name', original: '                onClick={handleSubmit}\n',
+      fixed: `                onClick={handleSubmit}\n                aria-label="${label}"\n` };
+    const withoutName = fixed.includes(nameHunk.fixed) ? fixed.replace(nameHunk.fixed, nameHunk.original) : fixed;
+    assert.equal(hash(withoutName), admitted[file], `${file}: exact admitted form after only the pending-name inverse`);
     const hunks = [
+      ...(withoutName === fixed ? [] : [nameHunk]),
       { name: 'lifecycle import', fixed: spec.importAnchor + hookImport, original: spec.importAnchor },
       { name: 'dialog open state', fixed: spec.header + '\n', original: spec.header + '\n  const [open, setOpen] = useState(false);\n' },
       { name: 'lifecycle state owner',
