@@ -7,8 +7,11 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { SavePointsScreen } from '@/components/club-manager/SavePointsScreen';
-import { startCareer } from '@/lib/clubManager';
-import { createPoint } from '@/lib/cmSavePoints';
+import { BrokenSaveRestore } from '@/components/BrokenSaveRestore';
+import { CONTINUE_SAVES } from '@/data/continueSaves';
+import { SAVE_KEY, startCareer } from '@/lib/clubManager';
+import { createPoint, pointText, stageCopy } from '@/lib/cmSavePoints';
+import { runSaveKeeper } from '@/lib/saveKeeper';
 import { pointKey, pointsIndexKey, readPointsIndex } from '@/lib/cmSavePointsStore';
 
 afterEach(() => { cleanup(); localStorage.clear(); });
@@ -82,5 +85,29 @@ describe('the save points screen names the right cause', () => {
     fireEvent.click(v.getByTestId('cm-point-confirm'));
     expect(note(v)).toBe('The save point "Before the derby" is damaged and will not open, so nothing changed. You can delete it.');
     expect(localStorage.getItem('dukb-save-pending')).toBeNull();
+  });
+});
+
+describe('the card after the load says what a save point restore did', () => {
+  const entry = CONTINUE_SAVES.find(e => e.saveKey === SAVE_KEY)!;
+  const said = () => render(<BrokenSaveRestore pathname="/club-manager" />).getByRole('status').textContent ?? '';
+
+  it('a point equal to the save being played says it was already there, not that it is the kept aside save', () => {
+    const text = pointText(startCareer('Everton'));
+    localStorage.setItem(SAVE_KEY, text);
+    expect(stageCopy(entry, text, localStorage).ok).toBe(true);
+    runSaveKeeper();
+    const words = said();
+    expect(words).toBe('Your career was already at this save point, so nothing needed keeping aside.');
+    expect(words).not.toContain('This is the save that was kept aside');
+  });
+
+  it('a load that refuses the restore says the season still will not post', () => {
+    const text = pointText(startCareer('Everton'));
+    localStorage.setItem(SAVE_KEY, `${text} `);
+    expect(stageCopy(entry, text, localStorage, new Date(Date.now() - 10 * 60 * 1000)).ok).toBe(true);
+    runSaveKeeper();
+    expect(localStorage.getItem(SAVE_KEY)).toBe(`${text} `);
+    expect(said()).toContain('still won\'t post a leaderboard score');
   });
 });
