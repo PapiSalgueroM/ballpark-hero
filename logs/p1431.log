@@ -1,0 +1,33 @@
+bindAt: scripts/qa/appearanceSelectedContrast1431.mjs bound
+bindAt: scripts/qa/replayAppearanceScroll1431.mjs bound
+bindAt: 62d7c8b33388 -> 5a58cf7b6618
+bindHash: scripts/qa/appearanceSelectedContrast1431.mjs bound
+bindHash: scripts/qa/replayAppearanceScroll1431.mjs bound
+bindHash: 94a22773c507 -> 145b59ddb669
+bindHash: abbf03e4ffe7 -> 573fb04507c2
+runProver: p1431 at 5e5519121d5aa13a8adaa79cbc8256856d3cdc67 (release BL hash bound: b388a335f557 with pinned file hashes bound to the joined tree)
+Current appearance scroll:15 actual unchanged cases passed. Ink inverse/source controls are declarations; measured contrast remains separate.
+{"kind":"APPEARANCE_CONTRAST_RESULT","mode":"fixed","evidenceRoot":"/tmp/rp-out-p1431","summarySha256":"be86fad329219d041c4e3a3fb82dfd6ced6de682fcdab610e4946c20a971298f","sourceHeld":true,"productQualified":false,"renderedContrastProofPassed":false}
+Preparing worktree (detached HEAD 5e5519121)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+1 !== 0
+
+    at file:///tmp/rp-wt-p1431/scripts/qa/replayAppearanceScroll1431.mjs:67:73
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+runProver: p1431 exit 1
