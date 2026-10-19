@@ -160,6 +160,11 @@
      inside the noise of a small fleet, which is why the first pick fitted it. 2.2 and 3.9 sit mid plateau, near
      the middle of each band, and every block of eight lands inside too. Impossible's big titles do not fall
      with the edge either (0.76, 0.61, 0.45, 0.61, 0.83): about 0.65 with a spread of 0.13 a fleet.
+     Out of sample (r1515-fxv on 8cb05b24, the committed table, no DIALS_JSON): seeds 32 to 47, never used in
+     any tuning, Medium 1.37 (even against odd a 0.26% gap); Hard -17.87 (blocks of eight -17.90 | -17.92),
+     sacked 2.51x, spend -21.56%, big titles 1.94; Impossible -27.92 (-27.08 | -28.77), sacked 3.28x, big titles
+     0.87. Every band holds there too. Its two shards of seeds 0 to 31 (SHARD=0/8) came back byte equal to
+     r1515-fxtB's and fxtD's, so the committed table plays exactly as the DIALS_JSON runs above.
      Settings tried on seeds 0 to 15 only, in the first retune: Hard 3.0: 20.80; Hard 2.25 with cheque 0.7 and
      mark 1.25: 14.40 (block two 11.20); Impossible 5.0: 35.64, big titles 0.49; Impossible 4 with cheque 0.6
      and mark 1.4: 28.44, big titles 0.49. The money dials added little drop and cost Impossible its big titles,
