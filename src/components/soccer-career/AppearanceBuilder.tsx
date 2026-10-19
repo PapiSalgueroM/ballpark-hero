@@ -4,6 +4,7 @@ import PlayerAvatar from "./PlayerAvatar";
 import {
   type PlayerAppearance, randomAppearance,
   SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR,
+  SOCCER_HAIRSTYLES, SOCCER_FACIAL_HAIR,
 } from "@/lib/soccerCareerAppearance";
 import { careerAppearanceCopy, type AppearanceSport } from "@/lib/careerAppearanceCopy";
 
@@ -43,6 +44,8 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
         : "border-border bg-muted/20 text-muted-foreground hover:bg-muted/40 hover:text-foreground"
     }`;
 
+  const hairstyles = sport === "soccer" ? SOCCER_HAIRSTYLES : HAIRSTYLES;
+  const facialHair = sport === "soccer" ? SOCCER_FACIAL_HAIR : FACIAL_HAIR;
   const copy = careerAppearanceCopy(sport);
   const boots = copy.boots.find(option => option.id === appearance.boots) ?? copy.boots[0];
   const celebration = copy.celebrations.find(option => option.id === appearance.celebration) ?? copy.celebrations[0];
@@ -129,7 +132,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
         {tab === "hair" && (
           <div className="space-y-3">
             <div className="flex flex-wrap gap-1.5">
-              {HAIRSTYLES.map(h => (
+              {hairstyles.map(h => (
                 <button key={h.id} aria-pressed={appearance.hairstyle === h.id} onClick={() => set({ hairstyle: h.id })} className={chip(appearance.hairstyle === h.id)}>
                   {h.label}
                 </button>
@@ -155,7 +158,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
 
         {tab === "beard" && (
           <div className="flex flex-wrap gap-1.5">
-            {FACIAL_HAIR.map(f => (
+            {facialHair.map(f => (
               <button key={f.id} aria-pressed={appearance.facialHair === f.id} onClick={() => set({ facialHair: f.id })} className={chip(appearance.facialHair === f.id)}>
                 {f.label}
               </button>

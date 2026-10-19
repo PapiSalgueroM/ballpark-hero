@@ -11,9 +11,9 @@ import { BOOTS } from '@/lib/soccerBoots';
 
 export interface PlayerAppearance {
   skinTone: string;      // id from SKIN_TONES
-  hairstyle: string;     // id from HAIRSTYLES
+  hairstyle: string;     // id from the hairstyle catalogue
   hairColor: string;     // id from HAIR_COLORS
-  facialHair: string;    // id from FACIAL_HAIR
+  facialHair: string;    // id from the facial hair catalogue
   celebration: string;   // id from CELEBRATIONS
   boots: string;         // id from BOOTS
   accessory: string;     // id from ACCESSORIES
@@ -108,6 +108,25 @@ export const FACIAL_HAIR: AppearanceOption[] = [
   { id: "patchy", label: "Patchy" },
 ];
 
+/* Extra manual choices for Soccer Career. Shared career rolls keep their original pools. */
+export const SOCCER_HAIRSTYLES: AppearanceOption[] = [
+  ...HAIRSTYLES,
+  { id: "texturedcrop", label: "Textured Crop" },
+  { id: "sidefringe", label: "Side Fringe" },
+  { id: "twists", label: "Twists" },
+  { id: "shortlocs", label: "Short Locs" },
+  { id: "halfup", label: "Half Up" },
+  { id: "afropuff", label: "Afro Puff" },
+];
+
+export const SOCCER_FACIAL_HAIR: AppearanceOption[] = [
+  ...FACIAL_HAIR,
+  { id: "circlebeard", label: "Circle Beard" },
+  { id: "handlebar", label: "Handlebar" },
+  { id: "ducktail", label: "Ducktail" },
+  { id: "muttonchops", label: "Mutton Chops" },
+];
+
 export const ACCESSORIES: AppearanceOption[] = [
   { id: "none", label: "Nothing" },
   { id: "headband", label: "Headband" },
@@ -164,8 +183,8 @@ export const CELEBRATIONS: (AppearanceOption & { emoji: string; line: string })[
 /* Lookup helpers, all safe on unknown ids so old or hand-edited saves never crash. */
 export const getSkinTone = (id: string) => SKIN_TONES.find(s => s.id === id) || SKIN_TONES[2];
 export const getHairColor = (id: string) => HAIR_COLORS.find(h => h.id === id) || HAIR_COLORS[0];
-export const getHairstyle = (id: string) => HAIRSTYLES.find(h => h.id === id) || HAIRSTYLES[0];
-export const getFacialHair = (id: string) => FACIAL_HAIR.find(f => f.id === id) || FACIAL_HAIR[0];
+export const getHairstyle = (id: string) => SOCCER_HAIRSTYLES.find(h => h.id === id) || HAIRSTYLES[0];
+export const getFacialHair = (id: string) => SOCCER_FACIAL_HAIR.find(f => f.id === id) || FACIAL_HAIR[0];
 export const getBoots = (id: string) => BOOTS.find(b => b.id === id) || BOOTS[0];
 export const getCelebration = (id: string) => CELEBRATIONS.find(c => c.id === id) || CELEBRATIONS[0];
 export const getAccessory = (id: string) => ACCESSORIES.find(a => a.id === id) || ACCESSORIES[0];

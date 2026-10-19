@@ -1,0 +1,625 @@
+{
+  "base": "775564305e9da84dab59f2b9fe246d044a3cc8e9",
+  "captureHead": "b90dad7f4cb49807b7db18e562487ea83ced123c",
+  "catalogues": {
+    "HAIRSTYLES": [
+      {
+        "id": "buzz",
+        "label": "Buzz Cut"
+      },
+      {
+        "id": "fade",
+        "label": "High Fade"
+      },
+      {
+        "id": "curls",
+        "label": "Curls"
+      },
+      {
+        "id": "afro",
+        "label": "Afro"
+      },
+      {
+        "id": "waves",
+        "label": "Waves"
+      },
+      {
+        "id": "topknot",
+        "label": "Top Knot"
+      },
+      {
+        "id": "long",
+        "label": "Flowing Locks"
+      },
+      {
+        "id": "mohawk",
+        "label": "Mohawk"
+      },
+      {
+        "id": "braids",
+        "label": "Braids"
+      },
+      {
+        "id": "mullet",
+        "label": "Mullet"
+      },
+      {
+        "id": "spiky",
+        "label": "Frosted Spikes"
+      },
+      {
+        "id": "bald",
+        "label": "Clean Bald"
+      },
+      {
+        "id": "sidepart",
+        "label": "Side Part"
+      },
+      {
+        "id": "slickback",
+        "label": "Slicked Back"
+      },
+      {
+        "id": "curtains",
+        "label": "Curtains"
+      },
+      {
+        "id": "dreads",
+        "label": "Dreadlocks"
+      },
+      {
+        "id": "cornrows",
+        "label": "Cornrows"
+      },
+      {
+        "id": "hightop",
+        "label": "High Top"
+      },
+      {
+        "id": "ponytail",
+        "label": "Ponytail"
+      },
+      {
+        "id": "receding",
+        "label": "Receding"
+      },
+      {
+        "id": "shaggy",
+        "label": "Shaggy Bowl"
+      },
+      {
+        "id": "lines",
+        "label": "Shaved Lines"
+      },
+      {
+        "id": "quiff",
+        "label": "Big Quiff"
+      }
+    ],
+    "FACIAL_HAIR": [
+      {
+        "id": "none",
+        "label": "Clean Shaven"
+      },
+      {
+        "id": "stubble",
+        "label": "Stubble"
+      },
+      {
+        "id": "goatee",
+        "label": "Goatee"
+      },
+      {
+        "id": "full",
+        "label": "Full Beard"
+      },
+      {
+        "id": "mustache",
+        "label": "Mustache"
+      },
+      {
+        "id": "chinstrap",
+        "label": "Chinstrap"
+      },
+      {
+        "id": "soul",
+        "label": "Soul Patch"
+      },
+      {
+        "id": "heavy",
+        "label": "Heavy Beard"
+      },
+      {
+        "id": "vandyke",
+        "label": "Van Dyke"
+      },
+      {
+        "id": "boxed",
+        "label": "Boxed Beard"
+      },
+      {
+        "id": "sideburns",
+        "label": "Sideburns"
+      },
+      {
+        "id": "pencil",
+        "label": "Pencil Moustache"
+      },
+      {
+        "id": "horseshoe",
+        "label": "Horseshoe"
+      },
+      {
+        "id": "patchy",
+        "label": "Patchy"
+      }
+    ],
+    "HAIR_COLORS": [
+      {
+        "id": "black",
+        "label": "Black",
+        "color": "#1D1A17"
+      },
+      {
+        "id": "darkbrown",
+        "label": "Dark Brown",
+        "color": "#3B2A1D"
+      },
+      {
+        "id": "brown",
+        "label": "Brown",
+        "color": "#6B4A2E"
+      },
+      {
+        "id": "lightbrown",
+        "label": "Light Brown",
+        "color": "#8C6136"
+      },
+      {
+        "id": "auburn",
+        "label": "Auburn",
+        "color": "#7C3A21"
+      },
+      {
+        "id": "ginger",
+        "label": "Ginger",
+        "color": "#C2652A"
+      },
+      {
+        "id": "blonde",
+        "label": "Blonde",
+        "color": "#D8B25C"
+      },
+      {
+        "id": "sandy",
+        "label": "Sandy Blonde",
+        "color": "#C6A778"
+      },
+      {
+        "id": "platinum",
+        "label": "Platinum",
+        "color": "#E8E3D8"
+      },
+      {
+        "id": "silver",
+        "label": "Silver Fox",
+        "color": "#B7B5B0"
+      },
+      {
+        "id": "red",
+        "label": "Red",
+        "color": "#A6432A"
+      },
+      {
+        "id": "blue",
+        "label": "Dyed Blue",
+        "color": "#3E6FB8"
+      },
+      {
+        "id": "pink",
+        "label": "Dyed Pink",
+        "color": "#D8679C"
+      },
+      {
+        "id": "green",
+        "label": "Dyed Green",
+        "color": "#3FA36B"
+      },
+      {
+        "id": "purple",
+        "label": "Dyed Purple",
+        "color": "#8155C4"
+      },
+      {
+        "id": "bleach",
+        "label": "Bleached Out",
+        "color": "#F2ECD9"
+      }
+    ],
+    "SKIN_TONES": [
+      {
+        "id": "porcelain",
+        "label": "Porcelain",
+        "color": "#F7DFC8",
+        "shade": "#E7C6A8"
+      },
+      {
+        "id": "ivory",
+        "label": "Ivory",
+        "color": "#F2D2B2",
+        "shade": "#DEB894"
+      },
+      {
+        "id": "fair",
+        "label": "Fair",
+        "color": "#EDBD95",
+        "shade": "#D9A67C"
+      },
+      {
+        "id": "sand",
+        "label": "Sand",
+        "color": "#E0AC80",
+        "shade": "#C9926A"
+      },
+      {
+        "id": "olive",
+        "label": "Olive",
+        "color": "#D19E6F",
+        "shade": "#BA885B"
+      },
+      {
+        "id": "honey",
+        "label": "Honey",
+        "color": "#C48C5C",
+        "shade": "#AC7648"
+      },
+      {
+        "id": "tan",
+        "label": "Tan",
+        "color": "#B57C4B",
+        "shade": "#9E683B"
+      },
+      {
+        "id": "chestnut",
+        "label": "Chestnut",
+        "color": "#9E6A3D",
+        "shade": "#875531"
+      },
+      {
+        "id": "brown",
+        "label": "Brown",
+        "color": "#8C572F",
+        "shade": "#754624"
+      },
+      {
+        "id": "cocoa",
+        "label": "Cocoa",
+        "color": "#71442A",
+        "shade": "#5C351F"
+      },
+      {
+        "id": "deep",
+        "label": "Deep",
+        "color": "#5C3A21",
+        "shade": "#4A2D18"
+      },
+      {
+        "id": "ebony",
+        "label": "Ebony",
+        "color": "#422815",
+        "shade": "#311D0F"
+      }
+    ],
+    "ACCESSORIES": [
+      {
+        "id": "none",
+        "label": "Nothing"
+      },
+      {
+        "id": "headband",
+        "label": "Headband"
+      },
+      {
+        "id": "chain",
+        "label": "Gold Chain"
+      },
+      {
+        "id": "sleeve",
+        "label": "Arm Sleeve"
+      },
+      {
+        "id": "gloves",
+        "label": "Gloves"
+      },
+      {
+        "id": "earring",
+        "label": "Diamond Stud"
+      },
+      {
+        "id": "tape",
+        "label": "Wrist Tape"
+      },
+      {
+        "id": "captain",
+        "label": "Captain's Band"
+      },
+      {
+        "id": "mask",
+        "label": "Face Mask"
+      },
+      {
+        "id": "snood",
+        "label": "Snood"
+      },
+      {
+        "id": "goggles",
+        "label": "Sports Goggles"
+      },
+      {
+        "id": "nosestrip",
+        "label": "Nose Strip"
+      },
+      {
+        "id": "sweatband",
+        "label": "Sweatbands"
+      },
+      {
+        "id": "cap",
+        "label": "Scrum Cap"
+      },
+      {
+        "id": "hoops",
+        "label": "Hoop Earrings"
+      },
+      {
+        "id": "undershirt",
+        "label": "Long Undershirt"
+      }
+    ]
+  },
+  "svgSha256": {
+    "104/accessory/cap": "ece85a2765ded8f5c8386206fa245735ead49b24491663a4b846189939e30ff9",
+    "104/accessory/captain": "a6b6031f09e2d34980e22722ed5cb241aac8f29e766f59fedee4f2e440a6664e",
+    "104/accessory/chain": "30016f955bf069e59cd0f402a17d417e3497e8b4b5754681839d34bbdb6aca8e",
+    "104/accessory/earring": "6b6971b1186e6ccf6e6df6b3a03ca8346d24a2538fede909779a28a085ea3e8c",
+    "104/accessory/gloves": "cf2e42544f488585ca28bf0278dbae15efbbca8f4ffeb7369564ccb29619f6ff",
+    "104/accessory/goggles": "32a66fb83b24d3d0b57dbf4f220e209795d509a616e07565138e12ba2ed4a26e",
+    "104/accessory/headband": "b9a58ef811409fb3b78633ad1bf2fec7e4f00048a23c0f5eaca78125177069cf",
+    "104/accessory/hoops": "dbd73035e2caa37f6fa93aa5591040a47d1f75e5c25589e9ca008025bbe7ce97",
+    "104/accessory/mask": "69bf040a497cdb1a998ca0362bc10d8e34b4e511b299a2938b7c76ba3b0f896e",
+    "104/accessory/none": "a388f6e051dd38f9ad508574ad67fa85b169db248515290ef9845f95b575cfd1",
+    "104/accessory/nosestrip": "f282c4b081c76a2a185e90712b8c10238e94297c6e6cdb77211e5158e8c88a5c",
+    "104/accessory/sleeve": "8b5326b85ca997ea10b01ad6639fbdf13645c8be7b0959b715b66150dfbbafc6",
+    "104/accessory/snood": "b1625d07bb46df61b92a4917c92007e435cdabcc3ff28a7a3e07da4b7f54fddf",
+    "104/accessory/sweatband": "2ad718b703ee2124c8a9d1b535c09ce4552d38846802833530eb2135ab035653",
+    "104/accessory/tape": "9b92d6396f6039a74093b8e81ca43ec69c486433b4ac44cec8243c64e8c11c4b",
+    "104/accessory/undershirt": "614dfbb40950ba6643d68b2731815bcd2e12d82f0829353a8528fd8a1792f1c8",
+    "104/beard/boxed": "1ef0a089e9407bb94d242d7f08efe5ddf76e840cdb15eb349cc40710d735337f",
+    "104/beard/chinstrap": "07c89bf2df4c4e783f1e89e5beb5e0f2f64814505b173e566c289aa8e4a425cc",
+    "104/beard/full": "7a3888f7e3e983e7deeeefc4d2c8c757cc5ab332984ddf2522ca20723a4fc652",
+    "104/beard/goatee": "7e04d4b3a499443f18da9a38bd184d8fb4da2d151fef579800fad6fb4998f72c",
+    "104/beard/heavy": "493e4d5f748582c260db198383efacb1b4f7a00b631121c845a4779aaa5a488e",
+    "104/beard/horseshoe": "8cf91fc77ab44d86825d8bb89b39b4bdcd8e5b15d138487e3e4707988f1c0e9e",
+    "104/beard/mustache": "526370c3c683028d1081c246de5d05a3899aef73f304c6ea16a6678835a6d378",
+    "104/beard/none": "30016f955bf069e59cd0f402a17d417e3497e8b4b5754681839d34bbdb6aca8e",
+    "104/beard/patchy": "54fa8df1caf277b4e02bd70948caabd7f92babe558540709842e59abb85c004d",
+    "104/beard/pencil": "d058bec162c43cc003b854a1ad079416afbca13ce4f157b5e47528879af37c5e",
+    "104/beard/sideburns": "6c2f29605fb2b560469d32c2d5f08f4cc6e871de3db8846b8396609a3a65ab43",
+    "104/beard/soul": "09d0b9f36d310e58e937e1407896ca17c954c900ff26ac52f2a03669d44b2e32",
+    "104/beard/stubble": "c319ac2f5cf22bd60f563562f25a2fb571c3b8020c931b56ae5e19e817c0c6d4",
+    "104/beard/vandyke": "c658e2e2d7b767e39ec0add2edb74537b0188afae2537b07a31b2ad7499d11e9",
+    "104/colour/auburn": "c4564651c9755ffc340ca3a3cd5efd77e10cee2092a2919d5fa8e98d97133f9f",
+    "104/colour/black": "1bc6769e42379ba07a351de0e8afbb07f62b2594117151724eb86a6b8c185a6b",
+    "104/colour/bleach": "a1f63a456ebd825f238a69ab80c5267fd3bf62ef20668eb721912d89442f7570",
+    "104/colour/blonde": "bfd1623fd06c724fe1b788874fa112c0c573efbc91c276a1a7b369671d11391b",
+    "104/colour/blue": "69ffdc5571946af6207217f457a1906fe23fa56a9e3e754849f86b8e31942f86",
+    "104/colour/brown": "570088a7865adb18c11873060a8713ff256ce7aa54a638e2081ae364e378bd10",
+    "104/colour/darkbrown": "4f5881287e924858d41f609b095187873572360983a5c13dcf312e8a171d1337",
+    "104/colour/ginger": "32be519eeeeac11df490d397c63ad55df638865a2c02af7309a9afc16792e2e5",
+    "104/colour/green": "3a166ce1090327ac2e20be3ff8a1c2dd8296e1a1eef5f73910c32e5c5d4f5600",
+    "104/colour/lightbrown": "8277623b01070198625a16ff1e223d0757b9c96f9ecdafc15fb314c489b7a255",
+    "104/colour/pink": "95e5890391410e8fdb32aecfb9ad723d515d9d517d5b1463e7931a2e21431125",
+    "104/colour/platinum": "b94b7cf12f5bc2da018c9c3e08cd1e531ac6dfa4f22b66e903a41db9569c3b13",
+    "104/colour/purple": "3ef9a347bc0be0350d8d53ea33e881b5e32b730cf8b8862aab3936b9732b157b",
+    "104/colour/red": "a7586e4acac8368e8901be8d49c03ad3667e371f4dc5932ef4cc277c788b98ef",
+    "104/colour/sandy": "7c0f0d37e0bba2a004a1ab288a03362dcc31aea17455d3e60cf0efe639a88342",
+    "104/colour/silver": "d89d3e4b2295515ec2ebfae0933c774d2a4b24a2104d1889ca85af1b3230d326",
+    "104/hair/afro": "f04751c4ee3337abc1621bafee0ac3c05f240db4b842532ed48d8b6343ebe9d3",
+    "104/hair/bald": "30016f955bf069e59cd0f402a17d417e3497e8b4b5754681839d34bbdb6aca8e",
+    "104/hair/braids": "89f9e92c5c8e574f346ae1e3a98e5d933fbe33874c6c6c4f0370f2cca7735a1e",
+    "104/hair/buzz": "10a9bf0dceed4b107bb179b2424acae66a76fd536c2611779e596b94cecb6eba",
+    "104/hair/cornrows": "dff9e3ef39648fe6895594c0909e009945a3dd14cc7ed942ea24a70eb4985242",
+    "104/hair/curls": "63f95d234d148678d6c4dcfbad5392071c0e2ce38e31f550d6ad8ee7d367d0a6",
+    "104/hair/curtains": "3e2895742373fe9694ebb3a8bc809462f7c64e936ff9b8857a4bde5bbef59c13",
+    "104/hair/dreads": "af49372d17aba3ed571047089524b7c35e07e61d5679cadffa6214d38bd03bd6",
+    "104/hair/fade": "b83b3cf05e1fb7c40eeb7d198a5440450e02bd1115e14cf6105fdfeec50ccd67",
+    "104/hair/hightop": "eb732cd4a5d780fbf2e0c10268c194120b488c59d4e9989552705f5c59ffc898",
+    "104/hair/lines": "5866e0df3007430f87acf1bdce0f147768e15ecf44d266b46698b90fe7811167",
+    "104/hair/long": "25c589b32c6b62796a15529ab7c9a52c2a03af5e1d811d30332ef8aba4ab67b8",
+    "104/hair/mohawk": "fa205a99c7e973b22ea2ff915da3d2b42e9b885941594edf5a90e6e6a5668919",
+    "104/hair/mullet": "e3bc254200cfe3a44da8871aaebd1fed5c07a46779fc12d1a0e9ac36bd41cd6a",
+    "104/hair/ponytail": "e7a89dd8c5f7dadfcb4f9c8730a38712f02a9542ccfdda41ddc5c90367158522",
+    "104/hair/quiff": "991bbf8973c0e0f97f713a9b3a8ae3f3ec55978f0e84e621e58b5d7386b2a42e",
+    "104/hair/receding": "579f8b630075131e0c9c090903be5bbc6468681a67bfb1b66d5b8610ab02ac97",
+    "104/hair/shaggy": "fe5f82ec1a2b0a5612c5e9d0a3dafd330375a6cbe671ed89044eeb48fe4103eb",
+    "104/hair/sidepart": "c1cf232de36173183e48d521f961142c467b7a34de9c9d9a0e89349e25079ebb",
+    "104/hair/slickback": "ef78b194bc18f8977153b44f15b417d98dc4cb4acacc212b9d87e7be10826715",
+    "104/hair/spiky": "55846997bb350bd95efe58fa3a2c9fd2accdc2ede86878223f6b5f779b02474d",
+    "104/hair/topknot": "a49f8d05a9163a7afb235f72c63a0ce4944701388a2b1827941ad0a0e3dd46f5",
+    "104/hair/waves": "7bf4ed247a7d5a682f3543d90cb92cd4b0258a88a737624671c1860acd04101e",
+    "104/skin/brown": "485f9518b65ce11fecaf5673a6046b26170043e77f4f906c567ab68113efae48",
+    "104/skin/chestnut": "eb00e97f6be68490355744372248b63e1017117b2f6f5576e63d684073c75383",
+    "104/skin/cocoa": "73c8980b67e118551078796310cdd88685629af8ab8ff676ccb149ba5c2497bd",
+    "104/skin/deep": "42d16f9faaec440fdad147ff3a97b8088bcfe639bef19e9018dd6bf974bc1a07",
+    "104/skin/ebony": "d7fa51fd4ed63739c6a765f7a877b6abf5d7b39995f42f5ca2e2aa11bbd9bbdb",
+    "104/skin/fair": "d7e122baf429312b9d33cd1d79e207a41ec388d574a235ffee9592d0cd7df192",
+    "104/skin/honey": "30016f955bf069e59cd0f402a17d417e3497e8b4b5754681839d34bbdb6aca8e",
+    "104/skin/ivory": "7f5c3da52f7924966f1f304fedfc083f538fc16a85927d9f8b17e4cf55a1aac3",
+    "104/skin/olive": "2f6b5ba878c658b0019f24b90524078a57eacbdc941119342cf3c9f9d11d03da",
+    "104/skin/porcelain": "93fc76e85a96d8d85ab44ceca701ac7da5cb89371cff2c4eb1353162f72a24ab",
+    "104/skin/sand": "6c4113d2b14607958dcea497099bf8f9492a5c74d3ab2ad8c16e343bb7c861ca",
+    "104/skin/tan": "e53f10db260f2081064335457c6b9b8b3c5d9f645c6487b5b3f0d8c7e3d8f724",
+    "32/accessory/cap": "553a8f515fdea5a143b618ebfe614ebb3fc1f855d45383d8f373b2c6febb93f5",
+    "32/accessory/captain": "5209086d686f19343fb0f20be9d5862e410e66f15c87e5befe8cd3c54740b2ee",
+    "32/accessory/chain": "6159962996d0455aa0f6ded8bbb1c339f7cf5027541fe71c735a23bc6bf4d3d3",
+    "32/accessory/earring": "55c7a1deef602b528e87a93fabd623cd65c4a4022d7616c0e31d78f13030841d",
+    "32/accessory/gloves": "dfae758c31d6961ae11784c6df3b0d49170a50048831edcb7cc5d4809b2972d8",
+    "32/accessory/goggles": "5238f463673c61e7724d905d5c64ce9d27ff2cc9ef0b13beb6181d46a980db37",
+    "32/accessory/headband": "5a265537e24a801a9d5004eb80ff626cbc6f398bca20a0ab53be4cc33cdfd02b",
+    "32/accessory/hoops": "4290daa6ab1f71c91a1a01f17ea56a09adaad80ad0a0f555eec19a0097b3f40d",
+    "32/accessory/mask": "e985d7e3f2debd933ff32aae8434e90f4ebc1028df6e122d35fab265ceee1c05",
+    "32/accessory/none": "29bc23bdaccf4ed92e87653acc744956d41a3ceb420e04191f02ad4bf40078da",
+    "32/accessory/nosestrip": "ab9a06690387eadcee351288dedd1017ae6430dce6a8a081b49698b60f44e878",
+    "32/accessory/sleeve": "245ac06012054b2a157feec0ba7992d20dd68d36467e8ee88271c3145446ca82",
+    "32/accessory/snood": "251c314f3738a93c45d79505776f2fe3ff2b38795ff54148f9805bf6308c23b2",
+    "32/accessory/sweatband": "97782e45e3b0bb971866eac096eba8f376161657d3f22d017f15d6a21c8e2711",
+    "32/accessory/tape": "8b2e431e10474b6f4d82a782933944a0c909e95b240a5fc5831309fe04c26fcf",
+    "32/accessory/undershirt": "74b55b53f53a340f1f5b41a2302750020f60bdfb14c47d926d59f91b61b5d38b",
+    "32/beard/boxed": "5140dc5930c7b6e4bf2ba74e3b4fbcf17053ba327eb3f488971c178911e79a49",
+    "32/beard/chinstrap": "7a801f1fecb528ff76a230f7b0ef75242fc417669621f9cd94943615237644be",
+    "32/beard/full": "dfb36cfbac58199415d46efa51b914947a74b060342bd1dc6dbb4ae26c72605a",
+    "32/beard/goatee": "a01816ceddb87001e3b52b934c31c590e704daa0ae78610e141b7ea23fbf3ad4",
+    "32/beard/heavy": "626f69ed25dca024d149b08ca36f1b135b6826482d32288dc078f6a067137874",
+    "32/beard/horseshoe": "8b8c8bb8b150cf847835a2e78d92ba50d9d7c0ae49f4b6271463b68186642e1e",
+    "32/beard/mustache": "6c90d87604971c7e4f28b0f4ea50b7d4e89b165474e5ce1fcc3d87b532c0c0cf",
+    "32/beard/none": "6159962996d0455aa0f6ded8bbb1c339f7cf5027541fe71c735a23bc6bf4d3d3",
+    "32/beard/patchy": "2af66ba8297ffcba064fa33db10332ac6b2543f793fdfb48dbfb348f99a0607e",
+    "32/beard/pencil": "644b0e2bc1c990370425d217568ab3888501b05ddf1c8c42983c231c725d8123",
+    "32/beard/sideburns": "beb682ad88aac814b536db36d99d9fbc83ce5caf58a66d3922bb8e46d277985f",
+    "32/beard/soul": "cf926d79e50e07787d7bc69d131b735489fedb90052044d70494917d843f6948",
+    "32/beard/stubble": "2e59979b1675428e37570b654d187a12d30707c684f2c6f5f2a2c8d4a59b4077",
+    "32/beard/vandyke": "058d2ecba86f6e0b76c3614f79c8d4edb84a68ea553ad41a0921d8bc8c309637",
+    "32/colour/auburn": "ed81fdaa0ba2f263e12a58b10c7ce91f79de470ef5b90d535769beb5575e8055",
+    "32/colour/black": "79724453545d19e1ce0801ad3b36284701c8faaad531c2587b44f914210a2e5f",
+    "32/colour/bleach": "2e09f398f315dea82f30f54e03e28216cf53b82c549cfa818eddf603581563d6",
+    "32/colour/blonde": "53e22f86e9adb92307ce2df53ae7f0df6ebf5b987e0b324830ee2391f1f50cb2",
+    "32/colour/blue": "c32ea35d67a6db76a256ad419719f13c065dae77d66b47fe0edee3525e07a732",
+    "32/colour/brown": "e69c4f142d7718830ac232b728bf5fa43f92d71f906ded05d72f5e8972b9390d",
+    "32/colour/darkbrown": "d517de70aea8f588fd3597cafc2792232c37f3239d26f1a6bb653777486325a1",
+    "32/colour/ginger": "38f94dab712b65c3b1b2a43796c727a4d7af7fa22248bace89d6792592cc546d",
+    "32/colour/green": "cc29b4dc32f346946745e2335492da87b7f0282f64d1049ecf1d9838a9f776a2",
+    "32/colour/lightbrown": "b2861c9bba36d59a5dcef59d100688eb16e81022a5276e1f70414b46dece0b93",
+    "32/colour/pink": "2c28b9118018143270e2170b1b30a0b04aa57d8da7a094a46a2970846d018378",
+    "32/colour/platinum": "c128563083f4b77acdb1b775eccb36a81859a9df3c76fe932db3fe3709f8b2d3",
+    "32/colour/purple": "51f25e1f56c54ac2f60f1a8bf6e214698d08e5616e711a3aec4ebfffedefc247",
+    "32/colour/red": "2993843bba075cc52ddf07ebca11fe3f916ff5ffdb10302abab5a721094efa47",
+    "32/colour/sandy": "168f8a5d5b260f45fa32031b1bfb7641608e2ff823c7da466fd9e9c2471bf0cd",
+    "32/colour/silver": "c91269e2a30b0d690d5a38f8eef04c2776876bdb973b7b8b5e2d23d80f090a20",
+    "32/hair/afro": "e17208145996e2b4c5f718dca3463fa4ead5413cfd42e13168a2a0850c74709a",
+    "32/hair/bald": "6159962996d0455aa0f6ded8bbb1c339f7cf5027541fe71c735a23bc6bf4d3d3",
+    "32/hair/braids": "6036e99cdb499f1593afae9f4d7d1b5ec44be97c7d23389a2fbf845eccf537d5",
+    "32/hair/buzz": "f756e9ef8845eeb79e674dc3fac55777a16315406e64a4b15405e541f8a51513",
+    "32/hair/cornrows": "63c6c07e51fa43b0108a2ca2cc9d4f97709fb6c0a3d3fd3021a19f15e93d836f",
+    "32/hair/curls": "b5d20dab1ff8a778266a2b4a02d99c79f4e9648446bf469d0910e9f0350a810a",
+    "32/hair/curtains": "28d2b361584db3168a3b973da2d570387f6eaea203ce5545c0c547cd48605d47",
+    "32/hair/dreads": "7cf9e1386629382b06c1c1b0c99c953d5307ece669d3f556b64c056da1413afe",
+    "32/hair/fade": "ed552e4bf567ad380a5a7780940db29e13bb96bfaf0888ffe8ae958367955a60",
+    "32/hair/hightop": "ae348ff2ec303c920e419e5c3f93353be7042deeb210f82e20638273b7c0540d",
+    "32/hair/lines": "b9feea34d90871a55dc6c90ea26db5f46cdb8f7996e6d7144e99e05005aafc38",
+    "32/hair/long": "f45ecea402ae189dfd5874526d3b61ca43d8440cc01ea2782ce9b6c28f8f74c9",
+    "32/hair/mohawk": "9061e9431955705af79107b4a5a8c4a3d7696f5025a3a801fb7620f8e6da45a9",
+    "32/hair/mullet": "78bc8003e72a789d1824fee85a9dc59de7f44d835545e77badd90d3872592b0b",
+    "32/hair/ponytail": "9bb81b5e9575fb352eca7dc4e1c7d04fb52fdc5b24027d271c088c7d68e1d7bd",
+    "32/hair/quiff": "a7695458742136724071bab5ab5c442bdf5f8a640d63559c3a19ccd51fb5965a",
+    "32/hair/receding": "cb672ae7c12ea9ab0a630fdd68cde8bbd841bece6e55263b72d3a997ef524365",
+    "32/hair/shaggy": "f80a4d6ab78088e9640da63a4e23cab72b5f98fbe097001e91719cb34aea606f",
+    "32/hair/sidepart": "775c2326248bb8e77d6a3d2a961ff700c07c87ce23f0dd2e7cbb495e97a5d8a0",
+    "32/hair/slickback": "9d8858a8a3671aad1947da5d7195d2ff25d4e90b80ecee77148045032ee1a0b8",
+    "32/hair/spiky": "d899f61b7a6d5111ec34adb7a4d3a8a795722d61a97cba79162cbfd0ad27004b",
+    "32/hair/topknot": "9748134cce7808a89ae372f50fd915e9bbf5c585455788bb67ee7d9d5e335bd9",
+    "32/hair/waves": "e2aceb9a54badfaf20c1fa486fce8ed00586ba4da601b39cf225f4a48f7af037",
+    "32/skin/brown": "57fe788acfa13fd86bd322723ae34554a7f6aa5e2d2aedd7e7f0869dbaabd08c",
+    "32/skin/chestnut": "f87d628939c61c94fe36b6b8f8372cad82f3ec1da12b753ca438447dae97849a",
+    "32/skin/cocoa": "91e9f96baac25014f7d03d2b53104f341513ad1073f4796e72259746716812e3",
+    "32/skin/deep": "60f4a8174a3050b46e921e3efdec37628d1203d34da5323df5c548952a25d0f2",
+    "32/skin/ebony": "3b6955d718a25944b5323d30bbc070e92fd7d34be4421160134130914c741715",
+    "32/skin/fair": "90a52433ae61c7af8d735354824616f816ba00475c10a846d8035fcd199270ca",
+    "32/skin/honey": "6159962996d0455aa0f6ded8bbb1c339f7cf5027541fe71c735a23bc6bf4d3d3",
+    "32/skin/ivory": "4962b652ad23d31c3aa35a20cb45ad3bd1c4ae0d2d5368e02dc092fbee8de967",
+    "32/skin/olive": "c66b99d078a46c8d931025d3650519364a2267a6b9a5624fa78a6cba0cd25dbe",
+    "32/skin/porcelain": "b2a827708460c310eeef94063221bb1bf500c0e27c20f6549a1a03898ed6638b",
+    "32/skin/sand": "3269c0f39ce66c6c6f0558e542255a7dacc3821592af164221badc461612ad3d",
+    "32/skin/tan": "e11fa4982c4adc0f35a6a18a8e72d1c9c52cf5d045c831e45d16225565fb03d5",
+    "52/accessory/cap": "850cb6b4ee8300e22389e5267f8b8f1c894cad10ec6940a53c6e474d989edb2d",
+    "52/accessory/captain": "b0fcacb6e837654c1c09a2a55b0d56af6df96d294843133ed6430d2f9bb0fb32",
+    "52/accessory/chain": "bca118f79f076a769feb20650094c3c710ad41493a2b668d6bc2d78cd352f839",
+    "52/accessory/earring": "5445dfd171ed34f468e495dca037d082c15c4544cfa6e92802405224a1b692bb",
+    "52/accessory/gloves": "fbc27b4836b82bf16ef8b7432470019ba04e1f2b7066aef9e91c5c99bdbc1f63",
+    "52/accessory/goggles": "1277a58a344feb7e6e15a4dd3a982f13c44432c0299b56cf284c508f271f0268",
+    "52/accessory/headband": "4e3bd3c9592ca604bb507b0d89fe0ffa072d19f0b368a80299190a4f7e0184dc",
+    "52/accessory/hoops": "151587e54e9c1b7b8da6eb8ced2e7414a400f9e06d9af49a71d646a145086df0",
+    "52/accessory/mask": "21f9f18f3a69028927428f52f691a1d9e23802664b9abfb00c4e7ce8344576f5",
+    "52/accessory/none": "4518d3937a64cd5bfbbe7b24086b13871b8e1408888eeabebe7566ab3b600fca",
+    "52/accessory/nosestrip": "acc622a988f5ecd4cd966c15151cfd70dcae5d835a2a38fbbf2e6afcf7da9ea8",
+    "52/accessory/sleeve": "2c41a85c93dbdcd8e3264bbf5c07ae0ad43c55cdc1c78a5d31171acec85ca675",
+    "52/accessory/snood": "fb140b0e38787b08dfdd8c4f9f818dda9848251ac970bbe58891d9f6a8f45a59",
+    "52/accessory/sweatband": "0b6fc8c50750b9c89643def5c02dcbf5552b664417d4a9f739c797a81c76934c",
+    "52/accessory/tape": "19f43ea9ba51682c09ce43d80f084a205785c4a8399bc337995deb2efbaaadd2",
+    "52/accessory/undershirt": "2f1bd92b184aca0aeccb10e14282ad9871080979dc1aa3fdda63bf4bf444a686",
+    "52/beard/boxed": "bf9d9b272221edde89959480ef8d7e84eb756089a55d3124e6d7ef7c2bc36329",
+    "52/beard/chinstrap": "9fc2de1dd69e1d96821831715a63cb5ef310662e2db0f15e5389cd0f9ec57394",
+    "52/beard/full": "fa29bba41517c5ddf9ff6bae3d40e51e6e3f149af92f3fa21207892abc0cf461",
+    "52/beard/goatee": "924c23fb1aad2309bfcee32e0286df1c1e0888996035234fe6218a0f89848371",
+    "52/beard/heavy": "075f86c940fa018dad070578019e5b889337f90d340124a2134f80caf03b99b5",
+    "52/beard/horseshoe": "388c01ba1a2e8f8db6f1527095b1efbd535ee391b8fff23224bb241d5123630a",
+    "52/beard/mustache": "29933fae7cd8bdbc8bad8223d9add19d40f4fe9b4583b1f2ae29572fa1470de0",
+    "52/beard/none": "bca118f79f076a769feb20650094c3c710ad41493a2b668d6bc2d78cd352f839",
+    "52/beard/patchy": "d83ded8c1d2425edb8e5621ed37531c2df259beb47514b0bbb225920e196de37",
+    "52/beard/pencil": "fb259d78b7e6735e2459194dcf4bc81b2382e312cdc0d11683a0c9f29ee41e24",
+    "52/beard/sideburns": "826099ba5c2fc7530c78215e86411c0d2d6e2c836d2584ce42a7e7ba49ff8082",
+    "52/beard/soul": "21fa37eb8db30678e80c251e2dd878f324b5f3717a7c95032ebc36746a396078",
+    "52/beard/stubble": "86796331ceb0651b1a757f9edf54629f0c79541a9575cb0604bbc42b75370d16",
+    "52/beard/vandyke": "1c6cb4d6a655f05b05d9560d630ce79f1d7ce173e7eef1cbaa5c46092dd44808",
+    "52/colour/auburn": "907b867c549e4c13655743496153b1f62188d44775149568b6870f6e9af82e20",
+    "52/colour/black": "fb5c46e996e10273ab10bc479c0482184b8f67fe65873f347f98c138692d8fad",
+    "52/colour/bleach": "e7e1dac1253380fbafcdd8699bc0a1be172b5b6acf751c58a3a0c1e8cf5ee937",
+    "52/colour/blonde": "e9299cd240190e43b790078a97a0e9920c73373e32d146b3a5ead4666e36707a",
+    "52/colour/blue": "7129aacb9ad79904eefcbd7d7c91cfb47f8113f5a93a031628d0bd8f36d78cab",
+    "52/colour/brown": "99b4c39a6f0a941351a2a0f122c51e761eb47c82794187e561c985de012690df",
+    "52/colour/darkbrown": "5d2f5e9b93d7fc59b926ca4e7e2ac21c9880c280fe1e6adfe26c75e0b5545681",
+    "52/colour/ginger": "8f724a6fd8463958501768de233fec4544777c730910c6e5b6d8542a798a9490",
+    "52/colour/green": "0f87036a93651a5d6c6acfd9dc717ac7adbbab3b4d36ee5941766edfde67e290",
+    "52/colour/lightbrown": "0c0dc08b69253583cc55ca6202c1fc354ea42542298880150b4edee1e239c18c",
+    "52/colour/pink": "83b0605bc446feede4500d450d22158250e3d8244219227a5187634b8571e9ef",
+    "52/colour/platinum": "0b4c99ebb487dde57df27c133cb9ef6db7d4b64a09daaacb1597bae5fc3eb519",
+    "52/colour/purple": "5c79fe345b46085c87d67816bc5f1fd21f551b478bc9eaaedaf1e5f3f9556fee",
+    "52/colour/red": "8bdb39143ff32e213c35729ed938f3c2b2172a7e61c72f43e095dfd573aea68f",
+    "52/colour/sandy": "0918a1105fd6b34bcd7e35265a93689f3321dcebf53781f3fc7a8b51b90158ed",
+    "52/colour/silver": "7aec79e347b7a25c0ebe1146a468d14dac04db33113d0ef00e04e856d30d2c2a",
+    "52/hair/afro": "e686dfbcd0f6eeb7f72e1734cea966e72183efde2eeed2cdb007ce14e38090aa",
+    "52/hair/bald": "bca118f79f076a769feb20650094c3c710ad41493a2b668d6bc2d78cd352f839",
+    "52/hair/braids": "a29088e036d299c9e4589b1788b7ea5fa1dfa2f303b0f889858ae8e547dde949",
+    "52/hair/buzz": "930b46d8dfb90ee034278f98ca96a09424df02e630997e109f8880364f695507",
+    "52/hair/cornrows": "1f679b9c1028cbcfcceca48501e4f76191ef7642a659ff1221679fb9c41a19cc",
+    "52/hair/curls": "e89df9913e6faee198763b86171c50471ff9fa4ed42eff52165f11a8c9e41da0",
+    "52/hair/curtains": "bc4fe0bb74ec62205ab69246955dec2a517e9c03f92c737c5bbeca01a5f9d562",
+    "52/hair/dreads": "3b8f561713276288a3c99c0206e1f65c920b1dd18f17e2d43243ce9f3c68b5b0",
+    "52/hair/fade": "4fdf48f95772685d2626af911ea420adcbd230f7bf564bcca66fe4feec3fe51e",
+    "52/hair/hightop": "e8ec8a561ab877b0540e09f1c797ff504cd8635a97e8dd5a7108d69fa3292a20",
+    "52/hair/lines": "f5d50e58f9fbe144217ee7f0a2962c07643c773ef0ba2c279d65aac0f80b3537",
+    "52/hair/long": "3e6b4714ac9549d8af7bbacfdf954a7da4a993ab9c21396fe192398d4993777b",
+    "52/hair/mohawk": "51e024773453a0010c36fe38c7313fc190ed98f272f6ef74ae1dff45a40ee727",
+    "52/hair/mullet": "fb97b4acff46fc33e768b421f3c3e4b2347ca251cf9eb209bec96803dcd6b9e5",
+    "52/hair/ponytail": "c8630b35a55d2c52602091c4c5b1cfbeea304fb7f284c42ebaf1b56779996916",
+    "52/hair/quiff": "0262e030da98b40cfb6d91e82da6f847cb0b4814620893b55a03b8ea75b2c9f8",
+    "52/hair/receding": "a19ded27f220b2bc4b5a3646cbe7d60be11af7495ba32c31d6abf560f1bccd07",
+    "52/hair/shaggy": "3dcbf5ed18fbc78038699d4d88faf4ea7b7a1156f3d3c4425b42099fc1f2fa8e",
+    "52/hair/sidepart": "1075de5861d394efda80aa16b85cce8e2f307173e59541c2c95895209f187fa9",
+    "52/hair/slickback": "9a0e87187da847f71ec8f744875c8d4530d46ab16258e9c2687066d944ad807b",
+    "52/hair/spiky": "4c6f03fad10f6b2e73d5fa1ef0aeeadb061c04125eb48ce793a5577b4b954388",
+    "52/hair/topknot": "f18a5f9d85d5497b853e5f15fb71daf8152b66d7be860f610d8bea73f26ad5a5",
+    "52/hair/waves": "4cf7834957b2cc26bc6c10f935eabf2f2dba4334c2abab1d3b09bcbda0082e45",
+    "52/skin/brown": "3a0bc746d1cc854dffa2d3808bd2d25ffa272fd43ea376aa4d6bf124d4da500b",
+    "52/skin/chestnut": "e6a0b1a9ed0a3dead562cd946c32f3de4a91f876fe9fe12902b0f635880cb328",
+    "52/skin/cocoa": "d501c4f4e556cea0776255e6f7a43c79efacf59b0e35c212f751675ad9718332",
+    "52/skin/deep": "011a8b60b949228535f5085785e47cf07d2821b01d1a8f2dbd58964875e61bdb",
+    "52/skin/ebony": "3840772e3ea0ef20b549ddfd3ad4fc9fdbed9494574e993e850d694b0c7b4802",
+    "52/skin/fair": "692e43fc43f3858e10510ca3adf63c7a9b661dd85e297ef319f164cf3369fdfe",
+    "52/skin/honey": "bca118f79f076a769feb20650094c3c710ad41493a2b668d6bc2d78cd352f839",
+    "52/skin/ivory": "5ed814946916b2d94e3b33cd85a290bcc4622c8ee8e9be7a45efa9534da58bbd",
+    "52/skin/olive": "4dca2764bd9488704d6ffdf81c5563035606641b856750108cd95acf3f737e56",
+    "52/skin/porcelain": "de6aba654b817b8e48eb59d54d78a627d0829c29d0cd9c7cc9f60ddf34f27c8f",
+    "52/skin/sand": "ff2dc97eb2bb3049b989c5294280362c54a8c4d7c4aef574f87718d74624769c",
+    "52/skin/tan": "be552446cf727885fa876d6fbc95146571a67ed77cf0207e69c04438a907377e"
+  }
+}

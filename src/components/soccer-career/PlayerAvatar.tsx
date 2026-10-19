@@ -192,6 +192,30 @@ const PlayerAvatar = ({ appearance, clubColor = "#3B82F6", size = 96, className 
         <path d="M 40 22 Q 44 12 54 11" stroke={darken(hair.color, 28)} strokeWidth="1.1" fill="none" opacity="0.6" />
       </>
     ),
+    texturedcrop: (
+      <path d="M30 35V29Q30 18 50 18T70 29V35L64 32L58 36L52 32L46 36L40 32L34 36Z" fill={hair.color} />
+    ),
+    sidefringe: (
+      <path d="M29 36Q27 14 50 14Q73 14 71 36L65 30Q62 39 45 39L49 31Q38 33 29 36Z" fill={hair.color} />
+    ),
+    twists: (
+      <path d="M29 34L31 15Q34 9 38 14L39 29L42 10Q46 5 49 11V29L53 10Q57 6 60 12V30L65 15Q69 11 71 18V35Z" fill={hair.color} />
+    ),
+    shortlocs: (
+      <path d="M29 35Q29 16 50 16T71 35L70 48H65V34L60 31V39H55V30H45V39H40V31L35 34V48H30Z" fill={hair.color} />
+    ),
+    halfup: (
+      <>
+        <path d="M27 35Q27 14 50 14T73 35L74 61L66 57V39Q50 26 34 39V57L26 61Z" fill={hair.color} />
+        <circle cx="50" cy="10" r="7" fill={hair.color} />
+      </>
+    ),
+    afropuff: (
+      <>
+        <path d="M30 36Q30 18 50 18T70 36L65 32Q50 28 35 32Z" fill={hair.color} />
+        <circle cx="50" cy="12" r="12" fill={hair.color} />
+      </>
+    ),
   };
 
   const facialPaths: Record<string, JSX.Element | null> = {
@@ -255,6 +279,18 @@ const PlayerAvatar = ({ appearance, clubColor = "#3B82F6", size = 96, className 
         <circle cx="59" cy="59" r="3.2" fill={hair.color} opacity="0.55" />
         <path d="M 45 63 Q 50 61 55 63 L 54 69 Q 50 71 46 69 Z" fill={hair.color} opacity="0.75" />
       </>
+    ),
+    circlebeard: (
+      <path d="M42 57Q50 52 58 57L59 66Q50 77 41 66ZM45 59V65Q50 70 55 65V59Q50 62 45 59Z" fill={hair.color} fillRule="evenodd" />
+    ),
+    handlebar: (
+      <path d="M41 56Q50 52 59 56Q66 59 65 51Q71 62 59 62Q54 62 50 59Q46 62 41 62Q29 62 35 51Q34 59 41 56Z" fill={hair.color} />
+    ),
+    ducktail: (
+      <path d="M35 49Q39 62 44 62V58Q50 61 56 58V62Q61 62 65 49V60L50 81L35 60Z" fill={hair.color} />
+    ),
+    muttonchops: (
+      <path d="M33 42H38V53L45 60L42 66Q33 62 33 54ZM67 42H62V53L55 60L58 66Q67 62 67 54Z" fill={hair.color} />
     ),
   };
 
