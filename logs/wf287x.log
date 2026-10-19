@@ -1,0 +1,1109 @@
+base 07b182821a53492d77a69fb67c1efea4df4616b0
+wfrun: HEAD moved from the request commit e840b2d7ec1e to the branch head it checks, f442fc9a8f61
+wfrun: running in a fresh worktree of f442fc9a8f61 at /home/runner/work/ballpark-hero/wfrun-wt-EpZJ9y
+wfrun .github/workflows/manager-handover-desk.yml job verify at f442fc9a8f6173964af758f3afd3442090c460a8; sets: CM_HANDOVER_BASE=07b182821a53492d77a69fb67c1efea4df4616b0
+STEP 1/13 uses actions/checkout@v4: skipped (uses)
+STEP 2/13 uses actions/setup-node@v4: skipped (uses)
+STEP 3/13 uses actions/setup-python@v5: skipped (uses)
+::: STEP 4/13 Bind incoming application, frozen method and full source archive
+npm warn deprecated abab@2.0.6: Use your platform's native atob() and btoa() methods instead
+npm warn deprecated whatwg-encoding@2.0.0: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+npm warn deprecated domexception@4.0.0: Use your platform's native DOMException instead
+npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+
+added 521 packages, and audited 522 packages in 6s
+
+101 packages are looking for funding
+  run `npm fund` for details
+
+23 vulnerabilities (5 moderate, 16 high, 2 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+npm warn install-scripts 3 packages have install scripts not yet covered by allowScripts:
+npm warn install-scripts   @swc/core@1.13.2 (postinstall: node postinstall.js)
+npm warn install-scripts   esbuild@0.21.5 (postinstall: node install.js)
+npm warn install-scripts   esbuild@0.25.0 (postinstall: node install.js)
+npm warn install-scripts
+npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+STEP 4/13 Bind incoming application, frozen method and full source archive: exit 0 (11s)
+::: STEP 5/13 Remote build reader tools
+
+added 2 packages in 540ms
+Installing dependencies...
+Switching to root user to install dependencies...
+Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+Hit:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease
+Hit:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease
+Hit:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+libcairo2 is already the newest version (1.18.0-3build1).
+libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+libgbm1 is already the newest version (25.2.8-0ubuntu0.24.04.4).
+libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.9).
+libnspr4 is already the newest version (2:4.35-1.1build1).
+libnss3 is already the newest version (2:3.98-1ubuntu0.2).
+libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+libx11-6 is already the newest version (2:1.8.7-1ubuntu0.1).
+libxcb1 is already the newest version (1.15-1ubuntu2).
+libxcomposite1 is already the newest version (1:0.4.5-1build3).
+libxdamage1 is already the newest version (1:1.1.6-1build1).
+libxext6 is already the newest version (2:1.3.4-1build2).
+libxfixes3 is already the newest version (1:6.0.0-2build1).
+libxkbcommon0 is already the newest version (1.6.0-1build1).
+libxrandr2 is already the newest version (2:1.5.2-2build1).
+xvfb is already the newest version (2:21.1.12-1ubuntu1.9).
+fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+fonts-unifont is already the newest version (1:15.1.01-1build1).
+libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+libfreetype6 is already the newest version (2.13.2+dfsg-1ubuntu0.2).
+xfonts-cyrillic is already the newest version (1:1.0.5+nmu1).
+xfonts-scalable is already the newest version (1:1.0.3-1.3).
+fonts-liberation is already the newest version (1:2.1.5-3).
+fonts-ipafont-gothic is already the newest version (00303-21ubuntu1).
+fonts-wqy-zenhei is already the newest version (0.9.45-8).
+fonts-tlwg-loma-otf is already the newest version (1:0.7.3-1).
+fonts-freefont-ttf is already the newest version (20211204+svn4273-2).
+0 upgraded, 0 newly installed, 0 to remove and 36 not upgraded.
+Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: fonttools in /home/runner/.local/lib/python3.12/site-packages (4.67.0)
+Requirement already satisfied: pillow in /home/runner/.local/lib/python3.12/site-packages (13.0.0)
+STEP 5/13 Remote build reader tools: exit 0 (4s)
+::: STEP 6/13 Actual application type gate
+STEP 6/13 Actual application type gate: exit 0 (55s)
+::: STEP 7/13 Five exact public handover arms and complete state, RNG and size comparisons
+normal: 10 passed, 0 exact expected faults; full state and draw holds.
+original-calendar: 6 passed, 4 exact expected faults; full state and draw holds.
+missing-picker: 8 passed, 2 exact expected faults; full state and draw holds.
+missing-job: 8 passed, 2 exact expected faults; full state and draw holds.
+restored: 10 passed, 0 exact expected faults; full state and draw holds.
+simCmHandoverDesk: five qualified arms, frozen ten-case method, both isolated missing-field controls, complete original calendar and full restoration.
+STEP 7/13 Five exact public handover arms and complete state, RNG and size comparisons: exit 0 (24s)
+::: STEP 8/13 Original 41 desk, depth and deadline regressions
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/wfrun-wt-EpZJ9y[39m
+
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline missing: saved board reply closes after actual kickoff[32m 138[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline missing: saved press reply closes after actual kickoff[32m 80[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline missing: saved morale reply closes after actual kickoff[32m 74[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline missing: saved budget reply closes after actual kickoff[32m 67[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline missing: saved decline reply closes after actual kickoff[32m 56[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: board reply keeps its exact before-kickoff effect[32m 40[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: press reply keeps its exact before-kickoff effect[32m 39[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: morale reply keeps its exact before-kickoff effect[32m 64[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: budget reply keeps its exact before-kickoff effect[32m 40[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: decline reply keeps its exact before-kickoff effect[32m 39[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: live appeal keeps its original expired outcome[32m 66[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: live acceptBan keeps its original accepted outcome[32m 56[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: before-kickoff appeal keeps its deterministic verdict[32m 38[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: before-kickoff acceptBan keeps its original accepted outcome[32m 36[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: missing card returns the same object[32m 35[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: resolved card returns the same object[32m 42[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: invalid before-kickoff choice returns the same object[32m 23[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: invalid live choice returns the same object[32m 37[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: real whistle expires the unanswered card without a desk benefit[32m 183[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDeadline.test.ts[2m > [22mClub Manager saved situation reply deadline[2m > [22mmanager deadline preservation: a previously answered card stays consumed across actual kickoff and reloads[32m 50[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDepth.test.ts[2m > [22mClub Manager recorded-context decision depth[2m > [22mpreserves the seven existing card identities and desk limits[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDepth.test.ts[2m > [22mClub Manager recorded-context decision depth[2m > [22mpoorRun: recorded eligibility, exact options, saved effects and one answer[32m 21[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDepth.test.ts[2m > [22mClub Manager recorded-context decision depth[2m > [22mboardPressure: recorded eligibility, exact options, saved effects and one answer[32m 19[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDepth.test.ts[2m > [22mClub Manager recorded-context decision depth[2m > [22mpressPressure: recorded eligibility, exact options, saved effects and one answer[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDepth.test.ts[2m > [22mClub Manager recorded-context decision depth[2m > [22minjurySupport: recorded eligibility, exact options, saved effects and one answer[32m 11[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDepth.test.ts[2m > [22mClub Manager recorded-context decision depth[2m > [22macademyStepUp: recorded eligibility, exact options, saved effects and one answer[32m 12[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisionDepth.test.ts[2m > [22mClub Manager recorded-context decision depth[2m > [22mminutesCheck: recorded eligibility, exact options, saved effects and one answer[32m 13[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 red card appeals[2m > [22mstates the odds by tier and walks every step of the ladder[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 red card appeals[2m > [22moffers nothing for a man with no ban[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 red card appeals[2m > [22mmoves suspendedMatches exactly as the card says, and nothing else[32m 7[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 red card appeals[2m > [22mrefuses an appeal once the ban has started being served[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 red card appeals[2m > [22mcloses the appeal window once the next match has kicked off[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 red card appeals[2m > [22mcloses an unanswered appeal at the next match with the ban untouched[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 decisions deck[2m > [22mmoves only the number each answer names, by exactly its amount[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 decisions deck[2m > [22mnever draws from Math.random[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 decisions deck[2m > [22mreads a damaged block as empty and leaves the rest of the save alone[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 decisions deck[2m > [22mshares the inbox answer path[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 the desk on the inbox screen[2m > [22mshows an appeal with its odds and answers it through onAnswer[32m 57[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 the desk on the inbox screen[2m > [22mshows the answered line once the card is resolved[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 the desk on the inbox screen[2m > [22mkeeps closed cards behind a toggle while a card is open[32m 19[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 the desk on the inbox screen[2m > [22mrenders nothing with an empty inbox and an empty desk[32m 1[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m41 passed[39m[22m[90m (41)[39m
+[2m   Start at [22m 21:38:39
+[2m   Duration [22m 5.33s[2m (transform 1.27s, setup 116ms, collect 1.92s, tests 1.39s, environment 669ms, prepare 132ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/wfrun-wt-EpZJ9y/manager-handover-artifacts/original-tests.json
+STEP 8/13 Original 41 desk, depth and deadline regressions: exit 0 (6s)
+::: STEP 9/13 Existing actual takeover, calendar and application simulations
+
+9 takeovers across 3 clubs and 3 entry points.
+1) The run-in really happened
+   every entry point deeper than the last, real matches and real points behind each
+2) The whole world moved, not just my club
+   every other league is as far through its own season as I am through mine
+3) The handover is clean: nothing of the last manager follows you in
+   9 handovers, all clean
+4) It terminates, and it reaches where it said it would
+   slowest 554ms (Real Madrid 2026-27 runIn), every run reached its target with a season left to play
+5) The save and the copy both say the run-in was simulated
+   the save records it, the dugout says simulated, the hub keeps saying it
+
+simMidSeasonStart: all green
+   NEGATIVE CONTROL ON: the handover tidy-up skipped, section 3 must go red
+
+9 takeovers across 3 clubs and 3 entry points.
+1) The run-in really happened
+   every entry point deeper than the last, real matches and real points behind each
+2) The whole world moved, not just my club
+   every other league is as far through its own season as I am through mine
+3) The handover is clean: nothing of the last manager follows you in
+  FAIL: Leicester 2015-16 runIn: the career arrives already sacked
+4) It terminates, and it reaches where it said it would
+   slowest 542ms (Real Madrid 2026-27 runIn), every run reached its target with a season left to play
+5) The save and the copy both say the run-in was simulated
+   the save records it, the dugout says simulated, the hub keeps saying it
+
+   CONTROL FIRED: the untidied handover was caught
+   CONTROL FIRED: the untidied handover was caught
+1) Sim to a day: the week pointer lands on the target, never past it, every league round on the way in the log
+   65 taps over 11 saves: 53 landed on the day, 12 halted (window 11, season over 0, sacked 1, approach 0)
+2) Fast forwards: each button equals the tap on its day, save for save, and Next match equals the engine's own single step
+   118 button/tap pairs, 182 save compares with id serials masked
+3) Windows: the grid's deadline day is the entry the engine shut the market on, January is drawn in January, and both sit near the real dates
+   Everton now summer strip: "The summer window is open. Deadline day is Sat 29 Aug, your 4th match of the season."
+   Everton now (20 clubs): summer deadline 2026-08-29 (real 2026-09-01), January opens 2027-01-02 (real 2027-01-01), deadline 2027-01-23 (real 2027-02-01)
+   Arsenal now (20 clubs): summer deadline 2026-08-26 (real 2026-09-01), January opens 2027-01-02 (real 2027-01-01), deadline 2027-01-23 (real 2027-02-01)
+   Augsburg now (18 clubs): summer deadline 2026-08-29 (real 2026-09-01), January opens 2027-01-02 (real 2027-01-01), deadline 2027-01-23 (real 2027-02-01)
+   Norwich City now (24 clubs): summer deadline 2026-08-29 (real 2026-09-01), January opens 2027-01-16 (real 2027-01-01), deadline 2027-02-06 (real 2027-02-01)
+   Barcelona era2015 (20 clubs): summer deadline 2015-08-26 (real 2015-09-01), January opens 2016-01-02 (real 2016-01-01), deadline 2016-01-16 (real 2016-02-01)
+   Juventus era2015 (20 clubs): summer deadline 2015-08-26 (real 2015-09-01), January opens 2016-01-02 (real 2016-01-01), deadline 2016-01-16 (real 2016-02-01)
+   Barcelona era2010 (20 clubs): summer deadline 2010-09-01 (real 2010-08-31), January opens 2011-01-01 (real 2011-01-01), deadline 2011-01-22 (real 2011-01-31)
+   Chelsea era2005 (20 clubs): summer deadline 2005-08-31 (real 2005-08-31), January opens 2006-01-07 (real 2006-01-01), deadline 2006-01-21 (real 2006-01-31)
+   Liverpool era2020 summer strip: "The summer window is open. Deadline day is Sat 3 Oct, your 7th match of the season."
+   Liverpool era2020 January strip: "The January window is open. Deadline day is Sat 23 Jan, your 3rd match after it opens."
+   Liverpool era2020 (20 clubs): summer deadline 2020-10-03 (real 2020-10-05), January opens 2021-01-02 (real 2021-01-01), deadline 2021-01-23 (real 2021-02-01)
+   Bayern Munich era2020 summer strip: "The summer window is open. Deadline day is Sat 3 Oct, your 5th match of the season."
+   Bayern Munich era2020 January strip: "The January window is open. Deadline day is Sat 23 Jan, your 3rd match after it opens."
+   Bayern Munich era2020 (18 clubs): summer deadline 2020-10-03 (real 2020-10-05), January opens 2021-01-09 (real 2021-01-01), deadline 2021-01-23 (real 2021-02-01)
+   Lille era2020 summer strip: "The summer window is open. Deadline day is Sat 3 Oct, your 9th match of the season."
+   Lille era2020 January strip: "The January window is open. Deadline day is Sat 16 Jan, your 3rd match after it opens."
+   Lille era2020 (20 clubs): summer deadline 2020-10-03 (real 2020-10-05), January opens 2021-01-02 (real 2021-01-01), deadline 2021-01-16 (real 2021-02-01)
+   22 of 22 deadline days matched the engine (6 of 11 August projections of January held); gaps to the real windows: summer up to 6 days, January open up to 8 (Championship 15), January deadline up to 16
+   22 window strips checked against the engine's deadline day and match count
+   1 long league save(s) checked for opening early enough in January: Norwich City now 2027-01-16
+4) Match days: the opponent and venue are the engine's own, rounds ahead are maybes, Europe is absent when I am not in it, played days carry the log
+   411 match days named, 0 draws to come, 87 rounds ahead drawn as maybes, 66 played days carry the log, 29 entries I am out of stay off the grid
+5) Grid: seven columns, at most six rows, every day of the season once, today once
+   10 months drawn, today once, no month over 42 cells
+6) Late season: 2020-21 opens on each league's real Saturday, crams rounds into midweek rather than drifting, ends by the real final weekend, and no other season moves a day
+   Liverpool (premier2020): opens 2020-09-12, 3 league rounds in midweek (2020-09-16, 2020-09-30, 2020-12-30), January window 2021-01-02, last league round 2021-05-15 (7 days before the real final weekend), summer window 7 matches to 2020-10-03 (four would shut it on 2020-09-23, 12 days early)
+   Barcelona (laliga2020): opens 2020-09-12, 3 league rounds in midweek (2020-09-16, 2020-09-30, 2020-12-30), January window 2021-01-02, last league round 2021-05-15 (7 days before the real final weekend), summer window 7 matches to 2020-10-03 (four would shut it on 2020-09-23, 12 days early)
+   Juventus (seriea2020): opens 2020-09-19, 3 league rounds in midweek (2020-09-23, 2020-10-07, 2021-01-06), January window 2021-01-09, last league round 2021-05-22 (0 days before the real final weekend), summer window 5 matches to 2020-10-03 (four would shut it on 2020-09-30, 5 days early)
+   Bayern Munich (bundesliga2020): opens 2020-09-19, 2 league rounds in midweek (2020-09-23, 2021-01-06), January window 2021-01-09, last league round 2021-05-08 (14 days before the real final weekend), summer window 5 matches to 2020-10-03 (four would shut it on 2020-09-30, 5 days early)
+   Lille (ligue12020): opens 2020-08-22, 0 league rounds in midweek (none), January window 2021-01-02, last league round 2021-05-15 (7 days before the real final weekend), summer window 9 matches to 2020-10-03 (four would shut it on 2020-09-09, 26 days early)
+   10 seasons outside 2020-21 checked: every one draws the plain rule's dates and a four match window
+   the plain rule over 4 calendar shapes and 28 world years: digest 61af451194fa4e13 (pinned 61af451194fa4e13, taken before this round)
+   joining Arsenal two entries in: in 2020-21 the summer window runs 7 matches (5 left), in 2021-22 4 (2 left, window summer)
+   a pre-round 2020-21 save migrated at week 9: 1 break(s) already played stay behind it, 4 of 4 played once each by the end, its four match window shut on entry 3 and the grid agrees
+simClubManagerCalendar: all green
+0) 24 base careers played to about week ten
+   24 bases, tiers 1, 2, 3, 4, weeks 10 to 10, 0 live approach(es) turned down first
+1) Acceptance against standing and tier gap over 480 applications
+   469 answered (11 sacked while waiting): 65.2 percent yes; r vs standing 0.406, r vs tiers up -0.195 (reported, the paired gap below is the gate); standing 34 to 100; off schedule 0, quoted 0, no message 0, wrong options 0
+   yes by tiers applied up: 0: 228 of 320, 1: 57 of 100, 2: 16 of 38, 3: 5 of 11
+   paired tier check: 213 pairs (7 lost to a sacking), yes at my tier 70.0 percent, yes above it 43.2 percent, gap 26.8 points; pairs where only the bigger club said yes 0
+   paired trouble check: 234 pairs from 24 bases (6 lost to a sacking), odds where their season is fine 67.6 percent, where it is going badly 73.2 percent, gap 5.6 points (trouble 0.0 vs 11.2 when sent); pairs where the settled club's odds were higher 12
+   ok  acceptance rises with standing and with the trouble the club is in, falls with the tiers applied up, every answer on its fixed match day, every answer in the inbox from the club's board
+2) One at a time, a season long cooldown, three a season
+   ok  one open application at a time, a decline shuts the door through next season and no further (by hand and through two real rollovers), three a season and the count resets
+3) A yes answered with the summer moves the manager at the rollover, once
+   ok  4 booked summer moves fired at the rollover, over a different tapped offer, once each, with the board hit, the old board's letter and the interim recorded
+4) A yes answered with now moves the manager that week
+   ok  4 managers joined the club that said yes that week, record and honours intact, interim named, and played on
+5) A save from before the round opens and plays with nothing in flight
+   ok  an old save opens with nothing in flight, can apply, plays on without the field, and an application in flight survives a save and load
+6) An approach and an application never overlap
+   approaches drawn over 209, 208 and 207 matches: free 15, application out 0, move booked 0
+   ok  no approach while an application is out or a move is booked (15 drawn in the free arm), no handshake beside one, and no application beside a live approach
+7) Late in the season, at its end, and after the sack
+   sacked at Brentford in week 17 with a move to Manchester United booked; the other job taken is Norwich City (a real call)
+   ok  an application goes out with 5 league games left and is answered in time, not with fewer; a waiting yes leads the summary; after the sack the job taken is the job you get
+
+simCmApplications: green. The answer is earned, the limits hold, a summer move fires once, joining now moves the manager that week, and old saves load.
+STEP 9/13 Existing actual takeover, calendar and application simulations: exit 0 (106s)
+::: STEP 10/13 Actual production build
+
+> vite_react_shadcn_ts@0.0.0 build
+> vite build
+
+[36mvite v5.4.21 [32mbuilding for production...[36m[39m
+transforming...
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[32m✓[39m 3540 modules transformed.
+rendering chunks...
+[dukb] preload wrapper: a cancelled chunk error waits for the reload (vite 5.4.21)
+computing gzip size...
+[2mdist/[22m[32mindex.html                                              [39m[1m[2m   31.73 kB[22m[1m[22m[2m │ gzip:  11.40 kB[22m
+[2mdist/[22m[2massets/[22m[32mcollegeGridJudge-BnVqn2Y8.json                   [39m[1m[2m  542.05 kB[22m[1m[22m[2m │ gzip: 137.17 kB[22m
+[2mdist/[22m[2massets/[22m[32mcollegeGridSearch-Bs7o3gLM.json                  [39m[1m[2m  599.14 kB[22m[1m[22m[2m │ gzip: 205.33 kB[22m
+[2mdist/[22m[2massets/[22m[35mInboxCard-DDfoldLS.css                           [39m[1m[2m    0.31 kB[22m[1m[22m[2m │ gzip:   0.22 kB[22m
+[2mdist/[22m[2massets/[22m[35mStaffScreen-DA5KNI2w.css                         [39m[1m[2m    0.34 kB[22m[1m[22m[2m │ gzip:   0.22 kB[22m
+[2mdist/[22m[2massets/[22m[35mPuckDetective-CNwlavUM.css                       [39m[1m[2m    0.46 kB[22m[1m[22m[2m │ gzip:   0.24 kB[22m
+[2mdist/[22m[2massets/[22m[35mMlbFrontOffice-CBF51_-Q.css                      [39m[1m[2m    0.46 kB[22m[1m[22m[2m │ gzip:   0.26 kB[22m
+[2mdist/[22m[2massets/[22m[35mFreeKick-Db_P_VAd.css                            [39m[1m[2m    0.48 kB[22m[1m[22m[2m │ gzip:   0.26 kB[22m
+[2mdist/[22m[2massets/[22m[35mChainLinkMotion-CvpbwvEe.css                     [39m[1m[2m    0.51 kB[22m[1m[22m[2m │ gzip:   0.27 kB[22m
+[2mdist/[22m[2massets/[22m[35mFantasyDraft-BBpfFIJM.css                        [39m[1m[2m    0.51 kB[22m[1m[22m[2m │ gzip:   0.21 kB[22m
+[2mdist/[22m[2massets/[22m[35mF1Constructor-ZNfpvwdP.css                       [39m[1m[2m    0.54 kB[22m[1m[22m[2m │ gzip:   0.27 kB[22m
+[2mdist/[22m[2massets/[22m[35mTrainingPanel-vaffBj46.css                       [39m[1m[2m    0.59 kB[22m[1m[22m[2m │ gzip:   0.32 kB[22m
+[2mdist/[22m[2massets/[22m[35mGuessTheNation-BPrjB6wp.css                      [39m[1m[2m    0.61 kB[22m[1m[22m[2m │ gzip:   0.29 kB[22m
+[2mdist/[22m[2massets/[22m[35mListQuiz-CfGTEzvO.css                            [39m[1m[2m    0.63 kB[22m[1m[22m[2m │ gzip:   0.33 kB[22m
+[2mdist/[22m[2massets/[22m[35mThroughBallBoard-gTKr9BrC.css                    [39m[1m[2m    0.67 kB[22m[1m[22m[2m │ gzip:   0.35 kB[22m
+[2mdist/[22m[2massets/[22m[35mNbaChain-COMs1moS.css                            [39m[1m[2m    0.74 kB[22m[1m[22m[2m │ gzip:   0.37 kB[22m
+[2mdist/[22m[2massets/[22m[35mBudgetBuilder-BMPKocqF.css                       [39m[1m[2m    0.74 kB[22m[1m[22m[2m │ gzip:   0.33 kB[22m
+[2mdist/[22m[2massets/[22m[35mGuessTennisPlayer-BJV-i7my.css                   [39m[1m[2m    0.77 kB[22m[1m[22m[2m │ gzip:   0.39 kB[22m
+[2mdist/[22m[2massets/[22m[35mGuessNascarDriver-B4spQIn2.css                   [39m[1m[2m    0.77 kB[22m[1m[22m[2m │ gzip:   0.38 kB[22m
+[2mdist/[22m[2massets/[22m[35mGuessCbbTeam-BcTI5nvh.css                        [39m[1m[2m    0.77 kB[22m[1m[22m[2m │ gzip:   0.39 kB[22m
+[2mdist/[22m[2massets/[22m[35mBallIq-BjxfiyZ_.css                              [39m[1m[2m    0.78 kB[22m[1m[22m[2m │ gzip:   0.39 kB[22m
+[2mdist/[22m[2massets/[22m[35mMysteryBox-6MFZ-n4f.css                          [39m[1m[2m    0.78 kB[22m[1m[22m[2m │ gzip:   0.37 kB[22m
+[2mdist/[22m[2massets/[22m[35mEmojiGuess-MeLdLiyY.css                          [39m[1m[2m    0.83 kB[22m[1m[22m[2m │ gzip:   0.37 kB[22m
+[2mdist/[22m[2massets/[22m[35mSearchAndDiscard-Bk7mANi4.css                    [39m[1m[2m    0.83 kB[22m[1m[22m[2m │ gzip:   0.40 kB[22m
+[2mdist/[22m[2massets/[22m[35mNbaStatLine-DajvjVkC.css                         [39m[1m[2m    0.85 kB[22m[1m[22m[2m │ gzip:   0.39 kB[22m
+[2mdist/[22m[2massets/[22m[35mMissingNine-BLGcLOj1.css                         [39m[1m[2m    0.88 kB[22m[1m[22m[2m │ gzip:   0.42 kB[22m
+[2mdist/[22m[2massets/[22m[35mF1Driver-DhrxUQx4.css                            [39m[1m[2m    0.94 kB[22m[1m[22m[2m │ gzip:   0.47 kB[22m
+[2mdist/[22m[2massets/[22m[35mQuizBoard-CBcAEXDf.css                           [39m[1m[2m    1.02 kB[22m[1m[22m[2m │ gzip:   0.44 kB[22m
+[2mdist/[22m[2massets/[22m[35mStatDetective-D6N_cvHt.css                       [39m[1m[2m    1.08 kB[22m[1m[22m[2m │ gzip:   0.42 kB[22m
+[2mdist/[22m[2massets/[22m[35musePracticeClock-ClTOd3XX.css                    [39m[1m[2m    1.09 kB[22m[1m[22m[2m │ gzip:   0.37 kB[22m
+[2mdist/[22m[2massets/[22m[35mGridCellLayout-D70wq1lC.css                      [39m[1m[2m    1.19 kB[22m[1m[22m[2m │ gzip:   0.50 kB[22m
+[2mdist/[22m[2massets/[22m[35mRankEm-Bxuyan4v.css                              [39m[1m[2m    1.33 kB[22m[1m[22m[2m │ gzip:   0.63 kB[22m
+[2mdist/[22m[2massets/[22m[35mClueAuction-D9aFrid-.css                         [39m[1m[2m    1.42 kB[22m[1m[22m[2m │ gzip:   0.58 kB[22m
+[2mdist/[22m[2massets/[22m[35mSetPieceBoard-BIg86Bhl.css                       [39m[1m[2m    1.50 kB[22m[1m[22m[2m │ gzip:   0.61 kB[22m
+[2mdist/[22m[2massets/[22m[35mGmTradeBuilder-CsXt162F.css                      [39m[1m[2m    1.61 kB[22m[1m[22m[2m │ gzip:   0.48 kB[22m
+[2mdist/[22m[2massets/[22m[35mNhlFrontOffice-Ce_3hBzp.css                      [39m[1m[2m    2.66 kB[22m[1m[22m[2m │ gzip:   0.99 kB[22m
+[2mdist/[22m[2massets/[22m[35mArcadeShotFeedback--eiU5Aah.css                  [39m[1m[2m    2.94 kB[22m[1m[22m[2m │ gzip:   0.97 kB[22m
+[2mdist/[22m[2massets/[22m[35mPitchSurface-BrcOvsZb.css                        [39m[1m[2m    3.11 kB[22m[1m[22m[2m │ gzip:   0.94 kB[22m
+[2mdist/[22m[2massets/[22m[35mFootle-pT74gEft.css                              [39m[1m[2m    3.20 kB[22m[1m[22m[2m │ gzip:   1.02 kB[22m
+[2mdist/[22m[2massets/[22m[35mLiveSimScreen-CutcJFZR.css                       [39m[1m[2m    3.70 kB[22m[1m[22m[2m │ gzip:   1.15 kB[22m
+[2mdist/[22m[2massets/[22m[35mAussieRulesManager-zdcvwuMp.css                  [39m[1m[2m    4.10 kB[22m[1m[22m[2m │ gzip:   1.18 kB[22m
+[2mdist/[22m[2massets/[22m[35mSportHub-wXzienJm.css                            [39m[1m[2m    9.45 kB[22m[1m[22m[2m │ gzip:   2.42 kB[22m
+[2mdist/[22m[2massets/[22m[35musCareerSeasonReview-CFU15qoy.css                [39m[1m[2m   10.14 kB[22m[1m[22m[2m │ gzip:   2.87 kB[22m
+[2mdist/[22m[2massets/[22m[35mindex-D2KTOPK1.css                               [39m[1m[2m  201.05 kB[22m[1m[22m[2m │ gzip:  33.18 kB[22m
+[2mdist/[22m[2massets/[22m[36mfirstDraw-DhshXfEx.js                            [39m[1m[2m    0.10 kB[22m[1m[22m[2m │ gzip:   0.10 kB[22m
+[2mdist/[22m[2massets/[22m[36mChainLinkMotion.module-CU3oOeKl.js               [39m[1m[2m    0.12 kB[22m[1m[22m[2m │ gzip:   0.11 kB[22m
+[2mdist/[22m[2massets/[22m[36mkeyedShuffle-CJAps3xO.js                         [39m[1m[2m    0.14 kB[22m[1m[22m[2m │ gzip:   0.14 kB[22m
+[2mdist/[22m[2massets/[22m[36mdialogA11y-BCgxbiii.js                           [39m[1m[2m    0.15 kB[22m[1m[22m[2m │ gzip:   0.13 kB[22m
+[2mdist/[22m[2massets/[22m[36mformatNumber-CGuttX8h.js                         [39m[1m[2m    0.15 kB[22m[1m[22m[2m │ gzip:   0.15 kB[22m
+[2mdist/[22m[2massets/[22m[36mskeleton-DAHfNOfq.js                             [39m[1m[2m    0.17 kB[22m[1m[22m[2m │ gzip:   0.16 kB[22m
+[2mdist/[22m[2massets/[22m[36mownGoalRule-J3XQry1d.js                          [39m[1m[2m    0.18 kB[22m[1m[22m[2m │ gzip:   0.17 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerLanding-j2jJAG9a.js                   [39m[1m[2m    0.22 kB[22m[1m[22m[2m │ gzip:   0.16 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerClock-C1EiWjUJ.js                     [39m[1m[2m    0.25 kB[22m[1m[22m[2m │ gzip:   0.16 kB[22m
+[2mdist/[22m[2massets/[22m[36mkeyedRng-BKZQ2UGv.js                             [39m[1m[2m    0.25 kB[22m[1m[22m[2m │ gzip:   0.21 kB[22m
+[2mdist/[22m[2massets/[22m[36mnameFold-Cxobkrgg.js                             [39m[1m[2m    0.26 kB[22m[1m[22m[2m │ gzip:   0.24 kB[22m
+[2mdist/[22m[2massets/[22m[36mcareerHeadroom-B6hg86bq.js                       [39m[1m[2m    0.26 kB[22m[1m[22m[2m │ gzip:   0.19 kB[22m
+[2mdist/[22m[2massets/[22m[36mvalidationReason-Bdi7tqty.js                     [39m[1m[2m    0.26 kB[22m[1m[22m[2m │ gzip:   0.18 kB[22m
+[2mdist/[22m[2massets/[22m[36mensureAnswerInOptions-ip2BqsWb.js                [39m[1m[2m    0.27 kB[22m[1m[22m[2m │ gzip:   0.15 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart08-IZEXs0WU.js                        [39m[1m[2m    0.27 kB[22m[1m[22m[2m │ gzip:   0.22 kB[22m
+[2mdist/[22m[2massets/[22m[36mnotCurrentPlayers-monyGCOh.js                    [39m[1m[2m    0.28 kB[22m[1m[22m[2m │ gzip:   0.24 kB[22m
+[2mdist/[22m[2massets/[22m[36mchevron-down-DpGO19SN.js                         [39m[1m[2m    0.29 kB[22m[1m[22m[2m │ gzip:   0.24 kB[22m
+[2mdist/[22m[2massets/[22m[36mchevron-up-FdyS63MX.js                           [39m[1m[2m    0.29 kB[22m[1m[22m[2m │ gzip:   0.24 kB[22m
+[2mdist/[22m[2massets/[22m[36msoccerBootIds-BWkyFIXk.js                        [39m[1m[2m    0.29 kB[22m[1m[22m[2m │ gzip:   0.20 kB[22m
+[2mdist/[22m[2massets/[22m[36museOwnedTimeouts-CI376okF.js                     [39m[1m[2m    0.29 kB[22m[1m[22m[2m │ gzip:   0.21 kB[22m
+[2mdist/[22m[2massets/[22m[36museScrollToGame-B6Id9t_t.js                      [39m[1m[2m    0.30 kB[22m[1m[22m[2m │ gzip:   0.23 kB[22m
+[2mdist/[22m[2massets/[22m[36marcadeRecord-Ccbsg8hp.js                         [39m[1m[2m    0.31 kB[22m[1m[22m[2m │ gzip:   0.23 kB[22m
+[2mdist/[22m[2massets/[22m[36marrow-down-DLqqo7qu.js                           [39m[1m[2m    0.33 kB[22m[1m[22m[2m │ gzip:   0.26 kB[22m
+[2mdist/[22m[2massets/[22m[36marrow-up-DI17HU4U.js                             [39m[1m[2m    0.33 kB[22m[1m[22m[2m │ gzip:   0.26 kB[22m
+[2mdist/[22m[2massets/[22m[36mGridCellLayout.module-BrZZmB8D.js                [39m[1m[2m    0.33 kB[22m[1m[22m[2m │ gzip:   0.23 kB[22m
+[2mdist/[22m[2massets/[22m[36marrow-left-Bou9hb6Z.js                           [39m[1m[2m    0.33 kB[22m[1m[22m[2m │ gzip:   0.26 kB[22m
+[2mdist/[22m[2massets/[22m[36mclock-CYiIvTZ-.js                                [39m[1m[2m    0.35 kB[22m[1m[22m[2m │ gzip:   0.27 kB[22m
+[2mdist/[22m[2massets/[22m[36mskip-forward-LLhdY62O.js                         [39m[1m[2m    0.36 kB[22m[1m[22m[2m │ gzip:   0.29 kB[22m
+[2mdist/[22m[2massets/[22m[36mfast-forward-BHqZEAYt.js                         [39m[1m[2m    0.37 kB[22m[1m[22m[2m │ gzip:   0.28 kB[22m
+[2mdist/[22m[2massets/[22m[36mrotate-ccw-BIwrLkgn.js                           [39m[1m[2m    0.37 kB[22m[1m[22m[2m │ gzip:   0.29 kB[22m
+[2mdist/[22m[2massets/[22m[36mtrending-up-BwSFT7vC.js                          [39m[1m[2m    0.37 kB[22m[1m[22m[2m │ gzip:   0.28 kB[22m
+[2mdist/[22m[2massets/[22m[36mlock-CI894qBX.js                                 [39m[1m[2m    0.38 kB[22m[1m[22m[2m │ gzip:   0.29 kB[22m
+[2mdist/[22m[2massets/[22m[36mtrending-down-BVX3R0VT.js                        [39m[1m[2m    0.38 kB[22m[1m[22m[2m │ gzip:   0.28 kB[22m
+[2mdist/[22m[2massets/[22m[36minfinity-DX_JpHz6.js                             [39m[1m[2m    0.38 kB[22m[1m[22m[2m │ gzip:   0.29 kB[22m
+[2mdist/[22m[2massets/[22m[36mflag-CLQwfHq-.js                                 [39m[1m[2m    0.39 kB[22m[1m[22m[2m │ gzip:   0.30 kB[22m
+[2mdist/[22m[2massets/[22m[36mbriefcase-BNBYOB4e.js                            [39m[1m[2m    0.39 kB[22m[1m[22m[2m │ gzip:   0.30 kB[22m
+[2mdist/[22m[2massets/[22m[36mtarget-BvwFUT4j.js                               [39m[1m[2m    0.40 kB[22m[1m[22m[2m │ gzip:   0.27 kB[22m
+[2mdist/[22m[2massets/[22m[36mshareGrids-BBcTDnrG.js                           [39m[1m[2m    0.40 kB[22m[1m[22m[2m │ gzip:   0.29 kB[22m
+[2mdist/[22m[2massets/[22m[36mcopy-CDDU0BjS.js                                 [39m[1m[2m    0.41 kB[22m[1m[22m[2m │ gzip:   0.31 kB[22m
+[2mdist/[22m[2massets/[22m[36mcircle-help-D0S8IL_-.js                          [39m[1m[2m    0.41 kB[22m[1m[22m[2m │ gzip:   0.30 kB[22m
+[2mdist/[22m[2massets/[22m[36mtimer-C9o6kJCn.js                                [39m[1m[2m    0.41 kB[22m[1m[22m[2m │ gzip:   0.29 kB[22m
+[2mdist/[22m[2massets/[22m[36mlink-2-Dila_B_b.js                               [39m[1m[2m    0.41 kB[22m[1m[22m[2m │ gzip:   0.31 kB[22m
+[2mdist/[22m[2massets/[22m[36marrow-left-right-DvN0G5a4.js                     [39m[1m[2m    0.42 kB[22m[1m[22m[2m │ gzip:   0.30 kB[22m
+[2mdist/[22m[2massets/[22m[36mawardDecision-aIUMdt9Z.js                        [39m[1m[2m    0.42 kB[22m[1m[22m[2m │ gzip:   0.22 kB[22m
+[2mdist/[22m[2massets/[22m[36meye-D8Bdj01Y.js                                  [39m[1m[2m    0.43 kB[22m[1m[22m[2m │ gzip:   0.31 kB[22m
+[2mdist/[22m[2massets/[22m[36mcalendar-Bx_082em.js                             [39m[1m[2m    0.43 kB[22m[1m[22m[2m │ gzip:   0.30 kB[22m
+[2mdist/[22m[2massets/[22m[36mzap-CTFddO03.js                                  [39m[1m[2m    0.43 kB[22m[1m[22m[2m │ gzip:   0.31 kB[22m
+[2mdist/[22m[2massets/[22m[36museBodyLock-Bw5ctY-P.js                          [39m[1m[2m    0.45 kB[22m[1m[22m[2m │ gzip:   0.28 kB[22m
+[2mdist/[22m[2massets/[22m[36mlightbulb-3BUuz3j5.js                            [39m[1m[2m    0.46 kB[22m[1m[22m[2m │ gzip:   0.33 kB[22m
+[2mdist/[22m[2massets/[22m[36msend-CDVi89DR.js                                 [39m[1m[2m    0.46 kB[22m[1m[22m[2m │ gzip:   0.33 kB[22m
+[2mdist/[22m[2massets/[22m[36musers-hwdZfuWf.js                                [39m[1m[2m    0.47 kB[22m[1m[22m[2m │ gzip:   0.33 kB[22m
+[2mdist/[22m[2massets/[22m[36marcade-CUT7KVjC.js                               [39m[1m[2m    0.49 kB[22m[1m[22m[2m │ gzip:   0.32 kB[22m
+[2mdist/[22m[2massets/[22m[36mnflScore-B7Uc3qH4.js                             [39m[1m[2m    0.49 kB[22m[1m[22m[2m │ gzip:   0.34 kB[22m
+[2mdist/[22m[2massets/[22m[36mReferenceSources-BL4X_wr_.js                     [39m[1m[2m    0.49 kB[22m[1m[22m[2m │ gzip:   0.36 kB[22m
+[2mdist/[22m[2massets/[22m[36mgraduation-cap-BILTQFrf.js                       [39m[1m[2m    0.50 kB[22m[1m[22m[2m │ gzip:   0.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart20-D3Jt8qZ_.js                        [39m[1m[2m    0.50 kB[22m[1m[22m[2m │ gzip:   0.34 kB[22m
+[2mdist/[22m[2massets/[22m[36mentityIds-L4Nd6Y8C.js                            [39m[1m[2m    0.51 kB[22m[1m[22m[2m │ gzip:   0.34 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart07-ympky3rW.js                        [39m[1m[2m    0.51 kB[22m[1m[22m[2m │ gzip:   0.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mnewspaper-B9on7Civ.js                            [39m[1m[2m    0.51 kB[22m[1m[22m[2m │ gzip:   0.34 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart13-Ig-3KGy2.js                        [39m[1m[2m    0.51 kB[22m[1m[22m[2m │ gzip:   0.34 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart31-BPitkLcI.js                        [39m[1m[2m    0.52 kB[22m[1m[22m[2m │ gzip:   0.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mtrash-2-BEIFQ36i.js                              [39m[1m[2m    0.53 kB[22m[1m[22m[2m │ gzip:   0.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mcrown-KOYyjfEu.js                                [39m[1m[2m    0.53 kB[22m[1m[22m[2m │ gzip:   0.36 kB[22m
+[2mdist/[22m[2massets/[22m[36mshuffle-Drfu5yku.js                              [39m[1m[2m    0.55 kB[22m[1m[22m[2m │ gzip:   0.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mpackage-C-gX8aCx.js                              [39m[1m[2m    0.56 kB[22m[1m[22m[2m │ gzip:   0.36 kB[22m
+[2mdist/[22m[2massets/[22m[36mdailyRecord-CX9SdYxa.js                          [39m[1m[2m    0.56 kB[22m[1m[22m[2m │ gzip:   0.34 kB[22m
+[2mdist/[22m[2massets/[22m[36mclipboard-list-DUJSsgZi.js                       [39m[1m[2m    0.58 kB[22m[1m[22m[2m │ gzip:   0.36 kB[22m
+[2mdist/[22m[2massets/[22m[36mmedal-DjL9RRw9.js                                [39m[1m[2m    0.60 kB[22m[1m[22m[2m │ gzip:   0.39 kB[22m
+[2mdist/[22m[2massets/[22m[36museArrivalTop-Cf8HK931.js                        [39m[1m[2m    0.61 kB[22m[1m[22m[2m │ gzip:   0.41 kB[22m
+[2mdist/[22m[2massets/[22m[36mhandshake-B8oBHxaY.js                            [39m[1m[2m    0.62 kB[22m[1m[22m[2m │ gzip:   0.39 kB[22m
+[2mdist/[22m[2massets/[22m[36mstar-CjX3SKiO.js                                 [39m[1m[2m    0.64 kB[22m[1m[22m[2m │ gzip:   0.40 kB[22m
+[2mdist/[22m[2massets/[22m[36mfetchQuizBoard-DfvZiDXI.js                       [39m[1m[2m    0.66 kB[22m[1m[22m[2m │ gzip:   0.43 kB[22m
+[2mdist/[22m[2massets/[22m[36mresume-iKq-NREI.js                               [39m[1m[2m    0.67 kB[22m[1m[22m[2m │ gzip:   0.42 kB[22m
+[2mdist/[22m[2massets/[22m[36mleagueCore--DUG-EXw.js                           [39m[1m[2m    0.67 kB[22m[1m[22m[2m │ gzip:   0.43 kB[22m
+[2mdist/[22m[2massets/[22m[36mbadge-DG3D6e7N.js                                [39m[1m[2m    0.71 kB[22m[1m[22m[2m │ gzip:   0.37 kB[22m
+[2mdist/[22m[2massets/[22m[36mSeasonResumeChip-C4GP3Fo7.js                     [39m[1m[2m    0.71 kB[22m[1m[22m[2m │ gzip:   0.49 kB[22m
+[2mdist/[22m[2massets/[22m[36mswords-CKkGtO__.js                               [39m[1m[2m    0.72 kB[22m[1m[22m[2m │ gzip:   0.39 kB[22m
+[2mdist/[22m[2massets/[22m[36mdumbbell-D9qFiUnq.js                             [39m[1m[2m    0.73 kB[22m[1m[22m[2m │ gzip:   0.40 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart02-BYbZNxRj.js                        [39m[1m[2m    0.74 kB[22m[1m[22m[2m │ gzip:   0.44 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart10-CPgkU0Ug.js                        [39m[1m[2m    0.75 kB[22m[1m[22m[2m │ gzip:   0.46 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart16-CmMlK9Np.js                        [39m[1m[2m    0.75 kB[22m[1m[22m[2m │ gzip:   0.45 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart00-CuVEcdvG.js                        [39m[1m[2m    0.75 kB[22m[1m[22m[2m │ gzip:   0.46 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart01-DtjgkM8Q.js                        [39m[1m[2m    0.75 kB[22m[1m[22m[2m │ gzip:   0.45 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart11-oLlb_0nk.js                        [39m[1m[2m    0.75 kB[22m[1m[22m[2m │ gzip:   0.45 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart03-BOxIFoUd.js                        [39m[1m[2m    0.76 kB[22m[1m[22m[2m │ gzip:   0.47 kB[22m
+[2mdist/[22m[2massets/[22m[36mgmDealTable-DYyD4N4_.js                          [39m[1m[2m    0.77 kB[22m[1m[22m[2m │ gzip:   0.44 kB[22m
+[2mdist/[22m[2massets/[22m[36mgamepad-2-pYnjj0Q4.js                            [39m[1m[2m    0.79 kB[22m[1m[22m[2m │ gzip:   0.49 kB[22m
+[2mdist/[22m[2massets/[22m[36museGameCompletion-mik38ih6.js                    [39m[1m[2m    0.81 kB[22m[1m[22m[2m │ gzip:   0.50 kB[22m
+[2mdist/[22m[2massets/[22m[36mRestoredResult-CYZXModV.js                       [39m[1m[2m    0.86 kB[22m[1m[22m[2m │ gzip:   0.43 kB[22m
+[2mdist/[22m[2massets/[22m[36mcareerEngine-C0YCb0dd.js                         [39m[1m[2m    0.86 kB[22m[1m[22m[2m │ gzip:   0.47 kB[22m
+[2mdist/[22m[2massets/[22m[36mConfetti-Cgmdw6jq.js                             [39m[1m[2m    0.90 kB[22m[1m[22m[2m │ gzip:   0.61 kB[22m
+[2mdist/[22m[2massets/[22m[36mfetchAllRows-CkoDCTo8.js                         [39m[1m[2m    0.92 kB[22m[1m[22m[2m │ gzip:   0.44 kB[22m
+[2mdist/[22m[2massets/[22m[36musCareerReveal-BW47Ke0-.js                       [39m[1m[2m    0.94 kB[22m[1m[22m[2m │ gzip:   0.58 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart24-CQTtSrLB.js                        [39m[1m[2m    0.98 kB[22m[1m[22m[2m │ gzip:   0.56 kB[22m
+[2mdist/[22m[2massets/[22m[36mcard-BlgqxBkJ.js                                 [39m[1m[2m    0.99 kB[22m[1m[22m[2m │ gzip:   0.38 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart04-DRX4FtX_.js                        [39m[1m[2m    0.99 kB[22m[1m[22m[2m │ gzip:   0.55 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart15-9v6Tzod_.js                        [39m[1m[2m    0.99 kB[22m[1m[22m[2m │ gzip:   0.53 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart18-Beou92RL.js                        [39m[1m[2m    0.99 kB[22m[1m[22m[2m │ gzip:   0.57 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart23-RMiEDEGg.js                        [39m[1m[2m    1.00 kB[22m[1m[22m[2m │ gzip:   0.55 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart19-CpToAW9C.js                        [39m[1m[2m    1.00 kB[22m[1m[22m[2m │ gzip:   0.55 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart25-Cf_pDGZt.js                        [39m[1m[2m    1.00 kB[22m[1m[22m[2m │ gzip:   0.56 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart21-BhVVnIEN.js                        [39m[1m[2m    1.01 kB[22m[1m[22m[2m │ gzip:   0.54 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart05-BnXoXrsk.js                        [39m[1m[2m    1.01 kB[22m[1m[22m[2m │ gzip:   0.59 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart22-S-3F3LJ6.js                        [39m[1m[2m    1.01 kB[22m[1m[22m[2m │ gzip:   0.59 kB[22m
+[2mdist/[22m[2massets/[22m[36mGuessFinish-C55MR_mt.js                          [39m[1m[2m    1.13 kB[22m[1m[22m[2m │ gzip:   0.60 kB[22m
+[2mdist/[22m[2massets/[22m[36mfetchCareerPlayers-D3sdIoMY.js                   [39m[1m[2m    1.16 kB[22m[1m[22m[2m │ gzip:   0.57 kB[22m
+[2mdist/[22m[2massets/[22m[36mchemistry-DIs7dgmv.js                            [39m[1m[2m    1.19 kB[22m[1m[22m[2m │ gzip:   0.58 kB[22m
+[2mdist/[22m[2massets/[22m[36mGiveUpButton-bUq6Ynvq.js                         [39m[1m[2m    1.19 kB[22m[1m[22m[2m │ gzip:   0.54 kB[22m
+[2mdist/[22m[2massets/[22m[36mfinalsBracket-DQg8LGI5.js                        [39m[1m[2m    1.20 kB[22m[1m[22m[2m │ gzip:   0.58 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart06-N4xfX3Sj.js                        [39m[1m[2m    1.20 kB[22m[1m[22m[2m │ gzip:   0.58 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart14-Ca8w5qDt.js                        [39m[1m[2m    1.21 kB[22m[1m[22m[2m │ gzip:   0.61 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart12-BJfl671y.js                        [39m[1m[2m    1.21 kB[22m[1m[22m[2m │ gzip:   0.67 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart27-CP2Svxjt.js                        [39m[1m[2m    1.22 kB[22m[1m[22m[2m │ gzip:   0.65 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart28-g2Jhz3O3.js                        [39m[1m[2m    1.22 kB[22m[1m[22m[2m │ gzip:   0.67 kB[22m
+[2mdist/[22m[2massets/[22m[36mClubManagerTreatmentPanel-BJ9j51dC.js            [39m[1m[2m    1.23 kB[22m[1m[22m[2m │ gzip:   0.73 kB[22m
+[2mdist/[22m[2massets/[22m[36mGridBoardSkeleton-CQZqFoOl.js                    [39m[1m[2m    1.32 kB[22m[1m[22m[2m │ gzip:   0.60 kB[22m
+[2mdist/[22m[2massets/[22m[36mHowToPlayPopover-BDWwFBCE.js                     [39m[1m[2m    1.37 kB[22m[1m[22m[2m │ gzip:   0.77 kB[22m
+[2mdist/[22m[2massets/[22m[36mHubTiles-CBdzHE7L.js                             [39m[1m[2m    1.39 kB[22m[1m[22m[2m │ gzip:   0.60 kB[22m
+[2mdist/[22m[2massets/[22m[36mpositionFit-BbUnYZIs.js                          [39m[1m[2m    1.42 kB[22m[1m[22m[2m │ gzip:   0.67 kB[22m
+[2mdist/[22m[2massets/[22m[36mRulesGate-4wRtDUKw.js                            [39m[1m[2m    1.42 kB[22m[1m[22m[2m │ gzip:   0.81 kB[22m
+[2mdist/[22m[2massets/[22m[36mGameShell-H3hNmX7i.js                            [39m[1m[2m    1.44 kB[22m[1m[22m[2m │ gzip:   0.74 kB[22m
+[2mdist/[22m[2massets/[22m[36mconfederationGroups-8jgsrX6T.js                  [39m[1m[2m    1.45 kB[22m[1m[22m[2m │ gzip:   0.74 kB[22m
+[2mdist/[22m[2massets/[22m[36mSaveMovedNotice-BZpC6Y0c.js                      [39m[1m[2m    1.46 kB[22m[1m[22m[2m │ gzip:   0.77 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart29-DFpfKJo-.js                        [39m[1m[2m    1.47 kB[22m[1m[22m[2m │ gzip:   0.73 kB[22m
+[2mdist/[22m[2massets/[22m[36museArcadeFlight-Cbh2bmPf.js                      [39m[1m[2m    1.51 kB[22m[1m[22m[2m │ gzip:   0.66 kB[22m
+[2mdist/[22m[2massets/[22m[36mCelebration-DZhzMdaQ.js                          [39m[1m[2m    1.53 kB[22m[1m[22m[2m │ gzip:   0.82 kB[22m
+[2mdist/[22m[2massets/[22m[36mfoSchedule-BzpgxJRf.js                           [39m[1m[2m    1.57 kB[22m[1m[22m[2m │ gzip:   0.89 kB[22m
+[2mdist/[22m[2massets/[22m[36msmartSearch-DxQivxxe.js                          [39m[1m[2m    1.58 kB[22m[1m[22m[2m │ gzip:   0.71 kB[22m
+[2mdist/[22m[2massets/[22m[36mCareerFx-Cm_2N5oD.js                             [39m[1m[2m    1.58 kB[22m[1m[22m[2m │ gzip:   0.92 kB[22m
+[2mdist/[22m[2massets/[22m[36msilverwareSort-CA7I-e9A.js                       [39m[1m[2m    1.63 kB[22m[1m[22m[2m │ gzip:   0.83 kB[22m
+[2mdist/[22m[2massets/[22m[36mdeskCue-fjnQF3R9.js                              [39m[1m[2m    1.63 kB[22m[1m[22m[2m │ gzip:   0.92 kB[22m
+[2mdist/[22m[2massets/[22m[36mGameHelp-COw84CDi.js                             [39m[1m[2m    1.66 kB[22m[1m[22m[2m │ gzip:   0.79 kB[22m
+[2mdist/[22m[2massets/[22m[36musePracticeClock-ga-EyMZ4.js                     [39m[1m[2m    1.66 kB[22m[1m[22m[2m │ gzip:   0.83 kB[22m
+[2mdist/[22m[2massets/[22m[36musLeagueShape-D2-42-br.js                        [39m[1m[2m    1.68 kB[22m[1m[22m[2m │ gzip:   0.81 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart26-BXx6PSW7.js                        [39m[1m[2m    1.71 kB[22m[1m[22m[2m │ gzip:   0.90 kB[22m
+[2mdist/[22m[2massets/[22m[36mTeamTalkRow-CaTExkLX.js                          [39m[1m[2m    1.73 kB[22m[1m[22m[2m │ gzip:   0.93 kB[22m
+[2mdist/[22m[2massets/[22m[36mmlbGrid-C1iYXmEc.js                              [39m[1m[2m    1.83 kB[22m[1m[22m[2m │ gzip:   0.75 kB[22m
+[2mdist/[22m[2massets/[22m[36mWonderkidFactory-BJ40Xp7C.js                     [39m[1m[2m    1.88 kB[22m[1m[22m[2m │ gzip:   0.95 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerMeters-zBE7msrJ.js                    [39m[1m[2m    1.89 kB[22m[1m[22m[2m │ gzip:   1.01 kB[22m
+[2mdist/[22m[2massets/[22m[36mhockeyGrid-CV2w-23K.js                           [39m[1m[2m    1.92 kB[22m[1m[22m[2m │ gzip:   0.80 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart30-C2bf-ABQ.js                        [39m[1m[2m    1.94 kB[22m[1m[22m[2m │ gzip:   0.96 kB[22m
+[2mdist/[22m[2massets/[22m[36mfreeKick-BSoL5hQo.js                             [39m[1m[2m    1.94 kB[22m[1m[22m[2m │ gzip:   1.10 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart17-DdtdxoPB.js                        [39m[1m[2m    1.94 kB[22m[1m[22m[2m │ gzip:   0.96 kB[22m
+[2mdist/[22m[2massets/[22m[36mcareerHallSpeech-D8aXsOEv.js                     [39m[1m[2m    1.94 kB[22m[1m[22m[2m │ gzip:   1.03 kB[22m
+[2mdist/[22m[2massets/[22m[36mArcadeShotFeedback-C4DBcvsA.js                   [39m[1m[2m    1.96 kB[22m[1m[22m[2m │ gzip:   0.93 kB[22m
+[2mdist/[22m[2massets/[22m[36museRevealScroll-Bp_zSayY.js                      [39m[1m[2m    1.96 kB[22m[1m[22m[2m │ gzip:   0.81 kB[22m
+[2mdist/[22m[2massets/[22m[36mSeasonCentreHelp-BZj3zfi6.js                     [39m[1m[2m    1.97 kB[22m[1m[22m[2m │ gzip:   0.85 kB[22m
+[2mdist/[22m[2massets/[22m[36mnfl-BoB-1lnO.js                                  [39m[1m[2m    1.99 kB[22m[1m[22m[2m │ gzip:   1.07 kB[22m
+[2mdist/[22m[2massets/[22m[36msoccerBoots-BK_dXNrV.js                          [39m[1m[2m    2.02 kB[22m[1m[22m[2m │ gzip:   0.99 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdBanner-coUFNzdL.js                             [39m[1m[2m    2.04 kB[22m[1m[22m[2m │ gzip:   1.08 kB[22m
+[2mdist/[22m[2massets/[22m[36mConnect4Finish-D-TfFCS_.js                       [39m[1m[2m    2.06 kB[22m[1m[22m[2m │ gzip:   0.92 kB[22m
+[2mdist/[22m[2massets/[22m[36mCelebrationStyles-Dq2DRroU.js                    [39m[1m[2m    2.13 kB[22m[1m[22m[2m │ gzip:   0.72 kB[22m
+[2mdist/[22m[2massets/[22m[36mSeasonHonoursCard-D1QZUSi6.js                    [39m[1m[2m    2.13 kB[22m[1m[22m[2m │ gzip:   0.91 kB[22m
+[2mdist/[22m[2massets/[22m[36mAcademyProspects-BMM0i83S.js                     [39m[1m[2m    2.15 kB[22m[1m[22m[2m │ gzip:   1.00 kB[22m
+[2mdist/[22m[2massets/[22m[36mseoMetaPart09-DnyHg2Rd.js                        [39m[1m[2m    2.17 kB[22m[1m[22m[2m │ gzip:   1.05 kB[22m
+[2mdist/[22m[2massets/[22m[36mMetersStrip-BdOab9KB.js                          [39m[1m[2m    2.19 kB[22m[1m[22m[2m │ gzip:   1.15 kB[22m
+[2mdist/[22m[2massets/[22m[36mPerfectLineupNba-C7_ODEEw.js                     [39m[1m[2m    2.21 kB[22m[1m[22m[2m │ gzip:   1.09 kB[22m
+[2mdist/[22m[2massets/[22m[36mResultScreen-CzFsNYkh.js                         [39m[1m[2m    2.28 kB[22m[1m[22m[2m │ gzip:   1.15 kB[22m
+[2mdist/[22m[2massets/[22m[36mfrontOfficeSave-LTb4SYA5.js                      [39m[1m[2m    2.39 kB[22m[1m[22m[2m │ gzip:   1.07 kB[22m
+[2mdist/[22m[2massets/[22m[36mDailyLegendOverlay-DYbfRlZ-.js                   [39m[1m[2m    2.39 kB[22m[1m[22m[2m │ gzip:   1.22 kB[22m
+[2mdist/[22m[2massets/[22m[36mSavePointsDoor-DKjKpQz0.js                       [39m[1m[2m    2.47 kB[22m[1m[22m[2m │ gzip:   1.30 kB[22m
+[2mdist/[22m[2massets/[22m[36mPostGameStats-BTwAGyOy.js                        [39m[1m[2m    2.52 kB[22m[1m[22m[2m │ gzip:   1.17 kB[22m
+[2mdist/[22m[2massets/[22m[36mcareerAwardsNight-BDQnO6dK.js                    [39m[1m[2m    2.57 kB[22m[1m[22m[2m │ gzip:   1.27 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminLogin-CuMjhNae.js                           [39m[1m[2m    2.59 kB[22m[1m[22m[2m │ gzip:   1.23 kB[22m
+[2mdist/[22m[2massets/[22m[36mClubManagerBoardPanel-BxiuobBx.js                [39m[1m[2m    2.78 kB[22m[1m[22m[2m │ gzip:   1.13 kB[22m
+[2mdist/[22m[2massets/[22m[36mCareerChanceWheel-CVBbaSZH.js                    [39m[1m[2m    2.89 kB[22m[1m[22m[2m │ gzip:   1.34 kB[22m
+[2mdist/[22m[2massets/[22m[36mconquestDataMlb-B4MKOeDm.js                      [39m[1m[2m    2.93 kB[22m[1m[22m[2m │ gzip:   1.22 kB[22m
+[2mdist/[22m[2massets/[22m[36mMatchClock-CqfLYO7I.js                           [39m[1m[2m    3.00 kB[22m[1m[22m[2m │ gzip:   1.43 kB[22m
+[2mdist/[22m[2massets/[22m[36mLeagueTableCard-BluTZsl0.js                      [39m[1m[2m    3.02 kB[22m[1m[22m[2m │ gzip:   1.08 kB[22m
+[2mdist/[22m[2massets/[22m[36msquadShape-DzJQ1wtR.js                           [39m[1m[2m    3.03 kB[22m[1m[22m[2m │ gzip:   1.07 kB[22m
+[2mdist/[22m[2massets/[22m[36msearchDiscard-CHhakAdg.js                        [39m[1m[2m    3.05 kB[22m[1m[22m[2m │ gzip:   1.58 kB[22m
+[2mdist/[22m[2massets/[22m[36mnbaCareerTraining-Cf4W8Q5c.js                    [39m[1m[2m    3.05 kB[22m[1m[22m[2m │ gzip:   1.62 kB[22m
+[2mdist/[22m[2massets/[22m[36mdailySaveShapes-CmYZfx9m.js                      [39m[1m[2m    3.05 kB[22m[1m[22m[2m │ gzip:   1.46 kB[22m
+[2mdist/[22m[2massets/[22m[36mconquestDataNhl-BBvewyKz.js                      [39m[1m[2m    3.06 kB[22m[1m[22m[2m │ gzip:   1.26 kB[22m
+[2mdist/[22m[2massets/[22m[36mtennisHLPlayers-DIbH8knL.js                      [39m[1m[2m    3.07 kB[22m[1m[22m[2m │ gzip:   0.88 kB[22m
+[2mdist/[22m[2massets/[22m[36mconquestMapGeometry-DMIJk1yA.js                  [39m[1m[2m    3.10 kB[22m[1m[22m[2m │ gzip:   1.42 kB[22m
+[2mdist/[22m[2massets/[22m[36mlocalLineupEval-BV75izm4.js                      [39m[1m[2m    3.11 kB[22m[1m[22m[2m │ gzip:   1.50 kB[22m
+[2mdist/[22m[2massets/[22m[36mmanagerOffers-EoQ6k_gA.js                        [39m[1m[2m    3.12 kB[22m[1m[22m[2m │ gzip:   1.57 kB[22m
+[2mdist/[22m[2massets/[22m[36museDailyPuzzle-Ds4dSotz.js                       [39m[1m[2m    3.13 kB[22m[1m[22m[2m │ gzip:   1.37 kB[22m
+[2mdist/[22m[2massets/[22m[36mFarewellCard-C0xK99LF.js                         [39m[1m[2m    3.15 kB[22m[1m[22m[2m │ gzip:   1.48 kB[22m
+[2mdist/[22m[2massets/[22m[36mNbaGauntletDraft-C237pmJA.js                     [39m[1m[2m    3.15 kB[22m[1m[22m[2m │ gzip:   1.53 kB[22m
+[2mdist/[22m[2massets/[22m[36mtabs-Bhhdb1Hd.js                                 [39m[1m[2m    3.19 kB[22m[1m[22m[2m │ gzip:   1.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mGridBoard-JjXaFU5J.js                            [39m[1m[2m    3.25 kB[22m[1m[22m[2m │ gzip:   1.23 kB[22m
+[2mdist/[22m[2massets/[22m[36mdealPlayers-BOqZWI6M.js                          [39m[1m[2m    3.27 kB[22m[1m[22m[2m │ gzip:   1.88 kB[22m
+[2mdist/[22m[2massets/[22m[36msoccerSeasonCompetitions-DOdWoyU5.js             [39m[1m[2m    3.30 kB[22m[1m[22m[2m │ gzip:   1.41 kB[22m
+[2mdist/[22m[2massets/[22m[36mContact-Do1kqVsZ.js                              [39m[1m[2m    3.37 kB[22m[1m[22m[2m │ gzip:   1.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mAcademyLegacyPanel-T9NTQY8w.js                   [39m[1m[2m    3.43 kB[22m[1m[22m[2m │ gzip:   1.42 kB[22m
+[2mdist/[22m[2massets/[22m[36mNflGauntletDraft-DsR9KnlH.js                     [39m[1m[2m    3.51 kB[22m[1m[22m[2m │ gzip:   1.67 kB[22m
+[2mdist/[22m[2massets/[22m[36mmlbCareerTraining-Bfw8zaq3.js                    [39m[1m[2m    3.53 kB[22m[1m[22m[2m │ gzip:   1.84 kB[22m
+[2mdist/[22m[2massets/[22m[36mUclGroupsCard-CVTAmTKq.js                        [39m[1m[2m    3.60 kB[22m[1m[22m[2m │ gzip:   1.67 kB[22m
+[2mdist/[22m[2massets/[22m[36mnflCareerTraining-Drysyr-d.js                    [39m[1m[2m    3.61 kB[22m[1m[22m[2m │ gzip:   1.83 kB[22m
+[2mdist/[22m[2massets/[22m[36mVictoryMoment-Cth-q-zK.js                        [39m[1m[2m    3.67 kB[22m[1m[22m[2m │ gzip:   1.30 kB[22m
+[2mdist/[22m[2massets/[22m[36mnhlCareerTraining-CER6lrfm.js                    [39m[1m[2m    3.69 kB[22m[1m[22m[2m │ gzip:   1.92 kB[22m
+[2mdist/[22m[2massets/[22m[36mGameNav-I52nf-t9.js                              [39m[1m[2m    3.70 kB[22m[1m[22m[2m │ gzip:   1.72 kB[22m
+[2mdist/[22m[2massets/[22m[36mResultMoment-CP6i0P2J.js                         [39m[1m[2m    3.75 kB[22m[1m[22m[2m │ gzip:   1.42 kB[22m
+[2mdist/[22m[2massets/[22m[36mfoOwnerMandate-9E_kBiSu.js                       [39m[1m[2m    3.79 kB[22m[1m[22m[2m │ gzip:   1.85 kB[22m
+[2mdist/[22m[2massets/[22m[36mdartDraft-tXH-LnI6.js                            [39m[1m[2m    3.82 kB[22m[1m[22m[2m │ gzip:   1.90 kB[22m
+[2mdist/[22m[2massets/[22m[36mNhlGauntletDraft-Da-shUL6.js                     [39m[1m[2m    3.85 kB[22m[1m[22m[2m │ gzip:   1.74 kB[22m
+[2mdist/[22m[2massets/[22m[36mgauntletEngine-tfrDo2sH.js                       [39m[1m[2m    3.87 kB[22m[1m[22m[2m │ gzip:   1.71 kB[22m
+[2mdist/[22m[2massets/[22m[36mResetPassword-zBEjhbIP.js                        [39m[1m[2m    3.91 kB[22m[1m[22m[2m │ gzip:   1.77 kB[22m
+[2mdist/[22m[2massets/[22m[36mDraftNightCard-BwTbQR63.js                       [39m[1m[2m    3.94 kB[22m[1m[22m[2m │ gzip:   1.66 kB[22m
+[2mdist/[22m[2massets/[22m[36mConquestMlb-BHX1otLt.js                          [39m[1m[2m    3.96 kB[22m[1m[22m[2m │ gzip:   1.88 kB[22m
+[2mdist/[22m[2massets/[22m[36mConquestNhl-Ce3GUnca.js                          [39m[1m[2m    4.00 kB[22m[1m[22m[2m │ gzip:   1.90 kB[22m
+[2mdist/[22m[2massets/[22m[36mMiniPitch-DowcoFKZ.js                            [39m[1m[2m    4.09 kB[22m[1m[22m[2m │ gzip:   2.06 kB[22m
+[2mdist/[22m[2massets/[22m[36musCareerFreeAgency-ViodNrE8.js                   [39m[1m[2m    4.11 kB[22m[1m[22m[2m │ gzip:   1.92 kB[22m
+[2mdist/[22m[2massets/[22m[36mgridEngine-uc3l3QXB.js                           [39m[1m[2m    4.13 kB[22m[1m[22m[2m │ gzip:   1.90 kB[22m
+[2mdist/[22m[2massets/[22m[36mFacilitiesScreen-BAnneW8Y.js                     [39m[1m[2m    4.19 kB[22m[1m[22m[2m │ gzip:   1.92 kB[22m
+[2mdist/[22m[2massets/[22m[36mPacksPanel-BUvI37ap.js                           [39m[1m[2m    4.36 kB[22m[1m[22m[2m │ gzip:   1.70 kB[22m
+[2mdist/[22m[2massets/[22m[36mmlbHLPlayers-DHB7Z7Uh.js                         [39m[1m[2m    4.45 kB[22m[1m[22m[2m │ gzip:   1.12 kB[22m
+[2mdist/[22m[2massets/[22m[36mperfectSeason-Dfo9UDiQ.js                        [39m[1m[2m    4.61 kB[22m[1m[22m[2m │ gzip:   2.11 kB[22m
+[2mdist/[22m[2massets/[22m[36mPressScreen-BAeeBZcy.js                          [39m[1m[2m    4.70 kB[22m[1m[22m[2m │ gzip:   1.96 kB[22m
+[2mdist/[22m[2massets/[22m[36mXpScreen-Bvi56grK.js                             [39m[1m[2m    4.70 kB[22m[1m[22m[2m │ gzip:   2.08 kB[22m
+[2mdist/[22m[2massets/[22m[36mRecords-BdLm9rDp.js                              [39m[1m[2m    4.76 kB[22m[1m[22m[2m │ gzip:   1.79 kB[22m
+[2mdist/[22m[2massets/[22m[36mthroughBallDrill-B9fNBoXH.js                     [39m[1m[2m    4.78 kB[22m[1m[22m[2m │ gzip:   2.31 kB[22m
+[2mdist/[22m[2massets/[22m[36mchampOrNot-BznwdGAr.js                           [39m[1m[2m    4.98 kB[22m[1m[22m[2m │ gzip:   1.77 kB[22m
+[2mdist/[22m[2massets/[22m[36mManagerSlotsScreen-CYnTl8Se.js                   [39m[1m[2m    4.99 kB[22m[1m[22m[2m │ gzip:   1.79 kB[22m
+[2mdist/[22m[2massets/[22m[36mUclBracketCard-C5sQgCHf.js                       [39m[1m[2m    5.00 kB[22m[1m[22m[2m │ gzip:   2.06 kB[22m
+[2mdist/[22m[2massets/[22m[36maflGoalKickers-BGnz1-kA.js                       [39m[1m[2m    5.10 kB[22m[1m[22m[2m │ gzip:   1.41 kB[22m
+[2mdist/[22m[2massets/[22m[36mf1HLDrivers-81Ps6THm.js                          [39m[1m[2m    5.13 kB[22m[1m[22m[2m │ gzip:   1.31 kB[22m
+[2mdist/[22m[2massets/[22m[36mAccessibility-BKkvtXhn.js                        [39m[1m[2m    5.18 kB[22m[1m[22m[2m │ gzip:   2.12 kB[22m
+[2mdist/[22m[2massets/[22m[36mnbaPerfectLineupPool-CcCQ221O.js                 [39m[1m[2m    5.24 kB[22m[1m[22m[2m │ gzip:   1.59 kB[22m
+[2mdist/[22m[2massets/[22m[36mShootoutKicks-DcUgLM1F.js                        [39m[1m[2m    5.26 kB[22m[1m[22m[2m │ gzip:   2.21 kB[22m
+[2mdist/[22m[2massets/[22m[36msoundKit-D78Dp-yv.js                             [39m[1m[2m    5.32 kB[22m[1m[22m[2m │ gzip:   2.42 kB[22m
+[2mdist/[22m[2massets/[22m[36mwc2026Results-bxFApXs8.js                        [39m[1m[2m    5.44 kB[22m[1m[22m[2m │ gzip:   1.24 kB[22m
+[2mdist/[22m[2massets/[22m[36mHallOfFameCard-Y01f4Maq.js                       [39m[1m[2m    5.45 kB[22m[1m[22m[2m │ gzip:   2.25 kB[22m
+[2mdist/[22m[2massets/[22m[36mbadges-CMXNJNkE.js                               [39m[1m[2m    5.77 kB[22m[1m[22m[2m │ gzip:   2.29 kB[22m
+[2mdist/[22m[2massets/[22m[36mFlagImg-Bse7jwju.js                              [39m[1m[2m    5.84 kB[22m[1m[22m[2m │ gzip:   2.98 kB[22m
+[2mdist/[22m[2massets/[22m[36mcareerRivalryChoices-B2c2ZYXB.js                 [39m[1m[2m    5.99 kB[22m[1m[22m[2m │ gzip:   2.43 kB[22m
+[2mdist/[22m[2massets/[22m[36mClubManagerFarewell-BPqVXlu1.js                  [39m[1m[2m    6.03 kB[22m[1m[22m[2m │ gzip:   2.53 kB[22m
+[2mdist/[22m[2massets/[22m[36mcfbHLPlayers-TgDMTX1-.js                         [39m[1m[2m    6.03 kB[22m[1m[22m[2m │ gzip:   1.62 kB[22m
+[2mdist/[22m[2massets/[22m[36mCmRetireDoor-C1u3G_pM.js                         [39m[1m[2m    6.14 kB[22m[1m[22m[2m │ gzip:   2.72 kB[22m
+[2mdist/[22m[2massets/[22m[36mWorldEditorScreen-BfrDZDxf.js                    [39m[1m[2m    6.15 kB[22m[1m[22m[2m │ gzip:   2.43 kB[22m
+[2mdist/[22m[2massets/[22m[36mHigherLowerTransfers-CvKBkzpz.js                 [39m[1m[2m    6.23 kB[22m[1m[22m[2m │ gzip:   2.82 kB[22m
+[2mdist/[22m[2massets/[22m[36mPlayerAutocomplete-Dwl__90R.js                   [39m[1m[2m    6.29 kB[22m[1m[22m[2m │ gzip:   2.75 kB[22m
+[2mdist/[22m[2massets/[22m[36mPerfectLineupF1-Bhy__-S0.js                      [39m[1m[2m    6.31 kB[22m[1m[22m[2m │ gzip:   2.20 kB[22m
+[2mdist/[22m[2massets/[22m[36mDirtyMoneyDesk-Wcsd7n5K.js                       [39m[1m[2m    6.35 kB[22m[1m[22m[2m │ gzip:   2.70 kB[22m
+[2mdist/[22m[2massets/[22m[36mWorldTablesCard-DVgg0f2y.js                      [39m[1m[2m    6.38 kB[22m[1m[22m[2m │ gzip:   2.57 kB[22m
+[2mdist/[22m[2massets/[22m[36mgolfLegends-wbmLaE0U.js                          [39m[1m[2m    6.42 kB[22m[1m[22m[2m │ gzip:   1.43 kB[22m
+[2mdist/[22m[2massets/[22m[36mFirstTeamPanel-BwOnSi-B.js                       [39m[1m[2m    6.43 kB[22m[1m[22m[2m │ gzip:   2.33 kB[22m
+[2mdist/[22m[2massets/[22m[36msoccerCareerAppearance-BDCQQaP7.js               [39m[1m[2m    6.51 kB[22m[1m[22m[2m │ gzip:   2.69 kB[22m
+[2mdist/[22m[2massets/[22m[36mhockeyHLPlayers-BftZ_j6A.js                      [39m[1m[2m    6.65 kB[22m[1m[22m[2m │ gzip:   1.44 kB[22m
+[2mdist/[22m[2massets/[22m[36mUsSeasonCentre-BUL5PQJz.js                       [39m[1m[2m    6.67 kB[22m[1m[22m[2m │ gzip:   3.07 kB[22m
+[2mdist/[22m[2massets/[22m[36mCupBracketCard-Com7FTAM.js                       [39m[1m[2m    6.73 kB[22m[1m[22m[2m │ gzip:   2.90 kB[22m
+[2mdist/[22m[2massets/[22m[36mAbout-BR9pbnsG.js                                [39m[1m[2m    6.75 kB[22m[1m[22m[2m │ gzip:   2.55 kB[22m
+[2mdist/[22m[2massets/[22m[36mwhoAmI-DbuRCCgp.js                               [39m[1m[2m    6.83 kB[22m[1m[22m[2m │ gzip:   2.84 kB[22m
+[2mdist/[22m[2massets/[22m[36mHomelandSelect-CYkfgjJk.js                       [39m[1m[2m    6.84 kB[22m[1m[22m[2m │ gzip:   2.64 kB[22m
+[2mdist/[22m[2massets/[22m[36mBootRoom-DKixPxZk.js                             [39m[1m[2m    6.84 kB[22m[1m[22m[2m │ gzip:   2.57 kB[22m
+[2mdist/[22m[2massets/[22m[36mPerfectLineupNhl-Mur1iuMo.js                     [39m[1m[2m    6.86 kB[22m[1m[22m[2m │ gzip:   2.42 kB[22m
+[2mdist/[22m[2massets/[22m[36mGauntletBoard-CpKa2Db0.js                        [39m[1m[2m    7.12 kB[22m[1m[22m[2m │ gzip:   2.69 kB[22m
+[2mdist/[22m[2massets/[22m[36mGameSeoContent-doUfg8w4.js                       [39m[1m[2m    7.13 kB[22m[1m[22m[2m │ gzip:   2.44 kB[22m
+[2mdist/[22m[2massets/[22m[36mus-BhZwfRyv.js                                   [39m[1m[2m    7.29 kB[22m[1m[22m[2m │ gzip:   3.38 kB[22m
+[2mdist/[22m[2massets/[22m[36mplayerSearch-BujjoWKO.js                         [39m[1m[2m    7.40 kB[22m[1m[22m[2m │ gzip:   2.85 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerLigue2Fixtures2026-CWGEvRlM.js        [39m[1m[2m    7.45 kB[22m[1m[22m[2m │ gzip:   1.61 kB[22m
+[2mdist/[22m[2massets/[22m[36mCareerRecordsSheet-DUbqelk1.js                   [39m[1m[2m    7.52 kB[22m[1m[22m[2m │ gzip:   2.98 kB[22m
+[2mdist/[22m[2massets/[22m[36mCareerStory-CCkJNUCd.js                          [39m[1m[2m    7.54 kB[22m[1m[22m[2m │ gzip:   3.09 kB[22m
+[2mdist/[22m[2massets/[22m[36mnba-D1cr08P_.js                                  [39m[1m[2m    7.60 kB[22m[1m[22m[2m │ gzip:   3.69 kB[22m
+[2mdist/[22m[2massets/[22m[36mSearch-Bb4Dw4C6.js                               [39m[1m[2m    7.87 kB[22m[1m[22m[2m │ gzip:   2.93 kB[22m
+[2mdist/[22m[2massets/[22m[36mGuessTheGolfer-zhfxx-MS.js                       [39m[1m[2m    8.00 kB[22m[1m[22m[2m │ gzip:   3.42 kB[22m
+[2mdist/[22m[2massets/[22m[36mnbaHLPlayers-KSI796bW.js                         [39m[1m[2m    8.05 kB[22m[1m[22m[2m │ gzip:   2.21 kB[22m
+[2mdist/[22m[2massets/[22m[36mSoccerCareerProgramme-BfnZGOFr.js                [39m[1m[2m    8.27 kB[22m[1m[22m[2m │ gzip:   3.09 kB[22m
+[2mdist/[22m[2massets/[22m[36mlz-string-cemwgVSj.js                            [39m[1m[2m    8.44 kB[22m[1m[22m[2m │ gzip:   3.01 kB[22m
+[2mdist/[22m[2massets/[22m[36mMatchCentre-BZ2Lftqz.js                          [39m[1m[2m    8.46 kB[22m[1m[22m[2m │ gzip:   2.83 kB[22m
+[2mdist/[22m[2massets/[22m[36maussieRulesManagement-4TlVLY3z.js                [39m[1m[2m    8.56 kB[22m[1m[22m[2m │ gzip:   3.64 kB[22m
+[2mdist/[22m[2massets/[22m[36mGameReportContext-BiPBfVVy.js                    [39m[1m[2m    8.56 kB[22m[1m[22m[2m │ gzip:   3.07 kB[22m
+[2mdist/[22m[2massets/[22m[36mRecordPage-VlXG6J45.js                           [39m[1m[2m    8.60 kB[22m[1m[22m[2m │ gzip:   2.52 kB[22m
+[2mdist/[22m[2massets/[22m[36macademyManagement-DZZqTLIl.js                    [39m[1m[2m    8.66 kB[22m[1m[22m[2m │ gzip:   3.51 kB[22m
+[2mdist/[22m[2massets/[22m[36mInboxCard-6MrG3K-n.js                            [39m[1m[2m    8.67 kB[22m[1m[22m[2m │ gzip:   3.00 kB[22m
+[2mdist/[22m[2massets/[22m[36mMlbHigherLower-6ZZHDInf.js                       [39m[1m[2m    8.72 kB[22m[1m[22m[2m │ gzip:   3.70 kB[22m
+[2mdist/[22m[2massets/[22m[36mF1HigherLower-CvRxsAC-.js                        [39m[1m[2m    8.79 kB[22m[1m[22m[2m │ gzip:   3.69 kB[22m
+[2mdist/[22m[2massets/[22m[36mTennisHigherLower-4pazzd5r.js                    [39m[1m[2m    8.80 kB[22m[1m[22m[2m │ gzip:   3.72 kB[22m
+[2mdist/[22m[2massets/[22m[36mAflHigherLower-B52SCghs.js                       [39m[1m[2m    8.81 kB[22m[1m[22m[2m │ gzip:   3.75 kB[22m
+[2mdist/[22m[2massets/[22m[36mCfbHigherLower-cpdgFUYm.js                       [39m[1m[2m    8.83 kB[22m[1m[22m[2m │ gzip:   3.72 kB[22m
+[2mdist/[22m[2massets/[22m[36mNbaHigherLower-B65eC42g.js                       [39m[1m[2m    8.85 kB[22m[1m[22m[2m │ gzip:   3.69 kB[22m
+[2mdist/[22m[2massets/[22m[36mHomeArt-Ci9rtYbi.js                              [39m[1m[2m    8.86 kB[22m[1m[22m[2m │ gzip:   2.64 kB[22m
+[2mdist/[22m[2massets/[22m[36mGolfHigherLower-DxYuSRnB.js                      [39m[1m[2m    8.87 kB[22m[1m[22m[2m │ gzip:   3.78 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerPrimeiraFixtures2026-DHKbixmh.js      [39m[1m[2m    8.96 kB[22m[1m[22m[2m │ gzip:   1.68 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerEredivisieFixtures2026-BoKvrAyQ.js    [39m[1m[2m    8.96 kB[22m[1m[22m[2m │ gzip:   1.71 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerSerieAFixtures2026-Df6OuJqm.js        [39m[1m[2m    8.98 kB[22m[1m[22m[2m │ gzip:   1.90 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerSuperLigFixtures2026-CWs7044H.js      [39m[1m[2m    9.11 kB[22m[1m[22m[2m │ gzip:   1.67 kB[22m
+[2mdist/[22m[2massets/[22m[36mNflHigherLower-GOgAb6sY.js                       [39m[1m[2m    9.15 kB[22m[1m[22m[2m │ gzip:   3.82 kB[22m
+[2mdist/[22m[2massets/[22m[36mStartOptionsScreen-BxmpMdPJ.js                   [39m[1m[2m    9.17 kB[22m[1m[22m[2m │ gzip:   3.24 kB[22m
+[2mdist/[22m[2massets/[22m[36mPressRoom-BT9lTHMk.js                            [39m[1m[2m    9.17 kB[22m[1m[22m[2m │ gzip:   3.42 kB[22m
+[2mdist/[22m[2massets/[22m[36mManagerForm-hQg7Muw6.js                          [39m[1m[2m    9.21 kB[22m[1m[22m[2m │ gzip:   3.01 kB[22m
+[2mdist/[22m[2massets/[22m[36mgmStaff-CQgWbtVe.js                              [39m[1m[2m    9.22 kB[22m[1m[22m[2m │ gzip:   3.90 kB[22m
+[2mdist/[22m[2massets/[22m[36mTrainingScreen-tkW3MvRW.js                       [39m[1m[2m    9.29 kB[22m[1m[22m[2m │ gzip:   3.15 kB[22m
+[2mdist/[22m[2massets/[22m[36mHomeAbout-Dbr0TQly.js                            [39m[1m[2m    9.39 kB[22m[1m[22m[2m │ gzip:   3.71 kB[22m
+[2mdist/[22m[2massets/[22m[36mRolesScreen-D01kx3NQ.js                          [39m[1m[2m    9.54 kB[22m[1m[22m[2m │ gzip:   3.23 kB[22m
+[2mdist/[22m[2massets/[22m[36mPollOfTheDay-BSPsEbmC.js                         [39m[1m[2m    9.56 kB[22m[1m[22m[2m │ gzip:   4.18 kB[22m
+[2mdist/[22m[2massets/[22m[36mWorldCup2026Results-CicjaGFB.js                  [39m[1m[2m    9.57 kB[22m[1m[22m[2m │ gzip:   3.18 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerBundesligaFixtures2026-c7ZzROUC.js    [39m[1m[2m    9.63 kB[22m[1m[22m[2m │ gzip:   1.71 kB[22m
+[2mdist/[22m[2massets/[22m[36mClubDetailScreen-6KW6Rs5O.js                     [39m[1m[2m    9.75 kB[22m[1m[22m[2m │ gzip:   3.38 kB[22m
+[2mdist/[22m[2massets/[22m[36mStaffScreen-4l5TSOs2.js                          [39m[1m[2m    9.84 kB[22m[1m[22m[2m │ gzip:   3.55 kB[22m
+[2mdist/[22m[2massets/[22m[36mNflBracket-DhtdrbY1.js                           [39m[1m[2m    9.87 kB[22m[1m[22m[2m │ gzip:   4.23 kB[22m
+[2mdist/[22m[2massets/[22m[36mPitchSurface-CA3Q3WrM.js                         [39m[1m[2m    9.90 kB[22m[1m[22m[2m │ gzip:   4.36 kB[22m
+[2mdist/[22m[2massets/[22m[36mTermsOfService-Bcfi1h5q.js                       [39m[1m[2m    9.99 kB[22m[1m[22m[2m │ gzip:   3.46 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerBundesliga2Fixtures2026-kg6AnCOp.js   [39m[1m[2m   10.01 kB[22m[1m[22m[2m │ gzip:   1.78 kB[22m
+[2mdist/[22m[2massets/[22m[36mPackBattle-CLRznR4N.js                           [39m[1m[2m   10.24 kB[22m[1m[22m[2m │ gzip:   4.16 kB[22m
+[2mdist/[22m[2massets/[22m[36mGameNavbar-Cd_lzZhw.js                           [39m[1m[2m   10.36 kB[22m[1m[22m[2m │ gzip:   3.80 kB[22m
+[2mdist/[22m[2massets/[22m[36mHockeyGrid-BpvgeFH1.js                           [39m[1m[2m   10.93 kB[22m[1m[22m[2m │ gzip:   4.13 kB[22m
+[2mdist/[22m[2massets/[22m[36musSeasonShape-CwVR7luQ.js                        [39m[1m[2m   10.96 kB[22m[1m[22m[2m │ gzip:   3.22 kB[22m
+[2mdist/[22m[2massets/[22m[36mGauntletDraft-DtcTLlk1.js                        [39m[1m[2m   10.99 kB[22m[1m[22m[2m │ gzip:   4.23 kB[22m
+[2mdist/[22m[2massets/[22m[36mAdminReports-73baxwY3.js                         [39m[1m[2m   11.01 kB[22m[1m[22m[2m │ gzip:   3.95 kB[22m
+[2mdist/[22m[2massets/[22m[36mMlbGrid-6zO_TaGl.js                              [39m[1m[2m   11.09 kB[22m[1m[22m[2m │ gzip:   4.24 kB[22m
+[2mdist/[22m[2massets/[22m[36mfightCareer-DFz8n-Ta.js                          [39m[1m[2m   11.14 kB[22m[1m[22m[2m │ gzip:   4.92 kB[22m
+[2mdist/[22m[2massets/[22m[36mQuizBoard-lh9mlExs.js                            [39m[1m[2m   11.16 kB[22m[1m[22m[2m │ gzip:   4.78 kB[22m
+[2mdist/[22m[2massets/[22m[36mCustomClubForm-DyY-HymW.js                       [39m[1m[2m   11.19 kB[22m[1m[22m[2m │ gzip:   3.30 kB[22m
+[2mdist/[22m[2massets/[22m[36mSavePointsScreen-DwiZ7cqG.js                     [39m[1m[2m   11.28 kB[22m[1m[22m[2m │ gzip:   4.08 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerLaLigaFixtures2026-brDX3MxS.js        [39m[1m[2m   11.41 kB[22m[1m[22m[2m │ gzip:   2.03 kB[22m
+[2mdist/[22m[2massets/[22m[36mAcademyScreen-Cuvcs3Gq.js                        [39m[1m[2m   11.55 kB[22m[1m[22m[2m │ gzip:   3.70 kB[22m
+[2mdist/[22m[2massets/[22m[36mShareButtons-CZakFqAE.js                         [39m[1m[2m   11.64 kB[22m[1m[22m[2m │ gzip:   4.53 kB[22m
+[2mdist/[22m[2massets/[22m[36mBallIq-GpWOhCO8.js                               [39m[1m[2m   11.74 kB[22m[1m[22m[2m │ gzip:   4.69 kB[22m
+[2mdist/[22m[2massets/[22m[36mHockeyHigherLower-Ch6kZVL7.js                    [39m[1m[2m   11.75 kB[22m[1m[22m[2m │ gzip:   4.32 kB[22m
+[2mdist/[22m[2massets/[22m[36mSearchAndDiscard-pM3xL_tP.js                     [39m[1m[2m   11.84 kB[22m[1m[22m[2m │ gzip:   4.65 kB[22m
+[2mdist/[22m[2massets/[22m[36mGenericLineupBoard-Cszt6icH.js                   [39m[1m[2m   12.17 kB[22m[1m[22m[2m │ gzip:   4.44 kB[22m
+[2mdist/[22m[2massets/[22m[36mTrophyCabinet-luh6eJ-0.js                        [39m[1m[2m   12.28 kB[22m[1m[22m[2m │ gzip:   4.46 kB[22m
+[2mdist/[22m[2massets/[22m[36muclFormatHistory-DwuhruDw.js                     [39m[1m[2m   12.33 kB[22m[1m[22m[2m │ gzip:   3.47 kB[22m
+[2mdist/[22m[2massets/[22m[36mChampionsLeagueFormatHistory-BPUM_zOR.js         [39m[1m[2m   12.44 kB[22m[1m[22m[2m │ gzip:   4.05 kB[22m
+[2mdist/[22m[2massets/[22m[36mLeaderboard-DeiDb5w9.js                          [39m[1m[2m   12.66 kB[22m[1m[22m[2m │ gzip:   4.30 kB[22m
+[2mdist/[22m[2massets/[22m[36mNbaGrid-D5Dm-NJC.js                              [39m[1m[2m   12.69 kB[22m[1m[22m[2m │ gzip:   4.74 kB[22m
+[2mdist/[22m[2massets/[22m[36mFootballTimeline-CcVFvFi_.js                     [39m[1m[2m   12.70 kB[22m[1m[22m[2m │ gzip:   4.24 kB[22m
+[2mdist/[22m[2massets/[22m[36mSetPieceBoard-BzpTijH-.js                        [39m[1m[2m   12.97 kB[22m[1m[22m[2m │ gzip:   5.25 kB[22m
+[2mdist/[22m[2massets/[22m[36mnflHLCategories-DOyYzQVv.js                      [39m[1m[2m   13.14 kB[22m[1m[22m[2m │ gzip:   3.65 kB[22m
+[2mdist/[22m[2massets/[22m[36mintlNames-DiJYNZJt.js                            [39m[1m[2m   13.18 kB[22m[1m[22m[2m │ gzip:   6.17 kB[22m
+[2mdist/[22m[2massets/[22m[36mSoccerCareerBuildEditor-DdDtX2HV.js              [39m[1m[2m   13.27 kB[22m[1m[22m[2m │ gzip:   4.25 kB[22m
+[2mdist/[22m[2massets/[22m[36mHalftimeScreen-0YXDUWH7.js                       [39m[1m[2m   13.33 kB[22m[1m[22m[2m │ gzip:   4.57 kB[22m
+[2mdist/[22m[2massets/[22m[36mHigherLower-CNtK7Ovk.js                          [39m[1m[2m   13.33 kB[22m[1m[22m[2m │ gzip:   4.81 kB[22m
+[2mdist/[22m[2massets/[22m[36mNflGameDay-BNNOLgSE.js                           [39m[1m[2m   13.47 kB[22m[1m[22m[2m │ gzip:   5.43 kB[22m
+[2mdist/[22m[2massets/[22m[36mShirtNumber-D7eJl6sK.js                          [39m[1m[2m   13.48 kB[22m[1m[22m[2m │ gzip:   5.24 kB[22m
+[2mdist/[22m[2massets/[22m[36mMysteryBox-DrqIip0W.js                           [39m[1m[2m   13.50 kB[22m[1m[22m[2m │ gzip:   5.31 kB[22m
+[2mdist/[22m[2massets/[22m[36mCalendarScreen-DGADJN_X.js                       [39m[1m[2m   13.57 kB[22m[1m[22m[2m │ gzip:   4.74 kB[22m
+[2mdist/[22m[2massets/[22m[36mDraftNightSequence-Cm6sBlJ6.js                   [39m[1m[2m   13.62 kB[22m[1m[22m[2m │ gzip:   5.15 kB[22m
+[2mdist/[22m[2massets/[22m[36mstadiumManagement-a4ZEwMzG.js                    [39m[1m[2m   13.81 kB[22m[1m[22m[2m │ gzip:   5.38 kB[22m
+[2mdist/[22m[2massets/[22m[36mSilverwareSort-Bw9XHSF2.js                       [39m[1m[2m   13.87 kB[22m[1m[22m[2m │ gzip:   5.36 kB[22m
+[2mdist/[22m[2massets/[22m[36mNascarChain-8fjB3rwM.js                          [39m[1m[2m   13.89 kB[22m[1m[22m[2m │ gzip:   4.94 kB[22m
+[2mdist/[22m[2massets/[22m[36mTennisChain-FEU6fxUH.js                          [39m[1m[2m   13.90 kB[22m[1m[22m[2m │ gzip:   4.98 kB[22m
+[2mdist/[22m[2massets/[22m[36mFinancesScreen-CSNpZAYX.js                       [39m[1m[2m   13.95 kB[22m[1m[22m[2m │ gzip:   4.05 kB[22m
+[2mdist/[22m[2massets/[22m[36mMlbConnect4-CDDTsvox.js                          [39m[1m[2m   13.99 kB[22m[1m[22m[2m │ gzip:   5.29 kB[22m
+[2mdist/[22m[2massets/[22m[36mNhlConnect4-SqNDpbVG.js                          [39m[1m[2m   14.06 kB[22m[1m[22m[2m │ gzip:   5.29 kB[22m
+[2mdist/[22m[2massets/[22m[36mCbbGrid-CkJUljM7.js                              [39m[1m[2m   14.13 kB[22m[1m[22m[2m │ gzip:   5.62 kB[22m
+[2mdist/[22m[2massets/[22m[36mWhodTheyBeat-ChntGyYl.js                         [39m[1m[2m   14.16 kB[22m[1m[22m[2m │ gzip:   5.58 kB[22m
+[2mdist/[22m[2massets/[22m[36mNflConnect4-BZhU5Bjd.js                          [39m[1m[2m   14.35 kB[22m[1m[22m[2m │ gzip:   5.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mFootballGrid-av79cymu.js                         [39m[1m[2m   14.37 kB[22m[1m[22m[2m │ gzip:   5.47 kB[22m
+[2mdist/[22m[2massets/[22m[36mAlphabetSprint-BIysSIG6.js                       [39m[1m[2m   14.89 kB[22m[1m[22m[2m │ gzip:   5.79 kB[22m
+[2mdist/[22m[2massets/[22m[36mNflConnections-Dnn2jJ3k.js                       [39m[1m[2m   15.17 kB[22m[1m[22m[2m │ gzip:   5.71 kB[22m
+[2mdist/[22m[2massets/[22m[36musStatesPaths-DfX_GtuE.js                        [39m[1m[2m   15.67 kB[22m[1m[22m[2m │ gzip:   5.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mCareerSeasonReview-Cx6Zm7RJ.js                   [39m[1m[2m   15.77 kB[22m[1m[22m[2m │ gzip:   4.48 kB[22m
+[2mdist/[22m[2massets/[22m[36mNflMyCareer-BpVOQUR0.js                          [39m[1m[2m   15.77 kB[22m[1m[22m[2m │ gzip:   6.95 kB[22m
+[2mdist/[22m[2massets/[22m[36mNbaChain-BCq5Jbov.js                             [39m[1m[2m   15.93 kB[22m[1m[22m[2m │ gzip:   6.09 kB[22m
+[2mdist/[22m[2massets/[22m[36mCareerGame-Drzz8VfS.js                           [39m[1m[2m   15.98 kB[22m[1m[22m[2m │ gzip:   6.06 kB[22m
+[2mdist/[22m[2massets/[22m[36mContractsCard-BKYqPO9A.js                        [39m[1m[2m   16.05 kB[22m[1m[22m[2m │ gzip:   5.03 kB[22m
+[2mdist/[22m[2massets/[22m[36mNbaConnect4-j7Kir-ND.js                          [39m[1m[2m   16.08 kB[22m[1m[22m[2m │ gzip:   5.89 kB[22m
+[2mdist/[22m[2massets/[22m[36mSoccerDerbyHistory-DVs97cje.js                   [39m[1m[2m   16.40 kB[22m[1m[22m[2m │ gzip:   5.33 kB[22m
+[2mdist/[22m[2massets/[22m[36mPlayerAvatar-sAs1ZIZ9.js                         [39m[1m[2m   16.50 kB[22m[1m[22m[2m │ gzip:   4.44 kB[22m
+[2mdist/[22m[2massets/[22m[36mConquestActionScene-DQoDViMc.js                  [39m[1m[2m   16.54 kB[22m[1m[22m[2m │ gzip:   6.80 kB[22m
+[2mdist/[22m[2massets/[22m[36mGuessCbbTeam-CqiPeZwb.js                         [39m[1m[2m   16.67 kB[22m[1m[22m[2m │ gzip:   6.16 kB[22m
+[2mdist/[22m[2massets/[22m[36msiteSearch-B69D0R_5.js                           [39m[1m[2m   16.79 kB[22m[1m[22m[2m │ gzip:   6.81 kB[22m
+[2mdist/[22m[2massets/[22m[36mClubManagerSeasonSummary-CANr7Fsq.js             [39m[1m[2m   16.85 kB[22m[1m[22m[2m │ gzip:   5.30 kB[22m
+[2mdist/[22m[2massets/[22m[36mGuessTennisPlayer-DZXzPedt.js                    [39m[1m[2m   16.95 kB[22m[1m[22m[2m │ gzip:   6.04 kB[22m
+[2mdist/[22m[2massets/[22m[36mNflPlayoffFormatHistory-DMVn1swb.js              [39m[1m[2m   17.04 kB[22m[1m[22m[2m │ gzip:   5.58 kB[22m
+[2mdist/[22m[2massets/[22m[36mThroughBallBoard-W4hfWxYD.js                     [39m[1m[2m   17.17 kB[22m[1m[22m[2m │ gzip:   6.37 kB[22m
+[2mdist/[22m[2massets/[22m[36mcareerLadder-D4pab2qP.js                         [39m[1m[2m   17.39 kB[22m[1m[22m[2m │ gzip:   6.56 kB[22m
+[2mdist/[22m[2massets/[22m[36mmlb-CTFyn9Gk.js                                  [39m[1m[2m   17.46 kB[22m[1m[22m[2m │ gzip:   7.67 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerChampionshipFixtures2026-DYlsM6ie.js  [39m[1m[2m   17.66 kB[22m[1m[22m[2m │ gzip:   2.81 kB[22m
+[2mdist/[22m[2massets/[22m[36mSeasonVerdict-CEqmUpGy.js                        [39m[1m[2m   18.29 kB[22m[1m[22m[2m │ gzip:   7.39 kB[22m
+[2mdist/[22m[2massets/[22m[36mMlbPostseasonFormatHistory-ZHXYk2JD.js           [39m[1m[2m   18.30 kB[22m[1m[22m[2m │ gzip:   5.64 kB[22m
+[2mdist/[22m[2massets/[22m[36msquadDeal-jQjRcmap.js                            [39m[1m[2m   18.35 kB[22m[1m[22m[2m │ gzip:   7.43 kB[22m
+[2mdist/[22m[2massets/[22m[36mnfl-DGS2Jagf.js                                  [39m[1m[2m   18.65 kB[22m[1m[22m[2m │ gzip:   7.74 kB[22m
+[2mdist/[22m[2massets/[22m[36mWhoAmI-BQjFjgno.js                               [39m[1m[2m   18.69 kB[22m[1m[22m[2m │ gzip:   5.94 kB[22m
+[2mdist/[22m[2massets/[22m[36mScorePredictor-KJHe3_Ap.js                       [39m[1m[2m   18.79 kB[22m[1m[22m[2m │ gzip:   6.52 kB[22m
+[2mdist/[22m[2massets/[22m[36mcore-Dsglyqbx.js                                 [39m[1m[2m   18.98 kB[22m[1m[22m[2m │ gzip:   7.67 kB[22m
+[2mdist/[22m[2massets/[22m[36mnhlFoPlayers-j0YE08i0.js                         [39m[1m[2m   19.06 kB[22m[1m[22m[2m │ gzip:   5.46 kB[22m
+[2mdist/[22m[2massets/[22m[36mPlayerStockMarket-DYiUuERz.js                    [39m[1m[2m   19.16 kB[22m[1m[22m[2m │ gzip:   7.05 kB[22m
+[2mdist/[22m[2massets/[22m[36mPrivacyPolicy-CteTnlmj.js                        [39m[1m[2m   19.42 kB[22m[1m[22m[2m │ gzip:   6.02 kB[22m
+[2mdist/[22m[2massets/[22m[36mSquadScreen-BnAPi6HW.js                          [39m[1m[2m   19.43 kB[22m[1m[22m[2m │ gzip:   6.98 kB[22m
+[2mdist/[22m[2massets/[22m[36mNbaStatLine-DSi3Ssjg.js                          [39m[1m[2m   19.74 kB[22m[1m[22m[2m │ gzip:   7.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mClueAuction-Dg5YW1GZ.js                          [39m[1m[2m   19.94 kB[22m[1m[22m[2m │ gzip:   7.23 kB[22m
+[2mdist/[22m[2massets/[22m[36mfootleEnrichment-BOt-YWCc.js                     [39m[1m[2m   19.95 kB[22m[1m[22m[2m │ gzip:   5.57 kB[22m
+[2mdist/[22m[2massets/[22m[36mPuckDetective-CiTsU0YF.js                        [39m[1m[2m   19.99 kB[22m[1m[22m[2m │ gzip:   7.39 kB[22m
+[2mdist/[22m[2massets/[22m[36mHofOrBust-RHRDrCrU.js                            [39m[1m[2m   20.05 kB[22m[1m[22m[2m │ gzip:   7.24 kB[22m
+[2mdist/[22m[2massets/[22m[36mUsCareerPractice-CHRftON2.js                     [39m[1m[2m   20.18 kB[22m[1m[22m[2m │ gzip:   5.88 kB[22m
+[2mdist/[22m[2massets/[22m[36museTycoonRewards-CvcvzBxK.js                     [39m[1m[2m   20.27 kB[22m[1m[22m[2m │ gzip:   7.63 kB[22m
+[2mdist/[22m[2massets/[22m[36mSeasonRatings-DX2UvMjz.js                        [39m[1m[2m   20.57 kB[22m[1m[22m[2m │ gzip:   6.60 kB[22m
+[2mdist/[22m[2massets/[22m[36mGuessTheNation-DqwMhYvq.js                       [39m[1m[2m   20.64 kB[22m[1m[22m[2m │ gzip:   7.18 kB[22m
+[2mdist/[22m[2massets/[22m[36mPerfectSeasonMlb-CnKLcxHm.js                     [39m[1m[2m   20.72 kB[22m[1m[22m[2m │ gzip:   7.37 kB[22m
+[2mdist/[22m[2massets/[22m[36msoccerInternational-FiWGI8ks.js                  [39m[1m[2m   21.07 kB[22m[1m[22m[2m │ gzip:   7.67 kB[22m
+[2mdist/[22m[2massets/[22m[36mAcademyPanel-COGaTi-U.js                         [39m[1m[2m   21.07 kB[22m[1m[22m[2m │ gzip:   7.74 kB[22m
+[2mdist/[22m[2massets/[22m[36mClubManagerCareerPanel-DZzAqyDn.js               [39m[1m[2m   21.28 kB[22m[1m[22m[2m │ gzip:   6.43 kB[22m
+[2mdist/[22m[2massets/[22m[36mselect-BIEuYASi.js                               [39m[1m[2m   21.29 kB[22m[1m[22m[2m │ gzip:   7.41 kB[22m
+[2mdist/[22m[2massets/[22m[36mWorldXi-Ch_Zb2-9.js                              [39m[1m[2m   21.29 kB[22m[1m[22m[2m │ gzip:   7.21 kB[22m
+[2mdist/[22m[2massets/[22m[36mBudgetBuilder-BASWBaJM.js                        [39m[1m[2m   21.64 kB[22m[1m[22m[2m │ gzip:   7.49 kB[22m
+[2mdist/[22m[2massets/[22m[36mSoccerConquest-CRmABCFk.js                       [39m[1m[2m   21.71 kB[22m[1m[22m[2m │ gzip:   9.19 kB[22m
+[2mdist/[22m[2massets/[22m[36mMlbGauntletDraft-D1MggAB6.js                     [39m[1m[2m   21.78 kB[22m[1m[22m[2m │ gzip:   7.01 kB[22m
+[2mdist/[22m[2massets/[22m[36mSportsMillionaire-CipiRGy1.js                    [39m[1m[2m   21.84 kB[22m[1m[22m[2m │ gzip:   7.54 kB[22m
+[2mdist/[22m[2massets/[22m[36mNbaConnections-DhfakPjj.js                       [39m[1m[2m   21.97 kB[22m[1m[22m[2m │ gzip:   8.23 kB[22m
+[2mdist/[22m[2massets/[22m[36mNhlConnections-DIeuqem1.js                       [39m[1m[2m   22.00 kB[22m[1m[22m[2m │ gzip:   8.17 kB[22m
+[2mdist/[22m[2massets/[22m[36mFootballConnect4-6_kAM2dO.js                     [39m[1m[2m   22.22 kB[22m[1m[22m[2m │ gzip:   7.22 kB[22m
+[2mdist/[22m[2massets/[22m[36msoccerMoments-6RaMPH_I.js                        [39m[1m[2m   22.34 kB[22m[1m[22m[2m │ gzip:   9.32 kB[22m
+[2mdist/[22m[2massets/[22m[36mCbbDynasty-hfeYM5zG.js                           [39m[1m[2m   22.38 kB[22m[1m[22m[2m │ gzip:   9.32 kB[22m
+[2mdist/[22m[2massets/[22m[36mSquadSheet-yeVa4qog.js                           [39m[1m[2m   22.38 kB[22m[1m[22m[2m │ gzip:   8.05 kB[22m
+[2mdist/[22m[2massets/[22m[36mMinefield-q5aL-HH7.js                            [39m[1m[2m   22.48 kB[22m[1m[22m[2m │ gzip:   9.33 kB[22m
+[2mdist/[22m[2massets/[22m[36mCfbDynasty-0tFTgUtG.js                           [39m[1m[2m   22.78 kB[22m[1m[22m[2m │ gzip:   9.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mPerfectSeasonNhl-B6Z8JqdW.js                     [39m[1m[2m   23.17 kB[22m[1m[22m[2m │ gzip:   8.21 kB[22m
+[2mdist/[22m[2massets/[22m[36mEmojiGuess-COiGdGIS.js                           [39m[1m[2m   23.27 kB[22m[1m[22m[2m │ gzip:   8.84 kB[22m
+[2mdist/[22m[2massets/[22m[36mhigherLowerPlayers-CyK6rra4.js                   [39m[1m[2m   23.57 kB[22m[1m[22m[2m │ gzip:   5.08 kB[22m
+[2mdist/[22m[2massets/[22m[36mSignThePlayer-C5gMl1ue.js                        [39m[1m[2m   23.81 kB[22m[1m[22m[2m │ gzip:   9.16 kB[22m
+[2mdist/[22m[2massets/[22m[36mContractChaos-DF4zlrdr.js                        [39m[1m[2m   23.94 kB[22m[1m[22m[2m │ gzip:   9.15 kB[22m
+[2mdist/[22m[2massets/[22m[36mHallOfChampions-BnIpjW7Y.js                      [39m[1m[2m   24.11 kB[22m[1m[22m[2m │ gzip:   8.22 kB[22m
+[2mdist/[22m[2massets/[22m[36mStatDetective-C9okgxYP.js                        [39m[1m[2m   24.19 kB[22m[1m[22m[2m │ gzip:   9.31 kB[22m
+[2mdist/[22m[2massets/[22m[36mMatchReportCard-BQioTC76.js                      [39m[1m[2m   24.74 kB[22m[1m[22m[2m │ gzip:   6.82 kB[22m
+[2mdist/[22m[2massets/[22m[36mF1Constructor-BvjPpSoQ.js                        [39m[1m[2m   24.87 kB[22m[1m[22m[2m │ gzip:   8.72 kB[22m
+[2mdist/[22m[2massets/[22m[36mManagerHotSeat-BfpCJvnE.js                       [39m[1m[2m   24.92 kB[22m[1m[22m[2m │ gzip:   7.21 kB[22m
+[2mdist/[22m[2massets/[22m[36mStatsScreen-CNTHKmUX.js                          [39m[1m[2m   25.10 kB[22m[1m[22m[2m │ gzip:   6.95 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagement-DezgbeYP.js                       [39m[1m[2m   25.58 kB[22m[1m[22m[2m │ gzip:  10.06 kB[22m
+[2mdist/[22m[2massets/[22m[36mSquadDeal-DHE4EzWr.js                            [39m[1m[2m   25.88 kB[22m[1m[22m[2m │ gzip:   7.91 kB[22m
+[2mdist/[22m[2massets/[22m[36mPerfectSeasonNba-B5OKALIO.js                     [39m[1m[2m   25.92 kB[22m[1m[22m[2m │ gzip:   9.11 kB[22m
+[2mdist/[22m[2massets/[22m[36mDrillBoard-DnWMIfFf.js                           [39m[1m[2m   25.95 kB[22m[1m[22m[2m │ gzip:   9.60 kB[22m
+[2mdist/[22m[2massets/[22m[36mNhlPlayoffFormatHistory-Cf8eJAN0.js              [39m[1m[2m   25.96 kB[22m[1m[22m[2m │ gzip:   7.80 kB[22m
+[2mdist/[22m[2massets/[22m[36mListQuiz-CJSQ1T9h.js                             [39m[1m[2m   26.08 kB[22m[1m[22m[2m │ gzip:   9.86 kB[22m
+[2mdist/[22m[2massets/[22m[36mF1Driver-CmP3FhMQ.js                             [39m[1m[2m   26.71 kB[22m[1m[22m[2m │ gzip:   9.65 kB[22m
+[2mdist/[22m[2massets/[22m[36mRarityRound-Z2s7O9gR.js                          [39m[1m[2m   26.98 kB[22m[1m[22m[2m │ gzip:   7.82 kB[22m
+[2mdist/[22m[2massets/[22m[36mNFLCareer-BNjNm00M.js                            [39m[1m[2m   27.01 kB[22m[1m[22m[2m │ gzip:   7.45 kB[22m
+[2mdist/[22m[2massets/[22m[36mRankEm-7CyRmeu_.js                               [39m[1m[2m   27.13 kB[22m[1m[22m[2m │ gzip:   9.72 kB[22m
+[2mdist/[22m[2massets/[22m[36mFreeKick-Ce_eIm6c.js                             [39m[1m[2m   27.14 kB[22m[1m[22m[2m │ gzip:   8.96 kB[22m
+[2mdist/[22m[2massets/[22m[36mFaceOff-B2mKL1TA.js                              [39m[1m[2m   27.29 kB[22m[1m[22m[2m │ gzip:   9.30 kB[22m
+[2mdist/[22m[2massets/[22m[36mNbaPlayoffFormatHistory-QfXu1TOz.js              [39m[1m[2m   27.58 kB[22m[1m[22m[2m │ gzip:   8.38 kB[22m
+[2mdist/[22m[2massets/[22m[36mNbaLineup-CjCmMwrj.js                            [39m[1m[2m   27.60 kB[22m[1m[22m[2m │ gzip:   8.46 kB[22m
+[2mdist/[22m[2massets/[22m[36mSoccerGrid-BgPUn2Y1.js                           [39m[1m[2m   27.96 kB[22m[1m[22m[2m │ gzip:   9.05 kB[22m
+[2mdist/[22m[2massets/[22m[36mNbaCareer-CiD4umY3.js                            [39m[1m[2m   28.30 kB[22m[1m[22m[2m │ gzip:   8.00 kB[22m
+[2mdist/[22m[2massets/[22m[36mOlympics-CFTDWjlk.js                             [39m[1m[2m   28.93 kB[22m[1m[22m[2m │ gzip:  10.23 kB[22m
+[2mdist/[22m[2massets/[22m[36mstadiumTycoon-CaRw-v5R.js                        [39m[1m[2m   28.95 kB[22m[1m[22m[2m │ gzip:  10.26 kB[22m
+[2mdist/[22m[2massets/[22m[36mPlayerBingo-DRdvk1-1.js                          [39m[1m[2m   29.61 kB[22m[1m[22m[2m │ gzip:  10.70 kB[22m
+[2mdist/[22m[2massets/[22m[36mSeasonReportTabs-BUH2OJs3.js                     [39m[1m[2m   29.71 kB[22m[1m[22m[2m │ gzip:  12.03 kB[22m
+[2mdist/[22m[2massets/[22m[36mFantasyDraft-CKkJ-w9A.js                         [39m[1m[2m   30.47 kB[22m[1m[22m[2m │ gzip:   9.28 kB[22m
+[2mdist/[22m[2massets/[22m[36mPerfectSeasonNfl-De9ENiB2.js                     [39m[1m[2m   31.00 kB[22m[1m[22m[2m │ gzip:  11.17 kB[22m
+[2mdist/[22m[2massets/[22m[36mChampOrNot-BFWsdRhF.js                           [39m[1m[2m   31.14 kB[22m[1m[22m[2m │ gzip:   9.63 kB[22m
+[2mdist/[22m[2massets/[22m[36mGuessTheYear-DXYoJE8L.js                         [39m[1m[2m   31.23 kB[22m[1m[22m[2m │ gzip:  10.91 kB[22m
+[2mdist/[22m[2massets/[22m[36mFightGym-DyWh_WxL.js                             [39m[1m[2m   32.00 kB[22m[1m[22m[2m │ gzip:  10.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mmanagerHotSeat-CsX8E8n2.js                       [39m[1m[2m   32.11 kB[22m[1m[22m[2m │ gzip:   7.11 kB[22m
+[2mdist/[22m[2massets/[22m[36mHockeyCareer-DSIdc4AD.js                         [39m[1m[2m   32.19 kB[22m[1m[22m[2m │ gzip:   8.46 kB[22m
+[2mdist/[22m[2massets/[22m[36mTrainingPanel-BIpPkU4j.js                        [39m[1m[2m   32.41 kB[22m[1m[22m[2m │ gzip:  10.13 kB[22m
+[2mdist/[22m[2massets/[22m[36mconquestDataNba-BDN2iDyW.js                      [39m[1m[2m   32.42 kB[22m[1m[22m[2m │ gzip:   8.52 kB[22m
+[2mdist/[22m[2massets/[22m[36mBaseballCareer-BFLDsdeX.js                       [39m[1m[2m   32.52 kB[22m[1m[22m[2m │ gzip:   8.70 kB[22m
+[2mdist/[22m[2massets/[22m[36mCareerLadder-DZQPYyNP.js                         [39m[1m[2m   32.59 kB[22m[1m[22m[2m │ gzip:  11.25 kB[22m
+[2mdist/[22m[2massets/[22m[36mSportsBingo-B6b3ASu6.js                          [39m[1m[2m   32.76 kB[22m[1m[22m[2m │ gzip:  10.81 kB[22m
+[2mdist/[22m[2massets/[22m[36mUfcChain-CHzmagBU.js                             [39m[1m[2m   33.00 kB[22m[1m[22m[2m │ gzip:   8.34 kB[22m
+[2mdist/[22m[2massets/[22m[36msoccerDeck-B4A6yKDa.js                           [39m[1m[2m   33.09 kB[22m[1m[22m[2m │ gzip:  10.85 kB[22m
+[2mdist/[22m[2massets/[22m[36mIdleArena-BmmNwRbO.js                            [39m[1m[2m   34.00 kB[22m[1m[22m[2m │ gzip:  11.19 kB[22m
+[2mdist/[22m[2massets/[22m[36mfrontOfficePlayers-BMdaeFxZ.js                   [39m[1m[2m   34.48 kB[22m[1m[22m[2m │ gzip:   8.25 kB[22m
+[2mdist/[22m[2massets/[22m[36mTeammates-BiuQMNUD.js                            [39m[1m[2m   34.82 kB[22m[1m[22m[2m │ gzip:   9.17 kB[22m
+[2mdist/[22m[2massets/[22m[36mTransferPath-DQQzgAsM.js                         [39m[1m[2m   35.27 kB[22m[1m[22m[2m │ gzip:  11.52 kB[22m
+[2mdist/[22m[2massets/[22m[36mcollege-B_XqEHQm.js                              [39m[1m[2m   36.30 kB[22m[1m[22m[2m │ gzip:  11.81 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubRivalries-DuNC-DyB.js                        [39m[1m[2m   36.59 kB[22m[1m[22m[2m │ gzip:  10.58 kB[22m
+[2mdist/[22m[2massets/[22m[36mUfcGame-C6Xm05UX.js                              [39m[1m[2m   37.11 kB[22m[1m[22m[2m │ gzip:   9.72 kB[22m
+[2mdist/[22m[2massets/[22m[36mTacticsScreen-Czvxl95s.js                        [39m[1m[2m   37.29 kB[22m[1m[22m[2m │ gzip:  11.39 kB[22m
+[2mdist/[22m[2massets/[22m[36mCollegeGrid-OFLb6oDl.js                          [39m[1m[2m   37.68 kB[22m[1m[22m[2m │ gzip:   9.05 kB[22m
+[2mdist/[22m[2massets/[22m[36mGuessNflTeam-CeUforRq.js                         [39m[1m[2m   37.80 kB[22m[1m[22m[2m │ gzip:  11.79 kB[22m
+[2mdist/[22m[2massets/[22m[36mGuessNascarDriver-CJkm7CTM.js                    [39m[1m[2m   39.13 kB[22m[1m[22m[2m │ gzip:   9.17 kB[22m
+[2mdist/[22m[2massets/[22m[36mconquestSports-B8RfKg53.js                       [39m[1m[2m   39.47 kB[22m[1m[22m[2m │ gzip:  10.82 kB[22m
+[2mdist/[22m[2massets/[22m[36mSeasonCentre-C5i69u3d.js                         [39m[1m[2m   40.99 kB[22m[1m[22m[2m │ gzip:  12.55 kB[22m
+[2mdist/[22m[2massets/[22m[36mSoccerSeasonCentre-DhZYXhp0.js                   [39m[1m[2m   41.25 kB[22m[1m[22m[2m │ gzip:  14.85 kB[22m
+[2mdist/[22m[2massets/[22m[36mBuzzerBeater-BSOnY2kG.js                         [39m[1m[2m   41.91 kB[22m[1m[22m[2m │ gzip:  13.67 kB[22m
+[2mdist/[22m[2massets/[22m[36mTransferScreen-B2dDSqD2.js                       [39m[1m[2m   41.97 kB[22m[1m[22m[2m │ gzip:  11.08 kB[22m
+[2mdist/[22m[2massets/[22m[36mera2015-CKBLW-Gg.js                              [39m[1m[2m   43.39 kB[22m[1m[22m[2m │ gzip:  14.90 kB[22m
+[2mdist/[22m[2massets/[22m[36mLineupBuilder-DJnGixWo.js                        [39m[1m[2m   43.41 kB[22m[1m[22m[2m │ gzip:  14.72 kB[22m
+[2mdist/[22m[2massets/[22m[36mMissingNine-CWsszkjz.js                          [39m[1m[2m   44.25 kB[22m[1m[22m[2m │ gzip:  12.34 kB[22m
+[2mdist/[22m[2massets/[22m[36mMissingFive-DyMNUjna.js                          [39m[1m[2m   44.85 kB[22m[1m[22m[2m │ gzip:  10.56 kB[22m
+[2mdist/[22m[2massets/[22m[36mWorldCompScreen-CC4fFpnG.js                      [39m[1m[2m   45.08 kB[22m[1m[22m[2m │ gzip:  14.03 kB[22m
+[2mdist/[22m[2massets/[22m[36mera2005-B29vZjuX.js                              [39m[1m[2m   45.34 kB[22m[1m[22m[2m │ gzip:  15.17 kB[22m
+[2mdist/[22m[2massets/[22m[36mera2010-YNeWL_4t.js                              [39m[1m[2m   45.62 kB[22m[1m[22m[2m │ gzip:  15.40 kB[22m
+[2mdist/[22m[2massets/[22m[36mDeadlineDay-DsqGfbtm.js                          [39m[1m[2m   46.28 kB[22m[1m[22m[2m │ gzip:  14.33 kB[22m
+[2mdist/[22m[2massets/[22m[36mera2020-7P0IGSTf.js                              [39m[1m[2m   46.53 kB[22m[1m[22m[2m │ gzip:  16.08 kB[22m
+[2mdist/[22m[2massets/[22m[36mAppearanceBuilder-CTjydPqy.js                    [39m[1m[2m   47.24 kB[22m[1m[22m[2m │ gzip:  14.98 kB[22m
+[2mdist/[22m[2massets/[22m[36mBaseballConnections-BBc0t6Ne.js                  [39m[1m[2m   49.17 kB[22m[1m[22m[2m │ gzip:  12.35 kB[22m
+[2mdist/[22m[2massets/[22m[36mnbaOpeningRatings-DmYGOL8G.js                    [39m[1m[2m   50.06 kB[22m[1m[22m[2m │ gzip:   6.77 kB[22m
+[2mdist/[22m[2massets/[22m[36mCageClash-G-tFPdzk.js                            [39m[1m[2m   52.21 kB[22m[1m[22m[2m │ gzip:  17.16 kB[22m
+[2mdist/[22m[2massets/[22m[36mFootle-CUegSgkX.js                               [39m[1m[2m   54.24 kB[22m[1m[22m[2m │ gzip:  17.18 kB[22m
+[2mdist/[22m[2massets/[22m[36mConquestNba-CCY5w46W.js                          [39m[1m[2m   54.41 kB[22m[1m[22m[2m │ gzip:  15.58 kB[22m
+[2mdist/[22m[2massets/[22m[36mbaseball-C94Eb-PF.js                             [39m[1m[2m   55.30 kB[22m[1m[22m[2m │ gzip:  19.47 kB[22m
+[2mdist/[22m[2massets/[22m[36mConquest-1aFFYygK.js                             [39m[1m[2m   55.77 kB[22m[1m[22m[2m │ gzip:  14.86 kB[22m
+[2mdist/[22m[2massets/[22m[36mMissingEleven-DEIqXOxz.js                        [39m[1m[2m   58.02 kB[22m[1m[22m[2m │ gzip:  14.86 kB[22m
+[2mdist/[22m[2massets/[22m[36mSportHub-BlSoGz53.js                             [39m[1m[2m   58.55 kB[22m[1m[22m[2m │ gzip:  19.69 kB[22m
+[2mdist/[22m[2massets/[22m[36msoccer1-MOKhqnXB.js                              [39m[1m[2m   60.80 kB[22m[1m[22m[2m │ gzip:  20.40 kB[22m
+[2mdist/[22m[2massets/[22m[36mhockey-D-_8KTQs.js                               [39m[1m[2m   61.50 kB[22m[1m[22m[2m │ gzip:  21.54 kB[22m
+[2mdist/[22m[2massets/[22m[36mLiveSimScreen-BypY2EXT.js                        [39m[1m[2m   62.85 kB[22m[1m[22m[2m │ gzip:  21.37 kB[22m
+[2mdist/[22m[2massets/[22m[36mCollegeDynastyBoard-GJd8TsNE.js                  [39m[1m[2m   64.39 kB[22m[1m[22m[2m │ gzip:  19.02 kB[22m
+[2mdist/[22m[2massets/[22m[36mfootball-DwGGO37E.js                             [39m[1m[2m   64.54 kB[22m[1m[22m[2m │ gzip:  22.82 kB[22m
+[2mdist/[22m[2massets/[22m[36mProfile-DPdxNLZa.js                              [39m[1m[2m   65.10 kB[22m[1m[22m[2m │ gzip:  20.06 kB[22m
+[2mdist/[22m[2massets/[22m[36mStadiumTycoon-DKx-_bts.js                        [39m[1m[2m   68.25 kB[22m[1m[22m[2m │ gzip:  21.70 kB[22m
+[2mdist/[22m[2massets/[22m[36mFightPromoter-BfnNdXXz.js                        [39m[1m[2m   68.51 kB[22m[1m[22m[2m │ gzip:  20.87 kB[22m
+[2mdist/[22m[2massets/[22m[36mClubManagerHelp-VS1fi-A-.js                      [39m[1m[2m   69.10 kB[22m[1m[22m[2m │ gzip:  23.69 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerEra2015-BUxVBSOC.js                   [39m[1m[2m   73.21 kB[22m[1m[22m[2m │ gzip:  21.60 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerEra2005-DZSwQTfX.js                   [39m[1m[2m   75.93 kB[22m[1m[22m[2m │ gzip:  21.84 kB[22m
+[2mdist/[22m[2massets/[22m[36mImperialismBoardShared-BPf5U-ZG.js               [39m[1m[2m   76.06 kB[22m[1m[22m[2m │ gzip:  24.92 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerEra2010-CiScj6R7.js                   [39m[1m[2m   76.80 kB[22m[1m[22m[2m │ gzip:  22.43 kB[22m
+[2mdist/[22m[2massets/[22m[36mAussieRulesManager-ChLzZESc.js                   [39m[1m[2m   76.89 kB[22m[1m[22m[2m │ gzip:  25.21 kB[22m
+[2mdist/[22m[2massets/[22m[36mWorldCupPredictor-DkfjUGxU.js                    [39m[1m[2m   77.06 kB[22m[1m[22m[2m │ gzip:  23.79 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManagerEra2020-Bej21k8N.js                   [39m[1m[2m   78.49 kB[22m[1m[22m[2m │ gzip:  23.60 kB[22m
+[2mdist/[22m[2massets/[22m[36mNhlFrontOffice-D_qNhtHS.js                       [39m[1m[2m   79.30 kB[22m[1m[22m[2m │ gzip:  26.57 kB[22m
+[2mdist/[22m[2massets/[22m[36mnhlOpeningRatings-Y9x0bvK7.js                    [39m[1m[2m   80.49 kB[22m[1m[22m[2m │ gzip:   9.19 kB[22m
+[2mdist/[22m[2massets/[22m[36mworld-bzrfPoKq.js                                [39m[1m[2m   83.56 kB[22m[1m[22m[2m │ gzip:  27.22 kB[22m
+[2mdist/[22m[2massets/[22m[36mFightCareer-CgB5HY47.js                          [39m[1m[2m   84.16 kB[22m[1m[22m[2m │ gzip:  26.32 kB[22m
+[2mdist/[22m[2massets/[22m[36mGuessTheCollege-CraccJxn.js                      [39m[1m[2m   84.72 kB[22m[1m[22m[2m │ gzip:  22.33 kB[22m
+[2mdist/[22m[2massets/[22m[36mmoreSports-GYqSPvUd.js                           [39m[1m[2m   85.08 kB[22m[1m[22m[2m │ gzip:  27.30 kB[22m
+[2mdist/[22m[2massets/[22m[36mbasketball-WzvisrdN.js                           [39m[1m[2m   85.79 kB[22m[1m[22m[2m │ gzip:  29.26 kB[22m
+[2mdist/[22m[2massets/[22m[36mClubManager-B4IMnThm.js                          [39m[1m[2m   90.13 kB[22m[1m[22m[2m │ gzip:  28.40 kB[22m
+[2mdist/[22m[2massets/[22m[36mNbaFrontOffice-4Q_39ID9.js                       [39m[1m[2m   90.22 kB[22m[1m[22m[2m │ gzip:  31.24 kB[22m
+[2mdist/[22m[2massets/[22m[36mplayers-BvqkSYM9.js                              [39m[1m[2m   97.64 kB[22m[1m[22m[2m │ gzip:  14.48 kB[22m
+[2mdist/[22m[2massets/[22m[36mGmTradeBuilder-De1RT1IK.js                       [39m[1m[2m  100.87 kB[22m[1m[22m[2m │ gzip:  33.86 kB[22m
+[2mdist/[22m[2massets/[22m[36mMlbFrontOffice-BwC9qC6S.js                       [39m[1m[2m  107.64 kB[22m[1m[22m[2m │ gzip:  34.16 kB[22m
+[2mdist/[22m[2massets/[22m[36mrecordBooks-BdkMyrPi.js                          [39m[1m[2m  108.78 kB[22m[1m[22m[2m │ gzip:  19.87 kB[22m
+[2mdist/[22m[2massets/[22m[36msoccer2-Bb_OhM1z.js                              [39m[1m[2m  111.22 kB[22m[1m[22m[2m │ gzip:  37.64 kB[22m
+[2mdist/[22m[2massets/[22m[36mFrontOffice-Dc4utq1U.js                          [39m[1m[2m  111.51 kB[22m[1m[22m[2m │ gzip:  36.47 kB[22m
+[2mdist/[22m[2massets/[22m[36mRebuild-BkrRsMqk.js                              [39m[1m[2m  117.24 kB[22m[1m[22m[2m │ gzip:  35.64 kB[22m
+[2mdist/[22m[2massets/[22m[36mConnections-BTmNaKlx.js                          [39m[1m[2m  154.10 kB[22m[1m[22m[2m │ gzip:  30.88 kB[22m
+[2mdist/[22m[2massets/[22m[36mDartDraft-xnLGRAxN.js                            [39m[1m[2m  176.85 kB[22m[1m[22m[2m │ gzip:  57.81 kB[22m
+[2mdist/[22m[2massets/[22m[36mhtml2canvas.esm-CBrSDip1.js                      [39m[1m[2m  201.42 kB[22m[1m[22m[2m │ gzip:  48.03 kB[22m
+[2mdist/[22m[2massets/[22m[36mMlbMyCareer-u8qhAw2u.js                          [39m[1m[2m  244.25 kB[22m[1m[22m[2m │ gzip:  82.43 kB[22m
+[2mdist/[22m[2massets/[22m[36mNhlMyCareer-CC9YAfO2.js                          [39m[1m[2m  249.85 kB[22m[1m[22m[2m │ gzip:  82.95 kB[22m
+[2mdist/[22m[2massets/[22m[36mNbaMyCareer-BmF6737W.js                          [39m[1m[2m  258.69 kB[22m[1m[22m[2m │ gzip:  87.85 kB[22m
+[2mdist/[22m[2massets/[22m[36mMissingXi-x2zwGuLS.js                            [39m[1m[2m  264.35 kB[22m[1m[22m[2m │ gzip:  51.89 kB[22m
+[2mdist/[22m[2massets/[22m[36museCareerMoment-C7zOyrov.js                      [39m[1m[2m  274.62 kB[22m[1m[22m[2m │ gzip:  70.64 kB[22m
+[2mdist/[22m[2massets/[22m[36mGridArchive-CXSYhFzy.js                          [39m[1m[2m  311.28 kB[22m[1m[22m[2m │ gzip:  56.56 kB[22m
+[2mdist/[22m[2massets/[22m[36mcareerPlayers-DOIUlYXN.js                        [39m[1m[2m  335.22 kB[22m[1m[22m[2m │ gzip:  40.78 kB[22m
+[2mdist/[22m[2massets/[22m[36mWhatsNew-DEButNUF.js                             [39m[1m[2m  395.67 kB[22m[1m[22m[2m │ gzip: 124.22 kB[22m
+[2mdist/[22m[2massets/[22m[36musCareerSeasonReview-BqMOyWLL.js                 [39m[1m[2m  487.57 kB[22m[1m[22m[2m │ gzip: 155.77 kB[22m
+[2mdist/[22m[2massets/[22m[36mfrontOfficeDepth-hFZ-rvc7.js                     [39m[1m[33m  505.58 kB[39m[22m[2m │ gzip:  56.44 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-Dt1sHGfV.js                                [39m[1m[33m  798.43 kB[39m[22m[2m │ gzip: 243.29 kB[22m
+[2mdist/[22m[2massets/[22m[36mclubManager-Ddt0ewLJ.js                          [39m[1m[33m  869.90 kB[39m[22m[2m │ gzip: 288.66 kB[22m
+[2mdist/[22m[2massets/[22m[36mSoccerCareer-CoFjSTKo.js                         [39m[1m[33m1,381.12 kB[39m[22m[2m │ gzip: 405.25 kB[22m
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 27.21s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+STEP 10/13 Actual production build: exit 0 (28s)
+::: STEP 11/13 All fifteen build and snapshot readers
+1) one publisher id, everywhere
+   publisher id pub-2929318086316376 in index.html, ads.txt, AdBanner and consentedScripts.ts
+2) site verification survives a visitor who never accepts cookies
+   meta tag in the template and on 170 of 170 shipped documents (21 redirect and noindex stubs excluded by design)
+3) ads.txt
+   1 record(s), all well formed
+4) the policy pages exist, are submitted, and have real content on them
+   4 required pages, all routed, all submitted, all with real prerendered text
+5) the advertising disclosures, as shipped
+   9 statements and 3 links, all present in the shipped document (14243 readable characters)
+5b) analytics loads only behind the same consent as the ads
+   measurement id G-KZQK2G68YC, analytics stays gated globally and ads load only beside a real slot
+6) the ad component never labels an empty box
+   collapses when ineligible or unfilled, labels only what filled
+6b) same-page consent reaches an already mounted ad
+   either choice notifies the current page, and an ad exists only after Accept
+6c) no global Auto Ads eligibility on non-content routes
+   the verification meta stays global, but the ad script is limited to pages with an AdBanner
+7) one production slot on every AdBanner caller
+   80 callers scanned against slot 7540487748, 0 mismatches
+
+simAdsense: green. Verification, ads.txt, the policy pages and the ad component are all review ready.
+1) every brand asset exists and is what it says it is
+   6 PNGs at their sizes, 4 SVGs made of outlines, the .ico with three sizes
+2) the template links the icons, the social image and the theme colour
+   3 icon links, og:image and twitter:image present, theme colour set
+3) no image the template points a crawler at lives off the domain
+   5 image references, 0 off the domain
+4) the Organization logo is the square mark, in both copies of the site block
+   both say /icon-512.png, a 512 by 512 square
+5) the header draws the mark from the generated geometry
+   LogoMark in the header, shape from logoMark.ts, hidden from screen readers
+6) the shipped geometry and SVGs are exactly what the generator produces
+   generator re-run, 5 files compared, 0 drifted
+7) the manifest makes the site installable with the same face
+   2 icons at their declared sizes, 3 shortcuts on live routes, theme colour agrees with the template
+
+simBrand: green. One mark, drawn from one source, everywhere the site shows its face.
+0) 153 shipped pages
+1) every head tag appears exactly once
+   11 tag kinds checked on 153 pages, 0 kinds wrong
+2) the tag that survives is the page's own, not the template's
+   0 template written tags left standing
+3) no two pages share a description
+   153 distinct descriptions across 153 pages
+4) no title is long enough to be truncated in a result
+   median 56, longest 60 (/alphabet-sprint), 0 over 60
+5) the trim never takes the brand off a title that had room for it
+   134 keep it, 14 could not have kept it under 60, 5 never used that suffix in their copy
+
+simHeadTags: green. Every page says its own thing, once.
+0) 10 live routes that are not submitted and ask not to be indexed
+1) every one of them has a document
+   10 of 10
+2) each one declares noindex in the HTML, before any JavaScript runs
+   10 documents, all declaring it
+3) none of them is a copy of the home page
+   10 documents, none of them the home page
+4) not in the sitemap, and no hashed paths in the committed copy
+   none submitted, 0 with a hashed path
+
+simHiddenPages: green. Every page we keep out of Google says so itself.
+1) registry: 13 categories, 133 games, 6 hubs
+   HUB_NAV carries the same 6 hubs as SPORT_HUBS
+2) the hub list, the router and the sitemap agree
+   6 hubs, all mounted, all in the sitemap, 0 pages gathering categories on their own
+   173 shipped documents read
+3) every hub links every game it gathers, and its count is true
+   /soccer: 36/36 games linked, printed count 36
+   /pro-basketball: 17/17 games linked, printed count 17
+   /hockey: 12/12 games linked, printed count 12
+   /pro-football: 11/11 games linked, printed count 11
+   /baseball: 11/11 games linked, printed count 11
+   /college: 7/7 games linked, printed count 7
+4) no shipped page tells the reader it has nothing
+   0 pages claiming zero, out of 173
+5) every game is reachable, and chrome is not allowed to do the work
+   20 chrome links, 133 games graded on body links: min 5, median 9, max 16
+6) every game on a hub ships as an h3 holding its link, and every section heading names the sport
+   /soccer: 36/36 games as h3 links, 6 section headings checked
+   /pro-basketball: 17/17 games as h3 links, 6 section headings checked
+   /hockey: 12/12 games as h3 links, 6 section headings checked
+   /pro-football: 11/11 games as h3 links, 6 section headings checked
+   /baseball: 11/11 games as h3 links, 6 section headings checked
+   /college: 7/7 games as h3 links, 6 section headings checked
+7) no hub prints a bare "/route" where a game's name and link should be
+   /soccer: 0 bare paths in the saved page
+   /pro-basketball: 0 bare paths in the saved page
+   /hockey: 0 bare paths in the saved page
+   /pro-football: 0 bare paths in the saved page
+   /baseball: 0 bare paths in the saved page
+   /college: 0 bare paths in the saved page
+
+simHubs: green. Every hub contains what it promises, and no page tells anyone it is empty.
+1) the key file
+   16211a5a50cff8f3434e5db883a21d8f.txt: content matches the name
+2) the submit script agrees
+   KEY constant matches the key file
+3) the sitemap the submission reads
+   171 URLs, all on the right host
+
+simIndexNow: green. The key file, the script and the sitemap agree.
+1) The pages that must never be indexed say so
+   7 routes noindexed, admin and 404 covered
+2) Every live page is either in the sitemap or deliberately out
+   171 URLs submitted, 181 live routes, 0 unexplained
+3) A sitemap entry with no inbound link is not a page
+   6 hubs, each submitted, kept by the generator and linked from the static home page
+4) Unique titles, unique descriptions, sane lengths
+   153 indexable pages, 0 duplicate titles, 0 duplicate descriptions (14 titles and 40 descriptions run past the display width, which only truncates)
+5) No indexable page ships without title, description and canonical
+6) One h1 per page: the SEO block fills in only where a page has none
+   145 pages carry the block, 137 have a headline of their own, 8 rely on it for their h1
+6b) Every submitted snapshot carries exactly one real h1
+   171 submitted documents checked at the bytes a crawler receives
+7) robots.txt reads the way a crawler parses it
+8) No em or en dash in the files this round touched
+
+simIndexing: green. Every page is either worth finding or honestly hidden.
+1) 171 crawlable documents against 171 sitemap routes
+2) every sitemap route is linked from somewhere
+   0 orphans, thinnest linked route has 4 inbound, median 8
+3) the pages that exist to gather other pages
+   13 hubs, every one linked from most of the site; sport hubs 170 to 170 inbound
+4) no page is a dead end
+   outbound links: min 13 (/privacy), median 21, max 93
+
+simInternalLinks: green. Every page can be reached, and every page leads somewhere.
+Checked 81 product names against 4224 files
+  scanned: src, public, supabase, scripts, index.html
+  skipped: node_modules, dist, dist-ssr, .git, .playwright-mcp, coverage, .cache, and docs/ on purpose (see the note above)
+  FIFA is allowlisted in 27 shapes, so the governing body, its
+    rankings and its World Cup all pass while the video game does not
+  6 live identifiers are left alone because renaming them is a
+    data migration, not a copy edit: routes, save keys and one Supabase table
+  lines ending in "rival-names-allow" are skipped, for the sims that carry
+    a banned-name list of their own because checking for them IS their job
+
+No rival product names found. 0 findings.
+1) coverage: 171 routes in the sitemap
+   171 of 171 routes have a document
+2) each document is a page, not the empty shell
+   thinnest page /contact at 2008 characters of text
+3) the documents are not all the same page
+   171 distinct documents across 171 routes
+4) each sampled page carries its OWN words
+   10 sampled pages each carry their own words
+5) nothing stale or broken was baked in
+   no error cards and no personal state in any of the 171 documents
+6) no snapshot pins itself to one build
+   170 snapshots, 0 carrying a hashed path
+7) no dated real world line was frozen into a snapshot
+   the calendar is retired and stays retired; drift is held by section 13 and playSnapshotDrift
+8) nothing a page renders is thrown away for being long
+  FAIL: /whats-new drops the entry "Club Manager: Hard and Impossible are harder again.", which means the extractor is throwing away real content again
+   437 of 438 changelog entries reach the shipped page
+9) no link is written into a snapshot twice
+   the consumed-anchor guard is in place; 1 block-then-same-link adjacencies (reported, not asserted on: honest repeat linking looks identical)
+10) the snapshot styling does not outlive the snapshot
+   170 snapshots, 0 leaking padding onto the live app, 0 missing the wrapper
+11) exactly one canonical per shipped document
+   171 documents, 0 with more than one canonical, worst 1
+12) no shipped page has a running clock frozen into it
+   171 documents, 0 carrying a frozen clock
+13) everything the ticker computes declares itself volatile
+   no push list, 2 computed elements checked for data-no-prerender, LIVE chip present
+   171 documents, 0 carrying a frozen score card
+14) no page in the sitemap ships a noindex
+   171 sitemap documents, 0 carrying a noindex
+   the snapshot write holds: it replaces, it rides out a transient hold, it throws rather than
+   damage the old page, it does not retry a genuine error, and it leaves no litter
+16) no random pick seeds React state directly
+   2217 source files scanned, 23 raw random initialiser(s), 22 file(s) on the frozen baseline, 0 new
+17) no saved page opens on a frozen loading line
+   171 documents read, 0 waiting lines found
+
+simPrerender: 1 failure
+1) every snapshot in public/ is hash free
+   161 snapshots, 161 referencing the stable boot script, 0 hashed paths
+   11 retired signposts, none booting the app
+2) the app boots on a snapshot served against a build it never saw
+   /soccer-career   snapshot 17990 chars, booted yes, 390 nodes / 231 styled, 1 stylesheet(s), 0 failed requests
+   /records         snapshot 13225 chars, booted yes, 1091 nodes / 974 styled, 1 stylesheet(s), 0 failed requests
+   /whats-new       snapshot 331349 chars, booted yes, 1282 nodes / 770 styled, 1 stylesheet(s), 0 failed requests
+4) every retired address lands on its destination in a real browser
+   /deal-or-no-deal       -> /squad-deal          3 navigation(s), 227 styled nodes
+   /football-draft        -> /                    3 navigation(s), 2964 styled nodes
+   /grade-transfer        -> /                    3 navigation(s), 2964 styled nodes
+   /guess-soccer-club     -> /                    3 navigation(s), 2964 styled nodes
+   /guess-transfer-value  -> /                    3 navigation(s), 2964 styled nodes
+   /jeopardy              -> /quiz-board          3 navigation(s), 140 styled nodes
+   /overrated-underrated  -> /face-off            3 navigation(s), 219 styled nodes
+   /perfect-lineup        -> /                    3 navigation(s), 2964 styled nodes
+   /tier-list             -> /                    3 navigation(s), 2964 styled nodes
+   /world-cup             -> /                    3 navigation(s), 2964 styled nodes
+   /world-cup-predictor   -> /world-cup-bracket   3 navigation(s), 950 styled nodes
+
+simPrerenderBoot: green. The snapshots read like documents and still turn into the app.
+0) 11 retired routes in App.tsx, 181 live routes
+1) coverage
+   11 of 11 retired routes have their own document
+2) every stub names one destination, and it is a live page
+   refresh, canonical and visible link agree on all 11
+3) no retired route serves the home page document
+   11 documents: 0 identical to the shell, 0 sharing its title, 0 with no canonical, 0 with no declared redirect
+4) not in the sitemap, not linked from anywhere shipped
+   sitemap has 171 URLs and none of the 11 retired routes
+   0 internal links point at a retired route
+5) stubs are current with App.tsx
+   11 of 11 current
+
+simRetiredRoutes: all green
+1) every shipped page carries structured data, and it parses
+   171 submitted pages, 0 with none, 0 unparseable, 0 with no file
+2) no page claims to be something it is not
+   171 pages typed correctly, 0 wrong
+3) the markup a game page generates actually ships
+   133 game pages, 0 without FAQ markup, 0 without breadcrumbs, 0 with a broken trail
+3b) a game in a sport with a hub ships its trail through that hub
+   94 game pages trail through their hub, 39 have no hub and keep two steps, 0 wrong
+4) every shipped page says who this site is
+   171 pages, 0 without WebSite, 0 without Organization, 0 without WebApplication, 0 unlinked; home page ships 3 objects
+4b) the template block and the library have not drifted apart
+   template declares WebSite and Organization and WebApplication; the library references /#org, /#website, /#webapp
+5) the classification table has not fallen behind the route list
+   37 routes classified by hand, 133 by the registry, 0 unclassified, 0 stale
+
+simSchema: green. Every page says what it is, and everything it generates reaches the file a crawler reads.
+1) Sanity: the three sources parsed
+   171 sitemap URLs, 181 live routes, 11 redirect routes, 133 registry games
+2) No submitted URL is a redirect
+   clean, the Search Console failure cannot recur from here
+3) Every registry game is submitted
+   all 133 games present, including the newest
+4) Every submitted URL has a real route
+   no orphans submitted
+5) every lastmod is a claim the shipped files back up
+   171 rows, 171 ledger entries, 0 unbacked, 0 disagreeing, 0 pointing at a version that has been rewritten, 0 in the future
+
+simSitemap: green. Google only ever hears about real pages.
+1) the committed snapshots stay hash free
+   172 committed documents, 0 carrying a hashed path
+2) every shipped page carries THIS build's assets
+   180 of 180 shipped pages carry their own tags, 0 pointing at a file this build did not make
+3) the injected stylesheet does not block the paint
+   0 render blocking stylesheet injections
+4) the boot script survives as the fallback
+   180 of 180 still reference /prerender-boot.js
+5) the retired signposts are left alone
+   11 signposts, 0 touched
+6) the calm boot: the mark on a cover before React, the whole page without JS
+   180 of 180 shipped pages carry the cover, and the home template carries its own
+
+simSnapshotAssets: green. Every page knows where its own code is, and finding out costs nobody a round trip.
+STEP 11/13 All fifteen build and snapshot readers: exit 1 (30s)
+::: STEP 12/13 Hold tracked source, installed packages, reader tools and offline transport (after an earlier failure)
+Held 521 locked manifests, reader tools and all tracked sources. No save cap or historical assertion changed.
+STEP 12/13 Hold tracked source, installed packages, reader tools and offline transport: exit 0 (0s)
+STEP 13/13 uses actions/upload-artifact@v4: skipped (uses)
+wfrun manager-handover-desk.yml: 9 steps ran, 1 failed: All fifteen build and snapshot readers
