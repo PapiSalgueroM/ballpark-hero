@@ -1,0 +1,4 @@
+headsha exit=0 0s | 6672eed3a Release BK fix: a Champions League slice written still moves worldComps to the end, as the old engine wrote it
+oc-light exit=0 288s | simOneOffCups: green, 22588 checks (288 s)
+oc-ctl-diff exit=0 638s | == keep: head exit 1, 0 lines; 499ec5ac exit 1, 0 lines | head: simOneOffCups: control keep FIRED (735 failures, all its own: 5 slices: Arsenal (now) seed | 499ec5ac: sim
+oc-whole exit=0 1865s | simOneOffCups: green, 161787 checks (1865 s)
