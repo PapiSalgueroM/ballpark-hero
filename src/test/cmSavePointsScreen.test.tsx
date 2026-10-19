@@ -107,13 +107,13 @@ describe('the card after the load says what a save point restore did', () => {
   const entry = CONTINUE_SAVES.find(e => e.saveKey === SAVE_KEY)!;
   const said = () => render(<BrokenSaveRestore pathname="/club-manager" />).getByRole('status').textContent ?? '';
 
-  it('a point equal to the save being played says it was already there, not that it is the kept aside save', () => {
+  it('a point equal to the save being played says nothing needed keeping aside, not that it is the kept aside save', () => {
     const text = pointText(startCareer('Everton'));
     localStorage.setItem(SAVE_KEY, text);
     expect(stageCopy(entry, text, localStorage).ok).toBe(true);
     runSaveKeeper();
     const words = said();
-    expect(words).toBe('You were already at this save point.');
+    expect(words).toBe('Nothing needed keeping aside.');
     expect(words).not.toContain('This is the save that was kept aside');
   });
 

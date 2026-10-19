@@ -57,13 +57,10 @@ type Offer = { entry: ContinueSave; backupKey: string; hasSave: boolean; when: s
 function outcomeWords(o: KeeperOutcome): string {
   /* Round 1513: a save point put back. The point itself stays in its list either way. */
   /* Review of 2026-10-19: the season mark written before staging stays on a refused load (the safe side), so the card says so. */
-  if (o.copy && !o.ok) return 'The save point could not be put back, so your career and points are as they were. Its season still won\'t post a score.';
+  if (o.copy && !o.ok) return 'The save point was not put back. Its season still won\'t post a score.';
   if (o.ok) {
-    /* Review of 2026-10-19: a point equal to the save being played (restored twice, or before a match) keeps nothing
-       aside; applyPending then answers with no `kept` at all, and with kept false when there was no save to keep. */
-    const first = o.kept ? 'The game you had before is kept aside in this browser'
-      : !o.copy ? 'This is the save that was kept aside'
-        : o.kept === undefined ? 'You were already at this save point' : 'Your career is at this save point';
+    /* Review of 2026-10-19: a point equal to the save being played (restored twice, or before a match) keeps nothing aside. */
+    const first = o.kept ? 'The game you had before is kept aside in this browser' : o.copy ? 'Nothing needed keeping aside' : 'This is the save that was kept aside';
     if (o.dropped) return `${first}. Each game keeps its three newest kept aside saves, so the oldest one was dropped.`;
     return o.kept ? `${first}, so nothing was deleted.` : `${first}.`;
   }
