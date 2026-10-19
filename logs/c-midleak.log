@@ -1,0 +1,19 @@
+simCmDifficulty: sections 8, control midleak
+  table: veryeasy {"gain":1.4,"pain":0.6,"cut":0,"cheque":1.5,"wageRoom":1.12,"mark":0.8,"edge":-3}; easy {"gain":1.2,"pain":0.8,"cut":0,"cheque":1.2,"wageRoom":1.06,"mark":0.87,"edge":-1.5}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":1.5}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3}
+NEGATIVE CONTROL ON: a change of level also moves the board's mood
+8) changing the level between matches
+  FAIL: 8a Brentford Medium to Very Easy: the state moved outside startOptions, first at key boardConfidence
+  FAIL: 8a Brentford Medium to Easy: the state moved outside startOptions, first at key boardConfidence
+  FAIL: 8a Brentford Medium to Hard: the state moved outside startOptions, first at key boardConfidence
+  FAIL: 8a Brentford Medium to Impossible: the state moved outside startOptions, first at key boardConfidence
+  FAIL: 8a Málaga Medium to Very Easy: the state moved outside startOptions, first at key boardConfidence
+  FAIL: 8a Málaga Medium to Easy: the state moved outside startOptions, first at key boardConfidence
+  FAIL: 8a Málaga Medium to Hard: the state moved outside startOptions, first at key boardConfidence
+  FAIL: 8a Málaga Medium to Impossible: the state moved outside startOptions, first at key boardConfidence
+  FAIL: 8a Inter Milan Medium to Very Easy: the state moved outside startOptions, first at key boardConfidence
+  FAIL: 8a Inter Milan Medium to Easy: the state moved outside startOptions, first at key boardConfidence
+  FAIL: 8a Inter Milan Medium to Hard: the state moved outside startOptions, first at key boardConfidence
+  FAIL: 8a Inter Milan Medium to Impossible: the state moved outside startOptions, first at key boardConfidence
+  ok: 8f: 12 summer cheques after a change at the season's end (3 clubs, four levels) are Medium's times the new dial
+CONTROL midleak FIRED: 12 failures
+simCmDifficulty: 12 FAILURES (sections 8)

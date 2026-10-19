@@ -1,0 +1,36 @@
+simCmDifficulty: sections 3, control ve-edge
+  table: veryeasy {"gain":1.4,"pain":0.6,"cut":0,"cheque":1.5,"wageRoom":1.12,"mark":0.8,"edge":-3}; easy {"gain":1.2,"pain":0.8,"cut":0,"cheque":1.2,"wageRoom":1.06,"mark":0.87,"edge":-1.5}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":1.5}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3}
+NEGATIVE CONTROL ON: Very Easy's edge set back to Medium's
+3) each lever does what its dial says (Very Easy with one lever on, the rest Medium's), 4 seeds
+  ok: B1: 35 first matches (22 up, 13 down), Very Easy's change is Normal's times the dial every time
+  FAIL: P1 Arsenal: the opponent reads 81.1, the dial says 78.1
+  FAIL: P1 Arsenal: the next match card shows 81, the dial says 78
+  FAIL: P1 Brentford: the opponent reads 85.8, the dial says 82.8
+  FAIL: P1 Brentford: the next match card shows 86, the dial says 83
+  FAIL: P1 Hull City: the opponent reads 85.5, the dial says 82.5
+  FAIL: P1 Hull City: the next match card shows 86, the dial says 83
+  FAIL: P1 Real Madrid: the opponent reads 76.3, the dial says 73.3
+  FAIL: P1 Real Madrid: the next match card shows 76, the dial says 73
+  FAIL: P1 Espanyol: the opponent reads 73.4, the dial says 70.4
+  FAIL: P1 Espanyol: the next match card shows 73, the dial says 70
+  FAIL: P1 Málaga: the opponent reads 79.3, the dial says 76.3
+  FAIL: P1 Málaga: the next match card shows 79, the dial says 76
+  FAIL: P1 Inter Milan: the opponent reads 81.9, the dial says 78.9
+  FAIL: P1 Inter Milan: the next match card shows 82, the dial says 79
+  FAIL: P1 Torino: the opponent reads 72.7, the dial says 69.7
+  FAIL: P1 Torino: the next match card shows 73, the dial says 70
+  FAIL: P1 Frosinone: the opponent reads 77.8, the dial says 74.8
+  FAIL: P1 Frosinone: the next match card shows 78, the dial says 75
+  FAIL: P1 Very Easy: the odds turned for you in 0 of 9 match facts
+  11 season ends rolled (the steady driver at the mid and small clubs)
+  ok: B2: 6 bad openings fell by exactly 0, 5 at or above Safe stayed
+  ok: M1: day one and 11 summer cheques are Normal's times 1.5
+  ok: M1 joinClubNow: 9 mid season moves start on Normal's money times 1.5
+  ok: M2: 10 new jobs (day one and summer moves) start on Normal's ceiling times 1.12
+  ok: M2 joinClubNow: 9 mid season moves start on Normal's ceiling times 1.12
+  ok: T1: all 5080 cards are the same men in the same order at 0.8 times the list
+  ok: T1 Very Easy: Buy charges the marked price (145.8 for a man listed at 178.2)
+  ok: T1 Very Easy: none of 5080 signings (727 of 30 or over) costs less than selling him straight back banks
+  ok: T1 Very Easy: the AI's own deals are Medium's (8 headlines after six entries)
+CONTROL ve-edge FIRED: 19 failures
+simCmDifficulty: 19 FAILURES (sections 3)

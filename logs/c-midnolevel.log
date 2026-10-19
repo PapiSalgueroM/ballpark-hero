@@ -1,0 +1,56 @@
+simCmDifficulty: sections 8, control midnolevel
+  table: veryeasy {"gain":1.4,"pain":0.6,"cut":0,"cheque":1.5,"wageRoom":1.12,"mark":0.8,"edge":-3}; easy {"gain":1.2,"pain":0.8,"cut":0,"cheque":1.2,"wageRoom":1.06,"mark":0.87,"edge":-1.5}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":1.5}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3}
+8) changing the level between matches
+  FAIL: 8b Brentford Medium to Very Easy: reads normal, and after a save and a load normal
+  FAIL: 8c Brentford Medium to Very Easy: the next match reads 88.3 (card 88), the new dial says 85.3
+  FAIL: 8d Brentford Medium to Very Easy: the mark is null (season 1) and the score still posts
+  FAIL: 8b Brentford Medium to Easy: reads normal, and after a save and a load normal
+  FAIL: 8c Brentford Medium to Easy: the next match reads 88.3 (card 88), the new dial says 86.8
+  FAIL: 8d Brentford Medium to Easy: the mark is null (season 1) and the score still posts
+  FAIL: 8b Brentford Medium to Hard: reads normal, and after a save and a load normal
+  FAIL: 8c Brentford Medium to Hard: the next match reads 88.3 (card 88), the new dial says 89.8
+  FAIL: 8d Brentford Medium to Hard: a career that only went harder lost its score or did not end on its own block
+  FAIL: 8b Brentford Medium to Impossible: reads normal, and after a save and a load normal
+  FAIL: 8c Brentford Medium to Impossible: the next match reads 88.3 (card 88), the new dial says 91.3
+  FAIL: 8d Brentford Medium to Impossible: a career that only went harder lost its score or did not end on its own block
+  FAIL: 8e Brentford: a sacked career cannot change its level
+  FAIL: 8b Málaga Medium to Very Easy: reads normal, and after a save and a load normal
+  FAIL: 8c Málaga Medium to Very Easy: the next match reads 86.9 (card 87), the new dial says 83.9
+  FAIL: 8d Málaga Medium to Very Easy: the mark is null (season 1) and the score still posts
+  FAIL: 8b Málaga Medium to Easy: reads normal, and after a save and a load normal
+  FAIL: 8c Málaga Medium to Easy: the next match reads 86.9 (card 87), the new dial says 85.4
+  FAIL: 8d Málaga Medium to Easy: the mark is null (season 1) and the score still posts
+  FAIL: 8b Málaga Medium to Hard: reads normal, and after a save and a load normal
+  FAIL: 8c Málaga Medium to Hard: the next match reads 86.9 (card 87), the new dial says 88.4
+  FAIL: 8d Málaga Medium to Hard: a career that only went harder lost its score or did not end on its own block
+  FAIL: 8b Málaga Medium to Impossible: reads normal, and after a save and a load normal
+  FAIL: 8c Málaga Medium to Impossible: the next match reads 86.9 (card 87), the new dial says 89.9
+  FAIL: 8d Málaga Medium to Impossible: a career that only went harder lost its score or did not end on its own block
+  FAIL: 8e Málaga: a sacked career cannot change its level
+  FAIL: 8b Inter Milan Medium to Very Easy: reads normal, and after a save and a load normal
+  FAIL: 8c Inter Milan Medium to Very Easy: the next match reads 82.5 (card 83), the new dial says 79.5
+  FAIL: 8d Inter Milan Medium to Very Easy: the mark is null (season 1) and the score still posts
+  FAIL: 8b Inter Milan Medium to Easy: reads normal, and after a save and a load normal
+  FAIL: 8c Inter Milan Medium to Easy: the next match reads 82.5 (card 83), the new dial says 81
+  FAIL: 8d Inter Milan Medium to Easy: the mark is null (season 1) and the score still posts
+  FAIL: 8b Inter Milan Medium to Hard: reads normal, and after a save and a load normal
+  FAIL: 8c Inter Milan Medium to Hard: the next match reads 82.5 (card 83), the new dial says 84
+  FAIL: 8d Inter Milan Medium to Hard: a career that only went harder lost its score or did not end on its own block
+  FAIL: 8b Inter Milan Medium to Impossible: reads normal, and after a save and a load normal
+  FAIL: 8c Inter Milan Medium to Impossible: the next match reads 82.5 (card 83), the new dial says 85.5
+  FAIL: 8d Inter Milan Medium to Impossible: a career that only went harder lost its score or did not end on its own block
+  FAIL: 8e Inter Milan: a sacked career cannot change its level
+  FAIL: 8f Brentford to Very Easy: the summer cheque is 63, Medium's 63 times 1.5 is 94.5
+  FAIL: 8f Hull City to Very Easy: the summer cheque is 33, Medium's 33 times 1.5 is 49.5
+  FAIL: 8f Torino to Very Easy: the summer cheque is 12, Medium's 12 times 1.5 is 18
+  FAIL: 8f Brentford to Easy: the summer cheque is 63, Medium's 63 times 1.2 is 75.6
+  FAIL: 8f Hull City to Easy: the summer cheque is 33, Medium's 33 times 1.2 is 39.6
+  FAIL: 8f Torino to Easy: the summer cheque is 12, Medium's 12 times 1.2 is 14.4
+  FAIL: 8f Brentford to Hard: the summer cheque is 63, Medium's 63 times 0.8 is 50.4
+  FAIL: 8f Hull City to Hard: the summer cheque is 33, Medium's 33 times 0.8 is 26.4
+  FAIL: 8f Torino to Hard: the summer cheque is 12, Medium's 12 times 0.8 is 9.6
+  FAIL: 8f Brentford to Impossible: the summer cheque is 63, Medium's 63 times 0.65 is 41
+  FAIL: 8f Hull City to Impossible: the summer cheque is 33, Medium's 33 times 0.65 is 21.5
+  FAIL: 8f Torino to Impossible: the summer cheque is 12, Medium's 12 times 0.65 is 7.8
+CONTROL midnolevel FIRED: 51 failures
+simCmDifficulty: 51 FAILURES (sections 8)
