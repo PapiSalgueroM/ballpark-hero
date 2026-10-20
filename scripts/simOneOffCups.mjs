@@ -600,6 +600,19 @@ async function fleetPass(forced) {
       probed.push(`${rid} from ${club}`);
     }
     console.log(`  1 venue probe: ${probed.join('; ') || 'none'}`);
+    /* Round 1516: a new career at either club of season one's UEFA Super Cup holds the 'seasonOne' stub (its place
+       was settled before I arrived) and no night of it on its calendar; the fleet holds neither club. */
+    const uscProbe = [];
+    for (const club of firstEditionClubs(R, 'uefa-2026') ?? []) {
+      const M = await E.fresh();
+      const s = tape(1, () => M.cm.startCareer(club)).value;
+      const u = s?.worldComps?.usc;
+      ok(u?.skip === 'seasonOne' && u.s === 1 && u.row === 'uefa-2026', `1 usc season one: a new career at ${club} holds ${u?.skip ?? u?.clubs?.join(' and ') ?? 'nothing'}, not the seasonOne stub`);
+      ok(!(s?.calendar ?? []).some(e => e.night?.k === 'usc'), `1 usc season one: a new career at ${club} has a UEFA Super Cup night on its calendar`);
+      uscProbe.push(`${club} ${u?.skip ?? 'no stub'}`);
+    }
+    ok(uscProbe.length === 2, `1 usc season one: ${uscProbe.length} clubs of the 2026 edition probed, not two`);
+    console.log(`  1 usc season one probe: ${uscProbe.join('; ')}`);
   }
   for (const f of fleet) {
     for (const seed of SEEDS) {
