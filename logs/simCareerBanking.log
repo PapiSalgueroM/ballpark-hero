@@ -1,0 +1,21 @@
+1) money arrives: a played career ends richer than it started
+   nfl: earned   26m, banked    12.1m
+   nba: earned   30m, banked    13.5m
+   mlb: earned   10m, banked     5.2m
+   nhl: earned   11m, banked     5.3m
+2) a player who never spends never goes backwards
+   4 careers walked season by season, no unexplained falls
+3) the owner's case: 30m a year with upkeep running must build a fortune
+   nfl: 8 years at 30m -> 88.1m banked
+   nba: 8 years at 30m -> 88.3m banked
+   mlb: 8 years at 30m -> 88.4m banked
+   nhl: 8 years at 30m -> 88.5m banked
+4) what you bank scales with what you earn
+   nfl: 2m/yr -> 7.3m, 25m/yr -> 90.5m
+   nba: 2m/yr -> 7.5m, 25m/yr -> 90.7m
+   mlb: 2m/yr -> 7.6m, 25m/yr -> 90.8m
+   nhl: 2m/yr -> 7.7m, 25m/yr -> 90.9m
+5) the repair rebuilds a broken old save, leaves a healthy one alone, and never refills a played one
+   5 repairs checked: old save rebuilt, healthy untouched, purchases deducted, two played saves stopped at zero
+
+simCareerBanking: green. Every career banks its pay, scales with it, and a broken save is repaired.

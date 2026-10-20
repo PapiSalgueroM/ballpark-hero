@@ -1,0 +1,16 @@
+
+1) leagues: one h2, and an h3 with its club count for every modern league, in order
+   ok  27 modern leagues looked for as h3s in 2 documents
+2) clubs: every league paragraph names exactly its clubs, the same ones the picker offers
+   ok  454 clubs in the data, 908 club names read, each league also read off the picker
+3) partial marks: exactly the isPartialClub clubs, explained once, every empty squad marked
+   ok  196 partial clubs in the data, 392 marks read, 42 empty squads in the data
+4) the date: one line, the roster bake's own, never the clock
+   ok  the bake's date is "August 2026, after the summer window"
+5) no other era: no club only a past season holds
+   ok  29 clubs only a past season holds, looked for in the block
+6) wiring: in the guide block, drawn, not stripped
+   ok  ClubManager.tsx and ClubManagerClubList.tsx read as code, the render read for where the block draws it
+   documents read: render, saved page public/club-manager/index.html
+
+simClubManagerClubList: green. 27 leagues and 454 clubs reach the render and the saved page.
