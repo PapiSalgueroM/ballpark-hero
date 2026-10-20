@@ -1,0 +1,10 @@
+replay (sections 1) exit=1 | simEventDeck: 1 failure, red sections 1 (CONTROL=replay fired)
+weightoff (sections 3) exit=1 | simEventDeck: 1 failure, red sections 3 (CONTROL=weightoff fired)
+weightkeep (sections 3) exit=1 | simEventDeck: 1 failure, red sections 3 (CONTROL=weightkeep fired)
+story (sections 4) exit=1 | simEventDeck: 2 failures, red sections 4 (CONTROL=story fired)
+rest (sections 5) exit=1 | simEventDeck: 3 failures, red sections 5 (CONTROL=rest fired)
+failopen (sections 5) exit=1 | simEventDeck: 1 failure, red sections 5 (CONTROL=failopen fired)
+restfall (sections 5) exit=1 | simEventDeck: 3 failures, red sections 5 (CONTROL=restfall fired)
+textrng (sections 6) exit=1 | simEventDeck: 2 failures, red sections 6 (CONTROL=textrng fired)
+seasonweek (sections 9) exit=1 | simEventDeck: 2 failures, red sections 9 (CONTROL=seasonweek fired)
+kctl: every control exited 1 and fired

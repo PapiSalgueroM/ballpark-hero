@@ -1,0 +1,12 @@
+   drawinrender: 58 cases, 48 passed, 10 failed, 0 skipped, 12s
+   control drawinrender red: 5 rendering the four screens draws nothing and leaves the career byte equal Liverpool 2026-27
+   control drawinrender red: 5 rendering the four screens draws nothing and leaves the career byte equal Dundee 2026-27
+   control drawinrender red: 5 rendering the four screens draws nothing and leaves the career byte equal Everton 2005-06
+   control drawinrender red: 5 rendering the four screens draws nothing and leaves the career byte equal OB 2026-27
+   control drawinrender red: 5 rendering the four screens draws nothing and leaves the career byte equal Brentford with an academy graduate
+   control drawinrender red: 5 rendering the four screens draws nothing and leaves the career byte equal Brentford with a made up free agent signed
+   control drawinrender red: 5 rendering the four screens draws nothing and leaves the career byte equal Sevilla old save (Round 1052)
+   control drawinrender red: 5 rendering the four screens draws nothing and leaves the career byte equal Valencia second tier old save
+   control drawinrender red: 5 rendering the four screens draws nothing and leaves the career byte equal Everton book save
+   control drawinrender red: 5 rendering the four screens draws nothing and leaves the career byte equal Hertha book save
+CONTROL drawinrender FIRED: 10 cases red (section 5: 10), none elsewhere
