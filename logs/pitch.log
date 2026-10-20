@@ -1,0 +1,7 @@
+treeWithoutMerge: e970bf1f33f00b62b30462c8ec53f9f78106bdb6, cc9e6f0f without c76a6827; conflicts kept from cc9e6f0f: scripts/playPitchRestartContinuity.mjs, scripts/simPitchRestartContinuity.mjs
+PITCH_RESTART_PARENT_REF e970bf1f33f00b62b30462c8ec53f9f78106bdb6 (this head without Round 1366s merge c76a6827; first parent ed9b483d)
+Actual shared hook: 9 cases, 9 passed, 0 exact continuity faults
+Committed layout tapes: 9 cases, 89 retained frames, zero match RNG draws
+Source holds: 20 before bodies, 17 parent bindings, 3 compiled modules
+Child outcome: exit 0, zero pending/file/setup faults; all nine outcomes green
+simPitchRestartContinuity: normal qualified (actual committed coordinates); browser paint unmeasured
