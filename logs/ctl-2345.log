@@ -1,0 +1,7 @@
+keep exit=1 simOneOffCups: control keep FIRED (923 failures, all its own: 5 slices: Arsenal (now) seed 1 nocoach at s1-rollover: worldComps holds uel dsc dscOld usc)
+participant exit=1 simOneOffCups: control participant FIRED (19 failures, all its own: 3 Arsenal (now) seed 1 nocoach at s2-e1: the state differs in a key other than worldComps.dsc)
+form exit=1 simOneOffCups: control form FIRED (15 failures, all its own: 3 Arsenal (now) seed 1 nocoach at s1-rollover: the state differs in a key other than worldComps.dsc)
+tick exit=1 simOneOffCups: control tick FIRED (16 failures, all its own: 2 fitness: Arsenal seed 1 nocoach at s2-e1: a night my club did not play moved 11 men's fitness)
+countdown exit=1 simOneOffCups: control countdown FIRED (16 failures, all its own: 2 window: Arsenal seed 1 nocoach: the summer window closes after 1:uclGroup:0:4 2:league:2:3, the twin after 1:uclGroup:0:4 2:uclGroup:0:4)
+weighs exit=1 simOneOffCups: control weighs FIRED (25 failures, all its own: 4 weighs: Chelsea seed 1: nationStanding reads 75.5 without a minor trophy and 89.5 with one)
+notrophy exit=1 simOneOffCups: control notrophy FIRED (8 failures, all its own: 4 trophy: Chelsea seed 1 won: 0 minor trophies ([]), not exactly the FA Community Shield of season 2)

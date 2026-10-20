@@ -1,0 +1,10 @@
+units exit=0 9s |    Duration  7.66s (transform 3.47s, setup 515ms, collect 6.79s, tests 7.19s, environment 2.05s, prepare 882ms)
+tsc exit=0 65s | 
+oneoff-2 exit=0 303s | simOneOffCups: green, 6458 checks (302 s)
+oneoff-046 exit=0 51s | simOneOffCups: green, 645 checks (51 s)
+ctl-1 exit=0 337s | firstedition exit=1 simOneOffCups: control firstedition FIRED (280 failures, all its own: 1 season one: Bayern Munich (now) seed 1 nocoach: a stub unfinished)
+oneoff-157 exit=0 956s | simOneOffCups: green, 194381 checks (955 s)
+rival exit=0 12s | No rival product names found. 0 findings.
+dashscan exit=0 1s | 
+ctl-2345 exit=0 336s | notrophy exit=1 simOneOffCups: control notrophy FIRED (8 failures, all its own: 4 trophy: Chelsea seed 1 won: 0 minor trophies ([]), not exactly the FA Community Shield o
+oneoff-3 exit=0 975s | simOneOffCups: green, 15353 checks (975 s)
