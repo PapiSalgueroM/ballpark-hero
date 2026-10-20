@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1514.mjs
+playoneoff: node scripts/playOneOffCups.mjs
+pc-nousctile: PLAY_ONEOFF_CONTROL=nousctile node scripts/playOneOffCups.mjs
+pc-notile: PLAY_ONEOFF_CONTROL=notile node scripts/playOneOffCups.mjs
