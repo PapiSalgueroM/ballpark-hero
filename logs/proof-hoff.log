@@ -1,0 +1,15 @@
+base 3d1b7d9a; fleet (1): Hoffenheim (now, watcher)
+seeds 1,2,3,4,5; modes both; strip worldComps.dsc+usc
+FAIL Hoffenheim (now, watcher, nocoach, seed 1, 3 seasons): 133 steps, 4.5 s
+ok   Hoffenheim (now, watcher, nocoach, seed 2, 3 seasons): 124 steps, 4.1 s
+ok   Hoffenheim (now, watcher, nocoach, seed 3, 3 seasons): 124 steps, 4.2 s
+ok   Hoffenheim (now, watcher, nocoach, seed 4, 3 seasons): 125 steps, 4.1 s
+ok   Hoffenheim (now, watcher, nocoach, seed 5, 3 seasons): 124 steps, 4.1 s
+ok   Hoffenheim (now, watcher, coach, seed 1, 3 seasons): 124 steps, 5.9 s
+ok   Hoffenheim (now, watcher, coach, seed 2, 3 seasons): 128 steps, 5.7 s
+ok   Hoffenheim (now, watcher, coach, seed 3, 3 seasons): 122 steps, 5.6 s
+ok   Hoffenheim (now, watcher, coach, seed 4, 3 seasons): 126 steps, 5.6 s
+ok   Hoffenheim (now, watcher, coach, seed 5, 3 seasons): 124 steps, 5.6 s
+  FAIL Hoffenheim (now, watcher, nocoach, seed 1, 3 seasons) at step 43 s1-rollover: the state differs, calendar: base ...[{"type":"league","round":0},{"type":"league","rou... tree ...[{"type":"oneOff","round":0,"night":{"k":"dsc","n"...
+journeys 10, steps compared 1254, tree journeys whose save carried worldComps 10, evaluations on the live state 1254, 49 s
+proofWorldUclFleet: RED, 1 journeys differ from 3d1b7d9a (of 10)
