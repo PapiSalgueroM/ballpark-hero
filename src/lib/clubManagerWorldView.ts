@@ -30,7 +30,7 @@ import {
   /* Round 1514: the UEFA Super Cup, and a slice's row with its dated edition. */
   oneOffSliceRow, uefaSuperCupRowOf, type OneOffKey,
 } from '@/lib/clubManager';
-import { oneOffEdition, oneOffFixturesOf, oneOffPartialWhy, type OneOffRow, type OneOffSkip } from '@/lib/worldOneOffs';
+import { oneOffEdition, oneOffFixturesOf, oneOffPartialWhy, oneOffPlayedIn, type OneOffRow, type OneOffSkip } from '@/lib/worldOneOffs';
 import { nightDateAt } from '@/lib/worldNights';
 import { CM_ONE_OFF_MARKS, CM_ONE_OFF_SEASON_ONE } from '@/data/cmOneOffRows';
 import { entryDatesOf, worldCompNightDates, worldYearOf, type CalDate } from '@/lib/clubManagerCalendar';
@@ -500,11 +500,17 @@ export interface SuperCupView {
   era: boolean;
   /** Round 1514: what the row simplifies or leaves out (CM_ONE_OFF_MARKS), one line, or empty. */
   mark: string;
+  /** Fix-1514: the game plays this row next season too. False on an edition only row's last dated edition
+   *  (Italy's 2026-27), so no line promises a cup next summer. */
+  later: boolean;
 }
 
 /* The critic's correction 8 words, its second sentence made true (fix-1510 minors 6 and 13): a place next summer is
    earned, never promised, as the help says. */
 const SETTLED_BEFORE = "Your club's place was settled before you arrived. Your first super cup is the next one your club earns, from next summer.";
+/* Fix-1514 (the run lens, major 1): an edition only row's last dated edition has no next summer to promise. */
+const ONLY_THIS_EDITION = "Only this season's edition is confirmed, so later seasons are not confirmed yet.";
+const SETTLED_LAST = `Your club's place was settled before you arrived. ${ONLY_THIS_EDITION}`;
 const STUB_WORDS: Record<OneOffSkip, (name: string) => string> = {
   seasonOne: () => SETTLED_BEFORE,
   joined: () => SETTLED_BEFORE,
@@ -539,7 +545,7 @@ export function superCupView(career: CareerState, key: OneOffKey = 'dsc'): Super
   const own = career.worldComps?.[key];
   const slice = own && own.s === career.season ? own : null;
   const row = slice ? oneOffSliceRow(career, slice) : key === 'usc' ? uefaSuperCupRowOf(career) : oneOffRowOf(career);
-  const base = { clubs: [], matches: [], mine: false, seasonOne: career.season === 1, era, mark: '' };
+  const base = { clubs: [], matches: [], mine: false, seasonOne: career.season === 1, era, mark: '', later: true };
   /* No row: the game has not proved this country's super cup (no 'none' row stands on two families either), so
      it says it is not confirmed and plays nothing, never that there is none. Round 1514: a partial row's own
      reason where the ledger gives one (Spain's four club cup, Italy's later editions). */
@@ -557,15 +563,18 @@ export function superCupView(career: CareerState, key: OneOffKey = 'dsc'): Super
     return { ...base, name: null, partial, format: '', ground: '', stub };
   }
   const view: SuperCupView = { ...base, name: row.name, partial: false, format: formatWords(row), ground: '', mark: CM_ONE_OFF_MARKS[row.id] ?? '' };
+  /* Fix-1514: next season's edition, keyed by its start year as the engine keys it (oneOffEditionYear). */
+  view.later = oneOffPlayedIn(row.id, (typeof career.startYear === 'number' ? career.startYear : 2026) + career.season);
   if (!slice) {
     /* Round 1514: season one's UEFA Super Cup is never opened (the 2025-26 Europa League winner is not in the game). */
     view.stub = key === 'usc' && career.season === 1
       ? `This year's ${row.name} is not played: last season's Europa League winner is not in your game. It opens next summer, when this season is done.`
-      : 'It opens next summer, when this season is done.';
+      : view.later ? 'It opens next summer, when this season is done.'
+      : `Your save started before the game had this one, so this season's is not followed here. ${ONLY_THIS_EDITION}`;
     return view;
   }
   if (slice.skip) {
-    view.stub = STUB_WORDS[slice.skip](row.name);
+    view.stub = !view.later && (slice.skip === 'seasonOne' || slice.skip === 'joined') ? SETTLED_LAST : STUB_WORDS[slice.skip](row.name);
     view.mine = slice.skip === 'seasonOne' || slice.skip === 'joined' || slice.skip === 'legs';
     return view;
   }

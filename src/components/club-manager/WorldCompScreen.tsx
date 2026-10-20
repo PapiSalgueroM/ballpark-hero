@@ -571,7 +571,7 @@ function SuperCupCard({ view, myClub, onClub }: { view: SuperCupView; myClub: st
           {m.winner && <div className="text-xs text-muted-foreground">{m.winner} won{m.pens ? ' on penalties' : m.aet ? ' after extra time' : ''}.</div>}
         </div>
       ))}
-      {view.name && view.seasonOne && !view.stub && !view.mine && <div className="text-xs text-muted-foreground">The game plays this one: you follow it from outside, and play in it from a summer your club earns a place.</div>}
+      {view.name && view.seasonOne && !view.stub && !view.mine && <div className="text-xs text-muted-foreground">The game plays this one: you follow it from outside{view.later ? ', and play in it from a summer your club earns a place' : ''}.</div>}
       {view.era && view.name && <div className="text-xs text-muted-foreground">This save keeps its era's super cup every season.</div>}
       {view.mark && <div className="text-xs text-muted-foreground" data-cm-super-cup-mark>{view.mark}</div>}
     </div>

@@ -355,3 +355,32 @@ describe('the super cup where the game has no row', () => {
     expect(noRow).toBeGreaterThan(30);
   }, 300_000);
 });
+
+/* Fix-1514 (the run lens, major 1): Italy's Supercoppa is played in its 2026-27 edition only, so no line of an
+   Italian save promises a cup next summer: a save written before the round (no slice), a new career at an entrant
+   (the season one stub), a followed one (the card's line). England's every season cup still promises it. */
+describe('the super cup whose next edition is not confirmed', () => {
+  it('never promises next summer on an Italian save, and still does on an English one', () => {
+    const watch = startCareer('Juventus');
+    const followed = superCupView(watch);
+    expect(followed.name).toBe(oneOffRowOf(watch)?.name);
+    expect(followed.stub).toBeUndefined();
+    expect(followed.later).toBe(false);
+    const old = JSON.parse(JSON.stringify(watch)) as CareerState;
+    delete old.worldComps!.dsc;
+    const oldView = superCupView(old);
+    expect(oldView.stub ?? '').toMatch(/^Your save started before the game had this one/);
+    expect(superCupStatus(oldView).sub).not.toMatch(/next summer/);
+    const entrant = startCareer('Inter Milan');
+    expect(entrant.worldComps?.dsc?.skip).toBe('seasonOne');
+    const stub = superCupView(entrant).stub ?? '';
+    expect(stub).toMatch(/settled before you arrived/);
+    expect(stub).not.toMatch(/next summer/);
+    const eng = startCareer('Arsenal');
+    expect(superCupView(eng).later).toBe(true);
+    expect(superCupView(eng).stub ?? '').toMatch(/from next summer\.$/);
+    const engOld = JSON.parse(JSON.stringify(startCareer('Chelsea'))) as CareerState;
+    delete engOld.worldComps!.dsc;
+    expect(superCupView(engOld).stub).toBe('It opens next summer, when this season is done.');
+  }, 300_000);
+});
