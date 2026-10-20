@@ -1,0 +1,29 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/lib/clubManagerWorldView.test.ts src/lib/clubManagerWorldCompsReload.test.ts src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000
+oo-046: ONE_OFF_ONLY=0,4,6 node scripts/simOneOffCups.mjs
+c0-onesource: ONE_OFF_CONTROL=onesource node scripts/simOneOffCups.mjs
+c0-wiki: ONE_OFF_CONTROL=wiki node scripts/simOneOffCups.mjs
+c0-thinused: ONE_OFF_CONTROL=thinused node scripts/simOneOffCups.mjs
+c0-receipt: ONE_OFF_CONTROL=receipt node scripts/simOneOffCups.mjs
+c0-notinworld: ONE_OFF_CONTROL=notinworld node scripts/simOneOffCups.mjs
+c0-twopub: ONE_OFF_CONTROL=twopub node scripts/simOneOffCups.mjs
+c0-pairing: ONE_OFF_CONTROL=pairing node scripts/simOneOffCups.mjs
+c1-wrongyear: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=wrongyear node scripts/simOneOffCups.mjs
+c1-seasononeplay: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=seasononeplay node scripts/simOneOffCups.mjs
+c1-carryseen: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=carryseen node scripts/simOneOffCups.mjs
+c1-uscswap: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=uscswap node scripts/simOneOffCups.mjs
+c1-italyall: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=italyall node scripts/simOneOffCups.mjs
+c1-nodated: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=nodated node scripts/simOneOffCups.mjs
+c1-firstedition: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=firstedition node scripts/simOneOffCups.mjs
+c5-keep: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=keep node scripts/simOneOffCups.mjs
+c3-participant: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=participant node scripts/simOneOffCups.mjs
+c3-form: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=form node scripts/simOneOffCups.mjs
+c2-tick: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=tick node scripts/simOneOffCups.mjs
+c2-countdown: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=countdown node scripts/simOneOffCups.mjs
+c4-weighs: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=weighs node scripts/simOneOffCups.mjs
+c4-notrophy: ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=notrophy node scripts/simOneOffCups.mjs
+rival: node scripts/simNoRivalNames.mjs
+fences: bad=0; for h in simInventedNames simNoInventedQuotes simNoInventedConduct simHarnessAnchors simTrustCopy simLegalPages; do node scripts/$h.mjs > /tmp/f-$h.log 2>&1; e=$?; echo "$h exit=$e $(tail -1 /tmp/f-$h.log | cut -c1-200)"; [ $e -ne 0 ] && bad=1; done; exit $bad
+helpreaders: bad=0; for h in simAcademy simClubManagerALeague simClubManagerBudget simClubManagerScore simCmBoardVerdict simCmVarLedger simEras; do node scripts/$h.mjs > /tmp/h-$h.log 2>&1; e=$?; echo "$h exit=$e $(tail -1 /tmp/h-$h.log | cut -c1-200)"; [ $e -ne 0 ] && bad=1; done; exit $bad
+leaguerules: node scripts/simCmLeagueRules.mjs > /tmp/lr.log 2>&1; e=$?; grep -cE "FAIL" /tmp/lr.log; tail -3 /tmp/lr.log | cut -c1-300; exit $e
+dashscan: ! git diff 92290f81 HEAD -U0 | grep '^+' | grep -P '\x{2013}|\x{2014}'
