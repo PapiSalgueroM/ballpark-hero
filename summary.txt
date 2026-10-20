@@ -1,0 +1,13 @@
+unit-lib exit=0 59s |    Duration  58.27s (transform 6.15s, setup 3.18s, collect 22.94s, tests 105.70s, environment 22.56s, prepare 5.53s)
+s0 exit=0 1s | simOneOffCups: green, 513 checks (1 s)
+tsc exit=0 147s | 
+unit-cm exit=0 199s |    Duration  198.43s (transform 10.66s, setup 4.11s, collect 46.42s, tests 338.74s, environment 26.66s, prepare 5.86s)
+proof-part exit=1 378s | proofWorldUclFleet: RED, 20 journeys differ from fb50ce9f (of 60)
+ucl-s2 exit=0 1491s | simWorldUcl: green, 23917 checks, 0 failures
+lr-head exit=0 82s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+ucl-savedbytes exit=1 1488s | simWorldUcl: control savedbytes FIRED (35 failures, all its own)
+lr-all4 exit=1 86s | lrAttr: states stripped of worldComps.uel before hashing: 89
+proof-watch exit=1 1142s | proofWorldUclFleet: RED, 50 journeys differ from fb50ce9f (of 130)
+dashscan exit=0 0s | no dash in the diff
+lr-write exit=0 120s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+anchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
