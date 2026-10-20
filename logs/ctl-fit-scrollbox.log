@@ -1,0 +1,13 @@
+PART 1, CSS: built dist/assets (41 file(s)), every request blocked
+CONTROL scrollbox: ContractsCard.tsx changed in the bundle only
+control scrollbox: 20 findings (deskclip 20)
+   deskclip at 320: desk liverpool: a contract row is cut by a 256 px box that scrolls inside the card (LBMilos Kerkez22y · this game's deal: 44)
+   deskclip at 320: desk liverpool, every list shown: a contract row is cut by a 256 px box that scrolls inside the card (LBMilos Kerkez22y · this game's deal: 44)
+   deskclip at 320: desk liverpoolAllFinal: a contract row is cut by a 256 px box that scrolls inside the card (CAMFlorian Wirtz22y · this game's deal: )
+   deskclip at 320: desk liverpoolAllFinal, every list shown: a contract row is cut by a 256 px box that scrolls inside the card (CAMDominik Szoboszlai25y · this game's d)
+   deskclip at 320: desk liverpoolAllFinal, every list shown: a contract row is cut by a 256 px box that scrolls inside the card (STHugo Ekitiké23y · this game's deal: 79)
+   deskclip at 390: desk liverpool: a contract row is cut by a 256 px box that scrolls inside the card (LBMilos Kerkez22y · this game's deal: 44)
+   deskclip at 390: desk liverpool, every list shown: a contract row is cut by a 256 px box that scrolls inside the card (LBMilos Kerkez22y · this game's deal: 44)
+   deskclip at 390: desk liverpoolAllFinal: a contract row is cut by a 256 px box that scrolls inside the card (CAMFlorian Wirtz22y · this game's deal: )
+CONTROL scrollbox FIRED: 5 deskclip findings at 390, first: desk liverpool: a contract row is cut by a 256 px box that scrolls inside the card (LBMilos Kerkez22y · this game's deal: 44)
+Shots and part1.json: /home/runner/work/_temp/t-ctl-fit-scrollbox/out/shots
