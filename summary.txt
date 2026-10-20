@@ -1,0 +1,6 @@
+sec0 exit=0 1s | simOneOffCups: green, 513 checks (1 s)
+ctl0 exit=0 4s | pairing exit=1 simOneOffCups: control pairing FIRED (2 failures, all its own: cup-seriea-2025-26: the constant names Roma, the ledger Lazio)
+units exit=0 9s |    Duration  8.79s (transform 3.98s, setup 494ms, collect 8.13s, tests 9.37s, environment 2.57s, prepare 498ms)
+dashscan exit=0 0s | 
+rival exit=0 18s | No rival product names found. 0 findings.
+tsc exit=2 67s | src/lib/clubManagerWorldView.ts(504,7): error TS2741: Property 'noWinner' is missing in type '{ seasonOne: () => string; joined: () => string; legs: (name: string) => str

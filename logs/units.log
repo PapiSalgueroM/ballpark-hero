@@ -1,0 +1,19 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/worldOneOffs.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 675[2mms[22m[39m
+   [33m[2m✓[22m[39m the evaluation as a whole[2m > [22ma prefix at every night, the same every time, and one winner on every finished cup over 300 seeds [33m 502[2mms[22m[39m
+ [32m✓[39m src/lib/worldNights.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 1685[2mms[22m[39m
+   [33m[2m✓[22m[39m placeNights on the engine calendars[2m > [22mfinds a slot that moves no date on every league size, with and without a cup, a round of 16 and two legs, in every year [33m 1580[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldCompsReload.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 2968[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: a save the engine wrote loads to the same bytes, whatever worldComps holds[2m > [22ma club in the Champions League, following the Europa League and the super cup [33m 584[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: a save the engine wrote loads to the same bytes, whatever worldComps holds[2m > [22ma club watching the Champions League, the Europa League and the super cup [33m 371[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: a save the engine wrote loads to the same bytes, whatever worldComps holds[2m > [22ma club in the Champions League, after its first summer [33m 2011[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldView.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 4038[2mms[22m[39m
+   [33m[2m✓[22m[39m the super cup where the game has no row[2m > [22msays Not confirmed with its reason on every league with no row, and names the cup where there is one [33m 738[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m55 passed[39m[22m[90m (55)[39m
+[2m   Start at [22m 00:49:19
+[2m   Duration [22m 8.79s[2m (transform 3.98s, setup 494ms, collect 8.13s, tests 9.37s, environment 2.57s, prepare 498ms)[22m
+

@@ -1,0 +1,1 @@
+src/lib/clubManagerWorldView.ts(504,7): error TS2741: Property 'noWinner' is missing in type '{ seasonOne: () => string; joined: () => string; legs: (name: string) => string; unfinished: () => string; noFinal: () => string; moved: (name: string) => string; notInWorld: () => string; noNight: () => string; }' but required in type 'Record<OneOffSkip, (name: string) => string>'.
