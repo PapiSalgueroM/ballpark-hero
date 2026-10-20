@@ -1,0 +1,59 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/worldOneOffs.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 1230[2mms[22m[39m
+   [33m[2m✓[22m[39m the evaluation as a whole[2m > [22ma prefix at every night, the same every time, and one winner on every finished cup over 300 seeds [33m 1040[2mms[22m[39m
+ [32m✓[39m src/lib/worldNights.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 2578[2mms[22m[39m
+   [33m[2m✓[22m[39m placeNights on the engine calendars[2m > [22mfinds a slot that moves no date on every league size, with and without a cup, a round of 16 and two legs, in every year [33m 2400[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldCompsReload.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 3315[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: a save the engine wrote loads to the same bytes, whatever worldComps holds[2m > [22ma club in the Champions League, following the Europa League and the super cup [33m 825[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: a save the engine wrote loads to the same bytes, whatever worldComps holds[2m > [22ma club watching the Champions League, the Europa League and the super cup [33m 428[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: a save the engine wrote loads to the same bytes, whatever worldComps holds[2m > [22ma club in the Champions League, after its first summer [33m 2060[2mms[22m[39m
+ [31m❯[39m src/lib/clubManagerWorldView.test.ts [2m([22m[2m21 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 4012[2mms[22m[39m
+   [32m✓[39m the club watching it: today's world, the 36 club league phase[2m > [22mopens with the draw made and nothing played[32m 24[2mms[22m[39m
+   [32m✓[39m the club watching it: today's world, the 36 club league phase[2m > [22msays on the tile why a season one Liverpool career is in neither competition[32m 134[2mms[22m[39m
+   [32m✓[39m the club watching it: today's world, the 36 club league phase[2m > [22mshows the nights the week has passed, and only those, with the engine's own scores[32m 12[2mms[22m[39m
+   [32m✓[39m the club watching it: today's world, the 36 club league phase[2m > [22mnever writes into the shared evaluation it reads, and reads the same twice[32m 2[2mms[22m[39m
+   [32m✓[39m the club watching it: today's world, the 36 club league phase[2m > [22mgives a club its eight league phase games, played then to play[32m 4[2mms[22m[39m
+   [32m✓[39m the club watching it: today's world, the 36 club league phase[2m > [22mcrowns one winner at the season's end, the other finalist runner-up[32m 8[2mms[22m[39m
+   [32m✓[39m the club watching it: today's world, the 36 club league phase[2m > [22mshows every tie as the engine played it: two legs to the semi-finals, each leg the right way round[32m 11[2mms[22m[39m
+   [32m✓[39m the club watching it: today's world, the 36 club league phase[2m > [22mis the same view keyed (Round 1509)[32m 3[2mms[22m[39m
+   [32m✓[39m the club in it: the participant engine read, not simulated again[2m > [22mis its own groups, every group's table in the engine's order[32m 2[2mms[22m[39m
+   [32m✓[39m the club in it: the participant engine read, not simulated again[2m > [22mshows each played group night with the ledger's scores, and the scores add up to the tables[32m 2[2mms[22m[39m
+   [32m✓[39m the club in it: the participant engine read, not simulated again[2m > [22mreads its knockout ties off the bracket, leg by leg[32m 2[2mms[22m[39m
+   [32m✓[39m the club in it: the participant engine read, not simulated again[2m > [22mlists each knockout leg on its night at the right ground, with the score the bracket holds[32m 5[2mms[22m[39m
+   [32m✓[39m the club in it: the participant engine read, not simulated again[2m > [22mcalls every club the draw left out "Out in the group stage", and no club in the bracket[32m 6[2mms[22m[39m
+   [32m✓[39m the club in it: the participant engine read, not simulated again[2m > [22mis the same view keyed (Round 1509)[32m 2[2mms[22m[39m
+   [32m✓[39m an era save in it from outside the real 32[2m > [22mnames the club and the real club whose place it takes[32m 7[2mms[22m[39m
+   [32m✓[39m an era save in it from outside the real 32[2m > [22mis the same view keyed (Round 1509)[32m 1[2mms[22m[39m
+   [32m✓[39m an era save watching: eight groups of four, and its stand in[2m > [22mplays the era's groups with the stand in named[32m 4[2mms[22m[39m
+   [32m✓[39m an era save watching: eight groups of four, and its stand in[2m > [22mshows a night counted through seen as played before the move, with no date[32m 2[2mms[22m[39m
+   [32m✓[39m an era save watching: eight groups of four, and its stand in[2m > [22mhas nothing to show for a save with no slice and no place[32m 1[2mms[22m[39m
+   [32m✓[39m an era save watching: eight groups of four, and its stand in[2m > [22mis the same view keyed (Round 1509)[32m 3[2mms[22m[39m
+[31m   [31m×[31m the super cup where the game has no row[2m > [22msays Not confirmed with its reason on every league with no row, and names the cup where there is one[39m[32m 100[2mms[22m[39m
+[31m     → Alavés now: expected 'Spain\'s is a four club cup with semi…' to match /could not confirm it on two sources, …/[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerWorldView.test.ts[2m > [22mthe super cup where the game has no row[2m > [22msays Not confirmed with its reason on every league with no row, and names the cup where there is one
+[31m[1mAssertionError[22m: Alavés now: expected 'Spain\'s is a four club cup with semi…' to match /could not confirm it on two sources, …/[39m
+
+[32m- Expected:[39m 
+/could not confirm it on two sources, so none is followed or played here\.$/
+
+[31m+ Received:[39m 
+"Spain's is a four club cup with semi finals, and its next dates stand on one source so far. It comes in a later update. Until then none is followed or played here."
+
+[36m [2m❯[22m src/lib/clubManagerWorldView.test.ts:[2m349:58[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m54 passed[39m[22m[90m (55)[39m
+[2m   Start at [22m 01:02:15
+[2m   Duration [22m 9.55s[2m (transform 4.65s, setup 882ms, collect 8.61s, tests 11.13s, environment 3.14s, prepare 766ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerWorldView.test.ts,title=src/lib/clubManagerWorldView.test.ts > the super cup where the game has no row > says Not confirmed with its reason on every league with no row%2C and names the cup where there is one,line=349,column=58::AssertionError: Alavés now: expected 'Spain\'s is a four club cup with semi…' to match /could not confirm it on two sources, …/%0A%0A- Expected: %0A/could not confirm it on two sources, so none is followed or played here\.$/%0A%0A+ Received: %0A"Spain's is a four club cup with semi finals, and its next dates stand on one source so far. It comes in a later update. Until then none is followed or played here."%0A%0A ❯ src/lib/clubManagerWorldView.test.ts:349:58%0A%0A

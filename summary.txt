@@ -1,0 +1,3 @@
+units exit=1 10s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerWorldView.test.ts,title=src/lib/clubManagerWorldView.test.ts > the super cup where the game 
+tsc exit=0 80s | 
+smoke1 exit=0 100s | simOneOffCups: green, 19560 checks (100 s)

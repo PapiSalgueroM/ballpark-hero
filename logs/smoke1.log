@@ -1,0 +1,35 @@
+  1 fleet: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher); Birmingham City (now, second tier watcher); Proof Town Athletic (now, created club in the Championship); Real Madrid (now, no row (Spain)); Bayern Munich (now, season one entrants (Germany, a double)); Marseille (now, watcher (France)); Juventus (now, watcher (Italy, its edition only)); América (now, no row (Mexico, no cup)); Arsenal (era2005, era row partial)
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  7 fra-2026 season one night for Marseille: 2026-08-05 (the edition's date 2026-08-16)
+  7 ita-2026 season one night for Juventus: 2026-12-16 (the edition's date 2026-12-22)
+  1 forced: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher); Birmingham City (now, second tier watcher); Proof Town Athletic (now, created club in the Championship); Real Madrid (now, no row (Spain)); Bayern Munich (now, season one entrants (Germany, a double)); Marseille (now, watcher (France)); Juventus (now, watcher (Italy, its edition only)); América (now, no row (Mexico, no cup)); Arsenal (era2005, era row partial)
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  7 fra-2026 season one night for Marseille: 2026-08-05 (the edition's date 2026-08-16)
+  7 ita-2026 season one night for Juventus: 2026-12-16 (the edition's date 2026-12-22)
+  1 doubles (the runners up took the cup place): 17
+  1 level matches on a pens row (the etall control needs one): 8
+  1 moved stubs: 2
+  1 moves carrying a cup already shown (the carryseen control reads these): 2
+  1 participants (my club earned a place: played from the match half): 10
+  1 plain fields (champions v cup winners): 11
+  1 rollovers into another league (the afterswap control reads these): 8
+  1 rollovers of a manager outside the top flight: 10
+  1 usc followed: 23
+  1 usc nights dated month 8: 25
+  1 usc participants: 25
+  1 usc played by my club: 25
+  1 usc watchers: 23
+  1 usc won by my club: 12
+  4 super cups my club won (section 1 fleet): 5
+  5 bytes of a followed one slice: 5830
+  5 bytes of a stub: 20368
+  5 followed one slices measured: 52
+  5 stubs measured: 424
+  7 season one followed: 14
+  7 season one stub seasonOne: 6
+  7 settled in 90 minutes: 44
+  7 settled on penalties: 8
+  7 won by the stronger side: 35
+  7 won by the weaker side: 16
+  1 rows seen: eng-2026 ger-2026 fra-2026 ita-2026
+simOneOffCups: green, 19560 checks (100 s)
