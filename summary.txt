@@ -1,0 +1,6 @@
+sd-base exit=0 73s | simSoccerDeck: green. Sections 2, 3, 4 only.
+sd1-5 exit=0 92s | simSoccerDeck: green. Sections 1, 2, 3, 4, 5 only.
+sd6-10 exit=0 167s | simSoccerDeck: green. Sections 6, 7, 8, 9, 10 only.
+vitest-1504 exit=0 4s |    Duration  4.01s (transform 2.15s, setup 115ms, collect 2.60s, tests 182ms, environment 503ms, prepare 167ms)
+sd-ctl exit=0 230s | controls (each must be 1): statmax=1 onefree=1 freetraining=1 noreseed=1 ceiling=1 bindopen=1 pressure=1
+eventdeck exit=0 230s | simEventDeck: green.
