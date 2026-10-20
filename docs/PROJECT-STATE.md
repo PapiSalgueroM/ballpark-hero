@@ -1,3 +1,9 @@
+## Round1440 claimed, 2026-10-20: saved guide lists
+
+Source-only generator seam on sealed PR353/e5596fb2. Preserve flat source list containers and original numbering while retaining per-item clock pruning. Actual remote original failure and all required proof precede adoption. No runtime, generated public output, AdSense or publication claim. I keeps joined derived output/integration. See docs/ROUND1440-SAVED-GUIDE-LISTS.md.
+
+Previous state follows.
+
 ## Round1439 source-qualified draft, 2026-10-19: Transfer Path report context
 
 [Draft PR353](https://github.com/PapiSalgueroM/ballpark-hero/pull/353) stacks on PR352 at c8b7279f259143fcd2741091c0a95fd12ba3a9cf. Tested84e0b326e122659b35b27e1f7cb41938b50e8dda clears old rejection, empty-search and visible-error details when the puzzle identity, mode, unlimited index or effective rule changes. Useful same-puzzle history remains available. Generic rejection copy now refers to our club-season records, and instructions explain that national teams do not count.
