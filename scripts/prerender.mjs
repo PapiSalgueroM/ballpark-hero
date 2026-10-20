@@ -406,6 +406,36 @@ async function draw(sample, route, url) {
      React clears #root on mount, so a real visitor sees this for the
      instant before the app draws over it. */
   const captured = await page.evaluate(() => {
+      const visible = el => {
+        const st = window.getComputedStyle(el);
+        return st.display !== 'none' && st.visibility !== 'hidden' && Number(st.opacity) > 0.05;
+      };
+      // Flat list ordinals are measured before marked or dialog content is removed.
+      const flatItems = new WeakMap();
+      const inlineTags = new Set(['A', 'SPAN', 'STRONG', 'EM', 'B', 'I', 'SMALL', 'SUP', 'SUB', 'ABBR', 'CODE', 'BR']);
+      const fullyVisible = el => {
+        for (let node = el; node; node = node.parentElement) if (!visible(node)) return false;
+        return true;
+      };
+      const integerAttribute = (el, name) => {
+        const raw = el.getAttribute(name);
+        return raw === null || (/^-?\d+$/.test(raw.trim()) && Number(raw) >= -2147483648 && Number(raw) <= 2147483647);
+      };
+      let listOwner = 0;
+      for (const owner of Array.from(document.querySelectorAll('ol, ul'))) {
+        if (owner.parentElement.closest('ol, ul, table, blockquote') || !fullyVisible(owner)) continue;
+        const tag = owner.tagName.toLowerCase(), items = Array.from(owner.children);
+        if (!items.length || items.some(el => el.tagName !== 'LI') || Array.from(owner.childNodes).some(node => node.nodeType === 3 && node.nodeValue.trim())) continue;
+        if (items.some(el => !fullyVisible(el) || getComputedStyle(el).display !== 'list-item' || Array.from(el.querySelectorAll('*')).some(inner => !inlineTags.has(inner.tagName) || !fullyVisible(inner) || !['inline', 'inline-block', 'contents'].includes(getComputedStyle(inner).display)))) continue;
+        if (tag === 'ul' && (owner.hasAttribute('start') || owner.hasAttribute('reversed') || owner.hasAttribute('type') || items.some(el => el.hasAttribute('value')))) continue;
+        if (tag === 'ol' && (!integerAttribute(owner, 'start') || items.some(el => !integerAttribute(el, 'value')) || (owner.hasAttribute('type') && !['1', 'a', 'A', 'i', 'I'].includes(owner.getAttribute('type'))))) continue;
+        const reversed = tag === 'ol' && owner.reversed, start = tag === 'ol' ? (owner.hasAttribute('start') ? owner.start : reversed ? items.length : 1) : null, type = tag === 'ol' ? owner.getAttribute('type') || '1' : '1';
+        let ordinal = start;
+        const ordinals = items.map(el => { if (tag !== 'ol') return null; if (el.hasAttribute('value')) ordinal = el.value; const value = ordinal; ordinal += reversed ? -1 : 1; return value; });
+        if (ordinals.some(value => value !== null && (value < -2147483648 || value > 2147483647))) continue;
+        const list = { owner: ++listOwner, tag, start, reversed, type };
+        items.forEach((el, index) => flatItems.set(el, { ...list, ordinal: ordinals[index] }));
+      }
       for (const el of Array.from(document.querySelectorAll('[role="dialog"]'))) el.remove();
       /* Round 258: anything the app marks data-no-prerender is live or dated
          and must not be frozen into a file that will still be on disk next
@@ -418,10 +448,6 @@ async function draw(sample, route, url) {
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       const seen = new Set();
       const parts = [];
-      const visible = el => {
-        const st = window.getComputedStyle(el);
-        return st.display !== 'none' && st.visibility !== 'hidden' && Number(st.opacity) > 0.05;
-      };
       /* ROUND 652: A TABLE IS ONE BLOCK, NOT A PILE OF CELLS. td and th used
          to be captured one at a time and each written as its own <p>, so the
          twelve Record Books pages, /records, the four grid answer archives and
@@ -548,6 +574,12 @@ async function draw(sample, route, url) {
         if (text.length > cap) continue;
         const html = inline(el);
         if (!html) continue;
+        const list = tag === 'li' && flatItems.get(el);
+        if (list) {
+          seen.add(tag + '|' + html);
+          parts.push({ s: `<li>${html}</li>`, chrome, list });
+          continue;
+        }
         /* ROUND 370: A REPEATED TABLE CELL IS DATA, NOT BOILERPLATE.
            `seen` is one Set for the whole document, and it used to be applied
            to every block including td and th. That is right for the link dedupe
@@ -716,32 +748,51 @@ for (const route of unique) {
        counts are kept apart so the third sample's own contribution is
        visible in the summary. */
     const first = samples[0].parts;
-    const inSecond = new Set(samples[1].parts.map(p => p.s));
-    const afterSecond = first.filter(p => inSecond.has(p.s));
+    const listKey = p => JSON.stringify([p.s, p.list.tag, p.list.start, p.list.reversed, p.list.type, p.list.ordinal, p.chrome]);
+    const intersect = (earlier, later) => {
+      const ordinary = new Set(later.map(p => p.s)), counts = new Map();
+      for (const p of later) if (p.list) { const key = listKey(p); counts.set(key, (counts.get(key) || 0) + 1); }
+      return earlier.filter(p => {
+        if (!p.list) return ordinary.has(p.s);
+        const key = listKey(p), count = counts.get(key) || 0;
+        if (!count) return false;
+        counts.set(key, count - 1);
+        return true;
+      });
+    };
+    const afterSecond = intersect(first, samples[1].parts);
     let keep = afterSecond;
-    for (const later of samples.slice(2)) {
-      const inLater = new Set(later.parts.map(p => p.s));
-      keep = keep.filter(p => inLater.has(p.s));
-    }
+    for (const later of samples.slice(2)) keep = intersect(keep, later.parts);
     const lostToSecond = first.length - afterSecond.length;
     const lostToThird = afterSecond.length - keep.length;
     if (lostToSecond + lostToThird > 0) {
       volatileRoutes += 1;
       droppedBySecond += lostToSecond;
       droppedByThird += lostToThird;
-      const kept = new Set(keep.map(p => p.s));
-      const gone = first.filter(p => !kept.has(p.s));
+      const kept = new Set(keep);
+      const gone = first.filter(p => !kept.has(p));
       const show = gone.slice(0, 2).map(p => JSON.stringify(p.s.replace(/<[^>]+>/g, '').slice(0, 70))).join(', ');
       console.log(`   ${route}: ${gone.length} block(s) change with the date and were left out: ${show}`);
     }
     /* runs of site chrome are wrapped so the sitemap can look past them */
     const lines = [];
-    let open = false;
+    let open = false, list = null;
+    const closeList = () => { if (list) { lines.push(`</${list.tag}>`); list = null; } };
     for (const p of keep) {
+      const sameList = p.list && list && p.list.owner === list.owner && p.list.tag === list.tag && p.list.start === list.start && p.list.reversed === list.reversed && p.list.type === list.type && p.chrome === list.chrome;
+      if (!sameList) closeList();
       if (p.chrome && !open) { lines.push('<div data-site-chrome>'); open = true; }
       if (!p.chrome && open) { lines.push('</div>'); open = false; }
-      lines.push(p.s);
+      if (p.list) {
+        if (!list) {
+          list = { ...p.list, chrome: p.chrome };
+          const attrs = list.tag === 'ol' ? ` start="${list.start}"${list.reversed ? ' reversed' : ''} type="${list.type}"` : '';
+          lines.push(`<${list.tag}${attrs}>`);
+        }
+        lines.push(p.list.tag === 'ol' ? p.s.replace(/^<li>/, `<li value="${p.list.ordinal}">`) : p.s);
+      } else lines.push(p.s);
     }
+    closeList();
     if (open) lines.push('</div>');
     const payload = { head: samples[0].head, body: lines.join('\n') };
     const html = [
