@@ -1,0 +1,8 @@
+#!serial
+m-none: node .rc/x/mutrun.mjs none; s=$?; git checkout -- src scripts; exit $s
+m-evalundated: node .rc/x/mutrun.mjs evalundated; s=$?; git checkout -- src scripts; exit $s
+m-nocarryusc: node .rc/x/mutrun.mjs nocarryusc; s=$?; git checkout -- src scripts; exit $s
+m-datedlater: node .rc/x/mutrun.mjs datedlater; s=$?; git checkout -- src scripts; exit $s
+m-nowinnerand: node .rc/x/mutrun.mjs nowinnerand; s=$?; git checkout -- src scripts; exit $s
+m-partialedition: node .rc/x/mutrun.mjs partialedition; s=$?; git checkout -- src scripts; exit $s
+m-editionyear: node .rc/x/mutrun.mjs editionyear; s=$?; git checkout -- src scripts; exit $s
