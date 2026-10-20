@@ -1,0 +1,3 @@
+#!serial
+# Release BN proof, part gh: simGuideHeadings alone on the final head (the refreshed /club-manager record committed, no refresh line beside it)
+simGuideHeadings: node scripts/simGuideHeadings.mjs 2>&1 | tail -5; exit ${PIPESTATUS[0]}
