@@ -1,0 +1,17 @@
+  check [node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/] exit=0 | [2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+  check [ONE_OFF_ONLY=0,1 ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/si] exit=1 | simOneOffCups: 13 FAILURES of 31343 checks (105 s)
+        FAIL 1 never falls: Liverpool (now) seed 1 nocoach at s2-join: 0 UEFA Super Cup nights shown after 1
+        FAIL 1 never falls: Liverpool (now) seed 1 nocoach at s2-join: the UEFA Super Cup finished before the move (won by Arsenal) shows nothing after it
+        FAIL 1 usc carry: Liverpool (now) seed 1 nocoach at s2-join: the UEFA Super Cup of Arsenal and Bournemouth is nothing after the move
+        FAIL 1 never falls: Liverpool (now) seed 2 nocoach at s2-join: 0 UEFA Super Cup nights shown after 1
+  check [ONE_OFF_ONLY=5 ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=3 ONE_OFF_COACH=nocoach node scripts/simO] exit=1 | simOneOffCups: 13 FAILURES of 46681 checks (177 s)
+        FAIL 1 never falls: Liverpool (now) seed 1 nocoach at s2-join: 0 UEFA Super Cup nights shown after 1
+        FAIL 1 never falls: Liverpool (now) seed 1 nocoach at s2-join: the UEFA Super Cup finished before the move (won by Arsenal) shows nothing after it
+        FAIL 1 usc carry: Liverpool (now) seed 1 nocoach at s2-join: the UEFA Super Cup of Arsenal and Bournemouth is nothing after the move
+        FAIL 1 never falls: Liverpool (now) seed 2 nocoach at s2-join: 0 UEFA Super Cup nights shown after 1
+  check [PROBE_PART=move node .rc/x/probeEngine.mjs] exit=1 | probe move: 407 checks, 8 failures: move Chelsea seed 1 after: the UEFA Super Cup is gone after the move / move Chelsea seed 1 before: the UEFA Super Cup is gone after the move / move Liverpool seed 1 into-after: the UEFA Super Cup is gone 
+         FAIL move Chelsea seed 1 after: the UEFA Super Cup is gone after the move
+         FAIL move Chelsea seed 1 before: the UEFA Super Cup is gone after the move
+         FAIL move Liverpool seed 1 into-after: the UEFA Super Cup is gone after the move
+         FAIL move Liverpool seed 1 into-before: the UEFA Super Cup is gone after the move
+mutrun nocarryusc: CAUGHT by 3 of 4 checks

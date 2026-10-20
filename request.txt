@@ -1,0 +1,4 @@
+#!serial
+m-none: node .rc/x/mutrun.mjs none; s=$?; git checkout -- src scripts; exit $s
+m-evalundated: node .rc/x/mutrun.mjs evalundated; s=$?; git checkout -- src scripts; exit $s
+m-nocarryusc: node .rc/x/mutrun.mjs nocarryusc; s=$?; git checkout -- src scripts; exit $s

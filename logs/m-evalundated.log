@@ -1,0 +1,7 @@
+  check [node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/] exit=0 | [2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+  check [ONE_OFF_ONLY=0,1 ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/si] exit=1 | simOneOffCups: 10 FAILURES of 31633 checks (107 s)
+        FAIL 1 venue: Augsburg (now) at its start: ger-2026's 2026 edition is played at Bayern Munich's ground, its ledger edition at Borussia Dortmund's (Signal Iduna Park in Dortmund)
+        FAIL 1 venue: Angers (now) at its start: fra-2026's 2026 edition is played on a neutral ground, its ledger edition at Lens's (the Stade Bollaert-Delelis in Lens)
+        FAIL 1 venue: Marseille (now) seed 1 nocoach at start: fra-2026's 2026 edition is played on a neutral ground, its ledger edition at Lens's (the Stade Bollaert-Delelis in Lens)
+        FAIL 1 venue: Marseille (now) seed 1 nocoach at s1-finish: fra-2026's 2026 edition is played on a neutral ground, its ledger edition at Lens's (the Stade Bollaert-Delelis in Lens)
+mutrun evalundated: CAUGHT by 1 of 2 checks
