@@ -1,3 +1,19 @@
+## Round1439 source-qualified draft, 2026-10-19: Transfer Path report context
+
+[Draft PR353](https://github.com/PapiSalgueroM/ballpark-hero/pull/353) stacks on PR352 at c8b7279f259143fcd2741091c0a95fd12ba3a9cf. Tested84e0b326e122659b35b27e1f7cb41938b50e8dda clears old rejection, empty-search and visible-error details when the puzzle identity, mode, unlimited index or effective rule changes. Useful same-puzzle history remains available. Generic rejection copy now refers to our club-season records, and instructions explain that national teams do not count.
+
+[CI39350870396](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/39350870396) passed real app types, serial plain build, all17 built-site readers and14 unchanged fatal caps. Both explicit and genuine absent-MODE/OUT default packets retain five arms and14 distinct cases each:140 repeated executions,96 passes,44 precise expected control failures,460 snapshots and34 effective refusers. Five compiled browser arms cover10 contexts,110 purposes,44 expected faults,30 healthy groups,40 PNGs and10 AX joins. Root viewed17 saved PNGs and whole-read all three complete actual UNIT/BROWSER/WHOLE reviews. The browser MD's430-total observation wording is clarified as86 paired normal/restored comparisons (172states).
+
+Fixed qualification161c27311e4a8d56d731091a79e89d3b6905499416c0ae263b78f1afb1934901 and original admissionbfd7305259beeb22b559b2706beb3d1b3b5d0df12e0d51897522118ebf759b43 are in C:/Users/antho/dukb-handoff/2026-10-19/transfer-path-report-context-1439/. See docs/ROUND1439-TRANSFER-PATH-REPORT-CONTEXT.md. The proof uses actual Board local state with fictional hook/search/report/UI boundaries. No current phone-instruction pixel, full-route layout, original live-incident replay, real graph/data repair, full-suite or publication credit. Full simReportRelay remains unrun/live-table. I retains career-data repairs, protected scopes, joined gates, integration and publication. All76 older seals remain immutable; final native closure is recorded externally.
+
+Previous project state follows.
+
+## Round1439 claimed, 2026-10-19: Transfer Path report context
+
+New independent Board-local diagnostic and refusal-copy work on PR352/c8b7279f. Original remote failure proof precedes adoption. All product/runtime/qualification results pending. Hook/data/graph/validators and Manager screens remain excluded; I retains integration/publication. See docs/ROUND1439-TRANSFER-PATH-REPORT-CONTEXT.md.
+
+Previous state follows.
+
 ## Round1438 qualified draft, 2026-10-19: report send failure alerts
 
 [Draft PR352](https://github.com/PapiSalgueroM/ballpark-hero/pull/352) stacks on report PR351, base `3ead1aa0f0a22a9341d66b911f007c7a58dc653b`. Tested `43fc92dd49667f6d32c0769aadac13a0d3bcab90` adds `role="alert"` to the two existing report failure paragraphs. Existing copy, draft edits, retries, category state, delivery and reset/focus behavior remain held.
