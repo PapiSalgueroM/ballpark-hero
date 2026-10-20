@@ -22,7 +22,7 @@ const evidenceRoot = outEnvAbsent ? fs.mkdtempSync(path.join(os.tmpdir(), 'trans
 assert(typeof evidenceRoot === 'string' && path.isAbsolute(evidenceRoot), 'Absolute evidence root');
 assert(path.resolve(evidenceRoot) !== ROOT && !path.resolve(evidenceRoot).startsWith(ROOT + path.sep), 'Evidence outside checkout');
 const OUT = path.join(evidenceRoot, 'unit'); assert(!fs.existsSync(OUT), 'Fresh unit packet'); fs.mkdirSync(OUT, { recursive: true });
-const TEMP = fs.mkdtempSync(path.join(os.tmpdir(), 'transfer-path-context-modules-'));
+const TEMP = fs.mkdtempSync(path.join(ROOT, 'src', 'test', '.transfer-path-context-modules-'));
 const write = (file, value) => { fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, JSON.stringify(value, null, 2) + '\n'); };
 function git(args) {
   const result = spawnSync('git', args, { cwd: ROOT, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
