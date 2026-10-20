@@ -4,10 +4,11 @@
  * read the round's design as a difference. Such a kit plays this tree with the one insertion call taken out (and
  * strips worldComps.dsc, the round's own key), which is the engine before the round on every other key; it is never
  * a new recording. The line must stand in clubManager.ts exactly once (engineOf in worldUclFleet.mjs refuses
- * otherwise), so a change to it fails the kit closed rather than quietly bridging nothing.
+ * otherwise), so a change to it fails the kit closed rather than quietly bridging nothing. Round 1514: the same call
+ * inserts the UEFA Super Cup's night (worldComps.usc), so the bridge leaves both off; strip both keys with it.
  */
 export const DSC_NIGHTS_EDIT = {
   file: 'src/lib/clubManager.ts',
-  from: '    if (mine) insertOneOffNights(state, slots as number[]);\n',
+  from: '    if (mine) insertOneOffNights(state, slots as number[], k);\n',
   to: '',
 };

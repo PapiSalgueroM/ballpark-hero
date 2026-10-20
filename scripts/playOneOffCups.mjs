@@ -18,7 +18,14 @@
  *       entry is played yet), and (f) the stats centre has its Super cups view.
  *   (e) on every view: scrollY and the document height the same before a tile and after its back button, every
  *       control at least 44 px tall, no text under 12 px, no sideways scroll, nothing cut or overlapping.
- * Pictures of every view go into $RC_OUT/shots (dsc-<case>-<width>.png) to be looked at.
+ * Round 1514, at 390 by 844 and 1280 by 900: (g) a 2026-27 Marseille career in season one: the Super cup tile and
+ *       card name the Trophée des Champions, PSG and Lens with why each is in, Lens's ground (the dated edition),
+ *       straight to penalties and the row's mark; the UEFA Super Cup tile and card say season one's is not played.
+ *   (h) a crafted 2026-27 Chelsea season two in the UEFA Super Cup (an engine with one edit reads Chelsea as last
+ *       season's Champions League winners at the rollover; the dist is the real one): the tile says the club is in
+ *       it against the Europa League winners, and the card names both, why, the neutral ground and the night.
+ *   Control nousctile (the UEFA Super Cup tile taken out: (g) and (h) red).
+ * Pictures of every view go into $RC_OUT/shots (dsc-<case>-<width>.png, usc-<case>-<width>.png) to be looked at.
  * CONTROLS (PLAY_ONEOFF_CONTROL; each builds its own dist from a patched copy of one line, put back after): notile
  * (the Super cup tile taken out: (a) red), swap (the card shows the score the wrong way round: (a) red), norowline
  * (the no-row card's reason taken out: (c) red), hubweek and tileweek (the hub's header line and the League tile
@@ -50,6 +57,10 @@ const CONTROLS = {
   swap: { file: 'src/lib/clubManagerWorldView.ts', cases: ['a'],
     from: '        homeGoals: got?.hg ?? null, awayGoals: got?.ag ?? null,',
     to: '        homeGoals: got?.ag ?? null, awayGoals: got?.hg ?? null,', finding: 'the card shows' },
+  /* Round 1514: the UEFA Super Cup tile taken out: (g) and (h) red. */
+  nousctile: { file: 'src/components/club-manager/WorldCompScreen.tsx', cases: ['g', 'h'],
+    from: `{uscStatus && <Tile icon="🏆" title="UEFA Super Cup" value={uscStatus.value} sub={uscStatus.sub} testId="usc" onClick={() => go({ ...HOME, at: 'usc' })} />}`,
+    to: '', finding: 'UEFA Super Cup tile' },
   /* Fix-1510: the no-row card's reason taken out (it was an empty box). */
   norowline: { file: 'src/lib/clubManagerWorldView.ts', cases: ['c'],
     from: "    return { ...base, name: null, partial, format: '', ground: '', stub };",
@@ -239,13 +250,13 @@ async function measure(page, where) {
   console.log(`   ${where}: ${m.controls} controls measured`);
 }
 /** Press the Super cup tile, read the card, come back with its back button: the page stands where it stood. */
-async function roundTrip(page, where, inside) {
-  const loc = page.locator('[data-cm-world-tile="dsc"]');
-  if (!(await count(page, '[data-cm-world-tile="dsc"]'))) { finding(where, 'no Super cup tile'); return; }
+async function roundTrip(page, where, inside, tile = 'dsc') {
+  const loc = page.locator(`[data-cm-world-tile="${tile}"]`);
+  if (!(await count(page, `[data-cm-world-tile="${tile}"]`))) { finding(where, tile === 'dsc' ? 'no Super cup tile' : 'no UEFA Super Cup tile'); return; }
   await loc.first().scrollIntoViewIfNeeded().catch(() => {});
   await page.waitForTimeout(250);
   const before = await page.evaluate(() => [Math.round(window.scrollY), document.scrollingElement.scrollHeight]);
-  if (!(await press(page, loc))) { finding(where, 'the Super cup tile could not be pressed'); return; }
+  if (!(await press(page, loc))) { finding(where, `the ${tile} tile could not be pressed`); return; }
   await page.waitForTimeout(300);
   await inside();
   await measure(page, `${where} card`);
@@ -315,6 +326,31 @@ async function caseC(browser, size, tag) {
   }
 }
 
+
+/* ---------- Round 1514's saves: (g) a 2026-27 Marseille career in season one, (h) a crafted Chelsea season two in
+   the UEFA Super Cup (an engine with one edit makes the save: the rollover reads my club as last season's
+   Champions League winners; the dist that plays it is the real one) ---------- */
+{
+  const M = await E.fresh();
+  const g = tape(0x1514a, () => M.cm.startCareer('Marseille')).value;
+  const dsc = g.worldComps?.dsc;
+  if (!dsc || dsc.skip || dsc.row !== 'fra-2026' || dsc.clubs.join() !== 'PSG,Lens') cannot(`Marseille's season one holds no followed Trophée des Champions of PSG and Lens (${JSON.stringify(dsc)})`);
+  if (g.worldComps?.usc) cannot('a season one save holds a UEFA Super Cup');
+  saves.g = { items: saved(M, g) };
+  console.log('(g) Marseille season one: the Trophée des Champions, PSG v Lens, and no UEFA Super Cup');
+  const USC_OPEN = "    openOneOff(state, { tables: { table: null, cupWinner: null, cupRunnerUp: null, uclWinner: exit(watchHolder), uelWinner: exit(watchUelHolder) }, seasonOne: false }, 'usc');\n";
+  const EU = await engineOf(ROOT, 'walk-usc', { edits: [{ file: 'src/lib/clubManager.ts', from: USC_OPEN, to: USC_OPEN.replace('uclWinner: exit(watchHolder)', 'uclWinner: career.clubName') }] }, cannot);
+  const MU = await EU.fresh();
+  let s = tape(0x1514b, () => MU.cm.startCareer('Chelsea')).value;
+  for (let i = 0; i < 300 && s.week < s.calendar.length; i += 1) s = tape(0x1514b + 1 + i, () => MU.cm.playNextEntry(s, { skipHalftime: true, noCoach: true })).value.state;
+  const fin = tape(0x1514c, () => MU.cm.finishSeason(s)).value.state;
+  const h = tape(0x1514d, () => MU.cm.startNextSeason(fin)).value;
+  const usc = h.worldComps?.usc;
+  const at = (h.calendar ?? []).findIndex(e => e.night?.k === 'usc');
+  if (!usc || usc.skip || usc.clubs[0] !== 'Chelsea' || at < 0) cannot(`the crafted Chelsea season two is not in the UEFA Super Cup with its night on the calendar (${JSON.stringify(usc)})`);
+  saves.h = { items: saved(MU, h), opp: usc.clubs[1], night: MU.cal.shortDate(MU.cal.entryDatesOf(h)[at]) };
+  console.log(`(h) Chelsea season two: the UEFA Super Cup against ${usc.clubs[1]} on ${saves.h.night}, entry ${at}`);
+}
 
 /* ---------- the played half's saves: (d) a season two Arsenal entrant at week 0, (e) after it won the Shield ---------- */
 {
@@ -386,12 +422,58 @@ async function caseE(browser, size, tag) {
     if (errors.length) finding(where, `page errors: ${errors.slice(0, 2).join(' | ')}`);
   } finally { await ctx.close(); }
 }
+/* Round 1514: (g) the French row's card and the UEFA Super Cup's season one tile; (h) my club's UEFA Super Cup. */
+async function caseG(browser, size, tag) {
+  const where = `(g) Marseille season one ${tag}`;
+  const { ctx, page, errors } = await open(browser, saves.g.items, size);
+  try {
+    if (!(await toCups(page, where))) return;
+    await measure(page, `${where} tiles`);
+    await shot(page, `usc-g-tiles-${tag}`);
+    const tile = await textOf(page, '[data-cm-world-tile="dsc"]');
+    if (!tile.includes('Trophée des Champions')) finding(where, `the Super cup tile reads "${tile.slice(0, 160)}"`);
+    const utile = await textOf(page, '[data-cm-world-tile="usc"]');
+    if (!/not played/.test(utile)) finding(where, `the UEFA Super Cup tile reads "${utile.slice(0, 160)}", not that season one's is not played`);
+    await roundTrip(page, where, async () => {
+      await shot(page, `usc-g-card-${tag}`);
+      const card = await textOf(page, '[data-cm-super-cup]');
+      for (const want of ['Trophée des Champions', 'PSG', 'Lens', 'champions', 'winners', 'Stade Bollaert-Delelis', 'straight to penalties', 'rarer exceptions']) {
+        if (!card.includes(want)) finding(where, `the card does not say "${want}" (it reads: ${card.slice(0, 220)})`);
+      }
+    });
+    await roundTrip(page, `${where} uefa`, async () => {
+      await shot(page, `usc-g-ucard-${tag}`);
+      if (!(await count(page, '[data-cm-super-cup="stub"]'))) finding(where, 'the UEFA Super Cup card is not the season one stub');
+      if (await count(page, '[data-cm-super-cup-match]')) finding(where, 'the UEFA Super Cup stub shows a match');
+    }, 'usc');
+    if (errors.length) finding(where, `page errors: ${errors.slice(0, 2).join(' | ')}`);
+  } finally { await ctx.close(); }
+}
+async function caseH(browser, size, tag) {
+  const where = `(h) Chelsea season two, UEFA Super Cup ${tag}`;
+  const { ctx, page, errors } = await open(browser, saves.h.items, size);
+  try {
+    if (!(await toCups(page, where))) return;
+    await shot(page, `usc-h-tiles-${tag}`);
+    const utile = await textOf(page, '[data-cm-world-tile="usc"]');
+    if (!utile.includes('Your club is in it') || !utile.includes(saves.h.opp)) finding(where, `the UEFA Super Cup tile reads "${utile.slice(0, 160)}"`);
+    await roundTrip(page, where, async () => {
+      await shot(page, `usc-h-card-${tag}`);
+      const card = await textOf(page, '[data-cm-super-cup]');
+      for (const want of ['UEFA Super Cup', 'Chelsea', saves.h.opp, 'Champions League winners last season', 'Europa League winners last season', 'neutral ground', 'straight to penalties', saves.h.night]) {
+        if (!card.includes(want)) finding(where, `the card does not say "${want}" (it reads: ${card.slice(0, 220)})`);
+      }
+    }, 'usc');
+    if (errors.length) finding(where, `page errors: ${errors.slice(0, 2).join(' | ')}`);
+  } finally { await ctx.close(); }
+}
 const browser = await chromium.launch();
 try {
-  const CASES = { a: caseA, b: caseB, c: caseC, d: caseD, e: caseE };
+  const CASES = { a: caseA, b: caseB, c: caseC, d: caseD, e: caseE, g: caseG, h: caseH };
   for (const size of SIZES) {
     const tag = String(size[0]);
-    for (const k of CONTROL ? CONTROLS[CONTROL].cases : Object.keys(CASES)) await CASES[k](browser, size, tag);
+    /* Round 1514's cases at 390 and 1280. */
+    for (const k of CONTROL ? CONTROLS[CONTROL].cases : Object.keys(CASES)) if (size[0] !== 320 || !'gh'.includes(k)) await CASES[k](browser, size, tag);
   }
 } finally {
   await browser.close();
@@ -404,5 +486,5 @@ if (CONTROL) {
   console.log(`playOneOffCups: control ${CONTROL} DID NOT FIRE (${findings.length} findings: ${findings.slice(0, 2).join(' / ')})`);
   process.exit(3);
 }
-console.log(findings.length ? `playOneOffCups: ${findings.length} FINDINGS` : `playOneOffCups: green, five cases at three sizes, pictures in ${SHOTS}`);
+console.log(findings.length ? `playOneOffCups: ${findings.length} FINDINGS` : `playOneOffCups: green, five cases at three sizes and two more at two, pictures in ${SHOTS}`);
 process.exit(findings.length ? 1 : 0);

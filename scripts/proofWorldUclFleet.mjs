@@ -98,8 +98,10 @@ async function journey(E, f, seasons, mode, compareStrip, evalEach = false) {
     let shown = s;
     const watching = !!s && !s.uclGroup;
     const [top, sub] = compareStrip.split('.');
-    if (compareStrip && sub && s && s[top] && sub in s[top]) {
-      shown = { ...s, [top]: { ...s[top] } }; delete shown[top][sub];
+    /* Round 1514: several keys of one object joined by '+' (--strip worldComps.dsc+usc). */
+    const subs = sub ? sub.split('+') : [];
+    if (compareStrip && sub && s && s[top] && subs.some(x => x in s[top])) {
+      shown = { ...s, [top]: { ...s[top] } }; for (const x of subs) delete shown[top][x];
       if (!Object.keys(shown[top]).length) delete shown[top];
     } else if (compareStrip && !sub && watching && compareStrip in s) { shown = { ...s }; delete shown[compareStrip]; }
     steps.push({ label, json: JSON.stringify(shown), draws: r.draws.length, drawSha: sha(r.draws), saved: got.saved ?? null, raw: got.raw ?? null,
