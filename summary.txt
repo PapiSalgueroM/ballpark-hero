@@ -1,0 +1,7 @@
+s2 exit=0 316s | simOneOffCups: green, 6458 checks (316 s)
+s046 exit=0 53s | simOneOffCups: green, 645 checks (53 s)
+ctl0 exit=0 2s | pairing exit=1 simOneOffCups: control pairing FIRED (2 failures, all its own: cup-seriea-2025-26: the constant names Roma, the ledger Lazio)
+ctl-1 exit=0 466s | nocarryusc exit=1 simOneOffCups: control nocarryusc FIRED (8 failures, all its own: 1 never falls: Liverpool (now) seed 1 nocoach at s2-join: 0 UEFA Super Cup nights show
+s157 exit=0 1020s | simOneOffCups: green, 233532 checks (1020 s)
+s3 exit=0 1022s | simOneOffCups: green, 15353 checks (1021 s)
+ctl-2345 exit=0 298s | notrophy exit=1 simOneOffCups: control notrophy FIRED (8 failures, all its own: 4 trophy: Chelsea seed 1 won: 0 minor trophies ([]), not exactly the FA Community Shield o
