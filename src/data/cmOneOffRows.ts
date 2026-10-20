@@ -82,9 +82,9 @@ export const CM_ONE_OFF_PARTIAL: string[] = ['eng-2005', 'eng-2010', 'eng-2015',
 /** Round 1514: what a played row simplifies or leaves out, said on its card (the brief's partial marks). */
 export const CM_ONE_OFF_MARKS: Readonly<Record<string, string>> = {
   'uefa-2026': 'UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.',
-  'ger-2026': "The league picks the real ground and either club can bid to host. The game plays it at the champions' ground, apart from 2026's at Dortmund.",
-  'fra-2026': 'The league picks the ground, in principle a neutral one. The rulebook\'s rarer exceptions are not played here.',
-  'ita-2026': 'Only the 2026-27 edition is confirmed. Later seasons show as not confirmed until the game can stand on them.',
+  'ger-2026': "The league picks the real ground and either club can bid to host. The game plays it at the champions' ground, apart from 2026's at Dortmund, and on its own date.",
+  'fra-2026': 'The league picks the ground, in principle a neutral one. The game plays it on its own date, and the rulebook\'s rarer exceptions are not played here.',
+  'ita-2026': 'Only the 2026-27 edition is confirmed, and the game plays it on its own midweek nearest the real date. Later seasons show as not confirmed until the game can stand on them.',
 };
 
 /** Round 1514: why a partial row is partial, where the tile says more than "not confirmed". */
