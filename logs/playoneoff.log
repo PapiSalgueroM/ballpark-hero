@@ -1,0 +1,34 @@
+(a) Chelsea season one: Arsenal 0-1 Manchester City, won by Manchester City, night Wed 5 Aug
+(b) Arsenal season one: the seasonOne stub
+(c) Everton 2005: no super cup (the era's row is partial)
+(c) América 2026-27: no super cup (no row for Mexico)
+(g) Marseille season one: the Trophée des Champions, PSG v Lens, and no UEFA Super Cup
+(h) Chelsea season two: the UEFA Super Cup against Atalanta on Wed 18 Aug, entry 1
+(d) Arsenal season two: the Shield against Liverpool on Wed 11 Aug, the first entry of the calendar
+(e) Arsenal season two after the Shield, won: the cabinet holds FA Community Shield
+   (a) Chelsea season one 320 tiles: 5 controls measured
+   (a) Chelsea season one 320 card: 5 controls measured
+   (b) Arsenal season one 320 card: 1 controls measured
+   (c) Everton 2005 320 card: 1 controls measured
+   (c) América 2026-27 320 card: 1 controls measured
+   (a) Chelsea season one 390 tiles: 5 controls measured
+   (a) Chelsea season one 390 card: 5 controls measured
+   (b) Arsenal season one 390 card: 1 controls measured
+   (c) Everton 2005 390 card: 1 controls measured
+   (c) América 2026-27 390 card: 1 controls measured
+   (g) Marseille season one 390 tiles: 5 controls measured
+   FAIL (g) Marseille season one 390: the Super cup tile reads "🛡️ SUPER CUP Won by PSG Lens 1-2 PSG"
+   (g) Marseille season one 390 card: 5 controls measured
+   (g) Marseille season one 390 uefa card: 1 controls measured
+   (h) Chelsea season two, UEFA Super Cup 390 card: 5 controls measured
+   (a) Chelsea season one 1280 tiles: 5 controls measured
+   (a) Chelsea season one 1280 card: 5 controls measured
+   (b) Arsenal season one 1280 card: 1 controls measured
+   (c) Everton 2005 1280 card: 1 controls measured
+   (c) América 2026-27 1280 card: 1 controls measured
+   (g) Marseille season one 1280 tiles: 5 controls measured
+   FAIL (g) Marseille season one 1280: the Super cup tile reads "🛡️ SUPER CUP Won by PSG Lens 1-2 PSG"
+   (g) Marseille season one 1280 card: 5 controls measured
+   (g) Marseille season one 1280 uefa card: 1 controls measured
+   (h) Chelsea season two, UEFA Super Cup 1280 card: 5 controls measured
+playOneOffCups: 2 FINDINGS

@@ -1,0 +1,27 @@
+(a) Chelsea season one: Arsenal 0-1 Manchester City, won by Manchester City, night Wed 5 Aug
+(b) Arsenal season one: the seasonOne stub
+(c) Everton 2005: no super cup (the era's row is partial)
+(c) América 2026-27: no super cup (no row for Mexico)
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+control notile: built src/components/club-manager/WorldCompScreen.tsx with its line patched into /home/runner/work/_temp/t-notile/dukb-one-off-walk-6jl9Wf/dist-notile (served on 43737); the file is back as it was
+(g) Marseille season one: the Trophée des Champions, PSG v Lens, and no UEFA Super Cup
+(h) Chelsea season two: the UEFA Super Cup against Atalanta on Wed 18 Aug, entry 1
+(d) Arsenal season two: the Shield against Liverpool on Wed 11 Aug, the first entry of the calendar
+(e) Arsenal season two after the Shield, won: the cabinet holds FA Community Shield
+   (a) Chelsea season one 320 tiles: 4 controls measured
+   FAIL (a) Chelsea season one 320: no Super cup tile
+   (a) Chelsea season one 390 tiles: 4 controls measured
+   FAIL (a) Chelsea season one 390: no Super cup tile
+   (a) Chelsea season one 1280 tiles: 4 controls measured
+   FAIL (a) Chelsea season one 1280: no Super cup tile
+playOneOffCups: control notile FIRED (3 findings of "no Super cup tile", 3 in all)

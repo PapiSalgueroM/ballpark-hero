@@ -1,0 +1,7 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+notile exit=1 91s | playOneOffCups: control notile FIRED (3 findings of "no Super cup tile", 3 in all)
+playoneoff exit=1 108s | playOneOffCups: 2 FINDINGS
+weight exit=1 27s | sweepWeight: 1 failure
+nousctile exit=1 179s | playOneOffCups: control nousctile FIRED (8 findings of "UEFA Super Cup tile", 10 in all)
+weight-base exit=0 67s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+playworlducl exit=0 262s | playWorldUcl: green. Nine saves at three sizes, 93 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
