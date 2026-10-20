@@ -17,6 +17,11 @@
  * League's place) after the opener in August or September, one winner, no extra time, the cabinet. Section 3 takes
  * the UEFA open out with the three others; sections 2 and 4 run without it. New controls: twopub and pairing
  * (section 0), uscswap, italyall, nodated and firstedition (section 1).
+ * FIX-1514 (the reviews' majors 2 and 3, minor 6): every dated edition's venue is read off the engine's own fixture
+ * (its home side or a neutral ground against CM_ONE_OFF_EDITIONS: a probe career per dated edition, Germany's
+ * included, and the fleet's French and Italian watchers every seed); the fleet makes two season two moves (Liverpool
+ * to Arsenal after the UEFA Super Cup's night, Marseille at season two's first week into one of its clubs) and holds
+ * the UEFA Super Cup's carry, its never falls and the season one guard's twin; controls evalundated and nocarryusc.
  *
  * SECTIONS (ONE_OFF_ONLY=0,1 runs some of them; the default is all that are built):
  *   0  the ledger. Every fact of a verified row stands on an official page and a press page on two hosts, none a
@@ -80,7 +85,9 @@
  *              nodouble (the double rule skipped: the forced fleet) afterswap (the read after next season's
  *              memberships: a promoted manager) etall (extra time on a straight to penalties row) seasononeplay
  *              (season one's stub for my club taken out) carryseen (the move's carry off by one: a club joined
- *              after its night shown becomes a 'joined' stub, the shown night taken back)
+ *              after its night shown becomes a 'joined' stub, the shown night taken back) evalundated (Fix-1514:
+ *              evalOneOff reads the undated row, so Germany's and France's 2026 editions leave their real grounds)
+ *              nocarryusc (Fix-1514: the UEFA Super Cup's mid season carry dropped, so a season two move loses it)
  *   section 2: tick (a skipped night ticks a week) adjacent (every night of a forced four club cup in the first
  *              gap: two midweeks in a row, a later date moves) countdown (a played night counts a window week)
  *              calweeks (the calendar's myMatchWeeks counts a night: its deadline is not the engine's)
@@ -370,6 +377,16 @@ Object.assign(ENGINE_EDITS, {
   italyall: [{ file: ONE, from: '  return !CM_ONE_OFF_EDITION_ONLY.includes(id) || oneOffEdition(id, edition) !== null;', to: '  return true;' }],
   nodated: [{ file: ONE, from: "  if (row.place === 'dated') return [row.on ? { place: 'dated', on: row.on } : { place: 'dated' }];", to: "  if (row.place === 'dated') return [{ place: 'newYear' }];" }],
   firstedition: [{ file: CM, from: '(from.seasonOne ? oneOffSeasonOneTables(row.nation) : from.tables)', to: '(from.seasonOne ? null : from.tables)' }],
+  /* Fix-1514 (the run lens, majors 2 and 3): evalOneOff reading the undated row (Round 1510's reader left in one of
+     the call sites the round rewired: Germany's 2026 Supercup at Bayern Munich's ground, France's on a neutral one,
+     while the card prints Dortmund and Lens), and the UEFA Super Cup's mid season carry dropped (a move from season
+     two on loses it). Both are the reviewer's own mutations. */
+  evalundated: [{ file: CM, from: '  const row = oneOffSliceRow(state, slice);\n  if (!row) return null;\n  const k = nights ?? oneOffNightsDone(state, key);', to: '  const row = oneOffRowAt(slice.row, 0);\n  if (!row) return null;\n  const k = nights ?? oneOffNightsDone(state, key);' }],
+  nocarryusc: [{ file: CM, from: "  carryOneOff(career, joined, 'usc');\n", to: '' }],
+});
+Object.assign(CONTROLS, {
+  evalundated: [1, /^1 venue: /, /^1 /],
+  nocarryusc: [1, /^1 (never falls|usc carry): .*UEFA Super Cup/, /^1 /],
 });
 const editsFor = (extra = []) => [...(ENGINE_EDITS[CONTROL] ?? []), ...extra];
 const counts = {};
@@ -385,12 +402,14 @@ function fleetOf(M) {
   const list = [
     { club: 'Arsenal', era: 'now', why: 'season one champions' }, { club: 'Manchester City', era: 'now', why: 'season one cup winners' },
     { club: 'Chelsea', era: 'now', why: 'watcher', join: 'Manchester City' }, { club: 'Everton', era: 'now', why: 'watcher', join: champ.clubs[champ.clubs.length - 1] },
-    { club: 'Liverpool', era: 'now', why: 'watcher' }, { club: champ.clubs[0], era: 'now', why: 'second tier watcher' },
+    /* Fix-1514: Liverpool moves to Arsenal in season two after the UEFA Super Cup's night (the carry with `seen`),
+       Marseille at season two's first week into a club of the UEFA Super Cup before its night (a 'joined' stub). */
+    { club: 'Liverpool', era: 'now', why: 'watcher, to Arsenal in season two', join2: 'Arsenal' }, { club: champ.clubs[0], era: 'now', why: 'second tier watcher' },
     { club: created.name, era: 'now', custom: created, why: 'created club in the Championship' },
     { club: 'Real Madrid', era: 'now', why: 'no row (Spain)', move: 'Chelsea' }, { club: 'Bayern Munich', era: 'now', why: 'season one entrants (Germany, a double)' },
     /* Round 1514: a French watcher (season one at Lens's ground, the dated edition) and an Italian one (the 2026-27
        edition only, extra time, a December night; no row from season two). */
-    { club: 'Marseille', era: 'now', why: 'watcher (France)' }, { club: 'Juventus', era: 'now', why: 'watcher (Italy, its edition only)' },
+    { club: 'Marseille', era: 'now', why: 'watcher (France), into a UEFA Super Cup club at season two', enter2: true }, { club: 'Juventus', era: 'now', why: 'watcher (Italy, its edition only)' },
     { club: mx.clubs[0], era: 'now', why: 'no row (Mexico, no cup)' }, { club: 'Arsenal', era: 'era2005', why: 'era row partial' },
   ];
   return list.filter(f => !FLEET_ONLY || f.club.includes(FLEET_ONLY));
@@ -399,7 +418,7 @@ function fleetOf(M) {
 /** One journey: startCareer, every playNextEntry, finishSeason, startNextSeason, through `seasons`, with a reload in
  *  every season, a mid season move where the fleet row asks (season one, entry 25) and a summer move where it asks
  *  (the first rollover). Every step on its own stretch of the counter stream; `onStep` sees every state. */
-async function journey(E, f, seed, mode, { evalEach = false, record = null, mark = null, onStep, onRollover } = {}) {
+async function journey(E, f, seed, mode, { evalEach = false, record = null, mark = null, onStep, onRollover, moves2 = false } = {}) {
   const M = await E.fresh();
   const opts = mode === 'coach' ? { skipHalftime: true } : { skipHalftime: true, noCoach: true };
   const steps = [];
@@ -419,8 +438,20 @@ async function journey(E, f, seed, mode, { evalEach = false, record = null, mark
   };
   step('start', () => ({ state: f.custom ? M.cm.startCareer(f.club, f.era, f.custom) : M.cm.startCareer(f.club, f.era) }));
   const reload = cur => { M.store.clear(); if (!M.cm.saveCareer(cur)) return {}; return { state: M.cm.loadCareer() }; };
+  /* Fix-1514 (the run lens, major 3): a season two move, only where the caller asks (`moves2`: the fleet sections,
+     never section 3, whose two arms must take the same steps). `pick` names the club, or null for no move. */
+  const joinStep = (label, pick) => step(label, cur => {
+    const club = pick(cur);
+    const lg = club && club !== cur.clubName ? M.cm.REAL_LEAGUES.find(l => l.clubs.includes(club)) : null;
+    if (!lg) return {};
+    const open = { club, league: lg.id, tier: 3, season: cur.season, week: cur.week, matchesLeft: 0, roll: 0, status: 'accepted' };
+    const joined = M.cal.joinClubNow({ ...cur, jobHunt: { open, cooldowns: [], sentSeason: cur.season, sent: 1, summerMove: null } });
+    return joined ? { state: joined, joined: cur } : {};
+  });
   for (let season = 1; season <= SEASONS; season += 1) {
     let over = false;
+    /* Season two's first week, before the UEFA Super Cup's night: into one of its clubs that is not mine. */
+    if (season === 2 && moves2 && f.enter2) joinStep('s2-enter', cur => { const u = cur.worldComps?.usc; return u && !u.skip ? u.clubs.find(c => c !== cur.clubName) ?? null : null; });
     for (let i = 0; i < 260 && !over; i += 1) {
       step(`s${season}-e${i + 1}`, cur => { const r = M.cm.playNextEntry(cur, opts); over = r.kind === 'seasonOver'; return { state: r.state }; });
       if (i === 20) step(`s${season}-reload`, reload);
@@ -432,6 +463,8 @@ async function journey(E, f, seed, mode, { evalEach = false, record = null, mark
           return joined ? { state: joined, joined: cur } : {};
         });
       }
+      /* Season two, entry 26: after the UEFA Super Cup's night (the first free midweek after the opener). */
+      if (season === 2 && moves2 && i === 25 && f.join2) joinStep('s2-join', () => f.join2);
     }
     if (!over) throw new Error(`season ${season} did not end in 260 entries`);
     step(`s${season}-finish`, cur => ({ state: M.cm.finishSeason(cur).state }));
@@ -483,6 +516,23 @@ function oracleOf(M, prev, forced) {
   return { nation, finished, champ, cupWinner, doubled, clubs: champ && cupWinner ? [champ, doubled ? table[1] : cupWinner] : null, promoted: lg.id !== top?.id, leagueId: lg.id };
 }
 
+/** Fix-1514 (the run lens, major 2): a dated edition's venue in the ENGINE. The fixture evalOneOff plays for a live
+ *  slice whose edition the ledger dates (CM_ONE_OFF_EDITIONS) is at that edition's venue: the cup winners' ground
+ *  ('w': Dortmund's and Lens's in 2026), the champions' ('c': Inter's) or a neutral one, never the row's every season
+ *  rule. False when the slice's edition is not dated. */
+function editionVenueCheck(M, R, s, where) {
+  const dsc = s.worldComps?.dsc;
+  if (!dsc || dsc.skip || !dsc.clubs) return false;
+  const year = (typeof s.startYear === 'number' ? s.startYear : 2026) + Math.max(0, dsc.s - 1);
+  const ed = R.CM_ONE_OFF_EDITIONS.find(e => e[0] === dsc.row && e[1] === year);
+  if (!ed) return false;
+  const v = ed[3];
+  const home = v === 'n' ? null : v === 'w' ? dsc.clubs[1] : dsc.clubs[0];
+  const fx = M.cm.evalOneOff(s, Infinity)?.fixtures?.[0];
+  ok(!!fx && fx.neutral === (v === 'n') && (v === 'n' || fx.home === home), `1 venue: ${where}: ${dsc.row}'s ${year} edition is played ${!fx ? 'nowhere' : fx.neutral ? 'on a neutral ground' : `at ${fx.home}'s ground`}, its ledger edition ${v === 'n' ? 'on a neutral ground' : `at ${home}'s`} (${ed[4]})`);
+  return true;
+}
+
 /** Sections 1, 5 and 7: every fleet save, both coach modes, every seed; with `forced` the double fleet. */
 async function fleetPass(forced) {
   const label = forced ? 'forced' : 'fleet';
@@ -491,17 +541,72 @@ async function fleetPass(forced) {
   const probe = await E.fresh();
   const fleet = fleetOf(probe);
   console.log(`  1 ${label}: ${fleet.map(f => `${f.club} (${f.era}, ${f.why})`).join('; ')}`);
+  /* Fix-1514 (major 2): every dated 2026 edition with no season one constant, read off a fresh career at a club of
+     its country's top flight that is not in it (a watcher), so Germany's is held too (the fleet's German club is an
+     entrant, a stub). The fleet's French and Italian watchers are held to the same below, every seed. */
+  if (!forced) {
+    const probed = [];
+    for (const [rid, year] of R.CM_ONE_OFF_EDITIONS) {
+      if (year !== 2026 || R.CM_ONE_OFF_SEASON_ONE.some(e => e[0] === rid)) continue;
+      const t = R.CM_ONE_OFF_ROWS.find(x => x[0] === rid);
+      const top = probe.cm.REAL_LEAGUES.find(l => { const r = probe.cm.leagueRulesOf(l.id); return r.nationId === t?.[1] && r.ladder === 'top'; });
+      const ed = firstEditionClubs(R, rid) ?? [];
+      const club = top?.clubs.find(c => !ed.includes(c));
+      if (!club) { ok(false, `1 venue: ${rid}: no club of its country's top flight to watch it from`); continue; }
+      const M = await E.fresh();
+      const s = tape(1, () => M.cm.startCareer(club)).value;
+      ok(editionVenueCheck(M, R, s, `${club} (now) at its start`), `1 venue: ${rid}: a new career at ${club} holds ${s?.worldComps?.dsc?.skip ?? s?.worldComps?.dsc?.row ?? 'no super cup'}, not a dated edition to read`);
+      probed.push(`${rid} from ${club}`);
+    }
+    console.log(`  1 venue probe: ${probed.join('; ') || 'none'}`);
+  }
   for (const f of fleet) {
     for (const seed of SEEDS) {
       for (const mode of COACH === 'both' ? ['coach', 'nocoach'] : [COACH]) {
         const tag = `${f.club} (${f.era}) seed ${seed} ${mode}${forced ? ' forced' : ''}`;
         let joined = false;
         let last = { season: 0, n: 0 };
+        /* Fix-1514 (major 3): the UEFA Super Cup's nights shown, its own never falls; the dsc row a move carried
+           (another country's, after a move abroad); the club I managed when I played each cup's night (a cup I
+           played and won stays mine after a move, and one carried onto my new club is not). */
+        let lastU = { season: 0, n: 0 };
+        let carriedRow = null;
+        const playedAs = {};
         await journey(E, f, seed, mode, {
+          moves2: true,
           onStep: (M, s, stepLabel, got) => {
             if (!s) return;
-            if (/-rollover$/.test(stepLabel)) joined = false;
+            if (/-rollover$/.test(stepLabel)) { joined = false; carriedRow = null; }
             if (got.joined) joined = true;
+            if (got.joined) carriedRow = got.joined.worldComps?.dsc?.s === s.season ? got.joined.worldComps.dsc.row : null;
+            for (const key of ['dsc', 'usc']) {
+              const sl = s.worldComps?.[key];
+              if (sl && !sl.skip && sl.s === s.season && Object.keys(sl.mine ?? {}).length && !playedAs[`${key}|${s.season}`]) playedAs[`${key}|${s.season}`] = s.clubName;
+            }
+            const uNow = M.cm.oneOffNightsDone(s, 'usc');
+            if (s.season === lastU.season) ok(uNow >= lastU.n, `1 never falls: ${tag} at ${stepLabel}: ${uNow} UEFA Super Cup nights shown after ${lastU.n}`);
+            lastU = { season: s.season, n: uNow };
+            if (got.joined) {
+              /* The UEFA Super Cup's carry: a cup finished before the move is finished after it with the same winner;
+                 a stub stays that stub; a move into one of its clubs before its night is the 'joined' stub (the
+                 game never plays my club without me); any other move keeps the slice whole (its clubs, seed and my
+                 results), its nights shown kept by the never falls check above. */
+              const wasR = M.cm.evalOneOff(got.joined, undefined, 'usc'), nowR = M.cm.evalOneOff(s, undefined, 'usc');
+              if (wasR?.done) ok(!!nowR?.done && nowR.winner === wasR.winner, `1 never falls: ${tag} at ${stepLabel}: the UEFA Super Cup finished before the move (won by ${wasR.winner}) shows ${nowR ? `${nowR.nightsDone} of ${nowR.nights} nights` : 'nothing'} after it`);
+              const was = got.joined.worldComps?.usc, now = s.worldComps?.usc;
+              if (was && was.s === s.season) {
+                const shown = Math.max(was.seen ?? 0, M.cm.oneOffNightsDone(got.joined, 'usc'));
+                const say = now ? (now.skip ?? `the slice of ${now.clubs?.join(' and ')}`) : 'nothing';
+                if (was.skip) ok(now?.skip === was.skip, `1 usc carry: ${tag} at ${stepLabel}: the UEFA Super Cup stub ${was.skip} is ${say} after the move`);
+                else if (was.clubs.includes(s.clubName) && shown < 1) {
+                  ok(now?.skip === 'joined', `1 usc carry: ${tag} at ${stepLabel}: joined ${s.clubName}, a club of the UEFA Super Cup before its night, and it holds ${say}, not the joined stub`);
+                  bump('1 moves into a UEFA Super Cup club before its night (a joined stub)');
+                } else {
+                  ok(!!now && !now.skip && same(now.clubs, was.clubs) && now.seed === was.seed && same(now.mine ?? {}, was.mine ?? {}), `1 usc carry: ${tag} at ${stepLabel}: the UEFA Super Cup of ${was.clubs.join(' and ')} is ${say} after the move`);
+                  bump(shown > 0 ? '1 moves carrying a UEFA Super Cup already shown (the nocarryusc control reads these)' : '1 moves carrying a UEFA Super Cup still ahead');
+                }
+              }
+            }
             /* 1: never falls (the critic's correction 7): the nights a save has passed never go down within a season,
                a mid season move included, and a cup finished before the move is finished after it, with the same
                winner (the carry keeps `seen`, and a club joined after its night is no 'joined' stub). */
@@ -515,8 +620,10 @@ async function fleetPass(forced) {
             last = { season: s.season, n: doneNow };
             const want = expectedRow(M, R, s);
             const dsc = s.worldComps?.dsc;
-            /* 1: the right row, every step. */
-            if (want.row) ok(!!dsc && dsc.row === want.id && dsc.s === s.season, `1 row: ${tag} at ${stepLabel}: ${dsc ? `holds ${dsc.row} of season ${dsc.s}` : 'holds no super cup'}, its country plays ${want.id}`);
+            /* 1: the right row, every step. Fix-1514: after a mid season move abroad the season's slice is the one the
+               move carried (its nights shown are never taken back) until the rollover. */
+            if (joined && !!dsc && dsc.row === carriedRow && dsc.row !== want.id) bump('1 steps holding a super cup carried from another country by a mid season move');
+            else if (want.row) ok(!!dsc && dsc.row === want.id && dsc.s === s.season, `1 row: ${tag} at ${stepLabel}: ${dsc ? `holds ${dsc.row} of season ${dsc.s}` : 'holds no super cup'}, its country plays ${want.id}`);
             else ok(!dsc, `1 row: ${tag} at ${stepLabel}: holds ${dsc?.row} but ${want.id} is no row of the game`);
             /* 5: one slice at most, of the season in play, and nothing else beside the keys the save knows. */
             const keys = Object.keys(s.worldComps ?? {});
@@ -526,13 +633,18 @@ async function fleetPass(forced) {
                game), never in an era save, and always this season's when held. */
             const usc = s.worldComps?.usc;
             if (usc) ok(s.season > 1 && uscRowOf(M, s) === usc.row && usc.s === s.season, `1 usc: ${tag} at ${stepLabel}: holds ${usc.row} of season ${usc.s} in season ${s.season}${s.eraId ? ` (${s.eraId})` : ''}`);
+            /* Fix-1514 (read lens minor 6): the season one guard's twin. After a move, a UEFA Super Cup slice with its
+               night still ahead never holds my club (the game would play it without me): that is the joined stub. */
+            if (usc && !usc.skip && joined && usc.clubs?.includes(s.clubName) && uNow < 1) ok(false, `1 season one: ${tag} at ${stepLabel}: a carried UEFA Super Cup slice holds my club ${s.clubName} with its night ahead, so the game would play it without me`);
             if (usc && /-finish$/.test(stepLabel) && !usc.skip) {
               const res = M.cm.evalOneOff(s, undefined, 'usc');
               ok(!!res?.done && !!res.winner && usc.clubs.includes(res.winner), `1 usc: ${tag} at ${stepLabel}: the season is over and the UEFA Super Cup is not (${res?.nightsDone} of ${res?.nights})`);
               for (const fx of res?.fixtures ?? []) ok(!fx.aet && (!fx.pens || fx.hg === fx.ag), `1 usc: ${tag}: extra time, or penalties after ${fx.hg}-${fx.ag}`);
-              const wonUsc = res?.winner === s.clubName && Object.keys(usc.mine ?? {}).length > 0;
+              /* Won by the club I managed when I played it (a move after the night keeps it mine; one carried onto my
+                 new club after its night is not). */
+              const wonUsc = !!res?.winner && res.winner === playedAs[`usc|${s.season}`];
               ok((s.trophies ?? []).filter(t => t.minor && t.season === s.season && t.name === 'UEFA Super Cup').length === (wonUsc ? 1 : 0), `1 usc: ${tag} at ${stepLabel}: the cabinet's UEFA Super Cups of this season are not ${wonUsc ? 1 : 0}`);
-              if (usc.clubs.includes(s.clubName)) { bump('1 usc played by my club'); ok(Object.keys(usc.mine ?? {}).length === 1, `1 usc: ${tag} at ${stepLabel}: my club's UEFA Super Cup was not played by me`); }
+              if (usc.clubs.includes(s.clubName) && !joined) { bump('1 usc played by my club'); ok(Object.keys(usc.mine ?? {}).length === 1, `1 usc: ${tag} at ${stepLabel}: my club's UEFA Super Cup was not played by me`); }
               else bump('1 usc followed');
               if (wonUsc) bump('1 usc won by my club');
             }
@@ -558,25 +670,31 @@ async function fleetPass(forced) {
             }
             if (s.season === 1 && !joined && dsc.skip) ok(dsc.skip === 'seasonOne', `1 season one: ${tag}: a stub ${dsc.skip}`);
             if (stepLabel === 'start') bump(`7 season one ${dsc.skip ? `stub ${dsc.skip}` : 'followed'}`);
+            /* Fix-1514 (major 2): a dated edition's venue, read off the engine's own fixture. */
+            if ((stepLabel === 'start' || /-finish$/.test(stepLabel)) && editionVenueCheck(M, R, s, `${tag} at ${stepLabel}`)) bump('1 dated editions whose venue was read off the engine');
             if (/-finish$/.test(stepLabel) && !dsc.skip) {
+              /* Fix-1514: the slice's own row (after a move abroad it is the carried one, not this country's). */
+              const dt = R.CM_ONE_OFF_ROWS.find(x => x[0] === dsc.row);
+              const dr = dt ? { name: dt[3], shape: dt[4], decider: dt[5] } : want.row;
               const res = M.cm.evalOneOff(s);
               const all = M.cm.evalOneOff(s, Infinity);
               ok(!!res && res.done && same(res, all), `1 winner: ${tag} at ${stepLabel}: the season is over and the cup is not (${res?.nightsDone} of ${res?.nights} nights)`);
               ok(!!res?.winner && dsc.clubs.includes(res.winner) && res.runnerUp !== res.winner && dsc.clubs.includes(res.runnerUp), `1 winner: ${tag}: no single winner among the clubs`);
               for (const fx of res?.fixtures ?? []) {
-                ok(want.row.decider === 'et' || !fx.aet, `1 extra time: ${tag}: extra time on a straight to penalties cup`);
+                ok(dr.decider === 'et' || !fx.aet, `1 extra time: ${tag}: extra time on a straight to penalties cup`);
                 ok(!fx.pens || fx.hg === fx.ag, `1 penalties: ${tag}: a shootout after ${fx.hg}-${fx.ag}`);
-                if (want.row.decider === 'pens' && fx.hg === fx.ag) bump('1 level matches on a pens row (the etall control needs one)');
+                if (dr.decider === 'pens' && fx.hg === fx.ag) bump('1 level matches on a pens row (the etall control needs one)');
                 if (fx.pens) bump('7 settled on penalties'); else bump('7 settled in 90 minutes');
                 const sh = dsc.str[dsc.clubs.indexOf(fx.home)], sa = dsc.str[dsc.clubs.indexOf(fx.away)];
                 if (sh !== sa) bump(fx.winner === (sh > sa ? fx.home : fx.away) ? '7 won by the stronger side' : '7 won by the weaker side');
               }
-              /* Won by my club and played by my club: a cup carried onto my new club after a move is not mine. */
-              const mineWon = res?.winner === s.clubName && Object.keys(dsc.mine ?? {}).length > 0;
-              ok((s.trophies ?? []).filter(t => t.minor && t.season === s.season && t.name === want.row.name).length === (mineWon ? 1 : 0), `5 trophies: ${tag} at ${stepLabel}: ${mineWon ? "my club won the cup and" : "my club did not win it and"} the cabinet holds ${(s.trophies ?? []).filter(t => t.minor && t.season === s.season).length} of this season`);
+              /* Won by the club I managed when I played it: a cup carried onto my new club after a move is not mine,
+                 and one I played and won stays mine after a move (Fix-1514's season two moves). */
+              const mineWon = !!res?.winner && res.winner === playedAs[`dsc|${s.season}`];
+              ok((s.trophies ?? []).filter(t => t.minor && t.season === s.season && t.name === dr.name).length === (mineWon ? 1 : 0), `5 trophies: ${tag} at ${stepLabel}: ${mineWon ? "my club won the cup and" : "my club did not win it and"} the cabinet holds ${(s.trophies ?? []).filter(t => t.minor && t.season === s.season).length} of this season`);
               if (mineWon) bump("4 super cups my club won (section 1 fleet)");
-              bump(`5 bytes of a followed ${want.row.shape} slice`, JSON.stringify(dsc).length);
-              bump(`5 followed ${want.row.shape} slices measured`);
+              bump(`5 bytes of a followed ${dr.shape} slice`, JSON.stringify(dsc).length);
+              bump(`5 followed ${dr.shape} slices measured`);
               if (s.season === 1 && f.club === 'Chelsea' && seed === SEEDS[0] && mode === 'nocoach') {
                 const places = M.cm.oneOffNightPlaces(s);
                 const dates = M.cal.entryDatesOf(s);
@@ -1002,7 +1120,7 @@ try {
   process.exit(2);
 }
 /* A control must have its case in the fleet: a count it reads at least one, else it could pass empty (exit 3). */
-const NEEDS = { afterswap: '1 rollovers into another league (the afterswap control reads these)', etall: '1 level matches on a pens row (the etall control needs one)', nodouble: '1 doubles (the runners up took the cup place)', carryseen: '1 moves carrying a cup already shown (the carryseen control reads these)', leaguestarted: '2 states after a night and before the league opener (the leaguestarted control reads these)', norecovery: '2 nights whose squad was read (the norecovery control reads these)' };
+const NEEDS = { afterswap: '1 rollovers into another league (the afterswap control reads these)', etall: '1 level matches on a pens row (the etall control needs one)', nodouble: '1 doubles (the runners up took the cup place)', carryseen: '1 moves carrying a cup already shown (the carryseen control reads these)', leaguestarted: '2 states after a night and before the league opener (the leaguestarted control reads these)', norecovery: '2 nights whose squad was read (the norecovery control reads these)', nocarryusc: '1 moves carrying a UEFA Super Cup already shown (the nocarryusc control reads these)' };
 if (CONTROL && NEEDS[CONTROL] && !(counts[NEEDS[CONTROL]] > 0) && CONTROL !== 'nodouble') { console.log(`simOneOffCups: control ${CONTROL} DID NOT FIRE: its case is not in the fleet (${NEEDS[CONTROL]}: 0)`); process.exit(3); }
 const secs = Math.round((Date.now() - t0) / 1000);
 if (CONTROL) {
