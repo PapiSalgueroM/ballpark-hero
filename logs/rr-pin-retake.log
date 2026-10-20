@@ -1,0 +1,5 @@
+head tree, head pin: src/lib/clubManager.ts matches (tree 654bb96b, pin 654bb96b)
+head tree, head pin: src/lib/clubManagerSlots.ts matches (tree 7b0ec76d, pin 7b0ec76d)
+head tree, head pin: scripts/simClubManagerSlots.mjs matches (tree c7bd9818, pin c7bd9818)
+head tree, head pin: scripts/simClubManagerDecisions.mjs matches (tree 3383d016, pin 3383d016)
+head tree, head pin: every pinned file matches

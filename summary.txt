@@ -1,0 +1,11 @@
+rr-receipt-revert exit=0 1s | base ledger with base receipt: 0 receipt failures; simOneOffCups: 10 FAILURES of 181 checks (0 s)
+rr-receipt-cause exit=0 0s | head ledger with base receipt: 1 receipt failures; simOneOffCups: 1 FAILURES of 513 checks (0 s)
+rr-receipt-retake exit=0 0s | receipt retaken from the tree: 8a9e149f420ee7a8d842507e762d1e9d5a7c7d1ef41b43389d6238ffb9fdff7e; committed: 8a9e149f420ee7a8d842507e762d1e9d5a7c7d1ef41b43389d6238ffb9fdff
+rr-pin-revert exit=0 0s | base clubManager.ts, base pin: every pinned file matches
+rr-pin-cause exit=0 0s | head tree, base pin: 1 pinned files differ
+rr-pin-retake exit=0 0s | head tree, head pin: every pinned file matches
+appeal exit=0 38s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+rr-lr-revert exit=0 58s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+rr-lr-cause exit=0 59s | simCmLeagueRules: 27 failure(s)
+rr-lr-retake exit=0 31s | the retaken digest is identical to the committed one
+rr-lr-whole exit=0 58s | on the committed digest
