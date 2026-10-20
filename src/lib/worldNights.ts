@@ -9,7 +9,7 @@
  *
  * Pure: no clock, nothing from Math.random, nothing from the engine.
  */
-import { addDays, dayOfWeek } from '@/lib/calDate';
+import { addDays, dayOfWeek, daysBetween } from '@/lib/calDate';
 import type { CalDate } from '@/lib/calDate';
 
 /** A calendar entry's night: the worldComps key and the night's index in that slice. */
@@ -22,8 +22,10 @@ export interface NightResult { h: number; a: number; et?: 1; pens?: 'h' | 'a' }
 /** Where a night wants to sit in the season: before the opening Saturday, in the first free midweek after the first
  *  league entry, or in the first free midweek from the window entry on. `afterLeague` starts the search that many
  *  league entries after the night placed just before it in the same list (a final after its semi finals). */
-export type NightPlace = 'open' | 'early' | 'newYear';
-export interface NightWant { place: NightPlace; afterLeague?: number }
+export type NightPlace = 'open' | 'early' | 'newYear' | 'dated';
+/** Round 1514: 'dated' takes the free gap whose night date (nightDateAt) is nearest `on`, the earlier on a tie, and
+ *  none without `on`. */
+export interface NightWant { place: NightPlace; afterLeague?: number; on?: CalDate }
 
 const saturday = (d: CalDate | undefined): boolean => !!d && dayOfWeek(d.y, d.m, d.d) === 6;
 
@@ -83,7 +85,15 @@ export function placeNights(
     }
     let gap: number | null = null;
     if (want.place === 'open') gap = free(0) ? 0 : null;
-    else for (let g = from; g <= seq.length; g += 1) if (free(g)) { gap = g; break; }
+    else if (want.place === 'dated') {
+      /* Round 1514: the nearest free midweek to the edition's date, a gap tried only when it would be nearer. */
+      let best = Infinity;
+      for (let g = 1; want.on && g <= seq.length; g += 1) {
+        const d = nightDateAt(dates, g - seq.slice(0, g).filter(s => s.night).length);
+        const off = d ? Math.abs(daysBetween(d, want.on)) : Infinity;
+        if (off < best && free(g)) { best = off; gap = g; }
+      }
+    } else for (let g = from; g <= seq.length; g += 1) if (free(g)) { gap = g; break; }
     if (gap === null) { out.push(null); continue; }
     seq.splice(gap, 0, { type: 'night', sat: false, night: true });
     last = gap + 1;

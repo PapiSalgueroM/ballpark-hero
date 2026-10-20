@@ -7,8 +7,8 @@
  */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
-  entrantsFrom, evaluateOneOff, myOneOffFixture, oneOffFixturesOf, oneOffNightsOf, oneOffPartial, oneOffRowById,
-  oneOffRowFor, oneOffRowId, oneOffWinner,
+  entrantsFrom, evaluateOneOff, myOneOffFixture, oneOffEdition, oneOffFixturesOf, oneOffNightsOf, oneOffPartial,
+  oneOffPartialWhy, oneOffPlayedIn, oneOffRowAt, oneOffRowById, oneOffRowFor, oneOffRowId, oneOffWinner,
   type OneOffBind, type OneOffRow, type OneOffSlice,
 } from './worldOneOffs';
 import { keyedRng } from './keyedRng';
@@ -26,7 +26,7 @@ describe('the rows', () => {
     expect(oneOffRowById('eng-2026')).toEqual(r);
   });
   it('a country or era the round could not stand on has no row and is marked partial', () => {
-    for (const [nation, year] of [['england', 2005], ['england', 2010], ['england', 2015], ['england', 2020], ['spain', 2026], ['italy', 2026], ['germany', 2026], ['france', 2026]] as const) {
+    for (const [nation, year] of [['england', 2005], ['england', 2010], ['england', 2015], ['england', 2020], ['spain', 2026]] as const) {
       expect(oneOffRowFor(nation, year)).toBeNull();
       expect(oneOffPartial(nation, year)).toBe(true);
     }
@@ -34,6 +34,35 @@ describe('the rows', () => {
     expect(oneOffPartial('england', 2026)).toBe(false);
     expect(oneOffRowFor('netherlands', 2026)).toBeNull();
     expect(oneOffPartial('netherlands', 2026)).toBe(false);
+    expect(oneOffPartialWhy('spain', 2026)).toMatch(/four club cup/);
+  });
+  it('Round 1514: the UEFA Super Cup and the German, French and Italian rows', () => {
+    expect(oneOffRowId('uefa', 2026)).toBe('uefa-2026');
+    expect(oneOffRowFor('uefa', 2026)).toMatchObject({ name: 'UEFA Super Cup', decider: 'pens', entry: 'euroWinners', double: 'none', place: 'early', venue: 'n' });
+    expect(oneOffRowFor('germany', 2026)).toMatchObject({ decider: 'pens', entry: 'champCup', double: 'leagueRunnerUp', place: 'open', venue: 'c' });
+    expect(oneOffRowFor('france', 2026)).toMatchObject({ name: 'Trophée des Champions', decider: 'pens', double: 'leagueRunnerUp', place: 'open', venue: 'n' });
+    expect(oneOffRowFor('italy', 2026)).toMatchObject({ decider: 'et', double: 'cupRunnerUp', place: 'dated', venue: 'c' });
+    for (const n of ['uefa', 'germany', 'france'] as const) expect(oneOffPartial(n, 2026, 2027)).toBe(false);
+    /* Italy's row plays its dated 2026-27 edition only: every other season is partial, never inferred. */
+    expect(oneOffPlayedIn('ita-2026', 2026)).toBe(true);
+    expect(oneOffPlayedIn('ita-2026', 2027)).toBe(false);
+    expect(oneOffPartial('italy', 2026, 2026)).toBe(false);
+    expect(oneOffPartial('italy', 2026, 2027)).toBe(true);
+    /* A dated edition's venue and date stand for that season alone. */
+    expect(oneOffRowAt('ger-2026', 2026)).toMatchObject({ venue: 'w', on: { y: 2026, m: 8, d: 22 } });
+    expect(oneOffRowAt('ger-2026', 2027)).toEqual(oneOffRowById('ger-2026'));
+    expect(oneOffRowAt('eng-2026', 2026)).toEqual(oneOffRowById('eng-2026'));
+    expect(oneOffEdition('fra-2026', 2026)).toMatchObject({ venue: 'w', ground: 'the Stade Bollaert-Delelis in Lens' });
+    expect(oneOffNightsOf(oneOffRowAt('ita-2026', 2026) as OneOffRow)).toEqual([{ place: 'dated', on: { y: 2026, m: 12, d: 22 } }]);
+  });
+  it('Round 1514: the UEFA Super Cup takes both European winners or plays nothing', () => {
+    const uefa = oneOffRowFor('uefa', 2026) as OneOffRow;
+    expect(entrantsFrom(uefa, { ...T(null, null), uclWinner: 'PSG', uelWinner: 'Aston Villa' })).toEqual({ clubs: ['PSG', 'Aston Villa'] });
+    expect(entrantsFrom(uefa, { ...T(null, null), uclWinner: 'PSG', uelWinner: null })).toEqual({ skip: 'noWinner' });
+    expect(entrantsFrom(uefa, { ...T(null, null), uclWinner: null, uelWinner: 'Aston Villa' })).toEqual({ skip: 'noWinner' });
+    /* The domestic rules are untouched by the winners. */
+    const ita = oneOffRowFor('italy', 2026) as OneOffRow;
+    expect(entrantsFrom(ita, { ...T(['Inter Milan', 'Napoli'], 'Inter Milan', 'Lazio'), uclWinner: 'PSG' })).toEqual({ clubs: ['Inter Milan', 'Lazio'], doubled: true });
   });
 });
 

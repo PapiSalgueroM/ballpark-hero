@@ -7,7 +7,8 @@
     "A literal is a line the page reader or the search engine quoted from the page on the read day, kept short. A date is the page's own; otherwise the source says undated.",
     "A row that is not verified (toVerify) carries no constant: its usedBy list is empty, its id is in CM_ONE_OFF_PARTIAL, and the game plays no super cup for that country and year. Candidates written beside it are memory or another lane's notes, never facts.",
     "A ground's name is a fact of one edition: it is printed only for the season one edition its row sources, never projected onto a later season.",
-    "The game's dates are its own: no real date and no real result is ever shown. The real 2026 result is not recorded here on purpose."
+    "The game's dates are its own: no real date and no real result is ever shown. The real 2026 result is not recorded here on purpose.",
+    "Round 1514: a row marked rule twoPublishers (the other lane's standard in dukb-handoff/2026-10-18/owner-report-intake-1424-1425/SUPER-CUP-SOURCES.md, which the lead bound this round to) stands on two independent publishers on two hosts, none a wiki, each with a line about the fact; an official page of a league, a federation, UEFA or a club counts, a press page too. A 'dated' row holds one edition's clubs, date, venue and ground; its date places a 'dated' row's night on the game's own calendar and is never printed. A 'cupRunnerUp' row holds a real cup final's losing club."
   ],
   "sources": {
     "FA-0604": { "family": "official", "publisher": "The FA", "url": "https://www.thefa.com/news/2026/jun/04/2026-fa-community-shield", "published": "2026-06-04", "literal": ["Further details confirmed for the 2026 FA Community Shield", "The 2025-26 Premier League champions, Arsenal, will face the 2026 Emirates FA Cup winners, Manchester City,", "in the English football season's traditional 'curtain raiser' on Sunday 16 August.", "Cardiff's Principality Stadium will host the match"] },
@@ -19,7 +20,25 @@
     "OUT-0816": { "family": "press", "publisher": "Outlook India (Outlook Sports Desk)", "url": "https://www.outlookindia.com/sports/football/arsenal-vs-manchester-city-live-steaming-fa-community-shield-2026-preview-when-and-where-to-watch-final-match", "published": "2026-08-16", "literal": ["Arsenal Vs Manchester City LIVE Steaming, FA Community Shield 2026: Preview", "the reigning Premier League champions", "FA Cup winners", "Cardiff's Millennium Stadium on Sunday"] },
     "TSC-0816": { "family": "press", "publisher": "The Sports Cast (Santiago Leon)", "url": "https://thesportscast.net/2026/08/16/who-plays-in-the-community-shield-qualification-rules-explained/", "published": "2026-08-16", "literal": ["The Premier League champions qualify by finishing first in the league.", "The FA Cup winners qualify by winning the FA Cup final.", "the Premier League runners-up usually receive the second Community Shield place.", "the winner is generally decided by a penalty shootout rather than extra time."] },
     "GO-0814": { "family": "press", "publisher": "Graphic Online", "url": "https://graphiconline.com/sports/sports-news/shield-showdown-arsenal-and-man-city-renew-rivalry-in-cardiff.html", "published": "2026-08-14", "literal": ["a blockbuster start to the English football season", "hosts the curtain-raiser for the first time in two decades"] },
-    "TL-0816": { "family": "press", "publisher": "Reuters (Rohith Nair), via TimesLIVE", "url": "https://www.timeslive.co.za/sport/soccer/2026-08-16-arsenal-hand-maresca-resounding-defeat-in-first-city-game-lift-community-shield/", "published": "2026-08-16", "literal": ["at Principality Stadium in Cardiff, Wales on Sunday", "Mikel Arteta's league champions"] }
+    "TL-0816": { "family": "press", "publisher": "Reuters (Rohith Nair), via TimesLIVE", "url": "https://www.timeslive.co.za/sport/soccer/2026-08-16-arsenal-hand-maresca-resounding-defeat-in-first-city-game-lift-community-shield/", "published": "2026-08-16", "literal": ["at Principality Stadium in Cardiff, Wales on Sunday", "Mikel Arteta's league champions"] },
+    "UEFA-A3": { "family": "official", "publisher": "UEFA, Regulations of the UEFA Super Cup 2026, Article 3", "url": "https://documents.uefa.com/r/Regulations-of-the-UEFA-Super-Cup-2026/Article-3-Representation-Online", "published": "undated", "literal": ["Regulations of the UEFA Super Cup 2026", "the winners of the previous season's UEFA Champions League and UEFA Europa League are automatically invited to compete"] },
+    "UEFA-A11": { "family": "official", "publisher": "UEFA, Regulations of the UEFA Super Cup 2026, Article 11", "url": "https://documents.uefa.com/r/Regulations-of-the-UEFA-Super-Cup-2026/Article-11-Match-system-Online", "published": "undated", "literal": ["The competition is staged as one single match in a neutral and predetermined stadium."] },
+    "UEFA-A12": { "family": "official", "publisher": "UEFA, Regulations of the UEFA Super Cup 2026, Article 12", "url": "https://documents.uefa.com/r/Regulations-of-the-UEFA-Super-Cup-2026/Article-12-Penalty-shoot-outs-Online", "published": "undated", "literal": ["no extra time is played at the end of the match"] },
+    "THFC-0813": { "family": "official", "publisher": "Tottenham Hotspur FC", "url": "https://www.tottenhamhotspur.com/news/1000154/shootout-agony-after-superb-showing-in-super-cup", "published": "2025-08-13", "literal": ["Shootout agony after superb showing in Super Cup", "first-ever appearance in the UEFA Super Cup", "went straight to penalties", "the Europa League trophy we won three months ago", "home of Udinese", "13 Aug 2025"] },
+    "DFL-SPOL": { "family": "official", "publisher": "DFL Deutsche Fussball Liga, Spielordnung as of 6 March 2026, section 7 Supercup", "url": "https://media.dfl.de/sites/2/2026/03/Spielordnung-SpOL-2026-03-06-Stand.pdf", "published": "2026-03-06", "literal": ["Am Supercup nehmen der Deutsche Meister und der Gewinner des DFB-Vereinspokals der vorangegangenen abgeschlossenen Spielzeit teil.", "Ist der Deutsche Meister auch der Gewinner des DFB-Vereinspokals nimmt der Vizemeister teil.", "Den Termin und den Spielort für den Supercup legt der DFL e.V. fest.", "Beide teilnehmenden Clubs haben das Recht, sich mit dem jeweiligen Heimstadion um den Spielort des Supercups zu bewerben.", "Der Supercup wird in einem Spiel ausgespielt.", "wird der Sieger ohne Verlängerung durch Elfmeterschießen ermittelt."] },
+    "BVB-0523": { "family": "official", "publisher": "Borussia Dortmund", "url": "https://www.bvb.de/de/en/news/news-overview/news.html/2026/5/23/Borussia-Dortmund-to-compete-in-2026-Franz-Beckenbauer-Supercup.html", "published": "2026-05-23", "literal": ["In the event of a double, the Bundesliga runners-up face the champions and cup winners in the Supercup.", "The match is scheduled for 22 August", "The venue has not yet been confirmed."] },
+    "DFB-2024": { "family": "official", "publisher": "DFB", "url": "https://www.dfb.de/news/detail/bayer-gewinnt-supercup-im-elfmeterschiessen-263706", "published": "undated", "literal": ["Bayer gewinnt Supercup im Elfmeterschießen", "besiegte Vizemeister VfB Stuttgart 4:3 (2:2, 1:1) im Elfmeterschießen", "in der Leverkusener BayArena"] },
+    "BL-0527": { "family": "official", "publisher": "Bundesliga", "url": "https://www.bundesliga.com/en/bundesliga/news/dfl-confirm-details-2026-franz-beckenbauer-supercup-bayern-munich-borussia-dortmund-37584", "published": "2026-05-27", "literal": ["Bundesliga runners-up Borussia Dortmund will host double winners Bayern Munich at Signal Iduna Park", "due to take place on 22 August at 8:30pm CEST"] },
+    "H24-0527": { "family": "press", "publisher": "Heidelberg24", "url": "https://www.heidelberg24.de/sport/fussball/nachteil-doublesieger-bayern-muessen-zum-supercup-nach-dortmund-zr-94324832.html", "published": "2026-05-27", "literal": ["Nachteil Doublesieger: Der FC Bayern muss zum Supercup nach Dortmund", "wird am 22. August um 20:30 Uhr im Signal Iduna Park in Dortmund ausgetragen"] },
+    "LFP-0603": { "family": "official", "publisher": "LFP", "url": "https://www.lfp.fr/article/le-rc-lens-accueillera-le-trophee-des-champions-en-ouverture-de-la-saison-2026-2027", "published": "2026-06-03", "literal": ["LE RC LENS ACCUEILLERA LE TROPHÉE DES CHAMPIONS EN OUVERTURE DE LA SAISON 2026/2027", "Le Trophée des Champions 2026-2027 se déroulera le dimanche 16 août 2026 au Stade Bollaert-Delelis.", "À l'issue du tirage au sort effectué ce jour"] },
+    "L1-0806": { "family": "official", "publisher": "Ligue 1", "url": "https://ligue1.com/en/articles/l1_article_5270-lens-will-host-psg-in-trophee-des-champions", "published": "2026-08-06", "literal": ["Lens will host PSG in Trophée des Champions meeting", "PSG qualified by being crowned champions for the 14th time", "thanks to their first-ever win in the Coupe de France", "It will take place on Sunday 16th August 2026 at 20:45 (CET) at the Stade Bollaert-Delelis."] },
+    "PSG-0816": { "family": "official", "publisher": "Paris Saint-Germain", "url": "https://www.psg.fr/matchs/football-masculin/20262027/lens-vs-paris-2026-08-16", "published": "undated", "literal": ["Trophée des Champions", "Racing Club de Lens", "Paris Saint-Germain", "Dimanche 16 août 2026", "Stade Bollaert-Delelis"] },
+    "PSG-0108": { "family": "official", "publisher": "Paris Saint-Germain", "url": "https://www.psg.fr/matchs/football-masculin/20252026/paris-vs-marseille-2026-01-08", "published": "undated", "literal": ["en cas d'égalité, il n'y aura pas de prolongations, ce serait donc les tirs au but directement !", "face à son dauphin de la saison passée et son plus grand rival : Marseille.", "le Paris Saint-Germain, champion de France la saison dernière et vainqueur de la Coupe de France", "Jaber Al-Ahmad International Stadium"] },
+    "LAV-0108": { "family": "press", "publisher": "L'Avenir", "url": "https://www.lavenir.net/sports/football/2026/01/08/rejoint-dans-le-temps-additionnel-marseille-laisse-filer-le-trophee-des-champions-face-au-psg-au-terme-des-tirs-au-but-ZARLZ6BSE5CXLMJG7CY27UFT4A/", "published": "2026-01-08", "literal": ["Rejoint dans le temps additionnel", "Marseille laisse filer le Trophée des Champions face au PSG au terme des tirs au but"] },
+    "GOAL-0926": { "family": "press", "publisher": "Goal (Bour Han Amoussa)", "url": "https://www.goal.com/fr/news/psg-om-la-lfp-a-tranche-pour-le-lieu-du-trophee-des-champions-officiel/blt64088480adece0e7", "published": "2025-09-26", "literal": ["champion de France et vainqueur de la Coupe de France, à l'Olympique de Marseille, dauphin en Ligue 1"] },
+    "LEGA-43": { "family": "official", "publisher": "Lega Serie A, Comunicato Ufficiale n. 43", "url": "https://images.legaseriea.it/image/private/fl_attachment/prd/cuauneg9k8wibh9h1thh.pdf", "published": "2026-10-01", "literal": ["La gara per l'aggiudicazione della Supercoppa Italiana 2026/2027", "si disputa a Milano, presso lo Stadio Giuseppe Meazza", "il giorno martedì 22 dicembre 2026 alle ore 21.00", "FC Internazionale Milano: Società Campione d'Italia", "SS Lazio : Società Finalista Coppa Italia", "essendo la Società vincitrice della Coppa Italia corrispondente a quella vincitrice il Campionato", "La Competizione prevede la disputa di 1 gara.", "le squadre devono disputare due tempi supplementari della durata di 15 minuti ciascuno"] },
+    "INTER-1001": { "family": "official", "publisher": "FC Internazionale Milano", "url": "https://www.inter.it/en/news/supercoppa-italiana-inter-lazio-22-december-2026-san-siro", "published": "2026-10-01", "literal": ["Supercoppa Italiana: Inter vs. Lazio on 22 December at San Siro", "The competition will be decided over a single match.", "If the scores are level after the 90 minutes, two 15-minute periods of extra time will be played.", "will be played as a single match on 22 December 2026 at San Siro"] },
+    "FI-COPPA": { "family": "press", "publisher": "Football Italia", "url": "https://football-italia.net/coppa-final-lazio-0-2-inter-player-ratings/", "published": "undated", "literal": ["Coppa Italia Final Player Ratings: Lazio 0-2 Inter"] }
   },
   "rows": [
     {
@@ -48,8 +67,94 @@
     { "id": "eng-2015", "kind": "format", "nation": "england", "year": 2015, "status": "toVerify", "usedBy": [], "standIn": "No row: a 2015 era save in England follows and plays no super cup, and the Cups panel says the game could not confirm that era's.", "candidates": "Memory only: Chelsea against Arsenal." },
     { "id": "eng-2020", "kind": "format", "nation": "england", "year": 2020, "status": "toVerify", "usedBy": [], "standIn": "No row: a 2020 era save in England follows and plays no super cup, and the Cups panel says the game could not confirm that era's.", "candidates": "Memory only: Liverpool against Arsenal." },
     { "id": "esp-2026", "kind": "format", "nation": "spain", "year": 2026, "status": "toVerify", "usedBy": [], "standIn": "No row: a modern career in Spain follows and plays no super cup this round, and the Cups panel says the game could not confirm it.", "candidates": "Press only in the scout's search (RFEF not opened): four clubs in the new year, the top two of LaLiga and both Copa del Rey finalists. Its cup runner up is in no ledger of the game yet." },
-    { "id": "ita-2026", "kind": "format", "nation": "italy", "year": 2026, "status": "toVerify", "usedBy": [], "standIn": "No row: a modern career in Italy follows and plays no super cup, and the Cups panel says the game could not confirm it.", "candidates": "The scout found the 2026-27 format and ground unsettled in the press (a return to one final was discussed)." },
-    { "id": "ger-2026", "kind": "format", "nation": "germany", "year": 2026, "status": "toVerify", "usedBy": [], "standIn": "No row: a modern career in Germany follows and plays no super cup this round, and the Cups panel says the game could not confirm it.", "candidates": "Memory only: one match, the champions against the cup winners at the champions' ground." },
-    { "id": "fra-2026", "kind": "format", "nation": "france", "year": 2026, "status": "toVerify", "usedBy": [], "standIn": "No row: a modern career in France follows and plays no super cup this round, and the Cups panel says the game could not confirm it.", "candidates": "Memory only: one match, often played abroad." }
+    {
+      "id": "uefa-2026", "kind": "format", "nation": "uefa", "year": 2026, "status": "verified", "rule": "twoPublishers",
+      "usedBy": ["CM_ONE_OFF_ROWS.uefa-2026"],
+      "facts": {
+        "name": { "value": "UEFA Super Cup", "by": ["UEFA-A3", "THFC-0813"], "token": "UEFA Super Cup" },
+        "shape": { "value": "one", "by": ["UEFA-A11", "THFC-0813"], "token": "single match|Shootout agony", "note": "One match, settled on the night." },
+        "decider": { "value": "pens", "by": ["UEFA-A12", "THFC-0813"], "token": "no extra time|straight to penalties", "note": "Level after 90 minutes goes straight to penalties: UEFA's 2026 Article 12, and Tottenham's report of the 2025 edition." },
+        "entry": { "value": "euroWinners", "by": ["UEFA-A3", "THFC-0813"], "token": "Europa League", "note": "Last season's Champions League winners against its Europa League winners; UEFA names the first the home side for logistics only, and the game lists them first." },
+        "double": { "value": "none", "by": ["UEFA-A3", "THFC-0813"], "token": "Europa League", "note": "The winners of two competitions no club plays in one season, so no place is ever held twice and no rule is needed." },
+        "place": { "value": "early", "by": ["UEFA-A11", "THFC-0813"], "token": "predetermined|13 Aug 2025", "note": "The new season's August match on a predetermined date (the 2025 edition was Wednesday 13 August). The game plays it on its own first free midweek after the opening league round, an August Wednesday on today's calendars; UEFA's 2026 date is not claimed." },
+        "venue": { "value": "n", "by": ["UEFA-A11", "THFC-0813"], "token": "neutral|home of Udinese", "note": "A neutral stadium chosen in advance (2025: Udinese's ground in Udine). No ground is printed." }
+      }
+    },
+    {
+      "id": "ger-2026", "kind": "format", "nation": "germany", "year": 2026, "status": "verified", "rule": "twoPublishers",
+      "usedBy": ["CM_ONE_OFF_ROWS.ger-2026"],
+      "facts": {
+        "name": { "value": "German Supercup", "by": ["DFL-SPOL", "BVB-0523", "DFB-2024"], "token": "Supercup", "note": "The DFL's Supercup with its country said, the game's plain name: never a sponsor's or a person's name." },
+        "shape": { "value": "one", "by": ["DFL-SPOL", "DFB-2024"], "token": "einem Spiel|Supercup im Elfmeterschießen" },
+        "decider": { "value": "pens", "by": ["DFL-SPOL", "DFB-2024"], "token": "Elfmeterschießen", "note": "Level after the regulation time: penalties with no extra time (DFL); the 2024 edition went from 2:2 to the shootout (DFB)." },
+        "entry": { "value": "champCup", "by": ["DFL-SPOL", "BVB-0523"], "token": "Meister und der Gewinner|champions and cup winners" },
+        "double": { "value": "leagueRunnerUp", "by": ["DFL-SPOL", "BVB-0523", "DFB-2024"], "token": "Vizemeister|runners-up" },
+        "place": { "value": "open", "by": ["BVB-0523", "DFL-SPOL"], "token": "22 August|Termin", "note": "The DFL sets the date: 2026's was the weekend of the cup's first round, before the league's opener. The game plays it on the Wednesday before its own opening Saturday." },
+        "venue": { "value": "c", "by": ["DFL-SPOL", "BVB-0523", "DFB-2024"], "token": "Heimstadion|venue|BayArena", "note": "THE GAME'S SIMPLIFICATION, marked: the DFL chooses the ground and both clubs may apply with their own. The game plays it at the league champions' ground, except an edition the ledger dates (2026: Dortmund hosted)." }
+      }
+    },
+    {
+      "id": "fra-2026", "kind": "format", "nation": "france", "year": 2026, "status": "verified", "rule": "twoPublishers",
+      "usedBy": ["CM_ONE_OFF_ROWS.fra-2026"],
+      "facts": {
+        "name": { "value": "Trophée des Champions", "by": ["LFP-0603", "PSG-0816", "LAV-0108"], "token": "Trophée des Champions" },
+        "shape": { "value": "one", "by": ["LFP-0603", "LAV-0108"], "token": "se déroulera le|au terme des tirs au but" },
+        "decider": { "value": "pens", "by": ["PSG-0108", "LAV-0108"], "token": "tirs au but|temps additionnel", "note": "Level after 90 minutes goes straight to penalties: PSG's page of the January 2026 edition says so, and L'Avenir's report has Marseille equalised in added time and beaten on penalties. The LFP rulebook (arts 801 to 803, read by the other lane) was not readable here." },
+        "entry": { "value": "champCup", "by": ["L1-0806", "PSG-0108", "GOAL-0926"], "token": "champion|Coupe de France" },
+        "double": { "value": "leagueRunnerUp", "by": ["PSG-0108", "GOAL-0926"], "token": "dauphin", "note": "On a double the league's runners up take the cup's place (PSG against Marseille, the 2025 edition). The rulebook's other exceptions (a cup winner outside the league, European dates) have one source only: not claimed." },
+        "place": { "value": "open", "by": ["LFP-0603", "PSG-0816"], "token": "OUVERTURE DE LA SAISON|16 août 2026", "note": "2026's opened the season; the 2025 edition was played in January 2026, so an edition and its match year can differ. The game plays it on the Wednesday before its own opening Saturday." },
+        "venue": { "value": "n", "by": ["LFP-0603", "PSG-0108"], "token": "tirage au sort|Jaber Al-Ahmad", "note": "The league chooses the place, in principle neutral: Kuwait City for the 2025 edition, Lens's ground by a draw for 2026 (CM_ONE_OFF_EDITIONS holds that one)." }
+      }
+    },
+    {
+      "id": "ita-2026", "kind": "format", "nation": "italy", "year": 2026, "status": "verified", "rule": "twoPublishers", "editionOnly": true,
+      "usedBy": ["CM_ONE_OFF_ROWS.ita-2026"],
+      "facts": {
+        "name": { "value": "Supercoppa Italiana", "by": ["LEGA-43", "INTER-1001"], "token": "Supercoppa Italiana", "note": "The plain name, never the sponsor's." },
+        "shape": { "value": "one", "by": ["LEGA-43", "INTER-1001"], "token": "1 gara|single match" },
+        "decider": { "value": "et", "by": ["LEGA-43", "INTER-1001"], "token": "tempi supplementari|extra time", "note": "Level after 90 minutes: two halves of extra time, then penalties." },
+        "entry": { "value": "champCup", "by": ["LEGA-43", "INTER-1001", "FI-COPPA"], "token": "Campione d'Italia|Inter vs. Lazio|Lazio 0-2 Inter" },
+        "double": { "value": "cupRunnerUp", "by": ["LEGA-43", "FI-COPPA"], "token": "Finalista|vincitrice il Campionato|Lazio 0-2 Inter", "note": "THIS EDITION ONLY: Inter won both, so the cup's runners up Lazio take the place. Never inferred for another season (editionOnly)." },
+        "place": { "value": "dated", "by": ["LEGA-43", "INTER-1001"], "token": "22 dicembre 2026|22 December", "note": "Tuesday 22 December 2026. The game plays it on its own free midweek nearest that date." },
+        "venue": { "value": "c", "by": ["LEGA-43", "INTER-1001"], "token": "Stadio Giuseppe Meazza|San Siro", "note": "San Siro in Milan, Inter's ground, for this edition." }
+      }
+    },
+    {
+      "id": "ger-2026-e2026", "kind": "dated", "row": "ger-2026", "year": 2026, "season": "2025-26", "status": "verified", "rule": "twoPublishers",
+      "usedBy": ["CM_ONE_OFF_EDITIONS.ger-2026"],
+      "facts": {
+        "clubs": { "value": ["Bayern Munich", "Borussia Dortmund"], "by": ["BL-0527", "H24-0527"], "token": "Bayern", "note": "Bayern Munich won the league and the cup (CM_FINAL_TABLES_2025_26, SEASON_ONE_CUP_WINNERS.bundesliga), so the league runners up Borussia Dortmund play." },
+        "date": { "value": "2026-08-22", "by": ["BL-0527", "H24-0527"], "token": "22 August|22. August" },
+        "venue": { "value": "w", "by": ["BL-0527", "H24-0527"], "token": "will host|nach Dortmund", "note": "The second named club's ground: Dortmund hosted." },
+        "ground": { "value": "Signal Iduna Park in Dortmund", "by": ["BL-0527", "H24-0527"], "token": "Signal Iduna Park" }
+      }
+    },
+    {
+      "id": "fra-2026-e2026", "kind": "dated", "row": "fra-2026", "year": 2026, "season": "2025-26", "status": "verified", "rule": "twoPublishers",
+      "usedBy": ["CM_ONE_OFF_EDITIONS.fra-2026"],
+      "facts": {
+        "clubs": { "value": ["PSG", "Lens"], "by": ["L1-0806", "PSG-0816"], "token": "PSG|Lens", "note": "PSG the 2025-26 champions, Lens the cup winners (CM_FINAL_TABLES_2025_26, SEASON_ONE_CUP_WINNERS.ligue1)." },
+        "date": { "value": "2026-08-16", "by": ["LFP-0603", "PSG-0816"], "token": "16 août 2026" },
+        "venue": { "value": "w", "by": ["LFP-0603", "PSG-0816"], "token": "LENS ACCUEILLERA|Racing Club de Lens", "note": "Lens's ground, the second named club's, after the league's draw." },
+        "ground": { "value": "the Stade Bollaert-Delelis in Lens", "by": ["LFP-0603", "PSG-0816"], "token": "Bollaert-Delelis" }
+      }
+    },
+    {
+      "id": "ita-2026-e2026", "kind": "dated", "row": "ita-2026", "year": 2026, "season": "2025-26", "status": "verified", "rule": "twoPublishers",
+      "usedBy": ["CM_ONE_OFF_EDITIONS.ita-2026"],
+      "facts": {
+        "clubs": { "value": ["Inter Milan", "Lazio"], "by": ["LEGA-43", "INTER-1001"], "token": "Internazionale|Lazio", "note": "Inter Milan won the league and the cup (CM_FINAL_TABLES_2025_26, SEASON_ONE_CUP_WINNERS.seriea), so the cup's runners up Lazio play." },
+        "date": { "value": "2026-12-22", "by": ["LEGA-43", "INTER-1001"], "token": "22 dicembre 2026|22 December" },
+        "venue": { "value": "c", "by": ["LEGA-43", "INTER-1001"], "token": "Meazza|San Siro" },
+        "ground": { "value": "San Siro in Milan", "by": ["LEGA-43", "INTER-1001"], "token": "Meazza|San Siro" }
+      }
+    },
+    {
+      "id": "cup-seriea-2025-26", "kind": "cupRunnerUp", "league": "seriea", "status": "verified", "rule": "twoPublishers",
+      "usedBy": ["CM_ONE_OFF_CUP_RUNNERS_UP_2025_26.seriea"],
+      "facts": {
+        "club": { "value": "Lazio", "by": ["LEGA-43", "FI-COPPA"], "token": "Lazio", "note": "The 2025-26 Coppa Italia final, Lazio 0-2 Inter." }
+      }
+    }
   ]
 }

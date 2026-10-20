@@ -158,3 +158,18 @@ describe('placeNights on the engine calendars', () => {
     expect(placed - before).toBe(late.length * FLAGS.length * WANTS.length);
   });
 });
+
+describe('Round 1514: a dated night', () => {
+  const A = cal('L L U L L W L L C L');
+  it('takes the free midweek nearest its date, the earlier on a tie, and none without a date', () => {
+    /* A's free gaps date their nights 12 Aug (gap 1), 26 Aug (4), 2 Sep (5), 9 Sep (6), 16 Sep (7) and 30 Sep (10). */
+    expect(placeNights(A, draw(A), [{ place: 'dated', on: { y: 2026, m: 9, d: 10 } }])).toEqual([6]);
+    expect(placeNights(A, draw(A), [{ place: 'dated', on: { y: 2026, m: 8, d: 20 } }])).toEqual([4]);
+    expect(placeNights(A, draw(A), [{ place: 'dated', on: { y: 2026, m: 8, d: 19 } }])).toEqual([1]);
+    expect(placeNights(A, draw(A), [{ place: 'dated' }])).toEqual([null]);
+    expect(iso(nightDateAt(draw(A), 6))).toBe('2026-09-09');
+  });
+  it('never shares a gap with a night placed before it', () => {
+    expect(placeNights(A, draw(A), [{ place: 'early' }, { place: 'dated', on: { y: 2026, m: 8, d: 13 } }])).toEqual([1, 4]);
+  });
+});

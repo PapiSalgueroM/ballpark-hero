@@ -107,6 +107,8 @@ const CONTROLS = {
   thinused: [0, /^eng-2015 is not verified and carries/, /^eng-2015/],
   receipt: [0, /does not carry the hash/],
   notinworld: [0, /^eng-2026-s1: .* is not a club of england/, /^eng-2026-s1/],
+  twopub: [0, /^ger-2026 decider stands on 1 host/, /^ger-2026 decider/],
+  pairing: [0, /^ita-2026-e2026: the game draws /, /^ita-2026-e2026|^cup-seriea-2025-26/],
 };
 const runs = n => (CONTROL ? CONTROLS[CONTROL][0] === n : ONLY.length === 0 || ONLY.includes(n));
 
@@ -140,13 +142,15 @@ async function bundle(name, entries, plugins = []) {
 /* ── Section 0: the ledger ── */
 const isWiki = url => /wikipedia|wikimedia|fandom|wiki\.|grokipedia|wikiwand/i.test(new URL(url).host);
 const publisherOf = url => { const h = new URL(url).host; return h.split('.').slice(/\.co\.(uk|za)$/.test(h) ? -3 : -2).join('.'); };
-const FACTS = { format: ['name', 'shape', 'decider', 'entry', 'double', 'place', 'venue'], edition: ['clubs', 'ground'] };
+const FACTS = { format: ['name', 'shape', 'decider', 'entry', 'double', 'place', 'venue'], edition: ['clubs', 'ground'], dated: ['clubs', 'date', 'venue', 'ground'], cupRunnerUp: ['club'] };
 
 function section0() {
   /* The controls of this section change the data in memory, the way a wrong edit of the file would. */
   if (CONTROL === 'onesource') { const f = row('eng-2026').facts.decider; fired += f.by.length > 1 ? 1 : 0; f.by = f.by.slice(0, 1); }
   if (CONTROL === 'wiki') { const s = ledger.sources['SM-0814']; fired += isWiki(s.url) ? 0 : 1; s.url = 'https://en.wikipedia.org/wiki/2026_FA_Community_Shield'; }
   if (CONTROL === 'thinused') { const r = row('eng-2015'); fired += r.status !== 'verified' && r.usedBy.length === 0 ? 1 : 0; r.usedBy = ['CM_ONE_OFF_ROWS.eng-2015']; }
+  /* Round 1514: one of the new rows' facts kept on one publisher (Germany's decider: the DFL's rule alone). */
+  if (CONTROL === 'twopub') { const f = row('ger-2026').facts.decider; fired += f.by.length > 1 && row('ger-2026').rule === 'twoPublishers' ? 1 : 0; f.by = f.by.slice(0, 1); }
 
   /* 0.1 Every source is a page somebody can open, of one family, with a date and a line. */
   for (const [id, s] of Object.entries(ledger.sources)) {
@@ -177,7 +181,10 @@ function section0() {
       const good = srcs.filter(x => x.s);
       const fams = new Set(good.map(x => x.s.family));
       const pubs = new Set(good.map(x => publisherOf(x.s.url)));
-      ok(fams.has('official') && fams.has('press') && pubs.size >= 2, `${r.id} ${name} stands on ${[...fams].join(' and ') || 'nothing'} (${pubs.size} hosts), not an official and a press page on two hosts`);
+      /* Round 1514: a row under the rule twoPublishers (the lead's binding standard for this round, the other
+         lane's SUPER-CUP-SOURCES.md) stands on two independent publishers on two hosts, of either family. */
+      if (r.rule === 'twoPublishers') ok(pubs.size >= 2, `${r.id} ${name} stands on ${pubs.size} host (${[...pubs].join(' ')}), not two publishers`);
+      else ok(fams.has('official') && fams.has('press') && pubs.size >= 2, `${r.id} ${name} stands on ${[...fams].join(' and ') || 'nothing'} (${pubs.size} hosts), not an official and a press page on two hosts`);
       const token = new RegExp(f.token ?? '^$', 'i');
       for (const x of good) ok(x.s.literal.some(l => token.test(l)), `${r.id} ${name}: ${x.k} has no line about it (${f.token})`);
     }
@@ -195,8 +202,8 @@ function section0() {
 
 /* ── Section 0, second half: the constants state what the ledger states ── */
 async function section0Engine() {
-  const M = await bundle('rows', { r: ROWS_FILE, cm: CM, ft: 'src/data/clubManagerFinalTables2025_26.ts', e: 'src/lib/euroAccess.ts' });
-  const { r: R, cm, ft, e } = M;
+  const M = await bundle('rows', { r: ROWS_FILE, cm: CM, ft: 'src/data/clubManagerFinalTables2025_26.ts', e: 'src/lib/euroAccess.ts', one: 'src/lib/worldOneOffs.ts' });
+  const { r: R, cm, ft, e, one } = M;
   const seasonOne = R.CM_ONE_OFF_SEASON_ONE.map(t => [...t]);
   if (CONTROL === 'notinworld') { fired += 1; seasonOne[0][2] = ['Arsenal', 'Torreense']; }
   /* 0.4 Every tuple is its verified ledger row, every verified row has its tuple, and the partial list is exactly
@@ -209,7 +216,7 @@ async function section0Engine() {
     const f = r.facts;
     ok(r.nation === nation && r.year === year, `${id}: the tuple is ${nation} ${year}, the ledger ${r.nation} ${r.year}`);
     ok(same([name, shape, decider, entry, dbl, place, venue], ['name', 'shape', 'decider', 'entry', 'double', 'place', 'venue'].map(k => f[k].value)), `${id}: the tuple ${JSON.stringify(t)} is not its ledger row`);
-    ok(id === `${({ spain: 'esp' })[nation] ?? nation.slice(0, 3)}-${year}`, `${id}: the id is not the nation and year`);
+    ok(id === `${({ spain: 'esp', uefa: 'uefa' })[nation] ?? nation.slice(0, 3)}-${year}`, `${id}: the id is not the nation and year`);
     ok((away === 1) === (f.awayGoals?.value === true) && same(pairing ?? null, f.pairing?.value ?? null), `${id}: away goals or the pairing are not the ledger's`);
     ok(r.usedBy.includes(`CM_ONE_OFF_ROWS.${id}`), `${id}: the ledger does not say the tuple uses it`);
     ok(shape !== 'four' || (Array.isArray(pairing) && same([...pairing].sort(), [0, 1, 2, 3])), `${id}: a four with no pairing of the four entrants`);
@@ -244,7 +251,48 @@ async function section0Engine() {
       ok(same([...clubs], [table[0], second]), `${ed.id}: the game's 2025-26 data names ${table[0]} and ${second}, the edition ${clubs.join(' and ')}`);
     } else ok(false, `${ed.id}: entry ${t[6]} has no season one cross check yet`);
   }
-  console.log(`  0 constants: ${R.CM_ONE_OFF_ROWS.length} rows (${R.CM_ONE_OFF_ROWS.map(t => t[0]).join(' ')}), ${seasonOne.length} season one editions, partial ${R.CM_ONE_OFF_PARTIAL.join(' ')}`);
+  /* 0.6 Round 1514. The dated editions: each tuple of CM_ONE_OFF_EDITIONS its verified 'dated' ledger row and back;
+     the rows played in their dated editions only are exactly the ledger's editionOnly rows; the cup runners up are
+     their 'cupRunnerUp' rows; every partial reason names a row that is partial or edition only. Then THE DATA
+     GUARDIAN'S CHECK: the clubs the ENGINE draws for a fresh career's first edition (entrantsFrom over
+     oneOffSeasonOneTables, the game's own 2025-26 tables, cup winners and runners up) are the clubs the edition's
+     publishers name, in the row's order, every one a club of that country in the game's world. */
+  const runnersUp = R.CM_ONE_OFF_CUP_RUNNERS_UP_2025_26;
+  if (CONTROL === 'pairing') { fired += runnersUp.seriea === 'Lazio' ? 1 : 0; runnersUp.seriea = 'Roma'; }
+  const dated = ledger.rows.filter(x => x.kind === 'dated');
+  for (const [rid, year, date, venue, ground] of R.CM_ONE_OFF_EDITIONS) {
+    const d = dated.find(x => x.row === rid && x.year === year);
+    if (!d || d.status !== 'verified') { ok(false, `${rid}: a dated edition ${year} with no verified ledger row`); continue; }
+    ok(same([date, venue, ground], [d.facts.date.value, d.facts.venue.value, d.facts.ground.value]), `${d.id}: the constant ${JSON.stringify([rid, year, date, venue, ground])} is not its ledger row`);
+    ok(d.usedBy.includes(`CM_ONE_OFF_EDITIONS.${rid}`), `${d.id}: the ledger does not say the constant uses it`);
+    ok(/^\d{4}-\d{2}-\d{2}$/.test(date) && Number(date.slice(0, 4)) >= year, `${d.id}: the date ${date} is not a day of its edition`);
+  }
+  for (const d of dated) ok(R.CM_ONE_OFF_EDITIONS.some(e => e[0] === d.row && e[1] === d.year), `${d.id}: verified and no constant holds it`);
+  ok(same([...R.CM_ONE_OFF_EDITION_ONLY].sort(), formats.filter(x => x.editionOnly).map(x => x.id).sort()), `CM_ONE_OFF_EDITION_ONLY is ${R.CM_ONE_OFF_EDITION_ONLY.join(' ')}, the ledger's edition only rows are ${formats.filter(x => x.editionOnly).map(x => x.id).join(' ')}`);
+  for (const id of R.CM_ONE_OFF_EDITION_ONLY) ok(R.CM_ONE_OFF_EDITIONS.some(e => e[0] === id), `${id}: played in its dated editions only, and none is dated`);
+  const cupRows = ledger.rows.filter(x => x.kind === 'cupRunnerUp');
+  ok(same(Object.keys(runnersUp).sort(), cupRows.map(x => x.league).sort()), `CM_ONE_OFF_CUP_RUNNERS_UP_2025_26 holds ${Object.keys(runnersUp).join(' ')}, the ledger ${cupRows.map(x => x.league).join(' ')}`);
+  for (const c of cupRows) {
+    ok(runnersUp[c.league] === c.facts.club.value, `${c.id}: the constant names ${runnersUp[c.league]}, the ledger ${c.facts.club.value}`);
+    ok(c.usedBy.includes(`CM_ONE_OFF_CUP_RUNNERS_UP_2025_26.${c.league}`), `${c.id}: the ledger does not say the constant uses it`);
+    ok((cm.REAL_LEAGUES.find(l => l.id === c.league)?.clubs ?? []).includes(c.facts.club.value), `${c.id}: ${c.facts.club.value} is not a club of ${c.league} in the game's world`);
+  }
+  for (const id of Object.keys(R.CM_ONE_OFF_PARTIAL_WHY)) ok(R.CM_ONE_OFF_PARTIAL.includes(id) || R.CM_ONE_OFF_EDITION_ONLY.includes(id), `${id}: a partial reason for a row that is neither partial nor edition only`);
+  noDash('CM_ONE_OFF_PARTIAL_WHY', Object.values(R.CM_ONE_OFF_PARTIAL_WHY).join(' '));
+  const draws = [];
+  for (const d of dated) {
+    const t = R.CM_ONE_OFF_ROWS.find(x => x[0] === d.row);
+    if (!t || R.CM_ONE_OFF_SEASON_ONE.some(e => e[0] === d.row) || d.year !== 2026) continue;
+    const r = one.oneOffRowById(d.row);
+    const got = one.entrantsFrom(r, cm.oneOffSeasonOneTables(t[1]) ?? { table: null, cupWinner: null, cupRunnerUp: null });
+    const clubs = 'clubs' in got ? got.clubs : [];
+    ok(same(clubs, d.facts.clubs.value), `${d.id}: the game draws ${clubs.join(' and ') || got.skip} for a fresh career's first ${t[3]}, its publishers name ${d.facts.clubs.value.join(' and ')}`);
+    const inWorld = new Set(cm.REAL_LEAGUES.filter(l => nationOf(l.id) === t[1]).flatMap(l => l.clubs));
+    for (const c of clubs) ok(inWorld.has(c), `${d.id}: ${c} is not a club of ${t[1]} in the game's world`);
+    draws.push(`${t[3]} ${clubs.join(' v ')}${got.doubled ? ' (a double)' : ''}`);
+  }
+  console.log(`  0 constants: ${R.CM_ONE_OFF_ROWS.length} rows (${R.CM_ONE_OFF_ROWS.map(t => t[0]).join(' ')}), ${seasonOne.length} season one editions, ${R.CM_ONE_OFF_EDITIONS.length} dated editions, partial ${R.CM_ONE_OFF_PARTIAL.join(' ')}, edition only ${R.CM_ONE_OFF_EDITION_ONLY.join(' ')}`);
+  console.log(`  0 the game's first editions against their publishers: ${draws.join('; ')}`);
 }
 
 
@@ -266,7 +314,7 @@ const OPENS = [
    is a double and the rule's other club plays (the dsc read only: nothing else of the season moves). */
 const FORCE_DOUBLE = { file: CM, from: '  const oneOffFrom = oneOffTablesOf(career);\n', to: '  const oneOffFrom = (t => ({ ...t, cupWinner: t.table?.[0] ?? t.cupWinner }))(oneOffTablesOf(career));\n' };
 const ENGINE_EDITS = {
-  wrongyear: [{ file: CM, from: '  return oneOffRowFor(oneOffNationOf(state), uclSeasonYear(state.eraId));', to: '  return oneOffRowFor(oneOffNationOf(state), worldYearOf(state as CareerState));' }],
+  wrongyear: [{ file: CM, from: '  return oneOffRowIn(state, oneOffRowFor(oneOffNationOf(state), uclSeasonYear(state.eraId)));', to: '  return oneOffRowIn(state, oneOffRowFor(oneOffNationOf(state), worldYearOf(state as CareerState)));' }],
   nodouble: [{ file: ONE, from: "    if (!c || out.includes(c)) { c = isCup && row.double === 'cupRunnerUp' ? t.cupRunnerUp : nextLeague(); doubled = true; }", to: '    if (!c) { c = nextLeague(); doubled = true; }' }],
   afterswap: [{ file: CM, from: '  const oneOffFrom = oneOffTablesOf(career);\n  registerLeagueOverrides(pr.overrides);', to: '  registerLeagueOverrides(pr.overrides);\n  const oneOffFrom = oneOffTablesOf(career);' }],
   etall: [{ file: ONE, from: "deciderScale: row.decider === 'et' ? bind.deciderScale : 1, etScale: bind.etScale, extraTime: row.decider === 'et' };", to: "deciderScale: row.decider === 'et' ? bind.deciderScale : 1, etScale: bind.etScale, extraTime: true };" }],
@@ -276,7 +324,7 @@ const ENGINE_EDITS = {
   carryseen: [{ file: CM, from: '    if (slice.clubs?.includes(joined.clubName) && seen < oneOffNightsOf(row).length) {', to: '    if (slice.clubs?.includes(joined.clubName) && seen <= oneOffNightsOf(row).length) {' }],
   stream: [{ file: ONE, from: '    const rand = keyedRng(keyOf(fx));\n    const t: SettleableTie', to: '    const rand = Math.random;\n    const t: SettleableTie' }],
   form: [{ file: CM, from: '  const out = evaluateOneOff(slice, row, k, oneOffBind(state));\n  memo.set(k, out);', to: '  const out = evaluateOneOff(slice, row, k, oneOffBind(state));\n  if (out) for (const f of out.fixtures) if (f.hg !== undefined) noteForm(state, f.home, f.away, f.hg, f.ag as number);\n  memo.set(k, out);' }],
-  keep: [{ file: CM, from: '  if (slice) next.dsc = slice;\n  else delete next.dsc;', to: '  if (slice) { if (next.dsc) (next as Record<string, unknown>).dscOld = next.dsc; next.dsc = slice; }\n  else delete next.dsc;' }],
+  keep: [{ file: CM, from: '  if (slice) next[k] = slice;\n  else delete next[k];', to: '  if (slice) { if (next[k]) (next as Record<string, unknown>)[`${k}Old`] = next[k]; next[k] = slice; }\n  else delete next[k];' }],
 };
 Object.assign(CONTROLS, {
   wrongyear: [1, /^1 row: /, /^1 /],
@@ -424,7 +472,7 @@ async function fleetPass(forced) {
             else ok(!dsc, `1 row: ${tag} at ${stepLabel}: holds ${dsc?.row} but ${want.id} is no row of the game`);
             /* 5: one slice at most, of the season in play, and nothing else beside the keys the save knows. */
             const keys = Object.keys(s.worldComps ?? {});
-            ok(keys.every(k => k === 'ucl' || k === 'uel' || k === 'dsc'), `5 slices: ${tag} at ${stepLabel}: worldComps holds ${keys.join(' ')}`);
+            ok(keys.every(k => k === 'ucl' || k === 'uel' || k === 'dsc' || k === 'usc'), `5 slices: ${tag} at ${stepLabel}: worldComps holds ${keys.join(' ')}`);
             ok((s.trophies ?? []).filter(t => t.minor).every(t => t.name === (want.row?.name ?? "") && t.season <= s.season), `5 trophies: ${tag} at ${stepLabel}: a minor trophy that is not its country's super cup`);
             if (!dsc) return;
             ONE_OFF_IDS.add(dsc.row);
