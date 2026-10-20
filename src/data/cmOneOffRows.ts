@@ -76,7 +76,9 @@ export const CM_ONE_OFF_SEASON_ONE: readonly (readonly [string, string, readonly
   ['eng-2026', '2025-26', ['Arsenal', 'Manchester City'], 'the Principality Stadium in Cardiff'],
 ];
 
-/** Countries and years the round looked at and could not stand on: no row, nothing played, said on the tile. */
+/** Countries and years the round looked at and could not stand on: no row, nothing played, said on the tile.
+ *  Round 1514: Italy's later seasons are partial too, but through CM_ONE_OFF_EDITION_ONLY (oneOffPartial's edition
+ *  test), so they are not listed here; their reason is in CM_ONE_OFF_PARTIAL_WHY. */
 export const CM_ONE_OFF_PARTIAL: string[] = ['eng-2005', 'eng-2010', 'eng-2015', 'eng-2020', 'esp-2026'];
 
 /** Round 1514: what a played row simplifies or leaves out, said on its card (the brief's partial marks). */
