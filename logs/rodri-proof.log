@@ -1,0 +1,9 @@
+normal: actual criterion 11 cases, 0 exact intended failures, 11 preservation passes.
+original-control: actual criterion 11 cases, 1 exact intended failures, 10 preservation passes.
+control-name: actual criterion 11 cases, 1 exact intended failures, 10 preservation passes.
+control-country: actual criterion 11 cases, 1 exact intended failures, 10 preservation passes.
+control-role: actual criterion 11 cases, 1 exact intended failures, 10 preservation passes.
+control-cohort: actual criterion 11 cases, 1 exact intended failures, 10 preservation passes.
+control-listed-age: actual criterion 11 cases, 1 exact intended failures, 10 preservation passes.
+restored: actual criterion 11 cases, 0 exact intended failures, 11 preservation passes.
+simPlayerBingoRodriHonour: fixed proof passed; complete raw reports and changed-copy receipts retained. Offline only.

@@ -1,0 +1,14 @@
+1) determinism and daily spread
+   one seed one game; 365 daily dates dealt 365 distinct games
+2) every card is completable from its own packs
+   300 seeds: zero incompletable cards, and a perfect player blacks out all 300
+3) condition density and label fit
+   33 conditions, thinnest is g15 at 1.8% against the 0.8% floor
+4) scoring identities
+   empty 0, blackout exactly 100 with 12 lines, and 200 random boards never score less for one more square
+5) the CPU levels mean what their names say
+   over 120 games each: casual 9.5, sharp 18.0, ruthless 22.3 squares
+6) the game is registered everywhere a game must be
+   registry row, App route and guide bundle entry all present
+
+simSportsBingo: green. Every card can be finished, and the packs play fair.
