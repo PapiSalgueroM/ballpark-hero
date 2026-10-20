@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+ledger: node scripts/simCmLedgerBound.mjs
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+dev1: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDevelopment.mjs
+dev2: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDevelopment.mjs
