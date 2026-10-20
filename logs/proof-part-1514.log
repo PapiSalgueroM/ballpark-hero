@@ -1,0 +1,6 @@
+ok   Manchester City (era2020, participant, coach, seed 3, 2 seasons): 120 steps, 7.8 s
+ok   Manchester City (era2020, participant, coach, seed 4, 2 seasons): 119 steps, 8.0 s
+ok   Manchester City (era2020, participant, coach, seed 5, 2 seasons): 117 steps, 8.3 s
+journeys 60, steps compared 6490, tree journeys whose save carried worldComps 29, evaluations on the live state 6490, 418 s
+old saves (written by 92290f81): 180 loaded by both engines, 0 gained a watched Champions League at load, 158 did not, 22 already followed one and kept it, 0 gained a Europa League, 0 against the rule
+proofWorldUclFleet: GREEN, 60 journeys and 6490 steps byte equal to 92290f81 (a watching state without worldComps.usc), draws equal
