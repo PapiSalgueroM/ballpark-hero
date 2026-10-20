@@ -1,0 +1,21 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest1346 exit=0 21s |    Duration  20.22s (transform 5.14s, setup 815ms, collect 15.17s, tests 31.62s, environment 4.82s, prepare 1.22s)
+coachret-ctl exit=0 29s | controls (exit/FIRED): drift=1/1 early=1/1 noretire=1/1 noguard=1/1 nosit=1/1 noaccept=1/1 norefresh=1/1
+coachret exit=0 60s | PASS: ALL US COACHING RETIREMENT CHECKS PASSED
+skips-ctl exit=0 4s | controls (exit/FIRED): noundo=1/1 leak=1/1 graded=1/1 clamp=1/1
+tsc exit=0 114s | 
+confirm exit=0 10s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+poach exit=0 3s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+coachcareer exit=0 4s | PASS: ALL US COACHING CAREER CHECKS PASSED
+coaching exit=0 8s | PASS: ALL US COACHING CHECKS PASSED
+parity exit=0 82s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+draftnight exit=0 0s | simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.
+skips exit=0 117s | PASS: ALL US CAREER SKIP CHECKS PASSED
+prospect exit=0 18s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+usweight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+predraft exit=0 29s | simCareerPreDraft [seed set a]: ALL GREEN
+c993-reveal exit=0 5s | Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-rev
+c993 exit=0 34s | Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-head
+walk exit=0 129s | playUsCareerReports: ALL GREEN, 22 walks
+draftnight-walk exit=0 217s | playDraftNight: ALL GREEN, 49 nights walked
+walk-ctl exit=0 580s | controls (exit/FIRED): noretire=1/1 noundo=1/1 noreplay=1/1 nosettle=1/1

@@ -1,0 +1,11 @@
+Fleet: 300 careers per sport, head engine against BASE (hunks stripped)
+  nfl: 300 careers, 5989 coaching steps before the retirement
+  nba: 300 careers, 5940 coaching steps before the retirement
+  mlb: 300 careers, 5784 coaching steps before the retirement
+  nhl: 300 careers, 6056 coaching steps before the retirement
+  retired: 902 while employed, 298 out of work (146 holding offers), 54 before a first season
+2) Byte identity with BASE: held
+3) Retired careers hand their input back: held
+4) src/test/usCoachRetirement.test.tsx and src/test/usCareerReports1346.test.tsx: 58/58 pass as they are; with retireCoachCareer returning its input 14 fail, exactly the 14 named
+4) with the panel's settle always settled 4 fail, exactly the 4 named
+PASS: ALL US COACHING RETIREMENT CHECKS PASSED
