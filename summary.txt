@@ -1,0 +1,7 @@
+m-none exit=0 88s | mutrun none: SURVIVED all 2 checks
+m-evalundated exit=0 88s | mutrun evalundated: SURVIVED all 2 checks
+m-nocarryusc exit=1 240s | mutrun nocarryusc: CAUGHT by 1 of 4 checks
+m-datedlater exit=1 86s | mutrun datedlater: CAUGHT by 1 of 2 checks
+m-nowinnerand exit=1 118s | mutrun nowinnerand: CAUGHT by 2 of 3 checks
+m-partialedition exit=1 88s | mutrun partialedition: CAUGHT by 1 of 2 checks
+m-editionyear exit=1 85s | mutrun editionyear: CAUGHT by 1 of 2 checks

@@ -1,0 +1,10 @@
+  check [node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/] exit=1 | [2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m | [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+      [31m   [31m×[31m the rows[2m > [22mRound 1514: the UEFA Super Cup takes both European winners or plays nothing[39m[32m 8[2mms[22m[39m
+      [41m[1m FAIL [22m[49m src/lib/worldOneOffs.test.ts[2m > [22mthe rows[2m > [22mRound 1514: the UEFA Super Cup takes both European winners or plays nothing
+  check [ONE_OFF_ONLY=0,1 ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/si] exit=0 | simOneOffCups: green, 26511 checks (82 s)
+  check [PROBE_PART=old node .rc/x/probeEngine.mjs] exit=1 | probe old: 95 checks, 5 failures: old B1 Juventus end: a winner unknown (PSG, null) and usc holds notInWorld / old B1 Bayer Leverkusen end: a winner unknown (Manchester City, null) and usc holds notInWorld / old B1 Marseille end: a winner u
+         FAIL old B1 Juventus end: a winner unknown (PSG, null) and usc holds notInWorld
+         FAIL old B1 Bayer Leverkusen end: a winner unknown (Manchester City, null) and usc holds notInWorld
+         FAIL old B1 Marseille end: a winner unknown (Barcelona, null) and usc holds notInWorld
+         FAIL old B1 Chelsea end: a winner unknown (Arsenal, null) and usc holds notInWorld
+mutrun nowinnerand: CAUGHT by 2 of 3 checks
