@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/lib/clubManagerWorldView.test.ts --testTimeout=300000 --hookTimeout=300000
+walk: node .rc/x/walk1514.mjs
+playoneoff: node scripts/playOneOffCups.mjs
+rival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; grep -iE "deadline-day|club-manager |over|FAIL|budget" /tmp/w.log | head -12; tail -2 /tmp/w.log; exit $s
