@@ -1,0 +1,1 @@
+p-jump exit=1 15s | probe jump: 12 checks, 9 failures: jump seed 1 w0 Manchester City: the UEFA night (not yet played before the move) is shown as played right after it, at week 1 / jump see
