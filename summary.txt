@@ -1,0 +1,3 @@
+difficulty-mark exit=1 156s | simCmDifficulty: 1 FAILURES (sections 2)
+proof-s1 exit=1 1112s | proofWorldUclFleet: RED, 2 journeys differ from c3309e67 (of 190)
+proof-s1-mark exit=1 1114s | proofWorldUclFleet: RED, 2 journeys differ from c3309e67 (of 190)
