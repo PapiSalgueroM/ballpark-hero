@@ -1,0 +1,1 @@
+proof-hoff2 exit=0 78s | proofWorldUclFleet: GREEN, 10 journeys and 1254 steps byte equal to 3d1b7d9a (a watching state without worldComps.dsc+usc), draws equal
