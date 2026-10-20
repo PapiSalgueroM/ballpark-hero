@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import type { CareerState } from '@/lib/clubManager';
 import {
-  ERA_LEAGUES, ERA_UCL_FIELDS, REAL_LEAGUES, evalWorldUcl, oneOffRowOf, playNextEntry, startCareer, worldUclEraField,
+  ERA_LEAGUES, ERA_UCL_FIELDS, REAL_LEAGUES, careerLeagueOf, evalWorldUcl, leagueRulesOf, oneOffRowOf, playNextEntry, startCareer, worldUclEraField,
   worldUclNightsDone,
 } from '@/lib/clubManager';
 import { dateKey } from '@/lib/clubManagerCalendar';
@@ -346,7 +346,9 @@ describe('the super cup where the game has no row', () => {
       expect(view.name).toBeNull();
       expect(tile.value).toBe('Not confirmed');
       expect(tile.sub).toBe(`No super cup confirmed for this country${era ? ' in this era' : ''} yet`);
-      expect(view.stub ?? '', `${club} ${era ?? 'now'}`).toMatch(view.partial ? /could not confirm it on two sources, so none is followed or played here\.$/ : /has not confirmed a super cup for this country.* yet, so none is followed or played here\.$/);
+      /* Round 1514: Spain's partial row gives its own reason (a four club cup, dates on one source). */
+      const spain = !era && leagueRulesOf(careerLeagueOf(s).id).nationId === 'spain';
+      expect(view.stub ?? '', `${club} ${era ?? 'now'}`).toMatch(spain ? /^Spain's is a four club cup with semi finals.* Until then none is followed or played here\.$/ : view.partial ? /could not confirm it on two sources, so none is followed or played here\.$/ : /has not confirmed a super cup for this country.* yet, so none is followed or played here\.$/);
     }
     expect(noRow).toBeGreaterThan(30);
   }, 300_000);
