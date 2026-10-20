@@ -1,0 +1,4 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ucl-walk exit=0 253s | playWorldUcl: green. Nine saves at three sizes, 93 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
+ucl-ctl exit=0 314s | controls (each must be 1): notile=1 ahead=1 oldcols=1 legflip=1 swapfinal=1 r16help=1 instandin=1 inswap=1 legturn=1
+held-1503 exit=0 0s | src and scripts held after every control
