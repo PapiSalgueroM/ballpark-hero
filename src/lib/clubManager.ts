@@ -13739,7 +13739,7 @@ function oneOffEditionYear(state: Pick<CareerState, 'startYear'>, s: number): nu
   return (typeof state.startYear === 'number' ? state.startYear : CM_BASE_YEAR) + Math.max(0, s - 1);
 }
 /** Round 1514: the row a slice plays, with its edition's venue and date where the ledger dates that edition. */
-function oneOffSliceRow(state: Pick<CareerState, 'startYear'>, slice: OneOffSlice): OneOffRow | null {
+export function oneOffSliceRow(state: Pick<CareerState, 'startYear'>, slice: OneOffSlice): OneOffRow | null {
   return oneOffRowAt(slice.row, oneOffEditionYear(state, slice.s));
 }
 
