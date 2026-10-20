@@ -1,0 +1,11 @@
+units exit=0 10s |    Duration  9.03s (transform 3.30s, setup 805ms, collect 6.89s, tests 8.97s, environment 2.72s, prepare 856ms)
+anchors exit=0 52s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 85s | 
+lr-write exit=0 106s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+unseeded exit=1 185s | simCmUnseededWorld: 112 FAILURE(S)
+appeal exit=0 48s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+unseeded-base exit=1 196s | simCmUnseededWorld: 112 FAILURE(S)
+rival exit=0 15s | No rival product names found. 0 findings.
+dashscan exit=0 0s | 
+euro-2 exit=0 712s | simWorldEuro: green, 14795 checks, 0 failures
+proof exit=1 938s | proofWorldUclFleet: RED, 40 journeys differ from 3d1b7d9a (of 190)

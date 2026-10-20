@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/lib/clubManagerWorldView.test.ts src/lib/clubManagerWorldCompsReload.test.ts src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000
+euro-2: WORLD_EURO_ONLY=2 node scripts/simWorldEuro.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+lr-write: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write > /tmp/lw.log 2>&1; tail -2 /tmp/lw.log; mkdir -p "$RC_OUT" && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/" && git diff --stat -- scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs
+unseeded: node scripts/simCmUnseededWorld.mjs > /tmp/u.log 2>&1; e=$?; grep FAIL /tmp/u.log | sort | sha256sum; grep -c FAIL /tmp/u.log; tail -1 /tmp/u.log; exit $e
+unseeded-base: R=$PWD; git worktree add /tmp/bu 3d1b7d9a > /dev/null 2>&1 && ln -s "$R/node_modules" /tmp/bu/node_modules && cd /tmp/bu && node scripts/simCmUnseededWorld.mjs > /tmp/ub.log 2>&1; e=$?; grep FAIL /tmp/ub.log | sort | sha256sum; grep -c FAIL /tmp/ub.log; tail -1 /tmp/ub.log; exit $e
+appeal: node scripts/simManagerAppealIsolation.mjs
+proof: node scripts/proofWorldUclFleet.mjs --base 3d1b7d9a --coach both --eval --old-saves --strip worldComps.dsc+usc --dsc-nights-off
+rival: node scripts/simNoRivalNames.mjs
+dashscan: ! git diff 92290f81 HEAD -U0 | grep '^+' | grep -P '\x{2013}|\x{2014}'
