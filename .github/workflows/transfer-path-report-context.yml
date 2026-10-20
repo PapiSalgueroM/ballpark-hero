@@ -250,4 +250,5 @@ jobs:
           name: transfer-path-report-context-${{ steps.admission.outputs.mode }}-${{ github.sha }}
           path: ${{ env.TRANSFER_PATH_CONTEXT_OUT }}
           if-no-files-found: error
+          include-hidden-files: true
           retention-days: 14
