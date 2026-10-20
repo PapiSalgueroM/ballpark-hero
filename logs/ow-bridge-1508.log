@@ -1,0 +1,12 @@
+treeWithoutMerge: 9da41751df5356f1f4ecca26ae8a4366628610a5, a892dea5 without f1e54e17; conflicts kept from a892dea5: scripts/lib/cmWorldSeed1250.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+simCmOldCareersWorld: BASE 9da41751 (CM_OLD_WORLD_BASE), sections 2, control bridge
+  FAIL section 2: Real Madrid (now, seed 1): saved string 1 of 7 differs from BASE's (the head saved 7 times)
+  FAIL section 2: Real Madrid (now, seed 2): saved string 1 of 7 differs from BASE's (the head saved 7 times)
+  FAIL section 2: Everton (now, seed 1): saved string 1 of 6 differs from BASE's (the head saved 6 times)
+  FAIL section 2: Everton (now, seed 2): saved string 1 of 7 differs from BASE's (the head saved 7 times)
+  FAIL section 2: Aberdeen (now, seed 1): saved string 1 of 6 differs from BASE's (the head saved 6 times)
+  FAIL section 2: Aberdeen (now, seed 2): saved string 1 of 6 differs from BASE's (the head saved 6 times)
+  FAIL section 2: Bayern Munich (era2015, seed 1): saved string 1 of 7 differs from BASE's (the head saved 7 times)
+  FAIL section 2: Bayern Munich (era2015, seed 2): saved string 1 of 7 differs from BASE's (the head saved 7 times)
+section 2: 18 seeded careers, 111 saves, 925065 draws, 30 January windows and 48 deals of mine on the head, 18 red
+simCmOldCareersWorld: control bridge FIRED: section 2 red on 18 of 18 seeded careers (52s)
