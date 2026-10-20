@@ -1,0 +1,14 @@
+1) Every page is inside its download budget
+  FAIL: /deadline-day: 654K of gzipped JavaScript against a budget of 653K
+   /                   244K gz over   3 files (budget 245K, 243.8K to the tenth)
+   /club-manager       629K gz over  43 files (budget 629K, 629.1K to the tenth)
+   /soccer-career      836K gz over  48 files (budget 836K, 835.5K to the tenth)
+   /stadium-tycoon     303K gz over  24 files (budget 303K, 302.7K to the tenth)
+   /wonderkid-factory  276K gz over  20 files (budget 277K, 276.5K to the tenth)
+   /minefield          294K gz over  21 files (budget 295K, 294.4K to the tenth)
+   /footle             353K gz over  39 files (budget 354K, 352.9K to the tenth)
+   /nfl-my-career      492K gz over  48 files (budget 493K, 491.9K to the tenth)
+   /front-office       373K gz over  38 files (budget 374K, 373.2K to the tenth)
+   /soccer-grid        319K gz over  36 files (budget 319K, 318.5K to the tenth)
+
+sweepWeight: 1 failure

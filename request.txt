@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+playoneoff: node scripts/playOneOffCups.mjs
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; grep -iE "deadline-day|club-manager |over|FAIL|budget" /tmp/w.log | head -12; tail -2 /tmp/w.log; exit $s
+rr-receipt-why: R=$PWD; git worktree add /tmp/rv HEAD > /dev/null 2>&1 && ln -s "$R/node_modules" /tmp/rv/node_modules && cd /tmp/rv && git show 92290f81:scripts/data/cmOneOffFormats.json > scripts/data/cmOneOffFormats.json && git show 92290f81:scripts/data/cmOneOffFormats.receipt.json > scripts/data/cmOneOffFormats.receipt.json && ONE_OFF_ONLY=0 node scripts/simOneOffCups.mjs > /tmp/rv.log 2>&1; grep -E "FAIL|simOneOffCups:" /tmp/rv.log | cut -c1-200; test $(grep -c 'does not carry the hash' /tmp/rv.log) = 0

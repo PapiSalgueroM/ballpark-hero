@@ -1,0 +1,11 @@
+  FAIL uefa-2026: a tuple with no verified ledger row
+  FAIL ger-2026: a tuple with no verified ledger row
+  FAIL fra-2026: a tuple with no verified ledger row
+  FAIL ita-2026: a tuple with no verified ledger row
+  FAIL CM_ONE_OFF_PARTIAL is eng-2005 eng-2010 eng-2015 eng-2020 esp-2026, the rows not verified are eng-2005 eng-2010 eng-2015 eng-2020 esp-2026 ita-2026 ger-2026 fra-2026
+  FAIL ger-2026: a dated edition 2026 with no verified ledger row
+  FAIL fra-2026: a dated edition 2026 with no verified ledger row
+  FAIL ita-2026: a dated edition 2026 with no verified ledger row
+  FAIL CM_ONE_OFF_EDITION_ONLY is ita-2026, the ledger's edition only rows are 
+  FAIL CM_ONE_OFF_CUP_RUNNERS_UP_2025_26 holds seriea, the ledger 
+simOneOffCups: 10 FAILURES of 181 checks (0 s)

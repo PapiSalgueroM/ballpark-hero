@@ -1,0 +1,4 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+rr-receipt-why exit=0 1s | simOneOffCups: 10 FAILURES of 181 checks (0 s)
+weight exit=1 27s | sweepWeight: 1 failure
+playoneoff exit=0 97s | playOneOffCups: green, five cases at three sizes and two more at two, pictures in /home/runner/work/_temp/rc-out/files/shots
