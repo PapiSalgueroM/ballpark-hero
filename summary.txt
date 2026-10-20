@@ -1,0 +1,7 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 99s | playOneOffCups: green, five cases at three sizes and two more at two, pictures in /home/runner/work/_temp/rc-out/files/shots
+walk-notile exit=1 34s | playOneOffCups: control notile FIRED (3 findings of "no Super cup tile", 3 in all)
+walk-swap exit=1 40s | playOneOffCups: control swap FIRED (3 findings of "the card shows", 3 in all)
+worldWalk exit=0 253s | playWorldUcl: green. Nine saves at three sizes, 93 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
+walkBoard exit=0 28s | WALK BOARD DONE 0 problems
+sweepWeight exit=0 25s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
