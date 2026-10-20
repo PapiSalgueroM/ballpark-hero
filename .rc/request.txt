@@ -1,0 +1,6 @@
+# Release BN proof, part long, on the final head: simWorldUcl whole and simWorldEuro in its gate form by sections (section 2 without the UEFA open in both arms since Round 1514)
+simWorldUcl: node scripts/simWorldUcl.mjs > /tmp/wu.log 2>&1; s=$?; grep -E "FAIL" /tmp/wu.log | head -10 | cut -c1-250; tail -4 /tmp/wu.log | cut -c1-250; exit $s
+euro-0147: WORLD_EURO_ONLY=0,1,4,5,7 node scripts/simWorldEuro.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+euro-2: WORLD_EURO_ONLY=2 node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+euro-3: WORLD_EURO_ONLY=3 WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+euro-6: WORLD_EURO_ONLY=6 WORLD_EURO_BASE=77556430 node scripts/simWorldEuro.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
