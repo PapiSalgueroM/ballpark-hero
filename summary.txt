@@ -1,0 +1,9 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ctl0-1514 exit=0 1s | pairing exit=1 simOneOffCups: control pairing FIRED (2 failures, all its own: cup-seriea-2025-26: the constant names Roma, the ledger Lazio)
+walk-nousctile exit=0 195s | playOneOffCups: control nousctile FIRED (8 findings of "UEFA Super Cup tile", 8 in all)
+proof-hoff-1514 exit=0 120s | proofWorldUclFleet: GREEN, 10 journeys and 1254 steps byte equal to 92290f81 (a watching state without worldComps.dsc+usc), draws equal
+proof-part-1514 exit=0 378s | proofWorldUclFleet: GREEN, 60 journeys and 6490 steps byte equal to 92290f81 (a watching state without worldComps.usc), draws equal
+dashscan-1514 exit=0 1s | since B1514: added lines with an en or em dash 0, commit message lines with one 0
+savesize-base-1514 exit=0 98s | simClubManagerSaveSize: all sections green
+bka-proof-part exit=1 319s | proofWorldUclFleet: RED, 20 journeys differ from fb50ce9f (of 60)
+proof-watch-1514 exit=0 1012s | proof exit 1, differing journeys 10 (10 expected), of them not Hoffenheim 0 (0 expected)
