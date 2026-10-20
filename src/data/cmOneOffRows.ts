@@ -89,6 +89,6 @@ export const CM_ONE_OFF_MARKS: Readonly<Record<string, string>> = {
 
 /** Round 1514: why a partial row is partial, where the tile says more than "not confirmed". */
 export const CM_ONE_OFF_PARTIAL_WHY: Readonly<Record<string, string>> = {
-  'esp-2026': "Spain's is a four club cup with semi finals, and its next dates stand on one source so far. It comes in a later update.",
+  'esp-2026': "Spain's is a four club cup with semi finals, and it comes in a later update.",
   'ita-2026': 'Only the 2026-27 edition is confirmed: the league champions against the cup runners up, because one club won both. Later editions are not confirmed yet.',
 };
