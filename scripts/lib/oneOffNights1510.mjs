@@ -21,3 +21,11 @@ export const USC_OPEN_OFF = {
   from: "    openOneOff(state, { tables: { table: null, cupWinner: null, cupRunnerUp: null, uclWinner: exit(watchHolder), uelWinner: exit(watchUelHolder) }, seasonOne: false }, 'usc');\n",
   to: "    setOneOffSlice(state, null, 'usc');\n",
 };
+
+/* Round 1514: the UEFA Super Cup's nights alone left off a participant's calendar (the domestic cup's kept), for a
+ * kit whose base already plays Round 1510's domestic cup: with --strip worldComps.usc it holds the tree to that base. */
+export const USC_NIGHTS_EDIT = {
+  file: 'src/lib/clubManager.ts',
+  from: '    if (mine) insertOneOffNights(state, slots as number[], k);\n',
+  to: "    if (mine && k === 'dsc') insertOneOffNights(state, slots as number[], k);\n",
+};
