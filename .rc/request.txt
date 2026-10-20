@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+oneoff: node scripts/simOneOffCups.mjs
+units: node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/lib/clubManagerWorldView.test.ts --testTimeout=300000 --hookTimeout=120000
+oneoff-uelpub: ONE_OFF_CONTROL=uelpub node scripts/simOneOffCups.mjs
+oneoff-nouscrow: ONE_OFF_CONTROL=nouscrow node scripts/simOneOffCups.mjs
+oneoff-notrophy: ONE_OFF_CONTROL=notrophy node scripts/simOneOffCups.mjs
+worlducl: node scripts/simWorldUcl.mjs
+worldeuro: node scripts/simWorldEuro.mjs
+savesize: node scripts/simClubManagerSaveSize.mjs
+dailydeals: node scripts/simDailyDeals.mjs
+leaguerules: node scripts/simCmLeagueRules.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
