@@ -1,0 +1,6 @@
+#!serial
+lr-revert: node .rc/x/mutLR.mjs && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src scripts; exit $s
+lr-retake: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write; s=$?; mkdir -p "$RC_OUT"; cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/"; exit $s
+lr-whole: node scripts/simCmLeagueRules.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+oneoff-s01: ONE_OFF_ONLY=0,1 ONE_OFF_FLEET=Marseille ONE_OFF_SEEDS=1 node scripts/simOneOffCups.mjs
