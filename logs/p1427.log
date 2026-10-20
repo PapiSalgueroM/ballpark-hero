@@ -1,0 +1,12 @@
+bindAt: scripts/simTennisChainScoreOwnership.mjs bound
+bindAt: 775564305e9d -> 85fa75926838
+runProver: p1427 at 7e7b1fe8049dc90706719980817c0cea3e6be5d4 (release BK bound: bf4513691d32 with its pinned bases bound to the joined tree)
+normal:11 finished,0 exact purpose faults,11 healthy,0 IO after cleanup.
+bare:11 finished,0 exact purpose faults,11 healthy,0 IO after cleanup.
+whole-original:11 finished,6 exact purpose faults,5 healthy,0 IO after cleanup.
+rank-owner-neutral:11 finished,5 exact purpose faults,6 healthy,0 IO after cleanup.
+busy-owner-neutral:11 finished,4 exact purpose faults,7 healthy,0 IO after cleanup.
+restored:11 finished,0 exact purpose faults,11 healthy,0 IO after cleanup.
+{"kind":"TENNIS_SCORE_RESULT","mode":"fixed","evidenceRoot":"/tmp/rp-out-p1427","modeEnvAbsent":false,"outEnvAbsent":false,"summarySha256":"ee915d542ffd3d14d983949bbeee861a95026791f546517f6518f6e0617cdb4e","sourceHeld":true,"controlsRemoved":true,"productQualified":false}
+p1427 PROOF DONE
+runProver: p1427 exit 0

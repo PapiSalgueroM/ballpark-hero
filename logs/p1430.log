@@ -1,0 +1,20 @@
+bindAt: scripts/simSoccerGridSearchDiscovery.mjs bound
+bindAt: 775564305e9d -> bf4513691d32
+bindAt: scripts/simSoccerGridBlurOwnership.mjs bound
+bindAt: scripts/qa/replayGridDiscovery1430.mjs bound
+bindAt: scripts/simSoccerGridSearchDiscovery.mjs bound
+bindAt: 775564305e9d -> bf4513691d32
+bindAt: 2077ffbe9214 -> 5684cd0ed33a
+runProver: p1430 at d65c412d101c3e0bbab48fb64c3c96eaeff1179c (release BK bound: 29c94aa5546f with its pinned bases bound to the joined tree)
+normal:8 actual cases,0 precise intended faults,0 cleanup timers.
+bare:8 actual cases,0 precise intended faults,0 cleanup timers.
+original:8 actual cases,3 precise intended faults,0 cleanup timers.
+focus-control:8 actual cases,2 precise intended faults,0 cleanup timers.
+unmount-control:8 actual cases,1 precise intended faults,0 cleanup timers.
+restored:8 actual cases,0 precise intended faults,0 cleanup timers.
+Inherited discovery:16 actual current-source cases passed,0failed,0pending.
+{"kind":"SOCCER_GRID_BLUR_RESULT","mode":"fixed","evidenceRoot":"/tmp/rp-out-p1430","modeEnvAbsent":false,"outEnvAbsent":false,"summarySha256":"31d98d57abc4dfcab03c8cbd9ea6ca11ed7c46264b5f387bdd98c08cf41b48c0","sourceHeld":true,"temporaryModulesRemoved":true,"productQualified":false}
+Preparing worktree (detached HEAD d65c412d1)
+Historical1429 full predicate:8x16 outcomes, complete controls and exact source restored. Current UI proof is separately attributed.
+p1430 PROOF DONE
+runProver: p1430 exit 0

@@ -1,0 +1,34 @@
+bindAt: scripts/simSoccerGridSearchDiscovery.mjs bound
+bindAt: 775564305e9d -> bf4513691d32
+bindAt: scripts/simSoccerGridBlurOwnership.mjs bound
+bindAt: scripts/qa/replayGridDiscovery1430.mjs bound
+bindAt: scripts/simSoccerGridSearchDiscovery.mjs bound
+bindAt: 775564305e9d -> bf4513691d32
+bindAt: 2077ffbe9214 -> 5684cd0ed33a
+bindAt: scripts/qa/gridSearchAccessibility1432.mjs bound
+bindAt: scripts/qa/gridSearchCompatibility1432.mjs bound
+bindAt: scripts/simSoccerGridBlurOwnership.mjs bound
+bindAt: scripts/simSoccerGridSearchDiscovery.mjs bound
+bindAt: scripts/qa/replayGridDiscovery1430.mjs bound
+bindAt: f568e4f74c81 -> d65c412d101c
+bindAt: 775564305e9d -> bf4513691d32
+bindAt: 2077ffbe9214 -> 5684cd0ed33a
+runProver: p1432 at 3ba37555a782a4bfad9948fc9bb03022cef7982c (release BK bound: 6bae5306f423 with its pinned bases bound to the joined tree)
+normal:8 actual semantic cases,0 exact purpose faults,0 pending after cleanup.
+bare:8 actual semantic cases,0 exact purpose faults,0 pending after cleanup.
+whole-original:8 actual semantic cases,5 exact purpose faults,0 pending after cleanup.
+role-control:8 actual semantic cases,1 exact purpose faults,0 pending after cleanup.
+active-control:8 actual semantic cases,1 exact purpose faults,0 pending after cleanup.
+selected-control:8 actual semantic cases,1 exact purpose faults,0 pending after cleanup.
+stale-active-control:8 actual semantic cases,1 exact purpose faults,0 pending after cleanup.
+restored:8 actual semantic cases,0 exact purpose faults,0 pending after cleanup.
+Historical blur actual ordinary default packet copied completely, source and original methods held.
+Historical discovery actual ordinary default packet copied completely, source and original methods held.
+Preparing worktree (detached HEAD 3ba37555a)
+Actual current blur8:8 healthy cases and complete traces held, only role selectors adapted.
+Actual current discovery16:16 healthy cases and complete traces held, only role selectors adapted.
+Preparing worktree (detached HEAD 3ba37555a)
+Compatibility refusals:8 actual baseline/invalid/unknown entry guards and3 exact prefix controls refused without app-case credit.
+{"kind":"GRID_SEARCH_ACCESSIBILITY_RESULT","mode":"fixed","evidenceRoot":"/tmp/rp-out-p1432","modeEnvAbsent":false,"outEnvAbsent":false,"summarySha256":"ee54cd428d0200a24859d6e894be727ad5b9df9ccca211de311e7a09ac6f809e","sourceHeld":true,"temporaryModulesRemoved":true,"productQualified":false}
+p1432 PROOF DONE
+runProver: p1432 exit 0
