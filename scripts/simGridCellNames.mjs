@@ -22,7 +22,7 @@ const TITLES = [
   'preserves correct locks complete visible content and input records',
 ];
 const VARIANTS = ['Football', 'College', 'Soccer'];
-const allNames = VARIANTS.flatMap(variant => TITLES.map(title => variant + ' grid cell names ' + title));
+const allNames = VARIANTS.flatMap(variant => TITLES.map(title => "'" + variant + "' grid cell names " + title));
 const hash = body => createHash('sha256').update(body).digest('hex');
 const lf = body => body.replace(/\r\n/g, '\n');
 const write = (file, value) => fs.writeFileSync(file, JSON.stringify(value, null, 2) + '\n');
@@ -40,7 +40,7 @@ const faultNames = arm => {
   if (arm === 'normal' || arm === 'restored') return [];
   const variants = arm.endsWith('-football') ? ['Football', 'College'] : arm.endsWith('-soccer') ? ['Soccer'] : VARIANTS;
   const ids = arm.startsWith('icons-') ? [0, 1, 2, 4] : [0, 1, 2, 3, 4];
-  return variants.flatMap(variant => ids.map(index => variant + ' grid cell names ' + TITLES[index]));
+  return variants.flatMap(variant => ids.map(index => "'" + variant + "' grid cell names " + TITLES[index]));
 };
 const modeAbsent = !Object.hasOwn(process.env, 'GRID_CELL_NAMES_MODE'), outAbsent = !Object.hasOwn(process.env, 'GRID_CELL_NAMES_OUT'), noArguments = process.argv.length === 2;
 const args = new Map();
