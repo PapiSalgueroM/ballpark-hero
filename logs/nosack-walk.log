@@ -1,0 +1,117 @@
+playCmNoSack: seed 969109896 (replay with NOSACK_SEED=969109896), widths 320, 390, 1280
+
+== 320 by 640
+  PASS  320: the Dugout step shows the Career options card
+  PASS  320: No sacking starts off
+  PASS  320: the switch turns it on
+  PASS  320: pressing it moves nothing (scrollY 2229 then 2229, height 31287 then 31287)
+  PASS  320: the switch is 44.0 px tall and the card's smallest text is 12 px
+  PASS  320: the Dugout step is no wider than the screen
+  PASS  320: the career the switch started is running
+  PASS  320: the switch left on, Skip made a No sacking career (save noSack 1)
+  PASS  320: the Dugout-made career wears the pill
+  PASS  320: Options reads "🛡️ No sacking On On for this career. The board can moan but it cannot fire you," with no way off
+  PASS  320: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 1 of 54 · Board 69/100 🏆 0 tro"
+  PASS  320: the created club's Dugout switch turns on
+  PASS  320: Take the job made the created club a No sacking career (club Test Rovers, save noSack 1)
+  PASS  320: the created club's hub wears the pill
+  PASS  320: the mid season badge is on the header too
+  PASS  320: on the created club's header nothing overlaps
+  PASS  320: with the mid season badge the header row is 156 px with the pill and 126 px without it (pill 22 px), so the pill adds at most its own row
+  PASS  320: the created club's hub is no wider than the screen
+  PASS  320: the career is running
+  PASS  320: a Normal career wears no pill and carries no key
+  PASS  320: the Normal career was planted in season 2
+  PASS  320: Options offers to turn No sacking on
+  PASS  320: the first tap only asks
+  PASS  320: the Options button is 44.0 px tall and its smallest text is 12 px
+  PASS  320: the second tap switches it on, for good
+  PASS  320: switched on in season 2, Options reads "🛡️ No sacking On On since season 2. The board can moan but " and the save holds 2
+  PASS  320: the hub's pill appears once it is on
+  PASS  320: the pill sits clear of the club name (pill -516 to -494, text 12 px)
+  PASS  320: the hub with the pill is no wider than the screen
+  PASS  320: the save was planted on its last point with No sacking and a weak squad
+  34 steps: the No sacking line showed on a match report
+  PASS  320: a defeat on the last point put the No sacking line on the match report
+  PASS  320: still in the job (board 1, saved sacked flag false)
+  PASS  320: the Board meter reads "Board Lost the board · No sacking"
+  PASS  320: at board 5 the strip is 52 px with No sacking and 52 px without
+  PASS  320: at board 15 the strip is 44 px with No sacking and 44 px without
+
+== 390 by 844
+  PASS  390: the Dugout step shows the Career options card
+  PASS  390: No sacking starts off
+  PASS  390: the switch turns it on
+  PASS  390: pressing it moves nothing (scrollY 1908 then 1908, height 25110 then 25110)
+  PASS  390: the switch is 44.0 px tall and the card's smallest text is 12 px
+  PASS  390: the Dugout step is no wider than the screen
+  PASS  390: the career the switch started is running
+  PASS  390: the switch left on, Skip made a No sacking career (save noSack 1)
+  PASS  390: the Dugout-made career wears the pill
+  PASS  390: Options reads "🛡️ No sacking On On for this career. The board can moan but it cannot fire you," with no way off
+  PASS  390: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 1 of 54 · Board 69/100 🏆 0 tro"
+  PASS  390: the created club's Dugout switch turns on
+  PASS  390: Take the job made the created club a No sacking career (club Test Rovers, save noSack 1)
+  PASS  390: the created club's hub wears the pill
+  PASS  390: the mid season badge is on the header too
+  PASS  390: on the created club's header nothing overlaps
+  PASS  390: with the mid season badge the header row is 109 px with the pill and 109 px without it (pill 22 px), so the pill adds at most its own row
+  PASS  390: the created club's hub is no wider than the screen
+  PASS  390: the career is running
+  PASS  390: a Normal career wears no pill and carries no key
+  PASS  390: the Normal career was planted in season 2
+  PASS  390: Options offers to turn No sacking on
+  PASS  390: the first tap only asks
+  PASS  390: the Options button is 44.0 px tall and its smallest text is 12 px
+  PASS  390: the second tap switches it on, for good
+  PASS  390: switched on in season 2, Options reads "🛡️ No sacking On On since season 2. The board can moan but " and the save holds 2
+  PASS  390: the hub's pill appears once it is on
+  PASS  390: the pill sits clear of the club name (pill -468 to -446, text 12 px)
+  PASS  390: the hub with the pill is no wider than the screen
+  PASS  390: the save was planted on its last point with No sacking and a weak squad
+  34 steps: the No sacking line showed on a match report
+  PASS  390: a defeat on the last point put the No sacking line on the match report
+  PASS  390: still in the job (board 1, saved sacked flag false)
+  PASS  390: the Board meter reads "Board Lost the board · No sacking"
+  PASS  390: at board 5 the strip is 52 px with No sacking and 52 px without
+  PASS  390: at board 15 the strip is 44 px with No sacking and 44 px without
+
+== 1280 by 900
+  PASS  1280: the Dugout step shows the Career options card
+  PASS  1280: No sacking starts off
+  PASS  1280: the switch turns it on
+  PASS  1280: pressing it moves nothing (scrollY 1406 then 1406, height 15091 then 15091)
+  PASS  1280: the switch is 44.0 px tall and the card's smallest text is 12 px
+  PASS  1280: the Dugout step is no wider than the screen
+  PASS  1280: the career the switch started is running
+  PASS  1280: the switch left on, Skip made a No sacking career (save noSack 1)
+  PASS  1280: the Dugout-made career wears the pill
+  PASS  1280: Options reads "🛡️ No sacking On On for this career. The board can moan but it cannot fire you," with no way off
+  PASS  1280: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 1 of 54 · Board 69/100 🏆 0 tro"
+  PASS  1280: the created club's Dugout switch turns on
+  PASS  1280: Take the job made the created club a No sacking career (club Test Rovers, save noSack 1)
+  PASS  1280: the created club's hub wears the pill
+  PASS  1280: the mid season badge is on the header too
+  PASS  1280: on the created club's header nothing overlaps
+  PASS  1280: with the mid season badge the header row is 67 px with the pill and 67 px without it (pill 22 px), so the pill adds at most its own row
+  PASS  1280: the created club's hub is no wider than the screen
+  PASS  1280: the career is running
+  PASS  1280: a Normal career wears no pill and carries no key
+  PASS  1280: the Normal career was planted in season 2
+  PASS  1280: Options offers to turn No sacking on
+  PASS  1280: the first tap only asks
+  PASS  1280: the Options button is 44.0 px tall and its smallest text is 12 px
+  PASS  1280: the second tap switches it on, for good
+  PASS  1280: switched on in season 2, Options reads "🛡️ No sacking On On since season 2. The board can moan but " and the save holds 2
+  PASS  1280: the hub's pill appears once it is on
+  PASS  1280: the pill sits clear of the club name (pill -393 to -371, text 12 px)
+  PASS  1280: the hub with the pill is no wider than the screen
+  PASS  1280: the save was planted on its last point with No sacking and a weak squad
+  34 steps: the No sacking line showed on a match report
+  PASS  1280: a defeat on the last point put the No sacking line on the match report
+  PASS  1280: still in the job (board 1, saved sacked flag false)
+  PASS  1280: the Board meter reads "Board Lost the board · No sacking"
+  PASS  1280: at board 5 the strip is 52 px with No sacking and 52 px without
+  PASS  1280: at board 15 the strip is 44 px with No sacking and 44 px without
+  PASS  no page errors
+
