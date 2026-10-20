@@ -431,7 +431,9 @@ async function caseG(browser, size, tag) {
     await measure(page, `${where} tiles`);
     await shot(page, `usc-g-tiles-${tag}`);
     const tile = await textOf(page, '[data-cm-world-tile="dsc"]');
-    if (!tile.includes('Trophée des Champions')) finding(where, `the Super cup tile reads "${tile.slice(0, 160)}"`);
+    /* Season one's night is the opening slot, so at week 0 the tile already gives the result (Round 1510's rule):
+       the two clubs, never another cup. */
+    if (!tile.includes('PSG') || !tile.includes('Lens') || /Not confirmed/.test(tile)) finding(where, `the Super cup tile reads "${tile.slice(0, 160)}"`);
     const utile = await textOf(page, '[data-cm-world-tile="usc"]');
     if (!/not played/.test(utile)) finding(where, `the UEFA Super Cup tile reads "${utile.slice(0, 160)}", not that season one's is not played`);
     await roundTrip(page, where, async () => {
