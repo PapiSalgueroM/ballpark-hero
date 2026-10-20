@@ -14,8 +14,10 @@
  * Pure: nothing from Math.random, no clock, nothing from the engine but the one tie rule it shares
  * (worldCompetition.ts's settleTie).
  */
-import { CM_ONE_OFF_PARTIAL, CM_ONE_OFF_ROWS } from '@/data/cmOneOffRows';
+import { CM_ONE_OFF_EDITION_ONLY, CM_ONE_OFF_EDITIONS, CM_ONE_OFF_PARTIAL, CM_ONE_OFF_PARTIAL_WHY, CM_ONE_OFF_ROWS } from '@/data/cmOneOffRows';
 import type { OneOffDecider, OneOffDouble, OneOffEntry, OneOffPlace, OneOffRowTuple, OneOffShape, OneOffVenue } from '@/data/cmOneOffRows';
+import { parseIsoDate } from '@/lib/calDate';
+import type { CalDate } from '@/lib/calDate';
 import { keyedRng } from '@/lib/keyedRng';
 import { settleTie } from '@/lib/worldCompetition';
 import type { SettleableTie } from '@/lib/worldCompetition';
@@ -28,6 +30,8 @@ export interface OneOffRow {
   id: string; nation: string; year: number; name: string; shape: OneOffShape; decider: OneOffDecider;
   entry: OneOffEntry; double: OneOffDouble; place: OneOffPlace; venue: OneOffVenue; awayGoals: boolean;
   pairing: readonly [number, number, number, number] | null;
+  /** Round 1514: the date of the edition the ledger dates (CM_ONE_OFF_EDITIONS), set only by oneOffRowAt. */
+  on?: CalDate;
 }
 
 const rowOf = (t: OneOffRowTuple): OneOffRow => ({
@@ -44,19 +48,47 @@ export function oneOffRowById(id: string): OneOffRow | null {
   const t = CM_ONE_OFF_ROWS.find(r => r[0] === id);
   return t ? rowOf(t) : null;
 }
-/** The ledger id of a country's row for a year ('eng-2026'), whether or not the game stands on it. */
+/** The ledger id of a country's row for a year ('eng-2026'), whether or not the game stands on it. Round 1514: the
+ *  UEFA Super Cup's 'uefa-2026'. */
 export function oneOffRowId(nation: string, year: number): string {
-  return `${nation === 'spain' ? 'esp' : nation.slice(0, 3)}-${year}`;
+  return `${nation === 'spain' ? 'esp' : nation === 'uefa' ? 'uefa' : nation.slice(0, 3)}-${year}`;
 }
-/** True when the round looked at this country and year and could not stand on it (the tile says so). */
-export function oneOffPartial(nation: string, year: number): boolean {
-  return CM_ONE_OFF_PARTIAL.includes(oneOffRowId(nation, year));
+/** True when the round looked at this country and year and could not stand on it (the tile says so). Round 1514:
+ *  or its row plays dated editions only and `edition` (the season's start year) is not one of them. */
+export function oneOffPartial(nation: string, year: number, edition?: number): boolean {
+  const id = oneOffRowId(nation, year);
+  return CM_ONE_OFF_PARTIAL.includes(id) || (edition !== undefined && !oneOffPlayedIn(id, edition));
+}
+/** Round 1514: the tile's reason for a partial row, where it says more than "not confirmed". */
+export function oneOffPartialWhy(nation: string, year: number): string | null {
+  return CM_ONE_OFF_PARTIAL_WHY[oneOffRowId(nation, year)] ?? null;
+}
+
+/** Round 1514: the edition of row `id` that starts in `edition` (a season's start year) where the ledger dates it:
+ *  its date, its venue that season and its ground. Null for any other. */
+export function oneOffEdition(id: string, edition: number): { date: CalDate; venue: OneOffVenue; ground: string } | null {
+  const e = CM_ONE_OFF_EDITIONS.find(x => x[0] === id && x[1] === edition);
+  return e ? { date: parseIsoDate(e[2]), venue: e[3], ground: e[4] } : null;
+}
+/** Round 1514: whether row `id` is played in the season starting in `edition`: every season, or only its dated
+ *  editions for a row in CM_ONE_OFF_EDITION_ONLY. */
+export function oneOffPlayedIn(id: string, edition: number): boolean {
+  return !CM_ONE_OFF_EDITION_ONLY.includes(id) || oneOffEdition(id, edition) !== null;
+}
+/** Round 1514: row `id` as played in the season starting in `edition`: a dated edition's venue and date over the
+ *  row's rule. The row as it stands for every other season (England's FA Community Shield is never dated). */
+export function oneOffRowAt(id: string, edition: number): OneOffRow | null {
+  const row = oneOffRowById(id);
+  const ed = row ? oneOffEdition(id, edition) : null;
+  return row && ed ? { ...row, venue: ed.venue, on: ed.date } : row;
 }
 
 /** Why a season's cup is not followed or not played: no finished season to read, a cup with no final, the manager
  *  arrived from another country this summer, an entrant that is not a club of this world, season one with my club
- *  in it, a mid season move into an entrant, a two legged cup my club is in, or no free midweek for my nights. */
-export type OneOffSkip = 'unfinished' | 'noFinal' | 'moved' | 'notInWorld' | 'seasonOne' | 'joined' | 'legs' | 'noNight';
+ *  in it, a mid season move into an entrant, a two legged cup my club is in, or no free midweek for my nights.
+ *  Round 1514: or a winner the save does not know (the UEFA Super Cup in a season whose European finals the game
+ *  did not follow): the match is never invented. */
+export type OneOffSkip = 'unfinished' | 'noFinal' | 'moved' | 'notInWorld' | 'seasonOne' | 'joined' | 'legs' | 'noNight' | 'noWinner';
 
 /** A season of one cup as a save keeps it. A stub (`skip`) carries nothing else. */
 export interface OneOffSlice {
@@ -80,8 +112,12 @@ export interface OneOffSlice {
   seen?: number;
 }
 
-/** What a finished season hands the next one: the top flight's final order and its cup final. */
-export interface OneOffTables { table: readonly string[] | null; cupWinner: string | null; cupRunnerUp: string | null }
+/** What a finished season hands the next one: the top flight's final order and its cup final. Round 1514: and,
+ *  for a 'euroWinners' row, the Champions League's and the Europa League's winners. */
+export interface OneOffTables {
+  table: readonly string[] | null; cupWinner: string | null; cupRunnerUp: string | null;
+  uclWinner?: string | null; uelWinner?: string | null;
+}
 
 /**
  * The entrants of a row from a finished season, in the row's order, or why there are none. A place a club holds
@@ -89,6 +125,12 @@ export interface OneOffTables { table: readonly string[] | null; cupWinner: stri
  * league club not yet in, 'cupRunnerUp' the cup's runners up. Always distinct clubs, or a skip.
  */
 export function entrantsFrom(row: Pick<OneOffRow, 'shape' | 'entry' | 'double'>, t: OneOffTables): { clubs: string[]; doubled?: true } | { skip: OneOffSkip } {
+  /* Round 1514: the UEFA Super Cup reads no table. Both winners or nothing: a winner the save does not know is never
+     filled in. */
+  if (row.entry === 'euroWinners') {
+    if (!t.uclWinner || !t.uelWinner) return { skip: 'noWinner' };
+    return t.uclWinner === t.uelWinner ? { skip: 'unfinished' } : { clubs: [t.uclWinner, t.uelWinner] };
+  }
   const table = t.table ?? [];
   if (table.length < 2) return { skip: 'unfinished' };
   if (!t.cupWinner) return { skip: 'noFinal' };
@@ -119,9 +161,11 @@ export function entrantsFrom(row: Pick<OneOffRow, 'shape' | 'entry' | 'double'>,
 export interface OneOffFixture { n: number; night: number; home: string; away: string; neutral: boolean; leg?: 1 | 2; settles: boolean }
 
 /** The nights a row's cup is played on, in order, as the placer wants them (src/lib/worldNights.ts). */
-export function oneOffNightsOf(row: Pick<OneOffRow, 'shape' | 'place'>): NightWant[] {
+export function oneOffNightsOf(row: Pick<OneOffRow, 'shape' | 'place'> & { on?: CalDate }): NightWant[] {
   if (row.shape === 'two') return [{ place: 'open' }, { place: 'early' }];
   if (row.shape === 'four') return [{ place: row.place }, { place: row.place, afterLeague: 1 }];
+  /* Round 1514: a 'dated' one match cup wants the free midweek nearest its edition's date. */
+  if (row.place === 'dated') return [row.on ? { place: 'dated', on: row.on } : { place: 'dated' }];
   return [{ place: row.place }];
 }
 

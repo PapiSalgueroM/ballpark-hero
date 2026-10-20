@@ -5,6 +5,24 @@
  *   scripts/data/cmOneOffFormats.json   the rows and the season one editions, each fact on two families
  *   src/data/cmOneOffRows.ts             the values the game plays, held to the ledger by section 0
  *
+ * ROUND 1514 adds the UEFA Super Cup (worldComps.usc, from a save's second season: last season's two European
+ * winners, never invented) and Germany's, France's and Italy's super cups (Italy's 2026-27 edition only), each on
+ * two independent publishers (the ledger rule twoPublishers), with their dated 2026 editions. Section 0 holds the
+ * new rows, the dated editions and the cup runners up to the ledger, and checks the clubs the ENGINE draws for a
+ * fresh career's first editions against the clubs their publishers name (Bayern Munich and Borussia Dortmund, PSG
+ * and Lens, Inter Milan and Lazio). Section 1 adds a French and an Italian watcher (Bayern Munich is now season
+ * one's entrant): a first edition's clubs and its night in its edition's month; Italy with no cup after 2026-27;
+ * the UEFA Super Cup after every rollover (the two winners in order, 'noWinner' when one is unknown, no key in
+ * season one or an era save), its night only on a participant's calendar (the forced fleet hands it the Champions
+ * League's place) after the opener in August or September, one winner, no extra time, the cabinet. Section 3 takes
+ * the UEFA open out with the three others; sections 2 and 4 run without it. New controls: twopub and pairing
+ * (section 0), uscswap, italyall, nodated and firstedition (section 1).
+ * FIX-1514 (the reviews' majors 2 and 3, minor 6): every dated edition's venue is read off the engine's own fixture
+ * (its home side or a neutral ground against CM_ONE_OFF_EDITIONS: a probe career per dated edition, Germany's
+ * included, and the fleet's French and Italian watchers every seed); the fleet makes two season two moves (Liverpool
+ * to Arsenal after the UEFA Super Cup's night, Marseille at season two's first week into one of its clubs) and holds
+ * the UEFA Super Cup's carry, its never falls and the season one guard's twin; controls evalundated and nocarryusc.
+ *
  * SECTIONS (ONE_OFF_ONLY=0,1 runs some of them; the default is all that are built):
  *   0  the ledger. Every fact of a verified row stands on an official page and a press page on two hosts, none a
  *      wiki, each with a line about that fact; a row that is not verified carries no constant and is named in
@@ -67,7 +85,9 @@
  *              nodouble (the double rule skipped: the forced fleet) afterswap (the read after next season's
  *              memberships: a promoted manager) etall (extra time on a straight to penalties row) seasononeplay
  *              (season one's stub for my club taken out) carryseen (the move's carry off by one: a club joined
- *              after its night shown becomes a 'joined' stub, the shown night taken back)
+ *              after its night shown becomes a 'joined' stub, the shown night taken back) evalundated (Fix-1514:
+ *              evalOneOff reads the undated row, so Germany's and France's 2026 editions leave their real grounds)
+ *              nocarryusc (Fix-1514: the UEFA Super Cup's mid season carry dropped, so a season two move loses it)
  *   section 2: tick (a skipped night ticks a week) adjacent (every night of a forced four club cup in the first
  *              gap: two midweeks in a row, a later date moves) countdown (a played night counts a window week)
  *              calweeks (the calendar's myMatchWeeks counts a night: its deadline is not the engine's)
@@ -107,6 +127,8 @@ const CONTROLS = {
   thinused: [0, /^eng-2015 is not verified and carries/, /^eng-2015/],
   receipt: [0, /does not carry the hash/],
   notinworld: [0, /^eng-2026-s1: .* is not a club of england/, /^eng-2026-s1/],
+  twopub: [0, /^ger-2026 decider stands on 1 host/, /^ger-2026 decider/],
+  pairing: [0, /^ita-2026-e2026: the game draws /, /^ita-2026-e2026|^cup-seriea-2025-26/],
 };
 const runs = n => (CONTROL ? CONTROLS[CONTROL][0] === n : ONLY.length === 0 || ONLY.includes(n));
 
@@ -140,13 +162,15 @@ async function bundle(name, entries, plugins = []) {
 /* ── Section 0: the ledger ── */
 const isWiki = url => /wikipedia|wikimedia|fandom|wiki\.|grokipedia|wikiwand/i.test(new URL(url).host);
 const publisherOf = url => { const h = new URL(url).host; return h.split('.').slice(/\.co\.(uk|za)$/.test(h) ? -3 : -2).join('.'); };
-const FACTS = { format: ['name', 'shape', 'decider', 'entry', 'double', 'place', 'venue'], edition: ['clubs', 'ground'] };
+const FACTS = { format: ['name', 'shape', 'decider', 'entry', 'double', 'place', 'venue'], edition: ['clubs', 'ground'], dated: ['clubs', 'date', 'venue', 'ground'], cupRunnerUp: ['club'] };
 
 function section0() {
   /* The controls of this section change the data in memory, the way a wrong edit of the file would. */
   if (CONTROL === 'onesource') { const f = row('eng-2026').facts.decider; fired += f.by.length > 1 ? 1 : 0; f.by = f.by.slice(0, 1); }
   if (CONTROL === 'wiki') { const s = ledger.sources['SM-0814']; fired += isWiki(s.url) ? 0 : 1; s.url = 'https://en.wikipedia.org/wiki/2026_FA_Community_Shield'; }
   if (CONTROL === 'thinused') { const r = row('eng-2015'); fired += r.status !== 'verified' && r.usedBy.length === 0 ? 1 : 0; r.usedBy = ['CM_ONE_OFF_ROWS.eng-2015']; }
+  /* Round 1514: one of the new rows' facts kept on one publisher (Germany's decider: the DFL's rule alone). */
+  if (CONTROL === 'twopub') { const f = row('ger-2026').facts.decider; fired += f.by.length > 1 && row('ger-2026').rule === 'twoPublishers' ? 1 : 0; f.by = f.by.slice(0, 1); }
 
   /* 0.1 Every source is a page somebody can open, of one family, with a date and a line. */
   for (const [id, s] of Object.entries(ledger.sources)) {
@@ -177,7 +201,10 @@ function section0() {
       const good = srcs.filter(x => x.s);
       const fams = new Set(good.map(x => x.s.family));
       const pubs = new Set(good.map(x => publisherOf(x.s.url)));
-      ok(fams.has('official') && fams.has('press') && pubs.size >= 2, `${r.id} ${name} stands on ${[...fams].join(' and ') || 'nothing'} (${pubs.size} hosts), not an official and a press page on two hosts`);
+      /* Round 1514: a row under the rule twoPublishers (the lead's binding standard for this round, the other
+         lane's SUPER-CUP-SOURCES.md) stands on two independent publishers on two hosts, of either family. */
+      if (r.rule === 'twoPublishers') ok(pubs.size >= 2, `${r.id} ${name} stands on ${pubs.size} host (${[...pubs].join(' ')}), not two publishers`);
+      else ok(fams.has('official') && fams.has('press') && pubs.size >= 2, `${r.id} ${name} stands on ${[...fams].join(' and ') || 'nothing'} (${pubs.size} hosts), not an official and a press page on two hosts`);
       const token = new RegExp(f.token ?? '^$', 'i');
       for (const x of good) ok(x.s.literal.some(l => token.test(l)), `${r.id} ${name}: ${x.k} has no line about it (${f.token})`);
     }
@@ -195,8 +222,8 @@ function section0() {
 
 /* ── Section 0, second half: the constants state what the ledger states ── */
 async function section0Engine() {
-  const M = await bundle('rows', { r: ROWS_FILE, cm: CM, ft: 'src/data/clubManagerFinalTables2025_26.ts', e: 'src/lib/euroAccess.ts' });
-  const { r: R, cm, ft, e } = M;
+  const M = await bundle('rows', { r: ROWS_FILE, cm: CM, ft: 'src/data/clubManagerFinalTables2025_26.ts', e: 'src/lib/euroAccess.ts', one: 'src/lib/worldOneOffs.ts' });
+  const { r: R, cm, ft, e, one } = M;
   const seasonOne = R.CM_ONE_OFF_SEASON_ONE.map(t => [...t]);
   if (CONTROL === 'notinworld') { fired += 1; seasonOne[0][2] = ['Arsenal', 'Torreense']; }
   /* 0.4 Every tuple is its verified ledger row, every verified row has its tuple, and the partial list is exactly
@@ -209,7 +236,7 @@ async function section0Engine() {
     const f = r.facts;
     ok(r.nation === nation && r.year === year, `${id}: the tuple is ${nation} ${year}, the ledger ${r.nation} ${r.year}`);
     ok(same([name, shape, decider, entry, dbl, place, venue], ['name', 'shape', 'decider', 'entry', 'double', 'place', 'venue'].map(k => f[k].value)), `${id}: the tuple ${JSON.stringify(t)} is not its ledger row`);
-    ok(id === `${({ spain: 'esp' })[nation] ?? nation.slice(0, 3)}-${year}`, `${id}: the id is not the nation and year`);
+    ok(id === `${({ spain: 'esp', uefa: 'uefa' })[nation] ?? nation.slice(0, 3)}-${year}`, `${id}: the id is not the nation and year`);
     ok((away === 1) === (f.awayGoals?.value === true) && same(pairing ?? null, f.pairing?.value ?? null), `${id}: away goals or the pairing are not the ledger's`);
     ok(r.usedBy.includes(`CM_ONE_OFF_ROWS.${id}`), `${id}: the ledger does not say the tuple uses it`);
     ok(shape !== 'four' || (Array.isArray(pairing) && same([...pairing].sort(), [0, 1, 2, 3])), `${id}: a four with no pairing of the four entrants`);
@@ -244,7 +271,48 @@ async function section0Engine() {
       ok(same([...clubs], [table[0], second]), `${ed.id}: the game's 2025-26 data names ${table[0]} and ${second}, the edition ${clubs.join(' and ')}`);
     } else ok(false, `${ed.id}: entry ${t[6]} has no season one cross check yet`);
   }
-  console.log(`  0 constants: ${R.CM_ONE_OFF_ROWS.length} rows (${R.CM_ONE_OFF_ROWS.map(t => t[0]).join(' ')}), ${seasonOne.length} season one editions, partial ${R.CM_ONE_OFF_PARTIAL.join(' ')}`);
+  /* 0.6 Round 1514. The dated editions: each tuple of CM_ONE_OFF_EDITIONS its verified 'dated' ledger row and back;
+     the rows played in their dated editions only are exactly the ledger's editionOnly rows; the cup runners up are
+     their 'cupRunnerUp' rows; every partial reason names a row that is partial or edition only. Then THE DATA
+     GUARDIAN'S CHECK: the clubs the ENGINE draws for a fresh career's first edition (entrantsFrom over
+     oneOffSeasonOneTables, the game's own 2025-26 tables, cup winners and runners up) are the clubs the edition's
+     publishers name, in the row's order, every one a club of that country in the game's world. */
+  const runnersUp = R.CM_ONE_OFF_CUP_RUNNERS_UP_2025_26;
+  if (CONTROL === 'pairing') { fired += runnersUp.seriea === 'Lazio' ? 1 : 0; runnersUp.seriea = 'Roma'; }
+  const dated = ledger.rows.filter(x => x.kind === 'dated');
+  for (const [rid, year, date, venue, ground] of R.CM_ONE_OFF_EDITIONS) {
+    const d = dated.find(x => x.row === rid && x.year === year);
+    if (!d || d.status !== 'verified') { ok(false, `${rid}: a dated edition ${year} with no verified ledger row`); continue; }
+    ok(same([date, venue, ground], [d.facts.date.value, d.facts.venue.value, d.facts.ground.value]), `${d.id}: the constant ${JSON.stringify([rid, year, date, venue, ground])} is not its ledger row`);
+    ok(d.usedBy.includes(`CM_ONE_OFF_EDITIONS.${rid}`), `${d.id}: the ledger does not say the constant uses it`);
+    ok(/^\d{4}-\d{2}-\d{2}$/.test(date) && Number(date.slice(0, 4)) >= year, `${d.id}: the date ${date} is not a day of its edition`);
+  }
+  for (const d of dated) ok(R.CM_ONE_OFF_EDITIONS.some(e => e[0] === d.row && e[1] === d.year), `${d.id}: verified and no constant holds it`);
+  ok(same([...R.CM_ONE_OFF_EDITION_ONLY].sort(), formats.filter(x => x.editionOnly).map(x => x.id).sort()), `CM_ONE_OFF_EDITION_ONLY is ${R.CM_ONE_OFF_EDITION_ONLY.join(' ')}, the ledger's edition only rows are ${formats.filter(x => x.editionOnly).map(x => x.id).join(' ')}`);
+  for (const id of R.CM_ONE_OFF_EDITION_ONLY) ok(R.CM_ONE_OFF_EDITIONS.some(e => e[0] === id), `${id}: played in its dated editions only, and none is dated`);
+  const cupRows = ledger.rows.filter(x => x.kind === 'cupRunnerUp');
+  ok(same(Object.keys(runnersUp).sort(), cupRows.map(x => x.league).sort()), `CM_ONE_OFF_CUP_RUNNERS_UP_2025_26 holds ${Object.keys(runnersUp).join(' ')}, the ledger ${cupRows.map(x => x.league).join(' ')}`);
+  for (const c of cupRows) {
+    ok(runnersUp[c.league] === c.facts.club.value, `${c.id}: the constant names ${runnersUp[c.league]}, the ledger ${c.facts.club.value}`);
+    ok(c.usedBy.includes(`CM_ONE_OFF_CUP_RUNNERS_UP_2025_26.${c.league}`), `${c.id}: the ledger does not say the constant uses it`);
+    ok((cm.REAL_LEAGUES.find(l => l.id === c.league)?.clubs ?? []).includes(c.facts.club.value), `${c.id}: ${c.facts.club.value} is not a club of ${c.league} in the game's world`);
+  }
+  for (const id of Object.keys(R.CM_ONE_OFF_PARTIAL_WHY)) ok(R.CM_ONE_OFF_PARTIAL.includes(id) || R.CM_ONE_OFF_EDITION_ONLY.includes(id), `${id}: a partial reason for a row that is neither partial nor edition only`);
+  noDash('CM_ONE_OFF_PARTIAL_WHY', Object.values(R.CM_ONE_OFF_PARTIAL_WHY).join(' '));
+  const draws = [];
+  for (const d of dated) {
+    const t = R.CM_ONE_OFF_ROWS.find(x => x[0] === d.row);
+    if (!t || R.CM_ONE_OFF_SEASON_ONE.some(e => e[0] === d.row) || d.year !== 2026) continue;
+    const r = one.oneOffRowById(d.row);
+    const got = one.entrantsFrom(r, cm.oneOffSeasonOneTables(t[1]) ?? { table: null, cupWinner: null, cupRunnerUp: null });
+    const clubs = 'clubs' in got ? got.clubs : [];
+    ok(same(clubs, d.facts.clubs.value), `${d.id}: the game draws ${clubs.join(' and ') || got.skip} for a fresh career's first ${t[3]}, its publishers name ${d.facts.clubs.value.join(' and ')}`);
+    const inWorld = new Set(cm.REAL_LEAGUES.filter(l => nationOf(l.id) === t[1]).flatMap(l => l.clubs));
+    for (const c of clubs) ok(inWorld.has(c), `${d.id}: ${c} is not a club of ${t[1]} in the game's world`);
+    draws.push(`${t[3]} ${clubs.join(' v ')}${got.doubled ? ' (a double)' : ''}`);
+  }
+  console.log(`  0 constants: ${R.CM_ONE_OFF_ROWS.length} rows (${R.CM_ONE_OFF_ROWS.map(t => t[0]).join(' ')}), ${seasonOne.length} season one editions, ${R.CM_ONE_OFF_EDITIONS.length} dated editions, partial ${R.CM_ONE_OFF_PARTIAL.join(' ')}, edition only ${R.CM_ONE_OFF_EDITION_ONLY.join(' ')}`);
+  console.log(`  0 the game's first editions against their publishers: ${draws.join('; ')}`);
 }
 
 
@@ -262,11 +330,19 @@ const OPENS = [
   { file: CM, from: "    openOneOff(state, oneOffFrom.nation === oneOffNationOf(state) ? { tables, seasonOne: false } : { tables: null, seasonOne: false, skip: 'moved' });\n", to: '    setOneOffSlice(state, null);\n' },
   { file: CAL, from: '  carryOneOffs(career, joined);\n', to: '' },
 ];
+/* Round 1514: the UEFA Super Cup's open at the rollover. Section 3's other arm takes it out with the three above
+   (so the round's whole engine is measured against the engine without any super cup); sections 2 and 4, which hold
+   the domestic cup's participant calendar and honours, run without it (USC_OFF), and section 1's forced fleet hands
+   it to my club (FORCE_USC: the Champions League winner read as my club, the Europa League's as it was). */
+const USC_OPEN = "    openOneOff(state, { tables: { table: null, cupWinner: null, cupRunnerUp: null, uclWinner: exit(watchHolder), uelWinner: exit(watchUelHolder) }, seasonOne: false }, 'usc');\n";
+OPENS.push({ file: CM, from: USC_OPEN, to: "    setOneOffSlice(state, null, 'usc');\n" });
+const USC_OFF = OPENS[OPENS.length - 1];
+const FORCE_USC = { file: CM, from: USC_OPEN, to: USC_OPEN.replace('uclWinner: exit(watchHolder)', 'uclWinner: career.clubName') };
 /* The forced double fleet: the season's cup is handed to its league champions at the read, so every season two
    is a double and the rule's other club plays (the dsc read only: nothing else of the season moves). */
 const FORCE_DOUBLE = { file: CM, from: '  const oneOffFrom = oneOffTablesOf(career);\n', to: '  const oneOffFrom = (t => ({ ...t, cupWinner: t.table?.[0] ?? t.cupWinner }))(oneOffTablesOf(career));\n' };
 const ENGINE_EDITS = {
-  wrongyear: [{ file: CM, from: '  return oneOffRowFor(oneOffNationOf(state), uclSeasonYear(state.eraId));', to: '  return oneOffRowFor(oneOffNationOf(state), worldYearOf(state as CareerState));' }],
+  wrongyear: [{ file: CM, from: '  return oneOffRowIn(state, oneOffRowFor(oneOffNationOf(state), uclSeasonYear(state.eraId)));', to: '  return oneOffRowIn(state, oneOffRowFor(oneOffNationOf(state), worldYearOf(state as CareerState)));' }],
   nodouble: [{ file: ONE, from: "    if (!c || out.includes(c)) { c = isCup && row.double === 'cupRunnerUp' ? t.cupRunnerUp : nextLeague(); doubled = true; }", to: '    if (!c) { c = nextLeague(); doubled = true; }' }],
   afterswap: [{ file: CM, from: '  const oneOffFrom = oneOffTablesOf(career);\n  registerLeagueOverrides(pr.overrides);', to: '  registerLeagueOverrides(pr.overrides);\n  const oneOffFrom = oneOffTablesOf(career);' }],
   etall: [{ file: ONE, from: "deciderScale: row.decider === 'et' ? bind.deciderScale : 1, etScale: bind.etScale, extraTime: row.decider === 'et' };", to: "deciderScale: row.decider === 'et' ? bind.deciderScale : 1, etScale: bind.etScale, extraTime: true };" }],
@@ -276,7 +352,7 @@ const ENGINE_EDITS = {
   carryseen: [{ file: CM, from: '    if (slice.clubs?.includes(joined.clubName) && seen < oneOffNightsOf(row).length) {', to: '    if (slice.clubs?.includes(joined.clubName) && seen <= oneOffNightsOf(row).length) {' }],
   stream: [{ file: ONE, from: '    const rand = keyedRng(keyOf(fx));\n    const t: SettleableTie', to: '    const rand = Math.random;\n    const t: SettleableTie' }],
   form: [{ file: CM, from: '  const out = evaluateOneOff(slice, row, k, oneOffBind(state));\n  memo.set(k, out);', to: '  const out = evaluateOneOff(slice, row, k, oneOffBind(state));\n  if (out) for (const f of out.fixtures) if (f.hg !== undefined) noteForm(state, f.home, f.away, f.hg, f.ag as number);\n  memo.set(k, out);' }],
-  keep: [{ file: CM, from: '  if (slice) next.dsc = slice;\n  else delete next.dsc;', to: '  if (slice) { if (next.dsc) (next as Record<string, unknown>).dscOld = next.dsc; next.dsc = slice; }\n  else delete next.dsc;' }],
+  keep: [{ file: CM, from: '  if (slice) next[k] = slice;\n  else delete next[k];', to: '  if (slice) { if (next[k]) (next as Record<string, unknown>)[`${k}Old`] = next[k]; next[k] = slice; }\n  else delete next[k];' }],
 };
 Object.assign(CONTROLS, {
   wrongyear: [1, /^1 row: /, /^1 /],
@@ -288,6 +364,29 @@ Object.assign(CONTROLS, {
   stream: [3, /^3 .*the draws differ/, /^3 /],
   form: [3, /^3 .*the state differs/, /^3 /],
   keep: [5, /^5 slices: /, /^5 /],
+  uscswap: [1, /^1 usc: .*holds .*last season's winners were/, /^1 /],
+  italyall: [1, /^1 row: .*ita-2026/, /^1 /],
+  nodated: [1, /^1 date: .*ita-2026/, /^1 /],
+  firstedition: [1, /^1 season one: /, /^1 /],
+});
+/* Round 1514's section 1 controls: the UEFA Super Cup's two clubs swapped, Italy's edition only rule dropped (a
+   2027-28 Supercoppa invented from one edition), a dated night placed by the new year rule, and a first edition with
+   no season one constant left unread (the stub every such row had before the round). */
+Object.assign(ENGINE_EDITS, {
+  uscswap: [{ file: ONE, from: '{ clubs: [t.uclWinner, t.uelWinner] }', to: '{ clubs: [t.uelWinner, t.uclWinner] }' }],
+  italyall: [{ file: ONE, from: '  return !CM_ONE_OFF_EDITION_ONLY.includes(id) || oneOffEdition(id, edition) !== null;', to: '  return true;' }],
+  nodated: [{ file: ONE, from: "  if (row.place === 'dated') return [row.on ? { place: 'dated', on: row.on } : { place: 'dated' }];", to: "  if (row.place === 'dated') return [{ place: 'newYear' }];" }],
+  firstedition: [{ file: CM, from: '(from.seasonOne ? oneOffSeasonOneTables(row.nation) : from.tables)', to: '(from.seasonOne ? null : from.tables)' }],
+  /* Fix-1514 (the run lens, majors 2 and 3): evalOneOff reading the undated row (Round 1510's reader left in one of
+     the call sites the round rewired: Germany's 2026 Supercup at Bayern Munich's ground, France's on a neutral one,
+     while the card prints Dortmund and Lens), and the UEFA Super Cup's mid season carry dropped (a move from season
+     two on loses it). Both are the reviewer's own mutations. */
+  evalundated: [{ file: CM, from: '  const row = oneOffSliceRow(state, slice);\n  if (!row) return null;\n  const k = nights ?? oneOffNightsDone(state, key);', to: '  const row = oneOffRowAt(slice.row, 0);\n  if (!row) return null;\n  const k = nights ?? oneOffNightsDone(state, key);' }],
+  nocarryusc: [{ file: CM, from: "  carryOneOff(career, joined, 'usc');\n", to: '' }],
+});
+Object.assign(CONTROLS, {
+  evalundated: [1, /^1 venue: /, /^1 /],
+  nocarryusc: [1, /^1 (never falls|usc carry): .*UEFA Super Cup/, /^1 /],
 });
 const editsFor = (extra = []) => [...(ENGINE_EDITS[CONTROL] ?? []), ...extra];
 const counts = {};
@@ -303,9 +402,14 @@ function fleetOf(M) {
   const list = [
     { club: 'Arsenal', era: 'now', why: 'season one champions' }, { club: 'Manchester City', era: 'now', why: 'season one cup winners' },
     { club: 'Chelsea', era: 'now', why: 'watcher', join: 'Manchester City' }, { club: 'Everton', era: 'now', why: 'watcher', join: champ.clubs[champ.clubs.length - 1] },
-    { club: 'Liverpool', era: 'now', why: 'watcher' }, { club: champ.clubs[0], era: 'now', why: 'second tier watcher' },
+    /* Fix-1514: Liverpool moves to Arsenal in season two after the UEFA Super Cup's night (the carry with `seen`),
+       Marseille at season two's first week into a club of the UEFA Super Cup before its night (a 'joined' stub). */
+    { club: 'Liverpool', era: 'now', why: 'watcher, to Arsenal in season two', join2: 'Arsenal' }, { club: champ.clubs[0], era: 'now', why: 'second tier watcher' },
     { club: created.name, era: 'now', custom: created, why: 'created club in the Championship' },
-    { club: 'Real Madrid', era: 'now', why: 'no row (Spain)', move: 'Chelsea' }, { club: 'Bayern Munich', era: 'now', why: 'no row (Germany)' },
+    { club: 'Real Madrid', era: 'now', why: 'no row (Spain)', move: 'Chelsea' }, { club: 'Bayern Munich', era: 'now', why: 'season one entrants (Germany, a double)' },
+    /* Round 1514: a French watcher (season one at Lens's ground, the dated edition) and an Italian one (the 2026-27
+       edition only, extra time, a December night; no row from season two). */
+    { club: 'Marseille', era: 'now', why: 'watcher (France), into a UEFA Super Cup club at season two', enter2: true }, { club: 'Juventus', era: 'now', why: 'watcher (Italy, its edition only)' },
     { club: mx.clubs[0], era: 'now', why: 'no row (Mexico, no cup)' }, { club: 'Arsenal', era: 'era2005', why: 'era row partial' },
   ];
   return list.filter(f => !FLEET_ONLY || f.club.includes(FLEET_ONLY));
@@ -314,7 +418,7 @@ function fleetOf(M) {
 /** One journey: startCareer, every playNextEntry, finishSeason, startNextSeason, through `seasons`, with a reload in
  *  every season, a mid season move where the fleet row asks (season one, entry 25) and a summer move where it asks
  *  (the first rollover). Every step on its own stretch of the counter stream; `onStep` sees every state. */
-async function journey(E, f, seed, mode, { evalEach = false, record = null, mark = null, onStep, onRollover } = {}) {
+async function journey(E, f, seed, mode, { evalEach = false, record = null, mark = null, onStep, onRollover, moves2 = false } = {}) {
   const M = await E.fresh();
   const opts = mode === 'coach' ? { skipHalftime: true } : { skipHalftime: true, noCoach: true };
   const steps = [];
@@ -334,8 +438,20 @@ async function journey(E, f, seed, mode, { evalEach = false, record = null, mark
   };
   step('start', () => ({ state: f.custom ? M.cm.startCareer(f.club, f.era, f.custom) : M.cm.startCareer(f.club, f.era) }));
   const reload = cur => { M.store.clear(); if (!M.cm.saveCareer(cur)) return {}; return { state: M.cm.loadCareer() }; };
+  /* Fix-1514 (the run lens, major 3): a season two move, only where the caller asks (`moves2`: the fleet sections,
+     never section 3, whose two arms must take the same steps). `pick` names the club, or null for no move. */
+  const joinStep = (label, pick) => step(label, cur => {
+    const club = pick(cur);
+    const lg = club && club !== cur.clubName ? M.cm.REAL_LEAGUES.find(l => l.clubs.includes(club)) : null;
+    if (!lg) return {};
+    const open = { club, league: lg.id, tier: 3, season: cur.season, week: cur.week, matchesLeft: 0, roll: 0, status: 'accepted' };
+    const joined = M.cal.joinClubNow({ ...cur, jobHunt: { open, cooldowns: [], sentSeason: cur.season, sent: 1, summerMove: null } });
+    return joined ? { state: joined, joined: cur } : {};
+  });
   for (let season = 1; season <= SEASONS; season += 1) {
     let over = false;
+    /* Season two's first week, before the UEFA Super Cup's night: into one of its clubs that is not mine. */
+    if (season === 2 && moves2 && f.enter2) joinStep('s2-enter', cur => { const u = cur.worldComps?.usc; return u && !u.skip ? u.clubs.find(c => c !== cur.clubName) ?? null : null; });
     for (let i = 0; i < 260 && !over; i += 1) {
       step(`s${season}-e${i + 1}`, cur => { const r = M.cm.playNextEntry(cur, opts); over = r.kind === 'seasonOver'; return { state: r.state }; });
       if (i === 20) step(`s${season}-reload`, reload);
@@ -347,6 +463,8 @@ async function journey(E, f, seed, mode, { evalEach = false, record = null, mark
           return joined ? { state: joined, joined: cur } : {};
         });
       }
+      /* Season two, entry 26: after the UEFA Super Cup's night (the first free midweek after the opener). */
+      if (season === 2 && moves2 && i === 25 && f.join2) joinStep('s2-join', () => f.join2);
     }
     if (!over) throw new Error(`season ${season} did not end in 260 entries`);
     step(`s${season}-finish`, cur => ({ state: M.cm.finishSeason(cur).state }));
@@ -369,8 +487,19 @@ function expectedRow(M, R, s) {
   const year = s.eraId && M.eras.isHistoricEra(s.eraId) ? s.startYear : 2026;
   const id = rowIdOf(nation, year);
   const t = R.CM_ONE_OFF_ROWS.find(x => x[0] === id) ?? null;
-  return { id, nation, row: t ? { id, name: t[3], shape: t[4], decider: t[5] } : null };
+  /* Round 1514: a row played in its dated editions only has no cup in any other season (Italy after 2026-27). */
+  const edition = (typeof s.startYear === 'number' ? s.startYear : 2026) + s.season - 1;
+  const off = !!t && R.CM_ONE_OFF_EDITION_ONLY.includes(id) && !R.CM_ONE_OFF_EDITIONS.some(e => e[0] === id && e[1] === edition);
+  return { id, nation, row: t && !off ? { id, name: t[3], shape: t[4], decider: t[5] } : null };
 }
+/** Round 1514: the UEFA Super Cup a save should hold: today's world only (an era save has no row). */
+const uscRowOf = (M, s) => (s.eraId && M.eras.isHistoricEra(s.eraId) ? null : 'uefa-2026');
+/** Round 1514: the first edition's clubs of a row with no season one constant, as its publishers name them (section
+ *  0 holds the engine's draw to the same ledger row). */
+const firstEditionClubs = (R, rid) => {
+  const ed = R.CM_ONE_OFF_SEASON_ONE.find(e => e[0] === rid);
+  return ed ? [...ed[2]] : ledger.rows.find(x => x.kind === 'dated' && x.row === rid && x.year === 2026)?.facts.clubs.value ?? null;
+};
 /** The oracle of the next season's entrants, read off the finished season before the rollover: the top flight's
  *  final order and the cup final, by the row's rule (the champions, the cup winners, the runners up on a double). */
 function oracleOf(M, prev, forced) {
@@ -387,25 +516,97 @@ function oracleOf(M, prev, forced) {
   return { nation, finished, champ, cupWinner, doubled, clubs: champ && cupWinner ? [champ, doubled ? table[1] : cupWinner] : null, promoted: lg.id !== top?.id, leagueId: lg.id };
 }
 
+/** Fix-1514 (the run lens, major 2): a dated edition's venue in the ENGINE. The fixture evalOneOff plays for a live
+ *  slice whose edition the ledger dates (CM_ONE_OFF_EDITIONS) is at that edition's venue: the cup winners' ground
+ *  ('w': Dortmund's and Lens's in 2026), the champions' ('c': Inter's) or a neutral one, never the row's every season
+ *  rule. False when the slice's edition is not dated. */
+function editionVenueCheck(M, R, s, where) {
+  const dsc = s.worldComps?.dsc;
+  if (!dsc || dsc.skip || !dsc.clubs) return false;
+  const year = (typeof s.startYear === 'number' ? s.startYear : 2026) + Math.max(0, dsc.s - 1);
+  const ed = R.CM_ONE_OFF_EDITIONS.find(e => e[0] === dsc.row && e[1] === year);
+  if (!ed) return false;
+  const v = ed[3];
+  const home = v === 'n' ? null : v === 'w' ? dsc.clubs[1] : dsc.clubs[0];
+  const fx = M.cm.evalOneOff(s, Infinity)?.fixtures?.[0];
+  ok(!!fx && fx.neutral === (v === 'n') && (v === 'n' || fx.home === home), `1 venue: ${where}: ${dsc.row}'s ${year} edition is played ${!fx ? 'nowhere' : fx.neutral ? 'on a neutral ground' : `at ${fx.home}'s ground`}, its ledger edition ${v === 'n' ? 'on a neutral ground' : `at ${home}'s`} (${ed[4]})`);
+  return true;
+}
+
 /** Sections 1, 5 and 7: every fleet save, both coach modes, every seed; with `forced` the double fleet. */
 async function fleetPass(forced) {
   const label = forced ? 'forced' : 'fleet';
-  const E = await engineOf(ROOT, label, { edits: editsFor(forced ? [FORCE_DOUBLE] : []) }, cannot);
+  const E = await engineOf(ROOT, label, { edits: editsFor(forced ? [FORCE_DOUBLE, FORCE_USC] : []) }, cannot);
   const R = (await bundle('rows1', { r: ROWS_FILE })).r;
   const probe = await E.fresh();
   const fleet = fleetOf(probe);
   console.log(`  1 ${label}: ${fleet.map(f => `${f.club} (${f.era}, ${f.why})`).join('; ')}`);
+  /* Fix-1514 (major 2): every dated 2026 edition with no season one constant, read off a fresh career at a club of
+     its country's top flight that is not in it (a watcher), so Germany's is held too (the fleet's German club is an
+     entrant, a stub). The fleet's French and Italian watchers are held to the same below, every seed. */
+  if (!forced) {
+    const probed = [];
+    for (const [rid, year] of R.CM_ONE_OFF_EDITIONS) {
+      if (year !== 2026 || R.CM_ONE_OFF_SEASON_ONE.some(e => e[0] === rid)) continue;
+      const t = R.CM_ONE_OFF_ROWS.find(x => x[0] === rid);
+      const top = probe.cm.REAL_LEAGUES.find(l => { const r = probe.cm.leagueRulesOf(l.id); return r.nationId === t?.[1] && r.ladder === 'top'; });
+      const ed = firstEditionClubs(R, rid) ?? [];
+      const club = top?.clubs.find(c => !ed.includes(c));
+      if (!club) { ok(false, `1 venue: ${rid}: no club of its country's top flight to watch it from`); continue; }
+      const M = await E.fresh();
+      const s = tape(1, () => M.cm.startCareer(club)).value;
+      ok(editionVenueCheck(M, R, s, `${club} (now) at its start`), `1 venue: ${rid}: a new career at ${club} holds ${s?.worldComps?.dsc?.skip ?? s?.worldComps?.dsc?.row ?? 'no super cup'}, not a dated edition to read`);
+      probed.push(`${rid} from ${club}`);
+    }
+    console.log(`  1 venue probe: ${probed.join('; ') || 'none'}`);
+  }
   for (const f of fleet) {
     for (const seed of SEEDS) {
       for (const mode of COACH === 'both' ? ['coach', 'nocoach'] : [COACH]) {
         const tag = `${f.club} (${f.era}) seed ${seed} ${mode}${forced ? ' forced' : ''}`;
         let joined = false;
         let last = { season: 0, n: 0 };
+        /* Fix-1514 (major 3): the UEFA Super Cup's nights shown, its own never falls; the dsc row a move carried
+           (another country's, after a move abroad); the club I managed when I played each cup's night (a cup I
+           played and won stays mine after a move, and one carried onto my new club is not). */
+        let lastU = { season: 0, n: 0 };
+        let carriedRow = null;
+        const playedAs = {};
         await journey(E, f, seed, mode, {
+          moves2: true,
           onStep: (M, s, stepLabel, got) => {
             if (!s) return;
-            if (/-rollover$/.test(stepLabel)) joined = false;
+            if (/-rollover$/.test(stepLabel)) { joined = false; carriedRow = null; }
             if (got.joined) joined = true;
+            if (got.joined) carriedRow = got.joined.worldComps?.dsc?.s === s.season ? got.joined.worldComps.dsc.row : null;
+            for (const key of ['dsc', 'usc']) {
+              const sl = s.worldComps?.[key];
+              if (sl && !sl.skip && sl.s === s.season && Object.keys(sl.mine ?? {}).length && !playedAs[`${key}|${s.season}`]) playedAs[`${key}|${s.season}`] = s.clubName;
+            }
+            const uNow = M.cm.oneOffNightsDone(s, 'usc');
+            if (s.season === lastU.season) ok(uNow >= lastU.n, `1 never falls: ${tag} at ${stepLabel}: ${uNow} UEFA Super Cup nights shown after ${lastU.n}`);
+            lastU = { season: s.season, n: uNow };
+            if (got.joined) {
+              /* The UEFA Super Cup's carry: a cup finished before the move is finished after it with the same winner;
+                 a stub stays that stub; a move into one of its clubs before its night is the 'joined' stub (the
+                 game never plays my club without me); any other move keeps the slice whole (its clubs, seed and my
+                 results), its nights shown kept by the never falls check above. */
+              const wasR = M.cm.evalOneOff(got.joined, undefined, 'usc'), nowR = M.cm.evalOneOff(s, undefined, 'usc');
+              if (wasR?.done) ok(!!nowR?.done && nowR.winner === wasR.winner, `1 never falls: ${tag} at ${stepLabel}: the UEFA Super Cup finished before the move (won by ${wasR.winner}) shows ${nowR ? `${nowR.nightsDone} of ${nowR.nights} nights` : 'nothing'} after it`);
+              const was = got.joined.worldComps?.usc, now = s.worldComps?.usc;
+              if (was && was.s === s.season) {
+                const shown = Math.max(was.seen ?? 0, M.cm.oneOffNightsDone(got.joined, 'usc'));
+                const say = now ? (now.skip ?? `the slice of ${now.clubs?.join(' and ')}`) : 'nothing';
+                if (was.skip) ok(now?.skip === was.skip, `1 usc carry: ${tag} at ${stepLabel}: the UEFA Super Cup stub ${was.skip} is ${say} after the move`);
+                else if (was.clubs.includes(s.clubName) && shown < 1) {
+                  ok(now?.skip === 'joined', `1 usc carry: ${tag} at ${stepLabel}: joined ${s.clubName}, a club of the UEFA Super Cup before its night, and it holds ${say}, not the joined stub`);
+                  bump('1 moves into a UEFA Super Cup club before its night (a joined stub)');
+                } else {
+                  ok(!!now && !now.skip && same(now.clubs, was.clubs) && now.seed === was.seed && same(now.mine ?? {}, was.mine ?? {}), `1 usc carry: ${tag} at ${stepLabel}: the UEFA Super Cup of ${was.clubs.join(' and ')} is ${say} after the move`);
+                  bump(shown > 0 ? '1 moves carrying a UEFA Super Cup already shown (the nocarryusc control reads these)' : '1 moves carrying a UEFA Super Cup still ahead');
+                }
+              }
+            }
             /* 1: never falls (the critic's correction 7): the nights a save has passed never go down within a season,
                a mid season move included, and a cup finished before the move is finished after it, with the same
                winner (the carry keeps `seen`, and a club joined after its night is no 'joined' stub). */
@@ -419,13 +620,34 @@ async function fleetPass(forced) {
             last = { season: s.season, n: doneNow };
             const want = expectedRow(M, R, s);
             const dsc = s.worldComps?.dsc;
-            /* 1: the right row, every step. */
-            if (want.row) ok(!!dsc && dsc.row === want.id && dsc.s === s.season, `1 row: ${tag} at ${stepLabel}: ${dsc ? `holds ${dsc.row} of season ${dsc.s}` : 'holds no super cup'}, its country plays ${want.id}`);
+            /* 1: the right row, every step. Fix-1514: after a mid season move abroad the season's slice is the one the
+               move carried (its nights shown are never taken back) until the rollover. */
+            if (joined && !!dsc && dsc.row === carriedRow && dsc.row !== want.id) bump('1 steps holding a super cup carried from another country by a mid season move');
+            else if (want.row) ok(!!dsc && dsc.row === want.id && dsc.s === s.season, `1 row: ${tag} at ${stepLabel}: ${dsc ? `holds ${dsc.row} of season ${dsc.s}` : 'holds no super cup'}, its country plays ${want.id}`);
             else ok(!dsc, `1 row: ${tag} at ${stepLabel}: holds ${dsc?.row} but ${want.id} is no row of the game`);
             /* 5: one slice at most, of the season in play, and nothing else beside the keys the save knows. */
             const keys = Object.keys(s.worldComps ?? {});
-            ok(keys.every(k => k === 'ucl' || k === 'uel' || k === 'dsc'), `5 slices: ${tag} at ${stepLabel}: worldComps holds ${keys.join(' ')}`);
-            ok((s.trophies ?? []).filter(t => t.minor).every(t => t.name === (want.row?.name ?? "") && t.season <= s.season), `5 trophies: ${tag} at ${stepLabel}: a minor trophy that is not its country's super cup`);
+            ok(keys.every(k => k === 'ucl' || k === 'uel' || k === 'dsc' || k === 'usc'), `5 slices: ${tag} at ${stepLabel}: worldComps holds ${keys.join(' ')}`);
+            ok((s.trophies ?? []).filter(t => t.minor).every(t => (t.name === (want.row?.name ?? "") || t.name === 'UEFA Super Cup') && t.season <= s.season), `5 trophies: ${tag} at ${stepLabel}: a minor trophy that is not its country's super cup or the UEFA Super Cup`);
+            /* Round 1514: the UEFA Super Cup, never in season one (the 2025-26 Europa League winner is not in the
+               game), never in an era save, and always this season's when held. */
+            const usc = s.worldComps?.usc;
+            if (usc) ok(s.season > 1 && uscRowOf(M, s) === usc.row && usc.s === s.season, `1 usc: ${tag} at ${stepLabel}: holds ${usc.row} of season ${usc.s} in season ${s.season}${s.eraId ? ` (${s.eraId})` : ''}`);
+            /* Fix-1514 (read lens minor 6): the season one guard's twin. After a move, a UEFA Super Cup slice with its
+               night still ahead never holds my club (the game would play it without me): that is the joined stub. */
+            if (usc && !usc.skip && joined && usc.clubs?.includes(s.clubName) && uNow < 1) ok(false, `1 season one: ${tag} at ${stepLabel}: a carried UEFA Super Cup slice holds my club ${s.clubName} with its night ahead, so the game would play it without me`);
+            if (usc && /-finish$/.test(stepLabel) && !usc.skip) {
+              const res = M.cm.evalOneOff(s, undefined, 'usc');
+              ok(!!res?.done && !!res.winner && usc.clubs.includes(res.winner), `1 usc: ${tag} at ${stepLabel}: the season is over and the UEFA Super Cup is not (${res?.nightsDone} of ${res?.nights})`);
+              for (const fx of res?.fixtures ?? []) ok(!fx.aet && (!fx.pens || fx.hg === fx.ag), `1 usc: ${tag}: extra time, or penalties after ${fx.hg}-${fx.ag}`);
+              /* Won by the club I managed when I played it (a move after the night keeps it mine; one carried onto my
+                 new club after its night is not). */
+              const wonUsc = !!res?.winner && res.winner === playedAs[`usc|${s.season}`];
+              ok((s.trophies ?? []).filter(t => t.minor && t.season === s.season && t.name === 'UEFA Super Cup').length === (wonUsc ? 1 : 0), `1 usc: ${tag} at ${stepLabel}: the cabinet's UEFA Super Cups of this season are not ${wonUsc ? 1 : 0}`);
+              if (usc.clubs.includes(s.clubName) && !joined) { bump('1 usc played by my club'); ok(Object.keys(usc.mine ?? {}).length === 1, `1 usc: ${tag} at ${stepLabel}: my club's UEFA Super Cup was not played by me`); }
+              else bump('1 usc followed');
+              if (wonUsc) bump('1 usc won by my club');
+            }
             if (!dsc) return;
             ONE_OFF_IDS.add(dsc.row);
             /* 1: season one, and after a move, never a slice that simulates my club. */
@@ -434,30 +656,45 @@ async function fleetPass(forced) {
             const ahead = M.cm.oneOffNightsDone(s) < (dsc.clubs?.length === 4 ? 2 : 1);
             if (dsc.clubs?.includes(s.clubName) && ((s.season === 1 && !joined) || (joined && ahead))) ok(false, `1 season one: ${tag} at ${stepLabel}: a ${joined ? 'carried' : 'season one'} slice holds my club ${s.clubName}, so the game would play it without me`);
             if (s.season === 1 && !joined && !dsc.skip) {
-              const ed = R.CM_ONE_OFF_SEASON_ONE.find(e => e[0] === dsc.row);
-              ok(!!ed && same(dsc.clubs, [...ed[2]]), `1 season one: ${tag}: the clubs ${dsc.clubs?.join(' and ')} are not the edition's`);
+              const ed = firstEditionClubs(R, dsc.row);
+              ok(!!ed && same(dsc.clubs, ed), `1 season one: ${tag}: the clubs ${dsc.clubs?.join(' and ')} are not the edition's`);
+              /* Round 1514: a dated edition's night, on the game's own calendar, in its real month. */
+              const dated = R.CM_ONE_OFF_EDITIONS.find(e => e[0] === dsc.row && e[1] === 2026);
+              if (dated && stepLabel === 'start') {
+                const p = M.cm.oneOffNightPlaces(s)?.[0];
+                const dates = M.cal.entryDatesOf(s);
+                const d = p ? (p.entry ? dates[p.at] : p.at === 0 ? M.cal.addDays(dates[0], -3) : M.cal.addDays(dates[p.at - 1], 4)) : null;
+                ok(!!d && d.m === Number(dated[2].slice(5, 7)), `1 date: ${tag}: ${dsc.row}'s night is ${d ? iso(d) : 'nowhere'}, its edition was ${dated[2]}`);
+                if (d && f.club && seed === SEEDS[0] && mode !== 'coach') console.log(`  7 ${dsc.row} season one night for ${f.club}: ${iso(d)} (the edition's date ${dated[2]})`);
+              }
             }
             if (s.season === 1 && !joined && dsc.skip) ok(dsc.skip === 'seasonOne', `1 season one: ${tag}: a stub ${dsc.skip}`);
             if (stepLabel === 'start') bump(`7 season one ${dsc.skip ? `stub ${dsc.skip}` : 'followed'}`);
+            /* Fix-1514 (major 2): a dated edition's venue, read off the engine's own fixture. */
+            if ((stepLabel === 'start' || /-finish$/.test(stepLabel)) && editionVenueCheck(M, R, s, `${tag} at ${stepLabel}`)) bump('1 dated editions whose venue was read off the engine');
             if (/-finish$/.test(stepLabel) && !dsc.skip) {
+              /* Fix-1514: the slice's own row (after a move abroad it is the carried one, not this country's). */
+              const dt = R.CM_ONE_OFF_ROWS.find(x => x[0] === dsc.row);
+              const dr = dt ? { name: dt[3], shape: dt[4], decider: dt[5] } : want.row;
               const res = M.cm.evalOneOff(s);
               const all = M.cm.evalOneOff(s, Infinity);
               ok(!!res && res.done && same(res, all), `1 winner: ${tag} at ${stepLabel}: the season is over and the cup is not (${res?.nightsDone} of ${res?.nights} nights)`);
               ok(!!res?.winner && dsc.clubs.includes(res.winner) && res.runnerUp !== res.winner && dsc.clubs.includes(res.runnerUp), `1 winner: ${tag}: no single winner among the clubs`);
               for (const fx of res?.fixtures ?? []) {
-                ok(want.row.decider === 'et' || !fx.aet, `1 extra time: ${tag}: extra time on a straight to penalties cup`);
+                ok(dr.decider === 'et' || !fx.aet, `1 extra time: ${tag}: extra time on a straight to penalties cup`);
                 ok(!fx.pens || fx.hg === fx.ag, `1 penalties: ${tag}: a shootout after ${fx.hg}-${fx.ag}`);
-                if (want.row.decider === 'pens' && fx.hg === fx.ag) bump('1 level matches on a pens row (the etall control needs one)');
+                if (dr.decider === 'pens' && fx.hg === fx.ag) bump('1 level matches on a pens row (the etall control needs one)');
                 if (fx.pens) bump('7 settled on penalties'); else bump('7 settled in 90 minutes');
                 const sh = dsc.str[dsc.clubs.indexOf(fx.home)], sa = dsc.str[dsc.clubs.indexOf(fx.away)];
                 if (sh !== sa) bump(fx.winner === (sh > sa ? fx.home : fx.away) ? '7 won by the stronger side' : '7 won by the weaker side');
               }
-              /* Won by my club and played by my club: a cup carried onto my new club after a move is not mine. */
-              const mineWon = res?.winner === s.clubName && Object.keys(dsc.mine ?? {}).length > 0;
-              ok((s.trophies ?? []).filter(t => t.minor && t.season === s.season).length === (mineWon ? 1 : 0), `5 trophies: ${tag} at ${stepLabel}: ${mineWon ? "my club won the cup and" : "my club did not win it and"} the cabinet holds ${(s.trophies ?? []).filter(t => t.minor && t.season === s.season).length} of this season`);
+              /* Won by the club I managed when I played it: a cup carried onto my new club after a move is not mine,
+                 and one I played and won stays mine after a move (Fix-1514's season two moves). */
+              const mineWon = !!res?.winner && res.winner === playedAs[`dsc|${s.season}`];
+              ok((s.trophies ?? []).filter(t => t.minor && t.season === s.season && t.name === dr.name).length === (mineWon ? 1 : 0), `5 trophies: ${tag} at ${stepLabel}: ${mineWon ? "my club won the cup and" : "my club did not win it and"} the cabinet holds ${(s.trophies ?? []).filter(t => t.minor && t.season === s.season).length} of this season`);
               if (mineWon) bump("4 super cups my club won (section 1 fleet)");
-              bump(`5 bytes of a followed ${want.row.shape} slice`, JSON.stringify(dsc).length);
-              bump(`5 followed ${want.row.shape} slices measured`);
+              bump(`5 bytes of a followed ${dr.shape} slice`, JSON.stringify(dsc).length);
+              bump(`5 followed ${dr.shape} slices measured`);
               if (s.season === 1 && f.club === 'Chelsea' && seed === SEEDS[0] && mode === 'nocoach') {
                 const places = M.cm.oneOffNightPlaces(s);
                 const dates = M.cal.entryDatesOf(s);
@@ -468,11 +705,31 @@ async function fleetPass(forced) {
             if (dsc.skip) bump(`5 bytes of a stub`, JSON.stringify(dsc).length), bump('5 stubs measured');
           },
           onRollover: {
-            before: (M, prev) => oracleOf(M, prev, forced),
+            before: (M, prev) => ({ ...oracleOf(M, prev, forced), ucl: forced ? prev.clubName : M.cm.uclHolderOf(prev), uel: M.cm.uelHolderOf(prev), from: prev.clubName }),
             after: (M, want, s, season) => {
               const dsc = s.worldComps?.dsc;
               const row = expectedRow(M, R, s);
               const t = `${tag} season ${season + 1}`;
+              /* Round 1514: the UEFA Super Cup, from the finished season's two European winners read before the swap
+                 (forced: the Champions League's read as my club). Never invented: a winner unknown is 'noWinner'. */
+              const usc = s.worldComps?.usc;
+              if (!uscRowOf(M, s)) ok(!usc, `1 usc: ${t}: an era save holds ${usc?.row}`);
+              else if (!want.ucl || !want.uel) { ok(usc?.skip === 'noWinner', `1 usc: ${t}: a winner unknown (${want.ucl} and ${want.uel}) and it holds ${usc?.skip ?? usc?.clubs?.join(' and ')}`); bump('1 usc noWinner stubs'); }
+              else if (want.ucl === want.uel) ok(usc?.skip === 'unfinished', `1 usc: ${t}: one club won both`);
+              else {
+                ok(!!usc && !usc.skip && same(usc.clubs, [want.ucl, want.uel]), `1 usc: ${t}${forced ? ' forced' : ''}: holds ${usc?.skip ?? usc?.clubs?.join(' and ')}, last season's winners were ${want.ucl} and ${want.uel}`);
+                const nights = (s.calendar ?? []).map((e, i) => (e.night?.k === 'usc' ? i : -1)).filter(i => i >= 0);
+                const mine = !!usc?.clubs?.includes(s.clubName);
+                ok(nights.length === (mine && !usc.skip ? 1 : 0), `1 usc: ${t}: ${nights.length} UEFA Super Cup nights on the calendar of a club ${mine ? 'in' : 'not in'} it`);
+                ok(!(s.calendar ?? []).some((e, i) => e.night && s.calendar[i + 1]?.night), `1 usc: ${t}: two nights in a row on the calendar`);
+                if (nights.length) {
+                  const d = M.cal.entryDatesOf(s)[nights[0]];
+                  const firstLeague = s.calendar.findIndex(e => e.type === 'league');
+                  ok(nights[0] > firstLeague && !!d && (d.m === 8 || d.m === 9), `1 usc: ${t}: the night is entry ${nights[0]} (${d ? iso(d) : 'no date'}), not the first free midweek after the opener in August or early September`);
+                  bump(`1 usc nights dated ${d ? `month ${d.m}` : 'nowhere'}`);
+                }
+                bump(mine ? '1 usc participants' : '1 usc watchers');
+              }
               if (want.promoted) bump('1 rollovers of a manager outside the top flight');
               if (M.cm.careerLeagueOf(s).id !== want.leagueId) bump('1 rollovers into another league (the afterswap control reads these)');
               if (!row.row) { ok(!dsc, `1 entrants: ${t}: a super cup where the game has no row`); return; }
@@ -494,9 +751,10 @@ async function fleetPass(forced) {
 
 /** A state's bytes with the super cup's own key taken out (and the map with it when it is left empty). */
 const withoutDsc = st => {
-  if (!st.worldComps || !('dsc' in st.worldComps)) return JSON.stringify(st);
+  if (!st.worldComps || (!('dsc' in st.worldComps) && !('usc' in st.worldComps))) return JSON.stringify(st);
   const w = { ...st.worldComps };
   delete w.dsc;
+  delete w.usc;
   const c = { ...st };
   if (Object.keys(w).length) c.worldComps = w; else delete c.worldComps;
   return JSON.stringify(c);
@@ -517,7 +775,7 @@ async function selfRelative() {
         /* A participant's season holds its nights: compared with them taken out of the calendar, and only until the
            week passes the first of them (from there it moves because it played, the match half's attribution). */
         const headRecord = st => ((st.calendar ?? []).some(e => e.night) ? withoutDsc({ ...st, calendar: st.calendar.filter(e => !e.night) }) : withoutDsc(st));
-        const pastNight = st => !!st.worldComps?.dsc?.clubs?.includes(st.clubName) && (st.calendar ?? []).some((e, i) => e.night && i < st.week);
+        const pastNight = st => (!!st.worldComps?.dsc?.clubs?.includes(st.clubName) || !!st.worldComps?.usc?.clubs?.includes(st.clubName)) && (st.calendar ?? []).some((e, i) => e.night && i < st.week);
         const a = await journey(head, f, seed, mode, { evalEach: true, record: headRecord, mark: pastNight, onStep: (M, s) => { if (s?.worldComps?.dsc) carried += 1; } });
         const b = await journey(off, f, seed, mode, { record: st => JSON.stringify(st) });
         journeys += 1;
@@ -551,7 +809,7 @@ async function dailies() {
     const run = tape(0x1510 + d, () => M.hs.startHotSeat({ club: setup.club, seed: setup.seed, daily: date })).value;
     ok(!('worldComps' in run.state) && !night(run.state), `6 daily: the Hot Seat of ${date} (${setup.club}) carries worldComps or a night`);
     const handed = tape(0x2510 + d, () => M.hs.handoverState(run)).value;
-    ok(!handed.worldComps?.dsc && !night(handed), `6 daily: the career handed over from the Hot Seat of ${date} carries a super cup or a night`);
+    ok(!handed.worldComps?.dsc && !handed.worldComps?.usc && !night(handed), `6 daily: the career handed over from the Hot Seat of ${date} carries a super cup or a night`);
     const dd = M.dd.startDeadlineDay(M.dd.dailyDeadlineDay(date));
     ok(!('worldComps' in dd.state) && !night(dd.state), `6 daily: the Deadline Day of ${date} carries worldComps or a night`);
     days += 2;
@@ -563,7 +821,7 @@ async function dailies() {
 /* ── Section 2: the calendar and the books of a participant ── */
 /* The participant fleet: the season's cup handed to my own club at the read, so every season two is played. */
 const FORCE_MINE = { file: CM, from: '  const oneOffFrom = oneOffTablesOf(career);\n', to: '  const oneOffFrom = (t => ({ ...t, cupWinner: career.clubName }))(oneOffTablesOf(career));\n' };
-const INSERT_OFF = { file: CM, from: '    if (mine) insertOneOffNights(state, slots as number[]);\n', to: '' };
+const INSERT_OFF = { file: CM, from: '    if (mine) insertOneOffNights(state, slots as number[], k);\n', to: '' };
 Object.assign(ENGINE_EDITS, {
   /* The guard taken out, on nights the participant does not play (its arm answering no), so each is skipped and
      the skip ticks: an 'open' one match night is always played in the match half, so only a skip reaches it. */
@@ -577,7 +835,7 @@ Object.assign(ENGINE_EDITS, {
     { file: CAL, from: "    if (entry.type === 'window' || entry.night) continue;", to: "    if (entry.type === 'window') continue;" },
   ],
   /* Section 3: a watcher given nights too. */
-  participant: [{ file: CM, from: '    if (mine) insertOneOffNights(state, slots as number[]);\n', to: '    insertOneOffNights(state, placeNights(state.calendar, entryDatesOf(state), oneOffNightsOf(row), oneOffRedate(state)) as number[]);\n' }],
+  participant: [{ file: CM, from: '    if (mine) insertOneOffNights(state, slots as number[], k);\n', to: '    insertOneOffNights(state, placeNights(state.calendar, entryDatesOf(state), oneOffNightsOf(row), oneOffRedate(state)) as number[], k);\n' }],
   /* A naive placing on a forced four club new year cup: every night of the cup in the first gap the search found,
      two midweeks in a row (the rule "never two midweeks in one gap" forgotten). The engine's own leagues give no
      season where the first gap of a search is not free, so the naive slot is made to differ this way. */
@@ -654,8 +912,8 @@ function nightChecks(M, prev, s, where) {
 }
 
 async function calendarSection() {
-  const head = await engineOf(ROOT, 'cal-head', { edits: editsFor([FORCE_MINE]) }, cannot);
-  const twin = await engineOf(ROOT, 'cal-twin', { edits: [...(CONTROL === 'adjacent' ? ENGINE_EDITS.adjacent.filter(e => e.file === ROWS_FILE) : []), FORCE_MINE, INSERT_OFF] }, cannot);
+  const head = await engineOf(ROOT, 'cal-head', { edits: editsFor([FORCE_MINE, USC_OFF]) }, cannot);
+  const twin = await engineOf(ROOT, 'cal-twin', { edits: [...(CONTROL === 'adjacent' ? ENGINE_EDITS.adjacent.filter(e => e.file === ROWS_FILE) : []), FORCE_MINE, INSERT_OFF, USC_OFF] }, cannot);
   const W = await bundle('nights', { n: 'src/lib/worldNights.ts', o: ONE });
   const probe = await head.fresh();
   const fleet = fleetOf(probe).filter(f => ['Chelsea', 'Everton', 'Arsenal', 'Birmingham City'].includes(f.club) && f.era === 'now').map(f => ({ ...f, join: undefined }));
@@ -787,8 +1045,8 @@ function readersOf(M, MT, st, seed) {
 }
 
 async function honours() {
-  const won = await engineOf(ROOT, 'won', { edits: editsFor([FORCE_MINE, WON_ARM]) }, cannot);
-  const lost = await engineOf(ROOT, 'lost', { edits: [FORCE_MINE, LOST_ARM] }, cannot);
+  const won = await engineOf(ROOT, 'won', { edits: editsFor([FORCE_MINE, WON_ARM, USC_OFF]) }, cannot);
+  const lost = await engineOf(ROOT, 'lost', { edits: [FORCE_MINE, LOST_ARM, USC_OFF] }, cannot);
   const MT = await bundle('meters', { mt: 'src/lib/clubManagerMeters.ts' });
   const probe = await won.fresh();
   const fleet = fleetOf(probe).filter(f => ['Chelsea', 'Everton'].includes(f.club) && f.era === 'now').map(f => ({ ...f, join: undefined }));
@@ -862,7 +1120,7 @@ try {
   process.exit(2);
 }
 /* A control must have its case in the fleet: a count it reads at least one, else it could pass empty (exit 3). */
-const NEEDS = { afterswap: '1 rollovers into another league (the afterswap control reads these)', etall: '1 level matches on a pens row (the etall control needs one)', nodouble: '1 doubles (the runners up took the cup place)', carryseen: '1 moves carrying a cup already shown (the carryseen control reads these)', leaguestarted: '2 states after a night and before the league opener (the leaguestarted control reads these)', norecovery: '2 nights whose squad was read (the norecovery control reads these)' };
+const NEEDS = { afterswap: '1 rollovers into another league (the afterswap control reads these)', etall: '1 level matches on a pens row (the etall control needs one)', nodouble: '1 doubles (the runners up took the cup place)', carryseen: '1 moves carrying a cup already shown (the carryseen control reads these)', leaguestarted: '2 states after a night and before the league opener (the leaguestarted control reads these)', norecovery: '2 nights whose squad was read (the norecovery control reads these)', nocarryusc: '1 moves carrying a UEFA Super Cup already shown (the nocarryusc control reads these)' };
 if (CONTROL && NEEDS[CONTROL] && !(counts[NEEDS[CONTROL]] > 0) && CONTROL !== 'nodouble') { console.log(`simOneOffCups: control ${CONTROL} DID NOT FIRE: its case is not in the fleet (${NEEDS[CONTROL]}: 0)`); process.exit(3); }
 const secs = Math.round((Date.now() - t0) / 1000);
 if (CONTROL) {

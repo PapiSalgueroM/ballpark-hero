@@ -26,11 +26,13 @@ import type { CareerState, TableRow, UclTie } from '@/lib/clubManager';
 import {
   ERA_UCL_FIELDS, evalWorldComp, sortedUclGroup, uclLegsFor, worldCompNights, worldCompNightsDone,
   /* Round 1510: the domestic super cup. */
-  evalOneOff, leagueRulesOf, oneOffNightPlaces, oneOffPartialOf, oneOffRowOf, worldLeagueDefs,
+  careerLeagueOf, evalOneOff, leagueRulesOf, oneOffNightPlaces, oneOffPartialOf, oneOffRowOf, worldLeagueDefs,
+  /* Round 1514: the UEFA Super Cup, and a slice's row with its dated edition. */
+  oneOffSliceRow, uefaSuperCupRowOf, type OneOffKey,
 } from '@/lib/clubManager';
-import { oneOffFixturesOf, oneOffRowById, type OneOffRow, type OneOffSkip } from '@/lib/worldOneOffs';
+import { oneOffEdition, oneOffFixturesOf, oneOffPartialWhy, oneOffPlayedIn, type OneOffRow, type OneOffSkip } from '@/lib/worldOneOffs';
 import { nightDateAt } from '@/lib/worldNights';
-import { CM_ONE_OFF_SEASON_ONE } from '@/data/cmOneOffRows';
+import { CM_ONE_OFF_MARKS, CM_ONE_OFF_SEASON_ONE } from '@/data/cmOneOffRows';
 import { entryDatesOf, worldCompNightDates, worldYearOf, type CalDate } from '@/lib/clubManagerCalendar';
 import { isHistoricEra } from '@/lib/clubManagerEras';
 import { CM_FINAL_TABLES_2025_26 } from '@/data/clubManagerFinalTables2025_26';
@@ -496,11 +498,19 @@ export interface SuperCupView {
   seasonOne: boolean;
   /** An era save keeps its era's row every season. */
   era: boolean;
+  /** Round 1514: what the row simplifies or leaves out (CM_ONE_OFF_MARKS), one line, or empty. */
+  mark: string;
+  /** Fix-1514: the game plays this row next season too. False on an edition only row's last dated edition
+   *  (Italy's 2026-27), so no line promises a cup next summer. */
+  later: boolean;
 }
 
 /* The critic's correction 8 words, its second sentence made true (fix-1510 minors 6 and 13): a place next summer is
    earned, never promised, as the help says. */
 const SETTLED_BEFORE = "Your club's place was settled before you arrived. Your first super cup is the next one your club earns, from next summer.";
+/* Fix-1514 (the run lens, major 1): an edition only row's last dated edition has no next summer to promise. */
+const ONLY_THIS_EDITION = "Only this season's edition is confirmed, so later seasons are not confirmed yet.";
+const SETTLED_LAST = `Your club's place was settled before you arrived. ${ONLY_THIS_EDITION}`;
 const STUB_WORDS: Record<OneOffSkip, (name: string) => string> = {
   seasonOne: () => SETTLED_BEFORE,
   joined: () => SETTLED_BEFORE,
@@ -510,6 +520,7 @@ const STUB_WORDS: Record<OneOffSkip, (name: string) => string> = {
   moved: name => `You arrived from another country this summer, so this season's ${name} is not in your game.`,
   notInWorld: () => "One of its clubs is not in this game's world, so it is not shown.",
   noNight: () => 'There is no free midweek for it on this season\'s calendar, so it is not played.',
+  noWinner: name => `This year's ${name} is not played here: the game does not hold one of last season's European winners for this save, and it never makes one up.`,
 };
 
 function formatWords(row: OneOffRow): string {
@@ -529,25 +540,41 @@ function namesOf(career: CareerState, row: OneOffRow): { league: string; cup: st
 /** This season's super cup for the Cups panel's card, read off the save. A country with no row says it is not
  *  confirmed (a stub line, no name). Pure and
  *  read only: the evaluation is memoised and shared, so it is copied here and never written into. */
-export function superCupView(career: CareerState): SuperCupView {
+export function superCupView(career: CareerState, key: OneOffKey = 'dsc'): SuperCupView {
   const era = !!career.eraId && isHistoricEra(career.eraId);
-  const slice = career.worldComps?.dsc && career.worldComps.dsc.s === career.season ? career.worldComps.dsc : null;
-  const row = slice ? oneOffRowById(slice.row) : oneOffRowOf(career);
-  const base = { clubs: [], matches: [], mine: false, seasonOne: career.season === 1, era };
+  const own = career.worldComps?.[key];
+  const slice = own && own.s === career.season ? own : null;
+  const row = slice ? oneOffSliceRow(career, slice) : key === 'usc' ? uefaSuperCupRowOf(career) : oneOffRowOf(career);
+  const base = { clubs: [], matches: [], mine: false, seasonOne: career.season === 1, era, mark: '', later: true };
   /* No row: the game has not proved this country's super cup (no 'none' row stands on two families either), so
-     it says it is not confirmed and plays nothing, never that there is none. */
+     it says it is not confirmed and plays nothing, never that there is none. Round 1514: a partial row's own
+     reason where the ledger gives one (Spain's four club cup, Italy's later editions). */
   if (!row) {
+    if (key === 'usc') return { ...base, name: null, partial: false, format: '', ground: '', stub: `The game has not confirmed the UEFA Super Cup ${era ? 'in this era' : 'here'} yet, so none is followed or played.` };
     const partial = oneOffPartialOf(career);
     const where = `this country's super cup${era ? ' in this era' : ''}`;
-    const stub = partial
+    const nation = leagueRulesOf(careerLeagueOf(career).id).nationId;
+    const why = partial && !era ? oneOffPartialWhy(nation, 2026) : null;
+    const stub = why
+      ? `${why} Until then none is followed or played here.`
+      : partial
       ? `The game looked for ${where} and could not confirm it on two sources, so none is followed or played here.`
       : `The game has not confirmed ${era ? 'a super cup for this country in this era' : 'a super cup for this country'} yet, so none is followed or played here.`;
     return { ...base, name: null, partial, format: '', ground: '', stub };
   }
-  const view: SuperCupView = { ...base, name: row.name, partial: false, format: formatWords(row), ground: '' };
-  if (!slice) { view.stub = 'It opens next summer, when this season is done.'; return view; }
+  const view: SuperCupView = { ...base, name: row.name, partial: false, format: formatWords(row), ground: '', mark: CM_ONE_OFF_MARKS[row.id] ?? '' };
+  /* Fix-1514: next season's edition, keyed by its start year as the engine keys it (oneOffEditionYear). */
+  view.later = oneOffPlayedIn(row.id, (typeof career.startYear === 'number' ? career.startYear : 2026) + career.season);
+  if (!slice) {
+    /* Round 1514: season one's UEFA Super Cup is never opened (the 2025-26 Europa League winner is not in the game). */
+    view.stub = key === 'usc' && career.season === 1
+      ? `This year's ${row.name} is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done.`
+      : view.later ? 'It opens next summer, when this season is done.'
+      : `Your save started before the game had this one, so this season's is not followed here. ${ONLY_THIS_EDITION}`;
+    return view;
+  }
   if (slice.skip) {
-    view.stub = STUB_WORDS[slice.skip](row.name);
+    view.stub = !view.later && (slice.skip === 'seasonOne' || slice.skip === 'joined') ? SETTLED_LAST : STUB_WORDS[slice.skip](row.name);
     view.mine = slice.skip === 'seasonOne' || slice.skip === 'joined' || slice.skip === 'legs';
     return view;
   }
@@ -559,6 +586,8 @@ export function superCupView(career: CareerState): SuperCupView {
      top two then the cup's two finalists, and on a double a cup place goes to whoever the rule hands it. Only
      'champCup' with 'leagueRunnerUp' is played today (eng-2026); the others stand for rows a later ledger proves. */
   const why = (i: number): string => {
+    /* Round 1514: the UEFA Super Cup's two European winners. */
+    if (row.entry === 'euroWinners') return i === 0 ? 'Champions League winners last season' : 'Europa League winners last season';
     if (i === 0) return `${names.league} champions`;
     if (row.entry === 'top2cup2') {
       if (i === 1) return `${names.league} runners up`;
@@ -570,16 +599,19 @@ export function superCupView(career: CareerState): SuperCupView {
   };
   view.clubs = clubs.map((club, i) => ({ club, why: why(i) }));
   const edition = career.season === 1 ? CM_ONE_OFF_SEASON_ONE.find(e => e[0] === row.id) : undefined;
-  view.ground = edition?.[3] ? `Played at ${edition[3]}.` : row.venue === 'n' ? 'On a neutral ground.' : `At ${row.venue === 'c' ? clubs[0] : clubs[1]}'s ground.`;
+  /* Round 1514: a dated edition's ground (the ledger's, for that season alone). */
+  const dated = oneOffEdition(row.id, (typeof career.startYear === 'number' ? career.startYear : 2026) + slice.s - 1);
+  const named = edition?.[3] ?? dated?.ground;
+  view.ground = named ? `Played at ${named}.` : row.venue === 'n' ? 'On a neutral ground.' : `At ${row.venue === 'c' ? clubs[0] : clubs[1]}'s ground.`;
   try {
-    const places = oneOffNightPlaces(career) ?? [];
+    const places = oneOffNightPlaces(career, key) ?? [];
     const dates = entryDatesOf(career);
     const dateOf = (night: number): CalDate | null => {
       const p = places[night];
       if (!p) return null;
       return p.entry ? dates[p.at] ?? null : nightDateAt(dates, p.at);
     };
-    const done = evalOneOff(career);
+    const done = evalOneOff(career, undefined, key);
     const shown = new Map((done?.fixtures ?? []).map(f => [f.n, f]));
     for (const f of oneOffFixturesOf(clubs, row)) {
       const got = shown.get(f.n);

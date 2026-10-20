@@ -729,7 +729,10 @@ async function selfRelative() {
      season's Champions League and the board's European rung each move a key outside worldComps by design, and each
      has its own attribution (sections 5 and 3). Without them the opens must move nothing but worldComps.uel. */
   const { UEL_HOLDER_EDIT, EURO_BOARD_EDIT } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'worldUelHolder1509.mjs')).href);
-  const named = [UEL_HOLDER_EDIT, EURO_BOARD_EDIT];
+  /* Round 1514: and without the UEFA Super Cup's open, which reads the Europa League's winner and so parts the arms
+     on worldComps.usc by design (simOneOffCups section 3 holds that open to its own key). */
+  const { USC_OPEN_OFF } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'oneOffNights1510.mjs')).href);
+  const named = [UEL_HOLDER_EDIT, EURO_BOARD_EDIT, USC_OPEN_OFF];
   const head = await engineOf(ROOT, 'head2', { edits: [...careerEdits(), ...named] }, cannot);
   const off = await engineOf(ROOT, 'off', { edits: [...UEL_OFF, ...named] }, cannot);
   if (careerEdits().length) changed = true;

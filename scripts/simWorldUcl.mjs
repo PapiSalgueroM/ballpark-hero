@@ -215,7 +215,7 @@ Object.assign(CONTROLS, {
      the draws stay equal and only that compare can see it: on every state in the Champions League, a participant's
      or a watcher's once it qualified or joined a club in it (runner r1509-fx2b). Release BK: since Round 1510 the
      compare takes worldComps.dsc off too and its sentence names both keys, so the control reads that sentence. */
-  savedbytes: [2, /^2 (participant|watcher) .* at [^:]*: the saved bytes differ \(worldComps\.uel and worldComps\.dsc taken off\)$/],
+  savedbytes: [2, /^2 (participant|watcher) .* at [^:]*: the saved bytes differ \(worldComps\.uel, worldComps\.dsc and worldComps\.usc taken off\)$/],
 });
 Object.assign(CAREER_EDITS, {
   mdearly: [{ file: CM, from: '      put(night, i < 0 ? prev.at : i, i < 0 ? prev.round : roundOf(i), i >= 0);', to: '      put(night, i < 0 ? prev.at : i - 1, i < 0 ? prev.round : roundOf(i), i >= 0);' }],
@@ -443,12 +443,14 @@ function entrantTarget(M, st) {
  */
 /** A stored value with the followed Europa League taken off the saved career (and worldComps with it when that
  *  was its only key), so a save of the head arm can be compared byte for byte with one that never had it.
- *  Round 1510: the domestic super cup's key (worldComps.dsc) comes off with it. */
+ *  Round 1510: the domestic super cup's key (worldComps.dsc) comes off with it. Round 1514: and the UEFA Super
+ *  Cup's (worldComps.usc), the same engine under its own key. */
 function withoutUelSaved(v) {
   try {
     const o = JSON.parse(v);
-    if (o && typeof o === 'object' && o.worldComps && typeof o.worldComps === 'object' && ('uel' in o.worldComps || 'dsc' in o.worldComps)) {
+    if (o && typeof o === 'object' && o.worldComps && typeof o.worldComps === 'object' && ('uel' in o.worldComps || 'dsc' in o.worldComps || 'usc' in o.worldComps)) {
       delete o.worldComps.dsc;
+      delete o.worldComps.usc;
       delete o.worldComps.uel;
       if (!Object.keys(o.worldComps).length) delete o.worldComps;
     }
@@ -927,8 +929,8 @@ async function selfRelative() {
      where this section's other arm has none, so a reload's repair moves the map among the save's keys in one arm
      only: it comes off every state compared here too. */
   const withoutUel = st => {
-    if (!st?.worldComps?.uel && !st?.worldComps?.dsc) return st;
-    const rest = { ...st.worldComps }; delete rest.uel; delete rest.dsc;
+    if (!st?.worldComps?.uel && !st?.worldComps?.dsc && !st?.worldComps?.usc) return st;
+    const rest = { ...st.worldComps }; delete rest.uel; delete rest.dsc; delete rest.usc;
     return { ...st, worldComps: Object.keys(rest).length ? rest : undefined };
   };
   const record = st => (!st ? 'null' : JSON.stringify(withoutUel(!st.uclGroup && 'worldComps' in st ? { ...st, worldComps: undefined } : st)));
@@ -954,7 +956,7 @@ async function selfRelative() {
          that one key taken off the saved career (fix-1509 minor 16: it used to be left out of the compare). */
       /* Round 1510: and the domestic super cup's key (worldComps.dsc) taken off in both arms, which this section's
          other arm keeps where a reload's repair moves the map in one arm only: so every save is compared bare. */
-      if (y.inIt && x.savedBare !== y.savedBare) why.push('the saved bytes differ (worldComps.uel and worldComps.dsc taken off)');
+      if (y.inIt && x.savedBare !== y.savedBare) why.push('the saved bytes differ (worldComps.uel, worldComps.dsc and worldComps.usc taken off)');
       if (why.length) { ok(false, `2 ${name} at ${x.label}: ${why.join('; ')}`); break; }
     }
   }
