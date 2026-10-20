@@ -1,0 +1,14 @@
+units exit=0 10s |    Duration  9.10s (transform 4.17s, setup 438ms, collect 7.50s, tests 6.51s, environment 2.16s, prepare 685ms)
+oneoff-uelpub exit=1 1s | simOneOffCups: control uelpub FIRED (1 failures, all its own: uel-2025-26 uelWinner stands on 1 host (uefa.com), not two publishers)
+tsc exit=0 106s | 
+oneoff-notrophy exit=1 77s | simOneOffCups: control notrophy FIRED (12 failures, all its own: 4 trophy: Chelsea seed 1 won: 0 minor trophies ([]), not exactly the FA Community Shield of season 2)
+oneoff-nouscrow exit=1 807s | simOneOffCups: control nouscrow FIRED (360 failures, all its own: 1 usc season one: Arsenal (now) seed 1 coach: holds noWinner, the 2026 edition's publishers name PSG and
+worldeuro exit=2 1272s | simWorldEuro: cannot run: section 3 needs WORLD_EURO_BASE, the commit before the board step
+savesize exit=0 90s | simClubManagerSaveSize: all sections green
+dailydeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+leaguerules exit=1 87s | simCmLeagueRules: 27 failure(s)
+appeal exit=1 13s | Node.js v24.22.0
+norival exit=0 21s | No rival product names found. 0 findings.
+anchors exit=0 63s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+worlducl exit=0 2266s | simWorldUcl: green, 495862 checks, 0 failures
+oneoff exit=0 3382s | simOneOffCups: green, 270642 checks (3381 s)

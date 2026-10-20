@@ -1,0 +1,82 @@
+  0 ledger: verified eng-2026 eng-2026-s1 uefa-2026 ger-2026 fra-2026 ita-2026 ger-2026-e2026 fra-2026-e2026 ita-2026-e2026 cup-seriea-2025-26 uel-2025-26 uefa-2026-e2026 | to verify eng-2005 eng-2010 eng-2015 eng-2020 esp-2026 | 31 pages
+  0 constants: 5 rows (eng-2026 uefa-2026 ger-2026 fra-2026 ita-2026), 1 season one editions, 4 dated editions, partial eng-2005 eng-2010 eng-2015 eng-2020 esp-2026, edition only ita-2026
+  0 the game's first editions against their publishers: German Supercup Bayern Munich v Borussia Dortmund (a double); Trophée des Champions PSG v Lens; Supercoppa Italiana Inter Milan v Lazio (a double); UEFA Super Cup PSG v Aston Villa
+  1 fleet: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher, to Arsenal in season two); Birmingham City (now, second tier watcher); Proof Town Athletic (now, created club in the Championship); Real Madrid (now, no row (Spain)); Bayern Munich (now, season one entrants (Germany, a double)); Marseille (now, watcher (France), into a UEFA Super Cup club at season two); Juventus (now, watcher (Italy, its edition only)); América (now, no row (Mexico, no cup)); Arsenal (era2005, era row partial)
+  1 venue probe: ger-2026 from Augsburg; fra-2026 from Angers; ita-2026 from Atalanta
+  7 uefa-2026 season one night for Arsenal: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Manchester City: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Chelsea: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  7 uefa-2026 season one night for Everton: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Liverpool: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Birmingham City: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Proof Town Athletic: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Real Madrid: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Bayern Munich: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Marseille: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 fra-2026 season one night for Marseille: 2026-08-05 (the edition's date 2026-08-16)
+  7 uefa-2026 season one night for Juventus: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 ita-2026 season one night for Juventus: 2026-12-16 (the edition's date 2026-12-22)
+  7 uefa-2026 season one night for América: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  1 forced: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher, to Arsenal in season two); Birmingham City (now, second tier watcher); Proof Town Athletic (now, created club in the Championship); Real Madrid (now, no row (Spain)); Bayern Munich (now, season one entrants (Germany, a double)); Marseille (now, watcher (France), into a UEFA Super Cup club at season two); Juventus (now, watcher (Italy, its edition only)); América (now, no row (Mexico, no cup)); Arsenal (era2005, era row partial)
+  7 uefa-2026 season one night for Arsenal: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Manchester City: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Chelsea: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  7 uefa-2026 season one night for Everton: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Liverpool: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Birmingham City: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Proof Town Athletic: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Real Madrid: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Bayern Munich: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 uefa-2026 season one night for Marseille: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 fra-2026 season one night for Marseille: 2026-08-05 (the edition's date 2026-08-16)
+  7 uefa-2026 season one night for Juventus: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 ita-2026 season one night for Juventus: 2026-12-16 (the edition's date 2026-12-22)
+  7 uefa-2026 season one night for América: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  2 calendar: 80 participant seasons beside their twins, 40 nights; the closest neighbour of a night 3 days, at most 1 matches in seven days to a night
+  7 fitness into the league opener: 80.2 after the super cup night, 100.0 in the twin with no night, 100.0 at the rollover (40 seasons)
+  4 honours: 12 arms (won and lost), 54 weighing readers compared with and without a minor trophy
+  3 self relative: 130 journeys, 19311 steps each arm, 15017 steps carrying a super cup
+  6 dailies: 20 daily states and 10 handovers, none with a super cup
+  1 dated editions whose venue was read off the engine: 80
+  1 doubles (the runners up took the cup place): 143
+  1 level matches on a pens row (the etall control needs one): 116
+  1 moved stubs: 20
+  1 moves carrying a UEFA Super Cup already shown (the nocarryusc control reads these): 54
+  1 moves carrying a cup already shown (the carryseen control reads these): 71
+  1 moves into a UEFA Super Cup club before its night (a joined stub): 20
+  1 participants (my club earned a place: played from the match half): 109
+  1 plain fields (champions v cup winners): 120
+  1 rollovers into another league (the afterswap control reads these): 51
+  1 rollovers of a manager outside the top flight: 142
+  1 steps holding a super cup carried from another country by a mid season move: 912
+  1 usc followed: 466
+  1 usc nights dated month 8: 246
+  1 usc noWinner stubs: 6
+  1 usc participants: 246
+  1 usc played by my club: 228
+  1 usc season one decided at the finish: 240
+  1 usc season one followed: 240
+  1 usc season one starts read (the nouscrow control reads these): 240
+  1 usc watchers: 228
+  1 usc won by my club: 100
+  2 later participant seasons (not held to the twin: the arms have parted): 40
+  2 men who paid a night (sum): 901
+  2 nights whose squad was read (the norecovery control reads these): 80
+  2 participant journeys whose wages differ from the twin by a week keyed event (printed, not asserted): 39
+  2 states after a night and before the league opener (the leaguestarted control reads these): 80
+  3 participant journeys compared up to their first night: 44
+  4 super cups my club won (section 1 fleet): 68
+  5 bytes of a followed one slice: 58042
+  5 bytes of a stub: 206616
+  5 followed one slices measured: 512
+  5 stubs measured: 4304
+  7 season one followed: 140
+  7 season one stub seasonOne: 60
+  7 settled in 90 minutes: 396
+  7 settled on penalties: 116
+  7 won by the stronger side: 298
+  7 won by the weaker side: 208
+  1 rows seen: eng-2026 ger-2026 fra-2026 ita-2026
+simOneOffCups: green, 270642 checks (3381 s)

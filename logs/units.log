@@ -1,0 +1,15 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/worldOneOffs.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 863[2mms[22m[39m
+   [33m[2m✓[22m[39m the evaluation as a whole[2m > [22ma prefix at every night, the same every time, and one winner on every finished cup over 300 seeds [33m 645[2mms[22m[39m
+ [32m✓[39m src/lib/worldNights.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 1876[2mms[22m[39m
+   [33m[2m✓[22m[39m placeNights on the engine calendars[2m > [22mfinds a slot that moves no date on every league size, with and without a cup, a round of 16 and two legs, in every year [33m 1750[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldView.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 3772[2mms[22m[39m
+   [33m[2m✓[22m[39m the super cup where the game has no row[2m > [22msays Not confirmed with its reason on every league with no row, and names the cup where there is one [33m 745[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m53 passed[39m[22m[90m (53)[39m
+[2m   Start at [22m 10:51:16
+[2m   Duration [22m 9.10s[2m (transform 4.17s, setup 438ms, collect 7.50s, tests 6.51s, environment 2.16s, prepare 685ms)[22m
+

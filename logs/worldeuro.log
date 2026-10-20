@@ -1,0 +1,5 @@
+  0 ledger: verified A1 A2 A3 A4 A5 Q2 Q3 Q4 C0 K1 K2 K3 K4 K5 K6 K7 K8 K9 K10 K11 K12 K13 K14 K15 K16 U-legs U7 | one publisher A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 | to verify U5 U6
+  0 constants: partial A1 A3 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 U5 U6; cup winners Manchester City, Inter Milan, Real Sociedad, Bayern Munich, Lens, AZ Alkmaar, none, Celtic, Trabzonspor, Union Saint-Gilloise, LASK, OFI, FC Midtjylland, St. Gallen, Dinamo Zagreb; nations england spain italy germany france netherlands portugal scotland turkey belgium austria greece denmark switzerland croatia
+  1 and 4: 95 journeys, 237 s
+  2 self relative: 190 journeys, 14794 steps each arm, 70 journeys carried one, 1029 s
+simWorldEuro: cannot run: section 3 needs WORLD_EURO_BASE, the commit before the board step

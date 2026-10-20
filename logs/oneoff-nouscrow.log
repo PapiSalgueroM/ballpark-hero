@@ -1,0 +1,39 @@
+  1 fleet: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher, to Arsenal in season two); Birmingham City (now, second tier watcher); Proof Town Athletic (now, created club in the Championship); Real Madrid (now, no row (Spain)); Bayern Munich (now, season one entrants (Germany, a double)); Marseille (now, watcher (France), into a UEFA Super Cup club at season two); Juventus (now, watcher (Italy, its edition only)); América (now, no row (Mexico, no cup)); Arsenal (era2005, era row partial)
+  1 venue probe: ger-2026 from Augsburg; fra-2026 from Angers; ita-2026 from Atalanta
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  7 fra-2026 season one night for Marseille: 2026-08-05 (the edition's date 2026-08-16)
+  7 ita-2026 season one night for Juventus: 2026-12-16 (the edition's date 2026-12-22)
+  1 dated editions whose venue was read off the engine: 40
+  1 doubles (the runners up took the cup place): 16
+  1 level matches on a pens row (the etall control needs one): 61
+  1 moved stubs: 10
+  1 moves carrying a UEFA Super Cup already shown (the nocarryusc control reads these): 10
+  1 moves carrying a cup already shown (the carryseen control reads these): 36
+  1 moves into a UEFA Super Cup club before its night (a joined stub): 10
+  1 participants (my club earned a place: played from the match half): 50
+  1 plain fields (champions v cup winners): 120
+  1 rollovers into another league (the afterswap control reads these): 25
+  1 rollovers of a manager outside the top flight: 71
+  1 steps holding a super cup carried from another country by a mid season move: 531
+  1 usc followed: 208
+  1 usc nights dated month 8: 18
+  1 usc noWinner stubs: 4
+  1 usc participants: 18
+  1 usc played by my club: 18
+  1 usc season one followed: 120
+  1 usc season one starts read (the nouscrow control reads these): 120
+  1 usc watchers: 218
+  1 usc won by my club: 13
+  4 super cups my club won (section 1 fleet): 33
+  5 bytes of a followed one slice: 28285
+  5 bytes of a stub: 103308
+  5 followed one slices measured: 256
+  5 stubs measured: 2152
+  7 season one followed: 70
+  7 season one stub seasonOne: 30
+  7 settled in 90 minutes: 195
+  7 settled on penalties: 61
+  7 won by the stronger side: 149
+  7 won by the weaker side: 105
+  1 rows seen: eng-2026 ger-2026 fra-2026 ita-2026
+simOneOffCups: control nouscrow FIRED (360 failures, all its own: 1 usc season one: Arsenal (now) seed 1 coach: holds noWinner, the 2026 edition's publishers name PSG and Aston Villa)
