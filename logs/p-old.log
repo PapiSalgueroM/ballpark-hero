@@ -1,0 +1,21 @@
+old B0 Juventus mid: loaded keys ucl uel; s2 dsc none; usc PSG v Fenerbahçe (ucl PSG, uel Fenerbahçe); s2 usc winner PSG; save 177732 chars
+old B0 Juventus end: loaded keys ucl uel; s2 dsc none; usc PSG v Fenerbahçe (ucl PSG, uel Fenerbahçe); s2 usc winner PSG; save 177651 chars
+old B0 Bayer Leverkusen mid: loaded keys ucl uel; s2 dsc ger-2026 RB Leipzig v Gladbach; usc Manchester City v Brighton (ucl Manchester City, uel Brighton); s2 usc winner Manchester City; save 175964 chars
+old B0 Bayer Leverkusen end: loaded keys ucl uel; s2 dsc ger-2026 Bayern Munich v Bayer Leverkusen; usc Manchester City v Brighton (ucl Manchester City, uel Brighton); s2 usc winner Manchester City; save 170733 chars
+old B0 Marseille mid: loaded keys ucl uel; s2 dsc fra-2026 PSG v Le Havre; usc Barcelona v Bologna (ucl Barcelona, uel Bologna); s2 usc winner Bologna; save 164077 chars
+old B0 Marseille end: loaded keys ucl uel; s2 dsc fra-2026 Marseille v Strasbourg; usc Barcelona v Bologna (ucl Barcelona, uel Bologna); s2 usc winner Bologna; save 173751 chars
+old B0 Chelsea mid: loaded keys ucl uel dsc; s2 dsc eng-2026 Chelsea v Liverpool; usc Arsenal v Crystal Palace (ucl Arsenal, uel Crystal Palace); s2 usc winner Arsenal; save 182003 chars
+old B0 Chelsea end: loaded keys ucl uel dsc; s2 dsc eng-2026 Liverpool v Chelsea; usc Arsenal v Crystal Palace (ucl Arsenal, uel Crystal Palace); s2 usc winner Arsenal; save 172742 chars
+old B0 Bayern Munich mid: loaded keys uel; s2 dsc ger-2026 Bayern Munich v Mainz; usc Real Madrid v Juventus (ucl Real Madrid, uel Juventus); s2 usc winner Real Madrid; save 178225 chars
+old B0 Bayern Munich end: loaded keys uel; s2 dsc ger-2026 Bayern Munich v Mainz; usc Barcelona v Juventus (ucl Barcelona, uel Juventus); s2 usc winner Barcelona; save 178660 chars
+old B1 Juventus mid: loaded keys ucl uel; s2 dsc none; usc PSG v Fenerbahçe (ucl PSG, uel Fenerbahçe); s2 usc winner PSG; save 177732 chars
+old B1 Juventus end: loaded keys ucl; s2 dsc none; usc noWinner (ucl PSG, uel null); s2 usc winner -; save 177603 chars
+old B1 Bayer Leverkusen mid: loaded keys ucl uel; s2 dsc ger-2026 RB Leipzig v Gladbach; usc Manchester City v Brighton (ucl Manchester City, uel Brighton); s2 usc winner Manchester City; save 175964 chars
+old B1 Bayer Leverkusen end: loaded keys ucl; s2 dsc ger-2026 Bayern Munich v Bayer Leverkusen; usc noWinner (ucl Manchester City, uel null); s2 usc winner -; save 170668 chars
+old B1 Marseille mid: loaded keys ucl uel; s2 dsc fra-2026 PSG v Le Havre; usc Barcelona v Bologna (ucl Barcelona, uel Bologna); s2 usc winner Bologna; save 164077 chars
+old B1 Marseille end: loaded keys ucl; s2 dsc fra-2026 Marseille v Strasbourg; usc noWinner (ucl Barcelona, uel null); s2 usc winner -; save 173701 chars
+old B1 Chelsea mid: loaded keys ucl uel; s2 dsc eng-2026 Chelsea v Liverpool; usc Arsenal v Crystal Palace (ucl Arsenal, uel Crystal Palace); s2 usc winner Arsenal; save 182003 chars
+old B1 Chelsea end: loaded keys ucl; s2 dsc eng-2026 Liverpool v Chelsea; usc noWinner (ucl Arsenal, uel null); s2 usc winner -; save 172687 chars
+old B1 Bayern Munich mid: loaded keys uel; s2 dsc ger-2026 Bayern Munich v Mainz; usc Real Madrid v Juventus (ucl Real Madrid, uel Juventus); s2 usc winner Real Madrid; save 178225 chars
+old B1 Bayern Munich end: loaded keys none; s2 dsc ger-2026 Bayern Munich v Mainz; usc noWinner (ucl Barcelona, uel null); s2 usc winner -; save 178609 chars
+probe old: 95 checks, 0 failures

@@ -1,0 +1,9 @@
+real: candidates Real Madrid, Arsenal, Bayern Munich, PSG, Manchester City, Liverpool, Inter Milan, Barcelona
+real Bayern Munich seed 1: WON the Champions League; season two UEFA Super Cup Bayern Munich v Fenerbahçe, night entry 2 (2027-08-18), first league entry 1 (2027-08-14)
+real Bayern Munich seed 1: played {"0":{"h":1,"a":0}}, winner Bayern Munich, cabinet 1
+real PSG seed 1: WON the Champions League; season two UEFA Super Cup PSG v Benfica, night entry 2 (2027-08-18), first league entry 1 (2027-08-14)
+real PSG seed 1: played {"0":{"h":5,"a":1}}, winner PSG, cabinet 1
+real Manchester City seed 1: WON the Champions League; season two UEFA Super Cup Manchester City v Liverpool, night entry 2 (2027-08-18), first league entry 1 (2027-08-14)
+real Manchester City seed 1: played {"0":{"h":0,"a":1}}, winner Liverpool, cabinet 0
+real: 3 real Champions League winners in 5 season ones
+probe real: 175 checks, 0 failures

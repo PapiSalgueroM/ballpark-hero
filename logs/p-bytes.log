@@ -1,0 +1,29 @@
+bytes: clubs Marseille, Juventus, Napoli, Ajax, Benfica, Celtic, LA Galaxy, Bayer Leverkusen, Atlante, Energie Cottbus, Ascoli, Laval, Toronto FC
+bytes Marseille seed 1: equal over 80 steps
+bytes Marseille seed 2: equal over 86 steps
+bytes Juventus seed 1: equal over 101 steps
+bytes Juventus seed 2: equal over 97 steps
+bytes Napoli seed 1: equal over 109 steps
+bytes Napoli seed 2: equal over 102 steps
+bytes Ajax seed 1: equal over 92 steps
+bytes Ajax seed 2: equal over 86 steps
+bytes Benfica seed 1: equal over 82 steps
+bytes Benfica seed 2: equal over 87 steps
+bytes Celtic seed 1: equal over 69 steps
+bytes Celtic seed 2: equal over 62 steps
+bytes LA Galaxy seed 1: equal over 69 steps
+bytes LA Galaxy seed 2: equal over 66 steps
+bytes Bayer Leverkusen seed 1: equal over 86 steps
+bytes Bayer Leverkusen seed 2: equal over 87 steps
+bytes Atlante seed 1: equal over 76 steps
+bytes Atlante seed 2: equal over 76 steps
+bytes Energie Cottbus seed 1: equal over 79 steps
+bytes Energie Cottbus seed 2: equal over 80 steps
+bytes Ascoli seed 1: equal over 86 steps
+bytes Ascoli seed 2: equal over 86 steps
+bytes Laval seed 1: equal over 78 steps
+bytes Laval seed 2: equal over 79 steps
+bytes Toronto FC seed 1: equal over 67 steps
+bytes Toronto FC seed 2: equal over 67 steps
+bytes: 26 of 26 journeys equal to 92290f81 with dsc and usc taken out
+probe bytes: 0 checks, 0 failures

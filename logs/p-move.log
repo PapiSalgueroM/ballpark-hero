@@ -1,0 +1,9 @@
+move Chelsea seed 1 after: week 2 to Manchester City; before ["Stuttgart","Fenerbahçe"] done 1 winner Fenerbahçe; after Stuttgart v Fenerbahçe seen 1 done 1 winner Fenerbahçe; nights on the new calendar 0
+move Chelsea seed 1 before: week 0 to Manchester City; before ["Stuttgart","Fenerbahçe"] done 0 winner -; after Stuttgart v Fenerbahçe seen 0 done 1 winner Fenerbahçe; nights on the new calendar 0
+move Liverpool seed 1 into-after: week 2 to Arsenal; before ["Arsenal","Bournemouth"] done 1 winner Arsenal; after Arsenal v Bournemouth seen 1 done 1 winner Arsenal; nights on the new calendar 0
+move Liverpool seed 1 into-before: week 0 to Arsenal; before ["Arsenal","Bournemouth"] done 0 winner -; after stub joined done 0 winner -; nights on the new calendar 0
+move Chelsea seed 2 after: week 1 to Manchester City; before ["Inter Milan","Crystal Palace"] done 1 winner Crystal Palace; after Inter Milan v Crystal Palace seen 1 done 1 winner Crystal Palace; nights on the new calendar 0
+move Chelsea seed 2 before: week 0 to Manchester City; before ["Inter Milan","Crystal Palace"] done 0 winner -; after Inter Milan v Crystal Palace seen 0 done 1 winner Crystal Palace; nights on the new calendar 0
+move Liverpool seed 2 into-after: week 2 to Manchester City; before ["Manchester City","Bayer Leverkusen"] done 1 winner Manchester City; after Manchester City v Bayer Leverkusen seen 1 done 1 winner Manchester City; nights on the new calendar 0
+move Liverpool seed 2 into-before: week 0 to Manchester City; before ["Manchester City","Bayer Leverkusen"] done 0 winner -; after stub joined done 0 winner -; nights on the new calendar 0
+probe move: 413 checks, 0 failures
