@@ -1,0 +1,11 @@
+oo-2 exit=0 473s | simOneOffCups: green, 6458 checks (473 s)
+cl-afterswap exit=1 760s | simOneOffCups: control afterswap FIRED (8 failures, all its own: 1 entrants: Everton (now) seed 1 nocoach season 3: unfinished, the rule says Manchester City and Fulham)
+oo-157 exit=0 1525s | simOneOffCups: green, 194381 checks (1525 s)
+oo-3 exit=0 1570s | simOneOffCups: green, 15353 checks (1570 s)
+cl-etall exit=1 752s | simOneOffCups: control etall FIRED (108 failures, all its own: 1 extra time: Arsenal (now) seed 2 coach: extra time on a straight to penalties cup)
+cl-adjacent exit=1 487s | simOneOffCups: control adjacent FIRED (127 failures, all its own: 2 slots: Arsenal seed 1 coach season 2: the nights sit before entries 28,28, the placer gives 0)
+cl-calweeks exit=1 486s | simOneOffCups: control calweeks FIRED (80 failures, all its own: 2 window: Arsenal seed 1 coach season 2: the calendar draws the deadline at entry 3, the engine closes th
+cl-leaguestarted exit=1 481s | simOneOffCups: control leaguestarted FIRED (160 failures, all its own: 2 league started: Arsenal seed 1 coach at s2-e1: leagueStarted reads true with no league entry play
+cl-norecovery exit=1 487s | simOneOffCups: control norecovery FIRED (157 failures, all its own: 2 fitness: Arsenal seed 1 coach at s2-e1: 4 men's fitness after the night is neither the week's recove
+cl-nodouble exit=1 1499s | simOneOffCups: control nodouble FIRED (2338 failures, all its own: 1 entrants: Arsenal (now) seed 1 coach season 3: unfinished, the rule says Manchester City and Sunderla
+cl-stream exit=1 1203s | simOneOffCups: control stream FIRED (87 failures, all its own: 3 Arsenal (now) seed 1 nocoach at s1-rollover: the draws differ (843 against 839))
