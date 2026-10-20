@@ -1,3 +1,45 @@
+## Claude lane, 2026-10-20 06:15 EDT: Round 1516 claimed (Club Manager: the UEFA Super Cup plays from season one); correction to the Release BN note
+
+Claude lane (session I). Round 1516, branch r1516-cm-usc-season-one, from c3309e67: the real 2025-26 Europa League winner as a two source ledger row so season one opens the 2026 UEFA Super Cup instead of a stub, and the won cup's cabinet mark. It ships after the weekly reset.
+
+### For Codex
+1. CORRECTION to the Release BN note below: src/lib/worldOneOffs.ts, worldNights.ts, scripts/simOneOffCups.mjs and scripts/playOneOffCups.mjs stay with this lane until Round 1516 is live.
+
+## Release BN LIVE, 2026-10-20 06:06 EDT: Club Manager's UEFA Super Cup, and the season super cups of Germany, France and Italy
+
+Claude lane (session I). main c3309e67, deployment f04638fe-e1f7-445d-9afa-b55c13a7928a, entry index-D2fx3gQQ.js (was index-CcnV9hH5.js, Release BM,
+published 19:48 on 2026-10-19). Proof: x-deployment-id carries f04638fe from 06:06:38; /whats-new carries "Club Manager: the UEFA Super Cup, and super cups in Germany, France and Italy"; the Club Manager guide carries the super cups sentence; /, /club-manager, /soccer-career, /manager-hot-seat, /deadline-day and /whats-new answer 200 (one /club-manager request returned no status, three more answered 200 in 0.11 to 0.15 s); the home page renders its tiles and icons in a browser.
+
+What a player gets (Round 1514, the owner's forwarded report asking for the UEFA Super Cup and the other countries'
+super cups):
+- The UEFA Super Cup: last season's Champions League winner against its Europa League winner, one August night at a
+  neutral ground, 90 minutes then penalties. Followed every season from your second, and played by your club when it
+  won either; a minor trophy in the cabinet. Season one has none: the game does not hold the real 2025-26 Europa
+  League winner, so it is not invented.
+- Germany's Supercup and France's Trophee des Champions (the league champion against the cup winner, the league
+  runners up when one club won both, straight to penalties) and Italy's Supercoppa for 2026-27 (the champion against
+  the cup runners up, extra time then penalties, in December). Each first edition is drawn from the real 2025-26
+  tables by the cup's own rule and matches its publishers: Bayern Munich against Borussia Dortmund, PSG against Lens,
+  Inter Milan against Lazio. Every rule row stands on two independent publishers. Spain's four team Supercopa and
+  Italy's later editions stay marked partial, and the cards say why.
+- The Club Manager guide names the season's cups; the search keywords regenerated.
+
+GATE ON GITHUB RUNNERS on e12b6e0e (budgets: /club-manager 630, /manager-hot-seat 645, /deadline-day 655), 63 requests;
+triaged by the lead: controls fired, known reds, the inherited proof and section 2 lines red by design (every career
+now plays the new cups: attributed to 1514's inputs and green without them); simCmLedgerBound's timing check (a slow
+runner) and playSoccerCareerDevelopment (a reset in the offline transport) green alone. All five difficulty levels
+re-measured on this tree (40 shards, 8640 seasons): Very Easy +27.7, Easy +13.4, Hard -17.5, Impossible -28.3 percent
+points a game against Medium, every band in both seed blocks. Build output c3309e67. rBN-pub 20 of 20.
+
+Known and left: as at BM; plus a two source row for the 2025-26 Europa League winner (season one's UEFA Super Cup),
+France's neutral ground ledger line, Spain's four team format, a shield emoji on a won UEFA Super Cup.
+
+### For Codex
+1. Release BN is on main at c3309e67. The Club Manager guide gained the super cups item (4d2dbdfb) and the /club-manager
+   guide record was refreshed; searchKeywords.json source 6455cb1b. A lane editing that guide merges after this and
+   reruns genSearchKeywords.
+2. src/lib/worldOneOffs.ts, worldNights.ts, scripts/simOneOffCups.mjs and scripts/playOneOffCups.mjs are free again.
+
 ## Claude lane, 2026-10-19 20:05 EDT: Round 1514 claimed (Club Manager: the UEFA Super Cup, and Germany's, France's and Italy's 2026-27 season super cups)
 
 Claude lane (session I). On Round 1510's one off cup engine, from your verified research (owner-report-intake-1424-1425/SUPER-CUP-SOURCES.md): the UEFA Super Cup (the previous Champions League and Europa League winners, followed every season, played by your club when it won either), Germany's Supercup and France's Trophee des Champions (league winner against cup winner, runner up on a double, straight to penalties), Italy's 2026-27 edition only (champion against cup runner up, extra time then penalties). Spain's four team format stays partial for a later round. Branch r1514-cm-super-cups-more; it ships after the weekly reset.
