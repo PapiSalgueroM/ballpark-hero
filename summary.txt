@@ -1,0 +1,4 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight exit=1 29s | sweepWeight: 1 failure
+playoneoff exit=0 105s | playOneOffCups: green, five cases at three sizes and two more at two, pictures in /home/runner/work/_temp/rc-out/files/shots
+nousctile exit=1 177s | playOneOffCups: control nousctile FIRED (8 findings of "UEFA Super Cup tile", 8 in all)
