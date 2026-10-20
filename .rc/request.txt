@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+leaguerules: node scripts/simCmLeagueRules.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+oneoff-s0: ONE_OFF_ONLY=0 node scripts/simOneOffCups.mjs
+norival: node scripts/simNoRivalNames.mjs
