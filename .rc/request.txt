@@ -1,0 +1,1 @@
+proof-hoff2: node scripts/proofWorldUclFleet.mjs --base 3d1b7d9a --coach both --eval --only Hoffenheim --strip worldComps.dsc+usc --dsc-nights-off
