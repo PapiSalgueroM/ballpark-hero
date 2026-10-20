@@ -1,0 +1,3 @@
+leaguerules: node scripts/simCmLeagueRules.mjs
+proof: node scripts/proofWorldUclFleet.mjs --base 3d1b7d9a --coach both --eval --old-saves --strip worldComps.usc --usc-nights-off
+anchors: node scripts/simHarnessAnchors.mjs
