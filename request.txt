@@ -1,0 +1,11 @@
+# Release BJ, Round 1500 (the US My Career dirty money desk), merged in Round BJG as m4 353d1c26 (first parent 65126da0).
+# simUsDirtyMoney's BASE (full sha) is the tree WITHOUT Round 1500 (treeWithoutMerge 353d1c26 65126da0). Proven per merge
+# on runner bjg-m4 (BASE=65126da0): all sections green, eleven controls fired. The weight on /nfl-my-career (490K against
+# its 488K row) was ruled accepted by the lead for this release; the row is the lead's to raise.
+# Round 1500 moved two keys of the US career truth digest (mlb|y2004|1B and RF); the join re-recorded them in de0fa114
+# (runner bjg-tdr). truthdigest must pass; truthdigest-ctl puts the fixture from before that back and must be refused.
+dirty: B=$(node scripts/lib/treeWithoutMerge.mjs 353d1c26 65126da0) || exit 2; BASE=$B node scripts/simUsDirtyMoney.mjs
+dm-ctl: ok=0; r=""; for k in words mathrandom flat farm cap cool8 deck noop nodesk sentence anyphase; do US_DIRTY_MONEY_CONTROL=$k node scripts/simUsDirtyMoney.mjs > /tmp/dm-$k.log 2>&1; e=$?; r="$r $k=$e"; [ $e = 1 ] || ok=1; echo "$k: last: $(tail -1 /tmp/dm-$k.log | cut -c1-200)"; done; echo "controls (each must be 1):$r"; exit $ok
+vitest-1500: node_modules/.bin/vitest run src/lib/careerDirtyMoney.test.ts src/test/usCareerDirtyMoney.test.tsx src/test/usCareerHelpRules1104.test.tsx --testTimeout=300000 --hookTimeout=120000
+truthdigest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=600000
+truthdigest-ctl: git show 5e3c9418:src/test/fixtures/usCareerTruthDigest.json > src/test/fixtures/usCareerTruthDigest.json && DIGEST_RECORD=1 DIGEST_ALLOW=none node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=600000; s=$?; git checkout -q HEAD -- src/test/fixtures/usCareerTruthDigest.json; [ $s = 1 ] && echo "the fixture before Round 1500's re-record is refused as it must" && exit 0; exit 1
