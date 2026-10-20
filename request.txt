@@ -1,0 +1,20 @@
+s157: ONE_OFF_ONLY=1,5,7 node scripts/simOneOffCups.mjs
+s3: ONE_OFF_ONLY=3 node scripts/simOneOffCups.mjs
+s2: ONE_OFF_ONLY=2 node scripts/simOneOffCups.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/lib/clubManagerWorldView.test.ts src/lib/clubManagerWorldCompsReload.test.ts src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=300000
+s046: ONE_OFF_ONLY=0,4,6 node scripts/simOneOffCups.mjs
+c-carryseen: ONE_OFF_CONTROL=carryseen ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+c-seasononeplay: ONE_OFF_CONTROL=seasononeplay ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+c-firstedition: ONE_OFF_CONTROL=firstedition ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+c-nodated: ONE_OFF_CONTROL=nodated ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+c-italyall: ONE_OFF_CONTROL=italyall ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+c-uscswap: ONE_OFF_CONTROL=uscswap ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+c-wrongyear: ONE_OFF_CONTROL=wrongyear ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+c-etall: ONE_OFF_CONTROL=etall ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs
+rival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+dashscan: node .rc/x/dashscan.mjs 86db9423
+dash-control: DASH_CONTROL=1 node .rc/x/dashscan.mjs 86db9423
+c-afterswap: ONE_OFF_CONTROL=afterswap ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs

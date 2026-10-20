@@ -1,0 +1,34 @@
+  1 fleet: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher, to Arsenal in season two); Birmingham City (now, second tier watcher); Proof Town Athletic (now, created club in the Championship); Real Madrid (now, no row (Spain)); Bayern Munich (now, season one entrants (Germany, a double)); Marseille (now, watcher (France), into a UEFA Super Cup club at season two); Juventus (now, watcher (Italy, its edition only)); América (now, no row (Mexico, no cup)); Arsenal (era2005, era row partial)
+  1 venue probe: ger-2026 from Augsburg; fra-2026 from Angers; ita-2026 from Atalanta
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  1 doubles (the runners up took the cup place): 1
+  1 level matches on a pens row (the etall control needs one): 4
+  1 moved stubs: 2
+  1 moves carrying a UEFA Super Cup already shown (the nocarryusc control reads these): 2
+  1 moves carrying a cup already shown (the carryseen control reads these): 7
+  1 moves into a UEFA Super Cup club before its night (a joined stub): 2
+  1 participants (my club earned a place: played from the match half): 9
+  1 plain fields (champions v cup winners): 8
+  1 rollovers into another league (the afterswap control reads these): 4
+  1 rollovers of a manager outside the top flight: 7
+  1 steps holding a super cup carried from another country by a mid season move: 103
+  1 usc followed: 20
+  1 usc nights dated month 8: 2
+  1 usc participants: 2
+  1 usc played by my club: 2
+  1 usc watchers: 22
+  1 usc won by my club: 2
+  4 super cups my club won (section 1 fleet): 5
+  5 bytes of a followed one slice: 3268
+  5 bytes of a stub: 29697
+  5 followed one slices measured: 28
+  5 stubs measured: 609
+  7 season one followed: 10
+  7 season one stub seasonOne: 4
+  7 season one stub unfinished: 6
+  7 settled in 90 minutes: 24
+  7 settled on penalties: 4
+  7 won by the stronger side: 15
+  7 won by the weaker side: 13
+  1 rows seen: eng-2026 ger-2026 fra-2026 ita-2026
+simOneOffCups: control firstedition FIRED (283 failures, all its own: 1 venue: ger-2026: a new career at Augsburg holds unfinished, not a dated edition to read)
