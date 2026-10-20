@@ -1,0 +1,151 @@
+reference 0e4c2519e3102d2734da8f42b2b7fe61411d114e
+rebind: scripts/qa/proveSoccerCreation1388.mjs BASE 1823478805186fcd037d5f6b3145513a273aa4fb -> 0e4c2519e3102d2734da8f42b2b7fe61411d114e (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/rebound-proveSoccerCreation1388.mjs)
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll preservation: a fresh settled roll starts and saves the displayed player 515ms
+ ✓ src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll stale settled: changing position requires a new roll before Begin Career 260ms
+ ✓ src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll stale in-flight: a previous position roll cannot publish after the switch 188ms
+ ✓ src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll preservation: a new position reroll starts with its displayed stats 252ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  07:21:27
+   Duration  4.16s (transform 1.59s, setup 70ms, collect 2.20s, tests 1.22s, environment 314ms, prepare 132ms)
+
+JSON report written to /home/runner/work/_temp/rc-out/files/c305/creation-proof/normal/units.json
+stderr | src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll preservation: a fresh settled roll starts and saves the displayed player
+Warning: validateDOMNesting(...): <span> cannot appear as a child of <option>.
+    at span
+    at option
+    at SelectItem (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:99:24)
+    at SelectGroup (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:107:25)
+    at SelectContent (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:96:27)
+    at select
+    at Select (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:87:20)
+    at div
+    at div
+    at div
+    at CreationScreen (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/SoccerCareer.tsx:3606:57)
+    at main
+    at div
+    at SoccerCareer (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/SoccerCareer.tsx:2144:59)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+
+Creation normal:4 completed;4 passed;0 precise stale-position faults;4 full observations.
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll preservation: a fresh settled roll starts and saves the displayed player 499ms
+ × src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll stale settled: changing position requires a new roll before Begin Career 258ms
+   → creation roll settled position leaves Begin Career enabled without a usable preview: expected false to be true // Object.is equality
+ × src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll stale in-flight: a previous position roll cannot publish after the switch 245ms
+   → creation roll in-flight position publishes an abandoned preview: expected false to be true // Object.is equality
+ ✓ src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll preservation: a new position reroll starts with its displayed stats 255ms
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 2 passed (4)
+   Start at  07:21:32
+   Duration  4.12s (transform 1.58s, setup 68ms, collect 2.17s, tests 1.26s, environment 296ms, prepare 122ms)
+
+JSON report written to /home/runner/work/_temp/rc-out/files/c305/creation-proof/original/units.json
+stderr | src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll preservation: a fresh settled roll starts and saves the displayed player
+Warning: validateDOMNesting(...): <span> cannot appear as a child of <option>.
+    at span
+    at option
+    at SelectItem (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:99:24)
+    at SelectGroup (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:107:25)
+    at SelectContent (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:96:27)
+    at select
+    at Select (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:87:20)
+    at div
+    at div
+    at div
+    at CreationScreen (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/SoccerCareer.tsx:3606:57)
+    at main
+    at div
+    at SoccerCareer (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/SoccerCareer.tsx:2144:59)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll stale settled: changing position requires a new roll before Begin Career
+AssertionError: creation roll settled position leaves Begin Career enabled without a usable preview: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/test/soccerCareerCreationRoll.test.tsx:130:132
+    128|     const switched = snapshot(view, 'GK'); fireEvent.click(begin(view)…
+    129|     retain('settled-position-change', { before, switched, afterPress: …
+    130|     expect(switched.beginDisabled === true, 'creation roll settled pos…
+       |                                                                                                                                    ^
+    131|     expect(switched.preview).toBeNull(); expect(localStorage.getItem(K…
+    132|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll stale in-flight: a previous position roll cannot publish after the switch
+AssertionError: creation roll in-flight position publishes an abandoned preview: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/test/soccerCareerCreationRoll.test.tsx:139:139
+    137|     const settled = snapshot(view, 'GK'); fireEvent.click(begin(view));
+    138|     retain('in-flight-position-change', { before, switched, settled, a…
+    139|     expect(settled.preview === null && settled.beginDisabled === true,…
+       |                                                                                                                                           ^
+    140|     expect(localStorage.getItem(KEY)).toBeNull(); expect(localStorage.…
+    141|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+Creation original:4 completed;2 passed;2 precise stale-position faults;4 full observations.
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll preservation: a fresh settled roll starts and saves the displayed player 499ms
+ ✓ src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll stale settled: changing position requires a new roll before Begin Career 259ms
+ ✓ src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll stale in-flight: a previous position roll cannot publish after the switch 186ms
+ ✓ src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll preservation: a new position reroll starts with its displayed stats 262ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  07:21:37
+   Duration  4.11s (transform 1.59s, setup 66ms, collect 2.18s, tests 1.21s, environment 297ms, prepare 127ms)
+
+JSON report written to /home/runner/work/_temp/rc-out/files/c305/creation-proof/restored/units.json
+stderr | src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll preservation: a fresh settled roll starts and saves the displayed player
+Warning: validateDOMNesting(...): <span> cannot appear as a child of <option>.
+    at span
+    at option
+    at SelectItem (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:99:24)
+    at SelectGroup (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:107:25)
+    at SelectContent (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:96:27)
+    at select
+    at Select (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:87:20)
+    at div
+    at div
+    at div
+    at CreationScreen (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/SoccerCareer.tsx:3606:57)
+    at main
+    at div
+    at SoccerCareer (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/SoccerCareer.tsx:2144:59)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+
+Creation restored:4 completed;4 passed;0 precise stale-position faults;4 full observations.
+Creation fixed proof:4 current passes;2 exact original faults+2 preserves;4 restored passes;12 full observations;source and actual baseline raw held.

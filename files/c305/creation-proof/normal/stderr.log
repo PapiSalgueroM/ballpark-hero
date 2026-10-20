@@ -1,0 +1,20 @@
+stderr | src/test/soccerCareerCreationRoll.test.tsx > Soccer Career creation roll belongs to its selected position > creation roll preservation: a fresh settled roll starts and saves the displayed player
+Warning: validateDOMNesting(...): <span> cannot appear as a child of <option>.
+    at span
+    at option
+    at SelectItem (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:99:24)
+    at SelectGroup (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:107:25)
+    at SelectContent (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:96:27)
+    at select
+    at Select (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:87:20)
+    at div
+    at div
+    at div
+    at CreationScreen (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/SoccerCareer.tsx:3606:57)
+    at main
+    at div
+    at SoccerCareer (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/SoccerCareer.tsx:2144:59)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+
