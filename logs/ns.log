@@ -1,0 +1,33 @@
+simCmNoSack: sections 1, 2, 3, 4, 5, 6, 7, compared with this tree with both floors taken out
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+1) A career without the key plays as the base tree: 9 clubs, 2 seeds, 2 seasons, coach and noCoach
+   36 careers compared, 2754097 draws here, in 104 s
+2) The hoard keeper for three seasons at the nine clubs, with No sacking and without (fleet seed 0)
+   Arsenal                No sacking: 3 seasons, board low 1.0, 4 lines; twin sacked at match 125
+   Brentford              No sacking: 3 seasons, board low 34.5, 0 lines; twin kept the job for 3 seasons
+   Hull City              No sacking: 3 seasons, board low 0.1, 21 lines; twin sacked at match 18
+   Real Madrid            No sacking: 3 seasons, board low 35.0, 0 lines; twin kept the job for 3 seasons
+   Espanyol               No sacking: 3 seasons, board low 1.0, 23 lines; twin sacked at match 99
+   Málaga                 No sacking: 3 seasons, board low 1.0, 10 lines; twin sacked at match 27
+   Inter Milan            No sacking: 3 seasons, board low 1.0, 19 lines; twin sacked at match 94
+   Torino                 No sacking: 3 seasons, board low 1.0, 17 lines; twin sacked at match 95
+   Frosinone              No sacking: 3 seasons, board low 0.9, 15 lines; twin sacked at match 99
+   twins sacked 7 of 9 (floor 5), each survived at that very match by its No sacking career: 7; No sacking lines 109; 49 s
+3) A No sacking save planted at confidence 1 before every match at Frosinone, to its first defeat, three seeds
+   seed 0, defeat in match 1 (0-2): board 1, in the job, reopened on 1
+   seed 1, defeat in match 1 (3-4): board 1, in the job, reopened on 1
+   seed 2, defeat in match 1 (2-1): board 1, in the job, reopened on 1
+4) turnOnNoSack is one way and refuses a sacked or out of work manager; the key reads strictly; only a career without it posts a score
+   3 scored match pings and 4 scored completions, each behind postsScore; literals for the three ping harnesses: 3 and 3
+5) 2 sacked writes and 2 No sacking floors in clubManager.ts, read as code
+6) Manager Hot Seat (2026-10-10, 2026-10-11, 2026-10-27) and Deadline Day (2026-10-10, 2026-10-11, 2026-10-18) play as on the base tree
+   Hot Seat 2026-10-10 Athletic Club: identical, no key
+   Hot Seat 2026-10-11 Young Boys: identical, no key
+   Hot Seat 2026-10-27 Nottingham Forest: identical, no key
+   Deadline Day 2026-10-10 Rangers: identical, no key
+   Deadline Day 2026-10-11 Borussia Dortmund: identical, no key
+   Deadline Day 2026-10-18 Nottingham Forest: identical, no key
+   red per daily: Hot Seat 0 of 3, Deadline Day 0 of 3; deadlineDay.ts calls none of the match or No sacking entry points; 2 s
+7) A promise to win before every match, the board planted on 2, 3.5, 5, 6.5 in turn, at Hull City, Málaga, Frosinone: 2 seeds, 36 matches each, the Normal twin played beside it (fleet seed 0)
+   twins kept the job and matched to the byte: 70; twins sacked at the recheck after a broken promise: 83 (floor 36); both floors in one match: 63 (floor 28); at the first check with no promise broken: 0; 10 s
+simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)

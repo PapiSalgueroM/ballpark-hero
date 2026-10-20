@@ -1,0 +1,14 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+c-stale exit=1 1s | simCmNoSack: CONTROL stale FIRED: section 4 red (1 failures)
+c-noslot exit=1 1s | simCmNoSack: CONTROL noslot FIRED: section 4 red (1 failures)
+c-farfloor exit=1 1s | simCmNoSack: CONTROL farfloor FIRED: section 5 red (1 failures)
+c-nofloor2 exit=1 3s | simCmNoSack: CONTROL nofloor2 FIRED: section 7 red (20 failures)
+vitest exit=0 9s |    Duration  8.41s (transform 3.84s, setup 351ms, collect 10.19s, tests 6.97s, environment 2.04s, prepare 815ms)
+c-twoline exit=1 15s | simCmNoSack: CONTROL twoline FIRED: section 7 red (63 failures)
+c-sack exit=1 56s | simCmNoSack: CONTROL sack FIRED: section 2 red (15 failures), section 3 red (9 failures), section 7 red (26 failures)
+guide exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+score exit=0 135s | ALL SEASON SCORE CHECKS PASSED
+ns exit=0 166s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
+walk-sack exit=0 56s | playCmNoSack control sack: all 3 guarded checks fired (mutations landed: {"readNoSack":2})
+walk-nopill exit=0 73s | playCmNoSack control nopill: all 3 guarded checks fired (mutations landed: {"pill":7})
+walk exit=0 265s |   PASS  no page errors
