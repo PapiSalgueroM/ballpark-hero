@@ -1,0 +1,3 @@
+unseeded: node scripts/simCmUnseededWorld.mjs > /tmp/u.log 2>&1; e=$?; grep -E "FAIL|differ" /tmp/u.log | head -30 | cut -c1-300; tail -5 /tmp/u.log | cut -c1-300; exit $e
+anchors: node scripts/simHarnessAnchors.mjs 2>&1 | grep -vE "^\s*ok" | tail -30 | cut -c1-300
+leaguerules: node scripts/simCmLeagueRules.mjs > /tmp/lr.log 2>&1; e=$?; grep -E "FAIL|fail|differs" /tmp/lr.log | head -40 | cut -c1-300; exit $e

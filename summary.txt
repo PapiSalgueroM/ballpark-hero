@@ -1,0 +1,3 @@
+anchors exit=0 50s | simHarnessAnchors: 1 failure(s)
+leaguerules exit=1 67s | simCmLeagueRules: 28 failure(s)
+unseeded exit=1 135s | simCmUnseededWorld: 112 FAILURE(S)

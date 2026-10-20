@@ -1,0 +1,6 @@
+1) every harness parses
+2) no harness carries an anchor it can never match
+   966 harnesses, 265 carry a multi line anchor into src, 338 normalised reads guard one
+   FAIL playOneOffCups.mjs reads src/lib/clubManager.ts raw at line 166 and searches it with a multi line anchor (line 341), so on a CRLF checkout it matches nothing
+
+simHarnessAnchors: 1 failure(s)
