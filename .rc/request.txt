@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1514.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/lib/clubManagerWorldView.test.ts src/lib/clubManagerWorldCompsReload.test.ts src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=300000
