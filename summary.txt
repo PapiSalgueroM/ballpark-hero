@@ -1,0 +1,12 @@
+euro-a exit=0 400s | simWorldEuro: green, 37019 checks, 0 failures
+euro-2 exit=1 768s | simWorldEuro: RED, 14865 checks, 70 failures
+euro-6 exit=0 19s | simWorldEuro: green, 30 checks, 0 failures
+euro-3 exit=0 475s | simWorldEuro: green, 521 checks, 0 failures
+savesize exit=0 73s | simClubManagerSaveSize: all sections green
+savesize-base exit=0 75s | simClubManagerSaveSize: all sections green
+dailydeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+difficulty exit=0 257s | simCmDifficulty: all green (sections 1,2,3,6,7,8)
+leaguerules exit=1 66s | simCmLeagueRules: 28 failure(s)
+leaguerules-base exit=0 66s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+readers exit=1 464s | simCmUnseededWorld exit=1 simCmUnseededWorld: 112 FAILURE(S)
+worlducl exit=0 1570s | simWorldUcl: green, 495862 checks, 0 failures

@@ -1,0 +1,15 @@
+simCmShootoutOrder exit=0 simCmShootoutOrder: all sections passed
+simStatsCentre exit=0 ALL STATS CENTRE CHECKS PASSED
+simClubManagerCalendar exit=0 simClubManagerCalendar: all green
+simCalendar exit=0 simCalendar: all green
+simExtraTime exit=0 simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI play
+simUclLegs exit=0 simUclLegs: green. Two legs, the right ground each week, and each season judged by its own rule for a level tie.
+simCup exit=0 ALL CUP CHECKS PASSED
+simMatchDetail exit=0 simMatchDetail: all green
+simClubManagerMeters exit=0 simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simUclField exit=0 simUclField: all green
+simUclSeasonOne exit=0 simUclSeasonOne: all green
+simWorldEditor exit=0 simWorldEditor: 2478 checks, 0 failures
+simClubManagerSlots exit=0 simClubManagerSlots: all sections green
+simHarnessAnchors exit=1 simHarnessAnchors: 1 failure(s)
+simCmUnseededWorld exit=1 simCmUnseededWorld: 112 FAILURE(S)

@@ -1,0 +1,33 @@
+  0 ledger: verified A1 A2 A3 A4 A5 Q2 Q3 Q4 C0 K1 K2 K3 K4 K5 K6 K7 K8 K9 K10 K11 K12 K13 K14 K15 K16 U-legs U7 | one publisher A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 | to verify U5 U6
+  0 constants: partial A1 A3 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 U5 U6; cup winners Manchester City, Inter Milan, Real Sociedad, Bayern Munich, Lens, AZ Alkmaar, none, Celtic, Trabzonspor, Union Saint-Gilloise, LASK, OFI, FC Midtjylland, St. Gallen, Dinamo Zagreb; nations england spain italy germany france netherlands portugal scotland turkey belgium austria greece denmark switzerland croatia
+  1 and 4: 95 journeys, 172 s
+  5 the holder: 60 rollovers after a Europa League final, the winner in next season's Champions League in 60, a participant's 32 already full in 0; the two engines parted on 28 steps, 224 s
+  5 parted on uclField and uclGroup and worldComps: 4
+  5 parted on uclField and worldComps: 20
+  5 parted on uclField: 1
+  5 parted on worldComps: 3
+  7 example, season one of a Chelsea career, the English clubs in it: Brighton F, Crystal Palace H, Bournemouth L, Sunderland P
+  7 routes over every open: C 193, F 580, H 44, L 1560, P 1367
+  7 my club's earned route at an open: C 6, L 16, P 1, none 81
+  7 titles by strength quartile (strongest first): 80, 9, 2, 0
+  7 goals a league phase match: 2.60 over 13104; ties after extra time 359, shootouts 187
+  7 the slice's bytes: 1407 to 1506 over 104 opens
+  7 the nights' months against 2026/27's (U7): 1055 the same month, 707 a month off, 6 further; 1768 of 1768 on a Thursday
+  1 carry probes (a slice that earned a route carried to a club outside the field): 13
+  1 opens join: 13
+  1 opens rollover: 60
+  1 opens start: 35
+  1 rollovers whose cup another club won: 47
+  1 rollovers whose cup my club won: 11
+  1 rollovers whose season had no cup bracket (its place passed down): 2
+  1 seasons that ended with no Europa League: 4
+  4 joins outside the field carried: 6
+  4 joins outside the field that changed the Champions League opened: 5
+  4 joins to an entrant opened: 4
+  4 joins to an entrant with none: 4
+  4 seen probes (a carry onto a calendar behind): 35
+  5 parted on uclField and uclGroup and worldComps: 4
+  5 parted on uclField and worldComps: 20
+  5 parted on uclField: 1
+  5 parted on worldComps: 3
+simWorldEuro: green, 37019 checks, 0 failures

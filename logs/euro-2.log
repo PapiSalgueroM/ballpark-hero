@@ -1,0 +1,42 @@
+  2 self relative: 190 journeys, 14794 steps each arm, 70 journeys carried one, 766 s
+FAIL 2 participant Real Madrid (now) nocoach seed 1 at s1-rollover: the state differs
+FAIL 2 participant Real Madrid (now) nocoach seed 2 at s1-rollover: the state differs
+FAIL 2 participant Real Madrid (now) nocoach seed 3 at s1-rollover: the state differs
+FAIL 2 participant Real Madrid (now) nocoach seed 4 at s1-rollover: the state differs
+FAIL 2 participant Real Madrid (now) nocoach seed 5 at s1-rollover: the state differs
+FAIL 2 participant Real Madrid (now) coach seed 1 at s1-rollover: the state differs
+FAIL 2 participant Real Madrid (now) coach seed 2 at s1-rollover: the state differs
+FAIL 2 participant Real Madrid (now) coach seed 3 at s1-rollover: the state differs
+FAIL 2 participant Real Madrid (now) coach seed 4 at s1-rollover: the state differs
+FAIL 2 participant Real Madrid (now) coach seed 5 at s1-rollover: the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 1 at s1-rollover: the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 2 at s1-rollover: the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 3 at s1-rollover: the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 4 at s1-rollover: the state differs
+FAIL 2 participant Arsenal (now) nocoach seed 5 at s1-rollover: the state differs
+FAIL 2 participant Arsenal (now) coach seed 1 at s1-rollover: the state differs
+FAIL 2 participant Arsenal (now) coach seed 2 at s1-rollover: the state differs
+FAIL 2 participant Arsenal (now) coach seed 3 at s1-rollover: the state differs
+FAIL 2 participant Arsenal (now) coach seed 4 at s1-rollover: the state differs
+FAIL 2 participant Arsenal (now) coach seed 5 at s1-rollover: the state differs
+FAIL 2 watcher Chelsea (now) nocoach seed 1 at s1-rollover: the state differs
+FAIL 2 watcher Chelsea (now) nocoach seed 2 at s1-rollover: the state differs
+FAIL 2 watcher Chelsea (now) nocoach seed 3 at s1-rollover: the state differs
+FAIL 2 watcher Chelsea (now) nocoach seed 4 at s1-rollover: the state differs
+FAIL 2 watcher Chelsea (now) nocoach seed 5 at s1-rollover: the state differs
+FAIL 2 watcher Chelsea (now) coach seed 1 at s1-rollover: the state differs
+FAIL 2 watcher Chelsea (now) coach seed 2 at s1-rollover: the state differs
+FAIL 2 watcher Chelsea (now) coach seed 3 at s1-rollover: the state differs
+FAIL 2 watcher Chelsea (now) coach seed 4 at s1-rollover: the state differs
+FAIL 2 watcher Chelsea (now) coach seed 5 at s1-rollover: the state differs
+FAIL 2 watcher Hoffenheim (now) nocoach seed 1 at s1-rollover: the state differs
+FAIL 2 watcher Hoffenheim (now) nocoach seed 2 at s1-rollover: the state differs
+FAIL 2 watcher Hoffenheim (now) nocoach seed 3 at s1-rollover: the state differs
+FAIL 2 watcher Hoffenheim (now) nocoach seed 4 at s1-rollover: the state differs
+FAIL 2 watcher Hoffenheim (now) nocoach seed 5 at s1-rollover: the state differs
+FAIL 2 watcher Hoffenheim (now) coach seed 1 at s1-rollover: the state differs
+FAIL 2 watcher Hoffenheim (now) coach seed 2 at s1-rollover: the state differs
+FAIL 2 watcher Hoffenheim (now) coach seed 3 at s1-rollover: the state differs
+FAIL 2 watcher Hoffenheim (now) coach seed 4 at s1-rollover: the state differs
+FAIL 2 watcher Hoffenheim (now) coach seed 5 at s1-rollover: the state differs
+simWorldEuro: RED, 14865 checks, 70 failures

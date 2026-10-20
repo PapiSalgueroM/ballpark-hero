@@ -1,0 +1,12 @@
+worlducl: node scripts/simWorldUcl.mjs
+euro-a: WORLD_EURO_ONLY=0,1,4,5,7 node scripts/simWorldEuro.mjs
+euro-2: WORLD_EURO_ONLY=2 node scripts/simWorldEuro.mjs
+euro-3: WORLD_EURO_ONLY=3 WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs
+euro-6: WORLD_EURO_ONLY=6 WORLD_EURO_BASE=77556430 node scripts/simWorldEuro.mjs
+difficulty: node scripts/simCmDifficulty.mjs
+savesize: node scripts/simClubManagerSaveSize.mjs
+savesize-base: R=$PWD; git worktree add /tmp/bs 3d1b7d9a > /dev/null 2>&1 && ln -s "$R/node_modules" /tmp/bs/node_modules && cd /tmp/bs && node scripts/simClubManagerSaveSize.mjs
+dailydeals: node scripts/simDailyDeals.mjs
+leaguerules: node scripts/simCmLeagueRules.mjs > /tmp/lr.log 2>&1; e=$?; grep -E "FAIL|differs" /tmp/lr.log | sort | sha256sum; grep -cE "FAIL" /tmp/lr.log; tail -3 /tmp/lr.log; exit $e
+leaguerules-base: R=$PWD; git worktree add /tmp/bl 3d1b7d9a > /dev/null 2>&1 && ln -s "$R/node_modules" /tmp/bl/node_modules && cd /tmp/bl && node scripts/simCmLeagueRules.mjs > /tmp/lrb.log 2>&1; e=$?; grep -E "FAIL|differs" /tmp/lrb.log | sort | sha256sum; grep -cE "FAIL" /tmp/lrb.log; tail -3 /tmp/lrb.log; exit $e
+readers: bad=0; for h in simCmShootoutOrder simStatsCentre simClubManagerCalendar simCalendar simExtraTime simUclLegs simCup simMatchDetail simClubManagerMeters simUclField simUclSeasonOne simWorldEditor simClubManagerSlots simHarnessAnchors simCmUnseededWorld; do node scripts/$h.mjs > /tmp/r-$h.log 2>&1; e=$?; echo "$h exit=$e $(tail -1 /tmp/r-$h.log | cut -c1-160)"; [ $e -ne 0 ] && bad=1; done; exit $bad
