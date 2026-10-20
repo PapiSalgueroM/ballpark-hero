@@ -1,0 +1,3 @@
+difficulty-raw exit=1 146s | simCmDifficulty: 48 FAILURES (sections 2)
+difficulty-usc exit=1 208s | simCmDifficulty: 1 FAILURES (sections 1,2,3,6,7,8)
+proof exit=1 1073s | proofWorldUclFleet: RED, 70 journeys differ from c3309e67 (of 190)
