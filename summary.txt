@@ -1,0 +1,2 @@
+afterswap-small-base exit=3 59s | simOneOffCups: control afterswap DID NOT FIRE (0 failures: )
+afterswap-default exit=1 546s | simOneOffCups: control afterswap FIRED (6 failures, all its own: 1 entrants: Everton (now) seed 1 nocoach season 3: unfinished, the rule says Manchester City and Fulham)

@@ -1,0 +1,2 @@
+afterswap-default: ONE_OFF_CONTROL=afterswap node scripts/simOneOffCups.mjs
+afterswap-small-base: R=$PWD; git worktree add /tmp/b 86db9423 > /dev/null 2>&1 && ln -s "$R/node_modules" /tmp/b/node_modules && cd /tmp/b && ONE_OFF_CONTROL=afterswap ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs > /tmp/ab.log 2>&1; s=$?; grep -E "rollovers|outside the top" /tmp/ab.log; tail -1 /tmp/ab.log; exit $s
