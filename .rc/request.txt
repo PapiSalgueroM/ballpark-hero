@@ -1,0 +1,4 @@
+#!serial
+difficulty-mark: git worktree add base-c33 c3309e67 >/dev/null 2>&1; MARK=1 node .rc/x/mutDiffUsc.mjs && BASE_ROOT=base-c33 SECTION=2 node scripts/simCmDifficulty.mjs; s=$?; git checkout -- scripts; exit $s
+proof-s1: node .rc/x/mutProofS1.mjs && node scripts/proofWorldUclFleet.mjs --base c3309e67 --coach both --eval --old-saves --strip worldComps.usc; s=$?; git checkout -- scripts; exit $s
+proof-s1-mark: MARK=1 node .rc/x/mutProofS1.mjs && node scripts/proofWorldUclFleet.mjs --base c3309e67 --coach both --eval --old-saves --strip worldComps.usc; s=$?; git checkout -- scripts; exit $s
