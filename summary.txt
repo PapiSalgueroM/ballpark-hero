@@ -1,0 +1,9 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+units exit=0 9s |    Duration  8.18s (transform 3.51s, setup 98ms, collect 3.10s, tests 3.63s, environment 517ms, prepare 368ms)
+tsc exit=0 81s | 
+rival exit=0 15s | No rival product names found. 0 findings.
+playoneoff exit=0 109s | playOneOffCups: green, five cases at three sizes and two more at two, pictures in /home/runner/work/_temp/rc-out/files/shots
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+anchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+weight exit=1 27s | sweepWeight: 1 failure
+walk exit=0 162s | walk: 0 findings

@@ -1,0 +1,143 @@
+save ita: Juventus s1 w0; dsc ita-2026 Inter Milan v Lazio; usc none
+save itaDec: Juventus s1 w27; dsc ita-2026 Inter Milan v Lazio; usc none; eval [{"n":0,"night":0,"home":"Inter Milan","away":"Lazio","neutral":false,"settles":true,"hg":1,"ag":0,"winner":"Inter Milan"}]
+save ger: Bayer Leverkusen s1 w0; dsc ger-2026 Bayern Munich v Borussia Dortmund; usc none; eval [{"n":0,"night":0,"home":"Borussia Dortmund","away":"Bayern Munich","neutral":false,"settles":true,"hg":0,"ag":1,"winner":"Bayern Munich"}]
+save usc2: Chelsea s2 w1; dsc eng-2026 Manchester City v Arsenal; usc uefa-2026 Liverpool v Crystal Palace; eval [{"n":0,"night":0,"home":"Liverpool","away":"Crystal Palace","neutral":true,"settles":true,"hg":1,"ag":2,"winner":"Crystal Palace"}]
+save inter: Inter Milan s1 w0; dsc ita-2026 seasonOne; usc none
+save mine0: Bayern Munich s2 w0; dsc ger-2026 Bayern Munich v Augsburg; usc uefa-2026 Bayern Munich v Fenerbahçe
+save mine1: Bayern Munich s2 w3; dsc ger-2026 Bayern Munich v Augsburg; usc uefa-2026 Bayern Munich v Fenerbahçe; mine {"0":{"h":1,"a":0}}; cabinet 1
+save oldIta (base 92290f81): Juventus s1 w15
+save old1509 (base 77556430, rolled on the head): Chelsea s2 w0; dsc eng-2026 Chelsea v Tottenham; usc uefa-2026 noWinner
+   ita-390-rm tiles: measured, running animations 0
+ita-390-rm tile dsc: 🛡️ SUPER CUP Supercoppa Italiana Inter Milan v Lazio
+ita-390-rm card dsc: Cups 🛡️ SUPER CUP Supercoppa Italiana One match. Level after 90 minutes, extra time and then penalties. Played at San Siro in Milan. Inter Milan Serie A champions Lazio Coppa Italia runners up, as the champions won the Coppa Italia too The match · Wed 16 Dec Inter Milan v Lazio The game plays this one: you follow it from outside. Only the 2026-27 edition is confirmed, and the game plays it on its own midweek nearest the real date. Later seasons show as not confirmed until the game can stand on them.
+   ita-390-rm dsc card: measured, running animations 0
+ita-390-rm tile usc: 🏆 UEFA SUPER CUP UEFA Super Cup This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done.
+ita-390-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   ita-390-rm usc card: measured, running animations 0
+   ita-390-mo tiles: measured, running animations 0
+ita-390-mo tile dsc: 🛡️ SUPER CUP Supercoppa Italiana Inter Milan v Lazio
+ita-390-mo card dsc: Cups 🛡️ SUPER CUP Supercoppa Italiana One match. Level after 90 minutes, extra time and then penalties. Played at San Siro in Milan. Inter Milan Serie A champions Lazio Coppa Italia runners up, as the champions won the Coppa Italia too The match · Wed 16 Dec Inter Milan v Lazio The game plays this one: you follow it from outside. Only the 2026-27 edition is confirmed, and the game plays it on its own midweek nearest the real date. Later seasons show as not confirmed until the game can stand on them.
+   ita-390-mo dsc card: measured, running animations 0
+ita-390-mo tile usc: 🏆 UEFA SUPER CUP UEFA Super Cup This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done.
+ita-390-mo card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   ita-390-mo usc card: measured, running animations 0
+   ita-1280-rm tiles: measured, running animations 0
+ita-1280-rm tile dsc: 🛡️ SUPER CUP Supercoppa Italiana Inter Milan v Lazio
+ita-1280-rm card dsc: Cups 🛡️ SUPER CUP Supercoppa Italiana One match. Level after 90 minutes, extra time and then penalties. Played at San Siro in Milan. Inter Milan Serie A champions Lazio Coppa Italia runners up, as the champions won the Coppa Italia too The match · Wed 16 Dec Inter Milan v Lazio The game plays this one: you follow it from outside. Only the 2026-27 edition is confirmed, and the game plays it on its own midweek nearest the real date. Later seasons show as not confirmed until the game can stand on them.
+   ita-1280-rm dsc card: measured, running animations 0
+ita-1280-rm tile usc: 🏆 UEFA SUPER CUP UEFA Super Cup This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done.
+ita-1280-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   ita-1280-rm usc card: measured, running animations 0
+   itaDec-390-rm tiles: measured, running animations 0
+itaDec-390-rm tile dsc: 🛡️ SUPER CUP Won by Inter Milan Inter Milan 1-0 Lazio
+itaDec-390-rm card dsc: Cups 🛡️ SUPER CUP Supercoppa Italiana One match. Level after 90 minutes, extra time and then penalties. Played at San Siro in Milan. Inter Milan Serie A champions Lazio Coppa Italia runners up, as the champions won the Coppa Italia too The match · Wed 16 Dec Inter Milan 1-0 Lazio Inter Milan won. The game plays this one: you follow it from outside. Only the 2026-27 edition is confirmed, and the game plays it on its own midweek nearest the real date. Later seasons show as not confirmed until the game can stand on them.
+   itaDec-390-rm dsc card: measured, running animations 0
+itaDec-390-rm tile usc: 🏆 UEFA SUPER CUP UEFA Super Cup This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done.
+itaDec-390-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   itaDec-390-rm usc card: measured, running animations 0
+   itaDec-1280-rm tiles: measured, running animations 0
+itaDec-1280-rm tile dsc: 🛡️ SUPER CUP Won by Inter Milan Inter Milan 1-0 Lazio
+itaDec-1280-rm card dsc: Cups 🛡️ SUPER CUP Supercoppa Italiana One match. Level after 90 minutes, extra time and then penalties. Played at San Siro in Milan. Inter Milan Serie A champions Lazio Coppa Italia runners up, as the champions won the Coppa Italia too The match · Wed 16 Dec Inter Milan 1-0 Lazio Inter Milan won. The game plays this one: you follow it from outside. Only the 2026-27 edition is confirmed, and the game plays it on its own midweek nearest the real date. Later seasons show as not confirmed until the game can stand on them.
+   itaDec-1280-rm dsc card: measured, running animations 0
+itaDec-1280-rm tile usc: 🏆 UEFA SUPER CUP UEFA Super Cup This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done.
+itaDec-1280-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   itaDec-1280-rm usc card: measured, running animations 0
+   ger-390-rm tiles: measured, running animations 0
+ger-390-rm tile dsc: 🛡️ SUPER CUP Won by Bayern Munich Borussia Dortmund 0-1 Bayern Munich
+ger-390-rm card dsc: Cups 🛡️ SUPER CUP German Supercup One match. Level after 90 minutes, it goes straight to penalties. Played at Signal Iduna Park in Dortmund. Bayern Munich Bundesliga champions Borussia Dortmund Bundesliga runners up, as the champions won the DFB-Pokal too The match · Wed 5 Aug Borussia Dortmund 0-1 Bayern Munich Bayern Munich won. The game plays this one: you follow it from outside, and play in it from a summer your club earns a place. The league picks the real ground and either club can bid to host. The game plays it at the champions' ground, apart from 2026's at Dortmund, and on its own date.
+   ger-390-rm dsc card: measured, running animations 0
+ger-390-rm tile usc: 🏆 UEFA SUPER CUP UEFA Super Cup This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done.
+ger-390-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   ger-390-rm usc card: measured, running animations 0
+   ger-1280-rm tiles: measured, running animations 0
+ger-1280-rm tile dsc: 🛡️ SUPER CUP Won by Bayern Munich Borussia Dortmund 0-1 Bayern Munich
+ger-1280-rm card dsc: Cups 🛡️ SUPER CUP German Supercup One match. Level after 90 minutes, it goes straight to penalties. Played at Signal Iduna Park in Dortmund. Bayern Munich Bundesliga champions Borussia Dortmund Bundesliga runners up, as the champions won the DFB-Pokal too The match · Wed 5 Aug Borussia Dortmund 0-1 Bayern Munich Bayern Munich won. The game plays this one: you follow it from outside, and play in it from a summer your club earns a place. The league picks the real ground and either club can bid to host. The game plays it at the champions' ground, apart from 2026's at Dortmund, and on its own date.
+   ger-1280-rm dsc card: measured, running animations 0
+ger-1280-rm tile usc: 🏆 UEFA SUPER CUP UEFA Super Cup This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done.
+ger-1280-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   ger-1280-rm usc card: measured, running animations 0
+   usc2-390-rm tiles: measured, running animations 0
+usc2-390-rm tile dsc: 🛡️ SUPER CUP Won by Manchester City Manchester City 3-1 Arsenal
+usc2-390-rm card dsc: Cups 🛡️ SUPER CUP FA Community Shield One match. Level after 90 minutes, it goes straight to penalties. On a neutral ground. Manchester City Premier League champions Arsenal FA Cup winners The match · Wed 11 Aug Manchester City 3-1 Arsenal Manchester City won.
+   usc2-390-rm dsc card: measured, running animations 0
+usc2-390-rm tile usc: 🏆 UEFA SUPER CUP Won by Crystal Palace Liverpool 1-2 Crystal Palace
+usc2-390-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. On a neutral ground. Liverpool Champions League winners last season Crystal Palace Europa League winners last season The match · Wed 18 Aug Liverpool 1-2 Crystal Palace Crystal Palace won. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   usc2-390-rm usc card: measured, running animations 0
+   usc2-1280-rm tiles: measured, running animations 0
+usc2-1280-rm tile dsc: 🛡️ SUPER CUP Won by Manchester City Manchester City 3-1 Arsenal
+usc2-1280-rm card dsc: Cups 🛡️ SUPER CUP FA Community Shield One match. Level after 90 minutes, it goes straight to penalties. On a neutral ground. Manchester City Premier League champions Arsenal FA Cup winners The match · Wed 11 Aug Manchester City 3-1 Arsenal Manchester City won.
+   usc2-1280-rm dsc card: measured, running animations 0
+usc2-1280-rm tile usc: 🏆 UEFA SUPER CUP Won by Crystal Palace Liverpool 1-2 Crystal Palace
+usc2-1280-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. On a neutral ground. Liverpool Champions League winners last season Crystal Palace Europa League winners last season The match · Wed 18 Aug Liverpool 1-2 Crystal Palace Crystal Palace won. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   usc2-1280-rm usc card: measured, running animations 0
+   inter-390-rm tiles: measured, running animations 0
+inter-390-rm tile dsc: 🛡️ SUPER CUP Supercoppa Italiana Your club's place was settled before you arrived. Only this season's edition is confirmed, so later seasons are not confirmed yet.
+inter-390-rm card dsc: Cups 🛡️ SUPER CUP Supercoppa Italiana One match. Level after 90 minutes, extra time and then penalties. Your club's place was settled before you arrived. Only the 2026-27 edition is confirmed, and the game plays it on its own midweek nearest the real date. Later seasons show as not confirmed until the game can stand on them.
+   inter-390-rm dsc card: measured, running animations 0
+inter-390-rm tile usc: 🏆 UEFA SUPER CUP UEFA Super Cup This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done.
+inter-390-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   inter-390-rm usc card: measured, running animations 0
+   inter-1280-rm tiles: measured, running animations 0
+inter-1280-rm tile dsc: 🛡️ SUPER CUP Supercoppa Italiana Your club's place was settled before you arrived. Only this season's edition is confirmed, so later seasons are not confirmed yet.
+inter-1280-rm card dsc: Cups 🛡️ SUPER CUP Supercoppa Italiana One match. Level after 90 minutes, extra time and then penalties. Your club's place was settled before you arrived. Only the 2026-27 edition is confirmed, and the game plays it on its own midweek nearest the real date. Later seasons show as not confirmed until the game can stand on them.
+   inter-1280-rm dsc card: measured, running animations 0
+inter-1280-rm tile usc: 🏆 UEFA SUPER CUP UEFA Super Cup This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done.
+inter-1280-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   inter-1280-rm usc card: measured, running animations 0
+   mine0-390-rm tiles: measured, running animations 0
+mine0-390-rm tile dsc: 🛡️ SUPER CUP Your club is in it Bayern Munich v Augsburg
+mine0-390-rm card dsc: Cups 🛡️ SUPER CUP German Supercup One match. Level after 90 minutes, it goes straight to penalties. At Bayern Munich's ground. Bayern Munich Bundesliga champions Augsburg DFB-Pokal winners The match · Wed 11 Aug Bayern Munich v Augsburg The league picks the real ground and either club can bid to host. The game plays it at the champions' ground, apart from 2026's at Dortmund, and on its own date.
+   mine0-390-rm dsc card: measured, running animations 0
+mine0-390-rm tile usc: 🏆 UEFA SUPER CUP Your club is in it Bayern Munich v Fenerbahçe
+mine0-390-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. On a neutral ground. Bayern Munich Champions League winners last season Fenerbahçe Europa League winners last season The match · Wed 18 Aug Bayern Munich v Fenerbahçe UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   mine0-390-rm usc card: measured, running animations 0
+   mine0-1280-rm tiles: measured, running animations 0
+mine0-1280-rm tile dsc: 🛡️ SUPER CUP Your club is in it Bayern Munich v Augsburg
+mine0-1280-rm card dsc: Cups 🛡️ SUPER CUP German Supercup One match. Level after 90 minutes, it goes straight to penalties. At Bayern Munich's ground. Bayern Munich Bundesliga champions Augsburg DFB-Pokal winners The match · Wed 11 Aug Bayern Munich v Augsburg The league picks the real ground and either club can bid to host. The game plays it at the champions' ground, apart from 2026's at Dortmund, and on its own date.
+   mine0-1280-rm dsc card: measured, running animations 0
+mine0-1280-rm tile usc: 🏆 UEFA SUPER CUP Your club is in it Bayern Munich v Fenerbahçe
+mine0-1280-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. On a neutral ground. Bayern Munich Champions League winners last season Fenerbahçe Europa League winners last season The match · Wed 18 Aug Bayern Munich v Fenerbahçe UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   mine0-1280-rm usc card: measured, running animations 0
+   mine1-390-rm tiles: measured, running animations 0
+mine1-390-rm tile dsc: 🛡️ SUPER CUP Won by Bayern Munich Bayern Munich 3-1 Augsburg
+mine1-390-rm card dsc: Cups 🛡️ SUPER CUP German Supercup One match. Level after 90 minutes, it goes straight to penalties. At Bayern Munich's ground. Bayern Munich Bundesliga champions Augsburg DFB-Pokal winners The match · Wed 11 Aug Bayern Munich 3-1 Augsburg Bayern Munich won. The league picks the real ground and either club can bid to host. The game plays it at the champions' ground, apart from 2026's at Dortmund, and on its own date.
+   mine1-390-rm dsc card: measured, running animations 0
+mine1-390-rm tile usc: 🏆 UEFA SUPER CUP Won by Bayern Munich Bayern Munich 1-0 Fenerbahçe
+mine1-390-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. On a neutral ground. Bayern Munich Champions League winners last season Fenerbahçe Europa League winners last season The match · Wed 18 Aug Bayern Munich 1-0 Fenerbahçe Bayern Munich won. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   mine1-390-rm usc card: measured, running animations 0
+   mine1-1280-rm tiles: measured, running animations 0
+mine1-1280-rm tile dsc: 🛡️ SUPER CUP Won by Bayern Munich Bayern Munich 3-1 Augsburg
+mine1-1280-rm card dsc: Cups 🛡️ SUPER CUP German Supercup One match. Level after 90 minutes, it goes straight to penalties. At Bayern Munich's ground. Bayern Munich Bundesliga champions Augsburg DFB-Pokal winners The match · Wed 11 Aug Bayern Munich 3-1 Augsburg Bayern Munich won. The league picks the real ground and either club can bid to host. The game plays it at the champions' ground, apart from 2026's at Dortmund, and on its own date.
+   mine1-1280-rm dsc card: measured, running animations 0
+mine1-1280-rm tile usc: 🏆 UEFA SUPER CUP Won by Bayern Munich Bayern Munich 1-0 Fenerbahçe
+mine1-1280-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. On a neutral ground. Bayern Munich Champions League winners last season Fenerbahçe Europa League winners last season The match · Wed 18 Aug Bayern Munich 1-0 Fenerbahçe Bayern Munich won. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   mine1-1280-rm usc card: measured, running animations 0
+   oldIta-390-rm tiles: measured, running animations 0
+oldIta-390-rm tile dsc: 🛡️ SUPER CUP Supercoppa Italiana Your save started before the game had this one, so this season's is not followed here. Only this season's edition is confirmed, so later seasons are not confirmed yet.
+oldIta-390-rm card dsc: Cups 🛡️ SUPER CUP Supercoppa Italiana One match. Level after 90 minutes, extra time and then penalties. Your save started before the game had this one, so this season's is not followed here. Only the 2026-27 edition is confirmed, and the game plays it on its own midweek nearest the real date. Later seasons show as not confirmed until the game can stand on them.
+   oldIta-390-rm dsc card: measured, running animations 0
+oldIta-390-rm tile usc: 🏆 UEFA SUPER CUP UEFA Super Cup This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done.
+oldIta-390-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   oldIta-390-rm usc card: measured, running animations 0
+   oldIta-1280-rm tiles: measured, running animations 0
+oldIta-1280-rm tile dsc: 🛡️ SUPER CUP Supercoppa Italiana Your save started before the game had this one, so this season's is not followed here. Only this season's edition is confirmed, so later seasons are not confirmed yet.
+oldIta-1280-rm card dsc: Cups 🛡️ SUPER CUP Supercoppa Italiana One match. Level after 90 minutes, extra time and then penalties. Your save started before the game had this one, so this season's is not followed here. Only the 2026-27 edition is confirmed, and the game plays it on its own midweek nearest the real date. Later seasons show as not confirmed until the game can stand on them.
+   oldIta-1280-rm dsc card: measured, running animations 0
+oldIta-1280-rm tile usc: 🏆 UEFA SUPER CUP UEFA Super Cup This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done.
+oldIta-1280-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. This year's UEFA Super Cup is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   oldIta-1280-rm usc card: measured, running animations 0
+   old1509-390-rm tiles: measured, running animations 0
+old1509-390-rm tile dsc: 🛡️ SUPER CUP Your club is in it Chelsea v Tottenham
+old1509-390-rm card dsc: Cups 🛡️ SUPER CUP FA Community Shield One match. Level after 90 minutes, it goes straight to penalties. On a neutral ground. Chelsea Premier League champions Tottenham FA Cup winners The match · Wed 11 Aug Chelsea v Tottenham
+   old1509-390-rm dsc card: measured, running animations 0
+old1509-390-rm tile usc: 🏆 UEFA SUPER CUP UEFA Super Cup This year's UEFA Super Cup is not played here: the game does not hold one of last season's European winners for this save, and it never makes one up.
+old1509-390-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. This year's UEFA Super Cup is not played here: the game does not hold one of last season's European winners for this save, and it never makes one up. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   old1509-390-rm usc card: measured, running animations 0
+   old1509-1280-rm tiles: measured, running animations 0
+old1509-1280-rm tile dsc: 🛡️ SUPER CUP Your club is in it Chelsea v Tottenham
+old1509-1280-rm card dsc: Cups 🛡️ SUPER CUP FA Community Shield One match. Level after 90 minutes, it goes straight to penalties. On a neutral ground. Chelsea Premier League champions Tottenham FA Cup winners The match · Wed 11 Aug Chelsea v Tottenham
+   old1509-1280-rm dsc card: measured, running animations 0
+old1509-1280-rm tile usc: 🏆 UEFA SUPER CUP UEFA Super Cup This year's UEFA Super Cup is not played here: the game does not hold one of last season's European winners for this save, and it never makes one up.
+old1509-1280-rm card usc: Cups 🏆 UEFA SUPER CUP UEFA Super Cup One match. Level after 90 minutes, it goes straight to penalties. This year's UEFA Super Cup is not played here: the game does not hold one of last season's European winners for this save, and it never makes one up. UEFA picks the stadium and the date in advance. The game plays it on its own first free midweek after the opening league game.
+   old1509-1280-rm usc card: measured, running animations 0
+walk: 0 findings
