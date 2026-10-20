@@ -1,0 +1,10 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | e12b6e0e5 Release BN seam: refresh scripts/data/guideHeadingsFrozen.json for /club-manager, the generated output of the 1514 guide item placed in 4d2dbdfb (node scripts/s
+vitest-luton-unit exit=0 2s |    Duration  1.58s (transform 830ms, setup 45ms, collect 1.04s, tests 52ms, environment 192ms, prepare 76ms)
+luton-proof exit=0 13s | PASS Luton display component proof
+genCareerLeagueSeasons-check exit=0 0s | careerLeagueSeasons.ts is current
+simCareerLeagueSeasons exit=0 11s | simCareerLeagueSeasons: all sections green
+luton-walk exit=0 10s | lutonWalk: PASS 32 checks
+base-minus278 exit=0 27s | /tmp/wt-4174
+luton-walk-ctl-minus278 exit=0 10s | FIRED-OK
+playSoccerCareerOpponents exit=0 10s | playSoccerCareerOpponents: 164 checks, 0 failed
