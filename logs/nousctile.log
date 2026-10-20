@@ -1,0 +1,4 @@
+   FAIL (g) Marseille season one 1280 uefa: no UEFA Super Cup tile
+   FAIL (h) Chelsea season two, UEFA Super Cup 1280: the UEFA Super Cup tile reads ""
+   FAIL (h) Chelsea season two, UEFA Super Cup 1280: no UEFA Super Cup tile
+playOneOffCups: control nousctile FIRED (8 findings of "UEFA Super Cup tile", 8 in all)

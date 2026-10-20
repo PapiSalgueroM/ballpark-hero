@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+# Release BN proof, part w, on the final head's vite build, the database host blocked by the walks and the runner: playOneOffCups and its controls notile and nousctile (each must exit 1 with FIRED), and sweepWeight against the new rows
+playoneoff: node scripts/playOneOffCups.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+notile: PLAY_ONEOFF_CONTROL=notile node scripts/playOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+nousctile: PLAY_ONEOFF_CONTROL=nousctile node scripts/playOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+weight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; grep -E "^ +/" /tmp/w.log | head -20 | cut -c1-120; grep -E "FAIL" /tmp/w.log | head -6 | cut -c1-200; tail -2 /tmp/w.log | cut -c1-200; exit $s
