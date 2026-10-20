@@ -1,0 +1,3 @@
+nocarryusc exit=1 83s | simOneOffCups: control nocarryusc FIRED (8 failures, all its own: 1 never falls: Liverpool (now) seed 1 nocoach at s2-join: 0 UEFA Super Cup nights shown after 1)
+evalundated exit=1 84s | simOneOffCups: control evalundated FIRED (6 failures, all its own: 1 venue: Augsburg (now) at its start: ger-2026's 2026 edition is played at Bayern Munich's ground, its 
+s01 exit=0 136s | simOneOffCups: green, 31633 checks (136 s)
