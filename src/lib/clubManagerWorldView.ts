@@ -520,7 +520,7 @@ const STUB_WORDS: Record<OneOffSkip, (name: string) => string> = {
   moved: name => `You arrived from another country this summer, so this season's ${name} is not in your game.`,
   notInWorld: () => "One of its clubs is not in this game's world, so it is not shown.",
   noNight: () => 'There is no free midweek for it on this season\'s calendar, so it is not played.',
-  noWinner: name => `This year's ${name} is not played: one of last season's European winners is not in your game, and the game never makes one up.`,
+  noWinner: name => `This year's ${name} is not played here: the game does not hold one of last season's European winners for this save, and it never makes one up.`,
 };
 
 function formatWords(row: OneOffRow): string {
@@ -568,7 +568,7 @@ export function superCupView(career: CareerState, key: OneOffKey = 'dsc'): Super
   if (!slice) {
     /* Round 1514: season one's UEFA Super Cup is never opened (the 2025-26 Europa League winner is not in the game). */
     view.stub = key === 'usc' && career.season === 1
-      ? `This year's ${row.name} is not played: last season's Europa League winner is not in your game. It opens next summer, when this season is done.`
+      ? `This year's ${row.name} is not played here: the game does not hold last season's Europa League winner. It opens next summer, when this season is done.`
       : view.later ? 'It opens next summer, when this season is done.'
       : `Your save started before the game had this one, so this season's is not followed here. ${ONLY_THIS_EDITION}`;
     return view;
