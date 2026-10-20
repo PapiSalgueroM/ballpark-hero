@@ -95,6 +95,31 @@ jobs:
           NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
           python -m pip install fonttools pillow > "$out/font-tools-install.log" 2>&1
           NODE_OPTIONS='' FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          fc-match --format='%{file}\t%{family}\n' Inter > "$out/native-font-before.txt"
+          test ! -e "$out/native-font-setup.transport"; : > "$out/native-font-setup.transport"
+          SIM_OFFLINE_RECEIPT="$out/native-font-setup.transport" node --input-type=module > "$out/native-font-copy.log" 2>&1 <<'NODE'
+          import fs from 'node:fs'; import path from 'node:path'; import assert from 'node:assert/strict'; import { createHash } from 'node:crypto';
+          const out = process.env.GRID_CELL_NAMES_OUT, cache = path.join(out, 'font-cache'), dir = path.join(cache, 'native-fonts'), sha = v => createHash('sha256').update(v).digest('hex');
+          assert(!fs.existsSync(dir)); fs.mkdirSync(dir);
+          const entries = JSON.parse(fs.readFileSync(path.join(cache, 'manifest.json'))).filter(row => row.contentType === 'font/ttf');
+          assert.equal(entries.length, 8); const copies = [];
+          for (const row of entries) { assert.match(row.url, /^https:\/\/fonts\.gstatic\.com\/s\/(inter|spacegrotesk)\//); assert.match(row.file, /^[0-9a-f]{64}$/); const original = path.join(cache, row.file), body = fs.readFileSync(original); assert.equal(sha(body), row.sha256); const file = path.join(dir, row.file + '.ttf'); fs.writeFileSync(file, body, { flag: 'wx' }); copies.push({ original, file, bytes: body.length, sha256: sha(body) }); }
+          const config = path.join(cache, 'fontconfig.xml'); assert(!/[<>&]/.test(dir + out));
+          fs.writeFileSync(config, '<?xml version="1.0"?><!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd"><fontconfig><include ignore_missing="no">/etc/fonts/fonts.conf</include><dir>' + dir + '</dir><cachedir>' + path.join(out, 'native-font-cache') + '</cachedir></fontconfig>', { flag: 'wx' });
+          fs.writeFileSync(path.join(out, 'native-font-copies.json'), JSON.stringify({ config, copies, scope: 'Verified existing TTF copies for inherited geometry fixture system font resolution. No source, layout predicate or transport change.' }, null, 2) + '\n', { flag: 'wx' });
+          NODE
+          export FONTCONFIG_FILE="$out/font-cache/fontconfig.xml"
+          echo "FONTCONFIG_FILE=$FONTCONFIG_FILE" >> "$GITHUB_ENV"
+          fc-cache --force "$out/font-cache/native-fonts" > "$out/native-font-cache.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/native-font-setup.transport" node --input-type=module > "$out/native-font-match.log" 2>&1 <<'NODE'
+          import fs from 'node:fs'; import path from 'node:path'; import assert from 'node:assert/strict'; import { createHash } from 'node:crypto'; import { execFileSync } from 'node:child_process';
+          const out = process.env.GRID_CELL_NAMES_OUT, source = JSON.parse(fs.readFileSync(path.join(out, 'native-font-copies.json'))), matches = [], files = new Set();
+          for (const family of ['Inter', 'Space Grotesk']) for (const weight of [80, 100, 180, 200]) { const pattern = family + ':weight=' + weight, raw = execFileSync('fc-match', ['--format=%{file}\t%{family}\t%{style}\n', pattern], { encoding: 'utf8' }), [file, actualFamily] = raw.trim().split('\t'), held = source.copies.find(row => row.file === file); assert(held, 'Actual native font match is an exact verified copied TTF'); assert.equal(actualFamily, family); const body = fs.readFileSync(file); assert.equal(body.length, held.bytes); assert.equal(createHash('sha256').update(body).digest('hex'), held.sha256); files.add(file); matches.push({ pattern, raw, ...held }); }
+          assert.equal(files.size, 8); fs.writeFileSync(path.join(out, 'native-font-matches.json'), JSON.stringify({ fontconfigFile: process.env.FONTCONFIG_FILE, matches, allEightDistinctVerifiedFontsMatched: true }, null, 2) + '\n', { flag: 'wx' });
+          NODE
+          test ! -s "$out/native-font-setup.transport"
+          readlink -f "$(command -v fc-match)" | xargs sha256sum > "$out/fontconfig-executables.sha256"
+          readlink -f "$(command -v fc-cache)" | xargs sha256sum >> "$out/fontconfig-executables.sha256"
           test ! -e "$out/dependencies-after.transport"; : > "$out/dependencies-after.transport"
           SIM_OFFLINE_RECEIPT="$out/dependencies-after.transport" node --input-type=module > "$out/dependencies-after.log" 2>&1 <<'NODE'
           import fs from 'node:fs'; import assert from 'node:assert/strict'; import { createHash } from 'node:crypto';
@@ -120,7 +145,7 @@ jobs:
           test "$(readlink node_modules/playwright)" = "$browser_tools/node_modules/playwright"
           test "$(readlink node_modules/playwright-core)" = "$browser_tools/node_modules/playwright-core"
           printf '%s\n' "$(readlink node_modules/playwright)" "$(readlink node_modules/playwright-core)" > "$out/browser-links.before"
-          sha256sum "$out/dependency-files.sha256" "$out/browser-tool-files.sha256" "$out/font-files.sha256" "$out/browser-executable-files.sha256" "$out/python-tool-files.sha256" "$out/node-executable.sha256" "$out/python-executable.sha256" > "$out/installed-input-manifests.sha256"
+          sha256sum "$out/dependency-files.sha256" "$out/browser-tool-files.sha256" "$out/font-files.sha256" "$out/browser-executable-files.sha256" "$out/python-tool-files.sha256" "$out/node-executable.sha256" "$out/python-executable.sha256" "$out/fontconfig-executables.sha256" > "$out/installed-input-manifests.sha256"
           git diff --exit-code HEAD
       - name: Actual app types
         id: types
@@ -226,7 +251,7 @@ jobs:
           sha256sum --check "$out/source-files.sha256" > "$out/final-source-hold.log" || result=1
           if test -f "$out/installed-input-manifests.sha256"; then sha256sum --check "$out/installed-input-manifests.sha256" > "$out/final-installed-manifests-hold.log" || result=1; fi
           if test -f "$out/browser-links.before"; then printf '%s\n' "$(readlink node_modules/playwright)" "$(readlink node_modules/playwright-core)" > "$out/browser-links.after"; cmp "$out/browser-links.before" "$out/browser-links.after" || result=1; fi
-          for name in dependency-files browser-tool-files font-files browser-executable-files python-tool-files node-executable python-executable; do if test -f "$out/$name.sha256"; then sha256sum --check "$out/$name.sha256" > "$out/final-$name-hold.log" || result=1; fi; done
+          for name in dependency-files browser-tool-files font-files browser-executable-files python-tool-files node-executable python-executable fontconfig-executables; do if test -f "$out/$name.sha256"; then sha256sum --check "$out/$name.sha256" > "$out/final-$name-hold.log" || result=1; fi; done
           if test -f "$out/dependency-files.before"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-files.after"; cmp "$out/dependency-files.before" "$out/dependency-files.after" || result=1; fi
           if test -f "$out/browser-tool-files.before"; then find "$RUNNER_TEMP/grid-cell-names-browser/node_modules" -type f -print0 | sort -z > "$out/browser-tool-files.after"; cmp "$out/browser-tool-files.before" "$out/browser-tool-files.after" || result=1; fi
           if test -f "$out/font-files.before"; then find "$out/font-cache" -type f -print0 | sort -z > "$out/font-files.after"; cmp "$out/font-files.before" "$out/font-files.after" || result=1; fi
