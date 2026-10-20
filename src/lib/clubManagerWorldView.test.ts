@@ -7,7 +7,7 @@ import {
 import { dateKey } from '@/lib/clubManagerCalendar';
 import { oneOffPartialWhy } from '@/lib/worldOneOffs';
 import { ensureEraRosters } from '@/lib/clubManagerEras';
-import { REAL_FIFTH_TILE, clubRun, firstStageNights, realFifthNation, superCupStatus, superCupView, worldCompView, worldUclStatus, worldUclView, type WorldCompView } from '@/lib/clubManagerWorldView';
+import { REAL_FIFTH_TILE, clubRun, firstStageNights, realFifthNation, superCupCardStub, superCupStatus, superCupView, worldCompView, worldUclStatus, worldUclView, type WorldCompView } from '@/lib/clubManagerWorldView';
 
 /* Round 1503: the one view of the Champions League the screen reads, for the club watching it and for the club
    in it. Every check here is an identity of the save itself (the engine's own evaluation, the participant's own
@@ -382,5 +382,14 @@ describe('the super cup whose next edition is not confirmed', () => {
     const engOld = JSON.parse(JSON.stringify(startCareer('Chelsea'))) as CareerState;
     delete engOld.worldComps!.dsc;
     expect(superCupView(engOld).stub).toBe('It opens next summer, when this season is done.');
+    /* Closing check of 1514: the Italian card says once that only one edition is confirmed (in the mark); the
+       tile, which shows no mark, keeps the stub's sentence; a card whose mark does not say it keeps the whole stub. */
+    const entrantView = superCupView(entrant);
+    expect(entrantView.mark).toMatch(/^Only the 2026-27 edition is confirmed/);
+    expect(superCupStatus(entrantView).sub).toMatch(/Only this season's edition is confirmed/);
+    expect(superCupCardStub(entrantView)).toBe("Your club's place was settled before you arrived.");
+    expect(superCupCardStub(oldView)).toBe("Your save started before the game had this one, so this season's is not followed here.");
+    expect(superCupCardStub({ ...entrantView, mark: '' })).toBe(entrantView.stub);
+    expect(superCupCardStub(superCupView(engOld))).toBe('It opens next summer, when this season is done.');
   }, 300_000);
 });

@@ -11,7 +11,7 @@ import type { WorldCompKey, WorldKoRound } from '@/lib/worldCompetition';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import {
   clubRun, firstStageNights, nextNight, nightLabel, ordinal, realFifthNation, roundPlural, routeWords, worldCompView, worldUclStatus, worldUelStatus,
-  superCupStatus, superCupView, type SuperCupView,
+  superCupCardStub, superCupStatus, superCupView, type SuperCupView,
   type WorldCompView, type WorldViewNight, type WorldViewTie,
 } from '@/lib/clubManagerWorldView';
 
@@ -544,12 +544,13 @@ const TAB_NAMES: Record<Tab, (v: WorldCompView) => string> = {
 
 /** Round 1510: the domestic super cup's one card, behind the Cups panel's fourth tile. */
 function SuperCupCard({ view, myClub, onClub }: { view: SuperCupView; myClub: string; onClub: (c: string) => void }) {
+  const stub = superCupCardStub(view);
   return (
     <div className="bg-card border border-border rounded-2xl p-3 space-y-2" data-cm-super-cup={view.stub ? 'stub' : view.winner ? 'done' : 'ahead'}>
       <div className="text-sm font-bold font-display text-foreground break-words">{view.name ?? 'Not confirmed'}</div>
       {view.format && <div className="text-xs text-muted-foreground">{view.format}</div>}
       {view.ground && <div className="text-xs text-muted-foreground">{view.ground}</div>}
-      {view.stub && <div className="text-xs text-foreground" data-cm-super-cup-stub>{view.stub}</div>}
+      {stub && <div className="text-xs text-foreground" data-cm-super-cup-stub>{stub}</div>}
       {view.clubs.length > 0 && (
         <div className="space-y-0.5">
           {view.clubs.map(c => (

@@ -657,3 +657,11 @@ export function superCupStatus(view: SuperCupView): { value: string; sub: string
   if (next) return { value: view.mine ? 'Your club is in it' : view.name, sub: `${next.home} v ${next.away}` };
   return { value: view.name, sub: 'Followed from outside' };
 }
+
+/** Closing check of 1514: the card's stub line. Where the row's own mark already says only one edition is confirmed
+ *  (Italy's), the card says it once, in the mark, and the stub keeps its first sentence. The tile shows no mark, so
+ *  superCupStatus keeps the whole stub. */
+export function superCupCardStub(view: SuperCupView): string | undefined {
+  const tail = ` ${ONLY_THIS_EDITION}`;
+  return view.stub && /\bedition is confirmed\b/.test(view.mark) && view.stub.endsWith(tail) ? view.stub.slice(0, -tail.length) : view.stub;
+}
