@@ -1,3 +1,13 @@
+## Round1440 source-qualified draft, 2026-10-20: saved guides keep their lists
+
+[Draft PR354](https://github.com/PapiSalgueroM/ballpark-hero/pull/354) stacks on PR353 at e5596fb2f44c3a7e0304af79bbb6568763aea9fc. Tested ab974056e70959ea2ad9b4ea5e48cd70d46d529d preserves eligible flat list containers, original ordered values and clock-common duplicate items. Removing a dated middle item keeps the remaining steps numbered 4 and 6. Complex and excluded list forms retain the original fallback.
+
+[Run 39383659390](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/39383659390) passed real app types, plain production build, all 17 built-site readers and 14 unchanged fatal caps. Explicit and genuine absent-environment default packets cover 15 unique purposes across eight arms each: 240 repeated executions, 200 healthy outcomes and 40 precise expected control faults. The complete 682-byte legacy fallback holds. All three complete actual raw reviews received Root ACKs. Root viewed 12 saved PNGs; the independent DOM reviewer viewed 36. The full saved DOM/AX supports deeper structure beyond those captured viewports.
+
+Source qualification 71c7dbd164c4cc73391e71e9de598e320ad5641833d8ee949015cb4e6549a9db and full original3 admission 54b98c5681ae4221a5c135a0775a2f3451260892f0c0f9d783c3e06243b50688 are in C:/Users/antho/dukb-handoff/2026-10-20/saved-guide-lists-1440/. Original1 remains a zero-case setup failure; original2 remains structural-only because of the proof-server charset confound. See docs/ROUND1440-SAVED-GUIDE-LISTS.md. Generated public pages, sitemap/lastmod, joined integration, protected scopes, main and publication remain I-owned. This round establishes no live-site, full-suite, spoken-AT or AdSense result. All 77 older seals remain immutable; final native source closure is recorded externally.
+
+Previous project state follows.
+
 ## Round1440 claimed, 2026-10-20: saved guide lists
 
 Source-only generator seam on sealed PR353/e5596fb2. Preserve flat source list containers and original numbering while retaining per-item clock pruning. Actual remote original failure and all required proof precede adoption. No runtime, generated public output, AdSense or publication claim. I keeps joined derived output/integration. See docs/ROUND1440-SAVED-GUIDE-LISTS.md.
