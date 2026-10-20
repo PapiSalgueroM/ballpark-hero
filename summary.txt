@@ -1,0 +1,5 @@
+appeal exit=0 49s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+oneoff-s0 exit=0 0s | simOneOffCups: green, 591 checks (0 s)
+norival exit=0 15s | No rival product names found. 0 findings.
+leaguerules exit=0 69s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+tsc exit=0 73s | 
