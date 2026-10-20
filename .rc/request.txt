@@ -1,0 +1,4 @@
+p-real: PROBE_PART=real node .rc/x/probeEngine.mjs
+p-move: PROBE_PART=move node .rc/x/probeEngine.mjs
+p-old: PROBE_PART=old node .rc/x/probeEngine.mjs
+p-bytes: PROBE_PART=bytes node .rc/x/probeEngine.mjs
