@@ -12,3 +12,12 @@ export const DSC_NIGHTS_EDIT = {
   from: '    if (mine) insertOneOffNights(state, slots as number[], k);\n',
   to: '',
 };
+
+/* Round 1514: the UEFA Super Cup's open at the rollover taken out (no worldComps.usc at all). For a kit whose two arms
+ * differ in the Europa League (simWorldEuro section 2: the UEFA Super Cup reads its winner, so the arms would part on
+ * that key by design); simOneOffCups section 3 is the proof that the open moves nothing but its own key. */
+export const USC_OPEN_OFF = {
+  file: 'src/lib/clubManager.ts',
+  from: "    openOneOff(state, { tables: { table: null, cupWinner: null, cupRunnerUp: null, uclWinner: exit(watchHolder), uelWinner: exit(watchUelHolder) }, seasonOne: false }, 'usc');\n",
+  to: "    setOneOffSlice(state, null, 'usc');\n",
+};

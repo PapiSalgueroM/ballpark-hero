@@ -338,7 +338,7 @@ async function caseC(browser, size, tag) {
   if (g.worldComps?.usc) cannot('a season one save holds a UEFA Super Cup');
   saves.g = { items: saved(M, g) };
   console.log('(g) Marseille season one: the Trophée des Champions, PSG v Lens, and no UEFA Super Cup');
-  const USC_OPEN = "    openOneOff(state, { tables: { table: null, cupWinner: null, cupRunnerUp: null, uclWinner: exit(watchHolder), uelWinner: exit(watchUelHolder) }, seasonOne: false }, 'usc');\n";
+  const USC_OPEN = "    openOneOff(state, { tables: { table: null, cupWinner: null, cupRunnerUp: null, uclWinner: exit(watchHolder), uelWinner: exit(watchUelHolder) }, seasonOne: false }, 'usc');";
   const EU = await engineOf(ROOT, 'walk-usc', { edits: [{ file: 'src/lib/clubManager.ts', from: USC_OPEN, to: USC_OPEN.replace('uclWinner: exit(watchHolder)', 'uclWinner: career.clubName') }] }, cannot);
   const MU = await EU.fresh();
   let s = tape(0x1514b, () => MU.cm.startCareer('Chelsea')).value;
