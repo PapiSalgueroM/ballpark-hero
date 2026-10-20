@@ -1,0 +1,8 @@
+# Release BL gate (the lead's ruling b): simGuideHeadings on its own line, in a request of its own. No request of this
+# gate carries a --refresh line (rc-BLc-a, the /soccer-career refresh with the fence run before and after it, is not
+# sent): finish-BLI.md section 3 found a refresh line run beside the plain run in one checkout wrote the record first
+# and voided the plain run. The records were refreshed and committed on the branch (/soccer-career bff30423,
+# /club-manager 31eb7833), so this line reads the committed record against the gate head's guides and saved pages.
+# Wanted: exit 0, "131 guides ... with every original sentence intact" (rBLI-p3 on 31eb7833).
+# Send: bash rc.sh <name> rc-BLgh.txt   (no extra files)
+simGuideHeadings: node scripts/simGuideHeadings.mjs
