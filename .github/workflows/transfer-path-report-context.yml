@@ -1,0 +1,253 @@
+name: Transfer Path report context
+on:
+  push:
+    branches: [codex/transfer-path-report-context]
+    paths:
+      - .github/workflows/transfer-path-report-context.yml
+      - src/components/transfer-path/TransferPathBoard.tsx
+      - src/test/transferPathReportContext.test.tsx
+      - scripts/simTransferPathReportContext.mjs
+      - scripts/qa/transferPathReportContext1439.mjs
+      - scripts/qa/playTransferPathReportContext.mjs
+      - scripts/qa/runTransferPathReportContext1439.mjs
+      - scripts/qa/transfer-path-report-context-fixture/entry.tsx
+      - scripts/qa/transfer-path-report-context-fixture/boundaries.tsx
+      - scripts/qa/transfer-path-report-context-fixture/fixture.css
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare owned evidence root
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/transfer-path-report-context"; test ! -e "$out"; mkdir -p "$out"
+          echo "TRANSFER_PATH_CONTEXT_OUT=$out" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+      - name: Exact request and source boundary
+        id: admission
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$TRANSFER_PATH_CONTEXT_OUT"
+          git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git archive --format=zip HEAD > "$out/source.zip"
+          git ls-files -z | sort -z > "$out/tracked-files.before"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
+          base=c8b7279f259143fcd2741091c0a95fd12ba3a9cf
+          git merge-base --is-ancestor "$base" HEAD
+          git diff --exit-code "$base" HEAD -- . ':!docs/ROUND1439-TRANSFER-PATH-REPORT-CONTEXT.md' ':!docs/PROJECT-STATE.md' ':!docs/WORKBOARD.md' ':!src/components/transfer-path/TransferPathBoard.tsx' ':!src/test/transferPathReportContext.test.tsx' ':!scripts/simTransferPathReportContext.mjs' ':!scripts/qa/transferPathReportContext1439.mjs' ':!scripts/qa/playTransferPathReportContext.mjs' ':!scripts/qa/runTransferPathReportContext1439.mjs' ':!scripts/qa/transfer-path-report-context-fixture/entry.tsx' ':!scripts/qa/transfer-path-report-context-fixture/boundaries.tsx' ':!scripts/qa/transfer-path-report-context-fixture/fixture.css' ':!.github/workflows/transfer-path-report-context.yml' > "$out/source-boundary.log"
+          git show "$base:src/components/transfer-path/TransferPathBoard.tsx" > "$out/original-TransferPathBoard.tsx"
+          mode=baseline
+          if ! cmp -s src/components/transfer-path/TransferPathBoard.tsx "$out/original-TransferPathBoard.tsx"; then mode=fixed; fi
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"; echo "TRANSFER_PATH_CONTEXT_MODE=$mode" >> "$GITHUB_ENV"
+          git diff --exit-code HEAD; test -z "$(git status --porcelain --untracked-files=all)"
+          test ! -e "$out/preload.transport"; : > "$out/preload.transport"
+          SIM_OFFLINE_RECEIPT="$out/preload.transport" node -e 'require("node:assert/strict").ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")])'
+      - name: Locked dependencies isolated browser and verified fonts
+        run: |
+          set -euo pipefail
+          out="$TRANSFER_PATH_CONTEXT_OUT"
+          NODE_OPTIONS='' npm ci > "$out/install.log" 2>&1
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          test ! -e "$out/dependencies-before.transport"; : > "$out/dependencies-before.transport"
+          SIM_OFFLINE_RECEIPT="$out/dependencies-before.transport" node --input-type=module > "$out/dependencies-before.log" 2>&1 <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import { createHash } from 'node:crypto';
+          const sha = v => createHash('sha256').update(v).digest('hex'), packages = [];
+          for (const [directory, metadata] of Object.entries(JSON.parse(fs.readFileSync('package-lock.json')).packages)) {
+            if (!directory.startsWith('node_modules/') || !fs.existsSync(directory + '/package.json') || typeof metadata.version !== 'string') continue;
+            const actual = JSON.parse(fs.readFileSync(directory + '/package.json')); assert.equal(actual.version, metadata.version);
+            packages.push({ directory, name: actual.name, version: actual.version, manifest: sha(fs.readFileSync(directory + '/package.json')) });
+          }
+          assert(packages.length > 0); fs.writeFileSync(process.env.TRANSFER_PATH_CONTEXT_OUT + '/dependencies-before.json', JSON.stringify({ packages, packageFiles: ['package.json', 'package-lock.json'].map(file => ({ file, sha256: sha(fs.readFileSync(file)) })) }, null, 2) + '\n', { flag: 'wx' });
+          NODE
+          browser_tools="$RUNNER_TEMP/transfer-path-report-context-browser"; test ! -e "$browser_tools"
+          NODE_OPTIONS='' npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright; ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/transfer-path-report-context-executables"; test ! -e "$PLAYWRIGHT_BROWSERS_PATH"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+          NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/font-tools-install.log" 2>&1
+          NODE_OPTIONS='' FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          test ! -e "$out/dependencies-after.transport"; : > "$out/dependencies-after.transport"
+          SIM_OFFLINE_RECEIPT="$out/dependencies-after.transport" node --input-type=module > "$out/dependencies-after.log" 2>&1 <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import { createHash } from 'node:crypto';
+          const sha = v => createHash('sha256').update(v).digest('hex'), before = JSON.parse(fs.readFileSync(process.env.TRANSFER_PATH_CONTEXT_OUT + '/dependencies-before.json'));
+          for (const row of before.packages) { const actual = JSON.parse(fs.readFileSync(row.directory + '/package.json')); assert.equal(actual.name, row.name); assert.equal(actual.version, row.version); assert.equal(sha(fs.readFileSync(row.directory + '/package.json')), row.manifest); }
+          for (const row of before.packageFiles) assert.equal(sha(fs.readFileSync(row.file)), row.sha256);
+          assert.equal(JSON.parse(fs.readFileSync('node_modules/playwright/package.json')).version, '1.64.0');
+          fs.writeFileSync(process.env.TRANSFER_PATH_CONTEXT_OUT + '/dependencies-after.json', JSON.stringify(before, null, 2) + '\n', { flag: 'wx' }); console.log('Held ' + before.packages.length + ' locked installed packages and both source manifests.');
+          NODE
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-tool-files.sha256"
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-files.sha256"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-files.before"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z > "$out/browser-tool-files.before"
+          find "$out/font-cache" -type f -print0 | sort -z > "$out/font-files.before"
+          find "$PLAYWRIGHT_BROWSERS_PATH" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-executable-files.sha256"
+          find "$PLAYWRIGHT_BROWSERS_PATH" -type f -print0 | sort -z > "$out/browser-executable-files.before"
+          readlink -f "$(command -v node)" | xargs sha256sum > "$out/node-executable.sha256"
+          readlink -f "$(command -v python)" | xargs sha256sum > "$out/python-executable.sha256"
+          python -c 'import pathlib,fontTools,PIL; print(pathlib.Path(fontTools.__file__).resolve().parent); print(pathlib.Path(PIL.__file__).resolve().parent)' > "$out/python-tool-roots.txt"
+          while IFS= read -r directory; do find "$directory" -name __pycache__ -prune -o -type f -print0; done < "$out/python-tool-roots.txt" | sort -z > "$out/python-tool-files.before"
+          xargs -0 sha256sum < "$out/python-tool-files.before" > "$out/python-tool-files.sha256"
+          test "$(readlink node_modules/playwright)" = "$browser_tools/node_modules/playwright"
+          test "$(readlink node_modules/playwright-core)" = "$browser_tools/node_modules/playwright-core"
+          printf '%s\n' "$(readlink node_modules/playwright)" "$(readlink node_modules/playwright-core)" > "$out/browser-links.before"
+          sha256sum "$out/dependency-files.sha256" "$out/browser-tool-files.sha256" "$out/font-files.sha256" "$out/browser-executable-files.sha256" "$out/python-tool-files.sha256" "$out/node-executable.sha256" "$out/python-executable.sha256" > "$out/installed-input-manifests.sha256"
+          git diff --exit-code HEAD
+      - name: Actual app types and focused report context cases
+        id: tests
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$TRANSFER_PATH_CONTEXT_OUT"
+          for file in types proof; do test ! -e "$out/$file.transport"; : > "$out/$file.transport"; done
+          started=$(date -u +%FT%T.%NZ); status=0
+          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1 || status=$?
+          printf 'started=%s\nfinished=%s\nstatus=%s\ncommand=node_modules/.bin/tsc --noEmit -p tsconfig.app.json\n' "$started" "$(date -u +%FT%T.%NZ)" "$status" > "$out/types.process.txt"
+          test "$status" -eq 0
+          started=$(date -u +%FT%T.%NZ); status=0
+          SIM_OFFLINE_RECEIPT="$out/proof.transport" node scripts/qa/runTransferPathReportContext1439.mjs units > "$out/proof.log" 2>&1 || status=$?
+          printf 'started=%s\nfinished=%s\nstatus=%s\ncommand=node scripts/qa/runTransferPathReportContext1439.mjs units\n' "$started" "$(date -u +%FT%T.%NZ)" "$status" > "$out/proof.process.txt"
+          test "$status" -eq 0
+          cat "$out/proof.log"
+          grep -E '^TRANSFER_PATH_REPORT_CONTEXT_UNITS_COMPLETE \{.*\}$' "$out/proof.log" > "$out/proof-closing-line.txt"
+          test "$(wc -l < "$out/proof-closing-line.txt")" -eq 1
+          sha256sum --check "$out/source-files.sha256" > "$out/after-tests-source-hold.log"
+      - name: Serial plain production build
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$TRANSFER_PATH_CONTEXT_OUT"
+          test ! -e "$out/build.transport"; : > "$out/build.transport"
+          started=$(date -u +%FT%T.%NZ); status=0
+          SIM_OFFLINE_RECEIPT="$out/build.transport" npm run build > "$out/build.log" 2>&1 || status=$?
+          printf 'started=%s\nfinished=%s\nstatus=%s\ncommand=npm run build\n' "$started" "$(date -u +%FT%T.%NZ)" "$status" > "$out/build.process.txt"
+          test "$status" -eq 0
+          tail -n 6 "$out/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist-files.sha256"
+          find dist -type f -print0 | sort -z > "$out/dist-members.before"
+          (cd dist && zip -qr "$out/dist.zip" .)
+      - name: Compiled actual Board fictional fixture and source controls
+        id: browser
+        timeout-minutes: 45
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$TRANSFER_PATH_CONTEXT_OUT"
+          test ! -e "$out/browser-orchestrator.transport"; : > "$out/browser-orchestrator.transport"
+          started=$(date -u +%FT%T.%NZ); status=0
+          SIM_OFFLINE_RECEIPT="$out/browser-orchestrator.transport" node scripts/qa/runTransferPathReportContext1439.mjs browser > "$out/browser.log" 2>&1 || status=$?
+          printf 'started=%s\nfinished=%s\nstatus=%s\ncommand=node scripts/qa/runTransferPathReportContext1439.mjs browser\n' "$started" "$(date -u +%FT%T.%NZ)" "$status" > "$out/browser.process.txt"
+          test "$status" -eq 0
+          cat "$out/browser.log"
+          grep -E '^TRANSFER_PATH_REPORT_CONTEXT_BROWSER_RUNNER_COMPLETE \{.*\}$' "$out/browser.log" > "$out/browser-closing-line.txt"
+          test "$(wc -l < "$out/browser-closing-line.txt")" -eq 1
+      - name: All fifteen built-site readers and both guide checks
+        id: readers
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$TRANSFER_PATH_CONTEXT_OUT"; mkdir "$out/readers"; : > "$out/readers.tsv"; : > "$out/extras-readers.tsv"; failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            test ! -e "$out/readers/$harness.transport"; : > "$out/readers/$harness.transport"
+            started=$(date -u +%FT%T.%NZ); status=0; SIM_OFFLINE_RECEIPT="$out/readers/$harness.transport" ONLY="$harness" node scripts/runAllSims.mjs --browser > "$out/readers/$harness.log" 2>&1 || status=$?
+            printf 'started=%s\nfinished=%s\nstatus=%s\ncommand=ONLY=%s node scripts/runAllSims.mjs --browser\n' "$started" "$(date -u +%FT%T.%NZ)" "$status" "$harness" > "$out/readers/$harness.process.txt"
+            printf '%s\t%s\n' "$harness" "$status" >> "$out/readers.tsv"; cat "$out/readers/$harness.log"; test "$status" -eq 0 || failed=1
+          done
+          for harness in simGuideHeadings simSiteSearch; do
+            test ! -e "$out/readers/$harness.transport"; : > "$out/readers/$harness.transport"
+            started=$(date -u +%FT%T.%NZ); status=0; SIM_OFFLINE_RECEIPT="$out/readers/$harness.transport" ONLY="$harness" node scripts/runAllSims.mjs --browser > "$out/readers/$harness.log" 2>&1 || status=$?
+            printf 'started=%s\nfinished=%s\nstatus=%s\ncommand=ONLY=%s node scripts/runAllSims.mjs --browser\n' "$started" "$(date -u +%FT%T.%NZ)" "$status" "$harness" > "$out/readers/$harness.process.txt"
+            printf '%s\t%s\n' "$harness" "$status" >> "$out/extras-readers.tsv"; cat "$out/readers/$harness.log"; test "$status" -eq 0 || failed=1
+          done
+          test "$(wc -l < "$out/readers.tsv")" -eq 15 || failed=1
+          test "$(wc -l < "$out/extras-readers.tsv")" -eq 2 || failed=1
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simGuideHeadings simSiteSearch; do
+            grep -Fx 'All 1 harnesses green.' "$out/readers/$harness.log" > "$out/readers/$harness.closing-line.txt" || failed=1
+            if grep -Eq 'SIM_OFFLINE_BLOCK|Unhandled[[:space:]]+(Errors?|Rejections?)|SKIPPED, not run and not counted' "$out/readers/$harness.log"; then failed=1; fi
+          done
+          sha256sum --check "$out/dist-files.sha256" > "$out/after-readers-dist-hold.log"
+          exit "$failed"
+      - name: All fourteen unchanged fatal download gates
+        id: weights
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$TRANSFER_PATH_CONTEXT_OUT"
+          git show 775564305e9da84dab59f2b9fe246d044a3cc8e9:scripts/sweepWeight.mjs > "$out/original-sweepWeight.mjs"; cmp scripts/sweepWeight.mjs "$out/original-sweepWeight.mjs"
+          for file in server-weights weights; do test ! -e "$out/$file.transport"; : > "$out/$file.transport"; done
+          SIM_OFFLINE_RECEIPT="$out/server-weights.transport" node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-weights.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          started=$(date -u +%FT%T.%NZ); status=0; SIM_OFFLINE_RECEIPT="$out/weights.transport" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
+          printf 'started=%s\nfinished=%s\nstatus=%s\ncommand=SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs\n' "$started" "$(date -u +%FT%T.%NZ)" "$status" > "$out/weights.process.txt"
+          cat "$out/weights.log"
+          test "$status" -eq 0
+          grep -Fx 'sweepWeight: green. Every page is inside its budget, and the budgets came down this round.' "$out/weights.log" > "$out/weights-closing-line.txt"
+          test "$(grep -Ec '^   /[^[:space:]]*[[:space:]]+[0-9]+K gz over[[:space:]]+[0-9]+ files \(budget [0-9]+K, [0-9]+\.[0-9]+K to the tenth\)$' "$out/weights.log")" -eq 14
+          awk '/^   \// { for (i=1;i<=NF;i++) if ($i == "(budget") { value=$(i+1); sub(/K,/, "", value); print $1 "\t" value } }' "$out/weights.log" > "$out/weights-observed.tsv"
+          printf '/\t244\n/club-manager\t619\n/soccer-career\t835\n/stadium-tycoon\t303\n/wonderkid-factory\t277\n/minefield\t295\n/footle\t354\n/nfl-my-career\t491\n/front-office\t374\n/soccer-grid\t319\n/leaderboard\t266\n/manager-hot-seat\t636\n/deadline-day\t646\n/transfer-path\t379\n' > "$out/weights-expected.tsv"
+          cmp "$out/weights-expected.tsv" "$out/weights-observed.tsv"
+          kill "$server"; wait "$server" || test "$?" -eq 143
+          trap - EXIT
+      - name: Final dependency source dist and transport holds
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="${TRANSFER_PATH_CONTEXT_OUT:-$RUNNER_TEMP/transfer-path-report-context}"; mkdir -p "$out"; result=0
+          git diff --exit-code HEAD > "$out/final-diff.log" || result=1
+          git status --porcelain --untracked-files=all > "$out/final-status.txt"; test ! -s "$out/final-status.txt" || result=1
+          git ls-files -z | sort -z > "$out/tracked-files.after"; cmp "$out/tracked-files.before" "$out/tracked-files.after" || result=1
+          sha256sum --check "$out/source-files.sha256" > "$out/final-source-hold.log" || result=1
+          if test -f "$out/installed-input-manifests.sha256"; then sha256sum --check "$out/installed-input-manifests.sha256" > "$out/final-installed-manifests-hold.log" || result=1; fi
+          if test -f "$out/browser-links.before"; then printf '%s\n' "$(readlink node_modules/playwright)" "$(readlink node_modules/playwright-core)" > "$out/browser-links.after"; cmp "$out/browser-links.before" "$out/browser-links.after" || result=1; fi
+          for name in dependency-files browser-tool-files font-files browser-executable-files python-tool-files node-executable python-executable; do if test -f "$out/$name.sha256"; then sha256sum --check "$out/$name.sha256" > "$out/final-$name-hold.log" || result=1; fi; done
+          if test -f "$out/dependency-files.before"; then find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$out/dependency-files.after"; cmp "$out/dependency-files.before" "$out/dependency-files.after" || result=1; fi
+          if test -f "$out/browser-tool-files.before"; then find "$RUNNER_TEMP/transfer-path-report-context-browser/node_modules" -type f -print0 | sort -z > "$out/browser-tool-files.after"; cmp "$out/browser-tool-files.before" "$out/browser-tool-files.after" || result=1; fi
+          if test -f "$out/font-files.before"; then find "$out/font-cache" -type f -print0 | sort -z > "$out/font-files.after"; cmp "$out/font-files.before" "$out/font-files.after" || result=1; fi
+          if test -f "$out/browser-executable-files.before"; then find "$PLAYWRIGHT_BROWSERS_PATH" -type f -print0 | sort -z > "$out/browser-executable-files.after"; cmp "$out/browser-executable-files.before" "$out/browser-executable-files.after" || result=1; fi
+          if test -f "$out/python-tool-files.before"; then while IFS= read -r directory; do find "$directory" -name __pycache__ -prune -o -type f -print0; done < "$out/python-tool-roots.txt" | sort -z > "$out/python-tool-files.after"; cmp "$out/python-tool-files.before" "$out/python-tool-files.after" || result=1; fi
+          if test -f "$out/dist-files.sha256"; then sha256sum --check "$out/dist-files.sha256" > "$out/final-dist-hold.log" || result=1; find dist -type f -print0 | sort -z > "$out/dist-members.after"; cmp "$out/dist-members.before" "$out/dist-members.after" || result=1; fi
+          while IFS= read -r -d '' file; do
+            case "$file" in
+              "$out/weights.transport") if test -s "$file"; then if grep -Ev '^\[SIM_OFFLINE_BLOCK\] external browser route continue https://(fonts\.googleapis\.com|flagcdn\.com)$' "$file" > "$out/weights-unrecognized-transport.txt"; then result=1; fi; fi ;;
+              *) test ! -s "$file" || result=1 ;;
+            esac
+          done < <(find "$out" -name '*.transport' -type f -print0)
+          printf 'mode=%s\ntests=%s\nbuild=%s\nbrowser=%s\nreaders=%s\nweights=%s\n' "${TRANSFER_PATH_CONTEXT_MODE:-unadmitted}" '${{ steps.tests.outcome }}' '${{ steps.build.outcome }}' '${{ steps.browser.outcome }}' '${{ steps.readers.outcome }}' '${{ steps.weights.outcome }}' > "$out/stages.txt"
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: transfer-path-report-context-${{ steps.admission.outputs.mode }}-${{ github.sha }}
+          path: ${{ env.TRANSFER_PATH_CONTEXT_OUT }}
+          if-no-files-found: error
+          retention-days: 14
