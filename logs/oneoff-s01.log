@@ -1,0 +1,32 @@
+  0 ledger: verified eng-2026 eng-2026-s1 uefa-2026 ger-2026 fra-2026 ita-2026 ger-2026-e2026 fra-2026-e2026 ita-2026-e2026 cup-seriea-2025-26 uel-2025-26 uefa-2026-e2026 | to verify eng-2005 eng-2010 eng-2015 eng-2020 esp-2026 | 31 pages
+  0 constants: 5 rows (eng-2026 uefa-2026 ger-2026 fra-2026 ita-2026), 1 season one editions, 4 dated editions, partial eng-2005 eng-2010 eng-2015 eng-2020 esp-2026, edition only ita-2026
+  0 the game's first editions against their publishers: German Supercup Bayern Munich v Borussia Dortmund (a double); Trophée des Champions PSG v Lens; Supercoppa Italiana Inter Milan v Lazio (a double); UEFA Super Cup PSG v Aston Villa
+  1 fleet: Marseille (now, watcher (France), into a UEFA Super Cup club at season two)
+  1 venue probe: ger-2026 from Augsburg; fra-2026 from Angers; ita-2026 from Atalanta
+  1 usc season one probe: PSG seasonOne; Aston Villa seasonOne
+  7 uefa-2026 season one night for Marseille: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 fra-2026 season one night for Marseille: 2026-08-05 (the edition's date 2026-08-16)
+  1 forced: Marseille (now, watcher (France), into a UEFA Super Cup club at season two)
+  7 uefa-2026 season one night for Marseille: 2026-08-12 (slot 1, the edition's date 2026-08-12)
+  7 fra-2026 season one night for Marseille: 2026-08-05 (the edition's date 2026-08-16)
+  1 dated editions whose venue was read off the engine: 8
+  1 doubles (the runners up took the cup place): 4
+  1 moves carrying a cup already shown (the carryseen control reads these): 4
+  1 moves into a UEFA Super Cup club before its night (a joined stub): 4
+  1 steps holding a super cup carried from another country by a mid season move: 204
+  1 usc followed: 6
+  1 usc nights dated month 8: 4
+  1 usc participants: 4
+  1 usc played by my club: 2
+  1 usc season one decided at the finish: 4
+  1 usc season one followed: 4
+  1 usc season one starts read (the nouscrow control reads these): 4
+  1 usc watchers: 4
+  1 usc won by my club: 2
+  5 bytes of a followed one slice: 792
+  5 followed one slices measured: 8
+  7 season one followed: 4
+  7 settled in 90 minutes: 8
+  7 won by the stronger side: 8
+  1 rows seen: fra-2026
+simOneOffCups: green, 4180 checks (18 s)
