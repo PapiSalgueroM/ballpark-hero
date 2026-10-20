@@ -12,7 +12,7 @@ export const TEST_SHA256 = 'cb584d96482ba45209bc5b866d71cb6c4a12ff3b4449210ab32e
 export const ORIGINAL_SHA256 = '9cb6bf16fff6cb6761257629e1cbef74ceffb94897ca8dedcbdcb60ad62fe799';
 export const FIXED_SHA256 = '59f2c4ea98e6e72a4e56c805491cd888967b5a8ed405407f3d0d8a4406862d3a';
 export const CONTROL_SHA256 = { 'reset-omission': '2c26ef752eecc8de8d1697aa88e4ecc34027daa0c6ee1824e23b54004099433c', 'copy-omission': 'fd45cf030a3df89ee784c8ce4f4a91ed2c208bee61b8a937d1eb0431ef665b8f' };
-export const ORIGINAL_ADMISSION = null;
+export const ORIGINAL_ADMISSION = {"status":"PASS","scope":"full-original-transfer-path-context","productAdopted":false,"head":"bc2bc8506d0e4e359a84f2fbc83702a9a8b01c75","sourceSha256":"9cb6bf16fff6cb6761257629e1cbef74ceffb94897ca8dedcbdcb60ad62fe799","testSha256":"cb584d96482ba45209bc5b866d71cb6c4a12ff3b4449210ab32eaf569f60a4bf","commonSha256":"737aa486663a5be5f4c50bff59a0a22af7d2a7b7a9acdc50515bb372bbab063a","featureSha256":"e8f1a769f74d240227cc33c8ba7015fc6103cc48cfb91fbf690b83bb1a26c9f4","pixelSha256":"16d5668870ff57104282f9e71e797b8c843e8edcc1dc828883bbe8914f5e14fc","admissionSha256":"bfd7305259beeb22b559b2706beb3d1b3b5d0df12e0d51897522118ebf759b43"};
 export const HUNKS = [
   {
     "name": "react-effect-import",

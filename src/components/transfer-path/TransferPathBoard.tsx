@@ -1,5 +1,5 @@
 import { FlagImg } from '@/components/FlagImg';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTransferPath, type TransferPathRefusal } from '@/hooks/useTransferPath';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
@@ -40,6 +40,12 @@ export function TransferPathBoard() {
      trying to type. The last search that came back empty goes with it now. */
   const [lastNoMatch, setLastNoMatch] = useState<string | null>(null);
 
+  useEffect(() => {
+    setLastRejected(null);
+    setLastNoMatch(null);
+    setError('');
+  }, [puzzle.id, puzzle.playerA, puzzle.playerB, mode, unlimitedIndex, activeRule]);
+
   const allNames = useMemo(() => getAllPlayerNames(), [getAllPlayerNames]);
   /* normalizeName, not toLowerCase: searchPlayers compares normalized names,
      so an accented chain name (Martin Ødegaard) was never left out before. */
@@ -65,7 +71,7 @@ export function TransferPathBoard() {
     if (reason === 'duplicate') return `${name} is already in the path`;
     if (reason === 'unverified-active') return `${name} isn't in our verified ${ACTIVE_YEAR} active-player records, so Active players only leaves them out`;
     if (reason === 'outside-europe') return `${name} only links to ${last} through a club outside Europe`;
-    return `${name} was never at the same club as ${last} in the same season`;
+    return `${name} and ${last} don't share a club season in our records`;
   };
 
   const handleSelect = (name: string) => {
@@ -123,7 +129,7 @@ export function TransferPathBoard() {
             <HowToPlayPopover title="How to Play Transfer Path" floatingTrigger={false} className="p-1">
               <div className="space-y-3 text-left">
                 <p>🎯 <span className="font-semibold text-foreground">Connect the two players</span> by naming footballers who were teammates, one link at a time.</p>
-                <p>🔗 Each name you add must have been at the same club as the LAST player in your chain, in the same season. Same shirt years apart does not count.</p>
+                <p>🔗 Each name you add must have been at the same club as the LAST player in your chain, in the same season. Same shirt years apart does not count. National teams don't count.</p>
                 <p>🏁 Reach the target player to win. 1000 points for the shortest possible path, minus 100 for every extra step.</p>
                 <p>💡 Stuck? The hint follows your chain, so it always speaks from the last name you played, and giving up shows a full working path.</p>
                 <p>🔎 Still stuck? More help counts your options and never names who to play: how many pool players shared a season with the last name you played, at which clubs, and how many of them are on a shortest route.</p>
