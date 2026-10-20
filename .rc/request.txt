@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+units: node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/lib/clubManagerWorldView.test.ts src/lib/clubManagerWorldCompsReload.test.ts src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000
+oneoff-157: ONE_OFF_ONLY=1,5,7 node scripts/simOneOffCups.mjs
+oneoff-2: ONE_OFF_ONLY=2 node scripts/simOneOffCups.mjs
+oneoff-3: ONE_OFF_ONLY=3 node scripts/simOneOffCups.mjs
+oneoff-046: ONE_OFF_ONLY=0,4,6 node scripts/simOneOffCups.mjs
+ctl-1: bad=0; for c in wrongyear seasononeplay carryseen uscswap italyall nodated firstedition; do ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=$c node scripts/simOneOffCups.mjs > /tmp/c1-$c.log; e=$?; echo "$c exit=$e $(tail -1 /tmp/c1-$c.log | cut -c1-220)"; if [ $e -ne 1 ] || ! tail -1 /tmp/c1-$c.log | grep -q FIRED; then bad=1; fi; done; exit $bad
+ctl-2345: bad=0; for c in keep participant form tick countdown weighs notrophy; do ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=$c node scripts/simOneOffCups.mjs > /tmp/c2-$c.log; e=$?; echo "$c exit=$e $(tail -1 /tmp/c2-$c.log | cut -c1-220)"; if [ $e -ne 1 ] || ! tail -1 /tmp/c2-$c.log | grep -q FIRED; then bad=1; fi; done; exit $bad
+rival: node scripts/simNoRivalNames.mjs
+dashscan: ! git diff 92290f81 HEAD -U0 | grep '^+' | grep -P '\x{2013}|\x{2014}'
