@@ -1,0 +1,31 @@
+  1 fleet: Arsenal (now, season one champions); Manchester City (now, season one cup winners); Chelsea (now, watcher); Everton (now, watcher); Liverpool (now, watcher); Birmingham City (now, second tier watcher); Proof Town Athletic (now, created club in the Championship); Real Madrid (now, no row (Spain)); Bayern Munich (now, season one entrants (Germany, a double)); Marseille (now, watcher (France)); Juventus (now, watcher (Italy, its edition only)); América (now, no row (Mexico, no cup)); Arsenal (era2005, era row partial)
+  7 the help's example (Chelsea season one): Arsenal v Manchester City, night slot 0, 2026-8-5, first league date 2026-8-8
+  7 fra-2026 season one night for Marseille: 2026-08-05 (the edition's date 2026-08-16)
+  7 ita-2026 season one night for Juventus: 2026-12-16 (the edition's date 2026-12-22)
+  1 doubles (the runners up took the cup place): 1
+  1 level matches on a pens row (the etall control needs one): 4
+  1 moved stubs: 2
+  1 moves carrying a cup already shown (the carryseen control reads these): 3
+  1 participants (my club earned a place: played from the match half): 9
+  1 plain fields (champions v cup winners): 8
+  1 rollovers into another league (the afterswap control reads these): 4
+  1 rollovers of a manager outside the top flight: 7
+  1 usc followed: 22
+  1 usc nights dated month 8: 2
+  1 usc participants: 2
+  1 usc played by my club: 2
+  1 usc watchers: 22
+  1 usc won by my club: 2
+  4 super cups my club won (section 1 fleet): 5
+  5 bytes of a followed one slice: 3622
+  5 bytes of a stub: 20695
+  5 followed one slices measured: 32
+  5 stubs measured: 431
+  7 season one followed: 14
+  7 season one stub seasonOne: 6
+  7 settled in 90 minutes: 28
+  7 settled on penalties: 4
+  7 won by the stronger side: 17
+  7 won by the weaker side: 15
+  1 rows seen: eng-2026 ger-2026 fra-2026 ita-2026
+simOneOffCups: control uscswap FIRED (24 failures, all its own: 1 usc: Arsenal (now) seed 1 nocoach season 2: holds AC Milan and Galatasaray, last season's winners were Galatasaray and AC Milan)

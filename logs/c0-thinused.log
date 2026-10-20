@@ -1,0 +1,4 @@
+  0 ledger: verified eng-2026 eng-2026-s1 uefa-2026 ger-2026 fra-2026 ita-2026 ger-2026-e2026 fra-2026-e2026 ita-2026-e2026 cup-seriea-2025-26 | to verify eng-2005 eng-2010 eng-2015 eng-2020 esp-2026 | 28 pages
+  0 constants: 5 rows (eng-2026 uefa-2026 ger-2026 fra-2026 ita-2026), 1 season one editions, 3 dated editions, partial eng-2005 eng-2010 eng-2015 eng-2020 esp-2026, edition only ita-2026
+  0 the game's first editions against their publishers: German Supercup Bayern Munich v Borussia Dortmund (a double); Trophée des Champions PSG v Lens; Supercoppa Italiana Inter Milan v Lazio (a double)
+simOneOffCups: control thinused FIRED (1 failures, all its own: eng-2015 is not verified and carries CM_ONE_OFF_ROWS.eng-2015)

@@ -1,0 +1,7 @@
+simAcademy exit=0 ALL ACADEMY CHECKS PASSED
+simClubManagerALeague exit=0 simClubManagerALeague: all checks passed
+simClubManagerBudget exit=0 simClubManagerBudget: PASS
+simClubManagerScore exit=0 ALL SEASON SCORE CHECKS PASSED
+simCmBoardVerdict exit=0 simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 655 s)
+simCmVarLedger exit=0 simCmVarLedger: all 691 checks passed.
+simEras exit=0 ALL ERA AND AGEING CHECKS PASSED

@@ -1,0 +1,29 @@
+units exit=0 13s |    Duration  11.40s (transform 4.13s, setup 746ms, collect 8.64s, tests 11.79s, environment 3.64s, prepare 1.25s)
+c0-onesource exit=1 0s | simOneOffCups: control onesource FIRED (1 failures, all its own: eng-2026 decider stands on official (1 hosts), not an official and a press page on two hosts)
+c0-wiki exit=1 0s | simOneOffCups: control wiki FIRED (1 failures, all its own: SM-0814: https://en.wikipedia.org/wiki/2026_FA_Community_Shield is a wiki)
+c0-thinused exit=1 0s | simOneOffCups: control thinused FIRED (1 failures, all its own: eng-2015 is not verified and carries CM_ONE_OFF_ROWS.eng-2015)
+c0-receipt exit=1 0s | simOneOffCups: control receipt FIRED (1 failures, all its own: the receipt does not carry the hash of scripts/data/cmOneOffFormats.json (6417843aa48efdaf54fe14b77e41c4db5
+c0-notinworld exit=1 0s | simOneOffCups: control notinworld FIRED (3 failures, all its own: eng-2026-s1: the constant ["eng-2026","2025-26",["Arsenal","Torreense"],"the Principality Stadium in Car
+c0-twopub exit=1 0s | simOneOffCups: control twopub FIRED (1 failures, all its own: ger-2026 decider stands on 1 host (dfl.de), not two publishers)
+c0-pairing exit=1 0s | simOneOffCups: control pairing FIRED (2 failures, all its own: cup-seriea-2025-26: the constant names Roma, the ledger Lazio)
+oo-046 exit=0 87s | simOneOffCups: green, 645 checks (86 s)
+c1-wrongyear exit=1 81s | simOneOffCups: control wrongyear FIRED (1049 failures, all its own: 1 row: Arsenal (now) seed 1 nocoach at s1-rollover: holds no super cup, its country plays eng-2026)
+tsc exit=0 105s | 
+c1-seasononeplay exit=1 79s | simOneOffCups: control seasononeplay FIRED (334 failures, all its own: 1 season one: Arsenal (now) seed 1 nocoach at start: a season one slice holds my club Arsenal, so t
+c1-carryseen exit=1 80s | simOneOffCups: control carryseen FIRED (4 failures, all its own: 1 never falls: Chelsea (now) seed 1 nocoach at s1-join: 0 nights shown after 1)
+c1-uscswap exit=1 82s | simOneOffCups: control uscswap FIRED (24 failures, all its own: 1 usc: Arsenal (now) seed 1 nocoach season 2: holds AC Milan and Galatasaray, last season's winners were G
+c1-italyall exit=1 79s | simOneOffCups: control italyall FIRED (111 failures, all its own: 1 row: Juventus (now) seed 1 nocoach at s1-rollover: holds ita-2026 but ita-2026 is no row of the game)
+c1-nodated exit=1 81s | simOneOffCups: control nodated FIRED (2 failures, all its own: 1 date: Juventus (now) seed 1 nocoach: ita-2026's night is 2027-01-06, its edition was 2026-12-22)
+c1-firstedition exit=1 77s | simOneOffCups: control firstedition FIRED (280 failures, all its own: 1 season one: Bayern Munich (now) seed 1 nocoach: a stub unfinished)
+c5-keep exit=1 82s | simOneOffCups: control keep FIRED (923 failures, all its own: 5 slices: Arsenal (now) seed 1 nocoach at s1-rollover: worldComps holds uel dsc dscOld usc)
+c2-tick exit=1 50s | simOneOffCups: control tick FIRED (16 failures, all its own: 2 fitness: Arsenal seed 1 nocoach at s2-e1: a night my club did not play moved 11 men's fitness)
+c2-countdown exit=1 49s | simOneOffCups: control countdown FIRED (16 failures, all its own: 2 window: Arsenal seed 1 nocoach: the summer window closes after 1:uclGroup:0:4 2:league:2:3, the twin a
+c3-participant exit=1 165s | simOneOffCups: control participant FIRED (19 failures, all its own: 3 Arsenal (now) seed 1 nocoach at s2-e1: the state differs in a key other than worldComps.dsc)
+c3-form exit=1 168s | simOneOffCups: control form FIRED (15 failures, all its own: 3 Arsenal (now) seed 1 nocoach at s1-rollover: the state differs in a key other than worldComps.dsc)
+rival exit=0 20s | No rival product names found. 0 findings.
+c4-weighs exit=1 36s | simOneOffCups: control weighs FIRED (25 failures, all its own: 4 weighs: Chelsea seed 1: nationStanding reads 75.5 without a minor trophy and 89.5 with one)
+c4-notrophy exit=1 35s | simOneOffCups: control notrophy FIRED (8 failures, all its own: 4 trophy: Chelsea seed 1 won: 0 minor trophies ([]), not exactly the FA Community Shield of season 2)
+leaguerules exit=0 90s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+dashscan exit=0 0s | 
+fences exit=0 104s | simLegalPages exit=0 simLegalPages: all green
+helpreaders exit=0 2728s | simEras exit=0 ALL ERA AND AGEING CHECKS PASSED
