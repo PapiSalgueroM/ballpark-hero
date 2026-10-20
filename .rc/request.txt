@@ -1,0 +1,8 @@
+# Release BN proof, part oc, on the final head: simOneOffCups by sections and its controls as finish-1514.md section 8 item 3 and fix-1514.md list them (each control must exit 1 with FIRED; the loop line exits 0 only then)
+s157: ONE_OFF_ONLY=1,5,7 node scripts/simOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+s3: ONE_OFF_ONLY=3 node scripts/simOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+s2: ONE_OFF_ONLY=2 node scripts/simOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+s046: ONE_OFF_ONLY=0,4,6 node scripts/simOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+ctl0: bad=0; for c in onesource wiki thinused receipt notinworld twopub pairing; do ONE_OFF_CONTROL=$c node scripts/simOneOffCups.mjs > /tmp/c-$c.log; e=$?; echo "$c exit=$e $(tail -1 /tmp/c-$c.log | cut -c1-200)"; if [ $e -ne 1 ] || ! tail -1 /tmp/c-$c.log | grep -q FIRED; then bad=1; fi; done; exit $bad
+ctl-1: bad=0; for c in wrongyear seasononeplay carryseen uscswap italyall nodated firstedition evalundated nocarryusc; do ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=$c node scripts/simOneOffCups.mjs > /tmp/c1-$c.log; e=$?; echo "$c exit=$e $(tail -1 /tmp/c1-$c.log | cut -c1-220)"; if [ $e -ne 1 ] || ! tail -1 /tmp/c1-$c.log | grep -q FIRED; then bad=1; fi; done; exit $bad
+ctl-2345: bad=0; for c in keep participant form tick countdown weighs notrophy; do ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=$c node scripts/simOneOffCups.mjs > /tmp/c2-$c.log; e=$?; echo "$c exit=$e $(tail -1 /tmp/c2-$c.log | cut -c1-220)"; if [ $e -ne 1 ] || ! tail -1 /tmp/c2-$c.log | grep -q FIRED; then bad=1; fi; done; exit $bad
