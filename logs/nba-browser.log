@@ -1,0 +1,6 @@
+PASS NBA retry 390: one real Retry, original document and both actual drafted picks held
+PASS NBA retry 1280: one real Retry, original document and both actual drafted picks held
+NBA retry browser: 2/2 actual production journeys.
+NBA retry browser controls: 2/2 effective copied controls.
+NBA retry originals, public state, requests and full draw callers: /home/runner/work/_temp/nba-browser
+PASS NBA Perfect Season retry browser

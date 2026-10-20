@@ -1,0 +1,24 @@
+PASS 320-visible: actual Attributes, full save/reload and visible boundary
+PASS 320-pending: actual Attributes waiting mask, no premature disclosure and complete raw save held
+PASS 320-reveal: actual reveal, saved Attributes values and complete raw reload held
+PASS 320-wall99: actual Attributes, full save/reload and wall99 boundary
+PASS 320-retired: actual Attributes, full save/reload and retired boundary
+PASS 390-visible: actual Attributes, full save/reload and visible boundary
+PASS 390-pending: actual Attributes waiting mask, no premature disclosure and complete raw save held
+PASS 390-reveal: actual reveal, saved Attributes values and complete raw reload held
+PASS 390-wall99: actual Attributes, full save/reload and wall99 boundary
+PASS 390-retired: actual Attributes, full save/reload and retired boundary
+PASS 430-visible: actual Attributes, full save/reload and visible boundary
+PASS 430-pending: actual Attributes waiting mask, no premature disclosure and complete raw save held
+PASS 430-reveal: actual reveal, saved Attributes values and complete raw reload held
+PASS 430-wall99: actual Attributes, full save/reload and wall99 boundary
+PASS 430-retired: actual Attributes, full save/reload and retired boundary
+PASS 1440-visible: actual Attributes, full save/reload and visible boundary
+PASS 1440-pending: actual Attributes waiting mask, no premature disclosure and complete raw save held
+PASS 1440-reveal: actual reveal, saved Attributes values and complete raw reload held
+PASS 1440-wall99: actual Attributes, full save/reload and wall99 boundary
+PASS 1440-retired: actual Attributes, full save/reload and retired boundary
+Potential progress browser: 20/20 declared journeys, 20 passed.
+Potential progress controls: 4/4 effective copied observation controls.
+Potential progress evidence: complete saves, draw callers, served bodies, geometry and original PNGs at /home/runner/work/_temp/potential-browser
+PASS Soccer potential progress browser

@@ -1,0 +1,5 @@
+treeWithoutMerge: 731f0b8cda6057324ddd32388981691f98efc856, fc34cf07 without 406c3c0a; conflicts kept from fc34cf07: none
+base 731f0b8cda6057324ddd32388981691f98efc856 (this head without PR334's merge 406c3c0a)
+runProver: drill at 731f0b8cda6057324ddd32388981691f98efc856 (fc34cf07 without 406c3c0a (back to 99154ea3))
+PASS Drill pointer cancellation: three six-case arms, two original-binding assertion failures, five held markup cases, four diagnostic controls
+runProver: drill exit 0
