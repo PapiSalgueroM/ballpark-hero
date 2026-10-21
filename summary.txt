@@ -1,0 +1,9 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+units exit=0 5s |    Duration  4.40s (transform 2.11s, setup 194ms, collect 2.47s, tests 460ms, environment 560ms, prepare 192ms)
+tsc exit=0 96s | 
+quick exit=0 14s | simCmTactics: all green (sections table, styles, balanced)
+walk exit=0 121s | playCmTactics: all green (41 checks)
+simNoRivalNames exit=0 23s | No rival product names found. 0 findings.
+simCmMatchDay exit=0 42s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+simHarnessAnchors exit=0 66s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+bytes exit=0 214s | simCmDifficulty: all green (sections 2)
