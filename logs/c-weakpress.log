@@ -1,0 +1,16 @@
+NEGATIVE CONTROL ON: weakpress (must turn styles red)
+
+[styles] the other dugout's style
+  ok [styles]: dealing 3200 styles drew nothing from the game's stream
+  ok [styles]: the same club at the same strength is always dealt the same style
+  ok [styles]: every style is dealt at a middling strength
+    press high: strong 0.049 weak 0.407; stand off: strong 0.421 weak 0.033; high line: strong 0.049 weak 0.407
+  FAIL [styles]: strong sides press high only -0.359 more often than weak ones (band 0.15)
+  FAIL [styles]: weak sides stand off only -0.389 more often (band 0.1)
+  ok [styles]: Everton: the preview's Crystal Palace plays patient, the style the engine reads
+    Everton's league: counter 4, patient 3, wingplay 2, balanced 3, lowblock 6, direct 1
+  ok [styles]: Real Madrid: the preview's Rayo Vallecano plays counter, the style the engine reads
+    Real Madrid's league: lowblock 2, counter 6, direct 1, balanced 4, patient 2, gegenpress 2, wingplay 1, possession 1
+  ok [styles]: Napoli: the preview's Cagliari plays direct, the style the engine reads
+    Napoli's league: counter 4, balanced 8, direct 2, wingplay 3, gegenpress 1, possession 1
+simCmTactics: control weakpress FIRED (2 failures: styles 2; must turn styles red)

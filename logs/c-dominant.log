@@ -1,0 +1,45 @@
+NEGATIVE CONTROL ON: dominant (must turn fleet red)
+
+[fleet] folded 120 season rows from 4 files in /home/runner/work/_temp/t-c-dominant/cm-tactics-fleet-6FAwAC
+
+  expected points a league game against balanced, paired (mid: pooled | block 0 to 1 | block 2 to 3; big; small) and actual points a game (mid, balanced 1.204)
+    line+                        mid +15.86% | +13.94% | +17.79%   big NaN%   small NaN%   ppg 1.441   (12 mid seasons)
+    adapt                        mid +14.98% | +12.80% | +17.15%   big NaN%   small NaN%   ppg 1.404   (12 mid seasons)
+    width-                       mid +1.08% | -1.20% | +3.36%   big NaN%   small NaN%   ppg 1.279   (12 mid seasons)
+    line-                        mid +0.99% | -2.36% | +4.34%   big NaN%   small NaN%   ppg 1.235   (12 mid seasons)
+    press-                       mid +0.38% | -2.71% | +3.49%   big NaN%   small NaN%   ppg 1.191   (12 mid seasons)
+    tempo+                       mid -1.14% | -0.45% | -1.84%   big NaN%   small NaN%   ppg 1.191   (12 mid seasons)
+    press+                       mid -1.71% | -1.67% | -1.74%   big NaN%   small NaN%   ppg 1.272   (12 mid seasons)
+    width+                       mid -2.16% | -1.93% | -2.38%   big NaN%   small NaN%   ppg 1.202   (12 mid seasons)
+    tempo-                       mid -2.91% | -4.36% | -1.45%   big NaN%   small NaN%   ppg 1.129   (12 mid seasons)
+  FAIL [dominance]: line+ raises a mid table club's expected points +13.94% | +17.79% by block (band +6.00%)
+  ok [adapt]: the best answer to each opponent's style gains +14.98% at a mid table club (+12.80% | +17.15%; big NaN%, small NaN%)
+
+  per match, every competition (balanced first):
+    balanced  poss 48.8  shots 10.944  wonHigh 6.380  crosses 10.628  offsides 2.033  breakC 0.239  wideShare 0.306  fit 83.6  inj 0.247  h2Opp 0.688  myG 1.198  oppG 1.383
+    adapt     poss 55.4  shots 11.665  wonHigh 6.700  crosses 7.384  offsides 4.492  breakC 0.409  wideShare 0.183  fit 82.4  inj 0.264  h2Opp 0.607  myG 1.300  oppG 1.205
+    line+     poss 53.5  shots 11.630  wonHigh 5.583  crosses 11.665  offsides 4.541  breakC 0.424  wideShare 0.319  fit 83.3  inj 0.252  h2Opp 0.640  myG 1.360  oppG 1.252
+    line-     poss 47.0  shots 10.856  wonHigh 6.383  crosses 10.158  offsides 0.754  breakC 0.048  wideShare 0.305  fit 83.7  inj 0.246  h2Opp 0.683  myG 1.190  oppG 1.369
+    press+    poss 52.3  shots 11.346  wonHigh 11.060  crosses 10.963  offsides 1.954  breakC 0.359  wideShare 0.309  fit 79.3  inj 0.307  h2Opp 0.757  myG 1.328  oppG 1.481
+    press-    poss 45.0  shots 10.636  wonHigh 3.259  crosses 9.879  offsides 1.929  breakC 0.259  wideShare 0.302  fit 85.4  inj 0.207  h2Opp 0.690  myG 1.115  oppG 1.368
+    tempo+    poss 42.5  shots 9.785  wonHigh 6.910  crosses 9.083  offsides 1.965  breakC 0.273  wideShare 0.303  fit 83.7  inj 0.233  h2Opp 0.758  myG 1.258  oppG 1.479
+    tempo-    poss 54.3  shots 11.985  wonHigh 5.533  crosses 11.805  offsides 1.959  breakC 0.261  wideShare 0.302  fit 83.5  inj 0.247  h2Opp 0.739  myG 1.141  oppG 1.438
+    width+    poss 48.4  shots 10.906  wonHigh 6.164  crosses 17.715  offsides 1.929  breakC 0.254  wideShare 0.461  fit 83.6  inj 0.243  h2Opp 0.728  myG 1.195  oppG 1.435
+    width-    poss 48.9  shots 11.023  wonHigh 6.077  crosses 5.485  offsides 1.965  breakC 0.245  wideShare 0.141  fit 83.6  inj 0.259  h2Opp 0.676  myG 1.220  oppG 1.355
+  ok [effects]: press+ wonHigh: ratio 1.733 (band 1.4 to Infinity)
+  ok [effects]: press+ fit: diff -4.319 (band -Infinity to -1)
+  ok [effects]: press- wonHigh: ratio 0.511 (band 0 to 0.7)
+  ok [effects]: press- fit: diff 1.787 (band 0.3 to Infinity)
+  ok [effects]: tempo+ poss: diff -6.236 (band -Infinity to -3)
+  ok [effects]: tempo+ shots: ratio 0.894 (band 0 to 0.93)
+  ok [effects]: tempo- poss: diff 5.492 (band 3 to Infinity)
+  ok [effects]: tempo- shots: ratio 1.095 (band 1.07 to Infinity)
+  ok [effects]: width+ crosses: ratio 1.667 (band 1.35 to Infinity)
+  ok [effects]: width+ wideShare: diff 0.155 (band 0.08 to Infinity)
+  ok [effects]: width- crosses: ratio 0.516 (band 0 to 0.7)
+  ok [effects]: width- wideShare: diff -0.164 (band -Infinity to -0.08)
+  ok [effects]: line+ offsides: ratio 2.234 (band 1.7 to Infinity)
+  ok [effects]: line+ breakC: ratio 1.772 (band 1.3 to Infinity)
+  ok [effects]: line- offsides: ratio 0.371 (band 0 to 0.6)
+  ok [effects]: line- breakC: ratio 0.200 (band 0 to 0.75)
+simCmTactics: control dominant FIRED (1 failures: dominance 1; must turn fleet red)

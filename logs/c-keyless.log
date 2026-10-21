@@ -1,0 +1,16 @@
+NEGATIVE CONTROL ON: keyless (must turn styles red)
+
+[styles] the other dugout's style
+  FAIL [styles]: dealing styles drew 3200 times from Math.random
+  FAIL [styles]: the same club at the same strength was dealt a different style
+  ok [styles]: every style is dealt at a middling strength
+    press high: strong 0.395 weak 0.034; stand off: strong 0.087 weak 0.366; high line: strong 0.395 weak 0.034
+  ok [styles]: strong sides press high 0.361 more often than weak ones
+  ok [styles]: weak sides stand off 0.279 more often
+  FAIL [styles]: Everton: the preview says gegenpress, the engine reads counter
+    Everton's league: patient 5, gegenpress 3, balanced 1, wingplay 3, lowblock 1, possession 4, counter 1, direct 1
+  FAIL [styles]: Real Madrid: the preview says patient, the engine reads possession
+    Real Madrid's league: patient 5, balanced 4, possession 5, gegenpress 2, wingplay 2, direct 1
+  FAIL [styles]: Napoli: the preview says possession, the engine reads patient
+    Napoli's league: wingplay 5, counter 2, balanced 3, gegenpress 3, possession 3, lowblock 1, patient 2
+simCmTactics: control keyless FIRED (5 failures: styles 5; must turn styles red)
