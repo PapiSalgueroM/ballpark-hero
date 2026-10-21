@@ -1,0 +1,2 @@
+ctl-nocarry exit=1 44s | simCmMadeUpNations: RED, 5 failure(s)
+simCmMadeUpNations exit=0 114s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
