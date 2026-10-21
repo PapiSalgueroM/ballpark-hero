@@ -49,7 +49,35 @@
    BUNDLE (never src), turned into 3 P(win) + P(draw) by Poisson. Arms are paired by club, seed and season, so
    the difference is the instructions and not the luck of the draw. Actual points are printed beside it.
 
-   MEASURED: (filled in from the runner, see below)
+   MEASURED (GitHub runners, 2026-10-21; the table above is the starting table, untuned: it met every band on
+   its first measurement once the arms were paired). Common random numbers (SEGMENT_STREAM) were added after the
+   first fleet, r1522-m1 on d26046dd, whose unpaired blocks of four seeds swung by up to 7 points (press+ -2.45 |
+   -10.04): the arms are now paired stretch by stretch, and the same seeds replay byte for byte (the singles of
+   every fleet below agree to the hundredth).
+   Effects, singles fleet, nine clubs (Arsenal, Brentford, Hull City; Real Madrid, Espanyol, Malaga; Inter Milan,
+   Torino, Frosinone), seeds 0 to 15, one season (r1522-f0 and f1 on 260c04ca, folded), per match
+   over every competition, the setting against balanced:
+     press+  won high 10.97 against 6.12 (x1.79), fitness at kick off 76.2 against 80.8 (-4.6), knocks 0.320
+             against 0.247, goals conceded after the break 0.750 against 0.667
+     press-  won high x0.54, fitness +1.9, knocks 0.208
+     tempo+  possession 43.9 against 49.6 (-5.7), shots x0.88      tempo-  possession 55.1 (+5.5), shots x1.11
+     width+  crosses 18.2 against 10.8 (x1.68), share of my goals from wide 0.475 against 0.298 (+0.18)
+     width-  crosses x0.51, wide share 0.136 (-0.16)
+     line+   their offsides 4.65 against 2.01 (x2.31), goals conceded on the break 0.469 against 0.255 (x1.84)
+     line-   offsides x0.40, break goals x0.22
+   Every band in EFFECT_BANDS holds with room; the closest is tempo+ shots, 0.882 against a ceiling of 0.93.
+   Dominance, every fixed set, mid table clubs only (Brentford, Espanyol and Torino, the middle of their leagues'
+   playableClubs by expectation), seeds 0 to 15, 48 mid seasons an arm (r1522-d0 to d3 on
+   ebabc291, 16 shards, folded): expected points a league game against balanced, paired. Top pooled press- line-
+   +0.74% (blocks -0.76 | +2.24); the largest single block press- width- line- +2.30%; no set over +3% in either
+   block, against the lead's band of 6. The worst: press+ tempo- width+ line- -11.95% (a press with a deep line
+   behind it and the middle given away). Balanced's actual points a game 1.172.
+   Reading the opponent, the same fleet as the effects: adapt (the table's best answer to each style, less
+   PRESS_LEGS_NET for a press) +4.42% against balanced (+3.30 | +5.53; big clubs +2.37, small +5.38); misread
+   -0.35% (-2.18 | +1.48); adapt over misread +4.77% (+5.48 | +4.06; big +1.79, small +6.33). The bands:
+   ADAPT_GAIN 2 and READ_GAIN 2, under the lowest block of each. The flat control shows why read is the check
+   that matters: with tacticBoost zero, adapt still gains +2.17% (stand off's legs and knocks alone pay), and
+   read falls to exactly 0.00 (adapt and misread then set the same instructions and play the same careers).
 
    Negative controls (CM_TACTICS_CONTROL), each patched into the bundle, never into src; each must turn red:
      flat       tacticBoost returns zero                                  read (adapt and misread then play alike)
@@ -62,7 +90,8 @@
      weakpress  strong sides press less than weak ones                    styles
      leak       setInstructions keeps an all balanced set on the save     balanced
      helpwords  a deep line concedes more against a direct side          table (the help's worked example)
-   Run: node scripts/simCmTactics.mjs (SECTION=fleet SEEDS=8 SEED_OFFSET=0 SEASONS=1 ARMS=all SHARD=k/n
+   Run: node scripts/simCmTactics.mjs (the default fleet: singles, adapt and misread, seeds 0 to 15, in PARTS=4
+   children PAR=2 at a time, about 15 minutes on a runner). SECTION=fleet SEEDS=16 SEED_OFFSET=0 SEASONS=1 ARMS=all SHARD=k/n
    OUT_JSON=<file>; FOLD=<dir> folds shards). Offline: bundles the engine from src, reads no network.
    Exit 0 green, 1 red (or a control fired), 2 could not run, 3 a control that did not fire.
 */
@@ -87,7 +116,7 @@ if (CONTROL && !CONTROL_SECTIONS[CONTROL]) cannot(`CM_TACTICS_CONTROL=${CONTROL}
 const FOLD = process.env.FOLD || '';
 const SECTIONS = FOLD ? ['fleet'] : CONTROL ? CONTROL_SECTIONS[CONTROL]
   : (process.env.SECTION || 'all') === 'all' ? ALL_SECTIONS : String(process.env.SECTION).split(',');
-const SEEDS = num('SEEDS', 8);
+const SEEDS = num('SEEDS', 16);
 const SEED_OFFSET = num('SEED_OFFSET', 0);
 const SEASONS = num('SEASONS', 1);
 const ARMS_KIND = process.env.ARMS || 'singles';
@@ -612,7 +641,7 @@ function analyze(rows) {
     const thin = fixed.filter(t => t.b0.n < 2 || t.b1.n < 2);
     if (thin.length) fail('dominance', `${thin.length} arms have under two mid seasons in a block (${thin[0].a})`);
     for (const t of over) fail('dominance', `${t.a} raises a mid table club's expected points ${pct(t.b0.rel)} | ${pct(t.b1.rel)} by block (band ${pct(DOMINANCE)})`);
-    if (!over.length && fixed.length) ok('dominance', `none of ${fixed.length} fixed sets beats balanced by over ${pct(DOMINANCE)} at a mid table club in either block (top ${table[0].a === 'adapt' ? table[1]?.a : table[0].a})`);
+    if (!over.length && fixed.length) ok('dominance', `none of ${fixed.length} fixed sets beats balanced by over ${pct(DOMINANCE)} at a mid table club in either block (top ${fixed[0].a})`);
     const adapt = table.find(t => t.a === 'adapt');
     const misread = table.find(t => t.a === 'misread');
     /* read: the reading itself, adapt against the same answers handed to the wrong opponents, paired. */
