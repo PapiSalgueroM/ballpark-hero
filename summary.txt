@@ -1,0 +1,9 @@
+vitest exit=0 11s |    Duration  9.80s (transform 4.12s, setup 350ms, collect 7.78s, tests 8.93s, environment 1.61s, prepare 393ms)
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+endings exit=0 71s | PASS: no career ends before the age rules without the player, and the pair is reconciled
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 90s | 
+simSoccerDeckFairness exit=0 62s | simSoccerDeckFairness: all sections green
+simSoccerWorldTruth exit=0 65s | simSoccerWorldTruth: OK, every section green
+simCareerAwardsNight exit=0 65s | simCareerAwardsNight: ALL 179 CHECKS PASSED
