@@ -1,0 +1,4 @@
+# Release BJ, Round 1504's walk on the final tree.
+#!serve
+#!playwright
+deck-walk: node scripts/playSoccerDeck.mjs
