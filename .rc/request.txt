@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+playReducedMotion: node scripts/playReducedMotion.mjs
+playCmMatchDay: node scripts/playCmMatchDay.mjs
+playManagerHalftimeLineups: node scripts/playManagerHalftimeLineups.mjs
+playCmQuickSubs: node scripts/playCmQuickSubs.mjs
+playCmDifficulty: node scripts/playCmDifficulty.mjs
