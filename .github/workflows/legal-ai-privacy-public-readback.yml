@@ -142,7 +142,7 @@ jobs:
           const out = path.resolve(process.env.READBACK_OUT);
           const tag = process.env.GITHUB_RUN_ID + '.' + process.env.GITHUB_RUN_ATTEMPT;
           const key = 'cookie-consent-v2';
-          const report = { complete: false, cases: [], pages: [], assets: [], browserRequests: [], locallyFulfilled: [], forbiddenMethods: [] };
+          const report = { complete: false, cases: [], pages: [], assets: [], browserRequests: [], locallyFulfilled: [], localPublicAggregateReads: [], forbiddenMethods: [] };
           const hash = value => createHash('sha256').update(value).digest('hex');
           function deploymentId(header) {
             assert.equal(typeof header, 'string');
@@ -163,6 +163,25 @@ jobs:
             assert.notEqual(changed, signedFixture); assert.throws(() => expectedDeployment(changed));
           }
           report.deploymentControls = { supportedFormats: 2, changedRejected: 3 };
+          function localAggregateRead(row) {
+            return row.url === 'https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today'
+              && row.method === 'POST' && row.type === 'fetch' && row.navigation === false
+              && row.body === '{"p_min":3,"p_limit":3}';
+          }
+          const aggregateFixture = { url: 'https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today', method: 'POST', type: 'fetch', navigation: false, body: '{"p_min":3,"p_limit":3}' };
+          assert.equal(localAggregateRead(aggregateFixture), true);
+          const aggregateFaults = [
+            { method: 'PUT' }, { url: aggregateFixture.url.replace('most_played_today', 'delete_account') },
+            { url: aggregateFixture.url.replace('flawuiqbvjobmkfkauhw', 'other') }, { url: aggregateFixture.url + '?other=1' },
+            { body: '{"p_min":"3","p_limit":3}' }, { body: '{"p_min":3,"p_limit":4}' },
+            { body: '{"p_min":3,"p_limit":3,"other":1}' }, { body: '{' },
+            { type: 'document' }, { navigation: true }, { body: '{"p_min":3,"p_min":4,"p_limit":3}' },
+          ];
+          for (const fault of aggregateFaults) {
+            const changed = { ...aggregateFixture, ...fault };
+            assert.notDeepEqual(changed, aggregateFixture); assert.equal(localAggregateRead(changed), false);
+          }
+          report.aggregateControls = { fixedLocalFixture: 1, changedRejected: aggregateFaults.length };
           const save = (name, value) => fs.writeFileSync(path.join(out, name), value);
           const cacheBust = route => ORIGIN + route + '?public_readback=' + tag;
           const json = () => save('readback.json', JSON.stringify(report, null, 2) + '\n');
@@ -248,6 +267,10 @@ jobs:
                 const req = route.request(), url = new URL(req.url());
                 const row = { method: req.method(), url: url.origin + url.pathname, type: req.resourceType() };
                 requests.push(row); report.browserRequests.push(row);
+                if (localAggregateRead({ ...row, url: req.url(), navigation: req.isNavigationRequest(), body: req.postData() })) {
+                  report.localPublicAggregateReads.push(row); report.locallyFulfilled.push(row);
+                  return route.fulfill({ status: 200, headers: { 'access-control-allow-origin': ORIGIN }, contentType: 'application/json', body: '[]' });
+                }
                 if (!['GET', 'HEAD'].includes(req.method())) report.forbiddenMethods.push(row);
                 try { checkedURL(url, req.method()); }
                 catch {
@@ -320,7 +343,7 @@ jobs:
             });
             assert.equal(report.forbiddenMethods.length, 0, 'No account, report, AI or other submission may be attempted');
             report.complete = true;
-            console.log('PUBLIC READBACK COMPLETE: fixed-host public GET/HEAD only; all other browser requests fulfilled locally; no account or report submission.');
+            console.log('PUBLIC READBACK COMPLETE: remote transport is fixed-host public GET/HEAD only; fixed popularity read and all other backend traffic fulfilled locally; no account or report submission.');
           } catch (error) {
             report.error = { name: error.name, message: error.message, stack: error.stack }; throw error;
           } finally { await browser?.close(); await api.dispose(); json(); }
