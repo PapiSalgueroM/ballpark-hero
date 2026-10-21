@@ -1,0 +1,3 @@
+s4-a exit=1 129s | simCareerForm: RED, 1 failure(s)
+s4-c exit=0 132s | simCareerForm: green
+s4-b exit=1 139s | simCareerForm: RED, 1 failure(s)
