@@ -1,0 +1,3 @@
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+discovery: node scripts/simBrowserHarnessDiscovery.mjs
