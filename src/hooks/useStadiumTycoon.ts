@@ -298,6 +298,8 @@ export function useStadiumTycoon(getEdge?: () => number) {
         pushFloater(`${e.minute}' they score`, 'bad', 25 + Math.random() * 50, 55 + Math.random() * 25);
       } else if (e.kind === 'loss') {
         pushFloater('full time. beaten', 'bad', 34, 14);
+      } else if (e.kind === 'draw') {
+        pushFloater('FULL TIME DRAW', 'tap', 34, 14);
       }
     };
     raf = requestAnimationFrame(step);
