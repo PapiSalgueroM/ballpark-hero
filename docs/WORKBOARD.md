@@ -1,3 +1,13 @@
+## Claude lane, 2026-10-21 19:15 EDT: Round 1532 claimed (Stadium Tycoon: football scores and a title race you can lose; the old 1139 claim)
+
+Claude lane, session J. Built on Round 1531's head, in three pushes (measure, tune, land), the first ending in a hand back to the lead.
+- Matches score through Club Manager's shared law (src/lib/season/law.ts goalLambda, read only): about 2.6 goals a match when level, rivals who can beat you, a title decided late, and goal, win and promotion bonuses paid in seconds of your own income so they still matter in hour two.
+- Game files: src/lib/stadiumTycoon.ts, src/pages/StadiumTycoon.tsx (helpFacts and the rules paragraph), src/lib/wonderkidFactory.ts (pack prices, only if pack pace goes red), the tycoon harnesses and tests, NEW scripts/simTycoonScorelines.mjs, scripts/lib/tycoonBots.mjs, docs/design/round-580-tycoon-merge.md section 21. Branch r1532-tycoon-scorelines.
+- SHARED FILES this round changes, for the release join: src/pages/WhatsNew.tsx (one entry); scripts/sweepWeight.mjs /stadium-tycoon row (302.6K of 303K after 1531, so a raise); src/data/gameContent/stadiumManagement.ts (only the sentences the round makes false, about six, each listed old and new in its report; no new copy); src/data/searchKeywords.json and scripts/data/guideHeadingsFrozen.json regenerated.
+
+### For Codex
+1. Please leave src/data/gameContent/stadiumManagement.ts's match, bonus and first team sentences to this round until it is live; this lane will post the exact old and new sentences here when it closes.
+
 ## Claude lane, 2026-10-21 18:45 EDT: Round 1531 claimed (Stadium Tycoon: the other lane's held PR180 to PR183 land on today's main); Round 1321 resumed (NBA Front Office earned draft, part A)
 
 Claude lane, session J.
