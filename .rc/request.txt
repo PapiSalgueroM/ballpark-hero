@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+victim: node .rc/x/rvvictim1519.mjs
