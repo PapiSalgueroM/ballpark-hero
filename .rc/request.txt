@@ -1,0 +1,35 @@
+# Release BI, Round 1508 (Club Manager careers started before 13 October join the living world at their next summer),
+# merged in Round BIK as f1e54e17 (first parent 67ec9956; the round's closed head 51423bf5, verify2-1508.md); the 1081
+# pin retaken after it in a5b0e767. Send with x/baseDeck.sh and x/minus1344.sh. rc-BIk2.txt has the serial half.
+# BINDINGS (every base is formed on the tree the kit runs on and fails closed):
+# - simCmUnseededWorld: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh), the gate's base (Release BC as published without
+#   Release AZ, plus this tree's desk deck), exactly as rc-R's unseeded lines and the round's own r1508-fx4s.
+# - simCmOldCareersWorld: its default BASE is 3a147a7c (Round 1344's tip) until main holds it; here it is bound to this
+#   tree WITHOUT Round 1508 (treeWithoutMerge f1e54e17 67ec9956), so section 1's "equal to BASE before the summer" and
+#   section 2's 18 seeded careers compare with the release minus exactly this round.
+# - simCmWorldMoves: CM_WORLD_MOVES_BASE=$(bash .rc/x/minus1344.sh), the tree without 1508 and 1344 (the base Round
+#   1344's lines use since part five; its own default d4f2c6f6 is 1344's branch point, the same thing on its branch).
+# CONTROLS: every u-*, ow-*, wm-* control and walk-never-1508 must exit 1 with FIRED on its last line, each on its own
+# check (u-early: quiet 49 and deals 49 red before the first summer; u-never: the moved check red after the rollover;
+# u-guard: the deal fleet red, quiet green; u-noinverse: 15 of 15; u-norecord: the mine check red after the rollover;
+# ow-never: moved red; ow-early: red before the summer; ow-bridge: section 2 red on the seeded careers; wm-seedless:
+# section 6; wm-noguard: section 2; wm-seedclose: section 13; wm-seedcarry: section 14; wm-goneshown: section 14;
+# walk-never: (b) red). A control that aborts also exits 1: read its last line.
+#!build
+#!playwright
+tsc-1508: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-1508: node_modules/.bin/vitest run src/lib/clubManagerAdoption.test.ts src/lib/clubManagerWorldMoves.test.ts src/lib/clubManagerWorldRoster.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-cm-1508: node_modules/.bin/vitest run src/lib/clubManager src/test/clubManager src/test/clubDetail src/test/manager src/test/dailyMenuResume src/test/cmTablesTruth --testTimeout=300000 --hookTimeout=120000
+bridges-1508: node scripts/lib/cmNoAdoption1508.mjs --check && node scripts/lib/cmWorldSeed1250.mjs --check && node scripts/lib/cmNoAiMoves1344.mjs --check
+unseeded-1508: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && echo "base $CM_UNSEEDED_BASE" && node scripts/simCmUnseededWorld.mjs
+u-early-1508: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && CM_UNSEEDED_CONTROL=early node scripts/simCmUnseededWorld.mjs
+u-never-1508: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && CM_UNSEEDED_CONTROL=never node scripts/simCmUnseededWorld.mjs
+u-guard-1508: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && CM_UNSEEDED_CONTROL=guard node scripts/simCmUnseededWorld.mjs
+u-noinverse-1508: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && CM_UNSEEDED_CONTROL=noinverse node scripts/simCmUnseededWorld.mjs
+u-norecord-1508: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && CM_UNSEEDED_CONTROL=norecord node scripts/simCmUnseededWorld.mjs
+oldworld-1508: B=$(node scripts/lib/treeWithoutMerge.mjs f1e54e17 67ec9956) && export CM_OLD_WORLD_BASE=$B && echo "base $B" && node scripts/simCmOldCareersWorld.mjs
+ow-never-1508: B=$(node scripts/lib/treeWithoutMerge.mjs f1e54e17 67ec9956) && export CM_OLD_WORLD_BASE=$B && CM_OLD_WORLD_CONTROL=never node scripts/simCmOldCareersWorld.mjs
+ow-early-1508: B=$(node scripts/lib/treeWithoutMerge.mjs f1e54e17 67ec9956) && export CM_OLD_WORLD_BASE=$B && CM_OLD_WORLD_CONTROL=early node scripts/simCmOldCareersWorld.mjs
+ow-bridge-1508: B=$(node scripts/lib/treeWithoutMerge.mjs f1e54e17 67ec9956) && export CM_OLD_WORLD_BASE=$B && CM_OLD_WORLD_CONTROL=bridge node scripts/simCmOldCareersWorld.mjs
+walk-1508: node scripts/playCmOldCareersWorld.mjs
+walk-never-1508: PLAY_OLD_WORLD_CONTROL=never node scripts/playCmOldCareersWorld.mjs
