@@ -1,0 +1,13 @@
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+vitest exit=0 18s |    Duration  18.38s (transform 6.34s, setup 322ms, collect 11.53s, tests 23.36s, environment 1.82s, prepare 576ms)
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simNoInventedQuotes exit=0 19s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simSoccerCareerSaveRecovery exit=0 6s | Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.
+simRetirementToManager exit=0 0s | ALL RETIREMENT BRIDGE CHECKS PASSED
+simCareerNoDeadEnd exit=0 0s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+simCareerMoneyAfterRetirement exit=0 3s | All good: the money app keeps running for the whole retirement tail.
+simHarnessAnchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 64s | 
+endings-seed2 exit=0 46s | PASS: no career ends before the age rules without the player, and the pair is reconciled
+endings exit=0 47s | PASS: no career ends before the age rules without the player, and the pair is reconciled
+endings-seed3 exit=0 48s | PASS: no career ends before the age rules without the player, and the pair is reconciled
