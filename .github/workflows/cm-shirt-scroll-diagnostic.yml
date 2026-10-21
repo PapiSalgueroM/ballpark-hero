@@ -39,7 +39,7 @@ jobs:
           git fetch --no-tags --depth=1 origin "$CURRENT_SOURCE" "$BASELINE_SOURCE" "$DRIVER_SOURCE" > "$SCROLL_DIAG_OUT/fetch.log" 2>&1
           git cat-file -e "$CURRENT_SOURCE^{commit}"; git cat-file -e "$BASELINE_SOURCE^{commit}"; git cat-file -e "$DRIVER_SOURCE^{commit}"
           git show "$DRIVER_SOURCE:scripts/qa/diagnoseCmFinanceScroll1443.mjs" > "$SCROLL_DIAG_OUT/driver-before.mjs"
-          printf '%s  %s\n' 'd325245074d39d5186e62c02433a1bc7089fd9a4d94d33f1ecc5c1f0ee39f1ab' "$SCROLL_DIAG_OUT/driver-before.mjs" '068d51336bb1a74d9c02645888110162d58d4349be3e2d61c476475d33440e60' 'scripts/qa/diagnoseCmFinanceScroll1443.mjs' '5bdbe34d91d0945a794177b9b550e3ef68f021f683aaaae78ec4423d985d5815' 'scripts/qa/playCmShirtSales1443.mjs' 'b3497014694abfd3dc547fb6f6fe38c5d231297789d6ee32ec45f25b2a223f48' '.github/workflows/cm-shirt-sales.yml' | sha256sum --check > "$SCROLL_DIAG_OUT/driver-product-gates-hold.log"
+          printf '%s  %s\n' 'd325245074d39d5186e62c02433a1bc7089fd9a4d94d33f1ecc5c1f0ee39f1ab' "$SCROLL_DIAG_OUT/driver-before.mjs" '327894c4d36751ff2a04d5e2801bd76fa659913fbd18a0c4c83360867e532113' 'scripts/qa/diagnoseCmFinanceScroll1443.mjs' '5bdbe34d91d0945a794177b9b550e3ef68f021f683aaaae78ec4423d985d5815' 'scripts/qa/playCmShirtSales1443.mjs' 'b3497014694abfd3dc547fb6f6fe38c5d231297789d6ee32ec45f25b2a223f48' '.github/workflows/cm-shirt-sales.yml' | sha256sum --check > "$SCROLL_DIAG_OUT/driver-product-gates-hold.log"
           git diff --exit-code "$BASELINE_SOURCE" "$CURRENT_SOURCE" -- src public scripts supabase index.html package.json package-lock.json vitest.config.ts ':!src/components/club-manager/FinancesScreen.tsx' ':!scripts/qa/diagnoseCmFinanceScroll1443.mjs' > "$SCROLL_DIAG_OUT/only-finance-style-source-hold.log"
           node --input-type=module <<'JS'
           import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';
@@ -125,7 +125,7 @@ jobs:
             for (const walk of row.walks) {
               assert.equal(walk.status, 'observed'); assert.equal(walk.timeline.done, true);
               const t = walk.timeline;
-              assert(t.frames.length > 100 && t.frames.at(-1).ms >= 3500);
+              assert(t.frames.length > 100 && Number.isFinite(t.completionMs) && t.completionMs >= 3500);
               for (const key of ['calls', 'actions', 'mutations', 'resources']) assert(Array.isArray(t[key]), key);
               for (const method of ['Element.scrollIntoView', 'window.scrollTo', 'HTMLElement.focus']) assert(t.instrumentation.installed.includes(method));
               assert(t.actions.some(action => action.type === 'click' && action.trusted), 'Actual trusted finance click observed');

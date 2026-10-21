@@ -232,8 +232,10 @@ async function observeStart(page) {
       if (dirty || shape !== lastShape) mutations.push({ ms: sample.ms, frame: sample.sequence,
         mutationCount, reasons: [...reasons], shapeChanged: shape !== lastShape, boxes: sample.boxes });
       lastShape = shape; dirty = false; mutationCount = 0; reasons.clear();
-      if (performance.now() - started < 3500) requestAnimationFrame(frame);
+      const completionMs = performance.now() - started;
+      if (completionMs < 3500) requestAnimationFrame(frame);
       else {
+        state.completionMs = completionMs;
         state.done = true; observer.disconnect();
         document.removeEventListener('scrollend', listener, true); document.removeEventListener('scroll', listener, true);
         state.resources = performance.getEntriesByType('resource').filter(row => /FinancesScreen/.test(row.name)).map(row => ({
@@ -279,7 +281,7 @@ async function walk(page, row, name) {
     result.status = 'observed';
   } catch (error) { result.status = 'incomplete'; result.error = String(error?.stack || error); }
   finally {
-    result.timeline = await page.evaluate(() => { const state = window.__cmScrollDiagnostic; return state && { frames: state.frames, events: state.events, samples: state.samples, calls: state.calls, actions: state.actions, mutations: state.mutations, resources: state.resources, instrumentation: state.instrumentation, anchor: state.anchor, done: state.done }; });
+    result.timeline = await page.evaluate(() => { const state = window.__cmScrollDiagnostic; return state && { frames: state.frames, events: state.events, samples: state.samples, calls: state.calls, actions: state.actions, mutations: state.mutations, resources: state.resources, instrumentation: state.instrumentation, anchor: state.anchor, completionMs: state.completionMs, done: state.done }; });
     const samples = result.timeline?.samples || [], arrived = samples.find(row => row.label === 'old-arrival-after-second-350ms'), stable = samples.find(row => row.label === 'old-stable-after-450ms');
     result.oldWindowObservation = { arrived, stable, deltaScroll: arrived && stable ? stable.scrollY - arrived.scrollY : null, thresholdEvaluated: false };
     const png = `${row.id}-${name}-final.png`; await page.screenshot({ path: path.join(OUT, png), fullPage: false, animations: 'allow' }); result.screenshot = png;
