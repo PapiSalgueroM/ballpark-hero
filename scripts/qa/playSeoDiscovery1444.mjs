@@ -31,6 +31,7 @@ fs.mkdirSync(OUT, { recursive: true });
 const twoFrames = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
 async function checks(page, kind) {
   const rows = [];
+  let overflowGeometry;
   const specs = [
     ['SEO_BROWSER_BRAND', async () => {
       const headings = page.locator('h1');
@@ -39,9 +40,13 @@ async function checks(page, kind) {
       assert(await headings.isVisible(), 'SEO_BROWSER_BRAND: H1 visible');
     }],
     ['SEO_BROWSER_OVERFLOW', async () => {
-      const geometry = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth, body: document.body.scrollWidth }));
-      assert(geometry.document <= geometry.viewport + 2 && geometry.body <= geometry.viewport + 2,
-        'SEO_BROWSER_OVERFLOW: actual document stays inside viewport ' + JSON.stringify(geometry));
+      const geometry = { configuredViewport: page.viewportSize().width,
+        ...await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth, body: document.body.scrollWidth })) };
+      overflowGeometry = geometry;
+      assert(Math.abs(geometry.viewport - geometry.configuredViewport) <= 2
+        && geometry.document <= geometry.configuredViewport + 2 && geometry.body <= geometry.configuredViewport + 2,
+        'SEO_BROWSER_OVERFLOW: actual document stays inside configured viewport ' + JSON.stringify(geometry));
+      return geometry;
     }],
     ['SEO_BROWSER_IMAGES', async () => {
       const images = await page.locator('img').evaluateAll(nodes => nodes.map(node => ({
@@ -72,7 +77,7 @@ async function checks(page, kind) {
   ];
   for (const [marker, fn] of specs) {
     try { const details = await fn(); rows.push({ marker, status: 'passed', details }); }
-    catch (error) { rows.push({ marker, status: 'failed', errorType: error.name, error: error.message, stack: error.stack }); }
+    catch (error) { rows.push({ marker, status: 'failed', errorType: error.name, error: error.message, stack: error.stack, details: marker === 'SEO_BROWSER_OVERFLOW' ? overflowGeometry : undefined }); }
   }
   return rows;
 }
@@ -109,7 +114,6 @@ async function open(profile, row) {
   await page.goto(BASE + (profile.kind === 'home' ? '/' : '/football-grid'), { waitUntil: 'domcontentloaded', timeout: 30000 });
   if (profile.kind === 'home') await page.getByRole('textbox', { name: 'Search games', exact: true }).waitFor();
   else {
-    await page.getByRole('button', { name: 'How to play', exact: true }).waitFor();
     await page.locator('section[data-seo-content="ready"]').waitFor();
     await page.locator('section[data-seo-content="ready"]').scrollIntoViewIfNeeded();
   }

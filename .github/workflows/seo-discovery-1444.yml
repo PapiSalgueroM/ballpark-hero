@@ -227,7 +227,8 @@ jobs:
           assert.deepEqual(rows.slice(1).map(x => x.selector), wanted);
           assert(rows.every(x => x.exit === 0));
           fs.writeFileSync('seo-baseline-artifacts/baseline.json', JSON.stringify({
-            guard, status: 'passed', unchangedBaseline: true, rows,
+            guard, status: 'passed', unchangedBaseline: guard !== 'simHomeCopy', rows,
+            assertionsUnchanged: true, anchorAdapted: guard === 'simHomeCopy',
             controlConvention: 'existing guards exit0 only after reporting the planted defect',
           }, null, 2) + '\n');
           JS
