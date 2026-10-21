@@ -1,0 +1,5 @@
+#!build
+#!playwright
+probe-hall: node .rc/x/probeHall.mjs
+corrupt-before: node scripts/playCorruptSaves.mjs
+corrupt-before-hall: ONLY=/hall-of-champions node scripts/playCorruptSaves.mjs
