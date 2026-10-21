@@ -154,6 +154,8 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 80
+    outputs:
+      build_ready: ${{ steps.package-build.outputs.ready }}
     defaults:
       run:
         shell: bash
@@ -201,7 +203,9 @@ jobs:
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee legal-privacy-artifacts/types.log
           node_modules/.bin/vitest run src/test/consentPurposeGates.test.ts src/test/consentPrivacy1442.test.ts src/test/consentSynchronization1442.test.tsx src/test/consentWithdrawal1442.test.ts src/test/legalAiTransparency1442.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/consent-unit.log
           node scripts/simConsentWithdrawal1442.mjs 2>&1 | tee legal-privacy-artifacts/consent-controls.log
-          node_modules/.bin/vitest run src/components/profile/AccountPrivacy.test.tsx src/test/cookieConsentStorage.test.tsx src/test/helpConsentFocus.test.tsx src/test/helpDialogFocus.test.tsx src/test/safeStorage.test.ts src/test/safeStorageQuota.test.ts src/test/freshBuildBlockedStorage.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/inherited-unit.log
+          node_modules/.bin/vitest run src/test/authModalLoading1442.test.tsx src/test/authModalFocus.test.tsx src/components/auth/AuthModal.google.test.tsx src/components/auth/googlePaused.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/account-unit.log
+          node scripts/simAuthModalLoading1442.mjs 2>&1 | tee legal-privacy-artifacts/account-controls.log
+          node_modules/.bin/vitest run src/components/profile/AccountPrivacy.test.tsx src/test/cookieConsentStorage.test.tsx src/test/helpConsentFocus.test.tsx src/test/helpDialogFocus.test.tsx src/test/rulesGateConsentFocus.test.tsx src/test/nbaStatLinePicker.test.tsx src/test/safeStorage.test.ts src/test/safeStorageQuota.test.ts src/test/freshBuildBlockedStorage.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/inherited-unit.log
       - name: Isolated browser and font tooling
         run: |
           set -euo pipefail
@@ -248,7 +252,7 @@ jobs:
           server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
           ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
           failed=0
-          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings; do
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simAuthModalFocus simGoogleIdentity simGoogleOnlyReturn simLoginReturn; do
             status=0; SIM_OFFLINE_RECEIPT="$out/$method.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
             printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv"
             tail -n 4 "$out/$method.log"; test "$status" -eq 0 || failed=1
@@ -262,6 +266,19 @@ jobs:
           printf '%s\n' "$status" > "$out/weights.exit"
           cat "$out/weights.log"; test "$status" -eq 0 || failed=1
           exit "$failed"
+      - name: Package completed build and font cache for the exact suite source
+        id: package-build
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/legal-privacy-artifacts"
+          SIM_OFFLINE_RECEIPT="$out/master-plan.transport" env -u ONLY -u BROWSER node scripts/runAllSims.mjs --plan-json > "$out/master-plan.json"
+          tar -czf "$out/dist.tar.gz" -C dist .
+          tar -czf "$out/fonts.tar.gz" -C "$FREE_KICK_FONT_CACHE" .
+          (cd "$FREE_KICK_FONT_CACHE"; find . -type f -print0 | sort -z | xargs -0 sha256sum) > "$out/fonts.sha256"
+          (cd "$out"; sha256sum dist.tar.gz fonts.tar.gz generated.patch master-plan.json) > "$out/build-package.sha256"
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
       - name: Retain completed build and reader evidence before the full suite
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         uses: actions/upload-artifact@v4
@@ -270,13 +287,6 @@ jobs:
           path: legal-privacy-artifacts/
           if-no-files-found: error
           retention-days: 7
-      - name: Complete offline node harness suite
-        if: ${{ !cancelled() && success() && steps.build.outcome == 'success' }}
-        timeout-minutes: 38
-        run: |
-          set -euo pipefail
-          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
-          SIM_OFFLINE_RECEIPT="$PWD/legal-privacy-artifacts/full-suite.transport" timeout --signal=TERM --kill-after=15s 35m node scripts/runAllSims.mjs > legal-privacy-artifacts/full-suite.log 2>&1
       - name: Preserve source and dependency boundaries
         if: always()
         run: |
@@ -292,3 +302,265 @@ jobs:
           path: legal-privacy-artifacts/
           if-no-files-found: error
           retention-days: 7
+
+
+  suite:
+    name: Offline node suite (shard ${{ matrix.shard }})
+    needs: verify
+    if: ${{ !cancelled() && needs.verify.outputs.build_ready == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_FULL_OUTPUT: '1'
+      ENGINES: chromium
+      TZ: UTC
+      SHARD_INDEX: ${{ matrix.shard }}
+      SHARD_COUNT: '12'
+      BASE: http://127.0.0.1:4173
+      SWEEP_BASE: http://127.0.0.1:4173
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Record exact source and install locked app dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p legal-privacy-suite-artifacts
+          git rev-parse HEAD > legal-privacy-suite-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > legal-privacy-suite-artifacts/tree.txt
+          sha256sum package.json package-lock.json > legal-privacy-suite-artifacts/dependencies-before.sha256
+          npm ci > legal-privacy-suite-artifacts/install.log 2>&1
+      - uses: actions/download-artifact@v4
+        with:
+          name: legal-privacy-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: legal-privacy-completed-build
+      - name: Install the same isolated browser and font tooling
+        run: |
+          set -euo pipefail
+          out="$PWD/legal-privacy-suite-artifacts"
+          browser_tools="$RUNNER_TEMP/legal-privacy-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/python-install.log" 2>&1
+          deno --version > "$out/deno-version.txt"
+      - name: Restore the completed build and only its generated public files
+        run: |
+          set -euo pipefail
+          out="$PWD/legal-privacy-suite-artifacts"
+          build="$PWD/legal-privacy-completed-build"
+          cmp "$build/head.txt" "$out/head.txt"
+          (cd "$build"; sha256sum --check build-package.sha256) > "$out/build-package-hold.log"
+          if [[ -s "$build/generated.patch" ]]; then
+            git apply --numstat "$build/generated.patch" > "$out/generated-patch-paths.tsv"
+            awk -F '\t' 'NF != 3 || !($3 ~ /^public\// || $3 == "scripts/data/lastmod.json") { bad=1 } END { exit bad }' "$out/generated-patch-paths.tsv"
+            git apply --check --include='public/**' --include='scripts/data/lastmod.json' "$build/generated.patch"
+            git apply --include='public/**' --include='scripts/data/lastmod.json' "$build/generated.patch"
+          fi
+          mkdir -p dist "$RUNNER_TEMP/legal-privacy-fonts"
+          tar -xzf "$build/dist.tar.gz" -C dist
+          tar -xzf "$build/fonts.tar.gz" -C "$RUNNER_TEMP/legal-privacy-fonts"
+          sha256sum --check "$build/dist.sha256" > "$out/dist-before.log"
+          (cd "$RUNNER_TEMP/legal-privacy-fonts"; sha256sum --check "$build/fonts.sha256") > "$out/fonts-hold.log"
+          echo "FREE_KICK_FONT_CACHE=$RUNNER_TEMP/legal-privacy-fonts" >> "$GITHUB_ENV"
+          git diff --exit-code HEAD -- src supabase package.json package-lock.json .github scripts/runAllSims.mjs > "$out/source-before.log"
+      - name: Record exact master and shard plans with omission and duplication controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/legal-privacy-suite-artifacts"
+          SIM_OFFLINE_RECEIPT="$out/plan.transport" env -u ONLY -u BROWSER node scripts/runAllSims.mjs --plan-json > "$out/master-plan.json"
+          cmp legal-privacy-completed-build/master-plan.json "$out/master-plan.json"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const out = 'legal-privacy-suite-artifacts';
+          const master = JSON.parse(fs.readFileSync(out + '/master-plan.json', 'utf8'));
+          const names = master.nodeGroup;
+          assert(Array.isArray(names) && names.length > 1, 'Expected a nonempty Node suite');
+          assert(Array.isArray(master.browserGroup), 'Missing browser classification');
+          assert.equal(new Set(names).size, names.length, 'Duplicate names in runner master plan');
+          const count = Number(process.env.SHARD_COUNT);
+          const shard = Number(process.env.SHARD_INDEX);
+          assert.equal(count, 12);
+          assert(Number.isInteger(shard) && shard >= 0 && shard < count);
+          const partitions = Array.from({ length: count }, (_, index) => names.filter((_, position) => position % count === index));
+          function exactCoverage(candidate) {
+            const flat = candidate.flat();
+            assert.equal(flat.length, names.length, 'Planned harness count changed');
+            assert.deepEqual([...flat].sort(), [...names].sort(), 'Omitted or duplicated planned harness');
+          }
+          exactCoverage(partitions);
+          const controls = [];
+          for (const kind of ['omitted', 'duplicated']) {
+            const changed = structuredClone(partitions);
+            if (kind === 'omitted') changed[0].pop();
+            else changed[0].push(names[0]);
+            assert.notDeepEqual(changed, partitions, 'Control did not change its target');
+            assert.throws(() => exactCoverage(changed), assert.AssertionError, 'Changed plan was accepted');
+            fs.writeFileSync(out + '/plan-control-' + kind + '.json', JSON.stringify(changed, null, 2) + '\n');
+            controls.push({ kind, changed: true, rejected: true });
+          }
+          fs.writeFileSync(out + '/partition-plan.json', JSON.stringify(partitions, null, 2) + '\n');
+          fs.writeFileSync(out + '/shard-plan.json', JSON.stringify({ shard, count, names: partitions[shard] }, null, 2) + '\n');
+          fs.writeFileSync(out + '/shard-harnesses.txt', partitions[shard].join('\n') + '\n');
+          fs.writeFileSync(out + '/plan-controls.json', JSON.stringify(controls, null, 2) + '\n');
+          console.log('Exact partition: ' + names.length + ' Node harnesses across 12 shards; omitted and duplicated plans changed and rejected.');
+          JS
+      - name: Run every selected harness sequentially with its actual output and exit
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/legal-privacy-suite-artifacts"
+          mkdir -p "$out/harnesses"
+          printf 'harness\trunner_exit\tverdict\tseconds\tstarted_utc\tfinished_utc\n' > "$out/results.tsv"
+          printf 'harness\tstarted_utc\n' > "$out/attempted.tsv"
+          SIM_OFFLINE_RECEIPT="$out/server.transport" node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          while IFS= read -r file; do
+            test -n "$file" || continue
+            started="$(date -u +%FT%TZ)"; start_seconds=$SECONDS
+            printf '%s\t%s\n' "$file" "$started" >> "$out/attempted.tsv"
+            echo "Starting shard $SHARD_INDEX: $file"
+            status=0
+            SIM_OFFLINE_RECEIPT="$out/harnesses/$file.transport" ONLY="$file" timeout --signal=TERM --kill-after=15s 12m node scripts/runAllSims.mjs > "$out/harnesses/$file.log" 2>&1 || status=$?
+            finished="$(date -u +%FT%TZ)"; elapsed=$((SECONDS - start_seconds))
+            printf '%s\n' "$status" > "$out/harnesses/$file.exit"
+            verdict="$(awk -v name="$file" '$2 == name && $1 ~ /^(PASS|FAIL|SKIP|EMPTY)$/ { result=$1 } END { print result }' "$out/harnesses/$file.log")"
+            if [[ "$status" == 124 || "$status" == 137 ]]; then verdict=TIMEOUT; fi
+            if [[ -z "$verdict" ]]; then verdict=UNVERIFIED; fi
+            printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$file" "$status" "$verdict" "$elapsed" "$started" "$finished" >> "$out/results.tsv"
+            tail -n 4 "$out/harnesses/$file.log"
+            if [[ "$status" != 0 || ( "$verdict" != PASS && "$verdict" != SKIP ) ]]; then failed=1; fi
+          done < "$out/shard-harnesses.txt"
+          exit "$failed"
+      - name: Retain source and dependency holds after all attempted harnesses
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$PWD/legal-privacy-suite-artifacts"
+          sha256sum --check "$out/dependencies-before.sha256" > "$out/dependencies-hold.log"
+          git diff --exit-code HEAD -- src supabase package.json package-lock.json .github scripts/runAllSims.mjs > "$out/source-after.log"
+          git ls-files --others --exclude-standard -- src supabase package.json package-lock.json .github scripts/runAllSims.mjs > "$out/source-untracked.txt"
+          test ! -s "$out/source-untracked.txt"
+          printf 'ok\n' > "$out/source-hold.ok"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: legal-privacy-suite-${{ matrix.shard }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: legal-privacy-suite-artifacts/
+          retention-days: 7
+          if-no-files-found: error
+
+  suite_coverage:
+    name: Exact full Node suite coverage
+    needs: [verify, suite]
+    if: ${{ !cancelled() && needs.verify.outputs.build_ready == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/download-artifact@v4
+        with:
+          name: legal-privacy-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: legal-privacy-completed-build
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: legal-privacy-suite-*-${{ github.run_id }}-${{ github.run_attempt }}
+          path: legal-privacy-suite-results
+      - name: Require each master Node harness exactly once across all 12 results
+        env:
+          SIM_NETWORK: offline
+          NODE_OPTIONS: --require=./scripts/lib/offlineTransport.cjs
+        run: |
+          set -euo pipefail
+          mkdir -p legal-privacy-suite-coverage
+          node --input-type=module <<'JS' 2>&1 | tee legal-privacy-suite-coverage/coverage.log
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          const masterText = fs.readFileSync('legal-privacy-completed-build/master-plan.json', 'utf8');
+          const master = JSON.parse(masterText);
+          const expected = master.nodeGroup;
+          const directories = fs.readdirSync('legal-privacy-suite-results');
+          const issues = [];
+          const records = [];
+          const seenShards = new Set();
+          for (const name of directories) {
+            const dir = path.join('legal-privacy-suite-results', name);
+            try {
+              assert.equal(fs.readFileSync(path.join(dir, 'source-hold.ok'), 'utf8'), 'ok\n', 'Source or dependency hold failed');
+              assert.equal(fs.readFileSync(path.join(dir, 'master-plan.json'), 'utf8'), masterText, 'Different master plan');
+              const plan = JSON.parse(fs.readFileSync(path.join(dir, 'shard-plan.json'), 'utf8'));
+              assert.equal(plan.count, 12);
+              assert(Number.isInteger(plan.shard) && plan.shard >= 0 && plan.shard < 12);
+              assert(!seenShards.has(plan.shard), 'Duplicated shard artifact');
+              seenShards.add(plan.shard);
+              const assigned = expected.filter((_, index) => index % 12 === plan.shard);
+              assert.deepEqual(plan.names, assigned, 'Different shard assignment');
+              const controls = JSON.parse(fs.readFileSync(path.join(dir, 'plan-controls.json'), 'utf8'));
+              assert.deepEqual(controls, [{ kind: 'omitted', changed: true, rejected: true }, { kind: 'duplicated', changed: true, rejected: true }]);
+              const rows = fs.readFileSync(path.join(dir, 'results.tsv'), 'utf8').trimEnd().split('\n');
+              assert.equal(rows.shift(), 'harness\trunner_exit\tverdict\tseconds\tstarted_utc\tfinished_utc');
+              const parsed = rows.filter(Boolean).map(line => {
+                const [harness, nativeExit, verdict, seconds, started, finished] = line.split('\t');
+                assert(/^\d+$/.test(nativeExit) && /^\d+$/.test(seconds), 'Missing native exit or duration');
+                return { harness, nativeExit: Number(nativeExit), verdict, seconds: Number(seconds), started, finished, shard: plan.shard };
+              });
+              assert.deepEqual(parsed.map(row => row.harness), assigned, 'Missing or duplicated execution in shard');
+              records.push(...parsed);
+            } catch (error) { issues.push({ artifact: name, error: String(error) }); }
+          }
+          if (seenShards.size !== 12) issues.push({ error: 'Expected 12 distinct shard artifacts, got ' + seenShards.size });
+          const actual = records.map(row => row.harness).sort();
+          try { assert.deepEqual(actual, [...expected].sort(), 'Each Node name must occur exactly once'); }
+          catch (error) { issues.push({ error: String(error) }); }
+          const totals = {
+            planned: expected.length, recorded: records.length, browserGroupExcluded: master.browserGroup.length,
+            passed: records.filter(row => row.nativeExit === 0 && row.verdict === 'PASS').length,
+            skipped: records.filter(row => row.nativeExit === 0 && row.verdict === 'SKIP').length,
+            timedOut: records.filter(row => row.verdict === 'TIMEOUT').length,
+            failed: records.filter(row => row.nativeExit !== 0 || !['PASS', 'SKIP'].includes(row.verdict)).length,
+          };
+          fs.writeFileSync('legal-privacy-suite-coverage/coverage.json', JSON.stringify({ totals, issues, records, master }, null, 2) + '\n');
+          console.log(JSON.stringify({ totals, issues }, null, 2));
+          assert.equal(issues.length, 0, 'Incomplete or inconsistent suite coverage');
+          assert.equal(totals.failed, 0, 'One or more harnesses failed or timed out; skips are reported separately');
+          console.log('Every planned Node harness is recorded exactly once across 12 shards. Skips are not passes.');
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: legal-privacy-suite-coverage-${{ github.run_id }}-${{ github.run_attempt }}
+          path: legal-privacy-suite-coverage/
+          retention-days: 7
+          if-no-files-found: error

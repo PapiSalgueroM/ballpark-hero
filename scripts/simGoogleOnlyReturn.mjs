@@ -50,12 +50,12 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TEST = 'src/components/auth/googlePaused.test.tsx';
 const FILES = {
-  modal: { rel: 'src/components/auth/AuthModal.tsx', env: 'GOOGLE_PAUSED_MODAL' },
+  modal: { rel: 'src/components/auth/AuthModalBody.tsx', env: 'GOOGLE_PAUSED_MODAL' },
   header: { rel: 'src/components/layout/Header.tsx', env: 'GOOGLE_PAUSED_HEADER' },
   reset: { rel: 'src/pages/ResetPassword.tsx', env: 'GOOGLE_PAUSED_RESET' },
   lib: { rel: 'src/lib/googlePaused.ts', env: 'GOOGLE_PAUSED_LIB' },
 };
-const ROUND_FILES = [...Object.values(FILES).map(f => f.rel), TEST, 'scripts/simGoogleOnlyReturn.mjs'];
+const ROUND_FILES = [...Object.values(FILES).map(f => f.rel), 'src/components/auth/AuthModal.tsx', TEST, 'scripts/simGoogleOnlyReturn.mjs'];
 const TEST_COUNT = 8;
 const DASH = new RegExp('[' + String.fromCharCode(0x2013, 0x2014) + ']');
 

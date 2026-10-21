@@ -76,7 +76,7 @@ vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
 
 const from = (env: string | undefined, fallback: () => Promise<Record<string, unknown>>) =>
   env ? import(/* @vite-ignore */ env) : fallback();
-const { AuthModal } = await from(process.env.GOOGLE_PAUSED_MODAL, () => import('@/components/auth/AuthModal'));
+const { AuthModal } = await from(process.env.GOOGLE_PAUSED_MODAL, () => import('@/components/auth/AuthModalBody'));
 const { Header } = await from(process.env.GOOGLE_PAUSED_HEADER, () => import('@/components/layout/Header'));
 const { default: ResetPassword } = await from(process.env.GOOGLE_PAUSED_RESET, () => import('@/pages/ResetPassword'));
 const { isGoogleOnlyAccount, PASSWORD_SET_FLAG } = await from(process.env.GOOGLE_PAUSED_LIB, () => import('@/lib/googlePaused'));

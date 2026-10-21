@@ -60,7 +60,7 @@ describe('account privacy controls', () => {
     fillDelete();
     fireEvent.click(screen.getByRole('button', { name: 'Permanently delete account' }));
     expect(await screen.findByRole('alert')).toHaveTextContent('Your account was deleted');
-    expect(screen.getByRole('alert')).toHaveTextContent('Sign Out');
+    expect(screen.getByRole('alert')).toHaveTextContent('Log Out');
     expect(mocks.signOut).not.toHaveBeenCalled();
     expect(mocks.cacheDisplayName).not.toHaveBeenCalled();
     expect(mocks.navigate).not.toHaveBeenCalled();

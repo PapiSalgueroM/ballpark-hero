@@ -134,6 +134,10 @@ if (ONLY.length) {
     process.exit(1);
   }
 }
+if (process.argv.includes('--plan-json')) {
+  console.log(JSON.stringify({ nodeGroup, browserGroup }));
+  process.exit(0);
+}
 const trafficFolder = OFFLINE ? mkdtempSync(path.join(tmpdir(), 'dukb-sim-traffic-')) : null;
 const cleanupTraffic = () => { if (trafficFolder) rmdirSync(trafficFolder); };
 
@@ -205,6 +209,7 @@ async function pool(files, size, fn) {
 
 function report(results) {
   for (const r of results) {
+    if (process.env.SIM_FULL_OUTPUT === '1') process.stdout.write(r.out);
     const secs = (r.ms / 1000).toFixed(1).padStart(6);
     console.log(`  ${r.verdict.padEnd(5)} ${r.file.padEnd(28)} ${secs}s`);
     if (r.why) console.log(`        ${r.why}`);

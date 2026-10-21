@@ -71,7 +71,7 @@ export default function AccountPrivacy() {
       setAccountDeleted(true);
       setDeleting(false);
       setConfirmation('');
-      setMessage('Your account was deleted. Use Sign Out in the account menu to clear this browser\'s old sign-in. Browser-only saves stay on this device.');
+      setMessage('Your account was deleted. Use Log Out in the account menu to clear this browser\'s old sign-in. Browser-only saves stay on this device.');
     } catch (error) {
       const code = error instanceof Error ? error.message : '';
       setMessage(code === 'account_changed'

@@ -146,6 +146,48 @@ try {
       assert.equal(JSON.parse(await page.evaluate(key => localStorage.getItem(key), key)).advertising, false);
     } finally { await ctx.close(); }
   });
+  await run('account form loads on request, keeps drafts and returns focus', async () => {
+    const { ctx } = await context();
+    let releaseBody = () => {};
+    const bodyHeld = new Promise(resolve => { releaseBody = resolve; });
+    try {
+      const page = await ctx.newPage(), scripts = [];
+      page.on('request', request => { if (request.resourceType() === 'script') scripts.push(request.url()); });
+      await page.route('**/AuthModalBody-*.js', async route => { await bodyHeld; await route.continue(); });
+      await page.goto(BASE + '/privacy');
+      await region(page).waitFor();
+      await region(page).getByRole('button', { name: 'Reject all', exact: true }).click();
+      await region(page).waitFor({ state: 'hidden' });
+      const bodyRequests = () => scripts.filter(url => /\/AuthModalBody-[^/]+\.js$/.test(new URL(url).pathname));
+      assert.equal(bodyRequests().length, 0, 'The unused account form is absent from the initial page download');
+      const login = page.getByRole('button', { name: 'Log In', exact: true });
+      await login.click();
+      const loadingCancel = page.getByRole('region', { name: 'Account sign in', exact: true }).getByRole('button', { name: 'Cancel', exact: true });
+      await loadingCancel.focus();
+      assert.equal(await loadingCancel.evaluate(element => element === document.activeElement), true);
+      releaseBody();
+      const dialog = page.getByRole('dialog');
+      await dialog.waitFor();
+      assert.equal(bodyRequests().length, 1, 'The account action fetches the real form chunk');
+      const email = dialog.getByRole('textbox', { name: 'Email', exact: true });
+      await email.fill('draft@example.test');
+      await dialog.getByRole('button', { name: 'Close', exact: true }).click();
+      await dialog.waitFor({ state: 'hidden' });
+      await page.waitForFunction(() => document.activeElement?.textContent?.trim() === 'Log In');
+      await login.click();
+      await dialog.waitFor();
+      assert.equal(await dialog.getByRole('textbox', { name: 'Email', exact: true }).inputValue(), 'draft@example.test');
+      assert.equal(bodyRequests().length, 1);
+      await dialog.getByRole('button', { name: 'Close', exact: true }).click();
+      await dialog.waitFor({ state: 'hidden' });
+      await page.getByRole('button', { name: 'Sign Up', exact: true }).click();
+      await dialog.getByRole('heading', { name: 'Join DoUKnowBall', exact: true }).waitFor();
+      assert.equal(await dialog.getByRole('checkbox', { name: /I am 13 or older/ }).isChecked(), false);
+      assert.equal(await dialog.getByRole('link', { name: 'Terms', exact: true }).getAttribute('href'), '/terms');
+      assert.equal(await dialog.getByRole('link', { name: 'Privacy Policy', exact: true }).getAttribute('href'), '/privacy');
+      await page.screenshot({ path: path.join(out, 'account-form-phone.png') });
+    } finally { releaseBody(); await ctx.close(); }
+  });
   report.complete = true;
   console.log(`Consent browser: PASS, ${report.cases.length} cases. Every external request was fulfilled locally; no live provider requests.`);
 } catch (error) {

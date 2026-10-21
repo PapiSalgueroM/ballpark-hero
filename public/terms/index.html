@@ -120,24 +120,48 @@
         window.addEventListener('load', sweep);
       })();
     </script>
-    <script>
-      // Google Analytics loads only after Accept. AdSense is intentionally not
-      // global: direct visits to account, reset, fallback, and other screens
-      // without a deliberate slot do not load it. Auto Ads and Auto optimize
-      // stay off in the account. The static verification meta stays global.
+    <script data-dukb-consent-bootstrap="">
+      // Keep this gate aligned with consentPreferences and consentedScripts.
       (function () {
+        var ANALYTICS_READY = false;
+        if (!ANALYTICS_READY) return;
         try {
-          if (localStorage.getItem('cookie-consent') === 'accepted') {
-            window.dataLayer = window.dataLayer || [];
-            window.gtag = function () { window.dataLayer.push(arguments); };
-            window.gtag('js', new Date());
-            window.gtag('config', 'G-KZQK2G68YC');
-            var g = document.createElement('script');
-            g.async = true;
-            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
-            document.head.appendChild(g);
+          var value = JSON.parse(localStorage.getItem('cookie-consent-v2') || 'null');
+          var now = Date.now();
+          if (!value || value.version !== 2 || typeof value.advertising !== 'boolean'
+            || typeof value.analytics !== 'boolean' || value.analytics !== true
+            || typeof value.updatedAt !== 'number' || !Number.isFinite(value.updatedAt)
+            || value.updatedAt < 0 || value.updatedAt > now
+            || now - value.updatedAt >= 180 * 24 * 60 * 60 * 1000) return;
+          if (/^\/(?:reset-password|auth|account|profile|admin)(?:\/|$)/.test(location.pathname)) return;
+          function cleanUrl(input) {
+            try {
+              var url = new URL(input, location.origin);
+              return url.protocol === 'https:' || url.protocol === 'http:' ? url.origin + url.pathname : '';
+            } catch (e) { return ''; }
           }
-        } catch (e) { /* storage blocked: analytics stays off */ }
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function () { window.dataLayer.push(arguments); };
+          window.gtag('consent', 'default', {
+            ad_storage: 'denied', analytics_storage: 'denied',
+            ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.__DUKB_CONSENT_DEFAULTED__ = true;
+          window.gtag('consent', 'update', {
+            ad_storage: value.advertising && navigator.globalPrivacyControl !== true ? 'granted' : 'denied',
+            analytics_storage: 'granted', ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.gtag('js', new Date());
+          window.gtag('config', 'G-KZQK2G68YC', {
+            send_page_view: false, page_location: cleanUrl(location.href),
+            page_referrer: document.referrer ? cleanUrl(document.referrer) : '',
+            allow_google_signals: false, allow_ad_personalization_signals: false
+          });
+          var g = document.createElement('script');
+          g.async = true;
+          g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+          document.head.appendChild(g);
+        } catch (e) { /* Blocked storage keeps optional analytics off. */ }
       })();
     </script>
     
@@ -210,7 +234,7 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <h1>Terms of Service</h1>
-<p>Last updated: September 15, 2026</p>
+<p>Last updated: October 21, 2026</p>
 <h2>1. Acceptance of Terms</h2>
 <p>By accessing or using DoUKnowBall ("the Site"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Site. The Site is owned and operated by an individual doing business as DoUKnowBall ("we", "us", "the operator").</p>
 <h2>2. Description of Service</h2>
@@ -218,19 +242,20 @@
 <p>Current game categories include pro football (NFL), college football, pro basketball (NBA), college basketball, baseball (MLB), hockey (NHL), soccer (including World Cup and Champions League), Formula 1, tennis, golf, NASCAR, combat sports (UFC), and multi-sport trivia covering the Olympics and international competitions. The Site is provided "as is" and "as available" without any warranties of any kind.</p>
 <h2>3. Sports Data &amp; Player Information</h2>
 <p>Real player names, team names, historical results, statistics, and trivia answers on the Site come from public records and sports sources. We work to verify this factual material before publishing it and correct errors when we confirm them.</p>
+<p>AI tools assist with development, debugging and drafting some text. Some games also use AI for answer checks, player suggestions, lineup ratings or analysis, and fictional season stories. The operator remains responsible for the Site. AI outputs can be inaccurate; a generated answer, rating or explanation is not proof of a real sporting fact. See our <a href="/privacy">Privacy Policy</a> for information about game inputs sent to AI services.</p>
 <h2>4. Accounts</h2>
 <p>You do not need an account to play any game on the Site. If you choose to create one, you can sign up with an email address and password. You are responsible for keeping your login details secure and for all activity under your account.</p>
 <p>You agree to provide accurate information when creating an account and not to create an account using someone else's identity or a name that is offensive or impersonates another person or brand. We may suspend or remove an account that violates these Terms.</p>
 <p>See our <a href="/privacy">Privacy Policy</a> for details on what account data we collect and how to request its deletion.</p>
 <h2>5. Advertising</h2>
-<p>Advertising can help cover hosting costs and keep the Site free. The Site is set up to request Google AdSense ads in non-personalized mode. Google's advertising script loads only if you choose Accept on our cookie banner; choose Essential only and no advertising code is loaded at all. See our <a href="/privacy">Privacy Policy</a> for the full advertising disclosure.</p>
+<p>Advertising can help cover hosting costs and keep the Site free. The Site is set up to request Google AdSense ads in non-personalized mode. Google's advertising script loads only when you turn on Advertising in Cookie choices. Analytics is a separate purpose but is currently paused. Advertising stays off if your browser sends a Global Privacy Control signal. You can leave optional purposes off and still play. See our <a href="/privacy">Privacy Policy</a> for the full advertising disclosure and how to change your choices.</p>
 <h2>6. Intellectual Property &amp; Trademarks</h2>
-<p>All original content, game designs, features, and functionality of DoUKnowBall are owned by DoUKnowBall and are protected by international copyright and intellectual property laws.</p>
-<p>All team names, player names, league names, logos, and trademarks referenced on this Site are the property of their respective owners and are used solely for identification and informational purposes.</p>
+<p>The operator claims rights in DoUKnowBall's original contributions only to the extent those rights exist under applicable law. Third-party content, software and other materials remain subject to their owners' rights and applicable licenses. AI assistance does not itself establish copyright ownership or permission to use someone else's material.</p>
+<p>Third-party trademarks and other protected material remain subject to their owners' rights. Player names, team and league names, and factual records are referenced for identification and commentary. These references do not imply endorsement or transfer any rights to us or to you.</p>
 <p>DoUKnowBall is not affiliated with, endorsed by, or sponsored by the NFL, NFLPA, NBA, NBPA, UFC, NHL, NHLPA, MLB, MLBPA, FIFA, IOC, NCAA, FIA (Formula 1), PGA Tour, NASCAR, ATP, WTA, or any team, club, or sports governing body.</p>
 <p>The Olympic name, Olympic rings, and related marks are trademarks of the International Olympic Committee (IOC). DoUKnowBall makes no claim to these marks and does not use any official Olympic branding.</p>
 <h2>7. User Conduct</h2>
-<p>You agree not to:</p>
+<p>Except where applicable law or an applicable license permits otherwise, you agree not to:</p>
 <li>Use the Site for any unlawful purpose or in violation of any applicable laws</li>
 <li>Attempt to interfere with, compromise, or disrupt the Site's systems or infrastructure</li>
 <li>Copy, scrape, crawl, or use automated tools to extract or redistribute game content, data, or any part of the Site without prior written permission</li>
@@ -243,14 +268,16 @@
 <p>The Site is provided on an "as is" and "as available" basis. DoUKnowBall makes no representations or warranties of any kind, express or implied, regarding the accuracy, reliability, completeness, or availability of the Site or its content. We work to keep real trivia and historical data accurate, but errors can happen. Fictional simulation outputs such as ratings, future seasons, finances, and generated results are entertainment estimates, not records of real events.</p>
 <h2>10. Limitation of Liability</h2>
 <p>To the fullest extent permitted by law, DoUKnowBall and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, arising from your use of or inability to use the Site.</p>
+<p>Nothing in these Terms excludes or limits a right, remedy or liability that cannot lawfully be excluded or limited, including mandatory consumer and data protection rights.</p>
 <h2>11. Indemnification</h2>
 <p>You agree to indemnify, defend, and hold harmless DoUKnowBall and its operators from any claims, liabilities, damages, losses, or expenses arising from your use of the Site or your violation of these Terms.</p>
 <h2>12. Age Requirement</h2>
-<p>The Site is intended for a general audience and can be used without an account or any personal information. Creating an optional account requires an email address; if you are under 13, please only create an account with a parent or guardian's involvement. See our <a href="/privacy">Privacy Policy</a> for more on children's privacy.</p>
+<p>The Site is intended for a general audience. You must be at least 13 to create an account. If you are under 13, do not create an account or submit personal information through the Site. Minors should use the Site with a parent or guardian's guidance and only where permitted by applicable law. Games can be played without an account, but hosting and other services still receive the technical data described in our <a href="/privacy">Privacy Policy</a>.</p>
 <h2>13. Modifications to Terms</h2>
 <p>DoUKnowBall reserves the right to modify these Terms at any time. Changes will be effective immediately upon posting to the Site. Your continued use of the Site after changes are posted constitutes your acceptance of the revised Terms.</p>
 <h2>14. Governing Law</h2>
 <p>These Terms shall be governed by and construed in accordance with the laws of the Commonwealth of Massachusetts and applicable United States federal law, without regard to conflict of law principles. Any disputes arising under these Terms shall be resolved exclusively in the state or federal courts located in Massachusetts, and you consent to the personal jurisdiction of those courts.</p>
+<p>This choice of law and courts does not remove mandatory protections or a right to bring a claim in another court that applicable law gives you.</p>
 <h2>15. Contact</h2>
 <p>If you have any questions about these Terms of Service or need to reach us for legal inquiries, please contact us at douknowball1@gmail.com.</p>
 <div data-site-chrome>
@@ -270,7 +297,7 @@
 <a href="/privacy">Privacy Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+<p>Essential features keep the games working. Choose whether to allow advertising. Analytics is temporarily paused. Your choice lasts up to 180 days. <a href="/privacy">Learn more</a></p>
 </div>
 </div>
 </div>
