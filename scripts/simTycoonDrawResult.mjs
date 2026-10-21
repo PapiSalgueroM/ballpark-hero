@@ -9,7 +9,9 @@ import { fileURLToPath } from 'node:url';
 assert(process.env.CI, 'Run this verification only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(process.env.TYCOON_DRAW_RESULT_ARTIFACTS || path.join(ROOT, 'tycoon-draw-result-artifacts/outcomes'));
-const BASE = '8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8';
+// Round 1531 re-pin: the PR was built on 8fe82a4d, and main changed this hook since (fa6cceab, ground sales).
+// The original is now main as Round 1531 found it, so the proof still compares the hook with only the draw branch.
+const BASE = 'f003721f923494cc851eef0ca8e30fa8bf14f32b';
 const HOOK = 'src/hooks/useStadiumTycoon.ts', ENGINE = 'src/lib/stadiumTycoon.ts', REWARDS = 'src/lib/tycoonRewards.ts';
 const NAMES = ['Win and loss remain exact', 'Draw result is shown without economic change'];
 const unix = value => value.replaceAll('\\', '/');

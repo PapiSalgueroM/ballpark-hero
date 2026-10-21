@@ -11,7 +11,11 @@ import { build } from 'esbuild';
 assert(process.env.CI, 'Run this verification only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const ART = path.join(ROOT, 'tycoon-ground-growth-artifacts'), OUT = path.join(ART, 'native'), CACHE = path.join(ART, 'asset-cache');
-const PAGE = 'src/pages/StadiumTycoon.tsx', HOOK = 'src/hooks/useStadiumTycoon.ts', BASE = '0a02f879', NOW = Date.parse('2026-10-07T12:00:00Z');
+/* Round 1531 re-pin. The PR was built on 0a02f879 (PR181's tip off 8fe82a4d), and today's main differs from that in
+   hundreds of src files. The parent is now this round's PR182 landing commit (main plus PR180 to PR182) and TERRACES
+   is this round's PR183 landing commit, so the scope check still proves PR183 changed only the page, and the page
+   relation below still proves the old arm is that parent's page, without failing on unrelated later src commits. */
+const PAGE = 'src/pages/StadiumTycoon.tsx', HOOK = 'src/hooks/useStadiumTycoon.ts', BASE = '3dc37dbf9c4d8c57edc18009c0b127b4d487726b', TERRACES = 'beb301396869b37d96536915e32d50235c753d07', NOW = Date.parse('2026-10-07T12:00:00Z');
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 function fileSha(file) { { const bytes = fs.readFileSync(file); return sha(bytes); } }
 const read = file => fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
@@ -78,7 +82,8 @@ let browser, server;
 try {
   const copyDir = path.join(OUT, 'copies'); fs.mkdirSync(copyDir, { recursive: true });
   const parent = execFileSync('git', ['rev-parse', BASE], { cwd: ROOT, encoding: 'utf8' }).trim(); report.parent = parent;
-  assert.deepEqual(execFileSync('git',['diff','--name-only',parent,'--','src'],{cwd:ROOT,encoding:'utf8'}).trim().split('\n'),[PAGE],'Only the declared page changes from the parent');
+  const terraces = execFileSync('git', ['rev-parse', TERRACES], { cwd: ROOT, encoding: 'utf8' }).trim(); report.terraces = terraces;
+  assert.deepEqual(execFileSync('git',['diff','--name-only',parent,terraces,'--','src'],{cwd:ROOT,encoding:'utf8'}).trim().split('\n'),[PAGE],'Only the declared page changes from the parent');
   const old = execFileSync('git', ['show', `${parent}:${PAGE}`], { cwd: ROOT, encoding: 'utf8' }).replace(/\r\n?/g, '\n'), current = read(path.join(ROOT, PAGE));
   const memo = `  const standBays = useMemo(() => Array.from({ length: Math.min(203, Math.floor(cap / 40)) }, (_, i) => {\n    const column = i % 20;\n    const centered = column % 2 === 0 ? 9 - Math.floor(column / 2) : 10 + Math.floor(column / 2);\n    return { x: 8 + centered * 15, y: 56 - Math.floor(i / 20) * 5 };\n  }), [cap]);\n\n`;
   const svg = `            <svg data-tycoon-terraces aria-hidden="true" viewBox="0 0 320 64" preserveAspectRatio="none" className="absolute inset-0 h-full w-full pointer-events-none text-muted-foreground/50">\n              {standBays.map((bay, i) => (\n                <rect key={i} x={bay.x} y={bay.y} width="13" height="3" rx="1" fill="currentColor" />\n              ))}\n            </svg>\n`;
