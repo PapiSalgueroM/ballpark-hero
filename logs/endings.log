@@ -1,0 +1,16 @@
+A) six fleets of 40 careers: nothing ends a career before the age rules without the player
+  careers 240, alive at 26 240 (overall under 60 there 27), alive at 27 240
+  endings {"suggestion":73,"forced":127,"farewell":40}, early 0, not on the ceremony 0, stuck 0
+  shady years lived: bans 9, drug test bans 13, trials 156, prison 156
+B) the edges at 25 and 26
+  fixtures: 25 overall 65 at Rio Ave, 26 overall 68 at Rio Ave
+C) a retired flag and a phase that disagree go back to what the rest of the save says
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerEndings.mjs:317
+if (!(summary26.phase === 'season_summary' && summary26.pendingSummary && summary26.age === 26)) throw new Error(`the summary fixture is on ${summary26.phase} at ${summary26.age}`);
+                                                                                                       ^
+
+Error: the summary fixture is on newspaper at 26
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerEndings.mjs:317:104
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.21.0

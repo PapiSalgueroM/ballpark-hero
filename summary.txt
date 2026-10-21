@@ -1,0 +1,2 @@
+endings-early exit=1 16s | Node.js v24.21.0
+endings exit=1 31s | Node.js v24.21.0
