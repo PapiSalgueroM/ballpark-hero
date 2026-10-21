@@ -23,9 +23,9 @@
  * ROUND 445 MOVED THE SHARED HALF OUT AND CHANGED NOTHING ELSE. The seeded
  * generator, the day seed, the spray law and the ladder builder now live in
  * src/lib/arcade.ts, because the second arcade game runs on the same four
- * things and the owner's instruction is one engine, many sports. Every number
- * below is the number Round 433 shipped, in the same order, so a seed plays
- * the same ten kicks it always did.
+ * things and the owner's instruction is one engine, many sports. Round 1091
+ * moves the three short walled setups outside the penalty area. The penalty,
+ * later distances, random draw order and shot rules stay unchanged.
  */
 import {
   buildLadder, clamp, daySeed, lehmer, sprayFor as arcadeSpray,
@@ -81,7 +81,7 @@ export interface Aim {
 /** The ten kicks of a run: further out, more men in the wall, better keepers. */
 export function buildRun(seed: number): KickSetup[] {
   return buildLadder(seed, ROUNDS_PER_RUN, (t, rng, i) => {
-    const distance = Math.round((11 + t * 14) * 10) / 10;
+    const distance = i === 0 ? 11 : Math.max(17, Math.round((11 + t * 14) * 10) / 10);
     const wallSize = i === 0 ? 0 : Math.min(5, 1 + Math.floor(t * 5 + rng() * 0.9));
     const keeperSkill = clamp(0.28 + t * 0.42 + (rng() - 0.5) * 0.12, 0.2, 0.82);
     const keeperLean = Math.round((rng() * 2 - 1) * 100) / 100;
