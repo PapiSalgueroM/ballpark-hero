@@ -134,10 +134,11 @@ async function amounts(page, row) {
   row.amountChecks += 1;
 }
 async function geometry(page, row) {
+  const viewport = page.viewportSize(); assert.equal(viewport?.width, row.width, 'Configured browser viewport matches the case');
   const value = await page.locator('[data-shirt-sales]').evaluate(el => {
     const r = el.getBoundingClientRect(); return { width: innerWidth, document: document.documentElement.scrollWidth, card: { left: r.left, right: r.right, width: r.width }, cut: [el, ...el.querySelectorAll('*')].filter(node => node.clientWidth && getComputedStyle(node).display !== 'inline' && node.scrollWidth > node.clientWidth + 2).map(node => ({ text: node.textContent?.trim().slice(0, 60), scroll: node.scrollWidth, client: node.clientWidth })), animations: el.getAnimations({ subtree: true }).filter(a => a.playState === 'running').length };
   });
-  row.geometry.push(value); assert(value.document <= value.width + 2 && value.card.left >= -.5 && value.card.right <= value.width + .5, 'Shirt card and page fit the viewport');
+  row.geometry.push({ ...value, configuredWidth: viewport.width }); assert(Math.abs(value.width - viewport.width) <= 2 && value.document <= viewport.width + 2 && value.card.left >= -.5 && value.card.right <= viewport.width + .5, 'Shirt card and page fit the viewport');
   assert.deepEqual(value.cut, [], 'Shirt figures and labels do not clip'); if (row.reduced) assert.equal(value.animations, 0, 'Reduced-motion shirt card remains still');
 }
 async function capture(page, row, name) { const file = row.id + '-' + name + '.png'; await page.screenshot({ path: path.join(OUT, file), fullPage: name === 'full', animations: 'disabled' }); row.screenshots.push(file); }
