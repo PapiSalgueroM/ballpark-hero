@@ -1,0 +1,6 @@
+m-age33 exit=1 40s | MUT age33: endings=1 v1519=1 => CAUGHT
+m-ovr50 exit=1 39s | MUT ovr50: endings=1 v1519=0 => CAUGHT
+m-noyouth exit=0 43s | MUT noyouth: endings=0 v1519=0 vrecov=0 => ESCAPED
+m-nolegacyrescue exit=1 39s | MUT nolegacyrescue: endings=1 v1519=0 => CAUGHT
+m-hop exit=1 39s | MUT hop: endings=1 v1519=0 => CAUGHT
+m-noflagguard exit=1 38s | MUT noflagguard: endings=1 => CAUGHT

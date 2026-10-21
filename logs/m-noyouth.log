@@ -1,0 +1,16 @@
+MUTATED noyouth
+=== endings exit=0
+D) every fleet career is byte for byte the base engine's
+  base bc79b526: 240 careers, 0 differ from this tree
+PASS: no career ends before the age rules without the player, and the pair is reconciled
+=== v1519 exit=0
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 20:50:04
+[2m   Duration [22m 3.22s[2m (transform 1.17s, setup 42ms, collect 1.62s, tests 1.13s, environment 171ms, prepare 67ms)[22m
+=== vrecov exit=0
+[2m      Tests [22m [1m[32m39 passed[39m[22m[90m (39)[39m
+[2m      Tests [22m [1m[32m39 passed[39m[22m[90m (39)[39m
+[2m   Start at [22m 20:50:08
+[2m   Duration [22m 4.28s[2m (transform 1.73s, setup 43ms, collect 1.69s, tests 2.04s, environment 174ms, prepare 44ms)[22m
+MUT noyouth: endings=0 v1519=0 vrecov=0 => ESCAPED

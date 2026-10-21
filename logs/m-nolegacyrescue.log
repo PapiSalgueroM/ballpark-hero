@@ -1,0 +1,14 @@
+MUTATED nolegacyrescue
+=== endings exit=1
+  FAIL: C a forced retirement whose phase and legacy were lost: repaired to retired true, phase retirement_ceremony, legacy none
+  FAIL: C a ceremony that lost its legacy: repaired to retired true, phase retirement_ceremony, legacy none
+FAIL: 2 check(s) failed
+D) every fleet career is byte for byte the base engine's
+  base bc79b526: 240 careers, 0 differ from this tree
+FAIL: 2 check(s) failed
+=== v1519 exit=0
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 20:50:48
+[2m   Duration [22m 2.96s[2m (transform 1.07s, setup 38ms, collect 1.47s, tests 1.04s, environment 160ms, prepare 74ms)[22m
+MUT nolegacyrescue: endings=1 v1519=0 => CAUGHT

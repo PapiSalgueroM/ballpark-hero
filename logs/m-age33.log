@@ -1,0 +1,23 @@
+MUTATED age33
+=== endings exit=1
+  FAIL: shady career 2: a forced ending at 33 has the send off line null
+  FAIL: shady career 7: a forced ending at 33 has the send off line null
+  FAIL: shady career 32: a forced ending at 33 has the send off line null
+  FAIL: shady career 34: a forced ending at 33 has the send off line null
+  FAIL: decline career 0: a forced ending at 33 has the send off line null
+  FAIL: B3 the send off says why (null)
+FAIL: 6 check(s) failed
+D) every fleet career is byte for byte the base engine's
+  base bc79b526: 240 careers, 0 differ from this tree
+FAIL: 6 check(s) failed
+=== v1519 exit=1
+ [31m❯[39m src/test/soccerCareerRetirement1519.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1176[2mms[22m[39m
+[31m   [31m×[31m Round 1519: no career ends at 26 without the player[2m > [22ma forced retirement says why on the send off[39m[32m 29[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/soccerCareerRetirement1519.test.tsx[2m > [22mRound 1519: no career ends at 26 without the player[2m > [22ma forced retirement says why on the send off
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 20:48:46
+[2m   Duration [22m 3.41s[2m (transform 1.23s, setup 46ms, collect 1.72s, tests 1.18s, environment 196ms, prepare 78ms)[22m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerRetirement1519.test.tsx,title=src/test/soccerCareerRetirement1519.test.tsx > Round 1519%3A no career ends at 26 without the player > a forced retirement says why on the send off,line=197,column=83::TypeError: .toMatch() expects to receive a string, but got undefined%0A ❯ src/test/soccerCareerRetirement1519.test.tsx:197:83%0A%0A
+MUT age33: endings=1 v1519=1 => CAUGHT

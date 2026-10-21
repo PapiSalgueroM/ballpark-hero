@@ -1,0 +1,8 @@
+MUTATED noflagguard
+=== endings exit=1
+  FAIL: no consistent save moves (2 did)
+FAIL: 1 check(s) failed
+D) every fleet career is byte for byte the base engine's
+  base bc79b526: 240 careers, 0 differ from this tree
+FAIL: 1 check(s) failed
+MUT noflagguard: endings=1 => CAUGHT
