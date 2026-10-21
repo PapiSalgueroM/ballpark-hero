@@ -93,7 +93,7 @@ report.courtChunk = { file: courtChunks[0], sha256: digest(fs.readFileSync(path.
 const profiles = [ { width: 360, height: 800 }, { width: 390, height: 844 }, { width: 432, height: 813 }, { width: 1440, height: 1000 }, { width: 390, height: 844, reduced: true } ];
 const twoFrames = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
 async function activate(locator, profile, floor = 44) {
-  await locator.scrollIntoViewIfNeeded();
+  // A trial click scrolls and retries if a legitimate portal remounts its node.
   await locator.click({ trial: true });
   const target = await locator.evaluate(el => {
     const box = el.getBoundingClientRect(), x = box.x + box.width / 2, y = box.y + box.height / 2;
@@ -182,7 +182,21 @@ async function open(browser, server, profile, sport, row) {
 async function ready(view, server, profile, sport, row) {
   const { page, entry } = view;
   await page.goto(server.base + (sport === 'nba' ? '/nba-my-career' : '/fight-career'), { waitUntil: 'domcontentloaded' });
-  const choices = page.getByRole('region', { name: 'Cookie choices', exact: true });
+  let choices = page.getByRole('region', { name: 'Cookie choices', exact: true });
+  if (sport === 'nba') {
+    // NBA opens its first-visit guide, then consent joins that focus scope.
+    // Wait for the final portal host before asking for a real choice.
+    const guide = page.getByRole('dialog', { name: 'How to play', exact: true });
+    await guide.waitFor();
+    const host = guide.locator('[data-dukb-help-cookie-choices]');
+    await host.waitFor();
+    choices = host.getByRole('region', { name: 'Cookie choices', exact: true });
+    await choices.waitFor();
+    await twoFrames(page);
+    assert.equal(await page.getByRole('region', { name: 'Cookie choices', exact: true }).count(), 1, 'One settled cookie region belongs to the existing help dialog');
+    row.consentPlacement = await choices.evaluate(el => ({ insideHelp: !!el.closest('[data-dukb-help-cookie-choices]'), dialog: el.closest('[role="dialog"]')?.getAttribute('aria-labelledby') ?? null }));
+    assert(row.consentPlacement.insideHelp, 'NBA cookie choice has completed its normal move into the first-visit guide');
+  }
   await choices.waitFor();
   const careerBeforeChoice = await view.stored();
   await activate(choices.getByRole('button', { name: 'Reject all', exact: true }), profile);

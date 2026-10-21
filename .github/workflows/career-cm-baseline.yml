@@ -1,0 +1,124 @@
+name: Career CM baseline diagnostic
+
+on:
+  push:
+    branches: [codex/career-cm-baseline]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: career-cm-baseline-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  paired_cm:
+    if: github.ref == 'refs/heads/codex/career-cm-baseline'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      TZ: UTC
+      BASELINE_SHA: 076091ac870db38b953ddf71d3252cf1ac556782
+      CANDIDATE_SHA: 0a1d1d77d65552933aea675ae5c5172ccc25c322
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Prepare exact source archives with one locked dependency install
+        run: |
+          set -euo pipefail
+          out="$GITHUB_WORKSPACE/cm-baseline-artifacts"
+          mkdir "$out"
+          git rev-parse HEAD > "$out/operator-head.txt"
+          sha256sum package.json package-lock.json > "$out/dependencies-before.sha256"
+          npm ci > "$out/install.log" 2>&1
+          for arm in baseline candidate; do
+            if test "$arm" = baseline; then source="$BASELINE_SHA"; else source="$CANDIDATE_SHA"; fi
+            dir="$RUNNER_TEMP/career-cm-$arm"
+            mkdir "$dir"
+            git cat-file -e "$source^{commit}"
+            git rev-parse "$source^{tree}" > "$out/$arm.tree.txt"
+            printf '%s\n' "$source" > "$out/$arm.head.txt"
+            git archive "$source" | tar -xf - -C "$dir"
+            cmp "$dir/package.json" package.json
+            cmp "$dir/package-lock.json" package-lock.json
+            ln -s "$GITHUB_WORKSPACE/node_modules" "$dir/node_modules"
+            (cd "$dir"; sha256sum src/lib/cmMatchDisplay* src/lib/clubManager*.ts src/data/clubManager*.ts src/lib/soccerDeckGate.ts vitest.config.ts tsconfig*.json scripts/lib/offlineTransport.cjs package.json package-lock.json) > "$out/$arm.inputs.sha256"
+            sha256sum "$dir/src/test/setup.ts" > "$out/$arm.setup.sha256"
+          done
+          cmp "$out/baseline.inputs.sha256" "$out/candidate.inputs.sha256"
+          git diff "$BASELINE_SHA" "$CANDIDATE_SHA" -- src/test/setup.ts > "$out/setup-difference.patch"
+      - name: Run both unchanged seven-case files with the default five second deadline
+        run: |
+          set -euo pipefail
+          out="$GITHUB_WORKSPACE/cm-baseline-artifacts"
+          for arm in baseline candidate; do
+            dir="$RUNNER_TEMP/career-cm-$arm"
+            status=0
+            (
+              cd "$dir"
+              export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+              node_modules/.bin/vitest run src/lib/cmMatchDisplay.test.ts --maxWorkers=1 --reporter=verbose --reporter=json --outputFile.json="$out/$arm.json"
+            ) > "$out/$arm.log" 2>&1 || status=$?
+            printf '%s\n' "$status" > "$out/$arm.exit"
+            tail -n 45 "$out/$arm.log"
+          done
+      - name: Record literal paired results and fail for either failed arm
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const root = 'cm-baseline-artifacts/';
+          const result = { baselineSource: process.env.BASELINE_SHA, candidateSource: process.env.CANDIDATE_SHA, maxWorkers: 1, deadlineOverride: null, arms: {} };
+          for (const arm of ['baseline', 'candidate']) {
+            const json = JSON.parse(fs.readFileSync(root + arm + '.json', 'utf8'));
+            const rows = json.testResults.flatMap(file => file.assertionResults);
+            assert.equal(json.testResults.length, 1, arm + ' must collect one actual file');
+            assert.equal(rows.length, 7, arm + ' must execute every unchanged case');
+            assert.equal(json.numTotalTests, 7);
+            assert.equal(json.numPendingTests, 0);
+            const exit = Number(fs.readFileSync(root + arm + '.exit', 'utf8').trim());
+            const log = fs.readFileSync(root + arm + '.log', 'utf8');
+            result.arms[arm] = {
+              exit, success: json.success, passed: json.numPassedTests, failed: json.numFailedTests,
+              explicitFiveSecondTimeout: /Test timed out in 5000ms/.test(log),
+              cases: rows.map(row => ({ title: row.fullName, status: row.status, durationMs: row.duration, failureMessages: row.failureMessages })),
+            };
+          }
+          assert.deepEqual(result.arms.baseline.cases.map(row => row.title), result.arms.candidate.cases.map(row => row.title));
+          fs.writeFileSync(root + 'paired-results.json', JSON.stringify(result, null, 2) + '\n');
+          console.log('BASELINE ACTUAL:', JSON.stringify(result.arms.baseline));
+          console.log('CANDIDATE ACTUAL:', JSON.stringify(result.arms.candidate));
+          if (Object.values(result.arms).some(arm => arm.exit !== 0 || !arm.success || arm.failed !== 0)) process.exitCode = 1;
+          JS
+      - name: Preserve source holds and diagnostic evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$GITHUB_WORKSPACE/cm-baseline-artifacts"
+          sha256sum --check "$out/dependencies-before.sha256" > "$out/dependencies-hold.log"
+          git diff --exit-code HEAD -- src scripts public supabase package.json package-lock.json .github > "$out/operator-source-hold.log"
+          for arm in baseline candidate; do
+            dir="$RUNNER_TEMP/career-cm-$arm"
+            if test -f "$out/$arm.inputs.sha256"; then
+              (cd "$dir"; sha256sum --check "$out/$arm.inputs.sha256"; sha256sum --check "$out/$arm.setup.sha256") > "$out/$arm.source-hold.log"
+            fi
+          done
+          (cd "$out"; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-cm-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: cm-baseline-artifacts/
+          if-no-files-found: error
+          retention-days: 14

@@ -58,10 +58,10 @@ export default function FightRing({ round, condition, finished }: FightRingProps
   const id = `fight-ring-${useId().replace(/:/g, '')}`;
   const loser = finished?.winner === 'player' ? 'opp' : finished?.winner === 'opp' ? 'player' : null;
   const victim = round?.knockdown === 'player' ? 'opp' : round?.knockdown === 'opp' ? 'player' : null;
-  const decision = finished && finished.method !== 'KO' && finished.method !== 'TKO';
   const pose = (side: 'player' | 'opp'): Pose => {
-    if (!decision && (finished?.method === 'KO' ? loser === side : victim === side)) return 'down';
-    if (finished?.method === 'TKO' && loser === side) return 'stopped';
+    if (finished?.method === 'KO' && loser === side) return 'down';
+    if (finished?.method === 'TKO' && loser === side) return victim === side ? 'down' : 'stopped';
+    if (!finished && victim === side) return 'down';
     return round ? tacticPose[side === 'player' ? round.tactic : round.oppTactic] : 'guard';
   };
   const summary = round

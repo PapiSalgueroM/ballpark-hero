@@ -23,6 +23,13 @@ const controls = {
     to: "const victim = round?.knockdown === 'player' ? 'player' : round?.knockdown === 'opp' ? 'opp' : null;",
     test: 'puts only the actual knockdown victim down', message: 'The knockdown scorer stays upright',
   },
+  tkowinner: {
+    file: ring,
+    from: "if (!finished && victim === side) return 'down';",
+    to: "if (victim === side) return 'down';",
+    test: 'shows a completed KO loser down and a TKO without a knockdown stopped upright',
+    message: 'A completed TKO winner is upright even if knocked down in the last round',
+  },
   future: {
     file: board, from: 'done ? result.rounds.length : offer.rounds', to: 'result.rounds.length',
     test: future, message: 'after 1 of 8',
@@ -32,6 +39,11 @@ const controls = {
     from: 'const busiest = Math.max(1, ...visible.map(r => Math.max(r.playerLanded, r.oppLanded)));',
     to: 'const busiest = Math.max(1, ...result.rounds.map(r => Math.max(r.playerLanded, r.oppLanded)));',
     test: future, message: 'Future rounds must not change current counts, scale, ring or scheduled length',
+  },
+  unmount: {
+    file: board, from: 'return clearRevealTimer;', to: 'return undefined;',
+    test: 'waits a full readable interval after Play before revealing the next round',
+    message: 'Unmount cancels the owned playback callback',
   },
   pause: {
     file: board, from: 'if (paused || shown >= result.rounds.length) return;', to: 'if (shown >= result.rounds.length) return;',

@@ -79,7 +79,7 @@ jobs:
           node_modules/.bin/vitest run src/test/nbaCourtRecap1517.test.tsx src/test/fightCareerRingPlayback.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usBoardFixture.test.tsx src/test/usSeasonCentreScreens.test.tsx src/lib/accountPrivacy.test.ts src/lib/cmMatchDisplay.test.ts --maxWorkers=1 --reporter=verbose --reporter=json --outputFile.json=career-visuals-artifacts/focused.json > career-visuals-artifacts/focused.log 2>&1
           cat career-visuals-artifacts/focused.log
       - name: Actual presentation guards and effective copied faults
-        if: github.ref == 'refs/heads/codex/career-match-visuals'
+        if: ${{ !cancelled() && github.ref == 'refs/heads/codex/career-match-visuals' }}
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
@@ -103,6 +103,56 @@ jobs:
         with:
           name: career-visuals-${{ github.run_id }}-${{ github.run_attempt }}
           path: career-visuals-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  inherited_engines:
+    if: github.ref == 'refs/heads/codex/career-match-visuals'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Existing career engine gates at their full default populations
+        run: |
+          set -euo pipefail
+          mkdir inherited-artifacts
+          git rev-parse HEAD > inherited-artifacts/head.txt
+          sha256sum package.json package-lock.json > inherited-artifacts/dependencies-before.sha256
+          npm ci > inherited-artifacts/install.log 2>&1
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset SPORTS CAREERS SEEDSET US_SEASON_CONTROL US_SEASON_DIGEST US_SEASON_DIGEST_RECEIPT FIGHT_CONTROL FIGHT_PROVE
+          failed=0
+          for method in simFightCareer simUsSeasonCentre; do
+            status=0; node "scripts/$method.mjs" > "inherited-artifacts/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> inherited-artifacts/results.tsv
+            tail -n 35 "inherited-artifacts/$method.log"; test "$status" -eq 0 || failed=1
+          done
+          exit "$failed"
+      - name: Preserve exact source and engine evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check inherited-artifacts/dependencies-before.sha256 > inherited-artifacts/dependencies-hold.log
+          git diff --exit-code HEAD -- src scripts public supabase package.json package-lock.json .github > inherited-artifacts/source-hold.log
+          (cd inherited-artifacts; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > inherited-artifacts/evidence.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-inherited-${{ github.run_id }}-${{ github.run_attempt }}
+          path: inherited-artifacts/
           if-no-files-found: error
           retention-days: 14
 

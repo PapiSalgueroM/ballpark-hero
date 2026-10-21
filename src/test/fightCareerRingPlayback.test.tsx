@@ -204,10 +204,32 @@ describe('Fight Career revealed round truth', () => {
     expect(view.container.querySelector('[data-current-round]')).toHaveAttribute('data-current-round', '2');
     expect(localStorage.getItem(SAVE_KEY)).toBe(savedBytes);
     view.unmount();
-    const pending = startSavedBout();
-    expect(vi.getTimerCount(), 'Active playback owns a pending timeout before unmount').toBeGreaterThan(0);
-    pending.view.unmount();
-    expect(vi.getTimerCount(), 'Unmount cancels the owned playback timeout').toBe(0);
+    /* Observe this board's reveal callback without judging unrelated timers. */
+    const realTimeout = window.setTimeout.bind(window);
+    const revealCallback = vi.fn();
+    const revealIds: number[] = [];
+    const timeouts = vi.spyOn(window, 'setTimeout').mockImplementation((handler: TimerHandler, delay?: number, ...args: unknown[]) => {
+      if (delay === 3000 && typeof handler === 'function') {
+        const id = realTimeout((...callbackArgs: unknown[]) => { revealCallback(); handler(...callbackArgs); }, delay, ...args);
+        revealIds.push(id);
+        return id;
+      }
+      return realTimeout(handler, delay, ...args);
+    });
+    try {
+      const pending = startSavedBout();
+      expect(revealIds, 'The fresh real board owns exactly one round reveal timeout').toHaveLength(1);
+      expect(revealIds[0]).toBeGreaterThan(0);
+      const independentCallback = vi.fn();
+      realTimeout(independentCallback, 3100);
+      pending.view.unmount();
+      act(() => { vi.advanceTimersByTime(3100); });
+      expect(independentCallback, 'The independent timer proves the clock advanced').toHaveBeenCalledTimes(1);
+      expect(revealCallback, 'Unmount cancels the owned playback callback').not.toHaveBeenCalled();
+      expect(localStorage.getItem(SAVE_KEY)).toBe(pending.savedBytes);
+    } finally {
+      timeouts.mockRestore();
+    }
   });
 
   it('skips to the saved verdict and keeps earlier cards collapsed by default', () => {
