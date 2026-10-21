@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+endings: SC_ENDINGS_BASE=bc79b526 node scripts/simSoccerCareerEndings.mjs
+endings-seed2: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_SEED=25190000 node scripts/simSoccerCareerEndings.mjs
+endings-seed3: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_SEED=35190000 node scripts/simSoccerCareerEndings.mjs
+endings-early: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=early node scripts/simSoccerCareerEndings.mjs
+endings-noreconcile: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=noreconcile node scripts/simSoccerCareerEndings.mjs
+endings-summary: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=summary node scripts/simSoccerCareerEndings.mjs
