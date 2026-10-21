@@ -18,8 +18,9 @@
     Fifteen points a step, not ten, is measured too (remote check r1523-var, 400 careers a fleet): at ten the house
     fleet, whose phone runs cold so the shared cap eats a low morale's cost, gained 0.71 league games a season and
     six points fewer journeymen, and a fleet that answers every text, whose morale sits at 98, gained 1.29 games and
-    7.5 points fewer solid pros. At fifteen the two move 0.28 and 0.99 games and both legacy blocks stay inside
-    what the fleet moves from seed to seed (scripts/simCareerForm.mjs section 4). */
+    7.5 points fewer solid pros. At fifteen (1,200 careers, three seeds) the two gain 0.30 and 0.94 games a season,
+    the Ballon d'Or rate stays inside its seed to seed spread, and the legacy tiers move about as much as that spread
+    (scripts/simCareerForm.mjs section 4 has every number). */
 export const CAREER_FORM = {
   nba: { per: 12, neutral: 60 },
   nfl: { per: 10, neutral: 60 },
