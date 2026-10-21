@@ -23,6 +23,7 @@ import { getBadgeState, BADGE_DEFS, ownTotals, viewedTotals, type BadgeState, ty
 import AchievementCase from '@/components/profile/AchievementCase';
 import StreakHistory from '@/components/profile/StreakHistory';
 import YourCareers from '@/components/profile/YourCareers';
+import AccountPrivacy from '@/components/profile/AccountPrivacy';
 import { nameModerationError } from '@/lib/nameModeration';
 import { CATEGORIES } from '@/data/gameRegistry';
 
@@ -893,6 +894,7 @@ export default function Profile() {
             </CardContent>
           </Card>
 
+          {isOwnProfile && <AccountPrivacy />}
         </main>
 
         <div className="max-w-4xl mx-auto px-4">

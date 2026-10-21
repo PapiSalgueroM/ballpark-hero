@@ -12,6 +12,75 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: privacy_fixture_only
+          POSTGRES_DB: account_privacy_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      SIM_NETWORK: offline
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Prepare isolated security verification
+        run: |
+          set -euo pipefail
+          mkdir legal-privacy-artifacts
+          git rev-parse HEAD > legal-privacy-artifacts/head.txt
+          sha256sum package.json package-lock.json > legal-privacy-artifacts/dependencies-before.sha256
+          npm ci > legal-privacy-artifacts/install.log 2>&1
+          deno --version > legal-privacy-artifacts/deno-version.txt
+          deno check supabase/functions/account-privacy/index.ts > legal-privacy-artifacts/edge-types.log 2>&1
+      - name: Actual endpoint and effective copied security faults
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$PWD/legal-privacy-artifacts/security.transport" node scripts/simAccountPrivacy.mjs > legal-privacy-artifacts/security.log 2>&1
+          cat legal-privacy-artifacts/security.log
+      - name: Isolated database authorization and cascade proof
+        env:
+          PGHOST: 127.0.0.1
+          PGPORT: 5432
+          PGUSER: postgres
+          PGPASSWORD: privacy_fixture_only
+          PGDATABASE: account_privacy_test
+        run: |
+          set -euo pipefail
+          psql --set ON_ERROR_STOP=1 --file scripts/testAccountPrivacyDb.sql > legal-privacy-artifacts/account-privacy-db.log 2>&1
+          tail -n 12 legal-privacy-artifacts/account-privacy-db.log
+      - name: Retain security evidence and source hold
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check legal-privacy-artifacts/dependencies-before.sha256 > legal-privacy-artifacts/dependencies-hold.log
+          git diff --exit-code HEAD -- src supabase package.json package-lock.json > legal-privacy-artifacts/source-hold.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: legal-privacy-security-${{ github.run_id }}-${{ github.run_attempt }}
+          path: legal-privacy-artifacts/
+          retention-days: 7
+          if-no-files-found: error
+
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 80
@@ -36,6 +105,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
       - name: Record source and install locked app dependencies
         run: |
           set -euo pipefail
@@ -45,14 +117,19 @@ jobs:
           git archive --format=zip HEAD > legal-privacy-artifacts/source.zip
           sha256sum package.json package-lock.json > legal-privacy-artifacts/dependencies-before.sha256
           npm ci > legal-privacy-artifacts/install.log 2>&1
+      - name: Edge entrypoint type checks
+        run: |
+          set -euo pipefail
+          deno --version > legal-privacy-artifacts/deno-version.txt
+          deno check supabase/functions/simulate-season/index.ts > legal-privacy-artifacts/edge-types.log 2>&1
       - name: Purpose consent regression checks
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           export SIM_OFFLINE_RECEIPT="$PWD/legal-privacy-artifacts/unit.transport"
-          node_modules/.bin/vitest run --config vitest.account-privacy.config.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/account-privacy-unit.log
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > legal-privacy-artifacts/types.log 2>&1
           node_modules/.bin/vitest run src/test/consentPurposeGates.test.ts src/test/consentPrivacy1442.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/consent-unit.log
-          node_modules/.bin/vitest run src/test/cookieConsentStorage.test.tsx src/test/helpConsentFocus.test.tsx src/test/helpDialogFocus.test.tsx src/test/safeStorage.test.ts src/test/safeStorageQuota.test.ts src/test/freshBuildBlockedStorage.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/inherited-unit.log
+          node_modules/.bin/vitest run src/components/profile/AccountPrivacy.test.tsx src/test/cookieConsentStorage.test.tsx src/test/helpConsentFocus.test.tsx src/test/helpDialogFocus.test.tsx src/test/safeStorage.test.ts src/test/safeStorageQuota.test.ts src/test/freshBuildBlockedStorage.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/inherited-unit.log
       - name: Isolated browser and font tooling
         run: |
           set -euo pipefail
@@ -72,13 +149,23 @@ jobs:
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
-          SIM_OFFLINE_RECEIPT="$PWD/legal-privacy-artifacts/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > legal-privacy-artifacts/types.log 2>&1
           SIM_OFFLINE_RECEIPT="$PWD/legal-privacy-artifacts/build.transport" npm run build:seo > legal-privacy-artifacts/build.log 2>&1
           SIM_OFFLINE_RECEIPT="$PWD/legal-privacy-artifacts/heads.transport" node scripts/refreshConsentSnapshots.mjs > legal-privacy-artifacts/heads.log 2>&1
           SIM_OFFLINE_RECEIPT="$PWD/legal-privacy-artifacts/rebuild.transport" npm run build > legal-privacy-artifacts/rebuild.log 2>&1
           git diff --binary -- public scripts/data/lastmod.json > legal-privacy-artifacts/generated.patch
           git diff --name-only -- public scripts/data/lastmod.json > legal-privacy-artifacts/generated-files.txt
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > legal-privacy-artifacts/dist.sha256
+      - name: Native consent choices and withdrawal against completed build
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/legal-privacy-artifacts"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/consent-server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          SIM_OFFLINE_RECEIPT="$out/consent-browser.transport" BASE=http://127.0.0.1:4173 timeout --signal=TERM --kill-after=15s 12m node scripts/playConsentPrivacy1442.mjs > "$out/consent-browser.log" 2>&1
+          cat "$out/consent-browser.log"
       - name: All saved-page readers and unchanged full page-weight limits
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
@@ -98,6 +185,13 @@ jobs:
           printf '%s\n' "$status" > "$out/weights.exit"
           cat "$out/weights.log"; test "$status" -eq 0 || failed=1
           exit "$failed"
+      - name: Complete offline node harness suite
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 38
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$PWD/legal-privacy-artifacts/full-suite.transport" timeout --signal=TERM --kill-after=15s 35m node scripts/runAllSims.mjs > legal-privacy-artifacts/full-suite.log 2>&1
       - name: Preserve source and dependency boundaries
         if: always()
         run: |
