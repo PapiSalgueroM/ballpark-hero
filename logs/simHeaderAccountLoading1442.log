@@ -1,0 +1,3 @@
+Header account loading: wrong-initial-actual, expected passed.
+Header account loading: wrong-initial-fault, expected failed.
+Header account loading: PASS, 5 actual outcomes and 5 effective copied faults.

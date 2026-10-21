@@ -1,0 +1,13 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+units-1516 exit=0 9s |    Duration  8.36s (transform 4.26s, setup 395ms, collect 7.50s, tests 6.17s, environment 2.31s, prepare 863ms)
+ctl-1516 exit=0 93s | nouscrow exit=1 simOneOffCups: control nouscrow FIRED (74 failures, all its own: 1 usc season one: a new career at PSG holds noWinner, not the seasonOne stub)
+dashscan-1516 exit=0 0s | since B1516: added lines with an en or em dash 0, commit message lines with one 0
+simAccountPrivacy-1442 exit=0 11s | Account privacy: PASS, actual security cases and all copied faults verified.
+simAuthModalLoading1442 exit=0 50s | Auth modal loading: PASS, 7 actual outcomes and 7 effective copied faults.
+simConsentWithdrawal1442 exit=0 38s | Consent withdrawal: PASS, 6 actual outcomes and 6 effective copied faults.
+simHeaderAccountLoading1442 exit=0 38s | Header account loading: PASS, 5 actual outcomes and 5 effective copied faults.
+simNbaCourtRecap-1517 exit=0 26s | NBA court: PASS, 19 actual outcomes and three effective copied faults.
+s2-map-1516 exit=0 263s | simCmDifficulty: all green (sections 2)
+consent-walk-1442 exit=1 1s | Node.js v24.21.0
+simFightRingPlayback-1518 exit=0 33s | simFightRingPlayback: 7 actual/fault runs verified; 14 source inputs held byte for byte.
+proof-s1-1516 exit=0 1294s | proof exit 1, differing steps 2 (2 expected), of them not an Arsenal s2-reload saved bytes line 0 (0 expected)

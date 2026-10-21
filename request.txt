@@ -1,0 +1,47 @@
+# Release BO (Round BOG): ROUND 1516's own proof lines (Club Manager: the UEFA Super Cup followed from season one, the 2026
+# edition PSG against Aston Villa, and a won UEFA Super Cup marked with the trophy), taken from finish-1516.md as the
+# round's own runners ran them (r1516-a, r1516-c, r1516-e, r1516-g), plus the lines the other lane's new harnesses of
+# Rounds 1442, 1517 and 1518 (on main since Release BN) need, and proven on the joined head by rBOp-k (finish-BOG.md).
+# BINDING. B1516 is the head of release-bo-gate before the merge m1 (65d16295) brought 1516 in, the merge's first parent:
+# bc79b526 (origin/main: Release BN c3309e67 plus the other lane's 1442, 1517 and 1518 and the board's 1519 to 1522
+# claim; no Club Manager engine file differs from c3309e67, the base 1516 measured against). Override with
+# B1516=<sha> in front of a line.
+# SIMCMDIFFICULTY SECTION 2 AGAINST B1516 is red as committed by 1516's design (every today's world career holds
+# season one's worldComps.usc; a won UEFA Super Cup wears the trophy, not the shield). s2-map-1516 is the answer the gate
+# reads: a copy of the head in its own worktree with 1516's own mapping (mutDiffUsc1516.mjs = r1516's mutDiffUsc.mjs,
+# MARK exported: season one's usc slice left out of the tree's states and the trophy read as the shield; it refuses
+# with exit 2 when an anchor is not there exactly once) plays Normal equal to B1516 on every other key, every season
+# and every draw count. It also answers rc-BNa.txt's s2-attr-1514 and s2-own-1514 and rc-BLb.txt's s2, which 1516
+# moves the same way (finish-BOG.md says what each predicted red is).
+# PROOFWORLDUCLFLEET AGAINST B1516 (finish-1516.md section 4, the right recipe): the strip narrowed to a SEASON ONE usc
+# slice and the trophy read as the shield (mutProofS1_1516.mjs = r1516's mutProofS1.mjs, MARK=1). Every state step of
+# all 190 journeys is equal; the only red is exactly two journeys (Arsenal, now, participant, coach, seeds 2 and 3) at
+# s2-reload, "the saved bytes differ" (the saved bytes still carry the trophy). proof-s1-1516 exits 0 only when the
+# harness exits 1 with exactly those two step lines and no other.
+# CONTROLS. ctl-1516 exits 0 only when each control exits 1 and its last line says FIRED (exit 2 is an abort): uelpub
+# (the Europa League winner on one publisher, section 0) and nouscrow (the Europa League winner emptied, every season
+# one holds a stub), on the small fleet. notrophy is in rc-BKc-c.txt's ctl-light; nousctile and the walk's case (g)
+# (season one's played UEFA Super Cup) are rc-BNa.txt's walk-nousctile and rc-BKc-d.txt's green walk.
+# THE OTHER LANE (Rounds 1442, 1517, 1518), its own harnesses as its workflows ran them (legal-ai-privacy.yml,
+# career-match-visuals.yml), the offline transport loaded: simAccountPrivacy, simAuthModalLoading1442,
+# simConsentWithdrawal1442, simHeaderAccountLoading1442 (1442), simNbaCourtRecap (1517), simFightRingPlayback with
+# every copied fault (1518), and the consent walk playConsentPrivacy1442 on this request's served build (it reads the
+# committed /privacy snapshot and fulfils every outside request locally; its fonts are prefetched in the same line).
+# Their vitest files are in every vitest-all line. Not carried: scripts/qa/careerMatchVisuals1517.mjs (a one time
+# before and after pixel proof against a 076091ac baseline build) and testAccountPrivacyDb.sql and
+# testAccountPrivacyConcurrency.sh (they need a database).
+# Send: bash rc.sh <name> rc-BOa.txt mutDiffUsc1516.mjs mutProofS1_1516.mjs     (#!serve builds dist and serves it on 4173)
+#!serve
+#!playwright
+units-1516: node_modules/.bin/vitest run src/lib/worldOneOffs.test.ts src/lib/worldNights.test.ts src/lib/clubManagerWorldView.test.ts --testTimeout=300000 --hookTimeout=300000 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+ctl-1516: bad=0; for c in uelpub nouscrow; do ONE_OFF_SEEDS=1,2 ONE_OFF_SEASONS=2 ONE_OFF_COACH=nocoach ONE_OFF_CONTROL=$c node scripts/simOneOffCups.mjs > /tmp/n6-$c.log 2>&1; e=$?; echo "$c exit=$e $(tail -1 /tmp/n6-$c.log | cut -c1-220)"; if [ $e -ne 1 ] || ! tail -1 /tmp/n6-$c.log | grep -q FIRED; then bad=1; fi; done; exit $bad
+s2-map-1516: B1516=${B1516:-bc79b526}; R=$PWD; git worktree add -q --detach /tmp/m16 HEAD && ln -s "$R/node_modules" /tmp/m16/node_modules && cd /tmp/m16 && export MARK=1 && node "$R/.rc/x/mutDiffUsc1516.mjs" && mkdir -p /tmp/b2m && git -C "$R" archive $B1516 | tar -x -C /tmp/b2m && BASE_ROOT=/tmp/b2m SECTION=2 node scripts/simCmDifficulty.mjs > /tmp/s2m.log 2>&1; s=$?; grep -E "usc1:|compared with the base" /tmp/s2m.log | cut -c1-260; tail -3 /tmp/s2m.log | cut -c1-230; exit $s
+proof-s1-1516: B1516=${B1516:-bc79b526}; R=$PWD; git worktree add -q --detach /tmp/p16 HEAD && ln -s "$R/node_modules" /tmp/p16/node_modules && cd /tmp/p16 && export MARK=1 && node "$R/.rc/x/mutProofS1_1516.mjs" && node scripts/proofWorldUclFleet.mjs --base $B1516 --coach both --eval --old-saves --strip worldComps.usc > /tmp/p16.log 2>&1; s=$?; tail -3 /tmp/p16.log | cut -c1-220; f=$(grep -c '^  FAIL ' /tmp/p16.log); o=$(grep '^  FAIL ' /tmp/p16.log | grep -vc 'FAIL Arsenal (now, participant, coach, seed [0-9], 2 seasons) at step [0-9]* s2-reload: the saved bytes differ$'); echo "proof exit $s, differing steps $f (2 expected), of them not an Arsenal s2-reload saved bytes line $o (0 expected)"; [ $s -eq 1 ] && [ $f -eq 2 ] && [ $o -eq 0 ]
+dashscan-1516: B1516=${B1516:-bc79b526}; n=$(git diff $B1516 HEAD | grep -cP '^\+.*(\x{2013}|\x{2014})'); m=$(git log --format=%B $B1516..HEAD | grep -cP '\x{2013}|\x{2014}'); echo "since B1516: added lines with an en or em dash $n, commit message lines with one $m"; [ "$n" = 0 ] && [ "$m" = 0 ]
+simAccountPrivacy-1442: export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" LEGAL_PRIVACY_OUT=/tmp/lp-ap; node scripts/simAccountPrivacy.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simAuthModalLoading1442: export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" LEGAL_PRIVACY_OUT=/tmp/lp-am; node scripts/simAuthModalLoading1442.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simConsentWithdrawal1442: export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" LEGAL_PRIVACY_OUT=/tmp/lp-cw; node scripts/simConsentWithdrawal1442.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simHeaderAccountLoading1442: export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" LEGAL_PRIVACY_OUT=/tmp/lp-ha; node scripts/simHeaderAccountLoading1442.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simNbaCourtRecap-1517: export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" CAREER_VISUALS_OUT=/tmp/cv-nba; node scripts/simNbaCourtRecap.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+simFightRingPlayback-1518: export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" FIGHT_RING_ARTIFACTS=/tmp/fr FIGHT_RING_CONTROL=all; node scripts/simFightRingPlayback.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+consent-walk-1442: export FREE_KICK_FONT_CACHE=/tmp/fk-1442 LEGAL_PRIVACY_OUT=/tmp/lp-walk; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playConsentPrivacy1442.mjs > /tmp/cpw.log 2>&1; s=$?; tail -3 /tmp/cpw.log | cut -c1-230; exit $s
