@@ -1,0 +1,10 @@
+vitest1519 exit=1 22s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerRetirement1519.test.tsx,title=src/test/soccerCareerRetirement1519.test.tsx > Round 1519%3A
+endings exit=0 59s | PASS: no career ends before the age rules without the player, and the pair is reconciled
+tsc exit=0 66s | 
+endings-seed2 exit=0 48s | PASS: no career ends before the age rules without the player, and the pair is reconciled
+endings-early exit=1 37s | FAIL: 249 check(s) failed
+endings-seed3 exit=0 55s | PASS: no career ends before the age rules without the player, and the pair is reconciled
+endings-noreconcile exit=1 47s | FAIL: 9 check(s) failed
+endings-summary exit=1 55s | FAIL: 2 check(s) failed
+endings-noreason exit=1 52s | FAIL: 1 check(s) failed
+simCareerLeagueWorld exit=0 288s | simCareerLeagueWorld: all sections green (288.6 s)

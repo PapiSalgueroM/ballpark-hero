@@ -1,0 +1,2037 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerFarewellPage.test.tsx[2m > [22m[2mSoccer farewell real page actions[2m > [22m[2mbanks a genuine open moment and plays one final year for two captured asynchronous Next Season clicks
+[22m[39mFAREWELL_ASYNC_ACT_STARTUP {"scope":"Unfiltered empty async act initialization before either career action tape","values":[0.02040268573909998],"stacks":["Error: Farewell action random draw\n    at Math.<anonymous> (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerFarewellPage.test.tsx:108:18)\n    at Math.mockCall (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/spy/dist/index.js:96:15)\n    at Math.random (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/tinyspy/dist/index.js:47:80)\n    at enqueueTask (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2458:45)\n    at recursivelyFlushAsyncActWork (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2634:9)\n    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2545:15\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)"],"attribution":{"diagnosticRun":"38051776558","source":"11c30639","caller":"react.development.js:2458:45 enqueueTask, recursivelyFlushAsyncActWork"}}
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2mthe warning, Keep Playing, and the season that follows
+[22m[39mKEEP seed=850 problems=0
+
+ [32m✓[39m src/test/soccerFarewellPage.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 3337[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22msaves one next-year announcement for two captured confirmation clicks without playing or drawing [33m 421[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mbanks a genuine open moment and plays one final year for two captured asynchronous Next Season clicks [33m 596[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mresumes the already-aged suggestion exactly once for two captured page announcement callbacks [33m 344[2mms[22m[39m
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2mthe warning, Keep Playing, and the season that follows
+[22m[39mKEEP seed=851 problems=0
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2mthe warning, Keep Playing, and the season that follows
+[22m[39mKEEP seed=852 problems=0
+
+ [32m✓[39m src/test/soccerCareerSaveRecovery.test.tsx [2m([22m[2m39 tests[22m[2m)[22m[33m 5272[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrestores current progress synchronously and advances the same career once [33m 366[2mms[22m[39m
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=900 rehab at 21
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=901 conviction at 25
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=902 rehab at 20
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=902 conviction at 23
+
+ [32m✓[39m src/test/careerKeepPlaying.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 8081[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: Keep Playing plays the season through the page[2m > [22mthe warning, Keep Playing, and the season that follows [33m 4976[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: Keep Playing plays the season through the page[2m > [22ma save left on the rehab choice or the conviction paper gets that year once [33m 1602[2mms[22m[39m
+ [31m❯[39m src/test/soccerCareerRetirement1519.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 11870[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1519: no career ends at 26 without the player[2m > [22mNext Season at 25, the summary and its Continue, then a reload: the career plays on at 26 [33m 1344[2mms[22m[39m
+[31m   [31m×[31m Round 1519: no career ends at 26 without the player[2m > [22mthe Retire dialog: Cancel keeps the career, Confirm ends it on the send off with its reason and choices[39m[33m 2846[2mms[22m[39m
+[31m     → Unable to find an accessible element with the role "dialog" and name "Retire?"
+
+Here are the accessible roles:
+
+  dialog:
+
+  Name "The Boycott Vote":
+  [36m<div[31m
+    [33maria-describedby[31m=[32m"radix-:rq:"[31m
+    [33maria-labelledby[31m=[32m"radix-:rp:"[31m
+    [33mclass[31m=[32m"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg flex max-h-[88dvh] w-[calc(100%-1.5rem)] max-w-sm flex-col gap-3 overflow-hidden rounded-2xl p-4 sm:gap-4 sm:p-6 [&>button]:hidden"[31m
+    [33mdata-career-chance-wheel[31m=[32m"true"[31m
+    [33mdata-state[31m=[32m"open"[31m
+    [33mid[31m=[32m"radix-:ro:"[31m
+    [33mrole[31m=[32m"dialog"[31m
+    [33mstyle[31m=[32m"pointer-events: auto;"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  heading:
+
+  Name "The Boycott Vote":
+  [36m<h2[31m
+    [33mclass[31m=[32m"text-lg font-semibold leading-none tracking-tight outline-none"[31m
+    [33mid[31m=[32m"radix-:rp:"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+    [33mid[31m=[32m"radix-:rq:"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p[31m
+    [33maria-live[31m=[32m"polite"[31m
+    [33mclass[31m=[32m"shrink-0 rounded-lg bg-muted p-3 text-sm font-bold"[31m
+    [33mdata-wheel-result[31m=[32m"true"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  --------------------------------------------------
+  button:
+
+  Name "Spin the wheel":
+  [36m<button[31m
+    [33mclass[31m=[32m"min-h-11 flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground"[31m
+    [33mdata-wheel-spin[31m=[32m"true"[31m
+  [36m/>[31m
+
+  Name "Show result":
+  [36m<button[31m
+    [33mclass[31m=[32m"min-h-11 flex-1 rounded-lg border px-3 text-sm"[31m
+    [33mdata-wheel-skip[31m=[32m"true"[31m
+  [36m/>[31m
+
+  Name "Close":
+  [36m<button[31m
+    [33mclass[31m=[32m"absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"[31m
+    [33mtype[31m=[32m"button"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[31m
+  [33mdata-scroll-locked[31m=[32m"1"[31m
+  [33mstyle[31m=[32m"pointer-events: none;"[31m
+[36m>[31m
+  [36m<span[31m
+    [33maria-hidden[31m=[32m"true"[31m
+    [33mdata-aria-hidden[31m=[32m"true"[31m
+    [33mdata-radix-focus-guard[31m=[32m""[31m
+    [33mstyle[31m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[31m
+    [33mtabindex[31m=[32m"0"[31m
+  [36m/>[31m
+  [36m<div[31m
+    [33maria-hidden[31m=[32m"true"[31m
+    [33mdata-aria-hidden[31m=[32m"true"[31m
+  [36m>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[31m
+      [36m/>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[31m
+        [33mid[31m=[32m"dukb-main"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"mb-3 flex gap-2 sm:contents"[31m
+          [33mdata-career-utilities[31m=[32m"true"[31m
+          [33mstyle[31m=[32m"--career-utility-lift: 0px;"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open the training ground"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"training"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m🏋️[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mTraining[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"[31m
+            [36m>[31m
+              [36m<span[31m
+                [33mclass[31m=[32m"sr-only"[31m
+              [36m>[31m
+                [0mDrill ready[0m
+              [36m</span>[31m
+            [36m</span>[31m
+          [36m</button>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open your phone"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"phone"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m📱[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mPhone[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[31m
+            [36m>[31m
+              [0m3[0m
+              [36m<span[31m
+                [33mclass[31m=[32m"sr-only"[31m
+              [36m>[31m
+                [0m unread[0m
+              [36m</span>[31m
+            [36m</span>[31m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"space-y-3 pb-20"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex flex-wrap items-center justify-between gap-2"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[31m
+            [36m>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"min-w-0 flex-1"[31m
+              [36m>[31m
+                [36m<h1[31m
+                  [33mclass[31m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"18"[31m
+                      [33mstyle[31m=[32m"display: block; border-radius: 2px;"[31m
+                      [33mviewBox[31m=[32m"0 0 60 36"[31m
+                      [33mwidth[31m=[32m"24"[31m
+                    [36m>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#fff"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"10"[31m
+                        [33mx[31m=[32m"25"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"10"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                        [33my[31m=[32m"13"[31m
+                      [36m/>[31m
+                    [36m</svg>[31m
+                  [36m</span>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"truncate whitespace-normal [overflow-wrap:anywhere] min-w-0"[31m
+                  [36m>[31m
+                    [0mRetire Tester[0m
+                  [36m</span>[31m
+                [36m</h1>[31m
+                [36m<p[31m
+                  [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+                [36m>[31m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m26[0m
+                  [0m · [0m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"9"[31m
+           ...[39m
+[31m   [31m×[31m Round 1519: no career ends at 26 without the player[2m > [22ma stray retired flag on the summary at 26 plays on after Continue[39m[33m 2228[2mms[22m[39m
+[31m     → Unable to find an accessible element with the role "button" and name `/^Continue/`
+
+Here are the accessible roles:
+
+  dialog:
+
+  Name "The Boycott Vote":
+  [36m<div[31m
+    [33maria-describedby[31m=[32m"radix-:r10:"[31m
+    [33maria-labelledby[31m=[32m"radix-:rv:"[31m
+    [33mclass[31m=[32m"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg flex max-h-[88dvh] w-[calc(100%-1.5rem)] max-w-sm flex-col gap-3 overflow-hidden rounded-2xl p-4 sm:gap-4 sm:p-6 [&>button]:hidden"[31m
+    [33mdata-career-chance-wheel[31m=[32m"true"[31m
+    [33mdata-state[31m=[32m"open"[31m
+    [33mid[31m=[32m"radix-:ru:"[31m
+    [33mrole[31m=[32m"dialog"[31m
+    [33mstyle[31m=[32m"pointer-events: auto;"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  heading:
+
+  Name "The Boycott Vote":
+  [36m<h2[31m
+    [33mclass[31m=[32m"text-lg font-semibold leading-none tracking-tight outline-none"[31m
+    [33mid[31m=[32m"radix-:rv:"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+    [33mid[31m=[32m"radix-:r10:"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p[31m
+    [33maria-live[31m=[32m"polite"[31m
+    [33mclass[31m=[32m"shrink-0 rounded-lg bg-muted p-3 text-sm font-bold"[31m
+    [33mdata-wheel-result[31m=[32m"true"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  --------------------------------------------------
+  button:
+
+  Name "Spin the wheel":
+  [36m<button[31m
+    [33mclass[31m=[32m"min-h-11 flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground"[31m
+    [33mdata-wheel-spin[31m=[32m"true"[31m
+  [36m/>[31m
+
+  Name "Show result":
+  [36m<button[31m
+    [33mclass[31m=[32m"min-h-11 flex-1 rounded-lg border px-3 text-sm"[31m
+    [33mdata-wheel-skip[31m=[32m"true"[31m
+  [36m/>[31m
+
+  Name "Close":
+  [36m<button[31m
+    [33mclass[31m=[32m"absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"[31m
+    [33mtype[31m=[32m"button"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[31m
+  [33mdata-scroll-locked[31m=[32m"1"[31m
+  [33mstyle[31m=[32m"pointer-events: none;"[31m
+[36m>[31m
+  [36m<span[31m
+    [33maria-hidden[31m=[32m"true"[31m
+    [33mdata-aria-hidden[31m=[32m"true"[31m
+    [33mdata-radix-focus-guard[31m=[32m""[31m
+    [33mstyle[31m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[31m
+    [33mtabindex[31m=[32m"0"[31m
+  [36m/>[31m
+  [36m<div[31m
+    [33maria-hidden[31m=[32m"true"[31m
+    [33mdata-aria-hidden[31m=[32m"true"[31m
+  [36m>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[31m
+      [36m/>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[31m
+        [33mid[31m=[32m"dukb-main"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"mb-3 flex gap-2 sm:contents"[31m
+          [33mdata-career-utilities[31m=[32m"true"[31m
+          [33mstyle[31m=[32m"--career-utility-lift: 0px;"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open the training ground"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"training"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m🏋️[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mTraining[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"[31m
+            [36m>[31m
+              [36m<span[31m
+                [33mclass[31m=[32m"sr-only"[31m
+              [36m>[31m
+                [0mDrill ready[0m
+              [36m</span>[31m
+            [36m</span>[31m
+          [36m</button>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open your phone"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"phone"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m📱[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mPhone[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[31m
+            [36m>[31m
+              [0m3[0m
+              [36m<span[31m
+                [33mclass[31m=[32m"sr-only"[31m
+              [36m>[31m
+                [0m unread[0m
+              [36m</span>[31m
+            [36m</span>[31m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"space-y-3 pb-20"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex flex-wrap items-center justify-between gap-2"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[31m
+            [36m>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"min-w-0 flex-1"[31m
+              [36m>[31m
+                [36m<h1[31m
+                  [33mclass[31m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"18"[31m
+                      [33mstyle[31m=[32m"display: block; border-radius: 2px;"[31m
+                      [33mviewBox[31m=[32m"0 0 60 36"[31m
+                      [33mwidth[31m=[32m"24"[31m
+                    [36m>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#fff"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"10"[31m
+                        [33mx[31m=[32m"25"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"10"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                        [33my[31m=[32m"13"[31m
+                      [36m/>[31m
+                    [36m</svg>[31m
+                  [36m</span>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"truncate whitespace-normal [overflow-wrap:anywhere] min-w-0"[31m
+                  [36m>[31m
+                    [0mRetire Tester[0m
+                  [36m</span>[31m
+                [36m</h1>[31m
+                [36m<p[31m
+                  [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+                [36m>[31m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m26[0m
+                  [0m · [0m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"9"[31m
+           ...[39m
+[31m   [31m×[31m Round 1519: no career ends at 26 without the player[2m > [22ma real retirement whose phase was lost opens its send off with the choices[39m[33m 2683[2mms[22m[39m
+[31m     → Unable to find an accessible element with the role "button" and name `/Retire and Enjoy Life/`
+
+Here are the accessible roles:
+
+  dialog:
+
+  Name "The Boycott Vote":
+  [36m<div[31m
+    [33maria-describedby[31m=[32m"radix-:r13:"[31m
+    [33maria-labelledby[31m=[32m"radix-:r12:"[31m
+    [33mclass[31m=[32m"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg flex max-h-[88dvh] w-[calc(100%-1.5rem)] max-w-sm flex-col gap-3 overflow-hidden rounded-2xl p-4 sm:gap-4 sm:p-6 [&>button]:hidden"[31m
+    [33mdata-career-chance-wheel[31m=[32m"true"[31m
+    [33mdata-state[31m=[32m"open"[31m
+    [33mid[31m=[32m"radix-:r11:"[31m
+    [33mrole[31m=[32m"dialog"[31m
+    [33mstyle[31m=[32m"pointer-events: auto;"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  heading:
+
+  Name "The Boycott Vote":
+  [36m<h2[31m
+    [33mclass[31m=[32m"text-lg font-semibold leading-none tracking-tight outline-none"[31m
+    [33mid[31m=[32m"radix-:r12:"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+    [33mid[31m=[32m"radix-:r13:"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p[31m
+    [33maria-live[31m=[32m"polite"[31m
+    [33mclass[31m=[32m"shrink-0 rounded-lg bg-muted p-3 text-sm font-bold"[31m
+    [33mdata-wheel-result[31m=[32m"true"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  --------------------------------------------------
+  button:
+
+  Name "Spin the wheel":
+  [36m<button[31m
+    [33mclass[31m=[32m"min-h-11 flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground"[31m
+    [33mdata-wheel-spin[31m=[32m"true"[31m
+  [36m/>[31m
+
+  Name "Show result":
+  [36m<button[31m
+    [33mclass[31m=[32m"min-h-11 flex-1 rounded-lg border px-3 text-sm"[31m
+    [33mdata-wheel-skip[31m=[32m"true"[31m
+  [36m/>[31m
+
+  Name "Close":
+  [36m<button[31m
+    [33mclass[31m=[32m"absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"[31m
+    [33mtype[31m=[32m"button"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[31m
+  [33mdata-scroll-locked[31m=[32m"1"[31m
+  [33mstyle[31m=[32m"pointer-events: none;"[31m
+[36m>[31m
+  [36m<span[31m
+    [33maria-hidden[31m=[32m"true"[31m
+    [33mdata-aria-hidden[31m=[32m"true"[31m
+    [33mdata-radix-focus-guard[31m=[32m""[31m
+    [33mstyle[31m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[31m
+    [33mtabindex[31m=[32m"0"[31m
+  [36m/>[31m
+  [36m<div[31m
+    [33maria-hidden[31m=[32m"true"[31m
+    [33mdata-aria-hidden[31m=[32m"true"[31m
+  [36m>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[31m
+      [36m/>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[31m
+        [33mid[31m=[32m"dukb-main"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"mb-3 flex gap-2 sm:contents"[31m
+          [33mdata-career-utilities[31m=[32m"true"[31m
+          [33mstyle[31m=[32m"--career-utility-lift: 0px;"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open your phone"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"phone"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m📱[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mPhone[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[31m
+            [36m>[31m
+              [0m3[0m
+              [36m<span[31m
+                [33mclass[31m=[32m"sr-only"[31m
+              [36m>[31m
+                [0m unread[0m
+              [36m</span>[31m
+            [36m</span>[31m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"space-y-3 pb-20"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex flex-wrap items-center justify-between gap-2"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[31m
+            [36m>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"min-w-0 flex-1"[31m
+              [36m>[31m
+                [36m<h1[31m
+                  [33mclass[31m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"18"[31m
+                      [33mstyle[31m=[32m"display: block; border-radius: 2px;"[31m
+                      [33mviewBox[31m=[32m"0 0 60 36"[31m
+                      [33mwidth[31m=[32m"24"[31m
+                    [36m>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#fff"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"10"[31m
+                        [33mx[31m=[32m"25"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"10"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                        [33my[31m=[32m"13"[31m
+                      [36m/>[31m
+                    [36m</svg>[31m
+                  [36m</span>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"truncate whitespace-normal [overflow-wrap:anywhere] min-w-0"[31m
+                  [36m>[31m
+                    [0mRetire Tester[0m
+                  [36m</span>[31m
+                [36m</h1>[31m
+                [36m<p[31m
+                  [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+                [36m>[31m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m26[0m
+                  [0m · [0m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"9"[31m
+                      [33mstyle[31m=[32m"display: block; border-radius: 2px;"[31m
+                      [33mviewBox[31m=[32m"0 0 60 36"[31m
+                      [33mwidth[31m=[32m"12"[31m
+                    [36m>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#fff"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"10"[31m
+                        [33mx[31m=[32m"25"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"10"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                        [33my[31m=[32m"13"[31m
+                      [36m/>[31m
+                    [36m</svg>[31m
+                    [36m<span[31m
+                      [33mclass[31m=[32m"text-inherit"[31m
+                    [36m>[31m
+                      [0mEngland[0m
+                    [36m</span>[31m
+                  [36m</span>[31m
+                [36m...[39m
+[31m   [31m×[31m Round 1519: no career ends at 26 without the player[2m > [22ma retired screen with nothing behind it goes back to Next Season[39m[33m 2712[2mms[22m[39m
+[31m     → Unable to find an accessible element with the role "button" and name `/Next Season/`
+
+Here are the accessible roles:
+
+  dialog:
+
+  Name "The Boycott Vote":
+  [36m<div[31m
+    [33maria-describedby[31m=[32m"radix-:r1c:"[31m
+    [33maria-labelledby[31m=[32m"radix-:r1b:"[31m
+    [33mclass[31m=[32m"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg flex max-h-[88dvh] w-[calc(100%-1.5rem)] max-w-sm flex-col gap-3 overflow-hidden rounded-2xl p-4 sm:gap-4 sm:p-6 [&>button]:hidden"[31m
+    [33mdata-career-chance-wheel[31m=[32m"true"[31m
+    [33mdata-state[31m=[32m"open"[31m
+    [33mid[31m=[32m"radix-:r1a:"[31m
+    [33mrole[31m=[32m"dialog"[31m
+    [33mstyle[31m=[32m"pointer-events: auto;"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  heading:
+
+  Name "The Boycott Vote":
+  [36m<h2[31m
+    [33mclass[31m=[32m"text-lg font-semibold leading-none tracking-tight outline-none"[31m
+    [33mid[31m=[32m"radix-:r1b:"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[31m
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+    [33mid[31m=[32m"radix-:r1c:"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+  [36m/>[31m
+
+  Name "":
+  [36m<p[31m
+    [33maria-live[31m=[32m"polite"[31m
+    [33mclass[31m=[32m"shrink-0 rounded-lg bg-muted p-3 text-sm font-bold"[31m
+    [33mdata-wheel-result[31m=[32m"true"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[31m
+
+  Name "":
+  [36m<strong />[31m
+
+  --------------------------------------------------
+  button:
+
+  Name "Spin the wheel":
+  [36m<button[31m
+    [33mclass[31m=[32m"min-h-11 flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground"[31m
+    [33mdata-wheel-spin[31m=[32m"true"[31m
+  [36m/>[31m
+
+  Name "Show result":
+  [36m<button[31m
+    [33mclass[31m=[32m"min-h-11 flex-1 rounded-lg border px-3 text-sm"[31m
+    [33mdata-wheel-skip[31m=[32m"true"[31m
+  [36m/>[31m
+
+  Name "Close":
+  [36m<button[31m
+    [33mclass[31m=[32m"absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"[31m
+    [33mtype[31m=[32m"button"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[31m
+  [33mdata-scroll-locked[31m=[32m"1"[31m
+  [33mstyle[31m=[32m"pointer-events: none;"[31m
+[36m>[31m
+  [36m<span[31m
+    [33maria-hidden[31m=[32m"true"[31m
+    [33mdata-aria-hidden[31m=[32m"true"[31m
+    [33mdata-radix-focus-guard[31m=[32m""[31m
+    [33mstyle[31m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[31m
+    [33mtabindex[31m=[32m"0"[31m
+  [36m/>[31m
+  [36m<div[31m
+    [33maria-hidden[31m=[32m"true"[31m
+    [33mdata-aria-hidden[31m=[32m"true"[31m
+  [36m>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[31m
+      [36m/>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[31m
+        [33mid[31m=[32m"dukb-main"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"mb-3 flex gap-2 sm:contents"[31m
+          [33mdata-career-utilities[31m=[32m"true"[31m
+          [33mstyle[31m=[32m"--career-utility-lift: 0px;"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open the training ground"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"training"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m🏋️[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mTraining[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"[31m
+            [36m>[31m
+              [36m<span[31m
+                [33mclass[31m=[32m"sr-only"[31m
+              [36m>[31m
+                [0mDrill ready[0m
+              [36m</span>[31m
+            [36m</span>[31m
+          [36m</button>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open your phone"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"phone"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m📱[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mPhone[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[31m
+            [36m>[31m
+              [0m3[0m
+              [36m<span[31m
+                [33mclass[31m=[32m"sr-only"[31m
+              [36m>[31m
+                [0m unread[0m
+              [36m</span>[31m
+            [36m</span>[31m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"space-y-3 pb-20"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex flex-wrap items-center justify-between gap-2"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[31m
+            [36m>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"min-w-0 flex-1"[31m
+              [36m>[31m
+                [36m<h1[31m
+                  [33mclass[31m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"18"[31m
+                      [33mstyle[31m=[32m"display: block; border-radius: 2px;"[31m
+                      [33mviewBox[31m=[32m"0 0 60 36"[31m
+                      [33mwidth[31m=[32m"24"[31m
+                    [36m>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#fff"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"10"[31m
+                        [33mx[31m=[32m"25"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"10"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                        [33my[31m=[32m"13"[31m
+                      [36m/>[31m
+                    [36m</svg>[31m
+                  [36m</span>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"truncate whitespace-normal [overflow-wrap:anywhere] min-w-0"[31m
+                  [36m>[31m
+                    [0mRetire Tester[0m
+                  [36m</span>[31m
+                [36m</h1>[31m
+                [36m<p[31m
+                  [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+                [36m>[31m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m26[0m
+                  [0m · [0m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"9"[31m
+           ...[39m
+   [32m✓[39m Round 1519: no career ends at 26 without the player[2m > [22ma forced retirement says why on the send off[32m 55[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerRetirement1519.test.tsx[2m > [22mRound 1519: no career ends at 26 without the player[2m > [22mthe Retire dialog: Cancel keeps the career, Confirm ends it on the send off with its reason and choices
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an accessible element with the role "dialog" and name "Retire?"
+
+Here are the accessible roles:
+
+  dialog:
+
+  Name "The Boycott Vote":
+  [36m<div[39m
+    [33maria-describedby[39m=[32m"radix-:rq:"[39m
+    [33maria-labelledby[39m=[32m"radix-:rp:"[39m
+    [33mclass[39m=[32m"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg flex max-h-[88dvh] w-[calc(100%-1.5rem)] max-w-sm flex-col gap-3 overflow-hidden rounded-2xl p-4 sm:gap-4 sm:p-6 [&>button]:hidden"[39m
+    [33mdata-career-chance-wheel[39m=[32m"true"[39m
+    [33mdata-state[39m=[32m"open"[39m
+    [33mid[39m=[32m"radix-:ro:"[39m
+    [33mrole[39m=[32m"dialog"[39m
+    [33mstyle[39m=[32m"pointer-events: auto;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "The Boycott Vote":
+  [36m<h2[39m
+    [33mclass[39m=[32m"text-lg font-semibold leading-none tracking-tight outline-none"[39m
+    [33mid[39m=[32m"radix-:rp:"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-sm text-muted-foreground"[39m
+    [33mid[39m=[32m"radix-:rq:"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33maria-live[39m=[32m"polite"[39m
+    [33mclass[39m=[32m"shrink-0 rounded-lg bg-muted p-3 text-sm font-bold"[39m
+    [33mdata-wheel-result[39m=[32m"true"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Spin the wheel":
+  [36m<button[39m
+    [33mclass[39m=[32m"min-h-11 flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground"[39m
+    [33mdata-wheel-spin[39m=[32m"true"[39m
+  [36m/>[39m
+
+  Name "Show result":
+  [36m<button[39m
+    [33mclass[39m=[32m"min-h-11 flex-1 rounded-lg border px-3 text-sm"[39m
+    [33mdata-wheel-skip[39m=[32m"true"[39m
+  [36m/>[39m
+
+  Name "Close":
+  [36m<button[39m
+    [33mclass[39m=[32m"absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mdata-scroll-locked[39m=[32m"1"[39m
+  [33mstyle[39m=[32m"pointer-events: none;"[39m
+[36m>[39m
+  [36m<span[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mdata-aria-hidden[39m=[32m"true"[39m
+    [33mdata-radix-focus-guard[39m=[32m""[39m
+    [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+    [33mtabindex[39m=[32m"0"[39m
+  [36m/>[39m
+  [36m<div[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mdata-aria-hidden[39m=[32m"true"[39m
+  [36m>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[39m
+      [36m/>[39m
+      [36m<main[39m
+        [33mclass[39m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[39m
+        [33mid[39m=[32m"dukb-main"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mb-3 flex gap-2 sm:contents"[39m
+          [33mdata-career-utilities[39m=[32m"true"[39m
+          [33mstyle[39m=[32m"--career-utility-lift: 0px;"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open the training ground"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"training"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m🏋️[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mTraining[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"sr-only"[39m
+              [36m>[39m
+                [0mDrill ready[0m
+              [36m</span>[39m
+            [36m</span>[39m
+          [36m</button>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open your phone"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"phone"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m📱[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mPhone[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[39m
+            [36m>[39m
+              [0m3[0m
+              [36m<span[39m
+                [33mclass[39m=[32m"sr-only"[39m
+              [36m>[39m
+                [0m unread[0m
+              [36m</span>[39m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-3 pb-20"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex flex-wrap items-center justify-between gap-2"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"min-w-0 flex-1"[39m
+              [36m>[39m
+                [36m<h1[39m
+                  [33mclass[39m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"18"[39m
+                      [33mstyle[39m=[32m"display: block; border-radius: 2px;"[39m
+                      [33mviewBox[39m=[32m"0 0 60 36"[39m
+                      [33mwidth[39m=[32m"24"[39m
+                    [36m>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#fff"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"10"[39m
+                        [33mx[39m=[32m"25"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"10"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                        [33my[39m=[32m"13"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"truncate whitespace-normal [overflow-wrap:anywhere] min-w-0"[39m
+                  [36m>[39m
+                    [0mRetire Tester[0m
+                  [36m</span>[39m
+                [36m</h1>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+                [36m>[39m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m26[0m
+                  [0m · [0m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"9"[39m
+           ...
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m getByRole node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/test/soccerCareerRetirement1519.test.tsx:[2m151:17[22m[39m
+    [90m149| [39m    [35mconst[39m view [33m=[39m [34mmount[39m([33mJSON[39m[33m.[39m[34mstringify[39m([34mfx[39m()[33m.[39mat26))[33m;[39m [34mplayable[39m(view)[33m;[39m
+    [90m150| [39m    fireEvent[33m.[39m[34mclick[39m([34mretireButton[39m(view))[33m;[39m
+    [90m151| [39m    expect(view.getByRole('dialog', { name: 'Retire?' })).toBeVisible(…
+    [90m   | [39m                [31m^[39m
+    [90m152| [39m    fireEvent[33m.[39m[34mclick[39m(view[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [32m'Cancel'[39m }))[33m;[39m
+    [90m153| [39m    [34mexpect[39m(view[33m.[39m[34mqueryByRole[39m([32m'dialog'[39m[33m,[39m { name[33m:[39m [32m'Retire?'[39m }))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerRetirement1519.test.tsx[2m > [22mRound 1519: no career ends at 26 without the player[2m > [22ma stray retired flag on the summary at 26 plays on after Continue
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an accessible element with the role "button" and name `/^Continue/`
+
+Here are the accessible roles:
+
+  dialog:
+
+  Name "The Boycott Vote":
+  [36m<div[39m
+    [33maria-describedby[39m=[32m"radix-:r10:"[39m
+    [33maria-labelledby[39m=[32m"radix-:rv:"[39m
+    [33mclass[39m=[32m"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg flex max-h-[88dvh] w-[calc(100%-1.5rem)] max-w-sm flex-col gap-3 overflow-hidden rounded-2xl p-4 sm:gap-4 sm:p-6 [&>button]:hidden"[39m
+    [33mdata-career-chance-wheel[39m=[32m"true"[39m
+    [33mdata-state[39m=[32m"open"[39m
+    [33mid[39m=[32m"radix-:ru:"[39m
+    [33mrole[39m=[32m"dialog"[39m
+    [33mstyle[39m=[32m"pointer-events: auto;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "The Boycott Vote":
+  [36m<h2[39m
+    [33mclass[39m=[32m"text-lg font-semibold leading-none tracking-tight outline-none"[39m
+    [33mid[39m=[32m"radix-:rv:"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-sm text-muted-foreground"[39m
+    [33mid[39m=[32m"radix-:r10:"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33maria-live[39m=[32m"polite"[39m
+    [33mclass[39m=[32m"shrink-0 rounded-lg bg-muted p-3 text-sm font-bold"[39m
+    [33mdata-wheel-result[39m=[32m"true"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Spin the wheel":
+  [36m<button[39m
+    [33mclass[39m=[32m"min-h-11 flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground"[39m
+    [33mdata-wheel-spin[39m=[32m"true"[39m
+  [36m/>[39m
+
+  Name "Show result":
+  [36m<button[39m
+    [33mclass[39m=[32m"min-h-11 flex-1 rounded-lg border px-3 text-sm"[39m
+    [33mdata-wheel-skip[39m=[32m"true"[39m
+  [36m/>[39m
+
+  Name "Close":
+  [36m<button[39m
+    [33mclass[39m=[32m"absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mdata-scroll-locked[39m=[32m"1"[39m
+  [33mstyle[39m=[32m"pointer-events: none;"[39m
+[36m>[39m
+  [36m<span[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mdata-aria-hidden[39m=[32m"true"[39m
+    [33mdata-radix-focus-guard[39m=[32m""[39m
+    [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+    [33mtabindex[39m=[32m"0"[39m
+  [36m/>[39m
+  [36m<div[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mdata-aria-hidden[39m=[32m"true"[39m
+  [36m>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[39m
+      [36m/>[39m
+      [36m<main[39m
+        [33mclass[39m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[39m
+        [33mid[39m=[32m"dukb-main"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mb-3 flex gap-2 sm:contents"[39m
+          [33mdata-career-utilities[39m=[32m"true"[39m
+          [33mstyle[39m=[32m"--career-utility-lift: 0px;"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open the training ground"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"training"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m🏋️[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mTraining[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"sr-only"[39m
+              [36m>[39m
+                [0mDrill ready[0m
+              [36m</span>[39m
+            [36m</span>[39m
+          [36m</button>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open your phone"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"phone"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m📱[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mPhone[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[39m
+            [36m>[39m
+              [0m3[0m
+              [36m<span[39m
+                [33mclass[39m=[32m"sr-only"[39m
+              [36m>[39m
+                [0m unread[0m
+              [36m</span>[39m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-3 pb-20"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex flex-wrap items-center justify-between gap-2"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"min-w-0 flex-1"[39m
+              [36m>[39m
+                [36m<h1[39m
+                  [33mclass[39m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"18"[39m
+                      [33mstyle[39m=[32m"display: block; border-radius: 2px;"[39m
+                      [33mviewBox[39m=[32m"0 0 60 36"[39m
+                      [33mwidth[39m=[32m"24"[39m
+                    [36m>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#fff"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"10"[39m
+                        [33mx[39m=[32m"25"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"10"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                        [33my[39m=[32m"13"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"truncate whitespace-normal [overflow-wrap:anywhere] min-w-0"[39m
+                  [36m>[39m
+                    [0mRetire Tester[0m
+                  [36m</span>[39m
+                [36m</h1>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+                [36m>[39m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m26[0m
+                  [0m · [0m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"9"[39m
+           ...
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m getAllByRole node_modules/@testing-library/dom/dist/query-helpers.js:[2m109:15[22m[39m
+[36m [2m❯[22m button src/test/soccerCareerRetirement1519.test.tsx:[2m104:72[22m[39m
+    [90m102| [39m  [34mexpect[39m(view[33m.[39mcontainer[33m.[39mtextContent)[33m.[39m[34mtoContain[39m([32m'Retire Tester'[39m)[33m;[39m
+    [90m103| [39m[33m}[39m
+    [90m104| [39mconst button = (view: ReturnType<typeof render>, name: RegExp) => view…
+    [90m   | [39m                                                                       [31m^[39m
+    [90m105| [39mconst ended = (s: Career) => s.retired || ['retirement_ceremony', 'pos…
+    [90m106| [39m
+[90m [2m❯[22m continueThrough src/test/soccerCareerRetirement1519.test.tsx:[2m117:21[22m[39m
+[90m [2m❯[22m src/test/soccerCareerRetirement1519.test.tsx:[2m168:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerRetirement1519.test.tsx[2m > [22mRound 1519: no career ends at 26 without the player[2m > [22ma real retirement whose phase was lost opens its send off with the choices
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an accessible element with the role "button" and name `/Retire and Enjoy Life/`
+
+Here are the accessible roles:
+
+  dialog:
+
+  Name "The Boycott Vote":
+  [36m<div[39m
+    [33maria-describedby[39m=[32m"radix-:r13:"[39m
+    [33maria-labelledby[39m=[32m"radix-:r12:"[39m
+    [33mclass[39m=[32m"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg flex max-h-[88dvh] w-[calc(100%-1.5rem)] max-w-sm flex-col gap-3 overflow-hidden rounded-2xl p-4 sm:gap-4 sm:p-6 [&>button]:hidden"[39m
+    [33mdata-career-chance-wheel[39m=[32m"true"[39m
+    [33mdata-state[39m=[32m"open"[39m
+    [33mid[39m=[32m"radix-:r11:"[39m
+    [33mrole[39m=[32m"dialog"[39m
+    [33mstyle[39m=[32m"pointer-events: auto;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "The Boycott Vote":
+  [36m<h2[39m
+    [33mclass[39m=[32m"text-lg font-semibold leading-none tracking-tight outline-none"[39m
+    [33mid[39m=[32m"radix-:r12:"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-sm text-muted-foreground"[39m
+    [33mid[39m=[32m"radix-:r13:"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33maria-live[39m=[32m"polite"[39m
+    [33mclass[39m=[32m"shrink-0 rounded-lg bg-muted p-3 text-sm font-bold"[39m
+    [33mdata-wheel-result[39m=[32m"true"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Spin the wheel":
+  [36m<button[39m
+    [33mclass[39m=[32m"min-h-11 flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground"[39m
+    [33mdata-wheel-spin[39m=[32m"true"[39m
+  [36m/>[39m
+
+  Name "Show result":
+  [36m<button[39m
+    [33mclass[39m=[32m"min-h-11 flex-1 rounded-lg border px-3 text-sm"[39m
+    [33mdata-wheel-skip[39m=[32m"true"[39m
+  [36m/>[39m
+
+  Name "Close":
+  [36m<button[39m
+    [33mclass[39m=[32m"absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mdata-scroll-locked[39m=[32m"1"[39m
+  [33mstyle[39m=[32m"pointer-events: none;"[39m
+[36m>[39m
+  [36m<span[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mdata-aria-hidden[39m=[32m"true"[39m
+    [33mdata-radix-focus-guard[39m=[32m""[39m
+    [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+    [33mtabindex[39m=[32m"0"[39m
+  [36m/>[39m
+  [36m<div[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mdata-aria-hidden[39m=[32m"true"[39m
+  [36m>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[39m
+      [36m/>[39m
+      [36m<main[39m
+        [33mclass[39m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[39m
+        [33mid[39m=[32m"dukb-main"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mb-3 flex gap-2 sm:contents"[39m
+          [33mdata-career-utilities[39m=[32m"true"[39m
+          [33mstyle[39m=[32m"--career-utility-lift: 0px;"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open your phone"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"phone"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m📱[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mPhone[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[39m
+            [36m>[39m
+              [0m3[0m
+              [36m<span[39m
+                [33mclass[39m=[32m"sr-only"[39m
+              [36m>[39m
+                [0m unread[0m
+              [36m</span>[39m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-3 pb-20"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex flex-wrap items-center justify-between gap-2"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"min-w-0 flex-1"[39m
+              [36m>[39m
+                [36m<h1[39m
+                  [33mclass[39m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"18"[39m
+                      [33mstyle[39m=[32m"display: block; border-radius: 2px;"[39m
+                      [33mviewBox[39m=[32m"0 0 60 36"[39m
+                      [33mwidth[39m=[32m"24"[39m
+                    [36m>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#fff"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"10"[39m
+                        [33mx[39m=[32m"25"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"10"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                        [33my[39m=[32m"13"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"truncate whitespace-normal [overflow-wrap:anywhere] min-w-0"[39m
+                  [36m>[39m
+                    [0mRetire Tester[0m
+                  [36m</span>[39m
+                [36m</h1>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+                [36m>[39m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m26[0m
+                  [0m · [0m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"9"[39m
+                      [33mstyle[39m=[32m"display: block; border-radius: 2px;"[39m
+                      [33mviewBox[39m=[32m"0 0 60 36"[39m
+                      [33mwidth[39m=[32m"12"[39m
+                    [36m>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#fff"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"10"[39m
+                        [33mx[39m=[32m"25"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"10"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                        [33my[39m=[32m"13"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"text-inherit"[39m
+                    [36m>[39m
+                      [0mEngland[0m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m...
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m getAllByRole node_modules/@testing-library/dom/dist/query-helpers.js:[2m109:15[22m[39m
+[36m [2m❯[22m button src/test/soccerCareerRetirement1519.test.tsx:[2m104:72[22m[39m
+    [90m102| [39m  [34mexpect[39m(view[33m.[39mcontainer[33m.[39mtextContent)[33m.[39m[34mtoContain[39m([32m'Retire Tester'[39m)[33m;[39m
+    [90m103| [39m[33m}[39m
+    [90m104| [39mconst button = (view: ReturnType<typeof render>, name: RegExp) => view…
+    [90m   | [39m                                                                       [31m^[39m
+    [90m105| [39mconst ended = (s: Career) => s.retired || ['retirement_ceremony', 'pos…
+    [90m106| [39m
+[90m [2m❯[22m src/test/soccerCareerRetirement1519.test.tsx:[2m178:12[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerRetirement1519.test.tsx[2m > [22mRound 1519: no career ends at 26 without the player[2m > [22ma retired screen with nothing behind it goes back to Next Season
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an accessible element with the role "button" and name `/Next Season/`
+
+Here are the accessible roles:
+
+  dialog:
+
+  Name "The Boycott Vote":
+  [36m<div[39m
+    [33maria-describedby[39m=[32m"radix-:r1c:"[39m
+    [33maria-labelledby[39m=[32m"radix-:r1b:"[39m
+    [33mclass[39m=[32m"fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg flex max-h-[88dvh] w-[calc(100%-1.5rem)] max-w-sm flex-col gap-3 overflow-hidden rounded-2xl p-4 sm:gap-4 sm:p-6 [&>button]:hidden"[39m
+    [33mdata-career-chance-wheel[39m=[32m"true"[39m
+    [33mdata-state[39m=[32m"open"[39m
+    [33mid[39m=[32m"radix-:r1a:"[39m
+    [33mrole[39m=[32m"dialog"[39m
+    [33mstyle[39m=[32m"pointer-events: auto;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "The Boycott Vote":
+  [36m<h2[39m
+    [33mclass[39m=[32m"text-lg font-semibold leading-none tracking-tight outline-none"[39m
+    [33mid[39m=[32m"radix-:r1b:"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-sm text-muted-foreground"[39m
+    [33mid[39m=[32m"radix-:r1c:"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33maria-live[39m=[32m"polite"[39m
+    [33mclass[39m=[32m"shrink-0 rounded-lg bg-muted p-3 text-sm font-bold"[39m
+    [33mdata-wheel-result[39m=[32m"true"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Spin the wheel":
+  [36m<button[39m
+    [33mclass[39m=[32m"min-h-11 flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground"[39m
+    [33mdata-wheel-spin[39m=[32m"true"[39m
+  [36m/>[39m
+
+  Name "Show result":
+  [36m<button[39m
+    [33mclass[39m=[32m"min-h-11 flex-1 rounded-lg border px-3 text-sm"[39m
+    [33mdata-wheel-skip[39m=[32m"true"[39m
+  [36m/>[39m
+
+  Name "Close":
+  [36m<button[39m
+    [33mclass[39m=[32m"absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mdata-scroll-locked[39m=[32m"1"[39m
+  [33mstyle[39m=[32m"pointer-events: none;"[39m
+[36m>[39m
+  [36m<span[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mdata-aria-hidden[39m=[32m"true"[39m
+    [33mdata-radix-focus-guard[39m=[32m""[39m
+    [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+    [33mtabindex[39m=[32m"0"[39m
+  [36m/>[39m
+  [36m<div[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mdata-aria-hidden[39m=[32m"true"[39m
+  [36m>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[39m
+      [36m/>[39m
+      [36m<main[39m
+        [33mclass[39m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[39m
+        [33mid[39m=[32m"dukb-main"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mb-3 flex gap-2 sm:contents"[39m
+          [33mdata-career-utilities[39m=[32m"true"[39m
+          [33mstyle[39m=[32m"--career-utility-lift: 0px;"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open the training ground"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"training"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m🏋️[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mTraining[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"sr-only"[39m
+              [36m>[39m
+                [0mDrill ready[0m
+              [36m</span>[39m
+            [36m</span>[39m
+          [36m</button>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open your phone"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"phone"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m📱[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mPhone[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[39m
+            [36m>[39m
+              [0m3[0m
+              [36m<span[39m
+                [33mclass[39m=[32m"sr-only"[39m
+              [36m>[39m
+                [0m unread[0m
+              [36m</span>[39m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-3 pb-20"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex flex-wrap items-center justify-between gap-2"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"min-w-0 flex-1"[39m
+              [36m>[39m
+                [36m<h1[39m
+                  [33mclass[39m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"18"[39m
+                      [33mstyle[39m=[32m"display: block; border-radius: 2px;"[39m
+                      [33mviewBox[39m=[32m"0 0 60 36"[39m
+                      [33mwidth[39m=[32m"24"[39m
+                    [36m>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#fff"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"10"[39m
+                        [33mx[39m=[32m"25"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"10"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                        [33my[39m=[32m"13"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"truncate whitespace-normal [overflow-wrap:anywhere] min-w-0"[39m
+                  [36m>[39m
+                    [0mRetire Tester[0m
+                  [36m</span>[39m
+                [36m</h1>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+                [36m>[39m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m26[0m
+                  [0m · [0m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"9"[39m
+           ...
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m getAllByRole node_modules/@testing-library/dom/dist/query-helpers.js:[2m109:15[22m[39m
+[36m [2m❯[22m button src/test/soccerCareerRetirement1519.test.tsx:[2m104:72[22m[39m
+    [90m102| [39m  [34mexpect[39m(view[33m.[39mcontainer[33m.[39mtextContent)[33m.[39m[34mtoContain[39m([32m'Retire Tester'[39m)[33m;[39m
+    [90m103| [39m[33m}[39m
+    [90m104| [39mconst button = (view: ReturnType<typeof render>, name: RegExp) => view…
+    [90m   | [39m                                                                       [31m^[39m
+    [90m105| [39mconst ended = (s: Career) => s.retired || ['retirement_ceremony', 'pos…
+    [90m106| [39m
+[90m [2m❯[22m src/test/soccerCareerRetirement1519.test.tsx:[2m183:12[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m56 passed[39m[22m[90m (60)[39m
+[2m   Start at [22m 19:43:55
+[2m   Duration [22m 21.78s[2m (transform 4.41s, setup 342ms, collect 11.38s, tests 28.56s, environment 1.94s, prepare 614ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerRetirement1519.test.tsx,title=src/test/soccerCareerRetirement1519.test.tsx > Round 1519%3A no career ends at 26 without the player > the Retire dialog%3A Cancel keeps the career%2C Confirm ends it on the send off with its reason and choices,line=151,column=17::TestingLibraryElementError: Unable to find an accessible element with the role "dialog" and name "Retire?"%0A%0AHere are the accessible roles:%0A%0A  dialog:%0A%0A  Name "The Boycott Vote":%0A  <div%0A    aria-describedby="radix-:rq:"%0A    aria-labelledby="radix-:rp:"%0A    class="fixed left-[50%25] top-[50%25] z-50 translate-x-[-50%25] translate-y-[-50%25] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%25] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%25] sm:rounded-lg flex max-h-[88dvh] w-[calc(100%25-1.5rem)] max-w-sm flex-col gap-3 overflow-hidden rounded-2xl p-4 sm:gap-4 sm:p-6 [&>button]:hidden"%0A    data-career-chance-wheel="true"%0A    data-state="open"%0A    id="radix-:ro:"%0A    role="dialog"%0A    style="pointer-events: auto;"%0A    tabindex="-1"%0A  />%0A%0A  --------------------------------------------------%0A  heading:%0A%0A  Name "The Boycott Vote":%0A  <h2%0A    class="text-lg font-semibold leading-none tracking-tight outline-none"%0A    id="radix-:rp:"%0A    tabindex="-1"%0A  />%0A%0A  --------------------------------------------------%0A  paragraph:%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p%0A    class="text-xs text-muted-foreground"%0A  />%0A%0A  Name "":%0A  <p%0A    class="text-sm text-muted-foreground"%0A    id="radix-:rq:"%0A  />%0A%0A  Name "":%0A  <p%0A    class="text-xs text-muted-foreground"%0A  />%0A%0A  Name "":%0A  <p%0A    aria-live="polite"%0A    class="shrink-0 rounded-lg bg-muted p-3 text-sm font-bold"%0A    data-wheel-result="true"%0A  />%0A%0A  --------------------------------------------------%0A  strong:%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  --------------------------------------------------%0A  button:%0A%0A  Name "Spin the wheel":%0A  <button%0A    class="min-h-11 flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground"%0A    data-wheel-spin="true"%0A  />%0A%0A  Name "Show result":%0A  <button%0A    class="min-h-11 flex-1 rounded-lg border px-3 text-sm"%0A    data-wheel-skip="true"%0A  />%0A%0A  Name "Close":%0A  <button%0A    class="absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"%0A    type="button"%0A  />%0A%0A  --------------------------------------------------%0A%0AIgnored nodes: comments, script, style%0A<body%0A  data-scroll-locked="1"%0A  style="pointer-events: none;"%0A>%0A  <span%0A    aria-hidden="true"%0A    data-aria-hidden="true"%0A    data-radix-focus-guard=""%0A    style="outline: none; opacity: 0; position: fixed; pointer-events: none;"%0A    tabindex="0"%0A  />%0A  <div%0A    aria-hidden="true"%0A    data-aria-hidden="true"%0A  >%0A    <div%0A      class="min-h-screen bg-background text-foreground flex flex-col pb-[88px]"%0A    >%0A      <div%0A        class="relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"%0A      />%0A      <main%0A        class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"%0A        id="dukb-main"%0A      >%0A        <div%0A          class="mb-3 flex gap-2 sm:contents"%0A          data-career-utilities="true"%0A          style="--career-utility-lift: 0px;"%0A        >%0A          <button%0A            aria-label="Open the training ground"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="training"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              🏋️%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Training%0A            </span>%0A            <span%0A              class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"%0A            >%0A              <span%0A                class="sr-only"%0A              >%0A                Drill ready%0A              </span>%0A            </span>%0A          </button>%0A          <button%0A            aria-label="Open your phone"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="phone"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              📱%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Phone%0A            </span>%0A            <span%0A              class="min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"%0A            >%0A              3%0A              <span%0A                class="sr-only"%0A              >%0A                 unread%0A              </span>%0A            </span>%0A          </button>%0A        </div>%0A        <div%0A          class="space-y-3 pb-20"%0A        >%0A          <div%0A            class="flex flex-wrap items-center justify-between gap-2"%0A          >%0A            <div%0A              class="flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"%0A            >%0A              <div%0A                class="min-w-0 flex-1"%0A              >%0A                <h1%0A                  class="text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"%0A                >%0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="18"%0A                      style="display: block; border-radius: 2px;"%0A                      viewBox="0 0 60 36"%0A                      width="24"%0A                    >%0A                      <rect%0A                        fill="#fff"%0A                        height="36"%0A                        width="60"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="36"%0A                        width="10"%0A                        x="25"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="10"%0A                        width="60"%0A                        y="13"%0A                      />%0A                    </svg>%0A                  </span>%0A                  <span%0A                    class="truncate whitespace-normal [overflow-wrap:anywhere] min-w-0"%0A                  >%0A                    Retire Tester%0A                  </span>%0A                </h1>%0A                <p%0A                  class="text-xs text-muted-foreground"%0A                >%0A                  CM%0A                   · Age %0A                  26%0A                   · %0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="9"%0A           ...%0A ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17%0A ❯ getByRole node_modules/@testing-library/dom/dist/query-helpers.js:95:19%0A ❯ src/test/soccerCareerRetirement1519.test.tsx:151:17%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerRetirement1519.test.tsx,title=src/test/soccerCareerRetirement1519.test.tsx > Round 1519%3A no career ends at 26 without the player > a stray retired flag on the summary at 26 plays on after Continue,line=104,column=72::TestingLibraryElementError: Unable to find an accessible element with the role "button" and name `/^Continue/`%0A%0AHere are the accessible roles:%0A%0A  dialog:%0A%0A  Name "The Boycott Vote":%0A  <div%0A    aria-describedby="radix-:r10:"%0A    aria-labelledby="radix-:rv:"%0A    class="fixed left-[50%25] top-[50%25] z-50 translate-x-[-50%25] translate-y-[-50%25] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%25] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%25] sm:rounded-lg flex max-h-[88dvh] w-[calc(100%25-1.5rem)] max-w-sm flex-col gap-3 overflow-hidden rounded-2xl p-4 sm:gap-4 sm:p-6 [&>button]:hidden"%0A    data-career-chance-wheel="true"%0A    data-state="open"%0A    id="radix-:ru:"%0A    role="dialog"%0A    style="pointer-events: auto;"%0A    tabindex="-1"%0A  />%0A%0A  --------------------------------------------------%0A  heading:%0A%0A  Name "The Boycott Vote":%0A  <h2%0A    class="text-lg font-semibold leading-none tracking-tight outline-none"%0A    id="radix-:rv:"%0A    tabindex="-1"%0A  />%0A%0A  --------------------------------------------------%0A  paragraph:%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p%0A    class="text-xs text-muted-foreground"%0A  />%0A%0A  Name "":%0A  <p%0A    class="text-sm text-muted-foreground"%0A    id="radix-:r10:"%0A  />%0A%0A  Name "":%0A  <p%0A    class="text-xs text-muted-foreground"%0A  />%0A%0A  Name "":%0A  <p%0A    aria-live="polite"%0A    class="shrink-0 rounded-lg bg-muted p-3 text-sm font-bold"%0A    data-wheel-result="true"%0A  />%0A%0A  --------------------------------------------------%0A  strong:%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  --------------------------------------------------%0A  button:%0A%0A  Name "Spin the wheel":%0A  <button%0A    class="min-h-11 flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground"%0A    data-wheel-spin="true"%0A  />%0A%0A  Name "Show result":%0A  <button%0A    class="min-h-11 flex-1 rounded-lg border px-3 text-sm"%0A    data-wheel-skip="true"%0A  />%0A%0A  Name "Close":%0A  <button%0A    class="absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"%0A    type="button"%0A  />%0A%0A  --------------------------------------------------%0A%0AIgnored nodes: comments, script, style%0A<body%0A  data-scroll-locked="1"%0A  style="pointer-events: none;"%0A>%0A  <span%0A    aria-hidden="true"%0A    data-aria-hidden="true"%0A    data-radix-focus-guard=""%0A    style="outline: none; opacity: 0; position: fixed; pointer-events: none;"%0A    tabindex="0"%0A  />%0A  <div%0A    aria-hidden="true"%0A    data-aria-hidden="true"%0A  >%0A    <div%0A      class="min-h-screen bg-background text-foreground flex flex-col pb-[88px]"%0A    >%0A      <div%0A        class="relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"%0A      />%0A      <main%0A        class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"%0A        id="dukb-main"%0A      >%0A        <div%0A          class="mb-3 flex gap-2 sm:contents"%0A          data-career-utilities="true"%0A          style="--career-utility-lift: 0px;"%0A        >%0A          <button%0A            aria-label="Open the training ground"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="training"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              🏋️%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Training%0A            </span>%0A            <span%0A              class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"%0A            >%0A              <span%0A                class="sr-only"%0A              >%0A                Drill ready%0A              </span>%0A            </span>%0A          </button>%0A          <button%0A            aria-label="Open your phone"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="phone"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              📱%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Phone%0A            </span>%0A            <span%0A              class="min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"%0A            >%0A              3%0A              <span%0A                class="sr-only"%0A              >%0A                 unread%0A              </span>%0A            </span>%0A          </button>%0A        </div>%0A        <div%0A          class="space-y-3 pb-20"%0A        >%0A          <div%0A            class="flex flex-wrap items-center justify-between gap-2"%0A          >%0A            <div%0A              class="flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"%0A            >%0A              <div%0A                class="min-w-0 flex-1"%0A              >%0A                <h1%0A                  class="text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"%0A                >%0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="18"%0A                      style="display: block; border-radius: 2px;"%0A                      viewBox="0 0 60 36"%0A                      width="24"%0A                    >%0A                      <rect%0A                        fill="#fff"%0A                        height="36"%0A                        width="60"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="36"%0A                        width="10"%0A                        x="25"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="10"%0A                        width="60"%0A                        y="13"%0A                      />%0A                    </svg>%0A                  </span>%0A                  <span%0A                    class="truncate whitespace-normal [overflow-wrap:anywhere] min-w-0"%0A                  >%0A                    Retire Tester%0A                  </span>%0A                </h1>%0A                <p%0A                  class="text-xs text-muted-foreground"%0A                >%0A                  CM%0A                   · Age %0A                  26%0A                   · %0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="9"%0A           ...%0A ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38%0A ❯ getAllByRole node_modules/@testing-library/dom/dist/query-helpers.js:109:15%0A ❯ button src/test/soccerCareerRetirement1519.test.tsx:104:72%0A ❯ continueThrough src/test/soccerCareerRetirement1519.test.tsx:117:21%0A ❯ src/test/soccerCareerRetirement1519.test.tsx:168:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerRetirement1519.test.tsx,title=src/test/soccerCareerRetirement1519.test.tsx > Round 1519%3A no career ends at 26 without the player > a real retirement whose phase was lost opens its send off with the choices,line=104,column=72::TestingLibraryElementError: Unable to find an accessible element with the role "button" and name `/Retire and Enjoy Life/`%0A%0AHere are the accessible roles:%0A%0A  dialog:%0A%0A  Name "The Boycott Vote":%0A  <div%0A    aria-describedby="radix-:r13:"%0A    aria-labelledby="radix-:r12:"%0A    class="fixed left-[50%25] top-[50%25] z-50 translate-x-[-50%25] translate-y-[-50%25] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%25] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%25] sm:rounded-lg flex max-h-[88dvh] w-[calc(100%25-1.5rem)] max-w-sm flex-col gap-3 overflow-hidden rounded-2xl p-4 sm:gap-4 sm:p-6 [&>button]:hidden"%0A    data-career-chance-wheel="true"%0A    data-state="open"%0A    id="radix-:r11:"%0A    role="dialog"%0A    style="pointer-events: auto;"%0A    tabindex="-1"%0A  />%0A%0A  --------------------------------------------------%0A  heading:%0A%0A  Name "The Boycott Vote":%0A  <h2%0A    class="text-lg font-semibold leading-none tracking-tight outline-none"%0A    id="radix-:r12:"%0A    tabindex="-1"%0A  />%0A%0A  --------------------------------------------------%0A  paragraph:%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p%0A    class="text-xs text-muted-foreground"%0A  />%0A%0A  Name "":%0A  <p%0A    class="text-sm text-muted-foreground"%0A    id="radix-:r13:"%0A  />%0A%0A  Name "":%0A  <p%0A    class="text-xs text-muted-foreground"%0A  />%0A%0A  Name "":%0A  <p%0A    aria-live="polite"%0A    class="shrink-0 rounded-lg bg-muted p-3 text-sm font-bold"%0A    data-wheel-result="true"%0A  />%0A%0A  --------------------------------------------------%0A  strong:%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  --------------------------------------------------%0A  button:%0A%0A  Name "Spin the wheel":%0A  <button%0A    class="min-h-11 flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground"%0A    data-wheel-spin="true"%0A  />%0A%0A  Name "Show result":%0A  <button%0A    class="min-h-11 flex-1 rounded-lg border px-3 text-sm"%0A    data-wheel-skip="true"%0A  />%0A%0A  Name "Close":%0A  <button%0A    class="absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"%0A    type="button"%0A  />%0A%0A  --------------------------------------------------%0A%0AIgnored nodes: comments, script, style%0A<body%0A  data-scroll-locked="1"%0A  style="pointer-events: none;"%0A>%0A  <span%0A    aria-hidden="true"%0A    data-aria-hidden="true"%0A    data-radix-focus-guard=""%0A    style="outline: none; opacity: 0; position: fixed; pointer-events: none;"%0A    tabindex="0"%0A  />%0A  <div%0A    aria-hidden="true"%0A    data-aria-hidden="true"%0A  >%0A    <div%0A      class="min-h-screen bg-background text-foreground flex flex-col pb-[88px]"%0A    >%0A      <div%0A        class="relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"%0A      />%0A      <main%0A        class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"%0A        id="dukb-main"%0A      >%0A        <div%0A          class="mb-3 flex gap-2 sm:contents"%0A          data-career-utilities="true"%0A          style="--career-utility-lift: 0px;"%0A        >%0A          <button%0A            aria-label="Open your phone"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="phone"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              📱%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Phone%0A            </span>%0A            <span%0A              class="min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"%0A            >%0A              3%0A              <span%0A                class="sr-only"%0A              >%0A                 unread%0A              </span>%0A            </span>%0A          </button>%0A        </div>%0A        <div%0A          class="space-y-3 pb-20"%0A        >%0A          <div%0A            class="flex flex-wrap items-center justify-between gap-2"%0A          >%0A            <div%0A              class="flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"%0A            >%0A              <div%0A                class="min-w-0 flex-1"%0A              >%0A                <h1%0A                  class="text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"%0A                >%0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="18"%0A                      style="display: block; border-radius: 2px;"%0A                      viewBox="0 0 60 36"%0A                      width="24"%0A                    >%0A                      <rect%0A                        fill="#fff"%0A                        height="36"%0A                        width="60"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="36"%0A                        width="10"%0A                        x="25"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="10"%0A                        width="60"%0A                        y="13"%0A                      />%0A                    </svg>%0A                  </span>%0A                  <span%0A                    class="truncate whitespace-normal [overflow-wrap:anywhere] min-w-0"%0A                  >%0A                    Retire Tester%0A                  </span>%0A                </h1>%0A                <p%0A                  class="text-xs text-muted-foreground"%0A                >%0A                  CM%0A                   · Age %0A                  26%0A                   · %0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="9"%0A                      style="display: block; border-radius: 2px;"%0A                      viewBox="0 0 60 36"%0A                      width="12"%0A                    >%0A                      <rect%0A                        fill="#fff"%0A                        height="36"%0A                        width="60"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="36"%0A                        width="10"%0A                        x="25"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="10"%0A                        width="60"%0A                        y="13"%0A                      />%0A                    </svg>%0A                    <span%0A                      class="text-inherit"%0A                    >%0A                      England%0A                    </span>%0A                  </span>%0A                ...%0A ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38%0A ❯ getAllByRole node_modules/@testing-library/dom/dist/query-helpers.js:109:15%0A ❯ button src/test/soccerCareerRetirement1519.test.tsx:104:72%0A ❯ src/test/soccerCareerRetirement1519.test.tsx:178:12%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerRetirement1519.test.tsx,title=src/test/soccerCareerRetirement1519.test.tsx > Round 1519%3A no career ends at 26 without the player > a retired screen with nothing behind it goes back to Next Season,line=104,column=72::TestingLibraryElementError: Unable to find an accessible element with the role "button" and name `/Next Season/`%0A%0AHere are the accessible roles:%0A%0A  dialog:%0A%0A  Name "The Boycott Vote":%0A  <div%0A    aria-describedby="radix-:r1c:"%0A    aria-labelledby="radix-:r1b:"%0A    class="fixed left-[50%25] top-[50%25] z-50 translate-x-[-50%25] translate-y-[-50%25] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%25] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%25] sm:rounded-lg flex max-h-[88dvh] w-[calc(100%25-1.5rem)] max-w-sm flex-col gap-3 overflow-hidden rounded-2xl p-4 sm:gap-4 sm:p-6 [&>button]:hidden"%0A    data-career-chance-wheel="true"%0A    data-state="open"%0A    id="radix-:r1a:"%0A    role="dialog"%0A    style="pointer-events: auto;"%0A    tabindex="-1"%0A  />%0A%0A  --------------------------------------------------%0A  heading:%0A%0A  Name "The Boycott Vote":%0A  <h2%0A    class="text-lg font-semibold leading-none tracking-tight outline-none"%0A    id="radix-:r1b:"%0A    tabindex="-1"%0A  />%0A%0A  --------------------------------------------------%0A  paragraph:%0A%0A  Name "":%0A  <p />%0A%0A  Name "":%0A  <p%0A    class="text-xs text-muted-foreground"%0A  />%0A%0A  Name "":%0A  <p%0A    class="text-sm text-muted-foreground"%0A    id="radix-:r1c:"%0A  />%0A%0A  Name "":%0A  <p%0A    class="text-xs text-muted-foreground"%0A  />%0A%0A  Name "":%0A  <p%0A    aria-live="polite"%0A    class="shrink-0 rounded-lg bg-muted p-3 text-sm font-bold"%0A    data-wheel-result="true"%0A  />%0A%0A  --------------------------------------------------%0A  strong:%0A%0A  Name "":%0A  <strong />%0A%0A  Name "":%0A  <strong />%0A%0A  --------------------------------------------------%0A  button:%0A%0A  Name "Spin the wheel":%0A  <button%0A    class="min-h-11 flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground"%0A    data-wheel-spin="true"%0A  />%0A%0A  Name "Show result":%0A  <button%0A    class="min-h-11 flex-1 rounded-lg border px-3 text-sm"%0A    data-wheel-skip="true"%0A  />%0A%0A  Name "Close":%0A  <button%0A    class="absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"%0A    type="button"%0A  />%0A%0A  --------------------------------------------------%0A%0AIgnored nodes: comments, script, style%0A<body%0A  data-scroll-locked="1"%0A  style="pointer-events: none;"%0A>%0A  <span%0A    aria-hidden="true"%0A    data-aria-hidden="true"%0A    data-radix-focus-guard=""%0A    style="outline: none; opacity: 0; position: fixed; pointer-events: none;"%0A    tabindex="0"%0A  />%0A  <div%0A    aria-hidden="true"%0A    data-aria-hidden="true"%0A  >%0A    <div%0A      class="min-h-screen bg-background text-foreground flex flex-col pb-[88px]"%0A    >%0A      <div%0A        class="relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"%0A      />%0A      <main%0A        class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"%0A        id="dukb-main"%0A      >%0A        <div%0A          class="mb-3 flex gap-2 sm:contents"%0A          data-career-utilities="true"%0A          style="--career-utility-lift: 0px;"%0A        >%0A          <button%0A            aria-label="Open the training ground"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="training"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              🏋️%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Training%0A            </span>%0A            <span%0A              class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"%0A            >%0A              <span%0A                class="sr-only"%0A              >%0A                Drill ready%0A              </span>%0A            </span>%0A          </button>%0A          <button%0A            aria-label="Open your phone"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="phone"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              📱%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Phone%0A            </span>%0A            <span%0A              class="min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"%0A            >%0A              3%0A              <span%0A                class="sr-only"%0A              >%0A                 unread%0A              </span>%0A            </span>%0A          </button>%0A        </div>%0A        <div%0A          class="space-y-3 pb-20"%0A        >%0A          <div%0A            class="flex flex-wrap items-center justify-between gap-2"%0A          >%0A            <div%0A              class="flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"%0A            >%0A              <div%0A                class="min-w-0 flex-1"%0A              >%0A                <h1%0A                  class="text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"%0A                >%0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="18"%0A                      style="display: block; border-radius: 2px;"%0A                      viewBox="0 0 60 36"%0A                      width="24"%0A                    >%0A                      <rect%0A                        fill="#fff"%0A                        height="36"%0A                        width="60"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="36"%0A                        width="10"%0A                        x="25"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="10"%0A                        width="60"%0A                        y="13"%0A                      />%0A                    </svg>%0A                  </span>%0A                  <span%0A                    class="truncate whitespace-normal [overflow-wrap:anywhere] min-w-0"%0A                  >%0A                    Retire Tester%0A                  </span>%0A                </h1>%0A                <p%0A                  class="text-xs text-muted-foreground"%0A                >%0A                  CM%0A                   · Age %0A                  26%0A                   · %0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="9"%0A           ...%0A ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38%0A ❯ getAllByRole node_modules/@testing-library/dom/dist/query-helpers.js:109:15%0A ❯ button src/test/soccerCareerRetirement1519.test.tsx:104:72%0A ❯ src/test/soccerCareerRetirement1519.test.tsx:183:12%0A%0A
