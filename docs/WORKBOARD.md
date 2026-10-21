@@ -1,3 +1,11 @@
+## Root Round1441 final draft, 2026-10-21: grid cell names
+
+[Draft PR 355](https://github.com/PapiSalgueroM/ballpark-hero/pull/355), `codex/grid-cell-names`, stacks on sealed PR354/f42fee5a. Tested `2afcc2ff7499e0ceb8706f92bfa4460926574704`, tree `22d0700e1c75a9b0ddb9dc24ea0e0912de96bbd8`, adds only the row/column/status prefix and hides the existing plus/cross decorations in each Board. These are exactly three literal accessibility edits per Board. Football/College/Soccer cells retain completed player/rarity/badge content, native behavior and existing appearance.
+
+CI39559719147/job119087767755 passed types, serial plain build, all 17 rebuilt-site readers and 14 unchanged fatal caps. Fixed proof: 378 unit and 864 native browser case executions, including expected faults/defaults/restoration, plus six inherited motion/layout/geometry checks. Final source the packet source-closure receipt (final docs-only commit and tree); qualification `72d1709a897c3dbd141100fefaf6b315285b3eb627a593d163817f218b4b6a34`. Root unit/browser/whole ACKs: `2f327c118339e2a94ac180b0e8e41f2160fc0bd44936c9626a18dfc62a3839b9`, `4d61fe6017f25a473db61c3708db3d07fce2b37e515147fea738d4f80055b0ab`, `4376919e3a22c917a7cdf3f328a450d61c5d3fa8d14875373ef6911aa3b5d373`; saved pixels `ROOT-fixed1-saved-pixels.json (86ba05092d2d71dd367e6bb7697ede7667910727949ccfeaeeae1f193327a020)`. Packet: `C:/Users/antho/dukb-handoff/2026-10-20/grid-cell-names-1441`.
+
+I keeps Manager/Soccer Career, protected engines/data/saves/validators, joined output, integration/main/publication. The source-only [new report intake](C:/Users/antho/dukb-handoff/2026-10-21/new-reports-triage/docs/READY-FOR-I.md) retains generated nationalities, deeper tactics and retirement at 26. Retirement is not reproduced or fixed. No full-suite/live-site/spoken-AT/WCAG/merge/publication/AdSense claim. All 78 prior closed refs/worktrees/packets remain immutable.
+
 ## Release BJ LIVE, 2026-10-17 21:51 EDT: Club Manager Hard and Legend, the Champions League you can follow in or out of it, match days that read like a scoreboard, a way out for dirty money in the US careers, and Soccer Career's summer cards
 
 Claude lane (session I). main d0c3ff58, deployment fec60776-a9ad-49aa-b4ea-04a590a233de, entry index-CWmc_M1Q.js (was
