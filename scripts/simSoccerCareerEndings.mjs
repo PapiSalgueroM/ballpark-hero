@@ -26,13 +26,29 @@
  *      a ban, the drug test ban, prison and the trial at 26 all play on; a farewell is refused at 26.
  *   C. The pair: a stray flag with a playing phase plays on, a real retirement whose phase was lost
  *      goes back to its ceremony, a lost flag on a real retirement comes back, a retired phase with
- *      nothing behind it goes back to playing, and every consistent save is left byte for byte.
+ *      nothing behind it goes back to playing (or to youth on a youth career), the save the base
+ *      engine's Continue already wrote (the flag AND the retired screen, nothing behind them) plays on
+ *      into 27, a chosen manager, pundit or owner career whose phase was lost goes back to its season,
+ *      and every consistent save (the four after careers and a youth career among them) is left byte
+ *      for byte.
  *
- * NEGATIVE CONTROLS (each asserts its target is in the source before it edits):
+ * NEGATIVE CONTROLS (each asserts its target is in its file exactly once before it edits; a control
+ * that cannot find its target ABORTS, which is not the same as firing: read the last line):
  *   SC_ENDINGS_CONTROL=early        the age 45 rule moved to 26: A and B go red.
  *   SC_ENDINGS_CONTROL=noreconcile  repairCareer stops reconciling the pair: C goes red.
  *   SC_ENDINGS_CONTROL=summary      dismissSummary's old hop to the retired screen: C goes red.
  *   SC_ENDINGS_CONTROL=noreason     the send off loses its reason for the age limit: B goes red.
+ *   SC_ENDINGS_CONTROL=aftermath    the retired screen with nothing behind it is left alone: C goes red.
+ *   SC_ENDINGS_CONTROL=manual       R2, the Retire dialog skips the ceremony: B1 and A's choices go red.
+ *   SC_ENDINGS_CONTROL=suggestion   R3, taking the suggestion skips the ceremony: B's R3 and A go red.
+ *   SC_ENDINGS_CONTROL=young        R3, the suggestion offered from 25: A goes red (an early ending).
+ *   SC_ENDINGS_CONTROL=farewell     R4, a finished farewell skips the ceremony: A's choices go red.
+ *   SC_ENDINGS_CONTROL=farewell26   R4, a farewell year open from 26 (soccerCareerFarewell.ts): B6 goes red.
+ *   SC_ENDINGS_CONTROL=ban          a match fixing ban ends the career: B5 and A go red.
+ *   SC_ENDINGS_CONTROL=prison       prison ends the career: B5 and A go red.
+ *   SC_ENDINGS_CONTROL=notail       a lost phase on a chosen after career goes to the end: C goes red.
+ *   SC_ENDINGS_CONTROL=youth        a stray retired screen on a youth career goes to playing: C goes red.
+ *   SC_ENDINGS_CONTROL=ovr50        the forced line at an overall of 50: B3's edges go red.
  *
  * Run: node scripts/simSoccerCareerEndings.mjs [careers per fleet, default 40]
  */
@@ -53,29 +69,49 @@ const CONTROL = process.env.SC_ENDINGS_CONTROL || '';
    trials 156, 162, 168. Floors are half the lowest, scaled to the fleet size. */
 const FLOORS = { lowAt26: 11, forced: 63, suggestion: 32, farewell: 20, bans: 7, trials: 78 };
 const SEED_BASE = Number(process.env.SC_ENDINGS_SEED || 15190000);
+const FAREWELL = path.join(ROOT, 'src/lib/soccerCareerFarewell.ts');
+/* [target, replacement, file]; the file is the engine unless named. */
 const CONTROLS = {
   early: ['if ((s.overall < 50 && s.age >= 33) || s.age >= 45) {', 'if ((s.overall < 50 && s.age >= 33) || s.age >= 26) {'],
   noreconcile: ['  reconcileRetirement(s);\n  if (!s.primeType)', '  if (!s.primeType)'],
   summary: ['  if (s.retired && reconcileRetirement(s)) return s;', '  if (s.retired) { s.phase = "retired"; return s; }'],
   noreason: ['  if (s.age >= 45) return "Forced out at 45, the age limit.";', '  if (s.age >= 45) return null;'],
+  /* Round 1519 review: one control per way a career ends, so each check below is seen to fire. */
+  aftermath: ['  if (s.retired !== post || (s.phase === "retired" && !backed)) {', '  if (s.retired !== post) {'],
+  manual: ['  if (readSoccerFarewell(prev) && prev.retired) return prev;\n  const s = { ...prev };\n  delete s.seasonAmbition;\n  delete s.seasonPreparation;\n  Object.assign(s, endCareerMentorForRetirement(s));\n  cancelReducedRole(s);\n  if (readSoccerFarewell(s) && s.loan) {',
+    '  if (readSoccerFarewell(prev) && prev.retired) return prev;\n  if (prev) return { ...prev, retired: true, phase: "retired" };\n  const s = { ...prev };\n  delete s.seasonAmbition;\n  delete s.seasonPreparation;\n  Object.assign(s, endCareerMentorForRetirement(s));\n  cancelReducedRole(s);\n  if (readSoccerFarewell(s) && s.loan) {'],
+  suggestion: ['  s.legacy = calculateLegacy(s);\n  s.phase = "retirement_ceremony";\n  return s;\n}\n\n/* Round 1519: a career the game ended', '  s.phase = "retired";\n  return s;\n}\n\n/* Round 1519: a career the game ended'],
+  young: ['!s.retirementSuggested && s.age >= 30) {', '!s.retirementSuggested && s.age >= 25) {'],
+  farewell: ['  if (farewellSeasonComplete(s)) return manualRetire(s);', '  if (farewellSeasonComplete(s)) return { ...s, retired: true, phase: "retired" };'],
+  farewell26: ["  if (!integer(career.age, 30, 44)) return unavailable(", "  if (!integer(career.age, 26, 44)) return unavailable(", FAREWELL],
+  ban: ['    if (s.matchFixBanned > 0) {\n      // Skip season entirely, add empty record', '    if (s.matchFixBanned > 0) {\n      return manualRetire(s);\n      // Skip season entirely, add empty record'],
+  prison: ['  if ((s.prisonSeasons ?? 0) > 0) {\n    s.prisonSeasons = (s.prisonSeasons ?? 0) - 1;', '  if ((s.prisonSeasons ?? 0) > 0) {\n    return manualRetire(s);\n    s.prisonSeasons = (s.prisonSeasons ?? 0) - 1;'],
+  notail: ['c !== "retire" && s[`${c}State` as const] ? `${c}_season` as const : "retired"', '"retired"'],
+  youth: ['?.type === "youth" ? "youth" : "playing";\n  }', '?.type === "youth" ? "playing" : "playing";\n  }'],
+  ovr50: ['s.overall < 50 && s.age >= 33 ? ', 's.overall <= 50 && s.age >= 33 ? '],
 };
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const check = (ok, m) => { if (!ok) fail(m); return ok; };
 
-let source = fs.readFileSync(ENGINE, 'utf8').split('\r\n').join('\n');
+const read = file => fs.readFileSync(file, 'utf8').split('\r\n').join('\n');
+let source = read(ENGINE);
+let farewellSource = null;
 if (CONTROL) {
   const pair = CONTROLS[CONTROL];
   if (!pair) { console.error(`ABORT: SC_ENDINGS_CONTROL=${CONTROL} is not a control (${Object.keys(CONTROLS).join(', ')})`); process.exit(1); }
-  if (source.split(pair[0]).length !== 2) { console.error(`ABORT: control ${CONTROL} target is not in the engine exactly once, so it would change nothing`); process.exit(1); }
-  source = source.replace(pair[0], () => pair[1]);
-  console.log(`CONTROL ${CONTROL}: the engine is mutated, this run must go red`);
+  const [from, to, file = ENGINE] = pair;
+  const text = file === ENGINE ? source : read(file);
+  if (text.split(from).length !== 2) { console.error(`ABORT: control ${CONTROL} target is not in ${path.basename(file)} exactly once, so it would change nothing`); process.exit(1); }
+  const mutated = text.replace(from, () => to);
+  if (file === ENGINE) source = mutated; else farewellSource = mutated;
+  console.log(`CONTROL ${CONTROL}: ${path.basename(file)} is mutated, this run must go red`);
 }
 
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'sc-endings-'));
 const slash = p => p.split(path.sep).join('/');
-async function bundle(name, engineSource) {
+async function bundle(name, engineSource, farewellOverride = null) {
   const entry = path.join(TMP, `${name}-entry.mjs`);
   const out = path.join(TMP, `${name}.mjs`);
   fs.writeFileSync(entry, `
@@ -88,6 +124,7 @@ export { readSoccerFarewell, farewellEligibility } from '${slash(path.join(ROOT,
     alias: { '@': path.join(ROOT, 'src') },
     plugins: [{ name: 'engine-source', setup(b) {
       b.onLoad({ filter: /[\\/]src[\\/]lib[\\/]soccerCareerEngine\.ts$/ }, () => ({ contents: engineSource, loader: 'ts', resolveDir: path.join(ROOT, 'src/lib') }));
+      if (farewellOverride) b.onLoad({ filter: /[\\/]src[\\/]lib[\\/]soccerCareerFarewell\.ts$/ }, () => ({ contents: farewellOverride, loader: 'ts', resolveDir: path.join(ROOT, 'src/lib') }));
     } }],
   });
   return import(pathToFileURL(out).href);
@@ -97,7 +134,7 @@ export { readSoccerFarewell, farewellEligibility } from '${slash(path.join(ROOT,
 const BASE_REF = process.env.SC_ENDINGS_BASE
   || execFileSync('git', ['merge-base', 'HEAD', 'origin/main'], { cwd: ROOT, encoding: 'utf8' }).trim();
 const baseSource = execFileSync('git', ['show', `${BASE_REF}:src/lib/soccerCareerEngine.ts`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 << 20 }).split('\r\n').join('\n');
-const CUR = await bundle('current', source);
+const CUR = await bundle('current', source, farewellSource);
 const BASE = await bundle('base', baseSource);
 fs.rmSync(TMP, { recursive: true, force: true });
 let E = CUR;
@@ -292,6 +329,11 @@ console.log(`  fixtures: 25 overall ${at25.overall} at ${at25.currentClub}, 26 o
   check(isCeremony(n) && n.age === 33 && endingRoute(fixture, 'advanceProSeason', n) === 'forced', `B3 the age rule fires at 33 under 50 (age ${n.age}, overall ${n.overall}, phase ${n.phase})`);
   check(n.events.some(l => l.includes('Forced retirement')), 'B3 the forced retirement says why in the season log');
   check(/^Forced out at 33: overall \d+, the body could not keep up\.$/.test(E.retirementReason(n) ?? ''), `B3 the send off says why (${E.retirementReason(n)})`);
+  /* The line's edges, read off that forced save: 50 is not under 50, 32 is not 33, 44 is not 45. */
+  for (const [label, edit, want] of [
+    ['overall 50 at 33', { overall: 50 }, null], ['overall 49 at 33', { overall: 49 }, 'Forced out at 33: overall 49, the body could not keep up.'],
+    ['overall 40 at 32', { age: 32, overall: 40 }, null], ['overall 70 at 44', { age: 44, overall: 70 }, null],
+  ]) check(E.retirementReason({ ...n, ...edit }) === want, `B3 the send off line at ${label} is ${want} (${E.retirementReason({ ...n, ...edit })})`);
   const old = { ...copy(at26), age: 44 };
   seedRandom(1519003);
   const m = E.advanceProSeason(old, clubs);
@@ -344,7 +386,26 @@ seedRandom(1519002);
 const forced33 = E.advanceProSeason({ ...withStats(copy(at26), 40), age: 32 }, clubs);
 const chose = E.choosePostRetirement(copy(real), 'retire', clubs);
 const pundit = E.choosePostRetirement(copy(real), 'pundit', clubs);
+seedRandom(1519603);
+const manager = E.choosePostRetirement(copy(real), 'manager', clubs);
+const owner = E.choosePostRetirement(copy(real), 'owner', clubs);
+const youth = newCareer(1519604, 5);
+if (!(youth.phase === 'youth' && youth.seasons[youth.seasons.length - 1].type === 'youth')) throw new Error(`the youth fixture is on ${youth.phase}`);
+/* The save the report's own road left before this round: the base engine's Continue on a stray flag at 26
+   wrote the flag AND the retired screen, a pair that agrees, with no legacy, no retired row and no choice. */
+seedRandom(1519605);
+const afterHop = BASE.dismissSummary({ ...copy(summary26), retired: true }, clubs);
+check(afterHop.retired === true && afterHop.phase === 'retired' && !afterHop.legacy && afterHop.age === 26,
+  `C the base engine's Continue left retired ${afterHop.retired} on ${afterHop.phase} at ${afterHop.age}, legacy ${!!afterHop.legacy}`);
 const pairs = [
+  { label: "the save the old Continue already wrote: retired at 26 on the retired screen, nothing behind it", save: afterHop,
+    want: r => !r.retired && r.phase === 'playing' && r.age === 26 },
+  { label: 'a retired flag on the retired screen with nothing behind it', save: { ...copy(at26), retired: true, phase: 'retired' }, want: r => !r.retired && r.phase === 'playing' },
+  { label: 'a stray retired screen on a youth career', save: { ...copy(youth), retired: true, phase: 'retired' }, want: r => !r.retired && r.phase === 'youth' },
+  { label: 'a youth career on the retired screen without its flag', save: { ...copy(youth), phase: 'retired' }, want: r => !r.retired && r.phase === 'youth' },
+  { label: 'a chosen pundit career whose phase was lost', save: { ...copy(pundit), phase: 'playing' }, want: r => r.retired && r.phase === 'pundit_season' },
+  { label: 'a chosen manager career whose phase was lost', save: { ...copy(manager), phase: 'season_summary' }, want: r => r.retired && r.phase === 'manager_season' },
+  { label: 'a chosen owner career whose phase was lost', save: { ...copy(owner), phase: 'playing' }, want: r => r.retired && r.phase === 'owner_season' },
   { label: 'a stray flag on the season summary at 26', save: { ...copy(summary26), retired: true },
     want: r => !r.retired && r.phase === 'season_summary' && JSON.stringify(r.pendingSummary) === JSON.stringify(summary26.pendingSummary) },
   { label: 'a stray flag on Next Season at 26', save: { ...copy(at26), retired: true }, want: r => !r.retired && r.phase === 'playing' },
@@ -378,12 +439,16 @@ for (const { label, save, want } of pairs) {
   const lost = { ...copy(real), phase: 'season_summary', pendingSummary: real.seasons[real.seasons.length - 1] };
   const m = E.dismissSummary(copy(lost), clubs);
   check(isCeremony(m), `C Continue on a real retirement whose phase was lost opens its ceremony, not the retired screen (phase ${m.phase})`);
+  /* The reporter's road after the reload: the old hop's save loads, plays 26 and stands on Next Season at 27. */
+  seedRandom(1519706);
+  const later = playOn(E.repairCareer(copy(afterHop)), 1519707);
+  check(!over(later) && later.age === 27, `C the old Continue's save plays on into 27 (age ${later.age}, phase ${later.phase}, retired ${later.retired})`);
 }
 {
   /* Consistent saves: repairCareer leaves them exactly as the base does, byte for byte. */
   const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/careerLeagueWorldSaves1100.json'), 'utf8'));
   const committed = (data.saves || []).map(row => row && typeof row === 'object' && 'phase' in row ? row : row && (row.save || row.career || row.state)).filter(Boolean);
-  const consistent = [at25, at26, summary26, real, forced33, chose, pundit, ...committed];
+  const consistent = [at25, at26, summary26, real, forced33, chose, pundit, manager, owner, youth, ...committed];
   const inconsistent = committed.filter(s => typeof s.retired === 'boolean' && s.retired !== POST.includes(s.phase)).length;
   let moved = 0;
   for (const save of consistent) {
