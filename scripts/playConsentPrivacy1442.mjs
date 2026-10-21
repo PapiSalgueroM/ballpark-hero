@@ -48,9 +48,10 @@ try {
       await region(page).waitFor();
       assert.equal(vendors(requests).length, 0);
       const advertising = region(page).getByRole('checkbox', { name: /Advertising/i });
-      const analytics = region(page).getByRole('checkbox', { name: /Analytics/i });
-      assert.equal(await advertising.isChecked(), false); assert.equal(await analytics.isChecked(), false);
-      assert.equal(await analytics.isDisabled(), true);
+      assert.equal(await advertising.isChecked(), false);
+      assert.equal(await region(page).getByRole('checkbox', { name: /Analytics/i }).count(), 0);
+      assert.equal(await region(page).locator('[data-analytics-paused-status]').isVisible(), true);
+      assert.match(await region(page).locator('[data-analytics-paused-status]').innerText(), /Analytics is paused\. Google Analytics is off while we check its privacy settings\./);
       await advertising.check();
       await region(page).getByRole('button', { name: 'Save choices', exact: true }).click();
       await region(page).waitFor({ state: 'hidden' });
@@ -61,7 +62,8 @@ try {
       await page.getByRole('button', { name: 'Cookie choices', exact: true }).click();
       await region(page).waitFor();
       assert.equal(await region(page).getByRole('checkbox', { name: /Advertising/i }).isChecked(), true);
-      assert.equal(await region(page).getByRole('checkbox', { name: /Analytics/i }).isChecked(), false);
+      assert.equal(await region(page).getByRole('checkbox', { name: /Analytics/i }).count(), 0);
+      assert.equal(await region(page).locator('[data-analytics-paused-status]').isVisible(), true);
       assert.equal(await page.evaluate(key => localStorage.getItem(key), key), before);
       assert(await region(page).getByRole('button', { name: 'Reject all', exact: true }).isVisible());
       assert(await region(page).getByRole('button', { name: 'Accept all', exact: true }).isVisible());
