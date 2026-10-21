@@ -1,3 +1,9 @@
+## Round1441 native closure blocked, 2026-10-21
+
+[Draft PR355](https://github.com/PapiSalgueroM/ballpark-hero/pull/355) remains open and source-qualified for the bounded grid change. The native preservation audit refused: ten older checkouts and their saved shared-index paths are now absent. Actual old checkout census is 32 present and 46 absent, versus the frozen 42 and 36. The cause and timing are unknown. No old checkout, index, redirect, branch or sealed packet was repaired or recreated. Remaining old metadata and the protected primary index held across the failed audit. Separate read-only local/remote observations matched all 79 refs at that observation, including all 78 frozen old heads; they do not qualify missing checkout preservation or cleanliness.
+
+The complete failure and exact missing paths are retained in `C:/Users/antho/dukb-handoff/2026-10-20/grid-cell-names-1441/prior78-index-audit/readback.json` and `missing-prior-checkouts-index-observations.json`. No successful all79 closure receipt, final native seal, outside seal audit, merge or publication is claimed. The failed gate remains binding. Earlier qualified grid proof and the three source-only simulation reports remain valid within their stated limits. I keeps integration and publication; this lane has no new implementation lease.
+
 ## Round1441 final draft, 2026-10-21: grid cell names
 
 [Draft PR 355](https://github.com/PapiSalgueroM/ballpark-hero/pull/355) stacks on sealed PR354/f42fee5a. Tested `2afcc2ff7499e0ceb8706f92bfa4460926574704`, tree `22d0700e1c75a9b0ddb9dc24ea0e0912de96bbd8`, contains exactly three literal accessibility edits in each of the two Board components. Football Grid, College Grid and Soccer Grid cells include their displayed row, column and current result; correct cells retain full player/rarity/badge descendants. Existing behavior and appearance remain held.
