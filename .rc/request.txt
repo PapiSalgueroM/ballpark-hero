@@ -1,0 +1,3 @@
+hall-mlb-before: node scripts/simCareerHall.mjs mlb
+hall-nhl-before: node scripts/simCareerHall.mjs nhl
+measure-nba: node .rc/x/measureBase.mjs nba 48
