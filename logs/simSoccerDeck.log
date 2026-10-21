@@ -1,0 +1,75 @@
+simSoccerDeck: head and base e814c2de bundled (1.3 s); the shipped pack holds 28 cards
+1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing
+   ok the shipped pack (28 cards) has no problem
+   ok 28 titles: no quote mark, dash, first person, conduct or private word, or any of 10483 real names
+   ok 24 breakages, each refused with its own message
+   ok the clean pack dealt 20 of 20 keys, the same pack with a problem none
+2) Inert: the deck not loaded, 200 careers of 12 seasons, every save byte equal to the base's after every step and the Math.random count equal
+   200 careers, 20846 saves compared, 1155960 Math.random calls on the base
+   FAIL 200 careers part from the base: career 0 (GK, 1990-94) from step 12; career 1 (CB, 1995-99) from step 55; career 2 (LB, 2000-04) from step 24
+   FAIL 160 careers draw Math.random a different number of times
+3) Adds, never replaces: at each deal, from one identical state, the old batch is the base's and a deck card is first
+   1933 deals compared from the base fleet's own states; a deck card dealt at 1903 (98.4%)
+   ok at every deal the old batch is the base's (ids, order, words), the deck card is first, the draws and the catalog are the base's, the stamps the base's plus the deck card's
+   a head fleet with the deck loaded: 1930 deals, 1801 batches holding a deck card, 1801 batches opening on a deck card
+   ok no deck card is pending at any deal of the loaded head fleet
+4) Neutral: every deck card answered on the option that moves nothing, every season end save is the base's but for the deck's own stamps
+   200 careers, 2200 season ends compared, 1808 deck cards answered on the option that moves nothing; seasons whose old draw was empty: 0
+     career 0 (GK) from season end 2
+     career 1 (CB) from season end 4
+     career 2 (LB) from season end 3
+   FAIL 200 careers part from the base at a season end
+5) Promises: every option moves what its button prints, to the bound and no further, says what landed, and never moves money or fame
+   4176 answers (2016 on the option that moves nothing), 1568 effects at a bound, 160 trainings held at 99
+   ok every option moves exactly what it prints (to the bound and no further), the season log says what landed, nothing moves money, fame or karma, and the option that moves nothing moves nothing
+   ok 320 deals at room 0 and 1, none with training that would not fit
+   the banked drill: room 1 at the deal, 0 after the drill; the answer logs "🔋 Pressing from the front: You push through the sprint work. Morale -1, Pace next season +0, you are at your ceiling, Shooting next season +0, you only pay for training that landed."
+   ok a drill banked between the deal and the answer: the answer lands nothing past the ceiling and its line says so
+   the fleet: 1252 deck training answers, 0 clamped (expected 0: the deck card is answered first); with a full drill banked after each, 185 (14.8%) would pass the ceiling only because of the deck's boost (the drills' rule, owed)
+6) Reach by position: every position card reaches its own group and never another, every situation card someone, no keeper word for an outfielder
+   GK: 13 cards reached, 474 deck cards in 526 summers (0.90 a summer), the top card 702 at 19.2%
+   CB: 13 cards reached, 469 deck cards in 512 summers (0.92 a summer), the top card 706 at 19.0%
+   LB: 13 cards reached, 486 deck cards in 532 summers (0.91 a summer), the top card 706 at 18.7%
+   RB: 13 cards reached, 481 deck cards in 531 summers (0.91 a summer), the top card 706 at 17.0%
+   CDM: 13 cards reached, 489 deck cards in 534 summers (0.92 a summer), the top card 706 at 18.4%
+   CM: 12 cards reached, 505 deck cards in 530 summers (0.95 a summer), the top card 713 at 16.4%
+   CAM: 12 cards reached, 509 deck cards in 535 summers (0.95 a summer), the top card 711 at 17.1%
+   LW: 13 cards reached, 486 deck cards in 526 summers (0.92 a summer), the top card 720 at 16.3%
+   RW: 13 cards reached, 512 deck cards in 540 summers (0.95 a summer), the top card 717 at 17.0%
+   ST: 13 cards reached, 499 deck cards in 539 summers (0.93 a summer), the top card 720 at 16.8%
+   keepers: a deck card in 90.1% of summers (474 of 526)
+   defenders: a deck card in 91.3% of summers (1925 of 2109)
+   midfielders: a deck card in 95.2% of summers (1014 of 1065)
+   forwards: a deck card in 93.3% of summers (1497 of 1605)
+   ok all 28 cards reached: every position card its own group and no other, every situation card at least one, and no group printed another's training words
+7) Keyed: the slot and the deck's answers draw no Math.random, the same save deals the same card in a fresh bundle, and the season moves the pick
+   the loaded fleet: 1930 slot calls and 1801 deck answers drew Math.random 0 times; the whole fleet drew it 1158087 times (printed, never asserted)
+   ok the slot and the deck's answers drew Math.random 0 times
+   ok 389 saves dealt in two fresh bundles (and two different Math.random streams): the same card every time (378 dealt one)
+   the same save eight summers, the year moved: careers dealt at least two different cards, by sample: 100.0, 100.0, 100.0, 100.0, 100.0 percent (floor 80); sample 0 had 0 saves dealt one card eight times
+   ok the pick moves with the season
+8) Economy: four answer arms against the deck off, over five seeds of whole careers
+   morale25: off 85.03 (seed to seed sd 1.75), best 85.41 (+0.39), worst 83.64 (-1.39), neutral 85.03 (+0.00), band 5.5
+   morale30: off 89.39 (seed to seed sd 2.02), best 90.09 (+0.70), worst 87.54 (-1.85), neutral 89.39 (+0.00), band 4
+   integrity25: off 20.80 (seed to seed sd 1.92), best 20.72 (-0.07), worst 20.60 (-0.20), neutral 20.80 (+0.00), band 3.5
+   integrity30: off 34.36 (seed to seed sd 4.22), best 34.44 (+0.08), worst 33.40 (-0.96), neutral 34.36 (+0.00), band 8.5
+   overall30: off 80.31 (seed to seed sd 0.45), best 80.33 (+0.02), worst 80.30 (-0.01), neutral 80.31 (+0.00), band 1
+   peak: off 78.16 (seed to seed sd 0.21), best 78.18 (+0.03), worst 78.16 (+0.00), neutral 78.16 (+0.00), band 0.75
+   legacy: off 52.44 (seed to seed sd 1.63), best 52.68 (+0.24), worst 52.34 (-0.11), neutral 52.44 (+0.00), band 1.2
+   clean40: off 0.52 (seed to seed sd 0.06), best 0.53 (+0.01), worst 0.53 (+0.00), neutral 0.52 (+0.00), band 0.15
+   pastCeiling: off 0.00 (seed to seed sd 0.00), best 0.00 (+0.00), worst 0.00 (+0.00), neutral 0.00 (+0.00), band 0.01
+   queued: off 0.00 (seed to seed sd 0.00), best 8.05 (+8.05), worst 8.07 (+8.07), neutral 0.00 (+0.00)
+   legacy against the deck off: BEST 0.24 (seeds 0.07 0.35 -0.22 1.28 -0.29), WORST -0.11 (seeds 0.09 0.59 -1.17 0.79 -0.83), NEUTRAL 0.00 (seeds 0.00 0.00 0.00 0.00 0.00); the seed to seed spread 1.63, the ruling's band 1.2
+   19418 deck answers, 0 queued more than the room just before them
+   ok every arm inside its bands against the deck off, and no deck answer queued past the room
+9) Old saves: the base's saves load and play here as they do there; a save with a deck card pending loads on the base (skipped, its stamp handed back) and answers here
+   445 saves the base wrote, loaded and played a season on both
+   FAIL 0 base saves load differently here and 31 play their season differently (the deck not loaded)
+   60 saves with a deck card pending: 60 pass the save validator, 60 skipped on the base with the stamp handed back, 60 answered here
+10) Lazy: the page and the engine reach the gate and nothing of the deck, and the page is the one caller that loads it
+   ok src/pages/SoccerCareer.tsx: 178 files load with it, the gate among them, and none of the deck
+   ok src/lib/soccerCareerEngine.ts: 66 files load with it, the gate among them, and none of the deck
+   ok 1572 src files read as code: the page loads the deck, and nothing else but the gate and tests calls loadSoccerDeck
+
+runtime 150.6 s
+simSoccerDeck: 4 failures, red sections 2, 4, 9
