@@ -47,3 +47,36 @@ export const SOCCER_MORALE_ROWS = [
     from: "\n  /* Puskás Award (best goal of the year), random chance for high-performing attackers. Round 1523: only from the\n     season it was first given for (soccerWorldTruth.ts puskasAwardExists, with its two sources). An earlier\n     season still makes the same draw and throws it away, the Round 1329 rule, so nothing later moves. */\n  const puskasDrawn = season.goals >= 15 && s.overall >= 80 && Math.random() < 0.08;\n  if (puskasDrawn && puskasAwardExists(thisYear)) {\n    s.awards = [...s.awards, { year: thisYear, name: \"Puskás Award\", emoji: \"🎯\" }];",
     to: "\n  // Puskás Award (best goal of the year), random chance for high-performing attackers\n  if (season.goals >= 15 && s.overall >= 80 && Math.random() < 0.08) {\n    s.awards = [...s.awards, { year: thisYear, name: \"Puskás Award\", emoji: \"🎯\" }];" },
 ];
+
+export const SOCCER_MORALE_FILES = Object.keys(SOCCER_MORALE_SHA256);
+
+/**
+ * The attribution switch for a harness that holds this tree to an older base on its own (not through the ninth),
+ * the scripts/lib/careerLifeChainBF.mjs pattern: each harness names its own variable. Unset is ON (Round 1523 taken
+ * out of the bundle compared with the base); an empty value is OFF, the unattributed arm, red on this head by design,
+ * which is how the attribution is shown to be the only change.
+ */
+export function soccerMoraleOut(envName) {
+  const value = process.env[envName];
+  return value === undefined || value.trim() !== '';
+}
+
+/** One file with Round 1523 alone taken out (LF). A file the round did not edit comes back as it was. */
+export function inverseSoccerMorale(relative, source, receipt = []) {
+  const rows = SOCCER_MORALE_ROWS.filter(row => row.file === relative);
+  if (rows.length === 0) return source;
+  let out = source.split('\r\n').join('\n');
+  for (const row of rows) {
+    if (out.split(row.from).length !== 2) throw new Error(`the ${row.name} row of Round 1523's inverse must be in ${relative} exactly once at its turn`);
+    out = out.replace(row.from, () => row.to);
+    receipt.push({ addition: row.name, file: relative });
+  }
+  return out;
+}
+
+/** '' when every row came off once, in order, in every file the receipt names, and the engine was among them. */
+export function soccerMoraleReceiptProblem(receipt) {
+  const want = SOCCER_MORALE_ROWS.map(row => row.name).join();
+  const got = receipt.map(row => row.addition).join();
+  return got === want ? '' : `Round 1523's inverse ran ${got || 'nothing'}, not ${want}`;
+}

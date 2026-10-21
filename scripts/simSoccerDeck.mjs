@@ -164,6 +164,9 @@
 
    SIM_SOCCER_DECK_SECTIONS=2,3 runs only those sections. SIM_SOCCER_DECK_BASE
    moves SC_BASE (default e814c2de, origin/main when the round started).
+   Round 1523 (morale that plays, the Puskas year) moves seeded careers on purpose, so every head bundle takes it
+   out first (scripts/lib/careerSoccerMorale1523.mjs, an attribution); SIM_SOCCER_DECK_MORALE= (empty) keeps it in,
+   and sections 2, 4 and 9 then go red, which shows that round is the only change.
    Runtime, measured 2026-10-16 on a GitHub runner (rc r1334-f1): the whole harness 188 s, over the 150 s an agent's
    command may take, so the gate runs it as three lines: SIM_SOCCER_DECK_SECTIONS=1,2,3,4,5 (112 s),
    SIM_SOCCER_DECK_SECTIONS=6,7,9,10 (69 s) and SIM_SOCCER_DECK_SECTIONS=8 (98 s). A control runs only its own
@@ -178,6 +181,11 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import * as esbuild from 'esbuild';
 import { staticClosure, codeOf } from './lib/staticClosure.mjs';
+/* Round 1523: the attribution (scripts/lib/careerSoccerMorale1523.mjs). SIM_SOCCER_DECK_MORALE unset takes that round
+   out of every head bundle; an empty value keeps it in, the unattributed arm, red in sections 2, 4 and 9 by design. */
+import { inverseSoccerMorale, soccerMoraleOut, soccerMoraleReceiptProblem } from './lib/careerSoccerMorale1523.mjs';
+const MORALE_OUT = soccerMoraleOut('SIM_SOCCER_DECK_MORALE');
+const moraleReceipt = [];
 
 const T0 = Date.now();
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -262,6 +270,9 @@ async function bundle(tag, { ref = null } = {}) {
       let source = ref
         ? lf(execFileSync('git', ['show', `${ref}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }))
         : (swapped.get(rel) ?? readSrc(rel));
+      /* Round 1523: its morale step and Puskas gate move seeded careers on purpose, so the head is held to
+         SC_BASE with that round taken out first (its own harness, simCareerForm, proves what it changes) */
+      if (!ref && MORALE_OUT) source = inverseSoccerMorale(rel, source, moraleReceipt);
       if (rel === ENGINE) {
         assert.equal(source.split(MARK[0]).length - 1, 1, 'the harness mark finds generateRandomEvents exactly once');
         source = source.replace(MARK[0], () => MARK[1]);
@@ -292,6 +303,8 @@ globalThis.localStorage = {
   removeItem: k => { store.delete(k); }, key: i => [...store.keys()][i] ?? null, get length() { return store.size; }, clear: () => store.clear(),
 };
 const H = await bundle('head');
+if (MORALE_OUT) assert.equal(soccerMoraleReceiptProblem(moraleReceipt), '', 'the head bundle took Round 1523 out of the engine, every row once, in order');
+console.log(MORALE_OUT ? `simSoccerDeck: Round 1523 taken out of the head bundles (${moraleReceipt.length} rows; SIM_SOCCER_DECK_MORALE= keeps it in)` : 'simSoccerDeck: Round 1523 kept in (SIM_SOCCER_DECK_MORALE is empty): sections 2, 4 and 9 are red by design');
 const B = await bundle('base', { ref: BASE });
 const SHIPPED = H.SOCCER_DECK_PACKS.soccer;
 console.log(`simSoccerDeck: head and base ${BASE.slice(0, 8)} bundled (${secs()} s); the shipped pack holds ${SHIPPED.events.length} cards${CONTROL ? `, CONTROL=${CONTROL}` : ''}`);
