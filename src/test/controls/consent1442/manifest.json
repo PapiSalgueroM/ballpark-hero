@@ -1,5 +1,5 @@
 {
-  "createdUtc": "2026-10-21T12:52:35.0633859Z",
+  "createdUtc": "2026-10-21T13:17:03.7325292Z",
   "scope": "Six copied faults, no local app execution",
   "focusedCases": 6,
   "files": [
@@ -76,14 +76,14 @@
       "source": "src/components/CookieConsent.tsx",
       "alias": "@/components/CookieConsent",
       "copy": "src/test/controls/consent1442/expiredDraft.tsx",
-      "old": "      if (!saved) { setAdvertising(false); setAnalytics(false); }\n      if (isGlobalPrivacyControlEnabled()) setAdvertising(false);\n      if (pendingRevoked.current.advertising || pendingRevoked.current.analytics) {\n        setAdvertising(next.advertising);\n        setAnalytics(next.analytics);",
-      "new": "      if (!saved) { setAnalytics(false); }\n      if (isGlobalPrivacyControlEnabled()) setAdvertising(false);\n      if (pendingRevoked.current.advertising || pendingRevoked.current.analytics) {\n        setAnalytics(next.analytics);",
+      "old": "      if (!saved) setAdvertising(false);\n      if (isGlobalPrivacyControlEnabled()) setAdvertising(false);\n      if (pendingRevoked.current.advertising || pendingRevoked.current.analytics) {\n        setAdvertising(next.advertising);",
+      "new": "      if (isGlobalPrivacyControlEnabled()) setAdvertising(false);\n      if (pendingRevoked.current.advertising || pendingRevoked.current.analytics) {",
       "verifiedOldOccurrences": 1,
       "changedSomething": true,
       "wholeInverseExact": true,
       "inverseMethod": "Verified replacement position",
-      "sourceSha256": "ad9b105495cb3f37e181469f2821394b37763d2ab82c0c370c35a92c00ac3075",
-      "copySha256": "6e13e5dcb4ec608feaa9a237b19137aa02a07609784ba1928f1b616966ed66e6",
+      "sourceSha256": "c1370e8981c387b28f1a7248c7dffd05e36c4d2e5509c5e2e78637f7175963ba",
+      "copySha256": "6dff9c56871ab30c4d73b7598a843d15edddfb8b911eeeeaf8c8fa303cb00057",
       "test": "src/test/consentSynchronization1442.test.tsx",
       "testName": "clears draft optional toggles when the displayed choice expires",
       "expectedAssertion": "Wrong consent boolean or checked state, no missing import"

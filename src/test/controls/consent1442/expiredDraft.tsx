@@ -14,7 +14,6 @@ export function CookieConsent() {
   const [helpTarget, setHelpTarget] = useState<HTMLElement | null>(null);
   const [preferences, setPreferences] = useState(readConsentPreferences);
   const [advertising, setAdvertising] = useState(false);
-  const [analytics, setAnalytics] = useState(false);
   const [gpc, setGpc] = useState(isGlobalPrivacyControlEnabled);
   const [pendingReload, setPendingReload] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -50,10 +49,8 @@ export function CookieConsent() {
       setGpc(isGlobalPrivacyControlEnabled());
       setPreferences(saved);
       setVisible(!saved || explicitlyOpen.current);
-      if (!saved) { setAnalytics(false); }
       if (isGlobalPrivacyControlEnabled()) setAdvertising(false);
       if (pendingRevoked.current.advertising || pendingRevoked.current.analytics) {
-        setAnalytics(next.analytics);
         stopRevokedServices(pendingRevoked.current, next);
         if (canReloadAfterWithdrawal(pendingRevoked.current)) {
           window.location.reload();
@@ -86,7 +83,6 @@ export function CookieConsent() {
       explicitlyOpen.current = true;
       opener.current = (event as CustomEvent<{ opener?: HTMLElement }>).detail?.opener ?? null;
       setAdvertising(effective.advertising);
-      setAnalytics(effective.analytics);
       setVisible(true);
     };
     window.addEventListener('storage', onStorage);
@@ -170,7 +166,7 @@ export function CookieConsent() {
     >
       <div className="max-w-3xl mx-auto space-y-3 text-sm text-muted-foreground">
         <p>
-          Essential features keep the games working. Choose whether to allow advertising. Analytics is temporarily paused. Your choice lasts up to 180 days.{' '}
+          Essential storage keeps games working. Advertising is optional. Analytics is paused. We ask again in 180 days.{' '}
           <Link to="/privacy" className="underline hover:text-foreground font-medium">Learn more</Link>
         </p>
         <div className="flex flex-wrap gap-x-6 gap-y-2">
@@ -179,16 +175,16 @@ export function CookieConsent() {
             Advertising
           </label>
           <label className="inline-flex min-h-11 items-center gap-2 text-foreground">
-            <input type="checkbox" checked={ANALYTICS_READY && analytics} disabled={!ANALYTICS_READY} onChange={event => setAnalytics(event.target.checked)} />
+            <input type="checkbox" checked={false} disabled />
             Analytics
           </label>
         </div>
         {gpc && <p>Your browser's Global Privacy Control keeps advertising off.</p>}
-        {pendingReload && <p role="status">Your choice is off for this visit. Save your game or allow site storage, then choose Save choices to refresh safely. Some already-loaded vendor code needs that refresh to finish stopping.</p>}
+        {pendingReload && <p role="status">Advertising is off for this visit. Save your game or allow site storage, then choose Save choices to refresh. Already-loaded vendor code may keep running until then.</p>}
         <div className="flex flex-wrap items-center gap-2">
           <button type="button" onClick={() => save({ advertising: false, analytics: false })} className="min-h-11 px-4 py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors">Reject all</button>
-          <button type="button" disabled={pendingReload} onClick={() => save({ advertising: true, analytics: true })} className="min-h-11 px-4 py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors">Accept all</button>
-          <button type="button" onClick={() => save({ advertising, analytics })} className="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button>
+          <button type="button" disabled={pendingReload} onClick={() => save({ advertising: true, analytics: false })} className="min-h-11 px-4 py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors">Accept all</button>
+          <button type="button" onClick={() => save({ advertising, analytics: false })} className="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button>
           {preferences && !pendingReload && <button type="button" onClick={cancel} className="min-h-11 px-4 py-2 underline hover:text-foreground">Cancel</button>}
         </div>
       </div>

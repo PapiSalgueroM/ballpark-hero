@@ -38,6 +38,8 @@
  *
  * Negative control: EDGE_SYNC_CONTROL=drift edits one synced file in memory, so
  * section 2 must go red. It refuses to run if the edit changed nothing.
+ * EDGE_SYNC_CONTROL=supporting-drift changes the actual account handler in
+ * memory and requires its specific supporting mismatch, independent of other findings.
  *
  * Run: node scripts/simEdgeSync.mjs
  */
@@ -51,8 +53,8 @@ const FN_DIR = path.join(ROOT, 'supabase', 'functions');
 const LEDGER = path.join(ROOT, 'scripts', 'data', 'edgeDeployed.json');
 
 const CONTROL = process.env.EDGE_SYNC_CONTROL || '';
-if (CONTROL && CONTROL !== 'drift') {
-  console.error(`EDGE_SYNC_CONTROL=${CONTROL} is not a control this harness knows (drift)`);
+if (CONTROL && !['drift', 'supporting-drift'].includes(CONTROL)) {
+  console.error(`EDGE_SYNC_CONTROL=${CONTROL} is not a control this harness knows (drift, supporting-drift)`);
   process.exit(1);
 }
 
@@ -97,7 +99,12 @@ console.log('2) nothing recorded as deployed has been edited since');
 {
   let armed = false;
   let drifted = 0;
+  let supportingChecked = 0;
+  let supportingDrifted = 0;
+  let supportingControlArmed = false;
+  let supportingControlCaught = false;
   for (const slug of Object.keys(synced).sort()) {
+    if (!dirs.includes(slug)) continue;
     const file = path.join(FN_DIR, slug, 'index.ts');
     if (!fs.existsSync(file)) { fail(`${slug} is in the ledger and its index.ts is gone`); continue; }
     let text = fs.readFileSync(file, 'utf8');
@@ -113,8 +120,45 @@ console.log('2) nothing recorded as deployed has been edited since');
       fail(`${slug} has changed since it was deployed on ${synced[slug].date} (version ${synced[slug].version}). Redeploy it and update the ledger, or the live site is not running this code.`);
       drifted++;
     }
+    const supportingFiles = synced[slug].supportingFiles ?? {};
+    if (typeof supportingFiles !== 'object' || Array.isArray(supportingFiles)) {
+      fail(`${slug} supportingFiles must map local filenames to deployed hashes`);
+      continue;
+    }
+    for (const [name, expected] of Object.entries(supportingFiles)) {
+      if (!/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(name)) {
+        fail(`${slug} supporting filename is not a local basename: ${name}`);
+        continue;
+      }
+      const supportingFile = path.join(FN_DIR, slug, name);
+      if (!fs.existsSync(supportingFile) || !fs.lstatSync(supportingFile).isFile()) {
+        fail(`${slug}/${name} supporting file is missing or is not a regular file`);
+        continue;
+      }
+      let supportingText = fs.readFileSync(supportingFile, 'utf8');
+      supportingChecked++;
+      const controlled = CONTROL === 'supporting-drift' && slug === 'account-privacy' && name === 'handler.ts';
+      if (controlled) {
+        const before = supportingText;
+        if (hashOf(before) !== expected) { console.error('CONTROL refused: account-privacy/handler.ts already differs from its deployed hash'); process.exit(1); }
+        supportingText += '\n// supporting control edit\n';
+        if (supportingText === before || hashOf(supportingText) === hashOf(before)) { console.error('supporting control changed nothing'); process.exit(1); }
+        supportingControlArmed = true;
+        console.log('   NEGATIVE CONTROL ON: account-privacy/handler.ts edited in memory; its supporting mismatch must be reported');
+      }
+      if (hashOf(supportingText) !== expected) {
+        fail(`supporting file mismatch: ${slug}/${name} has changed since it was deployed on ${synced[slug].date} (version ${synced[slug].version}). Redeploy it and update the ledger.`);
+        supportingDrifted++;
+        if (controlled) supportingControlCaught = true;
+      }
+    }
   }
   console.log(`   ${Object.keys(synced).length} checked, ${drifted} edited without a redeploy`);
+  console.log(`   ${supportingChecked} supporting files checked, ${supportingDrifted} supporting mismatches`);
+  if (CONTROL === 'supporting-drift' && (!supportingControlArmed || !supportingControlCaught)) {
+    console.error('   CONTROL supporting-drift failed: the changed account-privacy/handler.ts must produce its specific supporting mismatch');
+    process.exit(1);
+  }
   if (CONTROL === 'drift' && drifted === 0) {
     console.error('   CONTROL drift changed nothing: an edited file must be reported');
     process.exit(1);
@@ -127,7 +171,7 @@ console.log('3) the unverified list is a ratchet');
      actually deployed, and Rounds 486 to 490 confirmed the nba, tennis, nascar, soccer grid and college grid validators, leaving 20. The number may fall and must never rise, because the
      only way it rises is somebody adding a function and declining to confirm
      it, or moving a confirmed one back to make this file quiet. */
-  const BASELINE = 13;
+  const BASELINE = 12;
   if (unverified.size > BASELINE) {
     fail(`the unverified list has grown from ${BASELINE} to ${unverified.size}: confirm the new function against production rather than adding it here`);
   }

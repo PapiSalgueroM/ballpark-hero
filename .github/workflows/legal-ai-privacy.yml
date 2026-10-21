@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [codex/legal-ai-privacy]
+    paths-ignore: ['docs/**', 'AGENTS.md', 'CLAUDE.md']
 
 permissions:
   contents: read
@@ -195,6 +196,69 @@ jobs:
           deno --version > legal-privacy-artifacts/deno-version.txt
           status=0; deno check --node-modules-dir=none supabase/functions/simulate-season/index.ts > legal-privacy-artifacts/edge-types.log 2>&1 || status=$?
           cat legal-privacy-artifacts/edge-types.log; exit "$status"
+      - name: Attribute inherited edge drift and verify newly deployed sources
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export EDGE_SYNC_BASELINE="$(mktemp -d "$RUNNER_TEMP/edge-sync-base.XXXXXX")"
+          git archive 3c56c21f835d46743fe5cab337b9fb46e38e3242 scripts/simEdgeSync.mjs scripts/data/edgeDeployed.json supabase/functions | tar -xf - -C "$EDGE_SYNC_BASELINE"
+          node --input-type=module <<'JS' 2>&1 | tee legal-privacy-artifacts/edge-sync-attribution.log
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { spawnSync } from 'node:child_process';
+          const root = process.cwd(), baseline = process.env.EDGE_SYNC_BASELINE, out = path.join(root, 'legal-privacy-artifacts');
+          function run(label, cwd, control) {
+            const env = { ...process.env, SIM_NETWORK: 'offline', SIM_OFFLINE_RECEIPT: path.join(out, 'edge-sync-' + label + '.transport') };
+            delete env.EDGE_SYNC_CONTROL;
+            if (control) env.EDGE_SYNC_CONTROL = control;
+            const result = spawnSync(process.execPath, ['scripts/simEdgeSync.mjs'], { cwd, env, encoding: 'utf8', timeout: 120000, maxBuffer: 16 * 1024 * 1024 });
+            const text = (result.stdout || '') + (result.stderr || '');
+            fs.writeFileSync(path.join(out, 'edge-sync-' + label + '.log'), text);
+            fs.writeFileSync(path.join(out, 'edge-sync-' + label + '.exit'), String(result.status) + '\n');
+            assert.ifError(result.error); assert.equal(result.signal, null);
+            return { text, exit: result.status };
+          }
+          const old = run('baseline', baseline), actual = run('actual', root);
+          const drift = run('drift', root, 'drift'), supporting = run('supporting-drift', root, 'supporting-drift');
+          const inherited = '  FAIL: validate-player has changed since it was deployed on 2026-10-01 (version 12). Redeploy it and update the ledger, or the live site is not running this code.';
+          const failLines = text => text.split(/\r?\n/).filter(line => /\bFAIL\b/.test(line));
+          for (const result of [old, actual]) {
+            assert.equal(result.exit, 1); assert.deepEqual(failLines(result.text), [inherited]);
+            assert.deepEqual(result.text.split(/\r?\n/).filter(line => line.startsWith('simEdgeSync:')), ['simEdgeSync: 1 finding(s).']);
+          }
+          const read = (cwd, relative) => fs.readFileSync(path.join(cwd, relative));
+          const ledgerPath = 'scripts/data/edgeDeployed.json';
+          const oldLedgerText = read(baseline, ledgerPath).toString(), ledgerText = read(root, ledgerPath).toString();
+          const oldLedger = JSON.parse(oldLedgerText), ledger = JSON.parse(ledgerText);
+          assert.deepEqual(read(root, 'supabase/functions/validate-player/index.ts'), read(baseline, 'supabase/functions/validate-player/index.ts'));
+          assert.deepEqual(ledger.synced['validate-player'], oldLedger.synced['validate-player']);
+          const entryText = text => { const match = text.match(/^    "validate-player": \{\r?\n[\s\S]*?^    \}/m); assert(match); return match[0]; };
+          assert.equal(entryText(ledgerText), entryText(oldLedgerText));
+          const receipts = {
+            'account-privacy': { sha256: 'faa812c64d70a63a293af4745b4a86484a83677a3d0d0d8898cce439934e494f', supportingFiles: { 'handler.ts': 'c2a56aaa8da81ee46f3706fa530afaf9dd8e8baf14a4e7136675bde9bcc03662' }, version: 1, date: '2026-10-21' },
+            'simulate-season': { sha256: 'c14abf75d2a33ae5530e896b82bbb44c75f6bb8f1b52a35e7735851ed87eb5d4', version: 7, date: '2026-10-21' },
+          };
+          const hash = buffer => createHash('sha256').update(buffer.toString().replace(/\r\n/g, '\n')).digest('hex');
+          for (const [slug, receipt] of Object.entries(receipts)) {
+            assert.deepEqual(ledger.synced[slug], receipt); assert(!ledger.unverified.includes(slug));
+            assert.equal(hash(read(root, 'supabase/functions/' + slug + '/index.ts')), receipt.sha256);
+            for (const [name, expected] of Object.entries(receipt.supportingFiles || {})) assert.equal(hash(read(root, 'supabase/functions/' + slug + '/' + name)), expected);
+          }
+          const indexFault = '  FAIL: account-privacy has changed since it was deployed on 2026-10-21 (version 1). Redeploy it and update the ledger, or the live site is not running this code.';
+          const supportingFault = '  FAIL: supporting file mismatch: account-privacy/handler.ts has changed since it was deployed on 2026-10-21 (version 1). Redeploy it and update the ledger.';
+          for (const [name, result, expectedFault, marker] of [
+            ['drift', drift, indexFault, 'NEGATIVE CONTROL ON: account-privacy edited in memory, this section must go red'],
+            ['supporting-drift', supporting, supportingFault, 'NEGATIVE CONTROL ON: account-privacy/handler.ts edited in memory; its supporting mismatch must be reported'],
+          ]) {
+            assert.equal(result.exit, 0); assert.deepEqual(failLines(result.text).sort(), [inherited, expectedFault].sort());
+            assert(result.text.includes(marker));
+            assert(result.text.includes('NEGATIVE CONTROL ' + name + ' was on; 2 finding(s). A control run is expected to be red.'));
+          }
+          fs.writeFileSync(path.join(out, 'edge-sync-attribution.json'), JSON.stringify({ baseline: '3c56c21f835d46743fe5cab337b9fb46e38e3242', inheritedFinding: inherited, baselineExit: old.exit, actualExit: actual.exit, driftExit: drift.exit, supportingDriftExit: supporting.exit, verifiedDeploymentReceipts: receipts, validatePlayerSourceAndEntryUnchanged: true }, null, 2) + '\n');
+          console.log('Edge ledger: the same single inherited validate-player finding is proven on baseline and actual; new deployed index/handler hashes match receipts; both specific changed controls were detected.');
+          JS
       - name: Purpose consent regression checks
         run: |
           set -euo pipefail
@@ -307,7 +371,7 @@ jobs:
   suite:
     name: Offline node suite (shard ${{ matrix.shard }})
     needs: verify
-    if: ${{ !cancelled() && needs.verify.outputs.build_ready == 'true' }}
+    if: ${{ !cancelled() && needs.verify.result == 'success' && needs.verify.outputs.build_ready == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 180
     strategy:
@@ -479,7 +543,7 @@ jobs:
   suite_coverage:
     name: Exact full Node suite coverage
     needs: [verify, suite]
-    if: ${{ !cancelled() && needs.verify.outputs.build_ready == 'true' }}
+    if: ${{ !cancelled() && needs.verify.result == 'success' && needs.verify.outputs.build_ready == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
