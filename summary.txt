@@ -1,0 +1,10 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | e840605dd Release BO: the lead raises the /soccer-career weight row to 837K (836.0K measured on main and on the gate head alike: the other lane's Rounds 1442, 1517 and 15
+vitest-luton-unit exit=0 3s |    Duration  2.26s (transform 1.12s, setup 75ms, collect 1.36s, tests 86ms, environment 323ms, prepare 145ms)
+luton-proof exit=0 20s | PASS Luton display component proof
+genCareerLeagueSeasons-check exit=0 1s | careerLeagueSeasons.ts is current
+simCareerLeagueSeasons exit=0 18s | simCareerLeagueSeasons: all sections green
+luton-walk exit=0 13s | lutonWalk: PASS 32 checks
+base-minus278 exit=0 37s | /tmp/wt-4174
+luton-walk-ctl-minus278 exit=0 12s | FIRED-OK
+playSoccerCareerOpponents exit=0 12s | playSoccerCareerOpponents: 164 checks, 0 failed
