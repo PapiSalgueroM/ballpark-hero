@@ -58,6 +58,7 @@
      keyless    a style is drawn off Math.random                          styles
      weakpress  strong sides press less than weak ones                    styles
      leak       setInstructions keeps an all balanced set on the save     balanced
+     helpwords  a deep line concedes more against a direct side          table (the help's worked example)
    Run: node scripts/simCmTactics.mjs (SECTION=fleet SEEDS=8 SEED_OFFSET=0 SEASONS=1 ARMS=all SHARD=k/n
    OUT_JSON=<file>; FOLD=<dir> folds shards). Offline: bundles the engine from src, reads no network.
    Exit 0 green, 1 red (or a control fired), 2 could not run, 3 a control that did not fire.
@@ -77,7 +78,7 @@ const num = (k, d) => (process.env[k] !== undefined && process.env[k] !== '' ? N
 const ALL_SECTIONS = ['table', 'styles', 'balanced', 'fleet'];
 const CONTROL_SECTIONS = {
   flat: ['fleet'], dominant: ['fleet'], nolegs: ['fleet'], notempo: ['fleet'], nowidth: ['fleet'], noline: ['fleet'],
-  keyless: ['styles'], weakpress: ['styles'], leak: ['balanced'],
+  keyless: ['styles'], weakpress: ['styles'], leak: ['balanced'], helpwords: ['table'],
 };
 if (CONTROL && !CONTROL_SECTIONS[CONTROL]) cannot(`CM_TACTICS_CONTROL=${CONTROL} is not a control this harness knows`);
 const FOLD = process.env.FOLD || '';
@@ -128,6 +129,7 @@ const MEM = {
   nowidth: t => { t.TACTIC_TABLE.crosses.wide = 1; t.TACTIC_TABLE.crosses.narrow = 1; },
   noline: t => { t.TACTIC_TABLE.offsides.high = 1; t.TACTIC_TABLE.offsides.deep = 1; },
   weakpress: t => { t.AI_STYLES.gegenpress.slope = -0.1; t.AI_STYLES.possession.slope = -0.1; t.AI_STYLES.lowblock.slope = 0.1; t.AI_STYLES.counter.slope = 0.1; },
+  helpwords: t => { t.TACTIC_TABLE.line.deep.vsDirectDef = 0.2; },
 };
 /* TABLE_JSON (tuning on a runner without a commit): merged over TACTIC_TABLE after every load. */
 const TUNE = process.env.TABLE_JSON ? JSON.parse(process.env.TABLE_JSON) : null;
@@ -265,6 +267,22 @@ function sectionTable() {
     console.log(`    best answer to ${id}: ${nameOf(best.c)} (net ${best.v.toFixed(3)})`);
     if (!(best.v >= 0.01)) fail('table', `nothing answers ${id} better than balanced by 0.01 (best ${best.v.toFixed(3)})`);
   }
+  /* The help's worked example (ClubManagerHelp.tsx) prints its numbers off the table, so they cannot drift; what
+     can go wrong is its words. It says a high line against a direct side costs at the back and gives a little up
+     front, and a deep one gives up a little up front and concedes fewer: hold those signs, and that the block
+     still reads the table rather than typed numbers. */
+  const L = tac.TACTIC_TABLE.line;
+  const claims = [
+    ['a high line concedes more against a direct side', L.high.def + L.high.vsDirectDef > 0],
+    ['a high line scores more', L.high.atk > 0],
+    ['a deep line scores less', L.deep.atk < 0],
+    ['a deep line concedes less against a direct side', L.deep.def + L.deep.vsDirectDef < 0],
+  ];
+  for (const [what, holds] of claims) if (!holds) fail('table', `the help's worked example says ${what}, and the table no longer does`);
+  const help = fs.readFileSync(path.join(ROOT, 'src/components/club-manager/ClubManagerHelp.tsx'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  const reads = ['data-cm-help="instructions"', 'TAC_EXAMPLE.highTotal', 'TAC_EXAMPLE.deepDef', 'TAC_EXAMPLE.legs', 'TACTIC_TABLE'].every(s => help.includes(s));
+  if (!reads) fail('table', 'the help block no longer reads its worked example off TACTIC_TABLE');
+  if (claims.every(w => w[1]) && reads) ok('table', "the help's worked example reads the table and its words still hold");
 }
 
 /* ---- styles: the other dugout ---- */
