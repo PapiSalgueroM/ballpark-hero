@@ -1,0 +1,18 @@
+treeWithoutMerge: 2e78f3c871d610e915836ba7c3301e5a9fdf7b52, d77e10ce without f1e54e17; conflicts kept from d77e10ce: scripts/lib/cmWorldSeed1250.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+simCmOldCareersWorld: BASE 2e78f3c8 (CM_OLD_WORLD_BASE), sections 1, control never
+  FAIL section 1: [adopted] pre (Arsenal, now) at rollover: it holds no readable ledger
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Fermín López (Barcelona to Real Madrid): 0 owned records at the buyer
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Sandro Tonali (Tottenham to Manchester United): 0 owned records at the buyer
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Aleksandar Stanković (Inter Milan to Manchester United): 0 owned records at the buyer
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Aleksandar Pavlovic (Bayern Munich to Manchester City): 0 owned records at the buyer
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Malick Thiaw (Newcastle to Barcelona): 0 owned records at the buyer
+  FAIL section 1: [moved] pre (Arsenal, now) at rollover: Alessandro Bastoni (Inter Milan to Manchester City): 0 owned records at the buyer
+  FAIL section 1: [adopted] pre (Arsenal, now) at save-and-reload after the summer: it holds no readable ledger
+  pre (Arsenal, now): 20 steps equal to BASE before the summer, 32 after it
+  mid (Bayern Munich, era2015): 18 steps equal to BASE before the summer, 29 after it
+section 1: 2 old saves, 38 steps equal to BASE before the summer, 61 steps after it at 8 checkpoints; deals between two other clubs placed at their buyers: 10 in the summer, 12 in January (0 placements checked); 0 joined rows on the screen; red by check {"adopted":61,"moved":64}
+  pre: 4 bytes of ledger after January (0 records)
+  pre: the adoption adds 55 bytes to the state (an empty ledger)
+  mid: 4 bytes of ledger after January (0 records)
+  mid: the adoption adds 59 bytes to the state (an empty ledger)
+simCmOldCareersWorld: control never FIRED: section 1's moved check red 64 times, the comparison before the summer green (6s)
