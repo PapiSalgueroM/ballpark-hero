@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+ctl-nobutton: CORRUPT_CONTROL=nobutton node scripts/playCorruptSaves.mjs
+ctl-norestore: CORRUPT_CONTROL=norestore node scripts/playCorruptSaves.mjs
+ctl-multiline: CORRUPT_CONTROL=multiline node scripts/playCorruptSaves.mjs
