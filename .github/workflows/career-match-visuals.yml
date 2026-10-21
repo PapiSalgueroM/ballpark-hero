@@ -1,0 +1,85 @@
+name: Career match visuals verification
+
+on:
+  push:
+    branches: [codex/career-match-visuals, codex/career-match-visuals-red]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: career-match-visuals-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Hold source and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir career-visuals-artifacts
+          git rev-parse HEAD > career-visuals-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > career-visuals-artifacts/tree.txt
+          sha256sum package.json package-lock.json > career-visuals-artifacts/dependencies-before.sha256
+          npm ci > career-visuals-artifacts/install.log 2>&1
+      - name: Real app type gate
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > career-visuals-artifacts/types.log 2>&1
+      - name: Observe intended original presentation regressions
+        if: github.ref == 'refs/heads/codex/career-match-visuals-red'
+        run: |
+          set -euo pipefail
+          git diff --exit-code 076091ac870db38b953ddf71d3252cf1ac556782 HEAD -- src/components src/lib src/data public supabase package.json package-lock.json > career-visuals-artifacts/original-product-hold.log
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          status=0
+          node_modules/.bin/vitest run src/test/nbaCourtRecap1517.test.tsx src/test/fightCareerRingPlayback.test.tsx --maxWorkers=1 --reporter=verbose --reporter=json --outputFile.json=career-visuals-artifacts/red.json > career-visuals-artifacts/red.log 2>&1 || status=$?
+          printf '%s\n' "$status" > career-visuals-artifacts/red.exit
+          cat career-visuals-artifacts/red.log
+          test "$status" -eq 1
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const report = JSON.parse(fs.readFileSync('career-visuals-artifacts/red.json', 'utf8'));
+          assert.equal(report.numRuntimeErrorTestSuites, 0);
+          assert.equal(report.numPendingTests, 0);
+          const cases = report.testResults.flatMap(file => file.assertionResults);
+          assert.equal(cases.length, 5);
+          assert(cases.every(row => row.status === 'failed'));
+          for (const row of cases) {
+            const failure = row.failureMessages.join('\n');
+            assert.match(failure, /AssertionError|expect\(/);
+            assert.doesNotMatch(failure, /Cannot find|Failed to resolve|SyntaxError|ReferenceError|TypeError|No test suite found/);
+            console.log('INTENDED BASELINE RED: ' + row.fullName);
+          }
+          JS
+      - name: Preserve source and evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check career-visuals-artifacts/dependencies-before.sha256 > career-visuals-artifacts/dependencies-hold.log
+          git diff --exit-code HEAD -- src scripts public supabase package.json package-lock.json .github > career-visuals-artifacts/source-hold.log
+          (cd career-visuals-artifacts; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > career-visuals-artifacts/evidence.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-visuals-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-visuals-artifacts/
+          if-no-files-found: error
+          retention-days: 14

@@ -16119,3 +16119,7 @@ Standing claims after Round 400:
 ## Round1442 claimed by Codex Root, 2026-10-21
 
 Legal/AI/consent/privacy implementation and publication, explicitly authorized by Anthony. Isolated branch codex/legal-ai-privacy from actual main 3c56c21f835d46743fe5cab337b9fb46e38e3242. Scope: granular consent and withdrawal, truthful policy/AI disclosures, authenticated account-data handling, required remote verification and generated legal/consent snapshot updates. Excludes I's queued1516/BO gameplay, paused About/Contact842 drafts, all previous unmerged Root stacks and the unwaived1441 preservation audit. Product source and Git authoring occur only in C:/Users/antho/.codex/checkouts/legal-ai-privacy/ballpark-hero. Plan: docs/round1442/legal-ai-privacy.md.
+
+## Rounds1517 and1518 claimed by Codex Root, 2026-10-21
+
+NBA court recap and Fight Career ring playback, from owner reports and standing autonomy. Separate ordinary checkout C:/Users/antho/.codex/checkouts/career-match-visuals/ballpark-hero, branch codex/career-match-visuals, base076091ac870db38b953ddf71d3252cf1ac556782. Original SVG figures, clearer quarter and round states, pause and manual fight playback. No engines, save schemas, random streams, real sports inputs, dependencies or protected1516/BO world files change. Contract: docs/design/round-1517-1518-career-match-visuals.md. Runtime verification is GitHub Actions only, offline. Initial outcome regressions will be observed against unchanged product source before implementation.
