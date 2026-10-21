@@ -1,0 +1,18 @@
+save: Everton season 2; bought Cesar Konate (New Zealand); looking for Erik Paredes (New Zealand) at Auckland FC; youth Yusuf Keane (Youth) (Belgium)
+390: 390 by 844
+  PASS  390 squad: 1 of 1 MADE UP rows show a flag
+  PASS  390 squad: Cesar Konate shows New Zealand (bought as New Zealand)
+  PASS  390 squad: youth kid Yusuf Keane (Youth) shows Belgium (Belgium)
+  PASS  390 market: the nationality filter offers New Zealand
+  PASS  390 market: the page held still while typing (613 then 613)
+  PASS  390 market: filtered to New Zealand, Erik Paredes is listed with New Zealand and the MADE UP mark
+  PASS  390: no page error
+1280: 1280 by 900
+  PASS  1280 squad: 1 of 1 MADE UP rows show a flag
+  PASS  1280 squad: Cesar Konate shows New Zealand (bought as New Zealand)
+  PASS  1280 squad: youth kid Yusuf Keane (Youth) shows Belgium (Belgium)
+  PASS  1280 market: the nationality filter offers New Zealand
+  PASS  1280 market: the page held still while typing (0 then 0)
+  PASS  1280 market: filtered to New Zealand, Erik Paredes is listed with New Zealand and the MADE UP mark
+  PASS  1280: no page error
+playCmMadeUpNations: green. Made up men wear their country on the squad and the market.
