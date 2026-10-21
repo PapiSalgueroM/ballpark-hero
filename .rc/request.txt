@@ -1,0 +1,5 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+corrupt: node scripts/playCorruptSaves.mjs
+corrupt-everybutton: CORRUPT_CONTROL=everybutton node scripts/playCorruptSaves.mjs
