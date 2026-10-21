@@ -1,0 +1,16 @@
+endings-early exit=1 67s | FAIL: 249 check(s) failed
+endings-summary exit=1 85s | FAIL: 2 check(s) failed
+endings-noreconcile exit=1 94s | FAIL: 17 check(s) failed
+endings-noreason exit=1 84s | FAIL: 3 check(s) failed
+endings-aftermath exit=1 92s | FAIL: 4 check(s) failed
+endings-manual exit=1 91s | FAIL: 49 check(s) failed
+endings-suggestion exit=1 88s | FAIL: 76 check(s) failed
+endings-farewell exit=1 85s | FAIL: 42 check(s) failed
+endings-young exit=1 93s | FAIL: 49 check(s) failed
+endings-farewell26 exit=1 87s | FAIL: 1 check(s) failed
+endings-prison exit=1 84s | FAIL: 50 check(s) failed
+endings-ban exit=1 85s | FAIL: 12 check(s) failed
+endings-notail exit=1 99s | FAIL: 3 check(s) failed
+endings-bogus exit=1 0s | ABORT: SC_ENDINGS_CONTROL=bogus is not a control (early, noreconcile, summary, noreason, aftermath, manual, suggestion, young, farewell, farewell26, ban, prison, notail, 
+endings-ovr50 exit=1 79s | FAIL: 2 check(s) failed
+endings-youth exit=1 83s | FAIL: 2 check(s) failed

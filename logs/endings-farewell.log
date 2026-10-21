@@ -1,0 +1,72 @@
+CONTROL farewell: soccerCareerEngine.ts is mutated, this run must go red
+A) six fleets of 40 careers: nothing ends a career before the age rules without the player
+  FAIL: farewell career 0: ended at 30 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 1: ended at 30 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 2: ended at 30 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 3: ended at 30 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 4: ended at 30 on dismissRivalryEvent into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 5: ended at 32 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 6: ended at 32 on dismissRivalryEvent into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 7: ended at 30 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 8: ended at 30 on dismissRivalryEvent into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 9: ended at 30 on dismissRivalryEvent into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 10: ended at 31 on dismissWorldCup into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 11: ended at 32 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 12: ended at 32 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 13: ended at 30 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 14: ended at 30 on dismissRivalryEvent into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 15: ended at 32 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 16: ended at 30 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 17: ended at 30 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 18: ended at 30 on dismissRivalryEvent into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 19: ended at 30 on dismissRivalryEvent into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 20: ended at 30 on dismissRivalryEvent into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 21: ended at 32 on dismissSummary into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 22: ended at 30 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 23: ended at 30 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 24: ended at 30 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 25: ended at 30 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 26: ended at 31 on dismissRivalryEvent into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 27: ended at 31 on dismissWorldCup into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 28: ended at 32 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 29: ended at 31 on dismissWorldCup into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 30: ended at 30 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 31: ended at 30 on dismissRivalryEvent into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 32: ended at 30 on dismissRivalryEvent into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 33: ended at 31 on dismissRivalryEvent into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 34: ended at 30 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 35: ended at 32 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 36: ended at 32 on dismissRivalryEvent into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 37: ended at 32 on dismissRivalryEvent into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 38: ended at 32 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: farewell career 39: ended at 32 on dismissBallonDor into retired (retired true, legacy false), not the ceremony and its choices
+  careers 240, alive at 26 240 (overall under 60 there 27), alive at 27 240
+  endings {"suggestion":73,"forced":127,"farewell":40}, early 0, not on the ceremony 40, stuck 0
+  shady years lived: bans 9, drug test bans 13, trials 156, prison 156
+  FAIL: every ending lands on the ceremony with its choices (40 did not)
+B) the edges at 25 and 26
+  fixtures: 25 overall 65 at Rio Ave, 26 overall 68 at Rio Ave
+C) a retired flag and a phase that disagree go back to what the rest of the save says
+  the save the old Continue already wrote: retired at 26 on the retired screen, nothing behind it: base kept retired true on retired; now retired false on playing
+  a retired flag on the retired screen with nothing behind it: base kept retired true on retired; now retired false on playing
+  a stray retired screen on a youth career: base kept retired true on retired; now retired false on youth
+  a youth career on the retired screen without its flag: base kept retired false on retired; now retired false on youth
+  a chosen pundit career whose phase was lost: base kept retired true on playing; now retired true on pundit_season
+  a chosen manager career whose phase was lost: base kept retired true on playing; now retired true on manager_season
+  a chosen owner career whose phase was lost: base kept retired true on playing; now retired true on owner_season
+  a stray flag on the season summary at 26: base kept retired true on season_summary; now retired false on season_summary
+  a stray flag on Next Season at 26: base kept retired true on playing; now retired false on playing
+  a real retirement at 26 whose phase was lost: base kept retired true on season_summary; now retired true on retirement_ceremony
+  a forced retirement whose phase and legacy were lost: base kept retired true on playing; now retired true on retirement_ceremony
+  a real retirement whose flag was lost: base kept retired false on retirement_ceremony; now retired true on retirement_ceremony
+  a ceremony that lost its legacy: base kept retired true on retirement_ceremony; now retired true on retirement_ceremony
+  a chosen after career whose phase was lost: base kept retired true on playing; now retired true on retired
+  a retired screen with nothing behind it: base kept retired false on retired; now retired false on playing
+  a ceremony with nothing behind it: base kept retired false on retirement_ceremony; now retired false on playing
+  Continue on a stray flag at 26: base went to retired (retired true), now ballon_dor (retired false)
+  consistent saves 17 (committed fixtures 7, of which inconsistent 0), moved by the repair 0
+D) every fleet career is byte for byte the base engine's
+  base bc79b526: 240 careers, 40 differ from this tree
+  FAIL: the fleets match the base byte for byte (40 differ)
+
+FAIL: 42 check(s) failed
