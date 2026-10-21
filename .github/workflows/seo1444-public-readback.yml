@@ -18,7 +18,7 @@ jobs:
       run:
         shell: bash
     env:
-      OPERATOR_MODE: intake
+      OPERATOR_MODE: readback
       READBACK_OUT: seo1444-public-artifacts
       SOURCE_SHA: 529bc3c105b0d365d96961e72587bb7ab36a9a8d
       QUALIFIED_BUILD_SHA: a94c1b397b720c297600bdc5a52c7daaba375757
@@ -28,13 +28,13 @@ jobs:
       EXPECTED_DEPLOYMENT: d8a5f804-b134-42a1-bd51-04926c0d184a
       CI_ASSET_PINS_JSON: '{"entry":{"path":"/assets/index-DRbtYDL7.js","sha256":"e2ce6a620790cb5c2f9e996300ff7551d1a7adb418425879ab2749b408951d19"},"Index":{"path":"/assets/index-DRbtYDL7.js","sha256":"e2ce6a620790cb5c2f9e996300ff7551d1a7adb418425879ab2749b408951d19"},"footballGuide":{"path":"/assets/football-DwCm5RIA.js","sha256":"596d51d0c3a45c99fb3cbed104e73f94ae437bd7df5df9b730828dfdaae5735c"}}'
       CI_ASSET_PINS_SHA256: fdfaf5420d942cac45a6ca53e1904671f2060da4344f229a8195d7a4fc16ac09
-      PRIOR_OPERATOR_SHA: 8927738e1c796f7c2e4d9c90e681b7851fc99d58
-      PRIOR_RUN_ID: 39693963662
-      PRIOR_ARTIFACT_ID: 12390126917
-      PRIOR_ZIP_SHA256: 8efd87d6f7509e7503e209591aebb21883452600da81d497741eb212e06d1b35
+      PRIOR_OPERATOR_SHA: 553c58e6bc956a1bede85b1fc7f9971fa16efa1a
+      PRIOR_RUN_ID: 39695080560
+      PRIOR_ARTIFACT_ID: 12390550388
+      PRIOR_ZIP_SHA256: 818f20193b108b1c0fc41d82dffbda1fa22e4b67b33f893fbdcb80f95cbccefe
       OBSERVED_ENTRY: /assets/index-C5TTnBHb.js
-      OBSERVED_ASSET_PINS_JSON: REQUIRED_FOR_READBACK_FROM_REVIEWED_INTAKE
-      OBSERVED_ASSET_PINS_SHA256: REQUIRED_FOR_READBACK_EXACT_JSON_BYTES
+      OBSERVED_ASSET_PINS_JSON: '{"Index":{"path":"/assets/index-C5TTnBHb.js","sha256":"cb532b797946ae2102ddc6305517a9a21668b1c2ebbbadecc651feda4a500fcb"},"entry":{"path":"/assets/index-C5TTnBHb.js","sha256":"cb532b797946ae2102ddc6305517a9a21668b1c2ebbbadecc651feda4a500fcb"},"footballGuide":{"path":"/assets/football-DwCm5RIA.js","sha256":"596d51d0c3a45c99fb3cbed104e73f94ae437bd7df5df9b730828dfdaae5735c"}}'
+      OBSERVED_ASSET_PINS_SHA256: 37d1d224b42b846664900faf65175051dad31729096d8e6f071be294e26e3a1a
     steps:
       - uses: actions/checkout@v4
         with:
