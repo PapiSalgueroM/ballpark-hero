@@ -1,0 +1,6 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playManagerHalftimeLineups exit=1 1s | Node.js v24.22.0
+playCmQuickSubs exit=1 1s | Node.js v24.22.0
+playCmDifficulty exit=1 36s | Node.js v24.22.0
+playReducedMotion exit=0 45s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+playCmMatchDay exit=0 179s | playCmMatchDay: green. 15 walks over 4 saves, every match day screen home side first, whole names on the timeline, a 44 px toggle, the page never moved
