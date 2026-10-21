@@ -1,0 +1,50 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/academyFilters.test.tsx (8 tests) 632ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  20:09:08
+   Duration  1.59s (transform 119ms, setup 56ms, collect 260ms, tests 632ms, environment 233ms, prepare 126ms)
+
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: 
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/academyFilters.test.tsx (8 tests) 632ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  20:09:08
+   Duration  1.59s (transform 119ms, setup 56ms, collect 260ms, tests 632ms, environment 233ms, prepare 126ms)
+
+
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simAcademyFilters.mjs:40:12
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '\n' +
+    ' RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero\n' +
+    '\n' +
+    ' ✓ src/test/academyFilters.test.tsx (8 tests) 632ms\n' +
+    '\n' +
+    ' Test Files  1 passed (1)\n' +
+    '      Tests  8 passed (8)\n' +
+    '   Start at  20:09:08\n' +
+    '   Duration  1.59s (transform 119ms, setup 56ms, collect 260ms, tests 632ms, environment 233ms, prepare 126ms)\n' +
+    '\n' +
+    '\n',
+  expected: /7 passed/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v24.22.0

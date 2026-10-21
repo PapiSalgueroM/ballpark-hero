@@ -1,0 +1,12 @@
+simCmOldCareersWorld: node scripts/simCmOldCareersWorld.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+simCmOwnClubMarket: node scripts/simCmOwnClubMarket.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simAcademy: node scripts/simAcademy.mjs
+simAcademyFilters: node scripts/simAcademyFilters.mjs
+simBoard: node scripts/simBoard.mjs
+simBoardObjectives: node scripts/simBoardObjectives.mjs
+simBooks: node scripts/simBooks.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs

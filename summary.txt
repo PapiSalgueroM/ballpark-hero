@@ -1,0 +1,12 @@
+simCmOldCareersWorld exit=1 47s | simCmOldCareersWorld: RED, 20 failure(s) (section 1 2, section 2 18) (47s)
+simClubManagerSaveSize exit=0 58s | simClubManagerSaveSize: all sections green
+simClubManagerSave exit=0 12s | simClubManagerSave: all sections green
+simCmUnseededWorld exit=1 132s | simCmUnseededWorld: 113 FAILURE(S)
+simCmLedgerJourney exit=0 99s | simCmLedgerJourney: green. 45 seeded journeys, 9678 ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carri
+simAcademyFilters exit=1 2s | Node.js v24.22.0
+simBoard exit=0 5s | ALL BOARD CHECKS PASSED
+simBoardObjectives exit=0 1s | simBoardObjectives: green. Every board talks like a board.
+simBooks exit=0 11s | simBooks: green. Every number these games show agrees with every other number they show.
+simCmOwnClubMarket exit=0 280s | simCmOwnClubMarket: green (mode rule, sections 1, 2, 3, 4, 5): the market lists nobody at my own club in every old save and moves nothing else
+simCustomClubValues exit=0 73s | simCustomClubValues: 25 checks, 0 failures
+simAcademy exit=0 312s | ALL ACADEMY CHECKS PASSED
