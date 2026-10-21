@@ -4,7 +4,7 @@ import { ChevronRight, ChevronDown } from 'lucide-react';
 import { minuteLabel } from '@/lib/clubManager';
 import { scorerLine } from '@/lib/clubManagerScorerLine';
 import type { MatchWeekReport, MatchStats } from '@/lib/clubManager';
-import { AI_STYLES, INSTRUCTION_KEYS, settingLabel, type TeamInstructions } from '@/lib/clubManagerTactics';
+import { AI_STYLES, instructionsSummary, type TeamInstructions } from '@/lib/clubManagerTactics';
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import VictoryMoment from '@/components/game/VictoryMoment';
@@ -83,7 +83,7 @@ function StatsBlock({ stats, counts, mineFirst }: { stats: MatchStats; counts: C
 function TacticsDayBlock({ tactics, myGoals, oppGoals }: { tactics: NonNullable<NonNullable<MatchWeekReport['detail']>['tactics']>; myGoals: number; oppGoals: number }) {
   const t = tactics.stats;
   const style = AI_STYLES[tactics.theirStyle];
-  const words = (i: TeamInstructions) => INSTRUCTION_KEYS.filter(k => i[k] !== 0).map(k => settingLabel(k, i[k])).join(', ') || 'Balanced on all four';
+  const words = (i: TeamInstructions) => instructionsSummary(i);
   const first = tactics.log[0];
   const later = tactics.log.slice(first && first.minute === 0 ? 1 : 0);
   const rows: [string, string, string][] = [
