@@ -188,6 +188,29 @@ describe('Round 1519: no career ends at 26 without the player', () => {
     expect(view.queryByRole('button', { name: /Share Legacy/ })).toBeNull();
     expect(button(view, /Next Season/)).toBeVisible();
   });
+  it('the save the old Continue already wrote (retired on the retired screen at 26, nothing behind it) plays on', async () => {
+    seed(1519004);
+    let s = E.advanceProSeason(copy(fx().at25), E.FALLBACK_CLUBS);
+    if (s.phase === 'newspaper') s = E.dismissNewspaper(s);
+    expect(s.phase).toBe('season_summary'); expect(s.age).toBe(26);
+    /* The base engine's hop, exactly: the summary cleared, the flag kept, the retired screen. */
+    const victim = { ...seen(s), retired: true, pendingSummary: null, phase: 'retired' };
+    expect(victim.legacy).toBeNull(); expect(victim.postRetirementChoice).toBeNull();
+    const view = mount(JSON.stringify(victim)); playable(view);
+    expect(view.queryByRole('button', { name: /Share Legacy/ })).toBeNull();
+    seed(1519005);
+    fireEvent.click(button(view, /Next Season/));
+    await waitFor(() => expect(read().age).toBe(27));
+    expect(ended(read())).toBe(false);
+  });
+  it('an after career keeps one Retire, its own: the player Retire is gone once he has retired', () => {
+    seed(1519006);
+    const manager = E.choosePostRetirement(E.manualRetire(copy(fx().at26)), 'manager', E.FALLBACK_CLUBS);
+    expect(manager.phase).toBe('manager_season');
+    const view = mount(JSON.stringify(manager)); playable(view);
+    expect(Array.from(view.container.querySelectorAll('button')).some(b => b.textContent?.trim() === '🚪 Retire')).toBe(false);
+    expect(read().phase).toBe('manager_season');
+  });
   it('a forced retirement says why on the send off', () => {
     seed(1519003);
     const stats = { pace: 40, shooting: 40, passing: 40, dribbling: 40, defending: 40, physical: 40, reflexes: 40 };
