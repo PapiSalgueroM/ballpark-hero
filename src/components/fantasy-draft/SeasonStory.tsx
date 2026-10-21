@@ -8,6 +8,10 @@ interface SeasonStoryProps {
 export const SeasonStory = ({ teamAStory, teamBStory }: SeasonStoryProps) => {
   return (
     <div className="w-full rounded-2xl border border-border bg-card/60 backdrop-blur-md overflow-hidden">
+      <div className="border-b border-border px-4 py-3 sm:px-6">
+        <p className="text-sm font-semibold text-foreground">Fictional game recap</p>
+        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">These made-up game recaps can use AI. They are not reports or predictions about the named players.</p>
+      </div>
       <div className="flex flex-col sm:flex-row">
         {/* User team story */}
         <div className="flex-1 p-4 sm:p-6 border-b sm:border-b-0 sm:border-r border-border">

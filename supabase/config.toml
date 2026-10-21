@@ -1,1 +1,5 @@
 project_id = "pzzadswiradjnvvfybol"
+
+# The gateway checks the JWT; the endpoint also requires a current Auth user.
+[functions.account-privacy]
+verify_jwt = true

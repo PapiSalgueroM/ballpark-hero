@@ -463,6 +463,7 @@
    keeps its own bottom edge above the banner, and every control inside it
    stays clickable. Nothing applies once consent is answered. */
 body[data-consent-pending] [role='dialog'] {
-  max-height: calc(100dvh - 230px);
+  max-height: calc(100dvh - var(--dukb-consent-height, 230px) - 24px);
+  top: calc((100dvh - var(--dukb-consent-height, 230px)) / 2);
   overflow-y: auto;
 }

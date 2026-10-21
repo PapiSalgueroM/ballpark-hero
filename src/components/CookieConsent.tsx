@@ -1,20 +1,108 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { CONSENT_CHANGED_EVENT, loadConsentedScripts } from '@/lib/consentedScripts';
-import { safeLocalStorage } from '@/lib/safeStorage';
+import { loadConsentedScripts, stopRevokedServices } from '@/lib/consentedScripts';
+import {
+  ANALYTICS_READY, CONSENT_CHANGED_EVENT, CONSENT_EFFECTIVE_CHANGED_EVENT, CONSENT_KEY, CONSENT_MAX_AGE_MS, CONSENT_OPEN_EVENT,
+  canReloadAfterWithdrawal, enforceGlobalPrivacyControl, getEffectiveConsent, getPendingConsentWithdrawal, isGlobalPrivacyControlEnabled,
+  migrateConsentPreferences, readConsentPreferences, saveConsentPreferences, setPendingConsentWithdrawal, synchronizeConsentStorageEvent,
+  type ConsentPurposes,
+} from '@/lib/consentPreferences';
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);
   const [helpTarget, setHelpTarget] = useState<HTMLElement | null>(null);
+  const [preferences, setPreferences] = useState(readConsentPreferences);
+  const [advertising, setAdvertising] = useState(false);
+  const [gpc, setGpc] = useState(isGlobalPrivacyControlEnabled);
+  const [pendingReload, setPendingReload] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const opener = useRef<HTMLElement | null>(null);
+  const explicitlyOpen = useRef(false);
+  const lastEffective = useRef(getEffectiveConsent());
+  const pendingRevoked = useRef<ConsentPurposes>(getPendingConsentWithdrawal());
 
   useEffect(() => {
-    const consent = safeLocalStorage.getItem('cookie-consent');
-    if (!consent) setVisible(true);
+    let expiryTimer = 0;
+    const reconcile = () => {
+      window.clearTimeout(expiryTimer);
+      migrateConsentPreferences();
+      enforceGlobalPrivacyControl();
+      let next = getEffectiveConsent();
+      const saved = readConsentPreferences();
+      const previous = lastEffective.current;
+      const revoked = {
+        advertising: previous.advertising && !next.advertising,
+        analytics: previous.analytics && !next.analytics,
+      };
+
+      pendingRevoked.current = {
+        advertising: pendingRevoked.current.advertising || revoked.advertising,
+        analytics: pendingRevoked.current.analytics || revoked.analytics,
+      };
+      setPendingConsentWithdrawal(pendingRevoked.current);
+      next = getEffectiveConsent();
+      lastEffective.current = next;
+      if (previous.advertising !== next.advertising || previous.analytics !== next.analytics) {
+        window.dispatchEvent(new Event(CONSENT_EFFECTIVE_CHANGED_EVENT));
+      }
+      setGpc(isGlobalPrivacyControlEnabled());
+      setPreferences(saved);
+      setVisible(!saved || explicitlyOpen.current);
+      if (!saved) setAdvertising(false);
+      if (isGlobalPrivacyControlEnabled()) setAdvertising(false);
+      if (pendingRevoked.current.advertising || pendingRevoked.current.analytics) {
+        setAdvertising(next.advertising);
+        stopRevokedServices(pendingRevoked.current, next);
+        if (canReloadAfterWithdrawal(pendingRevoked.current)) {
+          window.location.reload();
+          return;
+        }
+        setPendingReload(true);
+        setVisible(true);
+      } else if (next.advertising || next.analytics) {
+        loadConsentedScripts();
+      }
+      if (saved) {
+        // Native timers cannot hold a 180-day delay. Recheck in bounded steps.
+        const remaining = saved.updatedAt + CONSENT_MAX_AGE_MS - Date.now();
+        expiryTimer = window.setTimeout(reconcile, Math.min(2147483647, Math.max(50, remaining)));
+      }
+    };
+    const legacy = migrateConsentPreferences();
+    // Old analytics cookies/code can survive a previous release even when the
+    // new effective analytics choice is false. Pause those without loading a vendor.
+    stopRevokedServices({ advertising: legacy === 'accepted' || isGlobalPrivacyControlEnabled(), analytics: !ANALYTICS_READY });
+    reconcile();
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === CONSENT_KEY || event.key === 'cookie-consent' || event.key === null) {
+        synchronizeConsentStorageEvent(event);
+        reconcile();
+      }
+    };
+    const onOpen = (event: Event) => {
+      const effective = getEffectiveConsent();
+      explicitlyOpen.current = true;
+      opener.current = (event as CustomEvent<{ opener?: HTMLElement }>).detail?.opener ?? null;
+      setAdvertising(effective.advertising);
+      setVisible(true);
+    };
+    window.addEventListener('storage', onStorage);
+    window.addEventListener(CONSENT_CHANGED_EVENT, reconcile);
+    window.addEventListener(CONSENT_OPEN_EVENT, onOpen);
+    window.addEventListener('focus', reconcile);
+    document.addEventListener('visibilitychange', reconcile);
+    return () => {
+      window.clearTimeout(expiryTimer);
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener(CONSENT_CHANGED_EVENT, reconcile);
+      window.removeEventListener(CONSENT_OPEN_EVENT, onOpen);
+      window.removeEventListener('focus', reconcile);
+      document.removeEventListener('visibilitychange', reconcile);
+    };
   }, []);
 
-  // Keep the existing choices inside an open rules dialog's focus scope.
+  // Keep one region inside an open rules dialog's existing focus scope.
   useEffect(() => {
     if (!visible) return;
     const syncTarget = () => setHelpTarget(document.querySelector<HTMLElement>('[data-dukb-help-cookie-choices]'));
@@ -25,108 +113,46 @@ export function CookieConsent() {
   }, [visible]);
   const insideHelp = !!helpTarget?.isConnected;
 
-  /* A withdrawal in another tab reloads this one so vendor code that already
-     ran is removed. Accept can start scripts in place, which preserves an
-     active game. Other choices only update the banner when no vendor ran. */
-  useEffect(() => {
-    const onStorage = (event: StorageEvent) => {
-      if (event.key !== 'cookie-consent') return;
-      if (event.newValue === 'accepted') {
-        setVisible(false);
-        loadConsentedScripts();
-        return;
-      }
-      if (event.oldValue === 'accepted') {
-        window.location.reload();
-        return;
-      }
-      setVisible(event.newValue === null);
-    };
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
-  }, []);
-
-  /* Round 117: mark the document while consent is still unanswered. index.css
-     uses this to keep an open dialog clear of the banner, so the banner can
-     sit on top without ever burying the dialog's own buttons. Cleared the
-     moment consent is answered, and on unmount, so it can never stick. */
   useEffect(() => {
     if (!visible || insideHelp) return;
     document.body.dataset.consentPending = '1';
-    return () => { delete document.body.dataset.consentPending; };
+    const el = ref.current;
+    const measure = () => document.body.style.setProperty('--dukb-consent-height', `${el?.getBoundingClientRect().height ?? 230}px`);
+    measure();
+    const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(measure) : null;
+    if (el) observer?.observe(el);
+    return () => {
+      delete document.body.dataset.consentPending;
+      document.body.style.removeProperty('--dukb-consent-height');
+      observer?.disconnect();
+    };
   }, [visible, insideHelp]);
 
-  /* Round 117, second half of the same bug. Making the banner clickable again
-     is not enough on its own: an open Radix modal also stamps aria-hidden on
-     every other child of <body>, this banner included, which takes it out of
-     the accessibility tree entirely. A sighted player could then click a
-     consent button that a screen reader could not even announce. Radix
-     re-applies the attribute whenever a dialog opens or closes, so watch for
-     it and take it straight back off. */
   useEffect(() => {
     if (!visible) return;
     const el = ref.current;
     if (!el) return;
     const unhide = () => { if (el.getAttribute('aria-hidden') !== null) el.removeAttribute('aria-hidden'); };
     unhide();
-    const mo = new MutationObserver(unhide);
-    mo.observe(el, { attributes: true, attributeFilter: ['aria-hidden'] });
-    return () => mo.disconnect();
+    const observer = new MutationObserver(unhide);
+    observer.observe(el, { attributes: true, attributeFilter: ['aria-hidden'] });
+    return () => observer.disconnect();
   }, [visible, helpTarget]);
 
-  /* Round 1142: through the storage seam. In a browser that blocks storage or
-     has filled it, this write used to throw, the banner stayed up for good and
-     Essential only could never be chosen. The seam keeps the answer for the
-     visit instead. The try is for the one case the seam cannot see, storage
-     that filled up after the page loaded: the answer still stands for this
-     page, and the banner still leaves. */
-  const saveChoice = (choice: 'accepted' | 'essential') => {
-    try { safeLocalStorage.setItem('cookie-consent', choice); } catch { /* see above */ }
-    window.dispatchEvent(new Event(CONSENT_CHANGED_EVENT));
+  const save = (choice: ConsentPurposes) => {
+    explicitlyOpen.current = false;
     setVisible(false);
+    saveConsentPreferences(choice);
+    if (!pendingRevoked.current.advertising && !pendingRevoked.current.analytics) opener.current?.focus({ preventScroll: true });
   };
-
-  const accept = () => {
-    saveChoice('accepted');
-    // Start analytics in this session. The ad loader also runs, but it stays
-    // off until AdBanner renders a deliberate slot after this state change.
-    loadConsentedScripts();
+  const cancel = () => {
+    explicitlyOpen.current = false;
+    setVisible(false);
+    opener.current?.focus({ preventScroll: true });
   };
-
-  // "Essential only": AdBanner reads this exact value and renders nothing
-  // when set, so no ad slot is initialized.
-  const essentialOnly = () => {
-    saveChoice('essential');
-  };
-
   if (!visible) return null;
 
-  /* Round 117: portalled to <body> at z-[60], not rendered in place at z-50.
-     Two separate things were burying this banner. RulesGate re-opens each
-     game's How to Play dialog on EVERY mount by design, and a shadcn Dialog
-     paints a full screen bg-black/80 overlay and portals it to the end of
-     <body>; at an equal z-index DOM order decides, so the overlay won. And
-     raising the number alone did not help, because rendered in place this
-     banner sits inside an ancestor stacking context and its z-index is only
-     ever resolved against its siblings, never against a body level portal.
-     Portalling puts it in the same context as the dialog so the number
-     finally means something. It matters because ads are consent gated: for
-     anyone landing on a game page from search, and most players do, Accept
-     and Essential only could not be clicked at all, every single visit.
-
-     pointer-events-auto is the part that actually unlocks it, and it is not
-     optional. A Radix Dialog in modal mode sets pointer-events:none on
-     <body> for as long as it is open, so everything outside the dialog goes
-     inert no matter how high its z-index is. Measured on /footle: body
-     pointer-events none, banner inherits none, banner z-index 60 sitting
-     uselessly above a z-50 overlay. Opting this one subtree back in is the
-     standard escape hatch and is scoped to the banner alone. */
-  // Inside shared help, the same choices use normal layout within its trap.
   return createPortal(
-    /* Round 307: a named region that takes focus when it appears. The portal
-       lands at the end of the document, so without the focus move a keyboard
-       user had to tab through the whole page to find the two buttons, and a
-       screen reader was never told the banner existed. */
     <div
       ref={el => {
         ref.current = el;
@@ -138,29 +164,30 @@ export function CookieConsent() {
       data-site-chrome=""
       className={insideHelp
         ? 'pointer-events-auto rounded-xl border border-border p-3 bg-card'
-        : 'fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto p-4 bg-card border-t border-border shadow-lg'}
+        : 'fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg'}
     >
-      <div className={`max-w-3xl mx-auto flex flex-col ${insideHelp ? '' : 'sm:flex-row'} items-center gap-3 text-sm text-muted-foreground`}>
-        {/* Round 286: the banner used to say "by continuing you agree", which
-            was never how it worked: nothing to do with ads loads until Accept
-            is pressed. It says what it does now. */}
-        <p className="min-w-0 self-stretch text-center sm:text-left">
-          Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same.{' '}
+      <div className="max-w-3xl mx-auto space-y-3 text-sm text-muted-foreground">
+        <p>
+          Essential storage keeps games working. Advertising is optional. Analytics is paused. We ask again in 180 days.{' '}
           <Link to="/privacy" className="underline hover:text-foreground font-medium">Learn more</Link>
         </p>
-        <div className="flex shrink-0 items-center gap-2 whitespace-nowrap">
-          <button
-            onClick={essentialOnly}
-            className="min-h-11 px-4 py-2 rounded-lg bg-transparent border border-border text-foreground font-medium text-sm hover:bg-muted transition-colors"
-          >
-            Essential only
-          </button>
-          <button
-            onClick={accept}
-            className="min-h-11 px-5 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity"
-          >
-            Accept
-          </button>
+        <div className="flex flex-wrap gap-x-6 gap-y-2">
+          <label className="inline-flex min-h-11 items-center gap-2 text-foreground">
+            <input type="checkbox" checked={advertising && !gpc} disabled={gpc || pendingReload} onChange={event => setAdvertising(event.target.checked)} />
+            Advertising
+          </label>
+          <label className="inline-flex min-h-11 items-center gap-2 text-foreground">
+            <input type="checkbox" checked={false} disabled />
+            Analytics
+          </label>
+        </div>
+        {gpc && <p>Your browser's Global Privacy Control keeps advertising off.</p>}
+        {pendingReload && <p role="status">Advertising is off for this visit. Save your game or allow site storage, then choose Save choices to refresh. Already-loaded vendor code may keep running until then.</p>}
+        <div className="flex flex-wrap items-center gap-2">
+          <button type="button" onClick={() => save({ advertising: false, analytics: false })} className="min-h-11 px-4 py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors">Reject all</button>
+          <button type="button" disabled={pendingReload} onClick={() => save({ advertising: true, analytics: false })} className="min-h-11 px-4 py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors">Accept all</button>
+          <button type="button" onClick={() => save({ advertising, analytics: false })} className="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button>
+          {preferences && !pendingReload && <button type="button" onClick={cancel} className="min-h-11 px-4 py-2 underline hover:text-foreground">Cancel</button>}
         </div>
       </div>
     </div>,

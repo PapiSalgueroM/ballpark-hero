@@ -56,7 +56,7 @@ const quiet = (state: Awaited<ReturnType<typeof start>>) => {
 
 describe('actual NBA Stat Line season picker', () => {
   it('holds manual ads off loading and failed pool states while retaining retry and guide', async () => {
-    localStorage.setItem('cookie-consent', 'accepted');
+    localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: true, analytics: false, updatedAt: Date.now() }));
     window.adsbygoogle = [];
     const guideText = 'A target per-36 stat line from real NBA history, five player seasons of your choosing, and one minutes weighted combined line scored 0 to 100 by similarity. A shared daily target with one scored run, plus an unlimited mode with a fresh target every time.';
     for (const failure of ['empty', 'rejected'] as const) {
@@ -78,7 +78,7 @@ describe('actual NBA Stat Line season picker', () => {
   });
 
   it('allows the original consented manual slot in setup play and results', async () => {
-    localStorage.setItem('cookie-consent', 'accepted'); window.adsbygoogle = [];
+    localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: true, analytics: false, updatedAt: Date.now() })); window.adsbygoogle = [];
     const view = render(frame()), menu = await view.findByRole('button', { name: /^Daily target/ });
     const slot = view.container.querySelector('ins.adsbygoogle');
     expect(slot).not.toBeNull(); expect(window.adsbygoogle).toHaveLength(1);
@@ -89,7 +89,7 @@ describe('actual NBA Stat Line season picker', () => {
     click(view.getByRole('button', { name: 'Score my line' }) as HTMLButtonElement);
     expect(view.container.querySelector('ins.adsbygoogle')).toBe(slot); expect(window.adsbygoogle).toHaveLength(1);
     expect(recordCompletion).toHaveBeenCalledTimes(1); view.unmount();
-    localStorage.setItem('cookie-consent', 'essential');
+    localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: Date.now() }));
     const essential = render(frame()); await essential.findByRole('button', { name: /^Daily target/ });
     expect(essential.container.querySelector('[data-dukb-manual-ad]')).toBeNull(); expect(window.adsbygoogle).toHaveLength(1);
   });

@@ -70,6 +70,19 @@
       "sha256": "fdeaa97f2fd5d08a00c96094b350aa7b272c6c670871c312bc2bc898e515d522",
       "version": 4,
       "date": "2026-10-01"
+    },
+    "account-privacy": {
+      "sha256": "faa812c64d70a63a293af4745b4a86484a83677a3d0d0d8898cce439934e494f",
+      "supportingFiles": {
+        "handler.ts": "c2a56aaa8da81ee46f3706fa530afaf9dd8e8baf14a4e7136675bde9bcc03662"
+      },
+      "version": 1,
+      "date": "2026-10-21"
+    },
+    "simulate-season": {
+      "sha256": "c14abf75d2a33ae5530e896b82bbb44c75f6bb8f1b52a35e7735851ed87eb5d4",
+      "version": 7,
+      "date": "2026-10-21"
     }
   },
   "unverified": [
@@ -83,7 +96,6 @@
     "nba-suggest-players",
     "nba-validate-player",
     "report-relay",
-    "simulate-season",
     "suggest-players",
     "tennis-daily"
   ]

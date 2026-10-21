@@ -57,7 +57,7 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8').replace(/\r\n/g, '\n');
 
 let template = read('index.html');
-let modal = read('src/components/auth/AuthModal.tsx');
+let modal = read('src/components/auth/AuthModalBody.tsx');
 const prerender = read('scripts/prerender.mjs');
 
 if (CONTROL === 'wall') {

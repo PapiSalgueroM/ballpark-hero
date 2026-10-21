@@ -43,7 +43,7 @@ vi.mock('sonner', () => ({
 const authModalPath = process.env.AUTH_MODAL_COMPONENT;
 const { AuthModal } = authModalPath
   ? await import(/* @vite-ignore */ authModalPath)
-  : await import('@/components/auth/AuthModal');
+  : await import('@/components/auth/AuthModalBody');
 
 describe('AuthModal Google sign in', () => {
   beforeEach(() => {
