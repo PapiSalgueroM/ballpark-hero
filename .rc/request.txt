@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk-main: WALK_EXPECT=main node .rc/x/walk1531.mjs
