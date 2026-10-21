@@ -78,3 +78,6 @@ Initial Green39672164076 now passes all six required jobs. Exact31576B/SHA25674c
 
 
 Exact consent main554a3b18641044ec5164bff9acab4d338237078c is integrated before fresh regeneration. Only unchanged-baselines BASE_SOURCE and final-build SEO_SPLIT_BASE_REF change to that actual source; original RED keepsbc79 and the original HomeCopy bytes remain held. The legacy workflow first measures fresh output. Exact new output adoption and final source-cleared complete-output holds are still owed, with no fixed-point assumption from the initial five-file patch.
+
+
+Integrated39688732949 passed all six jobs with complete141 root-manifest members and797 dist hashes. Exact726B/ea71093ed17f7517798a0552356d94222a64822e83393877b7df0ab253c84913 patch changes only football-grid consent chrome to the actual two paragraphs. Its24,489-byte snapshot SHA4a0d3a7212f7efe01533adbc911e08bbbfc0f1f115d852536b5470f9748ff4f3 is adopted with full inverse. Final output-hold workflow is the reviewed three-span delta composed with only the two actual554 base bindings. Four copied controls and complete end inventories now run without changing existing product cases, limits, waits or guards. Final all-six success and0B generated files remain owed.

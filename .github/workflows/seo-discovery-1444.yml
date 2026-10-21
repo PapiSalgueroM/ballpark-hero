@@ -416,8 +416,18 @@ jobs:
           node scripts/simGuideHeadings.mjs --refresh /football-grid > "$out/guide-refresh.log" 2>&1
           node scripts/genSearchKeywords.mjs > "$out/search-keywords.log" 2>&1
           npm run build:seo > "$out/build.log" 2>&1
-          git diff --binary -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$out/generated.patch"
-          git diff --name-only -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$out/generated-files.txt"
+          git diff --binary HEAD -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$out/generated.patch"
+          { git diff --name-only HEAD -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json; git ls-files --others -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json; } | sort -u > "$out/generated-files.txt"
+          for file in generated.patch generated-files.txt; do
+            test -f "$out/$file"; test ! -s "$out/$file"
+            cp "$out/$file" "$out/$file.nonempty-control"
+            printf '%s\n' 'CONTROL_NONEMPTY_FINAL_GENERATED_OUTPUT' >> "$out/$file.nonempty-control"
+            status=0; test ! -s "$out/$file.nonempty-control" || status=$?
+            printf '%s\n' "$status" > "$out/$file.nonempty-control.exit"; test "$status" -eq 1
+            status=0; cmp "$out/$file" "$out/$file.nonempty-control" > "$out/$file.nonempty-control.changed.log" 2>&1 || status=$?
+            printf '%s\n' "$status" > "$out/$file.nonempty-control.changed.exit"; test "$status" -eq 1
+            sha256sum "$out/$file" "$out/$file.nonempty-control" > "$out/$file.nonempty-control.sha256"
+          done
           git diff --exit-code HEAD -- index.html public ':!public/football-grid/index.html' ':!public/sitemap.xml' > "$out/unrelated-public-template-hold.log"
           node --input-type=module <<'JS' > "$out/generated-holds.log" 2>&1
           import fs from 'node:fs';
@@ -443,7 +453,19 @@ jobs:
           for (const [url, row] of before) if (url !== 'https://douknowball.com/football-grid') assert.equal(after.get(url), row, 'unrelated sitemap row ' + url);
           console.log('HELD unrelated sitemap rows: ' + (before.size - 1));
           JS
+          find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json ! -type d ! -type f -print > "$out/generated-source-nonregular-before.txt"
+          test ! -s "$out/generated-source-nonregular-before.txt"
+          find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json -type f -print0 | sort -z | xargs -0 sha256sum > "$out/generated-source-before.sha256"
+          find dist ! -type d ! -type f -print > "$out/dist-nonregular-before.txt"
+          test ! -s "$out/dist-nonregular-before.txt"
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist.sha256"
+          for inventory in generated-source-before.sha256 dist.sha256; do
+            test -s "$out/$inventory"
+            cp "$out/$inventory" "$out/$inventory.control"
+            printf '%s\n' 'CONTROL_DIFFERENT_INVENTORY_LINE' >> "$out/$inventory.control"
+            status=0; cmp "$out/$inventory" "$out/$inventory.control" > "$out/$inventory.control.log" 2>&1 || status=$?
+            printf '%s\n' "$status" > "$out/$inventory.control.exit"; test "$status" -eq 1
+          done
       - name: All18 completed-build readers and all14 unchanged caps
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
@@ -516,13 +538,32 @@ jobs:
           set -euo pipefail
           out="$PWD/seo-build-artifacts"
           mkdir -p "$out"
+          failed=0
           status=0
-          sha256sum --check "$out/dependencies-before.sha256" > "$out/dependencies-hold.log" 2>&1 || status=$?
-          git diff --exit-code HEAD -- src scripts supabase package.json package-lock.json index.html .github ':!scripts/data/lastmod.json' ':!scripts/data/guideHeadingsFrozen.json' ':!src/data/searchKeywords.json' > "$out/source-hold.log" 2>&1 || status=$?
-          if test -f "$out/dist.sha256"; then sha256sum --check "$out/dist.sha256" > "$out/dist-hold.log" 2>&1 || status=$?; fi
-          if test -d dist; then tar -czf "$out/dist.tar.gz" -C dist .; fi
+          {
+            find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json ! -type d ! -type f -print > "$out/generated-source-nonregular-after.txt" &&
+            test ! -s "$out/generated-source-nonregular-after.txt" &&
+            find public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json -type f -print0 | sort -z | xargs -0 sha256sum > "$out/generated-source-after.sha256" &&
+            cmp "$out/generated-source-before.sha256" "$out/generated-source-after.sha256"
+          } > "$out/generated-output-hold.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/generated-output-hold.exit"; test "$status" -eq 0 || failed=1
+          status=0
+          {
+            find dist ! -type d ! -type f -print > "$out/dist-nonregular-after.txt" &&
+            test ! -s "$out/dist-nonregular-after.txt" &&
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist-after.sha256" &&
+            cmp "$out/dist.sha256" "$out/dist-after.sha256"
+          } > "$out/dist-output-hold.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/dist-output-hold.exit"; test "$status" -eq 0 || failed=1
+          sha256sum --check "$out/dependencies-before.sha256" > "$out/dependencies-hold.log" 2>&1 || failed=1
+          git diff --exit-code HEAD -- src scripts supabase package.json package-lock.json index.html .github ':!scripts/data/lastmod.json' ':!scripts/data/guideHeadingsFrozen.json' ':!src/data/searchKeywords.json' > "$out/source-hold.log" 2>&1 || failed=1
+          if test -f "$out/dist.sha256"; then sha256sum --check "$out/dist.sha256" > "$out/dist-hold.log" 2>&1 || failed=1; fi
+          status=0
+          if test -d dist; then tar -czf "$out/dist.tar.gz" -C dist . > "$out/dist-archive.log" 2>&1 || status=$?; else status=1; fi
+          printf '%s\n' "$status" > "$out/dist-archive.exit"; test "$status" -eq 0 || failed=1
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
           (cd "$out"; find . -type f ! -path './evidence.sha256' -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
-          exit "$status"
+          exit "$failed"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
