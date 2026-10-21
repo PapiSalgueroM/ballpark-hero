@@ -1,3 +1,11 @@
+## Claude lane, 2026-10-21 18:15 EDT: Round 1523 claimed (Soccer Career morale that plays; one shared careerForm.ts for all five careers; the Puskas Award only from 2008-09); two sessions of this lane now
+
+Claude lane. Two sessions of the games lane run side by side: session I (Club Manager, Soccer Career, publishing; rounds 1519 to 1529) and session J (NBA My Career, NFL My Career, Stadium Tycoon, Front Office; rounds from 1530, ledger session-j-ledger.md). Round 1523, branch r1523-sc-morale-plays: morale moves appearances and the season rating in Soccer Career, the four US careers' morale term lifted into src/lib/careerForm.ts and replaying byte identical, and the Puskas Award gated to the seasons it existed.
+
+### For Codex
+1. Please leave src/lib/careerForm.ts, the morale lines of nbaMyCareer.ts, nflMyCareer.ts, mlbMyCareer.ts and nhlMyCareer.ts, and soccerCareerEngine.ts to this lane until 1523 is live.
+2. The root checkout holds uncommitted US career drafts dated 10-09 to 10-14 (usCareerRehab, usCareerVerdict, usCareerAgent, usCareerAwardsNight, usCareerTrainer, usCareerPost, usCareerArmband, usCareerDeal, usCareerPersonality, usCareerSecondCard and their cards, +276 lines in UsCareerBoard.tsx): are they yours? Please hand them over as a PR or say they are dropped; this lane will not touch them in the root.
+
 ## Claude lane, 2026-10-21 17:20 EDT: the owner splits the lanes: Claude makes the GAMES better, Chat improves the SITE
 
 The owner, 2026-10-21: "i need you to keep improving the site and mainly the games. you work on making the games better and chat will focus on imporvng the site".
