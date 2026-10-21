@@ -56,6 +56,12 @@ function seed(n: number) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
+/* A chance wheel the last card spun opens over the page on load until it is closed; these saves have seen it. */
+function seen(s: Career): Career {
+  const out = { ...s };
+  delete out.chanceWheel;
+  return out;
+}
 /* The page's own presses, the last answer on every card, Stay at every window, until Next Season at `age`. */
 function careerAt(age: number): Career {
   const clubs = E.FALLBACK_CLUBS;
@@ -85,7 +91,7 @@ function careerAt(age: number): Career {
   }
   if (!(s.phase === 'playing' && s.age === age)) throw new Error(`never stood on Next Season at ${age}`);
   Math.random = realRandom;
-  return s;
+  return seen(s);
 }
 class Boundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false };
@@ -164,7 +170,7 @@ describe('Round 1519: no career ends at 26 without the player', () => {
     let s = E.advanceProSeason(copy(fx().at25), E.FALLBACK_CLUBS);
     if (s.phase === 'newspaper') s = E.dismissNewspaper(s);
     expect(s.phase).toBe('season_summary'); expect(s.age).toBe(26);
-    const view = mount(JSON.stringify({ ...s, retired: true })); playable(view);
+    const view = mount(JSON.stringify({ ...seen(s), retired: true })); playable(view);
     await continueThrough(view);
     expect(ended(read())).toBe(false);
     expect(view.queryByRole('button', { name: /Share Legacy/ })).toBeNull();

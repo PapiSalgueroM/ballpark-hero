@@ -77,8 +77,10 @@ function careerAt(age) {
   }
   Math.random = realRandom;
   if (!(s.phase === 'playing' && s.age === age)) throw new Error(`never stood on Next Season at ${age}`);
-  return s;
+  return seen(s);
 }
+/* A chance wheel the last card spun opens over the page on load until it is closed; these saves have seen it. */
+function seen(s) { const out = { ...s }; delete out.chanceWheel; return out; }
 const copy = v => JSON.parse(JSON.stringify(v));
 const at25 = careerAt(25), at26 = careerAt(26);
 seed(1519002);
@@ -88,7 +90,7 @@ Math.random = realRandom;
 const real = E.manualRetire(copy(at26));
 const FIXTURES = {
   at25,
-  stray: { ...copy(summary26), retired: true },
+  stray: { ...seen(copy(summary26)), retired: true },
   lost: { ...copy(real), phase: 'season_summary', pendingSummary: real.seasons[real.seasons.length - 1] },
 };
 const ended = s => !!s && (s.retired || ['retirement_ceremony', 'post_retirement', 'retired'].includes(s.phase));
