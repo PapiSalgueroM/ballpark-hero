@@ -1,0 +1,1 @@
+s4easy exit=0 2480s | simCmDifficulty: all green (sections 4)

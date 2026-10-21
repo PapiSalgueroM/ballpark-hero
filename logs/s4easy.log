@@ -1,0 +1,20 @@
+simCmDifficulty: sections 4
+  table: veryeasy {"gain":1.4,"pain":0.6,"cut":0,"cheque":1.5,"wageRoom":1.12,"mark":0.8,"edge":-3}; easy {"gain":1.2,"pain":0.8,"cut":0,"cheque":1.2,"wageRoom":1.06,"mark":0.87,"edge":-1.5}; normal {"gain":1,"pain":1,"cut":0,"cheque":1,"wageRoom":1,"mark":1,"edge":0}; hard {"gain":0.8,"pain":1.25,"cut":8,"cheque":0.8,"wageRoom":0.94,"mark":1.15,"edge":2.2}; legend {"gain":0.65,"pain":1.5,"cut":14,"cheque":0.65,"wageRoom":0.9,"mark":1.3,"edge":3.9}
+4) outcomes: normal, easy, veryeasy, 32 seeds from 0, 6 seasons, engaged, shard 0/1
+  24 shards (8 a level, 4 at a time), 5184 seasons
+  level  tier  driver   n   ppg  vsExp titles10 troph10   fees  sign  balance over  bMin bMean sacked matches xiS  xiE  clauseU loanU
+  normal big   engaged 576 2.04   1.21    3.98    9.95  60.14  1.16   157.57 0.70 43.14 71.49 0.13  48.60 89.71 90.06     0     0
+  normal mid   engaged 576 1.35  -2.05    0.24    0.83  15.49  1.94    24.42 0.64 33.67 63.08 0.28  38.61 80.32 80.67     0     1
+  normal small engaged 576 1.10  -8.18    0.59    0.64   6.82  2.56     8.16 0.80 23.98 58.06 0.40  37.82 74.94 75.56     0     0
+  easy   big   engaged 576 2.14   0.96    5.52   13.58  68.81  0.99   211.84 0.72 57.50 84.51 0.02  51.83 90.24 90.70     0     0
+  easy   mid   engaged 576 1.54  -3.45    0.69    1.94  21.13  1.78    33.65 0.65 53.73 79.49 0.07  42.76 81.33 81.87     0     0
+  easy   small engaged 576 1.37  -8.57    1.39    1.51   7.16  2.06    10.54 0.77 48.33 75.35 0.06  42.03 76.58 77.23     0     0
+  veryeasy big   engaged 576 2.25   0.62    7.08   18.33  73.97  0.82   300.99 0.68 66.42 93.31 0.00  52.96 90.62 91.11     0     0
+  veryeasy mid   engaged 576 1.73  -5.36    1.27    4.36  29.54  1.55    53.06 0.69 68.26 92.16 0.00  45.60 82.19 82.87     0     0
+  veryeasy small engaged 576 1.45  -9.37    1.55    2.07  10.50  1.78    17.20 0.80 64.86 88.16 0.00  42.52 77.51 78.27     0     0
+  Normal: mid points per game 1.35, sacked 466 of 1728 seasons (0.27), spend 27.48m a season, big club titles 3.98 in ten
+  Normal against Normal (even seeds against odd): mid points per game 1.36 and 1.34, a gap of 1.29 percent
+  easy: mid points per game 1.54 (up 13.41 percent), sacked 85 of 1728 (0.05, 0.18 times Medium), spend 32.37m (up 17.77 percent), big club titles 5.52 in ten, small club points a game 1.37
+  veryeasy: mid points per game 1.73 (up 27.69 percent), sacked 1 of 1728 (0.00, 0.00 times Medium), spend 38.00m (up 38.27 percent), big club titles 7.08 in ten, small club points a game 1.45
+  ok: every level sits inside the bands the lead set
+simCmDifficulty: all green (sections 4)
