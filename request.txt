@@ -1,0 +1,45 @@
+# Release BO (brief-BOG decision 5): s2 (B1515=580b27f0) and the sixteen SECTION 4 shard cmp lines h0 to h7 and l0 to l7 (each against r1515-vfy's shards) are DROPPED, ruled stale by the lead after Release BN's gate (Round 1514 and Round 1516 move every today's world career by design; Release BN re-measured all five levels on 40 shards). The header below is Release BM's, kept as history. The other lines go as Release BN sent them.
+# Release BM (Round BMG): ROUND 1515's own proof lines (Club Manager: Hard and Impossible retuned harder, a kept aside
+# career offered only in the slot it came from), taken from finish-1515.md, fix-1515.md, fix2-1515.md and
+# verify2-1515.md as the round's own gates ran them on its closed head 8a1bb102 (r1515-fxg, r1515-fxw, r1515-w1,
+# r1515-vfy, r1515-fx2g), and proven on the joined head f442fc9a by rBMp-a, rBMp-s4 and rBMp-w (finish-BMG.md).
+# BINDING. B1515 is the head of release-bm-gate before the merge m1 (b30d6955) brought 1515 in, the merge's first
+# parent: 580b27f0 (origin/main, Release BL with its record). Every line that compares with a base (s2 and s6, Medium
+# and the easy rows must not move; the index weight probe) builds it from B1515, so the line asks "does the joined tree
+# play Medium as the tree did before 1515 joined". Override with B1515=<sha> in front of a line.
+# SECTION 4 (the measured fleet): Hard and Impossible on seeds 0 to 31, SEEDS=32 SHARD=k/8, exactly as r1515-vfy ran
+# them, and each shard's JSON is compared byte for byte (cmp) with r1515-vfy's on its result branch, which a runner
+# can read (rBMp-probe). Byte equal shards mean the tree plays Hard and Impossible as measured, so no fold is needed
+# here; a shard that differs exits 1 on cmp's "differ" line. The Medium and easy shards are not replayed: section 2
+# holds Medium byte equal and the dial table's other rows are byte equal to B1515 (1515 moved only two edges).
+# Controls: c-helpdrift, c-edge, c-helplines must exit 1 with "CONTROL <name> FIRED" (exit 2 is an abort); the walk
+# controls walk-nomark and walk-noevent must exit 1 with "control <name> FIRED (2 slot check(s) red, 2 in all)".
+# The fold controls (foldblock, foldbig, foldhalf) need a FOLD folder of shards and run on a PC in seconds; they are
+# not here (fix-1515.md ran them). playSaveKeeper with its usual base is rc-R.txt's line (fb8d6811); simWorldEuro's
+# gate form is rc-BKc-b.txt's. No line writes into src, so no #!serial.
+# Send: bash rc.sh <name> rc-BMa.txt weigh1515.mjs     (#!serve builds dist and serves it on 4173 for the walks)
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/brokenSaveRecovery.test.ts src/test/routeErrorRecovery.test.tsx src/test/saveKeeper.test.ts src/lib/clubManagerSlots.test.ts src/test/clubManagerSlots.test.tsx src/test/clubManagerRetire.test.tsx src/test/cmSavePoints.test.ts src/test/cmSavePointsHook.test.tsx src/test/cmSavePointsDoor.test.tsx src/test/cmSavePointsScreen.test.tsx src/lib/clubManagerDifficulty.test.ts src/test/clubManagerDifficultyPick.test.tsx --testTimeout=300000 --hookTimeout=120000
+s178: SECTION=1,7,8 node scripts/simCmDifficulty.mjs
+s3: SECTION=3 node scripts/simCmDifficulty.mjs
+s6: B1515=${B1515:-580b27f0}; mkdir -p /tmp/b6 && git archive $B1515 | tar -x -C /tmp/b6 && BASE_ROOT=/tmp/b6 SECTION=6 node scripts/simCmDifficulty.mjs
+dials: B1515=${B1515:-580b27f0}; n=$(git diff $B1515 HEAD -- src/lib/clubManagerDifficulty.ts | grep -cE '^[-+] +(veryeasy|easy|normal):'); echo "Very Easy, Easy and Medium dial lines changed since B1515: $n"; [ "$n" = 0 ]
+c-helpdrift: CM_DIFF_CONTROL=helpdrift SECTION=7 node scripts/simCmDifficulty.mjs
+c-edge: CM_DIFF_CONTROL=edge SECTION=3 node scripts/simCmDifficulty.mjs
+c-helplines: CM_DIFF_CONTROL=helplines SECTION=7 node scripts/simCmDifficulty.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simCmSavePoints: node scripts/simCmSavePoints.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+walk: node scripts/playCmSavePoints.mjs
+walk-nomark: WIDTHS=390 POINTS_CONTROL=nomark node scripts/playCmSavePoints.mjs
+walk-noevent: WIDTHS=390 POINTS_CONTROL=noevent node scripts/playCmSavePoints.mjs
+weight-1515: B1515=${B1515:-580b27f0}; R=$PWD && git worktree add -q --detach /tmp/wbase $B1515 && cd /tmp/wbase && ln -s $R/node_modules node_modules && npm run build > /tmp/wbase-build.log 2>&1 && cd $R && node .rc/x/weigh1515.mjs /tmp/wbase/dist dist
+dashscan: B1515=${B1515:-580b27f0}; n=$(git diff $B1515 HEAD | grep -cP '^\+.*(\x{2013}|\x{2014})'); echo "added lines with an en or em dash since B1515: $n"; git diff $B1515 HEAD | grep -nP '^\+.*(\x{2013}|\x{2014})' | head -5 | cut -c1-200; m=$(git log --format=%B $B1515..HEAD | grep -cP '\x{2013}|\x{2014}'); echo "commit message lines with one: $m"; [ "$n" = 0 ] && [ "$m" = 0 ]
