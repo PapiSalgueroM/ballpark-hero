@@ -1,4 +1,4 @@
-import { ANALYTICS_READY, getEffectiveConsent, type ConsentPurposes } from '@/lib/consentPreferences';
+import { getEffectiveConsent, type ConsentPurposes } from '@/lib/consentPreferences';
 export { CONSENT_CHANGED_EVENT } from '@/lib/consentPreferences';
 
 export const ADSENSE_CLIENT = 'ca-pub-2929318086316376';
@@ -52,35 +52,8 @@ export function loadAdSense(): boolean {
   } catch { return false; }
 }
 
-export function sanitizedAnalyticsUrl(value: string): string {
-  try {
-    const url = new URL(value, window.location.origin);
-    if (url.protocol !== 'https:' && url.protocol !== 'http:') return '';
-    return url.origin + url.pathname;
-  } catch { return ''; }
-}
-
-export function loadAnalytics(): void {
-  try {
-    // Paused until enhanced history and form collection settings are verified.
-    if (!ANALYTICS_READY || !getEffectiveConsent().analytics) return;
-    if (/^\/(?:reset-password|auth|account|profile|admin)(?:\/|$)/.test(location.pathname)) return;
-    if (document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) return;
-    updateGoogleConsent(getEffectiveConsent());
-    window.gtag!('js', new Date());
-    window.gtag!('config', GA_MEASUREMENT_ID, {
-      send_page_view: false,
-      page_location: sanitizedAnalyticsUrl(location.href),
-      page_referrer: document.referrer ? sanitizedAnalyticsUrl(document.referrer) : '',
-      allow_google_signals: false,
-      allow_ad_personalization_signals: false,
-    });
-    const g = document.createElement('script');
-    g.async = true;
-    g.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-    document.head.appendChild(g);
-  } catch { /* Optional analytics stays off when blocked. */ }
-}
+// Analytics stays paused until collection settings and a new implementation are reviewed.
+export function loadAnalytics(): void {}
 
 function clearPurposeCookies(purposes: ConsentPurposes): void {
   try {

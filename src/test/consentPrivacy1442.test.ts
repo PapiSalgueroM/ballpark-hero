@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { loadAdSense, loadAnalytics, sanitizedAnalyticsUrl, stopRevokedServices } from '@/lib/consentedScripts';
+import { loadAdSense, loadAnalytics, stopRevokedServices } from '@/lib/consentedScripts';
 import { safeLocalStorage } from '@/lib/safeStorage';
 
 const gpcDescriptor = Object.getOwnPropertyDescriptor(window.navigator, 'globalPrivacyControl');
@@ -52,17 +52,6 @@ describe('the privacy-safe paused analytics release', () => {
       expect(document.querySelector('script[src*="googletagmanager.com/gtag/js"]')).toBeNull();
       expect(window.dataLayer).toBeUndefined();
       expect(window.gtag).toBeUndefined();
-    });
-  }
-
-  // These helpers protect the dormant config too; enabling analytics needs a new review.
-  for (const fixture of [
-    { input: 'https://example.org/footle?email=private%40example.com#secret', expected: 'https://example.org/footle' },
-    { input: 'https://name:secret@example.org/from?reset=private-referrer#confidential', expected: 'https://example.org/from' },
-    { input: 'javascript:alert(1)', expected: '' },
-  ]) {
-    it(`removes private URL components from ${fixture.expected || 'unsupported URLs'}`, () => {
-      expect(sanitizedAnalyticsUrl(fixture.input)).toBe(fixture.expected);
     });
   }
 

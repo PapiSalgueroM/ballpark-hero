@@ -154,7 +154,7 @@ try {
       const page = await ctx.newPage(), scripts = [];
       page.on('request', request => { if (request.resourceType() === 'script') scripts.push(request.url()); });
       await page.route('**/AuthModalBody-*.js', async route => { await bodyHeld; await route.continue(); });
-      await page.goto(BASE + '/privacy');
+      await page.goto(BASE + '/');
       await region(page).waitFor();
       await region(page).getByRole('button', { name: 'Reject all', exact: true }).click();
       await region(page).waitFor({ state: 'hidden' });

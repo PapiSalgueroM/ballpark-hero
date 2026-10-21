@@ -41,4 +41,4 @@ for (const row of manifest.files) {
 }
 report.complete = true;
 fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2) + '\n');
-console.log('Consent withdrawal: PASS, five actual outcomes and five effective copied faults.');
+console.log(`Consent withdrawal: PASS, ${manifest.files.length} actual outcomes and ${manifest.files.length} effective copied faults.`);

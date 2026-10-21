@@ -48,6 +48,7 @@ const CONTROL_FAILURES = {
   'missing-slot': ['found 79 source AdBanner callers, expected exactly 80'],
   'privacy-npa-bridge': ["the privacy policy does not distinguish Google's general disclosure from this site's non-personalized ad request"],
   'delayed-consent': ['AdBanner does not read stored consent before its first render'],
+  'analytics-collection': ['paused loadAnalytics has executable collection code'],
 };
 if (CONTROL && !Object.hasOwn(CONTROL_FAILURES, CONTROL)) {
   console.error(`SIM_ADSENSE_CONTROL=${CONTROL} is not a control this harness knows`);
@@ -86,6 +87,12 @@ let termsSource = read('src/pages/TermsOfService.tsx');
    src/lib/consentedScripts.ts, which is where both gated scripts live now. */
 let consented = read('src/lib/consentedScripts.ts');
 let preferences = read('src/lib/consentPreferences.ts');
+consented = mutateOnce(
+  consented,
+  'export function loadAnalytics(): void {}',
+  'export function loadAnalytics(): void { window.dataLayer = []; }',
+  'analytics-collection',
+);
 
 preferences = mutateOnce(
   preferences,
@@ -336,7 +343,7 @@ console.log('5b) analytics stays off in the template and every saved head');
   const marked = templateScripts.filter(match => /\bdata-dukb-consent-bootstrap(?:\s|=|$)/.test(match[1]));
   if (marked.length !== 1) fail('index.html must have exactly one marked consent bootstrap');
   if (!/export const ANALYTICS_READY:\s*boolean\s*=\s*false/.test(codeOnly(preferences))) fail('runtime analytics readiness is not paused');
-  if (!/if\s*\(\s*!ANALYTICS_READY\s*\|\|/.test(codeOnly(consented))) fail('loadAnalytics bypasses the readiness gate');
+  if (!/export function loadAnalytics\(\): void \{\}/.test(codeOnly(consented))) fail('paused loadAnalytics has executable collection code');
   if (marked.length === 1) {
     const script = marked[0][2];
     const execute = (code, value) => {

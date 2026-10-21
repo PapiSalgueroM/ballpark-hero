@@ -1,7 +1,7 @@
 {
-  "createdUtc": "2026-10-21T11:12:09.7855167Z",
-  "scope": "Five copied faults, no local app execution",
-  "focusedCases": 5,
+  "createdUtc": "2026-10-21T12:52:35.0633859Z",
+  "scope": "Six copied faults, no local app execution",
+  "focusedCases": 6,
   "files": [
     {
       "name": "staleOverlay",
@@ -87,6 +87,23 @@
       "test": "src/test/consentSynchronization1442.test.tsx",
       "testName": "clears draft optional toggles when the displayed choice expires",
       "expectedAssertion": "Wrong consent boolean or checked state, no missing import"
+    },
+    {
+      "name": "analyticsCollection",
+      "source": "src/lib/consentedScripts.ts",
+      "alias": "@/lib/consentedScripts",
+      "copy": "src/test/controls/consent1442/analyticsCollection.ts",
+      "old": "export function loadAnalytics(): void {}",
+      "new": "export function loadAnalytics(): void { window.dataLayer = []; }",
+      "verifiedOldOccurrences": 1,
+      "changedSomething": true,
+      "wholeInverseExact": true,
+      "inverseMethod": "Verified replacement position",
+      "sourceSha256": "8106f28dcd5faa8546de50e304af41add45b4fd43a15ccaf009dac809ab6be50",
+      "copySha256": "2d7c5b5b23b863eca6d28ac1a115a9a30be027835d105fa864afd4d04c92b3be",
+      "test": "src/test/consentPrivacy1442.test.ts",
+      "testName": "keeps analytics paused on /footle despite an old affirmative record",
+      "expectedAssertion": "Expected analytics dataLayer to remain undefined, no missing import"
     }
   ],
   "inspectionNote": "Initial global string inverse refused durableShadow because its replacement text also occurs in the unchanged source. Complete positional inverse corrected and passed for every copy."
