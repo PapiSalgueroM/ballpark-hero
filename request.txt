@@ -1,0 +1,5 @@
+# Release BO proof, part oc, on the final head 841ea72f: simOneOffCups whole, and Round 1516's three controls as r1516-a ran them (each must exit 1 and its last line say FIRED; uelpub on section 0, nouscrow and notrophy on the whole fleet)
+oneoff: node scripts/simOneOffCups.mjs > /tmp/oo.log 2>&1; s=$?; grep -E "FAIL" /tmp/oo.log | head -8 | cut -c1-250; tail -4 /tmp/oo.log | cut -c1-250; exit $s
+uelpub: ONE_OFF_CONTROL=uelpub node scripts/simOneOffCups.mjs > /tmp/c-u.log 2>&1; s=$?; tail -3 /tmp/c-u.log | cut -c1-250; exit $s
+nouscrow: ONE_OFF_CONTROL=nouscrow node scripts/simOneOffCups.mjs > /tmp/c-n.log 2>&1; s=$?; grep -E "FAIL" /tmp/c-n.log | head -3 | cut -c1-250; tail -3 /tmp/c-n.log | cut -c1-250; exit $s
+notrophy: ONE_OFF_CONTROL=notrophy node scripts/simOneOffCups.mjs > /tmp/c-t.log 2>&1; s=$?; grep -E "FAIL" /tmp/c-t.log | head -3 | cut -c1-250; tail -3 /tmp/c-t.log | cut -c1-250; exit $s

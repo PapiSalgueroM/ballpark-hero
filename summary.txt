@@ -1,0 +1,4 @@
+uelpub exit=1 1s | simOneOffCups: control uelpub FIRED (1 failures, all its own: uel-2025-26 uelWinner stands on 1 host (uefa.com), not two publishers)
+notrophy exit=1 79s | simOneOffCups: control notrophy FIRED (12 failures, all its own: 4 trophy: Chelsea seed 1 won: 0 minor trophies ([]), not exactly the FA Community Shield of season 2)
+nouscrow exit=1 597s | simOneOffCups: control nouscrow FIRED (362 failures, all its own: 1 usc season one: a new career at PSG holds noWinner, not the seasonOne stub)
+oneoff exit=0 2616s | simOneOffCups: green, 270647 checks (2615 s)
