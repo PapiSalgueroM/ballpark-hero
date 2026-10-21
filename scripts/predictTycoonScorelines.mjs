@@ -360,3 +360,45 @@ for (const { sp } of SPS) for (const ae of AE_GRID) {
   }
 }
 if (replayBroken) { console.error('a replay under the base lines did not reproduce the base measurement, so the replays prove nothing'); process.exit(2); }
+
+/* ---------- F. each policy's predicted matchGap and results per window (critic item 21) ---------- */
+/* Priced on the BASE trajectories: where each bot's clubs were (division, Squad,
+   opponent) when the timer won everything. Under the law a club climbs slower
+   and meets each division with more Squad, so for a club that keeps pace these
+   are the gaps of a club that climbs as fast as the base did: a floor on its gap
+   while it is still climbing, not a measurement of the head. */
+function priceHist(h, R, sp) {
+  let n = 0; let gap = 0; let w = 0; let d = 0; let goals = 0;
+  for (const [k, cnt] of Object.entries(h ?? {})) {
+    const [div, sq, ok] = k.split('|').map(Number);
+    const g = sq * sp - R[div] - (ok / 1e5) * OFF;
+    const r = matchAt(g);
+    n += cnt; gap += cnt * g; w += cnt * r.w; d += cnt * r.d; goals += cnt * r.goals;
+  }
+  return n ? { n, gap: gap / n, w: w / n, d: d / n, goals: goals / n } : null;
+}
+const merge = (...hs) => { const m = {}; for (const h of hs) for (const [k, v] of Object.entries(h ?? {})) m[k] = (m[k] ?? 0) + v; return m; };
+const WIN = ['15-30', '30-60', '60-120'];
+out.windows = [];
+console.log('\nF) Predicted mean matchGap, win%, draw% and goals a match per window, calibration seeds, on the base trajectories');
+console.log('   SP AE policy      | 15-120: gap  win% draw% goals | win% 15-30 30-60 60-120 | 120-240 (pace)');
+const AE_PICK = {};
+for (const { sp, from } of SPS) {
+  let best = null;
+  for (const ae of AE_GRID) {
+    const R = ladder(sp, ae, r0For(sp));
+    for (const policy of ['pace', 'overinvest', from, 'nosquad']) {
+      const h = BASE.hist[policy]?.cal ?? {};
+      const all = priceHist(merge(...WIN.map(w => h[w])), R, sp);
+      if (!all) continue;
+      const per = WIN.map(w => priceHist(h[w], R, sp));
+      const late = policy === 'pace' ? priceHist(h['120-240'], R, sp) : null;
+      out.windows.push({ sp, ae, policy, all, per, late });
+      console.log(`   ${sp} ${String(ae).padStart(2)} ${policy.padEnd(10)} | ${f2(all.gap).padStart(6)} ${pct(all.w).padStart(5)} ${pct(all.d).padStart(5)} ${all.goals.toFixed(2)} | ${per.map(p => (p ? pct(p.w) : 'n/a').padStart(5)).join(' ')} | ${late ? `${f2(late.gap)} ${pct(late.w)}%` : ''}`);
+      if (policy === 'pace' && (best === null || Math.abs(all.w - 0.65) < Math.abs(best.w - 0.65) - 1e-12)) best = { ae, w: all.w };
+    }
+  }
+  AE_PICK[sp] = best.ae;
+  console.log(`   SP ${sp}: knob 3 on the base trajectories picks AE ${best.ae} (pace ${pct(best.w)}% over 15 to 120, nearest 65, ties to the smaller AE, the harder ladder; critic item 18). Step 2a measures it on the head.`);
+}
+out.aePick = AE_PICK;
