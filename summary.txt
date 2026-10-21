@@ -1,0 +1,5 @@
+b-simCareerPendingOverallGates exit=1 1s | Node.js v24.21.0
+b-simSoccerCareerColdContext exit=1 1s | Node.js v24.21.0
+b-simSoccerCareerStatRewards exit=1 1s | Node.js v24.21.0
+b-simPhonePanelLifeStories exit=1 6s | Node.js v24.21.0
+b-simCareerLeagueSeasons exit=0 15s | simCareerLeagueSeasons: all sections green
