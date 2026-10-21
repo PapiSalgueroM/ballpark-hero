@@ -1,0 +1,95 @@
+name: Club Manager finance scroll diagnostic
+on:
+  push:
+    branches: [codex/cm-shirt-scroll-diagnostic]
+permissions:
+  contents: read
+concurrency:
+  group: cm-shirt-scroll-diagnostic-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  observe:
+    if: github.ref == 'refs/heads/codex/cm-shirt-scroll-diagnostic'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+      CURRENT_SOURCE: 86e45814734bffce89e6bc2ec0c317514f382a9e
+      BASELINE_SOURCE: e13280c8cdab53a96b6b51071f5570fda8a55113
+      SCROLL_DIAG_OUT: cm-scroll-diagnostic-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Pin both sources and install isolated browser tooling
+        run: |
+          set -euo pipefail
+          mkdir "$SCROLL_DIAG_OUT"
+          git fetch --no-tags --depth=1 origin "$CURRENT_SOURCE" "$BASELINE_SOURCE" > "$SCROLL_DIAG_OUT/fetch.log" 2>&1
+          git cat-file -e "$CURRENT_SOURCE^{commit}"; git cat-file -e "$BASELINE_SOURCE^{commit}"
+          git rev-parse HEAD > "$SCROLL_DIAG_OUT/operator-head.txt"
+          git rev-parse 'HEAD^{tree}' > "$SCROLL_DIAG_OUT/operator-tree.txt"
+          git diff --exit-code "$CURRENT_SOURCE" HEAD -- src public scripts supabase package.json package-lock.json ':!scripts/qa/diagnoseCmFinanceScroll1443.mjs' > "$SCROLL_DIAG_OUT/current-source-hold.log"
+          git diff --exit-code "$BASELINE_SOURCE" "$CURRENT_SOURCE" -- src/hooks/useRevealScroll.ts src/hooks/useClubManager.ts src/pages/ClubManager.tsx src/lib/clubManager.ts src/lib/clubManagerMeters.ts src/lib/clubManagerSlots.ts src/lib/saveFence.ts > "$SCROLL_DIAG_OUT/shared-scroll-source-hold.log"
+          git ls-files -z -- src public scripts supabase package.json package-lock.json .github | sort -z | xargs -0 sha256sum > "$SCROLL_DIAG_OUT/source-before.sha256"
+          npm ci > "$SCROLL_DIAG_OUT/install.log" 2>&1
+          tools="$RUNNER_TEMP/cm-scroll-browser"
+          npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 > "$SCROLL_DIAG_OUT/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$tools/node_modules/playwright/cli.js" install --with-deps chromium > "$SCROLL_DIAG_OUT/chromium-install.log" 2>&1
+          export FREE_KICK_FONT_CACHE="$RUNNER_TEMP/cm-scroll-fonts"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$SCROLL_DIAG_OUT/fonts.log" 2>&1
+          echo "FREE_KICK_FONT_CACHE=$FREE_KICK_FONT_CACHE" >> "$GITHUB_ENV"
+      - name: Complete separate unmodified current and baseline production builds
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          npm run build > "$SCROLL_DIAG_OUT/current-build.log" 2>&1
+          echo "CURRENT_DIST=$PWD/dist" >> "$GITHUB_ENV"
+          before="$RUNNER_TEMP/cm-scroll-baseline"
+          mkdir "$before"
+          git archive "$BASELINE_SOURCE" | tar -xf - -C "$before"
+          cmp "$before/package.json" package.json; cmp "$before/package-lock.json" package-lock.json
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$before/node_modules"
+          (cd "$before"; find src public scripts supabase -type f -print0 | sort -z | xargs -0 sha256sum) > "$SCROLL_DIAG_OUT/baseline-source-before.sha256"
+          (cd "$before"; npm run build) > "$SCROLL_DIAG_OUT/baseline-build.log" 2>&1
+          (cd "$before"; sha256sum --check "$GITHUB_WORKSPACE/$SCROLL_DIAG_OUT/baseline-source-before.sha256") > "$SCROLL_DIAG_OUT/baseline-source-hold.log"
+          echo "BASELINE_DIST=$before/dist" >> "$GITHUB_ENV"
+          (cd dist; find . -type f -print0 | sort -z | xargs -0 sha256sum) > "$SCROLL_DIAG_OUT/current-dist.sha256"
+          (cd "$before/dist"; find . -type f -print0 | sort -z | xargs -0 sha256sum) > "$SCROLL_DIAG_OUT/baseline-dist.sha256"
+      - name: Observe both native scroll timelines, without a stability verdict
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          status=0
+          timeout --signal=TERM --kill-after=15s 4m node scripts/qa/diagnoseCmFinanceScroll1443.mjs > "$SCROLL_DIAG_OUT/diagnostic.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$SCROLL_DIAG_OUT/diagnostic.exit"
+          cat "$SCROLL_DIAG_OUT/diagnostic.log"
+          test "$status" -eq 0
+          grep -Fq 'CM_SCROLL_DIAGNOSTIC DIAGNOSTIC_COMPLETE:' "$SCROLL_DIAG_OUT/diagnostic.log"
+      - name: Retain complete source and diagnostic evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -f "$SCROLL_DIAG_OUT/source-before.sha256"; then sha256sum --check "$SCROLL_DIAG_OUT/source-before.sha256" > "$SCROLL_DIAG_OUT/source-hold.log"; fi
+          git diff --exit-code HEAD -- src public scripts supabase package.json package-lock.json .github > "$SCROLL_DIAG_OUT/operator-source-hold.log"
+          (cd "$SCROLL_DIAG_OUT"; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$SCROLL_DIAG_OUT/evidence.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm-finance-scroll-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: cm-scroll-diagnostic-artifacts/
+          if-no-files-found: error
+          retention-days: 14
