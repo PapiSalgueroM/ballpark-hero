@@ -1,0 +1,2 @@
+s2-own-1514-map exit=0 181s | simCmDifficulty: all green (sections 2)
+s2-attr-1514-map exit=0 182s | simCmDifficulty: all green (sections 2)
