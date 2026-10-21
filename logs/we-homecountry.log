@@ -1,0 +1,2 @@
+control homecountry: the real league country read to mutate is not in the source, refusing a dead control or a stale baseline
+exit 1

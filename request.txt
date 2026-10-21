@@ -1,0 +1,7 @@
+oldsave: git worktree add /tmp/base 85a762419658ed63206cb20ec85f379409e6ac6a >/dev/null 2>&1 && BASE_ROOT=/tmp/base SEASON=1 node .rc/x/review-run-oldsave.mjs
+simWorldEditor: node scripts/simWorldEditor.mjs
+we-homecountry: SIM_WORLD_EDITOR_CONTROL=homecountry node scripts/simWorldEditor.mjs; s=$?; echo "exit $s"; exit $s
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+al-nzcountry: SIM_ALEAGUE_CONTROL=nzcountry node scripts/simClubManagerALeague.mjs
+simCmBoardVerdict: node scripts/simCmBoardVerdict.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs

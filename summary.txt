@@ -1,0 +1,7 @@
+we-homecountry exit=1 0s | exit 1
+simWorldEditor exit=0 13s | simWorldEditor: 2478 checks, 0 failures
+simClubManagerALeague exit=0 12s | simClubManagerALeague: all checks passed
+al-nzcountry exit=1 12s | simClubManagerALeague: 2 failure(s) under control nzcountry
+oldsave exit=0 98s | review-oldsave: DIFFERS
+simClubManagerNewLeagues exit=0 167s | simClubManagerNewLeagues: all checks passed
+simCmBoardVerdict exit=0 691s | simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 691 s)

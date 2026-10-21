@@ -1,0 +1,25 @@
+  flip: now Lincoln City: ask "Have 1 player from England in the squad" target 1 England: base onTrack, branch done
+  season differs: now Lincoln City: pendingSummary
+  flip: now Elversberg: ask "Have 7 players from Germany in the squad" target 7 Germany: base onTrack, branch done
+  season differs: now Elversberg: pendingSummary
+  flip: now Excelsior: ask "Have 1 player from Netherlands in the squad" target 1 Netherlands: base onTrack, branch done
+  season differs: now Excelsior: pendingSummary
+  flip: now Inter Miami: ask "Have 2 players from United States in the squad" target 2 United States: base onTrack, branch done
+  season differs: now Inter Miami: pendingSummary
+  flip: now D.C. United: ask "Have 2 players from United States in the squad" target 2 United States: base onTrack, branch done
+  season differs: now D.C. United: pendingSummary
+  flip: now Sporting Kansas City: ask "Have 2 players from United States in the squad" target 2 United States: base onTrack, branch done
+  season differs: now Sporting Kansas City: pendingSummary
+  flip: now Nacional: ask "Have 1 player from Portugal in the squad" target 1 Portugal: base onTrack, branch done
+  season differs: now Nacional: pendingSummary
+  flip: now Dundee: ask "Have 1 player from Scotland in the squad" target 1 Scotland: base onTrack, branch done
+  season differs: now Dundee: pendingSummary
+  flip: now Erzurumspor: ask "Have 1 player from Türkiye in the squad" target 1 Türkiye: base onTrack, branch done
+  flip: now Club Brugge: ask "Have 7 players from Belgium in the squad" target 7 Belgium: base onTrack, branch done
+  flip: now Beveren: ask "Have 1 player from Belgium in the squad" target 1 Belgium: base onTrack, branch done
+  flip: now RB Salzburg: ask "Have 3 players from Austria in the squad" target 3 Austria: base onTrack, branch done
+careers 94; open differs beyond nation 0; after a match 22; after the season 63
+natQuota asks on the base save: 56; graded differently by the branch on load: 32
+differing keys: [["match:inbox",22]]
+season keys: [["pendingSummary",32],["inbox",40]]
+review-oldsave: DIFFERS
