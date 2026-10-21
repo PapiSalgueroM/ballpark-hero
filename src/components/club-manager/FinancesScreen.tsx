@@ -100,6 +100,7 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
   const bad = table.find(o => o.rep === 'bad');
   return (
     <div className="space-y-2">
+      <style hidden data-finance-scroll-anchor>{'html:has([data-finance-projection]) { overflow-anchor: none; }'}</style>
       {/* Round 467: the projection. */}
       <div className="bg-card border border-border rounded-xl p-3" data-finance-projection>
         <div className="flex items-baseline justify-between gap-2 mb-1">
