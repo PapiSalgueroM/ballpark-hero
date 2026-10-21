@@ -148,6 +148,7 @@ const F1HigherLower = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="f1-higher-lower" gameContext={{ mode }} />}
           pageHasOwnH1
           title="F1 Higher or Lower | DoUKnowBall"
           description="Two Formula 1 drivers, side by side. Which one won more Grands Prix? Every driver with 8+ career wins, from Fangio and Moss to Hamilton and Verstappen."
@@ -167,9 +168,7 @@ const F1HigherLower = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="f1-higher-lower" gameContext={{ mode }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

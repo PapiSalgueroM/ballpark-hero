@@ -546,11 +546,10 @@ describe('player autocomplete: a list is only on screen for the query that produ
     expect(searchPlayers).toHaveBeenCalledTimes(2);
   });
 
-  /* Test 14, also from the closing fix pass. A finger picks on pointerdown,
-     the list closes, and the click that same tap sends then landed on whatever
-     the list had been covering. Measured in a touch browser on Missing XI: one
-     tap on a name picked it and pressed Lock in guess, every time, on main
-     too. The box swallows that one click and nothing else. */
+  /* Test 14 keeps a touch or pen row attached until its completed click picks
+     the name. That row click leaves the next explicit button action usable.
+     This checks the DOM timeline; the browser proof owns native pan cancellation
+     and the actual tap target on Missing XI. */
   it('the click of the tap that picked a name never reaches what was under the list', async () => {
     vi.useFakeTimers();
     slowSearch(() => 50);
@@ -562,44 +561,65 @@ describe('player autocomplete: a list is only on screen for the query that produ
       return { p, view, button: view.getByText('Under the list') };
     };
 
-    // A finger's pick (a pen is a finger here): the tap's own click, landing on the button the list covered, is swallowed. Once.
+    // A completed touch or pen click belongs to the actual row that was pressed.
     let drawn = await draw();
     for (const kind of ['touch', 'pen'] as const) {
       under.mockClear();
-      pointerDownAs(kind, optionsIn(drawn.view.container)[0]);
-      expect(drawn.p.onSelect, kind).toHaveBeenCalledExactlyOnceWith(A);
-      expect(fireEvent.click(drawn.button), kind).toBe(false);
+      const row = optionsIn(drawn.view.container)[0];
+      pointerDownAs(kind, row);
+      expect(drawn.p.onSelect, kind).not.toHaveBeenCalled();
+      expect(drawn.p.onChange, kind).not.toHaveBeenCalled();
+      expect(row, kind).toBeInTheDocument();
       expect(under, kind).not.toHaveBeenCalled();
-      expect(fireEvent.click(drawn.button), kind).toBe(true);
+      fireEvent.pointerUp(row);
+      expect(fireEvent.click(row, { detail: 1 }), kind).toBe(true);
+      expect(drawn.p.onSelect, kind).toHaveBeenCalledExactlyOnceWith(A);
+      expect(drawn.p.onChange, kind).toHaveBeenCalledExactlyOnceWith(A.name);
+      expect(drawn.view.queryByRole('listbox'), kind).toBeNull();
+      expect(under, kind).not.toHaveBeenCalled();
+      pointerDownAs(kind, drawn.button);
+      expect(fireEvent.click(drawn.button, { detail: 1 }), kind).toBe(true);
       expect(under, kind).toHaveBeenCalledTimes(1);
       drawn.view.unmount();
       drawn = await draw();
     }
 
-    // A box that is busy takes no pick, so it swallows nothing.
+    // A busy box takes no row activation and leaves the next button action usable.
     under.mockClear();
     drawn.view.rerender(<><PlayerAutocomplete {...drawn.p} disabled /><button onClick={under}>Under the list</button></>);
-    pointerDownAs('touch', optionsIn(drawn.view.container)[0]);
+    const disabledRow = optionsIn(drawn.view.container)[0];
+    pointerDownAs('touch', disabledRow);
+    fireEvent.pointerUp(disabledRow);
+    fireEvent.click(disabledRow, { detail: 1 });
     expect(drawn.p.onSelect).not.toHaveBeenCalled();
+    expect(drawn.p.onChange).not.toHaveBeenCalled();
+    expect(under).not.toHaveBeenCalled();
+    pointerDownAs('touch', drawn.button);
     expect(fireEvent.click(drawn.button)).toBe(true);
     expect(under).toHaveBeenCalledTimes(1);
     drawn.view.unmount();
 
-    // The player's next touch is their own: it ends the wait, and its click goes through.
+    // A contact with no row click leaves the name unselected and the next action usable.
     under.mockClear();
     drawn = await draw();
     pointerDownAs('touch', optionsIn(drawn.view.container)[0]);
+    expect(drawn.p.onSelect).not.toHaveBeenCalled();
+    expect(drawn.p.onChange).not.toHaveBeenCalled();
     pointerDownAs('touch', drawn.button);
     fireEvent.click(drawn.button);
     expect(under).toHaveBeenCalledTimes(1);
     drawn.view.unmount();
 
-    // The browser sent no click for that tap: the wait gives up by itself.
+    // A cancelled contact sends no row click and installs no wait for the next action.
     under.mockClear();
     drawn = await draw();
-    pointerDownAs('pen', optionsIn(drawn.view.container)[0]);
-    expect(drawn.p.onSelect).toHaveBeenCalledExactlyOnceWith(A);
-    await advance(1000);
+    const cancelledRow = optionsIn(drawn.view.container)[0];
+    pointerDownAs('pen', cancelledRow);
+    fireEvent.pointerCancel(cancelledRow);
+    expect(drawn.p.onSelect).not.toHaveBeenCalled();
+    expect(drawn.p.onChange).not.toHaveBeenCalled();
+    expect(cancelledRow).toBeInTheDocument();
+    pointerDownAs('pen', drawn.button);
     fireEvent.click(drawn.button);
     expect(under).toHaveBeenCalledTimes(1);
     drawn.view.unmount();

@@ -22,7 +22,8 @@
  * stub then sits on every answer). Replace the text with B's. Wait a seeded
  * 0 to 700 ms (mulberry32 on RACE_SEED, default 1138). Then, in ONE evaluate
  * so nothing can change between the look and the tap: read the box and the
- * first option and, if there is one, dispatch a pointerdown on it.
+ * first option and, if there is one, dispatch a synthetic down, up and click.
+ * Native scrolling and taps are measured by the separate touch-scroll walk.
  *   staleVisible  an option naming A while the box holds B's text
  *   stalePicked   the page TOOK that pick: a second evaluate finds the box no
  *                 longer holding B's typed text (a pick writes the picked name
@@ -242,7 +243,11 @@ function lookAndTap(page) {
     const box = document.querySelector(sel);
     const option = document.querySelector('[role="option"]');
     const seen = { value: box ? box.value : null, label: option ? option.textContent : null };
-    if (option) option.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, cancelable: true, pointerType: 'touch', isPrimary: true }));
+    if (option) {
+      option.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, cancelable: true, pointerType: 'touch', isPrimary: true }));
+      option.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, cancelable: true, pointerType: 'touch', isPrimary: true }));
+      option.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, detail: 1 }));
+    }
     return seen;
   }, BOX);
 }
@@ -432,6 +437,7 @@ if (!fs.existsSync(path.join(distDir, 'index.html'))) {
 }
 console.log(`playAutocompleteRace: seed ${SEED}, ${TRIALS} trials a page, widths ${WIDTHS.join(' and ')}, build ${path.relative(ROOT, distDir) || distDir}`);
 const { cells, target, pageErrors } = await walk(distDir);
+console.log('RACE_RECEIPT ' + JSON.stringify({ cells, target, pageErrors }));
 
 const taps = cells.reduce((sum, cell) => sum + cell.taps, 0);
 const staleVisible = cells.reduce((sum, cell) => sum + cell.staleVisible, 0);

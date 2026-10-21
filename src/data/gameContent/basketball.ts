@@ -1990,6 +1990,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
             heading: "Spending across seven aisles",
             items: [
               "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
+              "During a playing season, open Deal with it under the heat meter when you're holding dirty money. Choose Come clean, Give it away, Keep it quiet or Wash it after reading the cost and any catch risk.",
             ],
           },
         ],

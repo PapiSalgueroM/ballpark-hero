@@ -176,11 +176,11 @@ describe('Soccer Career trophy cabinet panel', () => {
     fireEvent.click(help);
     expect(help).toHaveAttribute('aria-expanded', 'true');
     expect(view.getByText(/Example: a season with one league title/)).toBeVisible();
-    fireEvent.click(view.getByRole('button', { name: 'Back to wins' }));
+    fireEvent.click(view.getByRole('button', { name: 'Back to season' }));
     expect(view.container.querySelector('[data-trophy-detail="2026"]')).not.toBeNull();
     fireEvent.click(help);
     expect(view.container.querySelector('[data-trophy-help]')).not.toBeNull();
-    fireEvent.click(view.getByRole('button', { name: 'Back to wins' }));
+    fireEvent.click(view.getByRole('button', { name: 'Back to season' }));
     fireEvent.click(view.getByRole('button', { name: '‹ All wins' }));
     fireEvent.click(help);
     fireEvent.click(view.getByRole('button', { name: 'Back to wins' }));

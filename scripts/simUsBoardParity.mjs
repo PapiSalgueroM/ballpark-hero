@@ -263,6 +263,62 @@
  * steps, 2,296,639 bytes. Section A now asks every sport for a wheel step, a
  * step saved in each talk phase and the four saves, and two controls joined.
  *
+ * Round 1313 (2026-10-12) put the MLB and NHL rival on the player's own line
+ * (his season made by the player's functions at his position, the head to head
+ * read off the two saved lines, beat 206 and 306 naming both seasons). That
+ * moves the rival on every MLB and NHL save after the first season ON PURPOSE,
+ * so the fixture was taken again, once, on a GitHub runner (r1313-s5c1), from
+ * 560a3f85. The chain: the recorder run on 8fde50f0 (the tree before the
+ * switch) gave the committed recording back byte for byte, 2,296,639 bytes,
+ * the header aside (r1313-s5pre); after the MLB switch this harness was red in
+ * MLB alone (64 steps, r1313-s5ac), after the NHL switch in MLB and the NHL
+ * alone (128 steps, r1313-s5bc). New against old, by the --rival mode of
+ * scripts/qa/compareUsBoardFixture.mjs: the NFL and NBA sections byte equal;
+ * in MLB and the NHL the first step whose saved career differs is the first
+ * season played (step 10 and step 12, "Play the 2026 season") and it differs
+ * in c.rival alone; neither click path parts; 455 and 421 clicks, 24 seasons,
+ * 886 and 900 screen steps, 10 and 12 rival beats, 4 and 4 rival choices, all
+ * as before; 18 of 19 fixed saves a sport moved (rookie, saved before any
+ * season, did not) and 19 of 19 screen walks; 2,298,730 bytes. Section A's
+ * counts are the ones above, the four named saves and MLB's raised push kept.
+ * Release BK (2026-10-18) re-recorded it on purpose for the other lane's PR333
+ * (the appearance builder's buttons now say which one is chosen, with
+ * aria-pressed), which every US board shows on its create screen. Proof
+ * first: the release tree without PR333's merge (treeWithoutMerge 99154ea3
+ * 52419816) replays the Round 1313 recording green in all four sports
+ * (rBK-tr1 parity-no333). Then recorded twice on a GitHub runner from the
+ * branch head ff7d97ca, byte for byte the same (rBK-tr1 record). New against
+ * old, in each sport alike: only the markup hash of the 17 path steps that
+ * stand on the create screen moved (the first career's nine, the second
+ * career's seven and the last step, the screen the final restart opens; in
+ * the NFL steps 0 to 8, 301 to 307 and 474), and the create screen's first
+ * paint grew by 376 characters; every click, save hash, field, text excerpt,
+ * length, coverage count, fixed save and screen walk is the same, compared
+ * step for step over all 5,518 (68 moved, each in its markup hash alone).
+ * 2,298,731 bytes.
+ * Release BL (2026-10-19) re-recorded it on purpose for the other lane's
+ * PR339 and PR345, through the appearance builder that every US board shows
+ * on its create screen and that this file's test renders as "soccer" (the
+ * Round 996 historical projection, the vi.mock in usBoardFixture.test.tsx):
+ * PR339 gives Soccer Career six more hairstyles and four more beards, so the
+ * projection shows 29 and 18 (the live US boards keep their own 23 and 14),
+ * and PR345 adds a Light mode text class to the selected chip. Proof first:
+ * the tree before PR339's merge (ab1fe605) replays the BK recording green
+ * (rBLe-a parity-m2); with PR339's builder hunk alone it goes red in the NBA
+ * only, at the second career's hair tab (rBLi). Recorded twice on a runner
+ * from the branch head dd033ebf with the proved historical Panel aliased in,
+ * exactly as this replay runs since Round 1424, byte for byte the same
+ * (rBLh rec-hist, sha256 210cbd1a). New against old: in the NFL, the MLB and
+ * the NHL only the markup hash of the 17 create screen steps moved and the
+ * first paint grew by 31 characters (the class, with its escaped ampersand);
+ * in the NBA the same, and at step 345 the seeded walk, choosing among 6 more
+ * hair buttons, presses Brown where it pressed Auburn and then Extras where
+ * it pressed Boots, so the second career's player is created with another
+ * look: the only save field that differs is c.appearance (step 348), and
+ * with it every later save hash of that career and the markup of the screens
+ * that show his avatar. No other click, no text excerpt, no length, no
+ * coverage count and none of the 76 fixed saves moved. 2,298,731 bytes.
+ *
  * Controls, one per run (each is a full replay, about three minutes):
  *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared
  *                                    board: all four sports go red on the words
@@ -309,12 +365,15 @@
  * Nothing here reaches the network. Run: node scripts/simUsBoardParity.mjs
  */
 import { spawnSync } from 'node:child_process';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { US_CAREER_BOARD, usCareerSport, wrapperProblems } from './lib/usCareerFiles.mjs';
+import { NFL_STAFF_RECOVERY_PANEL_HUNKS, stripNflStaffRecoveryPanelHunks } from './lib/usNflStaffRecoveryHunks.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TEST = 'src/test/usBoardFixture.test.tsx';
@@ -331,6 +390,33 @@ process.on('exit', () => {
   try { fs.rmSync(tmp, { recursive: true, force: true }); } catch { /* best effort */ }
 });
 const read = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
+
+/* Round 1424: this recording predates the explicit NFL staff action. Only the
+   proved original Panel presentation is replayed; the current engine stays live. */
+const currentCoachPanel = read(path.join(ROOT, 'src/components/us-career/CoachCareerPanel.tsx'));
+const historicalCoachPanel = stripNflStaffRecoveryPanelHunks(currentCoachPanel);
+assert.equal(stripNflStaffRecoveryPanelHunks(currentCoachPanel.replaceAll('\n', '\r\n')), historicalCoachPanel, 'Whole historical panel LF and CRLF inverse agree');
+for (const [, hunk] of NFL_STAFF_RECOVERY_PANEL_HUNKS) {
+  const altered = hunk.slice(0, -1) + 'X';
+  assert.notEqual(altered, hunk);
+  for (const subject of [currentCoachPanel.replace(hunk, ''), currentCoachPanel.replace(hunk, () => altered), currentCoachPanel + hunk]) {
+    assert.notEqual(subject, currentCoachPanel, 'Effective historical inverse control');
+    assert.throws(() => stripNflStaffRecoveryPanelHunks(subject), /Exactly one NFL staff panel inverse hunk/, 'Missing altered or duplicated panel hunk refuses');
+  }
+}
+assert.throws(() => stripNflStaffRecoveryPanelHunks(currentCoachPanel + '\n// Unrelated source.\n'), /Whole historical panel SHA/, 'Unrelated panel source refuses');
+const historicalPanelFile = path.join(tmp, 'CoachCareerPanel.historical.tsx');
+fs.writeFileSync(historicalPanelFile, historicalCoachPanel, { flag: 'wx' });
+const nativeRequire = createRequire(path.join(ROOT, 'package.json'));
+const historicalAliases = {
+  ...Object.fromEntries(['react/jsx-dev-runtime', 'react/jsx-runtime', 'react', 'lucide-react'].map(id => [id, nativeRequire.resolve(id)])),
+  '@/components/us-career/CoachCareerPanel': historicalPanelFile,
+};
+const inheritedAliases = JSON.parse(process.env.NO_DOUBLE_SWAP || '{}');
+for (const alias of Object.keys(historicalAliases)) assert(!(alias in inheritedAliases), 'No inherited alias replaces the proved historical Panel or installed packages');
+const replayAliases = { ...historicalAliases, ...inheritedAliases };
+console.log('Round1424 historical presentation: proved main775 coaching Panel SHA9390fab969844b20ca4f7adbc097664191d3f5ea082090553f479305fe85d321, current engine and unchanged fixture. This replay gives no current-Panel visual parity credit.');
+console.log('Historical installed aliases: ' + JSON.stringify(Object.entries(historicalAliases).filter(([id]) => !id.startsWith('@/')).map(([id, file]) => ({ id, file, sha256: createHash('sha256').update(fs.readFileSync(file)).digest('hex') }))));
 
 /* The source controls. Each changes one thing in a copy of one file and
    points the replay at the copy. `red` is which sports that file draws: the
@@ -438,6 +524,7 @@ function wholeProblems(fx) {
 }
 
 function replay(env) {
+  assert.equal(read(historicalPanelFile), historicalCoachPanel, 'Proved historical Panel copy held');
   const out = path.join(tmp, `report-${Date.now()}.json`);
   const report = path.join(tmp, `problems-${Date.now()}.txt`);
   fs.writeFileSync(report, '');
@@ -446,7 +533,7 @@ function replay(env) {
     [VITEST, 'run', TEST, '--reporter=json', `--outputFile.json=${out}`, '--reporter=default'],
     {
       cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024,
-      env: { ...process.env, ...env, US_BOARD_FIXTURE: 'replay', US_BOARD_FIXTURE_REPORT: report, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' },
+      env: { ...process.env, ...env, NO_DOUBLE_SWAP: JSON.stringify(replayAliases), US_BOARD_FIXTURE: 'replay', US_BOARD_FIXTURE_REPORT: report, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' },
     },
   );
   const text = (r.stdout || '') + (r.stderr || '');
@@ -587,4 +674,4 @@ if (failures) {
   console.error(`simUsBoardParity: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
 }
-console.log('simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.');
+console.log('simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.');

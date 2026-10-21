@@ -56,13 +56,12 @@
  *                 fails 13; keeps 1, 7, 8, 11
  *   deafreturn    coming back to the box after a pick asks for no search
  *                 fails 8, 13; keeps 1, 7
- * And with test 14 (a finger picks on pointerdown, the list closes, and the
- * same tap's click landed on what the list had covered: on Missing XI one tap
- * on a name also pressed Lock in guess, every time, measured in a touch
- * browser on main and on this branch before the fix):
- *   tapthrough    the tap's own click is not swallowed
+ * Test 14 now checks that a completed touch or pen row click picks once and
+ * leaves the player's next explicit button click usable. The native browser
+ * proof separately checks pan cancellation and the actual tap target:
+ *   tapthrough    touch and pen select before their contact completes
  *                 fails 14; keeps 1, 7, 13
- *   greedyswallow the wait does not end with the player's next touch
+ *   greedyswallow the selecting row click steals the next explicit click
  *                 fails 14; keeps 1, 7, 13
  * Added at the close of Release AO, with test 15. A box with no debounce
  * (College Grid's board, which answers from memory) blinked "Finding players"
@@ -144,10 +143,14 @@ const STALE_CONTROLS = {
   stickypick: { edits: [['    if (!justPicked) pickedTagRef.current = null;\n', '']], fails: [13], keeps: [1, 7, 8, 11] },
   deafreturn: { edits: [['    pickedTagRef.current = null;\n    setOpen(true);', '    setOpen(true);']], fails: [8, 13], keeps: [1, 7] },
   tapthrough: {
-    edits: [["                  if (!disabled && (e.pointerType === 'touch' || e.pointerType === 'pen')) swallowTapClick();\n", '']],
+    edits: [["                  if (e.pointerType === 'touch' || e.pointerType === 'pen') return;\n", '']],
     fails: [14], keeps: [1, 7, 13],
   },
-  greedyswallow: { edits: [["  document.addEventListener('pointerdown', end, true);\n", '']], fails: [14], keeps: [1, 7, 13] },
+  greedyswallow: {
+    edits: [['                onClick={() => commitSelection(entity)}\n',
+      "                onClick={() => {\n                  commitSelection(entity);\n                  document.addEventListener('click', event => {\n                    event.preventDefault();\n                    event.stopPropagation();\n                  }, { capture: true, once: true });\n                }}\n"]],
+    fails: [14], keeps: [1, 7, 13],
+  },
   zerotimer: {
     edits: [
       ['          if (debounceMs <= 0) flushSync(commit); else commit();', '          commit();'],
@@ -204,7 +207,7 @@ try {
     if (staleSpec) {
       for (const [anchor, replacement] of staleSpec.edits) replace(anchor, replacement);
     } else if (control === 'pointeronly') {
-      replace('                onClick={e => {\n                  if (e.detail === 0) commitSelection(entity);\n                }}', '');
+      replace('                onClick={() => commitSelection(entity)}\n', '');
     } else if (control === 'unguard') {
       replace('      if (disabled) return;', '', 2);
     } else {

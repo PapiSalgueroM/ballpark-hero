@@ -18,7 +18,7 @@
    5. ten seasons of yo-yo never corrupt the world: sizes hold, no club is
       ever in two divisions, no name is created or destroyed, and the
       player's club def never goes NaN;
-   6. historic era saves and custom club saves are exempt: their
+   6. historic era saves and unpaired custom club saves are exempt: their
       memberships never move.
 
    Negative control: SIM_PROMOTION_CONTROL=freeze severs the
@@ -197,7 +197,7 @@ console.log('5) ten seasons of yo-yo never corrupt the world');
   console.log(`   10 rollovers, ${staticAll.length} club names intact every summer, budgets finite throughout`);
 }
 
-console.log('6) historic eras and custom clubs are exempt');
+console.log('6) historic eras and unpaired custom clubs are exempt');
 {
   const era = cm.startCareer('Arsenal', 'era2010');
   const eraNext = cm.startNextSeason(era);
@@ -205,10 +205,10 @@ console.log('6) historic eras and custom clubs are exempt');
   const custom = cm.startCareer('Real Anthony', 'now', {
     name: 'Real Anthony', stadium: 'Salguero Park',
     crest: { shape: 0, pattern: 2, color1: '#7c3aed', color2: '#f8fafc', initials: 'RA' },
-    budgetTier: 'mid', leagueId: 'premier', replacedClub: '',
+    budgetTier: 'mid', leagueId: 'eredivisie', replacedClub: '',
   });
   const customNext = cm.startNextSeason(custom);
-  if (customNext.leagueOverrides !== undefined) fail('a custom club save grew league overrides, the v1 exemption is gone');
+  if (customNext.leagueOverrides !== undefined) fail('an unpaired custom club save grew league overrides');
   console.log('   era2010 rollover: no overrides; custom club rollover: no overrides');
 }
 

@@ -42,6 +42,7 @@ import type { CareerState } from "./soccerCareerEngine";
 import { getEraStars, getEraTopClubs, getEraLeagueClubs, getEraRivalName } from "./careerEras";
 import { leagueKeyInYear, ledgerLeague } from "./soccerCareerLeague";
 import { cupFor, WORLD_LEAGUE_ASSOCIATION } from "./soccerCareerCup";
+import { LAST_REAL_YEAR, seasonHappened, summerHappened, feedPastSeasonLine, feedFutureSeasonLine } from "./soccerWorldTruth";
 
 /* ─── storage caps ─── */
 export const MAX_LINES = 6;    // lines kept per thread (three exchanges of history)
@@ -1032,14 +1033,22 @@ export function ensurePhone(s: CareerState): PhoneState {
   const p = (s as CareerState & { phone?: PhoneState }).phone;
   if (!p || typeof p !== "object") return blankPhone();
   const out: PhoneState = {
-    threads: Array.isArray(p.threads) ? p.threads.filter(t => t && Array.isArray(t.lines)) : [],
+    threads: Array.isArray(p.threads) ? p.threads.filter(t => t && Array.isArray(t.lines)).map(t => ({
+      ...t, lines: [...t.lines], seen: Array.isArray(t.seen) ? [...t.seen] : [],
+    })) : [],
     feed: Array.isArray(p.feed) ? p.feed.filter(f => typeof f === "string") : [],
     world: p.world && typeof p.world === "object" ? p.world : null,
-    clubs: p.clubs && typeof p.clubs === "object" ? p.clubs : {},
+    clubs: p.clubs && typeof p.clubs === "object" ? { ...p.clubs } : {},
     rivalClub: typeof p.rivalClub === "string" ? p.rivalClub : null,
     seed: typeof p.seed === "number" && p.seed > 0 ? p.seed : 1,
     offers: typeof p.offers === "number" ? p.offers : 0,
     perksTaken: typeof p.perksTaken === "number" ? p.perksTaken : 0,
+    /* Release BI join (Round BII): a missing or invalid budget field stays absent rather than an explicit undefined
+       key, so a repaired phone has the same keys as before PR289 (the saved bytes were always the same). */
+    ...(typeof p.bYear === "number" && Number.isFinite(p.bYear) ? { bYear: p.bYear } : {}),
+    ...(typeof p.bK === "number" && Number.isFinite(p.bK) && p.bK >= 0 ? { bK: p.bK } : {}),
+    ...(typeof p.bP === "number" && Number.isFinite(p.bP) && p.bP >= 0 ? { bP: p.bP } : {}),
+    ...(typeof p.bM === "number" && Number.isFinite(p.bM) && p.bM >= 0 ? { bM: p.bM } : {}),
   };
   for (const t of out.threads) {
     if (typeof t.rel !== "number" || !Number.isFinite(t.rel)) t.rel = 50;
@@ -1562,10 +1571,9 @@ export function unreadThreads(s: CareerState): number {
 
 const ATTACKING = ["ST", "LW", "RW", "CAM"];
 
-/* Past this the era pools run out of people who could plausibly still be
-   playing, so the world generates its own names, exactly like the Ballon d'Or
-   already does past 2032. Nobody real gets a fictional future. */
-const LAST_REAL_YEAR = 2032;
+/* LAST_REAL_YEAR (2032: past it the era pools run out of people who could
+   plausibly still be playing, so the world generates its own names) lives in
+   soccerWorldTruth.ts since Round 1329, so the quiz reads the same year. */
 
 function leagueOfClub(club: string, leagues: Record<string, string[]>): string | null {
   for (const [name, clubs] of Object.entries(leagues)) if (clubs.includes(club)) return name;
@@ -1638,8 +1646,12 @@ export function worldSeasonTick(
     }
   }
 
-  // Seed anybody new into the map at their era club, then let the map rule.
-  for (const st of stars) if (!p.clubs[st.name]) p.clubs[st.name] = st.club;
+  /* Seed anybody new into the map at their era club, then let the map rule.
+     Round 1329: a real man is never moved by the sim, so in a real names year
+     every one of them sits at the club his era pool gives for this season
+     (careerEras.ts), which is where the Ballon d'Or night finds him too
+     (worldClubOf). Generated names are seeded once, as before. */
+  for (const st of stars) if (realNames || !p.clubs[st.name]) p.clubs[st.name] = st.club;
 
   /* Transfers. Two to four of the era's names change clubs, and this map is
      the only place the answer lives, so nothing can contradict it later. */
@@ -1651,8 +1663,12 @@ export function worldSeasonTick(
   }
   const wanted = rng.int(2, 4);
   const movedAlready = new Set<string>();
+  /* Round 1329: every draw of a move is still made and counted, so the
+     season's later draws do not move, but only a generated man changes clubs:
+     a real one stays where his era pool put him. */
+  let drawnMoves = 0;
   for (const st of movers) {
-    if (moves.length >= wanted) break;
+    if (drawnMoves >= wanted) break;
     if (movedAlready.has(st.name)) continue;
     movedAlready.add(st.name);
     const from = p.clubs[st.name];
@@ -1662,6 +1678,8 @@ export function worldSeasonTick(
     if (dests.length === 0) continue;
     const to = dests[Math.floor(rng.next() * dests.length)];
     const fee = Math.round((22 + st.power * 7 + rng.int(0, 34)) / 5) * 5;
+    drawnMoves += 1;
+    if (realNames) continue;
     p.clubs[st.name] = to;
     moves.push({ who: st.name, from, to, fee });
   }
@@ -1721,7 +1739,8 @@ export function worldSeasonTick(
     const st = forwards[Math.floor(rng.next() * forwards.length)];
     const club = p.clubs[st.name] ?? st.club;
     const goals = rng.int(st.baseGoals[0], st.baseGoals[1]);
-    topScorer = { who: st.name, club, goals, league: leagueOfClub(club, leagues) ?? "the league" };
+    /* Round 1329: both draws stay; a real man's tally is never made up. */
+    if (!realNames) topScorer = { who: st.name, club, goals, league: leagueOfClub(club, leagues) ?? "the league" };
   }
 
   const t = s.lastTournament;
@@ -1733,24 +1752,40 @@ export function worldSeasonTick(
   const world: WorldSeason = { year, ucl, leagues: leagueWinners, cups: cupWinners, moves, topScorer, intl };
   p.world = world;
 
-  /* Feed lines. Every one of them is read straight off `world`. */
+  /* Feed lines. Every one of them is read straight off `world`. Round 1329:
+     the feed is the world around him, so each line is a claim about the real
+     world. A season that really happened says so in one line and states
+     nothing about other people's results, which the game draws but cannot
+     stand behind (soccerWorldTruth.ts); a season of the game's own future
+     prints as before, under a line that says it is his world's. The feed is
+     shown newest first, so that line goes in last and sits on top of its
+     season. A tournament's winner is named only for a summer still to come:
+     finals he played in a summer that happened are his story, told on his
+     International card and in his season log, never here as world news. The
+     rival's move is a generated man's, every year. */
+  const happened = seasonHappened(year);
   const items: string[] = [];
-  for (const m of moves) {
-    items.push(`🔄 DONE DEAL. ${m.who} joins ${m.to} from ${m.from}. Fee around ${m.fee}m.`);
+  if (!happened) {
+    for (const m of moves) {
+      items.push(`🔄 DONE DEAL. ${m.who} joins ${m.to} from ${m.from}. Fee around ${m.fee}m.`);
+    }
   }
   if (s.rival && !s.rival.retired && p.rivalClub && p.rivalClub !== s.rival.club) {
     items.push(`🔄 ${s.rival.name} has left ${p.rivalClub} for ${s.rival.club}.`);
   }
-  if (ucl !== s.currentClub) items.push(`⭐ ${ucl} are champions of Europe.`);
-  const titles = Object.entries(leagueWinners).filter(([, club]) => club !== s.currentClub);
-  for (const [lg, club] of titles.slice(0, 2)) {
-    items.push(`🏆 ${club} win ${leaguePhrase(lg)}.`);
+  if (!happened) {
+    if (ucl !== s.currentClub) items.push(`⭐ ${ucl} are champions of Europe.`);
+    const titles = Object.entries(leagueWinners).filter(([, club]) => club !== s.currentClub);
+    for (const [lg, club] of titles.slice(0, 2)) {
+      items.push(`🏆 ${club} win ${leaguePhrase(lg)}.`);
+    }
+    if (topScorer && topScorer.club !== s.currentClub) {
+      const where = topScorer.league === "the league" ? "his league" : leaguePhrase(topScorer.league);
+      items.push(`🥅 ${topScorer.who} finished top scorer in ${where} on ${topScorer.goals}.`);
+    }
   }
-  if (topScorer && topScorer.club !== s.currentClub) {
-    const where = topScorer.league === "the league" ? "his league" : leaguePhrase(topScorer.league);
-    items.push(`🥅 ${topScorer.who} finished top scorer in ${where} on ${topScorer.goals}.`);
-  }
-  if (intl) items.push(`🌍 ${intl.champion} win the ${intl.name}.`);
+  if (intl && !summerHappened(year)) items.push(`🌍 ${intl.champion} win the ${intl.name}.`);
+  items.push(happened ? feedPastSeasonLine(year) : feedFutureSeasonLine(year));
 
   p.feed = [...p.feed, ...items].slice(-MAX_FEED);
   p.rivalClub = s.rival && !s.rival.retired ? s.rival.club : null;

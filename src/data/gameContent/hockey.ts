@@ -870,6 +870,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "Shop your look and work the Bank",
         items: [
           "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
+          "During a playing season, open Deal with it under the heat meter when you're holding dirty money. Choose Come clean, Give it away, Keep it quiet or Wash it after reading the cost and any catch risk.",
           "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school at the back of the plane is one sitting a season on odds that are printed before you sit in.",
         ],
       },

@@ -120,24 +120,48 @@
         window.addEventListener('load', sweep);
       })();
     </script>
-    <script>
-      // Google Analytics loads only after Accept. AdSense is intentionally not
-      // global: direct visits to account, reset, fallback, and other screens
-      // without a deliberate slot do not load it. Auto Ads and Auto optimize
-      // stay off in the account. The static verification meta stays global.
+    <script data-dukb-consent-bootstrap="">
+      // Keep this gate aligned with consentPreferences and consentedScripts.
       (function () {
+        var ANALYTICS_READY = false;
+        if (!ANALYTICS_READY) return;
         try {
-          if (localStorage.getItem('cookie-consent') === 'accepted') {
-            window.dataLayer = window.dataLayer || [];
-            window.gtag = function () { window.dataLayer.push(arguments); };
-            window.gtag('js', new Date());
-            window.gtag('config', 'G-KZQK2G68YC');
-            var g = document.createElement('script');
-            g.async = true;
-            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
-            document.head.appendChild(g);
+          var value = JSON.parse(localStorage.getItem('cookie-consent-v2') || 'null');
+          var now = Date.now();
+          if (!value || value.version !== 2 || typeof value.advertising !== 'boolean'
+            || typeof value.analytics !== 'boolean' || value.analytics !== true
+            || typeof value.updatedAt !== 'number' || !Number.isFinite(value.updatedAt)
+            || value.updatedAt < 0 || value.updatedAt > now
+            || now - value.updatedAt >= 180 * 24 * 60 * 60 * 1000) return;
+          if (/^\/(?:reset-password|auth|account|profile|admin)(?:\/|$)/.test(location.pathname)) return;
+          function cleanUrl(input) {
+            try {
+              var url = new URL(input, location.origin);
+              return url.protocol === 'https:' || url.protocol === 'http:' ? url.origin + url.pathname : '';
+            } catch (e) { return ''; }
           }
-        } catch (e) { /* storage blocked: analytics stays off */ }
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function () { window.dataLayer.push(arguments); };
+          window.gtag('consent', 'default', {
+            ad_storage: 'denied', analytics_storage: 'denied',
+            ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.__DUKB_CONSENT_DEFAULTED__ = true;
+          window.gtag('consent', 'update', {
+            ad_storage: value.advertising && navigator.globalPrivacyControl !== true ? 'granted' : 'denied',
+            analytics_storage: 'granted', ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.gtag('js', new Date());
+          window.gtag('config', 'G-KZQK2G68YC', {
+            send_page_view: false, page_location: cleanUrl(location.href),
+            page_referrer: document.referrer ? cleanUrl(document.referrer) : '',
+            allow_google_signals: false, allow_ad_personalization_signals: false
+          });
+          var g = document.createElement('script');
+          g.async = true;
+          g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+          document.head.appendChild(g);
+        } catch (e) { /* Blocked storage keeps optional analytics off. */ }
       })();
     </script>
     
@@ -210,18 +234,18 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <h1>Privacy Policy</h1>
-<p>Last updated: September 15, 2026</p>
+<p>Last updated: October 21, 2026</p>
 <h2>1. Information We Collect</h2>
 <p>DoUKnowBall is completely free. There are no subscriptions, no paid features, and no in-app purchases, so we never collect or store payment information of any kind. You can also play every game without an account. If you choose to use certain features, here is what we collect:</p>
 <li>Local storage data: Game progress, scores, streaks, and preferences are stored in your browser's local storage on your own device and are not sent to our servers unless described below.</li>
 <li>Account data (optional): You can create an account with an email address and password. If you do, we store your email address, display name or username, avatar (if you set one), and your game scores and streaks so we can show them back to you and on leaderboards. You never need an account to play.</li>
-<li>Anonymous gameplay data: Certain game modes submit gameplay data (e.g., number of clues used, final score, puzzle date) to our database. When you are not signed in, this data is not linked to your name or email. Each row does carry a display name: your profile name if you are signed in, or a random sports themed handle your browser generates and keeps in local storage (something like "IcyPoacher-42") so your scores stay yours on leaderboards. Clearing your browser's site data mints a fresh handle.</li>
+<li>Gameplay and leaderboard data: Certain game modes submit gameplay data (e.g., number of clues used, final score, puzzle date) to our database. When you are not signed in, this data is not linked to your name or email. Each row does carry a display name: your profile name if you are signed in, or a random sports themed handle your browser generates and keeps in local storage (something like "IcyPoacher-42") so your scores stay yours on leaderboards. Clearing your browser's site data mints a fresh handle.</li>
 <li>Grid selection data: In grid-based games, player name selections are stored to calculate rarity scores. This is not linked to your identity unless you are signed in.</li>
-<li>Reported issues: If you use a Report button, we store the selected report category, the text you typed, the page, the date in Eastern Time, and limited in-game details supplied by that game, such as its puzzle, mode, target, lineup, current path, or last rejected answer. This helps us reproduce the issue. The report payload does not attach your account, email address, a screenshot, or general device data.</li>
+<li>Reported issues: If you use a Report button, we store the selected report category, the text you typed, the page, the date in Eastern Time, and limited in-game details supplied by that game, such as its puzzle, mode, target, lineup, current path, or last rejected answer. We record the report time in UTC. Where space allows, reports also include timezone, your browser's user agent string (its name, version and operating system) and language, viewport size and screen pixel ratio, and the loaded build filename when available. Each report also notes which Report button sent it (the game's own or the one in the footer) and whether the game details were shortened to fit. These small diagnostics help us reproduce the issue. The report payload does not automatically attach your account, email address, a screenshot, or whole browser storage. Anything you type into the report is included, so please leave out passwords and other personal or confidential information.</li>
 <h2>2. Cookies &amp; Local Storage</h2>
-<p>This site uses browser local storage to save your game progress, best scores, preferences, and UI state, and to remember that you have responded to our cookie banner. Local storage data stays on your device and is not transmitted to our servers except as described in Section 1.</p>
-<p>The first time you visit we show a cookie banner with two choices. Accept lets us load Google's advertising script, which sets advertising cookies. Essential only keeps that script off entirely, and every game works exactly the same either way. Nothing to do with ads is loaded until you have made a choice.</p>
-<p>You can change your mind at any time. The Cookie choices link in the footer of every page clears your answer and shows the banner again, and a page loaded with no answer stored carries no advertising code at all. You can also manage or block cookies in your browser settings, and you can clear everything this site has stored by clearing your browser's site data for douknowball.com.</p>
+<p>This site uses browser local storage to save your game progress, best scores, preferences, and UI state, and to remember your optional cookie choices. Local storage data stays on your device and is not transmitted to our servers except as described in Section 1.</p>
+<p>Advertising and Analytics are separate optional purposes, and both start off. Analytics is currently paused, and the banner explains why. Accept all enables the optional purposes currently available, Reject all keeps them off, and Save choices applies your available selections. If your browser sends a Global Privacy Control signal, Advertising stays off. You can play the games with optional purposes off. We ask you to choose again after 180 days.</p>
+<p>The Cookie choices link in the footer opens your current settings. You can turn Advertising off and choose Save choices. Analytics stays off while it is paused. Saving a withdrawal clears the relevant optional cookies our code can access on this site. We normally reload to stop scripts that are already loaded. If your choice cannot be saved or a game has unsaved progress, optional loading stays paused and a notice asks you to refresh when it is safe. This does not erase information already received by a provider or remove cookies controlled by another site or inaccessible to our code. You can also manage cookies and clear stored site data in your browser settings. For requests concerning data already collected, see Section 6.</p>
 <p>Third-party services (such as Google AdSense) use cookies and similar technologies to serve ads. If ads are served on this site, we request non-personalized ads. Those cookies are governed by the third party's own privacy policy, and Section 5 explains what they do.</p>
 <h2>3. How We Use Data</h2>
 <p>We use the data described above to:</p>
@@ -231,18 +255,20 @@
 <li>Understand aggregate site usage patterns and game popularity</li>
 <li>Review and fix reported wrong or outdated answers</li>
 <li>Improve game content, difficulty balancing, and user experience</li>
-<p>We do not sell your data. We do not share your data with third parties except the service providers described in Section 4, who process it on our behalf (for example, to host our database or serve ads).</p>
+<p>We do not sell your data. The third-party services described in Section 4 receive data to provide their services, such as hosting our database, handling reports or serving ads. Their own terms and privacy policies also apply.</p>
 <h2>4. Third-Party Services</h2>
 <p>We use the following third-party services:</p>
 <li>Supabase: Our backend provider. It hosts our database and handles account sign-up and sign-in (email/password). Account data, scores, and streaks are stored here.</li>
-<li>Google AdSense: The Site is set up to request Google AdSense ads after you choose Accept on our cookie banner and open a page with an ad slot. We request non-personalized ads. Google still uses cookies for things like frequency capping and fraud prevention. Section 5 has the full advertising disclosure and every opt-out link, including <a href="https://www.google.com/settings/ads">Google's Ads Settings</a>.</li>
-<li>Google Analytics: We use Google Analytics 4 to see which games people play and how the Site is used, so we know what to build next. It loads only after you choose Accept on our cookie banner, and it uses cookies to tell one visit from another. Google Analytics 4 uses your IP address to work out your rough location and then discards it; it is not stored in our reports. You can also opt out of Google Analytics everywhere with <a href="https://tools.google.com/dlpage/gaoptout">Google's browser add-on</a>.</li>
+<li>Google AdSense: The Site is set up to request Google AdSense ads after you turn on Advertising in Cookie choices and open a page with an ad slot. We request non-personalized ads. Google still uses cookies for things like frequency capping and fraud prevention. Section 5 has the full advertising disclosure and every opt-out link, including <a href="https://www.google.com/settings/ads">Google's Ads Settings</a>.</li>
+<li>Google Analytics: Google Analytics 4 is currently paused while we check its collection settings. We do not load its tag, including when you choose Accept all. Cookie choices shows this paused status. Hosting-provider usage information and ordinary server logs, described in Section 10, are separate.</li>
 <li>Hosting (Lovable and ChatGPT Sites): We use Lovable and OpenAI's ChatGPT Sites to host versions of the Site. The hosting service for the address you visit serves its pages and assets and receives standard technical request data (such as your IP address and browser type) to deliver them.</li>
-<li>FormSubmit: When you use a Report button, the report is relayed to our inbox through FormSubmit, an email relay service. The relay receives the selected report category, the text you typed, the page, the date in Eastern Time, and limited in-game details supplied by that game. We do not attach your account, email address, a screenshot, or general device data to the report.</li>
-<li>AI services (Google Gemini): Many of our games use an AI model to check answers and rate lineups. When you type an answer into a grid, board, or lineup game, the text you typed is sent through our backend to an AI model (currently Google's Gemini, reached either directly or through our hosting provider Lovable's AI gateway) so it can be verified against the category, and in games like "Build Your XI" the AI generates a rating for your team. Only the game content itself (your typed answer, player names, team names, formation data) is sent. Your name, email, account details, and device identifiers are never included, we do not use your inputs to train any model of our own, and the AI's output is only ever a validation result or rating shown back to you in the game.</li>
+<li>FormSubmit: When you use a Report button, the report is relayed to our inbox through FormSubmit, an email relay service. The relay receives the selected report category, the text you typed, the page, the date in Eastern Time, and limited in-game details supplied by that game. The relay also receives the time in UTC and the other report details and limited browser diagnostics described in Section 1. We do not automatically attach your account, email address, a screenshot, or whole browser storage to the report. Anything you type into the report is included.</li>
+<li>AI services (Google Gemini): Some games send game content, such as typed answers, search text, categories, selected player and team details, lineups or formations, through our backend to Google's Gemini, either directly or through Lovable's AI gateway. These services support answer checks, player suggestions, lineup ratings and analysis, and fictional season stories. Player-suggestion features may send search text while you type. Anything you enter in these fields can be included, so do not enter personal or confidential information. Our backend and providers also receive technical request data to deliver these services. We do not use these game inputs to train a model of our own; provider processing and retention are governed by the terms and privacy practices applicable to that service. These game services are separate from our use of AI tools to help develop the Site.</li>
+<li>FlagCDN: Some country flag images load from flagcdn.com. When your browser requests an image, the image provider receives standard request data, such as your IP address and browser information, to deliver it.</li>
+<li>Google Fonts: Pages load fonts and stylesheets from fonts.googleapis.com and fonts.gstatic.com. These requests share your IP address and standard browser request details with Google to deliver the fonts, even when Advertising and Analytics are off.</li>
 <li>Wikipedia (citation links, not a data processor): Some of our reference pages, such as the Champions League format history, cite Wikipedia and other public sources for facts and link to those pages so you can check the source yourself. Nothing about your visit is sent to Wikipedia, or to any other cited source, unless you click through to it, and if you do, that site's own privacy policy applies from that point.</li>
 <h2>5. Advertising and Your Choices</h2>
-<p>Advertising can help cover hosting costs and keep the games free. We request non-personalized Google AdSense ads on pages with ad slots after you choose Accept. Here is what using Google advertising means in practice:</p>
+<p>Advertising can help cover hosting costs and keep the games free. We request non-personalized Google AdSense ads on pages with ad slots after you turn on Advertising in Cookie choices. Here is what using Google advertising means in practice:</p>
 <p>The first two bullets below are Google's general publisher disclosure. The prior-visit and cross-site personalization described in them are not the ad-selection mode this Site requests. Before Google's advertising script loads, this Site sets Google's non-personalized ads flag. Google may still use cookies and identifiers for frequency capping, aggregate reporting, fraud prevention, and similar purposes.</p>
 <li>Third party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or to other websites.</li>
 <li>Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to this site and/or other sites on the Internet.</li>
@@ -250,22 +276,23 @@
 <li>You may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads">Google's Ads Settings</a>.</li>
 <li>Other third party vendors and ad networks may also serve ads on this site. You can opt out of some of these vendors' use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices">www.aboutads.info/choices</a>, and in the European Union at <a href="https://www.youronlinechoices.eu">www.youronlinechoices.eu</a>.</li>
 <li>Google explains how it uses information from sites that use its services at <a href="https://policies.google.com/technologies/partner-sites">policies.google.com/technologies/partner-sites</a>.</li>
-<p>If you chose Essential only on our banner, none of Google's advertising code is loaded by this site and no advertising cookies are set by it. Wherever you are, including the European Economic Area, the United Kingdom and Switzerland, ads on this site only ever appear after you have chosen Accept.</p>
+<p>When Advertising is off, this site does not load Google's advertising code. Analytics is currently paused. Advertising also stays off when your browser sends Global Privacy Control. Turning on Advertising lets us request non-personalized ads, which can still use cookies and identifiers as described above; it does not mean anonymous advertising. You can change the available Advertising setting through Cookie choices in the footer. Analytics remains paused.</p>
 <h2>6. Data Retention, Access &amp; Deletion</h2>
-<p>Local storage data is retained on your device until you clear it. If you have an account, we keep your account data, scores, and streaks until you ask us to delete them. There is currently no self-serve delete button, so deletion works by email: write to us at the address below and we will permanently delete your account and the data linked to it within 30 days. Gameplay data that is not linked to an account is kept only for aggregate statistics.</p>
+<p>Sign in and open <a href="/profile">your profile</a> for an account-data download or an account-deletion request. The download covers account details, preferences, scores, votes and account-linked saves included in the tool, including our account-score backup. Deletion requires your current password. Accounts with admin access, protected sign-in or uploaded files need a manual check. Browser-only saves, reports, inbox copies, server logs and provider backups need separate handling; contact us about access, corrections or deletion of those records. Deleting an account does not automatically erase every historical record held by a provider.</p>
+<p>Local storage data is retained on your device until you clear it. If you have an account, we keep your account data, scores, and streaks until you ask us to delete them. You can request deletion from your profile or by email: write to us at the address below and we will permanently delete your account and the data linked to it within 30 days. Guest gameplay can remain as individual score or leaderboard records under the browser's persistent sports-themed handle and can also be used for statistics. Contact us with the relevant game details if you want us to review a guest record; a matching display name alone does not establish ownership.</p>
 <p>You have the right to ask what data we have about you, correct it, or have it deleted. To do this, or for any privacy question, contact us at douknowball1@gmail.com and we will respond within 30 days.</p>
 <h2>7. Children's Privacy</h2>
-<p>DoUKnowBall's games are suitable for a general audience and may be played by minors. You can play every game on the Site without creating an account or providing any personal information.</p>
-<p>Creating an account is optional and requires an email address. This feature is not directed at children, and we ask that anyone under the age of 13 not create an account or otherwise provide personal information without a parent or guardian's involvement. If you believe a child has created an account or given us personal information, please contact us at douknowball1@gmail.com so we can delete it.</p>
+<p>DoUKnowBall is intended for a general audience. You can play without creating an account, but playing signed out does not mean that no data is processed. Hosting services receive technical request data, and some games submit the gameplay data described above.</p>
+<p>Accounts are optional and require you to be at least 13. If you are under 13, do not create an account or submit personal information through game answers, reports or other forms. A parent's involvement does not create an exception to the account age requirement. If you believe a child under 13 has created an account or submitted personal information, contact douknowball1@gmail.com so we can review and address it, including deleting the information as required.</p>
 <h2>8. Your Rights</h2>
 <p>Wherever you live, you can ask us what data we hold about you, ask us to correct it, or ask us to delete it, by emailing douknowball1@gmail.com. We answer within 30 days and we do not charge for it.</p>
-<p>If you are in the European Economic Area, the United Kingdom or Switzerland, the law gives you those rights formally, together with the right to restrict or object to processing, the right to receive a copy of your data in a portable format, the right to withdraw consent at any time (for advertising cookies, use the Cookie choices link in the footer), and the right to complain to your local data protection authority. Our legal bases are your consent for advertising cookies, our contract with you for any account you create, and our legitimate interest in running and securing a free website for everything else.</p>
-<p>If you are a California resident, you have the right to know what personal information we collect and how it is used, to request its deletion, to correct inaccurate information, and not to be treated differently for exercising any of those rights. We do not sell personal information, and because we request only non-personalized ads, this site is not built to "share" personal information for cross-context behavioral advertising either. Choosing Essential only on the banner, or using the Cookie choices link in the footer, keeps Google's advertising code off entirely.</p>
+<p>Where the data protection laws of the European Economic Area, the United Kingdom or Switzerland apply, you may also have rights to restrict or object to processing, receive a portable copy of your data, withdraw consent and complain to your local data protection authority, subject to the conditions and exceptions in those laws. Use Cookie choices in the footer to withdraw advertising consent. Analytics remains paused. Where these laws apply, our bases are consent for optional advertising technologies, performance of a contract for account services where applicable, and legitimate interests in operating and securing the Site where that basis is available and appropriate.</p>
+<p>Where applicable California privacy law gives you these rights, you can request information about collection and use, deletion or correction, and exercise your rights without unlawful discrimination. You can also use the request process above wherever you live. We do not sell personal information. We request non-personalized ads, as described in Section 5. You can turn Advertising off in Cookie choices; Reject all keeps both advertising and analytics off.</p>
 <h2>9. Security and Where Your Data Lives</h2>
-<p>Account data is stored by Supabase and protected by its security controls, and it travels between your browser and our servers over an encrypted connection. Passwords are hashed and never stored in plain text; we cannot read them. Our service providers may process data on servers in the United States and in other countries, and each of them publishes its own privacy commitments (see Section 4). No website can promise perfect security, so please use a password you do not use anywhere else.</p>
+<p>Account data is stored by Supabase and protected by its security controls, and it travels between your browser and our servers over an encrypted connection. Stored account passwords are hashed; the stored hash is not a readable copy of your password. For an account-deletion request, our backend briefly receives the current password you enter and passes it to our authentication provider to confirm it. Our account-privacy function does not store or log that password. Our service providers may process data on servers in the United States and in other countries, and each of them publishes its own privacy commitments (see Section 4). No website can promise perfect security, so please use a password you do not use anywhere else.</p>
 <h2>10. Server Logs and Analytics</h2>
 <p>Like any website, our host receives standard technical data with every request: your IP address, browser type, the page you asked for and the time. It is used to deliver the pages and to keep the Site working, and it is kept for as long as our host keeps its ordinary server logs.</p>
-<p>On top of that we use Google Analytics 4, described in Section 4, and only after you have chosen Accept on the cookie banner. It tells us things like which games are played most and how long people stay, in aggregate. If you chose Essential only, it is never loaded.</p>
+<p>We also use aggregate hosting-provider usage information to understand traffic and game popularity. This is separate from Google Analytics 4, which is currently paused and whose tag we do not load, even when Advertising is on.</p>
 <h2>11. Changes to This Policy</h2>
 <p>We may update this privacy policy from time to time. Any changes will be reflected on this page with an updated revision date.</p>
 <h2>12. Contact</h2>
@@ -287,7 +314,8 @@
 <a href="/privacy">Privacy Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>

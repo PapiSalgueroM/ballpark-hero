@@ -613,7 +613,12 @@ const heatUp = s => (s.age >= 22 ? { ...s, corruptionHeat: 95, dirtyMoney: Math.
     }
     /* d: pre-850, sitting on the conviction paper */
     {
-      const s = walkTo(OLD, 7000 + c, "accept", isConvictionStop, heatUp);
+      /* Release BF join: the life chain (Rounds 1350 to 1363) deals more cards, so one seeded career in 24 no longer
+         reaches the conviction paper on its first seed (23 of 24 on this tree, 24 of 24 with the chain held out); like the
+         rehab walks above, a save tries further careers (the first seed is the old one, so every save that reached it
+         before is the same save). The check that every save reaches the screen is unchanged. */
+      let s = null;
+      for (let k = 0; k < 4 && !s; k++) s = walkTo(OLD, 7000 + c + 1000 * k, "accept", isConvictionStop, heatUp);
       if (s) {
         tally.convOld[0] += 1;
         const save = JSON.stringify(s);
@@ -634,7 +639,12 @@ const heatUp = s => (s.age >= 22 ? { ...s, corruptionHeat: 95, dirtyMoney: Math.
     }
     /* e: this engine, sitting on the conviction paper, reloaded */
     {
-      const s = walkTo(CUR, 7000 + c, "accept", isConvictionStop, heatUp);
+      /* Release BF join: the life chain (Rounds 1350 to 1363) deals more cards, so one seeded career in 24 no longer
+         reaches the conviction paper on its first seed (23 of 24 on this tree, 24 of 24 with the chain held out); like the
+         rehab walks above, a save tries further careers (the first seed is the old one, so every save that reached it
+         before is the same save). The check that every save reaches the screen is unchanged. */
+      let s = null;
+      for (let k = 0; k < 4 && !s; k++) s = walkTo(CUR, 7000 + c + 1000 * k, "accept", isConvictionStop, heatUp);
       if (s) {
         tally.convNew[0] += 1;
         const after = CUR.dismissNewspaper(CUR.repairCareer(JSON.parse(JSON.stringify(s))));

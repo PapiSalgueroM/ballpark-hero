@@ -120,24 +120,48 @@
         window.addEventListener('load', sweep);
       })();
     </script>
-    <script>
-      // Google Analytics loads only after Accept. AdSense is intentionally not
-      // global: direct visits to account, reset, fallback, and other screens
-      // without a deliberate slot do not load it. Auto Ads and Auto optimize
-      // stay off in the account. The static verification meta stays global.
+    <script data-dukb-consent-bootstrap="">
+      // Keep this gate aligned with consentPreferences and consentedScripts.
       (function () {
+        var ANALYTICS_READY = false;
+        if (!ANALYTICS_READY) return;
         try {
-          if (localStorage.getItem('cookie-consent') === 'accepted') {
-            window.dataLayer = window.dataLayer || [];
-            window.gtag = function () { window.dataLayer.push(arguments); };
-            window.gtag('js', new Date());
-            window.gtag('config', 'G-KZQK2G68YC');
-            var g = document.createElement('script');
-            g.async = true;
-            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
-            document.head.appendChild(g);
+          var value = JSON.parse(localStorage.getItem('cookie-consent-v2') || 'null');
+          var now = Date.now();
+          if (!value || value.version !== 2 || typeof value.advertising !== 'boolean'
+            || typeof value.analytics !== 'boolean' || value.analytics !== true
+            || typeof value.updatedAt !== 'number' || !Number.isFinite(value.updatedAt)
+            || value.updatedAt < 0 || value.updatedAt > now
+            || now - value.updatedAt >= 180 * 24 * 60 * 60 * 1000) return;
+          if (/^\/(?:reset-password|auth|account|profile|admin)(?:\/|$)/.test(location.pathname)) return;
+          function cleanUrl(input) {
+            try {
+              var url = new URL(input, location.origin);
+              return url.protocol === 'https:' || url.protocol === 'http:' ? url.origin + url.pathname : '';
+            } catch (e) { return ''; }
           }
-        } catch (e) { /* storage blocked: analytics stays off */ }
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function () { window.dataLayer.push(arguments); };
+          window.gtag('consent', 'default', {
+            ad_storage: 'denied', analytics_storage: 'denied',
+            ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.__DUKB_CONSENT_DEFAULTED__ = true;
+          window.gtag('consent', 'update', {
+            ad_storage: value.advertising && navigator.globalPrivacyControl !== true ? 'granted' : 'denied',
+            analytics_storage: 'granted', ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.gtag('js', new Date());
+          window.gtag('config', 'G-KZQK2G68YC', {
+            send_page_view: false, page_location: cleanUrl(location.href),
+            page_referrer: document.referrer ? cleanUrl(document.referrer) : '',
+            allow_google_signals: false, allow_ad_personalization_signals: false
+          });
+          var g = document.createElement('script');
+          g.async = true;
+          g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+          document.head.appendChild(g);
+        } catch (e) { /* Blocked storage keeps optional analytics off. */ }
       })();
     </script>
     
@@ -239,8 +263,9 @@
 <li>Spend 6 weeks of camp across conditioning, power, defence and speed before every fight.</li>
 <h3>Picking three looks for fight night</h3>
 <li>Pick three looks for the night. They cycle through the rounds, so three different ones is a plan and one repeated is a gift.</li>
-<h3>Watching it live before the final verdict</h3>
-<li>Watch it round by round, or turn that off and take the decision straight away.</li>
+<h3>Watching the ring before the final verdict</h3>
+<li>The ring shows the latest revealed round: both fighters' tactics, punches landed and condition. The figures illustrate each round, not every punch. A knockdown puts its actual victim down; a technical stoppage can leave the stopped fighter upright.</li>
+<li>A new round arrives every 3 seconds. Pause holds it, Next round pauses and reveals one more, and Play starts a fresh 3-second wait. Skip takes you to the verdict. Earlier scorecards open below the current round. You can also turn playback off before the fight to see the result straight away.</li>
 <h4>What ends a career and reads the verdict</h4>
 <li>Keep going until the damage, the years or a run of defeats ends it, then read the verdict on your career.</li>
 <h2>Fight Career rules for styles, damage and the ranking climb</h2>
@@ -269,6 +294,8 @@
 <h3>Moving weight and the rematch clause</h3>
 <li>Moving up a division makes knockouts more likely, moving down makes them rarer, and either way you start the new division unranked and any belt stays behind. Your rival and the man who last beat you stay in the division you left. For 4 fights after a loss, a rematch clause can turn the middle offer into the man who beat you, and a win is worth up to 4 places, one more with the matchmaker.</li>
 <h2>Fight Career walkthrough: an unranked welterweight to Modern Great</h2>
+<h3>Reading a round in the ring</h3>
+<p>You use Pressure and land 12. Your opponent uses Counter and lands 4. If you score a knockdown, your opponent is the figure that goes down, and the recap names both tactics and counts. Tap Next round to pause on the next recap, then Play when you are ready. Watching never changes the saved fight.</p>
 <h3>Starting as an unranked welterweight</h3>
 <p>You start as a 21 year old welterweight out-boxer, unranked, and take the tune up. The purse is small and the win moves you one place, but you come out of it almost unmarked.</p>
 <h3>Learning the circle at number eleven</h3>
@@ -331,7 +358,7 @@
 <a href="/privacy">Privacy Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+<p>Essential storage keeps games working. Advertising is optional. Analytics is paused. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
 </div>
 </div>
 </div>

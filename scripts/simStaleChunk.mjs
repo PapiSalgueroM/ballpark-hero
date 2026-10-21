@@ -34,11 +34,28 @@
       a reload that was held does not spend the tab's one reload.
    6. (Round 1144 review) the two reloads that sit on every page, a career's
       included, do the same: the update toast's Refresh goes through
-      reloadToRetryChunk, and the footer's Cookie choices retries a waiting
-      save before it reloads. Section 3 also holds that the boundary lets
+      reloadToRetryChunk, and the footer opens Cookie choices without a reload.
+      Withdrawal reloads through the consent module's save and durable-record
+      gate. Section 3 also holds that the boundary lets
       go of held saves before it asks for its reload: by then the game
       that held them is unmounted, and a reload refused for their sake
       protected nothing and left the player on the broken page.
+   7. (Round 1338) a page that has asked for its reload waits with it. The
+      build makes a cancelled import wait (scripts/lib/vitePreloadWait.mjs,
+      scripts/simPreloadWait.mjs), so freshBuild.ts keeps a page flag: the
+      listener cancels on it before it asks reloadOnceForStaleChunk, after
+      the optional kit line; the flag is declared false and set true exactly
+      once, inside reloadOnceForStaleChunk, after the once flag is written
+      and after window.location.reload() returns, so it is true only once
+      the browser took the navigation.
+   8. (Round 1338) a loader's own catch never reloads on its own. Across src
+      (comments stripped, tests left out) no import() chain has a .catch that
+      calls reloadToRetryChunk or location.reload, except the two
+      SaveMovedNotice loaders (SoccerCareer.tsx and ClubManager.tsx), whose
+      reload ends itself: each must be there exactly once. A catch that
+      reloads by itself loops on a file that stays missing (CareerStory on
+      the retired screen did) and, under blocked storage, throws away a
+      career held in memory.
 
    Negative controls (SIM_STALE_CHUNK_CONTROL): nolistener deletes the
    addEventListener call from an in memory copy (section 1 red), noguard
@@ -49,15 +66,21 @@
    reloadOnceForStaleChunk (sections 2 and 5 red), norelease (Round 1144
    review) stops the boundary letting go of held saves before it asks for
    the reload (section 3 red), barenudge (Round 1144 review) puts the bare
-   reload back on the update toast's Refresh (section 6 red). Each asserts
-   its anchor exists exactly once first. */
+   reload back on the update toast's Refresh (section 6 red), nowait (Round
+   1338) takes the page flag out of the listener (section 7 red), flagfirst
+   (Round 1338) sets the page flag above the once flag read (section 7 red),
+   catchreload (Round 1338) puts CareerStory's old reloading catch back
+   (section 8 red). Round 1442 adds consentnosave, consentbare,
+   consentblocked and consentdurable, each breaks the withdrawal reload gate
+   (section 6 red).
+   Each asserts its anchor exists exactly once first. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_STALE_CHUNK_CONTROL || '';
-const EXPECT = { nolistener: [1], noguard: [2], noprerender: [2], nooffline: [2], nosave: [2, 5], norelease: [3], barenudge: [6] };
+const EXPECT = { nolistener: [1], noguard: [2], noprerender: [2], nooffline: [2], nosave: [2, 5], norelease: [3], barenudge: [6], nowait: [7], flagfirst: [7], catchreload: [8], consentnosave: [6], consentbare: [6], consentblocked: [6], consentdurable: [6] };
 /* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
 if (CONTROL && !(CONTROL in EXPECT)) { console.error('unknown control ' + CONTROL); process.exit(2); }
 
@@ -72,6 +95,8 @@ function rewrite(src, anchor, replacement, why) {
 let fresh = fs.readFileSync(path.join(ROOT, 'src/lib/freshBuild.ts'), 'utf8').replaceAll('\r\n', '\n');
 let boundaryRaw = fs.readFileSync(path.join(ROOT, 'src/components/RouteErrorBoundary.tsx'), 'utf8').replaceAll('\r\n', '\n');
 let nudgeRaw = fs.readFileSync(path.join(ROOT, 'src/components/layout/UpdateNudge.tsx'), 'utf8').replaceAll('\r\n', '\n');
+let consentRaw = fs.readFileSync(path.join(ROOT, 'src/components/CookieConsent.tsx'), 'utf8').replaceAll('\r\n', '\n');
+let preferencesRaw = fs.readFileSync(path.join(ROOT, 'src/lib/consentPreferences.ts'), 'utf8').replaceAll('\r\n', '\n');
 const footer = code(fs.readFileSync(path.join(ROOT, 'src/components/game/Footer.tsx'), 'utf8').replaceAll('\r\n', '\n'));
 const main = code(fs.readFileSync(path.join(ROOT, 'src/main.tsx'), 'utf8').replaceAll('\r\n', '\n'));
 if (CONTROL === 'nolistener') fresh = rewrite(fresh, "window.addEventListener('vite:preloadError', (event: Event) => {", "((event: Event) => {", 'nolistener');
@@ -103,9 +128,21 @@ if (CONTROL === 'nooffline') fresh = rewrite(fresh, '  if (navigator.onLine === 
 /* Round 1144 review: the two controls below edit the boundary and the update toast, in memory like the rest. */
 if (CONTROL === 'norelease') boundaryRaw = rewrite(boundaryRaw, 'const unsaved = !releasePendingSaves();', 'const unsaved = false;', 'norelease');
 if (CONTROL === 'barenudge') nudgeRaw = rewrite(nudgeRaw, 'if (reloadToRetryChunk() || !hasPendingSaves()) return;', 'window.location.reload();', 'barenudge');
+if (CONTROL === 'consentnosave') preferencesRaw = rewrite(preferencesRaw, '  if (!settlePendingSaves()) return false;', '', 'consentnosave');
+if (CONTROL === 'consentbare') consentRaw = rewrite(consentRaw, 'if (canReloadAfterWithdrawal(pendingRevoked.current)) {', 'if (true) {', 'consentbare');
+if (CONTROL === 'consentblocked') preferencesRaw = rewrite(preferencesRaw, "  if (getStorageTrouble() === 'blocked') return false;", '', 'consentblocked');
+if (CONTROL === 'consentdurable') preferencesRaw = rewrite(preferencesRaw, 'parseConsentPreferences(window.localStorage.getItem(CONSENT_KEY))', 'parseConsentPreferences(safeLocalStorage.getItem(CONSENT_KEY))', 'consentdurable');
+/* Round 1338: the page flag, in memory like the rest. */
+if (CONTROL === 'nowait') fresh = rewrite(fresh, 'if (reloadAsked || reloadOnceForStaleChunk())', 'if (reloadOnceForStaleChunk())', 'nowait');
+if (CONTROL === 'flagfirst') {
+  fresh = rewrite(fresh, '  reloadAsked = true;\n', '', 'flagfirst');
+  fresh = rewrite(fresh, "  try {\n    if (sessionStorage.getItem(STALE_KEY) === '1') return false;", "  reloadAsked = true;\n  try {\n    if (sessionStorage.getItem(STALE_KEY) === '1') return false;", 'flagfirst');
+}
 const boundary = code(boundaryRaw);
 const nudge = code(nudgeRaw);
 const freshCode = code(fresh);
+const consent = code(consentRaw);
+const preferences = code(preferencesRaw);
 
 let failures = 0; const red = new Set(); let section = 0;
 const fail = m => { failures++; red.add(section); console.log('   FAIL ' + m); };
@@ -201,21 +238,102 @@ console.log('5) every reload freshBuild makes asks for waiting saves first');
 }
 
 section = 6;
-console.log('6) the reloads on every page (the update toast, the footer) ask for waiting saves first');
+console.log('6) the update toast and consent withdrawal ask for waiting saves before reloading');
 {
-  /* Round 1144 review: these two are mounted on every page, a career's included, and both reloaded
-     bare. The update toast shows at the very moment check() above declines to reload over a refused
-     save, so its Refresh goes through the same guard. The footer's Cookie choices has to work every
-     time (it is how a choice is taken back), so it is not held: the save gets its retry first. */
+  /* Opening preferences keeps the current choice. A withdrawal stops optional
+     services at once, but reload waits for held saves, blocked storage and a
+     durable record that cannot grant the revoked purpose on the next boot. */
   const nudgeBare = /location\.reload\(/.test(nudge);
   const nudgeGuarded = /reloadToRetryChunk\(\)/.test(nudge) && /from ['"]@\/lib\/freshBuild['"]/.test(nudge);
-  const ask = footer.indexOf('settlePendingSaves()');
   const footerReloads = (footer.match(/location\.reload\(/g) ?? []).length;
-  const footerAsks = footerReloads === 1 && ask >= 0 && ask < footer.indexOf('location.reload(');
+  const footerOpens = footerReloads === 0 && /openConsentChoices\(event\.currentTarget\)/.test(footer)
+    && /import\s*\{\s*openConsentChoices\s*\}\s*from ['"]@\/lib\/consentPreferences['"]/.test(footer);
+  const consentReloads = (consent.match(/location\.reload\(/g) ?? []).length;
+  const consentGuarded = consentReloads === 1 && /if \(canReloadAfterWithdrawal\(pendingRevoked\.current\)\) \{\s*window\.location\.reload\(\);/.test(consent)
+    && /import\s*\{[^}]*\bcanReloadAfterWithdrawal\b[^}]*\}\s*from ['"]@\/lib\/consentPreferences['"]/.test(consent);
+  const gate = (preferences.match(/export function canReloadAfterWithdrawal\([^\n]*\n[\s\S]*?\n\}/) ?? [''])[0];
+  const asks = gate.indexOf('if (!settlePendingSaves()) return false;');
+  const blocks = gate.indexOf("if (getStorageTrouble() === 'blocked') return false;");
+  const durable = gate.indexOf('parseConsentPreferences(window.localStorage.getItem(CONSENT_KEY))');
+  const seamImport = /import\s*\{[^}]*\bsettlePendingSaves\b[^}]*\}\s*from ['"]@\/lib\/safeStorage['"]/.test(preferences);
+  const saveSafe = seamImport && asks >= 0 && asks < gate.indexOf('try {');
+  const blockedSafe = blocks >= 0 && blocks < gate.indexOf('try {');
+  const durableSafe = durable > gate.indexOf('try {') && /catch \{ return false; \}/.test(gate)
+    && /return !durable \|\| \(\(!revoked\.advertising \|\| !durable\.advertising\)\s*&& \(!revoked\.analytics \|\| !ANALYTICS_READY \|\| !durable\.analytics\)\);/.test(gate);
   if (nudgeBare) fail('UpdateNudge reloads the page itself: its Refresh would go over a save the browser refused');
   if (!nudgeGuarded) fail('UpdateNudge does not reload through reloadToRetryChunk from freshBuild');
-  if (!footerAsks) fail(`the footer has ${footerReloads} reload call(s) and ${ask < 0 ? 'never asks' : 'asks'} for waiting saves before the first: a refused save would not get its retry`);
-  if (!nudgeBare && nudgeGuarded && footerAsks) ok('the update toast reloads through the shared guard, and the footer retries a waiting save before its reload');
+  if (!footerOpens) fail(`the footer has ${footerReloads} reload call(s), or does not open the shared consent choices`);
+  if (!consentGuarded) fail(`CookieConsent has ${consentReloads} reload call(s), or reloads outside canReloadAfterWithdrawal`);
+  if (!saveSafe) fail('the withdrawal gate does not refuse reload when settlePendingSaves cannot save progress');
+  if (!blockedSafe) fail('the withdrawal gate does not refuse reload while site storage is blocked');
+  if (!durableSafe) fail('the withdrawal gate does not fail closed on the actual native consent record');
+  if (!nudgeBare && nudgeGuarded && footerOpens && consentGuarded && saveSafe && blockedSafe && durableSafe) ok('the footer opens choices; toast and withdrawal reloads protect waiting saves, and withdrawal verifies the durable record');
+}
+
+section = 7;
+console.log('7) a page that asked for its reload waits with it (the page flag)');
+{
+  /* Round 1338: the build makes a cancelled import wait, so cancelling is safe exactly when a reload is on
+     its way. The flag must mean that and nothing else: declared false, set true once, only after the once
+     flag is written and the browser took window.location.reload(), and read by the listener before it asks
+     for a second reload (which the once flag would refuse, leaving the second failure to break the page). */
+  const declared = (freshCode.match(/\blet reloadAsked = false;/g) ?? []).length;
+  const sets = (freshCode.match(/\breloadAsked\s*=\s*true\b/g) ?? []).length;
+  const writes = (freshCode.match(/\breloadAsked\s*=(?!=)/g) ?? []).length;
+  const fn = (freshCode.match(/function reloadOnceForStaleChunk\(\)[\s\S]*?\n\}/) ?? [''])[0];
+  const at = fn.search(/\breloadAsked\s*=\s*true\b/);
+  /* a missing set or reload is section 2's finding; here only the order is read */
+  const afterOnce = at > fn.indexOf('sessionStorage.setItem(STALE_KEY');
+  const afterReload = at > fn.indexOf('window.location.reload()');
+  const beforeReturn = at >= 0 && at < fn.lastIndexOf('return true');
+  const listener = (freshCode.match(/function reloadOnStaleChunk\(\)[\s\S]*?\n\}/) ?? [''])[0];
+  const waits = /if \(reloadAsked \|\| reloadOnceForStaleChunk\(\)\) event\.preventDefault\(\);/.test(listener);
+  const kitFirst = listener.indexOf('isOptionalChunkError(') >= 0 && listener.indexOf('isOptionalChunkError(') < listener.indexOf('reloadAsked');
+  if (declared !== 1) fail(`reloadAsked is declared false ${declared} time(s), expected once`);
+  if (sets !== 1 || writes !== 2) fail(`reloadAsked is set true ${sets} time(s) and written ${writes} time(s), expected one set and the declaration`);
+  if (at < 0) fail('reloadAsked is never set inside reloadOnceForStaleChunk, so a second failure in the page breaks it');
+  else if (!afterOnce || !afterReload || !beforeReturn) fail('reloadAsked is set before the once flag is written or before window.location.reload() returns, so a page whose reload never came would wait for ever');
+  if (!waits) fail('the listener does not cancel on reloadAsked before it asks reloadOnceForStaleChunk, so the second failure in a reloading page reaches a boundary');
+  else if (!kitFirst) fail('the page flag is read before the optional kit line, so a sound kit error in a reloading page would be cancelled');
+  if (declared === 1 && sets === 1 && writes === 2 && at >= 0 && afterOnce && afterReload && beforeReturn && waits && kitFirst) ok('declared false, set once after the once flag and after the reload call, read by the listener after the kit line');
+}
+
+section = 8;
+console.log('8) a loader\'s own catch never reloads, the two SaveMovedNotice loaders excepted');
+{
+  const files = [];
+  const walk = d => { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const p = path.join(d, e.name); if (e.isDirectory()) { if (e.name !== 'test') walk(p); } else if (/\.(ts|tsx)$/.test(e.name) && !/\.test\.tsx?$/.test(e.name)) files.push(p); } };
+  walk(path.join(ROOT, 'src'));
+  const ALLOWED = { 'src/pages/SoccerCareer.tsx': 0, 'src/pages/ClubManager.tsx': 0 };
+  const bad = []; let chains = 0;
+  for (const f of files) {
+    const rel = path.relative(ROOT, f).replaceAll('\\', '/');
+    let raw = fs.readFileSync(f, 'utf8').replaceAll('\r\n', '\n');
+    if (CONTROL === 'catchreload' && rel === 'src/pages/SoccerCareer.tsx') raw = rewrite(raw, 'import("@/components/soccer-career/CareerStory").catch(() => new Promise<never>(() => undefined))', 'import("@/components/soccer-career/CareerStory").catch(() => { reloadToRetryChunk(); return new Promise<never>(() => undefined); })', 'catchreload');
+    /* comments stripped with their line breaks kept, so a finding names its real line */
+    const t = raw.replace(/\/\*[\s\S]*?\*\//g, s => s.replace(/[^\n]/g, '')).replace(/(^|[^:])\/\/.*$/gm, '$1');
+    for (const m of t.matchAll(/(?<![\w$.])import\s*\(/g)) {
+      /* the chain: from import( to the end of its expression (a ; , or closing bracket at depth 0) */
+      let depth = 0; let i = m.index;
+      for (; i < t.length; i++) {
+        const ch = t[i];
+        if ('([{'.includes(ch)) depth++;
+        else if (')]}'.includes(ch)) { depth--; if (depth < 0) break; }
+        else if (depth === 0 && (ch === ';' || ch === ',')) break;
+      }
+      const chain = t.slice(m.index, i);
+      chains++;
+      const c = chain.search(/\.catch\s*\(/);
+      if (c < 0 || !/reloadToRetryChunk\s*\(|location\.reload\s*\(/.test(chain.slice(c))) continue;
+      if (rel in ALLOWED && /^import\(\s*['"]@\/components\/SaveMovedNotice['"]\s*\)/.test(chain)) { ALLOWED[rel]++; continue; }
+      bad.push(`${rel}:${t.slice(0, m.index).split('\n').length}`);
+    }
+  }
+  const off = Object.entries(ALLOWED).filter(([, n]) => n !== 1);
+  if (chains < 100) fail(`only ${chains} import( chains read: this check is not reading src`);
+  if (bad.length) fail(`an import() chain reloads from its own .catch: ${bad.join(', ')}. A loader's catch never reloads on its own (it loops on a file that stays missing, and under blocked storage drops a career held in memory)`);
+  if (off.length) fail(`the SaveMovedNotice loader with its reload is not there exactly once in ${off.map(([k, n]) => `${k} (${n})`).join(', ')}: update this allowlist only with a reason`);
+  if (chains >= 100 && !bad.length && !off.length) ok(`${chains} import( chains in src, none reloads from its own catch but the two SaveMovedNotice loaders`);
 }
 
 console.log('');

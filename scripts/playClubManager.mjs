@@ -67,12 +67,55 @@
  * squad. CM_CONTROL=nobusiness cuts the transfer business block out of the
  * served review (no rebuild, nothing left in the tree) and exactly the two
  * checks that read that block have to fire.
+ *
+ * ROUND 1314: A COIN TOSS NO MORE. 22 runs at Round 1304 were sacked in 10 and
+ * red in 5, every red a SHALLOW line after a sack that came before the first
+ * signing, and the sackings bunched by the hour, which a page seed alone
+ * cannot cure. So two things, both before the first kick off: the page plays
+ * on a seeded stream (PLAY_CM_SEED, scripts/lib/pageSeed.mjs, printed first),
+ * and the board's confidence is doctored to the top of its range once, from
+ * robots.txt, and PROVEN landed off the manager slot screen's "Board N/100"
+ * line (a lost edit is a BROKEN finding). The sack is playWilderness's to
+ * cover. The SHALLOW lines are unchanged: they are the coverage claim. The
+ * walk also blocks the database host.
+ * Measured on e07cd2df (runner results r1314-cm1 and r1314-cm2, 2026-10-12),
+ * all at Crystal Palace, board doctored from 60 to 100 and read back as
+ * "Board 100/100" every time, 4 page draws before the first kick off. The
+ * default seed 1542433760: played the season out, 40 full times, 44 windows,
+ * 2 signings, 0 findings, 47491 draws, identical in two runs and under CPU
+ * throttling at rate 4. Seeds 1 to 10: nine played the season out (39 to 42
+ * full times, 43 to 46 windows) and seed 10 was sacked after 27 full times,
+ * every one with 2 signings and 0 findings, 190 to 292 s.
+ * The nobusiness control's guard is the one followed by the "Transfer
+ * business" heading: since Round 721 the bare shape also matches the Deadline
+ * Day board, and the control refused to start.
+ *
+ * FIX REVIEW OF ROUND 1314: the doctoring check has its own two controls, and
+ * every control says how it ended by its exit code as well as its last line.
+ *   CM_CONTROL=nobusiness  exactly the two transfer business checks fire.
+ *   CM_CONTROL=nodoctor    the save is read but never written: exactly the
+ *                          "doctored board did not land" finding fires.
+ *   CM_CONTROL=nosave      the save is looked for under a key the game never
+ *                          writes: exactly "the save was not there" fires.
+ * nodoctor and nosave stop right after the check (about half a minute). A
+ * control that FIRED exits 1 with "control: green" as its last line (a run with
+ * findings fails); one that did not fire as designed, refused to start, or
+ * crashed exits 2 (last line "control: RED" or "control: CRASHED"). Before the
+ * fix review a RED or a crash under nobusiness exited 1 as well.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { pageSeedOf, seedPages, pageDraws } from './lib/pageSeed.mjs';
 const { chromium } = pw;
+
+/* Round 1314: the page plays on a seeded stream (scripts/lib/pageSeed.mjs). PLAY_CM_SEED is the one
+   knob: unset, the walk's own seed from its file name; a whole number; or "fresh". Printed first. */
+let SEED = 0;
+try { SEED = pageSeedOf(import.meta.url, process.env.PLAY_CM_SEED); }
+catch (e) { console.error(`PLAY_CM_SEED: ${e.message}`); process.exit(2); }
+console.log(`playClubManager: seed ${SEED}${process.env.PLAY_CM_SEED === undefined ? ' (the walk\'s own, from its file name)' : ''}. Replay with PLAY_CM_SEED=${SEED}`);
 
 const BASE = process.env.SWEEP_BASE || 'http://127.0.0.1:4173';
 /* Round 472: a match is two skips longer than it was, because Play Match and
@@ -101,6 +144,9 @@ const browser = await chromium.launch({
 /* Round 330: WIDTH=390 or 320 plays the season at a real phone width for the
    mobile depth walk; 430 stays the default baseline. */
 const ctx = await browser.newContext({ viewport: { width: Number(process.env.WIDTH || 430), height: Number(process.env.HEIGHT || 900) }, ignoreHTTPSErrors: true });
+/* Round 1314: no walk reaches the live database, and every page draws from the walk's seed. */
+await ctx.route(/supabase\.co/, r => r.abort());
+await seedPages(ctx, SEED);
 
 /* Round 672: CM_CONTROL=nobusiness, the negative control for the season
    review checks, now that the walk really signs somebody. The served season
@@ -110,7 +156,30 @@ const ctx = await browser.newContext({ viewport: { width: Number(process.env.WID
    checks that read that block have to fire, and nothing else. The shape must
    match once in the served asset or the run refuses to start. */
 const CONTROL = process.env.CM_CONTROL || '';
-const BUSINESS_GUARD = /\w+\.signings\.length>0&&/g;
+/* Fix review of Round 1314: the controls this walk knows. nodoctor and nosave are the negative
+   controls of the board doctoring check (see that block): nodoctor reads the save but never writes
+   the doctored value, so exactly the "did not land" finding must fire; nosave looks for the save
+   under a key that is not there, so exactly the "not there to doctor" finding must fire. Both stop
+   right after that check. An unknown control refuses to run, and an uncaught error under any control
+   exits 2 with a CRASHED line, so a crash is never read as a fire. */
+const CONTROLS = ['nobusiness', 'nodoctor', 'nosave'];
+if (CONTROL && !CONTROLS.includes(CONTROL)) {
+  console.error(`playClubManager: unknown CM_CONTROL "${CONTROL}" (known: ${CONTROLS.join(', ')}). Refusing to run.`);
+  process.exit(2);
+}
+if (CONTROL) {
+  const crashed = e => {
+    console.error(`playClubManager control: CRASHED, which is not a verdict: ${String((e && e.stack) || e).split('\n')[0].slice(0, 200)}`);
+    process.exit(2);
+  };
+  process.on('uncaughtException', crashed);
+  process.on('unhandledRejection', crashed);
+}
+/* Round 1314: the guard that opens the "Transfer business" block, not any guard of that shape. Round
+   721 (f4702db1) gave the Deadline Day board its own `g.signings.length > 0 &&`, so the bare shape
+   matched two chunks and this control refused to start (r1314-cm1 on e07cd2df: "matched 2 time(s)").
+   The block's heading literal survives minifying, so the guard is the one followed by it. */
+const BUSINESS_GUARD = /[\w$]+\.signings\.length>0&&(?=[\s\S]{0,400}?Transfer business)/g;
 const BUSINESS_TARGETS = [/review shows no transfer business block/, /block rendered no IN or OUT rows/];
 let controlSwaps = 0;
 if (CONTROL === 'nobusiness') {
@@ -124,15 +193,27 @@ if (CONTROL === 'nobusiness') {
   if (total !== 1 || (served.match(BUSINESS_GUARD) || []).length !== 1) {
     console.error(`playClubManager control: RED before it started. The transfer business guard matched ${total} time(s) in the built assets${total === 1 ? ' but did not come back from the server' : ''}, so the swap would change nothing or the wrong thing.`);
     await browser.close();
-    process.exit(1);
+    process.exit(2);
   }
   console.log(`  control  the transfer business guard confirmed once in the served /assets/${hits[0].f}`);
+  /* Fix review of Round 1314: one socket reset in route.fetch used to throw out of this handler and
+     crash the run with exit 1, the same exit code as a fire (r1314-run-w, cm-nobusiness, ECONNRESET on
+     a squadShape chunk). The fetch is tried three times; a chunk that still cannot be fetched is
+     aborted, which the walk then reports as a finding, so the verdict says RED rather than crashing. */
   await ctx.route('**/*.js', async route => {
-    const res = await route.fetch();
-    let body = await res.text();
+    let res = null;
+    for (let a = 1; a <= 3 && !res; a++) {
+      res = await route.fetch().catch(e => {
+        console.log(`  control  route.fetch failed for ${route.request().url().slice(-60)} (${String(e).split('\n')[0].slice(0, 80)}), attempt ${a} of 3`);
+        return null;
+      });
+    }
+    if (!res) { await route.abort().catch(() => {}); return; }
+    let body = await res.text().catch(() => null);
+    if (body === null) { await route.abort().catch(() => {}); return; }
     const swapped = body.replace(BUSINESS_GUARD, 'false&&');
     if (swapped !== body) { body = swapped; controlSwaps += 1; }
-    await route.fulfill({ response: res, body });
+    await route.fulfill({ response: res, body }).catch(() => {});
   });
 }
 
@@ -312,6 +393,66 @@ if (!/Season 1/i.test(t)) {
   if (!myClub) note('BROKEN ', 'could not read which club I am managing off the hub');
 }
 
+/* ---------- Round 1314: a board that gives the walk its season ----------
+   22 runs at Round 1304 (results-g/fix-1304.md) were sacked in 10 and red in 5, every red the same
+   SHALLOW line after a sack that came before the walk's first signing: the walk plays badly on
+   purpose, and a board that loses patience in the autumn left the market and the review unreached.
+   The sack is playWilderness's to cover. So, once, before the first kick off, the save's board
+   confidence goes to the top of its range, edited from a page where the app does not run (the Round
+   196 rule), and the walk PROVES it landed: the manager slot screen draws "Board N/100" off the save,
+   and it must read the doctored value before the career is resumed. A lost edit is a BROKEN finding. */
+const DOCTORED = 100;
+let kickoffDraws = null;
+if (myClub) {
+  await page.goto(BASE + '/robots.txt', { waitUntil: 'domcontentloaded', timeout: 20000 });
+  /* The nosave control looks under a key the game never writes; the nodoctor control reads the save
+     and leaves it as it was. Neither changes anything else the walk does up to the check. */
+  const SAVE_KEY = CONTROL === 'nosave' ? 'dukb-club-manager-save-control-nosave' : 'dukb-club-manager-save';
+  if (CONTROL === 'nodoctor' || CONTROL === 'nosave') console.log(`  control  ${CONTROL}: ${CONTROL === 'nosave' ? `the save is looked for under "${SAVE_KEY}"` : 'the save is read but the doctored value is never written'}`);
+  const was = await page.evaluate(([v, key, write]) => {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const c = JSON.parse(raw);
+    const before = c.boardConfidence;
+    if (write) {
+      c.boardConfidence = v;
+      localStorage.setItem(key, JSON.stringify(c));
+    }
+    return before;
+  }, [DOCTORED, SAVE_KEY, CONTROL !== 'nodoctor']).catch(() => null);
+  await page.goto(BASE + '/club-manager', { waitUntil: 'domcontentloaded', timeout: 20000 });
+  const resumeBtn = page.getByRole('button', { name: /^Resume Career$/ }).first();
+  await resumeBtn.waitFor({ timeout: 15000 }).catch(() => {});
+  /* The active slot is the one that draws the Board line. */
+  const slotText = ((await page.locator('[data-testid^="cm-slot-"]').filter({ hasText: /Board \d+\/100/ }).first().innerText({ timeout: 5000 }).catch(() => '')) || '').replace(/\s+/g, ' ');
+  const board = slotText.match(/Board (\d+)\/100/);
+  console.log(`   board confidence doctored from ${was} to ${DOCTORED}: the slot screen reads "${board ? board[0] : 'no Board line'}"`);
+  if (was === null) note('BROKEN ', 'the save was not there to doctor, so the board is the engine\'s own and the run may be sacked early');
+  else if (!board || Number(board[1]) !== DOCTORED) note('BROKEN ', `the doctored board did not land: the slot screen reads "${board ? board[0] : slotText.slice(0, 80)}", not Board ${DOCTORED}/100`);
+  await resumeBtn.click({ timeout: 5000 }).catch(() => {});
+  await page.getByText(/Season 1/i).first().waitFor({ timeout: 15000 }).catch(() => {});
+  kickoffDraws = await pageDraws(page);
+  console.log(`   back on the hub; the page has drawn ${kickoffDraws} times since this load, before the first kick off`);
+  if (CONTROL === 'nodoctor' && was === DOCTORED) note('CONTROL', `the save already read ${DOCTORED}, so a lost edit cannot be told from a landed one`);
+}
+
+/* Fix review of Round 1314: the verdict of the two doctoring controls, right after the check they
+   test. Same convention as nobusiness for a fire (exit 1, the last line says green); a control that
+   did not fire as designed exits 2 with RED. */
+if (CONTROL === 'nodoctor' || CONTROL === 'nosave') {
+  const target = CONTROL === 'nodoctor' ? /the doctored board did not land/ : /the save was not there to doctor/;
+  const hit = findings.filter(f => target.test(f.detail));
+  const collateral = findings.filter(f => !target.test(f.detail));
+  console.log(`\n   control: ${hit.length} of 1 target finding fired, ${collateral.length} other finding(s)${collateral.length ? `: ${collateral.map(f => f.kind.trim() + ' ' + f.detail.slice(0, 80)).join(' | ')}` : ''}`);
+  await browser.close();
+  if (hit.length === 1 && collateral.length === 0) {
+    console.error(`playClubManager control: green. With the ${CONTROL === 'nodoctor' ? 'doctored value never written' : 'save looked for under a key the game never writes'}, exactly the one doctoring check fired ("${hit[0].detail.slice(0, 90)}"). Exiting non zero, because a run with findings fails.`);
+    process.exit(1);
+  }
+  console.error(`playClubManager control: RED. Expected exactly the one "${target.source}" finding, got ${hit.length} of it and ${collateral.length} other(s).`);
+  process.exit(2);
+}
+
 /* ---------- play a season ---------- */
 console.log('2) Playing a season through the interface');
 let halftimes = 0, fullTimes = 0, subsMade = 0, shapeChanges = 0, windows = 0, seasonEnd = false, sacked = false;
@@ -352,7 +493,10 @@ for (let step = 0; step < MAX_STEPS; step++) {
   if (where === 'HALF TIME' || (where === 'MATCH LIVE' && /Second half/i.test(t))) {
     halftimes++;
     const score = (t.match(/(\d+)-(\d+)/) || []);
-    lastHt = { my: Number(score[1]), opp: Number(score[2]) };
+    /* Round 1340: the half time card reads home side first, like a scoreboard, so away from home its first
+       number is theirs. The card's own venue word ("Half time · <competition> · away") says which. */
+    const htAway = /Half time\s*·[^\n]*·\s*away\b/i.test(t);
+    lastHt = htAway ? { my: Number(score[2]), opp: Number(score[1]) } : { my: Number(score[1]), opp: Number(score[2]) };
     if (!Number.isFinite(lastHt.my) || !Number.isFinite(lastHt.opp)) {
       note('BROKEN ', 'the half time screen showed no readable score');
     }
@@ -412,10 +556,10 @@ for (let step = 0; step < MAX_STEPS; step++) {
 
   if (where === 'FULL TIME') {
     fullTimes++;
-    /* The two screens are oriented differently and comparing them naively is
-       wrong. The half time screen always puts YOUR club on the left, because
-       it is your dressing room. The full time report is a scoreboard, so it
-       prints home team first. Away at Old Trafford that reads "Brighton 0-1
+    /* Before Round 1340 the two screens were oriented differently. The half
+       time screen put YOUR club on the left, as your dressing room. The full
+       time report is a scoreboard, so it prints home team first (since Round
+       1340 the half time card does too, and is read by its venue word above). Away at Old Trafford that reads "Brighton 0-1
        Manchester United" at the break and "Manchester United 2 - 0 Brighton"
        at the end, which is 0-1 becoming 0-2 and not a score going backwards.
        The first version of this check reported exactly that, twice, and it was
@@ -461,6 +605,20 @@ for (let step = 0; step < MAX_STEPS; step++) {
        the heading and leaving. */
     const rv = t;
     reviewSeen = true;
+    /* Round 1314: the review's transfer business block as a player sees it, at the walk's own viewport, for
+       whoever reads the run. The review ticks its rows in, so the shot waits (at most six seconds) for the
+       block's heading to finish fading in; the walk ends after the review, so the wait moves nothing it reads. */
+    if (process.env.RC_OUT) {
+      /* Every tick-in row's own animation, finished (the heading's delay was 3.9 s on the default seed, probe
+         r1314-rv), at most eight seconds. A first version waited on the first element reading "Transfer
+         business" anywhere on the page and shot the rows still at opacity 0. */
+      await page.evaluate(() => Promise.race([
+        Promise.all(document.getAnimations().filter(a => a.animationName === 'cmTickIn').map(a => a.finished.catch(() => {}))),
+        new Promise(done => setTimeout(done, 8000)),
+      ])).catch(() => {});
+      await page.locator('.cm-tick-in', { hasText: /^Transfer business$/ }).first().scrollIntoViewIfNeeded({ timeout: 3000 }).catch(() => {});
+      await page.screenshot({ path: path.join(process.env.RC_OUT, `cm-season-review-${SEED}.png`) }).catch(() => {});
+    }
     /* A render throw unmounts the root, so the tell is an empty page rather
        than an error message. Round 544 put a boundary in, so the other tell is
        the boundary's own copy. */
@@ -529,7 +687,7 @@ for (let step = 0; step < MAX_STEPS; step++) {
       }
       if (!/Fast forward/i.test(tc)) note('BROKEN ', 'the calendar has no fast forward');
       if (!/Rest of season/i.test(tc)) note('BROKEN ', 'no rest-of-season fast forward');
-      if (!/Rest first|Balanced|Full training/i.test(tc)) note('BROKEN ', 'no training policy on the calendar');
+      if (!/Light|Normal|Double/i.test(tc)) note('BROKEN ', 'no training policy on the calendar');
       if (!/match day/i.test(tc)) note('BROKEN ', 'no legend on the calendar');
       if (!await tap(/Club home/i, 'back out of the calendar')) {
         note('BROKEN ', 'no way back out of the calendar');
@@ -644,6 +802,7 @@ for (let step = 0; step < MAX_STEPS; step++) {
 }
 
 const ending = seasonEnd ? 'played the season out' : sacked ? 'was sacked, which is a real ending' : 'ran out of steps';
+console.log(`   the page had drawn ${await pageDraws(page)} times since its last load when the walk ended (${kickoffDraws} at the hub before the first kick off)`);
 console.log(`   ${halftimes} half times, ${fullTimes} full times, ${subsMade} subs, ${shapeChanges} shape changes, ${windows} windows, ${signingsMade} signings, ${liveSkips} skips through the live viewer`);
 console.log(`   ending: ${ending}`);
 if (!seasonEnd && !sacked && fullTimes < 5) note('SHALLOW', `only reached ${fullTimes} matches, so most of the season was never exercised`);
@@ -672,9 +831,9 @@ if (CONTROL === 'nobusiness') {
   console.log(`   control: ${controlSwaps} served asset(s) rewritten, ${signingsMade} signing(s), ${hit.length} of ${BUSINESS_TARGETS.length} target checks fired, ${collateral.length} other finding(s)`);
   if (controlSwaps > 0 && hit.length === BUSINESS_TARGETS.length && collateral.length === 0) {
     console.error('playClubManager control: green. With the transfer business block cut out of the review, exactly the two checks that read it fired, so a review that drops a signed manager\'s business goes red. Exiting non zero, because a run with findings fails.');
-  } else {
-    console.error(`playClubManager control: RED. Expected exactly the two transfer business findings, got ${hit.length} of them and ${collateral.length} other(s)${controlSwaps ? '' : ', and the swap never landed on a served asset'}.`);
+    process.exit(1);
   }
-  process.exit(1);
+  console.error(`playClubManager control: RED. Expected exactly the two transfer business findings, got ${hit.length} of them and ${collateral.length} other(s)${controlSwaps ? '' : ', and the swap never landed on a served asset'}.`);
+  process.exit(2);
 }
 process.exit(findings.length === 0 ? 0 : 1);

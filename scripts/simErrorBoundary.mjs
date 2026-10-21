@@ -69,7 +69,7 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 const CONTROL = process.env.BOUNDARY_CONTROL || '';
-const KNOWN_CONTROLS = ['unwrapped', 'nocatch'];
+const KNOWN_CONTROLS = ['unwrapped', 'nocatch', 'rename'];
 if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
   console.error(`BOUNDARY_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
@@ -83,6 +83,34 @@ if (!fs.existsSync(BOUNDARY_SRC_PATH)) {
 /* Both normalised on read. The two controls match patterns that end a line
    with \n, and on a CRLF checkout they found nothing and refused to run. */
 const boundarySrc = fs.readFileSync(BOUNDARY_SRC_PATH, 'utf8').replaceAll('\r\n', '\n');
+
+/* Release BA: the footer button's label is read from ReportSiteIssue.tsx, never typed here. PR239 renamed it
+   from "Report a bug" to "Report a problem", and a literal in this file would have kept the crash screen
+   pointing at a button that no longer exists. The label is the text of the first button in that file once its
+   comments are gone, its tags and expressions dropped. Control BOUNDARY_CONTROL=rename renames the footer
+   button in memory, the way the next rename would, while the crash screen keeps its words: section 3 must go
+   red with "does not point at the Send us feedback button". */
+function footerLabel(src) {
+  const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const start = code.indexOf('<button');
+  if (start < 0) return '';
+  let i = start + '<button'.length, depth = 0;
+  for (; i < code.length; i++) {
+    const ch = code[i];
+    if (ch === '{') depth++;
+    else if (ch === '}') depth--;
+    else if (ch === '>' && depth === 0) break;
+  }
+  const end = code.indexOf('</button>', i);
+  if (end < 0) return '';
+  return code.slice(i + 1, end).replace(/<[^>]*>/g, ' ').replace(/\{[^}]*\}/g, ' ').replace(/\s+/g, ' ').trim();
+}
+let FOOTER_LABEL = footerLabel(fs.readFileSync(path.join(ROOT, 'src/components/game/ReportSiteIssue.tsx'), 'utf8').replaceAll('\r\n', '\n'));
+if (CONTROL === 'rename') {
+  if (!FOOTER_LABEL) { console.error('CONTROL rename cannot read the footer label, so it would change nothing'); process.exit(1); }
+  FOOTER_LABEL = 'Send us feedback';
+  console.log('   NEGATIVE CONTROL ON: the footer button renamed in memory, section 3 must go red');
+}
 
 let appSrc = fs.readFileSync(path.join(ROOT, 'src/App.tsx'), 'utf8').replaceAll('\r\n', '\n');
 if (CONTROL === 'unwrapped') {
@@ -189,10 +217,11 @@ if (!caught) {
 } else {
   if (!/href="\/"/.test(caught)) fail('no link back to the home page, so the visitor is stuck exactly as they were on the white page');
   if (!/still on this device/i.test(caught)) fail('the screen does not say the save survived, and "the page went blank" and "my career is gone" feel identical from the player side');
-  if (!/report a bug/i.test(caught)) fail('the screen does not point at the report a bug button');
+  if (!FOOTER_LABEL) fail('the footer button label could not be read from ReportSiteIssue.tsx, so this check would be blind');
+  else if (!caught.toLowerCase().includes(FOOTER_LABEL.toLowerCase())) fail(`the screen does not point at the ${FOOTER_LABEL} button, the footer's own label`);
   if (caught.length < 200) fail(`the recovery screen is ${caught.length} characters, which is not a usable page`);
 }
-if (failures === before) console.log('   home link, save reassurance and the report a bug pointer all present');
+if (failures === before) console.log(`   home link, save reassurance and the pointer at the footer's "${FOOTER_LABEL}" button all present`);
 
 /* ------------------------------------------------------------------ */
 console.log('4) It wraps the routes in App.tsx, inside Suspense so the footer survives');

@@ -495,11 +495,10 @@ const DealOrNoDeal = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="mystery-box" />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="mystery-box" />}
           pageHasOwnH1
           title="Mystery Box: The Banker Game"
           description="A sports take on the classic box gamble. Play for cash, or switch to Player Edition where every case hides a real footballer and you win their market value."

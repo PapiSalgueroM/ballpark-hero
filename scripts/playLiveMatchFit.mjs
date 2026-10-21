@@ -111,6 +111,18 @@
  *   LIVE_FIT_CONTROL=silentlist node scripts/playLiveMatchFit.mjs
  *   LIVE_FIT_CONTROL=earlyscore node scripts/playLiveMatchFit.mjs
  *   LIVE_FIT_CONTROL=nocard node scripts/playLiveMatchFit.mjs
+ *   LIVE_FIT_CONTROL=widelabels node scripts/playLiveMatchFit.mjs
+ *   LIVE_FIT_CONTROL=digits node scripts/playLiveMatchFit.mjs
+ *
+ * THE NAME LABELS (Round 1340b, section 3). The pitch wears surnames and, in a crowd, initials; it shows no number.
+ *   At every size and every frame measured no label begins with a digit. At 320 by 568 the mean overlapping label
+ *   pairs a frame may not rise above LABELS_BEFORE_320 (the same seed before the change) by more than the walk's
+ *   own spread between two runs of one seed; the labels cut short are printed beside the count before.
+ *   NEGATIVE CONTROLS (exit 1 when they fire on their own line and nothing else, 3 when not):
+ *   LIVE_FIT_CONTROL=widelabels  at 320, after counting at least 11 label nodes, a style tag takes the labels' cap
+ *                                off and draws them at 14 px while they are measured: the 320 ceiling goes red.
+ *   LIVE_FIT_CONTROL=digits      every label reading is read as "7 " and itself, once there are 11 to read: the
+ *                                digit check goes red at every size.
  */
 /* RECORDED BEFORE MATCH MODE, with LIVE_FIT_REPORT=1 on the build of 6b1caa20 (the viewer still a card in
    the page, under the navbar and the page's own heading), on a GitHub runner's Chromium:
@@ -139,7 +151,7 @@ const KEY = 'dukb-club-manager-save';
 const REPORT = process.env.LIVE_FIT_REPORT === '1';
 const REPLAY = process.env.LIVE_FIT_REPLAY === '1';
 const CONTROL = process.env.LIVE_FIT_CONTROL || '';
-if (CONTROL && !['bar', 'silentlist', 'earlyscore', 'nocard', 'noseed', 'ogbefore'].includes(CONTROL)) { console.error(`unknown LIVE_FIT_CONTROL ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['bar', 'silentlist', 'earlyscore', 'nocard', 'noseed', 'ogbefore', 'widelabels', 'digits'].includes(CONTROL)) { console.error(`unknown LIVE_FIT_CONTROL ${CONTROL}`); process.exit(2); }
 /* Round 1216: LIVE_FIT_OWN=1 runs section 9 (an own goal) alone. Its control, ogbefore, is for a build that
    still draws the picture from before Round 1216 and nothing else. */
 const OWN_ONLY = process.env.LIVE_FIT_OWN === '1';
@@ -694,7 +706,12 @@ function measure(page) {
     const buttons = root ? [...root.querySelectorAll('button')].filter(visible).filter(b => !b.hasAttribute('data-cm-dot')) : [];
     const under44 = buttons.filter(b => { const r = b.getBoundingClientRect(); return r.width < 43.5 || r.height < 43.5; }).length;
     /* Name labels that overlap: the label span under (or over) each figure on the pitch. */
-    const labels = pitch ? [...pitch.querySelectorAll('[data-cm-dot] > span, [data-cm-dot-opp] > span')].map(el => el.getBoundingClientRect()).filter(r => r.width > 0) : [];
+    const labelEls = pitch ? [...pitch.querySelectorAll('[data-cm-dot] > span, [data-cm-dot-opp] > span')].filter(el => el.getBoundingClientRect().width > 0) : [];
+    const labels = labelEls.map(el => el.getBoundingClientRect());
+    /* Round 1340: what the labels say (no label may begin with a digit or be a number once the pitch wears names)
+       and how many are cut short by their cap. */
+    const labelTexts = labelEls.map(el => el.textContent.trim());
+    const labelsCut = labelEls.filter(el => el.scrollWidth > el.clientWidth + 0.5).length;
     let overlapping = 0;
     for (let i = 0; i < labels.length; i++) for (let j = i + 1; j < labels.length; j++) {
       const a = labels[i], b = labels[j];
@@ -709,7 +726,7 @@ function measure(page) {
       strip: rect(strip), pitch: rect(pitch), controls: rect(controlsEl), stage: rect(stage), statline: statline && visible(statline) ? rect(statline) : null,
       controlRects: controls.map(b => ({ name: (b.getAttribute('aria-label') || b.textContent || '').trim().slice(0, 24), width: b.getBoundingClientRect().width, height: b.getBoundingClientRect().height, hit: hit(b) })),
       backHit: hit(back), scoreHit: hit(score), hasBack: !!back,
-      small, smallest, under44, labels: labels.length, overlapping,
+      small, smallest, under44, labels: labels.length, overlapping, labelTexts, labelsCut,
       orient: document.querySelector('[data-pm-orient]') ? document.querySelector('[data-pm-orient]').getAttribute('data-pm-orient') : null,
     };
   });
@@ -717,13 +734,14 @@ function measure(page) {
 
 /** The mean number of overlapping name labels a frame, over a couple of seconds of open play. */
 async function labelMean(page, frames = 24) {
-  let sum = 0, n = 0, labels = 0;
+  let sum = 0, n = 0, labels = 0, cut = 0;
+  const texts = [];
   for (let i = 0; i < frames; i++) {
     const m = await measure(page);
-    if (m.labels) { sum += m.overlapping; labels = m.labels; n++; }
+    if (m.labels) { sum += m.overlapping; labels = m.labels; cut += m.labelsCut; n++; texts.push(...m.labelTexts); }
     await page.waitForTimeout(250);
   }
-  return { mean: n ? sum / n : NaN, frames: n, labels };
+  return { mean: n ? sum / n : NaN, frames: n, labels, cut: n ? cut / n : NaN, texts };
 }
 
 const VIEWPORTS = [
@@ -784,6 +802,44 @@ function judgeFit(view, m) {
 /* The mean number of overlapping name labels a frame at 390 wide, measured with LIVE_FIT_REPORT=1 on the
    build of the commit named here, BEFORE the full screen match mode. With match mode the mean must be lower. */
 const LABELS_BEFORE = { commit: '6b1caa20', mean: 1.63 };
+/* Round 1340: the same mean at 320 by 568, BEFORE the pitch wore surnames (every label then began with its position
+   number), read over 24 frames on the build of the commit named here (Round 1340a's labels; remote check r1340-b2),
+   three seeds twice each. mean is the six runs' mean; spread is the widest gap between two runs of one seed (the
+   noise of the walk itself); cut is the labels cut a frame (scrollWidth over clientWidth), printed beside the head's. */
+const LABELS_BEFORE_320 = {
+  commit: 'abf78608',
+  seeds: { 3208792607: [2.417, 2.375], 1340: [3.208, 2.792], 2026: [2.375, 2.375] },
+  cut: { 3208792607: 13.917, 1340: 14.958, 2026: 15.0 },
+  mean: 2.590,
+  spread: 0.417,
+};
+/* The label checks run on a plain walk and under their own two controls, never in the measuring pass. */
+const LABELS_ON = !REPORT && (!CONTROL || CONTROL === 'widelabels' || CONTROL === 'digits');
+let labels320Red = false, digitFails = 0;
+/** No label begins with a digit, at any size and in any frame measured (a number is a label that begins with one).
+ *  Under LIVE_FIT_CONTROL=digits every reading is read as "7 " and itself, after there are labels to read. */
+function judgeLabelDigits(view, labels) {
+  let texts = labels.texts;
+  if (CONTROL === 'digits' && texts.length >= 11) { tampered += texts.length; texts = texts.map(t => `7 ${t}`); }
+  const bad = texts.filter(t => /^\d/.test(t));
+  if (!labels.frames) fail(`${view.name}: no frame with name labels was measured`);
+  else if (bad.length) { digitFails += 1; fail(`${view.name}: ${bad.length} of ${texts.length} name label readings begin with a digit (${[...new Set(bad)].slice(0, 4).join(', ')})`); }
+  else ok(`${view.name}: none of ${texts.length} name label readings begins with a digit`);
+  return bad.length;
+}
+/** At 320 the overlap may not rise above the same seed's reading before the pitch wore surnames by more than the
+ *  walk's own spread (an unknown seed is held to the three seeds' mean). A ceiling, not a fall: a label in a crowd
+ *  went from one or two digits to two or three letters, so it may grow, and the cut count is printed beside it. */
+function judgeLabels320(labels) {
+  const runs = LABELS_BEFORE_320.seeds[SEED];
+  const before = runs ? runs.reduce((a, b) => a + b, 0) / runs.length : LABELS_BEFORE_320.mean;
+  const ceiling = before + LABELS_BEFORE_320.spread;
+  const cutBefore = LABELS_BEFORE_320.cut[SEED];
+  console.log(`  [labels 320 against ${LABELS_BEFORE_320.commit}] ${labels.mean.toFixed(3)} overlapping a frame against ${before.toFixed(3)} before (${runs ? 'this seed' : 'the three seeds\' mean'}), ceiling ${ceiling.toFixed(3)}; ${labels.cut.toFixed(3)} cut a frame against ${cutBefore === undefined ? 'no reading of this seed' : cutBefore.toFixed(3)} before`);
+  if (!labels.frames) fail('320: no frame with name labels was measured');
+  else if (!(labels.mean <= ceiling)) { labels320Red = true; fail(`name labels at 320 overlap ${labels.mean.toFixed(3)} a frame, above the ${before.toFixed(3)} before by more than the walk's own spread of ${LABELS_BEFORE_320.spread}`); }
+  else ok(`name labels at 320 overlap ${labels.mean.toFixed(3)} a frame, within ${LABELS_BEFORE_320.spread} of the ${before.toFixed(3)} before`);
+}
 
 /** A period being played with at least `need` minutes of it left: a reading taken as a half ends finds the
  *  dressing room where the stage was. Skips on to the next period until there is one. */
@@ -1133,13 +1189,28 @@ try {
     const m = await measure(page);
     judgeFit(view, m);
     await shoot(page, `fit-${view.width}`);
-    if (!REPORT && !CONTROL && view.width !== 390) {
-      /* Printed, not asserted: there is no reading of these sizes from before match mode to hold them to. */
-      const labels = await labelMean(page, 10);
-      console.log(`  [labels ${view.name}] mean overlapping name labels a frame ${labels.mean.toFixed(2)} over ${labels.frames} frames of ${labels.labels} labels`);
+    if (LABELS_ON && view.width !== 390) {
+      /* Printed, not asserted, at 768, 1280 and on its side: there is no reading of these sizes from before match
+         mode to hold them to. Round 1340: 320 is read over 24 frames, the same as 390, with how many labels are cut
+         and how many begin with a digit, on one line a reader can collect (LABELS320), and held to the ceiling of
+         LABELS_BEFORE_320. At every size no label may begin with a digit (the pitch wears names, never numbers). */
+      let wide = null;
+      if (view.width === 320 && CONTROL === 'widelabels') {
+        tampered = await page.locator('.cm-dot-label').count();
+        if (tampered >= 11) wide = await page.addStyleTag({ content: '.cm-dot-label { max-width: none !important; font-size: 14px !important }' });
+      }
+      const labels = await labelMean(page, view.width === 320 ? 24 : 10);
+      if (wide) await wide.evaluate(el => el.remove());
+      const digits = judgeLabelDigits(view, labels);
+      console.log(`  [labels ${view.name}] mean overlapping name labels a frame ${labels.mean.toFixed(2)} over ${labels.frames} frames of ${labels.labels} labels; ${labels.cut.toFixed(2)} cut a frame; ${digits} of ${labels.texts.length} label readings begin with a digit`);
+      if (view.width === 320) {
+        console.log(`  LABELS320 seed=${SEED} mean=${labels.mean.toFixed(3)} frames=${labels.frames} labels=${labels.labels} cut=${labels.cut.toFixed(3)} digits=${digits}`);
+        judgeLabels320(labels);
+      }
     }
     if (view.width === 390) {
       const labels = await labelMean(page);
+      if (LABELS_ON) judgeLabelDigits(view, labels);
       console.log(`  [labels 390] mean overlapping name labels a frame ${labels.mean.toFixed(2)} over ${labels.frames} frames of ${labels.labels} labels; before match mode ${LABELS_BEFORE.mean} at ${LABELS_BEFORE.commit}${Number.isFinite(LABELS_BEFORE.mean) && LABELS_BEFORE.mean > 0 ? `, ratio ${(labels.mean / LABELS_BEFORE.mean).toFixed(2)}` : ''}`);
       if (!REPORT && !CONTROL) {
         if (!labels.frames) fail('no frame with name labels was measured');
@@ -1342,6 +1413,15 @@ if (REPLAY) {
     ? `playLiveMatchFit: the replay is RED, ${failures} failure${failures === 1 ? '' : 's'}.`
     : `playLiveMatchFit: the replay is green. Seed ${SEED} opened one match three times (digest ${mine[0].digest}, ${mine[0].draws} draws at kick off) and seed ${seedAt(1)} opened another (digest ${other.digest}); the page drew nothing while idle.`);
   process.exit(failures ? 1 : 0);
+}
+if (CONTROL === 'widelabels' || CONTROL === 'digits') {
+  /* Round 1340: each must turn its own line red and nothing else: the 320 ceiling, or the digit check. */
+  const own = CONTROL === 'widelabels' ? (labels320Red ? 1 : 0) : digitFails;
+  const asItMust = own > 0 && tampered >= 11 && failures === own;
+  console.log(asItMust
+    ? `playLiveMatchFit: control ${CONTROL} turned ${CONTROL === 'widelabels' ? 'the 320 label ceiling' : 'the digit check'} red on the line it must (${own} failure${own === 1 ? '' : 's'}, ${tampered} label nodes touched) and left the rest green.`
+    : `playLiveMatchFit: control ${CONTROL} did NOT behave: ${failures} failures, ${own} on its own line, red sections ${[...failed].sort().join(', ') || 'none'}, ${tampered} label nodes touched.`);
+  process.exit(asItMust ? 1 : 3);
 }
 if (CONTROL === 'bar') {
   const asItMust = failed.has(3) && !failed.has(1) && !failed.has(2) && !failed.has(4);

@@ -69,6 +69,8 @@ import {
   resolveXI,
   sellValue,
   startCareer,
+  /* Round 1509 (ruling 1l): the dailies start a career that follows no competition from outside. */
+  DAILY_START,
   startNegotiation,
   walkAway,
   type CareerState,
@@ -341,7 +343,7 @@ function stickerOf(mp: MarketPlayer): number {
  */
 export function startDeadlineDay(setup: DeadlineSetup): DeadlineRun {
   return onStaticWorld(() => {
-    const state0 = withSeed(mixSeed(setup.seed, SEED_START), () => startCareer(setup.club));
+    const state0 = withSeed(mixSeed(setup.seed, SEED_START), () => startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, DAILY_START));
     /* Release AT: a daily never carries the real fixture list (see startOnStaticWorld in
        managerHotSeat.ts). Deadline Day plays no match, so the key was inert here; it comes off so the
        day's state is the shape it was before Round 1184. scripts/simDailyDeals.mjs holds it. */
@@ -350,6 +352,19 @@ export function startDeadlineDay(setup: DeadlineSetup): DeadlineRun {
        match, so it would only ever be an empty block in the day's state; it comes off so the state is
        the shape it was. scripts/simCmLeagueBook.mjs (section dailies) holds it. */
     delete state0.leagueBook;
+    /* Release AZ, the lead's ruling Y3: nor a world seed (Round 1250 gives every new career one). With no
+       seed the engine never writes the day a ledger, so the signings and sales a day completes through the
+       engine leave its state the shape it was, and every market and roster read of the day stays on the
+       projected world. scripts/simDailyDeals.mjs holds it: its seeddeadline control puts this line back out. */
+    delete state0.worldSeed;
+    /* Round 1344: nor a ledger. startCareer records its opening window's deals into one once the seed is drawn
+       (the post seed flush), and a daily holds none (Y3), so it comes off with the seed. scripts/simDailyDeals.mjs
+       holds it: its ledgerdeadline control puts this line back out. */
+    delete state0.worldRoster;
+    /* Round 1502: nor a watched Champions League (startCareer opens one for a club that is not in it). It
+       draws nothing, so the deal cannot move; scripts/simDailyDeals.mjs holds the state's shape, and its
+       worlddeadline control puts this line back out. */
+    delete state0.worldComps;
     const rng = mulberry32(mixSeed(setup.seed, SEED_BRIEF));
     const count = rng() < 0.5 ? 3 : 4;
     const market = buildMarket(state0);

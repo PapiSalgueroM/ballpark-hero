@@ -89,6 +89,7 @@
  *   marketreleased the market lists a man you released               -> section 17
  *   buyreleased    a deal signs a man you released                   -> section 17
  *   noreleasedlist a release is not written to the permanent list    -> section 17
+ *   ownclub        my own club's men are on my market again          -> section 17, the own club check
  *   blocklist      the signing rule reads only the pool record       -> section 17
  *   ledgersquad    a man on a baked squad is in the ledger as free   -> section 18, the ledger and day one checks
  *   noseed         a new modern career is never seeded               -> section 18, day one
@@ -376,12 +377,24 @@ if (CONTROL === 'nosev') {
     '    budget: Math.round((career.budget - fee) * 10) / 10,\n    squad: [...career.squad, player],\n    freeAgents: pool.filter(x => x.name !== fa.name),',
     '    squad: [...career.squad, player],\n    freeAgents: pool.filter(x => x.name !== fa.name),');
 } else if (CONTROL === 'marketreleased') {
+  /* Release AZ fix pass 3 (the lead's finding 3): both anchors below went stale at Round 634 (02f7a00a put
+     the loan filter after this one, 1606068d made the deal check return a reason), so these two controls
+     aborted on every head before this train. Each now cuts the same rule from today's line. */
   rewrite('marketreleased', 'engine',
-    ' && !retired.has(p.name) && !released.has(p.name));',
-    ' && !retired.has(p.name));');
+    ' && !released.has(p.name) && !onLoanOut.has(sameManKey(p)));',
+    ' && !onLoanOut.has(sameManKey(p)));');
 } else if (CONTROL === 'buyreleased') {
   rewrite('buyreleased', 'engine',
-    '  if (releasedByYouNames(career).has(mp.name)) return null;\n',
+    '  if (releasedByYouNames(career).has(mp.name)) return `You released ${mp.name}. He will not sign for you again.`;\n  /* Round 634: nor a man you have out on loan',
+    '  /* Round 634: nor a man you have out on loan');
+} else if (CONTROL === 'ownclub') {
+  /* Release AZ fix pass 4: the market lists my own club's world roster again, ledger or none (Round 1339: the
+     rule now holds in every career, so the anchor is the one line that drops my club). */
+  rewrite('ownclub', 'engine',
+    '  if (!held) return fallback.filter(p => p.club !== career.clubName);\n',
+    '  if (!held) return fallback;\n');
+  rewrite('ownclub', 'engine',
+    '    if (club === current.clubName) continue;\n',
     '');
 } else if (CONTROL === 'noreleasedlist') {
   rewrite('noreleasedlist', 'engine',
@@ -1492,8 +1505,18 @@ console.log('17) a man you release never signs for you again, by any door');
      the save as it looks once the record and goneNames are gone, and each must
      open when the permanent list is taken away, or its refusal proves nothing. */
   const st = seeded(7700, () => cm.startCareer('Everton'));
+  /* Round 1344: a new career now carries its opening window's deals between other clubs in its ledger (the post
+     seed flush). This section reads the save with the one ledger record of the release below taken away, so it
+     starts from the ledger a new career had before the round: none. */
+  delete st.worldRoster;
   cm.ensureFreeAgents(st);
-  const shelf = cm.buildMarket({ ...st, squad: [] });
+  /* Release AZ fix pass 4, the lead's ruling (the manager's own club is read from his squad, never the world
+     roster): in a new, seeded career the market lists nobody at my own club, so a man I release there can only
+     come back on sale from my NEXT club, where Everton is another club read off the world roster. Every door
+     below is therefore read as the market looks from AWAY, the job after this one, and the own club rule is a
+     door of its own, checked at Everton with the list and the ledger both gone (FA_CONTROL=ownclub). */
+  const AWAY = 'Liverpool';
+  const shelf = cm.buildMarket({ ...st, clubName: AWAY, squad: [] });
   const pick = st.squad
     .filter(p => !p.isYouth && !p.generated && cm.releaseBlock(st, p) === null)
     .map(p => ({ p, mp: shelf.find(m => m.name === p.name) }))
@@ -1505,14 +1528,32 @@ console.log('17) a man you release never signs for you again, by any door');
     const rel = cm.releasePlayer(st, pick.p.id);
     if (!rel) fail(`the release of ${name} was refused`);
     else {
+      /* Release AZ: since Round 1250 a new modern career carries a world seed,
+         so this release also writes the world ledger, and the ledger's released
+         record is a door of its own: it takes him out of every club's world
+         roster and so off the market, list or no list (on the merge this
+         section went red with "not on the market even with the list taken
+         away"). The ledger's door is checked by itself here, and the doors
+         below read the save with that ledger taken away, which only this
+         release wrote, so each one still sees the list. */
+      const summer = { transferWindow: 'summer', windowWeeksLeft: 4, goneNames: [], releasedNames: [], freeAgents: (rel.freeAgents ?? []).filter(f => f.name !== name) };
+      if (st.worldSeed === undefined || st.worldRoster !== undefined || rel.worldRoster === undefined) fail(`the Everton career is not a new seeded save whose ledger only the release of ${name} wrote, so this cannot tell the ledger from the list`);
+      else if (cm.buildMarket({ ...rel, ...summer, clubName: AWAY }).some(m => m.name === name)) fail(`the world ledger's record of ${name} does not keep him off the market`);
+      else ok(`the world ledger's record of ${name} keeps him off the market by itself`);
+      const { worldRoster: _ledger, ...unledgered } = rel;
       const later = {
-        ...rel,
+        ...unledgered,
+        clubName: AWAY,
         transferWindow: 'summer',
         windowWeeksLeft: 4,
         goneNames: [],
         freeAgents: (rel.freeAgents ?? []).filter(f => f.name !== name),
       };
       const forgotten = { ...later, releasedNames: [] };
+      /* My own club: with the list and the ledger both gone he is still not on its market, because at my own
+         club the market lists nobody but my squad, and he is not in it. */
+      if (cm.buildMarket({ ...forgotten, clubName: st.clubName }).some(m => m.name === name)) fail(`${name} is on my own club's market once the list and the ledger are gone, so my own club is read off the world roster`);
+      else ok(`at my own club the market lists nobody but my squad, so ${name} is off it even with the list and the ledger taken away`);
       /* The market. */
       const listed = cm.buildMarket(forgotten).find(m => m.name === name);
       if (!listed) fail(`${name} is not on the market even with the list taken away, so this cannot see the market rule`);

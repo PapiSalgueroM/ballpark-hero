@@ -8,6 +8,9 @@ import ManagerLookEditor from '@/components/club-manager/ManagerLookEditor';
 import HomelandSelect from '@/components/club-manager/HomelandSelect';
 import { MIDSEASON_ENTRY } from '@/lib/clubManagerCalendar';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
+import type { CareerSetup } from '@/lib/clubManagerStart';
+import { DIFFICULTY_INFO, DIFFICULTY_LEVELS, isEasyLevel } from '@/lib/managerDifficulty';
+import type { DifficultyLevel } from '@/lib/managerDifficulty';
 
 /**
  * Round 303, off the owner's tweaks list: "customizable created manager".
@@ -29,8 +32,9 @@ interface ManagerFormProps {
   /** The nation the picker came through, preselected as the homeland. */
   defaultNation: string;
   onBack: () => void;
-  /** null means skip: no manager spec, the classic career. */
-  onConfirm: (spec: ManagerSpec | null, entry?: MidSeasonEntry) => void;
+  /** null means skip: no manager spec, the classic career. Round 1342: the
+   *  career options ride third, absent when nothing is switched on. */
+  onConfirm: (spec: ManagerSpec | null, entry?: MidSeasonEntry, setup?: CareerSetup) => void;
 }
 
 export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: ManagerFormProps) {
@@ -45,13 +49,20 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
      the house rule); the Roll one button is the random path. */
   const [look, setLook] = useState<ManagerLook>(defaultManagerLook);
   const [triedSubmit, setTriedSubmit] = useState(false);
+  /* Round 1342: No sacking, off unless he switches it on. */
+  const [noSack, setNoSack] = useState(false);
+  /* Round 1501: how hard, Medium ('normal') unless he picks another. Round 1512: changeable later in Options. */
+  const [level, setLevel] = useState<DifficultyLevel>('normal');
 
   const nameError = useMemo(() => validateManagerName(name), [name]);
+  const setup: CareerSetup | undefined = noSack || level !== 'normal'
+    ? { ...(noSack ? { noSack: true } : {}), ...(level !== 'normal' ? { level } : {}) }
+    : undefined;
 
   const create = () => {
     setTriedSubmit(true);
     if (nameError) return;
-    onConfirm({ name: name.trim(), nationality, background, style, appearance: look }, entry ?? undefined);
+    onConfirm({ name: name.trim(), nationality, background, style, appearance: look }, entry ?? undefined, setup);
   };
 
   return (
@@ -192,6 +203,62 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
           )}
         </div>
 
+        {/* Round 1342: career options. One switch for now, No sacking, off by
+            default. The line under it never changes with the switch, so the
+            page does not move when it is pressed. */}
+        <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-2" data-cm-career-options>
+          <div className="text-xs font-bold text-foreground">⚙️ Career options</div>
+          {/* Round 1501: how hard. Round 1512: five tiles, three to a row on a phone, Medium pressed; the line under them says what the
+              pressed one does. All five lines sit in the same grid cell and only the pressed one is visible,
+              so the box is always as tall as the longest of them at any width and pressing a tile never moves
+              the page (a fixed two line box let Hard's line wrap to three at 320 and push the page 16 px). */}
+          <div className="text-xs text-muted-foreground">How hard do you want it?</div>
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2" role="radiogroup" aria-label="How hard" data-cm-level-tiles={level}>
+            {DIFFICULTY_LEVELS.map(lv => (
+              <button
+                key={lv}
+                type="button"
+                role="radio"
+                aria-checked={level === lv}
+                onClick={() => setLevel(lv)}
+                data-cm-level-tile={lv}
+                className={cn(
+                  'min-h-[44px] rounded-xl border px-1.5 py-2 text-xs sm:text-sm font-bold transition-colors',
+                  level === lv ? 'border-primary bg-primary/10 text-foreground' : 'border-border bg-background text-muted-foreground hover:border-primary/60',
+                )}
+              >
+                {DIFFICULTY_INFO[lv].label}
+              </button>
+            ))}
+          </div>
+          <div className="grid text-xs text-muted-foreground" data-cm-level-blurb={level}>
+            {DIFFICULTY_LEVELS.map(lv => (
+              <p key={lv} className={cn('col-start-1 row-start-1', lv !== level && 'invisible')} aria-hidden={lv !== level}>
+                {DIFFICULTY_INFO[lv].blurb} {isEasyLevel(lv) ? 'This career posts no leaderboard scores, even if you move it up later in Options.' : 'You can change it any time in Options.'}
+              </p>
+            ))}
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={noSack}
+            onClick={() => setNoSack(v => !v)}
+            data-cm-nosack-switch
+            className={cn(
+              'w-full min-h-[44px] rounded-xl border px-3 py-2 flex items-center justify-between gap-3 text-left transition-colors',
+              noSack ? 'border-primary bg-primary/10' : 'border-border bg-background hover:border-primary/60',
+            )}
+          >
+            <span className="text-sm font-bold text-foreground">🛡️ No sacking</span>
+            <span className={cn('text-xs font-bold rounded-full px-2.5 py-1', noSack ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground')}>
+              {noSack ? 'On' : 'Off'}
+            </span>
+          </button>
+          <p className="text-xs text-muted-foreground">
+            The board can moan but it can never fire you. Once it is on it stays on for this career, and the career stops posting scores to the leaderboards.
+          </p>
+        </div>
+
         <div className="flex flex-col sm:flex-row gap-2 pt-1">
           <button
             onClick={create}
@@ -200,7 +267,7 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
             <Briefcase className="w-4 h-4" /> Take the job
           </button>
           <button
-            onClick={() => onConfirm(null, entry ?? undefined)}
+            onClick={() => onConfirm(null, entry ?? undefined, setup)}
             className="flex-1 inline-flex items-center justify-center px-6 py-2.5 rounded-full font-bold border border-border text-muted-foreground hover:text-foreground hover:border-primary transition-colors text-sm"
           >
             Skip: just manage

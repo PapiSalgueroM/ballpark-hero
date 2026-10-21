@@ -1,0 +1,143 @@
+name: Soccer Career recorded life reviews
+
+on:
+  push:
+    branches: [codex/soccer-career-life-reviews]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      CAREER_REVIEWS_PHASE: fixed
+      CAREER_REVIEWS_OUT: ${{ github.workspace }}/career-review-artifacts
+      SOCCER_ROUTINE_OUT: ${{ github.workspace }}/career-review-artifacts/prior-routines
+      SOCCER_ROUTINE_PHASE: fixed
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/career-review-artifacts/font-cache
+      PRERENDER_ONLY: /soccer-career
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind unchanged source and locked dependencies
+        run: |
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          mkdir -p "$CAREER_REVIEWS_OUT"
+          git rev-parse HEAD > "$CAREER_REVIEWS_OUT/source-head.txt"
+          git status --porcelain --untracked-files=no > "$CAREER_REVIEWS_OUT/source-before.txt"
+          test ! -s "$CAREER_REVIEWS_OUT/source-before.txt"
+          git diff --exit-code d43ec6caec43dba7ebd0433215bdbe8ce9732095 -- src scripts package.json package-lock.json bun.lock ':!src/lib/soccerCareerLife.ts' ':!src/test/soccerCareerLifeReviews.test.ts' ':!scripts/simSoccerCareerLifeReviews.mjs' ':!scripts/playSoccerCareerLifeReviews.mjs'
+          if test "$CAREER_REVIEWS_PHASE" = baseline; then
+            git diff --exit-code d43ec6caec43dba7ebd0433215bdbe8ce9732095 -- src/lib/soccerCareerLife.ts
+          fi
+          find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$CAREER_REVIEWS_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$CAREER_REVIEWS_OUT/package-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, entry]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, entry.version, p);
+            return { path: p, version };
+          });
+          assert.equal(installed.length, 521);
+          fs.writeFileSync(process.env.CAREER_REVIEWS_OUT + '/installed.json', JSON.stringify(installed, null, 2));
+          console.log(`Bound ${installed.length} installed locked versions.`);
+          NODE
+      - name: Actual application type gate
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CAREER_REVIEWS_OUT/types.log"
+      - name: Recorded acquisition and review outcomes
+        run: |
+          if test "$CAREER_REVIEWS_PHASE" = baseline; then
+            SC_LIFE_REVIEWS_EXPECT_RED=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerLifeReviews.mjs 2>&1 | tee "$CAREER_REVIEWS_OUT/baseline.log"
+          else
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerLifeReviews.mjs 2>&1 | tee "$CAREER_REVIEWS_OUT/fixed.log"
+            for control in missing priority effect; do
+              SC_LIFE_REVIEWS_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerLifeReviews.mjs 2>&1 | tee "$CAREER_REVIEWS_OUT/control-$control.log"
+            done
+          fi
+      - name: Preserve the prior routine and life-followup outcomes
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRoutineEvents.mjs 2>&1 | tee "$CAREER_REVIEWS_OUT/prior-routines.log"
+      - name: Normal fleet discovery without a packet artifact variable
+        if: env.CAREER_REVIEWS_PHASE == 'fixed'
+        run: env -u CAREER_REVIEWS_OUT ONLY=simSoccerCareerLifeReviews node scripts/runAllSims.mjs 2>&1 | tee "$CAREER_REVIEWS_OUT/fleet-discovery.log"
+      - name: Full unit suite
+        id: full_unit_suite
+        continue-on-error: true
+        if: env.CAREER_REVIEWS_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test 2>&1 | tee "$CAREER_REVIEWS_OUT/full-tests.log"
+      - name: Browser and build tools
+        if: env.CAREER_REVIEWS_PHASE == 'fixed'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/career-reviews-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/career-reviews-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/career-reviews-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/career-reviews-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$CAREER_REVIEWS_OUT/fonts.log"
+          sha256sum --check "$CAREER_REVIEWS_OUT/package-hashes.txt"
+      - name: Complete application build and career snapshot
+        if: env.CAREER_REVIEWS_PHASE == 'fixed'
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$CAREER_REVIEWS_OUT/build.log"
+          cp scripts/data/lastmod.json "$CAREER_REVIEWS_OUT/build-lastmod.json"
+          git diff -- scripts/data/lastmod.json > "$CAREER_REVIEWS_OUT/build-lastmod.diff"
+      - name: Actual saved review cards at phone and desktop widths
+        if: env.CAREER_REVIEWS_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerLifeReviews.mjs 2>&1 | tee "$CAREER_REVIEWS_OUT/browser.log"
+      - name: Existing download budgets
+        if: env.CAREER_REVIEWS_PHASE == 'fixed'
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$CAREER_REVIEWS_OUT/weight-server.log" 2>&1 &
+          weight_server_pid=$!
+          trap 'kill "$weight_server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$CAREER_REVIEWS_OUT/weight.log"
+      - name: Related career checks and every rebuilt-site reader
+        if: env.CAREER_REVIEWS_PHASE == 'fixed'
+        run: |
+          ONLY=simCreation,simAllocation,simFlagshipWeight,simCareerLife,simCareerLifeCooldowns,simCareerStory,simCareerProgramme,simCareerRecordedStats,simCareerSeasonTruth,simNoInventedQuotes,simUsCareerWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$CAREER_REVIEWS_OUT/related.log"
+      - name: Require the full unit-suite result
+        if: always() && env.CAREER_REVIEWS_PHASE == 'fixed'
+        run: test '${{ steps.full_unit_suite.outcome }}' = success
+      - name: Final source and dependency holds
+        if: always()
+        run: |
+          sha256sum --check "$CAREER_REVIEWS_OUT/source-hashes.txt" > "$CAREER_REVIEWS_OUT/source-holds.log"
+          sha256sum --check "$CAREER_REVIEWS_OUT/package-hashes.txt"
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' package.json package-lock.json bun.lock .github/workflows
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const installed = JSON.parse(fs.readFileSync(process.env.CAREER_REVIEWS_OUT + '/installed.json'));
+          for (const row of installed) assert.equal(JSON.parse(fs.readFileSync(row.path + '/package.json')).version, row.version, row.path);
+          console.log(`Held ${installed.length} installed locked versions.`);
+          NODE
+      - name: Retain complete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-reviews-${{ github.run_id }}
+          path: career-review-artifacts/
+          retention-days: 14
+          if-no-files-found: error

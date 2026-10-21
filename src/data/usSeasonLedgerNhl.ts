@@ -5,11 +5,19 @@
    It imports nothing. `year` is the year a season STARTS in (2012 is 2012-13).
 
    THE RULE is the MLB ledger's (src/data/usSeasonLedgerMlb.ts): every fact
-   was read on 2026-10-10 in two independent sources, neither a wiki; a fact
-   only one source gave is null and named in NHL_THIN; the receipts are in
-   scripts/data/usSeasonSources1211.json, keyed by the names in each `src`
-   list; scripts/simUsSeasonLedger.mjs holds this file to them and to the
-   game's own team lists.
+   was read in two independent sources, neither a wiki; a fact only one
+   source gave is null and named in NHL_THIN; scripts/simUsSeasonLedger.mjs
+   holds this file to the receipts and to the game's own team lists.
+
+   TWO READING DAYS. The facts of Round 1211 were read on 2026-10-10
+   (NHL_LEDGER_READ_ON) and their receipts are in
+   scripts/data/usSeasonSources1211.json. Round 1312 read the playoffs
+   season by season (NHL_ROUND_NAMES) on 2026-10-12
+   (NHL_LEDGER_READ_AGAIN_ON), and those receipts are in
+   scripts/data/usSeasonSources1312.json. A `src` key names one receipt in
+   one of the two files; a page read again on the later day is a new key.
+   Nothing in src reads Round 1312's blocks yet: Round 1315 (the skaters'
+   week by week) is their first reader.
 
    THE SOURCES, by the key used in `src`:
    nhl       The league's own standings feed for the last day of each regular
@@ -34,6 +42,8 @@
    Seattle and Utah. Today's list is the real league of 2025-26 and 2026-27. */
 
 export const NHL_LEDGER_READ_ON = '2026-10-10';
+/** Round 1312: the second reading day (the playoffs season by season). */
+export const NHL_LEDGER_READ_AGAIN_ON = '2026-10-12';
 /** The last FINISHED season both sources were read for (2025-26). */
 export const NHL_LENGTHS_VERIFIED_TO = 2025;
 
@@ -182,8 +192,9 @@ export const NHL_FORMULA_84 = {
    and Hockey Reference's page of the 2014 playoffs is the first to print a
    First Round and a Second Round (its 2007 page prints Conference
    Quarter-Finals and Conference Semi-Finals). THIS BLOCK SAYS NOTHING OF
-   2006-07 TO 2012-13: what those seven seasons' playoffs were has one
-   source and is in NHL_THIN.
+   2006-07 TO 2012-13: what those seven seasons' playoffs were is in
+   NHL_ROUND_NAMES below (Round 1312, read season by season). This block's
+   values are not changed by that round: the engine reads them.
 
    `modified` (start years): the two tournaments Sports Illustrated sets
    apart, and Hockey Reference shows both: the 2020 playoffs began with a
@@ -191,8 +202,8 @@ export const NHL_FORMULA_84 = {
    playoffs had Semi-Finals where the other three pages read (2007, 2014
    and 2020) have Conference Finals.
 
-   That the conference champions meet in the Final is one source's sentence
-   and is in NHL_THIN, not here. */
+   That the conference champions meet in the Final is NHL_ROUND_NAMES's
+   `finalOnlyAcross` (Round 1312, read season by season), not here. */
 export const NHL_PLAYOFF_FORMAT = {
   from: 2013,
   clubs: 16,
@@ -204,6 +215,100 @@ export const NHL_PLAYOFF_FORMAT = {
 /** For `from` and for `modified`, each on its own: the league's page speaks of today only. */
 export const NHL_PLAYOFF_FROM_SRC: readonly string[] = ['si-playoff-format', 'hr-playoffs'];
 export const NHL_PLAYOFF_MODIFIED_SRC: readonly string[] = ['si-playoff-format', 'hr-playoffs'];
+
+/* Round 1312: THE PLAYOFFS SEASON BY SEASON, in windows of start years, read
+   on 2026-10-12 on two sources for every season: the league's own records
+   site ("<season> Playoff Results": every series, its result and "Best-of-7")
+   and Hockey Reference (its summary page of each year's playoffs and the
+   matchup page of each Final). The two agree series for series in every
+   season read. Nothing in the engine reads this block: NHL_PLAYOFF_FORMAT
+   above stays what src/lib/usSeasonShape.ts plays.
+
+   `names` are the four rounds, first to last, in the league's spelling, used
+   only where two sources name every round alike in every season of the
+   window, hyphen and case aside (the league's "Conference Quarterfinals" is
+   Hockey Reference's "Conference Quarter-Finals"; Hockey Reference's summary
+   page calls the last round "Final" and its matchup page "Stanley Cup
+   Final"). `null` where they do not: the shape still stands. `series` is
+   [wins needed, most games] of each round. The windows of 2013-14 to 2018-19
+   and from 2021-22 hold NHL_PLAYOFF_FORMAT's own names, by reference.
+
+   `finalOnlyAcross`: in every season of the window the first three rounds
+   were played between two clubs of one conference and the last round
+   between the two conferences' champions, as both sources print every
+   series and the alignment of that year places the clubs.
+
+   THE 2026-27 PLAYOFFS are the last window carried on (`to: null`), as
+   NHL_FORMULA_84 is: no source read says the first 84 game season changed
+   the playoffs (NHL_THIN). */
+export interface NhlRoundWindow {
+  /** First and last season of the window (start years); `to: null` runs on. */
+  from: number;
+  to: number | null;
+  /** Clubs in the four best of seven rounds. */
+  clubs: number;
+  /** The four rounds' names, first to last, or null where two sources do not name them alike. */
+  names: readonly string[] | null;
+  series: readonly (readonly [number, number])[];
+  /** Whether the season had conferences (the alignment's own divisions say so). */
+  conferences: boolean;
+  /** True: only the last round was played across conferences, read twice season by season; false: not so; null: not read twice. */
+  finalOnlyAcross: boolean | null;
+  /** A stage played before the four rounds, which this ledger does not lay out. */
+  before?: string;
+  /** Receipts of the shape, season by season. */
+  src: readonly string[];
+  /** Receipts of the names. */
+  namesSrc: readonly string[];
+}
+
+const SEVEN: readonly (readonly [number, number])[] = [[4, 7], [4, 7], [4, 7], [4, 7]];
+const BY_SEASON = ['nhl-records-playoffs', 'hr-playoffs-1312'] as const;
+
+export const NHL_ROUND_NAMES: readonly NhlRoundWindow[] = [
+  {
+    from: 2006, to: 2012, clubs: 16,
+    names: ['Conference Quarterfinals', 'Conference Semifinals', 'Conference Finals', 'Stanley Cup Final'],
+    series: SEVEN, conferences: true, finalOnlyAcross: true,
+    src: BY_SEASON, namesSrc: [...BY_SEASON, 'hr-final-matchups'],
+  },
+  {
+    from: 2013, to: 2018, clubs: 16, names: NHL_PLAYOFF_FORMAT.rounds,
+    series: SEVEN, conferences: true, finalOnlyAcross: true,
+    src: BY_SEASON, namesSrc: NHL_PLAYOFF_FORMAT.src,
+  },
+  /* 2019-20: 24 clubs. A Qualifying Round of eight best of five series and a
+     round robin of each conference's top four came first; then the four
+     rounds of best of seven, each conference's clubs among themselves to the
+     Final. NBC Sports (24 August 2020) and CBS Sports (4 June 2020) name the
+     four rounds as today's format does; the league's records site and Hockey
+     Reference print every series. */
+  {
+    from: 2019, to: 2019, clubs: 16, names: NHL_PLAYOFF_FORMAT.rounds,
+    series: SEVEN, conferences: true, finalOnlyAcross: true,
+    before: 'A qualifying stage came first: 24 clubs, a Qualifying Round of eight best of five series and a round robin of the top four of each conference. This ledger does not lay it out.',
+    src: [...BY_SEASON, 'nbc-2020-format', 'cbs-2020-format'],
+    namesSrc: ['nbc-2020-format', 'cbs-2020-format', ...BY_SEASON, 'hr-final-matchups'],
+  },
+  /* 2020-21: 56 games inside four divisions and no conferences. The top four
+     of each division; the first two rounds inside the division; the last
+     four seeded again by points. The league ("Key questions, answers on
+     2020-21 NHL season" and its records site), NBC Sports (22 December 2020
+     and 13 June 2021) and Hockey Reference. No round was between the
+     conferences, for there were none: `finalOnlyAcross` is false. */
+  {
+    from: 2020, to: 2020, clubs: 16,
+    names: ['First Round', 'Second Round', 'Stanley Cup Semifinals', 'Stanley Cup Final'],
+    series: SEVEN, conferences: false, finalOnlyAcross: false,
+    src: [...BY_SEASON, 'nbc-2021-season', 'nhl-2021-keyq'],
+    namesSrc: [...BY_SEASON, 'hr-final-matchups', 'nhl-2021-keyq', 'nbc-2021-season', 'nbc-2021-semis'],
+  },
+  {
+    from: 2021, to: null, clubs: 16, names: NHL_PLAYOFF_FORMAT.rounds,
+    series: SEVEN, conferences: true, finalOnlyAcross: true,
+    src: BY_SEASON, namesSrc: NHL_PLAYOFF_FORMAT.src,
+  },
+];
 
 /* LEAGUE SCORING, goals per team game, by era id: 2006-07 for the throwback
    and 2025-26, the last finished season, for the present day era. There are
@@ -232,6 +337,36 @@ export const NHL_OVERTIME: Readonly<Record<string, { games: number; pastSixty: n
 };
 export const NHL_OVERTIME_SRC: readonly string[] = ['nhl', 'hr', 'hr-shootout'];
 
+/* Round 1312 (Part B3): PAST SIXTY MINUTES, SEASON BY SEASON, 2006-07 to
+   2025-26, read on 2026-10-12: the league's standings feed on the last day
+   of each regular season and Hockey Reference's expanded standings agree
+   club for club on every club's losses after sixty minutes and its shootout
+   wins and losses. `games` is the league's games (NHL_SEASONS' own), and
+   the first and last seasons are NHL_OVERTIME's two. Nothing reads it yet. */
+export const NHL_OVERTIME_BY_SEASON: Readonly<Record<number, { games: number; pastSixty: number; shootouts: number }>> = {
+  2006: { games: 1230, pastSixty: 281, shootouts: 164 },
+  2007: { games: 1230, pastSixty: 272, shootouts: 156 },
+  2008: { games: 1230, pastSixty: 282, shootouts: 159 },
+  2009: { games: 1230, pastSixty: 301, shootouts: 184 },
+  2010: { games: 1230, pastSixty: 297, shootouts: 149 },
+  2011: { games: 1230, pastSixty: 300, shootouts: 181 },
+  2012: { games: 720, pastSixty: 162, shootouts: 97 },
+  2013: { games: 1230, pastSixty: 307, shootouts: 178 },
+  2014: { games: 1230, pastSixty: 306, shootouts: 170 },
+  2015: { games: 1230, pastSixty: 275, shootouts: 107 },
+  2016: { games: 1230, pastSixty: 289, shootouts: 99 },
+  2017: { games: 1271, pastSixty: 296, shootouts: 103 },
+  2018: { games: 1271, pastSixty: 271, shootouts: 87 },
+  2019: { games: 1082, pastSixty: 250, shootouts: 86 },
+  2020: { games: 868, pastSixty: 195, shootouts: 65 },
+  2021: { games: 1312, pastSixty: 288, shootouts: 102 },
+  2022: { games: 1312, pastSixty: 302, shootouts: 95 },
+  2023: { games: 1312, pastSixty: 271, shootouts: 82 },
+  2024: { games: 1312, pastSixty: 271, shootouts: 77 },
+  2025: { games: 1312, pastSixty: 326, shootouts: 119 },
+};
+export const NHL_OVERTIME_BY_SEASON_SRC: readonly string[] = ['nhl-feed-1312', 'hr-standings-1312'];
+
 /* THE RULES AFTER SIXTY MINUTES, regular season: five minutes of sudden
    death overtime, three skaters a side since 2015-16, then a shootout of
    three rounds that goes on until one side leads; the loser keeps a point in
@@ -257,6 +392,18 @@ export const NHL_OVERTIME_RULES: {
 export const NHL_OVERTIME_RULES_SRC: readonly string[] = ['si-overtime', 'nbc-overtime'];
 export const NHL_OVERTIME_POINT_SRC: readonly string[] = ['si-overtime', 'nhl-points'];
 
+/* Round 1312: THE SHOOTOUT ERA. From 2005-06 (a start year, like every year
+   here) a regular season game still level after overtime goes to a
+   shootout, which goes on until one side leads, so no regular season game
+   ends level. The league's own site ("NHL general managers discuss, endorse
+   OT format at meetings", 18 March 2024) dates the shootout's arrival to
+   2005-06, and ESPN ("What are NHL overtime rules?", 29 January 2024) says
+   the shootout came in 2005 and ended the tied game in the regular season;
+   their words are in the receipts. Sports Illustrated (si-overtime) agrees
+   and is not needed. Every season this ledger holds starts after it. */
+export const NHL_SHOOTOUT_FROM = 2005;
+export const NHL_SHOOTOUT_FROM_SRC: readonly string[] = ['nhl-gm-overtime', 'espn-overtime'];
+
 /** The game clock: three periods of 20 minutes (the same two articles). */
 export const NHL_CLOCK = { periods: 3, minutes: 20 } as const;
 export const NHL_CLOCK_SRC: readonly string[] = ['si-overtime', 'nbc-overtime'];
@@ -279,29 +426,14 @@ export const NHL_THIN: readonly { what: string; oneSource: string; tried: string
     tried: 'Sports Illustrated gives 2015 for three a side and does not say what came before.',
   },
   {
-    what: 'How the 2020 and 2021 playoffs differed (the seasons that started in 2019 and 2020).',
-    oneSource: 'Hockey Reference: the 2020 playoffs held 24 clubs, with a Qualifying Round of eight series won with three wins and a Round Robin before the First Round; the 2021 playoffs had Semi-Finals in place of Conference Finals. Sports Illustrated says only that they were "modified". More detail is in src/lib/nhlPlayoffFormatHistory.ts, from pages not read again today.',
-    tried: 'The league\'s own "Playoff Format" page describes today only.',
-  },
-  {
-    what: 'The playoffs of 2006-07 to 2012-13: how many clubs, how many rounds, how long each series, and what the rounds were called.',
-    oneSource: 'Hockey Reference, the 2007 playoffs: sixteen clubs, fifteen series each won with four wins, under the names Conference Quarter-Finals, Conference Semi-Finals, Conference Finals and Final. One season of the seven was read. src/lib/nhlPlayoffFormatHistory.ts says best of seven in every round since 1986-87, from pages not read again today.',
-    tried: 'Sports Illustrated dates today\'s format from 2013-14 and the league\'s own page describes today only, so NHL_PLAYOFF_FORMAT starts in 2013.',
-  },
-  {
-    what: 'That the Stanley Cup Final is the only round against the other conference.',
-    oneSource: 'Sports Illustrated: "The conference champions meet in the Stanley Cup Final." Hockey Reference agrees for the one season read for it: on its 2014 page the Final is played by the winners of the two Conference Finals. It was not read season by season.',
-    tried: 'The league\'s own "Playoff Format" page does not say who meets in the Final.',
+    what: 'The playoffs of 2026-27, the first 84 game season.',
+    oneSource: 'The league\'s own "Playoff Format" page, read on 2026-10-12 during that season, still describes sixteen clubs and four rounds of best of seven; it names no season. The league\'s "10 things to know about 2026-27 NHL regular season" and ESPN\'s report of the 84 game schedule, both read again that day, say nothing of the playoffs. NHL_ROUND_NAMES carries its window from 2021 on into 2026, as NHL_FORMULA_84 is carried.',
+    tried: 'No source says the format changed or stayed for 2026-27; nothing more can be read until those playoffs are played.',
   },
   {
     what: 'Why 2012-13 had 48 games, why 2019-20 stopped and why 2020-21 had 56.',
     oneSource: 'None read today: the rows give the lengths the standings show and no cause.',
     tried: 'Not gathered: the held line needs the length, not the reason.',
-  },
-  {
-    what: 'The first season of the shootout.',
-    oneSource: 'Sports Illustrated: "After 2005, the league introduced the shootout".',
-    tried: 'Not needed: both sources count shootouts in 2006-07, the first season this ledger holds.',
   },
   {
     what: 'One goal of the 2006-07 New York Islanders.',

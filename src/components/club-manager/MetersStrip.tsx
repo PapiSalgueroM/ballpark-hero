@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import type { CareerState } from '@/lib/clubManager';
-import { boardMeter, fanMeter } from '@/lib/clubManagerMeters';
+import { BOARD_EDGE, boardMeter, fanMeter } from '@/lib/clubManagerMeters';
 import type { Meter, MeterTone } from '@/lib/clubManagerMeters';
+import { noSackFrom } from '@/lib/clubManagerStart';
 
 const BAR_TONE: Record<MeterTone, string> = { good: 'bg-emerald-500', mid: 'bg-yellow-500', bad: 'bg-red-500' };
 const TEXT_TONE: Record<MeterTone, string> = { good: 'text-emerald-400', mid: 'text-yellow-400', bad: 'text-red-400' };
@@ -18,9 +19,14 @@ const TEXT_TONE: Record<MeterTone, string> = { good: 'text-emerald-400', mid: 't
 export function MetersStrip({ career }: { career: CareerState }) {
   const [numbers, setNumbers] = useState(false);
   const toggle = () => setNumbers(v => !v);
+  /* Round 1342: under No sacking the bottom band cannot promise a sack it will
+     never deliver. Same length as the words it replaces, so it wraps the same
+     way and the slot the hub holds for it still fits. The number is unchanged. */
+  const board = boardMeter(career);
+  const shownBoard = noSackFrom(career) !== null && board.value < BOARD_EDGE ? { ...board, band: 'Lost the board · No sacking' } : board;
   return (
     <div className="max-w-sm mx-auto mt-2 grid grid-cols-2 gap-2" data-cm-meters={numbers ? 'numbers' : 'words'}>
-      <MeterBar name="Board" meter={boardMeter(career)} numbers={numbers} onToggle={toggle} />
+      <MeterBar name="Board" meter={shownBoard} numbers={numbers} onToggle={toggle} />
       <MeterBar name="Fans" meter={fanMeter(career)} numbers={numbers} onToggle={toggle} />
     </div>
   );
@@ -38,14 +44,15 @@ function MeterBar({ name, meter, numbers, onToggle }: { name: string; meter: Met
          under the 30px floor every tap target on this site is held to. The
          padding takes it to 34 without moving a pixel of what is drawn, and
          to 34 rather than exactly 30 because a sub pixel layout landed the
-         first try on 29.98 and read as under the floor. */
-      className="block w-full text-left rounded-md py-1.5 focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+         first try on 29.98 and read as under the floor. Round 1328: the
+         floor is 44 now, so min-h takes it there, and the words are 12px. */
+      className="block w-full min-h-[44px] text-left rounded-md py-1.5 focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
       data-cm-meter={name.toLowerCase()}
       data-cm-value={meter.shown}
     >
-      <div className="flex items-center justify-between gap-1 text-[9px] text-muted-foreground mb-0.5 whitespace-nowrap">
-        <span>{name}</span>
-        <span className={cn('font-semibold', TEXT_TONE[meter.tone])}>
+      <div className="flex items-center justify-between gap-1 text-xs text-muted-foreground mb-0.5">
+        <span className="shrink-0">{name}</span>
+        <span className={cn('min-w-0 text-right font-semibold', TEXT_TONE[meter.tone])}>
           {numbers ? `${meter.shown}/100` : meter.band}
         </span>
       </div>

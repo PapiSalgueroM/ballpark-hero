@@ -196,7 +196,7 @@ describe('Soccer transfer brief actual page request', () => {
     expect(read().phase).toBe('playing'); expect(read().transferSituation).toBeNull();
     expect(read()).not.toHaveProperty('transferBrief');
     expect(view.container.querySelector('[data-transfer-brief-result]')).toBeNull();
-    expect(toast.error).toHaveBeenCalledWith('No clubs are interested right now. You must stay.');
+    expect(toast.error).toHaveBeenCalledWith('No clubs are interested right now. You must stay.', expect.objectContaining({ position: 'top-center' }));
   });
   it('preserves the complete original unbriefed offer, contract terms and original draw vector', () => {
     const view = mount(windowCareer(false)), before = read();

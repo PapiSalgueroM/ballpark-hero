@@ -173,6 +173,21 @@
  * 33 failures in section 1 and nothing else). 203,000 sits 9,954 over the
  * healthy top and 12,793 under the defect's bottom. The slope fence did not
  * move.
+ * Round 1344 moved SIZE_BUDGET to 214,000, the lead's ruling 1 (2026-10-16),
+ * measured the same way on GitHub runners. The round records every deal
+ * between two other clubs in the world ledger (a man another club buys is at
+ * his new club at once and stays there), so a seeded save holds a complete
+ * record for each such man while he is owned. Its step 1 measured a tree
+ * that records them (remote checks r1344-szb and r1344-szp, head 21b3fa70,
+ * and r1344-szc): the base, default stream and SIM_SEED 1 to 5, healthy
+ * 186,495 to 201,112; recording, the same six streams, healthy 191,625 to
+ * 206,555 (11 of 18 rows over 203,000: Everton 5 of 6, Lincoln City 6 of 6),
+ * slope -181 to 1,517. Uncapped, default stream, recording: Real Madrid
+ * 227,507, Everton 236,740, Lincoln City 239,176, slope 3,965 to 4,802 (the
+ * control fired, section 1 red, 33 failures). 214,000 sits about 7,400 over
+ * the healthy top and 13,500 under the defect's bottom. The slope fence did
+ * not move. If a later head's healthy top passes 207,500, the budget is no
+ * longer in the middle of the gap: measure again, never just raise it.
  * The first cut of this file set 5,000 and 240,000 by feel, and both passed
  * the uncapped engine, which is exactly the mistake the house rule names.
  *
@@ -197,8 +212,8 @@ const ENTRY = `${TMP}/cmSaveSize.entry.mjs`;
 const BUNDLE = `${TMP}/cmSaveSize.bundle.mjs`;
 
 /* Measured ranges beside each, see the header. */
-const SIZE_BUDGET = 203_000;   // Round 1229, the league book: healthy 180,907 to 193,046; head to head uncapped 215,793 to 226,422 (was 196,000: Round 1052, 27 leagues, healthy 179,120 to 187,581, uncapped 207,690 to 219,987)
-const SLOPE_CAP = 2_000;       // healthy 249 to 1,178 bytes a season; uncapped 3,052 to 4,408
+const SIZE_BUDGET = 214_000;   // Round 1344, every club's deals recorded: healthy 191,625 to 206,555; uncapped 227,507 to 239,176 (was 203,000: Round 1229, the league book, healthy 180,907 to 193,046, uncapped 215,793 to 226,422)
+const SLOPE_CAP = 2_000;       // Round 1344, every club's deals recorded: healthy -181 to 1,517 bytes a season; uncapped 3,965 to 4,802 (was healthy 249 to 1,178, uncapped 3,052 to 4,408)
 const CLUBS = ['Real Madrid', 'Everton', 'Lincoln City'];
 const SEASONS = 15;
 const SAVE_KEY = 'dukb-club-manager-save';
@@ -614,6 +629,12 @@ let pairState = null;
      three years on carries two generated men under one name. */
   let s = startCareer('Real Madrid');
   for (let season = 1; season <= 3 && s; season++) {
+    /* Release AZ fix (reviewer 2, MAJOR 2): the pair is a fact of the projected world a career from before
+       Round 1250 plays, and a new career is seeded from its own drawn squad, so whether a seeded world three
+       years on still held it was a draw (red on half the seeds). The career plays its first two seasons as a
+       new career does (rmSeason3, which section 6 sweeps, is seeded), then carries on as a save from before
+       that release would, seed and ledger off, so the job it takes holds the pair on every seed. */
+    if (season === 3 && s) { s = JSON.parse(JSON.stringify(s)); delete s.worldSeed; delete s.worldRoster; for (const p of s.squad) { delete p.worldRosterKey; delete p.worldRosterSince; } }
     s = toSummer(s, season === 3 ? PAIR_CLUB : undefined);
     if (season === 2) rmSeason3 = s;
   }
@@ -686,12 +707,20 @@ console.log('6) The repair, on saves that really carry the duplicate the pre 634
 /* ================================================================== */
 section = 6;
 {
-  const base = startCareer('Real Madrid');
+  /* Release AZ fix pass 4: a save the pre 634 engine wrote is a save from before Round 1250's world seed, so the
+     duplicate is rebuilt on one. Since the lead's ruling a seeded career's market lists nobody at my own club,
+     where the pre 634 market listed him, so on a seeded save it could not be rebuilt at all. */
+  /* Round 1344: and from before its opening window's deals reached a ledger (the post seed flush writes one into
+     every new seeded career, and a readable ledger alone turns on the seeded market), so the flushed ledger comes
+     off with the seed. */
+  const { worldSeed: _preReleaseSeed, worldRoster: _flushedLedger, ...base } = startCareer('Real Madrid');
   const him = base.squad.find(p => !p.isYouth && p.rating < 80 && p.age < 27 && canLeaveSquad(base, p));
   const out = him ? loanOutPlayer(base, him.id, 'Sevilla', 1) : null;
   /* The pre 634 market: the same world with the loan record out of sight,
      which listed him at my own club. */
-  const card = out ? buildMarket({ ...out, loanedOut: [] }).find(m => m.name === him.name) : null;
+  /* Round 1339: since then no career's market lists a man at my own club, so his card is read off the same save seen
+     from another club, as a screen opened before the loan held it (no door refuses a man at my own club). */
+  const card = out ? buildMarket({ ...out, loanedOut: [], clubName: 'Barcelona' }).find(m => m.name === him.name) : null;
   if (!out || !card) fail(`could not rebuild the pre 634 round trip for ${him?.name} (loan out ${!!out}, card ${!!card})`);
   else {
     console.log(`   ${him.name} (${him.position} ${him.age}) out on loan; the pre 634 market listed him at ${card.club} for ${card.price} as ${card.position} ${card.age}`);
@@ -866,7 +895,9 @@ section = 8;
   /* A man out on loan, and his card from the pre 634 market. */
   const lent = A.squad.find(p => !p.isYouth && p.rating < 80 && canLeaveSquad(A, p));
   const away = lent ? loanOutPlayer(fresh(), lent.id, 'Sevilla', 1) : null;
-  const awayCard = away ? buildMarket({ ...away, loanedOut: [] }).find(m => m.name === lent.name) : null;
+  /* Release AZ fix pass 4 and Round 1339: no career's market lists a man at my own club, so the pre 634 market is
+     read off the same save seen from another club, as a screen opened before the loan held it. */
+  const awayCard = away ? buildMarket({ ...away, loanedOut: [], clubName: 'Barcelona' }).find(m => m.name === lent.name) : null;
   const coldName = cards[1].name;
   const states = [
     ['open window', A, []],

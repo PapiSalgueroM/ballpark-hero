@@ -6,6 +6,17 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { build } from 'esbuild';
+/* Release BB: Rounds 1280 to 1282 and 1318 keep the made up Ballon d'Or rivals in a saved pool on purpose, which this
+   base pinned comparison cannot know about. Every copy compared with the base takes them out, as the history
+   harnesses do: scripts/lib/careerAwardGenerations1318.mjs. The browser oracle of the native walk is
+   compared with the built page, which keeps the pool, so the oracle keeps it too. */
+import { inverseAwardGenerations, AWARD_GENERATIONS_ADDITIONS } from '../lib/careerAwardGenerations1318.mjs';
+/* Round 1327: the event deck draws on a keyed stream and the paper picks by weight, so a season makes other global draws from its paper on. Every node bundle of the tree takes that out first (scripts/lib/careerDeckFair1327.mjs), every row once, in order; the browser oracle stays the tree as built, like the page it is held to. */
+import { inverseDeckFair, DECK_FAIR_ADDITIONS } from '../lib/careerDeckFair1327.mjs';
+/* Round 1329: the world truth round (the month award, the phone's world, the quiz, the International panel) is taken out first, in front of Round 1327 (scripts/lib/careerWorldTruth1329.mjs), every row once, in order. */
+import { inverseWorldTruth, worldTruthReceiptProblem } from '../lib/careerWorldTruth1329.mjs';
+/* Round 1334: the soccer deck's three engine lines come out first, in front of Round 1329 (scripts/lib/careerSoccerDeck1334.mjs), every row once, in order. */
+import { inverseSoccerDeck, soccerDeckReceiptProblem } from '../lib/careerSoccerDeck1334.mjs';
 
 export const ROOT = process.cwd();
 export const BASE = '552ee88761731b9a341ae644f69ac3386e53c149';
@@ -45,7 +56,7 @@ export function evidence(name, value) {
   return name;
 }
 export async function bundleFarewell({ original = false, patches = [], browser = false } = {}) {
-  const loaded = [], faults = [], temp = fs.mkdtempSync(path.join(os.tmpdir(), 'soccer-farewell-'));
+  const soccerDeck = [], deckFair = [], worldTruth = [], loaded = [], faults = [], temp = fs.mkdtempSync(path.join(os.tmpdir(), 'soccer-farewell-'));
   const file = path.join(temp, 'oracle.cjs');
   const entry = "export * as engine from './src/lib/soccerCareerEngine';" + (original ? '' : "export * as farewell from './src/lib/soccerCareerFarewell';export * as moments from './src/components/soccer-career/careerMoments';export * as reveal from './src/lib/soccerAwardReveal';");
   try {
@@ -62,6 +73,12 @@ export async function bundleFarewell({ original = false, patches = [], browser =
           if (!relative.startsWith('src/')) return;
           const raw = original ? execFileSync('git', ['show', BASE + ':' + relative], { maxBuffer: 30 * 1024 * 1024 }) : fs.readFileSync(args.path);
           let contents = raw.toString('utf8').replaceAll('\r\n', '\n');
+          if (!original && !browser) contents = inverseDeckFair(relative, inverseWorldTruth(relative, inverseSoccerDeck(relative, contents, soccerDeck), worldTruth), deckFair);
+          if (!original && !browser && relative === 'src/lib/soccerCareerEngine.ts') {
+            const rows = [];
+            contents = inverseAwardGenerations(relative, contents, rows);
+            assert.deepEqual(rows.map(row => row.addition), AWARD_GENERATIONS_ADDITIONS, 'Release BB: the award generations of Rounds 1280 to 1282 and 1318 are taken out of every copy compared with the base, once each in order');
+          }
           for (const patch of patches.filter(value => value.file === relative)) {
             assert.equal(contents.split(patch.from).length, 2, 'Unique actual copied anchor: ' + patch.id);
             const before = sha(contents);
@@ -75,6 +92,9 @@ export async function bundleFarewell({ original = false, patches = [], browser =
       } }],
     });
     assert.equal(faults.length, patches.length, 'Every fault reaches its compiled product source');
+    assert.deepEqual(deckFair.map(row => row.addition), original || browser ? [] : DECK_FAIR_ADDITIONS, 'Round 1327 came out of every node bundle of the tree once, in order');
+    if (!original && !browser) assert.equal(worldTruthReceiptProblem(worldTruth), '', 'Round 1329 came out of every node bundle of the tree once, in order');
+    if (!original && !browser) assert.equal(soccerDeckReceiptProblem(soccerDeck), '', 'Round 1334 came out of every node bundle of the tree once, in order');
     return { value: browser ? result.outputFiles[0].text : createRequire(path.join(ROOT, 'package.json'))(file), loaded, faults };
   } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 }

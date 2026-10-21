@@ -219,6 +219,24 @@ import { NEXT_TEN_WHEEL_FILE, inverseCareerNextTen } from './lib/careerNextTenAt
 /* Release AW: Rounds 1262 to 1264 pay a career of 30 or more by age and form on purpose. The attributed bundle
    takes that out of a copy of the contracts file too, at its one condition: scripts/lib/careerVeteranPay1262.mjs. */
 import { VETERAN_PAY_FILE, VETERAN_PAY_ADDITIONS, inverseVeteranPay } from './lib/careerVeteranPay1262.mjs';
+/* Round 1327: the event deck draws on a keyed stream and the paper picks by weight, which moves every seeded
+   career's Math.random from the first deck or paper on. The attributed engine takes that out first, the newest
+   change first: scripts/lib/careerDeckFair1327.mjs. */
+import { inverseDeckFair, DECK_FAIR_ADDITIONS } from './lib/careerDeckFair1327.mjs';
+/* Round 1329: the world truth round (the month award, the phone's world, the quiz, the International panel the
+   cards render) is taken out first, in front of Round 1327: scripts/lib/careerWorldTruth1329.mjs. */
+import { inverseWorldTruth, worldTruthReceiptProblem, WORLD_TRUTH_FILES } from './lib/careerWorldTruth1329.mjs';
+/* Round 1334: the soccer deck's three engine lines come out first, in front of Round 1329 (scripts/lib/careerSoccerDeck1334.mjs), every row once, in order. */
+import { inverseSoccerDeck, soccerDeckReceiptProblem } from './lib/careerSoccerDeck1334.mjs';
+/* Release BF (Round BFH): the Soccer Career life chain (Rounds 1350 to 1363) deals more Life cards and holds some
+   choices over a reload, so the attributed replay parts from the fixture and from the independent original (the join's
+   rBFg-gA: the draw stream, the per-step saves, 104 tournament cards for 103, career 0 at step 13 of 229). The
+   attributed bundle patches the chain's three changed engine inputs whole to their text at Release BE's head 4ae7a534,
+   the contracts file before the veteran pay inverse runs on it: scripts/lib/careerLifeChainBF.mjs, the pattern of
+   simCareerStoryRole's CAREER_STORY_ROLE_CHAIN_REF. SIM_AWARDS_NIGHT_CHAIN_REF replaces the ref, and an empty value
+   reads this tree (the unattributed arm, red on this head). The current bundle keeps the chain. */
+import { lifeChain, lifeChainRef, LIFE_CHAIN_FILES } from './lib/careerLifeChainBF.mjs';
+const CHAIN_REF = lifeChainRef('SIM_AWARDS_NIGHT_CHAIN_REF');
 
 /* Release AT: two attributions meet in section 1. Release AQ replays the old fixture with the Soccer
    Career train (Rounds 1169 to 1178) taken out through these four lists. Rounds 1185 and 1187 replay it
@@ -393,7 +411,7 @@ function sourceHashes() {
   return result;
 }
 const proof = { control: CONTROL, base: careerDevelopmentBaseReceipt(), sourceBefore: sourceHashes(), sourceAfter: null,
-  sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], veteranPayAttribution: [], faultEdits: [], originalSources: [], replays: {}, originalFixtureMatches: false, fixtureMatches: false };
+  sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], veteranPayAttribution: [], deckFairAttribution: [], worldTruthAttribution: [], faultEdits: [], originalSources: [], replays: {}, originalFixtureMatches: false, fixtureMatches: false };
 const writeProof = (file, value) => fs.writeFileSync(path.join(ARTIFACTS, file), JSON.stringify(value, null, 2));
 
 /* The actual original tree is loaded independently. The sole page append is
@@ -443,7 +461,16 @@ export const cards = {
 async function attributedAwardsBundle() {
   const file = 'src/lib/soccerCareerEngine.ts';
   const authored = fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
-  let controlled = trainOutOf(file, authored);
+  const soccerDeckOut = [];
+  let controlled = trainOutOf(file, inverseDeckFair(file, inverseWorldTruth(file, inverseSoccerDeck(file, authored, soccerDeckOut), proof.worldTruthAttribution), proof.deckFairAttribution));
+  assert.deepEqual(proof.deckFairAttribution.map(row => row.addition), DECK_FAIR_ADDITIONS, 'The copied engine receives Round 1327\'s inverse once, every row in order');
+  /* Round 1329: the phone, the quiz and the International panel go back to the base whole, before any copied fault. */
+  const worldTruthWhole = WORLD_TRUTH_FILES.filter(f => f !== file).map(f => {
+    const authoredF = fs.readFileSync(path.join(ROOT, f), 'utf8').replaceAll('\r\n', '\n');
+    return { file: f, from: authoredF, to: inverseWorldTruth(f, authoredF, proof.worldTruthAttribution) };
+  });
+  assert.equal(worldTruthReceiptProblem(proof.worldTruthAttribution, WORLD_TRUTH_FILES), '', 'The copied engine, phone, quiz and panel receive Round 1329\'s inverse once, every row in order');
+  assert.equal(soccerDeckReceiptProblem(soccerDeckOut), '', 'The copied engine receives Round 1334\'s inverse once, every row in order');
   for (const patch of patches.filter(p => p.file === file)) {
     assert.equal(controlled.split(patch.from).length, 2, 'The awards engine fault has one effective anchor');
     const before = controlled;
@@ -459,12 +486,22 @@ async function attributedAwardsBundle() {
   assert.equal(proof.nextTenAttribution.length, 2, 'The copied engine and the copied wheel each receive the Rounds 1197 to 1208 inverse once');
   /* The veteran pay lives in the contracts file, so that file is patched whole the same way. */
   const contractsAuthored = fs.readFileSync(path.join(ROOT, VETERAN_PAY_FILE), 'utf8').replaceAll('\r\n', '\n');
-  const contractsInverse = inverseVeteranPay(VETERAN_PAY_FILE, contractsAuthored, proof.veteranPayAttribution);
+  /* Release BF: the contracts file is the life chain's ref text before the veteran pay inverse; the chain's other two
+     engine inputs are patched whole to theirs. */
+  const chain = lifeChain(ROOT, CHAIN_REF);
+  const contractsInverse = inverseVeteranPay(VETERAN_PAY_FILE, chain.swap(VETERAN_PAY_FILE, contractsAuthored), proof.veteranPayAttribution);
   assert.equal(proof.veteranPayAttribution.length, VETERAN_PAY_ADDITIONS.length, 'The copied contracts file receives the veteran pay inverse of Release AW once for each addition');
+  const chainWhole = LIFE_CHAIN_FILES.filter(f => f !== VETERAN_PAY_FILE).map(f => {
+    const authoredF = fs.readFileSync(path.join(ROOT, f), 'utf8').replaceAll('\r\n', '\n');
+    return { file: f, from: authoredF, to: chain.swap(f, authoredF) };
+  }).filter(p => p.to !== p.from);
+  assert.equal(chain.problem(), '', "The attributed bundle reads the life chain's three engine inputs at its ref");
+  proof.lifeChainAttribution = chain.served.map(file => ({ file, ref: CHAIN_REF }));
+  console.log(`   life chain attribution: ${CHAIN_REF ? `${chain.served.join(', ')} read at ${CHAIN_REF} in the attributed bundle` : 'none, SIM_AWARDS_NIGHT_CHAIN_REF is empty'}`);
   fs.writeFileSync(path.join(ARTIFACTS, 'current-engine.ts'), authored);
   fs.writeFileSync(path.join(ARTIFACTS, 'controlled-engine.ts'), controlled);
   fs.writeFileSync(path.join(ARTIFACTS, 'attributed-engine.ts'), inverse);
-  return bundleAwardsNight(ROOT, { patches: [...TRAIN_OUT.filter(p => p.file !== file), ...patches.filter(p => p.file !== file), { file, from: authored, to: inverse }, { file: NEXT_TEN_WHEEL_FILE, from: wheelAuthored, to: wheelInverse }, { file: VETERAN_PAY_FILE, from: contractsAuthored, to: contractsInverse }] });
+  return bundleAwardsNight(ROOT, { patches: [...worldTruthWhole, ...TRAIN_OUT.filter(p => p.file !== file), ...patches.filter(p => p.file !== file), { file, from: authored, to: inverse }, { file: NEXT_TEN_WHEEL_FILE, from: wheelAuthored, to: wheelInverse }, { file: VETERAN_PAY_FILE, from: contractsAuthored, to: contractsInverse }, ...chainWhole] });
 }
 
 /* Observe assignments of the probe's existing seeded generators. A wrapper

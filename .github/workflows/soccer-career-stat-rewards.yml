@@ -1,0 +1,231 @@
+name: Soccer Career stat rewards and previews
+
+on:
+  push:
+    branches: [codex/soccer-career-stat-rewards]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      CAREER_REWARDS_PHASE: fixed
+      CAREER_REWARDS_OUT: ${{ github.workspace }}/career-rewards-artifacts
+      CAREER_PROGRAMME_OUT: ${{ github.workspace }}/career-rewards-artifacts/programme-normal
+      CAREER_PENDING_PHASE: fixed
+      CAREER_PENDING_OUT: ${{ github.workspace }}/career-rewards-artifacts/prior-pending
+      SOCCER_ROUTINE_PHASE: fixed
+      SOCCER_ROUTINE_OUT: ${{ github.workspace }}/career-rewards-artifacts/prior-routines
+      CAREER_REVIEWS_OUT: ${{ github.workspace }}/career-rewards-artifacts/prior-reviews
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/career-rewards-artifacts/font-cache
+      PRERENDER_ONLY: /soccer-career
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind parent source and locked dependencies
+        run: |
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          mkdir -p "$CAREER_REWARDS_OUT"
+          git rev-parse HEAD > "$CAREER_REWARDS_OUT/source-head.txt"
+          git status --porcelain --untracked-files=no > "$CAREER_REWARDS_OUT/source-before.txt"
+          test ! -s "$CAREER_REWARDS_OUT/source-before.txt"
+          git diff --exit-code ee135646dd2344b90057140116aa15e804a7d9c3 -- src scripts package.json package-lock.json bun.lock ':!src/lib/soccerCareerLife.ts' ':!src/lib/soccerCareerContracts.ts' ':!src/lib/soccerCareerLifeConsequences.ts' ':!src/test/soccerCareerStatRewards.test.ts' ':!src/test/soccerCareerPendingLife.test.ts' ':!scripts/simSoccerCareerStatRewards.mjs' ':!scripts/playSoccerCareerStatRewards.mjs' ':!scripts/simCareerProgramme.mjs'
+          if test "$CAREER_REWARDS_PHASE" = baseline; then
+            git diff --exit-code ee135646dd2344b90057140116aa15e804a7d9c3 -- src/lib/soccerCareerLife.ts src/lib/soccerCareerContracts.ts src/test/soccerCareerPendingLife.test.ts scripts/simCareerProgramme.mjs
+            test ! -e src/lib/soccerCareerLifeConsequences.ts
+          fi
+          find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$CAREER_REWARDS_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$CAREER_REWARDS_OUT/package-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, entry]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, entry.version, p); return { path: p, version };
+          });
+          assert.equal(installed.length, 521);
+          fs.writeFileSync(process.env.CAREER_REWARDS_OUT + '/installed.json', JSON.stringify(installed, null, 2));
+          console.log(`Bound ${installed.length} installed locked versions.`);
+          NODE
+      - name: Actual application type gate
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CAREER_REWARDS_OUT/types.log"
+      - name: Actual rewards and previews with effective source controls
+        run: |
+          if test "$CAREER_REWARDS_PHASE" = baseline; then
+            SC_LIFE_REWARDS_EXPECT_RED=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerStatRewards.mjs 2>&1 | tee "$CAREER_REWARDS_OUT/baseline.log"
+          else
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerStatRewards.mjs 2>&1 | tee "$CAREER_REWARDS_OUT/fixed.log"
+            for control in overwrite preview legacy; do
+              SC_LIFE_REWARDS_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerStatRewards.mjs 2>&1 | tee "$CAREER_REWARDS_OUT/control-$control.log"
+            done
+          fi
+      - name: Preserve prior saved choices routines and life reviews
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerPendingLife.mjs 2>&1 | tee "$CAREER_REWARDS_OUT/prior-pending.log"
+          if test "$CAREER_REWARDS_PHASE" = fixed; then
+            for control in missing profile draw rate; do
+              SC_PENDING_LIFE_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerPendingLife.mjs 2>&1 | tee "$CAREER_REWARDS_OUT/prior-pending-control-$control.log"
+            done
+          fi
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRoutineEvents.mjs 2>&1 | tee "$CAREER_REWARDS_OUT/prior-routines.log"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerLifeReviews.mjs 2>&1 | tee "$CAREER_REWARDS_OUT/prior-reviews.log"
+      - name: Normal fleet discovery without a packet artifact variable
+        if: env.CAREER_REWARDS_PHASE == 'fixed'
+        run: env -u CAREER_REWARDS_OUT ONLY=simSoccerCareerStatRewards node scripts/runAllSims.mjs 2>&1 | tee "$CAREER_REWARDS_OUT/fleet-discovery.log"
+      - name: Full unit suite
+        id: full_unit_suite
+        continue-on-error: true
+        if: env.CAREER_REWARDS_PHASE == 'fixed'
+        run: SC_REWARDS_ENGINE="$CAREER_REWARDS_OUT/fixed/engine.mjs" SC_REWARDS_LIFE="$CAREER_REWARDS_OUT/fixed/life.mjs" SC_REWARDS_SAVE="$CAREER_REWARDS_OUT/fixed/save.mjs" SC_REWARDS_CONTRACTS="$CAREER_REWARDS_OUT/fixed/contracts.mjs" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test 2>&1 | tee "$CAREER_REWARDS_OUT/full-tests.log"
+      - name: Browser and build tools
+        if: env.CAREER_REWARDS_PHASE == 'fixed'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/career-rewards-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/career-rewards-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/career-rewards-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/career-rewards-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$CAREER_REWARDS_OUT/fonts.log"
+          sha256sum --check "$CAREER_REWARDS_OUT/package-hashes.txt"
+      - name: Complete application build and career snapshot
+        if: env.CAREER_REWARDS_PHASE == 'fixed'
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$CAREER_REWARDS_OUT/build.log"
+          cp scripts/data/lastmod.json "$CAREER_REWARDS_OUT/build-lastmod.json"
+          git diff -- scripts/data/lastmod.json > "$CAREER_REWARDS_OUT/build-lastmod.diff"
+      - name: Actual saved reward and preview choices on phone and desktop
+        if: env.CAREER_REWARDS_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerStatRewards.mjs 2>&1 | tee "$CAREER_REWARDS_OUT/browser.log"
+      - name: Existing download budgets
+        if: env.CAREER_REWARDS_PHASE == 'fixed'
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$CAREER_REWARDS_OUT/weight-server.log" 2>&1 &
+          weight_server_pid=$!
+          trap 'kill "$weight_server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$CAREER_REWARDS_OUT/weight.log"
+      - name: Related career checks and every rebuilt-site reader
+        if: env.CAREER_REWARDS_PHASE == 'fixed'
+        run: |
+          ONLY=simCreation,simAllocation,simFlagshipWeight,simCareerLife,simCareerLifeCooldowns,simCareerStory,simCareerProgramme,simCareerRecordedStats,simCareerSeasonTruth,simNoInventedQuotes,simUsCareerWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$CAREER_REWARDS_OUT/related.log"
+      - name: Effective original-bug control for the Programme reward comparison
+        if: always() && env.CAREER_REWARDS_PHASE == 'fixed'
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { execFileSync, spawnSync } from 'node:child_process';
+          const root = process.env.CAREER_REWARDS_OUT;
+          const normalDir = path.join(root, 'programme-normal'), controlDir = path.join(root, 'programme-overwrite');
+          fs.mkdirSync(controlDir, { recursive: true });
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          const read = (dir, name) => JSON.parse(fs.readFileSync(path.join(dir, name), 'utf8'));
+          const copy = value => JSON.parse(JSON.stringify(value));
+          const canonicalLoaded = rows => { assert.equal(new Set(rows.map(row => row.file)).size, rows.length, 'Unique loaded source paths'); return [...rows].sort((a, b) => a.file.localeCompare(b.file)); };
+          const run = spawnSync(process.execPath, ['scripts/simCareerProgramme.mjs'], { encoding: 'utf8', timeout: 300000, maxBuffer: 64 * 1024 * 1024, env: { ...process.env, PROGRAMME_REWARD_CONTROL: 'overwrite', CAREER_PROGRAMME_OUT: controlDir, FORCE_COLOR: '0', NO_COLOR: '1' } });
+          const output = (run.stdout || '') + (run.stderr || '');
+          fs.writeFileSync(path.join(controlDir, 'output.log'), output);
+          fs.writeFileSync(path.join(controlDir, 'process.json'), JSON.stringify({ status: run.status, signal: run.signal, error: run.error ? { name: run.error.name, message: run.error.message, code: run.error.code } : null }, null, 2));
+          assert.equal(run.error, undefined, 'Control must complete without a process/setup error');
+          assert.equal(run.signal, null, 'Control must complete without termination');
+          assert.equal(run.status, 1, 'Actual original-bug control must fail');
+          const cause = 'Secondary wheel preserves complete approved choice outcome: soccerCareerLife.ts/218 choice 0 seed 15';
+          assert.deepEqual(output.match(/^AssertionError \[ERR_ASSERTION\]: .+$/gm), ['AssertionError [ERR_ASSERTION]: ' + cause]);
+          assert(!/SyntaxError:|TypeError:|ReferenceError:|ERR_MODULE_NOT_FOUND|ERR_REQUIRE_ESM|UnhandledPromiseRejection|unhandled rejection/i.test(output), 'No setup or unrelated failure credit');
+          const control = read(controlDir, 'reward-control.json');
+          assert.equal(control.mode, 'overwrite'); assert.equal(control.scope, 'B-only'); assert.equal(control.file, 'src/lib/soccerCareerLife.ts'); assert.equal(control.effective, true);
+          const before = fs.readFileSync(path.join(controlDir, control.beforeSourcePath));
+          const fault = fs.readFileSync(path.join(controlDir, control.faultSourcePath));
+          assert.equal(sha(before), control.beforeSha256); assert.equal(sha(fault), control.afterSha256);
+          assert.notEqual(control.beforeSha256, control.afterSha256);
+          assert.equal(before.toString().split(control.anchor).length, 2, 'One actual additive source anchor');
+          assert.equal(fault.toString(), before.toString().replace(control.anchor, control.replacement));
+          assert.equal(control.candidateAfterSha256, control.beforeSha256);
+          assert.equal(sha(fs.readFileSync(control.file)), control.beforeSha256, 'Actual application source held');
+          assert.equal(sha(fs.readFileSync(path.join(controlDir, control.compiledB.file))), control.compiledB.sha256);
+          assert(output.includes('Effective Programme reward source control: overwrite; sha256=' + control.afterSha256 + '.'));
+          const normal = read(normalDir, 'outcomes.json');
+          assert.equal(normal.head, execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim());
+          assert.equal(normal.base, '2f1919478db9e3a0f13b8f8b34373756944459c1'); assert.equal(normal.baseTree, '877ae7877f37ddeb6e57385bed8ee4da7f95f108');
+          assert.equal(normal.neutral.length, 50); assert.equal(normal.fleets.length, 2); assert.equal(normal.controls.length, 21);
+          assert(normal.controls.every(row => row.effective && row.originalSha256 !== row.faultySha256 && row.failed.length > 0));
+          assert.equal(normal.wheels.length, 30); assert.equal(normal.secondaryWheels.length, 134);
+          assert.equal(normal.rewardCorrections.length, 1);
+          const loaded = read(controlDir, control.loadedSourcesPath), normalLoaded = read(normalDir, 'current-loaded.json');
+          canonicalLoaded(loaded); canonicalLoaded(normalLoaded);
+          assert.equal(loaded.length, normalLoaded.length);
+          for (const row of loaded) {
+            const held = normalLoaded.find(value => value.file === row.file); assert(held);
+            assert.equal(row.original, false); assert.equal(row.compatibility, false); assert.equal(row.sha256, held.sha256);
+            assert.equal(row.compiledSha256, row.file === control.file ? control.afterSha256 : held.compiledSha256);
+          }
+          for (const arm of ['original', 'compatibility']) {
+            const rows = read(controlDir, arm + '-loaded.json'); assert.deepEqual(canonicalLoaded(rows), canonicalLoaded(read(normalDir, arm + '-loaded.json')));
+            for (const row of rows.filter(value => value.file === control.file)) assert.equal(row.compiledSha256, row.sha256, arm + ' Life stays unmodified');
+          }
+          const file = 'wheel-secondary-218-0-15.json', row = read(controlDir, file), heldRow = read(normalDir, file);
+          assert.equal(row.action.file, 'soccerCareerLife.ts'); assert.equal(row.action.id, 218); assert.equal(row.action.choice, 0); assert.equal(row.action.chance, 0.6);
+          assert.equal(row.correctedReward, true); assert.equal(row.receipt.result, true); assert.equal(row.receipt.seen, false); assert(row.receipt.roll < 0.6);
+          assert.deepEqual(row.receipt, row.current.value.chanceWheel); assert.deepEqual(row.current.draws, row.original.draws); assert.equal(row.current.draws.length, 1);
+          assert.deepEqual(row.catalog.currentDraws, row.catalog.originalDraws);
+          assert.deepEqual(row.input.statBoostNextSeason, { physical: 1 });
+          const expected = copy(row.original.value);
+          expected.statBoostNextSeason = { physical: 2, pace: 1, shooting: 1, passing: 1, dribbling: 1, defending: 1, reflexes: 1 };
+          assert.deepEqual(row.expected, expected);
+          const normalized = copy(row.current.value); delete normalized.chanceWheel;
+          assert.deepEqual(normalized, row.original.value, 'Controlled actual result recreates the complete original outcome');
+          assert.notDeepEqual(normalized, row.expected, 'The additive reward comparison detects the original bug');
+          assert.deepEqual(row.input, heldRow.input); assert.deepEqual(row.original, heldRow.original); assert.deepEqual(row.expected, heldRow.expected);
+          const normalResult = copy(heldRow.current.value); delete normalResult.chanceWheel;
+          assert.deepEqual(normalResult, heldRow.expected, 'Normal actual B passes the complete corrected outcome');
+          assert.deepEqual(normal.rewardCorrections[0], { actionLabel: 'soccerCareerLife.ts/218 choice 0 seed 15', inputQueue: { physical: 1 }, expectedQueue: expected.statBoostNextSeason });
+          fs.writeFileSync(path.join(controlDir, 'qualified.json'), JSON.stringify({ head: normal.head, cause, effective: true, actualSourceHeld: control.beforeSha256, actualFaultCompiled: control.compiledB, normalComparisons: 164, unchangedComparisons: 163, approvedRewardCorrections: 1 }, null, 2));
+          console.log('Programme reward control: one effective B-only original bug, exact additive outcome failure, all normal164 comparisons held.');
+          NODE
+      - name: Require the full unit-suite result
+        if: always() && env.CAREER_REWARDS_PHASE == 'fixed'
+        run: test '${{ steps.full_unit_suite.outcome }}' = success
+      - name: Final source and dependency holds
+        if: always()
+        run: |
+          sha256sum --check "$CAREER_REWARDS_OUT/source-hashes.txt" > "$CAREER_REWARDS_OUT/source-holds.log"
+          sha256sum --check "$CAREER_REWARDS_OUT/package-hashes.txt"
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' package.json package-lock.json bun.lock .github/workflows
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const installed = JSON.parse(fs.readFileSync(process.env.CAREER_REWARDS_OUT + '/installed.json'));
+          for (const row of installed) assert.equal(JSON.parse(fs.readFileSync(row.path + '/package.json')).version, row.version, row.path);
+          console.log(`Held ${installed.length} installed locked versions.`);
+          NODE
+      - name: Retain complete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-rewards-${{ github.run_id }}
+          path: career-rewards-artifacts/
+          retention-days: 14
+          if-no-files-found: error

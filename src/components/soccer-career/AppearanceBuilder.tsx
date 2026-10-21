@@ -4,6 +4,7 @@ import PlayerAvatar from "./PlayerAvatar";
 import {
   type PlayerAppearance, randomAppearance,
   SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR,
+  SOCCER_HAIRSTYLES, SOCCER_FACIAL_HAIR,
 } from "@/lib/soccerCareerAppearance";
 import { careerAppearanceCopy, type AppearanceSport } from "@/lib/careerAppearanceCopy";
 
@@ -39,10 +40,12 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
   const chip = (active: boolean) =>
     `px-3 py-2 rounded-lg text-xs font-semibold border transition-all ${
       active
-        ? "border-emerald-500 bg-emerald-500/15 text-emerald-300"
+        ? "border-emerald-500 bg-emerald-500/15 text-emerald-300 [.light_&]:text-foreground"
         : "border-border bg-muted/20 text-muted-foreground hover:bg-muted/40 hover:text-foreground"
     }`;
 
+  const hairstyles = sport === "soccer" ? SOCCER_HAIRSTYLES : HAIRSTYLES;
+  const facialHair = sport === "soccer" ? SOCCER_FACIAL_HAIR : FACIAL_HAIR;
   const copy = careerAppearanceCopy(sport);
   const boots = copy.boots.find(option => option.id === appearance.boots) ?? copy.boots[0];
   const celebration = copy.celebrations.find(option => option.id === appearance.celebration) ?? copy.celebrations[0];
@@ -85,10 +88,11 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
         {TABS.map(t => (
           <button
             key={t.key}
+            aria-pressed={tab === t.key}
             onClick={() => setTab(t.key)}
             className={`py-2 rounded-lg text-[11px] font-bold border transition-all ${
               tab === t.key
-                ? "border-emerald-500 bg-emerald-500/15 text-emerald-300"
+                ? "border-emerald-500 bg-emerald-500/15 text-emerald-300 [.light_&]:text-foreground"
                 : "border-border bg-muted/20 text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -106,12 +110,13 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
           fixed window with its own scroll: the tabs, the preview and the
           buttons underneath never move no matter which tab you are on, which
           is the whole point of the tile rule. */}
-      <div className="min-h-[92px] max-h-[190px] overflow-y-auto scrollbar-thin pr-0.5">
+      <div key={tab} className="min-h-[92px] max-h-[190px] overflow-y-auto scrollbar-thin pr-0.5">
         {tab === "face" && (
           <div className="flex flex-wrap gap-2">
             {SKIN_TONES.map(s => (
               <button
                 key={s.id}
+                aria-pressed={appearance.skinTone === s.id}
                 onClick={() => set({ skinTone: s.id })}
                 title={s.label}
                 aria-label={s.label}
@@ -127,8 +132,8 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
         {tab === "hair" && (
           <div className="space-y-3">
             <div className="flex flex-wrap gap-1.5">
-              {HAIRSTYLES.map(h => (
-                <button key={h.id} onClick={() => set({ hairstyle: h.id })} className={chip(appearance.hairstyle === h.id)}>
+              {hairstyles.map(h => (
+                <button key={h.id} aria-pressed={appearance.hairstyle === h.id} onClick={() => set({ hairstyle: h.id })} className={chip(appearance.hairstyle === h.id)}>
                   {h.label}
                 </button>
               ))}
@@ -137,6 +142,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
               {HAIR_COLORS.map(c => (
                 <button
                   key={c.id}
+                  aria-pressed={appearance.hairColor === c.id}
                   onClick={() => set({ hairColor: c.id })}
                   title={c.label}
                   aria-label={c.label}
@@ -152,8 +158,8 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
 
         {tab === "beard" && (
           <div className="flex flex-wrap gap-1.5">
-            {FACIAL_HAIR.map(f => (
-              <button key={f.id} onClick={() => set({ facialHair: f.id })} className={chip(appearance.facialHair === f.id)}>
+            {facialHair.map(f => (
+              <button key={f.id} aria-pressed={appearance.facialHair === f.id} onClick={() => set({ facialHair: f.id })} className={chip(appearance.facialHair === f.id)}>
                 {f.label}
               </button>
             ))}
@@ -165,10 +171,11 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
             {copy.boots.map(b => (
               <button
                 key={b.id}
+                aria-pressed={appearance.boots === b.id}
                 onClick={() => set({ boots: b.id })}
                 className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-[11px] font-semibold border transition-all text-left ${
                   appearance.boots === b.id
-                    ? "border-emerald-500 bg-emerald-500/15 text-emerald-300"
+                    ? "border-emerald-500 bg-emerald-500/15 text-emerald-300 [.light_&]:text-foreground"
                     : "border-border bg-muted/20 text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -182,7 +189,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
         {tab === "extras" && (
           <div className="flex flex-wrap gap-1.5">
             {copy.accessories.map(a => (
-              <button key={a.id} onClick={() => set({ accessory: a.id })} className={chip(appearance.accessory === a.id)}>
+              <button key={a.id} aria-pressed={appearance.accessory === a.id} onClick={() => set({ accessory: a.id })} className={chip(appearance.accessory === a.id)}>
                 {a.label}
               </button>
             ))}
@@ -194,10 +201,11 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
             {copy.celebrations.map(c => (
               <button
                 key={c.id}
+                aria-pressed={appearance.celebration === c.id}
                 onClick={() => set({ celebration: c.id })}
                 className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-[11px] font-semibold border transition-all text-left ${
                   appearance.celebration === c.id
-                    ? "border-emerald-500 bg-emerald-500/15 text-emerald-300"
+                    ? "border-emerald-500 bg-emerald-500/15 text-emerald-300 [.light_&]:text-foreground"
                     : "border-border bg-muted/20 text-muted-foreground hover:text-foreground"
                 }`}
               >

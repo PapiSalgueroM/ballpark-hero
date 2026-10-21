@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Pause, Play, FastForward, Users, ArrowLeft, ArrowLeftRight, Gauge, X } from 'lucide-react';
 import {
   FORMATIONS, MENTALITIES, slotPosition, pitchLineOf, resolveXI, extraTimeCall,
-  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, MAX_SUBS, liveGoneIds,
+  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, changeRoom, liveGoneIds,
 } from '@/lib/clubManager';
 import type {
   CareerState, CMPlayer, LiveMatch, MatchWeekReport, MatchStats, Mentality, TalkTone,
@@ -32,6 +32,7 @@ import { scorerMark } from '@/lib/clubManagerScorerLine';
 import type { GoalMarks } from '@/lib/clubManagerScorerLine';
 import { cmVarEventWaiting, cmVarPlayWaiting, cmVarCanAnnounce, cmVarPlayedReviewIds, cmVarLabel, cmVarKindsOf } from '@/lib/clubManagerVar';
 import { ClubManagerVarReview } from '@/components/club-manager/ClubManagerVarReview';
+import { inFixtureOrder, mineFirstOfReport, myClubFirst, pitchInitials, pitchName } from '@/lib/cmMatchDisplay';
 
 /**
  * Round 158: the Live Sim. His words, the ones he said to really pay
@@ -245,7 +246,7 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
       const slot = myFormation.slots[i];
       if (!slot || goneIds.has(id)) return;
       const p = career.squad.find(q => q.id === id);
-      mine.push({ key: `m${i}`, slot, label: p ? lastName(p.name) : slot.label, name: p?.name, number: numbers.get(id) ?? i + 1, id, side: 'me' });
+      mine.push({ key: `m${i}`, slot, label: p ? pitchName(p.name) : slot.label, name: p?.name, number: numbers.get(id) ?? i + 1, id, side: 'me' });
     });
     const oppFormation = FORMATIONS[live.oppFormationIndex ?? DEFAULT_OPP_FORMATION] ?? FORMATIONS[DEFAULT_OPP_FORMATION];
     if (live.oppXi) {
@@ -257,10 +258,10 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
         if (!slot || sentOff.has(p.n)) return;
         const started = live.oppXi?.[i]?.n === p.n;
         const benchIdx = (live.oppBench ?? []).findIndex(b => b.n === p.n);
-        theirs.push({ key: `o${i}`, slot, label: lastName(p.n), name: p.n, number: started ? i + 1 : 12 + Math.max(0, benchIdx), side: 'opp', gen: p.g });
+        theirs.push({ key: `o${i}`, slot, label: pitchName(p.n), name: p.n, number: started ? i + 1 : 12 + Math.max(0, benchIdx), side: 'opp', gen: p.g });
       });
     } else {
-      oppFormation.slots.forEach((slot, i) => theirs.push({ key: `o${i}`, slot, label: '', number: i + 1, side: 'opp' }));
+      oppFormation.slots.forEach((slot, i) => theirs.push({ key: `o${i}`, slot, label: slot.label, number: i + 1, side: 'opp' }));
     }
     return { mine, theirs };
   }
@@ -268,13 +269,13 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
   const xi = resolveXI(career);
   myFormation.slots.forEach((slot, i) => {
     const p = xi[i];
-    mine.push({ key: `m${i}`, slot, label: p ? lastName(p.name) : slot.label, name: p?.name, number: i + 1, id: p?.id, side: 'me' });
+    mine.push({ key: `m${i}`, slot, label: p ? pitchName(p.name) : slot.label, name: p?.name, number: i + 1, id: p?.id, side: 'me' });
   });
   const d = report?.detail;
   const oppFormation = FORMATIONS[d?.oppFormationIndex ?? DEFAULT_OPP_FORMATION] ?? FORMATIONS[DEFAULT_OPP_FORMATION];
   oppFormation.slots.forEach((slot, i) => {
     const p = d?.oppXi?.[i];
-    theirs.push({ key: `o${i}`, slot, label: p ? lastName(p.n) : '', name: p?.n, number: i + 1, side: 'opp', gen: p?.g });
+    theirs.push({ key: `o${i}`, slot, label: p ? pitchName(p.n) : slot.label, name: p?.n, number: i + 1, side: 'opp', gen: p?.g });
   });
   return { mine, theirs };
 }
@@ -330,9 +331,9 @@ export function labelsAbove(figures: { key: string; x: number; y: number }[]): S
   }
   return up;
 }
-/** Round 1101: who shows his number without his name for now. Three or more men level and shoulder to
- *  shoulder (a free kick's wall) have no room for three names in any two rows, so each shows his number
- *  until they break. So does a man in a crowd: with three or more others inside the room his own name and
+/** Round 1101: who shows his initials instead of his surname for now (Round 1340: the pitch shows no numbers,
+ *  so this is the initials, never a digit). Three or more men level and shoulder to shoulder (a free kick's
+ *  wall) have no room for three names in any two rows, so each shows his initials until they break. So does a man in a crowd: with three or more others inside the room his own name and
  *  the next one would need (a corner coming in, a scramble in the area) the names print through each other
  *  whichever row each takes, worst on a 320 px phone. A pure function of the frame. */
 const LABEL_WALL = 8;
@@ -436,6 +437,8 @@ function LiveMatchHelp({ onClose, kinds = [] }: { onClose: () => void; kinds?: r
         <li>The half you are watching has already been played by the game. You are seeing it back minute by minute.</li>
         <li>Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them.</li>
         <li>{penalties ? 'The score changes when the ball is in the net, not before. A penalty a review gives waits for the review first.' : 'The score changes when the ball is in the net, not before.'}</li>
+        <li>The home side is named first, on the left of the score, the way a football scoreboard does it, so away from home your club is on the right. Your club's name is the one in green, on either side, and the stats follow the same order.</li>
+        <li>On the pitch each man wears his surname, or his initials when players bunch up at a wall or a corner. No side in the game carries real shirt numbers, so the pitch shows none, and a side the game has no names for shows each man's position instead (CB, ST).</li>
         <li>A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net. On the pitch the ball goes in off him and he holds his head.</li>
         {reviews && <li>VAR here reviews {goals && penalties ? 'goals and penalties only' : goals ? 'goals only' : 'penalty calls only'}, and you only see a review that changed the call.{goals ? ' A goal that gets ruled out goes in first: the check opens with the ball in the net, the score does not move, and it adds no scorer or shot stats.' : ''}{penalties ? ' A foul the referee missed can become a penalty, and that kick can go in, be saved or miss.' : ''}</li>}
         <li>Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.</li>
@@ -444,6 +447,10 @@ function LiveMatchHelp({ onClose, kinds = [] }: { onClose: () => void; kinds?: r
       <p className="mt-2 text-xs text-foreground">
         <span className="font-bold">Worked example: </span>
         {"It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next."}
+      </p>
+      <p className="mt-2 text-xs text-foreground">
+        <span className="font-bold">Away example: </span>
+        {'You manage Liverpool away at Newcastle and go 1-0 up. The score reads Newcastle 0 - 1 Liverpool, Liverpool in green, and on the report your scorers sit under Liverpool on the right.'}
       </p>
       {reviews && <p className="mt-2 text-xs text-foreground"><span className="font-bold">VAR example: </span>{goals ? 'At 0-0 the ball goes in, a check opens and the goal is ruled out. It stays 0-0 and nobody gets a goal.' : 'At 0-0 a review gives a penalty and the kick misses. It stays 0-0.'}{goals && penalties ? ' If a review gives a penalty and the kick misses, it still stays 0-0.' : ''}</p>}
     </div>
@@ -456,13 +463,17 @@ function fitnessTone(f: number): string {
   return 'text-destructive';
 }
 
-/** One stat, mine left and theirs right, the way every stats block on this game reads. */
-function StatCell({ label, mine, theirs }: { label: string; mine: string; theirs: string }) {
+/** One stat in the order of the fixture, home side first, the way every stats block on this game reads (Round
+ *  1340). My number keeps its bold and its data-cm-live-stat-n wherever it sits. */
+function StatCell({ label, mine, theirs, mineFirst }: { label: string; mine: string; theirs: string; mineFirst: boolean }) {
+  const [first, second] = inFixtureOrder(mineFirst,
+    <span className="font-bold text-foreground tabular-nums shrink-0" data-cm-live-stat-n="mine">{mine}</span>,
+    <span className="font-bold text-muted-foreground tabular-nums shrink-0" data-cm-live-stat-n="theirs">{theirs}</span>);
   return (
     <div className="flex items-center justify-between gap-1 text-[10px] min-w-0" data-cm-live-stat={label}>
-      <span className="font-bold text-foreground tabular-nums shrink-0">{mine}</span>
+      {first}
       <span className="text-[8px] uppercase tracking-wider text-muted-foreground truncate">{label}</span>
-      <span className="font-bold text-muted-foreground tabular-nums shrink-0">{theirs}</span>
+      {second}
     </div>
   );
 }
@@ -471,35 +482,46 @@ function StatCell({ label, mine, theirs }: { label: string; mine: string; theirs
  * The live stats strip: possession both ways, shots (on target), expected
  * goals, corners and fouls, counted off the committed play at this minute.
  * Three short rows, so a 390 wide phone never scrolls sideways.
+ * Round 1340: home side first, like the score above it.
  */
-function LiveStats({ stats, counts, clubName, opponent }: { stats: MatchStats | null; counts: CardsAndSubs | null; clubName: string; opponent: string }) {
+function LiveStats({ stats, counts, clubName, opponent, mineFirst }: { stats: MatchStats | null; counts: CardsAndSubs | null; clubName: string; opponent: string; mineFirst: boolean }) {
   const poss = stats ? Math.round(stats.possession) : 50;
+  const [nameFirst, nameSecond] = inFixtureOrder(mineFirst,
+    <span className="text-primary normal-case font-bold truncate">{clubName}</span>,
+    <span className="normal-case font-bold truncate">{opponent}</span>);
+  const [possFirst, possSecond] = inFixtureOrder(mineFirst,
+    <span className={cn('text-[10px] font-bold text-primary tabular-nums w-8 shrink-0', !mineFirst && 'text-right')} data-cm-live-poss="mine">{poss}%</span>,
+    <span className={cn('text-[10px] font-bold text-muted-foreground tabular-nums w-8 shrink-0', mineFirst && 'text-right')} data-cm-live-poss="theirs">{100 - poss}%</span>);
+  const [barFirst, barSecond] = inFixtureOrder(mineFirst,
+    <div className="bg-primary transition-[width] duration-[800ms] motion-reduce:transition-none" style={{ width: `${poss}%` }} />,
+    <div className="bg-muted-foreground/40" style={{ width: `${100 - poss}%` }} />);
   return (
     <div className="bg-card border border-border rounded-xl p-2.5" data-cm-live-stats="1">
       <div className="flex items-center justify-between gap-2 text-[9px] text-muted-foreground uppercase tracking-wider mb-1">
-        <span className="text-primary normal-case font-bold truncate">{clubName}</span>
+        {nameFirst}
         <span className="shrink-0">Balance of play</span>
-        <span className="normal-case font-bold truncate">{opponent}</span>
+        {nameSecond}
       </div>
       <div className="flex items-center gap-1.5">
-        <span className="text-[10px] font-bold text-primary tabular-nums w-8 shrink-0" data-cm-live-poss="mine">{poss}%</span>
+        {possFirst}
         <div className="flex-1 flex h-1.5 rounded-full overflow-hidden bg-secondary">
-          <div className="bg-primary" style={{ width: `${poss}%`, transition: 'width 0.8s' }} />
-          <div className="bg-muted-foreground/40" style={{ width: `${100 - poss}%` }} />
+          {barFirst}
+          {barSecond}
         </div>
-        <span className="text-[10px] font-bold text-muted-foreground tabular-nums w-8 shrink-0 text-right" data-cm-live-poss="theirs">{100 - poss}%</span>
+        {possSecond}
       </div>
       <div className="mt-1.5">
         <StatCell
           label="Shots (on target)"
           mine={stats ? `${stats.shots} (${stats.onTarget})` : '-'}
           theirs={stats ? `${stats.oppShots} (${stats.oppOnTarget})` : '-'}
+          mineFirst={mineFirst}
         />
       </div>
       <div className="grid grid-cols-3 gap-x-3 mt-1">
-        <StatCell label="xG" mine={stats ? stats.xg.toFixed(2) : '-'} theirs={stats ? stats.oppXg.toFixed(2) : '-'} />
-        <StatCell label="Corners" mine={stats ? String(stats.corners) : '-'} theirs={stats ? String(stats.oppCorners) : '-'} />
-        <StatCell label="Fouls" mine={stats ? String(stats.fouls) : '-'} theirs={stats ? String(stats.oppFouls) : '-'} />
+        <StatCell label="xG" mine={stats ? stats.xg.toFixed(2) : '-'} theirs={stats ? stats.oppXg.toFixed(2) : '-'} mineFirst={mineFirst} />
+        <StatCell label="Corners" mine={stats ? String(stats.corners) : '-'} theirs={stats ? String(stats.oppCorners) : '-'} mineFirst={mineFirst} />
+        <StatCell label="Fouls" mine={stats ? String(stats.fouls) : '-'} theirs={stats ? String(stats.oppFouls) : '-'} mineFirst={mineFirst} />
       </div>
       {/* Round 714: keeper saves off the same play, and both dugouts' bookings
           and changes off their committed lines, at this minute. */}
@@ -508,10 +530,11 @@ function LiveStats({ stats, counts, clubName, opponent }: { stats: MatchStats | 
           label="Saves"
           mine={stats?.saves !== undefined ? String(stats.saves) : '-'}
           theirs={stats?.oppSaves !== undefined ? String(stats.oppSaves) : '-'}
+          mineFirst={mineFirst}
         />
-        <StatCell label="Yellow" mine={counts ? String(counts.yellows) : '-'} theirs={counts ? String(counts.oppYellows) : '-'} />
-        <StatCell label="Red" mine={counts ? String(counts.reds) : '-'} theirs={counts ? String(counts.oppReds) : '-'} />
-        <StatCell label="Subs" mine={counts ? String(counts.subs) : '-'} theirs={counts ? String(counts.oppSubs) : '-'} />
+        <StatCell label="Yellow" mine={counts ? String(counts.yellows) : '-'} theirs={counts ? String(counts.oppYellows) : '-'} mineFirst={mineFirst} />
+        <StatCell label="Red" mine={counts ? String(counts.reds) : '-'} theirs={counts ? String(counts.oppReds) : '-'} mineFirst={mineFirst} />
+        <StatCell label="Subs" mine={counts ? String(counts.subs) : '-'} theirs={counts ? String(counts.oppSubs) : '-'} mineFirst={mineFirst} />
       </div>
     </div>
   );
@@ -625,6 +648,9 @@ export function LiveSimScreen({
   const plus = stage === 'first' || stage === 'second' || stage === 'extra' ? Math.max(0, Math.min(stageStop, Math.floor(clock)) - stageEnd) : undefined;
   const mentality: Mentality = liveNow?.mentality ?? career.mentality;
   const opponent = liveNow?.opponent ?? (report ? (report.home === career.clubName ? report.away : report.home) : '');
+  /* Round 1340: the score, the strip, the interval card and the stats read home side first, the scoreboard's
+     order, from the one rule in cmMatchDisplay (the engine's own: at home or on a neutral ground my club first). */
+  const mineFirst = liveNow ? myClubFirst(liveNow.home) : report ? mineFirstOfReport(report, career.clubName) : true;
   const compLabel = liveNow?.compLabel ?? report?.compLabel ?? '';
   const finalMy = report ? (report.home === career.clubName ? report.homeGoals : report.awayGoals) : null;
   const finalOpp = report ? (report.home === career.clubName ? report.awayGoals : report.homeGoals) : null;
@@ -1177,6 +1203,9 @@ export function LiveSimScreen({
           big = at > 0
             ? { segs: [{ t: 'Sub: ' }, named(side, e.text.slice(0, at)), { t: ' on for ' }, named(side, e.text.slice(at + 8))], club, tone: 'none' }
             : { segs: [{ t: `Sub: ${e.text}` }], club, tone: 'none' };
+          /* Round 1331: a change at the break before extra time is told on the line under the pitch, so the
+             extra time banner (and the aggregate on a second leg) keeps its place as the stage opens. */
+          if (liveNow?.et && e.minute === liveNow.et.from && !e.plus) { small = big.segs; big = null; }
           break;
         }
         case 'shot':
@@ -1452,7 +1481,9 @@ export function LiveSimScreen({
     if (!liveNow) return;
     onChange(changeMinute, { kind: 'shape', mentality: m }, plus);
   };
-  const subsLeft = liveNow ? Math.max(0, MAX_SUBS - liveNow.subsUsed) : 0;
+  /* Round 1331: the match's own rule, three or five in three stoppages, read at this clock. */
+  const room = liveNow ? changeRoom(career, liveNow, changeMinute, plus) : null;
+  const subsLeft = room?.subsLeft ?? 0;
   const picked = picking ? career.squad.find(p => p.id === picking) ?? null : null;
   const sheetOpen = !!(picking && picked && canChange);
   /* Round 505: ordered for the man coming off, same position first. */
@@ -1496,22 +1527,30 @@ export function LiveSimScreen({
 
   if (!live && !report) return null;
 
+  const [intervalScoreFirst, intervalScoreSecond] = inFixtureOrder(mineFirst,
+    <span data-cm-score-of="me">{myGoalsNow}</span>,
+    <span data-cm-score-of="opp">{oppGoalsNow}</span>);
+  const [intervalNameFirst, intervalNameSecond] = inFixtureOrder(mineFirst,
+    <span className="text-primary">{career.clubName}</span>,
+    <span>{opponent}</span>);
+
   if (stage === 'interval' && career.live) {
     return (
       <div className="max-w-md mx-auto space-y-3" data-cm-live-stage="interval">
         <div className="bg-card border border-border rounded-2xl p-3 text-center">
           <div className="text-[10px] text-muted-foreground uppercase tracking-widest">{compLabel} · Half time</div>
+          {/* Round 1340: home side first, each number marked with whose it is like the strip's digits. */}
           <div data-cm-live-score className="text-2xl font-display font-bold text-foreground tabular-nums mt-1">
-            {myGoalsNow} - {oppGoalsNow}
+            {intervalScoreFirst} - {intervalScoreSecond}
           </div>
-          <div className="text-[10px] text-muted-foreground">{career.clubName} vs {opponent}</div>
+          <div className="text-[10px] text-muted-foreground">{intervalNameFirst} vs {intervalNameSecond}</div>
           {legCtx && (
             <div className="mt-1 text-[10px] text-muted-foreground tabular-nums" data-cm-live-agg={`${legCtx.aggMine}-${legCtx.aggTheirs}`}>
               First leg {legCtx.leg1Mine}-{legCtx.leg1Theirs} {legCtx.leg1Home ? 'at home' : 'away'} · Agg {legCtx.aggMine}-{legCtx.aggTheirs}
             </div>
           )}
         </div>
-        <LiveStats stats={stats} counts={counts} clubName={career.clubName} opponent={opponent} />
+        <LiveStats stats={stats} counts={counts} clubName={career.clubName} opponent={opponent} mineFirst={mineFirst} />
         <HalftimeScreen
           career={career}
           onSub={onSub}
@@ -1546,13 +1585,24 @@ export function LiveSimScreen({
     ? (gm.side === 'me' ? 'left-[4%] right-[52%] top-[34%]' : 'left-[52%] right-[4%] top-[34%]')
     : (gm.side === 'me' ? 'inset-x-[7%] top-[62%]' : 'inset-x-[7%] top-[16%]');
   const poss = stats ? Math.round(stats.possession) : null;
+  /* Round 1340: the digits and the names either side of them read home side first, my club in green wherever
+     it sits. Each digit keeps its data-cm-score-of and its slam. */
+  const [scoreFirst, scoreSecond] = inFixtureOrder(mineFirst,
+    <span key={`m${shownMy}`} data-cm-score-of="me" className={cardUp && gm?.side === 'me' ? 'cm-slam inline-block' : undefined}>{shownMy}</span>,
+    <span key={`o${shownOpp}`} data-cm-score-of="opp" className={cardUp && gm?.side === 'opp' ? 'cm-slam inline-block' : undefined}>{shownOpp}</span>);
   const scoreDigits = (
     <>
-      <span key={`m${shownMy}`} data-cm-score-of="me" className={cardUp && gm?.side === 'me' ? 'cm-slam inline-block' : undefined}>{shownMy}</span>
+      {scoreFirst}
       {' - '}
-      <span key={`o${shownOpp}`} data-cm-score-of="opp" className={cardUp && gm?.side === 'opp' ? 'cm-slam inline-block' : undefined}>{shownOpp}</span>
+      {scoreSecond}
     </>
   );
+  const [nameFirst, nameSecond] = inFixtureOrder(mineFirst, career.clubName, opponent);
+  const toneFirst = mineFirst ? 'text-primary' : 'text-foreground';
+  const toneSecond = mineFirst ? 'text-foreground' : 'text-primary';
+  const statPair = (mine: string, theirs: string) => (mineFirst
+    ? <><b className="text-foreground">{mine}</b> {theirs}</>
+    : <>{theirs} <b className="text-foreground">{mine}</b></>);
 
   return (
     <div className="max-w-md mx-auto" data-cm-live-stage={stage} data-cm-live-minute={minute} data-cm-live-plus={plus ?? 0}>
@@ -1562,11 +1612,11 @@ export function LiveSimScreen({
         <div data-cm-live-compact="1" className="bg-card border border-border rounded-2xl p-4 text-center">
           <div className="text-[11px] text-muted-foreground uppercase tracking-wide">{compLabel}</div>
           <div className="mt-1 flex items-center justify-center gap-3">
-            <div className="flex-1 text-right text-sm font-bold text-primary truncate">{career.clubName}</div>
+            <div className={`flex-1 text-right text-sm font-bold ${toneFirst} truncate`}>{nameFirst}</div>
             <div data-cm-live-score className="px-3 py-1 rounded-xl bg-secondary font-display text-xl font-bold text-foreground shrink-0 tabular-nums">
               {scoreDigits}
             </div>
-            <div className="flex-1 text-left text-sm font-bold text-foreground truncate">{opponent}</div>
+            <div className={`flex-1 text-left text-sm font-bold ${toneSecond} truncate`}>{nameSecond}</div>
           </div>
           <div className="mt-1 text-xs text-muted-foreground">
             {stage === 'done' || finished ? 'Full time' : `Paused at ${minuteLabel({ minute, plus })}`}
@@ -1618,11 +1668,11 @@ export function LiveSimScreen({
                   ?
                 </button>
                 <div className="cm-strip-score">
-                  <div className="flex-1 min-w-0 text-right text-sm font-bold text-primary truncate">{career.clubName}</div>
+                  <div className={`flex-1 min-w-0 text-right text-sm font-bold ${toneFirst} truncate`}>{nameFirst}</div>
                   <div data-cm-live-score className="px-3 py-0.5 rounded-xl bg-secondary font-display text-xl font-bold text-foreground shrink-0 tabular-nums">
                     {scoreDigits}
                   </div>
-                  <div className="flex-1 min-w-0 text-left text-sm font-bold text-foreground truncate">{opponent}</div>
+                  <div className={`flex-1 min-w-0 text-left text-sm font-bold ${toneSecond} truncate`}>{nameSecond}</div>
                 </div>
                 {/* The whole label, on up to three short lines beside the buttons: never cut off with dots. */}
                 <div className="cm-strip-comp text-[11px] text-muted-foreground uppercase tracking-wide">{compLabel}</div>
@@ -1657,7 +1707,9 @@ export function LiveSimScreen({
                   It takes every pixel the rows around it leave. */}
               <div className="cm-pitchbox">
                 <PitchSurface frame={motion} orientation={orientation} className="cm-stage-pitch" style={{ aspectRatio: 'auto' }}>
-                  {/* their dots: numbers, and names when the engine has an eleven for them */}
+                  {/* their dots: surnames (initials in a crowd) when the engine has an eleven for them, and each
+                      slot's role (CB, ST) when it has none. Round 1340: never a number, the game holds no real
+                      shirt numbers */}
                   {motion.theirs.map(d => {
                     const m = manOf.get(d.key);
                     if (!m) return null;
@@ -1671,7 +1723,7 @@ export function LiveSimScreen({
                       >
                         <LivePitchPlayer color="#d6e6ed" keeper={d.keeper} pose={motion.poses[d.key]} />
                         <span className={cn('cm-dot-label text-[9px] text-white/80 leading-none truncate tabular-nums', up ? 'mb-0.5' : 'mt-0.5')}>
-                          {m.number}{m.label && !short.has(d.key) ? ` ${m.label}` : ''}{m.gen ? '*' : ''}
+                          {short.has(d.key) && m.name ? pitchInitials(m.name) || m.label : m.label}{m.gen ? '*' : ''}
                         </span>
                       </div>
                     );
@@ -1689,7 +1741,7 @@ export function LiveSimScreen({
                         type="button"
                         data-cm-dot={m.id ?? ''}
                         data-cm-captain={captain ? '1' : undefined}
-                        aria-label={`${m.label}, number ${m.number}${captain ? ', captain' : ''}. Tap to bring somebody on or change the shape.`}
+                        aria-label={`${m.name ?? m.label}${captain ? ', captain' : ''}. Tap to bring somebody on or change the shape.`}
                         disabled={!canChange || !m.id}
                         onClick={() => { if (m.id) openSheet(m.id); }}
                         className={cn(
@@ -1701,7 +1753,7 @@ export function LiveSimScreen({
                       >
                         <LivePitchPlayer color={clubColor} keeper={d.keeper} pose={motion.poses[d.key]} selected={picking === m.id} />
                         <span className={cn('cm-dot-label text-[9px] text-white/90 leading-none truncate tabular-nums', up ? 'mb-0.5' : 'mt-0.5')}>
-                          {m.number}{short.has(d.key) ? '' : ` ${m.label}`}
+                          {short.has(d.key) && m.name ? pitchInitials(m.name) || m.label : m.label}
                           {captain && (
                             <span className="ml-0.5 inline-block px-[2px] rounded-sm bg-yellow-400 text-black font-black leading-[9px] align-middle">C</span>
                           )}
@@ -1811,9 +1863,10 @@ export function LiveSimScreen({
               <div data-cm-live-statline="1" className="cm-statline text-[11px] text-muted-foreground tabular-nums">
                 {/* Its name, for a screen reader: the full stats, where the words are printed, are a panel away on a phone. */}
                 <span className="sr-only">Balance of play: </span>
-                <span>Poss <b className="text-foreground">{poss === null ? '-' : `${poss}%`}</b> {poss === null ? '-' : `${100 - poss}%`}</span>
-                <span>Shots <b className="text-foreground">{stats ? `${stats.shots} (${stats.onTarget})` : '-'}</b> {stats ? `${stats.oppShots} (${stats.oppOnTarget})` : '-'}</span>
-                <span>xG <b className="text-foreground">{stats ? stats.xg.toFixed(2) : '-'}</b> {stats ? stats.oppXg.toFixed(2) : '-'}</span>
+                {/* Round 1340: each pair home side first, like the score, my number the bold one wherever it sits. */}
+                <span>Poss {statPair(poss === null ? '-' : `${poss}%`, poss === null ? '-' : `${100 - poss}%`)}</span>
+                <span>Shots {statPair(stats ? `${stats.shots} (${stats.onTarget})` : '-', stats ? `${stats.oppShots} (${stats.oppOnTarget})` : '-')}</span>
+                <span>xG {statPair(stats ? stats.xg.toFixed(2) : '-', stats ? stats.oppXg.toFixed(2) : '-')}</span>
               </div>
 
               {/* The small stuff: chances, saves, corners, throw ins, fouls, at their minutes. */}
@@ -1922,7 +1975,7 @@ export function LiveSimScreen({
 
               {/* the live stats, the report's own numbers counted up to this minute.
                   Round 472: with the other club's name on it rather than "Them". */}
-              <LiveStats stats={stats} counts={counts} clubName={career.clubName} opponent={opponent} />
+              <LiveStats stats={stats} counts={counts} clubName={career.clubName} opponent={opponent} mineFirst={mineFirst} />
 
               {/* Round 782: at the whistle, the shootout kick by kick when the manager had set an order. */}
               {sidePanel === 'kicks' && report?.shootout && (
@@ -1937,7 +1990,7 @@ export function LiveSimScreen({
                 <div ref={sheetRef} className="bg-card border border-border rounded-xl p-3" data-cm-live-sheet={picking ?? ''}>
                   <div className="flex items-center justify-between">
                     <div className="text-[11px] text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-                      <ArrowLeftRight className="w-3 h-3" /> Change at {minuteLabel({ minute: changeMinute, plus })} · Subs left: {subsLeft}
+                      <ArrowLeftRight className="w-3 h-3" /> <span>Change at {minuteLabel({ minute: changeMinute, plus })} · Subs left: {subsLeft}{room && room.stopsLeft !== null && <span className="text-xs whitespace-nowrap" data-cm-live-stops={room.stopsLeft}>{` · ${room.stopsLeft} ${room.stopsLeft === 1 ? 'stop' : 'stops'} left`}</span>}</span>
                     </div>
                     <button
                       onClick={closeSheet}
@@ -1980,8 +2033,10 @@ export function LiveSimScreen({
                   </div>
 
                   <div className="text-[11px] text-muted-foreground uppercase tracking-wider mt-2 mb-1">Bring on for {lastName(picked.name)}</div>
-                  {subsLeft === 0 ? (
-                    <p className="text-[11px] text-yellow-400">You have used all three. Nobody else is coming off.</p>
+                  {subsLeft === 0 || (room && !room.open) ? (
+                    <p className="text-xs text-yellow-400" data-cm-live-refusal={subsLeft === 0 ? 'subs' : 'stops'}>{subsLeft === 0
+                      ? `You have used all ${room?.subs === 5 ? 'five' : 'three'}. Nobody else is coming off.`
+                      : 'No stoppages left for changes. All three are used.'}</p>
                   ) : bench.length === 0 ? (
                     <p className="text-[11px] text-muted-foreground">Nobody fit is left on the bench.</p>
                   ) : (

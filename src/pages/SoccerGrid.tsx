@@ -158,6 +158,7 @@ const SoccerGrid = () => {
                     <button
                       key={d.tier}
                       onClick={() => setDifficulty(d.tier)}
+                      disabled={validating}
                       className={cn(
                         'px-4 py-2 rounded-full text-sm font-semibold transition-all',
                         settings.difficulty === d.tier
@@ -178,6 +179,7 @@ const SoccerGrid = () => {
                     <button
                       key={t.mode}
                       onClick={() => setTimerMode(t.mode)}
+                      disabled={validating}
                       className={cn(
                         'px-4 py-2 rounded-full text-sm font-semibold transition-all',
                         settings.timerMode === t.mode
@@ -282,6 +284,7 @@ const SoccerGrid = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="soccer-grid" gameContext={{ puzzleId: puzzle.id }} />}
           pageHasOwnH1
           title="Soccer Grid | DoUKnowBall"
           description="A daily 3×3 grid puzzle where each cell requires a soccer player matching both the row and column criteria. Features clubs, leagues, nationalities, and achievements."
@@ -305,9 +308,7 @@ const SoccerGrid = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="soccer-grid" gameContext={{ puzzleId: puzzle.id }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

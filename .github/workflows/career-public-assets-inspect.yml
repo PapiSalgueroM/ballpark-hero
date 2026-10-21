@@ -1,0 +1,195 @@
+name: Inspect public career asset drift
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/career-public-assets-inspect]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: career-public-assets-inspect-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  inspect:
+    if: github.ref == 'refs/heads/codex/career-public-assets-inspect'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        shell: bash
+    env:
+      READBACK_OUT: career-public-assets-inspect-artifacts
+      SOURCE_SHA: d256101536e943a84cd8a19f23d84fdfdfbf59f9
+      QUALIFIED_BUILD_SHA: 723638895e13e199949cbcc8919ec8ca3d909a26
+      QUALIFIED_ARTIFACT: '12365607504'
+      QUALIFIED_ZIP_SHA256: db4960dfa527892a9a937d7987136f6bcca52f9bfd736d419ea6498ebbbb9c38
+      EXPECTED_DEPLOYMENT: 6325bddf-f62e-46e1-ae4a-283c292dc852
+      OBSERVED_ENTRY: /assets/index-aECAWOi5.js
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pin public source and download only the qualified GitHub artifact before the public guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir "$READBACK_OUT"
+          [[ "$SOURCE_SHA" =~ ^[a-f0-9]{40}$ && "$QUALIFIED_BUILD_SHA" =~ ^[a-f0-9]{40}$ && "$QUALIFIED_ARTIFACT" =~ ^[1-9][0-9]+$ && "$QUALIFIED_ZIP_SHA256" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$EXPECTED_DEPLOYMENT" =~ ^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$ && "$OBSERVED_ENTRY" == /assets/index-aECAWOi5.js ]]
+          git fetch --no-tags --depth=1 origin "$SOURCE_SHA" > "$READBACK_OUT/source-fetch.log" 2>&1
+          git fetch --no-tags --depth=1 origin "$QUALIFIED_BUILD_SHA" >> "$READBACK_OUT/source-fetch.log" 2>&1
+          git diff --exit-code "$SOURCE_SHA" HEAD -- src scripts public supabase package.json package-lock.json > "$READBACK_OUT/published-source-hold.log"
+          git diff --exit-code "$QUALIFIED_BUILD_SHA" "$SOURCE_SHA" -- src scripts supabase package.json package-lock.json ':!src/data/searchKeywords.json' ':!scripts/data/lastmod.json' ':!scripts/data/guideHeadingsFrozen.json' > "$READBACK_OUT/qualified-source-hold.log"
+          sha256sum .github/workflows/career-public-readback.yml .github/workflows/legal-ai-privacy-public-readback.yml package.json package-lock.json > "$READBACK_OUT/source-before.sha256"
+          git rev-parse HEAD > "$READBACK_OUT/operator-head.txt"
+          gh api "/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$QUALIFIED_ARTIFACT/zip" > "$READBACK_OUT/qualified.zip"
+          printf '%s  %s\n' "$QUALIFIED_ZIP_SHA256" "$READBACK_OUT/qualified.zip" | sha256sum --check > "$READBACK_OUT/qualified-zip-hold.log"
+          python <<'PY'
+          import os, pathlib, zipfile, tarfile, hashlib, re, json
+          out = pathlib.Path(os.environ['READBACK_OUT']).resolve()
+          qualified = out / 'qualified'; qualified.mkdir()
+          with zipfile.ZipFile(out / 'qualified.zip') as archive:
+              for item in archive.infolist():
+                  name = pathlib.PurePosixPath(item.filename)
+                  assert not name.is_absolute() and '..' not in name.parts
+              archive.extractall(qualified)
+          manifest = {}
+          for line in (qualified / 'evidence.sha256').read_text().splitlines():
+              match = re.fullmatch(r'([a-f0-9]{64})  (?:\./)?(.+)', line); assert match
+              name = match[2]; assert name not in manifest and '..' not in pathlib.PurePosixPath(name).parts
+              manifest[name] = match[1]
+          actual = {str(p.relative_to(qualified)) for p in qualified.rglob('*') if p.is_file()} - {'evidence.sha256'}
+          assert actual == set(manifest)
+          for name, expected in manifest.items(): assert hashlib.sha256((qualified / name).read_bytes()).hexdigest() == expected
+          assert (qualified / 'head.txt').read_text().strip() == os.environ['QUALIFIED_BUILD_SHA']
+          dist = out / 'qualified-dist'; dist.mkdir()
+          with tarfile.open(qualified / 'dist.tar.gz') as archive:
+              for item in archive.getmembers():
+                  name = pathlib.PurePosixPath(item.name)
+                  assert not name.is_absolute() and '..' not in name.parts and not item.issym() and not item.islnk()
+              archive.extractall(dist, filter='data')
+          (out / 'qualified-provenance.json').write_text(json.dumps({'artifact': os.environ['QUALIFIED_ARTIFACT'], 'zipSha256': os.environ['QUALIFIED_ZIP_SHA256'], 'source': os.environ['QUALIFIED_BUILD_SHA'], 'evidenceFiles': len(manifest)}, indent=2))
+          PY
+      - name: Install isolated parser and request tooling, without a browser or app build
+        run: |
+          set -euo pipefail
+          tools="$RUNNER_TEMP/career-public-inspect-tools"
+          npm install --prefix "$tools" --no-save --package-lock=false playwright-core@1.64.0 es-module-lexer@1.7.0 jsdom@20.0.3 > "$READBACK_OUT/tooling.log" 2>&1
+          echo "NODE_PATH=$tools/node_modules" >> "$GITHUB_ENV"
+      - name: Reuse approved fixed-origin guard with home and an initially single-asset allowlist
+        run: |
+          set -euo pipefail
+          node <<'JS'
+          const fs = require('node:fs'), assert = require('node:assert/strict'), { createHash } = require('node:crypto');
+          const source = fs.readFileSync('.github/workflows/legal-ai-privacy-public-readback.yml', 'utf8');
+          assert.equal(createHash('sha256').update(source).digest('hex'), '37d187d3bc4659ebfdda5d010fb157972c4c8e797b4bab2b3fc27d20ddfe15cb');
+          const start = '          cat > "$READBACK_OUT/read-only.cjs" <<\'JS\'\n', end = '\n          JS\n';
+          assert.equal(source.split(start).length, 2); const rest = source.split(start)[1], finish = rest.indexOf(end); assert(finish > 0);
+          let guard = rest.slice(0, finish).replace(/^          /gm, ''); assert(guard.trimEnd().endsWith('module.exports = { ORIGIN, checkedURL };'));
+          const from = guard.indexOf('const paths = new Set('), to = guard.indexOf('function checkedURL('); assert(from >= 0 && to > from);
+          guard = guard.slice(0, from) + "const paths = new Set(['/']);\nconst allowedAssets = () => new Set(JSON.parse(fs.readFileSync(path.join(out, 'allowed-assets.json'), 'utf8')));\n" + guard.slice(to);
+          const line = guard.split('\n').filter(row => row.trim().startsWith('const asset = ')); assert.equal(line.length, 1);
+          guard = guard.replace(line[0], '  const asset = allowedAssets().has(url.pathname);');
+          fs.writeFileSync(process.env.READBACK_OUT + '/read-only.cjs', guard);
+          fs.writeFileSync(process.env.READBACK_OUT + '/allowed-assets.json', JSON.stringify([process.env.OBSERVED_ENTRY]));
+          JS
+      - name: Fetch only observed entry and qualified role import paths, retaining full raw diffs
+        run: |
+          set -euo pipefail
+          cat > "$READBACK_OUT/inspect.cjs" <<'JS'
+          const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict'), { createHash } = require('node:crypto'), { spawnSync } = require('node:child_process');
+          const { request } = require('playwright-core'), { JSDOM } = require('jsdom'), lexer = require('es-module-lexer'), { ORIGIN, checkedURL } = require('./read-only.cjs');
+          async function main() {
+            await lexer.init;
+            const out = path.resolve(process.env.READBACK_OUT), dist = path.join(out, 'qualified-dist'), hash = value => createHash('sha256').update(value).digest('hex');
+            assert(fs.existsSync(path.join(dist, 'index.html')), 'Qualified archive must own index.html at its documented dist-content root');
+            const report = { complete: false, qualification: 'DIAGNOSTIC ONLY, no host equivalence claim', source: process.env.SOURCE_SHA, qualified: process.env.QUALIFIED_BUILD_SHA, expectedDeployment: process.env.EXPECTED_DEPLOYMENT, operator: process.env.GITHUB_SHA, run: process.env.GITHUB_RUN_ID, targets: [], imports: [] };
+            const save = (name, body) => fs.writeFileSync(path.join(out, name), body), persist = () => save('inspect.json', JSON.stringify(report, null, 2) + '\n');
+            const keyOf = filename => { const match = /^(.+)-[A-Za-z0-9_-]{8}\.js$/.exec(path.posix.basename(filename)); assert(match, 'Only hashed JS chunk names are considered'); return match[1]; };
+            const files = fs.readdirSync(path.join(dist, 'assets')).filter(name => name.endsWith('.js'));
+            const text = new Map(files.map(name => ['/assets/' + name, fs.readFileSync(path.join(dist, 'assets', name), 'utf8')]));
+            const local = specifier => { const url = new URL(specifier, ORIGIN + '/assets/'); assert.equal(url.origin, ORIGIN); assert(!url.search && !url.hash && /^\/assets\/[A-Za-z0-9_.-]+\.js$/.test(url.pathname)); return url.pathname; };
+            const imports = body => lexer.parse(body)[0].filter(item => typeof item.n === 'string' && /\.js$/.test(item.n)).map(item => local(item.n));
+            const graph = new Map([...text].map(([file, body]) => [file, imports(body).filter(target => text.has(target))]));
+            const unique = candidates => { const distinct = [...new Set(candidates)]; assert.equal(distinct.length, 1); return distinct[0]; };
+            const entry = '/assets/index-Dh8GD47A.js', reachable = new Set(), queue = [entry];
+            while (queue.length) { const at = queue.shift(); if (reachable.has(at)) continue; reachable.add(at); queue.push(...(graph.get(at) || [])); }
+            const roles = { entry, nba: unique([...reachable].filter(file => /^NbaMyCareer-[A-Za-z0-9_-]+\.js$/.test(path.posix.basename(file)))), fight: '/assets/FightCareer-D6Ke08xn.js', court: '/assets/UsSeasonCentre-BHxUOlvf.js', nbaGuide: '/assets/nba-Bp_6OSOA.js' };
+            const expectedHashes = { entry: '724f1ebde0f9d9e5157b35e7b4ce13f0bb7ee8aeb2a2da9445d880c3db9e9781', fight: 'e401b89f72d4c3ebd43f414eed01b2650d27bdf5f2ba85e1bc5f68573760e576', court: 'acd804c4eca4e2f807634ea7e1af75b3dd88bf9482719001ce6a1e4fbb0a8080', nbaGuide: '6265161ac99d15e7c16ca4695c7a1f1c8469a030b1aa90db317fbf4961350901' };
+            for (const [role, expected] of Object.entries(expectedHashes)) assert.equal(hash(text.get(roles[role])), expected);
+            function routeTo(target) { const queue = [[roles.entry]], seen = new Set(); while (queue.length) { const route = queue.shift(), at = route.at(-1); if (at === target) return route; if (seen.has(at)) continue; seen.add(at); for (const next of graph.get(at) || []) queue.push([...route, next]); } throw new Error('No qualified import path to ' + target); }
+            const routes = Object.fromEntries(Object.entries(roles).map(([role, file]) => [role, routeTo(file)]));
+            const needed = new Set(Object.values(routes).flat()); assert(needed.size <= 16, 'Diagnostic remains limited to role paths and necessary transitive JS imports'); report.qualifiedPaths = routes;
+            const allowed = new Set([process.env.OBSERVED_ENTRY]), observed = new Map([[roles.entry, process.env.OBSERVED_ENTRY]]), bodies = new Map();
+            const uuid = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
+            function deployment(value) { assert.equal(typeof value, 'string'); const match = value.match(new RegExp('^(' + uuid + ')$|^psr2\\.(' + uuid + ')\\.[0-9]{10}\\.[A-Za-z0-9_-]{43}$', 'i')); assert(match); assert.equal((match[1] || match[2]).toLowerCase(), process.env.EXPECTED_DEPLOYMENT); }
+            const signed = 'psr2.' + process.env.EXPECTED_DEPLOYMENT + '.1793208840.' + 'A'.repeat(43); deployment(signed);
+            const changed = signed.replace('psr2.', 'other.'); assert.notEqual(changed, signed); assert.throws(() => deployment(changed));
+            for (const [url, method] of [[ORIGIN + '/privacy', 'GET'], [ORIGIN + '/functions/v1/account-privacy', 'GET'], ['https://example.com/assets/index-aECAWOi5.js', 'GET'], [ORIGIN + process.env.OBSERVED_ENTRY, 'POST']]) assert.throws(() => checkedURL(url, method));
+            report.controls = { changedDeploymentRejected: 1, forbiddenTargetsRejected: 4 };
+            let api;
+            try {
+              api = await request.newContext({ extraHTTPHeaders: { 'User-Agent': 'DoUKnowBall bounded public asset diagnostic' } });
+              const homeURL = ORIGIN + '/?career_inspect=' + process.env.GITHUB_RUN_ID, home = await api.get(homeURL, { maxRedirects: 0, timeout: 30000 });
+              const homeBody = await home.body(), homeHeaders = home.headers(); delete homeHeaders['set-cookie']; save('home.html', homeBody); save('home-get.headers.json', JSON.stringify(homeHeaders, null, 2));
+              const homeHead = await api.head(homeURL, { maxRedirects: 0, timeout: 30000 }), homeHeadHeaders = homeHead.headers(); delete homeHeadHeaders['set-cookie']; save('home-head.headers.json', JSON.stringify(homeHeadHeaders, null, 2));
+              assert.equal(home.status(), 200); assert.equal(homeHead.status(), 200); deployment(homeHeaders['x-deployment-id']); deployment(homeHeadHeaders['x-deployment-id']);
+              const dom = new JSDOM(homeBody.toString()), entries = [...dom.window.document.querySelectorAll('script[type="module"][src]')].map(node => new URL(node.getAttribute('src'), ORIGIN)).filter(url => /^\/assets\/index-[A-Za-z0-9_-]+\.js$/.test(url.pathname));
+              dom.window.close(); assert.equal(entries.length, 1); checkedURL(entries[0]); assert.equal(entries[0].pathname, process.env.OBSERVED_ENTRY);
+              report.home = { getStatus: 200, headStatus: 200, deployment: process.env.EXPECTED_DEPLOYMENT, entry: entries[0].pathname, sha256: hash(homeBody) }; persist();
+              async function fetchTarget(qualified, live) {
+                if (bodies.has(qualified)) { assert.equal(observed.get(qualified), live); return; }
+                assert(needed.has(qualified)); assert.equal(keyOf(live), keyOf(qualified)); assert(allowed.has(live)); checkedURL(ORIGIN + live);
+                const filename = path.posix.basename(live), response = await api.get(ORIGIN + live + '?career_inspect=' + process.env.GITHUB_RUN_ID, { maxRedirects: 0, timeout: 30000 });
+                const body = await response.body(), headers = response.headers(); delete headers['set-cookie']; save('live-' + filename, body); save('live-' + filename + '.headers.json', JSON.stringify(headers, null, 2)); save('qualified-' + path.posix.basename(qualified), text.get(qualified));
+                assert.equal(response.status(), 200); if (headers['x-deployment-id']) deployment(headers['x-deployment-id']);
+                if (qualified === roles.entry) { const head = await api.head(ORIGIN + live, { maxRedirects: 0, timeout: 30000 }); const hh = head.headers(); delete hh['set-cookie']; save('entry-head.headers.json', JSON.stringify(hh, null, 2)); assert.equal(head.status(), 200); if (hh['x-deployment-id']) deployment(hh['x-deployment-id']); }
+                const rawEqual = hash(body) === hash(text.get(qualified));
+                const diff = spawnSync('diff', ['-u', '--label', 'qualified/' + path.posix.basename(qualified), '--label', 'published/' + filename, path.join(out, 'qualified-' + path.posix.basename(qualified)), path.join(out, 'live-' + filename)], { encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 });
+                assert(!diff.error && [0, 1].includes(diff.status)); assert.equal(diff.status === 0, rawEqual); save('raw-diff-' + path.posix.basename(qualified) + '.patch', diff.stdout);
+                report.targets.push({ qualified, live, qualifiedSha256: hash(text.get(qualified)), liveSha256: hash(body), bytes: body.length, rawEqual, rawDiff: 'raw-diff-' + path.posix.basename(qualified) + '.patch' }); bodies.set(qualified, body.toString()); observed.set(qualified, live); persist();
+              }
+              await fetchTarget(roles.entry, process.env.OBSERVED_ENTRY);
+              for (const route of Object.values(routes)) for (let index = 1; index < route.length; index++) {
+                const parent = route[index - 1], child = route[index];
+                const live = unique(imports(bodies.get(parent)).filter(file => keyOf(file) === keyOf(child)));
+                assert(graph.get(parent).includes(child)); allowed.add(live); assert(allowed.size <= needed.size); save('allowed-assets.json', JSON.stringify([...allowed]));
+                report.imports.push({ qualifiedParent: parent, liveParent: observed.get(parent), qualifiedChild: child, liveChild: live }); await fetchTarget(child, live);
+              }
+              assert(Object.values(roles).every(file => bodies.has(file))); report.roles = Object.fromEntries(Object.entries(roles).map(([role, file]) => [role, observed.get(file)]));
+              report.complete = true; console.log('PUBLIC ASSET DIAGNOSTIC COMPLETE: full raw bytes and diffs retained, no equivalence or release qualification asserted.');
+            } catch (error) { report.error = { name: error.name, message: error.message, stack: error.stack }; throw error; }
+            finally { await api?.dispose(); persist(); }
+          }
+          main().catch(error => { console.error(error); process.exitCode = 1; });
+          JS
+          export NODE_OPTIONS="--require=$PWD/$READBACK_OUT/read-only.cjs"
+          status=0; node "$READBACK_OUT/inspect.cjs" > "$READBACK_OUT/inspect.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/inspect.exit"
+          cat "$READBACK_OUT/inspect.log"; test "$status" -eq 0
+      - name: Hold the strict reader and source, hash diagnostic evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$READBACK_OUT/source-before.sha256" > "$READBACK_OUT/source-hold.log"
+          git diff --exit-code HEAD -- src scripts public supabase package.json package-lock.json .github > "$READBACK_OUT/operator-source-hold.log"
+          (cd "$READBACK_OUT"; find . -type f ! -path './qualified/*' ! -path './qualified-dist/*' ! -name qualified.zip ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$READBACK_OUT/evidence.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-public-assets-inspect-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            career-public-assets-inspect-artifacts/
+            !career-public-assets-inspect-artifacts/qualified/
+            !career-public-assets-inspect-artifacts/qualified-dist/
+            !career-public-assets-inspect-artifacts/qualified.zip
+          if-no-files-found: error
+          retention-days: 14

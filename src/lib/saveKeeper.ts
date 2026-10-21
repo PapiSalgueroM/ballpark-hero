@@ -85,6 +85,16 @@ import { getStorageTrouble, settlePendingSaves } from '@/lib/safeStorage';
 
 /** Where a staged put back waits for the next load. Not a game's save key. */
 export const PENDING_RESTORE_KEY = 'dukb-save-pending';
+/**
+ * Round 1513: a put back whose save is not a kept aside backup (Club Manager's
+ * save points, which are stored compressed) is staged from a plain copy here,
+ * by stageCopy in src/lib/cmSavePoints.ts (it loads with the points screen, so
+ * every page does not carry it): the same journal, with this key as its
+ * backupKey. The copy goes as the put back finishes, whatever the outcome:
+ * the save it was made from is still where the player made it, so this is
+ * never the only copy of anything.
+ */
+export const PENDING_COPY_KEY = 'dukb-save-pending-copy';
 /** How long a staged put back stays good. The load it waits for takes seconds. */
 export const STAGED_FOR_MS = 5 * 60 * 1000;
 /** A clock that stepped back between the press and the load is forgiven this much. */
@@ -97,7 +107,7 @@ export type KeeperRefusal = 'blocked' | 'no-room' | 'gone' | 'stale';
  * saves the cap removed (absent when none), so the card never says "nothing
  * was deleted" over a put back that dropped one.
  */
-export interface KeeperOutcome { path: string; ok: boolean; why?: KeeperRefusal; kept?: boolean; dropped?: number }
+export interface KeeperOutcome { path: string; ok: boolean; why?: KeeperRefusal; kept?: boolean; dropped?: number; copy?: true }
 
 /**
  * What a game does when its save holds a version number other than the one
@@ -191,7 +201,7 @@ function readStaged(storage: ListableStorage): { rec: Staged; entry: ContinueSav
   const whole = (n: unknown): n is number => typeof n === 'number' && Number.isInteger(n) && n >= 0;
   if (o.v !== 1 || typeof o.path !== 'string' || typeof o.backupKey !== 'string' || !whole(o.at) || !whole(o.len) || !whole(o.sum)) return 'junk';
   const entry = CONTINUE_SAVES.find(e => e.path === o.path);
-  if (!entry || !o.backupKey.startsWith(`${entry.saveKey}${BROKEN_SAVE_MARK}`)) return 'junk';
+  if (!entry || (o.backupKey !== PENDING_COPY_KEY && !o.backupKey.startsWith(`${entry.saveKey}${BROKEN_SAVE_MARK}`))) return 'junk';
   return { rec: { v: 1, path: o.path, backupKey: o.backupKey, at: o.at, len: o.len, sum: o.sum }, entry };
 }
 
@@ -250,9 +260,12 @@ export function applyPending(storage: ListableStorage | null, now: Date = new Da
   if (staged === 'none') return null;
   if (staged === 'junk') { forget(storage); return null; }
   const { rec, entry } = staged;
+  const fromCopy = rec.backupKey === PENDING_COPY_KEY;
   const done = (ok: boolean, extra: Partial<KeeperOutcome> = {}): KeeperOutcome => {
     forget(storage);
-    return { path: entry.path, ok, ...extra };
+    if (!fromCopy) return { path: entry.path, ok, ...extra };
+    try { storage.removeItem(PENDING_COPY_KEY); } catch { /* the next copy staged writes over it */ }
+    return { path: entry.path, ok, ...extra, copy: true };
   };
   const isStaged = (t: string): boolean => t.length === rec.len && sumOf(t) === rec.sum;
   let cur: string | null;

@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import { clubLeagueFixtures } from '@/lib/clubDetailFixtures';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, Eye } from 'lucide-react';
 import {
   money, moneyIn, sortedLeagueTable, isPartialClub, TIER_INFO,
-  oppRosterFor, projectedXIAvg, yearsOn, worldSeasonLabel,
+  oppRosterFor, worldRosterXIAvg, worldSeasonLabel, yearsOn,
   boardWantLabel, careerLeagueOf, eraClubDefFor,
   managerOf, sellValue,
 } from '@/lib/clubManager';
@@ -22,6 +23,7 @@ interface ClubDetailScreenProps {
  * rivals just by clicking on their team."
  */
 export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenProps) {
+  const [fixturesClub, setFixturesClub] = useState<string | null>(null);
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(career);
@@ -38,23 +40,30 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
   /* Round 154: a club you founded has no projected world entry, its squad IS
      the save's squad, so the viewer reads that directly. */
   const isMyCustom = !!career.customClub && clubName === career.customClub.name;
+  /* The club you manage always reads the squad in this save. Rival clubs
+     keep their current world roster, including recorded transfers. */
+  const fromMySquad = isMyCustom || clubName === career.clubName;
   /* Round 640: a founder of a club founded above what its money buys sells
      at a fixed share of his value, so the viewer shows what a sale would pay
      (sellValue, the figure the transfer and contracts screens quote) beside
      what he is worth, for him and for the squad. */
-  const roster: { n: string; p: string; a: number; v: number; r: number; g?: boolean; s?: number }[] = isMyCustom
+  const roster: { n: string; p: string; a: number; v: number; r: number; g?: boolean; s?: number }[] = fromMySquad
     ? career.squad.map(p => ({
       n: p.name, p: p.position, a: p.age, v: p.value ?? 0, r: p.rating, g: p.generated,
       s: p.founderSaleRatio !== undefined ? sellValue(p) : undefined,
     }))
     /* Round 742: minus the men in my squad. A man I signed off this club was
-       still listed here with them, straight off the projection. */
-    : oppRosterFor(career, clubName);
+       still listed here with them, straight off the projection. Release AZ fix
+       (reviewer 1, minor 3): a man the world ledger puts at this club comes at
+       the end of that list, so a 162m signing sat under a 3m keeper. The list
+       is sorted by worth here, a stable sort, so a projected roster (already in
+       that order) shows exactly as it always did. */
+    : [...oppRosterFor(career, clubName)].sort((a, b) => b.v - a.v);
   const saleRatioMen = isMyCustom && career.squad.some(p => p.founderSaleRatio !== undefined);
   const salePays = saleRatioMen ? career.squad.reduce((s, p) => s + sellValue(p), 0) : 0;
-  const xiAvg = isMyCustom
+  const xiAvg = fromMySquad
     ? (roster.length ? Math.round([...roster].sort((a, b) => b.r - a.r).slice(0, 11).reduce((s, p) => s + p.r, 0) / Math.min(11, roster.length)) : null)
-    : projectedXIAvg(clubName, onYears, career.eraId);
+    : worldRosterXIAvg(career, clubName);
   const squadValue = useMemo(() => roster.reduce((s, p) => s + p.v, 0), [roster]);
   /* Round 145: the board line quotes the real league demand for this club,
      lowercased into the sentence, instead of a raw "top N" rank. */
@@ -70,6 +79,25 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
   const rowIdx = table.findIndex(r => r.club === clubName);
   const row = rowIdx >= 0 ? table[rowIdx] : null;
   const inMyLeague = careerLeagueOf(career).clubs.includes(clubName);
+
+  if (fixturesClub === clubName) {
+    const fixtures = clubLeagueFixtures(career, clubName);
+    return <section aria-label="Club league fixtures" className="space-y-3">
+      <button type="button" onClick={() => setFixturesClub(null)} className="inline-flex min-h-11 items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+        <ChevronLeft className="h-4 w-4" /> Back
+      </button>
+      <div><h2 className="text-lg font-bold">{clubName} fixtures</h2>
+        {fixtures && <p className="text-xs text-muted-foreground">{fixtures.leagueName} · {worldSeasonLabel(career)}</p>}
+      </div>
+      {fixtures ? <ul className="max-h-[48vh] overflow-y-auto overscroll-contain space-y-2 pr-1">
+        {fixtures.rows.map(row => <li key={`${row.round}-${row.home}-${row.away}`} data-club-fixture={row.round} className="rounded-xl border border-border p-3">
+          <p className="text-[10px] text-muted-foreground">Matchday {row.round + 1}</p>
+          <p className="break-words text-sm font-semibold">{row.home} vs {row.away}</p>
+          <p className="text-sm">{row.status === 'recorded' ? `${row.homeGoals} - ${row.awayGoals}` : row.status === 'upcoming' ? 'Upcoming' : 'Result not recorded'}</p>
+        </li>)}
+      </ul> : <p className="text-sm text-muted-foreground">League fixtures are not available for this club in this save.</p>}
+    </section>;
+  }
 
   return (
     <div>
@@ -142,6 +170,7 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
         <div className="text-[9px] text-muted-foreground mt-2">
           Board wants: <span className="text-foreground font-semibold">{boardWant}</span> · transfer budget around {money(def.budget)}
         </div>
+        <button type="button" onClick={() => setFixturesClub(clubName)} className="mt-2 min-h-11 rounded-lg border border-border px-3 text-sm font-semibold">Fixtures</button>
       </div>
 
       {/* Full squad */}
@@ -180,7 +209,7 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
             {saleRatioMen && ' You started with a better squad than your money buys, so the made up players marked "sells" go for less than they are worth: what a sale pays, the same figure the transfer screen quotes.'}
           </p>
         )}
-        {!isMyCustom && onYears > 0 && roster.length > 0 && (
+        {!fromMySquad && onYears > 0 && roster.length > 0 && (
           <p className="text-[9px] text-yellow-500/80 pt-2">
             {worldSeasonLabel(career)} squad. Real players from August 2026 aged forward, with anyone who retired replaced by
             players this game made up, marked above.

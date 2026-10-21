@@ -120,24 +120,48 @@
         window.addEventListener('load', sweep);
       })();
     </script>
-    <script>
-      // Google Analytics loads only after Accept. AdSense is intentionally not
-      // global: direct visits to account, reset, fallback, and other screens
-      // without a deliberate slot do not load it. Auto Ads and Auto optimize
-      // stay off in the account. The static verification meta stays global.
+    <script data-dukb-consent-bootstrap="">
+      // Keep this gate aligned with consentPreferences and consentedScripts.
       (function () {
+        var ANALYTICS_READY = false;
+        if (!ANALYTICS_READY) return;
         try {
-          if (localStorage.getItem('cookie-consent') === 'accepted') {
-            window.dataLayer = window.dataLayer || [];
-            window.gtag = function () { window.dataLayer.push(arguments); };
-            window.gtag('js', new Date());
-            window.gtag('config', 'G-KZQK2G68YC');
-            var g = document.createElement('script');
-            g.async = true;
-            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
-            document.head.appendChild(g);
+          var value = JSON.parse(localStorage.getItem('cookie-consent-v2') || 'null');
+          var now = Date.now();
+          if (!value || value.version !== 2 || typeof value.advertising !== 'boolean'
+            || typeof value.analytics !== 'boolean' || value.analytics !== true
+            || typeof value.updatedAt !== 'number' || !Number.isFinite(value.updatedAt)
+            || value.updatedAt < 0 || value.updatedAt > now
+            || now - value.updatedAt >= 180 * 24 * 60 * 60 * 1000) return;
+          if (/^\/(?:reset-password|auth|account|profile|admin)(?:\/|$)/.test(location.pathname)) return;
+          function cleanUrl(input) {
+            try {
+              var url = new URL(input, location.origin);
+              return url.protocol === 'https:' || url.protocol === 'http:' ? url.origin + url.pathname : '';
+            } catch (e) { return ''; }
           }
-        } catch (e) { /* storage blocked: analytics stays off */ }
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function () { window.dataLayer.push(arguments); };
+          window.gtag('consent', 'default', {
+            ad_storage: 'denied', analytics_storage: 'denied',
+            ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.__DUKB_CONSENT_DEFAULTED__ = true;
+          window.gtag('consent', 'update', {
+            ad_storage: value.advertising && navigator.globalPrivacyControl !== true ? 'granted' : 'denied',
+            analytics_storage: 'granted', ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.gtag('js', new Date());
+          window.gtag('config', 'G-KZQK2G68YC', {
+            send_page_view: false, page_location: cleanUrl(location.href),
+            page_referrer: document.referrer ? cleanUrl(document.referrer) : '',
+            allow_google_signals: false, allow_ad_personalization_signals: false
+          });
+          var g = document.createElement('script');
+          g.async = true;
+          g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+          document.head.appendChild(g);
+        } catch (e) { /* Blocked storage keeps optional analytics off. */ }
       })();
     </script>
     
@@ -214,7 +238,7 @@
 <h2>Email us</h2>
 <p>The inbox for everything is douknowball1@gmail.com. Bug reports, wrong stats, game ideas, feedback, business inquiries, all of it. It is a small operation, so a real person reads every message.</p>
 <h2>Spotted a bug or a wrong answer?</h2>
-<p>The fastest route is the Report a bug button in the footer of any page. It sends your report straight to us with the exact page attached, so we can find the problem without any back and forth. For a wrong or missing player in a specific puzzle, many games also have a Report option right next to the answer.</p>
+<p>The fastest route is the Report a problem button in the footer of any page. It sends your report straight to us with the exact page attached, so we can find the problem without any back and forth. For a wrong or missing player in a specific puzzle, many games also have a Report option right next to the answer.</p>
 <h2>Game ideas and feedback</h2>
 <p>Send them in. Some of the most played games on the site exist because a player asked for them. If a game feels too easy, too hard, or too shallow, we want to hear that too. You can see how fast feedback turns into updates on the <a href="/whats-new">What's New</a> page.</p>
 <h2>Privacy and data requests</h2>
@@ -237,7 +261,7 @@
 <a href="/records">Record Books</a>
 <a href="/leaderboard">Leaderboard</a>
 <a href="/accessibility">Accessibility</a>
-<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+<p>Essential storage keeps games working. Advertising is optional. Analytics is paused. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
 </div>
 </div>
 </div>

@@ -1,0 +1,132 @@
+name: Measured Manager decision method
+
+on:
+  push:
+    branches: [codex/manager-decision-method]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      METHOD_BASE: 6f6b81b0afdb51e5d6f67f845f2312b9e536e469
+      METHOD_OUT: ${{ github.workspace }}/manager-decision-method-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind application historical evidence and single pin retake
+        run: |
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          mkdir -p "$METHOD_OUT"
+          git rev-parse HEAD > "$METHOD_OUT/head.txt"
+          git archive --format=zip HEAD > "$METHOD_OUT/source.zip"
+          git diff --exit-code "$METHOD_BASE" -- src public package.json package-lock.json bun.lock
+          git diff --exit-code "$METHOD_BASE" -- scripts ':!scripts/simClubManagerDecisions.mjs' ':!scripts/qa/managerDecisionRegression1081.mjs' ':!scripts/fixtures/managerAppealIsolation1081/manifest.json'
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          import { createHash } from 'node:crypto';
+          const hash = b => createHash('sha256').update(b).digest('hex');
+          const file = 'scripts/fixtures/managerAppealIsolation1081/manifest.json';
+          const before = execFileSync('git', ['show', process.env.METHOD_BASE + ':' + file], { encoding: 'utf8' });
+          const oldPin = '5b3ee496e6e6a0faf3e1a72ad84b3bdc87c477c7874ee2ea4b2eee32236229d8';
+          const newPin = '3383d016a113028328151586b75eab51e6fe59cd8bb2c466137ffcd269a787ca';
+          assert.equal(before.split(oldPin).length - 1, 1);
+          assert.equal(fs.readFileSync(file, 'utf8'), before.replace(oldPin, newPin));
+          assert.equal(hash(fs.readFileSync('scripts/simClubManagerDecisions.mjs')), newPin);
+          assert.equal(hash(fs.readFileSync('scripts/qa/managerDecisionRegression1081.mjs')), '1a2bcc1344edf7d5d0575239b587937ec86374d8d4ee1cba56b4e6b779acd72b');
+          const manifest = JSON.parse(before);
+          assert.equal(hash(fs.readFileSync(manifest.frozenSource)), manifest.sha256);
+          fs.writeFileSync(process.env.METHOD_OUT + '/manifest.before.json', before);
+          fs.writeFileSync(process.env.METHOD_OUT + '/manifest.after.json', fs.readFileSync(file));
+          fs.writeFileSync(process.env.METHOD_OUT + '/binding.json', JSON.stringify({ source: process.env.METHOD_BASE,
+            originalHarnessPin: oldPin, adoptedHarnessPin: newPin, otherPinsHeld: true, frozenDeskHeld: true,
+            inheritedCorePin: manifest.unchangedSource['src/lib/clubManager.ts'], actualCoreSha256: hash(fs.readFileSync('src/lib/clubManager.ts')) }, null, 2));
+          NODE
+          find src scripts .github/workflows -type f -print0 | sort -z | xargs -0 sha256sum > "$METHOD_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$METHOD_OUT/package-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, row]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, row.version, p); return { path: p, version };
+          });
+          assert.equal(rows.length, 521); fs.writeFileSync(process.env.METHOD_OUT + '/installed.json', JSON.stringify(rows, null, 2));
+          NODE
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$METHOD_OUT/installed-files.sha256"
+      - name: Actual types syntax and source fences
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$METHOD_OUT/types.log"
+          node --check scripts/simClubManagerDecisions.mjs
+          node --check scripts/qa/managerDecisionRegression1081.mjs
+          node scripts/simHarnessAnchors.mjs 2>&1 | tee "$METHOD_OUT/anchors.log"
+          node scripts/simNoRivalNames.mjs 2>&1 | tee "$METHOD_OUT/rivals.log"
+          node scripts/simStorageWrites.mjs 2>&1 | tee "$METHOD_OUT/storage.log"
+      - name: All ten actual normal runs and healthy observation control
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerDecisionRegression1081.mjs 2>&1 | tee "$METHOD_OUT/regressions.log"
+      - name: Every original executable negative control
+        run: |
+          mkdir -p "$METHOD_OUT/controls"
+          for control in freeloss liar leaky dice yellowappeal quote firstred noexpiry carry gate depthcohort presscohort; do
+            if SIM_SEED=1 CM_DECISIONS_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs > "$METHOD_OUT/controls/$control.stdout.log" 2> "$METHOD_OUT/controls/$control.stderr.log"; then status=0; else status=$?; fi
+            printf '%s\t%s\n' "$control" "$status" >> "$METHOD_OUT/controls/status.tsv"
+          done
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import { createHash } from 'node:crypto';
+          const out = process.env.METHOD_OUT + '/controls';
+          const mapped = { freeloss: '3', liar: '2', leaky: '4', dice: '5', yellowappeal: '1', quote: '6', firstred: '3', noexpiry: '3b', carry: '7', gate: '4', depthcohort: '4', presscohort: '4' };
+          const hash = s => createHash('sha256').update(s).digest('hex');
+          const statuses = fs.readFileSync(out + '/status.tsv', 'utf8').trim().split('\n').map(line => line.split('\t'));
+          assert.equal(statuses.length, 12); assert.equal(new Set(statuses.map(([name]) => name)).size, 12);
+          const rows = statuses.map(([name, status]) => {
+            assert(Object.hasOwn(mapped, name)); assert.equal(Number(status), 1, name + ' is an actual semantic failure');
+            const stdout = fs.readFileSync(out + '/' + name + '.stdout.log', 'utf8'), stderr = fs.readFileSync(out + '/' + name + '.stderr.log', 'utf8');
+            assert(!/SyntaxError|ReferenceError|TypeError|ERR_MODULE_NOT_FOUND|SIM_OFFLINE_BLOCK/.test(stderr));
+            const prefix = 'simClubManagerDecisions (control ' + name + '): ';
+            const terminal = stdout.split('\n').filter(line => line.startsWith(prefix)); assert.equal(terminal.length, 1);
+            const match = terminal[0].slice(prefix.length).match(/^(\d+) findings$/); assert(match);
+            const total = Number(match[1]), failures = stdout.split('\n').filter(line => line.startsWith('FAIL '));
+            assert(total > 0); assert.equal(failures.length, Math.min(40, total));
+            const omitted = [...stdout.matchAll(/^\.\.\. and (\d+) more$/gm)]; assert.equal(omitted.length, total > 40 ? 1 : 0);
+            if (total > 40) assert.equal(Number(omitted[0][1]), total - 40);
+            assert(failures.some(line => line.startsWith('FAIL [' + mapped[name] + ']')), name + ' reaches its original intended assertion');
+            return { name, exit: Number(status), mappedSection: mapped[name], totalFindings: total, printedFindings: failures,
+              omittedFindings: Math.max(0, total - 40), stdoutSha256: hash(stdout), stderrSha256: hash(stderr) };
+          });
+          fs.writeFileSync(out + '/report.json', JSON.stringify({ complete: true, rows }, null, 2));
+          console.log('All twelve original copied controls reached their intended semantic assertion.');
+          NODE
+      - name: Retain regression observations and exact source holds
+        if: always()
+        run: |
+          if test -d manager-appeal-isolation-artifacts/decision-regressions; then cp -R manager-appeal-isolation-artifacts/decision-regressions "$METHOD_OUT/decision-regressions"; fi
+          sha256sum --check "$METHOD_OUT/source-hashes.txt" > "$METHOD_OUT/source-holds.log"
+          sha256sum --check "$METHOD_OUT/package-hashes.txt" > "$METHOD_OUT/package-holds.log"
+          sha256sum --check "$METHOD_OUT/installed-files.sha256" > "$METHOD_OUT/installed-holds.log"
+          git diff --exit-code -- src scripts package.json package-lock.json bun.lock .github/workflows public
+      - name: Retain concrete method evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-decision-method-${{ github.run_id }}
+          path: manager-decision-method-artifacts/
+          retention-days: 14
+          if-no-files-found: error

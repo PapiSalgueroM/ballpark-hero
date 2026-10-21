@@ -28,8 +28,23 @@
        for "commits to". Basketball red, football green.
      COLLEGE_BOARD_CONTROL=board    the shared board's close button gains a
        word. Both sports red.
-   The rewritten file is a copy under dist/.college-control, swapped in
+   The rewritten file is a copy under dist/.college-control-<pid>, swapped in
    through vitest's NO_DOUBLE_SWAP alias; the real file is never touched.
+
+   Round 1320 (the athletic director): the fixture sets aside his nodes
+   (data-college-seat) and his block (st.seat), and nothing else, and proves in
+   a test of its own per sport that the replay ran with him on and that an old
+   save was offered him and not given him. Four controls prove the set aside
+   hides nothing else:
+     seatleak      the glue (src/lib/collegeSeatBind.ts) adds 1 to st.nil when
+                   a dynasty starts: the save hash goes red, both sports.
+     seatdraw      the glue draws one Math.random when a dynasty starts: the
+                   draw count goes red, both sports.
+     seatunmarked  the season tile (AthleticDirectorCard.tsx) loses its
+                   data-college-seat: the markup goes red, both sports.
+     seatoff       CFB's descriptor binds no athletic director: football's
+                   replay stays GREEN and its seat test goes RED, basketball
+                   stays green in both.
 
    Run: node scripts/simCollegeDynastyBoard.mjs
 */
@@ -51,6 +66,28 @@ const CONTROLS = {
   board: {
     alias: '@/components/college-dynasty/CollegeDynastyBoard', file: 'src/components/college-dynasty/CollegeDynastyBoard.tsx',
     from: 'Close the class, run it back', to: 'Close the class, run it back now', red: ['cfb', 'cbb'], green: [],
+  },
+  /* Round 1320: the athletic director is set aside by the fixture, and these prove the set aside is no blindfold. */
+  seatleak: {
+    alias: '@/lib/collegeSeatBind', file: 'src/lib/collegeSeatBind.ts',
+    from: '  st.seat = newCollegeSeat(b.view(st));', to: '  st.seat = newCollegeSeat(b.view(st));\n  (st as unknown as { nil: number }).nil += 1;',
+    red: ['cfb', 'cbb'], green: [],
+  },
+  seatdraw: {
+    alias: '@/lib/collegeSeatBind', file: 'src/lib/collegeSeatBind.ts',
+    from: '  st.seat = newCollegeSeat(b.view(st));', to: '  Math.random();\n  st.seat = newCollegeSeat(b.view(st));',
+    red: ['cfb', 'cbb'], green: [],
+  },
+  seatunmarked: {
+    alias: '@/components/college-dynasty/AthleticDirectorCard', file: 'src/components/college-dynasty/AthleticDirectorCard.tsx',
+    from: 'type="button" data-college-seat="tile" onClick={onOpen}', to: 'type="button" onClick={onOpen}',
+    red: ['cfb', 'cbb'], green: [],
+  },
+  /* No binding in football: its replay stays green (the set aside hides nothing a binding writes) and its
+     seat test goes red (the assertion, not the replay, is what holds the seat on). */
+  seatoff: {
+    alias: '@/components/cfb-dynasty/CfbDynastyBoard', file: 'src/components/cfb-dynasty/CfbDynastyBoard.tsx',
+    from: '    seat: cfbSeatBinding,', to: '', red: ['cfb:seat'], green: ['cfb', 'cbb', 'cbb:seat'],
   },
 };
 const CONTROL = process.env.COLLEGE_BOARD_CONTROL || '';
@@ -108,9 +145,11 @@ console.log('2) the replay: both boards match every recorded step');
     }
     const rewritten = src.replace(control.from, control.to);
     if (rewritten === src || !rewritten.includes(control.to)) { console.error('control cannot run: the rewrite changed nothing'); process.exit(1); }
-    dir = path.join(ROOT, 'dist', '.college-control');
+    /* Round 1320: a folder of this run's own. Two controls of one file run side by side (three at a time on
+       a runner) wrote one shared copy, and cfbword replayed seatoff's copy and read as dead. */
+    dir = path.join(ROOT, 'dist', `.college-control-${process.pid}`);
     fs.mkdirSync(dir, { recursive: true });
-    const copy = path.join(dir, path.basename(control.file).replace('.tsx', '.control.tsx'));
+    const copy = path.join(dir, path.basename(control.file).replace(/\.(tsx?)$/, '.control.$1'));
     fs.writeFileSync(copy, rewritten);
     env.NO_DOUBLE_SWAP = JSON.stringify({ [control.alias]: copy.replaceAll('\\', '/') });
     console.log(`   NEGATIVE CONTROL ON: ${control.file} says "${control.to}" for "${control.from}"`);
@@ -134,10 +173,15 @@ console.log('2) the replay: both boards match every recorded step');
     process.exit(1);
   }
   const result = {};
+  const verdictOf = name => {
+    const line = out.split('\n').find(l => l.includes(name));
+    return !line ? 'absent' : /✓/.test(line) ? 'green' : /×/.test(line) ? 'red' : 'unknown';
+  };
   for (const sport of ['cfb', 'cbb']) {
-    const line = out.split('\n').find(l => l.includes(`${sport}: every step matches the fixture`));
-    result[sport] = !line ? 'absent' : /✓/.test(line) ? 'green' : /×/.test(line) ? 'red' : 'unknown';
-    console.log(`   ${sport}: ${result[sport]}`);
+    result[sport] = verdictOf(`${sport}: every step matches the fixture`);
+    /* Round 1320: the seat test, in its own test so a control can read replay green and assertion red. */
+    result[`${sport}:seat`] = verdictOf(`${sport}: the replay ran with the athletic director on`);
+    console.log(`   ${sport}: ${result[sport]}, the athletic director set aside honestly: ${result[`${sport}:seat`]}`);
   }
   const mismatches = new Set([...out.matchAll(/(step \d+ \([^)]*\)) differs in ([a-z, ]+)/g)].map(m => `${m[1]}, in ${m[2]}`));
   for (const m of mismatches) console.log(`   first mismatch: ${m}`);
@@ -148,7 +192,8 @@ console.log('2) the replay: both boards match every recorded step');
     if (fired && /AssertionError|expected|no button/.test(out)) fail(`the "${CONTROL}" copy breaks the replay of ${control.red.join(' and ')}`);
   } else {
     for (const sport of ['cfb', 'cbb']) if (result[sport] !== 'green') fail(`${sport} no longer replays its recorded behaviour`);
-    if (r.status !== 0 || !/2 passed/.test(summary[1])) fail(`vitest exit ${r.status}: ${summary[1].trim()}`);
+    for (const sport of ['cfb', 'cbb']) if (result[`${sport}:seat`] !== 'green') fail(`${sport}: the athletic director's set aside is not proven honest`);
+    if (r.status !== 0 || !/4 passed/.test(summary[1])) fail(`vitest exit ${r.status}: ${summary[1].trim()}`);
   }
 }
 

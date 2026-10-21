@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Bug, Loader2, CheckCircle } from 'lucide-react';
 import { REPORT_KINDS_SITEWIDE } from '@/components/game/reportKinds';
 import {
@@ -10,6 +10,8 @@ import {
 } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
+import { buildReportContext } from '@/lib/reportContext';
+import { useReportDraftLifecycle } from '@/hooks/useReportDraftLifecycle';
 
 /**
  * Sitewide "Report a bug" (owner Aug 12 2026: "add a button in which people
@@ -30,19 +32,20 @@ import { cn } from '@/lib/utils';
 const REPORT_KINDS = REPORT_KINDS_SITEWIDE;
 
 export function ReportSiteIssue() {
-  const [open, setOpen] = useState(false);
+  // Release BA: a plain button opens the form, so Radix has no trigger to give
+  // focus back to on close. Hand it back here.
+  const trigger = useRef<HTMLButtonElement>(null);
   const [kind, setKind] = useState('');
   const [details, setDetails] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const { open, status, changeOpen, markDraftChanged, beginSubmission, completeSubmission, failSubmission } = useReportDraftLifecycle();
 
   const handleSubmit = async () => {
-    if (!details.trim() && !kind) return;
-    setStatus('loading');
-    const description = [kind, details.trim()].filter(Boolean).join(': ');
-    const context = {
-      path: typeof window !== 'undefined' ? window.location.pathname : '',
-      source: 'footer-report-button',
-    };
+    const text = details.trim();
+    if (!text || status === 'loading') return;
+    const submission = beginSubmission();
+    if (!submission) return;
+    const description = [kind, text].filter(Boolean).join(': ');
+    const context = buildReportContext({}, 'footer-report-button');
     try {
       let delivered = false;
       try {
@@ -61,39 +64,40 @@ export function ReportSiteIssue() {
         } as any);
         if (error) throw error;
       }
-      setStatus('success');
-      setTimeout(() => {
-        setOpen(false);
-        setStatus('idle');
+      completeSubmission(submission, () => {
         setKind('');
         setDetails('');
-      }, 1500);
+      });
     } catch {
-      setStatus('error');
+      failSubmission(submission);
     }
   };
 
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
+        ref={trigger}
+        onClick={() => changeOpen(true)}
         /* Round 209: padded so the footer report link is a real target. */
         className="inline-flex items-center gap-1 px-2 py-2 underline transition-colors hover:text-foreground"
-        title="Report a bug or wrong info"
+        title="Report a problem"
       >
         <Bug className="w-3 h-3" />
-        Report a bug
+        Report a problem
       </button>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-sm">
+      <Dialog open={open} onOpenChange={changeOpen}>
+        <DialogContent
+          className="max-w-sm"
+          onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}
+        >
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Bug className="w-4 h-4 text-destructive" />
-              Report a bug
+              Report a problem
             </DialogTitle>
             <DialogDescription>
-              Spotted a bug, wrong info, or got an idea? It goes straight to the owner.
+              Tell us what you did and what happened. Limited game and browser details are attached to help us reproduce it.
             </DialogDescription>
           </DialogHeader>
 
@@ -108,7 +112,10 @@ export function ReportSiteIssue() {
                 {REPORT_KINDS.map((k) => (
                   <button
                     key={k}
-                    onClick={() => setKind(k)}
+                    onClick={() => {
+                      if (kind !== k) markDraftChanged();
+                      setKind(k);
+                    }}
                     className={cn(
                       'px-3 py-1.5 rounded-full text-xs font-medium transition-all border',
                       kind === k
@@ -123,9 +130,13 @@ export function ReportSiteIssue() {
 
               <textarea
                 value={details}
-                onChange={(e) => setDetails(e.target.value)}
-                placeholder="What happened? Which game, which player, what went wrong..."
+                onChange={(e) => {
+                  if (details !== e.target.value) markDraftChanged();
+                  setDetails(e.target.value);
+                }}
+                placeholder="What did you do, what happened, and what did you expect?"
                 aria-label="Describe the problem"
+                required
                 rows={3}
                 maxLength={500}
                 className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
@@ -137,10 +148,10 @@ export function ReportSiteIssue() {
 
               <button
                 onClick={handleSubmit}
-                disabled={(!kind && !details.trim()) || status === 'loading'}
+                disabled={!details.trim() || status === 'loading'}
                 className={cn(
                   'w-full py-2.5 rounded-xl font-semibold text-sm transition-all inline-flex items-center justify-center gap-2',
-                  kind || details.trim()
+                  details.trim()
                     ? 'bg-primary text-primary-foreground hover:opacity-90'
                     : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
                 )}

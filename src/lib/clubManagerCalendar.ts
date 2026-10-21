@@ -27,14 +27,24 @@
  */
 import {
   playNextEntry, fixtureFor, entryInvolvesMe, careerLeagueOf, leagueRulesOf, CUP_LABELS, UCL_LABELS,
-  cupProgressRank, uclProgressRank, objectiveStatuses,
+  cupProgressRank, uclProgressRank, objectiveStatuses, openObjectives,
   /* Round 783: the mid season takeover an accepted application walks into. */
-  startCareer, interimManagerName,
+  startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, livingWorldOf, customExitUclField, SAVE_CAPS,
+  /* Round 1335: the old season rules' switch, read by both handovers. */
+  legacySeason,
+  /* Round 1502: the watched Champions League across a move, and where its nights sit. */
+  carryWorldUcl, carryWorldComp, worldCompNights,
+  /* Round 1510: the domestic super cup across a move. */
+  carryOneOffs, oneOffEntryLabel, oneOffPotential,
 } from '@/lib/clubManager';
+import type { WorldCompKey } from '@/lib/worldCompetition';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
+import { BOARD_FRESH, LEGACY_BOARD_START, LEGACY_NEW_JOB_BOARD } from '@/lib/clubManagerBoardVerdict';
+import { applyNewJobDials } from '@/lib/clubManagerDifficulty';
 import type { CmVarAsk } from '@/lib/clubManagerVar';
 import { CM_BASE_YEAR, DEFAULT_ERA_ID, eraById, isHistoricEra } from '@/lib/clubManagerEras';
 import { closeOnJoiningNow, jobHuntOf, leavingLine } from '@/lib/clubManagerJobHunt';
+import { plainCopy, snapshotWorldRosterClub, worldRosterView } from '@/lib/clubManagerWorldRoster';
 
 /* ================================================================== */
 /* Dates                                                              */
@@ -155,6 +165,32 @@ export function entryDatesOf(state: Pick<CareerState, 'startYear' | 'season' | '
   return dateOfEntries(worldYearOf(state), state.calendar, seasonPlanOf(state));
 }
 
+/**
+ * Round 1502: the date of every night of the watched Champions League this
+ * season, on the save's own calendar (the game's dates, never the real ones).
+ * A night that is a calendar week of its own (a European midweek, an era's
+ * knockout leg) takes that week's date; a league phase night that follows a
+ * league round is the Wednesday after it (the round's date plus four, the
+ * midweek rule above), and one past the last league round goes a week at a
+ * time after the last round's Wednesday. Null when the save watches nothing.
+ * Round 1509: keyed. The Europa League's nights are the Thursday of the same
+ * weeks, so each is the day after the date this rule gives.
+ */
+export function worldCompNightDates(state: CareerState, comp: WorldCompKey): CalDate[] | null {
+  const places = worldCompNights(state, comp);
+  if (!places) return null;
+  const dates = entryDatesOf(state);
+  const league = state.calendar.flatMap((e, i) => (e.type === 'league' ? [dates[i]] : []));
+  if (!league.length) return null;
+  const thursday = comp === 'uel' ? 1 : 0;
+  return places.map(p => {
+    if (p.entry) return thursday ? addDays(dates[p.at], thursday) : dates[p.at];
+    const last = league.length - 1;
+    return p.round <= last ? addDays(league[p.round], 4 + thursday) : addDays(league[last], 4 + thursday + 7 * (p.round - last));
+  });
+}
+export function worldUclNightDates(state: CareerState): CalDate[] | null { return worldCompNightDates(state, 'ucl'); }
+
 /** The opening Saturday of the save's current season. */
 export function kickoffOf(state: Pick<CareerState, 'startYear' | 'season' | 'eraId' | 'clubName' | 'customClub'>): CalDate {
   return seasonPlanOf(state)?.kickoff ?? seasonKickoff(worldYearOf(state));
@@ -260,12 +296,14 @@ export interface WindowSpan {
  */
 export function myMatchWeeks(state: CareerState): number[] {
   const weeks = new Set<number>();
+  /* Round 1510: a night (a super cup) is a match but never a window week (the engine's countdown skips it), so it
+     is left out on both sides. */
   for (const r of state.resultLog ?? []) {
-    if (r.week < state.week) weeks.add(r.week);
+    if (r.week < state.week && r.competition !== 'oneOff') weeks.add(r.week);
   }
   for (let w = state.week; w < state.calendar.length; w++) {
     const entry = state.calendar[w];
-    if (entry.type === 'window') continue;
+    if (entry.type === 'window' || entry.night) continue;
     if (fixtureFor(state, entry)) weeks.add(w);
   }
   return [...weeks].sort((a, b) => a - b);
@@ -383,6 +421,8 @@ export function dayEmoji(day: CalendarDay): string {
   if (day.kind === 'match') {
     if (day.competition === 'cup') return '\u{1F3C5}';
     if (day.competition === 'uclGroup' || day.competition === 'uclKo') return '⭐';
+    /* Round 1510: a super cup night. */
+    if (day.competition === 'oneOff') return '🛡️';
     return '⚽';
   }
   return '';
@@ -418,6 +458,8 @@ const ROUND_RANK: Record<'R16' | 'QF' | 'SF' | 'F', number> = { R16: 0, QF: 1, S
  * either inventing a fixture or leaving a blank where a final might be.
  */
 export function potentialEntry(state: CareerState, entry: CalendarEntry): boolean {
+  /* Round 1510: a four club super cup's final while my semi final is to come. */
+  if (entry.type === 'oneOff') return oneOffPotential(state, entry);
   if (entry.type === 'cup' && entry.cupRound) {
     const cur = state.cupRound;
     return cur !== 'out' && cur !== 'won' && ROUND_RANK[entry.cupRound] > ROUND_RANK[cur];
@@ -435,6 +477,8 @@ export function potentialEntry(state: CareerState, entry: CalendarEntry): boolea
 
 /** The competition label for an entry that involves me but has no fixture yet (a cup or European draw to come). */
 function pendingLabel(state: CareerState, entry: CalendarEntry): string {
+  /* Round 1510: a super cup night names its cup. */
+  if (entry.type === 'oneOff') return oneOffEntryLabel(state, entry) ?? 'Super cup';
   const league = careerLeagueOf(state);
   if (entry.type === 'cup' && entry.cupRound) return `${league.cupName} · ${CUP_LABELS[entry.cupRound]}`;
   if (entry.type === 'uclKo' && entry.uclRound) return `Champions League · ${UCL_LABELS[entry.uclRound]}`;
@@ -808,7 +852,7 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
     wilderness: null,
     /* A new appointment gets a fresh mandate, not the opinion the board had
        formed of somebody else. Slightly warm, because they just hired you. */
-    boardConfidence: 62,
+    boardConfidence: legacySeason(career) ? LEGACY_NEW_JOB_BOARD : BOARD_FRESH,
     /* Your record starts now. The club's season is inherited; the manager's is
        not, so the progression is the day one one rather than a run of matches
        you did not pick a team for. */
@@ -816,10 +860,13 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
     managerXp: career.managerXp,
     /* The inbox is the old manager's post. */
     inbox: career.inbox,
+    decisions: undefined,
     /* Round 978: and so was the assistant's note on the last international
        break, so the break and any rest stay behind with it. */
     ...(s.intl ? { intl: { season: s.season, fired: [...s.intl.fired] } } : {}),
     midSeasonStart: entry,
+    /* Round 1335: the card without what the last manager had already failed. */
+    boardObjectives: legacySeason(career) ? s.boardObjectives : openObjectives(s),
     /* Round 633: what he had already banked, frozen here so the season score
        can subtract it. It is stamped rather than estimated later because an
        estimate computed from the player's own running totals rises as he
@@ -840,7 +887,13 @@ function playRunIn(career: CareerState, target: number): CareerState {
      they run without ours: no background point working the gate or the
      academy, no homeland in the market. Both callers put our manager and his
      own XP block back at the handover. */
-  let s: CareerState = career.manager ? { ...career, manager: undefined, managerXp: undefined } : career;
+  /* Round 1335: and the run-in is the previous manager's season, so his board opens where every board did
+     before the round (LEGACY_BOARD_START, 60), not at the new appointment's BOARD_FRESH: the number keeps
+     every inherited season (its sackings, its press questions, its draws) what it was, and the handover
+     below gives the new man his own opening. scripts/simCmBoardVerdict.mjs section takeover holds it. */
+  let s: CareerState = career.manager
+    ? { ...career, manager: undefined, managerXp: undefined, boardConfidence: LEGACY_BOARD_START }
+    : { ...career, boardConfidence: LEGACY_BOARD_START };
   let guard = 0;
   while (s.week < target && guard < 400) {
     guard += 1;
@@ -851,6 +904,25 @@ function playRunIn(career: CareerState, target: number): CareerState {
     if (s.week <= before) break;   /* no progress: stop rather than spin */
   }
   return s;
+}
+
+/* Round 1344 review (both reviews' second major; the other lane's PR295 found it too): what a seeded career carries
+   across a mid season job move so a man another club bought this season is still not for sale after it (the brief's
+   decision 3). The gone names alone hid him from buildMarket, but the screen lists him at his buyer and every door
+   reads this season's deal line to that club (joinedHisClubThisSeason), and that line lived only in the departed
+   career's log, so the doors opened. Carried: the departed career's gone names of this season's deals between two
+   other clubs and those deal lines, first, then the run in's own lines (a seeded run in already plays this season's
+   number: startCareer takes it from the departed career). The log keeps its cap. scripts/simCmWorldMoves.mjs
+   section 3 holds it (control nocarry). */
+function seededJoinCarry(career: CareerState, s: CareerState, moved: ReadonlySet<string>): Pick<CareerState, 'goneNames' | 'transferLog'> {
+  const gone = career.goneNames.filter(name => moved.has(name));
+  const carried = new Set(gone);
+  const lines = (career.transferLog ?? []).filter(t => t.season === career.season && !t.loan && carried.has(t.name)
+    && t.from !== career.clubName && t.to !== career.clubName);
+  return {
+    goneNames: [...new Set([...s.goneNames, ...gone])],
+    transferLog: [...lines, ...(s.transferLog ?? [])].slice(-SAVE_CAPS.transferLog),
+  };
 }
 
 /* ---------- Round 783: walking into the job you applied for, today ---------- */
@@ -884,6 +956,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
   if (!open || open.status !== 'accepted' || career.sacked) return null;
   const club = open.club;
   const from = career.clubName;
+  const departed = refreshWorldRoster(snapshotWorldRosterClub(career, from));
   const eraId = career.eraId ?? DEFAULT_ERA_ID;
   const historic = isHistoricEra(eraId);
   const eraBase = historic ? eraById(eraId).startYear : CM_BASE_YEAR;
@@ -892,8 +965,10 @@ export function joinClubNow(career: CareerState): CareerState | null {
   try {
     fresh = startCareer(club, eraId, undefined, career.manager, {
       yearsOn,
-      uclField: career.uclField ?? null,
+      uclField: career.uclField ? customExitUclField(career, career.uclField) : null,
       keepLeagueOverrides: true,
+      ...(worldRosterView(departed) || worldSeedOf(departed) !== undefined
+        ? { rosterCareer: departed, worldSeed: worldSeedOf(departed) } : {}),
     });
   } catch {
     return null;
@@ -933,6 +1008,9 @@ export function joinClubNow(career: CareerState): CareerState | null {
   if (s.leagueClubs.includes(from)) managers[from] = { name: interim, since: career.season };
   const managed = new Set(career.careerStats.clubsManaged ?? [from]);
   managed.add(club);
+  /* Round 1344: this season's deals between two other clubs in the departed career (the gone names below). */
+  const movedElsewhere = new Set((career.transferLog ?? []).filter(t => t.season === career.season && !t.loan
+    && t.from !== from && t.to !== from).map(t => t.name));
   const joined: CareerState = {
     ...s,
     sacked: false,
@@ -944,7 +1022,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
     pendingSummary: null,
     promisedStarts: [],
     /* A new appointment's mandate, the same opening the rollover gives a move. */
-    boardConfidence: 62,
+    boardConfidence: legacySeason(career) ? LEGACY_NEW_JOB_BOARD : BOARD_FRESH,
     season: career.season,
     /* Round 978: the new club's international block, played through the
        run-in in the fresh save's season one, carried onto this season's
@@ -963,15 +1041,30 @@ export function joinClubNow(career: CareerState): CareerState | null {
     startOptions: career.startOptions,
     h2h: career.h2h,
     retiredNames: career.retiredNames,
+    /* Round 1344, the lead's ruling (brief decision 3): the run in started from the departed career's ledger and
+       wrote every deal it played (the new club's opening window and any January between other clubs, a sale through
+       a release clause), so the joined career takes the run in's ledger whole. A career with no seed writes none,
+       and keeps the departed one exactly as before. scripts/simCmWorldMoves.mjs section 3 holds it. */
+    ...(s.worldRoster !== undefined ? { worldRoster: plainCopy(s.worldRoster) }
+      : departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),
+    ...(departed.worldSeed === undefined ? {} : { worldSeed: departed.worldSeed }),
+    /* And in a seeded career a man another club bought earlier this season is not for sale after the move: the
+       run in's gone names plus the departed career's names of this season's deals between two other clubs (the men
+       I bought, sold or let go keep today's rule after a move), with the deal lines the refusal reads. Round 1508:
+       and in a career with no seed adopted at an earlier summer (adoptLivingWorld), which plays the same world. */
+    ...(!livingWorldOf(departed) ? {} : seededJoinCarry(career, s, movedElsewhere)),
     retiredLastSummer: career.retiredLastSummer,
     leagueOverrides: career.leagueOverrides,
     managers,
     inbox: [reaction],
+    decisions: undefined,
     aiHeadlines: [
       `🧳 You have left ${from} for ${club} with the season still running. ${interim} takes charge at ${from} until the summer.`,
       ...s.aiHeadlines,
     ].slice(0, 8),
     jobHunt: closeOnJoiningNow(hunt, from, interim, career.season, s.week),
+    /* Round 1335: the card without what the last manager had already failed. */
+    boardObjectives: legacySeason(career) ? s.boardObjectives : openObjectives(s),
     /* Round 633's rule: what the manager before you had banked, frozen here
        so the season score reads only the games you pick a team for. */
     handover: handoverFrom(s),
@@ -980,7 +1073,16 @@ export function joinClubNow(career: CareerState): CareerState | null {
   delete joined.customClub;
   delete joined.customValues;
   delete joined.founderWageRoom;
-  return joined;
+  /* Round 1502: the watched Champions League, decided on the joined season and year (carried with the nights
+     already shown, opened where its field is fixed data, or taken off). */
+  carryWorldUcl(career, joined);
+  /* Round 1509: and the Europa League, by the same rule, its own nights shown kept (seen). */
+  carryWorldComp(career, joined, 'uel');
+  /* Round 1510: and the super cup, its nights shown and my own results kept; a 'joined' stub when my new club is an
+     entrant of a night still ahead (the critic's corrections 6 to 8). */
+  carryOneOffs(career, joined);
+  /* Round 1501: the level's cheque and wage room on the new job (the identity on Normal). */
+  return applyNewJobDials(joined);
 }
 
 /**

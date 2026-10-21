@@ -8,7 +8,8 @@ import { useMemo, useState } from 'react';
 import { ChevronLeft, RotateCcw, ArrowLeftRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FlagImg } from '@/components/FlagImg';
-import { NATIONS, REAL_LEAGUES } from '@/lib/clubManager';
+/* toLeague is imported under another name: this screen keeps a state called toLeague. */
+import { NATIONS, REAL_LEAGUES, toLeague as withArticle } from '@/lib/clubManager';
 import {
   editedClubsOf, editedLeagueIdOf, realLeagueIdOf, swapClubs, worldEditMoves, worldLeagueName,
 } from '@/lib/clubManagerWorldEdit';
@@ -43,7 +44,7 @@ export function WorldEditorScreen({ edit, onChange, onBack, onDone }: Props) {
     const next = swapClubs(edit, moving, club);
     if (next === edit) return;
     const a = moving;
-    setLastSwap(`${a} now plays in the ${worldLeagueName(leagueId)}, and ${club} in the ${worldLeagueName(movingLeague ?? '')}.`);
+    setLastSwap(`${a} now plays in ${withArticle(worldLeagueName(leagueId))}, and ${club} in ${withArticle(worldLeagueName(movingLeague ?? ''))}.`);
     setMoving(null);
     onChange(next);
   };
@@ -147,7 +148,7 @@ export function WorldEditorScreen({ edit, onChange, onBack, onDone }: Props) {
                 <FlagImg name={nationOfLeague(home)} size={12} />
                 <span className="text-xs font-bold text-foreground truncate">{c}</span>
               </div>
-              {away && <div className="text-[9px] text-primary mt-0.5 truncate">moved from the {worldLeagueName(home ?? '')}</div>}
+              {away && <div className="text-[9px] text-primary mt-0.5 truncate">moved from {withArticle(worldLeagueName(home ?? ''))}</div>}
             </button>
           );
         })}

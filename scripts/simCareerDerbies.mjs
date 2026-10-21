@@ -357,7 +357,22 @@ const DASH = /[\u2013\u2014]/;
      derbies the swing is felt more, and both sat on their old bands (7 and
      0.15), a coin toss, so both were reset to about twice the largest seen,
      14 and 0.3. No control is caught by either limb alone.
-   - section 5: the 16 digest careers play 160 derby seasons (was 140). */
+   - section 5: the 16 digest careers play 160 derby seasons (was 140).
+   Re-measured 2026-10-14 on Release BF (Release BE with the Soccer Career
+   life chain, Rounds 1350 to 1363), runner checks rBFh-dz and rBFh-dz2:
+   the chain took 6b's gap -2 at offset 0 from 408 meetings (Release BE's
+   careers, the chain held out) to 390, under the 400 floor. The floor
+   stays and the sample grows: the default forced count goes from 120 to
+   240 careers a club, the smallest count measured to give every rung at
+   least 600 meetings (1.5 times the floor). Gap -2 at offset 0: 390 at
+   120, 550 at 200, 630 at 240, 650 at 250; with 240 it is 1070 at offset
+   2 and 1088 at offset 3, and every other rung is above 1800. Offset 1 is
+   not a sample question: the ladder plays 2020 plus the offset, and in
+   that year neither the forced nor the ladder seasons add a single gap -2
+   meeting, so the rung holds only the pool's 160 (170 on Release BE's
+   careers, so not the chain) at 120, 240, 250 and 300 alike; it is red
+   at offset 1 whatever this count is, and is left to the lead. The run
+   takes about 47 s on a runner where it took 38 s. */
 const BANDS = {
   rungMin: 400, rungStep: 0.03, drawLo: 0.24, drawHi: 0.30,
   heroAttMid: 0.01, heroMidDef: 0.013,
@@ -512,7 +527,7 @@ console.log(`pool: ${pool.length} careers, ${poolRows.length} playing seasons, $
 /* Forced seasons: a career walked to its first pro season, its calendar moved
    so the next season is the target year, then put at one club, era correct
    tier and league, for one season, over many seeds. */
-const FORCED = Number(process.env.SIM_DERBY_FORCED || 120);
+const FORCED = Number(process.env.SIM_DERBY_FORCED || 240); // 120 until Release BF, see the 2026-10-14 bands above
 function forcedSeasons(e, club, year, n = FORCED) {
   const out = [];
   for (let i = 1; i <= n; i++) {

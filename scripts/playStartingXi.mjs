@@ -147,7 +147,7 @@ await page.waitForTimeout(1500);
    click never lands at 390 wide (measured: a click timeout every time), so
    the walk burned 30 seconds an iteration and ran for over twenty minutes.
    playSoccerCareer skips it for the same reason. */
-const FURNITURE = /^(Back|Track stats|🚪 Retire|🔄 New Career|Full attributes|Retire from International|Open your phone|Report a bug|Retire|🏋️|📱|⏸|▶)/;
+const FURNITURE = /^(Back|Track stats|🚪 Retire|🔄 New Career|Full attributes|Retire from International|Open your phone|Report a problem|Retire|🏋️|📱|⏸|▶)/;
 let sawTournament = false;
 for (let i = 0; i < 60 && !sawTournament; i++) {
   if (await page.locator('button:has(> div:text-is("The Squad"))').count()) { sawTournament = true; break; }

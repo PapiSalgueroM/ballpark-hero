@@ -73,6 +73,14 @@ export function nhlPreDraftDescriptor(eraId?: string): PreDraftDescriptor {
     drills: era.id === 'now'
       ? ['Bike test', 'Standing long jump', 'Pro agility', 'Interview day']
       : ['Fitness testing', 'Interview day'],
+    /* Round 1319: the stations a player can run himself, off ice like the
+       combine. Today's two are the real tests' names, verified twice (audit
+       row 65: NHL.com 2022-06-14 and Topend Sports, read 2026-10-03). The
+       2006 test list did not confirm twice, so that era runs one station
+       under a plain name that claims no real test. */
+    stations: () => (era.id === 'now'
+      ? [{ name: 'Bike test', kind: 'burst' }, { name: 'Pro agility', kind: 'cones' }]
+      : [{ name: 'Burst test', kind: 'burst' }]),
     statLine: (perf, rng, pos) => nhlStatLine(perf, rng, pos),
     choices: [
       {

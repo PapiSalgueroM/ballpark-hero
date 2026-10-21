@@ -527,6 +527,10 @@ console.log('6) The game inside the game');
       for (const ss of played) {
         known.add(String(ss.goals)); known.add(String(ss.apps)); known.add(String(ss.assists));
         known.add(String(ss.year)); known.add(ss.club);
+        /* Round 1329: the quiz's own story questions read the row's clean sheets and rating, and the
+           season's Player of the Month count. */
+        known.add(String(ss.cleanSheets ?? 0)); known.add(Number(ss.rating).toFixed(1));
+        known.add(String((c.awards || []).filter(a => a.name === 'Player of the Month' && a.year === ss.year).length));
       }
       if (world) {
         known.add(world.ucl);

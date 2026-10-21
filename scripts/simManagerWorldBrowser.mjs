@@ -34,7 +34,7 @@ const faults = {
   selection: { from: 'if (id) setPick(id);', to: 'if (id) setPick(myLeague.id);', test: names.select },
   focus: { from: 'if (browsing) searchRef.current?.focus({ preventScroll: true });', to: 'if (browsing) void searchRef.current;', test: names.select },
   myfocus: { from: 'onClick={() => { browseRef.current?.focus({ preventScroll: true }); setPick(myLeague.id); }}', to: 'onClick={() => { setPick(myLeague.id); }}', test: names.select },
-  custom: { from: '? career.leagueClubs :', to: '? undefined :', test: names.custom },
+  custom: { from: '? career.leagueClubs :', to: '? career.leagueClubs.map(club => club === career.customClub?.name ? career.customClub!.replacedClub : club) :', test: names.custom },
   saved: { from: 'career.world?.[league.id]?.table.map(row => row.club)', to: 'undefined', test: names.saved },
   era: { from: 'worldLeagueDefs(career).filter', to: 'worldLeagueDefs({}).filter', test: names.era },
   order: { from: 'sortedWorldTable(career, active.id, world.table)', to: 'sortedWorldTable(career, active.id, world.table).reverse()', test: names.table },

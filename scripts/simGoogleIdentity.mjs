@@ -30,7 +30,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.GOOGLE_IDENTITY_CONTROL || '';
 const TEST = 'src/components/auth/AuthModal.google.test.tsx';
-const MODAL = 'src/components/auth/AuthModal.tsx';
+const MODAL = 'src/components/auth/AuthModalBody.tsx';
 const IDENTITY = 'src/lib/googleIdentity.ts';
 const PROVIDERS = 'src/lib/authProviders.ts';
 const PRIVACY = 'src/pages/PrivacyPolicy.tsx';

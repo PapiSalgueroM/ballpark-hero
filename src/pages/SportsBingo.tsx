@@ -491,11 +491,10 @@ export default function SportsBingo() {
         )}
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType={SLUG} />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType={SLUG} />}
           pageHasOwnH1
           title="Sports Bingo: The Pack Opening Bingo Game"
           description="A 5 by 5 bingo card of football conditions, ten packs of real players on a timer, and the marking is the skill: claim the squares your pulls satisfy before each pack closes. One shared daily card, an unlimited mode, a CPU opponent with three tempers, and a pass the device table for two to four people with custom cards."

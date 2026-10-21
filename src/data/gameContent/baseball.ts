@@ -866,6 +866,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
             heading: "Building your look and spending in seven aisles",
             items: [
               "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
+              "During a playing season, open Deal with it under the heat meter when you're holding dirty money. Choose Come clean, Give it away, Keep it quiet or Wash it after reading the cost and any catch risk.",
             ],
           },
         ],

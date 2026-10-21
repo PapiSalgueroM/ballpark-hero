@@ -9,7 +9,7 @@
 import { cleanup, render } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { MatchReportCard } from '@/components/club-manager/MatchReportCard';
-import { QUICK_LEGS_WINDOWS, playNextEntry, startCareer } from '@/lib/clubManager';
+import { QUICK_LEGS_WINDOWS, matchRuleOf, playNextEntry, startCareer } from '@/lib/clubManager';
 import type { CareerState, MatchWeekReport } from '@/lib/clubManager';
 
 vi.mock('@/components/game/VictoryMoment', () => ({ default: () => null }));
@@ -44,8 +44,9 @@ describe('Club Manager: a quick sim makes its subs (Round 1146)', () => {
       const hurt = new Set(done.report!.detail!.injuries.map(x => x.name));
       const legs = subs.filter(s => !hurt.has(s.off) && s.minute >= lo && s.minute <= hi);
       if (legs.length) { withLegs += 1; found ??= { report: done.report!, seed: k }; }
-      /* never more than two for legs: the third change is kept for an injury */
-      expect(subs.filter(s => !hurt.has(s.off)).length).toBeLessThanOrEqual(2);
+      /* never all of them for legs: one change is kept for an injury (Round 1331: of the match's own rule, so two
+         under three and four in this 2026-27 Premier League career, which plays five in three stoppages) */
+      expect(subs.filter(s => !hurt.has(s.off)).length).toBeLessThanOrEqual(matchRuleOf(pre).subs - 1);
     }
     /* A leggy eleven beside a fresh bench is exactly when he acts: measured, all 8 of these quick sims have a
        change for legs, so 6 leaves room for a fixture to drift and still fails a coach who has stopped. */

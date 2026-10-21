@@ -33,6 +33,28 @@
  * found nothing held: the owner card's pace read after the press during a
  * watch (pacespoils) and the seed handed over as an index (seedoff).
  *
+ * Round 1309 added the fourth, FrontOfficePostseason.test.tsx (the playoffs
+ * a round at a time), and its controls: the bracket dropped from the save
+ * (noplayoffs), carried into a new franchise (abandonbracket), the log's
+ * playoff games kept when a bracket is started again (rebuiltkeeps), and a
+ * hub save past the last week with a champion opened (champopen); then the
+ * bracket played without the desk's edges (bracketnoedges: red on a told
+ * score, as Round 1305's blind spot asks) and "Sim the rest" playing one
+ * round (restround); then the chip reading Week 18/17 in the playoffs
+ * (weekeighteen) and trades left open there with the desk off
+ * (playofftrades); then the mount: the bracket read after the press while
+ * he watches (roundspoils), a playoff press never held (holdround), the
+ * recap drawn under the title game's clock (recapnow), the league grid in
+ * the bracket (bracketgrid) and "Your game" opening his last game instead of
+ * that tie's (tiegame). Its fix pass added the three things the season close
+ * sets at the title game's press, each read after the press while he
+ * watches it: the owner's trust (trustspoils), the press room
+ * (pressspoils) and the finish (donenow); and "Your game" opening the
+ * first game between the two clubs whatever its round (tiewhere), which
+ * every test was green under until a tie between clubs that met in the
+ * regular season was played; and the feed counting the weeks of a man
+ * hurt on "Play Week 17", though nobody heals in the bracket (hurtweeks).
+ *
  * `blank` is this file's own control and is not part of `all`: it rewrites a
  * comment and nothing else, so no test may go red, and the run must say DID
  * NOT FIRE and exit 1. If `blank` ever exits 0 this file is lying.
@@ -53,6 +75,8 @@ const GD = 'src/components/front-office/FrontOfficeGameDay.test.tsx';
 const OP = 'src/components/front-office/FrontOfficeOnePress.test.tsx';
 /* Round 1307: the tile and Watch */
 const TL = 'src/components/front-office/FrontOfficeTile.test.tsx';
+/* Round 1309: the playoffs a round at a time */
+const PS = 'src/components/front-office/FrontOfficePostseason.test.tsx';
 
 /* The tests by the words of their titles. */
 const T = {
@@ -72,6 +96,31 @@ const T = {
   adopt: [TL, 'a save from before the log shows the next game'],
   pace: [TL, 'NO SPOILER ON THE OWNER CARD'],
   seed: [TL, 'HIS SEED IS COUNTED FROM 1'],
+  psKeep: [PS, 'every save after it holds the bracket'],
+  psRebuilt: [PS, 'is started again unplayed'],
+  psChamp: [PS, 'its season already has a champion'],
+  psOutside: [PS, 'a bracket on a save outside the playoffs'],
+  psAbandon: [PS, 'abandon in the playoffs and start again'],
+  /* the title seasons only: the desk's edges are his club's alone (nflDeskEdges, src/lib/nflGmDesk.ts), so a told
+     score moves only where he plays in the bracket, and only the title season is sure to hold games of his there
+     (measured on r1309-b2-ctl: the four desk on cases of the ordinary and the fired season stayed green under the
+     control, the two title cases went red) */
+  psDeskOnTitle: [PS, 'GM desk on: the bracket a round at a time is the one press title'],
+  psDeskOff: [PS, 'GM desk off: the bracket a round at a time is the one press'],
+  psRestAny: [PS, 'Sim the rest from any round'],
+  psChip: [PS, 'the chip, the week box line and its buttons'],
+  psChipPress: [PS, '"Play Week 17" turns the chip to Playoffs'],
+  psTradeOff: [PS, 'a trade is refused in the bracket (GM desk on: false)'],
+  psTradeOn: [PS, 'a trade is refused in the bracket (GM desk on: true)'],
+  psFaces: [PS, 'a round he plays opens his game on the box with the back chip'],
+  psBye: [PS, 'a round he does not play (his bye) shows the bracket'],
+  psWatchRound: [PS, 'WATCH YOUR GAME is the same press'],
+  psWatch17: [PS, '"Watch Week 17" is "Play Week 17" on the clock'],
+  psTitleWatch: [PS, 'the title game watched: the recap waits for full time'],
+  /* the fix pass */
+  psTitleRoom: [PS, 'the title game watched, won and lost'],
+  psTieRival: [PS, '"Your game" on a tie against a club he met in the regular season'],
+  psHurtFeed: [PS, 'a man of his hurt on "Play Week 17" is out for the playoffs in the feed'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -111,6 +160,28 @@ const CONTROLS = {
     [T.pace], [T.watch, T.tile, T.seed]],
   seedoff: ['the seed handed to the standing line is an index and not a seed (one too good, and a top seed reads 0th)',
     [['seedsNow.indexOf(myTeam) + 1 : null', 'seedsNow.indexOf(myTeam) : null']], [T.seed], [T.watch, T.pace, T.week]],
+  /* Round 1309, the playoffs a round at a time (FrontOfficePostseason.test.tsx) */
+  noplayoffs: ['the bracket is not saved', [['...(playoffsLive.current ? { playoffs: playoffsLive.current } : {}),', '']], [T.psKeep], [T.psOutside, T.week]],
+  abandonbracket: ['the bracket is cleared neither by Abandon nor by a new franchise (two keys, one lock)',
+    [["setPlayoffs(null); ask.current = 'week'; setHeld(null); /* Round 1309: nor are his old club's playoffs */", '/* a new franchise */'], ["setPlayoffs(null); ask.current = 'week'; setHeld(null); /* Round 1309: abandoned in the playoffs */", '/* abandoned */']], [T.psAbandon], [T.psKeep]],
+  rebuiltkeeps: ['a bracket started again keeps the log of the one that is gone', [['setGameLog(regular.length > 0 && gameLogLive.current ? { ...gameLogLive.current, games: regular } : null); /* the playoff games of a bracket started again */', '/* kept */']], [T.psRebuilt], [T.psKeep]],
+  champopen: ['a hub save past the last week with nothing to play opens', [["if (s.phase === 'hub' && s.league.week > REGULAR_WEEKS && !(bracketLoad && bracketLoad.kind === 'bracket')) { setSaveError(true); return; }", '']], [T.psChamp], [T.psKeep]],
+  bracketnoedges: ["the bracket is played without the desk's edges (the winners may stand; the told scores may not)", [['const play = nflPlayTie(lg.teams, Math.random, lg.season, gm ? nflDeskEdges(gm, lg, myTeam) : undefined, told);', 'const play = nflPlayTie(lg.teams, Math.random, lg.season, undefined, told);']], [T.psDeskOnTitle], [T.psDeskOff]],
+  restround: ['"Sim the rest" plays one round', [["playPlayoffs(asked === 'rest');", 'playPlayoffs(false);']], [T.psRestAny], [T.psKeep]],
+  weekeighteen: ['the chip reads Week 18/17 in the playoffs', [["{seen.season} · {seen.week > REGULAR_WEEKS ? 'Playoffs' : `Week ${seen.week}/${REGULAR_WEEKS}`}", '{seen.season} · Week {seen.week}/{REGULAR_WEEKS}']], [T.psChip, T.psChipPress], [T.psKeep]],
+  playofftrades: ['trades stay open in the playoffs with the desk off', [['const why = deadline ?? (playoffsLive.current && league && league.week > REGULAR_WEEKS ? PLAYOFF_TRADE_LINE : null);', 'const why = deadline;']], [T.psTradeOff], [T.psTradeOn]],
+  /* Round 1309 (c), the mount: the bracket on the box, his game on the tile, and Watch in the playoffs */
+  roundspoils: ['while he watches a playoff game the page reads the bracket AFTER the press', [['const seenPlayoffs = hold ? heldBracket : playoffs;', 'const seenPlayoffs = playoffs;']], [T.psWatchRound], [T.psKeep, T.psFaces]],
+  holdround: ['a playoff press is never held (the hold asks only for the next week)', [['(league.week === held.week + 1 || held.week > REGULAR_WEEKS)', 'league.week === held.week + 1']], [T.psWatchRound, T.psTitleWatch], [T.psWatch17]],
+  recapnow: ['the recap is drawn while he watches the title game', [["if (phase === 'recap' && !hold) {", "if (phase === 'recap') {"]], [T.psTitleWatch], [T.psWatchRound]],
+  bracketgrid: ['the league grid is drawn in the bracket', [['(!bracketRow) && (', '(']], [T.psWatch17], [T.psFaces]],
+  tiegame: ['"Your game" opens his last game and not the game of that tie', [['const gameLogNow = logOpen ?? gameLogLive.current;', 'const gameLogNow = gameLogLive.current;']], [T.psFaces], [T.psBye, T.psWatchRound]],
+  /* Round 1309, the fix pass: the three things the season close sets at the title game's press, each read after the press while he watches */
+  trustspoils: ["the owner card shows the trust the title game's press graded while he watches it", [['const seenTrust = roomHeld ? roomHeld.trust : trust;', 'const seenTrust = trust;']], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],
+  pressspoils: ["the press card shows the room the title game's press called while he watches it", [['const seenPresser = roomHeld ? roomHeld.presser : presser;', 'const seenPresser = presser;']], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],
+  tiewhere: ['"Your game" opens the first game between the two clubs, whatever its round (the review\'s mutant)', [['games.findIndex(g => g.where === tie.round && (g.home === p.home', 'games.findIndex(g => (g.home === p.home']], [T.psTieRival], [T.psFaces, T.psBye]],
+  hurtweeks: ['a man hurt on "Play Week 17" is out a count of weeks in the feed, though nobody heals in the bracket', [["const outForPlayoffs = lg.week >= REGULAR_WEEKS && asked === 'bracket';", 'const outForPlayoffs = false;']], [T.psHurtFeed], [T.psChipPress, T.psKeep]],
+  donenow: ["the finish is recorded at the title game's press while he watches it", [["useGameCompletion('front-office', roomHeld ? roomHeld.won : wonTitleNow,", "useGameCompletion('front-office', wonTitleNow,"]], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],
   blank: ["THIS FILE'S OWN CONTROL: a comment is reworded and nothing else, so nothing may fire", [['setGameLog(null); /* the summer */', 'setGameLog(null); /* the summer, as it was */']], [T.week], []],
 };
 
@@ -150,7 +221,7 @@ function run(name) {
   fs.writeFileSync(copy, src);
   let r, json = null;
   try {
-    r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', GD, OP, TL, '--reporter=json', `--outputFile=${report}`, '--testTimeout=600000', '--hookTimeout=120000'],
+    r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', GD, OP, TL, PS, '--reporter=json', `--outputFile=${report}`, '--testTimeout=600000', '--hookTimeout=120000'],
       { cwd: ROOT, encoding: 'utf8', env: { ...process.env, FO_BOARD_NFL: copy.replaceAll('\\', '/'), CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 });
     if (fs.existsSync(report)) json = JSON.parse(fs.readFileSync(report, 'utf8'));
   } finally {
@@ -164,7 +235,7 @@ function run(name) {
   console.log(`control ${name} (${why}): vitest exit ${r.status}; ${reds.length} red, ${rows.filter(x => x.status === 'passed').length} green of ${rows.length}`);
   for (const x of reds) console.log(`   red: ${path.basename(x.file)} > ${x.title.slice(0, 150)}`);
   /* a copy that did not load is not a firing */
-  const unloaded = [GD, OP, TL].filter(f => !rows.some(x => x.file.endsWith(f)));
+  const unloaded = [GD, OP, TL, PS].filter(f => !rows.some(x => x.file.endsWith(f)));
   if (unloaded.length || json.testResults.some(f => LOAD_ERROR.test(f.message || '')) || reds.some(x => LOAD_ERROR.test(x.why))) {
     return { name, fired: false, said: `the copy did not load or a test file did not run (${unloaded.join(', ') || 'a load error in the report'}), so a red here is not the check: ${tail}` };
   }

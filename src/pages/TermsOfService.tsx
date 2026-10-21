@@ -18,7 +18,7 @@ const TermsOfService = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Terms of Service</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: September 15, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: October 21, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -35,6 +35,7 @@ const TermsOfService = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">3. Sports Data &amp; Player Information</h2>
           <p>Real player names, team names, historical results, statistics, and trivia answers on the Site come from public records and sports sources. We work to verify this factual material before publishing it and correct errors when we confirm them.</p>
+          <p className="mt-2">AI tools assist with development, debugging and drafting some text. Some games also use AI for answer checks, player suggestions, lineup ratings or analysis, and fictional season stories. The operator remains responsible for the Site. AI outputs can be inaccurate; a generated answer, rating or explanation is not proof of a real sporting fact. See our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link> for information about game inputs sent to AI services.</p>
         </div>
 
         <div>
@@ -46,20 +47,20 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">5. Advertising</h2>
-          <p>Advertising can help cover hosting costs and keep the Site free. The Site is set up to request Google AdSense ads in non-personalized mode. Google's advertising script loads only if you choose Accept on our cookie banner; choose Essential only and no advertising code is loaded at all. See our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link> for the full advertising disclosure.</p>
+          <p>Advertising can help cover hosting costs and keep the Site free. The Site is set up to request Google AdSense ads in non-personalized mode. Google's advertising script loads only when you turn on Advertising in Cookie choices. Analytics is a separate purpose but is currently paused. Advertising stays off if your browser sends a Global Privacy Control signal. You can leave optional purposes off and still play. See our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link> for the full advertising disclosure and how to change your choices.</p>
         </div>
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">6. Intellectual Property &amp; Trademarks</h2>
-          <p>All original content, game designs, features, and functionality of DoUKnowBall are owned by DoUKnowBall and are protected by international copyright and intellectual property laws.</p>
-          <p className="mt-2">All team names, player names, league names, logos, and trademarks referenced on this Site are the property of their respective owners and are used solely for identification and informational purposes.</p>
+          <p>The operator claims rights in DoUKnowBall's original contributions only to the extent those rights exist under applicable law. Third-party content, software and other materials remain subject to their owners' rights and applicable licenses. AI assistance does not itself establish copyright ownership or permission to use someone else's material.</p>
+          <p className="mt-2">Third-party trademarks and other protected material remain subject to their owners' rights. Player names, team and league names, and factual records are referenced for identification and commentary. These references do not imply endorsement or transfer any rights to us or to you.</p>
           <p className="mt-2"><strong>DoUKnowBall is not affiliated with, endorsed by, or sponsored by the NFL, NFLPA, NBA, NBPA, UFC, NHL, NHLPA, MLB, MLBPA, FIFA, IOC, NCAA, FIA (Formula 1), PGA Tour, NASCAR, ATP, WTA, or any team, club, or sports governing body.</strong></p>
           <p className="mt-2">The Olympic name, Olympic rings, and related marks are trademarks of the International Olympic Committee (IOC). DoUKnowBall makes no claim to these marks and does not use any official Olympic branding.</p>
         </div>
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">7. User Conduct</h2>
-          <p>You agree not to:</p>
+          <p>Except where applicable law or an applicable license permits otherwise, you agree not to:</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
             <li>Use the Site for any unlawful purpose or in violation of any applicable laws</li>
             <li>Attempt to interfere with, compromise, or disrupt the Site's systems or infrastructure</li>
@@ -83,6 +84,7 @@ const TermsOfService = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">10. Limitation of Liability</h2>
           <p>To the fullest extent permitted by law, DoUKnowBall and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, arising from your use of or inability to use the Site.</p>
+          <p className="mt-2">Nothing in these Terms excludes or limits a right, remedy or liability that cannot lawfully be excluded or limited, including mandatory consumer and data protection rights.</p>
         </div>
 
         <div>
@@ -92,7 +94,7 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">12. Age Requirement</h2>
-          <p>The Site is intended for a general audience and can be used without an account or any personal information. Creating an optional account requires an email address; if you are under 13, please only create an account with a parent or guardian's involvement. See our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link> for more on children's privacy.</p>
+          <p>The Site is intended for a general audience. You must be at least 13 to create an account. If you are under 13, do not create an account or submit personal information through the Site. Minors should use the Site with a parent or guardian's guidance and only where permitted by applicable law. Games can be played without an account, but hosting and other services still receive the technical data described in our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>.</p>
         </div>
 
         <div>
@@ -103,6 +105,7 @@ const TermsOfService = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">14. Governing Law</h2>
           <p>These Terms shall be governed by and construed in accordance with the laws of the Commonwealth of Massachusetts and applicable United States federal law, without regard to conflict of law principles. Any disputes arising under these Terms shall be resolved exclusively in the state or federal courts located in Massachusetts, and you consent to the personal jurisdiction of those courts.</p>
+          <p className="mt-2">This choice of law and courts does not remove mandatory protections or a right to bring a claim in another court that applicable law gives you.</p>
         </div>
 
         <div>

@@ -174,8 +174,8 @@ if (CONTROL === 'flatboard') {
 }
 if (CONTROL === 'bareposs') {
   cardPath = rewrite(CARD, [
-    ['      <StatBar label="Possession" mine={stats.possession} theirs={100 - stats.possession} suffix="%" />\n',
-      '      <StatBar label="Possession" mine={stats.possession} theirs={100 - stats.possession} />\n'],
+    ['      <StatBar label="Possession" mine={stats.possession} theirs={100 - stats.possession} mineFirst={mineFirst} suffix="%" />\n',
+      '      <StatBar label="Possession" mine={stats.possession} theirs={100 - stats.possession} mineFirst={mineFirst} />\n'],
     ['data-cm-poss="theirs">{100 - detail.stats.possession}%</span>',
       'data-cm-poss="theirs">{detail.stats.possession}</span>'],
   ], 'MatchReportCard.bareposs.tsx', 'the possession pair');
@@ -399,11 +399,13 @@ for (const s of screens) {
   const theirsN = Number(theirsTxt.slice(0, -1));
   if (mineN + theirsN !== 100) fail(`${ctx}: possession ${mineTxt} and ${theirsTxt} sum to ${mineN + theirsN}`);
   if (mineN !== d.stats.possession) fail(`${ctx}: the screen says ${mineTxt}, the sim says ${d.stats.possession}`);
-  /* And the stats bar above it says the same thing in the same units. */
+  /* And the stats bar above it says the same thing in the same units. Round 1340: the bar is drawn home side
+     first, so its first number is the home side's share (mine when I am at home or on a neutral ground). */
   const bar = visible(s.html).match(/(\d+)% POSSESSION (\d+)%/i);
+  const homeShare = s.report.home === s.clubName ? d.stats.possession : 100 - d.stats.possession;
   if (!bar) fail(`${ctx}: the possession stat bar does not print two percentages`);
   else if (Number(bar[1]) + Number(bar[2]) !== 100) fail(`${ctx}: the stat bar's possession pair sums to ${Number(bar[1]) + Number(bar[2])}`);
-  else if (Number(bar[1]) !== d.stats.possession) fail(`${ctx}: the stat bar says ${bar[1]}%, the sim says ${d.stats.possession}`);
+  else if (Number(bar[1]) !== homeShare) fail(`${ctx}: the stat bar's first number says ${bar[1]}%, the home side's share is ${homeShare}`);
   possChecked += 1;
 }
 if (possChecked < 60) fail(`only ${possChecked} possession pairs checked`);

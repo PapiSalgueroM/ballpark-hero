@@ -3,24 +3,9 @@ import { ReportSiteIssue } from '@/components/game/ReportSiteIssue';
 import { SoundToggle } from '@/components/game/SoundToggle';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { HUB_NAV } from '@/lib/sportHubNav';
-import { settlePendingSaves } from '@/lib/safeStorage';
+import { openConsentChoices } from '@/lib/consentPreferences';
 
-/* Round 285: every visitor gets a way back to the cookie banner. Consent that
-   can be given in one click and withdrawn only by finding the browser's site
-   data screen is not much of a choice, and the privacy policy now promises
-   this link by name. Clearing the stored answer and reloading is the whole
-   mechanism: CookieConsent shows the banner whenever no answer is stored, and
-   index.html only loads the ad script when the stored answer is 'accepted', so
-   a reload with no answer is a page with no advertising code on it. */
-function resetCookieChoice() {
-  /* Round 1144 review: a save a game is holding because the browser refused it
-     gets one more try before the page goes. The reload is not held for it:
-     taking a cookie choice back has to work every time it is asked for. */
-  settlePendingSaves();
-  try { localStorage.removeItem('cookie-consent'); } catch { /* storage blocked: nothing was stored */ }
-  window.location.reload();
-}
-
+/* Opening preferences preserves the current choice until the visitor saves. */
 export function Footer() {
   /* data-site-chrome: this is on every page, so the prerenderer keeps it out
      of the text the sitemap dates a page by (Round 286). A footer change is
@@ -105,7 +90,7 @@ export function Footer() {
         <span>·</span>
         <button
           type="button"
-          onClick={resetCookieChoice}
+          onClick={event => openConsentChoices(event.currentTarget)}
           className="underline hover:text-foreground transition-colors"
         >
           Cookie choices

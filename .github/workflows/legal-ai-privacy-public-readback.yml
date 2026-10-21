@@ -1,0 +1,398 @@
+name: Public legal and privacy readback
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/legal-ai-privacy-public-readback]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: legal-ai-privacy-public-readback-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  public_readback:
+    if: github.ref == 'refs/heads/codex/legal-ai-privacy-public-readback'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+    env:
+      BASE: https://douknowball.com
+      READBACK_OUT: public-readback-artifacts
+      OLD_ENTRY: index-D2fx3gQQ.js
+      OLD_DEPLOYMENT: f04638fe-e1f7-445d-9afa-b55c13a7928a
+      SOURCE_SHA: 076091ac870db38b953ddf71d3252cf1ac556782
+      EXPECTED_DEPLOYMENT: 15a10710-f8ea-473d-b084-122e1afff7ed
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Pin source and install locked dependencies plus isolated browser tooling
+        run: |
+          set -euo pipefail
+          mkdir "$READBACK_OUT"
+          git rev-parse HEAD > "$READBACK_OUT/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$READBACK_OUT/tree.txt"
+          git diff --exit-code "$SOURCE_SHA" HEAD -- src public scripts supabase package.json package-lock.json > "$READBACK_OUT/published-source-hold.log"
+          sha256sum package.json package-lock.json scripts/auditLive.mjs scripts/lib/liveIndexability.mjs > "$READBACK_OUT/source-before.sha256"
+          npm ci > "$READBACK_OUT/install.log" 2>&1
+          browser_tools="$RUNNER_TEMP/public-readback-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$READBACK_OUT/browser-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$READBACK_OUT/chromium-install.log" 2>&1
+      - name: Prepare fixed read-only public transport and readback checks
+        run: |
+          set -euo pipefail
+          cat > "$READBACK_OUT/read-only.cjs" <<'JS'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const http = require('node:http');
+          const https = require('node:https');
+          const { syncBuiltinESMExports } = require('node:module');
+          const ORIGIN = 'https://douknowball.com';
+          const out = path.resolve(process.env.READBACK_OUT);
+          const paths = new Set(['/', '/about', '/terms', '/privacy', '/contact']);
+          const sitemap = fs.readFileSync('public/sitemap.xml', 'utf8');
+          for (const match of sitemap.matchAll(/<loc>https:\/\/douknowball\.com([^<]*)<\/loc>/g)) paths.add(match[1] || '/');
+          function addPublic(directory, prefix = '') {
+            for (const item of fs.readdirSync(directory, { withFileTypes: true })) {
+              const relative = prefix + '/' + item.name;
+              if (item.isDirectory()) addPublic(path.join(directory, item.name), relative);
+              else if (item.isFile()) paths.add(relative);
+            }
+          }
+          addPublic('public');
+          function checkedURL(value, method = 'GET') {
+            const url = new URL(String(value));
+            if (url.origin !== ORIGIN || url.username || url.password || !['GET', 'HEAD'].includes(method.toUpperCase())) throw new Error('Public readback permits fixed-origin GET/HEAD only');
+            if (/%|\\|(?:^|\/)\.\.(?:\/|$)/.test(url.pathname) || /^\/(?:api|auth|rest|functions|graphql|storage|realtime)(?:\/|$)/i.test(url.pathname)) throw new Error('Backend or ambiguous path refused');
+            const asset = /^\/assets\/[A-Za-z0-9_.-]+\.(?:js|css|woff2?|ttf|otf|png|jpe?g|gif|svg|webp|ico)$/i.test(url.pathname);
+            if (!paths.has(url.pathname) && !asset) throw new Error('Path is outside source-owned public pages and assets');
+            return url;
+          }
+          function record(file, row) { fs.appendFileSync(path.join(out, file), JSON.stringify(row) + '\n'); }
+          for (const key of Object.keys(process.env)) if (/^(?:https?|all)_proxy$|^node_use_env_proxy$/i.test(key)) delete process.env[key];
+          globalThis.fetch = async () => { throw new Error('Use the guarded Playwright public GET client'); };
+          if (globalThis.WebSocket) globalThis.WebSocket = class { constructor() { throw new Error('Public readback forbids WebSockets'); } };
+          for (const name of ['request', 'get']) {
+            http[name] = () => { throw new Error('Public readback forbids plain HTTP'); };
+            const native = https[name];
+            https[name] = function (...args) {
+              const firstIsURL = typeof args[0] === 'string' || args[0] instanceof URL;
+              const options = (firstIsURL ? args[1] : args[0]) || {};
+              if (firstIsURL && ['hostname', 'host', 'port', 'path', 'protocol'].some(key => options[key] !== undefined)) throw new Error('URL override refused');
+              const target = firstIsURL ? String(args[0]) : `${options.protocol || 'https:'}//${options.hostname || options.host || 'invalid'}${options.port ? ':' + options.port : ''}${options.path || '/'}`;
+              const method = String(options.method || 'GET').toUpperCase();
+              const url = checkedURL(target, method);
+              if (options.auth || options.createConnection || options.socketPath || options.rejectUnauthorized === false) throw new Error('Credentials, custom or insecure transport refused');
+              const headers = Object.fromEntries(Object.entries(options.headers || {}).filter(([key]) => !/^(?:authorization|cookie|proxy-authorization|host)$/i.test(key)));
+              const safe = { ...options, headers, agent: false };
+              record('public-network.jsonl', { method, origin: url.origin, path: url.pathname });
+              if (firstIsURL) {
+                if (typeof args[1] === 'function') args.splice(1, 0, safe);
+                else args[1] = safe;
+              } else args[0] = safe;
+              return native.apply(this, args);
+            };
+          }
+          syncBuiltinESMExports();
+          const playwright = require('playwright-core');
+          const newRequest = playwright.request.newContext.bind(playwright.request);
+          playwright.request.newContext = async (options = {}) => {
+            if (options.proxy || options.httpCredentials || options.ignoreHTTPSErrors) throw new Error('Proxy, credentials and insecure HTTPS refused');
+            const context = await newRequest({ ...options, extraHTTPHeaders: { ...options.extraHTTPHeaders, 'Cache-Control': 'no-cache' } });
+            for (const verb of ['get', 'head', 'fetch']) {
+              const native = context[verb].bind(context);
+              context[verb] = async (input, options = {}) => {
+                const method = verb === 'fetch' ? options.method ?? (typeof input === 'string' || input instanceof URL ? 'GET' : input.method()) : verb.toUpperCase();
+                checkedURL(typeof input === 'string' || input instanceof URL ? input : input.url(), method);
+                if (['data', 'form', 'multipart'].some(key => options[key] !== undefined)) throw new Error('Request bodies refused');
+                const response = await native(input, { ...options, maxRedirects: 0, maxRetries: 0 });
+                if (response.status() >= 300 && response.status() < 400) throw new Error('Public readback refuses redirects');
+                return response;
+              };
+            }
+            for (const verb of ['post', 'put', 'patch', 'delete']) context[verb] = async () => { throw new Error('Public readback forbids mutations'); };
+            return context;
+          };
+          module.exports = { ORIGIN, checkedURL };
+          JS
+          cat > "$READBACK_OUT/readback.mjs" <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { createRequire } from 'node:module';
+          import { JSDOM } from 'jsdom';
+          import { request, chromium } from 'playwright';
+          const require = createRequire(import.meta.url);
+          const { ORIGIN, checkedURL } = require('./read-only.cjs');
+          const out = path.resolve(process.env.READBACK_OUT);
+          const tag = process.env.GITHUB_RUN_ID + '.' + process.env.GITHUB_RUN_ATTEMPT;
+          const key = 'cookie-consent-v2';
+          const report = { complete: false, cases: [], pages: [], assets: [], browserRequests: [], locallyFulfilled: [], localPublicAggregateReads: [], forbiddenMethods: [] };
+          const hash = value => createHash('sha256').update(value).digest('hex');
+          function deploymentId(header) {
+            assert.equal(typeof header, 'string');
+            const uuid = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
+            const match = header.match(new RegExp('^(' + uuid + ')$|^psr2\\.(' + uuid + ')\\.[0-9]{10}\\.[A-Za-z0-9_-]{43}$', 'i'));
+            assert(match, 'Deployment header must have the observed bare or signed format');
+            return (match[1] || match[2]).toLowerCase();
+          }
+          function expectedDeployment(header) {
+            const id = deploymentId(header);
+            assert.equal(id, process.env.EXPECTED_DEPLOYMENT, 'Public response must match the requested deployment');
+            return id;
+          }
+          const signedFixture = 'psr2.' + process.env.EXPECTED_DEPLOYMENT + '.1793200847.' + 'A'.repeat(43);
+          assert.equal(expectedDeployment(process.env.EXPECTED_DEPLOYMENT), process.env.EXPECTED_DEPLOYMENT);
+          assert.equal(expectedDeployment(signedFixture), process.env.EXPECTED_DEPLOYMENT);
+          for (const changed of [signedFixture.replace('psr2.', 'other.'), signedFixture.slice(0, -1), signedFixture.replace(process.env.EXPECTED_DEPLOYMENT, process.env.OLD_DEPLOYMENT)]) {
+            assert.notEqual(changed, signedFixture); assert.throws(() => expectedDeployment(changed));
+          }
+          report.deploymentControls = { supportedFormats: 2, changedRejected: 3 };
+          function localAggregateRead(row) {
+            return row.url === 'https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today'
+              && row.method === 'POST' && row.type === 'fetch' && row.navigation === false
+              && row.body === '{"p_min":3,"p_limit":3}';
+          }
+          const aggregateFixture = { url: 'https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today', method: 'POST', type: 'fetch', navigation: false, body: '{"p_min":3,"p_limit":3}' };
+          assert.equal(localAggregateRead(aggregateFixture), true);
+          const aggregateFaults = [
+            { method: 'PUT' }, { url: aggregateFixture.url.replace('most_played_today', 'delete_account') },
+            { url: aggregateFixture.url.replace('flawuiqbvjobmkfkauhw', 'other') }, { url: aggregateFixture.url + '?other=1' },
+            { body: '{"p_min":"3","p_limit":3}' }, { body: '{"p_min":3,"p_limit":4}' },
+            { body: '{"p_min":3,"p_limit":3,"other":1}' }, { body: '{' },
+            { type: 'document' }, { navigation: true }, { body: '{"p_min":3,"p_min":4,"p_limit":3}' },
+          ];
+          for (const fault of aggregateFaults) {
+            const changed = { ...aggregateFixture, ...fault };
+            assert.notDeepEqual(changed, aggregateFixture); assert.equal(localAggregateRead(changed), false);
+          }
+          report.aggregateControls = { fixedLocalFixture: 1, changedRejected: aggregateFaults.length };
+          const save = (name, value) => fs.writeFileSync(path.join(out, name), value);
+          const cacheBust = route => ORIGIN + route + '?public_readback=' + tag;
+          const json = () => save('readback.json', JSON.stringify(report, null, 2) + '\n');
+          for (const [url, method] of [[ORIGIN + '/privacy', 'POST'], ['https://example.com/privacy', 'GET'], [ORIGIN + '/functions/v1/account-privacy', 'GET'], ['https://name:password@douknowball.com/privacy', 'GET']]) assert.throws(() => checkedURL(url, method));
+          report.transportControls = { changedTargets: 4, rejected: 4 };
+          const api = await request.newContext({ extraHTTPHeaders: { 'User-Agent': 'DoUKnowBall public readback' } });
+          let browser;
+          function visibleText(html) {
+            const dom = new JSDOM(html);
+            dom.window.document.querySelectorAll('script,style,template').forEach(node => node.remove());
+            const text = dom.window.document.body.textContent.replace(/\s+/g, ' ').trim();
+            dom.window.close(); return text;
+          }
+          function canonical(html, route) {
+            const dom = new JSDOM(html);
+            const links = [...dom.window.document.querySelectorAll('link[rel="canonical"]')].map(node => node.href);
+            dom.window.close(); assert.deepEqual(links, [ORIGIN + (route === '/' ? '/' : route)]);
+          }
+          async function get(route, file) {
+            const response = await api.get(cacheBust(route), { maxRedirects: 0, timeout: 30000 });
+            assert.equal(response.status(), 200, route + ' must return 200');
+            const body = await response.body(); save(file, body);
+            const headers = response.headers(); delete headers['set-cookie'];
+            save(file + '.headers.json', JSON.stringify(headers, null, 2) + '\n');
+            return { body, headers };
+          }
+          const cases = async (name, action) => { await action(); report.cases.push({ name, passed: true }); console.log('PUBLIC READBACK PASS: ' + name); };
+          try {
+            const routes = ['/about', '/terms', '/privacy', '/contact', '/', '/soccer-career', '/club-manager', '/soccer-grid', '/nba-grid', '/footle'];
+            const pages = new Map();
+            for (const route of routes) {
+              const { body, headers } = await get(route, 'page-' + (route.slice(1) || 'home') + '.html');
+              const html = body.toString(); canonical(html, route);
+              pages.set(route, { html, headers });
+              report.pages.push({ route, status: 200, sha256: hash(body), canonical: ORIGIN + route });
+            }
+            await cases('four legal pages and six representative routes have their own raw canonical', async () => assert.equal(pages.size, 10));
+            await cases('raw legal AI disclosures, dates and request wording are published', async () => {
+              assert.match(visibleText(pages.get('/about').html), /AI tools help with coding, debugging and drafting some text/);
+              assert.match(visibleText(pages.get('/terms').html), /Last updated: October 21, 2026/);
+              assert.match(visibleText(pages.get('/terms').html), /AI tools assist with development, debugging and drafting some text/);
+              assert.match(visibleText(pages.get('/privacy').html), /Last updated: October 21, 2026/);
+              assert.match(visibleText(pages.get('/privacy').html), /provider processing and retention are governed by the terms/);
+              assert.match(visibleText(pages.get('/privacy').html), /Analytics is currently paused/);
+              assert.match(visibleText(pages.get('/contact').html), /respond within 30 days/);
+            });
+            const home = pages.get('/');
+            let entry;
+            await cases('deployment header and entry differ from the previous publication', async () => {
+              const deployment = expectedDeployment(home.headers['x-deployment-id']);
+              assert.notEqual(deployment, process.env.OLD_DEPLOYMENT);
+              const dom = new JSDOM(home.html);
+              const entries = [...dom.window.document.querySelectorAll('script[type="module"][src]')].map(node => new URL(node.getAttribute('src'), ORIGIN)).filter(url => /^\/assets\/index-[A-Za-z0-9_-]+\.js$/.test(url.pathname));
+              dom.window.close(); assert.equal(entries.length, 1);
+              entry = entries[0]; checkedURL(entry);
+              assert.notEqual(path.posix.basename(entry.pathname), process.env.OLD_ENTRY);
+              const head = await api.head(cacheBust('/'), { maxRedirects: 0, timeout: 30000 });
+              const headHeaders = head.headers(); delete headHeaders['set-cookie'];
+              save('page-home.head.headers.json', JSON.stringify(headHeaders, null, 2) + '\n');
+              assert.equal(head.status(), 200); assert.equal(expectedDeployment(headHeaders['x-deployment-id']), deployment);
+              report.deployment = { id: deployment, entry: entry.pathname, previousEntry: process.env.OLD_ENTRY };
+            });
+            await cases('new entry contains privacy v2 and dynamic account body, and the body asset answers', async () => {
+              const { body } = await get(entry.pathname, 'entry.js');
+              const source = body.toString(); assert(source.includes(key));
+              const match = source.match(/import\(["']\.\/((?:AuthModalBody)-[A-Za-z0-9_-]+\.js)["']\)/);
+              assert(match, 'Entry must dynamically import the real account body chunk');
+              const bodyPath = '/assets/' + match[1];
+              const auth = await get(bodyPath, 'AuthModalBody.js');
+              assert(auth.body.toString().includes('I am 13 or older'));
+              report.assets.push({ path: entry.pathname, sha256: hash(body) }, { path: bodyPath, sha256: hash(auth.body) });
+              report.authBodyPath = bodyPath;
+            });
+            browser = await chromium.launch({ headless: true, args: ['--disable-background-networking', '--disable-component-update', '--disable-sync', '--force-webrtc-ip-handling-policy=disable_non_proxied_udp'] });
+            const region = page => page.getByRole('region', { name: 'Cookie choices', exact: true });
+            const vendor = row => /(?:^|\.)(?:googletagmanager|googlesyndication|google-analytics|doubleclick)\.(?:com|net)$/.test(new URL(row.url).hostname);
+            async function context(gpc = false) {
+              const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block', extraHTTPHeaders: { 'Cache-Control': 'no-cache' } });
+              const requests = [];
+              if (gpc) await ctx.addInitScript(() => Object.defineProperty(navigator, 'globalPrivacyControl', { configurable: true, value: true }));
+              await ctx.routeWebSocket('**/*', route => route.close());
+              await ctx.route('**/*', async route => {
+                const req = route.request(), url = new URL(req.url());
+                const row = { method: req.method(), url: url.origin + url.pathname, type: req.resourceType() };
+                requests.push(row); report.browserRequests.push(row);
+                if (localAggregateRead({ ...row, url: req.url(), navigation: req.isNavigationRequest(), body: req.postData() })) {
+                  report.localPublicAggregateReads.push(row); report.locallyFulfilled.push(row);
+                  return route.fulfill({ status: 200, headers: { 'access-control-allow-origin': ORIGIN }, contentType: 'application/json', body: '[]' });
+                }
+                if (!['GET', 'HEAD'].includes(req.method())) report.forbiddenMethods.push(row);
+                try { checkedURL(url, req.method()); }
+                catch {
+                  report.locallyFulfilled.push(row);
+                  return route.fulfill({ status: 200, headers: { 'access-control-allow-origin': ORIGIN }, contentType: req.resourceType() === 'script' ? 'application/javascript' : req.resourceType() === 'stylesheet' ? 'text/css' : 'application/json', body: ['script', 'stylesheet'].includes(req.resourceType()) ? '' : '[]' });
+                }
+                const headers = Object.fromEntries(Object.entries(req.headers()).filter(([name]) => !/^(?:authorization|cookie|proxy-authorization)$/i.test(name)));
+                const response = await route.fetch({ headers, maxRedirects: 0, maxRetries: 0, timeout: 30000 });
+                assert(!(response.status() >= 300 && response.status() < 400), 'Browser redirect refused');
+                return route.fulfill({ response });
+              });
+              return { ctx, requests };
+            }
+            async function closeContext(ctx) {
+              for (const page of ctx.pages()) await page.close();
+              assert.equal(ctx.pages().length, 0, 'Close every page before removing its network guard');
+              await ctx.unrouteAll({ behavior: 'ignoreErrors' });
+              await ctx.close();
+            }
+            await cases('phone privacy choices start off, reject all persists, and footer choices preserve the decision', async () => {
+              const { ctx, requests } = await context();
+              try {
+                const page = await ctx.newPage(); await page.goto(cacheBust('/privacy'), { waitUntil: 'domcontentloaded' });
+                await region(page).waitFor();
+                const ads = region(page).getByRole('checkbox', { name: 'Advertising', exact: true });
+                const analytics = region(page).getByRole('checkbox', { name: 'Analytics', exact: true });
+                assert.equal(await ads.isChecked(), false); assert.equal(await ads.isDisabled(), false);
+                assert.equal(await analytics.isChecked(), false); assert.equal(await analytics.isDisabled(), true);
+                await ads.check(); assert.equal(await analytics.isChecked(), false); await ads.uncheck();
+                assert.equal(requests.filter(vendor).length, 0, 'No optional vendor may be requested before a saved choice');
+                await region(page).getByRole('button', { name: 'Reject all', exact: true }).click(); await region(page).waitFor({ state: 'hidden' });
+                const before = await page.evaluate(key => localStorage.getItem(key), key);
+                assert.equal(JSON.parse(before).version, 2); assert.equal(JSON.parse(before).advertising, false); assert.equal(JSON.parse(before).analytics, false);
+                await page.getByRole('button', { name: 'Cookie choices', exact: true }).click(); await region(page).waitFor();
+                assert.equal(await ads.isChecked(), false); assert.equal(await analytics.isDisabled(), true);
+                assert.equal(await page.evaluate(key => localStorage.getItem(key), key), before);
+                assert.equal(requests.filter(vendor).length, 0);
+                await page.screenshot({ path: path.join(out, 'privacy-phone.png'), fullPage: true });
+                await region(page).getByRole('button', { name: 'Reject all', exact: true }).click(); await region(page).waitFor({ state: 'hidden' });
+                await page.goto(cacheBust('/'), { waitUntil: 'domcontentloaded' });
+                const login = page.getByRole('button', { name: 'Log In', exact: true }); await login.waitFor();
+                const bodies = () => requests.filter(row => new URL(row.url).pathname === report.authBodyPath);
+                assert.equal(bodies().length, 0, 'Unused account body must stay lazy');
+                await login.click();
+                const dialog = page.getByRole('dialog'); await dialog.waitFor();
+                assert.equal(bodies().length, 1, 'Log In must request the real dynamic account form');
+                assert.equal(await dialog.getByRole('textbox', { name: 'Email', exact: true }).inputValue(), '');
+                await page.screenshot({ path: path.join(out, 'login-phone.png') });
+                await dialog.getByRole('button', { name: 'Close', exact: true }).click(); await dialog.waitFor({ state: 'hidden' });
+                await page.waitForFunction(() => document.activeElement?.textContent?.trim() === 'Log In');
+                assert.equal(requests.filter(vendor).length, 0);
+                const browserEntry = requests.filter(row => /^\/assets\/index-[A-Za-z0-9_-]+\.js$/.test(new URL(row.url).pathname));
+                assert(browserEntry.length > 0); assert(browserEntry.every(row => new URL(row.url).pathname === entry.pathname), 'Browser and raw readback must use the same entry');
+                report.cases.push({ name: 'home Log In loads lazy body and closes without email or API submission', passed: true });
+              } finally { await closeContext(ctx); }
+            });
+            await cases('phone Global Privacy Control disables advertising even after Accept all', async () => {
+              const { ctx, requests } = await context(true);
+              try {
+                const page = await ctx.newPage(); await page.goto(cacheBust('/privacy'), { waitUntil: 'domcontentloaded' }); await region(page).waitFor();
+                const ads = region(page).getByRole('checkbox', { name: 'Advertising', exact: true });
+                assert.equal(await ads.isChecked(), false); assert.equal(await ads.isDisabled(), true);
+                assert.equal(await region(page).getByRole('checkbox', { name: 'Analytics', exact: true }).isDisabled(), true);
+                await region(page).getByRole('button', { name: 'Accept all', exact: true }).click(); await region(page).waitFor({ state: 'hidden' });
+                const saved = JSON.parse(await page.evaluate(key => localStorage.getItem(key), key));
+                assert.equal(saved.advertising, false); assert.equal(saved.analytics, false); assert.equal(requests.filter(vendor).length, 0);
+                await page.getByRole('button', { name: 'Cookie choices', exact: true }).click(); await region(page).waitFor();
+                assert.equal(await ads.isDisabled(), true); await page.screenshot({ path: path.join(out, 'gpc-phone.png'), fullPage: true });
+              } finally { await closeContext(ctx); }
+            });
+            assert.equal(report.forbiddenMethods.length, 0, 'No account, report, AI or other submission may be attempted');
+            report.complete = true;
+            console.log('PUBLIC READBACK COMPLETE: remote transport is fixed-host public GET/HEAD only; fixed popularity read and all other backend traffic fulfilled locally; no account or report submission.');
+          } catch (error) {
+            report.error = { name: error.name, message: error.message, stack: error.stack }; throw error;
+          } finally { await browser?.close(); await api.dispose(); json(); }
+          JS
+      - name: Existing live audit with its measured sitemap chrome sample
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/$READBACK_OUT/read-only.cjs"
+          status=0
+          timeout --signal=TERM --kill-after=15s 8m node scripts/auditLive.mjs /about /terms /privacy /contact / /soccer-career /club-manager /soccer-grid /nba-grid /footle > "$READBACK_OUT/audit-live.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/audit-live.exit"
+          cat "$READBACK_OUT/audit-live.log"
+          test "$status" -eq 0
+          grep -Eq 'shared chrome measured at [0-9]+ readable characters over ([1-9][0-9]+) pages' "$READBACK_OUT/audit-live.log"
+          ! grep -Fq 'thin rule skipped' "$READBACK_OUT/audit-live.log"
+          grep -Fq '10 of 10 answered cleanly, 0 did not.' "$READBACK_OUT/audit-live.log"
+      - name: Effective chrome-only negative control against the same public source
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/$READBACK_OUT/read-only.cjs"
+          status=0
+          AUDIT_CONTROL=thin timeout --signal=TERM --kill-after=15s 8m node scripts/auditLive.mjs /about /terms /privacy /contact / /soccer-career /club-manager /soccer-grid /nba-grid /footle > "$READBACK_OUT/audit-thin-control.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/audit-thin-control.exit"
+          cat "$READBACK_OUT/audit-thin-control.log"
+          test "$status" -eq 1
+          grep -Fq 'Planting' "$READBACK_OUT/audit-thin-control.log"
+          grep -Fq '(CONTROL plant)' "$READBACK_OUT/audit-thin-control.log"
+          grep -Fq '9 of 10 answered cleanly, 1 did not.' "$READBACK_OUT/audit-thin-control.log"
+      - name: Raw deployment and mobile consent and account readback without submissions
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/$READBACK_OUT/read-only.cjs"
+          status=0
+          timeout --signal=TERM --kill-after=15s 12m node "$READBACK_OUT/readback.mjs" > "$READBACK_OUT/readback.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/readback.exit"
+          cat "$READBACK_OUT/readback.log"
+          test "$status" -eq 0
+          grep -Fq 'PUBLIC READBACK COMPLETE:' "$READBACK_OUT/readback.log"
+      - name: Preserve source and hash readback evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$READBACK_OUT/source-before.sha256" > "$READBACK_OUT/source-hold.log"
+          git diff --exit-code HEAD -- src scripts supabase public package.json package-lock.json .github > "$READBACK_OUT/source-diff.log"
+          (cd "$READBACK_OUT"; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$READBACK_OUT/evidence.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: legal-privacy-public-readback-${{ github.run_id }}-${{ github.run_attempt }}
+          path: public-readback-artifacts/
+          if-no-files-found: error
+          retention-days: 14

@@ -8,6 +8,7 @@
  */
 import { useState } from 'react';
 import type { SlotView } from '@/lib/clubManagerSlots';
+import { DIFFICULTY_INFO } from '@/lib/managerDifficulty';
 
 interface Props {
   slots: SlotView[];
@@ -54,12 +55,12 @@ export default function ManagerSlotsScreen({ slots, activeDetail, note, onContin
                   </div>
                   {v.active && activeDetail && <div className="text-xs text-muted-foreground mt-0.5">{activeDetail}</div>}
                   <div className="text-xs text-muted-foreground mt-0.5">
-                    🏆 {s.trophies} {s.trophies === 1 ? 'trophy' : 'trophies'}{s.sacked ? ' · sacked, looking for work' : ''}
+                    🏆 {s.trophies} {s.trophies === 1 ? 'trophy' : 'trophies'}{s.level ? ` · ${DIFFICULTY_INFO[s.level].label}` : ''}{s.noSack ? ' · No sacking' : ''}{s.retired ? ' · 👋 retired' : s.sacked ? ' · sacked, looking for work' : ''}
                   </div>
                   <div className="mt-auto pt-3">
                     {confirming === v.slot ? (
                       <div className="text-xs">
-                        <div className="text-foreground mb-2">Delete {s.clubName} for good? There is no undo.</div>
+                        <div className="text-foreground mb-2">Delete {s.clubName} for good? There is no undo.{s.retired ? ' The farewell goes with it.' : ''}</div>
                         <div className="flex gap-2">
                           <button
                             onClick={() => { setConfirming(null); onDelete(v.slot); }}
@@ -76,9 +77,10 @@ export default function ManagerSlotsScreen({ slots, activeDetail, note, onContin
                       <>
                         <button
                           onClick={() => onContinue(v.slot)}
-                          className="w-full px-4 py-2.5 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90 transition-opacity"
+                          data-cm-slot-open={s.retired ? 'farewell' : 'resume'}
+                          className="w-full min-h-[44px] px-4 py-2.5 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90 transition-opacity"
                         >
-                          Resume Career
+                          {s.retired ? 'See the farewell' : 'Resume Career'}
                         </button>
                         <button
                           onClick={() => setConfirming(v.slot)}
@@ -96,20 +98,27 @@ export default function ManagerSlotsScreen({ slots, activeDetail, note, onContin
                   <div className="text-sm text-muted-foreground mt-1">
                     {v.damaged ? 'This save could not be read.' : 'Empty slot'}
                   </div>
+                  {/* Round 1323: and what can be done about it, out loud. */}
+                  {v.damaged && (
+                    <div className="text-xs text-muted-foreground mt-1" data-testid={`cm-slot-${v.slot}-damaged`}>
+                      You can clear it and start a new manager here. A copy is kept on this device.
+                    </div>
+                  )}
                   <div className="mt-auto pt-3">
-                    {/* Round 928 review: clearing an unreadable save erases its
-                        bytes for good, so it asks first, like Delete. */}
+                    {/* Round 928 review: clearing an unreadable save asks first,
+                        like Delete. Round 1323: the bytes go to a backup first
+                        (the error boundary's own fresh start), so it says so. */}
                     {v.damaged && confirming === v.slot ? (
                       <div className="text-xs">
-                        <div className="text-foreground mb-2">Clear this save for good and start a new manager here? There is no undo.</div>
+                        <div className="text-foreground mb-2">Clear this save and start a new manager here? A copy is kept on this device and the game offers to put it back. Each game keeps its three newest copies.</div>
                         <div className="flex gap-2">
                           <button
                             onClick={() => { setConfirming(null); onNew(v.slot); }}
-                            className="flex-1 px-3 py-2 rounded-lg bg-destructive text-destructive-foreground font-bold"
+                            className="flex-1 min-h-[44px] px-3 py-2 rounded-lg bg-destructive text-destructive-foreground font-bold"
                           >
                             Clear it
                           </button>
-                          <button onClick={() => setConfirming(null)} className="flex-1 px-3 py-2 rounded-lg bg-secondary text-foreground font-bold">
+                          <button onClick={() => setConfirming(null)} className="flex-1 min-h-[44px] px-3 py-2 rounded-lg bg-secondary text-foreground font-bold">
                             Keep
                           </button>
                         </div>
@@ -117,7 +126,7 @@ export default function ManagerSlotsScreen({ slots, activeDetail, note, onContin
                     ) : (
                       <button
                         onClick={() => (v.damaged ? setConfirming(v.slot) : onNew(v.slot))}
-                        className="w-full px-4 py-2.5 bg-secondary text-foreground rounded-xl font-bold hover:bg-secondary/70 transition-colors"
+                        className="w-full min-h-[44px] px-4 py-2.5 bg-secondary text-foreground rounded-xl font-bold hover:bg-secondary/70 transition-colors"
                       >
                         {v.damaged ? 'Clear it, new manager' : 'New manager'}
                       </button>

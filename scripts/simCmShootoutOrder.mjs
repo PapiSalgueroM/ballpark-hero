@@ -256,6 +256,7 @@
  */
 import './lib/seedRandom.mjs';
 import { buildSync } from 'esbuild';
+import { withoutWorldSeed } from './lib/cmWorldSeed1250.mjs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import os from 'node:os';
@@ -378,8 +379,37 @@ let baselineSourceHash = null;
 /* the coachless engine with Round 1052's league taken out (Release AO, below); null when the arm is not needed */
 const leagueOutPath = `${TMP}/${TAG}.leagueout.engine.ts`;
 let leagueOutEnginePath = null;
+/* Round 1326: the historical arm (below) is made with that round's words put
+   back. It changed what six lines of the engine say and nothing they draw: the
+   board's three title labels ("Win La Liga" for "Win the La Liga"), two weekly
+   headlines that put "the" before a league name, and a drama line that now
+   opens every sentence on a capital. The full content check below compares
+   every string of the save with an engine from before those words, so the arm
+   writes the old words back in memory, each anchor found exactly as often as it
+   is listed or the run aborts. What that buys is the same as the own goal cut
+   below: every row must still equal pre-1072 main in result, next draw and full
+   content, so everything else that round did is held to changing nothing at
+   all. That the words move no draw anywhere is scripts/qa/cmCopyOnly1326.mjs,
+   which compares every entry of 67 careers on the round's base and head. The
+   words go back on the source the arm starts from, here and not beside the
+   arm's own cuts, so a later edit to those cuts (Release AZ's world seed block)
+   merges past this one without touching it. */
+const R1326_WORDS = [
+  ['  return text.replace(/(^|[.?!] )([a-z])/g, (_m, lead: string, c: string) => lead + c.toUpperCase());\n',
+    '  return text.charAt(0).toUpperCase() + text.slice(1);\n', 1, 'dramaText (a capital after every full stop)'],
+  ['top ${toLeague(league.name)} on', 'top the ${league.name} on', 1, 'the weekly leaders headline'],
+  ['sharpest attack in ${toLeague(league.name)}:', 'sharpest attack in the ${league.name}:', 1, 'the weekly attack headline'],
+  ['label: `Win ${toLeague(league.name)}`', 'label: `Win the ${league.name}`', 3, "leagueDemand's three title labels"],
+];
+function withRound1326WordsBack(text) {
+  for (const [now, was, times, what] of R1326_WORDS) {
+    if (text.split(now).length - 1 !== times) abort(`Historical arm needs Round 1326's ${what} exactly ${times} time(s) to put the old words back`);
+    text = text.split(now).join(was);
+  }
+  return text;
+}
 if (!WRITE_FIXTURE) {
-  const source = readLF(enginePath);
+  const source = withRound1326WordsBack(readLF(enginePath));
   const header = 'export function coachQuickMatch(career: CareerState): CareerState {\n';
   if (source.split(header).length - 1 !== 1) abort('Historical no-coach arm needs one executable coach header');
   /* Round 1146: and with no own goals. Since that round the engine now and
@@ -394,7 +424,15 @@ if (!WRITE_FIXTURE) {
      section 1. */
   const ownGoalCall = '  tagOwnGoals(state, live, fx, half, me.goals, oppGoals);\n';
   if (source.split(ownGoalCall).length - 1 !== 1) abort('Historical arm needs the one own goal call to take out');
-  const coachless = source.replace(header, header + '  return career;\n').replace(ownGoalCall, '');
+  /* Release AZ: and with no world seed. Since Round 1250 (the other lane's PR224) startCareer gives every new
+     career a world seed, and the rows of sections 4 and 5 hash the save after the match from a new career, so
+     the arm that stands for the engine before it takes the seed block out (scripts/lib/cmWorldSeed1250.mjs,
+     which fails closed unless its anchor stands exactly once). Same shape as the own goal call above: every
+     other change to the engine is still held to changing nothing. The fixture belongs to a frozen engine and
+     is never taken again. */
+  let coachless = '';
+  try { coachless = withoutWorldSeed(source.replace(header, header + '  return career;\n').replace(ownGoalCall, '')); }
+  catch (e) { abort(`Historical arm needs the world seed block to take out: ${e.message}`); }
   fs.writeFileSync(historicalPath, coachless);
   historicalEnginePath = historicalPath;
   const baselineSource = execFileSync('git', ['show', '5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f:src/lib/clubManager.ts'], { cwd: ROOT, encoding: 'utf8' });
@@ -510,8 +548,20 @@ const fail = m => { failures += 1; (failedSections[section] ??= []).push(m); con
 const pct = x => `${(x * 100).toFixed(1)}%`;
 
 /* ---------- the base career, simmed to its first cup week ---------- */
+/* Round 1331, the bridge for a kit pinned to an old engine: since that round a match plays its league and
+   season's substitution rule (five in three stoppages in La Liga from 2020-21) and the press at the whistle reads
+   the next fixture, and the pinned pre-1072 engine knows neither. The arms that stand for the engine before
+   (historical, and the league out arm made from it) play with matchRules 'base', which is the old engine for
+   subs and press by construction (scripts/simCmSubs.mjs section legacy proves it byte for byte), set again
+   after a loadCareer (which drops it), and the key is taken off every state before it is hashed or compared. */
+const oldRules = engine => !WRITE_FIXTURE && (engine === historical || (!!leagueOut && engine === leagueOut));
 const reachCup = (engine, baseSeed = BASE_SEED) => withSeed(baseSeed, () => {
   const start = engine.startCareer(CLUB);
+  if (oldRules(engine)) start.matchRules = 'base';
+  /* Release BI's join, Round 1335's bridge carried here (as that round wrote it into simCmUnseededWorld and
+     simManagerWorldContinuity): a new career now opens at BOARD_FRESH, which startCareer cannot be told about,
+     and the pinned engine opened at 60, so the old rules arms open at the old 60. */
+  if (oldRules(engine)) start.boardConfidence = 60;
   const cupIdx = start.calendar.findIndex(e => e.type === 'cup');
   if (cupIdx < 0) abort(`${CLUB} has no cup entry in its calendar`);
   /* playNextEntry hands back after every match, so the walk to the cup week is a loop. */
@@ -540,6 +590,13 @@ function playCup(state, seed, engine = cm) {
     const r = engine.playNextEntry(state, { skipHalftime: true });
     if (r.kind !== 'match' || !r.report) abort(`seed ${seed}: the cup week did not play a match (${r.kind})`);
     if (r.report.competition !== 'cup') abort(`seed ${seed}: played a ${r.report.competition} match, not the cup`);
+    /* Round 1331: the bridge's key comes off before anything is hashed (see oldRules). */
+    if (r.state && 'matchRules' in r.state) delete r.state.matchRules;
+    /* Round 1509: so does the Europa League every new career of today's world now follows (worldComps), the
+       Champions League's participants included: the pinned and historical engines have none, it is opened on the
+       seed the historical arm takes out, and a match reads it and never writes it (scripts/simWorldEuro.mjs
+       section 2 holds that). Everything else the match wrote is still hashed. */
+    if (r.state && 'worldComps' in r.state) delete r.state.worldComps;
     const rep = r.report;
     return {
       seed, decidedBy: rep.decidedBy, shootoutWon: rep.shootoutWon ?? null,
@@ -937,6 +994,7 @@ section = 5;
   const probe = fixture?.rows?.find(r => pensNow.has(r.seed));
   if (!probe) fail(`none of the ${fixture?.rows?.length ?? 0} rows is a shootout on main's engine, so the old save never walks the one draw path`);
   if (probe) {
+    back.matchRules = 'base'; /* Round 1331: loadCareer drops the bridge's key; set again (see oldRules) */
     let out = playCup(back, probe.seed, historical);
     const baselineOld = JSON.parse(JSON.stringify(baselineCup));
     delete baselineOld.shootoutOrder;
@@ -956,6 +1014,7 @@ section = 5;
       const backOut = leagueOut.loadCareer();
       if (!backOut) abort('the league out engine could not open its old save');
       if ('shootoutOrder' in backOut) fail('the league out engine gave an old save an order');
+      backOut.matchRules = 'base'; /* Round 1331: set again after loadCareer (see oldRules) */
       const alt = playCup(backOut, probe.seed, leagueOut);
       const altContent = compareContent(alt, baselineOut);
       if (altContent.paired) { out = alt; content = altContent; oldBy1052 = true; }

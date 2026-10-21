@@ -110,11 +110,13 @@ async function journey(walk, profile) {
     ok('the save is the club that was picked', save?.clubName === walk.club, String(save?.clubName));
     ok('the save holds the key of its league\'s real list', save?.realLeagueFixtures === key, String(save?.realLeagueFixtures));
     ok('the page fetched that league\'s list and no other', JSON.stringify([...new Set(s.lists)]) === JSON.stringify([walk.file]), s.lists.join(','));
-    /* The hub's next match card: "<club> vs <opponent>" over "Home" or "Away". The picker leaves the page scrolled, so go to the top first. */
+    /* The hub's next match card: "<home> vs <away>" over "Home" or "Away" (Round 1340: the home side first, like a
+       scoreboard). The picker leaves the page scrolled, so go to the top first. */
     await s.page.evaluate(() => window.scrollTo(0, 0));
     const hub = (await s.page.locator('body').innerText()).replace(/\s+/g, ' ');
     const venue = first.home ? 'Home' : 'Away';
-    ok(`the next match card shows the real first fixture: ${walk.club} vs ${first.opponent}, ${venue}`, hub.includes(`${walk.club} vs ${first.opponent} ${venue}`), hub.slice(Math.max(0, hub.indexOf(walk.club + ' vs')), hub.indexOf(walk.club + ' vs') + 80));
+    const [homeSide, awaySide] = first.home ? [walk.club, first.opponent] : [first.opponent, walk.club];
+    ok(`the next match card shows the real first fixture: ${homeSide} vs ${awaySide}, ${venue}`, hub.includes(`${homeSide} vs ${awaySide} ${venue}`), hub.slice(Math.max(0, hub.indexOf(homeSide + ' vs')), hub.indexOf(homeSide + ' vs') + 80));
     await s.page.screenshot({ path: path.join(OUT, `${id}-hub.png`) });
     await openCalendar(s);
     const line = s.page.locator(`[data-cm-fixture-coverage="${key}"]`);

@@ -1,0 +1,284 @@
+name: Career drill pointer cancellation verification
+on:
+  push:
+    branches: [codex/career-drill-pointer-cancel]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retain source and capture commands
+        run: |
+          set -euo pipefail
+          test "${GITHUB_REF_NAME}" = codex/career-drill-pointer-cancel
+          mkdir career-drill-pointer-cancel-artifacts
+          git cat-file -e 4a5f759aeab6d0e7b8d29e55d3cd624c8ad20c54^{commit}
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse '4a5f759aeab6d0e7b8d29e55d3cd624c8ad20c54^{tree}')" = 8f8078136ba98fc07c944553aeaa53c307a68554
+          git -c core.autocrlf=false archive --format=zip HEAD > career-drill-pointer-cancel-artifacts/source.zip
+          git -c core.autocrlf=false archive --format=zip 4a5f759aeab6d0e7b8d29e55d3cd624c8ad20c54 > career-drill-pointer-cancel-artifacts/base.zip
+          git ls-tree -r HEAD > career-drill-pointer-cancel-artifacts/source-inventory.txt
+          git ls-tree -r 4a5f759aeab6d0e7b8d29e55d3cd624c8ad20c54 > career-drill-pointer-cancel-artifacts/base-inventory.txt
+          sha256sum career-drill-pointer-cancel-artifacts/source.zip career-drill-pointer-cancel-artifacts/base.zip > career-drill-pointer-cancel-artifacts/source-archives.sha256
+          node --input-type=module <<'SCOPE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const base='4a5f759aeab6d0e7b8d29e55d3cd624c8ad20c54',allowed=['src/components/soccer-career/DrillBoard.tsx','src/test/drillBoardMatch.test.tsx','scripts/qa/soccerDrillPointerCancelProof.mjs','.github/workflows/career-drill-pointer-cancel.yml','docs/CAREER-DRILL-POINTER-CANCEL.md'];
+          const changed=execFileSync('git',['diff','--name-only','-z',base,'HEAD']).toString().split('\0').filter(Boolean);
+          fs.writeFileSync('career-drill-pointer-cancel-artifacts/source-scope.json',JSON.stringify({base,allowed,changed},null,2));assert.deepEqual([...changed].sort(),[...allowed].sort());
+          SCOPE
+          node --input-type=module <<'PINS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const pins=[["src/components/soccer-career/DrillBoard.tsx",42504,"42591173de244f05f7e21166035ee6b7fe2d04ac78a8dc54c69bbd817038a99e"],["src/test/drillBoardMatch.test.tsx",12037,"3641efe7c96f24e6500745940ce8957f2e9f686fe3bc2c739d189f4af7727c42"],["scripts/qa/soccerDrillPointerCancelProof.mjs",11998,"c61ac628e640d4ccb0373c54cf7dd55db21da4b66a80f204e75dea4d97f81840"],["docs/CAREER-DRILL-POINTER-CANCEL.md",2000,"57df6eeec63e74ee6b5382c97ac8377fc4573fc30cc514c3d2d78d7ec205b921"]];
+          fs.writeFileSync('career-drill-pointer-cancel-artifacts/expected-source-pins.json',JSON.stringify(pins,null,2));for(const [file,bytes,sha256] of pins){const body=fs.readFileSync(file);assert.equal(body.length,bytes);assert.equal(createHash('sha256').update(body).digest('hex'),sha256);}
+          PINS
+          git rev-parse HEAD HEAD^{tree} > career-drill-pointer-cancel-artifacts/head-tree.txt
+          cp package.json career-drill-pointer-cancel-artifacts/package.before.json
+          cp package-lock.json career-drill-pointer-cancel-artifacts/package-lock.before.json
+          sha256sum src/components/soccer-career/DrillBoard.tsx src/test/drillBoardMatch.test.tsx scripts/qa/soccerDrillPointerCancelProof.mjs .github/workflows/career-drill-pointer-cancel.yml docs/CAREER-DRILL-POINTER-CANCEL.md src/lib/careerDrills.ts src/lib/dailyRecord.ts src/hooks/useArcadeFlight.ts src/test/drillBoardMarkup.test.tsx src/test/fixtures/drillBoardMarkup.recorded.json scripts/simCareerDrills.mjs scripts/simCareerTraining.mjs scripts/simFreeKick.mjs scripts/simFreeKickPractice.mjs scripts/qa/soccerAgentReviewDependencies.mjs scripts/lib/offlineTransport.cjs scripts/lib/hostLikeServer.mjs > career-drill-pointer-cancel-artifacts/source-hold.sha256
+          cat > career-drill-pointer-cancel-artifacts/capture.sh <<'CAPTURE'
+          capture() {
+            local label="$1"; shift
+            printf '%s\0' "$@" > "career-drill-pointer-cancel-artifacts/$label.argv"
+            set +e
+            "$@" > "career-drill-pointer-cancel-artifacts/$label.stdout" 2> "career-drill-pointer-cancel-artifacts/$label.stderr"
+            local code=$?
+            set -e
+            echo "$code" > "career-drill-pointer-cancel-artifacts/$label.exit"
+            cat "career-drill-pointer-cancel-artifacts/$label.stdout"
+            cat "career-drill-pointer-cancel-artifacts/$label.stderr" >&2
+            return "$code"
+          }
+          CAPTURE
+      - name: Install remote verification dependencies
+        id: dependencies
+        run: |
+          set -euo pipefail
+          source career-drill-pointer-cancel-artifacts/capture.sh
+          capture npm-ci npm ci
+          capture locked-before node scripts/qa/soccerAgentReviewDependencies.mjs before
+          cp soccer-agent-review-artifacts/dependencies-before.json career-drill-pointer-cancel-artifacts/dependencies-before.json
+          browser_tools="$RUNNER_TEMP/drill-pointer-cancel-seo-browser-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          capture playwright-package npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" career-drill-pointer-cancel-artifacts/browser-package.json
+          cp "$browser_tools/package-lock.json" career-drill-pointer-cancel-artifacts/browser-package-lock.json
+          capture chromium node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium
+          capture locked-after-setup node scripts/qa/soccerAgentReviewDependencies.mjs after
+          cp soccer-agent-review-artifacts/dependencies-after.json career-drill-pointer-cancel-artifacts/dependencies-after-setup.json
+          node --input-type=module <<'PLAYWRIGHT'
+          import fs from 'node:fs';import assert from 'node:assert/strict';for(const name of ['playwright','playwright-core'])assert.equal(JSON.parse(fs.readFileSync('node_modules/'+name+'/package.json')).version,'1.64.0');
+          PLAYWRIGHT
+          capture fonts python -m pip install fonttools pillow
+          cmp package.json career-drill-pointer-cancel-artifacts/package.before.json
+          cmp package-lock.json career-drill-pointer-cancel-artifacts/package-lock.before.json
+      - name: Actual application type gate
+        id: types
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source career-drill-pointer-cancel-artifacts/capture.sh
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      - name: Retain independently reviewed consumer Source
+        id: consumer_source
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' && steps.types.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          test ! -e career-drill-pointer-cancel-artifacts/proof-consumer.mjs
+          cat > career-drill-pointer-cancel-artifacts/proof-consumer.mjs <<'DRILLCONSUMER'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          import {stripVTControlCharacters} from 'node:util';
+          assert(process.env.CI);assert.equal(process.env.SOCCER_DRILL_CANCEL_OUT,'career-drill-pointer-cancel-artifacts/proof');
+          const ROOT=process.cwd(),OUT=path.resolve(ROOT,process.env.SOCCER_DRILL_CANCEL_OUT);assert(!fs.existsSync(path.join(OUT,'consumer-result.json')));
+          const result={status:'running',checks:[],references:[],errors:[]};
+          const hash=b=>createHash('sha256').update(b).digest('hex'),same=(a,b)=>assert.deepEqual(a,b);
+          const check=(id,fn)=>{const row={id,status:'running'};result.checks.push(row);try{fn();row.status='pass';}catch(error){row.status='fail';row.error=String(error.stack||error);throw error;}};
+          const keys=(v,w)=>same(Object.keys(v).sort(),[...w].sort());
+          const safe=name=>{assert.equal(typeof name,'string');assert(name&&!path.isAbsolute(name)&&!name.includes('\\')&&name.split('/').every(x=>x&&x!=='.'&&x!=='..'));const full=path.resolve(OUT,name);assert(full.startsWith(OUT+path.sep));return full;};
+          const body=ref=>{assert(ref&&Number.isSafeInteger(ref.bytes)&&ref.bytes>=0&&/^[a-f0-9]{64}$/.test(ref.sha256));const raw=fs.readFileSync(safe(ref.path)),row={path:ref.path,expectedBytes:ref.bytes,expectedSHA:ref.sha256,bytes:raw.length,sha256:hash(raw),status:'running'};result.references.push(row);assert.equal(raw.length,ref.bytes);assert.equal(row.sha256,ref.sha256);row.status='pass';return raw;};
+          const json=ref=>JSON.parse(body(ref)),walk=x=>{if(!x||typeof x!=='object')return;if(typeof x.path==='string'&&Number.isSafeInteger(x.bytes)&&typeof x.sha256==='string')body(x);for(const v of Object.values(x))walk(v);};
+          const files=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(x=>x.isDirectory()?files(path.join(dir,x.name)):x.isFile()?[path.join(dir,x.name)]:(()=>{throw Error('Only regular proof files');})());
+          const APP='src/components/soccer-career/DrillBoard.tsx',UNIT='src/test/drillBoardMatch.test.tsx',MARKUP='src/test/drillBoardMarkup.test.tsx';
+          const OLD=['plays the wall shot round it was handed, once, and writes no daily record','wins the tackle round by tapping the loose ball, and reports what the engine settles','lets a glove round run out as a miss, once','plays one through ball, reports once and offers no next ball or menu'];
+          const NEW=['cancels a Wall Shot drag without spending the round, then releases once','cancels a Gloves drag without spending the round, then releases once'];
+          const TITLES=[...OLD,...NEW],MARKUP_TITLES=['draws the Wall Shot as recorded','draws the Tackle as recorded','draws the Glove Save as recorded','draws the Through Ball as recorded','matches the record made before the match prop existed'];
+          const IDS=['current','original-binding','whole-undo','unchanged-markup'];
+          const HELD=[APP,UNIT,MARKUP,'src/test/fixtures/drillBoardFrames.tsx','src/test/fixtures/drillBoardMarkup.recorded.json','src/lib/careerDrills.ts','src/lib/dailyRecord.ts','src/hooks/useArcadeFlight.ts','src/hooks/useRevealScroll.ts','src/lib/season/soccerMoments.ts','src/lib/throughBallDrill.ts','src/components/soccer-career/ThroughBallBoard.tsx','src/components/soccer-career/DrillPlayers.tsx','src/components/ui/button.tsx','src/lib/utils.ts','src/lib/dateUtils.ts','src/test/setup.ts','vitest.config.ts','tsconfig.app.json','package.json','package-lock.json','scripts/lib/offlineTransport.cjs','scripts/simCareerDrills.mjs','scripts/simCareerTraining.mjs','scripts/simFreeKick.mjs','scripts/simFreeKickPractice.mjs','scripts/qa/soccerDrillPointerCancelProof.mjs','.github/workflows/career-drill-pointer-cancel.yml','docs/CAREER-DRILL-POINTER-CANCEL.md'];
+          const PINS=[[APP,42504,'42591173de244f05f7e21166035ee6b7fe2d04ac78a8dc54c69bbd817038a99e'],[UNIT,12037,'3641efe7c96f24e6500745940ce8957f2e9f686fe3bc2c739d189f4af7727c42'],['scripts/qa/soccerDrillPointerCancelProof.mjs',11998,'c61ac628e640d4ccb0373c54cf7dd55db21da4b66a80f204e75dea4d97f81840'],['docs/CAREER-DRILL-POINTER-CANCEL.md',2000,'57df6eeec63e74ee6b5382c97ac8377fc4573fc30cc514c3d2d78d7ec205b921']];
+          const project=rows=>rows.map(({file,bytes,sha256})=>({file,bytes,sha256}));
+          let report;
+          try{
+           const raw=fs.readFileSync(path.join(OUT,'report.json'));result.report={bytes:raw.length,sha256:hash(raw)};report=JSON.parse(raw);walk(report);
+           check('complete-source-and-physical',()=>{assert.equal(report.status,'pass');same(report.errors,[]);same(report.identity,{head:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT});assert.equal(report.wholeSourceHeld,true);same(report.sourceBefore.map(x=>x.file),HELD);same(project(report.sourceBefore),project(report.sourceAfter));for(let i=0;i<HELD.length;i++){const a=report.sourceBefore[i],b=report.sourceAfter[i];keys(a,['file','path','bytes','sha256']);keys(b,['file','path','bytes','sha256']);same([a.path,b.path],[`source/before/${a.file}`,`source/after/${a.file}`]);assert(body(a).equals(body(b)));assert(body(a).equals(fs.readFileSync(path.join(ROOT,a.file))));}for(const[file,length,sha]of PINS){const ref=report.sourceBefore.find(x=>x.file===file);assert(ref);const raw=body(ref);assert.equal(raw.length,length);assert.equal(hash(raw),sha);}const vector=JSON.parse(fs.readFileSync(path.join(OUT,'physical-body-vector.json')));const names=files(OUT).map(f=>path.relative(OUT,f).split(path.sep).join('/')).filter(f=>f!=='physical-body-vector.json').sort();same(vector.files.map(x=>x.path).sort(),names);assert.equal(new Set(vector.files.map(x=>x.path)).size,names.length);for(const ref of vector.files){keys(ref,['path','bytes','sha256']);body(ref);}result.physicalBytes=vector.files.reduce((n,x)=>n+x.bytes,0);});
+           check('exact-original-binding-and-full-same-copy-undo',()=>{const c=report.sourceControl;assert.equal(c.id,'original-pointer-cancel-binding');assert.equal(c.status,'pass');same(c.errors,[]);same([c.changed,c.actualSameCopyReversed,report.temporaryRemoved],[true,true,true]);same([c.from,c.to],['        onPointerCancel={onCancel}','        onPointerCancel={onUp}']);const before=body(c.before),fault=body(c.fault),undo=body(c.undo);assert(before.equals(body(report.sourceBefore.find(x=>x.file===APP))));assert.equal(before.toString('utf8').split(c.from).length-1,1);assert.equal(fault.toString('utf8'),before.toString('utf8').replace(c.from,c.to));assert(!fault.equals(before));assert.equal(fault.toString('utf8').split(c.to).length-1,1);assert.equal(fault.toString('utf8').replace(c.to,c.from),before.toString('utf8'));assert(undo.equals(before));assert.equal(report.temporarySource.path,c.copyPath);assert(body(report.temporarySource.body).equals(before));assert(!fs.existsSync(c.copyPath));assert(path.basename(c.copyPath).match(/^__drill_pointer_cancel_[0-9]+\.tsx$/));assert.equal(path.dirname(c.copyPath),path.join(ROOT,'src/components/soccer-career'));});
+           check('all-eighteen-unit-plus-five-markup-assertions',()=>{same(report.arms.map(x=>x.id),IDS);same(report.processes.map(x=>x.id),IDS);result.assertions=[];for(let i=0;i<IDS.length;i++){const arm=report.arms[i],processRow=report.processes[i],isMarkup=i===3,titles=isMarkup?MARKUP_TITLES:TITLES,failed=i===1?NEW:[],test=isMarkup?MARKUP:UNIT,output=path.join(OUT,'arms',arm.id,'vitest.json');assert.equal(arm.status,'pass');same(arm.errors,[]);same(arm.process,processRow);same([arm.test,arm.titles,arm.expectedFailures],[test,titles,failed]);same([processRow.command,processRow.cwd,processRow.status,processRow.exit,processRow.signal,processRow.error],[process.execPath,ROOT,'closed',failed.length?1:0,null,null]);same(processRow.args,['--require',path.join(ROOT,'scripts/lib/offlineTransport.cjs'),path.join(ROOT,'node_modules/vitest/vitest.mjs'),'run',test,'--no-cache','--maxWorkers=1','--no-file-parallelism','--reporter=default','--reporter=json',`--outputFile=${output}`]);const env=isMarkup?{NO_DOUBLE_SWAP:'',RECORD_DRILL_MARKUP:''}:{NO_DOUBLE_SWAP:i===0?'':JSON.stringify({'@/components/soccer-career/DrillBoard':report.sourceControl.copyPath})};same(processRow.env,env);const streams=body(processRow.stdout).toString('utf8')+'\n'+body(processRow.stderr).toString('utf8');assert(body(processRow.stdout).length>0);assert(!/^\[SIM_OFFLINE_BLOCK\]/m.test(streams));assert(body(arm.vitest).equals(fs.readFileSync(output)));const value=json(arm.vitest);assert.equal(value.testResults.length,1);const file=value.testResults[0];same([file.name,file.message,file.status],[path.join(ROOT,test),'',failed.length?'failed':'passed']);const rows=file.assertionResults;same(rows.map(x=>x.title).sort(),[...titles].sort());same([value.numTotalTests,value.numPassedTests,value.numFailedTests,value.numPendingTests,value.numTodoTests,value.numPendingTestSuites],[titles.length,titles.length-failed.length,failed.length,0,0,0]);same(rows.filter(x=>x.status==='failed').map(x=>x.title).sort(),[...failed].sort());for(const row of rows){assert.equal(row.status,failed.includes(row.title)?'failed':'passed');if(failed.includes(row.title)){const marker=row.title===NEW[0]?'DRILL_POINTER_CANCEL_wallshot':'DRILL_POINTER_CANCEL_gloves';assert(row.failureMessages.length&&row.failureMessages.every(x=>x.includes(marker)));}else same(row.failureMessages,[]);}same(json(arm.assertions),rows);result.assertions.push({arm:arm.id,rows});}assert.equal(result.assertions.flatMap(x=>x.rows).length,23);});
+           check('four-effective-complete-runtime-diagnostic-copies',()=>{same(report.diagnostics.map(x=>x.id),IDS);for(const row of report.diagnostics){assert.equal(row.status,'pass');same(row.errors,[]);same([row.changed,row.actualSameFaultReversed],[true,true]);const child=report.processes.find(x=>x.id===row.id);same([row.stdout,row.stderr],[child.stdout,child.stderr]);const actual=stripVTControlCharacters(body(child.stdout).toString('utf8')+'\n'+body(child.stderr).toString('utf8')),a=body(row.before).toString('utf8'),f=body(row.fault).toString('utf8'),u=body(row.undo).toString('utf8'),banner='\nUnhandled Errors\n',detect=s=>/\b(?:Unhandled Errors|Unhandled Error|Unhandled Rejection|Failed Suites|Source Errors)\b/.test(s);assert.equal(a,actual);assert.equal(f,a+banner);assert.equal(f.slice(0,-banner.length),u);assert.equal(u,a);same([row.beforeFindings,row.faultFindings,row.undoFindings],[[],['vitest-runtime-diagnostic'],[]]);same([detect(a),detect(f),detect(u)],[false,true,false]);}});
+           result.unitArms=3;result.unitAssertions=18;result.markupAssertions=5;result.originalFailures=2;result.diagnosticControls=4;result.rawUnitOutcomeScope='Actual controlled unit assertions only. No custom model/trace, browser, natural-career, raw random-tape or Vitest transform credit.';result.status='pass';
+          }catch(error){result.status='fail';result.errors.push(String(error.stack||error));}
+          finally{fs.writeFileSync(path.join(OUT,'consumer-result.json'),JSON.stringify(result,null,2));}
+          console.log(`${result.status==='pass'?'PASS':'FAIL'} Complete cancellation consumer:18unit assertions,5held markup assertions,2exact original-binding failures,4diagnostic controls`);if(result.status!=='pass')process.exitCode=1;
+          DRILLCONSUMER
+          printf 'b3fc39f0117918c61a395bf08978d5bc834d3ec4d4f04dc8ede53e0672a14754  career-drill-pointer-cancel-artifacts/proof-consumer.mjs\n' > career-drill-pointer-cancel-artifacts/proof-consumer.sha256
+          sha256sum -c career-drill-pointer-cancel-artifacts/proof-consumer.sha256
+      - name: Actual current, original binding and whole undo units plus held markup
+        id: proof
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' && steps.types.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source career-drill-pointer-cancel-artifacts/capture.sh
+          capture proof env SOCCER_DRILL_CANCEL_OUT=career-drill-pointer-cancel-artifacts/proof SIM_OFFLINE_RECEIPT="$PWD/career-drill-pointer-cancel-artifacts/proof.transport.log" node scripts/qa/soccerDrillPointerCancelProof.mjs
+          test ! -s career-drill-pointer-cancel-artifacts/proof.transport.log
+      - name: Independently reopen complete cases, Source fault and whole undo
+        id: proof_consumer
+        if: ${{ !cancelled() && steps.proof.outcome == 'success' && steps.consumer_source.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source career-drill-pointer-cancel-artifacts/capture.sh
+          capture consumer-source sha256sum -c career-drill-pointer-cancel-artifacts/proof-consumer.sha256
+          capture proof-consumer env SOCCER_DRILL_CANCEL_OUT=career-drill-pointer-cancel-artifacts/proof node career-drill-pointer-cancel-artifacts/proof-consumer.mjs
+      - name: Full production SEO build
+        id: build
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' && steps.types.outcome == 'success' && steps.proof.outcome == 'success' && steps.proof_consumer.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source career-drill-pointer-cancel-artifacts/capture.sh
+          capture build npm run build:seo
+      - name: Four unchanged drill and free kick baseline methods
+        id: related
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source career-drill-pointer-cancel-artifacts/capture.sh
+          failed=0
+          printf 'harness\texit\tlines\tverdict\n' > career-drill-pointer-cancel-artifacts/related.tsv
+          for harness in simCareerDrills simCareerTraining simFreeKick simFreeKickPractice; do
+            capture "$harness" env SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$PWD/career-drill-pointer-cancel-artifacts/$harness.transport.log" node "scripts/$harness.mjs" || failed=1
+            status="$(cat "career-drill-pointer-cancel-artifacts/$harness.exit")"
+            lines="$(cat "career-drill-pointer-cancel-artifacts/$harness.stdout" "career-drill-pointer-cancel-artifacts/$harness.stderr" | awk 'NF && $0 !~ /^\[SIM_OFFLINE_BLOCK\]/ {n++} END {print n+0}')"
+            verdict=PASS
+            if test "$status" -ne 0; then verdict=FAIL; failed=1; fi
+            if test "$status" -eq 0 && test "$lines" -lt 4; then verdict=EMPTY; failed=1; fi
+            if grep -E '(^|[[:space:]])(FAIL|SKIP|EMPTY)([[:space:]]|$)|^\[SIM_OFFLINE_BLOCK\]' "career-drill-pointer-cancel-artifacts/$harness.stdout" "career-drill-pointer-cancel-artifacts/$harness.stderr" > /dev/null; then verdict=FAIL; failed=1; fi
+            if test -s "career-drill-pointer-cancel-artifacts/$harness.transport.log"; then verdict=FAIL; failed=1; fi
+            printf '%s\t%s\t%s\t%s\n' "$harness" "$status" "$lines" "$verdict" >> career-drill-pointer-cancel-artifacts/related.tsv
+            printf '%s: %s (exit %s, %s complete output lines)\n' "$harness" "$verdict" "$status" "$lines"
+          done
+          test "$(tail -n +2 career-drill-pointer-cancel-artifacts/related.tsv | wc -l)" -eq 4
+          exit "$failed"
+      - name: Every unchanged rebuilt reader with full child output
+        id: readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source career-drill-pointer-cancel-artifacts/capture.sh
+          node scripts/lib/hostLikeServer.mjs dist 4173 > career-drill-pointer-cancel-artifacts/reader-server.stdout 2> career-drill-pointer-cancel-artifacts/reader-server.stderr &
+          reader_server=$!
+          trap 'kill "$reader_server" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" -eq 1
+          failed=0
+          printf 'harness\texit\tlines\tverdict\n' > career-drill-pointer-cancel-artifacts/readers.tsv
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            capture "$harness" env SIM_NETWORK=offline ENGINES=chromium NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$PWD/career-drill-pointer-cancel-artifacts/$harness.transport.log" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$harness.mjs" || failed=1
+            status="$(cat "career-drill-pointer-cancel-artifacts/$harness.exit")"
+            lines="$(cat "career-drill-pointer-cancel-artifacts/$harness.stdout" "career-drill-pointer-cancel-artifacts/$harness.stderr" | awk 'NF && $0 !~ /^\[SIM_OFFLINE_BLOCK\]/ {n++} END {print n+0}')"
+            verdict=PASS
+            if test "$status" -ne 0; then verdict=FAIL; failed=1; fi
+            if test "$status" -eq 0 && test "$lines" -lt 4; then verdict=EMPTY; failed=1; fi
+            if grep -E '(^|[[:space:]])(FAIL|SKIP|EMPTY)([[:space:]]|$)|^\[SIM_OFFLINE_BLOCK\]' "career-drill-pointer-cancel-artifacts/$harness.stdout" "career-drill-pointer-cancel-artifacts/$harness.stderr" > /dev/null; then verdict=FAIL; failed=1; fi
+            if test -s "career-drill-pointer-cancel-artifacts/$harness.transport.log"; then verdict=FAIL; failed=1; fi
+            printf '%s\t%s\t%s\t%s\n' "$harness" "$status" "$lines" "$verdict" >> career-drill-pointer-cancel-artifacts/readers.tsv
+            printf '%s: %s (exit %s, %s complete output lines)\n' "$harness" "$verdict" "$status" "$lines"
+          done
+          test "$(tail -n +2 career-drill-pointer-cancel-artifacts/readers.tsv | wc -l)" -eq 15
+          exit "$failed"
+      - name: Whole source and package holds
+        if: always()
+        run: |
+          set -euo pipefail
+          source career-drill-pointer-cancel-artifacts/capture.sh
+          git diff --binary HEAD > career-drill-pointer-cancel-artifacts/generated.patch
+          cp package.json career-drill-pointer-cancel-artifacts/package.after.json
+          cp package-lock.json career-drill-pointer-cancel-artifacts/package-lock.after.json
+          failed=0
+          capture source-hold sha256sum -c career-drill-pointer-cancel-artifacts/source-hold.sha256 || failed=1
+          capture consumer-final-hold sha256sum -c career-drill-pointer-cancel-artifacts/proof-consumer.sha256 || failed=1
+          capture source-whole-hold git diff --exit-code HEAD -- . ':!public/**' ':!scripts/data/lastmod.json' || failed=1
+          capture source-extra git ls-files --others --exclude-standard -- src scripts .github/workflows docs || failed=1
+          test ! -s career-drill-pointer-cancel-artifacts/source-extra.stdout || failed=1
+          capture locked-final node scripts/qa/soccerAgentReviewDependencies.mjs after || failed=1
+          if test -f soccer-agent-review-artifacts/dependencies-after.json; then cp soccer-agent-review-artifacts/dependencies-after.json career-drill-pointer-cancel-artifacts/dependencies-final.json; fi
+          capture package-hold cmp package.json career-drill-pointer-cancel-artifacts/package.before.json || failed=1
+          capture lock-hold cmp package-lock.json career-drill-pointer-cancel-artifacts/package-lock.before.json || failed=1
+          exit "$failed"
+      - name: Preserve complete generated bodies and self-inclusive cap
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p career-drill-pointer-cancel-artifacts
+          paths=()
+          for item in public dist scripts/data/lastmod.json; do
+            if test -e "$item"; then paths+=("$item"); fi
+          done
+          tar -czf career-drill-pointer-cancel-artifacts/generated.tar.gz "${paths[@]}"
+          node --input-type=module <<'FOOTER'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          const out='career-drill-pointer-cancel-artifacts';
+          const files=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(row=>row.isDirectory()?files(path.join(dir,row.name)):[path.join(dir,row.name)]);
+          const count=()=>files(out).reduce((sum,file)=>sum+fs.statSync(file).size,0);
+          const target=path.join(out,'size.json');
+          fs.writeFileSync(target,JSON.stringify({bytes:0,cap:500000000}));
+          let bytes=count();
+          for(let i=0;i<3;i++){fs.writeFileSync(target,JSON.stringify({bytes,cap:500000000}));bytes=count();}
+          if(bytes>=500000000){
+            fs.writeFileSync(path.join(out,'cap-failure.json'),JSON.stringify({bytes,cap:500000000,retainedAllEvidence:true}));
+            for(let i=0;i<3;i++){bytes=count();fs.writeFileSync(target,JSON.stringify({bytes,cap:500000000}));}
+            bytes=count();
+          }
+          assert.equal(JSON.parse(fs.readFileSync(target)).bytes,count(),'Exact whole self-inclusive footer byte join');
+          assert(bytes<500000000,'Whole self-inclusive evidence remains below500M; retain all failures without pruning');
+          FOOTER
+      - name: Upload complete evidence even after failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-drill-pointer-cancel-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          include-hidden-files: true
+          if-no-files-found: error
+          path: career-drill-pointer-cancel-artifacts/

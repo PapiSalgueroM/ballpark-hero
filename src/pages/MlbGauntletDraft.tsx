@@ -26,11 +26,10 @@ export default function MlbGauntletDraft() {
         <GauntletBoard config={MLB_GAUNTLET_CONFIG} />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="mlb-gauntlet-draft" />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="mlb-gauntlet-draft" />}
           pageHasOwnH1
           title="Gauntlet Draft: MLB, Fill the Card, Win the Series"
           description="The MLB draft mode: each of the eleven spots on the lineup card, the nine in the batting order plus a starter and a closer, deals five real players from a star to a bargain, you keep one per spot, and the finished lineup runs a five round postseason against ever stronger invented opposition. Players and ratings come from real 2026 rosters, with hitters rated off their production and pitchers off theirs. One shared daily draft, unlimited redrafts, and a fully deterministic run so the draft is the game."

@@ -47,7 +47,7 @@
  * src/lib/clubManagerFinances.ts.
  */
 import type { CareerState, FormResult } from '@/lib/clubManager';
-import { eraClubDefFor, leaguePosition } from '@/lib/clubManager';
+import { eraClubDefFor, leaguePosition, weighedTrophies } from '@/lib/clubManager';
 
 export type MeterTone = 'good' | 'mid' | 'bad';
 
@@ -190,8 +190,9 @@ export function fanTerms(state: CareerState): FanTerms {
   const foodTerm = food === 0 || food === 1 || food === 2 ? FAN_FOOD_TERMS[food] : FAN_FOOD_TERMS[1];
   const shirtTerm = state.sponsor?.rep === 'bad' ? FAN_BAD_SHIRT : 0;
 
+  /* Round 1510: a minor cup (a super cup) is in the cabinet, not in the fans' trophy term. */
   const lifted = Array.isArray(state.trophies)
-    ? state.trophies.filter(t => t && t.season === state.season).length
+    ? weighedTrophies(state.trophies.filter(t => t && t.season === state.season)).length
     : 0;
   const trophiesTerm = Math.min(FAN_TROPHY_CAP, lifted * FAN_TROPHY_TERM);
 

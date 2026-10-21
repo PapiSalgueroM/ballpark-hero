@@ -1,0 +1,334 @@
+name: Soccer potential progress verification
+on:
+  push:
+    branches: [codex/career-potential-progress]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retain source and capture commands
+        run: |
+          set -euo pipefail
+          test "${GITHUB_REF_NAME}" = codex/career-potential-progress
+          mkdir potential-progress-artifacts
+          git cat-file -e 4aa47b12179f3e6bd734ffd84dd3a4b6641e36b5^{commit}
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse '4aa47b12179f3e6bd734ffd84dd3a4b6641e36b5^{tree}')" = 23f749bd3302eeff45881690346ff05321b6ec7b
+          git -c core.autocrlf=false archive --format=zip HEAD > potential-progress-artifacts/source.zip
+          git -c core.autocrlf=false archive --format=zip 4aa47b12179f3e6bd734ffd84dd3a4b6641e36b5 > potential-progress-artifacts/base.zip
+          git ls-tree -r HEAD > potential-progress-artifacts/source-inventory.txt
+          git ls-tree -r 4aa47b12179f3e6bd734ffd84dd3a4b6641e36b5 > potential-progress-artifacts/base-inventory.txt
+          sha256sum potential-progress-artifacts/source.zip potential-progress-artifacts/base.zip > potential-progress-artifacts/source-archives.sha256
+          node --input-type=module <<'SCOPE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const base='4aa47b12179f3e6bd734ffd84dd3a4b6641e36b5',allowed=['src/pages/SoccerCareer.tsx','src/components/soccer-career/PotentialProgress.tsx','src/test/soccerPotentialProgress.test.tsx','scripts/qa/soccerPotentialProgressBrowser.mjs','.github/workflows/soccer-potential-progress.yml','docs/CAREER-POTENTIAL-PROGRESS.md'];
+          const changed=execFileSync('git',['diff','--name-only','-z',base,'HEAD']).toString().split('\0').filter(Boolean);
+          fs.writeFileSync('potential-progress-artifacts/source-scope.json',JSON.stringify({base,allowed,changed},null,2));assert.deepEqual([...changed].sort(),[...allowed].sort());
+          SCOPE
+          git rev-parse HEAD HEAD^{tree} > potential-progress-artifacts/head-tree.txt
+          cp package.json potential-progress-artifacts/package.before.json
+          cp package-lock.json potential-progress-artifacts/package-lock.before.json
+          sha256sum src/pages/SoccerCareer.tsx src/components/soccer-career/PotentialProgress.tsx src/test/soccerPotentialProgress.test.tsx scripts/qa/soccerPotentialProgressBrowser.mjs .github/workflows/soccer-potential-progress.yml docs/CAREER-POTENTIAL-PROGRESS.md scripts/qa/soccerAgentReviewDependencies.mjs > potential-progress-artifacts/source-hold.sha256
+          cat > potential-progress-artifacts/capture.sh <<'CAPTURE'
+          capture() {
+            local label="$1"; shift
+            printf '%s\0' "$@" > "potential-progress-artifacts/$label.argv"
+            set +e
+            "$@" > "potential-progress-artifacts/$label.stdout" 2> "potential-progress-artifacts/$label.stderr"
+            local code=$?
+            set -e
+            echo "$code" > "potential-progress-artifacts/$label.exit"
+            cat "potential-progress-artifacts/$label.stdout"
+            cat "potential-progress-artifacts/$label.stderr" >&2
+            return "$code"
+          }
+          CAPTURE
+      - name: Install remote verification dependencies
+        id: dependencies
+        run: |
+          set -euo pipefail
+          source potential-progress-artifacts/capture.sh
+          capture npm-ci npm ci
+          capture locked-before node scripts/qa/soccerAgentReviewDependencies.mjs before
+          cp soccer-agent-review-artifacts/dependencies-before.json potential-progress-artifacts/dependencies-before.json
+          browser_tools="$RUNNER_TEMP/potential-progress-browser-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          capture playwright-package npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" potential-progress-artifacts/browser-package.json
+          cp "$browser_tools/package-lock.json" potential-progress-artifacts/browser-package-lock.json
+          capture chromium node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium
+          capture locked-after-setup node scripts/qa/soccerAgentReviewDependencies.mjs after
+          cp soccer-agent-review-artifacts/dependencies-after.json potential-progress-artifacts/dependencies-after-setup.json
+          node --input-type=module <<'PLAYWRIGHT'
+          import fs from 'node:fs';import assert from 'node:assert/strict';for(const name of ['playwright','playwright-core'])assert.equal(JSON.parse(fs.readFileSync('node_modules/'+name+'/package.json')).version,'1.64.0');
+          PLAYWRIGHT
+          capture fonts python -m pip install fonttools pillow
+          cmp package.json potential-progress-artifacts/package.before.json
+          cmp package-lock.json potential-progress-artifacts/package-lock.before.json
+      - name: Actual application type gate
+        id: types
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source potential-progress-artifacts/capture.sh
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      - name: Actual twenty display and privacy outcomes
+        id: display
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source potential-progress-artifacts/capture.sh
+          capture display node_modules/.bin/vitest run src/test/soccerPotentialProgress.test.tsx --reporter=default --reporter=json --outputFile=potential-progress-artifacts/display.json
+      - name: Independently check full display results
+        if: ${{ !cancelled() && steps.display.outcome == 'success' }}
+        run: |
+          node --input-type=module <<'DISPLAY'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const raw=fs.readFileSync('potential-progress-artifacts/display.json');
+          const report=JSON.parse(raw);
+          const assertions=report.testResults.flatMap(row=>row.assertionResults);
+          assert.equal(report.success,true);
+          assert.equal(assertions.length,20);
+          const expected=["shows the actual saved run without treating old seasons as near-ceiling evidence","keeps the run target visible when the current overall target is already met","shows the real effective ceiling and earned points with the actual eligibility requirements","keeps the 99 ceiling wall independent of overall 95","keeps the 99 ceiling wall independent of overall 99","keeps the saved record on retirement without promising another ceiling point","reads absent legacy counters as zero without migrating the save","conceals award-dependent counters during the actual queued newspaper boundary","conceals award-dependent counters during the actual queued season_summary boundary","conceals award-dependent counters during the actual queued ballon_dor boundary","conceals award-dependent counters during the actual queued world_cup boundary","conceals award-dependent counters during the actual queued international_debut boundary","conceals award-dependent counters during the actual queued rivalry_event boundary","does not conceal an already visible revealed award boundary","does not conceal an already visible speech award boundary","does not conceal an already visible stale award boundary","keeps full saved bytes and consumes no random draw across reads and rerenders","binds the actual Attributes consumer to the guarded plain props","detects a labelled copied pending-view exposure and restores the whole actual DOM","detects a labelled copied 99-wall target and restores the whole actual DOM"];
+          assert.deepEqual(assertions.map(row=>row.title).sort(),expected.sort());
+          assert(assertions.every(row=>row.status==='passed'));
+          assert.equal(report.numFailedTests,0);
+          assert.equal(report.numPendingTests,0);
+          assert.equal(report.numFailedTestSuites,0);
+          fs.writeFileSync('potential-progress-artifacts/complete-display-assertions.json',JSON.stringify(assertions));
+          DISPLAY
+      - name: Unchanged award reveal boundary outcomes
+        id: award
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source potential-progress-artifacts/capture.sh
+          capture award node_modules/.bin/vitest run src/test/soccerAwardReveal.test.tsx --reporter=default --reporter=json --outputFile=potential-progress-artifacts/award.json
+      - name: Independently check every unchanged award assertion
+        if: ${{ !cancelled() && steps.award.outcome == 'success' }}
+        run: |
+          node --input-type=module <<'AWARD'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const report=JSON.parse(fs.readFileSync('potential-progress-artifacts/award.json')),assertions=report.testResults.flatMap(row=>row.assertionResults);
+          fs.writeFileSync('potential-progress-artifacts/complete-award-assertions.json',JSON.stringify(assertions));assert.equal(report.success,true);assert(assertions.length>0);assert(assertions.every(row=>row.status==='passed'));assert.equal(report.numFailedTests,0);assert.equal(report.numPendingTests,0);assert.equal(report.numFailedTestSuites,0);
+          AWARD
+      - name: Full production SEO build
+        id: build
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' && steps.types.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source potential-progress-artifacts/capture.sh
+          capture build npm run build:seo
+      - name: Actual Attributes and award-boundary browser reads
+        id: browser
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source potential-progress-artifacts/capture.sh
+          server_pid=''
+          close_server() { if test -n "$server_pid"; then kill "$server_pid" 2>/dev/null || true; wait "$server_pid" 2>/dev/null || true; fi; }
+          trap close_server EXIT
+          node scripts/lib/hostLikeServer.mjs dist 4173 > potential-progress-artifacts/browser-server.stdout 2> potential-progress-artifacts/browser-server.stderr &
+          server_pid=$!
+          capture browser-server-ready node --input-type=module -e 'for(let i=0;i<100;i++){try{const r=await fetch("http://127.0.0.1:4173/");if(r.ok)process.exit(0);}catch{}await new Promise(r=>setTimeout(r,100));}process.exit(1);'
+          capture browser env BASE=http://127.0.0.1:4173 SOCCER_POTENTIAL_BROWSER_OUT=potential-progress-artifacts/browser node scripts/qa/soccerPotentialProgressBrowser.mjs
+      - name: Independently check every browser journey and whole retained reference
+        if: ${{ !cancelled() && steps.browser.outcome == 'success' }}
+        run: |
+          node --input-type=module <<'BROWSER'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out=path.resolve('potential-progress-artifacts/browser');
+          const report=JSON.parse(fs.readFileSync(path.join(out,'report.json'),'utf8'));
+          const expected=[320,390,430,1440].flatMap(width=>['visible','pending','reveal','wall99','retired'].map(kind=>`${width}-${kind}`));
+          assert.equal(report.status,'pass');assert.deepEqual(report.cases.map(row=>row.id),expected);assert.equal(report.errors.length,0);
+          assert(report.cases.every(row=>row.status==='pass'&&row.errors.length===0&&row.assets.every(asset=>!asset.error)&&row.scopes.some(scope=>scope.included&&scope.top)));
+          assert.deepEqual(report.controls.map(row=>row.id),['layout-observation','read-purity','pending-privacy','hard-wall']);
+          assert(report.controls.every(row=>row.status==='pass'&&row.reverseApplied===true&&row.findings.length>0&&row.actual.sha256===row.undo.sha256&&row.actual.sha256!==row.fault.sha256));
+          const ancestorControl=report.controls.find(row=>row.id==='layout-observation').ancestorPaint;
+          assert.equal(ancestorControl.status,'pass');assert.equal(ancestorControl.reverseApplied,true);assert.deepEqual(ancestorControl.findings,['paint']);
+          assert.equal(ancestorControl.actual.sha256,ancestorControl.undo.sha256);assert.notEqual(ancestorControl.actual.sha256,ancestorControl.fault.sha256);
+          const controlMap={'layout-observation':['horizontal-overflow','paint','fonts','viewport','stable','animations','target-size','scroll-position'],
+            'read-purity':['raw-save','read-rng'],'pending-privacy':['pending-progress-exposure'],'hard-wall':['hard-wall-target']};
+          for(const row of report.controls)assert.deepEqual(row.findings,controlMap[row.id]);
+          assert.deepEqual(report.sourceAfter,report.sourceBefore);assert.equal(report.forwardedExternalRequests,0);
+          const references=[];
+          const walk=value=>{if(!value||typeof value!=='object')return;if(typeof value.path==='string'&&Number.isInteger(value.bytes)&&typeof value.sha256==='string'){
+            const full=path.resolve(out,value.path);assert(full.startsWith(`${out}${path.sep}`));const body=fs.readFileSync(full);assert.equal(body.length,value.bytes);
+            assert.equal(createHash('sha256').update(body).digest('hex'),value.sha256);references.push(value);
+          }for(const child of Object.values(value))walk(child);};walk(report);
+          const readJSON=reference=>JSON.parse(fs.readFileSync(path.join(out,reference.path),'utf8'));
+          const callerSequence=draws=>{assert(Array.isArray(draws));for(const draw of draws){assert.equal(typeof draw.value,'number');assert(Number.isFinite(draw.value));assert.equal(typeof draw.caller,'string');}return draws.map(draw=>draw.caller);};
+          const reloadFindings=value=>[value.beforeRaw!==value.afterRaw&&'raw-save',JSON.stringify(callerSequence(value.beforeDraws))!==JSON.stringify(callerSequence(value.afterDraws))&&'read-rng'].filter(Boolean);
+          const privacyFindings=value=>value.mode!=='waiting'||value.progressCount!==1||value.ceilingCount||value.runCount||value.nextCount||value.summaryCount||value.revealed||value.text!=='Potential progress is waiting for the award reveal.'?['pending-progress-exposure']:[];
+          const namedLayout=(row,name)=>{const matches=row.layouts.filter(layout=>layout.name===name);assert.equal(matches.length,1);return readJSON(matches[0].observation);};
+          const readControl=report.controls.find(row=>row.id==='read-purity'),readActual=readJSON(readControl.actual),readFault=readJSON(readControl.fault),readUndo=readJSON(readControl.undo);
+          assert.deepEqual(readControl.reloadCallerFindings,controlMap['read-purity']);assert.deepEqual(reloadFindings(readActual),[]);
+          assert.deepEqual(reloadFindings(readFault),controlMap['read-purity']);assert.deepEqual(reloadFindings(readUndo),[]);assert.deepEqual(readUndo,readActual);assert.notDeepEqual(readFault,readActual);
+          const readCase=report.cases.find(row=>row.id==='390-visible'),readSteps=readCase.steps.filter(step=>step.name==='back-and-reopen');assert.equal(readSteps.length,1);assert.deepEqual(readActual,readJSON(readSteps[0].purity));
+          const privacyControl=report.controls.find(row=>row.id==='pending-privacy'),privacyActual=readJSON(privacyControl.actual),privacyFault=readJSON(privacyControl.fault),privacyUndo=readJSON(privacyControl.undo);
+          assert.deepEqual(privacyFindings(privacyActual),[]);assert.deepEqual(privacyFindings(privacyFault),controlMap['pending-privacy']);assert.deepEqual(privacyFindings(privacyUndo),[]);
+          assert.deepEqual(privacyUndo,privacyActual);assert.notDeepEqual(privacyFault,privacyActual);assert.deepEqual(privacyActual,readJSON(report.cases.find(row=>row.id==='390-pending').inaccessiblePending));
+          for(const row of report.cases){assert.equal(row.reloads.length,1);assert(row.reloads.every(reload=>reload.status==='pass'));
+            const loaded=readJSON(row.loaded),oracle=readJSON(row.oracle),reload=row.reloads[0],before=readJSON(reload.before),after=readJSON(reload.after);
+            assert.deepEqual(reload.bootstrap,row.loaded);assert.equal(loaded.raw,oracle.output);assert.equal(before.raw,loaded.raw);assert.equal(after.raw,before.raw);
+            assert.deepEqual(before.evidence.draws,loaded.evidence.draws);
+            const witness=readJSON(row.kind==='pending'||row.kind==='reveal'?reload.witness:reload.purity);
+            assert.equal(witness.beforeRaw,before.raw);assert.equal(witness.afterRaw,after.raw);
+            assert.deepEqual(witness.beforeDraws,loaded.evidence.draws);assert.deepEqual(witness.afterDraws,after.evidence.draws);
+            assert.deepEqual(callerSequence(witness.beforeDraws),callerSequence(witness.afterDraws));assert.deepEqual(reloadFindings(witness),[]);
+            if(row.kind==='pending'){
+              const phase=readJSON(row.pendingPhaseView),mask=readJSON(row.inaccessiblePending),restoredMask=readJSON(reload.mask);
+              assert.equal(phase.attributesCount,1);assert.equal(phase.progressCount,0);assert.equal(phase.revealed,false);
+              assert.equal(JSON.parse(loaded.raw).pendingBallonDor.revealed??false,false);assert.equal(JSON.parse(after.raw).pendingBallonDor.revealed??false,false);
+              const waiting=namedLayout(row,'pending-progress'),restored=namedLayout(row,'reloaded-pending-progress');
+              for(const [actual,observed] of [[mask,waiting],[restoredMask,restored]]){
+                assert.deepEqual(privacyFindings(actual),[]);assert.equal(actual.progressCount,1);assert.equal(actual.revealed,false);
+                for(const key of ['mode','ceilingCount','runCount','nextCount','summaryCount','text'])assert.deepEqual(actual[key],observed[key]);
+                assert(actual.html.includes(observed.html));
+              }
+              assert.equal(restored.html,waiting.html);assert(row.layouts.some(layout=>layout.name==='pending-summary-heading'));
+            }else if(row.kind==='reveal'){
+              const phase=readJSON(row.inaccessibleRevealed),revealed=readJSON(row.revealedProgress),restored=readJSON(reload.progress),saved=JSON.parse(loaded.raw);
+              assert.equal(phase.attributesCount,1);assert.equal(phase.progressCount,0);assert.equal(saved.pendingBallonDor.revealed,true);
+              assert.equal(row.actualReveal.expected,oracle.output);assert.equal(row.actualReveal.actual,loaded.raw);assert.deepEqual(row.actualReveal.draws,loaded.evidence.draws);
+              assert.deepEqual(revealed,namedLayout(row,'revealed-progress'));assert.deepEqual(restored,namedLayout(row,'reloaded-revealed-progress'));
+              for(const view of [revealed,restored]){
+                assert.equal(view.mode,'visible');assert.equal(view.ceilingCount,1);assert.equal(view.runCount,1);assert.equal(view.nextCount,1);assert.equal(view.summaryCount,1);
+                assert(view.text.includes(`Ceiling ${oracle.ceiling}/99${saved.potentialEarned>0?` · ${saved.potentialEarned} earned`:''}.`));
+                assert(view.text.includes(`Elite run: ${saved.eliteStreak} ${saved.eliteStreak===1?'season':'seasons'}.`));
+                assert(view.text.includes(`Next point: elite run 2+ and ${oracle.ceiling-2}+ overall at season end.${saved.overall>=oracle.ceiling-2?' Overall target met now.':''}`));
+              }
+              assert.equal(restored.html,revealed.html);assert(row.layouts.some(layout=>layout.name==='actual-reveal-headline'));
+            }else{assert.equal(namedLayout(row,'reload-progress').html,namedLayout(row,'progress').html);}
+            if(row.kind==='visible')for(const name of ['requirements-closed','requirements-reclosed'])assert(row.layouts.some(layout=>layout.name===name));
+            for(const layout of row.layouts){const observed=JSON.parse(fs.readFileSync(path.join(out,layout.observation.path),'utf8'));
+              assert(Array.isArray(observed.ancestors)&&observed.ancestors.length>1);assert.equal(observed.effectiveOpacity,1);
+              assert(observed.ancestors.every(layer=>layer.display!=='none'&&layer.visibility==='visible'));assert.equal(observed.finite,0);
+              assert.deepEqual(observed.documentFiniteAnimations,[]);assert.equal(observed.elementFinite,0);
+              if(observed.expectedScroll!==null)assert.equal(observed.scrollY,observed.expectedScroll);
+            }
+            assert(row.steps.every(step=>step.status==='pass'));
+          }
+          const stdout=fs.readFileSync('potential-progress-artifacts/browser.stdout','utf8');assert(stdout.split('\n').filter(line=>line.trim()).length>=4);
+          assert(stdout.trimEnd().endsWith('PASS Soccer potential progress browser'));assert.equal(fs.readFileSync('potential-progress-artifacts/browser.exit','utf8').trim(),'0');
+          fs.writeFileSync('potential-progress-artifacts/browser-complete-references.json',JSON.stringify(references));
+          BROWSER
+      - name: Every unchanged rebuilt reader with full child output
+        id: readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source potential-progress-artifacts/capture.sh
+          node scripts/lib/hostLikeServer.mjs dist 4173 > potential-progress-artifacts/reader-server.stdout 2> potential-progress-artifacts/reader-server.stderr &
+          reader_server=$!
+          trap 'kill "$reader_server" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" -eq 1
+          failed=0
+          printf 'harness\texit\tlines\tverdict\n' > potential-progress-artifacts/readers.tsv
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            capture "$harness" env SIM_NETWORK=offline ENGINES=chromium NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$PWD/potential-progress-artifacts/$harness.transport.log" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$harness.mjs" || failed=1
+            status="$(cat "potential-progress-artifacts/$harness.exit")"
+            lines="$(cat "potential-progress-artifacts/$harness.stdout" "potential-progress-artifacts/$harness.stderr" | awk 'NF && $0 !~ /^\[SIM_OFFLINE_BLOCK\]/ {n++} END {print n+0}')"
+            verdict=PASS
+            if test "$status" -ne 0; then verdict=FAIL; failed=1; fi
+            if test "$status" -eq 0 && test "$lines" -lt 4; then verdict=EMPTY; failed=1; fi
+            if grep -E '(^|[[:space:]])(FAIL|SKIP|EMPTY)([[:space:]]|$)|^\[SIM_OFFLINE_BLOCK\]' "potential-progress-artifacts/$harness.stdout" "potential-progress-artifacts/$harness.stderr" > /dev/null; then verdict=FAIL; failed=1; fi
+            if test -s "potential-progress-artifacts/$harness.transport.log"; then verdict=FAIL; failed=1; fi
+            printf '%s\t%s\t%s\t%s\n' "$harness" "$status" "$lines" "$verdict" >> potential-progress-artifacts/readers.tsv
+            printf '%s: %s (exit %s, %s complete output lines)\n' "$harness" "$verdict" "$status" "$lines"
+          done
+          test "$(tail -n +2 potential-progress-artifacts/readers.tsv | wc -l)" -eq 15
+          exit "$failed"
+      - name: Whole source and package holds
+        if: always()
+        run: |
+          set -euo pipefail
+          source potential-progress-artifacts/capture.sh
+          git diff --binary HEAD > potential-progress-artifacts/generated.patch
+          cp package.json potential-progress-artifacts/package.after.json
+          cp package-lock.json potential-progress-artifacts/package-lock.after.json
+          failed=0
+          capture source-hold sha256sum -c potential-progress-artifacts/source-hold.sha256 || failed=1
+          capture source-whole-hold git diff --exit-code HEAD -- . ':!public/**' ':!scripts/data/lastmod.json' || failed=1
+          capture source-extra git ls-files --others --exclude-standard -- src scripts .github/workflows docs || failed=1
+          test ! -s potential-progress-artifacts/source-extra.stdout || failed=1
+          capture locked-final node scripts/qa/soccerAgentReviewDependencies.mjs after || failed=1
+          if test -f soccer-agent-review-artifacts/dependencies-after.json; then cp soccer-agent-review-artifacts/dependencies-after.json potential-progress-artifacts/dependencies-final.json; fi
+          capture package-hold cmp package.json potential-progress-artifacts/package.before.json || failed=1
+          capture lock-hold cmp package-lock.json potential-progress-artifacts/package-lock.before.json || failed=1
+          exit "$failed"
+      - name: Preserve complete generated bodies and self-inclusive cap
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p potential-progress-artifacts
+          paths=()
+          for item in public dist scripts/data/lastmod.json; do
+            if test -e "$item"; then paths+=("$item"); fi
+          done
+          tar -czf potential-progress-artifacts/generated.tar.gz "${paths[@]}"
+          node --input-type=module <<'FOOTER'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          const out='potential-progress-artifacts';
+          const files=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(row=>row.isDirectory()?files(path.join(dir,row.name)):[path.join(dir,row.name)]);
+          const count=()=>files(out).reduce((sum,file)=>sum+fs.statSync(file).size,0);
+          const target=path.join(out,'size.json');
+          fs.writeFileSync(target,JSON.stringify({bytes:0,cap:500000000}));
+          let bytes=count();
+          for(let i=0;i<3;i++){fs.writeFileSync(target,JSON.stringify({bytes,cap:500000000}));bytes=count();}
+          if(bytes>=500000000){
+            fs.writeFileSync(path.join(out,'cap-failure.json'),JSON.stringify({bytes,cap:500000000,retainedAllEvidence:true}));
+            for(let i=0;i<3;i++){bytes=count();fs.writeFileSync(target,JSON.stringify({bytes,cap:500000000}));}
+            bytes=count();
+          }
+          assert.equal(JSON.parse(fs.readFileSync(target)).bytes,count(),'Exact whole self-inclusive footer byte join');
+          assert(bytes<500000000,'Whole self-inclusive evidence remains below500M; retain all failures without pruning');
+          FOOTER
+      - name: Upload complete evidence even after failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-potential-progress-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          include-hidden-files: true
+          if-no-files-found: error
+          path: potential-progress-artifacts/

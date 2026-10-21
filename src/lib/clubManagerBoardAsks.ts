@@ -60,6 +60,7 @@ import {
   REAL_LEAGUES, isHistoricEra, leagueRulesOf,
 } from '@/lib/clubManager';
 import { nationalityOf } from '@/data/playerNationalities';
+import { marketForMe } from '@/lib/clubManagerDifficulty';
 
 /** Bump when the shape of a stored ask changes so old saves rebuild theirs. */
 export const BOARD_ASKS_VERSION = 1;
@@ -176,7 +177,8 @@ const SPEND_MARGIN = 0.85;
 export function askCandidates(career: CareerState): AskCandidate[] {
   const squad = career.squad ?? [];
   const budget = career.budget ?? 0;
-  const market: MarketPlayer[] = buildMarket(career);
+  /* Round 1501: priced as the market is listed to you, so an ask never points at a man the level puts out of reach. */
+  const market: MarketPlayer[] = marketForMe(career, buildMarket(career));
   const affordable = market.filter(p => p.price <= budget * SPEND_MARGIN);
   const out: AskCandidate[] = [];
   const room = SQUAD_LIMIT - squad.length;

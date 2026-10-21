@@ -3,10 +3,11 @@ import { ArrowLeft, ArrowRight, Check, HelpCircle } from 'lucide-react';
 import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';
 import { PreDraftSeasonCard } from '@/components/career/PreDraftSeasonCard';
 import { DraftShowcaseCard } from '@/components/career/DraftShowcaseCard';
-import { preDraftChoose, preDraftPlaySeason, preDraftProjection, preDraftProjectionLine, preDraftRunDraft, preDraftShowcase, preDraftStart, type PreDraftState } from '@/lib/careerPreDraft';
+import { preDraftChoose, preDraftPlaySeason, preDraftProjection, preDraftProjectionLine, preDraftRunDraft, preDraftShowcase, preDraftStart, preDraftUndoSkip, type PreDraftState } from '@/lib/careerPreDraft';
 import type { UsCareerProspect } from '@/lib/usCareerProspect';
 import type { UsCareerSport } from '@/lib/usCareerSport';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { useTapSettle } from '@/hooks/useTapSettle';
 import styles from './ProspectJourney.module.css';
 
 const ACTS = ['Pick your path', 'Earn your place', 'Draft day'];
@@ -35,6 +36,17 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
   const titleRef = useRef<HTMLHeadingElement>(null);
   const actionTitleRef = useRef<HTMLHeadingElement>(null);
   const [help, setHelp] = useState(!state);
+  /* Round 1346: draft night can be watched again in the mount that played it (never saved, like the night itself).
+     Each run remounts the card and the stage, whose keys carry it, so the rows and the held result arrive again on
+     the night's clock. The keys matter after a night that landed on its own: its hold (the result's cm-rise and the
+     stage's data-night-hold) is already on, so without a remount nothing would start again and the pick would stay
+     in sight while the rows replay (after a skipped night the hold is added fresh either way). Focus goes to the
+     play area's own title, as it does at every new step. */
+  const [nightRun, setNightRun] = useState(0);
+  useEffect(() => { if (nightRun) actionTitleRef.current?.focus({ preventScroll: true }); }, [nightRun]);
+  /* "Skip to the end" and "Watch it again" share one cell, so a press of either ignores a tap for a second after the
+     other (useTapSettle): a double tap on the skip no longer starts the night over, nor one on the replay end it. */
+  const nightSettle = useTapSettle();
   useEffect(() => { (state ? actionTitleRef : titleRef).current?.focus({ preventScroll: true }); }, [eventKey]);
   /* Round 1220: the night plays once, in the mount that pressed "Draft day".
      The flag is never saved, so a reload at the result shows the result. */
@@ -81,7 +93,7 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
           <span>{i < act ? <Check size={15} /> : i + 1}</span>{label}
         </li>)}
       </ol>
-      <div className={styles.stage} key={eventKey} data-arrival={state?.phase === 'done' || undefined} data-night-hold={nightHold ? '' : undefined}>
+      <div className={styles.stage} key={`${eventKey}:${nightRun}`} data-arrival={state?.phase === 'done' || undefined} data-night-hold={nightHold ? '' : undefined}>
         <div className={styles.stadium} aria-hidden="true"><i /><i /><i /><i /><i /></div>
         <div className={styles.stageCopy}>
           <p className={styles.chapter}>{sport.label} Road to the Draft</p>
@@ -103,7 +115,8 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
         <h3>Make the league on your terms</h3>
         <p>Pick a route, play its seasons, then decide how to handle scouts, training and health. Your rating and health shape your performances. Draft stock shapes how early a team takes you.</p>
         <p><strong>For example:</strong> playing through a knock can raise your stock but cost health. The button shows the exact change before you choose. The showcase lets you push hard, play safe or skip; each option lists its possible stock changes. Its grade is simulated from your rating, health and saved career seed.</p>
-        <p><strong>Draft night:</strong> before the draft the scouts quote a range for you, and the night always ends inside it. At a draft stock of 60, for example: {preDraftProjectionLine(preDraftProjection(desc, { stock: 60, pos: prospect.pos }), 'have')} Then you watch the picks ahead of yours come off the board in the order the game already set, until your name is called or the last pick goes by without it. Nothing is drawn while you watch, no other prospect is ever named, and you can skip to the end at any time.{desc.lottery ? ' The lottery tile shows which club won each drawn pick. Seed 1 is the worst record.' : ''}</p>
+        <p>Pressed Skip it by mistake? Undo it any time before you press Draft day. For example: skip at a draft stock of 50 and you drop to 48; Undo skip puts you back at 50 with all three options open again.</p>
+        <p><strong>Draft night:</strong> before the draft the scouts quote a range for you, and the night always ends inside it. At a draft stock of 60, for example: {preDraftProjectionLine(preDraftProjection(desc, { stock: 60, pos: prospect.pos }), 'have')} Then you watch the picks ahead of yours come off the board in the order the game already set, until your name is called or the last pick goes by without it. Nothing is drawn while you watch, no other prospect is ever named, and you can skip to the end at any time. Once it is over, Watch it again plays the same night from the start, unless your device is set to reduce motion.{desc.lottery ? ' The lottery tile shows which club won each drawn pick. Seed 1 is the worst record.' : ''}</p>
         <p>All prospects and results are fictional. The era sets the available teams and routes. The draft uses a simplified order without traded or extra picks; baseball and hockey lotteries are not modeled. Money in your career is a simulation, not a real contract quote. Going undrafted still leads to a camp signing.</p>
         <button className={styles.helpClose} onClick={() => setHelp(false)}>Got it</button>
       </div>}
@@ -116,11 +129,12 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
             <small>Start at age {route.startAge} · Draft at {route.startAge + route.seasons}</small>
           </button>)}
         </div> : act === 1 ? <PreDraftSeasonCard desc={desc} state={state} choiceRef={actionRef} onPlaySeason={() => onChange(preDraftPlaySeason(desc, state))} onChoose={i => onChange(preDraftChoose(desc, state, i))} />
-          : <DraftShowcaseCard desc={{ ...desc, bonusLine: undefined }} state={state} onShowcase={approach => onChange(preDraftShowcase(desc, state, approach))}
+          : <DraftShowcaseCard key={nightRun} desc={{ ...desc, bonusLine: undefined }} state={state} onShowcase={approach => onChange(preDraftShowcase(desc, state, approach))}
               onRunDraft={() => { setNightStage(!nightKit ? 'off' : lessMotion() ? 'skipped' : 'live'); onChange(preDraftRunDraft(desc, state)); }} onContinue={onJoin}
-              showRange nightHold={nightHold} nightHeld={held}
+              showRange nightHold={nightHold} nightHeld={held} onUndoSkip={() => onChange(preDraftUndoSkip(state))}
               night={night && nightKit && out ? <nightKit.DraftNightSequence night={night} desc={desc} draftYear={out.draftYear} stage={nightStage === 'live' ? 'live' : nightStage === 'landed' ? 'landed' : 'skipped'}
-                onLanded={() => setNightStage(s => (s === 'live' ? 'landed' : s))} onSkip={() => setNightStage('skipped')} onContinue={onJoin} /> : undefined} />}
+                onLanded={() => setNightStage(s => (s === 'live' ? 'landed' : s))} onSkip={() => { if (!nightSettle.settled()) return; nightSettle.mark(); setNightStage('skipped'); }} onContinue={onJoin}
+                onReplay={lessMotion() ? undefined : () => { if (!nightSettle.settled()) return; nightSettle.mark(); setNightRun(n => n + 1); setNightStage('live'); }} /> : undefined} />}
       </div>
       {state && state.lines.length > 0 && <details className={styles.history}>
         <summary>Your scout file <span>{state.lines.length} {state.lines.length === 1 ? 'season' : 'seasons'}</span></summary>

@@ -129,7 +129,8 @@ const CLUBS = (process.env.CLUBS ?? 'Everton,Real Madrid,Ajax,Aston Villa,Barcel
 const GAP = Number(process.env.GAP ?? 0.2);
 
 const OFF = [{ file: ENGINE, from: '    restLegs(at);', to: '    void restLegs;' }];
-const GUARD = 'if (live.subsUsed >= MAX_SUBS - 1 || (live.minute ?? 0) > at || benchFor(state).length < 2) return;';
+/* Round 1331: the guard reads the match's rule now (three here, see the base rules below); same meaning. */
+const GUARD = 'if (live.subsUsed >= rule.subs - 1 || (live.minute ?? 0) > at || benchFor(state).length < 2) return false;';
 const CONTROLS = {
   unbooked: { patch: [{ file: ENGINE, from: '.sort((a, b) => Number(booked.has(b.p.id)) - Number(booked.has(a.p.id)) || a.p.fitness - b.p.fitness);', to: '.sort((a, b) => a.p.fitness - b.p.fitness);' }], red: 'order' },
   stale: { patch: [{ file: ENGINE, from: '&& (p.fitness > out.p.fitness || (p.fitness === out.p.fitness && p.morale > out.p.morale)));', to: ');' }], red: 'fresher' },
@@ -138,7 +139,7 @@ const CONTROLS = {
   noclock: { patch: [{ file: ENGINE, from: GUARD, to: GUARD.replace(' || (live.minute ?? 0) > at', '') }], red: 'clock' },
   off: { patch: OFF, red: 'gap' },
   anyone: { patch: [{ file: ENGINE, from: 'const coming = options.find(p => settled || noWeaker(p));', to: 'const coming = options[0];' }], red: 'rule' },
-  nokeep: { patch: [{ file: ENGINE, from: GUARD, to: GUARD.replace('live.subsUsed >= MAX_SUBS - 1', 'live.subsUsed >= MAX_SUBS') }], red: 'reserve' },
+  nokeep: { patch: [{ file: ENGINE, from: GUARD, to: GUARD.replace('live.subsUsed >= rule.subs - 1', 'live.subsUsed >= rule.subs') }], red: 'reserve' },
   ambient: { patch: [{ file: ENGINE, from: 'lo + Math.floor(keyedRng(`${key}|${i}`)() * (hi - lo + 1))', to: 'lo + Math.floor(Math.random() * (hi - lo + 1))' }], red: 'manual' },
 };
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) { console.error(`simCmQuickLegs: unknown control "${CONTROL}"`); process.exit(2); }
@@ -241,6 +242,10 @@ function playCareer(cm, club, seed, a, keep, section5) {
   const kept = [];
   under(stream, () => {
     let s = cm.startCareer(club);
+    /* Round 1331: this file measures the three change coach of Round 1146, so its careers play the base
+       rules (three, no stoppage limit), the engine it was written against. The coach under five in three is
+       scripts/simCmSubs.mjs, section coach. */
+    s.matchRules = 'base';
     for (let season = 0; season < SEASONS; season++) {
       let guard = 0;
       while (s.week < s.calendar.length && guard++ < 200) {
@@ -400,6 +405,10 @@ function careerByHand(cm, club, seed, plays, probe) {
   const stream = seeded(seed);
   under(stream, () => {
     let st = cm.startCareer(club);
+    /* Round 1331: this file measures the three change coach of Round 1146, so its careers play the base
+       rules (three, no stoppage limit), the engine it was written against. The coach under five in three is
+       scripts/simCmSubs.mjs, section coach. */
+    st.matchRules = 'base';
     let i = 0;
     for (let season = 0; season < SEASONS; season++) {
       let guard = 0;

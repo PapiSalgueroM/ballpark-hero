@@ -33,7 +33,13 @@ const fonts = new Map(JSON.parse(fs.readFileSync(path.join(CACHE, 'manifest.json
 assert(/^\s+setClubs\(FALLBACK_CLUBS\);$/m.test(fs.readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8')),
   'The route and oracle must use the same actual static club pool');
 const B = await developmentBundle();
-const bundle = await build({ stdin: { contents: "export * as soccer from './src/lib/soccerCareerEngine'; export * as preparation from './src/lib/soccerCareerPreparation'; export * as mentor from './src/lib/soccerCareerMentor';", resolveDir: ROOT, loader: 'ts' },
+/* Release BJ triage: since Round 1504 the page pulls Soccer Career's summer deck (src/lib/soccerDeckGate.ts) in as
+   soon as a live career is on screen, so a summer the page deals can open with a deck card. The oracle is the same
+   engine with the same deck in memory (its gate is bundled and loaded on every reset), and the walk checks the page
+   really fetched the deck chunk on each load (scripts/playSoccerDeck.mjs's DECK_CHUNK) before it presses anything.
+   Nothing else about the comparison changed: every saved field and every random draw is still held. */
+const DECK_CHUNK = /\/assets\/soccerDeck-[\w-]+\.js$/;
+const bundle = await build({ stdin: { contents: "export * as soccer from './src/lib/soccerCareerEngine'; export * as preparation from './src/lib/soccerCareerPreparation'; export * as mentor from './src/lib/soccerCareerMentor'; export * as deckGate from './src/lib/soccerDeckGate';", resolveDir: ROOT, loader: 'ts' },
   bundle: true, platform: 'browser', format: 'iife', globalName: '__developmentEngine', write: false, jsx: 'automatic',
   alias: { '@': path.join(ROOT, 'src') }, define: { 'import.meta.env': '{"DEV":false,"PROD":true,"MODE":"production"}' },
   loader: { '.css': 'empty', '.png': 'empty', '.svg': 'empty', '.jpg': 'empty', '.webp': 'empty' }, logLevel: 'error' });
@@ -94,7 +100,7 @@ try {
       const oracleContext = await browser.newContext({ reducedMotion: 'reduce' });
       const oracle = await oracleContext.newPage();
       await oracle.addInitScript(now => { const OldDate = Date; window.Date = class extends OldDate { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } }; }, NOW);
-      const resetOracle = async () => { await oracle.goto('about:blank'); await oracle.addScriptTag({ content: browserSource }); };
+      const resetOracle = async () => { await oracle.goto('about:blank'); await oracle.addScriptTag({ content: browserSource }); await oracle.evaluate(() => window.__developmentEngine.deckGate.loadSoccerDeck()); };
       await context.addInitScript(now => { const OldDate = Date; window.Date = class extends OldDate { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } }; }, NOW);
       await context.route('**/*', route => {
         const request = route.request(), url = new URL(request.url());
@@ -108,6 +114,8 @@ try {
       });
       await context.routeWebSocket('**/*', socket => socket.close());
       const page = await context.newPage(); page.setDefaultTimeout(15000);
+      const deckFetched = () => page.waitForResponse(response => DECK_CHUNK.test(response.url()), { timeout: 45000 }).then(response => response.ok(), () => false);
+      const deckLanded = async (pending, name) => { check(await pending, `${name}: the page fetched the summer deck chunk, the deck the oracle plays with`); await page.waitForLoadState('networkidle'); };
       page.on('pageerror', error => row.errors.push(String(error)));
       page.on('requestfailed', request => { if (request.url().startsWith(BASE)) row.assetErrors.push(`${request.url()}: ${request.failure()?.errorText}`); });
       page.on('response', response => { if (response.url().startsWith(BASE) && response.status() >= 400) row.assetErrors.push(`${response.url()}: ${response.status()}`); });
@@ -157,7 +165,7 @@ try {
         return actual;
       };
       const reload = async name => {
-        const before = await bytes(); await page.reload({ waitUntil: 'domcontentloaded' }); await page.getByRole('button', { name: 'How to play', exact: true }).waitFor({ timeout: 45000 }); const after = await bytes();
+        const before = await bytes(), deck = deckFetched(); await page.reload({ waitUntil: 'domcontentloaded' }); await page.getByRole('button', { name: 'How to play', exact: true }).waitFor({ timeout: 45000 }); await deckLanded(deck, `${name}-reload`); const after = await bytes();
         const receipt = { name, beforeHash: hash(before), afterHash: hash(after), beforeBytes: Buffer.byteLength(before), afterBytes: Buffer.byteLength(after), equal: after === before };
         fs.writeFileSync(path.join(OUT, `${id}-${name}-reload-before.json`), before); fs.writeFileSync(path.join(OUT, `${id}-${name}-reload-after.json`), after);
         row.reloads.push(receipt); write(`${id}-${name}-reload-receipt`, receipt); check(after === before, `${name}: reload preserves the complete saved bytes`); await resetOracle();
@@ -248,7 +256,7 @@ try {
         throw new Error('Actual summer never returned to playing in 24 actions');
       };
       try {
-        await resetOracle(); await page.goto(`${BASE}/soccer-career`, { waitUntil: 'domcontentloaded' }); await page.getByRole('button', { name: 'How to play', exact: true }).waitFor({ timeout: 45000 }); await page.evaluate(() => document.fonts.ready);
+        await resetOracle(); const deck = deckFetched(); await page.goto(`${BASE}/soccer-career`, { waitUntil: 'domcontentloaded' }); await page.getByRole('button', { name: 'How to play', exact: true }).waitFor({ timeout: 45000 }); await deckLanded(deck, 'initial'); await page.evaluate(() => document.fonts.ready);
         const initial = await predict(fixture, 'soccer', 'repairCareer', [], 118500); compare(initial.next, await saved(), 'initial-repair');
         if (kind === 'mentor') {
           const eventCard = page.getByRole('heading', { name: 'Youth Mentor', exact: true }).locator('..').locator('..'), eventText = await eventCard.innerText();

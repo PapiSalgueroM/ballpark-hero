@@ -1,0 +1,208 @@
+name: Club Manager reported season outcomes
+on:
+  push:
+    branches: [codex/manager-reported-bugs]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      MANAGER_REPORT_PHASE: fixed
+      ENGINES: chromium
+      PRERENDER_ONLY: /club-manager
+      MANAGER_REPORT_ARTIFACTS: manager-report-artifacts/natural
+      FREE_KICK_FONT_CACHE: manager-report-artifacts/font-cache
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked setup and source binding
+        run: |
+          mkdir -p manager-report-artifacts
+          git rev-parse HEAD > manager-report-artifacts/head.txt
+          git ls-files src scripts .github/workflows package.json package-lock.json bun.lock index.html ':!scripts/data/lastmod.json' | xargs sha256sum > manager-report-artifacts/source-hashes.txt
+          tar -cf manager-report-artifacts/source.tar src scripts package.json package-lock.json bun.lock index.html .github/workflows/manager-reported-bugs.yml
+          NODE_OPTIONS= npm ci 2>&1 | tee manager-report-artifacts/install.log
+          if [ "$MANAGER_REPORT_PHASE" = baseline ]; then
+            git diff --exit-code 082fc2774c8aa9f919c14efa33bfc3fbfc599597 -- src scripts package.json package-lock.json bun.lock index.html ':!src/lib/clubManagerCustomPromotion.test.ts' ':!src/lib/clubManagerReportAge.test.ts' ':!src/lib/clubManagerReportedScorers.test.ts'
+          fi
+      - name: Actual application types
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-report-artifacts/types.log
+      - name: Report outcomes on the actual engine
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: |
+          set +e
+          npm test -- --run src/lib/clubManagerCustomPromotion.test.ts src/lib/clubManagerReportAge.test.ts src/lib/clubManagerReportedScorers.test.ts --reporter=verbose --reporter=json --outputFile=manager-report-artifacts/outcomes.json 2>&1 | tee manager-report-artifacts/outcomes.log
+          status=${PIPESTATUS[0]}
+          set -e
+          echo "$status" > manager-report-artifacts/outcomes-exit.txt
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const report = JSON.parse(fs.readFileSync('manager-report-artifacts/outcomes.json', 'utf8'));
+          const results = report.testResults.flatMap(file => file.assertionResults);
+          const expected = [
+            'promotes created champions in every configured pair while preserving all real clubs',
+            'keeps the created club outside the automatic places in its current division',
+            'uses the saved own-name head-to-head before mapping the promotion slot',
+            'relegates a promoted created club without replacing a second real club',
+            'migrates an unseeded legacy custom first summer without inventing history',
+            'restores the promoted custom league and board after another slot registered overrides',
+            'restores the real proxy on summer departure and removes the departed name from Europe',
+            'restores the real proxy when leaving a created European club during a season',
+          ];
+          assert.equal(results.length, 23, 'Every specified outcome case must run');
+          assert.equal(report.testResults.length, 3, 'All three diagnostic files must run');
+          for (const [name, count] of [['clubManagerCustomPromotion.test.ts', 13], ['clubManagerReportAge.test.ts', 3], ['clubManagerReportedScorers.test.ts', 7]]) assert.equal(report.testResults.find(file => file.name.endsWith(name))?.assertionResults.length, count, name);
+          assert.equal(report.numPendingTests, 0);
+          assert.equal(results.some(row => !['passed', 'failed'].includes(row.status)), false);
+          const failed = results.filter(row => row.status === 'failed');
+          if (process.env.MANAGER_REPORT_PHASE === 'baseline') {
+            assert.equal(fs.readFileSync('manager-report-artifacts/outcomes-exit.txt', 'utf8').trim(), '1');
+            assert.deepEqual(failed.map(row => row.title).sort(), expected.sort());
+            for (const row of failed) assert.ok(row.failureMessages.every(message => message.includes('AssertionError') && !/TypeError|ReferenceError|SyntaxError/.test(message)), row.fullName);
+          } else if (process.env.MANAGER_REPORT_PHASE === 'alias-baseline') {
+            assert.equal(fs.readFileSync('manager-report-artifacts/outcomes-exit.txt', 'utf8').trim(), '1');
+            assert.deepEqual(failed.map(row => row.title), ['keeps qualified non-English created clubs apart from their domestic opponents in Europe']);
+            assert.ok(failed[0].failureMessages.every(message => message.includes('AssertionError') && !/TypeError|ReferenceError|SyntaxError/.test(message)));
+          } else {
+            assert.equal(fs.readFileSync('manager-report-artifacts/outcomes-exit.txt', 'utf8').trim(), '0');
+            assert.equal(report.success, true); assert.equal(failed.length, 0);
+          }
+          const summary = { phase: process.env.MANAGER_REPORT_PHASE, cases: results.length, passed: results.filter(row => row.status === 'passed').length, failed: failed.map(row => row.title) };
+          fs.writeFileSync('manager-report-artifacts/outcome-summary.json', JSON.stringify(summary, null, 2));
+          console.log(JSON.stringify(summary));
+          JS
+      - name: Existing promotion contracts on the baseline
+        if: env.MANAGER_REPORT_PHASE == 'baseline'
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: node scripts/simPromotion.mjs 2>&1 | tee manager-report-artifacts/original-promotion.log
+      - name: Actual created-club seasons and save/load summers
+        if: env.MANAGER_REPORT_PHASE == 'fixed'
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+          MANAGER_REPORT_ARTIFACTS: manager-report-artifacts/natural
+        run: node scripts/simManagerCustomPromotion.mjs 2>&1 | tee manager-report-artifacts/natural.log
+      - name: Effective promotion faults
+        if: env.MANAGER_REPORT_PHASE == 'fixed'
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: node scripts/qa/checkManagerReportControls.mjs 2>&1 | tee manager-report-artifacts/controls.log
+      - name: Existing world browsing outcomes and effective copied faults
+        if: env.MANAGER_REPORT_PHASE == 'fixed'
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: MANAGER_WORLD_BROWSER_CONTROL=all MANAGER_WORLD_BROWSER_ARTIFACTS=manager-report-artifacts/world-browser/mounted node scripts/simManagerWorldBrowser.mjs 2>&1 | tee manager-report-artifacts/world-browser-mounted.log
+      - name: Remote build and browser prerequisites
+        if: env.MANAGER_REPORT_PHASE == 'fixed'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/manager-report-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/manager-report-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/manager-report-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/manager-report-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee manager-report-artifacts/fonts.log
+          mkdir -p manager-report-artifacts/world-browser
+          MANAGER_WORLD_FONT_CACHE=manager-report-artifacts/world-browser/font-cache node scripts/qa/managerWorldBrowser1077.mjs --prefetch-fonts-only 2>&1 | tee manager-report-artifacts/world-browser-fonts.log
+      - name: Complete SEO build
+        id: build
+        if: env.MANAGER_REPORT_PHASE == 'fixed'
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: |
+          npm run build:seo 2>&1 | tee manager-report-artifacts/build.log
+          git diff -- scripts/data/lastmod.json > manager-report-artifacts/lastmod.diff
+          mkdir -p manager-report-artifacts/generated
+          cp -r public/club-manager manager-report-artifacts/generated/club-manager
+          cp public/sitemap.xml scripts/data/lastmod.json manager-report-artifacts/generated/
+      - name: Unchanged route download ceilings
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > manager-report-artifacts/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee manager-report-artifacts/weights.log
+      - name: Rebuilt readers and existing Manager contracts
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: ONLY=simPromotion,simClubManager,simClubManagerCalendar,simClubManagerSaveSize,simClubManagerSlots,simEra2010,simCmLeagueBook,simUclField,simCustomClubValues,simSaveFence,simFlagshipWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee manager-report-artifacts/readers.log
+      - name: Actual promotion continuation and reload in Chromium
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: node scripts/playManagerCustomPromotion.mjs 2>&1 | tee manager-report-artifacts/browser.log
+      - name: Native modern edited and historical world browsing
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+          MANAGER_WORLD_FONT_CACHE: manager-report-artifacts/world-browser/font-cache
+        run: |
+          world_browser_status=0
+          node scripts/qa/managerWorldBrowser1077.mjs 2>&1 | tee manager-report-artifacts/world-browser-native.log || world_browser_status=$?
+          if [ -d manager-world-browser-artifacts/native ]; then cp -r manager-world-browser-artifacts/native manager-report-artifacts/world-browser/; fi
+          exit "$world_browser_status"
+      - name: Retain the qualified full-unit receipt
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: manager-reports-38538631115
+          run-id: 38538631115
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/manager-prior-proof
+      - name: Full ordinary unit suite or identical qualified inputs
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: |
+          if git diff --quiet 8eba33314fe89b43a045c31c33e916cd4d8965e4 HEAD -- . ':!scripts/playManagerCustomPromotion.mjs' ':!.github/workflows/manager-reported-bugs.yml'; then
+            node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const folder = process.env.RUNNER_TEMP + '/manager-prior-proof';
+          assert.equal(fs.readFileSync(folder + '/head.txt', 'utf8').trim(), '8eba33314fe89b43a045c31c33e916cd4d8965e4');
+          const report = JSON.parse(fs.readFileSync(folder + '/full-unit.json', 'utf8'));
+          assert.equal(report.success, true); assert.equal(report.numFailedTests, 0);
+          assert.equal(report.numPassedTests, 7887); assert.equal(report.numPendingTests, 58);
+          for (const file of ['full-unit.json', 'full-unit.log']) fs.copyFileSync(folder + '/' + file, 'manager-report-artifacts/' + file);
+          const receipt = { qualifiedHead: '8eba33314fe89b43a045c31c33e916cd4d8965e4', run: 38538631115, passed: report.numPassedTests,
+            existingSkipped: report.numPendingTests, changedFilesAllowed: ['scripts/playManagerCustomPromotion.mjs', '.github/workflows/manager-reported-bugs.yml'],
+            method: 'All other tracked inputs are byte-identical by git diff. Only the standalone browser driver and its workflow changed.' };
+          fs.writeFileSync('manager-report-artifacts/full-unit-reuse.json', JSON.stringify(receipt, null, 2));
+          console.log(JSON.stringify(receipt));
+          JS
+          else
+            npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile.json=manager-report-artifacts/full-unit.json 2>&1 | tee manager-report-artifacts/full-unit.log
+          fi
+      - name: Final source holds
+        if: always()
+        run: |
+          sha256sum --check manager-report-artifacts/source-hashes.txt > manager-report-artifacts/source-holds.log
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' .github/workflows package.json package-lock.json bun.lock index.html
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manager-reports-${{ github.run_id }}
+          path: manager-report-artifacts/
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: error

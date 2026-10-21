@@ -6,6 +6,8 @@ import { createHash } from 'node:crypto';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { build } from 'esbuild';
+import { stripRetireHunks } from './lib/usCoachRetireHunks.mjs';
+import { stripNflStaffRecoveryHunk } from './lib/usNflStaffRecoveryHunks.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const engine = 'src/lib/usCoachCareer.ts', test = 'src/lib/usCoachPoaching.test.ts';
@@ -45,7 +47,13 @@ for (const anchor of [departure, credit]) {
   assert.equal(source.split(anchor).length - 1, 1, 'One actual executable binding');
   assert.equal(holdSource(Buffer.from(source.replaceAll('\n', '\r\n'))).source.split(anchor).length - 1, 1, 'CRLF binding held');
 }
-const original = source.replace(departure, oldDeparture).replace(credit + '\n', '');
+/* Round 1346 bridge: the coaching retirement added five hunks to the engine (retireCoachCareer and one done guard
+   at the top of four functions). Each is an exact anchor held once in the LF text (the strip turns a CRLF
+   checkout to LF first), and stripped before the hash, so
+   the pinned pre-888 hash is unchanged and still proves no other line of the engine moved. The anchors live in
+   scripts/lib/usCoachRetireHunks.mjs, shared with simUsCoachRetirement. */
+const preRetire = stripRetireHunks(stripNflStaffRecoveryHunk(source));
+const original = preRetire.replace(departure, oldDeparture).replace(credit + '\n', '');
 assert.equal(createHash('sha256').update(original).digest('hex'), originalHash, 'Reconstructed original matches the captured pre-repair engine exactly');
 let subject = source;
 if (control) { const [anchor, replacement] = controls[control]; subject = source.replace(anchor, replacement); assert.notEqual(subject, source); }

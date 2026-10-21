@@ -9,7 +9,8 @@ import {
    meter prints. This desk used to print a second one from its own stored
    number and the two disagreed on screen. */
 import { fanMeter } from '@/lib/clubManagerMeters';
-import type { ConcessionTier, ProjectionLine } from '@/lib/clubManagerFinances';
+import { kittyChange } from '@/lib/clubManagerHubLines';
+import type { ConcessionTier, FinanceProjection, ProjectionLine } from '@/lib/clubManagerFinances';
 
 /* ─── Round 467: the finances desk. ───
    The projection first, because it is the screen he asked for and it has to
@@ -54,6 +55,15 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
   const money = moneyIn(c);
   const books = booksOf(c);
   const p = projectFinances(c);
+  /* Round 1326 and Round 1328 joined: what the board covers and what that
+     leaves the kitty. The kitty change is kittyChange, the one place the
+     hub's Finances tile reads too, so the tile and this desk cannot
+     disagree. The cover row sums the running costs the board pays, each
+     spend line counted by its own kitty flag, never by its id. */
+  const kitty = kittyChange(p);
+  const cover = (pick: 'actual' | 'projected') => Math.round(p.spend.filter(l => l.kitty === false).reduce((n, l) => n + l[pick], 0) * 100) / 100;
+  const k = { coverActual: cover('actual'), coverProjected: cover('projected'), kittyActual: kitty.actual, kittyProjected: kitty.projected };
+  const signed = (n: number) => `${n > 0 ? '+' : n < 0 ? '-' : ''}${money(Math.abs(n))}`;
   const ticketTier = c.finance?.ticketTier ?? 1;
   const tReact = ticketReaction(ticketTier);
   const cReact = concessionReaction(books.concessionTier);
@@ -65,12 +75,12 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
       {/* Round 467: the projection. */}
       <div className="bg-card border border-border rounded-xl p-3" data-finance-projection>
         <div className="flex items-baseline justify-between gap-2 mb-1">
-          <div className="text-[10px] text-muted-foreground uppercase tracking-wider">📊 Projected to season end</div>
-          <div className="text-[9px] text-muted-foreground tabular-nums">week {p.weeksPlayed}, {p.weeksLeft} left</div>
+          <div className="text-xs text-muted-foreground uppercase tracking-wider">📊 Projected to season end</div>
+          <div className="text-xs text-muted-foreground tabular-nums">week {p.weeksPlayed}, {p.weeksLeft} left</div>
         </div>
-        <table className="w-full text-[10px] leading-tight">
+        <table className="w-full text-xs leading-tight">
           <thead>
-            <tr className="text-[9px] text-muted-foreground uppercase tracking-wider">
+            <tr className="text-xs text-muted-foreground uppercase tracking-wider">
               <th className="text-left font-normal pb-0.5">In</th>
               <th className="text-right font-normal pb-0.5">so far</th>
               <th className="text-right font-normal pb-0.5 pl-2">season</th>
@@ -83,22 +93,27 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
               <td className="py-0.5 text-right tabular-nums text-muted-foreground">{money(p.incomeActual)}</td>
               <td className="py-0.5 pl-2 text-right tabular-nums font-bold text-emerald-400">{money(p.incomeProjected)}</td>
             </tr>
-            <tr><td colSpan={3} className="pt-1 text-[9px] text-muted-foreground uppercase tracking-wider">Out</td></tr>
+            <tr><td colSpan={3} className="pt-1 text-xs text-muted-foreground uppercase tracking-wider">Out</td></tr>
             {p.spend.map(l => <Row key={l.id} line={l} tone="out" fmt={money} />)}
             <tr className="border-t border-border" data-projection-total="spend">
               <td className="py-0.5 font-bold text-foreground">Spend</td>
               <td className="py-0.5 text-right tabular-nums text-muted-foreground">{money(p.spendActual)}</td>
               <td className="py-0.5 pl-2 text-right tabular-nums font-bold text-foreground">{money(p.spendProjected)}</td>
             </tr>
-            <tr className="border-t border-border" data-projection-total="result">
-              <td className="py-0.5 font-bold text-foreground">Season result</td>
-              <td className={cn('py-0.5 text-right tabular-nums', p.resultActual < 0 ? 'text-red-400' : 'text-muted-foreground')}>{p.resultActual < 0 ? '-' : ''}{money(Math.abs(p.resultActual))}</td>
-              <td className={cn('py-0.5 pl-2 text-right tabular-nums font-bold', p.resultProjected < 0 ? 'text-red-400' : 'text-emerald-400')}>{p.resultProjected < 0 ? '-' : ''}{money(Math.abs(p.resultProjected))}</td>
+            <tr className="border-t border-border" data-projection-total="cover">
+              <td className="py-0.5 text-muted-foreground">Board covers running costs</td>
+              <td className="py-0.5 text-right tabular-nums whitespace-nowrap text-muted-foreground">{signed(k.coverActual)}</td>
+              <td className="py-0.5 pl-2 text-right tabular-nums whitespace-nowrap text-muted-foreground">{signed(k.coverProjected)}</td>
+            </tr>
+            <tr className="border-t border-border" data-projection-total="kitty">
+              <td className="py-0.5 font-bold text-foreground">Kitty change</td>
+              <td className={cn('py-0.5 text-right tabular-nums whitespace-nowrap', k.kittyActual < 0 ? 'text-red-400' : 'text-emerald-400')}>{signed(k.kittyActual)}</td>
+              <td className={cn('py-0.5 pl-2 text-right tabular-nums whitespace-nowrap font-bold', k.kittyProjected < 0 ? 'text-red-400' : 'text-emerald-400')}>{signed(k.kittyProjected)}</td>
             </tr>
           </tbody>
         </table>
-        <p className="text-[9px] text-muted-foreground mt-1.5">
-          Tickets, food, the sponsor, deals, the builders and staff fees move the transfer kitty ({money(c.budget)} now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty. {p.caveat}
+        <p className="text-xs text-muted-foreground mt-1.5">
+          Tickets, food, the sponsor, deals, the builders and staff fees move the transfer kitty ({money(c.budget)} now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty, and the kitty change adds them back. Not counted above, and they move the kitty too: a ground expansion, the academy, scout trips, promoted prospects, contract renewals, role settlements, loan recalls and broken loans, fines, the board's top ups and the decisions desk. {p.caveat}
           {p.possibleBonus > 0 && c.sponsor?.bonusFor ? ` A ${money(p.possibleBonus)} sponsor bonus pays at the summer for ${BONUS_FOR[c.sponsor.bonusFor]}, not counted until it is earned.` : ''}
         </p>
       </div>
@@ -106,8 +121,8 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
       {/* Round 171's ticket policy, Round 467's food, and the reactions. */}
       <div className="bg-card border border-border rounded-xl p-3" data-pricing-desk>
         <div className="flex items-baseline justify-between gap-2 mb-1.5">
-          <div className="text-[10px] text-muted-foreground uppercase tracking-wider">🎟️ Prices</div>
-          <div className="text-[9px] text-muted-foreground" data-fan-mood={fanMeter(c).shown}>Fans: <span className="font-bold text-foreground">{fanMeter(c).band}</span></div>
+          <div className="text-xs text-muted-foreground uppercase tracking-wider">🎟️ Prices</div>
+          <div className="text-xs text-muted-foreground" data-fan-mood={fanMeter(c).shown}>Fans: <span className="font-bold text-foreground">{fanMeter(c).band}</span></div>
         </div>
         <div className="grid grid-cols-3 gap-1.5">
           {TICKET_TIERS.map((tt, i) => (
@@ -116,16 +131,16 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
               aria-pressed={ticketTier === i}
               onClick={() => onTickets(i as 0 | 1 | 2)}
               className={cn(
-                'rounded-lg border p-1.5 text-left transition-colors',
+                'min-h-[44px] rounded-lg border p-1.5 text-left transition-colors',
                 ticketTier === i ? 'border-primary bg-primary/10' : 'border-border bg-background/40 hover:border-primary',
               )}
             >
-              <div className="text-[11px] font-bold text-foreground">{tt.emoji} {tt.label}</div>
-              <div className="text-[9px] text-muted-foreground mt-0.5">{tt.blurb}</div>
+              <div className="text-xs font-bold text-foreground">{tt.emoji} {tt.label}</div>
+              <div className="text-xs text-muted-foreground mt-0.5">{tt.blurb}</div>
             </button>
           ))}
         </div>
-        <p className="text-[9px] text-muted-foreground mt-1">Tickets about £{ticketPerFan(c)} a head. {tReact.fans} {tReact.board}</p>
+        <p className="text-xs text-muted-foreground mt-1">Tickets about £{ticketPerFan(c)} a head. {tReact.fans} {tReact.board}</p>
         <div className="grid grid-cols-3 gap-1.5 mt-1.5">
           {CONCESSION_TIERS.map((ct, i) => (
             <button
@@ -133,21 +148,21 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
               aria-pressed={books.concessionTier === i}
               onClick={() => onConcessions(i as ConcessionTier)}
               className={cn(
-                'rounded-lg border p-1.5 text-left transition-colors',
+                'min-h-[44px] rounded-lg border p-1.5 text-left transition-colors',
                 books.concessionTier === i ? 'border-primary bg-primary/10' : 'border-border bg-background/40 hover:border-primary',
               )}
             >
-              <div className="text-[11px] font-bold text-foreground">{ct.emoji} {ct.label}</div>
-              <div className="text-[9px] text-muted-foreground mt-0.5">{ct.blurb}</div>
+              <div className="text-xs font-bold text-foreground">{ct.emoji} {ct.label}</div>
+              <div className="text-xs text-muted-foreground mt-0.5">{ct.blurb}</div>
             </button>
           ))}
         </div>
-        <p className="text-[9px] text-muted-foreground mt-1">Food and drink about £{concessionPerFan(c)} a head, lifted by the stadium level. {cReact.fans} {cReact.board} The mood also follows the last five results, and it moves your home crowd: 0.9x furious, 1.1x singing.</p>
+        <p className="text-xs text-muted-foreground mt-1">Food and drink about £{concessionPerFan(c)} a head, lifted by the stadium level. {cReact.fans} {cReact.board} The mood also follows the last five results, and it moves your home crowd: 0.9x furious, 1.1x singing.</p>
       </div>
 
       {/* Round 200: the commercial desk. Round 467: reach, a push, and a bad brand. */}
       <div data-sponsor-desk className="bg-card border border-border rounded-xl p-3">
-        <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">🤝 Shirt sponsor</div>
+        <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1.5">🤝 Shirt sponsor</div>
         {c.sponsor ? (
           <>
             <p className="text-xs text-foreground">
@@ -157,14 +172,14 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
                 ? ` Plus ${money(c.sponsor.bonus)} for ${BONUS_FOR[c.sponsor.bonusFor]}.`
                 : ' No bonuses, just the cheque.'}
             </p>
-            <p className="text-[10px] text-muted-foreground mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               {c.sponsor.yearsLeft === 1 ? 'Final season of the deal.' : `${c.sponsor.yearsLeft} seasons left.`} Paid so far: <span className="font-bold text-foreground">{money(c.sponsor.paid)}</span>.
               {c.sponsor.rep === 'bad' ? ' The fans hate the shirt: 6 off the meter for as long as you wear it, and the ground thins out.' : ''}
             </p>
           </>
         ) : (
           <>
-            <p className="text-[10px] text-muted-foreground mb-2">
+            <p className="text-xs text-muted-foreground mb-2">
               Offers on the table. The money lands in the same kitty as everything else, this season and every season the deal runs. Push for more and the brand comes up six percent, or walks.
             </p>
             <div className="space-y-1.5">
@@ -172,17 +187,17 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
                 <div key={o.id} className="rounded-lg border border-border bg-background/40 p-2">
                   <div data-sponsor-offer={o.id}>
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-[11px] font-bold text-foreground truncate">{o.brand} <span className="font-normal text-muted-foreground">({o.reach})</span></span>
-                      <span className="text-[11px] font-bold text-gold tabular-nums shrink-0">{money(o.perSeason)}/season</span>
+                      <span className="text-xs font-bold text-foreground min-w-0">{o.brand} <span className="font-normal text-muted-foreground">({o.reach})</span></span>
+                      <span className="text-xs font-bold text-gold tabular-nums shrink-0">{money(o.perSeason)}/season</span>
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-0.5 leading-snug">
+                    <p className="text-xs text-muted-foreground mt-0.5 leading-snug">
                       {o.pitch} {o.years} season{o.years === 1 ? '' : 's'}.
                       {o.bonus > 0 && o.bonusFor ? ` Bonus ${money(o.bonus)} for ${o.bonusFor === 'title' ? 'the title' : o.bonusFor === 'europe' ? 'Europe' : 'a top half finish'}.` : ''}
                       {o.pushed > 0 ? ` Pushed ${o.pushed === 1 ? 'once' : 'twice'}, up from ${money(o.basePerSeason)}.` : ''}
                     </p>
                     <button
                       onClick={() => onSponsor(o.id)}
-                      className="mt-1.5 w-full py-1.5 rounded-lg text-[11px] font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+                      className="mt-1.5 w-full min-h-[44px] py-1.5 rounded-lg text-xs font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
                     >
                       Sign with {o.brand.split(' ')[0]}
                     </button>
@@ -190,7 +205,7 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
                   <button
                     onClick={() => onPush(o.id)}
                     data-sponsor-push={o.id}
-                    className="mt-1 w-full py-1 rounded-lg text-[10px] font-bold border border-border text-muted-foreground hover:border-primary hover:text-foreground transition-colors"
+                    className="mt-1 w-full min-h-[44px] py-1 rounded-lg text-xs font-bold border border-border text-muted-foreground hover:border-primary hover:text-foreground transition-colors"
                   >
                     Push for more
                   </button>
@@ -199,24 +214,24 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
               {bad && (
                 <div data-sponsor-bad={bad.id} className="rounded-lg border border-red-500/40 bg-red-500/5 p-2">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[11px] font-bold text-foreground truncate">{bad.brand} <span className="font-normal text-red-400">(fans will hate it)</span></span>
-                    <span className="text-[11px] font-bold text-gold tabular-nums shrink-0">{money(bad.perSeason)}/season</span>
+                    <span className="text-xs font-bold text-foreground min-w-0">{bad.brand} <span className="font-normal text-red-400">(fans will hate it)</span></span>
+                    <span className="text-xs font-bold text-gold tabular-nums shrink-0">{money(bad.perSeason)}/season</span>
                   </div>
-                  <p className="text-[9px] text-muted-foreground mt-0.5 leading-snug">
+                  <p className="text-xs text-muted-foreground mt-0.5 leading-snug">
                     {bad.pitch} {bad.years} seasons, no bonus. Costs the fans 6 mood the day you sign and 8 off their target every week after, and buys a point with the board.
                     {bad.pushed > 0 ? ` Pushed ${bad.pushed === 1 ? 'once' : 'twice'}, up from ${money(bad.basePerSeason)}.` : ''}
                   </p>
                   <div className="grid grid-cols-2 gap-1.5 mt-1.5">
                     <button
                       onClick={() => onSponsor(bad.id)}
-                      className="py-1.5 rounded-lg text-[11px] font-bold bg-red-500/80 text-white hover:opacity-90 transition-opacity"
+                      className="min-h-[44px] py-1.5 rounded-lg text-xs font-bold bg-red-500/80 text-white hover:opacity-90 transition-opacity"
                     >
                       Take the money
                     </button>
                     <button
                       onClick={() => onPush(bad.id)}
                       data-sponsor-push={bad.id}
-                      className="py-1.5 rounded-lg text-[10px] font-bold border border-border text-muted-foreground hover:border-primary hover:text-foreground transition-colors"
+                      className="min-h-[44px] py-1.5 rounded-lg text-xs font-bold border border-border text-muted-foreground hover:border-primary hover:text-foreground transition-colors"
                     >
                       Push for more
                     </button>
@@ -224,7 +239,7 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
                 </div>
               )}
               {books.walked.length > 0 && (
-                <p className="text-[9px] text-muted-foreground">{books.walked.length === 1 ? 'One brand has' : `${books.walked.length} brands have`} walked this season after one push too many.</p>
+                <p className="text-xs text-muted-foreground">{books.walked.length === 1 ? 'One brand has' : `${books.walked.length} brands have`} walked this season after one push too many.</p>
               )}
             </div>
           </>
@@ -232,23 +247,23 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
       </div>
 
       {/* Round 171: the books card. */}
-      <div className="bg-card border border-border rounded-xl p-3">
-        <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">💰 The books</div>
+      <div className="bg-card border border-border rounded-xl p-3" data-finance-books>
+        <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1.5">💰 The books</div>
         <div className="grid grid-cols-3 gap-2 text-center">
           <div>
             <div className="text-sm font-bold font-display text-foreground">{money(c.budget)}</div>
-            <div className="text-[9px] text-muted-foreground">Transfer kitty</div>
+            <div className="text-xs text-muted-foreground">Transfer kitty</div>
           </div>
           <div>
             <div className="text-sm font-bold font-display text-emerald-400">{c.finance?.seasonGate ? money(c.finance.seasonGate) : money(0)}</div>
-            <div className="text-[9px] text-muted-foreground">Matchday money this season</div>
+            <div className="text-xs text-muted-foreground">Matchday money this season</div>
           </div>
           <div>
             <div className="text-sm font-bold font-display text-foreground">{c.finance?.lastGate ? money(c.finance.lastGate) : '-'}</div>
-            <div className="text-[9px] text-muted-foreground">Last home gate</div>
+            <div className="text-xs text-muted-foreground">Last home gate</div>
           </div>
         </div>
-        <p className="text-[9px] text-muted-foreground mt-1.5">Every home crowd pays the kitty: attendance times about £{gatePricePerFan(c)} a head, tickets plus food and drink at your prices. Scouts, the academy, the facilities and the staff desk spend from the same kitty in their own tabs. What you have left in August rolls into next season on top of the board's new cheque, up to one more season's worth of it.</p>
+        <p className="text-xs text-muted-foreground mt-1.5">Every home crowd pays the kitty: attendance times about £{gatePricePerFan(c)} a head, tickets plus food and drink at your prices. Scouts, the academy, the facilities and the staff desk spend from the same kitty in their own tabs. What you have left in August rolls into next season on top of the board's new cheque, up to one more season's worth of it.</p>
       </div>
     </div>
   );

@@ -13,6 +13,23 @@ import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { nextTenPatches } from './lib/careerNextTenAttribution1197.mjs';
 import { veteranPayPatches } from './lib/careerVeteranPay1262.mjs';
+/* Round 1327: the event deck draws on a keyed stream and the paper picks by weight, so advanceProSeason makes other
+   global draws from its paper on (the old sort drew from Math.random). Every engine this file compares with the AR
+   tree (the uncopied one, the copied fault one and the historical ones) therefore loads with Round 1327 taken out
+   first, as an attribution kept apart from the copied faults: scripts/lib/careerDeckFair1327.mjs. The milestone
+   engine news check compares the paper's global draws with AR's, so it reads that attributed engine too. */
+import { deckFairPatches } from './lib/careerDeckFair1327.mjs';
+/* Round 1329: the world truth round comes out first, in front of Round 1327 (scripts/lib/careerWorldTruth1329.mjs): its
+   engine rows before 1327's, and its phone rows when the engine's import of the phone loads (the quiz and the
+   International panel are not in this bundle). */
+import { worldTruthPatches } from './lib/careerWorldTruth1329.mjs';
+/* Round 1334: the soccer deck's three engine lines come out first, in front of Round 1329 (scripts/lib/careerSoccerDeck1334.mjs), every row once, in order. */
+import { soccerDeckPatches } from './lib/careerSoccerDeck1334.mjs';
+const deckFair1327 = () => {
+  const truth = worldTruthPatches().map(row => ({ id: row.id, file: row.file, from: row.from, to: row.to }));
+  return [...soccerDeckPatches().map(row => ({ id: row.id, file: row.file, from: row.from, to: row.to })), ...truth.filter(row => row.file === 'src/lib/soccerCareerEngine.ts'), ...deckFairPatches().map(row => ({ id: row.id, file: row.file, from: row.from, to: row.to })), ...truth.filter(row => row.file === 'src/lib/soccerPhone.ts')];
+};
+import { awardGenerationsPatches } from './lib/careerAwardGenerations1318.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SELF = fileURLToPath(import.meta.url);
@@ -20,7 +37,16 @@ const SELF = fileURLToPath(import.meta.url);
 const BASE_TREE = '487b8f9274808bd3d2a7990b2172035989b1fdee';
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const sha = value => createHash('sha256').update(value).digest('hex');
-const textAt = file => fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
+/* Release BF join: the Soccer Career life chain (Rounds 1350 to 1363) adds cards to the catalog and to the priority
+   beats, so with Round 1327 taken out the old sort shuffle draws a different number of times and no AR career keeps its
+   global draws. The chain's three changed engine inputs are read as at Release BE's head (4ae7a534), an attribution kept
+   apart from the copied faults like Round 1327's and Round 1329's; the chain's own harnesses prove what it changes.
+   CAREER_STORY_ROLE_CHAIN_REF replaces the ref, and an empty value reads this tree. */
+const CHAIN_REF = process.env.CAREER_STORY_ROLE_CHAIN_REF ?? '4ae7a534';
+const CHAIN_FILES = new Set(['src/lib/soccerCareerLife.ts', 'src/lib/soccerCareerContracts.ts', 'src/lib/soccerCareerRealismA.ts']);
+const textAt = file => CHAIN_REF && CHAIN_FILES.has(file)
+  ? execFileSync('git', ['show', `${CHAIN_REF}:${file}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 8e6 }).replaceAll('\r\n', '\n')
+  : fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
 const originalAt = file => execFileSync('git', ['show', `${STORY_ROLE_BASE}:${file}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 8e6 }).replaceAll('\r\n', '\n');
 const copy = value => structuredClone(value);
 const serial = value => JSON.stringify(value);
@@ -44,12 +70,12 @@ export function withCareerStorySeed(seed, fn) {
 /** Uses Git's frozen source for every transitive src import in the original arm.
  * Faults are confined to current copied input. Their unique anchors must load.
  */
-export async function bundleCareerStoryRole({ original = false, patches = [], expose = false } = {}) {
+export async function bundleCareerStoryRole({ original = false, patches = [], expose = false, attribution = [] } = {}) {
   const require = createRequire(path.join(ROOT, 'package.json'));
   const esbuild = require('esbuild');
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'career-story-role-'));
   const outfile = path.join(dir, 'engine.cjs');
-  const applied = new Set(), loaded = [];
+  const applied = new Set(), loaded = [], attributed = [];
   const rootSrc = path.join(ROOT, 'src') + path.sep;
   const enginePath = path.join(ROOT, ENGINE).replaceAll('\\', '/');
   const extra = original ? '' : ['role:soccerCareerRole', 'milestone:soccerCareerMilestone', 'squad:soccerClubSquad', 'sheet:soccerClubSquadSheet'].map(item => { const [name, file] = item.split(':'); return `export * as ${name} from '${path.join(ROOT, 'src/lib', file + '.ts').replaceAll('\\', '/')}';`; }).join('\n');
@@ -59,6 +85,11 @@ export async function bundleCareerStoryRole({ original = false, patches = [], ex
       const file = path.relative(ROOT, args.path).replaceAll('\\', '/');
       let contents = original ? originalAt(file) : textAt(file);
       const beforeSha256 = sha(contents);
+      for (const row of original ? [] : attribution.filter(p => p.file === file)) {
+        assert.equal(contents.split(row.from).length - 1, 1, `unique attribution anchor ${row.id}`);
+        contents = contents.replace(row.from, () => row.to);
+        attributed.push({ id: row.id, file });
+      }
       for (const patch of patches.filter(p => p.file === file)) {
         assert.equal(contents.split(patch.from).length - 1, 1, `unique control anchor ${patch.id}`);
         const before = contents;
@@ -75,9 +106,10 @@ export async function bundleCareerStoryRole({ original = false, patches = [], ex
   try {
     await esbuild.build({ stdin: { contents: `export * as soccer from '${enginePath}';\n${extra}`, resolveDir: ROOT, sourcefile: 'story-role-entry.ts' }, bundle: true, format: 'cjs', platform: 'node', jsx: 'automatic', outfile, logLevel: 'error', plugins: [plugin], alias: { '@': path.join(ROOT, 'src') }, define: { 'import.meta.env': '{"DEV":false,"PROD":true,"MODE":"production"}' } });
     for (const patch of patches) assert.ok(applied.has(patch.id), `control module loaded ${patch.id}`);
+    if (!original) assert.deepEqual(attributed.map(row => row.id), attribution.map(row => row.id), 'every attribution row was applied once, in order');
     globalThis.localStorage ??= { getItem: () => null, setItem: () => {}, removeItem: () => {} };
     const result = require(outfile);
-    return { ...result, loaded, faultEdits: patches.map(p => p.receipt) };
+    return { ...result, loaded, faultEdits: patches.map(p => p.receipt), attributionEdits: attributed };
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 }
 
@@ -122,8 +154,9 @@ async function runOutcomes(control = '') {
   const report = { head: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim(), tree: execFileSync('git', ['rev-parse', 'HEAD^{tree}'], { cwd: ROOT, encoding: 'utf8' }).trim(), baseHead: STORY_ROLE_BASE, baseTree: BASE_TREE, control, cases: [], counts: {}, faultEdits: [], sourceHeld: false };
   const check = async (id, fn) => { try { await fn(); report.cases.push({ id, passed: true }); console.log(`PASS [${id}]`); } catch (error) { report.cases.push({ id, passed: false, name: error.name, message: error.message, stack: error.stack }); console.error(`FAIL [${id}] ${error.name}: ${error.message}`); } };
   const original = await bundleCareerStoryRole({ original: true, expose: true });
-  const uncopied = await bundleCareerStoryRole({ expose: true });
-  const current = control ? await bundleCareerStoryRole({ patches: controlPatches(control), expose: true }) : uncopied;
+  const uncopied = await bundleCareerStoryRole({ expose: true, attribution: deckFair1327() });
+  const current = control ? await bundleCareerStoryRole({ patches: controlPatches(control), expose: true, attribution: deckFair1327() }) : uncopied;
+  report.attribution1327 = uncopied.attributionEdits;
   report.faultEdits = current.faultEdits;
   save('original-source', original.loaded);
   save('candidate-source', uncopied.loaded);
@@ -192,6 +225,9 @@ function inverseTruthPatches() {
   /* Release AW: Rounds 1262 to 1264 pay a career of 30 or more by age and form on purpose
      (scripts/lib/careerVeteranPay1262.mjs). The attributed engine takes that out too, at its one condition. */
   for (const row of veteranPayPatches()) patches.push({ id: row.id, file: row.file, from: row.from, to: row.to });
+  /* Round 1318: Rounds 1280 to 1282 and 1318 keep the made up Ballon d'Or rivals in a saved pool on purpose
+     (scripts/lib/careerAwardGenerations1318.mjs). The attributed engine takes that out too, its rows in order. */
+  for (const row of awardGenerationsPatches()) patches.push({ id: row.id, file: row.file, from: row.from, to: row.to });
   return patches;
 }
 
@@ -242,15 +278,15 @@ function fullCareer(E, seed) {
 
 async function fullCareerChecks(check, current, uncopied, original, save, report, out, control) {
   const inverse = inverseTruthPatches();
-  const neutral = await bundleCareerStoryRole({ patches: inverse, expose: true });
+  const neutral = await bundleCareerStoryRole({ patches: inverse, expose: true, attribution: deckFair1327() });
   const faults = control ? controlPatches(control) : [];
   const shared = inverse.filter(edit => faults.some(fault => fault.file === edit.file && fault.from === edit.from && fault.to === edit.to));
   const remaining = inverse.filter(edit => !shared.includes(edit));
-  const controlled = control ? await bundleCareerStoryRole({ patches: [...faults, ...remaining], expose: true }) : neutral;
+  const controlled = control ? await bundleCareerStoryRole({ patches: [...faults, ...remaining], expose: true, attribution: deckFair1327() }) : neutral;
   report.attribution = { edits: neutral.faultEdits, sharedFaultInverses: shared.map(edit => ({ inverseId: edit.id, faultId: faults.find(fault => fault.file === edit.file && fault.from === edit.from && fault.to === edit.to).id, fromSha256: sha(edit.from), toSha256: sha(edit.to), effective: true })), controlledEdits: controlled.faultEdits };
   save('attribution-edits', report.attribution);
   await check('attribution boundaries', () => {
-    assert.deepEqual(neutral.faultEdits.map(edit => edit.id).sort(), ['milestone-empty-return', 'milestone-final-return', 'hundred-goal-slot', 'exact-goal-slot', 'role-consequence', 'role-event-line', 'next-ten-wheel', 'next-ten-opening', ...veteranPayPatches().map(row => row.id)].sort(), 'both actual old weighted objects, both return sites, declared role metadata, and the two later additions of Rounds 1197 to 1208 are restored');
+    assert.deepEqual(neutral.faultEdits.map(edit => edit.id).sort(), ['milestone-empty-return', 'milestone-final-return', 'hundred-goal-slot', 'exact-goal-slot', 'role-consequence', 'role-event-line', 'next-ten-wheel', 'next-ten-opening', ...veteranPayPatches().map(row => row.id), ...awardGenerationsPatches().map(row => row.id)].sort(), 'both actual old weighted objects, both return sites, declared role metadata, and the two later additions of Rounds 1197 to 1208 are restored');
     assert.ok(neutral.faultEdits.every(edit => edit.effective && edit.beforeSha256 !== edit.afterSha256), 'every certified inverse changes exactly its loaded source');
     const expectedShared = control === 'milestoneHooks' ? ['milestone-final-return'] : control === 'milestoneLegacy' ? ['exact-goal-slot', 'hundred-goal-slot'] : [];
     assert.deepEqual(shared.map(edit => edit.id).sort(), expectedShared.sort(), 'only exact same-file/from/to certified inverse edits may be shared with a product fault');

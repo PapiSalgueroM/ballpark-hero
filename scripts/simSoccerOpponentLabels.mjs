@@ -24,12 +24,32 @@ const EXPORT = '\nexport { buildModel as __opponentModel };\n';
 const ENV = '{"PROD":true,"DEV":false,"MODE":"production","SSR":false}';
 const MEMBERS = ['Anderlecht','Antwerp','Cercle Brugge','Charleroi','Club Brugge','Dender','Genk','Gent','La Louviere','Mechelen','OH Leuven','Sint-Truiden','Standard Liege','Union Saint-Gilloise','Westerlo','Zulte Waregem'];
 const NOTE = "2025/26 club membership is verified. Match order and results are simulated; extra opponents and their phase aren't recorded.";
+/* Release BH: PR278's four hunks (the verified 2023 Premier League opponent) are reversed first, so the legacy page
+   below is still the component this proof was qualified against. */
 const REVERSE = [
+  ["import { historicalOpponentLabels } from '@/lib/season/historicalOpponentLabels';\n",''],
+  ['  const historical = historicalOpponentLabels(row, ctx, s);\n  const display = historical ?? belgian2025OpponentLabels(row, s);\n','  const display = belgian2025OpponentLabels(row, s);\n'],
+  ["  if (historical && s.mode === 'table') notes.push(historical.note);\n",''],
+  ['    season: historical ? { ...s, labels: historical.labels } : s,','    season: s,'],
   ["import { belgian2025OpponentLabels } from '@/lib/season/belgianOpponentLabels';\n",''],
   ['  const display = belgian2025OpponentLabels(row, s);\n',''],
   ['    names: display?.names ?? s.labels.map(l => (l.named ? l.name : SOCCER.words.unnamed)),','    names: s.labels.map(l => (l.named ? l.name : SOCCER.words.unnamed)),'],
   ["    resultsWhy: s.mode === 'table' ? null : [ctx.why === 'severe' ? 'Results only: your season was cut short, so there is no final table.' : RESULTS_WORDS, display?.note].filter(Boolean).join(' '),","    resultsWhy: s.mode === 'table' ? null : ctx.why === 'severe' ? 'Results only: your season was cut short, so there is no final table.' : RESULTS_WORDS,"],
+  /* Round 1337: the help's first two paragraphs (HELP.intro) were reworded; the legacy page takes the old words back. */
+  [`    'Your season was played the moment you pressed Next Season or 📺 Week by week. Here you watch it one matchday at a time, and the final table and your season totals end where your season summary has them.',`,
+    `    'Your season was played the moment you pressed Next Season. This is that same season, match by match: the final table and your season totals are settled, and nothing here can change them.',`],
+  [`    "Earlier seasons use the league's real clubs and competition rules where the game has them checked. From 2026-27, a season with a saved league world runs on your career's simulated clubs, with promotion and relegation between two divisions. Every score, every other club's result and every minute are your career's own.",`,
+    `    "Earlier-season tables use verified league membership and competition rules. From 2026-27, saved league worlds use your career's simulated clubs and direct promotion and relegation between two divisions. The review marks the available Spanish lower-division club pool. Every score, every other club's result and every minute are your career's own.",`],
 ];
+/* Round 1337: the same two help strings as the model carries them ([new, old], quotes and indentation off). The
+   unrelated-model check and the display check's whole-output comparison map exactly these back before they
+   compare with the legacy page; any other difference still fails. */
+const INTRO_1337 = REVERSE.slice(-2).map(pair => pair.map(line => line.trim().replace(/,$/, '').slice(1, -1)));
+const intro1337 = output => {
+  const copy = JSON.parse(JSON.stringify(output));
+  if (Array.isArray(copy?.model?.help?.intro)) copy.model.help.intro = copy.model.help.intro.map(p => INTRO_1337.find(([now]) => now === p)?.[1] ?? p);
+  return copy;
+};
 const sha = b => createHash('sha256').update(b).digest('hex');
 const json = v => JSON.stringify(v, (_k, x) => typeof x === 'function' ? { functionBody: String(x) } : x);
 const clone = v => JSON.parse(JSON.stringify(v));
@@ -62,7 +82,7 @@ async function bundle(name, sourceRoot, patch=null, options={}) {
     const raw=Buffer.from(fs.readFileSync(args.path,'utf8').replace(/\r\n/g,'\n')),rel=path.relative(sourceRoot,args.path).replaceAll(path.sep,'/'); let text=raw.toString('utf8').replace(/\r\n/g,'\n'); const before=text;
     if(patch&&rel===patch.file){text=one(text,patch.from,patch.to,name);effective++;patches.push({file:rel,before:hold(before),after:hold(text),undo:hold(text.replace(patch.to,patch.from))});}
     for(const fault of options.undoPatches??[])if(rel===fault.file){const healthy=text,bad=one(text,fault.from,fault.to,'compiled undo '+rel);text=bad.replace(fault.to,fault.from);assert.equal(text,healthy);patches.push({file:rel,kind:'compiled fault reversal',before:hold(healthy),fault:hold(bad),undo:hold(text)});}
-    if(options.legacy&&rel===PAGE){const current=text;for(const[from,to]of REVERSE){assert.equal(text.split(from).length-1,1,'component reverse anchor');text=text.replace(from,to);}assert.equal(sha(Buffer.from(text)),ORIGINAL_COMPONENT_SHA,'complete canonical original component');patches.push({file:rel,kind:'exact original reconstruction',before:hold(current),after:hold(text),canonicalSha256:ORIGINAL_COMPONENT_SHA});}
+    if(options.legacy&&rel===PAGE){const current=text;for(const[i,[from,to]]of REVERSE.entries()){const found=text.split(from).length-1;if(found!==1)throw new Error(`FAIL component reverse anchor: REVERSE pair ${i+1} of ${REVERSE.length} is found ${found} times in ${PAGE}, not once, so a later edit changed that text. Add its new words to REVERSE as [current, legacy]. The stale side starts ${JSON.stringify(from.trim().slice(0,100))}`);text=text.replace(from,to);}assert.equal(sha(Buffer.from(text)),ORIGINAL_COMPONENT_SHA,'complete canonical original component');patches.push({file:rel,kind:'exact original reconstruction',before:hold(current),after:hold(text),canonicalSha256:ORIGINAL_COMPONENT_SHA});}
     if(rel===PAGE){const beforeExport=text;text+=EXPORT;assert.equal(text.split(EXPORT).length-1,1,'private export exact');assert.equal(text.replace(EXPORT,''),beforeExport);patches.push({file:rel,kind:'private export',before:hold(beforeExport),after:hold(text),undo:hold(text.replace(EXPORT,''))});}
     loaded.push({file:rel,absolute:args.path,raw:hold(raw.toString('utf8')),rawSha256:sha(raw),loaded:hold(text),loadedSha256:sha(Buffer.from(text))});
     const ext=path.extname(args.path); const loader=ext==='.css'?'empty':ext==='.json'?'json':ext==='.tsx'?'tsx':ext==='.ts'?'ts':ext==='.jsx'?'jsx':'js'; return{contents:text,loader,resolveDir:path.dirname(args.path)};
@@ -144,8 +164,8 @@ function checkReading(row,item,original) {
   const out=read(row.output),base=read(original.output),checks=[];const expected=expectedNames(item.row,item.season);
   attempt(checks,'read-only',()=>assert.equal(row.inputAfter,row.input));attempt(checks,'read-vector',()=>{assert.equal(row.count,0);same(read(row.draws),[]);});
   attempt(checks,'whole-season',()=>same(out.model.season,item.season));
-  attempt(checks,'unrelated-model',()=>{const a=clone(out.model),b=clone(base.model);delete a.names;delete b.names;delete a.resultsWhy;delete b.resultsWhy;same(a,b);});
-  attempt(checks,'display',()=>{if(expected){same(out.model.names,expected);assert.equal(out.model.resultsWhy,base.model.resultsWhy+' '+NOTE);const words=item.season.games.map((g,gi)=>g.events.map((e,ei)=>{if(e.kind!=='goal'||e.side!=='them')return base.eventWords[gi][ei];if(e.ownGoalBy){const who=e.ownGoalBy==='you'?'You':e.ownGoalBy==='teammate'?'A teammate':'An opponent';return `⚽ ${who} (O.G), goal for ${expected[g.opp]}`;}return `⚽ Goal, ${expected[g.opp]}`;}));same(out.eventWords,words,'complete event text with independent opponent-goal labels');}else same(out,base);});
+  attempt(checks,'unrelated-model',()=>{const a=clone(out.model),b=clone(base.model);delete a.names;delete b.names;delete a.resultsWhy;delete b.resultsWhy;a.help=intro1337({model:{help:a.help}}).model.help;same(a,b);});
+  attempt(checks,'display',()=>{if(expected){same(out.model.names,expected);assert.equal(out.model.resultsWhy,base.model.resultsWhy+' '+NOTE);const words=item.season.games.map((g,gi)=>g.events.map((e,ei)=>{if(e.kind!=='goal'||e.side!=='them')return base.eventWords[gi][ei];if(e.ownGoalBy){const who=e.ownGoalBy==='you'?'You':e.ownGoalBy==='teammate'?'A teammate':'An opponent';return `⚽ ${who} (O.G), goal for ${expected[g.opp]}`;}return `⚽ Goal, ${expected[g.opp]}`;}));same(out.eventWords,words,'complete event text with independent opponent-goal labels');}else same(intro1337(out),base);});
   return checks;
 }
 
@@ -164,7 +184,7 @@ async function pure() {
     let old;if(hasBase){const tar=execFileSync('git',['archive','--format=tar',BASE],{cwd:ROOT,maxBuffer:150000000});write('original/source.tar.gz',gzipSync(tar,{level:9}));write('original/source-inventory.txt',execFileSync('git',['ls-tree','-r',BASE],{cwd:ROOT}));oldRoot=fs.mkdtempSync(path.join(os.tmpdir(),'opponent-original-'));execFileSync('tar',['-xf','-','-C',oldRoot],{input:tar});old=await bundle('original',oldRoot);report.originalScope='complete pinned f780 source';}
     else{old=await bundle('original',ROOT,null,{legacy:true});report.originalScope='canonical f780 component reconstructed, other engine/read modules from current shallow checkout';}
     const current=await bundle('current',ROOT);
-    const remove={file:PAGE,from:'  const display = belgian2025OpponentLabels(row, s);',to:'  const display = null;'};
+    const remove={file:PAGE,from:'  const display = historical ?? belgian2025OpponentLabels(row, s);',to:'  const display = historical ?? null;'};
     const widen={file:HELPER,from:'row.year !== 2025',to:'row.year !== 2024 && row.year !== 2025'};
     const removed=await bundle('remove-overlay',ROOT,remove),wide=await bundle('widen-year',ROOT,widen),undo=await bundle('whole-undo',ROOT,null,{undoPatches:[remove,widen]});report.arms=[old,current,removed,wide,undo].map(a=>a.receipt);assert.equal(undo.receipt.compiled.sha256,current.receipt.compiled.sha256,'whole compiled undo');
     for(const seed of report.cohort.seeds){const a=career(old,seed),b=career(current,seed);report.careers.push({original:a,current:b});}

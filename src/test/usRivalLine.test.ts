@@ -12,6 +12,8 @@ import {
 } from '@/lib/usCareerStatLine';
 import { keyedRng } from '@/lib/keyedRng';
 import { nflStatLineFor } from '@/lib/nflMyCareer';
+import { mlbStatLineFor, mlbFullWorkload, mlbLineOnSlate } from '@/lib/mlbMyCareer';
+import { nhlStatLineFor, nhlFullWorkload, nhlLineOnSlate } from '@/lib/nhlMyCareer';
 import type { CareerPos, SeasonLine } from '@/lib/nflMyCareer';
 import type { MlbCareerPos, MlbSeasonLine } from '@/lib/mlbMyCareer';
 import type { NhlCareerPos, NhlSeasonLine } from '@/lib/nhlMyCareer';
@@ -173,5 +175,103 @@ describe('Round 1227: the other two sports', () => {
         expect(picked(nhlLineAsPrinted(line, pos)), `${pos} "${text}"`).toEqual(read);
       }
     }
+  });
+});
+
+/* Round 1313: the MLB season sim's stat block, healthy workload and carry, cut into three functions with not one
+   draw and not one saved byte moved. The keys and their order are part of a saved line's bytes, so they are held
+   here position by position, with the draws each takes on a counting stream. */
+describe('Round 1313: the MLB cut (mlbStatLineFor, mlbFullWorkload, mlbLineOnSlate)', () => {
+  const HITTER = ['avg', 'hr', 'rbi', 'sb', 'doubles', 'obp'];
+  const CASES: { pos: MlbCareerPos; kind: string; keys: string[]; draws: number }[] = [
+    { pos: 'SP', kind: 'flame', keys: ['era', 'wins', 'lossesP', 'so'], draws: 4 },
+    { pos: 'RP', kind: 'closer', keys: ['era', 'so', 'wins', 'lossesP', 'saves', 'holds'], draws: 6 },
+    { pos: 'RP', kind: 'setup', keys: ['era', 'so', 'wins', 'lossesP', 'saves', 'holds'], draws: 6 },
+    { pos: 'C', kind: 'framer', keys: HITTER, draws: 6 },
+    { pos: 'SS', kind: 'sparkplug', keys: HITTER, draws: 6 },
+    { pos: 'CF', kind: 'burner', keys: HITTER, draws: 6 },
+    { pos: 'DH', kind: 'pure_masher', keys: HITTER, draws: 6 },
+  ];
+  it('writes only its position\'s keys, in the order the block wrote them, each a number, on its draws', () => {
+    for (const { pos, kind, keys, draws } of CASES) {
+      const base = keyedRng(`usRivalLine|mlbcut|${pos}|${kind}`);
+      for (const games of [20, 32, 62, 71, 155, 162]) for (const form of [45, 62, 80, 99]) {
+        const seen: number[] = [];
+        const line = mlbStatLineFor({ form, pos, kind, games }, () => { const v = base(); seen.push(v); return v; });
+        expect(Object.keys(line), `${pos} ${kind} at form ${form}, ${games} games`).toEqual(keys);
+        for (const v of Object.values(line)) expect(Number.isFinite(v)).toBe(true);
+        expect(seen.length, `${pos} ${kind} draws`).toBe(draws);
+        let k = 0;
+        expect(mlbStatLineFor({ form, pos, kind, games }, () => seen[k++]), `${pos} ${kind}: the same draws give the same line`).toEqual(line);
+      }
+    }
+  });
+  it('the healthy workload: 32 starts on no draw, 62 to 71 appearances and 155 to 162 games on one', () => {
+    for (const [pos, lo, hi, draws] of [['SP', 32, 32, 0], ['RP', 62, 71, 1], ['CF', 155, 162, 1]] as [string, number, number, number][]) {
+      for (const v of [0, 0.5, 0.999]) {
+        let n = 0;
+        const games = mlbFullWorkload(pos, () => { n += 1; return v; });
+        expect(n, `${pos} draws`).toBe(draws);
+        expect(games).toBeGreaterThanOrEqual(lo);
+        expect(games).toBeLessThanOrEqual(hi);
+      }
+    }
+  });
+  it('the carry: the line itself at 162, every count carried and the key order kept at any other length', () => {
+    const full: MlbSeasonLine = { year: 2020, team: 'X', age: 25, ovr: 80, games: 150, awards: [], teamResult: '', salary: 1, slate: 60,
+      ...mlbStatLineFor({ form: 80, pos: 'CF', kind: 'burner', games: 150 }, keyedRng('usRivalLine|carry')) };
+    expect(mlbLineOnSlate(full, 162)).toBe(full);
+    const short = mlbLineOnSlate(full, 60);
+    expect(short).not.toBe(full);
+    expect(Object.keys(short)).toEqual(Object.keys(full));
+    expect(short.avg).toBe(full.avg);
+    expect(short.obp).toBe(full.obp);
+    for (const k of ['games', 'hr', 'rbi', 'sb', 'doubles'] as const) expect(short[k]).toBe(Math.round(((full[k] ?? 0) * 60) / 162));
+  });
+});
+
+/* Round 1313: the NHL season sim's stat block, healthy workload and carry, cut the same way. */
+describe('Round 1313: the NHL cut (nhlStatLineFor, nhlFullWorkload, nhlLineOnSlate)', () => {
+  const CASES: { pos: NhlCareerPos; mult: number; keys: string[] }[] = [
+    { pos: 'G', mult: 0, keys: ['wins', 'svpct'] },
+    { pos: 'C', mult: 1.25, keys: ['goals', 'assists', 'points'] },
+    { pos: 'LW', mult: 0.85, keys: ['goals', 'assists', 'points'] },
+    { pos: 'D', mult: 0.4, keys: ['goals', 'assists', 'points'] },
+  ];
+  it('writes only its position\'s keys, in the order the block wrote them, each a number, on two draws', () => {
+    for (const { pos, mult, keys } of CASES) {
+      const base = keyedRng(`usRivalLine|nhlcut|${pos}`);
+      for (const games of [20, 58, 67, 79, 82]) for (const form of [45, 62, 80, 99]) for (const iceShare of [0.5, 1]) {
+        const seen: number[] = [];
+        const line = nhlStatLineFor({ form, pos, scoringMult: mult, games, iceShare }, () => { const v = base(); seen.push(v); return v; });
+        expect(Object.keys(line), `${pos} at form ${form}, ${games} games`).toEqual(keys);
+        for (const v of Object.values(line)) expect(Number.isFinite(v)).toBe(true);
+        expect(seen.length, `${pos} draws`).toBe(2);
+        let k = 0;
+        expect(nhlStatLineFor({ form, pos, scoringMult: mult, games, iceShare }, () => seen[k++])).toEqual(line);
+      }
+    }
+  });
+  it('the healthy workload: 58 to 67 starts, or 79 to 82 games, on one draw', () => {
+    for (const [pos, lo, hi] of [['G', 58, 67], ['C', 79, 82], ['D', 79, 82]] as [string, number, number][]) {
+      for (const v of [0, 0.5, 0.999]) {
+        let n = 0;
+        const games = nhlFullWorkload(pos, () => { n += 1; return v; });
+        expect(n, `${pos} draws`).toBe(1);
+        expect(games).toBeGreaterThanOrEqual(lo);
+        expect(games).toBeLessThanOrEqual(hi);
+      }
+    }
+  });
+  it('the carry: the line itself at 82; at 48 the games, goals and assists carried, the points their sum', () => {
+    const full: NhlSeasonLine = { year: 2012, team: 'X', age: 25, ovr: 80, games: 80, awards: [], teamResult: '', salary: 1, slate: 48,
+      ...nhlStatLineFor({ form: 85, pos: 'C', scoringMult: 1.25, games: 80, iceShare: 1 }, keyedRng('usRivalLine|nhlcarry')) };
+    expect(nhlLineOnSlate(full, 82)).toBe(full);
+    const short = nhlLineOnSlate(full, 48);
+    expect(Object.keys(short)).toEqual(Object.keys(full));
+    expect(short.games).toBe(Math.round((80 * 48) / 82));
+    expect(short.goals).toBe(Math.round(((full.goals ?? 0) * 48) / 82));
+    expect(short.assists).toBe(Math.round(((full.assists ?? 0) * 48) / 82));
+    expect(short.points).toBe((short.goals ?? 0) + (short.assists ?? 0));
   });
 });

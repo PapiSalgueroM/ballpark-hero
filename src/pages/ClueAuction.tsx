@@ -509,11 +509,10 @@ const ClueAuction = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="clue-auction" />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="clue-auction" />}
           pageHasOwnH1
           title="Clue Auction: The Secret Footballer Market"
           description="One secret footballer and a bank of 100 points. Every clue has a price, every wrong guess burns 10, and whatever you are still holding when you name him is your score. Spend like a scout, not like a sheikh."

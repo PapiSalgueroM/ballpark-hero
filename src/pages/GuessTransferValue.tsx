@@ -267,11 +267,10 @@ const GuessTransferValue = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="guess-transfer-value" gameContext={{ target: target?.name }} />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="guess-transfer-value" gameContext={{ target: target?.name }} />}
           pageHasOwnH1
           title="Guess The Transfer Value: Daily Soccer Market Value Game"
           description="Read a real soccer player's profile and guess their transfer market value in 6 tries. After each guess, see higher/lower and a hot/cold cue to narrow in."

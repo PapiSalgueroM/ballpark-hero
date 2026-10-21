@@ -42,7 +42,7 @@ import {
   type OwnerMandate, type FoSeasonOutcome,
 } from './foOwnerMandate';
 import {
-  generateJobOffers, managerStanding,
+  bestTierAvailable, generateJobOffers, managerStanding,
   type ClubTier, type Departure, type ManagerProfile, type OfferClub,
 } from './managerOffers';
 
@@ -396,6 +396,47 @@ export function seatOffers(
     }
   }
   return offers;
+}
+
+/**
+ * What a year out leaves for the next one, read in every state.
+ *   open    still above the floor next year as things stand: his old club's
+ *           tier is read today, and the year out is a real season that can
+ *           move it, so the screen says "as things stand" and never more.
+ *   climb   above it next year only if his old club finishes the year in a
+ *           better tier than it is in today (its tier is his pedigree).
+ *   shut    under it whatever happens. With an empty feed that is the closed
+ *           state. With offers on the table they are the last calls he gets:
+ *           the line says so, and no year out is offered or played.
+ * Round 1320 lifted it here from gmDeskHost.ts (which re-exports it as
+ * HostNextYear) so the pro host and the college seat read one rule.
+ */
+export type SeatNextYear = 'open' | 'climb' | 'shut';
+
+/**
+ * What next year holds for a man whose feed is empty today. On 'climb',
+ * `climbTo` is the lowest tier his old club must have reached by then for
+ * the market to look at him again (a better tier is a bigger pedigree, so the
+ * first tier that works, counting up from where the club is, is the easiest).
+ *
+ * 'open' is read at his old club's tier TODAY. The year out is a real season
+ * and the club can drop a tier in it, which takes 4 or 5 points off his
+ * standing, so a man near the floor can meet a closed market a year after
+ * reading open (measured by the review on real seasons: about 1 in 40 quiet
+ * markets that read open). Every line that prints it therefore says "as
+ * things stand", and none promises more.
+ *
+ * Round 1320 lifted the body here unchanged from gmDeskHost.hostNextYear,
+ * which now calls it: it reads only the career and the tiers.
+ */
+export function seatNextYear(career: GmCareer, tiers: Map<string, ClubTier>): { nextYear: SeatNextYear; climbTo: ClubTier | null } {
+  const p = careerProfile(career, tiers);
+  const later = { ...p, seasonsOut: p.seasonsOut + 1 };
+  if (bestTierAvailable(later) !== null) return { nextYear: 'open', climbTo: null };
+  for (let t = p.lastTier - 1; t >= 1; t--) {
+    if (bestTierAvailable({ ...later, lastTier: t as ClubTier }) !== null) return { nextYear: 'climb', climbTo: t as ClubTier };
+  }
+  return { nextYear: 'shut', climbTo: null };
 }
 
 /** The chance a big year draws a bid from above, by the grade that earned it. */

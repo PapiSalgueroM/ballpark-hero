@@ -1,0 +1,149 @@
+name: Tennis Player replay confirmation
+on:
+  push:
+    branches: [codex/tennis-give-up-replay]
+    paths:
+      - .github/workflows/tennis-player-replay.yml
+      - src/components/tennis-player/TennisPlayerBoard.tsx
+      - src/test/tennisPlayerReplay.test.tsx
+      - scripts/simTennisPlayerReplay.mjs
+      - scripts/qa/playTennisPlayerReplay.mjs
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact source and unchanged dependencies
+        id: admission
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/tennis-replay"; test ! -e "$out"; mkdir -p "$out"
+          echo "TENNIS_REPLAY_OUT=$out" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$out/head.txt"
+          git archive --format=zip HEAD > "$out/source.zip"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source-files.sha256"
+          base=775564305e9da84dab59f2b9fe246d044a3cc8e9
+          git merge-base --is-ancestor "$base" HEAD
+          git diff --exit-code "$base" HEAD -- . ':!docs' ':!src/components/tennis-player/TennisPlayerBoard.tsx' ':!src/test/tennisPlayerReplay.test.tsx' ':!scripts/simTennisPlayerReplay.mjs' ':!scripts/qa/playTennisPlayerReplay.mjs' ':!.github/workflows/tennis-player-replay.yml' > "$out/source-boundary.log"
+          test "$(git rev-parse "$base:src/components/tennis-player/TennisPlayerBoard.tsx")" = 3f48aa85f7621bacb9bf10507fa6cd09d55e7822
+          git show "$base:src/components/tennis-player/TennisPlayerBoard.tsx" > "$out/original-board.tsx"
+          if cmp -s src/components/tennis-player/TennisPlayerBoard.tsx "$out/original-board.tsx"; then mode=baseline; else mode=fixed; fi
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "TENNIS_REPLAY_MODE=$mode" >> "$GITHUB_ENV"
+          npm ci > "$out/install.log" 2>&1
+          browser_tools="$RUNNER_TEMP/tennis-replay-browser"; test ! -e "$browser_tools"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$out/font-tools-install.log" 2>&1
+          FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$out/preload.transport" node -e 'require("node:assert/strict").ok(require.cache[require.resolve("./scripts/lib/offlineTransport.cjs")])'
+          git diff --exit-code HEAD
+      - name: Real types and original or fixed regression with effective control
+        id: tests
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$TENNIS_REPLAY_OUT"
+          SIM_OFFLINE_RECEIPT="$out/types.transport" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
+          if test "$TENNIS_REPLAY_MODE" = baseline; then export TENNIS_REPLAY_BASELINE=1; fi
+          SIM_OFFLINE_RECEIPT="$out/replay.transport" node scripts/simTennisPlayerReplay.mjs > "$out/replay.log" 2>&1
+          cat "$out/replay.log"
+          SIM_OFFLINE_RECEIPT="$out/existing.transport" node scripts/simTennisPlayerFeedback.mjs > "$out/existing.log" 2>&1
+          tail -n 5 "$out/existing.log"
+          sha256sum --check "$out/source-files.sha256" > "$out/after-tests-source-hold.log"
+      - name: Serial plain production build
+        id: build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          SIM_OFFLINE_RECEIPT="$TENNIS_REPLAY_OUT/build.transport" npm run build > "$TENNIS_REPLAY_OUT/build.log" 2>&1
+          tail -n 6 "$TENNIS_REPLAY_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$TENNIS_REPLAY_OUT/dist-files.sha256"
+          (cd dist && zip -qr "$TENNIS_REPLAY_OUT/dist.zip" .)
+      - name: Actual built-route phone and desktop replay
+        id: browser
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$TENNIS_REPLAY_OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-browser.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          SIM_OFFLINE_RECEIPT="$out/browser.transport" node scripts/qa/playTennisPlayerReplay.mjs "$TENNIS_REPLAY_MODE" > "$out/browser.log" 2>&1
+          cat "$out/browser.log"
+      - name: All fifteen built-site readers
+        id: readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$TENNIS_REPLAY_OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-readers.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            status=0; SIM_OFFLINE_RECEIPT="$out/$method.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv"; tail -n 3 "$out/$method.log"
+            test "$status" -eq 0 || failed=1; test ! -s "$out/$method.transport" || failed=1
+          done
+          test "$(wc -l < "$out/readers.tsv")" -eq 15; exit "$failed"
+      - name: All fourteen unchanged fatal download gates
+        id: weights
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$TENNIS_REPLAY_OUT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server-weights.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          status=0; SIM_OFFLINE_RECEIPT="$out/weights.transport" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
+          cat "$out/weights.log"; exit "$status"
+      - name: Final source dist and transport holds
+        if: always()
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$TENNIS_REPLAY_OUT"; result=0
+          git diff --exit-code HEAD > "$out/final-diff.log" || result=1
+          git status --porcelain --untracked-files=all > "$out/final-status.txt"; test ! -s "$out/final-status.txt" || result=1
+          sha256sum --check "$out/source-files.sha256" > "$out/final-source-hold.log" || result=1
+          if test -f "$out/dist-files.sha256"; then sha256sum --check "$out/dist-files.sha256" > "$out/final-dist-hold.log" || result=1; fi
+          while IFS= read -r -d '' file; do case "$file" in "$out/weights.transport") ;; *) test ! -s "$file" || result=1 ;; esac; done < <(find "$out" -name '*.transport' -type f -print0)
+          printf 'mode=%s\ntests=%s\nbuild=%s\nbrowser=%s\nreaders=%s\nweights=%s\n' "$TENNIS_REPLAY_MODE" '${{ steps.tests.outcome }}' '${{ steps.build.outcome }}' '${{ steps.browser.outcome }}' '${{ steps.readers.outcome }}' '${{ steps.weights.outcome }}' > "$out/stages.txt"
+          exit "$result"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tennis-replay-${{ steps.admission.outputs.mode }}-${{ github.sha }}
+          path: ${{ env.TENNIS_REPLAY_OUT }}
+          if-no-files-found: error
+          retention-days: 14

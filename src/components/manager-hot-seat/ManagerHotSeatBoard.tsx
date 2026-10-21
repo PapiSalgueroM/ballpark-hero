@@ -122,6 +122,7 @@ function Progress({ run }: { run: HotSeatRun }) {
 function openPage(path: string) {
   window.location.assign(path);
 }
+import { markLandOnHub } from '@/lib/clubManagerLanding';
 
 export function CarryOnCard({ run, openPath = openPage }: { run: HotSeatRun; openPath?: (path: string) => void }) {
   const [ask, setAsk] = useState<ExistingClubManagerSave | null>(null);
@@ -146,6 +147,8 @@ export function CarryOnCard({ run, openPath = openPage }: { run: HotSeatRun; ope
     }
     if (res === 'saved') {
       setGoing(true);
+      /* Round 1323: and Club Manager opens it on the hub, not the managers screen. */
+      markLandOnHub();
       openPath('/club-manager');
     }
   };
@@ -233,9 +236,11 @@ export default function ManagerHotSeatBoard() {
         const club = typeof p.club === 'string' ? p.club : '';
         const seed = Number(p.seed);
         if (p.v === 1 && actions && hotSeatPool().some(c => c.club === club) && Number.isFinite(seed)) {
-          if (p.done !== true) setFreeSaved({ setup: { club, seed: seed >>> 0 }, actions });
+          /* Round 1331: the match rules stamp passes through; a run saved without it replays on the base rules. */
+          const stamp: Pick<HotSeatSetup, 'rules'> = p.rules === 1331 ? { rules: 1331 } : {};
+          if (p.done !== true) setFreeSaved({ setup: { club, seed: seed >>> 0, ...stamp }, actions });
           /* kind is new in Round 956 and optional: an older finished record has none and gets no offer. */
-          else if (typeof p.kind === 'string' && keepsJob(p.kind as VerdictKind)) setFreeFinished({ setup: { club, seed: seed >>> 0 }, actions });
+          else if (typeof p.kind === 'string' && keepsJob(p.kind as VerdictKind)) setFreeFinished({ setup: { club, seed: seed >>> 0, ...stamp }, actions });
         }
       }
     } catch {
@@ -261,7 +266,7 @@ export default function ManagerHotSeatBoard() {
       setDailySaved(r.verdict || !r.actions.length ? null : r.actions);
     } else {
       try {
-        localStorage.setItem(FREE_KEY, JSON.stringify({ v: 1, club: r.setup.club, seed: r.setup.seed, actions: r.actions, done: !!r.verdict, ...(r.verdict ? { kind: r.verdict.kind } : {}) }));
+        localStorage.setItem(FREE_KEY, JSON.stringify({ v: 1, club: r.setup.club, seed: r.setup.seed, ...(r.setup.rules === 1331 ? { rules: 1331 } : {}), actions: r.actions, done: !!r.verdict, ...(r.verdict ? { kind: r.verdict.kind } : {}) }));
       } catch {
         /* storage full or blocked: the run still plays, it just will not survive a refresh */
       }
@@ -288,7 +293,8 @@ export default function ManagerHotSeatBoard() {
   const startFree = (club: string) => {
     const seed = Math.floor(Math.random() * 4294967296) >>> 0;
     setFreeSaved(null);
-    open({ club, seed });
+    /* Round 1331: every new free run plays the current match rules, and its save says so. */
+    open({ club, seed, rules: 1331 });
   };
   const randomFree = () => {
     const pool = hotSeatPool();

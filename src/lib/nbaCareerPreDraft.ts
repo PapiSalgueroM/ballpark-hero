@@ -81,6 +81,9 @@ export function nbaPreDraftDescriptor(eraId?: string): PreDraftDescriptor {
     routes: then ? [PREP, COLLEGE_ONE, COLLEGE_THREE] : [COLLEGE_ONE, COLLEGE_THREE],
     showcaseName: 'Pre draft workouts',
     drills: ['Spot up shooting', 'Lane agility', 'Max vertical', 'Three on three'],
+    /* Round 1319: the stations a player can run himself, in both eras. Plain
+       names: they claim no real test (docs/audits/ROUND-1319-NOTES.md). */
+    stations: () => [{ name: 'Burst test', kind: 'burst' }, { name: 'Agility run', kind: 'cones' }],
     statLine: (perf, rng, pos) => nbaStatLine(perf, rng, pos),
     choices: [
       {

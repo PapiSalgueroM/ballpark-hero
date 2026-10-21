@@ -1,0 +1,163 @@
+name: Club details current owned roster
+on:
+  push:
+    branches: [codex/manager-current-rosters]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      CM_OWN_ROSTER_PHASE: fixed
+      CM_OWN_ROSTER_OUT: ${{ github.workspace }}/club-detail-artifacts
+      MANAGER_WORLD_CONTINUITY_ARTIFACTS: ${{ github.workspace }}/club-detail-artifacts/world-continuity
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/club-detail-artifacts/font-cache
+      PRERENDER_ONLY: /club-manager
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind current main app and locked dependencies
+        run: |
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          mkdir -p "$CM_OWN_ROSTER_OUT"
+          git diff --exit-code 082fc2774c8aa9f919c14efa33bfc3fbfc599597 -- src scripts .github/workflows package.json package-lock.json bun.lock index.html ':!src/components/club-manager/ClubDetailScreen.tsx' ':!src/test/clubDetailOwnClub.test.tsx' ':!src/test/clubDetailCurrentRoster.test.tsx' ':!scripts/simClubDetailCurrentRoster.mjs' ':!scripts/playClubDetailCurrentRoster.mjs' ':!.github/workflows/club-detail-current-roster.yml'
+          if test "$CM_OWN_ROSTER_PHASE" = baseline; then
+            git diff --exit-code 082fc2774c8aa9f919c14efa33bfc3fbfc599597 -- src/components/club-manager/ClubDetailScreen.tsx src/test/clubDetailOwnClub.test.tsx
+          fi
+          find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$CM_OWN_ROSTER_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$CM_OWN_ROSTER_OUT/package-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows = Object.entries(lock.packages).filter(([file]) => file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')).map(([file, entry]) => {
+            const bytes = fs.readFileSync(file + '/package.json'), version = JSON.parse(bytes).version; assert.equal(version, entry.version);
+            return { file, version, sha256: createHash('sha256').update(bytes).digest('hex') };
+          });
+          fs.writeFileSync(process.env.CM_OWN_ROSTER_OUT + '/installed.json', JSON.stringify(rows, null, 2));
+          console.log(`Bound ${rows.length} installed locked versions.`);
+          NODE
+      - name: Actual application type gate
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CM_OWN_ROSTER_OUT/types.log"
+      - name: Actual current-roster screen outcomes
+        run: |
+          if test "$CM_OWN_ROSTER_PHASE" = baseline; then
+            CM_OWN_ROSTER_EXPECT_RED=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs 2>&1 | tee "$CM_OWN_ROSTER_OUT/baseline.log"
+          else
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs 2>&1 | tee "$CM_OWN_ROSTER_OUT/fixed.log"
+            CM_OWN_ROSTER_CONTROL=original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs 2>&1 | tee "$CM_OWN_ROSTER_OUT/control-original.log"
+          fi
+      - name: Existing own-club level and club-detail cases
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/clubDetailOwnClub.test.tsx src/lib/clubManagerOwnClubLevel.test.ts --reporter=json --outputFile="$CM_OWN_ROSTER_OUT/prior-unit.json" 2>&1 | tee "$CM_OWN_ROSTER_OUT/prior-unit.log"
+      - name: Existing actual world continuity and all thirteen controls
+        run: |
+          inverse_base=$(node scripts/lib/treeWithoutMerge.mjs 5ec5a724 36cc9ffe 082fc2774c8aa9f919c14efa33bfc3fbfc599597)
+          echo "MANAGER_WORLD_CONTINUITY_BASE=$inverse_base" >> "$GITHUB_ENV"
+          echo "CM_UNSEEDED_BASE=$inverse_base" >> "$GITHUB_ENV"
+          MANAGER_WORLD_CONTINUITY_BASE="$inverse_base" MANAGER_WORLD_CONTINUITY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs 2>&1 | tee "$CM_OWN_ROSTER_OUT/world-continuity.log"
+      - name: Existing legacy world policy and effective controls
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmUnseededWorld.mjs 2>&1 | tee "$CM_OWN_ROSTER_OUT/unseeded.log"
+      - name: Existing book and own-market guard
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simBooks.mjs 2>&1 | tee "$CM_OWN_ROSTER_OUT/books.log"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simFreeAgents.mjs 2>&1 | tee "$CM_OWN_ROSTER_OUT/free-agents.log"
+      - name: Strict expected failures from existing effective controls
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { spawnSync } from 'node:child_process';
+          const root = process.env.CM_OWN_ROSTER_OUT;
+          for (const [script, key, control] of [['simCmUnseededWorld.mjs', 'CM_UNSEEDED_CONTROL', 'guard'], ['simCmUnseededWorld.mjs', 'CM_UNSEEDED_CONTROL', 'noinverse'], ['simFreeAgents.mjs', 'FA_CONTROL', 'ownclub']]) {
+            const run = spawnSync(process.execPath, ['scripts/' + script], { encoding: 'utf8', timeout: 1800000, maxBuffer: 64 * 1024 * 1024, env: { ...process.env, [key]: control, FORCE_COLOR: '0', NO_COLOR: '1' } });
+            const output = (run.stdout || '') + (run.stderr || ''), file = path.join(root, 'existing-control-' + control);
+            fs.writeFileSync(file + '.log', output);
+            fs.writeFileSync(file + '.json', JSON.stringify({ script, control, status: run.status, signal: run.signal, error: run.error?.message || null }, null, 2));
+            assert(!run.error && !run.signal && run.status === 1, 'Actual effective control must finish with its expected failure');
+            assert(!/SyntaxError:|ReferenceError:|TypeError:|ERR_MODULE_NOT_FOUND|cannot run:|DID NOT FIRE|Unhandled (?:Errors?|Rejection)/i.test(output), 'No setup or unfired control credit');
+            if (control === 'ownclub') {
+              assert.equal((output.match(/\[control ownclub applied to engine\]/g) || []).length, 2);
+              const failures = output.split('\n').filter(line => /\bFAIL\b/.test(line));
+              assert.equal(failures.length, 1); assert(failures[0].includes("is on my own club's market once the list and the ledger are gone"));
+            } else assert(output.includes('simCmUnseededWorld: CONTROL ' + control + ' FIRED:'));
+            console.log(`Effective existing ${control}: actual exit1, exact owned refusal, raw process and output retained.`);
+          }
+          NODE
+      - name: Full ordinary unit suite
+        if: env.CM_OWN_ROSTER_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- --maxWorkers=2 --reporter=json --outputFile="$CM_OWN_ROSTER_OUT/full-unit.json" 2>&1 | tee "$CM_OWN_ROSTER_OUT/full-unit.log"
+      - name: Build and browser dependencies
+        if: env.CM_OWN_ROSTER_PHASE == 'fixed'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/current-roster-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/current-roster-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/current-roster-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/current-roster-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$CM_OWN_ROSTER_OUT/fonts.log"
+      - name: Complete application build
+        if: env.CM_OWN_ROSTER_PHASE == 'fixed'
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$CM_OWN_ROSTER_OUT/build.log"
+          cp scripts/data/lastmod.json "$CM_OWN_ROSTER_OUT/build-lastmod.json"
+          git diff -- scripts/data/lastmod.json > "$CM_OWN_ROSTER_OUT/build-lastmod.diff"
+      - name: Actual current owned-club displays on phone and desktop
+        if: env.CM_OWN_ROSTER_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playClubDetailCurrentRoster.mjs 2>&1 | tee "$CM_OWN_ROSTER_OUT/browser.log"
+      - name: Every rebuilt-site reader and current save budgets
+        if: env.CM_OWN_ROSTER_PHASE == 'fixed'
+        run: ONLY=simClubManagerSaveSize,simClubManagerSlots,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$CM_OWN_ROSTER_OUT/readers.log"
+      - name: Current main download budgets
+        if: env.CM_OWN_ROSTER_PHASE == 'fixed'
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$CM_OWN_ROSTER_OUT/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$CM_OWN_ROSTER_OUT/weights.log"
+      - name: Final source and package holds
+        if: always()
+        run: |
+          sha256sum --check "$CM_OWN_ROSTER_OUT/source-hashes.txt" > "$CM_OWN_ROSTER_OUT/source-holds.log"
+          sha256sum --check "$CM_OWN_ROSTER_OUT/package-hashes.txt"
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' .github/workflows package.json package-lock.json bun.lock index.html
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const rows = JSON.parse(fs.readFileSync(process.env.CM_OWN_ROSTER_OUT + '/installed.json'));
+          for (const row of rows) {
+            const bytes = fs.readFileSync(row.file + '/package.json');
+            assert.equal(JSON.parse(bytes).version, row.version); assert.equal(createHash('sha256').update(bytes).digest('hex'), row.sha256);
+          }
+          console.log(`Held all ${rows.length} current locked installed versions and package bytes.`);
+          NODE
+      - name: Retain complete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: club-detail-${{ github.run_id }}
+          path: club-detail-artifacts/
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: error

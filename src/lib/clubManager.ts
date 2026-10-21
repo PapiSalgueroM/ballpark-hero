@@ -1,6 +1,7 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
+import { noteHighestScoring } from '@/lib/clubManagerRecords';
 import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGoalLift, type CmVarDecision, type CmVarKind, type CmVarAsk } from '@/lib/clubManagerVar';
 /* Round 201: the wilderness reuses the manager job market the retired
    player path already had, so a sacked manager gets real clubs with real
@@ -46,6 +47,13 @@ import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade 
 import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 /* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */
 import { keyedRng } from '@/lib/keyedRng';
+/* Round 1510: the shared night of a participant and the one match cups. Pure modules: no cycle. */
+import { nightsDoneAt, placeNights } from '@/lib/worldNights';
+import type { CalDate } from '@/lib/calDate';
+import type { NightRef, NightResult } from '@/lib/worldNights';
+import { entrantsFrom, evaluateOneOff, myOneOffFixture, oneOffNightsOf, oneOffPartial, oneOffPlayedIn, oneOffRowAt, oneOffRowFor } from '@/lib/worldOneOffs';
+import type { OneOffFixture, OneOffResult, OneOffRow, OneOffSkip, OneOffSlice, OneOffTables } from '@/lib/worldOneOffs';
+import { CM_ONE_OFF_CUP_RUNNERS_UP_2025_26, CM_ONE_OFF_SEASON_ONE } from '@/data/cmOneOffRows';
 /* Round 1229: the one scorer weight table. It imports a type and nothing else, so there is no cycle. */
 import { goalWeight, assistWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWeight';
 /* Round 1229: the league book, pure. It imports the keyed generator, the own goal rule and the weight table. */
@@ -53,6 +61,10 @@ import {
   bookFits, bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal, creditMine, creditOwnGoal, dealAssist, dealGoals,
   liveBook, openBook, openLateBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
+/* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */
+import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardInput, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
+import { compactWorldRoster, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterOwner, worldRosterView } from '@/lib/clubManagerWorldRoster';
+import type { WorldRosterState } from '@/lib/clubManagerWorldRoster';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -74,10 +86,11 @@ import { PRIMARY_RIVAL as RIVALS } from '@/data/clubRivalries';
 // from this file, so there is no cycle.
 import {
   CM_BASE_YEAR, CM_ERAS, DEFAULT_ERA_ID, eraById, seasonLabel,
-  projectedRoster, projectedWorld, projectedXIAvg, projectedWorldFor,
+  projectedRoster, projectedWorld, projectedXIAvg, projectedWorldFor, projectedClubXIAvg,
   ageDriftBand, declineScale, retireChance,
   isHistoricEra, eraRosters, eraRostersRaw, eraUpliftRating, HISTORIC_PARTIAL,
   makeGeneratedName, eraBakeRating, bakedValueForRating,
+  eraRostersLoaded,
 } from '@/lib/clubManagerEras';
 import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
 /* Round 467: the facilities and the books. Both modules import from this
@@ -112,10 +125,19 @@ import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
 /* Round 513: manager XP and the seven trees, in their own file for the same
    reason the deals and the staff are in theirs. */
 import { addXp, askEdge, dutyEdge, ensureXp, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthIntakeEdge, youthReportEdge } from '@/lib/clubManagerXp';
-import { PATIENCE_FLOOR, askPremiumScale, currencySymbol, ensureStartOptions, nationJobsOn, patienceDelta, startOptionsOf } from '@/lib/clubManagerStart';
+import { NO_SACK_LINE, PATIENCE_FLOOR, askPremiumScale, boardMaySack, currencySymbol, ensureStartOptions, nationJobsOn, patienceDelta, startOptionsOf } from '@/lib/clubManagerStart';
+/* Round 1501: the difficulty dials. Every function there is the identity on Normal, and the file imports
+   this one as a type only, so there is no cycle. */
+import { boardCheque, boardOpening, boardSwing, oppEdge, wageRoomFor } from '@/lib/clubManagerDifficulty';
+/* Round 1331: the substitution rule by league and season, a pure table. */
+import { subsLeagueBase, subsRuleFor, type SubsRule } from '@/lib/clubManagerSubsRule';
+export { subsRuleFor, CM_SUBS_PARTIAL } from '@/lib/clubManagerSubsRule';
 /* Round 474: the five specific board asks, built and graded there for the
    same reason the facilities and the books live in their own files. */
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
+/* Round 1335: the board's verdict, its openings, the kitty band and the offer step, a pure module. */
+import { BOARD_FRESH, VERDICT_LINES, fillLeague, kittyAllocation, offerStepOk, openingConfidence, seasonGrade, type SeasonFate } from '@/lib/clubManagerBoardVerdict';
+export { BOARD_FRESH } from '@/lib/clubManagerBoardVerdict';
 /* Round 978: international duty. Called only inside functions, never at module
    scope, so the cycle back into this file stays evaluation safe. */
 import { answerBreak, backFromDuty, endRest, ensureIntl, fireDueBreaks, freshIntl, restingIds } from '@/lib/clubManagerInternationals';
@@ -123,7 +145,7 @@ import type { IntlDuty } from '@/lib/clubManagerInternationals';
 /* Round 1021: the late 2020-21 start's summer window. Called inside
    startCareer only, never at module scope: the calendar module imports this
    one, the same loop the internationals module already closes. */
-import { lateSummerWindowWeeks } from '@/lib/clubManagerCalendar';
+import { dateOfEntries, entryDatesOf, lateSummerWindowWeeks, seasonPlanOf, worldYearOf } from '@/lib/clubManagerCalendar';
 /* Round 478: the Champions League orders a level group table by its own
    rule, not a league one. That module imports nothing but types from here,
    so there is no cycle at all. */
@@ -132,6 +154,24 @@ import type { UclGroupRule } from '@/lib/clubManagerUclGroups';
 /* Round 670 review: how a Champions League tie is read, shared with Soccer
    Career. The module imports nothing. */
 import { uclTieOutcome } from '@/lib/uclTieRule';
+/* Round 1347 E2: one competition engine. The AI's knockout tie is settled by
+   settleTie and a group's matchday by groupFixtures, the same two functions
+   the watched Champions League plays. The module imports nothing but types
+   from here, so there is no cycle. Round 1502: and the world's Champions
+   League, watched by a club that is not in it, is opened at the draw and
+   evaluated against the week by the binding block beside initUclWorld, with
+   Round 1228's library drawing the league phase. */
+import {
+  groupFixtures, settleTie,
+  G8_SHAPE, drawG8, evaluateWorldComp, g8DrawRules, leaguePhaseNightRounds, nightsOf, worldCompWinner, LEAGUE_PHASE_NIGHT_MARKS,
+  type TieRules, type WorldCompBind, type WorldCompFormat, type WorldCompKey, type WorldCompResult, type WorldCompSlice, type WorldKoRound, type WorldNight,
+} from '@/lib/worldCompetition';
+/* Round 1509: the Europa League's access rule and its ledger's constants. The module imports nothing from here. */
+import {
+  euroFieldFromTables, SEASON_ONE_CUP_WINNERS, SEASON_ONE_UECL_HOLDER, UEL_FINAL_MARK, UEL_LEGS,
+  type EuroRoute, type EuroTable,
+} from '@/lib/euroAccess';
+import { UCL_LEAGUE, drawUclLeaguePhase } from '@/lib/uclLeaguePhase';
 /* Round 781: the match clock with the board in it. The module imports nothing. */
 import { clockOrder, playedBy } from '@/lib/clubManagerClock';
 
@@ -153,11 +193,14 @@ import { clockOrder, playedBy } from '@/lib/clubManagerClock';
 
 export type Mentality = 'defensive' | 'balanced' | 'attacking';
 export type FormResult = 'W' | 'D' | 'L';
-export type Competition = 'league' | 'cup' | 'uclGroup' | 'uclKo';
+/** Round 1510: 'oneOff' is a one match cup a participant plays on a night of its own (the domestic super cup,
+ *  CareerState.worldComps.dsc). */
+export type Competition = 'league' | 'cup' | 'uclGroup' | 'uclKo' | 'oneOff';
 
 /** Round 164: how the stats centre buckets football. The two UCL phases are
- *  one competition to a fan, so they share a bucket. */
-export type CompBucket = 'league' | 'cup' | 'ucl';
+ *  one competition to a fan, so they share a bucket. Round 1510: 'other' holds
+ *  every one match cup. */
+export type CompBucket = 'league' | 'cup' | 'ucl' | 'other';
 
 export interface CompStatLine {
   apps: number;
@@ -170,7 +213,8 @@ export interface CompStatLine {
 }
 
 export function compBucketOf(c: Competition): CompBucket {
-  return c === 'league' ? 'league' : c === 'cup' ? 'cup' : 'ucl';
+  /* Round 1510: before the fall through, or a one match cup's goals would land in the Champions League column. */
+  return c === 'league' ? 'league' : c === 'cup' ? 'cup' : c === 'oneOff' ? 'other' : 'ucl';
 }
 
 export interface TeamCompLine {
@@ -206,7 +250,7 @@ export interface RaceScorer {
  */
 export function teamCompRecord(state: CareerState, cupName: string | null): Record<CompBucket | 'all', TeamCompLine> {
   const mk = (): TeamCompLine => ({ p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0 });
-  const out: Record<CompBucket | 'all', TeamCompLine> = { all: mk(), league: mk(), cup: mk(), ucl: mk() };
+  const out: Record<CompBucket | 'all', TeamCompLine> = { all: mk(), league: mk(), cup: mk(), ucl: mk(), other: mk() };
   for (const e of state.resultLog ?? []) {
     const bucket: CompBucket = e.competition
       ? compBucketOf(e.competition)
@@ -248,13 +292,14 @@ const RACE_SECOND_SHARE = 0.26;
  * pickOppSquad and the scorer draws, so the match engine's random stream
  * changes only through the men available to it.
  */
-function projectedRosterWithout(club: string, yearsOnNow: number, eraId: string, exclude: ReadonlySet<string>): ProjectedPlayer[] {
+function projectedRosterWithout(club: string, yearsOnNow: number, eraId: string, exclude: ReadonlySet<string>, career?: CareerState): ProjectedPlayer[] {
   /* Round 1028: a 2015 save from before Round 899 can still meet Paris
      Saint-Germain or Borussia Mönchengladbach under the long name its group
      was drawn with. The strength and the association already read that as the
      club it always was (eraEuroName); the roster now does too, so its line up
      and its scorers are the 2015 squad rather than nobody. */
-  return projectedRoster(eraEuroName(eraId, club), yearsOnNow, eraId).filter(p => !exclude.has(p.n));
+  const name = eraEuroName(eraId, club);
+  return (career ? worldRosterFor(career, name, yearsOnNow) : projectedRoster(name, yearsOnNow, eraId)).filter(p => !exclude.has(p.n));
 }
 const NO_NAMES: ReadonlySet<string> = new Set();
 
@@ -263,9 +308,303 @@ export function mySquadNames(state: CareerState): Set<string> {
   return new Set(state.squad.map(p => p.name));
 }
 
+/** The held seed is optional, so an old save keeps the original projected world. */
+export function worldSeedOf(career: CareerState): number | undefined {
+  const seed = career.worldSeed;
+  return Number.isInteger(seed) && seed! >= 0 && seed! <= 0xffffffff ? seed : undefined;
+}
+
+/* Round 1508: a career that plays the living world. One with a world seed (every career started since the 13
+   October update), or one with no seed that holds a readable ledger: a career from before that update (or a Hot
+   Seat day carried on here) adopted at its first summer on this engine (adoptLivingWorld). The ledger's writers ask
+   this; its readers already turn on a readable ledger alone. Hot Seat and Deadline Day hold neither, so they never
+   write one. scripts/simCmUnseededWorld.mjs holds it. */
+export function livingWorldOf(career: CareerState): boolean {
+  return worldSeedOf(career) !== undefined || worldRosterView(career) !== null;
+}
+
+/* Round 1508 (the lead's ruling 5 of Round 1344, the player report of 2026-10-16: a man another club bought vanished
+   and turned up at his old club the next season, most likely in a career older than the 13 October update). A
+   career with no seed joins the living world at its next summer: it gains an empty ledger and still no seed, so it
+   keeps the projected world it always had (a seed would change every club's future squads), and from that summer
+   every deal, mine and the other clubs', is recorded the way a seeded career records it. startNextSeason calls this
+   first thing, so nothing changes before that summer. A career already in the living world comes back as it is;
+   an unreadable ledger in a career with no seed is replaced by a fresh one, the next honest write of Release AZ's
+   ruling Y2. scripts/simCmUnseededWorld.mjs holds it (controls early and never).
+   The one thing the ledger learns about the time before: where my own men are. A man I signed before this summer
+   (in my squad, or out on loan from me) is still on the projected roster of the club he came from, because nothing
+   recorded the deal; the market and the line ups hide him by name while he is mine, but the day I sell him the
+   ledger would put him at his buyer and the projection would keep him at his old club, one man at two clubs. So a
+   man the projection lists at exactly one club, and that club not mine, is recorded as signed by me from it, the
+   way a buy records him in a seeded career. A man of my own club's bake, my academy's boys and a name the
+   projection lists at two clubs are left alone. Nothing else from before is rebuilt. Pure, no draw.
+   An era whose squads have not arrived is not adopted at all (the review of 2026-10-16): without them it could not
+   find my men, and adoption happens once, so they would never be recorded. It joins at the next summer that has
+   them. The page loads them before the hub (useClubManager), so only a headless caller meets this. */
+export function adoptLivingWorld(career: CareerState): CareerState {
+  if (livingWorldOf(career) || !eraRostersLoaded(career.eraId)) return career;
+  let adopted: CareerState = { ...career, worldRoster: { version: 1, eraId: career.eraId ?? 'now', records: [] } };
+  const listedAt = new Map<string, string[]>();
+  for (const [club, roster] of Object.entries(projectedWorldFor(career.eraId ?? 'now', yearsOn(career)))) {
+    for (const p of roster) { const key = `${p.n}|${p.a}`; const clubs = listedAt.get(key); if (clubs) clubs.push(club); else listedAt.set(key, [club]); }
+  }
+  for (const p of [...career.squad.filter(x => !x.onLoan), ...(career.loanedOut ?? []).map(l => l.player)]) {
+    if (p.academyGrad || p.isYouth) continue;
+    const clubs = listedAt.get(`${p.name}|${p.age}`) ?? [];
+    if (clubs.length !== 1 || clubs[0] === career.clubName) continue;
+    adopted = recordActualRosterTransfer(adopted, p, clubs[0], career.clubName, 'permanent', false);
+  }
+  return adopted;
+}
+
+/* Release AZ fix (reviewer 1, MAJOR 1): a ledger a year behind was aged and packed again on EVERY roster read,
+   once a club. The answer is kept per ledger object, world year, club, era and seed, unless a record the
+   refresh copies from my own squad is due (the one branch that reads the squad), so it is the same answer the
+   refresh always gave. */
+const REFRESH_MEMO = new WeakMap<object, { year: number; start: unknown; era: unknown; club: string; seed: number | undefined; out: unknown }>();
+
+/** Refresh only recorded affected players with the existing aging rules and a private stream. */
+export function refreshWorldRoster(career: CareerState): CareerState {
+  const held = worldRosterView(career);
+  if (!held) return career;
+  const year = worldYear(career);
+  if (!held.records.some(record => record.year < year && record.status !== 'retired')) return career;
+  const raw = career.worldRoster as object, seed = worldSeedOf(career);
+  const hit = REFRESH_MEMO.get(raw);
+  if (hit && hit.year === year && hit.start === career.startYear && hit.era === career.eraId && hit.club === career.clubName && hit.seed === seed) {
+    return { ...career, worldRoster: hit.out as WorldRosterState };
+  }
+  const out = refreshWorldRosterOnce(career, held, year);
+  if (!held.records.some(record => record.year < year && record.status !== 'retired' && record.owner === career.clubName)) {
+    REFRESH_MEMO.set(raw, { year, start: career.startYear, era: career.eraId, club: career.clubName, seed, out: out.worldRoster });
+  }
+  return out;
+}
+
+function refreshWorldRosterOnce(career: CareerState, held: WorldRosterState, year: number): CareerState {
+  const neutral = { ...career, training: DEFAULT_TRAINING, academy: undefined, facilities: undefined, staff: undefined };
+  const records = held.records.map(record => {
+    if (record.year === year || record.status === 'retired') return record;
+    const actual = career.squad.find(p => p.worldRosterKey === record.key && !p.onLoan
+      && p.name === record.origin.name && year - p.age === record.origin.birthYear);
+    if (record.owner === career.clubName && actual) return { ...plainCopy(record), year, player: plainCopy(actual) };
+    let player = plainCopy(record.player);
+    let status: WorldRosterState['records'][number]['status'] = record.status;
+    let owner = record.owner;
+    for (let next = record.year + 1; next <= year; next++) {
+      const random = keyedRng(`world-roster|${worldSeedOf(career) ?? 'legacy'}|${record.key}|${next}`);
+      player = agePlayer(player, neutral, random);
+      if (random() < retireChance(player.age, player.rating, player.position)) { status = 'retired'; owner = null; break; }
+      /* Release AZ fix (reviewer 4, MAJOR 2): a man I sold kept the countdown of the deal he had with ME, and at
+         zero this line released him, so an 86 rated 25 year old sold in the last year of his deal was gone from
+         the buyer a season later and from the whole world after that, against the help's worked example and
+         What's New's "stay where they went". The club that holds him keeps him the way the projected world keeps
+         its own men until they retire: at zero it signs him again on the engine's renewal length (renewalTerms,
+         what a club would offer him). No random draw is taken. scripts/simCmLedgerBound.mjs holds it. */
+      if (status === 'owned' && (player.contractYears ?? 1) <= 0) player = { ...player, contractYears: renewalTerms(player).years };
+    }
+    return { ...plainCopy(record), year: record.origin.birthYear + player.age, player, status, owner };
+  });
+  return { ...career, worldRoster: compactWorldRoster({ ...held, records }) };
+}
+
+/* Release AZ fix (reviewer 2, MAJOR 1): the ledger never dropped a record, so a seeded career gained about nine a
+   season for ever (374 by season 40), and the save and the cost of every read grew with it. A released or retired
+   man's record does one thing: it takes him off the projected roster of the club he came from. Once that club's
+   projected roster (this world year, this seed) no longer lists him, by his key or by the name, position and birth
+   year worldRosterClub matches on, the record changes no roster, so the summer rollover drops it before the save
+   stores it. A man who retired this summer keeps his record for the season. Owned records always stay: they put a
+   man at a club. Never pruned while the era's squads are not loaded. The refresh above still only ages (PR224's
+   own rule and cases). scripts/simCmLedgerBound.mjs holds the bound (CM_LEDGER_BOUND_CONTROL=noprune). */
+function pruneWorldRoster(career: CareerState): CareerState {
+  const held = worldRosterView(career);
+  if (!held || !eraRostersLoaded(career.eraId)) return career;
+  const year = worldYear(career), years = yearsOn(career), seed = worldSeedOf(career), era = career.eraId ?? 'now';
+  const listed = (record: WorldRosterState['records'][number]): boolean => projectedRoster(record.origin.club, years, era, seed)
+    .some(p => p.worldRosterKey === record.key || p.p === record.origin.position && p.n === record.origin.name && year - p.a === record.origin.birthYear);
+  const kept = held.records.filter(record => record.status === 'owned' || record.status === 'retired' && record.year >= year || listed(record));
+  if (kept.length === held.records.length) return career;
+  const ledger = compactWorldRoster({ ...held, records: kept });
+  /* A packed ledger pruned down to owned records is stored plain, so it must not share the read's objects. */
+  return { ...career, worldRoster: ledger.packedRecords === undefined && held !== career.worldRoster
+    ? { ...ledger, records: kept.map(record => plainCopy(record)) } : ledger };
+}
+
+/** Ownership is applied to the same projected players used for rivals and the market. */
+export function worldRosterFor(career: CareerState, club: string, onYears = yearsOn(career)): ProjectedPlayer[] {
+  const fallback = projectedRoster(club, onYears, career.eraId ?? 'now', worldSeedOf(career));
+  const current = refreshWorldRoster(career);
+  if (!worldRosterView(current)) return fallback;
+  const base = fallback.map(bakedToCMPlayer);
+  const roster = worldRosterClub(current, club, base);
+  if (roster === base) return fallback;
+  return roster.map(p => {
+    const original = fallback.find(b => b.worldRosterKey === p.worldRosterKey && b.worldRosterKey !== undefined
+      || b.n === p.name && b.p === p.position && b.a === p.age);
+    if (original && p.worldRosterKey === undefined) return original;
+    /* Release AZ fix (reviewer 4, MAJOR 1): a boy from my academy or a youth pad is a name this game made up,
+       and once I sell him the ledger lists him at a real club. He carries academyGrad or isYouth rather than
+       generated, so every reader of this list (the club screen, the market, the scorer race) showed him with no
+       MADE UP tag under a caption that promises every made up man is marked. Real footballers never carry
+       either flag. scripts/simCmLedgerBound.mjs holds it. */
+    return { n: p.name, p: p.position, a: p.age, v: p.value ?? 0, r: p.rating,
+      ...(p.generated || p.academyGrad || p.isYouth ? { g: true } : {}), anchor: original?.anchor ?? p.rating,
+      since: p.worldRosterSince ?? original?.since ?? 0,
+      ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey } : {}),
+      ...(p.potential === undefined ? {} : { potential: p.potential }) };
+  });
+}
+
+function rosterXIAvg(roster: readonly ProjectedPlayer[]): number | null {
+  if (!roster.length) return null;
+  const top = roster.map(p => p.r).sort((a, b) => b - a).slice(0, 11);
+  while (top.length < 11) top.push(60);
+  return Math.round(top.reduce((sum, rating) => sum + rating, 0) / 11 * 10) / 10;
+}
+
+/* Release AZ fix, the lead's ruling of 2026-10-12: the manager's OWN club is never read off the world roster.
+   The ledger takes every man who left him off his club's world roster and adds nothing for the boys who replaced
+   them, so a seeded career's club sank season by season (74.49 against 79.15 by season three) and took the free
+   agent level rule with it (freeAgentClubLevel is the one reader of his club's strength in src: no board reads
+   it). His club reads the base's projection exactly as before
+   PR224; the world roster serves the other clubs only. genClubStrengths and fillSquadGaps keep the same rule.
+   projectedClubXIAvg is projectedXIAvg taken for the one club, so a seeded career never builds a second whole
+   world for it. src/lib/clubManagerOwnClubLevel.test.ts holds it. */
+export function worldRosterXIAvg(career: CareerState, club: string): number | null {
+  if (!worldRosterView(career) && worldSeedOf(career) === undefined) return projectedXIAvg(club, yearsOn(career), career.eraId);
+  return club === career.clubName ? projectedClubXIAvg(club, yearsOn(career), career.eraId) : rosterXIAvg(worldRosterFor(career, club));
+}
+
+/* Release AZ fix (reviewer 1, MAJOR 1): buildMarket runs on every change of the save, and with a ledger this
+   walked every club of the world each time. The list is kept per ledger object and world year, so a tap that
+   changes no deal reads it back; it is shared like marketBase's, and buildMarket only ever filters it. */
+const WORLD_MARKET_MEMO = new WeakMap<object, { years: number; year: number; start: unknown; era: unknown; seed: number | undefined; club: string; out: MarketPlayer[] }>();
+
+/* Release AZ fix pass 4, the lead's ruling (the manager's own club is read from his squad, never the world
+   roster), and since Round 1339 in every career, seeded or not: the market lists nobody at my own club. My club is
+   my squad, and buildMarket drops every man of my squad by name, so what the world roster still put at my club were
+   men who are not mine (a deep club's bake beyond the 26 a squad starts with, the projection's replacements, the men
+   I sold, the men whose deals ran out): on sale from my own club, and named in the feed as signed from it. A career
+   from before Release AZ keeps its projected world and never writes a ledger (ruling Y1), but its market agrees with
+   the club's page (ClubDetailScreen). src/lib/clubManagerOwnClubLevel.test.ts, scripts/simFreeAgents.mjs section 17
+   (FA_CONTROL=ownclub) and scripts/simCmOwnClubMarket.mjs (OWNCLUB_MARKET_CONTROL=legacy) hold it. */
+function worldMarket(career: CareerState): MarketPlayer[] {
+  const fallback = marketBase(yearsOn(career), career.eraId, worldSeedOf(career));
+  const current = refreshWorldRoster(career);
+  const held = worldRosterView(current);
+  if (!held) return fallback.filter(p => p.club !== career.clubName);
+  const raw = current.worldRoster as object, years = yearsOn(current), year = worldYear(current), seed = worldSeedOf(current);
+  const hit = WORLD_MARKET_MEMO.get(raw);
+  if (hit && hit.years === years && hit.year === year && hit.start === current.startYear && hit.era === current.eraId && hit.seed === seed && hit.club === current.clubName) return hit.out;
+  const clubs = new Set(fallback.map(p => p.club));
+  for (const record of held.records) if (record.owner) clubs.add(record.owner);
+  const out: MarketPlayer[] = [];
+  for (const club of clubs) {
+    if (club === current.clubName) continue;
+    for (const p of worldRosterFor(current, club)) out.push({ name: p.n, club, position: p.p, age: p.a, rating: p.r,
+      price: askingPrice(p.v, p.a), value: p.v, generated: p.g || undefined,
+      ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey, worldRosterSince: p.since, potential: p.potential } : {}) });
+  }
+  out.sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
+  /* Release AZ fix pass 4 (scripts/simBooks.mjs section 1, which nobody had run on this train): marketBase lists
+     one man per name, because a few real men share one (Paulinho of Palmeiras and of Toluca, Allan of Manchester
+     City and of Corinthians), and this list did not, so from a seeded career's first recorded deal six names were
+     on sale twice. One listing per name again: the one the projected market lists while he is still there,
+     otherwise the best rated. */
+  const baseClub = new Map(fallback.map(p => [p.name, p.club] as const));
+  const chosen = new Map<string, MarketPlayer>();
+  for (const p of out) {
+    const had = chosen.get(p.name);
+    if (!had || (had.club !== baseClub.get(p.name) && p.club === baseClub.get(p.name))) chosen.set(p.name, p);
+  }
+  const once = chosen.size === out.length ? out : out.filter(p => chosen.get(p.name) === p);
+  WORLD_MARKET_MEMO.set(raw, { years, year, start: current.startYear, era: current.eraId, seed, club: current.clubName, out: once });
+  return once;
+}
+
+/** Only a projected source or an already certified ownership record supplies deal provenance. */
+function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: string, to: string | null, kind: 'permanent' | 'release' | 'retire', pack = true): CareerState {
+  /* Release AZ, the lead's ruling Y1: a career with no world seed (every save from before this release, and a
+     Hot Seat day handed over) never writes a ledger, so it plays on exactly as it did. A readable ledger alone
+     turns on the same branches the seed does, so this is the one place both are kept off together.
+     scripts/simCmUnseededWorld.mjs holds it (CM_UNSEEDED_CONTROL=guard takes this line out).
+     Round 1508: such a career writes once it holds a readable ledger with no seed, which only its first summer on
+     this engine gives it (adoptLivingWorld); before that summer it still writes nothing. */
+  if (!livingWorldOf(state)) return state;
+  const held = worldRosterView(state);
+  const carried = player.worldRosterKey && held?.records.find(record => record.key === player.worldRosterKey);
+  const sources = projectedRoster(from, yearsOn(state), state.eraId ?? 'now', worldSeedOf(state))
+    .filter(p => player.worldRosterKey ? p.worldRosterKey === player.worldRosterKey : p.n === player.name && p.a === player.age);
+  const source = sources.length === 1 ? sources[0] : undefined;
+  if (!carried && (sources.length > 1 || player.worldRosterKey && !source)) return state;
+  return recordWorldRosterTransfer(state, { player, from, to, kind,
+    since: carried?.origin.since ?? source?.since ?? player.worldRosterSince,
+    originPosition: carried?.origin.position ?? source?.p,
+    ...(carried ? { key: carried.key } : {}) }, pack);
+}
+
+/** Round 1344: one deal closed between two clubs that are not mine. `mp.club` is the seller. */
+export interface AiDeal { mp: MarketPlayer; to: string; fee: number }
+
+/* Round 1344 (the player report of 2026-10-16: a man another club bought vanished from the market and turned up at
+   his old club the next season; PR269, the other lane's Round 1367, proved the four writers that never told the
+   ledger). The man an AI deal moves, as the ledger records him: his own record's payload when the ledger already
+   holds him at the seller, else the seller's projected man (by his key, else by name, age and position) through
+   bakedToCMPlayer, never a payload made up from the market card. Null when the seller does not hold exactly one such
+   man, and (the lead's ruling 3, Release AZ's promise) when the ledger holds him there from a deal of MINE: a man I
+   sold, or one I signed and left behind when I changed jobs. His payload is then the one my squad gave him, the only
+   kind that carries a wage (agePlayer never adds one), and the club that holds him signs him again whenever his
+   deal runs down (refreshWorldRosterOnce), so no AI club takes him while he is there. Pure, no draw.
+   scripts/simCmWorldMoves.mjs and scripts/simCmLedgerBound.mjs (section 4) hold it. */
+export function aiDealPlayer(state: CareerState, mp: MarketPlayer): CMPlayer | null {
+  const current = refreshWorldRoster(state);
+  const found = worldRosterFor(current, mp.club).filter(p => mp.worldRosterKey ? p.worldRosterKey === mp.worldRosterKey
+    : p.n === mp.name && p.a === mp.age && p.p === mp.position);
+  if (found.length !== 1) return null;
+  const key = found[0].worldRosterKey;
+  const record = key ? worldRosterView(current)?.records.find(r => r.key === key && r.owner === mp.club && r.status === 'owned') : undefined;
+  if (!record) return bakedToCMPlayer(found[0]);
+  return record.player.wage === undefined ? plainCopy(record.player) : null;
+}
+
+/* Round 1344: one AI deal written to the ledger, through recordActualRosterTransfer's rules, with the ledger left
+   unpacked (`seen` is the state the window read its market from, so every lookup of a window shares one refreshed
+   read). The same state comes back when the deal is refused. */
+function recordAiDeal(state: CareerState, deal: AiDeal, seen: CareerState): CareerState {
+  const player = aiDealPlayer(seen, deal.mp);
+  return player ? recordActualRosterTransfer(state, player, deal.mp.club, deal.to, 'permanent', false) : state;
+}
+
+/** Round 1344: an unpacked ledger is packed once, at the end of the window that wrote it (the lead's ruling 4). */
+function packedLedger(state: CareerState): CareerState {
+  return state.worldRoster === undefined ? state : { ...state, worldRoster: compactWorldRoster(state.worldRoster) };
+}
+
+/* Round 1344: deals closed while the career had no seed yet (the opening window of a fresh career, whose seed is drawn
+   after its news) or outside a window (the hijack, the walk away), recorded in order and packed once. A career with
+   no seed comes back as the same object (the guard of recordActualRosterTransfer, ruling Y1), so it gains no key.
+   Pure, no draw. Its loop is one line, so scripts/lib/cmNoAiMoves1344.mjs can take it out. Exported for
+   src/lib/clubManagerWorldMoves.test.ts. Round 1508: a career with no seed records here once it is adopted. */
+export function recordAiDeals(state: CareerState, deals: readonly AiDeal[]): CareerState {
+  if (!livingWorldOf(state) || !deals.length) return state;
+  let next = state;
+  for (const deal of deals) next = recordAiDeal(next, deal, state);
+  return next === state ? state : packedLedger(next);
+}
+
+/* Round 1344 review (both reviews' first major; the other lane's PR295 found it too): a rival in a bidding war closes
+   only a deal a seeded career's ledger records. When the ledger refuses the man (the lead's ruling 3: one I sold, or
+   one I signed and left behind at a job move; or a man his club does not hold exactly once) the rival does not get
+   him: the draw that brought the close is spent as before, but no news line, no gone name and no "closed the deal"
+   note say he moved while the ledger keeps him where he was. An unseeded career never refuses (today's rule). Pure,
+   no draw. Its body is one line so scripts/lib/cmNoAiMoves1344.mjs can take it out; scripts/simCmWorldMoves.mjs
+   section 2 (the protected arms) holds it. Round 1508: and an adopted career (no seed, a readable ledger) the same. */
+function rivalCloseRefused(career: CareerState, deal: AiDeal): boolean {
+  return livingWorldOf(career) && recordAiDeal(career, deal, career) === career;
+}
 /** A rival club's projected roster minus every man who is in my squad. */
 export function oppRosterFor(state: CareerState, club: string, mine: ReadonlySet<string> = mySquadNames(state)): ProjectedPlayer[] {
-  return projectedRosterWithout(club, yearsOn(state), state.eraId ?? 'now', mine);
+  return projectedRosterWithout(club, yearsOn(state), state.eraId ?? 'now', mine, state);
 }
 
 /**
@@ -400,6 +739,85 @@ export function leagueBookOf(state: CareerState): LeagueBook | null {
   return readBook(state.leagueBook, bookStampOf(state, careerLeagueOf(state).id));
 }
 
+/** What the league leaders card and the awards read: the reader's input, how much of the league is on
+ *  record, the round a late book counts from (null for a whole book) and the keepers on record. */
+export interface LeagueBoards {
+  input: BoardInput;
+  share: number;
+  from: number | null;
+  keepers: { have: number; of: number };
+}
+
+/**
+ * Round 1311. THE ONE DOOR every screen (and, from the awards on, every award) reads the league book
+ * through. It builds the reader's input (src/lib/clubManagerLeagueBoards.ts) from the active save: the
+ * book through the careful reader, the rival clubs with their goals for, their place in the table and
+ * whether their roster holds a keeper, my squad's league lines, a rival's rating off his roster, and the
+ * engine's own grouping of positions. Each rival's roster is asked for ONCE. Null when there is no book,
+ * when the careful reader refuses it, or when it does not add up to the table (the next match week
+ * replaces such a book: ensureLeagueBook). A read: it draws nothing and changes nothing in the save.
+ */
+export function leagueBoardsOf(state: CareerState): LeagueBoards | null {
+  if (!state.leagueClubs?.length) return null;
+  const book = leagueBookOf(state);
+  if (!book) return null;
+  const table = sortedLeagueTable(state).map(r => r.club);
+  const place = (club: string): number => { const i = table.indexOf(club); return i < 0 ? table.length + 1 : i + 1; };
+  const mine = mySquadNames(state);
+  const rosters = new Map<string, ProjectedPlayer[]>();
+  const rosterOf = (club: string): ProjectedPlayer[] => {
+    let have = rosters.get(club);
+    if (!have) { have = oppRosterFor(state, club, mine); rosters.set(club, have); }
+    return have;
+  };
+  const goalsFor = new Map(state.table.map(r => [r.club, r.gf]));
+  const clubs: BoardClub[] = state.leagueClubs.filter(c => c !== state.clubName).map(club => ({
+    club, gf: goalsFor.get(club) ?? 0, place: place(club), keeperOnRecord: rosterOf(club).some(p => p.p === 'GK'),
+  }));
+  if (!bookFits(book, clubs)) return null;
+  const input: BoardInput = {
+    book,
+    clubs,
+    mine: state.squad.map(p => ({
+      id: p.id, name: p.name, pos: p.position, rating: p.rating, apps: p.comp?.league?.apps ?? 0,
+      goals: p.comp?.league?.goals ?? 0, assists: p.comp?.league?.assists ?? 0, ...(p.generated ? { gen: true } : {}),
+    })),
+    myClub: state.clubName,
+    myPlace: place(state.clubName),
+    ratingOf: (club, name, pos) => rosterOf(club).find(p => p.n === name && p.p === pos)?.r ?? 0,
+    lineOf: groupOf,
+  };
+  return { input, share: bookShare(book, clubs).share, from: book.r0 ?? null, keepers: keepersOnRecord(clubs) };
+}
+
+/** Round 1311: the team of the season is kept on the newest TEAMS_KEPT records that hold awards and let go
+ *  from every older one (the three winners stay on every record). A record with no team is left as it is,
+ *  so a history that never held a team comes back the very same objects. */
+export function keepTeams(history: SeasonRecord[]): SeasonRecord[] {
+  const keep = new Set(history.filter(h => h.awards).map(h => h.season).sort((a, b) => b - a).slice(0, TEAMS_KEPT));
+  return history.map(h => {
+    if (!h.awards?.xi || keep.has(h.season)) return h;
+    const { xi, ...rest } = h.awards;
+    void xi;
+    return { ...h, awards: rest };
+  });
+}
+
+/** Round 1311: who settles this season's golden boot and awards. 'book' on a season the league book
+ *  decides; otherwise why not: no readable book that adds up, a book that started late, or one with too
+ *  little of the league on record (the share comes with it). The screens print the reason in plain words. */
+export function bookAwardsState(state: CareerState, boards: LeagueBoards | null = leagueBoardsOf(state)): { by: 'book' | 'none' | 'late' | 'thin'; share: number | null } {
+  if (!boards) return { by: 'none', share: null };
+  if (boards.from !== null) return { by: 'late', share: boards.share };
+  return { by: bookDecides(boards.input) ? 'book' : 'thin', share: boards.share };
+}
+
+/** Round 1311: the rule a rival's goals are dealt by, for the league leaders card's worked example (the
+ *  card computes it from this object with dealShares, never from typed numbers). */
+export function leagueBookRules(): BookRules {
+  return bookRules();
+}
+
 /** The eleven a rival that can field one is dealt over this week: the one the Match Centre and the viewer
  *  already show, minus any man now in my squad. Null for a club that cannot field a named eleven (the
  *  book deals that club over its partial eleven, thinBookEleven below). Since Round 1306 nothing in src
@@ -527,8 +945,20 @@ function noteBookMine(
  * The live golden boot board: AI entries plus every one of MY players with a
  * league goal, read straight from his per-competition line so the race and
  * the stats centre are one bookkeeping.
+ *
+ * Round 1311: on a season the league book decides (a WHOLE book with at least
+ * AWARD_FLOOR in 100 rival goals on record, bookDecides) the board IS the
+ * book's Goals board, so the golden boot, the player of the season and the
+ * world award read it. Any other season (a late book, no book, or a league
+ * whose data is too thin) keeps the old race below, to the letter. `boards`
+ * lets a caller that already asked the door hand its answer in.
  */
-export function goldenBootTable(state: CareerState, limit = 12): RaceScorer[] {
+export function goldenBootTable(state: CareerState, limit = 12, boards: LeagueBoards | null = leagueBoardsOf(state)): RaceScorer[] {
+  if (boards && bookDecides(boards.input)) {
+    return leaders(boards.input, 'goals', limit).map(m => ({
+      name: m.name, club: m.club, goals: m.n, ...(m.mine ? { mine: true } : {}), ...(m.gen ? { gen: true } : {}),
+    }));
+  }
   /* Round 742: a rival entry carrying the name of a man now in my squad is
      his old club's, seeded before he moved (or a namesake), so it is dropped
      at read time rather than rewritten into the save. He is on the board
@@ -558,13 +988,13 @@ export interface PotyLine {
  * in the table carries weight. One formula for everyone, mine included, so
  * the ranking cannot quietly favour my own squad.
  */
-export function playerOfSeasonRace(state: CareerState, limit = 5): PotyLine[] {
+export function playerOfSeasonRace(state: CareerState, limit = 5, boards: LeagueBoards | null = leagueBoardsOf(state)): PotyLine[] {
   const table = sortedLeagueTable(state);
   const posOf = (club: string): number => {
     const i = table.findIndex(r => r.club === club);
     return i >= 0 ? i + 1 : table.length;
   };
-  return goldenBootTable(state, 40)
+  return goldenBootTable(state, 40, boards)
     .map(e => ({
       name: e.name,
       club: e.club,
@@ -735,6 +1165,8 @@ export interface LoanOut {
 }
 
 export interface CMPlayer {
+  worldRosterKey?: string;
+  worldRosterSince?: number;
   id: string;
   name: string;
   position: Position;
@@ -1147,6 +1579,9 @@ export interface TierInfo { label: string; emoji: string; blurb: string; }
 export interface MentalityDef { id: Mentality; label: string; emoji: string; desc: string; }
 
 export interface MarketPlayer {
+  worldRosterKey?: string;
+  worldRosterSince?: number;
+  potential?: number;
   name: string;
   club: string;
   position: Position;
@@ -1158,6 +1593,8 @@ export interface MarketPlayer {
   value?: number;
   /** Round 132: this game made him up, and the transfer screen says so. */
   generated?: boolean;
+  /** Round 1344: another club bought him this season (marketForScreen); listed there, not for sale until the summer. */
+  joinedThisSeason?: true;
 }
 
 export interface TransferRecord {
@@ -1270,7 +1707,16 @@ export interface TransferNews {
   week: number;
 }
 
-export interface Trophy { name: string; emoji: string; season: number; }
+/** Round 1510: `minor` marks a one match cup (a super cup): shown everywhere a trophy is shown, weighed nowhere a
+ *  season is judged or paid (weighedTrophies). */
+export interface Trophy { name: string; emoji: string; season: number; minor?: true; }
+
+/** Round 1510: the trophies that count where a season is judged or paid (the grade, the offers, the kitty, the
+ *  XP, the wage cap, the sponsor, a federation's view, the job market, the fans): every one but a minor cup. The
+ *  one helper every weighing reader goes through; a display reads the whole list. */
+export function weighedTrophies(list: readonly Trophy[]): Trophy[] {
+  return list.filter(t => !t.minor);
+}
 
 export interface ScorerLine {
   name: string;
@@ -1338,6 +1784,10 @@ export interface SubLine {
   onGen?: boolean; offGen?: boolean;
   /** Round 781: into the board of `minute`, see ScorerLine. */
   plus?: number;
+  /** Round 1331: my changes only, true when the change was made in play under a rule that limits the
+   *  stoppages (five changes in three), so it used a stoppage; a change at a break carries none. Never
+   *  written under a rule with no limit, so a three change match saves what it always did. */
+  stop?: true;
 }
 export interface InjuryLine { name: string; minute: number; weeks: number; id?: string; plus?: number; }
 
@@ -1594,6 +2044,12 @@ export interface CalendarEntry {
    * keeps playing the ties it was already halfway through.
    */
   uclLeg?: 1 | 2;
+  /**
+   * Round 1510: a participant's NIGHT (src/lib/worldNights.ts), a match only my calendar holds, backed by a
+   * worldComps slice: its key and the night's index there. A night never ticks a week, never counts a window week
+   * and never charges the books; skipped, the week moves on and nothing else happens. Absent on every other entry.
+   */
+  night?: NightRef;
 }
 
 export interface UclGroupState {
@@ -1688,6 +2144,13 @@ export interface SeasonRecord {
    *  neither on its old seasons. */
   leagueId?: string;
   leagueSize?: number;
+  /** Round 1311: the league's top scorer, most assists and most clean sheets, read from the book, on a
+   *  season the book decided. Kept on the record, so a manager who moves club takes his past winners
+   *  with him (joinClubNow copies the history). An older record has none. */
+  awards?: SeasonAwards;
+  /** Round 1335: the summer move the season earned, written only on a season the club really went up or
+   *  down or stayed up against the odds (seasonFate). An older record, and every other season, has none. */
+  fate?: SeasonFate;
 }
 
 export interface CareerStats {
@@ -1701,6 +2164,9 @@ export interface CareerStats {
   mostExpensiveBuy?: { name: string; fee: number } | null;
   mostExpensiveSale?: { name: string; fee: number } | null;
   clubsManaged?: string[];
+  /** Round 1343: the match with the most goals in it (clubManagerRecords.ts). Absent until the first match
+   *  played on Round 1343's engine, and then read from the book; null means counted with no game yet. */
+  highestScoring?: import('@/lib/clubManagerRecords').ScoringGame | null;
 }
 
 export interface JobOffer { club: string; blurb: string; }
@@ -1780,7 +2246,7 @@ export interface NationOffer {
 export function nationStanding(career: CareerState): number {
   const def = clubDefFor(career.clubName);
   const tierWorth = [26, 16, 8, 3][def.tier - 1] ?? 3;
-  const trophies = career.trophies.length * 14;
+  const trophies = weighedTrophies(career.trophies).length * 14;
   const seasons = Math.min(career.history.length, 12) * 3;
   const wins = career.careerStats.played > 0
     ? (career.careerStats.wins / career.careerStats.played) * 30
@@ -1928,7 +2394,7 @@ export function wildernessProfile(career: CareerState): ManagerProfile {
   return {
     playingRep: 0,
     seasonsSinceRetired: 0,
-    managerTrophies: career.trophies.length,
+    managerTrophies: weighedTrophies(career.trophies).length,
     promotions,
     relegations,
     seasonsManaged: Math.max(0, career.season - 1) + (career.history.length ? 0 : 0),
@@ -2138,7 +2604,7 @@ function sponsorPull(state: CareerState): number {
   const byTier = [1, 0.62, 0.4, 0.26][def.tier - 1] ?? 0.26;
   const europe = state.uclGroup ? 1.35 : 1;
   /* A club that just won something is worth more in the room. */
-  const trophies = (state.trophies?.length ?? 0);
+  const trophies = weighedTrophies(state.trophies ?? []).length;
   const form = 1 + Math.min(trophies, 6) * 0.04;
   const era = eraHist ? 0.7 : 1;
   return byTier * europe * form * era;
@@ -2314,6 +2780,10 @@ export interface SeasonSummary {
   goldenBoot?: { name: string; club: string; goals: number } | null;
   playerOfSeason?: { name: string; club: string } | null;
   ballonDor?: { name: string; club: string } | null;
+  /** Round 1311: the same awards the season's record keeps, on a season the league book decided. */
+  awards?: SeasonAwards;
+  /** Round 1335: the same fate the season's record keeps, only on a season that has one. */
+  fate?: SeasonFate;
 }
 
 export interface CareerState {
@@ -2404,6 +2874,8 @@ export interface CareerState {
   loanedOut?: LoanOut[];
   /** Round 95: live standings for every league that is not mine, by league id. */
   world?: Record<string, WorldLeague>;
+  worldRoster?: WorldRosterState;
+  worldSeed?: number;
   /** Round 95: the full Champions League knockout bracket. */
   uclBracket?: UclTie[];
   /** Round 163: every OTHER Champions League group, simulated alongside mine. */
@@ -2427,6 +2899,23 @@ export interface CareerState {
    *  Round 612 has none and keeps the group it was drawn, a custom club's
    *  season one has none because it has qualified for nothing. */
   uclField?: string[];
+  /** Round 1502: the competitions this season plays that the save follows
+   *  from outside: `ucl`, the world's Champions League in a season my club
+   *  is NOT in it (worldCompetition.ts's slice: its entrants, a strength
+   *  snapshot, a seed and, for the league phase, the slate). Written only
+   *  when such a competition exists, replaced at every rollover and never
+   *  kept beside a group of my own; every result is derived from it against
+   *  the week (evalWorldUcl). Absent on every save from before the round.
+   *  Round 1509: and `uel`, the world's Europa League, followed every season
+   *  of today's world (my club is never one of its entrants yet). One object,
+   *  two keys, written in the order ucl, uel by setWorldComp, and gone when
+   *  both are. Round 1510: and `dsc`, the country's domestic super cup (a
+   *  slice or a stub with its reason, worldOneOffs.ts), written and taken off
+   *  by its own writer alone (setOneOffSlice) and carried by setWorldComp.
+   *  Round 1514: and `usc`, the UEFA Super Cup, on the same engine and writer
+   *  under its own key (from a save's second season: season one's Europa
+   *  League winner is not in the game, so none is opened then). */
+  worldComps?: { ucl?: WorldCompSlice; uel?: WorldCompSlice; dsc?: OneOffSlice; usc?: OneOffSlice };
   /** Round 617: the league fixture list alternates home and away (the circle
    *  method's standard venue rule, see roundPairs). Set on every new career
    *  and on every season rollover. Absent on a save from before the round,
@@ -2637,6 +3126,19 @@ export interface CareerState {
   shootoutOrder?: string[];
   /** Three club-bound tactics setups. Older saves have none; the match-plan reader validates entries. */
   matchPlans?: import('@/lib/clubManagerMatchPlans').SavedMatchPlan[];
+  /** Round 1331: 'base' plays the match rules from before Round 1331 (three changes with no stoppage
+   *  limit everywhere, and the press asking about the fixture the old way), and since Round 1335 the
+   *  season rules from before that round as well (legacySeason: the grade and its line, the offers, the
+   *  mid season approach, the openings, the kitty and the takeovers' card). Set only by Manager Hot Seat
+   *  on a day dated before HOT_SEAT_RULES_FROM or a free run started before it, so a run in flight and
+   *  every past daily replay exactly; taken off when the run is carried on to Club Manager and dropped by
+   *  loadCareer, so no Club Manager save ever plays it. Absent means the current rules. A later rule
+   *  that moves the dailies joins this same field (a dated value naming the newest rule a run plays)
+   *  rather than adding a second one. Round 1343 joined it: 'base' also keeps no highest scoring game. */
+  matchRules?: 'base';
+  /** Round 1343: set once, by retireCareer (clubManagerRetire.ts), when the manager retires. A retired career
+   *  keeps its slot as a finished career and opens on its farewell. Absent on every other save. */
+  retired?: import('@/lib/clubManagerRetire').Retirement;
 }
 
 /* ---------- Round 505: the armband and the set piece takers ---------- */
@@ -5025,6 +5527,8 @@ function bakedToCMPlayer(b: BakedPlayer | ProjectedPlayer): CMPlayer {
     seasonAssists: 0,
     value: b.v,
     generated: gen || undefined,
+    ...((b as ProjectedPlayer).worldRosterKey ? { worldRosterKey: (b as ProjectedPlayer).worldRosterKey,
+      worldRosterSince: (b as ProjectedPlayer).since, potential: (b as ProjectedPlayer).potential } : {}),
   };
 }
 
@@ -5102,7 +5606,7 @@ export interface CustomClubSpec {
   budgetTier: CustomBudgetTier;
   /** The league def id this club plays in (real or era league). */
   leagueId: string;
-  /** The club it displaced this season. Recomputed every summer. */
+  /** The displaced real club. Modern paired leagues retain its slot across summers. */
   replacedClub: string;
   /**
    * Round 160: how good the squad starts, decoupled from the money. The
@@ -6028,13 +6532,28 @@ function squadXIAvg(squad: CMPlayer[]): number {
   return Math.round((rs.reduce((s, r) => s + r, 0) / 11) * 10) / 10;
 }
 
+function customUsesPyramid(spec: Pick<CustomClubSpec, 'leagueId'> | undefined, eraId?: string): boolean {
+  return !!spec && !(eraId && isHistoricEra(eraId))
+    && PYRAMIDS.some(pair => pair.top === spec.leagueId || pair.second === spec.leagueId);
+}
+
+/** Leaving a created club restores its real slot in the next European field. */
+export function customExitUclField(career: Pick<CareerState, 'customClub' | 'eraId'>, field: string[]): string[] {
+  const custom = career.customClub;
+  return customUsesPyramid(custom, career.eraId)
+    ? field.map(name => name === custom!.name ? custom!.replacedClub : name) : field;
+}
+
 /** The league def a custom spec plays in, era leagues first. */
-function customLeagueDef(spec: Pick<CustomClubSpec, 'leagueId'>, eraId?: string): LeagueDef | null {
+function customLeagueDef(spec: Pick<CustomClubSpec, 'leagueId' | 'name' | 'replacedClub'>, eraId?: string): LeagueDef | null {
   if (eraId && ERA_LEAGUES[eraId]) {
     const el = ERA_LEAGUES[eraId].find(l => l.id === spec.leagueId);
     if (el) return el;
   }
-  return REAL_LEAGUES.find(l => l.id === spec.leagueId) ?? null;
+  const real = REAL_LEAGUES.find(l => l.id === spec.leagueId);
+  if (!real || !customUsesPyramid(spec, eraId)) return real ?? null;
+  const league = effectiveLeague(real);
+  return { ...league, clubs: league.clubs.map(name => name === spec.replacedClub ? spec.name : name) };
 }
 
 /**
@@ -6053,7 +6572,7 @@ function buildCustomDef(spec: CustomClubSpec, eraId?: string, xiOverride?: numbe
   const xiOf = xiChainFor(chainEra);
   // The replaced club is out of the world, so it neither counts toward the
   // rank nor (being the weakest) moves the top of the league.
-  const others = (league?.clubs ?? []).filter(c => c !== spec.replacedClub);
+  const others = (league?.clubs ?? []).filter(c => c !== spec.replacedClub && c !== spec.name);
   let topXI = xi;
   let above = 0;
   for (const c of others) {
@@ -6175,7 +6694,7 @@ export function customBoardPreview(spec: Omit<CustomClubSpec, 'replacedClub'>, e
   return { label: demand.label, replaced };
 }
 
-function buildSquad(clubName: string, yearsOnNow = 0, eraId: string = 'now'): CMPlayer[] {
+function buildSquad(clubName: string, yearsOnNow = 0, eraId: string = 'now', career?: CareerState): CMPlayer[] {
   // Round 70: baked real rosters first (with real market values); the old
   // static pool only backs up clubs outside the bake. Round 72: cap the
   // start at the 26 most valuable so deep baked squads (Real Madrid has 29
@@ -6183,11 +6702,11 @@ function buildSquad(clubName: string, yearsOnNow = 0, eraId: string = 'now'): CM
   // people. Round 132: at yearsOn 0 the projection IS the bake, so a career
   // in the current era gets exactly the squad it always got. Round 146: the
   // era picks the bake, so a 2010 save is handed the real 2010 squad.
-  const baked = projectedRoster(clubName, yearsOnNow, eraId);
+  const baked = projectedRoster(clubName, yearsOnNow, eraId, career ? worldSeedOf(career) : undefined);
   const real = baked.length
     ? baked.slice(0, 26).map(bakedToCMPlayer)
     : getPool().filter(p => p.club === clubName).map(toCMPlayer);
-  return ensureSquadCoverage(real);
+  return ensureSquadCoverage(career ? [...worldRosterClub(refreshWorldRoster(career), clubName, real)] : real);
 }
 
 /* ================================================================== */
@@ -7060,7 +7579,7 @@ export function topUpFreeAgents(state: CareerState): void {
     ...(state.releasedNames ?? []),
     ...(state.academy?.prospects ?? []).map(pr => pr.name),
     ...(state.loanedOut ?? []).map(l => l.player.name),
-    ...marketBase(yearsOn(state), state.eraId).map(m => m.name),
+    ...marketBase(yearsOn(state), state.eraId, worldSeedOf(state)).map(m => m.name),
   ]);
   const out = [...pool];
   for (let k = 0; have < FREE_AGENT_POOL_TARGET && k < FREE_AGENT_POOL_TARGET * 3; k++) {
@@ -7108,7 +7627,7 @@ export function seedRealFreeAgents(state: CareerState): void {
   const taken = new Set<string>([
     ...state.squad.map(p => p.name),
     ...pool.map(f => f.name),
-    ...marketBase(yearsOn(state), state.eraId).map(m => m.name),
+    ...marketBase(yearsOn(state), state.eraId, worldSeedOf(state)).map(m => m.name),
   ]);
   const real: FreeAgent[] = CM_REAL_FREE_AGENTS
     .filter(r => !taken.has(r.name))
@@ -7243,7 +7762,7 @@ export function releasePlayer(career: CareerState, playerId: string): CareerStat
       ? career.releasedNames
       : [...(career.releasedNames ?? []), p.name],
   };
-  return next;
+  return recordActualRosterTransfer(next, p, career.clubName, null, 'release');
 }
 
 /**
@@ -7422,7 +7941,7 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
   };
   /* Round 640 review: a founder signed back still sells at his ratio. */
   if (fa.founderSaleRatio !== undefined) player.founderSaleRatio = fa.founderSaleRatio;
-  return {
+  const state: CareerState = {
     ...career,
     budget: Math.round((career.budget - fee) * 10) / 10,
     squad: [...career.squad, player],
@@ -7432,6 +7951,15 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
        transfer fee. */
     seasonSignings: [...career.seasonSignings, { dir: 'in', name: fa.name, fee: 0, bonus: fee }],
   };
+  /* Release AZ fix (reviewer 1, minor 6): the one ledger writer that does not pass recordActualRosterTransfer, so
+     ruling Y1's guard did not stand in front of it. Inert before this line too (it needs a readable ledger, which a
+     career with no seed never gets), now said where it is done. Round 1508: until its first summer here, when it is
+     adopted with a readable ledger (adoptLivingWorld). */
+  if (!livingWorldOf(career)) return state;
+  const released = worldRosterView(career)?.records.filter(record => record.status === 'released'
+    && record.player.name === player.name && record.origin.birthYear === worldYear(career) - player.age);
+  return released?.length === 1 ? recordWorldRosterTransfer(state, { player, from: null, to: state.clubName,
+    kind: 'permanent', key: released[0].key }) : state;
 }
 
 /**
@@ -8403,8 +8931,9 @@ function xiMood(state: CareerState, xi: CMPlayer[]): number {
  * except on an exact tie, and it errs the safe way, because the only thing that
  * reads this rather than the raw number is the read line and the harness.
  */
-export function matchEdge(career: CareerState): number | null {
-  const fx = nextFixture(career);
+export function matchEdge(career: CareerState, fixture?: NextFixtureInfo): number | null {
+  /* Round 1331: the press at the whistle hands in the fixture it is asking about. */
+  const fx = fixture ?? nextFixture(career);
   if (fx.kind !== 'match') return null;
   const xi = effectiveXIWithSlots(career);
   const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
@@ -8491,7 +9020,7 @@ export function talkTargetNow(career: CareerState): number | null {
   if (live) {
     const second = livePairs(career, live);
     const venue = live.home === true ? 3 : live.home === false ? -1.5 : 0;
-    const edge = myMatchStrength(career, second) + venue - strengthOf(career, live.opponent);
+    const edge = myMatchStrength(career, second) + venue - oppStrengthVsMe(career, live.opponent);
     return halftimeTarget(live.myGoals, live.oppGoals, edge, xiMood(career, men(second)));
   }
   const edge = matchEdge(career);
@@ -8568,8 +9097,10 @@ const PRESS_SILENCE = 'Nothing on the desk. The press only come when there is so
  * a question that fires every single week whatever the state of the club is the
  * thing that turns this into a chore.
  */
-function buildPressQuestion(state: CareerState): PressQuestion | null {
-  const fx = nextFixture(state);
+function buildPressQuestion(state: CareerState, fromWeek?: number): PressQuestion | null {
+  /* Round 1331: asked at the whistle, the question is about the match AFTER the one just played
+     (fromWeek), never the one that has just finished. Without it, the old read. */
+  const fx = fromWeek === undefined ? nextFixture(state) : nextFixtureFrom(state, fromWeek);
   const opponent = fx.kind === 'match' ? fx.opponent : null;
   const senior = state.squad.filter(p => !p.onLoan && !p.isYouth);
   const mk = (q: Omit<PressQuestion, 'id'>): PressQuestion => {
@@ -8748,7 +9279,7 @@ function buildPressQuestion(state: CareerState): PressQuestion | null {
 
   /* 8. Anything big enough to be worth asking about. */
   if (opponent && fx.kind === 'match') {
-    const edge = matchEdge(state);
+    const edge = matchEdge(state, fromWeek === undefined ? undefined : fx);
     if (edge !== null && edge - EDGE_LEVEL <= -6) {
       return mk({
         kind: 'bigGame',
@@ -8778,7 +9309,7 @@ function buildPressQuestion(state: CareerState): PressQuestion | null {
  * Roll a question onto the desk, if there is one worth asking and they have not
  * had you in front of a microphone too recently.
  */
-function maybeAskPress(state: CareerState): void {
+function maybeAskPress(state: CareerState, fromWeek?: number): void {
   const press = state.press;
   if (!press) return;
   /* A story has a shelf life. A question nobody ever answered stops being a
@@ -8798,7 +9329,7 @@ function maybeAskPress(state: CareerState): void {
     return;
   }
   if (state.week - press.lastWeek < PRESS_GAP) return;
-  const q = buildPressQuestion(state);
+  const q = buildPressQuestion(state, fromWeek);
   if (!q) return;
   press.pending = q;
   press.lastWeek = state.week;
@@ -8916,14 +9447,14 @@ const MARKET_BASE_CACHE = new Map<string, MarketPlayer[]>();
    2026 one, so Bellingham cannot be signed in 2010 and 2010 Messi cannot be
    signed today. The cache key carries the era for the same reason the world
    cache does. */
-function marketBase(yearsOnNow: number, eraId: string = 'now'): MarketPlayer[] {
+function marketBase(yearsOnNow: number, eraId: string = 'now', worldSeed?: number): MarketPlayer[] {
   const y = Math.max(0, Math.round(yearsOnNow));
-  const key = `${isHistoricEra(eraId) ? eraId : 'now'}|${y}`;
+  const key = `${isHistoricEra(eraId) ? eraId : 'now'}|${y}${worldSeed === undefined ? '' : `|${worldSeed}`}`;
   const hit = MARKET_BASE_CACHE.get(key);
   if (hit) return hit;
   const out: MarketPlayer[] = [];
   const seen = new Set<string>();
-  for (const [club, roster] of Object.entries(projectedWorldFor(eraId, y))) {
+  for (const [club, roster] of Object.entries(projectedWorldFor(eraId, y, worldSeed))) {
     for (const b of roster) {
       if (seen.has(b.n)) continue;
       seen.add(b.n);
@@ -8936,6 +9467,7 @@ function marketBase(yearsOnNow: number, eraId: string = 'now'): MarketPlayer[] {
         price: askingPrice(b.v, b.a),
         value: b.v,
         generated: b.g || undefined,
+        ...(b.worldRosterKey ? { worldRosterKey: b.worldRosterKey, worldRosterSince: b.since, potential: b.potential } : {}),
       });
     }
   }
@@ -8966,8 +9498,53 @@ export function buildMarket(career: CareerState): MarketPlayer[] {
   /* Keyed on sameManKey, so a different man who happens to share his name is
      still on the market. */
   const onLoanOut = new Set((career.loanedOut ?? []).map(l => sameManKey(l.player)));
-  return marketBase(yearsOn(career), career.eraId)
+  return worldMarket(career)
     .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.has(sameManKey(p)));
+}
+
+/* Round 1344 (the player report: a man another club bought was "deleted from the database"). The market the transfer
+   screen shows: buildMarket, plus, in a career with a readable ledger, every man another club bought this season (his
+   name is on goneNames, this season's deal line takes him to the club the market lists him at, and the ledger owns
+   him there), marked joinedThisSeason, in the
+   market's own order. He can be found at his new club; every door refuses him with the reason until the summer
+   (joinedThisSeasonRefusal). buildMarket itself is unchanged: the window news and the board's asks read it. A man I
+   sold this season is the same case. With no ledger the answer is buildMarket's own list. scripts/simCmWorldMoves.mjs
+   section 4 holds it. */
+export function marketForScreen(career: CareerState): MarketPlayer[] {
+  const market = buildMarket(career);
+  const gone = new Set(career.goneNames);
+  if (!gone.size || !worldRosterView(career)) return market;
+  const squadNames = new Set(career.squad.map(p => p.name));
+  const retired = new Set(career.retiredNames ?? []);
+  const released = releasedByYouNames(career);
+  const onLoanOut = new Set((career.loanedOut ?? []).map(l => sameManKey(l.player)));
+  /* Round 1344 review: rows are matched by name and club, not by object, so the answer never rests on worldMarket's
+     memo handing the same objects back to three calls; and a man is marked joined by the one test the refusal reads
+     (joinedHisClubThisSeason), so nothing is listed as joined that a door then sells. A gone name with no deal line
+     to his club this season stays off the screen, as buildMarket has it. */
+  const at = (p: MarketPlayer) => `${p.name}|${p.club}`;
+  const world = worldMarket(career);
+  const joined = new Set(world.filter(p => gone.has(p.name)
+    && !squadNames.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.has(sameManKey(p))
+    && joinedHisClubThisSeason(career, p)).map(at));
+  if (!joined.size) return market;
+  const listed = new Set(market.map(at));
+  return world.filter(p => listed.has(at(p)) || joined.has(at(p))).map(p => joined.has(at(p)) ? { ...p, joinedThisSeason: true as const } : p);
+}
+
+/* Round 1344: whether a man joined the club the market lists him at this season: this season's deal line to that
+   club (a namesake on goneNames cannot trip it) and the ledger owning him there, so a career with no ledger never
+   meets it. The screen's listing (marketForScreen) and every door (joinedThisSeasonRefusal) read this one test. */
+function joinedHisClubThisSeason(career: CareerState, mp: MarketPlayer): boolean {
+  return !!mp.worldRosterKey && (career.transferLog ?? []).some(t => t.name === mp.name && t.to === mp.club && t.season === career.season && !t.loan)
+    && worldRosterOwner(career, mp.worldRosterKey) === mp.club;
+}
+
+/* Round 1344: a man another club bought this season is not for sale until the summer, by any door. After every older
+   reason, so today's refusals keep their order. */
+function joinedThisSeasonRefusal(career: CareerState, mp: MarketPlayer): string | null {
+  if (!joinedHisClubThisSeason(career, mp)) return null;
+  return `${mp.name} only joined ${mp.club} this season. They will not sell him on until ${career.transferWindow === 'summer' ? 'next summer' : 'the summer'}.`;
 }
 
 /** Round 71: append a line to the Latest Transfers feed (capped at 80). */
@@ -9016,7 +9593,7 @@ export function signingRefusal(career: CareerState, mp: MarketPlayer, fee: numbe
      be pressed, and the summer return would make two of him. */
   const away = (career.loanedOut ?? []).find(l => sameManKey(l.player) === sameManKey(mp));
   if (away) return `${mp.name} is already yours, out on loan at ${away.club}. Bring him back from the loan desk instead.`;
-  return null;
+  return joinedThisSeasonRefusal(career, mp);
 }
 
 /** Round 634 review: the four ways a market card can be pressed. */
@@ -9052,7 +9629,7 @@ export function doorRefusal(career: CareerState, mp: MarketPlayer, door: MarketD
   if (releasedByYouNames(career).has(mp.name)) return `You released ${mp.name}. He will not sign for you again.`;
   const away = (career.loanedOut ?? []).find(l => sameManKey(l.player) === sameManKey(mp));
   if (away) return `${mp.name} is already yours, out on loan at ${away.club}. Bring him back from the loan desk instead.`;
-  return null;
+  return joinedThisSeasonRefusal(career, mp);
 }
 
 function completeSigning(
@@ -9080,6 +9657,8 @@ function completeSigning(
     seasonGoals: 0,
     seasonAssists: 0,
     value: mp.value,
+    ...(mp.worldRosterKey ? { worldRosterKey: mp.worldRosterKey, worldRosterSince: mp.worldRosterSince,
+      potential: mp.potential, generated: mp.generated } : {}),
     onLoan: loan || undefined,
     // Round 105: a signing arrives on a real deal.
     contractYears: loan ? 1 : (terms ? terms.years : (mp.age >= 31 ? 2 : 4)),
@@ -9114,7 +9693,7 @@ function completeSigning(
   };
   pushNews(state, { name: mp.name, from: mp.club, to: state.clubName, fee, loan: loan || undefined });
   if (!loan) trackDealExtremes(state, 'in', mp.name, fee);
-  return state;
+  return loan ? state : recordActualRosterTransfer(state, player, mp.club, state.clubName, 'permanent');
 }
 
 /** Returns the new state, or null if the deal is not allowed. */
@@ -9134,7 +9713,10 @@ export function releaseClauseOf(mp: MarketPlayer, season: number): number | null
   if (h % 100 >= 35) return null;
   const mult = 1.5 + ((h >>> 8) % 100) / 100;
   const base = mp.value ?? mp.price;
-  return Math.max(1, Math.round(base * mult * 10) / 10);
+  /* Round 1501: never under the card's own price. On Normal a clause is always above it (1.5 times the value
+     or more, against a price of at most 1.25 times), so this changes nothing there; on Hard and Legend the
+     card carries the marked price, and a clause must not become the cheaper door round the mark. */
+  return Math.max(1, Math.round(base * mult * 10) / 10, mp.price);
 }
 
 /** Pay the release clause: instant signing at the clause price. */
@@ -9214,7 +9796,7 @@ export function exerciseLoanOption(career: CareerState, playerId: string): Caree
   };
   pushNews(state, { name: p.name, from, to: state.clubName, fee });
   trackDealExtremes(state, 'in', p.name, fee);
-  return state;
+  return from === 'his club' ? state : recordActualRosterTransfer(state, bought, from, state.clubName, 'permanent');
 }
 
 /**
@@ -9305,7 +9887,18 @@ function otherDescriptor(p: CMPlayer, taken: string): string {
   return p.isYouth ? 'one of the academy lads' : 'another of the senior lads';
 }
 
-const DRAMA_POOL: { text: string; options: { label: string; effect: MessageEffect }[] }[] = [
+/**
+ * Round 1326: a drama line with its two descriptors filled in, every sentence
+ * opening on a capital ("...in the players lounge. One of your defenders
+ * reckons..."): the first letter and any lower case letter after a full stop,
+ * a question mark or an exclamation mark and a space. Pure; draws nothing.
+ */
+export function dramaText(template: string, d1: string, d2: string): string {
+  const text = template.replace('{P}', d1).replace('{Q}', d2);
+  return text.replace(/(^|[.?!] )([a-z])/g, (_m, lead: string, c: string) => lead + c.toUpperCase());
+}
+
+export const DRAMA_POOL: { text: string; options: { label: string; effect: MessageEffect }[] }[] = [
   { text: '{P} got caught selling his match worn boots on eBay. Buy it now, no returns.', options: [{ label: 'Fine him', effect: 'fine' }, { label: 'Buy a pair yourself', effect: 'laugh' }] },
   { text: '{P} showed up to training in a full chrome wrap on his car with his own face printed on the hood.', options: [{ label: 'Fine him for the parking spot he took', effect: 'fine' }, { label: 'Respect it, honestly', effect: 'laugh' }] },
   { text: '{P} has started a podcast. Episode one is called Why My Manager Does Not Understand Football.', options: [{ label: 'Make him listen to it in front of everyone', effect: 'fine' }, { label: 'Go on the podcast', effect: 'support' }] },
@@ -9489,14 +10082,11 @@ function generatePlayerMessage(state: CareerState, xi: CMPlayer[], won: boolean,
      on somebody, but it is metadata now: InboxCard renders text and nothing
      else, so no roster name reaches the screen through this branch. */
   const d1 = squadDescriptor(p1);
-  const text = drama.text
-    .replace('{P}', d1)
-    .replace('{Q}', otherDescriptor(p2, d1));
   pushMessage(state, {
     playerName: p1.name,
     playerId: p1.id,
     kind: 'drama',
-    text: text.charAt(0).toUpperCase() + text.slice(1),
+    text: dramaText(drama.text, d1, otherDescriptor(p2, d1)),
     options: drama.options,
   });
 }
@@ -10013,7 +10603,8 @@ export function makeOffer(career: CareerState, amount: number, extras?: DealExtr
   if (next.rivalBidder && next.rivalOffer !== null && packageValue <= next.rivalOffer) {
     next.note = `${next.rivalBidder} are still ahead at ${money(next.rivalOffer)}. Beat it or lose him.`;
     // Dithering lets the rival close: 30% they win the race right now.
-    if (Math.random() < 0.3) {
+    // Round 1344 review: only a deal the ledger records (the draw comes first, so no draw moves).
+    if (Math.random() < 0.3 && !rivalCloseRefused(career, { mp: next.player, to: next.rivalBidder, fee: next.rivalOffer })) {
       const state: CareerState = {
         ...career,
         negotiation: { ...next, status: 'hijacked', note: `${next.rivalBidder} closed the deal at ${money(next.rivalOffer)} while you hesitated.` },
@@ -10021,7 +10612,8 @@ export function makeOffer(career: CareerState, amount: number, extras?: DealExtr
         transferLog: [...(career.transferLog ?? [])],
       };
       pushNews(state, { name: next.player.name, from: next.player.club, to: next.rivalBidder, fee: next.rivalOffer });
-      return state;
+      /* Round 1344: the rival's deal is a deal between two other clubs, so a seeded career records it (no draw). */
+      return recordAiDeals(state, [{ mp: next.player, to: next.rivalBidder, fee: next.rivalOffer }]);
     }
     return { ...career, negotiation: next };
   }
@@ -10274,6 +10866,7 @@ function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: Personal
     const swapVal = Math.round(sellValue(swap) * 0.85 * 10) / 10;
     signed.seasonSignings = [...signed.seasonSignings, { dir: 'out', name: swap.name, fee: swapVal }];
     pushNews(signed, { name: swap.name, from: career.clubName, to: neg.player.club, fee: swapVal });
+    Object.assign(signed, recordActualRosterTransfer(signed, swap, career.clubName, neg.player.club, 'permanent'));
   }
   const sellOnPct = clamp(Math.round(extras?.sellOnPct ?? 0), 0, 30);
   if (sellOnPct > 0) {
@@ -10293,14 +10886,16 @@ function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: Personal
     ...neg, status: 'agreed', phase: 'terms',
     note: `Done: ${bits.join(', ')}. Welcome to ${career.clubName}, ${neg.player.name}.`,
   };
-  return signed;
+  return snapshotWorldRosterClub(signed, signed.clubName);
 }
 
 /** Walk away. If a rival was circling, they usually take him. */
 export function walkAway(career: CareerState): CareerState {
   const neg = career.negotiation;
   if (!neg) return career;
-  if (neg.status === 'open' && neg.rivalBidder && neg.rivalOffer !== null && Math.random() < 0.6) {
+  /* Round 1344 review: the rival takes him only when the ledger records it (the draw comes first, so no draw moves). */
+  if (neg.status === 'open' && neg.rivalBidder && neg.rivalOffer !== null && Math.random() < 0.6
+    && !rivalCloseRefused(career, { mp: neg.player, to: neg.rivalBidder, fee: neg.rivalOffer })) {
     const state: CareerState = {
       ...career,
       negotiation: null,
@@ -10312,7 +10907,8 @@ export function walkAway(career: CareerState): CareerState {
       `${neg.rivalBidder} sign ${neg.player.name} after ${career.clubName} walk away from the table.`,
       ...state.aiHeadlines,
     ].slice(0, 8);
-    return state;
+    /* Round 1344: and so is this one (no draw). */
+    return recordAiDeals(state, [{ mp: neg.player, to: neg.rivalBidder, fee: neg.rivalOffer }]);
   }
   return { ...career, negotiation: null };
 }
@@ -10366,7 +10962,7 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
     ].slice(0, 8);
   }
   trackDealExtremes(state, 'out', p.name, netFee);
-  return state;
+  return recordActualRosterTransfer(state, p, career.clubName, bid.club, 'permanent');
 }
 
 /**
@@ -10615,10 +11211,10 @@ export function loanOutPlayer(
  */
 function returnLoanedPlayers(career: CareerState): {
   home: CMPlayer[];
-  bought: { name: string; club: string; fee: number }[];
+  bought: { name: string; club: string; fee: number; player: CMPlayer }[];
 } {
   const out: CMPlayer[] = [];
-  const bought: { name: string; club: string; fee: number }[] = [];
+  const bought: { name: string; club: string; fee: number; player: CMPlayer }[] = [];
   for (const l of career.loanedOut ?? []) {
     const p = l.player;
     const bump =
@@ -10653,7 +11249,7 @@ function returnLoanedPlayers(career: CareerState): {
        has to be the exception that makes the option interesting rather than the
        default outcome that makes loaning out a bad idea. */
     if (l.optionFee !== undefined && (bump >= 3 || grown.rating >= 80) && Math.random() < 0.25) {
-      bought.push({ name: p.name, club: l.club, fee: l.optionFee });
+      bought.push({ name: p.name, club: l.club, fee: l.optionFee, player: grown });
       continue;
     }
     out.push(grown);
@@ -10902,7 +11498,7 @@ export function generateWeeklyNews(state: CareerState): void {
     } else if (gap <= 2 && stage > 0.25) {
       pushHeadline(state, `\u{1F3C6} ${leader.club} lead ${second.club} by ${gap === 0 ? 'goal difference alone' : `${gap} ${gap === 1 ? 'point' : 'points'}`}. Title race.`);
     } else {
-      pushHeadline(state, `\u{1F4CA} ${leader.club} top the ${league.name} on ${leader.pts} points after ${played} rounds.`);
+      pushHeadline(state, `\u{1F4CA} ${leader.club} top ${toLeague(league.name)} on ${leader.pts} points after ${played} rounds.`);
     }
     return;
   }
@@ -10925,13 +11521,22 @@ export function generateWeeklyNews(state: CareerState): void {
   const byGf = [...table].sort((a, b) => b.gf - a.gf)[0];
   const byGa = [...table].sort((a, b) => a.ga - b.ga)[0];
   if (played % 2 === 0 && byGf.gf > 0) {
-    pushHeadline(state, `\u{26BD} ${byGf.club} have the sharpest attack in the ${league.name}: ${byGf.gf} scored in ${played} rounds.`);
+    pushHeadline(state, `\u{26BD} ${byGf.club} have the sharpest attack in ${toLeague(league.name)}: ${byGf.gf} scored in ${played} rounds.`);
   } else if (byGa.ga >= 0) {
     pushHeadline(state, `\u{1F9F1} Nobody is harder to score on than ${byGa.club}: ${byGa.ga} conceded all season.`);
   }
 }
 
-function generateHeadlines(state: CareerState): void {
+/* Round 1344: in a seeded career every deal of the window is written to the ledger as it closes (onto a working copy,
+   packed once at the end, the lead's ruling 4), so the man is at his buyer at once: his squad, the line ups, the club
+   page, the market. A deal the ledger would refuse is not made at all (no news, no goneNames): the skip comes after
+   the candidate's three draws, so no draw moves. A career with no seed records nothing here and hands its deals back,
+   so startCareer can record a fresh career's opening window once its seed is drawn. scripts/simCmWorldMoves.mjs.
+   Round 1508: a career with no seed records here too from its first summer on this engine (adoptLivingWorld). */
+function generateHeadlines(state: CareerState): AiDeal[] {
+  const unrecorded: AiDeal[] = [];
+  const seen = livingWorldOf(state) ? state : null;
+  let working = seen;
   const market = buildMarket(state);
   const count = Math.min(ri(3, 6), market.length);
   const candidates = shuffle(market.slice(0, 120)).slice(0, count);
@@ -10963,11 +11568,14 @@ function generateHeadlines(state: CareerState): void {
     const pool = (local.length && Math.random() < 0.5) ? local : affordable;
     if (pool.length === 0) continue;   // nobody in the world can afford him
     const buyer = pick(pool).name;
+    if (working && seen) { const moved = recordAiDeal(working, { mp, to: buyer, fee }, seen); if (moved === working) continue; working = moved; }
+    else unrecorded.push({ mp, to: buyer, fee });
     heads.push(`${buyer} sign ${mp.name} from ${mp.club} for ${money(fee)}.`);
     state.goneNames.push(mp.name);
     // Round 71: every AI deal lands in the Latest Transfers feed too.
     pushNews(state, { name: mp.name, from: mp.club, to: buyer, fee });
   }
+  if (working && working !== seen) state.worldRoster = packedLedger(working).worldRoster;
   /* Round 141: the window's own record deal gets a line, read off the same
      transferLog the Latest Transfers card shows, so the two never disagree. */
   const seasonDeals = (state.transferLog ?? []).filter(t => t.season === state.season && !t.loan);
@@ -10980,6 +11588,7 @@ function generateHeadlines(state: CareerState): void {
   state.aiHeadlines = heads;
   // Round 71: a fresh window also means AI clubs come sniffing at my squad.
   generateIncomingBids(state);
+  return unrecorded;
 }
 
 /* ================================================================== */
@@ -10992,15 +11601,22 @@ function generateHeadlines(state: CareerState): void {
  * average of the value-derived ratings), so the data drives the sim. The
  * old priors only back up anything outside the bake.
  */
-function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = 'now'): Record<string, number> {
+function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = 'now', career?: CareerState, myClub?: string): Record<string, number> {
   const out: Record<string, number> = {};
   // Round 132: from the PROJECTED roster for this world year, not from the
   // frozen 2026 bake. Before this, every AI club in the game was recomputed
   // from August 2026 every single summer, so Arsenal were 89.5 in season one
   // and 89.5 in season thirteen while my own squad was ageing underneath me.
   // At yearsOn 0 the projection is the bake, so season one has not moved.
+  /* Release AZ fix, the lead's ruling (see worldRosterXIAvg): the club I manage this season reads the base's
+     projection, never the world roster. It is named by the caller, because the career handed over on a job taken
+     mid season (joinClubNow) still carries the club I just left, which is another club from now on. */
+  const seededWorld = !!career && (worldRosterView(career) || worldSeedOf(career) !== undefined);
   const baseFor = (name: string): number =>
-    projectedXIAvg(name, yearsOnNow, eraId) ?? STRENGTH_PRIORS[name] ?? Math.max(clubPreviewRating(name), 66);
+    (!seededWorld ? projectedXIAvg(name, yearsOnNow, eraId)
+      : name === myClub ? projectedClubXIAvg(name, yearsOnNow, eraId)
+        : rosterXIAvg(worldRosterFor(career!, name, yearsOnNow)))
+      ?? STRENGTH_PRIORS[name] ?? Math.max(clubPreviewRating(name), 66);
   for (const name of myLeague.clubs) {
     out[name] = clamp(baseFor(name) + ri(-2, 2), 52, 95);
   }
@@ -11036,6 +11652,15 @@ function strengthOf(state: CareerState, club: string): number {
      the finish derived era prior, never a 2026 preview rating. */
   const eraPrior = state.eraId && isHistoricEra(state.eraId) ? eraEuroPrior(state.eraId, club) : null;
   return state.clubStrengths[club] ?? eraPrior ?? STRENGTH_PRIORS[club] ?? Math.max(clubPreviewRating(club), 64);
+}
+
+/* Round 1501: the other side in one of YOUR matches, with the level's edge on top. Zero on Normal, where
+   this is strengthOf's very number. Every read of an opponent in your match goes through here (the two
+   halves' goal rates, the match itself, the team talks, the next match card and the match facts); every
+   match between two other clubs keeps strengthOf, so the rest of the world plays as it always did. */
+export function oppStrengthVsMe(state: CareerState, club: string): number {
+  const edge = oppEdge(state);
+  return edge === 0 ? strengthOf(state, club) : strengthOf(state, club) + edge;
 }
 /* Round 899: simEra2015 reads the rating every match uses, and the
    association the round of 16 draw uses, for a save from before the round. */
@@ -11120,8 +11745,9 @@ const UCL_SECOND_LEG_GAP = 0.035;
 
 /* Round 832: `cup` false is a league with no domestic cup (cupName null on
    its rules row): its season carries no cup week at all. Every league before
-   this round has one, and for them the calendar is the one it always was. */
-function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false, cup = true): CalendarEntry[] {
+   this round has one, and for them the calendar is the one it always was.
+   Round 1510: exported so the night placer's unit file builds every league size on the engine's own calendar. */
+export function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false, cup = true): CalendarEntry[] {
   // Odd-sized leagues carry a BYE ghost, so the schedule runs 2*n rounds.
   const effSize = leagueSize % 2 === 0 ? leagueSize : leagueSize + 1;
   const rounds = 2 * (effSize - 1);
@@ -11803,6 +12429,8 @@ export const ET_DEFLATOR = 0.965;
 /** Round 670: does this week's match, if level when the ninety minutes are
  *  up, play extra time? Only a Champions League match that settles its tie. */
 function playsExtraTime(state: CareerState, entry: CalendarEntry): boolean {
+  /* Round 1510: a one match cup's night plays it when its row's decider is extra time ('et'), never on 'pens'. */
+  if (entry.type === 'oneOff') return oneOffPlaysExtraTime(state, entry);
   if (entry.type !== 'uclKo' || !entry.uclRound) return false;
   /* A legacy week carries no uclLeg and is the whole tie (Round 507). */
   const twoLegs = uclLegsFor(state.eraId, entry.uclRound) === 2 && !!entry.uclLeg;
@@ -12120,56 +12748,19 @@ function advanceUclBracket(state: CareerState, round: UclKoRound): void {
     if (t.round !== round || t.winner) continue;
     if (t.mine) continue;                     // my tie is settled by my match
     const legs = uclLegsFor(state.eraId, t.round);
-    if (legs === 2) {
-      /* Round 507: two matches, the second at the other ground, and the tie
-         read by the competition's own rule for this season. simAiMatch returns
-         the goals in the order it was handed the clubs, so leg two comes back
-         reversed and is turned back into this tie's orientation here rather
-         than at the four places that read it. */
-      const [h1, a1] = simAiMatch(state, t.home, t.away);
-      /* Round 670: leg two settles the tie, so it can go to extra time and
-         draws at the deflator the manager's own deciders draw at. */
-      const [a2, h2] = simAiMatch(state, t.away, t.home, ET_DEFLATOR);
-      t.legs = 2;
-      t.leg1 = { homeGoals: h1, awayGoals: a1 };
-      t.leg2 = { homeGoals: h2, awayGoals: a2 };
-      let out = uclTieOutcome(t, uclAwayGoalsApply(state.eraId));
-      if (out.winner === null) {
-        /* Round 670: level after ninety, so thirty more minutes at the same
-           ground, added to leg two and read again by the era's rule. */
-        const [ea, eh] = simAiMatch(state, t.away, t.home, ET_DEFLATOR * ET_MINUTES / 90);
-        t.leg2 = { homeGoals: h2 + eh, awayGoals: a2 + ea };
-        t.aet = true;
-        out = uclTieOutcome(t, uclAwayGoalsApply(state.eraId));
-      }
-      t.homeGoals = out.homeAgg;
-      t.awayGoals = out.awayAgg;
-      t.byAwayGoals = out.byAwayGoals || undefined;
-      if (out.winner === null) {
-        t.pens = true;
-        t.winner = Math.random() < 0.5 ? t.home : t.away;
-      } else {
-        t.winner = out.winner === 'home' ? t.home : t.away;
-      }
-      continue;
-    }
-    let [hg, ag] = simAiMatch(state, t.home, t.away, ET_DEFLATOR);
-    if (hg === ag) {
-      /* Round 670: level after ninety, so extra time first. */
-      const [eh, ea] = simAiMatch(state, t.home, t.away, ET_DEFLATOR * ET_MINUTES / 90);
-      hg += eh;
-      ag += ea;
-      t.aet = true;
-    }
-    t.homeGoals = hg;
-    t.awayGoals = ag;
-    if (hg === ag) {
-      // Knockout football always produces a winner, and level after extra time means penalties.
-      t.pens = true;
-      t.winner = Math.random() < 0.5 ? t.home : t.away;
-    } else {
-      t.winner = hg > ag ? t.home : t.away;
-    }
+    /* Round 1347 E2: the tie is settled by settleTie (src/lib/worldCompetition.ts),
+       the one writing the watched Champions League settles its ties with too.
+       Round 507: two legs, the second at the other ground, read by the
+       competition's own rule for this season (simAiMatch hands the goals back
+       in the order it was handed the clubs, and settleTie turns leg two back
+       into the tie's orientation). Round 670: the deciding ninety minutes draw
+       at ET_DEFLATOR, a level decider gets thirty more minutes at that times
+       30/90 (added to leg two in a two legged tie), then penalties on a coin.
+       The draws come in today's order (leg one, leg two, extra time, the coin)
+       and the fields are written in today's order, so a saved bracket is the
+       same bytes it always was (scripts/recordWorldTieGolden1347.mjs --check). */
+    settleTie(t, { legs, awayGoals: uclAwayGoalsApply(state.eraId), deciderScale: ET_DEFLATOR, etScale: ET_DEFLATOR * ET_MINUTES / 90 },
+      (home, away, scale) => simAiMatch(state, home, away, scale), () => Math.random());
   }
   const next: UclKoRound | null = round === 'R16' ? 'QF' : round === 'QF' ? 'SF' : round === 'SF' ? 'F' : null;
   if (!next) return;
@@ -12248,6 +12839,9 @@ function recordMyUclTie(
 
 function initUclGroup(qualified: boolean, myClub: string, eraId?: string, field?: string[]): UclGroupState | null {
   if (!qualified) return null;
+  const custom = activeCustomClub();
+  const myLeague = custom?.name === myClub && customUsesPyramid(custom, eraId)
+    ? customLeagueDef(custom, eraId)! : leagueOf(myClub);
   /* Round 547: when last season's tables gave us a real field, my three group
      opponents come out of it, avoiding my own league the way the real draw
      does. Only when that leaves too few does it fall back to the pool below,
@@ -12255,7 +12849,7 @@ function initUclGroup(qualified: boolean, myClub: string, eraId?: string, field?
      Round 612: season one of a 2026-27 career hands in the field from the
      real 2025-26 tables, so it takes the first path too. */
   if (field && field.length >= 8) {
-    const myLeagueClubs = new Set(leagueOf(myClub).clubs);
+    const myLeagueClubs = new Set(myLeague.clubs);
     const fromField = shuffle(field.filter(c => c !== myClub && !myLeagueClubs.has(c)));
     if (fromField.length >= 3) {
       const opponents = fromField.slice(0, 3);
@@ -12270,7 +12864,7 @@ function initUclGroup(qualified: boolean, myClub: string, eraId?: string, field?
     const opponents = shuffle(pool).slice(0, 3);
     return { opponents, table: [myClub, ...opponents].map(emptyRow), matchday: 0 };
   }
-  const myLeagueClubs = new Set(leagueOf(myClub).clubs);
+  const myLeagueClubs = new Set(myLeague.clubs);
   const bigForeign = CLUBS.map(c => c.name).filter(c => c !== myClub && !myLeagueClubs.has(c));
   const pool = [...new Set([...EURO_CLUBS, ...bigForeign])].filter(c => c !== myClub && !myLeagueClubs.has(c));
   const opponents = shuffle(pool).slice(0, 3);
@@ -12318,8 +12912,61 @@ function initUclGroup(qualified: boolean, myClub: string, eraId?: string, field?
  * function's job is only to read the save's final tables in world order.
  */
 export function uclQualifiersFrom(career: CareerState): string[] {
-  if (!!career.eraId && isHistoricEra(career.eraId)) return [];
-  if (!career.world || !Array.isArray(career.table) || !career.table.length) return [];
+  const tables = uclFinalTables(career);
+  if (!tables) return [];
+  /* Round 1509 (ruling 1k): and the Europa League's winner, row Q4. */
+  return uclFieldFromTables(tables, uclHolderOf(career), undefined, undefined, uelHolderOf(career));
+}
+
+/**
+ * Round 1502 (step E5): the Champions League holder a finished season hands
+ * the next one, read in ONE place (the critic's correction 4). The final of my
+ * own bracket when my club was in the competition, else the winner of the one
+ * it watched: the holders go in whatever their league did (the real route,
+ * uclDirectQualifiersFromTables), and until this round a season my club
+ * watched lost them. So from here a season after a watched final can draw a
+ * different field, and with it different groups, which is why the last line
+ * is the whole of the change: scripts/lib/worldUclHolder1502.mjs reverts it
+ * for the harnesses that need the engine without it. Null when the season
+ * crowned nobody this save knows of.
+ */
+export function uclHolderOf(career: CareerState): string | null {
+  const own = career.uclBracket?.find(t => t.round === 'F')?.winner ?? null;
+  return own ?? worldUclWinner(career);
+}
+
+/**
+ * Round 1509 (rulings 1j and 1k): the Europa League's winner a finished season hands the next Champions League
+ * (row Q4: the titleholder is admitted to its league phase), read in one place, the one line reader of
+ * worldCompWinnerOf. My club is never an entrant of the Europa League yet, so it is never this. Null when the
+ * season crowned nobody this save knows of. scripts/lib/worldUelHolder1509.mjs reverts its route for the harnesses
+ * that need the engine without it.
+ */
+export function uelHolderOf(career: CareerState): string | null {
+  return worldCompWinnerOf(career, 'uel');
+}
+
+/**
+ * Round 1347 E2: the save's final tables of the season just played, the
+ * European leagues in world order, each in its own finishing order, or null
+ * when there is no finished season to read (a historic era, a save with no
+ * world or table, a season that did not finish). Lifted out of
+ * uclQualifiersFrom unchanged so the watched Champions League reads the very
+ * same tables (Round 1502), never a second reading of them.
+ */
+export function uclFinalTables(career: CareerState): { league: LeagueDef; clubs: string[] }[] | null {
+  if (!!career.eraId && isHistoricEra(career.eraId)) return null;
+  return finishedLeagueTables(career, l => !!l.euro);
+}
+
+/**
+ * Round 1510 (answer 7): the final tables of the season just played, every league of the save's world `keep`
+ * keeps, in world order, each in its own finishing order with its own tiebreaks, or null when the season did not
+ * finish (the guard below). Lifted out of uclFinalTables unchanged, which keeps its era guard and its European
+ * filter over it, so the super cups read the same tables the Champions League reads, never a second reading.
+ */
+export function finishedLeagueTables(career: CareerState, keep: (l: LeagueDef) => boolean): { league: LeagueDef; clubs: string[] }[] | null {
+  if (!career.world || !Array.isArray(career.table) || !career.table.length) return null;
   /* Only a season that actually FINISHED has a table worth reading. syncWorld
      drags the rest of the world to the same fraction of its season that I am
      through mine, so a half played save carries half played tables everywhere,
@@ -12328,16 +12975,15 @@ export function uclQualifiersFrom(career: CareerState): string[] {
      acceptWildernessJob also rolls a season over, and a manager sacked in
      November reaches it with his calendar unfinished. That case falls back to
      the pool, which is the honest answer when there is no final table. */
-  if (!Array.isArray(career.calendar) || career.week < career.calendar.length) return [];
+  if (!Array.isArray(career.calendar) || career.week < career.calendar.length) return null;
   const myLeague = careerLeagueOf(career);
   /* Each European league's own table with its own tiebreaks, in world order. */
-  const tables = worldLeagueDefs(career).filter(l => l.euro).map(league => {
+  return worldLeagueDefs(career).filter(keep).map(league => {
     const rows = league.id === myLeague.id
       ? sortedLeagueTable(career)
       : (career.world![league.id] ? sortedWorldTable(career, league.id, career.world![league.id].table) : null);
     return { league, clubs: (rows ?? []).map(r => r.club) };
   });
-  return uclFieldFromTables(tables, career.uclBracket?.find(t => t.round === 'F')?.winner);
 }
 
 /**
@@ -12347,15 +12993,27 @@ export function uclQualifiersFrom(career: CareerState): string[] {
  *
  * `tables` are the European leagues in world order, each with its clubs in
  * finishing order (champion first). A league with no clubs sends nobody.
+ *
+ * Round 1347 E2: `size` is the field's size (32, the participant's eight
+ * groups, unless the watched league phase asks for its 36) and `exclude` the
+ * clubs kept out of every route (one name or a list), its league place, the holders' route and the
+ * fill, with the fill topping the field back up: the manager's own club is
+ * never an entrant of the Champions League he watches (Round 1502). Every
+ * call that passes neither is the call it always was.
  */
 export function uclFieldFromTables(
   tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[],
   holder?: string | null,
+  size: number = UCL_FIELD_SIZE,
+  exclude?: string | readonly string[],
+  uelHolder?: string | null,
 ): string[] {
-  /* The league places, then the holders (uclDirectQualifiersFromTables). */
-  const field = uclDirectQualifiersFromTables(tables, holder);
+  /* The league places, then the holders (uclDirectQualifiersFromTables), then since Round 1509 the Europa League's
+     winner. Every call without `uelHolder` is the call it was. */
+  const field = uclDirectQualifiersFromTables(tables, holder, exclude, uelHolder);
   if (!field.length) return [];
   const seen = new Set<string>(field);
+  for (const club of excludedClubs(exclude)) seen.add(club);
   const take = (club: string) => {
     if (!club || seen.has(club)) return;
     seen.add(club);
@@ -12369,14 +13027,14 @@ export function uclFieldFromTables(
   const byDepth = [...ranked].sort((a, b) =>
     (uclPlacesIn(b.league) - uclPlacesIn(a.league))
     || a.league.id.localeCompare(b.league.id));
-  for (let extra = 0; field.length < UCL_FIELD_SIZE && extra < 8; extra++) {
+  for (let extra = 0; field.length < size && extra < 8; extra++) {
     for (const t of byDepth) {
-      if (field.length >= UCL_FIELD_SIZE) break;
+      if (field.length >= size) break;
       const club = t.clubs[uclPlacesIn(t.league) + extra];
       if (club) take(club);
     }
   }
-  return field.slice(0, UCL_FIELD_SIZE);
+  return field.slice(0, size);
 }
 
 /**
@@ -12394,8 +13052,12 @@ export function uclFieldFromTables(
 export function uclDirectQualifiersFromTables(
   tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[],
   holder?: string | null,
+  exclude?: string | readonly string[],
+  uelHolder?: string | null,
 ): string[] {
-  const seen = new Set<string>();
+  /* Round 1347 E2: `exclude` (uclFieldFromTables says why) is never taken,
+     by its league place or as the holders. */
+  const seen = new Set<string>(excludedClubs(exclude));
   const field: string[] = [];
   const take = (club: string) => {
     if (!club || seen.has(club)) return;
@@ -12412,7 +13074,14 @@ export function uclDirectQualifiersFromTables(
   /* The holders go in whatever their league did, which is the real rule and
      the one route that is not a finishing position. */
   if (holder) take(holder);
+  /* Round 1509 (ruling 1k, row Q4): the Europa League's titleholder is admitted too, right after the holders. */
+  if (uelHolder) take(uelHolder);
   return field;
+}
+
+/** Round 1347 E2: the clubs an `exclude` names, one or a list (none when left out). */
+function excludedClubs(exclude: string | readonly string[] | undefined): readonly string[] {
+  return exclude === undefined ? [] : typeof exclude === 'string' ? [exclude] : exclude;
 }
 
 /**
@@ -12437,11 +13106,12 @@ export function uclDirectQualifiersFromTables(
  * CM_FINAL_TABLES_PARTIAL sends nobody from here, and its own clubs keep the
  * old tier rule in startCareer.
  */
-export function seasonOneUclField(eraId: string): string[] | null {
+export function seasonOneUclField(eraId: string, size: number = UCL_FIELD_SIZE, exclude?: string | readonly string[]): string[] | null {
   const era = eraById(eraId);
   if (isHistoricEra(era.id) || era.startYear !== CM_FINAL_TABLES_2025_26.startYear + 1) return null;
   const tables = seasonOneTables();
-  const field = uclFieldFromTables(tables, CM_FINAL_TABLES_2025_26.holders);
+  /* Round 1347 E2: `size` and `exclude` as uclFieldFromTables reads them. */
+  const field = uclFieldFromTables(tables, CM_FINAL_TABLES_2025_26.holders, size, exclude);
   return field.length ? field : null;
 }
 
@@ -12506,20 +13176,862 @@ export function initUclWorld(state: CareerState): UclAiGroup[] | undefined {
   return groups;
 }
 
-/** The two fixtures of one matchday in a four club double round robin.
- *  Every club plays every matchday, and every pairing happens exactly twice
- *  with the venue swapped. */
-function groupFixtures(clubs: string[], md: number): [string, string][] {
-  const [a, b, c, d] = clubs;
-  const rounds: [string, string][][] = [
-    [[a, b], [c, d]],
-    [[c, a], [b, d]],
-    [[a, d], [b, c]],
-    [[b, a], [d, c]],
-    [[a, c], [d, b]],
-    [[d, a], [c, b]],
-  ];
-  return rounds[clamp(md, 0, 5)];
+/* Round 1347 E2: groupFixtures (the two fixtures of one matchday in a four
+   club double round robin) lives in src/lib/worldCompetition.ts and is
+   imported above, so the participant's groups and the watched ones play one
+   schedule. */
+
+/* ---------- Round 1502: the world's Champions League, in it or not ---------- */
+
+/*
+ * WHY. A player's report, forwarded by the owner on 2026-10-16: "if you don't
+ * make the UCL you can't see the fixtures. It would be cool to see who wins
+ * the UCL and what happens even if u didn't make it." Until this round a club
+ * outside Europe had no Champions League at all: initUclGroup answered null,
+ * initUclWorld undefined, and the European weeks it skipped advanced nothing.
+ *
+ * WHAT. Every season my club is NOT in it, that season's competition is opened
+ * at the draw into one small saved slice (CareerState.worldComps.ucl: the
+ * entrants, a strength snapshot, a seed and the league phase slate) and is
+ * EVALUATED against the week, never stepped: no calendar entry is added,
+ * playNextEntry is not touched, and a night counts as played once the save's
+ * week is past it. Every match draws from its own keyed stream
+ * (worldCompetition.ts), never from Math.random, and nothing is written into
+ * the world (no form, no pair ledger, no table, no news). So a save that never
+ * watches is the save it was, and a save that watches differs by this key.
+ *
+ * WHICH COMPETITION. The format of the participant's own year (uclSeasonYear:
+ * an era's start year for the whole career): the eras' eight groups of four
+ * through 2023-24, the 36 club league phase after. The field is the
+ * participant's own rule read at the format's size: in today's world the
+ * finished tables through uclFieldFromTables at 36 with my club kept out of
+ * every route; in an era its own verified 32 (eraEuroPool) with my club taken
+ * out and its place given to the strongest club of the era's own leagues
+ * outside them, a stand in the screen names. No honest field, no competition.
+ */
+
+/** The watched competition's format for this save (its whole life). */
+export function worldUclFormatOf(state: Pick<CareerState, 'eraId'>): WorldCompFormat {
+  return uclSeasonYear(state.eraId) <= UCL_R16_LAST_YEAR ? 'g8' : 'l36';
+}
+
+/** The clubs a watched field leaves out: my club, and the club a created club
+ *  replaced (it does not exist in this world while I manage the created one). */
+function worldUclExcluded(state: Pick<CareerState, 'clubName' | 'customClub'>): string[] {
+  const out = [state.clubName];
+  const replaced = state.customClub?.replacedClub;
+  if (replaced) out.push(replaced);
+  return out;
+}
+
+/**
+ * An era's watched field: its verified 32 (eraEuroPool), my club taken out
+ * (by its own name or the name the era's field knew it by) and, when it was
+ * there, its place given to the strongest club of the era's own leagues
+ * outside the 32 (best XI, then the name as plain text), returned as
+ * `standIn`. Null for a modern save or an era without a verified 32.
+ */
+export function worldUclEraField(state: Pick<CareerState, 'eraId' | 'clubName' | 'customClub'>): { field: string[]; standIn?: string } | null {
+  const eraId = state.eraId;
+  if (!eraId || !isHistoricEra(eraId)) return null;
+  const pool = eraEuroPool(eraId);
+  if (pool.length !== G8_SHAPE.clubs || new Set(pool).size !== pool.length) return null;
+  const out = new Set(worldUclExcluded(state).flatMap(c => [c, eraEuroName(eraId, c)]));
+  const field = pool.filter(c => !out.has(c));
+  if (field.length === pool.length) return { field };
+  if (field.length !== pool.length - 1) return null;
+  const inPool = new Set(pool);
+  const plain = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
+  const standIn = (ERA_LEAGUES[eraId] ?? []).flatMap(l => l.clubs)
+    .filter(c => !inPool.has(c) && !inPool.has(eraEuroName(eraId, c)) && !out.has(c))
+    .map(c => ({ c, xi: eraXIAvg(eraId, c) ?? 0 }))
+    .sort((a, b) => b.xi - a.xi || plain(a.c, b.c))[0]?.c;
+  return standIn ? { field: [...field, standIn], standIn } : null;
+}
+
+/**
+ * The field of the watched season `state` is opening: an era's (above), or in
+ * today's world the participant's rule at 36 with my club kept out, read off
+ * `tables` (the season just finished, uclFinalTables) or, with none, off the
+ * real 2025-26 tables in season one (seasonOneUclField). Null when there is
+ * no honest field: a later season of today's world with no finished tables to
+ * read (a rollover from a season cut short, a job move from season two on).
+ */
+export function worldCompField(
+  state: CareerState,
+  comp: WorldCompKey,
+  tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[] | null,
+  holder?: string | null,
+  cup?: EuroCup | null,
+  uelHolder?: string | null,
+): string[] | null {
+  if (comp === 'uel') return worldUelField(state, tables, cup ?? null);
+  if (worldUclFormatOf(state) === 'g8') return worldUclEraField(state)?.field ?? null;
+  const field = tables
+    ? uclFieldFromTables(tables, holder, UCL_LEAGUE.clubs, worldUclExcluded(state), uelHolder)
+    : state.season === 1 ? seasonOneUclField(state.eraId ?? DEFAULT_ERA_ID, UCL_LEAGUE.clubs, worldUclExcluded(state)) : null;
+  return field && field.length ? field : null;
+}
+export function worldUclField(state: CareerState, tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[] | null, holder?: string | null, uelHolder?: string | null): string[] | null { return worldCompField(state, 'ucl', tables, holder, null, uelHolder); }
+
+/* ---------- Round 1509: the world's Europa League, followed every season of today's world ---------- */
+
+/** A nation's domestic cup as a finished season hands it on: its nation and its winner (null when the season
+ *  crowned nobody the game knows, so the cup's place passes down the league). */
+export interface EuroCup { nationId: string; winner: string | null }
+
+/** A Europa League field with how each entrant got in and the route the save's own club earned. */
+type TaggedField = string[] & { via?: Record<string, EuroRoute>; earned?: EuroRoute | null };
+
+/** The clubs of the Champions League this season really plays (the critic's 2(b)): my group and the AI groups
+ *  with my club when it is in, else the one the save follows. */
+export function uclEntrantsOf(state: Pick<CareerState, 'clubName' | 'uclGroup' | 'uclWorld' | 'worldComps'>): string[] {
+  if (state.uclGroup) return [state.clubName, ...state.uclGroup.opponents, ...(state.uclWorld ?? []).flatMap(g => g.clubs)];
+  return [...(state.worldComps?.ucl?.clubs ?? [])];
+}
+
+/** The European leagues of a set of final tables, in world order, as the access rule reads them. */
+function euroTablesOf(tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[]): EuroTable[] {
+  return tables.filter(t => t.league.euro).map(t => ({
+    leagueId: t.league.id, nationId: leagueRulesOf(t.league.id).nationId, clubs: t.clubs,
+    uclPlaces: uclPlacesIn(t.league), uelLast: EURO_SLOTS[t.league.id]?.uel ?? uclPlacesIn(t.league),
+  }));
+}
+
+/** The domestic cup the season of `career` played: its nation's id and the final's winner, null when the final
+ *  crowned nobody (no bracket, or a final not played). */
+export function euroCupOf(career: CareerState): EuroCup {
+  return { nationId: leagueRulesOf(careerLeagueOf(career).id).nationId, winner: career.cupBracket?.find(t => t.round === 'F')?.winner ?? null };
+}
+
+/** Round 1510 (advice 15): the domestic cup final the season played (the bracket's 'F' tie), its winner and the
+ *  club it beat, both null when no final was won. One reading for the super cups and the Europa League's later
+ *  participant half. */
+export function cupFinalistsOf(career: Pick<CareerState, 'cupBracket'>): { winner: string | null; runnerUp: string | null } {
+  const f = career.cupBracket?.find(t => t.round === 'F');
+  if (!f?.winner) return { winner: null, runnerUp: null };
+  return { winner: f.winner, runnerUp: f.winner === f.home ? f.away : f.home };
+}
+
+/**
+ * The Europa League field of the season `state` is opening (rulings 1f and 1g), or null when there is no honest
+ * one: an era save (it keeps its era's format, which has no Europa League in this round), or a later season of
+ * today's world with no finished tables to read. One rule, euroAccess.ts's, over `tables` (the season just
+ * finished, uclFinalTables) with `cup` the save's own domestic cup and every other nation's cup place passed
+ * down its league (the stand in the screen names); or, in season one, over the real 2025-26 tables with the real
+ * 2025-26 cup winners and the Conference League titleholder (rows K1 to K16). The Champions League it is kept
+ * apart from is the one this season really plays (uclEntrantsOf), so `state` has opened that first. My club is
+ * kept out of every route and its place passes on; the route it would have had by the same rule is `earned`.
+ */
+function worldUelField(state: CareerState, tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[] | null, cup: EuroCup | null): TaggedField | null {
+  const eraId = state.eraId ?? DEFAULT_ERA_ID;
+  if (isHistoricEra(eraId)) return null;
+  const real = !tables && state.season === 1 && eraById(eraId).startYear === CM_FINAL_TABLES_2025_26.startYear + 1;
+  /* Season one reads the real 2025-26 tables, which know nothing of a world edited at the start (the World Editor
+     can move a club into a league outside Europe): a club that no longer plays in a European nation's league takes
+     no place, and its place passes on. Every club of an unedited world plays where those tables have it. */
+  const nations = new Set(worldLeagueDefs(state).filter(l => l.euro).map(l => leagueRulesOf(l.id).nationId));
+  const inEurope = (c: string | null): string | null => {
+    if (!c || !real) return c;
+    try { return nations.has(leagueRulesOf(leagueOf(c).id).nationId) ? c : null; } catch { return null; }
+  };
+  const src = tables ?? (real ? seasonOneTables().map(t => ({ ...t, clubs: t.clubs.filter(c => inEurope(c) !== null) })) : null);
+  if (!src) return null;
+  const euro = euroTablesOf(src);
+  const cups: Record<string, string | null> = {};
+  for (const t of euro) cups[t.nationId] = real ? inEurope(SEASON_ONE_CUP_WINNERS[t.leagueId] ?? null) : null;
+  if (!real && cup && Object.prototype.hasOwnProperty.call(cups, cup.nationId)) cups[cup.nationId] = cup.winner;
+  const input = { tables: euro, cups, uclEntrants: uclEntrantsOf(state), ueclHolder: real ? inEurope(SEASON_ONE_UECL_HOLDER) : null, size: UCL_LEAGUE.clubs };
+  const out = worldUclExcluded(state);
+  const field = euroFieldFromTables({ ...input, exclude: out });
+  if (field.clubs.length !== UCL_LEAGUE.clubs) return null;
+  const tagged = field.clubs as TaggedField;
+  tagged.via = field.via;
+  /* The route my club earned: the same rule with my club not kept out (the club a created club replaced still
+     is, it does not exist while I manage the created one) and the fill never taking it. */
+  const mine = euroFieldFromTables({ ...input, exclude: out.filter(c => c !== state.clubName), noFill: [state.clubName] });
+  tagged.earned = mine.via[state.clubName] ?? null;
+  return tagged;
+}
+
+/**
+ * Round 1509 (ruling 1l): what a caller asks of startCareer beyond the career itself, one options object.
+ * `noWorldComps`: a daily (Manager Hot Seat, Deadline Day) follows no competition from outside. Its state is
+ * stripped of worldComps anyway; this skips opening them, which cost a daily start a median of 55 ms a date on a
+ * runner (simWorldEuro section 6). Opening draws nothing, so no deal moves either way.
+ */
+export interface StartCareerOptions { noWorldComps?: boolean }
+/** The options both dailies start a career with. */
+export const DAILY_START: StartCareerOptions = { noWorldComps: true };
+/* The states a start was asked to open nothing on, read by openWorldUclOnStart (a set of objects, never saved). */
+const NO_WORLD_COMPS = new WeakSet<CareerState>();
+
+/** Round 1509: the competitions in the order their keys are written. */
+const WORLD_COMP_KEYS: readonly WorldCompKey[] = ['ucl', 'uel'];
+
+/** Where each league phase night after matchday 6 sits (ruling 1h): the Champions League's eleven marks, and for
+ *  the Europa League the first ten of them with its final at UEL_FINAL_MARK, before the season's end. Read at
+ *  the call, never at module scope (an imported value evaluated at load is how an import cycle crashes). */
+function worldCompMarks(comp: WorldCompKey): readonly number[] {
+  return comp === 'uel' ? [...LEAGUE_PHASE_NIGHT_MARKS.slice(0, 10), UEL_FINAL_MARK] : LEAGUE_PHASE_NIGHT_MARKS;
+}
+
+/**
+ * Round 1509 (ruling 2b): write one key of worldComps, or take it off with null, leaving every other key as it
+ * was. The keys are written in the order ucl, uel and the object goes when it is empty, so a save that follows
+ * one competition is the save it was before this round, and never carries `worldComps: {}` or an undefined key.
+ */
+function setWorldComp(state: CareerState, comp: WorldCompKey, slice: WorldCompSlice | null): void {
+  const next: NonNullable<CareerState['worldComps']> = {};
+  for (const k of WORLD_COMP_KEYS) {
+    const s = k === comp ? slice : state.worldComps?.[k];
+    if (s) next[k] = s;
+  }
+  /* Round 1510 (ruling 2c): every key this writer does not own rides along as it was, after its two. */
+  const dsc = state.worldComps?.dsc;
+  if (dsc) next.dsc = dsc;
+  const usc = state.worldComps?.usc;
+  if (usc) next.usc = usc;
+  /* Taking the Champions League's key off takes the object off first and puts back what is left, the way the
+     engine has always written it (delete, then assign), so the object stands where it always stood among the
+     save's keys; the Europa League's key is written in place. Release BK fix: the load repair never calls this for
+     a key the save does not hold (repairWorldComp), so a load leaves the object where it stands. */
+  if (comp === 'ucl' && !slice) delete state.worldComps;
+  if (next.ucl || next.uel || next.dsc || next.usc) state.worldComps = next;
+  else delete state.worldComps;
+}
+
+/** Round 1514: the keys a one match cup's slice lives under: the domestic super cup and the UEFA Super Cup. */
+export type OneOffKey = 'dsc' | 'usc';
+const isOneOffKey = (k: string | undefined): k is OneOffKey => k === 'dsc' || k === 'usc';
+
+/** Round 1510 (ruling 2c): the domestic super cup's own writer: a NEW map with its key set, or its key taken off,
+ *  the map gone when nothing is left; never an undefined key and never a write into last season's object (the
+ *  rollover's literal carries the old career's map). Round 1514: the UEFA Super Cup's too, under its key. */
+function setOneOffSlice(state: CareerState, slice: OneOffSlice | null, k: OneOffKey = 'dsc'): void {
+  const next: NonNullable<CareerState['worldComps']> = { ...(state.worldComps ?? {}) };
+  if (slice) next[k] = slice;
+  else delete next[k];
+  if (next.ucl || next.uel || next.dsc || next.usc) state.worldComps = next;
+  else delete state.worldComps;
+}
+
+/** The format a competition plays in this save: the Champions League's (worldUclFormatOf), and the Europa League
+ *  of today's world, the league phase (an era save follows no Europa League in this round). */
+export function worldCompFormatOf(state: Pick<CareerState, 'eraId'>, comp: WorldCompKey): WorldCompFormat {
+  return comp === 'ucl' ? worldUclFormatOf(state) : 'l36';
+}
+
+/** The keyed seed of a watched season: the world seed when the save has one,
+ *  else the save's own start, and the season's year. Round 1510: the domestic
+ *  super cup's slice ('dsc') is seeded the same way under its own key. */
+function worldCompSeed(state: CareerState, comp: WorldCompKey | OneOffKey): number {
+  const base = worldSeedOf(state) ?? `${state.clubName}|${state.eraId ?? ''}|${state.startYear}`;
+  return Math.floor(keyedRng(`world-${comp}|${base}|${worldYear(state)}`)() * 0x100000000);
+}
+
+/** One decimal, the strength every watched match reads (the snapshot). */
+const worldUclStrength = (state: CareerState, club: string): number => Math.round(strengthOf(state, club) * 10) / 10;
+
+/**
+ * Open this season's watched competition on `state` from `field`: the
+ * strength snapshot, the seed, then the draw (the eras' groups by drawG8 under
+ * that season's rules, the league phase by Round 1228's drawUclLeaguePhase,
+ * the holder first in pot one when it is in the field). The key comes off
+ * when my club is in the competition, when the field is not the format's size
+ * of different clubs, when my club is in it, or when the draw cannot be made.
+ * Draws nothing from Math.random and writes nothing but the key.
+ */
+export function openWorldComp(state: CareerState, comp: WorldCompKey, field: string[] | null, holder?: string | null): void {
+  setWorldComp(state, comp, null);
+  if ((comp === 'ucl' && state.uclGroup) || !field) return;
+  const f = worldCompFormatOf(state, comp);
+  const size = f === 'g8' ? G8_SHAPE.clubs : UCL_LEAGUE.clubs;
+  if (field.length !== size || new Set(field).size !== size || field.includes(state.clubName)) return;
+  const str = new Map(field.map(club => [club, worldUclStrength(state, club)]));
+  const seed = worldCompSeed(state, comp);
+  const top = holder && field.includes(holder) ? holder : undefined;
+  let slice: WorldCompSlice | null = null;
+  if (f === 'g8') {
+    const entrants = field.map(club => ({ club, str: str.get(club) as number, assoc: uclClubCountry(state, club) }));
+    const drawn = drawG8(entrants, seed, top, g8DrawRules(uclSeasonYear(state.eraId)));
+    if (drawn) {
+      slice = { v: 1, s: state.season, f, seed, clubs: drawn.clubs, str: drawn.clubs.map(c => str.get(c) as number),
+        ...(drawn.clashes ? { clashes: drawn.clashes } : {}), ...(top ? { holder: top } : {}) };
+    }
+  } else {
+    const slate = drawUclLeaguePhase({ field, holder: top ?? null, seed, strengthOf: c => str.get(c) ?? 0, assocOf: c => uclClubCountry(state, c) });
+    if (slate) {
+      slice = { v: 1, s: state.season, f, seed, clubs: slate.clubs, str: slate.clubs.map(c => str.get(c) as number),
+        fx: slate.fx, breaks: slate.breaks, overCap: slate.overCap, ...(slate.fallback ? { fallback: true as const } : {}), ...(top ? { holder: top } : {}) };
+    }
+  }
+  /* Round 1509: the Europa League keeps how each entrant got in, in its clubs' order, and my club's own route. */
+  const tagged = field as TaggedField;
+  if (slice && comp === 'uel' && tagged.via) slice.via = slice.clubs.map(c => tagged.via![c] ?? 'F').join('');
+  if (slice && comp === 'uel' && tagged.earned) slice.earned = tagged.earned;
+  if (slice) setWorldComp(state, comp, slice);
+}
+export function openWorldUcl(state: CareerState, field: string[] | null, holder?: string | null): void { openWorldComp(state, 'ucl', field, holder); }
+
+/**
+ * startCareer's last step: a new career that is not in the Champions League
+ * opens the one it watches, season one's field (an era's 32, or the real
+ * 2025-26 tables at 36 with the 2025-26 holders). A job move (`world`) does
+ * nothing here: its slice is decided in joinClubNow once the joined season and
+ * year are known (the critic's correction 10). Never throws: an optional
+ * competition must never stop a career starting (correction 15).
+ */
+function openWorldUclOnStart(state: CareerState, world: SeasonWorld | undefined): void {
+  if (world || NO_WORLD_COMPS.has(state)) return;
+  if (!state.uclGroup) {
+    try {
+      openWorldUcl(state, worldUclField(state, null), worldUclFormatOf(state) === 'l36' ? CM_FINAL_TABLES_2025_26.holders : null);
+    } catch {
+      setWorldComp(state, 'ucl', null);
+    }
+  }
+  /* Round 1509 (ruling 1c): then the Europa League, for every new career of today's world, in the Champions League
+     or not (my club is never one of its entrants yet), after the Champions League it is kept apart from, in its
+     own try. Season one's field is the real 2025-26 tables (worldUelField); an era save has none. */
+  try {
+    openWorldComp(state, 'uel', worldCompField(state, 'uel', null), null);
+  } catch {
+    setWorldComp(state, 'uel', null);
+  }
+}
+
+/**
+ * What the watched evaluation is handed: the match is simAiMatch's own home
+ * edge over the snapshot (simScore with the fixture's keyed stream), and a
+ * knockout round's rules are the participant's (uclLegsFor, the era's away
+ * goals, ET_DEFLATOR and ET_MINUTES; the league phase's play-off has the round
+ * of 16's two legs). The eras' groups read the era's own order (uclGroupRule)
+ * and their round of 16 is the participant's own draw (drawUclRoundOf16, with
+ * its venue rule for two legs). Round 1509: keyed, one binding for every
+ * competition the save follows.
+ */
+function worldCompBind(state: CareerState, comp: WorldCompKey, f: WorldCompFormat): WorldCompBind {
+  const tie = (round: WorldKoRound): TieRules => ({
+    /* Round 1509: the Europa League's legs are its own ledger row (U-legs); the Champions League's the participant's. */
+    legs: comp === 'uel' ? UEL_LEGS[round] : uclLegsFor(state.eraId, round === 'PO' ? 'R16' : round),
+    awayGoals: uclAwayGoalsApply(state.eraId),
+    deciderScale: ET_DEFLATOR,
+    etScale: ET_DEFLATOR * ET_MINUTES / 90,
+  });
+  const bind: WorldCompBind = { sim: (strH, strA, scale, rand) => simScore(strH, strA, 0.2, -0.08, scale, rand), tie };
+  if (f === 'g8') {
+    bind.groupRule = uclGroupRule(state);
+    bind.drawR16 = field => drawUclRoundOf16(field, c => uclClubCountry(state, c), tie('R16').legs === 2);
+  }
+  return bind;
+}
+/* Round 1502: scripts/simWorldUcl.mjs replays watched matches on simAiMatch itself over the snapshot, so the
+   watched match is held to the participant's own AI match, and checks the eras' stand in on eraXIAvg. */
+export { simAiMatch, eraXIAvg, eraEuroName };
+
+/** Where one night of the watched season sits on this save's calendar: it
+ *  counts as played once `state.week` is past `at`. `entry` says the night
+ *  IS the calendar entry at `at` (and is dated with it); otherwise it follows
+ *  league round `round` (a value past the last round is that many weeks after
+ *  the season's last league round). worldUclNightDates dates them. */
+export interface WorldUclNightPlace { night: WorldNight; at: number; round: number; entry: boolean }
+
+/**
+ * The watched season's nights on this save's calendar (the critic's
+ * corrections 8 and 9). A night the calendar has an entry for is that entry:
+ * every matchday of the first stage is one of the six uclGroup weeks every
+ * calendar carries, qualified or not, and the eras' knockout legs are its
+ * uclKo weeks. The league phase's other eleven nights have no week of their
+ * own, so each follows the league round leaguePhaseNightRounds gives it
+ * (buildCalendar's fraction rule, every night a round after the one before)
+ * and counts once the week is past that round and whatever the calendar
+ * plays after it before the next round. A knockout leg an old calendar lacks
+ * is put where a fresh one has it (the round of 16 at UCL_R16_MARK, a second
+ * leg a round after its first). Never earlier than the night before it.
+ */
+export function worldCompNights(state: CareerState, comp: WorldCompKey): WorldUclNightPlace[] | null {
+  const slice = state.worldComps?.[comp];
+  const cal = state.calendar;
+  if (!slice || slice.s !== state.season || !Array.isArray(cal) || !cal.length) return null;
+  const bind = worldCompBind(state, comp, slice.f);
+  const nights = nightsOf(slice.f, r => bind.tie(r).legs);
+  const leagueAt: number[] = [];
+  cal.forEach((e, i) => { if (e.type === 'league') leagueAt.push(i); });
+  const rounds = leagueAt.length;
+  if (!rounds) return null;
+  const blockEnd = (r: number): number => (r + 1 < rounds ? leagueAt[r + 1] - 1 : cal.length - 1);
+  const roundOf = (i: number): number => Math.max(0, leagueAt.filter(x => x <= i).length - 1);
+  const groupAt = (md: number): number => cal.findIndex(e => e.type === 'uclGroup' && e.round === md);
+  const places: WorldUclNightPlace[] = [];
+  let prev = { at: -1, round: 0, entry: false };
+  const put = (night: WorldNight, at: number, round: number, entry: boolean): void => {
+    if (at >= prev.at) prev = { at, round, entry };
+    places.push({ night, ...prev });
+  };
+  /* Every calendar carries six European midweeks (buildCalendar's uclGroup weeks): the league phase plays its
+     first six matchdays on them and its other eleven nights on the marks. */
+  const weeks = 6;
+  const marks = slice.f === 'l36' ? leaguePhaseNightRounds(rounds, roundOf(Math.max(0, groupAt(weeks - 1))), worldCompMarks(comp)) : [];
+  nights.forEach((night, n) => {
+    if (slice.f === 'l36' && n >= weeks) {
+      const r = marks[n - weeks];
+      put(night, r < rounds ? blockEnd(r) : cal.length - 1, r, false);
+      return;
+    }
+    if (night.stage === 'md') {
+      const i = groupAt(night.md ?? 0);
+      put(night, i < 0 ? prev.at : i, i < 0 ? prev.round : roundOf(i), i >= 0);
+      return;
+    }
+    const leg = night.leg ?? 1;
+    const i = cal.findIndex(e => e.type === 'uclKo' && e.uclRound === night.stage && (e.uclLeg ?? 1) === leg);
+    if (i >= 0) { put(night, i, roundOf(i), true); return; }
+    const r = leg === 2 ? prev.round + 1 : Math.max(0, Math.min(rounds - 1, Math.round(rounds * UCL_R16_MARK)));
+    put(night, r < rounds ? blockEnd(r) : cal.length - 1, r, false);
+  });
+  return places;
+}
+export function worldUclNights(state: CareerState): WorldUclNightPlace[] | null { return worldCompNights(state, 'ucl'); }
+
+/** How many nights of the watched season the save has passed: a prefix, and
+ *  never fewer than a slice carried across a job move had already shown. */
+export function worldCompNightsDone(state: CareerState, comp: WorldCompKey): number {
+  const places = worldCompNights(state, comp);
+  if (!places) return 0;
+  let n = 0;
+  if (state.week >= state.calendar.length) n = places.length;
+  else while (n < places.length && state.week > places[n].at) n += 1;
+  return Math.max(n, Math.min(state.worldComps?.[comp]?.seen ?? 0, places.length));
+}
+export function worldUclNightsDone(state: CareerState): number { return worldCompNightsDone(state, 'ucl'); }
+
+/* Evaluations kept per slice and night count. A result is shared: read it, never write into it. */
+const WORLD_UCL_MEMO = new WeakMap<WorldCompSlice, Map<string, WorldCompResult>>();
+
+/**
+ * The watched season as far as the save has played it (or as far as
+ * `nights`), derived from the slice alone: every table, fixture, tie and the
+ * winner. Null when the save watches nothing this season. Pure: it draws
+ * nothing from Math.random and writes nothing into `state`.
+ */
+export function evalWorldComp(state: CareerState, comp: WorldCompKey, nights?: number): WorldCompResult | null {
+  const slice = state.worldComps?.[comp];
+  if (!slice || slice.s !== state.season) return null;
+  const k = nights ?? worldCompNightsDone(state, comp);
+  const key = `${state.eraId ?? ''}|${k}`;
+  let memo = WORLD_UCL_MEMO.get(slice);
+  if (!memo) { memo = new Map(); WORLD_UCL_MEMO.set(slice, memo); }
+  const hit = memo.get(key);
+  if (hit) return hit;
+  const out = evaluateWorldComp(slice, k, worldCompBind(state, comp, slice.f));
+  memo.set(key, out);
+  return out;
+}
+export function evalWorldUcl(state: CareerState, nights?: number): WorldCompResult | null { return evalWorldComp(state, 'ucl', nights); }
+
+/** The holder a fresh season one draw puts top of pot one: the real 2025-26 Champions League winner in today's
+ *  world. The Europa League's holder is always in the Champions League (row Q4), so it never has one. */
+function worldCompStartHolder(state: Pick<CareerState, 'eraId'>, comp: WorldCompKey): string | null {
+  return comp === 'ucl' && worldUclFormatOf(state) === 'l36' ? CM_FINAL_TABLES_2025_26.holders : null;
+}
+
+/**
+ * A mid season job move (joinClubNow): the slice is decided on the joined
+ * state, once its season and year are the career's (the critic's correction
+ * 10). It is carried when the new club watches and is not one of its
+ * entrants, keeping the nights already shown (`seen`: the new club's calendar
+ * can sit behind the old one, correction 11). When nothing can be carried
+ * (there is none, or the new club is one of its entrants) it is opened fresh
+ * only where the field is fixed data (season one of today's world, any season
+ * of an era), else the key comes off: the load repair's own rule, so a reload
+ * never opens a competition the move left out. Never throws.
+ */
+export function carryWorldComp(career: CareerState, joined: CareerState, comp: WorldCompKey): void {
+  try {
+    setWorldComp(joined, comp, null);
+    if (comp === 'ucl' && joined.uclGroup) return;
+    const held = career.worldComps?.[comp];
+    /* fix-1509: the Europa League is carried only while it stays apart from the Champions League the joined
+       season plays. A move can change that one (a club in it leaving for one outside, or a watcher joining one
+       of the 36 it watched, which draws it again), and the carried field would then share clubs with it: the
+       rule a career with nothing to carry follows decides instead (season one draws it again, later none). */
+    const slice = comp === 'uel' && held && uclEntrantsOf(joined).some(c => held.clubs.includes(c)) ? undefined : held;
+    const names = [joined.clubName, joined.eraId ? eraEuroName(joined.eraId, joined.clubName) : joined.clubName];
+    if (slice && slice.s === career.season && slice.s === joined.season && !names.some(c => slice.clubs.includes(c))) {
+      const seen = Math.max(slice.seen ?? 0, worldCompNightsDone(career, comp));
+      setWorldComp(joined, comp, { ...slice, ...(seen > 0 ? { seen } : {}) });
+      /* `earned` is the route of the club the slice was opened for. The rule kept out only that club, so a club
+         outside the field earned no place by it: the carried slice says none for the new club (fix-1509). */
+      const carried = joined.worldComps?.[comp];
+      if (carried && joined.clubName !== career.clubName) delete carried.earned;
+      return;
+    }
+    /* Nothing to carry, or my new club is an entrant of the one it watched (it cannot watch itself play): the
+       rule of a career with nothing to carry decides, the one repairWorldUcl applies at the next load. */
+    openWorldComp(joined, comp, worldCompField(joined, comp, null), worldCompStartHolder(joined, comp));
+  } catch {
+    setWorldComp(joined, comp, null);
+  }
+}
+export function carryWorldUcl(career: CareerState, joined: CareerState): void { carryWorldComp(career, joined, 'ucl'); }
+
+/**
+ * The load repair (step E6, narrowly: the critic's answer 4 and correction
+ * 15). A save that is not in the Champions League and carries no watched one
+ * for its season (every save from before the round) gets one where the field
+ * is fixed data: season one of today's world (the real 2025-26 tables) and
+ * any season of an era (its verified 32). A later season of today's world no
+ * longer holds the tables its 36 came from, so it gets its first one at its
+ * next rollover. A slice of another season is taken off. In its own try and
+ * catch: a repair that fails leaves the save without a slice, never without
+ * the save (loadCareer's catch would hand back no career at all).
+ */
+export function repairWorldComp(state: CareerState, comp: WorldCompKey): void {
+  try {
+    const inIt = comp === 'ucl' && !!state.uclGroup;
+    const slice = state.worldComps?.[comp];
+    if (slice && slice.s === state.season && !inIt) return;
+    /* Release BK triage (section 7): a key the save does not hold is not touched. Clearing the Champions League's
+       key takes the whole object off and puts it back, so on a club in the Champions League (which never holds
+       that key, but since Round 1509 holds the Europa League's) it moved worldComps to the end of the save at
+       every load: equal values, other bytes. */
+    if (slice !== undefined) setWorldComp(state, comp, null);
+    if (inIt || !Array.isArray(state.calendar) || state.week >= state.calendar.length) return;
+    const fmt = worldCompFormatOf(state, comp);
+    if (fmt === 'l36' && state.season !== 1) return;
+    openWorldComp(state, comp, worldCompField(state, comp, null), worldCompStartHolder(state, comp));
+  } catch {
+    setWorldComp(state, comp, null);
+  }
+}
+export function repairWorldUcl(state: CareerState): void { repairWorldComp(state, 'ucl'); }
+
+/** The winner of a followed competition's season, once the season is over
+ *  (every night played and a final won), else null. Never throws. Round 1509
+ *  (ruling 1j): the one name this round and Round 1510 read a winner by. */
+export function worldCompWinnerOf(career: CareerState, comp: WorldCompKey): string | null {
+  const slice = career.worldComps?.[comp];
+  if (!slice || slice.s !== career.season || !Array.isArray(career.calendar) || career.week < career.calendar.length) return null;
+  try {
+    return worldCompWinner(evalWorldComp(career, comp, Infinity) as WorldCompResult)?.winner ?? null;
+  } catch {
+    return null;
+  }
+}
+export function worldUclWinner(career: CareerState): string | null { return worldCompWinnerOf(career, 'ucl'); }
+
+/* ================================================================== */
+/* Round 1510: the domestic super cup (worldComps.dsc)                */
+/* ================================================================== */
+
+/** The live super cup slice of this season, with its row, behind a night of the calendar. Null for anything else. */
+function oneOffNightRow(state: CareerState, night: NightRef | undefined): { slice: OneOffSlice; row: OneOffRow } | null {
+  if (!night || !isOneOffKey(night.k)) return null;
+  const slice = state.worldComps?.[night.k];
+  if (!slice || slice.skip || slice.s !== state.season) return null;
+  const row = oneOffSliceRow(state, slice);
+  return row ? { slice, row } : null;
+}
+
+/** Round 1514: the season a save's season `s` starts in (worldYear's rule), the year an edition is keyed by. */
+function oneOffEditionYear(state: Pick<CareerState, 'startYear'>, s: number): number {
+  return (typeof state.startYear === 'number' ? state.startYear : CM_BASE_YEAR) + Math.max(0, s - 1);
+}
+/** Round 1514: the row a slice plays, with its edition's venue and date where the ledger dates that edition. */
+export function oneOffSliceRow(state: Pick<CareerState, 'startYear'>, slice: OneOffSlice): OneOffRow | null {
+  return oneOffRowAt(slice.row, oneOffEditionYear(state, slice.s));
+}
+
+/** The words a super cup night wears on the calendar and the match screens: the cup's name for one match, with
+ *  the stage for a four club cup or a two legged one. Null for anything else. */
+export function oneOffEntryLabel(state: CareerState, entry: CalendarEntry): string | null {
+  const got = oneOffNightRow(state, entry.night);
+  if (!got) return null;
+  const n = entry.night!.n;
+  if (got.row.shape === 'four') return `${got.row.name} · ${n === 0 ? 'Semi-final' : 'Final'}`;
+  if (got.row.shape === 'two') return `${got.row.name} · ${n === 0 ? 'First leg' : 'Second leg'}`;
+  return got.row.name;
+}
+
+/** A four club cup's final while my semi final is still to be played: a maybe on the calendar, never an invented
+ *  fixture (potentialEntry's rule). */
+export function oneOffPotential(state: CareerState, entry: CalendarEntry): boolean {
+  const got = oneOffNightRow(state, entry.night);
+  if (!got || got.row.shape !== 'four' || entry.night!.n !== 1 || !got.slice.clubs?.includes(state.clubName)) return false;
+  return !Object.keys(got.slice.mine ?? {}).some(k => Number(k) < 2);
+}
+
+/** Round 670's rule for a night: extra time when level only on a row whose decider is 'et'. */
+function oneOffPlaysExtraTime(state: CareerState, entry: CalendarEntry): boolean {
+  return oneOffNightRow(state, entry.night)?.row.decider === 'et';
+}
+
+/** The VAR coverage key of a night's competition: `oneOff:<row>`, which no coverage row holds (none is sourced). */
+function nightVarKey(state: CareerState, night: NightRef): string {
+  return `oneOff:${(isOneOffKey(night.k) ? state.worldComps?.[night.k]?.row : undefined) ?? night.k}`;
+}
+
+/** My fixture of a super cup night, still to be played: the night's match my club is in (a final only once my
+ *  semi final is won), or null when there is none or it has been played. */
+function oneOffMyFixture(state: CareerState, entry: CalendarEntry): OneOffFixture | null {
+  const got = oneOffNightRow(state, entry.night);
+  if (!got || !got.slice.clubs?.includes(state.clubName)) return null;
+  const n = entry.night!.n;
+  const before = n > 0 ? evalOneOff(state, n, entry.night!.k as OneOffKey) : null;
+  const fx = myOneOffFixture(before, got.slice, got.row, state.clubName, n);
+  return fx && !got.slice.mine?.[fx.n] ? fx : null;
+}
+
+/**
+ * A night's completion: my result goes into the slice by fixture index in the fixture's own orientation, the slice
+ * REPLACED (a new object, so the memoised evaluation of the old one is never served again), and on a won final
+ * the cup goes in the cabinet as a minor trophy (no confidence bonus: the board takes the result's ordinary
+ * swing). The other semi final and a final I am not in come from the slice's own keyed streams. Returns the
+ * trophy's name when one was won, else null.
+ */
+function completeOneOffNight(state: CareerState, night: NightRef, mine: number, theirs: number, et: boolean, shootoutWon: boolean | null, events: string[]): string | null {
+  const got = oneOffNightRow(state, night);
+  if (!got) return null;
+  const n = night.n;
+  const k = night.k as OneOffKey;
+  const fx = myOneOffFixture(n > 0 ? evalOneOff(state, n, k) : null, got.slice, got.row, state.clubName, n);
+  if (!fx || got.slice.mine?.[fx.n]) return null;
+  const iAmHome = fx.home === state.clubName;
+  const res: NightResult = { h: iAmHome ? mine : theirs, a: iAmHome ? theirs : mine };
+  if (et) res.et = 1;
+  if (shootoutWon !== null) res.pens = shootoutWon === iAmHome ? 'h' : 'a';
+  setOneOffSlice(state, { ...got.slice, mine: { ...(got.slice.mine ?? {}), [fx.n]: res } }, k);
+  const won = shootoutWon !== null ? shootoutWon : mine > theirs;
+  const opp = iAmHome ? fx.away : fx.home;
+  const final = n === oneOffNightsOf(got.row).length - 1;
+  if (!final) {
+    events.push(won ? `🛡️ Into the ${got.row.name} final.` : `❌ Out of the ${got.row.name} in the semi final.`);
+    return null;
+  }
+  if (!won) {
+    events.push(`🛡️ The ${got.row.name} goes to ${opp}.`);
+    return null;
+  }
+  state.trophies.push({ name: got.row.name, emoji: '🛡️', season: state.season, minor: true });
+  events.push(`🛡️ The ${got.row.name} is yours!`);
+  return got.row.name;
+}
+
+/** Round 1510 (the critic's correction 13): a league entry of this season has been played. "Week 0" meant that
+ *  until a participant's super cup night could stand before the opening league round. */
+export function leagueStarted(state: Pick<CareerState, 'week' | 'calendar'>): boolean {
+  const cal = Array.isArray(state.calendar) ? state.calendar : [];
+  for (let i = 0; i < state.week && i < cal.length; i += 1) if (cal[i].type === 'league') return true;
+  return state.week > 0 && cal.length === 0;
+}
+
+/** The country the save's league is in. */
+function oneOffNationOf(state: Pick<CareerState, 'clubName' | 'eraId' | 'customClub'>): string {
+  return leagueRulesOf(careerLeagueOf(state).id).nationId;
+}
+
+/** The super cup row this save's country plays in its format year (uclSeasonYear: an era save keeps its era's for
+ *  life, today's world the 2026 row every season), or null: a country with no row plays and follows none. */
+export function oneOffRowOf(state: Pick<CareerState, 'clubName' | 'eraId' | 'customClub' | 'season' | 'startYear'>): OneOffRow | null {
+  return oneOffRowIn(state, oneOffRowFor(oneOffNationOf(state), uclSeasonYear(state.eraId)));
+}
+
+/** Round 1514: a row as this season plays it (its dated edition's venue and date), or null when the row plays only
+ *  its dated editions and this season is not one of them (Italy's: the tile says so, partial). */
+function oneOffRowIn(state: Pick<CareerState, 'season' | 'startYear'>, row: OneOffRow | null): OneOffRow | null {
+  const ed = oneOffEditionYear(state, state.season);
+  return row && oneOffPlayedIn(row.id, ed) ? oneOffRowAt(row.id, ed) : null;
+}
+
+/** Round 1514: the UEFA Super Cup's row in this save's format year (today's world's only; an era save has none). */
+export function uefaSuperCupRowOf(state: Pick<CareerState, 'eraId' | 'season' | 'startYear'>): OneOffRow | null {
+  return oneOffRowIn(state, oneOffRowFor('uefa', uclSeasonYear(state.eraId)));
+}
+
+/** True when the round looked at this save's country and year and could not prove its super cup (the tile says so).
+ *  Round 1514: or the row plays dated editions only and this season is not one of them. */
+export function oneOffPartialOf(state: Pick<CareerState, 'clubName' | 'eraId' | 'customClub' | 'season' | 'startYear'>): boolean {
+  return oneOffPartial(oneOffNationOf(state), uclSeasonYear(state.eraId), oneOffEditionYear(state, state.season));
+}
+
+/**
+ * Round 1514: what the real 2025-26 season hands a country's first super cup where cmOneOffRows.ts holds no season
+ * one constant (CM_ONE_OFF_SEASON_ONE: England's): the top flight's verified final order (CM_FINAL_TABLES_2025_26),
+ * Round 1509's cup winners (SEASON_ONE_CUP_WINNERS) and the cup runners up the ledger holds. The same rule then
+ * picks the clubs as in every later season, so no club is typed. Null where the game holds no 2025-26 table.
+ */
+export function oneOffSeasonOneTables(nation: string): OneOffTables | null {
+  const top = REAL_LEAGUES.find(l => { const r = leagueRulesOf(l.id); return r.nationId === nation && r.ladder === 'top'; });
+  const table = top ? CM_FINAL_TABLES_2025_26.leagues[top.id]?.table : undefined;
+  if (!top || !table || !table.length) return null;
+  return { table, cupWinner: SEASON_ONE_CUP_WINNERS[top.id] ?? null, cupRunnerUp: CM_ONE_OFF_CUP_RUNNERS_UP_2025_26[top.id] ?? null };
+}
+
+/** What a FINISHED season hands its country's next super cup: the top flight's final order (my table when I am in
+ *  it, the world's otherwise, the same reading as the Champions League's) and the cup final. Read in
+ *  startNextSeason before registerLeagueOverrides, so a promoted club is read in the league it played in. */
+export function oneOffTablesOf(career: CareerState): OneOffTables & { nation: string } {
+  const nation = oneOffNationOf(career);
+  const tables = finishedLeagueTables(career, l => { const r = leagueRulesOf(l.id); return r.nationId === nation && r.ladder === 'top'; });
+  const cup = cupFinalistsOf(career);
+  const table = tables && tables.length === 1 && tables[0].clubs.length ? tables[0].clubs : null;
+  return { nation, table, cupWinner: cup.winner, cupRunnerUp: cup.runnerUp };
+}
+
+/** A club of this save's world (a league of it, or my own club). */
+function oneOffClubInWorld(state: CareerState, club: string): boolean {
+  return club === state.clubName || worldLeagueDefs(state).some(l => l.clubs.includes(club));
+}
+
+/**
+ * Open this season's super cup on `state` from a finished season's tables (or season one's edition), writing
+ * only its own key: no key at all for a country with no row, a stub with its reason when there is no honest field
+ * (an unfinished season, a cup with no final, a summer move abroad, an entrant that is not a club of this world,
+ * my club in season one's cup or in a two legged one), else the slice: the entrants, their strength snapshot and
+ * the keyed seed. Draws nothing from Math.random. Never throws: an optional competition never stops a season.
+ */
+function openOneOff(state: CareerState, from: { tables: OneOffTables | null; seasonOne: boolean; skip?: OneOffSkip }, k: OneOffKey = 'dsc'): void {
+  try {
+    const row = k === 'usc' ? uefaSuperCupRowOf(state) : oneOffRowOf(state);
+    if (!row) { setOneOffSlice(state, null, k); return; }
+    const stub = (skip: OneOffSkip): void => setOneOffSlice(state, { v: 1, s: state.season, row: row.id, skip }, k);
+    if (from.skip) { stub(from.skip); return; }
+    let clubs: string[];
+    let dbl = false;
+    /* Round 1514: a row with no season one constant reads the real 2025-26 season through the row's own rule. */
+    const edition = from.seasonOne ? CM_ONE_OFF_SEASON_ONE.find(e => e[0] === row.id) : undefined;
+    if (edition) {
+      clubs = [...edition[2]];
+    } else {
+      const got = entrantsFrom(row, (from.seasonOne ? oneOffSeasonOneTables(row.nation) : from.tables) ?? { table: null, cupWinner: null, cupRunnerUp: null });
+      if ('skip' in got) { stub(got.skip); return; }
+      clubs = got.clubs;
+      dbl = !!got.doubled;
+    }
+    if (!clubs.every(c => oneOffClubInWorld(state, c))) { stub('notInWorld'); return; }
+    const mine = clubs.includes(state.clubName);
+    /* The critic's correction 8: my club's place in season one's cup was settled before I arrived, and the game
+       never plays my club without me. A two legged cup is followed only (answer 1b). */
+    if (mine && from.seasonOne) { stub('seasonOne'); return; }
+    if (mine && row.shape === 'two') { stub('legs'); return; }
+    /* A participant's nights go on its own calendar at the one placer's slots (the calendar half of the round). */
+    const slots = mine ? placeNights(state.calendar, entryDatesOf(state), oneOffNightsOf(row), oneOffRedate(state)) : [];
+    if (slots.some(s => s === null)) { stub('noNight'); return; }
+    setOneOffSlice(state, { v: 1, s: state.season, row: row.id, clubs, str: clubs.map(c => worldUclStrength(state, c)), ...(dbl ? { dbl: 1 as const } : {}), seed: worldCompSeed(state, k) }, k);
+    if (mine) insertOneOffNights(state, slots as number[], k);
+  } catch {
+    setOneOffSlice(state, null, k);
+  }
+}
+
+/** A participant's nights spliced into its calendar at the placer's slots, the last first so the earlier slots
+ *  stay where they were: `{ type: 'oneOff', round: 0, night: { k: 'dsc', n } }`. Only at a rollover (startCareer
+ *  never inserts), and no other entry's date moves (the placer took only gaps that keep every date). Round 1514:
+ *  the UEFA Super Cup's under 'usc', opened after the domestic one, so its placer sees that night as taken. */
+function insertOneOffNights(state: CareerState, slots: number[], k: OneOffKey = 'dsc'): void {
+  const order = slots.map((at, n) => ({ at, n })).sort((a, b) => b.at - a.at || b.n - a.n);
+  for (const { at, n } of order) state.calendar.splice(at, 0, { type: 'oneOff', round: 0, night: { k, n } });
+}
+
+/** startCareer's last step for the super cup: a new career opens season one's edition, followed (my club in it is a
+ *  'seasonOne' stub). A job move (`world`) decides in joinClubNow; the dailies open nothing (DAILY_START). */
+function openOneOffsOnStart(state: CareerState, world: SeasonWorld | undefined): void {
+  if (world || NO_WORLD_COMPS.has(state)) return;
+  openOneOff(state, { tables: null, seasonOne: true });
+}
+
+/** A late season redraws its midweek league rounds from their neighbours, so a night's gap is taken only if every
+ *  entry keeps its date (the placer's `redate`). */
+function oneOffRedate(state: CareerState): (types: { type: string }[]) => CalDate[] {
+  const year = worldYearOf(state);
+  const plan = seasonPlanOf(state);
+  return types => dateOfEntries(year, types, plan);
+}
+
+/**
+ * Where each night of this season's super cup sits on this save's calendar. A participant's calendar holds its
+ * nights as entries (`entry`, counted once its week is played); a watcher's sit where the one placer puts them
+ * (counted once every entry before the slot is). Null without a live slice of this season.
+ */
+export function oneOffNightPlaces(state: CareerState, key: OneOffKey = 'dsc'): { at: number; entry: boolean }[] | null {
+  const slice = state.worldComps?.[key];
+  if (!slice || slice.skip || slice.s !== state.season || !Array.isArray(state.calendar) || !state.calendar.length) return null;
+  const row = oneOffSliceRow(state, slice);
+  if (!row) return null;
+  const wants = oneOffNightsOf(row);
+  const own = wants.map((_, n) => state.calendar.findIndex(e => e.night?.k === key && e.night.n === n));
+  if (own.every(i => i >= 0)) return own.map(at => ({ at, entry: true }));
+  const slots = placeNights(state.calendar, entryDatesOf(state), wants, oneOffRedate(state));
+  return slots.map(s => ({ at: s ?? state.calendar.length, entry: false }));
+}
+
+/** How many nights of this season's super cup the save has passed: a prefix, never fewer than the nights shown
+ *  before a mid season move (`seen`), every night once the season is over. Round 1514: of the UEFA Super Cup's
+ *  with `key` 'usc'. */
+export function oneOffNightsDone(state: CareerState, key: OneOffKey = 'dsc'): number {
+  const places = oneOffNightPlaces(state, key);
+  if (!places) return 0;
+  /* The shared count (worldNights.ts). A participant's night is its own entry, passed once that entry's week is
+     played, so it counts as sitting before the entry after it. */
+  return nightsDoneAt(state.week, state.calendar.length, places.map(p => (p.entry ? p.at + 1 : p.at)), state.worldComps?.[key]?.seen ?? 0);
+}
+
+/** The match a followed super cup plays: the watched Champions League's own (the home edge over the snapshot,
+ *  never a third writing of it) and the engine's extra time scales. */
+function oneOffBind(state: CareerState) {
+  return { sim: worldCompBind(state, 'ucl', 'l36').sim, deciderScale: ET_DEFLATOR, etScale: ET_DEFLATOR * ET_MINUTES / 90 };
+}
+
+/* Evaluations kept per slice and night count; a result is shared, never written into. A slice my results are
+   written into is replaced (a new object), so its memo is fresh. */
+const ONE_OFF_MEMO = new WeakMap<OneOffSlice, Map<number, OneOffResult | null>>();
+
+/** This season's super cup as far as the save has played it (or as far as `nights`), from the slice alone. Null
+ *  without a live slice. Pure: draws nothing from Math.random and writes nothing into `state`. Round 1514: the
+ *  UEFA Super Cup's with `key` 'usc'. */
+export function evalOneOff(state: CareerState, nights?: number, key: OneOffKey = 'dsc'): OneOffResult | null {
+  const slice = state.worldComps?.[key];
+  if (!slice || slice.skip || slice.s !== state.season) return null;
+  const row = oneOffSliceRow(state, slice);
+  if (!row) return null;
+  const k = nights ?? oneOffNightsDone(state, key);
+  let memo = ONE_OFF_MEMO.get(slice);
+  if (!memo) { memo = new Map(); ONE_OFF_MEMO.set(slice, memo); }
+  if (memo.has(k)) return memo.get(k) ?? null;
+  const out = evaluateOneOff(slice, row, k, oneOffBind(state));
+  memo.set(k, out);
+  return out;
+}
+
+/**
+ * A mid season job move (joinClubNow): this season's super cup comes along, its nights already shown kept (`seen`:
+ * the new calendar can sit behind the old one, and a night once shown is never taken back), and my own results
+ * with it, so nothing shown moves. When my new club is an entrant of a night still ahead it is a 'joined' stub (its
+ * place was settled before I arrived, and the game never plays it without me). A save with none gets none.
+ * Round 1514: the domestic super cup and the UEFA Super Cup each by this rule, under its own key.
+ */
+export function carryOneOffs(career: CareerState, joined: CareerState): void {
+  carryOneOff(career, joined, 'dsc');
+  carryOneOff(career, joined, 'usc');
+}
+function carryOneOff(career: CareerState, joined: CareerState, key: OneOffKey): void {
+  try {
+    const slice = career.worldComps?.[key];
+    if (key === 'dsc' || joined.worldComps?.[key]) setOneOffSlice(joined, null, key);
+    if (!slice || slice.s !== career.season || slice.s !== joined.season) return;
+    if (slice.skip) { setOneOffSlice(joined, slice, key); return; }
+    const row = oneOffSliceRow(career, slice);
+    const seen = Math.max(slice.seen ?? 0, oneOffNightsDone(career, key));
+    if (!row) return;
+    if (slice.clubs?.includes(joined.clubName) && seen < oneOffNightsOf(row).length) {
+      setOneOffSlice(joined, { v: 1, s: slice.s, row: slice.row, skip: 'joined' }, key);
+      return;
+    }
+    setOneOffSlice(joined, { ...slice, ...(seen > 0 ? { seen } : {}) }, key);
+  } catch {
+    setOneOffSlice(joined, null, key);
+  }
 }
 
 /**
@@ -12796,6 +14308,8 @@ export function entryInvolvesMe(state: CareerState, entry: CalendarEntry): boole
     case 'cup': return state.cupRound === entry.cupRound;
     case 'uclGroup': return state.uclGroup !== null && state.uclKoRound === null;
     case 'uclKo': return state.uclKoRound === entry.uclRound;
+    /* Round 1510: a super cup night with a fixture of mine still to play (a semi final lost has no final). */
+    case 'oneOff': return oneOffMyFixture(state, entry) !== null;
     default: return false;
   }
 }
@@ -13060,7 +14574,7 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
   // placed side plays the Bundesliga's sixteenth: each row's playoff rung.)
   if (rules.ladder === 'promotion') {
     // The single biggest club in the division is not aiming for second.
-    if (rank <= 1) return { target: 1, label: `Win the ${league.name}` };
+    if (rank <= 1) return { target: 1, label: `Win ${toLeague(league.name)}` };
     if (rank <= 2 || (rank <= 4 && tier <= 2)) {
       // A club this big in this division exists to leave it immediately.
       return { target: 2, label: `Win automatic promotion` };
@@ -13072,7 +14586,7 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
 
   // MLS: no relegation exists, so no board can honestly threaten it.
   if (rules.ladder === 'playoffs') {
-    if (rank <= 2) return { target: 1, label: `Win the ${league.name}` };
+    if (rank <= 2) return { target: 1, label: `Win ${toLeague(league.name)}` };
     if (rules.playoff && rank <= rules.playoff.rankUpTo) return { target: rules.playoff.target, label: rules.playoff.label };
     return { target: size - (rules.floorFromBottom ?? 4), label: `Finish mid-table or better` };
   }
@@ -13082,7 +14596,9 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
   // measured XI gap catches the club that is title-class inside its own
   // league even when its absolute rating is modest (Sporting CP, Feyenoord).
   if (demandsTitle(rank, tier, titleGap, clubName, eraId)) {
-    return { target: 1, label: `Win the ${league.name}` };
+    /* Round 1326: the league takes its article by toLeague's rule ("Win La
+       Liga", "Win Serie A", "Win the Premier League"). */
+    return { target: 1, label: `Win ${toLeague(league.name)}` };
   }
 
   const slots = rules.europe;
@@ -13225,12 +14741,120 @@ export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSi
   return objs;
 }
 
+/* ---------- Round 1509 (rulings 1e and 1i): the board's European rungs, graded by the one rule ---------- */
+
+/** Where my club stands for Europe: in the Champions League, in the Europa League, or neither. */
+export type EuroPlace = 'ucl' | 'uel' | null;
+
+/* One answer per state and moment: objectiveStatuses runs on every render. Keyed on the week, because the engine
+   plays entries into a state it then hands on, and the table is only ever moved by an entry. */
+const EURO_PLACE_MEMO = new WeakMap<CareerState, { key: string; place: EuroPlace; route: EuroRoute | null }>();
+
+/** The route behind euroPlaceOf's 'uel' (a league place, the cup, the cup's place passed down), or null. Read by
+ *  scripts/simWorldEuro.mjs section 3 to print the board's moves by route. */
+export function euroPlaceRouteOf(career: CareerState): EuroRoute | null {
+  euroPlaceOf(career);
+  return EURO_PLACE_MEMO.get(career)?.route ?? null;
+}
+
+/**
+ * Where MY club stands for Europe by the rule that fills the competitions (rulings 1e and 1i). 'ucl' exactly when
+ * qualifiedUcl's own expression says so (a league place, position within uclPlacesIn; startNextSeason), never
+ * membership of an AI field. 'uel' when the Europa League's rule, run WITHOUT my club kept out and with the fill
+ * never taking it, gives my club a place. Mid season it reads my league's own table, my nation's cup final once
+ * that is played, and the places those pass down inside my league (before the final: league places only). At
+ * the season's end it reads what the rollover will: every European league's final table, the cup, and the
+ * Champions League the rollover will draw with my club kept out, whose fill takes the fifth placed club of the
+ * deepest leagues, so a place there can pass to sixth. On a summer move it answers for the club the season was
+ * played with. Never throws: on an error it gives the position grade of before this round.
+ */
+export function euroPlaceOf(career: CareerState): EuroPlace {
+  const key = `${career.season}|${career.week}|${career.calendar?.length ?? 0}|${career.clubName}`;
+  const hit = EURO_PLACE_MEMO.get(career);
+  if (hit && hit.key === key) return hit.place;
+  const league = careerLeagueOf(career);
+  const table = sortedLeagueTable(career);
+  const pos = table.findIndex(r => r.club === career.clubName) + 1;
+  const places = uclPlacesIn(league);
+  let place: EuroPlace;
+  let route: EuroRoute | null = null;
+  try {
+    if (league.euro && pos > 0 && pos <= places) place = 'ucl';
+    else {
+      const over = Array.isArray(career.calendar) && career.calendar.length > 0 && career.week >= career.calendar.length;
+      route = over ? euroRouteAtEnd(career, league, table) : euroRouteNow(career, league, table);
+      place = route ? 'uel' : null;
+    }
+  } catch {
+    const uelLast = EURO_SLOTS[league.id]?.uel ?? places;
+    place = league.euro && pos > 0 && pos <= places ? 'ucl' : league.euro && pos > 0 && pos <= uelLast ? 'uel' : null;
+  }
+  EURO_PLACE_MEMO.set(career, { key, place, route });
+  return place;
+}
+
+/** My club's route mid season: my league's own table and my nation's cup final once it is played. */
+function euroRouteNow(career: CareerState, league: LeagueDef, table: TableRow[]): EuroRoute | null {
+  const nationId = leagueRulesOf(league.id).nationId;
+  if (!worldLeagueDefs(career).some(l => l.euro && leagueRulesOf(l.id).nationId === nationId)) return null;
+  const winner = career.cupBracket?.find(t => t.round === 'F')?.winner ?? null;
+  const clubs = league.euro ? table.map(r => r.club) : [];
+  const ucl = league.euro ? uclPlacesIn(league) : 0;
+  const mine: EuroTable = { leagueId: league.id, nationId, clubs, uclPlaces: ucl, uelLast: league.euro ? (EURO_SLOTS[league.id]?.uel ?? ucl) : 0 };
+  const field = euroFieldFromTables({
+    tables: [mine], cups: winner ? { [nationId]: winner } : {}, uclEntrants: clubs.slice(0, ucl), size: UCL_LEAGUE.clubs,
+    exclude: worldUclExcluded(career).slice(1), noFill: [career.clubName],
+  });
+  return field.via[career.clubName] ?? null;
+}
+
+/** My club's route at the season's end: the rollover's own inputs, read off the finished season. */
+function euroRouteAtEnd(career: CareerState, league: LeagueDef, table: TableRow[]): EuroRoute | null {
+  const tables = uclFinalTables(career);
+  if (!tables) return euroRouteNow(career, league, table);
+  const watched = uclFieldFromTables(tables, uclHolderOf(career), UCL_LEAGUE.clubs, worldUclExcluded(career), uelHolderOf(career));
+  const euro = euroTablesOf(tables);
+  const cups: Record<string, string | null> = {};
+  for (const t of euro) cups[t.nationId] = null;
+  const cup = euroCupOf(career);
+  if (Object.prototype.hasOwnProperty.call(cups, cup.nationId)) cups[cup.nationId] = cup.winner;
+  const field = euroFieldFromTables({
+    tables: euro, cups, uclEntrants: watched, size: UCL_LEAGUE.clubs,
+    exclude: worldUclExcluded(career).slice(1), noFill: [career.clubName],
+  });
+  return field.via[career.clubName] ?? null;
+}
+
+/** Which European rung a league objective is, read off the three labels leagueDemand writes (ruling 1i). */
+export function europeRungOf(objective: Pick<BoardObjective, 'id' | 'label'>): 'ucl' | 'uel' | 'uecl' | null {
+  if (objective.id !== 'league') return null;
+  if (objective.label === 'Qualify for the Champions League') return 'ucl';
+  if (objective.label === 'Qualify for the Europa League') return 'uel';
+  if (objective.label === 'Qualify for the Conference League') return 'uecl';
+  return null;
+}
+
+/** The one line the board panel shows under a European rung met otherwise than by finishing where the board asked
+ *  (fix2-1509, run minor 6): the cup won (C), the cup's place passed down the table (P), or a league place passed
+ *  down past a club going into the Champions League to a club below the asked position (L, `below`). Undefined
+ *  for any other case. */
+function euroRungWhy(career: CareerState, route: EuroRoute | null, below: boolean): string | undefined {
+  const cup = careerLeagueOf(career).cupName ?? 'cup';
+  if (route === 'C') return `Your ${cup} win counts: the cup winner gets a Europa League place.`;
+  if (route === 'L') return below ? 'A club above you goes into the Champions League, so a Europa League place passes down the table to you.' : undefined;
+  if (route !== 'P') return undefined;
+  return euroCupOf(career).winner
+    ? `The ${cup} winner already has a European place, so its Europa League place passes down to you.`
+    : `The ${cup}'s Europa League place passes down the table to you.`;
+}
+
 /**
  * Live status of every board objective. Pure; the hub renders this and
  * finishSeason grades from it (seasonDone flips onTrack/behind into
- * done/failed).
+ * done/failed). `why`, only on a European rung met otherwise than by the
+ * position asked (euroRungWhy), is the line the board panel shows under it.
  */
-export function objectiveStatuses(career: CareerState): { objective: BoardObjective; status: ObjectiveStatus }[] {
+export function objectiveStatuses(career: CareerState): { objective: BoardObjective; status: ObjectiveStatus; why?: string }[] {
   const objs = career.boardObjectives ?? [];
   const table = sortedLeagueTable(career);
   const myIdx = table.findIndex(r => r.club === career.clubName);
@@ -13247,8 +14871,19 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
     if (asked) return { objective, status: asked };
     let status: ObjectiveStatus = 'onTrack';
     if (objective.id === 'league') {
-      const met = myPos <= objective.target;
+      /* Round 1509 (ruling 1i): a European rung of today's world is met by the rule that fills the competitions
+         (euroPlaceOf): the Champions League's by its places, the Europa League's by any route into it or above,
+         the Conference League's by its position or by either place above it. An era save keeps its position grade,
+         and so does every other league objective. */
+      const rung = isHistoricEra(career.eraId) ? null : europeRungOf(objective);
+      const place = rung ? euroPlaceOf(career) : null;
+      const met = rung === 'ucl' ? place === 'ucl'
+        : rung === 'uel' ? place === 'ucl' || place === 'uel'
+          : rung === 'uecl' ? myPos <= objective.target || place === 'ucl' || place === 'uel'
+            : myPos <= objective.target;
       status = seasonDone ? (met ? 'done' : 'failed') : (met ? 'onTrack' : 'behind');
+      const why = met && place === 'uel' ? euroRungWhy(career, euroPlaceRouteOf(career), myPos > objective.target) : undefined;
+      if (why) return { objective, status, why };
     } else if (objective.id === 'cup') {
       const { rank, alive } = cupProgressRank(career);
       status = rank >= objective.target ? 'done' : alive ? 'onTrack' : 'failed';
@@ -13341,6 +14976,13 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
   });
 }
 
+/** Round 1335: the card a new manager takes over in mid season: every objective but the ones already failed
+ *  before he arrived, in order. A done one stays (it can come back off, and the season score already leaves
+ *  an inherited tick out, Round 633's stamp). Pure, no draw. */
+export function openObjectives(s: CareerState): BoardObjective[] {
+  return objectiveStatuses(s).filter(x => x.status !== 'failed').map(x => x.objective);
+}
+
 /* ================================================================== */
 /* Match engine                                                       */
 /* ================================================================== */
@@ -13351,24 +14993,29 @@ const MENT_MOD: Record<Mentality, { atk: number; def: number }> = {
   attacking: { atk: 0.42, def: 0.34 },
 };
 
-function poisson(lambda: number): number {
+/* Round 1347 E2: `rand` is the stream the draw reads. Every existing call
+   passes nothing and reads Math.random at call time (a default is evaluated
+   then, so withSeed's swap in the dailies still holds); the watched
+   Champions League passes a keyed stream per fixture so it never touches
+   the game's own. */
+function poisson(lambda: number, rand: () => number = Math.random): number {
   const L = Math.exp(-lambda);
   let k = 0;
   let p = 1;
   do {
     k += 1;
-    p *= Math.random();
+    p *= rand();
   } while (p > L);
   return Math.min(k - 1, 7);
 }
 
 /** Score for A vs B given strengths + extra xG boosts for each side. */
-function simScore(sA: number, sB: number, boostA: number, boostB: number, scale = 1): [number, number] {
+function simScore(sA: number, sB: number, boostA: number, boostB: number, scale = 1, rand: () => number = Math.random): [number, number] {
   const lA = clamp(1.25 + (sA - sB) * 0.055 + boostA, 0.12, 4.2);
   const lB = clamp(1.25 + (sB - sA) * 0.055 + boostB, 0.12, 4.2);
   /* Round 670: `scale` is 1 for every ninety minutes that cannot go to extra
      time, ET_DEFLATOR for a decider, and that times 30/90 for its extra time. */
-  return [poisson(lA * scale), poisson(lB * scale)];
+  return [poisson(lA * scale, rand), poisson(lB * scale, rand)];
 }
 
 /**
@@ -13729,7 +15376,7 @@ function creditMyScorers(
   return { goalCounts, assistCounts, assistNames };
 }
 
-function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now', taken: Set<number> = new Set(), window?: [number, number], exclude: ReadonlySet<string> = NO_NAMES, board?: BoardWeight): ScorerLine[] {
+function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now', taken: Set<number> = new Set(), window?: [number, number], exclude: ReadonlySet<string> = NO_NAMES, board?: BoardWeight, career?: CareerState): ScorerLine[] {
   /* Round 504: a segment of a half asks for its own window; the whole match
      shape splits at the interval as before. Round 781: a window that runs
      into a board weights it (BoardWeight). */
@@ -13742,7 +15389,7 @@ function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, 
   // Round 742: minus the men in my squad (`exclude`, passed in because no
   // save is in scope here), so a man I bought off this club never scores
   // against me for them. See oppRosterFor.
-  const baked = projectedRosterWithout(opp, yearsOnNow, eraId, exclude).filter(p =>
+  const baked = projectedRosterWithout(opp, yearsOnNow, eraId, exclude, career).filter(p =>
     groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID');
   /* Round 1028: the static pool is today's squads, so it only ever backs up
      today's world. A historic era's foreign Champions League club (AC Milan in
@@ -14671,23 +16318,51 @@ export function squadNumbers(career: CareerState, live: LiveMatch): Map<string, 
   return map;
 }
 
+/** Round 1331: the minutes of the other dugout's changes under a stoppage limit: at most stopsLeft
+ *  distinct minutes drawn, the changes past them joining those stoppages in order. */
+function stopMinutes(count: number, stopsLeft: number, lo: number, hi: number): number[] {
+  const k = Math.min(count, stopsLeft);
+  const stops = distinctMinutes(k, lo, hi, new Set());
+  const extra = count - k;
+  const out: number[] = [];
+  stops.forEach((m, i) => {
+    const n = 1 + Math.floor(extra / k) + (i < extra % k ? 1 : 0);
+    for (let j = 0; j < n; j++) out.push(m);
+  });
+  return out;
+}
+
 /**
  * The other dugout's substitutions for the minutes (from, to]: one to three
  * a match, from their own bench, like for like when the game is level, a
  * forward for a defender when they are behind and the reverse when they are
  * two clear. Subs already made at or before `from` are kept. A man is never
  * taken off before his last goal.
+ *
+ * Round 1331: the room and the count follow the match's rule. Under three the
+ * count is ri(1, 3) as it always was (the same draws, call for call); under five
+ * in three stoppages it is ri(3, 5), and the changes go on at most the
+ * stoppages they have left: that many minutes are drawn, and the changes past
+ * them join those stoppages in order (a double change), with no new draw.
  */
-function drawOppSubs(live: LiveMatch, from: number, to: number, oppGoalMinutes: number[]): SubLine[] {
+function drawOppSubs(live: LiveMatch, from: number, to: number, oppGoalMinutes: number[], rule: SubsRule): SubLine[] {
   const made = (live.oppSubs ?? []).filter(s => s.minute <= from);
-  const room = MAX_HALFTIME_SUBS - made.length;
+  const room = rule.subs - made.length;
   if (!live.oppXi || !live.oppBench || room <= 0) return made;
+  const stopsLeft = rule.stops === null ? null : rule.stops - new Set(made.map(s => s.minute)).size;
+  /* Breaks are free, and the one break this draw reaches is the one before extra time (their changes are never
+     drawn at half time, under any rule). Extra time drawn with changes left and no stoppage left puts them on at
+     that break, at the minute extra time is drawn from, as mine go on (isBreakChange): their unused changes carry
+     on into extra time, as Round 670 has them. Without it a five change side that used its three stoppages by 90
+     made no change in extra time at all. A redraw from that minute keeps the changes the break already has. */
+  const etBreak = stopsLeft !== null && stopsLeft <= 0 && !!live.et && from === live.et.from && !made.some(s => s.minute === from);
+  if (stopsLeft !== null && stopsLeft <= 0 && !etBreak) return made;
   const len = (to - from) / 45;
   const lo = Math.max(from + 1, 56);
   /* Round 670: in extra time they may use whatever changes they have left. */
   const hi = from >= 90 ? to - 2 : Math.min(to, 88);
   if (lo > hi) return made;
-  const count = Math.min(room, Math.round(ri(1, 3) * len));
+  const count = Math.min(room, Math.round(ri(rule.subs - 2, rule.subs) * len));
   if (count <= 0) return made;
   const keep: LiveMatch = { ...live, oppSubs: made };
   const onPitch = oppOnPitchAt(keep, to);
@@ -14699,7 +16374,8 @@ function drawOppSubs(live: LiveMatch, from: number, to: number, oppGoalMinutes: 
   for (const c of cards) lastCard.set(c.name, Math.max(lastCard.get(c.name) ?? 0, c.minute));
   const myGoalMinutes = [...(live.h1My ?? []), ...(live.h2My ?? [])].map(g => g.minute);
   const theirGoalMinutes = [...(live.h1Opp ?? []).map(g => g.minute), ...(live.h2Opp ?? []).map(g => g.minute), ...oppGoalMinutes];
-  const minutes = distinctMinutes(count, lo, hi, new Set());
+  const minutes = stopsLeft === null ? distinctMinutes(count, lo, hi, new Set())
+    : etBreak ? Array.from({ length: count }, () => from) : stopMinutes(count, stopsLeft, lo, hi);
   const subs: SubLine[] = [];
   /* A man who has just come on is not hooked again in the same draw. */
   const cameOn = new Set<string>(made.map(s => s.on));
@@ -14737,7 +16413,7 @@ function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], menta
   const talk = talkEdgeFor(state, xi, fx, state.teamTalk ?? null);
   const press = state.press;
   const mine = myMatchStrength(state, xi) + talk + (press?.nextSharpen ?? 0);
-  const oppS = strengthOf(state, fx.opponent) + (press?.nextFire ?? 0);
+  const oppS = oppStrengthVsMe(state, fx.opponent) + (press?.nextFire ?? 0);
   const ment = MENT_MOD[mentality] ?? MENT_MOD.balanced;
   const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
   const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
@@ -14760,7 +16436,7 @@ function etScale(fx: MyFixture): number { return fx.extraTime ? ET_DEFLATOR : 1;
 function secondHalfLambdas(
   state: CareerState, fx: MyFixture, live: LiveMatch, xi: XiSlot[], scoreMine: number, scoreOpp: number,
 ): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
-  const oppS = strengthOf(state, fx.opponent);
+  const oppS = oppStrengthVsMe(state, fx.opponent);
   const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
   const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
   const press = state.press;
@@ -15068,8 +16744,8 @@ function drawSegment(
   let oppGoals: ScorerLine[];
   let oppCards: CardLine[] = [];
   if (!oppStart) {
-    oppGoals = generateOppScorers(fx.opponent, nOpp, 0, yearsOn(state), state.eraId, taken, [from + 1, hi], mySquadNames(state), board);
-    live.oppSubs = drawOppSubs(live, from, to, []);
+    oppGoals = generateOppScorers(fx.opponent, nOpp, 0, yearsOn(state), state.eraId, taken, [from + 1, hi], mySquadNames(state), board, state);
+    live.oppSubs = drawOppSubs(live, from, to, [], matchRuleOf(state));
   } else {
     /* Their goals' MINUTES first (the other dugout reads the score as it
        stands), then their bookings off whoever is on their pitch at each
@@ -15082,7 +16758,7 @@ function drawSegment(
     oppCards = drawSegmentOppCards(m => oppAt(live, m) ?? [], from, to, maxYellows, bookedMapOf(prior, c => c.name), dismissedOf(prior, c => c.name), hi);
     if (half === 1) live.h1OppCards = [...(live.h1OppCards ?? []), ...oppCards];
     else live.h2OppCards = [...(live.h2OppCards ?? []), ...oppCards];
-    live.oppSubs = drawOppSubs(live, from, to, oppGoalMinutes);
+    live.oppSubs = drawOppSubs(live, from, to, oppGoalMinutes, matchRuleOf(state));
     oppGoals = oppGoalMinutes.map(minute => {
       const there = oppAt(live, minute) ?? oppStart;
       const on = there.filter(p => p.p !== 'GK');
@@ -15314,7 +16990,7 @@ function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
     for (const l of live.h1My) taken.add(l.minute);
   }
   if (!live.h1Opp || live.h1Opp.length !== live.oppGoals) {
-    live.h1Opp = generateOppScorers(fx.opponent, live.oppGoals, live.oppGoals, yearsOn(state), state.eraId, taken, undefined, mySquadNames(state));
+    live.h1Opp = generateOppScorers(fx.opponent, live.oppGoals, live.oppGoals, yearsOn(state), state.eraId, taken, undefined, mySquadNames(state), undefined, state);
     markOppSetPieceGoals(live.h1Opp);
   }
   if (!live.h1Play) {
@@ -15593,6 +17269,33 @@ export function liveStatsAt(
 export const MATCH_FITNESS_COST = 20;
 export const MATCH_FITNESS_SPREAD = 8;
 
+/** Round 116's week of recovery by the training plan, read by tickWeek and by a night (Round 1510). */
+function weekRecoveryOf(state: CareerState): { recoveryMod: number; flat: number } {
+  const plan = state.training ?? DEFAULT_TRAINING;
+  return {
+    recoveryMod: plan.intensity === 'double' ? 0.78 : plan.intensity === 'light' ? 1.18 : 1,
+    flat: plan.intensity === 'light' ? 6 : plan.intensity === 'double' ? 3 : 4,
+  };
+}
+
+/** One man's fitness after a week's recovery and, if he played, the match's cost (its spread is the week's draw). */
+function fitnessAfterWeek(fitness: number, played: boolean, recoveryMod: number, flat: number): number {
+  const recovery = Math.round((100 - fitness) * 0.71 * recoveryMod) + flat;
+  const cost = played ? MATCH_FITNESS_COST + ri(0, MATCH_FITNESS_SPREAD) : 0;
+  return clamp(fitness + recovery - cost, 20, 100);
+}
+
+/**
+ * Round 1510 (ruling 2b): what a NIGHT does to the squad in place of tickWeek. The recovery and the match cost a
+ * European midweek gets from its own tick, and nothing else: no knock risk, no injury or retraining countdown, no
+ * facilities, no books (a night is no wage week), no severance count. Without the recovery a club with a night
+ * between two Saturdays would carry the night's cost into the weekend (Round 95's fatigue collapse).
+ */
+function nightSquadTick(state: CareerState, playedIds: Set<string>): void {
+  const { recoveryMod, flat } = weekRecoveryOf(state);
+  state.squad = state.squad.map(p => ({ ...p, fitness: fitnessAfterWeek(p.fitness, playedIds.has(p.id), recoveryMod, flat) }));
+}
+
 function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   /* Round 619: a settlement counts down HERE, in the same function that charges
      the wage bill, and a row at zero is gone.
@@ -15614,16 +17317,13 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   // pick up knocks on the training ground, and that is the price of the
   // development the same setting buys you at the end of the season.
   const plan = state.training ?? DEFAULT_TRAINING;
-  const recoveryMod = plan.intensity === 'double' ? 0.78 : plan.intensity === 'light' ? 1.18 : 1;
-  const flat = plan.intensity === 'light' ? 6 : plan.intensity === 'double' ? 3 : 4;
+  const { recoveryMod, flat } = weekRecoveryOf(state);
   const knockRisk = plan.intensity === 'double' ? 0.005 : 0;
   /* Round 505: anyone who finished learning a second position this week. */
   const learned: string[] = [];
   state.squad = state.squad.map(p => {
     const played = playedIds ? playedIds.has(p.id) : false;
-    const recovery = Math.round((100 - p.fitness) * 0.71 * recoveryMod) + flat;
-    const cost = played ? MATCH_FITNESS_COST + ri(0, MATCH_FITNESS_SPREAD) : 0;
-    const fitness = clamp(p.fitness + recovery - cost, 20, 100);
+    const fitness = fitnessAfterWeek(p.fitness, played, recoveryMod, flat);
     let injuryWeeks = Math.max(0, p.injuryWeeks - 1);
     if (knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
     const out: CMPlayer = { ...p, fitness, injuryWeeks };
@@ -15783,6 +17483,18 @@ export function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture 
       compLabel: `Champions League · ${UCL_LABELS[entry.uclRound]}${legLabel}`,
       opponent,
       home: atHome,
+      ...(playsExtraTime(state, entry) ? { extraTime: true } : {}),
+    };
+  }
+  /* Round 1510: a super cup night, my fixture of it (on a neutral ground nobody is at home). */
+  if (entry.type === 'oneOff') {
+    const fx = oneOffMyFixture(state, entry);
+    if (!fx) return null;
+    return {
+      competition: 'oneOff',
+      compLabel: oneOffEntryLabel(state, entry) ?? 'Super cup',
+      opponent: fx.home === state.clubName ? fx.away : fx.home,
+      home: fx.neutral ? null : fx.home === state.clubName,
       ...(playsExtraTime(state, entry) ? { extraTime: true } : {}),
     };
   }
@@ -16147,7 +17859,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       }
     : null;
   const firstLegTonight = !!uclLeg && uclLeg.twoLegs && uclLeg.leg === 1;
-  const isKnockout = (fx.competition === 'cup' || fx.competition === 'uclKo') && !firstLegTonight;
+  /* Round 1510: a one match cup's night settles the cup or its semi final, so a draw goes to the shootout. */
+  const isKnockout = (fx.competition === 'cup' || fx.competition === 'uclKo' || fx.competition === 'oneOff') && !firstLegTonight;
 
   const suspendedNow = state.squad.filter(p => p.suspendedMatches > 0).map(p => p.id);
   /* Round 127: who could actually have played today, taken before the match
@@ -16158,7 +17871,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const fitAtKickoff = new Set(
     state.squad.filter(p => isAvailable(p) && !p.onLoan).map(p => p.id),
   );
-  const oppS = strengthOf(state, fx.opponent);
+  const oppS = oppStrengthVsMe(state, fx.opponent);
 
   /* Round 119: with a first half already played, the second is simulated off
      whatever the manager left on the pitch and whichever mentality he sent
@@ -16506,6 +18219,14 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     }
   }
 
+  /* Round 1510: a super cup night writes my result into its slice (the other semi final and a final I am not in
+     come from the slice's own keyed streams), and a won final goes in the cabinet as a minor trophy: no
+     confidence bonus, nothing weighed. */
+  if (fx.competition === 'oneOff' && entry.night) {
+    const won = completeOneOffNight(state, entry.night, myGoals, oppGoals, etPlayed, shootoutWon, events);
+    if (won) trophyWon = won;
+  }
+
   /* ----- Round 73: full stat lines for everyone who played ----- */
   const cleanSheet = oppGoals === 0;
   const xiIdSet = new Set(xi.map(p => p.id));
@@ -16779,7 +18500,6 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     opp: fx.opponent, res, score: `${myGoals}-${oppGoals}`,
     season: state.season, comp: fx.competition, home: fx.home,
   });
-  state.h2h = h2hLog.slice(-300);
   /* And both sides' last-5 form, whatever the competition, because a cup
      hiding matters to the next opponent reading the form guide. */
   noteFormOne(state, state.clubName, res);
@@ -16811,6 +18531,12 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       state.careerStats.biggestDefeat = { opp: fx.opponent, score: `${oppGoals}-${myGoals}` };
     }
   }
+  /* Round 1343: and the highest scoring game (clubManagerRecords.ts). Not on Hot Seat's base rules: 'base' is
+     the engine before Round 1331, which kept no such line, so a day dated before the cutover replays as it did. */
+  if (state.matchRules !== 'base') {
+    noteHighestScoring(state, { opp: fx.opponent, score: `${myGoals}-${oppGoals}`, res, season: state.season, club: state.clubName, comp: fx.compLabel });
+  }
+  state.h2h = h2hLog.slice(-300);
 
   // Round 73: broken start promises get noticed, then the dressing room
   // finds something new to message you about.
@@ -16872,8 +18598,20 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      save starts on, so a manager who never opens the press room plays the game
      the previous twelve rounds calibrated. */
   if (confDelta < 0 && state.press) confDelta *= pressPatience(state.press.mood);
+  /* Round 1501: the level. A win counts for less and a defeat for more, after patience and the press,
+     so a giant's board still feels a defeat most. The identity on Normal (boardSwing returns its input). */
+  confDelta = boardSwing(state, confDelta);
   confDelta = Math.round(confDelta * 10) / 10;
   state.boardConfidence = clamp(state.boardConfidence + confDelta, 0, 100);
+  /* Round 1342: No sacking holds the board on its last point in front of the
+     check below, which is left exactly as it was, so zero stays the sack and
+     the warning under 22 still reads. Draws nothing. */
+  let noSackLine = false;
+  if (!boardMaySack(state) && state.boardConfidence <= 0) {
+    state.boardConfidence = 1;
+    noSackLine = true;
+    events.push(NO_SACK_LINE);
+  }
   if (state.boardConfidence <= 0) {
     state.sacked = true;
     events.push('📉 The board has seen enough. You are relieved of your duties.');
@@ -16919,6 +18657,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      check that sacks, so a manager could finish the week on zero and still
      be in a job. The header meter reads this number and says zero is the
      sack (src/lib/clubManagerMeters.ts), so the check runs once more here. */
+  /* Round 1342: and No sacking's floor runs once more in front of it, with one line a match. */
+  if (!boardMaySack(state) && state.boardConfidence <= 0) {
+    state.boardConfidence = 1;
+    if (!noSackLine) events.push(NO_SACK_LINE);
+  }
   if (!state.sacked && state.boardConfidence <= 0) {
     state.sacked = true;
     events.push('📉 The board has seen enough. You are relieved of your duties.');
@@ -16926,15 +18669,19 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   // The talk only ever covered the match it was given for.
   state.teamTalk = null;
 
-  tickWeek(state, new Set(xi.map(p => p.id)));
+  /* Round 1510 (ruling 2b): a night is not a week. The men who played pay the match and get a midweek's
+     recovery (nightSquadTick); nothing else ticks: no wage week, no knock, no countdown, no window week. */
+  if (entry.night) nightSquadTick(state, new Set(xi.map(p => p.id)));
+  else tickWeek(state, new Set(xi.map(p => p.id)));
   /* Round 141: a window no longer slams shut the moment you play a match,
      because real windows run through the early fixtures and because the
      instant sell is gone, so listing a man needs actual weeks for offers to
      arrive. The window now spans a few match weeks (4 in summer, 3 in
      January), fresh bids can land in any of them, and open offers stay on
      the table instead of being wiped every Saturday. When the weeks run out
-     the deadline hits: deals die, bids die, grudges are forgotten. */
-  if (state.transferWindow !== null) {
+     the deadline hits: deals die, bids die, grudges are forgotten.
+     Round 1510: a night (a super cup) never counts a window week; the calendar's myMatchWeeks skips it too. */
+  if (state.transferWindow !== null && !entry.night) {
     const left = (state.windowWeeksLeft ?? 1) - 1;
     state.windowWeeksLeft = Math.max(0, left);
     if (left <= 0) {
@@ -16975,7 +18722,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   // Round 141: the news feed reads the week's table and says something true.
   generateWeeklyNews(state);
   // Round 135: and the room fills up again, once there is something to ask.
-  maybeAskPress(state);
+  /* Round 1331: about the next match, not the one just played (state.week is still this match's week
+     here); a Hot Seat day on the base rules keeps the old read. */
+  maybeAskPress(state, state.matchRules === 'base' ? undefined : live.week + 1);
   // Round 168: and sometimes, when you are flying, the phone rings.
   const approachLine = maybeApproach(state);
   if (approachLine) events.push(approachLine);
@@ -17153,17 +18902,18 @@ const SCOUT_LAST = [
  * The ceiling a player is carrying. Older players are at or near it already,
  * which is why the whole system is about teenagers.
  */
-export function rollPotential(rating: number, age: number): number {
+export function rollPotential(rating: number, age: number, random?: () => number): number {
+  const range = (lo: number, hi: number) => random ? lo + Math.floor(random() * (hi - lo + 1)) : ri(lo, hi);
   let head: number;
   if (age >= 30) head = 0;
-  else if (age >= 28) head = ri(0, 1);
-  else if (age >= 26) head = ri(0, 2);
-  else if (age >= 24) head = ri(1, 4);
-  else if (age >= 22) head = ri(1, 6);
-  else if (age >= 20) head = ri(2, 10);
-  else head = ri(3, 15);
+  else if (age >= 28) head = range(0, 1);
+  else if (age >= 26) head = range(0, 2);
+  else if (age >= 24) head = range(1, 4);
+  else if (age >= 22) head = range(1, 6);
+  else if (age >= 20) head = range(2, 10);
+  else head = range(3, 15);
   // About one young player in twelve is carrying something special.
-  if (age <= 21 && Math.random() < 0.085) head += ri(4, 9);
+  if (age <= 21 && (random ? random() : Math.random()) < 0.085) head += range(4, 9);
   return clamp(rating + head, rating, 95);
 }
 
@@ -17612,6 +19362,8 @@ export interface SeasonWorld {
   yearsOn: number;
   uclField: string[] | null;
   keepLeagueOverrides: boolean;
+  worldSeed?: number;
+  rosterCareer?: CareerState;
 }
 
 /* Round 964: `edit` is a world editor edit (src/lib/clubManagerWorldEdit.ts),
@@ -17621,7 +19373,7 @@ export interface SeasonWorld {
    where an edited world is a fresh start in every other way. It applies to a
    real club in today's world only: a historic era never reads the overrides,
    and a custom club is placed against the real lineups. */
-export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld, edit?: Record<string, string[]> | null): CareerState {
+export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld, edit?: Record<string, string[]> | null, opts?: StartCareerOptions): CareerState {
   /* Round 132: the era decides what year season one is, and the year decides
      everything else: the squad you are handed, how good every other club is,
      and who is on the market. The default era is the current one and its
@@ -17637,6 +19389,9 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
      leagueClubs, so the world simply is the world with your club in it. */
   const era = eraById(eraId);
   const historic = isHistoricEra(era.id);
+  /* A fresh start ranks its custom club inside its own memberships. */
+  const worldEdit = edit && !custom && !historic && !world ? edit : null;
+  if (!world?.keepLeagueOverrides) registerLeagueOverrides(worldEdit);
   if (custom) {
     const ranked = historic ? eraPlayableClubs(era.id, custom.leagueId) : playableClubs(custom.leagueId);
     const spec: CustomClubSpec = {
@@ -17652,15 +19407,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     // A fresh real-club career must never inherit a previous save's club.
     registerCustomClub(null);
   }
-  /* Round 310: and it starts on the static memberships for the same reason,
-     custom or not: a NEW career has no promotions behind it, so a previous
-     save's registered pyramid must never leak into its world. */
-  const worldEdit = edit && !custom && !historic && !world ? edit : null;
-  if (!world?.keepLeagueOverrides) registerLeagueOverrides(worldEdit);
   const club = custom ? clubDefFor(custom.name)
     : historic ? eraClubDefFor(clubName, era.id) : clubDefFor(clubName);
   const startYearsOn = world ? world.yearsOn : historic ? 0 : Math.max(0, era.startYear - CM_BASE_YEAR);
-  const squad = custom ? buildCustomSquad(custom, era.id) : buildSquad(club.name, startYearsOn, era.id);
+  const squad = custom ? buildCustomSquad(custom, era.id) : buildSquad(club.name, startYearsOn, era.id, world?.rosterCareer);
   // Owner task 61: the league is the club's REAL league with its real clubs.
   // Round 1035: withClubCup, so a club outside its league's cup starts cupless.
   const league = withClubCup((custom && customLeagueDef(custom, era.id))
@@ -17705,7 +19455,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     retiredNames: [],
     retiredLastSummer: [],
     budget: club.budget,
-    boardConfidence: 60,
+    boardConfidence: BOARD_FRESH,
     sacked: false,
     squad,
     xiIds: [],
@@ -17716,7 +19466,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     table: leagueClubs.map(emptyRow),
     form: [],
     calendar: buildCalendar(league.clubs.length, eraUclHasR16(era.id), uclLegsFor(era.id, 'QF') === 2, league.cupName !== null),
-    clubStrengths: genClubStrengths(custom ? { ...league, clubs: leagueClubs } : league, startYearsOn, era.id),
+    clubStrengths: genClubStrengths(custom ? { ...league, clubs: leagueClubs } : league, startYearsOn, era.id, world?.rosterCareer, club.name),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
     aiHeadlines: [],
@@ -17754,6 +19504,14 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     promisedStarts: [],
     pairResults: {},
   };
+  /* Round 1509 (ruling 1l): a daily follows no competition from outside, so its start opens none. */
+  if (opts?.noWorldComps) NO_WORLD_COMPS.add(state);
+  if (world?.rosterCareer && (worldRosterView(world.rosterCareer) || worldSeedOf(world.rosterCareer) !== undefined)) {
+    state.season = world.rosterCareer.season;
+    state.startYear = world.rosterCareer.startYear;
+    if (world.rosterCareer.worldRoster !== undefined) state.worldRoster = plainCopy(world.rosterCareer.worldRoster);
+    if (world.rosterCareer.worldSeed !== undefined) state.worldSeed = world.rosterCareer.worldSeed;
+  }
   /* Round 964: the edited world rides on the save the way a promoted one
      does, so the first summer resolves on it and a reload registers it. */
   if (worldEdit) state.leagueOverrides = worldEdit;
@@ -17837,7 +19595,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     state.windowWeeksLeft = lateWeeks;
     state.summerWindow = { season: state.season, matchWeeks: lateWeeks };
   }
-  generateHeadlines(state);
+  /* Round 1344: a fresh career has no seed yet, so its opening window's deals come back and are recorded by the
+     last line, once the seed block below has drawn one (the post seed flush; the year 0 projection ignores the
+     seed, so the keys are the ones the seeded world gives these men). A job move is seeded already: nothing comes back. */
+  const unrecorded = generateHeadlines(state);
   /* Round 1021 review: a late season can meet its first international window
      before a ball is kicked (2020-21's September window opened five days
      before the Premier League did). Its note goes out with the save, so it
@@ -17846,7 +19607,21 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
      answer it. Only a late season can have a window before its opener, so
      every other save draws exactly what it did. */
   if (lateWeeks !== null) for (const msg of fireDueBreaks(state)) pushMessage(state, msg);
-  return state;
+  if (!world) {
+    const entropy = JSON.stringify([state.eraId, state.startYear, state.clubName,
+      state.manager ? [state.manager.name, state.manager.nationality, state.manager.background, state.manager.style] : null,
+      state.squad.map(p => [p.name, p.position, p.age, p.rating, p.potential]),
+      [state.academy?.recruitment, state.academy?.coaching, state.academy?.facilities,
+        state.academy?.prospects.map(p => [p.name, p.position, p.age, p.rating, p.potential])]]);
+    state.worldSeed = Math.floor(keyedRng(`manager-world|${entropy}`)() * 0x100000000);
+  } else if (world.worldSeed !== undefined && state.worldSeed === undefined) {
+    state.worldSeed = world.worldSeed;
+  }
+  /* Round 1502: a club not in the Champions League watches it, opened after the seed it is keyed on. */
+  openWorldUclOnStart(state, world);
+  /* Round 1510: the country's super cup, season one's edition, followed, opened after the seed it is keyed on. */
+  openOneOffsOnStart(state, world);
+  return recordAiDeals(state, unrecorded);
 }
 
 /**
@@ -17982,7 +19757,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
         advanceCupBracket(state, entry.cupRound);
       }
       state.week += 1;
-      tickWeek(state, null);
+      /* Round 1510 (ruling 2a): a night I do not play (a semi final lost, a stub) moves the week on and ticks nothing. */
+      if (!entry.night) tickWeek(state, null);
       continue;
     }
     // Round 95: the rest of the football world plays its round too.
@@ -18043,7 +19819,8 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
   const live: LiveMatch = {
     /* Round 1218: and only where the competition uses reviews in real life (scripts/data/cmVarCompetitions.json). */
     ...(varReviews && worldYear(state) >= 2026 && !isHistoricEra(state.eraId ?? DEFAULT_ERA_ID) && varKinds.length > 0
-      && cmVarCovers(entry.type === 'league' ? `league:${careerLeagueOf(state).id}` : entry.type === 'cup' ? `cup:${careerLeagueOf(state).cupName}` : 'ucl',
+      /* Round 1510: a night keys its own competition (`oneOff:<row>` for a super cup), which no coverage row holds. */
+      && cmVarCovers(entry.night ? nightVarKey(state, entry.night) : entry.type === 'league' ? `league:${careerLeagueOf(state).id}` : entry.type === 'cup' ? `cup:${careerLeagueOf(state).cupName}` : 'ucl',
         entry.type === 'cup' ? entry.cupRound : entry.type === 'uclGroup' ? 'group' : entry.uclRound) ? { varReviews: true as const, ...(varReviews === true ? {} : { varKinds }) } : {}),
     week: state.week,
     myGoals: 0,
@@ -18098,7 +19875,7 @@ function talkEdgeFor(
 ): number {
   if (!tone) return 0;
   const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
-  const edge = myMatchStrength(state, xi) + venue - strengthOf(state, fx.opponent);
+  const edge = myMatchStrength(state, xi) + venue - oppStrengthVsMe(state, fx.opponent);
   const target = preMatchTarget(edge, xiMood(state, men(xi)), state.form);
   return talkWeight(state, tone, target) * TALK_EDGE;
 }
@@ -18199,9 +19976,77 @@ export function tiringAtHalftime(career: CareerState): CMPlayer[] {
     .sort((a, b) => a.fitness - b.fitness);
 }
 
-/** Three changes a match, on the pitch or in the dressing room. */
+/** Three changes a match, on the pitch or in the dressing room: the old rule's number. Since Round 1331
+ *  a match plays its league and season's rule (matchRuleOf), which is this number with no stoppage
+ *  limit before 2020-21 and wherever the game has no sourced row, and the base rule an older Manager
+ *  Hot Seat day plays. Kept exported because harnesses read it as that number. */
 export const MAX_HALFTIME_SUBS = 3;
 export const MAX_SUBS = MAX_HALFTIME_SUBS;
+
+/** Round 1331: the substitution rule this career's matches play: its league's row for the season the
+ *  world stands in (src/lib/clubManagerSubsRule.ts, two sourced in scripts/data/cmSubsRuleSources.json),
+ *  or three with no limit on a Hot Seat day played on the base rules. Cups and continental ties follow
+ *  the career league's row, a stated simplification. */
+export function matchRuleOf(career: CareerState): SubsRule {
+  if (career.matchRules === 'base') return { subs: MAX_SUBS, stops: null, partial: false };
+  return subsRuleFor(subsLeagueBase(careerLeagueOf(career).id), worldYear(career));
+}
+
+/** Round 1335: true when this career plays the season rules from before Round 1335 (the CareerState doc of
+ *  matchRules: only a Hot Seat day dated before HOT_SEAT_RULES_FROM). Every read this round adds goes
+ *  through here, so one answer puts the whole round back (simCmBoardVerdict's forced leg). */
+export function legacySeason(c: Pick<CareerState, 'matchRules'>): boolean {
+  return c.matchRules === 'base';
+}
+
+/** Round 1331: is a change at this minute made at a break, which uses no stoppage? Half time is any
+ *  change before the second half is drawn (the dressing room records it at 46); the break before extra
+ *  time is the minute extra time is drawn from, before a ball of it is played. Extra time's own half
+ *  time is not a moment the engine has (its thirty minutes are one stretch), so a change at 105 counts
+ *  as a stoppage. */
+export function isBreakChange(live: LiveMatch, minute: number, plus?: number): boolean {
+  if (!live.h2Drawn && minute >= 46) return true;
+  return !!live.et && minute === live.et.from && !(plus && plus > 0);
+}
+
+const stopKey = (minute: number, plus?: number): string => `${minute}|${plus && plus > 0 ? plus : 0}`;
+
+/** Round 1331: the stoppages my changes have used: the distinct clock readings of the changes made in
+ *  play under a stoppage limit (two at the same minute share one). */
+export function stopsUsed(live: LiveMatch): number {
+  return new Set((live.subs ?? []).filter(s => s.stop).map(s => stopKey(s.minute, s.plus))).size;
+}
+
+/** Round 1331: does a change at this clock reading join a stoppage already used? */
+function sharesStop(live: LiveMatch, minute: number, plus?: number): boolean {
+  const key = stopKey(minute, plus);
+  return (live.subs ?? []).some(s => s.stop && stopKey(s.minute, s.plus) === key);
+}
+
+/** Round 1331: changes I have left in the match on, by its rule. */
+export function subsLeftOf(career: CareerState): number {
+  return career.live ? Math.max(0, matchRuleOf(career).subs - career.live.subsUsed) : 0;
+}
+
+/** Round 1331: stoppages I have left, or null under a rule with no limit. */
+export function stopsLeftOf(career: CareerState): number | null {
+  const stops = matchRuleOf(career).stops;
+  if (stops === null) return null;
+  return career.live ? Math.max(0, stops - stopsUsed(career.live)) : stops;
+}
+
+/** Round 1331: what the live sheet can offer at this clock reading: the changes and stoppages left,
+ *  and whether a change made now would be taken (a change at a break, or at a stoppage already used,
+ *  needs no stoppage of its own). */
+export function changeRoom(career: CareerState, live: LiveMatch, minute: number, plus?: number): { subs: number; subsLeft: number; stopsLeft: number | null; open: boolean } {
+  const rule = matchRuleOf(career);
+  const subsLeft = Math.max(0, rule.subs - live.subsUsed);
+  const stopsLeft = rule.stops === null ? null : Math.max(0, rule.stops - stopsUsed(live));
+  const m = Math.floor(minute);
+  const p = plus && plus > 0 ? Math.floor(plus) : 0;
+  const open = subsLeft > 0 && (stopsLeft === null || stopsLeft > 0 || isBreakChange(live, m, p) || sharesStop(live, m, p));
+  return { subs: rule.subs, subsLeft, stopsLeft, open };
+}
 
 export type LiveChange =
   | { kind: 'sub'; outId: string; inId: string }
@@ -18212,11 +20057,15 @@ export type LiveChange =
  * that minute, and everything the engine had committed after it is redrawn
  * off the eleven and the shape you just chose: the first half from that
  * minute to the break, or the second half from that minute to the whistle.
- * Nothing before it moves. At the interval (45, or 46 before the second half
- * is drawn) there is nothing to redraw, because the second half has not
+ * Nothing before it moves. At the interval (46 or later before the second
+ * half is drawn, as the dressing room sends it; 45 and its board are still
+ * the first half, in play, and under a stoppage limit use one, Round 1331
+ * review) there is nothing to redraw, because the second half has not
  * been decided yet and will read your changes when it is. Returns null when
- * the change is not allowed: no match on, the third sub already made, the
- * man is not on the pitch or the one coming on is not fit.
+ * the change is not allowed: no match on, the last change the match's rule
+ * allows already made (Round 1331: three, or five in three stoppages where
+ * the league and season had it, see matchRuleOf), no stoppage left for a
+ * change in play, the man is not on the pitch or the one coming on is not fit.
  */
 export function changeLive(
   career: CareerState, minute: number, change: LiveChange,
@@ -18242,8 +20091,13 @@ export function changeLive(
   const boardNow = period ? live.added?.[period] ?? 0 : 0;
   const p = boardNow > 0 && Math.floor(minute) === m && plus !== undefined && Number.isFinite(plus) && plus > 0
     ? Math.min(Math.floor(plus), boardNow) : 0;
+  /* Round 1331: the match's own rule. Under five in three, a change in play that opens a new stoppage
+     needs one left; a change at a break, or at a stoppage already used, does not. */
+  const rule = change.kind === 'sub' ? matchRuleOf(state) : null;
+  const inPlay = !!rule && rule.stops !== null && !isBreakChange(live, m, p);
   if (change.kind === 'sub') {
-    if (live.subsUsed >= MAX_HALFTIME_SUBS) return null;
+    if (live.subsUsed >= rule!.subs) return null;
+    if (inPlay && !sharesStop(live, m, p) && stopsUsed(live) >= rule!.stops!) return null;
     const idx = live.onPitch.indexOf(change.outId);
     if (idx < 0) return null;
     if (live.onPitch.includes(change.inId)) return null;
@@ -18264,7 +20118,7 @@ export function changeLive(
     live.subsUsed += 1;
     live.subs = [...(live.subs ?? []), {
       off: going?.name ?? change.outId, on: coming.name, minute: m, offId: change.outId, onId: change.inId,
-      ...plusOf({ plus: p }),
+      ...plusOf({ plus: p }), ...(inPlay ? { stop: true as const } : {}),
     }];
   } else {
     live.mentality = change.mentality;
@@ -18443,8 +20297,14 @@ export function coachQuickMatch(career: CareerState): CareerState {
     const allowed = slot ? slot.allowed : out ? [out.position] : [];
     return p => gradeFit(heldPositions(p), allowed);
   };
+  /* Round 1331: the match's own rule. Under three he is the coach he always was, line for line. Under
+     five in three: at the break still up to two (a break costs no stoppage); at each look up to two
+     changes at the same minute (one stoppage), only while a change and a stoppage stay back for an
+     injury; and an injury at a minute with no stoppage left is not replaced (changeLive refuses it, and
+     the man plays on, as he does today with no change left). */
+  const rule = matchRuleOf(state);
   const injuriesThrough = (to: number) => {
-    while (state.live!.subsUsed < MAX_SUBS) {
+    while (state.live!.subsUsed < rule.subs) {
       const live = state.live!;
       const injury = [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]
         .map(line => ({ ...line, id: line.id ?? state.squad.find(p => p.name === line.name)?.id }))
@@ -18463,10 +20323,15 @@ export function coachQuickMatch(career: CareerState): CareerState {
   };
   /* Round 1146: legs, after the break. See QUICK_LEGS_WINDOWS for the rule. */
   const restLegs = (at: number) => {
+    for (let look = 0; look < (rule.stops === null ? 1 : 2); look++) if (!legsOnce(at)) return;
+  };
+  const legsOnce = (at: number): boolean => {
     const live = state.live!;
     /* One change stays back for an injury, as at the break, and so does one
        man: he never spends his last fit bench player on legs. */
-    if (live.subsUsed >= MAX_SUBS - 1 || (live.minute ?? 0) > at || benchFor(state).length < 2) return;
+    if (live.subsUsed >= rule.subs - 1 || (live.minute ?? 0) > at || benchFor(state).length < 2) return false;
+    /* Round 1331: and under a stoppage limit one stoppage stays back too. */
+    if (rule.stops !== null && (stopsLeftOf(state) ?? 0) - (isBreakChange(live, at) || sharesStop(live, at) ? 0 : 1) < 1) return false;
     const gone = liveGoneIds(live, at);
     const cameOn = new Set((live.subs ?? []).map(s => s.onId));
     const booked = new Set([...(live.h1Cards ?? []), ...(live.h2Cards ?? [])].filter(c => c.kind === 'yellow' && c.minute <= at).map(c => c.id));
@@ -18487,16 +20352,19 @@ export function coachQuickMatch(career: CareerState): CareerState {
       const noWeaker = (p: CMPlayer): boolean => (liveElevenStrength(state, at, { outId: out.p.id, inId: p.id }) ?? 0) >= now;
       const coming = options.find(p => settled || noWeaker(p));
       if (!coming) continue;
-      state = changeLive(state, at, { kind: 'sub', outId: out.p.id, inId: coming.id }) ?? state;
-      return;
+      const next = changeLive(state, at, { kind: 'sub', outId: out.p.id, inId: coming.id });
+      state = next ?? state;
+      return !!next;
     }
+    return false;
   };
   ensureFirstHalf(state, entry, state.live!);
   injuriesThrough(45);
   if (!state.live!.h2Drawn) {
     // Keep one change for a later injury rather than spending all three at the break.
+    const atBreak = state.live!.subsUsed;
     for (const out of tiringAtHalftime(state)) {
-      if (state.live!.subsUsed >= MAX_SUBS - 1) break;
+      if (state.live!.subsUsed >= rule.subs - 1 || (rule.stops !== null && state.live!.subsUsed - atBreak >= 2)) break;
       if (liveGoneIds(state.live!, 46).has(out.id)) continue;
       const tiredFit = gradeFor(out.id);
       const coming = benchFor(state, out.id).find(p => (tiredFit(p) === 'natural' || tiredFit(p) === 'family')
@@ -18533,7 +20401,13 @@ export function resumeMatch(career: CareerState): PlayResult {
 
 /** Preview of the next thing on the calendar that involves my club. */
 export function nextFixture(career: CareerState): NextFixtureInfo {
-  for (let w = career.week; w < career.calendar.length; w++) {
+  return nextFixtureFrom(career, career.week);
+}
+
+/** Round 1331: the next fixture from a given calendar week on, the loop nextFixture always ran from the
+ *  career's own week. The press asked at the whistle reads it from the week after the match just played. */
+export function nextFixtureFrom(career: CareerState, fromWeek: number): NextFixtureInfo {
+  for (let w = fromWeek; w < career.calendar.length; w++) {
     const entry = career.calendar[w];
     if (entry.type === 'window') return { kind: 'window' };
     const fx = fixtureFor(career, entry);
@@ -18544,7 +20418,7 @@ export function nextFixture(career: CareerState): NextFixtureInfo {
         compLabel: fx.compLabel,
         opponent: fx.opponent,
         home: fx.home,
-        oppStrength: Math.round(strengthOf(career, fx.opponent)),
+        oppStrength: Math.round(oppStrengthVsMe(career, fx.opponent)),
       };
     }
   }
@@ -18602,7 +20476,7 @@ export function matchFacts(career: CareerState): MatchFacts | null {
 
     const xi = effectiveXIWithSlots(career);
     const mine = myMatchStrength(career, xi);
-    const oppS = strengthOf(career, fx.opponent);
+    const oppS = oppStrengthVsMe(career, fx.opponent);
     const ment = MENT_MOD[career.mentality] ?? MENT_MOD.balanced;
     const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
     const oppAtk = fx.home === true ? -0.12 : fx.home === false ? 0.28 : 0.08;
@@ -18629,14 +20503,14 @@ export function matchFacts(career: CareerState): MatchFacts | null {
     if (loss < 0) { draw += loss; loss = 0; }
 
     const table = sortedLeagueTable(career);
-    const myPos = career.week === 0 ? null : Math.max(1, table.findIndex(r => r.club === career.clubName) + 1) || null;
+    const myPos = !leagueStarted(career) ? null : Math.max(1, table.findIndex(r => r.club === career.clubName) + 1) || null;
     const myLeague = careerLeagueOf(career);
     let oppPos: number | null = null;
     let oppLeagueName: string | null = null;
     const inMyLeague = career.leagueClubs.includes(fx.opponent);
     if (inMyLeague) {
       const idx = table.findIndex(r => r.club === fx.opponent);
-      oppPos = career.week === 0 ? null : idx >= 0 ? idx + 1 : null;
+      oppPos = !leagueStarted(career) ? null : idx >= 0 ? idx + 1 : null;
     } else {
       const oppLeague = career.eraId && isHistoricEra(career.eraId)
         ? eraLeagueOf(fx.opponent, career.eraId)
@@ -18692,7 +20566,7 @@ export function matchFacts(career: CareerState): MatchFacts | null {
 /* Round 633: the league title trophy's name, shared by the rollover that
    pushes it and the season score that reads it, rather than two literals that
    can drift apart. */
-const LEAGUE_TITLE_NAME = 'League Title';
+export const LEAGUE_TITLE_NAME = 'League Title';
 
 /**
  * Round 633: a record shape guard for the stamped handover, on the
@@ -18826,6 +20700,19 @@ const VERDICTS: Record<'A' | 'B' | 'C' | 'D' | 'F', string[]> = {
   ],
 };
 
+/* Round 1501, the lead's ruling from Round 1342's closing check: under No sacking the board cannot carry out a
+   threat to sack you, so its verdict never makes one. The same pick is taken on every path (the season's draws
+   are what they were), and only these two lines are reworded: the board's disappointment, without the threat.
+   Neither says No sacking kept you in the job: the line is picked by the grade alone, and a D or F season with the
+   board nowhere near zero was never going to cost the job (the only sacks are the zero checks after a match). */
+const NO_SACK_VERDICTS: Record<string, string> = {
+  'A poor season. One more like that and you are gone.': 'A poor season. The board is fuming and wants a lot more next year.',
+  'Catastrophic. Only the compensation clause saved your job this long.': 'Catastrophic. The board is furious, and it will not forget this one.',
+};
+export function boardVerdictLine(state: CareerState, line: string): string {
+  return boardMaySack(state) ? line : NO_SACK_VERDICTS[line] ?? line;
+}
+
 /* ---------- Round 168: mid-season approaches ---------- */
 
 /** The suitor pool: bigger clubs than mine, era aware, custom-safe. */
@@ -18870,7 +20757,8 @@ function maybeApproach(state: CareerState): string | null {
   const hotForm = state.form.slice(-5).filter(r => r === 'W').length >= 4;
   if (overshoot < 3 && !hotForm) return null;
   if (Math.random() > 0.06) return null;
-  const suitor = pick(shuffle(approachSuitors(state)).slice(0, 6));
+  /* Round 1335: one tier above mine at most, filtered after the shuffle so the one pick draws as before. */
+  const suitor = pick(shuffle(approachSuitors(state)).filter(c => legacySeason(state) || offerStepOk(club.tier, c.tier, false)).slice(0, 6));
   if (!suitor) return null;
   const sLeague = (eraHist && eraLeagueOf(suitor.name, state.eraId)) || leagueOf(suitor.name);
   const ask = leagueDemand(suitor.expectation, suitor.tier, sLeague.clubs.length, sLeague, titleGapFor(suitor.name, sLeague, state.eraId), state.eraId, suitor.name);
@@ -19197,12 +21085,24 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     state.trophies.push({ name: LEAGUE_TITLE_NAME, emoji: '🏆', season: state.season });
   }
   const seasonTrophies = state.trophies.filter(t => t.season === state.season).map(t => t.name);
+  /* Round 1510: what the grade and the offers weigh, a minor cup left out; the summary and the history below keep
+     every trophy of the season (seasonTrophies). */
+  const weighed = weighedTrophies(state.trophies.filter(t => t.season === state.season)).map(t => t.name);
   const overshoot = club.expectation - position;
+  /* Round 1335: the grade knows the summer move the season earned (going up is at least a B, going down at
+     most a C, a B with a trophy) and names why; the old rules (legacySeason) keep the ladder below. */
+  const legacy = legacySeason(state);
+  const fated = legacy ? null : fateRead(state);
+  const fate = fated?.fate ?? null;
+  const graded = legacy ? null : seasonGrade({ position, expectation: club.expectation, trophies: weighed.length,
+    europeWon: weighed.includes('Champions League'), fate });
 
   let verdictGrade: 'A' | 'B' | 'C' | 'D' | 'F';
-  if (seasonTrophies.includes('Champions League') || position === 1 || overshoot >= 3 || seasonTrophies.length >= 2) {
+  if (graded) {
+    verdictGrade = graded.grade;
+  } else if (weighed.includes('Champions League') || position === 1 || overshoot >= 3 || weighed.length >= 2) {
     verdictGrade = 'A';
-  } else if (overshoot >= 0 || seasonTrophies.length >= 1) {
+  } else if (overshoot >= 0 || weighed.length >= 1) {
     verdictGrade = 'B';
   } else if (overshoot >= -3) {
     verdictGrade = 'C';
@@ -19211,7 +21111,10 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   } else {
     verdictGrade = 'F';
   }
-  const verdict = pick(VERDICTS[verdictGrade]);
+  /* One pick on every path, so the season's draws are what they were. A title or two trophies read the A
+     lines, an ordinary season its grade's, and only the kinds with their own lines read the module's. */
+  const ownLines = graded && graded.kind in VERDICT_LINES ? VERDICT_LINES[graded.kind as keyof typeof VERDICT_LINES] : null;
+  const verdict = boardVerdictLine(state, ownLines ? fillLeague(pick([...ownLines]), fated?.league ?? '') : pick(VERDICTS[verdictGrade]));
 
   const byGoals = [...state.squad].sort((a, b) => b.seasonGoals - a.seasonGoals);
   const byAssists = [...state.squad].sort((a, b) => b.seasonAssists - a.seasonAssists);
@@ -19268,7 +21171,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
      so a job you are offered is a chair that really empties and the
      merry-go-round that runs at the rollover honors this exact list. */
   state.pendingVacancies = pickSummerSackings(state);
-  if (overshoot >= 2 || seasonTrophies.length > 0) {
+  if (overshoot >= 2 || weighed.length > 0) {
     // Round 70: suitors can come from any of the five leagues now.
     // Round 146: inside a historic save they come from the era's own two
     // leagues, because a 2010 manager cannot be poached by a 2026 club.
@@ -19293,7 +21196,12 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
       && (c.tier < club.tier || (c.tier === club.tier && !myLeagueClubs.has(c.name)))
       && c.name !== state.clubName && c.name !== droppedClub && c.name !== offers[0]?.club));
     const classic = shuffle(everyClub.filter(c => !vacancyNames.has(c.name) && c.tier < club.tier && c.name !== state.clubName && c.name !== droppedClub && c.name !== offers[0]?.club));
-    const suitors = [...vacancySuitors, ...classic];
+    /* Round 1335: a club calls from at most one tier above yours, two after a top flight title or the
+       Champions League (a second tier title is not one: the promotion already pays it). Filtered after the
+       two shuffles, so the season's draws are what they were and the first callers keep their order. The
+       handshake and an application's yes above are never filtered; the old rules keep every caller. */
+    const big = (position === 1 && !PYRAMIDS.some(p => p.second === careerLeagueOf(state).id)) || weighed.includes('Champions League');
+    const suitors = [...vacancySuitors, ...classic].filter(c => legacy || offerStepOk(club.tier, c.tier, big));
     for (const s of suitors.slice(0, ri(1, 2))) {
       const myLeague = careerLeagueOf(state);
       const abroad = !myLeague.clubs.includes(s.name);
@@ -19311,11 +21219,13 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   }
 
   /* ----- Round 165: the individual honours settle with the season ----- */
-  const bootTop = goldenBootTable(state, 1)[0] ?? null;
+  /* Round 1311: the league book's door, asked once for every honour below. Pure reads: nothing is drawn. */
+  const bookBoards = leagueBoardsOf(state);
+  const bootTop = goldenBootTable(state, 1, bookBoards)[0] ?? null;
   const goldenBoot = bootTop && bootTop.goals > 0
     ? { name: bootTop.name, club: bootTop.club, goals: bootTop.goals }
     : null;
-  const potyTop = playerOfSeasonRace(state, 1)[0] ?? null;
+  const potyTop = playerOfSeasonRace(state, 1, bookBoards)[0] ?? null;
   const playerOfSeason = potyTop && potyTop.goals > 0
     ? { name: potyTop.name, club: potyTop.club }
     : null;
@@ -19354,6 +21264,10 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     const best = cands.sort((a, b) => b.score - a.score)[0];
     return { name: best.name, club: best.club };
   })();
+  /* Round 1311: the top scorer, most assists and most clean sheets of the league, from the book. Only on
+     a season the book decides; any other season writes nothing new, so its summary and its record are
+     exactly what they were before the book was read. */
+  const awards = bookBoards ? seasonAwards(bookBoards.input) : null;
 
   const summary: SeasonSummary = {
     season: state.season,
@@ -19384,12 +21298,15 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     goldenBoot,
     playerOfSeason,
     ballonDor,
+    ...(awards ? { awards } : {}),
+    ...(fate ? { fate } : {}),
   };
 
   state.history = [
     ...state.history.filter(h => h.season !== state.season),
-    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length },
+    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length, ...(awards ? { awards } : {}), ...(fate ? { fate } : {}) },
   ];
+  state.history = keepTeams(state.history);
   state.pendingSummary = summary;
   return { state, summary };
 }
@@ -19404,7 +21321,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
  * the player's ceiling. Decline is untouched: no amount of coaching keeps a
  * thirty four year old from slowing down.
  */
-function agePlayer(p: CMPlayer, career: CareerState): CMPlayer {
+function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMPlayer {
   const age = p.age + 1;
   /* Round 132: the same single curve the projected world runs on, so my squad
      and every AI squad in the game age on identical rules. That symmetry is
@@ -19420,9 +21337,9 @@ function agePlayer(p: CMPlayer, career: CareerState): CMPlayer {
      38, -1.83 at 40 and -1.69 at 43. A perfectly straight line, and nobody
      ever stopped playing. */
   const [lo, hi] = ageDriftBand(age);
-  let drift = ri(lo, hi);
+  let drift = random ? lo + Math.floor(random() * (hi - lo + 1)) : ri(lo, hi);
   if (drift < 0) drift = Math.round(drift * declineScale(p.position));
-  const potential = p.potential ?? rollPotential(p.rating, p.age);
+  const potential = p.potential ?? rollPotential(p.rating, p.age, random);
   if (drift > 0) {
     drift = Math.round(drift * developmentRate(p, career));
     drift = Math.min(drift, Math.max(0, potential - p.rating));
@@ -19434,7 +21351,8 @@ function agePlayer(p: CMPlayer, career: CareerState): CMPlayer {
     value = value * Math.pow(1.2, drift) * (age >= 31 ? 0.85 : 1);
     value = Math.max(0.2, Math.round(value * 10) / 10);
   }
-  const rating = clamp(p.rating + drift, 40, 95);
+  const ceiling = worldRosterView(career) || worldSeedOf(career) !== undefined ? Math.max(95, Math.min(99, p.rating)) : 95;
+  const rating = clamp(p.rating + drift, 40, ceiling);
   return {
     ...p,
     age,
@@ -19507,10 +21425,16 @@ function fillSquadGaps(
   clubName: string, season: number, squad: CMPlayer[], yearsOnNow: number,
   retiredNames: string[], eraId: string = 'now', realPool: FreeAgent[] = [],
   released: string[] = [],
-): { squad: CMPlayer[]; signed: string[] } {
+  worldSeed?: number,
+): { squad: CMPlayer[]; signed: string[]; from: Map<string, string> } {
   const seniors = squad.filter(p => !p.isYouth && p.age >= 20).length;
-  if (seniors >= SENIOR_FLOOR) return { squad, signed: [] };
-  const baseline = projectedXIAvg(clubName, yearsOnNow, eraId)
+  if (seniors >= SENIOR_FLOOR) return { squad, signed: [], from: new Map() };
+  /* Release AZ fix (reviewer 1, minor 2): a seeded career fills its gaps from ITS world (the seed is undefined on
+     every other career, so theirs read exactly what they always read), and each man taken off a club's list is
+     recorded from that club below, so a man signed here and sold later is not left on his old club's list too.
+     The band itself is MY club's level, so it reads the base's projection with no seed (the lead's ruling of
+     2026-10-12, see worldRosterXIAvg): the same level genClubStrengths gives my club. */
+  const baseline = (worldSeed === undefined ? projectedXIAvg(clubName, yearsOnNow, eraId) : projectedClubXIAvg(clubName, yearsOnNow, eraId))
     ?? STRENGTH_PRIORS[clubName] ?? 66;
   const taken = new Set(squad.map(p => p.name));
   const retired = new Set(retiredNames);
@@ -19540,15 +21464,16 @@ function fillSquadGaps(
   /* A made up journeyman is worth the floor and asks a wage off his squad, so
      the club pays him what he asks rather than what his value would price. */
   const askingWage = new Map(realPool.filter(f => f.wage !== undefined).map(f => [f.name, f.wage as number]));
-  const invented = marketBase(yearsOnNow, eraId)
+  const invented = marketBase(yearsOnNow, eraId, worldSeed)
     .filter(p => !letGo.has(p.name) && !taken.has(p.name) && !retired.has(p.name) && band(p.rating)
       && !fromReal.some(f => f.name === p.name))
     .sort((a, b) => a.rating - b.rating);
   const pool = [...fromReal.sort((a, b) => a.rating - b.rating), ...invented];
-  if (!pool.length) return { squad, signed: [] };
+  if (!pool.length) return { squad, signed: [], from: new Map() };
   const want = clamp(SENIOR_FLOOR - seniors, 0, 4);
   const out = [...squad];
   const signed: string[] = [];
+  const from = new Map<string, string>();
   for (let i = 0; i < want; i++) {
     // The thinnest position first, so an emergency window does not hand you
     // six strikers and no keeper.
@@ -19561,6 +21486,7 @@ function fillSquadGaps(
     const mp = (fits.length ? fits : pool.filter(p => !signed.includes(p.name)))[0];
     if (!mp) break;
     signed.push(mp.name);
+    if (mp.club) from.set(mp.name, mp.club);
     const player: CMPlayer = {
       /* Round 567's rule, which this signing skipped: unique inside the squad. */
       id: freeSquadId(out, `fa-${slug(mp.name)}-s${season}`),
@@ -19586,7 +21512,7 @@ function fillSquadGaps(
     if (ratio !== undefined) player.founderSaleRatio = ratio;
     out.push(player);
   }
-  return { squad: out, signed };
+  return { squad: out, signed, from };
 }
 
 /**
@@ -19602,13 +21528,14 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
   /* The finished season resolves under ITS OWN memberships, whatever a
      screen or a harness registered last. */
   registerLeagueOverrides(carried);
-  /* A historic era has no second divisions to trade with. A custom save is
-     exempt in v1 on purpose: its spec re-picks replacedClub from its league
-     every summer, and letting the membership move underneath that recompute
-     (the replaced club relegating out, say) is a seam this round does not
-     open. Both keep whatever overrides the save already carried. */
+  /* Historic and unpaired custom leagues keep their existing memberships. */
   if (prev.eraId && isHistoricEra(prev.eraId)) return { overrides: carried, lines: [] };
-  if (prev.customClub) return { overrides: carried, lines: [] };
+  if (prev.customClub && !customUsesPyramid(prev.customClub, prev.eraId)) return { overrides: carried, lines: [] };
+  const custom = prev.customClub;
+  const mySlot = custom?.replacedClub ?? prev.clubName;
+  /* Sort under the saved names first, so recorded head-to-head stays readable. */
+  const ownTable = sortedLeagueTable(prev).map(row => custom && row.club === prev.clubName
+    ? { ...row, club: custom.replacedClub } : row);
   const myLeagueId = careerLeagueOf(prev).id;
   const next: Record<string, string[]> = carried ? { ...carried } : {};
   const lines: string[] = [];
@@ -19632,10 +21559,10 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
     const topClubs = next[pyr.top] ?? topDef.clubs;
     const secondClubs = next[pyr.second] ?? secondDef.clubs;
     const topTable = myLeagueId === pyr.top
-      ? sortedLeagueTable(prev)
+      ? ownTable
       : sortedWorldTable(prev, pyr.top, prev.world?.[pyr.top]?.table ?? []);
     const secondTable = myLeagueId === pyr.second
-      ? sortedLeagueTable(prev)
+      ? ownTable
       : sortedWorldTable(prev, pyr.second, prev.world?.[pyr.second]?.table ?? []);
     /* A save with no readable table for either half (fast-forwarded with no
        world, an old save mid-repair) moves nothing: skipping is the honest
@@ -19656,11 +21583,11 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
     if (myLeagueId === pyr.top || myLeagueId === pyr.second) {
       // The player's own pyramid gets a line per moved club, own club first.
       for (const c of up) {
-        if (c === prev.clubName) lines.unshift(`\u{2B06} You are up: ${c} will play ${topDef.name} football next season.`);
+        if (c === mySlot) lines.unshift(`\u{2B06} You are up: ${prev.clubName} will play ${topDef.name} football next season.`);
         else lines.push(`\u{2B06} ${c} win promotion to ${toLeague(topDef.name)}.`);
       }
       for (const c of down) {
-        if (c === prev.clubName) lines.unshift(`\u{2B07} Relegated. ${c} go down to ${toLeague(secondDef.name)}.`);
+        if (c === mySlot) lines.unshift(`\u{2B07} Relegated. ${prev.clubName} go down to ${toLeague(secondDef.name)}.`);
         else lines.push(`\u{2B07} ${c} are relegated to ${toLeague(secondDef.name)}.`);
       }
     } else {
@@ -19668,6 +21595,60 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
     }
   }
   return { overrides: moved ? next : carried, lines: [...lines, ...elsewhere].slice(0, Math.max(5, lines.length)) };
+}
+
+/**
+ * Round 1335: the summer move runPromotionRelegation will make for MY slot, read without making it. Its own
+ * conditions, line for line: nothing in a historic era or an unpaired custom league, the same tables, the
+ * same custom slot mapping, the same skips (no readable table, a side that cannot move exactly `count`),
+ * and the pairs walked in the same order with the same memberships, stopping at the first pair that holds
+ * my league. 'up' when I finish inside the second tier's count, 'down' inside the top flight's bottom
+ * count, 'escape' when the top flight's drop zone is where my club was expected to finish and it finished
+ * outside it. No register call: it reads the registry finishSeason already reads. simCmBoardVerdict
+ * section fate holds it to what the rollover really does.
+ */
+function fateRead(prev: CareerState): { fate: SeasonFate; league: string } | null {
+  if (prev.eraId && isHistoricEra(prev.eraId)) return null;
+  if (prev.customClub && !customUsesPyramid(prev.customClub, prev.eraId)) return null;
+  const custom = prev.customClub;
+  const mySlot = custom?.replacedClub ?? prev.clubName;
+  const ownTable = sortedLeagueTable(prev).map(row => custom && row.club === prev.clubName
+    ? { ...row, club: custom.replacedClub } : row);
+  const myLeagueId = careerLeagueOf(prev).id;
+  const carried = prev.leagueOverrides ?? null;
+  const next: Record<string, string[]> = carried ? { ...carried } : {};
+  for (const pyr of PYRAMIDS) {
+    const mine = myLeagueId === pyr.top || myLeagueId === pyr.second;
+    const topDef = REAL_LEAGUES.find(l => l.id === pyr.top);
+    const secondDef = REAL_LEAGUES.find(l => l.id === pyr.second);
+    if (!topDef || !secondDef) { if (mine) return null; continue; }
+    const topClubs = next[pyr.top] ?? topDef.clubs;
+    const secondClubs = next[pyr.second] ?? secondDef.clubs;
+    const topTable = myLeagueId === pyr.top ? ownTable : sortedWorldTable(prev, pyr.top, prev.world?.[pyr.top]?.table ?? []);
+    const secondTable = myLeagueId === pyr.second ? ownTable : sortedWorldTable(prev, pyr.second, prev.world?.[pyr.second]?.table ?? []);
+    if (topTable.length < topClubs.length || secondTable.length < secondClubs.length) { if (mine) return null; continue; }
+    const topSet = new Set(topClubs);
+    const secondSet = new Set(secondClubs);
+    const topRows = topTable.filter(r => topSet.has(r.club));
+    const down = topRows.slice(-pyr.count).map(r => r.club);
+    const up = secondTable.filter(r => secondSet.has(r.club)).slice(0, pyr.count).map(r => r.club);
+    if (down.length !== pyr.count || up.length !== pyr.count) { if (mine) return null; continue; }
+    if (mine) {
+      if (myLeagueId === pyr.second) return up.includes(mySlot) ? { fate: 'up', league: toLeague(topDef.name) } : null;
+      if (down.includes(mySlot)) return { fate: 'down', league: toLeague(secondDef.name) };
+      const expected = clubDefFor(prev.clubName).expectation;
+      return expected > topRows.length - pyr.count ? { fate: 'escape', league: toLeague(topDef.name) } : null;
+    }
+    const downSet = new Set(down);
+    const upSet = new Set(up);
+    next[pyr.top] = [...topClubs.filter(c => !downSet.has(c)), ...up];
+    next[pyr.second] = [...secondClubs.filter(c => !upSet.has(c)), ...down];
+  }
+  return null;
+}
+/** Round 1335: the season's fate alone (fateRead). */
+export function seasonFate(state: CareerState): SeasonFate | null {
+  return fateRead(state)?.fate ?? null;
 }
 
 /* Round 1040 review: the summer lines name the league the way people say it.
@@ -19685,6 +21666,10 @@ export function toLeague(name: string): string {
  * competitions and reopens the summer window.
  */
 export function startNextSeason(career: CareerState, acceptOfferClub?: string): CareerState {
+  /* Round 1508: a career with no world seed joins the living world here, at its first summer on this engine, before
+     the summer's first deal is made (adoptLivingWorld, above worldSeedOf's neighbours). Its own hunk, one line. */
+  career = adoptLivingWorld(career);
+  career = snapshotWorldRosterClub(career, career.clubName);
   const summary = career.pendingSummary;
   const prevPos = summary ? summary.position : Math.max(1, leaguePosition(career));
   /*
@@ -19732,7 +21717,18 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      promoted into the Premier League handed the Championship's top four the
      Premier League's places, and one just relegated out of it left the
      Premier League sending nobody. */
-  const nextUclField = uclQualifiersFrom(career);
+  let nextUclField = uclQualifiersFrom(career);
+  /* Round 1502: the watched Champions League reads the very same final tables, here for the same reason, and
+     the season's winner as the holder the participant's field is handed. */
+  const watchTables = uclFinalTables(career);
+  const watchHolder = uclHolderOf(career);
+  /* Round 1509: and the domestic cup the season played, for the Europa League's cup place, and the Europa League's
+     winner, admitted to the watched Champions League as nextUclField admits it (row Q4). */
+  const watchCup = euroCupOf(career);
+  const watchUelHolder = uelHolderOf(career);
+  /* Round 1510: and what the season hands its country's super cup (the top flight's order and the cup final),
+     here for the same reason: after the swap a promoted club would be read in the wrong league. */
+  const oneOffFrom = oneOffTablesOf(career);
   registerLeagueOverrides(pr.overrides);
   /* Round 146: inside a historic save, a "playable club" is an era club, so
      the move guard consults the era world before the modern one. */
@@ -19747,13 +21743,16 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     ? !!eraLeagueOf(targetClub, eraId)
     : !!clubByName(targetClub));
   const moving = !!(targetClub && validTarget && targetClub !== career.clubName);
+  if (moving) nextUclField = customExitUclField(career, nextUclField);
   const clubName = moving && targetClub ? targetClub : career.clubName;
   /* Round 154: the custom club lives exactly as long as you manage it. Stay
      and it re-registers for the new season (its def re-measured against the
      aged world); walk to another job and the spec is dropped, so next season
      the real league is simply the real league again. */
   const custom = !moving && career.customClub && career.customClub.name === clubName
-    ? career.customClub
+    ? { ...career.customClub, leagueId: customUsesPyramid(career.customClub, eraId)
+      ? Object.entries(pr.overrides ?? {}).find(([, clubs]) => clubs.includes(career.customClub!.replacedClub))?.[0] ?? career.customClub.leagueId
+      : career.customClub.leagueId }
     : undefined;
   registerCustomClub(custom ?? null, eraId);
   const club = custom ? clubDefFor(clubName)
@@ -19770,6 +21769,17 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const promiseNet = objectiveStatuses(career)
     .filter(s => s.objective.promised)
     .reduce((n, s) => n + (s.status === 'done' ? 1 : -1), 0);
+  /* Round 1335: next season's opening reads the season you had. A move opens at BOARD_FRESH; a stay opens
+     from the club you PLAYED for (playedExpectation, read before the summer moved anybody), with the hits
+     the review printed weighed by their ids on the card they were graded from (the season's main demand
+     three, a board ask half, a summary whose list does not line up one each), then banded by the grade:
+     an A or B at least BOARD_FRESH, a D or F under Safe. The old rules (legacySeason) keep the old sum. */
+  const legacy = legacySeason(career);
+  const cardIds = (career.boardObjectives ?? []).map(o => o.id);
+  const opening = legacy
+    ? (moving ? 62 : clamp(55 + (club.expectation - prevPos) * 1.5 + objNet * 2 + promiseNet * 3, 35, 82))
+    : moving ? BOARD_FRESH : openingConfidence({ grade: summary?.verdictGrade ?? 'C', playedExpectation, finish: prevPos,
+      objectives: objs.map((o, i) => ({ id: cardIds.length === objs.length ? cardIds[i] : undefined, hit: o.hit })), promiseNet });
 
   /* Round 132: the world clock ticks here and only here. The new season is one
      year further from the baked roster year, which moves every AI squad, the
@@ -19782,6 +21792,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const freeAgentNews: string[] = [];
   const releasedNews: string[] = [];
   const freeAgentsIn: string[] = [];
+  let emergencyFrom = new Map<string, string>();
   const retiredNow: { name: string; age: number; rating: number }[] = [];
   /* Round 619: men whose deals ran out this summer, collected here and
      written into the new season's free agent pool below. */
@@ -19794,8 +21805,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      sale on the record, so it is settled here rather than inside the return. */
   const loanReturn = returnLoanedPlayers(career);
   const homeFromLoan = loanReturn.home;
+  let rosterCareer: CareerState = career;
+  for (const sale of loanReturn.bought) rosterCareer = recordActualRosterTransfer(rosterCareer, sale.player, career.clubName, sale.club, 'permanent');
+  const rosterExits: { player: CMPlayer; kind: 'release' | 'retire' }[] = [];
   if (moving) {
-    squad = buildSquad(clubName, nextYearsOn, eraId);
+    rosterCareer = refreshWorldRoster({ ...rosterCareer, season, clubName, squad: [] });
+    squad = buildSquad(clubName, nextYearsOn, eraId, rosterCareer);
   } else {
     // Round 105: deals run down over the summer and the expired walk for
     // nothing. This is the price of never sitting down with your own players.
@@ -19812,12 +21827,13 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     for (const p of aged) {
       if (Math.random() < retireChance(p.age, p.rating, p.position)) {
         retiredNow.push({ name: p.name, age: p.age, rating: p.rating });
+        rosterExits.push({ player: p, kind: 'retire' });
       } else {
         stillPlaying.push(p);
       }
     }
     const walked = stillPlaying.filter(p => (p.contractYears ?? 1) <= 0);
-    for (const p of walked) freeAgentNews.push(p.name);
+    for (const p of walked) { freeAgentNews.push(p.name); rosterExits.push({ player: p, kind: 'release' }); }
     /* Round 619: a deal that ran out does not delete the man. He walks for
        nothing, which is what Round 105 always said, and now there is somewhere
        for him to walk TO. No severance, because nothing was broken early. */
@@ -19859,9 +21875,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       eraId,
       career.freeAgents ?? [],
       [...releasedByYouNames(career)],
+      worldSeedOf(career),
     );
     squad = emergency.squad;
     freeAgentsIn.push(...emergency.signed);
+    emergencyFrom = emergency.from;
     squad = ensureSquadCoverage(squad);
     /* Round 132: and the books get balanced. Keeping veterans alive (see
        renewalTerms) plus a bigger intake pushed a well managed squad to 41
@@ -19884,12 +21902,26 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
         !p.academyGrad && (p.isYouth || (p.potential ?? p.rating) <= p.rating));
       spare.sort((a, b) => (a.isYouth ? 0 : 1) - (b.isYouth ? 0 : 1) || a.rating - b.rating);
       const cut = new Set(spare.slice(0, squad.length - SQUAD_LIMIT).map(p => p.id));
-      for (const p of squad) if (cut.has(p.id)) releasedNews.push(p.name);
+      for (const p of squad) if (cut.has(p.id)) { releasedNews.push(p.name); rosterExits.push({ player: p, kind: 'release' }); }
       squad = squad.filter(p => !cut.has(p.id));
     }
   }
 
-  const seasonTrophyCount = career.trophies.filter(t => t.season === career.season).length;
+  rosterCareer = { ...rosterCareer, season, clubName, squad };
+  if (worldRosterView(rosterCareer) || worldSeedOf(rosterCareer) !== undefined) {
+    for (const exit of rosterExits) rosterCareer = recordActualRosterTransfer(rosterCareer, exit.player, career.clubName, null, exit.kind);
+    for (const [name, club] of emergencyFrom) {
+      const man = squad.find(p => p.name === name);
+      if (man) rosterCareer = recordActualRosterTransfer(rosterCareer, man, club, clubName, 'permanent');
+    }
+    /* Release AZ fix (closing check, NEW-A): the record copies its key onto the man in rosterCareer's squad only,
+       and the new season is built from this one, so the ledger held him as mine while no man of my squad carried
+       his key. The exits above write no squad, so this takes exactly the emergency signings' keys. */
+    if (emergencyFrom.size) squad = rosterCareer.squad;
+  }
+  rosterCareer = pruneWorldRoster(refreshWorldRoster(snapshotWorldRosterClub(rosterCareer, clubName)));
+
+  const seasonTrophyCount = weighedTrophies(career.trophies.filter(t => t.season === career.season)).length;
 
   /* Round 513: what the season was worth to the manager himself. Every figure
      here is one the rollover already knows, which is the point: XP is a reading
@@ -19930,9 +21962,14 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      chest nothing in the game can balance against. Walking to a new job
      carries nothing, the same rule the sponsor deal and the ground
      expansions already follow: the balance belonged to the club. */
+  /* Round 1335: a stay's cheque is that same flat formula, never past KITTY_TOP_SHARE of the club's usual
+     budget or 10m (kittyAllocation), so a small club's good year pays a bonus its size can carry; the
+     carry below is unchanged, and it is capped by the cheque, so it shrinks with it. */
+  /* Round 1501: the level's cheque on every arm (the identity on Normal); the carry rule below is untouched. */
   const allocation = moving
-    ? Math.round(club.budget * 1.1)
-    : Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12));
+    ? boardCheque(career, Math.round(club.budget * 1.1))
+    : legacy ? boardCheque(career, Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12)))
+    : boardCheque(career, kittyAllocation({ budget: club.budget, expectation: club.expectation, finish: prevPos, trophies: seasonTrophyCount }));
   /* A corrupt or pre-Round 436 save can hand us anything here, so a balance
      that is not a real number carries nothing rather than poisoning the new
      season with NaN. */
@@ -19979,11 +22016,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      had, the same way Round 310 made it check that league's euro flag. */
   const qualifiedUcl = (summary ? summary.qualifiedUcl : prevPos <= playedLeagueUclPlaces) && nextLeague.euro;
   const league = nextLeague;
-  /* Round 154: the swap is recomputed every summer, because the weakest club
-     of the league can change as the world ages. The spec remembers who is
-     out this season so the cup and the def math agree with the fixture list. */
+  /* Paired modern divisions move the same displaced slot every summer. */
   const nextReplaced = custom
-    ? (() => {
+    ? customUsesPyramid(custom, eraId) ? custom.replacedClub : (() => {
         const ranked = historic ? eraPlayableClubs(eraId!, league.id) : playableClubs(league.id);
         return ranked.length ? ranked[ranked.length - 1].name : custom.replacedClub;
       })()
@@ -20000,7 +22035,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     season,
     week: 0,
     budget,
-    boardConfidence: moving ? 62 : clamp(55 + (club.expectation - prevPos) * 1.5 + objNet * 2 + promiseNet * 3, 35, 82),
+    boardConfidence: boardOpening(career, opening),
     sacked: false,
     squad,
     xiIds: [],
@@ -20009,7 +22044,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     table: leagueClubs.map(emptyRow),
     form: [],
     calendar: buildCalendar(league.clubs.length, eraUclHasR16(eraId), uclLegsFor(eraId, 'QF') === 2, league.cupName !== null),
-    clubStrengths: genClubStrengths(nextCustom ? { ...league, clubs: leagueClubs } : league, nextYearsOn, eraId),
+    clubStrengths: genClubStrengths(nextCustom ? { ...league, clubs: leagueClubs } : league, nextYearsOn, eraId, rosterCareer, clubName),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
     aiHeadlines: [],
@@ -20094,6 +22129,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     leagueOverrides: pr.overrides ?? undefined,
   };
   delete state.realLeagueFixtures;
+  if (worldRosterView(rosterCareer)) state.worldRoster = plainCopy(rosterCareer.worldRoster);
   /* Round 154: the deep copy above carried the old spec either way, so make
      the outcome explicit: staying keeps the re-measured spec, moving drops
      the club you built. */
@@ -20180,7 +22216,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      whenever in the season they went. Zero at every other club. */
   const roomNow = moving ? 0 : foundersWageRoom(state);
   state.wageCap = moving
-    ? wageCapFrom(wageBill(state))
+    ? wageRoomFor(career, wageCapFrom(wageBill(state)))
     : nextWageCap(Math.max(60, (career.wageCap ?? wageCapFrom(wageBill(career))) - (career.founderWageRoom ?? 0)), club.expectation, prevPos, seasonTrophyCount) + roomNow;
   state.founderWageRoom = roomNow || undefined;
   for (const name of freeAgentNews) {
@@ -20230,6 +22266,25 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length, eraId, nextCustom ? leagueClubs : undefined);
   // Round 163: a fresh Champions League draw for the new season.
   state.uclWorld = initUclWorld(state);
+  /* Round 1502: and the season's watched one when my club is not in it. The spread of the old career copied
+     last season's slice, so it is always replaced or taken off here, never kept. A summer move away from a
+     created club hands its place back to the club it replaced, the way the participant's field does
+     (customExitUclField). Never throws: a rollover always completes. */
+  try {
+    const tables = moving && watchTables ? watchTables.map(t => ({ ...t, clubs: customExitUclField(career, t.clubs) })) : watchTables;
+    openWorldUcl(state, worldUclField(state, tables, watchHolder, watchUelHolder), watchHolder);
+  } catch {
+    setWorldComp(state, 'ucl', null);
+  }
+  /* Round 1509 (ruling 1c): and the season's Europa League, every season of today's world, off the same final tables
+     and the cup the season played, kept apart from the Champions League just opened. Last season's slice came
+     with the copy, so it is always replaced or taken off here. Its own try: a rollover always completes. */
+  try {
+    const tables = moving && watchTables ? watchTables.map(t => ({ ...t, clubs: customExitUclField(career, t.clubs) })) : watchTables;
+    openWorldComp(state, 'uel', worldCompField(state, 'uel', tables, null, watchCup), null);
+  } catch {
+    setWorldComp(state, 'uel', null);
+  }
   // Round 165: a fresh golden boot race too (the new table is all zeros).
   state.scorerRace = initScorerRace(state);
   openLeagueBook(state);
@@ -20342,6 +22397,19 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     delete state.cupByes;
   }
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
+  /* Round 1510: the season's super cup, off the season just finished (read above, before the swap), after the cup
+     bracket and before the windows. The literal copied last season's map, so this key is always replaced or taken
+     off here. A summer move abroad: that cup was never this country's ('moved'); a move away from a created club
+     hands its place back to the club it replaced, as the Champions League's field does. */
+  {
+    const exit = (c: string | null): string | null => (c && moving ? customExitUclField(career, [c])[0] : c);
+    const tables = { table: oneOffFrom.table && moving ? customExitUclField(career, [...oneOffFrom.table]) : oneOffFrom.table, cupWinner: exit(oneOffFrom.cupWinner), cupRunnerUp: exit(oneOffFrom.cupRunnerUp) };
+    openOneOff(state, oneOffFrom.nation === oneOffNationOf(state) ? { tables, seasonOne: false } : { tables: null, seasonOne: false, skip: 'moved' });
+    /* Round 1514: then the UEFA Super Cup, last season's Champions League winners (my own final included) against
+       its Europa League winners, both read above before the swap. A winner the save does not know is a 'noWinner'
+       stub: the match is never invented. */
+    openOneOff(state, { tables: { table: null, cupWinner: null, cupRunnerUp: null, uclWinner: exit(watchHolder), uelWinner: exit(watchUelHolder) }, seasonOne: false }, 'usc');
+  }
   /* Round 978: the new season's international windows. An older save gets its
      first block here, so its first season with windows is a whole one. */
   state.intl = freshIntl(state);
@@ -20386,7 +22454,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 310: promotion and relegation lead the whole summer, same seat,
      same reason, prepended last so they sit on top of the feed. */
   if (pr.lines.length) state.aiHeadlines = [...pr.lines, ...state.aiHeadlines].slice(0, 8);
-  return state;
+  return snapshotWorldRosterClub(state, state.clubName);
 }
 
 /* ================================================================== */
@@ -20463,22 +22531,35 @@ export function leanCareer(state: CareerState): CareerState {
  * the lean shape, and false comes back only when that is refused as well, so
  * the hook can put it on screen. Same career in, same bytes out, so writing
  * twice is harmless.
+ *
+ * Round 1323: and through the save fence (src/lib/saveFence.ts), so a tab
+ * whose career another tab has played on since writes nothing at all, at a
+ * press or at page leave, and false comes back. Every writer of the career
+ * reaches it here: the hook, the slot swap's own write in clubManagerSlots.ts,
+ * and Hot Seat's carry on, which holds nothing and so writes as a claim. The
+ * import sits here, beside its only callers in this file. The write inside
+ * the fence keeps the name saveCareer on purpose: it is the same refusal
+ * answering false, and scripts/simStorageWrites.mjs follows it by that name
+ * to every caller that keeps the answer.
  */
 export function saveCareer(career: CareerState): boolean {
   const full = trimCareer(career);
-  try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify(full));
-    return true;
-  } catch {
-    /* quota, or a blocked store: once more, lean */
-  }
-  try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify(leanCareer(full)));
-    return true;
-  } catch {
-    return false;
-  }
+  return saveFence.write(SAVE_KEY, function saveCareer() {
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(full));
+      return true;
+    } catch {
+      /* quota, or a blocked store: once more, lean */
+    }
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(leanCareer(full)));
+      return true;
+    } catch {
+      return false;
+    }
+  }) === 'written';
 }
+import { saveFence } from '@/lib/saveFence';
 
 /**
  * Round 832: which era the saved career plays in, read without opening it, so
@@ -20525,6 +22606,8 @@ export function loadCareer(): CareerState | null {
        callers' !! and flip a season's venues, so it is dropped, which keeps
        the old list, the safe side for a save already in play. */
     if (parsed && parsed.balancedFixtures !== undefined && parsed.balancedFixtures !== true) delete parsed.balancedFixtures;
+    /* Round 1331: the base match rules are Manager Hot Seat's alone; no Club Manager save plays them. */
+    if (parsed && 'matchRules' in parsed) delete parsed.matchRules;
     if (
       !parsed ||
       parsed.saveVersion !== SAVE_VERSION ||
@@ -20555,6 +22638,42 @@ export function loadCareer(): CareerState | null {
        in playNextEntry because a save can be opened on its summary and rolled
        straight into the summer without a ball being kicked. */
     ensureOneOfEach(parsed);
+    /* Round 1323: three repairs for states this engine never writes, so a
+       save edited by hand or damaged in storage opens playable instead of
+       showing "NaN" money, kicking off with five men or reading "your XI avg
+       0". Each fires only on its own condition, which no played save meets
+       (scripts/simSaveFence.mjs section fleet holds that, byte for byte and
+       draw for draw). A negative budget is NOT repaired: startNextSeason
+       clamps one with Math.max(0, ...), so the engine itself expects it. */
+    const rawBudget: unknown = parsed.budget;
+    if (typeof rawBudget !== 'number' || !Number.isFinite(rawBudget)) {
+      const spelled = typeof rawBudget === 'string' && rawBudget.trim() !== '' ? Number(rawBudget) : NaN;
+      parsed.budget = Number.isFinite(spelled) ? spelled : 0;
+    }
+    /* Too few men to name an eleven: topped up the way every squad this
+       engine assembles is, with made up youth marked as such, and the new men
+       given their rungs. NOT at the transfer floor of 14 (loanOutRefusal):
+       sell to 14 with two loanees in, send both back with breakLoan, and the
+       engine itself writes 12, a squad that plays on and must load as it is.
+       The fleet in simSaveFence plays exactly that squeeze. */
+    if (parsed.squad.length < 11) {
+      parsed.squad = ensureSquadCoverage(parsed.squad);
+      ensureRoles(parsed);
+    }
+    /* XI ids that name nobody in the squad are cleared, and only those slots
+       are filled, by the engine's own auto pick over the men not already in
+       the eleven. Pure, no draw. */
+    const squadIds = new Set(parsed.squad.map(p => p.id));
+    const lostSlots = parsed.xiIds.map((id, j) => (id !== null && !squadIds.has(id) ? j : -1)).filter(j => j >= 0);
+    if (lostSlots.length) {
+      const formation = FORMATIONS[parsed.formationIndex] ?? FORMATIONS[0];
+      const xi = parsed.xiIds.map(id => (id !== null && squadIds.has(id) ? id : null));
+      const used = new Set(xi.filter((id): id is string => !!id));
+      const fill = lostSlots.filter(j => j < formation.slots.length);
+      const picks = autoPickXI(parsed.squad.filter(p => !used.has(p.id)), { ...formation, slots: fill.map(j => formation.slots[j]) });
+      fill.forEach((j, k) => { xi[j] = picks[k] ?? null; });
+      parsed.xiIds = xi;
+    }
     /* Round 135: and the press room, for exactly the same reason. The hub tile
        and the press screen both read it before a ball is kicked. */
     ensurePress(parsed);
@@ -20642,6 +22761,7 @@ export function loadCareer(): CareerState | null {
     if (!parsed.sacked && typeof parsed.boardConfidence === 'number' && parsed.boardConfidence <= 0) {
       parsed.boardConfidence = 1;
     }
+    registerLeagueOverrides(parsed.leagueOverrides ?? null);
     /* Round 154: the custom club's identity is rebuilt from the save the
        moment it is opened, measured against the squad as saved, and cleared
        just as firmly when the save is a normal one, so a stale registration
@@ -20660,11 +22780,17 @@ export function loadCareer(): CareerState | null {
       if (parsed.customClub) delete parsed.customClub;
       registerCustomClub(null);
     }
-    /* Round 310: the save's own league memberships come back the same way,
-       registered the moment it opens and nulled for a save from before the
-       feature, so every league lookup on every screen answers with the
-       divisions this save actually plays. */
-    registerLeagueOverrides(parsed.leagueOverrides ?? null);
+    /* Round 1344: a seeded save written before this round may hold this season's deals between other clubs that
+       never reached the ledger; they are mended here, inside their own fail safe. Before the asks, which read
+       buildMarket: it drops every name on goneNames, and every man mended is on it, so no ask can move. */
+    repairAiMoves(parsed);
+    /* Round 1502: a save with no watched Champions League for its season gets one here where the field is
+       fixed data (repairWorldUcl). After the registrations, because the strengths it snapshots read the
+       registered world; it never throws. */
+    repairWorldUcl(parsed);
+    /* Round 1509: and its Europa League, season one of today's world only, after the Champions League it is kept
+       apart from; its own try inside, so it never throws either. */
+    repairWorldComp(parsed, 'uel');
     /* Round 474: the specific asks, LAST, because the country an ask counts
        and the market it is measured against both read the league, and the
        league is not settled until the two registrations above have run. */
@@ -20675,15 +22801,58 @@ export function loadCareer(): CareerState | null {
   }
 }
 
+/* Round 1344: mending a seeded save that is missing this season's moves between other clubs (written by an engine
+   from before the round: the news said a club bought him, the ledger never heard, so he was off the market and still
+   at his old club). Each deal line of THIS season (not a loan, neither club mine, not a free transfer) whose man is on
+   goneNames and of whose name the ledger holds no record at all: the seller's man found by name alone (a line
+   carries no age or position), exactly one or the line is skipped, then recorded through recordAiDeals, the same rules
+   as every other deal. Earlier seasons are left as they are: by then he has played a season or more at his old club
+   in that save, and the 80 line log cannot rebuild the rest honestly (PR269's audit says so too). Nothing happens
+   with no seed, with an unreadable ledger, or while the era's squads are not loaded. It can never cost a save: any
+   error leaves the parsed state exactly as it was (loadCareer reads a thrown error as no save at all). It is idempotent
+   and a no-op on every save this engine writes. scripts/simCmWorldMoves.mjs section 5 holds it. */
+function repairAiMoves(state: CareerState): void {
+  try {
+    if (worldSeedOf(state) === undefined || !eraRostersLoaded(state.eraId) || !Array.isArray(state.transferLog) || !Array.isArray(state.goneNames)) return;
+    if (state.worldRoster !== undefined && !worldRosterView(state)) return;
+    const gone = new Set(state.goneNames);
+    const records = worldRosterView(state)?.records ?? [];
+    /* In the log's order, each on the state the lines before it left, so a man sold on within the season is found
+       at the club that bought him first. */
+    let mended = state;
+    for (const line of state.transferLog) {
+      if (!line || typeof line.name !== 'string' || typeof line.from !== 'string' || typeof line.to !== 'string' || line.loan
+        || line.season !== state.season || !gone.has(line.name) || line.from === state.clubName || line.to === state.clubName
+        || line.from === 'a free transfer' || line.to === 'a free transfer') continue;
+      /* Any record of the name means the ledger already placed him (here, or wherever he went next): never a second. */
+      if (records.some(r => r.player.name === line.name || r.origin.name === line.name)) continue;
+      const found = worldRosterFor(mended, line.from).filter(p => p.n === line.name);
+      if (found.length !== 1) continue;
+      const p = found[0];
+      mended = recordAiDeals(mended, [{ mp: { name: p.n, club: line.from, position: p.p, age: p.a, rating: p.r, price: askingPrice(p.v, p.a), value: p.v,
+        generated: p.g || undefined, ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey, worldRosterSince: p.since, potential: p.potential } : {}) },
+        to: line.to, fee: typeof line.fee === 'number' ? line.fee : 0 }]);
+    }
+    if (mended !== state && mended.worldRoster !== undefined) state.worldRoster = mended.worldRoster;
+  } catch {
+    /* The save opens as it was saved. */
+  }
+}
+
 export function clearCareer(): void {
   registerCustomClub(null);
   // Round 310: the deleted save's promotions go with it.
   registerLeagueOverrides(null);
-  try {
-    localStorage.removeItem(SAVE_KEY);
-  } catch {
-    /* ignore */
-  }
+  /* Round 1323: fenced too, so a stale tab cannot clear a career another tab
+     has played on since. */
+  saveFence.write(SAVE_KEY, () => {
+    try {
+      localStorage.removeItem(SAVE_KEY);
+      return true;
+    } catch {
+      return false;
+    }
+  });
 }
 
 

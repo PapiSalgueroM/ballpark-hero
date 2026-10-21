@@ -44,7 +44,7 @@ describe('Club Manager calendar current date', () => {
     const career = fixture(), view = mount(career), target = fastForwardTargets(career, seasonDays(career)).nextMatch!;
     fireEvent.click(view.getByRole('button', { name: /^Next match/ }));
     expect(view.onSimTo).toHaveBeenCalledExactlyOnceWith(target.week);
-    fireEvent.click(view.getByRole('button', { name: /^Rest first/ }));
+    fireEvent.click(view.getByRole('button', { name: /^Light/ }));
     expect(view.onSetTraining).toHaveBeenCalledExactlyOnceWith({ intensity: 'light', focus: career.training?.focus ?? 'balanced' });
   });
 

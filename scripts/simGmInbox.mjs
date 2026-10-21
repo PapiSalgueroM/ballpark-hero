@@ -10,6 +10,9 @@
         src/data, which simNoInventedQuotes' static pass skips on purpose, so
         its detectors (and simNoInventedConduct's) are run over the banks
         here. The roster name set must be big enough to mean something.
+        Since Round 1324 every wording of a card (texts) is scanned like its
+        text, and no wording may print an effect (a meter word next to a
+        signed number): the card's effects are choiceEffects' alone.
      2) EXACT EFFECTS. Every option of every event, answered through the
         engine on a fresh desk, moves exactly what it declares and nothing
         else, its card line names exactly those moves, and a second answer
@@ -74,6 +77,16 @@
                               section 4 fails.
      GM_INBOX_CONTROL=unclamp careerInbox stops clamping trust at 0 and 100;
                               section 2 fails.
+     GM_INBOX_CONTROL=quotevariant  (Round 1324) the quote control's line as a
+                              second wording (texts) of an NFL card; section
+                              1 fails.
+     GM_INBOX_CONTROL=effectvariant (Round 1324) a wording that prints the
+                              trust meter with a signed number; section 1
+                              fails.
+     GM_INBOX_CONTROL=effectout / effectrating (Round 1324's review) a
+                              wording that prints a man out for 2 weeks, or
+                              a rating with a signed number, as choiceEffects
+                              writes them; section 1 fails.
    Each control asserts the thing it mutates exists first, and refuses to run
    otherwise.
 
@@ -87,7 +100,7 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.GM_INBOX_CONTROL || '';
 const SEED = Number(process.env.SEED || 1);
-if (CONTROL && !['quote', 'flip', 'cool', 'drift', 'never', 'random', 'shift', 'opencap', 'maxcap', 'oneshot', 'ungate', 'unclamp'].includes(CONTROL)) {
+if (CONTROL && !['quote', 'flip', 'cool', 'drift', 'never', 'random', 'shift', 'opencap', 'maxcap', 'oneshot', 'ungate', 'unclamp', 'quotevariant', 'effectvariant', 'effectout', 'effectrating'].includes(CONTROL)) {
   console.error(`GM_INBOX_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(2);
 }
@@ -199,6 +212,21 @@ if (CONTROL === 'quote') {
     text: `${someone} told reporters: "I want a new deal before camp or I sit."`, choices: PACKS.nfl.events[0].choices });
   if (PACKS.nfl.events.length !== before + 1) { console.error('quote control changed nothing, refusing to run'); process.exit(2); }
 }
+/* Round 1324: the same line as a second wording of a real NFL card, and
+   wordings that print an effect (a meter, a man out for weeks, a rating).
+   Each must turn section 1 red. */
+if (['quotevariant', 'effectvariant', 'effectout', 'effectrating'].includes(CONTROL)) {
+  const someone = [...REAL].find(n => /^[A-Z][a-z]+ [A-Z][a-z]+$/.test(n));
+  const e = PACKS.nfl.events[0];
+  if (!someone || !e || e.texts !== undefined) { console.error(`${CONTROL} control: no real name or no plain NFL card to change, refusing to run`); process.exit(2); }
+  e.texts = [{
+    quotevariant: `${someone} told reporters: "I want a new deal before camp or I sit."`,
+    effectvariant: `Sort this out and it is ${PACKS.nfl.meters.trust} +5.`,
+    effectout: 'Whatever the call, the starter sits out 2 weeks.',
+    effectrating: 'Get this right and his rating +3 by the weekend.',
+  }[CONTROL]];
+  if (PACKS.nfl.events[0].texts?.length !== 1) { console.error(`${CONTROL} control changed nothing, refusing to run`); process.exit(2); }
+}
 
 {
   let strings = 0;
@@ -206,11 +234,31 @@ if (CONTROL === 'quote') {
   for (const seat of SEATS) {
     const p = PACKS[seat];
     const lines = [['label', p.label], ...p.calendar.map(b => ['beat', b.label]), ...Object.values(p.targets).map(t => ['target', t])];
+    /* Round 1324: a meter word next to a signed number is an effect, and a
+       wording must never print one (the card's effects are written by
+       choiceEffects alone). */
+    const meterWords = [...Object.values(p.meters), 'Recruit interest'].map(w => w.toLowerCase());
+    const printsEffect = t => {
+      const low = t.toLowerCase();
+      /* choiceEffects also prints "<target> out N weeks" and "<target> rating +N". */
+      if (/\bout\s+\d+\s+weeks?\b/.test(low) || /\brating\s*[+-]\s*\d/.test(low)) return true;
+      return meterWords.some(w => {
+        for (let at = low.indexOf(w); at >= 0; at = low.indexOf(w, at + 1)) {
+          const after = low.slice(at + w.length, at + w.length + 8);
+          const before = low.slice(Math.max(0, at - 10), at);
+          if (/^\s*[+-]\s*\$?\d/.test(after) || /[+-]\s*\$?\d[\d.,]*\s*[a-z$]*\s*$/.test(before)) return true;
+        }
+        return false;
+      });
+    };
     for (const e of p.events) {
       lines.push(['text', e.text], ['from', e.from]);
+      for (const t of e.texts ?? []) lines.push(['wording', t]);
       for (const c of e.choices) lines.push(['option', c.label], ['reply', c.reply]);
       if (!ROLE.test(e.from) && !DEPARTMENTS.has(e.from)) bad.push(`${e.id}: the voice "${e.from}" is not a role`);
       if (FIRST_PERSON.test(deaccent(e.text))) bad.push(`${e.id}: the message speaks in the first person instead of narrating`);
+      for (const t of e.texts ?? []) if (FIRST_PERSON.test(deaccent(t))) bad.push(`${e.id}: a wording speaks in the first person instead of narrating`);
+      for (const t of [e.text, ...(e.texts ?? [])]) if (printsEffect(t)) bad.push(`${e.id}: a wording prints an effect ("${t.slice(0, 50)}")`);
     }
     for (const [kind, s] of lines) {
       strings++;

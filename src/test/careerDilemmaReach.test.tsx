@@ -82,6 +82,7 @@ vi.mock('@/components/game/PostGameStats', () => ({ default: () => null }));
 
 import * as E from '@/lib/soccerCareerEngine';
 import type { CareerState } from '@/lib/soccerCareerEngine';
+import { parseSoccerCareerSave } from '@/lib/soccerCareerSave';
 import SoccerCareer from '@/pages/SoccerCareer';
 import { signThroughReview } from './signThroughReview';
 
@@ -105,7 +106,7 @@ function seeded(seed: number) {
 const tick = (ms = 5) => act(async () => { await new Promise(r => setTimeout(r, ms)); });
 const mount = (el: JSX.Element) => render(<HelmetProvider><MemoryRouter>{el}</MemoryRouter></HelmetProvider>);
 const readSave = (): CareerState | null => {
-  try { return JSON.parse(localStorage.getItem(SAVE_KEY) || 'null'); } catch { return null; }
+  try { return parseSoccerCareerSave(localStorage.getItem(SAVE_KEY) || 'null') as CareerState | null; } catch { return null; }
 };
 
 /* The starting save: the engine plays a career from 16 until the first

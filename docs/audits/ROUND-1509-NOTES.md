@@ -1,0 +1,157 @@
+# Round 1509 notes: the Europa League followed every season beside the Champions League
+
+Branch r1509-cm-europa-watch, base origin/main 77556430 (Release BJ). Brief:
+dukb-handoff/2026-10-10/briefs/brief-1509.md. Kept at every push; the builder's scratch notes live in .tmp-fx.
+
+## The steps and their commits
+
+1. The ledger (dark), 65ad85c9: scripts/data/cmEuroAccess.json (39 rows) and its receipt, euroAccess.ts's
+   constants and EURO_ACCESS_PARTIAL, simWorldEuro section 0 with the controls onesource, wiki, thinused, receipt.
+2. The keyed lift, 50247294: every function of Round 1502's binding block keyed by competition, each exported
+   worldUcl* name a one line wrapper passing 'ucl', the seed `world-${comp}|`, one object with two keys written by
+   setWorldComp, the view and the night dates keyed. Names for Round 1510: worldCompField, openWorldComp,
+   worldCompBind (private), worldCompNights, worldCompNightsDone, evalWorldComp, carryWorldComp,
+   repairWorldComp, worldCompWinnerOf(career, comp), worldCompFormatOf, worldCompNightDates (calendar),
+   worldCompView (view); uelHolderOf(career) is worldCompWinnerOf's one line reader.
+3. The rule, pure, 85414f0b: euroFieldFromTables and euroRouteOf over plain finishing orders, unit tested.
+4. The watched Europa League, 75f92025 and fixes c2a49314, 769e2ac8, c5af5e04: opened at a new career's start (in
+   openWorldUclOnStart's body, participants included), at every rollover (one block after the watched Champions
+   League), carried across a job move (both keys, seen per key), repaired at load in season one; worldUelField
+   (the rule over the finished tables, or over the real 2025-26 tables, cup winners and Conference League winner in
+   season one), `via` and `earned` on the slice; the Europa League's legs from row U-legs; its nights on the six
+   European midweeks and the Champions League's first ten marks with its final at 0.95; dated the Thursday.
+   Ruling 1l, 4ca130e0: startCareer alone cost a median 54.9 ms more a daily date with the Europa League open, over
+   the 10 ms line, so startCareer takes one options object (StartCareerOptions, `noWorldComps`; DAILY_START) and
+   both dailies pass it; their strips stay as the shape guard.
+5. The screen, b0236c4c: a third tile on the Cups panel, the competition screen by key, its ?, how each club got
+   in, the place my club earned; the help block; What's New; the walk's cases (u) and (v) and the controls
+   notileuel and wednesday.
+6. (a) The board, 39978122: euroPlaceOf and europeRungOf, objectiveStatuses' league branch (an era save keeps its
+   position grade), simWorldEuro section 3. (b) The winner, a06f9e18: uelHolderOf into next season's Champions
+   League (the participant's field and the watched one), scripts/lib/worldUelHolder1509.mjs, simWorldEuro
+   section 5. Fixes a0061f75, cd03aa46, 02bc87d1 (season one's field keeps to clubs of a European nation's league,
+   for an edited world).
+7. The readers and the proof, 3b2c40f4 to 71374d36: simWorldUcl section 2 and its saved bytes, the fleet proof's
+   --euro-board-off and its whole worldComps comparison when the base carries it, and the Round 1081 pin retaken
+   last (scripts/fixtures/managerAppealIsolation1081/manifest.json: only clubManager.ts's hash moved).
+
+## Decisions taken by the builder
+
+- The watched Champions League's fill takes the fifth placed club of the four deepest leagues every season unless
+  it is my club, so in those leagues the Europa League's league place passes from fifth to sixth. euroPlaceOf at a
+  season's end therefore reads the same Champions League the rollover will draw (my club kept out, the holders in),
+  so that it agrees with the rule run without the exclusion (section 3 holds it); mid season it reads my league's
+  places and the cup final only, as ruling 1e says.
+- A mid season move to a club that is an entrant of the Europa League draws it again without that club in season
+  one and leaves none later (Round 1502's rule per key); the nights shown before the move then read differently,
+  and the screen says so.
+- setWorldComp: taking the Champions League's key off deletes the object first and puts back what is left, so the
+  object stands where the engine always put it among the save's keys (the fleet proof is byte equal on that).
+- The participant's 32 field takes the league places, the holders and the Europa League winner and is cut to 32,
+  so in a season when both holders come from outside the league places the Europa League winner does not fit
+  there (section 5 counts it); the watched 36 always has room.
+- simCmShootoutOrder hashes a match's state without worldComps (participants now carry worldComps.uel).
+
+## Measured (runner results named in the builder's closing report)
+
+- Step 2: fleet proof against 65ad85c9 byte equal on every step (190 journeys); weight +0.2K on the three rows.
+- Step 4: fleet proof against 85414f0b byte equal but for worldComps.uel (60 and 130 journeys, draws equal);
+  weight /club-manager 620.0K (+1.6K over BJ's 618.4K), /manager-hot-seat 637.1K (+1.6K), /deadline-day 646.6K
+  (+1.6K), inside the lead's +3.0K; the save at season 15 +1,461 (Real Madrid), +1,417 (Everton), +1,494
+  (Lincoln City) bytes over 85414f0b, slopes unchanged, under SIZE_BUDGET 214,000.
+- Season one of a Chelsea career: the English clubs in the Europa League are Bournemouth (league place, Liverpool
+  fifth being in the Champions League on its fill), Sunderland (the FA Cup's place passed down, Manchester City in
+  the Champions League), Crystal Palace (the Conference League's winners) and Brighton (the fill).
+- simWorldEuro section 7 over its fleet: routes C 173, F 555, H 39, L 1485, P 1312; titles by strength quartile
+  76, 13, 2, 0; 2.60 goals a match; a slice 1,419 to 1,506 bytes; 1,683 of 1,683 nights on a Thursday.
+- Section 3: 252 season ends; 31 Europa League routes and 37 Champions League places on which euroPlaceOf and the
+  rollover agree; my club won its cup in 24 seasons, 11 of them from outside the Champions League places.
+- Section 5: 60 rollovers after a watched final; the winner is in next season's Champions League in all 60.
+- Dailies: with the options object a Hot Seat start is a median 69.8 ms faster than with both competitions open.
+- The board: simCmUnseededWorld's Hot Seat day of 2026-10-27 (Nottingham Forest) scores 34 against the base's 28,
+  one objective more under the rule's grading; its tree arms revert both of the round's lines.
+- The proof: 190 journeys (60 participants, 130 watchers, both coaches, eval and old saves) byte equal to main
+  77556430 on every step with worldComps.uel stripped and the two named lines reverted.
+- Weight on the final engine: /club-manager 620.7K, /manager-hot-seat 637.8K, /deadline-day 647.3K, +2.3K each over
+  Release BJ, inside the lead's +3.0K.
+
+## Recordings and harnesses that move, attributed
+
+- scripts/data/cmLeagueRulesDigest.json (simCmLeagueRules, 27 modern saves): with every state hashed without
+  worldComps.uel, 15 remain; with the holder line reverted too, 1 (bundesliga's summary, the board's rung); with the
+  rung line reverted too, every part green. Not retaken: the lead retakes it at the join.
+- simCmOldCareersWorld compares the tree with its merge base with main, so on this branch it compares the round with
+  main: 7 failures, all the followed Europa League's key at load and in the first save (green with the four opens
+  and both lines taken out; the same 7 with the lines alone taken out).
+- simCmWorldMoves is red on main (sections 5, 6, 8); with the opens and both lines taken out its log equals main's
+  line for line; the round adds 18 lines to section 5 (the key at load) and, through the holder and the rung, one to
+  section 8 and a few AI deal lines.
+
+## Owed
+
+- To the other lane (src/data/gameContent is theirs): one sentence for clubManagement.ts, for example "The Europa
+  League plays out every season too, and you can follow its table, matchdays, knockouts and final from the Cups
+  panel; win your cup and the board counts it.", then their genSearchKeywords.
+- To the lead: the three engine weight rows (sweepWeight is red over 619, 636 and 646 by about 1.6K each, inside
+  the accepted +3.0K); scripts/data/cmLeagueRulesDigest.json moves by the new key (named, not retaken); the saved
+  What's New page; the participant's own Europa League nights (a later number); simCmBoardVerdict's kit
+  (x/minus1335.sh no longer forms a base even on main 77556430: taking Round 1335 out conflicts in
+  ClubManagerSeasonSummary.tsx, clubManager.ts and clubManagerCalendar.ts, so the harness exits 2 on main and here);
+  simCmOldCareersWorld and simCmWorldMoves read at the join as attributed above; the Round 1081 pin
+  (scripts/fixtures/managerAppealIsolation1081/manifest.json) retaken again, last, if main changes clubManager.ts
+  before this merges.
+
+## Fix round (fix-1509, 2026-10-18), after the run and read reviews
+
+- The carry (major, both lenses): a mid season move kept the old club's `earned` on the carried Europa League slice,
+  so the tile and the screen said the new club had earned a place. carryWorldComp now takes `earned` off a carried
+  slice when the club changes (the rule kept out only the old club, so a club outside the field earned nothing).
+  simWorldEuro section 1 checks it on every real move and on a probe once a journey, control carryearned.
+- The cup's route (major, run lens m4): every check read the cup through the engine's own euroCupOf, so handing the
+  route to the final's loser stayed green. The harness now reads the final's winner off the bracket (cupOfBracket),
+  section 1 holds euroCupOf to it, section 3 requires a route for a final my club won, and euroAccess.test.ts tests
+  euroCupOf. Controls cuploser and cupwin. The harness also builds the Champions League really played from the save
+  (uclPlayedOf, control noworld) and works the league places and the cup winners out by hand (byHand, control
+  oneplace, which edits the rule in the engine and the oracle alike), so a wrong edit of euroAccess.ts no longer
+  passes runAllSims with only the vitest file to catch it.
+- Advice 21's last item (major, read lens): a season one club whose real fifth place went to the 2026-27 Champions
+  League (England and Spain, rows A1 and A3, both verified; Liverpool and Real Betis in an unedited world) gets one
+  line on the Champions League tile and one in the screen's header saying why it is in neither.
+- The ?'s clause "several smaller leagues sent only their cup winner" stood on rows A11 to A15, kassiesa.net only
+  (onePublisher): cut. Other words made true of the game: the final is not the day after a Champions League night,
+  the winner's Champions League place holds when the field has room (a participant's 32 has none when both
+  holders finished outside their league places; simWorldEuro section 5 counts those as "a participant's 32 already
+  full"), the board's live reading is said, the Europa League table names the Champions League's tiebreak as the
+  one it uses (row U6 is toVerify), and What's New names your own country's cup winner.
+- Critic 9(g), the grep: `grep -n -i "russia\|ukrain" src/lib/clubManager.ts` finds the Russian Premier League
+  (LEAGUE_RULES.russia, line 3815, `europe: null`, with its UEFA suspension sourced at 3794 to 3797) and no
+  Ukrainian league. euroTablesOf keeps only `league.euro` tables and euroRouteNow returns null for a nation with no
+  European league, so no Russian club takes a league place, a cup place, the fill or a holder route.
+  simWorldEuro section 0.9 asserts it in code.
+- Scope, said plainly: managerHotSeat.ts and deadlineDay.ts (listed NOT TOUCHED) gained the DAILY_START import and
+  argument, which ruling 1l's options object needs; scripts/simCmShootoutOrder.mjs (in no FILES list) deletes
+  worldComps from the state it hashes, which on a participant is the Europa League's key alone.
+- simWorldUcl section 2 and simWorldEuro section 2 now compare a save holding the followed Europa League byte for
+  byte with that key taken off, instead of leaving it out. Section 3 prints, for each season graded otherwise, the
+  season score's objectives term on both engines and next season's opening confidence from the base's own rollover.
+- Not fixed here: the board panel's "On track" for a cup winner seventh in its league with no reason given
+  (ClubManagerBoardPanel.tsx is outside this round's files); the brief's realSaves rule, which lives only in
+  simCmBoardVerdict, whose kit refuses on main too (owed at the join).
+
+## Closing check fix (fix2-1509, 2026-10-18)
+
+- The board says why. objectiveStatuses carries an optional `why` line on a European rung met otherwise than by
+  the position asked: the cup won (C), the cup's place passed down the table (P), or a league place passed down
+  past a club going into the Champions League to a club below the target (L). ClubManagerBoardPanel.tsx shows it
+  under the ask at 12 px. That file is outside this round's FILES list: the lead's closing check asked for it as a
+  major (run minor 6). src/pages/ClubManager.tsx stays untouched. Unit tested in euroAccess.test.ts; the L case
+  only arises on a played season and is held by the runner's board walk (r1509-fx2b: Eintracht Frankfurt, cup won
+  from seventh, sixth at the end against a target of fifth).
+- The brief's realSaves rule, evidenced without simCmBoardVerdict's kit (which still refuses): every Club Manager
+  save scripts/lib/realSaves.mjs builds on 77556430, plus 17 more the base engine writes (season one week 20, a
+  paused review, season two, two eras), loads to the same JSON on this tree and on 77556430 with worldComps.uel
+  taken off (r1509-fx2b: 21 saves, 9 gained a Europa League, 0 differ; its leak control fired on 9). A paused review
+  gains none, as the Champions League's repair of 1502 opens nothing on a finished season.
+- simWorldUcl section 2's saved bytes compare with worldComps.uel taken off has its own control, savedbytes: a save
+  holding the Europa League also writes matchRules, which loadCareer deletes, so only that compare can turn red.
+- The Round 1081 pin was retaken once more, last, after the two clubManager.ts changes above (fee5af48).

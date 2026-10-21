@@ -62,9 +62,11 @@ import {
   fixtureFor,
   isPartialClub,
   leaguePosition,
+  legacySeason,
   matchEdge,
   nextFixture,
   objectiveStatuses,
+  openObjectives,
   playNextEntry,
   playableClubs,
   registerCustomClub,
@@ -73,6 +75,8 @@ import {
   restoreEngineRegistrations,
   saveCareer,
   startCareer,
+  /* Round 1509 (ruling 1l): the dailies start a career that follows no competition from outside. */
+  DAILY_START,
   uclProgressRank,
   type CareerState,
   type Competition,
@@ -82,6 +86,7 @@ import {
   type TalkTone,
 } from '@/lib/clubManager';
 import { FAN_SINGING, boardMeter, fanMeter, type Meter, type MeterTone } from '@/lib/clubManagerMeters';
+import { LEGACY_BOARD_START } from '@/lib/clubManagerBoardVerdict';
 import type { SeasonHandover } from '@/lib/clubManagerScore';
 import { dailyIndex, dailyPrngSeed } from '@/lib/dateUtils';
 import DAILY_CLUB_POOL from '@/data/dailyClubPool.json';
@@ -291,6 +296,29 @@ export interface HotSeatSetup {
   seed: number;
   /** The Eastern day this is the daily for, or absent in free play. */
   daily?: string;
+  /** Round 1331: a free run started on a build that plays the match rules of Round 1331 (five changes
+   *  in three stoppages where the league and season had it, the press asking about the next match).
+   *  Only the number 1331 counts; a run without it (every free run in flight on the release day)
+   *  replays on the base rules for ever. Dailies ignore it and go by their date (rulesOf). */
+  rules?: 1331;
+}
+
+/**
+ * Round 1331: the first daily that plays the Round 1331 match rules. A day replays from its seed and its
+ * choices every time it is opened, so a rule that moves a match would rewrite every day already played
+ * and change the day the release lands mid day. A daily dated before this plays the base rules (three
+ * changes everywhere, the press asking the old way) exactly as it did; every daily from this date on plays
+ * the current ones. Set a week and a bit out on purpose: the release has to land before it (the lead may
+ * move it later if the release slips, never earlier than the release day). scripts/simDailyDeals.mjs
+ * proves every earlier date replays and holds this to a date after the round's base commit.
+ */
+export const HOT_SEAT_RULES_FROM = '2026-10-24';
+
+/** Round 1331: the match rules a run plays: 'base' for a daily dated before HOT_SEAT_RULES_FROM or a free
+ *  run without the 1331 stamp, undefined (the current rules) otherwise. */
+export function rulesOf(setup: HotSeatSetup): CareerState['matchRules'] {
+  if (setup.daily) return setup.daily < HOT_SEAT_RULES_FROM ? 'base' : undefined;
+  return setup.rules === 1331 ? undefined : 'base';
 }
 
 export type HotSeatAction =
@@ -472,7 +500,14 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
   /* startCareer itself registers the static world for a real club; the
      onStaticWorld wrapper is what hands a Club Manager save's registrations
      back once this returns. */
-  let s = withSeed(mixSeed(setup.seed, 0), () => startCareer(setup.club));
+  let s = withSeed(mixSeed(setup.seed, 0), () => startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, DAILY_START));
+  /* Round 1335: and the board the previous manager had. startCareer opens a new appointment at BOARD_FRESH
+     since the round; the weeks below are the previous manager's search for the crisis, and they read the
+     board (the press question below 32, the desk below 35, the floor reset), so they open where they always
+     did, on every day, dated or free. The player never sees this number: the takeover sets
+     HOT_SEAT_BOARD_START. scripts/simDailyDeals.mjs (unedited) and scripts/simCmBoardVerdict.mjs (section
+     dailies, its control hotstart takes this line out) hold every date to what it dealt. */
+  s.boardConfidence = LEGACY_BOARD_START;
   /* Release AT: a hot seat day never plays the real fixture list. Round 1184 binds the real 2026/27
      Premier League list to any new original Premier League career, and startCareer above is one. Left on,
      the weeks this function plays to find the crisis were another season: five of 120 daily dates dealt a
@@ -493,6 +528,29 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
      scripts/simCmLeagueBook.mjs (section dailies) holds this: its controls put this line out, and take
      the option off each of the three calls in turn. */
   delete s.leagueBook;
+  /* Release AZ, the lead's ruling Y3: and no world seed. Since Round 1250 startCareer gives every new career
+     one, and a seed left on the day would make the career handed to Club Manager (handoverState) a seeded
+     world, the same seed for everyone who took that day. It comes off whether or not a date moves, so a hot
+     seat day is an unseeded world like any save from before the release, and with no seed the engine never
+     writes it a ledger (recordActualRosterTransfer). scripts/simDailyDeals.mjs holds this: its seed control
+     puts this line back out. */
+  delete s.worldSeed;
+  /* Round 1344: and no ledger. startCareer records its opening window's deals into one once the seed is drawn
+     (the post seed flush); a hot seat day holds none (Y3), so it comes off with the seed, before the first week.
+     scripts/simDailyDeals.mjs holds this: its ledger control puts this line back out. */
+  delete s.worldRoster;
+  /* Round 1502: and no watched Champions League. startCareer opens one for a club that is not in it; a hot
+     seat day is the day it is, and the career handed to Club Manager (handoverState) is like any save from
+     before the round: a season one of today's world, so Club Manager's first load opens its slice
+     (repairWorldUcl). It draws nothing, so the deal cannot move:
+     scripts/simDailyDeals.mjs holds the day's shape, and its world control puts this line back out. */
+  delete s.worldComps;
+  /* Round 1331: and the match rules the day plays, set before the first week (rulesOf). A day on the base
+     rules carries matchRules 'base', read for the substitution rule, the press fixture and (Round 1335)
+     the season rules (legacySeason); handoverState takes it off again. scripts/simDailyDeals.mjs (rulesall) and
+     scripts/simCmSubs.mjs (section hotseat, control nodate) hold this. */
+  const rules = rulesOf(setup);
+  if (rules) s.matchRules = rules;
   const rounds = leagueRounds(s);
   const lastWeek = Math.max(HOT_SEAT_TAKEOVER_MIN, Math.min(HOT_SEAT_TAKEOVER_MAX, rounds - HOT_SEAT_LEASH - 1));
   let best: { state: CareerState; formPts: number; week: number } | null = null;
@@ -521,6 +579,11 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
     boardConfidence: HOT_SEAT_BOARD_START,
     sacked: false,
     teamTalk: null,
+    /* Round 1335 (advice 17): and the card a Club Manager takeover gets, less what the previous manager had
+       already failed (openObjectives); a day on the old rules (legacySeason) keeps the whole card. Nothing a
+       hot seat day plays reads a failed line, so no deal moves; a career carried on starts clean.
+       scripts/simCmBoardVerdict.mjs section dailies holds it (control hscard). */
+    boardObjectives: legacySeason(chosen.state) ? chosen.state.boardObjectives : openObjectives(chosen.state),
     /* Round 956 review fix: this is a takeover, so it wears Club Manager's
        takeover stamp (Round 633) from the day you walk in. Nothing in a match
        reads either field; Club Manager's season score and its "took over mid
@@ -809,6 +872,8 @@ export function existingClubManagerSave(): ExistingClubManagerSave | null {
  *  the job opened were his, the way Club Manager's own takeovers clear them. */
 export function handoverState(run: HotSeatRun): CareerState {
   const copy = JSON.parse(JSON.stringify(run.state)) as CareerState;
+  /* Round 1331: a career carried on plays Club Manager's current rules, whatever rules the day played. */
+  delete copy.matchRules;
   const from = run.takeover.calendarWeek;
   if (Array.isArray(copy.inbox)) copy.inbox = copy.inbox.filter(m => !(typeof m.week === 'number' && m.week < from));
   return copy;

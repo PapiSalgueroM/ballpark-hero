@@ -1,0 +1,120 @@
+name: Player Bingo verified World Cup identity
+
+on:
+  push:
+    branches: [codex/player-bingo-world-cup-alias]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      PLAYER_BINGO_WC_PHASE: fixed
+      PLAYER_BINGO_WC_OUT: ${{ github.workspace }}/bingo-world-cup-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/bingo-world-cup-artifacts/font-cache
+      PRERENDER_ONLY: /player-bingo
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Block production database transport
+        run: echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+      - name: Bind source and locked packages
+        run: |
+          mkdir -p "$PLAYER_BINGO_WC_OUT"
+          git rev-parse HEAD > "$PLAYER_BINGO_WC_OUT/source-head.txt"
+          git status --porcelain --untracked-files=no > "$PLAYER_BINGO_WC_OUT/source-before.txt"
+          test ! -s "$PLAYER_BINGO_WC_OUT/source-before.txt"
+          if test "$PLAYER_BINGO_WC_PHASE" = baseline; then
+            git diff --exit-code 48cb9d4bbe8d8f4922113326d9db5d120dcb0b09 -- src/lib/playerBingo.ts src/pages/PlayerBingo.tsx src/lib/whoAmI.ts supabase/migrations/20260901_round_389_world_cup_2026_squads.sql
+          fi
+          sha256sum src/lib/playerBingo.ts src/pages/PlayerBingo.tsx src/lib/whoAmI.ts src/test/playerBingoWorldCupAlias.test.ts scripts/simPlayerBingoWorldCupAlias.mjs src/test/playerBingoTransport.test.ts vitest.config.ts supabase/migrations/20260901_round_389_world_cup_2026_squads.sql .github/workflows/player-bingo-world-cup-alias.yml > "$PLAYER_BINGO_WC_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$PLAYER_BINGO_WC_OUT/package-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, entry]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, entry.version, p);
+            return { path: p, version };
+          });
+          assert(installed.length > 0);
+          fs.writeFileSync(process.env.PLAYER_BINGO_WC_OUT + '/installed.json', JSON.stringify(installed, null, 2));
+          console.log(`Bound ${installed.length} installed locked versions.`);
+          NODE
+      - name: Application type gate
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$PLAYER_BINGO_WC_OUT/types.log"
+      - name: Actual loader and World Cup criterion outcomes
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoWorldCupAlias.mjs 2>&1 | tee "$PLAYER_BINGO_WC_OUT/$PLAYER_BINGO_WC_PHASE.log"
+      - name: Exact executable alias and country controls
+        if: env.PLAYER_BINGO_WC_PHASE == 'fixed'
+        run: |
+          for control in alias country; do
+            PLAYER_BINGO_WC_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoWorldCupAlias.mjs 2>&1 | tee "$PLAYER_BINGO_WC_OUT/control-$control.log"
+          done
+      - name: Existing Bingo page and engine regressions
+        if: env.PLAYER_BINGO_WC_PHASE == 'fixed'
+        run: |
+          for harness in simPlayerBingoLoad simPlayerBingoLineFeedback simSportsBingo simBingoSeats; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" 2>&1 | tee "$PLAYER_BINGO_WC_OUT/$harness.log"
+          done
+      - name: Isolated remote build tools
+        if: env.PLAYER_BINGO_WC_PHASE == 'fixed'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/bingo-world-cup-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/bingo-world-cup-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/bingo-world-cup-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/bingo-world-cup-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$PLAYER_BINGO_WC_OUT/fonts.log"
+          sha256sum --check "$PLAYER_BINGO_WC_OUT/package-hashes.txt"
+      - name: Complete build with Bingo snapshot
+        if: env.PLAYER_BINGO_WC_PHASE == 'fixed'
+        run: |
+          npm run build:seo 2>&1 | tee "$PLAYER_BINGO_WC_OUT/build.log"
+          cp scripts/data/lastmod.json "$PLAYER_BINGO_WC_OUT/build-lastmod.json"
+          git diff -- scripts/data/lastmod.json > "$PLAYER_BINGO_WC_OUT/build-lastmod.diff"
+      - name: Every rebuilt-site reader
+        if: env.PLAYER_BINGO_WC_PHASE == 'fixed'
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "$PLAYER_BINGO_WC_OUT/$harness.log" || failed=1
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "$PLAYER_BINGO_WC_OUT/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Final source and package holds
+        if: always()
+        run: |
+          sha256sum --check "$PLAYER_BINGO_WC_OUT/source-hashes.txt"
+          sha256sum --check "$PLAYER_BINGO_WC_OUT/package-hashes.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const installed = JSON.parse(fs.readFileSync(process.env.PLAYER_BINGO_WC_OUT + '/installed.json'));
+          for (const row of installed) assert.equal(JSON.parse(fs.readFileSync(row.path + '/package.json')).version, row.version, row.path);
+          console.log(`All ${installed.length} installed versions held.`);
+          NODE
+      - name: Retain complete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bingo-world-cup-${{ github.run_id }}
+          path: bingo-world-cup-artifacts/
+          retention-days: 14

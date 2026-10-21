@@ -201,6 +201,7 @@ export const NBA_SEASON: UsSeasonBind = {
       named, games: GAMES, bands: BANDS,
       examples: [
         { head: 'A game', body: `Game 12, at home to ${named && opp ? `the ${opp}` : 'another team'}. You win 112-104 and put up 31 points, 8 rebounds and 6 assists. Your record goes to 8-4.` },
+        { head: 'The court', body: 'Scores update at the end of each quarter. A 24-22 first quarter followed by 31-28 makes it 55-50. The figures are an illustration, not a shot chart or play-by-play. Your points, rebounds and assists appear at the final buzzer.' },
         { head: 'Your averages', body: 'Your season card says 25 points a game over 80 games. Add up every game here, divide by 80, and it rounds to 25. Same for rebounds and assists.' },
         { head: 'The playoffs', body: 'Your card says you lost in the conference semis after 11 playoff games. The path shows two rounds that add up to 11: a 4-2 win, then a 1-4 loss.' },
       ],

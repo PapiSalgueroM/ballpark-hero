@@ -304,7 +304,7 @@ export function squadHelp(): SquadHelp {
   return {
     title: 'How the squad works',
     rules: [
-      'This screen shows what the game already decided. Nothing here changes how many games you play.',
+      'This is where you stand at the club right now. It explains your games, it does not change them.',
       /* Release AT gate: the six rules have to fit the panel at 390 by 844 without scrolling (playCareerSquad
          check 7 measures it). 32 lines of 12px text is the most the panel holds there, and the walk's page
          has no web font, so it wraps wider than the site does: these words are 30 lines there (773 of 820px)

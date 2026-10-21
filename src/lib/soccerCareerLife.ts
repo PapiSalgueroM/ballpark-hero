@@ -1,4 +1,6 @@
 import { rollCareerChance } from "./careerChanceWheel";
+import { getSoccerRoutineEvents } from "./soccerCareerRoutineEvents";
+import { SOCCER_LIFE_CONSEQUENCES } from "./soccerCareerLifeConsequences";
 /* ────────────────────────────────────────────────────────────────────────────
    soccerCareerLife.ts, the life layer for Soccer Career (Round 49)
    Personalities, agents, and the expanded off-pitch event catalog (ids 200+).
@@ -41,6 +43,11 @@ const followers = (s: CareerState, delta: number) => {
   s.socialMediaFollowers = Math.round((s.socialMediaFollowers + delta) * 100) / 100;
 };
 const log = (s: CareerState, line: string) => { s.events = [...s.events, line]; };
+
+function pendingLifeChance(state: CareerState, id: number, chance: number): boolean {
+  const rolled = Math.random() < chance;
+  return rolled || (state.pendingEvents ?? []).some(event => event.id === id);
+}
 
 /* ─── Round 725: cooldowns ───
    Seasons an event sits out after it fires, one number per kind of story so
@@ -158,6 +165,13 @@ export function getPriorityLifeEventIds(state: CareerState): number[] {
      the general draw it showed up in about one comeback in three, and a
      return from a long injury is not a story that should lose a raffle. */
   if (comebackDue(state) && !state.retired) ids.push(262);
+  if (!state.retired) {
+    const year = state.seasons[state.seasons.length - 1]?.year ?? 0;
+    for (const [acquisition, followup, key] of [[226, 227, "esports"], [230, 231, "cursedBoots"], [236, 237, "teammateLoan"], [270, 630, "coachingBadges"], [408, 631, "rDocCrew"]] as const) {
+      const acquired = state.eventLastFired?.[String(acquisition)];
+      if (flag(state, key) === 1 && (typeof acquired !== "number" || !Number.isFinite(acquired) || acquired < year)) ids.push(followup);
+    }
+  }
   return ids;
 }
 
@@ -215,17 +229,17 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   }
 
   /* ── agent drama ── */
-  if (state.agentId === "cousin" && Math.random() < 0.6) {
+  if (state.agentId === "cousin" && pendingLifeChance(state, 205, 0.6)) {
     push({ id: 205, cooldown: COOLDOWN.agent, emoji: "📱", title: "Ricky Posted Your Contract",
       description: "Cousin Ricky accidentally posted a screenshot of your full contract to his public story. The numbers are everywhere.",
       category: "negative", choices: [
-        { label: "Laugh it off", emoji: "😅", color: "bg-amber-600", consequence: "Followers +400k, dressing room teases you forever",
+        { label: "Laugh it off", emoji: "😅", color: "bg-amber-600", consequence: SOCCER_LIFE_CONSEQUENCES[205][0],
           apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.4) * 100) / 100; s.morale = clamp(s.morale - 3, 0, 100); s.events = [...s.events, "📱 Ricky leaked your contract. The memes were incredible"]; return s; } },
-        { label: "Fire him", emoji: "🚪", color: "bg-red-600", consequence: "Represent yourself from now on, awkward family dinners",
+        { label: "Fire him", emoji: "🚪", color: "bg-red-600", consequence: SOCCER_LIFE_CONSEQUENCES[205][1],
           apply: s => { s.agentId = "self"; s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "🚪 Fired Cousin Ricky. Thanksgiving will be tense"]; return s; } },
       ] });
   }
-  if (state.agentId === "cousin" && Math.random() < 0.4) {
+  if (state.agentId === "cousin" && pendingLifeChance(state, 206, 0.4)) {
     push({ id: 206, cooldown: COOLDOWN.agent, emoji: "✈️", title: "Wrong Preseason, Ricky",
       description: "Ricky booked your preseason flights to the wrong country. You joined a stranger's training camp for two days before anyone noticed.",
       category: "negative", choices: [
@@ -235,7 +249,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.morale = clamp(s.morale - 4, 0, 100); s.events = [...s.events, "✈️ Ricky sent you to the wrong country. You told no one"]; return s; } },
       ] });
   }
-  if (state.agentId === "shark" && Math.random() < 0.4) {
+  if (state.agentId === "shark" && pendingLifeChance(state, 207, 0.4)) {
     push({ id: 207, cooldown: COOLDOWN.agent, emoji: "🦈", title: "Double Agent",
       description: "You find out Marco also represents your direct rival for the same position, and he has been pitching you both to the same clubs.",
       category: "negative", choices: [
@@ -247,7 +261,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.marketValue += 3; s.integrityBonus -= 2; s.events = [...s.events, "🧠 Turned Marco's double game to your advantage"]; return s; } },
       ] });
   }
-  if (state.agentId === "super" && Math.random() < 0.4) {
+  if (state.agentId === "super" && pendingLifeChance(state, 208, 0.4)) {
     push({ id: 208, cooldown: COOLDOWN.agent, emoji: "🗞️", title: "The Leak",
       description: "Zara leaked fake transfer interest to three newspapers to spike your value. Your manager is furious. Your value did spike though.",
       category: "negative", choices: [
@@ -259,7 +273,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   }
 
   /* ── personality exclusives ── */
-  if (p === "showman" && Math.random() < 0.5) {
+  if (p === "showman" && pendingLifeChance(state, 210, 0.5)) {
     push({ id: 210, cooldown: COOLDOWN.personality, emoji: "🤸", title: "The Halftime Backflip",
       description: "The warm-up DJ plays your song at halftime. The crowd starts chanting for the backflip you posted last summer.",
       category: "life", choices: [
@@ -269,17 +283,17 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.events = [...s.events, "🤸 Declined the backflip. The crowd booed lovingly"]; return s; } },
       ] });
   }
-  if (p === "showman" && Math.random() < 0.35) {
+  if (p === "showman" && pendingLifeChance(state, 211, 0.35)) {
     push({ id: 211, cooldown: COOLDOWN.once, emoji: "🕶️", title: "Trademark the Celebration",
       description: "Your goggles celebration is everywhere. A lawyer suggests trademarking it for merch.",
       category: "life", choices: [
         { label: "Trademark it", emoji: "®️", color: "bg-emerald-600", consequence: "Sponsorship income +€300k/yr",
           apply: s => { s.sponsorBonus = Math.round(((s.sponsorBonus ?? 0) + 0.3) * 100) / 100; s.events = [...s.events, "®️ Trademarked your celebration. The merch prints money"]; return s; } },
-        { label: "Let the kids use it free", emoji: "❤️", color: "bg-blue-600", consequence: "Integrity +4, playgrounds everywhere copy you",
+        { label: "Let the kids use it free", emoji: "❤️", color: "bg-blue-600", consequence: SOCCER_LIFE_CONSEQUENCES[211][1],
           apply: s => { s.integrityBonus += 4; s.popularity = clamp(s.popularity + 4, 0, 100); s.events = [...s.events, "❤️ Kept the celebration free for every playground on earth"]; return s; } },
       ] });
   }
-  if (p === "iceman" && Math.random() < 0.5) {
+  if (p === "iceman" && pendingLifeChance(state, 212, 0.5)) {
     push({ id: 212, cooldown: COOLDOWN.personality, emoji: "🧊", title: "No Celebration",
       description: "You score against your boyhood club and simply raise both hands in apology. The stadium, both ends, applauds.",
       category: "positive", choices: [
@@ -289,37 +303,37 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.popularity = clamp(s.popularity + 2, 0, 100); s.morale = clamp(s.morale + 2, 0, 100); log(s, "👋 Scored against your old club and waved once. Everyone understood"); return s; } },
       ] });
   }
-  if (p === "iceman" && Math.random() < 0.35) {
+  if (p === "iceman" && pendingLifeChance(state, 213, 0.35)) {
     push({ id: 213, cooldown: COOLDOWN.personality, emoji: "🎤", title: "The One-Word Interview",
       description: "A reporter asks you eleven questions after the match. You answer all eleven with the word 'yes'. It becomes a meme format.",
       category: "life", choices: [
-        { label: "Yes", emoji: "🧊", color: "bg-blue-600", consequence: "Followers +500k, journalists hate it",
+        { label: "Yes", emoji: "🧊", color: "bg-blue-600", consequence: SOCCER_LIFE_CONSEQUENCES[213][0],
           apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.5) * 100) / 100; s.popularity = clamp(s.popularity - 2, 0, 100); s.events = [...s.events, "🎤 The all-yes interview became a meme format"]; return s; } },
         { label: "Answer the twelfth question properly", emoji: "🎙️", color: "bg-muted", consequence: "Popularity +2, the meme loses its ending",
           apply: s => { s.popularity = clamp(s.popularity + 2, 0, 100); log(s, "🎙️ Eleven yeses and then a full sentence. The reporter nearly fainted"); return s; } },
       ] });
   }
-  if (p === "hothead" && Math.random() < 0.5) {
+  if (p === "hothead" && pendingLifeChance(state, 214, 0.5)) {
     push({ id: 214, cooldown: COOLDOWN.personality, emoji: "🚇", title: "Tunnel Incident",
       description: "An opponent stepped on your boot in the tunnel. On purpose. Everyone is watching what you do next.",
       category: "negative", choices: [
         { label: "Get in his face", emoji: "😤", color: "bg-red-600", consequence: "€200k fine, Physical +1 next season, defenders think twice now",
           apply: s => { s.netWorth = Math.round((s.netWorth - 0.2) * 100) / 100; s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 1 }; s.events = [...s.events, "🚇 Tunnel confrontation. Fined, feared, worth it"]; return s; } },
-        { label: "Stare. Say nothing. Walk away", emoji: "🥶", color: "bg-emerald-600", consequence: "Integrity +2, the stare goes viral anyway",
+        { label: "Stare. Say nothing. Walk away", emoji: "🥶", color: "bg-emerald-600", consequence: SOCCER_LIFE_CONSEQUENCES[214][1],
           apply: s => { s.integrityBonus += 2; s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.3) * 100) / 100; s.events = [...s.events, "🥶 The tunnel stare went viral. Scarier than shouting"]; return s; } },
       ] });
   }
-  if (p === "hothead" && Math.random() < 0.35) {
+  if (p === "hothead" && pendingLifeChance(state, 215, 0.35)) {
     push({ id: 215, cooldown: COOLDOWN.personality, emoji: "🧃", title: "The Drinks Cart Flip",
       description: "Subbed off at 60 minutes in a match you were winning by yourself. The drinks cart caught the full force of your opinion.",
       category: "negative", choices: [
         { label: "No regrets", emoji: "🌋", color: "bg-red-600", consequence: "Morale +8 (you needed that), €100k fine",
           apply: s => { s.morale = clamp(s.morale + 8, 0, 100); s.netWorth = Math.round((s.netWorth - 0.1) * 100) / 100; s.events = [...s.events, "🧃 Flipped the drinks cart. Honestly? Therapeutic"]; return s; } },
-        { label: "Buy the kit man a new cart, apologize", emoji: "🛒", color: "bg-blue-600", consequence: "Integrity +3, dressing room respect",
+        { label: "Buy the kit man a new cart, apologize", emoji: "🛒", color: "bg-blue-600", consequence: SOCCER_LIFE_CONSEQUENCES[215][1],
           apply: s => { s.integrityBonus += 3; s.morale = clamp(s.morale + 3, 0, 100); s.events = [...s.events, "🛒 Bought the kit man a top of the line cart. All good"]; return s; } },
       ] });
   }
-  if (p === "professor" && Math.random() < 0.5) {
+  if (p === "professor" && pendingLifeChance(state, 216, 0.5)) {
     push({ id: 216, cooldown: COOLDOWN.personality, emoji: "📽️", title: "Film Room Legend",
       description: "You spotted the opponent's penalty pattern from three seasons of film and briefed the keeper. He saved two in the shootout.",
       category: "positive", choices: [
@@ -329,31 +343,31 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.integrityBonus += 2; s.morale = clamp(s.morale + 3, 0, 100); log(s, "📋 Handed the penalty dossier to the whole defence. Four of them now study film"); return s; } },
       ] });
   }
-  if (p === "professor" && Math.random() < 0.35) {
+  if (p === "professor" && pendingLifeChance(state, 217, 0.35)) {
     push({ id: 217, cooldown: COOLDOWN.once, emoji: "🗞️", title: "The Tactics Column",
       description: "A newspaper offers you a weekly tactics column. Smart, respected, and guaranteed to annoy your manager whenever you analyze your own team.",
       category: "life", choices: [
-        { label: "Write it", emoji: "✍️", color: "bg-emerald-600", consequence: "Popularity +4, Morale -3 when the manager reads issue two",
+        { label: "Write it", emoji: "✍️", color: "bg-emerald-600", consequence: SOCCER_LIFE_CONSEQUENCES[217][0],
           apply: s => { s.popularity = clamp(s.popularity + 4, 0, 100); s.morale = clamp(s.morale - 3, 0, 100); s.events = [...s.events, "✍️ Your tactics column is a hit. The gaffer underlines things in red"]; return s; } },
         { label: "Keep the notes private", emoji: "🔒", color: "bg-muted", consequence: "The knowledge stays in-house",
           apply: s => { s.events = [...s.events, "🔒 Declined the column. Your notebook stays classified"]; return s; } },
       ] });
   }
-  if (p === "enigma" && Math.random() < 0.5) {
+  if (p === "enigma" && pendingLifeChance(state, 218, 0.5)) {
     push({ id: 218, cooldown: COOLDOWN.personality, emoji: "⛰️", title: "The Monastery Offseason",
       description: "You spent the entire offseason at a mountain monastery. No phone. No boots. Nobody knew where you were, including your club.",
       category: "life", choices: [
-        { label: "Return enlightened", emoji: "🧘", color: "bg-purple-600", consequence: "60%: all stats +1 next season. 40%: Pace -1, you mostly learned soup",
-          apply: s => { if (rollCareerChance(s, 0.6, "The Monastery Offseason", "Sharper after the retreat", "Pace drops by 1")) { s.statBoostNextSeason = { pace: 1, shooting: 1, passing: 1, dribbling: 1, defending: 1, physical: 1 }; s.events = [...s.events, "⛰️ Came back from the monastery visibly sharper. Spooky"]; } else { s.pace = clamp(s.pace - 1, 20, 99); s.events = [...s.events, "⛰️ The monastery taught you inner peace and excellent soup. Pace -1"]; } return s; } },
+        { label: "Return enlightened", emoji: "🧘", color: "bg-purple-600", consequence: SOCCER_LIFE_CONSEQUENCES[218][0],
+          apply: s => { if (rollCareerChance(s, 0.6, "The Monastery Offseason", "Sharper after the retreat", "Pace drops by 1")) { for (const key of ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"] as const) bump(s, key, 1); s.events = [...s.events, "⛰️ Came back from the monastery visibly sharper. Spooky"]; } else { s.pace = clamp(s.pace - 1, 20, 99); s.events = [...s.events, "⛰️ The monastery taught you inner peace and excellent soup. Pace -1"]; } return s; } },
         { label: "Leave after a week, the silence was loud", emoji: "🔔", color: "bg-muted", consequence: "Morale +3, nothing else changes, the monks send a card",
           apply: s => { s.morale = clamp(s.morale + 3, 0, 100); log(s, "🔔 Lasted a week at the monastery. The card they sent is on your fridge"); return s; } },
       ] });
   }
-  if (p === "enigma" && Math.random() < 0.35) {
+  if (p === "enigma" && pendingLifeChance(state, 219, 0.35)) {
     push({ id: 219, cooldown: COOLDOWN.once, emoji: "🦇", title: "The Cape Era",
       description: "You arrived at training in a full-length cape. When asked why, you said 'the wind'. You have worn it every day since.",
       category: "life", choices: [
-        { label: "Commit to the cape", emoji: "🦇", color: "bg-purple-600", consequence: "Followers +800k, coin flip on public opinion",
+        { label: "Commit to the cape", emoji: "🦇", color: "bg-purple-600", consequence: SOCCER_LIFE_CONSEQUENCES[219][0],
           apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.8) * 100) / 100; if (rollCareerChance(s, 0.5, "The Cape Era", "The cape is loved", "The cape divides opinion")) { s.popularity = clamp(s.popularity + 6, 0, 100); s.events = [...s.events, "🦇 The cape era is beloved. Fans wear them to matches"]; } else { s.popularity = clamp(s.popularity - 3, 0, 100); s.events = [...s.events, "🦇 The cape era divides the nation. You do not care"]; } return s; } },
         { label: "Retire the cape", emoji: "🧥", color: "bg-muted", consequence: "The mystery deepens",
           apply: s => { s.events = [...s.events, "🧥 The cape vanished as suddenly as it appeared"]; return s; } },
@@ -378,19 +392,19 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   push({ id: 221, cooldown: COOLDOWN.once, emoji: "🎤", title: "Karaoke Night Leak",
     description: "Video of your initiation karaoke escapes the team dinner. Your rendition was, being generous, an experience.",
     category: "life", choices: [
-      { label: "Post the full version yourself", emoji: "🎶", color: "bg-emerald-600", consequence: "Followers +1M, the people love a bad singer",
+      { label: "Post the full version yourself", emoji: "🎶", color: "bg-emerald-600", consequence: SOCCER_LIFE_CONSEQUENCES[221][0],
         apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 1) * 100) / 100; s.popularity = clamp(s.popularity + 4, 0, 100); s.events = [...s.events, "🎶 Posted your own karaoke disaster. Instant classic"]; return s; } },
       { label: "Never speak of it again", emoji: "🤐", color: "bg-muted", consequence: "It resurfaces every birthday forever",
         apply: s => { s.events = [...s.events, "🤐 The karaoke video lives on in the group chat only"]; return s; } },
     ] });
 
-  if (state.morale <= 60) {
+  if (state.pendingEvents.some(event => event.id === 222) || state.morale <= 60) {
     push({ id: 222, cooldown: COOLDOWN.once, emoji: "🛫", title: "Wrong City",
       description: "You boarded the wrong connecting flight after the international break and landed 900 miles from the away match.",
       category: "negative", choices: [
         { label: "Rent a car, drive all night, make kickoff", emoji: "🚗", color: "bg-emerald-600", consequence: "Legendary commitment: Morale +6, Physical -1 next season",
           apply: s => { s.morale = clamp(s.morale + 6, 0, 100); s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) - 1 }; s.events = [...s.events, "🚗 Drove nine hours overnight and still made kickoff"]; return s; } },
-        { label: "Miss the match, tell the truth", emoji: "🤷", color: "bg-muted", consequence: "Morale -5, the story becomes a documentary punchline",
+        { label: "Miss the match, tell the truth", emoji: "🤷", color: "bg-muted", consequence: SOCCER_LIFE_CONSEQUENCES[222][1],
           apply: s => { s.morale = clamp(s.morale - 5, 0, 100); s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.3) * 100) / 100; s.events = [...s.events, "🛫 Missed a match by boarding the wrong plane. Iconic, unfortunately"]; return s; } },
       ] });
   }
@@ -400,7 +414,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
     category: "life", choices: [
       { label: "Seize the aux", emoji: "🎧", color: "bg-emerald-600", consequence: "Your playlist unites the squad: Morale +6",
         apply: s => { s.morale = clamp(s.morale + 6, 0, 100); s.events = [...s.events, "🎧 Won the aux cord war. The whale era is over"]; return s; } },
-      { label: "Broker a schedule", emoji: "📋", color: "bg-blue-600", consequence: "Diplomacy: Morale +3, whales on Wednesdays",
+      { label: "Broker a schedule", emoji: "📋", color: "bg-blue-600", consequence: SOCCER_LIFE_CONSEQUENCES[223][1],
         apply: s => { s.morale = clamp(s.morale + 3, 0, 100); s.integrityBonus += 1; s.events = [...s.events, "📋 Negotiated the aux schedule. Whales on Wednesdays only"]; return s; } },
     ] });
 
@@ -413,7 +427,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
         apply: s => { s.events = [...s.events, "🙄 Refused the mascot race. It did a victory lap anyway"]; return s; } },
     ] });
 
-  if (state.age >= 26 && state.popularity >= 55) {
+  if (state.age >= 26 && (state.pendingEvents.some(event => event.id === 225) || state.popularity >= 55)) {
     push({ id: 225, cooldown: COOLDOWN.once, emoji: "📖", title: "The Tell-All Book Offer",
       description: "A publisher offers €1.5M for a tell-all autobiography. NOW, mid-career, with names named.",
       category: "life", choices: [
@@ -424,7 +438,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.netWorth >= 1.5 && !flag(state, "esports")) {
+  if ((state.pendingEvents.some(event => event.id === 226) || state.netWorth >= 1.5) && !flag(state, "esports")) {
     push({ id: 226, cooldown: COOLDOWN.once, emoji: "🎮", title: "Buy an Esports Team?",
       description: "A struggling esports org is for sale for €800k. Your gamer teammates swear it is about to blow up.",
       category: "life", choices: [
@@ -438,7 +452,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
     push({ id: 227, cooldown: COOLDOWN.once, emoji: "🏆", title: "Esports Season Results",
       description: "Your esports team's season just wrapped. The group chat has been suspiciously quiet.",
       category: "life", choices: [
-        { label: "Check the standings", emoji: "📊", color: "bg-purple-600", consequence: "40%: they won it all (+€2M). 60%: they folded (-€300k more)",
+        { label: "Check the standings", emoji: "📊", color: "bg-purple-600", consequence: SOCCER_LIFE_CONSEQUENCES[227][0],
           apply: s => { setFlag(s, "esports", 2); if (rollCareerChance(s, 0.4, "Esports Season Results", "Your team wins", "The organisation folds")) { s.netWorth = Math.round((s.netWorth + 2) * 100) / 100; s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.5) * 100) / 100; s.events = [...s.events, "🏆 Your esports team won the whole thing! +€2M"]; } else { s.netWorth = Math.round((s.netWorth - 0.3) * 100) / 100; s.events = [...s.events, "📉 The esports org folded. The jerseys are collectors items now"]; } return s; } },
         { label: "Sell your stake before the results post", emoji: "💸", color: "bg-muted", consequence: "Net worth +€500k back, you never find out how they did",
           apply: s => { setFlag(s, "esports", 2); money(s, 0.5); log(s, "💸 Sold the esports org the night before the final. You have never checked the score"); return s; } },
@@ -467,46 +481,46 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
     push({ id: 230, cooldown: COOLDOWN.once, emoji: "👟", title: "The Cursed Boots",
       description: "Your new limited-edition boots have not seen a single win. Seven matches. The kit man refuses to touch them. He crosses himself near your locker.",
       category: "life", choices: [
-        { label: "Keep wearing them: superstition is fake", emoji: "🧪", color: "bg-red-600", consequence: "Science! The curse saga continues next season",
+        { label: "Keep wearing them: superstition is fake", emoji: "🧪", color: "bg-red-600", consequence: SOCCER_LIFE_CONSEQUENCES[230][0],
           apply: s => { setFlag(s, "cursedBoots", 1); s.morale = clamp(s.morale - 3, 0, 100); s.events = [...s.events, "👟 Kept the cursed boots. The kit man now salts the doorway"]; return s; } },
-        { label: "Burn them in the parking lot", emoji: "🔥", color: "bg-amber-600", consequence: "Morale +5, sponsor mildly concerned, the video goes viral",
+        { label: "Burn them in the parking lot", emoji: "🔥", color: "bg-amber-600", consequence: SOCCER_LIFE_CONSEQUENCES[230][1],
           apply: s => { s.morale = clamp(s.morale + 5, 0, 100); s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.4) * 100) / 100; s.events = [...s.events, "🔥 Ceremonially burned the cursed boots. The squad attended"]; return s; } },
       ] });
   }
   if (flag(state, "cursedBoots") === 1) {
     push({ id: 231, cooldown: COOLDOWN.once, emoji: "✨", title: "The Curse Breaks",
-      description: "You scored a hat trick in the cursed boots. The kit man has framed them. Scientists want to study you.",
+      description: "The next season is over and you still have the same boots. You and the kit man are ready to stop blaming them for the results.",
       category: "positive", choices: [
-        { label: "Vindication", emoji: "✨", color: "bg-emerald-600", consequence: "Shooting +2 next season, followers +500k, curse officially reversed",
-          apply: s => { setFlag(s, "cursedBoots", 2); s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 2 }; s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.5) * 100) / 100; s.events = [...s.events, "✨ The cursed boots delivered a hat trick. You were right all along"]; return s; } },
-        { label: "Retire the boots at their peak", emoji: "🏛️", color: "bg-muted", consequence: "Morale +4, Followers +200k, the kit man builds a small shrine",
-          apply: s => { setFlag(s, "cursedBoots", 2); s.morale = clamp(s.morale + 4, 0, 100); followers(s, 0.2); log(s, "🏛️ Retired the boots after the hat trick. The kit man lights a candle on matchdays"); return s; } },
+        { label: "Keep the boots, focus on finishing", emoji: "✨", color: "bg-emerald-600", consequence: "Shooting +2 next season, followers +500k, curse officially reversed",
+          apply: s => { setFlag(s, "cursedBoots", 2); s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 2 }; s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.5) * 100) / 100; s.events = [...s.events, "✨ Kept the boots and put the focus on finishing. The superstition is over"]; return s; } },
+        { label: "Retire the boots", emoji: "🏛️", color: "bg-muted", consequence: "Morale +4, Followers +200k, the kit man builds a small shrine",
+          apply: s => { setFlag(s, "cursedBoots", 2); s.morale = clamp(s.morale + 4, 0, 100); followers(s, 0.2); log(s, "🏛️ Retired the boots at the end of the season. The kit man lights a candle on matchdays"); return s; } },
       ] });
   }
 
-  if (state.overall >= 84 && state.age >= 27) {
+  if ((state.pendingEvents.some(event => event.id === 232) || state.overall >= 84) && state.age >= 27) {
     push({ id: 232, story: STORY.statueVote, cooldown: COOLDOWN.once, emoji: "🗿", title: "The Statue Vote",
       description: "Your hometown council is voting on a statue of you outside the stadium where you played as a kid.",
       category: "life", choices: [
-        { label: "Attend the vote", emoji: "🗿", color: "bg-amber-600", consequence: "60%: it passes, Legacy +8. 40%: rejected 5 votes to 4, ouch",
+        { label: "Attend the vote", emoji: "🗿", color: "bg-amber-600", consequence: SOCCER_LIFE_CONSEQUENCES[232][0],
           apply: s => { if (rollCareerChance(s, 0.6, "The Statue Vote", "Statue vote passes", "Statue vote fails")) { s.integrityBonus += 8; s.morale = clamp(s.morale + 8, 0, 100); s.events = [...s.events, "🗿 The statue vote passed! Bronze you goes up next spring"]; } else { s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "🗿 The statue vote failed 5 to 4. Councilman Dave will be hearing about this"]; } return s; } },
         { label: "Ask them to fund youth pitches instead", emoji: "⚽", color: "bg-emerald-600", consequence: "Integrity +10, the real legacy",
           apply: s => { s.integrityBonus += 10; s.events = [...s.events, "⚽ Redirected the statue budget to youth pitches. Better than bronze"]; return s; } },
       ] });
   }
 
-  if (state.popularity >= 60) {
+  if (state.pendingEvents.some(event => event.id === 233) || state.popularity >= 60) {
     push({ id: 233, cooldown: COOLDOWN.once, emoji: "🗽", title: "The Wax Statue",
       description: "A famous wax museum unveils your figure. It looks like you, if you were a startled substitute teacher from a different, sadder timeline.",
       category: "life", choices: [
-        { label: "Pose next to it grinning", emoji: "📸", color: "bg-emerald-600", consequence: "Followers +800k, self-awareness is elite",
+        { label: "Pose next to it grinning", emoji: "📸", color: "bg-emerald-600", consequence: SOCCER_LIFE_CONSEQUENCES[233][0],
           apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.8) * 100) / 100; s.popularity = clamp(s.popularity + 4, 0, 100); s.events = [...s.events, "📸 Posed with your terrible wax figure. Comedy gold"]; return s; } },
         { label: "Demand a redo", emoji: "😤", color: "bg-red-600", consequence: "Popularity -3, the museum posts the demand letter",
           apply: s => { s.popularity = clamp(s.popularity - 3, 0, 100); s.events = [...s.events, "😤 Demanded a wax redo. The internet sided with the statue"]; return s; } },
       ] });
   }
 
-  if (state.popularity >= 40 && !flag(state, "lookalike")) {
+  if ((state.pendingEvents.some(event => event.id === 234) || state.popularity >= 40) && !flag(state, "lookalike")) {
     push({ id: 234, cooldown: COOLDOWN.once, emoji: "🥸", title: "The Lookalike",
       description: "A man who looks 70% like you has been opening supermarkets and charging for autographs two towns over.",
       category: "negative", choices: [
@@ -527,7 +541,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (!flag(state, "teammateLoan") && state.netWorth >= 0.5) {
+  if (!flag(state, "teammateLoan") && (state.pendingEvents.some(event => event.id === 236) || state.netWorth >= 0.5)) {
     push({ id: 236, cooldown: COOLDOWN.once, emoji: "🤲", title: "A Teammate Needs €200k",
       description: "A squad player pulls you aside. Family trouble back home, he says. He needs €200k and swears he is good for it.",
       category: "life", choices: [
@@ -575,7 +589,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
         apply: s => { s.morale = clamp(s.morale - 3, 0, 100); s.events = [...s.events, "🧢 Wore a beanie until the haircut grew out. Everyone knew"]; return s; } },
     ] });
 
-  if (state.popularity >= 50) {
+  if (state.pendingEvents.some(event => event.id === 241) || state.popularity >= 50) {
     push({ id: 241, cooldown: COOLDOWN.once, emoji: "🐐", title: "A Village Named a Goat After You",
       description: "A small village in the mountains has named its prize goat after you. They have invited you to the naming festival. The goat has won awards.",
       category: "life", choices: [
@@ -597,7 +611,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (!state.hasRelationship && !state.family?.isMarried && state.popularity >= 45) {
+  if (!state.hasRelationship && !state.family?.isMarried && (state.pendingEvents.some(event => event.id === 243) || state.popularity >= 45)) {
     push({ id: 243, cooldown: COOLDOWN.once, emoji: "🌹", title: "Reality Dating Show Invite",
       description: "A massive reality dating show wants you as the celebrity single next season. Filming is during the offseason. Your agent has opinions. Everyone has opinions.",
       category: "life", choices: [
@@ -608,7 +622,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.popularity >= 45 && !flag(state, "podcast")) {
+  if ((state.pendingEvents.some(event => event.id === 244) || state.popularity >= 45) && !flag(state, "podcast")) {
     push({ id: 244, story: STORY.podcastLaunch, cooldown: COOLDOWN.once, emoji: "🎙️", title: "Start a Podcast?",
       description: "Every player has a podcast now. Yours would be called whatever you want, and sponsors are already lining up.",
       category: "life", choices: [
@@ -618,7 +632,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.integrityBonus += 1; s.events = [...s.events, "🛑 Declined to start a podcast. Historians will thank you"]; return s; } },
       ] });
   }
-  if (flag(state, "podcast") === 1 && Math.random() < 0.4) {
+  if (flag(state, "podcast") === 1 && pendingLifeChance(state, 245, 0.4)) {
     push({ id: 245, cooldown: COOLDOWN.media, emoji: "🔥", title: "Podcast Hot Take Backlash",
       description: "On episode 14 you said a legendary retired striker 'would not score in today's game'. He has responded. On every platform. Twice.",
       category: "negative", choices: [
@@ -647,7 +661,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
         apply: s => { s.events = [...s.events, "🧤 Gaffer Two was relocated to a lovely forest. The squad still salutes"]; return s; } },
     ] });
 
-  if (state.popularity >= 35) {
+  if (state.pendingEvents.some(event => event.id === 248) || state.popularity >= 35) {
     push({ id: 248, cooldown: COOLDOWN.fans, emoji: "💍", title: "Pitch Invasion Proposal",
       description: "A fan proposes to their partner in front of you after the match and asks you to hand over the ring. Forty thousand people are watching. No pressure.",
       category: "life", choices: [
@@ -658,7 +672,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.overall >= 86 && state.age >= 29) {
+  if ((state.pendingEvents.some(event => event.id === 249) || state.overall >= 86) && state.age >= 29) {
     push({ id: 249, cooldown: COOLDOWN.once, emoji: "🎞️", title: "The Biopic Offer",
       description: "A major studio wants the film rights to your life story. They mention an A-list actor for the lead. He is 5 foot 6. You are not.",
       category: "life", choices: [
@@ -669,7 +683,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.netWorth >= 1) {
+  if (state.pendingEvents.some(event => event.id === 251) || state.netWorth >= 1) {
     push({ id: 251, cooldown: COOLDOWN.money, emoji: "🪙", title: "The Teammate Coin",
       description: "A teammate launches his own cryptocurrency and corners you at lunch about getting in early. His pitch deck is a napkin.",
       category: "life", choices: [
@@ -695,7 +709,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
      that until now had nothing to say. */
 
   /* ── family ── */
-  if (state.popularity >= 30) {
+  if (state.pendingEvents.some(event => event.id === 253) || state.popularity >= 30) {
     push({ id: 253, cooldown: COOLDOWN.family, emoji: "📱", title: "Your Mum Is In The Comments",
       description: "Your mum has started replying to every critic under your posts. In full sentences. With childhood photos as evidence. A man who said you were slow has now seen your nursery sports day medal.",
       category: "life", choices: [
@@ -735,7 +749,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   }
 
   /* ── media ── */
-  if (state.popularity >= 35) {
+  if (state.pendingEvents.some(event => event.id === 256) || state.popularity >= 35) {
     push({ id: 256, cooldown: COOLDOWN.media, emoji: "🎬", title: "The Documentary Edit",
       description: "The club's behind the scenes series has cut your forty minute press conference down to one eye roll and a sigh. The episode is called Tension.",
       category: "life", choices: [
@@ -749,7 +763,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   }
 
   /* ── money and brands ── */
-  if (state.popularity >= 30 && !flag(state, "energyDrink")) {
+  if ((state.pendingEvents.some(event => event.id === 257) || state.popularity >= 30) && !flag(state, "energyDrink")) {
     push({ id: 257, cooldown: COOLDOWN.money, emoji: "🥤", title: "The Energy Drink Pitch",
       description: "A drinks brand wants your face on a can. The flavour is called Blue. Not blueberry. Blue. The money is very real.",
       category: "life", choices: [
@@ -762,7 +776,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.netWorth >= 1) {
+  if (state.pendingEvents.some(event => event.id === 258) || state.netWorth >= 1) {
     push({ id: 258, cooldown: COOLDOWN.once, emoji: "🪴", title: "The Garden Centre Charge",
       description: "Your bank has frozen your card over €80k spent at a garden centre at three on a Tuesday afternoon. You were at training. Your dad has gone very quiet in the family chat.",
       category: "life", choices: [
@@ -775,7 +789,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.netWorth >= 1) {
+  if (state.pendingEvents.some(event => event.id === 259) || state.netWorth >= 1) {
     push({ id: 259, cooldown: COOLDOWN.money, emoji: "🧮", title: "The Accountant's Spreadsheet",
       description: "A teammate shows you his accountant's fees over lunch. Yours has been charging four times that for the same job, for three years, plus a 'strategy retainer' nobody can explain.",
       category: "negative", choices: [
@@ -897,7 +911,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   }
 
   /* ── fans and community ── */
-  if (state.popularity >= 25) {
+  if (state.pendingEvents.some(event => event.id === 268) || state.popularity >= 25) {
     push({ id: 268, cooldown: COOLDOWN.fans, emoji: "🏅", title: "The Under Nines' Medal Night",
       description: "A local under nines team has written, in crayon, asking you to hand out their end of season medals. It is the same evening as a sponsor dinner you already said yes to.",
       category: "life", choices: [
@@ -910,7 +924,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.popularity >= 40) {
+  if (state.pendingEvents.some(event => event.id === 269) || state.popularity >= 40) {
     push({ id: 269, cooldown: COOLDOWN.fans, emoji: "🪧", title: "Forty Feet, One Typo",
       description: "The fans have unveiled a forty foot banner of your face behind the goal. It is magnificent. Your name is spelt wrong on it.",
       category: "life", choices: [
@@ -934,6 +948,36 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { setFlag(s, "coachingBadges", 2); s.morale = clamp(s.morale + 2, 0, 100); log(s, "⚽ Turned down the coaching course. For now. The gaffer wrote the date down"); return s; } },
         { label: "Suggest the captain instead", emoji: "🤝", color: "bg-blue-600", consequence: "Integrity +1, Morale +1",
           apply: s => { setFlag(s, "coachingBadges", 2); s.integrityBonus += 1; s.morale = clamp(s.morale + 1, 0, 100); log(s, "🤝 Pointed the coaching course at the captain. He is already correcting the gaffer"); return s; } },
+      ] });
+  }
+
+  const startedCourse = state.eventLastFired?.["270"];
+  const courseYear = state.seasons[state.seasons.length - 1]?.year ?? 0;
+  if ((state.pendingEvents ?? []).some(event => event.id === 630) || (!state.retired && flag(state, "coachingBadges") === 1
+    && (typeof startedCourse !== "number" || !Number.isFinite(startedCourse) || startedCourse < courseYear))) {
+    push({ id: 630, cooldown: COOLDOWN.once, emoji: "📚", title: "Your coursework",
+      description: "Your coaching course has practical work to review. Skill boosts are queued for next season.",
+      category: "life", choices: [
+        { label: "Review your match-analysis assignment", emoji: "📋", color: "bg-blue-600", consequence: "Passing +1 queued, Integrity +2. Coursework reviewed",
+          apply: s => { setFlag(s, "coachingBadges", 3); bump(s, "passing", 1); s.integrityBonus += 2; log(s, "📚 Reviewed the course match-analysis assignment"); return s; } },
+        { label: "Finish your youth-session plan", emoji: "🤝", color: "bg-emerald-600", consequence: "Defending +1 queued, Integrity +1. Coursework reviewed",
+          apply: s => { setFlag(s, "coachingBadges", 3); bump(s, "defending", 1); s.integrityBonus += 1; log(s, "📚 Finished the course youth-session plan"); return s; } },
+        { label: "Leave the course", emoji: "⚽", color: "bg-muted", consequence: "Morale +2. Course closed",
+          apply: s => { setFlag(s, "coachingBadges", 4); s.morale = clamp(s.morale + 2, 0, 100); log(s, "⚽ Left the coaching course to focus on playing"); return s; } },
+      ] });
+  }
+
+  const documentaryYear = state.seasons[state.seasons.length - 1]?.year ?? 0;
+  const documentaryDeal = state.eventLastFired?.["408"];
+  if ((state.pendingEvents ?? []).some(event => event.id === 631) || (!state.retired && flag(state, "rDocCrew") === 1
+    && (typeof documentaryDeal !== "number" || !Number.isFinite(documentaryDeal) || documentaryDeal < documentaryYear))) {
+    push({ id: 631, cooldown: COOLDOWN.family, emoji: "🎬", title: "Your documentary review",
+      description: "The production team has sent footage and promotional copy to review. You can check details or ask to keep family scenes out of the promotion.",
+      category: "life", choices: [
+        { label: "Check the facts", emoji: "📋", color: "bg-blue-600", consequence: "Integrity +2, Morale -1. Documentary reviewed",
+          apply: s => { setFlag(s, "rDocCrew", 2); s.integrityBonus += 2; s.morale = clamp(s.morale - 1, 0, 100); log(s, "🎬 Checked the facts in the documentary footage and promotional copy"); return s; } },
+        { label: "Ask to keep family scenes out of the promotion", emoji: "🏠", color: "bg-emerald-600", consequence: "Morale +2, Popularity -1. Documentary reviewed",
+          apply: s => { setFlag(s, "rDocCrew", 3); s.morale = clamp(s.morale + 2, 0, 100); s.popularity = clamp(s.popularity - 1, 0, 100); log(s, "🎬 Asked the production team to keep family scenes out of the promotion"); return s; } },
       ] });
   }
 
@@ -969,5 +1013,5 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  return events;
+  return [...events, ...getSoccerRoutineEvents(state)];
 }

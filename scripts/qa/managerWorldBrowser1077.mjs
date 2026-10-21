@@ -48,7 +48,7 @@ const fonts = new Map(JSON.parse(fs.readFileSync(path.join(CACHE, 'manifest.json
   return [entry.url, { body, contentType: entry.contentType }];
 }));
 assert(fonts.has(sheets[0]), 'Prefetch current fonts before the guarded native run');
-const held = ['src/components/club-manager/WorldTablesCard.tsx', 'src/components/club-manager/LeagueTableCard.tsx', 'src/components/FlagImg.tsx', 'src/lib/clubManager.ts', 'src/lib/clubManagerEras.ts', 'src/lib/clubManagerWorldEdit.ts', 'src/data/clubManagerWorldRosters.ts', 'src/data/clubManagerRosters.ts', 'src/data/clubManagerALeague2026.ts', 'scripts/qa/managerWorldBrowser1077.mjs'];
+const held = ['src/components/club-manager/WorldTablesCard.tsx', 'src/components/club-manager/LeagueTableCard.tsx', 'src/components/FlagImg.tsx', 'src/lib/clubManager.ts', 'src/lib/clubManagerEras.ts', 'src/lib/clubManagerWorldEdit.ts', 'src/data/clubManagerWorldRosters.ts', 'src/data/clubManagerRosters.ts', 'src/data/clubManagerALeague2026.ts', 'src/integrations/supabase/client.ts', 'src/lib/safeStorage.ts', 'scripts/qa/managerWorldBrowser1077.mjs'];
 const hashes = () => Object.fromEntries(held.map(file => [file, digest(fs.readFileSync(path.join(ROOT, file)))]));
 const report = { sourceBefore: hashes(), cases: [], controls: [], forwardedWrites: 0 };
 fs.mkdirSync(OUT, { recursive: true });
@@ -109,6 +109,29 @@ function checkMeasure(row) {
   for (const text of row.text) { assert(text.font >= 12, 'Readable league browser text at least12px'); assert(text.scroll <= text.width + 1, 'League browser labels fit'); }
 }
 
+function checkStartupStorage(snapshot, theme) {
+  assert.deepEqual(snapshot.writes, [], 'World browser startup makes no storage writes');
+  assert.deepEqual(snapshot.removals, [], 'World browser startup removes no stored bytes');
+  assert.deepEqual(snapshot.values, { 'dukb-theme': theme }, 'World browser startup preserves the exact original theme bytes');
+}
+const instrumentStorage = ({ faultKey, faultMode } = {}) => {
+  window.__worldEvents=[]; window.__worldWrites=[]; window.__worldRemovals=[];
+  const original=Storage.prototype.setItem, originalRemove=Storage.prototype.removeItem;
+  Storage.prototype.setItem=function(key,value){if(this===localStorage)window.__worldWrites.push({key,value:String(value),bytes:String(value).length});return original.call(this,key,value);};
+  Storage.prototype.removeItem=function(key){if(this===localStorage)window.__worldRemovals.push(key);return originalRemove.call(this,key);};
+  for(const type of ['pointerdown','pointerup','click','input','keydown','keyup']) document.addEventListener(type,event=>{const node=event.target instanceof Element?event.target:null;window.__worldEvents.push({type,trusted:event.isTrusted,key:event.key,pointerType:event.pointerType,target:node?.getAttribute('data-world-league')||node?.getAttribute('aria-label')||node?.closest('button')?.textContent||node?.tagName});},true);
+  if (faultKey) {
+    if (localStorage.getItem(faultKey) !== null) throw new Error('The startup control must not overwrite a held key');
+    window.__worldStartupControl = { before: { writes: [...window.__worldWrites], removals: [...window.__worldRemovals], values: { ...localStorage } } };
+    if (faultMode === 'pair') {
+      localStorage.setItem(faultKey, faultKey);
+      window.__worldStartupControl.written = { writes: [...window.__worldWrites], removals: [...window.__worldRemovals], values: { ...localStorage } };
+    }
+    localStorage.removeItem(faultKey);
+  }
+};
+const storageSnapshot = page => page.evaluate(() => ({ writes: window.__worldWrites, removals: window.__worldRemovals, values: { ...localStorage } }));
+
 try {
   const { build } = await import('vite');
   await build({ root:temp, configFile:path.join(ROOT,'vite.config.ts'), publicDir:false, build:{outDir:dist,emptyOutDir:true,minify:false}, logLevel:'warn' });
@@ -131,23 +154,19 @@ try {
   ]) {
     const id = `${profile.width}-${profile.touch ? 'touch' : 'keyboard'}-${profile.theme}`;
     const row = {id,profile,network:[],assets:[],events:[],storageWrites:[],screenshots:[],geometry:[],checks:[],errors:[]}; report.cases.push(row); save();
+    let startupFaultPage, startupFaultRow;
     const context = await browser.newContext({ viewport:{width:profile.width,height:profile.height}, hasTouch:profile.touch,isMobile:profile.touch,deviceScaleFactor:1,reducedMotion:profile.reduced?'reduce':'no-preference',colorScheme:profile.theme,serviceWorkers:'block',storageState:{cookies:[],origins:[{origin:BASE,localStorage:[{name:'dukb-theme',value:profile.theme}]}]} });
     await context.route('**/*',route => {
       const request = route.request(), url = new URL(request.url());
+      const observed = startupFaultPage && request.frame().page() === startupFaultPage ? startupFaultRow : row;
       if(url.origin === BASE) { assert(['GET','HEAD'].includes(request.method())); return route.continue(); }
-      row.network.push({url:url.href,method:request.method(),fulfilledLocally:true});
-      if(fonts.has(url.href)) { const cached=fonts.get(url.href); row.assets.push({url:url.href,bytes:cached.body.length,sha256:digest(cached.body)}); return route.fulfill({status:200,...cached}); }
+      observed.network.push({url:url.href,method:request.method(),fulfilledLocally:true});
+      if(fonts.has(url.href)) { const cached=fonts.get(url.href); observed.assets.push({url:url.href,bytes:cached.body.length,sha256:digest(cached.body)}); return route.fulfill({status:200,...cached}); }
       assert.notEqual(request.resourceType(),'image',`Every actual flag image must be prefetched: ${url.href}`);
       return route.fulfill({status:200,contentType:'application/json',body:'[]'});
     });
     const page = await context.newPage(); page.setDefaultTimeout(15000);
-    await page.addInitScript(() => {
-      window.__worldEvents=[]; window.__worldWrites=[]; window.__worldRemovals=[];
-      const original=Storage.prototype.setItem, originalRemove=Storage.prototype.removeItem;
-      Storage.prototype.setItem=function(key,value){if(this===localStorage)window.__worldWrites.push({key,value:String(value),bytes:String(value).length});return original.call(this,key,value);};
-      Storage.prototype.removeItem=function(key){if(this===localStorage)window.__worldRemovals.push(key);return originalRemove.call(this,key);};
-      for(const type of ['pointerdown','pointerup','click','input','keydown','keyup']) document.addEventListener(type,event=>{const node=event.target instanceof Element?event.target:null;window.__worldEvents.push({type,trusted:event.isTrusted,key:event.key,pointerType:event.pointerType,target:node?.getAttribute('data-world-league')||node?.getAttribute('aria-label')||node?.closest('button')?.textContent||node?.tagName});},true);
-    });
+    await page.addInitScript(instrumentStorage);
     page.on('pageerror',error=>row.errors.push(String(error)));
     page.on('response',response=>{if(response.url().startsWith(BASE)&&response.status()>=400)row.errors.push(response.url()+':'+response.status());});
     const button = name => page.getByRole('button',{name,exact:true});
@@ -180,12 +199,44 @@ try {
       await page.goto(BASE,{waitUntil:'domcontentloaded'});await button('Browse leagues').waitFor();
       row.fonts=await page.evaluate(async()=>{await document.fonts.ready;const result=[];for(const family of ['Inter','Space Grotesk'])for(const weight of [400,500,600,700]){const faces=await document.fonts.load(`${weight} 16px "${family}"`,'Explore your world');result.push({family,weight,faces:faces.map(face=>({family:face.family,status:face.status}))});}return result;});
       for(const font of row.fonts)assert(font.faces.length>0&&font.faces.every(face=>face.status==='loaded'&&face.family.replaceAll('"','')===font.family));
-      // The imported auth client tests storage once before the journey. Retain
-      // that exact write/remove pair, then require browsing to add no writes.
-      row.startupStorage=await page.evaluate(()=>({writes:window.__worldWrites,removals:window.__worldRemovals,values:{...localStorage}}));
-      assert.equal(row.startupStorage.writes.length,1,'One auth startup storage probe');
-      const probe=row.startupStorage.writes[0];assert.match(probe.key,/^lswt-/);assert.equal(probe.value,probe.key);assert.equal(probe.bytes,probe.key.length);
-      assert.deepEqual(row.startupStorage.removals,[probe.key]);assert.deepEqual(row.startupStorage.values,{'dukb-theme':profile.theme});
+      row.startupStorage=await storageSnapshot(page); checkStartupStorage(row.startupStorage, profile.theme);
+      row.startupStorageControls = [];
+      for (const mode of ['pair', 'remove']) {
+        const faultKey = mode === 'pair' ? '__world_startup_fault__' : '__world_startup_remove_fault__';
+        const controlRow = { id: `${id}-startup-storage-${mode}`, mode, network: [], assets: [], errors: [] };
+        startupFaultRow = controlRow; row.startupStorageControls.push(controlRow);
+        startupFaultPage = await context.newPage();
+        startupFaultPage.on('pageerror', error => controlRow.errors.push(String(error)));
+        startupFaultPage.on('response', response => { if(response.url().startsWith(BASE) && response.status() >= 400) controlRow.errors.push(response.url()+':'+response.status()); });
+        try {
+          await startupFaultPage.addInitScript(instrumentStorage, { faultKey, faultMode: mode });
+          await startupFaultPage.goto(BASE, { waitUntil: 'domcontentloaded' });
+          await startupFaultPage.getByRole('button', { name: 'Browse leagues', exact: true }).waitFor();
+          const setup = await startupFaultPage.evaluate(() => window.__worldStartupControl);
+          controlRow.before = setup.before; controlRow.written = setup.written;
+          checkStartupStorage(controlRow.before, profile.theme);
+          if (mode === 'pair') assert.equal(controlRow.written.values[faultKey], faultKey, 'The startup control actually wrote its temporary bytes');
+          controlRow.fault = await storageSnapshot(startupFaultPage);
+          assert.deepEqual(controlRow.fault.writes, mode === 'pair' ? [{ key: faultKey, value: faultKey, bytes: faultKey.length }] : []);
+          assert.deepEqual(controlRow.fault.removals, [faultKey]);
+          assert.notDeepEqual(controlRow.fault, controlRow.before, 'The actual startup fault changed the captured record');
+          let rejected = false;
+          try { checkStartupStorage(controlRow.fault, profile.theme); }
+          catch (error) {
+            assert(error instanceof assert.AssertionError);
+            assert(error.message.startsWith(mode === 'pair' ? 'World browser startup makes no storage writes' : 'World browser startup removes no stored bytes'));
+            controlRow.rejectedAt = mode === 'pair' ? 'writes' : 'removals'; rejected = true;
+          }
+          assert(rejected, 'The same startup guard rejects the actual captured fault at its intended assertion');
+          controlRow.rejected = rejected;
+          assert.deepEqual(controlRow.fault.values, controlRow.before.values, 'The startup fault preserves all held bytes');
+          assert.deepEqual(controlRow.errors, []);
+        } finally { await startupFaultPage.close(); }
+        controlRow.restored = await storageSnapshot(page);
+        assert.deepEqual(controlRow.restored, row.startupStorage, 'The separate startup control preserves all main-page counters and theme bytes');
+        checkStartupStorage(controlRow.restored, profile.theme);
+        controlRow.mainHeld = true; save();
+      }
       const initial=await proof();assert(initial.expected.length>0);const beforeSave=digest(JSON.stringify(initial.career));
       await page.evaluate(()=>scrollTo(0,48));const beforeY=await page.evaluate(()=>scrollY);
       await activate(button('Browse leagues'));assert(await search().evaluate(node=>document.activeElement===node));assert.equal(await page.evaluate(()=>scrollY),beforeY,'Opening browser does not jump the page');
@@ -224,6 +275,10 @@ try {
     finally{await context.close();}
   }
   assert.equal(report.cases.length,3);assert(report.cases.every(row=>row.passed));assert.equal(report.controls.length,9);
+  for (const row of report.cases) assert.deepEqual(row.startupStorageControls.map(control => control.mode), ['pair', 'remove']);
+  const startupControls = report.cases.flatMap(row => row.startupStorageControls);
+  assert.equal(startupControls.length, 6);
+  assert(startupControls.every(control => control.rejected && control.mainHeld), 'All separate-page actual startup controls reject and preserve the main journeys');
   report.sourceAfter=hashes();assert.deepEqual(report.sourceAfter,report.sourceBefore);report.passed=true;save();
   console.log('PASS manager world native:3 profiles,9 effective DOM faults,actual modern/edited/historical worlds,unchanged saved tables and sources.');
 }finally{await browser?.close();if(server)await new Promise(resolve=>server.close(resolve));const resolved=path.resolve(temp);assert(resolved.startsWith(ROOT+path.sep+'.manager-world-native-'));fs.rmSync(resolved,{recursive:true,force:true});save();}

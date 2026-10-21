@@ -398,6 +398,168 @@
       of the 16 entries. Written with --part=modern,eras,pure --write on
       the tree itself (16 lines changed and no other), then run green
       whole on the same runner.
+      Round 1311 (2026-10-12) re-took modern and eras for the season's
+      honours and nothing else: on a season the league book decides (a
+      whole book with at least 73 in 100 rival goals on record) the
+      summary's golden boot, player of the season and world award read
+      the book's Goals board, and the summary and the season's record
+      gain the league's awards. Attribution on a GitHub runner at
+      977c3eca (remote check r1311-s2d), two legs. Leg A, a copy of the
+      tree in which the book never decides (bookDecides answers false,
+      the rule before the round): the file as it stood, green whole, so
+      the awards are the whole cause and no result, table or draw moved.
+      Leg B, the tree itself: 33 saves moved, 13 of 27 modern (summary
+      and wholeNext, and s2_whole for six pyramid saves) and 20 of 20
+      era (summary and wholeNext), 72 hashes; the 14 modern saves that
+      held are the leagues whose book stays under the floor, and start,
+      whole, every other view and pure held in all of them. Written with
+      --part=modern,eras,pure --write on the tree itself, then run green
+      whole on the same runner.
+      Round 1311's step 5 (2026-10-12) re-took them again for the team of
+      the season, which the same awards now carry (kept on the newest five
+      records). Attribution on a GitHub runner at 5090d373 (remote check
+      r1311-s5d). Leg A, a copy of the tree whose awards carry no team:
+      step 2's file as it stood, green whole. Leg B, the tree itself: the
+      same 33 saves moved, in summary and wholeNext (and s2_whole for the
+      six pyramid saves), 72 hashes, nothing else. Written the same way,
+      then green whole.
+      Release AZ (2026-10-12) re-took it once more, for Round 1250 (the
+      other lane's PR224): every new career now carries a world seed, so
+      `start` and every whole state hash moves with nothing wrong (47
+      entries red after the merge, remote check az-e1b, among them the
+      board's objectives the summer after in eight entries, four modern
+      leagues and four era ones, whose club
+      strengths a seeded world draws). Attribution on a GitHub runner at
+      5b0da7f1 (remote check az-digest, line attrib-inverse): with the
+      seed block of startCareer taken out by scripts/lib/cmWorldSeed1250.mjs
+      the harness is green whole against Release AX's file, so the seed
+      is the only cause. Written with --part=modern,eras,pure --write on
+      the tree itself (201 lines changed), then run green whole on the
+      same runner (line write-digest).
+      Release AZ's fix pass (2026-10-12) took it once more, for two
+      intended changes to seeded careers only: the summer rollover now
+      drops a released or retired ledger record that changes no roster
+      (pruneWorldRoster), and a seeded career's free agent name guards and
+      emergency signings read its own world. 24 entries moved, in the
+      state after the summer only (wholeNext 24, s2_whole 9, no readable
+      field). Attribution on a runner at 91019024 (remote check azfx-4):
+      with both taken out the committed file is green whole (rules-both);
+      the prune alone out leaves 7 entries red, the other alone out 24.
+      Written on the runner (azfx-5, line write-digest, 33 lines changed),
+      then run green whole there.
+      The closing check's fixer (2026-10-12) took it once more, for
+      7942d4d1: a seeded career's summer emergency signing now carries
+      the key of its ledger record. 6 modern entries moved, in the state
+      after the summer only (wholeNext 6, s2_whole 3, no readable field).
+      Attribution on a runner at 7942d4d1 (remote check fx2-b, line
+      rules-nokey): with that one line taken out the committed file is
+      green whole. Written on the same runner (line write-digest, 9 lines
+      changed), then run green whole there.
+      Fix pass 3 (2026-10-13) took it once more, for the lead's ruling that
+      the club I manage is never read off the world roster: its strength
+      in the state after the summer now reads the base's projection. All
+      47 entries moved in wholeNext and the ten pyramid saves in s2_whole,
+      no readable field and no other hash. Attribution on a runner at
+      342e67b0 (remote check fx3-Fe, line rules-revert): with the
+      engine's fix taken out the committed file is green whole. Written on
+      the same runner (line write-digest, 57 lines changed), then run green
+      whole there.
+      Round 1326 (2026-10-13) re-took modern, eras and pure for words and
+      nothing else (a copy round: Win La Liga, Serie A and Ligue 1 by
+      toLeague, the weekly news lines that name a league, the drama line's
+      sentence capitals, the break note's clause, the staff approach line).
+      Attribution on a GitHub runner at ea84ed63 (remote check r1326-s5a),
+      three legs. Leg A, the base c9c77eba under CM_RULES_ROOT: the file as
+      it stood, green whole. Leg B, the tree itself: 26 of 27 modern saves
+      (all but now|saudi), 20 of 20 era saves and 17 of 48 pure entries
+      moved, 130 hashes, in start, whole, objectives, summary, wholeNext,
+      objectivesNext, s2_whole and s2_objectives, and in pure only demand
+      and objectives of the five modern and twelve era leagues toLeague
+      leaves bare; table, results, world, cup, europe, trophies,
+      promotions, europeNext, calendarNext and cupDrawNext held everywhere.
+      Leg C, scripts/qa/cmCopyOnly1326.mjs fleet B (these same 47 saves on
+      the base and the head in lockstep, every entry compared): equal draws
+      and every differing string one of the round's declared rewrites
+      (now|saudi none). Written with --part=modern,eras,pure --write on the
+      tree itself, then run green whole.
+      Release BC's join (2026-10-13) took it ONCE on the merged tree
+      25c07316 (main with Release AZ, Rounds 1325, 1326, 1328 and 1323),
+      where AZ's world seed and 1326's words meet. Attribution on a
+      GitHub runner at 25c07316 (remote check rBCg-m5d), two legs, each
+      in a throwaway checkout. Leg A, the seed block of startCareer taken
+      out by scripts/lib/cmWorldSeed1250.mjs, against the file the join
+      held (Round 1326's own, byte equal to origin/r1326-cm-copy's): green
+      whole, so the seed is the only cause of what moved past 1326. Leg B,
+      the same tree against Release BB's file (36cc9ffe): 63 failures,
+      the same 63 FAIL lines, line for line, as Round 1326's own base leg
+      (r1326-s8a, rules-baseleg), so 1326's words are the only other
+      cause. The committed file on the tree itself: 47 entries red, the
+      47 the seed moved. Written with --part=modern,eras,pure --write on
+      the tree itself (line write-digest, 201 lines changed), then run
+      green whole on the same runner.
+      Release BE's join (2026-10-14) took it ONCE on the merged tree
+      f14ae6f1, after Rounds 1351 and 1357 (m3, six more desk situations
+      drawn from the real save) moved it. Attribution on a GitHub runner at
+      f14ae6f1 (remote check rBEg-rules), in a throwaway checkout. Leg A,
+      the tree with src/lib/clubManagerDecisions.ts set back to main's
+      (4a5f759a): green whole against the committed file (modern 27/0,
+      eras 20/0, pure 48/0), so the desk deck is the only cause; Release
+      BE's other merges (the created club promotion of Round 1369 among
+      them) move no hash. Leg B, the tree itself: 32 failures, 18 modern
+      and 14 era saves, in whole (27 hashes) and s2_whole (10) only, the
+      hashes of whole states that carry the desk; tables, results, cups,
+      Europe, trophies, objectives and promotions held in all 47, and pure
+      held 48/0. Written with --part=modern,eras,pure --write on the tree
+      itself (37 lines changed), then run green whole on the same runner.
+      Round 1343 (2026-10-16) re-took modern, eras and pure for one new
+      save field and nothing else: careerStats.highestScoring, the highest
+      scoring game on the manager record, written at every whistle on the
+      current rules (never on Hot Seat's 'base'), drawing nothing.
+      Attribution on a GitHub runner at 5053712f (remote check r1343-s6b),
+      three legs. Leg A, the base d4f2c6f6's src: green whole against the
+      committed file. Leg B, the tree with the record's one gated call made
+      a no-op: green whole, so the record is the whole cause and no result,
+      table or draw of any save moved. Leg C, the tree itself: 47 failures,
+      every entry in whole and wholeNext and the ten pyramid saves in
+      s2_whole as well, 104 hashes, each a hash of a whole state; every
+      other view held, and pure held. Written with --part=modern,eras,pure
+      --write on the tree itself (104 lines changed), then run green whole.
+      Round 1344 (2026-10-16) took it ONCE, by the brief's decision 7: a
+      seeded career now records every deal between two other clubs in its
+      world ledger, from the opening window on, so `start`, `whole` and
+      `wholeNext` move in all 47 saves (27 modern, 20 era), `summary` in 25,
+      and the tables, results, cups and Europe of the few saves whose
+      matches met a moved man (s2_world and s2_whole in 10, s2_table in 8,
+      s2_results 7, s2_cup 6, world 3, objectivesNext 3, table, results,
+      europe, cup and cupDrawNext 2 each, trophies, s2_trophies, s2_europe,
+      promotions and europeNext 1 each); pure held 48/0. Attribution on a
+      GitHub runner at b7da3075 (remote check r1344-y), in throwaway
+      checkouts: with scripts/lib/cmNoAiMoves1344.mjs applied (the
+      recording taken out) the committed file is green whole
+      (leaguerules-bridged), and the round's base d4f2c6f6 is green whole
+      (leaguerules-onbase), so the recording is the only cause. Written with
+      --part=modern,eras,pure --write on the tree itself (remote check
+      r1344-dg, line write-digest, 234 lines changed), then run green whole
+      on the same runner.
+      Release BK's join (2026-10-18) took it ONCE, after Rounds 1509 (the
+      Europa League followed every season) and 1510 (each country's super
+      cup) were merged. The tree moves 27 modern saves (start, whole and
+      wholeNext in all 27, europeNext in 13, s2_whole in 10, s2_europe in
+      6, the Premier League save's s2 table, results, world and cup, and
+      the Bundesliga save's summary); eras and pure held. Attribution on a
+      GitHub runner at 9a705e19 (remote check rBKa-m2): the tree itself 27
+      failure lines (sha c6e91949, the same as Round 1510's head); a
+      throwaway checkout with worldComps.uel stripped before hashing, the
+      Europa League holder line and the board's European rung taken back
+      (Round 1509's lrAttr strip, holder and board) and Round 1510's three
+      super cup opens taken out is green whole against the committed file,
+      so those four changes are the only cause. Round 1509's own legs
+      (fix-1509 r1509-fixB3: the key alone 12, the winner into the
+      Champions League 14 more, the rung bundesliga's summary) and Round
+      1510's (r1510-lr: one line, the Championship save's worldComps.dsc in
+      wholeNext and s2_whole) stand. Written with --part=modern,eras,pure
+      --write on the tree itself (line lr-write, 115 lines changed), then
+      run green whole on the same runner.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,

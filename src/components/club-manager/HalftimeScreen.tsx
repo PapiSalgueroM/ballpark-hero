@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ArrowLeftRight, Gauge, Play } from 'lucide-react';
-import { benchFor, tiringAtHalftime, MAX_HALFTIME_SUBS, pressOf, liveGoneIds } from '@/lib/clubManager';
+import { benchFor, tiringAtHalftime, matchRuleOf, subsLeftOf, pressOf, liveGoneIds } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, Mentality, TalkTone } from '@/lib/clubManager';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
+import { HalftimeLineups } from '@/components/club-manager/HalftimeLineups';
+import { inFixtureOrder, myClubFirst } from '@/lib/cmMatchDisplay';
 
 interface HalftimeScreenProps {
   career: CareerState;
@@ -38,9 +40,11 @@ function fitnessTone(f: number): string {
 export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }: HalftimeScreenProps) {
   const live = career.live;
   const [picking, setPicking] = useState<string | null>(null);
+  const [readingLineups, setReadingLineups] = useState(false);
   const benchRef = useRevealScroll<HTMLDivElement>(`sub:${picking ?? ''}`, { skipFirst: true });
 
   if (!live) return null;
+  if (readingLineups) return <HalftimeLineups career={career} onBack={() => setReadingLineups(false)} />;
 
   const onPitch: CMPlayer[] = live.onPitch
     .map(id => career.squad.find(p => p.id === id))
@@ -49,7 +53,8 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }:
      first, then the family, then the rest, freshest first inside a tier. */
   const bench = benchFor(career, picking ?? undefined);
   const tired = new Set(tiringAtHalftime(career).map(p => p.id));
-  const subsLeft = MAX_HALFTIME_SUBS - live.subsUsed;
+  /* Round 1331: the match's own rule; changes at the break use no stoppage, so only the changes count here. */
+  const subsLeft = subsLeftOf(career);
   const started = new Set(live.startXi);
   /* Round 504: a man sent off in the first half is still in the eleven the
      save holds, and the engine refuses a sub for him, so his row says so and
@@ -64,6 +69,9 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }:
   const venue = live.home === true ? 'at home' : live.home === false ? 'away' : 'neutral';
   const leading = live.myGoals > live.oppGoals;
   const level = live.myGoals === live.oppGoals;
+  const mineFirst = myClubFirst(live.home);
+  const [nameFirst, nameSecond] = inFixtureOrder(live.home, career.clubName, live.opponent);
+  const [goalsFirst, goalsSecond] = inFixtureOrder(live.home, live.myGoals, live.oppGoals);
 
   return (
     <div className="space-y-3">
@@ -72,20 +80,24 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }:
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">
           Half time {'·'} {live.compLabel} {'·'} {venue}
         </div>
+        {/* Round 1340: home side first, like every scoreboard, my club picked out in green wherever it sits. The
+            score's colour is about me (leading, level, behind) and stays so. */}
         <div className="flex items-center justify-center gap-3">
-          <span className="text-sm text-foreground truncate max-w-[38%] text-right">{career.clubName}</span>
+          <span className={cn('text-sm truncate max-w-[38%] text-right', mineFirst ? 'text-primary' : 'text-muted-foreground')}>{nameFirst}</span>
           <span
             className={cn(
               'text-3xl font-black tabular-nums px-3',
               leading ? 'text-emerald-400' : level ? 'text-foreground' : 'text-destructive',
             )}
           >
-            {live.myGoals}-{live.oppGoals}
+            {goalsFirst}-{goalsSecond}
           </span>
-          <span className="text-sm text-muted-foreground truncate max-w-[38%] text-left">{live.opponent}</span>
+          <span className={cn('text-sm truncate max-w-[38%] text-left', mineFirst ? 'text-muted-foreground' : 'text-primary')}>{nameSecond}</span>
         </div>
         <p className="text-[11px] text-muted-foreground mt-2 italic">{live.read}</p>
       </div>
+
+      <button type="button" onClick={() => setReadingLineups(true)} className="w-full rounded-xl border border-border bg-card p-3 text-left text-sm font-bold text-foreground">Starting XIs</button>
 
       {/* ---- shape ---- */}
       <div className="bg-card border border-border rounded-xl p-3">
@@ -118,7 +130,7 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }:
         </div>
 
         {subsLeft === 0 && (
-          <p className="text-[10px] text-yellow-400 mb-1.5">You have used all three. Nobody else is coming off.</p>
+          <p className="text-[10px] text-yellow-400 mb-1.5">You have used all {matchRuleOf(career).subs === 5 ? 'five' : 'three'}. Nobody else is coming off.</p>
         )}
 
         <div className="space-y-0.5">

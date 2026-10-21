@@ -37,6 +37,11 @@
  *                            the engine no longer matches history, by the
  *                            timeline comparison specifically and not by any
  *                            other section 3 finding.
+ *   UCL_FORMAT_CONTROL=watched  (Round 1503) makes worldUclFormatOf answer
+ *                            the eras' groups for every save in a patched
+ *                            copy of clubManager.ts, so section 3 must report
+ *                            that the modern save's watched competition is not
+ *                            the real league phase its line promises.
  *
  * Run: node scripts/simUclFormatHistory.mjs
  */
@@ -58,7 +63,7 @@ const ENGINE = `${ROOT}/src/lib/clubManager.ts`;
 const SHAPES_JSON = path.join(ROOT, 'src', 'data', 'uclEngineShapes.json');
 
 const CONTROL = process.env.UCL_FORMAT_CONTROL || '';
-const KNOWN = ['gap', 'legs', 'table'];
+const KNOWN = ['gap', 'legs', 'table', 'watched'];
 // Source-only mode renders production components but does not claim the saved HTML was rebuilt.
 const SOURCE_ONLY = process.env.FORMAT_GUIDE_SOURCE_ONLY === '1';
 if (CONTROL && !KNOWN.includes(CONTROL)) {
@@ -92,6 +97,14 @@ if (CONTROL === 'gap') {
     ENGINE,
     '  return uclSeasonYear(eraId) >= UCL_TWO_LEG_FIRST_YEAR ? 2 : 1;',
     '  return uclSeasonYear(eraId) >= UCL_TWO_LEG_FIRST_YEAR ? 1 : 2;',
+    `clubManager.${PID}.control.ts`,
+  );
+  aliases.unshift(`--alias:@/lib/clubManager=${enginePath}`);
+} else if (CONTROL === 'watched') {
+  const enginePath = patched(
+    ENGINE,
+    "  return uclSeasonYear(state.eraId) <= UCL_R16_LAST_YEAR ? 'g8' : 'l36';",
+    "  return uclSeasonYear(state.eraId) <= UCL_R16_LAST_YEAR ? 'g8' : 'g8';",
     `clubManager.${PID}.control.ts`,
   );
   aliases.unshift(`--alias:@/lib/clubManager=${enginePath}`);
@@ -226,7 +239,7 @@ console.log('3) the generated block equals the engine, every era plays its real 
     for (const s of shapes) {
       const f = filed.find(x => x?.era?.id === s.era.id);
       if (!f) { stale += 1; fail(`uclEngineShapes.json has no entry for ${s.era.id}`); continue; }
-      for (const k of ['firstKo', 'legs', 'awayGoals', 'realId', 'matchesReal', 'line']) {
+      for (const k of ['firstKo', 'legs', 'awayGoals', 'realId', 'matchesReal', 'watched', 'line']) {
         if (JSON.stringify(f[k]) !== JSON.stringify(s[k])) { stale += 1; fail(`uclEngineShapes.json is stale for ${s.era.label} (${k}): run node scripts/genUclEngineShapes.mjs`); }
       }
     }
@@ -243,9 +256,14 @@ console.log('3) the generated block equals the engine, every era plays its real 
       if (s.matchesReal) fail(`the modern save claims to match the real ${real.title}, which the engine does not play`);
       if (!/stand in/.test(s.line)) fail(`the modern save's line does not say it is a stand in: ${s.line}`);
       if (s.firstKo !== 'QF') fail(`the modern save's first knockout round is ${s.firstKo}, expected QF`);
+      /* Round 1503: a modern save not in it follows the real league phase (worldUclFormatOf), and the line says so */
+      if (s.watched !== 'l36' || !s.line.includes('The Champions League you follow from outside it plays the real format.')) {
+        fail(`the modern save's watched competition is ${s.watched}, not the real league phase its line promises: ${s.line}`);
+      }
       standIns += 1;
       continue;
     }
+    if (s.watched !== 'g8') fail(`${s.era.label}: the watched competition is ${s.watched}, not the era's own eight groups`);
     historic += 1;
     if (s.matchesReal) matched += 1;
     else {
@@ -319,6 +337,7 @@ if (CONTROL) {
     gap: { section: '1', signal: 'a hole or an overlap' },
     legs: { section: '3', signal: 'the real season ran' },
     table: { section: '5', signal: 'UCL table knockout cell' },
+    watched: { section: '3', signal: 'watched competition is g8' },
   })[CONTROL];
   const hits = (sectionMessages[want.section] ?? []).filter(m => m.includes(want.signal)).length;
   if (hits > 0) {

@@ -142,6 +142,7 @@ const HigherLowerGame = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="higher-lower" gameContext={{ currentPlayer: currentPlayer?.name, nextPlayer: nextPlayer?.name }} />}
           pageHasOwnH1
           title="Soccer Higher or Lower | DoUKnowBall"
           description="Two soccer players face off. Yours shows his career appearances, goals and international caps while the challenger's stay hidden, so pick the stat where yours is higher. One wrong pick ends the streak."
@@ -163,9 +164,7 @@ const HigherLowerGame = () => {
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
         <HigherLowerHowToPlay open={showHelp} onOpenChange={setShowHelp} />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="higher-lower" gameContext={{ currentPlayer: currentPlayer?.name, nextPlayer: nextPlayer?.name }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

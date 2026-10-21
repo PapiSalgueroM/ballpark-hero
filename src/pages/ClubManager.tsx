@@ -15,13 +15,15 @@ import {
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
   worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
-  nationOfferFor, SHOOTOUT_MAX_ORDER, shootoutOrderOf, cupSatOutBy,
+  nationOfferFor, SHOOTOUT_MAX_ORDER, shootoutOrderOf, cupSatOutBy, leagueStarted,
 } from '@/lib/clubManager';
 // Round 1035: the A-League Men's squads come from their own generated file.
 import { generatedLeagueCountClauses, generatedLeagueMonthClause } from '@/data/clubManagerWorldRosters';
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
-import { fanMeter } from '@/lib/clubManagerMeters';
+import { inboxTile, kittyChange, leagueTileValue, recordLine } from '@/lib/clubManagerHubLines';
+import { myClubFirst, pitchName } from '@/lib/cmMatchDisplay';
+import { BOARD_EDGE, boardMeter } from '@/lib/clubManagerMeters';
 import { STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
 import { deskOf } from '@/lib/clubManagerDecisions';
 import type { NationDef, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
@@ -35,11 +37,15 @@ import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { ClubManagerClubList } from '@/components/club-manager/ClubManagerClubList';
-import { CURRENCIES, STRICTNESS_INFO, startOptionsOf } from '@/lib/clubManagerStart';
+import { CURRENCIES, STRICTNESS_DEFAULT, STRICTNESS_INFO, levelFrom, noSackFrom, startOptionsOf } from '@/lib/clubManagerStart';
+import { DIFFICULTY_INFO } from '@/lib/managerDifficulty';
+import { POINTS_CAP, readPointsIndex } from '@/lib/cmSavePointsStore';
+import type { CareerSetup } from '@/lib/clubManagerStart';
 import { withWorldEdit, worldEditMoves, realLeagueIdOf } from '@/lib/clubManagerWorldEdit';
 import type { WorldEdit } from '@/lib/clubManagerWorldEdit';
 import { levelFor, pointsFree, xpOf, MAX_LEVEL } from '@/lib/clubManagerXp';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { useArrivalTop } from '@/hooks/useArrivalTop';
 
 const ClubManagerTreatmentPanel = lazy(() => import('@/components/club-manager/ClubManagerTreatmentPanel'));
 const ClubManagerBoardPanel = lazy(() => import('@/components/club-manager/ClubManagerBoardPanel'));
@@ -47,8 +53,19 @@ const ClubManagerCareerPanel = lazy(() => import('@/components/club-manager/Club
 const ConfettiBurst = lazy(() => import('@/components/club-manager/Celebration').then(m => ({ default: m.ConfettiBurst })));
 const ClubManagerHelp = lazy(() => import('@/components/club-manager/ClubManagerHelp'));
 const ManagerSlotsScreen = lazy(() => import('@/components/club-manager/ManagerSlotsScreen'));
+/* Round 1323 review: lazy, for this page's weight (593.6K against its 593K row
+   once Release BB joined). Fetched only once another tab has moved the career
+   on. If the fetch fails (a deploy since this tab opened took the old file
+   away), the page reloads itself the site's way, which is all the notice
+   asks: the reload makes this tab the newest. Offline it stays put, never on
+   a crash screen. Its writes are refused either way (saveCareer's fence). */
+const SaveMovedNotice = lazy(() => import('@/components/SaveMovedNotice').catch(() => { reloadToRetryChunk(); return new Promise<never>(() => undefined); }));
 const ClubManagerSeasonSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary'));
 const SackedCareerSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary').then(m => ({ default: m.SackedCareerSummary })));
+/* Round 1343: the farewell loads only for a career that retires; the door starts loading it when its confirm opens. */
+const ClubManagerFarewell = lazy(() => import('@/components/club-manager/ClubManagerFarewell'));
+const CmRetireDoor = lazy(() => import('@/components/club-manager/CmRetireDoor'));
+const preloadFarewell = () => { void import('@/components/club-manager/ClubManagerFarewell'); };
 const WorldEditorScreen = lazy(() => import('@/components/club-manager/WorldEditorScreen'));
 const CustomClubForm = lazy(() => import('@/components/club-manager/CustomClubForm').then(m => ({ default: m.CustomClubForm })));
 const CrestBadge = lazy(() => import('@/components/club-manager/CustomClubForm').then(m => ({ default: m.CrestBadge })));
@@ -61,6 +78,7 @@ const MetersStrip = lazy(() => import('@/components/club-manager/MetersStrip').t
 const UclBracketCard = lazy(() => import('@/components/club-manager/UclBracketCard').then(m => ({ default: m.UclBracketCard })));
 const UclGroupsCard = lazy(() => import('@/components/club-manager/UclGroupsCard').then(m => ({ default: m.UclGroupsCard })));
 const CupBracketCard = lazy(() => import('@/components/club-manager/CupBracketCard').then(m => ({ default: m.CupBracketCard })));
+const CupsPanel = lazy(() => import('@/components/club-manager/WorldCompScreen').then(m => ({ default: m.CupsPanel })));
 const StatsScreen = lazy(() => import('@/components/club-manager/StatsScreen').then(m => ({ default: m.StatsScreen })));
 const CalendarScreen = lazy(() => import('@/components/club-manager/CalendarScreen').then(m => ({ default: m.CalendarScreen })));
 const InboxCard = lazy(() => import('@/components/club-manager/InboxCard').then(m => ({ default: m.InboxCard })));
@@ -76,6 +94,10 @@ const TrainingScreen = lazy(() => import('@/components/club-manager/TrainingScre
 const RolesScreen = lazy(() => import('@/components/club-manager/RolesScreen').then(m => ({ default: m.RolesScreen })));
 const XpScreen = lazy(() => import('@/components/club-manager/XpScreen').then(m => ({ default: m.XpScreen })));
 const StartOptionsScreen = lazy(() => import('@/components/club-manager/StartOptionsScreen').then(m => ({ default: m.StartOptionsScreen })));
+/* Round 1512 review: the Difficulty row on the sacked screen, which has no Options tile. */
+const DifficultyOption = lazy(() => import('@/components/club-manager/StartOptionsScreen').then(m => ({ default: m.DifficultyOption })));
+/* Round 1513: the save points, with lz-string, load when the tile opens. */
+const SavePointsScreen = lazy(() => import('@/components/club-manager/SavePointsScreen').then(m => ({ default: m.SavePointsScreen })));
 const PressScreen = lazy(() => import('@/components/club-manager/PressScreen').then(m => ({ default: m.PressScreen })));
 const MatchCentre = lazy(() => import('@/components/club-manager/MatchCentre').then(m => ({ default: m.MatchCentre })));
 const LiveSimScreen = lazy(() => import('@/components/club-manager/LiveSimScreen').then(m => ({ default: m.LiveSimScreen })));
@@ -136,13 +158,15 @@ function HubTile({ icon, title, value, sub, accent, onClick }: {
         {accent && <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />}
       </div>
       <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{title}</div>
-      <div className="text-sm font-bold font-display text-foreground truncate">{value}</div>
-      {sub && <div className="text-[9px] text-muted-foreground truncate mt-0.5">{sub}</div>}
+      {/* Round 1328: the value and the line wrap instead of cutting their key
+          words at 320 ("-£13.5m projec..."), and the line is 12px. */}
+      <div className="text-sm font-bold font-display text-foreground break-words">{value}</div>
+      {sub && <div className="text-xs leading-snug text-muted-foreground break-words mt-0.5">{sub}</div>}
     </button>
   );
 }
 
-type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities' | 'staff' | 'xp' | 'options';
+type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities' | 'staff' | 'xp' | 'options' | 'points';
 
 const ClubManager = () => {
   const g = useClubManager();
@@ -150,6 +174,13 @@ const ClubManager = () => {
   // what you were waiting for after pressing Play, so they pull themselves into
   // view rather than rendering below where your thumb just was.
   const revealRef = useRevealScroll<HTMLDivElement>(`${g.phase}:${g.career?.week ?? 0}`);
+  /* Round 1328: every entry into the hub (a new job, a Resume, a new season)
+     opens the club's home screen at its top before the first paint, instead of
+     at the scroll offset the screen before it left behind. */
+  const hubTopRef = useArrivalTop<HTMLDivElement>(g.phase === 'hub' && g.career ? 'hub' : null);
+  /* Round 1343: the farewell opens at its top too. On the RETIRED heading, which has height before the lazy
+     farewell lands. */
+  const retiredTopRef = useArrivalTop<HTMLDivElement>(g.phase === 'retired' && g.career ? 'retired' : null);
   // Round 70: the nation -> league -> team picker. Each step change pulls the
   // new step into view (skipFirst so landing on the page stays put).
   // Round 72: nations can hold more than one league (England, the USA).
@@ -280,7 +311,9 @@ const ClubManager = () => {
         reportGameType="club-manager"
       >
         <div className="relative">
-          <HowToPlayPopover title="How to Play Club Manager" triggerSide="right">
+          {/* Round 1328: the "?" is 44 by 44 now, pulled 8px further into the
+              corner so it covers no more of the screen than the old 36px one. */}
+          <HowToPlayPopover title="How to Play Club Manager" triggerSide="right" className="-mr-2 -mt-2 inline-flex min-h-[44px] min-w-[44px] items-center justify-center">
             <ScreenLoading><ClubManagerHelp /></ScreenLoading>
           </HowToPlayPopover>
           {/* Round 634: the save was refused and the player is told, in plain
@@ -297,6 +330,9 @@ const ClubManager = () => {
               </div>
             </div>
           )}
+          {/* Round 1323: another tab has played this career on, so this one
+              writes nothing more and covers itself until it is reloaded. */}
+          {g.saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
           {inner}
         </div>
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
@@ -368,7 +404,7 @@ const ClubManager = () => {
       <ScreenLoading>
         <ManagerSlotsScreen
           slots={g.slots}
-          activeDetail={c ? `Week ${Math.min(c.week + 1, c.calendar.length)} of ${c.calendar.length} · Board ${Math.round(c.boardConfidence)}/100` : null}
+          activeDetail={c && !c.retired ? `Week ${Math.min(c.week + 1, c.calendar.length)} of ${c.calendar.length} · Board ${Math.round(c.boardConfidence)}/100` : null}
           note={g.slotNote}
           onContinue={g.openSlot}
           onNew={g.newInSlot}
@@ -382,9 +418,9 @@ const ClubManager = () => {
   if (g.phase === 'clubSelect') {
     /* Round 303: the dugout step hands in null (skip) or a manager spec, and
        either way the picker resets for the next career. */
-    const confirmAndReset = (manager: ManagerSpec | null, entry?: MidSeasonEntry) => {
-      if (pendingCustomSpec) g.confirmCustomClub(pickEra, pendingCustomSpec, manager ?? undefined, entry);
-      else g.confirmClub(pickEra, manager ?? undefined, entry, isHistoricEra(pickEra) ? null : worldEdit);
+    const confirmAndReset = (manager: ManagerSpec | null, entry?: MidSeasonEntry, setup?: CareerSetup) => {
+      if (pendingCustomSpec) g.confirmCustomClub(pickEra, pendingCustomSpec, manager ?? undefined, entry, setup);
+      else g.confirmClub(pickEra, manager ?? undefined, entry, isHistoricEra(pickEra) ? null : worldEdit, setup);
       setWorldEdit(null);
       setPickStep('era');
       setPickEra(DEFAULT_ERA_ID);
@@ -689,9 +725,11 @@ const ClubManager = () => {
                     {/* Round 145: this line said "Top 20" at a rank 20 club,
                         which is exactly the phrasing he told us to stop using.
                         It now quotes the board's actual named demand. */}
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[10px] text-muted-foreground shrink-0">Board wants</span>
-                      <span className="text-[10px] font-bold text-foreground truncate" title={teamWants.get(c.name) ?? ''}>
+                    {/* Round 1328: the one line that tells clubs apart was cut at
+                        390 ("Win the Premi..."). It wraps now, at 12px, whole. */}
+                    <div className="text-xs leading-snug mt-0.5 break-words" data-cm-board-wants>
+                      <span className="text-muted-foreground">Board wants </span>
+                      <span className="font-bold text-foreground" title={teamWants.get(c.name) ?? ''}>
                         {teamWants.get(c.name) ?? ''}
                       </span>
                     </div>
@@ -842,7 +880,7 @@ const ClubManager = () => {
         <header className="text-center mb-4">
           <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">FULL TIME</h1>
         </header>
-        <ScreenLoading><MatchReportCard report={g.report} clubName={g.career.clubName} onContinue={g.continueFromReport} /></ScreenLoading>
+        <ScreenLoading><MatchReportCard report={g.report} clubName={g.career.clubName} onContinue={g.continueFromReport} noSack={noSackFrom(g.career) !== null} /></ScreenLoading>
       </div>
     );
   }
@@ -869,6 +907,8 @@ const ClubManager = () => {
         <h1 className="text-3xl md:text-5xl font-bold text-primary font-display mb-1">SEASON {sm.season} COMPLETE</h1>
         <p className="text-muted-foreground text-sm mb-5">{sm.club} · finished <span className="text-foreground font-bold">#{sm.position}</span> with {sm.points} pts</p>
         <ScreenLoading><ClubManagerSeasonSummary sm={sm} c={c} g={g} /></ScreenLoading>
+        {/* Round 1343: retire here, before the summer. */}
+        <div className="mt-4 mx-auto max-w-sm"><Suspense fallback={<div className="min-h-11" />}><CmRetireDoor c={c} retire={g.retire} onOpen={preloadFarewell} /></Suspense></div>
         {/* Round 928 review: the managers are a tap away here too, not only on the hub. */}
         <button onClick={g.showSlots} data-testid="cm-show-slots-end" className="mt-4 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors">
           Your managers
@@ -887,9 +927,27 @@ const ClubManager = () => {
             are document wide once mounted, so the class is live up here. */}
         <h1 className="cm-loss-shake text-3xl md:text-5xl font-bold text-destructive font-display mb-5">SACKED!</h1>
         <ScreenLoading><SackedCareerSummary c={c} g={g} /></ScreenLoading>
+        {/* Round 1343: or stop waiting for the phone. */}
+        <div className="mt-4 mx-auto max-w-sm"><Suspense fallback={<div className="min-h-11" />}><CmRetireDoor c={c} retire={g.retire} onOpen={preloadFarewell} /></Suspense></div>
+        {/* Round 1512 review: the level, changeable while out of work too (the brief and the help say so). */}
+        <div className="mt-4 mx-auto max-w-sm text-left" data-cm-sacked-level><Suspense fallback={<div className="min-h-[11rem]" />}><DifficultyOption career={c} onDifficulty={g.setDifficulty} /></Suspense></div>
         <button onClick={g.showSlots} data-testid="cm-show-slots-sacked" className="mt-4 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors">
           Your managers
         </button>
+      </div>
+    );
+  }
+
+  /* ================= RETIRED ================= */
+  /* Round 1343: a retired career's only screen. Its own career binding (Round 541, simEarlyReturnScope). */
+  if (g.phase === 'retired' && g.career) {
+    const c = g.career;
+    return shell(
+      <div className="text-center">
+        <div ref={retiredTopRef}>
+          <h1 data-cm-retired className="text-3xl md:text-5xl font-bold text-primary font-display mb-5">RETIRED</h1>
+        </div>
+        <ScreenLoading><ClubManagerFarewell c={c} g={g} /></ScreenLoading>
       </div>
     );
   }
@@ -907,9 +965,9 @@ const ClubManager = () => {
   // Round 74: tile summaries.
   const objBehind = objStatuses.filter(s => s.status === 'behind' || s.status === 'failed').length;
   const objDone = objStatuses.filter(s => s.status === 'done').length;
-  /* Round 979: an open appeal or decision counts as unread on the tile. */
-  const unreadCount = (c.inbox ?? []).filter(m => !m.resolved).length + deskOf(c).filter(d => !d.resolved).length;
-  const latestMsg = (c.inbox ?? [])[0];
+  /* Round 979: an open appeal or decision counts as unread on the tile.
+     Round 1328: the count and the line come from one rule, the panel's own. */
+  const inboxLine = inboxTile(c);
   const lastRes = (c.resultLog ?? []).slice(-1)[0];
   const rivalName = c.boardObjectives?.find(o => o.id === 'rival')?.rivalName ?? null;
   const rivalIdx = rivalName ? g.tableRows.findIndex(r => r.club === rivalName) : -1;
@@ -933,10 +991,12 @@ const ClubManager = () => {
   }
 
   return shell(
-    <div>
+    <div ref={hubTopRef} data-cm-hub>
       {/* Header */}
       <header className="mb-4">
-        <div className="flex items-center justify-center gap-2 mb-1 flex-wrap">
+        {/* Round 1328: px-12 on both sides keeps the help button's corner clear
+            of the club name and the pills, and the row centred. */}
+        <div className="flex items-center justify-center gap-2 mb-1 flex-wrap px-12">
           {/* Round 154: a club you founded wears its crest where every other
               club wears its color dot. */}
           {c.customClub && c.customClub.name === c.clubName
@@ -945,16 +1005,32 @@ const ClubManager = () => {
           <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">{c.clubName}</h1>
           {/* Round 132: the save now knows what year it is, so it says so, next
               to the season count it has always shown. */}
-          <span className="text-[10px] font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
+          <span className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
             {worldSeasonLabel(c)} · Season {c.season}
           </span>
+          {/* Round 1501: a career off Medium wears its level (Round 1512: whichever it is on now). No pill on Medium. */}
+          {levelFrom(c) !== 'normal' && (
+            <span data-cm-level-pill={levelFrom(c)} className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
+              {DIFFICULTY_INFO[levelFrom(c)].label}
+            </span>
+          )}
+          {/* Round 1342: a No sacking career wears it for its whole life. No pill otherwise. */}
+          {noSackFrom(c) !== null && (
+            <span data-cm-nosack-pill className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
+              🛡️ No sacking
+            </span>
+          )}
           {/* Round 549: a career that began part way through says so for as long
-              as that season runs. The run-in was simulated, and a badge that
-              only lives on the picker would let somebody forget that by the
-              time they are reading the table. */}
+              as that season runs. The games before the takeover were simulated,
+              and a badge that only lives on the picker would let somebody forget
+              that by the time they are reading the table. Round 1328: it used to
+              call those games the run-in, but a run-in is the end of a season,
+              and "The run-in" is itself one of the three takeover points; the words
+              now hold for the Autumn, the New year and the run-in takeovers and
+              for a Hot Seat carry on alike. */}
           {c.midSeasonStart && c.season === 1 && (
-            <span className="text-[10px] font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
-              🗓️ Took over mid season · run-in simulated
+            <span className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 text-center leading-snug">
+              🗓️ Took over mid season · the games before you arrived were simulated
             </span>
           )}
         </div>
@@ -963,7 +1039,7 @@ const ClubManager = () => {
               club is on zero points, so the "position" was just wherever the
               shuffled table happened to put you: a brand new Manchester City
               save opened on "#15 in league", which reads as broken. */}
-          <span>{c.week === 0 ? 'Season not started' : `#${g.myPosition || '-'} in league`}</span>
+          <span>{!leagueStarted(c) ? 'Season not started' : `#${g.myPosition || '-'} in league`}</span>
           {c.customClub && c.customClub.name === c.clubName && (
             <span className="inline-flex items-center gap-1">
               🏟 {c.customClub.stadium}{c.customClub.capacity ? ` (${Math.round(c.customClub.capacity / 1000)}k)` : ''}
@@ -978,13 +1054,20 @@ const ClubManager = () => {
           </span>
           {c.trophies.length > 0 && <span>🏆×{c.trophies.length}</span>}
           {/* Round 928: back to the three manager slots, this career saved first. */}
-          <button onClick={g.showSlots} data-testid="cm-show-slots" className="underline underline-offset-2 hover:text-primary transition-colors">
+          <button onClick={g.showSlots} data-testid="cm-show-slots" className="inline-flex min-h-[44px] items-center underline underline-offset-2 hover:text-primary transition-colors">
             Managers
           </button>
         </div>
         {/* Round 465: the board and the fans, on every tab, words by default
             and the number on tap. */}
-        <ScreenLoading compact><MetersStrip career={c} /></ScreenLoading>
+        {/* Round 1328: the strip is a lazy chunk, so its slot holds the drawn
+            height while it loads, and the hub does not shift when it lands:
+            8px of margin over a 44px meter. flow-root keeps that margin inside
+            the slot; without it the margin escaped when the strip landed and
+            pushed the hub down 8px. The board's last band ("One bad week from
+            the sack") wraps to two lines at 320, 390 and 1280, which makes the
+            strip 60px, so the slot holds 60 then. */}
+        <div className={cn('flow-root', boardMeter(c).value > 0 && boardMeter(c).value < BOARD_EDGE ? 'min-h-[60px]' : 'min-h-[52px]')}><ScreenLoading compact><MetersStrip career={c} /></ScreenLoading></div>
       </header>
 
       <Tabs value={g.activeTab} onValueChange={(v) => g.setActiveTab(v as HubTab)}>
@@ -1023,7 +1106,7 @@ const ClubManager = () => {
               seven year old you have had since day one is the biggest thing
               that happened between May and August, and until this round it was
               a thing that could never happen at all. */}
-          {c.week === 0 && (c.retiredLastSummer ?? []).length > 0 && (
+          {!leagueStarted(c) && (c.retiredLastSummer ?? []).length > 0 && (
             <div className="rounded-xl border border-border bg-card p-2.5">
               <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">👟 Hung up their boots</div>
               <div className="text-xs text-foreground">
@@ -1045,8 +1128,12 @@ const ClubManager = () => {
             {fx && fx.kind === 'match' && (
               <>
                 <div className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">{fx.compLabel}</div>
-                <div className="text-lg font-bold font-display text-foreground">
-                  {fx.home === null ? '🏟️ ' : ''}{c.clubName} <span className="text-muted-foreground text-sm">vs</span> {fx.opponent}
+                {/* Round 1340: the home side first, like a scoreboard, your club picked out in green wherever it sits. */}
+                <div className="text-lg font-bold font-display text-foreground" data-cm-next-match="1">
+                  {fx.home === null ? '🏟️ ' : ''}
+                  {myClubFirst(fx.home)
+                    ? <><span className="text-primary" data-cm-next-side="me">{c.clubName}</span> <span className="text-muted-foreground text-sm">vs</span> <span data-cm-next-side="opp">{fx.opponent}</span></>
+                    : <><span data-cm-next-side="opp">{fx.opponent}</span> <span className="text-muted-foreground text-sm">vs</span> <span className="text-primary" data-cm-next-side="me">{c.clubName}</span></>}
                 </div>
                 <div className="text-[10px] text-muted-foreground mt-0.5">
                   {fx.home === null ? 'Neutral venue' : fx.home ? 'Home' : 'Away'} · their strength ~{fx.oppStrength} · your XI avg {xiAverageRating(c)}
@@ -1095,8 +1182,8 @@ const ClubManager = () => {
                   </button>
                 )}
                 {/* Round 782: a knockout tie can end on penalties, so the
-                    shootout order is one tap from the pre match card. */}
-                {(fx.competition === 'cup' || fx.competition === 'uclKo') && (
+                    shootout order is one tap from the pre match card. Round 1510: and a super cup night. */}
+                {(fx.competition === 'cup' || fx.competition === 'uclKo' || fx.competition === 'oneOff') && (
                   <button
                     onClick={() => { setTacticsTile('shootout'); g.setActiveTab('tactics'); }}
                     data-cm-shootout-link="1"
@@ -1145,9 +1232,9 @@ const ClubManager = () => {
                 onClick={() => setHubPanel('board')}
               />
               <HubTile
-                icon="📩" title="Inbox" accent={unreadCount > 0}
-                value={unreadCount > 0 ? `${unreadCount} new` : 'All quiet'}
-                sub={deskOf(c).find(d => !d.resolved)?.kind === 'appeal' ? 'Red card appeal' : latestMsg ? (latestMsg.from ?? latestMsg.playerName) : 'No messages yet'}
+                icon="📩" title="Inbox" accent={inboxLine.count > 0}
+                value={inboxLine.value}
+                sub={inboxLine.sub}
                 onClick={() => setHubPanel('inbox')}
               />
               <HubTile
@@ -1158,7 +1245,7 @@ const ClubManager = () => {
               />
               <HubTile
                 icon="🏆" title="League"
-                value={`#${g.myPosition || '-'}`}
+                value={leagueTileValue(leagueStarted(c) ? c.week : 0, g.myPosition)}
                 sub={c.form.length ? `Form: ${c.form.join(' ')}` : careerLeagueOf(c).name}
                 onClick={() => g.setActiveTab('table')}
               />
@@ -1170,20 +1257,29 @@ const ClubManager = () => {
               />
               <HubTile
                 icon="📊" title="Stats"
-                value={`${c.squad.reduce((n, p) => n + p.seasonGoals, 0)} goals`}
+                value={(() => {
+                  const goals = c.squad.reduce((n, p) => n + p.seasonGoals, 0);
+                  return `${goals} ${goals === 1 ? 'goal' : 'goals'}`;
+                })()}
                 sub={(() => {
                   const ts = [...c.squad].sort((a, b) => b.seasonGoals - a.seasonGoals)[0];
-                  return ts && ts.seasonGoals > 0 ? `${ts.name} leads with ${ts.seasonGoals}` : 'Goals, assists, ratings';
+                  return ts && ts.seasonGoals > 0 ? `${pitchName(ts.name)}: ${ts.seasonGoals}` : 'Goals, assists, ratings';
                 })()}
                 onClick={() => setHubPanel('stats')}
               />
               <HubTile
                 icon="💰" title="Finances"
                 value={(() => {
-                  const r = projectFinances(c).resultProjected;
-                  return `${r < 0 ? '-' : '+'}${money(Math.abs(r), c)} projected`;
+                  /* Round 1328: what the kitty is on course to do this season
+                     (the result plus the running costs the board covers), by
+                     Round 1326's rule for the Finances desk, not the red loss
+                     the board never asks the kitty to pay. It is the desk's
+                     projection (no more deals, only the cup ties drawn), so
+                     the line says so. */
+                  const k = kittyChange(projectFinances(c)).projected;
+                  return `${k < 0 ? '-' : '+'}${money(Math.abs(k), c)}`;
                 })()}
-                sub={`Fans ${fanMeter(c).band.toLowerCase()} · prices, sponsor, the books`}
+                sub="Kitty change, projected"
                 onClick={() => setHubPanel('finance')}
               />
               <HubTile
@@ -1192,7 +1288,7 @@ const ClubManager = () => {
                   const f = facilitiesOf(c);
                   return `Level ${FACILITY_IDS.map(id => f[id]).join(' · ')}`;
                 })()}
-                sub="Stadium, training, medical, dressing room"
+                sub="Stadium, training, medical, more"
                 onClick={() => setHubPanel('facilities')}
               />
               {/* Round 471: the staff desk. Accented while a rival has an
@@ -1209,7 +1305,8 @@ const ClubManager = () => {
                   const st = staffOf(c);
                   if (st.poach) return `They want your ${STAFF_POST_INFO[st.poach.postId].short.toLowerCase()} man`;
                   const empty = STAFF_POST_IDS.filter(p => !st[p]);
-                  return empty.length ? `Nobody on ${empty.map(p => STAFF_POST_INFO[p].short.toLowerCase()).join(', ')}` : 'Attack, defence, keepers, scouting';
+                  if (empty.length > 2) return 'Hire them on the staff desk';
+                  return empty.length ? `Nobody on ${empty.map(p => STAFF_POST_INFO[p].short.toLowerCase()).join(', ')}` : 'Attack, defence, keepers, scouts';
                 })()}
                 onClick={() => setHubPanel('staff')}
               />
@@ -1225,7 +1322,7 @@ const ClubManager = () => {
                 sub={(() => {
                   const level = levelFor(xpOf(c).xp);
                   if (pointsFree(xpOf(c)) > 0) return `Level ${level} · seven trees open`;
-                  return level >= MAX_LEVEL ? 'Every tree filled' : 'Tactics, recruitment, money, the press';
+                  return level >= MAX_LEVEL ? 'Every tree filled' : 'Seven skill trees to grow';
                 })()}
                 onClick={() => setHubPanel('xp')}
               />
@@ -1235,17 +1332,36 @@ const ClubManager = () => {
                 icon="⚙️" title="Options"
                 value={(() => {
                   const o = startOptionsOf(c);
-                  return `${CURRENCIES[o.currency].symbol} · ${STRICTNESS_INFO[o.strictness]?.label ?? 'Normal'}`;
+                  /* Round 1501: a career off Medium shows its level here, never the haggle's Normal, and
+                     after it the haggle's word whenever that is not the default, so no setting hides. */
+                  const lv = levelFrom(c);
+                  const haggle = STRICTNESS_INFO[o.strictness]?.label ?? 'Normal';
+                  if (lv === 'normal') return `${CURRENCIES[o.currency].symbol} · ${haggle}`;
+                  return `${CURRENCIES[o.currency].symbol} · ${DIFFICULTY_INFO[lv].label}${o.strictness !== STRICTNESS_DEFAULT ? ` · ${haggle}` : ''}`;
                 })()}
                 sub={(() => {
                   const o = startOptionsOf(c);
-                  return o.nationJobs ? 'Currency, the international job, haggling' : 'International job off';
+                  return o.nationJobs ? 'Currency, nation job, haggling' : 'International job off';
                 })()}
                 onClick={() => setHubPanel('options')}
               />
+              {/* Round 1513: named save points. On the hub, beside Options,
+                  because a player who just lost a match looks here first. */}
+              {(() => {
+                const slot = g.pointsSlot();
+                const held = slot === null ? [] : readPointsIndex(slot)?.points ?? [];
+                return (
+                  <HubTile
+                    icon="💾" title="Save points"
+                    value={held.length ? `${held.length} of ${POINTS_CAP} made` : 'None yet'}
+                    sub={held.length ? held[held.length - 1].name : 'Go back after a mistake'}
+                    onClick={() => setHubPanel('points')}
+                  />
+                );
+              })()}
               <HubTile
                 icon="🧢" title="Manager" accent={!!c.approach || !!nationOffer || c.jobHunt?.open?.status === 'accepted'}
-                value={c.jobHunt?.open?.status === 'accepted' ? '✅ A club said yes' : c.approach ? '📞 A club is calling' : nationOffer ? '🌐 Your country is calling' : `${c.careerStats.wins}W ${c.careerStats.losses}L`}
+                value={c.jobHunt?.open?.status === 'accepted' ? '✅ A club said yes' : c.approach ? '📞 A club is calling' : nationOffer ? '🌐 Your country is calling' : recordLine(c.careerStats)}
                 sub={c.jobHunt?.open?.status === 'accepted'
                   ? `${c.jobHunt.open.club}: now or in the summer`
                   : c.approach
@@ -1253,7 +1369,7 @@ const ClubManager = () => {
                   : nationOffer
                     ? `${nationOffer.nation} want you for the summer`
                     : c.nationJob
-                      ? `${c.nationJob.nation} manager · ${c.careerStats.wins}W ${c.careerStats.losses}L`
+                      ? `${c.nationJob.nation} manager · ${recordLine(c.careerStats)}`
                       : c.careerStats.played > 0 ? `${Math.round((c.careerStats.wins / c.careerStats.played) * 100)}% win rate` : 'New in the job'}
                 onClick={() => setHubPanel('manager')}
               />
@@ -1323,7 +1439,7 @@ const ClubManager = () => {
             <div ref={panelRef} className="space-y-3">
               <button
                 onClick={() => setHubPanel(null)}
-                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                className="inline-flex min-h-[44px] min-w-[44px] items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 <ChevronLeft className="w-3.5 h-3.5" /> Club home
               </button>
@@ -1388,15 +1504,20 @@ const ClubManager = () => {
                 <ScreenLoading><ClubManagerTreatmentPanel unavailable={unavailable} /></ScreenLoading>
               )}
 
+              {/* Round 1503: two tiles, the domestic cup and the Champions League, each opening a view of its own
+                  (WorldCompScreen.tsx, lazy). The cards this panel has always mounted are handed in, in its old
+                  order: the cup line, the cup bracket, the Champions League heading, the groups and the bracket
+                  (scripts/simClubManagerEraMidSeason.mjs section 6 reads that order). Round 312: two clearly
+                  separated competitions. Round 832: a league with no domestic cup says so, once, and shows no
+                  bracket. */}
               {hubPanel === 'cups' && (
-                <div className="space-y-2">
-                  {/* Round 312: two clearly separated competitions. The old
-                      panel put the UCL groups straight under the domestic cup
-                      line, which read as the cup showing the wrong table, and
-                      the domestic bracket card had never been mounted at all. */}
-                  {/* Round 832: a league with no domestic cup says so, once, and
-                      shows no bracket. */}
-                  {cupName === null ? (
+                <ScreenLoading><CupsPanel
+                  career={c}
+                  onClubClick={setClubView}
+                  cupTitle="Domestic cup"
+                  cupValue={cupName ?? cupSatOut ?? 'No domestic cup'}
+                  cupSub={cupName === null ? (cupSatOut ? 'Not entered' : undefined) : cupAlive ? `Still alive. Next up: ${c.cupDraw[c.cupRound as CupRound] ?? 'to be drawn'}` : c.cupRound === 'won' ? 'Cup winners' : 'Knocked out'}
+                  cupLine={cupName === null ? (
                     <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">
                       🏅 {cupSatOut
                         ? <>{c.clubName} do not enter the {cupSatOut}, so the season is the league{careerLeagueOf(c).euro ? ' and Europe' : ''}.</>
@@ -1415,29 +1536,15 @@ const ClubManager = () => {
                       <>🏅 <span className="font-bold">{careerLeagueOf(c).cupName}</span>: out{c.cupExit ? ` at the ${c.cupExit === 'F' ? 'final' : c.cupExit === 'SF' ? 'semi-final' : c.cupExit === 'QF' ? 'quarter-final' : 'Round of 16'}` : ''}. Next year.</>
                     )}
                   </div>
-                  {/* Round 102 built this bracket; Round 312 finally mounts it. */}
-                  <ScreenLoading><CupBracketCard career={c} onClubClick={setClubView} /></ScreenLoading>
                   </>)}
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider px-1 pt-1">
-                    ⭐ Champions League
-                  </div>
-                  {/* Round 163: every group in the draw, not just mine, plus
-                      the projected bracket that locks in after matchday 6. */}
-                  <ScreenLoading><UclGroupsCard career={c} onClubClick={setClubView} /></ScreenLoading>
-                  {c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won' && (
-                    <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
-                      ⭐ Alive in the Champions League. Next knockout round: <span className="font-bold">{c.uclKoRound === 'F' ? 'Final' : c.uclKoRound === 'SF' ? 'Semi-final' : c.uclKoRound === 'QF' ? 'Quarter-final' : 'Round of 16'}</span>
-                    </div>
-                  )}
-                  {c.uclKoRound === 'won' && (
-                    <div className="bg-card border border-gold/40 rounded-xl p-3 text-xs text-gold font-bold">⭐ CHAMPIONS OF EUROPE.</div>
-                  )}
-                  {/* Round 95: the knockout stage as a real bracket. */}
-                  <ScreenLoading><UclBracketCard career={c} onClubClick={setClubView} /></ScreenLoading>
-                  {!uclAlive && c.uclKoRound !== 'won' && c.uclGroup === null && (
-                    <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">No European football this season{careerLeagueOf(c).euro ? '. Reach the Champions League places to change that' : ' in this league'}.</div>
-                  )}
-                </div>
+                  /* Round 102 built this bracket; Round 312 mounted it. */
+                  cupBracket={cupName === null ? undefined : <CupBracketCard career={c} onClubClick={setClubView} />}
+                  uclHeading={<div className="text-xs text-muted-foreground uppercase tracking-wider">⭐ Champions League</div>}
+                  /* Round 163: every group in the draw; Round 95: the knockouts as a real bracket. In the
+                     Champions League view for the club in it (the club watching reads clubManagerWorldView.ts). */
+                  groupsCard={<UclGroupsCard career={c} onClubClick={setClubView} />}
+                  bracketCard={<UclBracketCard career={c} onClubClick={setClubView} />}
+                /></ScreenLoading>
               )}
 
               {/* Round 171: the finance desk, his CM-8. Round 200: the sponsor.
@@ -1480,8 +1587,17 @@ const ClubManager = () => {
                   onCurrency={g.setCurrency}
                   onNationJobs={g.setNationJobs}
                   onStrictness={g.setStrictness}
+                  onNoSack={g.turnOnNoSack}
+                  onDifficulty={g.setDifficulty}
                 /></ScreenLoading>
               )}
+
+              {hubPanel === 'points' && (() => {
+                const slot = g.pointsSlot();
+                return slot === null
+                  ? <p className="text-sm text-muted-foreground">Reload the page to use your save points.</p>
+                  : <ScreenLoading><SavePointsScreen career={c} slot={slot} /></ScreenLoading>;
+              })()}
 
               {hubPanel === 'trophies' && (
                 <div className="bg-card border border-border rounded-xl p-3">
@@ -1498,7 +1614,7 @@ const ClubManager = () => {
               )}
 
               {hubPanel === 'manager' && (
-                <ScreenLoading><ClubManagerCareerPanel c={c} g={g} nationOffer={nationOffer} /></ScreenLoading>
+                <ScreenLoading><ClubManagerCareerPanel c={c} g={g} nationOffer={nationOffer} onRetireOpen={preloadFarewell} /></ScreenLoading>
               )}
             </div>
           )}

@@ -51,7 +51,9 @@ const faultDefinitions = [
   { id: 'young-text', file: CONTRACTS, from: "    hit: '20% wage raise',", to: "    hit: 'Wrong young result',", failures: ['projection', 'young'] },
   { id: 'draw', file: CONTRACTS, from: signature, to: signature + '\n  Math.random();', failures: ['projection', 'copies', 'policy', 'young', 'other-choices', 'draws'] },
   { id: 'input-mutation', file: CONTRACTS, from: signature, to: signature + '\n  if (career.seasons.length) career.seasons[0].rating += 0.01;', failures: ['projection', 'copies', 'policy', 'young', 'other-choices'] },
-  { id: 'copy-text', file: CONTRACTS, from: '  return eventId === 16 && choiceIndex === 1 ? soccerWageDemand(career).consequence : saved;', to: '  return saved;', failures: ['copies'] },
+  /* Release BF join: Round 1355 (the life chain) made this line also refresh the corrected Life captions; the fault still
+     drops only the wage demand refresh of event 16, so the control breaks exactly what it broke before. */
+  { id: 'copy-text', file: CONTRACTS, from: '  return eventId === 16 && choiceIndex === 1 ? soccerWageDemand(career).consequence : SOCCER_LIFE_CONSEQUENCES[eventId]?.[choiceIndex] ?? saved;', to: '  return SOCCER_LIFE_CONSEQUENCES[eventId]?.[choiceIndex] ?? saved;', failures: ['copies'] },
 ];
 async function bundle(id, { baseline = false, observed = false, oracle = false, fault = null } = {}) {
   const dir = path.join(OUT, 'bundles', id);

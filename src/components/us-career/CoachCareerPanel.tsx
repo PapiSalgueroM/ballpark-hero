@@ -19,15 +19,17 @@
 import { useState } from 'react';
 import { Briefcase, ClipboardList, Flame, RotateCcw, TrendingUp } from 'lucide-react';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { useTapSettle } from '@/hooks/useTapSettle';
 /* Round 530: the season result is a moment. Same kit as the season curtain. */
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import {
-  acceptCoachOffer, playCoachSeason, sitOutCoachSeason,
+  acceptCoachOffer, playCoachSeason, sitOutCoachSeason, retireCoachCareer, takeNflStaffRole,
   coachOutlook, coachHotSeat, coachTotals, coachVerdict, formatCoachRecord,
 } from '@/lib/usCoachCareer';
 import type { CoachCareerState } from '@/lib/usCoachCareer';
 import { coachTierLabel, titleWord } from '@/lib/usCareerToCoach';
 import { cn } from '@/lib/utils';
+import USCareerActionConfirm from '@/components/us-career/USCareerActionConfirm';
 
 type Panel = 'none' | 'job' | 'market' | 'standing' | 'log';
 
@@ -53,6 +55,10 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
   const seat = coachHotSeat(state);
   const totals = coachTotals(state);
   const last = state.results[state.results.length - 1];
+  const canTakeStaffRole = state.sport === 'nfl' && !state.done && state.unemployed && state.job === null && state.offers.length === 0;
+  const marketNote = canTakeStaffRole
+    ? 'No automatic offers right now. You can take a staff role or wait for another opening.'
+    : state.offerNote;
 
   /* How to describe being out of work. profile.seasonsOut ticks up the moment
      you are let go, which is right for the maths and wrong for the sentence:
@@ -60,12 +66,18 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
      seasons actually spent on the couch and the day you got fired says so. */
   const justLetGo = !state.job && !!last && last.departure !== null;
   const outLabel = state.job ? ''
+    : state.done ? 'Retired from coaching'
     : justLetGo ? 'Just let go'
     : totals.yearsOut === 0 ? 'Looking for a job'
     : `${totals.yearsOut} season${totals.yearsOut === 1 ? '' : 's'} without one`;
 
+  /* Round 1346: the panel also reveals its action card when it first mounts. The board opens it from the bottom of
+     the long retirement screen ("Back to the sideline", "Review coaching career"), and the walk measured the card
+     500 to 970 px above the screen after that press. On a load at the top the card is already readable, so the
+     hook leaves the page alone. */
   const revealRef = useRevealScroll<HTMLDivElement>(
-    `${state.results.length}:${state.unemployed}:${state.offers.length}:${panel}`,
+    `${state.results.length}:${state.unemployed}:${state.offers.length}:${panel}:${state.done}`,
+    { skipFirst: false },
   );
 
   /* Round 530: the notes the last coached season produced, kept only for
@@ -74,6 +86,12 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
      line off the save and drops the notes, and the log has them anyway. */
   const [seasonNotes, setSeasonNotes] = useState<{ n: number; notes: string[] } | null>(null);
   const lastNotes = seasonNotes && seasonNotes.n === state.results.length ? seasonNotes.notes : [];
+
+  /* Round 1346: confirming the retirement shortens the hub under the pointer, so the second click of a double click
+     opened whichever tile slid under it (the review saw the Coaching Log open at 1280). For a second after the
+     retirement the tiles and the way back ignore a click (useTapSettle). */
+  const retireSettle = useTapSettle();
+  const open = (next: Panel) => { if (retireSettle.settled()) setPanel(next); };
 
   const coachSeason = () => {
     const r = playCoachSeason(state);
@@ -88,6 +106,13 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
     const o = state.offers[i];
     onChange(acceptCoachOffer(state, i), [`You took the ${o.team} job as their ${o.role}.`]);
   };
+  const takeStaffRole = () => {
+    const next = takeNflStaffRole(state);
+    if (next === state) return;
+    onChange(next, [`You took a staff role with ${next.job!.team}. Work your way up from here.`]);
+  };
+  /* Round 1346: the player ends it himself, behind the shared confirm. Only `done` changes. */
+  const retire = () => { retireSettle.mark(); onChange(retireCoachCareer(state), ['You stepped away from coaching. The record and the log stay.']); };
 
   /* ------------------------------ drill in screens ------------------------------ */
   if (panel !== 'none') {
@@ -98,7 +123,7 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
             &lsaquo; Back
           </button>
           <p className="min-w-0 truncate text-sm font-black text-foreground">
-            {panel === 'job' ? (state.job ? '🪑 The Job' : '📪 Out Of Work')
+            {panel === 'job' ? (state.job ? '🪑 The Job' : state.done ? '📪 Retired' : '📪 Out Of Work')
               : panel === 'market' ? '🗞️ The Market'
               : panel === 'standing' ? '📈 Where You Stand'
               : '📜 Coaching Log'}
@@ -122,6 +147,12 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
                   <p className="mt-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">What you inherited</p>
                   <p className="mt-1 text-xs text-muted-foreground">{state.job.roster}</p>
                 </div>
+                {state.done ? (
+                  /* Round 1346: a finished career's last job is history, so there is no seat to be hot. */
+                  <div className="rounded-2xl border border-border bg-card p-3 text-center">
+                    <p className="text-[11px] text-muted-foreground">Your last job. You retired from coaching here, so nobody is grading you now.</p>
+                  </div>
+                ) : (
                 <div className={cn('rounded-2xl border p-3', seat.tone === 'hot' ? 'border-destructive/40 bg-destructive/5' : seat.tone === 'warm' ? 'border-gold/40 bg-gold/5' : 'border-border bg-card')}>
                   <div className="flex items-center justify-between gap-2 text-[11px]">
                     <span className="font-bold uppercase tracking-wider text-muted-foreground"><Flame className="mr-1 inline h-3 w-3" />Hot seat</span>
@@ -129,16 +160,18 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
                   </div>
                   <p className="mt-1.5 text-[11px] leading-snug text-muted-foreground">{seat.line}</p>
                 </div>
+                )}
               </>
             ) : (
               <div className="rounded-2xl border border-gold/40 bg-gold/5 p-4 text-center">
                 <p className="text-3xl">📪</p>
                 <p className="mt-1 text-sm font-black text-foreground">{outLabel}</p>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  {totals.yearsOut === 0 ? 'Nothing has started yet. Find a chair before the league forgets you were in one.'
+                  {state.done ? 'You stepped away from coaching. Nobody is waiting on a call.'
+                    : totals.yearsOut === 0 ? 'Nothing has started yet. Find a chair before the league forgets you were in one.'
                     : `${totals.yearsOut} season${totals.yearsOut === 1 ? '' : 's'} on the couch. Every one of them costs you.`}
                 </p>
-                <p className="mt-2 text-[11px] text-muted-foreground">{out.blurb}</p>
+                {!state.done && <p className="mt-2 text-[11px] text-muted-foreground">{out.blurb}</p>}
               </div>
             )}
           </div>
@@ -152,9 +185,12 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
                 {' '}{state.reachable} {state.reachable === 1 ? 'was' : 'were'} at a level that would even look at you.
               </p>
             </div>
+            {state.done && state.offers.length > 0 && (
+              <p className="px-1 text-center text-[11px] text-muted-foreground">You retired from coaching, so these are only the calls that came in before you did.</p>
+            )}
             {state.offers.length === 0 ? (
               <div className="rounded-2xl border border-border bg-card p-4 text-center">
-                <p className="text-xs text-muted-foreground">{state.offerNote || 'Nothing on the table right now.'}</p>
+                <p className="text-xs text-muted-foreground">{state.done ? 'You retired from coaching, so nobody is calling now.' : marketNote || 'Nothing on the table right now.'}</p>
               </div>
             ) : (
               state.offers.map((o, i) => (
@@ -174,7 +210,7 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
                     </span>
                     <span className="shrink-0 text-[10px] font-black text-foreground">{o.keenness}</span>
                   </div>
-                  {state.unemployed && (
+                  {state.unemployed && !state.done && (
                     <button onClick={() => { setPanel('none'); take(i); }} className="mt-2 w-full rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground hover:opacity-90">
                       Take the {o.team} job
                     </button>
@@ -231,16 +267,26 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
         {panel === 'log' && (
           <div className="space-y-2">
             <div className="rounded-2xl border border-border bg-card p-3 text-center">
-              <p className="text-sm font-black text-foreground">
-                {totals.wins}-{totals.losses}{totals.otl ? `-${totals.otl}` : ''} as a coach
-              </p>
-              <p className="text-[11px] text-muted-foreground">
-                {totals.seasons} season{totals.seasons === 1 ? '' : 's'} · {totals.rings} title{totals.rings === 1 ? '' : 's'} · {(totals.winPct * 100).toFixed(1)} percent
-              </p>
+              {/* Round 1346: a career retired before a first season has no record to print, the same as the done
+                  card. A live career keeps its lines as they were (the US board fixture holds them). */}
+              {state.done && totals.seasons === 0 ? (
+                <p className="text-sm font-black text-foreground">No seasons coached</p>
+              ) : (
+                <>
+                  <p className="text-sm font-black text-foreground">
+                    {totals.wins}-{totals.losses}{totals.otl ? `-${totals.otl}` : ''} as a coach
+                  </p>
+                  <p className="text-[11px] text-muted-foreground">
+                    {totals.seasons} season{totals.seasons === 1 ? '' : 's'} · {totals.rings} title{totals.rings === 1 ? '' : 's'} · {(totals.winPct * 100).toFixed(1)} percent
+                  </p>
+                </>
+              )}
             </div>
             <div className="rounded-2xl border border-border bg-card p-3">
               {state.results.length === 0 ? (
-                <p className="py-6 text-center text-xs text-muted-foreground">Nothing on the books yet. Go coach a season.</p>
+                <p className="py-6 text-center text-xs text-muted-foreground">
+                  {state.done ? 'Nothing on the books. You walked away before coaching a season.' : 'Nothing on the books yet. Go coach a season.'}
+                </p>
               ) : (
                 <div className="max-h-96 space-y-0.5 overflow-y-auto">
                   {[...state.results].reverse().map((r, i) => (
@@ -277,7 +323,32 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
 
       <div ref={revealRef} className="rounded-2xl border border-gold/40 bg-card p-4">
         <CelebrationStyles />
-        {state.unemployed ? (
+        {state.done ? (
+          /* Round 1346: a finished coaching career. The action card becomes the
+             legacy: no season, no offer and no retire button, while the four
+             tiles below still open the job, the market, the standing and the log. */
+          <div className="cm-rise text-center" data-coach-done>
+            <p className="text-2xl">🧢</p>
+            <h2 className="text-sm font-black text-foreground">Coaching career complete</h2>
+            {totals.seasons > 0 ? (
+              <>
+                <p className="mt-1 text-xs font-bold text-foreground">
+                  {totals.wins}-{totals.losses}{totals.otl ? `-${totals.otl}` : ''} as a coach
+                </p>
+                <p className="text-[11px] text-muted-foreground">
+                  {totals.seasons} season{totals.seasons === 1 ? '' : 's'} · {totals.rings} title{totals.rings === 1 ? '' : 's'} · {(totals.winPct * 100).toFixed(1)} percent
+                </p>
+              </>
+            ) : (
+              <p className="mt-1 text-xs font-bold text-foreground">No seasons coached</p>
+            )}
+            <p className="mt-2 text-[11px] text-muted-foreground">
+              {totals.seasons > 0
+                ? 'You called it a career. The record and the log stay with this save.'
+                : 'You walked away before coaching a season. Nothing on the books, and nothing against you either.'}
+            </p>
+          </div>
+        ) : state.unemployed ? (
           /* Round 530: being let go, or a new cycle of offers, lands as a
              beat too: the header rises and the offers tick in. Keyed on the
              results count and the offer count so only a new cycle moves. */
@@ -285,7 +356,7 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
             <div className="cm-rise text-center">
               <p className="text-2xl">📪</p>
               <p className="text-sm font-black text-foreground">{outLabel}</p>
-              <p className="mt-1 text-[11px] italic text-muted-foreground">{state.offerNote}</p>
+              <p className="mt-1 text-[11px] italic text-muted-foreground">{marketNote}</p>
             </div>
             {state.offers.map((o, i) => (
               <button
@@ -303,13 +374,21 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
                 <span className="mt-0.5 block text-[10px] text-gold">{o.reason}</span>
               </button>
             ))}
+            {canTakeStaffRole && (
+              <button
+                onClick={takeStaffRole}
+                className="min-h-11 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+              >
+                Take a staff role
+              </button>
+            )}
             <button
               onClick={sitOut}
               className="w-full rounded-full border border-border px-4 py-2.5 text-sm font-bold text-foreground hover:border-primary/60"
             >
               Sit out the {state.year} season
             </button>
-            {state.offers.length === 0 && (
+            {state.offers.length === 0 && !canTakeStaffRole && (
               <p className="text-center text-[10px] text-muted-foreground">
                 It gets harder every year you wait. That is the point.
               </p>
@@ -373,29 +452,38 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
             </p>
           </div>
         )}
+        {!state.done && (
+          <div data-coach-retire className="mt-1 text-center">
+            <USCareerActionConfirm action="retireCoach" sport={state.sport.toUpperCase() as 'NFL' | 'NBA' | 'MLB' | 'NHL'} onConfirm={retire}>
+              <button className="min-h-11 min-w-11 text-[11px] text-muted-foreground hover:text-destructive">Retire from coaching</button>
+            </USCareerActionConfirm>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        <button onClick={() => setPanel('job')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
+        <button onClick={() => open('job')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
           <span className="text-xl">{state.job ? '🪑' : '📪'}</span>
-          <span className="mt-0.5 block text-sm font-black text-foreground">{state.job ? 'The Job' : 'Out Of Work'}</span>
-          <span className="block truncate text-[10px] text-muted-foreground">{state.job ? `${state.job.role} · ${seat.label}` : 'Nobody has hired you'}</span>
+          <span className="mt-0.5 block text-sm font-black text-foreground">{state.job ? 'The Job' : state.done ? 'Retired' : 'Out Of Work'}</span>
+          <span className="block truncate text-[10px] text-muted-foreground">
+            {state.job ? `${state.job.role} · ${state.done ? 'your last job' : seat.label}` : state.done ? 'You stepped away' : 'Nobody has hired you'}
+          </span>
         </button>
-        <button onClick={() => setPanel('market')} className="relative rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
+        <button onClick={() => open('market')} className="relative rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
           <span className="text-xl">🗞️</span>
           <span className="mt-0.5 block text-sm font-black text-foreground">The Market</span>
-          <span className="block truncate text-[10px] text-muted-foreground">{state.openings} jobs open · {state.offers.length} for you</span>
-          {state.offers.length > 0 && <span className="absolute right-2 top-2 rounded-full bg-primary px-1.5 text-[9px] font-black text-primary-foreground">{state.offers.length}</span>}
+          <span className="block truncate text-[10px] text-muted-foreground">{state.done ? 'You are not looking now' : `${state.openings} jobs open · ${state.offers.length} for you`}</span>
+          {state.offers.length > 0 && !state.done && <span className="absolute right-2 top-2 rounded-full bg-primary px-1.5 text-[9px] font-black text-primary-foreground">{state.offers.length}</span>}
         </button>
-        <button onClick={() => setPanel('standing')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
+        <button onClick={() => open('standing')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
           <span className="text-xl"><TrendingUp className="inline h-5 w-5 text-primary" /></span>
           <span className="mt-0.5 block text-sm font-black text-foreground">Where You Stand</span>
           <span className="block truncate text-[10px] text-muted-foreground">{out.standing} · can reach {out.ceilingLabel}</span>
         </button>
-        <button onClick={() => setPanel('log')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
+        <button onClick={() => open('log')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
           <span className="text-xl">📜</span>
           <span className="mt-0.5 block text-sm font-black text-foreground">Coaching Log</span>
-          <span className="block truncate text-[10px] text-muted-foreground">{totals.seasons} season{totals.seasons === 1 ? '' : 's'} · {totals.wins}-{totals.losses}{totals.otl ? `-${totals.otl}` : ''}</span>
+          <span className="block truncate text-[10px] text-muted-foreground">{state.done && totals.seasons === 0 ? 'No seasons coached' : <>{totals.seasons} season{totals.seasons === 1 ? '' : 's'} · {totals.wins}-{totals.losses}{totals.otl ? `-${totals.otl}` : ''}</>}</span>
         </button>
       </div>
 
@@ -413,8 +501,8 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
             one. On the very first board it used to read "Never got a job",
             which is a strange thing to tell somebody who retired ten seconds
             ago and has not been given a chance to try yet. */}
-        <p className="text-[11px] text-muted-foreground">{totals.seasons > 0 ? coachVerdict(state) : out.blurb}</p>
-        <button onClick={onBack} className="mt-2 inline-flex items-center gap-2 rounded-full border border-border px-5 py-2 text-xs font-semibold text-foreground hover:border-primary/60">
+        <p className="text-[11px] text-muted-foreground">{totals.seasons > 0 ? coachVerdict(state) : state.done ? 'The book is closed.' : out.blurb}</p>
+        <button onClick={() => { if (retireSettle.settled()) onBack(); }} className="mt-2 inline-flex items-center gap-2 rounded-full border border-border px-5 py-2 text-xs font-semibold text-foreground hover:border-primary/60">
           <Briefcase className="h-3.5 w-3.5" /> Back to the playing career
         </button>
       </div>
@@ -435,6 +523,22 @@ export function CoachStartCard({
   onResume: () => void;
   sport: CoachCareerState['sport'];
 }) {
+  /* Round 1346: a finished coaching career is reviewed, never resumed. */
+  if (existing?.done) {
+    const t = coachTotals(existing);
+    return (
+      <div className="rounded-2xl border border-primary/40 bg-card p-4 text-center">
+        <p className="text-2xl">🧢</p>
+        <p className="mt-1 text-sm font-black text-foreground">Coaching career complete</p>
+        <p className="mt-1 text-[11px] text-muted-foreground">
+          {t.seasons > 0 ? <>{t.seasons} season{t.seasons === 1 ? '' : 's'}, {t.wins}-{t.losses}{t.otl ? `-${t.otl}` : ''}, {t.rings} title{t.rings === 1 ? '' : 's'}.</> : 'No seasons coached.'}
+        </p>
+        <button onClick={onResume} className="mt-3 min-h-11 w-full rounded-full border border-primary/60 px-6 py-2.5 text-sm font-bold text-foreground hover:bg-primary/10">
+          Review coaching career
+        </button>
+      </div>
+    );
+  }
   if (existing) {
     const t = coachTotals(existing);
     return (

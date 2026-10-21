@@ -1,18 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState, type ComponentType } from 'react';
 import { LogoMark } from '@/components/layout/Logo';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRoutePath } from '@/hooks/useRoutePath';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthModal } from '@/components/auth/AuthModal';
-import { Flame, User, BarChart3, LogOut, Loader2, KeyRound } from 'lucide-react';
+import type { AccountMenuProps } from '@/components/layout/AccountMenu';
+import { Flame, Loader2 } from 'lucide-react';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { SoundToggle } from '@/components/game/SoundToggle';
 import { useStreaks } from '@/hooks/useStreaks';
@@ -32,6 +26,17 @@ export function Header() {
     open: false,
     tab: 'login',
   });
+  const [AccountMenu, setAccountMenu] = useState<ComponentType<AccountMenuProps> | null>(null);
+  const [accountMenuFailed, setAccountMenuFailed] = useState(false);
+  useEffect(() => {
+    if (!user || AccountMenu || accountMenuFailed) return;
+    let active = true;
+    import('@/components/layout/AccountMenu').then(
+      module => { if (active) setAccountMenu(() => module.AccountMenu); },
+      () => { if (active) setAccountMenuFailed(true); },
+    );
+    return () => { active = false; };
+  }, [user?.id, AccountMenu, accountMenuFailed]);
   const navigate = useNavigate();
   /* Round 283: the guest sign up strip below is suppressed on the home page.
      See the comment at that block for the measurement behind it. */
@@ -122,13 +127,23 @@ export function Header() {
             ) : user ? (
               <>
                 {/* User Menu */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
+                {AccountMenu ? (
+                  <AccountMenu
+                    displayName={profile?.display_name}
+                    email={user.email}
+                    username={profile?.username}
+                    initial={getUserInitial()}
+                    offerPassword={!OAUTH_PROVIDERS.google && isGoogleOnlyAccount(user)}
+                    onSignOut={handleSignOut}
+                  />
+                ) : accountMenuFailed ? (
+                  <Button variant="ghost" size="sm" onClick={handleSignOut}>Log Out</Button>
+                ) : (
+                  <>
                     <Button
                       variant="ghost"
-                      /* Round 306: below the sm breakpoint the name span hides
-                         and this button's only content is a single initial. */
                       aria-label="Account menu"
+                      disabled
                       className="flex items-center gap-2 h-9 pl-3 pr-1 rounded-full hover:bg-accent"
                     >
                       <span className="hidden sm:inline max-w-[120px] truncate text-sm font-medium">
@@ -138,55 +153,9 @@ export function Header() {
                         {getUserInitial()}
                       </span>
                     </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <div className="px-2 py-1.5">
-                      <p className="text-sm font-medium">
-                        {profile?.display_name || user.email}
-                      </p>
-                      {profile?.username && (
-                        <p className="text-xs text-muted-foreground">@{profile.username}</p>
-                      )}
-                    </div>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link to="/profile" className="cursor-pointer">
-                        <User className="mr-2 h-4 w-4" />
-                        My Profile
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/leaderboard" className="cursor-pointer">
-                        <BarChart3 className="mr-2 h-4 w-4" />
-                        Leaderboard
-                      </Link>
-                    </DropdownMenuItem>
-                    {/* Round 610: a Google-only account has no password while
-                        Google sign in is paused, so it offers one before the
-                        session that is keeping this player in runs out. It
-                        goes straight to the change password page, which needs
-                        no email: the 3 Google accounts that had set a password
-                        by 2026-09-15 had never been sent one. */}
-                    {!OAUTH_PROVIDERS.google && isGoogleOnlyAccount(user) && (
-                      <DropdownMenuItem asChild>
-                        <Link to="/reset-password" data-set-password className="cursor-pointer flex-col items-start gap-0.5">
-                          <span className="flex items-center">
-                            <KeyRound className="mr-2 h-4 w-4" />
-                            Set a password
-                          </span>
-                          <span className="pl-6 text-xs text-muted-foreground">
-                            Google sign in is paused. A password means you can always log back in.
-                          </span>
-                        </Link>
-                      </DropdownMenuItem>
-                    )}
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Log Out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                    <span role="status" className="sr-only">Loading account menu...</span>
+                  </>
+                )}
               </>
             ) : (
               <>
@@ -209,6 +178,10 @@ export function Header() {
             )}
           </div>
         </div>
+
+        {user && accountMenuFailed && (
+          <p role="alert" className="px-4 py-2 text-center text-xs text-muted-foreground">Account menu could not load. You can still log out.</p>
+        )}
 
         {/* Sign up CTA for guests.
 

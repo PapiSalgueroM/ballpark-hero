@@ -2,6 +2,8 @@ import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import { nflHallHelpRules } from '@/lib/nflCareerHall';
 import { nflTruthHelpRules } from '@/lib/nflCareerHelpRules';
+import { US_COACH_RETIRE_HELP_RULE } from '@/lib/usCoachRetirement';
+import { US_DIRTY_MONEY_HELP_RULE } from '@/lib/careerDirtyMoney';
 import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
@@ -17,7 +19,7 @@ const NflMyCareer = () => {
       />
       <div className="min-h-screen bg-background text-foreground">
         <GameNavbar />
-        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp firstVisit extraRules={[...nflHallHelpRules(), ...nflTruthHelpRules()]} className="inline-flex min-h-11 min-w-11 items-center justify-center" /></div>
+        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp firstVisit extraRules={[...nflHallHelpRules(), ...nflTruthHelpRules(), US_COACH_RETIRE_HELP_RULE, US_DIRTY_MONEY_HELP_RULE]} className="inline-flex min-h-11 min-w-11 items-center justify-center" /></div>
         <main id="dukb-main" className="container max-w-2xl mx-auto px-4 py-6 pb-20">
           <div className="text-center mb-4">
             <h1 className="text-2xl font-display font-bold text-primary">NFL My Career</h1>

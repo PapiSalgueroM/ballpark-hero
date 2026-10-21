@@ -10,6 +10,11 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { nextTenPatches } from './lib/careerNextTenAttribution1197.mjs';
 import { veteranPayPatches } from './lib/careerVeteranPay1262.mjs';
+import { awardGenerationsPatches } from './lib/careerAwardGenerations1318.mjs';
+import { deckFairPatches } from './lib/careerDeckFair1327.mjs';
+import { worldTruthPatches } from './lib/careerWorldTruth1329.mjs';
+/* Round 1334: the soccer deck's three engine lines come out first, in front of Round 1329 (scripts/lib/careerSoccerDeck1334.mjs), every row once, in order. */
+import { soccerDeckPatches } from './lib/careerSoccerDeck1334.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* Release AT: the base is the tree just before Rounds 1185 to 1187 were merged on the release line (5d31eaa6, PR208
@@ -178,8 +183,20 @@ if (!IMPORT_ONLY) {
      control still reaches them); every other group runs on the tree as it ships. */
   /* Release AW: the same two bundles take the veteran pay of Rounds 1262 to 1264 out as well, at its one condition in
      the contracts file (scripts/lib/careerVeteranPay1262.mjs): a career of 30 or more is offered other money on purpose. */
-  const nextTen = [...nextTenPatches(), ...veteranPayPatches()].map(patch => ({ ...patch, name: patch.id }));
-  const neutralB = await developmentBundle({ patches: [...activePatches, ...nextTen] }), neutralOriginal = CONTROL ? await developmentBundle({ patches: nextTen }) : neutralB;
+  /* Round 1318: and the saved pool of made up Ballon d'Or rivals of Rounds 1280 to 1282 and 1318, its rows in order
+     (scripts/lib/careerAwardGenerations1318.mjs). */
+  /* Round 1327: and Round 1327's event deck and paper first, the newest change first (scripts/lib/careerDeckFair1327.mjs):
+     its keyed draws move every seeded career's Math.random from the first deck or paper on. */
+  /* Round 1329: and the world truth round before that, the newest change first (scripts/lib/careerWorldTruth1329.mjs): the
+     engine's and the phone's rows, the two files of it this bundle loads. */
+  const nextTen = [...soccerDeckPatches(), ...worldTruthPatches().filter(patch => patch.file === 'src/lib/soccerCareerEngine.ts' || patch.file === 'src/lib/soccerPhone.ts'), ...deckFairPatches(), ...nextTenPatches(), ...veteranPayPatches(), ...awardGenerationsPatches()].map(patch => ({ ...patch, name: patch.id }));
+  /* Round 1329 fix pass: a control's edit can sit inside an attribution row (mentorRemember's label is inside Round
+     1327's cards-1-to-10 row, once on each side), and that row then misses its anchor and the copied bundle refuses, so
+     the =all run died on main 082fc277 too. The control is carried through such a row on both sides: the row still finds
+     its one anchor, and the neutral bundle still holds the control, as it did before Round 1327's rows were wired. */
+  const carried = nextTen.map(row => activePatches.reduce((r, c) => c.file === r.file && r.from.split(c.from).length === 2 && r.to.split(c.from).length === 2
+    ? { ...r, from: r.from.replace(c.from, () => c.to), to: r.to.replace(c.from, () => c.to) } : r, row));
+  const neutralB = await developmentBundle({ patches: [...activePatches, ...carried] }), neutralOriginal = CONTROL ? await developmentBundle({ patches: nextTen }) : neutralB;
   const mentorMetadata = seeded(118500, () => B.soccer.getAllEvents(developmentFixture(B)).find(event => event.id === 6)).value;
   async function check(name, fn) {
     try { await fn(); report.cases.push({ name, status: 'passed' }); console.log(`ok   ${name}`); }

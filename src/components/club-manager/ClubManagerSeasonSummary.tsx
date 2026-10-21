@@ -1,10 +1,16 @@
-import { Trophy } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ChevronLeft, Trophy } from 'lucide-react';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
-import { money } from '@/lib/clubManager';
+import { bookAwardsState, evalWorldUcl, money } from '@/lib/clubManager';
+import { BOOK_FULL_SHARE, type AwardMan } from '@/lib/clubManagerLeagueBoards';
+import { MadeUpTag } from '@/components/club-manager/SquadScreen';
+import { TeamLines } from '@/components/club-manager/SeasonHonoursCard';
 import type { CareerState, SeasonSummary } from '@/lib/clubManager';
+import type { SeasonFate } from '@/lib/clubManagerBoardVerdict';
 import type { useClubManager } from '@/hooks/useClubManager';
+import { SavePointsDoor } from '@/components/club-manager/SavePointsDoor';
 
 /* Round 633: the five terms, in the order they are worth. Kept beside the
    screen that prints them rather than in the engine, because the wording is
@@ -17,10 +23,18 @@ const SCORE_TERMS = [
   { key: 'objectives', label: 'Board' },
 ] as const;
 
+/* Round 1335: the summer move a season earned, in the review and on the career record. */
+const FATE_LINE: Record<SeasonFate, string> = {
+  up: 'You went up.',
+  down: 'You went down.',
+  escape: 'You stayed up when everyone had you going down.',
+};
+const FATE_WORD: Record<SeasonFate, string> = { up: 'promoted', down: 'relegated', escape: 'stayed up' };
+
 export default function ClubManagerSeasonSummary({ sm, c, g }: {
   sm: SeasonSummary;
   c: CareerState;
-  g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'>;
+  g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot'>>;
 }) {
   const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
   /* Optional: a summary stored before Round 633 carries no breakdown, and the
@@ -32,6 +46,40 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
   const summerMove = c.jobHunt?.summerMove ?? null;
   let tick = 0;
   const tickIn = () => ({ animationDelay: revealDelay(tick++) });
+  /* Round 1503: the Champions League a save follows from outside it plays its final after the last league game in
+     today's world, so the season ends before the Cups tile can show it: the winner lands here. Read only. */
+  const watchedFinal = (() => {
+    try {
+      const r = c.uclGroup ? null : evalWorldUcl(c);
+      return r?.done && r.winner && r.runnerUp ? { winner: r.winner, runnerUp: r.runnerUp } : null;
+    } catch {
+      return null;
+    }
+  })();
+  /* Round 1311: the league's awards from the book. A summary written before them has no `awards`; it
+     prints as it always did, plus, on a season the book could not settle, one line that says why. */
+  const awards = sm.awards;
+  const awardsBy = awards ? null : bookAwardsState(c);
+  const [teamOpen, setTeamOpen] = useState(false);
+  /* Round 1335: an offer asks before it moves the career. The question opens in place of the list, in the
+     same panel, and only "Take the job" moves anything. Keyed on the season, so the next review opens on the
+     list. Focus follows: to the question's button when it opens, back to the card that was tapped. */
+  const [asking, setAsking] = useState<{ season: number; club: string } | null>(null);
+  const askingOffer = asking && asking.season === sm.season ? sm.offers.find(o => o.club === asking.club) ?? null : null;
+  const takeRef = useRef<HTMLButtonElement>(null);
+  const cardRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const backTo = useRef<string | null>(null);
+  /* Review fix: the list Back returns to is the one already on screen, so it does not rise in again (the
+     cards would sit invisible for most of a second with focus on one of them). Keyed on the season. */
+  const [backedIn, setBackedIn] = useState<number | null>(null);
+  useEffect(() => {
+    if (askingOffer) { takeRef.current?.focus({ preventScroll: true }); return; }
+    if (backTo.current) { cardRefs.current[backTo.current]?.focus({ preventScroll: true }); backTo.current = null; }
+  }, [askingOffer]);
+  const mineInTeam = awards?.xi ? awards.xi.filter(m => (m[3] & 2) !== 0).length : 0;
+  const winner = (m: AwardMan) => (
+    <><span className={cn('font-bold', (m[3] & 2) !== 0 && 'text-primary')}>{m[0]}</span>{(m[3] & 1) !== 0 && <MadeUpTag className="ml-1" />} ({m[1]}, {m[2]})</>
+  );
   return (
 <ResultScreen
           won={sm.verdictGrade === 'A' || sm.verdictGrade === 'B' ? true : sm.verdictGrade === 'C' ? undefined : false}
@@ -62,23 +110,52 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
                 </div>
               )}
               {!summerMove && sm.offers.length > 0 && (
-                <div className="text-left bg-surface-2 border border-border/60 rounded-xl p-3">
+                <div data-cm-offers className="text-left bg-surface-2 border border-border/60 rounded-xl p-3">
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-2">📞 Job offers on the table</div>
-                  {/* Round 530: each offer rises in on its own beat, keyed on
-                      the season so next year's offers rise again. The button
-                      works from frame one; only its opacity is on the way in. */}
-                  {sm.offers.map((o, i) => (
-                    <button
-                      key={`${sm.season}:${o.club}`}
-                      onClick={() => g.nextSeason(o.club)}
-                      className="cm-rise w-full mb-2 last:mb-0 rounded-lg border border-primary/40 bg-primary/5 p-2.5 text-left hover:bg-primary/15 transition-colors"
-                      style={{ animationDelay: revealDelay(i) }}
-                    >
-                      <div className="text-sm font-bold text-primary">{o.club} want you as manager</div>
-                      <div className="text-[10px] text-muted-foreground">{o.blurb}</div>
-                    </button>
-                  ))}
-                  <p className="text-[9px] text-muted-foreground">Accepting an offer moves you there for Season {sm.season + 1}.</p>
+                  {askingOffer ? (
+                    <div data-cm-offer-confirm role="group" aria-labelledby="cm-offer-question">
+                      <p id="cm-offer-question" className="text-sm font-bold text-primary">Take the {askingOffer.club} job?</p>
+                      <p className="text-xs text-muted-foreground mt-1">{askingOffer.blurb}</p>
+                      <p className="text-xs text-foreground mt-1.5">Your players and the money you did not spend stay at {c.clubName}. You start Season {sm.season + 1} with theirs.</p>
+                      <div className="flex gap-2 mt-2.5">
+                        <button
+                          ref={takeRef}
+                          data-cm-offer-take
+                          onClick={() => g.nextSeason(askingOffer.club)}
+                          className="min-h-[44px] flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground hover:bg-primary/90 transition-colors"
+                        >
+                          Take the job
+                        </button>
+                        <button
+                          data-cm-offer-back
+                          onClick={() => { backTo.current = askingOffer.club; setBackedIn(sm.season); setAsking(null); }}
+                          className="min-h-[44px] inline-flex items-center gap-1 rounded-lg border border-border px-4 text-sm text-foreground hover:bg-primary/10 transition-colors"
+                        >
+                          <ChevronLeft className="w-4 h-4" />Back
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {/* Round 530: each offer rises in on its own beat, keyed on
+                          the season so next year's offers rise again. The button
+                          works from frame one; only its opacity is on the way in. */}
+                      {sm.offers.map((o, i) => (
+                        <button
+                          key={`${sm.season}:${o.club}`}
+                          ref={el => { cardRefs.current[o.club] = el; }}
+                          data-cm-offer={o.club}
+                          onClick={() => setAsking({ season: sm.season, club: o.club })}
+                          className={cn('w-full mb-2 last:mb-0 rounded-lg border border-primary/40 bg-primary/5 p-2.5 text-left hover:bg-primary/15 transition-colors', backedIn !== sm.season && 'cm-rise')}
+                          style={backedIn === sm.season ? undefined : { animationDelay: revealDelay(i) }}
+                        >
+                          <div className="text-sm font-bold text-primary">{o.club} want you as manager</div>
+                          <div className="text-[10px] text-muted-foreground">{o.blurb}</div>
+                        </button>
+                      ))}
+                      <p data-cm-offer-note className="text-xs text-muted-foreground">Tap an offer to see it first. Nothing moves until you take the job.</p>
+                    </>
+                  )}
                 </div>
               )}
               <button onClick={g.startNew} className="text-xs text-muted-foreground hover:text-primary transition-colors">
@@ -99,6 +176,18 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
               <Trophy className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
               Champions: <span className="font-bold">{sm.champion}</span>
             </p>
+            {watchedFinal && (
+              <p data-cm-world-final-line className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
+                <span className="shrink-0">⭐</span>
+                <span>Champions League: <span className="font-bold">{watchedFinal.winner}</span> beat {watchedFinal.runnerUp} in the final.</span>
+              </p>
+            )}
+            {sm.fate && (
+              <p data-cm-fate={sm.fate} className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
+                <span className="shrink-0">{sm.fate === 'up' ? '⬆️' : sm.fate === 'down' ? '⬇️' : '🛟'}</span>
+                <span className="font-bold">{FATE_LINE[sm.fate]}</span>
+              </p>
+            )}
             {sm.trophies.map(t => {
               /* The glow starts 0.35s after this line's own beat, once the
                  tick-in has finished. */
@@ -115,23 +204,54 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
             })}
             {sm.topScorer && (
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-                <span className="shrink-0">⚽</span>Top scorer: {sm.topScorer.name} ({sm.topScorer.goals} goals)
+                <span className="shrink-0">⚽</span><span>Your top scorer: {sm.topScorer.name} ({sm.topScorer.goals} goals)</span>
               </p>
             )}
             {sm.topAssister && (
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-                <span className="shrink-0">🎯</span>Most assists: {sm.topAssister.name} ({sm.topAssister.assists})
+                <span className="shrink-0">🎯</span><span>Your most assists: {sm.topAssister.name} ({sm.topAssister.assists})</span>
               </p>
             )}
             {/* Round 165: the season's individual honours. */}
             {sm.goldenBoot && (
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-                <span className="shrink-0">👟</span>Golden boot: <span className="font-bold">{sm.goldenBoot.name}</span> ({sm.goldenBoot.club}, {sm.goldenBoot.goals} goals)
+                <span className="shrink-0">👟</span><span>Golden boot: <span className="font-bold">{sm.goldenBoot.name}</span> ({sm.goldenBoot.club}, {sm.goldenBoot.goals} goals)</span>
               </p>
+            )}
+            {awards?.ast && (
+              <p data-cm-award="ast" className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
+                <span className="shrink-0">🅰️</span><span>Most assists in the league: {winner(awards.ast)}</span>
+              </p>
+            )}
+            {awards?.glove && (
+              <p data-cm-award="glove" className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
+                <span className="shrink-0">🧤</span><span>Most clean sheets: {winner(awards.glove)}</span>
+              </p>
+            )}
+            {awards?.xi && (teamOpen ? (
+              <div data-cm-team-open className="text-left rounded-xl border border-border p-3 space-y-2">
+                <button type="button" data-cm-team-back onClick={() => setTeamOpen(false)} className="inline-flex items-center gap-1 min-h-[44px] min-w-[44px] pr-2 text-xs text-muted-foreground hover:text-foreground">
+                  <ChevronLeft className="w-3.5 h-3.5" /> Back
+                </button>
+                <div className="text-sm font-bold text-foreground">🌟 Team of the season</div>
+                <TeamLines xi={awards.xi} />
+              </div>
+            ) : (
+              <button type="button" data-cm-team-tile onClick={() => setTeamOpen(true)} className="min-h-[44px] w-full rounded-xl border border-border bg-card px-3 py-2 text-left text-sm hover:border-primary">
+                <span className="mr-1">🌟</span>Team of the season <span className="text-xs text-muted-foreground">{mineInTeam ? `${mineInTeam} of yours made it` : 'None of yours this time'}</span>
+              </button>
+            ))}
+            {awards && awards.cov < BOOK_FULL_SHARE && (
+              <p data-cm-award-thin className="text-[9px] text-yellow-500/80">The data covers only part of this league: {awards.cov} in 100 of the other clubs' goals had a name on them this season.</p>
+            )}
+            {awardsBy && awardsBy.by !== 'book' && (
+              <p data-cm-award-withheld className="text-[10px] text-muted-foreground">{awardsBy.by === 'thin'
+                ? `Only ${awardsBy.share} in 100 of the other clubs' goals had a name on them, too few to settle awards on, so the golden boot went to the scorers' race and there are no most assists, most clean sheets or team of the season awards this time.`
+                : 'The league book only covered part of this season, so the golden boot went to the scorers\' race and there are no most assists, most clean sheets or team of the season awards this time.'}</p>
             )}
             {sm.playerOfSeason && (
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-                <span className="shrink-0">🎖️</span>Player of the season: <span className="font-bold">{sm.playerOfSeason.name}</span> ({sm.playerOfSeason.club})
+                <span className="shrink-0">🎖️</span><span>Player of the season: <span className="font-bold">{sm.playerOfSeason.name}</span> ({sm.playerOfSeason.club})</span>
               </p>
             )}
             {sm.ballonDor && (
@@ -186,13 +306,15 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
               </div>
             )}
           </div>
+          {/* Round 1513 review: the save points, before the summer runs. */}
+          {g.pointsSlot && <div className="mt-3"><SavePointsDoor career={c} pointsSlot={g.pointsSlot} /></div>}
         </ResultScreen>
   );
 }
 
 export function SackedCareerSummary({ c, g }: {
   c: CareerState;
-  g: Pick<ReturnType<typeof useClubManager>, 'startNew' | 'takeJob' | 'waitAWeek'>;
+  g: Pick<ReturnType<typeof useClubManager>, 'startNew' | 'takeJob' | 'waitAWeek'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot'>>;
 }) {
   return (
 <ResultScreen
@@ -267,12 +389,14 @@ export function SackedCareerSummary({ c, g }: {
               Trophies and promotions open doors; relegations shut them. Waiting costs you standing, so the job you hold out for may not be there when you finally say yes. Somebody always needs a manager in the end.
             </p>
           </div>
+          {/* Round 1513 review: the moment a save point is for, so the way back is right here. */}
+          {g.pointsSlot && <div className="mb-3"><SavePointsDoor career={c} pointsSlot={g.pointsSlot} /></div>}
           <div className="text-left space-y-1.5 mb-2">
             <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Career record</div>
             {c.history.length === 0 && <p className="text-xs text-muted-foreground">Sacked before finishing a single season. Brutal.</p>}
             {c.history.map(h => (
               <p key={h.season} className="text-xs text-foreground">
-                S{h.season} · {h.club} · #{h.position} ({h.points} pts){h.trophies.length ? ` · 🏆 ${h.trophies.join(', ')}` : ''}
+                S{h.season} · {h.club} · #{h.position} ({h.points} pts){h.fate ? ` · ${FATE_WORD[h.fate]}` : ''}{h.trophies.length ? ` · 🏆 ${h.trophies.join(', ')}` : ''}
               </p>
             ))}
             {c.trophies.length > 0 && (

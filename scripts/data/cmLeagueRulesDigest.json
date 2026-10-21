@@ -5,15 +5,15 @@
    "now|premier": {
     "club": "Arsenal",
     "eraId": "now",
-    "entries": 20,
+    "entries": 52,
     "read": {
-     "position": 15,
-     "champion": "Manchester United",
-     "bottom": "Hull City",
-     "cupWinner": null,
-     "uclWinner": null,
+     "position": 4,
+     "champion": "Manchester City",
+     "bottom": "Coventry City",
+     "cupWinner": "Bournemouth",
+     "uclWinner": "Barcelona",
      "nextLeague": "premier",
-     "nextUcl": false,
+     "nextUcl": true,
      "overrides": {
       "premier": 20,
       "championship": 24,
@@ -28,40 +28,40 @@
      }
     },
     "hashes": {
-     "start": "aca5636eec8f8860",
-     "table": "7d516448a38c9f0f",
-     "results": "a135b05d41f1cc56",
-     "world": "4a818d2b25e606aa",
-     "cup": "bd9780a1399e8347",
-     "europe": "8183b06acde2c6f8",
+     "start": "d983da2a803bf1db",
+     "table": "b848149ea934dfa8",
+     "results": "55174bf1a53b2eba",
+     "world": "eabfd46783b6cfb0",
+     "cup": "993f321bb33e890f",
+     "europe": "3c18570079af6f19",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "077a21b7077bc277",
-     "whole": "c2362d39273f5f4c",
-     "summary": "884cea4fde1e1393",
-     "promotions": "a6be8878122081d9",
-     "europeNext": "85583c158b019c6c",
-     "objectivesNext": "06d9b881b0244fec",
+     "whole": "6c7ec9558f3137f3",
+     "summary": "2553424b0b0578aa",
+     "promotions": "60c4851daf4bfe61",
+     "europeNext": "eda3822c434f822f",
+     "objectivesNext": "78a079a7b27cf79f",
      "calendarNext": "f1abab140ab75d84",
-     "cupDrawNext": "9a576bf22bb63519",
-     "wholeNext": "154ecd75ed421a88",
-     "s2_table": "cf520d13238c37ee",
-     "s2_results": "e27749707fd94d04",
-     "s2_world": "7534af9564e91b0c",
-     "s2_cup": "f7bcfe74d19e7384",
-     "s2_europe": "9814fd6ccd11c92b",
+     "cupDrawNext": "007d8b1ae18e95b9",
+     "wholeNext": "b715b949cd89e42b",
+     "s2_table": "83d35d18b647f428",
+     "s2_results": "f5ed89973947878e",
+     "s2_world": "318a94866fd67006",
+     "s2_cup": "9a520b51a2c566f4",
+     "s2_europe": "754a14e9d6e6a771",
      "s2_trophies": "4f53cda18c2baa0c",
-     "s2_objectives": "06d9b881b0244fec",
-     "s2_whole": "a5d45f0691f7051e"
+     "s2_objectives": "78a079a7b27cf79f",
+     "s2_whole": "ddfe3b8f16e17fe1"
     }
    },
    "now|championship": {
     "club": "Birmingham City",
     "eraId": "now",
-    "entries": 24,
+    "entries": 27,
     "read": {
-     "position": 19,
+     "position": 20,
      "champion": "Wolves",
-     "bottom": "Cardiff City",
+     "bottom": "Lincoln City",
      "cupWinner": null,
      "uclWinner": null,
      "nextLeague": "championship",
@@ -80,41 +80,41 @@
      }
     },
     "hashes": {
-     "start": "d1b44a1af6ef71c5",
-     "table": "be5635bbc4eca913",
-     "results": "0e07a33d2ed60971",
-     "world": "1e1832c4d1d37055",
-     "cup": "253b518f76e0f108",
+     "start": "b64bb1f9c2e9c654",
+     "table": "cffdba171c9bc913",
+     "results": "a030d07bcbd92510",
+     "world": "e29aab12c30661f6",
+     "cup": "88327b08f627eee4",
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "6f1bc9741be9a028",
-     "whole": "c927bac3da4fb34d",
-     "summary": "e2363ce0cea5cfdf",
-     "promotions": "aa0ab3ef2838d043",
+     "whole": "91b7d30a6bec9703",
+     "summary": "e0147132d6196b6c",
+     "promotions": "b6e7472b35233078",
      "europeNext": "85583c158b019c6c",
-     "objectivesNext": "096fdfa22c3552e8",
+     "objectivesNext": "f18c5958009d01f8",
      "calendarNext": "0e07661382ca5600",
-     "cupDrawNext": "bd24d4a5cc755ba2",
-     "wholeNext": "054b679ea2c93d21",
-     "s2_table": "a77d202fe8488e16",
-     "s2_results": "a18fb270040293ef",
-     "s2_world": "a52e761b2726ddf3",
-     "s2_cup": "ef11f37221b97f0b",
+     "cupDrawNext": "78ec14b7d1a5ed71",
+     "wholeNext": "b25580196f3193bb",
+     "s2_table": "d555514e2ffc34b4",
+     "s2_results": "afeaf2d42324f4bb",
+     "s2_world": "72a86214cab668af",
+     "s2_cup": "1288fe624a2fa08d",
      "s2_europe": "9814fd6ccd11c92b",
      "s2_trophies": "4f53cda18c2baa0c",
-     "s2_objectives": "096fdfa22c3552e8",
-     "s2_whole": "eba19de982d74b51"
+     "s2_objectives": "f18c5958009d01f8",
+     "s2_whole": "d80f03da7140e6d9"
     }
    },
    "now|laliga": {
     "club": "Alavés",
     "eraId": "now",
-    "entries": 36,
+    "entries": 44,
     "read": {
      "position": 19,
      "champion": "Real Madrid",
      "bottom": "Málaga",
-     "cupWinner": null,
+     "cupWinner": "Espanyol",
      "uclWinner": null,
      "nextLeague": "segunda",
      "nextUcl": false,
@@ -132,30 +132,30 @@
      }
     },
     "hashes": {
-     "start": "82bd696302891a46",
-     "table": "3c72c0439243a63f",
-     "results": "a717a0de42539f5c",
-     "world": "36cd2a44c4e713d7",
-     "cup": "ac9ad0e9252792da",
+     "start": "40917ee9a3ace987",
+     "table": "7ab77dfbcb3f73a9",
+     "results": "5c2cb680be058588",
+     "world": "e45f717b47e214b1",
+     "cup": "81b5385b35e3494c",
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "8516e33f0d968b41",
-     "whole": "4fa33f4e04cefe22",
-     "summary": "9feee28281e4755a",
-     "promotions": "c04c6161c648ffb4",
-     "europeNext": "85583c158b019c6c",
-     "objectivesNext": "202b55682e207ce1",
+     "whole": "1bb86cb113ed8aec",
+     "summary": "aaffb844e050a8e5",
+     "promotions": "b666ce59da140a5d",
+     "europeNext": "0ebf670c02b9bf9e",
+     "objectivesNext": "00384072b30cfca9",
      "calendarNext": "f1abab140ab75d84",
-     "cupDrawNext": "d83c2a64f58bc18a",
-     "wholeNext": "b4ebd5b59bc00da3",
-     "s2_table": "143588cda5e21b95",
-     "s2_results": "fbdcb380fdee93b4",
-     "s2_world": "bafcfeb183a042c9",
-     "s2_cup": "1234689c1995accd",
-     "s2_europe": "9814fd6ccd11c92b",
+     "cupDrawNext": "057df44ad9e3f79d",
+     "wholeNext": "3f60311a5bcff5f8",
+     "s2_table": "fb608c30550dc1ea",
+     "s2_results": "172c5435241aa685",
+     "s2_world": "d1c533d99a98bd43",
+     "s2_cup": "44e8fccdaabff758",
+     "s2_europe": "22a09cca2c53712c",
      "s2_trophies": "4f53cda18c2baa0c",
-     "s2_objectives": "202b55682e207ce1",
-     "s2_whole": "04b3722ae999fb8d"
+     "s2_objectives": "00384072b30cfca9",
+     "s2_whole": "7ac9a641e0ecf06b"
     }
    },
    "now|seriea": {
@@ -163,13 +163,13 @@
     "eraId": "now",
     "entries": 42,
     "read": {
-     "position": 3,
-     "champion": "Como",
-     "bottom": "Parma",
-     "cupWinner": "AC Milan",
+     "position": 8,
+     "champion": "Inter Milan",
+     "bottom": "Lecce",
+     "cupWinner": "Juventus",
      "uclWinner": null,
      "nextLeague": "seriea",
-     "nextUcl": true,
+     "nextUcl": false,
      "overrides": {
       "premier": 20,
       "championship": 24,
@@ -184,30 +184,30 @@
      }
     },
     "hashes": {
-     "start": "df7713be40a1d237",
-     "table": "2767c164ae663e6d",
-     "results": "206f6a657e4d3416",
-     "world": "be3ab86169485afd",
-     "cup": "3c6c68972ca7d23b",
+     "start": "dec9dc4b31ae8439",
+     "table": "85b6c744557f3dd1",
+     "results": "3d677cce87377a04",
+     "world": "a4e8c7fa30646410",
+     "cup": "9ee0190073dad48d",
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "70f2580d39ac86e0",
-     "whole": "4034e275468b5edf",
-     "summary": "a4649a8c176903cb",
-     "promotions": "15c4c4e1e7cc75ed",
-     "europeNext": "20af0c1cc6069e12",
-     "objectivesNext": "01e1c35dcba957a8",
+     "whole": "5e47508cbf45df8e",
+     "summary": "7a9c97d0ac05b7b9",
+     "promotions": "14d6b753ceda1acb",
+     "europeNext": "04aa3b31c3d4c5c9",
+     "objectivesNext": "3836aefad4accfcb",
      "calendarNext": "f1abab140ab75d84",
-     "cupDrawNext": "14feac9f94149e02",
-     "wholeNext": "6b4392b7433356a7",
-     "s2_table": "889e954a89327e74",
-     "s2_results": "23b556f0eea50f31",
-     "s2_world": "724b95393c0f997c",
-     "s2_cup": "980edad4f53a0715",
-     "s2_europe": "ab0ca6ada151eb57",
+     "cupDrawNext": "cfeb6acf729a1a48",
+     "wholeNext": "f032a2cddc935f32",
+     "s2_table": "de30e9c49d38a127",
+     "s2_results": "3d4459d776934407",
+     "s2_world": "c34b4c315d19402a",
+     "s2_cup": "0a6033aa7023c77a",
+     "s2_europe": "b84239f2e988ccb4",
      "s2_trophies": "4f53cda18c2baa0c",
-     "s2_objectives": "01e1c35dcba957a8",
-     "s2_whole": "9bbe97d868b0a1d6"
+     "s2_objectives": "3836aefad4accfcb",
+     "s2_whole": "db9ab416e5ed354a"
     }
    },
    "now|bundesliga": {
@@ -215,10 +215,10 @@
     "eraId": "now",
     "entries": 38,
     "read": {
-     "position": 5,
+     "position": 7,
      "champion": "Bayern Munich",
      "bottom": "Elversberg",
-     "cupWinner": "Bayer Leverkusen",
+     "cupWinner": "Hoffenheim",
      "uclWinner": null,
      "nextLeague": "bundesliga",
      "nextUcl": false,
@@ -236,43 +236,43 @@
      }
     },
     "hashes": {
-     "start": "7fab41acfb2ee801",
-     "table": "177cb4fd8e63f606",
-     "results": "eb722fb87768e12b",
-     "world": "90b4dc379349b8d2",
-     "cup": "59632daf58a5675d",
+     "start": "7104930b4c436d12",
+     "table": "fdd129c582e6ffdf",
+     "results": "d49e41eb022f4475",
+     "world": "26a6c17b5c8fb82a",
+     "cup": "fa0eb1c6b3fcb782",
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "de57f300e481801f",
-     "whole": "075581af70760959",
-     "summary": "71b01f354eca9aba",
-     "promotions": "500040b2c19b7fe6",
-     "europeNext": "4bbabc1fadb5b79a",
+     "whole": "b839fbf7450c7c6e",
+     "summary": "c72ef325a8fcd8d2",
+     "promotions": "d0274304e99a60bb",
+     "europeNext": "25997503dd76a44c",
      "objectivesNext": "4ac4f1dbedc5ee5a",
      "calendarNext": "2a7699ed6cde921e",
-     "cupDrawNext": "5d79e657f50a1a14",
-     "wholeNext": "f9f636054f4c8cb1",
-     "s2_table": "1ee8227a65eb8fa2",
-     "s2_results": "7734b53c2cbde270",
-     "s2_world": "4a5172addcc2915c",
-     "s2_cup": "b0ba13862c85a7ef",
-     "s2_europe": "98578ab1ccb0c9a7",
+     "cupDrawNext": "2feccd95f593ecc5",
+     "wholeNext": "6c3ce92706c02110",
+     "s2_table": "30a81888c1fba133",
+     "s2_results": "d07b4eb47f2755ac",
+     "s2_world": "05df03ec0adbdc3e",
+     "s2_cup": "46dce0e6136e0cda",
+     "s2_europe": "17f04497b5ea5791",
      "s2_trophies": "4f53cda18c2baa0c",
      "s2_objectives": "4ac4f1dbedc5ee5a",
-     "s2_whole": "517c5bca839eabcd"
+     "s2_whole": "1c4d82f9d177dd05"
     }
    },
    "now|ligue1": {
     "club": "Angers",
     "eraId": "now",
-    "entries": 23,
+    "entries": 38,
     "read": {
-     "position": 17,
+     "position": 14,
      "champion": "PSG",
      "bottom": "Le Mans",
-     "cupWinner": null,
+     "cupWinner": "Nice",
      "uclWinner": null,
-     "nextLeague": "ligue2",
+     "nextLeague": "ligue1",
      "nextUcl": false,
      "overrides": {
       "premier": 20,
@@ -288,30 +288,30 @@
      }
     },
     "hashes": {
-     "start": "c9477b6d08e218be",
-     "table": "648da68dc8a95078",
-     "results": "59665577cb89cea0",
-     "world": "a915201280cc1b14",
-     "cup": "3531c8469a568bc5",
+     "start": "b35cbf8a61c01d19",
+     "table": "3d3dcdf4b0427053",
+     "results": "b11887e7fb43da37",
+     "world": "4f7cefa06e927ed3",
+     "cup": "5c3c95cc027c6d19",
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "0cefcf8ba979464d",
-     "whole": "aebe88070679a256",
-     "summary": "9aad747b60e02cc0",
-     "promotions": "772586b6e93b80e1",
-     "europeNext": "85583c158b019c6c",
-     "objectivesNext": "cea3f505438343c0",
+     "whole": "e2578640d6f70378",
+     "summary": "44f6011d26b8f751",
+     "promotions": "f2b888e0bcc44b4a",
+     "europeNext": "9ec73ab425c369de",
+     "objectivesNext": "b3c787be0afc6406",
      "calendarNext": "2a7699ed6cde921e",
-     "cupDrawNext": "5c1ef30b2373da44",
-     "wholeNext": "28ded7958b7b8111",
-     "s2_table": "50f26f45056eaf27",
-     "s2_results": "88bbdb8ae1009e7e",
-     "s2_world": "7f6896a100bab9b2",
-     "s2_cup": "dd81adce683b4da2",
-     "s2_europe": "9814fd6ccd11c92b",
+     "cupDrawNext": "f295f4e8614dd07e",
+     "wholeNext": "0afae4ce246f15f9",
+     "s2_table": "30f1d2580afd673f",
+     "s2_results": "1cd44c8795e9b20f",
+     "s2_world": "5910b304f5d99c10",
+     "s2_cup": "e088e2ed761e9507",
+     "s2_europe": "902c50525829f859",
      "s2_trophies": "4f53cda18c2baa0c",
-     "s2_objectives": "cea3f505438343c0",
-     "s2_whole": "dee7784a31b0ee11"
+     "s2_objectives": "b3c787be0afc6406",
+     "s2_whole": "06819eb340a1066e"
     }
    },
    "now|eredivisie": {
@@ -340,7 +340,7 @@
      }
     },
     "hashes": {
-     "start": "4a32f8957329d31b",
+     "start": "ed8de079659df419",
      "table": "4dfdec178772d6a8",
      "results": "4fb93b47e79177b6",
      "world": "195480d73444914a",
@@ -348,14 +348,14 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "4ed00eda81d0ae50",
-     "whole": "86ec9f09fdc8d21e",
+     "whole": "2700fedc9e35992c",
      "summary": "4ee33e8a355fc136",
      "promotions": "acdabe948cae1d1f",
      "europeNext": "a6b75f2301c2afb2",
      "objectivesNext": "1057e54bfcc40c00",
      "calendarNext": "2a7699ed6cde921e",
      "cupDrawNext": "f5618f3e9ebf34c5",
-     "wholeNext": "ce1d251dab80a469"
+     "wholeNext": "f6efd558455708b0"
     }
    },
    "now|saudi": {
@@ -384,7 +384,7 @@
      }
     },
     "hashes": {
-     "start": "e3a185ef15c577fc",
+     "start": "d44e2847cf01f498",
      "table": "cd2a07ab3d12d7a5",
      "results": "03c4938ef1f45e3d",
      "world": "c4428f0af4b999c1",
@@ -392,14 +392,14 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "54f67d1728729cb1",
-     "whole": "c7cd4c6f6f6f8ee8",
-     "summary": "4656527002865fe7",
+     "whole": "548a0227079cb738",
+     "summary": "3477590d13198ea3",
      "promotions": "e4ce9b267e9de292",
-     "europeNext": "d91bafc70310e13b",
-     "objectivesNext": "c36e5d8e82eef510",
+     "europeNext": "d98a8136b7e4580c",
+     "objectivesNext": "97b606ab2e20c1db",
      "calendarNext": "2a7699ed6cde921e",
      "cupDrawNext": "6942bf236688735f",
-     "wholeNext": "bcfbca39569fe216"
+     "wholeNext": "71372957762afa8e"
     }
    },
    "now|mlsEast": {
@@ -428,7 +428,7 @@
      }
     },
     "hashes": {
-     "start": "f8246ee8d8f13cc3",
+     "start": "68c2912d03835beb",
      "table": "0ab4b74f20b3ea93",
      "results": "9f173fddca484923",
      "world": "07640cbb0f2b0c5f",
@@ -436,14 +436,14 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "8cdd5094f9f00b51",
-     "whole": "87243a0bb710c6d3",
-     "summary": "ec2497d13a9e2f1b",
+     "whole": "49dacf284c990aba",
+     "summary": "dc7257da22315ce5",
      "promotions": "30aa432ac8fe9bc6",
      "europeNext": "447095563a96d8bf",
      "objectivesNext": "41d291b814d81c3c",
      "calendarNext": "1c5f8cf302526163",
      "cupDrawNext": "cc9a340a170a9105",
-     "wholeNext": "0314108c00e0ba24"
+     "wholeNext": "27511b68fac34634"
     }
    },
    "now|mlsWest": {
@@ -472,7 +472,7 @@
      }
     },
     "hashes": {
-     "start": "3cd8fd068b6ae163",
+     "start": "08df638ae7456cda",
      "table": "4d07bcd000c36e6c",
      "results": "5e298ae8562210f7",
      "world": "91a5e9637abb407d",
@@ -480,14 +480,14 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "7b93580d61313b28",
-     "whole": "55ba57831f31dcda",
-     "summary": "7a54535e6eb91112",
+     "whole": "08281f2f749c4883",
+     "summary": "23dea24ff5412ecc",
      "promotions": "a814e5e6241599b0",
-     "europeNext": "c967ac76f3b4708c",
-     "objectivesNext": "12742053649e19e5",
+     "europeNext": "6e1b34ee947d735d",
+     "objectivesNext": "9c1f49ecdcb8b14b",
      "calendarNext": "1c5f8cf302526163",
      "cupDrawNext": "69e9363a475ffb1a",
-     "wholeNext": "f1112b36e6d5e5a7"
+     "wholeNext": "267430cbcb78a36e"
     }
    },
    "now|primeira": {
@@ -516,7 +516,7 @@
      }
     },
     "hashes": {
-     "start": "7cdabc4dab8abaf3",
+     "start": "37b15b94b8817575",
      "table": "f8794954a7c4d05a",
      "results": "ac0f83f7571e4335",
      "world": "c4cb4b6155edb5a5",
@@ -524,14 +524,14 @@
      "europe": "ddf8f88550957755",
      "trophies": "225181dee37b8d35",
      "objectives": "2265d37b6e2894fe",
-     "whole": "404ba108fcdfc37a",
-     "summary": "f2333a5dfc58b101",
+     "whole": "a16fabbeb7899f26",
+     "summary": "783a3baeb9892d19",
      "promotions": "df7814c6ea63bf4c",
-     "europeNext": "a476035b18a6ec3b",
+     "europeNext": "4d631982ea0a91dc",
      "objectivesNext": "22a1286e456347de",
      "calendarNext": "2a7699ed6cde921e",
      "cupDrawNext": "e9c503aaad1e44fc",
-     "wholeNext": "544f1ebd5789e90b"
+     "wholeNext": "7ba665abe6ef0c28"
     }
    },
    "now|scottish": {
@@ -560,7 +560,7 @@
      }
     },
     "hashes": {
-     "start": "bf62387879f510f1",
+     "start": "146b87fbe7e297fa",
      "table": "fb0b58f1a0c767f5",
      "results": "27caea193ab45a6e",
      "world": "3310cab565967cca",
@@ -568,14 +568,14 @@
      "europe": "8c0faa9788b2074e",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "fcd82e24e5eecd63",
-     "whole": "926ac73d80b80ca5",
+     "whole": "91f00558526e1caf",
      "summary": "27d0f064dad72bfb",
      "promotions": "f02baba86be7e371",
      "europeNext": "5c1a143558256733",
      "objectivesNext": "2b1d1f33597039b3",
      "calendarNext": "ebe4d0f9af292dbc",
      "cupDrawNext": "e3cf98c49d838fba",
-     "wholeNext": "62492c3cf19ef1f7"
+     "wholeNext": "eae029f7ca27f5a0"
     }
    },
    "now|superlig": {
@@ -604,7 +604,7 @@
      }
     },
     "hashes": {
-     "start": "d87ff2038a594579",
+     "start": "90d20825f5393adf",
      "table": "32c2a7942680688c",
      "results": "6d0fe41466ca4d7e",
      "world": "890d6c8bf09b82e0",
@@ -612,14 +612,14 @@
      "europe": "907673c5bbd4758e",
      "trophies": "b1201cf26dcacab3",
      "objectives": "7785ff30175304fb",
-     "whole": "f46a9b0f3e52f8ce",
+     "whole": "e92c229fc03412a3",
      "summary": "1ad5b395c07b302e",
      "promotions": "67f6ec8cea8152d9",
      "europeNext": "70fcdb21552f7fea",
      "objectivesNext": "f1a66ee9bfb1130b",
      "calendarNext": "2a7699ed6cde921e",
      "cupDrawNext": "5b01dfb8cccadc96",
-     "wholeNext": "658b88434a7b91d3"
+     "wholeNext": "b49ba139604310d8"
     }
    },
    "now|bundesliga2": {
@@ -648,7 +648,7 @@
      }
     },
     "hashes": {
-     "start": "da3b98fed7bfc059",
+     "start": "f8429843eafa75ff",
      "table": "87f2b6059e20e2cd",
      "results": "435e797c1e9563e0",
      "world": "1d5996bcbb056d32",
@@ -656,22 +656,22 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "2aba5ac9952e27eb",
-     "whole": "86a1c523017bb531",
-     "summary": "b7511089b5b567fa",
+     "whole": "405c876efbb44e19",
+     "summary": "1c4471f938a9cd7c",
      "promotions": "6c2723993f4ccf84",
      "europeNext": "7ab0b51ce309e72c",
      "objectivesNext": "4d015607773b48a2",
      "calendarNext": "2a7699ed6cde921e",
      "cupDrawNext": "f206f496870ce826",
-     "wholeNext": "7bdbc6138c55543f",
-     "s2_table": "4eb4a02de1c20aff",
-     "s2_results": "57d02206aa3f05e7",
-     "s2_world": "f28d6d8917f2cb20",
-     "s2_cup": "0f0be3f87cc77347",
+     "wholeNext": "349e681926a55490",
+     "s2_table": "bc79399a5f91148b",
+     "s2_results": "6ac0966c7dffa8fe",
+     "s2_world": "31532527b6096a7f",
+     "s2_cup": "7511e2b9cc96889e",
      "s2_europe": "86ee2ea4bd613653",
      "s2_trophies": "19d4b35a41f2232c",
      "s2_objectives": "4d015607773b48a2",
-     "s2_whole": "8936cfc515314ee6"
+     "s2_whole": "928ff02cb297fc01"
     }
    },
    "now|proleague": {
@@ -700,7 +700,7 @@
      }
     },
     "hashes": {
-     "start": "54bd9c6f2e747ee8",
+     "start": "e6ebe557cc2e8812",
      "table": "4d8cee9696b5b740",
      "results": "85d7a9b6498a5f73",
      "world": "69fa93dccca66d55",
@@ -708,14 +708,14 @@
      "europe": "58cc68975307c540",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "d7495c0f581fe016",
-     "whole": "5479010da5a424eb",
+     "whole": "3c0aff1d267f23dc",
      "summary": "35367f2eb2d9aaed",
      "promotions": "7f2be84ee4a07e9c",
-     "europeNext": "565f5210ebb90fc1",
+     "europeNext": "2af1ebd12ba1198d",
      "objectivesNext": "735b4e702d681212",
      "calendarNext": "2a7699ed6cde921e",
      "cupDrawNext": "d041379790381e46",
-     "wholeNext": "ff339381e90e2caf"
+     "wholeNext": "9f9dff14686bc76b"
     }
    },
    "now|austria": {
@@ -744,7 +744,7 @@
      }
     },
     "hashes": {
-     "start": "a90cc6650ff15a07",
+     "start": "f78fbea211685ce6",
      "table": "a22c2f663f4bf525",
      "results": "95e5158fc6fd7136",
      "world": "58c75c3fede4c1cc",
@@ -752,14 +752,14 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "6902519265aa4b3e",
-     "whole": "19a20bf768eaf068",
+     "whole": "0d5eb166d32c5193",
      "summary": "15f9ebf0af05fb02",
      "promotions": "0a95e5b0194bd677",
      "europeNext": "1a754bea8e101ab5",
      "objectivesNext": "a882c8421acfdcf4",
      "calendarNext": "ebe4d0f9af292dbc",
      "cupDrawNext": "d630fb10695a6cab",
-     "wholeNext": "2b25359a191f34bf"
+     "wholeNext": "df526615195664cb"
     }
    },
    "now|greece": {
@@ -788,7 +788,7 @@
      }
     },
     "hashes": {
-     "start": "0d694f0afae88afb",
+     "start": "d308de569e024069",
      "table": "c25b0eb71ddef2f0",
      "results": "40b23eb3273b1db7",
      "world": "36e3e8070545ec4c",
@@ -796,14 +796,14 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "a1ccb8bf0ca84460",
      "objectives": "b2c94cf529cb101e",
-     "whole": "746625ac3cf825e7",
+     "whole": "e04948687c835374",
      "summary": "0ad72f9f2b162e8f",
      "promotions": "36e9205d44b503ce",
      "europeNext": "98cbee618f9df9a1",
      "objectivesNext": "7e97763a730003cd",
      "calendarNext": "a21b88d931ce9f6a",
      "cupDrawNext": "1d6131e91dbc42b0",
-     "wholeNext": "50b182062fcef1f8"
+     "wholeNext": "7991c34b8474a9c4"
     }
    },
    "now|denmark": {
@@ -832,7 +832,7 @@
      }
     },
     "hashes": {
-     "start": "ae8fbae3e42877be",
+     "start": "b68cd12ba5e76bbf",
      "table": "b7bac87e24b6b6d4",
      "results": "33e50704ce711192",
      "world": "6b2a8cdcc15e3402",
@@ -840,14 +840,14 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "fe67afed54aeeeac",
      "objectives": "df8bb6e1e27d26cc",
-     "whole": "dceafcf1340c4d7e",
+     "whole": "1bce1aba8a46883d",
      "summary": "67d050de1cc3ffdd",
      "promotions": "9530e47c1ef941c4",
-     "europeNext": "62a2d5ee19af2e73",
+     "europeNext": "964d2c89af09b43f",
      "objectivesNext": "33f9c49196c6baa6",
      "calendarNext": "ebe4d0f9af292dbc",
      "cupDrawNext": "9af3410c973d56bd",
-     "wholeNext": "36a3995e0b697e90"
+     "wholeNext": "7e029de75354166c"
     }
    },
    "now|switzerland": {
@@ -876,7 +876,7 @@
      }
     },
     "hashes": {
-     "start": "317014f40421165a",
+     "start": "fb953e13e5f00b69",
      "table": "c91681b042ca861c",
      "results": "4511304dfcbd5450",
      "world": "816dc81d48635e4b",
@@ -884,14 +884,14 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "c7eadd06a64515ca",
-     "whole": "acca9a6b966282a1",
+     "whole": "4910988a4a0b549b",
      "summary": "951180962aeca77a",
      "promotions": "ca81e1796c815e24",
      "europeNext": "794386c3abc448a7",
      "objectivesNext": "3046e1d277d1ab18",
      "calendarNext": "ebe4d0f9af292dbc",
      "cupDrawNext": "814b1ab3e37e293d",
-     "wholeNext": "a03ca66bb90d0b98"
+     "wholeNext": "dc541d3f3be0eb3f"
     }
    },
    "now|croatia": {
@@ -920,7 +920,7 @@
      }
     },
     "hashes": {
-     "start": "528268c831767f6b",
+     "start": "6b18a6eae4e2701c",
      "table": "b0da7fea39cf679f",
      "results": "5e6bd59113b683db",
      "world": "91d950ff26f07185",
@@ -928,14 +928,14 @@
      "europe": "0d790ca0875a4936",
      "trophies": "2237e27a2506c57c",
      "objectives": "3dc17a26ec5549f5",
-     "whole": "9ca64d969922ab93",
+     "whole": "da994089e0cfc176",
      "summary": "56fd7f881c9faa96",
      "promotions": "8a8b983386c8e275",
-     "europeNext": "0d63f2c8a539dbfb",
-     "objectivesNext": "42bc37c23cbae7df",
+     "europeNext": "a98c0d8b132d12a3",
+     "objectivesNext": "7c51063f0f4fc4f1",
      "calendarNext": "ab149a1b79040e50",
      "cupDrawNext": "1153e7b7b926a989",
-     "wholeNext": "5059485780eaf9d9"
+     "wholeNext": "1f71a71440e9f939"
     }
    },
    "now|brasileirao": {
@@ -964,7 +964,7 @@
      }
     },
     "hashes": {
-     "start": "5a95b07e7cff3392",
+     "start": "8663067fc45a1326",
      "table": "bee4787ec1332cc0",
      "results": "a9fd0c3ece9f31b7",
      "world": "2d9f1910c8fc01fe",
@@ -972,14 +972,14 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "91f08cf791855957",
-     "whole": "881ee3648330c123",
-     "summary": "8d5ed49bb34f307c",
+     "whole": "2571c1d94d2dc6cb",
+     "summary": "a66b8323f2abd2d8",
      "promotions": "affce8d717707196",
-     "europeNext": "5a65171c0ebacd1a",
+     "europeNext": "5bf3ad0a34fb1ae7",
      "objectivesNext": "1c6a957c057b90a5",
      "calendarNext": "f1abab140ab75d84",
      "cupDrawNext": "776a659aec340ec8",
-     "wholeNext": "2eb9dafce07d6f5d"
+     "wholeNext": "038f2f0581545475"
     }
    },
    "now|ligamx": {
@@ -1008,7 +1008,7 @@
      }
     },
     "hashes": {
-     "start": "9718c582aa657d11",
+     "start": "37da103db187b3d3",
      "table": "8c1d3dbf54c3ce4f",
      "results": "41f36953b28267e4",
      "world": "f1a8300d833bc39a",
@@ -1016,14 +1016,14 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "4fda6ca31c801dee",
-     "whole": "ffd93a6eb2f68584",
-     "summary": "4eb930e8594eadf1",
+     "whole": "76a07b6c878a2195",
+     "summary": "cb2659a5382e57d1",
      "promotions": "ecec4b90a4ef4e28",
      "europeNext": "a18e98d31d4e90e0",
      "objectivesNext": "41368c7539edda32",
      "calendarNext": "bbde2a7d9eff9e97",
      "cupDrawNext": "74234e98afe7498f",
-     "wholeNext": "9b1cbd16bb65364f"
+     "wholeNext": "f7082f09a474868b"
     }
    },
    "now|aleague": {
@@ -1052,7 +1052,7 @@
      }
     },
     "hashes": {
-     "start": "7969d5cb9c940097",
+     "start": "e32ef126d9dc31c6",
      "table": "21661925a317d87a",
      "results": "68b2e7a732fa8482",
      "world": "83eccdae11f8e9f4",
@@ -1060,14 +1060,14 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "7a7c2441783c052a",
-     "whole": "4eba5618baae0410",
-     "summary": "334d184f1c88ff0b",
+     "whole": "d5555d8e57046059",
+     "summary": "90cfad63d829aac0",
      "promotions": "a339cc309fda5769",
-     "europeNext": "4d7b6304ecfe8dd8",
-     "objectivesNext": "c6fbdffe767f3da2",
+     "europeNext": "4d3b0bc6f6e5a029",
+     "objectivesNext": "f8c700b009f03b9c",
      "calendarNext": "ebe4d0f9af292dbc",
      "cupDrawNext": "b524e06697608ecc",
-     "wholeNext": "ef05c8d3167563e6"
+     "wholeNext": "cec060f361adca50"
     }
    },
    "now|serieb": {
@@ -1096,7 +1096,7 @@
      }
     },
     "hashes": {
-     "start": "6c48820577f6a723",
+     "start": "dece7a839a8a929b",
      "table": "d15dc57bd4364caa",
      "results": "1107b4547f92206a",
      "world": "87adf595a01e3e94",
@@ -1104,22 +1104,22 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "e8df12b228e3d6d3",
-     "whole": "69b2c32a34093479",
-     "summary": "a82e01a75dce111b",
+     "whole": "69dc66778a3f432b",
+     "summary": "c50321639d203582",
      "promotions": "72bb0d8c1ee747bf",
-     "europeNext": "036fb9888b412822",
-     "objectivesNext": "b35b36f95a7a8620",
+     "europeNext": "71e6e1a0d01dce7b",
+     "objectivesNext": "ad9f745c2768b36f",
      "calendarNext": "f1abab140ab75d84",
      "cupDrawNext": "3afe80775900b54b",
-     "wholeNext": "39cb1e9157a6f6d0",
-     "s2_table": "7ef5d2e40d6623d8",
-     "s2_results": "e9241790d53a9ca5",
-     "s2_world": "68522223a1ec83f1",
-     "s2_cup": "902bf65eb185db29",
-     "s2_europe": "e8c118698f6a3481",
+     "wholeNext": "df35a71e0f42ac3f",
+     "s2_table": "c3087c2aa5577143",
+     "s2_results": "7ba7dfbc7bb097c3",
+     "s2_world": "4736a94a84d6ada6",
+     "s2_cup": "1d0c39ee52697c7a",
+     "s2_europe": "b9188f0d733be945",
      "s2_trophies": "4f53cda18c2baa0c",
-     "s2_objectives": "b35b36f95a7a8620",
-     "s2_whole": "4b07a75fedeb7c08"
+     "s2_objectives": "ad9f745c2768b36f",
+     "s2_whole": "882999c49298fc7a"
     }
    },
    "now|ligue2": {
@@ -1148,7 +1148,7 @@
      }
     },
     "hashes": {
-     "start": "a670641f37a1846e",
+     "start": "c1ed70950ac991bd",
      "table": "224796d0b600b994",
      "results": "2fd18021b1ad2573",
      "world": "0d09fda1eccfd506",
@@ -1156,22 +1156,22 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "79dd633c55387625",
-     "whole": "ca0ce902949c4606",
-     "summary": "e97a724318f2e47d",
+     "whole": "2c768faec6ca5cfa",
+     "summary": "6bb76f21c143ca95",
      "promotions": "40c3ad6d78d183ce",
-     "europeNext": "f93c7cce15fa7a0d",
+     "europeNext": "b3687939d9c7bdfa",
      "objectivesNext": "cab1f30c41841ea6",
      "calendarNext": "2a7699ed6cde921e",
      "cupDrawNext": "2a498d28c22cb3bf",
-     "wholeNext": "74f3b3c44401c37b",
-     "s2_table": "b1e71db15732db83",
-     "s2_results": "50bf7137e8a79b06",
-     "s2_world": "d9f5b55b5e4f8224",
-     "s2_cup": "e1b24d28d64351b9",
-     "s2_europe": "a6d893f1c45cda8f",
+     "wholeNext": "b802d1aac5d50cfe",
+     "s2_table": "cbeae5efb6d09e9d",
+     "s2_results": "a3a60e3d67241cb2",
+     "s2_world": "db036d5873b91417",
+     "s2_cup": "89b75b9a281537d1",
+     "s2_europe": "205932c15b053b79",
      "s2_trophies": "4f53cda18c2baa0c",
      "s2_objectives": "cab1f30c41841ea6",
-     "s2_whole": "ed37c0ad02f8c9a6"
+     "s2_whole": "ed55dc2492ce0dc6"
     }
    },
    "now|segunda": {
@@ -1200,7 +1200,7 @@
      }
     },
     "hashes": {
-     "start": "79231bd6f72466ed",
+     "start": "ea0c37185758070c",
      "table": "baa2d0a05f5ecb60",
      "results": "e493eb67e94cb757",
      "world": "c5bae9f7af4fca6f",
@@ -1208,22 +1208,22 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "687c1240a026dcbf",
-     "whole": "56e490ecf4471b72",
-     "summary": "61f2e9a1c7216aa8",
+     "whole": "1e6af2abfade4949",
+     "summary": "ac7ec1be12aed473",
      "promotions": "abb3329c0f395471",
-     "europeNext": "351e0ed82c57c041",
-     "objectivesNext": "9c64b6421fd95e6d",
+     "europeNext": "83805f2f3571bbc2",
+     "objectivesNext": "4161e2a168651d8f",
      "calendarNext": "f1abab140ab75d84",
      "cupDrawNext": "9ab2431c9ea45558",
-     "wholeNext": "6c600da03fadaf93",
-     "s2_table": "0f600aef72fefb35",
-     "s2_results": "4562ca337066f9a9",
-     "s2_world": "e1d8ac6f491ec5ee",
-     "s2_cup": "f2cc9061fd2049b2",
-     "s2_europe": "1824904366e7612f",
+     "wholeNext": "de65d1a9d34859ab",
+     "s2_table": "13b8c99cd1e85c50",
+     "s2_results": "2395fd8f2ffba1fa",
+     "s2_world": "63cb8e241d40f260",
+     "s2_cup": "c43399a5f871ac2e",
+     "s2_europe": "df52bcbb36c589fc",
      "s2_trophies": "19d4b35a41f2232c",
-     "s2_objectives": "9c64b6421fd95e6d",
-     "s2_whole": "de8acfb781351254"
+     "s2_objectives": "4161e2a168651d8f",
+     "s2_whole": "06275ba12138ef33"
     }
    },
    "now|russia": {
@@ -1252,7 +1252,7 @@
      }
     },
     "hashes": {
-     "start": "ba0bd70cadf7dc57",
+     "start": "f2a8b913f8fec9df",
      "table": "e3939de78a1b90a3",
      "results": "cc3ab7dc7bf29d22",
      "world": "cb052aea92cdd1f4",
@@ -1260,14 +1260,14 @@
      "europe": "792e4b975aadbd5d",
      "trophies": "f7788393ae28aa1f",
      "objectives": "ea20e49b03b81c4c",
-     "whole": "052e0b41e9b6e1a1",
-     "summary": "a30271ce64026ecd",
+     "whole": "7e6c6ac806b69b8a",
+     "summary": "3ff40992e290a809",
      "promotions": "1245735c10293f31",
      "europeNext": "ba843daaff82f9c2",
-     "objectivesNext": "e5562a4f7375b72f",
+     "objectivesNext": "9d20f7acaa4a6c61",
      "calendarNext": "1c5f8cf302526163",
      "cupDrawNext": "ccd2a824b3fc2454",
-     "wholeNext": "8dbc5f64b733cc6d"
+     "wholeNext": "e585f2e1cad49d81"
     }
    }
   },
@@ -1275,67 +1275,67 @@
    "era2010|premier2010": {
     "club": "Arsenal",
     "eraId": "era2010",
-    "entries": 50,
+    "entries": 49,
     "read": {
      "position": 5,
-     "champion": "Everton",
-     "bottom": "Blackpool",
-     "cupWinner": "Arsenal",
+     "champion": "Manchester United",
+     "bottom": "Wigan Athletic",
+     "cupWinner": "Tottenham",
      "uclWinner": "Manchester United",
      "nextLeague": "premier2010",
      "nextUcl": false,
      "overrides": {}
     },
     "hashes": {
-     "start": "34a2caf3aa3bc234",
-     "table": "34bf6e441d08d71d",
-     "results": "89230c212ae3cb73",
-     "world": "72053c30bcfb116c",
-     "cup": "dc8ae05c68bd5be5",
-     "europe": "0b28bd5a0c0dcaec",
-     "trophies": "9c937f97f8114dd6",
+     "start": "5054b85e5f133731",
+     "table": "757affaf2597a4f2",
+     "results": "99053002774f237c",
+     "world": "a15db7363f0f33aa",
+     "cup": "5a76105db294a684",
+     "europe": "e5fcac178c9edb71",
+     "trophies": "4f53cda18c2baa0c",
      "objectives": "d8b0424d47871b24",
-     "whole": "8203f02b0fe8c027",
-     "summary": "7bc1368ee7ea686c",
+     "whole": "34708465d03cfab8",
+     "summary": "e0eb31548f6f5ab8",
      "promotions": "74234e98afe7498f",
      "europeNext": "85583c158b019c6c",
      "objectivesNext": "5a53f51651677ee1",
      "calendarNext": "bc765b33645f0e7b",
-     "cupDrawNext": "8fb77627914e0b05",
-     "wholeNext": "d853db10a4ec95e9"
+     "cupDrawNext": "f665f4a0d36514f7",
+     "wholeNext": "d197e4bf4eb16bc7"
     }
    },
    "era2010|laliga2010": {
     "club": "Almería",
     "eraId": "era2010",
-    "entries": 38,
+    "entries": 43,
     "read": {
-     "position": 12,
+     "position": 9,
      "champion": "Real Madrid",
      "bottom": "Levante",
-     "cupWinner": null,
+     "cupWinner": "Barcelona",
      "uclWinner": null,
      "nextLeague": "laliga2010",
      "nextUcl": false,
      "overrides": {}
     },
     "hashes": {
-     "start": "4fd165fbcd275f59",
-     "table": "db0bd8f7f96f1d9b",
-     "results": "b051f44ce1026c46",
-     "world": "296a61243bd9d46e",
-     "cup": "1324f481e3d7cfd1",
+     "start": "b74c704448269849",
+     "table": "9695264ae0b0e45b",
+     "results": "80d791bab18168f5",
+     "world": "f09696ce2b2391f5",
+     "cup": "7e50f3b2f5e8a37e",
      "europe": "9814fd6ccd11c92b",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "222a9e20699c77bd",
-     "whole": "19694b9abf928cf8",
-     "summary": "1275f952865149f6",
+     "whole": "d6a343de80726362",
+     "summary": "cb25f79a15b988b1",
      "promotions": "74234e98afe7498f",
      "europeNext": "85583c158b019c6c",
-     "objectivesNext": "62de994c041d559c",
+     "objectivesNext": "6f33bf902d079bcf",
      "calendarNext": "bc765b33645f0e7b",
-     "cupDrawNext": "bedccc65ce80a6a2",
-     "wholeNext": "0549615d3f31b0f1"
+     "cupDrawNext": "29411ee4872269a9",
+     "wholeNext": "fc225f3c10a6cdf7"
     }
    },
    "era2010|seriea2010": {
@@ -1353,22 +1353,22 @@
      "overrides": {}
     },
     "hashes": {
-     "start": "b7d8b1601b739b30",
+     "start": "cbb3b0d5699d5b42",
      "table": "2557e4918dc7db66",
      "results": "7588820d5dde2c0b",
      "world": "c2ab3d6011bd3f4e",
      "cup": "4a005310d19698ea",
      "europe": "dad87a688c35803f",
      "trophies": "4f53cda18c2baa0c",
-     "objectives": "9c8bb1f15034ced3",
-     "whole": "25f47e6a554a05eb",
-     "summary": "606a4a9954ec8b52",
+     "objectives": "60c3e4d1d82868af",
+     "whole": "960dff906b74a76e",
+     "summary": "c0168a9fb32bb3e5",
      "promotions": "74234e98afe7498f",
      "europeNext": "85583c158b019c6c",
-     "objectivesNext": "51f0e80936ff7051",
+     "objectivesNext": "39c77f2de7dfc95c",
      "calendarNext": "bc765b33645f0e7b",
      "cupDrawNext": "688cf815a87119d7",
-     "wholeNext": "628753660d9cfbce"
+     "wholeNext": "0700cd8ca3d5ad15"
     }
    },
    "era2010|bundesliga2010": {
@@ -1386,7 +1386,7 @@
      "overrides": {}
     },
     "hashes": {
-     "start": "9afad8111cc8878b",
+     "start": "57c5a684f723269e",
      "table": "4ba4ffacda148183",
      "results": "275fcfa6520139d3",
      "world": "4ca883bd2fdfd229",
@@ -1394,14 +1394,14 @@
      "europe": "9814fd6ccd11c92b",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "50f697a1b83a76ea",
-     "whole": "fb6c1b578bb831dd",
-     "summary": "1474de67198370a3",
+     "whole": "5d853ecc4d2f9df9",
+     "summary": "b5ba6bd893692826",
      "promotions": "74234e98afe7498f",
      "europeNext": "85583c158b019c6c",
      "objectivesNext": "9175804403ff519f",
      "calendarNext": "2fd0ce2aa56f0a07",
      "cupDrawNext": "88c1cc4250326473",
-     "wholeNext": "4a3bc2ee127ef109"
+     "wholeNext": "5f963b4472547328"
     }
    },
    "era2010|ligue12010": {
@@ -1419,7 +1419,7 @@
      "overrides": {}
     },
     "hashes": {
-     "start": "2512be43a0a0dad4",
+     "start": "2a8cac944ac93098",
      "table": "83f8a67d9d87f73c",
      "results": "1ff193fd9dd2eb3c",
      "world": "62ed8e5a4bd2042c",
@@ -1427,47 +1427,47 @@
      "europe": "9814fd6ccd11c92b",
      "trophies": "169f057818963c9d",
      "objectives": "9df8df25b12c7aab",
-     "whole": "f07d23c16b97ba66",
-     "summary": "46278f4bbaa76819",
+     "whole": "9cfcda15c248b5b3",
+     "summary": "6d59415ea69fb712",
      "promotions": "74234e98afe7498f",
      "europeNext": "85583c158b019c6c",
      "objectivesNext": "ce40d83cd21094d3",
      "calendarNext": "bc765b33645f0e7b",
      "cupDrawNext": "9b1bfa90b9d7ca48",
-     "wholeNext": "d783205ee8b263a3"
+     "wholeNext": "13d96b0aaafeb0dd"
     }
    },
    "era2015|premier2015": {
     "club": "Arsenal",
     "eraId": "era2015",
-    "entries": 47,
+    "entries": 52,
     "read": {
      "position": 6,
      "champion": "Chelsea",
      "bottom": "Crystal Palace",
-     "cupWinner": null,
-     "uclWinner": null,
+     "cupWinner": "Manchester City",
+     "uclWinner": "Barcelona",
      "nextLeague": "premier2015",
      "nextUcl": false,
      "overrides": {}
     },
     "hashes": {
-     "start": "fb78a26ec3ee27a1",
-     "table": "e6a6d98fe6a978e6",
-     "results": "58cd7dccc8f70411",
-     "world": "2c4ee43df791d340",
-     "cup": "8f608b883eeacb06",
-     "europe": "fa8c888739db1c5f",
+     "start": "55d2875153c0fa19",
+     "table": "8f095e6bb26f8826",
+     "results": "0680477810a89b77",
+     "world": "e994e85bf5b07bef",
+     "cup": "6f3ff5afb45a6340",
+     "europe": "6f2cef2885a36b0e",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "a7575f937b75e178",
-     "whole": "15a4b206feaa98eb",
-     "summary": "481b2850bdb49676",
+     "whole": "a0f356286342511d",
+     "summary": "57a72d8fd37c2514",
      "promotions": "74234e98afe7498f",
      "europeNext": "85583c158b019c6c",
      "objectivesNext": "7a248fcdbd085e8b",
      "calendarNext": "bc765b33645f0e7b",
-     "cupDrawNext": "8ea888c47c47c596",
-     "wholeNext": "0bc4a5631ac88961"
+     "cupDrawNext": "fad9f6fef890d7da",
+     "wholeNext": "ca431c660f0bf7fa"
     }
    },
    "era2015|laliga2015": {
@@ -1485,7 +1485,7 @@
      "overrides": {}
     },
     "hashes": {
-     "start": "a987d9bfd0bc1b49",
+     "start": "809d36f062ec0297",
      "table": "6a15583bd6a66ae3",
      "results": "75419df4cf84de15",
      "world": "a67b267aead1441a",
@@ -1493,14 +1493,14 @@
      "europe": "9814fd6ccd11c92b",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "664270a2caebb96c",
-     "whole": "c2fea40164d9077f",
-     "summary": "952f365271cae53a",
+     "whole": "290bdf13e8501435",
+     "summary": "94229b81558ef581",
      "promotions": "74234e98afe7498f",
      "europeNext": "85583c158b019c6c",
      "objectivesNext": "d6dff1f434399411",
      "calendarNext": "bc765b33645f0e7b",
      "cupDrawNext": "2a9065905949b5c1",
-     "wholeNext": "95573c5c409e98da"
+     "wholeNext": "ea6b80cc2de93b8d"
     }
    },
    "era2015|seriea2015": {
@@ -1518,22 +1518,22 @@
      "overrides": {}
     },
     "hashes": {
-     "start": "31d3233cbe139cb9",
+     "start": "e507358f27b011cd",
      "table": "6609b1ab7e2ae61d",
      "results": "4dd9274f7ed7a40c",
      "world": "c5b084142848c88f",
      "cup": "26815f6fc6cbaf7d",
      "europe": "ecc59ac6801fbe16",
      "trophies": "cd06796a204ec96a",
-     "objectives": "86bdc1d6c8625550",
-     "whole": "241d41ceb807ea9f",
-     "summary": "75b4b212def92615",
+     "objectives": "c1c0c052fa2ad680",
+     "whole": "39d509673a134c5d",
+     "summary": "2dc769b0b1158005",
      "promotions": "74234e98afe7498f",
      "europeNext": "85583c158b019c6c",
-     "objectivesNext": "e4b0b6ad552b79e5",
+     "objectivesNext": "1b1bc913ff6c555e",
      "calendarNext": "bc765b33645f0e7b",
      "cupDrawNext": "b0834fe9b80c4990",
-     "wholeNext": "f9c33c1822684054"
+     "wholeNext": "822d57cb009b0541"
     }
    },
    "era2015|bundesliga2015": {
@@ -1551,7 +1551,7 @@
      "overrides": {}
     },
     "hashes": {
-     "start": "7b60c9cb601bf4af",
+     "start": "557026d6325af175",
      "table": "e225497a529acd52",
      "results": "436b010a42250476",
      "world": "83ea49043befabc7",
@@ -1559,14 +1559,14 @@
      "europe": "b3046f6e8f0d33d1",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "2c5e89af23c9c635",
-     "whole": "6f5d84aca4bfa19f",
-     "summary": "55515ab85e00f668",
+     "whole": "c20d6a30ba28e421",
+     "summary": "ff4c1ce016551a21",
      "promotions": "74234e98afe7498f",
      "europeNext": "493e9c31f7755c8e",
-     "objectivesNext": "8bae1305bd617a19",
+     "objectivesNext": "06a84af79c7bcac2",
      "calendarNext": "2fd0ce2aa56f0a07",
      "cupDrawNext": "3965f0f86c729dac",
-     "wholeNext": "0c9d53a9246ceb6d"
+     "wholeNext": "3d2f9490fbd13a1a"
     }
    },
    "era2015|ligue12015": {
@@ -1584,22 +1584,22 @@
      "overrides": {}
     },
     "hashes": {
-     "start": "f837c7c194f1d3e1",
+     "start": "90d3de274f0d4d12",
      "table": "c1e6bd7b88828daa",
      "results": "1ec33c2c139aa7d2",
      "world": "6909d571cf70699d",
      "cup": "0f2f754752123fb7",
      "europe": "1db161f1e2f6ca70",
      "trophies": "4f53cda18c2baa0c",
-     "objectives": "8cde9a762f9f03dd",
-     "whole": "abc26ad925671d24",
-     "summary": "97a49d358a594338",
+     "objectives": "632ca8bf0ab77f94",
+     "whole": "125a0996a4720d90",
+     "summary": "02433d4242e00694",
      "promotions": "74234e98afe7498f",
      "europeNext": "85cfc00221fc9495",
-     "objectivesNext": "34ac162125c44359",
+     "objectivesNext": "974d369ea8c5eceb",
      "calendarNext": "bc765b33645f0e7b",
      "cupDrawNext": "575c45fe17ac0826",
-     "wholeNext": "644832ee3ddf2383"
+     "wholeNext": "be833c2c87a24eec"
     }
    },
    "era2005|premier2005": {
@@ -1617,7 +1617,7 @@
      "overrides": {}
     },
     "hashes": {
-     "start": "b44a5a4c7d92267a",
+     "start": "73abc280ef4fe328",
      "table": "2c8aff0ee79d3f89",
      "results": "8eeb1fcb831b2ded",
      "world": "e4ab4a60bba4203a",
@@ -1625,14 +1625,14 @@
      "europe": "83371e84529f220b",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "434cf8b4cfc81dfc",
-     "whole": "5fad55a17a6af6da",
-     "summary": "95fc629d79226233",
+     "whole": "8e93805b62b4198c",
+     "summary": "2d9ff2bb55281f8f",
      "promotions": "74234e98afe7498f",
      "europeNext": "2336592c7ef22e3a",
      "objectivesNext": "9c7b01c6a2079e6a",
      "calendarNext": "bc765b33645f0e7b",
      "cupDrawNext": "cfdf0402b792fb5d",
-     "wholeNext": "e1c4fbbd83ff9cee"
+     "wholeNext": "1e3b4f281eaa4e60"
     }
    },
    "era2005|laliga2005": {
@@ -1650,7 +1650,7 @@
      "overrides": {}
     },
     "hashes": {
-     "start": "2391d4e8edde1b5c",
+     "start": "b7e90e3e5be92f55",
      "table": "87937df0721f265f",
      "results": "552816f576fc5bc7",
      "world": "be8b725469ea7156",
@@ -1658,14 +1658,14 @@
      "europe": "9814fd6ccd11c92b",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "038fd7e734a7bdb8",
-     "whole": "df34822d4531b463",
-     "summary": "a27ad5588168e9d7",
+     "whole": "28bead8a82fc9598",
+     "summary": "9c85b2b62446e036",
      "promotions": "74234e98afe7498f",
      "europeNext": "85583c158b019c6c",
      "objectivesNext": "1fc205867ae68dbc",
      "calendarNext": "bc765b33645f0e7b",
      "cupDrawNext": "5760c9aa64ec171a",
-     "wholeNext": "7fc1638a9968fab9"
+     "wholeNext": "35c4810c0e9814e4"
     }
    },
    "era2005|seriea2005": {
@@ -1683,22 +1683,22 @@
      "overrides": {}
     },
     "hashes": {
-     "start": "7532addaf2a2be20",
+     "start": "1bb3820d4b9628be",
      "table": "464f3458214542d5",
      "results": "3e277477caff5ab0",
      "world": "de814297d46dd5a4",
      "cup": "3a0b83a656412adc",
      "europe": "6eb23b9e34a7a701",
      "trophies": "4f53cda18c2baa0c",
-     "objectives": "65636ee3bf243a66",
-     "whole": "311ec71e36bc1fb3",
-     "summary": "572089c576e6563f",
+     "objectives": "0fdc9bbdca682272",
+     "whole": "abd4ec8ebb9ef9a9",
+     "summary": "b3eb50a8a9665cb9",
      "promotions": "74234e98afe7498f",
      "europeNext": "e1373aca2062d591",
-     "objectivesNext": "9ad7174136e60445",
+     "objectivesNext": "a40e2ed77ab7cff1",
      "calendarNext": "bc765b33645f0e7b",
      "cupDrawNext": "8f45cfea1363f3ff",
-     "wholeNext": "bad5b2bda519e1a3"
+     "wholeNext": "8c79569b800d1529"
     }
    },
    "era2005|bundesliga2005": {
@@ -1716,7 +1716,7 @@
      "overrides": {}
     },
     "hashes": {
-     "start": "11da2422eb940117",
+     "start": "67b15763eff976d0",
      "table": "30c7f2bffb69447b",
      "results": "0370c1147bcce0b7",
      "world": "13ee733796e7f587",
@@ -1724,20 +1724,20 @@
      "europe": "9814fd6ccd11c92b",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "c17070a376b16f1d",
-     "whole": "88f729072b0d3f91",
-     "summary": "dbb23867a32a0e75",
+     "whole": "00be036193e1eda2",
+     "summary": "0718dec2a5102c4b",
      "promotions": "74234e98afe7498f",
      "europeNext": "85583c158b019c6c",
      "objectivesNext": "155b28d5cdea10b0",
      "calendarNext": "2fd0ce2aa56f0a07",
      "cupDrawNext": "030005e2e7187db9",
-     "wholeNext": "ecf3f251d43c82f4"
+     "wholeNext": "616c9f629d967d0d"
     }
    },
    "era2005|ligue12005": {
     "club": "AC Ajaccio",
     "eraId": "era2005",
-    "entries": 14,
+    "entries": 16,
     "read": {
      "position": 20,
      "champion": "Auxerre",
@@ -1749,22 +1749,22 @@
      "overrides": {}
     },
     "hashes": {
-     "start": "360b5831fb52645c",
-     "table": "79e9e7c0bab9b942",
-     "results": "0cfa9d4e8d16997a",
-     "world": "f413162428638417",
+     "start": "024c2f9eabe279e6",
+     "table": "67a7705963e6749b",
+     "results": "abf7f60c0b355cf6",
+     "world": "2b5fd47b5c187457",
      "cup": "ff2fba7eb54e67a6",
      "europe": "9814fd6ccd11c92b",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "92d30e4203c32c14",
-     "whole": "e51de4a8b1a32555",
-     "summary": "566c641d8bfab735",
+     "whole": "17ba1fafa808aece",
+     "summary": "be444eab33c3c724",
      "promotions": "74234e98afe7498f",
      "europeNext": "85583c158b019c6c",
-     "objectivesNext": "9588059b9464863a",
+     "objectivesNext": "1b319efb93832eed",
      "calendarNext": "bc765b33645f0e7b",
-     "cupDrawNext": "e14a4018592ce6f3",
-     "wholeNext": "2a792ca1fc43d0f1"
+     "cupDrawNext": "87d1c2211853a686",
+     "wholeNext": "bfa943b019c6759f"
     }
    },
    "era2020|premier2020": {
@@ -1782,7 +1782,7 @@
      "overrides": {}
     },
     "hashes": {
-     "start": "0f63e9beb57de26a",
+     "start": "6966450bab7526ef",
      "table": "d64c07d79f63d22c",
      "results": "7a1a0e5ac613fabb",
      "world": "ec1289c32a1f21fb",
@@ -1790,146 +1790,146 @@
      "europe": "17dbd1d04e1876b3",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "c7f4d8477e449b6e",
-     "whole": "569a5047357386cb",
-     "summary": "ac0530a446b4819b",
+     "whole": "88d761a7bafb736f",
+     "summary": "445137f3b5b6cb18",
      "promotions": "74234e98afe7498f",
      "europeNext": "85583c158b019c6c",
      "objectivesNext": "4323d79216de9c55",
      "calendarNext": "bc765b33645f0e7b",
      "cupDrawNext": "ce99ab7d90e6e1e3",
-     "wholeNext": "9467a98e127d183c"
+     "wholeNext": "1d22c4ac2ce6d9bd"
     }
    },
    "era2020|laliga2020": {
     "club": "Atlético Madrid",
     "eraId": "era2020",
-    "entries": 54,
+    "entries": 49,
     "read": {
-     "position": 3,
+     "position": 2,
      "champion": "Real Madrid",
-     "bottom": "Huesca",
+     "bottom": "Elche",
      "cupWinner": "Athletic Club",
-     "uclWinner": "Chelsea",
+     "uclWinner": "Barcelona",
      "nextLeague": "laliga2020",
      "nextUcl": true,
      "overrides": {}
     },
     "hashes": {
-     "start": "f9d28f76906a52ec",
-     "table": "e9de9f9dddd3e72e",
-     "results": "20ea2e841d72d0ea",
-     "world": "acf731ffbf7e20a0",
-     "cup": "429548d5acae6509",
-     "europe": "95afeede98426101",
+     "start": "3dd63b1538978ded",
+     "table": "6488bb2b815c89a0",
+     "results": "a5c08b8f3bfeac6a",
+     "world": "6dc21ec1ad145d05",
+     "cup": "40ae95465d1e06aa",
+     "europe": "be53ac2de6ae3cce",
      "trophies": "4f53cda18c2baa0c",
-     "objectives": "3689490b294b6c65",
-     "whole": "8a49f20670d11945",
-     "summary": "9c8c987cb6550830",
+     "objectives": "cf3e1ef146df42c4",
+     "whole": "871dc65d84baa12e",
+     "summary": "35f9f9ac7cf23a4a",
      "promotions": "74234e98afe7498f",
-     "europeNext": "f34b342e7652b7b6",
-     "objectivesNext": "27f9138bdb6e3788",
+     "europeNext": "41a6cfe7a5f2275a",
+     "objectivesNext": "64bc27b50c43d297",
      "calendarNext": "bc765b33645f0e7b",
-     "cupDrawNext": "b715ef3360cd0afe",
-     "wholeNext": "1802fc7458381275"
+     "cupDrawNext": "6bd6866efc7e2fb3",
+     "wholeNext": "6d5107a8f7c5a6f7"
     }
    },
    "era2020|seriea2020": {
     "club": "Inter Milan",
     "eraId": "era2020",
-    "entries": 47,
+    "entries": 48,
     "read": {
-     "position": 1,
-     "champion": "Inter Milan",
+     "position": 2,
+     "champion": "Atalanta",
      "bottom": "Crotone",
-     "cupWinner": "Atalanta",
-     "uclWinner": "Liverpool",
+     "cupWinner": "Roma",
+     "uclWinner": "PSG",
      "nextLeague": "seriea2020",
      "nextUcl": true,
      "overrides": {}
     },
     "hashes": {
-     "start": "1cca2d862aa2e21a",
-     "table": "a99d9cc375f24416",
-     "results": "d0ffb24091cf05c5",
-     "world": "eec00ece746601aa",
-     "cup": "32ad1a2b7bd19fed",
-     "europe": "99b82c1a10d88cf8",
+     "start": "fbcfbd3e8c2c5022",
+     "table": "cb8222c236fc87c8",
+     "results": "6ac27224b86ee795",
+     "world": "deaf9bdfb123e1cf",
+     "cup": "984d47e3526c1a90",
+     "europe": "375039fc4c9ff4ea",
      "trophies": "4f53cda18c2baa0c",
-     "objectives": "86acac7eacf6ac4b",
-     "whole": "3e09dbeb06c9f1e6",
-     "summary": "4b0e91e9c9435bd1",
+     "objectives": "4ecafdaa0e6fbd34",
+     "whole": "3054812ee259c097",
+     "summary": "e4a4109aa920ec03",
      "promotions": "74234e98afe7498f",
-     "europeNext": "16d499f44dd2a7f6",
-     "objectivesNext": "783480ed46e12fdb",
+     "europeNext": "e10eb63cfdc3ec5a",
+     "objectivesNext": "9e96b88af86784d6",
      "calendarNext": "bc765b33645f0e7b",
-     "cupDrawNext": "e37fc5339fe673e0",
-     "wholeNext": "05b4bc1275d0f45f"
+     "cupDrawNext": "8b77e31a945b5865",
+     "wholeNext": "114ece70e20d425d"
     }
    },
    "era2020|bundesliga2020": {
     "club": "Bayern Munich",
     "eraId": "era2020",
-    "entries": 51,
+    "entries": 50,
     "read": {
      "position": 1,
      "champion": "Bayern Munich",
      "bottom": "Arminia Bielefeld",
-     "cupWinner": "RB Leipzig",
-     "uclWinner": "Bayern Munich",
+     "cupWinner": "Bayern Munich",
+     "uclWinner": "Inter Milan",
      "nextLeague": "bundesliga2020",
      "nextUcl": true,
      "overrides": {}
     },
     "hashes": {
-     "start": "5857360c5c8d00b5",
-     "table": "a69df4aaac589e85",
-     "results": "5bdfa0710a9d2c19",
-     "world": "4356eb0f6031e328",
-     "cup": "f8d6363177e25a17",
-     "europe": "4d3efee26441b37d",
-     "trophies": "4db1187947e93fe9",
+     "start": "74c48bfa12a6bb08",
+     "table": "81607887ea760e7d",
+     "results": "1adb9473bf25643e",
+     "world": "105aa42f9be42dfc",
+     "cup": "44f1df252679a536",
+     "europe": "b70c0972c724cd2e",
+     "trophies": "78947a0467c419d3",
      "objectives": "93b6b48c4d24704d",
-     "whole": "383fb85bacc81d90",
-     "summary": "9620579119526131",
+     "whole": "85204633cb1ce5a3",
+     "summary": "41b714d97db7ea09",
      "promotions": "74234e98afe7498f",
-     "europeNext": "ec95fc7927282b82",
+     "europeNext": "e4faba5062f7fc0a",
      "objectivesNext": "1c7f7f6dd9220b0d",
      "calendarNext": "2fd0ce2aa56f0a07",
-     "cupDrawNext": "4715702c3dcd7ea1",
-     "wholeNext": "8dc8689b95bd6197"
+     "cupDrawNext": "8b2c2dab6f533478",
+     "wholeNext": "81961ea64d127097"
     }
    },
    "era2020|ligue12020": {
     "club": "Lille",
     "eraId": "era2020",
-    "entries": 50,
+    "entries": 52,
     "read": {
-     "position": 3,
-     "champion": "Lyon",
-     "bottom": "Dijon",
+     "position": 8,
+     "champion": "Marseille",
+     "bottom": "Lens",
      "cupWinner": "Lille",
-     "uclWinner": "Manchester City",
+     "uclWinner": "Barcelona",
      "nextLeague": "ligue12020",
-     "nextUcl": true,
+     "nextUcl": false,
      "overrides": {}
     },
     "hashes": {
-     "start": "b6354a1540211a1e",
-     "table": "f3bd3d76299fb74b",
-     "results": "5d24a7b61aef0ebb",
-     "world": "ff6dce70e1c310cc",
-     "cup": "571b85462a3ecafe",
-     "europe": "4bc670d00fd065dc",
+     "start": "13a9379409523596",
+     "table": "04ceec3ea31716db",
+     "results": "f054cec99a79559b",
+     "world": "a35675f91e3691cb",
+     "cup": "f4447b20af9fd03b",
+     "europe": "bbfe1a4e179daa1b",
      "trophies": "169f057818963c9d",
-     "objectives": "0431dc6494536085",
-     "whole": "82c7345dc989e156",
-     "summary": "9020d67434d27958",
+     "objectives": "2bbe1024fb11954e",
+     "whole": "3593bbc162fb9761",
+     "summary": "b827675269b411cb",
      "promotions": "74234e98afe7498f",
-     "europeNext": "e06a00e1c80f9fef",
-     "objectivesNext": "3b6fc8a13f12969d",
+     "europeNext": "85583c158b019c6c",
+     "objectivesNext": "97a6cfc48e90cb9b",
      "calendarNext": "bc765b33645f0e7b",
-     "cupDrawNext": "0383f0ba1cb933c4",
-     "wholeNext": "7d77a50ac5274394"
+     "cupDrawNext": "49c1530434a0a86e",
+     "wholeNext": "89749a78d2b7b6ca"
     }
    }
   },
@@ -1952,15 +1952,15 @@
     "drop": "4e07408562bedb8b",
     "ucl": "4b227777d4dd1fc6",
     "def": "017d444dbc328e77",
-    "demand": "2ba8976507d1e6d4",
-    "objectives": "90112e66c832cc90"
+    "demand": "93a45fc77e7d2ce1",
+    "objectives": "5bf85486f3881859"
    },
    "now|seriea": {
     "drop": "4e07408562bedb8b",
     "ucl": "4b227777d4dd1fc6",
     "def": "d400ffba2e51beaf",
-    "demand": "2c7cceb09b3c6a4d",
-    "objectives": "31b57b4d524e4597"
+    "demand": "ce5beea8cd8de212",
+    "objectives": "75645375cd065dee"
    },
    "now|bundesliga": {
     "drop": "d4735e3a265e16ee",
@@ -1973,8 +1973,8 @@
     "drop": "d4735e3a265e16ee",
     "ucl": "4e07408562bedb8b",
     "def": "2f49558d2c122977",
-    "demand": "7899f4940a22484a",
-    "objectives": "bc3ce0c8b022e7cf"
+    "demand": "3085d53943da72f8",
+    "objectives": "7c23d1ae0d7576e6"
    },
    "now|eredivisie": {
     "drop": "d4735e3a265e16ee",
@@ -2099,15 +2099,15 @@
     "drop": "4e07408562bedb8b",
     "ucl": "5feceb66ffc86f38",
     "def": "75cb3ed76158739e",
-    "demand": "ffba1d254eb37573",
-    "objectives": "7bf03067985db9d6"
+    "demand": "d80c947332db9fa9",
+    "objectives": "03daa9a365aed6c1"
    },
    "now|ligue2": {
     "drop": "d4735e3a265e16ee",
     "ucl": "5feceb66ffc86f38",
     "def": "857b4edb34b66814",
-    "demand": "2669d50177a5efcf",
-    "objectives": "b45fed48a3aa3a2e"
+    "demand": "f5ef395033d2a899",
+    "objectives": "6fb60c215eb07ec2"
    },
    "now|segunda": {
     "drop": "4b227777d4dd1fc6",
@@ -2134,15 +2134,15 @@
     "drop": "4e07408562bedb8b",
     "ucl": "4b227777d4dd1fc6",
     "def": "76b2a7ee8c8ff208",
-    "demand": "4cb528fb27204a28",
-    "objectives": "18db956a8b7c0c0b"
+    "demand": "27cc87bc1eee340b",
+    "objectives": "f7e8cde7a5c627ea"
    },
    "era2010|seriea2010": {
     "drop": "4e07408562bedb8b",
     "ucl": "4b227777d4dd1fc6",
     "def": "35fadf3222a38288",
-    "demand": "5209828dc3b677f6",
-    "objectives": "d966468b13a6fadc"
+    "demand": "70cb50d5afd5e841",
+    "objectives": "598a6d3a7f4e6bb1"
    },
    "era2010|bundesliga2010": {
     "drop": "d4735e3a265e16ee",
@@ -2155,8 +2155,8 @@
     "drop": "4e07408562bedb8b",
     "ucl": "4e07408562bedb8b",
     "def": "d977d5efb7fd0ec0",
-    "demand": "92a09ec6d1646c42",
-    "objectives": "419ea6b82a2759bc"
+    "demand": "f39c7176122a0123",
+    "objectives": "e31b27c59bc0602f"
    },
    "era2015|premier2015": {
     "drop": "4e07408562bedb8b",
@@ -2169,15 +2169,15 @@
     "drop": "4e07408562bedb8b",
     "ucl": "4b227777d4dd1fc6",
     "def": "9c85973c09076914",
-    "demand": "4cb528fb27204a28",
-    "objectives": "6b798bccaafce12b"
+    "demand": "27cc87bc1eee340b",
+    "objectives": "612980b20762ac72"
    },
    "era2015|seriea2015": {
     "drop": "4e07408562bedb8b",
     "ucl": "4e07408562bedb8b",
     "def": "8681b465d0d0e6a3",
-    "demand": "1bd9595dc0e8d902",
-    "objectives": "ace36d6f904805a3"
+    "demand": "1d474a5d8042f451",
+    "objectives": "91f8428e352c1c0e"
    },
    "era2015|bundesliga2015": {
     "drop": "d4735e3a265e16ee",
@@ -2190,8 +2190,8 @@
     "drop": "4e07408562bedb8b",
     "ucl": "4e07408562bedb8b",
     "def": "71e5cc4de1b3b910",
-    "demand": "92a09ec6d1646c42",
-    "objectives": "931a5e110c1cd44b"
+    "demand": "f39c7176122a0123",
+    "objectives": "3a40540f7ef8bc34"
    },
    "era2005|premier2005": {
     "drop": "4e07408562bedb8b",
@@ -2204,15 +2204,15 @@
     "drop": "4e07408562bedb8b",
     "ucl": "4b227777d4dd1fc6",
     "def": "fe4b711a6ec5f626",
-    "demand": "8dd5efb2f048ae01",
-    "objectives": "f30c32bfdbd62745"
+    "demand": "5adf6ef84811ba2b",
+    "objectives": "f3f779c3f9e2b12d"
    },
    "era2005|seriea2005": {
     "drop": "4e07408562bedb8b",
     "ucl": "4b227777d4dd1fc6",
     "def": "f9c44328927058ba",
-    "demand": "1426bbfb5f2a237f",
-    "objectives": "0a112cb825bc3397"
+    "demand": "5908c3856c6de3f3",
+    "objectives": "57d09bde645f09f1"
    },
    "era2005|bundesliga2005": {
     "drop": "4e07408562bedb8b",
@@ -2225,8 +2225,8 @@
     "drop": "4e07408562bedb8b",
     "ucl": "4e07408562bedb8b",
     "def": "c4d1e818279e3a33",
-    "demand": "babda33fe675e812",
-    "objectives": "6a8c595b327304e8"
+    "demand": "ccf68fcc5f679870",
+    "objectives": "2f15dfa8bab5e860"
    },
    "era2020|premier2020": {
     "drop": "4e07408562bedb8b",
@@ -2239,15 +2239,15 @@
     "drop": "4e07408562bedb8b",
     "ucl": "4b227777d4dd1fc6",
     "def": "ae08b9038ef458bf",
-    "demand": "ff1a2989961032c6",
-    "objectives": "0b22e74491fe38eb"
+    "demand": "197fc54f9c8f6f82",
+    "objectives": "d7e84d9b679b2f6d"
    },
    "era2020|seriea2020": {
     "drop": "4e07408562bedb8b",
     "ucl": "4b227777d4dd1fc6",
     "def": "d9d704ffdd1c9e4c",
-    "demand": "cc9d3574b58867f9",
-    "objectives": "0cffa11cee85607b"
+    "demand": "b6c2317ab419aa1f",
+    "objectives": "17458f5ae65b38dc"
    },
    "era2020|bundesliga2020": {
     "drop": "d4735e3a265e16ee",
@@ -2260,8 +2260,8 @@
     "drop": "d4735e3a265e16ee",
     "ucl": "4e07408562bedb8b",
     "def": "6ca60a1b126170ee",
-    "demand": "f8048545de529449",
-    "objectives": "08a8a0429558f0e2"
+    "demand": "f1b77f32df3feb83",
+    "objectives": "65ae2f612232ce24"
    },
    "views": {
     "pyramids": "dc09af090ed2bed6",

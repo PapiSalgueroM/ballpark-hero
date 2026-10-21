@@ -251,7 +251,8 @@ export function useLiveSimMotion<T extends MotionPlayer>(scene: MotionScene<T>, 
      its wind up, a goal nobody scored at the start of the second half. */
   const inAction = active && action && action.event === event && clock - action.event.at <= 1.05
     && samePlayers(action.scene.mine, scene.mine) && samePlayers(action.scene.theirs, scene.theirs);
-  const base = reduced ? scene : between(travel.from, travel.to, smooth((clock - travel.at) / .3));
+  const travelForFrame = scene !== travel.to ? { from: current.current, to: scene, at: clock } : travel;
+  const base = reduced ? scene : between(travelForFrame.from, travelForFrame.to, smooth((clock - travelForFrame.at) / .3));
   const frame: MotionFrame<T> = inAction
     ? actionFrame(action.scene, action.event, reduced ? 1.05 : clock - action.event.at)
     : { ...base, poses: {}, action: 'pass', net: null, netPulse: 0, phase: 'pass' };

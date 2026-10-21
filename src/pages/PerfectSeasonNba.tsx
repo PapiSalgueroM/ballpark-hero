@@ -6,7 +6,6 @@ import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import AdBanner from '@/components/ads/AdBanner';
-import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
@@ -92,6 +91,7 @@ const PerfectSeasonNba = () => {
   const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const dailyPicker = useRef<((len: number) => number) | null>(null);
   const dailySaved = useRef(false);
+  const retryReroll = useRef(false);
 
   const openSlots = useMemo(
     () => NBA_SLOTS.filter(s => !picks[s.key]).map(s => s.key),
@@ -130,6 +130,7 @@ const PerfectSeasonNba = () => {
       }
       dailyPicker.current = makeDailyPicker(SPORT_KEY);
     }
+    setIndex([]);
     setPhase('boot');
   };
 
@@ -168,8 +169,8 @@ const PerfectSeasonNba = () => {
     if (index.length === 0) return;
     if (isReroll) {
       if (rerolls <= 0) return;
-      setRerolls(r => r - 1);
     }
+    retryReroll.current = isReroll;
     const spinStart = Date.now();
     setPhase('spinning');
     setSelected(null);
@@ -203,6 +204,7 @@ const PerfectSeasonNba = () => {
       setPhase('error');
       return;
     }
+    if (isReroll) setRerolls(r => r - 1);
     setWheelText(`${found.entry.season} ${found.squad.teamName}`);
     setSquad(found.squad);
     setSpins(s => s + 1);
@@ -533,7 +535,7 @@ const PerfectSeasonNba = () => {
         {phase === 'error' && (
           <div className="text-center py-12">
             <p className="text-destructive font-semibold mb-3">Couldn't reach the basketball archives.</p>
-            <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
+            <button onClick={() => index.length > 0 ? void spin(retryReroll.current) : setPhase('boot')} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
               Try again
             </button>
           </div>
@@ -812,12 +814,20 @@ const PerfectSeasonNba = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="perfect-season-nba" />
-        </div>
-
         <GameSeoContent
           pageHasOwnH1
+          reportGameContext={{
+            phase, mode, puzzleDate: todayStr,
+            decade: decade?.id ?? null,
+            theme: dailyTheme?.id ?? null,
+            spins, rerolls,
+            squad: squad?.squadId ?? null,
+            selected: selected?.playerId ?? null,
+            picks: NBA_SLOTS.map(slot => [slot.key, picks[slot.key]?.playerId ?? null]),
+            openSlots,
+            result: sim ? [sim.wins, sim.losses, sim.overall, revealed, poSeed] : null,
+            lockedResult: lockedAttempt ? [lockedAttempt.sim.wins, lockedAttempt.sim.losses, lockedAttempt.overall] : null,
+          }}
           title="82-0 NBA Perfect Season Challenge"
           description="Draft across every era of NBA history. The wheel decides which team and season you draft from, one player per spin, no repeats. Then the sim decides your fate over 82 games."
           howToPlay={[

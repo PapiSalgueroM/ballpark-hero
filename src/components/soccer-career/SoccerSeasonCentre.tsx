@@ -38,6 +38,7 @@ import { ballonDorSeasonForDisplay } from '@/lib/soccerAwardReveal';
 import { soccerCardLine } from '@/lib/soccerDiscipline';
 import { readLeagueWorldSeason } from '@/lib/soccerCareerLeagueWorld';
 import { belgian2025OpponentLabels } from '@/lib/season/belgianOpponentLabels';
+import { historicalOpponentLabels } from '@/lib/season/historicalOpponentLabels';
 import { readSeasonDerbies } from '@/lib/soccerCareerDerby';
 import { leagueWithArticle, ordinal, readLeagueFinish } from '@/lib/soccerCareerLeague';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
@@ -84,8 +85,8 @@ export interface SoccerSeasonCentreProps {
 const HELP: HelpWords = {
   title: 'How the Season Centre works',
   intro: [
-    'Your season was played the moment you pressed Next Season. This is that same season, match by match: the final table and your season totals are settled, and nothing here can change them.',
-    "Earlier-season tables use verified league membership and competition rules. From 2026-27, saved league worlds use your career's simulated clubs and direct promotion and relegation between two divisions. The review marks the available Spanish lower-division club pool. Every score, every other club's result and every minute are your career's own.",
+    'Your season was played the moment you pressed Next Season or 📺 Week by week. Here you watch it one matchday at a time, and the final table and your season totals end where your season summary has them.',
+    "Earlier seasons use the league's real clubs and competition rules where the game has them checked. From 2026-27, a season with a saved league world runs on your career's simulated clubs, with promotion and relegation between two divisions. Every score, every other club's result and every minute are your career's own.",
     'When the table changes, each club slides from where it was to where it is now. The little pitch shows who scored and when. The ring is you, whenever you are in the move: scoring it, setting it up, or up there with the attack if you play in midfield or up front, and at the back when one goes in past you as a keeper or a defender. ⚽ Yours or 🅰️ Your assist under the pitch tells you when the goal or the assist was yours. How the move looked is the game\'s own drawing.',
     'Now and then a goal in your season is an own goal, marked (O.G). It is always one of the goals your season already had, never an extra one, and it never touches your goals or assists. Who put it in (you, a teammate or one of theirs) is made up by the game. The pitch still plays it as a goal for the side that got it and says Own goal underneath, and when it was yours the ring is on you at the back.',
     'Saved cup games appear between league games. Their placement is the simulation\'s own order, not a real calendar. New modern named cups keep a simplified opening tie, not every early round. Reveal one saved result to add its next recorded round. A deciding loss ends that cup run. Missing early-round opponents and scores stay marked. Closing at a cup night can show that same saved result again; it never rerolls.',
@@ -178,7 +179,8 @@ const RESUME_GAME = 'soccer';
 const RESULTS_WORDS = 'Results only: the game does not have a verified table for this league that season.';
 
 function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, moments: CentreMoments | null, color: string): CentreModel {
-  const display = belgian2025OpponentLabels(row, s);
+  const historical = historicalOpponentLabels(row, ctx, s);
+  const display = historical ?? belgian2025OpponentLabels(row, s);
   const occasion: Record<string, string> = {};
   for (const d of readSeasonDerbies(row)) occasion[d.rival] = d.name;
   const finish = ctx.finish;
@@ -191,6 +193,7 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, m
     : row.injurySevere ? 'Your season ended early with an injury.' : null;
   const trophies = [row.leagueTitle && '🏆 League', row.domesticCup && '🏆 Cup', row.championsLeague && '⭐ UCL', row.clubCupTitle && `⭐ ${row.clubCupTitle}`, row.worldCup && '🌍 World Cup', row.continentalCup && '🌐 Continental', row.ballonDor && "🏅 Ballon d'Or"].filter((t): t is string => !!t);
   const notes: string[] = [];
+  if (historical && s.mode === 'table') notes.push(historical.note);
   const world = readLeagueWorldSeason(row);
   if (world) {
     notes.push('Simulated league world: direct promotion and relegation between two divisions.');
@@ -207,7 +210,7 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, m
   const rating = SOCCER.totals(row, ctx).find(t => t.key === 'rating');
   const ratingRange: [number, number] | null = rating && rating.kind === 'mean' ? [rating.min, rating.max] : null;
   return {
-    season: s,
+    season: historical ? { ...s, labels: historical.labels } : s,
     words: SOCCER.words,
     names: display?.names ?? s.labels.map(l => (l.named ? l.name : SOCCER.words.unnamed)),
     occasion,

@@ -342,6 +342,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
   useEffect(() => {
     if (phase !== 'playing' && phase !== 'ready') return;
     const down = (e: KeyboardEvent) => {
+      if (e.defaultPrevented || (e.target instanceof Element && e.target.closest('button, a[href], input, select, textarea, [contenteditable]:not([contenteditable="false"])'))) return;
       if (phase === 'ready') { if (e.key === ' ' || e.key === 'Enter') { beginRound(); e.preventDefault(); } return; }
       if (kind === 'wallshot') {
         if (e.key === 'ArrowLeft') { setAimX(x => Math.max(-1.15, x - 0.06)); e.preventDefault(); }
@@ -414,6 +415,10 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
     setDragging(false);
     if (kind === 'wallshot') strike();
     else if (kind === 'gloves') dive();
+  };
+  const onCancel = () => {
+    setDragging(false);
+    dragStart.current = null;
   };
 
   /* What moment the board is drawing. Live it is the clock; while the resolve
@@ -495,7 +500,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
-        onPointerCancel={onUp}
+        onPointerCancel={onCancel}
       >
         {[0, 1, 2, 3, 4, 5].map(i => (
           <rect key={i} x={0} y={(VIEW_H / 6) * i} width={VIEW_W} height={VIEW_H / 6} fill={i % 2 ? 'hsl(140 35% 20%)' : 'hsl(140 35% 17%)'} />

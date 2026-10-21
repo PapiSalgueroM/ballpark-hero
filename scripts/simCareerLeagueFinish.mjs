@@ -69,6 +69,27 @@ import { NEXT_TEN_WHEEL_FILE, inverseCareerNextTen } from './lib/careerNextTenAt
 /* Release AW: Rounds 1262 to 1264 pay a career of 30 or more by age and form on purpose. Both attribution
    bundles take that out of a copy of the contracts file too: scripts/lib/careerVeteranPay1262.mjs. */
 import { VETERAN_PAY_ADDITIONS, veteranPayOutPlugin } from './lib/careerVeteranPay1262.mjs';
+/* Round 1318: Rounds 1280 to 1282 and 1318 keep the made up Ballon d'Or rivals in a saved pool on purpose. The
+   guarded development bundle takes that out of its copied engine too, its rows in order; the train out bundle
+   already does, since the 1172 list it spreads starts with the same rows: scripts/lib/careerAwardGenerations1318.mjs. */
+import { AWARD_GENERATIONS_ADDITIONS, inverseAwardGenerations } from './lib/careerAwardGenerations1318.mjs';
+/* Round 1327: the event deck draws on a keyed stream and the paper picks by weight, which moves every seeded
+   career from its first deck or paper on. Both historical bundles take that out first, the newest change first:
+   scripts/lib/careerDeckFair1327.mjs. */
+import { inverseDeckFair, deckFairPatches, DECK_FAIR_ADDITIONS } from './lib/careerDeckFair1327.mjs';
+/* Round 1329: the world truth round (the month award, the phone's world, the quiz, the International panel) comes
+   off first, in front of Round 1327, in both historical bundles: scripts/lib/careerWorldTruth1329.mjs. */
+import { inverseWorldTruth, worldTruthPatches, worldTruthOutPlugin, worldTruthReceiptProblem } from './lib/careerWorldTruth1329.mjs';
+/* Round 1334: the soccer deck's three engine lines come out first, in front of Round 1329 (scripts/lib/careerSoccerDeck1334.mjs), every row once, in order. */
+import { inverseSoccerDeck, soccerDeckPatches, soccerDeckReceiptProblem } from './lib/careerSoccerDeck1334.mjs';
+/* Release BF (Round BFH): the Soccer Career life chain (Rounds 1350 to 1363) deals more Life cards and holds some
+   choices over a reload, so every historical career parts from its recording (the join's rBFg-gA: 16 careers moved,
+   16 draw vectors differ). Its three changed engine inputs are read as at Release BE's head 4ae7a534 in the attributed
+   and both out bundles, never in the current one: scripts/lib/careerLifeChainBF.mjs, the pattern of
+   simCareerStoryRole's CAREER_STORY_ROLE_CHAIN_REF. SIM_LEAGUE_FINISH_CHAIN_REF replaces the ref, and an empty value
+   reads this tree (the unattributed arm, red on this head). */
+import { lifeChain, lifeChainRef } from './lib/careerLifeChainBF.mjs';
+const CHAIN_REF = lifeChainRef('SIM_LEAGUE_FINISH_CHAIN_REF');
 import crypto from 'node:crypto';
 import os from 'node:os';
 import fs from 'node:fs';
@@ -110,7 +131,7 @@ const sourceFiles = ['src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerLeagu
   'scripts/lib/careerDevelopmentAttribution1185.mjs', 'scripts/lib/careerStoryRoleAttribution1190.mjs', 'scripts/simCareerLeagueFinish.mjs'];
 const sourceHashes = () => Object.fromEntries(sourceFiles.map(file => [file,
   crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, file))).digest('hex')]));
-const proof = { control: CONTROL, sourceBefore: sourceHashes(), sourceAfter: null, sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], veteranPayAttribution: [], originalSources: [], careers: [] };
+const proof = { control: CONTROL, sourceBefore: sourceHashes(), sourceAfter: null, sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], veteranPayAttribution: [], awardGenerationsAttribution: [], deckFairAttribution: [], worldTruthAttribution: [], lifeChainAttribution: [], originalSources: [], careers: [] };
 
 /* A control edits a COPY. The copies live outside src/lib, so their relative
    imports are pointed back at the real files, except the engine's import of
@@ -183,16 +204,53 @@ function wheelOutPlugin() {
     });
   } };
 }
+/* Round 1327's rows come off first. A control's copy of the engine has its imports pointed back at src/lib
+   (relocate), so the rows are read through the same relocation as the copy they are applied to. */
+/* Round 1329: the files of the eighth inverse that no other plugin of a historical bundle loads, and the receipt of
+   the both out bundle's own loader. */
+const WORLD_TRUTH_REST = ['src/lib/soccerArcade.ts', 'src/components/soccer-career/InternationalPanel.tsx'];
+const bothWorldTruth = [];
+const bothSoccerDeck = [];
+function deckFairOut(text) {
+  const copied = enginePath !== `${ROOT}/src/lib/soccerCareerEngine.ts`;
+  const keep = CONTROL === 'stream' || CONTROL === 'notitle' ? 'soccerCareerLeague' : '';
+  let out = text;
+  for (const row of soccerDeckPatches()) {
+    const from = copied ? relocate(row.from, keep) : row.from, to = copied ? relocate(row.to, keep) : row.to;
+    assert.equal(out.split(from).length, 2, `${row.id} of Round 1334's inverse is in the engine exactly once at its turn`);
+    out = out.replace(from, () => to);
+  }
+  for (const row of worldTruthPatches().filter(r => r.file === ENGINE_REL)) {
+    const from = copied ? relocate(row.from, keep) : row.from, to = copied ? relocate(row.to, keep) : row.to;
+    assert.equal(out.split(from).length, 2, `${row.id} of Round 1329's inverse is in the engine exactly once at its turn`);
+    out = out.replace(from, () => to);
+    proof.worldTruthAttribution.push({ addition: row.addition, file: ENGINE_REL, bundle: 'attributed' });
+  }
+  for (const row of deckFairPatches()) {
+    const from = copied ? relocate(row.from, keep) : row.from, to = copied ? relocate(row.to, keep) : row.to;
+    assert.equal(out.split(from).length, 2, `${row.id} of Round 1327's inverse is in the engine exactly once at its turn`);
+    out = out.replace(from, () => to);
+    proof.deckFairAttribution.push({ addition: row.addition, file: ENGINE_REL, bundle: 'attributed' });
+  }
+  return out;
+}
 async function attributionEngine() {
   const before = fs.readFileSync(enginePath, 'utf8').replaceAll('\r\n', '\n');
-  const attributed = inverseCareerStoryRole(inverseCareerDevelopment(before, proof.attribution), proof.storyRoleAttribution);
+  const attributed = inverseCareerStoryRole(inverseCareerDevelopment(inverseAwardGenerations(ENGINE_REL, deckFairOut(before), proof.awardGenerationsAttribution), proof.attribution), proof.storyRoleAttribution);
   assert.notEqual(attributed, before, 'Historical attribution changes its copied engine');
-  const file = path.join(WORK, 'attributedEngine.ts'), entry = path.join(WORK, 'attributedEntry.mjs'), out = path.join(WORK, 'attributedBundle.mjs'), veteranOut = [];
+  assert.equal(proof.awardGenerationsAttribution.length, AWARD_GENERATIONS_ADDITIONS.length, 'The copied engine had the award generations of Rounds 1280 to 1282 and 1318 taken out, once for each row');
+  const file = path.join(WORK, 'attributedEngine.ts'), entry = path.join(WORK, 'attributedEntry.mjs'), out = path.join(WORK, 'attributedBundle.mjs'), veteranOut = [], worldTruthOut = [];
   fs.writeFileSync(file, relocate(attributed, CONTROL === 'stream' || CONTROL === 'notitle' ? 'soccerCareerLeague' : ''));
   fs.writeFileSync(entry, `globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };\nexport * from '${file.replaceAll('\\', '/')}';\n`);
+  /* Release BF: the contracts file reaches the veteran pay inverse at the chain's ref, the other two chain files load at it last. */
+  const chain = lifeChain(ROOT, CHAIN_REF);
   await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
-    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [wheelOutPlugin(), veteranPayOutPlugin(ROOT, path, fs, veteranOut)] });
+    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [wheelOutPlugin(), veteranPayOutPlugin(ROOT, path, chain.fs, veteranOut), worldTruthOutPlugin(ROOT, path, chain.fs, worldTruthOut, [...WORLD_TRUTH_REST, 'src/lib/soccerPhone.ts']), chain.plugin] });
+  assert.equal(chain.problem(), '', 'The attributed bundle loaded the life chain\'s three engine inputs at its ref');
+  proof.lifeChainAttribution.push({ bundle: 'attributed', ref: CHAIN_REF, served: chain.served });
   assert.equal(veteranOut.length, VETERAN_PAY_ADDITIONS.length, 'The attributed bundle loaded the contracts file with the veteran pay of Release AW taken out, once');
+  assert.equal(worldTruthReceiptProblem(worldTruthOut, ['src/lib/soccerPhone.ts']), '', 'The attributed bundle took Round 1329 out of the engine, the phone and every other file it loaded, once, in order');
+  proof.worldTruthAttribution.push(...worldTruthOut.map(row => ({ ...row, bundle: 'attributed' })));
   proof.veteranPayAttribution.push(...veteranOut);
   const attributedEngine = await import(pathToFileURL(out).href);
   assert.equal(JSON.stringify(attributedEngine.FALLBACK_CLUBS), JSON.stringify(engine.FALLBACK_CLUBS), 'Attribution keeps the complete club pool');
@@ -219,7 +277,14 @@ function bothOutPlugin() {
       if (!full.toLowerCase().startsWith(`${base}/`)) return undefined;
       const rel = full.slice(base.length + 1);
       if (rel !== ENGINE_REL && !SOCCER_TRAIN_FILES.includes(rel)) return undefined;
-      let text = out.rewrite(rel, fs.readFileSync(args.path, 'utf8')).split('\r\n').join('\n');
+      let text = inverseWorldTruth(rel, inverseSoccerDeck(rel, fs.readFileSync(args.path, 'utf8').split('\r\n').join('\n'), bothSoccerDeck), bothWorldTruth);
+      if (rel === ENGINE_REL) {
+        const receipt = [];
+        text = inverseDeckFair(ENGINE_REL, text, receipt);
+        assert.deepEqual(receipt.map(row => row.addition), DECK_FAIR_ADDITIONS, 'The historical bundle takes Round 1327 out of the engine once, every row in order');
+        proof.deckFairAttribution.push(...receipt.map(row => ({ ...row, bundle: 'both-out' })));
+      }
+      text = out.rewrite(rel, text).split('\r\n').join('\n');
       if (rel === ENGINE_REL) text = inverseCareerStoryRole(inverseCareerDevelopment(text, proof.attribution), proof.storyRoleAttribution);
       return { contents: text, loader: rel.endsWith('.tsx') ? 'tsx' : 'ts' };
     });
@@ -229,9 +294,16 @@ function bothOutPlugin() {
 async function bothOutEngine() {
   const entry = path.join(WORK, 'bothOutEntry.mjs'), out = path.join(WORK, 'bothOutBundle.mjs');
   fs.writeFileSync(entry, `globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };\nexport * from '${lib}soccerCareerEngine.ts';\n`);
-  const both = bothOutPlugin(), veteranOut = [];
+  const both = bothOutPlugin(), veteranOut = [], chain = lifeChain(ROOT, CHAIN_REF);
+  bothWorldTruth.length = 0;
+  bothSoccerDeck.length = 0;
   await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
-    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [wheelOutPlugin(), veteranPayOutPlugin(ROOT, path, fs, veteranOut), both.plugin] });
+    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [wheelOutPlugin(), veteranPayOutPlugin(ROOT, path, chain.fs, veteranOut), both.plugin, worldTruthOutPlugin(ROOT, path, fs, bothWorldTruth, WORLD_TRUTH_REST), chain.plugin] });
+  assert.equal(chain.problem(), '', 'The historical bundle loaded the life chain\'s three engine inputs at its ref');
+  proof.lifeChainAttribution.push({ bundle: 'both-out', ref: CHAIN_REF, served: chain.served });
+  assert.equal(worldTruthReceiptProblem(bothWorldTruth), '', 'The historical bundle took Round 1329 out of every file it loaded, once, in order');
+  assert.equal(soccerDeckReceiptProblem(bothSoccerDeck), '', 'The historical bundle took Round 1334 out of the engine, once, in order');
+  proof.worldTruthAttribution.push(...bothWorldTruth.map(row => ({ ...row, bundle: 'both-out' })));
   assert.equal(veteranOut.length, VETERAN_PAY_ADDITIONS.length, 'The historical bundle loaded the contracts file with the veteran pay of Release AW taken out, once');
   proof.veteranPayAttribution.push(...veteranOut);
   const mod = await import(pathToFileURL(out).href);
@@ -647,6 +719,7 @@ console.log('4) the unchanged historical digests hold directly or after guarded 
       currentDraws: row.draws.length, attributedDraws: inverse ? draws.length : null, historicalDraws: historicalDraws.length, originalDraws: originalDraws.length });
   }
   console.log(`   ${direct} direct matches; ${same} of ${DIGEST_SEEDS} careers match the unchanged main digest${inverse ? ' after attribution' : ''}; ${originalSame} original hashes match the list before the train, ${historicalSame} match it with the train and the development edits out, and ${drawPairs} complete draw vectors match; ${withFinish} of their ${totalSeasons} current playing seasons carry a finish`);
+  console.log(`   life chain attribution: ${CHAIN_REF ? `soccerCareerLife, soccerCareerContracts and soccerCareerRealismA read at ${CHAIN_REF} in the ${proof.lifeChainAttribution.map(row => row.bundle).join(' and ')} bundle(s)` : 'none, SIM_LEAGUE_FINISH_CHAIN_REF is empty'}`);
   if (originalSame !== DIGEST_SEEDS) fail(`${DIGEST_SEEDS - originalSame} independent original careers differ from the unchanged baseline (the list before the train)`);
   if (historicalSame !== DIGEST_SEEDS) fail(`${DIGEST_SEEDS - historicalSame} careers moved with the train and the development edits both taken out: something other than those rounds changed a career`);
   if (same !== DIGEST_SEEDS) fail(`${DIGEST_SEEDS - same} careers moved after guarded attribution: the main Math.random stream or another complete state field changed`);

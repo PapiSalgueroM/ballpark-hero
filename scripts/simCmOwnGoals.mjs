@@ -208,7 +208,7 @@ function resultFace(s, calls) {
     table: s.table, form: s.form, results: (s.resultLog ?? []).map(r => [r.week, r.opp, r.score, r.res, r.comp]),
     squad: s.squad.map(p => [p.id, p.name, p.rating, p.morale, p.fitness, p.apps ?? 0, p.injuryWeeks, p.suspendedMatches, p.value, p.wage, p.seasonYellows ?? 0, p.seasonReds ?? 0, p.cleanSheets ?? 0]),
     race: s.scorerRace ?? [], world: Object.fromEntries(Object.entries(s.world ?? {}).map(([id, w]) => [id, w?.table ?? null])),
-    cup: s.cupRound, ucl: s.uclKoRound, trophies: s.trophies, history: s.history, stats: s.careerStats, strengths: s.clubStrengths,
+    cup: s.cupRound, ucl: s.uclKoRound, trophies: s.trophies, history: (s.history ?? []).map(({ awards, ...h }) => h) /* Round 1311: a record's awards are scorer credits (the league's top scorer, assists, keeper), which the two arms differ in by design */, stats: s.careerStats, strengths: s.clubStrengths,
   };
 }
 

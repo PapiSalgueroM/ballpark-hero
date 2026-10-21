@@ -19,9 +19,24 @@
  * (the sha is in its header). COLLEGE_FIXTURE_RECORD=1 writes it again
  * (COLLEGE_FIXTURE_OUT picks another file, COLLEGE_FIXTURE_FULL=1 keeps the
  * whole text of every step, for diffing a mismatch). Without those it
- * replays and every step must match byte for byte.
+ * replays and every step must match on all nine fields, draws included.
  * scripts/simCollegeDynastyBoard.mjs runs it and carries the negative
  * controls.
+ *
+ * WHAT IS SET ASIDE (Round 1320, the athletic director). A new dynasty now
+ * starts with an athletic director, so the path draws his nodes and the save
+ * carries his block. Exactly two things are set aside before hashing, nothing
+ * else: every element marked data-college-seat is removed from a CLONE of the
+ * container before the markup hash (the style elements stay in it) and before
+ * the text hash and the head; and st.seat is deleted from the save only when
+ * the save holds one, and only after asserting that the save is exactly what
+ * JSON.stringify writes for it, so the re-serialise can never be what moves a
+ * hash. Two assertions, each in its own test per sport, prove the set aside
+ * cannot pass for the wrong reason: at 'start' the save holds st.seat and a
+ * seat node was removed (the replay ran with the seat on), and at 'plain save'
+ * no st.seat exists and exactly the offer to an older dynasty was removed (it
+ * was offered the seat and not given it). The fixture JSON is never recorded
+ * again for this.
  */
 import type { ComponentType } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -96,8 +111,12 @@ const PLAY = /^(Play (Week|Round) \d+|Final week \+ the Playoff|Final round \+ M
 const txt = (el: Element) => (el.textContent ?? '').trim();
 const ask = (el: Element) => Number(/asks (\d+) NIL/.exec(el.textContent ?? '')?.[1] ?? 0);
 
+/* Round 1320: what each step set aside, read by the two seat tests below. */
+const SEAT_FACTS: Record<string, { step: string; seatInSave: boolean; removed: string[] }[]> = { cfb: [], cbb: [] };
+
 /* One scripted path through one board. Every click is followed by a step. */
 function run(sport: Sport): Step[] {
+  SEAT_FACTS[sport.name] = [];
   const steps: Step[] = [];
   let draws = 0;
   let rng = lehmer(912);
@@ -113,14 +132,30 @@ function run(sport: Sport): Step[] {
     return b;
   };
   const snap = (step: string) => {
-    const html = view.container.innerHTML;
+    /* Round 1320: the athletic director's nodes are set aside from a clone (see the header). */
+    const kept = view.container.cloneNode(true) as HTMLElement;
+    const seatNodes = [...kept.querySelectorAll('[data-college-seat]')];
+    seatNodes.forEach(n => n.remove());
+    const html = kept.innerHTML;
     /* The text without the celebration keyframes, so the head reads as the screen does. */
-    const shown = view.container.cloneNode(true) as HTMLElement;
+    const shown = kept.cloneNode(true) as HTMLElement;
     shown.querySelectorAll('style').forEach(s => s.remove());
     const t = (shown.textContent ?? '').replace(/\s+/g, ' ').trim();
+    let raw = localStorage.getItem(sport.key) ?? '';
+    let seatInSave = false;
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed?.st && Object.prototype.hasOwnProperty.call(parsed.st, 'seat')) {
+        if (JSON.stringify(parsed) !== raw) throw new Error(`${sport.name} ${step}: the save is not what JSON.stringify writes, so setting st.seat aside could move its hash`);
+        delete parsed.st.seat;
+        raw = JSON.stringify(parsed);
+        seatInSave = true;
+      }
+    }
+    SEAT_FACTS[sport.name].push({ step, seatInSave, removed: seatNodes.map(n => n.getAttribute('data-college-seat') ?? '') });
     /* Entity ids carry a per page load token drawn at import, before any seed
        can reach it (src/lib/entityIds.ts), so it is written as a placeholder. */
-    const save = (localStorage.getItem(sport.key) ?? '').split(EPOCH).join('<load>');
+    const save = raw.split(EPOCH).join('<load>');
     let info = '';
     if (save) {
       /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -276,5 +311,19 @@ describe('Round 912: both college dynasty boards hold their recorded behaviour',
       }
       expect(first).toBe('');
     }, 120_000); /* a full scripted dynasty: 3 s on a quiet machine, 14 s on a busy one */
+
+    /* Round 1320: the set aside cannot pass for the wrong reason. Reads what the replay above recorded. */
+    it(`${sport.name}: the replay ran with the athletic director on, and an old save was offered him and not given him`, () => {
+      const facts = SEAT_FACTS[sport.name];
+      const at = (name: string) => facts.find(f => f.step === name);
+      const start = at('start');
+      const plain = at('plain save');
+      expect(start, 'the replay never reached start').toBeTruthy();
+      expect(plain, 'the replay never reached the plain save').toBeTruthy();
+      expect(start!.seatInSave).toBe(true);
+      expect(start!.removed.length).toBeGreaterThan(0);
+      expect(plain!.seatInSave).toBe(false);
+      expect(plain!.removed).toEqual(['optin']);
+    });
   }
 });

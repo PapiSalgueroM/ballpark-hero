@@ -1765,7 +1765,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Creating your player and building your look",
         items: [
           "Create your player: name, one of 50 nationalities, one of 10 positions, and a starting era from the 1990s to the 2020s.",
-          "Build your look in the appearance editor: 12 skin tones, 23 hairstyles, 16 hair colours, 14 beard styles, 16 accessories, 18 boot lines, and 19 signature celebrations, or hit Surprise me.",
+          "Build your look in the appearance editor: 12 skin tones, 29 hairstyles, 16 hair colours, 18 beard styles, 16 accessories, 18 boot lines, and 19 signature celebrations, or hit Surprise me.",
         ],
       },
       {
@@ -1785,6 +1785,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Advancing seasons through the training ground",
         items: [
           "Advance season by season through simulated stats, newspaper headlines, random events, and decisions.",
+          "Most summers open with one card about your position or your career, before the rest of the news between seasons. Training can trade one skill for another next season, with gains stopping at your ceiling.",
           "Want to see it happen? The 📺 Week by week button plays the same season match by match, with your rating every game and the league table after every matchday, then hands you back to the newspaper. Its ? button has the rules and worked examples.",
           "Up to three times a season the clock stops and the moment is yours to play on your training ground board (look for 🎯 on the fixtures): a YOUR CALL decides how that match went, with the return game taking the other side so your final table and season totals never move, and a RECREATE replays what the record says you did, for stars that bank into next season's growth.",
           "Open the training ground (the dumbbell button, above your player on phones or bottom right on desktop) once a season. Your position picks a drill you actually play: keepers hold and drag a glove save dive, centre backs, full backs and defensive midfielders time a tackle on a moving ball, central and attacking midfielders thread a through ball onto a runner before he is offside, and everyone else times a wall shot through a gap that opens and closes. Today's ten rounds are the same for everyone at your position and count once; practice is unlimited and banks nothing.",
@@ -1794,6 +1795,8 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Working transfer windows and the shop aisles",
         items: [
           "Work the transfer windows: stay, extend, request a move, or weigh rival offers and dream club pay cuts.",
+          "When the window offers it, open Set transfer priority, choose minutes, club level or home country, save the brief, then use Request transfer. Saving the brief alone does not request a move, and No Agent can use it too.",
+          "After a settled senior season, open Review representation to compare agent terms or choose No Agent before a later deal.",
           "Spend the money in 8 shop aisles: property, vehicles, investments, lifestyle, performance, flex, family, and a shady aisle that only appears once you have something to hide.",
         ],
         subsections: [
@@ -1801,6 +1804,8 @@ export const SOCCER_CONTENT_2: GameContentMap = {
             heading: "Retiring into management, punditry or ownership",
             items: [
               "Retire, on your terms or your body's, collect the legacy verdict, then carry on as a manager, pundit, or owner if you want.",
+              "Want one last year? Eligible players from 30 can open Plan a farewell season, read the terms and confirm their final year. You can still choose to retire immediately.",
+              "If you previously retired from internationals, an eligible National-team comeback lets you make yourself available again after a settled season.",
             ],
           },
         ],
@@ -1819,12 +1824,16 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         items: [
           "The club that raised you always offers you a first team deal when you turn pro, so you can spend a whole career at your boyhood club, and it can call you home again from 27.",
           "Retirement is suggested from age 30 once you drop 10 off your peak or hit 75 overall, forced below 50 overall at 33 or older, and automatic at 45.",
+          "From 30, renewal and transfer pay follow your age, overall and latest playing season. A renewal or extension lasts two years at 30 to 33, then one from 34. Another club keeps the years shown on its offer.",
+          "A money talk still has a 50% chance of success. From 30, success raises or holds your current wage; it does not renew the contract.",
+          "A farewell is one declared final year for eligible players aged 30 to 44. The announcement is saved and cannot be undone or extended. Finish its results and queued ceremonies, then retire. Injuries, bans and forced retirement still apply; appearances and trophies are not promised.",
         ],
       },
       {
         heading: "The World Cup cycle and your legacy score",
         items: [
           "The World Cup comes every 4 years. Top nations qualify about 90 percent of the time, while a small nation mostly needs a world class you.",
+          "After international retirement, eligible players aged 18 to 44 with a recorded cap can return once per recorded season. Existing caps, goals, trophies and history stay the same. Returning opens selection, not an instant call-up or extra caps; injury, bans and failed qualification can still keep you out.",
           "Legacy runs 0 to 100: 90 is GOAT, 80 LEGEND, 70 GREAT, 60 SOLID PRO, and less is JOURNEYMAN. The verdict also knows the overall you started at, so climbing from 54 to 91 scores better than being handed 91 on the creation screen.",
         ],
       },
@@ -1854,6 +1863,8 @@ export const SOCCER_CONTENT_2: GameContentMap = {
             heading: "A pay cut, an injury and a rival's Ballon d'Or",
             items: [
               "A statistically dominant season cannot be snubbed at the Ballon d'Or. Outscore the whole shortlist while winning a major and the trophy is yours, and any 45 goal or 55 goal involvement season finishes on the podium at worst.",
+              "After a settled senior season, ages 19 to 44 can change representation once per recorded season. Agents and No Agent affect future signings and income fees; your current wage, savings and already-paid fees stay the same.",
+              "A transfer priority searches the clubs already eligible for your age and rating. The usual response chance is 50%; a broken appearance promise guarantees a response, but not an offer. The response is saved for that window and cannot be rerolled by reloading. Projected minutes are not guaranteed starts, and club-arranged sales and loans keep their own flow.",
             ],
           },
           {
@@ -1892,6 +1903,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "A dream transfer and a torn hamstring",
         paragraphs: [
           "At 22 a dream club calls with a pay cut, and he signs anyway. A league title lands in year two, then a torn hamstring eats half a season, and a moral dilemma offers a shady shortcut back to fitness. He refuses, banking integrity, while the rival the game spawned at his debut, a preening Brazilian winger, lifts the Ballon d'Or. The snub becomes fuel.",
+          "A separate pay example: with No Agent, at 35 and 76 overall after a playing season rated 7.1, a €1,000 base offer is quoted at €850 a week. Another club keeps the years shown on its offer. If the current wage is €1,000, a successful pay talk holds it at €1,000 instead of cutting it, without renewing the contract.",
         ],
       },
       {
@@ -1925,7 +1937,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Weighing the doping risk, your agent and loyalty",
         items: [
           "The doping storyline boosts every stat but risks a 20 percent failed test each season it runs, and failing means a 1 season ban and a wrecked reputation.",
-          "Your personality and your agent shape the whole run. The Showman grows followers 60 percent faster, The Professor earns brand trust, and super agent Zara Blackwood opens dream club doors for a 10 percent cut.",
+          "Your personality and representation shape the whole run. The Showman grows followers 60 percent faster, The Professor earns brand trust, and super agent Zara Blackwood opens dream club doors for a 10 percent cut.",
           "Loyalty pays: a decade at one club is worth about as much legacy as two and a half league titles.",
         ],
       },

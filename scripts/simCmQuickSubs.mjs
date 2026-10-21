@@ -29,6 +29,12 @@ export function withQuickSubsSeed(seed, fn) {
 function freshCareer(cm) {
   const pre = withQuickSubsSeed(4107, () => cm.startCareer('Everton'));
   pre.squad = pre.squad.map(p => ({ ...p, fitness: 100, morale: 70, injuryWeeks: 0, suspendedMatches: 0 }));
+  /* Round 1331: this file holds the coach to his three change rule (Rounds 1072 and 1146), so its
+     2026-27 Everton plays the base rules: three changes with no stoppage limit, the engine this file was
+     written against, line for line. The coach under five in three is scripts/simCmSubs.mjs (section
+     coach). The native walk loads this save through loadCareer, which drops the key, so the page and its
+     oracle both play the current rule there. */
+  pre.matchRules = 'base';
   return pre;
 }
 // Native QA imports only this helper and seeds the real UI before clicking Quick sim.
@@ -68,11 +74,13 @@ const controls = {
      playNextEntry reaches the coach through `coached`, which Manager Hot Seat
      switches off). Each mutation is the one Round 1072 wrote. */
   loan: { from: "const coming = bench.find(p => injuredFit(p) !== 'keeper') ?? bench[0];", to: 'const coming = bench.find(p => !p.onLoan);', test: 'legal' },
-  fourth: { from: '    if (live.subsUsed >= MAX_HALFTIME_SUBS) return null;', to: '    if (live.subsUsed > MAX_HALFTIME_SUBS) return null;', test: 'legal' },
+  /* Round 1331: the cap is the match's rule now (three here, see freshCareer); same meaning, new line. */
+  fourth: { from: '    if (live.subsUsed >= rule!.subs) return null;', to: '    if (live.subsUsed > rule!.subs) return null;', test: 'legal' },
   red: { from: '    if (reds.length) return null;', to: '    if (false) return null;', test: 'legal' },
   unavailable: { from: '    if (!coming || !isAvailable(coming)) return null;', to: '    if (!coming) return null;', test: 'legal' },
   fresh: { from: 'for (const out of tiringAtHalftime(state)) {', to: 'for (const out of [] as CMPlayer[]) {', test: 'fatigue' },
-  reserve: { from: 'if (state.live!.subsUsed >= MAX_SUBS - 1) break;', to: 'if (state.live!.subsUsed >= MAX_SUBS) break;', test: 'fatigue' },
+  /* Round 1331: the break's keep back reads the match's rule (three here, see freshCareer); same meaning, new line. */
+  reserve: { from: 'if (state.live!.subsUsed >= rule.subs - 1 || (rule.stops !== null && state.live!.subsUsed - atBreak >= 2)) break;', to: 'if (state.live!.subsUsed >= rule.subs || (rule.stops !== null && state.live!.subsUsed - atBreak >= 2)) break;', test: 'fatigue' },
   paused: { from: "      return resumeMatch(coached(state));", to: '      return resumeMatch(state);', test: 'paths' },
   entry: { from: '    state.live = live;\n    return resumeMatch(coached(state));', to: '    state.live = live;\n    return resumeMatch(state);', test: 'manual' },
   immutable: { from: '  let state: CareerState = JSON.parse(JSON.stringify(career));\n  const entry = state.calendar[state.live!.week];', to: '  let state: CareerState = career;\n  const entry = state.calendar[state.live!.week];', test: 'immutable' },

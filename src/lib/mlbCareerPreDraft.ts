@@ -14,7 +14,7 @@
    left out: it would not confirm twice. The real draft lottery (since 2023)
    is not modelled; the order is inverse record. */
 
-import { mlbEraById, mlbEraTeamIds, mlbTeamLabelOf } from './mlbMyCareer';
+import { MLB_PITCHERS, mlbEraById, mlbEraTeamIds, mlbTeamLabelOf, type MlbCareerPos } from './mlbMyCareer';
 import type { PreDraftDescriptor, PreDraftStat } from './careerPreDraft';
 
 /** 2026 draft slot values in dollars, picks 1 to 25, two sources. */
@@ -83,6 +83,12 @@ export function mlbPreDraftDescriptor(eraId?: string): PreDraftDescriptor {
     ],
     showcaseName: 'Pre draft showcase',
     drills: ['Sixty yard dash', 'Live batting practice', 'Bullpen session', 'Defensive drills'],
+    /* Round 1319: the stations a player can run himself, in both eras. Plain
+       names: they claim no real test (docs/audits/ROUND-1319-NOTES.md). A
+       pitcher runs one: hitting his spots in order, the cone run. */
+    stations: pos => (MLB_PITCHERS.includes(pos as MlbCareerPos)
+      ? [{ name: 'Hit your spots', kind: 'cones' }]
+      : [{ name: 'Burst test', kind: 'burst' }, { name: 'Agility run', kind: 'cones' }]),
     statLine: (perf, rng, pos) => mlbStatLine(perf, rng, pos),
     choices: [
       {

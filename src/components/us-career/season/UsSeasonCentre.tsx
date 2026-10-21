@@ -15,10 +15,12 @@
    failing to load. */
 import { Component, useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { UsCareerCore, UsCareerSeason, UsCareerSport } from '@/lib/usCareerSport';
-import { deriveSeason, type DerivedSeason } from '@/lib/season/core';
+import { deriveSeason, type DerivedGame, type DerivedSeason } from '@/lib/season/core';
 import { buildUsSeason, usPlayoffPath, type UsPlayoffPath, type UsRow, type UsSeasonBind, type UsSeasonCtx } from '@/lib/season/us';
 import { SeasonCentre, type CentreModel } from '@/components/season-centre/SeasonCentre';
 import { CentreTile } from '@/components/season-centre/CentreTile';
+import { MiniBasketballCourt } from '@/components/us-career/season/MiniBasketballCourt';
+import type { ClockStageAt } from '@/components/season-centre/MatchClock';
 
 export interface UsSeasonCentreProps {
   sport: UsCareerSport;
@@ -100,6 +102,7 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
       soFar: so => view.soFar(so, pos),
       half: so => view.half(so, pos, row),
       bucket: () => '',
+      ...(bind.slug === 'nba' ? { pitch: (g: DerivedGame, at: ClockStageAt) => <MiniBasketballCourt game={g} at={at} usName={ctx.teamLabel} themName={s.labels[g.opp]?.name ?? view.words.unnamed} /> } : {}),
     },
     copy: view.copy,
     helpKey: `seasonCentre:help:${bind.slug}`,

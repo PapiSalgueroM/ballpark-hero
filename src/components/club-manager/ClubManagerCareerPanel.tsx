@@ -10,11 +10,29 @@ import ManagerAvatar from '@/components/club-manager/ManagerAvatar';
 import EditManagerSheet from '@/components/club-manager/EditManagerSheet';
 import { huntBusy } from '@/lib/clubManagerJobHunt';
 import { BACKGROUND_TREE, TREE_INFO } from '@/lib/clubManagerXp';
+import { highestScoringOf, scoringOutcome } from '@/lib/clubManagerRecords';
+import CmRetireDoor from '@/components/club-manager/CmRetireDoor';
 
-export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
+/* Round 1325: a score printed low number first. The save has kept the worst
+   defeat as the other side's goals first since Round 71, so "3-0 vs Manchester
+   City" read like a win. A defeat the engine keeps is never a shootout, so our
+   goals are always the lower number, whichever order a save holds them in.
+   Anything that is not two whole numbers comes back exactly as it was. */
+export function lowFirst(score: string): string {
+  const parts = score.split('-');
+  if (parts.length !== 2 || parts.some(x => x.trim() === '')) return score;
+  const [a, b] = parts.map(Number);
+  if (!Number.isFinite(a) || !Number.isFinite(b)) return score;
+  return `${Math.min(a, b)}-${Math.max(a, b)}`;
+}
+
+export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen }: {
   c: CareerState;
-  g: Pick<ReturnType<typeof useClubManager>, 'resignNation' | 'acceptNation' | 'answerApproach' | 'applyJob' | 'joinNow' | 'joinSummer' | 'updateManager'>;
+  /* Round 1343: retire is optional, and the door is drawn only when it is passed. */
+  g: Pick<ReturnType<typeof useClubManager>, 'resignNation' | 'acceptNation' | 'answerApproach' | 'applyJob' | 'joinNow' | 'joinSummer' | 'updateManager'>
+    & Partial<Pick<ReturnType<typeof useClubManager>, 'retire'>>;
   nationOffer: ReturnType<typeof nationOfferFor>;
+  onRetireOpen?: () => void;
 }) {
   /* Round 965: the Edit manager sheet, and for a Skip career the way to name
      the man in the dugout after all. */
@@ -46,7 +64,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                     </p>
                     <button
                       onClick={g.resignNation}
-                      className="mt-2 w-full py-2 rounded-lg bg-secondary text-foreground text-xs font-bold hover:opacity-90 transition-opacity"
+                      className="mt-2 w-full min-h-11 py-2 rounded-lg bg-secondary text-foreground text-xs font-bold hover:opacity-90 transition-opacity"
                     >
                       Step down from the national team
                     </button>
@@ -58,7 +76,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                     <p className="text-[11px] text-muted-foreground mb-2">{nationOffer.blurb}</p>
                     <button
                       onClick={g.acceptNation}
-                      className="w-full py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
+                      className="w-full min-h-11 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
                     >
                       🌐 Take the {nationOffer.nation} job as well
                     </button>
@@ -78,14 +96,14 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                       {!huntBusy(c) && (
                         <button
                           onClick={() => g.answerApproach(true)}
-                          className="flex-1 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
+                          className="flex-1 min-h-11 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
                         >
                           🤝 Shake hands for the summer
                         </button>
                       )}
                       <button
                         onClick={() => g.answerApproach(false)}
-                        className="flex-1 py-2 rounded-lg border border-border bg-card text-xs font-bold text-foreground hover:border-primary transition-colors"
+                        className="flex-1 min-h-11 py-2 rounded-lg border border-border bg-card text-xs font-bold text-foreground hover:border-primary transition-colors"
                       >
                         Turn them down
                       </button>
@@ -102,7 +120,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                 {!c.sacked && !c.wilderness && (
                   <JobHuntCard c={c} onApply={g.applyJob} onJoinNow={g.joinNow} onJoinSummer={g.joinSummer} />
                 )}
-                <div className="bg-card border border-border rounded-xl p-3">
+                <div data-cm-career-card className="bg-card border border-border rounded-xl p-3">
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">💼 Manager career</div>
                   {/* Round 303: the created manager's card line. Absent spec, the
                       panel reads exactly as it always has. */}
@@ -126,7 +144,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                       <button
                         type="button"
                         onClick={() => setEditing(true)}
-                        className="shrink-0 inline-flex items-center gap-1 rounded-full border border-border px-2 py-1 text-[10px] font-bold text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
+                        className="shrink-0 inline-flex min-h-11 items-center gap-1 rounded-full border border-border px-3 py-1 text-xs font-bold text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
                       >
                         <Pencil className="w-3 h-3" /> Edit
                       </button>
@@ -136,7 +154,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                       type="button"
                       data-name-manager
                       onClick={() => setEditing(true)}
-                      className="w-full mb-2 inline-flex items-center justify-center gap-1.5 rounded-lg border border-dashed border-border px-2.5 py-2 text-[11px] font-bold text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
+                      className="w-full min-h-11 mb-2 inline-flex items-center justify-center gap-1.5 rounded-lg border border-dashed border-border px-2.5 py-2 text-xs font-bold text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
                     >
                       <UserPlus className="w-3.5 h-3.5" /> Name your manager
                     </button>
@@ -156,12 +174,33 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                       <div className="text-[9px] text-muted-foreground">Trophies</div>
                     </div>
                   </div>
-                  <div className="space-y-0.5 text-[10px] text-muted-foreground">
+                  <ManagerRecordLines c={c} />
+                  {g.retire && !c.retired && !c.live && (
+                    <div className="mt-3"><CmRetireDoor c={c} retire={g.retire} onOpen={onRetireOpen} /></div>
+                  )}
+                </div>
+                </>
+  );
+}
+
+/* Round 1343: the record lines, one list for the Manager panel and the farewell. Text unchanged from the panel,
+   plus the highest scoring game after the worst defeat. */
+export function ManagerRecordLines({ c, ended = false }: { c: CareerState; /** On the farewell: no first match is coming. */ ended?: boolean }) {
+  const high = highestScoringOf(c);
+  const counted = high?.missed ? Math.max(0, c.careerStats.played - high.missed) : 0;
+  return (
+                  <div data-cm-career-lines className="space-y-0.5 text-xs text-muted-foreground">
                     {c.careerStats.biggestWin && (
                       <p>🎉 Biggest win: <span className="text-foreground font-semibold">{c.careerStats.biggestWin.score}</span> vs {c.careerStats.biggestWin.opp}</p>
                     )}
                     {c.careerStats.biggestDefeat && (
-                      <p>💀 Worst defeat: <span className="text-foreground font-semibold">{c.careerStats.biggestDefeat.score}</span> vs {c.careerStats.biggestDefeat.opp}</p>
+                      <p data-cm-worst-defeat>💀 Worst defeat: <span className="text-foreground font-semibold">{lowFirst(c.careerStats.biggestDefeat.score)}</span> vs {c.careerStats.biggestDefeat.opp}</p>
+                    )}
+                    {high && (
+                      <p data-cm-highest-scoring>⚽ Highest scoring game: <span className="text-foreground font-semibold">{high.score}</span>{SCORING_WORD[scoringOutcome(high)]} vs {high.opp}{SCORING_AFTER[scoringOutcome(high)]}, <span className="whitespace-nowrap">Season {formatNumber(high.season)}</span></p>
+                    )}
+                    {high && (high.missed ?? 0) >= 1 && (
+                      <p data-cm-highest-scoring-missed>Counted from {formatNumber(counted)} of your {formatNumber(c.careerStats.played)} matches. Your save no longer keeps {high.missed === 1 ? 'the score of the other one' : `the scores of the other ${formatNumber(high.missed!)}`}.</p>
                     )}
                     {c.careerStats.mostExpensiveBuy && (
                       <p>💸 Priciest buy: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveBuy.name}</span> ({money(c.careerStats.mostExpensiveBuy.fee, c)})</p>
@@ -172,9 +211,12 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                     {(c.careerStats.clubsManaged?.length ?? 0) > 1 && (
                       <p>🧳 Clubs managed: <span className="text-foreground">{c.careerStats.clubsManaged!.join(', ')}</span></p>
                     )}
-                    {c.careerStats.played === 0 && <p>Take charge of your first match and the numbers start here.</p>}
+                    {c.careerStats.played === 0 && <p>{ended ? 'You retired before your first match, so there are no numbers to keep.' : 'Take charge of your first match and the numbers start here.'}</p>}
                   </div>
-                </div>
-                </>
   );
 }
+
+/* The word after the score comes from the score (a res that contradicts it gets none); res only says who won a
+   level shootout. Never "2-5 win". */
+const SCORING_WORD: Record<ReturnType<typeof scoringOutcome>, string> = { win: ' win', loss: ' loss', draw: ' draw', pensWon: '', pensLost: '', plain: '' };
+const SCORING_AFTER: Record<ReturnType<typeof scoringOutcome>, string> = { win: '', loss: '', draw: '', pensWon: ', won on penalties', pensLost: ', lost on penalties', plain: '' };

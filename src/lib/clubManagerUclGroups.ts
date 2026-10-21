@@ -165,10 +165,14 @@ function miniLeague(
   return line;
 }
 
+/** How two names are put in order when nothing else splits them. */
+type NameOrder = (a: string, b: string) => number;
+const byLocale: NameOrder = (a, b) => a.localeCompare(b);
+
 /** Overall goal difference, then overall goals scored, then the name. */
-function byOverall(run: TableRow[]): TableRow[] {
+function byOverall(run: TableRow[], byName: NameOrder = byLocale): TableRow[] {
   return [...run].sort((a, b) =>
-    (b.gf - b.ga) - (a.gf - a.ga) || b.gf - a.gf || a.club.localeCompare(b.club));
+    (b.gf - b.ga) - (a.gf - a.ga) || b.gf - a.gf || byName(a.club, b.club));
 }
 
 /**
@@ -179,10 +183,10 @@ function byOverall(run: TableRow[]): TableRow[] {
  * goes straight to the overall numbers.
  */
 function orderHeadToHead(
-  run: TableRow[], pairs: Record<string, [number, number]>, full: boolean,
+  run: TableRow[], pairs: Record<string, [number, number]>, full: boolean, byName: NameOrder = byLocale,
 ): TableRow[] {
   const line = miniLeague(run, pairs);
-  if (!line) return byOverall(run);
+  if (!line) return byOverall(run, byName);
   const key = (r: TableRow): number[] => {
     const h = line.get(r.club)!;
     return full ? [h.pts, h.gd, h.gf, h.away] : [h.pts, h.gd, h.away];
@@ -191,7 +195,7 @@ function orderHeadToHead(
     const ka = key(a);
     const kb = key(b);
     for (let i = 0; i < ka.length; i++) if (ka[i] !== kb[i]) return kb[i] - ka[i];
-    return a.club.localeCompare(b.club);
+    return byName(a.club, b.club);
   };
   const sorted = [...run].sort(cmp);
   const same = (a: TableRow, b: TableRow): boolean => {
@@ -206,8 +210,8 @@ function orderHeadToHead(
     while (j < sorted.length && same(sorted[j], sorted[i])) j += 1;
     const sub = sorted.slice(i, j);
     if (sub.length === 1) out.push(sub[0]);
-    else if (full && sub.length < run.length) out.push(...orderHeadToHead(sub, pairs, full));
-    else out.push(...byOverall(sub));
+    else if (full && sub.length < run.length) out.push(...orderHeadToHead(sub, pairs, full, byName));
+    else out.push(...byOverall(sub, byName));
     i = j;
   }
   return out;
@@ -217,11 +221,18 @@ function orderHeadToHead(
  * One group table: points first, then each run of level clubs in the order
  * that world uses. Pure, and a pure function of the rows and the results
  * handed in, so a harness can put a crafted table through it.
+ *
+ * Round 1347: `byName` is how two clubs level on everything are listed. It is
+ * the device's own order (localeCompare) unless a caller hands in another, and
+ * every caller before that round hands in nothing. The world's Champions League
+ * (src/lib/worldCompetition.ts) hands in plain text order, because its tables
+ * are derived on every read and must order the same on every device, the way
+ * Release AV made the league phase table (uclLeaguePhase.ts, byText).
  */
 export function sortedUclGroupTable(
-  rows: TableRow[], rule: UclGroupRule, pairs?: Record<string, [number, number]>,
+  rows: TableRow[], rule: UclGroupRule, pairs?: Record<string, [number, number]>, byName: NameOrder = byLocale,
 ): TableRow[] {
-  const byPts = [...rows].sort((a, b) => b.pts - a.pts || a.club.localeCompare(b.club));
+  const byPts = [...rows].sort((a, b) => b.pts - a.pts || byName(a.club, b.club));
   const out: TableRow[] = [];
   let i = 0;
   while (i < byPts.length) {
@@ -229,8 +240,8 @@ export function sortedUclGroupTable(
     while (j < byPts.length && byPts[j].pts === byPts[i].pts) j += 1;
     const run = byPts.slice(i, j);
     if (run.length === 1) out.push(run[0]);
-    else if (rule === 'leaguePhase') out.push(...byOverall(run));
-    else out.push(...orderHeadToHead(run, pairs ?? {}, rule === 'h2hFull'));
+    else if (rule === 'leaguePhase') out.push(...byOverall(run, byName));
+    else out.push(...orderHeadToHead(run, pairs ?? {}, rule === 'h2hFull', byName));
     i = j;
   }
   return out;

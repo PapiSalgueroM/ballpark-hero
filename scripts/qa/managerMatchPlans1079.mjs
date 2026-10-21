@@ -239,7 +239,8 @@ try {
     const collectDocument=async stage=>{
       const data=await page.evaluate(()=>({events:window.__planEvents,writes:window.__planWrites,removals:window.__planRemovals,storage:{...localStorage}}));
       for(const [key,value]of Object.entries(protectedStorage))assert.equal(data.storage[key],value,'Unrelated saved progress is byte-exact');
-      for(const write of data.writes)assert(write.key===engine.SAVE_KEY||/^lswt-/.test(write.key),`Only actual manager autosave or auth probe may write: ${write.key}`);
+      /* Round 1323: every manager autosave also moves its generation in the save fence's own key (src/lib/saveFence.ts, one tab wins), so that one key, and no other, joins the save and the auth probe. */
+      for(const write of data.writes)assert(write.key===engine.SAVE_KEY||write.key==='dukb-fence:'+engine.SAVE_KEY||/^lswt-/.test(write.key),`Only actual manager autosave, its fence or auth probe may write: ${write.key}`);
       assert(data.removals.every(key=>/^lswt-/.test(key)),'No career or score removal');
       const file=`${id}-${stage}-save.json`;fs.writeFileSync(path.join(OUT,file),data.storage[engine.SAVE_KEY]);
       row.events.push(...data.events);row.documents.push({stage,savedFile:file,savedSha256:digest(data.storage[engine.SAVE_KEY]),writes:data.writes.map(write=>({key:write.key,bytes:Buffer.byteLength(write.value),sha256:digest(write.value)})),removals:data.removals,otherStorage:Object.fromEntries(Object.entries(data.storage).filter(([key])=>key!==engine.SAVE_KEY))});save();

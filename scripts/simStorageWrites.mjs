@@ -18,7 +18,8 @@
  * WHAT IT HOLDS, on the TypeScript syntax tree (code, never comments or
  * strings):
  *   1. Every call of .setItem(...) in src outside the tests sits inside the
- *      try block of its own function, or is on the short ALLOWED list with
+ *      try block of its own function, calls an unshadowed safeStorage import,
+ *      or is on the short ALLOWED list with
  *      the reason it is safe and a check that the reason is still true.
  *      A try around the place a function is DEFINED does not count: it has
  *      to be between the call and the function it runs in.
@@ -62,7 +63,8 @@
  * seam 13 write, remove or clear calls, none reachable as it loads, 4 of
  * them on the probe key, 2 in each of the two functions that may. The header
  * is refreshed by hand; the summary line prints the live numbers. Each
- * control turns one section red, except probe, which turns two (4 and 5: a
+ * control turns one section red, except nocatch (1 and 7: an unsafe writer
+ * also loses its listed refusal catch) and probe, which turns two (4 and 5: a
  * probe written in resolve runs as the seam loads AND is a probe outside the
  * two functions that may write one).
  *
@@ -73,8 +75,14 @@
  *   SIM_STORAGE_WRITES_CONTROL=client   puts `storage: localStorage` back.
  *   SIM_STORAGE_WRITES_CONTROL=caller   takes the try off one writeIndex call,
  *                                        so the ALLOWED reason stops being true.
- *   SIM_STORAGE_WRITES_CONTROL=nocatch  turns the cookie banner's try and catch
+ *   SIM_STORAGE_WRITES_CONTROL=nocatch  turns the storage seam's try and catch
  *                                        into a try and finally, which still throws.
+ *   SIM_STORAGE_WRITES_CONTROL=rawconsent changes a safe consent write to a
+ *                                        bare native write.
+ *   SIM_STORAGE_WRITES_CONTROL=shadowseam shadows the safe import with native
+ *                                        storage inside the consent writer.
+ *   SIM_STORAGE_WRITES_CONTROL=seamraw  rebinds the seam export to native
+ *                                        storage, so safe imports cannot qualify.
  *   SIM_STORAGE_WRITES_CONTROL=probe    puts the write probe back in resolve,
  *                                        which runs as the seam loads.
  *   SIM_STORAGE_WRITES_CONTROL=recheck  (Round 1144) takes "the seam already
@@ -201,10 +209,10 @@ const fail = msg => { failures += 1; console.log('   FAIL  ' + msg); };
 
 /** Files the control rewrites, in memory only. */
 const overrides = new Map();
-function control(file, from, to) {
+function control(file, from, to, unique = false) {
   const full = path.join(ROOT, file);
   const text = fs.readFileSync(full, 'utf8');
-  if (!text.includes(from)) {
+  if (!text.includes(from) || (unique && text.split(from).length !== 2)) {
     console.error(`REFUSING TO RUN: control ${CONTROL} wants to change "${from}" in ${file} and it is not there.`);
     process.exit(2);
   }
@@ -215,7 +223,10 @@ if (CONTROL === 'unguard') control('src/pages/Footle.tsx', "safeSetItem('footle-
 else if (CONTROL === 'order') control('src/main.tsx', 'import "./lib/safeStorage";', 'import "./lib/translateGuard";');
 else if (CONTROL === 'client') control('src/integrations/supabase/client.ts', 'storage: safeLocalStorage,', 'storage: localStorage,');
 else if (CONTROL === 'caller') control('src/lib/clubManagerSlots.ts', 'try { writeIndex(from); } catch {', '{ writeIndex(from); } {');
-else if (CONTROL === 'nocatch') control('src/components/CookieConsent.tsx', "try { safeLocalStorage.setItem('cookie-consent', choice); } catch { /* see above */ }", "try { safeLocalStorage.setItem('cookie-consent', choice); } finally { /* see above */ }");
+else if (CONTROL === 'nocatch') control('src/lib/safeStorage.ts', 'try { below.setItem(k, v); kept.delete(k); return; } catch { onRefused?.(roomNeeded(below, k, v)); }', 'try { below.setItem(k, v); kept.delete(k); return; } finally { onRefused?.(roomNeeded(below, k, v)); }', true);
+else if (CONTROL === 'rawconsent') control('src/lib/consentPreferences.ts', 'safeLocalStorage.setItem(CONSENT_KEY, JSON.stringify(next));', 'window.localStorage.setItem(CONSENT_KEY, JSON.stringify(next));', true);
+else if (CONTROL === 'shadowseam') control('src/lib/consentPreferences.ts', 'function writeConsentPreferences(purposes: ConsentPurposes): ConsentPreferences {', 'function writeConsentPreferences(purposes: ConsentPurposes, safeLocalStorage = window.localStorage): ConsentPreferences {', true);
+else if (CONTROL === 'seamraw') control('src/lib/safeStorage.ts', 'export const safeLocalStorage: Storage = local.storage;', 'export const safeLocalStorage: Storage = window.localStorage;', true);
 else if (CONTROL === 'probe') control('src/lib/safeStorage.ts', 'real.getItem(PROBE_KEY);', "real.setItem(PROBE_KEY, '1'); real.removeItem(PROBE_KEY);");
 else if (CONTROL === 'recheck') control('src/lib/safeStorage.ts', 'if (refusedWrite && !raw && local.real) {', 'if (!raw && local.real) {');
 else if (CONTROL === 'once') control('src/lib/safeStorage.ts', 'if (!probedWrites && !raw && local.real) {', 'if (!raw && local.real) {');
@@ -274,6 +285,68 @@ function calls(sf, test) {
   return found;
 }
 const lineOf = (sf, n) => sf.getLineAndCharacterOfPosition(n.getStart(sf)).line + 1;
+/** Only the actual nonthrowing seam, never an object with the same spelling.
+ *  A second binding anywhere in the file fails closed rather than guessing
+ *  which scope owns the receiver. The seam's native writes remain audited. */
+function safeSeamImports(sf) {
+  const names = new Set();
+  for (const statement of sf.statements) {
+    if (!ts.isImportDeclaration(statement) || !ts.isStringLiteral(statement.moduleSpecifier)
+      || statement.moduleSpecifier.text !== '@/lib/safeStorage' || statement.importClause?.isTypeOnly) continue;
+    const bindings = statement.importClause?.namedBindings;
+    if (!bindings || !ts.isNamedImports(bindings)) continue;
+    for (const item of bindings.elements) {
+      if (!item.isTypeOnly && (item.propertyName ?? item.name).text === 'safeLocalStorage') names.add(item.name.text);
+    }
+  }
+  const counts = new Map([...names].map(name => [name, 0]));
+  const walk = node => {
+    if ((ts.isVariableDeclaration(node) || ts.isParameter(node) || ts.isBindingElement(node)
+      || ts.isImportSpecifier(node) || ts.isImportClause(node) || ts.isNamespaceImport(node)
+      || ts.isFunctionDeclaration(node) || ts.isFunctionExpression(node)
+      || ts.isClassDeclaration(node) || ts.isClassExpression(node) || ts.isEnumDeclaration(node))
+      && node.name && ts.isIdentifier(node.name) && counts.has(node.name.text)) {
+      counts.set(node.name.text, counts.get(node.name.text) + 1);
+    }
+    ts.forEachChild(node, walk);
+  };
+  walk(sf);
+  return new Set([...names].filter(name => counts.get(name) === 1));
+}
+/** The imported name must still lead to the caught memory-backed writer.
+ *  The raw browser branch is reserved for the existing explicit test switch. */
+function safeSeamBindingHolds() {
+  const sf = parse(path.join(SRC, 'lib', 'safeStorage.ts'));
+  const nodes = [];
+  const walk = node => { nodes.push(node); ts.forEachChild(node, walk); };
+  walk(sf);
+  const initializer = name => {
+    const found = nodes.filter(n => ts.isVariableDeclaration(n) && ts.isIdentifier(n.name) && n.name.text === name);
+    return found.length === 1 ? found[0].initializer : undefined;
+  };
+  const text = node => node?.getText(sf).replace(/\s+/g, '');
+  const fn = name => sf.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+  const ownReturns = owner => nodes.filter(n => {
+    if (!ts.isReturnStatement(n)) return false;
+    let parent = n.parent;
+    while (parent && !isFunction(parent)) parent = parent.parent;
+    return parent === owner;
+  });
+  const resolver = fn('resolve'), constructor = fn('createMemoryStorage');
+  const returnedStorage = ownReturns(resolver).map(n => n.expression && ts.isObjectLiteralExpression(n.expression)
+    ? n.expression.properties.find(p => ts.isPropertyAssignment(p) && p.name.getText(sf) === 'storage')?.initializer : undefined);
+  const store = initializer('store');
+  const writer = store && ts.isObjectLiteralExpression(store)
+    ? store.properties.find(n => ts.isMethodDeclaration(n) && n.name.getText(sf) === 'setItem') : undefined;
+  const writes = writer ? calls(writer, n => ts.isPropertyAccessExpression(n.expression) && n.expression.name.text === 'setItem') : [];
+  const returns = ownReturns(constructor);
+  return text(initializer('safeLocalStorage')) === 'local.storage'
+    && text(initializer('local')) === "raw?{storage:window.localStorage,real:null,blocked:false}:resolve('localStorage',noteRefusedWrite)"
+    && returnedStorage.length === 2 && text(returnedStorage[0]) === 'createMemoryStorage(real,onRefused)'
+    && text(returnedStorage[1]) === 'memory' && text(initializer('memory')) === 'createMemoryStorage()'
+    && returns.length === 1 && text(returns[0].expression) === 'storeasStorage'
+    && writes.length === 1 && guarded(writes[0]);
+}
 /** Every file under src that ships: no test, no spec, no outcomes file and
  *  nothing under a test folder. A path is put on forward slashes before the
  *  filter reads it, so this PC and the Linux runner scan the same files
@@ -314,25 +387,35 @@ const ALLOWED = [
   },
 ];
 
-console.log('1. every storage write is inside a try of its own function, or allowed with a reason that still holds');
+let consentControlFired = false;
+console.log('1. every storage write is caught, uses the unshadowed safe seam, or is allowed with a reason that still holds');
 {
   const files = sourceFiles();
+  const seamBinding = safeSeamBindingHolds();
+  if (!seamBinding) fail('safeLocalStorage no longer resolves to the caught memory-backed writer; imported calls cannot be exempted');
   let total = 0;
   let inTry = 0;
+  let viaSeam = 0;
   let allowed = 0;
   let withWrites = 0;
   const offenders = [];
   for (const full of files) {
     if (!read(full).includes('.setItem(')) continue;
     const sf = parse(full);
+    const safeImports = seamBinding ? safeSeamImports(sf) : new Set();
     const writes = calls(sf, n => ts.isPropertyAccessExpression(n.expression) && n.expression.name.text === 'setItem');
     if (!writes.length) continue;
     withWrites += 1;
     for (const w of writes) {
       total += 1;
       if (guarded(w)) { inTry += 1; continue; }
+      if (ts.isIdentifier(w.expression.expression) && safeImports.has(w.expression.expression.text)) { viaSeam += 1; continue; }
       const entry = ALLOWED.find(a => a.file === rel(full) && a.owner === ownerName(w));
-      if (!entry) { offenders.push(`${rel(full)}:${lineOf(sf, w)}  ${w.getText(sf).slice(0, 80)}`); continue; }
+      if (!entry) {
+        offenders.push(`${rel(full)}:${lineOf(sf, w)}  ${w.getText(sf).slice(0, 80)}`);
+        if (rel(full) === 'src/lib/consentPreferences.ts' && ownerName(w) === 'writeConsentPreferences') consentControlFired = true;
+        continue;
+      }
       const broken = entry.holds(sf, w);
       if (broken) offenders.push(`${rel(full)}:${lineOf(sf, w)}  allowed because ${entry.why}, but ${broken}`);
       else allowed += 1;
@@ -343,7 +426,7 @@ console.log('1. every storage write is inside a try of its own function, or allo
     fail(`${offenders.length} storage write(s) that can throw into a render, an effect or a handler:`);
     for (const o of offenders) console.log('           ' + o);
     console.log('           use safeSetItem from @/lib/safeStorage, or guard the write where it is made');
-  } else ok(`${total} .setItem calls in ${withWrites} files: ${inTry} inside a try of their own function, ${allowed} allowed, 0 that can throw`);
+  } else ok(`${total} .setItem calls in ${withWrites} files: ${inTry} inside a try of their own function, ${viaSeam} through the unshadowed safe seam, ${allowed} allowed, 0 that can throw`);
 }
 
 console.log('2. the storage seam is the first thing src/main.tsx imports');
@@ -467,6 +550,10 @@ const NOTHING_HELD = [
     why: 'recovery of a save that would not open: each answers its caller and leaves the stored bytes where they were (Round 1219 moved the guarded write of moveAside into copyAside)' },
   { file: 'src/lib/saveKeeper.ts', keys: ['write:stageRestore', 'write:applyPending'],
     why: 'a put back that cannot be staged or applied changes nothing: the save stays at its key, the backup stays kept aside, and the card says so (Round 1219)' },
+  { file: 'src/lib/cmSavePointsStore.ts', keys: ['write:writePointsIndex'],
+    why: 'the save points index (Round 1513): a refused write answers false, the screen says nothing was saved, and the career is not touched' },
+  { file: 'src/lib/cmSavePoints.ts', keys: ['write:writePoint', 'keeps:writePoint', 'keeps:writePointsIndex', 'write:stageCopy', 'write:stageCopy#2'],
+    why: 'a save point the browser refused, or a restore it would not stage, is taken back out and the screen says so (Round 1513): the career and the other points are untouched, and nothing is left waiting in the page' },
   { file: 'src/lib/completions.ts', keys: ['write:getGuestHandle'],
     why: 'a guest handle kept for the visit when it cannot be stored: a name, not progress' },
   /* a flag that says "seen", not a save */
@@ -474,8 +561,8 @@ const NOTHING_HELD = [
     why: 'the rules seen flag could not be read or written, so the rules show again' },
   { file: 'src/components/conquest/ImperialismBoardShared.tsx', keys: ['write:(anonymous)'],
     why: 'the help seen flag: refused, the help does not open by itself' },
-  { file: 'src/components/soccer-career/SquadSheet.tsx', keys: ['write:helpSeen', 'keeps:helpSeen'],
-    why: 'the help seen flag: a browser that refuses storage sees the help again' },
+  { file: 'src/components/soccer-career/SquadSheet.tsx', keys: ['write:markHintShown'],
+    why: 'the hint seen flag: a browser that refuses storage sees the one line pointer again' },
   /* the game refused the action instead of keeping it */
   { file: 'src/lib/clubManagerSlots.ts', keys: ['write:switchSlot', 'write:switchSlot#2'],
     why: 'a refused switch is rolled back step by step and answers false (step 1 parks the outgoing career, step 3 seats the incoming one, each write with its own undo); the outgoing career never left its key' },
@@ -485,6 +572,9 @@ const NOTHING_HELD = [
     why: 'the hand over to Club Manager answers "failed" and writes nothing; the run stays in the hot seat save' },
   { file: 'src/lib/rankEmCircuit.ts', keys: ['write:saveCircuit'],
     why: 'answers false and holds nothing itself; RankEm.tsx keeps the answer and is listed' },
+  /* Round 1330: the soccer save's write runs inside saveFence.write */
+  { file: 'src/pages/SoccerCareer.tsx', keys: ['write:saveCareer'],
+    why: 'answers false and holds nothing itself; saveFence.write hands the answer back to saveCurrentCareer, which keeps it as state:saveFailed, listed under OWED' },
   { file: 'src/lib/squadDeal.ts', keys: ['write:saveScore'],
     why: 'a refused leaderboard row is dropped and the stored board is answered; nothing waits for a retry' },
   { file: 'src/hooks/useHofOrBust.ts', keys: ['keeps:safeSetItem'],
@@ -798,9 +888,14 @@ let owedTotal = 0;
 }
 
 const AIMED = ['unnamed', 'newsite', 'stale', 'deadhold', 'partial', 'second', 'twolists', 'gone', 'floor'].includes(CONTROL);
+const CONSENT_AIMED = ['rawconsent', 'shadowseam', 'seamraw'].includes(CONTROL);
+if (CONSENT_AIMED && !consentControlFired) {
+  console.log(`\nsimStorageWrites (control ${CONTROL}): DID NOT FIRE. Section 1 never rejected the consent writer, so other failures prove nothing`);
+  process.exit(3);
+}
 if (AIMED && !aim.fired) {
   console.log(`\nsimStorageWrites (control ${CONTROL}): DID NOT FIRE. Section 7 never named ${aim.what}, so its green proves nothing (${failures} failed for another reason)`);
   process.exit(3);
 }
-console.log(`\nsimStorageWrites${CONTROL ? ` (control ${CONTROL})` : ''}: ${failures === 0 ? 'all green' : failures + ' failed'}${AIMED ? `, the control FIRED on ${aim.what}` : ''} (owed: ${owedTotal})`);
+console.log(`\nsimStorageWrites${CONTROL ? ` (control ${CONTROL})` : ''}: ${failures === 0 ? 'all green' : failures + ' failed'}${AIMED ? `, the control FIRED on ${aim.what}` : ''}${CONSENT_AIMED ? ', the control FIRED on the consent writer' : ''} (owed: ${owedTotal})`);
 process.exit(failures ? 1 : 0);
