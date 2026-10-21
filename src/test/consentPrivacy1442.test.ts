@@ -83,8 +83,21 @@ describe('the privacy-safe paused analytics release', () => {
     expect(document.querySelector('script[src*="googletagmanager.com/gtag/js"]')).toBeNull();
     expect(Reflect.get(window, 'ga-disable-G-KZQK2G68YC')).toBe(true);
     const commands = window.dataLayer!.map(item => Array.from(item as ArrayLike<unknown>));
-    expect(commands.at(-1)).toEqual(['consent', 'update', {
+    expect(commands[commands.length - 1]).toEqual(['consent', 'update', {
       ad_storage: 'denied', analytics_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
     }]);
   });
-});
+  it('does not crash optional-service cleanup when the browser denies cookie access', () => {
+    const descriptor = Object.getOwnPropertyDescriptor(document, 'cookie');
+    try {
+      Object.defineProperty(document, 'cookie', {
+        configurable: true,
+        get: () => { throw new DOMException('Fixture cookie access denied', 'SecurityError'); },
+        set: () => { throw new DOMException('Fixture cookie write denied', 'SecurityError'); },
+      });
+      expect(() => stopRevokedServices({ advertising: true, analytics: true }, { advertising: false, analytics: false })).not.toThrow();
+    } finally {
+      if (descriptor) Object.defineProperty(document, 'cookie', descriptor);
+      else Reflect.deleteProperty(document, 'cookie');
+    }
+  });});

@@ -45,7 +45,7 @@ const CONTROL_FAILURES = {
   'ad-status-behavior': ['AdBanner does not read and watch data-ad-status, so it cannot know whether an ad ever arrived'],
   'snapshot-loader': ['public/privacy/index.html contains an executable adsbygoogle.js loader'],
   'placeholder-slot': ['src/pages/Footle.tsx uses AdBanner slot 1234567890 instead of 7540487748'],
-  'missing-slot': ['found 76 source AdBanner callers, expected exactly 77'],
+  'missing-slot': ['found 79 source AdBanner callers, expected exactly 80'],
   'privacy-npa-bridge': ["the privacy policy does not distinguish Google's general disclosure from this site's non-personalized ad request"],
   'delayed-consent': ['AdBanner does not read stored consent before its first render'],
 };

@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { loadConsentedScripts, stopRevokedServices } from '@/lib/consentedScripts';
 import {
   ANALYTICS_READY, CONSENT_CHANGED_EVENT, CONSENT_EFFECTIVE_CHANGED_EVENT, CONSENT_KEY, CONSENT_MAX_AGE_MS, CONSENT_OPEN_EVENT,
-  canReloadAfterWithdrawal, enforceGlobalPrivacyControl, getEffectiveConsent, isGlobalPrivacyControlEnabled,
-  migrateConsentPreferences, readConsentPreferences, saveConsentPreferences, synchronizeConsentStorageEvent,
+  canReloadAfterWithdrawal, enforceGlobalPrivacyControl, getEffectiveConsent, getPendingConsentWithdrawal, isGlobalPrivacyControlEnabled,
+  migrateConsentPreferences, readConsentPreferences, saveConsentPreferences, setPendingConsentWithdrawal, synchronizeConsentStorageEvent,
   type ConsentPurposes,
 } from '@/lib/consentPreferences';
 
@@ -21,7 +21,7 @@ export function CookieConsent() {
   const opener = useRef<HTMLElement | null>(null);
   const explicitlyOpen = useRef(false);
   const lastEffective = useRef(getEffectiveConsent());
-  const pendingRevoked = useRef<ConsentPurposes>({ advertising: false, analytics: false });
+  const pendingRevoked = useRef<ConsentPurposes>(getPendingConsentWithdrawal());
 
   useEffect(() => {
     let expiryTimer = 0;
@@ -29,27 +29,32 @@ export function CookieConsent() {
       window.clearTimeout(expiryTimer);
       migrateConsentPreferences();
       enforceGlobalPrivacyControl();
-      const next = getEffectiveConsent();
+      let next = getEffectiveConsent();
       const saved = readConsentPreferences();
       const previous = lastEffective.current;
       const revoked = {
         advertising: previous.advertising && !next.advertising,
         analytics: previous.analytics && !next.analytics,
       };
-      lastEffective.current = next;
-      if (previous.advertising !== next.advertising || previous.analytics !== next.analytics) {
-        window.dispatchEvent(new Event(CONSENT_EFFECTIVE_CHANGED_EVENT));
-      }
+
       pendingRevoked.current = {
         advertising: pendingRevoked.current.advertising || revoked.advertising,
         analytics: pendingRevoked.current.analytics || revoked.analytics,
       };
+      setPendingConsentWithdrawal(pendingRevoked.current);
+      next = getEffectiveConsent();
+      lastEffective.current = next;
+      if (previous.advertising !== next.advertising || previous.analytics !== next.analytics) {
+        window.dispatchEvent(new Event(CONSENT_EFFECTIVE_CHANGED_EVENT));
+      }
       setGpc(isGlobalPrivacyControlEnabled());
       setPreferences(saved);
       setVisible(!saved || explicitlyOpen.current);
       if (!saved) { setAdvertising(false); setAnalytics(false); }
       if (isGlobalPrivacyControlEnabled()) setAdvertising(false);
       if (pendingRevoked.current.advertising || pendingRevoked.current.analytics) {
+        setAdvertising(next.advertising);
+        setAnalytics(next.analytics);
         stopRevokedServices(pendingRevoked.current, next);
         if (canReloadAfterWithdrawal(pendingRevoked.current)) {
           window.location.reload();
@@ -78,11 +83,11 @@ export function CookieConsent() {
       }
     };
     const onOpen = (event: Event) => {
-      const saved = readConsentPreferences();
+      const effective = getEffectiveConsent();
       explicitlyOpen.current = true;
       opener.current = (event as CustomEvent<{ opener?: HTMLElement }>).detail?.opener ?? null;
-      setAdvertising(saved?.advertising === true && !isGlobalPrivacyControlEnabled());
-      setAnalytics(ANALYTICS_READY && saved?.analytics === true);
+      setAdvertising(effective.advertising);
+      setAnalytics(effective.analytics);
       setVisible(true);
     };
     window.addEventListener('storage', onStorage);
@@ -171,7 +176,7 @@ export function CookieConsent() {
         </p>
         <div className="flex flex-wrap gap-x-6 gap-y-2">
           <label className="inline-flex min-h-11 items-center gap-2 text-foreground">
-            <input type="checkbox" checked={advertising && !gpc} disabled={gpc} onChange={event => setAdvertising(event.target.checked)} />
+            <input type="checkbox" checked={advertising && !gpc} disabled={gpc || pendingReload} onChange={event => setAdvertising(event.target.checked)} />
             Advertising
           </label>
           <label className="inline-flex min-h-11 items-center gap-2 text-foreground">
@@ -183,7 +188,7 @@ export function CookieConsent() {
         {pendingReload && <p role="status">Your choice is off for this visit. Save your game or allow site storage, then choose Save choices to refresh safely. Some already-loaded vendor code needs that refresh to finish stopping.</p>}
         <div className="flex flex-wrap items-center gap-2">
           <button type="button" onClick={() => save({ advertising: false, analytics: false })} className="min-h-11 px-4 py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors">Reject all</button>
-          <button type="button" onClick={() => save({ advertising: true, analytics: true })} className="min-h-11 px-4 py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors">Accept all</button>
+          <button type="button" disabled={pendingReload} onClick={() => save({ advertising: true, analytics: true })} className="min-h-11 px-4 py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors">Accept all</button>
           <button type="button" onClick={() => save({ advertising, analytics })} className="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button>
           {preferences && !pendingReload && <button type="button" onClick={cancel} className="min-h-11 px-4 py-2 underline hover:text-foreground">Cancel</button>}
         </div>

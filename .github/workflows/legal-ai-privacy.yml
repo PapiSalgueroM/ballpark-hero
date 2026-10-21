@@ -184,6 +184,11 @@ jobs:
             printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv"
             tail -n 4 "$out/$method.log"; test "$status" -eq 0 || failed=1
           done
+          for control in same-page-consent stale-player-photos fact-clarity script-without-slot noindex-guard slot-before-consent loader-result noindex-ad ad-status-behavior snapshot-loader placeholder-slot missing-slot privacy-npa-bridge delayed-consent; do
+            status=0; SIM_OFFLINE_RECEIPT="$out/adsense-$control.transport" SIM_ADSENSE_CONTROL="$control" node scripts/simAdsense.mjs > "$out/adsense-$control.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$control" "$status" >> "$out/adsense-controls.tsv"
+            tail -n 3 "$out/adsense-$control.log"; test "$status" -eq 0 || failed=1
+          done
           status=0; SIM_OFFLINE_RECEIPT="$out/weights.transport" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
           printf '%s\n' "$status" > "$out/weights.exit"
           cat "$out/weights.log"; test "$status" -eq 0 || failed=1

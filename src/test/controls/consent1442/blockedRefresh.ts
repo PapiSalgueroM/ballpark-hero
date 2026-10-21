@@ -15,6 +15,19 @@ export interface ConsentPreferences {
   updatedAt: number;
 }
 export interface ConsentPurposes { advertising: boolean; analytics: boolean }
+let pendingWithdrawal: ConsentPurposes = { advertising: false, analytics: false };
+
+// Latched for this document. A component remount must not resume vendor code.
+export function setPendingConsentWithdrawal(purposes: ConsentPurposes): void {
+  pendingWithdrawal = {
+    advertising: pendingWithdrawal.advertising || purposes.advertising,
+    analytics: pendingWithdrawal.analytics || purposes.analytics,
+  };
+}
+
+export function getPendingConsentWithdrawal(): ConsentPurposes {
+  return { ...pendingWithdrawal };
+}
 
 export function parseConsentPreferences(raw: string | null, now = Date.now()): ConsentPreferences | null {
   if (!raw) return null;
@@ -42,8 +55,8 @@ export function getEffectiveConsent(): ConsentPurposes {
   const value = readConsentPreferences();
   const legacyDenial = safeLocalStorage.getItem('cookie-consent') === 'essential';
   return {
-    advertising: !legacyDenial && value?.advertising === true && !isGlobalPrivacyControlEnabled(),
-    analytics: ANALYTICS_READY && value?.analytics === true,
+    advertising: !pendingWithdrawal.advertising && !legacyDenial && value?.advertising === true && !isGlobalPrivacyControlEnabled(),
+    analytics: !pendingWithdrawal.analytics && ANALYTICS_READY && value?.analytics === true,
   };
 }
 
@@ -60,8 +73,8 @@ export function migrateConsentPreferences(): 'accepted' | 'essential' | null {
 function writeConsentPreferences(purposes: ConsentPurposes): ConsentPreferences {
   const next: ConsentPreferences = {
     version: 2,
-    advertising: purposes.advertising && !isGlobalPrivacyControlEnabled(),
-    analytics: ANALYTICS_READY && purposes.analytics,
+    advertising: !pendingWithdrawal.advertising && purposes.advertising && !isGlobalPrivacyControlEnabled(),
+    analytics: !pendingWithdrawal.analytics && ANALYTICS_READY && purposes.analytics,
     updatedAt: Date.now(),
   };
   // Removing the previous choice first frees space and prevents a durable old
@@ -106,7 +119,7 @@ export function canReloadAfterWithdrawal(revoked: ConsentPurposes): boolean {
     // A full store's safe seam can shadow a refused removal or write. Only the
     // actual browser record tells us what the next template would receive.
     const durable = parseConsentPreferences(window.localStorage.getItem(CONSENT_KEY));
-    return !durable || ((!revoked.advertising || !durable.advertising || isGlobalPrivacyControlEnabled())
+    return !durable || ((!revoked.advertising || !durable.advertising)
       && (!revoked.analytics || !ANALYTICS_READY || !durable.analytics));
   } catch { return false; }
 }

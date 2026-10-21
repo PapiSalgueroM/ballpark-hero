@@ -33,7 +33,7 @@ for (const row of manifest.files) {
     assert.equal(child.status, control ? 1 : 0);
     assert.equal(selected[0].status, control ? 'failed' : 'passed');
     assert.equal(result.numFailedTests, control ? 1 : 0);
-    if (control) assert(selected[0].failureMessages.some(message => /AssertionError|expected/i.test(message)), name + ' fails on the actual expectation');
+    if (control) assert(selected[0].failureMessages.some(message => /AssertionError|expected|^Error: expect\(element\)\.not\.toBeChecked\(\)/i.test(message.replace(/\u001b\[[0-9;]*m/g, ''))), name + ' fails on the actual expectation');
     report.cases.push({ name, controlledFault: control, exit: child.status, selectedStatus: selected[0].status });
     console.log(`Consent withdrawal: ${name}, expected ${selected[0].status}.`);
   }

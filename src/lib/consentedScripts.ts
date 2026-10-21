@@ -83,6 +83,7 @@ export function loadAnalytics(): void {
 }
 
 function clearPurposeCookies(purposes: ConsentPurposes): void {
+  try {
   const names = document.cookie.split(';').map(part => part.trim().split('=')[0]).filter(Boolean);
   const domains = ['', location.hostname, `.${location.hostname}`];
   if (location.hostname === 'douknowball.com' || location.hostname.endsWith('.douknowball.com')) {
@@ -99,6 +100,7 @@ function clearPurposeCookies(purposes: ConsentPurposes): void {
       document.cookie = `${name}=; Max-Age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}${domain ? `; domain=${domain}` : ''}`;
     }
   }
+  } catch { /* Cookie access may be blocked; core games and withdrawal remain usable. */ }
 }
 
 export function stopRevokedServices(revoked: ConsentPurposes, next = getEffectiveConsent()): void {
