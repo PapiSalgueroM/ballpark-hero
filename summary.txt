@@ -1,0 +1,9 @@
+simCareerAwardsNight exit=0 55s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simCareerNoDeadEnd exit=0 0s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+simSoccerCareer exit=0 3s | PASS: no crashes, no snubs, homegrown path live
+simCareerKeepPlaying exit=0 67s | simCareerKeepPlaying: 1495 checks, 0 failures
+simSoccerFarewell exit=0 6s | Soccer farewell:9 healthy groups,168 full original state/RNG pairs,6 effective source controls,6 prepared native branches.
+simRetirementToManager exit=0 0s | ALL RETIREMENT BRIDGE CHECKS PASSED
+simCareerMoneyAfterRetirement exit=0 3s | All good: the money app keeps running for the whole retirement tail.
+simSoccerCareerSaveRecovery exit=0 5s | Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.
+simSoccerDeck exit=0 121s | simSoccerDeck: green. Every section.
