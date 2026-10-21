@@ -51,6 +51,7 @@ import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
 import { hallCalibrationOf, legacyRead, LEGACY_GAME_RULES, type HallCalibration, type LegacyRead, type LegacyStandout, type LegacyWeights } from './careerHallOfFame';
+import { moraleForm } from './careerForm';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -728,7 +729,7 @@ export function simNbaSeason(
   const { games, note } = gamesFor(c, rng);
   if (note) { notes.push(`🚑 ${note}`); c.health -= 7; }
   const swing = seasonSwing(rng, c.age);
-  const form = c.ovr + (c.morale - 60) / 12 + (teamQuality - 78) / 8
+  const form = c.ovr + moraleForm('nba', c.morale) + (teamQuality - 78) / 8
     // Round 98: the season itself gets a say, so career years and lost
     // years both exist. Averages out to zero across a career.
     + swing;
