@@ -14,7 +14,7 @@ import {
   setTeamTalk, giveHalftimeTalk, answerPress, duckPress,
   matchFacts,
   changeLive, startSecondHalf, startExtraTime, markLiveMinute,
-  setDuty, dutyOptions, dutyLineOf, pitchLineOf, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
+  setDuty, carryShape, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
   setShootoutOrder,
   DEFAULT_ERA_ID,
   releasePlayer, signFreeAgent,
@@ -23,7 +23,7 @@ import {
   editManager,
 } from '@/lib/clubManager';
 import type { MarketDoor } from '@/lib/clubManager';
-import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation, FormationSlot } from '@/lib/clubManager';
+import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec, ManagerEdit, BoardObjective } from '@/lib/clubManager';
@@ -81,48 +81,10 @@ export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
  * line first, then one on the same band of the pitch, then any that is left,
  * and his duty rides along wherever the new slot's line offers it.
  */
+/* Round 1522: the rule itself now lives in the engine (carryShape), so the live sheet's reshape and this tab move
+   an eleven the same way. */
 function carryAcross(state: CareerState, from: Formation, to: Formation): { xiIds: (string | null)[]; xiDuties: (Duty | null)[] } {
-  const oldIds = state.xiIds;
-  const oldDuties = state.xiDuties ?? [];
-  const xiIds: (string | null)[] = to.slots.map(() => null);
-  const xiDuties: (Duty | null)[] = to.slots.map(() => null);
-  const taken = new Set<number>();
-  const placed = new Set<string>();
-  const place = (i: number, j: number, id: string) => {
-    taken.add(j);
-    placed.add(id);
-    xiIds[j] = id;
-    const d = oldDuties[i] ?? null;
-    xiDuties[j] = d && dutyOptions(to.slots[j]).includes(d) ? d : null;
-  };
-  const freeSlot = (ok: (t: FormationSlot) => boolean): number => to.slots.findIndex((t, k) => !taken.has(k) && ok(t));
-  const picked = from.slots
-    .map((sl, i) => ({ sl, i, id: oldIds[i] }))
-    .filter((x): x is { sl: FormationSlot; i: number; id: string } => !!x.id && state.squad.some(p => p.id === x.id));
-  const unmatched: typeof picked = [];
-  for (const x of picked) {
-    if (placed.has(x.id)) continue;
-    const j = freeSlot(t => t.label === x.sl.label);
-    if (j < 0) { unmatched.push(x); continue; }
-    place(x.i, j, x.id);
-  }
-  for (const x of unmatched) {
-    if (placed.has(x.id)) continue;
-    const dutyLine = dutyLineOf(x.sl);
-    const pitchLine = pitchLineOf(x.sl);
-    let j = freeSlot(t => dutyLineOf(t) === dutyLine);
-    if (j < 0) j = freeSlot(t => pitchLineOf(t) === pitchLine);
-    if (j < 0) j = freeSlot(() => true);
-    if (j < 0) break;
-    place(x.i, j, x.id);
-  }
-  const empty = to.slots.map((_, j) => j).filter(j => xiIds[j] === null);
-  if (empty.length) {
-    const used = new Set(xiIds.filter((id): id is string => !!id));
-    const picks = autoPickXI(state.squad.filter(p => !used.has(p.id)), { name: to.name, slots: empty.map(j => to.slots[j]) });
-    empty.forEach((j, k) => { xiIds[j] = picks[k] ?? null; });
-  }
-  return { xiIds, xiDuties };
+  return carryShape(state.xiIds, state.xiDuties ?? [], from, to, state.squad);
 }
 
 /** Round 1225: the key of the real fixture list a new career at this club would open on, or null. */
