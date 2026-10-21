@@ -1,0 +1,3 @@
+simAccessibility exit=0 1s | simAccessibility: all green
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+tsc exit=0 53s | 
