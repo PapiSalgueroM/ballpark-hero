@@ -1,0 +1,3 @@
+simCmOldCareersWorld: node scripts/simCmOldCareersWorld.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+simAcademyFilters-base: git checkout -q bc79b526 -- scripts/simAcademyFilters.mjs src/test/academyFilters.test.tsx src/components/club-manager/AcademyScreen.tsx && node scripts/simAcademyFilters.mjs; s=$?; git checkout -q HEAD -- scripts src; exit $s
