@@ -1,0 +1,3 @@
+PROBE586 calibration: base sellWins 78.8125 holdWins 82.46875; mean f sell 0.08894 hold 0.12255; matches per arm 140
+PROBE586 holdout: base sellWins 77.9375 holdWins 81.125; mean f sell 0.08815 hold 0.11508; matches per arm 140
+probe586: wrote /home/runner/work/_temp/rc-out/files/probe586.json

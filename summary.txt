@@ -1,0 +1,4 @@
+probe586 exit=0 16s | probe586: wrote /home/runner/work/_temp/rc-out/files/probe586.json
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+gen exit=0 38s | genTycoonScorelineBaseline: done
+simTycoonLeague exit=0 65s |    Every older save lands in the division it had earned, no club that can compete is walled in, and all ten controls fired.
