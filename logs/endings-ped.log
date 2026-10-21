@@ -1,0 +1,48 @@
+CONTROL ped: soccerCareerEngine.ts is mutated, this run must go red
+A) six fleets of 40 careers: nothing ends a career before the age rules without the player
+  FAIL: first career 2: ended at 23 (overall 58) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: first career 4: ended at 25 (overall 71) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: first career 10: ended at 23 (overall 66) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: first career 15: ended at 21 (overall 67) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: first career 27: ended at 31 (overall 83) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: first career 37: ended at 25 (overall 71) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: random career 7: ended at 40 (overall 55) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: random career 16: ended at 30 (overall 82) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: random career 21: ended at 27 (overall 82) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 31: ended at 28 (overall 56) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 36: ended at 31 (overall 80) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: decline career 18: ended at 25 (overall 77) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: decline career 26: ended at 36 (overall 68) on advanceProSeason from playing, phase retirement_ceremony
+  careers 240, alive at 26 234 (overall under 60 there 27), alive at 27 233
+  endings {"suggestion":65,"early":13,"forced":122,"farewell":40}, early 13, not on the ceremony 0, stuck 0
+  shady years lived: bans 7, drug test bans 13, trials 152, prison 152
+  FAIL: every career is alive at 26 (234 of 240)
+  FAIL: no career ends early (13)
+B) the edges at 25 and 26
+  fixtures: 25 overall 65 at Rio Ave, 26 overall 68 at Rio Ave
+  FAIL: B5 the failed drug test at 26 is not an ending (phase retirement_ceremony, retired true)
+  FAIL: B5 the career plays on after the failed drug test at 26 (age 26, phase retirement_ceremony)
+C) a retired flag and a phase that disagree go back to what the rest of the save says
+  the save the old Continue already wrote: retired at 26 on the retired screen, nothing behind it: base kept retired true on retired; now retired false on playing
+  a retired flag on the retired screen with nothing behind it: base kept retired true on retired; now retired false on playing
+  a stray retired screen on a youth career: base kept retired true on retired; now retired false on youth
+  a youth career on the retired screen without its flag: base kept retired false on retired; now retired false on youth
+  a chosen pundit career whose phase was lost: base kept retired true on playing; now retired true on pundit_season
+  a chosen manager career whose phase was lost: base kept retired true on playing; now retired true on manager_season
+  a chosen owner career whose phase was lost: base kept retired true on playing; now retired true on owner_season
+  a stray flag on the season summary at 26: base kept retired true on season_summary; now retired false on season_summary
+  a stray flag on Next Season at 26: base kept retired true on playing; now retired false on playing
+  a real retirement at 26 whose phase was lost: base kept retired true on season_summary; now retired true on retirement_ceremony
+  a forced retirement whose phase and legacy were lost: base kept retired true on playing; now retired true on retirement_ceremony
+  a real retirement whose flag was lost: base kept retired false on retirement_ceremony; now retired true on retirement_ceremony
+  a ceremony that lost its legacy: base kept retired true on retirement_ceremony; now retired true on retirement_ceremony
+  a chosen after career whose phase was lost: base kept retired true on playing; now retired true on retired
+  a retired screen with nothing behind it: base kept retired false on retired; now retired false on playing
+  a ceremony with nothing behind it: base kept retired false on retirement_ceremony; now retired false on playing
+  Continue on a stray flag at 26: base went to retired (retired true), now ballon_dor (retired false)
+  consistent saves 17 (committed fixtures 7, of which inconsistent 0), moved by the repair 0
+D) every fleet career is byte for byte the base engine's
+  base 529bc3c1: 240 careers, 13 differ from this tree
+  FAIL: the fleets match the base byte for byte (13 differ)
+
+FAIL: 18 check(s) failed

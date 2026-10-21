@@ -1,0 +1,6 @@
+endings-ped: SC_ENDINGS_CONTROL=ped node scripts/simSoccerCareerEndings.mjs
+endings-pedoff: SC_ENDINGS_CONTROL=pedoff node scripts/simSoccerCareerEndings.mjs
+endings-trial: SC_ENDINGS_CONTROL=trial node scripts/simSoccerCareerEndings.mjs
+endings-trialoff: SC_ENDINGS_CONTROL=trialoff node scripts/simSoccerCareerEndings.mjs
+endings-ban: SC_ENDINGS_CONTROL=ban node scripts/simSoccerCareerEndings.mjs
+endings-prison: SC_ENDINGS_CONTROL=prison node scripts/simSoccerCareerEndings.mjs
