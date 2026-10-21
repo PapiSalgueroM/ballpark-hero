@@ -1,0 +1,1 @@
+s4easy: SECTION=4 LEVELS=normal,easy,veryeasy PAR=4 node scripts/simCmDifficulty.mjs
