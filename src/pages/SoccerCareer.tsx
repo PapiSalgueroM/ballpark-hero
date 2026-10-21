@@ -102,6 +102,8 @@ import { SeasonCupExitLine, SeasonCupWinBlock } from "@/components/soccer-career
 import { cupCabinetLabel, cupChipLabel } from "@/lib/soccerCareerCup";
 import { derbyHeroSeasons, DERBY_HELP_RULES } from "@/lib/soccerCareerDerby";
 import type { WorldSeason } from "@/lib/soccerPhone";
+import { phoneAppsSwing } from "@/lib/soccerPhone";
+import { soccerMoraleLine } from "@/lib/careerForm";
 /* Round 131: height, weight and the specifics under each family. */
 import {
   type PlayerPhysique, type AttrShape,
@@ -2844,6 +2846,10 @@ function FinancialPanel({ career, onCurrencyChange, onAgentChange }: { career: C
           </div>
           <span className="text-[10px] font-bold w-6 text-right">{career.morale}</span>
         </div>
+        {/* Round 1523: what this season's morale is worth on the pitch, the same step the engine plays */}
+        {career.phase === "playing" && !career.retired && (
+          <p className="text-[10px] text-muted-foreground pl-16" data-morale-line>{soccerMoraleLine(career.morale, phoneAppsSwing(career))}</p>
+        )}
         <div className="flex items-center gap-2">
           <span className="text-[10px] text-muted-foreground w-14">Popularity</span>
           <div className="flex-1 h-1.5 rounded-full bg-muted/40 overflow-hidden">

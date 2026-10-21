@@ -41,8 +41,9 @@ export function trustLines(c: CareerState, at: SquadAt, trust: Trust, myOverall:
   if (trust.frozen) {
     lines.push('You stayed when the club wanted you gone, so you are out of the plans: 8 league games at most.');
   } else {
-    const a = clampN(trust.band.min + trust.swing + trust.form.swing + (trust.roleSwing ?? 0), 0, 38);
-    const b = clampN(trust.band.max + trust.swing + trust.form.swing + (trust.roleSwing ?? 0), 0, 38);
+    const head = trust.moraleGames ?? 0;
+    const a = clampN(trust.band.min + trust.swing + head + trust.form.swing + (trust.roleSwing ?? 0), 0, 38);
+    const b = clampN(trust.band.max + trust.swing + head + trust.form.swing + (trust.roleSwing ?? 0), 0, 38);
     lines.push(`The plan is about ${a} to ${b} league games if you stay fit.`);
   }
   lines.push(d > 0 ? `You are ${d} above the level this squad expects (${centre}).`
@@ -57,6 +58,9 @@ export function trustLines(c: CareerState, at: SquadAt, trust: Trust, myOverall:
   } else if (trust.swing < 0) {
     lines.push(`The dressing room has gone cold on you: about ${-trust.swing} fewer league games. Your phone is where that gets fixed.`);
   }
+  /* Round 1523: his morale, after the cap it shares with the dressing room */
+  if ((trust.moraleGames ?? 0) > 0) lines.push(`You are in a good place: your morale is worth about ${trust.moraleGames} more league game${trust.moraleGames === 1 ? '' : 's'}.`);
+  else if ((trust.moraleGames ?? 0) < 0) lines.push(`Your morale is costing you: about ${-trust.moraleGames} fewer league game${trust.moraleGames === -1 ? '' : 's'}.`);
   if (trust.form.row) lines.push(trust.form.reason);
   if (trust.roleSwing < 0) {
     lines.push(`You accepted the new manager's smaller role: ${-trust.roleSwing} fewer planned league games for this season at ${at.club}, before selection limits, injuries and bans.`);

@@ -55,6 +55,9 @@ import {
   worldSeasonTick, worldClubOf, phoneAppsSwing, takePhoneOffers, unreadThreads,
 } from "./soccerPhone";
 import type { PhoneState, WorldSeason } from "./soccerPhone";
+/* Round 1523: morale that plays (src/lib/careerForm.ts) and the first season the Puskas Award was given for. */
+import { dressingRoomApps, soccerMoraleRating } from "./careerForm";
+import { puskasAwardExists } from "./soccerWorldTruth";
 /* Round 134: money stops being a number that only goes up. A savings account,
    a market of five things whose prices move every season whether you are
    watching or not, a statement with a limit on it, and the two small things
@@ -3876,6 +3879,12 @@ export function projectLeagueApps(overall: number, clubTier: number, clubName: s
   return { min: 8, max: 18 };
 }
 
+/* Round 1523: a season reads the morale he pressed on, the number the hub showed him, not the one the summer's
+   texts leave behind. advanceProSeason notes it before the phone moves it; a season resumed from the retirement
+   screen reads the save's own. A WeakMap, so nothing new is ever saved and nothing outlives the press. */
+const MORALE_AT_PRESS = new WeakMap<CareerState, number>();
+const moraleAtPress = (state: CareerState): number => MORALE_AT_PRESS.get(state) ?? state.morale;
+
 /* exported for simLoanSpell, which proves the projection and the draw share one table */
 export function calcAppearances(overall: number, clubTier: number, age: number, state?: CareerState, fx: BuildEffects = NEUTRAL_EFFECTS): { apps: number; leagueApps: number; injured: boolean; injuryWeeks: number; injuryName: string | null; injurySevere: boolean } {
   const clubAvg = clubAverageRating(clubTier);
@@ -3893,7 +3902,9 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
   /* Round 130: a happy dressing room gets you picked, a cold one does not.
      Two appearances out of thirty is on purpose. It is enough to measure and
      small enough that it cannot undo thirty rounds of balance work. */
-  if (state) leagueApps = clamp(leagueApps + phoneAppsSwing(state) + recentClubForm(state).swing + reducedRoleSwing(state), 0, 38);
+  /* Round 1523: and his head, a step of up to two games from his morale, capped together with the dressing room
+     at three either way (careerForm.ts dressingRoomApps), so a warm phone and a happy head never stack past it. */
+  if (state) leagueApps = clamp(leagueApps + dressingRoomApps(phoneAppsSwing(state), moraleAtPress(state)) + recentClubForm(state).swing + reducedRoleSwing(state), 0, 38);
 
   /* Round 257: frozen out. You told the club you were staying, the club told
      you what that means. A quarter of the minutes you would otherwise have
@@ -4174,7 +4185,8 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
   const cleanSheets = keepsSheets ? clamp(Math.round(apps * rand(20, 45) / 100 * fx.cleanSheetMult * programme.cleanSheetMult), 0, apps) : 0;
   const yellowCards = Math.round(rand(0, Math.min(8, Math.round(apps * 0.25))) * programme.yellowCardMult);
   const redCards = Math.random() < 0.08 * programme.redCardMult && apps > 0 ? 1 : 0;
-  const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier, fx.ratingDelta);
+  /* Round 1523: his morale is worth a tenth of a rating point a step, beside the build's own delta. */
+  const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier, fx.ratingDelta + soccerMoraleRating(moraleAtPress(state)));
 
   // --- Trophy realism ---
   /* Round 929: elite only in a season where the era tier rules leave the club
@@ -5209,6 +5221,7 @@ function endClubCaptaincy(s: CareerState, reason: "transfer" | "loan" | "handove
 export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerState {
   if (readSoccerFarewell(prev) && (prev.retired || farewellSeasonComplete(prev))) return prev;
   const s = repairCareer({ ...prev }); s.age += 1; s.story = archiveSeasonStory(s); s.events = [];
+  MORALE_AT_PRESS.set(s, s.morale); /* Round 1523: the morale he pressed on, before the summer's texts */
   prepareLeagueWorld(s, clubs, (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1);
   receivePhoneTexts(s, "pro");
   // Reset social media action for new season
@@ -5748,8 +5761,11 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
 
   // --- NEW AWARDS ---
 
-  // Puskás Award (best goal of the year), random chance for high-performing attackers
-  if (season.goals >= 15 && s.overall >= 80 && Math.random() < 0.08) {
+  /* Puskás Award (best goal of the year), random chance for high-performing attackers. Round 1523: only from the
+     season it was first given for (soccerWorldTruth.ts puskasAwardExists, with its two sources). An earlier
+     season still makes the same draw and throws it away, the Round 1329 rule, so nothing later moves. */
+  const puskasDrawn = season.goals >= 15 && s.overall >= 80 && Math.random() < 0.08;
+  if (puskasDrawn && puskasAwardExists(thisYear)) {
     s.awards = [...s.awards, { year: thisYear, name: "Puskás Award", emoji: "🎯" }];
     s.events.push(`🎯 Won the Puskás Award for Goal of the Year!`);
   }

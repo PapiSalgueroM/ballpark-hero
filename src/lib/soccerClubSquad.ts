@@ -41,6 +41,7 @@ import { CLUB_SQUADS, CLUB_DATA_NAME, CLUB_SQUAD_YEARS } from '@/data/clubSquads
 import type { CareerState } from './soccerCareerEngine';
 import { projectLeagueApps } from './soccerCareerEngine';
 import { phoneAppsSwing } from './soccerPhone';
+import { dressingRoomApps } from './careerForm';
 import { recentClubForm, type RecentClubForm } from './soccerCareerSelection';
 import { reducedRoleForSeason, reducedRoleSwing, type ReducedRolePlan } from './soccerCareerRole';
 import { genClubSquad, roleName, ELEVEN_SHAPE } from './soccerClubSquadGen';
@@ -212,6 +213,8 @@ export interface Trust {
   expected: number;
   band: { min: number; max: number };
   swing: number;
+  /** Round 1523: what his morale adds to the plan, after the cap it shares with the dressing room. */
+  moraleGames: number;
   form: RecentClubForm;
   role: ReducedRolePlan | null;
   roleSwing: -4 | 0;
@@ -297,7 +300,9 @@ export function managerTrust(c: CareerState, at: SquadAt, myOverall: number = c.
   const role = reducedRoleForSeason(c, at.club, at.year);
   const roleSwing = reducedRoleSwing(c, at.club, at.year);
   const frozen = at.club === c.currentClub && (c.frozenOut ?? 0) > 0;
-  let expected = clampN((band.min + band.max) / 2 + swing + form.swing + roleSwing, 0, 38);
+  /* Round 1523: his head joins the dressing room, capped together at three games, as calcAppearances plays it */
+  const moraleGames = dressingRoomApps(swing, c.morale) - swing;
+  let expected = clampN((band.min + band.max) / 2 + swing + moraleGames + form.swing + roleSwing, 0, 38);
   if (frozen) expected = Math.min(8, Math.round(expected * 0.25));
   const pct = Math.round((expected / 38) * 100);
   const label = frozen ? 'Frozen out'
@@ -306,7 +311,7 @@ export function managerTrust(c: CareerState, at: SquadAt, myOverall: number = c.
         : pct >= 55 ? 'Starter most weeks'
           : pct >= 38 ? 'In and out of the side'
             : 'Squad player';
-  return { pct, expected, band, swing, form, role, roleSwing, frozen, inPlans: !frozen && band.min + roleSwing >= 20, label };
+  return { pct, expected, band, swing, moraleGames, form, role, roleSwing, frozen, inPlans: !frozen && band.min + roleSwing >= 20, label };
 }
 
 /* Left, centre, right inside a line, the way a team sheet reads. */
