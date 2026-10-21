@@ -1,0 +1,36 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerDifficulty.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 3152[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22mthe market: the same men in the same order, every price marked, every value untouched [33m 853[2mms[22m[39m
+   [33m[2m✓[22m[39m the dials on Hard and Legend[2m > [22ma release clause is never the cheaper door round the mark, and on Normal it is exactly what it was [33m 554[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1512: the dials on Easy and Very Easy[2m > [22mmore money, more wage room, a cheaper market (never under 0.5) and a weaker side against you [33m 408[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1512: the dials on Easy and Very Easy[2m > [22mthe easy market never lists a man under what selling him straight back banks, nor over Medium's price [33m 785[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDifficultyPick.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 4004[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22moffers five levels with Medium pressed, and Skip on Medium hands nothing on [33m 923[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mImpossible and No sacking ride on both buttons [33m 1292[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mEasy and Very Easy say plainly that the career posts no leaderboard scores [33m 465[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerSlots.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 5105[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mtwo managers survive leaving the page, and either one opens [33m 801[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mthe screen asks before it deletes, and every tile says what it holds [33m 532[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mclosing the old tab after a switch in another never wipes the career switched in [33m 328[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22ma change in the old tab writes nothing over the other career and goes back to the managers [33m 438[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mthe old tab live clock writes nothing over the career switched in [33m 596[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mManagers tapped on the old tab hub writes nothing over the other career [33m 444[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mthe old tab managers screen follows the other tab, and a stale New manager says why it did nothing [33m 370[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: Retire and Start New Career keep the career[2m > [22mparks the career and starts the new one in an empty slot, and with every slot full deletes nothing [33m 330[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: a parked era career[2m > [22mopens through the era boot, squads first [33m 393[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerSlots.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1195[2mms[22m[39m
+   [33m[2m✓[22m[39m an old save, from before slots[2m > [22mis slot 1, and reading the slots writes nothing [33m 363[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerNoSack.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 2134[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mstarts with No sacking off and Skip hands nothing on [33m 771[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mthe switch rides on both buttons [33m 669[2mms[22m[39m
+ [32m✓[39m src/hooks/useClubManager.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 3299[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager completion shape[2m > [22ma played match records activity and not a completion [33m 461[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager completion shape[2m > [22ma finished season records exactly one completion [33m 2836[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m72 passed[39m[22m[90m (72)[39m
+[2m   Start at [22m 21:02:51
+[2m   Duration [22m 15.83s[2m (transform 4.52s, setup 720ms, collect 14.46s, tests 18.89s, environment 4.31s, prepare 1.13s)[22m
+
