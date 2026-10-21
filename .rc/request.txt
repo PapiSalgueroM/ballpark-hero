@@ -1,0 +1,1 @@
+f1: mkdir -p /tmp/ff && for j in 0 1 2 3; do SECTION=fleet SEEDS=16 SHARD=$((4*1+j))/8 OUT_JSON=/tmp/ff/s$((4*1+j)).json node scripts/simCmTactics.mjs > /tmp/ff/log$j.txt 2>&1 & done; wait; tail -n 1 /tmp/ff/log*.txt; mkdir -p "$RC_OUT/ff" && cp /tmp/ff/*.json "$RC_OUT/ff/"; ls /tmp/ff/*.json | wc -l
