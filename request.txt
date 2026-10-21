@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmEarnedDraft.test.ts src/lib/nbaEarnedDraft.test.ts --testTimeout=300000 --hookTimeout=120000
+earned: node scripts/simNbaEarnedDraft.mjs
+earned-ctl: SIM_NBA_EARNED_DRAFT_CONTROL=all node scripts/simNbaEarnedDraft.mjs
+base-s1: export TMPDIR=$(mktemp -d); SIM_NBA_EARNED_DRAFT_FLEET=full SIM_NBA_EARNED_DRAFT_RUN=1 SIM_NBA_EARNED_DRAFT_OUT=$RC_OUT/fleet SIM_NBA_EARNED_DRAFT_SETS=2 SIM_NBA_EARNED_DRAFT_SHARD=0/2 node scripts/simNbaEarnedDraft.mjs
+base-s2: export TMPDIR=$(mktemp -d); SIM_NBA_EARNED_DRAFT_FLEET=full SIM_NBA_EARNED_DRAFT_RUN=1 SIM_NBA_EARNED_DRAFT_OUT=$RC_OUT/fleet SIM_NBA_EARNED_DRAFT_SETS=2 SIM_NBA_EARNED_DRAFT_SHARD=1/2 node scripts/simNbaEarnedDraft.mjs
