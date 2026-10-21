@@ -1,0 +1,1 @@
+simCmTactics: node scripts/simCmTactics.mjs
