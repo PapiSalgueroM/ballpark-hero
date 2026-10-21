@@ -1,0 +1,25 @@
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerPressMarket.mjs:49:374
+FAIL 1280-nhl-my-career-decline locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerPressMarket.mjs:49:374
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 3
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerPressMarket.mjs:76:45 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 3,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.0

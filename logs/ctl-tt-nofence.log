@@ -1,0 +1,44 @@
+fixtures: Brighton 60502 chars, Everton 59336 chars, Hot Seat survivor Arsenal (survived, 9 actions)
+== 320x640
+1) CLOBBER, and 8) THE NOTICE (320x640)
+   start Brighton week 1, 1 results, last Aston Villa 2-0 | after B played three Brighton week 5, 4 results, last Coventry City 1-2 | after A left Brighton week 1, 1 results, last Aston Villa 2-0 | A saw the notice: false
+  FAIL [case 1]: tab A never showed the notice after tab B opened the career and played on
+  FAIL [case 1]: CLOBBER: tab A's leave took the save from "Brighton week 5, 4 results, last Coventry City 1-2" to "Brighton week 1, 1 results, last Aston Villa 2-0"
+2) REPLAY, three times (320x640)
+   REPLAY 0: B wrote "Brighton week 1, 1 results, last Aston Villa 1-1"; A's press went through: true; on disk after A's press "Brighton week 1, 1 results, last Aston Villa 0-1", after the forced press "Brighton week 1, 1 results, last Aston Villa 0-1"
+  FAIL [case 2]: REPLAY 0: the press reached Quick Sim behind the notice
+  FAIL [case 2]: REPLAY 0: the stale tab changed the save from "Brighton week 1, 1 results, last Aston Villa 1-1" to "Brighton week 1, 1 results, last Aston Villa 0-1"
+   REPLAY 1: B wrote "Brighton week 2, 2 results, last Chelsea 0-4"; A's press went through: true; on disk after A's press "Brighton week 2, 2 results, last Chelsea 0-1", after the forced press "Brighton week 2, 2 results, last Chelsea 0-1"
+  FAIL [case 2]: REPLAY 1: the press reached Quick Sim behind the notice
+  FAIL [case 2]: REPLAY 1: the stale tab changed the save from "Brighton week 2, 2 results, last Chelsea 0-4" to "Brighton week 2, 2 results, last Chelsea 0-1"
+   REPLAY 2: B wrote "Brighton week 3, 3 results, last Leeds United 3-0"; A's press went through: true; on disk after A's press "Brighton week 3, 3 results, last Leeds United 0-2", after the forced press "Brighton week 3, 3 results, last Leeds United 0-2"
+  FAIL [case 2]: REPLAY 2: the press reached Quick Sim behind the notice
+  FAIL [case 2]: REPLAY 2: the stale tab changed the save from "Brighton week 3, 3 results, last Leeds United 3-0" to "Brighton week 3, 3 results, last Leeds United 0-2"
+3) HOT SEAT carry on beside a Club Manager tab, and 4) LANDING (320x640)
+   A held "Brighton week 1, 1 results, last Aston Villa 3-1"; B handed over "Arsenal week 26, 26 results, last Hull City 2-0" and landed on the hub; A saw it: false; after A left "Brighton week 1, 1 results, last Aston Villa 3-1"
+  FAIL [case 3]: tab A never showed the notice after the handover
+  FAIL [case 3]: tab A's leave write put "Brighton week 1, 1 results, last Aston Villa 3-1" over the handover "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the carry on opened Club Manager on the hub
+6) PUT BACK through the restore card beside a Club Manager tab (320x640)
+   offered: true; put back "Brighton week 1, 1 results, last Aston Villa 5-0"; A saw it: false; after A left "Brighton week 1, 1 results, last Aston Villa 5-0"
+  FAIL [case 6]: the put back did not land: "Brighton week 1, 1 results, last Aston Villa 5-0"
+  FAIL [case 6]: tab A never showed the notice after the put back
+9) BACK: a stale tab leaves by the browser's Back, mid Play Live and on the hub (320x640)
+  note  tab A's live match is in minute 4
+   mid Play Live: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 1-2" (live none); A saw the notice: false; after A's Back (same document true) "Brighton week 0, 0 results, last none" (live minute 13)
+  FAIL [case 9]: mid Play Live: tab A never showed the notice
+  FAIL [case 9]: CLOBBER by Back mid Play Live: B left "Brighton week 3, 3 results, last Leeds United 1-2" (live none), after A's Back the save holds "Brighton week 0, 0 results, last none" (live minute 13)
+   on the hub: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 4-0" (live none); A saw the notice: false; after A's Back (same document true) "Brighton week 0, 0 results, last none" (live none)
+  FAIL [case 9]: on the hub: tab A never showed the notice
+  FAIL [case 9]: CLOBBER by Back on the hub: B left "Brighton week 3, 3 results, last Leeds United 4-0" (live none), after A's Back the save holds "Brighton week 0, 0 results, last none" (live none)
+   then in the same document a Hot Seat carry on: the save holds "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the same document carried a Hot Seat job on afterwards
+15) RETIRE (320x640)
+   B played on to Everton week 1, 1 results, last Wrexham 2-1 | A saw the notice: false, its door press went through: true | after A's forced Yes: Everton week 54, 39 results, last Ipswich Town 0-1, retired true
+  FAIL [case 15]: tab A never showed the notice after tab B played on
+  FAIL [case 15]: tab A pressed the door through the notice
+  FAIL [case 15]: A's forced Yes wrote: the disk went from "Everton week 1, 1 results, last Wrexham 2-1" to "Everton week 54, 39 results, last Ipswich Town 0-1", retired true
+   C retired: true at Everton week 54, 39 results, last Ipswich Town 0-1 | after B's forced Quick Sim: Everton week 2, 2 results, last Norwich City 3-1, retired false
+  FAIL [case 15]: B's forced Quick Sim wrote over the retired career ("Everton week 54, 39 results, last Ipswich Town 0-1" to "Everton week 2, 2 results, last Norwich City 3-1", retired false)
+10) SOCCER REPLACE, and 11) REVERSE (320x640)
+soccer fixture: Two Tab Tester age 18, playing, 3 seasons, last 2022 West Ham: 32 apps, 5 goals, 6.9, 13506 chars

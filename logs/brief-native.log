@@ -1,0 +1,81 @@
+FAIL 1280-home locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 1280-no-home locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 1280-declined locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 1280-saved-offer locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 1280-mandatory-loan locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 1280-mandatory-sale locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 1280-malformed locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 3
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:65:45 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 3,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.0
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+27 !== 0
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/checkCareerTransferBrief.mjs:20:49
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 27,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.0
