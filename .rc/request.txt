@@ -1,0 +1,4 @@
+gen: node scripts/genTycoonScorelineBaseline.mjs --base 77c00798c0a6be53b71dbcb8386ad6961be150cf
+probe586: node .rc/x/probe586.mjs
+simTycoonLeague: node scripts/simTycoonLeague.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
