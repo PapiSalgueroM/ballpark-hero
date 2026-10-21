@@ -205,7 +205,93 @@ jobs:
           git rev-parse HEAD > analytics-build-artifacts/head.txt
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           git fetch --no-tags --depth=1 origin "$SEO_SPLIT_BASE_REF" > analytics-build-artifacts/baseline-fetch.log 2>&1
-          git diff --exit-code "$SEO_SPLIT_BASE_REF" HEAD -- src scripts supabase public index.html package.json package-lock.json vitest.config.ts ':!src/components/CookieConsent.tsx' ':!src/pages/PrivacyPolicy.tsx' ':!src/test/analyticsPausedStatus1445.test.tsx' ':!src/test/controls/consent1442/expiredDraft.tsx' ':!src/test/controls/consent1442/manifest.json' ':!scripts/playConsentPrivacy1442.mjs' ':!scripts/qa/playAnalyticsStatus1445.mjs' > analytics-build-artifacts/protected-source-hold.log
+          git diff --exit-code "$SEO_SPLIT_BASE_REF" HEAD -- src scripts supabase public index.html package.json package-lock.json vitest.config.ts ':!src/components/CookieConsent.tsx' ':!src/pages/PrivacyPolicy.tsx' ':!src/test/analyticsPausedStatus1445.test.tsx' ':!src/test/controls/consent1442/expiredDraft.tsx' ':!src/test/controls/consent1442/manifest.json' ':!scripts/playConsentPrivacy1442.mjs' ':!scripts/qa/playAnalyticsStatus1445.mjs' ':!public/privacy/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' > analytics-build-artifacts/protected-source-hold.log
+          cat > analytics-build-artifacts/generated-semantic.py <<'PY'
+          import copy
+          import datetime
+          import hashlib
+          import json
+          import os
+          import pathlib
+          import re
+          import subprocess
+          import sys
+          import xml.etree.ElementTree as ET
+
+          base = os.environ['SEO_SPLIT_BASE_REF']
+          assert base == 'bc79b526cb69a4e913416c77c6dba00fe9401a16'
+          out = pathlib.Path('analytics-build-artifacts')
+          phase = sys.argv[1]
+          assert phase in ('pre', 'post')
+          allowed = {'public/privacy/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json'}
+          changed = subprocess.check_output(['git', 'diff', '--name-only', base, '--', 'public', 'scripts/data/lastmod.json'], text=True).splitlines()
+          assert len(changed) == len(set(changed)) <= 3
+          assert set(changed) <= allowed, 'GENERATED_PATH_OUTSIDE_PRIVACY'
+          prior = lambda name: subprocess.check_output(['git', 'show', base + ':' + name])
+          ledger_before = json.loads(prior('scripts/data/lastmod.json'))
+          ledger_after = json.loads(pathlib.Path('scripts/data/lastmod.json').read_bytes())
+
+          def ledger_check(before, after):
+              assert set(before) == set(after), 'GENERATED_LEDGER_KEYS_CHANGED'
+              assert all(before[key] == after[key] for key in before if key != '/privacy'), 'GENERATED_OTHER_LEDGER_CHANGED'
+              row = after['/privacy']
+              assert isinstance(row, dict) and set(row) == {'hash', 'date'}, 'GENERATED_PRIVACY_LEDGER_SHAPE'
+              assert isinstance(row['hash'], str) and re.fullmatch('[a-f0-9]{16}', row['hash']), 'GENERATED_PRIVACY_HASH_SHAPE'
+              assert isinstance(row['date'], str) and datetime.date.fromisoformat(row['date']).isoformat() == row['date'], 'GENERATED_PRIVACY_DATE_SHAPE'
+
+          def sitemap_rows(data):
+              root = ET.fromstring(data)
+              ns = '{http://www.sitemaps.org/schemas/sitemap/0.9}'
+              assert root.tag == ns + 'urlset' and not root.attrib
+              rows = {}
+              for node in root:
+                  assert node.tag == ns + 'url' and not node.attrib
+                  fields = []
+                  for child in node:
+                      assert child.tag in [ns + tag for tag in ('loc', 'lastmod', 'changefreq', 'priority')]
+                      assert not child.attrib and len(child) == 0
+                      fields.append((child.tag[len(ns):], (child.text or '').strip()))
+                  assert [key for key, value in fields] == ['loc', 'lastmod', 'changefreq', 'priority']
+                  loc = fields[0][1]
+                  assert loc.startswith('https://douknowball.com/') and loc not in rows
+                  rows[loc] = fields
+              assert rows
+              return rows
+
+          def sitemap_check(before, after, date):
+              privacy = 'https://douknowball.com/privacy'
+              assert list(before) == list(after), 'GENERATED_SITEMAP_URLS_CHANGED'
+              assert all(before[key] == after[key] for key in before if key != privacy), 'GENERATED_OTHER_SITEMAP_ROW_CHANGED'
+              assert [field for field in before[privacy] if field[0] != 'lastmod'] == [field for field in after[privacy] if field[0] != 'lastmod'], 'GENERATED_PRIVACY_SITEMAP_FIELDS_CHANGED'
+              assert dict(after[privacy])['lastmod'] == date, 'GENERATED_PRIVACY_LASTMOD_DIFFERS_FROM_LEDGER'
+
+          ledger_check(ledger_before, ledger_after)
+          map_before = sitemap_rows(prior('public/sitemap.xml'))
+          map_after = sitemap_rows(pathlib.Path('public/sitemap.xml').read_bytes())
+          sitemap_check(map_before, map_after, ledger_after['/privacy']['date'])
+          other_key = next(key for key in ledger_after if key.startswith('/') and key != '/privacy')
+          bad_ledger = copy.deepcopy(ledger_after)
+          bad_ledger[other_key]['hash'] = '0' * 16 if bad_ledger[other_key]['hash'] != '0' * 16 else '1' * 16
+          assert bad_ledger != ledger_after
+          try:
+              ledger_check(ledger_before, bad_ledger)
+          except AssertionError as error:
+              assert str(error) == 'GENERATED_OTHER_LEDGER_CHANGED'
+          else:
+              raise AssertionError('Other ledger fault was accepted')
+          other_url = next(key for key in map_after if key != 'https://douknowball.com/privacy')
+          bad_map = copy.deepcopy(map_after)
+          bad_map[other_url][1] = ('lastmod', '1900-01-01')
+          assert bad_map != map_after
+          try:
+              sitemap_check(map_before, bad_map, ledger_after['/privacy']['date'])
+          except AssertionError as error:
+              assert str(error) == 'GENERATED_OTHER_SITEMAP_ROW_CHANGED'
+          else:
+              raise AssertionError('Other sitemap fault was accepted')
+          (out / ('generated-semantic-' + phase + '.json')).write_text(json.dumps({'complete': True, 'baseline': base, 'phase': phase, 'allowedPaths': sorted(allowed), 'changedPaths': changed, 'ledgerEntries': len(ledger_after), 'sitemapRows': len(map_after), 'controls': ['other-ledger-entry', 'other-sitemap-row'], 'privacyLedger': ledger_after['/privacy']}, indent=2) + '\n')
+          PY
+          python analytics-build-artifacts/generated-semantic.py pre > analytics-build-artifacts/generated-semantic-pre.log 2>&1
           git ls-files -z src scripts supabase .github index.html package.json package-lock.json vitest.config.ts ':!scripts/data/lastmod.json' | xargs -0 sha256sum > analytics-build-artifacts/source-before.sha256
           sha256sum package.json package-lock.json scripts/sweepWeight.mjs > analytics-build-artifacts/dependencies-cap-before.sha256
           npm ci > analytics-build-artifacts/install.log 2>&1
@@ -219,26 +305,94 @@ jobs:
           ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
           node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > analytics-build-artifacts/chromium-install.log 2>&1
           python -m pip install fonttools pillow > analytics-build-artifacts/python-install.log 2>&1
-          export FREE_KICK_FONT_CACHE="$RUNNER_TEMP/analytics1445-fonts"
+          export FREE_KICK_FONT_CACHE="$PWD/analytics-build-artifacts/font-cache"
           node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > analytics-build-artifacts/fonts.log 2>&1
           echo "FREE_KICK_FONT_CACHE=$FREE_KICK_FONT_CACHE" >> "$GITHUB_ENV"
+          cat > analytics-build-artifacts/cached-fonts.cjs <<'JS'
+          'use strict';
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const assert = require('node:assert/strict');
+          const { createHash } = require('node:crypto');
+          const hash = value => createHash('sha256').update(value).digest('hex');
+          if (path.basename(process.argv[1] || '') === 'prerender.mjs') {
+            const cache = process.env.FREE_KICK_FONT_CACHE;
+            const manifestBytes = fs.readFileSync(path.join(cache, 'manifest.json'));
+            assert.match(process.env.FONT_CACHE_MANIFEST_SHA256 || '', /^[a-f0-9]{64}$/);
+            assert.equal(hash(manifestBytes), process.env.FONT_CACHE_MANIFEST_SHA256, 'Prepared font manifest stays exact');
+            const sheet = [...fs.readFileSync('index.html', 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(m => new URL(m[1]).href);
+            assert.equal(sheet.length, 1, 'Use the actual single template stylesheet');
+            const entries = JSON.parse(manifestBytes);
+            assert(Array.isArray(entries) && entries.length > 1);
+            const fonts = new Map();
+            for (const entry of entries) {
+              assert(!fonts.has(entry.url), 'No duplicate font cache URL');
+              const url = new URL(entry.url);
+              assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(url.origin));
+              assert.equal(url.href, entry.url);
+              assert.equal(entry.file, hash(entry.url));
+              assert.match(entry.sha256, /^[a-f0-9]{64}$/);
+              assert.equal(typeof entry.contentType, 'string');
+              const body = fs.readFileSync(path.join(cache, entry.file));
+              assert.equal(hash(body), entry.sha256, 'Prepared font body stays exact');
+              fonts.set(entry.url, { ...entry, body });
+            }
+            assert(fonts.has(sheet[0]), 'Current template stylesheet is cached');
+            const css = fonts.get(sheet[0]);
+            assert.match(css.contentType, /^text\/css(?:;|$)/);
+            const declared = [...new Set([...css.body.toString('utf8').matchAll(/url\(\s*['"]?(https:\/\/[^)'"\s]+)/g)].map(m => m[1]))];
+            assert(declared.length > 0);
+            assert.deepEqual([...fonts.keys()].sort(), [sheet[0], ...declared].sort(), 'Only actual stylesheet dependencies are fulfilled');
+            for (const url of declared) assert.equal(new URL(url).origin, 'https://fonts.gstatic.com');
+            const pw = require('playwright-core');
+            let contextId = 0;
+            const originalLaunch = pw.chromium.launch.bind(pw.chromium);
+            pw.chromium.launch = async options => {
+              const browser = await originalLaunch(options);
+              const originalContext = browser.newContext.bind(browser);
+              browser.newContext = async options => {
+                const context = await originalContext(options);
+                const id = ++contextId;
+                await context.route(/^https:\/\/(?:fonts\.googleapis\.com|fonts\.gstatic\.com)\//, async route => {
+                  const request = route.request(), entry = fonts.get(request.url());
+                  if (request.method() !== 'GET' || !entry || !['stylesheet', 'font'].includes(request.resourceType())) return route.fallback();
+                  await route.fulfill({ status: 200, contentType: entry.contentType, body: entry.body });
+                  fs.appendFileSync(process.env.FONT_CACHE_USE_RECEIPT, JSON.stringify({ contextId: id, url: entry.url, sha256: entry.sha256, manifestSha256: hash(manifestBytes), resourceType: request.resourceType() }) + '\n');
+                });
+                return context;
+              };
+              return browser;
+            };
+          }
+          JS
+          sha256sum analytics-build-artifacts/cached-fonts.cjs > analytics-build-artifacts/font-inputs.sha256
+          find "$FREE_KICK_FONT_CACHE" -type f -print0 | sort -z | xargs -0 sha256sum >> analytics-build-artifacts/font-inputs.sha256
+          font_manifest_sha=$(sha256sum "$FREE_KICK_FONT_CACHE/manifest.json" | cut -d ' ' -f 1)
+          echo "FONT_CACHE_MANIFEST_SHA256=$font_manifest_sha" >> "$GITHUB_ENV"
       - name: Types and completed scoped production build
         run: |
           set -euo pipefail
-          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$PWD/analytics-build-artifacts/cached-fonts.cjs"
           export SIM_OFFLINE_RECEIPT="$PWD/analytics-build-artifacts/build.transport"
+          export FONT_CACHE_USE_RECEIPT="$PWD/analytics-build-artifacts/font-cache-use.jsonl"
           : > "$SIM_OFFLINE_RECEIPT"
+          : > "$FONT_CACHE_USE_RECEIPT"
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json > analytics-build-artifacts/types.log 2>&1
           npm run build:seo > analytics-build-artifacts/build.log 2>&1
           git diff --name-only HEAD -- public scripts/data/lastmod.json > analytics-build-artifacts/generated-files.txt
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';
           const allowed=new Set(['public/privacy/index.html','public/sitemap.xml','scripts/data/lastmod.json']);
-          const files=fs.readFileSync('analytics-build-artifacts/generated-files.txt','utf8').trim().split('\n').filter(Boolean);for(const file of files)assert(allowed.has(file),'Unexpected generated output: '+file);
+          const files=fs.readFileSync('analytics-build-artifacts/generated-files.txt','utf8').trim().split('\n').filter(Boolean);assert.equal(files.length,new Set(files).size);assert(files.length<=3);for(const file of files)assert(allowed.has(file),'Unexpected generated output: '+file);
           NODE
+          python analytics-build-artifacts/generated-semantic.py post > analytics-build-artifacts/generated-semantic-post.log 2>&1
           git diff --binary HEAD -- public scripts/data/lastmod.json > analytics-build-artifacts/generated.patch
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > analytics-build-artifacts/dist.sha256
           tar -czf analytics-build-artifacts/dist.tar.gz -C dist .
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');const raw=fs.readFileSync(process.env.FREE_KICK_FONT_CACHE+'/manifest.json');assert.equal(sha(raw),process.env.FONT_CACHE_MANIFEST_SHA256);const cache=new Map(JSON.parse(raw).map(row=>[row.url,row]));const rows=fs.readFileSync(process.env.FONT_CACHE_USE_RECEIPT,'utf8').trim().split('\n').filter(Boolean).map(line=>JSON.parse(line));assert.deepEqual([...new Set(rows.map(row=>row.contextId))].sort(),[1,2,3]);assert.equal(rows.filter(row=>row.resourceType==='stylesheet').length,3);for(const id of [1,2,3]){assert.equal(rows.filter(row=>row.contextId===id&&row.resourceType==='stylesheet').length,1);assert(rows.some(row=>row.contextId===id&&row.resourceType==='font'));}for(const row of rows){assert(cache.has(row.url));assert.equal(row.sha256,cache.get(row.url).sha256);assert.equal(row.manifestSha256,process.env.FONT_CACHE_MANIFEST_SHA256);}fs.writeFileSync('analytics-build-artifacts/font-cache-use-summary.json',JSON.stringify({complete:true,contexts:3,stylesheetFulfillments:3,fontFulfillments:rows.filter(row=>row.resourceType==='font').length,manifestSha256:process.env.FONT_CACHE_MANIFEST_SHA256,preloadSha256:sha(fs.readFileSync('analytics-build-artifacts/cached-fonts.cjs')),offlinePreloadFirst:true},null,2)+'\n');
+          NODE
           test ! -s "$SIM_OFFLINE_RECEIPT"
       - name: Three status profiles and all eight preserved consent browser cases
         run: |
@@ -280,14 +434,25 @@ jobs:
         if: always()
         run: |
           set -euo pipefail
-          sha256sum --check analytics-build-artifacts/source-before.sha256 > analytics-build-artifacts/source-hold.log
-          sha256sum --check analytics-build-artifacts/dependencies-cap-before.sha256 > analytics-build-artifacts/dependencies-cap-hold.log
-          git diff --exit-code HEAD -- src scripts supabase .github index.html package.json package-lock.json vitest.config.ts ':!scripts/data/lastmod.json' > analytics-build-artifacts/operator-source-hold.log
-          node --input-type=module <<'NODE'
+          failed=0
+          status=0; sha256sum --check analytics-build-artifacts/source-before.sha256 > analytics-build-artifacts/source-hold.log 2>&1 || status=$?
+          printf '%s\n' "$status" > analytics-build-artifacts/source-hold.exit; test "$status" -eq 0 || failed=1
+          status=0; sha256sum --check analytics-build-artifacts/dependencies-cap-before.sha256 > analytics-build-artifacts/dependencies-cap-hold.log 2>&1 || status=$?
+          printf '%s\n' "$status" > analytics-build-artifacts/dependencies-cap-hold.exit; test "$status" -eq 0 || failed=1
+          status=0; git diff --exit-code HEAD -- src scripts supabase .github index.html package.json package-lock.json vitest.config.ts ':!scripts/data/lastmod.json' > analytics-build-artifacts/operator-source-hold.log 2>&1 || status=$?
+          printf '%s\n' "$status" > analytics-build-artifacts/operator-source-hold.exit; test "$status" -eq 0 || failed=1
+          status=0; sha256sum --check analytics-build-artifacts/font-inputs.sha256 > analytics-build-artifacts/font-inputs-hold.log 2>&1 || status=$?
+          printf '%s\n' "$status" > analytics-build-artifacts/font-inputs-hold.exit; test "$status" -eq 0 || failed=1
+          status=0
+          node --input-type=module > analytics-build-artifacts/transport-hold.log 2>&1 <<'NODE' || status=$?
           import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
-          function walk(dir){for(const e of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,e.name);if(e.isDirectory())walk(file);else if(file.endsWith('.transport'))assert.equal(fs.statSync(file).size,0,'Offline transport attempted: '+file);}}walk('analytics-build-artifacts');
+          const rows=[];function walk(dir){for(const e of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,e.name);if(e.isDirectory())walk(file);else if(file.endsWith('.transport'))rows.push({file,bytes:fs.statSync(file).size});}}walk('analytics-build-artifacts');
+          fs.writeFileSync('analytics-build-artifacts/transport-hold.json',JSON.stringify({complete:true,receipts:rows,zeroActualAttempts:rows.length>0&&rows.every(row=>row.bytes===0)},null,2)+'\n');assert(rows.length>0,'Offline transport receipts exist');assert(rows.every(row=>row.bytes===0),'Offline transport attempted');
           NODE
+          printf '%s\n' "$status" > analytics-build-artifacts/transport-hold.exit; test "$status" -eq 0 || failed=1
+          printf '%s\n' "$failed" > analytics-build-artifacts/final-holds.exit
           (cd analytics-build-artifacts; find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > analytics-build-artifacts/evidence.sha256
+          exit "$failed"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
