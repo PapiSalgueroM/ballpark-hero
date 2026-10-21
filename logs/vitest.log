@@ -1,0 +1,23 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerFarewell.test.ts [2m([22m[2m50 tests[22m[2m)[22m[33m 551[2mms[22m[39m
+[90mstdout[2m | src/test/soccerFarewellPage.test.tsx[2m > [22m[2mSoccer farewell real page actions[2m > [22m[2mbanks a genuine open moment and plays one final year for two captured asynchronous Next Season clicks
+[22m[39mFAREWELL_ASYNC_ACT_STARTUP {"scope":"Unfiltered empty async act initialization before either career action tape","values":[0.02040268573909998],"stacks":["Error: Farewell action random draw\n    at Math.<anonymous> (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerFarewellPage.test.tsx:108:18)\n    at Math.mockCall (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/spy/dist/index.js:96:15)\n    at Math.random (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/tinyspy/dist/index.js:47:80)\n    at enqueueTask (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2458:45)\n    at recursivelyFlushAsyncActWork (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2634:9)\n    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2545:15\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)"],"attribution":{"diagnosticRun":"38051776558","source":"11c30639","caller":"react.development.js:2458:45 enqueueTask, recursivelyFlushAsyncActWork"}}
+
+ [32m✓[39m src/test/soccerFarewellPage.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 3550[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mbanks a genuine open moment and plays one final year for two captured asynchronous Next Season clicks [33m 816[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mresumes the already-aged suggestion exactly once for two captured page announcement callbacks [33m 397[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mkeeps the original manual Retire confirmation without declaring a farewell [33m 353[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerRetirement1519.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 3072[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1519: no career ends at 26 without the player[2m > [22mNext Season at 25, the summary and its Continue, then a reload: the career plays on at 26 [33m 1316[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1519: no career ends at 26 without the player[2m > [22mthe Retire dialog: Cancel keeps the career, Confirm ends it on the send off with its choices [33m 770[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1519: no career ends at 26 without the player[2m > [22ma retired screen with nothing behind it goes back to Next Season [33m 558[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRecovery.test.tsx [2m([22m[2m39 tests[22m[2m)[22m[33m 4844[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrestores current progress synchronously and advances the same career once [33m 378[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m108 passed[39m[22m[90m (108)[39m
+[2m   Start at [22m 21:54:01
+[2m   Duration [22m 9.11s[2m (transform 4.22s, setup 326ms, collect 8.65s, tests 12.02s, environment 2.11s, prepare 496ms)[22m
+

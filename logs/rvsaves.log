@@ -1,0 +1,4 @@
+phases seen {"youth":180,"contract_offer":180,"playing":4224,"newspaper":2691,"season_summary":2691,"ballon_dor":2523,"social_media_action":2661,"random_events":8452,"transfer_window":2661,"rivalry_event":1377,"retirement_suggestion":162,"retirement_ceremony":180,"retired":1440,"manager_season":900,"pundit_season":900,"owner_season":900,"international_debut":134,"world_cup":669,"red_card_appeal_result":1}
+differing phases {}
+careers 180, tails 720, states 32926, repair differ 0, inconsistent engine states 0, summaries 2691 (Continue differs 0), errors 0
+RVSAVES PASS: every base save loads byte equal on the branch
