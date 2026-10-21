@@ -139,6 +139,14 @@ describe('Fight Career revealed round truth', () => {
     view.rerender(<FightRing round={round} condition={{ round: 1, player: 90, opp: 0 }} finished={{ method: 'TKO', winner: 'player' }} />);
     expect(ringPose(view.container, 'opp'), 'A TKO without a current knockdown does not invent a fall').toBe('stopped');
     expect(ringPose(view.container, 'player')).toBe('pressure');
+    view.rerender(<FightRing round={{ ...RECAP_ROUND, knockdown: 'opp' }} condition={{ round: 1, player: 80, opp: 0 }} finished={{ method: 'TKO', winner: 'player' }} />);
+    expect(ringPose(view.container, 'player'), 'A completed TKO winner is upright even if knocked down in the last round').toBe('pressure');
+    expect(ringPose(view.container, 'opp'), 'The actual TKO loser without a current knockdown is stopped').toBe('stopped');
+    view.rerender(<FightRing round={RECAP_ROUND} condition={{ round: 1, player: 90, opp: 0 }} finished={{ method: 'TKO', winner: 'player' }} />);
+    expect(ringPose(view.container, 'opp'), 'The actual TKO loser is down when this round records their knockdown').toBe('down');
+    view.rerender(<FightRing round={RECAP_ROUND} condition={{ round: 1, player: 0, opp: 80 }} finished={{ method: 'TKO', winner: 'opp' }} />);
+    expect(ringPose(view.container, 'opp'), 'An opponent TKO winner is upright even if knocked down in the last round').toBe('counter');
+    expect(ringPose(view.container, 'player'), 'The actual player TKO loser without a current knockdown is stopped').toBe('stopped');
     expect(view.getByRole('img', { name: /boxing ring/i })).toHaveAccessibleDescription();
   });
 
@@ -195,6 +203,11 @@ describe('Fight Career revealed round truth', () => {
     act(() => { vi.advanceTimersByTime(1); });
     expect(view.container.querySelector('[data-current-round]')).toHaveAttribute('data-current-round', '2');
     expect(localStorage.getItem(SAVE_KEY)).toBe(savedBytes);
+    view.unmount();
+    const pending = startSavedBout();
+    expect(vi.getTimerCount(), 'Active playback owns a pending timeout before unmount').toBeGreaterThan(0);
+    pending.view.unmount();
+    expect(vi.getTimerCount(), 'Unmount cancels the owned playback timeout').toBe(0);
   });
 
   it('skips to the saved verdict and keeps earlier cards collapsed by default', () => {

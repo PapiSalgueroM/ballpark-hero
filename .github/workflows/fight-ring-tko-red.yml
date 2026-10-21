@@ -1,0 +1,57 @@
+name: Fight ring final TKO regression
+on:
+  push:
+    branches: [codex/career-match-visuals-tko-red]
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      SIM_NETWORK: offline
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Observe final-pose assertion on unchanged original ring
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir tko-red-artifacts
+          git rev-parse HEAD > tko-red-artifacts/head.txt
+          sha256sum src/components/fight-career/FightRing.tsx package.json package-lock.json > tko-red-artifacts/source-before.sha256
+          test "$(sha256sum src/components/fight-career/FightRing.tsx | cut -d' ' -f1)" = 677d7545d395b92f80e1b2fbe43333f090ca8734adb668edc7d96df5238a6e8a
+          npm ci > tko-red-artifacts/install.log 2>&1
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > tko-red-artifacts/types.log 2>&1
+          status=0
+          node_modules/.bin/vitest run src/test/fightCareerRingPlayback.test.tsx --maxWorkers=1 --testNamePattern='shows a completed KO loser down and a TKO without a knockdown stopped upright' --reporter=json --outputFile=tko-red-artifacts/red.json > tko-red-artifacts/red.log 2>&1 || status=$?
+          printf '%s\n' "$status" > tko-red-artifacts/red.exit
+          cat tko-red-artifacts/red.log
+          test "$status" -eq 1
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const result = JSON.parse(fs.readFileSync('tko-red-artifacts/red.json', 'utf8'));
+          assert.equal(result.numFailedTests, 1);
+          const selected = result.testResults.flatMap(s => s.assertionResults).filter(t => t.status === 'failed');
+          assert.equal(selected.length, 1);
+          assert.match(selected[0].title, /^shows a completed KO loser down and a TKO/);
+          assert.match(selected[0].failureMessages.join('\n'), /TKO winner/);
+          assert.doesNotMatch(selected[0].failureMessages.join('\n'), /Cannot find|SyntaxError|ReferenceError|TypeError/);
+          console.log('INTENDED TKO RED: final winner pose assertion failed on original ring.');
+          JS
+          sha256sum --check tko-red-artifacts/source-before.sha256 > tko-red-artifacts/source-hold.log
+          git diff --exit-code HEAD -- src scripts public supabase package.json package-lock.json > tko-red-artifacts/source-diff.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fight-tko-red-${{ github.run_id }}-${{ github.run_attempt }}
+          path: tko-red-artifacts/
+          if-no-files-found: error
+          retention-days: 14

@@ -3,6 +3,7 @@ name: Career match visuals verification
 on:
   push:
     branches: [codex/career-match-visuals, codex/career-match-visuals-red]
+    paths-ignore: ['docs/**']
   workflow_dispatch:
 
 permissions:
