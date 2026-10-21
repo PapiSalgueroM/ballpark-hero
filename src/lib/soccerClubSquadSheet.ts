@@ -80,8 +80,9 @@ export function rankHeadline(view: SquadView): string {
 /** The plan beside the headline: the games, never the rank. */
 export function planLine(trust: Trust): string {
   if (trust.frozen) return 'The plan: frozen out, 8 league games at most.';
-  const a = clampN(trust.band.min + trust.swing + trust.form.swing + (trust.roleSwing ?? 0), 0, 38);
-  const b = clampN(trust.band.max + trust.swing + trust.form.swing + (trust.roleSwing ?? 0), 0, 38);
+  const head = trust.moraleGames ?? 0; /* Round 1523 */
+  const a = clampN(trust.band.min + trust.swing + head + trust.form.swing + (trust.roleSwing ?? 0), 0, 38);
+  const b = clampN(trust.band.max + trust.swing + head + trust.form.swing + (trust.roleSwing ?? 0), 0, 38);
   return `The plan is about ${a} to ${b} league games.`;
 }
 
