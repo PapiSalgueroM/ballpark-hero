@@ -1,0 +1,36 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/arcadePause.test.tsx > arcade flight active time > preserves an unpaused caller and settles once through RAF before its backup 27ms
+ ✓ src/test/arcadePause.test.tsx > arcade flight active time > freezes active time and rejects the old segment when resumed 7ms
+ ✓ src/test/arcadePause.test.tsx > arcade flight active time > reschedules only remaining active time plus the existing backup margin without RAF 4ms
+ ✓ src/test/arcadePause.test.tsx > arcade flight active time > reset invalidates the previous flight and restores an unpaused start 5ms
+ ✓ src/test/arcadePause.test.tsx > arcade flight active time > unmount cancels all scheduled work and invalidates stale callbacks 3ms
+ ✓ src/test/arcadePause.test.tsx > arcade flight active time > keeps reduced motion immediate once and blocks launching while paused 2ms
+ ✓ src/test/arcadePause.test.tsx > 'Free Kick' pause and input safety > cancels a held charge and requires a fresh press after resume 322ms
+ ✓ src/test/arcadePause.test.tsx > 'Free Kick' pause and input safety > freezes the flight and score until the remaining flight resumes once 179ms
+ ✓ src/test/arcadePause.test.tsx > 'Free Kick' pause and input safety > keeps Space and Enter shooting on the focused shot button 204ms
+ ✓ src/test/arcadePause.test.tsx > 'Free Kick' pause and input safety > keeps help, pause, ranges and dialogs out of global gameplay keys 255ms
+ ✓ src/test/arcadePause.test.tsx > 'Free Kick' pause and input safety > keeps a paused daily at ten settlements, one save and one completion 773ms
+ ✓ src/test/arcadePause.test.tsx > 'Buzzer Beater' pause and input safety > cancels a held charge and requires a fresh press after resume 194ms
+ ✓ src/test/arcadePause.test.tsx > 'Buzzer Beater' pause and input safety > freezes the flight and score until the remaining flight resumes once 168ms
+ ✓ src/test/arcadePause.test.tsx > 'Buzzer Beater' pause and input safety > keeps Space and Enter shooting on the focused shot button 181ms
+ ✓ src/test/arcadePause.test.tsx > 'Buzzer Beater' pause and input safety > keeps help, pause, ranges and dialogs out of global gameplay keys 217ms
+ ✓ src/test/arcadePause.test.tsx > 'Buzzer Beater' pause and input safety > keeps a paused daily at ten settlements, one save and one completion 632ms
+
+ Test Files  1 passed (1)
+      Tests  16 passed (16)
+   Start at  22:36:32
+   Duration  5.94s (transform 675ms, setup 100ms, collect 1.08s, tests 3.18s, environment 387ms, prepare 77ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/arcadePause.test.tsx > 'Free Kick' pause and input safety > keeps help, pause, ranges and dialogs out of global gameplay keys
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+stderr | src/test/arcadePause.test.tsx > 'Buzzer Beater' pause and input safety > keeps help, pause, ranges and dialogs out of global gameplay keys
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+simArcadePause: sixteen actual hook/Board checks passed for active time, stale callbacks, backup settlement, fresh input, keyboard routing and one daily save/completion.

@@ -1,0 +1,9 @@
+CONTROL PROVED: nonzero
+CONTROL PROVED: unhandled-count
+CONTROL PROVED: unhandled-array
+CONTROL PROVED: unhandled-text
+CONTROL PROVED: late-error
+CONTROL PROVED: signal
+CONTROL PROVED: spawn-error
+CONTROL PROVED: negative-exit2
+simTycoonPitchRunner: healthy and intended assertion exits accepted; all 8 runner error controls rejected.
