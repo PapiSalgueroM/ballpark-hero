@@ -38,10 +38,13 @@
      balanced   a career with all four set to balanced by setInstructions is the untouched career, to the byte
      fleet      careers at nine clubs (three leagues, first, middle and last by expectation), every arm the same
                 seeds, quick sim with the coach; arms: balanced, the eight single settings and (ARMS=all) every
-                combination, plus `adapt` (the best answer to each opponent's style, set before each match).
+                combination, plus `adapt` (the best answer to each opponent's style, set before each match) and
+                `misread` (the same answers handed to the wrong opponents: the next style's answer).
                 Checks: effects (each setting moves its own stat its way, see EFFECT_BANDS), dominance (no fixed
                 set raises a mid table club's expected points a league game by more than DOMINANCE against
-                balanced, each seed block), adapt (reading the opponent gains at least ADAPT_GAIN)
+                balanced, each seed block), adapt (reading the opponent gains at least ADAPT_GAIN over balanced),
+                read (adapt beats misread by at least READ_GAIN: the reading itself, since both play the same
+                mix of settings and a setting's fitness and knock effects alone already pay a little)
    Expected points: each league match's own goal rates, read off the engine by an observer patched into the
    BUNDLE (never src), turned into 3 P(win) + P(draw) by Poisson. Arms are paired by club, seed and season, so
    the difference is the instructions and not the luck of the draw. Actual points are printed beside it.
@@ -49,7 +52,7 @@
    MEASURED: (filled in from the runner, see below)
 
    Negative controls (CM_TACTICS_CONTROL), each patched into the bundle, never into src; each must turn red:
-     flat       tacticBoost returns zero                                  adapt
+     flat       tacticBoost returns zero                                  read (adapt and misread then play alike)
      dominant   a high line concedes less (def -0.15)                     dominance
      nolegs     a high press costs no legs                                effects (press fitness)
      notempo    tempo moves no possession                                 effects (tempo possession)
@@ -94,6 +97,9 @@ const OUT_JSON = process.env.OUT_JSON || '';
 const DOMINANCE = num('DOMINANCE', 0.06);
 /** Reading the opponent (adapt) must gain at least this over balanced, mid table, pooled. Set from measurement. */
 const ADAPT_GAIN = num('ADAPT_GAIN', 0.02);
+/** Reading the opponent (adapt) must beat the same answers handed to the wrong opponents (misread) by this, mid table,
+    pooled. Set from measurement. */
+const READ_GAIN = num('READ_GAIN', 0.02);
 
 let failures = 0;
 const red = new Map();
@@ -388,6 +394,9 @@ function fleetArms() {
     if (ARMS_KIND === 'all' || set === 1) arms.push({ key: ARM_KEY(instr), instr });
   }
   arms.push({ key: 'adapt', instr: null });
+  /* The same answers handed to the wrong opponents (the answer to the next style in AI_STYLE_IDS): the same mix of
+     settings, so what adapt gains over it is the reading itself. */
+  arms.push({ key: 'misread', instr: null, misread: true });
   return arms;
 }
 
@@ -425,6 +434,9 @@ function bestAnswers(tac) {
   return out;
 }
 
+/** The style the misread arm answers instead of the real one: the next in AI_STYLE_IDS, round the end. */
+const misreadOf = (tac, id) => tac.AI_STYLE_IDS[(tac.AI_STYLE_IDS.indexOf(id) + 1) % tac.AI_STYLE_IDS.length];
+
 const blank = () => ({ n: 0, xpts: 0, pts: 0, all: 0, poss: 0, shots: 0, wonHigh: 0, crosses: 0, offsides: 0, breakC: 0, wideG: 0, myG: 0, oppG: 0, h2Opp: 0, inj: 0, fit: 0 });
 
 /** One career of SEASONS seasons at a club under an arm: the steady keeper (renews every deal, signs nobody), no
@@ -451,7 +463,7 @@ function runCareer(arm, club, seed) {
         for (const p of cm.expiringPlayers(s)) { const nx = cm.renewContract(s, p.id); if (nx) s = nx; }
         if (answers) {
           const f = cm.matchFacts(s);
-          if (f) s = cm.setInstructions(s, answers[f.oppStyle]) ?? s;
+          if (f) s = cm.setInstructions(s, answers[arm.misread ? misreadOf(tac, f.oppStyle) : f.oppStyle]) ?? s;
         }
         obs = null;
         restream(`week|${s.week}`);
@@ -595,13 +607,21 @@ function analyze(rows) {
   }
   /* dominance: no fixed set beats balanced by more than the band at a mid table club, in either block. */
   if (SECTIONS.includes('fleet')) {
-    const fixed = table.filter(t => t.a !== 'adapt');
+    const fixed = table.filter(t => t.a !== 'adapt' && t.a !== 'misread');
     const over = fixed.filter(t => !(t.b0.rel <= DOMINANCE && t.b1.rel <= DOMINANCE));
     const thin = fixed.filter(t => t.b0.n < 2 || t.b1.n < 2);
     if (thin.length) fail('dominance', `${thin.length} arms have under two mid seasons in a block (${thin[0].a})`);
     for (const t of over) fail('dominance', `${t.a} raises a mid table club's expected points ${pct(t.b0.rel)} | ${pct(t.b1.rel)} by block (band ${pct(DOMINANCE)})`);
     if (!over.length && fixed.length) ok('dominance', `none of ${fixed.length} fixed sets beats balanced by over ${pct(DOMINANCE)} at a mid table club in either block (top ${table[0].a === 'adapt' ? table[1]?.a : table[0].a})`);
     const adapt = table.find(t => t.a === 'adapt');
+    const misread = table.find(t => t.a === 'misread');
+    /* read: the reading itself, adapt against the same answers handed to the wrong opponents, paired. */
+    if (adapt && misread) {
+      const d = adapt.mid.rel - misread.mid.rel;
+      const d0 = adapt.b0.rel - misread.b0.rel, d1 = adapt.b1.rel - misread.b1.rel;
+      if (!(d >= READ_GAIN)) fail('read', `reading the opponent beats misreading them by only ${pct(d)} at a mid table club (${pct(d0)} | ${pct(d1)}; band ${pct(READ_GAIN)})`);
+      else ok('read', `reading the opponent beats misreading them by ${pct(d)} at a mid table club (${pct(d0)} | ${pct(d1)}; big ${pct(adapt.big.rel - misread.big.rel)}, small ${pct(adapt.small.rel - misread.small.rel)})`);
+    } else if (adapt) console.log('    read: no misread arm in these rows (a dominance only fleet), not judged');
     if (adapt) {
       if (!(adapt.mid.rel >= ADAPT_GAIN)) fail('adapt', `reading the opponent gains only ${pct(adapt.mid.rel)} at a mid table club (band ${pct(ADAPT_GAIN)})`);
       else ok('adapt', `the best answer to each opponent's style gains ${pct(adapt.mid.rel)} at a mid table club (${pct(adapt.b0.rel)} | ${pct(adapt.b1.rel)}; big ${pct(adapt.big.rel)}, small ${pct(adapt.small.rel)})`);
