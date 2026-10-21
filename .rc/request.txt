@@ -1,0 +1,19 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/soccerCareerRetirement1519.test.tsx src/test/soccerCareerSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+endings: SC_ENDINGS_BASE=bc79b526 node scripts/simSoccerCareerEndings.mjs
+endings-early: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=early node scripts/simSoccerCareerEndings.mjs
+endings-noreconcile: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=noreconcile node scripts/simSoccerCareerEndings.mjs
+endings-summary: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=summary node scripts/simSoccerCareerEndings.mjs
+endings-noreason: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=noreason node scripts/simSoccerCareerEndings.mjs
+endings-aftermath: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=aftermath node scripts/simSoccerCareerEndings.mjs
+endings-manual: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=manual node scripts/simSoccerCareerEndings.mjs
+endings-suggestion: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=suggestion node scripts/simSoccerCareerEndings.mjs
+endings-young: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=young node scripts/simSoccerCareerEndings.mjs
+endings-farewell: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=farewell node scripts/simSoccerCareerEndings.mjs
+endings-farewell26: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=farewell26 node scripts/simSoccerCareerEndings.mjs
+endings-ban: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=ban node scripts/simSoccerCareerEndings.mjs
+endings-prison: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=prison node scripts/simSoccerCareerEndings.mjs
+endings-notail: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=notail node scripts/simSoccerCareerEndings.mjs
+endings-youth: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=youth node scripts/simSoccerCareerEndings.mjs
+endings-ovr50: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=ovr50 node scripts/simSoccerCareerEndings.mjs
+endings-bogus: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=bogus node scripts/simSoccerCareerEndings.mjs
