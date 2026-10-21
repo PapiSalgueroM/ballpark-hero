@@ -2795,10 +2795,11 @@ export function archiveSeasonStory(s: CareerState): CareerStorySeason[] {
  * leaves its legacy, and most leave a retired season row or the after career it
  * chose. With any of those the retirement stands: the flag comes back if it was
  * lost, and a playing phase goes back to the ceremony and its choices (or to the
- * retired screen when the after career was already chosen). With none of them
- * the flag is the stray part, and the career plays on from Next Season. A
- * ceremony that lost its legacy gets it back, since the card cannot draw without
- * it. A save whose flag and phase agree is left exactly as it is. Returns
+ * after career already chosen: its season, or the retired screen). With none of
+ * them the flag is the stray part, and the career plays on from Next Season,
+ * including a save the old hop already put on the retired screen. A ceremony
+ * that lost its legacy gets it back, since the card cannot draw without it. Any
+ * other save whose flag and phase agree is left exactly as it is. Returns
  * whether the career is retired afterwards.
  *
  * Measured over 720 seeded careers in six ways of playing (three seed bases):
@@ -2812,11 +2813,17 @@ function reconcileRetirement(s: CareerState): boolean {
      nothing about the pair, so it is left alone. */
   if (typeof s.retired !== "boolean") return false;
   const post = POST_CAREER_PHASES.includes(s.phase);
-  if (s.retired !== post) {
-    s.retired = !!(s.legacy || s.postRetirementChoice || s.managerState || s.punditState || s.ownerState
-      || s.seasons?.some(row => row?.type === "retired"));
-    if (s.retired && !post) s.phase = s.postRetirementChoice ? "retired" : "retirement_ceremony";
-    if (!s.retired && post) s.phase = s.seasons?.[s.seasons.length - 1]?.type === "youth" ? "youth" : "playing";
+  const backed = !!(s.legacy || s.postRetirementChoice || s.managerState || s.punditState || s.ownerState
+    || s.seasons?.some(row => row?.type === "retired"));
+  /* The old summary hop wrote the flag AND the retired screen, a pair that agrees. Every real road to that
+     screen leaves a legacy or a chosen after career, so the screen with nothing behind it is the stray flag's
+     too, and that career plays on as well. A lost phase on a chosen manager, pundit or owner career goes back
+     to that career's season, never to the end. */
+  if (s.retired !== post || (s.phase === "retired" && !backed)) {
+    s.retired = backed;
+    const c = s.postRetirementChoice;
+    if (backed && !post) s.phase = !c ? "retirement_ceremony" : c !== "retire" && s[`${c}State` as const] ? `${c}_season` as const : "retired";
+    if (!backed && post) s.phase = s.seasons?.[s.seasons.length - 1]?.type === "youth" ? "youth" : "playing";
   }
   if (s.retired && s.phase === "retirement_ceremony" && !s.legacy) s.legacy = calculateLegacy(s);
   return s.retired;
@@ -8863,7 +8870,8 @@ export function declineRetirementSuggestion(prev: CareerState, clubs: ClubData[]
   const s = repairCareer({ ...prev });
   s.events = [...s.events, "💪 Decided to push on, not ready to hang up the boots yet"];
   if (prev.phase !== "retirement_suggestion" || prev.retired) {
-    s.phase = "playing";
+    /* Round 1519: a retirement the repair stood up keeps its screen, never retired on Next Season. */
+    if (!s.retired) s.phase = "playing";
     return s;
   }
   return playPendingProSeason(s, clubs);
