@@ -1,0 +1,5 @@
+endings exit=0 47s | PASS: no career ends before the age rules without the player, and the pair is reconciled
+endings-aftermath exit=1 52s | FAIL: 4 check(s) failed
+endings-bogus exit=1 0s | ABORT: SC_ENDINGS_CONTROL=bogus is not a control (early, noreconcile, summary, noreason, aftermath, manual, suggestion, young, farewell, farewell26, ban, prison, notail, 
+endings-ban exit=1 54s | FAIL: 12 check(s) failed
+endings-prison exit=1 36s | FAIL: 50 check(s) failed

@@ -1,0 +1,5 @@
+endings: node scripts/simSoccerCareerEndings.mjs
+endings-aftermath: SC_ENDINGS_CONTROL=aftermath node scripts/simSoccerCareerEndings.mjs
+endings-ban: SC_ENDINGS_CONTROL=ban node scripts/simSoccerCareerEndings.mjs
+endings-prison: SC_ENDINGS_CONTROL=prison node scripts/simSoccerCareerEndings.mjs
+endings-bogus: SC_ENDINGS_CONTROL=bogus node scripts/simSoccerCareerEndings.mjs
