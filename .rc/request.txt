@@ -1,0 +1,1 @@
+digest-bridged: node .rc/x/bridgeTree.mjs /tmp/bridged && CM_RULES_ROOT=/tmp/bridged node scripts/simCmLeagueRules.mjs 2>&1 | tail -15; exit ${PIPESTATUS[0]}
