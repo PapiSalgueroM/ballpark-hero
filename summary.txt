@@ -1,0 +1,1 @@
+weight-pair3 exit=0 115s |    /deadline-day       655K gz over  48 files (budget 655K, 654.9K to the tenth)
