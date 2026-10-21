@@ -1,0 +1,3 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simTycoonDrawResult exit=0 5s | 3910 original source holds; copies, transforms and raw process records retained at /home/runner/work/ballpark-hero/ballpark-hero/tycoon-draw-result-artifacts/outcomes.
+simTycoonGroundGrowth exit=0 31s | Original source, build and actual template font cache stayed byte-identical.
