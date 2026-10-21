@@ -76,6 +76,12 @@
  * No committed offline copy of the championship archive exists (the wings
  * come from ten database tables through fetchCatalog), so the route stays
  * excused, for the reason written beside it.
+ * Measured on GitHub runners 2026-10-21, chromium, all variants: on main
+ * 2736e054 the walk was red on the ratchet line alone (46 broken saves over
+ * 21 games: 17 needed the button, 29 coped, 0 not judged, 1 trapped, the
+ * Hall's two screens reading "Try again | Report a problem"); with this
+ * reading 17 needed the button, 27 coped, 2 not judged, 0 trapped, green;
+ * everybutton FIRED with exactly main's split.
  *
  * NETWORK. Everything that is not this machine is aborted, the database host
  * included: this harness never reaches production.

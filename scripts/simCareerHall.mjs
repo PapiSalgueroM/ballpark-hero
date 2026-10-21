@@ -304,7 +304,9 @@
                     the majority call against firstBallotChance: ballotflip
                     (the ballot draws against the wrong side of the chance).
      19. base, words (a) the base terms are the ledger's and the median
-                    career of a base position earns what was measured. (b)
+                    career of a base position earns what was measured,
+                    read since Round 1530 on the fleet of 17 (a) pooled,
+                    never on one seed (control basedrift). (b)
                     the Hall share on 2 is at or over 1 and under its
                     ceiling (never over 45 percent: that is the lead's call).
                     (c) the two lines of the "?" carry the rule's numbers,
