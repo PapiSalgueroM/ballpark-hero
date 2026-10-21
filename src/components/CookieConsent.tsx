@@ -168,7 +168,7 @@ export function CookieConsent() {
     >
       <div className="max-w-3xl mx-auto space-y-3 text-sm text-muted-foreground">
         <p>
-          Essential storage keeps games working. Advertising is optional. Analytics is paused. We ask again in 180 days.{' '}
+          Essential storage keeps games working. Advertising is optional. We ask again in 180 days.{' '}
           <Link to="/privacy" className="underline hover:text-foreground font-medium">Learn more</Link>
         </p>
         <div className="flex flex-wrap gap-x-6 gap-y-2">
@@ -176,10 +176,9 @@ export function CookieConsent() {
             <input type="checkbox" checked={advertising && !gpc} disabled={gpc || pendingReload} onChange={event => setAdvertising(event.target.checked)} />
             Advertising
           </label>
-          <label className="inline-flex min-h-11 items-center gap-2 text-foreground">
-            <input type="checkbox" checked={false} disabled />
-            Analytics
-          </label>
+          <p data-analytics-paused-status="">
+            <strong>Analytics is paused.</strong> Google Analytics is off while we check its privacy settings.
+          </p>
         </div>
         {gpc && <p>Your browser's Global Privacy Control keeps advertising off.</p>}
         {pendingReload && <p role="status">Advertising is off for this visit. Save your game or allow site storage, then choose Save choices to refresh. Already-loaded vendor code may keep running until then.</p>}
