@@ -16214,3 +16214,14 @@ Own only narrow Index.tsx visible hero description, existing public/llms.txt, th
 ## Codex Root Round1445 claim: honest paused-analytics status, 2026-10-21
 
 User reports Analytics checkbox cannot be clicked. Root owns only CookieConsent.tsx presentation, the same presentation hunk in its expiredDraft copied fault and manifest source/copy hashes, current privacy-browser assertions, narrow PrivacyPolicy wording and owned proof/workflow/docs. Separate checkout consent-analytics-1445/ballpark-hero branch codex/consent-analytics-1445 frombc79. No ANALYTICS_READY flip, analytics loader, consent storage/purpose gate, vendor setting, database or real-user change. Keep advertising controls, analytics:false choices, GPC/expiry/withdrawal/save/focus semantics. Original semantic RED precedes product. All runtime remote/offline. No historical public receipt or I gameplay hunk changed. This is claimed, not implemented, qualified or live;1443shirt and1444SEO remain separate.
+
+
+## Codex Root Round 1445 LIVE, 2026-10-21
+
+PR 362 source `19c907608a31d0cbd454163286d4a6fda7359137`/run 39686101581 passed both jobs: 74+1 consent/status cases, seven effective faults, 8+3 browser cases, 18 readers, 14 unchanged caps, 0 B generated patch/list and complete final output/source holds. The Analytics checkbox is now a plain paused explanation; Advertising works and analytics:false stays held. Provider settings remain unverified and Google Analytics stays paused.
+
+Merged `554a3b18641044ec5164bff9acab4d338237078c`, published `8873089e-26a7-4095-b517-fde0ded96092`/index-gLwQ_4x3.js. Proper public 39691562482/`d03d471f05c7bf46a04484a2aa0d3288529b4a8a` passed 2 pages/2 observed assets/3 roles/60 GET-HEAD and audit 2/2 with effective thin 1/2; 994 root hashes admitted. Source/deployment, exact observed pins and bounded AST proof are held. Strict CI comparison remains exit 1, no whole-binary equivalence claim. Failed 39689016594 remains failed; corrected intake 39690909464 provides observed-pin provenance.
+
+Privacy-only IndexNow 39692127079/`e6665c9cc330c0e97d1f9f6e11a4a2701f587c62` succeeded: actual one URL, live key verified, HTTP 200 and source holds. Artifact 12388354971 SHA256 `56f87c82af2895f3b919fa80f5c8a3b7441340e2566fa7bc05e96388a9f44fc7`, all 9 hashes held. The reviewed workflow/held script bind Privacy only; no separate payload capture or indexing guarantee.
+
+No engine/shared I-lane source, sports data, dependencies or old 1441 state repaired or waived. Broader 785 audit, 1441 preservation and ongoing privacy/legal operations remain open. SEO 1444 publication follows 1445 closure; shirt 1443 is separate. Operator/docs closure requires no product republish. Record: docs/releases/2026-10-21-analytics-paused-status-live.md.
