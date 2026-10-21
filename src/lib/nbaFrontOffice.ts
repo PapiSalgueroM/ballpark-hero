@@ -863,13 +863,15 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
    yet; scripts/simNbaEarnedDraft.mjs measures them. */
 
 /** The game's own bands of slots and true rating ranges for men 13 on of an
-    earned draft class, from the high 70s down to the minimum man's band
-    (nbaMinimumMan, 66 to 71) by the last pick. The game's own numbers, a
-    starting shape tuned against the balance table of the harness. */
+    earned draft class, falling to the minimum man's band (nbaMinimumMan, 66
+    to 71) by the last pick. The game's own numbers, tuned on 2026-10-21
+    against the balance table of the harness from a starting shape of 72 to
+    80, 69 to 76 and 66 to 72, which put about four points of strength on
+    the league by season ten (docs/audits/ROUND-1321-NOTES.md). */
 export const NBA_EARNED_CLASS_CURVE: readonly { from: number; to: number; ovr: readonly [number, number] }[] = [
-  { from: 13, to: 30, ovr: [72, 80] },
-  { from: 31, to: 45, ovr: [69, 76] },
-  { from: 46, to: 70, ovr: [66, 72] },
+  { from: 13, to: 30, ovr: [67, 72] },
+  { from: 31, to: 45, ovr: [66, 69] },
+  { from: 46, to: 70, ovr: [66, 68] },
 ];
 
 /** How many men an earned class of `slots` picks holds: four more than the

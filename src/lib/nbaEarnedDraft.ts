@@ -102,11 +102,13 @@ export function openNbaDraftNight(desk: GmDesk, league: NbaLeague, series: Serie
 /** The class's two knobs (the brief's A4), on a RIVAL's man only, after he signs, and neither draws a number:
     `rivalSecondOnMin`, a rival's second round man signs one season at the league minimum instead of the rookie
     scale; `latePot`, a rival's man taken at overall pick `from` or later has his ceiling capped at `cap`, never
-    under his own rating (null leaves every ceiling as drawn). Tuned against the two arm table of
-    scripts/simNbaEarnedDraft.mjs; the values and why are in docs/audits/ROUND-1321-NOTES.md. */
+    under his own rating (null leaves every ceiling as drawn). Tuned on 2026-10-21 against the two arm table of
+    scripts/simNbaEarnedDraft.mjs: both on, and a cap of 66 from pick 13 means a rival's man from there on stays the
+    player he was drafted as (the class never draws under 66). The values and why are in
+    docs/audits/ROUND-1321-NOTES.md. */
 export const NBA_DRAFT_KNOBS: { readonly rivalSecondOnMin: boolean; readonly latePot: { readonly from: number; readonly cap: number } | null } = {
-  rivalSecondOnMin: false,
-  latePot: null,
+  rivalSecondOnMin: true,
+  latePot: { from: 13, cap: 66 },
 };
 
 export interface NbaDraftHostCtx { me: string; season: number; scoutLevel: number; rng: () => number }

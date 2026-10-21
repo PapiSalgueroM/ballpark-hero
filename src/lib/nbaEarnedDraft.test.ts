@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { NBA_ROUNDS, initNbaLeague, nbaProspectToPlayer, type NbaLeague, type NbaProspect, type SeriesResult } from './nbaFrontOffice';
+import {
+  NBA_ROUNDS, initNbaLeague, nbaDraftSigning, nbaMinContract, nbaProspectToPlayer, type NbaLeague, type NbaProspect, type SeriesResult,
+} from './nbaFrontOffice';
 import { nbaContractsOf, nbaGamePickRules, nbaPicksOf, nbaScoutRead, openNbaDesk, syncNbaPicks } from './nbaGmDesk';
 import { withGmBlock, type GmDesk } from './gmDesk';
 import { movePicks, pickKey } from './gmEarnedDraft';
 import { NBA_ROOKIE_SCALE_YEARS } from './gmContractRules';
 import {
-  NBA_DRAFT_BLOCK, draftRulesFor, nbaDraftByStaff, nbaDraftContinue, nbaDraftHeading, nbaDraftHelp, nbaDraftHost, nbaDraftNightOf,
-  nbaDraftPick, nbaDraftSeason, nbaEarnedDraftClass, openNbaDraftNight, type GmDraftNight,
+  NBA_DRAFT_BLOCK, NBA_DRAFT_KNOBS, draftRulesFor, nbaDraftByStaff, nbaDraftContinue, nbaDraftHeading, nbaDraftHelp, nbaDraftHost,
+  nbaDraftNightOf, nbaDraftPick, nbaDraftSeason, nbaEarnedDraftClass, openNbaDraftNight, type EarnedSlot, type GmDraftNight,
 } from './nbaEarnedDraft';
 
 function mulberry32(seed: number): () => number {
@@ -142,6 +144,31 @@ describe('the host and the three presses', () => {
       expect(host.read(p, ME)).toBe(scout(p));
       expect(host.shown(p)).toBe(scout(p));
     }
+  });
+  it('the two knobs touch a rival\'s man only: a second rounder signs one season at the minimum, a man from pick 13 never grows', () => {
+    const { league, night } = opened();
+    const { host } = nbaDraftHost({ me: ME, season: league.season, scoutLevel: 1, rng: mulberry32(2) });
+    const cls = nbaEarnedDraftClass(mulberry32(21), night.slots.length, new Set());
+    const signed = (club: string, p: NbaProspect, slot: EarnedSlot) => {
+      host.sign(league, club, p, slot);
+      return league.teams[club].players[league.teams[club].players.length - 1];
+    };
+    const at = (overall: number) => night.slots[overall - 1];
+    expect([at(5).round, at(20).round, at(40).round]).toEqual([1, 1, 2]);
+    expect(NBA_DRAFT_KNOBS).toEqual({ rivalSecondOnMin: true, latePot: { from: 13, cap: 66 } });
+    const min = nbaMinContract(nbaDraftSigning(league).cap);
+    const top = signed('LAL', cls[0], at(5));
+    expect(top.years).toBe(4);
+    expect(top.pot).toBeGreaterThan(top.ovr);
+    const lateFirst = signed('LAL', cls[20], at(20));
+    expect(lateFirst.years).toBe(4);
+    expect(lateFirst.pot).toBe(lateFirst.ovr);
+    const second = signed('DEN', cls[40], at(40));
+    expect([second.years, second.salary, second.pot]).toEqual([1, min, second.ovr]);
+    /* His own men keep the draft's deal and their ceiling, whatever the slot. */
+    const mine = signed(ME, cls[41], at(40));
+    expect(mine.years).not.toBe(1);
+    expect(mine.pot).toBeGreaterThan(mine.ovr);
   });
   it('the staff press is done, and every man of his reaches the re-sign ledger with his round', () => {
     const { league, desk, night } = opened();

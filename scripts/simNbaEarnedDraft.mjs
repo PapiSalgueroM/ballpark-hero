@@ -52,6 +52,15 @@
  *      writes nothing; the block survives a JSON round trip and every press
  *      changes only `made` and `seen`; a draft replayed with the table swapped
  *      under the saved block is the same draft.
+ *   5. THE INCENTIVE. On every closed season of the walk, before any pick
+ *      moved, each of the thirty clubs in turn is the GM on a fresh desk,
+ *      through the libraries' own presses (open, the class, Continue): his
+ *      first selection is the best man left on his scout's read at his first
+ *      slot. One class a season for all thirty (common draws). By band of five
+ *      places in the season's finish, worst first, its pick number rises and
+ *      its true rating falls at every band, each step above 70 percent of the
+ *      smallest measured step; the OLD arm (he picks first from a class of 24
+ *      or more) is printed beside it, flat.
  *   6. THE CLASS. The curve's shape; today's twelve found in every class by
  *      replaying nbaDraftClass on a twin generator; every man after them held
  *      to the curve rating by rating; the mean true rating falls ten slots
@@ -70,9 +79,27 @@
  *  10. THE SHARED HALF KNOWS NO SPORT. gmEarnedDraft.ts imports only the lift
  *      and names no sport in its code (comments stripped); neither library
  *      draws from Math.random or carries an address.
- *   7. THE TABLE (FLEET=full only). Step (a): the OLD arm alone, the board's
- *      draft of today replayed as simNbaGmDesk's draftNight does, on the
- *      fleet below; per seed set S1 to S6 and their spread over the sets.
+ *   7. THE TABLE. FLEET=full PLAYS the fleet below and writes each set's
+ *      careers; SIM_NBA_EARNED_DRAFT_COMBINE=<dir> JUDGES the files. The arms:
+ *      old (the board's draft of today, replayed as simNbaGmDesk's draftNight
+ *      does), new (the earned draft through nbaDraftContinue, nbaDraftPick and
+ *      nbaDraftByStaff, the class from nbaEarnedDraftClass) and arb (new, plus
+ *      a FORCED swap of his first with the weakest club's on opening day
+ *      every season: a CEILING on what a pick trade buys, never a price). The
+ *      stop lines are the lead's of 2026-10-13 (LINES below): S1 the mean
+ *      nbaStrength at seasons 5 and 10 within 0.5; S2 men rated 85 or more at
+ *      season 10 within 20 percent; S3 the two weakest starts' playoff
+ *      seasons, seasons 2 to 5, at most 10 points under; S4 the two strongest
+ *      starts' PLAYOFF seasons, seasons 2 to 10, at most 10 points under (their
+ *      title share printed, never asserted); S5 section 5's rise at every band
+ *      in every set; S6 CPU dead money a season under 1.0 $M and tax payers a
+ *      season within 0.5 of the old arm. The resolution rule (correction 8
+ *      (b)): the per set differences are the replicates, the error of the
+ *      pooled difference is their sd over root k and must be under a third
+ *      of the margin, and the two runs' pooled differences within two errors
+ *      of each other; else UNRESOLVED and the size the rule asks is printed.
+ *      OUTSIDE is a STOP. The table prints between TABLE BEGIN and TABLE END
+ *      for the notes, then what the lead reads beside it, never asserted.
  *
  * THE FLEET. Six user clubs, the two strongest, the two middle and the two
  * weakest by opening nbaStrength, on seed sets of ten seeds: 60 careers of ten
@@ -89,7 +116,17 @@
  * numbers do not depend on how the fleet was sharded. The second run of the
  * same sets is SIM_NBA_EARNED_DRAFT_RUN=2: the same leagues with another id
  * epoch, so the scout's reads (a hash of the man's id) and the injuries (a
- * hash of it too) move.
+ * hash of it too) move. SIM_NBA_EARNED_DRAFT_ARMS picks the arms (old,new by
+ * default; new alone under a control); SIM_NBA_EARNED_DRAFT_TUNE plays a
+ * variant of the curve and the two knobs in the bundle only (JSON: curve as
+ * [[from, to, lo, hi], ...], second, late), its files tagged by
+ * SIM_NBA_EARNED_DRAFT_TAG; SIM_NBA_EARNED_DRAFT_VS names the arm a COMBINE
+ * holds against old (new by default). A control's own fleet (FLEET=full under
+ * SIM_NBA_EARNED_DRAFT_CONTROL=fatclass or bestfirst) writes new-<control>
+ * files; a COMBINE with VS=new-<control> must land OUTSIDE a line (exit 1,
+ * FIRED, the misses in errors) and exits 2 when it does not.
+ * SIM_NBA_EARNED_DRAFT_PROBE_SEEDS=n is a builder's smoke run only: n seeds a
+ * set and the quick walk, so section 7 is red by construction.
  *
  * Controls, through SIM_NBA_EARNED_DRAFT_CONTROL, applied to the source at
  * bundle time and never on disk, each asserted to find its target exactly
@@ -99,8 +136,9 @@
  * one fired.
  *   touchseason  one stray draw before the playoffs                    (1)
  *   flatodds     the bound pick rules hand every club one weight          (2)
- *   playinmade   a play-in game counts as the playoffs: no night opens    (2, 3, 4, 8, 9)
- *   gmfirst      the night is drawn as if his club had the worst record   (3)
+ *   playinmade   a play-in game counts as the playoffs: no night opens    (2, 3, 4, 5, 8, 9)
+ *   gmfirst      the night is drawn as if his club had the worst record   (3, 5)
+ *   bestfirst    the order drawn best record first (records swapped)      (3, 5)
  *   origholder   every slot used by its first owner                       (3)
  *   shortclass   a class four short of the picks                          (3, 6)
  *   shownread    the run prints the engine's grade                        (3)
@@ -210,9 +248,9 @@ const CONTROLS = {
   touchseason: { expect: [1], swaps: { engine: [['  const confWinners: string[] = [];', '  rng(); const confWinners: string[] = [];']] } },
   /* every man after today's twelve drawn as the old class draws them, 70 to 87 */
   fatclass: { expect: [6], swaps: { engine: [
-    ['  { from: 13, to: 30, ovr: [72, 80] },', '  { from: 13, to: 30, ovr: [70, 87] },'],
-    ['  { from: 31, to: 45, ovr: [69, 76] },', '  { from: 31, to: 45, ovr: [70, 87] },'],
-    ['  { from: 46, to: 70, ovr: [66, 72] },', '  { from: 46, to: 70, ovr: [70, 87] },'],
+    ['  { from: 13, to: 30, ovr: [67, 72] },', '  { from: 13, to: 30, ovr: [70, 87] },'],
+    ['  { from: 31, to: 45, ovr: [66, 69] },', '  { from: 31, to: 45, ovr: [70, 87] },'],
+    ['  { from: 46, to: 70, ovr: [66, 68] },', '  { from: 46, to: 70, ovr: [70, 87] },'],
   ] } },
   /* the class ignores the curve and draws every man after the twelve as the old class does */
   nocurve: { expect: [6], swaps: { engine: [['    const trueOvr = lo + Math.floor(rng() * (hi - lo + 1));', '    const trueOvr = 70 + Math.floor(rng() * 18) + 0 * (lo + hi);']] } },
@@ -260,9 +298,9 @@ const CONTROLS = {
   elevenhead: { expect: [6], swaps: { engine: [['  const out = nbaDraftClass(rng, 24, taken).slice(0, Math.min(12, size));', '  const out = nbaDraftClass(rng, 24, taken).slice(0, Math.min(11, size));']] } },
   /* the curve flattened: every band one range */
   flatclass: { expect: [6], swaps: { engine: [
-    ['  { from: 13, to: 30, ovr: [72, 80] },', '  { from: 13, to: 30, ovr: [66, 80] },'],
-    ['  { from: 31, to: 45, ovr: [69, 76] },', '  { from: 31, to: 45, ovr: [66, 80] },'],
-    ['  { from: 46, to: 70, ovr: [66, 72] },', '  { from: 46, to: 70, ovr: [66, 80] },'],
+    ['  { from: 13, to: 30, ovr: [67, 72] },', '  { from: 13, to: 30, ovr: [66, 72] },'],
+    ['  { from: 31, to: 45, ovr: [66, 69] },', '  { from: 31, to: 45, ovr: [66, 72] },'],
+    ['  { from: 46, to: 70, ovr: [66, 68] },', '  { from: 46, to: 70, ovr: [66, 72] },'],
   ] } },
 };
 
@@ -593,9 +631,10 @@ open(6);
   }
   const bands = bandSum.map((s, b) => s / bandN[b]);
   const steps = bands.slice(1).map((m, b) => bands[b] - m);
-  /* Floor: 70 percent of the smallest step measured on these fixed classes (1.70, 2026-10-12, the starting curve;
-     the house rule), see MEASURED. A tuned curve is remeasured here and the floor moves with it. */
-  const STEP_FLOOR = 1.19;
+  /* Floor: 70 percent of the smallest step measured on these fixed classes (the house rule), see MEASURED: 1.70 on
+     the starting curve (2026-10-12), 0.25 on the tuned curve (2026-10-21, slots 51-60 to 61-64; each step is a
+     mean over 1,500 classes, its error about 0.02). A retuned curve is remeasured here and the floor moves with it. */
+  const STEP_FLOOR = 0.17;
   steps.forEach((d, b) => check(d > STEP_FLOOR, `the mean true rating does not fall from slots ${b * 10 + 1}-${b * 10 + 10} to ${b * 10 + 11}-${Math.min(size, b * 10 + 20)} (${d.toFixed(2)})`));
   /* The size rule at every number of slots a draft can have, and two it cannot. */
   for (const s of [-3, 0, 1, 7, 8, 12, 30, 59, 60, 61, 66, 70, 75]) {
@@ -947,12 +986,16 @@ open(5);
   let nights = 0;
   let refused = 0;
   const bySeason = [];
+  /* Three classes a season on the quick walk's thirty seasons, one on the full walk's ninety: about 2,700 nights. */
+  const K = WALK_SEEDS === 30 ? 1 : 3;
   incSeasons.forEach(({ league, series }, si) => {
     const base = JSON.parse(league);
-    X.E.nbaStandings(base).map(t => t.abbr).reverse().forEach((club, fi) => {
+    const worstFirst = X.E.nbaStandings(base).map(t => t.abbr).reverse();
+    for (let k = 0; k < K; k += 1) worstFirst.forEach((club, fi) => {
       const band = Math.floor(fi / 5);
-      /* One class a season for all thirty clubs (common draws), so a band's step compares men of the same class. */
-      const key = 50000 + si * 64;
+      /* One class and one draw for all thirty clubs (common draws), so a band's step compares men of one class. */
+      const rep = si * K + k;
+      const key = 50000 + rep * 64;
       const l = JSON.parse(league);
       const opened = X.N.openNbaDraftNight(X.D.openNbaDesk(l, club), l, series, club);
       if (!opened || !opened.night.slots.some(s => s.holder === club)) { refused += 1; return; }
@@ -966,9 +1009,9 @@ open(5);
       NEW[band].n += 1;
       NEW[band].overall += res.onClock.overall;
       NEW[band].trueOvr += best(res.left).trueOvr;
-      if (!bySeason[si]) bySeason[si] = blank();
-      bySeason[si][band].n += 1;
-      bySeason[si][band].trueOvr += best(res.left).trueOvr;
+      if (!bySeason[rep]) bySeason[rep] = blank();
+      bySeason[rep][band].n += 1;
+      bySeason[rep][band].trueOvr += best(res.left).trueOvr;
       const o = JSON.parse(league);
       const capital = X.E.nbaDraftCapital(o.teams[club]) ?? 0;
       const rivals = Object.values(o.teams).filter(t => t.abbr !== club).reduce((s, t) => s + (X.E.nbaDraftCapital(t) ?? 0), 0);
@@ -986,14 +1029,17 @@ open(5);
   }
   check(incSeasons.length > 0 && nights > 0 && NEW.every(b => b.n > 0), `${nights} nights over ${incSeasons.length} seasons, by band ${NEW.map(b => b.n).join(', ')}`);
   check(refused === 0, `${refused} of ${refused + nights} nights did not open or never put the club on the clock`);
-  /* 70 percent of the smallest step measured on the quick walk (MEASURED 2026-10-21: 3.37 places and 1.27 rating);
-     the house rule of simNbaGmDesk. A tuned curve is remeasured here and the floors move with it. */
-  const RISE_FLOOR = 2.36;
-  const FALL_FLOOR = 0.89;
+  /* MEASURED 2026-10-21 on the tuned curve (quick walk, 2,700 nights): the smallest steps are 3.29 places and 0.38
+     rating (error 0.08, the last band, where the tuned curve is nearly flat). RISE_FLOOR is the house rule of
+     simNbaGmDesk, 70 percent of the smallest step. For the rating, 70 percent (0.27) would sit 1.4 errors under the
+     step, a coin toss for any change of draws, so the floor is three errors under it (0.38 - 3 x 0.08), still above
+     zero, which is S5's own line. A retuned curve is remeasured here and both floors move with it. */
+  const RISE_FLOOR = 2.3;
+  const FALL_FLOOR = 0.14;
   rise.forEach((d, b) => check(d > RISE_FLOOR, `his first selection does not come later from finish ${b * 5 + 1}-${b * 5 + 5} to ${b * 5 + 6}-${b * 5 + 10} (${Number.isFinite(d) ? d.toFixed(2) : d} places, floor ${RISE_FLOOR})`));
   fall.forEach((d, b) => check(d > FALL_FLOOR, `his first selection is not worse from finish ${b * 5 + 1}-${b * 5 + 5} to ${b * 5 + 6}-${b * 5 + 10} (${Number.isFinite(d) ? d.toFixed(2) : d} rating, floor ${FALL_FLOOR})`));
   const row = list => list.map((b, i) => `${i * 5 + 1}-${i * 5 + 5}: #${per(b, 'overall').toFixed(1)} ${per(b, 'trueOvr').toFixed(1)}`).join(', ');
-  console.log(`   ${nights} nights over ${incSeasons.length} seasons (${NEW[0].n} a band), each club the GM once a season, in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  console.log(`   ${nights} nights over ${incSeasons.length} seasons x ${K} classes (${NEW[0].n} a band), each club the GM once a class, in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
   console.log(`   new, by finish worst first, his first selection's pick and true rating: ${row(NEW)}`);
   console.log(`   old, the same clubs today: ${row(OLD)}`);
   /* The error of each rating step, the seasons as replicates (each season one class for all thirty clubs). */
@@ -1389,6 +1435,18 @@ function twoArmTable(table) {
   const pooled = (label, f) => { const m = table.get(label); if (!m) return NaN; return mean([...m.values()].flatMap(x => [...x.values()].map(f))); };
   const labels = ['old', VS, ...[...table.keys()].filter(l => l !== 'old' && l !== VS)];
   const say = (what, f, d = 1) => console.log(`   ${what}: ${labels.map(l => `${l} ${fix(pooled(l, f), d)}`).join(', ')}`);
+  console.log('   EVERY ARM ON THE LINES, minus the old arm on the same sets and runs (S6 dead is the arm\'s own), pooled:');
+  for (const l of labels.filter(x => x !== 'old')) {
+    const m = table.get(l);
+    const cells = LINES.map(line => {
+      const d = [];
+      for (const [r, sets] of m) for (const [s, L] of sets) if (old.get(r)?.has(s)) d.push(line.kind === 'abs' ? line.get(L) : line.get(L) - line.get(old.get(r).get(s)));
+      return `${line.id} ${fix(mean(d), line.d)}`;
+    });
+    const all = [...m.values()].flatMap(x => [...x.values()]);
+    const s5ok = all.filter(L => L.S5.every(x => x.n > 0) && L.S5.slice(1).every((x, i) => x.overall > L.S5[i].overall && x.trueOvr < L.S5[i].trueOvr)).length;
+    console.log(`   ${l} (${all.length} sets): ${cells.join(', ')}, S5 in ${s5ok} of ${all.length} sets`);
+  }
   console.log('   BESIDE THE LINES (pooled, printed, never asserted):');
   say("strong starts' title share, seasons 2 to 10 (per season)", L => L.S4titles.rate);
   for (const t of ['strong', 'middle', 'weak']) {
