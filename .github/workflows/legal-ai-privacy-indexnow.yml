@@ -1,0 +1,57 @@
+name: Index verified legal pages
+
+on:
+  push:
+    branches: [codex/legal-ai-privacy-indexnow]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  index_legal_pages:
+    if: github.ref == 'refs/heads/codex/legal-ai-privacy-indexnow'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SOURCE_SHA: 076091ac870db38b953ddf71d3252cf1ac556782
+      READBACK_RUN: '39629153890'
+      READBACK_SHA: ea19d8a5728cb10b238a17edf048fc75dcf93eb1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Require successful public readback and unchanged published source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir indexnow-evidence
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$READBACK_RUN" --jq '[.head_sha,.status,.conclusion,.name] | @tsv' > indexnow-evidence/public-readback.tsv
+          expected="$(printf '%s\tcompleted\tsuccess\tPublic legal and privacy readback' "$READBACK_SHA")"
+          test "$(cat indexnow-evidence/public-readback.tsv)" = "$expected"
+          git diff --exit-code "$SOURCE_SHA" HEAD -- src public scripts supabase package.json package-lock.json > indexnow-evidence/source-hold.log
+          git rev-parse HEAD > indexnow-evidence/head.txt
+          sha256sum scripts/indexnowSubmit.mjs public/16211a5a50cff8f3434e5db883a21d8f.txt > indexnow-evidence/source-before.sha256
+      - name: Submit only the four verified legal pages
+        env:
+          URLS: /about,/terms,/privacy,/contact
+        run: |
+          set -euo pipefail
+          status=0
+          timeout --signal=TERM --kill-after=5s 2m node scripts/indexnowSubmit.mjs > indexnow-evidence/indexnow.log 2>&1 || status=$?
+          printf '%s\n' "$status" > indexnow-evidence/indexnow.exit
+          cat indexnow-evidence/indexnow.log
+          test "$status" -eq 0
+          sha256sum --check indexnow-evidence/source-before.sha256 > indexnow-evidence/source-after.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: legal-indexnow-${{ github.run_id }}-${{ github.run_attempt }}
+          path: indexnow-evidence/
+          if-no-files-found: error
+          retention-days: 14
