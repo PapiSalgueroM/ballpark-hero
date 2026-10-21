@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+weight-base: git checkout -q bc79b526 -- src index.html vite.config.ts package.json && node_modules/.bin/vite build --outDir /tmp/dbase --logLevel error; git checkout -q HEAD -- src index.html vite.config.ts package.json; (nohup node scripts/lib/hostLikeServer.mjs /tmp/dbase 4176 > /tmp/srvb.log 2>&1 &) ; sleep 4; SWEEP_OFFLINE=1 BASE=http://localhost:4176 node scripts/sweepWeight.mjs 2>&1 | grep -E "club-manager|manager-hot-seat|deadline-day" | head -12
+weight-head: node_modules/.bin/vite build --outDir /tmp/dhead --logLevel error && (nohup node scripts/lib/hostLikeServer.mjs /tmp/dhead 4177 > /tmp/srvh.log 2>&1 &) ; sleep 4; SWEEP_OFFLINE=1 BASE=http://localhost:4177 node scripts/sweepWeight.mjs 2>&1 | grep -E "club-manager|manager-hot-seat|deadline-day" | head -12
