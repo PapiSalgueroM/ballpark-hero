@@ -1,0 +1,5 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ledger exit=0 334s | simCmLedgerBound: green, all four sections held
+victory exit=0 20s | PASS reduce: motion, final facts, first-frame Continue and 320px layout
+mainDD exit=0 1s | AssertionError [ERR_ASSERTION]: Only fixed Decisions may differ from the held parent app
+hereDD exit=0 0s | AssertionError [ERR_ASSERTION]: Only fixed Decisions may differ from the held parent app
