@@ -1,0 +1,16 @@
+MUTATED noowner
+=== endings exit=0
+D) every fleet career is byte for byte the base engine's
+  base bc79b526: 240 careers, 0 differ from this tree
+PASS: no career ends before the age rules without the player, and the pair is reconciled
+=== vrecov exit=1
+ [31m❯[39m src/test/soccerCareerSaveRecovery.test.tsx [2m([22m[2m39 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 2341[2mms[22m[39m
+[31m   [31m×[31m Soccer Career actual save recovery[2m > [22mrestores the current owner tail with its own saved season history[39m[32m 25[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/soccerCareerSaveRecovery.test.tsx[2m > [22mSoccer Career actual save recovery[2m > [22mrestores the current owner tail with its own saved season history
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m38 passed[39m[22m[90m (39)[39m
+[2m   Start at [22m 21:53:00
+[2m   Duration [22m 4.86s[2m (transform 1.88s, setup 54ms, collect 1.82s, tests 2.34s, environment 227ms, prepare 50ms)[22m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerSaveRecovery.test.tsx,title=src/test/soccerCareerSaveRecovery.test.tsx > Soccer Career actual save recovery > restores the current owner tail with its own saved season history,line=177,column=48::AssertionError: expected 'retired' to be 'owner_season' // Object.is equality%0A%0AExpected: "owner_season"%0AReceived: "retired"%0A%0A ❯ src/test/soccerCareerSaveRecovery.test.tsx:177:48%0A%0A
+MUT noowner: endings=0 vrecov=1 => CAUGHT

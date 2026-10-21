@@ -1,0 +1,35 @@
+MUTATED nomgrowner
+=== endings exit=0
+D) every fleet career is byte for byte the base engine's
+  base bc79b526: 240 careers, 0 differ from this tree
+PASS: no career ends before the age rules without the player, and the pair is reconciled
+=== v1519 exit=0
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 21:52:01
+[2m   Duration [22m 3.92s[2m (transform 1.38s, setup 56ms, collect 1.89s, tests 1.40s, environment 247ms, prepare 94ms)[22m
+=== vrecov exit=1
+ [31m❯[39m src/test/soccerCareerSaveRecovery.test.tsx [2m([22m[2m39 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 2234[2mms[22m[39m
+[31m   [31m×[31m Soccer Career actual save recovery[2m > [22mrestores the current manager tail with its own saved season history[39m[32m 25[2mms[22m[39m
+[31m   [31m×[31m Soccer Career actual save recovery[2m > [22mrestores the current owner tail with its own saved season history[39m[32m 18[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/soccerCareerSaveRecovery.test.tsx[2m > [22mSoccer Career actual save recovery[2m > [22mrestores the current manager tail with its own saved season history
+[41m[1m FAIL [22m[49m src/test/soccerCareerSaveRecovery.test.tsx[2m > [22mSoccer Career actual save recovery[2m > [22mrestores the current owner tail with its own saved season history
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m37 passed[39m[22m[90m (39)[39m
+[2m   Duration [22m 5.02s[2m (transform 1.34s, setup 49ms, collect 2.17s, tests 2.23s, environment 227ms, prepare 48ms)[22m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerSaveRecovery.test.tsx,title=src/test/soccerCareerSaveRecovery.test.tsx > Soccer Career actual save recovery > restores the current manager tail with its own saved season history,line=177,column=48::AssertionError: expected 'retired' to be 'manager_season' // Object.is equality%0A%0AExpected: "manager_season"%0AReceived: "retired"%0A%0A ❯ src/test/soccerCareerSaveRecovery.test.tsx:177:48%0A%0A
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerSaveRecovery.test.tsx,title=src/test/soccerCareerSaveRecovery.test.tsx > Soccer Career actual save recovery > restores the current owner tail with its own saved season history,line=177,column=48::AssertionError: expected 'retired' to be 'owner_season' // Object.is equality%0A%0AExpected: "owner_season"%0AReceived: "retired"%0A%0A ❯ src/test/soccerCareerSaveRecovery.test.tsx:177:48%0A%0A
+=== simRetirementToManager exit=0
+5) Copy check
+   clean
+ALL RETIREMENT BRIDGE CHECKS PASSED
+=== simCareerNoDeadEnd exit=0
+   the engine assigns 20 distinct phases
+   20/20 assignable phases are drawable, 0 orphaned
+simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+=== simCareerMoneyAfterRetirement exit=0
+6) "Everything you have" matches what the two screens promise
+   worst drift after 25 seasons: €35k (0.1% of the honest total, on the manager path)
+All good: the money app keeps running for the whole retirement tail.
+MUT nomgrowner: endings=0 v1519=0 vrecov=1 simRetirementToManager=0 simCareerNoDeadEnd=0 simCareerMoneyAfterRetirement=0 => CAUGHT

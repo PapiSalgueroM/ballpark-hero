@@ -1,0 +1,6 @@
+m-nomgrowner exit=1 58s | MUT nomgrowner: endings=0 v1519=0 vrecov=1 simRetirementToManager=0 simCareerNoDeadEnd=0 simCareerMoneyAfterRetirement=0 => CAUGHT
+m-noowner exit=1 49s | MUT noowner: endings=0 vrecov=1 => CAUGHT
+m-nolegacy exit=1 48s | MUT nolegacy: endings=1 v1519=1 => CAUGHT
+m-norow exit=1 53s | MUT norow: endings=1 v1519=0 vrecov=0 => CAUGHT
+m-swap exit=1 48s | MUT swap: endings=1 v1519=1 => CAUGHT
+m-believe exit=1 48s | MUT believe: endings=1 v1519=1 => CAUGHT

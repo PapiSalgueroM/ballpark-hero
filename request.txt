@@ -1,0 +1,7 @@
+#!serial
+m-nomgrowner: bash .rc/x/rvgates1519.sh nomgrowner endings v1519 vrecov simRetirementToManager simCareerNoDeadEnd simCareerMoneyAfterRetirement
+m-noowner: bash .rc/x/rvgates1519.sh noowner endings vrecov
+m-nolegacy: bash .rc/x/rvgates1519.sh nolegacy endings v1519
+m-norow: bash .rc/x/rvgates1519.sh norow endings v1519 vrecov
+m-swap: bash .rc/x/rvgates1519.sh swap endings v1519
+m-believe: bash .rc/x/rvgates1519.sh believe endings v1519

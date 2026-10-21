@@ -1,0 +1,19 @@
+MUTATED believe
+=== endings exit=1
+  FAIL: C a retired screen with nothing behind it: repaired to retired false, phase retired, legacy none
+  FAIL: C a ceremony with nothing behind it: repaired to retired false, phase retirement_ceremony, legacy none
+FAIL: 2 check(s) failed
+D) every fleet career is byte for byte the base engine's
+  base bc79b526: 240 careers, 0 differ from this tree
+FAIL: 2 check(s) failed
+=== v1519 exit=1
+ [31m❯[39m src/test/soccerCareerRetirement1519.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1222[2mms[22m[39m
+[31m   [31m×[31m Round 1519: no career ends at 26 without the player[2m > [22ma retired screen with nothing behind it goes back to Next Season[39m[32m 71[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/soccerCareerRetirement1519.test.tsx[2m > [22mRound 1519: no career ends at 26 without the player[2m > [22ma retired screen with nothing behind it goes back to Next Season
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 21:56:19
+[2m   Duration [22m 3.60s[2m (transform 1.31s, setup 51ms, collect 1.78s, tests 1.22s, environment 227ms, prepare 98ms)[22m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerRetirement1519.test.tsx,title=src/test/soccerCareerRetirement1519.test.tsx > Round 1519%3A no career ends at 26 without the player > a retired screen with nothing behind it goes back to Next Season,line=188,column=66::AssertionError: expected <button …(1)></button> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<button%0A  class="inline-flex items-center justify-center gap-2 rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground py-2 flex-1 min-w-0 h-12 whitespace-normal px-2 text-xs leading-tight font-bold sm:px-4 sm:text-sm"%0A>%0A  📤 Share Legacy%0A</button>%0A%0A ❯ src/test/soccerCareerRetirement1519.test.tsx:188:66%0A%0A
+MUT believe: endings=1 v1519=1 => CAUGHT
