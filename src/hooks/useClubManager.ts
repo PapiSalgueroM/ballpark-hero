@@ -13,7 +13,7 @@ import {
   resumeMatch, makeHalftimeSub, setHalftimeMentality, setSquadRole,
   setTeamTalk, giveHalftimeTalk, answerPress, duckPress,
   matchFacts,
-  changeLive, startSecondHalf, startExtraTime, markLiveMinute,
+  changeLive, startSecondHalf, startExtraTime, markLiveMinute, setInstructions,
   setDuty, carryShape, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
   setShootoutOrder,
   DEFAULT_ERA_ID,
@@ -24,6 +24,7 @@ import {
 } from '@/lib/clubManager';
 import type { MarketDoor } from '@/lib/clubManager';
 import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation } from '@/lib/clubManager';
+import type { TeamInstructions } from '@/lib/clubManagerTactics';
 import type { Position } from '@/types/game';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec, ManagerEdit, BoardObjective } from '@/lib/clubManager';
@@ -767,6 +768,12 @@ export function useClubManager() {
     setCareer(prev => (prev ? { ...prev, mentality: m } : prev));
   }, []);
 
+  /* Round 1522: the four standing instructions, between matches (the engine refuses with a match on, and drops
+     the field when all four are back on balanced). */
+  const setTeamInstructions = useCallback((i: TeamInstructions) => {
+    setCareer(prev => (prev ? setInstructions(prev, i) ?? prev : prev));
+  }, []);
+
   const setXiSlot = useCallback((slotIdx: number, playerId: string | null) => {
     setCareer(prev => {
       if (!prev) return prev;
@@ -1178,6 +1185,11 @@ export function useClubManager() {
     setCareer(prev => (prev ? setHalftimeMentality(prev, m) : prev));
   }, []);
 
+  /* Round 1522: instructions, a formation or a duty in the dressing room, for tonight only (the restart, 46). */
+  const changeAtHalftime = useCallback((change: LiveChange) => {
+    setCareer(prev => (prev ? changeLive(prev, 46, change) ?? prev : prev));
+  }, []);
+
   /* Round 504: secondHalf is the FINISH of a live match now. The classic half
      time screen still calls it straight from the break (the whistle draws the
      second half itself), and the live viewer calls it when its clock reaches
@@ -1302,7 +1314,7 @@ export function useClubManager() {
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
     resume, startNew, retire, chooseClub, confirmClub, confirmCustomClub,
-    setFormationIndex, setMentality, setXiSlot, swapXiSlots, autoPick,
+    setFormationIndex, setMentality, setTeamInstructions, setXiSlot, swapXiSlots, autoPick,
     saveMatchPlan, applyMatchPlan, deleteMatchPlan,
     setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
     play, quickPlay, continueFromReport, nextSeason,
@@ -1313,7 +1325,7 @@ export function useClubManager() {
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, renewWithClause, terminate, signFree, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
-    subAtHalftime, shapeAtHalftime, secondHalf, startSecondHalfLive, startExtraTimeLive, changeAt, markMinute,
+    subAtHalftime, shapeAtHalftime, changeAtHalftime, secondHalf, startSecondHalfLive, startExtraTimeLive, changeAt, markMinute,
     talk, halftimeTalk, sayIt, sendAssistant,
     answer,
     applyJob, joinSummer, joinNow,

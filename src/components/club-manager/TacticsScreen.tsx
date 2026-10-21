@@ -7,9 +7,11 @@ import {
   slotPosition, defensiveLineY, lineLabel,
   benchFor, dutyOptions, slotDuty, DUTY_INFO,
   SET_PIECE_KEYS, SET_PIECE_INFO, setPieceCandidates,
-  SHOOTOUT_MAX_ORDER, shootoutOrderOf,
+  SHOOTOUT_MAX_ORDER, shootoutOrderOf, instructionsOf,
 } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, Mentality, Duty, SetPieceKey, FitGrade } from '@/lib/clubManager';
+import type { AiStyleId, TeamInstructions } from '@/lib/clubManagerTactics';
+import { InstructionsPicker } from '@/components/club-manager/InstructionsPicker';
 import { ratingTint, SecondPositionChips } from '@/components/club-manager/SquadScreen';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { MatchPlansCard } from '@/components/club-manager/MatchPlansCard';
@@ -50,6 +52,10 @@ interface TacticsScreenProps {
   career: CareerState;
   onFormation: (idx: number) => void;
   onMentality: (m: Mentality) => void;
+  /** Round 1522: the four standing instructions. Without it the block is not drawn. */
+  onInstructions?: (i: TeamInstructions) => void;
+  /** Round 1522: the next opponent's style, for the line on what tends to work against it. */
+  theirStyle?: AiStyleId | null;
   onSlot: (slotIdx: number, playerId: string | null) => void;
   onSwap: (a: number, b: number) => void;
   onAutoPick: () => void;
@@ -112,7 +118,7 @@ interface TacticsScreenProps {
  * takers with the same-position-first lists the engine ranks.
  */
 export function TacticsScreen({
-  career, onFormation, onMentality, onSlot, onSwap, onAutoPick, onDuty, onSetPiece, onAutoSetPieces,
+  career, onFormation, onMentality, onInstructions, theirStyle, onSlot, onSwap, onAutoPick, onDuty, onSetPiece, onAutoSetPieces,
   onShootoutOrder, openTileRequest, onOpenTileRequestDone, onSaveMatchPlan, onApplyMatchPlan, onDeleteMatchPlan,
 }: TacticsScreenProps) {
   const [openSlot, setOpenSlot] = useState<number | null>(null);
@@ -435,6 +441,14 @@ export function TacticsScreen({
           ))}
         </div>
       </div>
+
+      {/* Round 1522: the four team instructions, beside the mentality. */}
+      {onInstructions && (
+        <div>
+          <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1.5">Team instructions</div>
+          <InstructionsPicker value={instructionsOf(career)} onChange={onInstructions} theirStyle={theirStyle} idPrefix="tab" />
+        </div>
+      )}
 
       {/* Pitch */}
       <div ref={pitchWrapRef}>

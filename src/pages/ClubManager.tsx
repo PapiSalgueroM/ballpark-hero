@@ -867,6 +867,7 @@ const ClubManager = () => {
           career={g.career}
           onSub={g.subAtHalftime}
           onShape={g.shapeAtHalftime}
+          onChange={g.changeAtHalftime}
           onTalk={g.halftimeTalk}
           onSecondHalf={g.secondHalf}
         /></ScreenLoading>
@@ -1640,6 +1641,8 @@ const ClubManager = () => {
             career={c}
             onFormation={g.setFormationIndex}
             onMentality={g.setMentality}
+            onInstructions={g.setTeamInstructions}
+            theirStyle={g.facts?.oppStyle ?? null}
             onSlot={g.setXiSlot}
             onSwap={g.swapXiSlots}
             onAutoPick={g.autoPick}

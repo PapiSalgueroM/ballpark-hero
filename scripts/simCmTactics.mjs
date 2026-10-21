@@ -105,6 +105,16 @@ const OBSERVER = {
   from: '  const detail = buildMatchDetail({\n    myGoals, oppGoals, lamMine, lamOpp,',
   to: '  globalThis.__cmTacObs?.({ lamMine, lamOpp, comp: fx.competition, opp: fx.opponent, week: live.week, fit: started.reduce((a, x) => a + x.p.fitness, 0) / Math.max(1, started.length) });\n  const detail = buildMatchDetail({\n    myGoals, oppGoals, lamMine, lamOpp,',
 };
+/* Common random numbers for the fleet: each stretch of my match starts its own stream, keyed to the career, the
+   week and the stretch, so two arms draw their goal counts off the same numbers and part only where the
+   instructions part them. The draws are still uniform and independent, so each arm is the game as played; only
+   the pairing between arms is tighter. Inert unless the fleet sets the hook (CRN=0 turns it off). */
+const SEGMENT_STREAM = {
+  file: 'clubManager.ts',
+  from: '  if (from >= to) return;\n  const off = offPitchIds(live);',
+  to: '  if (from >= to) return;\n  globalThis.__cmTacSeg?.(live.week, half, from);\n  const off = offPitchIds(live);',
+};
+const CRN = process.env.CRN !== '0';
 const PATCHES = {
   flat: { file: 'clubManagerTactics.ts', from: 'export function tacticBoost(r: TacticRead): { atk: number; def: number } {\n', to: 'export function tacticBoost(r: TacticRead): { atk: number; def: number } {\n  if (r) return { atk: 0, def: 0 };\n' },
   keyless: { file: 'clubManagerTactics.ts', from: '  let u = keyedRng(`cm-style|${club}`)() * total;', to: '  let u = Math.random() * total;' },
@@ -204,7 +214,7 @@ const S = [-1, 0, 1];
 const KEYS = ['press', 'tempo', 'width', 'line'];
 const nameOf = i => KEYS.every(k => i[k] === 0) ? 'balanced' : KEYS.filter(k => i[k] !== 0).map(k => `${k}${i[k] > 0 ? '+' : '-'}`).join(' ');
 
-const HEAD = FOLD ? null : await bundle([OBSERVER, ...(PATCHES[CONTROL] ? [PATCHES[CONTROL]] : [])]);
+const HEAD = FOLD ? null : await bundle([OBSERVER, SEGMENT_STREAM, ...(PATCHES[CONTROL] ? [PATCHES[CONTROL]] : [])]);
 if (CONTROL) console.log(`NEGATIVE CONTROL ON: ${CONTROL} (must turn ${CONTROL_SECTIONS[CONTROL].join(', ')} red)`);
 const DASHES = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
 
@@ -372,10 +382,16 @@ function fleetClubs(cm) {
     out.push({ name: clubs[Math.floor(clubs.length / 2)].name, tier: 'mid' });
     out.push({ name: clubs[clubs.length - 1].name, tier: 'small' });
   }
-  return out;
+  const tiers = (process.env.TIERS || "big,mid,small").split(",");
+  return out.filter(c => tiers.includes(c.tier));
 }
 
-/** The best answer to each style by the table (fit 85, no duties), which the adapt arm sets before each match. */
+/** What a manager who reads the help would charge a high press for its legs, in net goals a match (the press's
+    fitness cost is a strength cost in the matches after). The adapt arm's own judgement, not the engine's. */
+const PRESS_LEGS_NET = num('PRESS_LEGS_NET', 0.04);
+
+/** The best answer to each style by the table (fit 85, no duties) less the press's legs, which the adapt arm sets
+    before each match. */
 function bestAnswers(tac) {
   const all = [];
   for (const press of S) for (const tempo of S) for (const width of S) for (const line of S) all.push({ press, tempo, width, line });
@@ -384,7 +400,7 @@ function bestAnswers(tac) {
     const net = c => {
       const r1 = tac.tacticBoost({ mine: c, theirs: tac.AI_STYLES[id].instructions, half: 1, fit: 85, duties: [] });
       const r2 = tac.tacticBoost({ mine: c, theirs: tac.AI_STYLES[id].instructions, half: 2, fit: 85, duties: [] });
-      return (r1.atk + r2.atk - r1.def - r2.def) / 2;
+      return (r1.atk + r2.atk - r1.def - r2.def) / 2 - (c.press === 1 ? PRESS_LEGS_NET : 0);
     };
     out[id] = all.map(c => ({ c, v: net(c) })).sort((a, b) => b.v - a.v)[0].c;
   }
@@ -401,11 +417,16 @@ function runCareer(arm, club, seed) {
   const answers = arm.instr ? null : bestAnswers(tac);
   let obs = null;
   globalThis.__cmTacObs = o => { obs = o; };
-  return withStream(hash32(`tactics|${club.name}|${seed}`), () => {
+  const career = `tactics|${club.name}|${seed}`;
+  let season = 1;
+  /* Common random numbers: every entry of the calendar, and every stretch of my match, on its own keyed stream. */
+  const restream = key => { if (CRN) Math.random = seeded(hash32(`${career}|${season}|${key}`)); };
+  globalThis.__cmTacSeg = CRN ? ((week, half, from) => restream(`seg|${week}|${half}|${from}`)) : undefined;
+  try { return withStream(hash32(career), () => {
     let s = cm.startCareer(club.name);
     s = { ...s, startOptions: { ...(s.startOptions ?? {}), noSack: 1 } };
     const rows = [];
-    for (let season = 1; season <= SEASONS; season++) {
+    for (season = 1; season <= SEASONS; season++) {
       const rec = { arm: arm.key, club: club.name, tier: club.tier, seed, season, ...blank() };
       if (arm.instr) s = cm.setInstructions(s, arm.instr) ?? s;
       for (let guard = 0; guard < 160; guard++) {
@@ -415,16 +436,17 @@ function runCareer(arm, club, seed) {
           if (f) s = cm.setInstructions(s, answers[f.oppStyle]) ?? s;
         }
         obs = null;
+        restream(`week|${s.week}`);
         const r = cm.playNextEntry(s, { skipHalftime: true });
         s = r.state;
         if (r.kind === 'match' && r.report && obs) countMatch(cm, tac, s, r.report, obs, rec, `${club.name}|${seed}|${season}`);
         if (r.kind === 'seasonOver') break;
       }
       rows.push(rec);
-      if (season < SEASONS) s = cm.startNextSeason(cm.finishSeason(s).state);
+      if (season < SEASONS) { restream('summer'); s = cm.startNextSeason(cm.finishSeason(s).state); }
     }
     return rows;
-  });
+  }); } finally { globalThis.__cmTacSeg = undefined; }
 }
 
 /** One match into a season's record. The tactics numbers are the report's own, or for a match played on balanced

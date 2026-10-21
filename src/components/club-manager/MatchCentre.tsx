@@ -4,6 +4,7 @@ import type { CareerState, MatchFacts, FormResult, TalkTone } from '@/lib/clubMa
 import { toLeague } from '@/lib/clubManager';
 import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
 import { inFixtureOrder, myClubFirst } from '@/lib/cmMatchDisplay';
+import { AI_STYLES } from '@/lib/clubManagerTactics';
 
 /**
  * Round 157: the pre-match facts screen, modelled on what a matchday app
@@ -117,6 +118,13 @@ export function MatchCentre({
         <div className="text-[10px] text-muted-foreground mt-1.5">
           {venue} · their strength ~{f.oppStrength} · your XI ~{f.myStrength}
         </div>
+        {/* Round 1522: how they play, and what tends to work against it. Set your instructions on the Tactics tab. */}
+        {f.oppStyle && AI_STYLES[f.oppStyle] && (
+          <div className="text-[10px] text-foreground mt-1 leading-snug" data-cm-mc-style={f.oppStyle}>
+            <span className="font-bold">{AI_STYLES[f.oppStyle].emoji} They play {AI_STYLES[f.oppStyle].label}.</span>{' '}
+            <span className="text-muted-foreground">{AI_STYLES[f.oppStyle].blurb} {AI_STYLES[f.oppStyle].read}</span>
+          </div>
+        )}
         {/* Round 781: the first leg before a second leg, so you know what tonight has to do. */}
         {f.firstLeg && (
           <div className="text-[10px] text-foreground mt-1 tabular-nums" data-cm-first-leg={`${f.firstLeg.mine}-${f.firstLeg.theirs}`}>

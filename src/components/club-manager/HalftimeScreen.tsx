@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { ArrowLeftRight, Gauge, Play } from 'lucide-react';
+import { ArrowLeft, ArrowLeftRight, Gauge, Play } from 'lucide-react';
 import { benchFor, tiringAtHalftime, matchRuleOf, subsLeftOf, pressOf, liveGoneIds } from '@/lib/clubManager';
-import type { CareerState, CMPlayer, Mentality, TalkTone } from '@/lib/clubManager';
+import type { CareerState, CMPlayer, LiveChange, Mentality, TalkTone } from '@/lib/clubManager';
+import { LiveTacticsPanel } from '@/components/club-manager/LiveTacticsPanel';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
 import { HalftimeLineups } from '@/components/club-manager/HalftimeLineups';
@@ -14,6 +15,8 @@ interface HalftimeScreenProps {
   onShape: (m: Mentality) => void;
   onTalk: (tone: TalkTone) => void;
   onSecondHalf: () => void;
+  /** Round 1522: an instructions, formation or duty change for the second half. Without it the tile is not drawn. */
+  onChange?: (change: LiveChange) => void;
 }
 
 const SHAPES: { id: Mentality; label: string; blurb: string }[] = [
@@ -37,14 +40,25 @@ function fitnessTone(f: number): string {
  * stands, who is running on empty, and two things you can actually do about
  * it before they go back out.
  */
-export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }: HalftimeScreenProps) {
+export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf, onChange }: HalftimeScreenProps) {
   const live = career.live;
   const [picking, setPicking] = useState<string | null>(null);
   const [readingLineups, setReadingLineups] = useState(false);
+  const [tactics, setTactics] = useState(false);
   const benchRef = useRevealScroll<HTMLDivElement>(`sub:${picking ?? ''}`, { skipFirst: true });
 
   if (!live) return null;
   if (readingLineups) return <HalftimeLineups career={career} onBack={() => setReadingLineups(false)} />;
+  if (tactics && onChange) {
+    return (
+      <div className="space-y-3" data-cm-ht-tactics>
+        <button type="button" onClick={() => setTactics(false)} className="inline-flex items-center gap-1 text-xs font-semibold text-primary">
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to the dressing room
+        </button>
+        <LiveTacticsPanel career={career} live={live} onChange={onChange} idPrefix="ht" />
+      </div>
+    );
+  }
 
   const onPitch: CMPlayer[] = live.onPitch
     .map(id => career.squad.find(p => p.id === id))
@@ -98,6 +112,12 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }:
       </div>
 
       <button type="button" onClick={() => setReadingLineups(true)} className="w-full rounded-xl border border-border bg-card p-3 text-left text-sm font-bold text-foreground">Starting XIs</button>
+      {/* Round 1522: tonight's instructions, formation and duties, on their own screen with a way back. */}
+      {onChange && (
+        <button type="button" data-cm-ht-tactics-open onClick={() => setTactics(true)} className="w-full rounded-xl border border-border bg-card p-3 text-left text-sm font-bold text-foreground">
+          Tactics <span className="block text-[10px] font-normal text-muted-foreground">Instructions, formation and duties for the second half</span>
+        </button>
+      )}
 
       {/* ---- shape ---- */}
       <div className="bg-card border border-border rounded-xl p-3">
