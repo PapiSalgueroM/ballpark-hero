@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+corrupt: node scripts/playCorruptSaves.mjs
+ctl-everybutton: CORRUPT_CONTROL=everybutton node scripts/playCorruptSaves.mjs
+ctl-nobutton: CORRUPT_CONTROL=nobutton node scripts/playCorruptSaves.mjs
+ctl-norestore: CORRUPT_CONTROL=norestore node scripts/playCorruptSaves.mjs
+ctl-multiline: CORRUPT_CONTROL=multiline node scripts/playCorruptSaves.mjs
+ctl-everybutton-nohall: CORRUPT_CONTROL=everybutton ONLY=/fight-gym node scripts/playCorruptSaves.mjs
+mutA-offline: node .rc/x/mutA.mjs offline && node_modules/.bin/vite build --outDir /tmp/mutA1 --emptyOutDir > /tmp/mutA1.log 2>&1; b=$?; git checkout -- src; [ $b -eq 0 ] || { tail -20 /tmp/mutA1.log; exit 7; }; echo "== branch harness"; CORRUPT_DIST=/tmp/mutA1 ONLY=/fight-gym,/fight-career node scripts/playCorruptSaves.mjs; s=$?; echo "branch exit=$s"; echo "== main harness 554a3b18"; git show 554a3b18:scripts/playCorruptSaves.mjs > scripts/zzPcsMain.mjs && CORRUPT_DIST=/tmp/mutA1 ONLY=/fight-gym,/fight-career node scripts/zzPcsMain.mjs; echo "main exit=$?"; rm -f scripts/zzPcsMain.mjs; exit $s
+mutA-label: node .rc/x/mutA.mjs offline,label && node_modules/.bin/vite build --outDir /tmp/mutA2 --emptyOutDir > /tmp/mutA2.log 2>&1 && CORRUPT_DIST=/tmp/mutA2 ONLY=/fight-gym,/fight-career,/hall-of-champions node scripts/playCorruptSaves.mjs; s=$?; git checkout -- src; echo "label exit=$s"; exit $s
+walk: node .rc/x/walkHall.mjs

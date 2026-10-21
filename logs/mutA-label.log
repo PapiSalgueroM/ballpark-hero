@@ -1,0 +1,14 @@
+mutA: src/pages/FightGym.tsx mutated
+mutA: src/pages/FightCareer.tsx mutated
+mutA: src/components/game/ReportQuestion.tsx mutated
+  PASS  /fight-career shell: coped without the button, 0 click(s), buttons: Report this
+  PASS  /fight-career wrongtype: coped without the button, 0 click(s), buttons: Report this
+  PASS  /fight-gym shell: coped without the button, 0 click(s), buttons: Try again | Report this
+  PASS  /fight-gym wrongtype: coped without the button, 0 click(s), buttons: Try again | Report this
+  PASS  /hall-of-champions shell: coped without the button, 0 click(s), buttons: Try again | Report this
+  PASS  /hall-of-champions wrongtype: coped without the button, 0 click(s), buttons: Try again | Report this
+  FAIL  /hall-of-champions: excused in OFFLINE_ONLY but judged offline now, remove the excuse
+
+6 broken saves over 3 long games: 0 reached the error page and needed the button, 6 were coped with by the game, 0 drew the broken save without throwing, 0 could not be judged offline, 1 trapped
+playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all
+label exit=1

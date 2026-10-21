@@ -1,0 +1,6 @@
+NEGATIVE CONTROL ON (everybutton): the offline reading counts the report affordance as a game action again, so /hall-of-champions must read as coped and its excuse be called stale
+  PASS  /fight-gym shell: needed the button, 1 click(s), buttons: Open the doors | Report a problem
+  PASS  /fight-gym wrongtype: needed the button, 1 click(s), buttons: Open the doors | Report a problem
+
+2 broken saves over 1 long games: 2 reached the error page and needed the button, 0 were coped with by the game, 0 drew the broken save without throwing, 0 could not be judged offline, 0 trapped
+playCorruptSaves control everybutton: CANNOT FIRE. /hall-of-champions was not walked (ONLY leaves it out).

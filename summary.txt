@@ -1,0 +1,11 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 52s | 
+corrupt exit=0 128s | playCorruptSaves: green. No broken save traps a long game.
+ctl-everybutton exit=0 128s | playCorruptSaves control everybutton: FIRED. With the report affordance counted as a game action, /hall-of-champions reads as coped and its OFFLINE_ONLY excuse is called 
+ctl-nobutton exit=0 83s | playCorruptSaves control: FIRED. With the button hidden, 17 of 17 routes that need it are trapped.
+ctl-norestore exit=0 111s | playCorruptSaves control: FIRED. With the restore card hidden, 17 of 17 routes that need it are trapped.
+ctl-multiline exit=0 0s | playCorruptSaves control multiline: FIRED. continueSaves.ts has 22 path: rows in CONTINUE_SAVES but the row pattern read 21; a row written over several lines is not walke
+ctl-everybutton-nohall exit=1 7s | playCorruptSaves control everybutton: CANNOT FIRE. /hall-of-champions was not walked (ONLY leaves it out).
+mutA-offline exit=1 42s | main exit=0
+mutA-label exit=1 38s | label exit=1
+walk exit=0 22s | walkHall: 12 screens, 0 with a problem

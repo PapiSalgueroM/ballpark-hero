@@ -1,0 +1,1058 @@
+[
+ {
+  "name": "hall-390-rm-nosave",
+  "errText": "Couldn't load the championship archive right now.",
+  "errBox": {
+   "x": 16,
+   "y": 273,
+   "w": 358,
+   "h": 48
+  },
+  "overflowX": 0,
+  "docH": 5581,
+  "btns": [
+   {
+    "t": "Back",
+    "x": 296,
+    "y": 8,
+    "w": 82,
+    "h": 36,
+    "inFooter": true
+   },
+   {
+    "t": "Sign up to track your statsTra",
+    "x": 135,
+    "y": 50,
+    "w": 120,
+    "h": 30,
+    "inFooter": true
+   },
+   {
+    "t": "",
+    "x": 0,
+    "y": 89,
+    "w": 36,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Try again",
+    "x": 143,
+    "y": 333,
+    "w": 105,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Report a problem",
+    "x": 122,
+    "y": 465,
+    "w": 146,
+    "h": 32,
+    "inFooter": false
+   },
+   {
+    "t": "Cookie choices",
+    "x": 256,
+    "y": 5493,
+    "w": 90,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Light mode",
+    "x": 27,
+    "y": 5525,
+    "w": 68,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Sound: off",
+    "x": 123,
+    "y": 5525,
+    "w": 76,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Report a problem",
+    "x": 227,
+    "y": 5517,
+    "w": 136,
+    "h": 32,
+    "inFooter": true
+   }
+  ],
+  "errs": [],
+  "problems": []
+ },
+ {
+  "name": "hall-390-rm-wrongtype",
+  "errText": "Couldn't load the championship archive right now.",
+  "errBox": {
+   "x": 16,
+   "y": 273,
+   "w": 358,
+   "h": 48
+  },
+  "overflowX": 0,
+  "docH": 5581,
+  "btns": [
+   {
+    "t": "Back",
+    "x": 296,
+    "y": 8,
+    "w": 82,
+    "h": 36,
+    "inFooter": true
+   },
+   {
+    "t": "Sign up to track your statsTra",
+    "x": 135,
+    "y": 50,
+    "w": 120,
+    "h": 30,
+    "inFooter": true
+   },
+   {
+    "t": "",
+    "x": 0,
+    "y": 89,
+    "w": 36,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Try again",
+    "x": 143,
+    "y": 333,
+    "w": 105,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Report a problem",
+    "x": 122,
+    "y": 465,
+    "w": 146,
+    "h": 32,
+    "inFooter": false
+   },
+   {
+    "t": "Cookie choices",
+    "x": 256,
+    "y": 5493,
+    "w": 90,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Light mode",
+    "x": 27,
+    "y": 5525,
+    "w": 68,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Sound: off",
+    "x": 123,
+    "y": 5525,
+    "w": 76,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Report a problem",
+    "x": 227,
+    "y": 5517,
+    "w": 136,
+    "h": 32,
+    "inFooter": true
+   }
+  ],
+  "errs": [],
+  "problems": []
+ },
+ {
+  "name": "hall-390-rm-shell",
+  "errText": "Couldn't load the championship archive right now.",
+  "errBox": {
+   "x": 16,
+   "y": 273,
+   "w": 358,
+   "h": 48
+  },
+  "overflowX": 0,
+  "docH": 5581,
+  "btns": [
+   {
+    "t": "Back",
+    "x": 296,
+    "y": 8,
+    "w": 82,
+    "h": 36,
+    "inFooter": true
+   },
+   {
+    "t": "Sign up to track your statsTra",
+    "x": 135,
+    "y": 50,
+    "w": 120,
+    "h": 30,
+    "inFooter": true
+   },
+   {
+    "t": "",
+    "x": 0,
+    "y": 89,
+    "w": 36,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Try again",
+    "x": 143,
+    "y": 333,
+    "w": 105,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Report a problem",
+    "x": 122,
+    "y": 465,
+    "w": 146,
+    "h": 32,
+    "inFooter": false
+   },
+   {
+    "t": "Cookie choices",
+    "x": 256,
+    "y": 5493,
+    "w": 90,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Light mode",
+    "x": 27,
+    "y": 5525,
+    "w": 68,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Sound: off",
+    "x": 123,
+    "y": 5525,
+    "w": 76,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Report a problem",
+    "x": 227,
+    "y": 5517,
+    "w": 136,
+    "h": 32,
+    "inFooter": true
+   }
+  ],
+  "errs": [],
+  "problems": []
+ },
+ {
+  "name": "hall-390-motion-nosave",
+  "errText": "Couldn't load the championship archive right now.",
+  "errBox": {
+   "x": 16,
+   "y": 273,
+   "w": 358,
+   "h": 48
+  },
+  "overflowX": 0,
+  "docH": 5581,
+  "btns": [
+   {
+    "t": "Back",
+    "x": 296,
+    "y": 8,
+    "w": 82,
+    "h": 36,
+    "inFooter": true
+   },
+   {
+    "t": "Sign up to track your statsTra",
+    "x": 135,
+    "y": 50,
+    "w": 120,
+    "h": 30,
+    "inFooter": true
+   },
+   {
+    "t": "",
+    "x": 0,
+    "y": 89,
+    "w": 36,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Try again",
+    "x": 143,
+    "y": 333,
+    "w": 105,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Report a problem",
+    "x": 122,
+    "y": 465,
+    "w": 146,
+    "h": 32,
+    "inFooter": false
+   },
+   {
+    "t": "Cookie choices",
+    "x": 256,
+    "y": 5493,
+    "w": 90,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Light mode",
+    "x": 27,
+    "y": 5525,
+    "w": 68,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Sound: off",
+    "x": 123,
+    "y": 5525,
+    "w": 76,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Report a problem",
+    "x": 227,
+    "y": 5517,
+    "w": 136,
+    "h": 32,
+    "inFooter": true
+   }
+  ],
+  "errs": [],
+  "problems": []
+ },
+ {
+  "name": "hall-390-motion-wrongtype",
+  "errText": "Couldn't load the championship archive right now.",
+  "errBox": {
+   "x": 16,
+   "y": 273,
+   "w": 358,
+   "h": 48
+  },
+  "overflowX": 0,
+  "docH": 5581,
+  "btns": [
+   {
+    "t": "Back",
+    "x": 296,
+    "y": 8,
+    "w": 82,
+    "h": 36,
+    "inFooter": true
+   },
+   {
+    "t": "Sign up to track your statsTra",
+    "x": 135,
+    "y": 50,
+    "w": 120,
+    "h": 30,
+    "inFooter": true
+   },
+   {
+    "t": "",
+    "x": 0,
+    "y": 89,
+    "w": 36,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Try again",
+    "x": 143,
+    "y": 333,
+    "w": 105,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Report a problem",
+    "x": 122,
+    "y": 465,
+    "w": 146,
+    "h": 32,
+    "inFooter": false
+   },
+   {
+    "t": "Cookie choices",
+    "x": 256,
+    "y": 5493,
+    "w": 90,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Light mode",
+    "x": 27,
+    "y": 5525,
+    "w": 68,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Sound: off",
+    "x": 123,
+    "y": 5525,
+    "w": 76,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Report a problem",
+    "x": 227,
+    "y": 5517,
+    "w": 136,
+    "h": 32,
+    "inFooter": true
+   }
+  ],
+  "errs": [],
+  "problems": []
+ },
+ {
+  "name": "hall-390-motion-shell",
+  "errText": "Couldn't load the championship archive right now.",
+  "errBox": {
+   "x": 16,
+   "y": 273,
+   "w": 358,
+   "h": 48
+  },
+  "overflowX": 0,
+  "docH": 5581,
+  "btns": [
+   {
+    "t": "Back",
+    "x": 296,
+    "y": 8,
+    "w": 82,
+    "h": 36,
+    "inFooter": true
+   },
+   {
+    "t": "Sign up to track your statsTra",
+    "x": 135,
+    "y": 50,
+    "w": 120,
+    "h": 30,
+    "inFooter": true
+   },
+   {
+    "t": "",
+    "x": 0,
+    "y": 89,
+    "w": 36,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Try again",
+    "x": 143,
+    "y": 333,
+    "w": 105,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Report a problem",
+    "x": 122,
+    "y": 465,
+    "w": 146,
+    "h": 32,
+    "inFooter": false
+   },
+   {
+    "t": "Cookie choices",
+    "x": 256,
+    "y": 5493,
+    "w": 90,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Light mode",
+    "x": 27,
+    "y": 5525,
+    "w": 68,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Sound: off",
+    "x": 123,
+    "y": 5525,
+    "w": 76,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Report a problem",
+    "x": 227,
+    "y": 5517,
+    "w": 136,
+    "h": 32,
+    "inFooter": true
+   }
+  ],
+  "errs": [],
+  "problems": []
+ },
+ {
+  "name": "hall-1280-rm-nosave",
+  "errText": "Couldn't load the championship archive right now.",
+  "errBox": {
+   "x": 320,
+   "y": 245,
+   "w": 640,
+   "h": 24
+  },
+  "overflowX": 0,
+  "docH": 3930,
+  "btns": [
+   {
+    "t": "Back",
+    "x": 1180,
+    "y": 40,
+    "w": 88,
+    "h": 36,
+    "inFooter": true
+   },
+   {
+    "t": "Sign up to track your statsTra",
+    "x": 510,
+    "y": 41,
+    "w": 259,
+    "h": 34,
+    "inFooter": true
+   },
+   {
+    "t": "",
+    "x": 192,
+    "y": 85,
+    "w": 40,
+    "h": 40,
+    "inFooter": false
+   },
+   {
+    "t": "Try again",
+    "x": 588,
+    "y": 281,
+    "w": 105,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Report a problem",
+    "x": 567,
+    "y": 413,
+    "w": 146,
+    "h": 32,
+    "inFooter": false
+   },
+   {
+    "t": "Cookie choices",
+    "x": 939,
+    "y": 3842,
+    "w": 90,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Light mode",
+    "x": 1056,
+    "y": 3842,
+    "w": 68,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Sound: off",
+    "x": 1152,
+    "y": 3842,
+    "w": 76,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Report a problem",
+    "x": 572,
+    "y": 3866,
+    "w": 136,
+    "h": 32,
+    "inFooter": true
+   }
+  ],
+  "errs": [],
+  "problems": []
+ },
+ {
+  "name": "hall-1280-rm-wrongtype",
+  "errText": "Couldn't load the championship archive right now.",
+  "errBox": {
+   "x": 320,
+   "y": 245,
+   "w": 640,
+   "h": 24
+  },
+  "overflowX": 0,
+  "docH": 3930,
+  "btns": [
+   {
+    "t": "Back",
+    "x": 1180,
+    "y": 40,
+    "w": 88,
+    "h": 36,
+    "inFooter": true
+   },
+   {
+    "t": "Sign up to track your statsTra",
+    "x": 510,
+    "y": 41,
+    "w": 259,
+    "h": 34,
+    "inFooter": true
+   },
+   {
+    "t": "",
+    "x": 192,
+    "y": 85,
+    "w": 40,
+    "h": 40,
+    "inFooter": false
+   },
+   {
+    "t": "Try again",
+    "x": 588,
+    "y": 281,
+    "w": 105,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Report a problem",
+    "x": 567,
+    "y": 413,
+    "w": 146,
+    "h": 32,
+    "inFooter": false
+   },
+   {
+    "t": "Cookie choices",
+    "x": 939,
+    "y": 3842,
+    "w": 90,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Light mode",
+    "x": 1056,
+    "y": 3842,
+    "w": 68,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Sound: off",
+    "x": 1152,
+    "y": 3842,
+    "w": 76,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Report a problem",
+    "x": 572,
+    "y": 3866,
+    "w": 136,
+    "h": 32,
+    "inFooter": true
+   }
+  ],
+  "errs": [],
+  "problems": []
+ },
+ {
+  "name": "hall-1280-rm-shell",
+  "errText": "Couldn't load the championship archive right now.",
+  "errBox": {
+   "x": 320,
+   "y": 245,
+   "w": 640,
+   "h": 24
+  },
+  "overflowX": 0,
+  "docH": 3930,
+  "btns": [
+   {
+    "t": "Back",
+    "x": 1180,
+    "y": 40,
+    "w": 88,
+    "h": 36,
+    "inFooter": true
+   },
+   {
+    "t": "Sign up to track your statsTra",
+    "x": 510,
+    "y": 41,
+    "w": 259,
+    "h": 34,
+    "inFooter": true
+   },
+   {
+    "t": "",
+    "x": 192,
+    "y": 85,
+    "w": 40,
+    "h": 40,
+    "inFooter": false
+   },
+   {
+    "t": "Try again",
+    "x": 588,
+    "y": 281,
+    "w": 105,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Report a problem",
+    "x": 567,
+    "y": 413,
+    "w": 146,
+    "h": 32,
+    "inFooter": false
+   },
+   {
+    "t": "Cookie choices",
+    "x": 939,
+    "y": 3842,
+    "w": 90,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Light mode",
+    "x": 1056,
+    "y": 3842,
+    "w": 68,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Sound: off",
+    "x": 1152,
+    "y": 3842,
+    "w": 76,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Report a problem",
+    "x": 572,
+    "y": 3866,
+    "w": 136,
+    "h": 32,
+    "inFooter": true
+   }
+  ],
+  "errs": [],
+  "problems": []
+ },
+ {
+  "name": "hall-1280-motion-nosave",
+  "errText": "Couldn't load the championship archive right now.",
+  "errBox": {
+   "x": 320,
+   "y": 245,
+   "w": 640,
+   "h": 24
+  },
+  "overflowX": 0,
+  "docH": 3930,
+  "btns": [
+   {
+    "t": "Back",
+    "x": 1180,
+    "y": 40,
+    "w": 88,
+    "h": 36,
+    "inFooter": true
+   },
+   {
+    "t": "Sign up to track your statsTra",
+    "x": 510,
+    "y": 41,
+    "w": 259,
+    "h": 34,
+    "inFooter": true
+   },
+   {
+    "t": "",
+    "x": 192,
+    "y": 85,
+    "w": 40,
+    "h": 40,
+    "inFooter": false
+   },
+   {
+    "t": "Try again",
+    "x": 588,
+    "y": 281,
+    "w": 105,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Report a problem",
+    "x": 567,
+    "y": 413,
+    "w": 146,
+    "h": 32,
+    "inFooter": false
+   },
+   {
+    "t": "Cookie choices",
+    "x": 939,
+    "y": 3842,
+    "w": 90,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Light mode",
+    "x": 1056,
+    "y": 3842,
+    "w": 68,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Sound: off",
+    "x": 1152,
+    "y": 3842,
+    "w": 76,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Report a problem",
+    "x": 572,
+    "y": 3866,
+    "w": 136,
+    "h": 32,
+    "inFooter": true
+   }
+  ],
+  "errs": [],
+  "problems": []
+ },
+ {
+  "name": "hall-1280-motion-wrongtype",
+  "errText": "Couldn't load the championship archive right now.",
+  "errBox": {
+   "x": 320,
+   "y": 245,
+   "w": 640,
+   "h": 24
+  },
+  "overflowX": 0,
+  "docH": 3930,
+  "btns": [
+   {
+    "t": "Back",
+    "x": 1180,
+    "y": 40,
+    "w": 88,
+    "h": 36,
+    "inFooter": true
+   },
+   {
+    "t": "Sign up to track your statsTra",
+    "x": 510,
+    "y": 41,
+    "w": 259,
+    "h": 34,
+    "inFooter": true
+   },
+   {
+    "t": "",
+    "x": 192,
+    "y": 85,
+    "w": 40,
+    "h": 40,
+    "inFooter": false
+   },
+   {
+    "t": "Try again",
+    "x": 588,
+    "y": 281,
+    "w": 105,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Report a problem",
+    "x": 567,
+    "y": 413,
+    "w": 146,
+    "h": 32,
+    "inFooter": false
+   },
+   {
+    "t": "Cookie choices",
+    "x": 939,
+    "y": 3842,
+    "w": 90,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Light mode",
+    "x": 1056,
+    "y": 3842,
+    "w": 68,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Sound: off",
+    "x": 1152,
+    "y": 3842,
+    "w": 76,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Report a problem",
+    "x": 572,
+    "y": 3866,
+    "w": 136,
+    "h": 32,
+    "inFooter": true
+   }
+  ],
+  "errs": [],
+  "problems": []
+ },
+ {
+  "name": "hall-1280-motion-shell",
+  "errText": "Couldn't load the championship archive right now.",
+  "errBox": {
+   "x": 320,
+   "y": 245,
+   "w": 640,
+   "h": 24
+  },
+  "overflowX": 0,
+  "docH": 3930,
+  "btns": [
+   {
+    "t": "Back",
+    "x": 1180,
+    "y": 40,
+    "w": 88,
+    "h": 36,
+    "inFooter": true
+   },
+   {
+    "t": "Sign up to track your statsTra",
+    "x": 510,
+    "y": 41,
+    "w": 259,
+    "h": 34,
+    "inFooter": true
+   },
+   {
+    "t": "",
+    "x": 192,
+    "y": 85,
+    "w": 40,
+    "h": 40,
+    "inFooter": false
+   },
+   {
+    "t": "Try again",
+    "x": 588,
+    "y": 281,
+    "w": 105,
+    "h": 36,
+    "inFooter": false
+   },
+   {
+    "t": "Report a problem",
+    "x": 567,
+    "y": 413,
+    "w": 146,
+    "h": 32,
+    "inFooter": false
+   },
+   {
+    "t": "Cookie choices",
+    "x": 939,
+    "y": 3842,
+    "w": 90,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Light mode",
+    "x": 1056,
+    "y": 3842,
+    "w": 68,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Sound: off",
+    "x": 1152,
+    "y": 3842,
+    "w": 76,
+    "h": 16,
+    "inFooter": true
+   },
+   {
+    "t": "Report a problem",
+    "x": 572,
+    "y": 3866,
+    "w": 136,
+    "h": 32,
+    "inFooter": true
+   }
+  ],
+  "errs": [],
+  "problems": []
+ }
+]

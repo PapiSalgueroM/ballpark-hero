@@ -1,0 +1,20 @@
+mutA: src/pages/FightGym.tsx mutated
+mutA: src/pages/FightCareer.tsx mutated
+== branch harness
+  PASS  /fight-career shell: coped without the button, 0 click(s), buttons: Report a problem
+  PASS  /fight-career wrongtype: coped without the button, 0 click(s), buttons: Report a problem
+  FAIL  /fight-gym shell: its data never loaded with the database aborted, so the save was never read, and the route is not excused in OFFLINE_ONLY (not judged offline)
+  FAIL  /fight-gym wrongtype: its data never loaded with the database aborted, so the save was never read, and the route is not excused in OFFLINE_ONLY (not judged offline)
+
+4 broken saves over 2 long games: 0 reached the error page and needed the button, 2 were coped with by the game, 0 drew the broken save without throwing, 2 could not be judged offline, 2 trapped
+playCorruptSaves: 2 broken save(s) trap the player: /fight-gym shell, /fight-gym wrongtype
+branch exit=1
+== main harness 554a3b18
+  PASS  /fight-career shell: coped without the button, 0 click(s), buttons: Report a problem
+  PASS  /fight-career wrongtype: coped without the button, 0 click(s), buttons: Report a problem
+  PASS  /fight-gym shell: coped without the button, 0 click(s), buttons: Try again | Report a problem
+  PASS  /fight-gym wrongtype: coped without the button, 0 click(s), buttons: Try again | Report a problem
+
+4 broken saves over 2 long games: 0 reached the error page and needed the button, 4 were coped with by the game, 0 drew the broken save without throwing, 0 could not be judged offline, 0 trapped
+playCorruptSaves: green. No broken save traps a long game.
+main exit=0

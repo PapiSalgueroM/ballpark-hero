@@ -1,0 +1,13 @@
+ok   hall-390-rm-nosave: "Couldn't load the championship archive right now." buttons [@0,89 36x36 | Try again@143,333 105x36 | Report a problem@122,465 146x32] overflowX=0
+ok   hall-390-rm-wrongtype: "Couldn't load the championship archive right now." buttons [@0,89 36x36 | Try again@143,333 105x36 | Report a problem@122,465 146x32] overflowX=0
+ok   hall-390-rm-shell: "Couldn't load the championship archive right now." buttons [@0,89 36x36 | Try again@143,333 105x36 | Report a problem@122,465 146x32] overflowX=0
+ok   hall-390-motion-nosave: "Couldn't load the championship archive right now." buttons [@0,89 36x36 | Try again@143,333 105x36 | Report a problem@122,465 146x32] overflowX=0
+ok   hall-390-motion-wrongtype: "Couldn't load the championship archive right now." buttons [@0,89 36x36 | Try again@143,333 105x36 | Report a problem@122,465 146x32] overflowX=0
+ok   hall-390-motion-shell: "Couldn't load the championship archive right now." buttons [@0,89 36x36 | Try again@143,333 105x36 | Report a problem@122,465 146x32] overflowX=0
+ok   hall-1280-rm-nosave: "Couldn't load the championship archive right now." buttons [@192,85 40x40 | Try again@588,281 105x36 | Report a problem@567,413 146x32] overflowX=0
+ok   hall-1280-rm-wrongtype: "Couldn't load the championship archive right now." buttons [@192,85 40x40 | Try again@588,281 105x36 | Report a problem@567,413 146x32] overflowX=0
+ok   hall-1280-rm-shell: "Couldn't load the championship archive right now." buttons [@192,85 40x40 | Try again@588,281 105x36 | Report a problem@567,413 146x32] overflowX=0
+ok   hall-1280-motion-nosave: "Couldn't load the championship archive right now." buttons [@192,85 40x40 | Try again@588,281 105x36 | Report a problem@567,413 146x32] overflowX=0
+ok   hall-1280-motion-wrongtype: "Couldn't load the championship archive right now." buttons [@192,85 40x40 | Try again@588,281 105x36 | Report a problem@567,413 146x32] overflowX=0
+ok   hall-1280-motion-shell: "Couldn't load the championship archive right now." buttons [@192,85 40x40 | Try again@588,281 105x36 | Report a problem@567,413 146x32] overflowX=0
+walkHall: 12 screens, 0 with a problem
