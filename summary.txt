@@ -1,0 +1,11 @@
+earned exit=0 23s | simNbaEarnedDraft: green.
+vitest exit=0 27s |    Duration  26.34s (transform 5.87s, setup 2.56s, collect 17.60s, tests 28.54s, environment 15.47s, prepare 3.60s)
+nbadesk exit=0 35s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+tsc exit=0 118s | 
+capital-ctl exit=0 58s | zeroBudget exit=0 "failedIndices":[19]
+draftorder exit=0 13s | simGmDraftOrder: green. 603416 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+earned-ctl exit=0 240s | simNbaEarnedDraft controls: all 19 fired, each in exactly its own sections.
+singles exit=0 113s | simStorageWrites exit=0 | simStorageWrites: all green (owed: 12)
+diffproof exit=0 0s | diffproof-ok
+draftorder-all exit=0 371s | simGmDraftOrder controls: all 40 fired, each in exactly its own sections.
+nbadesk-ctl exit=0 543s | dayonestature exit=0 simNbaGmDesk: control dayonestature fired (87 failures, as it should)
