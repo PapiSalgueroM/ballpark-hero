@@ -1,0 +1,8 @@
+#!serial
+m3-nat: node .rc/x/review-run-mut.mjs expiry && node scripts/simCmMadeUpNations.mjs; s=$?; git checkout -- src; exit $s
+m3-vit: node .rc/x/review-run-mut.mjs expiry && node_modules/.bin/vitest run src/test/cmMadeUpNations.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+m3-carry: node .rc/x/review-run-mut.mjs expiry && node .rc/x/review-run-carry.mjs; s=$?; git checkout -- src; exit $s
+m4-nat: node .rc/x/review-run-mut.mjs noown && node scripts/simCmMadeUpNations.mjs; s=$?; git checkout -- src; exit $s
+m4-vit: node .rc/x/review-run-mut.mjs noown && node_modules/.bin/vitest run src/test/cmMadeUpNations.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+m4-aleague: node .rc/x/review-run-mut.mjs noown && node scripts/simClubManagerALeague.mjs; s=$?; git checkout -- src; exit $s
+m4-boardasks: node .rc/x/review-run-mut.mjs noown && node scripts/simBoardAsks.mjs; s=$?; git checkout -- src; exit $s
