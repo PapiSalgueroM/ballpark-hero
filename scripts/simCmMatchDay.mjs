@@ -70,11 +70,16 @@
    not fire.
    Green is the closing summary line and the real exit code.
 
-   Run: node scripts/simCmMatchDay.mjs     (MATCHDAY_BASE=<commit> overrides the base, default d8aaa4cb)
+   Run: node scripts/simCmMatchDay.mjs     (MATCHDAY_BASE=<commit> overrides the base, default ebabc291)
    The base is pinned on purpose: section 7 proves this round left a home match as it was. A later round that
    edits MatchReportCard, MatchTimeline, LiveSimScreen, HalftimeScreen or MatchCentre and changes what a home match
    prints turns section 7 red until MATCHDAY_BASE is moved to that round's own starting commit (say so in its
-   gate); and if d8aaa4cb ever stops being reachable (a squash merge), the run exits 2 rather than judging.
+   gate); and if the base ever stops being reachable (a squash merge), the run exits 2 rather than judging.
+   Round 1522 moved the base from d8aaa4cb to ebabc291, its own commit with its four screens final: it adds a
+   Tactics tile to the dressing room and a line naming the other side's style to the Match Centre, so every home
+   interval and Match Centre printed more than at d8aaa4cb (r1522-g2: 203 reds, all section 7). With those four
+   screens put back to their bc79b526 text on the round's tree, every section is green against d8aaa4cb
+   (r1522-md): the round's engine and hook print a home match as before.
 */
 import './lib/seedRandom.mjs';
 import { execFileSync } from 'node:child_process';
@@ -97,7 +102,7 @@ const CONTROL_KINDS = {
 };
 const kindHits = (CONTROL_KINDS[CONTROL] ?? []).map(() => 0);
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`MATCHDAY_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
-const BASE = process.env.MATCHDAY_BASE || 'd8aaa4cb';
+const BASE = process.env.MATCHDAY_BASE || 'ebabc291';
 const lf = s => s.replaceAll('\r\n', '\n');
 const cannotRun = m => { console.error(`simCmMatchDay could not run: ${m}`); process.exit(2); };
 
