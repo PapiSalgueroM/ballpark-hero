@@ -1,0 +1,15 @@
+simManagerLiveLineups exit=1 0s | Node.js v24.22.0
+simManagerHalftimeLineups exit=1 0s | Node.js v24.22.0
+simManagerMatchPlans exit=0 7s | simManagerMatchPlans: 13 actual outcomes passed.
+simCmStoppageTime exit=0 36s | simCmStoppageTime: PASS. Goals fall in the board at a measured share without adding any, every line in a board says 45+N or 90+N wherever a minute is printed, extra time 
+simCmVarLedger exit=0 1s | simCmVarLedger: all 691 checks passed.
+simCmOwnGoals exit=0 105s | simCmOwnGoals: PASS, 8 sections green
+simCmQuickSubs exit=0 1s | simCmQuickSubs normal: real coaching outcomes and independent unmanaged baseline passed.
+simCmSubs exit=0 73s | simCmSubs GREEN: 59 of 59 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press)
+simLiveSimMotion exit=0 71s | simLiveSimMotion: green. 56 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+simCmQuickLegs exit=0 81s | simCmQuickLegs: PASS, 10 sections green
+simPitchRestartContinuity exit=1 0s | Node.js v24.22.0
+simOwnGoalMotion exit=0 27s | simOwnGoalMotion: green. 16 tests passed: the dense fleet, OG1 to OG9 against their baseline arm, the scenes made by hand (OG6 to OG8 and OG10), the two recorded digests,
+simCmVar exit=0 210s | simCmVar normal: actual review outcomes and full prior baseline passed.
+simRoles exit=0 1455s | ALL ROLE CHECKS PASSED
+simPress exit=0 2175s | ALL PRESS AND TEAM TALK CHECKS PASSED
