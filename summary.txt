@@ -1,0 +1,1 @@
+chunkdiff exit=0 67s | chunks compared: 536 and 536; changed 308; net 1342 bytes gz

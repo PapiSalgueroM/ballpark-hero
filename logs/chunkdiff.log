@@ -1,0 +1,27 @@
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
++981	clubManager	290050 -> 291031
++311	WhatsNew	124479 -> 124790
++37	ClubManagerHelp	24245 -> 24282
++18	ClubManager	28394 -> 28412
+-15	index	242961 -> 242946
+-13	usCareerSeasonReview	155799 -> 155786
+-9	ClubManagerSeasonSummary	5301 -> 5292
+-9	DeadlineDay	14345 -> 14336
+-9	ManagerHotSeat	7209 -> 7200
+-8	ClubDetailScreen	3382 -> 3374
++7	MlbHigherLower	3693 -> 3700
+-6	ConquestNba	15585 -> 15579
+-6	FarewellCard	1481 -> 1475
++6	FootballGrid	5465 -> 5471
++6	HockeyHigherLower	4317 -> 4323
+-6	Leaderboard	4297 -> 4291
++6	LineupBuilder	14730 -> 14736
++6	NflGauntletDraft	1664 -> 1670
++6	NhlConnections	8169 -> 8175
+-6	NhlMyCareer	82949 -> 82943
++6	TrophyCabinet	4482 -> 4488
++5	BaseballConnections	12344 -> 12349
++5	Connections	30879 -> 30884
+-5	DirtyMoneyDesk	2692 -> 2687
+-5	DraftNightSequence	5151 -> 5146
+chunks compared: 536 and 536; changed 308; net 1342 bytes gz
