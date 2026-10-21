@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+form: node scripts/simCareerForm.mjs
+form-divisor: SIM_CAREER_FORM_CONTROL=divisor node scripts/simCareerForm.mjs
+beats: node scripts/simCareerInboxBeats.mjs
+beats-flatnba: BEATS_CONTROL=flatnba node scripts/simCareerInboxBeats.mjs

@@ -1,0 +1,5 @@
+form exit=0 6s | simCareerForm: green
+form-divisor exit=1 6s | simCareerForm: RED, 1 failure(s)
+beats-flatnba exit=1 60s | simCareerInboxBeats: 2 failures (control flatnba)
+beats exit=0 60s | simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.
+tsc exit=0 88s | 
