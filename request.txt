@@ -1,0 +1,3 @@
+#!playwright
+#!serial
+weight-pair: P="src index.html package.json vite.config.ts public"; git checkout -q bc79b526 -- $P && npm run build > /tmp/b.log 2>&1; tail -2 /tmp/b.log; mv dist dist-base; git checkout -q HEAD -- $P && npm run build > /tmp/h.log 2>&1; tail -2 /tmp/h.log; (nohup node scripts/lib/hostLikeServer.mjs dist-base 4176 > /tmp/sb.log 2>&1 &); (nohup node scripts/lib/hostLikeServer.mjs dist 4177 > /tmp/sh.log 2>&1 &); sleep 5; echo BASE; SWEEP_OFFLINE=1 BASE=http://localhost:4176 node scripts/sweepWeight.mjs 2>&1 | grep -E "^ +/(club-manager|manager-hot-seat|deadline-day) "; echo HEAD; SWEEP_OFFLINE=1 BASE=http://localhost:4177 node scripts/sweepWeight.mjs 2>&1 | grep -E "^ +/(club-manager|manager-hot-seat|deadline-day) "

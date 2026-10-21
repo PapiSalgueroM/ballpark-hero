@@ -1,0 +1,12 @@
+[32m✓ built in 27.54s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+[32m✓ built in 27.07s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+BASE
+   /club-manager        58K gz over  43 files (budget 630K, 58.3K to the tenth)
+   /manager-hot-seat    85K gz over  45 files (budget 645K, 85.1K to the tenth)
+   /deadline-day        85K gz over  48 files (budget 655K, 85.0K to the tenth)
+HEAD
+   /club-manager       631K gz over  43 files (budget 630K, 631.1K to the tenth)
+   /manager-hot-seat   646K gz over  45 files (budget 645K, 646.1K to the tenth)
+   /deadline-day       656K gz over  48 files (budget 655K, 656.0K to the tenth)
