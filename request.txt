@@ -1,0 +1,4 @@
+pa: PROBE_FLEET=passive PROBE_VARIANTS=off,v1,max1 node .rc/x/variantProbe.mjs
+pb: PROBE_FLEET=passive PROBE_VARIANTS=off,per15,n86 node .rc/x/variantProbe.mjs
+ea: PROBE_FLEET=engaged PROBE_VARIANTS=off,v1,max1 node .rc/x/variantProbe.mjs
+eb: PROBE_FLEET=engaged PROBE_VARIANTS=off,per15,n86 node .rc/x/variantProbe.mjs

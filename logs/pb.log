@@ -1,0 +1,6 @@
+passive off: league 21.92 rating 6.717 bdor 27.75 morale 80.6 | GOAT 20.5 LEGEND 19.3 GREAT 26.5 SOLID PRO 14.8 JOURNEYMAN 19.0
+passive per15: league 22.21 rating 6.728 bdor 31.00 morale 79.7 | GOAT 20.3 LEGEND 20.3 GREAT 29.5 SOLID PRO 14.3 JOURNEYMAN 15.8
+   shift vs off: league 0.28 rating 0.011 bdor 3.25 | GOAT -0.3 LEGEND 1.0 GREAT 3.0 SOLID PRO -0.5 JOURNEYMAN -3.3
+passive n86: league 22.20 rating 6.703 bdor 29.75 morale 80.4 | GOAT 20.8 LEGEND 19.8 GREAT 27.5 SOLID PRO 19.8 JOURNEYMAN 12.3
+   shift vs off: league 0.27 rating -0.014 bdor 2.00 | GOAT 0.3 LEGEND 0.5 GREAT 1.0 SOLID PRO 5.0 JOURNEYMAN -6.8
+variantProbe: done
