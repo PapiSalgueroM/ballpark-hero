@@ -1,31 +1,32 @@
 # DoUKnowBall
 
-> DoUKnowBall.com is a free sports trivia and puzzle site with 130+ games
-> across soccer, NFL, NBA, MLB, NHL, college sports, Formula 1, tennis, golf,
-> NASCAR and combat sports. Daily puzzles (grids, connections, guess-the-player,
-> higher or lower) plus deep career and manager simulations. Every game is free,
-> runs in the browser, and needs no login. Data correctness is the house rule:
-> real rosters, real stats, verified lineups.
+> DoUKnowBall.com has 130+ free browser games: sports trivia, daily puzzles,
+> and career and manager simulations across multiple sports. Every game can
+> be played without an account. Trivia and puzzles use sports records.
+> Career and manager simulations include fictional progression, contracts
+> and results.
 
 ## Popular games
 
-- [Soccer Career](https://douknowball.com/soccer-career): season by season football life sim, the site's flagship
-- [College Grid](https://douknowball.com/college-grid): college football 3x3 grid puzzle
-- [Footle](https://douknowball.com/footle): daily guess-the-player with feedback tiles
-- [NFL Conquest](https://douknowball.com/conquest): imperialism map where winners annex whole empires
-- [NBA Connections](https://douknowball.com/nba-connections): group 20 players into four hidden links
-- [Rebuild Challenge](https://douknowball.com/rebuild): inherit a real club, survive the transfer window
+- [Soccer Career](https://douknowball.com/soccer-career): create a player and guide a simulated soccer career
+- [Club Manager](https://douknowball.com/club-manager): manage a club, tactics, transfers and the season ahead
+- [NBA My Career](https://douknowball.com/nba-my-career): a simulated basketball career with games and life choices
+- [NFL My Career](https://douknowball.com/nfl-my-career): a simulated pro football career with games and life choices
+- [NFL Grid](https://douknowball.com/football-grid): a daily nine-cell player grid with crowd-based rarity
+- [Soccer Grid](https://douknowball.com/soccer-grid): a daily soccer grid with row and column criteria
+- [Footle](https://douknowball.com/footle): a daily soccer player puzzle with feedback tiles
 
 ## Pages
 
-- [All games](https://douknowball.com): the full catalog, organized by sport
-- [About](https://douknowball.com/about): what the site is and who builds it
+- [All games](https://douknowball.com/): browse the catalog by sport
+- [About](https://douknowball.com/about): who builds the site and how it is made
 - [What's New](https://douknowball.com/whats-new): the running update log
+- [Privacy](https://douknowball.com/privacy): storage and data choices
+- [Terms](https://douknowball.com/terms): site terms
 - [Contact](https://douknowball.com/contact): douknowball1@gmail.com
 
 ## Notes
 
 - Sitemap: https://douknowball.com/sitemap.xml
-- Every game page carries a full how-to-play guide, rules, an example run,
-  strategy tips and an FAQ in its on-page content.
+- Game pages include how-to-play guides, rules, worked examples, strategy tips and FAQs.
 - DoUKnowBall is not affiliated with any sports league.
