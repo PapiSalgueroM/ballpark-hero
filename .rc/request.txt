@@ -1,0 +1,20 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+nat: node scripts/simCmMadeUpNations.mjs
+nat-base: git worktree add /tmp/base 85a762419658ed63206cb20ec85f379409e6ac6a >/dev/null 2>&1 && BASE_ROOT=/tmp/base node scripts/simCmMadeUpNations.mjs
+ctl-mainstream: CM_NATIONS_CONTROL=mainstream node scripts/simCmMadeUpNations.mjs
+ctl-flat: CM_NATIONS_CONTROL=flat node scripts/simCmMadeUpNations.mjs
+ctl-realtouched: CM_NATIONS_CONTROL=realtouched node scripts/simCmMadeUpNations.mjs
+ctl-nocarry: CM_NATIONS_CONTROL=nocarry node scripts/simCmMadeUpNations.mjs
+ctl-noledger: CM_NATIONS_CONTROL=noledger node scripts/simCmMadeUpNations.mjs
+ctl-nopromote: CM_NATIONS_CONTROL=nopromote node scripts/simCmMadeUpNations.mjs
+ctl-noload: CM_NATIONS_CONTROL=noload node scripts/simCmMadeUpNations.mjs
+ctl-askoff: CM_NATIONS_CONTROL=askoff node scripts/simCmMadeUpNations.mjs
+ctl-leak: CM_NATIONS_CONTROL=leak node scripts/simCmMadeUpNations.mjs
+ctl-bloat: CM_NATIONS_CONTROL=bloat node scripts/simCmMadeUpNations.mjs
+vitest-nat: node_modules/.bin/vitest run src/test/cmMadeUpNations.test.ts --testTimeout=300000 --hookTimeout=120000
+simBoardAsks: node scripts/simBoardAsks.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
