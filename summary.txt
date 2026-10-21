@@ -1,0 +1,4 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+units exit=0 4s |    Duration  2.90s (transform 1.44s, setup 67ms, collect 1.73s, tests 250ms, environment 385ms, prepare 107ms)
+walk exit=1 37s | Node.js v24.22.0
+tsc exit=0 43s | 
