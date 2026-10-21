@@ -1,0 +1,9 @@
+3) a pinned fleet: every press played again at morale 20, at the neutral point and at 90
+   120 careers, 2483 presses played three ways (seed 77)
+   league games: morale 20 22.11, 81 22.21, 90 23.20; rating 6.56, 6.77, 6.91
+   gaps: games 0.10 and 0.99, rating 0.21 and 0.15
+   at the neutral point the round's arm and the arm without the step: 2483 presses byte identical with the same draws, 0 not
+   at morale 20 the two arms made the same number of draws in 2301 presses and a different number in 182
+   FAIL 1 presses moved more league games than the step allows (2 below, 1 above)
+   FAIL gap g1 is 0.10, under its floor 0.6
+simCareerForm: RED, 2 failure(s)

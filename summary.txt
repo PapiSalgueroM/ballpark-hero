@@ -1,0 +1,6 @@
+s3-b exit=1 130s | simCareerForm: RED, 2 failure(s)
+s3-a exit=1 136s | simCareerForm: RED, 1 failure(s)
+s3-c exit=1 139s | simCareerForm: RED, 2 failure(s)
+s5-nogate exit=1 15s | simCareerForm: RED, 1 failure(s)
+s5 exit=0 26s | simCareerForm: green
+s3-zero exit=1 100s | simCareerForm: RED, 4 failure(s)

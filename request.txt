@@ -1,0 +1,6 @@
+s3-a: SIM_CAREER_FORM_SECTIONS=3 SIM_CAREER_FORM_SEED=1523 node scripts/simCareerForm.mjs
+s3-b: SIM_CAREER_FORM_SECTIONS=3 SIM_CAREER_FORM_SEED=2024 node scripts/simCareerForm.mjs
+s3-c: SIM_CAREER_FORM_SECTIONS=3 SIM_CAREER_FORM_SEED=77 node scripts/simCareerForm.mjs
+s3-zero: SIM_CAREER_FORM_CONTROL=zero node scripts/simCareerForm.mjs
+s5: SIM_CAREER_FORM_SECTIONS=5 node scripts/simCareerForm.mjs
+s5-nogate: SIM_CAREER_FORM_CONTROL=nogate node scripts/simCareerForm.mjs
