@@ -1,0 +1,2 @@
+diff2-base: git worktree add /tmp/base 85a762419658ed63206cb20ec85f379409e6ac6a >/dev/null 2>&1 && SECTION=2 BASE_ROOT=/tmp/base node scripts/simCmDifficulty.mjs
+diff2-self: SECTION=2 node scripts/simCmDifficulty.mjs
