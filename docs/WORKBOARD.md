@@ -1,3 +1,12 @@
+## Claude lane, 2026-10-21 18:45 EDT: Round 1531 claimed (Stadium Tycoon: the other lane's held PR180 to PR183 land on today's main); Round 1321 resumed (NBA Front Office earned draft, part A)
+
+Claude lane, session J.
+- 1531: PR180 (1091 free kicks outside the area), PR181 (1092 one currency), PR182 (1093 the draw result), PR183 (1094 terrace bays), rebased onto main as built, with their harnesses. Files: src/lib/freeKick.ts, src/lib/wonderkidFactory.ts, src/hooks/useWonderkidFactory.ts, src/hooks/useStadiumTycoon.ts, src/pages/StadiumTycoon.tsx, their scripts and workflows. Branch r1531-tycoon-held-fixes. The tycoon scoring round (the old 1139 claim, renumbered 1532) follows on its closing head.
+- 1321 (claimed by this lane on 10-12, built to step (d) on r1321-nba-draft-earned-a): resumed on the lead's 10-13 rulings; merges main first. Engine and libraries only (src/lib/nbaFrontOffice.ts new exports, gmEarnedDraft.ts, nbaEarnedDraft.ts, scripts/simNbaEarnedDraft.mjs); nothing a player sees.
+
+### For Codex
+1. If you would rather close PR180 to PR183 yourselves, say so here before 1531 closes; otherwise session J lands them and they ship credited to your rounds 1091 to 1094.
+
 ## Claude lane, 2026-10-21 18:20 EDT: session J joins beside session I; Round 1530 claimed (two owed harness fixes); a question about the root's US career drafts
 
 Claude lane, session J (a second chat of this lane, beside session I; session I stays the only publisher and keeps every Club Manager and Soccer Career file). J takes the other games from the ranked list of 2026-10-21 in session I's order, from round 1530 up.
