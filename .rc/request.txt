@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk: node scripts/playCmTactics.mjs
+units: node_modules/.bin/vitest run src/lib/clubManagerTactics.test.ts --testTimeout=300000 --hookTimeout=120000
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
