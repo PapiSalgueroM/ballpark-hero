@@ -369,6 +369,23 @@ jobs:
           find "$FREE_KICK_FONT_CACHE" -type f -print0 | sort -z | xargs -0 sha256sum >> analytics-build-artifacts/font-inputs.sha256
           font_manifest_sha=$(sha256sum "$FREE_KICK_FONT_CACHE/manifest.json" | cut -d ' ' -f 1)
           echo "FONT_CACHE_MANIFEST_SHA256=$font_manifest_sha" >> "$GITHUB_ENV"
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');const sha=value=>createHash('sha256').update(value).digest('hex');
+          const original=fs.readFileSync('analytics-build-artifacts/cached-fonts.cjs','utf8');assert.equal(sha(original),'ac09f64a5d9592ec980864bf422c7f580880d9bd981adaef8c9c0e674d298fd3');assert.equal(sha(fs.readFileSync('scripts/sweepWeight.mjs')),'438a626c71a86e24e90508cb4784d6727839ca0b192ca85fd9531dcc1e411925');
+          const gate="if (path.basename(process.argv[1] || '') === 'prerender.mjs') {",newGate="if (path.basename(process.argv[1] || '') === 'sweepWeight.mjs') {",anchor='      const id = ++contextId;';assert.equal(original.split(gate).length,2);assert.equal(original.split(anchor).length,2);
+          const insert=anchor+'\n'+[
+            '      fs.appendFileSync(process.env.SWEEP_CONTEXT_RECEIPT, JSON.stringify({ contextId: id }) + "\\n");',
+            '      await context.route(url => url.origin === "https://flagcdn.com", async route => {',
+            '        const request = route.request(), url = new URL(request.url());',
+            '        const validPath = /^\\/(?:w[1-9][0-9]{0,2}\\/|h[1-9][0-9]{0,2}\\/|[1-9][0-9]{0,2}x[1-9][0-9]{0,2}\\/)?[a-z]{2}(?:-[a-z0-9]{1,8})?\\.(?:png|webp|svg)$/.test(url.pathname);',
+            '        if (url.origin !== "https://flagcdn.com" || url.username || url.password || url.search || url.hash || !validPath || request.method() !== "GET" || request.resourceType() !== "image") return route.fallback();',
+            '        await route.abort("blockedbyclient");',
+            '        fs.appendFileSync(process.env.SWEEP_FLAG_RECEIPT, JSON.stringify({ contextId: id, method: request.method(), resourceType: request.resourceType(), url: url.href, origin: url.origin, path: url.pathname, action: "LOCAL_ABORT" }) + "\\n");',
+            '      });',
+          ].join('\n');
+          const copy=original.replace(gate,newGate).replace(anchor,insert);assert.notEqual(copy,original);assert.equal(copy.replace(insert,anchor).replace(newGate,gate),original);fs.writeFileSync('analytics-build-artifacts/weights-cached-fonts.cjs',copy);fs.writeFileSync('analytics-build-artifacts/weights-preload-binding.json',JSON.stringify({complete:true,originalSha256:sha(original),copySha256:sha(copy),gateOccurrences:1,contextAnchorOccurrences:1,wholeInverseExact:true,sweepWeightSha256:'438a626c71a86e24e90508cb4784d6727839ca0b192ca85fd9531dcc1e411925',scope:'Cached known font bodies; local GET image denial for validated flagcdn paths. No outbound flag fetch.'},null,2)+'\n');
+          NODE
+          sha256sum analytics-build-artifacts/weights-cached-fonts.cjs >> analytics-build-artifacts/font-inputs.sha256
       - name: Types and completed scoped production build
         run: |
           set -euo pipefail
@@ -387,7 +404,22 @@ jobs:
           NODE
           python analytics-build-artifacts/generated-semantic.py post > analytics-build-artifacts/generated-semantic-post.log 2>&1
           git diff --binary HEAD -- public scripts/data/lastmod.json > analytics-build-artifacts/generated.patch
+          test -f analytics-build-artifacts/generated.patch && test ! -s analytics-build-artifacts/generated.patch
+          test -f analytics-build-artifacts/generated-files.txt && test ! -s analytics-build-artifacts/generated-files.txt
+          find public scripts/data/lastmod.json ! -type d ! -type f -print > analytics-build-artifacts/generated-source-nonregular-before.txt
+          test ! -s analytics-build-artifacts/generated-source-nonregular-before.txt
+          find public scripts/data/lastmod.json -type f -print0 | sort -z | xargs -0 sha256sum > analytics-build-artifacts/generated-source-before.sha256
+          find dist ! -type d ! -type f -print > analytics-build-artifacts/dist-nonregular-before.txt
+          test ! -s analytics-build-artifacts/dist-nonregular-before.txt
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > analytics-build-artifacts/dist.sha256
+          for inventory in generated-source-before.sha256 dist.sha256; do
+            test -s "analytics-build-artifacts/$inventory"
+            cp "analytics-build-artifacts/$inventory" "analytics-build-artifacts/$inventory.control"
+            printf '%s\n' 'CONTROL_DIFFERENT_INVENTORY_LINE' >> "analytics-build-artifacts/$inventory.control"
+            status=0; cmp "analytics-build-artifacts/$inventory" "analytics-build-artifacts/$inventory.control" > "analytics-build-artifacts/$inventory.control.log" 2>&1 || status=$?
+            printf '%s\n' "$status" > "analytics-build-artifacts/$inventory.control.exit"
+            test "$status" -eq 1
+          done
           tar -czf analytics-build-artifacts/dist.tar.gz -C dist .
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
@@ -422,12 +454,19 @@ jobs:
             status=0;SIM_OFFLINE_RECEIPT="$out/$method.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
             printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv";test "$status" -eq 0 || failed=1
           done
-          status=0;SIM_OFFLINE_RECEIPT="$out/weights.transport" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
+          : > "$out/weights.transport"; : > "$out/weights-contexts.jsonl"; : > "$out/weights-font-cache-use.jsonl"; : > "$out/weights-flags-aborted.jsonl"
+          status=0;NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$out/weights-cached-fonts.cjs" SIM_OFFLINE_RECEIPT="$out/weights.transport" FONT_CACHE_USE_RECEIPT="$out/weights-font-cache-use.jsonl" SWEEP_CONTEXT_RECEIPT="$out/weights-contexts.jsonl" SWEEP_FLAG_RECEIPT="$out/weights-flags-aborted.jsonl" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
           printf '%s\n' "$status" > "$out/weights.exit";test "$status" -eq 0 || failed=1
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';
           const rows=fs.readFileSync('analytics-build-artifacts/readers.tsv','utf8').trim().split('\n').map(line=>line.split('\t'));assert.equal(rows.length,18);assert.equal(new Set(rows.map(row=>row[0])).size,18);assert(rows.every(row=>row[1]==='0'));
           const weights=fs.readFileSync('analytics-build-artifacts/weights.log','utf8');assert.equal((weights.match(/gz over[^\n]+budget/g)||[]).length,14);assert.match(weights,/sweepWeight: green/);
+          const load=file=>fs.readFileSync('analytics-build-artifacts/'+file,'utf8').trim().split('\n').filter(Boolean).map(line=>JSON.parse(line));const contexts=load('weights-contexts.jsonl'),fonts=load('weights-font-cache-use.jsonl'),flags=load('weights-flags-aborted.jsonl');const ids=Array.from({length:14},(_,i)=>i+1);
+          function checkContexts(value){assert.equal(value.length,14,'WEIGHTS_CONTEXT_COUNT');assert.deepEqual(value.map(row=>row.contextId),ids,'WEIGHTS_CONTEXT_IDS');}checkContexts(contexts);assert.throws(()=>checkContexts(contexts.slice(1)),error=>error.name==='AssertionError'&&error.message.startsWith('WEIGHTS_CONTEXT_COUNT'));
+          const cache=new Map(JSON.parse(fs.readFileSync(process.env.FREE_KICK_FONT_CACHE+'/manifest.json','utf8')).map(row=>[row.url,row]));
+          function checkFonts(value){assert.deepEqual([...new Set(value.map(row=>row.contextId))].sort((a,b)=>a-b),ids);assert.equal(value.filter(row=>row.resourceType==='stylesheet').length,14);for(const id of ids){assert.equal(value.filter(row=>row.contextId===id&&row.resourceType==='stylesheet').length,1);assert(value.some(row=>row.contextId===id&&row.resourceType==='font'));}for(const row of value){assert(cache.has(row.url));assert.equal(row.sha256,cache.get(row.url).sha256,'WEIGHTS_FONT_HASH');assert.equal(row.manifestSha256,process.env.FONT_CACHE_MANIFEST_SHA256);}}checkFonts(fonts);const badFonts=fonts.map(row=>({...row}));badFonts[0].sha256=(badFonts[0].sha256[0]==='0'?'1':'0')+badFonts[0].sha256.slice(1);assert.notEqual(badFonts[0].sha256,fonts[0].sha256);assert.throws(()=>checkFonts(badFonts),error=>error.name==='AssertionError'&&error.message.startsWith('WEIGHTS_FONT_HASH'));
+          function checkFlags(value){assert.equal(value.length,4,'WEIGHTS_FLAG_COUNT');for(const row of value){const url=new URL(row.url);assert(ids.includes(row.contextId)&&row.method==='GET'&&row.resourceType==='image'&&row.action==='LOCAL_ABORT'&&url.origin==='https://flagcdn.com'&&!url.username&&!url.password&&!url.search&&!url.hash&&row.origin===url.origin&&row.path===url.pathname&&/^\/(?:w[1-9][0-9]{0,2}\/|h[1-9][0-9]{0,2}\/|[1-9][0-9]{0,2}x[1-9][0-9]{0,2}\/)?[a-z]{2}(?:-[a-z0-9]{1,8})?\.(?:png|webp|svg)$/.test(url.pathname),'WEIGHTS_FLAG_DENIAL_SCOPE');}}checkFlags(flags);const badFlags=flags.map(row=>({...row}));badFlags[0].method='POST';assert.notEqual(badFlags[0].method,flags[0].method);assert.throws(()=>checkFlags(badFlags),error=>error.name==='AssertionError'&&error.message.startsWith('WEIGHTS_FLAG_DENIAL_SCOPE'));
+          fs.writeFileSync('analytics-build-artifacts/weights-fixture-summary.json',JSON.stringify({complete:true,sourceSha:process.env.GITHUB_SHA,contexts:14,stylesheetFulfillments:14,fontFulfillments:fonts.filter(row=>row.resourceType==='font').length,localFlagDenials:4,controls:['missing-context','changed-font-hash','flag-method'],offlinePreloadFirst:true,prerenderReceiptUnchanged:true},null,2)+'\n');assert.equal(fs.statSync('analytics-build-artifacts/weights.transport').size,0,'Weights transport remains strictly empty');
           NODE
           exit "$failed"
       - name: Source, output, dependency and offline evidence holds
@@ -435,6 +474,22 @@ jobs:
         run: |
           set -euo pipefail
           failed=0
+          status=0
+          {
+            find public scripts/data/lastmod.json ! -type d ! -type f -print > analytics-build-artifacts/generated-source-nonregular-after.txt &&
+            test ! -s analytics-build-artifacts/generated-source-nonregular-after.txt &&
+            find public scripts/data/lastmod.json -type f -print0 | sort -z | xargs -0 sha256sum > analytics-build-artifacts/generated-source-after.sha256 &&
+            cmp analytics-build-artifacts/generated-source-before.sha256 analytics-build-artifacts/generated-source-after.sha256
+          } > analytics-build-artifacts/generated-output-hold.log 2>&1 || status=$?
+          printf '%s\n' "$status" > analytics-build-artifacts/generated-output-hold.exit; test "$status" -eq 0 || failed=1
+          status=0
+          {
+            find dist ! -type d ! -type f -print > analytics-build-artifacts/dist-nonregular-after.txt &&
+            test ! -s analytics-build-artifacts/dist-nonregular-after.txt &&
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > analytics-build-artifacts/dist-after.sha256 &&
+            cmp analytics-build-artifacts/dist.sha256 analytics-build-artifacts/dist-after.sha256
+          } > analytics-build-artifacts/dist-output-hold.log 2>&1 || status=$?
+          printf '%s\n' "$status" > analytics-build-artifacts/dist-output-hold.exit; test "$status" -eq 0 || failed=1
           status=0; sha256sum --check analytics-build-artifacts/source-before.sha256 > analytics-build-artifacts/source-hold.log 2>&1 || status=$?
           printf '%s\n' "$status" > analytics-build-artifacts/source-hold.exit; test "$status" -eq 0 || failed=1
           status=0; sha256sum --check analytics-build-artifacts/dependencies-cap-before.sha256 > analytics-build-artifacts/dependencies-cap-hold.log 2>&1 || status=$?
