@@ -1,0 +1,3 @@
+base-continuity: git worktree add -q /tmp/b1 bc79b526 && ln -s "$PWD/node_modules" /tmp/b1/node_modules && cd /tmp/b1 && node scripts/simManagerWorldContinuity.mjs 2>&1 | grep -E "^(FAIL|PASS)|AssertionError" | head -20; exit ${PIPESTATUS[0]}
+base-worldmoves: git worktree add -q /tmp/b2 bc79b526 && ln -s "$PWD/node_modules" /tmp/b2/node_modules && cd /tmp/b2 && node scripts/simCmWorldMoves.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
+base-unseeded: git worktree add -q /tmp/b3 bc79b526 && ln -s "$PWD/node_modules" /tmp/b3/node_modules && cd /tmp/b3 && node scripts/simCmUnseededWorld.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}

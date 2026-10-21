@@ -1,0 +1,30 @@
+   Real Madrid (now, seed 1): ledger 22 records on BASE, 64 on the head; the window entry's median BASE 31.1 ms, head 60.3 ms (limit 98.4)
+   Real Madrid (now, seed 2): ledger 23 records on BASE, 68 on the head; the window entry's median BASE 30.3 ms, head 61.9 ms (limit 96.0)
+   Real Madrid (now, seed 3): ledger 22 records on BASE, 74 on the head; the window entry's median BASE 30.5 ms, head 65.8 ms (limit 96.4)
+   Everton (now, seed 1): ledger 12 records on BASE, 56 on the head; the window entry's median BASE 27.8 ms, head 57.8 ms (limit 88.5)
+   Everton (now, seed 2): ledger 12 records on BASE, 51 on the head; the window entry's median BASE 28.7 ms, head 56.3 ms (limit 91.1)
+   Everton (now, seed 3): ledger 15 records on BASE, 55 on the head; the window entry's median BASE 27.7 ms, head 57.5 ms (limit 88.2)
+   Aberdeen (now, seed 1): ledger 4 records on BASE, 53 on the head; the window entry's median BASE 28.6 ms, head 55.3 ms (limit 90.8)
+   Aberdeen (now, seed 2): ledger 5 records on BASE, 53 on the head; the window entry's median BASE 29.0 ms, head 57.3 ms (limit 92.0)
+   Aberdeen (now, seed 3): ledger 5 records on BASE, 42 on the head; the window entry's median BASE 28.9 ms, head 49.2 ms (limit 91.7)
+7) my deals with the recording on: a release, a buy and a sale at the start and a season later, on BASE and on the head, seeds 1,2,3
+   BASE: 309 deals of mine, 6 without exactly one record; the head: 309 deals, 6 without exactly one record
+   swaps: BASE 54, the head 54; exercised loan options: BASE 54, the head 54; deals not reached on the stream: BASE 0, the head 0
+8) the bridge: seeded careers, BASE against the head with scripts/lib/cmNoAiMoves1344.mjs, every saved string and draw; and without it
+  FAIL section 8: Real Madrid (now, seed 0, seeded): with the bridge, saved string 1 of 4 differs from BASE's
+  FAIL section 8: Real Madrid (now, seed 0, seeded): with the bridge, 102179 draws against BASE's 101787
+  FAIL section 8: Real Madrid (now, seed 0, seeded): with the bridge, the last state differs from BASE's
+  FAIL section 8: Real Madrid (now, seed 1, seeded): with the bridge, saved string 1 of 4 differs from BASE's
+  FAIL section 8: Real Madrid (now, seed 1, seeded): with the bridge, 101900 draws against BASE's 102044
+  FAIL section 8: Real Madrid (now, seed 1, seeded): with the bridge, the last state differs from BASE's
+  FAIL section 8: Real Madrid (now, seed 2, seeded): with the bridge, saved string 1 of 4 differs from BASE's
+  FAIL section 8: Real Madrid (now, seed 2, seeded): with the bridge, the last state differs from BASE's
+   27 careers: with the bridge every one checked against BASE; without it 27 differ (first at save 1 x27) and 0 do not
+10) the window's skip: Real Madrid sells its eight best outfield men at the start and plays 3 seasons, seeds 1,2,3,4,5,6,7,8
+   8 careers, 64 men sold, 40 windows, 157 deal lines checked; a man I sold stood in the top 120 a window draws from 256 times
+11) my own results: Aberdeen, Motherwell, St Mirren (2026-27), 2 seasons, BASE against the head on one stream, seeds 1,2,3
+   9 careers: 343 results of mine compared; 217 of them in season one; 3 compared to the end, 0 cut where a deal touched my league, 0 where it touched a club I played; the stream parted after the first summer in season 2 x6 (measured, not asserted)
+  section 5: 76 more failures not shown
+  section 6: 262 more failures not shown
+  section 8: 49 more failures not shown
+simCmWorldMoves: RED, sections 5 (84), 6 (270), 8 (57)
