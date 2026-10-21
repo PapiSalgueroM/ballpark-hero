@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-new: node_modules/.bin/vitest run src/test/cmMadeUpNations.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmMadeUpNations: node scripts/simCmMadeUpNations.mjs
+ctl-flat: CM_NATIONS_CONTROL=flat LONG=3 SEASONS=2 node scripts/simCmMadeUpNations.mjs
+ctl-leak: CM_NATIONS_CONTROL=leak LONG=3 SEASONS=2 node scripts/simCmMadeUpNations.mjs
