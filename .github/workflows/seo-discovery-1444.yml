@@ -1,0 +1,223 @@
+name: Search discovery1444 original outcomes
+
+on:
+  push:
+    branches: [codex/seo-search-1444]
+    paths-ignore: ['docs/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: seo-discovery1444-${{ github.sha }}
+  cancel-in-progress: false
+
+# This is the original-proof phase. Evolve it before any product push.
+# A successful original job means three specified assertions failed after
+# valid foundations. It never means the product is implemented or qualified.
+jobs:
+  original_outcomes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      TZ: UTC
+      BASE_SOURCE: bc79b526cb69a4e913416c77c6dba00fe9401a16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Hold original product and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p seo-original-artifacts
+          git rev-parse HEAD > seo-original-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > seo-original-artifacts/tree.txt
+          sha256sum package.json package-lock.json > seo-original-artifacts/dependencies-before.sha256
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > seo-original-artifacts/base-fetch.log 2>&1
+          git cat-file -e "$BASE_SOURCE^{commit}"
+          git diff --exit-code "$BASE_SOURCE" HEAD -- src public supabase index.html package.json package-lock.json > seo-original-artifacts/original-product-hold.log
+          git diff --exit-code "$BASE_SOURCE" HEAD -- scripts/simHomeCopy.mjs scripts/simTrustCopy.mjs scripts/simNflGridPage.mjs scripts/simNflGrid.mjs scripts/lib/retiredRoutes.mjs scripts/lib/offlineTransport.cjs > seo-original-artifacts/original-baselines-hold.log
+          npm ci > seo-original-artifacts/install.log 2>&1
+      - name: Real app type gate
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > seo-original-artifacts/types.log 2>&1
+      - name: Observe exactly three intended original assertions
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/seo-original-artifacts/transport.txt"
+          export SEO_DISCOVERY_ARTIFACTS="$PWD/seo-original-artifacts/outcomes"
+          unset SEO_DISCOVERY_CONTROL
+          status=0
+          node scripts/simSeoDiscovery1444.mjs > seo-original-artifacts/original.log 2>&1 || status=$?
+          printf '%s\n' "$status" > seo-original-artifacts/original.exit
+          cat seo-original-artifacts/original.log
+          test "$status" -eq 1
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const r = JSON.parse(fs.readFileSync('seo-original-artifacts/outcomes/report.json', 'utf8'));
+          assert.equal(r.status, 'failed');
+          assert.equal(r.control, null);
+          assert.deepEqual(r.errors, []);
+          assert.equal(r.foundations.length, 5);
+          assert(r.foundations.every(x => x.status === 'passed'));
+          assert.equal(r.outcomes.length, 3);
+          const wanted = {
+            'home-description': 'SEO_HOME_DESCRIPTION_MISSING',
+            'summary-career-discovery': 'SEO_SUMMARY_CAREERS_MISSING',
+            'nfl-guide-honest-strategy': 'SEO_GRID_RARITY_PROMISE',
+          };
+          assert.deepEqual(r.outcomes.map(x => x.id).sort(), Object.keys(wanted).sort());
+          for (const row of r.outcomes) {
+            assert.equal(row.status, 'failed');
+            assert.equal(row.errorType, 'AssertionError');
+            assert.equal(row.marker, wanted[row.id]);
+            assert(row.error.includes(wanted[row.id]));
+            assert.doesNotMatch(row.error, /Cannot find|Failed to resolve|SyntaxError|ReferenceError|TypeError/);
+            console.log('INTENDED ORIGINAL RED: ' + row.id + ' -> ' + wanted[row.id]);
+          }
+          assert.equal(r.source.unchanged, true);
+          assert.equal(r.source.before.length, 14);
+          assert.deepEqual(r.source.before, r.source.after);
+          assert.equal(r.source.otherFootballSha256, 'e729f4417fe3207a5c5c457efe56e89be1e9de41939b4c2b029a6a477cb2a903');
+          assert.equal(r.transport.attempts, 0);
+          fs.writeFileSync('seo-original-artifacts/admission.json', JSON.stringify({
+            status: 'ORIGINAL_OUTCOMES_ADMITTED', productQualified: false,
+            foundationsPassed: 5, intendedFailedAssertions: wanted,
+            sourceUnchanged: true, networkAttempts: 0,
+          }, null, 2) + '\n');
+          JS
+      - name: Preserve original source and all evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p seo-original-artifacts
+          status=0
+          sha256sum --check seo-original-artifacts/dependencies-before.sha256 > seo-original-artifacts/dependencies-hold.log 2>&1 || status=$?
+          git diff --exit-code HEAD -- src scripts public supabase package.json package-lock.json index.html .github > seo-original-artifacts/source-hold.log 2>&1 || status=$?
+          test ! -s seo-original-artifacts/transport.txt || status=1
+          (cd seo-original-artifacts; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > seo-original-artifacts/evidence.sha256
+          exit "$status"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seo1444-original-${{ github.run_id }}-${{ github.run_attempt }}
+          path: seo-original-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  unchanged_baselines:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        guard: [simHomeCopy, simTrustCopy, simNflGridPage, simNflGrid]
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      TZ: UTC
+      BASE_SOURCE: bc79b526cb69a4e913416c77c6dba00fe9401a16
+      GUARD: ${{ matrix.guard }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Hold the baseline and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p seo-baseline-artifacts
+          git rev-parse HEAD > seo-baseline-artifacts/head.txt
+          sha256sum package.json package-lock.json > seo-baseline-artifacts/dependencies-before.sha256
+          git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > seo-baseline-artifacts/base-fetch.log 2>&1
+          git diff --exit-code "$BASE_SOURCE" HEAD -- src public supabase index.html package.json package-lock.json scripts/simHomeCopy.mjs scripts/simTrustCopy.mjs scripts/simNflGridPage.mjs scripts/simNflGrid.mjs scripts/lib > seo-baseline-artifacts/original-hold.log
+          npm ci > seo-baseline-artifacts/install.log 2>&1
+      - name: Run the actual unchanged guard and effective existing faults
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/seo-baseline-artifacts/transport.txt"
+          unset HOME_COPY_CONTROL TRUST_CONTROL SIM_NFLPAGE_CONTROL SIM_NFLGRID_CONTROL
+          case "$GUARD" in
+            simHomeCopy) controls='HOME_COPY_CONTROL:hiddenh1 HOME_COPY_CONTROL:srsource' ;;
+            simTrustCopy) controls='TRUST_CONTROL:typedcount TRUST_CONTROL:staleliteral' ;;
+            simNflGridPage) controls='SIM_NFLPAGE_CONTROL:copy SIM_NFLPAGE_CONTROL:invoke' ;;
+            simNflGrid) controls='SIM_NFLGRID_CONTROL:thin' ;;
+            *) exit 1 ;;
+          esac
+          status=0
+          node "scripts/$GUARD.mjs" > seo-baseline-artifacts/normal.log 2>&1 || status=$?
+          printf 'normal\tnone\t%s\n' "$status" > seo-baseline-artifacts/results.tsv
+          tail -n 18 seo-baseline-artifacts/normal.log
+          test "$status" -eq 0
+          grep -F "$GUARD: green." seo-baseline-artifacts/normal.log
+          for pair in $controls; do
+            variable=$(printf '%s' "$pair" | cut -d: -f1)
+            control=$(printf '%s' "$pair" | cut -d: -f2)
+            status=0
+            env "$variable=$control" node "scripts/$GUARD.mjs" > "seo-baseline-artifacts/control-$control.log" 2>&1 || status=$?
+            printf 'control\t%s\t%s\n' "$control" "$status" >> seo-baseline-artifacts/results.tsv
+            tail -n 10 "seo-baseline-artifacts/control-$control.log"
+            test "$status" -eq 0
+            case "$GUARD" in
+              simHomeCopy|simTrustCopy) grep -F "$GUARD control $control: green." "seo-baseline-artifacts/control-$control.log" ;;
+              simNflGridPage|simNflGrid)
+                grep -F "control \"$control\":" "seo-baseline-artifacts/control-$control.log"
+                grep -F 'failure(s) fired in section' "seo-baseline-artifacts/control-$control.log"
+                grep -F 'as expected, the check works' "seo-baseline-artifacts/control-$control.log" ;;
+            esac
+          done
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const guard = process.env.GUARD;
+          const wanted = { simHomeCopy: ['hiddenh1', 'srsource'], simTrustCopy: ['typedcount', 'staleliteral'],
+            simNflGridPage: ['copy', 'invoke'], simNflGrid: ['thin'] }[guard];
+          const rows = fs.readFileSync('seo-baseline-artifacts/results.tsv', 'utf8').trim().split('\n').map(x => {
+            const [kind, selector, exit] = x.split('\t'); return { kind, selector, exit: Number(exit) };
+          });
+          assert.equal(rows.length, wanted.length + 1);
+          assert.deepEqual(rows[0], { kind: 'normal', selector: 'none', exit: 0 });
+          assert.deepEqual(rows.slice(1).map(x => x.selector), wanted);
+          assert(rows.every(x => x.exit === 0));
+          fs.writeFileSync('seo-baseline-artifacts/baseline.json', JSON.stringify({
+            guard, status: 'passed', unchangedBaseline: true, rows,
+            controlConvention: 'existing guards exit0 only after reporting the planted defect',
+          }, null, 2) + '\n');
+          JS
+      - name: Preserve source and complete baseline evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p seo-baseline-artifacts
+          status=0
+          sha256sum --check seo-baseline-artifacts/dependencies-before.sha256 > seo-baseline-artifacts/dependencies-hold.log 2>&1 || status=$?
+          git diff --exit-code HEAD -- src scripts public supabase package.json package-lock.json index.html .github > seo-baseline-artifacts/source-hold.log 2>&1 || status=$?
+          test ! -s seo-baseline-artifacts/transport.txt || status=1
+          (cd seo-baseline-artifacts; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > seo-baseline-artifacts/evidence.sha256
+          exit "$status"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seo1444-baseline-${{ matrix.guard }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: seo-baseline-artifacts/
+          if-no-files-found: error
+          retention-days: 14
