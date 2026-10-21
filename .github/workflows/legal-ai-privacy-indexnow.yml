@@ -15,7 +15,8 @@ jobs:
     timeout-minutes: 5
     env:
       SOURCE_SHA: 076091ac870db38b953ddf71d3252cf1ac556782
-      READBACK_RUN: '39623468386'
+      READBACK_RUN: '39629153890'
+      READBACK_SHA: ea19d8a5728cb10b238a17edf048fc75dcf93eb1
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,7 +32,7 @@ jobs:
           set -euo pipefail
           mkdir indexnow-evidence
           gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$READBACK_RUN" --jq '[.head_sha,.status,.conclusion,.name] | @tsv' > indexnow-evidence/public-readback.tsv
-          expected="$(printf '%s\tcompleted\tsuccess\tPublic legal and privacy readback' "$SOURCE_SHA")"
+          expected="$(printf '%s\tcompleted\tsuccess\tPublic legal and privacy readback' "$READBACK_SHA")"
           test "$(cat indexnow-evidence/public-readback.tsv)" = "$expected"
           git diff --exit-code "$SOURCE_SHA" HEAD -- src public scripts supabase package.json package-lock.json > indexnow-evidence/source-hold.log
           git rev-parse HEAD > indexnow-evidence/head.txt
