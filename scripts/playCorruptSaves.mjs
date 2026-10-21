@@ -59,6 +59,24 @@
  * attribute asserted in BrokenSaveRestore.tsx and in the bundle), and every
  * route that needed the button must then fail for want of a way back.
  *
+ * OFFLINE, Round 1530. A route whose own data load fails with the database
+ * aborted (its screen says it couldn't load, and its only game action is
+ * "Try again") never read the save, so it is not judged, and only a route
+ * excused in OFFLINE_ONLY may stop there. The site's report affordance is not
+ * a game action: GameSeoContent puts the "Report a problem" button
+ * (src/components/game/ReportQuestion.tsx) under every game page, the data
+ * error screens included, and from the report rounds on the Hall of
+ * Champions' error screen carried it beside the retry. The old reading held
+ * EVERY usable button to "Try again", so that screen read as a cope and the
+ * ratchet called the excuse stale on a screen that had read no save at all.
+ * The button has no data attribute, so it is matched by its exact label, and
+ * the label is asserted in the component's code. CORRUPT_CONTROL=everybutton
+ * puts the old reading back (the filter it removes is asserted present in
+ * readScreen first) and must fire on the ratchet line for /hall-of-champions.
+ * No committed offline copy of the championship archive exists (the wings
+ * come from ten database tables through fetchCatalog), so the route stays
+ * excused, for the reason written beside it.
+ *
  * NETWORK. Everything that is not this machine is aborted, the database host
  * included: this harness never reaches production.
  *
@@ -100,7 +118,7 @@ const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.resolve(process.env.CORRUPT_DIST || path.join(ROOT, 'dist'));
 const CONTROL = process.env.CORRUPT_CONTROL || '';
-if (CONTROL && !['nobutton', 'norestore', 'multiline'].includes(CONTROL)) { console.error(`CORRUPT_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && !['nobutton', 'norestore', 'multiline', 'everybutton'].includes(CONTROL)) { console.error(`CORRUPT_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 const VARIANTS = (process.env.CORRUPT_VARIANTS || 'shell,wrongtype,summer').split(',').map(s => s.trim()).filter(Boolean);
 for (const v of VARIANTS) if (!['shell', 'wrongtype', 'summer'].includes(v)) { console.error(`unknown variant ${v}`); process.exit(1); }
 const MARK = 'data-dukb-fresh-start';
@@ -110,6 +128,10 @@ const RESTORE_MARK = 'data-dukb-set-aside';
 const RESTORE_LABEL = 'Put that save back';
 const BROKE = 'This page broke';
 const NAME = 'Broken Save Test';
+/* Round 1530: the label of the site's report affordance (ReportQuestion, which
+   GameSeoContent puts on every game page, the data error screens included).
+   The offline reading ignores a button with exactly this label. */
+const REPORT_LABEL = 'Report a problem';
 /* Routes that load their game data from the database before they read the
    save, so with the database aborted they stop at their own retry screen and
    this walk cannot judge them. Each is named with the reason; a new route that
@@ -210,6 +232,13 @@ if (!restoreCode.includes(RESTORE_MARK) || !restoreCode.includes(RESTORE_LABEL))
   console.error(`src/components/BrokenSaveRestore.tsx carries no ${RESTORE_MARK} card with "${RESTORE_LABEL}", so the way back cannot be checked and the norestore control would remove nothing`);
   process.exit(1);
 }
+/* If the affordance's label moved, the offline reading would stop ignoring it
+   without a word, so the label has to be in the component's code. */
+const reportCode = stripComments(fs.readFileSync(path.join(ROOT, 'src/components/game/ReportQuestion.tsx'), 'utf8'));
+if (!new RegExp(`>\\s*${REPORT_LABEL}\\s*<`).test(reportCode)) {
+  console.error(`src/components/game/ReportQuestion.tsx no longer labels its button "${REPORT_LABEL}", so the offline reading would count it as a game action; update REPORT_LABEL`);
+  process.exit(1);
+}
 const assetsDir = path.join(DIST, 'assets');
 if (!fs.existsSync(path.join(DIST, 'index.html')) || !fs.existsSync(assetsDir)) { console.error(`no build at ${DIST}; run vite build first`); process.exit(1); }
 const bundleHasButton = fs.readdirSync(assetsDir).filter(f => f.endsWith('.js'))
@@ -218,6 +247,19 @@ if (!bundleHasButton) { console.error(`the build at ${DIST} has no fresh start b
 const bundleHasRestore = fs.readdirSync(assetsDir).filter(f => f.endsWith('.js'))
   .some(f => { const t = fs.readFileSync(path.join(assetsDir, f), 'utf8'); return t.includes(RESTORE_MARK) && t.includes(RESTORE_LABEL); });
 if (!bundleHasRestore) { console.error(`the build at ${DIST} has no restore card in any chunk; it predates the way back, rebuild it`); process.exit(1); }
+
+/* Control everybutton: the offline reading before Round 1530, where every
+   usable button, the report affordance included, had to be the retry. The
+   line it removes must be in readScreen (below) as written, or the control
+   would change nothing and is refused. */
+const REPORT_FILTER = "buttons.filter(b => (b.textContent || '').trim() !== reportLabel)";
+let readScreenFn = readScreen;
+if (CONTROL === 'everybutton') {
+  const src = readScreen.toString();
+  if (!src.includes(REPORT_FILTER)) { console.error('playCorruptSaves control everybutton: readScreen no longer filters the report affordance as written here, so the control would change nothing'); process.exit(1); }
+  readScreenFn = new Function(`return (${src.replace(REPORT_FILTER, 'buttons')})`)();
+  if (readScreenFn.toString().includes(REPORT_FILTER)) { console.error('playCorruptSaves control everybutton: the mutation did not take'); process.exit(1); }
+}
 
 const freePort = () => new Promise((resolve, reject) => {
   const s = net.createServer();
@@ -236,7 +278,7 @@ const isLocal = u => u.startsWith(BASE) || u.startsWith('data:') || u.startsWith
 
 /* ------------------------------------------------------------------ */
 /* What the screen is right now. Runs in the page. */
-function readScreen({ broke, name, restoreMark }) {
+function readScreen({ broke, name, restoreMark, reportLabel }) {
   const visible = el => {
     const r = el.getBoundingClientRect();
     if (r.width === 0 || r.height === 0) return false;
@@ -260,9 +302,16 @@ function readScreen({ broke, name, restoreMark }) {
     sample: buttons.slice(0, 3).map(b => (b.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 24)),
     drewName: text.includes(name),
     /* The game's own data load failed (the database is aborted here) and the
-       only thing on offer is its retry: the save was never even read. */
-    offline: /couldn'?t load|could not load/i.test(text) && buttons.length > 0
-      && buttons.every(b => /^try again$/i.test((b.textContent || '').trim())),
+       only thing on offer is its retry: the save was never even read. Round
+       1530: the site's report affordance is not a game action, so it never
+       turns a data error screen into a cope. It carries no data attribute or
+       other marker, only its label, so it is matched by its exact label (see
+       REPORT_LABEL); everything else on the screen still has to be the retry. */
+    offline: (() => {
+      const game = buttons.filter(b => (b.textContent || '').trim() !== reportLabel);
+      return /couldn'?t load|could not load/i.test(text) && game.length > 0
+        && game.every(b => /^try again$/i.test((b.textContent || '').trim()));
+    })(),
   };
 }
 
@@ -274,7 +323,7 @@ async function settle(page) {
     return t.includes(broke) || (document.querySelectorAll('#root button').length > 0 && t.trim().length > 80);
   }, BROKE, { timeout: 30000 }).catch(() => {});
   await page.waitForTimeout(1500);
-  return page.evaluate(readScreen, { broke: BROKE, name: NAME, restoreMark: RESTORE_MARK });
+  return page.evaluate(readScreenFn, { broke: BROKE, name: NAME, restoreMark: RESTORE_MARK, reportLabel: REPORT_LABEL });
 }
 
 /* Every backup value this browser holds for one save key. */
@@ -364,7 +413,8 @@ async function walk(browser, e, variant) {
 const results = [];
 const browser = await chromium.launch();
 try {
-  if (CONTROL) console.log(`NEGATIVE CONTROL ON (${CONTROL}): the ${CONTROL === 'nobutton' ? 'fresh start button' : 'restore card'} is hidden on every page, every route that needs the button must fail`);
+  if (CONTROL === 'everybutton') console.log('NEGATIVE CONTROL ON (everybutton): the offline reading counts the report affordance as a game action again, so /hall-of-champions must read as coped and its excuse be called stale');
+  else if (CONTROL) console.log(`NEGATIVE CONTROL ON (${CONTROL}): the ${CONTROL === 'nobutton' ? 'fresh start button' : 'restore card'} is hidden on every page, every route that needs the button must fail`);
   for (const e of routes) {
     for (const variant of VARIANTS) {
       if (variant === 'summer' && !SUMMER_SAVE_KEY.test(e.saveKey)) continue;
@@ -397,6 +447,16 @@ for (const r of unjudged.filter(x => x.ok)) console.log(`  note  ${r.route} ${r.
 console.log('');
 console.log(`${results.length} broken saves over ${routes.length} long games: ${needed.length} reached the error page and needed the button, ${coped.length} were coped with by the game, ${drew.length} drew the broken save without throwing, ${unjudged.length} could not be judged offline, ${failed.length} trapped`);
 
+/* Control everybutton fires when the old reading turns the Hall of Champions'
+   data error screen (retry plus the report affordance) back into a cope, so the
+   ratchet calls its excuse stale. It needs that route walked. */
+if (CONTROL === 'everybutton') {
+  const target = '/hall-of-champions';
+  if (!results.some(r => r.route === target)) { console.error(`playCorruptSaves control everybutton: CANNOT FIRE. ${target} was not walked (ONLY leaves it out).`); process.exit(1); }
+  if (failed.some(r => r.route === target && r.variant === 'all')) { console.log(`playCorruptSaves control everybutton: FIRED. With the report affordance counted as a game action, ${target} reads as coped and its OFFLINE_ONLY excuse is called stale.`); process.exit(0); }
+  console.error(`playCorruptSaves control everybutton: DID NOT FIRE. ${target} still reads offline with every button held to the retry, so the report affordance changed nothing there.`);
+  process.exit(1);
+}
 if (CONTROL) {
   if (needed.length === 0) { console.error(`playCorruptSaves control: CANNOT FIRE. No broken save reached the error page, so hiding the ${CONTROL === 'nobutton' ? 'button' : 'restore card'} changes nothing here.`); process.exit(1); }
   const stillPassed = needed.filter(r => r.ok);
