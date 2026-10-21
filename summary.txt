@@ -1,0 +1,3 @@
+simTycoonSetPiece exit=0 5s | Tycoon set pieces: 8/8 selected sections pass
+predict exit=0 13s | predictTycoonScorelines: done (predictions, not measurements; step 2a measures the head)
+simTycoonAwayMatchdays exit=0 26s |    All 6 controls fired exactly where they should, in node and in the real hook.

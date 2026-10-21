@@ -1,0 +1,3 @@
+predict: node scripts/predictTycoonScorelines.mjs --probe586 .rc/x/probe586.json
+simTycoonAwayMatchdays: node scripts/simTycoonAwayMatchdays.mjs
+simTycoonSetPiece: node scripts/simTycoonSetPiece.mjs
