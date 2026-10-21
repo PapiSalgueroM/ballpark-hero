@@ -1,0 +1,3 @@
+discovery exit=0 9s | Retained actual child receipts: .sim-control/browser-discovery-0Iq3cx/report.json
+rival exit=0 23s | No rival product names found. 0 findings.
+anchors exit=0 51s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
