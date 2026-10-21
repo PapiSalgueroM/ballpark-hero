@@ -1,0 +1,7 @@
+hall-nfl-nobase: SIM_CONTROL=nobase SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl
+hall-nfl-plantbase: SIM_CONTROL=plantbase SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl
+hall-nba-plantbase: SIM_CONTROL=plantbase SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba
+hall-mlb-plantbase: SIM_CONTROL=plantbase SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs mlb
+hall-nhl-plantbase: SIM_CONTROL=plantbase SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl
+hall-mlb-basedrift: SIM_CONTROL=basedrift SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs mlb
+hall-nfl-statsup: SIM_CONTROL=statsup SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl
