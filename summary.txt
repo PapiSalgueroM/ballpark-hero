@@ -1,0 +1,6 @@
+simSaveFence exit=0 62s | simSaveFence: all green (tabs, source, fleet)
+simFreeAgents exit=0 128s | simFreeAgents: all sections passed
+simManagerWorldContinuity exit=1 43s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:523:24
+simYouthPadding exit=0 61s | simYouthPadding: 12 checks, 0 failures
+simCmLedgerBound exit=1 377s | simCmLedgerBound: RED, sections 1 (1)
+simCmWorldMoves exit=1 1034s | simCmWorldMoves: RED, sections 5 (108), 6 (270), 8 (57)
