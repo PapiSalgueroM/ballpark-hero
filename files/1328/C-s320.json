@@ -1,0 +1,259 @@
+{
+ "head": {
+  "era": {
+   "small": 23,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "nation": {
+   "small": 54,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "league": {
+   "small": 15,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "team": {
+   "small": 74,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "dugout": {
+   "small": 84,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "hub": {
+   "small": 35,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "help button 44x44",
+    "Managers button 59x44",
+    "meter button 140x44",
+    "meter button 140x44"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "",
+   "cls": 0
+  },
+  "tiles": {
+   "Board": {
+    "value": "2 behind",
+    "sub": "Elite patience",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Inbox": {
+    "value": "All quiet",
+    "sub": "No messages yet",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Calendar": {
+    "value": "D 1-1",
+    "sub": "Next: Everton",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "League": {
+    "value": "#9",
+    "sub": "Form: L W L L D",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Cups": {
+    "value": "Knocked out",
+    "sub": "FA Cup",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Stats": {
+    "value": "22 goals",
+    "sub": "Isak: 12",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Finances": {
+    "value": "-£7.6m",
+    "sub": "Kitty change, projected",
+    "h": 136,
+    "valueLines": 1,
+    "subLines": 2
+   },
+   "Facilities": {
+    "value": "Level 9 · 8 · 8 · 8",
+    "sub": "Stadium, training, medical, more",
+    "h": 136,
+    "valueLines": 2,
+    "subLines": 2
+   },
+   "Staff": {
+    "value": "Level 9 · 8 · 7 · 9",
+    "sub": "Attack, defence, keepers, scouts",
+    "h": 136,
+    "valueLines": 2,
+    "subLines": 2
+   },
+   "Skills": {
+    "value": "Level 1",
+    "sub": "Seven skill trees to grow",
+    "h": 136,
+    "valueLines": 1,
+    "subLines": 2
+   },
+   "Options": {
+    "value": "£ · Normal",
+    "sub": "Currency, nation job, haggling",
+    "h": 116,
+    "valueLines": 1,
+    "subLines": 2
+   },
+   "Save points": {
+    "value": "None yet",
+    "sub": "Go back after a mistake",
+    "h": 116,
+    "valueLines": 1,
+    "subLines": 2
+   },
+   "Manager": {
+    "value": "4W 4D 4L",
+    "sub": "33% win rate",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Treatment": {
+    "value": "All fit",
+    "sub": "No injuries or bans",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Rival watch": {
+    "value": "Everton",
+    "sub": "They sit #17",
+    "h": 136,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Press room": {
+    "value": "They want a word",
+    "sub": "One question, one tap",
+    "h": 136,
+    "valueLines": 2,
+    "subLines": 2
+   },
+   "Dressing room": {
+    "value": "3 unhappy",
+    "sub": "Hugo Ekitiké",
+    "h": 116,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Academy": {
+    "value": "Nobody yet",
+    "sub": "Recruitment 14/20 · 0 scouting",
+    "h": 116,
+    "valueLines": 1,
+    "subLines": 2
+   },
+   "Training": {
+    "value": "Normal · Balanced",
+    "sub": "12 players still improving",
+    "h": 136,
+    "valueLines": 2,
+    "subLines": 2
+   },
+   "Market": {
+    "value": "Window shut",
+    "sub": "Latest transfers inside",
+    "h": 136,
+    "valueLines": 1,
+    "subLines": 2
+   }
+  },
+  "calendar": {
+   "small": 100,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "previous month 44x44",
+    "next month 44x44",
+    "intensity button 83x171",
+    "intensity button 83x171",
+    "intensity button 83x171",
+    "Club home 83x44"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": "36x46",
+   "control": ""
+  },
+  "training": {
+   "small": 57,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "Club home 83x44"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "errors": []
+ },
+ "base": null
+}

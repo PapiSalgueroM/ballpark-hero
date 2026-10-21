@@ -1,0 +1,18 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+assets1082 exit=0 10s | Prepared 92 actual font and flag dependencies for 84 career-club countries.
+playGameReports exit=0 8s | PASS all eight game report journeys
+playGameReports-below exit=0 5s | PASS below-guide control fired on all eight actual pages
+playWorldXiReportFit exit=0 4s | playWorldXiReportFit: green. 16 cases, the narrowest name column 87px, nothing cut, nothing sideways, nothing jumps.
+simCareerTransferBrief-forwalk exit=0 7s | Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.
+playCareerTransferBrief exit=1 851s | Node.js v24.22.0
+simSoccerAgentReview-forwalk exit=0 10s | PASS agent review product and proof source bytes held.
+playSoccerAgentReview exit=1 389s | Node.js v24.22.0
+playSoccerOfferReview1082 exit=0 83s | Soccer offer review: 9 actual-route journeys, 12 effective restored DOM controls, no forwarded writes.
+simSoccerOpponentLabels-forwalk exit=0 26s | PASS simSoccerOpponentLabels: complete original/current careers, display controls and whole undo
+simSoccerOpponentLabels-browser exit=0 10s | PASS simSoccerOpponentLabels browser: 3 actual saved-row journeys, complete saves and read vectors
+hub-walk-noD exit=1 111s | playCmHubLanding: 1 failure(s) (A 8 pass 0 fail, B 63 pass 1 fail, C 112 pass 0 fail, E 65 pass 0 fail, F 9 pass 0 fail)
+ctl-hub-tilectl exit=0 60s | playCmHubLanding: 3 failure(s) (C 109 pass 3 fail)
+land-main exit=1 403s | playSoccerLanding: RED, 8 finding(s)
+land-toasts exit=0 435s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also no extra sizes; toasts, bytes), every marked section red on the base
+ctl-land-seed exit=0 181s | CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed 1987332286 and the byte check went red, and the old save comparison went red on 8 save(s) given the next se

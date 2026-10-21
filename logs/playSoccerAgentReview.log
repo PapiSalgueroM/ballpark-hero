@@ -1,0 +1,91 @@
+sim first: PASS agent review product and proof source bytes held.
+FAIL 320-cousin locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:75:9
+FAIL 320-shark locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:75:9
+FAIL 320-super locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:75:9
+FAIL 320-self locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:75:9
+FAIL 390-cousin locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:75:9
+FAIL 390-shark locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:75:9
+FAIL 390-super locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:75:9
+FAIL 390-self locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:75:9
+FAIL 1280-cousin locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:75:9
+FAIL 1280-shark locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:75:9
+FAIL 1280-super locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:75:9
+FAIL 1280-self locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:75:9
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 3
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:129:45 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 3,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.0

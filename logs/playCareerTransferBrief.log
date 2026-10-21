@@ -1,0 +1,180 @@
+FAIL 320-minutes locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 320-level locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 320-home locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 320-no-home locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 320-declined locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 320-saved-offer locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 320-mandatory-loan locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 320-mandatory-sale locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 320-malformed locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 390-minutes locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 390-level locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 390-home locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 390-no-home locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 390-declined locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 390-saved-offer locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 390-mandatory-loan locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 390-mandatory-sale locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 390-malformed locator.tap: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:121)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 1280-minutes locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 1280-level locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 1280-home locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 1280-no-home locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 1280-declined locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 1280-saved-offer locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 1280-mandatory-loan locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 1280-mandatory-sale locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+FAIL 1280-malformed locator.focus: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: 'Cookie choices', exact: true }).getByRole('button', { name: 'Essential only', exact: true })
+
+    at activate (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:29:64)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:44:311
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 3
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerTransferBrief.mjs:65:45 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 3,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.0
