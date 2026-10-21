@@ -222,8 +222,57 @@ jobs:
             const match = header.match(new RegExp('^(' + uuid + ')$|^psr2\\.(' + uuid + ')\\.[0-9]{10}\\.[A-Za-z0-9_-]{43}$', 'i'));
             assert(match, 'DEPLOYMENT_FORMAT'); assert.equal((match[1] || match[2]).toLowerCase(), process.env.EXPECTED_DEPLOYMENT, 'DEPLOYMENT_ID');
           }
+          const pausedBootstrapSha256 = 'c2b7502f066225a879f1ddf8f1d98751624c49511bc4654ad28bba3b55db3ed0';
+          let sourceBootstrapRecord;
+          function designatedBootstrap(html, dom) {
+            const nodes = [...dom.window.document.querySelectorAll('script[data-dukb-consent-bootstrap]')];
+            assert.equal(nodes.length, 1, 'RAW_PAUSED_BOOTSTRAP_UNIQUE'); const node = nodes[0];
+            assert(node.attributes.length === 1 && node.getAttribute('data-dukb-consent-bootstrap') === '', 'RAW_PAUSED_BOOTSTRAP_ATTRIBUTES');
+            const location = dom.nodeLocation(node);
+            assert(location?.startTag && location?.endTag && Number.isInteger(location.startTag.endOffset) && Number.isInteger(location.endTag.startOffset), 'RAW_PAUSED_BOOTSTRAP_LOCATION');
+            return { node, body: html.slice(location.startTag.endOffset, location.endTag.startOffset) };
+          }
+          function verifyPausedBootstrap(body, expected) {
+            assert.equal(body, expected, 'RAW_PAUSED_SOURCE_BYTES');
+            const ast = parse(body), statement = ast.body[0], call = statement?.expression, fn = call?.callee;
+            assert(ast.body.length === 1 && statement.type === 'ExpressionStatement' && call.type === 'CallExpression' && !call.optional && call.arguments.length === 0
+              && fn?.type === 'FunctionExpression' && fn.id === null && !fn.async && !fn.generator && fn.params.length === 0 && fn.body.type === 'BlockStatement', 'RAW_PAUSED_IIFE_REQUIRED');
+            const flag = fn.body.body[0], declaration = flag?.declarations?.[0], gate = fn.body.body[1];
+            assert(flag?.type === 'VariableDeclaration' && flag.kind === 'var' && flag.declarations.length === 1 && declaration?.id.type === 'Identifier'
+              && declaration.id.name === 'ANALYTICS_READY' && declaration.init?.type === 'Literal' && declaration.init.value === false, 'RAW_PAUSED_FLAG_FALSE_REQUIRED');
+            assert(gate?.type === 'IfStatement' && gate.test.type === 'UnaryExpression' && gate.test.operator === '!' && gate.test.prefix === true
+              && gate.test.argument.type === 'Identifier' && gate.test.argument.name === declaration.id.name && gate.alternate === null
+              && gate.consequent.type === 'ReturnStatement' && gate.consequent.argument === null, 'RAW_PAUSED_RETURN_REQUIRED');
+            return { bytes: Buffer.byteLength(body), sha256: hash(body), literalAnalyticsReady: false, gateCondition: true, immediateReturn: true, reachableStatementsAfterGate: 0, proof: 'Strict AST structure, no script execution' };
+          }
+          function sourceBootstrap() {
+            if (sourceBootstrapRecord) return sourceBootstrapRecord;
+            const html = fs.readFileSync('index.html', 'utf8'), dom = new JSDOM(html, { includeNodeLocations: true });
+            try { const { body } = designatedBootstrap(html, dom); assert.equal(hash(body), pausedBootstrapSha256, 'RAW_PAUSED_SOURCE_PIN');
+              sourceBootstrapRecord = { body, sourceIndexSha256: hash(html), proof: verifyPausedBootstrap(body, body) }; return sourceBootstrapRecord;
+            } finally { dom.window.close(); }
+          }
+          function pausedBootstrapControls(body) {
+            const controls = [
+              { name: 'flag-true', old: 'var ANALYTICS_READY = false;', replacement: 'var ANALYTICS_READY = true;', marker: 'RAW_PAUSED_FLAG_FALSE_REQUIRED' },
+              { name: 'missing-return', old: 'if (!ANALYTICS_READY) return;', replacement: 'if (!ANALYTICS_READY) {}', marker: 'RAW_PAUSED_RETURN_REQUIRED' },
+              { name: 'before-gate', old: 'if (!ANALYTICS_READY) return;', replacement: 'window.gtag("config", "CONTROL_ACTIVE_BEFORE_GATE");\n        if (!ANALYTICS_READY) return;', marker: 'RAW_PAUSED_RETURN_REQUIRED' }
+            ], rows = [];
+            for (const control of controls) {
+              assert.equal(body.split(control.old).length, 2); const at = body.indexOf(control.old), changed = body.slice(0, at) + control.replacement + body.slice(at + control.old.length);
+              assert.notEqual(changed, body); parse(changed); assert.equal(changed.slice(0, at) + control.old + changed.slice(at + control.replacement.length), body);
+              let caught; try { verifyPausedBootstrap(changed, changed); } catch (error) { caught = error; }
+              assert.equal(caught?.name, 'AssertionError'); assert(caught.message.startsWith(control.marker));
+              rows.push({ name: control.name, beforeSha256: hash(body), afterSha256: hash(changed), expectedCopyAlsoChanged: true, parserAcceptedFault: true, wholeInverseExact: true, rejection: { name: caught.name, message: caught.message } });
+            }
+            const addition = '\n//CONTROL_DORMANT_BODY_DRIFT', changed = body + addition; assert.notEqual(changed, body); parse(changed); assert.equal(changed.slice(0, -addition.length), body);
+            let caught; try { verifyPausedBootstrap(changed, body); } catch (error) { caught = error; }
+            assert.equal(caught?.name, 'AssertionError'); assert(caught.message.startsWith('RAW_PAUSED_SOURCE_BYTES'));
+            rows.push({ name: 'dormant-body-drift', beforeSha256: hash(body), afterSha256: hash(changed), parserAcceptedFault: true, wholeInverseExact: true, rejection: { name: caught.name, message: caught.message } });
+            return rows;
+          }
           function raw(html, route) {
-            const dom = new JSDOM(html), doc = dom.window.document;
+            const dom = new JSDOM(html, { includeNodeLocations: true }), doc = dom.window.document;
             try {
               assert.deepEqual([...doc.querySelectorAll('link[rel="canonical"]')].map(node => node.href), [ORIGIN + route], 'OWN_CANONICAL');
               const entries = [...doc.querySelectorAll('script[type="module"][src]')].map(node => new URL(node.getAttribute('src'), ORIGIN)).filter(url => /^\/assets\/index-[A-Za-z0-9_-]+\.js$/.test(url.pathname));
@@ -231,16 +280,18 @@ jobs:
               const boot = [...doc.querySelectorAll('script[src]')].filter(node => node.getAttribute('src') === '/prerender-boot.js' && node.hasAttribute('defer'));
               if (route === '/') assert.equal(entries.length, 1, 'HOME_ENTRY_UNIQUE');
               else { assert(entries.length <= 1, 'PRIVACY_ENTRY_AT_MOST_ONE'); if (!entries.length) assert.equal(boot.length, 1, 'PRIVACY_SNAPSHOT_BOOT_REQUIRED'); }
+              const designated = designatedBootstrap(html, dom), paused = verifyPausedBootstrap(designated.body, sourceBootstrap().body);
               for (const node of doc.querySelectorAll('script')) {
                 const src = node.getAttribute('src'); if (src) { const url = new URL(src, ORIGIN); assert(!/(?:^|\.)(?:googletagmanager|google-analytics)\.com$/i.test(url.hostname), 'RAW_GA_LOADER_REFUSED'); }
                 else if (!node.type || /^(?:text|application)\/javascript$|^module$/.test(node.type)) {
+                  if (node === designated.node) continue;
                   const ast = parse(node.textContent); walk(ast, item => { if (item.type === 'CallExpression' && (item.callee.name === 'gtag' || item.callee.property?.name === 'gtag') && ['js', 'config'].includes(item.arguments[0]?.value)) assert.fail('RAW_GA_BOOTSTRAP_REFUSED'); });
                 }
               }
               doc.querySelectorAll('script,style,template').forEach(node => node.remove());
               const words = doc.body.textContent.replace(/\s+/g, ' ').trim();
               if (route === '/privacy') for (const phrase of ['Analytics is currently paused, and the banner explains why.', 'Analytics stays off while it is paused.', 'Cookie choices shows this paused status.']) assert(words.includes(phrase), 'RAW_PRIVACY_PAUSE_REQUIRED: ' + phrase);
-              return { entry: entries[0]?.pathname ?? null, prerenderBoot: boot.length === 1, readableChars: words.length };
+              return { entry: entries[0]?.pathname ?? null, prerenderBoot: boot.length === 1, readableChars: words.length, pausedBootstrap: paused };
             } finally { dom.window.close(); }
           }
           function rawControl(html) {
@@ -254,6 +305,20 @@ jobs:
             assert.throws(() => raw(changed, '/privacy'), error => error.name === 'AssertionError' && error.message.startsWith('RAW_PRIVACY_PAUSE_REQUIRED'));
             return { originalSha256: hash(html), changedSha256: hash(changed), realTextChanged: 1, inertShadowRejected: true };
           }
+          function rawBootstrapOutsideControls(html) {
+            const controls = [
+              { name: 'active-outside-bootstrap', addition: '<script>window.gtag("config", "CONTROL_OUTSIDE_BOOTSTRAP");</script>', marker: 'RAW_GA_BOOTSTRAP_REFUSED' },
+              { name: 'external-ga-loader', addition: '<script src="https://www.googletagmanager.com/gtag/js?id=CONTROL"></script>', marker: 'RAW_GA_LOADER_REFUSED' }
+            ], rows = [];
+            for (const control of controls) {
+              assert.equal(html.split('</head>').length, 2); const changed = html.replace('</head>', control.addition + '</head>'); assert.notEqual(changed, html);
+              assert.equal(changed.replace(control.addition + '</head>', '</head>'), html);
+              let caught; try { raw(changed, '/'); } catch (error) { caught = error; }
+              assert.equal(caught?.name, 'AssertionError'); assert(caught.message.startsWith(control.marker));
+              rows.push({ name: control.name, beforeSha256: hash(html), afterSha256: hash(changed), wholeInverseExact: true, rejection: { name: caught.name, message: caught.message } });
+            }
+            return rows;
+          }
           async function main() {
             await lexer.init;
             const sourcePins = { 'src/lib/consentPreferences.ts': 'a7f50b82c4ca1c757ec98b53e30688b91b160e0b3216f0b3ec0b9ee3576ed124', 'src/lib/consentedScripts.ts': '8106f28dcd5faa8546de50e304af41add45b4fd43a15ccaf009dac809ab6be50' };
@@ -262,6 +327,8 @@ jobs:
             assert.match(strip(fs.readFileSync('src/lib/consentPreferences.ts', 'utf8')), /export const ANALYTICS_READY:\s*boolean\s*=\s*false;/);
             assert.match(strip(fs.readFileSync('src/lib/consentedScripts.ts', 'utf8')), /export function loadAnalytics\(\): void \{\}/);
             report.sourceFlags = { sourcePins, analyticsReady: false, loadAnalyticsEmpty: true, changedSourceRejected: 2, scope: 'Exact published source hold, no invented minified variable identity' };
+            const dormant = sourceBootstrap(); report.sourceFlags.pausedBootstrap = { sourceIndexSha256: dormant.sourceIndexSha256, ...dormant.proof };
+            report.controls.pausedBootstrap = pausedBootstrapControls(dormant.body);
             const signed = 'psr2.' + process.env.EXPECTED_DEPLOYMENT + '.1793200847.' + 'A'.repeat(43); deployment(signed); deployment(process.env.EXPECTED_DEPLOYMENT);
             for (const changed of [signed.replace('psr2.', 'other.'), signed.slice(0, -1), signed.replace(process.env.EXPECTED_DEPLOYMENT, '00000000-0000-0000-0000-000000000000')]) { assert.notEqual(changed, signed); assert.throws(() => deployment(changed)); }
             const refused = [[ORIGIN + '/', 'POST'], ['https://example.com/', 'GET'], [ORIGIN + '/functions/v1/account-privacy', 'GET'], ['https://name:password@douknowball.com/', 'GET'], [ORIGIN + '/__analytics1445_unlisted', 'GET'], [ORIGIN + '/assets/unlisted.js', 'GET']];
@@ -279,6 +346,7 @@ jobs:
               const pages = new Map();
               for (const route of ['/', '/privacy']) { const file = 'page-' + (route.slice(1) || 'home') + '.html', body = await read(route, file); await read(route, file + '.head', 'head'); const observed = raw(body.toString(), route); pages.set(route, { body, observed }); report.pages.push({ route, status: 200, ...observed, sha256: hash(body) }); persist(); }
               report.controls.rawPrivacy = rawControl(pages.get('/privacy').body.toString());
+              report.controls.rawBootstrapOutside = rawBootstrapOutsideControls(pages.get('/').body.toString());
               let pins, bodies;
               if (mode === 'intake') {
                 const dist = path.join(out, 'input-dist'), files = fs.readdirSync(path.join(dist, 'assets')).filter(file => file.endsWith('.js'));
