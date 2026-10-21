@@ -1,0 +1,26 @@
+bindAt: scripts/simSoccerAppearanceOptions.mjs bound
+bindAt: 775564305e9d -> ab1fe605a285
+runProver: p1425 at f7d150bba48032f26d1e97a412d44ba3d2d947d8 (release BK bound: 75340a8322b3 with its pinned bases bound to the joined tree)
+capture-original: 1 passed, 0 expected failures, 0 skipped
+normal: 28 passed, 0 expected failures, 0 skipped
+missing-texturedcrop: 0 passed, 1 expected failures, 27 skipped
+missing-sidefringe: 0 passed, 1 expected failures, 27 skipped
+missing-twists: 0 passed, 1 expected failures, 27 skipped
+missing-shortlocs: 0 passed, 1 expected failures, 27 skipped
+missing-halfup: 0 passed, 1 expected failures, 27 skipped
+missing-afropuff: 0 passed, 1 expected failures, 27 skipped
+missing-circlebeard: 0 passed, 1 expected failures, 27 skipped
+missing-handlebar: 0 passed, 1 expected failures, 27 skipped
+missing-ducktail: 0 passed, 1 expected failures, 27 skipped
+missing-muttonchops: 0 passed, 1 expected failures, 27 skipped
+changed-old-drawing: 0 passed, 1 expected failures, 27 skipped
+changed-shared-catalogue: 0 passed, 1 expected failures, 27 skipped
+extra-random-draw: 0 passed, 1 expected failures, 27 skipped
+exposed-to-us: 24 passed, 4 expected failures, 0 skipped
+restored: 28 passed, 0 expected failures, 0 skipped
+simSoccerAppearanceOptions: all declared cases and actual source controls passed.
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m39 passed[39m[22m[90m (39)[39m
+ALL CREATION CHECKS PASSED
+p1425 PROOF DONE
+runProver: p1425 exit 0
