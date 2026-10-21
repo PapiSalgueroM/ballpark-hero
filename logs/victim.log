@@ -1,0 +1,9 @@
+victim save on the base: age 26, retired true, phase retired, legacy none, last row playing, choice none
+  ok   the base ended the stray flag career on the retired screen at 26 (the reported bug)
+the branch loads it as: retired true, phase retired, legacy none
+  FAIL the branch gives that player his career back (or at least the send off and its choices)
+  390: Share Legacy 1, Next Season 0, send off choices 0, says 26: true
+  FAIL 390: the player who already hit the bug is not left on the retired screen with no choice
+  1280: Share Legacy 1, Next Season 0, send off choices 0, says 26: true
+  FAIL 1280: the player who already hit the bug is not left on the retired screen with no choice
+rvvictim1519: FAIL, 3 of 4 checks failed
