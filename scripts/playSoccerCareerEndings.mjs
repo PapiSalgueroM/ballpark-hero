@@ -107,7 +107,8 @@ try {
     const shot = async name => page.screenshot({ path: path.join(OUT, `shot-${width}-${name}.png`) });
     const load = async fixture => {
       await page.goto(BASE + '/soccer-career', { waitUntil: 'domcontentloaded' });
-      await page.evaluate(([k, v]) => { localStorage.clear(); localStorage.setItem('cookie-consent', 'essential'); localStorage.setItem(k, v); }, [KEY, JSON.stringify(fixture)]);
+      /* The rules card opens on a first visit; this walk has read it (it is the game's own key). */
+      await page.evaluate(([k, v]) => { localStorage.clear(); localStorage.setItem('cookie-consent', 'essential'); localStorage.setItem('rules-gate-seen:/soccer-career', '1'); localStorage.setItem(k, v); }, [KEY, JSON.stringify(fixture)]);
       await page.reload({ waitUntil: 'networkidle' });
       await page.waitForSelector('[data-career-action-bar]', { timeout: 20000 });
     };
