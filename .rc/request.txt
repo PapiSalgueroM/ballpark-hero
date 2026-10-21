@@ -1,0 +1,6 @@
+simFreeAgents: node scripts/simFreeAgents.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+simCmWorldMoves: node scripts/simCmWorldMoves.mjs
+simManagerWorldContinuity: node scripts/simManagerWorldContinuity.mjs
+simYouthPadding: node scripts/simYouthPadding.mjs
