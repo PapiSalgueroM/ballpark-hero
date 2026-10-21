@@ -262,8 +262,16 @@ jobs:
           printf '%s\n' "$status" > "$out/weights.exit"
           cat "$out/weights.log"; test "$status" -eq 0 || failed=1
           exit "$failed"
-      - name: Complete offline node harness suite
+      - name: Retain completed build and reader evidence before the full suite
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: legal-privacy-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: legal-privacy-artifacts/
+          if-no-files-found: error
+          retention-days: 7
+      - name: Complete offline node harness suite
+        if: ${{ !cancelled() && success() && steps.build.outcome == 'success' }}
         timeout-minutes: 38
         run: |
           set -euo pipefail
