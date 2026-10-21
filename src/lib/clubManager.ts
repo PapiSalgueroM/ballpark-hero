@@ -450,8 +450,10 @@ export function worldRosterFor(career: CareerState, club: string, onYears = year
        MADE UP tag under a caption that promises every made up man is marked. Real footballers never carry
        either flag. scripts/simCmLedgerBound.mjs holds it. */
     return { n: p.name, p: p.position, a: p.age, v: p.value ?? 0, r: p.rating,
-      ...(p.generated || p.academyGrad || p.isYouth ? { g: true, ...(p.nation ? { nation: p.nation } : {}) } : {}), anchor: original?.anchor ?? p.rating,
+      ...(p.generated || p.academyGrad || p.isYouth ? { g: true } : {}), anchor: original?.anchor ?? p.rating,
       since: p.worldRosterSince ?? original?.since ?? 0,
+      /* Round 1520: only a made up man carries one, and the ledger keeps it. */
+      ...(p.nation ? { nation: p.nation } : {}),
       ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey } : {}),
       ...(p.potential === undefined ? {} : { potential: p.potential }) };
   });
@@ -7732,9 +7734,9 @@ export function topUpFreeAgents(state: CareerState): void {
       value: JOURNEYMAN_VALUE,
       wage: freeAgentTerms({ name, position, age, rating, value: worth, since: state.season, reason: 'unattached' }).wage,
       generated: true,
-      ...(nation ? { nation } : {}),
       since: state.season,
       reason: 'unattached',
+      ...(nation ? { nation } : {}),
     });
     have += 1;
   }
@@ -19704,14 +19706,14 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   ensureRoles(state);
   ensurePress(state);
   ensureManagers(state);
-  /* Round 1520: every made up man on day one gets his country, before the board's asks count them. */
-  ensureMadeUpNations(state);
   state.wageCap = wageCapFrom(wageBill(state));
   /* Round 640: and a created club gets the cap a real club with its budget
      has, plus the room its founders above that money bring, recorded so the
      summer knows how much of the cap is theirs. */
   if (custom) state.founderWageRoom = foundersWageRoom(state) || undefined;
   if (custom) state.wageCap = Math.max(state.wageCap, realCapForBudget(club.budget) + (state.founderWageRoom ?? 0));
+  /* Round 1520: every made up man on day one gets his country, before the board's asks count them. */
+  ensureMadeUpNations(state);
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id, custom ? leagueClubs : undefined);
   /* Round 474: and the two specific asks, read off the squad you have just
      been handed and the market this world really has. */
