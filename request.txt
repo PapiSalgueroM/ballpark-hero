@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+weight-base: git worktree add -q /tmp/b4 bc79b526 && ln -s "$PWD/node_modules" /tmp/b4/node_modules && (cd /tmp/b4 && npm run build > /tmp/b4build.log 2>&1); tail -2 /tmp/b4build.log; (nohup node scripts/lib/hostLikeServer.mjs /tmp/b4/dist 4176 > /tmp/srvb.log 2>&1 &) ; sleep 4; SWEEP_OFFLINE=1 BASE=http://localhost:4176 node scripts/sweepWeight.mjs 2>&1 | grep -E "^ +/(club-manager|manager-hot-seat|deadline-day) " | head -6
+weight-head: npm run build > /tmp/hbuild.log 2>&1; tail -2 /tmp/hbuild.log; (nohup node scripts/lib/hostLikeServer.mjs dist 4177 > /tmp/srvh.log 2>&1 &) ; sleep 4; SWEEP_OFFLINE=1 BASE=http://localhost:4177 node scripts/sweepWeight.mjs 2>&1 | grep -E "^ +/(club-manager|manager-hot-seat|deadline-day) " | head -6
