@@ -1,11 +1,12 @@
 /**
  * Club Manager team instructions on the screens (Round 1522), at 390 by 844 and 1280 by 900.
  *
- *   (t) The Tactics tab draws four instruction rows (pressing, tempo, width, line) of three tiles each, Balanced
+ *   (t) The Tactics tab holds the instructions in one folded tile reading Balanced on all four; opened, it draws
+ *       four instruction rows (pressing, tempo, width, line) of three tiles each, Balanced
  *       pressed on a new career. A high press and a deep line are tapped: the save holds exactly those two, the
  *       page neither jumps (scrollY the same after each tap) nor runs wider than the screen, every tile is at
- *       least 24 px tall, and each row's line says what the setting does and, off balanced, what it costs.
- *   (r) A reload keeps the two settings on the save and on the tab.
+ *       least 28 px tall, and each row's line says what the setting does and, off balanced, what it costs.
+ *   (r) A reload keeps the two settings on the save and on the tab, and the folded tile names them.
  *   (p) The Match Centre names the other side's style.
  *   (h) Play Live, Skip to the interval: the dressing room's Tactics tile opens tonight's panel; a direct tempo and
  *       a new formation are taken at 46 (the save's instruction log and shape change say so), the tab's standing
@@ -116,6 +117,9 @@ for (const W of WIDTHS) {
     page = await toHub(ctx);
     /* (t) the Tactics tab */
     await page.getByRole('tab', { name: /Tactics/ }).first().click({ timeout: 10000 });
+    const folded = ((await page.locator('[data-cm-instr-open="tab"]').innerText({ timeout: 15000 })) || '').trim();
+    say(/Balanced on all four/.test(folded) && (await page.locator('[data-cm-instructions="tab"]').count()) === 0, `${W}: the instructions sit in one folded tile ("${folded.split('\n')[0]}")`);
+    await tap(page, '[data-cm-instr-open="tab"]');
     await page.locator('[data-cm-instructions="tab"]').waitFor({ timeout: 15000 });
     const rows = await page.locator('[data-cm-instructions="tab"] [data-cm-instr-row]').count();
     const start = await pressed(page);
@@ -131,7 +135,7 @@ for (const W of WIDTHS) {
     say(y0 === y1 && y1 === y2, `${W}: the page does not jump on a tap (scrollY ${y0}, ${y1}, ${y2})`);
     say(await fits(page), `${W}: the tactics tab is no wider than the screen`);
     const tile = await page.locator('[data-cm-instr-btn]').evaluateAll(els => Math.min(...els.map(e => e.getBoundingClientRect().height)));
-    say(tile >= 24, `${W}: every instruction tile is at least 24 px tall (${tile.toFixed(1)})`);
+    say(tile >= 28, `${W}: every instruction tile is at least 28 px tall (${tile.toFixed(1)})`);
     const line = ((await page.locator('[data-cm-instructions="tab"] [data-cm-instr-line="press"]').innerText()) || '').trim();
     say(/Cost:/.test(line) && line.length > 40, `${W}: the press row says what it does and what it costs ("${line.slice(0, 70)}...")`);
     await shot(page, `tactics-${W}.png`);
@@ -139,6 +143,9 @@ for (const W of WIDTHS) {
     /* (r) a reload keeps them */
     await resume(page);
     await page.getByRole('tab', { name: /Tactics/ }).first().click({ timeout: 10000 }).catch(() => {});
+    const summary = ((await page.locator('[data-cm-instr-open="tab"]').innerText({ timeout: 15000 }).catch(() => '')) || '').split('\n')[0].trim();
+    say(summary === 'High press, Deep line', `${W}: the folded tile reads the plan after a reload ("${summary}")`);
+    await tap(page, '[data-cm-instr-open="tab"]').catch(() => {});
     await page.locator('[data-cm-instructions="tab"]').waitFor({ timeout: 15000 }).catch(() => {});
     const after = await pressed(page);
     const s2 = await readSave(page);
@@ -201,6 +208,8 @@ for (const W of WIDTHS) {
 
     /* a reload mid second half lands back in the viewer with tonight's log intact */
     await resume(page);
+    /* the hub's next match card offers Resume match; it lands back in the viewer */
+    await page.locator('button:visible').filter({ hasText: /Resume match/ }).first().click({ timeout: 20000 }).catch(() => {});
     await page.locator('[data-cm-live-stage]').first().waitFor({ timeout: 30000 }).catch(() => {});
     const s6 = await readSave(page);
     say(same(s6?.live?.instrLog, s5?.live?.instrLog) && (s6?.live?.formChanges?.length ?? 0) === 2 && (await page.locator('[data-cm-live-stage]').count()) > 0, `${W}: a reload in the second half keeps tonight's changes and the viewer`);

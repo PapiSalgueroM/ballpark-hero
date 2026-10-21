@@ -10,7 +10,7 @@ import {
   SHOOTOUT_MAX_ORDER, shootoutOrderOf, instructionsOf,
 } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, Mentality, Duty, SetPieceKey, FitGrade } from '@/lib/clubManager';
-import type { AiStyleId, TeamInstructions } from '@/lib/clubManagerTactics';
+import { instructionsSummary, type AiStyleId, type TeamInstructions } from '@/lib/clubManagerTactics';
 import { InstructionsPicker } from '@/components/club-manager/InstructionsPicker';
 import { ratingTint, SecondPositionChips } from '@/components/club-manager/SquadScreen';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -122,6 +122,8 @@ export function TacticsScreen({
   onShootoutOrder, openTileRequest, onOpenTileRequestDone, onSaveMatchPlan, onApplyMatchPlan, onDeleteMatchPlan,
 }: TacticsScreenProps) {
   const [openSlot, setOpenSlot] = useState<number | null>(null);
+  /* Round 1522: the instructions tile, folded until asked for. */
+  const [instrOpen, setInstrOpen] = useState(false);
   // A one-shot pitch flourish on top of the shape move, keyed so it replays.
   const [mentPulse, setMentPulse] = useState(0);
   const pitchRef = useRef<HTMLDivElement>(null);
@@ -446,7 +448,25 @@ export function TacticsScreen({
       {onInstructions && (
         <div>
           <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1.5">Team instructions</div>
-          <InstructionsPicker value={instructionsOf(career)} onChange={onInstructions} theirStyle={theirStyle} idPrefix="tab" />
+          {/* One small tile until asked for, so the tab does not grow a long stack. */}
+          <button
+            type="button"
+            data-cm-instr-open="tab"
+            aria-expanded={instrOpen}
+            onClick={() => setInstrOpen(o => !o)}
+            className="w-full flex items-center justify-between gap-2 rounded-lg border border-border bg-card px-2.5 py-2 text-left hover:border-primary"
+          >
+            <span className="min-w-0">
+              <span className="block text-[11px] font-bold text-foreground truncate">{instructionsSummary(instructionsOf(career))}</span>
+              <span className="block text-[9px] text-muted-foreground">Pressing, tempo, width and the line. Each one has a cost.</span>
+            </span>
+            <ChevronDown className={cn('w-4 h-4 shrink-0 text-muted-foreground transition-transform', instrOpen && 'rotate-180')} />
+          </button>
+          {instrOpen && (
+            <div className="mt-1.5">
+              <InstructionsPicker value={instructionsOf(career)} onChange={onInstructions} theirStyle={theirStyle} idPrefix="tab" />
+            </div>
+          )}
         </div>
       )}
 

@@ -45,7 +45,7 @@ export function InstructionsPicker({ value, onChange, theirStyle, idPrefix = 'cm
                       data-cm-instr-btn={`${idPrefix}:${k}:${v}`}
                       onClick={() => { if (!on) onChange({ ...value, [k]: v }); }}
                       className={cn(
-                        'rounded-md border px-1 py-1 text-[10px] font-bold leading-tight truncate transition-colors',
+                        'min-h-[28px] rounded-md border px-1 py-1 text-[10px] font-bold leading-tight truncate transition-colors',
                         on ? 'bg-primary text-primary-foreground border-primary' : 'bg-background border-border text-foreground hover:border-primary',
                       )}
                     >

@@ -95,6 +95,12 @@ export const INSTRUCTION_INFO: Record<InstructionKey, { label: string; options: 
 /** The words for one setting of one instruction. */
 export const settingLabel = (k: InstructionKey, v: Setting): string => INSTRUCTION_INFO[k].options[String(v) as '-1' | '0' | '1'].label;
 
+/** A set in a few words for a folded tile: the settings off balanced, or "Balanced on all four". */
+export function instructionsSummary(i: TeamInstructions): string {
+  const on = INSTRUCTION_KEYS.filter(k => i[k] !== 0).map(k => (k === 'line' ? `${settingLabel(k, i[k])} line` : settingLabel(k, i[k])));
+  return on.length ? on.join(', ') : 'Balanced on all four';
+}
+
 /* ---------- the other dugout's style ---------- */
 
 export type AiStyleId = 'gegenpress' | 'possession' | 'patient' | 'wingplay' | 'direct' | 'counter' | 'lowblock' | 'balanced';
