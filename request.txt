@@ -1,0 +1,6 @@
+nfl-fleet30: SIM_FLEET_SEEDS=30-53 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl
+nba-fleet30: SIM_FLEET_SEEDS=30-53 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba
+nfl-fleet60: SIM_FLEET_SEEDS=60-83 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl
+nba-fleet60: SIM_FLEET_SEEDS=60-83 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba
+nfl-basedrift60: SIM_CONTROL=basedrift SIM_FLEET_SEEDS=60-83 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl
+nba-basedrift60: SIM_CONTROL=basedrift SIM_FLEET_SEEDS=60-83 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba

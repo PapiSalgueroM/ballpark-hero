@@ -1,0 +1,6 @@
+nba-fleet30 exit=3 114s | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nfl-fleet60 exit=3 127s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nfl-fleet30 exit=3 127s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba-fleet60 exit=3 112s | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba-basedrift60 exit=1 115s | simCareerHall nba CONTROL basedrift: wanted base red and marks green, red [base], FIRED
+nfl-basedrift60 exit=1 121s | simCareerHall nfl CONTROL basedrift: wanted base red and marks green, red [base], FIRED
