@@ -6,12 +6,18 @@ do $$ begin
     raise exception 'Refusing privacy fixtures outside account_privacy_test';
   end if;
 end $$;
-create role anon nologin;
-create role authenticated nologin;
-create role service_role nologin bypassrls;
+do $$ begin
+  if not exists(select 1 from pg_roles where rolname='anon') then create role anon nologin; end if;
+  if not exists(select 1 from pg_roles where rolname='authenticated') then create role authenticated nologin; end if;
+  if not exists(select 1 from pg_roles where rolname='service_role') then create role service_role nologin bypassrls; end if;
+  if not exists(select 1 from pg_roles where rolname='supabase_auth_admin') then create role supabase_auth_admin nologin; end if;
+end $$;
 create schema auth;
 create schema storage;
 create table auth.users (id uuid primary key);
+create table auth.mfa_factors (id uuid primary key, user_id uuid references auth.users(id) on delete cascade, status text);
+grant usage on schema auth to supabase_auth_admin;
+grant select, delete on auth.users to supabase_auth_admin;
 create function auth.uid() returns uuid language sql stable
   as $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
 grant usage on schema public, auth, storage to anon, authenticated, service_role;
@@ -310,6 +316,7 @@ insert into public.overrated_votes(user_id) values (null);
 insert into public.tier_list_votes(user_id) values (null);
 insert into public.transfer_grade_votes(user_id) values (null);
 grant select on all tables in schema public, storage to service_role;
+grant insert on public.overrated_votes, public.tier_list_votes, public.transfer_grade_votes to service_role;
 grant select, insert, update on all tables in schema public to anon, authenticated;
 alter table public.bootroom_save enable row level security;
 create policy own_account on public.bootroom_save to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
@@ -350,7 +357,11 @@ create policy vote_insert on public.overrated_votes for insert to anon,authentic
 create policy vote_insert on public.tier_list_votes for insert to anon,authenticated with check (true);
 create policy vote_insert on public.transfer_grade_votes for insert to anon,authenticated with check (true);
 
+\if :{?PRIVACY_MIGRATION_FILE}
+\i :PRIVACY_MIGRATION_FILE
+\else
 \ir ../supabase/migrations/20261021000000_account_privacy.sql
+\endif
 
 set local role anon;
 do $$ declare t text; begin
@@ -382,6 +393,24 @@ reset role;
 delete from public.overrated_votes where user_id='11111111-1111-4111-8111-111111111111' and id is null;
 delete from public.tier_list_votes where user_id='11111111-1111-4111-8111-111111111111' and id is null;
 delete from public.transfer_grade_votes where user_id='11111111-1111-4111-8111-111111111111' and id is null;
+set local role service_role;
+insert into public.overrated_votes(id,user_id) values ('eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee','11111111-1111-4111-8111-111111111111');
+insert into public.tier_list_votes(id,user_id) values ('eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee','11111111-1111-4111-8111-111111111111');
+insert into public.transfer_grade_votes(id,user_id) values ('eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee','11111111-1111-4111-8111-111111111111');
+reset role;
+delete from public.overrated_votes where id='eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee';
+delete from public.tier_list_votes where id='eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee';
+delete from public.transfer_grade_votes where id='eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee';
+
+-- The aggregate cannot silently stop at a normal 1000-row API page.
+insert into public.user_game_scores(user_id,score)
+  select '11111111-1111-4111-8111-111111111111'::uuid,n from generate_series(1,1005) n;
+do $$ begin
+  if jsonb_array_length(public.account_privacy_export('11111111-1111-4111-8111-111111111111')->'user_game_scores') <> 1006 then
+    raise exception 'Account export lost rows past 1000';
+  end if;
+end $$;
+delete from public.user_game_scores where user_id='11111111-1111-4111-8111-111111111111' and id is null;
 
 -- The service-only functions must not become public RPCs.
 set local role anon;
@@ -422,7 +451,7 @@ begin
     'bootroom_save','daily_badges','daily_completions','fantasy_draft_votes','overrated_votes','profiles','saved_brackets',
     'tier_list_votes','transfer_grade_votes','user_best_scores','user_game_scores','user_preferences','user_roles','user_scores','user_scores_bak_20260919'
   ] loop
-    if jsonb_array_length(data->t) <> case when t='user_scores_bak_20260919' then 2 else 1 end then
+    if jsonb_array_length(data->t) <> (case when t='user_scores_bak_20260919' then 2 else 1 end) then
       raise exception 'Missing, duplicate or foreign account rows in %', t;
     end if;
     for row_data in select value from jsonb_array_elements(data->t) loop
@@ -448,6 +477,17 @@ do $$ begin
   end if;
 end $$;
 update public.user_roles set role='admin' where user_id='11111111-1111-4111-8111-111111111111';
+do $$ begin
+  begin
+    delete from auth.users where id='11111111-1111-4111-8111-111111111111';
+    raise exception 'Admin deletion unexpectedly allowed';
+  exception when raise_exception then
+    if sqlerrm <> 'account_privacy_manual_required' then raise; end if;
+  end;
+  if not exists(select 1 from auth.users where id='11111111-1111-4111-8111-111111111111') then
+    raise exception 'Admin account was lost';
+  end if;
+end $$;
 insert into storage.objects(owner_id) values ('11111111-1111-4111-8111-111111111111');
 do $$ begin
   if public.account_privacy_deletion_blockers('11111111-1111-4111-8111-111111111111') <> '{"admin":true,"storage":true}'::jsonb then
@@ -455,14 +495,31 @@ do $$ begin
   end if;
 end $$;
 delete from storage.objects;
+update public.user_roles set role='user' where user_id='11111111-1111-4111-8111-111111111111';
 insert into storage.buckets(owner) values ('11111111-1111-4111-8111-111111111111');
 do $$ begin
   if not (public.account_privacy_deletion_blockers('11111111-1111-4111-8111-111111111111')->>'storage')::boolean then
     raise exception 'Legacy Storage ownership missed';
   end if;
+  begin
+    delete from auth.users where id='11111111-1111-4111-8111-111111111111';
+    raise exception 'Storage owner deletion unexpectedly allowed';
+  exception when raise_exception then
+    if sqlerrm <> 'account_privacy_manual_required' then raise; end if;
+  end;
 end $$;
 delete from storage.buckets;
 update public.user_roles set role='user' where user_id='11111111-1111-4111-8111-111111111111';
+insert into auth.mfa_factors(id,user_id,status) values ('11111111-1111-4111-8111-111111111111','11111111-1111-4111-8111-111111111111','verified');
+do $$ begin
+  begin
+    delete from auth.users where id='11111111-1111-4111-8111-111111111111';
+    raise exception 'Verified MFA deletion unexpectedly allowed';
+  exception when raise_exception then
+    if sqlerrm <> 'account_privacy_manual_required' then raise; end if;
+  end;
+end $$;
+delete from auth.mfa_factors where user_id='11111111-1111-4111-8111-111111111111';
 -- Real RLS, with a still-valid A subject, refuses writing a B-owned row.
 set local role authenticated;
 select set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
@@ -474,7 +531,9 @@ do $$ begin
   end;
 end $$;
 reset role;
+set local role supabase_auth_admin;
 delete from auth.users where id='11111111-1111-4111-8111-111111111111';
+reset role;
 do $$
 declare t text; n bigint;
 begin
@@ -519,5 +578,9 @@ begin
 end $$;
 reset role;
 select 'PASS: account privacy cascades, fixed export, RPC grants, RLS and stale JWT fixtures' as result;
+\if :{?PRIVACY_CONCURRENCY_SETUP}
+commit;
+\else
 rollback;
+\endif
 

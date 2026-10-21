@@ -1,22 +1,28 @@
 import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '@/integrations/supabase/client';
-import { cacheDisplayName } from '@/lib/completions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function AccountPrivacy() {
-  const navigate = useNavigate();
   const passwordInput = useRef<HTMLInputElement>(null);
   const [deleting, setDeleting] = useState(false);
   const [confirmation, setConfirmation] = useState('');
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
+  const [accountDeleted, setAccountDeleted] = useState(false);
+
+  const requireSameAccount = async (userId: string) => {
+    const { data, error } = await supabase.auth.getSession();
+    if (error || data.session?.user?.id !== userId) {
+      throw new Error('account_changed');
+    }
+  };
 
   const request = async (body: Record<string, unknown>) => {
     const { data, error } = await supabase.auth.getSession();
-    if (error || !data.session) throw new Error('sign_in_required');
+    if (error || !data.session?.user?.id) throw new Error('sign_in_required');
+    const userId = data.session.user.id;
     const response = await fetch(`${SUPABASE_URL}/functions/v1/account-privacy`, {
       method: 'POST', headers: { 'Content-Type': 'application/json', apikey: SUPABASE_PUBLISHABLE_KEY,
         Authorization: `Bearer ${data.session.access_token}` },
@@ -29,22 +35,26 @@ export default function AccountPrivacy() {
       if (response.status === 401) throw new Error('sign_in_required');
       throw new Error('request_failed');
     }
-    return result;
+    await requireSameAccount(userId);
+    return { result, userId };
   };
 
   const exportAccount = async () => {
     setBusy(true); setMessage('');
     try {
-      const result = await request({ action: 'export' });
-      if (!result.export?.account?.id || !result.export.data) throw new Error('request_failed');
+      const { result, userId } = await request({ action: 'export' });
+      if (result.export?.account?.id !== userId || !result.export.data) throw new Error('request_failed');
+      await requireSameAccount(userId);
       const url = URL.createObjectURL(new Blob([JSON.stringify(result.export, null, 2)], { type: 'application/json' }));
       const link = document.createElement('a');
       link.href = url; link.download = 'douknowball-account.json';
       document.body.appendChild(link); link.click(); link.remove();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
       setMessage('Your account download is ready. Keep it somewhere private.');
-    } catch {
-      setMessage('We could not download your account data. Please try again or contact douknowball1@gmail.com.');
+    } catch (error) {
+      setMessage(error instanceof Error && error.message === 'account_changed'
+        ? 'Your sign-in changed during this request. Check the account you started with before trying again.'
+        : 'We could not download your account data. Please try again or contact douknowball1@gmail.com.');
     } finally { setBusy(false); }
   };
 
@@ -54,19 +64,18 @@ export default function AccountPrivacy() {
     if (busy || confirmation !== 'DELETE MY ACCOUNT' || !password) return;
     if (passwordInput.current) passwordInput.current.value = '';
     setBusy(true); setMessage('');
-    let deleted = false;
     try {
-      const result = await request({ action: 'delete', confirmation, password });
+      const { result, userId } = await request({ action: 'delete', confirmation, password });
       if (result.deleted !== true) throw new Error('request_failed');
-      deleted = true;
-      cacheDisplayName(null);
-      const { error } = await supabase.auth.signOut({ scope: 'local' });
-      if (error) throw new Error('sign_out_failed');
-      navigate('/', { replace: true });
+      await requireSameAccount(userId);
+      setAccountDeleted(true);
+      setDeleting(false);
+      setConfirmation('');
+      setMessage('Your account was deleted. Use Sign Out in the account menu to clear this browser\'s old sign-in. Browser-only saves stay on this device.');
     } catch (error) {
       const code = error instanceof Error ? error.message : '';
-      setMessage(deleted
-        ? 'Your account was deleted. Please sign out or close this tab to clear the old session on this browser.'
+      setMessage(code === 'account_changed'
+        ? 'Your sign-in changed during this request. Check the account you started with before trying again.'
         : code === 'manual_required'
           ? 'Please contact douknowball1@gmail.com to finish this request. Accounts with admin access, protected sign-in or uploaded files need a manual check.'
           : code === 'password_not_confirmed'
@@ -84,8 +93,8 @@ export default function AccountPrivacy() {
           Your file includes the account-linked score backup we hold.
         </p>
         <div className="flex flex-wrap gap-3">
-          <Button variant="outline" disabled={busy} onClick={exportAccount}>Download account data</Button>
-          {!deleting && <Button variant="destructive" disabled={busy} onClick={() => { setDeleting(true); setMessage(''); }}>Delete account</Button>}
+          <Button variant="outline" disabled={busy || accountDeleted} onClick={exportAccount}>Download account data</Button>
+          {!deleting && <Button variant="destructive" disabled={busy || accountDeleted} onClick={() => { setDeleting(true); setMessage(''); }}>Delete account</Button>}
         </div>
         <p className="text-xs text-muted-foreground">
           Browser-only saves, reports, inbox messages and provider backups need separate handling.

@@ -82,6 +82,75 @@ jobs:
           retention-days: 7
           if-no-files-found: error
 
+  database:
+    name: Database privacy (${{ matrix.control }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        control: [actual, role-lock, mfa-lock, storage-lock]
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: privacy_fixture_only
+          POSTGRES_DB: account_privacy_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      PGHOST: 127.0.0.1
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: privacy_fixture_only
+      PGDATABASE: account_privacy_test
+      CONTROL: ${{ matrix.control }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Prove current atomic guard and effective copied faults
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir legal-privacy-artifacts
+          git rev-parse HEAD > legal-privacy-artifacts/head.txt
+          if [[ "$CONTROL" == actual ]]; then
+            git show e01bcd5af4691a46b45b275cfcfd131bc8c2bce3:supabase/migrations/20261021000000_account_privacy.sql > "$RUNNER_TEMP/privacy-before.sql"
+            status=0
+            psql -X -v ON_ERROR_STOP=1 -v PRIVACY_MIGRATION_FILE="$RUNNER_TEMP/privacy-before.sql" -f scripts/testAccountPrivacyDb.sql > legal-privacy-artifacts/before-guard.log 2>&1 || status=$?
+            test "$status" -ne 0
+            grep -Fq 'Admin deletion unexpectedly allowed' legal-privacy-artifacts/before-guard.log
+            ! grep -Eq 'syntax error|does not exist|permission denied' legal-privacy-artifacts/before-guard.log
+            echo 'Before-control: prior migration allows the protected deletion, intended assertion failed.'
+            psql -X -v ON_ERROR_STOP=1 -f scripts/testAccountPrivacyDb.sql > legal-privacy-artifacts/actual-db.log 2>&1
+            bash scripts/testAccountPrivacyConcurrency.sh > legal-privacy-artifacts/concurrency.log 2>&1
+            tail -n 4 legal-privacy-artifacts/actual-db.log
+            tail -n 4 legal-privacy-artifacts/concurrency.log
+          else
+            status=0
+            PRIVACY_CONCURRENCY_CONTROL="$CONTROL" bash scripts/testAccountPrivacyConcurrency.sh > legal-privacy-artifacts/concurrency.log 2>&1 || status=$?
+            test "$status" -ne 0
+            grep -Eq 'Expected atomic deletion refusal|Protected update committed after delete guard|Storage write bypassed deletion SHARE lock' legal-privacy-artifacts/concurrency.log
+            ! grep -Eq 'syntax error|does not exist|permission denied|Negative control did not change' legal-privacy-artifacts/concurrency.log
+            tail -n 6 legal-privacy-artifacts/concurrency.log
+            echo "Copied $CONTROL fault: intended authorization expectation failed."
+          fi
+          git diff --exit-code HEAD -- src scripts supabase .github > legal-privacy-artifacts/source-hold.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: legal-privacy-db-${{ matrix.control }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: legal-privacy-artifacts/
+          retention-days: 7
+          if-no-files-found: error
+
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 80

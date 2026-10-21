@@ -894,7 +894,7 @@ export default function Profile() {
             </CardContent>
           </Card>
 
-          {isOwnProfile && <AccountPrivacy />}
+          {isOwnProfile && <AccountPrivacy key={user?.id} />}
         </main>
 
         <div className="max-w-4xl mx-auto px-4">

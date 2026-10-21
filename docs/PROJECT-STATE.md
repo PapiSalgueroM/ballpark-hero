@@ -1,3 +1,15 @@
+## 2026-10-21: legal, AI and privacy implementation pending final verification
+
+Scoped work on `codex/legal-ai-privacy`, based on main `3c56c21f835d46743fe5cab337b9fb46e38e3242`. Implementation and final remote verification are in progress. This is not a published release or a claim of complete legal compliance.
+
+- About, Terms and Privacy explain AI-assisted development, current AI features, fictional recaps, account eligibility and applicable rights. Existing maker and sports disclaimers and the 30-day request response commitment stay in place.
+- Cookie choices separate Advertising and Analytics, provide Accept all, Reject all and Save choices, refresh after 180 days, and keep Advertising off under Global Privacy Control. Withdrawal clears matching JS-visible optional first-party cookies and pauses loading while a safe reload waits for saved game progress or usable storage. The pending withdrawal stays off across a component remount.
+- Google Analytics is paused. Its control stays disabled until enhanced measurement, history and form settings are verified. Separate hosting analytics remain disclosed.
+- Own-profile account download and password-confirmed deletion are implemented in the branch. The server uses the verified account ID; admin access, verified MFA and owned uploads require manual handling. Reports, guest records, inbox copies, browser-only saves and provider retention remain separate request categories.
+- Season recaps are explicitly fictional. The proposed prompt safety changes preserve the actual deployed simulate-season foundation and remove requests for invented real-person incidents or quotes; deployment is pending.
+
+Final remote type, unit, security, database/concurrency, browser and saved-page checks remain pending on the final source. Migration/function deployment, readback and production publication are also pending. The old Round 1441 preservation blocker is unwaived and separate from this scoped work; unrelated pending rounds and the other release lane are not included.
+
 ## Release BN LIVE, 2026-10-20 06:06 EDT: Club Manager's UEFA Super Cup, and the season super cups of Germany, France and Italy
 
 Claude lane (session I). main c3309e67, deployment f04638fe-e1f7-445d-9afa-b55c13a7928a, entry index-D2fx3gQQ.js (was index-CcnV9hH5.js, Release BM,
