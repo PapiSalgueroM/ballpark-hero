@@ -1,0 +1,2 @@
+#!build
+peek: node .rc/x/peek.mjs dist/assets
