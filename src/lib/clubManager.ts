@@ -4763,6 +4763,9 @@ export function nationCountsAt(place: NationPlace, eraId: string | undefined): [
   return table.get(`${place.league}|${place.home}`) ?? null;
 }
 
+/* Each draw, kept once made: the market lists thousands of made up men and is rebuilt after every deal. */
+const DRAWN_NATIONS = new Map<string, string>();
+
 /** A made up man's country, drawn where the save first meets him (madeUpNations.ts says how). Undefined when there
     is no place to draw from, or the world's squads have not arrived: nothing is stored then, and the next
     ensureMadeUpNations draws the same one. A young man reads the league's young count when it has enough of them. */
@@ -4770,7 +4773,12 @@ export function madeUpNationAt(name: string, place: NationPlace | null, eraId: s
   if (!place) return undefined;
   const counts = nationCountsAt(place, eraId);
   if (counts === undefined) return undefined;
-  return drawNation(name, place.home, counts && (young && counts[1].known >= YOUNG_FLOOR ? counts[1] : counts[0]));
+  const key =`${isHistoricEra(eraId) ? eraId : 'now'}|${place.league}|${place.home}|${young ? 'y' : ''}|${name}`;
+  const kept = DRAWN_NATIONS.get(key);
+  if (kept !== undefined) return kept;
+  const nation = drawNation(name, place.home, counts && (young && counts[1].known >= YOUNG_FLOOR ? counts[1] : counts[0]));
+  DRAWN_NATIONS.set(key, nation);
+  return nation;
 }
 
 /** The country a market listing carries off a made up projected or ledger man at `club`; nothing for a real man. */
