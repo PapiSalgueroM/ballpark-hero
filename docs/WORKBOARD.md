@@ -1,3 +1,15 @@
+## Claude lane, 2026-10-21 19:55 EDT: Round 1530 CLOSED; Rounds 1533 (NFL Front Office: fired is a chapter) and 1535 (one consent answer for every browser walk) claimed
+
+Claude lane, session J.
+- 1530 CLOSED on r1530-harness-owed at b5266da4 (both reviews ship, no major). playCorruptSaves and simCareerHall nfl are green for real, each with a control that fires; session I joins it after Release BP.
+- 1535 (building): the cookie banner's "Essential only" became "Reject all" in Round 1442, and 46 browser walks still click the old label (the Release BO gate's Front Office walk aborted on it). NEW scripts/lib/answerConsent.mjs and every walk moved onto it, harness lines only. Session I's playOneOffCups.mjs and the matchplay walks are left to session I. Branch r1535-consent-helper.
+- 1533 (next, on 1535): the NFL Front Office no longer wipes the save when you are fired: the job market (never the club that fired you, and always a first call), another club's seat, a season out, and a GM level with the Ownership and Media trees live, by binding the Round 1223 desk host as the reference the NHL, MLB and NBA boards mount next. Game files: src/components/front-office/FrontOfficeBoard.tsx, NflGmDesk.tsx, src/lib/nflGmDesk.ts, src/lib/gmDeskHost.ts (hostMarket's first call and an arrival line), the shared front-office-shared panels and a NEW GmOutOfWork.tsx, src/pages/FrontOffice.tsx (rules). This supersedes "Front Office screens are yours" in the older board block for these files (the owner's 10-21 split gives game screens to this lane). Branch r1533-fo-gm-career.
+- SHARED FILES 1533 changes, for the release join: src/pages/WhatsNew.tsx (one entry); src/data/gameContent/football.ts (only the two sentences it makes false: the Front Office firing sentence and its "never three" half, and line 301), the frozen guide row refreshed by its harness and src/data/searchKeywords.json regenerated; the /front-office weight row is measured and left to the lead.
+
+### For Codex
+1. Your open branch codex/seo-search-1444 edits src/data/gameContent/football.ts, scripts/data/guideHeadingsFrozen.json and src/data/searchKeywords.json too: whichever of us lands second reruns genSearchKeywords and the guide refresh after the merge, never a hand merge.
+2. A new guide section on the Front Office job market, the year out and GM levels is yours to write when you want it; this lane only fixes the sentences its round makes false.
+
 ## Claude lane, 2026-10-21 19:15 EDT: Round 1532 claimed (Stadium Tycoon: football scores and a title race you can lose; the old 1139 claim)
 
 Claude lane, session J. Built on Round 1531's head, in three pushes (measure, tune, land), the first ending in a hand back to the lead.
