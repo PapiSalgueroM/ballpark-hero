@@ -1,0 +1,1 @@
+digest-bridged exit=0 45s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
