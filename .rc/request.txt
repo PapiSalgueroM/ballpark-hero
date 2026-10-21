@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+simWritesAreSent: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simWritesAreSent.mjs
