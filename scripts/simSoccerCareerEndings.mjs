@@ -32,6 +32,7 @@
  *   SC_ENDINGS_CONTROL=early        the age 45 rule moved to 26: A and B go red.
  *   SC_ENDINGS_CONTROL=noreconcile  repairCareer stops reconciling the pair: C goes red.
  *   SC_ENDINGS_CONTROL=summary      dismissSummary's old hop to the retired screen: C goes red.
+ *   SC_ENDINGS_CONTROL=noreason     the send off loses its reason for the Retire button: B goes red.
  *
  * Run: node scripts/simSoccerCareerEndings.mjs [careers per fleet, default 40]
  */
@@ -46,12 +47,17 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENGINE = path.join(ROOT, 'src/lib/soccerCareerEngine.ts');
 const PER_FLEET = Number(process.argv[2] || 40);
 const CONTROL = process.env.SC_ENDINGS_CONTROL || '';
-/* The fleets' seed base; SC_ENDINGS_SEED moves every fleet to other careers, to measure the floors. */
+/* The fleets' seed base; SC_ENDINGS_SEED moves every fleet to other careers, to measure the floors.
+   Measured at 40 careers a fleet on bases 15190000, 25190000 and 35190000 (rc r1519-s3): under 60 at 26
+   27, 25, 22; forced 127, 135, 128; suggestions 73, 65, 72; farewells 40, 40, 40; ban years 22, 38, 14;
+   trials 156, 162, 168. Floors are half the lowest, scaled to the fleet size. */
+const FLOORS = { lowAt26: 11, forced: 63, suggestion: 32, farewell: 20, bans: 7, trials: 78 };
 const SEED_BASE = Number(process.env.SC_ENDINGS_SEED || 15190000);
 const CONTROLS = {
   early: ['if ((s.overall < 50 && s.age >= 33) || s.age >= 45) {', 'if ((s.overall < 50 && s.age >= 33) || s.age >= 26) {'],
   noreconcile: ['  reconcileRetirement(s);\n  if (!s.primeType)', '  if (!s.primeType)'],
   summary: ['  if (s.retired && reconcileRetirement(s)) return s;', '  if (s.retired) { s.phase = "retired"; return s; }'],
+  noreason: ['  return "You chose to retire.";', '  return null;'],
 };
 
 let failures = 0;
@@ -210,6 +216,7 @@ for (const [p, policy] of POLICIES.entries()) {
         if (!over(s)) continue;
         const route = endingRoute(prev, action, s);
         tally.ended[route ?? 'early'] = (tally.ended[route ?? 'early'] ?? 0) + 1;
+        if (route === 'farewell' && E.retirementReason && E.retirementReason(s) !== 'Your farewell season is done, the year you picked.') note(`${policy} career ${c}: a farewell ending says ${E.retirementReason(s)}`);
         if (!route) { tally.early += 1; note(`${policy} career ${c}: ended at ${s.age} (overall ${s.overall}) on ${action} from ${prev.phase}, phase ${s.phase}`); }
         if (!(s.phase === 'retirement_ceremony' && s.retired && s.legacy)) { tally.noChoice += 1; note(`${policy} career ${c}: ended at ${s.age} on ${action} into ${s.phase} (retired ${s.retired}, legacy ${!!s.legacy}), not the ceremony and its choices`); }
       }
@@ -228,6 +235,12 @@ console.log(`  shady years lived: bans ${tally.bans}, drug test bans ${tally.ped
 check(tally.alive26 === tally.careers, `every career is alive at 26 (${tally.alive26} of ${tally.careers})`);
 check(tally.early === 0, `no career ends early (${tally.early})`);
 check(tally.noChoice === 0, `every ending lands on the ceremony with its choices (${tally.noChoice} did not)`);
+/* Floors, half the lowest of three seed bases (see the header), so a fleet that stops reaching a road fails. */
+for (const [label, got, floor] of [
+  ['careers under 60 at 26', tally.lowAt26, FLOORS.lowAt26], ['forced endings', tally.ended.forced ?? 0, FLOORS.forced],
+  ['suggestions taken', tally.ended.suggestion ?? 0, FLOORS.suggestion], ['farewells', tally.ended.farewell ?? 0, FLOORS.farewell],
+  ['ban years (match fixing and drug test)', tally.bans + tally.pedBans, FLOORS.bans], ['trials', tally.trials, FLOORS.trials],
+]) check(got >= floor * PER_FLEET / 40, `the fleets reach ${label}: ${got}, floor ${floor * PER_FLEET / 40}`);
 
 /* Drive one career the 'last' way until it stands on Next Season at `age`. */
 function careerAt(age, c = 3) {
@@ -263,6 +276,9 @@ console.log(`  fixtures: 25 overall ${at25.overall} at ${at25.currentClub}, 26 o
   const r = E.manualRetire(copy(at26));
   check(isCeremony(r) && r.age === 26, `B1 a confirmed retirement at 26 lands on the ceremony with its legacy (phase ${r.phase}, retired ${r.retired})`);
   check(r.events.some(l => l.includes('Announced retirement')), 'B1 the confirmed retirement says so in the season log');
+  check(E.retirementReason(r) === 'You chose to retire.', `B1 the send off says the player chose it (${E.retirementReason(r)})`);
+  const took = E.acceptRetirementSuggestion({ ...copy(at26), age: 31, phase: 'retirement_suggestion' });
+  check(isCeremony(took) && E.retirementReason(took) === 'Your body was slowing down and you called it.', `R3 taking the suggestion says so (${E.retirementReason(took)})`);
 }
 {
   seedRandom(1);
@@ -275,10 +291,12 @@ console.log(`  fixtures: 25 overall ${at25.overall} at ${at25.currentClub}, 26 o
   const n = E.advanceProSeason(fixture, clubs);
   check(isCeremony(n) && n.age === 33 && endingRoute(fixture, 'advanceProSeason', n) === 'forced', `B3 the age rule fires at 33 under 50 (age ${n.age}, overall ${n.overall}, phase ${n.phase})`);
   check(n.events.some(l => l.includes('Forced retirement')), 'B3 the forced retirement says why in the season log');
+  check(/^Forced out at 33: an overall of \d+ and the body could not keep up\.$/.test(E.retirementReason(n) ?? ''), `B3 the send off says why (${E.retirementReason(n)})`);
   const old = { ...copy(at26), age: 44 };
   seedRandom(1519003);
   const m = E.advanceProSeason(old, clubs);
   check(isCeremony(m) && m.age === 45, `B4 the age rule fires at 45 (age ${m.age}, phase ${m.phase})`);
+  check(E.retirementReason(m) === 'Forced out at 45, as long as any career here can run.', `B4 the send off says why (${E.retirementReason(m)})`);
   const young = { ...withStats(copy(at26), 40), age: 25 };
   seedRandom(1519004);
   const y = E.advanceProSeason(young, clubs);
@@ -366,7 +384,7 @@ for (const { label, save, want } of pairs) {
   const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/careerLeagueWorldSaves1100.json'), 'utf8'));
   const committed = (data.saves || []).map(row => row && typeof row === 'object' && 'phase' in row ? row : row && (row.save || row.career || row.state)).filter(Boolean);
   const consistent = [at25, at26, summary26, real, forced33, chose, pundit, ...committed];
-  const inconsistent = committed.filter(s => s.retired !== POST.includes(s.phase)).length;
+  const inconsistent = committed.filter(s => typeof s.retired === 'boolean' && s.retired !== POST.includes(s.phase)).length;
   let moved = 0;
   for (const save of consistent) {
     seedRandom(1519702);
