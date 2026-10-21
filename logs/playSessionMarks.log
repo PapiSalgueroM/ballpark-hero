@@ -1,0 +1,75 @@
+1) Loading the front office is not playing it
+  PASS  no mark on page load (0 sent)
+  PASS  no mark for picking a franchise (0 sent)
+2) A played week marks unscored, and every week counts
+  PASS  no mark for looking at the fixture (0 sent)
+  PASS  exactly one mark after one week (1 sent)
+  PASS  the mark is front-office, unscored, with a handle ({"game":"front-office","player_name":"SteadyCloser-85"})
+  PASS  a second week is a second mark (2 sent)
+  PASS  the second mark is unscored too
+  PASS  no real page errors on the FO walk (clean)
+3) The idle game: many taps, one mark
+  PASS  no mark on tycoon load (0 sent)
+  PASS  the rules greet a player with no save
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'Let\'s go', exact: true })
+    - locator resolved to <button type="button" class="mt-4 w-full py-3 rounded-xl font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity">Let's go</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <p>…</p> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <p>…</p> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    56 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <p>…</p> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSessionMarks.mjs:108:16 {
+  log: [
+    "  - waiting for getByRole('button', { name: 'Let\\'s go', exact: true })",
+    `    - locator resolved to <button type="button" class="mt-4 w-full py-3 rounded-xl font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity">Let's go</button>`,
+    '  - attempting click action',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <p>…</p> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events',
+    '    - retrying click action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <p>…</p> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events',
+    '    - retrying click action',
+    '      - waiting 100ms',
+    '    56 × waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <p>…</p> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

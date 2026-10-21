@@ -1,0 +1,88 @@
+1) The era step now holds four real starts
+  PASS  the 2005-06 era tile is on the menu
+  PASS  the 2015-16 tile survived
+  PASS  the 2010-11 tile survived
+  PASS  all four eras carry the REAL DATA badge
+  PASS  the 2005-06 tile sells the Ronaldinho season
+2) Spain in 2005
+  PASS  England and Spain offered in 2005
+  PASS  Italy, Germany and France offered in 2005 (Round 902)
+  PASS  the Netherlands correctly absent from 2005
+  PASS  2005 Cadiz are a pickable club
+  PASS  Eibar correctly absent from 2005 La Liga
+  PASS  the thin-squad marker shows for Cadiz AND Alaves
+  PASS  the Barcelona tile demands the title
+  PASS  the Barcelona tile never says "the La Liga"
+  PASS  no real page errors on the Spain walk (clean)
+3) The 2005 Premier League speaks 2005
+  PASS  2005 Wigan are a pickable club
+  PASS  Leicester correctly absent from the 2005 top flight
+  PASS  the Chelsea tile demands the title
+  PASS  the club grid renders board demands (20 tiles)
+  PASS  somebody's board names the UEFA Cup
+  PASS  no 2005 board says Europa League (that name arrived in 2009)
+  PASS  no 2005 board says Conference League
+4) Into the 2005 dressing room
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('text=Take the job')
+    - locator resolved to <button class="shrink-0 inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity">…</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <button type="button" class="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <button type="button" class="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <button type="button" class="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+
+    at enterSquad (/home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/eraDressingRoom.mjs:149:43)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playEra2005.mjs:132:22 {
+  log: [
+    "  - waiting for locator('text=Take the job')",
+    '    - locator resolved to <button class="shrink-0 inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity">…</button>',
+    '  - attempting click action',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <button type="button" class="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events',
+    '    - retrying click action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <button type="button" class="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events',
+    '    - retrying click action',
+    '      - waiting 100ms',
+    '    58 × waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <button type="button" class="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button> from <div role="region" tabindex="-1" data-site-chrome="" data-dukb-focused="1" aria-label="Cookie choices" class="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg">…</div> subtree intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
