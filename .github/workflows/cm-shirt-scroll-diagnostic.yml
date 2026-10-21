@@ -1,0 +1,180 @@
+name: Club Manager finance scroll diagnostic
+on:
+  push:
+    branches: [codex/cm-shirt-anchor-paired]
+permissions:
+  contents: read
+concurrency:
+  group: cm-shirt-scroll-diagnostic-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  observe:
+    if: github.ref == 'refs/heads/codex/cm-shirt-anchor-paired'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+      CURRENT_SOURCE: ac5614f77230d447c89d128549ba7a11afe29eb0
+      BASELINE_SOURCE: 86e45814734bffce89e6bc2ec0c317514f382a9e
+      DRIVER_SOURCE: 9392591598a773c05efa83cdaa7e46fa4b04eacb
+      SCROLL_DIAG_OUT: cm-scroll-diagnostic-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Pin both sources and install isolated browser tooling
+        run: |
+          set -euo pipefail
+          mkdir "$SCROLL_DIAG_OUT"
+          git fetch --no-tags --depth=1 origin "$CURRENT_SOURCE" "$BASELINE_SOURCE" "$DRIVER_SOURCE" > "$SCROLL_DIAG_OUT/fetch.log" 2>&1
+          git cat-file -e "$CURRENT_SOURCE^{commit}"; git cat-file -e "$BASELINE_SOURCE^{commit}"; git cat-file -e "$DRIVER_SOURCE^{commit}"
+          git show "$DRIVER_SOURCE:scripts/qa/diagnoseCmFinanceScroll1443.mjs" > "$SCROLL_DIAG_OUT/driver-before.mjs"
+          printf '%s  %s\n' 'd325245074d39d5186e62c02433a1bc7089fd9a4d94d33f1ecc5c1f0ee39f1ab' "$SCROLL_DIAG_OUT/driver-before.mjs" '068d51336bb1a74d9c02645888110162d58d4349be3e2d61c476475d33440e60' 'scripts/qa/diagnoseCmFinanceScroll1443.mjs' '5bdbe34d91d0945a794177b9b550e3ef68f021f683aaaae78ec4423d985d5815' 'scripts/qa/playCmShirtSales1443.mjs' 'b3497014694abfd3dc547fb6f6fe38c5d231297789d6ee32ec45f25b2a223f48' '.github/workflows/cm-shirt-sales.yml' | sha256sum --check > "$SCROLL_DIAG_OUT/driver-product-gates-hold.log"
+          git diff --exit-code "$BASELINE_SOURCE" "$CURRENT_SOURCE" -- src public scripts supabase index.html package.json package-lock.json vitest.config.ts ':!src/components/club-manager/FinancesScreen.tsx' ':!scripts/qa/diagnoseCmFinanceScroll1443.mjs' > "$SCROLL_DIAG_OUT/only-finance-style-source-hold.log"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';
+          const file='src/components/club-manager/FinancesScreen.tsx', before=execFileSync('git',['show',process.env.BASELINE_SOURCE+':'+file],{encoding:'utf8'}), after=fs.readFileSync(file,'utf8'), hash=x=>createHash('sha256').update(x).digest('hex');
+          const old="    <div className=\"space-y-2\">\n      {/* Round 467: the projection. */}", replacement="    <div className=\"space-y-2\">\n      <style hidden data-finance-scroll-anchor>{'html:has([data-finance-projection]) { overflow-anchor: none; }'}</style>\n      {/* Round 467: the projection. */}";
+          assert.equal(hash(before),'2b698775741811b4a4e52c4a70aff0b73d1e671aaa5269ce1607f62c2967f14f');assert.equal(hash(after),'8cb6bddd630f6d3b30363019c576bee6e4e4b97a10885984a755b1e35c284bce');
+          assert.equal(before.split(old).length,2);const at=before.indexOf(old);assert.equal(before.slice(0,at)+replacement+before.slice(at+old.length),after);assert.equal(after.slice(0,at)+old+after.slice(at+replacement.length),before);
+          fs.writeFileSync(process.env.SCROLL_DIAG_OUT+'/finance-style-source-binding.json',JSON.stringify({before:process.env.BASELINE_SOURCE,current:process.env.CURRENT_SOURCE,beforeSha256:hash(before),afterSha256:hash(after),wholeForwardExact:true,wholeInverseExact:true,original13ScriptSha256:'5bdbe34d91d0945a794177b9b550e3ef68f021f683aaaae78ec4423d985d5815'},null,2)+'\n');
+          JS
+          git rev-parse HEAD > "$SCROLL_DIAG_OUT/operator-head.txt"
+          git rev-parse 'HEAD^{tree}' > "$SCROLL_DIAG_OUT/operator-tree.txt"
+          git diff --exit-code "$CURRENT_SOURCE" HEAD -- src public scripts supabase package.json package-lock.json ':!scripts/qa/diagnoseCmFinanceScroll1443.mjs' > "$SCROLL_DIAG_OUT/current-source-hold.log"
+          git diff --exit-code "$BASELINE_SOURCE" "$CURRENT_SOURCE" -- src/hooks/useRevealScroll.ts src/hooks/useClubManager.ts src/pages/ClubManager.tsx src/lib/clubManager.ts src/lib/clubManagerMeters.ts src/lib/clubManagerSlots.ts src/lib/saveFence.ts > "$SCROLL_DIAG_OUT/shared-scroll-source-hold.log"
+          git ls-files -z -- src public scripts supabase package.json package-lock.json .github | sort -z | xargs -0 sha256sum > "$SCROLL_DIAG_OUT/source-before.sha256"
+          npm ci > "$SCROLL_DIAG_OUT/install.log" 2>&1
+          tools="$RUNNER_TEMP/cm-scroll-browser"
+          npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 > "$SCROLL_DIAG_OUT/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$tools/node_modules/playwright/cli.js" install --with-deps chromium > "$SCROLL_DIAG_OUT/chromium-install.log" 2>&1
+          export FREE_KICK_FONT_CACHE="$RUNNER_TEMP/cm-scroll-fonts"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$SCROLL_DIAG_OUT/fonts.log" 2>&1
+          echo "FREE_KICK_FONT_CACHE=$FREE_KICK_FONT_CACHE" >> "$GITHUB_ENV"
+      - name: Complete separate unmodified current and baseline production builds
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          npm run build > "$SCROLL_DIAG_OUT/current-build.log" 2>&1
+          echo "CURRENT_DIST=$PWD/dist" >> "$GITHUB_ENV"
+          before="$RUNNER_TEMP/cm-scroll-baseline"
+          mkdir "$before"
+          git archive "$BASELINE_SOURCE" | tar -xf - -C "$before"
+          cmp "$before/package.json" package.json; cmp "$before/package-lock.json" package-lock.json
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$before/node_modules"
+          (cd "$before"; find src public scripts supabase -type f -print0 | sort -z | xargs -0 sha256sum) > "$SCROLL_DIAG_OUT/baseline-source-before.sha256"
+          (cd "$before"; npm run build) > "$SCROLL_DIAG_OUT/baseline-build.log" 2>&1
+          (cd "$before"; sha256sum --check "$GITHUB_WORKSPACE/$SCROLL_DIAG_OUT/baseline-source-before.sha256") > "$SCROLL_DIAG_OUT/baseline-source-hold.log"
+          echo "BASELINE_DIST=$before/dist" >> "$GITHUB_ENV"
+          (cd dist; find . -type f -print0 | sort -z | xargs -0 sha256sum) > "$SCROLL_DIAG_OUT/current-dist.sha256"
+          (cd "$before/dist"; find . -type f -print0 | sort -z | xargs -0 sha256sum) > "$SCROLL_DIAG_OUT/baseline-dist.sha256"
+      - name: Observe both native scroll timelines, without a stability verdict
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          status=0
+          timeout --signal=TERM --kill-after=15s 8m node scripts/qa/diagnoseCmFinanceScroll1443.mjs > "$SCROLL_DIAG_OUT/diagnostic.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$SCROLL_DIAG_OUT/diagnostic.exit"
+          cat "$SCROLL_DIAG_OUT/diagnostic.log"
+          test "$status" -eq 0
+          grep -Fq 'CM_SCROLL_DIAGNOSTIC DIAGNOSTIC_COMPLETE:' "$SCROLL_DIAG_OUT/diagnostic.log"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const r = JSON.parse(fs.readFileSync(process.env.SCROLL_DIAG_OUT + '/report.json', 'utf8'));
+          assert.equal(r.diagnosticOnly, true);
+          assert.equal(r.status, 'DIAGNOSTIC_COMPLETE');
+          assert.deepEqual(r.errors, []);
+          assert.equal(r.sourceUnchanged, true);
+          assert.equal(r.plannedCases, 12);
+          assert.equal(r.plannedWalks, 24);
+          assert.equal(r.cases.length, 12);
+          assert.equal(r.cases.flatMap(row => row.walks).length, 24);
+          assert.equal(r.fixture.sha256, '678365456eae1d3e4cd2d68e54194e3ac61d71cb758f07ff52539736810729e0');
+          assert.equal(r.fixture.bytes, 61407);
+          assert.equal(r.fixture.engineAdvances, 0);
+          assert.equal(r.fixture.syntheticLedgerWeeks, 2);
+          const expected = ['360:false:native', '360:true:native', '390:false:native', '390:true:native',
+            '360:false:finance-root-none', '360:false:html-none'].sort();
+          for (const arm of ['baseline', 'current']) {
+            const rows = r.cases.filter(row => row.arm === arm);
+            assert.equal(rows.length, 6);
+            assert.deepEqual(rows.map(row => [row.width, !!row.reduced, row.anchor].join(':')).sort(), expected);
+          }
+          for (const row of r.cases) {
+            assert.equal(row.status, 'observed'); assert.deepEqual(row.errors, []); assert.deepEqual(row.assets, []);
+            assert.equal(row.fixtureSha256, r.fixture.sha256);
+            assert.equal(row.bootSaveSha256, r.fixture.sha256);
+            assert.equal(row.finalSaveSha256, r.fixture.sha256);
+            assert.equal(row.saveAfterRestorationSha256, r.fixture.sha256);
+            assert(row.anchorRestoration.ruleAbsent && row.anchorRestoration.htmlInlineUnchanged && row.anchorRestoration.rootInlineUnchanged);
+            assert.deepEqual(row.walks.map(walk => walk.name), ['first-entry', 're-entry']);
+            for (const walk of row.walks) {
+              assert.equal(walk.status, 'observed'); assert.equal(walk.timeline.done, true);
+              const t = walk.timeline;
+              assert(t.frames.length > 100 && t.frames.at(-1).ms >= 3500);
+              for (const key of ['calls', 'actions', 'mutations', 'resources']) assert(Array.isArray(t[key]), key);
+              for (const method of ['Element.scrollIntoView', 'window.scrollTo', 'HTMLElement.focus']) assert(t.instrumentation.installed.includes(method));
+              assert(t.actions.some(action => action.type === 'click' && action.trusted), 'Actual trusted finance click observed');
+              assert(t.mutations.length > 0, 'Coalesced mount/layout observations present');
+              const first = t.frames.find(frame => frame.boxes.financeRoot);
+              assert(first && first.boxes.financeRootMatches === 1, 'One actual finance root');
+              if (row.anchor === 'finance-root-none') assert.equal(first.boxes.financeRoot.overflowAnchor, 'none');
+              if (row.anchor === 'html-none') assert.equal(first.boxes.htmlOverflowAnchor, 'none');
+              if (row.anchor === 'native') assert.equal(first.boxes.ruleText, null);
+              assert.equal(t.anchor.intervention, row.anchor !== 'native');
+              for (const call of t.calls) {
+                assert(typeof call.method === 'string' && typeof call.stack === 'string');
+                assert(Array.isArray(call.args));
+                assert(typeof call.beforeMs === 'number' && typeof call.afterMs === 'number');
+                assert(Object.hasOwn(call, 'beforeBox') && Object.hasOwn(call, 'afterBox'));
+                assert(call.afterFrame !== null);
+              }
+            }
+          }
+          const mountScroll = walk => {
+            const frames=walk.timeline.frames, at=frames.findIndex(frame=>frame.boxes.financeRoot);
+            assert(at>0,'Mounted frame has an actual earlier frame');
+            return frames[at].scrollY-frames[at-1].scrollY;
+          };
+          const baselineCold=r.cases.filter(row=>row.arm==='baseline'&&row.anchor==='native'&&!row.reduced);
+          assert.deepEqual(baselineCold.map(row=>row.width).sort(),[360,390]);
+          for(const row of baselineCold){const walk=row.walks[0];assert(mountScroll(walk)>0,'BEFORE_SHEET_MOUNT_JUMP_REQUIRED');assert(Math.abs(walk.oldWindowObservation.deltaScroll)>8,'BEFORE_SHEET_OLD_8PX_GATE_FAILURE_REQUIRED');}
+          const currentNative=r.cases.filter(row=>row.arm==='current'&&row.anchor==='native');
+          assert.equal(currentNative.length,4);
+          for(const row of currentNative)for(const walk of row.walks){assert.equal(mountScroll(walk),0,'MOUNTED_SHEET_NO_MOUNT_SCROLL_JUMP');assert.equal(walk.oldWindowObservation.deltaScroll,0,'MOUNTED_SHEET_OLD_WINDOW_EXACTLY_STABLE');}
+          for(const row of r.cases)assert.deepEqual(row.lifecycle.map(item=>item.label),['before-first-entry','first-entry-mounted-first-frame','after-club-home-before-re-entry','re-entry-mounted-first-frame']);
+          fs.writeFileSync(process.env.SCROLL_DIAG_OUT+'/mounted-anchor-pair.json',JSON.stringify({complete:true,baseline:process.env.BASELINE_SOURCE,current:process.env.CURRENT_SOURCE,baselineColdDeltas:baselineCold.map(row=>({width:row.width,oldWindowDelta:row.walks[0].oldWindowObservation.deltaScroll,mountScrollDelta:mountScroll(row.walks[0])})),currentNativeWalks:currentNative.flatMap(row=>row.walks.map(walk=>({width:row.width,reduced:!!row.reduced,walk:walk.name,oldWindowDelta:walk.oldWindowObservation.deltaScroll,mountScrollDelta:mountScroll(walk)}))),lifecycleCases:r.cases.length,original13ScriptSha256:'5bdbe34d91d0945a794177b9b550e3ef68f021f683aaaae78ec4423d985d5815',measurementWaitsUnchanged:true,diagnosticOnly:true},null,2)+'\n');
+          console.log('DIAGNOSTIC COVERAGE: 12/12 cases,24/24 walks; eight native width/motion cases and four explicit CSS interventions. No stability verdict.');
+          console.log('MOUNTED ANCHOR PAIR: before-sheet cold native old8px failure observed; current native mount/window deltas0; lifecycle12cases observed. Original13case product gate remains separate.');
+          JS
+      - name: Retain complete source and diagnostic evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -f "$SCROLL_DIAG_OUT/source-before.sha256"; then sha256sum --check "$SCROLL_DIAG_OUT/source-before.sha256" > "$SCROLL_DIAG_OUT/source-hold.log"; fi
+          git diff --exit-code HEAD -- src public scripts supabase package.json package-lock.json .github > "$SCROLL_DIAG_OUT/operator-source-hold.log"
+          if test -f "$SCROLL_DIAG_OUT/current-dist.sha256"; then (cd dist; sha256sum --check "$GITHUB_WORKSPACE/$SCROLL_DIAG_OUT/current-dist.sha256") > "$SCROLL_DIAG_OUT/current-dist-hold.log"; fi
+          baseline_before="$RUNNER_TEMP/cm-scroll-baseline"
+          if test -f "$SCROLL_DIAG_OUT/baseline-dist.sha256" -a -d "$baseline_before/dist"; then (cd "$baseline_before/dist"; sha256sum --check "$GITHUB_WORKSPACE/$SCROLL_DIAG_OUT/baseline-dist.sha256") > "$SCROLL_DIAG_OUT/baseline-dist-hold.log"; fi
+          (cd "$SCROLL_DIAG_OUT"; find . -type f ! -path './evidence.sha256' -print0 | sort -z | xargs -0 sha256sum) > "$SCROLL_DIAG_OUT/evidence.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm-finance-scroll-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: cm-scroll-diagnostic-artifacts/
+          if-no-files-found: error
+          retention-days: 14
