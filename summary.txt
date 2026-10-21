@@ -1,0 +1,2 @@
+weight-base exit=0 57s |    /deadline-day         0K gz over  48 files (budget 655K, 0.0K to the tenth)
+weight-head exit=0 57s |    /deadline-day       656K gz over  48 files (budget 655K, 656.2K to the tenth)
