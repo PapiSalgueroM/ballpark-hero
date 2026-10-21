@@ -1,0 +1,2 @@
+writes-base exit=1 42s | simWritesAreSent: 2 failures
+writes-head-again exit=1 38s | simWritesAreSent: 2 failures

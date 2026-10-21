@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+writes-base: git checkout bc79b526 -- src scripts && node_modules/.bin/vite build > /dev/null 2>&1 && node scripts/simWritesAreSent.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+writes-head-again: node_modules/.bin/vite build > /dev/null 2>&1 && node scripts/simWritesAreSent.mjs
