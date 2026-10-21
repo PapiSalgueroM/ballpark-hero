@@ -1,0 +1,13 @@
+simEras: node scripts/simEras.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simManagers: node scripts/simManagers.mjs
+simCmSavePoints: node scripts/simCmSavePoints.mjs
+simClubManagerStart: node scripts/simClubManagerStart.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
