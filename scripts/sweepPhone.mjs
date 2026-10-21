@@ -51,6 +51,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { answerConsent } from './lib/answerConsent.mjs';
 
 const { chromium, devices } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -123,8 +124,7 @@ await wirePage();
    with once rather than on every page. */
 await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 20000 });
 await page.waitForTimeout(600);
-const consent = page.locator('button:has-text("Essential only")');
-if (await consent.count()) { await consent.first().click().catch(() => {}); await page.waitForTimeout(300); }
+await answerConsent(page); await page.waitForTimeout(300);
 
 console.log(`Sweeping ${ROUTES.length} routes at 390x844 with touch`);
 
@@ -140,8 +140,7 @@ for (const route of ROUTES) {
     page = await ctx.newPage();
     await wirePage();
     await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => {});
-    const c = page.locator('button:has-text("Essential only")');
-    if (await c.count()) { await c.first().click().catch(() => {}); await page.waitForTimeout(300); }
+    await answerConsent(page); await page.waitForTimeout(300);
     sinceRecycle = 0;
   }
   sinceRecycle += 1;
