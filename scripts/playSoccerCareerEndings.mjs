@@ -4,7 +4,11 @@
  * paper and the summary, reloads, opens the Retire dialog and cancels it, then confirms it as the
  * positive control. Then two saves whose retired flag and phase disagree: a stray flag on the summary
  * at 26 (it must play on) and a real retirement whose phase was lost (it must open its send off with
- * the reason and the choices). The save is read back from the page after every press.
+ * its choices; a player's own retirement has no reason line). Then the review's additions: a low
+ * overall career, a match fixing ban and prison at 25, each through Next Season, the summary and a
+ * reload (all play on); the save the old Continue already wrote, retired at 26 on the retired screen
+ * (it must play on from Next Season into 27); and two endings the game made, at 33 under 50 and at
+ * 45, whose send off must show the reason line on screen. The save is read back after every press.
  *
  * Runs against a served build: BASE (default http://localhost:4173). The database host is blocked,
  * nothing here reads or writes it. Screenshots and walk.json go to RC_OUT (or .tmp-fx/walk1519).
@@ -49,9 +53,9 @@ function seed(n) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-function careerAt(age) {
+function careerAt(age, o = 66) {
   seed(15191519);
-  const o = 66, stats = { pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o };
+  const stats = { pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o };
   let s = E.initCareer('Walk Tester', 'England', 'CM', '2020s', stats, o, 2025, clubs, null);
   const last = n => n - 1;
   for (let guard = 0; guard < 1500 && !(s.phase === 'playing' && s.age === age); guard++) {
@@ -88,11 +92,28 @@ let summary26 = E.advanceProSeason(copy(at25), clubs);
 if (summary26.phase === 'newspaper') summary26 = E.dismissNewspaper(summary26);
 Math.random = realRandom;
 const real = E.manualRetire(copy(at26));
+const low25 = careerAt(25, 44);
+const flat = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o, overall: o });
+seed(1519010);
+const forced33 = seen(E.advanceProSeason({ ...copy(at26), ...flat(40), age: 32 }, clubs));
+seed(1519011);
+const forced45 = seen(E.advanceProSeason({ ...copy(at26), age: 44 }, clubs));
+Math.random = realRandom;
 const FIXTURES = {
   at25,
   stray: { ...seen(copy(summary26)), retired: true },
   lost: { ...copy(real), phase: 'season_summary', pendingSummary: real.seasons[real.seasons.length - 1] },
+  /* The base engine's Continue on that stray flag, exactly: the summary cleared, the flag kept, the retired screen. */
+  oldContinue: { ...seen(copy(summary26)), retired: true, pendingSummary: null, phase: 'retired' },
 };
+const ROADS = [
+  ['low', `a low overall career (overall ${low25.overall} at 25)`, low25],
+  ['ban', 'a match fixing ban at 25', { ...copy(at25), matchFixBanned: 2 }],
+  ['prison', 'prison at 25', { ...copy(at25), prisonSeasons: 1 }],
+];
+for (const [label, s, rule] of [['forced33', forced33, /^Forced out at 33: overall \d+, the body could not keep up\.$/], ['forced45', forced45, /^Forced out at 45, the age limit\.$/]]) {
+  if (!(s.phase === 'retirement_ceremony' && rule.test(E.retirementReason(s) ?? ''))) throw new Error(`the ${label} fixture is on ${s.phase} with ${E.retirementReason(s)}`);
+}
 const ended = s => !!s && (s.retired || ['retirement_ceremony', 'post_retirement', 'retired'].includes(s.phase));
 
 const browser = await pw.chromium.launch({ headless: true });
@@ -176,6 +197,43 @@ try {
     await page.getByRole('button', { name: /Retire and Enjoy Life/ }).waitFor({ timeout: 10000 }).catch(() => {});
     check(await page.getByRole('button', { name: /Retire and Enjoy Life/ }).count() === 1 && (await page.textContent('body')).includes('retires at age 26'), `${width} a real retirement whose phase was lost opens its send off`);
     await shot('lost-phase');
+
+    /* 5. A low overall career, a match fixing ban and prison at 25: Next Season, the summary, a reload. */
+    for (const [key, label, fixture] of ROADS) {
+      await load(fixture);
+      await press(page.locator('[data-career-action-bar] button').first());
+      await page.waitForFunction(k => { try { return /"age":26/.test(localStorage.getItem(k) || ''); } catch { return false; } }, KEY, { timeout: 15000 }).catch(() => {});
+      await continueThrough();
+      await page.reload({ waitUntil: 'networkidle' });
+      s = await save();
+      const row = s?.seasons?.[s.seasons.length - 1];
+      check(s && s.age === 26 && !ended(s) && (await page.getByRole('button', { name: /Share Legacy/ }).count()) === 0,
+        `${width} ${label} plays on through 26 and a reload (age ${s?.age}, phase ${s?.phase}, retired ${s?.retired}, last row ${row?.club})`);
+      await shot(`road-${key}`);
+    }
+
+    /* 6. The save the old Continue already wrote: the retired screen at 26 with nothing behind it plays on. */
+    await load(FIXTURES.oldContinue);
+    check(await page.getByRole('button', { name: /Share Legacy/ }).count() === 0, `${width} the old Continue's save no longer opens the retired screen`);
+    await shot('old-continue'); await fits('on the old save');
+    await press(page.getByRole('button', { name: /Next Season/ }).first());
+    await page.waitForFunction(k => { try { return /"age":27/.test(localStorage.getItem(k) || ''); } catch { return false; } }, KEY, { timeout: 15000 }).catch(() => {});
+    s = await save();
+    check(s && s.age === 27 && !ended(s), `${width} the old Continue's save plays Next Season into 27 (age ${s?.age}, phase ${s?.phase}, retired ${s?.retired})`);
+
+    /* 7. Endings the game made say why on the send off, on screen, one tidy line at this width. */
+    for (const [key, fixture, rule] of [['forced33', forced33, /^Forced out at 33: overall \d+, the body could not keep up\.$/], ['forced45', forced45, /^Forced out at 45, the age limit\.$/]]) {
+      await load(fixture);
+      const line = page.locator('[data-retirement-reason]');
+      await line.first().waitFor({ timeout: 10000 }).catch(() => {});
+      const text = (await line.count()) === 1 ? (await line.textContent())?.trim() : null;
+      const box = text ? await line.boundingBox() : null;
+      check(rule.test(text ?? '') && await line.isVisible() && box && box.x >= 0 && box.x + box.width <= width + 1,
+        `${width} ${key}: the send off shows the reason line (${text}, box ${box ? `${Math.round(box.x)} to ${Math.round(box.x + box.width)}` : 'none'})`);
+      check(await page.getByRole('button', { name: /Retire and Enjoy Life/ }).count() === 1, `${width} ${key}: the send off still offers its choices`);
+      await line.first().scrollIntoViewIfNeeded().catch(() => {});
+      await shot(`reason-${key}`); await fits(`on the ${key} send off`);
+    }
     await ctx.close();
   }
 } finally {
