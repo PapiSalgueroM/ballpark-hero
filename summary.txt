@@ -1,0 +1,7 @@
+build exit=0 41s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ownclub exit=0 355s | simCmOwnClubMarket: green (mode rule, sections 1, 2, 3, 4, 5): the market lists nobody at my own club in every old save and moves nothing else
+ctl-own exit=0 1067s | controls: legacy=1 slice=1 shallow=1
+freeagents exit=0 212s | head=0 ownclub=1
+sizediag exit=0 506s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained
+walk1339 exit=0 8s | playCmOwnClubMarket: green. Saves A and B from before Release AZ list nobody at their own club on the market, the club's page names its squad and none of those men, and t
+walk1339-ctl exit=1 50s | playCmOwnClubMarket: CONTROL base FIRED: with the old line the market lists 4 and 17 men at the club for saves A and B
