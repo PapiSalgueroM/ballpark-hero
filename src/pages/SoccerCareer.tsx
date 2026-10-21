@@ -40,7 +40,7 @@ import {
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,
   giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
-  acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason, retirementReason,
+  acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
   advanceOwnerSeason, endOwnerCareer,
   dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
@@ -64,6 +64,7 @@ import { careerBeforeBallonDorReveal, revealBallonDorResult, ballonDorAwaitingRe
 import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";
 import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";
 import { farewellEligibility, readSoccerFarewell } from "@/lib/soccerCareerFarewell";
+import { retirementReason } from "@/lib/soccerCareerRetirementReason";
 import { FarewellSeasonCard } from "@/components/soccer-career/FarewellSeasonCard";
 import AgentBrief from '@/components/soccer-career/AgentBrief';
 import { readTransferBrief, transferBriefResult } from '@/lib/soccerCareerTransferBrief';

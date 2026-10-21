@@ -37,7 +37,7 @@
  *   SC_ENDINGS_CONTROL=early        the age 45 rule moved to 26: A and B go red.
  *   SC_ENDINGS_CONTROL=noreconcile  repairCareer stops reconciling the pair: C goes red.
  *   SC_ENDINGS_CONTROL=summary      dismissSummary's old hop to the retired screen: C goes red.
- *   SC_ENDINGS_CONTROL=noreason     the send off loses its reason for the age limit: B goes red.
+ *   SC_ENDINGS_CONTROL=noreason     the send off loses its reason for the age limit (soccerCareerRetirementReason.ts): B goes red.
  *   SC_ENDINGS_CONTROL=aftermath    the retired screen with nothing behind it is left alone: C goes red.
  *   SC_ENDINGS_CONTROL=manual       R2, the Retire dialog skips the ceremony: B1 and A's choices go red.
  *   SC_ENDINGS_CONTROL=suggestion   R3, taking the suggestion skips the ceremony: B's R3 and A go red.
@@ -48,7 +48,7 @@
  *   SC_ENDINGS_CONTROL=prison       prison ends the career: B5 and A go red.
  *   SC_ENDINGS_CONTROL=notail       a lost phase on a chosen after career goes to the end: C goes red.
  *   SC_ENDINGS_CONTROL=youth        a stray retired screen on a youth career goes to playing: C goes red.
- *   SC_ENDINGS_CONTROL=ovr50        the forced line at an overall of 50: B3's edges go red.
+ *   SC_ENDINGS_CONTROL=ovr50        the forced line at an overall of 50 (soccerCareerRetirementReason.ts): B3 edges go red.
  *
  * Run: node scripts/simSoccerCareerEndings.mjs [careers per fleet, default 40]
  */
@@ -70,17 +70,18 @@ const CONTROL = process.env.SC_ENDINGS_CONTROL || '';
 const FLOORS = { lowAt26: 11, forced: 63, suggestion: 32, farewell: 20, bans: 7, trials: 78 };
 const SEED_BASE = Number(process.env.SC_ENDINGS_SEED || 15190000);
 const FAREWELL = path.join(ROOT, 'src/lib/soccerCareerFarewell.ts');
+const REASON = path.join(ROOT, 'src/lib/soccerCareerRetirementReason.ts');
 /* [target, replacement, file]; the file is the engine unless named. */
 const CONTROLS = {
   early: ['if ((s.overall < 50 && s.age >= 33) || s.age >= 45) {', 'if ((s.overall < 50 && s.age >= 33) || s.age >= 26) {'],
   noreconcile: ['  reconcileRetirement(s);\n  if (!s.primeType)', '  if (!s.primeType)'],
   summary: ['  if (s.retired && reconcileRetirement(s)) return s;', '  if (s.retired) { s.phase = "retired"; return s; }'],
-  noreason: ['  if (s.age >= 45) return "Forced out at 45, the age limit.";', '  if (s.age >= 45) return null;'],
+  noreason: ['  if (s.age >= 45) return "Forced out at 45, the age limit.";', '  if (s.age >= 45) return null;', REASON],
   /* Round 1519 review: one control per way a career ends, so each check below is seen to fire. */
   aftermath: ['  if (s.retired !== post || (s.phase === "retired" && !backed)) {', '  if (s.retired !== post) {'],
   manual: ['  if (readSoccerFarewell(prev) && prev.retired) return prev;\n  const s = { ...prev };\n  delete s.seasonAmbition;\n  delete s.seasonPreparation;\n  Object.assign(s, endCareerMentorForRetirement(s));\n  cancelReducedRole(s);\n  if (readSoccerFarewell(s) && s.loan) {',
     '  if (readSoccerFarewell(prev) && prev.retired) return prev;\n  if (prev) return { ...prev, retired: true, phase: "retired" };\n  const s = { ...prev };\n  delete s.seasonAmbition;\n  delete s.seasonPreparation;\n  Object.assign(s, endCareerMentorForRetirement(s));\n  cancelReducedRole(s);\n  if (readSoccerFarewell(s) && s.loan) {'],
-  suggestion: ['  s.legacy = calculateLegacy(s);\n  s.phase = "retirement_ceremony";\n  return s;\n}\n\n/* Round 1519: a career the game ended', '  s.phase = "retired";\n  return s;\n}\n\n/* Round 1519: a career the game ended'],
+  suggestion: ['  s.legacy = calculateLegacy(s);\n  s.phase = "retirement_ceremony";\n  return s;\n}\n\nexport function announceFarewellSeason(', '  s.phase = "retired";\n  return s;\n}\n\nexport function announceFarewellSeason('],
   young: ['!s.retirementSuggested && s.age >= 30) {', '!s.retirementSuggested && s.age >= 25) {'],
   farewell: ['  if (farewellSeasonComplete(s)) return manualRetire(s);', '  if (farewellSeasonComplete(s)) return { ...s, retired: true, phase: "retired" };'],
   farewell26: ["  if (!integer(career.age, 30, 44)) return unavailable(", "  if (!integer(career.age, 26, 44)) return unavailable(", FAREWELL],
@@ -88,7 +89,7 @@ const CONTROLS = {
   prison: ['  if ((s.prisonSeasons ?? 0) > 0) {\n    s.prisonSeasons = (s.prisonSeasons ?? 0) - 1;', '  if ((s.prisonSeasons ?? 0) > 0) {\n    return manualRetire(s);\n    s.prisonSeasons = (s.prisonSeasons ?? 0) - 1;'],
   notail: ['c !== "retire" && s[`${c}State` as const] ? `${c}_season` as const : "retired"', '"retired"'],
   youth: ['?.type === "youth" ? "youth" : "playing";\n  }', '?.type === "youth" ? "playing" : "playing";\n  }'],
-  ovr50: ['s.overall < 50 && s.age >= 33 ? ', 's.overall <= 50 && s.age >= 33 ? '],
+  ovr50: ['s.overall < 50 && s.age >= 33 ? ', 's.overall <= 50 && s.age >= 33 ? ', REASON],
 };
 
 let failures = 0;
@@ -97,7 +98,8 @@ const check = (ok, m) => { if (!ok) fail(m); return ok; };
 
 const read = file => fs.readFileSync(file, 'utf8').split('\r\n').join('\n');
 let source = read(ENGINE);
-let farewellSource = null;
+/* A control on another file (the farewell rules, the reason line) loads that file's mutated text instead. */
+const overrides = new Map();
 if (CONTROL) {
   const pair = CONTROLS[CONTROL];
   if (!pair) { console.error(`ABORT: SC_ENDINGS_CONTROL=${CONTROL} is not a control (${Object.keys(CONTROLS).join(', ')})`); process.exit(1); }
@@ -105,26 +107,30 @@ if (CONTROL) {
   const text = file === ENGINE ? source : read(file);
   if (text.split(from).length !== 2) { console.error(`ABORT: control ${CONTROL} target is not in ${path.basename(file)} exactly once, so it would change nothing`); process.exit(1); }
   const mutated = text.replace(from, () => to);
-  if (file === ENGINE) source = mutated; else farewellSource = mutated;
+  if (file === ENGINE) source = mutated; else overrides.set(path.normalize(file), mutated);
   console.log(`CONTROL ${CONTROL}: ${path.basename(file)} is mutated, this run must go red`);
 }
 
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'sc-endings-'));
 const slash = p => p.split(path.sep).join('/');
-async function bundle(name, engineSource, farewellOverride = null) {
+async function bundle(name, engineSource, others = new Map()) {
   const entry = path.join(TMP, `${name}-entry.mjs`);
   const out = path.join(TMP, `${name}.mjs`);
   fs.writeFileSync(entry, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 export * from '${slash(ENGINE)}';
 export { readSoccerFarewell, farewellEligibility } from '${slash(path.join(ROOT, 'src/lib/soccerCareerFarewell.ts'))}';
+export { retirementReason } from '${slash(REASON)}';
 `);
   await build({
     entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out, logLevel: 'error',
     alias: { '@': path.join(ROOT, 'src') },
     plugins: [{ name: 'engine-source', setup(b) {
       b.onLoad({ filter: /[\\/]src[\\/]lib[\\/]soccerCareerEngine\.ts$/ }, () => ({ contents: engineSource, loader: 'ts', resolveDir: path.join(ROOT, 'src/lib') }));
-      if (farewellOverride) b.onLoad({ filter: /[\\/]src[\\/]lib[\\/]soccerCareerFarewell\.ts$/ }, () => ({ contents: farewellOverride, loader: 'ts', resolveDir: path.join(ROOT, 'src/lib') }));
+      if (others.size) b.onLoad({ filter: /[\\/]src[\\/]lib[\\/][^\\/]+\.ts$/ }, args => {
+        const contents = others.get(path.normalize(args.path));
+        return contents === undefined ? undefined : { contents, loader: 'ts', resolveDir: path.dirname(args.path) };
+      });
     } }],
   });
   return import(pathToFileURL(out).href);
@@ -134,7 +140,7 @@ export { readSoccerFarewell, farewellEligibility } from '${slash(path.join(ROOT,
 const BASE_REF = process.env.SC_ENDINGS_BASE
   || execFileSync('git', ['merge-base', 'HEAD', 'origin/main'], { cwd: ROOT, encoding: 'utf8' }).trim();
 const baseSource = execFileSync('git', ['show', `${BASE_REF}:src/lib/soccerCareerEngine.ts`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 << 20 }).split('\r\n').join('\n');
-const CUR = await bundle('current', source, farewellSource);
+const CUR = await bundle('current', source, overrides);
 const BASE = await bundle('base', baseSource);
 fs.rmSync(TMP, { recursive: true, force: true });
 let E = CUR;

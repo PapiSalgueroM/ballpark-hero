@@ -38,6 +38,7 @@ fs.writeFileSync(path.join(TMP, 'entry.mjs'), `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 export * from '${slash(path.join(ROOT, 'src/lib/soccerCareerEngine.ts'))}';
 export { parseSoccerCareerSave } from '${slash(path.join(ROOT, 'src/lib/soccerCareerSave.ts'))}';
+export { retirementReason } from '${slash(path.join(ROOT, 'src/lib/soccerCareerRetirementReason.ts'))}';
 `);
 await build({ entryPoints: [path.join(TMP, 'entry.mjs')], bundle: true, format: 'esm', platform: 'node', outfile: path.join(TMP, 'e.mjs'), logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
 const E = await import(pathToFileURL(path.join(TMP, 'e.mjs')).href);
