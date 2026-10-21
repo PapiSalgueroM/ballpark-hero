@@ -132,7 +132,7 @@ jobs:
     env:
       SIM_NETWORK: offline
       TZ: UTC
-      BASE_SOURCE: bc79b526cb69a4e913416c77c6dba00fe9401a16
+      BASE_SOURCE: 554a3b18641044ec5164bff9acab4d338237078c
       GUARD: ${{ matrix.guard }}
     steps:
       - uses: actions/checkout@v4
@@ -372,7 +372,7 @@ jobs:
       ENGINES: chromium
       TZ: UTC
       PRERENDER_ONLY: /football-grid
-      SEO_SPLIT_BASE_REF: bc79b526cb69a4e913416c77c6dba00fe9401a16
+      SEO_SPLIT_BASE_REF: 554a3b18641044ec5164bff9acab4d338237078c
     steps:
       - uses: actions/checkout@v4
         with:
