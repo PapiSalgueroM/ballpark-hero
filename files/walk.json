@@ -1,0 +1,140 @@
+{
+  "base": "http://localhost:4173",
+  "checks": 33,
+  "failures": 0,
+  "results": [
+    {
+      "ok": true,
+      "label": "390 Next Season at 25 plays the season at 26 (age 26, phase newspaper, retired false)"
+    },
+    {
+      "ok": true,
+      "label": "390 the summary's Continue at 26 plays on (phase ballon_dor, retired false)"
+    },
+    {
+      "ok": true,
+      "label": "390 after the summary: no sideways scroll (390 wide)"
+    },
+    {
+      "ok": true,
+      "label": "390 a reload at 26 keeps the career (phase ballon_dor, retired false)"
+    },
+    {
+      "ok": true,
+      "label": "390 no retired screen after the reload"
+    },
+    {
+      "ok": true,
+      "label": "390 Retire opens the dialog"
+    },
+    {
+      "ok": true,
+      "label": "390 Cancel keeps the career (phase playing, retired false)"
+    },
+    {
+      "ok": true,
+      "label": "390 Confirm Retirement ends it on the send off at 26 (phase retirement_ceremony)"
+    },
+    {
+      "ok": true,
+      "label": "390 the player's own retirement gets no forced line"
+    },
+    {
+      "ok": true,
+      "label": "390 the send off offers /Retire and Enjoy Life/"
+    },
+    {
+      "ok": true,
+      "label": "390 the send off offers /Become a Manager/"
+    },
+    {
+      "ok": true,
+      "label": "390 the send off offers /Become a TV Pundit/"
+    },
+    {
+      "ok": true,
+      "label": "390 on the send off: no sideways scroll (390 wide)"
+    },
+    {
+      "ok": true,
+      "label": "390 a stray flag on the summary at 26 plays on (phase ballon_dor, retired false)"
+    },
+    {
+      "ok": true,
+      "label": "390 the stray flag never reaches the retired screen"
+    },
+    {
+      "ok": true,
+      "label": "390 a real retirement whose phase was lost opens its send off"
+    },
+    {
+      "ok": true,
+      "label": "1280 Next Season at 25 plays the season at 26 (age 26, phase newspaper, retired false)"
+    },
+    {
+      "ok": true,
+      "label": "1280 the summary's Continue at 26 plays on (phase ballon_dor, retired false)"
+    },
+    {
+      "ok": true,
+      "label": "1280 after the summary: no sideways scroll (1280 wide)"
+    },
+    {
+      "ok": true,
+      "label": "1280 a reload at 26 keeps the career (phase ballon_dor, retired false)"
+    },
+    {
+      "ok": true,
+      "label": "1280 no retired screen after the reload"
+    },
+    {
+      "ok": true,
+      "label": "1280 Retire opens the dialog"
+    },
+    {
+      "ok": true,
+      "label": "1280 Cancel keeps the career (phase playing, retired false)"
+    },
+    {
+      "ok": true,
+      "label": "1280 Confirm Retirement ends it on the send off at 26 (phase retirement_ceremony)"
+    },
+    {
+      "ok": true,
+      "label": "1280 the player's own retirement gets no forced line"
+    },
+    {
+      "ok": true,
+      "label": "1280 the send off offers /Retire and Enjoy Life/"
+    },
+    {
+      "ok": true,
+      "label": "1280 the send off offers /Become a Manager/"
+    },
+    {
+      "ok": true,
+      "label": "1280 the send off offers /Become a TV Pundit/"
+    },
+    {
+      "ok": true,
+      "label": "1280 on the send off: no sideways scroll (1280 wide)"
+    },
+    {
+      "ok": true,
+      "label": "1280 a stray flag on the summary at 26 plays on (phase ballon_dor, retired false)"
+    },
+    {
+      "ok": true,
+      "label": "1280 the stray flag never reaches the retired screen"
+    },
+    {
+      "ok": true,
+      "label": "1280 a real retirement whose phase was lost opens its send off"
+    },
+    {
+      "ok": true,
+      "label": "no page errors ()"
+    }
+  ],
+  "errors": []
+}
