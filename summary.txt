@@ -1,0 +1,3 @@
+simAccessibility exit=0 0s | simAccessibility: all green
+vitest-academy-arcade exit=0 35s |    Duration  34.41s (transform 7.80s, setup 1.50s, collect 16.31s, tests 53.23s, environment 7.91s, prepare 1.96s)
+vitest-tycoon exit=0 121s |    Duration  120.32s (transform 2.13s, setup 1.38s, collect 8.66s, tests 174.95s, environment 8.25s, prepare 2.38s)
