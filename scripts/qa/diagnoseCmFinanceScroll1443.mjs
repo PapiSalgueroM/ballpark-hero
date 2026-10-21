@@ -176,7 +176,7 @@ async function tap(locator, row) {
   row.controls.push(target); assert(target.width >= 43.5 && target.height >= 43.5 && target.topmost, 'Trusted44px control precondition');
   await locator.evaluate(() => { const state = window.__cmScrollDiagnostic; if (state && !state.done) state.mark('driver-before-native-tap'); });
   await locator.tap();
-  await locator.evaluate(() => { const state = window.__cmScrollDiagnostic; if (state && !state.done) state.mark('driver-after-native-tap'); });
+  await locator.page().evaluate(() => { const state = window.__cmScrollDiagnostic; if (state && !state.done) state.mark('driver-after-native-tap'); });
   await settle(locator.page());
 }
 async function observeStart(page) {
