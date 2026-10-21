@@ -1,0 +1,1 @@
+difficulty-mark2 exit=0 105s | simCmDifficulty: all green (sections 2)
