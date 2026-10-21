@@ -1,0 +1,5 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+notile exit=1 57s | playOneOffCups: control notile FIRED (3 findings of "no Super cup tile", 3 in all)
+weight exit=0 30s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+playoneoff exit=0 134s | playOneOffCups: green, five cases at three sizes and two more at two, pictures in /home/runner/work/_temp/rc-out/files/shots
+nousctile exit=1 226s | playOneOffCups: control nousctile FIRED (8 findings of "UEFA Super Cup tile", 8 in all)
