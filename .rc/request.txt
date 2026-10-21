@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmEarnedDraft.test.ts src/lib/nbaEarnedDraft.test.ts src/components/nba-front-office src/components/front-office-shared src/lib/gmDraftNight.test.ts src/lib/gmDraftOrder.test.ts src/lib/gmLotteryNight.test.ts --testTimeout=300000 --hookTimeout=120000
+earned: node scripts/simNbaEarnedDraft.mjs
+earned-ctl: SIM_NBA_EARNED_DRAFT_CONTROL=all node scripts/simNbaEarnedDraft.mjs
+f-r1-0: export TMPDIR=$(mktemp -d); SIM_NBA_EARNED_DRAFT_FLEET=full SIM_NBA_EARNED_DRAFT_OUT=$RC_OUT/fleet SIM_NBA_EARNED_DRAFT_RUN=1 SIM_NBA_EARNED_DRAFT_SETS=12 SIM_NBA_EARNED_DRAFT_SHARD=0/4 node scripts/simNbaEarnedDraft.mjs
+f-r1-1: export TMPDIR=$(mktemp -d); SIM_NBA_EARNED_DRAFT_FLEET=full SIM_NBA_EARNED_DRAFT_OUT=$RC_OUT/fleet SIM_NBA_EARNED_DRAFT_RUN=1 SIM_NBA_EARNED_DRAFT_SETS=12 SIM_NBA_EARNED_DRAFT_SHARD=1/4 node scripts/simNbaEarnedDraft.mjs
+f-r1-2: export TMPDIR=$(mktemp -d); SIM_NBA_EARNED_DRAFT_FLEET=full SIM_NBA_EARNED_DRAFT_OUT=$RC_OUT/fleet SIM_NBA_EARNED_DRAFT_RUN=1 SIM_NBA_EARNED_DRAFT_SETS=12 SIM_NBA_EARNED_DRAFT_SHARD=2/4 node scripts/simNbaEarnedDraft.mjs
+f-r1-3: export TMPDIR=$(mktemp -d); SIM_NBA_EARNED_DRAFT_FLEET=full SIM_NBA_EARNED_DRAFT_OUT=$RC_OUT/fleet SIM_NBA_EARNED_DRAFT_RUN=1 SIM_NBA_EARNED_DRAFT_SETS=12 SIM_NBA_EARNED_DRAFT_SHARD=3/4 node scripts/simNbaEarnedDraft.mjs
