@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+walk1519: node scripts/playSoccerCareerEndings.mjs
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs; echo "weight-head exit $?"
+weight-prev: git show 5029dc60:src/lib/soccerCareerEngine.ts > src/lib/soccerCareerEngine.ts && git show 5029dc60:src/pages/SoccerCareer.tsx > src/pages/SoccerCareer.tsx && git show 5029dc60:src/pages/WhatsNew.tsx > src/pages/WhatsNew.tsx && git diff --stat 5029dc60 -- src | tail -1 && node_modules/.bin/vite build > /dev/null 2>&1; b=$?; git checkout -- src; echo "prev build into dist exit $b"; SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs; echo "weight-prev exit $?"; exit 0
+weight-base: git show bc79b526:src/lib/soccerCareerEngine.ts > src/lib/soccerCareerEngine.ts && git show bc79b526:src/pages/SoccerCareer.tsx > src/pages/SoccerCareer.tsx && git show bc79b526:src/pages/WhatsNew.tsx > src/pages/WhatsNew.tsx && git diff --stat bc79b526 -- src | tail -1 && node_modules/.bin/vite build > /dev/null 2>&1; b=$?; git checkout -- src; echo "base build into dist exit $b"; SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs; echo "weight-base exit $?"; exit 0
