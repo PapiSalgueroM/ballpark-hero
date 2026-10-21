@@ -1,0 +1,2 @@
+oldsave: git worktree add /tmp/base 85a762419658ed63206cb20ec85f379409e6ac6a >/dev/null 2>&1 && BASE_ROOT=/tmp/base SEASON=1 node .rc/x/review-run-oldsave.mjs
+oldsave-self: BASE_ROOT="$PWD" SEASON=1 node .rc/x/review-run-oldsave.mjs
