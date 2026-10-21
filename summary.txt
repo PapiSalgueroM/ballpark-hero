@@ -1,0 +1,14 @@
+hall-nfl exit=0 349s | simCareerHall nfl: all 34 checks green
+hall-mlb exit=0 392s | simCareerHall mlb: all 34 checks green
+hall-nba exit=0 515s | simCareerHall nba: all 34 checks green
+nfl-basedrift exit=1 151s | simCareerHall nfl CONTROL basedrift: wanted base red and marks green, red [base], FIRED
+mlb-basedrift exit=2 0s | simCareerHall mlb: basedrift refuses to run, the ledger bands no base position in this sport, so there is nothing to move
+nhl-basedrift exit=2 0s | simCareerHall nhl: basedrift refuses to run, the ledger bands no base position in this sport, so there is nothing to move
+nfl-plantbase exit=1 17s | simCareerHall nfl CONTROL plantbase: wanted base red, red [v2replay,v3replay,base], FIRED
+nba-plantbase exit=1 13s | simCareerHall nba CONTROL plantbase: wanted base red, red [v2replay,v3replay,base,words,anchors,hallshare], FIRED
+mlb-plantbase exit=1 18s | simCareerHall mlb CONTROL plantbase: wanted base red, red [v2replay,v3replay,base,anchors], FIRED
+nba-basedrift exit=1 92s | simCareerHall nba CONTROL basedrift: wanted base red and marks green, red [base], FIRED
+nhl-plantbase exit=1 10s | simCareerHall nhl CONTROL plantbase: wanted base red, red [v3replay,base,words,hallshare], FIRED
+nfl-nobase exit=1 9s | simCareerHall nfl CONTROL nobase: wanted base red, red [v2replay,v3replay,base], FIRED
+nba-statsup exit=1 71s | simCareerHall nba CONTROL statsup: wanted marks red, red [marks], FIRED
+hall-nhl exit=0 629s | simCareerHall nhl: all 35 checks green

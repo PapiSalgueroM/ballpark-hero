@@ -1,0 +1,14 @@
+hall-nfl: node scripts/simCareerHall.mjs nfl
+hall-nba: node scripts/simCareerHall.mjs nba
+hall-mlb: node scripts/simCareerHall.mjs mlb
+hall-nhl: node scripts/simCareerHall.mjs nhl
+nfl-basedrift: SIM_CONTROL=basedrift SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl
+nba-basedrift: SIM_CONTROL=basedrift SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba
+mlb-basedrift: SIM_CONTROL=basedrift SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs mlb
+nhl-basedrift: SIM_CONTROL=basedrift SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl
+nfl-plantbase: SIM_CONTROL=plantbase SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl
+nba-plantbase: SIM_CONTROL=plantbase SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba
+mlb-plantbase: SIM_CONTROL=plantbase SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs mlb
+nhl-plantbase: SIM_CONTROL=plantbase SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl
+nfl-nobase: SIM_CONTROL=nobase SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl
+nba-statsup: SIM_CONTROL=statsup SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba
