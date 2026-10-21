@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest1519: node_modules/.bin/vitest run src/test/soccerCareerRetirement1519.test.tsx src/test/soccerCareerSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+endings: SC_ENDINGS_BASE=bc79b526 node scripts/simSoccerCareerEndings.mjs
+endings-early: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=early node scripts/simSoccerCareerEndings.mjs
+endings-noreconcile: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=noreconcile node scripts/simSoccerCareerEndings.mjs
+endings-summary: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=summary node scripts/simSoccerCareerEndings.mjs
+endings-noreason: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=noreason node scripts/simSoccerCareerEndings.mjs

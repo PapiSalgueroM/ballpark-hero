@@ -1,0 +1,14 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerRetirement1519.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 3516[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1519: no career ends at 26 without the player[2m > [22mNext Season at 25, the summary and its Continue, then a reload: the career plays on at 26 [33m 1478[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1519: no career ends at 26 without the player[2m > [22mthe Retire dialog: Cancel keeps the career, Confirm ends it on the send off with its choices [33m 1095[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1519: no career ends at 26 without the player[2m > [22ma retired screen with nothing behind it goes back to Next Season [33m 437[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRecovery.test.tsx [2m([22m[2m39 tests[22m[2m)[22m[33m 5250[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m45 passed[39m[22m[90m (45)[39m
+[2m   Start at [22m 19:57:51
+[2m   Duration [22m 10.52s[2m (transform 4.01s, setup 211ms, collect 7.49s, tests 8.77s, environment 1.11s, prepare 469ms)[22m
+

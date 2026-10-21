@@ -1,0 +1,7 @@
+vitest1519 exit=0 11s |    Duration  10.52s (transform 4.01s, setup 211ms, collect 7.49s, tests 8.77s, environment 1.11s, prepare 469ms)
+endings-early exit=1 66s | FAIL: 249 check(s) failed
+tsc exit=0 84s | 
+endings exit=0 85s | PASS: no career ends before the age rules without the player, and the pair is reconciled
+endings-noreason exit=1 75s | FAIL: 3 check(s) failed
+endings-noreconcile exit=1 82s | FAIL: 9 check(s) failed
+endings-summary exit=1 83s | FAIL: 2 check(s) failed
