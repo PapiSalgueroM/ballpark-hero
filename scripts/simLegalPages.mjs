@@ -31,6 +31,8 @@
      into the template.
      SIM_LEGAL_CONTROL=adchoice, adinit, adslot, or adloader removes one
      advertising-purpose gate from the reader, initialization, slot, or loader.
+     SIM_LEGAL_CONTROL=fontnotice or fonthost removes the font provider or
+     font-file host from the privacy disclosure.
    Every mutation must find exactly one target and must cause exactly its own
    named failure.
 
@@ -68,7 +70,9 @@ if (CONTROL === 'strip') {
   const needle = 'independent fan project';
   footer = replaceExactlyOnce(footer, needle, '', 'footer disclaimer control');
 }
-const privacy = stripComments(read('src/pages/PrivacyPolicy.tsx'));
+let privacy = stripComments(read('src/pages/PrivacyPolicy.tsx'));
+if (CONTROL === 'fontnotice') privacy = replaceExactlyOnce(privacy, 'Google Fonts:', 'Web fonts:', 'font provider disclosure control');
+if (CONTROL === 'fonthost') privacy = replaceExactlyOnce(privacy, 'fonts.gstatic.com', 'the font file host', 'font host disclosure control');
 const terms = stripComments(read('src/pages/TermsOfService.tsx'));
 const contact = stripComments(read('src/pages/Contact.tsx'));
 const about = stripComments(read('src/pages/About.tsx'));
@@ -126,6 +130,8 @@ console.log('4) every external host the code talks to is disclosed in the privac
     'wikipedia.org': 'Wikipedia',
     'googlesyndication.com': 'AdSense',
     'googletagmanager.com': 'Analytics',
+    'fonts.googleapis.com': 'Google Fonts',
+    'fonts.gstatic.com': 'fonts.gstatic.com',
   };
   const scan = [];
   const walk = dir => {
@@ -253,6 +259,8 @@ if (CONTROL) {
     adinit: 'AdBanner and its loader no longer gate explicitly on the effective advertising choice',
     adslot: 'AdBanner and its loader no longer gate explicitly on the effective advertising choice',
     adloader: 'AdBanner and its loader no longer gate explicitly on the effective advertising choice',
+    fontnotice: 'the code talks to fonts.googleapis.com but the privacy policy never says "Google Fonts"',
+    fonthost: 'the code talks to fonts.gstatic.com but the privacy policy never says "fonts.gstatic.com"',
   }[CONTROL];
   if (!expected) {
     console.error(`\ncontrol run: unknown SIM_LEGAL_CONTROL=${CONTROL}`);

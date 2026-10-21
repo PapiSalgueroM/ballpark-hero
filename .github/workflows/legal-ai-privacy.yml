@@ -337,7 +337,7 @@ jobs:
             if [[ "$control" != nocatch ]] && ! grep -Fq 'control FIRED on the consent writer' "$out/storage-$control.log"; then failed=1; fi
             if [[ "$control" == nocatch ]] && ! grep -Fq 'below.setItem(k, v)' "$out/storage-$control.log"; then failed=1; fi
           done
-          for control in strip npa npaorder globalads adchoice adinit adslot adloader; do
+          for control in strip npa npaorder globalads adchoice adinit adslot adloader fontnotice fonthost; do
             status=0; SIM_OFFLINE_RECEIPT="$out/legal-$control.transport" SIM_LEGAL_CONTROL="$control" node scripts/simLegalPages.mjs > "$out/legal-$control.log" 2>&1 || status=$?
             printf '%s\t%s\n' "$control" "$status" >> "$out/legal-controls.tsv"
             tail -n 3 "$out/legal-$control.log"; test "$status" -eq 0 || failed=1
