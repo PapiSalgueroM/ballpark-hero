@@ -2,13 +2,13 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { bannerClearance } from '@/components/club-manager/deskCue';
 /* Round 194: the nationality filter, CM-7's last open line. Per-world maps
-   so a 2010 name never wears a 2026 flag. */
-import { nationalityOf } from '@/data/playerNationalities';
+   so a 2010 name never wears a 2026 flag. Round 1520: a made up man reads his
+   own country (shownNation), so the filter finds him under it. */
 import { FlagImg } from '@/components/FlagImg';
 import { groupByConfederation } from '@/lib/confederationGroups';
 import { Input } from '@/components/ui/input';
 import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp } from 'lucide-react';
-import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, careerLeagueOf, loanOutRefusal } from '@/lib/clubManager';
+import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, careerLeagueOf, loanOutRefusal, shownNation } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, MarketPlayer, TransferStatus, DealExtras } from '@/lib/clubManager';
 /* Round 506: the deal desk. The screen reads the SAME verdict and the SAME
    meter the engine judges with, so what the bar says while you are typing and
@@ -230,7 +230,7 @@ export function TransferScreen({
   const marketNations = useMemo(() => {
     const counts = new Map<string, number>();
     for (const m of market) {
-      const nat = nationalityOf(career.eraId, m.name);
+      const nat = shownNation(career.eraId, m);
       if (nat) counts.set(nat, (counts.get(nat) ?? 0) + 1);
     }
     return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
@@ -246,7 +246,7 @@ export function TransferScreen({
       .filter(m => m.age >= age.lo && m.age <= age.hi)
       .filter(m => m.price <= price.max)
       .filter(m => leaguePick === 'any' || careerLeagueOf({ clubName: m.club, eraId: career.eraId }).name === leaguePick)
-      .filter(m => natPick === 'any' || nationalityOf(career.eraId, m.name) === natPick)
+      .filter(m => natPick === 'any' || shownNation(career.eraId, m) === natPick)
       .filter(m => !q || m.name.toLowerCase().includes(q) || m.club.toLowerCase().includes(q));
     const sorted = [...list];
     if (sortKey === 'rating') sorted.sort((a, b) => b.rating - a.rating);
@@ -892,8 +892,9 @@ export function TransferScreen({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
                       {/* Round 194: his real nationality's flag, from this
-                          world's own map. Made-up players honestly get none. */}
-                      {(() => { const nat = nationalityOf(career.eraId, m.name); return nat ? <FlagImg name={nat} size={14} /> : null; })()}
+                          world's own map. Round 1520: a made up man shows his
+                          own, and the MADE UP tag beside his name says so. */}
+                      {(() => { const nat = shownNation(career.eraId, m); return nat ? <FlagImg name={nat} size={14} /> : null; })()}
                       <span className="text-xs text-foreground truncate">{m.name}</span>
                       {/* Round 132: you are about to spend real money on him, so
                           you get told whether he is a real person. */}

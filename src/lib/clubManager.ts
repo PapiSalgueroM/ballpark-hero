@@ -47,6 +47,8 @@ import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade 
 import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 /* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */
 import { keyedRng } from '@/lib/keyedRng';
+import { YOUNG_AGE, YOUNG_FLOOR, countNations, drawNation, mapSpelling, type NationCount } from '@/lib/clubManagerMadeUpNations';
+import { nationalityOf } from '@/data/playerNationalities';
 /* Round 1510: the shared night of a participant and the one match cups. Pure modules: no cycle. */
 import { nightsDoneAt, placeNights } from '@/lib/worldNights';
 import type { CalDate } from '@/lib/calDate';
@@ -448,7 +450,7 @@ export function worldRosterFor(career: CareerState, club: string, onYears = year
        MADE UP tag under a caption that promises every made up man is marked. Real footballers never carry
        either flag. scripts/simCmLedgerBound.mjs holds it. */
     return { n: p.name, p: p.position, a: p.age, v: p.value ?? 0, r: p.rating,
-      ...(p.generated || p.academyGrad || p.isYouth ? { g: true } : {}), anchor: original?.anchor ?? p.rating,
+      ...(p.generated || p.academyGrad || p.isYouth ? { g: true, ...(p.nation ? { nation: p.nation } : {}) } : {}), anchor: original?.anchor ?? p.rating,
       since: p.worldRosterSince ?? original?.since ?? 0,
       ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey } : {}),
       ...(p.potential === undefined ? {} : { potential: p.potential }) };
@@ -502,7 +504,7 @@ function worldMarket(career: CareerState): MarketPlayer[] {
   for (const club of clubs) {
     if (club === current.clubName) continue;
     for (const p of worldRosterFor(current, club)) out.push({ name: p.n, club, position: p.p, age: p.a, rating: p.r,
-      price: askingPrice(p.v, p.a), value: p.v, generated: p.g || undefined,
+      price: askingPrice(p.v, p.a), value: p.v, ...madeUpListing(p, club, current.eraId),
       ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey, worldRosterSince: p.since, potential: p.potential } : {}) });
   }
   out.sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
@@ -531,6 +533,12 @@ function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: 
      Round 1508: such a career writes once it holds a readable ledger with no seed, which only its first summer on
      this engine gives it (adoptLivingWorld); before that summer it still writes nothing. */
   if (!livingWorldOf(state)) return state;
+  /* Round 1520: a made up man the ledger takes in keeps the country the market showed for him at the club he left. */
+  if (madeUp(player) && player.nation === undefined) {
+    const nation = madeUpNationAt(player.name, from === state.clubName ? careerPlace(state) : clubPlace(from, state.eraId), state.eraId,
+      !!(player.isYouth || player.academyGrad));
+    if (nation) player = { ...player, nation };
+  }
   const held = worldRosterView(state);
   const carried = player.worldRosterKey && held?.records.find(record => record.key === player.worldRosterKey);
   const sources = projectedRoster(from, yearsOn(state), state.eraId ?? 'now', worldSeedOf(state))
@@ -1275,6 +1283,14 @@ export interface CMPlayer {
    */
   generated?: boolean;
   /**
+   * Round 1520: a made up man's own country (generated, youth pad or academy
+   * graduate), drawn once where the save first meets him (madeUpNationAt) and
+   * carried wherever he goes. Never on a real footballer, whose country only
+   * ever comes from the verified map (nationalityOf). Absent on a save from
+   * before the round until ensureMadeUpNations draws the same one.
+   */
+  nation?: string;
+  /**
    * Round 161: the sell-on clause his old club took when you signed him.
    * Sell him later and that percentage of the fee goes straight back to
    * them, off the top.
@@ -1593,6 +1609,8 @@ export interface MarketPlayer {
   value?: number;
   /** Round 132: this game made him up, and the transfer screen says so. */
   generated?: boolean;
+  /** Round 1520: a made up man's own country (CMPlayer.nation). */
+  nation?: string;
   /** Round 1344: another club bought him this season (marketForScreen); listed there, not for sale until the summer. */
   joinedThisSeason?: true;
 }
@@ -4677,6 +4695,116 @@ export function cupSatOutBy(career: Pick<CareerState, 'clubName' | 'eraId'> & { 
   return cup !== null && !clubEntersCup(lg.id, career.clubName) ? cup : null;
 }
 
+/* ─── Round 1520: a made up man's country (the draw itself is src/lib/clubManagerMadeUpNations.ts) ─── */
+
+/** A league's country spelt the way the verified map spells it. Only one of the league nations disagrees. */
+const LEAGUE_NATION_ALIAS: Record<string, string> = { USA: 'United States' };
+
+/** Where a club plays and the country it is in. A club its league's row places in another country (Auckland FC
+    and Wellington Phoenix in the A-League Men) keeps its own; a created club never has a row of its own. */
+export interface NationPlace { league: string; home: string }
+function placeIn(leagueId: string, club: string | null): NationPlace | null {
+  const own = club === null ? undefined : leagueRulesOf(leagueId).clubCountry?.[club];
+  const raw = own ?? LEAGUE_NATIONS[leagueId];
+  return raw ? { league: leagueId, home: own ?? LEAGUE_NATION_ALIAS[raw] ?? raw } : null;
+}
+
+/** My club's place. Moved here from clubManagerBoardAsks.ts's clubCountry unchanged (Round 964: a real club in
+    today's world takes it from the league it REALLY plays in, so one the world editor moved keeps its own country),
+    so the board's country ask and the flags on a made up man read one rule. */
+export function careerPlace(career: Pick<CareerState, 'clubName' | 'eraId' | 'customClub'>): NationPlace | null {
+  const historic = !!career.eraId && isHistoricEra(career.eraId);
+  const custom = !!career.customClub && career.customClub.name === career.clubName;
+  const home = historic || custom ? undefined : REAL_LEAGUES.find(l => l.clubs.includes(career.clubName));
+  return placeIn((home ?? careerLeagueOf(career)).id, custom ? null : career.clubName);
+}
+
+/** Another club's place in its own world, off the static league lists (never the world editor's), its era's first. */
+function clubPlace(club: string, eraId: string | undefined): NationPlace | null {
+  const lg = (isHistoricEra(eraId) ? ERA_LEAGUES[eraId!]?.find(l => l.clubs.includes(club)) : undefined)
+    ?? REAL_LEAGUES.find(l => l.clubs.includes(club));
+  return lg ? placeIn(lg.id, club) : null;
+}
+
+/* Each league's real men counted by country, once a world, from the squads and the verified map of that world. */
+const NATION_COUNTS = new Map<string, Map<string, [NationCount, NationCount]>>();
+
+/** The real count behind a place, whole squads and young men. Undefined while the world's squads have not arrived. */
+export function nationCountsAt(place: NationPlace, eraId: string | undefined): [NationCount, NationCount] | null | undefined {
+  if (!eraRostersLoaded(eraId)) return undefined;
+  const world = isHistoricEra(eraId) ? eraId! : 'now';
+  let table = NATION_COUNTS.get(world);
+  if (!table) {
+    const lists = new Map<string, { home: string; all: (string | null)[]; young: (string | null)[] }>();
+    for (const [club, roster] of Object.entries(eraRostersRaw(eraId))) {
+      const at = clubPlace(club, eraId);
+      if (!at) continue;
+      const key = `${at.league}|${at.home}`;
+      let list = lists.get(key);
+      if (!list) lists.set(key, list = { home: at.home, all: [], young: [] });
+      for (const b of roster) {
+        const n = nationalityOf(eraId, b.n);
+        list.all.push(n);
+        if (b.a <= YOUNG_AGE) list.young.push(n);
+      }
+    }
+    table = new Map([...lists].map(([key, l]) => [key, [countNations(l.all, l.home), countNations(l.young, l.home)]]));
+    NATION_COUNTS.set(world, table);
+  }
+  return table.get(`${place.league}|${place.home}`) ?? null;
+}
+
+/** A made up man's country, drawn where the save first meets him (madeUpNations.ts says how). Undefined when there
+    is no place to draw from, or the world's squads have not arrived: nothing is stored then, and the next
+    ensureMadeUpNations draws the same one. A young man reads the league's young count when it has enough of them. */
+export function madeUpNationAt(name: string, place: NationPlace | null, eraId: string | undefined, young = false): string | undefined {
+  if (!place) return undefined;
+  const counts = nationCountsAt(place, eraId);
+  if (counts === undefined) return undefined;
+  return drawNation(name, place.home, counts && (young && counts[1].known >= YOUNG_FLOOR ? counts[1] : counts[0]));
+}
+
+/** The made up mark and country a market listing carries off a projected or ledger man at `club`. */
+function madeUpListing(p: ProjectedPlayer, club: string, eraId: string | undefined): Pick<MarketPlayer, 'generated' | 'nation'> {
+  if (!p.g) return {};
+  const nation = p.nation ?? madeUpNationAt(p.n, clubPlace(club, eraId), eraId);
+  return nation ? { generated: true, nation } : { generated: true };
+}
+
+function madeUp(p: CMPlayer): boolean {
+  return !!(p.generated || p.isYouth || p.academyGrad);
+}
+
+/** Round 1520: every made up man of mine (squad, out on loan, the free agent pool) carries his country. Draws only
+    for a man with none, so it moves nothing already stored, and replaces the objects it changes rather than writing
+    into them. The same draw as the day he arrived, so a save from before the round gets the country it would have
+    had. Registered in loadCareer and playNextEntry, and run where men are made (startCareer, startNextSeason). */
+export function ensureMadeUpNations(state: CareerState): void {
+  const place = careerPlace(state);
+  const stamp = <T extends { name: string; nation?: string }>(p: T, young: boolean): T => {
+    const nation = p.nation === undefined ? madeUpNationAt(p.name, place, state.eraId, young) : undefined;
+    return nation ? { ...p, nation } : p;
+  };
+  const young = (p: CMPlayer) => !!(p.isYouth || p.academyGrad);
+  const each = <T>(list: T[], f: (x: T) => T): T[] => {
+    const out = list.map(f);
+    return out.some((x, i) => x !== list[i]) ? out : list;
+  };
+  if (Array.isArray(state.squad)) state.squad = each(state.squad, p => (madeUp(p) ? stamp(p, young(p)) : p));
+  if (Array.isArray(state.loanedOut)) {
+    state.loanedOut = each(state.loanedOut, l => {
+      const p = l?.player && madeUp(l.player) ? stamp(l.player, young(l.player)) : undefined;
+      return p && p !== l.player ? { ...l, player: p } : l;
+    });
+  }
+  if (Array.isArray(state.freeAgents)) state.freeAgents = each(state.freeAgents, f => (f?.generated ? stamp(f, false) : f));
+}
+
+/** The flag a man shows: a made up man's own country, else the verified map's, which a real man only ever reads. */
+export function shownNation(eraId: string | undefined, p: { name: string; nation?: string }): string | null {
+  return p.nation ?? nationalityOf(eraId, p.name);
+}
+
 /** Best XI average straight off an era bake, same math as bakedXIAvg. */
 function eraXIAvgFrom(rosters: Record<string, BakedPlayer[]>, clubName: string): number | null {
   const roster = rosters[clubName];
@@ -5527,6 +5655,7 @@ function bakedToCMPlayer(b: BakedPlayer | ProjectedPlayer): CMPlayer {
     seasonAssists: 0,
     value: b.v,
     generated: gen || undefined,
+    ...((b as ProjectedPlayer).nation ? { nation: (b as ProjectedPlayer).nation } : {}),
     ...((b as ProjectedPlayer).worldRosterKey ? { worldRosterKey: (b as ProjectedPlayer).worldRosterKey,
       worldRosterSince: (b as ProjectedPlayer).since, potential: (b as ProjectedPlayer).potential } : {}),
   };
@@ -7380,6 +7509,8 @@ export interface FreeAgent {
       topUpFreeAgents). Absent on a real man. */
   wage?: number;
   generated?: boolean;
+  /** Round 1520: a made up man's own country travels with him (CMPlayer.nation). */
+  nation?: string;
   /** Round 640 review: a founder's sale ratio travels with him (CMPlayer.founderSaleRatio). */
   founderSaleRatio?: number;
   /** Season he became available, so the pool can age and clear. */
@@ -7594,11 +7725,14 @@ export function topUpFreeAgents(state: CareerState): void {
     const age = cInt(`${seed}|a`, 24, 33);
     const rating = clamp(Math.round(level) - cInt(`${seed}|r`, 20, 26), 40, 99);
     const worth = squadScaledValue(state.squad, rating, age);
+    /* Round 1520: he is out of work in my club's country, so he is drawn from there (madeUpNationAt). */
+    const nation = madeUpNationAt(name, careerPlace(state), state.eraId);
     out.push({
       name, position, age, rating,
       value: JOURNEYMAN_VALUE,
       wage: freeAgentTerms({ name, position, age, rating, value: worth, since: state.season, reason: 'unattached' }).wage,
       generated: true,
+      ...(nation ? { nation } : {}),
       since: state.season,
       reason: 'unattached',
     });
@@ -7746,7 +7880,8 @@ export function releasePlayer(career: CareerState, playerId: string): CareerStat
     severance: [...(career.severance ?? []), { name: p.name, weekly: sev.weekly, weeksLeft: sev.weeksLeft }],
     freeAgents: addFreeAgent(career.freeAgents ?? [], {
       name: p.name, position: p.position, age: p.age, rating: p.rating,
-      value: p.value, generated: p.generated, since: career.season,
+      /* Round 1520: a youth pad or an academy boy is made up too, so he goes to the pool marked, with his country. */
+      value: p.value, generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation } : {}), since: career.season,
       /* Round 640 review: a founder's sale ratio goes with him. */
       founderSaleRatio: p.founderSaleRatio,
       reason: 'released', fromMyClub: true,
@@ -7935,7 +8070,7 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
     name: fa.name, position: fa.position, rating: fa.rating, age: fa.age,
     fitness: 100, morale: 70, injuryWeeks: 0, suspendedMatches: 0,
     isYouth: false, seasonGoals: 0, seasonAssists: 0,
-    value: fa.value, generated: fa.generated,
+    value: fa.value, generated: fa.generated, ...(fa.nation ? { nation: fa.nation } : {}),
     contractYears: years,
     wage,
   };
@@ -9466,7 +9601,7 @@ function marketBase(yearsOnNow: number, eraId: string = 'now', worldSeed?: numbe
         rating: b.r,
         price: askingPrice(b.v, b.a),
         value: b.v,
-        generated: b.g || undefined,
+        ...madeUpListing(b, club, eraId),
         ...(b.worldRosterKey ? { worldRosterKey: b.worldRosterKey, worldRosterSince: b.since, potential: b.potential } : {}),
       });
     }
@@ -9659,6 +9794,9 @@ function completeSigning(
     value: mp.value,
     ...(mp.worldRosterKey ? { worldRosterKey: mp.worldRosterKey, worldRosterSince: mp.worldRosterSince,
       potential: mp.potential, generated: mp.generated } : {}),
+    /* Round 1520: a made up man keeps his mark and his country whatever world he was bought in (before the round
+       a career with no world seed bought him unmarked). */
+    ...(mp.generated ? { generated: true, ...(mp.nation ? { nation: mp.nation } : {}) } : {}),
     onLoan: loan || undefined,
     // Round 105: a signing arrives on a real deal.
     contractYears: loan ? 1 : (terms ? terms.years : (mp.age >= 31 ? 2 : 4)),
@@ -19243,6 +19381,10 @@ export function promoteProspect(career: CareerState, prospectId: string): Career
     ratingSum: 0,
     contractYears: 4,
   };
+  /* Round 1520: a boy a scout found abroad keeps that trip's country; a boy of the home intake is drawn from the
+     club's own country at its league's young share (madeUpNationAt). */
+  const nation = pr.source !== 'Academy' && pr.source ? mapSpelling(pr.source) : madeUpNationAt(pr.name, careerPlace(next), next.eraId, true);
+  if (nation) player.nation = nation;
   player.wage = wageFor(player);
   next.squad = [...next.squad, player];
   next.academyGraduates = (next.academyGraduates ?? 0) + 1;
@@ -19562,6 +19704,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   ensureRoles(state);
   ensurePress(state);
   ensureManagers(state);
+  /* Round 1520: every made up man on day one gets his country, before the board's asks count them. */
+  ensureMadeUpNations(state);
   state.wageCap = wageCapFrom(wageBill(state));
   /* Round 640: and a created club gets the cap a real club with its budget
      has, plus the room its founders above that money bring, recorded so the
@@ -19654,6 +19798,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   // Round 634: and nobody is on the books twice, nor in the squad and out
   // on loan at once, so the summer cannot bring a second copy of him home.
   ensureOneOfEach(state);
+  // Round 1520: and every made up man of mine carries his country, before the board counts them.
+  ensureMadeUpNations(state);
   // Round 132: and a save made before the world had a clock gets put on one.
   ensureClock(state);
   // Round 135: and one from before the press room existed gets one of those.
@@ -21460,7 +21606,7 @@ function fillSquadGaps(
   const letGo = new Set(released);
   const fromReal = realPool
     .filter(f => !letGo.has(f.name) && !taken.has(f.name) && !retired.has(f.name) && band(f.rating))
-    .map(f => ({ name: f.name, club: '', position: f.position, age: f.age, rating: f.rating, price: 0, value: f.value, generated: f.generated, founderSaleRatio: f.founderSaleRatio }));
+    .map(f => ({ name: f.name, club: '', position: f.position, age: f.age, rating: f.rating, price: 0, value: f.value, generated: f.generated, ...(f.nation ? { nation: f.nation } : {}), founderSaleRatio: f.founderSaleRatio }));
   /* A made up journeyman is worth the floor and asks a wage off his squad, so
      the club pays him what he asks rather than what his value would price. */
   const askingWage = new Map(realPool.filter(f => f.wage !== undefined).map(f => [f.name, f.wage as number]));
@@ -21503,6 +21649,7 @@ function fillSquadGaps(
       seasonAssists: 0,
       value: mp.value,
       generated: mp.generated,
+      ...(mp.nation ? { nation: mp.nation } : {}),
       contractYears: mp.age >= 31 ? 2 : 3,
       wage: 0,
     };
@@ -21839,7 +21986,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
        for him to walk TO. No severance, because nothing was broken early. */
     walkedFree619.push(...walked.map(p => ({
       name: p.name, position: p.position, age: p.age, rating: p.rating,
-      value: p.value, generated: p.generated, since: career.season + 1,
+      /* Round 1520: marked and with his country, as on a release. */
+      value: p.value, generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation } : {}), since: career.season + 1,
       /* Round 640 review: a founder's sale ratio walks with him, or letting a
          deal run out and signing him back would strip it for nothing. */
       founderSaleRatio: p.founderSaleRatio,
@@ -22205,6 +22353,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      the books shares a name with one, and after the decay above cleared last
      season's unsigned ones. */
   topUpFreeAgents(state);
+  /* Round 1520: the summer's new made up men (the intake, the gap fillers, a new club's squad) get their country
+     before the board's new asks count them. */
+  ensureMadeUpNations(state);
   /* Round 436: a new club sets its ceiling off the squad it hands you, which
      is the Round 105 anchor doing its job. Staying carries last season's
      ceiling and moves it on the CLUB's season, never on your own wage bill.
@@ -22660,6 +22811,9 @@ export function loadCareer(): CareerState | null {
       parsed.squad = ensureSquadCoverage(parsed.squad);
       ensureRoles(parsed);
     }
+    /* Round 1520: a made up man of a save from before the round gets his country here, the same draw as the day he
+       arrived would have given him, so the squad screen shows it before a ball is kicked. */
+    ensureMadeUpNations(parsed);
     /* XI ids that name nobody in the squad are cleared, and only those slots
        are filled, by the engine's own auto pick over the men not already in
        the eleven. Pure, no draw. */
