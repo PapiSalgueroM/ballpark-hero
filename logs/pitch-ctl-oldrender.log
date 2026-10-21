@@ -1,0 +1,5 @@
+treeWithoutMerge: cc2537787bb6e73943bf6e1c3f6c131b918f71eb, 5d918307 without c76a6827; conflicts kept from 5d918307: scripts/playPitchRestartContinuity.mjs, scripts/simPitchRestartContinuity.mjs
+PITCH_RESTART_PARENT_REF cc2537787bb6e73943bf6e1c3f6c131b918f71eb (this head without Round 1366s merge c76a6827; first parent ed9b483d)
+Child outcome: exit 1, zero pending/file/setup faults; three owned Boolean causes
+simPitchRestartContinuity: oldrender qualified (one effective copied old-render fault); browser paint unmeasured
+FIRED-OK

@@ -1,0 +1,11 @@
+treeWithoutMerge: b5079eb6805de14665b76f37586562fc05b64049, 5d918307 without c855520d; conflicts kept from 5d918307: scripts/playPlayerAutocompleteTouchScroll.mjs, scripts/simPlayerAutocompleteTouchScroll.mjs
+PARENT b5079eb6805de14665b76f37586562fc05b64049 (this head without Round 1359's merge c855520d)
+bindAt: scripts/simPlayerAutocompleteTouchScroll.mjs bound
+bindAt: 36cc9ffe7e13 -> b5079eb6805d
+runProver: touch at 58afeb0f04f170485e377f55c30f4ac3ddef5e36 (release BK bound: 5d9183079985 with its pinned bases bound to the joined tree)
+Touch scroll: one actual component unit file, all20 named outcomes, 20 passes and 0 exact intended faults; childexit0.
+Complete raw outcomes, logs and process receipt retained; 14 unchanged source copies and 10 parent bindings.
+Two complete physical TSX compilations retained with source hashes, output hashes and actual compiler version.
+Actual application mutation: none; effective copied source faults0; no file, setup or pending credit.
+simPlayerAutocompleteTouchScroll normal: green.
+runProver: touch exit 0
