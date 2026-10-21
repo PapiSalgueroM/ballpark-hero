@@ -1,0 +1,4 @@
+worldtruth-at-base exit=0 59s | simSoccerWorldTruth: OK, every section green
+worldtruth-at-builder exit=1 58s | simSoccerWorldTruth: 6 FAILURES (section 6: 6)
+deckfairness-at-base exit=0 52s | simSoccerDeckFairness: all sections green
+deckfairness-at-builder exit=1 52s | simSoccerDeckFairness: 6 failures in section 8
