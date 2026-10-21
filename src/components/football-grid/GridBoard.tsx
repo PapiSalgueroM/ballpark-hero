@@ -87,6 +87,7 @@ export function GridBoard({ puzzle, cells, activeCell, onCellClick, accentVar = 
                         : undefined
                   }
                 >
+                  <span className="sr-only">{row.label}, {puzzle.cols[colIdx].label}: {cell.status === 'correct' ? 'Correct' : cell.status === 'wrong' ? 'Try again' : 'Choose a player'}</span>
                   {cell.status === 'correct' && cell.playerName ? (
                     <div className={cn('flex flex-col items-center gap-0.5', motion.correctContent, layout.content)}>
                       <span title={cell.playerName} className={cn('text-[11px] md:text-xs font-bold text-foreground leading-tight', layout.name)}>
@@ -102,9 +103,9 @@ export function GridBoard({ puzzle, cells, activeCell, onCellClick, accentVar = 
                       )}
                     </div>
                   ) : cell.status === 'wrong' ? (
-                    <span className={cn('text-xs text-destructive font-semibold', motion.wrongContent)}>✗</span>
+                    <span aria-hidden="true" className={cn('text-xs text-destructive font-semibold', motion.wrongContent)}>✗</span>
                   ) : (
-                    <span className="text-lg text-muted-foreground/30">+</span>
+                    <span aria-hidden="true" className="text-lg text-muted-foreground/30">+</span>
                   )}
                 </button>
               );
