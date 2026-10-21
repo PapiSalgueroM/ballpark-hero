@@ -1,0 +1,3 @@
+c-helpwords exit=1 1s | simCmTactics: control helpwords FIRED (1 failures: table 1; must turn table red)
+quick exit=0 10s | simCmTactics: all green (sections table, styles, balanced)
+c-flat exit=1 94s | simCmTactics: control flat FIRED (1 failures: read 1; must turn fleet red)

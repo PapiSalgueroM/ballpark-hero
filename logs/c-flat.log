@@ -1,0 +1,48 @@
+NEGATIVE CONTROL ON: flat (must turn fleet red)
+
+[fleet] folded 132 season rows from 4 files in /home/runner/work/_temp/t-c-flat/cm-tactics-fleet-LG2Gtt
+
+  expected points a league game against balanced, paired (mid: pooled | block 0 to 1 | block 2 to 3; big; small) and actual points a game (mid, balanced 1.204)
+    adapt                        mid +2.17% | +2.06% | +2.27%   big NaN%   small NaN%   ppg 1.246   (12 mid seasons)
+    misread                      mid +2.17% | +2.06% | +2.27%   big NaN%   small NaN%   ppg 1.246   (12 mid seasons)
+    press-                       mid +2.16% | +0.03% | +4.29%   big NaN%   small NaN%   ppg 1.230   (12 mid seasons)
+    width-                       mid +0.00% | +0.00% | +0.00%   big NaN%   small NaN%   ppg 1.204   (12 mid seasons)
+    line-                        mid +0.00% | +0.00% | +0.00%   big NaN%   small NaN%   ppg 1.204   (12 mid seasons)
+    line+                        mid +0.00% | +0.00% | +0.00%   big NaN%   small NaN%   ppg 1.204   (12 mid seasons)
+    width+                       mid +0.00% | +0.00% | +0.00%   big NaN%   small NaN%   ppg 1.204   (12 mid seasons)
+    tempo-                       mid -0.45% | -0.06% | -0.83%   big NaN%   small NaN%   ppg 1.195   (12 mid seasons)
+    tempo+                       mid -2.06% | -0.74% | -3.39%   big NaN%   small NaN%   ppg 1.171   (12 mid seasons)
+    press+                       mid -3.78% | -3.74% | -3.82%   big NaN%   small NaN%   ppg 1.191   (12 mid seasons)
+  ok [dominance]: none of 8 fixed sets beats balanced by over +6.00% at a mid table club in either block (top misread)
+  FAIL [read]: reading the opponent beats misreading them by only +0.00% at a mid table club (+0.00% | +0.00%; band +2.00%)
+  ok [adapt]: the best answer to each opponent's style gains +2.17% at a mid table club (+2.06% | +2.27%; big NaN%, small NaN%)
+
+  per match, every competition (balanced first):
+    balanced  poss 48.8  shots 10.944  wonHigh 6.380  crosses 10.628  offsides 2.033  breakC 0.239  wideShare 0.306  fit 83.6  inj 0.247  h2Opp 0.688  myG 1.198  oppG 1.383
+    adapt     poss 49.1  shots 12.487  wonHigh 3.056  crosses 5.480  offsides 0.756  breakC 0.052  wideShare 0.141  fit 85.0  inj 0.199  h2Opp 0.692  myG 1.217  oppG 1.379
+    line+     poss 50.8  shots 10.944  wonHigh 5.894  crosses 11.046  offsides 4.455  breakC 0.462  wideShare 0.307  fit 83.6  inj 0.247  h2Opp 0.688  myG 1.198  oppG 1.383
+    line-     poss 46.8  shots 10.944  wonHigh 6.351  crosses 10.148  offsides 0.767  breakC 0.054  wideShare 0.307  fit 83.6  inj 0.247  h2Opp 0.688  myG 1.198  oppG 1.383
+    misread   poss 49.1  shots 12.487  wonHigh 3.056  crosses 5.480  offsides 0.756  breakC 0.052  wideShare 0.141  fit 85.0  inj 0.199  h2Opp 0.692  myG 1.217  oppG 1.379
+    press+    poss 52.0  shots 10.985  wonHigh 11.197  crosses 10.952  offsides 1.881  breakC 0.360  wideShare 0.309  fit 79.7  inj 0.301  h2Opp 0.743  myG 1.245  oppG 1.471
+    press-    poss 45.2  shots 11.085  wonHigh 3.266  crosses 10.000  offsides 1.944  breakC 0.249  wideShare 0.303  fit 85.2  inj 0.216  h2Opp 0.692  myG 1.200  oppG 1.374
+    tempo+    poss 42.4  shots 9.656  wonHigh 6.969  crosses 9.061  offsides 2.031  breakC 0.265  wideShare 0.303  fit 83.8  inj 0.244  h2Opp 0.718  myG 1.221  oppG 1.426
+    tempo-    poss 54.6  shots 12.240  wonHigh 5.448  crosses 11.855  offsides 1.868  breakC 0.254  wideShare 0.301  fit 83.3  inj 0.240  h2Opp 0.723  myG 1.200  oppG 1.424
+    width+    poss 48.8  shots 10.944  wonHigh 6.123  crosses 17.846  offsides 1.967  breakC 0.249  wideShare 0.453  fit 83.6  inj 0.247  h2Opp 0.688  myG 1.198  oppG 1.383
+    width-    poss 48.8  shots 10.944  wonHigh 6.123  crosses 5.459  offsides 1.988  breakC 0.249  wideShare 0.146  fit 83.6  inj 0.247  h2Opp 0.688  myG 1.198  oppG 1.383
+  ok [effects]: press+ wonHigh: ratio 1.755 (band 1.4 to Infinity)
+  ok [effects]: press+ fit: diff -3.917 (band -Infinity to -1)
+  ok [effects]: press- wonHigh: ratio 0.512 (band 0 to 0.7)
+  ok [effects]: press- fit: diff 1.602 (band 0.3 to Infinity)
+  ok [effects]: tempo+ poss: diff -6.356 (band -Infinity to -3)
+  ok [effects]: tempo+ shots: ratio 0.882 (band 0 to 0.93)
+  ok [effects]: tempo- poss: diff 5.832 (band 3 to Infinity)
+  ok [effects]: tempo- shots: ratio 1.118 (band 1.07 to Infinity)
+  ok [effects]: width+ crosses: ratio 1.679 (band 1.35 to Infinity)
+  ok [effects]: width+ wideShare: diff 0.148 (band 0.08 to Infinity)
+  ok [effects]: width- crosses: ratio 0.514 (band 0 to 0.7)
+  ok [effects]: width- wideShare: diff -0.160 (band -Infinity to -0.08)
+  ok [effects]: line+ offsides: ratio 2.191 (band 1.7 to Infinity)
+  ok [effects]: line+ breakC: ratio 1.930 (band 1.3 to Infinity)
+  ok [effects]: line- offsides: ratio 0.377 (band 0 to 0.6)
+  ok [effects]: line- breakC: ratio 0.226 (band 0 to 0.75)
+simCmTactics: control flat FIRED (1 failures: read 1; must turn fleet red)
