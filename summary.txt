@@ -1,0 +1,3 @@
+measure-nfl exit=0 187s | measureBase nfl: done
+hall-nfl-before exit=1 343s | simCareerHall nfl: RED [base]
+hall-nba-before exit=0 422s | simCareerHall nba: all 34 checks green
