@@ -1,0 +1,15 @@
+      1 simCmDifficulty: 48 FAILURES (sections 2)
+      1   FAIL: a created club seed 1 noCoach: season 1 differs from the base, first at key worldComps
+      1   FAIL: a created club seed 1 coach: season 1 differs from the base, first at key worldComps
+      1   FAIL: a created club seed 0 noCoach: season 1 differs from the base, first at key worldComps
+      1   FAIL: a created club seed 0 coach: season 1 differs from the base, first at key worldComps
+      1   FAIL: Torino seed 1 noCoach: season 1 differs from the base, first at key worldComps
+      1   FAIL: Torino seed 1 coach: season 1 differs from the base, first at key worldComps
+      1   FAIL: Torino seed 0 noCoach: season 1 differs from the base, first at key worldComps
+      1   FAIL: Torino seed 0 coach: season 1 differs from the base, first at key worldComps
+      1   FAIL: Real Madrid seed 1 noCoach: season 1 differs from the base, first at key worldComps
+      1   FAIL: Real Madrid seed 1 coach: season 1 differs from the base, first at key worldComps
+      1   FAIL: Real Madrid seed 0 noCoach: season 1 differs from the base, first at key worldComps
+  ok: 56 Normal careers compared with the base, 3904394 draws, in 114 s
+  ok: 2b: 18 of 18 Hard careers on Normal's dials play as Normal, the key aside
+simCmDifficulty: 48 FAILURES (sections 2)

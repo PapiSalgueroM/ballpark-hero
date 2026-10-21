@@ -1,0 +1,2 @@
+s2-raw exit=1 169s | simCmDifficulty: 48 FAILURES (sections 2)
+s2-map exit=0 165s | simCmDifficulty: all green (sections 2)
