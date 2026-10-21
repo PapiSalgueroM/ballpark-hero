@@ -1,0 +1,361 @@
+name: Analytics1445 public intake
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/analytics1445-public-intake]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: analytics1445-public-intake-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  public_operator:
+    if: github.ref == 'refs/heads/codex/analytics1445-public-intake'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      OPERATOR_MODE: intake
+      READBACK_OUT: analytics1445-public-intake-artifacts
+      SOURCE_SHA: 554a3b18641044ec5164bff9acab4d338237078c
+      QUALIFIED_BUILD_SHA: 19c907608a31d0cbd454163286d4a6fda7359137
+      INPUT_RUN_ID: 39686101581
+      INPUT_OPERATOR_SHA: 19c907608a31d0cbd454163286d4a6fda7359137
+      INPUT_ARTIFACT_ID: 12386369039
+      INPUT_ZIP_SHA256: f3cb62f8817ec1538e58a1109e5f7c18d83df1ace624fd8ed2e80f89060a5dbe
+      INPUT_WORKFLOW_NAME: Analytics paused status1445
+      EXPECTED_DEPLOYMENT: 8873089e-26a7-4095-b517-fde0ded96092
+      OBSERVED_ENTRY: /assets/index-gLwQ_4x3.js
+      ASSET_PINS_JSON: REQUIRED_FINAL_READER_THREE_OBSERVED_ROLES_JSON
+      ASSET_PINS_SHA256: REQUIRED_FINAL_READER_EXACT_JSON_64_HEX
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fail closed on manual bindings before downloads or public requests
+        run: |
+          set -euo pipefail
+          mkdir "$READBACK_OUT"
+          git rev-parse HEAD > "$READBACK_OUT/operator-head.txt"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          node <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
+          for(const key of ['SOURCE_SHA','QUALIFIED_BUILD_SHA','INPUT_OPERATOR_SHA'])assert.match(process.env[key]||'',/^[a-f0-9]{40}$/);
+          for(const key of ['INPUT_RUN_ID','INPUT_ARTIFACT_ID'])assert.match(process.env[key]||'',/^[1-9][0-9]+$/);
+          assert.match(process.env.INPUT_ZIP_SHA256||'',/^[a-f0-9]{64}$/);assert.match(process.env.EXPECTED_DEPLOYMENT||'',/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/);assert.notEqual(process.env.EXPECTED_DEPLOYMENT,'00000000-0000-0000-0000-000000000000');
+          assert(['intake','readback'].includes(process.env.OPERATOR_MODE));
+          if(process.env.OPERATOR_MODE==='intake'){assert.equal(process.env.INPUT_OPERATOR_SHA,process.env.QUALIFIED_BUILD_SHA);assert.equal(process.env.INPUT_WORKFLOW_NAME,'Analytics paused status1445');assert.match(process.env.OBSERVED_ENTRY||'',/^\/assets\/index-[A-Za-z0-9_-]{8}\.js$/);}
+          else{assert.equal(process.env.INPUT_WORKFLOW_NAME,'Analytics1445 public intake');const pins=JSON.parse(process.env.ASSET_PINS_JSON);assert.deepEqual(Object.keys(pins).sort(),['cookie','entry','privacy']);const hash=value=>createHash('sha256').update(value).digest('hex');assert.match(process.env.ASSET_PINS_SHA256||'',/^[a-f0-9]{64}$/);assert.equal(hash(process.env.ASSET_PINS_JSON),process.env.ASSET_PINS_SHA256);for(const row of Object.values(pins)){assert.deepEqual(Object.keys(row).sort(),['path','sha256']);assert.match(row.path,/^\/assets\/[A-Za-z0-9_.-]+\.js$/);assert.match(row.sha256,/^[a-f0-9]{64}$/);}for(const row of Object.values(pins))for(const other of Object.values(pins))if(row.path===other.path)assert.equal(row.sha256,other.sha256);assert.match(pins.entry.path,/^\/assets\/index-[A-Za-z0-9_-]{8}\.js$/);assert.equal(process.env.OBSERVED_ENTRY,pins.entry.path);}
+          fs.writeFileSync(process.env.READBACK_OUT+'/bindings.json',JSON.stringify(Object.fromEntries(['OPERATOR_MODE','SOURCE_SHA','QUALIFIED_BUILD_SHA','INPUT_RUN_ID','INPUT_OPERATOR_SHA','INPUT_ARTIFACT_ID','INPUT_ZIP_SHA256','INPUT_WORKFLOW_NAME','EXPECTED_DEPLOYMENT','OBSERVED_ENTRY','ASSET_PINS_JSON','ASSET_PINS_SHA256'].map(key=>[key,process.env[key]])),null,2)+'\n');
+          JS
+      - name: Rebind successful input run and download its exact artifact before public guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "/repos/PapiSalgueroM/ballpark-hero/actions/runs/$INPUT_RUN_ID" > "$READBACK_OUT/input-run.json"
+          gh api "/repos/PapiSalgueroM/ballpark-hero/actions/runs/$INPUT_RUN_ID/artifacts?per_page=100" > "$READBACK_OUT/input-artifacts.json"
+          node <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),out=process.env.READBACK_OUT;const run=JSON.parse(fs.readFileSync(out+'/input-run.json'));assert.equal(String(run.id),process.env.INPUT_RUN_ID);assert.equal(run.head_sha,process.env.INPUT_OPERATOR_SHA);assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(run.name,process.env.INPUT_WORKFLOW_NAME);assert.equal(run.repository.full_name,'PapiSalgueroM/ballpark-hero');const listed=JSON.parse(fs.readFileSync(out+'/input-artifacts.json'));assert(listed.total_count>0&&listed.total_count<=100);assert.equal(listed.artifacts.length,listed.total_count);const chosen=listed.artifacts.filter(row=>String(row.id)===process.env.INPUT_ARTIFACT_ID);assert.equal(chosen.length,1);assert.equal(chosen[0].expired,false);assert.equal(chosen[0].digest,'sha256:'+process.env.INPUT_ZIP_SHA256);assert.equal(String(chosen[0].workflow_run.id),process.env.INPUT_RUN_ID);assert.equal(chosen[0].workflow_run.head_sha,process.env.INPUT_OPERATOR_SHA);const prefix=process.env.OPERATOR_MODE==='intake'?'analytics1445-build-browser-':'analytics1445-public-intake-';assert(chosen[0].name.startsWith(prefix+process.env.INPUT_RUN_ID+'-'));
+          JS
+          gh api "/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$INPUT_ARTIFACT_ID/zip" > "$READBACK_OUT/input.zip"
+          printf '%s  %s\n' "$INPUT_ZIP_SHA256" "$READBACK_OUT/input.zip" | sha256sum --check > "$READBACK_OUT/input-zip-hold.log"
+          python <<'PY'
+          import os,pathlib,zipfile,tarfile,hashlib,json,re,stat
+          out=pathlib.Path(os.environ['READBACK_OUT']).resolve();target=out/'input';target.mkdir()
+          def safe(name):
+              part=pathlib.PurePosixPath(name)
+              assert name and not part.is_absolute() and '..' not in part.parts and '\\' not in name and ':' not in name
+              return part
+          with zipfile.ZipFile(out/'input.zip') as archive:
+              names=set()
+              for item in archive.infolist():
+                  safe(item.filename);assert item.filename not in names;names.add(item.filename);assert not stat.S_ISLNK(item.external_attr>>16)
+              archive.extractall(target)
+          manifest={}
+          for line in (target/'evidence.sha256').read_text().splitlines():
+              match=re.fullmatch(r'([a-f0-9]{64})  (?:\./)?(.+)',line);assert match
+              name=str(safe(match[2]));assert name not in manifest and name!='evidence.sha256';manifest[name]=match[1]
+          actual={str(p.relative_to(target)) for p in target.rglob('*') if p.is_file()}-{'evidence.sha256'}
+          assert actual==set(manifest) and actual
+          for name,expected in manifest.items():assert hashlib.sha256((target/name).read_bytes()).hexdigest()==expected
+          if os.environ['OPERATOR_MODE']=='intake':
+              assert (target/'head.txt').read_text().strip()==os.environ['QUALIFIED_BUILD_SHA']
+              assert (target/'final-holds.exit').read_text().strip()=='0'
+              assert json.loads((target/'transport-hold.json').read_text())['zeroActualAttempts'] is True
+              assert all(p.stat().st_size==0 for p in target.rglob('*.transport'))
+              dest=out/'input-dist';dest.mkdir()
+              with tarfile.open(target/'dist.tar.gz') as archive:
+                  for item in archive.getmembers():safe(item.name);assert item.isdir() or item.isfile()
+                  archive.extractall(dest,filter='data')
+              dist_manifest={}
+              for line in (target/'dist.sha256').read_text().splitlines():
+                  match=re.fullmatch(r'([a-f0-9]{64})  dist/(.+)',line);assert match
+                  name=str(safe(match[2]));assert name not in dist_manifest;dist_manifest[name]=match[1]
+              actual_dist={str(p.relative_to(dest)) for p in dest.rglob('*') if p.is_file()}
+              assert actual_dist==set(dist_manifest) and actual_dist
+              for name,expected in dist_manifest.items():assert hashlib.sha256((dest/name).read_bytes()).hexdigest()==expected
+          else:
+              prior=json.loads((target/'readback.json').read_text());assert prior['complete'] is True and prior['diagnosticOnly'] is True and prior['mode']=='intake'
+              assert prior['operator']==os.environ['INPUT_OPERATOR_SHA'] and str(prior['run'])==os.environ['INPUT_RUN_ID']
+              assert prior['source']==os.environ['SOURCE_SHA'] and prior['qualified']==os.environ['QUALIFIED_BUILD_SHA'] and prior['deployment']==os.environ['EXPECTED_DEPLOYMENT']
+          (out/'input-provenance.json').write_text(json.dumps({'complete':True,'run':os.environ['INPUT_RUN_ID'],'operator':os.environ['INPUT_OPERATOR_SHA'],'artifact':os.environ['INPUT_ARTIFACT_ID'],'zipSha256':os.environ['INPUT_ZIP_SHA256'],'manifestFiles':len(manifest)},indent=2)+'\n')
+          PY
+      - name: Hold exact published source and qualified generated patch
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "$SOURCE_SHA" > "$READBACK_OUT/source-fetch.log" 2>&1
+          git fetch --no-tags --depth=1 origin "$QUALIFIED_BUILD_SHA" >> "$READBACK_OUT/source-fetch.log" 2>&1
+          git diff --exit-code "$SOURCE_SHA" HEAD -- src scripts public supabase index.html package.json package-lock.json vitest.config.ts > "$READBACK_OUT/published-source-hold.log"
+          git diff --exit-code "$QUALIFIED_BUILD_SHA" "$SOURCE_SHA" -- src scripts public supabase index.html package.json package-lock.json vitest.config.ts ':!public/privacy/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' > "$READBACK_OUT/qualified-source-hold.log"
+          qualified_input="$READBACK_OUT/input";if test "$OPERATOR_MODE" = readback;then qualified_input="$READBACK_OUT/input/input";fi
+          test -f "$qualified_input/generated.patch" && test ! -s "$qualified_input/generated.patch"
+          test -f "$qualified_input/generated-files.txt" && test ! -s "$qualified_input/generated-files.txt"
+          sha256sum "$qualified_input/generated.patch" "$qualified_input/generated-files.txt" > "$READBACK_OUT/qualified-fixed-point.sha256"
+          git diff --binary "$QUALIFIED_BUILD_SHA" "$SOURCE_SHA" -- public scripts/data/lastmod.json > "$READBACK_OUT/adopted-generated.patch"
+          cmp "$qualified_input/generated.patch" "$READBACK_OUT/adopted-generated.patch" > "$READBACK_OUT/qualified-generated-patch-hold.log"
+          sha256sum .github/workflows/legal-ai-privacy-public-readback.yml scripts/auditLive.mjs scripts/lib/liveIndexability.mjs src/lib/consentPreferences.ts src/lib/consentedScripts.ts package.json package-lock.json public/sitemap.xml > "$READBACK_OUT/source-before.sha256"
+      - name: Isolated pinned request and parser tools without an app build or browser installation
+        run: |
+          set -euo pipefail
+          tools="$RUNNER_TEMP/analytics1445-public-tools"
+          npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 jsdom@20.0.3 es-module-lexer@1.7.0 acorn@8.15.0 > "$READBACK_OUT/tooling.log" 2>&1
+          test ! -e node_modules;mkdir node_modules
+          for package in playwright playwright-core jsdom;do ln -s "$tools/node_modules/$package" "node_modules/$package";done
+          echo "NODE_PATH=$tools/node_modules" >> "$GITHUB_ENV"
+      - name: Narrow the pinned historical public guard without editing it
+        run: |
+          set -euo pipefail
+          node <<'JS'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');const hash=body=>createHash('sha256').update(body).digest('hex'),out=process.env.READBACK_OUT;
+          for(const [file,pin] of Object.entries({'scripts/auditLive.mjs':'26c387c01ba5cb2a993bf5205228d7b451770eed1c4836d052574c9dc5e3f2de','scripts/lib/liveIndexability.mjs':'133365fa307e7548b4367508a91d2629af24d6cca207e127df294c1a3e23ac40'})){const body=fs.readFileSync(file);assert.equal(hash(body),pin);assert.throws(()=>assert.equal(hash(Buffer.concat([body,Buffer.from('\n')])),pin));}
+          const source=fs.readFileSync('.github/workflows/legal-ai-privacy-public-readback.yml','utf8'),pin='37d187d3bc4659ebfdda5d010fb157972c4c8e797b4bab2b3fc27d20ddfe15cb';assert.equal(hash(source),pin);assert.throws(()=>assert.equal(hash(source+'\n'),pin));
+          const start='          cat > "$READBACK_OUT/read-only.cjs" <<\'JS\'\n',end='\n          JS\n';assert.equal(source.split(start).length,2);const rest=source.split(start)[1],finish=rest.indexOf(end);assert(finish>0);let guard=rest.slice(0,finish).replace(/^          /gm,'');assert(guard.trimEnd().endsWith('module.exports = { ORIGIN, checkedURL };'));
+          const from=guard.indexOf('const paths = new Set('),to=guard.indexOf('function checkedURL(');assert(from>=0&&to>from&&guard.slice(from,to).includes("addPublic('public')"));
+          const sitemap=fs.readFileSync('public/sitemap.xml','utf8');const routes=[...new Set([...sitemap.matchAll(/<loc>https?:\/\/[^/]+([^<]*)<\/loc>/g)].map(m=>(m[1]||'/').replace(/\/$/,'')||'/'))].filter(route=>route!=='/');const count=Math.min(24,routes.length),sample=Array.from({length:count},(_,i)=>routes[Math.floor(i*routes.length/count)]);assert.equal(count,24);assert(sample.every(route=>/^\/(?:[a-z0-9-]+\/)*[a-z0-9-]+$/.test(route)));const pages=[...new Set(['/', '/privacy',...(process.env.OPERATOR_MODE==='readback'?sample:[])])];assert(!pages.includes('/__analytics1445_unlisted'));
+          guard=guard.slice(0,from)+'const paths = new Set('+JSON.stringify(pages)+');\nconst allowedAssets = () => new Set(JSON.parse(fs.readFileSync(path.join(out, "allowed-assets.json"), "utf8")));\n'+guard.slice(to);
+          const assetLine=guard.split('\n').filter(line=>line.trim().startsWith('const asset = '));assert.equal(assetLine.length,1);guard=guard.replace(assetLine[0],'  const asset = allowedAssets().has(url.pathname);');
+          const requestLine='      const response = await native(input, { ...options, maxRedirects: 0, maxRetries: 0 });';assert.equal(guard.split(requestLine).length,2);guard=guard.replace(requestLine,'      const fresh = checkedURL(typeof input === "string" || input instanceof URL ? input : input.url(), method);\n      fresh.searchParams.set("analytics1445_public_audit", process.env.GITHUB_RUN_ID + "." + process.env.GITHUB_RUN_ATTEMPT);\n      const response = await native(fresh.href, { ...options, maxRedirects: 0, maxRetries: 0 });\n      const header = response.headers()["x-deployment-id"];\n      if (!fresh.pathname.startsWith("/assets/") || header) { const uuid = "[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}"; const match = String(header).match(new RegExp("^("+uuid+")$|^psr2\\\\.("+uuid+")\\\\.[0-9]{10}\\\\.[A-Za-z0-9_-]{43}$", "i")); if (!match || (match[1] || match[2]).toLowerCase() !== process.env.EXPECTED_DEPLOYMENT) throw new Error("Exact deployment header required"); }');
+          const assets=process.env.OPERATOR_MODE==='intake'?[process.env.OBSERVED_ENTRY]:[...new Set(Object.values(JSON.parse(process.env.ASSET_PINS_JSON)).map(row=>row.path))];fs.writeFileSync(out+'/allowed-assets.json',JSON.stringify(assets));fs.writeFileSync(out+'/audit-allowed-pages.json',JSON.stringify({audited:['/','/privacy'],chromeSample:process.env.OPERATOR_MODE==='readback'?sample:[],allowed:pages},null,2));fs.writeFileSync(out+'/read-only.cjs',guard);fs.writeFileSync(out+'/preparation.json',JSON.stringify({complete:true,guardSourceSha256:pin,narrowedGuardSha256:hash(guard),changedGuardRejected:1,unchangedAuditPinsHeld:2,source:process.env.SOURCE_SHA,qualified:process.env.QUALIFIED_BUILD_SHA},null,2));
+          JS
+      - name: Read fixed pages and source reachable status assets with strict diagnostics retained
+        run: |
+          set -euo pipefail
+          cat > "$READBACK_OUT/operator.cjs" <<'JS'
+          // Private operator template. Copied into the workflow artifact directory, never app code.
+          const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict');
+          const { createHash } = require('node:crypto');
+          const { spawnSync } = require('node:child_process');
+          const { request } = require('playwright-core'), { JSDOM } = require('jsdom');
+          const lexer = require('es-module-lexer'), acorn = require('acorn');
+          const { ORIGIN, checkedURL } = require('./read-only.cjs');
+          const out = process.env.READBACK_OUT, mode = process.env.OPERATOR_MODE;
+          const hash = value => createHash('sha256').update(value).digest('hex');
+          const rolesRequired = ['cookie', 'entry', 'privacy'];
+          const save = (name, value) => fs.writeFileSync(path.join(out, name), typeof value === 'string' || Buffer.isBuffer(value) ? value : JSON.stringify(value, null, 2) + '\n');
+          const report = { complete: false, mode, diagnosticOnly: mode === 'intake', source: process.env.SOURCE_SHA, qualified: process.env.QUALIFIED_BUILD_SHA, operator: process.env.GITHUB_SHA, run: process.env.GITHUB_RUN_ID, deployment: process.env.EXPECTED_DEPLOYMENT, pages: [], targets: [], imports: [], controls: {}, scope: 'Published source, bounded renderer semantics and exact observed assets. Whole CI binary equality is not asserted.' };
+          const persist = () => save('readback.json', report);
+          function walk(node, visit) { if (!node || typeof node !== 'object') return; if (typeof node.type === 'string') visit(node); for (const value of Object.values(node)) if (Array.isArray(value)) value.forEach(child => walk(child, visit)); else if (value && typeof value === 'object') walk(value, visit); }
+          const parse = source => acorn.parse(source, { ecmaVersion: 'latest', sourceType: 'module', allowHashBang: true });
+          const prop = (object, name) => object?.properties?.find(row => row.type === 'Property' && !row.computed && (row.key.name ?? row.key.value) === name)?.value;
+          function jsxCalls(root) { const result = []; walk(root, node => { if (node.type === 'CallExpression' && node.arguments[0]?.type === 'Literal' && typeof node.arguments[0].value === 'string' && node.arguments[1]?.type === 'ObjectExpression') result.push(node); }); return result; }
+          function text(root) { const values = []; walk(root, node => { if (node.type === 'Literal' && typeof node.value === 'string') values.push(node.value); }); return values.join(' ').replace(/\s+/g, ' ').trim(); }
+          function cookieRenderer(source) {
+            const ast = parse(source), calls = jsxCalls(ast);
+            const regions = calls.filter(node => prop(node.arguments[1], 'role')?.value === 'region' && prop(node.arguments[1], 'aria-label')?.value === 'Cookie choices');
+            assert.equal(regions.length, 1, 'COOKIE_REGION_UNIQUE');
+            const nested = jsxCalls(regions[0]);
+            const status = nested.filter(node => prop(node.arguments[1], 'data-analytics-paused-status')?.value === '');
+            assert.equal(status.length, 1, 'STATUS_MARKER_UNIQUE');
+            assert.equal(status[0].arguments[0].value, 'p', 'STATUS_PLAIN_P_REQUIRED');
+            const plainProps = (object, keys) => object?.type === 'ObjectExpression'
+              && object.properties.length === keys.length
+              && object.properties.every(row => row.type === 'Property' && !row.computed && row.kind === 'init' && !row.method && !row.shorthand && keys.includes(row.key.name ?? row.key.value))
+              && new Set(object.properties.map(row => row.key.name ?? row.key.value)).size === keys.length;
+            const props = status[0].arguments[1], children = prop(props, 'children');
+            const strong = children?.elements?.[0], reason = children?.elements?.[1], strongProps = strong?.arguments?.[1];
+            assert(status[0].arguments.length === 2
+              && plainProps(props, ['data-analytics-paused-status', 'children'])
+              && prop(props, 'data-analytics-paused-status')?.type === 'Literal'
+              && children?.type === 'ArrayExpression' && children.elements.length === 2
+              && strong?.type === 'CallExpression' && strong.arguments.length === 2
+              && strong.arguments[0]?.type === 'Literal' && strong.arguments[0].value === 'strong'
+              && plainProps(strongProps, ['children'])
+              && prop(strongProps, 'children')?.type === 'Literal' && prop(strongProps, 'children').value === 'Analytics is paused.'
+              && reason?.type === 'Literal' && typeof reason.value === 'string' && reason.value.trim() === 'Google Analytics is off while we check its privacy settings.'
+              && jsxCalls(status[0]).length === 2, 'STATUS_PLAIN_SHAPE_REQUIRED');
+            const inputs = nested.filter(node => node.arguments[0].value === 'input');
+            assert.equal(inputs.length, 1, 'COOKIE_ONLY_ADVERTISING_INPUT');
+            assert.equal(prop(inputs[0].arguments[1], 'type')?.value, 'checkbox', 'COOKIE_ADVERTISING_CHECKBOX');
+            const labels = nested.filter(node => node.arguments[0].value === 'label');
+            assert.equal(labels.filter(node => /\bAdvertising\b/.test(text(prop(node.arguments[1], 'children')))).length, 1, 'COOKIE_ADVERTISING_LABEL');
+            assert.equal(labels.filter(node => /\bAnalytics\b/.test(text(prop(node.arguments[1], 'children')))).length, 0, 'COOKIE_ANALYTICS_LABEL_REFUSED');
+            return { statusStart: status[0].start, statusEnd: status[0].end, propsStart: props.start, callee: source.slice(status[0].callee.start, status[0].callee.end) };
+          }
+          function cookieControl(source) {
+            const found = cookieRenderer(source), original = source.slice(found.statusStart, found.statusEnd);
+            const replacement = found.callee + '("label",{"data-analytics-paused-status":"",children:[' + found.callee + '("input",{type:"checkbox",checked:false,disabled:true}),"Analytics"]})';
+            const changed = source.slice(0, found.statusStart) + replacement + source.slice(found.statusEnd);
+            assert.notEqual(changed, source); parse(changed);
+            assert.equal(changed.slice(0, found.statusStart) + original + changed.slice(found.statusStart + replacement.length), source);
+            assert.throws(() => cookieRenderer(changed), error => error.name === 'AssertionError' && error.message.startsWith('STATUS_PLAIN_P_REQUIRED'));
+            const handlerAt = found.propsStart + 1, handler = 'onClick:()=>{},';
+            assert.equal(source[found.propsStart], '{');
+            const withHandler = source.slice(0, handlerAt) + handler + source.slice(handlerAt);
+            assert.notEqual(withHandler, source); parse(withHandler);
+            assert.equal(withHandler.slice(0, handlerAt) + withHandler.slice(handlerAt + handler.length), source);
+            assert.throws(() => cookieRenderer(withHandler), error => error.name === 'AssertionError' && error.message.startsWith('STATUS_PLAIN_SHAPE_REQUIRED'));
+            return { originalSha256: hash(source), changedSha256: hash(changed), occurrences: 1, wholeInverseExact: true, parserAcceptedFault: true, rejection: 'STATUS_PLAIN_P_REQUIRED', handler: { changedSha256: hash(withHandler), occurrences: 1, wholeInverseExact: true, parserAcceptedFault: true, rejection: 'STATUS_PLAIN_SHAPE_REQUIRED' } };
+          }
+          function deployment(header) {
+            assert.equal(typeof header, 'string'); const uuid = '[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}';
+            const match = header.match(new RegExp('^(' + uuid + ')$|^psr2\\.(' + uuid + ')\\.[0-9]{10}\\.[A-Za-z0-9_-]{43}$', 'i'));
+            assert(match, 'DEPLOYMENT_FORMAT'); assert.equal((match[1] || match[2]).toLowerCase(), process.env.EXPECTED_DEPLOYMENT, 'DEPLOYMENT_ID');
+          }
+          function raw(html, route) {
+            const dom = new JSDOM(html), doc = dom.window.document;
+            try {
+              assert.deepEqual([...doc.querySelectorAll('link[rel="canonical"]')].map(node => node.href), [ORIGIN + route], 'OWN_CANONICAL');
+              const entries = [...doc.querySelectorAll('script[type="module"][src]')].map(node => new URL(node.getAttribute('src'), ORIGIN)).filter(url => /^\/assets\/index-[A-Za-z0-9_-]+\.js$/.test(url.pathname));
+              for (const entry of entries) { assert.equal(entry.origin, ORIGIN, 'ENTRY_OWN_ORIGIN'); assert(!entry.search && !entry.hash, 'ENTRY_NO_QUERY_OR_HASH'); }
+              const boot = [...doc.querySelectorAll('script[src]')].filter(node => node.getAttribute('src') === '/prerender-boot.js' && node.hasAttribute('defer'));
+              if (route === '/') assert.equal(entries.length, 1, 'HOME_ENTRY_UNIQUE');
+              else { assert(entries.length <= 1, 'PRIVACY_ENTRY_AT_MOST_ONE'); if (!entries.length) assert.equal(boot.length, 1, 'PRIVACY_SNAPSHOT_BOOT_REQUIRED'); }
+              for (const node of doc.querySelectorAll('script')) {
+                const src = node.getAttribute('src'); if (src) { const url = new URL(src, ORIGIN); assert(!/(?:^|\.)(?:googletagmanager|google-analytics)\.com$/i.test(url.hostname), 'RAW_GA_LOADER_REFUSED'); }
+                else if (!node.type || /^(?:text|application)\/javascript$|^module$/.test(node.type)) {
+                  const ast = parse(node.textContent); walk(ast, item => { if (item.type === 'CallExpression' && (item.callee.name === 'gtag' || item.callee.property?.name === 'gtag') && ['js', 'config'].includes(item.arguments[0]?.value)) assert.fail('RAW_GA_BOOTSTRAP_REFUSED'); });
+                }
+              }
+              doc.querySelectorAll('script,style,template').forEach(node => node.remove());
+              const words = doc.body.textContent.replace(/\s+/g, ' ').trim();
+              if (route === '/privacy') for (const phrase of ['Analytics is currently paused, and the banner explains why.', 'Analytics stays off while it is paused.', 'Cookie choices shows this paused status.']) assert(words.includes(phrase), 'RAW_PRIVACY_PAUSE_REQUIRED: ' + phrase);
+              return { entry: entries[0]?.pathname ?? null, prerenderBoot: boot.length === 1, readableChars: words.length };
+            } finally { dom.window.close(); }
+          }
+          function rawControl(html) {
+            raw(html, '/privacy'); const phrase = 'Analytics is currently paused, and the banner explains why.';
+            const dom = new JSDOM(html), doc = dom.window.document, walker = doc.createTreeWalker(doc.body, dom.window.NodeFilter.SHOW_TEXT); let found = 0;
+            while (walker.nextNode()) if (!walker.currentNode.parentElement?.closest('script,style,template') && walker.currentNode.nodeValue.includes(phrase)) { found += 1; walker.currentNode.nodeValue = walker.currentNode.nodeValue.replace(phrase, 'CONTROL_REMOVED_READABLE_PAUSE'); }
+            assert.equal(found, 1); doc.body.append(doc.createComment(phrase));
+            const script = doc.createElement('script'); script.type = 'application/json'; script.textContent = JSON.stringify(phrase); doc.body.append(script);
+            const template = doc.createElement('template'); template.textContent = phrase; doc.body.append(template);
+            const changed = dom.serialize(); dom.window.close(); assert.notEqual(changed, html);
+            assert.throws(() => raw(changed, '/privacy'), error => error.name === 'AssertionError' && error.message.startsWith('RAW_PRIVACY_PAUSE_REQUIRED'));
+            return { originalSha256: hash(html), changedSha256: hash(changed), realTextChanged: 1, inertShadowRejected: true };
+          }
+          async function main() {
+            await lexer.init;
+            const sourcePins = { 'src/lib/consentPreferences.ts': 'a7f50b82c4ca1c757ec98b53e30688b91b160e0b3216f0b3ec0b9ee3576ed124', 'src/lib/consentedScripts.ts': '8106f28dcd5faa8546de50e304af41add45b4fd43a15ccaf009dac809ab6be50' };
+            for (const [file, sha] of Object.entries(sourcePins)) { const body = fs.readFileSync(file); assert.equal(hash(body), sha); assert.throws(() => assert.equal(hash(Buffer.concat([body, Buffer.from('\n')])), sha)); }
+            const strip = value => value.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+            assert.match(strip(fs.readFileSync('src/lib/consentPreferences.ts', 'utf8')), /export const ANALYTICS_READY:\s*boolean\s*=\s*false;/);
+            assert.match(strip(fs.readFileSync('src/lib/consentedScripts.ts', 'utf8')), /export function loadAnalytics\(\): void \{\}/);
+            report.sourceFlags = { sourcePins, analyticsReady: false, loadAnalyticsEmpty: true, changedSourceRejected: 2, scope: 'Exact published source hold, no invented minified variable identity' };
+            const signed = 'psr2.' + process.env.EXPECTED_DEPLOYMENT + '.1793200847.' + 'A'.repeat(43); deployment(signed); deployment(process.env.EXPECTED_DEPLOYMENT);
+            for (const changed of [signed.replace('psr2.', 'other.'), signed.slice(0, -1), signed.replace(process.env.EXPECTED_DEPLOYMENT, '00000000-0000-0000-0000-000000000000')]) { assert.notEqual(changed, signed); assert.throws(() => deployment(changed)); }
+            const refused = [[ORIGIN + '/', 'POST'], ['https://example.com/', 'GET'], [ORIGIN + '/functions/v1/account-privacy', 'GET'], ['https://name:password@douknowball.com/', 'GET'], [ORIGIN + '/__analytics1445_unlisted', 'GET'], [ORIGIN + '/assets/unlisted.js', 'GET']];
+            for (const [url, method] of refused) assert.throws(() => checkedURL(url, method));
+            report.controls.transportRejected = 6; report.controls.deploymentRejected = 3;
+            const api = await request.newContext({ extraHTTPHeaders: { 'User-Agent': 'DoUKnowBall analytics status publication readback' } });
+            async function read(route, filename, method = 'get') {
+              checkedURL(ORIGIN + route, method.toUpperCase());
+              const response = await api[method](ORIGIN + route + '?analytics1445=' + process.env.GITHUB_RUN_ID + '.' + process.env.GITHUB_RUN_ATTEMPT, { maxRedirects: 0, timeout: 30000 });
+              assert.equal(response.status(), 200, 'HTTP_200: ' + route); const headers = response.headers(); delete headers['set-cookie'];
+              if (!route.startsWith('/assets/') || headers['x-deployment-id']) deployment(headers['x-deployment-id']);
+              save(filename + '.headers.json', headers); const body = method === 'get' ? await response.body() : Buffer.alloc(0); if (method === 'get') save(filename, body); return body;
+            }
+            try {
+              const pages = new Map();
+              for (const route of ['/', '/privacy']) { const file = 'page-' + (route.slice(1) || 'home') + '.html', body = await read(route, file); await read(route, file + '.head', 'head'); const observed = raw(body.toString(), route); pages.set(route, { body, observed }); report.pages.push({ route, status: 200, ...observed, sha256: hash(body) }); persist(); }
+              report.controls.rawPrivacy = rawControl(pages.get('/privacy').body.toString());
+              let pins, bodies;
+              if (mode === 'intake') {
+                const dist = path.join(out, 'input-dist'), files = fs.readdirSync(path.join(dist, 'assets')).filter(file => file.endsWith('.js'));
+                const source = new Map(files.map(file => ['/assets/' + file, fs.readFileSync(path.join(dist, 'assets', file), 'utf8')]));
+                const local = value => { const url = new URL(value, ORIGIN + '/assets/'); assert.equal(url.origin, ORIGIN); assert(!url.search && !url.hash && /^\/assets\/[A-Za-z0-9_.-]+\.js$/.test(url.pathname)); return url.pathname; };
+                const imports = value => lexer.parse(value)[0].filter(row => typeof row.n === 'string' && /\.js$/.test(row.n)).map(row => local(row.n));
+                const graph = new Map([...source].map(([file, value]) => [file, imports(value).filter(child => source.has(child))]));
+                const qualifiedHome = raw(fs.readFileSync(path.join(dist, 'index.html'), 'utf8'), '/'), entry = qualifiedHome.entry;
+                const reachable = new Set(), queue = [entry]; while (queue.length) { const at = queue.shift(); if (reachable.has(at)) continue; reachable.add(at); queue.push(...(graph.get(at) || [])); }
+                const unique = values => { const distinct = [...new Set(values)]; assert.equal(distinct.length, 1); return distinct[0]; };
+                const qualified = { entry, cookie: unique([...reachable].filter(file => source.get(file)?.includes('data-analytics-paused-status'))), privacy: unique([...reachable].filter(file => source.get(file)?.includes('Cookie choices shows this paused status.'))) };
+                cookieRenderer(source.get(qualified.cookie));
+                const routeTo = target => { const todo = [[entry]], seen = new Set(); while (todo.length) { const route = todo.shift(), at = route.at(-1); if (at === target) return route; if (seen.has(at)) continue; seen.add(at); for (const next of graph.get(at) || []) todo.push([...route, next]); } assert.fail('QUALIFIED_ROLE_UNREACHABLE'); };
+                const routes = Object.fromEntries(Object.entries(qualified).map(([role, file]) => [role, routeTo(file)])), needed = new Set(Object.values(routes).flat()); assert(needed.size <= 16);
+                const observedEntry = process.env.OBSERVED_ENTRY; assert.equal(pages.get('/').observed.entry, observedEntry); if (pages.get('/privacy').observed.entry) assert.equal(pages.get('/privacy').observed.entry, observedEntry);
+                const keyOf = file => { const match = /^(.+)-[A-Za-z0-9_-]{8}\.js$/.exec(path.posix.basename(file)); assert(match); return match[1]; };
+                const allowed = new Set([observedEntry]), mapping = new Map([[entry, observedEntry]]); bodies = new Map();
+                const fetchAsset = async (old, live) => { if (bodies.has(old)) { assert.equal(mapping.get(old), live); return; } assert(needed.has(old) && allowed.has(live)); assert.equal(keyOf(old), keyOf(live)); const liveFile = 'live-' + path.posix.basename(live), qualifiedFile = 'qualified-' + path.posix.basename(old), rawDiff = 'raw-diff-' + path.posix.basename(old) + '.patch'; const body = await read(live, liveFile); save(qualifiedFile, source.get(old)); const rawEqual = hash(body) === hash(source.get(old)); const diff = spawnSync('diff', ['-u', path.join(out, qualifiedFile), path.join(out, liveFile)], { encoding: 'utf8', timeout: 10000, maxBuffer: 20 * 1024 * 1024 }); assert(!diff.error && [0, 1].includes(diff.status), 'RAW_DIFF_COMMAND_COMPLETED'); assert.equal(diff.status === 0, rawEqual); save(rawDiff, diff.stdout); save(rawDiff + '.stderr', diff.stderr); report.targets.push({ qualified: old, live, qualifiedSha256: hash(source.get(old)), liveSha256: hash(body), rawEqual, rawDiff, rawDiffExit: diff.status, bytes: body.length }); mapping.set(old, live); bodies.set(old, body.toString()); persist(); };
+                await fetchAsset(entry, observedEntry);
+                for (const route of Object.values(routes)) for (let index = 1; index < route.length; index += 1) { const parent = route[index - 1], child = route[index], live = unique(imports(bodies.get(parent)).filter(file => keyOf(file) === keyOf(child))); assert(graph.get(parent).includes(child)); allowed.add(live); assert(allowed.size <= needed.size); save('allowed-assets.json', [...allowed]); report.imports.push({ qualifiedParent: parent, liveParent: mapping.get(parent), qualifiedChild: child, liveChild: live }); await fetchAsset(child, live); }
+                pins = Object.fromEntries(Object.entries(qualified).map(([role, file]) => [role, { path: mapping.get(file), sha256: hash(bodies.get(file)) }]));
+                report.qualifiedPaths = routes; report.strictComparison = { entryEqual: entry === observedEntry, allNeededBytesEqual: report.targets.every(row => row.rawEqual), qualification: 'Actual strict comparison result retained, diagnostic only', exit: 0 };
+                try { assert(report.strictComparison.entryEqual && report.strictComparison.allNeededBytesEqual, 'STRICT_QUALIFIED_ASSET_BYTES'); save('strict-comparison.log', 'STRICT_QUALIFIED_ASSET_BYTES: exact entry and all necessary raw bytes match.\n'); }
+                catch (error) { assert.equal(error.name, 'AssertionError'); assert(error.message.startsWith('STRICT_QUALIFIED_ASSET_BYTES')); report.strictComparison.exit = 1; report.strictComparison.error = { name: error.name, message: error.message }; save('strict-comparison.log', error.stack + '\n'); }
+                save('strict-comparison.exit', String(report.strictComparison.exit) + '\n');
+                report.controls.cookie = cookieControl(bodies.get(qualified.cookie));
+                save('observed-asset-pins.json', pins); report.assetPins = pins; report.assetPinsSerializedSha256 = hash(JSON.stringify(pins));
+              } else {
+                const prior = JSON.parse(fs.readFileSync(path.join(out, 'input', 'readback.json'), 'utf8'));
+                assert.equal(prior.complete, true); assert.equal(prior.mode, 'intake'); assert.equal(prior.diagnosticOnly, true); assert.equal(prior.source, process.env.SOURCE_SHA); assert.equal(prior.qualified, process.env.QUALIFIED_BUILD_SHA); assert.equal(prior.operator, process.env.INPUT_OPERATOR_SHA); assert.equal(String(prior.run), process.env.INPUT_RUN_ID); assert.equal(prior.deployment, process.env.EXPECTED_DEPLOYMENT);
+                assert([0, 1].includes(prior.strictComparison.exit)); assert.equal(fs.readFileSync(path.join(out, 'input', 'strict-comparison.exit'), 'utf8').trim(), String(prior.strictComparison.exit));
+                if (prior.strictComparison.exit === 0) assert(prior.strictComparison.entryEqual && prior.strictComparison.allNeededBytesEqual);
+                else { assert.equal(prior.strictComparison.error.name, 'AssertionError'); assert(prior.strictComparison.error.message.startsWith('STRICT_QUALIFIED_ASSET_BYTES')); }
+                pins = JSON.parse(process.env.ASSET_PINS_JSON); assert.deepEqual(pins, prior.assetPins); assert.equal(hash(process.env.ASSET_PINS_JSON), process.env.ASSET_PINS_SHA256); assert.equal(hash(JSON.stringify(pins)), prior.assetPinsSerializedSha256);
+                assert.deepEqual(Object.keys(pins).sort(), rolesRequired); assert.equal(pages.get('/').observed.entry, pins.entry.path); if (pages.get('/privacy').observed.entry) assert.equal(pages.get('/privacy').observed.entry, pins.entry.path);
+                bodies = new Map(); for (const row of Object.values(pins)) if (!bodies.has(row.path)) { const body = await read(row.path, path.posix.basename(row.path)); assert.equal(hash(body), row.sha256, 'ASSET_PIN_REQUIRED'); const changed = Buffer.concat([body, Buffer.from('\n//CONTROL_CHANGED')]); assert.notEqual(hash(changed), hash(body)); assert.throws(() => assert.equal(hash(changed), row.sha256)); bodies.set(row.path, body.toString()); report.targets.push({ path: row.path, sha256: hash(body), bytes: body.length }); }
+                report.controls.changedAssetRejected = bodies.size; report.controls.cookie = cookieControl(bodies.get(pins.cookie.path)); report.assetPins = pins; report.retainedStrictComparison = prior.strictComparison;
+                report.observedPinsProvenance = { run: process.env.INPUT_RUN_ID, operator: process.env.INPUT_OPERATOR_SHA, artifact: process.env.INPUT_ARTIFACT_ID, zipSha256: process.env.INPUT_ZIP_SHA256 };
+              }
+              assert.equal(report.pages.length, 2); report.complete = true;
+              console.log(mode === 'intake' ? 'ANALYTICS1445 INTAKE COMPLETE: strict outcomes and observed pins retained, diagnostic only.' : 'ANALYTICS1445 PUBLIC READBACK COMPLETE: two raw pages, exact observed assets and bounded status semantics, GET/HEAD only.');
+            } catch (error) { report.error = { name: error.name, message: error.message, stack: error.stack }; throw error; }
+            finally { await api.dispose(); persist(); }
+          }
+          main().catch(error => { report.error = { name: error.name, message: error.message, stack: error.stack }; persist(); console.error(error); process.exitCode = 1; });
+          JS
+          export NODE_OPTIONS="--require=$PWD/$READBACK_OUT/read-only.cjs"
+          status=0;timeout --signal=TERM --kill-after=15s 4m node "$READBACK_OUT/operator.cjs" > "$READBACK_OUT/operator.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/operator.exit";cat "$READBACK_OUT/operator.log";test "$status" -eq 0
+          node -e 'const fs=require("node:fs"),assert=require("node:assert/strict"),r=JSON.parse(fs.readFileSync(process.env.READBACK_OUT+"/readback.json"));assert.equal(r.complete,true);assert.equal(r.pages.length,2);assert.equal(r.mode,process.env.OPERATOR_MODE);assert.equal(r.source,process.env.SOURCE_SHA);assert.equal(r.deployment,process.env.EXPECTED_DEPLOYMENT)'
+      - name: Unchanged live audit and its effective thin control over the actual24 page sample
+        if: env.OPERATOR_MODE == 'readback'
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/$READBACK_OUT/read-only.cjs"
+          status=0;timeout --signal=TERM --kill-after=15s 3m node scripts/auditLive.mjs / /privacy > "$READBACK_OUT/audit-live.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/audit-live.exit";cat "$READBACK_OUT/audit-live.log";test "$status" -eq 0
+          grep -Eq 'shared chrome measured at [0-9]+ readable characters over 24 pages' "$READBACK_OUT/audit-live.log";! grep -Fq 'thin rule skipped' "$READBACK_OUT/audit-live.log";grep -Fq '2 of 2 answered cleanly, 0 did not.' "$READBACK_OUT/audit-live.log"
+          status=0;AUDIT_CONTROL=thin timeout --signal=TERM --kill-after=15s 3m node scripts/auditLive.mjs / /privacy > "$READBACK_OUT/audit-thin-control.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/audit-thin-control.exit";cat "$READBACK_OUT/audit-thin-control.log";test "$status" -eq 1
+          grep -Fq 'Planting' "$READBACK_OUT/audit-thin-control.log";grep -Fq '(CONTROL plant)' "$READBACK_OUT/audit-thin-control.log";grep -Fq '1 of 2 answered cleanly, 1 did not.' "$READBACK_OUT/audit-thin-control.log"
+      - name: Preserve all hold outcomes and a complete manifest before final exit
+        if: always()
+        run: |
+          set -euo pipefail
+          failed=0
+          status=0;sha256sum --check "$READBACK_OUT/source-before.sha256" > "$READBACK_OUT/source-hold.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/source-hold.exit";test "$status" -eq 0 || failed=1
+          status=0;git diff --exit-code HEAD -- src public scripts supabase index.html package.json package-lock.json vitest.config.ts .github > "$READBACK_OUT/operator-source-hold.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$READBACK_OUT/operator-source-hold.exit";test "$status" -eq 0 || failed=1
+          printf '%s\n' "$failed" > "$READBACK_OUT/final-holds.exit"
+          (cd "$READBACK_OUT";find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$READBACK_OUT/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: analytics1445-public-intake-${{ github.run_id }}-${{ github.run_attempt }}
+          path: analytics1445-public-intake-artifacts/
+          if-no-files-found: error
+          retention-days: 14
