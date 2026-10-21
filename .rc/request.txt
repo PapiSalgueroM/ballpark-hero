@@ -1,0 +1,8 @@
+#!serial
+carry-head: node .rc/x/review-run-carry.mjs
+m1-nat: node .rc/x/review-run-mut.mjs aiswap && node scripts/simCmMadeUpNations.mjs; s=$?; git checkout -- src; exit $s
+m1-vit: node .rc/x/review-run-mut.mjs aiswap && node_modules/.bin/vitest run src/test/cmMadeUpNations.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+m1-carry: node .rc/x/review-run-mut.mjs aiswap && node .rc/x/review-run-carry.mjs; s=$?; git checkout -- src; exit $s
+m2-nat: node .rc/x/review-run-mut.mjs fasign && node scripts/simCmMadeUpNations.mjs; s=$?; git checkout -- src; exit $s
+m2-vit: node .rc/x/review-run-mut.mjs fasign && node_modules/.bin/vitest run src/test/cmMadeUpNations.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+m2-carry: node .rc/x/review-run-mut.mjs fasign && node .rc/x/review-run-carry.mjs; s=$?; git checkout -- src; exit $s
