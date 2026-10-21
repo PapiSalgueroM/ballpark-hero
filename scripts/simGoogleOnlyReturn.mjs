@@ -55,7 +55,7 @@ const FILES = {
   reset: { rel: 'src/pages/ResetPassword.tsx', env: 'GOOGLE_PAUSED_RESET' },
   lib: { rel: 'src/lib/googlePaused.ts', env: 'GOOGLE_PAUSED_LIB' },
 };
-const ROUND_FILES = [...Object.values(FILES).map(f => f.rel), 'src/components/auth/AuthModal.tsx', TEST, 'scripts/simGoogleOnlyReturn.mjs'];
+const ROUND_FILES = [...Object.values(FILES).map(f => f.rel), 'src/components/auth/AuthModal.tsx', 'src/components/layout/AccountMenu.tsx', TEST, 'scripts/simGoogleOnlyReturn.mjs'];
 const TEST_COUNT = 8;
 const DASH = new RegExp('[' + String.fromCharCode(0x2013, 0x2014) + ']');
 
@@ -138,11 +138,11 @@ const CONTROLS = [
   { name: 'providers', why: 'the app_metadata fallback is dropped', red: [4], file: 'lib',
     edit: t => mustReplace(t, '  const providers = user.identities && user.identities.length > 0 ? user.identities.map(i => i.provider) : fromToken;', '  const providers = (user.identities ?? []).map(i => i.provider);', 'googlePaused.ts') },
   { name: 'menu', why: 'the menu item shows for any signed in player', red: [5], file: 'header',
-    edit: t => mustReplace(t, '!OAUTH_PROVIDERS.google && isGoogleOnlyAccount(user) && (', '!OAUTH_PROVIDERS.google && (', 'Header.tsx') },
+    edit: t => mustReplace(t, 'offerPassword={!OAUTH_PROVIDERS.google && isGoogleOnlyAccount(user)}', 'offerPassword={!OAUTH_PROVIDERS.google}', 'Header.tsx') },
   { name: 'reset', why: 'the reset page stops marking the account', red: [6], file: 'reset',
     edit: t => mustReplace(t, '{ password, data: { [PASSWORD_SET_FLAG]: true } }', '{ password }', 'ResetPassword.tsx') },
   { name: 'gate', why: 'the menu item ignores the Google flag', red: [7], file: 'header',
-    edit: t => mustReplace(t, '!OAUTH_PROVIDERS.google && isGoogleOnlyAccount(user) && (', 'isGoogleOnlyAccount(user) && (', 'Header.tsx') },
+    edit: t => mustReplace(t, 'offerPassword={!OAUTH_PROVIDERS.google && isGoogleOnlyAccount(user)}', 'offerPassword={isGoogleOnlyAccount(user)}', 'Header.tsx') },
   { name: 'reauth', why: 'the reset page never offers the email link', red: [8], file: 'reset',
     edit: t => mustReplace(t, '      setLinkInstead(reauth);', '      setLinkInstead(false);', 'ResetPassword.tsx') },
 ];

@@ -29,6 +29,8 @@
      script append;
      SIM_LEGAL_CONTROL=globalads injects an executable global AdSense loader
      into the template.
+     SIM_LEGAL_CONTROL=adchoice, adinit, adslot, or adloader removes one
+     advertising-purpose gate from the reader, initialization, slot, or loader.
    Every mutation must find exactly one target and must cause exactly its own
    named failure.
 
@@ -148,9 +150,21 @@ console.log('4) every external host the code talks to is disclosed in the privac
 
 console.log('5) the ads claims match the ads code');
 {
-  const adBanner = stripComments(read('src/components/ads/AdBanner.tsx'));
+  let adBanner = stripComments(read('src/components/ads/AdBanner.tsx'));
   let consented = stripComments(read('src/lib/consentedScripts.ts'));
   let template = stripComments(read('index.html'));
+  if (CONTROL === 'adchoice') {
+    adBanner = replaceExactlyOnce(adBanner, 'return getEffectiveConsent().advertising;', 'return true;', 'advertising choice control');
+  }
+  if (CONTROL === 'adinit') {
+    adBanner = replaceExactlyOnce(adBanner, "if (!consent) { pushed.current = false; setState('unknown'); return; }", '', 'advertising initialization control');
+  }
+  if (CONTROL === 'adslot') {
+    adBanner = replaceExactlyOnce(adBanner, 'if (!consent) return null;', '', 'advertising slot control');
+  }
+  if (CONTROL === 'adloader') {
+    consented = replaceExactlyOnce(consented, 'if (!getEffectiveConsent().advertising) return false;', '', 'advertising loader control');
+  }
   if (CONTROL === 'npa') {
     consented = replaceExactlyOnce(
       consented,
@@ -205,8 +219,18 @@ document.head.appendChild(adScript);
   if (/adsbygoogle\.js|pagead2\.googlesyndication\.com|requestNonPersonalizedAds/.test(template)) {
     fail('index.html executable code globally loads AdSense instead of waiting for a deliberate slot');
   }
-  if (!/consent !== 'accepted'/.test(adBanner) && !/consent === 'accepted'/.test(adBanner)) {
-    fail('AdBanner no longer gates explicitly on accepted consent');
+  const choiceReader = /function readStoredConsent\(\): boolean \{\s*return getEffectiveConsent\(\)\.advertising;\s*\}/.test(adBanner)
+    && /import\s*\{[^}]*\bgetEffectiveConsent\b[^}]*\}\s*from ['"]@\/lib\/consentPreferences['"]/.test(adBanner)
+    && /useState<boolean>\(readStoredConsent\)/.test(adBanner);
+  const initializationGate = adBanner.indexOf("if (!consent) { pushed.current = false; setState('unknown'); return; }");
+  const initialization = adBanner.indexOf('if (!loadAdSense())');
+  const slotGate = adBanner.indexOf('if (!consent) return null;');
+  const slot = adBanner.indexOf('data-dukb-manual-ad=');
+  const loaderGate = /export function loadAdSense\(\): boolean \{\s*try \{\s*if \(!getEffectiveConsent\(\)\.advertising\) return false;/.test(consented)
+    && /import\s*\{[^}]*\bgetEffectiveConsent\b[^}]*\}\s*from ['"]@\/lib\/consentPreferences['"]/.test(consented);
+  if (!choiceReader || initializationGate < 0 || initializationGate >= initialization
+    || slotGate < 0 || slotGate >= slot || !loaderGate) {
+    fail('AdBanner and its loader no longer gate explicitly on the effective advertising choice');
   }
   /* The pages must not promise personalization the code refuses. The Google
      mandated Section 5 sentences describe what GOOGLE's cookies can do and
@@ -225,6 +249,10 @@ if (CONTROL) {
     npa: 'the slot-driven AdSense loader no longer requests non personalized treatment',
     npaorder: 'the non personalized flag is not assigned before the AdSense script is appended',
     globalads: 'index.html executable code globally loads AdSense instead of waiting for a deliberate slot',
+    adchoice: 'AdBanner and its loader no longer gate explicitly on the effective advertising choice',
+    adinit: 'AdBanner and its loader no longer gate explicitly on the effective advertising choice',
+    adslot: 'AdBanner and its loader no longer gate explicitly on the effective advertising choice',
+    adloader: 'AdBanner and its loader no longer gate explicitly on the effective advertising choice',
   }[CONTROL];
   if (!expected) {
     console.error(`\ncontrol run: unknown SIM_LEGAL_CONTROL=${CONTROL}`);

@@ -1,0 +1,64 @@
+{
+  "files": [
+    {
+      "name": "guest-import",
+      "source": "src/components/layout/Header.tsx",
+      "copy": "src/test/controls/headerAccountLoading1442/guest-import.tsx",
+      "alias": "@/components/layout/Header",
+      "old": "if (!user || AccountMenu || accountMenuFailed) return;",
+      "new": "if (AccountMenu || accountMenuFailed) return;",
+      "test": "src/test/headerAccountLoading1442.test.tsx",
+      "testName": "does not import the member menu for a guest",
+      "sourceSha256": "245e4a9b90851de13f90442786d24be06c9a2da5f939b1bfcc21e170b6ce4639",
+      "copySha256": "59606e0f906298f0aef3cae4cae1fb96d694bd6a230c4e286fe5d37910d4254d"
+    },
+    {
+      "name": "pending-enabled",
+      "source": "src/components/layout/Header.tsx",
+      "copy": "src/test/controls/headerAccountLoading1442/pending-enabled.tsx",
+      "alias": "@/components/layout/Header",
+      "old": "                      disabled\n",
+      "new": "",
+      "test": "src/test/headerAccountLoading1442.test.tsx",
+      "testName": "keeps the account button disabled and announces the pending menu",
+      "sourceSha256": "245e4a9b90851de13f90442786d24be06c9a2da5f939b1bfcc21e170b6ce4639",
+      "copySha256": "c4e9fa2506c7a5fca4869c08e137fbd87698b88ddea332595d4fe5a15962c74e"
+    },
+    {
+      "name": "missing-alert",
+      "source": "src/components/layout/Header.tsx",
+      "copy": "src/test/controls/headerAccountLoading1442/missing-alert.tsx",
+      "alias": "@/components/layout/Header",
+      "old": "role=\"alert\"",
+      "new": "role=\"status\"",
+      "test": "src/test/headerAccountLoading1442.test.tsx",
+      "testName": "contains an import failure in a local alert",
+      "sourceSha256": "245e4a9b90851de13f90442786d24be06c9a2da5f939b1bfcc21e170b6ce4639",
+      "copySha256": "60e1be94c4a5e29ceb02add78b1a1c739717f0a77ed02b6f5c87de327386b304"
+    },
+    {
+      "name": "lost-signout",
+      "source": "src/components/layout/Header.tsx",
+      "copy": "src/test/controls/headerAccountLoading1442/lost-signout.tsx",
+      "alias": "@/components/layout/Header",
+      "old": "onClick={handleSignOut}>Log Out</Button>",
+      "new": "onClick={() => {}}>Log Out</Button>",
+      "test": "src/test/headerAccountLoading1442.test.tsx",
+      "testName": "keeps Log Out working when the member chunk fails",
+      "sourceSha256": "245e4a9b90851de13f90442786d24be06c9a2da5f939b1bfcc21e170b6ce4639",
+      "copySha256": "e8855821f6cda84c9f1f67c9752abb021aba694bcc19cc8c65c4dbd90db95bbe"
+    },
+    {
+      "name": "wrong-initial",
+      "source": "src/components/layout/Header.tsx",
+      "copy": "src/test/controls/headerAccountLoading1442/wrong-initial.tsx",
+      "alias": "@/components/layout/Header",
+      "old": "initial={getUserInitial()}",
+      "new": "initial=\"?\"",
+      "test": "src/test/headerAccountLoading1442.test.tsx",
+      "testName": "passes the current identity and account actions to the loaded menu",
+      "sourceSha256": "245e4a9b90851de13f90442786d24be06c9a2da5f939b1bfcc21e170b6ce4639",
+      "copySha256": "72c23d388b083ac6990e5b7cee0a0e3dd6ffc8cca6bba0e6cd62524ae57a5a09"
+    }
+  ]
+}

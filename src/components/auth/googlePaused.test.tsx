@@ -87,8 +87,12 @@ const emailUser = { id: 'u2', email: 'other@example.com', identities: [{ provide
 function renderModal() {
   return render(<MemoryRouter><AuthModal isOpen onClose={vi.fn()} defaultTab="login" /></MemoryRouter>);
 }
-function openAccountMenu() {
-  const trigger = screen.getByRole('button', { name: 'Account menu' });
+async function openAccountMenu() {
+  const trigger = await waitFor(() => {
+    const button = screen.getByRole('button', { name: 'Account menu' });
+    expect(button).toBeEnabled();
+    return button;
+  });
   act(() => {
     fireEvent.pointerDown(trigger, { button: 0, ctrlKey: false, pointerType: 'mouse' });
     fireEvent.keyDown(trigger, { key: 'Enter' });
@@ -160,7 +164,7 @@ describe('Round 610: Google players can get back in while Google is paused', () 
   it('5 the account menu offers a Google-only player the change password page, and nobody else', async () => {
     spies.user = googleOnly;
     const { unmount } = render(<MemoryRouter><Header /></MemoryRouter>);
-    openAccountMenu();
+    await openAccountMenu();
     const item = await waitFor(() => {
       const el = document.querySelector('[data-set-password]');
       expect(el).not.toBeNull();
@@ -174,7 +178,7 @@ describe('Round 610: Google players can get back in while Google is paused', () 
 
     spies.user = emailUser;
     render(<MemoryRouter><Header /></MemoryRouter>);
-    openAccountMenu();
+    await openAccountMenu();
     await screen.findByText('Log Out');
     expect(document.querySelector('[data-set-password]')).toBeNull();
   });
@@ -221,7 +225,7 @@ describe('Round 610: Google players can get back in while Google is paused', () 
 
     spies.user = googleOnly;
     render(<MemoryRouter><Header /></MemoryRouter>);
-    openAccountMenu();
+    await openAccountMenu();
     await screen.findByText('Log Out');
     expect(document.querySelector('[data-set-password]')).toBeNull();
   });

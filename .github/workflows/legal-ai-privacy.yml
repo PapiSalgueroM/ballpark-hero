@@ -269,6 +269,8 @@ jobs:
           node scripts/simConsentWithdrawal1442.mjs 2>&1 | tee legal-privacy-artifacts/consent-controls.log
           node_modules/.bin/vitest run src/test/authModalLoading1442.test.tsx src/test/authModalFocus.test.tsx src/components/auth/AuthModal.google.test.tsx src/components/auth/googlePaused.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/account-unit.log
           node scripts/simAuthModalLoading1442.mjs 2>&1 | tee legal-privacy-artifacts/account-controls.log
+          node_modules/.bin/vitest run src/test/headerAccountLoading1442.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/member-menu-unit.log
+          node scripts/simHeaderAccountLoading1442.mjs 2>&1 | tee legal-privacy-artifacts/member-menu-controls.log
           node_modules/.bin/vitest run src/components/profile/AccountPrivacy.test.tsx src/test/cookieConsentStorage.test.tsx src/test/helpConsentFocus.test.tsx src/test/helpDialogFocus.test.tsx src/test/rulesGateConsentFocus.test.tsx src/test/nbaStatLinePicker.test.tsx src/test/safeStorage.test.ts src/test/safeStorageQuota.test.ts src/test/freshBuildBlockedStorage.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/inherited-unit.log
       - name: Isolated browser and font tooling
         run: |
@@ -316,10 +318,29 @@ jobs:
           server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
           ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
           failed=0
-          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simAuthModalFocus simGoogleIdentity simGoogleOnlyReturn simLoginReturn; do
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simAuthModalFocus simGoogleIdentity simGoogleOnlyReturn simLoginReturn simStaleChunk simStorageWrites simLegalPages; do
             status=0; SIM_OFFLINE_RECEIPT="$out/$method.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
             printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv"
             tail -n 4 "$out/$method.log"; test "$status" -eq 0 || failed=1
+          done
+          for control in consentnosave consentbare consentblocked consentdurable; do
+            status=0; SIM_OFFLINE_RECEIPT="$out/stale-$control.transport" SIM_STALE_CHUNK_CONTROL="$control" node scripts/simStaleChunk.mjs > "$out/stale-$control.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$control" "$status" >> "$out/stale-controls.tsv"
+            tail -n 3 "$out/stale-$control.log"
+            if [[ "$status" != 1 ]] || ! grep -Fq 'section(s) 6' "$out/stale-$control.log"; then failed=1; fi
+          done
+          for control in rawconsent shadowseam seamraw nocatch; do
+            status=0; SIM_OFFLINE_RECEIPT="$out/storage-$control.transport" SIM_STORAGE_WRITES_CONTROL="$control" node scripts/simStorageWrites.mjs > "$out/storage-$control.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$control" "$status" >> "$out/storage-controls.tsv"
+            tail -n 3 "$out/storage-$control.log"
+            if [[ "$status" != 1 ]]; then failed=1; fi
+            if [[ "$control" != nocatch ]] && ! grep -Fq 'control FIRED on the consent writer' "$out/storage-$control.log"; then failed=1; fi
+            if [[ "$control" == nocatch ]] && ! grep -Fq 'below.setItem(k, v)' "$out/storage-$control.log"; then failed=1; fi
+          done
+          for control in strip npa npaorder globalads adchoice adinit adslot adloader; do
+            status=0; SIM_OFFLINE_RECEIPT="$out/legal-$control.transport" SIM_LEGAL_CONTROL="$control" node scripts/simLegalPages.mjs > "$out/legal-$control.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$control" "$status" >> "$out/legal-controls.tsv"
+            tail -n 3 "$out/legal-$control.log"; test "$status" -eq 0 || failed=1
           done
           for control in same-page-consent stale-player-photos fact-clarity script-without-slot noindex-guard slot-before-consent loader-result noindex-ad ad-status-behavior snapshot-loader placeholder-slot missing-slot privacy-npa-bridge delayed-consent analytics-collection; do
             status=0; SIM_OFFLINE_RECEIPT="$out/adsense-$control.transport" SIM_ADSENSE_CONTROL="$control" node scripts/simAdsense.mjs > "$out/adsense-$control.log" 2>&1 || status=$?
