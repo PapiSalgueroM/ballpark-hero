@@ -1,0 +1,2 @@
+quick exit=0 23s | simCmTactics: all green (sections table, styles, balanced)
+singles exit=1 307s | simCmTactics: RED (1 failures: adapt 1)

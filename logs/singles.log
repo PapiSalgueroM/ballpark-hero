@@ -1,0 +1,63 @@
+==> /tmp/f1/log0.txt <==
+    wrote 180 season rows to /tmp/f1/s0.json
+    a shard: fold the shards with FOLD=<dir> to judge them
+simCmTactics: all green (sections fleet)
+
+==> /tmp/f1/log1.txt <==
+    wrote 180 season rows to /tmp/f1/s1.json
+    a shard: fold the shards with FOLD=<dir> to judge them
+simCmTactics: all green (sections fleet)
+
+==> /tmp/f1/log2.txt <==
+    wrote 180 season rows to /tmp/f1/s2.json
+    a shard: fold the shards with FOLD=<dir> to judge them
+simCmTactics: all green (sections fleet)
+
+==> /tmp/f1/log3.txt <==
+    wrote 180 season rows to /tmp/f1/s3.json
+    a shard: fold the shards with FOLD=<dir> to judge them
+simCmTactics: all green (sections fleet)
+
+[fleet] folded 720 season rows from 4 files in /tmp/f1
+
+  expected points a league game against balanced, paired (mid: pooled | block 0 to 3 | block 4 to 7; big; small) and actual points a game (mid, balanced 1.299)
+    press-                       mid +0.82% | +2.66% | -0.91%   big +1.58%   small -8.23%   ppg 1.298   (24 mid seasons)
+    tempo-                       mid -0.23% | -0.11% | -0.34%   big +0.14%   small -8.01%   ppg 1.299   (24 mid seasons)
+    line-                        mid -0.29% | +0.37% | -0.91%   big -0.34%   small -6.99%   ppg 1.281   (24 mid seasons)
+    adapt                        mid -1.37% | +0.91% | -3.51%   big -0.25%   small +1.49%   ppg 1.252   (24 mid seasons)
+    line+                        mid -1.45% | +1.21% | -3.96%   big -1.42%   small -1.54%   ppg 1.248   (24 mid seasons)
+    tempo+                       mid -1.93% | -1.59% | -2.26%   big -0.05%   small +0.44%   ppg 1.240   (24 mid seasons)
+    width-                       mid -2.40% | -0.19% | -4.48%   big -0.35%   small -2.07%   ppg 1.205   (24 mid seasons)
+    width+                       mid -2.91% | -2.65% | -3.16%   big -1.44%   small -4.75%   ppg 1.243   (24 mid seasons)
+    press+                       mid -6.36% | -2.45% | -10.04%   big -3.78%   small -8.69%   ppg 1.154   (24 mid seasons)
+  ok [dominance]: none of 8 fixed sets beats balanced by over +6.00% at a mid table club in either block (top press-)
+  FAIL [adapt]: reading the opponent gains only -1.37% at a mid table club (band +2.00%)
+
+  per match, every competition (balanced first):
+    balanced  poss 49.8  shots 11.367  wonHigh 6.055  crosses 10.902  offsides 1.990  breakC 0.233  wideShare 0.307  fit 80.6  inj 0.250  h2Opp 0.668  myG 1.280  oppG 1.346
+    adapt     poss 54.3  shots 11.783  wonHigh 8.140  crosses 7.252  offsides 3.004  breakC 0.382  wideShare 0.170  fit 77.9  inj 0.292  h2Opp 0.704  myG 1.246  oppG 1.344
+    line+     poss 51.2  shots 11.498  wonHigh 5.933  crosses 11.237  offsides 4.603  breakC 0.484  wideShare 0.290  fit 81.1  inj 0.247  h2Opp 0.706  myG 1.291  oppG 1.423
+    line-     poss 47.6  shots 10.992  wonHigh 6.378  crosses 10.395  offsides 0.805  breakC 0.059  wideShare 0.299  fit 81.1  inj 0.237  h2Opp 0.677  myG 1.212  oppG 1.348
+    press+    poss 52.5  shots 11.269  wonHigh 11.068  crosses 11.374  offsides 1.974  breakC 0.357  wideShare 0.308  fit 75.9  inj 0.319  h2Opp 0.753  myG 1.264  oppG 1.462
+    press-    poss 46.0  shots 11.054  wonHigh 3.308  crosses 10.082  offsides 1.982  breakC 0.252  wideShare 0.299  fit 82.5  inj 0.191  h2Opp 0.647  myG 1.250  oppG 1.303
+    tempo+    poss 44.0  shots 9.964  wonHigh 6.783  crosses 9.621  offsides 1.975  breakC 0.265  wideShare 0.300  fit 80.8  inj 0.240  h2Opp 0.678  myG 1.301  oppG 1.377
+    tempo-    poss 55.2  shots 12.525  wonHigh 5.483  crosses 12.049  offsides 2.010  breakC 0.253  wideShare 0.303  fit 81.0  inj 0.238  h2Opp 0.686  myG 1.230  oppG 1.352
+    width+    poss 49.3  shots 11.303  wonHigh 6.178  crosses 18.318  offsides 1.984  breakC 0.259  wideShare 0.470  fit 80.8  inj 0.231  h2Opp 0.689  myG 1.276  oppG 1.374
+    width-    poss 49.6  shots 11.093  wonHigh 6.144  crosses 5.455  offsides 1.969  breakC 0.254  wideShare 0.128  fit 80.8  inj 0.233  h2Opp 0.681  myG 1.232  oppG 1.350
+  ok [effects]: press+ wonHigh: ratio 1.828 (band 1.4 to Infinity)
+  ok [effects]: press+ fit: diff -4.669 (band -Infinity to -1)
+  ok [effects]: press- wonHigh: ratio 0.546 (band 0 to 0.7)
+  ok [effects]: press- fit: diff 1.890 (band 0.3 to Infinity)
+  ok [effects]: tempo+ poss: diff -5.808 (band -Infinity to -3)
+  ok [effects]: tempo+ shots: ratio 0.877 (band 0 to 0.93)
+  ok [effects]: tempo- poss: diff 5.443 (band 3 to Infinity)
+  ok [effects]: tempo- shots: ratio 1.102 (band 1.07 to Infinity)
+  ok [effects]: width+ crosses: ratio 1.680 (band 1.35 to Infinity)
+  ok [effects]: width+ wideShare: diff 0.163 (band 0.08 to Infinity)
+  ok [effects]: width- crosses: ratio 0.500 (band 0 to 0.7)
+  ok [effects]: width- wideShare: diff -0.179 (band -Infinity to -0.08)
+  ok [effects]: line+ offsides: ratio 2.313 (band 1.7 to Infinity)
+  ok [effects]: line+ breakC: ratio 2.072 (band 1.3 to Infinity)
+  ok [effects]: line- offsides: ratio 0.405 (band 0 to 0.6)
+  ok [effects]: line- breakC: ratio 0.254 (band 0 to 0.75)
+simCmTactics: RED (1 failures: adapt 1)

@@ -1,0 +1,2 @@
+quick: SECTION=table,styles,balanced node scripts/simCmTactics.mjs
+singles: mkdir -p /tmp/f1 && for k in 0 1 2 3; do SECTION=fleet SEEDS=8 SHARD=$k/4 OUT_JSON=/tmp/f1/s$k.json node scripts/simCmTactics.mjs > /tmp/f1/log$k.txt 2>&1 & done; wait; tail -n 3 /tmp/f1/log*.txt; cp /tmp/f1/*.json "$RC_OUT"/ 2>/dev/null; FOLD=/tmp/f1 node scripts/simCmTactics.mjs
