@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/soccerCareerRetirement1519.test.tsx src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerFarewellPage.test.tsx src/test/soccerCareerFarewell.test.ts src/test/scoreShown.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSoccerCareerSaveRecovery: node scripts/simSoccerCareerSaveRecovery.mjs
+simSoccerFarewell: node scripts/simSoccerFarewell.mjs
+simRetirementToManager: node scripts/simRetirementToManager.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+simCareerMoneyAfterRetirement: node scripts/simCareerMoneyAfterRetirement.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
