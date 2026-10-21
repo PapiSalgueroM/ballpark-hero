@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs 2>&1 | grep -E "club-manager|manager-hot-seat|deadline-day|green|RED|FAIL|over" | head -40; exit ${PIPESTATUS[0]}
+weight-base: git worktree add -q /tmp/base bc79b526 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --logLevel error) && (nohup node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4176 > /tmp/srvb.log 2>&1 &) && sleep 4 && SWEEP_OFFLINE=1 BASE=http://localhost:4176 node scripts/sweepWeight.mjs 2>&1 | grep -E "club-manager|manager-hot-seat|deadline-day|green|RED|FAIL|over" | head -40
