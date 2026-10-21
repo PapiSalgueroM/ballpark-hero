@@ -1,0 +1,1 @@
+mainDiff exit=0 71s |     "  - waiting for locator('text=Take the job')",

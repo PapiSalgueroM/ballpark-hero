@@ -1,0 +1,3 @@
+playCmDifficulty: seed 2543157748 (replay with DIFF_SEED=2543157748), widths 390, play widths 390
+  - waiting for locator('text=Take the job')
+    "  - waiting for locator('text=Take the job')",
