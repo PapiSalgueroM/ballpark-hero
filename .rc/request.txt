@@ -1,0 +1,4 @@
+#!build
+#!playwright
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
