@@ -1,0 +1,2 @@
+ctl-nocarry: CM_NATIONS_CONTROL=nocarry LONG=3 SEASONS=2 node scripts/simCmMadeUpNations.mjs
+simCmMadeUpNations: node scripts/simCmMadeUpNations.mjs
