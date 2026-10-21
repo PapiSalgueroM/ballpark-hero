@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+ledger: node scripts/simCmLedgerBound.mjs
+victory: node scripts/simVictoryMoment.mjs
+mainDD: git worktree add /tmp/m4 554a3b18 >/dev/null 2>&1; cd /tmp/m4 && ln -sf "$OLDPWD/node_modules" node_modules && node scripts/simClubManagerDecisionDeadline.mjs 2>&1 | grep -E "AssertionError|held parent|differ|green|PASS" | head -4
+hereDD: node scripts/simClubManagerDecisionDeadline.mjs 2>&1 | grep -E "AssertionError|held parent|differ|green|PASS" | head -4
