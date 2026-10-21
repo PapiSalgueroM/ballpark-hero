@@ -1,0 +1,7 @@
+m3-nat exit=2 1s | simCmMadeUpNations: CANNOT RUN: an edit's text is in clubManager.ts 0 times, it must be exactly once (generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation
+m3-vit exit=0 4s |    Duration  2.53s (transform 1.29s, setup 68ms, collect 1.55s, tests 222ms, environment 301ms, prepare 161ms)
+m3-carry exit=0 7s | review-carry: BROKEN in 1 check(s)
+m4-nat exit=0 97s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+m4-vit exit=0 3s |    Duration  2.54s (transform 1.30s, setup 64ms, collect 1.56s, tests 225ms, environment 286ms, prepare 69ms)
+m4-aleague exit=1 8s | simClubManagerALeague: 2 failure(s)
+m4-boardasks exit=0 47s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.

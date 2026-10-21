@@ -1,0 +1,2 @@
+MUTATION APPLIED: expiry
+simCmMadeUpNations: CANNOT RUN: an edit's text is in clubManager.ts 0 times, it must be exactly once (generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation }...)
