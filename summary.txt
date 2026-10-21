@@ -1,0 +1,2 @@
+vitest exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerDevelopment.test.ts,title=src/test/soccerCareerDevelopment.test.ts > Soccer Career develop
+squad exit=0 295s | simCareerSquad: 2220 checks, 0 failed
