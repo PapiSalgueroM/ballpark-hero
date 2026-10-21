@@ -1,0 +1,12 @@
+simCmMadeUpNations: node scripts/simCmMadeUpNations.mjs
+simCmMadeUpNations-base: git worktree add -q /tmp/base bc79b526 && BASE_ROOT=/tmp/base node scripts/simCmMadeUpNations.mjs
+ctl-mainstream: CM_NATIONS_CONTROL=mainstream LONG=3 SEASONS=2 node scripts/simCmMadeUpNations.mjs
+ctl-flat: CM_NATIONS_CONTROL=flat LONG=3 SEASONS=2 node scripts/simCmMadeUpNations.mjs
+ctl-realtouched: CM_NATIONS_CONTROL=realtouched LONG=3 SEASONS=2 node scripts/simCmMadeUpNations.mjs
+ctl-nocarry: CM_NATIONS_CONTROL=nocarry LONG=3 SEASONS=2 node scripts/simCmMadeUpNations.mjs
+ctl-noledger: CM_NATIONS_CONTROL=noledger LONG=3 SEASONS=2 node scripts/simCmMadeUpNations.mjs
+ctl-nopromote: CM_NATIONS_CONTROL=nopromote LONG=3 SEASONS=2 node scripts/simCmMadeUpNations.mjs
+ctl-noload: CM_NATIONS_CONTROL=noload LONG=3 SEASONS=2 node scripts/simCmMadeUpNations.mjs
+ctl-askoff: CM_NATIONS_CONTROL=askoff LONG=3 SEASONS=2 node scripts/simCmMadeUpNations.mjs
+ctl-leak: CM_NATIONS_CONTROL=leak LONG=3 SEASONS=2 node scripts/simCmMadeUpNations.mjs
+ctl-bloat: CM_NATIONS_CONTROL=bloat LONG=3 SEASONS=2 node scripts/simCmMadeUpNations.mjs

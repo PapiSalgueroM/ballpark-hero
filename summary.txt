@@ -1,0 +1,12 @@
+ctl-mainstream exit=1 37s | simCmMadeUpNations: RED, 21 failure(s)
+ctl-flat exit=1 36s | simCmMadeUpNations: RED, 92 failure(s)
+simCmMadeUpNations exit=0 105s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+ctl-nocarry exit=1 3s | Node.js v24.21.0
+ctl-realtouched exit=1 36s | simCmMadeUpNations: RED, 1235 failure(s)
+simCmMadeUpNations-base exit=0 126s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+ctl-nopromote exit=1 38s | simCmMadeUpNations: RED, 3 failure(s)
+ctl-noledger exit=1 38s | simCmMadeUpNations: RED, 1 failure(s)
+ctl-noload exit=1 38s | simCmMadeUpNations: RED, 19 failure(s)
+ctl-leak exit=1 37s | simCmMadeUpNations: RED, 15 failure(s)
+ctl-askoff exit=1 37s | simCmMadeUpNations: RED, 58 failure(s)
+ctl-bloat exit=1 31s | simCmMadeUpNations: RED, 132 failure(s)
