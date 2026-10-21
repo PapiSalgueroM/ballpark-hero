@@ -1,0 +1,13 @@
+vitest-cm: node_modules/.bin/vitest run src/lib/clubManager*.test.ts src/test/clubManagerDeskCues.test.tsx src/test/clubManagerDifficultyPick.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/clubManagerNoSack.test.tsx src/test/clubManagerRetire.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerSaveSize.test.tsx src/test/clubManagerShootoutTile.test.tsx src/test/clubManagerSlots.test.tsx src/test/clubManagerStartWait.test.tsx src/test/clubManagerVarLive.test.tsx src/test/clubManagerVarScreen.test.tsx src/test/clubManagerWorldEditor.test.tsx src/test/cmMinuteLabel.test.ts src/test/cmReportBoardWord.test.tsx src/test/cmSavePointsHook.test.tsx src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx src/test/managerHalftimeLineups.test.tsx src/test/managerHalftimeLineupsSubsRule.test.ts src/test/managerLiveLineups.test.ts src/test/managerMatchPlans.test.tsx src/test/managerPenaltyMarkers.test.tsx src/test/managerQuickSimLegs.test.tsx src/test/managerScorerMarks.test.tsx src/test/pitchOwnGoal.test.tsx --testTimeout=300000 --hookTimeout=120000
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+simHalftime: node scripts/simHalftime.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simMatchDetail: node scripts/simMatchDetail.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simTacticsEngine: node scripts/simTacticsEngine.mjs

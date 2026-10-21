@@ -1,0 +1,13 @@
+simClubManagerSave exit=0 31s | simClubManagerSave: all sections green
+simClubManagerSaveSize exit=0 148s | simClubManagerSaveSize: all sections green
+simClubManagerMeters exit=0 54s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simCmMatchCentre exit=0 5s | simCmMatchCentre: PASS. Every stat on the report and the live strip is counted off the committed play and lines, and every timeline row is an event the engine drew.
+simClubManagerScore exit=0 202s | ALL SEASON SCORE CHECKS PASSED
+vitest-cm exit=0 238s |    Duration  237.14s (transform 8.52s, setup 5.32s, collect 43.26s, tests 529.74s, environment 32.71s, prepare 7.21s)
+simLiveMatch exit=0 8s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven
+simCmMatchDay exit=1 38s | simCmMatchDay: RED, 203 failures in section(s) 7
+simMatchScreen exit=0 7s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+simMatchDetail exit=0 10s | simMatchDetail: all green
+simExtraTime exit=0 112s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (
+simTacticsEngine exit=0 125s | simTacticsEngine: PASS. A man is read in his slot, a second position is earned over counted weeks, the armband and the takers reach the stream, a duty moves the football 
+simHalftime exit=0 812s | ALL HALFTIME CHECKS PASSED
