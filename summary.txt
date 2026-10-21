@@ -1,0 +1,2 @@
+before exit=1 1s | simGuideHeadings: RED, 2 failures in section 1
+refresh exit=0 0s |  1 file changed, 1 insertion(+), 1 deletion(-)

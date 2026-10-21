@@ -1,0 +1,4 @@
+simGuideHeadings: refreshed /club-manager from its actual guide (howToPlay 14, rules 22, example 2, tips 4)
+5de025aa4277f9c3bbec29efae8b8049d8e1237071d7d71f1f743c45400c923c  scripts/data/guideHeadingsFrozen.json
+ scripts/data/guideHeadingsFrozen.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
