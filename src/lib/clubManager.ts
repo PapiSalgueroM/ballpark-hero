@@ -47,8 +47,6 @@ import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade 
 import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 /* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */
 import { keyedRng } from '@/lib/keyedRng';
-import { countNations, drawNation, mapSpelling, type NationCount } from '@/lib/clubManagerMadeUpNations';
-import { nationalityOf } from '@/data/playerNationalities';
 /* Round 1510: the shared night of a participant and the one match cups. Pure modules: no cycle. */
 import { nightsDoneAt, placeNights } from '@/lib/worldNights';
 import type { CalDate } from '@/lib/calDate';
@@ -95,6 +93,9 @@ import {
   eraRostersLoaded,
 } from '@/lib/clubManagerEras';
 import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
+/* Round 1520: after the eras module, which brings the nationality maps in first, so the chunk keeps its order. */
+import { countNations, drawNation, mapSpelling, type NationCount } from '@/lib/clubManagerMadeUpNations';
+import { nationalityOf } from '@/data/playerNationalities';
 /* Round 467: the facilities and the books. Both modules import from this
    file and this file calls into them; nothing on either side runs at module
    scope, which is the house rule for a cycle. */
