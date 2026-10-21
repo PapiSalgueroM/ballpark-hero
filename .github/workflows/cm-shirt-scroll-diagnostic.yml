@@ -74,18 +74,77 @@ jobs:
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           status=0
-          timeout --signal=TERM --kill-after=15s 4m node scripts/qa/diagnoseCmFinanceScroll1443.mjs > "$SCROLL_DIAG_OUT/diagnostic.log" 2>&1 || status=$?
+          timeout --signal=TERM --kill-after=15s 8m node scripts/qa/diagnoseCmFinanceScroll1443.mjs > "$SCROLL_DIAG_OUT/diagnostic.log" 2>&1 || status=$?
           printf '%s\n' "$status" > "$SCROLL_DIAG_OUT/diagnostic.exit"
           cat "$SCROLL_DIAG_OUT/diagnostic.log"
           test "$status" -eq 0
           grep -Fq 'CM_SCROLL_DIAGNOSTIC DIAGNOSTIC_COMPLETE:' "$SCROLL_DIAG_OUT/diagnostic.log"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const r = JSON.parse(fs.readFileSync(process.env.SCROLL_DIAG_OUT + '/report.json', 'utf8'));
+          assert.equal(r.diagnosticOnly, true);
+          assert.equal(r.status, 'DIAGNOSTIC_COMPLETE');
+          assert.deepEqual(r.errors, []);
+          assert.equal(r.sourceUnchanged, true);
+          assert.equal(r.plannedCases, 12);
+          assert.equal(r.plannedWalks, 24);
+          assert.equal(r.cases.length, 12);
+          assert.equal(r.cases.flatMap(row => row.walks).length, 24);
+          assert.equal(r.fixture.sha256, '678365456eae1d3e4cd2d68e54194e3ac61d71cb758f07ff52539736810729e0');
+          assert.equal(r.fixture.bytes, 61407);
+          assert.equal(r.fixture.engineAdvances, 0);
+          assert.equal(r.fixture.syntheticLedgerWeeks, 2);
+          const expected = ['360:false:native', '360:true:native', '390:false:native', '390:true:native',
+            '360:false:finance-root-none', '360:false:html-none'].sort();
+          for (const arm of ['baseline', 'current']) {
+            const rows = r.cases.filter(row => row.arm === arm);
+            assert.equal(rows.length, 6);
+            assert.deepEqual(rows.map(row => [row.width, !!row.reduced, row.anchor].join(':')).sort(), expected);
+          }
+          for (const row of r.cases) {
+            assert.equal(row.status, 'observed'); assert.deepEqual(row.errors, []); assert.deepEqual(row.assets, []);
+            assert.equal(row.fixtureSha256, r.fixture.sha256);
+            assert.equal(row.bootSaveSha256, r.fixture.sha256);
+            assert.equal(row.finalSaveSha256, r.fixture.sha256);
+            assert.equal(row.saveAfterRestorationSha256, r.fixture.sha256);
+            assert(row.anchorRestoration.ruleAbsent && row.anchorRestoration.htmlInlineUnchanged && row.anchorRestoration.rootInlineUnchanged);
+            assert.deepEqual(row.walks.map(walk => walk.name), ['first-entry', 're-entry']);
+            for (const walk of row.walks) {
+              assert.equal(walk.status, 'observed'); assert.equal(walk.timeline.done, true);
+              const t = walk.timeline;
+              assert(t.frames.length > 100 && t.frames.at(-1).ms >= 3500);
+              for (const key of ['calls', 'actions', 'mutations', 'resources']) assert(Array.isArray(t[key]), key);
+              for (const method of ['Element.scrollIntoView', 'window.scrollTo', 'HTMLElement.focus']) assert(t.instrumentation.installed.includes(method));
+              assert(t.actions.some(action => action.type === 'click' && action.trusted), 'Actual trusted finance click observed');
+              assert(t.mutations.length > 0, 'Coalesced mount/layout observations present');
+              const first = t.frames.find(frame => frame.boxes.financeRoot);
+              assert(first && first.boxes.financeRootMatches === 1, 'One actual finance root');
+              if (row.anchor === 'finance-root-none') assert.equal(first.boxes.financeRoot.overflowAnchor, 'none');
+              if (row.anchor === 'html-none') assert.equal(first.boxes.htmlOverflowAnchor, 'none');
+              if (row.anchor === 'native') assert.equal(first.boxes.ruleText, null);
+              assert.equal(t.anchor.intervention, row.anchor !== 'native');
+              for (const call of t.calls) {
+                assert(typeof call.method === 'string' && typeof call.stack === 'string');
+                assert(Array.isArray(call.args));
+                assert(typeof call.beforeMs === 'number' && typeof call.afterMs === 'number');
+                assert(Object.hasOwn(call, 'beforeBox') && Object.hasOwn(call, 'afterBox'));
+                assert(call.afterFrame !== null);
+              }
+            }
+          }
+          console.log('DIAGNOSTIC COVERAGE: 12/12 cases,24/24 walks; eight native width/motion cases and four explicit CSS interventions. No stability verdict.');
+          JS
       - name: Retain complete source and diagnostic evidence
         if: always()
         run: |
           set -euo pipefail
           if test -f "$SCROLL_DIAG_OUT/source-before.sha256"; then sha256sum --check "$SCROLL_DIAG_OUT/source-before.sha256" > "$SCROLL_DIAG_OUT/source-hold.log"; fi
           git diff --exit-code HEAD -- src public scripts supabase package.json package-lock.json .github > "$SCROLL_DIAG_OUT/operator-source-hold.log"
-          (cd "$SCROLL_DIAG_OUT"; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$SCROLL_DIAG_OUT/evidence.sha256"
+          if test -f "$SCROLL_DIAG_OUT/current-dist.sha256"; then (cd dist; sha256sum --check "$GITHUB_WORKSPACE/$SCROLL_DIAG_OUT/current-dist.sha256") > "$SCROLL_DIAG_OUT/current-dist-hold.log"; fi
+          baseline_before="$RUNNER_TEMP/cm-scroll-baseline"
+          if test -f "$SCROLL_DIAG_OUT/baseline-dist.sha256" -a -d "$baseline_before/dist"; then (cd "$baseline_before/dist"; sha256sum --check "$GITHUB_WORKSPACE/$SCROLL_DIAG_OUT/baseline-dist.sha256") > "$SCROLL_DIAG_OUT/baseline-dist-hold.log"; fi
+          (cd "$SCROLL_DIAG_OUT"; find . -type f ! -path './evidence.sha256' -print0 | sort -z | xargs -0 sha256sum) > "$SCROLL_DIAG_OUT/evidence.sha256"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
