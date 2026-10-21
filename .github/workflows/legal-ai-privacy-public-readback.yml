@@ -25,9 +25,12 @@ jobs:
       READBACK_OUT: public-readback-artifacts
       OLD_ENTRY: index-D2fx3gQQ.js
       OLD_DEPLOYMENT: f04638fe-e1f7-445d-9afa-b55c13a7928a
+      SOURCE_SHA: 076091ac870db38b953ddf71d3252cf1ac556782
+      EXPECTED_DEPLOYMENT: 15a10710-f8ea-473d-b084-122e1afff7ed
     steps:
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -39,6 +42,7 @@ jobs:
           mkdir "$READBACK_OUT"
           git rev-parse HEAD > "$READBACK_OUT/head.txt"
           git rev-parse 'HEAD^{tree}' > "$READBACK_OUT/tree.txt"
+          git diff --exit-code "$SOURCE_SHA" HEAD -- src public scripts supabase package.json package-lock.json > "$READBACK_OUT/published-source-hold.log"
           sha256sum package.json package-lock.json scripts/auditLive.mjs scripts/lib/liveIndexability.mjs > "$READBACK_OUT/source-before.sha256"
           npm ci > "$READBACK_OUT/install.log" 2>&1
           browser_tools="$RUNNER_TEMP/public-readback-browser"
@@ -140,6 +144,25 @@ jobs:
           const key = 'cookie-consent-v2';
           const report = { complete: false, cases: [], pages: [], assets: [], browserRequests: [], locallyFulfilled: [], forbiddenMethods: [] };
           const hash = value => createHash('sha256').update(value).digest('hex');
+          function deploymentId(header) {
+            assert.equal(typeof header, 'string');
+            const uuid = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
+            const match = header.match(new RegExp('^(' + uuid + ')$|^psr2\\.(' + uuid + ')\\.[0-9]{10}\\.[A-Za-z0-9_-]{43}$', 'i'));
+            assert(match, 'Deployment header must have the observed bare or signed format');
+            return (match[1] || match[2]).toLowerCase();
+          }
+          function expectedDeployment(header) {
+            const id = deploymentId(header);
+            assert.equal(id, process.env.EXPECTED_DEPLOYMENT, 'Public response must match the requested deployment');
+            return id;
+          }
+          const signedFixture = 'psr2.' + process.env.EXPECTED_DEPLOYMENT + '.1793200847.' + 'A'.repeat(43);
+          assert.equal(expectedDeployment(process.env.EXPECTED_DEPLOYMENT), process.env.EXPECTED_DEPLOYMENT);
+          assert.equal(expectedDeployment(signedFixture), process.env.EXPECTED_DEPLOYMENT);
+          for (const changed of [signedFixture.replace('psr2.', 'other.'), signedFixture.slice(0, -1), signedFixture.replace(process.env.EXPECTED_DEPLOYMENT, process.env.OLD_DEPLOYMENT)]) {
+            assert.notEqual(changed, signedFixture); assert.throws(() => expectedDeployment(changed));
+          }
+          report.deploymentControls = { supportedFormats: 2, changedRejected: 3 };
           const save = (name, value) => fs.writeFileSync(path.join(out, name), value);
           const cacheBust = route => ORIGIN + route + '?public_readback=' + tag;
           const json = () => save('readback.json', JSON.stringify(report, null, 2) + '\n');
@@ -189,8 +212,7 @@ jobs:
             const home = pages.get('/');
             let entry;
             await cases('deployment header and entry differ from the previous publication', async () => {
-              const deployment = home.headers['x-deployment-id'];
-              assert.match(deployment || '', /^[0-9a-f-]{36}$/i);
+              const deployment = expectedDeployment(home.headers['x-deployment-id']);
               assert.notEqual(deployment, process.env.OLD_DEPLOYMENT);
               const dom = new JSDOM(home.html);
               const entries = [...dom.window.document.querySelectorAll('script[type="module"][src]')].map(node => new URL(node.getAttribute('src'), ORIGIN)).filter(url => /^\/assets\/index-[A-Za-z0-9_-]+\.js$/.test(url.pathname));
@@ -198,7 +220,9 @@ jobs:
               entry = entries[0]; checkedURL(entry);
               assert.notEqual(path.posix.basename(entry.pathname), process.env.OLD_ENTRY);
               const head = await api.head(cacheBust('/'), { maxRedirects: 0, timeout: 30000 });
-              assert.equal(head.status(), 200); assert.equal(head.headers()['x-deployment-id'], deployment);
+              const headHeaders = head.headers(); delete headHeaders['set-cookie'];
+              save('page-home.head.headers.json', JSON.stringify(headHeaders, null, 2) + '\n');
+              assert.equal(head.status(), 200); assert.equal(expectedDeployment(headHeaders['x-deployment-id']), deployment);
               report.deployment = { id: deployment, entry: entry.pathname, previousEntry: process.env.OLD_ENTRY };
             });
             await cases('new entry contains privacy v2 and dynamic account body, and the body asset answers', async () => {
