@@ -1,0 +1,486 @@
+TOUCH ok src/lib/wonderkidFactory.ts lines 906 -> 908
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+... Skipped lines
+
+  '/**\n' +
+    " * Round 216: Wonderkid Factory, the site's second idle game.\n" +
+    ' *\n' +
+    ' * Stadium Tycoon grows a ground; this grows people. You run a youth academy:\n' +
+    ' * scouts bring in kids, coaches grow them toward a ceiling only better scouts\n' +
+...
+    '  packsDelivered?: number;\n' +
++   '  /** Optional so untou'... 29476 more characters
+-   '  /** Optional so untou'... 29431 more characters
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simTycoonMoneyDisplay.mjs:44:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '/**\n' +
+    " * Round 216: Wonderkid Factory, the site's second idle game.\n" +
+    ' *\n' +
+    ' * Stadium Tycoon grows a ground; this grows people. You run a youth academy:\n' +
+    ' * scouts bring in kids, coaches grow them toward a ceiling only better scouts\n' +
+    ' * can see, and you decide when to cash each one out. Sell early and safe, or\n' +
+    ' * hold while the rating climbs and the age premium melts. When the academy\n' +
+    " * has earned its region's respect you move the whole operation up a level,\n" +
+    ' * keep your reputation stars forever, and start again where the ceilings are\n' +
+    ' * higher.\n' +
+    ' *\n' +
+    ' * House rules kept, each one load bearing:\n' +
+    " * - Every kid is generated. Names come from intlNames (Round 197's banks,\n" +
+    ' *   enumerated against every real name on the site), never from a new bank,\n' +
+    " *   and no two kids in the academy share a name (Round 206's rule, same\n" +
+    ' *   reroll then walk guard).\n' +
+    ' * - Growth respects headroom (Rounds 96 and 116): a kid slows as he nears\n' +
+    ' *   his ceiling and NEVER passes it.\n' +
+    ' * - Multipliers reach their nominal value (Round 95): a x3 surge measures 3.\n' +
+    ' * - The save loads fail closed: a doctored save gets a working game, never a\n' +
+    ' *   printing press. Offline progress is capped and cannot leak.\n' +
+    ' * - The screen never lies: the exact price quoted is the price paid, the\n' +
+    ' *   ceiling shown at scout level 6 is the real ceiling.\n' +
+    ' *\n' +
+    ' * All logic lives here, pure, so simWonderkid can run thousands of hours of\n' +
+    ' * academy time without a browser. The hook only glues this to React.\n' +
+    ' */\n' +
+    '\n' +
+    "import { intlName, NATION_FAMILY } from '@/lib/intlNames';\n" +
+    "import { ensureUniqueIds, makeIdMinter } from '@/lib/entityIds';\n" +
+    "import { basePrice } from '@/lib/playerValue';\n" +
+    "import { BOOT_IDS } from '@/lib/soccerBootIds';\n" +
+    "export { basePrice } from '@/lib/playerValue';\n" +
+    '\n' +
+    '/* ------------------------------------------------------------------ tuning */\n' +
+    '\n' +
+    "export const SAVE_KEY = 'wonderkidFactoryV1';\n" +
+    'const SAVE_VERSION = 1;\n' +
+    '\n' +
+    '/** The ladder. Each region raises the ceilings scouts can find. */\n' +
+    'export interface Region {\n' +
+    '  name: string;\n' +
+    '  emoji: string;\n' +
+    '  potMin: number;\n' +
+    '  potMax: number;\n' +
+    '  /** lifetime earnings that unlock the move up, and pay the star */\n' +
+    '  goal: number;\n' +
+    '}\n' +
+    'export const REGIONS: Region[] = [\n' +
+    "  { name: 'District Fields', emoji: '🌾', potMin: 58, potMax: 76, goal: 8_000 },\n" +
+    "  { name: 'Provincial Town', emoji: '🏘️', potMin: 62, potMax: 81, goal: 70_000 },\n" +
+    "  { name: 'Port City', emoji: '⚓', potMin: 66, potMax: 86, goal: 700_000 },\n" +
+    "  { name: 'The Capital', emoji: '🏛️', potMin: 70, potMax: 91, goal: 5_500_000 },\n" +
+    "  { name: 'Continental Hub', emoji: '✈️', potMin: 74, potMax: 95, goal: 45_000_000 },\n" +
+    "  { name: 'World Stage', emoji: '🌍', potMin: 78, potMax: 99, goal: 45_000_000 },\n" +
+    '];\n' +
+    '\n' +
+    "export type FacilityId = 'scouting' | 'coaching' | 'dorms' | 'agents';\n" +
+    'export interface Facility {\n' +
+    '  id: FacilityId;\n' +
+    '  label: string;\n' +
+    '  emoji: string;\n' +
+    '  base: number;\n' +
+    '  growth: number;\n' +
+    '  maxLevel: number;\n' +
+    '  blurb: string;\n' +
+    '}\n' +
+    'export const FACILITIES: Facility[] = [\n' +
+    "  { id: 'scouting', label: 'Scouting network', emoji: '🔭', base: 60, growth: 1.6, maxLevel: 24, blurb: 'Finds kids faster. Level 3 reads a ceiling range, level 6 reads it exactly.' },\n" +
+    "  { id: 'coaching', label: 'Coaching staff', emoji: '📋', base: 45, growth: 1.6, maxLevel: 24, blurb: 'Every session grows every kid faster.' },\n" +
+    "  { id: 'dorms', label: 'Dorms', emoji: '🛏️', base: 150, growth: 1.75, maxLevel: 9, blurb: 'One more bed per level. A full academy stops scouting.' },\n" +
+    "  { id: 'agents', label: 'Agent office', emoji: '🤝', base: 200, growth: 1.75, maxLevel: 20, blurb: 'Squeezes more out of every sale.' },\n" +
+    '];\n' +
+    '\n' +
+    '/** seconds for one scout find at level 0. */\n' +
+    'const FIND_BASE_SEC = 30;\n' +
+    '/** rating points per second at coaching 0, before any multiplier. */\n' +
+    'const TRAIN_BASE = 0.085;\n' +
+    '/** an academy year passes every this many seconds of play. */\n' +
+    'export const YEAR_SEC = 300;\n' +
+    '/** kids leave on a free at this age. The clock is the pressure. */\n' +
+    'export const LEAVE_AGE = 24;\n' +
+    '/** First team years run only while the academy is watched. */\n' +
+    'export const SENIOR_YEAR_SEC = 900;\n' +
+    'export const FIRST_TEAM_SLOTS = 5;\n' +
+    'export const PROMOTE_AGE = 18;\n' +
+    'export const RETIRE_AGE = 34;\n' +
+    'export const SENIOR_DECLINE = 1.2;\n' +
+    '\n' +
+    'export const SHOWCASE_COOLDOWN = 150;\n' +
+    'export const SHOWCASE_SEC = 25;\n' +
+    'export const SHOWCASE_MULT = 3;\n' +
+    '\n' +
+    'export const DEADLINE_EVERY = 360;\n' +
+    'export const DEADLINE_SEC = 50;\n' +
+    'export const DEADLINE_MULT = 1.5;\n' +
+    '\n' +
+    '/** offline progress: everything runs at half speed, capped at eight hours. */\n' +
+    'const OFFLINE_RATE = 0.5;\n' +
+    'const OFFLINE_CAP_SEC = 8 * 3600;\n' +
+    '/**\n' +
+    ' * Round 581: the longest gap between two clock callbacks on a VISIBLE page that\n' +
+    ' * still counts as somebody watching. A hidden page is always away, whatever the\n' +
+    ' * gap (see advanceClock).\n' +
+    ' *\n' +
+    " * The first draft used Idle Arena's 750ms and decided on the gap alone. The\n" +
+    ' * review found both halves of that wrong for this game: a hidden tab whose\n' +
+    ' * throttled wakes jitter can land one gap under 750ms and reset the eight hour\n' +
+    ' * meter (twenty hidden hours credited ten, against a promise of four), and a\n' +
+    ' * slow phone whose visible callbacks come every 800ms was paid as away, so kids\n' +
+    ' * stopped ageing while being watched and after eight hours the academy stopped\n' +
+    ' * dead. Visibility decides hidden; this bound only catches a visible page that\n' +
+    ' * was not really running (a sleeping laptop wakes with one huge gap), and five\n' +
+    ' * seconds is far past any honest main thread stall.\n' +
+    ' *\n' +
+    ' * Before this round the hook ticked a fixed quarter second per callback, so a\n' +
+    ' * tab hidden for three hours (a callback a second at first, then one a minute\n' +
+    ' * once the browser throttles it hard) trained for a minute or two and stamped\n' +
+    ' * lastSeen on every callback, so a reload could not pay those hours either. The\n' +
+    ' * rules modal promises half speed for up to eight hours.\n' +
+    ' */\n' +
+    'export const AWAY_AFTER_MS = 5000;\n' +
+    '/** Away time trains in steps of at most this many academy seconds, so one long\n' +
+    ' *  closed absence and the same absence paid a wake at a time land on the same\n' +
+    ' *  academy. Growth slows toward the ceiling, so one giant step used to overpay. */\n' +
+    'const AWAY_STEP_SEC = 5;\n' +
+    '\n' +
+    'export const MAX_REP = 60;\n' +
+    '\n' +
+    '/* ------------------------------------------------------------ packs (585) */\n' +
+    '\n' +
+    "/** Round 585: a pack kid's tier is a band of potential, drawn through the same\n" +
+    ' *  generator the scouts use. */\n' +
+    "export type TierId = 'grassroots' | 'prospect' | 'talent' | 'star' | 'phenom';\n" +
+    'export interface Tier { id: TierId; label: string; potMin: number; potMax: number }\n' +
+    'export const TIERS: Tier[] = [\n' +
+    "  { id: 'grassroots', label: 'Grassroots', potMin: 58, potMax: 70 },\n" +
+    "  { id: 'prospect', label: 'Prospect', potMin: 66, potMax: 78 },\n" +
+    "  { id: 'talent', label: 'Talent', potMin: 74, potMax: 86 },\n" +
+    "  { id: 'star', label: 'Star', potMin: 82, potMax: 92 },\n" +
+    "  { id: 'phenom', label: 'Phenom', potMin: 90, potMax: 99 },\n" +
+    '];\n' +
+    'export const TIER_IDS: TierId[] = TIERS.map(t => t.id);\n' +
+    '\n' +
+    "export type PackId = 'scout' | 'club' | 'elite';\n" +
+    'export interface Pack {\n' +
+    '  id: PackId;\n' +
+    '  name: string;\n' +
+    '  emoji: string;\n' +
+    '  /** gems */\n' +
+    '  price: number;\n' +
+    '  /** the first one of this pack costs nothing */\n' +
+    '  firstFree: boolean;\n' +
+    '  /** whole percents per tier, summing to 100, printed on the panel as they are */\n' +
+    '  odds: Record<TierId, number>;\n' +
+    '  /** a Star or better arrives on or before this many packs since the last one */\n' +
+    '  guarantee: number | null;\n' +
+    '}\n' +
+    '/** Round 585: the published odds. The Packs panel prints these numbers and no\n' +
+    ' *  others, and scripts/simTycoonPacks.mjs draws against them. A better pack has\n' +
+    ' *  strictly better odds; nothing about a pack is ever sold for money. */\n' +
+    'export const PACKS: Pack[] = [\n' +
+    "  { id: 'scout', name: 'Scout Pack', emoji: '🔭', price: 30, firstFree: true, odds: { grassroots: 62, prospect: 30, talent: 7, star: 1, phenom: 0 }, guarantee: null },\n" +
+    "  { id: 'club', name: 'Club Pack', emoji: '🏟️', price: 100, firstFree: false, odds: { grassroots: 0, prospect: 55, talent: 35, star: 9, phenom: 1 }, guarantee: 10 },\n" +
+    "  { id: 'elite', name: 'Elite Pack', emoji: '👑', price: 250, firstFree: false, odds: { grassroots: 0, prospect: 0, talent: 60, star: 34, phenom: 6 }, guarantee: 3 },\n" +
+    '];\n' +
+    '/** The tiers a guarantee counts: a Star or better. */\n' +
+    "export const GUARANTEED_TIERS: TierId[] = ['star', 'phenom'];\n" +
+    '\n' +
+    '/* ------------------------------------------------------------------- state */\n' +
+    '\n' +
+    "export type Pos = 'GK' | 'DF' | 'MF' | 'FW';\n" +
+    '\n' +
+    'export interface Prospect {\n' +
+    '  id: number;\n' +
+    '  name: string;\n' +
+    '  nation: string;\n' +
+    '  pos: Pos;\n' +
+    '  /** whole years, ticks up on the academy clock */\n' +
+    '  age: number;\n' +
+    '  ageClock: number;\n' +
+    '  rating: number;\n' +
+    '  potential: number;\n' +
+    '  /** Round 585: the pack tier a kid came from. Scouted kids have none. */\n' +
+    '  tier?: TierId;\n' +
+    '}\n' +
+    '\n' +
+    '/** A graduate keeps his name and ability, with a separate first team id. */\n' +
+    "export interface Senior extends Omit<Prospect, 'id'> {\n" +
+    '  id: string;\n' +
+    '  bootId?: string;\n' +
+    '}\n' +
+    '\n' +
+    'export type GearLevels = Readonly<Partial<Record<string, number>>>;\n' +
+    'export const MAX_BOOT_LEVEL = 3;\n' +
+    '\n' +
+    'export interface FactoryState {\n' +
+    '  v: number;\n' +
+    '  seed: number;\n' +
+    '  cash: number;\n' +
+    '  /** earned this run, drives the move up */\n' +
+    '  lifetime: number;\n' +
+    '  /** earned across every run, display only */\n' +
+    '  careerEarned: number;\n' +
+    '  rep: number;\n' +
+    '  levels: Record<FacilityId, number>;\n' +
+    '  prospects: Prospect[];\n' +
+    '  scoutProgress: number;\n' +
+    '  showcaseCooldown: number;\n' +
+    '  showcaseLeft: number;\n' +
+    '  deadlineIn: number;\n' +
+    '  deadlineLeft: number;\n' +
+    '  sold: number;\n' +
+    '  soldCareer: number;\n' +
+    '  best: number;\n' +
+    '  leftFree: number;\n' +
+    '  lastSeen: number;\n' +
+    '  nextId: number;\n' +
+    '  /** Round 581: wall ms already paid as away time in the current absence, so\n' +
+    '   *  the eight hour cap counts the whole absence rather than each throttled\n' +
+    '   *  callback inside it. The first watched tick sets it back to zero. Optional,\n' +
+    '   *  so every older save loads and older builds carry it through untouched. */\n' +
+    '  awayMs?: number;\n' +
+    '  /** Round 585: the highest pack sequence delivered into this academy, so a pack\n' +
+    '   *  opened once is delivered once, whatever reloads in between. Optional, so\n' +
+    '   *  every older save loads as it did. */\n' +
+    '  packsDelivered?: number;\n' +
+    '  /** Optional so untou'... 29476 more characters,
+  expected: '/**\n' +
+    " * Round 216: Wonderkid Factory, the site's second idle game.\n" +
+    ' *\n' +
+    ' * Stadium Tycoon grows a ground; this grows people. You run a youth academy:\n' +
+    ' * scouts bring in kids, coaches grow them toward a ceiling only better scouts\n' +
+    ' * can see, and you decide when to cash each one out. Sell early and safe, or\n' +
+    ' * hold while the rating climbs and the age premium melts. When the academy\n' +
+    " * has earned its region's respect you move the whole operation up a level,\n" +
+    ' * keep your reputation stars forever, and start again where the ceilings are\n' +
+    ' * higher.\n' +
+    ' *\n' +
+    ' * House rules kept, each one load bearing:\n' +
+    " * - Every kid is generated. Names come from intlNames (Round 197's banks,\n" +
+    ' *   enumerated against every real name on the site), never from a new bank,\n' +
+    " *   and no two kids in the academy share a name (Round 206's rule, same\n" +
+    ' *   reroll then walk guard).\n' +
+    ' * - Growth respects headroom (Rounds 96 and 116): a kid slows as he nears\n' +
+    ' *   his ceiling and NEVER passes it.\n' +
+    ' * - Multipliers reach their nominal value (Round 95): a x3 surge measures 3.\n' +
+    ' * - The save loads fail closed: a doctored save gets a working game, never a\n' +
+    ' *   printing press. Offline progress is capped and cannot leak.\n' +
+    ' * - The screen never lies: the exact price quoted is the price paid, the\n' +
+    ' *   ceiling shown at scout level 6 is the real ceiling.\n' +
+    ' *\n' +
+    ' * All logic lives here, pure, so simWonderkid can run thousands of hours of\n' +
+    ' * academy time without a browser. The hook only glues this to React.\n' +
+    ' */\n' +
+    '\n' +
+    "import { intlName, NATION_FAMILY } from '@/lib/intlNames';\n" +
+    "import { ensureUniqueIds, makeIdMinter } from '@/lib/entityIds';\n" +
+    "import { basePrice } from '@/lib/playerValue';\n" +
+    "import { BOOT_IDS } from '@/lib/soccerBootIds';\n" +
+    "export { basePrice } from '@/lib/playerValue';\n" +
+    '\n' +
+    '/* ------------------------------------------------------------------ tuning */\n' +
+    '\n' +
+    "export const SAVE_KEY = 'wonderkidFactoryV1';\n" +
+    'const SAVE_VERSION = 1;\n' +
+    '\n' +
+    '/** The ladder. Each region raises the ceilings scouts can find. */\n' +
+    'export interface Region {\n' +
+    '  name: string;\n' +
+    '  emoji: string;\n' +
+    '  potMin: number;\n' +
+    '  potMax: number;\n' +
+    '  /** lifetime earnings that unlock the move up, and pay the star */\n' +
+    '  goal: number;\n' +
+    '}\n' +
+    'export const REGIONS: Region[] = [\n' +
+    "  { name: 'District Fields', emoji: '🌾', potMin: 58, potMax: 76, goal: 8_000 },\n" +
+    "  { name: 'Provincial Town', emoji: '🏘️', potMin: 62, potMax: 81, goal: 70_000 },\n" +
+    "  { name: 'Port City', emoji: '⚓', potMin: 66, potMax: 86, goal: 700_000 },\n" +
+    "  { name: 'The Capital', emoji: '🏛️', potMin: 70, potMax: 91, goal: 5_500_000 },\n" +
+    "  { name: 'Continental Hub', emoji: '✈️', potMin: 74, potMax: 95, goal: 45_000_000 },\n" +
+    "  { name: 'World Stage', emoji: '🌍', potMin: 78, potMax: 99, goal: 45_000_000 },\n" +
+    '];\n' +
+    '\n' +
+    "export type FacilityId = 'scouting' | 'coaching' | 'dorms' | 'agents';\n" +
+    'export interface Facility {\n' +
+    '  id: FacilityId;\n' +
+    '  label: string;\n' +
+    '  emoji: string;\n' +
+    '  base: number;\n' +
+    '  growth: number;\n' +
+    '  maxLevel: number;\n' +
+    '  blurb: string;\n' +
+    '}\n' +
+    'export const FACILITIES: Facility[] = [\n' +
+    "  { id: 'scouting', label: 'Scouting network', emoji: '🔭', base: 60, growth: 1.6, maxLevel: 24, blurb: 'Finds kids faster. Level 3 reads a ceiling range, level 6 reads it exactly.' },\n" +
+    "  { id: 'coaching', label: 'Coaching staff', emoji: '📋', base: 45, growth: 1.6, maxLevel: 24, blurb: 'Every session grows every kid faster.' },\n" +
+    "  { id: 'dorms', label: 'Dorms', emoji: '🛏️', base: 150, growth: 1.75, maxLevel: 9, blurb: 'One more bed per level. A full academy stops scouting.' },\n" +
+    "  { id: 'agents', label: 'Agent office', emoji: '🤝', base: 200, growth: 1.75, maxLevel: 20, blurb: 'Squeezes more out of every sale.' },\n" +
+    '];\n' +
+    '\n' +
+    '/** seconds for one scout find at level 0. */\n' +
+    'const FIND_BASE_SEC = 30;\n' +
+    '/** rating points per second at coaching 0, before any multiplier. */\n' +
+    'const TRAIN_BASE = 0.085;\n' +
+    '/** an academy year passes every this many seconds of play. */\n' +
+    'export const YEAR_SEC = 300;\n' +
+    '/** kids leave on a free at this age. The clock is the pressure. */\n' +
+    'export const LEAVE_AGE = 24;\n' +
+    '/** First team years run only while the academy is watched. */\n' +
+    'export const SENIOR_YEAR_SEC = 900;\n' +
+    'export const FIRST_TEAM_SLOTS = 5;\n' +
+    'export const PROMOTE_AGE = 18;\n' +
+    'export const RETIRE_AGE = 34;\n' +
+    'export const SENIOR_DECLINE = 1.2;\n' +
+    '\n' +
+    'export const SHOWCASE_COOLDOWN = 150;\n' +
+    'export const SHOWCASE_SEC = 25;\n' +
+    'export const SHOWCASE_MULT = 3;\n' +
+    '\n' +
+    'export const DEADLINE_EVERY = 360;\n' +
+    'export const DEADLINE_SEC = 50;\n' +
+    'export const DEADLINE_MULT = 1.5;\n' +
+    '\n' +
+    '/** offline progress: everything runs at half speed, capped at eight hours. */\n' +
+    'const OFFLINE_RATE = 0.5;\n' +
+    'const OFFLINE_CAP_SEC = 8 * 3600;\n' +
+    '/**\n' +
+    ' * Round 581: the longest gap between two clock callbacks on a VISIBLE page that\n' +
+    ' * still counts as somebody watching. A hidden page is always away, whatever the\n' +
+    ' * gap (see advanceClock).\n' +
+    ' *\n' +
+    " * The first draft used Idle Arena's 750ms and decided on the gap alone. The\n" +
+    ' * review found both halves of that wrong for this game: a hidden tab whose\n' +
+    ' * throttled wakes jitter can land one gap under 750ms and reset the eight hour\n' +
+    ' * meter (twenty hidden hours credited ten, against a promise of four), and a\n' +
+    ' * slow phone whose visible callbacks come every 800ms was paid as away, so kids\n' +
+    ' * stopped ageing while being watched and after eight hours the academy stopped\n' +
+    ' * dead. Visibility decides hidden; this bound only catches a visible page that\n' +
+    ' * was not really running (a sleeping laptop wakes with one huge gap), and five\n' +
+    ' * seconds is far past any honest main thread stall.\n' +
+    ' *\n' +
+    ' * Before this round the hook ticked a fixed quarter second per callback, so a\n' +
+    ' * tab hidden for three hours (a callback a second at first, then one a minute\n' +
+    ' * once the browser throttles it hard) trained for a minute or two and stamped\n' +
+    ' * lastSeen on every callback, so a reload could not pay those hours either. The\n' +
+    ' * rules modal promises half speed for up to eight hours.\n' +
+    ' */\n' +
+    'export const AWAY_AFTER_MS = 5000;\n' +
+    '/** Away time trains in steps of at most this many academy seconds, so one long\n' +
+    ' *  closed absence and the same absence paid a wake at a time land on the same\n' +
+    ' *  academy. Growth slows toward the ceiling, so one giant step used to overpay. */\n' +
+    'const AWAY_STEP_SEC = 5;\n' +
+    '\n' +
+    'export const MAX_REP = 60;\n' +
+    '\n' +
+    '/* ------------------------------------------------------------ packs (585) */\n' +
+    '\n' +
+    "/** Round 585: a pack kid's tier is a band of potential, drawn through the same\n" +
+    ' *  generator the scouts use. */\n' +
+    "export type TierId = 'grassroots' | 'prospect' | 'talent' | 'star' | 'phenom';\n" +
+    'export interface Tier { id: TierId; label: string; potMin: number; potMax: number }\n' +
+    'export const TIERS: Tier[] = [\n' +
+    "  { id: 'grassroots', label: 'Grassroots', potMin: 58, potMax: 70 },\n" +
+    "  { id: 'prospect', label: 'Prospect', potMin: 66, potMax: 78 },\n" +
+    "  { id: 'talent', label: 'Talent', potMin: 74, potMax: 86 },\n" +
+    "  { id: 'star', label: 'Star', potMin: 82, potMax: 92 },\n" +
+    "  { id: 'phenom', label: 'Phenom', potMin: 90, potMax: 99 },\n" +
+    '];\n' +
+    'export const TIER_IDS: TierId[] = TIERS.map(t => t.id);\n' +
+    '\n' +
+    "export type PackId = 'scout' | 'club' | 'elite';\n" +
+    'export interface Pack {\n' +
+    '  id: PackId;\n' +
+    '  name: string;\n' +
+    '  emoji: string;\n' +
+    '  /** gems */\n' +
+    '  price: number;\n' +
+    '  /** the first one of this pack costs nothing */\n' +
+    '  firstFree: boolean;\n' +
+    '  /** whole percents per tier, summing to 100, printed on the panel as they are */\n' +
+    '  odds: Record<TierId, number>;\n' +
+    '  /** a Star or better arrives on or before this many packs since the last one */\n' +
+    '  guarantee: number | null;\n' +
+    '}\n' +
+    '/** Round 585: the published odds. The Packs panel prints these numbers and no\n' +
+    ' *  others, and scripts/simTycoonPacks.mjs draws against them. A better pack has\n' +
+    ' *  strictly better odds; nothing about a pack is ever sold for money. */\n' +
+    'export const PACKS: Pack[] = [\n' +
+    "  { id: 'scout', name: 'Scout Pack', emoji: '🔭', price: 30, firstFree: true, odds: { grassroots: 62, prospect: 30, talent: 7, star: 1, phenom: 0 }, guarantee: null },\n" +
+    "  { id: 'club', name: 'Club Pack', emoji: '🏟️', price: 100, firstFree: false, odds: { grassroots: 0, prospect: 55, talent: 35, star: 9, phenom: 1 }, guarantee: 10 },\n" +
+    "  { id: 'elite', name: 'Elite Pack', emoji: '👑', price: 250, firstFree: false, odds: { grassroots: 0, prospect: 0, talent: 60, star: 34, phenom: 6 }, guarantee: 3 },\n" +
+    '];\n' +
+    '/** The tiers a guarantee counts: a Star or better. */\n' +
+    "export const GUARANTEED_TIERS: TierId[] = ['star', 'phenom'];\n" +
+    '\n' +
+    '/* ------------------------------------------------------------------- state */\n' +
+    '\n' +
+    "export type Pos = 'GK' | 'DF' | 'MF' | 'FW';\n" +
+    '\n' +
+    'export interface Prospect {\n' +
+    '  id: number;\n' +
+    '  name: string;\n' +
+    '  nation: string;\n' +
+    '  pos: Pos;\n' +
+    '  /** whole years, ticks up on the academy clock */\n' +
+    '  age: number;\n' +
+    '  ageClock: number;\n' +
+    '  rating: number;\n' +
+    '  potential: number;\n' +
+    '  /** Round 585: the pack tier a kid came from. Scouted kids have none. */\n' +
+    '  tier?: TierId;\n' +
+    '}\n' +
+    '\n' +
+    '/** A graduate keeps his name and ability, with a separate first team id. */\n' +
+    "export interface Senior extends Omit<Prospect, 'id'> {\n" +
+    '  id: string;\n' +
+    '  bootId?: string;\n' +
+    '}\n' +
+    '\n' +
+    'export type GearLevels = Readonly<Partial<Record<string, number>>>;\n' +
+    'export const MAX_BOOT_LEVEL = 3;\n' +
+    '\n' +
+    'export interface FactoryState {\n' +
+    '  v: number;\n' +
+    '  seed: number;\n' +
+    '  cash: number;\n' +
+    '  /** earned this run, drives the move up */\n' +
+    '  lifetime: number;\n' +
+    '  /** earned across every run, display only */\n' +
+    '  careerEarned: number;\n' +
+    '  rep: number;\n' +
+    '  levels: Record<FacilityId, number>;\n' +
+    '  prospects: Prospect[];\n' +
+    '  scoutProgress: number;\n' +
+    '  showcaseCooldown: number;\n' +
+    '  showcaseLeft: number;\n' +
+    '  deadlineIn: number;\n' +
+    '  deadlineLeft: number;\n' +
+    '  sold: number;\n' +
+    '  soldCareer: number;\n' +
+    '  best: number;\n' +
+    '  leftFree: number;\n' +
+    '  lastSeen: number;\n' +
+    '  nextId: number;\n' +
+    '  /** Round 581: wall ms already paid as away time in the current absence, so\n' +
+    '   *  the eight hour cap counts the whole absence rather than each throttled\n' +
+    '   *  callback inside it. The first watched tick sets it back to zero. Optional,\n' +
+    '   *  so every older save loads and older builds carry it through untouched. */\n' +
+    '  awayMs?: number;\n' +
+    '  /** Round 585: the highest pack sequence delivered into this academy, so a pack\n' +
+    '   *  opened once is delivered once, whatever reloads in between. Optional, so\n' +
+    '   *  every older save loads as it did. */\n' +
+    '  packsDelivered?: number;\n' +
+    '  /** Optional so untou'... 29431 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,400 @@
+TOUCH ok src/lib/stadiumTycoon.ts lines 1723 -> 1725
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Authoritative engine/rewards stay exact
++ actual - expected
+... Skipped lines
+
+  '/**\n' +
+    ' * Stadium Tycoon (Round 146): the idle game. The owner sent two reference\n' +
+    ' * screenshots of an idle sports tycoon on 2026-08-17 and asked for ours,\n' +
+    ' * "Suprise me on how ur going to do it but add so many things to it", with\n' +
+    ' * animation called out twice. Everything here is original: our mechanics,\n' +
+...
+    '\n' +
++   'export type'... 73521 more characters
+-   'export type'... 73476 more characters
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simTycoonDrawResult.mjs:33:51
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '/**\n' +
+    ' * Stadium Tycoon (Round 146): the idle game. The owner sent two reference\n' +
+    ' * screenshots of an idle sports tycoon on 2026-08-17 and asked for ours,\n' +
+    ' * "Suprise me on how ur going to do it but add so many things to it", with\n' +
+    ' * animation called out twice. Everything here is original: our mechanics,\n' +
+    " * our names, our numbers, no other product's art or currency.\n" +
+    ' *\n' +
+    " * The shape of the game: you run a small football club's matchday business.\n" +
+    ' * Fans arrive if there is room and a reason; every fan pays at the gate and\n' +
+    ' * spends at whatever you have built; the toy match on screen creates goal\n' +
+    ' * moments that pay a bonus scaled by the crowd; winning runs grow the\n' +
+    ' * fanbase. Spend income on nine upgrade tracks, prestige into Reputation\n' +
+    ' * stars when the club outgrows itself, and the loop restarts faster.\n' +
+    ' *\n' +
+    ' * Everything below is PURE: the hook owns time and storage, this file owns\n' +
+    ' * math. The sim harness (scripts/simStadiumTycoon.mjs) plays hours of the\n' +
+    ' * game headless and asserts the curve: no softlock, no runaway, prestige\n' +
+    ' * lands in a sane window, offline pay is capped.\n' +
+    ' */\n' +
+    '\n' +
+    "import { roundRobinCalendar, tableOrder, mulberry32, hash32 } from '@/lib/leagueCore';\n" +
+    '\n' +
+    'export interface TycoonTrack {\n' +
+    '  id: string;\n' +
+    '  name: string;\n' +
+    '  emoji: string;\n' +
+    '  /** What the track does, one line, shown under the name. */\n' +
+    '  blurb: string;\n' +
+    '  /** First level cost. */\n' +
+    '  baseCost: number;\n' +
+    '  /** Cost multiplier per level. */\n' +
+    '  growth: number;\n' +
+    '  /** Hard cap so the UI can show mastery; high enough to never feel near. */\n' +
+    '  maxLevel: number;\n' +
+    '}\n' +
+    '\n' +
+    '/* The nine tracks. Costs and effects are tuned together with the harness:\n' +
+    ' * the measured first prestige on a greedy strategy lands around a quarter\n' +
+    ' * of an hour of active play (12.7 to 13.3 minutes, measured in Round 583), and no state exists where nothing is affordable\n' +
+    ' * within a minute of income. */\n' +
+    'export const TRACKS: TycoonTrack[] = [\n' +
+    "  { id: 'stands', name: 'Stands', emoji: '\\u{1F3DF}\\u{FE0F}', blurb: 'Seats. Every level adds room for 40 more fans', baseCost: 30, growth: 1.15, maxLevel: 200 },\n" +
+    "  { id: 'tickets', name: 'Ticket Office', emoji: '\\u{1F39F}\\u{FE0F}', blurb: 'Faster turnstiles, better prices per fan', baseCost: 25, growth: 1.14, maxLevel: 200 },\n" +
+    "  { id: 'snacks', name: 'Snack Bar', emoji: '\\u{1F32D}', blurb: 'Every fan buys a little more each second', baseCost: 60, growth: 1.14, maxLevel: 200 },\n" +
+    "  { id: 'shop', name: 'Club Shop', emoji: '\\u{1F455}', blurb: 'Scarves and shirts, higher spend per fan', baseCost: 220, growth: 1.16, maxLevel: 200 },\n" +
+    "  { id: 'parking', name: 'Parking', emoji: '\\u{1F697}', blurb: 'Flat matchday money that never has a bad day', baseCost: 120, growth: 1.15, maxLevel: 200 },\n" +
+    "  { id: 'lights', name: 'Floodlights', emoji: '\\u{1F4A1}', blurb: 'Night games. New fans find the club faster', baseCost: 400, growth: 1.165, maxLevel: 150 },\n" +
+    "  { id: 'squad', name: 'Squad', emoji: '⚽', blurb: 'Better players, more goals, longer win runs', baseCost: 150, growth: 1.16, maxLevel: 200 },\n" +
+    "  { id: 'academy', name: 'Academy', emoji: '\\u{1F331}', blurb: 'Kids and community. The fanbase grows on its own', baseCost: 900, growth: 1.175, maxLevel: 150 },\n" +
+    "  { id: 'megaphone', name: 'Megaphone', emoji: '\\u{1F4E3}', blurb: 'Your taps on the stadium hype the crowd for more', baseCost: 45, growth: 1.17, maxLevel: 120 },\n" +
+    '];\n' +
+    '\n' +
+    "export type TrackId = typeof TRACKS[number]['id'];\n" +
+    '\n' +
+    '/* ================================================================== */\n' +
+    '/* Round 162: the massive version. His words: "a full game like a     */\n' +
+    '/* Massive idle game... a ton better." Four new systems, every one    */\n' +
+    '/* additive, every one pure, every one measured by the harness:       */\n' +
+    '/* DIVISIONS to climb (the long arc), STAFF to hire (income that      */\n' +
+    '/* scales into the billions), ACHIEVEMENTS (each one a permanent      */\n' +
+    '/* income bonus, forever, across grounds), and the GOLDEN WHISTLE     */\n' +
+    '/* (a catch-it-quick bonus that drifts across the pitch).             */\n' +
+    '/* ================================================================== */\n' +
+    '\n' +
+    '/* ---------- divisions: the ladder this ground is climbing ---------- */\n' +
+    '\n' +
+    'export interface TycoonDivision {\n' +
+    '  name: string;\n' +
+    '  emoji: string;\n' +
+    '  /** Wins at THIS ground to sit in this division. */\n' +
+    '  winsNeeded: number;\n' +
+    '  /** Everything earns this much more here: bigger stage, bigger money. */\n' +
+    '  incomeMult: number;\n' +
+    '  /** Opponents up here are better, permanently. */\n' +
+    '  oppBoost: number;\n' +
+    '}\n' +
+    '\n' +
+    '/* Invented league names, checked by the harness against every real club\n' +
+    ' * and league in the Club Manager world. Climbing is per GROUND: sell up\n' +
+    ' * and the new club starts at the bottom with the rep multiplier for company. */\n' +
+    'export const DIVISIONS: TycoonDivision[] = [\n' +
+    "  { name: 'Muddy Meadows League', emoji: '🌧️', winsNeeded: 0, incomeMult: 1, oppBoost: 0 },\n" +
+    "  { name: 'Gravel Lane League', emoji: '🧱', winsNeeded: 6, incomeMult: 1.15, oppBoost: 0.006 },\n" +
+    "  { name: 'Tin Cup Division', emoji: '🥫', winsNeeded: 14, incomeMult: 1.32, oppBoost: 0.012 },\n" +
+    "  { name: 'Ironworks League', emoji: '⚙️', winsNeeded: 25, incomeMult: 1.55, oppBoost: 0.019 },\n" +
+    "  { name: 'Granite Division', emoji: '🪨', winsNeeded: 40, incomeMult: 1.85, oppBoost: 0.027 },\n" +
+    "  { name: 'Silverline League', emoji: '🥈', winsNeeded: 60, incomeMult: 2.25, oppBoost: 0.036 },\n" +
+    "  { name: 'Floodlit League', emoji: '💡', winsNeeded: 85, incomeMult: 2.8, oppBoost: 0.046 },\n" +
+    "  { name: 'Velvet Division', emoji: '🎩', winsNeeded: 115, incomeMult: 3.5, oppBoost: 0.057 },\n" +
+    "  { name: 'Crown Circuit', emoji: '👑', winsNeeded: 150, incomeMult: 4.4, oppBoost: 0.069 },\n" +
+    "  { name: 'The Summit', emoji: '🏔️', winsNeeded: 200, incomeMult: 5.5, oppBoost: 0.082 },\n" +
+    '];\n' +
+    '\n' +
+    '/** Index into DIVISIONS for the current ground. Round 582: the league decides.\n' +
+    ' *  A save without one (only ever mid-load) falls back to the old win count. */\n' +
+    'export function divisionIndex(s: TycoonState): number {\n' +
+    '  if (s.league) return Math.min(DIVISIONS.length - 1, Math.max(0, s.league.division | 0));\n' +
+    '  return legacyDivisionIndex(s.groundWins ?? 0);\n' +
+    '}\n' +
+    '\n' +
+    "/** Round 162 to 581: the division a ground's home win count put it in. Since\n" +
+    ' *  Round 582 promotion is by winning the league, and this survives only to seed\n' +
+    ' *  the league of a save written before the league existed, so nobody drops. */\n' +
+    'export function legacyDivisionIndex(groundWins: number): number {\n' +
+    '  let idx = 0;\n' +
+    '  for (let i = 0; i < DIVISIONS.length; i++) {\n' +
+    '    if (groundWins >= DIVISIONS[i].winsNeeded) idx = i;\n' +
+    '  }\n' +
+    '  return idx;\n' +
+    '}\n' +
+    '\n' +
+    'export function divisionOf(s: TycoonState): TycoonDivision {\n' +
+    '  return DIVISIONS[divisionIndex(s)];\n' +
+    '}\n' +
+    '\n' +
+    '/* ---------- staff: the payroll that earns while you sleep ---------- */\n' +
+    '\n' +
+    'export interface TycoonStaff {\n' +
+    '  id: string;\n' +
+    '  name: string;\n' +
+    '  emoji: string;\n' +
+    '  blurb: string;\n' +
+    '  baseCost: number;\n' +
+    '  growth: number;\n' +
+    '  /** Dollars per second per level, before the global multipliers. */\n' +
+    '  rate: number;\n' +
+    '  maxLevel: number;\n' +
+    '}\n' +
+    '\n' +
+    '/* Classic idle-building economics: each tier costs about 5x the last and\n' +
+    ' * pays about 4.5x, so every tier is worth reaching and none is ever the\n' +
+    ' * only answer. Rates and costs tuned with the harness: every tier pays\n' +
+    ' * itself back inside a few minutes at the stage it unlocks. */\n' +
+    'export const STAFF: TycoonStaff[] = [\n' +
+    "  { id: 'steward', name: 'Turnstile Steward', emoji: '🧍', blurb: 'Keeps the queue moving and the coins counted', baseCost: 100, growth: 1.13, rate: 0.6, maxLevel: 300 },\n" +
+    "  { id: 'pieChef', name: 'Pie Chef', emoji: '👨‍🍳', blurb: 'The half time pie that people cross town for', baseCost: 650, growth: 1.13, rate: 3.5, maxLevel: 300 },\n" +
+    "  { id: 'kitman', name: 'Kit Man', emoji: '🧺', blurb: 'Shirts washed, boots ready, fines for lost socks', baseCost: 3500, growth: 1.13, rate: 16, maxLevel: 300 },\n" +
+    "  { id: 'groundsman', name: 'Groundskeeper', emoji: '🌱', blurb: 'A pitch so good visiting teams ask for a photo', baseCost: 18000, growth: 1.135, rate: 70, maxLevel: 300 },\n" +
+    "  { id: 'photographer', name: 'Club Photographer', emoji: '📷', blurb: 'Every goal framed and sold by the exit', baseCost: 95000, growth: 1.135, rate: 300, maxLevel: 300 },\n" +
+    "  { id: 'megastore', name: 'Megastore Manager', emoji: '🏬', blurb: 'Third kits, fourth kits, a candle that smells of grass', baseCost: 520000, growth: 1.14, rate: 1300, maxLevel: 300 },\n" +
+    "  { id: 'commercial', name: 'Commercial Director', emoji: '💼', blurb: 'Shakes hands, signs deals, never watches the match', baseCost: 2800000, growth: 1.14, rate: 5800, maxLevel: 300 },\n" +
+    "  { id: 'legend', name: 'Club Legend Ambassador', emoji: '🐐', blurb: 'Retired, beloved, worth a stand full of season ticket renewals', baseCost: 15000000, growth: 1.145, rate: 26000, maxLevel: 300 },\n" +
+    '];\n' +
+    '\n' +
+    'export function staffById(id: string): TycoonStaff {\n' +
+    '  return STAFF.find(t => t.id === id) ?? STAFF[0];\n' +
+    '}\n' +
+    '\n' +
+    'export function staffLevelOf(s: TycoonState, id: string): number {\n' +
+    '  return (s.staffLevels ?? {})[id] ?? 0;\n' +
+    '}\n' +
+    '\n' +
+    'export function staffCostOf(s: TycoonState, id: string): number {\n' +
+    '  const t = staffById(id);\n' +
+    '  return Math.round(t.baseCost * Math.pow(t.growth, staffLevelOf(s, id)));\n' +
+    '}\n' +
+    '\n' +
+    'export function canHire(s: TycoonState, id: string): boolean {\n' +
+    '  return staffLevelOf(s, id) < staffById(id).maxLevel && s.money >= staffCostOf(s, id);\n' +
+    '}\n' +
+    '\n' +
+    'export function hire(s: TycoonState, id: string): TycoonState {\n' +
+    '  if (!canHire(s, id)) return s;\n' +
+    '  const cost = staffCostOf(s, id);\n' +
+    '  return {\n' +
+    '    ...s,\n' +
+    '    money: s.money - cost,\n' +
+    '    staffLevels: { ...(s.staffLevels ?? {}), [id]: staffLevelOf(s, id) + 1 },\n' +
+    '  };\n' +
+    '}\n' +
+    '\n' +
+    'export function totalStaffLevels(s: TycoonState): number {\n' +
+    '  return STAFF.reduce((sum, t) => sum + staffLevelOf(s, t.id), 0);\n' +
+    '}\n' +
+    '\n' +
+    '/** Staff income before the global multipliers. Round 196: the Veteran\n' +
+    ' *  Payroll legacy perk raises every rate here, at the source, so the\n' +
+    ' *  payroll line and the income line can never disagree about it. */\n' +
+    'export function staffBaseIncome(s: TycoonState): number {\n' +
+    '  return STAFF.reduce((sum, t) => sum + staffLevelOf(s, t.id) * t.rate, 0) * payrollMult(s);\n' +
+    '}\n' +
+    '\n' +
+    '/* ---------- the golden whistle: catch it before it drifts away ---------- */\n' +
+    '\n' +
+    'export type'... 73521 more characters,
+  expected: '/**\n' +
+    ' * Stadium Tycoon (Round 146): the idle game. The owner sent two reference\n' +
+    ' * screenshots of an idle sports tycoon on 2026-08-17 and asked for ours,\n' +
+    ' * "Suprise me on how ur going to do it but add so many things to it", with\n' +
+    ' * animation called out twice. Everything here is original: our mechanics,\n' +
+    " * our names, our numbers, no other product's art or currency.\n" +
+    ' *\n' +
+    " * The shape of the game: you run a small football club's matchday business.\n" +
+    ' * Fans arrive if there is room and a reason; every fan pays at the gate and\n' +
+    ' * spends at whatever you have built; the toy match on screen creates goal\n' +
+    ' * moments that pay a bonus scaled by the crowd; winning runs grow the\n' +
+    ' * fanbase. Spend income on nine upgrade tracks, prestige into Reputation\n' +
+    ' * stars when the club outgrows itself, and the loop restarts faster.\n' +
+    ' *\n' +
+    ' * Everything below is PURE: the hook owns time and storage, this file owns\n' +
+    ' * math. The sim harness (scripts/simStadiumTycoon.mjs) plays hours of the\n' +
+    ' * game headless and asserts the curve: no softlock, no runaway, prestige\n' +
+    ' * lands in a sane window, offline pay is capped.\n' +
+    ' */\n' +
+    '\n' +
+    "import { roundRobinCalendar, tableOrder, mulberry32, hash32 } from '@/lib/leagueCore';\n" +
+    '\n' +
+    'export interface TycoonTrack {\n' +
+    '  id: string;\n' +
+    '  name: string;\n' +
+    '  emoji: string;\n' +
+    '  /** What the track does, one line, shown under the name. */\n' +
+    '  blurb: string;\n' +
+    '  /** First level cost. */\n' +
+    '  baseCost: number;\n' +
+    '  /** Cost multiplier per level. */\n' +
+    '  growth: number;\n' +
+    '  /** Hard cap so the UI can show mastery; high enough to never feel near. */\n' +
+    '  maxLevel: number;\n' +
+    '}\n' +
+    '\n' +
+    '/* The nine tracks. Costs and effects are tuned together with the harness:\n' +
+    ' * the measured first prestige on a greedy strategy lands around a quarter\n' +
+    ' * of an hour of active play (12.7 to 13.3 minutes, measured in Round 583), and no state exists where nothing is affordable\n' +
+    ' * within a minute of income. */\n' +
+    'export const TRACKS: TycoonTrack[] = [\n' +
+    "  { id: 'stands', name: 'Stands', emoji: '\\u{1F3DF}\\u{FE0F}', blurb: 'Seats. Every level adds room for 40 more fans', baseCost: 30, growth: 1.15, maxLevel: 200 },\n" +
+    "  { id: 'tickets', name: 'Ticket Office', emoji: '\\u{1F39F}\\u{FE0F}', blurb: 'Faster turnstiles, better prices per fan', baseCost: 25, growth: 1.14, maxLevel: 200 },\n" +
+    "  { id: 'snacks', name: 'Snack Bar', emoji: '\\u{1F32D}', blurb: 'Every fan buys a little more each second', baseCost: 60, growth: 1.14, maxLevel: 200 },\n" +
+    "  { id: 'shop', name: 'Club Shop', emoji: '\\u{1F455}', blurb: 'Scarves and shirts, higher spend per fan', baseCost: 220, growth: 1.16, maxLevel: 200 },\n" +
+    "  { id: 'parking', name: 'Parking', emoji: '\\u{1F697}', blurb: 'Flat matchday money that never has a bad day', baseCost: 120, growth: 1.15, maxLevel: 200 },\n" +
+    "  { id: 'lights', name: 'Floodlights', emoji: '\\u{1F4A1}', blurb: 'Night games. New fans find the club faster', baseCost: 400, growth: 1.165, maxLevel: 150 },\n" +
+    "  { id: 'squad', name: 'Squad', emoji: '⚽', blurb: 'Better players, more goals, longer win runs', baseCost: 150, growth: 1.16, maxLevel: 200 },\n" +
+    "  { id: 'academy', name: 'Academy', emoji: '\\u{1F331}', blurb: 'Kids and community. The fanbase grows on its own', baseCost: 900, growth: 1.175, maxLevel: 150 },\n" +
+    "  { id: 'megaphone', name: 'Megaphone', emoji: '\\u{1F4E3}', blurb: 'Your taps on the stadium hype the crowd for more', baseCost: 45, growth: 1.17, maxLevel: 120 },\n" +
+    '];\n' +
+    '\n' +
+    "export type TrackId = typeof TRACKS[number]['id'];\n" +
+    '\n' +
+    '/* ================================================================== */\n' +
+    '/* Round 162: the massive version. His words: "a full game like a     */\n' +
+    '/* Massive idle game... a ton better." Four new systems, every one    */\n' +
+    '/* additive, every one pure, every one measured by the harness:       */\n' +
+    '/* DIVISIONS to climb (the long arc), STAFF to hire (income that      */\n' +
+    '/* scales into the billions), ACHIEVEMENTS (each one a permanent      */\n' +
+    '/* income bonus, forever, across grounds), and the GOLDEN WHISTLE     */\n' +
+    '/* (a catch-it-quick bonus that drifts across the pitch).             */\n' +
+    '/* ================================================================== */\n' +
+    '\n' +
+    '/* ---------- divisions: the ladder this ground is climbing ---------- */\n' +
+    '\n' +
+    'export interface TycoonDivision {\n' +
+    '  name: string;\n' +
+    '  emoji: string;\n' +
+    '  /** Wins at THIS ground to sit in this division. */\n' +
+    '  winsNeeded: number;\n' +
+    '  /** Everything earns this much more here: bigger stage, bigger money. */\n' +
+    '  incomeMult: number;\n' +
+    '  /** Opponents up here are better, permanently. */\n' +
+    '  oppBoost: number;\n' +
+    '}\n' +
+    '\n' +
+    '/* Invented league names, checked by the harness against every real club\n' +
+    ' * and league in the Club Manager world. Climbing is per GROUND: sell up\n' +
+    ' * and the new club starts at the bottom with the rep multiplier for company. */\n' +
+    'export const DIVISIONS: TycoonDivision[] = [\n' +
+    "  { name: 'Muddy Meadows League', emoji: '🌧️', winsNeeded: 0, incomeMult: 1, oppBoost: 0 },\n" +
+    "  { name: 'Gravel Lane League', emoji: '🧱', winsNeeded: 6, incomeMult: 1.15, oppBoost: 0.006 },\n" +
+    "  { name: 'Tin Cup Division', emoji: '🥫', winsNeeded: 14, incomeMult: 1.32, oppBoost: 0.012 },\n" +
+    "  { name: 'Ironworks League', emoji: '⚙️', winsNeeded: 25, incomeMult: 1.55, oppBoost: 0.019 },\n" +
+    "  { name: 'Granite Division', emoji: '🪨', winsNeeded: 40, incomeMult: 1.85, oppBoost: 0.027 },\n" +
+    "  { name: 'Silverline League', emoji: '🥈', winsNeeded: 60, incomeMult: 2.25, oppBoost: 0.036 },\n" +
+    "  { name: 'Floodlit League', emoji: '💡', winsNeeded: 85, incomeMult: 2.8, oppBoost: 0.046 },\n" +
+    "  { name: 'Velvet Division', emoji: '🎩', winsNeeded: 115, incomeMult: 3.5, oppBoost: 0.057 },\n" +
+    "  { name: 'Crown Circuit', emoji: '👑', winsNeeded: 150, incomeMult: 4.4, oppBoost: 0.069 },\n" +
+    "  { name: 'The Summit', emoji: '🏔️', winsNeeded: 200, incomeMult: 5.5, oppBoost: 0.082 },\n" +
+    '];\n' +
+    '\n' +
+    '/** Index into DIVISIONS for the current ground. Round 582: the league decides.\n' +
+    ' *  A save without one (only ever mid-load) falls back to the old win count. */\n' +
+    'export function divisionIndex(s: TycoonState): number {\n' +
+    '  if (s.league) return Math.min(DIVISIONS.length - 1, Math.max(0, s.league.division | 0));\n' +
+    '  return legacyDivisionIndex(s.groundWins ?? 0);\n' +
+    '}\n' +
+    '\n' +
+    "/** Round 162 to 581: the division a ground's home win count put it in. Since\n" +
+    ' *  Round 582 promotion is by winning the league, and this survives only to seed\n' +
+    ' *  the league of a save written before the league existed, so nobody drops. */\n' +
+    'export function legacyDivisionIndex(groundWins: number): number {\n' +
+    '  let idx = 0;\n' +
+    '  for (let i = 0; i < DIVISIONS.length; i++) {\n' +
+    '    if (groundWins >= DIVISIONS[i].winsNeeded) idx = i;\n' +
+    '  }\n' +
+    '  return idx;\n' +
+    '}\n' +
+    '\n' +
+    'export function divisionOf(s: TycoonState): TycoonDivision {\n' +
+    '  return DIVISIONS[divisionIndex(s)];\n' +
+    '}\n' +
+    '\n' +
+    '/* ---------- staff: the payroll that earns while you sleep ---------- */\n' +
+    '\n' +
+    'export interface TycoonStaff {\n' +
+    '  id: string;\n' +
+    '  name: string;\n' +
+    '  emoji: string;\n' +
+    '  blurb: string;\n' +
+    '  baseCost: number;\n' +
+    '  growth: number;\n' +
+    '  /** Dollars per second per level, before the global multipliers. */\n' +
+    '  rate: number;\n' +
+    '  maxLevel: number;\n' +
+    '}\n' +
+    '\n' +
+    '/* Classic idle-building economics: each tier costs about 5x the last and\n' +
+    ' * pays about 4.5x, so every tier is worth reaching and none is ever the\n' +
+    ' * only answer. Rates and costs tuned with the harness: every tier pays\n' +
+    ' * itself back inside a few minutes at the stage it unlocks. */\n' +
+    'export const STAFF: TycoonStaff[] = [\n' +
+    "  { id: 'steward', name: 'Turnstile Steward', emoji: '🧍', blurb: 'Keeps the queue moving and the coins counted', baseCost: 100, growth: 1.13, rate: 0.6, maxLevel: 300 },\n" +
+    "  { id: 'pieChef', name: 'Pie Chef', emoji: '👨‍🍳', blurb: 'The half time pie that people cross town for', baseCost: 650, growth: 1.13, rate: 3.5, maxLevel: 300 },\n" +
+    "  { id: 'kitman', name: 'Kit Man', emoji: '🧺', blurb: 'Shirts washed, boots ready, fines for lost socks', baseCost: 3500, growth: 1.13, rate: 16, maxLevel: 300 },\n" +
+    "  { id: 'groundsman', name: 'Groundskeeper', emoji: '🌱', blurb: 'A pitch so good visiting teams ask for a photo', baseCost: 18000, growth: 1.135, rate: 70, maxLevel: 300 },\n" +
+    "  { id: 'photographer', name: 'Club Photographer', emoji: '📷', blurb: 'Every goal framed and sold by the exit', baseCost: 95000, growth: 1.135, rate: 300, maxLevel: 300 },\n" +
+    "  { id: 'megastore', name: 'Megastore Manager', emoji: '🏬', blurb: 'Third kits, fourth kits, a candle that smells of grass', baseCost: 520000, growth: 1.14, rate: 1300, maxLevel: 300 },\n" +
+    "  { id: 'commercial', name: 'Commercial Director', emoji: '💼', blurb: 'Shakes hands, signs deals, never watches the match', baseCost: 2800000, growth: 1.14, rate: 5800, maxLevel: 300 },\n" +
+    "  { id: 'legend', name: 'Club Legend Ambassador', emoji: '🐐', blurb: 'Retired, beloved, worth a stand full of season ticket renewals', baseCost: 15000000, growth: 1.145, rate: 26000, maxLevel: 300 },\n" +
+    '];\n' +
+    '\n' +
+    'export function staffById(id: string): TycoonStaff {\n' +
+    '  return STAFF.find(t => t.id === id) ?? STAFF[0];\n' +
+    '}\n' +
+    '\n' +
+    'export function staffLevelOf(s: TycoonState, id: string): number {\n' +
+    '  return (s.staffLevels ?? {})[id] ?? 0;\n' +
+    '}\n' +
+    '\n' +
+    'export function staffCostOf(s: TycoonState, id: string): number {\n' +
+    '  const t = staffById(id);\n' +
+    '  return Math.round(t.baseCost * Math.pow(t.growth, staffLevelOf(s, id)));\n' +
+    '}\n' +
+    '\n' +
+    'export function canHire(s: TycoonState, id: string): boolean {\n' +
+    '  return staffLevelOf(s, id) < staffById(id).maxLevel && s.money >= staffCostOf(s, id);\n' +
+    '}\n' +
+    '\n' +
+    'export function hire(s: TycoonState, id: string): TycoonState {\n' +
+    '  if (!canHire(s, id)) return s;\n' +
+    '  const cost = staffCostOf(s, id);\n' +
+    '  return {\n' +
+    '    ...s,\n' +
+    '    money: s.money - cost,\n' +
+    '    staffLevels: { ...(s.staffLevels ?? {}), [id]: staffLevelOf(s, id) + 1 },\n' +
+    '  };\n' +
+    '}\n' +
+    '\n' +
+    'export function totalStaffLevels(s: TycoonState): number {\n' +
+    '  return STAFF.reduce((sum, t) => sum + staffLevelOf(s, t.id), 0);\n' +
+    '}\n' +
+    '\n' +
+    '/** Staff income before the global multipliers. Round 196: the Veteran\n' +
+    ' *  Payroll legacy perk raises every rate here, at the source, so the\n' +
+    ' *  payroll line and the income line can never disagree about it. */\n' +
+    'export function staffBaseIncome(s: TycoonState): number {\n' +
+    '  return STAFF.reduce((sum, t) => sum + staffLevelOf(s, t.id) * t.rate, 0) * payrollMult(s);\n' +
+    '}\n' +
+    '\n' +
+    '/* ---------- the golden whistle: catch it before it drifts away ---------- */\n' +
+    '\n' +
+    'export type'... 73476 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

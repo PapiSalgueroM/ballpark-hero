@@ -1,0 +1,460 @@
+TOUCH ok src/hooks/useStadiumTycoon.ts lines 490 -> 492
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Complete pinned original differs only by the draw branch
++ actual - expected
+... Skipped lines
+
+  '/**\n' +
+    ' * Round 146: the live half of Stadium Tycoon. The lib owns the math; this\n' +
+    ' * owns time, storage and the event stream the animations feed on. The loop\n' +
+    ' * runs on requestAnimationFrame but ticks the sim at ~5 Hz, which is plenty\n' +
+    ' * for an idle game and keeps phones cool. Saves every 5 seconds and on tab\n' +
+...
+    '        // settle must not bill for them again.\n' +
++   '        paidUntilRef.curre'... 12965 more characters
+-   '        paidUntilRef.curre'... 12920 more characters
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simTycoonDrawResult.mjs:28:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '/**\n' +
+    ' * Round 146: the live half of Stadium Tycoon. The lib owns the math; this\n' +
+    ' * owns time, storage and the event stream the animations feed on. The loop\n' +
+    ' * runs on requestAnimationFrame but ticks the sim at ~5 Hz, which is plenty\n' +
+    ' * for an idle game and keeps phones cool. Saves every 5 seconds and on tab\n' +
+    ' * hide, so the away-earnings clock is honest.\n' +
+    ' */\n' +
+    "import { useCallback, useEffect, useRef, useState } from 'react';\n" +
+    "import { recordCompletion } from '@/lib/completions';\n" +
+    "import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';\n" +
+    "import { recordFullTimes } from '@/lib/tycoonRewards';\n" +
+    "import type { FullTime } from '@/lib/tycoonRewards';\n" +
+    'import {\n' +
+    '  TycoonState, TickEvent, newTycoon, tick, buy, tap, prestige,\n' +
+    '  offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,\n' +
+    '  activateBoost, hire, catchGolden, rollGoldenKind, goldenActive, ACH_BONUS,\n' +
+    '  GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName, GOLDEN_CATCH_SEC, GOLDEN_MEAN_GAP_SEC, HYPE_MULT,\n' +
+    '  awaySecondsOf, playAwayMatchdays, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,\n' +
+    '  setPieceOffer, beginSetPiece, awardSetPieceGoal,\n' +
+    '  setTicketPolicy,\n' +
+    "} from '@/lib/stadiumTycoon';\n" +
+    "import type { GoldenKind, LeagueClub, AwayMatch, SetPieceOffer, TicketPolicy } from '@/lib/stadiumTycoon';\n" +
+    '\n' +
+    '/** Round 162: a golden whistle drifting across the pitch, waiting to be\n' +
+    ' *  caught. Purely presentational until the tap: the engine only hears about\n' +
+    ' *  it if the player actually catches it. */\n' +
+    'export interface PendingGolden {\n' +
+    '  id: number;\n' +
+    '  kind: GoldenKind;\n' +
+    '  x: number;\n' +
+    '  y: number;\n' +
+    '  /** performance.now() when it drifts away uncaught. */\n' +
+    '  expiresAt: number;\n' +
+    '}\n' +
+    '\n' +
+    'export interface Floater {\n' +
+    '  id: number;\n' +
+    '  text: string;\n' +
+    "  kind: 'money' | 'goal' | 'win' | 'bad' | 'tap';\n" +
+    '  /** Percent coordinates inside the pitch panel. */\n' +
+    '  x: number;\n' +
+    '  y: number;\n' +
+    '}\n' +
+    '\n' +
+    'let floaterSeq = 1;\n' +
+    '\n' +
+    "/** Round 530: the two loudest events, held for the page's cards. The label\n" +
+    " *  and the bonus are the engine's own event fields, printed as they came. */\n" +
+    'export interface Promotion { label: string; amount: number; seq: number }\n' +
+    'export interface BadgeEarned { label: string; seq: number }\n' +
+    '/** Round 582 review: the season that just ended, so the League tab can show how\n' +
+    ' *  it finished instead of silently wiping the table. This sitting only. */\n' +
+    'export interface LastSeason { label: string; position: number; table: LeagueClub[] }\n' +
+    "/** Round 583: one goal the pitch replays, straight off the engine's event: which\n" +
+    ' *  end it went in and the minute the engine committed it. Never a second roll. */\n' +
+    "export interface Replay { id: number; side: 'for' | 'against'; minute: number }\n" +
+    '/** Round 584: what the away card says about a trip. The results as they were\n' +
+    ' *  played, the milestone money they earned, and the table as it stood when you\n' +
+    ' *  came back (a snapshot, so a card left open never describes a later table). */\n' +
+    'export interface AwayTrip {\n' +
+    '  results: AwayMatch[];\n' +
+    '  milestonePay: number;\n' +
+    '  /** Round 585: the gems the away wins earned. */\n' +
+    '  gems: number;\n' +
+    '  standing: { position: number; clubs: number; left: number } | null;\n' +
+    '}\n' +
+    '\n' +
+    'export function useStadiumTycoon(getEdge?: () => number) {\n' +
+    '  const getEdgeRef = useRef(getEdge);\n' +
+    '  getEdgeRef.current = getEdge;\n' +
+    '  const [state, setState] = useState<TycoonState>(() => {\n' +
+    '    const now = Date.now();\n' +
+    '    const loaded = deserializeTycoon(\n' +
+    "      typeof localStorage !== 'undefined' ? localStorage.getItem(TYCOON_SAVE_KEY) : null,\n" +
+    '      now,\n' +
+    '    );\n' +
+    '    return loaded ?? newTycoon(now);\n' +
+    '  });\n' +
+    '  const [floaters, setFloaters] = useState<Floater[]>([]);\n' +
+    '  const [awayPay, setAwayPay] = useState<number | null>(null);\n' +
+    '  /* Round 584: the matchdays played while you were away, for the away card. */\n' +
+    '  const [awayTrip, setAwayTrip] = useState<AwayTrip | null>(null);\n' +
+    '  const [confetti, setConfetti] = useState(0);\n' +
+    '  const [golden, setGolden] = useState<PendingGolden | null>(null);\n' +
+    '  const [activeSetPiece, setActiveSetPiece] = useState<SetPieceOffer | null>(null);\n' +
+    '  const [setPieceError, setSetPieceError] = useState<string | null>(null);\n' +
+    '  const [gearSaveBlocked, setGearSaveBlocked] = useState(false);\n' +
+    '  const [ticketSaveFailed, setTicketSaveFailed] = useState(false);\n' +
+    '  const [promotion, setPromotion] = useState<Promotion | null>(null);\n' +
+    '  const [badge, setBadge] = useState<BadgeEarned | null>(null);\n' +
+    '  const [lastSeason, setLastSeason] = useState<LastSeason | null>(null);\n' +
+    '  /* Round 583: goals waiting for the pitch. Queued only while the pitch is on\n' +
+    '     screen: a goal scored while you are in another room is on the scoreboard\n' +
+    '     when you come back, and is never replayed late. */\n' +
+    '  const [replays, setReplays] = useState<Replay[]>([]);\n' +
+    '  const replaysOnRef = useRef(true);\n' +
+    '  /* Round 581: the ref is the truth and it is written FIRST. Every change\n' +
+    '     computes from the ref, assigns the ref, saves if it has to, and only then\n' +
+    '     tells React. It used to be assigned during render, so between an action and\n' +
+    '     the render that followed it the ref still held the state from before the\n' +
+    '     action: a pagehide in that gap (the Round 567 shape) saved the old state\n' +
+    '     over the new one, and a tick and a tap landing in the same frame each read\n' +
+    '     the old ref and the second erased the first. */\n' +
+    '  const stateRef = useRef(state);\n' +
+    '  const commit = useCallback((next: TycoonState) => {\n' +
+    '    stateRef.current = next;\n' +
+    '    setState(next);\n' +
+    '  }, []);\n' +
+    '  const saveTicketState = useCallback((next: TycoonState) => {\n' +
+    '    try {\n' +
+    '      localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now()));\n' +
+    '      setTicketSaveFailed(false);\n' +
+    '      return true;\n' +
+    '    } catch {\n' +
+    '      setTicketSaveFailed(true);\n' +
+    '      return false;\n' +
+    '    }\n' +
+    '  }, []);\n' +
+    '  const retryTicketSave = useCallback(() => saveTicketState(stateRef.current), [saveTicketState]);\n' +
+    '  const goldenRef = useRef(golden);\n' +
+    '  goldenRef.current = golden;\n' +
+    '\n' +
+    "  /* Round 657: the floater's clean up timer is owned by the page and dies\n" +
+    '     with it (see useOwnedTimeouts). */\n' +
+    '  const later = useOwnedTimeouts();\n' +
+    '\n' +
+    "  const pushFloater = useCallback((text: string, kind: Floater['kind'], x?: number, y?: number) => {\n" +
+    '    const f: Floater = {\n' +
+    '      id: floaterSeq++,\n' +
+    '      text,\n' +
+    '      kind,\n' +
+    '      x: x ?? 20 + Math.random() * 60,\n' +
+    '      y: y ?? 30 + Math.random() * 40,\n' +
+    '    };\n' +
+    '    setFloaters(cur => [...cur.slice(-14), f]);\n' +
+    '    // Floaters clean themselves up after the animation finishes.\n' +
+    '    later(() => setFloaters(cur => cur.filter(g => g.id !== f.id)), 1900);\n' +
+    '  }, [later]);\n' +
+    '\n' +
+    '  /* Round 439: away earnings settle from the wall clock the ground has not\n' +
+    '     already been paid for, so a fresh load and a tab that was only\n' +
+    '     backgrounded go through the exact same rule and the exact same cap.\n' +
+    '     paidUntilRef is wall-clock ms, seeded from the save and pushed forward\n' +
+    '     by the loop by exactly the seconds it ticks, so live play can never be\n' +
+    '     billed as time away and a throttled frame cannot quietly lose an hour.\n' +
+    '\n' +
+    '     What this fixes: the settle used to run once, on mount. rAF stops dead\n' +
+    '     in a hidden tab, so a player who left the tab open in another window\n' +
+    '     came back to a single frame with dt clamped to two seconds, and the old\n' +
+    '     visibilitychange handler then saved with savedAt = now, so a later\n' +
+    '     reload could not pay for those hours either. Hours away, two seconds\n' +
+    '     paid, and the difference gone for good. */\n' +
+    '  const paidUntilRef = useRef(state.savedAt);\n' +
+    '  const settleAway = useCallback(() => {\n' +
+    '    const now = Date.now();\n' +
+    '    const cur = stateRef.current;\n' +
+    '    const trip = { ...cur, savedAt: paidUntilRef.current };\n' +
+    '    const pay = offlineEarnings(trip, now);\n' +
+    '    /* Round 584: a matchday for every half hour of the same trip the pay counts.\n' +
+    '       Played after the pay is worked out, so the results cannot move it. */\n' +
+    '    const matchdays = Math.floor(awaySecondsOf(trip, now) / AWAY_MATCHDAY_SEC);\n' +
+    '    paidUntilRef.current = now;\n' +
+    '    /* Review: a club with no income (a doctored fanbase of 0) still plays its\n' +
+    '       matchdays, so the pay alone cannot gate the settle. */\n' +
+    '    if (!(pay > 0) && matchdays === 0) return;\n' +
+    '    setAwayPay(Math.max(0, pay));\n' +
+    '    const paid = { ...cur, money: cur.money + Math.max(0, pay), lifetime: cur.lifetime + Math.max(0, pay), savedAt: now };\n' +
+    '    const away = matchdays > 0 ? playAwayMatchdays(paid, matchdays, Math.random, getEdgeRef.current?.() ?? 0) : null;\n' +
+    '    const lg = away?.state.league;\n' +
+    '    /* Round 585: an away win earns its gem, credited once per match. */\n' +
+    '    const awayGems = away\n' +
+    '      ? recordFullTimes(away.results.map((m, i) => ({\n' +
+    '        totalMatches: (paid.totalMatches ?? 0) + i + 1,\n' +
+    "        result: m.result === 'W' ? 'win' : m.result === 'D' ? 'draw' : 'loss',\n" +
+    '        away: true,\n' +
+    '      })))\n' +
+    '      : 0;\n' +
+    '    setAwayTrip(away && away.results.length > 0 ? {\n' +
+    '      results: away.results,\n' +
+    '      gems: awayGems,\n' +
+    "      milestonePay: away.events.reduce((sum, e) => sum + (e.kind === 'milestone' ? e.amount ?? 0 : 0), 0),\n" +
+    '      standing: lg && away.results.some(r => !r.friendly)\n' +
+    '        ? { position: leaguePosition(lg), clubs: lg.clubs.length, left: leagueShape(lg.division).matchdays - lg.matchday }\n' +
+    '        : null,\n' +
+    '    } : null);\n' +
+    '    const next = away ? away.state : paid;\n' +
+    '    stateRef.current = next;\n' +
+    '    // Bank it straight away: an unsaved settle would be paid a second time.\n' +
+    '    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, now)); } catch { /* ignore */ }\n' +
+    '    setState(next);\n' +
+    '  }, []);\n' +
+    '\n' +
+    '  // The settlement for the time before this mount, before the loop starts.\n' +
+    '  useEffect(() => {\n' +
+    '    settleAway();\n' +
+    '    // eslint-disable-next-line react-hooks/exhaustive-deps\n' +
+    '  }, []);\n' +
+    '\n' +
+    '  // The loop.\n' +
+    '  useEffect(() => {\n' +
+    '    let raf = 0;\n' +
+    '    let last = performance.now();\n' +
+    '    let acc = 0;\n' +
+    '    let sinceSave = 0;\n' +
+    '    const step = (t: number) => {\n' +
+    '      const dt = Math.min(2, (t - last) / 1000);\n' +
+    '      last = t;\n' +
+    '      acc += dt;\n' +
+    '      sinceSave += dt;\n' +
+    '      if (acc >= 0.2) {\n' +
+    '        const use = acc;\n' +
+    '        acc = 0;\n' +
+    '        // Round 439: the loop has now paid for these seconds, so the away\n' +
+    '        // settle must not bill for them again.\n' +
+    '        paidUntilRef.curre'... 12965 more characters,
+  expected: '/**\n' +
+    ' * Round 146: the live half of Stadium Tycoon. The lib owns the math; this\n' +
+    ' * owns time, storage and the event stream the animations feed on. The loop\n' +
+    ' * runs on requestAnimationFrame but ticks the sim at ~5 Hz, which is plenty\n' +
+    ' * for an idle game and keeps phones cool. Saves every 5 seconds and on tab\n' +
+    ' * hide, so the away-earnings clock is honest.\n' +
+    ' */\n' +
+    "import { useCallback, useEffect, useRef, useState } from 'react';\n" +
+    "import { recordCompletion } from '@/lib/completions';\n" +
+    "import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';\n" +
+    "import { recordFullTimes } from '@/lib/tycoonRewards';\n" +
+    "import type { FullTime } from '@/lib/tycoonRewards';\n" +
+    'import {\n' +
+    '  TycoonState, TickEvent, newTycoon, tick, buy, tap, prestige,\n' +
+    '  offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,\n' +
+    '  activateBoost, hire, catchGolden, rollGoldenKind, goldenActive, ACH_BONUS,\n' +
+    '  GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName, GOLDEN_CATCH_SEC, GOLDEN_MEAN_GAP_SEC, HYPE_MULT,\n' +
+    '  awaySecondsOf, playAwayMatchdays, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,\n' +
+    '  setPieceOffer, beginSetPiece, awardSetPieceGoal,\n' +
+    '  setTicketPolicy,\n' +
+    "} from '@/lib/stadiumTycoon';\n" +
+    "import type { GoldenKind, LeagueClub, AwayMatch, SetPieceOffer, TicketPolicy } from '@/lib/stadiumTycoon';\n" +
+    '\n' +
+    '/** Round 162: a golden whistle drifting across the pitch, waiting to be\n' +
+    ' *  caught. Purely presentational until the tap: the engine only hears about\n' +
+    ' *  it if the player actually catches it. */\n' +
+    'export interface PendingGolden {\n' +
+    '  id: number;\n' +
+    '  kind: GoldenKind;\n' +
+    '  x: number;\n' +
+    '  y: number;\n' +
+    '  /** performance.now() when it drifts away uncaught. */\n' +
+    '  expiresAt: number;\n' +
+    '}\n' +
+    '\n' +
+    'export interface Floater {\n' +
+    '  id: number;\n' +
+    '  text: string;\n' +
+    "  kind: 'money' | 'goal' | 'win' | 'bad' | 'tap';\n" +
+    '  /** Percent coordinates inside the pitch panel. */\n' +
+    '  x: number;\n' +
+    '  y: number;\n' +
+    '}\n' +
+    '\n' +
+    'let floaterSeq = 1;\n' +
+    '\n' +
+    "/** Round 530: the two loudest events, held for the page's cards. The label\n" +
+    " *  and the bonus are the engine's own event fields, printed as they came. */\n" +
+    'export interface Promotion { label: string; amount: number; seq: number }\n' +
+    'export interface BadgeEarned { label: string; seq: number }\n' +
+    '/** Round 582 review: the season that just ended, so the League tab can show how\n' +
+    ' *  it finished instead of silently wiping the table. This sitting only. */\n' +
+    'export interface LastSeason { label: string; position: number; table: LeagueClub[] }\n' +
+    "/** Round 583: one goal the pitch replays, straight off the engine's event: which\n" +
+    ' *  end it went in and the minute the engine committed it. Never a second roll. */\n' +
+    "export interface Replay { id: number; side: 'for' | 'against'; minute: number }\n" +
+    '/** Round 584: what the away card says about a trip. The results as they were\n' +
+    ' *  played, the milestone money they earned, and the table as it stood when you\n' +
+    ' *  came back (a snapshot, so a card left open never describes a later table). */\n' +
+    'export interface AwayTrip {\n' +
+    '  results: AwayMatch[];\n' +
+    '  milestonePay: number;\n' +
+    '  /** Round 585: the gems the away wins earned. */\n' +
+    '  gems: number;\n' +
+    '  standing: { position: number; clubs: number; left: number } | null;\n' +
+    '}\n' +
+    '\n' +
+    'export function useStadiumTycoon(getEdge?: () => number) {\n' +
+    '  const getEdgeRef = useRef(getEdge);\n' +
+    '  getEdgeRef.current = getEdge;\n' +
+    '  const [state, setState] = useState<TycoonState>(() => {\n' +
+    '    const now = Date.now();\n' +
+    '    const loaded = deserializeTycoon(\n' +
+    "      typeof localStorage !== 'undefined' ? localStorage.getItem(TYCOON_SAVE_KEY) : null,\n" +
+    '      now,\n' +
+    '    );\n' +
+    '    return loaded ?? newTycoon(now);\n' +
+    '  });\n' +
+    '  const [floaters, setFloaters] = useState<Floater[]>([]);\n' +
+    '  const [awayPay, setAwayPay] = useState<number | null>(null);\n' +
+    '  /* Round 584: the matchdays played while you were away, for the away card. */\n' +
+    '  const [awayTrip, setAwayTrip] = useState<AwayTrip | null>(null);\n' +
+    '  const [confetti, setConfetti] = useState(0);\n' +
+    '  const [golden, setGolden] = useState<PendingGolden | null>(null);\n' +
+    '  const [activeSetPiece, setActiveSetPiece] = useState<SetPieceOffer | null>(null);\n' +
+    '  const [setPieceError, setSetPieceError] = useState<string | null>(null);\n' +
+    '  const [gearSaveBlocked, setGearSaveBlocked] = useState(false);\n' +
+    '  const [ticketSaveFailed, setTicketSaveFailed] = useState(false);\n' +
+    '  const [promotion, setPromotion] = useState<Promotion | null>(null);\n' +
+    '  const [badge, setBadge] = useState<BadgeEarned | null>(null);\n' +
+    '  const [lastSeason, setLastSeason] = useState<LastSeason | null>(null);\n' +
+    '  /* Round 583: goals waiting for the pitch. Queued only while the pitch is on\n' +
+    '     screen: a goal scored while you are in another room is on the scoreboard\n' +
+    '     when you come back, and is never replayed late. */\n' +
+    '  const [replays, setReplays] = useState<Replay[]>([]);\n' +
+    '  const replaysOnRef = useRef(true);\n' +
+    '  /* Round 581: the ref is the truth and it is written FIRST. Every change\n' +
+    '     computes from the ref, assigns the ref, saves if it has to, and only then\n' +
+    '     tells React. It used to be assigned during render, so between an action and\n' +
+    '     the render that followed it the ref still held the state from before the\n' +
+    '     action: a pagehide in that gap (the Round 567 shape) saved the old state\n' +
+    '     over the new one, and a tick and a tap landing in the same frame each read\n' +
+    '     the old ref and the second erased the first. */\n' +
+    '  const stateRef = useRef(state);\n' +
+    '  const commit = useCallback((next: TycoonState) => {\n' +
+    '    stateRef.current = next;\n' +
+    '    setState(next);\n' +
+    '  }, []);\n' +
+    '  const saveTicketState = useCallback((next: TycoonState) => {\n' +
+    '    try {\n' +
+    '      localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now()));\n' +
+    '      setTicketSaveFailed(false);\n' +
+    '      return true;\n' +
+    '    } catch {\n' +
+    '      setTicketSaveFailed(true);\n' +
+    '      return false;\n' +
+    '    }\n' +
+    '  }, []);\n' +
+    '  const retryTicketSave = useCallback(() => saveTicketState(stateRef.current), [saveTicketState]);\n' +
+    '  const goldenRef = useRef(golden);\n' +
+    '  goldenRef.current = golden;\n' +
+    '\n' +
+    "  /* Round 657: the floater's clean up timer is owned by the page and dies\n" +
+    '     with it (see useOwnedTimeouts). */\n' +
+    '  const later = useOwnedTimeouts();\n' +
+    '\n' +
+    "  const pushFloater = useCallback((text: string, kind: Floater['kind'], x?: number, y?: number) => {\n" +
+    '    const f: Floater = {\n' +
+    '      id: floaterSeq++,\n' +
+    '      text,\n' +
+    '      kind,\n' +
+    '      x: x ?? 20 + Math.random() * 60,\n' +
+    '      y: y ?? 30 + Math.random() * 40,\n' +
+    '    };\n' +
+    '    setFloaters(cur => [...cur.slice(-14), f]);\n' +
+    '    // Floaters clean themselves up after the animation finishes.\n' +
+    '    later(() => setFloaters(cur => cur.filter(g => g.id !== f.id)), 1900);\n' +
+    '  }, [later]);\n' +
+    '\n' +
+    '  /* Round 439: away earnings settle from the wall clock the ground has not\n' +
+    '     already been paid for, so a fresh load and a tab that was only\n' +
+    '     backgrounded go through the exact same rule and the exact same cap.\n' +
+    '     paidUntilRef is wall-clock ms, seeded from the save and pushed forward\n' +
+    '     by the loop by exactly the seconds it ticks, so live play can never be\n' +
+    '     billed as time away and a throttled frame cannot quietly lose an hour.\n' +
+    '\n' +
+    '     What this fixes: the settle used to run once, on mount. rAF stops dead\n' +
+    '     in a hidden tab, so a player who left the tab open in another window\n' +
+    '     came back to a single frame with dt clamped to two seconds, and the old\n' +
+    '     visibilitychange handler then saved with savedAt = now, so a later\n' +
+    '     reload could not pay for those hours either. Hours away, two seconds\n' +
+    '     paid, and the difference gone for good. */\n' +
+    '  const paidUntilRef = useRef(state.savedAt);\n' +
+    '  const settleAway = useCallback(() => {\n' +
+    '    const now = Date.now();\n' +
+    '    const cur = stateRef.current;\n' +
+    '    const trip = { ...cur, savedAt: paidUntilRef.current };\n' +
+    '    const pay = offlineEarnings(trip, now);\n' +
+    '    /* Round 584: a matchday for every half hour of the same trip the pay counts.\n' +
+    '       Played after the pay is worked out, so the results cannot move it. */\n' +
+    '    const matchdays = Math.floor(awaySecondsOf(trip, now) / AWAY_MATCHDAY_SEC);\n' +
+    '    paidUntilRef.current = now;\n' +
+    '    /* Review: a club with no income (a doctored fanbase of 0) still plays its\n' +
+    '       matchdays, so the pay alone cannot gate the settle. */\n' +
+    '    if (!(pay > 0) && matchdays === 0) return;\n' +
+    '    setAwayPay(Math.max(0, pay));\n' +
+    '    const paid = { ...cur, money: cur.money + Math.max(0, pay), lifetime: cur.lifetime + Math.max(0, pay), savedAt: now };\n' +
+    '    const away = matchdays > 0 ? playAwayMatchdays(paid, matchdays, Math.random, getEdgeRef.current?.() ?? 0) : null;\n' +
+    '    const lg = away?.state.league;\n' +
+    '    /* Round 585: an away win earns its gem, credited once per match. */\n' +
+    '    const awayGems = away\n' +
+    '      ? recordFullTimes(away.results.map((m, i) => ({\n' +
+    '        totalMatches: (paid.totalMatches ?? 0) + i + 1,\n' +
+    "        result: m.result === 'W' ? 'win' : m.result === 'D' ? 'draw' : 'loss',\n" +
+    '        away: true,\n' +
+    '      })))\n' +
+    '      : 0;\n' +
+    '    setAwayTrip(away && away.results.length > 0 ? {\n' +
+    '      results: away.results,\n' +
+    '      gems: awayGems,\n' +
+    "      milestonePay: away.events.reduce((sum, e) => sum + (e.kind === 'milestone' ? e.amount ?? 0 : 0), 0),\n" +
+    '      standing: lg && away.results.some(r => !r.friendly)\n' +
+    '        ? { position: leaguePosition(lg), clubs: lg.clubs.length, left: leagueShape(lg.division).matchdays - lg.matchday }\n' +
+    '        : null,\n' +
+    '    } : null);\n' +
+    '    const next = away ? away.state : paid;\n' +
+    '    stateRef.current = next;\n' +
+    '    // Bank it straight away: an unsaved settle would be paid a second time.\n' +
+    '    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, now)); } catch { /* ignore */ }\n' +
+    '    setState(next);\n' +
+    '  }, []);\n' +
+    '\n' +
+    '  // The settlement for the time before this mount, before the loop starts.\n' +
+    '  useEffect(() => {\n' +
+    '    settleAway();\n' +
+    '    // eslint-disable-next-line react-hooks/exhaustive-deps\n' +
+    '  }, []);\n' +
+    '\n' +
+    '  // The loop.\n' +
+    '  useEffect(() => {\n' +
+    '    let raf = 0;\n' +
+    '    let last = performance.now();\n' +
+    '    let acc = 0;\n' +
+    '    let sinceSave = 0;\n' +
+    '    const step = (t: number) => {\n' +
+    '      const dt = Math.min(2, (t - last) / 1000);\n' +
+    '      last = t;\n' +
+    '      acc += dt;\n' +
+    '      sinceSave += dt;\n' +
+    '      if (acc >= 0.2) {\n' +
+    '        const use = acc;\n' +
+    '        acc = 0;\n' +
+    '        // Round 439: the loop has now paid for these seconds, so the away\n' +
+    '        // settle must not bill for them again.\n' +
+    '        paidUntilRef.curre'... 12920 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,462 @@
+TOUCH ok src/lib/tycoonRewards.ts lines 387 -> 389
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Authoritative engine/rewards stay exact
++ actual - expected
+... Skipped lines
+
+  '/**\n' +
+    ' * Round 585: gems and packs. The only file that writes the gem ledger\n' +
+    ' * (docs/design/round-580-tycoon-merge.md, section 6).\n' +
+    ' *\n' +
+    ' * THE RULES, each one held by scripts/simTycoonPacks.mjs.\n' +
+...
+    "/** mulberry32 on the ledger's seed, the academy's own generator shape. */\n" +
++   'export function ledgerRng(seed: number): { next: () => '... 6870 more characters
+-   'export function ledgerRng(seed: number): { next: () => '... 6825 more characters
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simTycoonDrawResult.mjs:33:51
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '/**\n' +
+    ' * Round 585: gems and packs. The only file that writes the gem ledger\n' +
+    ' * (docs/design/round-580-tycoon-merge.md, section 6).\n' +
+    ' *\n' +
+    ' * THE RULES, each one held by scripts/simTycoonPacks.mjs.\n' +
+    ' * - Gems are earned only by match results: a watched win, a watched draw, a win played\n' +
+    ' *   while you were away, a league title and second place. Nothing else writes\n' +
+    ' *   `earned`: not taps, idle money, away pay, whistles, sales, badges, logins,\n' +
+    ' *   adverts, purchases or packs. No gem is ever for sale.\n' +
+    ' * - Every full time is credited once, keyed on the career match count, so a\n' +
+    ' *   full time replayed by a second tab or a reload pays nothing.\n' +
+    " * - A pack's tier is drawn from the published odds in PACKS\n" +
+    " *   (src/lib/wonderkidFactory.ts) on this ledger's own generator. A guarantee\n" +
+    ' *   makes a Star or better arrive on or before the Nth pack since the last one.\n' +
+    ' * - The draw is written here, as `pending`, before the reveal starts, so a\n' +
+    ' *   reload shows the same kid and nothing is drawn twice. The academy counts the\n' +
+    ' *   delivery (packsDelivered), so a pack is delivered once.\n' +
+    ' *\n' +
+    ' * Pure functions take a ledger and return a new one; the few functions that\n' +
+    ' * touch storage say so in their names (load, record, commit, clear).\n' +
+    ' */\n' +
+    "import { PACKS, TIERS, TIER_IDS, GUARANTEED_TIERS, cleanPackKid, MAX_BOOT_LEVEL } from '@/lib/wonderkidFactory';\n" +
+    "import type { PackId, Pack, TierId, Prospect } from '@/lib/wonderkidFactory';\n" +
+    "import { BOOT_IDS } from '@/lib/soccerBootIds';\n" +
+    "export { MAX_BOOT_LEVEL } from '@/lib/wonderkidFactory';\n" +
+    '\n' +
+    "export const REWARDS_KEY = 'tycoonRewardsV1';\n" +
+    '\n' +
+    '/** What each result pays, in gems. */\n' +
+    'export const GEM_PAY = { win: 3, draw: 1, loss: 0, awayWin: 1, title: 20, runnerUp: 6 } as const;\n' +
+    '\n' +
+    'export interface PendingPack { seq: number; pack: PackId; tier: TierId; kid: Prospect }\n' +
+    '\n' +
+    'export interface RewardsLedger {\n' +
+    '  v: 1;\n' +
+    '  /** gems ever earned */\n' +
+    '  earned: number;\n' +
+    '  /** gems ever spent on packs */\n' +
+    '  spent: number;\n' +
+    '  /** the career match count of the last full time credited */\n' +
+    '  lastMatch: number;\n' +
+    '  /** packs opened, per pack */\n' +
+    '  opened: Record<PackId, number>;\n' +
+    '  /** packs of each kind opened since the last Star or better */\n' +
+    '  dry: Record<PackId, number>;\n' +
+    "  /** this ledger's own generator, so a pack never moves the academy's scouts.\n" +
+    '   *  Seeded fresh the first time a ledger is stored, never a shared constant: the\n' +
+    '   *  review found every player drawing the same packs in the same order. */\n' +
+    '  seed: number;\n' +
+    '  /** the sequence number the next pack will carry */\n' +
+    '  nextSeq: number;\n' +
+    '  /** a pack drawn and not yet dismissed */\n' +
+    '  pending: PendingPack | null;\n' +
+    '  /** Round 588: prospective title rewards, absent in untouched older ledgers. */\n' +
+    '  gearUnlocked?: string[];\n' +
+    '  gearLevel?: Record<string, number>;\n' +
+    '  kitUpgrades?: number;\n' +
+    '  /** First credited title match in each division, zero until one is observed. */\n' +
+    '  gearTitles?: number[];\n' +
+    '}\n' +
+    '\n' +
+    'export const GEAR_DIVISIONS = 10;\n' +
+    '\n' +
+    'const PACK_IDS: PackId[] = PACKS.map(p => p.id);\n' +
+    'const zeroes = (): Record<PackId, number> => ({ scout: 0, club: 0, elite: 0 });\n' +
+    '\n' +
+    'export function newLedger(seed = 585): RewardsLedger {\n' +
+    '  return { v: 1, earned: 0, spent: 0, lastMatch: 0, opened: zeroes(), dry: zeroes(), seed: seed | 0, nextSeq: 1, pending: null };\n' +
+    '}\n' +
+    '\n' +
+    '/** A seed no other player shares, for a ledger stored for the first time. The\n' +
+    ' *  only place this file reads a clock or Math.random; the draw never does. */\n' +
+    'export function freshSeed(): number {\n' +
+    '  return (Date.now() ^ Math.floor(Math.random() * 2147483647)) | 0;\n' +
+    '}\n' +
+    '\n' +
+    'export function balance(l: RewardsLedger): number {\n' +
+    '  return Math.max(0, l.earned - l.spent);\n' +
+    '}\n' +
+    '\n' +
+    'export function packById(id: PackId): Pack {\n' +
+    '  return PACKS.find(p => p.id === id) as Pack;\n' +
+    '}\n' +
+    '\n' +
+    '/** Packs opened in all. */\n' +
+    'export function packsOpened(l: RewardsLedger): number {\n' +
+    '  return PACK_IDS.reduce((n, id) => n + l.opened[id], 0);\n' +
+    '}\n' +
+    '\n' +
+    '/** What this pack costs this ledger now: the first of a free pack costs nothing. */\n' +
+    'export function priceOf(l: RewardsLedger, id: PackId): number {\n' +
+    '  const pack = packById(id);\n' +
+    '  return pack.firstFree && l.opened[id] === 0 ? 0 : pack.price;\n' +
+    '}\n' +
+    '\n' +
+    '/** Packs left before a guaranteed Star or better, counting the next one, or null. */\n' +
+    'export function packsToGuarantee(l: RewardsLedger, id: PackId): number | null {\n' +
+    '  const g = packById(id).guarantee;\n' +
+    '  return g === null ? null : Math.max(1, g - l.dry[id]);\n' +
+    '}\n' +
+    '\n' +
+    '/** A ledger from storage, fail closed: anything wrong comes back sane. */\n' +
+    'export function cleanLedger(raw: unknown, seedIfMissing = 585): RewardsLedger {\n' +
+    '  const base = newLedger(seedIfMissing);\n' +
+    "  if (!raw || typeof raw !== 'object') return base;\n" +
+    '  const r = raw as Partial<RewardsLedger>;\n' +
+    '  if (r.v !== 1) return base;\n' +
+    '  const whole = (v: unknown, max = Number.MAX_SAFE_INTEGER) => (Number.isSafeInteger(v) && (v as number) >= 0 ? Math.min(v as number, max) : 0);\n' +
+    '  const earned = whole(r.earned, 1e9);\n' +
+    '  const out: RewardsLedger = {\n' +
+    '    v: 1,\n' +
+    '    earned,\n' +
+    '    spent: Math.min(whole(r.spent, 1e9), earned),\n' +
+    '    lastMatch: whole(r.lastMatch),\n' +
+    '    opened: zeroes(),\n' +
+    '    dry: zeroes(),\n' +
+    '    seed: Number.isFinite(r.seed) ? (r.seed as number) | 0 : base.seed,\n' +
+    '    nextSeq: 1,\n' +
+    '    pending: null,\n' +
+    '  };\n' +
+    '  for (const id of PACK_IDS) {\n' +
+    '    out.opened[id] = whole(r.opened?.[id], 1e9);\n' +
+    '    const g = packById(id).guarantee;\n' +
+    '    out.dry[id] = g === null ? whole(r.dry?.[id], 1e9) : Math.min(whole(r.dry?.[id]), g - 1);\n' +
+    '  }\n' +
+    '  out.nextSeq = Math.max(packsOpened(out) + 1, Number.isSafeInteger(r.nextSeq) && (r.nextSeq as number) > 0 ? Math.min(r.nextSeq as number, 1e9) : 1);\n' +
+    '  const p = r.pending;\n' +
+    "  if (p && typeof p === 'object' && Number.isSafeInteger(p.seq) && p.seq > 0 && p.seq < out.nextSeq\n" +
+    "    && PACK_IDS.includes(p.pack) && TIER_IDS.includes(p.tier) && p.kid && typeof p.kid === 'object' && typeof p.kid.name === 'string') {\n" +
+    '    const kid = cleanPackKid(p.kid, p.tier);\n' +
+    '    if (kid) out.pending = { seq: p.seq, pack: p.pack, tier: p.tier, kid };\n' +
+    '  }\n' +
+    '  if (r.gearUnlocked !== undefined || r.gearLevel !== undefined || r.kitUpgrades !== undefined || r.gearTitles !== undefined) {\n' +
+    '    const receipts = new Set<number>();\n' +
+    '    out.gearTitles = Array.from({ length: GEAR_DIVISIONS }, (_, division) => {\n' +
+    '      const match = Array.isArray(r.gearTitles) ? r.gearTitles[division] : 0;\n' +
+    '      if (!Number.isSafeInteger(match) || match <= 0 || match > out.lastMatch || receipts.has(match)) return 0;\n' +
+    '      receipts.add(match);\n' +
+    '      return match;\n' +
+    '    });\n' +
+    '    out.gearUnlocked = [];\n' +
+    '    out.gearLevel = {};\n' +
+    '    if (receipts.size > 0 && Array.isArray(r.gearUnlocked)) {\n' +
+    '      for (const id of BOOT_IDS) {\n' +
+    '        if (r.gearUnlocked[out.gearUnlocked.length] !== id || out.gearUnlocked.length >= out.lastMatch) break;\n' +
+    '        out.gearUnlocked.push(id);\n' +
+    '        const level = Object.prototype.hasOwnProperty.call(r.gearLevel ?? {}, id) ? r.gearLevel?.[id] : 1;\n' +
+    '        out.gearLevel[id] = Number.isSafeInteger(level) && level! >= 1 ? Math.min(level!, MAX_BOOT_LEVEL) : 1;\n' +
+    '      }\n' +
+    '    }\n' +
+    '    out.kitUpgrades = receipts.size > 0 ? whole(r.kitUpgrades, Math.min(out.lastMatch, 1e9)) : 0;\n' +
+    '  }\n' +
+    '  return out;\n' +
+    '}\n' +
+    '\n' +
+    '/* ---------------------------------------------------------------- earning */\n' +
+    '\n' +
+    'export interface FullTime {\n' +
+    '  /** the career match count once this match is over */\n' +
+    '  totalMatches: number;\n' +
+    "  result: 'win' | 'draw' | 'loss';\n" +
+    '  /** played while you were away */\n' +
+    '  away: boolean;\n' +
+    '  /** your final league place, when this full time ended a season */\n' +
+    '  position?: number;\n' +
+    '  /** The division that just finished, before a title promotes the club. */\n' +
+    '  division?: number;\n' +
+    '}\n' +
+    '\n' +
+    '/** The gems one full time pays. Away matchdays never end a season. */\n' +
+    'export function gemsFor(ft: FullTime): number {\n' +
+    "  if (ft.away) return ft.result === 'win' ? GEM_PAY.awayWin : 0;\n" +
+    "  const result = ft.result === 'win' ? GEM_PAY.win : ft.result === 'draw' ? GEM_PAY.draw : GEM_PAY.loss;\n" +
+    '  const table = ft.position === 1 ? GEM_PAY.title : ft.position === 2 ? GEM_PAY.runnerUp : 0;\n' +
+    '  return result + table;\n' +
+    '}\n' +
+    '\n' +
+    '/** Credit full times in order. One already credited (its match count at or under\n' +
+    ' *  the last one) pays nothing. */\n' +
+    'export function creditFullTimes(l: RewardsLedger, list: FullTime[], allowGear = true): RewardsLedger {\n' +
+    '  let out = l;\n' +
+    '  for (const ft of list) {\n' +
+    '    if (!Number.isSafeInteger(ft.totalMatches) || ft.totalMatches <= out.lastMatch) continue;\n' +
+    '    out = { ...out, earned: Math.min(1e9, out.earned + gemsFor(ft)), lastMatch: ft.totalMatches };\n' +
+    '    if (allowGear && !ft.away && ft.position === 1 && Number.isInteger(ft.division) && ft.division! >= 0 && ft.division! < GEAR_DIVISIONS) {\n' +
+    '      const division = ft.division!;\n' +
+    '      const titles = [...(out.gearTitles ?? Array(GEAR_DIVISIONS).fill(0))];\n' +
+    '      const unlocked = out.gearUnlocked ?? [];\n' +
+    '      const unlock = unlocked.length < BOOT_IDS.length && (!titles[division] || division === GEAR_DIVISIONS - 1);\n' +
+    '      if (!titles[division]) titles[division] = ft.totalMatches;\n' +
+    '      out = { ...out, gearTitles: titles, gearUnlocked: unlocked, gearLevel: out.gearLevel ?? {}, kitUpgrades: out.kitUpgrades ?? 0 };\n' +
+    '      if (unlock) {\n' +
+    '        const id = BOOT_IDS[unlocked.length];\n' +
+    '        out.gearUnlocked = [...unlocked, id];\n' +
+    '        out.gearLevel = { ...out.gearLevel, [id]: 1 };\n' +
+    '      } else {\n' +
+    '        out.kitUpgrades = Math.min(1e9, out.kitUpgrades! + 1);\n' +
+    '      }\n' +
+    '    }\n' +
+    '  }\n' +
+    '  return out;\n' +
+    '}\n' +
+    '\n' +
+    '/** A kit upgrade raises one owned pair. It never costs gems or changes its wearer. */\n' +
+    'export function upgradeBoot(l: RewardsLedger, id: string): RewardsLedger | null {\n' +
+    '  const level = l.gearLevel?.[id];\n' +
+    '  if (!BOOT_IDS.some(bootId => bootId === id) || !l.gearUnlocked?.includes(id)\n' +
+    '    || !Number.isInteger(level) || level! < 1 || level! >= MAX_BOOT_LEVEL\n' +
+    '    || !Number.isSafeInteger(l.kitUpgrades) || l.kitUpgrades! < 1) return null;\n' +
+    '  return { ...l, gearLevel: { ...l.gearLevel, [id]: level! + 1 }, kitUpgrades: l.kitUpgrades! - 1 };\n' +
+    '}\n' +
+    '\n' +
+    '/* ------------------------------------------------------------------ packs */\n' +
+    '\n' +
+    "/** mulberry32 on the ledger's seed, the academy's own generator shape. */\n" +
+    'export function ledgerRng(seed: number): { next: () => '... 6870 more characters,
+  expected: '/**\n' +
+    ' * Round 585: gems and packs. The only file that writes the gem ledger\n' +
+    ' * (docs/design/round-580-tycoon-merge.md, section 6).\n' +
+    ' *\n' +
+    ' * THE RULES, each one held by scripts/simTycoonPacks.mjs.\n' +
+    ' * - Gems are earned only by match results: a watched win, a watched draw, a win played\n' +
+    ' *   while you were away, a league title and second place. Nothing else writes\n' +
+    ' *   `earned`: not taps, idle money, away pay, whistles, sales, badges, logins,\n' +
+    ' *   adverts, purchases or packs. No gem is ever for sale.\n' +
+    ' * - Every full time is credited once, keyed on the career match count, so a\n' +
+    ' *   full time replayed by a second tab or a reload pays nothing.\n' +
+    " * - A pack's tier is drawn from the published odds in PACKS\n" +
+    " *   (src/lib/wonderkidFactory.ts) on this ledger's own generator. A guarantee\n" +
+    ' *   makes a Star or better arrive on or before the Nth pack since the last one.\n' +
+    ' * - The draw is written here, as `pending`, before the reveal starts, so a\n' +
+    ' *   reload shows the same kid and nothing is drawn twice. The academy counts the\n' +
+    ' *   delivery (packsDelivered), so a pack is delivered once.\n' +
+    ' *\n' +
+    ' * Pure functions take a ledger and return a new one; the few functions that\n' +
+    ' * touch storage say so in their names (load, record, commit, clear).\n' +
+    ' */\n' +
+    "import { PACKS, TIERS, TIER_IDS, GUARANTEED_TIERS, cleanPackKid, MAX_BOOT_LEVEL } from '@/lib/wonderkidFactory';\n" +
+    "import type { PackId, Pack, TierId, Prospect } from '@/lib/wonderkidFactory';\n" +
+    "import { BOOT_IDS } from '@/lib/soccerBootIds';\n" +
+    "export { MAX_BOOT_LEVEL } from '@/lib/wonderkidFactory';\n" +
+    '\n' +
+    "export const REWARDS_KEY = 'tycoonRewardsV1';\n" +
+    '\n' +
+    '/** What each result pays, in gems. */\n' +
+    'export const GEM_PAY = { win: 3, draw: 1, loss: 0, awayWin: 1, title: 20, runnerUp: 6 } as const;\n' +
+    '\n' +
+    'export interface PendingPack { seq: number; pack: PackId; tier: TierId; kid: Prospect }\n' +
+    '\n' +
+    'export interface RewardsLedger {\n' +
+    '  v: 1;\n' +
+    '  /** gems ever earned */\n' +
+    '  earned: number;\n' +
+    '  /** gems ever spent on packs */\n' +
+    '  spent: number;\n' +
+    '  /** the career match count of the last full time credited */\n' +
+    '  lastMatch: number;\n' +
+    '  /** packs opened, per pack */\n' +
+    '  opened: Record<PackId, number>;\n' +
+    '  /** packs of each kind opened since the last Star or better */\n' +
+    '  dry: Record<PackId, number>;\n' +
+    "  /** this ledger's own generator, so a pack never moves the academy's scouts.\n" +
+    '   *  Seeded fresh the first time a ledger is stored, never a shared constant: the\n' +
+    '   *  review found every player drawing the same packs in the same order. */\n' +
+    '  seed: number;\n' +
+    '  /** the sequence number the next pack will carry */\n' +
+    '  nextSeq: number;\n' +
+    '  /** a pack drawn and not yet dismissed */\n' +
+    '  pending: PendingPack | null;\n' +
+    '  /** Round 588: prospective title rewards, absent in untouched older ledgers. */\n' +
+    '  gearUnlocked?: string[];\n' +
+    '  gearLevel?: Record<string, number>;\n' +
+    '  kitUpgrades?: number;\n' +
+    '  /** First credited title match in each division, zero until one is observed. */\n' +
+    '  gearTitles?: number[];\n' +
+    '}\n' +
+    '\n' +
+    'export const GEAR_DIVISIONS = 10;\n' +
+    '\n' +
+    'const PACK_IDS: PackId[] = PACKS.map(p => p.id);\n' +
+    'const zeroes = (): Record<PackId, number> => ({ scout: 0, club: 0, elite: 0 });\n' +
+    '\n' +
+    'export function newLedger(seed = 585): RewardsLedger {\n' +
+    '  return { v: 1, earned: 0, spent: 0, lastMatch: 0, opened: zeroes(), dry: zeroes(), seed: seed | 0, nextSeq: 1, pending: null };\n' +
+    '}\n' +
+    '\n' +
+    '/** A seed no other player shares, for a ledger stored for the first time. The\n' +
+    ' *  only place this file reads a clock or Math.random; the draw never does. */\n' +
+    'export function freshSeed(): number {\n' +
+    '  return (Date.now() ^ Math.floor(Math.random() * 2147483647)) | 0;\n' +
+    '}\n' +
+    '\n' +
+    'export function balance(l: RewardsLedger): number {\n' +
+    '  return Math.max(0, l.earned - l.spent);\n' +
+    '}\n' +
+    '\n' +
+    'export function packById(id: PackId): Pack {\n' +
+    '  return PACKS.find(p => p.id === id) as Pack;\n' +
+    '}\n' +
+    '\n' +
+    '/** Packs opened in all. */\n' +
+    'export function packsOpened(l: RewardsLedger): number {\n' +
+    '  return PACK_IDS.reduce((n, id) => n + l.opened[id], 0);\n' +
+    '}\n' +
+    '\n' +
+    '/** What this pack costs this ledger now: the first of a free pack costs nothing. */\n' +
+    'export function priceOf(l: RewardsLedger, id: PackId): number {\n' +
+    '  const pack = packById(id);\n' +
+    '  return pack.firstFree && l.opened[id] === 0 ? 0 : pack.price;\n' +
+    '}\n' +
+    '\n' +
+    '/** Packs left before a guaranteed Star or better, counting the next one, or null. */\n' +
+    'export function packsToGuarantee(l: RewardsLedger, id: PackId): number | null {\n' +
+    '  const g = packById(id).guarantee;\n' +
+    '  return g === null ? null : Math.max(1, g - l.dry[id]);\n' +
+    '}\n' +
+    '\n' +
+    '/** A ledger from storage, fail closed: anything wrong comes back sane. */\n' +
+    'export function cleanLedger(raw: unknown, seedIfMissing = 585): RewardsLedger {\n' +
+    '  const base = newLedger(seedIfMissing);\n' +
+    "  if (!raw || typeof raw !== 'object') return base;\n" +
+    '  const r = raw as Partial<RewardsLedger>;\n' +
+    '  if (r.v !== 1) return base;\n' +
+    '  const whole = (v: unknown, max = Number.MAX_SAFE_INTEGER) => (Number.isSafeInteger(v) && (v as number) >= 0 ? Math.min(v as number, max) : 0);\n' +
+    '  const earned = whole(r.earned, 1e9);\n' +
+    '  const out: RewardsLedger = {\n' +
+    '    v: 1,\n' +
+    '    earned,\n' +
+    '    spent: Math.min(whole(r.spent, 1e9), earned),\n' +
+    '    lastMatch: whole(r.lastMatch),\n' +
+    '    opened: zeroes(),\n' +
+    '    dry: zeroes(),\n' +
+    '    seed: Number.isFinite(r.seed) ? (r.seed as number) | 0 : base.seed,\n' +
+    '    nextSeq: 1,\n' +
+    '    pending: null,\n' +
+    '  };\n' +
+    '  for (const id of PACK_IDS) {\n' +
+    '    out.opened[id] = whole(r.opened?.[id], 1e9);\n' +
+    '    const g = packById(id).guarantee;\n' +
+    '    out.dry[id] = g === null ? whole(r.dry?.[id], 1e9) : Math.min(whole(r.dry?.[id]), g - 1);\n' +
+    '  }\n' +
+    '  out.nextSeq = Math.max(packsOpened(out) + 1, Number.isSafeInteger(r.nextSeq) && (r.nextSeq as number) > 0 ? Math.min(r.nextSeq as number, 1e9) : 1);\n' +
+    '  const p = r.pending;\n' +
+    "  if (p && typeof p === 'object' && Number.isSafeInteger(p.seq) && p.seq > 0 && p.seq < out.nextSeq\n" +
+    "    && PACK_IDS.includes(p.pack) && TIER_IDS.includes(p.tier) && p.kid && typeof p.kid === 'object' && typeof p.kid.name === 'string') {\n" +
+    '    const kid = cleanPackKid(p.kid, p.tier);\n' +
+    '    if (kid) out.pending = { seq: p.seq, pack: p.pack, tier: p.tier, kid };\n' +
+    '  }\n' +
+    '  if (r.gearUnlocked !== undefined || r.gearLevel !== undefined || r.kitUpgrades !== undefined || r.gearTitles !== undefined) {\n' +
+    '    const receipts = new Set<number>();\n' +
+    '    out.gearTitles = Array.from({ length: GEAR_DIVISIONS }, (_, division) => {\n' +
+    '      const match = Array.isArray(r.gearTitles) ? r.gearTitles[division] : 0;\n' +
+    '      if (!Number.isSafeInteger(match) || match <= 0 || match > out.lastMatch || receipts.has(match)) return 0;\n' +
+    '      receipts.add(match);\n' +
+    '      return match;\n' +
+    '    });\n' +
+    '    out.gearUnlocked = [];\n' +
+    '    out.gearLevel = {};\n' +
+    '    if (receipts.size > 0 && Array.isArray(r.gearUnlocked)) {\n' +
+    '      for (const id of BOOT_IDS) {\n' +
+    '        if (r.gearUnlocked[out.gearUnlocked.length] !== id || out.gearUnlocked.length >= out.lastMatch) break;\n' +
+    '        out.gearUnlocked.push(id);\n' +
+    '        const level = Object.prototype.hasOwnProperty.call(r.gearLevel ?? {}, id) ? r.gearLevel?.[id] : 1;\n' +
+    '        out.gearLevel[id] = Number.isSafeInteger(level) && level! >= 1 ? Math.min(level!, MAX_BOOT_LEVEL) : 1;\n' +
+    '      }\n' +
+    '    }\n' +
+    '    out.kitUpgrades = receipts.size > 0 ? whole(r.kitUpgrades, Math.min(out.lastMatch, 1e9)) : 0;\n' +
+    '  }\n' +
+    '  return out;\n' +
+    '}\n' +
+    '\n' +
+    '/* ---------------------------------------------------------------- earning */\n' +
+    '\n' +
+    'export interface FullTime {\n' +
+    '  /** the career match count once this match is over */\n' +
+    '  totalMatches: number;\n' +
+    "  result: 'win' | 'draw' | 'loss';\n" +
+    '  /** played while you were away */\n' +
+    '  away: boolean;\n' +
+    '  /** your final league place, when this full time ended a season */\n' +
+    '  position?: number;\n' +
+    '  /** The division that just finished, before a title promotes the club. */\n' +
+    '  division?: number;\n' +
+    '}\n' +
+    '\n' +
+    '/** The gems one full time pays. Away matchdays never end a season. */\n' +
+    'export function gemsFor(ft: FullTime): number {\n' +
+    "  if (ft.away) return ft.result === 'win' ? GEM_PAY.awayWin : 0;\n" +
+    "  const result = ft.result === 'win' ? GEM_PAY.win : ft.result === 'draw' ? GEM_PAY.draw : GEM_PAY.loss;\n" +
+    '  const table = ft.position === 1 ? GEM_PAY.title : ft.position === 2 ? GEM_PAY.runnerUp : 0;\n' +
+    '  return result + table;\n' +
+    '}\n' +
+    '\n' +
+    '/** Credit full times in order. One already credited (its match count at or under\n' +
+    ' *  the last one) pays nothing. */\n' +
+    'export function creditFullTimes(l: RewardsLedger, list: FullTime[], allowGear = true): RewardsLedger {\n' +
+    '  let out = l;\n' +
+    '  for (const ft of list) {\n' +
+    '    if (!Number.isSafeInteger(ft.totalMatches) || ft.totalMatches <= out.lastMatch) continue;\n' +
+    '    out = { ...out, earned: Math.min(1e9, out.earned + gemsFor(ft)), lastMatch: ft.totalMatches };\n' +
+    '    if (allowGear && !ft.away && ft.position === 1 && Number.isInteger(ft.division) && ft.division! >= 0 && ft.division! < GEAR_DIVISIONS) {\n' +
+    '      const division = ft.division!;\n' +
+    '      const titles = [...(out.gearTitles ?? Array(GEAR_DIVISIONS).fill(0))];\n' +
+    '      const unlocked = out.gearUnlocked ?? [];\n' +
+    '      const unlock = unlocked.length < BOOT_IDS.length && (!titles[division] || division === GEAR_DIVISIONS - 1);\n' +
+    '      if (!titles[division]) titles[division] = ft.totalMatches;\n' +
+    '      out = { ...out, gearTitles: titles, gearUnlocked: unlocked, gearLevel: out.gearLevel ?? {}, kitUpgrades: out.kitUpgrades ?? 0 };\n' +
+    '      if (unlock) {\n' +
+    '        const id = BOOT_IDS[unlocked.length];\n' +
+    '        out.gearUnlocked = [...unlocked, id];\n' +
+    '        out.gearLevel = { ...out.gearLevel, [id]: 1 };\n' +
+    '      } else {\n' +
+    '        out.kitUpgrades = Math.min(1e9, out.kitUpgrades! + 1);\n' +
+    '      }\n' +
+    '    }\n' +
+    '  }\n' +
+    '  return out;\n' +
+    '}\n' +
+    '\n' +
+    '/** A kit upgrade raises one owned pair. It never costs gems or changes its wearer. */\n' +
+    'export function upgradeBoot(l: RewardsLedger, id: string): RewardsLedger | null {\n' +
+    '  const level = l.gearLevel?.[id];\n' +
+    '  if (!BOOT_IDS.some(bootId => bootId === id) || !l.gearUnlocked?.includes(id)\n' +
+    '    || !Number.isInteger(level) || level! < 1 || level! >= MAX_BOOT_LEVEL\n' +
+    '    || !Number.isSafeInteger(l.kitUpgrades) || l.kitUpgrades! < 1) return null;\n' +
+    '  return { ...l, gearLevel: { ...l.gearLevel, [id]: level! + 1 }, kitUpgrades: l.kitUpgrades! - 1 };\n' +
+    '}\n' +
+    '\n' +
+    '/* ------------------------------------------------------------------ packs */\n' +
+    '\n' +
+    "/** mulberry32 on the ledger's seed, the academy's own generator shape. */\n" +
+    'export function ledgerRng(seed: number): { next: () => '... 6825 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

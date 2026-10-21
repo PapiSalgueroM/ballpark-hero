@@ -1,0 +1,546 @@
+TOUCH ok src/hooks/useWonderkidFactory.ts lines 257 -> 259
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+... Skipped lines
+
+  '/**\n' +
+    ' * Round 216: React glue for Wonderkid Factory. All the rules live in\n' +
+    ' * src/lib/wonderkidFactory.ts where the harness can drive them headless;\n' +
+    ' * this file only owns the clock, the save, and the render trigger.\n' +
+    ' *\n' +
+...
+    '  };\n' +
++   '}\n' +
++   '\n' +
++   '// a later, unrelated round edits this file\n'
+-   '}\n'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simTycoonMoneyDisplay.mjs:45:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '/**\n' +
+    ' * Round 216: React glue for Wonderkid Factory. All the rules live in\n' +
+    ' * src/lib/wonderkidFactory.ts where the harness can drive them headless;\n' +
+    ' * this file only owns the clock, the save, and the render trigger.\n' +
+    ' *\n' +
+    ' * The engine state is a mutable object behind a ref, ticked four times a\n' +
+    ' * second, and a version counter is the only React state: an idle game that\n' +
+    ' * setStates its whole world every frame spends its battery on renders.\n' +
+    ' */\n' +
+    "import { useCallback, useEffect, useRef, useState } from 'react';\n" +
+    "import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';\n" +
+    'import {\n' +
+    '  FactoryState, FacilityId, SAVE_KEY,\n' +
+    '  newFactory, deserialize, serialize, applyOffline, advanceClock,\n' +
+    '  buyFacility, sellProspect, startShowcase, moveUp,\n' +
+    '  bedFree, deliverPack, makeProspectInBand, promote, sellSenior, equipBoot,\n' +
+    "} from '@/lib/wonderkidFactory';\n" +
+    "import type { PackId } from '@/lib/wonderkidFactory';\n" +
+    "import { commitOpenPack, clearPendingPack, loadLedger, commitUpgradeBoot } from '@/lib/tycoonRewards';\n" +
+    "import { recordCompletion } from '@/lib/completions';\n" +
+    '\n' +
+    'export interface Floater {\n' +
+    '  id: number;\n' +
+    '  text: string;\n' +
+    "  kind: 'sale' | 'find' | 'bad' | 'win';\n" +
+    '}\n' +
+    '\n' +
+    'export function useWonderkidFactory() {\n' +
+    '  const stateRef = useRef<FactoryState | null>(null);\n' +
+    '  if (stateRef.current === null) {\n' +
+    '    const now = Date.now();\n' +
+    '    let loaded: FactoryState | null = null;\n' +
+    '    try { loaded = deserialize(localStorage.getItem(SAVE_KEY), now, loadLedger().gearLevel); } catch { loaded = null; }\n' +
+    '    const s = loaded ?? newFactory(now);\n' +
+    '    const applied = applyOffline(s, now);\n' +
+    '    if (applied > 60) s.scoutProgress = Math.max(s.scoutProgress, 0);\n' +
+    '    stateRef.current = s;\n' +
+    '  }\n' +
+    '  const [, setVersion] = useState(0);\n' +
+    '  const bump = useCallback(() => setVersion(v => v + 1), []);\n' +
+    '  const [packSaveBlocked, setPackSaveBlocked] = useState(false);\n' +
+    '  const [academySaveBlocked, setAcademySaveBlocked] = useState(false);\n' +
+    '  const [gearSaveBlocked, setGearSaveBlocked] = useState(false);\n' +
+    '\n' +
+    '  /* Moving a player only reaches the screen after the whole academy is saved. */\n' +
+    '  const commitAcademy = useCallback((next: FactoryState): boolean => {\n' +
+    '    try { localStorage.setItem(SAVE_KEY, serialize(next)); } catch {\n' +
+    '      setAcademySaveBlocked(true);\n' +
+    '      return false;\n' +
+    '    }\n' +
+    '    Object.assign(stateRef.current!, next);\n' +
+    '    setAcademySaveBlocked(false);\n' +
+    '    bump();\n' +
+    '    return true;\n' +
+    '  }, [bump]);\n' +
+    '\n' +
+    '  /** Round 585: a pack opened and not yet in a bed (a reload between the draw\n' +
+    '   *  and the delivery, or a bed that filled) moves in as soon as a bed is free. */\n' +
+    '  const deliverWaiting = useCallback((s: FactoryState): boolean => {\n' +
+    '    const pending = loadLedger().pending;\n' +
+    '    if (!pending) return false;\n' +
+    '    const next = { ...s, prospects: [...s.prospects] };\n' +
+    '    if (!deliverPack(next, pending.seq, pending.kid, pending.tier)) return false;\n' +
+    '    try { localStorage.setItem(SAVE_KEY, serialize(next)); } catch {\n' +
+    '      setPackSaveBlocked(true);\n' +
+    '      return false;\n' +
+    '    }\n' +
+    '    Object.assign(s, next);\n' +
+    '    setPackSaveBlocked(false);\n' +
+    '    return true;\n' +
+    '  }, []);\n' +
+    '\n' +
+    '  const [floaters, setFloaters] = useState<Floater[]>([]);\n' +
+    '  const floaterId = useRef(1);\n' +
+    '  /* Round 657: the floater timer is owned by the page (useOwnedTimeouts). */\n' +
+    '  const later = useOwnedTimeouts();\n' +
+    "  const pushFloater = useCallback((text: string, kind: Floater['kind']) => {\n" +
+    '    const id = floaterId.current++;\n' +
+    '    setFloaters(f => [...f.slice(-4), { id, text, kind }]);\n' +
+    '    later(() => setFloaters(f => f.filter(x => x.id !== id)), 2600);\n' +
+    '  }, [later]);\n' +
+    '\n' +
+    '  /* the clock, and the save that survives a closed lid.\n' +
+    '     Round 581: each callback pays the wall time since the last one, not a fixed\n' +
+    '     quarter second. A browser that hides the tab slows this interval to once a\n' +
+    '     second and then once a minute, and a fixed step turned three hidden hours\n' +
+    '     into a minute or two of training. advanceClock pays a watched gap at full\n' +
+    '     speed and a hidden page, or a gap too long to have been watched, as time\n' +
+    '     away, under the same half speed, eight hour, nobody-ages rule a closed tab\n' +
+    "     gets on load. The academy panel hidden under Stadium Tycoon's other tab is\n" +
+    '     still a visible page, so it keeps its watched clock. */\n' +
+    '  useEffect(() => {\n' +
+    '    const iv = window.setInterval(() => {\n' +
+    '      const s = stateRef.current!;\n' +
+    '      const before = s.prospects.length;\n' +
+    '      const now = Date.now();\n' +
+    "      advanceClock(s, now - s.lastSeen, document.visibilityState !== 'hidden');\n" +
+    '      s.lastSeen = now;\n' +
+    '      const scouted = s.prospects.length > before;\n' +
+    "      if (deliverWaiting(s)) pushFloater('🎁 your pack kid moved into a free bed', 'win');\n" +
+    "      if (scouted) pushFloater('🔭 the scouts found someone', 'find');\n" +
+    '      if (s.prospects.length < before && s.leftFree > 0) {\n' +
+    '        /* only the leaver path shrinks the academy inside a tick */\n' +
+    "        pushFloater('a kid ran out of time and left on a free', 'bad');\n" +
+    '      }\n' +
+    '      bump();\n' +
+    '    }, 250);\n' +
+    '    const save = () => {\n' +
+    '      try { localStorage.setItem(SAVE_KEY, serialize(stateRef.current!)); } catch { /* storage full or blocked */ }\n' +
+    '    };\n' +
+    '    const saver = window.setInterval(save, 5000);\n' +
+    "    document.addEventListener('visibilitychange', save);\n" +
+    "    window.addEventListener('pagehide', save);\n" +
+    '    return () => {\n' +
+    '      window.clearInterval(iv);\n' +
+    '      window.clearInterval(saver);\n' +
+    "      document.removeEventListener('visibilitychange', save);\n" +
+    "      window.removeEventListener('pagehide', save);\n" +
+    '      save();\n' +
+    '    };\n' +
+    '  }, [bump, pushFloater, deliverWaiting]);\n' +
+    '\n' +
+    "  /* Round 195's S-1 rule, the tycoon shape exactly: one unscored mark per\n" +
+    '     sitting, on the first meaningful action, behind a ref so marking never\n' +
+    '     re-renders the loop. The idle game never sends a score. */\n' +
+    '  const sessionMarkedRef = useRef(false);\n' +
+    '  const markSessionPlay = useCallback(() => {\n' +
+    '    if (sessionMarkedRef.current) return;\n' +
+    '    sessionMarkedRef.current = true;\n' +
+    "    recordCompletion('/wonderkid-factory');\n" +
+    '  }, []);\n' +
+    '\n' +
+    '  const doBuy = useCallback((id: FacilityId) => {\n' +
+    '    markSessionPlay();\n' +
+    '    if (buyFacility(stateRef.current!, id)) bump();\n' +
+    '  }, [bump, markSessionPlay]);\n' +
+    '\n' +
+    '  const doSell = useCallback((id: number) => {\n' +
+    '    markSessionPlay();\n' +
+    '    const s = stateRef.current!;\n' +
+    '    const kid = s.prospects.find(p => p.id === id);\n' +
+    '    const price = sellProspect(s, id);\n' +
+    '    if (price !== null && kid) {\n' +
+    "      pushFloater(`💷 ${kid.name} sold for ${price.toLocaleString()}`, 'sale');\n" +
+    '      bump();\n' +
+    '    }\n' +
+    '  }, [bump, markSessionPlay, pushFloater]);\n' +
+    '\n' +
+    '  const doShowcase = useCallback(() => {\n' +
+    '    markSessionPlay();\n' +
+    '    if (startShowcase(stateRef.current!)) {\n' +
+    "      pushFloater('🎪 showcase day: training x3', 'win');\n" +
+    '      bump();\n' +
+    '    }\n' +
+    '  }, [bump, markSessionPlay, pushFloater]);\n' +
+    '\n' +
+    '  const doMoveUp = useCallback(() => {\n' +
+    '    const next = copyAcademy(stateRef.current!);\n' +
+    '    if (moveUp(next) && commitAcademy(next)) {\n' +
+    '      markSessionPlay();\n' +
+    "      pushFloater('⭐ the academy moves up in the world', 'win');\n" +
+    '    }\n' +
+    '  }, [commitAcademy, markSessionPlay, pushFloater]);\n' +
+    '\n' +
+    '  const doPromote = useCallback((id: number) => {\n' +
+    '    const next = copyAcademy(stateRef.current!);\n' +
+    '    const kid = next.prospects.find(p => p.id === id);\n' +
+    '    if (kid && promote(next, id) && commitAcademy(next)) {\n' +
+    '      markSessionPlay();\n' +
+    "      pushFloater(`⚽ ${kid.name} joined the first team`, 'win');\n" +
+    '    }\n' +
+    '  }, [commitAcademy, markSessionPlay, pushFloater]);\n' +
+    '\n' +
+    '  const doSellSenior = useCallback((id: string) => {\n' +
+    '    const next = copyAcademy(stateRef.current!);\n' +
+    '    const player = next.firstTeam?.find(p => p.id === id);\n' +
+    '    const price = sellSenior(next, id);\n' +
+    '    if (player && price !== null && commitAcademy(next)) {\n' +
+    '      markSessionPlay();\n' +
+    "      pushFloater(`💷 ${player.name} sold for ${price.toLocaleString()}`, 'sale');\n" +
+    '    }\n' +
+    '  }, [commitAcademy, markSessionPlay, pushFloater]);\n' +
+    '\n' +
+    '  const doEquipBoot = useCallback((seniorId: string, bootId: string | null) => {\n' +
+    '    const next = copyAcademy(stateRef.current!);\n' +
+    '    if (!equipBoot(next, seniorId, bootId, loadLedger().gearLevel ?? {})) return;\n' +
+    '    setGearSaveBlocked(!commitAcademy(next));\n' +
+    '  }, [commitAcademy]);\n' +
+    '\n' +
+    '  const doUpgradeBoot = useCallback((bootId: string) => {\n' +
+    '    try {\n' +
+    '      if (commitUpgradeBoot(bootId)) {\n' +
+    '        setGearSaveBlocked(false);\n' +
+    '        bump();\n' +
+    '      }\n' +
+    '    } catch { setGearSaveBlocked(true); }\n' +
+    '  }, [bump]);\n' +
+    '\n' +
+    '  /* Round 585: open a pack. The ledger stores the draw first, then the kid moves\n' +
+    '     into a free bed and the academy is saved, all before anything is shown. */\n' +
+    '  /* Review: no session mark here. Safeguard 2 keeps packs and gems away from\n' +
+    '     streaks, and a mark is what a streak counts. */\n' +
+    '  const doOpenPack = useCallback((id: PackId) => {\n' +
+    '    const s = stateRef.current!;\n' +
+    '    let pending;\n' +
+    '    try {\n' +
+    '      pending = commitOpenPack(\n' +
+    '        id, bedFree(s),\n' +
+    '        (potMin, potMax, rng) => makeProspectInBand({ ...s, prospects: [...s.prospects] }, potMin, potMax, rng),\n' +
+    '        (s.packsDelivered ?? 0) + 1,\n' +
+    '      );\n' +
+    '    } catch {\n' +
+    '      setPackSaveBlocked(true);\n' +
+    '      return;\n' +
+    '    }\n' +
+    '    if (!pending) return;\n' +
+    '    deliverWaiting(s);\n' +
+    '    bump();\n' +
+    '  }, [bump, deliverWaiting]);\n' +
+    '\n' +
+    '  const doDismissPack = useCallback(() => {\n' +
+    '    const s = stateRef.current!;\n' +
+    '    try { localStorage.setItem(SAVE_KEY, serialize(s)); } catch {\n' +
+    '      setPackSaveBlocked(true);\n' +
+    '      return;\n' +
+    '    }\n' +
+    '    setPackSaveBlocked(false);\n' +
+    '    if (clearPendingPack(s.packsDelivered ?? 0)) bump();\n' +
+    '  }, [bump]);\n' +
+    '\n' +
+    '  return {\n' +
+    '    state: stateRef.current,\n' +
+    '    floaters,\n' +
+    '    doBuy,\n' +
+    '    doSell,\n' +
+    '    doShowcase,\n' +
+    '    doMoveUp,\n' +
+    '    doOpenPack,\n' +
+    '    doDismissPack,\n' +
+    '    packSaveBlocked,\n' +
+    '    doPromote,\n' +
+    '    doSellSenior,\n' +
+    '    academySaveBlocked,\n' +
+    '    doEquipBoot,\n' +
+    '    doUpgradeBoot,\n' +
+    '    gearSaveBlocked,\n' +
+    '  };\n' +
+    '}\n' +
+    '\n' +
+    'function copyAcademy(s: FactoryState): FactoryState {\n' +
+    '  return {\n' +
+    '    ...s,\n' +
+    '    prospects: s.prospects.map(p => ({ ...p })),\n' +
+    '    ...(s.firstTeam ? { firstTeam: s.firstTeam.map(p => ({ ...p })) } : {}),\n' +
+    '  };\n' +
+    '}\n' +
+    '\n' +
+    '// a later, unrelated round edits this file\n',
+  expected: '/**\n' +
+    ' * Round 216: React glue for Wonderkid Factory. All the rules live in\n' +
+    ' * src/lib/wonderkidFactory.ts where the harness can drive them headless;\n' +
+    ' * this file only owns the clock, the save, and the render trigger.\n' +
+    ' *\n' +
+    ' * The engine state is a mutable object behind a ref, ticked four times a\n' +
+    ' * second, and a version counter is the only React state: an idle game that\n' +
+    ' * setStates its whole world every frame spends its battery on renders.\n' +
+    ' */\n' +
+    "import { useCallback, useEffect, useRef, useState } from 'react';\n" +
+    "import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';\n" +
+    'import {\n' +
+    '  FactoryState, FacilityId, SAVE_KEY,\n' +
+    '  newFactory, deserialize, serialize, applyOffline, advanceClock,\n' +
+    '  buyFacility, sellProspect, startShowcase, moveUp,\n' +
+    '  bedFree, deliverPack, makeProspectInBand, promote, sellSenior, equipBoot,\n' +
+    "} from '@/lib/wonderkidFactory';\n" +
+    "import type { PackId } from '@/lib/wonderkidFactory';\n" +
+    "import { commitOpenPack, clearPendingPack, loadLedger, commitUpgradeBoot } from '@/lib/tycoonRewards';\n" +
+    "import { recordCompletion } from '@/lib/completions';\n" +
+    '\n' +
+    'export interface Floater {\n' +
+    '  id: number;\n' +
+    '  text: string;\n' +
+    "  kind: 'sale' | 'find' | 'bad' | 'win';\n" +
+    '}\n' +
+    '\n' +
+    'export function useWonderkidFactory() {\n' +
+    '  const stateRef = useRef<FactoryState | null>(null);\n' +
+    '  if (stateRef.current === null) {\n' +
+    '    const now = Date.now();\n' +
+    '    let loaded: FactoryState | null = null;\n' +
+    '    try { loaded = deserialize(localStorage.getItem(SAVE_KEY), now, loadLedger().gearLevel); } catch { loaded = null; }\n' +
+    '    const s = loaded ?? newFactory(now);\n' +
+    '    const applied = applyOffline(s, now);\n' +
+    '    if (applied > 60) s.scoutProgress = Math.max(s.scoutProgress, 0);\n' +
+    '    stateRef.current = s;\n' +
+    '  }\n' +
+    '  const [, setVersion] = useState(0);\n' +
+    '  const bump = useCallback(() => setVersion(v => v + 1), []);\n' +
+    '  const [packSaveBlocked, setPackSaveBlocked] = useState(false);\n' +
+    '  const [academySaveBlocked, setAcademySaveBlocked] = useState(false);\n' +
+    '  const [gearSaveBlocked, setGearSaveBlocked] = useState(false);\n' +
+    '\n' +
+    '  /* Moving a player only reaches the screen after the whole academy is saved. */\n' +
+    '  const commitAcademy = useCallback((next: FactoryState): boolean => {\n' +
+    '    try { localStorage.setItem(SAVE_KEY, serialize(next)); } catch {\n' +
+    '      setAcademySaveBlocked(true);\n' +
+    '      return false;\n' +
+    '    }\n' +
+    '    Object.assign(stateRef.current!, next);\n' +
+    '    setAcademySaveBlocked(false);\n' +
+    '    bump();\n' +
+    '    return true;\n' +
+    '  }, [bump]);\n' +
+    '\n' +
+    '  /** Round 585: a pack opened and not yet in a bed (a reload between the draw\n' +
+    '   *  and the delivery, or a bed that filled) moves in as soon as a bed is free. */\n' +
+    '  const deliverWaiting = useCallback((s: FactoryState): boolean => {\n' +
+    '    const pending = loadLedger().pending;\n' +
+    '    if (!pending) return false;\n' +
+    '    const next = { ...s, prospects: [...s.prospects] };\n' +
+    '    if (!deliverPack(next, pending.seq, pending.kid, pending.tier)) return false;\n' +
+    '    try { localStorage.setItem(SAVE_KEY, serialize(next)); } catch {\n' +
+    '      setPackSaveBlocked(true);\n' +
+    '      return false;\n' +
+    '    }\n' +
+    '    Object.assign(s, next);\n' +
+    '    setPackSaveBlocked(false);\n' +
+    '    return true;\n' +
+    '  }, []);\n' +
+    '\n' +
+    '  const [floaters, setFloaters] = useState<Floater[]>([]);\n' +
+    '  const floaterId = useRef(1);\n' +
+    '  /* Round 657: the floater timer is owned by the page (useOwnedTimeouts). */\n' +
+    '  const later = useOwnedTimeouts();\n' +
+    "  const pushFloater = useCallback((text: string, kind: Floater['kind']) => {\n" +
+    '    const id = floaterId.current++;\n' +
+    '    setFloaters(f => [...f.slice(-4), { id, text, kind }]);\n' +
+    '    later(() => setFloaters(f => f.filter(x => x.id !== id)), 2600);\n' +
+    '  }, [later]);\n' +
+    '\n' +
+    '  /* the clock, and the save that survives a closed lid.\n' +
+    '     Round 581: each callback pays the wall time since the last one, not a fixed\n' +
+    '     quarter second. A browser that hides the tab slows this interval to once a\n' +
+    '     second and then once a minute, and a fixed step turned three hidden hours\n' +
+    '     into a minute or two of training. advanceClock pays a watched gap at full\n' +
+    '     speed and a hidden page, or a gap too long to have been watched, as time\n' +
+    '     away, under the same half speed, eight hour, nobody-ages rule a closed tab\n' +
+    "     gets on load. The academy panel hidden under Stadium Tycoon's other tab is\n" +
+    '     still a visible page, so it keeps its watched clock. */\n' +
+    '  useEffect(() => {\n' +
+    '    const iv = window.setInterval(() => {\n' +
+    '      const s = stateRef.current!;\n' +
+    '      const before = s.prospects.length;\n' +
+    '      const now = Date.now();\n' +
+    "      advanceClock(s, now - s.lastSeen, document.visibilityState !== 'hidden');\n" +
+    '      s.lastSeen = now;\n' +
+    '      const scouted = s.prospects.length > before;\n' +
+    "      if (deliverWaiting(s)) pushFloater('🎁 your pack kid moved into a free bed', 'win');\n" +
+    "      if (scouted) pushFloater('🔭 the scouts found someone', 'find');\n" +
+    '      if (s.prospects.length < before && s.leftFree > 0) {\n' +
+    '        /* only the leaver path shrinks the academy inside a tick */\n' +
+    "        pushFloater('a kid ran out of time and left on a free', 'bad');\n" +
+    '      }\n' +
+    '      bump();\n' +
+    '    }, 250);\n' +
+    '    const save = () => {\n' +
+    '      try { localStorage.setItem(SAVE_KEY, serialize(stateRef.current!)); } catch { /* storage full or blocked */ }\n' +
+    '    };\n' +
+    '    const saver = window.setInterval(save, 5000);\n' +
+    "    document.addEventListener('visibilitychange', save);\n" +
+    "    window.addEventListener('pagehide', save);\n" +
+    '    return () => {\n' +
+    '      window.clearInterval(iv);\n' +
+    '      window.clearInterval(saver);\n' +
+    "      document.removeEventListener('visibilitychange', save);\n" +
+    "      window.removeEventListener('pagehide', save);\n" +
+    '      save();\n' +
+    '    };\n' +
+    '  }, [bump, pushFloater, deliverWaiting]);\n' +
+    '\n' +
+    "  /* Round 195's S-1 rule, the tycoon shape exactly: one unscored mark per\n" +
+    '     sitting, on the first meaningful action, behind a ref so marking never\n' +
+    '     re-renders the loop. The idle game never sends a score. */\n' +
+    '  const sessionMarkedRef = useRef(false);\n' +
+    '  const markSessionPlay = useCallback(() => {\n' +
+    '    if (sessionMarkedRef.current) return;\n' +
+    '    sessionMarkedRef.current = true;\n' +
+    "    recordCompletion('/wonderkid-factory');\n" +
+    '  }, []);\n' +
+    '\n' +
+    '  const doBuy = useCallback((id: FacilityId) => {\n' +
+    '    markSessionPlay();\n' +
+    '    if (buyFacility(stateRef.current!, id)) bump();\n' +
+    '  }, [bump, markSessionPlay]);\n' +
+    '\n' +
+    '  const doSell = useCallback((id: number) => {\n' +
+    '    markSessionPlay();\n' +
+    '    const s = stateRef.current!;\n' +
+    '    const kid = s.prospects.find(p => p.id === id);\n' +
+    '    const price = sellProspect(s, id);\n' +
+    '    if (price !== null && kid) {\n' +
+    "      pushFloater(`💷 ${kid.name} sold for ${price.toLocaleString()}`, 'sale');\n" +
+    '      bump();\n' +
+    '    }\n' +
+    '  }, [bump, markSessionPlay, pushFloater]);\n' +
+    '\n' +
+    '  const doShowcase = useCallback(() => {\n' +
+    '    markSessionPlay();\n' +
+    '    if (startShowcase(stateRef.current!)) {\n' +
+    "      pushFloater('🎪 showcase day: training x3', 'win');\n" +
+    '      bump();\n' +
+    '    }\n' +
+    '  }, [bump, markSessionPlay, pushFloater]);\n' +
+    '\n' +
+    '  const doMoveUp = useCallback(() => {\n' +
+    '    const next = copyAcademy(stateRef.current!);\n' +
+    '    if (moveUp(next) && commitAcademy(next)) {\n' +
+    '      markSessionPlay();\n' +
+    "      pushFloater('⭐ the academy moves up in the world', 'win');\n" +
+    '    }\n' +
+    '  }, [commitAcademy, markSessionPlay, pushFloater]);\n' +
+    '\n' +
+    '  const doPromote = useCallback((id: number) => {\n' +
+    '    const next = copyAcademy(stateRef.current!);\n' +
+    '    const kid = next.prospects.find(p => p.id === id);\n' +
+    '    if (kid && promote(next, id) && commitAcademy(next)) {\n' +
+    '      markSessionPlay();\n' +
+    "      pushFloater(`⚽ ${kid.name} joined the first team`, 'win');\n" +
+    '    }\n' +
+    '  }, [commitAcademy, markSessionPlay, pushFloater]);\n' +
+    '\n' +
+    '  const doSellSenior = useCallback((id: string) => {\n' +
+    '    const next = copyAcademy(stateRef.current!);\n' +
+    '    const player = next.firstTeam?.find(p => p.id === id);\n' +
+    '    const price = sellSenior(next, id);\n' +
+    '    if (player && price !== null && commitAcademy(next)) {\n' +
+    '      markSessionPlay();\n' +
+    "      pushFloater(`💷 ${player.name} sold for ${price.toLocaleString()}`, 'sale');\n" +
+    '    }\n' +
+    '  }, [commitAcademy, markSessionPlay, pushFloater]);\n' +
+    '\n' +
+    '  const doEquipBoot = useCallback((seniorId: string, bootId: string | null) => {\n' +
+    '    const next = copyAcademy(stateRef.current!);\n' +
+    '    if (!equipBoot(next, seniorId, bootId, loadLedger().gearLevel ?? {})) return;\n' +
+    '    setGearSaveBlocked(!commitAcademy(next));\n' +
+    '  }, [commitAcademy]);\n' +
+    '\n' +
+    '  const doUpgradeBoot = useCallback((bootId: string) => {\n' +
+    '    try {\n' +
+    '      if (commitUpgradeBoot(bootId)) {\n' +
+    '        setGearSaveBlocked(false);\n' +
+    '        bump();\n' +
+    '      }\n' +
+    '    } catch { setGearSaveBlocked(true); }\n' +
+    '  }, [bump]);\n' +
+    '\n' +
+    '  /* Round 585: open a pack. The ledger stores the draw first, then the kid moves\n' +
+    '     into a free bed and the academy is saved, all before anything is shown. */\n' +
+    '  /* Review: no session mark here. Safeguard 2 keeps packs and gems away from\n' +
+    '     streaks, and a mark is what a streak counts. */\n' +
+    '  const doOpenPack = useCallback((id: PackId) => {\n' +
+    '    const s = stateRef.current!;\n' +
+    '    let pending;\n' +
+    '    try {\n' +
+    '      pending = commitOpenPack(\n' +
+    '        id, bedFree(s),\n' +
+    '        (potMin, potMax, rng) => makeProspectInBand({ ...s, prospects: [...s.prospects] }, potMin, potMax, rng),\n' +
+    '        (s.packsDelivered ?? 0) + 1,\n' +
+    '      );\n' +
+    '    } catch {\n' +
+    '      setPackSaveBlocked(true);\n' +
+    '      return;\n' +
+    '    }\n' +
+    '    if (!pending) return;\n' +
+    '    deliverWaiting(s);\n' +
+    '    bump();\n' +
+    '  }, [bump, deliverWaiting]);\n' +
+    '\n' +
+    '  const doDismissPack = useCallback(() => {\n' +
+    '    const s = stateRef.current!;\n' +
+    '    try { localStorage.setItem(SAVE_KEY, serialize(s)); } catch {\n' +
+    '      setPackSaveBlocked(true);\n' +
+    '      return;\n' +
+    '    }\n' +
+    '    setPackSaveBlocked(false);\n' +
+    '    if (clearPendingPack(s.packsDelivered ?? 0)) bump();\n' +
+    '  }, [bump]);\n' +
+    '\n' +
+    '  return {\n' +
+    '    state: stateRef.current,\n' +
+    '    floaters,\n' +
+    '    doBuy,\n' +
+    '    doSell,\n' +
+    '    doShowcase,\n' +
+    '    doMoveUp,\n' +
+    '    doOpenPack,\n' +
+    '    doDismissPack,\n' +
+    '    packSaveBlocked,\n' +
+    '    doPromote,\n' +
+    '    doSellSenior,\n' +
+    '    academySaveBlocked,\n' +
+    '    doEquipBoot,\n' +
+    '    doUpgradeBoot,\n' +
+    '    gearSaveBlocked,\n' +
+    '  };\n' +
+    '}\n' +
+    '\n' +
+    'function copyAcademy(s: FactoryState): FactoryState {\n' +
+    '  return {\n' +
+    '    ...s,\n' +
+    '    prospects: s.prospects.map(p => ({ ...p })),\n' +
+    '    ...(s.firstTeam ? { firstTeam: s.firstTeam.map(p => ({ ...p })) } : {}),\n' +
+    '  };\n' +
+    '}\n',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
