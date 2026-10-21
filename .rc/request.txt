@@ -1,0 +1,7 @@
+#!serial
+m-age33: bash .rc/x/rvgates1519.sh age33 endings v1519
+m-ovr50: bash .rc/x/rvgates1519.sh ovr50 endings v1519
+m-noyouth: bash .rc/x/rvgates1519.sh noyouth endings v1519 vrecov
+m-nolegacyrescue: bash .rc/x/rvgates1519.sh nolegacyrescue endings v1519
+m-hop: bash .rc/x/rvgates1519.sh hop endings v1519
+m-noflagguard: bash .rc/x/rvgates1519.sh noflagguard endings
