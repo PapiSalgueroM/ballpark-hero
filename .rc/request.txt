@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+corrupt-after: node scripts/playCorruptSaves.mjs
+ctl-everybutton: CORRUPT_CONTROL=everybutton node scripts/playCorruptSaves.mjs
