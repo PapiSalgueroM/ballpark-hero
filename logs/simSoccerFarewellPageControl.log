@@ -1,0 +1,5 @@
+PASS copied page baseline:13 complete-state and callback cases.
+CONTROL FIRED announcement-reentry:1 actual callback equality failures,12 unrelated actual page cases pass.
+CONTROL FIRED advance-reentry:2 actual callback equality failures,11 unrelated actual page cases pass.
+CONTROL FIRED component-reentry:1 actual consume-once assertion,13 unrelated UI cases pass,14 healthy baseline cases.
+PASS farewell copied source held and complete evidence retained.
