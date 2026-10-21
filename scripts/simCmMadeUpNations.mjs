@@ -399,9 +399,10 @@ let moved = null;
     /* Sold to a club: the ledger lists him there under his country. */
     const sale = s.squad.find(p => tracked.has(p.name) && p.generated && tracked.get(p.name).how.startsWith('bought'));
     const buyer = mm.cm.playableClubs('laliga')[0].name;
-    const withBid = { ...s, incomingBids: [{ playerId: sale.id, playerName: sale.name, club: buyer, offer: 3, status: 'open' }] };
-    const sold = mm.cm.acceptBid(withBid, sale.id);
-    if (!sold) fail(`acceptBid would not sell ${sale.name} to ${buyer}`);
+    const withBid = sale && { ...s, incomingBids: [{ playerId: sale.id, playerName: sale.name, club: buyer, offer: 3, status: 'open' }] };
+    const sold = sale ? mm.cm.acceptBid(withBid, sale.id) : null;
+    if (!sale) fail('no bought man was left to sell to a club, so the ledger was not tried');
+    else if (!sold) fail(`acceptBid would not sell ${sale.name} to ${buyer}`);
     else {
       const there = mm.cm.worldRosterFor(sold, buyer).find(p => p.n === sale.name);
       if (!there) fail(`${sale.name} is not on ${buyer}'s roster after the sale`);
