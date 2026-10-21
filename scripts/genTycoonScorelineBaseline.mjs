@@ -3,7 +3,9 @@
  * against (brief-1532 design 3.7.1), taken on the engine BEFORE any edit.
  *
  * Plays the four bots of scripts/lib/tycoonBots.mjs (pace 300 minutes, overinvest
- * and nosquad 120, paceSell 240) on seeds 1 to 40 (calibration 1 to 20, holdout 21
+ * and nosquad 120, paceSell 240, and the measured overinvest variants over1, over2,
+ * over4 and over8 for 120, added when the first record showed G = 0) on seeds 1 to
+ * 40 (calibration 1 to 20, holdout 21
  * to 40) at the hook's cadence, and writes scripts/data/tycoonScorelineBaseline.json:
  * - per policy and seed: summaries per full time window (W, D, L, goals for and
  *   against, titles, seasons, gems, the summed capped streak), the checkpoints
@@ -38,7 +40,9 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { POLICIES, WINDOWS, MILESTONE_IDS, BADGE_IDS, readDt, bundleTs, freshTmp, runBot, mulberry } from './lib/tycoonBots.mjs';
+import { POLICIES as SPEC_POLICIES, VARIANTS, WINDOWS, MILESTONE_IDS, BADGE_IDS, readDt, bundleTs, freshTmp, runBot, mulberry } from './lib/tycoonBots.mjs';
+/* The four policies of design 3.6, then the measured overinvest variants (see tycoonBots.mjs). */
+const POLICIES = [...SPEC_POLICIES, ...VARIANTS];
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const arg = name => { const i = process.argv.indexOf(name); return i >= 0 ? process.argv[i + 1] : undefined; };
@@ -61,7 +65,10 @@ if (BASE) {
 const DT = readDt(ROOT);
 const SEEDS = SMOKE ? [1, 21] : Array.from({ length: 40 }, (_, i) => i + 1);
 const CAL = seed => seed <= 20;
-const MINUTES = SMOKE ? { pace: 24, overinvest: 16, nosquad: 16, paceSell: 16 } : { pace: 300, overinvest: 120, nosquad: 120, paceSell: 240 };
+const MINUTES = {
+  ...(SMOKE ? { pace: 24, overinvest: 16, nosquad: 16, paceSell: 16 } : { pace: 300, overinvest: 120, nosquad: 120, paceSell: 240 }),
+  ...Object.fromEntries(VARIANTS.map(v => [v, SMOKE ? 16 : 120])),
+};
 const r4 = x => (x === null || x === undefined ? null : Math.round(x * 1e4) / 1e4);
 const median = xs => { const v = xs.filter(x => x !== null && x !== undefined && Number.isFinite(x)).sort((a, b) => a - b); return v.length ? v[Math.floor(v.length / 2)] : null; };
 
@@ -116,6 +123,9 @@ function seedRecord(run) {
     checkpoints: cp,
     windows: windowsOf(run),
     seasons: seasonsOf(run),
+    /* The first twelve watched matches: full time minute, division, mean Squad,
+       opponent offset times 1e5. Season one, match by match, for knob 4. */
+    early: run.matches.slice(0, 12).map(m => [r4(m.t), m.div, r4(m.sq), Math.round(m.off * 1e5)]),
     winBonusSecAt120: before120.length ? r4(before120[before120.length - 1][1]) : null,
     firsts: Object.fromEntries(tracked.filter(id => run.firsts[id] !== undefined).map(id => [id, r4(run.firsts[id])])),
   };
@@ -143,8 +153,8 @@ for (const policy of POLICIES) {
 
 /* ---------- the knobs of design 3.5, read off this record ---------- */
 const squadAt = (policy, minute, pick) => record.policies[policy].filter(r => pick(r.seed)).map(r => r.checkpoints[minute]?.sq ?? null);
-const gOf = (minute, pick) => {
-  const pace = record.policies.pace.filter(r => pick(r.seed)); const over = record.policies.overinvest.filter(r => pick(r.seed));
+const gOf = (minute, pick, overName = 'overinvest') => {
+  const pace = record.policies.pace.filter(r => pick(r.seed)); const over = record.policies[overName].filter(r => pick(r.seed));
   return median(pace.map((r, i) => (over[i]?.checkpoints[minute] && r.checkpoints[minute] ? over[i].checkpoints[minute].sq - r.checkpoints[minute].sq : null)));
 };
 const sets = { cal: CAL, hold: seed => !CAL(seed), all: () => true };
@@ -157,6 +167,7 @@ for (const [name, pick] of Object.entries(sets)) {
   }
   knobs[name] = {
     G: { 30: gOf(30, pick), 60: gOf(60, pick), 120: gOf(120, pick) },
+    Gvariants: Object.fromEntries(VARIANTS.map(v => [v, { 30: gOf(30, pick, v), 60: gOf(60, pick, v), 120: gOf(120, pick, v) }])),
     A: arrival,
     S5: median(squadAt('pace', 5, pick)),
     S15: median(squadAt('pace', 15, pick)),
@@ -259,6 +270,7 @@ if (process.env.RC_OUT) fs.copyFileSync(OUT, path.join(process.env.RC_OUT, 'tyco
 console.log(`wrote ${SMOKE ? OUT : path.relative(ROOT, OUT)} (${(text.length / 1024).toFixed(0)} KB) for ${out.commit}, dt ${DT}, in ${((Date.now() - started) / 1000).toFixed(1)} s`);
 for (const [name, k] of Object.entries(knobs)) {
   console.log(`  ${name}: G at 30/60/120 = ${k.G[30]} / ${k.G[60]} / ${k.G[120]}; S5 ${k.S5}; S15 ${k.S15}; win bonus at 120 = ${k.winBonusSecAt120} s of income`);
+  console.log(`    G of the measured variants: ${Object.entries(k.Gvariants).map(([v, g]) => `${v} ${g[30]} / ${g[60]} / ${g[120]}`).join('; ')}`);
   console.log(`    A_d: ${Object.entries(k.A).map(([d, a]) => `${d}:${a.median}(${a.reached}/${a.of})`).join(' ')}`);
   console.log(`    first promotion ${JSON.stringify(k.firstPromotion)}; first Sell up ${JSON.stringify(k.firstSellUp)}`);
 }

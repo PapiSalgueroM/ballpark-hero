@@ -61,8 +61,33 @@ export const unboosted = (T, s) => (typeof T.unboostedIncomePerSec === 'function
   ? T.unboostedIncomePerSec(s)
   : T.incomePerSec({ ...s, boostLeftSec: 0, goldenLeftSec: 0, goldenKind: null }));
 
+/* Round 1532 step 1 finding: on the base record `overinvest` as specified sits at
+ * most one Squad level above `pace` (G = 0 at 30, 60 and 120 minutes), because the
+ * cheapest first loop spends each round's money before the Squad, which by
+ * minute 60 costs about seventeen rounds of income, is ever affordable. These
+ * three variants are measured beside it for the lead's ruling: a queue that
+ * buys the track with the lowest WEIGHTED price, the Squad's price multiplied by
+ * 1/2, 1/4 or 1/8 (Stands at 0.55 when the ground is full, as pace does), and
+ * WAITS for that track when it is not yet affordable, so money is saved for the
+ * Squad instead of spent around it. over1 prices the Squad in full: the control
+ * that shows the queue alone buys what pace buys. */
+export const SQUAD_WEIGHT = { over1: 1, over2: 0.5, over4: 0.25, over8: 0.125 };
+export const VARIANTS = Object.keys(SQUAD_WEIGHT);
+
+function buyQueue(T, s, squadWeight) {
+  for (let guard = 0; guard < 25; guard += 1) {
+    const full = T.attendance(s) >= T.capacity(s) - 5;
+    const weighted = tr => T.costOf(s, tr.id) * (tr.id === 'squad' ? squadWeight : full && tr.id === 'stands' ? 0.55 : 1);
+    const open = T.TRACKS.filter(tr => T.levelOf(s, tr.id) < tr.maxLevel).sort((a, b) => weighted(a) - weighted(b));
+    if (!open.length || !T.canBuy(s, open[0].id)) break;
+    s = T.buy(s, open[0].id);
+  }
+  return s;
+}
+
 function buyRound(T, s, policy) {
   for (let i = 0; i < 6; i += 1) s = T.tap(s);
+  if (SQUAD_WEIGHT[policy] !== undefined) return buyQueue(T, s, SQUAD_WEIGHT[policy]);
   if (policy === 'overinvest') {
     for (let guard = 0; guard < 25 && T.canBuy(s, 'squad'); guard += 1) s = T.buy(s, 'squad');
   }
@@ -92,7 +117,7 @@ const TABLE_GEMS = pos => (pos === 1 ? 20 : pos === 2 ? 6 : 0);
  * written.
  */
 export function runBot(T, { policy, seed, minutes, dt }) {
-  if (!POLICIES.includes(policy)) throw new Error(`unknown policy ${policy}`);
+  if (!POLICIES.includes(policy) && SQUAD_WEIGHT[policy] === undefined) throw new Error(`unknown policy ${policy}`);
   const roll = mulberry(seed);
   let s = T.newTycoon(0);
   const everyTwo = Math.round(2 / dt);
