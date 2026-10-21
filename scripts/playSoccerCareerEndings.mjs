@@ -157,11 +157,10 @@ try {
     check(!(await dialog.isVisible()) && s && !ended(s) && s.phase === 'playing', `${width} Cancel keeps the career (phase ${s?.phase}, retired ${s?.retired})`);
     await press(retire);
     await press(page.getByRole('dialog', { name: 'Retire?' }).getByRole('button', { name: 'Confirm Retirement' }));
-    await page.waitForSelector('[data-retirement-reason]', { timeout: 10000 }).catch(() => {});
+    await page.getByRole('button', { name: /Retire and Enjoy Life/ }).waitFor({ timeout: 10000 }).catch(() => {});
     s = await save();
     check(s && s.retired && s.phase === 'retirement_ceremony' && s.age === 26, `${width} Confirm Retirement ends it on the send off at 26 (phase ${s?.phase})`);
-    const reason = await page.locator('[data-retirement-reason]').textContent().catch(() => null);
-    check(reason === 'You chose to retire.', `${width} the send off says why (${reason})`);
+    check(await page.locator('[data-retirement-reason]').count() === 0, `${width} the player's own retirement gets no forced line`);
     for (const name of [/Retire and Enjoy Life/, /Become a Manager/, /Become a TV Pundit/]) check(await page.getByRole('button', { name }).count() === 1, `${width} the send off offers ${name}`);
     await shot('send-off'); await fits('on the send off');
 
@@ -174,8 +173,8 @@ try {
 
     /* 4. A real retirement whose phase was lost opens its send off. */
     await load(FIXTURES.lost);
-    const lostReason = await page.locator('[data-retirement-reason]').textContent({ timeout: 10000 }).catch(() => null);
-    check(lostReason === 'You chose to retire.' && await page.getByRole('button', { name: /Retire and Enjoy Life/ }).count() === 1, `${width} a real retirement whose phase was lost opens its send off (${lostReason})`);
+    await page.getByRole('button', { name: /Retire and Enjoy Life/ }).waitFor({ timeout: 10000 }).catch(() => {});
+    check(await page.getByRole('button', { name: /Retire and Enjoy Life/ }).count() === 1 && (await page.textContent('body')).includes('retires at age 26'), `${width} a real retirement whose phase was lost opens its send off`);
     await shot('lost-phase');
     await ctx.close();
   }

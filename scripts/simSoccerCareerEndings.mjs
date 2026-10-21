@@ -32,7 +32,7 @@
  *   SC_ENDINGS_CONTROL=early        the age 45 rule moved to 26: A and B go red.
  *   SC_ENDINGS_CONTROL=noreconcile  repairCareer stops reconciling the pair: C goes red.
  *   SC_ENDINGS_CONTROL=summary      dismissSummary's old hop to the retired screen: C goes red.
- *   SC_ENDINGS_CONTROL=noreason     the send off loses its reason for the Retire button: B goes red.
+ *   SC_ENDINGS_CONTROL=noreason     the send off loses its reason for the age limit: B goes red.
  *
  * Run: node scripts/simSoccerCareerEndings.mjs [careers per fleet, default 40]
  */
@@ -57,7 +57,7 @@ const CONTROLS = {
   early: ['if ((s.overall < 50 && s.age >= 33) || s.age >= 45) {', 'if ((s.overall < 50 && s.age >= 33) || s.age >= 26) {'],
   noreconcile: ['  reconcileRetirement(s);\n  if (!s.primeType)', '  if (!s.primeType)'],
   summary: ['  if (s.retired && reconcileRetirement(s)) return s;', '  if (s.retired) { s.phase = "retired"; return s; }'],
-  noreason: ['  return "You chose to retire.";', '  return null;'],
+  noreason: ['  if (s.age >= 45) return "Forced out at 45, the age limit.";', '  if (s.age >= 45) return null;'],
 };
 
 let failures = 0;
@@ -216,7 +216,7 @@ for (const [p, policy] of POLICIES.entries()) {
         if (!over(s)) continue;
         const route = endingRoute(prev, action, s);
         tally.ended[route ?? 'early'] = (tally.ended[route ?? 'early'] ?? 0) + 1;
-        if (route === 'farewell' && E.retirementReason && E.retirementReason(s) !== 'Your farewell season is done, the year you picked.') note(`${policy} career ${c}: a farewell ending says ${E.retirementReason(s)}`);
+        if (E.retirementReason && (route === 'forced') !== !!E.retirementReason(s)) note(`${policy} career ${c}: a ${route} ending at ${s.age} has the send off line ${E.retirementReason(s)}`);
         if (!route) { tally.early += 1; note(`${policy} career ${c}: ended at ${s.age} (overall ${s.overall}) on ${action} from ${prev.phase}, phase ${s.phase}`); }
         if (!(s.phase === 'retirement_ceremony' && s.retired && s.legacy)) { tally.noChoice += 1; note(`${policy} career ${c}: ended at ${s.age} on ${action} into ${s.phase} (retired ${s.retired}, legacy ${!!s.legacy}), not the ceremony and its choices`); }
       }
@@ -276,9 +276,9 @@ console.log(`  fixtures: 25 overall ${at25.overall} at ${at25.currentClub}, 26 o
   const r = E.manualRetire(copy(at26));
   check(isCeremony(r) && r.age === 26, `B1 a confirmed retirement at 26 lands on the ceremony with its legacy (phase ${r.phase}, retired ${r.retired})`);
   check(r.events.some(l => l.includes('Announced retirement')), 'B1 the confirmed retirement says so in the season log');
-  check(E.retirementReason(r) === 'You chose to retire.', `B1 the send off says the player chose it (${E.retirementReason(r)})`);
+  check(E.retirementReason(r) === null, `B1 the player's own retirement gets no forced line (${E.retirementReason(r)})`);
   const took = E.acceptRetirementSuggestion({ ...copy(at26), age: 31, phase: 'retirement_suggestion' });
-  check(isCeremony(took) && E.retirementReason(took) === 'Your body was slowing down and you called it.', `R3 taking the suggestion says so (${E.retirementReason(took)})`);
+  check(isCeremony(took) && E.retirementReason(took) === null, `R3 taking the suggestion is the player's own, no forced line (${E.retirementReason(took)})`);
 }
 {
   seedRandom(1);
@@ -291,12 +291,12 @@ console.log(`  fixtures: 25 overall ${at25.overall} at ${at25.currentClub}, 26 o
   const n = E.advanceProSeason(fixture, clubs);
   check(isCeremony(n) && n.age === 33 && endingRoute(fixture, 'advanceProSeason', n) === 'forced', `B3 the age rule fires at 33 under 50 (age ${n.age}, overall ${n.overall}, phase ${n.phase})`);
   check(n.events.some(l => l.includes('Forced retirement')), 'B3 the forced retirement says why in the season log');
-  check(/^Forced out at 33: an overall of \d+ and the body could not keep up\.$/.test(E.retirementReason(n) ?? ''), `B3 the send off says why (${E.retirementReason(n)})`);
+  check(/^Forced out at 33: overall \d+, the body could not keep up\.$/.test(E.retirementReason(n) ?? ''), `B3 the send off says why (${E.retirementReason(n)})`);
   const old = { ...copy(at26), age: 44 };
   seedRandom(1519003);
   const m = E.advanceProSeason(old, clubs);
   check(isCeremony(m) && m.age === 45, `B4 the age rule fires at 45 (age ${m.age}, phase ${m.phase})`);
-  check(E.retirementReason(m) === 'Forced out at 45, as long as any career here can run.', `B4 the send off says why (${E.retirementReason(m)})`);
+  check(E.retirementReason(m) === 'Forced out at 45, the age limit.', `B4 the send off says why (${E.retirementReason(m)})`);
   const young = { ...withStats(copy(at26), 40), age: 25 };
   seedRandom(1519004);
   const y = E.advanceProSeason(young, clubs);

@@ -151,7 +151,7 @@ describe('Round 1519: no career ends at 26 without the player', () => {
     expect(ended(read())).toBe(false); expect(read().age).toBe(26);
     expect(again.queryByRole('button', { name: /Share Legacy/ })).toBeNull();
   });
-  it('the Retire dialog: Cancel keeps the career, Confirm ends it on the send off with its reason and choices', () => {
+  it('the Retire dialog: Cancel keeps the career, Confirm ends it on the send off with its choices', () => {
     const view = mount(JSON.stringify(fx().at26)); playable(view);
     fireEvent.click(retireButton(view));
     expect(view.getByRole('dialog', { name: 'Retire?' })).toBeVisible();
@@ -162,7 +162,7 @@ describe('Round 1519: no career ends at 26 without the player', () => {
     fireEvent.click(view.getByRole('button', { name: 'Confirm Retirement' }));
     expect(read().retired).toBe(true); expect(read().phase).toBe('retirement_ceremony'); expect(read().age).toBe(26);
     expect(view.container.textContent).toContain('retires at age 26');
-    expect(view.container.querySelector('[data-retirement-reason]')?.textContent).toBe('You chose to retire.');
+    expect(view.container.querySelector('[data-retirement-reason]')).toBeNull();
     for (const name of [/Retire and Enjoy Life/, /Become a Manager/, /Become a TV Pundit/]) expect(button(view, name)).toBeVisible();
   });
   it('a stray retired flag on the summary at 26 plays on after Continue', async () => {
@@ -180,7 +180,7 @@ describe('Round 1519: no career ends at 26 without the player', () => {
     const lost = { ...real, phase: 'season_summary', pendingSummary: real.seasons[real.seasons.length - 1] };
     const view = mount(JSON.stringify(lost)); playable(view);
     expect(view.container.textContent).toContain('retires at age 26');
-    expect(view.container.querySelector('[data-retirement-reason]')?.textContent).toBe('You chose to retire.');
+    expect(view.container.querySelector('[data-retirement-reason]')).toBeNull();
     expect(button(view, /Retire and Enjoy Life/)).toBeVisible();
   });
   it('a retired screen with nothing behind it goes back to Next Season', () => {
@@ -194,6 +194,6 @@ describe('Round 1519: no career ends at 26 without the player', () => {
     const forced = E.advanceProSeason({ ...copy(fx().at26), ...stats, overall: 40, age: 32 }, E.FALLBACK_CLUBS);
     expect(forced.phase).toBe('retirement_ceremony');
     const view = mount(JSON.stringify(forced)); playable(view);
-    expect(view.container.querySelector('[data-retirement-reason]')?.textContent).toMatch(/^Forced out at 33: an overall of \d+ and the body could not keep up\.$/);
+    expect(view.container.querySelector('[data-retirement-reason]')?.textContent).toMatch(/^Forced out at 33: overall \d+, the body could not keep up\.$/);
   });
 });
