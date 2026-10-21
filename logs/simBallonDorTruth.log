@@ -1,0 +1,5 @@
+   1456 ceremonies, 13721 nominees; honours held: UCL 2441, League 4604, Cup 3143, World Cup 1086, Continental 269
+   player's club inside the record on 1297 ceremonies (league won 709, cup won 573, Europe won 96); 4915 same club nominee pairs compared
+   teeth: ceremonies>=400, UCL>=100 League>=200 Cup>=100 held, player in record on half, 200+ pairs, all measured above
+
+simBallonDorTruth: green. Every medal on the ceremony was won by the club that holds it, and the player's card is the record.
