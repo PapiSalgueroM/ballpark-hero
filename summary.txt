@@ -1,0 +1,4 @@
+headsha exit=0 0s | 841ea72fb Release BO seam: refresh scripts/data/guideHeadingsFrozen.json for /club-manager
+wf285 exit=0 141s | wfrun club-detail-fixtures.yml: 8 steps ran, 0 failed
+wf287x exit=0 238s | wfrun manager-handover-desk.yml: 9 steps ran, 0 failed
+wf301x exit=0 599s | wfrun manager-decision-method.yml: 5 steps ran, 0 failed
