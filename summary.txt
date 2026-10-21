@@ -1,0 +1,12 @@
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simClubManagerALeague exit=0 11s | simClubManagerALeague: all checks passed
+simCmLeagueFixtures exit=0 15s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+simClubManagerMeters exit=0 35s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simClubManagerScore exit=0 145s | ALL SEASON SCORE CHECKS PASSED
+simCmVarLedger exit=0 1s | simCmVarLedger: all 691 checks passed.
+simCmCopy exit=0 54s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simCmInternationals exit=0 36s | simCmInternationals: all green
+simClubManagerBudget exit=0 291s | simClubManagerBudget: PASS
+simCmDifficulty exit=0 350s | simCmDifficulty: all green (sections 1,2,3,6,7,8)
+simCmDifficulty-base exit=1 341s | grep: write error: Broken pipe
+simCmBoardVerdict exit=0 850s | simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 850 s)

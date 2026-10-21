@@ -1,0 +1,41 @@
+  ok: Normal is the identity row
+  ok: 28 of 28 neighbour pairs ordered (every dial but the cut strictly)
+  ok: 24 of 24 caps hold
+  ok: src/lib/managerDifficulty.ts: no growth, potential, rating, draw or clock in its code
+  ok: src/lib/clubManagerDifficulty.ts: no growth, potential, rating, draw or clock in its code
+  ok: clubManagerDifficulty.ts runtime imports: @/lib/clubManagerStart, @/lib/clubManagerBoardVerdict
+  ok: src/lib/clubManagerStart.ts does not import the engine or this module at runtime
+  ok: src/lib/clubManagerBoardVerdict.ts does not import the engine or this module at runtime
+2) Normal plays as the base tree /tmp/base: 2 seeds, 2 seasons, coach and noCoach
+  FAIL: Arsenal seed 0 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Arsenal seed 0 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Arsenal seed 1 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Arsenal seed 1 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Brentford seed 0 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Brentford seed 0 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Brentford seed 1 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Brentford seed 1 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Hull City seed 0 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Hull City seed 0 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Hull City seed 1 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Hull City seed 1 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Real Madrid seed 0 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Real Madrid seed 0 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Real Madrid seed 1 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Real Madrid seed 1 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Espanyol seed 0 coach: season 1 differs from the base, first at key squad
+  FAIL: Espanyol seed 0 noCoach: season 1 differs from the base, first at key squad
+  FAIL: Espanyol seed 1 coach: season 1 differs from the base, first at key squad
+  FAIL: Espanyol seed 1 noCoach: season 1 differs from the base, first at key squad
+  FAIL: Málaga seed 0 coach: season 1 differs from the base, first at key squad
+  FAIL: Málaga seed 0 noCoach: season 1 differs from the base, first at key squad
+  FAIL: Málaga seed 1 coach: season 1 differs from the base, first at key squad
+  FAIL: Málaga seed 1 noCoach: season 1 differs from the base, first at key squad
+  FAIL: Inter Milan seed 0 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Inter Milan seed 0 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Inter Milan seed 1 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Inter Milan seed 1 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Torino seed 0 coach: season 1 differs from the base, first at key freeAgents
+  FAIL: Torino seed 0 noCoach: season 1 differs from the base, first at key freeAgents
+  FAIL: Torino seed 1 coach: season 1 differs from the base, first at key freeAgents
+grep: write error: Broken pipe
