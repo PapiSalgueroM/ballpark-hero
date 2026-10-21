@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+# Release BO proof, part w, on the final head 841ea72f's vite build, the database host blocked by the walks and the runner: playOneOffCups (case g reads season one's played UEFA Super Cup) and its controls nousctile and notile (each must exit 1 with FIRED), and sweepWeight against the rows Release BN set
+playoneoff: node scripts/playOneOffCups.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+nousctile: PLAY_ONEOFF_CONTROL=nousctile node scripts/playOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+notile: PLAY_ONEOFF_CONTROL=notile node scripts/playOneOffCups.mjs 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+weight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; grep -E "^ +/" /tmp/w.log | head -20 | cut -c1-120; grep -E "FAIL" /tmp/w.log | head -6 | cut -c1-200; tail -2 /tmp/w.log | cut -c1-200; exit $s
