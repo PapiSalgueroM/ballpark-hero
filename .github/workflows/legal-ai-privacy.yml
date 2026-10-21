@@ -129,8 +129,9 @@ jobs:
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           export SIM_OFFLINE_RECEIPT="$PWD/legal-privacy-artifacts/unit.transport"
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > legal-privacy-artifacts/types.log 2>&1
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee legal-privacy-artifacts/types.log
           node_modules/.bin/vitest run src/test/consentPurposeGates.test.ts src/test/consentPrivacy1442.test.ts src/test/consentSynchronization1442.test.tsx src/test/consentWithdrawal1442.test.ts src/test/legalAiTransparency1442.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/consent-unit.log
+          node scripts/simConsentWithdrawal1442.mjs 2>&1 | tee legal-privacy-artifacts/consent-controls.log
           node_modules/.bin/vitest run src/components/profile/AccountPrivacy.test.tsx src/test/cookieConsentStorage.test.tsx src/test/helpConsentFocus.test.tsx src/test/helpDialogFocus.test.tsx src/test/safeStorage.test.ts src/test/safeStorageQuota.test.ts src/test/freshBuildBlockedStorage.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/inherited-unit.log
       - name: Isolated browser and font tooling
         run: |

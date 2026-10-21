@@ -95,7 +95,8 @@ describe('account privacy server authorization', () => {
       { deleteUser: async () => { throw new Error('SECRET'); } },
     ]) {
       const f = fixture(overrides);
-      const response = await handleAccountPrivacy(request({ action: overrides.exportData ? 'export' : 'delete', confirmation: 'DELETE MY ACCOUNT', password: 'right' }), f.services);
+      const body = overrides.exportData ? { action: 'export' } : { action: 'delete', confirmation: 'DELETE MY ACCOUNT', password: 'right' };
+      const response = await handleAccountPrivacy(request(body), f.services);
       expect(response.status).toBe(503);
       expect(await response.text()).not.toContain('SECRET');
     }

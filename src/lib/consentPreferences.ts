@@ -100,15 +100,15 @@ export function synchronizeConsentStorageEvent(event: StorageEvent): void {
   }
 }
 export function canReloadAfterWithdrawal(revoked: ConsentPurposes): boolean {
-  if (getStorageTrouble() === 'blocked') return false;
   if (!settlePendingSaves()) return false;
+  if (getStorageTrouble() === 'blocked') return false;
   try {
     // A full store's safe seam can shadow a refused removal or write. Only the
     // actual browser record tells us what the next template would receive.
     const durable = parseConsentPreferences(window.localStorage.getItem(CONSENT_KEY));
     return !durable || ((!revoked.advertising || !durable.advertising || isGlobalPrivacyControlEnabled())
       && (!revoked.analytics || !ANALYTICS_READY || !durable.analytics));
-  } catch { return true; }
+  } catch { return false; }
 }
 
 export function openConsentChoices(opener?: HTMLElement): void {

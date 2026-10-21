@@ -160,6 +160,6 @@ describe('each optional loader requires its own current affirmative purpose', ()
     loadConsentedScripts();
     expect(adScripts()).toHaveLength(1);
     expect(analyticsScripts()).toHaveLength(0);
-    expect(Reflect.get(window, 'adsbygoogle').requestNonPersonalizedAds).toBe(1);
+    expect(Reflect.get(Reflect.get(window, 'adsbygoogle'), 'requestNonPersonalizedAds')).toBe(1);
   });
 });
