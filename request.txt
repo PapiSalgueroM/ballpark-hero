@@ -1,0 +1,4 @@
+h20: PROBE_N=1200 PROBE_FLEET=passive PROBE_VARIANTS=per20 node .rc/x/variantProbe.mjs
+h25: PROBE_N=1200 PROBE_FLEET=passive PROBE_VARIANTS=per25 node .rc/x/variantProbe.mjs
+e20: PROBE_N=1200 PROBE_FLEET=engaged PROBE_VARIANTS=per20 node .rc/x/variantProbe.mjs
+e25: PROBE_N=1200 PROBE_FLEET=engaged PROBE_VARIANTS=per25 node .rc/x/variantProbe.mjs
