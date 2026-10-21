@@ -1,0 +1,23 @@
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
+... Skipped lines
+
+...
+
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
+... Skipped lines
+
+...
+
+PASS [healthy] identity
+PASS [healthy] buy-job
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+2 !== 0
+

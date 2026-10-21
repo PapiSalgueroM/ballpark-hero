@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simManagerWorldContinuity: node scripts/simManagerWorldContinuity.mjs 2>&1 | grep -v "^[ +-]" | tail -40; exit ${PIPESTATUS[0]}
+simCmWorldMoves: node scripts/simCmWorldMoves.mjs
+simCmMadeUpNations: node scripts/simCmMadeUpNations.mjs
+vitest-new: node_modules/.bin/vitest run src/test/cmMadeUpNations.test.ts --testTimeout=300000 --hookTimeout=120000

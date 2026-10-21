@@ -1,0 +1,5 @@
+simManagerWorldContinuity exit=1 43s | 2 !== 0
+simCmMadeUpNations exit=1 50s | simCmMadeUpNations: RED, 1 failure(s)
+vitest-new exit=0 5s |    Duration  4.39s (transform 2.35s, setup 111ms, collect 2.84s, tests 403ms, environment 381ms, prepare 183ms)
+tsc exit=0 105s | 
+simCmWorldMoves exit=1 1139s | simCmWorldMoves: RED, sections 5 (84), 6 (270), 8 (57)
