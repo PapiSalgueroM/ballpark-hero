@@ -35,7 +35,7 @@ async function checks(page, kind) {
     ['SEO_BROWSER_BRAND', async () => {
       const headings = page.locator('h1');
       assert.equal(await headings.count(), 1, 'SEO_BROWSER_BRAND: one actual H1');
-      assert.equal((await headings.innerText()).trim(), kind === 'home' ? 'DoUKnowBall' : 'NFL GRID', 'SEO_BROWSER_BRAND: owner/game label');
+      assert.equal((await headings.innerText()).trim(), kind === 'home' ? 'DoUKnowBall' : '🏈NFL GRID', 'SEO_BROWSER_BRAND: owner/game label');
       assert(await headings.isVisible(), 'SEO_BROWSER_BRAND: H1 visible');
     }],
     ['SEO_BROWSER_OVERFLOW', async () => {
@@ -153,10 +153,10 @@ async function fault(id, profile, marker, targetKind) {
     const normal = await checks(view.page, profile.kind);
     assert(normal.every(x => x.status === 'passed'), 'fault precondition was already unhealthy');
     locator = targetKind === 'descriptor' ? view.page.getByText(actual.descriptor, { exact: true })
-      : targetKind === 'guide' ? view.page.locator('section[data-seo-content="ready"]') : view.page.locator('html');
+      : targetKind === 'guide' ? view.page.locator('section[data-seo-content="ready"]') : view.page.locator('body');
     original = await locator.getAttribute('style');
     row.beforeSha256 = digest(JSON.stringify(original));
-    if (targetKind === 'overflow') await locator.evaluate(el => el.style.setProperty('width', (innerWidth + 260) + 'px', 'important'));
+    if (targetKind === 'overflow') await locator.evaluate(el => el.style.setProperty('min-width', (innerWidth + 260) + 'px', 'important'));
     else await locator.evaluate(el => el.style.setProperty('visibility', 'hidden', 'important'));
     const changed = await locator.getAttribute('style');
     row.afterSha256 = digest(JSON.stringify(changed));

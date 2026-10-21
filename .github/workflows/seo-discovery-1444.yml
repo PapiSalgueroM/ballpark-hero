@@ -150,9 +150,35 @@ jobs:
           git rev-parse HEAD > seo-baseline-artifacts/head.txt
           sha256sum package.json package-lock.json > seo-baseline-artifacts/dependencies-before.sha256
           git fetch --no-tags --depth=1 origin "$BASE_SOURCE" > seo-baseline-artifacts/base-fetch.log 2>&1
-          git diff --exit-code "$BASE_SOURCE" HEAD -- src/lib src/hooks src/components src/data/gameRegistry.ts supabase index.html package.json package-lock.json scripts/simHomeCopy.mjs scripts/simTrustCopy.mjs scripts/simNflGridPage.mjs scripts/simNflGrid.mjs scripts/lib > seo-baseline-artifacts/unchanged-engines-baselines-hold.log
+          git diff --exit-code "$BASE_SOURCE" HEAD -- src/lib src/hooks src/components src/data/gameRegistry.ts supabase index.html package.json package-lock.json scripts/simTrustCopy.mjs scripts/simNflGridPage.mjs scripts/simNflGrid.mjs scripts/lib > seo-baseline-artifacts/unchanged-engines-baselines-hold.log
+          git show "$BASE_SOURCE:scripts/simHomeCopy.mjs" > seo-baseline-artifacts/original-home-guard.txt
           npm ci > seo-baseline-artifacts/install.log 2>&1
-      - name: Run the actual unchanged guard and effective existing faults
+      - name: Exact two-line home-control adaptation and original actual comparison
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const old=fs.readFileSync('seo-baseline-artifacts/original-home-guard.txt','utf8'),current=fs.readFileSync('scripts/simHomeCopy.mjs','utf8');
+          const from="indexBundled = controlled('srsource', indexBundled, 'All playable without an account.`}',\n  'All playable without an account.`}<span className=\"sr-only\"> Free sports trivia, quizzes and career sims.</span>');";
+          const to="indexBundled = controlledRe('srsource', indexBundled, /<\\/h1>/,\n  '</h1><span className=\"sr-only\"> Free sports trivia, quizzes and career sims.</span>');";
+          assert.equal(old.split(from).length-1,1);assert.equal(current.split(to).length-1,1);assert.equal(old.replace(from,to),current);assert.equal(current.replace(to,from),old);
+          const hash=x=>createHash('sha256').update(x).digest('hex');fs.writeFileSync('seo-baseline-artifacts/home-control-adaptation.json',JSON.stringify({oldSha256:hash(old),currentSha256:hash(current),twoLineOnly:true,wholeInverseExact:true},null,2));
+          JS
+          if test "$GUARD" = simHomeCopy; then
+            baseline="$RUNNER_TEMP/seo1444-original-home"
+            mkdir "$baseline";git archive "$BASE_SOURCE" | tar -x -C "$baseline"
+            ln -s "$PWD/node_modules" "$baseline/node_modules"
+            out="$PWD/seo-baseline-artifacts"
+            for control in normal hiddenh1 srsource;do
+              status=0
+              (cd "$baseline";export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/original-home.transport";unset HOME_COPY_CONTROL;if test "$control" != normal;then export HOME_COPY_CONTROL="$control";fi;node scripts/simHomeCopy.mjs) > "$out/original-home-$control.log" 2>&1 || status=$?
+              printf '%s\t%s\n' "$control" "$status" >> "$out/original-home-results.tsv"
+              test "$status" -eq 0
+              if test "$control" = normal;then grep -F 'simHomeCopy: green.' "$out/original-home-$control.log";else grep -F "simHomeCopy control $control: green." "$out/original-home-$control.log";grep -F '  FAIL:' "$out/original-home-$control.log";fi
+            done
+            test ! -s "$out/original-home.transport"
+          fi
+      - name: Run the actual guard and effective existing faults
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"

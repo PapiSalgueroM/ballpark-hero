@@ -69,3 +69,5 @@ After merge and publish, perform bounded raw public/asset/crawler readback. A fr
 - [Google image guidance](https://developers.google.com/search/docs/appearance/google-images): useful contextual image descriptions, avoiding keyword stuffing.
 
 The screenshot's AI summary wording is not defined in the official Lovable page. Refreshing an existing factual summary is justified, but it is not evidence that this clears that particular badge.
+
+The first Green candidate reproduced a stale literal in the existing HomeCopy srsource fault, before it could plant the fault. Its only guard adaptation now uses the existing exactly-one controlledRe helper at the actual closing H1, with the same hidden span, part8 detector and all assertions. Original bc79 plus original guard and current plus adapted guard each run normal, hiddenh1 and srsource. Whole forward and inverse source bindings restrict the adaptation to those two lines. The failed original Green evidence remains retained. The browser proof also now expects the existing football emoji in the title and uses an effective body minimum width for its overflow fault. Product copy is unchanged by these proof repairs.
