@@ -1,0 +1,14 @@
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerProgramme: node scripts/simCareerProgramme.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerStoryRole: node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns: node scripts/simCareerTrophyRuns.mjs
+simSoccerCareerDevelopment: node scripts/simSoccerCareerDevelopment.mjs
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+simSoccerWorldTruth: node scripts/simSoccerWorldTruth.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simSoccerDeck: node scripts/simSoccerDeck.mjs
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs
+simCareerLeagueWorld: node scripts/simCareerLeagueWorld.mjs
+simSoccerCareer: node scripts/simSoccerCareer.mjs

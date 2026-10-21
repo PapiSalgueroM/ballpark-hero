@@ -1,0 +1,14 @@
+simCareerLeagueFinish exit=0 15s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4819 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+simCareerLeagueSeasons exit=0 17s | simCareerLeagueSeasons: all sections green
+simCareerSocialBrands exit=0 22s | ALL SOCIAL AND BRAND CHECKS PASSED
+simCareerTrophyRuns exit=0 2s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+simSoccerCareerDevelopment exit=0 3s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+simCareerStoryRole exit=0 35s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+simCareerProgramme exit=0 61s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
+simSoccerDeckFairness exit=1 41s | simSoccerDeckFairness: 7 failures in section 8
+simSoccerWorldTruth exit=1 48s | simSoccerWorldTruth: 7 FAILURES (section 6: 7)
+simCareerAwardsNight exit=0 54s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simCareerKeepPlaying exit=0 59s | simCareerKeepPlaying: 1495 checks, 0 failures
+simSoccerCareer exit=0 4s | PASS: no crashes, no snubs, homegrown path live
+simSoccerDeck exit=0 122s | simSoccerDeck: green. Every section.
+simCareerLeagueWorld exit=0 266s | simCareerLeagueWorld: all sections green (266.1 s)
