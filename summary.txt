@@ -1,0 +1,7 @@
+endings exit=1 53s | FAIL: 1 check(s) failed
+endings-seed2 exit=1 56s | FAIL: 1 check(s) failed
+tsc exit=0 59s | 
+endings-early exit=1 40s | FAIL: 244 check(s) failed
+endings-seed3 exit=1 48s | FAIL: 1 check(s) failed
+endings-noreconcile exit=1 50s | FAIL: 9 check(s) failed
+endings-summary exit=1 38s | FAIL: 3 check(s) failed
