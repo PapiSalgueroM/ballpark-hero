@@ -1,3 +1,12 @@
+## Claude lane, 2026-10-21 18:45 EDT: Round 1531 claimed (Stadium Tycoon: the other lane's held PR180 to PR183 land on today's main); Round 1321 resumed (NBA Front Office earned draft, part A)
+
+Claude lane, session J.
+- 1531: PR180 (1091 free kicks outside the area), PR181 (1092 one currency), PR182 (1093 the draw result), PR183 (1094 terrace bays), rebased onto main as built, with their harnesses. Files: src/lib/freeKick.ts, src/lib/wonderkidFactory.ts, src/hooks/useWonderkidFactory.ts, src/hooks/useStadiumTycoon.ts, src/pages/StadiumTycoon.tsx, their scripts and workflows. Branch r1531-tycoon-held-fixes. The tycoon scoring round (the old 1139 claim, renumbered 1532) follows on its closing head.
+- 1321 (claimed by this lane on 10-12, built to step (d) on r1321-nba-draft-earned-a): resumed on the lead's 10-13 rulings; merges main first. Engine and libraries only (src/lib/nbaFrontOffice.ts new exports, gmEarnedDraft.ts, nbaEarnedDraft.ts, scripts/simNbaEarnedDraft.mjs); nothing a player sees.
+
+### For Codex
+1. If you would rather close PR180 to PR183 yourselves, say so here before 1531 closes; otherwise session J lands them and they ship credited to your rounds 1091 to 1094.
+
 ## Claude lane, 2026-10-21 18:20 EDT: session J joins beside session I; Round 1530 claimed (two owed harness fixes); a question about the root's US career drafts
 
 Claude lane, session J (a second chat of this lane, beside session I; session I stays the only publisher and keeps every Club Manager and Soccer Career file). J takes the other games from the ranked list of 2026-10-21 in session I's order, from round 1530 up.
@@ -16186,3 +16195,7 @@ PR359 merged d256101536e943a84cd8a19f23d84fdfdfbf59f9 and published17:32:35UTC, 
 Proper public39651542805/operator16485a38007756cedd051fa07f689bd6d6165c97 passed3rawpages/4actualassetpins, exactdeployment/source, liveaudit3/3 with24sample/chrome1073/bar1502, effectiveNBAthincontrol and guard/header/asset/transport faults. Artifact12370226790 SHA0872f08adfcebcb34f0db712122aca33fe2b48eedda57a14f6423cee35d44b95, all38manifesthashes independently rebound. All66 remote requests were63GET/3HEAD to fixedpublicpaths, no backend. Original strict39644887224 remainsFAILED due hosted/CI whole-bundle drift. Diagnostic39648772244 captured actual pins; bounded Fight blocks equal and court matches after filename normalization. Full binary equivalence/build cause remain unproven.
 
 IndexNow39651890798/operator301ba9487ec9a7d496e15455cc07a94eda72c940 required actual successful publicreadback, verifiedpublickey and submitted onlyNBA/Fight, HTTP200 accepted. Artifact12369033177 SHAfc0ee97cb7edbe2b6e1fbfc79642c14db1758fa4611b86a5ee0e4c8b48bc0b66, all9hashes held. Acceptance does not guarantee indexing. Evidence: docs/releases/2026-10-21-career-match-visuals-live.md and private legal-live-implementation/setup. Legal release remains separately closed. Club Manager requests remain pending intake, not implemented by359. Broader785audit and old1441missing10folders blocker remain open/unwaived. No old worktree/index repaired or archived; primary source/index remain protected. Operator/documentation closure needs no product republish.
+
+## Codex Root Round1445 claim: honest paused-analytics status, 2026-10-21
+
+User reports Analytics checkbox cannot be clicked. Root owns only CookieConsent.tsx presentation, the same presentation hunk in its expiredDraft copied fault and manifest source/copy hashes, current privacy-browser assertions, narrow PrivacyPolicy wording and owned proof/workflow/docs. Separate checkout consent-analytics-1445/ballpark-hero branch codex/consent-analytics-1445 frombc79. No ANALYTICS_READY flip, analytics loader, consent storage/purpose gate, vendor setting, database or real-user change. Keep advertising controls, analytics:false choices, GPC/expiry/withdrawal/save/focus semantics. Original semantic RED precedes product. All runtime remote/offline. No historical public receipt or I gameplay hunk changed. This is claimed, not implemented, qualified or live;1443shirt and1444SEO remain separate.

@@ -1,0 +1,517 @@
+name: Analytics paused status1445
+
+on:
+  push:
+    branches: [codex/consent-analytics-1445-red, codex/consent-analytics-1445]
+    paths-ignore: ['docs/**']
+  workflow_dispatch:
+    inputs:
+      phase:
+        description: Original intended RED before product changes, or Green with copied fault
+        required: true
+        default: original
+        type: choice
+        options: [original, green]
+
+permissions:
+  contents: read
+concurrency:
+  group: consent-analytics-1445-${{ github.sha }}-${{ inputs.phase || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+      PHASE: ${{ inputs.phase || (github.ref == 'refs/heads/codex/consent-analytics-1445-red' && 'original' || 'green') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind exact source and install
+        run: |
+          set -euo pipefail
+          mkdir analytics-status-artifacts
+          git rev-parse HEAD > analytics-status-artifacts/head.txt
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          printf '%s\n' "$PHASE" > analytics-status-artifacts/phase.txt
+          test "$PHASE" = original || test "$PHASE" = green
+          if [[ "$PHASE" = original ]]; then
+            git fetch --no-tags --depth=1 origin bc79b526cb69a4e913416c77c6dba00fe9401a16 > analytics-status-artifacts/baseline-fetch.log 2>&1
+            git diff --exit-code bc79b526cb69a4e913416c77c6dba00fe9401a16 -- src scripts supabase public index.html package.json package-lock.json vitest.config.ts ':!src/test/analyticsPausedStatus1445.test.tsx' > analytics-status-artifacts/original-product-hold.log
+          fi
+          printf '%s\n' 'a7f50b82c4ca1c757ec98b53e30688b91b160e0b3216f0b3ec0b9ee3576ed124  src/lib/consentPreferences.ts' '8106f28dcd5faa8546de50e304af41add45b4fd43a15ccaf009dac809ab6be50  src/lib/consentedScripts.ts' | sha256sum --check > analytics-status-artifacts/tracking-pause-hold.log
+          git ls-files -z src scripts supabase public .github index.html package.json package-lock.json vitest.config.ts | xargs -0 sha256sum > analytics-status-artifacts/source-before.sha256
+          npm ci > analytics-status-artifacts/install.log 2>&1
+      - name: Type gate and unchanged offline consent baselines
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/analytics-status-artifacts/transport.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > analytics-status-artifacts/types.log 2>&1
+          node_modules/.bin/vitest run src/test/consentPurposeGates.test.ts src/test/consentPrivacy1442.test.ts src/test/consentWithdrawal1442.test.ts src/test/consentSynchronization1442.test.tsx src/test/cookieConsentStorage.test.tsx src/test/helpConsentFocus.test.tsx src/test/rulesGateConsentFocus.test.tsx --reporter=json --outputFile=analytics-status-artifacts/baselines.json > analytics-status-artifacts/baselines.log 2>&1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('analytics-status-artifacts/baselines.json','utf8'));
+          assert.equal(r.success,true); assert.equal(r.numFailedTests,0); assert.equal(r.numPendingTests,0);
+          assert.equal(r.numTodoTests,0); assert.equal(r.numTotalTests,74); assert.equal(r.numPassedTests,74);
+          assert.equal(r.numRuntimeErrorTestSuites??0,0); assert.equal(r.numUnhandledErrors??0,0); assert.deepEqual(r.unhandledErrors??[],[]);
+          assert.equal(r.testResults.length,7); assert(r.testResults.every(s=>s.status==='passed'&&s.assertionResults.length>0&&s.assertionResults.every(t=>t.status==='passed')));
+          NODE
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Actual focused result and strict intended assertion attribution
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/analytics-status-artifacts/transport.log"
+          status=0
+          node_modules/.bin/vitest run src/test/analyticsPausedStatus1445.test.tsx --reporter=json --outputFile=analytics-status-artifacts/focused.json > analytics-status-artifacts/focused.log 2>&1 || status=$?
+          STATUS="$status" node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('analytics-status-artifacts/focused.json','utf8'));
+          const rows=r.testResults.flatMap(s=>s.assertionResults), expected='Analytics paused status1445 explains the pause without a dead control and preserves advertising, privacy and focus';
+          assert.equal(r.numTotalTests,1); assert.equal(rows.length,1); assert.equal(rows[0].fullName,expected);
+          assert.equal(r.numPendingTests,0); assert.equal(r.numTodoTests,0);
+          assert.equal(r.testResults.length,1); assert.equal(r.numRuntimeErrorTestSuites??0,0); assert.equal(r.numUnhandledErrors??0,0); assert.deepEqual(r.unhandledErrors??[],[]);
+          if(process.env.PHASE==='original') {
+            assert.equal(Number(process.env.STATUS),1); assert.equal(r.success,false); assert.equal(r.numFailedTests,1); assert.equal(r.numPassedTests,0); assert.equal(rows[0].status,'failed');
+            assert.equal(rows[0].failureMessages.length,1); assert.match(rows[0].failureMessages[0],/ANALYTICS_PAUSED_1445_DEAD_CONTROL/);
+            assert.match(rows[0].failureMessages[0],/expected 1 to be \+?0/); assert.doesNotMatch(rows[0].failureMessages[0],/Cannot find|Failed to resolve|SyntaxError|ReferenceError|TypeError/);
+          } else { assert.equal(Number(process.env.STATUS),0); assert.equal(r.success,true); assert.equal(r.numFailedTests,0); assert.equal(r.numPassedTests,1); assert.equal(rows[0].status,'passed'); }
+          fs.writeFileSync('analytics-status-artifacts/focused-admission.json',JSON.stringify({phase:process.env.PHASE,sourceSha:process.env.GITHUB_SHA,exit:Number(process.env.STATUS),case:expected,result:process.env.PHASE==='original'?'INTENDED_RED':'PASS'},null,2));
+          NODE
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Effective copied dead-checkbox fault after Green
+        if: env.PHASE == 'green'
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/analytics-status-artifacts/transport.log"
+          export FAULT_FILE="$PWD/analytics-status-artifacts/CookieConsent.dead-checkbox.tsx"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import {createHash} from 'node:crypto';
+          const file='src/components/CookieConsent.tsx', source=fs.readFileSync(file,'utf8');
+          const old='          <p data-analytics-paused-status="">\n            <strong>Analytics is paused.</strong> Google Analytics is off while we check its privacy settings.\n          </p>';
+          const replacement='          <label className="inline-flex min-h-11 items-center gap-2 text-foreground">\n            <input type="checkbox" checked={false} disabled />\n            Analytics\n          </label>';
+          assert.equal(source.split(old).length-1,1,'Expected one real status block'); const pos=source.indexOf(old);
+          const copy=source.slice(0,pos)+replacement+source.slice(pos+old.length); assert.notEqual(copy,source);
+          assert.equal(copy.slice(0,pos)+old+copy.slice(pos+replacement.length),source,'Whole inverse must match');
+          fs.writeFileSync(process.env.FAULT_FILE,copy); const hash=x=>createHash('sha256').update(x).digest('hex');
+          fs.writeFileSync('analytics-status-artifacts/fault-binding.json',JSON.stringify({file,copy:process.env.FAULT_FILE,sourceSha256:hash(source),copySha256:hash(copy),old,replacement,occurrences:1,wholeInverseExact:true},null,2));
+          NODE
+          export NO_DOUBLE_SWAP="$(node -e 'console.log(JSON.stringify({"@/components/CookieConsent":process.env.FAULT_FILE}))')"
+          status=0
+          node_modules/.bin/vitest run src/test/analyticsPausedStatus1445.test.tsx --reporter=json --outputFile=analytics-status-artifacts/fault.json > analytics-status-artifacts/fault.log 2>&1 || status=$?
+          STATUS="$status" node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('analytics-status-artifacts/fault.json','utf8')), rows=r.testResults.flatMap(s=>s.assertionResults);
+          assert.equal(Number(process.env.STATUS),1); assert.equal(r.success,false); assert.equal(r.numTotalTests,1); assert.equal(r.numFailedTests,1); assert.equal(r.numPassedTests,0); assert.equal(r.numPendingTests,0); assert.equal(r.numTodoTests,0); assert.equal(rows.length,1);
+          assert.equal(r.testResults.length,1); assert.equal(r.numRuntimeErrorTestSuites??0,0); assert.equal(r.numUnhandledErrors??0,0); assert.deepEqual(r.unhandledErrors??[],[]);
+          assert.equal(rows[0].fullName,'Analytics paused status1445 explains the pause without a dead control and preserves advertising, privacy and focus'); assert.equal(rows[0].status,'failed'); assert.equal(rows[0].failureMessages.length,1);
+          assert.match(rows[0].failureMessages[0],/ANALYTICS_PAUSED_1445_DEAD_CONTROL/); assert.match(rows[0].failureMessages[0],/expected 1 to be \+?0/); assert.doesNotMatch(rows[0].failureMessages[0],/Cannot find|Failed to resolve|SyntaxError|ReferenceError|TypeError/);
+          fs.writeFileSync('analytics-status-artifacts/fault-admission.json',JSON.stringify({sourceSha:process.env.GITHUB_SHA,exit:Number(process.env.STATUS),result:'INTENDED_DEAD_CONTROL_REJECTED'},null,2));
+          NODE
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Six unchanged consent controls with physical bindings and actual assertions
+        if: env.PHASE == 'green'
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/analytics-status-artifacts/transport.log"
+          export LEGAL_PRIVACY_OUT="$PWD/analytics-status-artifacts"
+          node scripts/simConsentWithdrawal1442.mjs > analytics-status-artifacts/consent-controls.log 2>&1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import {createHash} from 'node:crypto';
+          const manifest=JSON.parse(fs.readFileSync('src/test/controls/consent1442/manifest.json','utf8'));
+          const names=['staleOverlay','blockedRefresh','durableShadow','gpcRestore','expiredDraft','analyticsCollection'];
+          assert.deepEqual(manifest.files.map(r=>r.name).sort(),names.sort());
+          const hash=x=>createHash('sha256').update(x).digest('hex'), bindings=[];
+          const proof=JSON.parse(fs.readFileSync('analytics-status-artifacts/consent-controls/report.json','utf8'));
+          assert.equal(proof.complete,true); assert.equal(proof.cases.length,12);
+          for(const row of manifest.files){
+            const source=fs.readFileSync(row.source,'utf8'), copy=fs.readFileSync(row.copy,'utf8'), pos=source.indexOf(row.old);
+            assert.equal(hash(source),row.sourceSha256);assert.equal(hash(copy),row.copySha256);assert.equal(source.split(row.old).length-1,1);
+            assert.equal(source.slice(0,pos)+row.new+source.slice(pos+row.old.length),copy);assert.equal(copy.slice(0,pos)+row.old+copy.slice(pos+row.new.length),source);assert.notEqual(source,copy);
+            for(const fault of [false,true]){
+              const name=row.name+(fault?'-fault':'-actual'), r=JSON.parse(fs.readFileSync('analytics-status-artifacts/consent-controls/'+name+'.json','utf8'));
+              const cases=r.testResults.flatMap(s=>s.assertionResults).filter(t=>t.title===row.testName);assert.equal(cases.length,1);assert.equal(cases[0].status,fault?'failed':'passed');assert.equal(r.numFailedTests,fault?1:0);
+              assert.equal(r.numRuntimeErrorTestSuites??0,0);assert.equal(r.numUnhandledErrors??0,0);assert.deepEqual(r.unhandledErrors??[],[]);
+              if(fault){const messages=cases[0].failureMessages.map(s=>s.replace(/\u001b\[[0-9;]*m/g,''));assert.equal(messages.length,1);assert.match(messages[0],/AssertionError|expected|expect\(element\)\.not\.toBeChecked/i);assert.doesNotMatch(messages[0],/Cannot find|Failed to resolve|SyntaxError|ReferenceError|TypeError/);bindings.push({name,sourceSha256:row.sourceSha256,copySha256:row.copySha256,wholeInverseExact:true,test:row.test,case:cases[0].fullName,actualFailure:messages[0]});}
+            }
+          }
+          fs.writeFileSync('analytics-status-artifacts/consent-control-bindings.json',JSON.stringify(bindings,null,2));
+          NODE
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Retain source and complete evidence holds
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check analytics-status-artifacts/source-before.sha256 > analytics-status-artifacts/source-hold.log
+          git diff --exit-code HEAD -- src scripts supabase public .github index.html package.json package-lock.json vitest.config.ts > analytics-status-artifacts/tracked-source-hold.log
+          test ! -s analytics-status-artifacts/transport.log
+          (cd analytics-status-artifacts; find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > analytics-status-artifacts/evidence.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: analytics-paused-status1445-${{ env.PHASE }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: analytics-status-artifacts/
+          if-no-files-found: error
+          retention-days: 7
+
+  build_browser:
+    needs: focused
+    if: inputs.phase == 'green' || (github.event_name == 'push' && github.ref == 'refs/heads/codex/consent-analytics-1445')
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      PRERENDER_ONLY: /privacy
+      SEO_SPLIT_BASE_REF: bc79b526cb69a4e913416c77c6dba00fe9401a16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind source and protected baseline
+        run: |
+          set -euo pipefail
+          mkdir analytics-build-artifacts
+          git rev-parse HEAD > analytics-build-artifacts/head.txt
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git fetch --no-tags --depth=1 origin "$SEO_SPLIT_BASE_REF" > analytics-build-artifacts/baseline-fetch.log 2>&1
+          git diff --exit-code "$SEO_SPLIT_BASE_REF" HEAD -- src scripts supabase public index.html package.json package-lock.json vitest.config.ts ':!src/components/CookieConsent.tsx' ':!src/pages/PrivacyPolicy.tsx' ':!src/test/analyticsPausedStatus1445.test.tsx' ':!src/test/controls/consent1442/expiredDraft.tsx' ':!src/test/controls/consent1442/manifest.json' ':!scripts/playConsentPrivacy1442.mjs' ':!scripts/qa/playAnalyticsStatus1445.mjs' ':!public/privacy/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json' > analytics-build-artifacts/protected-source-hold.log
+          cat > analytics-build-artifacts/generated-semantic.py <<'PY'
+          import copy
+          import datetime
+          import hashlib
+          import json
+          import os
+          import pathlib
+          import re
+          import subprocess
+          import sys
+          import xml.etree.ElementTree as ET
+
+          base = os.environ['SEO_SPLIT_BASE_REF']
+          assert base == 'bc79b526cb69a4e913416c77c6dba00fe9401a16'
+          out = pathlib.Path('analytics-build-artifacts')
+          phase = sys.argv[1]
+          assert phase in ('pre', 'post')
+          allowed = {'public/privacy/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json'}
+          changed = subprocess.check_output(['git', 'diff', '--name-only', base, '--', 'public', 'scripts/data/lastmod.json'], text=True).splitlines()
+          assert len(changed) == len(set(changed)) <= 3
+          assert set(changed) <= allowed, 'GENERATED_PATH_OUTSIDE_PRIVACY'
+          prior = lambda name: subprocess.check_output(['git', 'show', base + ':' + name])
+          ledger_before = json.loads(prior('scripts/data/lastmod.json'))
+          ledger_after = json.loads(pathlib.Path('scripts/data/lastmod.json').read_bytes())
+
+          def ledger_check(before, after):
+              assert set(before) == set(after), 'GENERATED_LEDGER_KEYS_CHANGED'
+              assert all(before[key] == after[key] for key in before if key != '/privacy'), 'GENERATED_OTHER_LEDGER_CHANGED'
+              row = after['/privacy']
+              assert isinstance(row, dict) and set(row) == {'hash', 'date'}, 'GENERATED_PRIVACY_LEDGER_SHAPE'
+              assert isinstance(row['hash'], str) and re.fullmatch('[a-f0-9]{16}', row['hash']), 'GENERATED_PRIVACY_HASH_SHAPE'
+              assert isinstance(row['date'], str) and datetime.date.fromisoformat(row['date']).isoformat() == row['date'], 'GENERATED_PRIVACY_DATE_SHAPE'
+
+          def sitemap_rows(data):
+              root = ET.fromstring(data)
+              ns = '{http://www.sitemaps.org/schemas/sitemap/0.9}'
+              assert root.tag == ns + 'urlset' and not root.attrib
+              rows = {}
+              for node in root:
+                  assert node.tag == ns + 'url' and not node.attrib
+                  fields = []
+                  for child in node:
+                      assert child.tag in [ns + tag for tag in ('loc', 'lastmod', 'changefreq', 'priority')]
+                      assert not child.attrib and len(child) == 0
+                      fields.append((child.tag[len(ns):], (child.text or '').strip()))
+                  assert [key for key, value in fields] == ['loc', 'lastmod', 'changefreq', 'priority']
+                  loc = fields[0][1]
+                  assert loc.startswith('https://douknowball.com/') and loc not in rows
+                  rows[loc] = fields
+              assert rows
+              return rows
+
+          def sitemap_check(before, after, date):
+              privacy = 'https://douknowball.com/privacy'
+              assert list(before) == list(after), 'GENERATED_SITEMAP_URLS_CHANGED'
+              assert all(before[key] == after[key] for key in before if key != privacy), 'GENERATED_OTHER_SITEMAP_ROW_CHANGED'
+              assert [field for field in before[privacy] if field[0] != 'lastmod'] == [field for field in after[privacy] if field[0] != 'lastmod'], 'GENERATED_PRIVACY_SITEMAP_FIELDS_CHANGED'
+              assert dict(after[privacy])['lastmod'] == date, 'GENERATED_PRIVACY_LASTMOD_DIFFERS_FROM_LEDGER'
+
+          ledger_check(ledger_before, ledger_after)
+          map_before = sitemap_rows(prior('public/sitemap.xml'))
+          map_after = sitemap_rows(pathlib.Path('public/sitemap.xml').read_bytes())
+          sitemap_check(map_before, map_after, ledger_after['/privacy']['date'])
+          other_key = next(key for key in ledger_after if key.startswith('/') and key != '/privacy')
+          bad_ledger = copy.deepcopy(ledger_after)
+          bad_ledger[other_key]['hash'] = '0' * 16 if bad_ledger[other_key]['hash'] != '0' * 16 else '1' * 16
+          assert bad_ledger != ledger_after
+          try:
+              ledger_check(ledger_before, bad_ledger)
+          except AssertionError as error:
+              assert str(error) == 'GENERATED_OTHER_LEDGER_CHANGED'
+          else:
+              raise AssertionError('Other ledger fault was accepted')
+          other_url = next(key for key in map_after if key != 'https://douknowball.com/privacy')
+          bad_map = copy.deepcopy(map_after)
+          bad_map[other_url][1] = ('lastmod', '1900-01-01')
+          assert bad_map != map_after
+          try:
+              sitemap_check(map_before, bad_map, ledger_after['/privacy']['date'])
+          except AssertionError as error:
+              assert str(error) == 'GENERATED_OTHER_SITEMAP_ROW_CHANGED'
+          else:
+              raise AssertionError('Other sitemap fault was accepted')
+          (out / ('generated-semantic-' + phase + '.json')).write_text(json.dumps({'complete': True, 'baseline': base, 'phase': phase, 'allowedPaths': sorted(allowed), 'changedPaths': changed, 'ledgerEntries': len(ledger_after), 'sitemapRows': len(map_after), 'controls': ['other-ledger-entry', 'other-sitemap-row'], 'privacyLedger': ledger_after['/privacy']}, indent=2) + '\n')
+          PY
+          python analytics-build-artifacts/generated-semantic.py pre > analytics-build-artifacts/generated-semantic-pre.log 2>&1
+          git ls-files -z src scripts supabase .github index.html package.json package-lock.json vitest.config.ts ':!scripts/data/lastmod.json' | xargs -0 sha256sum > analytics-build-artifacts/source-before.sha256
+          sha256sum package.json package-lock.json scripts/sweepWeight.mjs > analytics-build-artifacts/dependencies-cap-before.sha256
+          npm ci > analytics-build-artifacts/install.log 2>&1
+      - name: Isolated Playwright1.64 and verified font cache
+        run: |
+          set -euo pipefail
+          browser_tools="$RUNNER_TEMP/analytics1445-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > analytics-build-artifacts/browser-install.log 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > analytics-build-artifacts/chromium-install.log 2>&1
+          python -m pip install fonttools pillow > analytics-build-artifacts/python-install.log 2>&1
+          export FREE_KICK_FONT_CACHE="$PWD/analytics-build-artifacts/font-cache"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > analytics-build-artifacts/fonts.log 2>&1
+          echo "FREE_KICK_FONT_CACHE=$FREE_KICK_FONT_CACHE" >> "$GITHUB_ENV"
+          cat > analytics-build-artifacts/cached-fonts.cjs <<'JS'
+          'use strict';
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const assert = require('node:assert/strict');
+          const { createHash } = require('node:crypto');
+          const hash = value => createHash('sha256').update(value).digest('hex');
+          if (path.basename(process.argv[1] || '') === 'prerender.mjs') {
+            const cache = process.env.FREE_KICK_FONT_CACHE;
+            const manifestBytes = fs.readFileSync(path.join(cache, 'manifest.json'));
+            assert.match(process.env.FONT_CACHE_MANIFEST_SHA256 || '', /^[a-f0-9]{64}$/);
+            assert.equal(hash(manifestBytes), process.env.FONT_CACHE_MANIFEST_SHA256, 'Prepared font manifest stays exact');
+            const sheet = [...fs.readFileSync('index.html', 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(m => new URL(m[1]).href);
+            assert.equal(sheet.length, 1, 'Use the actual single template stylesheet');
+            const entries = JSON.parse(manifestBytes);
+            assert(Array.isArray(entries) && entries.length > 1);
+            const fonts = new Map();
+            for (const entry of entries) {
+              assert(!fonts.has(entry.url), 'No duplicate font cache URL');
+              const url = new URL(entry.url);
+              assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(url.origin));
+              assert.equal(url.href, entry.url);
+              assert.equal(entry.file, hash(entry.url));
+              assert.match(entry.sha256, /^[a-f0-9]{64}$/);
+              assert.equal(typeof entry.contentType, 'string');
+              const body = fs.readFileSync(path.join(cache, entry.file));
+              assert.equal(hash(body), entry.sha256, 'Prepared font body stays exact');
+              fonts.set(entry.url, { ...entry, body });
+            }
+            assert(fonts.has(sheet[0]), 'Current template stylesheet is cached');
+            const css = fonts.get(sheet[0]);
+            assert.match(css.contentType, /^text\/css(?:;|$)/);
+            const declared = [...new Set([...css.body.toString('utf8').matchAll(/url\(\s*['"]?(https:\/\/[^)'"\s]+)/g)].map(m => m[1]))];
+            assert(declared.length > 0);
+            assert.deepEqual([...fonts.keys()].sort(), [sheet[0], ...declared].sort(), 'Only actual stylesheet dependencies are fulfilled');
+            for (const url of declared) assert.equal(new URL(url).origin, 'https://fonts.gstatic.com');
+            const pw = require('playwright-core');
+            let contextId = 0;
+            const originalLaunch = pw.chromium.launch.bind(pw.chromium);
+            pw.chromium.launch = async options => {
+              const browser = await originalLaunch(options);
+              const originalContext = browser.newContext.bind(browser);
+              browser.newContext = async options => {
+                const context = await originalContext(options);
+                const id = ++contextId;
+                await context.route(/^https:\/\/(?:fonts\.googleapis\.com|fonts\.gstatic\.com)\//, async route => {
+                  const request = route.request(), entry = fonts.get(request.url());
+                  if (request.method() !== 'GET' || !entry || !['stylesheet', 'font'].includes(request.resourceType())) return route.fallback();
+                  await route.fulfill({ status: 200, contentType: entry.contentType, body: entry.body });
+                  fs.appendFileSync(process.env.FONT_CACHE_USE_RECEIPT, JSON.stringify({ contextId: id, url: entry.url, sha256: entry.sha256, manifestSha256: hash(manifestBytes), resourceType: request.resourceType() }) + '\n');
+                });
+                return context;
+              };
+              return browser;
+            };
+          }
+          JS
+          sha256sum analytics-build-artifacts/cached-fonts.cjs > analytics-build-artifacts/font-inputs.sha256
+          find "$FREE_KICK_FONT_CACHE" -type f -print0 | sort -z | xargs -0 sha256sum >> analytics-build-artifacts/font-inputs.sha256
+          font_manifest_sha=$(sha256sum "$FREE_KICK_FONT_CACHE/manifest.json" | cut -d ' ' -f 1)
+          echo "FONT_CACHE_MANIFEST_SHA256=$font_manifest_sha" >> "$GITHUB_ENV"
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');const sha=value=>createHash('sha256').update(value).digest('hex');
+          const original=fs.readFileSync('analytics-build-artifacts/cached-fonts.cjs','utf8');assert.equal(sha(original),'ac09f64a5d9592ec980864bf422c7f580880d9bd981adaef8c9c0e674d298fd3');assert.equal(sha(fs.readFileSync('scripts/sweepWeight.mjs')),'438a626c71a86e24e90508cb4784d6727839ca0b192ca85fd9531dcc1e411925');
+          const gate="if (path.basename(process.argv[1] || '') === 'prerender.mjs') {",newGate="if (path.basename(process.argv[1] || '') === 'sweepWeight.mjs') {",anchor='      const id = ++contextId;';assert.equal(original.split(gate).length,2);assert.equal(original.split(anchor).length,2);
+          const insert=anchor+'\n'+[
+            '      fs.appendFileSync(process.env.SWEEP_CONTEXT_RECEIPT, JSON.stringify({ contextId: id }) + "\\n");',
+            '      await context.route(url => url.origin === "https://flagcdn.com", async route => {',
+            '        const request = route.request(), url = new URL(request.url());',
+            '        const validPath = /^\\/(?:w[1-9][0-9]{0,2}\\/|h[1-9][0-9]{0,2}\\/|[1-9][0-9]{0,2}x[1-9][0-9]{0,2}\\/)?[a-z]{2}(?:-[a-z0-9]{1,8})?\\.(?:png|webp|svg)$/.test(url.pathname);',
+            '        if (url.origin !== "https://flagcdn.com" || url.username || url.password || url.search || url.hash || !validPath || request.method() !== "GET" || request.resourceType() !== "image") return route.fallback();',
+            '        await route.abort("blockedbyclient");',
+            '        fs.appendFileSync(process.env.SWEEP_FLAG_RECEIPT, JSON.stringify({ contextId: id, method: request.method(), resourceType: request.resourceType(), url: url.href, origin: url.origin, path: url.pathname, action: "LOCAL_ABORT" }) + "\\n");',
+            '      });',
+          ].join('\n');
+          const copy=original.replace(gate,newGate).replace(anchor,insert);assert.notEqual(copy,original);assert.equal(copy.replace(insert,anchor).replace(newGate,gate),original);fs.writeFileSync('analytics-build-artifacts/weights-cached-fonts.cjs',copy);fs.writeFileSync('analytics-build-artifacts/weights-preload-binding.json',JSON.stringify({complete:true,originalSha256:sha(original),copySha256:sha(copy),gateOccurrences:1,contextAnchorOccurrences:1,wholeInverseExact:true,sweepWeightSha256:'438a626c71a86e24e90508cb4784d6727839ca0b192ca85fd9531dcc1e411925',scope:'Cached known font bodies; local GET image denial for validated flagcdn paths. No outbound flag fetch.'},null,2)+'\n');
+          NODE
+          sha256sum analytics-build-artifacts/weights-cached-fonts.cjs >> analytics-build-artifacts/font-inputs.sha256
+      - name: Types and completed scoped production build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$PWD/analytics-build-artifacts/cached-fonts.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/analytics-build-artifacts/build.transport"
+          export FONT_CACHE_USE_RECEIPT="$PWD/analytics-build-artifacts/font-cache-use.jsonl"
+          : > "$SIM_OFFLINE_RECEIPT"
+          : > "$FONT_CACHE_USE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > analytics-build-artifacts/types.log 2>&1
+          npm run build:seo > analytics-build-artifacts/build.log 2>&1
+          git diff --name-only HEAD -- public scripts/data/lastmod.json > analytics-build-artifacts/generated-files.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const allowed=new Set(['public/privacy/index.html','public/sitemap.xml','scripts/data/lastmod.json']);
+          const files=fs.readFileSync('analytics-build-artifacts/generated-files.txt','utf8').trim().split('\n').filter(Boolean);assert.equal(files.length,new Set(files).size);assert(files.length<=3);for(const file of files)assert(allowed.has(file),'Unexpected generated output: '+file);
+          NODE
+          python analytics-build-artifacts/generated-semantic.py post > analytics-build-artifacts/generated-semantic-post.log 2>&1
+          git diff --binary HEAD -- public scripts/data/lastmod.json > analytics-build-artifacts/generated.patch
+          test -f analytics-build-artifacts/generated.patch && test ! -s analytics-build-artifacts/generated.patch
+          test -f analytics-build-artifacts/generated-files.txt && test ! -s analytics-build-artifacts/generated-files.txt
+          find public scripts/data/lastmod.json ! -type d ! -type f -print > analytics-build-artifacts/generated-source-nonregular-before.txt
+          test ! -s analytics-build-artifacts/generated-source-nonregular-before.txt
+          find public scripts/data/lastmod.json -type f -print0 | sort -z | xargs -0 sha256sum > analytics-build-artifacts/generated-source-before.sha256
+          find dist ! -type d ! -type f -print > analytics-build-artifacts/dist-nonregular-before.txt
+          test ! -s analytics-build-artifacts/dist-nonregular-before.txt
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > analytics-build-artifacts/dist.sha256
+          for inventory in generated-source-before.sha256 dist.sha256; do
+            test -s "analytics-build-artifacts/$inventory"
+            cp "analytics-build-artifacts/$inventory" "analytics-build-artifacts/$inventory.control"
+            printf '%s\n' 'CONTROL_DIFFERENT_INVENTORY_LINE' >> "analytics-build-artifacts/$inventory.control"
+            status=0; cmp "analytics-build-artifacts/$inventory" "analytics-build-artifacts/$inventory.control" > "analytics-build-artifacts/$inventory.control.log" 2>&1 || status=$?
+            printf '%s\n' "$status" > "analytics-build-artifacts/$inventory.control.exit"
+            test "$status" -eq 1
+          done
+          tar -czf analytics-build-artifacts/dist.tar.gz -C dist .
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');const raw=fs.readFileSync(process.env.FREE_KICK_FONT_CACHE+'/manifest.json');assert.equal(sha(raw),process.env.FONT_CACHE_MANIFEST_SHA256);const cache=new Map(JSON.parse(raw).map(row=>[row.url,row]));const rows=fs.readFileSync(process.env.FONT_CACHE_USE_RECEIPT,'utf8').trim().split('\n').filter(Boolean).map(line=>JSON.parse(line));assert.deepEqual([...new Set(rows.map(row=>row.contextId))].sort(),[1,2,3]);assert.equal(rows.filter(row=>row.resourceType==='stylesheet').length,3);for(const id of [1,2,3]){assert.equal(rows.filter(row=>row.contextId===id&&row.resourceType==='stylesheet').length,1);assert(rows.some(row=>row.contextId===id&&row.resourceType==='font'));}for(const row of rows){assert(cache.has(row.url));assert.equal(row.sha256,cache.get(row.url).sha256);assert.equal(row.manifestSha256,process.env.FONT_CACHE_MANIFEST_SHA256);}fs.writeFileSync('analytics-build-artifacts/font-cache-use-summary.json',JSON.stringify({complete:true,contexts:3,stylesheetFulfillments:3,fontFulfillments:rows.filter(row=>row.resourceType==='font').length,manifestSha256:process.env.FONT_CACHE_MANIFEST_SHA256,preloadSha256:sha(fs.readFileSync('analytics-build-artifacts/cached-fonts.cjs')),offlinePreloadFirst:true},null,2)+'\n');
+          NODE
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Three status profiles and all eight preserved consent browser cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/analytics-build-artifacts"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/browser-server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1;break;fi;sleep 1;done;test "$ready" -eq 1
+          SIM_OFFLINE_RECEIPT="$out/status-browser.transport" SOURCE_SHA="$GITHUB_SHA" BASE=http://127.0.0.1:4173 ANALYTICS_STATUS_OUT="$out/status-browser" timeout --signal=TERM --kill-after=15s 5m node scripts/qa/playAnalyticsStatus1445.mjs > "$out/status-browser.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/consent-browser.transport" BASE=http://127.0.0.1:4173 LEGAL_PRIVACY_OUT="$out/consent-browser" timeout --signal=TERM --kill-after=15s 12m node scripts/playConsentPrivacy1442.mjs > "$out/consent-browser.log" 2>&1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('analytics-build-artifacts/status-browser/report.json','utf8'));assert.equal(r.complete,true);assert.equal(r.source,process.env.GITHUB_SHA);assert.equal(r.actualOutbound,0);assert.deepEqual(r.before,r.after);assert.deepEqual(r.profiles.map(x=>x.width),[360,432,1280]);assert(r.profiles.every(x=>x.status==='PASS'&&x.saved.analytics===false&&x.submissions.length===0&&x.errors.length===0));
+          const p=JSON.parse(fs.readFileSync('analytics-build-artifacts/consent-browser/consent-browser.json','utf8'));assert.equal(p.complete,true);assert.equal(p.actualOutbound,0);assert.equal(p.cases.length,8);assert(p.cases.every(x=>x.passed===true));
+          NODE
+      - name: All18 saved-page readers and14 unchanged page caps sequentially
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/analytics-build-artifacts"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/readers-server.log" 2>&1 &
+          server=$!;trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0;for attempt in 1 2 3 4 5;do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then ready=1;break;fi;sleep 1;done;test "$ready" -eq 1
+          failed=0
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simLegalPages;do
+            status=0;SIM_OFFLINE_RECEIPT="$out/$method.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv";test "$status" -eq 0 || failed=1
+          done
+          : > "$out/weights.transport"; : > "$out/weights-contexts.jsonl"; : > "$out/weights-font-cache-use.jsonl"; : > "$out/weights-flags-aborted.jsonl"
+          status=0;NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$out/weights-cached-fonts.cjs" SIM_OFFLINE_RECEIPT="$out/weights.transport" FONT_CACHE_USE_RECEIPT="$out/weights-font-cache-use.jsonl" SWEEP_CONTEXT_RECEIPT="$out/weights-contexts.jsonl" SWEEP_FLAG_RECEIPT="$out/weights-flags-aborted.jsonl" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/weights.exit";test "$status" -eq 0 || failed=1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const rows=fs.readFileSync('analytics-build-artifacts/readers.tsv','utf8').trim().split('\n').map(line=>line.split('\t'));assert.equal(rows.length,18);assert.equal(new Set(rows.map(row=>row[0])).size,18);assert(rows.every(row=>row[1]==='0'));
+          const weights=fs.readFileSync('analytics-build-artifacts/weights.log','utf8');assert.equal((weights.match(/gz over[^\n]+budget/g)||[]).length,14);assert.match(weights,/sweepWeight: green/);
+          const load=file=>fs.readFileSync('analytics-build-artifacts/'+file,'utf8').trim().split('\n').filter(Boolean).map(line=>JSON.parse(line));const contexts=load('weights-contexts.jsonl'),fonts=load('weights-font-cache-use.jsonl'),flags=load('weights-flags-aborted.jsonl');const ids=Array.from({length:14},(_,i)=>i+1);
+          function checkContexts(value){assert.equal(value.length,14,'WEIGHTS_CONTEXT_COUNT');assert.deepEqual(value.map(row=>row.contextId),ids,'WEIGHTS_CONTEXT_IDS');}checkContexts(contexts);assert.throws(()=>checkContexts(contexts.slice(1)),error=>error.name==='AssertionError'&&error.message.startsWith('WEIGHTS_CONTEXT_COUNT'));
+          const cache=new Map(JSON.parse(fs.readFileSync(process.env.FREE_KICK_FONT_CACHE+'/manifest.json','utf8')).map(row=>[row.url,row]));
+          function checkFonts(value){assert.deepEqual([...new Set(value.map(row=>row.contextId))].sort((a,b)=>a-b),ids);assert.equal(value.filter(row=>row.resourceType==='stylesheet').length,14);for(const id of ids){assert.equal(value.filter(row=>row.contextId===id&&row.resourceType==='stylesheet').length,1);assert(value.some(row=>row.contextId===id&&row.resourceType==='font'));}for(const row of value){assert(cache.has(row.url));assert.equal(row.sha256,cache.get(row.url).sha256,'WEIGHTS_FONT_HASH');assert.equal(row.manifestSha256,process.env.FONT_CACHE_MANIFEST_SHA256);}}checkFonts(fonts);const badFonts=fonts.map(row=>({...row}));badFonts[0].sha256=(badFonts[0].sha256[0]==='0'?'1':'0')+badFonts[0].sha256.slice(1);assert.notEqual(badFonts[0].sha256,fonts[0].sha256);assert.throws(()=>checkFonts(badFonts),error=>error.name==='AssertionError'&&error.message.startsWith('WEIGHTS_FONT_HASH'));
+          function checkFlags(value){assert.equal(value.length,4,'WEIGHTS_FLAG_COUNT');for(const row of value){const url=new URL(row.url);assert(ids.includes(row.contextId)&&row.method==='GET'&&row.resourceType==='image'&&row.action==='LOCAL_ABORT'&&url.origin==='https://flagcdn.com'&&!url.username&&!url.password&&!url.search&&!url.hash&&row.origin===url.origin&&row.path===url.pathname&&/^\/(?:w[1-9][0-9]{0,2}\/|h[1-9][0-9]{0,2}\/|[1-9][0-9]{0,2}x[1-9][0-9]{0,2}\/)?[a-z]{2}(?:-[a-z0-9]{1,8})?\.(?:png|webp|svg)$/.test(url.pathname),'WEIGHTS_FLAG_DENIAL_SCOPE');}}checkFlags(flags);const badFlags=flags.map(row=>({...row}));badFlags[0].method='POST';assert.notEqual(badFlags[0].method,flags[0].method);assert.throws(()=>checkFlags(badFlags),error=>error.name==='AssertionError'&&error.message.startsWith('WEIGHTS_FLAG_DENIAL_SCOPE'));
+          fs.writeFileSync('analytics-build-artifacts/weights-fixture-summary.json',JSON.stringify({complete:true,sourceSha:process.env.GITHUB_SHA,contexts:14,stylesheetFulfillments:14,fontFulfillments:fonts.filter(row=>row.resourceType==='font').length,localFlagDenials:4,controls:['missing-context','changed-font-hash','flag-method'],offlinePreloadFirst:true,prerenderReceiptUnchanged:true},null,2)+'\n');assert.equal(fs.statSync('analytics-build-artifacts/weights.transport').size,0,'Weights transport remains strictly empty');
+          NODE
+          exit "$failed"
+      - name: Source, output, dependency and offline evidence holds
+        if: always()
+        run: |
+          set -euo pipefail
+          failed=0
+          status=0
+          {
+            find public scripts/data/lastmod.json ! -type d ! -type f -print > analytics-build-artifacts/generated-source-nonregular-after.txt &&
+            test ! -s analytics-build-artifacts/generated-source-nonregular-after.txt &&
+            find public scripts/data/lastmod.json -type f -print0 | sort -z | xargs -0 sha256sum > analytics-build-artifacts/generated-source-after.sha256 &&
+            cmp analytics-build-artifacts/generated-source-before.sha256 analytics-build-artifacts/generated-source-after.sha256
+          } > analytics-build-artifacts/generated-output-hold.log 2>&1 || status=$?
+          printf '%s\n' "$status" > analytics-build-artifacts/generated-output-hold.exit; test "$status" -eq 0 || failed=1
+          status=0
+          {
+            find dist ! -type d ! -type f -print > analytics-build-artifacts/dist-nonregular-after.txt &&
+            test ! -s analytics-build-artifacts/dist-nonregular-after.txt &&
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > analytics-build-artifacts/dist-after.sha256 &&
+            cmp analytics-build-artifacts/dist.sha256 analytics-build-artifacts/dist-after.sha256
+          } > analytics-build-artifacts/dist-output-hold.log 2>&1 || status=$?
+          printf '%s\n' "$status" > analytics-build-artifacts/dist-output-hold.exit; test "$status" -eq 0 || failed=1
+          status=0; sha256sum --check analytics-build-artifacts/source-before.sha256 > analytics-build-artifacts/source-hold.log 2>&1 || status=$?
+          printf '%s\n' "$status" > analytics-build-artifacts/source-hold.exit; test "$status" -eq 0 || failed=1
+          status=0; sha256sum --check analytics-build-artifacts/dependencies-cap-before.sha256 > analytics-build-artifacts/dependencies-cap-hold.log 2>&1 || status=$?
+          printf '%s\n' "$status" > analytics-build-artifacts/dependencies-cap-hold.exit; test "$status" -eq 0 || failed=1
+          status=0; git diff --exit-code HEAD -- src scripts supabase .github index.html package.json package-lock.json vitest.config.ts ':!scripts/data/lastmod.json' > analytics-build-artifacts/operator-source-hold.log 2>&1 || status=$?
+          printf '%s\n' "$status" > analytics-build-artifacts/operator-source-hold.exit; test "$status" -eq 0 || failed=1
+          status=0; sha256sum --check analytics-build-artifacts/font-inputs.sha256 > analytics-build-artifacts/font-inputs-hold.log 2>&1 || status=$?
+          printf '%s\n' "$status" > analytics-build-artifacts/font-inputs-hold.exit; test "$status" -eq 0 || failed=1
+          status=0
+          node --input-type=module > analytics-build-artifacts/transport-hold.log 2>&1 <<'NODE' || status=$?
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          const rows=[];function walk(dir){for(const e of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,e.name);if(e.isDirectory())walk(file);else if(file.endsWith('.transport'))rows.push({file,bytes:fs.statSync(file).size});}}walk('analytics-build-artifacts');
+          fs.writeFileSync('analytics-build-artifacts/transport-hold.json',JSON.stringify({complete:true,receipts:rows,zeroActualAttempts:rows.length>0&&rows.every(row=>row.bytes===0)},null,2)+'\n');assert(rows.length>0,'Offline transport receipts exist');assert(rows.every(row=>row.bytes===0),'Offline transport attempted');
+          NODE
+          printf '%s\n' "$status" > analytics-build-artifacts/transport-hold.exit; test "$status" -eq 0 || failed=1
+          printf '%s\n' "$failed" > analytics-build-artifacts/final-holds.exit
+          (cd analytics-build-artifacts; find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > analytics-build-artifacts/evidence.sha256
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: analytics1445-build-browser-${{ github.run_id }}-${{ github.run_attempt }}
+          path: analytics-build-artifacts/
+          if-no-files-found: error
+          retention-days: 7
