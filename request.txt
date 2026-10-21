@@ -1,0 +1,2 @@
+hall-nba-plantbase: SIM_CONTROL=plantbase SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba
+hall-nfl-plantbase: SIM_CONTROL=plantbase SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl

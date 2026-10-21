@@ -1,0 +1,2 @@
+hall-nba-plantbase exit=1 2s | simCareerHall nba CONTROL plantbase: wanted base red, red [v2replay,v3replay,base,words,anchors,hallshare], FIRED
+hall-nfl-plantbase exit=1 3s | simCareerHall nfl CONTROL plantbase: wanted base red, red [v2replay,v3replay,base], FIRED
