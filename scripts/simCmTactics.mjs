@@ -482,12 +482,38 @@ function countMatch(cm, tac, s, report, obs, rec, key) {
   }
 }
 
-function sectionFleet() {
+/** A whole fleet with no SHARD plays in PARTS child processes, PAR at a time (one process loading a fresh engine
+    for hundreds of careers can run out of memory, as simCmDifficulty found), and folds them here. Each career has
+    its own module and streams, so a shard plays it exactly as a whole run would. */
+async function fleetInChildren() {
+  const { spawn } = await import('node:child_process');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cm-tactics-fleet-'));
+  const parts = num('PARTS', 4), par = num('PAR', 2);
+  const run = k => new Promise(resolve => {
+    const env = { ...process.env, SECTION: 'fleet', SHARD: `${k}/${parts}`, OUT_JSON: path.join(dir, `s${k}.json`) };
+    delete env.FOLD;
+    const child = spawn(process.execPath, [fileURLToPath(import.meta.url)], { env, stdio: ['ignore', 'pipe', 'pipe'] });
+    let tail = '';
+    child.stdout.on('data', d => { tail = (tail + d).slice(-300); });
+    child.stderr.on('data', d => { tail = (tail + d).slice(-300); });
+    child.on('close', code => resolve({ k, code, tail }));
+  });
+  const ks = Array.from({ length: parts }, (_, k) => k);
+  for (let i = 0; i < ks.length; i += par) {
+    for (const r of await Promise.all(ks.slice(i, i + par).map(run))) {
+      if (r.code !== 0) cannot(`fleet shard ${r.k} of ${parts} ended ${r.code}: ${r.tail.trim().split('\n').pop()}`);
+    }
+  }
+  return dir;
+}
+
+async function sectionFleet() {
   let rows;
-  if (FOLD) {
-    const files = fs.readdirSync(FOLD).filter(f => f.endsWith('.json'));
-    rows = files.flatMap(f => JSON.parse(fs.readFileSync(path.join(FOLD, f), 'utf8')).rows);
-    console.log(`\n[fleet] folded ${rows.length} season rows from ${files.length} files in ${FOLD}`);
+  const foldDir = FOLD || (process.env.SHARD ? '' : await fleetInChildren());
+  if (foldDir) {
+    const files = fs.readdirSync(foldDir).filter(f => f.endsWith('.json'));
+    rows = files.flatMap(f => JSON.parse(fs.readFileSync(path.join(foldDir, f), 'utf8')).rows);
+    console.log(`\n[fleet] folded ${rows.length} season rows from ${files.length} files in ${foldDir}`);
   } else {
     const { cm } = fresh(HEAD);
     const clubs = fleetClubs(cm);
@@ -593,8 +619,13 @@ for (const sec of SECTIONS) {
   if (sec === 'table') sectionTable();
   else if (sec === 'styles') sectionStyles();
   else if (sec === 'balanced') sectionBalanced();
-  else if (sec === 'fleet') sectionFleet();
+  else if (sec === 'fleet') await sectionFleet();
   else cannot(`no section ${sec}`);
+}
+/* A fleet shard only plays and writes; the fold judges (a control's shard included). */
+if (SHARD[1] > 1 && OUT_JSON && SECTIONS.length === 1 && SECTIONS[0] === 'fleet' && !failures) {
+  console.log(`simCmTactics: shard ${SHARD[0]}/${SHARD[1]} written`);
+  process.exit(0);
 }
 if (CONTROL) {
   const sections = CONTROL_SECTIONS[CONTROL];
