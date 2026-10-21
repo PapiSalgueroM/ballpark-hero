@@ -1,0 +1,115 @@
+fixtures: at25 playing/25, at26 playing/26, youth youth/16, summary26 season_summary/26, forced33 retirement_ceremony/33/40, forced45 retirement_ceremony/45, manager manager_season
+  ok   390-rm 1 Next Season at 25 then Continue plays on at 26 (phase ballon_dor)
+  ok   390-rm 1 a reload keeps it (phase ballon_dor, retired false)
+  ok   390-rm after reload: no sideways scroll (390)
+  ok   390-rm 2 a stray flag on Next Season at 26 shows no retired screen or send off
+  ok   390-rm 2 Next Season from the stray flag plays 27 (age 27, phase newspaper, retired false)
+  ok   390-rm 3 Continue on a stray flag at 26 plays on (phase ballon_dor, retired false)
+  ok   390-rm 4 a stray flag on a youth career shows no retired screen
+  ok   390-rm 4 the youth career plays on (age 17, phase contract_offer, retired false)
+  ok   390-rm forced33: the send off says why (Forced out at 33: overall 40, the body could not keep up.)
+  ok   390-rm forced33: the send off offers its choices
+  ok   390-rm forced33: the line is whole, below the age line, fully opaque ({"clipped":false,"overlap":false,"h":16,"w":322,"color":"rgb(132, 145, 164)","opacity":1})
+  ok   390-rm forced33: no sideways scroll (390)
+  ok   390-rm forced45: the send off says why (Forced out at 45, the age limit.)
+  ok   390-rm forced45: the send off offers its choices
+  ok   390-rm forced45: the line is whole, below the age line, fully opaque ({"clipped":false,"overlap":false,"h":16,"w":322,"color":"rgb(132, 145, 164)","opacity":1})
+  ok   390-rm forced45: no sideways scroll (390)
+  ok   390-rm forced33-lost: the send off says why (Forced out at 33: overall 40, the body could not keep up.)
+  ok   390-rm forced33-lost: the send off offers its choices
+  ok   390-rm forced33-lost: the line is whole, below the age line, fully opaque ({"clipped":false,"overlap":false,"h":16,"w":322,"color":"rgb(132, 145, 164)","opacity":1})
+  ok   390-rm forced33-lost: no sideways scroll (390)
+  ok   390-rm 8 the manager tail opens as the manager, not the send off or the retired screen
+  ok   390-rm 8 the manager tail is still the manager after a reload (phase manager_season)
+  ok   390-rm 9 a real retirement whose phase was lost opens its send off
+  ok   390-rm 9 the player's own retirement has no forced line
+  ok   390-rm 9 Retire and Enjoy Life lands on the retired screen (phase retired)
+  ok   390-rm 9 the retired screen survives a reload (phase retired)
+  ok   390-rm 10 Cancel keeps the career (phase playing)
+  ok   390-rm 10 Confirm ends on the send off at 26 (phase retirement_ceremony)
+  ok   390-mo 1 Next Season at 25 then Continue plays on at 26 (phase ballon_dor)
+  ok   390-mo 1 a reload keeps it (phase ballon_dor, retired false)
+  ok   390-mo after reload: no sideways scroll (390)
+  ok   390-mo 2 a stray flag on Next Season at 26 shows no retired screen or send off
+  ok   390-mo 2 Next Season from the stray flag plays 27 (age 27, phase newspaper, retired false)
+  ok   390-mo 3 Continue on a stray flag at 26 plays on (phase ballon_dor, retired false)
+  ok   390-mo 4 a stray flag on a youth career shows no retired screen
+  ok   390-mo 4 the youth career plays on (age 17, phase contract_offer, retired false)
+  ok   390-mo forced33: the send off says why (Forced out at 33: overall 40, the body could not keep up.)
+  ok   390-mo forced33: the send off offers its choices
+  ok   390-mo forced33: the line is whole, below the age line, fully opaque ({"clipped":false,"overlap":false,"h":16,"w":322,"color":"rgb(132, 145, 164)","opacity":1})
+  ok   390-mo forced33: no sideways scroll (390)
+  ok   390-mo forced45: the send off says why (Forced out at 45, the age limit.)
+  ok   390-mo forced45: the send off offers its choices
+  ok   390-mo forced45: the line is whole, below the age line, fully opaque ({"clipped":false,"overlap":false,"h":16,"w":322,"color":"rgb(132, 145, 164)","opacity":1})
+  ok   390-mo forced45: no sideways scroll (390)
+  ok   390-mo forced33-lost: the send off says why (Forced out at 33: overall 40, the body could not keep up.)
+  ok   390-mo forced33-lost: the send off offers its choices
+  ok   390-mo forced33-lost: the line is whole, below the age line, fully opaque ({"clipped":false,"overlap":false,"h":16,"w":322,"color":"rgb(132, 145, 164)","opacity":1})
+  ok   390-mo forced33-lost: no sideways scroll (390)
+  ok   390-mo 8 the manager tail opens as the manager, not the send off or the retired screen
+  ok   390-mo 8 the manager tail is still the manager after a reload (phase manager_season)
+  ok   390-mo 9 a real retirement whose phase was lost opens its send off
+  ok   390-mo 9 the player's own retirement has no forced line
+  ok   390-mo 9 Retire and Enjoy Life lands on the retired screen (phase retired)
+  ok   390-mo 9 the retired screen survives a reload (phase retired)
+  ok   390-mo 10 Cancel keeps the career (phase playing)
+  ok   390-mo 10 Confirm ends on the send off at 26 (phase retirement_ceremony)
+  ok   1280-rm 1 Next Season at 25 then Continue plays on at 26 (phase ballon_dor)
+  ok   1280-rm 1 a reload keeps it (phase ballon_dor, retired false)
+  ok   1280-rm after reload: no sideways scroll (1280)
+  ok   1280-rm 2 a stray flag on Next Season at 26 shows no retired screen or send off
+  ok   1280-rm 2 Next Season from the stray flag plays 27 (age 27, phase newspaper, retired false)
+  ok   1280-rm 3 Continue on a stray flag at 26 plays on (phase ballon_dor, retired false)
+  ok   1280-rm 4 a stray flag on a youth career shows no retired screen
+  ok   1280-rm 4 the youth career plays on (age 17, phase contract_offer, retired false)
+  ok   1280-rm forced33: the send off says why (Forced out at 33: overall 40, the body could not keep up.)
+  ok   1280-rm forced33: the send off offers its choices
+  ok   1280-rm forced33: the line is whole, below the age line, fully opaque ({"clipped":false,"overlap":false,"h":16,"w":676,"color":"rgb(132, 145, 164)","opacity":1})
+  ok   1280-rm forced33: no sideways scroll (1280)
+  ok   1280-rm forced45: the send off says why (Forced out at 45, the age limit.)
+  ok   1280-rm forced45: the send off offers its choices
+  ok   1280-rm forced45: the line is whole, below the age line, fully opaque ({"clipped":false,"overlap":false,"h":16,"w":676,"color":"rgb(132, 145, 164)","opacity":1})
+  ok   1280-rm forced45: no sideways scroll (1280)
+  ok   1280-rm forced33-lost: the send off says why (Forced out at 33: overall 40, the body could not keep up.)
+  ok   1280-rm forced33-lost: the send off offers its choices
+  ok   1280-rm forced33-lost: the line is whole, below the age line, fully opaque ({"clipped":false,"overlap":false,"h":16,"w":676,"color":"rgb(132, 145, 164)","opacity":1})
+  ok   1280-rm forced33-lost: no sideways scroll (1280)
+  ok   1280-rm 8 the manager tail opens as the manager, not the send off or the retired screen
+  ok   1280-rm 8 the manager tail is still the manager after a reload (phase manager_season)
+  ok   1280-rm 9 a real retirement whose phase was lost opens its send off
+  ok   1280-rm 9 the player's own retirement has no forced line
+  ok   1280-rm 9 Retire and Enjoy Life lands on the retired screen (phase retired)
+  ok   1280-rm 9 the retired screen survives a reload (phase retired)
+  ok   1280-rm 10 Cancel keeps the career (phase playing)
+  ok   1280-rm 10 Confirm ends on the send off at 26 (phase retirement_ceremony)
+  ok   1280-mo 1 Next Season at 25 then Continue plays on at 26 (phase ballon_dor)
+  ok   1280-mo 1 a reload keeps it (phase ballon_dor, retired false)
+  ok   1280-mo after reload: no sideways scroll (1280)
+  ok   1280-mo 2 a stray flag on Next Season at 26 shows no retired screen or send off
+  ok   1280-mo 2 Next Season from the stray flag plays 27 (age 27, phase newspaper, retired false)
+  ok   1280-mo 3 Continue on a stray flag at 26 plays on (phase ballon_dor, retired false)
+  ok   1280-mo 4 a stray flag on a youth career shows no retired screen
+  ok   1280-mo 4 the youth career plays on (age 17, phase contract_offer, retired false)
+  ok   1280-mo forced33: the send off says why (Forced out at 33: overall 40, the body could not keep up.)
+  ok   1280-mo forced33: the send off offers its choices
+  ok   1280-mo forced33: the line is whole, below the age line, fully opaque ({"clipped":false,"overlap":false,"h":16,"w":676,"color":"rgb(132, 145, 164)","opacity":1})
+  ok   1280-mo forced33: no sideways scroll (1280)
+  ok   1280-mo forced45: the send off says why (Forced out at 45, the age limit.)
+  ok   1280-mo forced45: the send off offers its choices
+  ok   1280-mo forced45: the line is whole, below the age line, fully opaque ({"clipped":false,"overlap":false,"h":16,"w":676,"color":"rgb(132, 145, 164)","opacity":1})
+  ok   1280-mo forced45: no sideways scroll (1280)
+  ok   1280-mo forced33-lost: the send off says why (Forced out at 33: overall 40, the body could not keep up.)
+  ok   1280-mo forced33-lost: the send off offers its choices
+  ok   1280-mo forced33-lost: the line is whole, below the age line, fully opaque ({"clipped":false,"overlap":false,"h":16,"w":676,"color":"rgb(132, 145, 164)","opacity":1})
+  ok   1280-mo forced33-lost: no sideways scroll (1280)
+  ok   1280-mo 8 the manager tail opens as the manager, not the send off or the retired screen
+  ok   1280-mo 8 the manager tail is still the manager after a reload (phase manager_season)
+  ok   1280-mo 9 a real retirement whose phase was lost opens its send off
+  ok   1280-mo 9 the player's own retirement has no forced line
+  ok   1280-mo 9 Retire and Enjoy Life lands on the retired screen (phase retired)
+  ok   1280-mo 9 the retired screen survives a reload (phase retired)
+  ok   1280-mo 10 Cancel keeps the career (phase playing)
+  ok   1280-mo 10 Confirm ends on the send off at 26 (phase retirement_ceremony)
+  ok   no page errors ()
+rvwalk1519: 113 checks, 0 failures
