@@ -1,0 +1,4 @@
+#!serve
+# Release BO kit proof on 841ea72f: rc-BOa consent-walk-1442 verbatim after the BASE fix (rBOp-ka: the harness asserts the host 127.0.0.1 and the runner sets localhost)
+#!playwright
+consent-walk-1442: export FREE_KICK_FONT_CACHE=/tmp/fk-1442 LEGAL_PRIVACY_OUT=/tmp/lp-walk; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && BASE=http://127.0.0.1:4173 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playConsentPrivacy1442.mjs > /tmp/cpw.log 2>&1; s=$?; tail -3 /tmp/cpw.log | cut -c1-230; exit $s
