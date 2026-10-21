@@ -1,0 +1,2 @@
+oldsave-self exit=1 0s | Node.js v24.22.0
+oldsave exit=0 74s | review-oldsave: DIFFERS
