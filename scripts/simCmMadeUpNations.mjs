@@ -495,12 +495,13 @@ console.log('6) The board counts exactly the men whose flag is its country');
 
 /** One career, `seasons` seasons of quick sims on one stream: the whole state at every season end, the draws taken
     and the save's length at every season end. */
-async function replay(b, career, seed, seasons) {
+async function replay(b, career, seed, seasons, noSack = false) {
   const mod = fresh(b);
   if (career.era) await mod.cm.ensureEraRosters(career.era);
   const snaps = [], sizes = [];
   withStream(seed, () => {
     let s = startOf(mod, career);
+    if (noSack) s = { ...s, startOptions: { ...(s.startOptions ?? {}), noSack: 1 } };
     for (let k = 1; k <= seasons; k += 1) {
       s = playSeason(mod, s);
       snaps.push(stripped(s, NATION, mod));
@@ -533,7 +534,14 @@ const REPLAY = [
     const unmark = j => JSON.stringify(JSON.parse(j), (k, v) => (MARKS.has(k) ? undefined : v));
     const hs = head.snaps.map(unmark), ns = noask.snaps.map(unmark);
     const moves = hs.findIndex((x, k) => x !== ns[k]);
-    if (moves >= 0) { askMoved += 1; console.log(`   ${tag}: the board's new count moves it from season ${moves + 1} (first key ${firstDiff(hs[moves], ns[moves])}), ${head.draws} draws against ${noask.draws}`); }
+    if (moves >= 0) {
+      askMoved += 1;
+      const x = JSON.parse(hs.at(-1)), y = JSON.parse(ns.at(-1));
+      const keys = [...new Set([...Object.keys(x), ...Object.keys(y)])].filter(k => JSON.stringify(x[k]) !== JSON.stringify(y[k]));
+      const asks = o => (o.boardObjectives ?? []).filter(b => b.id === 'natQuota').map(b => `${b.country} ${b.target}`).join(', ');
+      console.log(`   ${tag}: the board's new count moves it from season ${moves + 1}; at the last season end ${keys.join(', ') || 'nothing'} differ`
+        + `; country ask ${asks(x) || 'none'} against ${asks(y) || 'none'}; budget ${x.budget} against ${y.budget}, board ${x.boardConfidence} against ${y.boardConfidence}; ${head.draws} draws against ${noask.draws}`);
+    }
     else console.log(`   ${tag}: the board's new count leaves it on its path (${head.draws} draws, ${noask.draws} with the old count)`);
     console.log(`   ${tag}: save ${noask.sizes.map((x, k) => `+${x - none.sizes[k]}`).join(' ')} characters a season end with countries`);
   }
@@ -542,15 +550,14 @@ const REPLAY = [
 }
 
 console.log(`7b) The save's growth to season ${LONG}`);
-{
-  const c = { era: 'now', club: 'Everton' };
-  const a = await replay(B_NOASK, c, 9001, LONG), z = await replay(B_NONATION, c, 9001, LONG);
+for (const c of [{ era: 'now', club: 'Everton' }, { era: 'now', club: m.cm.playableClubs('laliga').at(-1).name }]) {
+  const a = await replay(B_NOASK, c, 9001, LONG, true), z = await replay(B_NONATION, c, 9001, LONG, true);
   const growth = a.sizes.map((x, k) => x - z.sizes[k]);
-  console.log(`   characters added by the countries at each season end: ${growth.join(' ')}`);
+  console.log(`   ${c.club}, characters added by the countries at each season end: ${growth.join(' ')}`);
   const last = growth.at(-1) ?? Infinity;
-  if (a.sizes.length < LONG) fail(`the long career stopped after ${a.sizes.length} seasons`);
-  if (!(last <= 1500)) fail(`the countries add ${last} characters at season ${a.sizes.length}, over the 1500 budget`);
-  else ok(`season ${a.sizes.length}: +${last} characters (budget 1500), ${(last / Math.max(1, a.sizes.length)).toFixed(0)} a season`);
+  if (a.sizes.length < LONG) fail(`${c.club}: the long career stopped after ${a.sizes.length} seasons`);
+  if (!(last <= 1500)) fail(`${c.club}: the countries add ${last} characters at season ${a.sizes.length}, over the 1500 budget`);
+  else ok(`${c.club} season ${a.sizes.length}: +${last} characters (budget 1500), ${(last / Math.max(1, a.sizes.length)).toFixed(0)} a season; the save is ${a.sizes.at(-1)} characters`);
 }
 
 if (B_BASE) {
