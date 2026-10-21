@@ -1,0 +1,6 @@
+k3 exit=0 90s | simNbaEarnedDraft: green.
+k1 exit=0 97s | simNbaEarnedDraft: green.
+k2 exit=0 99s | simNbaEarnedDraft: green.
+k4 exit=1 104s | simNbaEarnedDraft: RED in section 6.
+k6 exit=1 95s | simNbaEarnedDraft: RED in section 6, 5.
+k5 exit=1 99s | simNbaEarnedDraft: RED in section 6, 5.
