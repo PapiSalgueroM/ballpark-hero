@@ -1,0 +1,46 @@
+CONTROL noreconcile: soccerCareerEngine.ts is mutated, this run must go red
+A) six fleets of 40 careers: nothing ends a career before the age rules without the player
+  careers 240, alive at 26 240 (overall under 60 there 27), alive at 27 240
+  endings {"suggestion":73,"forced":127,"farewell":40}, early 0, not on the ceremony 0, stuck 0
+  shady years lived: bans 9, drug test bans 13, trials 156, prison 156
+B) the edges at 25 and 26
+  fixtures: 25 overall 65 at Rio Ave, 26 overall 68 at Rio Ave
+C) a retired flag and a phase that disagree go back to what the rest of the save says
+  FAIL: C the save the old Continue already wrote: retired at 26 on the retired screen, nothing behind it: repaired to retired true, phase retired, legacy none
+  the save the old Continue already wrote: retired at 26 on the retired screen, nothing behind it: base kept retired true on retired; now retired true on retired
+  FAIL: C a retired flag on the retired screen with nothing behind it: repaired to retired true, phase retired, legacy none
+  a retired flag on the retired screen with nothing behind it: base kept retired true on retired; now retired true on retired
+  FAIL: C a stray retired screen on a youth career: repaired to retired true, phase retired, legacy none
+  a stray retired screen on a youth career: base kept retired true on retired; now retired true on retired
+  FAIL: C a youth career on the retired screen without its flag: repaired to retired false, phase retired, legacy none
+  a youth career on the retired screen without its flag: base kept retired false on retired; now retired false on retired
+  FAIL: C a chosen pundit career whose phase was lost: repaired to retired true, phase playing, legacy 36
+  a chosen pundit career whose phase was lost: base kept retired true on playing; now retired true on playing
+  FAIL: C a chosen manager career whose phase was lost: repaired to retired true, phase playing, legacy 36
+  a chosen manager career whose phase was lost: base kept retired true on playing; now retired true on playing
+  FAIL: C a chosen owner career whose phase was lost: repaired to retired true, phase playing, legacy 36
+  a chosen owner career whose phase was lost: base kept retired true on playing; now retired true on playing
+  FAIL: C a stray flag on the season summary at 26: repaired to retired true, phase season_summary, legacy none
+  a stray flag on the season summary at 26: base kept retired true on season_summary; now retired true on season_summary
+  FAIL: C a stray flag on Next Season at 26: repaired to retired true, phase playing, legacy none
+  a stray flag on Next Season at 26: base kept retired true on playing; now retired true on playing
+  FAIL: C a real retirement at 26 whose phase was lost: repaired to retired true, phase season_summary, legacy 36
+  a real retirement at 26 whose phase was lost: base kept retired true on season_summary; now retired true on season_summary
+  FAIL: C a forced retirement whose phase and legacy were lost: repaired to retired true, phase playing, legacy none
+  a forced retirement whose phase and legacy were lost: base kept retired true on playing; now retired true on playing
+  FAIL: C a real retirement whose flag was lost: repaired to retired false, phase retirement_ceremony, legacy 36
+  a real retirement whose flag was lost: base kept retired false on retirement_ceremony; now retired false on retirement_ceremony
+  FAIL: C a ceremony that lost its legacy: repaired to retired true, phase retirement_ceremony, legacy none
+  a ceremony that lost its legacy: base kept retired true on retirement_ceremony; now retired true on retirement_ceremony
+  FAIL: C a chosen after career whose phase was lost: repaired to retired true, phase playing, legacy 36
+  a chosen after career whose phase was lost: base kept retired true on playing; now retired true on playing
+  FAIL: C a retired screen with nothing behind it: repaired to retired false, phase retired, legacy none
+  a retired screen with nothing behind it: base kept retired false on retired; now retired false on retired
+  FAIL: C a ceremony with nothing behind it: repaired to retired false, phase retirement_ceremony, legacy none
+  a ceremony with nothing behind it: base kept retired false on retirement_ceremony; now retired false on retirement_ceremony
+  Continue on a stray flag at 26: base went to retired (retired true), now ballon_dor (retired false)
+  FAIL: B and C could not run: unhandled phase retired at 26
+D) every fleet career is byte for byte the base engine's
+  base bc79b526: 240 careers, 0 differ from this tree
+
+FAIL: 17 check(s) failed

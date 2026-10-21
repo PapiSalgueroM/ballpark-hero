@@ -1,0 +1,60 @@
+CONTROL prison: soccerCareerEngine.ts is mutated, this run must go red
+A) six fleets of 40 careers: nothing ends a career before the age rules without the player
+  FAIL: first career 19: ended at 33 (overall 82) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: random career 10: a forced ending at 42 has the send off line null
+  FAIL: shady career 0: ended at 31 (overall 69) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 1: ended at 26 (overall 55) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 2: ended at 25 (overall 53) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 3: ended at 28 (overall 69) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 5: ended at 25 (overall 55) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 6: ended at 25 (overall 63) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 7: ended at 21 (overall 54) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 8: ended at 28 (overall 69) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 9: ended at 32 (overall 78) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 10: ended at 32 (overall 86) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 11: ended at 25 (overall 62) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 12: ended at 25 (overall 70) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 13: ended at 26 (overall 69) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 14: ended at 24 (overall 70) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 15: ended at 23 (overall 67) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 16: ended at 23 (overall 68) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 17: ended at 25 (overall 74) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 18: ended at 25 (overall 73) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 19: ended at 29 (overall 78) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 20: ended at 27 (overall 72) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 21: ended at 24 (overall 77) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 22: ended at 24 (overall 74) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 23: ended at 25 (overall 74) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 24: ended at 23 (overall 74) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 25: ended at 26 (overall 75) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 26: ended at 26 (overall 72) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 27: ended at 21 (overall 76) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 28: ended at 25 (overall 85) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 29: ended at 25 (overall 73) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 30: ended at 27 (overall 50) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 31: ended at 27 (overall 55) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 32: ended at 27 (overall 58) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 33: ended at 23 (overall 51) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 34: ended at 25 (overall 60) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 35: ended at 31 (overall 72) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 36: ended at 30 (overall 85) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 37: ended at 30 (overall 77) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 38: ended at 23 (overall 60) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 39: ended at 30 (overall 77) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: decline career 14: ended at 43 (overall 55) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: decline career 20: ended at 39 (overall 51) on advanceProSeason from playing, phase retirement_ceremony
+  careers 240, alive at 26 215 (overall under 60 there 20), alive at 27 211
+  endings {"suggestion":72,"early":42,"forced":86,"farewell":40}, early 42, not on the ceremony 0, stuck 0
+  shady years lived: bans 8, drug test bans 11, trials 44, prison 0
+  FAIL: every career is alive at 26 (215 of 240)
+  FAIL: no career ends early (42)
+  FAIL: the fleets reach trials: 44, floor 78
+B) the edges at 25 and 26
+  fixtures: 25 overall 65 at Rio Ave, 26 overall 68 at Rio Ave
+  FAIL: B5 prison at 26 is a year out, not an ending (row Rio Ave, phase retirement_ceremony, retired true)
+  FAIL: B and C could not run: unhandled phase retirement_ceremony at 26
+D) every fleet career is byte for byte the base engine's
+  base bc79b526: 240 careers, 44 differ from this tree
+  FAIL: the fleets match the base byte for byte (44 differ)
+
+FAIL: 49 check(s) failed

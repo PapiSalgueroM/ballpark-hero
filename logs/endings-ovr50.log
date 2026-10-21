@@ -1,0 +1,32 @@
+CONTROL ovr50: soccerCareerEngine.ts is mutated, this run must go red
+A) six fleets of 40 careers: nothing ends a career before the age rules without the player
+  FAIL: random career 13: a suggestion ending at 41 has the send off line Forced out at 41: overall 50, the body could not keep up.
+  careers 240, alive at 26 240 (overall under 60 there 27), alive at 27 240
+  endings {"suggestion":73,"forced":127,"farewell":40}, early 0, not on the ceremony 0, stuck 0
+  shady years lived: bans 9, drug test bans 13, trials 156, prison 156
+B) the edges at 25 and 26
+  fixtures: 25 overall 65 at Rio Ave, 26 overall 68 at Rio Ave
+  FAIL: B3 the send off line at overall 50 at 33 is null (Forced out at 33: overall 50, the body could not keep up.)
+C) a retired flag and a phase that disagree go back to what the rest of the save says
+  the save the old Continue already wrote: retired at 26 on the retired screen, nothing behind it: base kept retired true on retired; now retired false on playing
+  a retired flag on the retired screen with nothing behind it: base kept retired true on retired; now retired false on playing
+  a stray retired screen on a youth career: base kept retired true on retired; now retired false on youth
+  a youth career on the retired screen without its flag: base kept retired false on retired; now retired false on youth
+  a chosen pundit career whose phase was lost: base kept retired true on playing; now retired true on pundit_season
+  a chosen manager career whose phase was lost: base kept retired true on playing; now retired true on manager_season
+  a chosen owner career whose phase was lost: base kept retired true on playing; now retired true on owner_season
+  a stray flag on the season summary at 26: base kept retired true on season_summary; now retired false on season_summary
+  a stray flag on Next Season at 26: base kept retired true on playing; now retired false on playing
+  a real retirement at 26 whose phase was lost: base kept retired true on season_summary; now retired true on retirement_ceremony
+  a forced retirement whose phase and legacy were lost: base kept retired true on playing; now retired true on retirement_ceremony
+  a real retirement whose flag was lost: base kept retired false on retirement_ceremony; now retired true on retirement_ceremony
+  a ceremony that lost its legacy: base kept retired true on retirement_ceremony; now retired true on retirement_ceremony
+  a chosen after career whose phase was lost: base kept retired true on playing; now retired true on retired
+  a retired screen with nothing behind it: base kept retired false on retired; now retired false on playing
+  a ceremony with nothing behind it: base kept retired false on retirement_ceremony; now retired false on playing
+  Continue on a stray flag at 26: base went to retired (retired true), now ballon_dor (retired false)
+  consistent saves 17 (committed fixtures 7, of which inconsistent 0), moved by the repair 0
+D) every fleet career is byte for byte the base engine's
+  base bc79b526: 240 careers, 0 differ from this tree
+
+FAIL: 2 check(s) failed

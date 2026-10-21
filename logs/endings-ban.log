@@ -1,0 +1,23 @@
+CONTROL ban: soccerCareerEngine.ts is mutated, this run must go red
+A) six fleets of 40 careers: nothing ends a career before the age rules without the player
+  FAIL: first career 18: ended at 29 (overall 85) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: random career 39: ended at 25 (overall 62) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: shady career 27: ended at 33 (overall 64) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: decline career 6: ended at 29 (overall 74) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: decline career 18: ended at 37 (overall 54) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: decline career 20: ended at 29 (overall 72) on advanceProSeason from playing, phase retirement_ceremony
+  FAIL: decline career 39: ended at 30 (overall 65) on advanceProSeason from playing, phase retirement_ceremony
+  careers 240, alive at 26 239 (overall under 60 there 27), alive at 27 239
+  endings {"suggestion":71,"early":7,"forced":122,"farewell":40}, early 7, not on the ceremony 0, stuck 0
+  shady years lived: bans 0, drug test bans 13, trials 153, prison 153
+  FAIL: every career is alive at 26 (239 of 240)
+  FAIL: no career ends early (7)
+B) the edges at 25 and 26
+  fixtures: 25 overall 65 at Rio Ave, 26 overall 68 at Rio Ave
+  FAIL: B5 a match fixing ban at 26 is a year out, not an ending (row Rio Ave, phase retirement_ceremony, retired true)
+  FAIL: B and C could not run: unhandled phase retirement_ceremony at 26
+D) every fleet career is byte for byte the base engine's
+  base bc79b526: 240 careers, 7 differ from this tree
+  FAIL: the fleets match the base byte for byte (7 differ)
+
+FAIL: 12 check(s) failed
