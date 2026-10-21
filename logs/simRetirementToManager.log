@@ -1,0 +1,15 @@
+1) Three careers, three different worlds
+   legend   rep 100  standing  88  ceiling T1  2.48 offers  0% empty  best T1
+   solid    rep  36  standing  54  ceiling T3  1.40 offers  8% empty  best T3
+   grinder  rep  14  standing  40  ceiling T4  0.92 offers  27% empty  best T4
+2) Countries you played in are countries that call
+   worked in: Spain | nationality Spain
+3) Silence still says something
+   1 distinct empty-feed messages, sample: "No offers this window. Boards move slowly on first time managers. Sit ..."
+4) The dugout record takes over from the playing career
+   grinder after 5 winning seasons: seasonsManaged 5, trophies 5, promotions 5, lastTier 1
+   then relegated and sacked: seasonsOut 1, relegations 1, departure relegated
+5) Copy check
+   clean
+
+ALL RETIREMENT BRIDGE CHECKS PASSED
