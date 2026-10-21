@@ -1,0 +1,4 @@
+Prepared 9 declared font dependencies for local fulfillment.
+Consent browser: browser privacy signal keeps advertising off
+Consent browser: account form loads on request, keeps drafts and returns focus
+Consent browser: PASS, 8 cases. Every external request was fulfilled locally; no live provider requests.

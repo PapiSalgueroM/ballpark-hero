@@ -1,0 +1,2 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+consent-walk-1442 exit=0 5s | Consent browser: PASS, 8 cases. Every external request was fulfilled locally; no live provider requests.
