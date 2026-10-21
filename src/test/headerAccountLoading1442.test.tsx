@@ -47,7 +47,7 @@ describe('member account menu loads only for a signed-in player', () => {
     spies.user = null; spies.profile = null; mount();
     await act(async () => {});
     expect(imported).not.toHaveBeenCalled();
-    expect(screen.getByRole('button', { name: 'Log In', exact: true })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Log In' })).toBeEnabled();
     expect(screen.queryByRole('button', { name: 'Account menu' })).toBeNull();
   });
   it('keeps the account button disabled and announces the pending menu', async () => {
@@ -62,15 +62,15 @@ describe('member account menu loads only for a signed-in player', () => {
     await act(async () => { rejectMenu(new Error('Fixture member chunk failed')); });
     await waitFor(() => expect(screen.queryByRole('alert')).not.toBeNull());
     expect(screen.getByRole('alert')).toHaveTextContent('Account menu could not load');
-    expect(screen.getByRole('link', { name: 'DoUKnowBall', exact: true })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'DoUKnowBall' })).toBeInTheDocument();
     expect(screen.queryByRole('region', { name: 'Loaded account menu' })).toBeNull();
-    expect(screen.getByRole('button', { name: 'Log Out', exact: true })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Log Out' })).toBeEnabled();
   });
   it('keeps Log Out working when the member chunk fails', async () => {
     mount(); await waitFor(() => expect(imported).toHaveBeenCalledTimes(1));
     await act(async () => { rejectMenu(new Error('Fixture member chunk failed')); });
     await waitFor(() => expect(screen.queryByRole('alert')).not.toBeNull());
-    fireEvent.click(screen.getByRole('button', { name: 'Log Out', exact: true }));
+    fireEvent.click(screen.getByRole('button', { name: 'Log Out' }));
     await waitFor(() => expect(spies.signOut).toHaveBeenCalledTimes(1));
     expect(spies.navigate).toHaveBeenCalledWith('/');
   });
@@ -87,7 +87,7 @@ describe('member account menu loads only for a signed-in player', () => {
     expect(screen.getByRole('button', { name: 'Account menu' })).toHaveTextContent('B');
     expect(screen.getByRole('region', { name: 'Loaded account menu' })).toHaveTextContent('Blair a@example.test blair');
     expect(imported).toHaveBeenCalledTimes(1);
-    fireEvent.click(screen.getByRole('button', { name: 'Log Out', exact: true }));
+    fireEvent.click(screen.getByRole('button', { name: 'Log Out' }));
     await waitFor(() => expect(spies.signOut).toHaveBeenCalledTimes(1));
     expect(spies.navigate).toHaveBeenCalledWith('/');
   });
