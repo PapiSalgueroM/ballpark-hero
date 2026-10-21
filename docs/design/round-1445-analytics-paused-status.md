@@ -19,3 +19,5 @@ The agreed replacement is a plain paragraph, with no live or interactive role:
 The regression uses the actual component and preference/loader modules. It checks visible explanatory text, absence of an Analytics checkbox, working Advertising persistence, analytics false, no Analytics tag or globals, no fetch attempts, initial/reopened region focus, Cancel focus restoration and unchanged saved choices. Existing consent baselines retain GPC, expiry, storage, withdrawal and help/rules focus coverage.
 
 All app execution is remote on GitHub Actions. No local Node, npm, parser, build, test or browser execution. The historical legal public workflow and receipts remain unchanged.
+
+Actual original evidence: corrected63beaf695ddc3d3ff093956440eca2c4893469e3/run39664707661, one exact dead-control AssertionError after74 baselinePASS and real types. Artifact12375339227,247034B SHAcedaef64c55a3c87f522dd2af39005cf8ff73c29d3d088236580d2128d833c30, all16hashes independently held. Earlier94ae/run39664004370 failed five unsupported ByRole exact options in the new test, before the original outcome, and earns no original credit. No tracking activation follows.

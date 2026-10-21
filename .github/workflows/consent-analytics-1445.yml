@@ -67,7 +67,7 @@ jobs:
           import fs from 'node:fs'; import assert from 'node:assert/strict';
           const r=JSON.parse(fs.readFileSync('analytics-status-artifacts/baselines.json','utf8'));
           assert.equal(r.success,true); assert.equal(r.numFailedTests,0); assert.equal(r.numPendingTests,0);
-          assert.equal(r.numTodoTests,0); assert(r.numTotalTests>0); assert.equal(r.numPassedTests,r.numTotalTests);
+          assert.equal(r.numTodoTests,0); assert.equal(r.numTotalTests,74); assert.equal(r.numPassedTests,74);
           assert.equal(r.numRuntimeErrorTestSuites??0,0); assert.equal(r.numUnhandledErrors??0,0); assert.deepEqual(r.unhandledErrors??[],[]);
           assert.equal(r.testResults.length,7); assert(r.testResults.every(s=>s.status==='passed'&&s.assertionResults.length>0&&s.assertionResults.every(t=>t.status==='passed')));
           NODE
@@ -125,6 +125,36 @@ jobs:
           fs.writeFileSync('analytics-status-artifacts/fault-admission.json',JSON.stringify({sourceSha:process.env.GITHUB_SHA,exit:Number(process.env.STATUS),result:'INTENDED_DEAD_CONTROL_REJECTED'},null,2));
           NODE
           test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Six unchanged consent controls with physical bindings and actual assertions
+        if: env.PHASE == 'green'
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/analytics-status-artifacts/transport.log"
+          export LEGAL_PRIVACY_OUT="$PWD/analytics-status-artifacts"
+          node scripts/simConsentWithdrawal1442.mjs > analytics-status-artifacts/consent-controls.log 2>&1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import {createHash} from 'node:crypto';
+          const manifest=JSON.parse(fs.readFileSync('src/test/controls/consent1442/manifest.json','utf8'));
+          const names=['staleOverlay','blockedRefresh','durableShadow','gpcRestore','expiredDraft','analyticsCollection'];
+          assert.deepEqual(manifest.files.map(r=>r.name).sort(),names.sort());
+          const hash=x=>createHash('sha256').update(x).digest('hex'), bindings=[];
+          const proof=JSON.parse(fs.readFileSync('analytics-status-artifacts/consent-controls/report.json','utf8'));
+          assert.equal(proof.complete,true); assert.equal(proof.cases.length,12);
+          for(const row of manifest.files){
+            const source=fs.readFileSync(row.source,'utf8'), copy=fs.readFileSync(row.copy,'utf8'), pos=source.indexOf(row.old);
+            assert.equal(hash(source),row.sourceSha256);assert.equal(hash(copy),row.copySha256);assert.equal(source.split(row.old).length-1,1);
+            assert.equal(source.slice(0,pos)+row.new+source.slice(pos+row.old.length),copy);assert.equal(copy.slice(0,pos)+row.old+copy.slice(pos+row.new.length),source);assert.notEqual(source,copy);
+            for(const fault of [false,true]){
+              const name=row.name+(fault?'-fault':'-actual'), r=JSON.parse(fs.readFileSync('analytics-status-artifacts/consent-controls/'+name+'.json','utf8'));
+              const cases=r.testResults.flatMap(s=>s.assertionResults).filter(t=>t.title===row.testName);assert.equal(cases.length,1);assert.equal(cases[0].status,fault?'failed':'passed');assert.equal(r.numFailedTests,fault?1:0);
+              assert.equal(r.numRuntimeErrorTestSuites??0,0);assert.equal(r.numUnhandledErrors??0,0);assert.deepEqual(r.unhandledErrors??[],[]);
+              if(fault){const messages=cases[0].failureMessages.map(s=>s.replace(/\u001b\[[0-9;]*m/g,''));assert.equal(messages.length,1);assert.match(messages[0],/AssertionError|expected|expect\(element\)\.not\.toBeChecked/i);assert.doesNotMatch(messages[0],/Cannot find|Failed to resolve|SyntaxError|ReferenceError|TypeError/);bindings.push({name,sourceSha256:row.sourceSha256,copySha256:row.copySha256,wholeInverseExact:true,test:row.test,case:cases[0].fullName,actualFailure:messages[0]});}
+            }
+          }
+          fs.writeFileSync('analytics-status-artifacts/consent-control-bindings.json',JSON.stringify(bindings,null,2));
+          NODE
+          test ! -s "$SIM_OFFLINE_RECEIPT"
       - name: Retain source and complete evidence holds
         if: always()
         run: |
@@ -132,11 +162,136 @@ jobs:
           sha256sum --check analytics-status-artifacts/source-before.sha256 > analytics-status-artifacts/source-hold.log
           git diff --exit-code HEAD -- src scripts supabase public .github index.html package.json package-lock.json vitest.config.ts > analytics-status-artifacts/tracked-source-hold.log
           test ! -s analytics-status-artifacts/transport.log
-          (cd analytics-status-artifacts; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > analytics-status-artifacts/evidence.sha256
+          (cd analytics-status-artifacts; find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > analytics-status-artifacts/evidence.sha256
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: analytics-paused-status1445-${{ env.PHASE }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: analytics-status-artifacts/
+          if-no-files-found: error
+          retention-days: 7
+
+  build_browser:
+    needs: focused
+    if: inputs.phase == 'green' || (github.event_name == 'push' && github.ref == 'refs/heads/codex/consent-analytics-1445')
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      PRERENDER_ONLY: /privacy
+      SEO_SPLIT_BASE_REF: bc79b526cb69a4e913416c77c6dba00fe9401a16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind source and protected baseline
+        run: |
+          set -euo pipefail
+          mkdir analytics-build-artifacts
+          git rev-parse HEAD > analytics-build-artifacts/head.txt
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git fetch --no-tags --depth=1 origin "$SEO_SPLIT_BASE_REF" > analytics-build-artifacts/baseline-fetch.log 2>&1
+          git diff --exit-code "$SEO_SPLIT_BASE_REF" HEAD -- src scripts supabase public index.html package.json package-lock.json vitest.config.ts ':!src/components/CookieConsent.tsx' ':!src/pages/PrivacyPolicy.tsx' ':!src/test/analyticsPausedStatus1445.test.tsx' ':!src/test/controls/consent1442/expiredDraft.tsx' ':!src/test/controls/consent1442/manifest.json' ':!scripts/playConsentPrivacy1442.mjs' ':!scripts/qa/playAnalyticsStatus1445.mjs' > analytics-build-artifacts/protected-source-hold.log
+          git ls-files -z src scripts supabase .github index.html package.json package-lock.json vitest.config.ts ':!scripts/data/lastmod.json' | xargs -0 sha256sum > analytics-build-artifacts/source-before.sha256
+          sha256sum package.json package-lock.json scripts/sweepWeight.mjs > analytics-build-artifacts/dependencies-cap-before.sha256
+          npm ci > analytics-build-artifacts/install.log 2>&1
+      - name: Isolated Playwright1.64 and verified font cache
+        run: |
+          set -euo pipefail
+          browser_tools="$RUNNER_TEMP/analytics1445-browser"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > analytics-build-artifacts/browser-install.log 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > analytics-build-artifacts/chromium-install.log 2>&1
+          python -m pip install fonttools pillow > analytics-build-artifacts/python-install.log 2>&1
+          export FREE_KICK_FONT_CACHE="$RUNNER_TEMP/analytics1445-fonts"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > analytics-build-artifacts/fonts.log 2>&1
+          echo "FREE_KICK_FONT_CACHE=$FREE_KICK_FONT_CACHE" >> "$GITHUB_ENV"
+      - name: Types and completed scoped production build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$PWD/analytics-build-artifacts/build.transport"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > analytics-build-artifacts/types.log 2>&1
+          npm run build:seo > analytics-build-artifacts/build.log 2>&1
+          git diff --name-only HEAD -- public scripts/data/lastmod.json > analytics-build-artifacts/generated-files.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const allowed=new Set(['public/privacy/index.html','public/sitemap.xml','scripts/data/lastmod.json']);
+          const files=fs.readFileSync('analytics-build-artifacts/generated-files.txt','utf8').trim().split('\n').filter(Boolean);for(const file of files)assert(allowed.has(file),'Unexpected generated output: '+file);
+          NODE
+          git diff --binary HEAD -- public scripts/data/lastmod.json > analytics-build-artifacts/generated.patch
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > analytics-build-artifacts/dist.sha256
+          tar -czf analytics-build-artifacts/dist.tar.gz -C dist .
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Three status profiles and all eight preserved consent browser cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/analytics-build-artifacts"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/browser-server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1;break;fi;sleep 1;done;test "$ready" -eq 1
+          SIM_OFFLINE_RECEIPT="$out/status-browser.transport" SOURCE_SHA="$GITHUB_SHA" BASE=http://127.0.0.1:4173 ANALYTICS_STATUS_OUT="$out/status-browser" timeout --signal=TERM --kill-after=15s 5m node scripts/qa/playAnalyticsStatus1445.mjs > "$out/status-browser.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$out/consent-browser.transport" BASE=http://127.0.0.1:4173 LEGAL_PRIVACY_OUT="$out/consent-browser" timeout --signal=TERM --kill-after=15s 12m node scripts/playConsentPrivacy1442.mjs > "$out/consent-browser.log" 2>&1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('analytics-build-artifacts/status-browser/report.json','utf8'));assert.equal(r.complete,true);assert.equal(r.source,process.env.GITHUB_SHA);assert.equal(r.actualOutbound,0);assert.deepEqual(r.before,r.after);assert.deepEqual(r.profiles.map(x=>x.width),[360,432,1280]);assert(r.profiles.every(x=>x.status==='PASS'&&x.saved.analytics===false&&x.submissions.length===0&&x.errors.length===0));
+          const p=JSON.parse(fs.readFileSync('analytics-build-artifacts/consent-browser/consent-browser.json','utf8'));assert.equal(p.complete,true);assert.equal(p.actualOutbound,0);assert.equal(p.cases.length,8);assert(p.cases.every(x=>x.passed===true));
+          NODE
+      - name: All18 saved-page readers and14 unchanged page caps sequentially
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          out="$PWD/analytics-build-artifacts"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/readers-server.log" 2>&1 &
+          server=$!;trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0;for attempt in 1 2 3 4 5;do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then ready=1;break;fi;sleep 1;done;test "$ready" -eq 1
+          failed=0
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simLegalPages;do
+            status=0;SIM_OFFLINE_RECEIPT="$out/$method.transport" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$method.mjs" > "$out/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$out/readers.tsv";test "$status" -eq 0 || failed=1
+          done
+          status=0;SIM_OFFLINE_RECEIPT="$out/weights.transport" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$out/weights.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/weights.exit";test "$status" -eq 0 || failed=1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const rows=fs.readFileSync('analytics-build-artifacts/readers.tsv','utf8').trim().split('\n').map(line=>line.split('\t'));assert.equal(rows.length,18);assert.equal(new Set(rows.map(row=>row[0])).size,18);assert(rows.every(row=>row[1]==='0'));
+          const weights=fs.readFileSync('analytics-build-artifacts/weights.log','utf8');assert.equal((weights.match(/gz over[^\n]+budget/g)||[]).length,14);assert.match(weights,/sweepWeight: green/);
+          NODE
+          exit "$failed"
+      - name: Source, output, dependency and offline evidence holds
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check analytics-build-artifacts/source-before.sha256 > analytics-build-artifacts/source-hold.log
+          sha256sum --check analytics-build-artifacts/dependencies-cap-before.sha256 > analytics-build-artifacts/dependencies-cap-hold.log
+          git diff --exit-code HEAD -- src scripts supabase .github index.html package.json package-lock.json vitest.config.ts ':!scripts/data/lastmod.json' > analytics-build-artifacts/operator-source-hold.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          function walk(dir){for(const e of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,e.name);if(e.isDirectory())walk(file);else if(file.endsWith('.transport'))assert.equal(fs.statSync(file).size,0,'Offline transport attempted: '+file);}}walk('analytics-build-artifacts');
+          NODE
+          (cd analytics-build-artifacts; find . -type f ! -path ./evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > analytics-build-artifacts/evidence.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: analytics1445-build-browser-${{ github.run_id }}-${{ github.run_attempt }}
+          path: analytics-build-artifacts/
           if-no-files-found: error
           retention-days: 7
