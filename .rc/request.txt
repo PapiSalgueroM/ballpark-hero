@@ -1,0 +1,2 @@
+endings: SC_ENDINGS_BASE=bc79b526 node scripts/simSoccerCareerEndings.mjs
+endings-early: SC_ENDINGS_BASE=bc79b526 SC_ENDINGS_CONTROL=early node scripts/simSoccerCareerEndings.mjs
