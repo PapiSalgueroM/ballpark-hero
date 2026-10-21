@@ -1,0 +1,174 @@
+{
+  "status": "PRIVATE_READY_FOR_DOCS_CLOSURE_ALL_RELEASE_EVIDENCE_ADMITTED",
+  "productPublished": true,
+  "round": 1445,
+  "date": "2026-10-21",
+  "product": {
+    "buildManifestRows": 104,
+    "buildArtifact": 12386369039,
+    "run": 39686101581,
+    "bothJobsSuccessful": "Root supplied actualterminalstatus; finalfocused/build admissions whole-read",
+    "distFiles": 797,
+    "buildZipSha256": "f3cb62f8817ec1538e58a1109e5f7c18d83df1ace624fd8ed2e80f89060a5dbe",
+    "focusedPassed": 75,
+    "generatedEndInventoryEqual": true,
+    "readers": 18,
+    "qualifiedSource": "19c907608a31d0cbd454163286d4a6fda7359137",
+    "buildZipBytes": 10146727,
+    "generatedFilesBytes": 0,
+    "buildRegularFiles": 105,
+    "generatedPatchBytes": 0,
+    "mergedPublishedSource": "554a3b18641044ec5164bff9acab4d338237078c",
+    "caps": 14,
+    "browserCases": 11,
+    "pullRequest": 362,
+    "effectiveFaults": 7,
+    "distEndInventoryEqual": true
+  },
+  "publication": {
+    "roleSerializedSha256": "aa960238c3c7911c31db217b1dc993c72e6419abf0e1ee4b770bf5ef5aeb449f",
+    "rootManifestRows": 994,
+    "entry": "/assets/index-gLwQ_4x3.js",
+    "currentEntryObservedUtc": "2026-10-21T22:45:17Z",
+    "source": "554a3b18641044ec5164bff9acab4d338237078c",
+    "bootstrapBodySha256": "c2b7502f066225a879f1ddf8f1d98751624c49511bc4654ad28bba3b55db3ed0",
+    "bootstrapBodyBytes": 2336,
+    "head": 2,
+    "audit": {
+      "thinControlFailedRoutes": 1,
+      "thinControlPlanted": 1073,
+      "thinExit": 1,
+      "samplePages": 24,
+      "privacyRealChars": 16740,
+      "totalRoutes": 2,
+      "cleanRoutes": 2,
+      "thinControlCleanRoutes": 1,
+      "sharedChrome": 1073,
+      "thinBar": 1502
+    },
+    "nestedIntakeManifestRows": 950,
+    "rolePins": {
+      "entry": {
+        "path": "/assets/index-gLwQ_4x3.js",
+        "sha256": "397d2582fb288332afb32b424237c30e2d004723b9379e6931260ee0de38016b"
+      },
+      "cookie": {
+        "path": "/assets/index-gLwQ_4x3.js",
+        "sha256": "397d2582fb288332afb32b424237c30e2d004723b9379e6931260ee0de38016b"
+      },
+      "privacy": {
+        "path": "/assets/PrivacyPolicy-Bvg4J1Jq.js",
+        "sha256": "83c7d13894a8fb29a9279dc2bd4e2fab0cce24de91e5b861c9912c30ca1d07a3"
+      }
+    },
+    "artifact": 12388896473,
+    "bootstrapFaults": 6,
+    "allOuterNestedBindingsExact": true,
+    "regularFiles": 995,
+    "requests": 60,
+    "roles": 3,
+    "retainedStrictCiComparison": {
+      "entryEqual": false,
+      "allNeededBytesEqual": false,
+      "qualification": "Actual strict comparison result retained, diagnostic only",
+      "exit": 1,
+      "error": {
+        "name": "AssertionError",
+        "message": "STRICT_QUALIFIED_ASSET_BYTES"
+      }
+    },
+    "uniqueAssetFiles": 2,
+    "wholeCiBinaryEquivalenceAsserted": false,
+    "deployment": "8873089e-26a7-4095-b517-fde0ded96092",
+    "zipBytes": 58441960,
+    "zipSha256": "ad2dd1bd871db3f7548eca06305d30afaea835bde225d45536a5c59278d1aa4f",
+    "observedPinsProvenance": {
+      "run": "39690909464",
+      "operator": "fd03a18fd9d420131cc2f40ba74df1bc59d9efc6",
+      "artifact": "12387923827",
+      "zipSha256": "bc2a76e51a653673d6b2a34075c13d0cbe0cd767d35a00a2fa4700b5c7681a9d"
+    },
+    "get": 58,
+    "backendRequests": 0,
+    "operator": "d03d471f05c7bf46a04484a2aa0d3288529b4a8a",
+    "properRun": 39691562482
+  },
+  "indexNow": {
+    "zipBytes": 2342,
+    "publishedSourceDiffZero": true,
+    "run": 39692127079,
+    "allHashesExact": true,
+    "urlScope": [
+      "/privacy"
+    ],
+    "boundUrls": [
+      "https://douknowball.com/privacy"
+    ],
+    "http": 200,
+    "sourceBeforeAfterFinalHeld": true,
+    "properReadbackOperator": "d03d471f05c7bf46a04484a2aa0d3288529b4a8a",
+    "regularFiles": 10,
+    "operator": "e6665c9cc330c0e97d1f9f6e11a4a2701f587c62",
+    "acceptanceDoesNotGuaranteeIndexing": true,
+    "manifestRows": 9,
+    "urlEvidence": "Exact reviewed workflow step environment URLS=/privacy, held unchanged indexnowSubmit.mjs HOST douknowball.com and URLS mapping, plus actual logged count1. Payload body is not separately captured.",
+    "artifact": 12388354971,
+    "publicKeySha256": "c42c3c91e0aee24ae111f71483a082a99c0289ef43c7d1c3fa5c925b5d1529a3",
+    "separatePayloadCaptured": false,
+    "keyVerified": true,
+    "status": "PRIVACY_ONLY_INDEXNOW_ACCEPTED_ADMITTED",
+    "workflowSha256": "5e5bccbaba234ddb176a62d55f626664a6461be3c19934a42e404b0039cd0ca8",
+    "properReadbackRun": 39691562482,
+    "submitScriptSha256": "b2bea64932bb38d764c6dd84a897dfa603338fa42e9756bcc512ae5f5fec62d6",
+    "zipSha256": "56f87c82af2895f3b919fa80f5c8a3b7441340e2566fa7bc05e96388a9f44fc7",
+    "workflowBytes": 2941
+  },
+  "retainedFailures": {
+    "firstRawIntakeStatus": "FAILED_UNREACHABLE_GTAG_FALSE_POSITIVE",
+    "correctedIntakeRun": 39690909464,
+    "allEarlierFailedRunsRemainFailed": true,
+    "strictCiAssetComparisonExit": 1,
+    "firstRawIntakeRun": 39689016594
+  },
+  "limits": [
+    "GoogleAnalytics remains paused; providercollectionsettings unverified",
+    "Ongoing30dayprivacyresponse and processor/retention/licensing duties remain",
+    "No legalimmunity orcompletecompliance guarantee",
+    "Broader785harness audit and1441preservationblocker remainopen/unwaived",
+    "No productrepublish required foroperators/docs closure",
+    "SEO1444 publication follows1445closure; shirt1443 separate"
+  ],
+  "evidenceAuthoring": {
+    "sources": [
+      {
+        "path": "C:\\Users\\antho\\dukb-handoff\\2026-10-21\\legal-live-implementation\\setup\\analytics1445-public-readback-39691562482-admission.json",
+        "sha256": "a8ceca0b31b1d251ebf99a729144ca8da23806154d470c4a1791db0375968dc9",
+        "bytes": 17322
+      },
+      {
+        "path": "C:\\Users\\antho\\dukb-handoff\\2026-10-21\\legal-live-implementation\\setup\\analytics1445-final-39686101581-build-admission.json",
+        "sha256": "790586c48db085b8b08faa2b7acc501cdb41c25004195d35d87fb721d2422ea7",
+        "bytes": 8602
+      },
+      {
+        "path": "C:\\Users\\antho\\dukb-handoff\\2026-10-21\\legal-live-implementation\\setup\\analytics1445-final-39686101581-focused-admission.json",
+        "sha256": "814a5ee6d64bdbc049c6b435761c7e54140848135f29f9ebca744c64ea6f9a66",
+        "bytes": 3818
+      },
+      {
+        "bytes": 1663,
+        "path": "C:\\Users\\antho\\dukb-handoff\\2026-10-21\\legal-live-implementation\\setup\\analytics1445-indexnow-39692127079-admission.json",
+        "sha256": "d40d66f107453a29e28897d2b0ca945eac40c8fcdced10a5c7cdfbc8a2fb4cd2"
+      }
+    ],
+    "fullArtifactAdmissions": "Root and cm_report_map, as recorded in whole-read admissionJSONs",
+    "mode": "Native text/hash/JSON whole-reading of admitted records only",
+    "noLocalAppRuntimeGitProbe": true,
+    "rootReportedCurrentMain": "85a762419658ed63206cb20ec85f379409e6ac6a",
+    "currentMainDifference": "Only10WORKBOARDJclaimlines afterpublished554; Root owns native integration/preservation, author made noGitquery",
+    "draftWords": 588
+  },
+  "releaseEvidenceComplete": true,
+  "repositoryClosureWritten": false,
+  "rootOwnsFinalAdoption": true
+}
