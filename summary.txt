@@ -1,0 +1,4 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+corrupt-before-hall exit=1 5s | playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all
+probe-hall exit=0 7s | probeHall: done
+corrupt-before exit=1 133s | playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all

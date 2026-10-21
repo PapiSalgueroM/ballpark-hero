@@ -1,0 +1,63 @@
+save key read from src/lib/hallOfChampions.ts: hallOfChampionsV1
+
+== shell: error line "Couldn't load the championship archive right now.\n\nTry again\nReport a problem\nHa"; hosts aborted fonts.googleapis.com, flawuiqbvjobmkfkauhw.supabase.co
+  button "Back" title=null aria="Go back" visible=true disabled=false chrome=true attrs=[aria-label]
+     div > nav[data-site-chrome] > div > button
+  button "Sign up to track your statsTrack stats" title=null aria=null visible=true disabled=false chrome=true attrs=[]
+     div > nav[data-site-chrome] > div > div > button
+  button "" title=null aria="How to play" visible=true disabled=false chrome=false attrs=[type,aria-label]
+     div > div > button
+  button "Try again" title=null aria=null visible=true disabled=false chrome=false attrs=[]
+     div > main[id=dukb-main] > div > button
+  button "Report a problem" title="Report a problem" aria=null visible=true disabled=false chrome=false attrs=[title]
+     div > main[id=dukb-main] > section[data-seo-content=ready] > div[data-no-prerender=true] > button
+  button "Cookie choices" title=null aria=null visible=true disabled=false chrome=true attrs=[type]
+     footer[data-site-chrome] > div > button
+  button "Light mode" title=null aria=null visible=true disabled=false chrome=true attrs=[type,data-theme-toggle]
+     footer[data-site-chrome] > div > button[data-theme-toggle]
+  button "Sound: off" title=null aria=null visible=true disabled=false chrome=true attrs=[type,aria-pressed,data-sound-toggle]
+     footer[data-site-chrome] > div > button[data-sound-toggle=text]
+  button "Report a problem" title="Report a problem" aria=null visible=true disabled=false chrome=true attrs=[title]
+     footer[data-site-chrome] > div > button
+
+== wrongtype: error line "Couldn't load the championship archive right now.\n\nTry again\nReport a problem\nHa"; hosts aborted fonts.googleapis.com, flawuiqbvjobmkfkauhw.supabase.co
+  button "Back" title=null aria="Go back" visible=true disabled=false chrome=true attrs=[aria-label]
+     div > nav[data-site-chrome] > div > button
+  button "Sign up to track your statsTrack stats" title=null aria=null visible=true disabled=false chrome=true attrs=[]
+     div > nav[data-site-chrome] > div > div > button
+  button "" title=null aria="How to play" visible=true disabled=false chrome=false attrs=[type,aria-label]
+     div > div > button
+  button "Try again" title=null aria=null visible=true disabled=false chrome=false attrs=[]
+     div > main[id=dukb-main] > div > button
+  button "Report a problem" title="Report a problem" aria=null visible=true disabled=false chrome=false attrs=[title]
+     div > main[id=dukb-main] > section[data-seo-content=ready] > div[data-no-prerender=true] > button
+  button "Cookie choices" title=null aria=null visible=true disabled=false chrome=true attrs=[type]
+     footer[data-site-chrome] > div > button
+  button "Light mode" title=null aria=null visible=true disabled=false chrome=true attrs=[type,data-theme-toggle]
+     footer[data-site-chrome] > div > button[data-theme-toggle]
+  button "Sound: off" title=null aria=null visible=true disabled=false chrome=true attrs=[type,aria-pressed,data-sound-toggle]
+     footer[data-site-chrome] > div > button[data-sound-toggle=text]
+  button "Report a problem" title="Report a problem" aria=null visible=true disabled=false chrome=true attrs=[title]
+     footer[data-site-chrome] > div > button
+
+== none: error line "Couldn't load the championship archive right now.\n\nTry again\nReport a problem\nHa"; hosts aborted fonts.googleapis.com, flawuiqbvjobmkfkauhw.supabase.co
+  button "Back" title=null aria="Go back" visible=true disabled=false chrome=true attrs=[aria-label]
+     div > nav[data-site-chrome] > div > button
+  button "Sign up to track your statsTrack stats" title=null aria=null visible=true disabled=false chrome=true attrs=[]
+     div > nav[data-site-chrome] > div > div > button
+  button "" title=null aria="How to play" visible=true disabled=false chrome=false attrs=[type,aria-label]
+     div > div > button
+  button "Try again" title=null aria=null visible=true disabled=false chrome=false attrs=[]
+     div > main[id=dukb-main] > div > button
+  button "Report a problem" title="Report a problem" aria=null visible=true disabled=false chrome=false attrs=[title]
+     div > main[id=dukb-main] > section[data-seo-content=ready] > div[data-no-prerender=true] > button
+  button "Cookie choices" title=null aria=null visible=true disabled=false chrome=true attrs=[type]
+     footer[data-site-chrome] > div > button
+  button "Light mode" title=null aria=null visible=true disabled=false chrome=true attrs=[type,data-theme-toggle]
+     footer[data-site-chrome] > div > button[data-theme-toggle]
+  button "Sound: off" title=null aria=null visible=true disabled=false chrome=true attrs=[type,aria-pressed,data-sound-toggle]
+     footer[data-site-chrome] > div > button[data-sound-toggle=text]
+  button "Report a problem" title="Report a problem" aria=null visible=true disabled=false chrome=true attrs=[title]
+     footer[data-site-chrome] > div > button
+
+probeHall: done

@@ -1,0 +1,6 @@
+  PASS  /hall-of-champions shell: coped without the button, 0 click(s), buttons: Try again | Report a problem
+  PASS  /hall-of-champions wrongtype: coped without the button, 0 click(s), buttons: Try again | Report a problem
+  FAIL  /hall-of-champions: excused in OFFLINE_ONLY but judged offline now, remove the excuse
+
+2 broken saves over 1 long games: 0 reached the error page and needed the button, 2 were coped with by the game, 0 drew the broken save without throwing, 0 could not be judged offline, 1 trapped
+playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all
