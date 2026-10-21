@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node scripts/playCmTactics.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
