@@ -1,0 +1,3 @@
+#!serial
+mainLL: git worktree add /tmp/m2 554a3b18 >/dev/null 2>&1; cd /tmp/m2 && ln -sf "$OLDPWD/node_modules" node_modules && node scripts/simManagerLiveLineups.mjs 2>&1 | grep -v "^ *at " | tail -6
+mainHL: git worktree add /tmp/m2 554a3b18 >/dev/null 2>&1; cd /tmp/m2 && ln -sf "$OLDPWD/node_modules" node_modules 2>/dev/null; node scripts/simManagerHalftimeLineups.mjs 2>&1 | grep -v "^ *at " | tail -6
