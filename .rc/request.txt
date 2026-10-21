@@ -1,0 +1,3 @@
+#!serial
+mutB-te: node .rc/x/mutB.mjs te && SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl; s=$?; git checkout -- src scripts; echo "mutB-te exit=$s"; exit $s
+mutB-newline: node .rc/x/mutB.mjs newline && SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba; s=$?; git checkout -- src scripts; echo "mutB-newline exit=$s"; exit $s
