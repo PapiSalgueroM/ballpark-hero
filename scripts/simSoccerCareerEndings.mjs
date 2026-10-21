@@ -295,7 +295,8 @@ const withStats = (s, o) => ({ ...s, ...stats(o), overall: o });
 function playOn(s, seed) {
   seedRandom(seed);
   const pick = n => n - 1;
-  for (let guard = 0; guard < 400; guard++) {
+  /* An ended career is returned as it is (a control can end one), so the check after it fails cleanly. */
+  for (let guard = 0; guard < 400 && !over(s); guard++) {
     s = step(s, 'last', pick)[1];
     if (over(s) || s.phase === 'playing' || s.phase === 'retirement_suggestion') break;
   }
