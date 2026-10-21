@@ -1,0 +1,1 @@
+s4hard: SECTION=4 LEVELS=normal,hard,legend PAR=4 node scripts/simCmDifficulty.mjs
