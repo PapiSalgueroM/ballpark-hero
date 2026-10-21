@@ -1,0 +1,4 @@
+#!serial
+# Release BO: does simGuideHeadings need the /club-manager record refreshed for the 1516 guide sentence (3412e11c)? before shows it; then the refresh, alone, its output brought back
+before: node scripts/simGuideHeadings.mjs > /tmp/gh0.log 2>&1; s=$?; grep -E "FAIL|not in the frozen" /tmp/gh0.log | head -8 | cut -c1-260; tail -3 /tmp/gh0.log | cut -c1-260; exit $s
+refresh: node scripts/simGuideHeadings.mjs --refresh /club-manager; s=$?; cp scripts/data/guideHeadingsFrozen.json "$RC_OUT/guideHeadingsFrozen.json"; sha256sum scripts/data/guideHeadingsFrozen.json; git diff --stat; exit $s
