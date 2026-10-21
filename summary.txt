@@ -1,0 +1,13 @@
+s1378 exit=0 160s | simCmDifficulty: all green (sections 1,3,7,8)
+tsc exit=0 162s | 
+s6 exit=0 6s | simCmDifficulty: all green (sections 6)
+simCmLeagueRules exit=0 130s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simClubManagerSaveSize exit=0 140s | simClubManagerSaveSize: all sections green
+simDailyDeals exit=0 9s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simManagerAppealIsolation exit=0 95s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simSiteSearch exit=0 4s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simClubManagerSlots exit=0 164s | simClubManagerSlots: all sections green
+simNoRivalNames exit=0 27s | No rival product names found. 0 findings.
+dashscan exit=0 0s | commit message lines with one: 0
+simHarnessAnchors exit=0 89s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+vitest-all exit=0 992s |       Tests  9299 passed | 58 skipped (9357)
