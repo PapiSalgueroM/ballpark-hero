@@ -1,0 +1,4 @@
+h77 exit=0 260s | simCareerForm: green
+e2024 exit=0 273s | simCareerForm: green
+h2024 exit=1 284s | simCareerForm: RED, 1 failure(s)
+e77 exit=1 198s | simCareerForm: RED, 1 failure(s)
