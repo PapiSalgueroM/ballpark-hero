@@ -60,12 +60,21 @@ async function newCtx(vp) {
   await seedPages(ctx, SEED);
   return ctx;
 }
+/** The privacy banner, answered the most private way it offers: essential only, or its choices saved as they
+    open (everything optional off). */
+async function dismissConsent(page) {
+  for (const name of [/^\s*Essential only\s*$/, /^\s*(Reject|Decline)( all)?\s*$/i, /^\s*Save choices\s*$/]) {
+    const b = page.locator('button:visible').filter({ hasText: name });
+    if (await visible(b)) { await b.first().click({ timeout: 4000 }).catch(() => {}); await pause(page, 400); return; }
+  }
+}
 /** A fresh start: 2026-27, England, the Premier League, Brentford, Skip the Dugout step, to the hub. */
 async function toHub(ctx) {
   const page = await ctx.newPage();
   page.on('pageerror', e => errors.push(String(e)));
   await page.goto(`${BASE}/club-manager`, { waitUntil: 'networkidle' });
   await pause(page, 1500);
+  await dismissConsent(page);
   const fresh = page.locator('text=Start Fresh');
   if (await fresh.count()) { await fresh.click(); await pause(page, 800); }
   await page.locator('button:has-text("2026-27")').first().click();
@@ -78,6 +87,7 @@ async function toHub(ctx) {
   if (await essential.count()) { await essential.click(); await pause(page, 400); }
   await page.locator('button:has-text("Brentford")').first().click();
   await pause(page, 500);
+  await dismissConsent(page);
   await page.locator('text=Take the job').click();
   await page.locator('button:has-text("Skip: just manage")').first().click({ timeout: 15000 }).catch(() => {});
   await page.locator('[data-cm-meters]').waitFor({ timeout: 30000 }).catch(() => {});
@@ -101,8 +111,9 @@ for (const W of WIDTHS) {
   const vp = { width: W, height: HEIGHTS[W] ?? 900 };
   console.log(`\n== ${vp.width} by ${vp.height}`);
   const ctx = await newCtx(vp);
-  const page = await toHub(ctx);
+  let page = null;
   try {
+    page = await toHub(ctx);
     /* (t) the Tactics tab */
     await page.getByRole('tab', { name: /Tactics/ }).first().click({ timeout: 10000 });
     await page.locator('[data-cm-instructions="tab"]').waitFor({ timeout: 15000 });
@@ -209,7 +220,7 @@ for (const W of WIDTHS) {
     await shot(page, `report-${W}.png`);
   } catch (e) {
     say(false, `${W}: the walk stopped: ${String(e).split('\n')[0]}`);
-    await shot(page, `stopped-${W}.png`);
+    if (page) await shot(page, `stopped-${W}.png`);
   }
   await ctx.close();
 }
