@@ -1,0 +1,25 @@
+1) a save from before the desk plays exactly as the engine did before this round
+   9 seasons replayed against 8f27082f
+2) over ten seasons a seed, no expiring man of yours leaves without a recorded decision, applied as written
+   20 sheets let stand still reached the club written down after a draft that filled every rival roster
+   408 expiring men: 224 decided by the GM, 184 by the staff's rule
+   draftees up: 60 first rounders after the rookie scale, 68 second rounders; 128 restricted cases, 66 sheets (46 matched, 20 gone to the rival on its terms)
+3) no trade lands after the deadline, and deals do land before it
+   239 deals before the deadline, 700 tries after it, 0 landed; 1949 buyer and 395 seller places at the deadline
+   2000 rounds where the trade paths' refusal matched the window; 4 of 4 board trade handlers ask the deadline first, 2 of 2 that send a pick ask the pick rules
+4) picks are conserved league wide after every deal and every summer
+   439 ledger checks, 239 deals with a pick in them; 60 sweetened trade finder deals mirrored into the ledger, 0 refused by the pick rules
+5) the staff's effects change their consumer at every level step
+   each post alone: hc win 0.548 to 0.618; assistant win 0.548 to 0.618; development grow 2.000 to 2.199; scouting miss 2.252 to 0.562; medical out 3.000 to 2.252
+   through simRound: your wins over 10 seasons 504, 512, 519, 526, 535, 547, 558, 572, 582, 596 at levels 1 to 10 (504 with no desk)
+   through simRound: 1144 injuries to your men announced 2286, 2223, 2172, 2122, 2063, 2009, 1969, 1933, 1874, 1826 rounds out at trainer levels 1 to 10
+   through runNbaPlayoffs: your playoff wins over 2000 runs 17561, 18525, 19484, 20522, 21635, 22639, 23675, 24683, 25554, 26384 at levels 1 to 10
+   summer growth of your young men over 5 leagues: 98 rating points at level 1, 109 at level 10
+   a level 6 head coach alone adds 0.83 team strength (the page's worked example says +0.83)
+   edge 0.00 to 3.00, win 0.548 to 0.683, miss 2.25 to 0.56, rounds out 3.00 to 2.25, summer step 2.000 to 2.199
+   day one: 90 of 90 clubs opening the desk on a new franchise and hiring nobody played the season exactly as no desk (total opening edge 0.00)
+6) migration keeps every marker, a corrupt block resets alone, a package is held to the engine salary rule and the apron
+   58 markers migrated; 750 one for one pairs agree with nbaSalaryFits (110 over the first apron)
+7) every desk panel draws, and the re-sign desk shows a tile for every expiring man
+   4 panels drawn, 1 re-sign tiles for 1 expiring men
+simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
