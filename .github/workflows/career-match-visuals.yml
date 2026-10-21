@@ -76,7 +76,7 @@ jobs:
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
-          node_modules/.bin/vitest run src/test/nbaCourtRecap1517.test.tsx src/test/fightCareerRingPlayback.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usBoardFixture.test.tsx src/test/usSeasonCentreScreens.test.tsx --maxWorkers=1 --reporter=verbose --reporter=json --outputFile.json=career-visuals-artifacts/focused.json > career-visuals-artifacts/focused.log 2>&1
+          node_modules/.bin/vitest run src/test/nbaCourtRecap1517.test.tsx src/test/fightCareerRingPlayback.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usBoardFixture.test.tsx src/test/usSeasonCentreScreens.test.tsx src/lib/accountPrivacy.test.ts src/lib/cmMatchDisplay.test.ts --maxWorkers=1 --reporter=verbose --reporter=json --outputFile.json=career-visuals-artifacts/focused.json > career-visuals-artifacts/focused.log 2>&1
           cat career-visuals-artifacts/focused.log
       - name: Actual presentation guards and effective copied faults
         if: github.ref == 'refs/heads/codex/career-match-visuals'
@@ -133,6 +133,10 @@ jobs:
           git rev-parse HEAD > unit-artifacts/head.txt
           sha256sum package.json package-lock.json > unit-artifacts/dependencies-before.sha256
           npm ci > unit-artifacts/install.log 2>&1
+          for anchor in 56356be9a5d4d310f1759c09ba8e3811a8a05c1b e8b39ccc39f763351d4439c833b853c2e3ed2188 6b7596d2c009802e6c011492ae1cefa8af29c62a 31a4ec01f13dde6ce5614d371f5aa135e08ef8da 2b7dda2951fb9b63e76a2af66970cb682f312105 0c66a55929dfe8d6493a86aa00a28ef0ed2db25d; do
+            git fetch --no-tags --depth=1 origin "$anchor"
+            git cat-file -e "$anchor^{commit}"
+          done > unit-artifacts/historical-inputs.log 2>&1
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           status=0
           npm test -- --shard=${{ matrix.shard }}/4 --maxWorkers=2 --reporter=json --outputFile=unit-artifacts/results.json > unit-artifacts/unit.log 2>&1 || status=$?
@@ -202,10 +206,11 @@ jobs:
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           out="$PWD/career-visuals-artifacts"
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.log" 2>&1
+          node scripts/simGuideHeadings.mjs --refresh /fight-career > "$out/fight-guide-refresh.log" 2>&1
           node scripts/genSearchKeywords.mjs > "$out/search-keywords.log" 2>&1
           npm run build:seo > "$out/build.log" 2>&1
-          git diff --binary -- public scripts/data/lastmod.json src/data/searchKeywords.json > "$out/generated.patch"
-          git diff --name-only -- public scripts/data/lastmod.json src/data/searchKeywords.json > "$out/generated-files.txt"
+          git diff --binary -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$out/generated.patch"
+          git diff --name-only -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > "$out/generated-files.txt"
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist.sha256"
       - name: Complete a separate unchanged baseline build
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
@@ -251,7 +256,7 @@ jobs:
           set -euo pipefail
           out="$PWD/career-visuals-artifacts"
           sha256sum --check "$out/dependencies-before.sha256" > "$out/dependencies-hold.log"
-          git diff --exit-code HEAD -- src scripts supabase package.json package-lock.json .github ':!scripts/data/lastmod.json' ':!src/data/searchKeywords.json' > "$out/source-hold.log"
+          git diff --exit-code HEAD -- src scripts supabase package.json package-lock.json .github ':!scripts/data/lastmod.json' ':!scripts/data/guideHeadingsFrozen.json' ':!src/data/searchKeywords.json' > "$out/source-hold.log"
           if test -d dist; then tar -czf "$out/dist.tar.gz" -C dist .; fi
           (cd "$out"; find . -type f ! -name evidence.sha256 -print0 | sort -z | xargs -0 sha256sum) > "$out/evidence.sha256"
       - uses: actions/upload-artifact@v4

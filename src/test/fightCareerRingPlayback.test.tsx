@@ -74,7 +74,7 @@ describe('Fight Career ring playback', () => {
     expect(pause).toBeInTheDocument();
     fireEvent.click(pause!);
     act(() => { vi.advanceTimersByTime(20_000); });
-    expect(view.queryByText('Round 1', { exact: true }), 'Paused playback must not reveal the opening round').not.toBeInTheDocument();
+    expect(view.container.querySelector('[data-current-round]')?.getAttribute('data-current-round'), 'Paused playback must not reveal the opening round').toBe('0');
     expect(view.getByRole('button', { name: 'Play' })).toBeInTheDocument();
     expect(localStorage.getItem(SAVE_KEY)).toBe(savedBytes);
   });

@@ -83,7 +83,7 @@ for (const name of selected) {
     await writeFile(path.join(artifacts, `${label}-vitest.log`), output);
     process.stdout.write(output);
     assert.ok(!run.error && !run.signal, `${label} runner finished`);
-    assert.doesNotMatch(output, /Unhandled (?:Error|Rejection)|Test timed out|Failed to (?:resolve import|load)|Cannot find module|No test files found|SyntaxError|Transform failed/, 'Runner faults cannot earn control credit');
+    assert.doesNotMatch(output, /Unhandled (?:Error|Rejection)|Test timed out|Timeout calling|Failed to (?:resolve import|load)|Cannot find module|No test files found|No test suite found|SyntaxError|ReferenceError|TypeError|Transform failed/, 'Runner faults cannot earn control credit');
     const report = JSON.parse(await readFile(reportPath, 'utf8'));
     const rows = report.testResults.flatMap(file => file.assertionResults);
     assert.equal(rows.length, 9, 'All nine real board and ring cases are discovered');
@@ -98,7 +98,7 @@ for (const name of selected) {
       assert.equal(failed.length, 1);
       assert.equal(failed[0].title, spec.test);
       const failure = failed[0].failureMessages.join('\n').replace(/\x1b\[[0-9;]*m/g, '');
-      assert.match(failure, /AssertionError:/, 'A real outcome assertion rejects the fault');
+      assert.match(failure, /AssertionError:|Error:\s*expect\(element\)/, 'A real outcome assertion rejects the fault');
       assert.ok(failure.includes(spec.message), `${label} fails at its intended assertion`);
       assert.equal(rows.find(row => row.title === baseline)?.status, 'passed', 'The independent real Fight entry still works');
     } else {

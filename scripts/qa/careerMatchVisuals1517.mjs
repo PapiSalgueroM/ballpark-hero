@@ -84,15 +84,29 @@ function fixtures() {
 }
 const fixture = fixtures();
 report.fixtures = Object.fromEntries(Object.entries(fixture).map(([name, value]) => [name, { key: value.key, bytes: Buffer.byteLength(value.value), sha256: digest(value.value) }]));
+const nbaSetup = JSON.parse(fixture.nba.value).c;
+report.fixtures.nba.setup = { phase: 'season', seasons: nbaSetup.seasons.length, year: nbaSetup.year,
+  games: nbaSetup.seasons.at(-1)?.games, pendingRivalryEvent: nbaSetup.pendingRivalryEvent?.id ?? null, pendingRivalryChoice: nbaSetup.pendingRivalryChoice?.id ?? null };
 const courtChunks = fs.readdirSync(path.join(CURRENT, 'assets')).filter(file => file.endsWith('.js') && fs.readFileSync(path.join(CURRENT, 'assets', file), 'utf8').includes('data-nba-court'));
 assert.equal(courtChunks.length, 1, 'One completed-build chunk owns the court marker');
 report.courtChunk = { file: courtChunks[0], sha256: digest(fs.readFileSync(path.join(CURRENT, 'assets', courtChunks[0]))) };
 const profiles = [ { width: 360, height: 800 }, { width: 390, height: 844 }, { width: 432, height: 813 }, { width: 1440, height: 1000 }, { width: 390, height: 844, reduced: true } ];
 const twoFrames = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-async function activate(locator, profile) {
-  const box = await locator.boundingBox();
-  assert(box && box.width >= 43.5 && box.height >= 43.5, 'New playback action retains a 44px target');
+async function activate(locator, profile, floor = 44) {
+  await locator.scrollIntoViewIfNeeded();
+  await locator.click({ trial: true });
+  const target = await locator.evaluate(el => {
+    const box = el.getBoundingClientRect(), x = box.x + box.width / 2, y = box.y + box.height / 2;
+    const hit = document.elementFromPoint(x, y);
+    return { text: (el.textContent || '').trim(), x: box.x, y: box.y, width: box.width, height: box.height,
+      center: { x, y }, onTop: !!hit && (hit === el || el.contains(hit)), hit: hit?.closest('button, summary')?.textContent?.trim() ?? hit?.nodeName ?? null };
+  });
+  report.cases.at(-1).controlTargets.push({ ...target, required: floor });
+  assert(target.width >= floor - 0.5 && target.height >= floor - 0.5, `Action retains its ${floor}px target`);
+  assert(target.onTop, 'The actual control center is on top, with no cookie banner or modal covering it');
   if (profile.width < 600) await locator.tap(); else { await locator.focus(); await locator.press('Enter'); }
+  // Let real mount/focus/reveal callbacks run before measuring their arrival.
+  await locator.page().clock.runFor(50);
 }
 async function geometry(page, art, actions, stage) {
   const value = await art.evaluate((el, selectors) => {
@@ -103,6 +117,7 @@ async function geometry(page, art, actions, stage) {
   }, actions);
   assert(value.document <= value.viewport + 2, stage + ': no horizontal document overflow');
   assert(value.art.width > 100 && value.art.height > 70 && value.art.x >= -0.5 && value.art.right <= value.viewport + 0.5, stage + ': visible sport surface stays inside the phone');
+  assert(value.art.y >= -0.5 && value.art.bottom <= value.height + 0.5, stage + ': sport surface is actually visible in the viewport');
   for (const action of value.actions.filter(row => row.box.height > 0)) {
     assert(action.box.x >= -0.5 && action.box.right <= value.viewport + 0.5 && action.scroll <= action.client + 2, stage + ': playback labels fit');
     assert(action.box.y >= -0.5 && action.box.bottom <= value.height + 0.5, stage + ': playback controls remain visible in the viewport');
@@ -125,10 +140,18 @@ async function serve(dir) {
   await new Promise((resolve, reject) => { const timer = setTimeout(() => reject(new Error('Owned host-like server did not start')), 15000); child.once('error', reject); child.once('exit', code => reject(new Error('Owned server exited ' + code))); child.stdout.on('data', data => { if (String(data).includes('host-like server:')) { clearTimeout(timer); resolve(); } }); });
   const expected = fs.readFileSync(path.join(dir, 'index.html'));
   assert.equal(digest(Buffer.from(await (await fetch(`http://127.0.0.1:${port}`)).arrayBuffer())), digest(expected), 'Owned server serves exactly the requested completed build');
-  return { base: `http://127.0.0.1:${port}`, close: () => { child.kill(); fs.writeFileSync(path.join(OUT, path.basename(dir) + '-server.log'), log); } };
+  const contexts = new Set();
+  return { base: `http://127.0.0.1:${port}`, contexts, close: async () => {
+    for (const context of contexts) await close(context);
+    assert([...contexts].every(context => context.pages().length === 0), 'Every page is closed before its owned server stops');
+    contexts.clear();
+    if (child.exitCode === null && child.signalCode === null) { const exited = new Promise(resolve => child.once('exit', resolve)); child.kill(); await exited; }
+    fs.writeFileSync(path.join(OUT, path.basename(dir) + '-server.log'), log);
+  } };
 }
 async function open(browser, server, profile, sport, row) {
   const save = fixture[sport], context = await browser.newContext({ viewport: { width: profile.width, height: profile.height }, isMobile: profile.width < 600, hasTouch: profile.width < 600, reducedMotion: profile.reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block', deviceScaleFactor: 1 });
+  server.contexts.add(context);
   await context.route('**/*', route => {
     const request = route.request(), url = new URL(request.url());
     if (url.origin === server.base) { assert(['GET', 'HEAD'].includes(request.method()), 'Local build receives read requests only'); return route.continue(); }
@@ -142,7 +165,6 @@ async function open(browser, server, profile, sport, row) {
   await context.addInitScript(({ key, value }) => {
     if (!sessionStorage.getItem('career-visual-fixture')) {
       sessionStorage.setItem('career-visual-fixture', '1'); localStorage.setItem(key, value);
-      localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: Date.now() }));
     }
     let seed = 1517; window.__careerVisualDraws = 0;
     Math.random = () => { window.__careerVisualDraws += 1; seed = (seed + 0x6D2B79F5) >>> 0; let n = Math.imul(seed ^ seed >>> 15, 1 | seed); n = (n + Math.imul(n ^ n >>> 7, 61 | n)) ^ n; return ((n ^ n >>> 14) >>> 0) / 4294967296; };
@@ -154,14 +176,72 @@ async function open(browser, server, profile, sport, row) {
   page.on('pageerror', error => row.errors.push(String(error)));
   page.on('requestfailed', request => { if (request.url().startsWith(server.base)) row.assets.push(request.url() + ': ' + request.failure()?.errorText); });
   page.on('response', response => { if (response.url().startsWith(server.base) && response.status() >= 400) row.assets.push(response.url() + ': ' + response.status()); });
-  await page.goto(server.base + (sport === 'nba' ? '/nba-my-career' : '/fight-career'), { waitUntil: 'domcontentloaded' });
   const entry = sport === 'nba' ? page.locator('[data-watch-last]') : page.getByRole('button', { name: 'Fight', exact: true });
+  return { page, context, entry, stored: () => page.evaluate(key => localStorage.getItem(key), save.key), draws: () => page.evaluate(() => window.__careerVisualDraws) };
+}
+async function ready(view, server, profile, sport, row) {
+  const { page, entry } = view;
+  await page.goto(server.base + (sport === 'nba' ? '/nba-my-career' : '/fight-career'), { waitUntil: 'domcontentloaded' });
+  const choices = page.getByRole('region', { name: 'Cookie choices', exact: true });
+  await choices.waitFor();
+  const careerBeforeChoice = await view.stored();
+  await activate(choices.getByRole('button', { name: 'Reject all', exact: true }), profile);
+  await choices.waitFor({ state: 'hidden' });
+  const consent = await page.evaluate(() => JSON.parse(localStorage.getItem('cookie-consent-v2')));
+  assert.equal(consent.version, 2); assert.equal(consent.advertising, false); assert.equal(consent.analytics, false);
+  assert.equal(await view.stored(), careerBeforeChoice, 'The actual cookie choice preserves the fictional career bytes');
+  row.consent = { decision: 'Reject all', ...consent };
+  if (sport === 'nba') await prepareNbaHub(view, profile, row);
   await entry.waitFor(); await page.evaluate(() => document.fonts.ready); await twoFrames(page);
   await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
-  return { page, context, entry, stored: () => page.evaluate(key => localStorage.getItem(key), save.key), draws: () => page.evaluate(() => window.__careerVisualDraws) };
+}
+async function prepareNbaHub(view, profile, row) {
+  const { page } = view;
+  const guide = page.getByRole('dialog', { name: 'How to play', exact: true });
+  await guide.waitFor();
+  assert((await guide.innerText()).includes('A worked example'), 'The first-visit NBA guide is read before the career hub');
+  await screenshot(page, row, 'initial-guide');
+  await activate(guide.getByRole('button', { name: "Let's Play!", exact: true }), profile);
+  await guide.waitFor({ state: 'detached' });
+  row.setupActions = [];
+  if (nbaSetup.pendingRivalryEvent) {
+    const event = page.locator('[data-rivalry-event]'); await event.waitFor();
+    assert((await event.innerText()).includes(nbaSetup.pendingRivalryEvent.title), 'The real saved rivalry beat precedes Watch');
+    row.setupActions.push({ kind: 'rivalry-event', id: nbaSetup.pendingRivalryEvent.id, action: 'Continue' });
+    await activate(event.getByRole('button', { name: 'Continue', exact: true }), profile, 30);
+    await event.waitFor({ state: 'detached' });
+  }
+  if (nbaSetup.pendingRivalryChoice) {
+    const choice = page.locator('[data-rivalry-choice]'); await choice.waitFor();
+    assert.equal(await choice.getAttribute('data-rivalry-choice'), String(nbaSetup.pendingRivalryChoice.id), 'The real saved rivalry choice precedes Watch');
+    row.setupActions.push({ kind: 'rivalry-choice', id: nbaSetup.pendingRivalryChoice.id, action: 'Option 0, Continue' });
+    await activate(choice.locator('[data-rivalry-option="0"]'), profile, 30);
+    await choice.locator('[data-rivalry-outcome]').waitFor();
+    await activate(choice.getByRole('button', { name: 'Continue', exact: true }), profile, 30);
+    await choice.waitFor({ state: 'detached' });
+  }
+  const kept = JSON.parse(await view.stored()).c;
+  assert.deepEqual(kept.seasons, nbaSetup.seasons, 'Real setup handlers preserve every supplied season result');
+  assert(!kept.pendingRivalryEvent && !kept.pendingRivalryChoice, 'The actual saved rivalry flow reaches its hub without erasing a queued choice');
+  row.readySave = { sha256: digest(await view.stored()), year: kept.year, seasons: kept.seasons.length };
+}
+async function diagnose(view, row) {
+  const { page } = view;
+  if (page.isClosed()) return;
+  const html = row.id + '-failure.html', facts = row.id + '-failure-state.json';
+  await screenshot(page, row, 'failure').catch(error => { row.failureScreenshotError = String(error); });
+  try {
+    fs.writeFileSync(path.join(OUT, html), await page.content());
+    const state = await page.evaluate(key => ({ url: location.href, title: document.title, text: document.body.innerText,
+      buttons: [...document.querySelectorAll('button, summary')].map(el => ({ text: el.textContent?.trim(), label: el.getAttribute('aria-label'), disabled: el.disabled ?? false })),
+      fixtureSave: localStorage.getItem(key), consent: localStorage.getItem('cookie-consent-v2'), active: document.activeElement?.outerHTML }), fixture[row.sport].key);
+    fs.writeFileSync(path.join(OUT, facts), JSON.stringify(state, null, 2) + '\n');
+    row.failureArtifacts = { html, facts };
+  } catch (error) { row.failureDiagnosticError = String(error); }
 }
 async function close(context) {
   for (const page of context.pages()) await page.close();
+  assert.equal(context.pages().length, 0, 'Pages are closed before removing their network guard');
   await context.unrouteAll({ behavior: 'ignoreErrors' }); await context.close();
 }
 
@@ -172,11 +252,12 @@ try {
     const server = await serve(variant === 'before' ? BASELINE : CURRENT);
     try {
       for (const profile of variant === 'before' ? [profiles[1]] : profiles) for (const sport of ['nba', 'fight']) {
-        const row = { id: `${variant}-${sport}-${profile.width}${profile.reduced ? '-reduced' : ''}`, variant, sport, ...profile, screenshots: [], geometry: [], external: [], writes: [], fonts: [], errors: [], assets: [] };
+        const row = { id: `${variant}-${sport}-${profile.width}${profile.reduced ? '-reduced' : ''}`, variant, sport, ...profile, screenshots: [], geometry: [], controlTargets: [], external: [], writes: [], fonts: [], errors: [], assets: [] };
         report.cases.push(row); writeReport();
         let view;
         try {
           view = await open(browser, server, profile, sport, row);
+          await ready(view, server, profile, sport, row);
           await screenshot(view.page, row, 'before-watch');
           if (sport === 'nba') await nba(view, profile, row); else await fight(view, profile, row);
           assert.deepEqual(row.errors, [], row.id + ': no page errors'); assert.deepEqual(row.assets, [], row.id + ': no failed build assets');
@@ -184,11 +265,11 @@ try {
           row.passed = true; console.log('CAREER VISUALS PASS ' + row.id);
         } catch (error) {
           row.passed = false; row.error = String(error.stack || error);
-          if (view) await screenshot(view.page, row, 'failure').catch(() => {});
+          if (view) await diagnose(view, row);
           console.error('CAREER VISUALS FAIL ' + row.id + ': ' + row.error);
-        } finally { if (view) await close(view.context); writeReport(); }
+        } finally { if (view) { await close(view.context); server.contexts.delete(view.context); } writeReport(); }
       }
-    } finally { server.close(); }
+    } finally { await server.close(); }
   }
   assert.equal(report.cases.length, 12, 'Both games run at all five profiles plus two baseline cases');
   assert(report.cases.every(row => row.passed), 'All browser cases pass');
