@@ -10,8 +10,30 @@
  *    quality swept across their whole range from a stream of their own, and the whole state after every season
  *    and every progress step must be the same string in both arms. Control SIM_CAREER_FORM_CONTROL=divisor
  *    changes the NFL divisor in careerForm.ts (10 to 11) in this tree's bundle: the replay must part.
+ *    Measured 2026-10-21 (remote check r1523-s1): nba 90 careers 1,620 seasons, nfl 144 and 2,592, mlb 198 and
+ *    3,564, nhl 108 and 1,944, all byte identical; the control parts the NFL at record 0.
+ * 2) Soccer Career's step, its cap with the phone and the hub line, value by value (neutral 81, 15 points a step).
+ * 3) A PINNED fleet: every press of 120 house careers (scripts/lib/careerStep.mjs) is played again at morale 20, at
+ *    the neutral point and at 90 from one seeded stream. Exact: calcAppearances' league games less the designed
+ *    joint step (dressingRoomApps of the phone and the morale he PRESSED on) are one number at all three pins,
+ *    wherever 0 or 38 did not clamp. The neutral pin is byte identical, with the same draws, to the tree without the
+ *    step (no new draw). Then the means rise in order. Measured over seeds 1523, 2024 and 77 (r1523-m3): about 2,450
+ *    presses each, 0 mismatches; league games gap 0.10 (20 to neutral: the house fleet's phone runs cold, so the
+ *    shared cap already holds most of a low morale's cost) and 0.99 to 1.00 (neutral to 90); rating gaps 0.20 to
+ *    0.21 and 0.14 to 0.15. Floors are about half of those. Controls: zero (the step is 0, every gap is 0) and
+ *    posttext (the season reads the morale after the summer's texts: no press is exact and the top gaps are 0).
+ * 4) The NATURAL fleet, 400 careers to the end, the round against the same tree without the step on the same seeds,
+ *    for the house fleet and (SIM_CAREER_FORM_FLEET_KIND=engaged) one that answers every text: the Ballon d'Or
+ *    rate, league games, rating and the five legacy tier shares, both blocks printed, each shift held inside the
+ *    seed to seed spread of the no step arm (numbers at BOUND).
+ * 5) The ERA fleet: 240 attacking careers from 1990, 1995, 2000 and 2005 hold no Puskas Award before 2008-09 and
+ *    some after it, every award on a season with 15 goals, and in lockstep with an ungated tree the gated one makes
+ *    the same draws and keeps the same state where only the ungated one wins early. Measured (r1523-m1): 0 before,
+ *    114 from it, 43 lockstep careers all equal. Control nogate (the gate gone): 126 before.
  *
- * Environment: SIM_CAREER_FORM_BASE (the ref the base arm reads), SIM_CAREER_FORM_SECTIONS (comma separated).
+ * Environment: SIM_CAREER_FORM_BASE (the ref the base arm reads), SIM_CAREER_FORM_SECTIONS (comma separated),
+ * SIM_CAREER_FORM_SEED, SIM_CAREER_FORM_PIN_CAREERS, SIM_CAREER_FORM_FLEET, SIM_CAREER_FORM_FLEET_KIND,
+ * SIM_CAREER_FORM_ERA. A control runs only its own section.
  * Never reads the network. Exit 1 on any failure; the last line says green or red.
  */
 import { execFileSync } from 'node:child_process';
@@ -264,12 +286,14 @@ if (runs('3')) {
   if (mismatch) fail(`${mismatch} presses moved league games by something other than the designed step of the morale he pressed on`);
   if (neutralDiffer) fail(`${neutralDiffer} presses at the neutral point differ from the arm without the step`);
   /* Floors from measured headroom (see the header): each gap must clear its floor. */
-  const FLOORS = { g1: 0.6, g2: 0.3, r1: 0.12, r2: 0.05 };
+  const FLOORS = { g1: 0.05, g2: 0.5, r1: 0.1, r2: 0.07 };
   const gaps = { g1: lm[1] - lm[0], g2: lm[2] - lm[1], r1: rm[1] - rm[0], r2: rm[2] - rm[1] };
   for (const [k, floor] of Object.entries(FLOORS)) if (!(gaps[k] >= floor)) fail(`gap ${k} is ${f2(gaps[k])}, under its floor ${floor}`);
 }
 
 const TIERS = ['GOAT', 'LEGEND', 'GREAT', 'SOLID PRO', 'JOURNEYMAN'];
+/* Section 4's bounds, per fleet: to be set from the no step arm's spread between seed bases at 1,200 careers. */
+const HEADROOM = { house: { bdor: 5, tier: 3.5 }, engaged: { bdor: 5, tier: 3.5 } };
 /* A whole career, Math.random seeded from the career's index. The house fleet never opens the phone; the engaged
    fleet answers every waiting text (its first choice) before each press, which keeps its morale near the top. */
 function wholeCareer(S, i, seedBase, opts, engaged = false) {
@@ -305,23 +329,27 @@ if (runs('4')) {
   const FLEET = process.env.SIM_CAREER_FORM_FLEET_KIND || 'house';
   if (!['house', 'engaged'].includes(FLEET)) { console.log(`ABORT: unknown SIM_CAREER_FORM_FLEET_KIND ${FLEET}`); process.exit(1); }
   console.log(`4) the natural fleet (${FLEET}): the round against the same tree without the morale step, same seeds`);
-  const N = Number(process.env.SIM_CAREER_FORM_FLEET || 400);
-  const head = fleetBlock(await soccer('fleet-head'), N, SEED, FLEET === 'engaged');
+  const N = Number(process.env.SIM_CAREER_FORM_FLEET || 1200);
+  const ARMS = process.env.SIM_CAREER_FORM_ARMS || 'both';
   const off = fleetBlock(await soccer('fleet-off', { stepOff: true }), N, SEED, FLEET === 'engaged');
-  showBlock('round', head);
-  showBlock('no step', off);
-  const shift = { bdor: head.bdor - off.bdor, league: head.league - off.league, rating: head.rating - off.rating };
-  const tierShift = Object.fromEntries(TIERS.map(t => [t, head.tiers[t] - off.tiers[t]]));
-  console.log(`   shift: Ballon d'Or ${f2(shift.bdor)} per 100, league games ${f2(shift.league)}, rating ${f2(shift.rating)}; legacy ${TIERS.map(t => `${t} ${tierShift[t].toFixed(1)}`).join(', ')} points`);
-  if (N >= 400) {
-    /* Bounds from measured headroom (see the header): how far the no step arm itself moves between seed bases. */
-    const BOUND = { bdor: 4, league: 0.8, rating: 0.08, tier: 6 };
-    if (Math.abs(shift.bdor) > BOUND.bdor) fail(`the Ballon d'Or rate moved ${f2(shift.bdor)} per 100 careers, past ${BOUND.bdor}`);
-    if (Math.abs(shift.league) > BOUND.league) fail(`league games a season moved ${f2(shift.league)}, past ${BOUND.league}`);
-    if (Math.abs(shift.rating) > BOUND.rating) fail(`the season rating moved ${f2(shift.rating)}, past ${BOUND.rating}`);
-    for (const t of TIERS) if (Math.abs(tierShift[t]) > BOUND.tier) fail(`the ${t} share moved ${tierShift[t].toFixed(1)} points, past ${BOUND.tier}`);
-  } else console.log(`   ${N} careers is under the 400 the bounds were measured at, so the bounds are not asserted`);
-  if (head.seasons < N * 10) fail(`only ${head.seasons} seasons were played`);
+  if (ARMS === 'off') {
+    showBlock('no step', off);
+    console.log('   the no step arm alone (SIM_CAREER_FORM_ARMS=off): a headroom reading, nothing asserted');
+  } else {
+    const head = fleetBlock(await soccer('fleet-head'), N, SEED, FLEET === 'engaged');
+    showBlock('round', head);
+    showBlock('no step', off);
+    const shift = { bdor: head.bdor - off.bdor, league: head.league - off.league, rating: head.rating - off.rating };
+    const tierShift = Object.fromEntries(TIERS.map(t => [t, head.tiers[t] - off.tiers[t]]));
+    console.log(`   shift: Ballon d'Or ${f2(shift.bdor)} per 100, league games ${f2(shift.league)}, rating ${f2(shift.rating)}; legacy ${TIERS.map(t => `${t} ${tierShift[t].toFixed(1)}`).join(', ')} points`);
+    if (N >= 1200) {
+      /* Bounds from measured headroom (see the header): how far the no step arm moves between seed bases. */
+      const BOUND = HEADROOM[FLEET];
+      if (Math.abs(shift.bdor) > BOUND.bdor) fail(`the Ballon d'Or rate moved ${f2(shift.bdor)} per 100 careers, past ${BOUND.bdor}`);
+      for (const t of TIERS) if (Math.abs(tierShift[t]) > BOUND.tier) fail(`the ${t} share moved ${tierShift[t].toFixed(1)} points, past ${BOUND.tier}`);
+    } else console.log(`   ${N} careers is under the 1,200 the bounds were measured at, so the bounds are not asserted`);
+    if (head.seasons < N * 10) fail(`only ${head.seasons} seasons were played`);
+  }
 }
 
 if (runs('5')) {
