@@ -1,0 +1,8 @@
+statmax: last: simSoccerDeck: CONTROL=statmax FIRED: section 5 failed (1 failures, red sections 5)
+onefree: last: simSoccerDeck: CONTROL=onefree FIRED: section 1 failed (1 failures, red sections 1)
+freetraining: last: simSoccerDeck: CONTROL=freetraining FIRED: section 8 failed (2 failures, red sections 8)
+noreseed: last: simSoccerDeck: CONTROL=noreseed FIRED: section 4 failed (1 failures, red sections 4)
+ceiling: last: simSoccerDeck: CONTROL=ceiling FIRED: section 5 failed (2 failures, red sections 5)
+bindopen: last: simSoccerDeck: CONTROL=bindopen FIRED: section 1 failed (25 failures, red sections 1)
+pressure: last: simSoccerDeck: CONTROL=pressure FIRED: section 8 failed (3 failures, red sections 8)
+controls (each must be 1): statmax=1 onefree=1 freetraining=1 noreseed=1 ceiling=1 bindopen=1 pressure=1
