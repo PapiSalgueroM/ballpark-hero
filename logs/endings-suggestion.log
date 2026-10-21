@@ -1,0 +1,106 @@
+CONTROL suggestion: soccerCareerEngine.ts is mutated, this run must go red
+A) six fleets of 40 careers: nothing ends a career before the age rules without the player
+  FAIL: first career 0: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 1: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 2: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 3: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 4: ended at 36 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 5: ended at 32 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 6: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 7: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 8: ended at 36 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 9: ended at 35 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 10: ended at 31 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 11: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 12: ended at 33 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 13: ended at 37 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 14: ended at 35 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 15: ended at 36 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 16: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 17: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 18: ended at 35 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 19: ended at 36 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 20: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 21: ended at 35 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 22: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 23: ended at 36 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 24: ended at 32 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 25: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 26: ended at 31 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 27: ended at 33 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 28: ended at 37 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 29: ended at 37 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 30: ended at 36 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 31: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 32: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 33: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 34: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 35: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 36: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 37: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 38: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: first career 39: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 1: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 3: ended at 31 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 4: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 6: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 8: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 9: ended at 35 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 11: ended at 32 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 12: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 13: ended at 41 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 14: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 15: ended at 32 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 16: ended at 32 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 17: ended at 34 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 19: ended at 37 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 20: ended at 36 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 21: ended at 36 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 22: ended at 36 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 23: ended at 36 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 24: ended at 36 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 25: ended at 34 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 26: ended at 35 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 27: ended at 33 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 28: ended at 36 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 29: ended at 36 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 30: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 31: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 32: ended at 37 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 34: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 35: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 36: ended at 37 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 37: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 38: ended at 33 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  FAIL: random career 39: ended at 30 on acceptRetirementSuggestion into retired (retired true, legacy false), not the ceremony and its choices
+  careers 240, alive at 26 240 (overall under 60 there 27), alive at 27 240
+  endings {"suggestion":73,"forced":127,"farewell":40}, early 0, not on the ceremony 73, stuck 0
+  shady years lived: bans 9, drug test bans 13, trials 156, prison 156
+  FAIL: every ending lands on the ceremony with its choices (73 did not)
+B) the edges at 25 and 26
+  fixtures: 25 overall 65 at Rio Ave, 26 overall 68 at Rio Ave
+  FAIL: R3 taking the suggestion is the player's own, no forced line (null)
+C) a retired flag and a phase that disagree go back to what the rest of the save says
+  the save the old Continue already wrote: retired at 26 on the retired screen, nothing behind it: base kept retired true on retired; now retired false on playing
+  a retired flag on the retired screen with nothing behind it: base kept retired true on retired; now retired false on playing
+  a stray retired screen on a youth career: base kept retired true on retired; now retired false on youth
+  a youth career on the retired screen without its flag: base kept retired false on retired; now retired false on youth
+  a chosen pundit career whose phase was lost: base kept retired true on playing; now retired true on pundit_season
+  a chosen manager career whose phase was lost: base kept retired true on playing; now retired true on manager_season
+  a chosen owner career whose phase was lost: base kept retired true on playing; now retired true on owner_season
+  a stray flag on the season summary at 26: base kept retired true on season_summary; now retired false on season_summary
+  a stray flag on Next Season at 26: base kept retired true on playing; now retired false on playing
+  a real retirement at 26 whose phase was lost: base kept retired true on season_summary; now retired true on retirement_ceremony
+  a forced retirement whose phase and legacy were lost: base kept retired true on playing; now retired true on retirement_ceremony
+  a real retirement whose flag was lost: base kept retired false on retirement_ceremony; now retired true on retirement_ceremony
+  a ceremony that lost its legacy: base kept retired true on retirement_ceremony; now retired true on retirement_ceremony
+  a chosen after career whose phase was lost: base kept retired true on playing; now retired true on retired
+  a retired screen with nothing behind it: base kept retired false on retired; now retired false on playing
+  a ceremony with nothing behind it: base kept retired false on retirement_ceremony; now retired false on playing
+  Continue on a stray flag at 26: base went to retired (retired true), now ballon_dor (retired false)
+  consistent saves 17 (committed fixtures 7, of which inconsistent 0), moved by the repair 0
+D) every fleet career is byte for byte the base engine's
+  base bc79b526: 240 careers, 73 differ from this tree
+  FAIL: the fleets match the base byte for byte (73 differ)
+
+FAIL: 76 check(s) failed

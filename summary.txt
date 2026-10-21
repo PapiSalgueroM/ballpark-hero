@@ -1,0 +1,19 @@
+vitest exit=0 14s |    Duration  12.61s (transform 4.87s, setup 251ms, collect 8.11s, tests 12.04s, environment 1.26s, prepare 574ms)
+endings-early exit=1 69s | FAIL: 249 check(s) failed
+tsc exit=0 100s | 
+endings exit=0 100s | PASS: no career ends before the age rules without the player, and the pair is reconciled
+endings-noreconcile exit=1 90s | FAIL: 17 check(s) failed
+endings-summary exit=1 82s | FAIL: 2 check(s) failed
+endings-noreason exit=1 97s | FAIL: 3 check(s) failed
+endings-aftermath exit=1 84s | FAIL: 4 check(s) failed
+endings-manual exit=1 90s | FAIL: 49 check(s) failed
+endings-suggestion exit=1 93s | FAIL: 76 check(s) failed
+endings-young exit=1 91s | FAIL: 49 check(s) failed
+endings-farewell exit=1 97s | FAIL: 42 check(s) failed
+endings-farewell26 exit=1 83s | FAIL: 1 check(s) failed
+endings-ban exit=1 76s | FAIL: 12 check(s) failed
+endings-prison exit=1 86s | FAIL: 50 check(s) failed
+endings-notail exit=1 100s | FAIL: 3 check(s) failed
+endings-bogus exit=1 1s | ABORT: SC_ENDINGS_CONTROL=bogus is not a control (early, noreconcile, summary, noreason, aftermath, manual, suggestion, young, farewell, farewell26, ban, prison, notail, 
+endings-youth exit=1 78s | FAIL: 2 check(s) failed
+endings-ovr50 exit=1 66s | FAIL: 2 check(s) failed

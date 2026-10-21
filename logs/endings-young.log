@@ -1,0 +1,79 @@
+CONTROL young: soccerCareerEngine.ts is mutated, this run must go red
+A) six fleets of 40 careers: nothing ends a career before the age rules without the player
+  FAIL: first career 0: ended at 25 (overall 59) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 1: ended at 25 (overall 53) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 2: ended at 25 (overall 57) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 3: ended at 25 (overall 53) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 4: ended at 26 (overall 66) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 5: ended at 25 (overall 64) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 6: ended at 25 (overall 67) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 7: ended at 25 (overall 62) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 8: ended at 25 (overall 66) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 9: ended at 25 (overall 68) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 10: ended at 25 (overall 65) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 11: ended at 25 (overall 67) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 13: ended at 25 (overall 72) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 14: ended at 25 (overall 72) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 15: ended at 25 (overall 70) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 17: ended at 25 (overall 69) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 21: ended at 25 (overall 74) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 23: ended at 25 (overall 74) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 25: ended at 25 (overall 72) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 26: ended at 26 (overall 75) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 30: ended at 25 (overall 59) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 31: ended at 25 (overall 52) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 32: ended at 25 (overall 59) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 33: ended at 25 (overall 61) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 34: ended at 25 (overall 57) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 35: ended at 25 (overall 61) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 36: ended at 25 (overall 60) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 37: ended at 26 (overall 66) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 38: ended at 25 (overall 66) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: first career 39: ended at 25 (overall 67) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: random career 0: ended at 25 (overall 57) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: random career 2: ended at 25 (overall 61) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: random career 7: ended at 25 (overall 65) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: random career 10: ended at 25 (overall 69) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: random career 11: ended at 25 (overall 70) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: random career 13: ended at 25 (overall 75) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: random career 14: ended at 25 (overall 72) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: random career 16: ended at 25 (overall 72) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: random career 17: ended at 29 (overall 75) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: random career 23: ended at 25 (overall 73) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: random career 26: ended at 25 (overall 73) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: random career 33: ended at 25 (overall 64) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: random career 34: ended at 25 (overall 55) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: random career 38: ended at 25 (overall 62) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  FAIL: random career 39: ended at 26 (overall 62) on acceptRetirementSuggestion from retirement_suggestion, phase retirement_ceremony
+  careers 240, alive at 26 200 (overall under 60 there 25), alive at 27 196
+  endings {"early":45,"suggestion":27,"forced":128,"farewell":40}, early 45, not on the ceremony 0, stuck 0
+  shady years lived: bans 9, drug test bans 11, trials 157, prison 157
+  FAIL: every career is alive at 26 (200 of 240)
+  FAIL: no career ends early (45)
+  FAIL: the fleets reach suggestions taken: 27, floor 32
+B) the edges at 25 and 26
+  fixtures: 25 overall 65 at Rio Ave, 26 overall 68 at Rio Ave
+C) a retired flag and a phase that disagree go back to what the rest of the save says
+  the save the old Continue already wrote: retired at 26 on the retired screen, nothing behind it: base kept retired true on retired; now retired false on playing
+  a retired flag on the retired screen with nothing behind it: base kept retired true on retired; now retired false on playing
+  a stray retired screen on a youth career: base kept retired true on retired; now retired false on youth
+  a youth career on the retired screen without its flag: base kept retired false on retired; now retired false on youth
+  a chosen pundit career whose phase was lost: base kept retired true on playing; now retired true on pundit_season
+  a chosen manager career whose phase was lost: base kept retired true on playing; now retired true on manager_season
+  a chosen owner career whose phase was lost: base kept retired true on playing; now retired true on owner_season
+  a stray flag on the season summary at 26: base kept retired true on season_summary; now retired false on season_summary
+  a stray flag on Next Season at 26: base kept retired true on playing; now retired false on playing
+  a real retirement at 26 whose phase was lost: base kept retired true on season_summary; now retired true on retirement_ceremony
+  a forced retirement whose phase and legacy were lost: base kept retired true on playing; now retired true on retirement_ceremony
+  a real retirement whose flag was lost: base kept retired false on retirement_ceremony; now retired true on retirement_ceremony
+  a ceremony that lost its legacy: base kept retired true on retirement_ceremony; now retired true on retirement_ceremony
+  a chosen after career whose phase was lost: base kept retired true on playing; now retired true on retired
+  a retired screen with nothing behind it: base kept retired false on retired; now retired false on playing
+  a ceremony with nothing behind it: base kept retired false on retirement_ceremony; now retired false on playing
+  Continue on a stray flag at 26: base went to retired (retired true), now ballon_dor (retired false)
+  consistent saves 17 (committed fixtures 7, of which inconsistent 0), moved by the repair 0
+D) every fleet career is byte for byte the base engine's
+  base bc79b526: 240 careers, 196 differ from this tree
+  FAIL: the fleets match the base byte for byte (196 differ)
+
+FAIL: 49 check(s) failed
