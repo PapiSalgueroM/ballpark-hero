@@ -168,6 +168,19 @@ const RECORD = process.env.SIM_NBA_EARNED_DRAFT_RECORD || '';
 const FLEET = process.env.SIM_NBA_EARNED_DRAFT_FLEET || 'quick';
 const COMBINE = process.env.SIM_NBA_EARNED_DRAFT_COMBINE || '';
 const OUT = process.env.SIM_NBA_EARNED_DRAFT_OUT || '';
+/* The fleet's arms (FLEET=full): old (today's draft), new (the earned draft through the libraries), arb (the earned
+   draft with a forced swap of firsts on opening day, a CEILING). Under a control only the new arm is worth playing. */
+const ARMS = (process.env.SIM_NBA_EARNED_DRAFT_ARMS || (CONTROL ? 'new' : 'old,new')).split(',').filter(Boolean);
+/* A label for the files of the non old arms: the control's name, or a tuning variant's own tag. */
+const TAG = process.env.SIM_NBA_EARNED_DRAFT_TAG || CONTROL || '';
+/* A tuning variant, applied to the bundle and never on disk: JSON with any of
+   { "curve": [[from, to, lo, hi], [..], [..]], "second": true|false, "late": { "from": n, "cap": n } | null }. */
+const TUNE = process.env.SIM_NBA_EARNED_DRAFT_TUNE || '';
+/* COMBINE: the arm label held against the old arm (new, new-<tag>, arb). */
+const VS = process.env.SIM_NBA_EARNED_DRAFT_VS || 'new';
+/* A PROBE only (a builder's smoke run of the fleet code): this many seeds a set and the quick walk. A set is then
+   short of 60 careers and section 7 says so, so a probe can never pass for a fleet. */
+const PROBE = Number(process.env.SIM_NBA_EARNED_DRAFT_PROBE_SEEDS || 0);
 
 /* A crash is not a result: without this a throw exits 1, which is what a control that fired exits with. */
 for (const event of ['uncaughtException', 'unhandledRejection']) {
@@ -184,11 +197,12 @@ const SECTION_NAMES = {
   2: 'the lottery through the bind: the sixteen off the numbers, drawn every season, the table\'s chances',
   3: 'the slot is the truth: every pick used once by its holder at its first owner\'s place',
   4: 'drawn once: the block survives a round trip, every press, a second open and a swapped table',
+  5: 'the incentive: the worse the finish, the earlier and the better his first selection',
   6: 'the class: today\'s twelve, then the curve, slots plus four, never over 70',
   8: 'the fallback: a block broken mid draft finishes the old way on a valid league',
   9: 'need: a club short at a position leans to it, and never past a better read by more than the weight',
   10: 'the shared half names no sport; neither library draws from Math.random or carries an address',
-  7: 'the table: the old arm on the fleet (FLEET=full only)',
+  7: 'the table: the old and new arms on the fleet, and the stop lines (FLEET=full plays, COMBINE judges)',
 };
 
 /* control -> { expect: the sections that must go red, swaps: { file key: [[from, to]] } } */
@@ -206,11 +220,16 @@ const CONTROLS = {
   flatodds: { expect: [2], swaps: { bind: [['  return buildDraftOrder(season, rules, nbaGamePickRules(), key ?? draftSeasonKey(season, rules.id));',
     '  return buildDraftOrder(season, rules, { ...nbaGamePickRules(), lottery: { ...nbaGamePickRules().lottery!, odds: nbaGamePickRules().lottery!.odds.map(() => 100 / 14) } }, key ?? draftSeasonKey(season, rules.id));']] } },
   /* a play-in game counts as making the playoffs, so no season is drawn and no night opens */
-  playinmade: { expect: [2, 3, 4, 8, 9], swaps: { bind: [['    if (s && (s.homeWins === 4 || s.awayWins === 4)) { made.add(s.home); made.add(s.away); }',
+  playinmade: { expect: [2, 3, 4, 5, 8, 9], swaps: { bind: [['    if (s && (s.homeWins === 4 || s.awayWins === 4)) { made.add(s.home); made.add(s.away); }',
     '    if (s && (s.homeWins >= 1 || s.awayWins >= 1)) { made.add(s.home); made.add(s.away); }']] } },
   /* his slots put first: the night is drawn on a season where his club had the worst record */
-  gmfirst: { expect: [3], swaps: { bind: [['  const season = nbaDraftSeason(league, series);\n  const order = season ? nbaDraftOrder(season) : null;',
+  gmfirst: { expect: [3, 5], swaps: { bind: [['  const season = nbaDraftSeason(league, series);\n  const order = season ? nbaDraftOrder(season) : null;',
     '  const real = nbaDraftSeason(league, series);\n  const season = real && { ...real, rows: real.rows.map(r => (r.id === me ? { ...r, wins: 0, losses: 82 } : r)) };\n  const order = season ? nbaDraftOrder(season) : null;']] } },
+  /* the order drawn best record first: every club's wins and losses swapped before the order is built, so within the
+     lottery and within the sixteen the better club picks first (the brief's `bestfirst`, rivals in reverse order) and
+     the night still validates */
+  bestfirst: { expect: [3, 5], swaps: { bind: [['  const season = nbaDraftSeason(league, series);\n  const order = season ? nbaDraftOrder(season) : null;',
+    '  const real = nbaDraftSeason(league, series);\n  const season = real && { ...real, rows: real.rows.map(r => ({ ...r, wins: r.losses, losses: r.wins })) };\n  const order = season ? nbaDraftOrder(season) : null;']] } },
   /* every slot used by its first owner, whoever holds the pick */
   origholder: { expect: [3], swaps: { bind: [['draftSlots(order, nbaPicksOf(desk, league), league.season, 2)', 'draftSlots(order, nbaPicksOf(desk, league), league.season, 2).map(s => ({ ...s, holder: s.orig }))']] } },
   /* a class four short of the picks instead of four over */
@@ -298,6 +317,36 @@ if (CONTROL) {
       src = next;
     }
     overrides.set(keyOf(path.join(ROOT, FILES[which])), src);
+  }
+}
+/* TUNING (step (d)): a variant of the curve and the two knobs, in the bundle only. Each edit must change the source. */
+let tune = null;
+if (TUNE) {
+  try { tune = JSON.parse(TUNE); } catch { cannotRun('SIM_NBA_EARNED_DRAFT_TUNE is not JSON'); }
+  if (!TAG) cannotRun('a tuning variant needs SIM_NBA_EARNED_DRAFT_TAG, so its files cannot pass for the new arm');
+  const edit = (which, fn) => {
+    const k = keyOf(path.join(ROOT, FILES[which]));
+    const src = overrides.get(k) ?? fs.readFileSync(path.join(ROOT, FILES[which]), 'utf8').replaceAll('\r\n', '\n');
+    const next = fn(src);
+    if (next === src) cannotRun(`the tune changed nothing in ${FILES[which]}`);
+    overrides.set(k, next);
+  };
+  if (tune.curve) {
+    edit('engine', src => {
+      const re = /(export const NBA_EARNED_CLASS_CURVE[^=]*= \[\n)([\s\S]*?)(\n\];)/;
+      if (!re.test(src)) cannotRun('the engine holds no curve to tune');
+      return src.replace(re, (_, head, _body, tail) => `${head}${tune.curve.map(([f, to, lo, hi]) => `  { from: ${f}, to: ${to}, ovr: [${lo}, ${hi}] },`).join('\n')}${tail}`);
+    });
+  }
+  if ('second' in tune || 'late' in tune) {
+    edit('bind', src => {
+      const re = /  rivalSecondOnMin: (true|false),\n  latePot: [^\n]*,\n/;
+      const m = src.match(re);
+      if (!m) cannotRun('the library holds no knobs to tune');
+      const second = 'second' in tune ? !!tune.second : m[1] === 'true';
+      const late = 'late' in tune ? (tune.late ? `{ from: ${tune.late.from}, cap: ${tune.late.cap} }` : 'null') : m[0].split('latePot: ')[1].split(',\n')[0];
+      return src.replace(re, `  rivalSecondOnMin: ${second},\n  latePot: ${late},\n`);
+    });
   }
 }
 /* RECORDING: every src file the bundle reads comes from the base commit, so the fixture is the base's own season. */
@@ -564,9 +613,9 @@ open(6);
    picks change hands (one club gives both of its picks to another, so a club holds none and one holds four, and
    two to four more move, his among them half the time). The GM continues, takes the best man on his scout's read
    at each of his slots and lets the draft run on; the desk's summer follows. */
-const WALK_SEEDS = FLEET === 'full' ? 30 : 10;
+const WALK_SEEDS = FLEET === 'full' && !PROBE ? 30 : 10;
 const WALK_SEASONS = 3;
-const LOTTERIES = FLEET === 'full' ? 40000 : 10000;
+const LOTTERIES = FLEET === 'full' && !PROBE ? 40000 : 10000;
 /* The need weight, PINNED here as a number and never read off the engine (review 2026-10-12: a bound read from
    E.NBA_DRAFT_NEED_WEIGHT grew with it, so a weight of 20 stayed green). A5: need is flavour and only splits men
    whose reads are within a few points; the engine's 2 is that number. A tuned weight is a change to this line
@@ -576,6 +625,8 @@ const Q = { 2: [], 3: [], 4: [], 8: [] };
 const W = { seasons: 0, drawn: 0, tieFree: 0, drafts: 0, opened: 0, moved: 0, mineMoved: 0, three: 0, none: 0, clocks: 0, steps: 0, rivalRows: 0, swaps: 0, breaks: 0, fallbacks: 0, reopens: 0 };
 const seasonsForLotteries = [];
 const needRows = [];
+/* Section 5's closed seasons, as they stood before any pick moved. */
+const incSeasons = [];
 const shareOf = t => (t.wins + t.losses > 0 ? t.wins / (t.wins + t.losses) : 0.5);
 /* The harness's own reading of the playoff sixteen: the first round's series, by name. The bind reads numbers. */
 const firstRoundClubs = series => { const s = new Set(); for (const x of series) if (/ R1$/.test(x.name)) { s.add(x.home); s.add(x.away); } return s; };
@@ -821,6 +872,7 @@ for (let seed = 1; seed <= WALK_SEEDS; seed += 1) {
     const closedSeason = seasonToDraft(M, lg, team, desk, rng);
     desk = closedSeason.desk;
     checkSeason(lg, closedSeason.series, where);
+    incSeasons.push({ league: J(lg), series: closedSeason.series, where });
     desk = movePicksBeforeDraft(lg, team, desk, mulberry32(71000 + seed * 10 + s));
     const done = walkDraft(lg, team, rng, desk, closedSeason.series, where, s === 1);
     desk = done ? done.desk : oldDraft(M, lg, team, rng, desk).desk;
@@ -875,6 +927,82 @@ open(4);
   for (const p of Q[4]) fail(p);
   check(W.opened > 0 && W.swaps > 0 && W.reopens > 0, `${W.opened} nights opened, ${W.swaps} tables swapped, ${W.reopens} opened again mid draft`);
   console.log(`   ${W.opened} nights: each opened twice to the same block, read back after a JSON round trip, unchanged by every press; ${W.reopens} opened again after Continue and answered as they stood; ${W.swaps} drafts replayed with the table swapped under the block`);
+}
+
+open(5);
+{
+  /* THE INCENTIVE, on every closed season of the walk as it stood before any pick moved: each of the thirty clubs in
+     turn is the GM, on a fresh desk (his own two picks), through the libraries' own presses: the night opens, the
+     class is drawn, Continue runs every club ahead of him, and his first selection is the best man left on his
+     scout's read at his first slot. By band of five places in the season's finish, worst first, its overall number
+     rises at every band and its true rating falls at every band. Beside it, the OLD arm: the same club in today's
+     draft picks first from a class of 24 or more on the same read, so its line is flat. In a loaded copy of the
+     bundle of its own, so the walk's ids are untouched. Floors in MEASURED: 70 percent of the smallest step. */
+  const X = freshCopy(55555);
+  const t0 = Date.now();
+  const NB = 6;
+  const blank = () => Array.from({ length: NB }, () => ({ n: 0, overall: 0, trueOvr: 0 }));
+  const NEW = blank();
+  const OLD = blank();
+  let nights = 0;
+  let refused = 0;
+  const bySeason = [];
+  incSeasons.forEach(({ league, series }, si) => {
+    const base = JSON.parse(league);
+    X.E.nbaStandings(base).map(t => t.abbr).reverse().forEach((club, fi) => {
+      const band = Math.floor(fi / 5);
+      /* One class a season for all thirty clubs (common draws), so a band's step compares men of the same class. */
+      const key = 50000 + si * 64;
+      const l = JSON.parse(league);
+      const opened = X.N.openNbaDraftNight(X.D.openNbaDesk(l, club), l, series, club);
+      if (!opened || !opened.night.slots.some(s => s.holder === club)) { refused += 1; return; }
+      const level = X.S.gmStaffLevel(X.D.nbaStaffOf(opened.desk, l, club).block, 'scouting');
+      const read = p => X.D.nbaScoutRead(p, club, l.season, level);
+      const best = list => [...list].sort((a, b) => read(b) - read(a) || (a.id < b.id ? -1 : 1))[0];
+      const cls = X.E.nbaEarnedDraftClass(mulberry32(key), opened.night.slots.length, X.leagueNames(l));
+      const res = X.N.nbaDraftContinue(l, opened.desk, club, cls, mulberry32(key + 1));
+      if (!res || !res.onClock || res.onClock.holder !== club || !best(res.left)) { refused += 1; return; }
+      nights += 1;
+      NEW[band].n += 1;
+      NEW[band].overall += res.onClock.overall;
+      NEW[band].trueOvr += best(res.left).trueOvr;
+      if (!bySeason[si]) bySeason[si] = blank();
+      bySeason[si][band].n += 1;
+      bySeason[si][band].trueOvr += best(res.left).trueOvr;
+      const o = JSON.parse(league);
+      const capital = X.E.nbaDraftCapital(o.teams[club]) ?? 0;
+      const rivals = Object.values(o.teams).filter(t => t.abbr !== club).reduce((s, t) => s + (X.E.nbaDraftCapital(t) ?? 0), 0);
+      OLD[band].n += 1;
+      OLD[band].overall += 1;
+      OLD[band].trueOvr += best(X.E.nbaDraftClass(mulberry32(key + 2), Math.max(24, capital + Math.min(10, rivals)), X.leagueNames(o))).trueOvr;
+    });
+  });
+  const per = (b, k) => (b.n ? b[k] / b.n : NaN);
+  const rise = [];
+  const fall = [];
+  for (let b = 1; b < NB; b += 1) {
+    rise.push(per(NEW[b], 'overall') - per(NEW[b - 1], 'overall'));
+    fall.push(per(NEW[b - 1], 'trueOvr') - per(NEW[b], 'trueOvr'));
+  }
+  check(incSeasons.length > 0 && nights > 0 && NEW.every(b => b.n > 0), `${nights} nights over ${incSeasons.length} seasons, by band ${NEW.map(b => b.n).join(', ')}`);
+  check(refused === 0, `${refused} of ${refused + nights} nights did not open or never put the club on the clock`);
+  /* 70 percent of the smallest step measured on the quick walk (MEASURED 2026-10-21: 3.37 places and 1.27 rating);
+     the house rule of simNbaGmDesk. A tuned curve is remeasured here and the floors move with it. */
+  const RISE_FLOOR = 2.36;
+  const FALL_FLOOR = 0.89;
+  rise.forEach((d, b) => check(d > RISE_FLOOR, `his first selection does not come later from finish ${b * 5 + 1}-${b * 5 + 5} to ${b * 5 + 6}-${b * 5 + 10} (${Number.isFinite(d) ? d.toFixed(2) : d} places, floor ${RISE_FLOOR})`));
+  fall.forEach((d, b) => check(d > FALL_FLOOR, `his first selection is not worse from finish ${b * 5 + 1}-${b * 5 + 5} to ${b * 5 + 6}-${b * 5 + 10} (${Number.isFinite(d) ? d.toFixed(2) : d} rating, floor ${FALL_FLOOR})`));
+  const row = list => list.map((b, i) => `${i * 5 + 1}-${i * 5 + 5}: #${per(b, 'overall').toFixed(1)} ${per(b, 'trueOvr').toFixed(1)}`).join(', ');
+  console.log(`   ${nights} nights over ${incSeasons.length} seasons (${NEW[0].n} a band), each club the GM once a season, in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  console.log(`   new, by finish worst first, his first selection's pick and true rating: ${row(NEW)}`);
+  console.log(`   old, the same clubs today: ${row(OLD)}`);
+  /* The error of each rating step, the seasons as replicates (each season one class for all thirty clubs). */
+  const stepSe = fall.map((_, b) => {
+    const v = bySeason.filter(x => x && x[b].n && x[b + 1].n).map(x => x[b].trueOvr / x[b].n - x[b + 1].trueOvr / x[b + 1].n);
+    const m = v.reduce((a, c) => a + c, 0) / v.length;
+    return Math.sqrt(v.reduce((a, c) => a + (c - m) ** 2, 0) / (v.length - 1) / v.length);
+  });
+  console.log(`   new steps: later by ${rise.map(d => d.toFixed(2)).join(', ')} places; worse by ${fall.map(d => d.toFixed(2)).join(', ')} rating (errors ${stepSe.map(d => d.toFixed(2)).join(', ')})`);
 }
 
 open(8);
@@ -1006,7 +1134,51 @@ function oldDraftWith(X, lg, team, rng, desk, drawn) {
   return { desk, first, signed: taken };
 }
 
-const ARM_DRAFT = { old: oldDraft };
+/** The earned draft as the board will play it in part B, through the libraries' own presses: the night opens, the
+    class is drawn, Continue, then his pick of the best man on his scout's read at each of his slots (the staff's
+    press when a pick is refused) until the run is done. `fell` when no night opened: the old draft then ran. */
+function newDraft(X, lg, team, rng, desk, series) {
+  const opened = X.N.openNbaDraftNight(desk, lg, series, team);
+  if (!opened) return { ...oldDraft(X, lg, team, rng, desk), fell: true };
+  desk = opened.desk;
+  const level = X.S.gmStaffLevel(X.D.nbaStaffOf(desk, lg, team).block, 'scouting');
+  const read = p => X.D.nbaScoutRead(p, team, lg.season, level);
+  let cls = X.E.nbaEarnedDraftClass(rng, opened.night.slots.length, X.leagueNames(lg));
+  const trueOf = new Map(cls.map(p => [p.name, p.trueOvr]));
+  let first = null;
+  let signed = 0;
+  let res = X.N.nbaDraftContinue(lg, desk, team, cls, rng);
+  for (let guard = 0; res && guard < 200; guard += 1) {
+    signed += res.steps.length;
+    for (const st of res.steps) if (st.mine && !first) first = { overall: st.overall, trueOvr: trueOf.get(st.playerName) };
+    desk = res.desk;
+    cls = res.left;
+    if (res.done) break;
+    const best = [...cls].sort((a, b) => read(b) - read(a) || (a.id < b.id ? -1 : 1))[0];
+    res = (best && X.N.nbaDraftPick(lg, desk, team, cls, best.id, rng)) || X.N.nbaDraftByStaff(lg, desk, team, cls, rng);
+  }
+  return { desk, first, signed, stuck: !res || !res.done };
+}
+
+/** The arbitrage arm (critic 25, advice 24): on opening day his first of this season's draft and the first of the
+    club of lowest nbaStrength change hands, FORCED (movePicks then syncNbaPicks, no club asked), so what it buys is a
+    CEILING on what a pick trade could buy, never a price. No swap when his club is the weakest. */
+function arbSwap(X, lg, team, desk) {
+  const weakest = Object.keys(lg.teams).sort((a, b) => X.E.nbaStrength(lg.teams[a]) - X.E.nbaStrength(lg.teams[b]) || (a < b ? -1 : 1))[0];
+  if (weakest === team) return { desk, swapped: false };
+  let ledger = X.D.nbaPicksOf(desk, lg);
+  const firstOf = c => ledger.picks.find(p => p.year === lg.season && p.round === 1 && p.holder === c);
+  const mine = firstOf(team);
+  const theirs = firstOf(weakest);
+  if (!mine || !theirs) return { desk, swapped: false };
+  ledger = X.P.movePicks(ledger, [X.P.pickKey(mine)], weakest);
+  ledger = X.P.movePicks(ledger, [X.P.pickKey(theirs)], team);
+  X.D.syncNbaPicks(lg, ledger);
+  return { desk: X.GD.withGmBlock(desk, X.D.NBA_DESK_KEYS.picks, ledger), swapped: true };
+}
+
+const ARM_DRAFT = { old: oldDraft, new: newDraft, arb: newDraft };
+const labelOf = arm => (arm === 'old' ? 'old' : TAG ? `${arm}-${TAG}` : arm);
 
 /** One career: ten seasons, a draft after each, the desk's summer after each but the last. */
 function career(arm, set, seed, ci, club, tier) {
@@ -1016,13 +1188,24 @@ function career(arm, set, seed, ci, club, tier) {
   const rng = mulberry32(key);
   const lg = X.E.initNbaLeague(rng, X.NBA_OPENING_RATINGS);
   let desk = X.D.openNbaDesk(lg, club);
-  const rec = { arm, run: RUN, set, seed, club, tier, at: {}, seasons: [] };
+  const rec = { arm, label: labelOf(arm), run: RUN, set, seed, club, tier, at: {}, pool10: {}, swaps: 0, seasons: [] };
   for (let s = 1; s <= SEASONS; s += 1) {
+    if (arm === 'arb') {
+      const sw = arbSwap(X, lg, club, desk);
+      desk = sw.desk;
+      if (sw.swapped) rec.swaps += 1;
+    }
     const out = seasonToDraft(X, lg, club, desk, rng, l => {
+      /* critic 23b: the mean rating of the free agent pool's best ten at tip off, every season. */
+      const pool = [...l.freeAgents].map(p => p.ovr).sort((a, b) => b - a).slice(0, 10);
+      rec.pool10[s] = pool.length ? pool.reduce((a, b) => a + b, 0) / pool.length : null;
       if (s !== 5 && s !== 10) return;
       const teams = Object.values(l.teams);
+      const str = teams.map(t => X.E.nbaStrength(t));
+      const m = str.reduce((a, b) => a + b, 0) / str.length;
       rec.at[s] = {
-        strength: teams.reduce((sum, t) => sum + X.E.nbaStrength(t), 0) / teams.length,
+        strength: m,
+        spread: Math.sqrt(str.reduce((a, b) => a + (b - m) ** 2, 0) / (str.length - 1)),
         stars: teams.reduce((sum, t) => sum + t.players.filter(p => p.ovr >= 85).length, 0),
       };
     });
@@ -1034,11 +1217,19 @@ function career(arm, set, seed, ci, club, tier) {
       finish: worstFirst.indexOf(club) + 1,
       dead: Object.values(lg.teams).filter(t => t.abbr !== club).reduce((sum, t) => sum + X.deadCapUsed(t), 0),
       payers: out.taxes.filter(x => x.bill > 0).length,
+      /* critic 23a: his own dead money (the fleet's GM waives only at tip off, the weakest men, mostly draftees). */
+      myDead: X.deadCapUsed(lg.teams[club]),
+      /* every club's wins and whether it made the sixteen, in CLUBS order, for the bottom three's climb */
+      w: CLUBS.map(c => lg.teams[c].wins),
+      g: lg.teams[club].wins + lg.teams[club].losses,
+      m: CLUBS.map(c => (sixteen.has(c) ? '1' : '0')).join(''),
     };
-    const d = ARM_DRAFT[arm](X, lg, club, rng, desk);
+    const d = ARM_DRAFT[arm](X, lg, club, rng, desk, out.series);
     desk = d.desk;
     row.first = d.first;
     row.signed = d.signed;
+    if (d.fell) row.fell = true;
+    if (d.stuck) row.stuck = true;
     rec.seasons.push(row);
     if (s < SEASONS) {
       const summer = X.D.nbaDeskOffseason(lg, desk, club, rng);
@@ -1052,12 +1243,25 @@ function career(arm, set, seed, ci, club, tier) {
 const mean = a => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : NaN);
 const sdOf = a => { if (a.length < 2) return NaN; const m = mean(a); return Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length - 1)); };
 const fix = (v, d = 2) => (Number.isFinite(v) ? v.toFixed(d) : 'n/a');
-/* The stop lines' margins, in each outcome's own unit (decision 2 of the brief): S3 and S4 in points of a rate. */
-const MARGIN = { S3: 10, S4: 5 };
+/* The step (a) margins, the fleet rule's own (S3 and S4 in points of a rate), used only to size the fleet. */
+const MARGIN = { S3: 10, S4: 10 };
+/* THE STOP LINES, in each outcome's own unit, fixed before the new arm was measured: the brief's decision 2 as the
+   lead ruled it on 2026-10-13 (dukb-handoff/2026-10-10/briefs/lead-rulings-1319-1320-1321.md): S4 is the two
+   strongest starts' PLAYOFF seasons, their title share printed and never asserted; S6 is absolute bands. `two` is
+   |new - old| <= margin, `under` is new - old >= -margin, `abs` is the new arm's own mean under the margin. */
+const LINES = [
+  { id: 'S1 at 5', get: L => L.S1at5, kind: 'two', margin: () => 0.5, d: 2, what: 'mean nbaStrength of the 30 clubs, season 5 tip off' },
+  { id: 'S1 at 10', get: L => L.S1at10, kind: 'two', margin: () => 0.5, d: 2, what: 'mean nbaStrength of the 30 clubs, season 10 tip off' },
+  { id: 'S2', get: L => L.S2, kind: 'two', margin: old => 0.2 * old, d: 1, what: 'men rated 85 or more, season 10 tip off (20 percent of the old arm)' },
+  { id: 'S3', get: L => L.S3.rate, kind: 'under', margin: () => 10, d: 1, what: "two weakest starts' playoff seasons, seasons 2 to 5, per season" },
+  { id: 'S4', get: L => L.S4.rate, kind: 'under', margin: () => 10, d: 1, what: "two strongest starts' playoff seasons, seasons 2 to 10, per season" },
+  { id: 'S6 dead', get: L => L.S6dead, kind: 'abs', margin: () => 1.0, d: 2, what: 'CPU dead money a season ($M), seasons 2 to 10, under 1.0' },
+  { id: 'S6 payers', get: L => L.S6payers, kind: 'two', margin: () => 0.5, d: 2, what: 'tax payers a season, seasons 2 to 10' },
+];
 
-/** One seed set's lines. S3 is playoff seasons over seasons 2 to 5 of the two weakest starts and S4 titles over
-    seasons 2 to 10 of the two strongest, per season: season 1 is played before any draft and is the same in both
-    arms. S6 is seasons 2 to 10 for the same reason. n is printed beside every rate. */
+/** One seed set's lines. S3 is playoff seasons over seasons 2 to 5 of the two weakest starts and S4 playoff seasons
+    over seasons 2 to 10 of the two strongest, per season: season 1 is played before any draft and is the same in
+    both arms. S6 is seasons 2 to 10 for the same reason. n is printed beside every rate. */
 function setLines(careers) {
   const rows = (tier, from, to) => careers.filter(c => !tier || c.tier === tier).flatMap(c => c.seasons.filter(r => r.s >= from && r.s <= to));
   const rate = (list, key) => ({ n: list.length, rate: list.length ? (100 * list.filter(r => r[key]).length) / list.length : NaN });
@@ -1066,8 +1270,27 @@ function setLines(careers) {
   const tiers = {};
   for (const t of ['strong', 'middle', 'weak']) {
     const list = rows(t, 1, SEASONS);
-    tiers[t] = { playoffs: rate(list, 'made'), titles: rate(list, 'title'), wins: mean(list.map(r => r.wins)) };
+    const drafted = rows(t, 1, SEASONS).filter(r => r.first);
+    tiers[t] = { playoffs: rate(list, 'made'), titles: rate(list, 'title'), wins: mean(list.map(r => r.wins)), pick: mean(drafted.map(r => r.first.overall)), pickTrue: mean(drafted.map(r => r.first.trueOvr)) };
   }
+  /* The bottom three of every season but the last three: in the sixteen within three seasons, and the change in win
+     share after three (critic 22's climb). */
+  let b3 = 0;
+  let b3made = 0;
+  let b3delta = 0;
+  for (const c of careers) {
+    for (let i = 0; i + 3 < c.seasons.length; i += 1) {
+      const r = c.seasons[i];
+      if (!r.w || !r.g) continue;
+      const low = r.w.map((w, k) => [w, k]).sort((a, b) => a[0] - b[0] || a[1] - b[1]).slice(0, 3).map(x => x[1]);
+      for (const k of low) {
+        b3 += 1;
+        if ([1, 2, 3].some(j => c.seasons[i + j].m[k] === '1')) b3made += 1;
+        b3delta += (c.seasons[i + 3].w[k] - r.w[k]) / r.g;
+      }
+    }
+  }
+  const at = (s, key) => mean(careers.map(c => c.at[s]?.[key]).filter(Number.isFinite));
   const bands = [];
   for (let b = 1; b <= 6; b += 1) {
     const list = all.filter(r => r.first && Math.ceil(r.finish / 5) === b);
@@ -1079,12 +1302,21 @@ function setLines(careers) {
     S1at10: mean(careers.map(c => c.at[10]?.strength).filter(Number.isFinite)),
     S2: mean(careers.map(c => c.at[10]?.stars).filter(Number.isFinite)),
     S3: rate(rows('weak', 2, 5), 'made'),
-    S4: rate(rows('strong', 2, SEASONS), 'title'),
+    S4: rate(rows('strong', 2, SEASONS), 'made'),
+    S4titles: rate(rows('strong', 2, SEASONS), 'title'),
     S5: bands,
     S6dead: mean(late.map(r => r.dead)),
     S6payers: mean(late.map(r => r.payers)),
     tiers,
     signed: mean(all.map(r => r.signed)),
+    spread5: at(5, 'spread'),
+    spread10: at(10, 'spread'),
+    pool10: mean(careers.flatMap(c => Object.entries(c.pool10 ?? {}).filter(([s, v]) => Number(s) >= 2 && Number.isFinite(v)).map(([, v]) => v))),
+    myDead: mean(late.map(r => r.myDead).filter(Number.isFinite)),
+    b3: { n: b3, made: b3 ? (100 * b3made) / b3 : NaN, delta: b3 ? (100 * b3delta) / b3 : NaN },
+    swaps: careers.reduce((s, c) => s + (c.swaps ?? 0), 0),
+    fell: all.filter(r => r.fell).length,
+    stuck: all.filter(r => r.stuck).length,
   };
 }
 
@@ -1096,15 +1328,99 @@ function fleetFor(sd, margin) {
   return k;
 }
 
+/* A COMBINE held against a control's own new arm (new-fatclass, new-bestfirst): it must land OUTSIDE a line. */
+const FLEET_CONTROL = COMBINE && VS.startsWith('new-') && CONTROLS[VS.slice(4)] ? VS.slice(4) : '';
+const fleetMisses = [];
+
+/** THE TWO ARM TABLE AND ITS STOP LINES (COMBINE only). For every line and every run, the per set differences of
+    the arm VS minus the old arm on the same sets are the replicates: the pooled difference is their mean and its
+    error their sd over root k (correction 8 (b)). A line PASSES when the mean of the runs' pooled differences is
+    inside its band, every run's error is under a third of the margin, and the two runs' pooled differences are
+    within two errors (the larger run's) of each other. OUTSIDE is a STOP; UNRESOLVED grows the fleet once, to the
+    printed size and at most 24 sets. An `abs` line holds the arm's own per set means the same way. */
+function twoArmTable(table) {
+  const old = table.get('old');
+  const vs = table.get(VS);
+  check(!!old && !!vs, `COMBINE holds ${VS} against the old arm and found ${[...table.keys()].join(', ')}`);
+  if (!old || !vs) return;
+  const runs = [...vs.keys()].filter(r => old.has(r)).sort((a, b) => a - b);
+  const md = ['TABLE BEGIN', `| line | old | ${VS} | ${VS} minus old, run by run (error) | band | sets | verdict |`, '|---|---|---|---|---|---|---|'];
+  for (const line of LINES) {
+    const perRun = runs.map(r => {
+      const sets = [...vs.get(r).keys()].filter(s => old.get(r).has(s)).sort((a, b) => a - b);
+      const o = sets.map(s => line.get(old.get(r).get(s)));
+      const v = sets.map(s => line.get(vs.get(r).get(s)));
+      const d = line.kind === 'abs' ? v : v.map((x, i) => x - o[i]);
+      return { run: r, k: sets.length, old: mean(o), vs: mean(v), d: mean(d), sdd: sdOf(d), se: sdOf(d) / Math.sqrt(sets.length) };
+    });
+    const margin = line.margin(mean(perRun.map(p => p.old)));
+    const dbar = mean(perRun.map(p => p.d));
+    const inside = line.kind === 'two' ? Math.abs(dbar) <= margin : line.kind === 'under' ? dbar >= -margin : dbar < margin;
+    const maxSe = Math.max(...perRun.map(p => p.se));
+    const resolved = perRun.length > 0 && perRun.every(p => Number.isFinite(p.se) && p.se < margin / 3);
+    const agree = perRun.length < 2 || Math.abs(perRun[0].d - perRun[1].d) <= 2 * maxSe;
+    const verdict = !inside ? 'OUTSIDE' : !resolved ? 'UNRESOLVED' : !agree ? 'RUNS DISAGREE' : 'PASS';
+    const miss = line.kind === 'two' ? Math.abs(dbar) - margin : line.kind === 'under' ? -margin - dbar : dbar - margin;
+    let need = 0;
+    const sdd = Math.max(...perRun.map(p => p.sdd));
+    if (verdict === 'UNRESOLVED' && Number.isFinite(sdd)) { need = perRun[0].k; while (need < 24 && sdd / Math.sqrt(need) >= margin / 3) need += 1; }
+    const band = line.kind === 'two' ? `within ${fix(margin, line.d)}` : line.kind === 'under' ? `at most ${fix(margin, line.d)} under` : `under ${fix(margin, line.d)}`;
+    const said = `${verdict}${verdict === 'OUTSIDE' ? ` by ${fix(miss, line.d)} (${fix(miss / maxSe, 1)} errors)` : ''}${need ? ` (the rule asks ${need} sets)` : ''}`;
+    md.push(`| ${line.id}: ${line.what} | ${perRun.map(p => fix(p.old, line.d)).join(' / ')} | ${perRun.map(p => fix(p.vs, line.d)).join(' / ')} | ${perRun.map(p => `${p.d >= 0 ? '+' : ''}${fix(p.d, line.d)} (${fix(p.se, line.d)})`).join(' / ')} | ${band} | ${perRun.map(p => p.k).join(' / ')} | ${said} |`);
+    if (verdict === 'OUTSIDE') fleetMisses.push(`${line.id} by ${fix(miss, line.d)}, ${fix(miss / maxSe, 1)} errors`);
+    if (!FLEET_CONTROL) check(verdict === 'PASS', `${line.id} (${line.what}): ${said}`);
+  }
+  /* S5: in every set of every run of VS, his first selection comes later and is worse at every band of finish. */
+  const s5bad = [];
+  for (const r of runs) {
+    for (const [s, L] of vs.get(r)) {
+      const b = L.S5;
+      const ok = b.every(x => x.n > 0) && b.slice(1).every((x, i) => x.overall > b[i].overall && x.trueOvr < b[i].trueOvr);
+      if (!ok) s5bad.push(`run ${r} set ${s}`);
+    }
+  }
+  const s5n = runs.reduce((a, r) => a + vs.get(r).size, 0);
+  md.push(`| S5: his first selection later and worse at every band of finish, in every set | flat (pick 1) | ${s5n - s5bad.length} of ${s5n} sets | | every set | ${s5n} | ${s5bad.length ? `OUTSIDE in ${s5bad.join(', ')}` : 'PASS'} |`);
+  if (s5bad.length) fleetMisses.push(`S5 in ${s5bad.length} sets`);
+  if (!FLEET_CONTROL) check(s5bad.length === 0, `S5: the rise is not positive at every band in ${s5bad.join(', ')}`);
+  md.push('TABLE END');
+  console.log(md.join('\n'));
+  /* What the lead reads beside the lines, never asserted: pooled over every set and run of each arm. */
+  const pooled = (label, f) => { const m = table.get(label); if (!m) return NaN; return mean([...m.values()].flatMap(x => [...x.values()].map(f))); };
+  const labels = ['old', VS, ...[...table.keys()].filter(l => l !== 'old' && l !== VS)];
+  const say = (what, f, d = 1) => console.log(`   ${what}: ${labels.map(l => `${l} ${fix(pooled(l, f), d)}`).join(', ')}`);
+  console.log('   BESIDE THE LINES (pooled, printed, never asserted):');
+  say("strong starts' title share, seasons 2 to 10 (per season)", L => L.S4titles.rate);
+  for (const t of ['strong', 'middle', 'weak']) {
+    say(`${t} starts: playoff seasons`, L => L.tiers[t].playoffs.rate);
+    say(`${t} starts: title seasons`, L => L.tiers[t].titles.rate);
+    say(`${t} starts: mean wins`, L => L.tiers[t].wins);
+    say(`${t} starts: his first selection, pick number`, L => L.tiers[t].pick);
+    say(`${t} starts: his first selection, true rating`, L => L.tiers[t].pickTrue);
+  }
+  say('the bottom three: in the sixteen within three seasons (percent)', L => L.b3.made);
+  say('the bottom three: change in win share after three seasons (points)', L => L.b3.delta);
+  say('the spread of nbaStrength over the 30 clubs, season 5', L => L.spread5, 2);
+  say('the spread of nbaStrength over the 30 clubs, season 10', L => L.spread10, 2);
+  say('the free agent pool\'s best ten at tip off, seasons 2 to 10', L => L.pool10, 2);
+  say('his own dead money a season ($M), seasons 2 to 10', L => L.myDead, 2);
+  say('men signed on a draft night', L => L.signed);
+  say('forced swaps of firsts a set (arb only)', L => L.swaps, 0);
+  if (FLEET_CONTROL) console.log(`   CONTROL ${FLEET_CONTROL} on the fleet: ${fleetMisses.length ? `outside ${fleetMisses.join('; ')}` : 'inside every line'}`);
+}
+
 if (FLEET === 'full' || COMBINE) {
   open(7);
   let careers = [];
   if (COMBINE) {
-    for (const f of fs.readdirSync(COMBINE).filter(x => /^old-run\d+-set\d+\.json$/.test(x)).sort()) {
-      careers.push(...JSON.parse(fs.readFileSync(path.join(COMBINE, f), 'utf8')));
+    for (const f of fs.readdirSync(COMBINE).filter(x => /^(old|new|arb)(-[A-Za-z0-9.]+)?-run\d+-set\d+\.json$/.test(x)).sort()) {
+      const label = f.replace(/-run\d+-set\d+\.json$/, '');
+      for (const c of JSON.parse(fs.readFileSync(path.join(COMBINE, f), 'utf8'))) careers.push({ ...c, label });
     }
-    console.log(`   combined ${careers.length} careers from ${COMBINE}`);
+    console.log(`   combined ${careers.length} careers from ${COMBINE}: ${[...new Set(careers.map(c => c.label))].join(', ')}`);
   } else {
+    for (const arm of ARMS) if (!ARM_DRAFT[arm]) cannotRun(`SIM_NBA_EARNED_DRAFT_ARMS names ${arm}; the arms are ${Object.keys(ARM_DRAFT).join(', ')}`);
+    if (tune) console.log(`   TUNING ${TAG}: ${TUNE}`);
     const SETS = Number(process.env.SIM_NBA_EARNED_DRAFT_SETS || 12);
     const [at, of] = (process.env.SIM_NBA_EARNED_DRAFT_SHARD || '0/1').split('/').map(Number);
     if (!Number.isInteger(at) || !Number.isInteger(of) || of < 1 || at < 0 || at >= of) cannotRun('SIM_NBA_EARNED_DRAFT_SHARD is not k/n with 0 <= k < n');
@@ -1116,14 +1432,16 @@ if (FLEET === 'full' || COMBINE) {
     Math.random = () => { randomCalls += 1; return realRandom(); };
     for (let set = 1; set <= SETS; set += 1) {
       if ((set - 1) % of !== at) continue;
-      const t0 = Date.now();
-      const mine = [];
-      for (let seed = (set - 1) * 10 + 1; seed <= set * 10; seed += 1) {
-        clubs.forEach((c, ci) => mine.push(career('old', set, seed, ci, c.club, c.tier)));
+      for (const arm of ARMS) {
+        const t0 = Date.now();
+        const mine = [];
+        for (let seed = (set - 1) * 10 + 1; seed <= (set - 1) * 10 + (PROBE || 10); seed += 1) {
+          clubs.forEach((c, ci) => mine.push(career(arm, set, seed, ci, c.club, c.tier)));
+        }
+        careers.push(...mine);
+        if (OUT) { fs.mkdirSync(OUT, { recursive: true }); fs.writeFileSync(path.join(OUT, `${labelOf(arm)}-run${RUN}-set${set}.json`), J(mine)); }
+        console.log(`   ${labelOf(arm)} set ${set} (seeds ${(set - 1) * 10 + 1} to ${set * 10}), run ${RUN}: ${mine.length} careers in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
       }
-      careers.push(...mine);
-      if (OUT) { fs.mkdirSync(OUT, { recursive: true }); fs.writeFileSync(path.join(OUT, `old-run${RUN}-set${set}.json`), J(mine)); }
-      console.log(`   set ${set} (seeds ${(set - 1) * 10 + 1} to ${set * 10}), run ${RUN}: ${mine.length} careers in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
     }
     Math.random = realRandom;
     console.log(`   shard ${at}/${of}: ${careers.length} careers in ${((Date.now() - started) / 1000).toFixed(1)} s; Math.random called ${randomCalls} times while the fleet played`);
@@ -1133,23 +1451,34 @@ if (FLEET === 'full' || COMBINE) {
     check(c.refused === undefined, () => `${c.arm} set ${c.set} seed ${c.seed} ${c.club}: the desk summer refused after season ${c.refused}`);
     check(c.seasons.length === SEASONS, () => `${c.arm} set ${c.set} seed ${c.seed} ${c.club}: ${c.seasons.length} seasons, not ${SEASONS}`);
     for (const r of c.seasons) check(r.sixteen === 16, () => `${c.arm} set ${c.set} seed ${c.seed} season ${r.s}: a playoff field of ${r.sixteen}`);
+    if (c.arm !== 'old') {
+      const fell = c.seasons.filter(r => r.fell).length;
+      const stuck = c.seasons.filter(r => r.stuck).length;
+      check(fell === 0 && stuck === 0, () => `${c.label} set ${c.set} seed ${c.seed} ${c.club}: ${fell} drafts fell back to the old draft and ${stuck} never finished`);
+    }
   }
+  /* label -> run -> set -> the set's lines */
+  const table = new Map();
   const bySet = new Map();
   for (const c of careers) {
-    const k = `${c.arm} run ${c.run} set ${c.set}`;
+    const k = `${c.label ?? c.arm}|${c.run}|${c.set}`;
     if (!bySet.has(k)) bySet.set(k, []);
     bySet.get(k).push(c);
   }
   const lines = [];
-  for (const [k, list] of [...bySet].sort((a, b) => a[1][0].set - b[1][0].set || a[1][0].run - b[1][0].run)) {
-    check(list.length === 60, `${k}: ${list.length} careers, a set is 60`);
+  for (const [k, list] of [...bySet].sort((a, b) => (a[0] < b[0] ? -1 : 1) || a[1][0].set - b[1][0].set)) {
+    const [label, run, set] = k.split('|');
+    check(list.length === 60, `${label} run ${run} set ${set}: ${list.length} careers, a set is 60`);
     const L = setLines(list);
-    lines.push(L);
-    console.log(`   ${k}: S1 ${fix(L.S1at5)} / ${fix(L.S1at10)}, S2 ${fix(L.S2, 1)}, S3 ${fix(L.S3.rate, 1)} (n ${L.S3.n}), S4 ${fix(L.S4.rate, 1)} (n ${L.S4.n}), S6 dead ${fix(L.S6dead, 1)} payers ${fix(L.S6payers, 2)}, signed a night ${fix(L.signed, 1)}`);
-    console.log(`      S5 by finish band, worst first: ${L.S5.map(b => `${b.band}: #${fix(b.overall, 1)} ${fix(b.trueOvr, 1)} (n ${b.n})`).join(', ')}`);
-    console.log(`      by tier: ${Object.entries(L.tiers).map(([t, v]) => `${t} playoffs ${fix(v.playoffs.rate, 1)} titles ${fix(v.titles.rate, 1)} wins ${fix(v.wins, 1)}`).join('; ')}`);
+    if (label === 'old') lines.push(L);
+    if (!table.has(label)) table.set(label, new Map());
+    if (!table.get(label).has(Number(run))) table.get(label).set(Number(run), new Map());
+    table.get(label).get(Number(run)).set(Number(set), L);
+    console.log(`   ${label} run ${run} set ${set}: S1 ${fix(L.S1at5)} / ${fix(L.S1at10)}, S2 ${fix(L.S2, 1)}, S3 ${fix(L.S3.rate, 1)} (n ${L.S3.n}), S4 ${fix(L.S4.rate, 1)} titles ${fix(L.S4titles.rate, 1)} (n ${L.S4.n}), S6 dead ${fix(L.S6dead, 2)} payers ${fix(L.S6payers, 2)}, signed a night ${fix(L.signed, 1)}`);
+    console.log(`      S5, worst finish first: ${L.S5.map(b => `${b.band} #${fix(b.overall, 1)} ${fix(b.trueOvr, 1)} (${b.n})`).join(', ')}`);
   }
-  if (lines.length > 1) {
+  if (COMBINE) twoArmTable(table);
+  if (!COMBINE && lines.length > 1) {
     const pool = (f, label, d = 2) => {
       const v = lines.map(f);
       console.log(`   over ${lines.length} sets, ${label}: mean ${fix(mean(v), d)}, per set sd ${fix(sdOf(v), d)}`);
@@ -1159,7 +1488,7 @@ if (FLEET === 'full' || COMBINE) {
     pool(L => L.S1at10, 'S1 mean strength at season 10 tip off');
     pool(L => L.S2, 'S2 men rated 85 or more at season 10 tip off', 1);
     const s3 = pool(L => L.S3.rate, `S3 weak starts' playoff seasons, seasons 2 to 5, per season (n ${lines[0].S3.n} a set)`, 1);
-    const s4 = pool(L => L.S4.rate, `S4 strong starts' titles, seasons 2 to 10, per season (n ${lines[0].S4.n} a set)`, 1);
+    const s4 = pool(L => L.S4.rate, `S4 strong starts' playoff seasons, seasons 2 to 10, per season (n ${lines[0].S4.n} a set)`, 1);
     pool(L => L.S6dead, 'S6 CPU dead money a season, seasons 2 to 10', 1);
     pool(L => L.S6payers, 'S6 tax payers a season, seasons 2 to 10');
     const k3 = fleetFor(s3, MARGIN.S3);
@@ -1174,6 +1503,13 @@ if (FLEET === 'full' || COMBINE) {
   const red = ran.filter(n => failures[n] > 0);
   for (const n of ran) console.log(`   section ${n}: ${failures[n] === 0 ? 'green' : `${failures[n]} failures`}`);
   console.log(`   ${ran.length} sections ran (${ran.join(', ')}), ${checks} checks`);
+  if (FLEET_CONTROL) {
+    const fired = fleetMisses.length > 0 && red.length === 0;
+    console.log(fired
+      ? `${NAME}: CONTROL ${FLEET_CONTROL} FIRED on the fleet: outside ${fleetMisses.join('; ')}.`
+      : `${NAME}: CONTROL ${FLEET_CONTROL} DID NOT FIRE on the fleet: red in [${red.join(', ')}], ${fleetMisses.length} lines outside.`);
+    process.exit(fired ? 1 : 2);
+  }
   if (CONTROL) {
     const want = CONTROLS[CONTROL].expect;
     const exact = red.length === want.length && want.every(n => red.includes(n));

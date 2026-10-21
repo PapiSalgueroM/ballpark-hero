@@ -21,7 +21,7 @@
 import { NBA_TEAM_MAP } from '@/data/conquestDataNba';
 import {
   NBA_DRAFT_NEED_WEIGHT, NBA_ROUNDS, nbaConsumeDraftRound, nbaDraftCapital, nbaDraftNeed, nbaDraftSigning,
-  nbaEarnedClassSize, nbaProspectToPlayer,
+  nbaEarnedClassSize, nbaMinContract, nbaProspectToPlayer,
 } from './nbaFrontOffice';
 import type { NbaLeague, NbaProspect, SeriesResult } from './nbaFrontOffice';
 import { nbaGamePickRules, nbaNoteArrivals, nbaPicksOf, nbaScoutRead, nbaSignDraftee, nbaStaffOf } from './nbaGmDesk';
@@ -99,6 +99,16 @@ export function openNbaDraftNight(desk: GmDesk, league: NbaLeague, series: Serie
   return nbaDraftNightOf(next, league) ? { desk: next, night } : null;
 }
 
+/** The class's two knobs (the brief's A4), on a RIVAL's man only, after he signs, and neither draws a number:
+    `rivalSecondOnMin`, a rival's second round man signs one season at the league minimum instead of the rookie
+    scale; `latePot`, a rival's man taken at overall pick `from` or later has his ceiling capped at `cap`, never
+    under his own rating (null leaves every ceiling as drawn). Tuned against the two arm table of
+    scripts/simNbaEarnedDraft.mjs; the values and why are in docs/audits/ROUND-1321-NOTES.md. */
+export const NBA_DRAFT_KNOBS: { readonly rivalSecondOnMin: boolean; readonly latePot: { readonly from: number; readonly cap: number } | null } = {
+  rivalSecondOnMin: false,
+  latePot: null,
+};
+
 export interface NbaDraftHostCtx { me: string; season: number; scoutLevel: number; rng: () => number }
 
 /** The NBA's half of a night. Every club spends the marker of the slot's round; a man signs the engine's way
@@ -114,10 +124,18 @@ export function nbaDraftHost(ctx: NbaDraftHostCtx): { host: GmDraftHost<NbaLeagu
       return !!team && (slot.round === 1 || slot.round === 2) && nbaConsumeDraftRound(team, slot.round);
     },
     sign: (league, club, p, slot) => {
-      const man = nbaProspectToPlayer(p, ctx.rng, nbaDraftSigning(league));
+      const signing = nbaDraftSigning(league);
+      const man = nbaProspectToPlayer(p, ctx.rng, signing);
       if (club === ctx.me) {
         nbaSignDraftee(man, slot.round);
         signedMine.push({ id: man.id, round: slot.round });
+      } else {
+        if (NBA_DRAFT_KNOBS.rivalSecondOnMin && slot.round === 2) {
+          man.salary = nbaMinContract(signing.cap);
+          man.years = 1;
+        }
+        const late = NBA_DRAFT_KNOBS.latePot;
+        if (late && slot.overall >= late.from) man.pot = Math.max(man.ovr, Math.min(man.pot, late.cap));
       }
       league.teams[club].players.push(man);
     },
