@@ -1,0 +1,206 @@
+NEGATIVE CONTROL ON: flat
+48 places over 5 worlds (now, era2020, era2015, era2010, era2005)
+1) The draw is keyed on the man and never takes a number from the season's stream
+  ok: 14400 draws over 48 places, 0 numbers off Math.random
+  ok: a fresh load of the engine draws every one of them the same
+2) Realistic shares: each league's drawn men are home as often as its real squads are
+  FAIL: now premier (England): drawn home 47.9% against real 25.8%, top foreign France 5.3% against 7.5%
+  FAIL: now championship (England): drawn home 50.6% against real 32.8%, top foreign Ireland 6.1% against 8.0%
+  FAIL: now seriea (Italy): drawn home 50.2% against real 27.3%, top foreign France 2.7% against 5.0%
+  FAIL: now bundesliga (Germany): drawn home 50.7% against real 35.6%, top foreign France 5.7% against 6.9%
+  FAIL: now ligue1 (France): drawn home 53.0% against real 32.6%, top foreign Senegal 3.8% against 5.6%
+  FAIL: now eredivisie (Netherlands): drawn home 50.6% against real 37.9%, top foreign Germany 4.2% against 5.0%
+  FAIL: now saudi (Saudi Arabia): drawn home 48.8% against real 7.7%, top foreign Brazil 7.4% against 12.8%
+  FAIL: now mlsEast (United States): drawn home 50.5% against real 19.0%, top foreign Argentina 6.3% against 10.9%
+  FAIL: now mlsWest (United States): drawn home 50.4% against real 31.1%, top foreign Germany 4.9% against 6.6%
+  FAIL: now primeira (Portugal): drawn home 50.4% against real 27.1%, top foreign Brazil 11.0% against 15.7%
+  FAIL: now scottish (Scotland): drawn home 49.0% against real 19.7%, top foreign England 6.8% against 11.5%
+  FAIL: now superlig (Türkiye): drawn home 49.6% against real 25.9%, top foreign Brazil 4.7% against 5.7%
+  FAIL: now bundesliga2 (Germany): drawn home 51.2% against real 43.4%, top foreign Denmark 5.5% against 7.1%
+  FAIL: now proleague (Belgium): drawn home 50.3% against real 29.0%, top foreign Japan 5.1% against 7.6%
+  FAIL: now austria (Austria): drawn home 51.1% against real 45.0%, top foreign Germany 8.5% against 8.3%
+  FAIL: now greece (Greece): drawn home 50.4% against real 12.3%, top foreign Argentina 4.0% against 8.6%
+  FAIL: now denmark (Denmark): drawn home 48.3% against real 32.3%, top foreign Norway 9.0% against 11.3%
+  FAIL: now switzerland (Switzerland): drawn home 50.2% against real 43.6%, top foreign France 7.8% against 9.0%
+  FAIL: now croatia (Croatia): drawn home 49.4% against real 64.3%, top foreign Bosnia-Herzegovina 10.2% against 7.1%
+  FAIL: now brasileirao (Brazil): drawn home 51.0% against real 64.8%, top foreign Argentina 16.3% against 10.9%
+  FAIL: now ligamx (Mexico): drawn home 50.0% against real 57.9%, top foreign Argentina 14.6% against 12.8%
+  FAIL: now aleague (Australia): drawn home 49.0% against real 81.6%, top foreign New Zealand 6.5% against 2.3%
+  FAIL: now aleague (New Zealand): drawn home 49.6% against real 74.4%, top foreign Australia 14.0% against 7.0%
+  FAIL: now serieb (Italy): drawn home 50.5% against real 65.4%, top foreign France 7.2% against 5.1%
+  FAIL: now ligue2 (France): drawn home 49.6% against real 44.9%, top foreign Cote d'Ivoire 4.7% against 6.1%
+  FAIL: now segunda (Spain): drawn home 50.0% against real 64.6%, top foreign Netherlands 8.3% against 6.3%
+  FAIL: now russia (Russia): drawn home 49.9% against real 66.2%, top foreign Brazil 6.7% against 4.7%
+  FAIL: era2020 premier2020 (England): drawn home 50.3% against real 29.9%, top foreign Spain 5.0% against 6.3%
+  FAIL: era2020 laliga2020 (Spain): drawn home 50.2% against real 59.0%, top foreign Brazil 6.5% against 5.2%
+  FAIL: era2020 seriea2020 (Italy): drawn home 50.4% against real 36.0%, top foreign Brazil 3.5% against 4.5%
+  FAIL: era2020 bundesliga2020 (Germany): drawn home 48.0% against real 36.9%, top foreign France 5.5% against 6.5%
+  FAIL: era2020 ligue12020 (France): drawn home 51.4% against real 39.1%, top foreign Brazil 5.3% against 6.6%
+  FAIL: era2015 premier2015 (England): drawn home 52.5% against real 28.3%, top foreign France 4.5% against 7.5%
+  FAIL: era2015 laliga2015 (Spain): drawn home 49.8% against real 58.9%, top foreign Argentina 8.2% against 6.5%
+  FAIL: era2015 seriea2015 (Italy): drawn home 49.9% against real 38.2%, top foreign Argentina 6.0% against 7.9%
+  FAIL: era2015 bundesliga2015 (Germany): drawn home 50.2% against real 43.8%, top foreign Switzerland 5.6% against 5.8%
+  FAIL: era2015 ligue12015 (France): drawn home 49.9% against real 43.9%, top foreign Brazil 5.1% against 4.7%
+  FAIL: era2010 premier2010 (England): drawn home 53.1% against real 31.6%, top foreign Ireland 3.8% against 5.7%
+  FAIL: era2010 laliga2010 (Spain): drawn home 49.4% against real 59.0%, top foreign Argentina 12.6% against 9.9%
+  FAIL: era2010 bundesliga2010 (Germany): drawn home 49.6% against real 42.1%, top foreign Brazil 4.5% against 5.8%
+  FAIL: era2005 premier2005 (England): drawn home 52.5% against real 35.5%, top foreign France 4.5% against 6.2%
+  FAIL: era2005 laliga2005 (Spain): drawn home 50.0% against real 58.5%, top foreign Argentina 12.3% against 10.0%
+  FAIL: era2005 seriea2005 (Italy): drawn home 49.3% against real 62.6%, top foreign Brazil 10.8% against 7.8%
+   now     premier        England        real men  496  home  25.8% drawn  47.9%  then France 7%, Netherlands 7%, Brazil 5%
+   now     championship   England        real men  338  home  32.8% drawn  50.6%  then Ireland 8%, Denmark 5%, Brazil 3%
+   now     laliga         Spain          real men  374  home  53.2% drawn  50.0%  then Argentina 5%, France 5%, Morocco 3%
+   now     seriea         Italy          real men  440  home  27.3% drawn  50.2%  then France 5%, Spain 5%, Argentina 4%
+   now     bundesliga     Germany        real men  348  home  35.6% drawn  50.7%  then France 7%, Austria 5%, Japan 3%
+   now     ligue1         France         real men  285  home  32.6% drawn  53.0%  then Senegal 6%, Morocco 5%, Belgium 4%
+   now     eredivisie     Netherlands    real men  161  home  37.9% drawn  50.6%  then Germany 5%, Denmark 4%, Belgium 4%
+   now     saudi          Saudi Arabia   real men  117  home   7.7% drawn  48.8%  then Brazil 13%, France 12%, Portugal 11%
+   now     mlsEast        United States  real men  147  home  19.0% drawn  50.5%  then Argentina 11%, Brazil 4%, Spain 4%
+   now     mlsWest        United States  real men  122  home  31.1% drawn  50.4%  then Germany 7%, Colombia 5%, Canada 4%
+   now     primeira       Portugal       real men  166  home  27.1% drawn  50.4%  then Brazil 16%, Spain 8%, Greece 4%
+   now     scottish       Scotland       real men   61  home  19.7% drawn  49.0%  then England 11%, Denmark 7%, Portugal 7%
+   now     superlig       Türkiye        real men  174  home  25.9% drawn  49.6%  then Brazil 6%, Portugal 6%, France 5%
+   now     bundesliga2    Germany        real men   99  home  43.4% drawn  51.2%  then Denmark 7%, Japan 7%, Sweden 4%
+   now     proleague      Belgium        real men  145  home  29.0% drawn  50.3%  then Japan 8%, Cote d'Ivoire 5%, Sweden 5%
+   now     austria        Austria        real men   60  home  45.0% drawn  51.1%  then Germany 8%, Denmark 7%, Bosnia-Herzegovina 5%
+   now     greece         Greece         real men   81  home  12.3% drawn  50.4%  then Argentina 9%, Portugal 6%, Serbia 6%
+   now     denmark        Denmark        real men   62  home  32.3% drawn  48.3%  then Norway 11%, Germany 8%, Iceland 5%
+   now     switzerland    Switzerland    real men   78  home  43.6% drawn  50.2%  then France 9%, DR Congo 5%, Germany 5%
+   now     croatia        Croatia        real men   28  home  64.3% drawn  49.4%  then Bosnia-Herzegovina 7%, Albania 4%, Belgium 4%
+   now     brasileirao    Brazil         real men  267  home  64.8% drawn  51.0%  then Argentina 11%, Colombia 7%, Uruguay 7%
+   now     ligamx         Mexico         real men  164  home  57.9% drawn  50.0%  then Argentina 13%, Uruguay 8%, Colombia 6%
+   now     aleague        Australia      real men  256  home  81.6% drawn  49.0%  then New Zealand 2%, Japan 2%, Scotland 2%
+   now     aleague        New Zealand    real men   43  home  74.4% drawn  49.6%  then Australia 7%, Japan 5%, Chile 2%
+   now     serieb         Italy          real men   78  home  65.4% drawn  50.5%  then France 5%, Norway 3%, Sweden 3%
+   now     ligue2         France         real men   49  home  44.9% drawn  49.6%  then Cote d'Ivoire 6%, Denmark 4%, Malta 4%
+   now     segunda        Spain          real men   48  home  64.6% drawn  50.0%  then Netherlands 6%, Colombia 4%, Angola 2%
+   now     russia         Russia         real men  402  home  66.2% drawn  49.9%  then Brazil 5%, Serbia 2%, Argentina 2%
+   era2020 premier2020    England        real men  442  home  29.9% drawn  50.3%  then Spain 6%, Brazil 6%, France 5%
+   era2020 laliga2020     Spain          real men  329  home  59.0% drawn  50.2%  then Brazil 5%, Argentina 4%, France 4%
+   era2020 seriea2020     Italy          real men  358  home  36.0% drawn  50.4%  then Brazil 4%, Argentina 4%, Spain 4%
+   era2020 bundesliga2020 Germany        real men  325  home  36.9% drawn  48.0%  then France 6%, Austria 6%, Switzerland 6%
+   era2020 ligue12020     France         real men  320  home  39.1% drawn  51.4%  then Brazil 7%, Algeria 4%, Senegal 4%
+   era2015 premier2015    England        real men  441  home  28.3% drawn  52.5%  then France 7%, Spain 7%, Argentina 5%
+   era2015 laliga2015     Spain          real men  355  home  58.9% drawn  49.8%  then Argentina 6%, Portugal 5%, Brazil 4%
+   era2015 seriea2015     Italy          real men  317  home  38.2% drawn  49.9%  then Argentina 8%, Brazil 6%, France 3%
+   era2015 bundesliga2015 Germany        real men  292  home  43.8% drawn  50.2%  then Switzerland 6%, Brazil 4%, Japan 3%
+   era2015 ligue12015     France         real men  253  home  43.9% drawn  49.9%  then Brazil 5%, Senegal 4%, Cote d'Ivoire 4%
+   era2010 premier2010    England        real men  424  home  31.6% drawn  53.1%  then Ireland 6%, France 5%, Argentina 4%
+   era2010 laliga2010     Spain          real men  383  home  59.0% drawn  49.4%  then Argentina 10%, Brazil 5%, Portugal 3%
+   era2010 seriea2010     Italy          real men  314  home  52.9% drawn  49.8%  then Argentina 10%, Brazil 8%, Uruguay 3%
+   era2010 bundesliga2010 Germany        real men  311  home  42.1% drawn  49.6%  then Brazil 6%, Croatia 4%, Austria 3%
+   era2010 ligue12010     France         real men  319  home  48.6% drawn  49.5%  then Senegal 5%, Brazil 4%, Mali 3%
+   era2005 premier2005    England        real men  420  home  35.5% drawn  52.5%  then France 6%, Ireland 6%, Netherlands 4%
+   era2005 laliga2005     Spain          real men  340  home  58.5% drawn  50.0%  then Argentina 10%, Brazil 7%, Uruguay 4%
+   era2005 seriea2005     Italy          real men  294  home  62.6% drawn  49.3%  then Brazil 8%, Argentina 5%, France 3%
+   era2005 bundesliga2005 Germany        real men  332  home  46.7% drawn  49.1%  then Brazil 6%, Croatia 3%, Czech Republic 3%
+   era2005 ligue12005     France         real men  341  home  48.1% drawn  51.0%  then Brazil 6%, Cote d'Ivoire 4%, Senegal 4%
+  ok: 48 counts checked at 2000 draws each (0 under 20 known men left unchecked), worst 68.99 standard errors (now saudi Saudi Arabia), bound 4
+2b) Ten years on, the market's made up men sit at each league's real home share
+  FAIL: now premier (England): 299 made up market men 51.5% home against real 25.8%
+  FAIL: now ligue1 (France): 196 made up market men 49.0% home against real 32.6%
+  FAIL: now saudi (Saudi Arabia): 102 made up market men 47.1% home against real 7.7%
+  FAIL: now superlig (Türkiye): 144 made up market men 51.4% home against real 25.9%
+  FAIL: now bundesliga (Germany): 255 made up market men 48.6% home against real 35.6%
+  FAIL: now championship (England): 265 made up market men 52.1% home against real 32.8%
+  FAIL: now seriea (Italy): 320 made up market men 48.8% home against real 27.3%
+  FAIL: now brasileirao (Brazil): 230 made up market men 49.1% home against real 64.8%
+  FAIL: now primeira (Portugal): 121 made up market men 53.7% home against real 27.1%
+  FAIL: now russia (Russia): 326 made up market men 51.2% home against real 66.2%
+  FAIL: now scottish (Scotland): 50 made up market men 50.0% home against real 19.7%
+  FAIL: now mlsEast (United States): 127 made up market men 62.2% home against real 19.0%
+  FAIL: now proleague (Belgium): 121 made up market men 47.1% home against real 29.0%
+  FAIL: now greece (Greece): 78 made up market men 39.7% home against real 12.3%
+  FAIL: now aleague (Australia): 215 made up market men 50.2% home against real 81.6%
+  FAIL: era2020 premier2020 (England): 302 made up market men 47.0% home against real 29.9%
+  FAIL: era2020 bundesliga2020 (Germany): 232 made up market men 50.9% home against real 36.9%
+  FAIL: era2020 ligue12020 (France): 242 made up market men 52.9% home against real 39.1%
+  FAIL: era2020 seriea2020 (Italy): 271 made up market men 52.0% home against real 36.0%
+  FAIL: era2015 premier2015 (England): 362 made up market men 48.1% home against real 28.3%
+  FAIL: era2010 premier2010 (England): 348 made up market men 49.7% home against real 31.6%
+  FAIL: era2005 seriea2005 (Italy): 268 made up market men 50.0% home against real 62.6%
+  FAIL: era2005 premier2005 (England): 343 made up market men 48.7% home against real 35.5%
+   now     premier          299 made up men, home  51.5% (real 25.8%)
+   now     ligue1           196 made up men, home  49.0% (real 32.6%)
+   now     saudi            102 made up men, home  47.1% (real 7.7%)
+   now     laliga           271 made up men, home  47.2% (real 53.2%)
+   now     superlig         144 made up men, home  51.4% (real 25.9%)
+   now     bundesliga       255 made up men, home  48.6% (real 35.6%)
+   now     championship     265 made up men, home  52.1% (real 32.8%)
+   now     seriea           320 made up men, home  48.8% (real 27.3%)
+   now     brasileirao      230 made up men, home  49.1% (real 64.8%)
+   now     eredivisie       125 made up men, home  53.6% (real 37.9%)
+   now     primeira         121 made up men, home  53.7% (real 27.1%)
+   now     russia           326 made up men, home  51.2% (real 66.2%)
+   now     mlsWest          105 made up men, home  43.8% (real 31.1%)
+   now     scottish          50 made up men, home  50.0% (real 19.7%)
+   now     mlsEast          127 made up men, home  62.2% (real 19.0%)
+   now     proleague        121 made up men, home  47.1% (real 29.0%)
+   now     ligue2            42 made up men, home  52.4% (real 44.9%)
+   now     segunda           42 made up men, home  54.8% (real 64.6%)
+   now     denmark           54 made up men, home  38.9% (real 32.3%)
+   now     ligamx           142 made up men, home  47.9% (real 57.9%)
+   now     greece            78 made up men, home  39.7% (real 12.3%)
+   now     bundesliga2       78 made up men, home  43.6% (real 43.4%)
+   now     austria           47 made up men, home  46.8% (real 45.0%)
+   now     serieb            64 made up men, home  45.3% (real 65.4%)
+   now     switzerland       66 made up men, home  47.0% (real 43.6%)
+   now     aleague          215 made up men, home  50.2% (real 81.6%)
+   era2020 premier2020      302 made up men, home  47.0% (real 29.9%)
+   era2020 laliga2020       271 made up men, home  51.3% (real 59.0%)
+   era2020 bundesliga2020   232 made up men, home  50.9% (real 36.9%)
+   era2020 ligue12020       242 made up men, home  52.9% (real 39.1%)
+   era2020 seriea2020       271 made up men, home  52.0% (real 36.0%)
+   era2015 laliga2015       303 made up men, home  56.4% (real 58.9%)
+   era2015 seriea2015       267 made up men, home  46.1% (real 38.2%)
+   era2015 premier2015      362 made up men, home  48.1% (real 28.3%)
+   era2015 bundesliga2015   236 made up men, home  52.5% (real 43.8%)
+   era2015 ligue12015       211 made up men, home  51.7% (real 43.9%)
+   era2010 laliga2010       330 made up men, home  53.3% (real 59.0%)
+   era2010 seriea2010       274 made up men, home  43.1% (real 52.9%)
+   era2010 premier2010      348 made up men, home  49.7% (real 31.6%)
+   era2010 bundesliga2010   257 made up men, home  47.5% (real 42.1%)
+  ok: 46 leagues checked ten years on, worst 14.92 standard errors (now saudi), bound 4; 0 made up listings without a country (0 clubs in no league: )
+3) Every made up man carries a country, and no real man is touched
+  ok: 95 careers: 10773 of 10773 made up men carry a country; 59466 real men, none carrying the field, each showing the map's flag
+4) It stays with him: bought, loaned out and back, the summer, released, sold to a club, promoted, reloaded
+   7 tracked men checked after a match
+  ok: Cesar Konate went out on loan and came back as New Zealand
+   7 tracked men checked after a reload
+  ok: Erik Paredes sold to Real Madrid is listed there as Japan
+  ok: a released academy boy is in the free agent pool marked made up, still Brazilian
+   6 tracked men checked after the summer
+  ok: 7 men tracked through the moves
+5) An old save gets the same countries twice, and nothing else in it changes
+  ok: the moved career, countries stripped: 14 of 14 men made at the club got back the very country they had
+  ok: the moved career, countries stripped: 23 made up men given a country, the same on a second open, nothing else changed
+  ok: cmBookSaveEvertonFixture: 6 made up men given a country, the same on a second open, nothing else changed
+  ok: cmBookSaveHerthaFixture: 16 made up men given a country, the same on a second open, nothing else changed
+  ok: cmOldSave1052Fixture: 8 made up men given a country, the same on a second open, nothing else changed
+  ok: cmSecondTierOldSaveFixture: 6 made up men given a country, the same on a second open, nothing else changed
+6) The board counts exactly the men whose flag is its country
+  ok: 95 careers: the board's count equals the flags; 62 of them count made up men the map alone did not
+   day one country asks issued: 57; 39 of them ask for more men than the map alone counted
+7) The field moves nothing else: 2 seasons a career, the board's old count and no draw at all, draw for draw
+   now Everton: the board's new count moves it from season 2; at the last season end pendingSummary, boardObjectives differ; country ask England 14 against England 12; budget 107.12 against 107.12, board 0 against 0; 63682 draws against 63682
+   now Everton: save +120 +231 characters a season end with countries
+   now Málaga: the board's new count leaves it on its path (97163 draws, 97163 with the old count)
+   now Málaga: save +321 +418 characters a season end with countries
+   now West Ham: the board's new count leaves it on its path (106993 draws, 106993 with the old count)
+   now West Ham: save +118 +310 characters a season end with countries
+   now Wellington Phoenix: the board's new count moves it from season 2; at the last season end pendingSummary, boardObjectives differ; country ask New Zealand 15 against New Zealand 14; budget 23.71 against 23.71, board 93.5 against 93.5; 86659 draws against 86659
+   now Wellington Phoenix: save +140 +211 characters a season end with countries
+   era2005 Everton: the board's new count moves it from season 2; at the last season end pendingSummary, boardObjectives differ; country ask England 11 against England 7; budget 32.99 against 32.99, board 60.299999999999976 against 60.299999999999976; 47009 draws against 47009
+   era2005 Everton: save +134 +250 characters a season end with countries
+   era2015 Bournemouth: the board's new count moves it from season 1; at the last season end pendingSummary, boardObjectives differ; country ask England 10 against England 8; budget 11.3 against 11.3, board 0 against 0; 14082 draws against 14082
+   era2015 Bournemouth: save +214 characters a season end with countries
+   now a created club: the board's new count moves it from season 1; at the last season end pendingSummary, boardObjectives differ; country ask England 14 against England 1; budget 19.84 against 19.84, board 0 against 0; 33154 draws against 33154
+   now a created club: save +594 characters a season end with countries
+  ok: 7 of 7 careers play draw for draw and byte for byte the same with countries as without, once stripped
+   the board's count of made up men moved 5 of 7 careers off the old count's path
+7b) The save's growth to season 3
+   Everton, characters added by the countries at each season end: 120 195 335
+  ok: Everton season 3: +335 characters (budget 1500), 112 a season; the save is 178409 characters
+   Málaga, characters added by the countries at each season end: 307 433 531
+  ok: Málaga season 3: +531 characters (budget 1500), 177 a season; the save is 166935 characters
+simCmMadeUpNations: RED, 66 failure(s)

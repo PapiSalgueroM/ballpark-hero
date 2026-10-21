@@ -1,0 +1,5 @@
+vitest-new exit=0 5s |    Duration  4.00s (transform 2.08s, setup 107ms, collect 2.56s, tests 322ms, environment 422ms, prepare 216ms)
+ctl-flat exit=1 45s | simCmMadeUpNations: RED, 66 failure(s)
+tsc exit=0 86s | 
+ctl-leak exit=1 41s | simCmMadeUpNations: RED, 15 failure(s)
+simCmMadeUpNations exit=0 111s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
