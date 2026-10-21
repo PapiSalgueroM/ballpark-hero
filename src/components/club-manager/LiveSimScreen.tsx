@@ -444,6 +444,7 @@ function LiveMatchHelp({ onClose, kinds = [] }: { onClose: () => void; kinds?: r
         <li>A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net. On the pitch the ball goes in off him and he holds his head.</li>
         {reviews && <li>VAR here reviews {goals && penalties ? 'goals and penalties only' : goals ? 'goals only' : 'penalty calls only'}, and you only see a review that changed the call.{goals ? ' A goal that gets ruled out goes in first: the check opens with the ball in the net, the score does not move, and it adds no scorer or shot stats.' : ''}{penalties ? ' A foul the referee missed can become a penalty, and that kick can go in, be saved or miss.' : ''}</li>}
         <li>Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.</li>
+        <li>Tactics from here, in the same sheet, changes your team instructions, the formation and any duty for the rest of this match only. Your standing plan stays on the Tactics tab.</li>
         <li>Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on.</li>
       </ul>
       <p className="mt-2 text-xs text-foreground">
