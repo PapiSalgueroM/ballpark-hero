@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+victim: node .rc/x/rvvictim1519.mjs
+walk1519: node scripts/playSoccerCareerEndings.mjs
