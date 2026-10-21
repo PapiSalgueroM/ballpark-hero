@@ -1,0 +1,5 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+diff-walk exit=1 36s | Node.js v24.21.0
+diff-jump exit=1 36s | Node.js v24.21.0
+diff-nopill exit=1 36s | Node.js v24.21.0
+nosack-walk exit=1 36s | Node.js v24.21.0
