@@ -1,0 +1,5 @@
+#!serial
+carry-head: node .rc/x/review-run-carry.mjs
+m1-carry: node .rc/x/review-run-mut.mjs aiswap && node .rc/x/review-run-carry.mjs; s=$?; git checkout -- src; exit $s
+m2-carry: node .rc/x/review-run-mut.mjs fasign && node .rc/x/review-run-carry.mjs; s=$?; git checkout -- src; exit $s
+m3-carry: node .rc/x/review-run-mut.mjs expiry && node .rc/x/review-run-carry.mjs; s=$?; git checkout -- src; exit $s
