@@ -1,0 +1,3 @@
+measure-nba exit=0 159s | measureBase nba: done
+hall-mlb-before exit=0 378s | simCareerHall mlb: all 34 checks green
+hall-nhl-before exit=0 566s | simCareerHall nhl: all 35 checks green
