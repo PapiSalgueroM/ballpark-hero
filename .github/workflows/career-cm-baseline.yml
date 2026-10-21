@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -45,6 +45,7 @@ jobs:
             if test "$arm" = baseline; then source="$BASELINE_SHA"; else source="$CANDIDATE_SHA"; fi
             dir="$RUNNER_TEMP/career-cm-$arm"
             mkdir "$dir"
+            git fetch --no-tags --depth=1 origin "$source" > "$out/$arm.fetch.log" 2>&1
             git cat-file -e "$source^{commit}"
             git rev-parse "$source^{tree}" > "$out/$arm.tree.txt"
             printf '%s\n' "$source" > "$out/$arm.head.txt"

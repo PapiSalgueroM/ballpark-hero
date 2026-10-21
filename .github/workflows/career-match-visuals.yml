@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -35,6 +35,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir career-visuals-artifacts
+          git fetch --no-tags --depth=1 origin 076091ac870db38b953ddf71d3252cf1ac556782 > career-visuals-artifacts/baseline-fetch.log 2>&1
+          git cat-file -e '076091ac870db38b953ddf71d3252cf1ac556782^{commit}'
           git rev-parse HEAD > career-visuals-artifacts/head.txt
           git rev-parse 'HEAD^{tree}' > career-visuals-artifacts/tree.txt
           sha256sum package.json package-lock.json > career-visuals-artifacts/dependencies-before.sha256
@@ -119,7 +121,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -220,7 +222,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -234,6 +236,8 @@ jobs:
           set -euo pipefail
           mkdir career-visuals-artifacts
           out="$PWD/career-visuals-artifacts"
+          git fetch --no-tags --depth=1 origin 076091ac870db38b953ddf71d3252cf1ac556782 > "$out/baseline-fetch.log" 2>&1
+          git cat-file -e '076091ac870db38b953ddf71d3252cf1ac556782^{commit}'
           git rev-parse HEAD > "$out/head.txt"
           git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           sha256sum package.json package-lock.json > "$out/dependencies-before.sha256"
