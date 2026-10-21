@@ -1,0 +1,87 @@
+/* Review probe (Round 1520, run lens): a save written by the BASE engine (BASE_ROOT) opened by the branch engine.
+   Measures: (a) beyond `nation`, does the open equal the base's own open; (b) natQuota asks the base grades onTrack
+   that the branch grades done on load; (c) after one match and after a whole season on the same stream, which keys
+   differ beyond `nation`. Never reads the network. Run from the repo root: BASE_ROOT=/tmp/base node <this>. */
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { createRequire } from 'node:module';
+import { build } from 'esbuild';
+
+const ROOT = process.cwd();
+const BASE = process.env.BASE_ROOT;
+if (!BASE || !fs.existsSync(path.join(BASE, 'src/lib/clubManager.ts'))) { console.log('CANNOT RUN: BASE_ROOT'); process.exit(2); }
+const MODS = { cm: 'lib/clubManager', asks: 'lib/clubManagerBoardAsks', wr: 'lib/clubManagerWorldRoster' };
+async function bundleOf(root, name) {
+  const work = fs.mkdtempSync(path.join(os.tmpdir(), `rv-${name}-`));
+  const entry = path.join(work, 'entry.ts');
+  fs.writeFileSync(entry, Object.entries(MODS).map(([k, f]) => `export * as ${k} from ${JSON.stringify(path.join(root, `src/${f}.ts`))};`).join('\n'));
+  const out = path.join(work, 'bundle.cjs');
+  await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: out, logLevel: 'silent',
+    alias: { '@': path.join(root, 'src') }, nodePaths: [path.join(ROOT, 'node_modules')] });
+  return out;
+}
+const store = new Map();
+globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
+Date.now = () => 1791547200000;
+const req = createRequire(import.meta.url);
+const H = req(await bundleOf(ROOT, 'head'));
+const B = req(await bundleOf(BASE, 'base'));
+await H.cm.ensureAllEraRosters();
+await B.cm.ensureAllEraRosters();
+function seeded(seed) {
+  let a = seed >>> 0;
+  return () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+function withStream(seed, fn) { const saved = Math.random; Math.random = seeded(seed); try { return fn(); } finally { Math.random = saved; } }
+const strip = (mod, s) => {
+  const view = s.worldRoster ? mod.wr.worldRosterView(s) : null;
+  const t = view && view !== s.worldRoster ? { ...s, worldRoster: { ...view, packedRecords: undefined, packedFormat: undefined } } : s;
+  return JSON.stringify(t, (k, v) => (k === 'nation' ? undefined : v));
+};
+const diffKeys = (a, b) => { const x = JSON.parse(a), y = JSON.parse(b); return [...new Set([...Object.keys(x), ...Object.keys(y)])].filter(k => JSON.stringify(x[k]) !== JSON.stringify(y[k])); };
+const rawSave = (mod, s) => { store.delete(mod.cm.SAVE_KEY); mod.cm.saveCareer(s); return store.get(mod.cm.SAVE_KEY); };
+const reload = (mod, raw) => { store.set(mod.cm.SAVE_KEY, raw); return mod.cm.loadCareer(); };
+const playSeason = (mod, s) => { for (let g = 0; g < 160; g += 1) { const r = mod.cm.playNextEntry(s, { skipHalftime: true }); s = r.state; if (r.kind === 'seasonOver' || s.sacked) break; } return s; };
+
+const fleet = [];
+for (const era of H.cm.CM_ERAS.map(e => e.id)) {
+  for (const lg of era === 'now' ? H.cm.REAL_LEAGUES : H.cm.eraLeaguesFor(era)) {
+    const clubs = (era === 'now' ? H.cm.playableClubs(lg.id) : H.cm.eraPlayableClubs(era, lg.id)).map(c => c.name);
+    for (const club of new Set([clubs[0], clubs.at(-1)].filter(Boolean))) fleet.push({ era, club });
+  }
+}
+const LIMIT = Number(process.env.FLEET || fleet.length), SEASON = process.env.SEASON === '1';
+let n = 0, openDiff = 0, asks = 0, flipped = 0, matchDiff = 0, seasonDiff = 0;
+const keyTally = new Map(), seasonTally = new Map();
+for (const f of fleet.slice(0, LIMIT)) {
+  const seed = 1520 + n;
+  const sB = withStream(seed, () => B.cm.startCareer(f.club, f.era));
+  const raw = rawSave(B, sB);
+  const bL = reload(B, raw), hL = reload(H, raw);
+  if (!bL || !hL) { console.log(`  FAIL: ${f.era} ${f.club} would not open (${!!bL}, ${!!hL})`); continue; }
+  n += 1;
+  const ob = strip(B, bL), oh = strip(H, hL);
+  if (ob !== oh) { openDiff += 1; for (const k of diffKeys(ob, oh)) keyTally.set(k, (keyTally.get(k) ?? 0) + 1); }
+  for (const o of bL.boardObjectives ?? []) {
+    if (o.id !== 'natQuota') continue;
+    asks += 1;
+    const sb = B.asks.askStatus(bL, o), sh = H.asks.askStatus(hL, o);
+    if (sb !== sh) { flipped += 1; if (flipped <= 12) console.log(`  flip: ${f.era} ${f.club}: ask "${o.label}" target ${o.target} ${o.country}: base ${sb}, branch ${sh}`); }
+  }
+  const mB = withStream(seed + 7, () => B.cm.playNextEntry(bL, { skipHalftime: true }).state);
+  const mH = withStream(seed + 7, () => H.cm.playNextEntry(hL, { skipHalftime: true }).state);
+  const pb = strip(B, mB), ph = strip(H, mH);
+  if (pb !== ph) { matchDiff += 1; for (const k of diffKeys(pb, ph)) keyTally.set(`match:${k}`, (keyTally.get(`match:${k}`) ?? 0) + 1); }
+  if (SEASON) {
+    const eB = withStream(seed + 9, () => B.cm.finishSeason(playSeason(B, mB)).state);
+    const eH = withStream(seed + 9, () => H.cm.finishSeason(playSeason(H, mH)).state);
+    const qb = strip(B, eB), qh = strip(H, eH);
+    if (qb !== qh) { seasonDiff += 1; const ks = diffKeys(qb, qh); for (const k of ks) seasonTally.set(k, (seasonTally.get(k) ?? 0) + 1); if (seasonDiff <= 8) console.log(`  season differs: ${f.era} ${f.club}: ${ks.join(', ')}`); }
+  }
+}
+console.log(`careers ${n}; open differs beyond nation ${openDiff}; after a match ${matchDiff}${SEASON ? `; after the season ${seasonDiff}` : ''}`);
+console.log(`natQuota asks on the base save: ${asks}; graded differently by the branch on load: ${flipped}`);
+console.log(`differing keys: ${JSON.stringify([...keyTally])}`);
+if (SEASON) console.log(`season keys: ${JSON.stringify([...seasonTally])}`);
+console.log(`review-oldsave: ${openDiff || matchDiff || flipped || seasonDiff ? 'DIFFERS' : 'SAME'}`);
