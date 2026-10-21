@@ -46,6 +46,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENGINE = path.join(ROOT, 'src/lib/soccerCareerEngine.ts');
 const PER_FLEET = Number(process.argv[2] || 40);
 const CONTROL = process.env.SC_ENDINGS_CONTROL || '';
+/* The fleets' seed base; SC_ENDINGS_SEED moves every fleet to other careers, to measure the floors. */
+const SEED_BASE = Number(process.env.SC_ENDINGS_SEED || 15190000);
 const CONTROLS = {
   early: ['if ((s.overall < 50 && s.age >= 33) || s.age >= 45) {', 'if ((s.overall < 50 && s.age >= 33) || s.age >= 26) {'],
   noreconcile: ['  reconcileRetirement(s);\n  if (!s.primeType)', '  if (!s.primeType)'],
@@ -179,7 +181,7 @@ const tally = { careers: 0, alive26: 0, alive27: 0, ended: {}, early: 0, noChoic
 const finals = [];
 for (const [p, policy] of POLICIES.entries()) {
   for (let c = 0; c < PER_FLEET; c++) {
-    const seed = 15190000 + p * 100003 + c * 7919;
+    const seed = SEED_BASE + p * 100003 + c * 7919;
     let s = newCareer(seed, c);
     let choiceSeed = seed ^ 0x5f3759df;
     const pick = n => {
@@ -251,6 +253,9 @@ function playOn(s, seed) {
 }
 const isCeremony = s => s.phase === 'retirement_ceremony' && s.retired === true && !!s.legacy && Number.isFinite(s.legacy.score);
 
+/* B and C build their fixtures from the engine; a mutated engine can break that, and a broken
+   fixture is a failed check, never a crash that hides the summary line. */
+try {
 console.log('B) the edges at 25 and 26');
 const at25 = careerAt(25), at26 = careerAt(26);
 console.log(`  fixtures: 25 overall ${at25.overall} at ${at25.currentClub}, 26 overall ${at26.overall} at ${at26.currentClub}`);
@@ -313,7 +318,8 @@ console.log(`  fixtures: 25 overall ${at25.overall} at ${at25.currentClub}, 26 o
 
 console.log('C) a retired flag and a phase that disagree go back to what the rest of the save says');
 seedRandom(1519600);
-const summary26 = E.advanceProSeason(copy(at25), clubs);
+let summary26 = E.advanceProSeason(copy(at25), clubs);
+if (summary26.phase === 'newspaper') summary26 = E.dismissNewspaper(summary26);
 if (!(summary26.phase === 'season_summary' && summary26.pendingSummary && summary26.age === 26)) throw new Error(`the summary fixture is on ${summary26.phase} at ${summary26.age}`);
 const real = E.manualRetire(copy(at26));
 seedRandom(1519002);
@@ -372,6 +378,8 @@ for (const { label, save, want } of pairs) {
   check(committed.length >= 5, `the committed fixture saves were read (${committed.length})`);
   check(moved === 0, `no consistent save moves (${moved} did)`);
 }
+
+} catch (e) { fail(`B and C could not run: ${String(e && e.message || e).slice(0, 160)}`); }
 
 console.log("D) every fleet career is byte for byte the base engine's");
 E = BASE;

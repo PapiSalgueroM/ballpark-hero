@@ -40,7 +40,7 @@ import {
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,
   giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
-  acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason,
+  acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason, retirementReason,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
   advanceOwnerSeason, endOwnerCareer,
   dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
@@ -2920,6 +2920,7 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech, onReveal }: 
 /* ─── Retirement Ceremony Card ─── */
 function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: CareerState; totals: ReturnType<typeof getCareerTotals>; onPostRetirement: (c: PostRetirementChoice) => void }) {
   const legacy = career.legacy!;
+  const reason = retirementReason(career);
   const tierColors: Record<LegacyTier, string> = { "GOAT": "text-amber-400", "LEGEND": "text-purple-400", "GREAT": "text-emerald-400", "SOLID PRO": "text-blue-400", "JOURNEYMAN": "text-muted-foreground" };
   const tierEmoji: Record<LegacyTier, string> = { "GOAT": "🐐", "LEGEND": "🏛️", "GREAT": "⭐", "SOLID PRO": "💪", "JOURNEYMAN": "🎒" };
   
@@ -2948,6 +2949,8 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
         )}
         <h3 className="text-xl font-black tracking-tight">RETIREMENT</h3>
         <p className="text-sm text-muted-foreground flex items-center justify-center gap-1"><FlagImg name={career.nationality} />{career.playerName} retires at age {career.age}</p>
+        {/* Round 1519: the reason, in plain words, so an ending is never a mystery. */}
+        {reason && <p data-retirement-reason className="text-xs text-muted-foreground">{reason}</p>}
       </div>
 
       {/* Career summary grid */}
