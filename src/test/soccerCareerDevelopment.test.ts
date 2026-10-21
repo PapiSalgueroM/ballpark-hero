@@ -67,7 +67,8 @@ describe('Soccer Career development selection', () => {
     const at = squadNow(c)!;
     for (const frozenOut of [0, 1]) {
       c.frozenOut = frozenOut;
-      const trust = managerTrust(c, at), raw = Math.max(0, Math.min(38, (trust.band.min + trust.band.max) / 2 + trust.swing + 2));
+      /* Round 1523: what his morale is worth sits in the same sum, after the cap it shares with the phone */
+      const trust = managerTrust(c, at), raw = Math.max(0, Math.min(38, (trust.band.min + trust.band.max) / 2 + trust.swing + trust.moraleGames + 2));
       expect(trust.expected).toBe(frozenOut ? Math.min(8, Math.round(raw * 0.25)) : raw);
       expect(trust.inPlans).toBe(!frozenOut && trust.band.min >= 20);
       expect(planLine(trust)).toContain('league');
