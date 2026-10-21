@@ -1,0 +1,2 @@
+#!serial
+mdRevert: git checkout bc79b526 -- src/components/club-manager/HalftimeScreen.tsx src/components/club-manager/MatchCentre.tsx src/components/club-manager/LiveSimScreen.tsx src/components/club-manager/MatchReportCard.tsx && node scripts/simCmMatchDay.mjs; s=$?; git checkout HEAD -- src; exit $s
