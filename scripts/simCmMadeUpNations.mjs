@@ -209,14 +209,13 @@ const DRAWS = 2000;
   for (const p of places) {
     const counts = m.cm.nationCountsAt(p, p.era);
     if (!counts) { fail(`${p.era} ${p.league} (${p.home}): no real count to draw from`); continue; }
-    for (const young of [false, true]) {
-      const c = counts[young ? 1 : 0];
-      if (young && c.known < m.nat.YOUNG_FLOOR) continue;
+    for (const young of [false]) {
+      const c = counts;
       if (c.known < 20) { thin += 1; continue; }
       const real = c.home / c.known, top = c.abroad[0], realTop = top ? top[1] / c.known : 0;
       let home = 0, topHits = 0;
       for (let i = 0; i < DRAWS; i += 1) {
-        const n = m.cm.madeUpNationAt(`Probe ${p.era} ${p.league} ${p.home} ${young ? 'y' : 'a'} ${i}`, p, p.era, young);
+        const n = m.cm.madeUpNationAt(`Probe ${p.era} ${p.league} ${p.home} ${i}`, p, p.era);
         if (n === p.home) home += 1;
         else if (top && n === top[0]) topHits += 1;
       }
@@ -274,7 +273,7 @@ console.log('2b) Ten years on, the market\'s made up men sit at each league\'s r
   let checked = 0, worst = 0, worstAt = '';
   const rows = [];
   for (const t of tally.values()) {
-    const c = m.cm.nationCountsAt(t.pl, t.era)?.[0];
+    const c = m.cm.nationCountsAt(t.pl, t.era);
     if (!c || c.known < 20 || t.n < 40) continue;
     const real = c.home / c.known, drawn = t.home / t.n;
     const z = Math.abs(drawn - real) / Math.sqrt(Math.max(real * (1 - real), 0.0025) / t.n);

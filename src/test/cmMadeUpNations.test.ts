@@ -76,7 +76,7 @@ describe('it stays with him', () => {
     s = promoteProspect(s, 'u1')!;
     s = promoteProspect(s, 'u2')!;
     expect(find(s, 'Unit Scouted')?.nation).toBe('Türkiye');
-    expect(find(s, 'Unit Home')?.nation).toBe(madeUpNationAt('Unit Home', careerPlace(s), s.eraId, true));
+    expect(find(s, 'Unit Home')?.nation).toBe(madeUpNationAt('Unit Home', careerPlace(s), s.eraId));
   });
   it('bought, loaned out and back, released, reloaded', () => {
     let s: CareerState = { ...startCareer('Everton'), budget: 500 };

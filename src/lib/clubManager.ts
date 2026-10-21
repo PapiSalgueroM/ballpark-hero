@@ -47,7 +47,7 @@ import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade 
 import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 /* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */
 import { keyedRng } from '@/lib/keyedRng';
-import { YOUNG_AGE, YOUNG_FLOOR, countNations, drawNation, mapSpelling, type NationCount } from '@/lib/clubManagerMadeUpNations';
+import { countNations, drawNation, mapSpelling, type NationCount } from '@/lib/clubManagerMadeUpNations';
 import { nationalityOf } from '@/data/playerNationalities';
 /* Round 1510: the shared night of a participant and the one match cups. Pure modules: no cycle. */
 import { nightsDoneAt, placeNights } from '@/lib/worldNights';
@@ -537,8 +537,7 @@ function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: 
   if (!livingWorldOf(state)) return state;
   /* Round 1520: a made up man the ledger takes in keeps the country the market showed for him at the club he left. */
   if (madeUp(player) && player.nation === undefined) {
-    const nation = madeUpNationAt(player.name, from === state.clubName ? careerPlace(state) : clubPlace(from, state.eraId), state.eraId,
-      !!(player.isYouth || player.academyGrad));
+    const nation = madeUpNationAt(player.name, from === state.clubName ? careerPlace(state) : clubPlace(from, state.eraId), state.eraId);
     if (nation) player = { ...player, nation };
   }
   const held = worldRosterView(state);
@@ -4725,39 +4724,31 @@ export function careerPlace(career: Pick<CareerState, 'clubName' | 'eraId' | 'cu
     Kept per world and club, since a market of thousands asks it once a made up man. */
 const CLUB_PLACES = new Map<string, NationPlace | null>();
 function clubPlace(club: string, eraId: string | undefined): NationPlace | null {
-  const key = `${isHistoricEra(eraId) ? eraId : 'now'}|${club}`;
-  const hit = CLUB_PLACES.get(key);
-  if (hit !== undefined) return hit;
-  const lg = (isHistoricEra(eraId) ? ERA_LEAGUES[eraId!]?.find(l => l.clubs.includes(club)) : undefined)
-    ?? REAL_LEAGUES.find(l => l.clubs.includes(club));
-  const place = lg ? placeIn(lg.id, club) : null;
-  CLUB_PLACES.set(key, place);
-  return place;
+  const world = isHistoricEra(eraId) ? eraId! : 'now', key = `${world}|${club}`;
+  if (!CLUB_PLACES.has(key)) {
+    const lg = (world === 'now' ? undefined : ERA_LEAGUES[world]?.find(l => l.clubs.includes(club))) ?? REAL_LEAGUES.find(l => l.clubs.includes(club));
+    CLUB_PLACES.set(key, lg ? placeIn(lg.id, club) : null);
+  }
+  return CLUB_PLACES.get(key)!;
 }
 
 /* Each league's real men counted by country, once a world, from the squads and the verified map of that world. */
-const NATION_COUNTS = new Map<string, Map<string, [NationCount, NationCount]>>();
+const NATION_COUNTS = new Map<string, Map<string, NationCount>>();
 
-/** The real count behind a place, whole squads and young men. Undefined while the world's squads have not arrived. */
-export function nationCountsAt(place: NationPlace, eraId: string | undefined): [NationCount, NationCount] | null | undefined {
+/** The real count behind a place. Undefined while the world's squads have not arrived. */
+export function nationCountsAt(place: NationPlace, eraId: string | undefined): NationCount | null | undefined {
   if (!eraRostersLoaded(eraId)) return undefined;
   const world = isHistoricEra(eraId) ? eraId! : 'now';
   let table = NATION_COUNTS.get(world);
   if (!table) {
-    const lists = new Map<string, { home: string; all: (string | null)[]; young: (string | null)[] }>();
+    const lists = new Map<string, (string | null)[]>();
     for (const [club, roster] of Object.entries(eraRostersRaw(eraId))) {
       const at = clubPlace(club, eraId);
       if (!at) continue;
       const key = `${at.league}|${at.home}`;
-      let list = lists.get(key);
-      if (!list) lists.set(key, list = { home: at.home, all: [], young: [] });
-      for (const b of roster) {
-        const n = nationalityOf(eraId, b.n);
-        list.all.push(n);
-        if (b.a <= YOUNG_AGE) list.young.push(n);
-      }
+      lists.set(key, (lists.get(key) ?? []).concat(roster.map(b => nationalityOf(eraId, b.n))));
     }
-    table = new Map([...lists].map(([key, l]) => [key, [countNations(l.all, l.home), countNations(l.young, l.home)]]));
+    table = new Map([...lists].map(([key, all]) => [key, countNations(all, key.slice(key.indexOf('|') + 1))]));
     NATION_COUNTS.set(world, table);
   }
   return table.get(`${place.league}|${place.home}`) ?? null;
@@ -4768,17 +4759,14 @@ const DRAWN_NATIONS = new Map<string, string>();
 
 /** A made up man's country, drawn where the save first meets him (madeUpNations.ts says how). Undefined when there
     is no place to draw from, or the world's squads have not arrived: nothing is stored then, and the next
-    ensureMadeUpNations draws the same one. A young man reads the league's young count when it has enough of them. */
-export function madeUpNationAt(name: string, place: NationPlace | null, eraId: string | undefined, young = false): string | undefined {
+    ensureMadeUpNations draws the same one. */
+export function madeUpNationAt(name: string, place: NationPlace | null, eraId: string | undefined): string | undefined {
   if (!place) return undefined;
   const counts = nationCountsAt(place, eraId);
   if (counts === undefined) return undefined;
-  const key =`${isHistoricEra(eraId) ? eraId : 'now'}|${place.league}|${place.home}|${young ? 'y' : ''}|${name}`;
-  const kept = DRAWN_NATIONS.get(key);
-  if (kept !== undefined) return kept;
-  const nation = drawNation(name, place.home, counts && (young && counts[1].known >= YOUNG_FLOOR ? counts[1] : counts[0]));
-  DRAWN_NATIONS.set(key, nation);
-  return nation;
+  const key = `${eraId}|${place.league}|${place.home}|${name}`;
+  if (!DRAWN_NATIONS.has(key)) DRAWN_NATIONS.set(key, drawNation(name, place.home, counts));
+  return DRAWN_NATIONS.get(key);
 }
 
 /** The country a market listing carries off a made up projected or ledger man at `club`; nothing for a real man. */
@@ -4792,28 +4780,18 @@ function madeUp(p: CMPlayer): boolean {
 }
 
 /** Round 1520: every made up man of mine (squad, out on loan, the free agent pool) carries his country. Draws only
-    for a man with none, so it moves nothing already stored, and replaces the objects it changes rather than writing
-    into them. The same draw as the day he arrived, so a save from before the round gets the country it would have
-    had. Registered in loadCareer and playNextEntry, and run where men are made (startCareer, startNextSeason). */
+    for a man with none, so it moves nothing already stored, and replaces the man it changes rather than writing into
+    him. The same draw as the day he arrived, so a save from before the round gets the country it would have had.
+    Registered in loadCareer and playNextEntry, and run where men are made (startCareer, startNextSeason). */
 export function ensureMadeUpNations(state: CareerState): void {
   const place = careerPlace(state);
-  const stamp = <T extends { name: string; nation?: string }>(p: T, young: boolean): T => {
-    const nation = p.nation === undefined ? madeUpNationAt(p.name, place, state.eraId, young) : undefined;
+  const stamp = <T extends { name: string; nation?: string }>(p: T): T => {
+    const nation = p.nation === undefined ? madeUpNationAt(p.name, place, state.eraId) : undefined;
     return nation ? { ...p, nation } : p;
   };
-  const young = (p: CMPlayer) => !!(p.isYouth || p.academyGrad);
-  const each = <T>(list: T[], f: (x: T) => T): T[] => {
-    const out = list.map(f);
-    return out.some((x, i) => x !== list[i]) ? out : list;
-  };
-  if (Array.isArray(state.squad)) state.squad = each(state.squad, p => (madeUp(p) ? stamp(p, young(p)) : p));
-  if (Array.isArray(state.loanedOut)) {
-    state.loanedOut = each(state.loanedOut, l => {
-      const p = l?.player && madeUp(l.player) ? stamp(l.player, young(l.player)) : undefined;
-      return p && p !== l.player ? { ...l, player: p } : l;
-    });
-  }
-  if (Array.isArray(state.freeAgents)) state.freeAgents = each(state.freeAgents, f => (f?.generated ? stamp(f, false) : f));
+  if (Array.isArray(state.squad)) state.squad = state.squad.map(p => (madeUp(p) ? stamp(p) : p));
+  if (Array.isArray(state.loanedOut)) state.loanedOut = state.loanedOut.map(l => (l?.player && madeUp(l.player) ? { ...l, player: stamp(l.player) } : l));
+  if (Array.isArray(state.freeAgents)) state.freeAgents = state.freeAgents.map(f => (f?.generated ? stamp(f) : f));
 }
 
 /** The flag a man shows: a made up man's own country, else the verified map's, which a real man only ever reads. */
@@ -19399,8 +19377,8 @@ export function promoteProspect(career: CareerState, prospectId: string): Career
     contractYears: 4,
   };
   /* Round 1520: a boy a scout found abroad keeps that trip's country; a boy of the home intake is drawn from the
-     club's own country at its league's young share (madeUpNationAt). */
-  const nation = pr.source !== 'Academy' && pr.source ? mapSpelling(pr.source) : madeUpNationAt(pr.name, careerPlace(next), next.eraId, true);
+     club's own country at its league's share (madeUpNationAt). */
+  const nation = pr.source !== 'Academy' && pr.source ? mapSpelling(pr.source) : madeUpNationAt(pr.name, careerPlace(next), next.eraId);
   if (nation) player.nation = nation;
   player.wage = wageFor(player);
   next.squad = [...next.squad, player];

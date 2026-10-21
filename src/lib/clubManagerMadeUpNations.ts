@@ -8,8 +8,8 @@
    How it is drawn: from the country of the club where the save first meets him, at the share of home players the
    real squads of that club's league actually have in this world (counted off the save's own world: its squads and
    its verified map), and otherwise from the countries those squads' foreign players come from, in proportion. A
-   youth pad or a boy out of the home academy reads the same count taken over the league's real men aged 21 or under,
-   when there are enough of them to count. A boy a scout found abroad keeps the country of that scouting trip.
+   youth pad and a boy of the home academy read the same count. A boy a scout found abroad keeps the country of that
+   scouting trip.
 
    The draw is keyed on his name (keyedRng), so it never touches the season's random stream and the same man always
    lands on the same country, a save from before this round included. Pure: no state, no clock. */
@@ -17,11 +17,6 @@ import { keyedRng } from '@/lib/keyedRng';
 
 /** One club country's real men in one league, counted. `known` holds only men the verified map has a country for. */
 export interface NationCount { known: number; home: number; abroad: [string, number][] }
-
-/** Too few young men to count leaves a boy on the whole squad's count. */
-export const YOUNG_FLOOR = 20;
-/** The oldest a man can be and still count as young. */
-export const YOUNG_AGE = 21;
 
 /** Counts a list of verified countries against the club country they play in, busiest foreign country first. */
 export function countNations(nations: readonly (string | null)[], home: string): NationCount {
