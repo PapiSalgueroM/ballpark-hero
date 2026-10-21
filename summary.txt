@@ -1,0 +1,14 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+proof-hoff-1514 exit=0 88s | proofWorldUclFleet: GREEN, 10 journeys and 1254 steps byte equal to 92290f81 (a watching state without worldComps.dsc+usc), draws equal
+s2-attr-1514 exit=1 183s | simCmDifficulty: 48 FAILURES (sections 2)
+proof-part-1514 exit=0 322s | proofWorldUclFleet: GREEN, 60 journeys and 6490 steps byte equal to 92290f81 (a watching state without worldComps.usc), draws equal
+ctl0-1514 exit=0 0s | pairing exit=1 simOneOffCups: control pairing FIRED (2 failures, all its own: cup-seriea-2025-26: the constant names Roma, the ledger Lazio)
+s2-own-1514 exit=1 183s | simCmDifficulty: 48 FAILURES (sections 2)
+ctl1-1514 exit=0 440s | nocarryusc exit=1 simOneOffCups: control nocarryusc FIRED (17 failures, all its own: 1 never falls: Chelsea (now) seed 1 nocoach at s1-join: 0 UEFA Super Cup nights shown
+walk-swap exit=1 64s | playOneOffCups: control swap FIRED (3 findings of "the card shows", 3 in all)
+proof-watch-1514 exit=0 970s | proof exit 1, differing journeys 10 (10 expected), of them not Hoffenheim 0 (0 expected)
+unseeded-1508 exit=0 177s | simCmUnseededWorld: green. 49 old saves with no deal play byte equal to da5c7413 (state, draws and saved bytes at every step), 49 with every deal play byte equal to it up
+oldworld-1508 exit=0 59s | simCmOldCareersWorld: green, sections 1, 2 held (59s)
+continuity-1508 exit=0 63s | contCmp1508: green, the log equals the tree without 1508 line for line
+s2 exit=1 147s | simCmDifficulty: 54 FAILURES (sections 2)
+ctl-light exit=0 816s | keep exit=1 | simOneOffCups: control keep FIRED (1071 failures, all its own: 5 slices: Arsenal (now) seed 1 nocoach at s1-rollover: worldComps holds uel dsc usc dscOld us
