@@ -1,0 +1,11 @@
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[dukb] preload wrapper: a cancelled chunk error waits for the reload (vite 5.4.21)
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+   /club-manager         0K gz over  43 files (budget 630K, 0.0K to the tenth)
+   /manager-hot-seat     0K gz over  45 files (budget 645K, 0.0K to the tenth)
+   /deadline-day         0K gz over  48 files (budget 655K, 0.0K to the tenth)
