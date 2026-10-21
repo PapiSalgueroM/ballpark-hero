@@ -1,0 +1,7 @@
+carry-head exit=0 5s | review-carry: every carry held
+m1-nat exit=0 77s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+m1-vit exit=0 3s |    Duration  1.96s (transform 1.04s, setup 50ms, collect 1.25s, tests 152ms, environment 228ms, prepare 93ms)
+m1-carry exit=0 5s | review-carry: every carry held
+m2-nat exit=0 77s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+m2-vit exit=0 2s |    Duration  2.03s (transform 1.04s, setup 48ms, collect 1.24s, tests 165ms, environment 218ms, prepare 51ms)
+m2-carry exit=0 5s | review-carry: every carry held
