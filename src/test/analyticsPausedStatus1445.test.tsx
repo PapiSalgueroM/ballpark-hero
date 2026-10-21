@@ -35,8 +35,8 @@ describe('Analytics paused status1445', () => {
       <button onClick={event => openConsentChoices(event.currentTarget)}>Open cookie choices</button>
       <CookieConsent />
     </MemoryRouter>);
-    const region = screen.getByRole('region', { name: 'Cookie choices', exact: true });
-    const advertising = within(region).getByRole('checkbox', { name: 'Advertising', exact: true });
+    const region = screen.getByRole('region', { name: 'Cookie choices' });
+    const advertising = within(region).getByRole('checkbox', { name: 'Advertising' });
     expect(advertising).toBeEnabled(); expect(advertising).not.toBeChecked();
     await waitFor(() => expect(region).toHaveFocus());
     expect(within(region).queryAllByRole('checkbox', { name: /Analytics/i }).length,
@@ -50,7 +50,7 @@ describe('Analytics paused status1445', () => {
     expect(getEffectiveConsent()).toEqual({ advertising: false, analytics: false });
 
     fireEvent.click(advertising); expect(advertising).toBeChecked();
-    fireEvent.click(within(region).getByRole('button', { name: 'Save choices', exact: true }));
+    fireEvent.click(within(region).getByRole('button', { name: 'Save choices' }));
     expect(screen.queryByRole('region', { name: 'Cookie choices' })).toBeNull();
     expect(JSON.parse(localStorage.getItem(key)!)).toMatchObject({ version: 2, advertising: true, analytics: false });
     expect(getEffectiveConsent()).toEqual({ advertising: true, analytics: false });
@@ -58,14 +58,14 @@ describe('Analytics paused status1445', () => {
     expect(document.querySelector('script[src*="googletagmanager.com"], script[src*="google-analytics.com"]')).toBeNull();
     expect(window.dataLayer).toBeUndefined(); expect(window.gtag).toBeUndefined();
 
-    const opener = screen.getByRole('button', { name: 'Open cookie choices', exact: true });
+    const opener = screen.getByRole('button', { name: 'Open cookie choices' });
     act(() => opener.focus()); fireEvent.click(opener);
     const reopened = screen.getByRole('region', { name: 'Cookie choices' });
     await waitFor(() => expect(reopened).toHaveFocus());
     expect(within(reopened).getByRole('checkbox', { name: 'Advertising' })).toBeChecked();
     expect(within(reopened).queryByRole('checkbox', { name: /Analytics/i })).toBeNull();
     const before = localStorage.getItem(key);
-    fireEvent.click(within(reopened).getByRole('button', { name: 'Cancel', exact: true }));
+    fireEvent.click(within(reopened).getByRole('button', { name: 'Cancel' }));
     expect(opener).toHaveFocus(); expect(localStorage.getItem(key)).toBe(before);
     expect(fetchCalls).not.toHaveBeenCalled();
   });
