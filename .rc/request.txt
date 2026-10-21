@@ -1,0 +1,12 @@
+simTrustCopy: node scripts/simTrustCopy.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simCmBoardVerdict: node scripts/simCmBoardVerdict.mjs
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simCmCopy: node scripts/simCmCopy.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simCmDifficulty: node scripts/simCmDifficulty.mjs
+simCmDifficulty-base: git worktree add -q /tmp/base bc79b526 && BASE_ROOT=/tmp/base node scripts/simCmDifficulty.mjs 2>&1 | grep -E "^2|FAIL|ok:|green|RED" | head -40; exit ${PIPESTATUS[0]}
