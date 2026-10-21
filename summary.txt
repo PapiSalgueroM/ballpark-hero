@@ -1,0 +1,1 @@
+simCmTactics exit=0 740s | simCmTactics: all green (sections table, styles, balanced, fleet)
