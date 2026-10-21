@@ -356,14 +356,14 @@ describe('the living squad', () => {
     const base = { ...save('Leeds', 'England', 2, 74, 2030), morale: 81 } as CareerState;
     const at = squadNow(base);
     if (!at) throw new Error('no club');
-    const happy = { ...base, morale: 96 } as CareerState;
+    const happy = { ...base, morale: 95 } as CareerState;
     const low = { ...base, morale: 40 } as CareerState;
     const warmHappy = { ...happy, phone: { threads: [{ rel: 90 }] } } as unknown as CareerState;
     expect(managerTrust(base, at)).toMatchObject({ expected: 25, moraleGames: 0 });
-    expect(managerTrust(happy, at)).toMatchObject({ expected: 27, moraleGames: 2 });
+    expect(managerTrust(happy, at)).toMatchObject({ expected: 26, moraleGames: 1 });
     expect(managerTrust(low, at)).toMatchObject({ expected: 23, moraleGames: -2 });
     expect(managerTrust(warmHappy, at)).toMatchObject({ expected: 28, swing: 3, moraleGames: 0 });
-    expect(trustLines(happy, at, managerTrust(happy, at))).toContain('You are in a good place: your morale is worth about 2 more league games.');
+    expect(trustLines(happy, at, managerTrust(happy, at))).toContain('You are in a good place: your morale is worth about 1 more league game.');
     expect(trustLines(low, at, managerTrust(low, at))).toContain('Your morale is costing you: about 2 fewer league games.');
   });
 

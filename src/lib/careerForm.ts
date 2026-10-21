@@ -14,13 +14,18 @@
     Soccer's neutral point is measured, not picked: the median morale at the moment of the press over the house
     fleet (scripts/lib/careerStep.mjs, 160 careers, 3,906 presses, remote check r1523-probe on 2ab9bef1) is 81,
     because a career's morale runs high. A neutral point of 60 would have handed most careers extra games for
-    nothing. A chooser who picks every card at random sits at 75, one point under the zero band. */
+    nothing. A chooser who picks every card at random sits at 75, inside the zero band.
+    Fifteen points a step, not ten, is measured too (remote check r1523-var, 400 careers a fleet): at ten the house
+    fleet, whose phone runs cold so the shared cap eats a low morale's cost, gained 0.71 league games a season and
+    six points fewer journeymen, and a fleet that answers every text, whose morale sits at 98, gained 1.29 games and
+    7.5 points fewer solid pros. At fifteen the two move 0.28 and 0.99 games and both legacy blocks stay inside
+    what the fleet moves from seed to seed (scripts/simCareerForm.mjs section 4). */
 export const CAREER_FORM = {
   nba: { per: 12, neutral: 60 },
   nfl: { per: 10, neutral: 60 },
   mlb: { per: 12, neutral: 60 },
   nhl: { per: 12, neutral: 60 },
-  soccer: { per: 10, neutral: 81 },
+  soccer: { per: 15, neutral: 81 },
 } as const;
 
 export type CareerFormKey = keyof typeof CAREER_FORM;
@@ -32,8 +37,8 @@ export function moraleForm(career: CareerFormKey, morale: number): number {
 }
 
 /* ─── Soccer Career: morale that plays ───
-   A step from -2 to +2, zero across the middle (76 to 85), +1 from 86, +2 from 96, -1 from 75 down to 66, -2 at
-   65 and below. The step is league games (beside the dressing room's phoneAppsSwing, the two capped together at
+   A step from -2 to +1: zero across the middle (74 to 88), +1 from 89, -1 from 73 down to 59, -2 at 58 and below
+   (the top of the scale is 100, so +1 is as high as it goes). The step is league games (beside the dressing room's phoneAppsSwing, the two capped together at
    plus or minus three, so a happy phone and a happy head never stack past three games) and a tenth of a rating
    point a step on the season rating. A pure function of the save: no draw, so the season's dice are the same. */
 export const SOCCER_MORALE_STEP_MAX = 2;

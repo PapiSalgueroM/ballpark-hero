@@ -24,7 +24,7 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.SIM_CAREER_FORM_BASE || '2ab9bef153009a3144970e87755225a458ef0c3b';
 const CONTROL = process.env.SIM_CAREER_FORM_CONTROL || '';
-const CONTROLS = { divisor: '1', zero: '3', nogate: '5' };
+const CONTROLS = { divisor: '1', zero: '3', posttext: '3', nogate: '5' };
 if (CONTROL && !CONTROLS[CONTROL]) { console.log(`ABORT: unknown SIM_CAREER_FORM_CONTROL ${CONTROL}`); process.exit(1); }
 /* A control runs only the section it breaks, unless SIM_CAREER_FORM_SECTIONS names others. */
 const SECTIONS = (process.env.SIM_CAREER_FORM_SECTIONS || (CONTROL ? CONTROLS[CONTROL] : '1,2,3,4,5')).split(',').map(s => s.trim());
@@ -116,7 +116,9 @@ const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const STEP_LINE = "const step = Math.round(moraleForm('soccer', morale));";
 const GATE_LINE = 'if (puskasDrawn && puskasAwardExists(thisYear)) {';
 const PRESS_MARK = 'function generateSeasonStats(state, clubs) {';
-async function soccer(name, { stepOff = false, noGate = false } = {}) {
+const AT_PRESS = 'const moraleAtPress = (state: CareerState): number => MORALE_AT_PRESS.get(state) ?? state.morale;';
+const APPS_MARK = 'dressingRoomApps(phoneAppsSwing(state), moraleAtPress(state))';
+async function soccer(name, { stepOff = false, noGate = false, postText = false } = {}) {
   const serve = {};
   if (stepOff) {
     const form = read(FORM);
@@ -127,6 +129,11 @@ async function soccer(name, { stepOff = false, noGate = false } = {}) {
     const engine = read(ENGINE);
     if (engine.split(GATE_LINE).length !== 2) { console.log(`ABORT: ${ENGINE} does not hold ${GATE_LINE} once`); process.exit(1); }
     serve[ENGINE] = engine.replace(GATE_LINE, 'if (puskasDrawn) {');
+  }
+  if (postText) {
+    const engine = serve[ENGINE] ?? read(ENGINE);
+    if (engine.split(AT_PRESS).length !== 2) { console.log(`ABORT: ${ENGINE} does not hold ${AT_PRESS} once`); process.exit(1); }
+    serve[ENGINE] = engine.replace(AT_PRESS, 'const moraleAtPress = (state: CareerState): number => state.morale;');
   }
   const entry = path.join(TMP, `${name}-entry.ts`);
   fs.writeFileSync(entry, ['soccerCareerEngine', 'soccerCareerAttributes', 'careerForm', 'soccerWorldTruth', 'soccerPhone']
@@ -142,6 +149,12 @@ async function soccer(name, { stepOff = false, noGate = false } = {}) {
   let text = fs.readFileSync(out, 'utf8');
   if (text.split(PRESS_MARK).length !== 2) { console.log('ABORT: generateSeasonStats is not in the bundle once'); process.exit(1); }
   text = text.replace(PRESS_MARK, `${PRESS_MARK}\n  if (globalThis.__sfPress) globalThis.__sfPress(state);`);
+  /* the league games calcAppearances settled on, before the freeze: the exact check of section 3 reads them */
+  const at = text.indexOf(APPS_MARK);
+  if (at < 0 || text.indexOf(APPS_MARK, at + 1) >= 0) { console.log('ABORT: the morale line of calcAppearances is not in the bundle once'); process.exit(1); }
+  const end = text.indexOf(';', at) + 1;
+  if (!/if \(state\) leagueApps = clamp\d*\(leagueApps \+ $/.test(text.slice(text.lastIndexOf('\n', at) + 1, at))) { console.log('ABORT: the morale line does not set leagueApps'); process.exit(1); }
+  text = `${text.slice(0, end)}\n  if (globalThis.__sfApps) globalThis.__sfApps(leagueApps, state);${text.slice(end)}`;
   fs.writeFileSync(out, text);
   return import(pathToFileURL(out).href);
 }
@@ -170,18 +183,18 @@ if (runs('2')) {
   console.log('2) the soccer step, the cap it shares with the phone, and the hub line');
   const S = await soccer('step');
   const F = S.F;
-  const want = [[0, -2], [20, -2], [65, -2], [66, -1], [75, -1], [76, 0], [81, 0], [85, 0], [86, 1], [95, 1], [96, 2], [100, 2], [undefined, 0], [NaN, 0]];
+  const want = [[0, -2], [20, -2], [58, -2], [59, -1], [73, -1], [74, 0], [81, 0], [88, 0], [89, 1], [95, 1], [100, 1], [undefined, 0], [NaN, 0]];
   for (const [m, s] of want) if (F.soccerMoraleStep(m) !== s) fail(`soccerMoraleStep(${m}) is ${F.soccerMoraleStep(m)}, not ${s}`);
-  if (Object.is(F.soccerMoraleStep(76), -0)) fail('soccerMoraleStep(76) is minus zero');
+  if (Object.is(F.soccerMoraleStep(74), -0)) fail('soccerMoraleStep(74) is minus zero');
   for (const phone of [-3, -2, 0, 2, 3]) for (const m of [20, 81, 100]) {
     const got = F.dressingRoomApps(phone, m), cap = Math.max(-3, Math.min(3, phone + F.soccerMoraleStep(m)));
     if (got !== cap) fail(`dressingRoomApps(${phone}, ${m}) is ${got}, not ${cap}`);
     if (F.soccerMoraleStep(m) === 0 && got !== phone) fail(`a neutral morale moved the phone's ${phone} games to ${got}`);
   }
-  for (const [m, r] of [[20, -0.2], [70, -0.1], [81, 0], [90, 0.1], [100, 0.2]]) if (F.soccerMoraleRating(m) !== r) fail(`soccerMoraleRating(${m}) is ${F.soccerMoraleRating(m)}, not ${r}`);
-  const lines = [[90, 0, 'Morale 90: +1 league game, rating +0.1 this season.'], [100, 0, 'Morale 100: +2 league games, rating +0.2 this season.'],
+  for (const [m, r] of [[20, -0.2], [70, -0.1], [81, 0], [90, 0.1], [100, 0.1]]) if (F.soccerMoraleRating(m) !== r) fail(`soccerMoraleRating(${m}) is ${F.soccerMoraleRating(m)}, not ${r}`);
+  const lines = [[90, 0, 'Morale 90: +1 league game, rating +0.1 this season.'], [100, 0, 'Morale 100: +1 league game, rating +0.1 this season.'],
     [40, 0, 'Morale 40: -2 league games, rating -0.2 this season.'], [81, 0, 'Morale 81: settled, no swing in games or rating this season.'],
-    [100, 3, 'Morale 100: rating +0.2 this season (the dressing room already has your games at the limit).'], [100, 2, 'Morale 100: +1 league game, rating +0.2 this season.']];
+    [100, 3, 'Morale 100: rating +0.1 this season (the dressing room already has your games at the limit).'], [40, -2, 'Morale 40: -1 league game, rating -0.2 this season.']];
   for (const [m, phone, line] of lines) if (F.soccerMoraleLine(m, phone) !== line) fail(`soccerMoraleLine(${m}, ${phone}) reads "${F.soccerMoraleLine(m, phone)}"`);
   const dash = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
   for (let m = 0; m <= 100; m += 1) for (const phone of [-3, 0, 3]) if (dash.some(d => F.soccerMoraleLine(m, phone).includes(d))) fail(`the hub line for ${m} holds a dash`);
@@ -203,27 +216,33 @@ const playedRow = (before, after) => {
 if (runs('3')) {
   console.log('3) a pinned fleet: every press played again at morale 20, at the neutral point and at 90');
   if (CONTROL === 'zero') console.log('   CONTROL zero: the soccer step is 0 in this tree\'s bundle');
-  const S = await soccer(CONTROL === 'zero' ? 'pin-zero' : 'pin', { stepOff: CONTROL === 'zero' });
+  if (CONTROL === 'posttext') console.log('   CONTROL posttext: the season reads the morale the summer\'s texts leave, not the one he pressed on');
+  const S = await soccer(CONTROL ? `pin-${CONTROL}` : 'pin', { stepOff: CONTROL === 'zero', postText: CONTROL === 'posttext' });
   const OFF = await soccer('pin-off', { stepOff: true });
   const NEUTRAL = S.F.CAREER_FORM.soccer.neutral, PINS = [20, NEUTRAL, 90];
   const N = Number(process.env.SIM_CAREER_FORM_PIN_CAREERS || 120);
   const got = PINS.map(() => ({ league: [], rating: [] }));
-  let presses = 0, breaks = 0, overCap = 0, neutralSame = 0, neutralDiffer = 0, lowDrawsSame = 0, lowDrawsDiffer = 0;
+  let presses = 0, exact = 0, clamped = 0, mismatch = 0, neutralSame = 0, neutralDiffer = 0, lowDrawsSame = 0, lowDrawsDiffer = 0;
+  let seen = null;
+  globalThis.__sfApps = (leagueApps, st) => { seen = { leagueApps, phone: S.P.phoneAppsSwing(st) }; };
   for (let i = 0; i < N; i += 1) {
     seedRandom(SEED * 1000 + i);
     let c = newCareer(S, i);
     for (let k = 0; k < 1500 && !c.retired; k += 1) {
       if (c.phase === 'playing') {
         const snap = JSON.stringify(c), seed = SEED * 7919 + i * 131 + k;
-        const at = (E, morale) => aside(seed, () => E.advanceProSeason({ ...JSON.parse(snap), morale }, E.FALLBACK_CLUBS));
+        const at = (E, morale) => { seen = null; const r = aside(seed, () => E.advanceProSeason({ ...JSON.parse(snap), morale }, E.FALLBACK_CLUBS)); return { ...r, seen }; };
         const runsAt = PINS.map(p => at(S.E, p));
         const rows = runsAt.map(r => playedRow(c, r.value));
-        if (rows.every(Boolean)) {
+        if (rows.every(Boolean) && runsAt.every(r => r.seen)) {
           presses += 1;
           rows.forEach((row, j) => { got[j].league.push(row.leagueApps ?? row.apps); got[j].rating.push(row.rating); });
-          const [l20, l81, l90] = rows.map(row => row.leagueApps ?? row.apps);
-          if (l20 > l81 || l81 > l90) breaks += 1;
-          if (l81 - l20 > 2 || l90 - l81 > 1) overCap += 1;
+          /* exact: calcAppearances' league games less the designed joint step (phone plus the step of the morale he
+             pressed on, capped at three) are the same number at every pin, wherever the 0 to 38 clamp did not bite */
+          if (runsAt.every(r => r.seen.leagueApps > 0 && r.seen.leagueApps < 38)) {
+            const rest = runsAt.map((r, j) => r.seen.leagueApps - S.F.dressingRoomApps(r.seen.phone, PINS[j]));
+            if (rest.every(v => v === rest[0])) exact += 1; else mismatch += 1;
+          } else clamped += 1;
           const offNeutral = at(OFF.E, NEUTRAL), offLow = at(OFF.E, 20);
           if (JSON.stringify(offNeutral.value) === JSON.stringify(runsAt[1].value) && offNeutral.draws === runsAt[1].draws) neutralSame += 1; else neutralDiffer += 1;
           if (offLow.draws === runsAt[0].draws) lowDrawsSame += 1; else lowDrawsDiffer += 1;
@@ -232,15 +251,17 @@ if (runs('3')) {
       c = step(S, c);
     }
   }
+  globalThis.__sfApps = null;
   const lm = got.map(g => meanOf(g.league)), rm = got.map(g => meanOf(g.rating));
   console.log(`   ${N} careers, ${presses} presses played three ways (seed ${SEED})`);
   console.log(`   league games: morale 20 ${f2(lm[0])}, ${NEUTRAL} ${f2(lm[1])}, 90 ${f2(lm[2])}; rating ${f2(rm[0])}, ${f2(rm[1])}, ${f2(rm[2])}`);
   console.log(`   gaps: games ${f2(lm[1] - lm[0])} and ${f2(lm[2] - lm[1])}, rating ${f2(rm[1] - rm[0])} and ${f2(rm[2] - rm[1])}`);
+  console.log(`   exact: ${exact} presses moved by exactly the designed step at every pin, ${mismatch} did not, ${clamped} left out where 0 or 38 bit`);
   console.log(`   at the neutral point the round's arm and the arm without the step: ${neutralSame} presses byte identical with the same draws, ${neutralDiffer} not`);
-  console.log(`   at morale 20 the two arms made the same number of draws in ${lowDrawsSame} presses and a different number in ${lowDrawsDiffer}`);
+  console.log(`   at morale 20 the two arms made the same number of draws in ${lowDrawsSame} presses and a different number in ${lowDrawsDiffer} (draws after the league games move with them)`);
   if (presses < N * 8) fail(`only ${presses} presses were played three ways`);
-  if (breaks) fail(`${breaks} presses gave fewer league games at a higher morale`);
-  if (overCap) fail(`${overCap} presses moved more league games than the step allows (2 below, 1 above)`);
+  if (exact < presses * 0.8) fail(`only ${exact} of ${presses} presses were checked exactly`);
+  if (mismatch) fail(`${mismatch} presses moved league games by something other than the designed step of the morale he pressed on`);
   if (neutralDiffer) fail(`${neutralDiffer} presses at the neutral point differ from the arm without the step`);
   /* Floors from measured headroom (see the header): each gap must clear its floor. */
   const FLOORS = { g1: 0.6, g2: 0.3, r1: 0.12, r2: 0.05 };
@@ -249,39 +270,51 @@ if (runs('3')) {
 }
 
 const TIERS = ['GOAT', 'LEGEND', 'GREAT', 'SOLID PRO', 'JOURNEYMAN'];
-/* A whole career on the house fleet, Math.random seeded from the career's index. */
-function wholeCareer(S, i, seedBase, opts) {
+/* A whole career, Math.random seeded from the career's index. The house fleet never opens the phone; the engaged
+   fleet answers every waiting text (its first choice) before each press, which keeps its morale near the top. */
+function wholeCareer(S, i, seedBase, opts, engaged = false) {
   seedRandom(seedBase * 1000 + i);
   let c = newCareer(S, i, opts);
-  for (let k = 0; k < 2000 && !c.retired; k += 1) c = step(S, c);
+  for (let k = 0; k < 2000 && !c.retired; k += 1) {
+    if (engaged && c.phase === 'playing') for (let r = 0; r < 6; r += 1) {
+      const t = (c.phone?.threads ?? []).find(th => th.pending);
+      const next = t ? S.E.answerPhoneText(c, t.id, 0) : c;
+      if (next === c) break;
+      c = next;
+    }
+    c = step(S, c);
+  }
   return c;
 }
-function fleetBlock(S, n, seedBase) {
+function fleetBlock(S, n, seedBase, engaged = false) {
   let bdor = 0, seasons = 0, league = 0, rating = 0, morale = 0, presses = 0;
   const tiers = Object.fromEntries(TIERS.map(t => [t, 0]));
   globalThis.__sfPress = st => { morale += st.morale; presses += 1; };
   for (let i = 0; i < n; i += 1) {
-    const c = wholeCareer(S, i, seedBase);
+    const c = wholeCareer(S, i, seedBase, undefined, engaged);
     for (const row of c.seasons) if (row.type === 'playing' && row.clubTier < 99) { seasons += 1; league += row.leagueApps ?? row.apps; rating += row.rating; if (row.ballonDor) bdor += 1; }
     tiers[S.E.calculateLegacy(c).tier] += 1;
   }
   globalThis.__sfPress = null;
-  return { n, bdor: (100 * bdor) / n, seasons, league: league / seasons, rating: rating / seasons, tiers: Object.fromEntries(TIERS.map(t => [t, (100 * tiers[t]) / n])) };
+  return { n, bdor: (100 * bdor) / n, seasons, league: league / seasons, rating: rating / seasons, morale: morale / presses,
+    tiers: Object.fromEntries(TIERS.map(t => [t, (100 * tiers[t]) / n])) };
 }
-const showBlock = (name, b) => console.log(`   ${name.padEnd(9)} ${b.n} careers, ${b.seasons} seasons: Ballon d'Or ${f2(b.bdor)} per 100 careers, league games ${f2(b.league)}, rating ${f2(b.rating)}; legacy ${TIERS.map(t => `${t} ${b.tiers[t].toFixed(1)}%`).join(', ')}`);
+const showBlock = (name, b) => console.log(`   ${name.padEnd(9)} ${b.n} careers, ${b.seasons} seasons, morale ${b.morale.toFixed(1)} as the engine reads it: Ballon d'Or ${f2(b.bdor)} per 100 careers, league games ${f2(b.league)}, rating ${f2(b.rating)}; legacy ${TIERS.map(t => `${t} ${b.tiers[t].toFixed(1)}%`).join(', ')}`);
 
 if (runs('4')) {
-  console.log('4) the natural fleet: the round against the same tree without the morale step, same seeds');
+  const FLEET = process.env.SIM_CAREER_FORM_FLEET_KIND || 'house';
+  if (!['house', 'engaged'].includes(FLEET)) { console.log(`ABORT: unknown SIM_CAREER_FORM_FLEET_KIND ${FLEET}`); process.exit(1); }
+  console.log(`4) the natural fleet (${FLEET}): the round against the same tree without the morale step, same seeds`);
   const N = Number(process.env.SIM_CAREER_FORM_FLEET || 400);
-  const head = fleetBlock(await soccer('fleet-head'), N, SEED);
-  const off = fleetBlock(await soccer('fleet-off', { stepOff: true }), N, SEED);
+  const head = fleetBlock(await soccer('fleet-head'), N, SEED, FLEET === 'engaged');
+  const off = fleetBlock(await soccer('fleet-off', { stepOff: true }), N, SEED, FLEET === 'engaged');
   showBlock('round', head);
   showBlock('no step', off);
   const shift = { bdor: head.bdor - off.bdor, league: head.league - off.league, rating: head.rating - off.rating };
   const tierShift = Object.fromEntries(TIERS.map(t => [t, head.tiers[t] - off.tiers[t]]));
   console.log(`   shift: Ballon d'Or ${f2(shift.bdor)} per 100, league games ${f2(shift.league)}, rating ${f2(shift.rating)}; legacy ${TIERS.map(t => `${t} ${tierShift[t].toFixed(1)}`).join(', ')} points`);
   if (N >= 400) {
-    /* Bounds from measured headroom (see the header). */
+    /* Bounds from measured headroom (see the header): how far the no step arm itself moves between seed bases. */
     const BOUND = { bdor: 4, league: 0.8, rating: 0.08, tier: 6 };
     if (Math.abs(shift.bdor) > BOUND.bdor) fail(`the Ballon d'Or rate moved ${f2(shift.bdor)} per 100 careers, past ${BOUND.bdor}`);
     if (Math.abs(shift.league) > BOUND.league) fail(`league games a season moved ${f2(shift.league)}, past ${BOUND.league}`);
