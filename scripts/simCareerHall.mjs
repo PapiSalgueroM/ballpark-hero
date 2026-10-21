@@ -567,6 +567,8 @@ const CONTROLS = {
   // Section 17 (a), Round 1301: every career total of the fleet times 1.02, and divided by it (done in memory where the fleet is read; the string below only has to be there).
   statsup: { file: 'careerHallOfFame.ts', from: 'export type HallCalibration = 1 | 2 | 3;', to: 'export type HallCalibration = 1 | 2 | 3;' },
   statsdown: { file: 'careerHallOfFame.ts', from: 'export type HallCalibration = 1 | 2 | 3;', to: 'export type HallCalibration = 1 | 2 | 3;' },
+  // Section 19 (a), Round 1530: one base position's credit lowered by BASE_DRIFT, in memory where 19 (a) reads it (the string below only has to be there). Football and basketball only.
+  basedrift: { file: 'careerHallOfFame.ts', from: 'export type HallCalibration = 1 | 2 | 3;', to: 'export type HallCalibration = 1 | 2 | 3;' },
   // Section 18 (c): the ballot draws its first call against the wrong side of the chance.
   ballotflip: { file: 'careerHallOfFame.ts', from: 'if (rng() >= firstBallotChance(cand.score, lines)) {', to: 'if (rng() >= 1 - firstBallotChance(cand.score, lines)) {' },
   // Section 19 (b): calibration 2 pays every season double, so the Hall fills past its ceiling.
@@ -579,6 +581,11 @@ const CONTROLS = {
   v1drift: { file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V1: LegacyWeights = \{\s+awards: \{ \w+: )(\d+)/, to: (m, a, n) => `${a}${Number(n) + 1}` },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown SIM_CONTROL ${CONTROL}`); process.exit(2); }
+/* Control basedrift (Round 1530, section 19 (a)): the base position it moves and by how much, in credit
+   points. The size is one a single seed's median can miss and the fleet's pooled median cannot: the
+   header's Round 1530 block has the measured numbers behind it. Baseball and hockey band no base. */
+const BASE_DRIFT = { nfl: { pos: 'TE', by: -3.5 }, nba: { pos: 'PG', by: -1.4 } };
+if (CONTROL === 'basedrift' && !BASE_DRIFT[SPORT]) { console.error(`simCareerHall ${SPORT}: basedrift refuses to run, the ledger bands no base position in this sport, so there is nothing to move`); process.exit(2); }
 /* Round 1301. The table a career retiring today is read on, by its name in the
    sport's own file: the last entry of its <SPORT>_LEGACY_WEIGHTS map (the NHL's
    is NHL_LEGACY_V3; football, basketball and baseball map calibration 3 to
@@ -1519,7 +1526,7 @@ console.log(`  17 (a) marks, this run's one seed (printed, never the check): ${t
 const FLEET = MARKS.fleet ?? null;
 const FL = FLEET?.sports?.[SPORT] ?? null;
 /* The controls that aim at [marks] or must leave it green. Any other control is judged on its own check, so it plays no fleet. */
-const FLEET_CONTROLS = ['markdrift', 'todrift', 'nostandout', 'oldmarks', 'statsup', 'statsdown'];
+const FLEET_CONTROLS = ['markdrift', 'todrift', 'nostandout', 'oldmarks', 'statsup', 'statsdown', 'basedrift'];
 /* A measuring run (a child of the fleet, or a row dump for the generator) plays no fleet of its own. */
 const MEASURING = Boolean(process.env.SIM_DUMP_ROWS) || process.env.SIM_FLEET_CHILD === '1';
 const fleetRuns = !MEASURING && (!CONTROL || FLEET_CONTROLS.includes(CONTROL));
@@ -1527,6 +1534,8 @@ const fleetRuns = !MEASURING && (!CONTROL || FLEET_CONTROLS.includes(CONTROL));
 const STATS_STEP = 1.02;
 const fleetScale = CONTROL === 'statsup' ? STATS_STEP : CONTROL === 'statsdown' ? 1 / STATS_STEP : 1;
 let fleetOk = false, fleetDetail = 'the fleet was not played on this run';
+/* Round 1530: the fleet's rows, one array a seed, kept for 19 (a) when every seed left a full row file. */
+let fleetRows = null;
 if (fleetRuns && !FL) fleetDetail = `the ledger holds no fleet band for ${SPORT}: record one (MARKS_FLEET, the header of scripts/genCareerHallMarks.mjs)`;
 if (fleetRuns && FL) {
   /* SIM_FLEET_SEEDS=a-b plays another fleet against the same reference (the out of sample confirmation). */
@@ -1561,6 +1570,7 @@ if (fleetRuns && FL) {
     bySeed.push(r);
   }
   const K = bySeed.length, R = FLEET.refSeeds.length;
+  if (bad.length === 0 && K === seeds.length && K >= 10) fleetRows = bySeed;
   const err = sd => sd * Math.sqrt(1 / K + 1 / R);
   const bandOf = m => ({ lo: Math.max(0, m.mean - FLEET.z * err(m.sd)), hi: m.mean + FLEET.z * err(m.sd) });
   let fa = 0, fb = 0, fn = 0;
@@ -1666,8 +1676,21 @@ console.log(`  17 (d) cap: ${capMiss} of ${careers.length} careers off the resta
 
 /* 19 (a). The base: the table's added terms are the ledger's, the median
    career of each base position earns what was measured, and a position the
-   ledger gives no base has none (the kicker). */
+   ledger gives no base has none (the kicker).
+   Round 1530: the median is read on the fleet of 17 (a), never on this run's
+   one seed. The band (outcome.baseCredit) is the range of six single run
+   medians widened by half its width each side, and six runs undersold the
+   spread of one run: at 2000 careers one seed's median wanders past that band
+   on healthy code (nfl TE 108.8 against 109.2 on one run, with the seeds
+   around it near the middle). The fleet's 24 seeds pooled (about 48,000
+   careers) read the median of the position itself, which the six runs were
+   measuring, with a fraction of one run's wander; the header has the numbers.
+   This run's one seed, and how many of the fleet's seeds alone the band
+   would have passed, are printed and judge nothing. A run that plays no
+   fleet (a measuring run, or a control aimed at another check) does not
+   judge the median; one that should have and has no full set of rows is red. */
 const baseOf = pos => (W2.positions[pos] ?? W2.positions['*']).terms.slice((W1.positions[pos] ?? W1.positions['*']).terms.length);
+const drift = CONTROL === 'basedrift' ? BASE_DRIFT[SPORT] : null;
 const baseMiss = [], baseSeen = [];
 for (const pos of Object.keys(ML.base)) {
   if (!decided(pos, 'base', null, 'dropped')) continue;
@@ -1677,9 +1700,19 @@ for (const pos of Object.keys(ML.base)) {
 for (const [pos, band] of Object.entries(ML.outcome.baseCredit)) {
   const terms = baseOf(pos);
   if (!sameJson(terms, ML.base[pos].map(t => ({ stat: t.stat, per: t.per })))) baseMiss.push(`${pos} terms off the ledger`);
-  const med = medOf(rows.filter(r => r.pos === pos).map(r => terms.reduce((s, t) => s + (r.t[t.stat] ?? 0) / t.per, 0)));
-  baseSeen.push(`${pos} ${med.toFixed(1)} (${band.lo.toFixed(1)} to ${band.hi.toFixed(1)})`);
-  if (!inBand(med, band)) baseMiss.push(`${pos} median base credit ${med.toFixed(1)}`);
+  const shift = drift && drift.pos === pos ? drift.by : 0;
+  const credit = r => terms.reduce((s, t) => s + (r.t[t.stat] ?? 0) / t.per, 0) + shift;
+  const one = medOf(rows.filter(r => r.pos === pos).map(credit));
+  const range = `${band.lo.toFixed(1)} to ${band.hi.toFixed(1)}`;
+  if (fleetRows) {
+    const pooled = medOf(fleetRows.flatMap(run => run.filter(r => r.pos === pos).map(credit)));
+    const alone = fleetRows.filter(run => inBand(medOf(run.filter(r => r.pos === pos).map(credit)), band)).length;
+    baseSeen.push(`${pos} ${pooled.toFixed(2)} pooled over ${fleetRows.length} seeds (${range}${shift ? `; shifted ${shift} by the control` : ''}; this run's one seed ${one.toFixed(1)}, the fleet's seeds alone inside the band ${alone} of ${fleetRows.length})`);
+    if (!inBand(pooled, band)) baseMiss.push(`${pos} pooled median base credit ${pooled.toFixed(2)}`);
+  } else {
+    baseSeen.push(`${pos} ${one.toFixed(1)} on this run's one seed, NOT JUDGED (${range})`);
+    if (fleetRuns) baseMiss.push(`${pos}: the fleet left no full set of rows, so the median was not judged`);
+  }
 }
 for (const pos of E.positions) if (!ML.base[pos] && baseOf(pos).length) baseMiss.push(`${pos} has a base the ledger does not`);
 for (const d of DECISIONS) if (d.kind === 'base' && d.action !== 'dropped') baseMiss.push(`${d.pos}: a base decision the harness does not know (${d.action})`);
@@ -2036,6 +2069,8 @@ if (CONTROL) {
     // Round 1301. In the NHL calibration 3 has a table of its own, so its drift must leave the recording of 2 alone.
     v3drift: SPORT === 'nhl' ? { red: ['v3replay'], green: ['v2replay'] } : 'v3replay',
     oldmarks: 'marks', statsup: 'marks', statsdown: 'marks',
+    // Round 1530: the base median moved alone, the marks read on the same fleet untouched.
+    basedrift: { red: ['base'], green: ['marks'] },
     // The board loop's own stamp check only exists on a run that plays the board loop.
     nostamp: SKIP_BOARD ? 'calrule' : ['calrule', 'boardstamp'],
     // An object also names checks that must stay green: the standout switched off moves the outcome, never the marks.
