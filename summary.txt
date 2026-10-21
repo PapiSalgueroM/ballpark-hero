@@ -1,0 +1,3 @@
+hall-nba-basedrift exit=1 75s | simCareerHall nba CONTROL basedrift: wanted base red and marks green, red [base], FIRED
+hall-mlb exit=0 304s | simCareerHall mlb: all 34 checks green
+hall-nhl exit=0 483s | simCareerHall nhl: all 35 checks green
