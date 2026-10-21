@@ -1,0 +1,1 @@
+size exit=1 1s | Node.js v24.22.0

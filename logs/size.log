@@ -1,0 +1,29 @@
+/tmp/b src/lib/clubManager.ts: 1590315 minified, 469514 gzipped
+/tmp/b src/lib/clubManagerTactics.ts: absent
+/tmp/b src/hooks/useClubManager.ts: 1631104 minified, 480727 gzipped
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 50 errors:
+src/lib/clubManager.ts:1:33: ERROR: Could not resolve "src/lib/nameFold" (originally "@/lib/nameFold")
+src/lib/clubManager.ts:2:36: ERROR: Could not resolve "src/lib/nameModeration" (originally "@/lib/nameModeration")
+src/lib/clubManager.ts:3:96: ERROR: Could not resolve "src/lib/clubManagerFixtures" (originally "@/lib/clubManagerFixtures")
+src/lib/clubManager.ts:4:35: ERROR: Could not resolve "src/lib/clubManagerRecords" (originally "@/lib/clubManagerRecords")
+src/lib/clubManager.ts:5:184: ERROR: Could not resolve "src/lib/clubManagerVar" (originally "@/lib/clubManagerVar")
+...
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:569:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.22.0
