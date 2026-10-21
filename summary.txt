@@ -1,0 +1,4 @@
+deck-b exit=0 65s | simSoccerDeck: green. Sections 6, 7, 9, 10 only.
+deck-a exit=0 89s | simSoccerDeck: green. Sections 1, 2, 3, 4, 5 only.
+deck-unattributed exit=1 32s | simSoccerDeck: 2 failures, red sections 2
+deck-c exit=0 106s | simSoccerDeck: green. Sections 8 only.
