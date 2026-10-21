@@ -1,0 +1,35 @@
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[dukb] preload wrapper: a cancelled chunk error waits for the reload (vite 5.4.21)
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+  FAIL: /club-manager: 58K against a 630K budget, so the budget is stale and should be lowered in this round
+  FAIL: /soccer-career: 79K against a 836K budget, so the budget is stale and should be lowered in this round
+  FAIL: /stadium-tycoon: 23K against a 303K budget, so the budget is stale and should be lowered in this round
+  FAIL: /wonderkid-factory: 11K against a 277K budget, so the budget is stale and should be lowered in this round
+  FAIL: /minefield: 27K against a 295K budget, so the budget is stale and should be lowered in this round
+  FAIL: /footle: 60K against a 354K budget, so the budget is stale and should be lowered in this round
+  FAIL: /nfl-my-career: 49K against a 493K budget, so the budget is stale and should be lowered in this round
+  FAIL: /front-office: 38K against a 374K budget, so the budget is stale and should be lowered in this round
+  FAIL: /soccer-grid: 39K against a 319K budget, so the budget is stale and should be lowered in this round
+  FAIL: /manager-hot-seat: 85K against a 645K budget, so the budget is stale and should be lowered in this round
+  FAIL: /deadline-day: 85K against a 655K budget, so the budget is stale and should be lowered in this round
+  FAIL: /transfer-path: 87K against a 379K budget, so the budget is stale and should be lowered in this round
+   /                     0K gz over   3 files (budget 245K, 0.0K to the tenth)
+   /club-manager        58K gz over  43 files (budget 630K, 58.3K to the tenth)
+   /soccer-career       79K gz over  50 files (budget 836K, 79.4K to the tenth)
+   /stadium-tycoon      23K gz over  24 files (budget 303K, 23.0K to the tenth)
+   /wonderkid-factory   11K gz over  20 files (budget 277K, 10.6K to the tenth)
+   /minefield           27K gz over  21 files (budget 295K, 27.4K to the tenth)
+   /footle              60K gz over  39 files (budget 354K, 60.0K to the tenth)
+   /nfl-my-career       49K gz over  48 files (budget 493K, 49.2K to the tenth)
+   /front-office        38K gz over  38 files (budget 374K, 38.3K to the tenth)
+   /soccer-grid         39K gz over  36 files (budget 319K, 39.3K to the tenth)
+   /leaderboard          0K gz over   9 files (budget 266K, 0.0K to the tenth)
+   /manager-hot-seat    85K gz over  45 files (budget 645K, 85.1K to the tenth)
+   /deadline-day        85K gz over  48 files (budget 655K, 85.0K to the tenth)
+   /transfer-path       87K gz over  39 files (budget 379K, 87.4K to the tenth)
+  FAIL: /soccer-career fetches no file with the national team pools, and it is the page that reads them: either they moved or the probes cannot see them
