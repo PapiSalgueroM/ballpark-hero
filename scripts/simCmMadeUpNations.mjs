@@ -36,6 +36,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
+import { BRIDGE_EDITS_1520 } from './lib/cmNoMadeUpNations1520.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CM_NATIONS_CONTROL || '';
@@ -61,18 +62,14 @@ const CONTROLS = {
   bloat: [{ file: N, from: "  if (!count || count.known <= 0 || !count.abroad.length) return home;", to: "  return home.padEnd(400, '.');" }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`CM_NATIONS_CONTROL=${CONTROL} is not a control this harness knows`);
-/* The board's count as it was before the round: every man by the verified map alone. */
-const NOASK = [
-  { file: A, from: "import { SQUAD_LIMIT, buildMarket, careerPlace, groupOf, money, shownNation } from '@/lib/clubManager';", to: "import { SQUAD_LIMIT, buildMarket, careerPlace, groupOf, money, shownNation } from '@/lib/clubManager';\nimport { nationalityOf } from '@/data/playerNationalities';" },
-  { file: A, from: '  return squad.filter(p => !p.onLoan && shownNation(eraId, p) === country).length;', to: '  return squad.filter(p => !p.onLoan && nationalityOf(eraId, p.name) === country).length;' },
-  { file: A, from: '    const pool = affordable.filter(p => shownNation(career.eraId, p) === country);', to: '    const pool = affordable.filter(p => nationalityOf(career.eraId, p.name) === country);' },
-];
-/* No country is ever drawn, which with NOASK's count is the engine before the round, the made up mark aside. */
-const NONATION = [
-  ...NOASK,
-  { file: E, from: '  if (!place) return undefined;\n  const counts = nationCountsAt(place, eraId);', to: '  if (place || !place) return undefined;\n  const counts = nationCountsAt(place, eraId);' },
-  { file: E, from: "pr.source !== 'Academy' && pr.source ? mapSpelling(pr.source) : ", to: '' },
-];
+/* NONATION is the bridge every kit pinned to an older engine composes (scripts/lib/cmNoMadeUpNations1520.mjs): no
+   country drawn, the board's old count, the old marks. NOASK is the same bridge with the countries left on, so the two
+   differ by the countries alone. */
+const asEdit = ([file, , from, to]) => ({ file: path.basename(file), from, to });
+const DRAWS_OFF = new Set(['no country is drawn', 'a scouted boy takes no country']);
+const NONATION = BRIDGE_EDITS_1520.map(asEdit);
+const NOASK = BRIDGE_EDITS_1520.filter(([, label]) => !DRAWS_OFF.has(label)).map(asEdit);
+if (NOASK.length !== NONATION.length - 2) cannot('the bridge no longer carries its two draw edits by those labels');
 
 /* ---- bundles: this tree as it is, with the board's old count, with no country drawn, and the base tree ---- */
 const MODS = { cm: 'lib/clubManager', asks: 'lib/clubManagerBoardAsks', eras: 'lib/clubManagerEras', nat: 'lib/clubManagerMadeUpNations',
@@ -427,6 +424,7 @@ let moved = null;
 }
 
 const NATION = new Set(['nation']);
+const MARKS = new Set(['nation', 'generated', 'gen', 'g']);
 const nationsOf = s => [...s.squad, ...(s.loanedOut ?? []).map(l => l.player), ...(s.freeAgents ?? [])].filter(p => p && p.nation).map(p => `${p.name}=${p.nation}`).sort();
 
 console.log('5) An old save gets the same countries twice, and nothing else in it changes');
@@ -531,8 +529,12 @@ const REPLAY = [
     const at = noask.snaps.findIndex((x, k) => x !== none.snaps[k]);
     if (at >= 0 || noask.snaps.length !== none.snaps.length) fail(`${tag}: with countries the career differs once they are stripped, season ${at + 1}, first at key ${at >= 0 ? firstDiff(noask.snaps[at], none.snaps[at]) : 'length'}`);
     else same += 1;
-    const moves = head.snaps.findIndex((x, k) => x !== noask.snaps[k]);
-    if (moves >= 0) { askMoved += 1; console.log(`   ${tag}: the board's new count moves it from season ${moves + 1} (first key ${firstDiff(head.snaps[moves], noask.snaps[moves])}), ${head.draws} draws against ${noask.draws}`); }
+    /* The engine against NOASK: the board's new count (and the marks, which nothing plays on, stripped). */
+    const unmark = j => JSON.stringify(JSON.parse(j), (k, v) => (MARKS.has(k) ? undefined : v));
+    const hs = head.snaps.map(unmark), ns = noask.snaps.map(unmark);
+    const moves = hs.findIndex((x, k) => x !== ns[k]);
+    if (moves >= 0) { askMoved += 1; console.log(`   ${tag}: the board's new count moves it from season ${moves + 1} (first key ${firstDiff(hs[moves], ns[moves])}), ${head.draws} draws against ${noask.draws}`); }
+    else console.log(`   ${tag}: the board's new count leaves it on its path (${head.draws} draws, ${noask.draws} with the old count)`);
     console.log(`   ${tag}: save ${noask.sizes.map((x, k) => `+${x - none.sizes[k]}`).join(' ')} characters a season end with countries`);
   }
   ok(`${same} of ${REPLAY.length} careers play draw for draw and byte for byte the same with countries as without, once stripped`);
@@ -553,7 +555,6 @@ console.log(`7b) The save's growth to season ${LONG}`);
 
 if (B_BASE) {
   console.log('7c) With no country drawn the engine plays as the base tree, the made up mark aside');
-  const MARKS = new Set(['nation', 'generated', 'gen', 'g']);
   let same = 0;
   for (const [i, c] of REPLAY.entries()) {
     const seed = 7000 + i * 31;

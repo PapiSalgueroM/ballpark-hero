@@ -506,7 +506,7 @@ function worldMarket(career: CareerState): MarketPlayer[] {
   for (const club of clubs) {
     if (club === current.clubName) continue;
     for (const p of worldRosterFor(current, club)) out.push({ name: p.n, club, position: p.p, age: p.a, rating: p.r,
-      price: askingPrice(p.v, p.a), value: p.v, ...madeUpListing(p, club, current.eraId),
+      price: askingPrice(p.v, p.a), value: p.v, generated: p.g || undefined, ...listedNation(p, club, current.eraId),
       ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey, worldRosterSince: p.since, potential: p.potential } : {}) });
   }
   out.sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
@@ -4721,11 +4721,18 @@ export function careerPlace(career: Pick<CareerState, 'clubName' | 'eraId' | 'cu
   return placeIn((home ?? careerLeagueOf(career)).id, custom ? null : career.clubName);
 }
 
-/** Another club's place in its own world, off the static league lists (never the world editor's), its era's first. */
+/** Another club's place in its own world, off the static league lists (never the world editor's), its era's first.
+    Kept per world and club, since a market of thousands asks it once a made up man. */
+const CLUB_PLACES = new Map<string, NationPlace | null>();
 function clubPlace(club: string, eraId: string | undefined): NationPlace | null {
+  const key = `${isHistoricEra(eraId) ? eraId : 'now'}|${club}`;
+  const hit = CLUB_PLACES.get(key);
+  if (hit !== undefined) return hit;
   const lg = (isHistoricEra(eraId) ? ERA_LEAGUES[eraId!]?.find(l => l.clubs.includes(club)) : undefined)
     ?? REAL_LEAGUES.find(l => l.clubs.includes(club));
-  return lg ? placeIn(lg.id, club) : null;
+  const place = lg ? placeIn(lg.id, club) : null;
+  CLUB_PLACES.set(key, place);
+  return place;
 }
 
 /* Each league's real men counted by country, once a world, from the squads and the verified map of that world. */
@@ -4766,11 +4773,10 @@ export function madeUpNationAt(name: string, place: NationPlace | null, eraId: s
   return drawNation(name, place.home, counts && (young && counts[1].known >= YOUNG_FLOOR ? counts[1] : counts[0]));
 }
 
-/** The made up mark and country a market listing carries off a projected or ledger man at `club`. */
-function madeUpListing(p: ProjectedPlayer, club: string, eraId: string | undefined): Pick<MarketPlayer, 'generated' | 'nation'> {
-  if (!p.g) return {};
-  const nation = p.nation ?? madeUpNationAt(p.n, clubPlace(club, eraId), eraId);
-  return nation ? { generated: true, nation } : { generated: true };
+/** The country a market listing carries off a made up projected or ledger man at `club`; nothing for a real man. */
+function listedNation(p: ProjectedPlayer, club: string, eraId: string | undefined): Pick<MarketPlayer, 'nation'> {
+  const nation = p.g ? p.nation ?? madeUpNationAt(p.n, clubPlace(club, eraId), eraId) : undefined;
+  return nation ? { nation } : {};
 }
 
 function madeUp(p: CMPlayer): boolean {
@@ -9603,7 +9609,8 @@ function marketBase(yearsOnNow: number, eraId: string = 'now', worldSeed?: numbe
         rating: b.r,
         price: askingPrice(b.v, b.a),
         value: b.v,
-        ...madeUpListing(b, club, eraId),
+        generated: b.g || undefined,
+        ...listedNation(b, club, eraId),
         ...(b.worldRosterKey ? { worldRosterKey: b.worldRosterKey, worldRosterSince: b.since, potential: b.potential } : {}),
       });
     }
