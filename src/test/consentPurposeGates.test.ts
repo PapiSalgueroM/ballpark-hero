@@ -60,8 +60,8 @@ describe('each optional loader requires its own current affirmative purpose', ()
   for (const fixture of [
     { advertising: false, analytics: false, wantAds: 0, wantAnalytics: 0 },
     { advertising: true, analytics: false, wantAds: 1, wantAnalytics: 0 },
-    { advertising: false, analytics: true, wantAds: 0, wantAnalytics: 1 },
-    { advertising: true, analytics: true, wantAds: 1, wantAnalytics: 1 },
+    { advertising: false, analytics: true, wantAds: 0, wantAnalytics: 0 },
+    { advertising: true, analytics: true, wantAds: 1, wantAnalytics: 0 },
   ]) {
     // Break caught: either purpose accidentally grants the other service.
     it(`honors advertising=${fixture.advertising}, analytics=${fixture.analytics} independently`, () => {
@@ -70,10 +70,12 @@ describe('each optional loader requires its own current affirmative purpose', ()
       loadConsentedScripts();
       expect(adScripts()).toHaveLength(fixture.wantAds);
       expect(analyticsScripts()).toHaveLength(fixture.wantAnalytics);
-      if (fixture.wantAnalytics === 0) {
+      if (!fixture.advertising) {
         expect(window.dataLayer).toBeUndefined();
         expect(window.gtag).toBeUndefined();
       }
+      const commands = (window.dataLayer ?? []).map(item => Array.from(item as ArrayLike<unknown>));
+      expect(commands.filter(command => command[0] === 'config' || command[0] === 'event')).toHaveLength(0);
       if (fixture.wantAds === 0) expect(Reflect.get(window, 'adsbygoogle')).toBeUndefined();
     });
   }
@@ -157,7 +159,7 @@ describe('each optional loader requires its own current affirmative purpose', ()
     loadConsentedScripts();
     loadConsentedScripts();
     expect(adScripts()).toHaveLength(1);
-    expect(analyticsScripts()).toHaveLength(1);
+    expect(analyticsScripts()).toHaveLength(0);
     expect(Reflect.get(window, 'adsbygoogle').requestNonPersonalizedAds).toBe(1);
   });
 });

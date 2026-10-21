@@ -1,33 +1,45 @@
-/**
- * Round 285: the two third party scripts that only ever load after Accept.
- *
- * index.html carries the analytics half for page loads that already have
- * consent stored, because the template cannot import anything. AdSense stays
- * here and loads on demand only when the page contains a deliberate ad slot.
- * This keeps account, reset, fallback, and other no-slot screens free of ad
- * requests while the global meta tag still verifies the publisher account.
- *
- * Neither function does anything when its script is already on the page, so
- * calling them twice is harmless.
- */
+import { ANALYTICS_READY, getEffectiveConsent, type ConsentPurposes } from '@/lib/consentPreferences';
+export { CONSENT_CHANGED_EVENT } from '@/lib/consentPreferences';
+
 export const ADSENSE_CLIENT = 'ca-pub-2929318086316376';
 export const GA_MEASUREMENT_ID = 'G-KZQK2G68YC';
-export const CONSENT_CHANGED_EVENT = 'dukb-consent-changed';
 
 declare global {
   interface Window {
     dataLayer?: unknown[];
     gtag?: (...args: unknown[]) => void;
+    __DUKB_CONSENT_DEFAULTED__?: boolean;
   }
+}
+
+function updateGoogleConsent(purposes: ConsentPurposes): void {
+  const hadTag = !!window.gtag;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function gtag() {
+    // eslint-disable-next-line prefer-rest-params
+    window.dataLayer!.push(arguments);
+  };
+  if (!hadTag || !window.__DUKB_CONSENT_DEFAULTED__) {
+    window.gtag('consent', 'default', {
+      ad_storage: 'denied', analytics_storage: 'denied',
+      ad_user_data: 'denied', ad_personalization: 'denied',
+    });
+    window.__DUKB_CONSENT_DEFAULTED__ = true;
+  }
+  window.gtag('consent', 'update', {
+    ad_storage: purposes.advertising ? 'granted' : 'denied',
+    analytics_storage: purposes.analytics ? 'granted' : 'denied',
+    ad_user_data: 'denied', ad_personalization: 'denied',
+  });
 }
 
 export function loadAdSense(): boolean {
   try {
+    if (!getEffectiveConsent().advertising) return false;
     if (document.querySelector('meta[name="robots"][content*="noindex"]')) return false;
     if (!document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot]')) return false;
+    updateGoogleConsent(getEffectiveConsent());
     if (document.querySelector('script[src*="adsbygoogle.js"]')) return true;
-    /* Round 304: non personalized ads only, declared before the script
-       loads. This keeps ad requests consistent with the privacy pages. */
     const w = window as Window & { adsbygoogle?: unknown[] & { requestNonPersonalizedAds?: number } };
     w.adsbygoogle = w.adsbygoogle || [];
     w.adsbygoogle.requestNonPersonalizedAds = 1;
@@ -37,32 +49,75 @@ export function loadAdSense(): boolean {
     s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
     document.head.appendChild(s);
     return true;
-  } catch {
-    // DOM blocked: ads simply stay off this session
-    return false;
-  }
+  } catch { return false; }
+}
+
+export function sanitizedAnalyticsUrl(value: string): string {
+  try {
+    const url = new URL(value, window.location.origin);
+    if (url.protocol !== 'https:' && url.protocol !== 'http:') return '';
+    return url.origin + url.pathname;
+  } catch { return ''; }
 }
 
 export function loadAnalytics(): void {
   try {
+    // Paused until enhanced history and form collection settings are verified.
+    if (!ANALYTICS_READY || !getEffectiveConsent().analytics) return;
+    if (/^\/(?:reset-password|auth|account|profile|admin)(?:\/|$)/.test(location.pathname)) return;
     if (document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) return;
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function gtag() {
-      // eslint-disable-next-line prefer-rest-params
-      window.dataLayer!.push(arguments);
-    };
-    window.gtag('js', new Date());
-    window.gtag('config', GA_MEASUREMENT_ID);
+    updateGoogleConsent(getEffectiveConsent());
+    window.gtag!('js', new Date());
+    window.gtag!('config', GA_MEASUREMENT_ID, {
+      send_page_view: false,
+      page_location: sanitizedAnalyticsUrl(location.href),
+      page_referrer: document.referrer ? sanitizedAnalyticsUrl(document.referrer) : '',
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false,
+    });
     const g = document.createElement('script');
     g.async = true;
     g.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
     document.head.appendChild(g);
-  } catch {
-    // DOM blocked: analytics simply stays off this session
+  } catch { /* Optional analytics stays off when blocked. */ }
+}
+
+function clearPurposeCookies(purposes: ConsentPurposes): void {
+  const names = document.cookie.split(';').map(part => part.trim().split('=')[0]).filter(Boolean);
+  const domains = ['', location.hostname, `.${location.hostname}`];
+  if (location.hostname === 'douknowball.com' || location.hostname.endsWith('.douknowball.com')) {
+    domains.push('douknowball.com', '.douknowball.com');
+  }
+  const paths = new Set(['/']);
+  const segments = location.pathname.split('/').filter(Boolean);
+  for (let i = 1; i <= segments.length; i += 1) paths.add('/' + segments.slice(0, i).join('/'));
+  for (const name of names) {
+    const analytics = /^_ga(?:_|$)|^_gid$|^_gat(?:_|$)/.test(name);
+    const advertising = /^__gads$|^__gpi$|^__eoi$|^_gcl_/.test(name);
+    if (!(purposes.analytics && analytics) && !(purposes.advertising && advertising)) continue;
+    for (const domain of new Set(domains)) for (const path of paths) {
+      document.cookie = `${name}=; Max-Age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}${domain ? `; domain=${domain}` : ''}`;
+    }
   }
 }
 
-/** Everything that waits on Accept, in one call. */
+export function stopRevokedServices(revoked: ConsentPurposes, next = getEffectiveConsent()): void {
+  const hadGoogle = !!window.gtag || !!window.dataLayer;
+  if (revoked.analytics) {
+    if (hadGoogle || document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) {
+      Reflect.set(window, `ga-disable-${GA_MEASUREMENT_ID}`, true);
+    }
+    document.querySelectorAll('script[src*="googletagmanager.com/gtag/js"]').forEach(el => el.remove());
+  }
+  if (hadGoogle) updateGoogleConsent(next);
+  if (revoked.advertising) {
+    document.querySelectorAll('[data-dukb-manual-ad] iframe, script[src*="adsbygoogle.js"]').forEach(el => el.remove());
+    const queue = Reflect.get(window, 'adsbygoogle');
+    if (Array.isArray(queue)) queue.length = 0;
+  }
+  clearPurposeCookies(revoked);
+}
+
 export function loadConsentedScripts(): void {
   loadAdSense();
   loadAnalytics();

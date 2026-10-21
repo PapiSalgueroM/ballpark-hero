@@ -18,6 +18,7 @@
  */
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
+import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -84,9 +85,10 @@ let termsSource = read('src/pages/TermsOfService.tsx');
 /* Round 285: the banner no longer carries the id itself, it calls
    src/lib/consentedScripts.ts, which is where both gated scripts live now. */
 let consented = read('src/lib/consentedScripts.ts');
+let preferences = read('src/lib/consentPreferences.ts');
 
-consent = mutateOnce(
-  consent,
+preferences = mutateOnce(
+  preferences,
   'window.dispatchEvent(new Event(CONSENT_CHANGED_EVENT));',
   'void CONSENT_CHANGED_EVENT;',
   'same-page-consent',
@@ -123,8 +125,8 @@ consented = mutateOnce(
 );
 banner = mutateOnce(
   banner,
-  "if (consent !== 'accepted') return null;",
-  "if (consent === 'essential') return null;",
+  'if (!consent) return null;',
+  'if (false) return null;',
   'slot-before-consent',
 );
 banner = mutateOnce(
@@ -141,8 +143,8 @@ banner = mutateOnce(
 );
 banner = mutateOnce(
   banner,
-  'const [consent, setConsent] = useState<string | null>(readStoredConsent);',
-  'const [consent, setConsent] = useState<string | null>(null);',
+  'const [consent, setConsent] = useState<boolean>(readStoredConsent);',
+  'const [consent, setConsent] = useState<boolean>(false);',
   'delayed-consent',
 );
 const ids = new Set();
@@ -284,7 +286,7 @@ console.log('5) the advertising disclosures, as shipped');
       [/web beacons[\s\S]{0,80}IP addresses[\s\S]{0,80}other identifiers/i, 'that ad serving may use web beacons, IP addresses, and other identifiers'],
       [/opt out of personali[sz]ed advertising/i, 'how to opt out of personalised advertising'],
       [/other third[ -]party vendors and ad networks may also serve ads/i, 'that other vendors and ad networks may serve ads on the site'],
-      [/Essential only/, 'what the Essential only choice on the banner does'],
+      [/Reject all/, 'what the Reject all choice on the banner does'],
       [/Cookie choices/, 'that consent can be withdrawn from the footer'],
       [/Google Analytics/, 'that Google Analytics is used and behind the same consent'],
     ];
@@ -301,15 +303,12 @@ console.log('5) the advertising disclosures, as shipped');
     }
     console.log(`   ${MUST_SAY.length} statements and ${MUST_LINK.length} links, all present in the shipped document (${words.length} readable characters)`);
   }
-  /* The withdrawal link the policy promises has to exist and has to do the
-     one thing that makes it a withdrawal: forget the stored answer. Read as
-     code, not as a comment: the call itself. */
-  const footer = read('src/components/game/Footer.tsx').replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\{\/\*[\s\S]*?\*\/\}/g, ' ');
-  if (!/localStorage\.removeItem\(\s*'cookie-consent'\s*\)/.test(footer)) {
-    fail("the footer has no control that removes the stored 'cookie-consent' answer, so the withdrawal the policy promises does not exist");
+  const footer = codeOnly(read('src/components/game/Footer.tsx'));
+  if (!/onClick=\{event => openConsentChoices\(event\.currentTarget\)\}/.test(footer)) {
+    fail('the footer has no working control that opens Cookie choices');
   }
+  if (/removeItem\(|location\.reload\(/.test(footer)) fail('opening Cookie choices changes consent before Save');
   if (!/Cookie choices/.test(footer)) fail('the footer does not offer the Cookie choices control the policy names');
-
   if (/Wikipedia REST API[\s\S]{0,100}player photographs/i.test(codeOnly(privacySource))) {
     fail('the privacy policy still claims a Wikipedia player-photo integration that the site does not use');
   }
@@ -330,56 +329,46 @@ console.log('5) the advertising disclosures, as shipped');
   }
 }
 
-/* ── 5b: analytics rides on the same consent gate as the ads ──────────── */
-/* Round 285 wired Google Analytics (G-KZQK2G68YC, from the owner on
-   2026-08-25). It loads in exactly the two places the ad script loads, behind
-   exactly the same check, and this holds three things: the id is one id in
-   both copies, the tag is never a static script element in the template, and
-   every mention of either script URL in index.html sits inside the consent
-   branch. The branch is found by matching braces from the consent check, so a
-   copy of the URL pasted above it, which is how the vendor's snippet arrives,
-   fails here rather than quietly tracking everyone. */
-console.log('5b) analytics loads only behind the same consent as the ads');
+/* Analytics stays paused until its account-side collection settings are verified. */
+console.log('5b) analytics stays off in the template and every saved head');
 {
-  const gaIds = new Set();
-  for (const src of [indexHtml, consented]) {
-    for (const m of src.matchAll(/\bG-[A-Z0-9]{6,12}\b/g)) gaIds.add(m[0]);
-  }
-  if (gaIds.size === 0) fail('no GA4 measurement id in index.html or consentedScripts.ts');
-  if (gaIds.size > 1) fail(`${gaIds.size} different GA4 ids: ${[...gaIds].join(', ')}`);
-  if (!/G-[A-Z0-9]{6,12}/.test(consented)) fail('consentedScripts.ts has no measurement id, so accepting the banner never starts analytics');
-  if (/<script[^>]*src="https:\/\/www\.googletagmanager\.com\/gtag\/js/i.test(indexHtml)) {
-    fail('index.html loads gtag.js as a plain script tag, which runs for every visitor whether they accepted or not');
-  }
-  const gate = indexHtml.indexOf("localStorage.getItem('cookie-consent') === 'accepted'");
-  if (gate < 0) {
-    fail('index.html has no consent gate, so nothing can be behind it');
-  } else {
-    const open = indexHtml.indexOf('{', gate);
-    let depth = 0, close = -1;
-    for (let i = open; i < indexHtml.length; i++) {
-      if (indexHtml[i] === '{') depth += 1;
-      else if (indexHtml[i] === '}') { depth -= 1; if (depth === 0) { close = i; break; } }
+  const templateScripts = [...indexHtml.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
+  const marked = templateScripts.filter(match => /\bdata-dukb-consent-bootstrap(?:\s|=|$)/.test(match[1]));
+  if (marked.length !== 1) fail('index.html must have exactly one marked consent bootstrap');
+  if (!/export const ANALYTICS_READY:\s*boolean\s*=\s*false/.test(codeOnly(preferences))) fail('runtime analytics readiness is not paused');
+  if (!/if\s*\(\s*!ANALYTICS_READY\s*\|\|/.test(codeOnly(consented))) fail('loadAnalytics bypasses the readiness gate');
+  if (marked.length === 1) {
+    const script = marked[0][2];
+    const execute = (code, value) => {
+      const requests = [];
+      const context = { Date, JSON, Number, URL, navigator: { globalPrivacyControl: false },
+        location: { origin: 'https://douknowball.com', pathname: '/privacy', href: 'https://douknowball.com/privacy?private=fixture#fixture' },
+        localStorage: { getItem: key => key === 'cookie-consent-v2' ? value : 'accepted' },
+        document: { referrer: '', querySelector: () => null, createElement: () => ({}), head: { appendChild: element => requests.push(element.src) } },
+      };
+      context.window = context;
+      vm.runInNewContext(code, context, { timeout: 1000 });
+      return requests;
+    };
+    const values = [null, '{', JSON.stringify({ version: 3, advertising: true, analytics: true, updatedAt: Date.now() })];
+    for (const advertising of [false, true]) for (const analytics of [false, true]) {
+      values.push(JSON.stringify({ version: 2, advertising, analytics, updatedAt: Date.now() }));
     }
-    const inside = indexHtml.slice(open, close);
-    /* whole line comments only: a URL contains a double slash too */
-    const stripped = indexHtml.replace(/<!--[\s\S]*?-->/g, ' ').replace(/^\s*\/\/[^\n]*/gm, ' ');
-    for (const url of ['googletagmanager.com/gtag/js']) {
-      const all = (stripped.match(new RegExp(url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []).length;
-      const gated = (inside.match(new RegExp(url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []).length;
-      if (all === 0) fail(`index.html never loads ${url} at all`);
-      if (all !== gated) fail(`${url} appears ${all} time(s) in index.html code and only ${gated} inside the consent branch`);
-    }
-    if (/adsbygoogle\.js/.test(codeOnly(indexHtml))) {
-      fail('index.html loads AdSense globally, which can make private, reset, fallback, and no-content routes eligible for Auto Ads');
+    for (const value of values) if (execute(script, value).length) fail('paused template analytics still loads an optional script');
+    const forced = script + '\ndocument.head.appendChild({src:"https://www.googletagmanager.com/gtag/js?id=fixture"});';
+    if (forced === script || execute(forced, null).length !== 1) fail('the bootstrap request negative control did not fire');
+    for (const file of snapshotFiles) {
+      const html = readFileSync(file, 'utf8');
+      const blocks = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
+      const saved = blocks.filter(match => /\bdata-dukb-consent-bootstrap(?:\s|=|$)/.test(match[1]));
+      if (html.includes("getItem('cookie-consent')")) fail(`${file} retains a legacy bundled consent bootstrap`);
+      if (saved.length && (saved.length !== 1 || saved[0][2] !== script)) fail(`${file} has a different consent bootstrap`);
+      if (html.includes('googletagmanager.com/gtag/js') && saved.length !== 1) fail(`${file} has an unmarked analytics loader`);
     }
   }
-  if (!/adsbygoogle\.js/.test(codeOnly(consented))) {
-    fail('consentedScripts.ts has no on-demand AdSense loader for real ad slots');
-  }
-  console.log(`   measurement id ${[...gaIds][0] ?? 'MISSING'}, analytics stays gated globally and ads load only beside a real slot`);
+  if (/adsbygoogle\.js/.test(codeOnly(indexHtml))) fail('index.html loads advertising globally without a manual slot');
+  console.log('   paused readiness, all stored purpose combinations, copied request fault and every saved bootstrap verified');
 }
-
 /* ── 6: an empty ad slot is not labelled as an advertisement ──────────── */
 console.log('6) the ad component never labels an empty box');
 const bannerBehavior = codeOnly(banner);
@@ -399,9 +388,9 @@ console.log('   collapses when ineligible or unfilled, labels only what filled')
 /* ── 6b: accepting consent wakes an ad already mounted on this page ───── */
 console.log('6b) same-page consent reaches an already mounted ad');
 {
-  const consentCode = codeOnly(consent);
+  const consentCode = codeOnly(consent + preferences);
   const bannerCode = codeOnly(banner);
-  const sharedCode = codeOnly(consented);
+  const sharedCode = codeOnly(consented + preferences);
   if (!/useState(?:<[^>]+>)?\(\s*(?:readStoredConsent|\(\s*\)\s*=>\s*readStoredConsent\(\s*\))\s*\)/.test(bannerCode)) {
     fail('AdBanner does not read stored consent before its first render');
   }
@@ -414,7 +403,7 @@ console.log('6b) same-page consent reaches an already mounted ad');
   if (!/addEventListener\(CONSENT_CHANGED_EVENT/.test(bannerCode) || !/removeEventListener\(CONSENT_CHANGED_EVENT/.test(bannerCode)) {
     fail('AdBanner does not subscribe and unsubscribe from the same-page consent event');
   }
-  if (!/if\s*\(\s*consent\s*!==\s*['"]accepted['"]\s*\)\s*return null/.test(bannerCode)) {
+  if (!/if\s*\(\s*!consent\s*\)\s*return null/.test(bannerCode)) {
     fail('AdBanner renders or starts its timeout before the visitor explicitly accepts consent');
   }
   console.log('   either choice notifies the current page, and an ad exists only after Accept');
@@ -424,7 +413,7 @@ console.log('6b) same-page consent reaches an already mounted ad');
 console.log('6c) no global Auto Ads eligibility on non-content routes');
 {
   const bannerCode = codeOnly(banner);
-  const sharedCode = codeOnly(consented);
+  const sharedCode = codeOnly(consented + preferences);
   const noindexGuard = sharedCode.indexOf('meta[name="robots"][content*="noindex"]');
   const slotGuard = sharedCode.indexOf('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot]');
   const existingScript = sharedCode.indexOf('script[src*="adsbygoogle.js"]');

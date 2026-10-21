@@ -24,7 +24,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U postgres"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -49,7 +49,8 @@ jobs:
           sha256sum package.json package-lock.json > legal-privacy-artifacts/dependencies-before.sha256
           npm ci > legal-privacy-artifacts/install.log 2>&1
           deno --version > legal-privacy-artifacts/deno-version.txt
-          deno check supabase/functions/account-privacy/index.ts > legal-privacy-artifacts/edge-types.log 2>&1
+          status=0; deno check --node-modules-dir=none supabase/functions/account-privacy/index.ts > legal-privacy-artifacts/edge-types.log 2>&1 || status=$?
+          cat legal-privacy-artifacts/edge-types.log; exit "$status"
       - name: Actual endpoint and effective copied security faults
         run: |
           set -euo pipefail
@@ -65,8 +66,8 @@ jobs:
           PGDATABASE: account_privacy_test
         run: |
           set -euo pipefail
-          psql --set ON_ERROR_STOP=1 --file scripts/testAccountPrivacyDb.sql > legal-privacy-artifacts/account-privacy-db.log 2>&1
-          tail -n 12 legal-privacy-artifacts/account-privacy-db.log
+          status=0; psql --set ON_ERROR_STOP=1 --file scripts/testAccountPrivacyDb.sql > legal-privacy-artifacts/account-privacy-db.log 2>&1 || status=$?
+          tail -n 25 legal-privacy-artifacts/account-privacy-db.log; exit "$status"
       - name: Retain security evidence and source hold
         if: always()
         run: |
@@ -121,14 +122,15 @@ jobs:
         run: |
           set -euo pipefail
           deno --version > legal-privacy-artifacts/deno-version.txt
-          deno check supabase/functions/simulate-season/index.ts > legal-privacy-artifacts/edge-types.log 2>&1
+          status=0; deno check --node-modules-dir=none supabase/functions/simulate-season/index.ts > legal-privacy-artifacts/edge-types.log 2>&1 || status=$?
+          cat legal-privacy-artifacts/edge-types.log; exit "$status"
       - name: Purpose consent regression checks
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           export SIM_OFFLINE_RECEIPT="$PWD/legal-privacy-artifacts/unit.transport"
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json > legal-privacy-artifacts/types.log 2>&1
-          node_modules/.bin/vitest run src/test/consentPurposeGates.test.ts src/test/consentPrivacy1442.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/consent-unit.log
+          node_modules/.bin/vitest run src/test/consentPurposeGates.test.ts src/test/consentPrivacy1442.test.ts src/test/consentSynchronization1442.test.tsx src/test/consentWithdrawal1442.test.ts src/test/legalAiTransparency1442.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/consent-unit.log
           node_modules/.bin/vitest run src/components/profile/AccountPrivacy.test.tsx src/test/cookieConsentStorage.test.tsx src/test/helpConsentFocus.test.tsx src/test/helpDialogFocus.test.tsx src/test/safeStorage.test.ts src/test/safeStorageQuota.test.ts src/test/freshBuildBlockedStorage.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee legal-privacy-artifacts/inherited-unit.log
       - name: Isolated browser and font tooling
         run: |

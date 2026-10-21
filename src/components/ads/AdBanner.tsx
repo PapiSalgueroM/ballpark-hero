@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { CONSENT_CHANGED_EVENT, loadAdSense } from '@/lib/consentedScripts';
-import { safeLocalStorage } from '@/lib/safeStorage';
+import { CONSENT_EFFECTIVE_CHANGED_EVENT, CONSENT_KEY, getEffectiveConsent } from '@/lib/consentPreferences';
 
 declare global {
   interface Window {
@@ -77,18 +77,14 @@ const HEAD_SETTLE_FRAMES = 2;
 
 type AdState = 'unknown' | 'filled' | 'empty';
 
-function readStoredConsent(): string | null {
-  try {
-    return safeLocalStorage.getItem('cookie-consent');
-  } catch {
-    return null;
-  }
+function readStoredConsent(): boolean {
+  return getEffectiveConsent().advertising;
 }
 
 const AdBanner = ({ slot, format = 'auto', layout, layoutKey, className = '' }: AdBannerProps) => {
   const adRef = useRef<HTMLModElement>(null);
   const pushed = useRef(false);
-  const [consent, setConsent] = useState<string | null>(readStoredConsent);
+  const [consent, setConsent] = useState<boolean>(readStoredConsent);
   const [state, setState] = useState<AdState>('unknown');
 
   useEffect(() => {
@@ -96,24 +92,26 @@ const AdBanner = ({ slot, format = 'auto', layout, layoutKey, className = '' }: 
     // tab or right after the user responds to the cookie banner.
     setConsent(readStoredConsent());
     const onStorage = (e: StorageEvent) => {
-      if (e.key === 'cookie-consent') setConsent(e.newValue);
+      if (e.key === CONSENT_KEY || e.key === 'cookie-consent' || e.key === null) setConsent(readStoredConsent());
     };
     const onConsentChanged = () => setConsent(readStoredConsent());
     window.addEventListener('storage', onStorage);
     window.addEventListener(CONSENT_CHANGED_EVENT, onConsentChanged);
+    window.addEventListener(CONSENT_EFFECTIVE_CHANGED_EVENT, onConsentChanged);
     return () => {
       window.removeEventListener('storage', onStorage);
       window.removeEventListener(CONSENT_CHANGED_EVENT, onConsentChanged);
+      window.removeEventListener(CONSENT_EFFECTIVE_CHANGED_EVENT, onConsentChanged);
     };
   }, []);
 
   useEffect(() => {
-    if (pushed.current) return;
+    if (!consent) { pushed.current = false; setState('unknown'); return; }
     /* Round 304: the gate is an explicit rule now. It used to block only on
        'essential' and let null (undecided) fall through to the script
        presence check, which happened to hold; an affirmative accepted is
        the only state that initializes a slot. */
-    if (consent !== 'accepted') return;
+    if (pushed.current) return;
     let cancelled = false;
     let retryFrame = 0;
     let attempts = 0;
@@ -145,7 +143,7 @@ const AdBanner = ({ slot, format = 'auto', layout, layoutKey, className = '' }: 
   /* AdSense writes data-ad-status onto the ins element when it answers. */
   useEffect(() => {
     const el = adRef.current;
-    if (consent !== 'accepted' || !el || state !== 'unknown') return;
+    if (!consent || !el || state !== 'unknown') return;
     const read = () => {
       const status = el.getAttribute('data-ad-status');
       if (status === 'filled') setState('filled');
@@ -159,7 +157,7 @@ const AdBanner = ({ slot, format = 'auto', layout, layoutKey, className = '' }: 
   }, [consent, state]);
 
   // Until Accept, there is no slot, no request, and no timeout to expire.
-  if (consent !== 'accepted') return null;
+  if (!consent) return null;
   // Nothing came, and nothing is coming. Take the space back.
   if (state === 'empty') return null;
 

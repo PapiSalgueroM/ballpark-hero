@@ -5,10 +5,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CookieConsent } from '@/components/CookieConsent';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 
+const essentialChoice = () => JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: Date.now() });
+
 const consent = vi.hoisted(() => ({ load: vi.fn(), changed: vi.fn() }));
 vi.mock('@/lib/consentedScripts', () => ({
   CONSENT_CHANGED_EVENT: 'dukb-consent-changed',
   loadConsentedScripts: consent.load,
+  stopRevokedServices: vi.fn(),
 }));
 
 function Fixture({ initialOpen = true }: { initialOpen?: boolean }) {
@@ -33,7 +36,7 @@ afterEach(() => {
 });
 
 describe('pending cookie choices belong to the open help focus scope', () => {
-  for (const choice of ['Essential only', 'Accept'] as const) {
+  for (const choice of ['Reject all', 'Accept all'] as const) {
     it(`${choice} receives focus inside initial rules and keeps its original consent behavior`, async () => {
       render(<Fixture />);
       const dialog = await screen.findByRole('dialog');
@@ -42,13 +45,13 @@ describe('pending cookie choices belong to the open help focus scope', () => {
       act(() => button.focus());
       expect(button).toHaveFocus();
       expect(dialog).toContainElement(region);
-      expect(localStorage.getItem('cookie-consent')).toBeNull();
+      expect(localStorage.getItem('cookie-consent-v2')).toBeNull();
       expect(consent.load).not.toHaveBeenCalled();
       fireEvent.click(button);
       await waitFor(() => expect(screen.queryByRole('region', { name: 'Cookie choices' })).toBeNull());
-      expect(localStorage.getItem('cookie-consent')).toBe(choice === 'Accept' ? 'accepted' : 'essential');
+      expect(JSON.parse(localStorage.getItem('cookie-consent-v2')!)).toMatchObject({ version: 2, advertising: choice === 'Accept all', analytics: false });
       expect(consent.changed).toHaveBeenCalledTimes(1);
-      expect(consent.load).toHaveBeenCalledTimes(choice === 'Accept' ? 1 : 0);
+      expect(consent.load).toHaveBeenCalledTimes(choice === 'Accept all' ? 1 : 0);
       expect(screen.getByRole('dialog')).toBe(dialog);
       expect(dialog).toHaveTextContent('Fixture instructions.Fixture worked example.');
       fireEvent.click(screen.getByRole('button', { name: "Let's Play!" }));
@@ -67,14 +70,14 @@ describe('pending cookie choices belong to the open help focus scope', () => {
     const region = await screen.findByRole('region', { name: 'Cookie choices' });
     region.setAttribute('aria-hidden', 'true');
     await waitFor(() => expect(region).not.toHaveAttribute('aria-hidden'));
-    const essential = within(region).getByRole('button', { name: 'Essential only' });
+    const essential = within(region).getByRole('button', { name: 'Reject all' });
     act(() => essential.focus());
     expect(essential).toHaveFocus();
     expect(region.parentElement).toBe(document.body);
-    expect(screen.getAllByRole('button', { name: 'Accept' })).toHaveLength(1);
-    expect(screen.getAllByRole('button', { name: 'Essential only' })).toHaveLength(1);
+    expect(screen.getAllByRole('button', { name: 'Accept all' })).toHaveLength(1);
+    expect(screen.getAllByRole('button', { name: 'Reject all' })).toHaveLength(1);
     expect(document.body.dataset.consentPending).toBe('1');
-    expect(localStorage.getItem('cookie-consent')).toBeNull();
+    expect(localStorage.getItem('cookie-consent-v2')).toBeNull();
     expect(consent.load).not.toHaveBeenCalled();
   });
 
@@ -85,12 +88,12 @@ describe('pending cookie choices belong to the open help focus scope', () => {
     fireEvent.click(screen.getByRole('button', { name: 'How to play' }));
     const dialog = await screen.findByRole('dialog');
     await waitFor(() => expect(dialog).toContainElement(screen.getByRole('region', { name: 'Cookie choices' })));
-    const accept = screen.getByRole('button', { name: 'Accept' });
+    const accept = screen.getByRole('button', { name: 'Accept all' });
     act(() => accept.focus());
     expect(accept).toHaveFocus();
     expect(document.body.dataset.consentPending).toBeUndefined();
-    expect(screen.getAllByRole('button', { name: 'Accept' })).toHaveLength(1);
-    expect(localStorage.getItem('cookie-consent')).toBeNull();
+    expect(screen.getAllByRole('button', { name: 'Accept all' })).toHaveLength(1);
+    expect(localStorage.getItem('cookie-consent-v2')).toBeNull();
     expect(consent.load).not.toHaveBeenCalled();
   });
 
@@ -99,18 +102,18 @@ describe('pending cookie choices belong to the open help focus scope', () => {
     const dialog = await screen.findByRole('dialog');
     await screen.findByRole('region', { name: 'Cookie choices' });
     act(() => {
-      localStorage.setItem('cookie-consent', 'essential');
-      window.dispatchEvent(new StorageEvent('storage', { key: 'cookie-consent', oldValue: null, newValue: 'essential' }));
+      localStorage.setItem('cookie-consent-v2', essentialChoice());
+      window.dispatchEvent(new StorageEvent('storage', { key: 'cookie-consent-v2', oldValue: null, newValue: essentialChoice() }));
     });
     await waitFor(() => expect(screen.queryByRole('region', { name: 'Cookie choices' })).toBeNull());
     expect(screen.getByRole('dialog')).toBe(dialog);
     act(() => {
-      localStorage.removeItem('cookie-consent');
-      window.dispatchEvent(new StorageEvent('storage', { key: 'cookie-consent', oldValue: 'essential', newValue: null }));
+      localStorage.removeItem('cookie-consent-v2');
+      window.dispatchEvent(new StorageEvent('storage', { key: 'cookie-consent-v2', oldValue: essentialChoice(), newValue: null }));
     });
     const region = await screen.findByRole('region', { name: 'Cookie choices' });
     await waitFor(() => expect(dialog).toContainElement(region));
-    const essential = within(region).getByRole('button', { name: 'Essential only' });
+    const essential = within(region).getByRole('button', { name: 'Reject all' });
     act(() => essential.focus());
     expect(essential).toHaveFocus();
     expect(consent.load).not.toHaveBeenCalled();
@@ -118,7 +121,7 @@ describe('pending cookie choices belong to the open help focus scope', () => {
   });
 
   it('preserves the normal modal trap and manual opener once consent is answered', async () => {
-    localStorage.setItem('cookie-consent', 'essential');
+    localStorage.setItem('cookie-consent-v2', essentialChoice());
     render(<Fixture initialOpen={false} />);
     const opener = screen.getByRole('button', { name: 'How to play' });
     opener.focus();
@@ -129,7 +132,7 @@ describe('pending cookie choices belong to the open help focus scope', () => {
     expect(dialog).toContainElement(document.activeElement as HTMLElement);
     fireEvent.keyDown(dialog, { key: 'Escape' });
     await waitFor(() => expect(opener).toHaveFocus());
-    expect(localStorage.getItem('cookie-consent')).toBe('essential');
+    expect(JSON.parse(localStorage.getItem('cookie-consent-v2')!)).toMatchObject({ version: 2, advertising: false, analytics: false });
     expect(consent.load).not.toHaveBeenCalled();
   });
 
@@ -141,7 +144,7 @@ describe('pending cookie choices belong to the open help focus scope', () => {
     expect(region).toHaveClass('fixed', 'bottom-0');
     expect(document.body.dataset.consentPending).toBe('1');
     expect(screen.queryByRole('dialog')).toBeNull();
-    expect(localStorage.getItem('cookie-consent')).toBeNull();
+    expect(localStorage.getItem('cookie-consent-v2')).toBeNull();
     expect(consent.load).not.toHaveBeenCalled();
   });
 });

@@ -1,6 +1,6 @@
 /**
  * Round 1142: the cookie banner in a browser that will not store its answer.
- * Before this round "Essential only" threw an uncaught quota error when
+ * Before this round "Reject all" threw an uncaught quota error when
  * storage was full and the banner stayed up for good, and with storage
  * blocked there was no app to show a banner at all. Both choices have to
  * work in both cases, the answer has to hold for the visit, and nothing to do
@@ -56,16 +56,16 @@ afterEach(() => {
 });
 
 describe.each(['blocked', 'full'] as const)('the cookie banner with storage %s', kind => {
-  it('Essential only: the banner leaves, the answer holds for the visit, and no analytics load', async () => {
+  it('Reject all: the banner leaves, the answer holds for the visit, and no analytics load', async () => {
     breakStorage(kind);
     const { seam, view, CookieConsent } = await mountBanner();
     /* blocked is known from the first read; full is only known once a write was refused */
     expect(seam.getStorageTrouble()).toBe(kind === 'blocked' ? 'blocked' : null);
     expect(banner()).not.toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Essential only' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Reject all' }));
     expect(banner()).toBeNull();
     expect(seam.getStorageTrouble()).toBe(kind);
-    expect(seam.safeLocalStorage.getItem('cookie-consent')).toBe('essential');
+    expect(JSON.parse(seam.safeLocalStorage.getItem('cookie-consent-v2')!)).toMatchObject({ version: 2, advertising: false, analytics: false });
     expect(document.querySelector(ANALYTICS)).toBeNull();
     /* a later mount in the same visit (the banner asks again only when no answer is held) */
     view.unmount();
@@ -73,14 +73,14 @@ describe.each(['blocked', 'full'] as const)('the cookie banner with storage %s',
     expect(banner()).toBeNull();
   });
 
-  it('Accept: the banner leaves, the answer holds for the visit, and analytics start', async () => {
+  it('Accept all: the banner leaves, the answer holds for the visit, while analytics stays paused', async () => {
     breakStorage(kind);
     const { seam, view, CookieConsent } = await mountBanner();
     expect(document.querySelector(ANALYTICS)).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Accept' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Accept all' }));
     expect(banner()).toBeNull();
-    expect(seam.safeLocalStorage.getItem('cookie-consent')).toBe('accepted');
-    expect(document.querySelector(ANALYTICS)).not.toBeNull();
+    expect(JSON.parse(seam.safeLocalStorage.getItem('cookie-consent-v2')!)).toMatchObject({ version: 2, advertising: true, analytics: false });
+    expect(document.querySelector(ANALYTICS)).toBeNull();
     view.unmount();
     render(<MemoryRouter><CookieConsent /></MemoryRouter>);
     expect(banner()).toBeNull();
@@ -88,16 +88,16 @@ describe.each(['blocked', 'full'] as const)('the cookie banner with storage %s',
 });
 
 describe('the cookie banner, the cases around those two', () => {
-  it('storage that fills up after the page loaded: Essential only still dismisses and nothing loads', async () => {
+  it('storage that fills up after the page loaded: Reject all still dismisses and nothing loads', async () => {
     const { seam, view, CookieConsent } = await mountBanner();
     expect(seam.getStorageTrouble()).toBeNull();
     vi.spyOn(Storage.prototype, 'setItem').mockImplementation(quota);
-    fireEvent.click(screen.getByRole('button', { name: 'Essential only' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Reject all' }));
     expect(banner()).toBeNull();
     expect(document.querySelector(ANALYTICS)).toBeNull();
     /* the seam heard the refusal: the answer is held for the visit and the banner does not ask again */
     expect(seam.getStorageTrouble()).toBe('full');
-    expect(seam.safeLocalStorage.getItem('cookie-consent')).toBe('essential');
+    expect(JSON.parse(seam.safeLocalStorage.getItem('cookie-consent-v2')!)).toMatchObject({ version: 2, advertising: false, analytics: false });
     view.unmount();
     render(<MemoryRouter><CookieConsent /></MemoryRouter>);
     expect(banner()).toBeNull();
@@ -112,9 +112,9 @@ describe('the cookie banner, the cases around those two', () => {
 
   it('a browser that stores normally: the answer goes to the real storage, exactly as before', async () => {
     const { seam } = await mountBanner();
-    fireEvent.click(screen.getByRole('button', { name: 'Essential only' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Reject all' }));
     expect(banner()).toBeNull();
-    expect(window.localStorage.getItem('cookie-consent')).toBe('essential');
+    expect(JSON.parse(window.localStorage.getItem('cookie-consent-v2')!)).toMatchObject({ version: 2, advertising: false, analytics: false });
     expect(seam.getStorageTrouble()).toBeNull();
   });
 });
@@ -136,12 +136,12 @@ describe.each(['blocked', 'full'] as const)('the ad slot with storage %s', kind 
     return { ...mounted, adSlot };
   }
 
-  it('Accept: a slot already on the page appears, and so does one mounted later in the visit', async () => {
+  it('Accept all: a slot already on the page appears, and so does one mounted later in the visit', async () => {
     breakStorage(kind);
     const { adSlot } = await mountBannerAndSlot();
     const first = render(adSlot());
     expect(slot()).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Accept' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Accept all' }));
     expect(slot()).not.toBeNull();
     /* the next page of the visit: a fresh mount, with no consent event to hear */
     first.unmount();
@@ -150,11 +150,11 @@ describe.each(['blocked', 'full'] as const)('the ad slot with storage %s', kind 
     expect(slot()).not.toBeNull();
   });
 
-  it('Essential only: no slot, now or on a later mount', async () => {
+  it('Reject all: no slot, now or on a later mount', async () => {
     breakStorage(kind);
     const { adSlot } = await mountBannerAndSlot();
     const first = render(adSlot());
-    fireEvent.click(screen.getByRole('button', { name: 'Essential only' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Reject all' }));
     expect(slot()).toBeNull();
     first.unmount();
     render(adSlot());
