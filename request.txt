@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk-branch: WALK_EXPECT=branch node .rc/x/walk1531.mjs
