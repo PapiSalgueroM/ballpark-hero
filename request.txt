@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+weightHere: ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs 2>&1 | grep -E "club-manager|manager-hot-seat|deadline-day|sweepWeight|FAIL|over" | head -20
+weightMain: git worktree add /tmp/m5 554a3b18 >/dev/null 2>&1; cd /tmp/m5 && ln -sf "$OLDPWD/node_modules" node_modules && node_modules/.bin/vite build >/dev/null 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4182 > /tmp/m5srv.log 2>&1 &) && sleep 3 && BASE=http://127.0.0.1:4182 ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs 2>&1 | grep -E "club-manager|manager-hot-seat|deadline-day|sweepWeight|FAIL|over" | head -20
